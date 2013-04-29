@@ -12646,6 +12646,14 @@ else if (sameWord(type, "bam"))
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
+#ifdef USE_HAL
+else if (sameWord(type, "halSnake"))
+    {
+    halSnakeMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
+#endif
 else if (sameWord(type, "vcfTabix"))
     {
     vcfTabixMethods(track);

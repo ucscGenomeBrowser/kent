@@ -26,6 +26,13 @@ ifeq (${USE_SSL},)
 endif
 
 
+# libhal: disabled by default
+ifeq (${USE_HAL},1)
+    L+=/cluster/home/braney/hal/lib/halChain.a /cluster/home/braney/hal/lib/halLod.a /cluster/home/braney/hal/lib/halLib.a /cluster/home/braney/sonLib/lib/sonLib.a /hive/groups/recon/local/lib/libhdf5_cpp.a /hive/groups/recon/local/lib/libhdf5.a /hive/groups/recon/local/lib/libhdf5_hl.a /hive/groups/recon/local/lib/libsz.a -lstdc++
+    HG_DEFS+=-DUSE_HAL
+    HG_INC+=-I/cluster/home/braney/hal/chain/inc/
+endif
+
 # libssl: disabled by default
 ifeq (${USE_SSL},1)
     L+=-lssl -lcrypto
@@ -128,7 +135,7 @@ ifeq (${HG_WARN},)
       HG_WARN_UNINIT=-Wuninitialized
     else
       ifeq (${FULLWARN},hgwdev)
-        HG_WARN = -Wall -Werror -Wformat -Wimplicit -Wreturn-type
+        HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type
         HG_WARN_UNINIT=-Wuninitialized
       else
         HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
@@ -162,6 +169,11 @@ ifeq (${ENCODE_PIPELINE_BIN},)
     ENCODE_PIPELINE_BIN=/cluster/data/encode/pipeline/bin
 endif
 
+DESTBINDIR=${DESTDIR}/${BINDIR}
+
+# location of stringify program
+STRINGIFY = ${DESTBINDIR}/stringify
+
 MKDIR=mkdir -p
 ifeq (${STRIP},)
    STRIP=true
@@ -178,9 +190,6 @@ else
   AOUT=a.out
   EXE=
 endif
-
-# location of stringify program
-STRINGIFY = ${DESTDIR}${BINDIR}/stringify
 
 #Lowelab defines
 #The lowelab specific code will be included in compilation if the following conditions are satistied

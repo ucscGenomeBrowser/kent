@@ -568,10 +568,9 @@ if (npu->byteRangeStart != -1)
 return dyStringCannibalize(&dy);
 }
 
-/* this was cloned from rudp.c - move it later for sharing */
-static boolean readReadyWait(int sd, int microseconds)
-/* Wait for descriptor to have some data to read, up to
- * given number of microseconds. */
+int netWaitForData(int sd, int microseconds)
+/* Wait for descriptor to have some data to read, up to given number of
+ * number of microseconds.  Returns amount of data there or zero if timed out. */
 {
 struct timeval tv;
 fd_set set;
@@ -597,13 +596,21 @@ for (;;)
 	if (errno == EINTR)	/* Select interrupted, not timed out. */
 	    continue;
     	else 
-    	    warn("select failure in rudp: %s", strerror(errno));
+    	    warn("select failure %s", strerror(errno));
     	}
     else
 	{
-    	return readyCount > 0;	/* Zero readyCount indicates time out */
+    	return readyCount;	/* Zero readyCount indicates time out */
 	}
     }
+}
+
+static boolean readReadyWait(int sd, int microseconds)
+/* Wait for descriptor to have some data to read, up to given number of
+ * number of microseconds.  Returns true if there is data, false if timed out. */
+{
+int readyCount = netWaitForData(sd, microseconds);
+return readyCount > 0;	/* Zero readyCount indicates time out */
 }
 
 static void sendFtpCommandOnly(int sd, char *cmd)
@@ -1399,6 +1406,11 @@ while(TRUE)
 		return FALSE;
 		}
 	    }
+	else if (sameString(code, "404"))
+	    {
+	    warn("404 file not found on %s", url);
+	    return FALSE;
+	    }
 	else if (!sameString(code, "200"))
 	    {
 	    warn("Expected 200 %s: %s %s", url, code, line);
@@ -1617,6 +1629,29 @@ else
 	freeMem(newUrl); 
     return lf;
     }
+}
+
+int netUrlMustOpenPastHeader(char *url)
+/* Get socket descriptor for URL.  Process header, handling any forwarding and
+ * the like.  Do errAbort if there's a problem, which includes anything but a 200
+ * return from http after forwarding. */
+{
+int sd = netUrlOpen(url);
+if (sd < 0)
+    noWarnAbort();
+int newSd = 0;
+if (startsWith("http://",url) || startsWith("https://",url))
+    {  
+    char *newUrl = NULL;
+    if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+	noWarnAbort();
+    if (newUrl != NULL)
+	{
+	sd = newSd;
+	freeMem(newUrl); 
+	}
+    }
+return sd;
 }
 
 struct lineFile *netLineFileSilentOpen(char *url)
@@ -2636,4 +2671,9 @@ int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
   return qCount;
 } /* netHttpMultipleQueries */
 
+boolean hasProtocol(char *urlOrPath)
+/* Return TRUE if it looks like it has http://, ftp:// etc. */
+{
+return stringIn("://", urlOrPath) != NULL;
+}
 

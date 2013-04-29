@@ -12,16 +12,22 @@ struct annoStreamDb
     struct sqlConnection *conn;		// Database connection (e.g. hg19 or customTrash)
     char *table;			// Table name, must exist in database
     struct sqlResult *sr;		// SQL query result from which we grab rows
-    boolean hasBin;			// 1 if SQL table's first column is bin
-    boolean omitBin;			// 1 if table hasBin and autoSql doesn't have bin
     char *chromField;			// Name of chrom-ish column in table
     char *startField;			// Name of chromStart-ish column in table
     char *endField;			// Name of chromEnd-ish column in table
+    char *endFieldIndexName;		// SQL index on end field, if any (can mess up sorting)
     int chromIx;			// Index of chrom-ish col in autoSql or bin-less table
     int startIx;			// Index of chromStart-ish col in autoSql or bin-less table
     int endIx;				// Index of chromEnd-ish col in autoSql or bin-less table
-    boolean hasEndFieldIndex;		// TRUE if index on end field (can mess up sorting)
     boolean notSorted;			// TRUE if table is not sorted (e.g. genbank-updated)
+    boolean hasBin;			// 1 if SQL table's first column is bin
+    boolean omitBin;			// 1 if table hasBin and autoSql doesn't have bin
+    boolean mergeBins;			// TRUE if query results will be in bin order
+    struct annoRow *bigItemQueue;	// If mergeBins, accumulate coarse-bin items here
+    struct annoRow *smallItemQueue;	// Max 1 item for merge-sorting with bigItemQueue
+    struct lm *qLm;			// localmem for merge-sorting queues
+    int minFinestBin;			// Smallest bin number for finest bin level
+    boolean gotFinestBin;		// Flag that it's time to merge-sort with bigItemQueue
     };
 
 static void asdSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionStart, uint regionEnd)
@@ -41,8 +47,23 @@ struct annoStreamer *streamer = &(self->streamer);
 struct dyString *query = dyStringCreate("select * from %s", self->table);
 if (!streamer->positionIsGenome)
     {
+    if (self->hasBin)
+	{
+	// Results will be in bin order, but we can restore chromStart order by
+	// accumulating initial coarse-bin items and merge-sorting them with
+	// subsequent finest-bin items which will be in chromStart order.
+	self->mergeBins = TRUE;
+	self->bigItemQueue = self->smallItemQueue = NULL;
+	lmCleanup(&(self->qLm));
+	self->qLm = lmInit(0);
+	self->gotFinestBin = FALSE;
+	}
+    if (self->endFieldIndexName != NULL)
+	// Don't let mysql use a (chrom, chromEnd) index because that messes up
+	// sorting by chromStart.
+	dyStringPrintf(query, " IGNORE INDEX (%s)", self->endFieldIndexName);
     dyStringPrintf(query, " where %s='%s'", self->chromField, streamer->chrom);
-    int chromSize = hashIntVal(streamer->query->chromSizes, streamer->chrom);
+    int chromSize = annoAssemblySeqSize(streamer->assembly, streamer->chrom);
     if (streamer->regionStart != 0 || streamer->regionEnd != chromSize)
 	{
 	dyStringAppend(query, " and ");
@@ -51,7 +72,7 @@ if (!streamer->positionIsGenome)
 	dyStringPrintf(query, "%s < %u and %s > %u", self->startField, streamer->regionEnd,
 		       self->endField, streamer->regionStart);
 	}
-    if (self->hasEndFieldIndex || self->notSorted)
+    if (self->notSorted)
 	dyStringPrintf(query, " order by %s", self->startField);
     }
 else if (self->notSorted)
@@ -61,18 +82,135 @@ dyStringFree(&query);
 self->sr = sr;
 }
 
-static char **nextRowUnfiltered(struct annoStreamDb *self)
-/* Fetch the next row from the sqlResult, and skip past table's bin field if necessary. */
+static char **nextRowFiltered(struct annoStreamDb *self, boolean *retRightFail)
+/* Skip past any left-join failures until we get a right-join failure, a passing row,
+ * or end of data.  Return row or NULL, and return right-join fail status via retRightFail. */
 {
+int numCols = self->streamer.numCols;
 char **row = sqlNextRow(self->sr);
-if (row == NULL)
-    return NULL;
-// Skip table's bin field if not in autoSql:
-row += self->omitBin;
+boolean rightFail = FALSE;
+struct annoFilter *filterList = self->streamer.filters;
+while (row && annoFilterRowFails(filterList, row+self->omitBin, numCols, &rightFail))
+    {
+    if (rightFail)
+	break;
+    row = sqlNextRow(self->sr);
+    }
+*retRightFail = rightFail;
 return row;
 }
 
-static struct annoRow *asdNextRow(struct annoStreamer *vSelf)
+static struct annoRow *rowToAnnoRow(struct annoStreamDb *self, char **row, boolean rightFail,
+				    struct lm *lm)
+/* Extract coords from row and return an annoRow including right-fail status. */
+{
+row += self->omitBin;
+char *chrom = row[self->chromIx];
+uint chromStart = sqlUnsigned(row[self->startIx]);
+uint chromEnd = sqlUnsigned(row[self->endIx]);
+return annoRowFromStringArray(chrom, chromStart, chromEnd, rightFail, row,
+			      self->streamer.numCols, lm);
+}
+
+static char **getFinestBinItem(struct annoStreamDb *self, char **row, boolean *pRightFail)
+/* If row is a coarse-bin item, add it to bigItemQueue, get the next row(s) and
+ * add any subsequent coarse-bin items to bigItemQueue.  As soon as we get an item from a
+ * finest-level bin (or NULL), sort the bigItemQueue and return the finest-bin item/row. */
+{
+int bin = atoi(row[0]);
+while (bin < self->minFinestBin)
+    {
+    // big item -- store aside in queue for merging later, move on to next item
+    slAddHead(&(self->bigItemQueue), rowToAnnoRow(self, row, *pRightFail, self->qLm));
+    *pRightFail = FALSE;
+    row = nextRowFiltered(self, pRightFail);
+    if (row == NULL)
+	break;
+    bin = atoi(row[0]);
+    }
+// First finest-bin item!  Sort bigItemQueue in preparation for merging:
+self->gotFinestBin = TRUE;
+slReverse(&(self->bigItemQueue));
+slSort(&(self->bigItemQueue), annoRowCmp);
+return row;
+}
+
+static struct annoRow *mergeRow(struct annoStreamDb *self, struct annoRow *aRow,
+				struct lm *callerLm)
+/* Compare head of bigItemQueue with (finest-bin) aRow; return the one with
+ * lower chromStart and save the other for later.  */
+{
+struct annoRow *outRow = aRow;
+if (self->bigItemQueue == NULL)
+    {
+    // No coarse-bin items to merge-sort, just stream finest-bin items from here on out.
+    self->mergeBins = FALSE;
+    }
+else if (annoRowCmp(&(self->bigItemQueue), &aRow) < 0)
+    {
+    // Big item gets to go now, so save aside small item for next time.
+    outRow = slPopHead(&(self->bigItemQueue));
+    slAddHead(&(self->smallItemQueue), aRow);
+    }
+enum annoRowType rowType = self->streamer.rowType;
+int numCols = self->streamer.numCols;
+return annoRowClone(outRow, rowType, numCols, callerLm);
+}
+
+static struct annoRow *nextQueuedRow(struct annoStreamDb *self, struct lm *callerLm)
+// Return the head of either bigItemQueue or smallItemQueue, depending on which has
+// the lower chromStart.
+{
+struct annoRow *row = NULL;
+if (self->bigItemQueue && annoRowCmp(&(self->bigItemQueue), &(self->smallItemQueue)) < 0)
+    row = slPopHead(&(self->bigItemQueue));
+else
+    row = slPopHead(&(self->smallItemQueue));
+if (self->bigItemQueue == NULL && self->smallItemQueue == NULL)
+    // All done merge-sorting, just stream finest-bin items from here on out.
+    self->mergeBins = FALSE;
+enum annoRowType rowType = self->streamer.rowType;
+int numCols = self->streamer.numCols;
+return annoRowClone(row, rowType, numCols, callerLm);
+}
+
+static struct annoRow *nextRowMergeBins(struct annoStreamDb *self, struct lm *callerLm)
+/* Fetch the next filtered row from mysql, merge-sorting coarse-bin items into finest-bin
+ * items to maintain chromStart ordering. */
+{
+assert(self->mergeBins && self->hasBin);
+if (self->smallItemQueue)
+    // In this case we have already begun merge-sorting; don't pull a new row from mysql,
+    // use the queues.  This should keep smallItemQueue's max depth at 1.
+    return nextQueuedRow(self, callerLm);
+else
+    {
+    // We might need to collect initial coarse-bin items, or might already be merge-sorting.
+    boolean rightFail = FALSE;
+    char **row = nextRowFiltered(self, &rightFail);
+    if (row && !self->gotFinestBin)
+	{
+	// We are just starting -- queue up coarse-bin items, if any, until we get the first
+	// finest-bin item.
+	row = getFinestBinItem(self, row, &rightFail);
+	}
+    // Time to merge-sort finest-bin items from mysql with coarse-bin items from queue.
+    if (row != NULL)
+	{
+	struct annoRow *aRow = rowToAnnoRow(self, row, rightFail, self->qLm);
+	return mergeRow(self, aRow, callerLm);
+	}
+    else
+	{
+	struct annoRow *qRow = slPopHead(&(self->bigItemQueue));
+	enum annoRowType rowType = self->streamer.rowType;
+	int numCols = self->streamer.numCols;
+	return annoRowClone(qRow, rowType, numCols, callerLm);
+	}
+    }
+}
+
+static struct annoRow *asdNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
 /* Perform sql query if we haven't already and return a single
  * annoRow, or NULL if there are no more items. */
 {
@@ -82,23 +220,13 @@ if (self->sr == NULL)
 if (self->sr == NULL)
     // This is necessary only if we're using sqlStoreResult in asdDoQuery, harmless otherwise:
     return NULL;
-char **row = nextRowUnfiltered(self);
+if (self->mergeBins)
+    return nextRowMergeBins(self, callerLm);
+boolean rightFail = FALSE;
+char **row = nextRowFiltered(self, &rightFail);
 if (row == NULL)
     return NULL;
-// Skip past any left-join failures until we get a right-join failure, a passing row, or EOF.
-boolean rightFail = FALSE;
-while (annoFilterRowFails(vSelf->filters, row, vSelf->numCols, &rightFail))
-    {
-    if (rightFail)
-	break;
-    row = nextRowUnfiltered(self);
-    if (row == NULL)
-	return NULL;
-    }
-char *chrom = row[self->chromIx];
-uint chromStart = sqlUnsigned(row[self->startIx]);
-uint chromEnd = sqlUnsigned(row[self->endIx]);
-return annoRowFromStringArray(chrom, chromStart, chromEnd, rightFail, row, vSelf->numCols);
+return rowToAnnoRow(self, row, rightFail, callerLm);
 }
 
 static void asdClose(struct annoStreamer **pVSelf)
@@ -107,65 +235,25 @@ static void asdClose(struct annoStreamer **pVSelf)
 if (pVSelf == NULL)
     return;
 struct annoStreamDb *self = *(struct annoStreamDb **)pVSelf;
-// Let the caller close conn; it might be from a cache.
+lmCleanup(&(self->qLm));
 freeMem(self->table);
 sqlFreeResult(&(self->sr));
 hFreeConn(&(self->conn));
 annoStreamerFree(pVSelf);
 }
 
-static int asColumnFindIx(struct asColumn *list, char *string)
-/* Return index of first element of asColumn list that matches string.
- * Return -1 if not found. */
-{
-struct asColumn *ac;
-int ix = 0;
-for (ac = list; ac != NULL; ac = ac->next, ix++)
-    if (sameString(string, ac->name))
-        return ix;
-return -1;
-}
-
-static boolean asHasFields(struct annoStreamDb *self, char *chromField, char *startField,
-			   char *endField)
-/* If autoSql def has all three columns, remember their names and column indexes and
- * return TRUE. */
-{
-struct asColumn *columns = self->streamer.asObj->columnList;
-int chromIx = asColumnFindIx(columns, chromField);
-int startIx = asColumnFindIx(columns, startField);
-int endIx = asColumnFindIx(columns, endField);
-if (chromIx >= 0 && startIx >= 0 && endIx >= 0)
-    {
-    self->chromField = cloneString(chromField);
-    self->startField = cloneString(startField);
-    self->endField = cloneString(endField);
-    self->chromIx = chromIx;
-    self->startIx = startIx;
-    self->endIx = endIx;
-    return TRUE;
-    }
-return FALSE;
-}
-
 static boolean asdInitBed3Fields(struct annoStreamDb *self)
 /* Use autoSql to figure out which table fields correspond to {chrom, chromStart, chromEnd}. */
 {
-if (asHasFields(self, "chrom", "chromStart", "chromEnd"))
-    return TRUE;
-if (asHasFields(self, "chrom", "txStart", "txEnd"))
-    return TRUE;
-if (asHasFields(self, "tName", "tStart", "tEnd"))
-    return TRUE;
-if (asHasFields(self, "genoName", "genoStart", "genoEnd"))
-    return TRUE;
-return FALSE;
+struct annoStreamer *vSelf = &(self->streamer);
+return annoStreamerFindBed3Columns(vSelf, &(self->chromIx), &(self->startIx), &(self->endIx),
+				   &(self->chromField), &(self->startField), &(self->endField));
 }
 
-boolean sqlTableHasIndexOn(struct sqlConnection *conn, char *table, char *field)
-/* Return TRUE if table has an index that includes field. */
+char *sqlTableIndexOnField(struct sqlConnection *conn, char *table, char *field)
+/* If table has an index that includes field, return the index name, else NULL. */
 {
-boolean foundIndex = FALSE;
+char *indexName = NULL;
 char query[512];
 safef(query, sizeof(query), "show index from %s", table);
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -174,15 +262,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     if (sameString(row[4], field))
 	{
-	foundIndex = TRUE;
+	indexName = cloneString(row[2]);
 	break;
 	}
     }
 sqlFreeResult(&sr);
-return foundIndex;
+return indexName;
 }
 
-struct annoStreamer *annoStreamDbNew(char *db, char *table, struct asObject *asObj)
+struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly *aa,
+				     struct asObject *asObj)
 /* Create an annoStreamer (subclass) object from a database table described by asObj. */
 {
 struct sqlConnection *conn = hAllocConn(db);
@@ -191,7 +280,10 @@ if (!sqlTableExists(conn, table))
 struct annoStreamDb *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, asObj);
+int dbtLen = strlen(db) + strlen(table) + 2;
+char dbTable[dbtLen];
+safef(dbTable, dbtLen, "%s.%s", db, table);
+annoStreamerInit(streamer, aa, asObj, dbTable);
 streamer->rowType = arWords;
 streamer->setRegion = asdSetRegion;
 streamer->nextRow = asdNextRow;
@@ -204,11 +296,12 @@ if (sqlFieldIndex(self->conn, self->table, "bin") == 0)
 if (self->hasBin && !sameString(asFirstColumnName, "bin"))
     self->omitBin = 1;
 if (!asdInitBed3Fields(self))
-    errAbort("annoStreamDbNew: can't figure out which fields of %s to use as "
-	     "{chrom, chromStart, chromEnd}.", table);
+    errAbort("annoStreamDbNew: can't figure out which fields of %s.%s to use as "
+	     "{chrom, chromStart, chromEnd}.", db, table);
 // When a table has an index on endField, sometimes the query optimizer uses it
 // and that ruins the sorting.  Fortunately most tables don't anymore.
-self->hasEndFieldIndex = sqlTableHasIndexOn(self->conn, self->table, self->endField);
-self->notSorted = TRUE; // True for more tables than I counted on, e.g. snp135 (bc it's packed??)
+self->endFieldIndexName = sqlTableIndexOnField(self->conn, self->table, self->endField);
+self->notSorted = FALSE;
+self->mergeBins = FALSE;
 return (struct annoStreamer *)self;
 }

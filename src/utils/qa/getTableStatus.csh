@@ -14,6 +14,7 @@ set db=""
 set mach="hgwbeta"
 set url1=""
 set url2=""
+set url2a=""
 set url3=""
 set url=""
 
@@ -40,6 +41,10 @@ if ( $#argv == 2 ) then
   set mach=$argv[2]
 endif
 
+if ( $mach == euronode ) then
+  set mach="genome-euro"
+endif
+
 checkMachineName.csh $mach
 if ( $status ) then
   exit 1
@@ -47,9 +52,15 @@ endif
 
 # get the STATUS
 set url1="http://"
-set url2=".cse.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doMetaData=1"
+set url2a=".cse"
+set url2=".ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doMetaData=1"
 set url3="&hgta_metaStatus=1"
-set url="$url1$mach$url2$url3"
+if ( $mach == genome-euro ) then
+  set url="$url1$mach$url2$url3"
+else
+  set url="$url1$mach$url2a$url2$url3"
+endif
+
 wget -q -O $mach.tempfile "$url"
 if ( $db != `head -1 $mach.tempfile | awk '{print $NF}'` ) then
   # does not allow uniProt or visiGene, etc to work.  

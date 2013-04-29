@@ -43,9 +43,9 @@ self->intervalList = bigWigIntervalQuery(self->bbi, streamer->chrom,
 self->nextInterval = self->intervalList;
 }
 
-static struct annoRow *annoRowFromContigBbiIntervals(char *chrom,
+static struct annoRow *annoRowFromContigBbiIntervals(char *name, char *chrom,
 				struct bbiInterval *startIv, struct bbiInterval *endIv,
-				boolean rightJoinFail)
+				boolean rightJoinFail, struct lm *callerLm)
 /* Given a range of non-NULL contiguous bbiIntervals (i.e. no gaps between intervals),
  * translate into annoRow with annoVector as data. */
 {
@@ -60,13 +60,13 @@ for (iv = startIv;  iv != endIv->next;  iv = iv->next)
     for (i = 0;  i < (iv->end - iv->start);  i++)
 	vals[vecOff++] = iv->val;
     if (vecOff > baseCount)
-	errAbort("annoRowFromContigBbiIntervals: overflowed baseCount (%s:%d-%d)",
-		 chrom, startIv->start, endIv->end);
+	errAbort("annoStreamBigWig %s: overflowed baseCount (%s:%d-%d)",
+		 name, chrom, startIv->start, endIv->end);
     }
-return annoRowWigNew(chrom, startIv->start, endIv->end, rightJoinFail, vals);
+return annoRowWigNew(chrom, startIv->start, endIv->end, rightJoinFail, vals, callerLm);
 }
 
-static struct annoRow *asbwNextRow(struct annoStreamer *vSelf)
+static struct annoRow *asbwNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
 /* Return a single annoRow, or NULL if there are no more items. */
 {
 struct annoStreamBigWig *self = (struct annoStreamBigWig *)vSelf;
@@ -86,7 +86,8 @@ while (annoFilterWigValueFails(vSelf->filters, self->nextInterval->val, &rightFa
 	return NULL;
     }
 if (rightFail)
-    return annoRowFromContigBbiIntervals(vSelf->chrom, startIv, startIv, rightFail);
+    return annoRowFromContigBbiIntervals(vSelf->name, vSelf->chrom,
+					 startIv, startIv, rightFail, callerLm);
 struct bbiInterval *endIv = startIv, *iv;
 int maxCount = 16 * 1024, count;
 for (iv = startIv->next, count = 0;  iv != NULL && count < maxCount;  iv = iv->next, count++)
@@ -100,7 +101,8 @@ for (iv = startIv->next, count = 0;  iv != NULL && count < maxCount;  iv = iv->n
 	break;
     }
 self->nextInterval = endIv->next;
-return annoRowFromContigBbiIntervals(vSelf->chrom, startIv, endIv, rightFail);
+return annoRowFromContigBbiIntervals(vSelf->name, vSelf->chrom,
+				     startIv, endIv, rightFail, callerLm);
 }
 
 static void asbwClose(struct annoStreamer **pVSelf)
@@ -115,7 +117,7 @@ lmCleanup(&(self->intervalQueryLm));
 annoStreamerFree(pVSelf);
 }
 
-struct annoStreamer *annoStreamBigWigNew(char *fileOrUrl)
+struct annoStreamer *annoStreamBigWigNew(char *fileOrUrl, struct annoAssembly *aa)
 /* Create an annoStreamer (subclass) object from a file or URL. */
 {
 struct bbiFile *bbi = bigWigFileOpen(fileOrUrl);
@@ -123,7 +125,7 @@ struct asObject *asObj = asParseText(annoRowBigWigAsText);
 struct annoStreamBigWig *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, asObj);
+annoStreamerInit(streamer, aa, asObj, fileOrUrl);
 streamer->rowType = arWig;
 streamer->setRegion = asbwSetRegion;
 streamer->nextRow = asbwNextRow;

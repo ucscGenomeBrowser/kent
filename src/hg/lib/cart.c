@@ -240,18 +240,17 @@ dyStringFree(&dy);
 }
 
 #ifndef GBROWSE
-static void cartCopyCustomTracks(struct cart *cart, struct hash *oldVars)
+void cartCopyCustomTracks(struct cart *cart)
 /* If cart contains any live custom tracks, save off a new copy of them,
- * to prevent clashes by multiple loaders of the same session.  */
+ * to prevent clashes by multiple uses of the same session.  */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
-char *db=NULL, *ignored;
-getDbAndGenome(cart, &db, &ignored, oldVars);
 
 for (el = elList; el != NULL; el = el->next)
     {
     if (startsWith(CT_FILE_VAR_PREFIX, el->name))
 	{
+	char *db = &el->name[strlen(CT_FILE_VAR_PREFIX)];
 	struct slName *browserLines = NULL;
 	struct customTrack *ctList = NULL;
 	char *ctFileName = (char *)(el->val);
@@ -409,6 +408,14 @@ hashElFreeList(&helList);
 assert(hashNumEntries(hash) == 0);
 }
 
+INLINE char *getDb(struct cart *cart, struct hash *oldVars)
+/* Quick wrapper around getDbGenomeClade for when we only want db. */
+{
+char *db=NULL, *ignoreOrg, *ignoreClade;
+getDbGenomeClade(cart, &db, &ignoreOrg, &ignoreClade, oldVars);
+return db;
+}
+
 #ifndef GBROWSE
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
@@ -454,7 +461,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 	 * command that sent us here): */
 	loadCgiOverHash(cart, oldVars);
 #ifndef GBROWSE
-	cartCopyCustomTracks(cart, oldVars);
+	cartCopyCustomTracks(cart);
 #endif /* GBROWSE */
 	if (isNotEmpty(actionVar))
 	    cartRemove(cart, actionVar);
@@ -514,7 +521,7 @@ if (oldVars)
  * command that sent us here): */
 loadCgiOverHash(cart, oldVars);
 #ifndef GBROWSE
-cartCopyCustomTracks(cart, oldVars);
+cartCopyCustomTracks(cart);
 #endif /* GBROWSE */
 
 if (isNotEmpty(actionVar))
@@ -610,9 +617,6 @@ loadCgiOverHash(cart, oldVars);
 // I think this is the place to justify old and new values
 cartJustify(cart, oldVars);
 
-/* wire up the assembly hubs so we can operate without sql */
-hubConnectLoadHubs(cart);
-
 #ifndef GBROWSE
 /* If some CGI other than hgSession been passed hgSession loading instructions,
  * apply those to cart before we do anything else.  (If this is hgSession,
@@ -639,6 +643,9 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	}
     }
 #endif /* GBROWSE */
+
+/* wire up the assembly hubs so we can operate without sql */
+hubConnectLoadHubs(cart);
 
 if (exclude != NULL)
     {
@@ -1138,6 +1145,37 @@ void cartSetBoolean(struct cart *cart, char *var, boolean val)
 {
 // Be explicit because some cartBools overloaded with negative "disabled" values
 cartSetInt(cart,var,(val?1:0));
+}
+
+boolean cartTimeoutBoolean(struct cart *cart, char *var, int hours)
+// Returns true if a cart var was set to non-zero less than hours ago
+// If the var has expired or val=0, it will be deleted.
+// If val is non-zero and not a time_t, (e.g. 'set') then the timer is started.
+{
+char *s = cartOptionalString(cart, var);
+if (s == NULL)
+    return FALSE;
+if (sameString(s,"0"))
+    {
+    cartRemove(cart, var);
+    return FALSE;
+    }
+
+time_t seconds = clock1();
+time_t val = (time_t)atoll(s);
+if (val < 1000)
+    {
+    char buf[64];
+    safef(buf, sizeof(buf), "%ld", seconds);
+    cartSetString(cart, var, buf);
+    return TRUE;
+    }
+if (val + (hours * 3600) < seconds)
+    {
+    cartRemove(cart, var);
+    return FALSE;
+    }
+return TRUE;
 }
 
 void cartMakeTextVar(struct cart *cart, char *var, char *defaultVal, int charSize)
@@ -2486,6 +2524,7 @@ void cgiExitTime(char *cgiName, long enteredMainTime)
 /* single stderr print out called at end of CGI binaries to record run
  * time in apache error_log */
 {
-fprintf(stderr, "CGI_TIME: %s: Overall total time: %ld millis\n",
+if (sameWord("yes", cfgOptionDefault("browser.cgiTime", "yes")) )
+  fprintf(stderr, "CGI_TIME: %s: Overall total time: %ld millis\n",
         cgiName, clock1000() - enteredMainTime);
 }

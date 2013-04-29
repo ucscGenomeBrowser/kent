@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../lib/${MACHTYPE}/libSpliceG
 
 % : %.c
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} \
-            -o ${BINDIR}/$@ ${addsuffix .c,$@} ${MYLIBS} ${L}
+            -o ${DESTDIR}${BINDIR}/$@ ${addsuffix .c,$@} ${MYLIBS} ${L}
 
 %Test: %Test.c 
 	${CC} ${COPT} -gp ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} \

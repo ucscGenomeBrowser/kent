@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-PPART = ../pslPartition
+PPART = ${DESTBINDIR}/pslPartition
 DIFF = diff
 
 test: defaultsTest level0Test level1Test partSize3Test partSize10Test dropContainedTest

@@ -914,6 +914,20 @@ if (refOnList(*pRefList, val) == NULL)
     }
 }
 
+void slRefFreeListAndVals(struct slRef **pList)
+/* Free up (with simple freeMem()) each val on list, and the list itself as well. */
+{
+struct slRef *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    freeMem(el->val);
+    freeMem(el);
+    }
+*pList = NULL;
+}
+
 struct slRef *refListFromSlList(void *list)
 /* Make a reference list that mirrors a singly-linked list. */
 {
@@ -3472,10 +3486,3 @@ if (strptime(date,format, &tp))
     }
 return cloneString(newDate);  // newDate is never freed!
 }
-
-boolean hasProtocol(char *urlOrPath)
-/* Return TRUE if it looks like it has http://, ftp:// etc. */
-{
-return stringIn("://", urlOrPath) != NULL;
-}
-

@@ -1,0 +1,360 @@
+Hi Galt - this directory
+ /hive/groups/encode/encode3/testSets/manifest1
+has a test set for the manifest file.
+The input is manifest.txt and the output should be called "validated.txt"
+and include the following extra columns:
+
+1) md5 - the usual md5sum of the file
+
+2) size - in bytes
+
+3) modified - last modified time.
+I would not be adverse to a simple seconds since 1970 format,
+but if you have other simple good ideas please let me know.
+
+4) validation key/error.
+If the file validates this should be V plus a number calculated as so:
+          (sum-of-ascii-values-in-MD5 + file-size)%10000
+so it should be something like V18209.
+We'd just use this as a lightweight security mechanism to make sure they
+don't fake the validation.
+
+If it's an error,  instead please put just ERROR there.
+Hopefully the validate program will tell user about the error in std
+err in more detail.
+
+Could you design the program so that it could read in a previous
+version of validated.txt,
+and just check the ones where the file date or size has changed,
+and for the unchanged ones just use what is in validated.txt rather
+than rerunning?
+
+-------------------------
+
+[hgwdev:manifest1> ll
+total 112
+-rw-rw-r-- 1 kent genecats 3505 Feb  4 17:56 files.txt
+-rw-rw-r-- 1 kent genecats   74 Feb  4 17:32 genomes.txt
+-rw-rw-r-- 1 kent genecats   88 Feb  4 18:32 header
+drwxrwsr-x 2 kent genecats 8192 Feb  4 17:42 hg19
+-rw-rw-r-- 1 kent genecats  136 Feb  4 17:33 hub.txt
+-rw-rw-r-- 1 kent genecats 6136 Feb  4 18:34 manifest.txt
+drwxrwsr-x 2 kent genecats 8192 Feb  4 17:45 mm9
+
+
+-------------------------
+
+[hgwdev:manifest1> find
+.
+./hg19
+./hg19/wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam
+./hg19/wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam.bai
+./hg19/wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters.bigWig
+./hg19/wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters.bigWig
+./hg19/wgEncodeRikenCageH1hescCellLongnonpolyaRawData.fastq.gz
+./hg19/wgEncodeRikenCageH1hescCellPamAln.bam
+./hg19/wgEncodeRikenCageH1hescCellPamAln.bam.bai
+./hg19/wgEncodeRikenCageH1hescCellPamMinusSignal.bigWig
+./hg19/wgEncodeRikenCageH1hescCellPamPlusSignal.bigWig
+./hg19/wgEncodeRikenCageH1hescCellPamRawData.fastq.gz
+./hg19/wgEncodeRikenCageH1hescCellPamTssGencV7.gtf.gz
+./hg19/wgEncodeRikenCageH1hescCellPamTssHmm.bedRnaElements.gz
+./hg19/wgEncodeRikenCageH1hescCellPamTssHmmV2.bedRnaElements.gz
+./hg19/wgEncodeRikenCageH1hescCellPapAlnRep1.bam
+./hg19/wgEncodeRikenCageH1hescCellPapAlnRep1.bam.bai
+./hg19/wgEncodeRikenCageH1hescCellPapAlnRep2.bam
+./hg19/wgEncodeRikenCageH1hescCellPapAlnRep2.bam.bai
+./hg19/wgEncodeRikenCageH1hescCellPapMinusClustersRep1.bigWig
+./hg19/wgEncodeRikenCageH1hescCellPapMinusClustersRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescCellPapMinusSignalRep1.bigWig
+./hg19/wgEncodeRikenCageH1hescCellPapMinusSignalRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescCellPapPlusClustersRep1.bigWig
+./hg19/wgEncodeRikenCageH1hescCellPapPlusClustersRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescCellPapPlusSignalRep1.bigWig
+./hg19/wgEncodeRikenCageH1hescCellPapPlusSignalRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescCellPapRawDataRep1.fastq.gz
+./hg19/wgEncodeRikenCageH1hescCellPapRawDataRep2.fastq.gz
+./hg19/wgEncodeRikenCageH1hescCellPapTssGencV7.gtf.gz
+./hg19/wgEncodeRikenCageH1hescCellPapTssHmm.bedRnaElements.gz
+./hg19/wgEncodeRikenCageH1hescCytosolPapAlnRep2.bam
+./hg19/wgEncodeRikenCageH1hescCytosolPapAlnRep2.bam.bai
+./hg19/wgEncodeRikenCageH1hescCytosolPapMinusClustersRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescCytosolPapMinusSignalRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescCytosolPapPlusClustersRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescCytosolPapPlusSignalRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescCytosolPapRawDataRep2.fastq.gz
+./hg19/wgEncodeRikenCageH1hescCytosolPapTssHmm.bedRnaElements.gz
+./hg19/wgEncodeRikenCageH1hescNucleusPapAlnRep2.bam
+./hg19/wgEncodeRikenCageH1hescNucleusPapAlnRep2.bam.bai
+./hg19/wgEncodeRikenCageH1hescNucleusPapMinusClustersRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescNucleusPapMinusSignalRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescNucleusPapPlusClustersRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescNucleusPapPlusSignalRep2.bigWig
+./hg19/wgEncodeRikenCageH1hescNucleusPapRawDataRep2.fastq.gz
+./hg19/wgEncodeRikenCageH1hescNucleusPapTssHmm.bedRnaElements.gz
+./hg19/wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcFt.bigBed
+./hg19/wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcUnFt.bigBed
+./hg19/wgEncodeUncBsuProtGencH1hescCellFasppepMapGcFt.bigBed
+./hg19/wgEncodeUncBsuProtGencH1hescCellFasppepMapGcUnFt.bigBed
+./hg19/wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcFt.bigBed
+./hg19/wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcUnFt.bigBed
+./hg19/wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcFt.bigBed
+./hg19/wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcUnFt.bigBed
+./mm9
+./mm9/wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xAlnRep1.bam
+./mm9/wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xAlnRep1.bam.bai
+./mm9/wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xPkRep1.narrowPeak.gz
+./mm9/wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xRawDataRep1.fastq.tgz
+./mm9/wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xSigRep1.bigWig
+./genomes.txt
+./hub.txt
+./files.txt
+./manifest.txt
+./header
+
+Looks like most of these are symlinks.
+
+--------------------
+
+manifest.txt looks like this:
+
+#file_name      format  experiment      replicate       output_type
+ biosample       target  localization    update
+hg19/wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam     bam     exp1
+ pooled  alignment       H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam.bai bam.bai exp1
+ pooled  alignment       H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters.bigWig
+ bigWig  exp1    pooled  clusters        H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters.bigWig bigWig
+ exp1    pooled  clusters        H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellLongnonpolyaRawData.fastq.gz
+fastq.gz        exp1    pooled  reads   H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPamAln.bam      bam     exp1    pooled
+ alignment       H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPamAln.bam.bai  bam.bai exp1    pooled
+ alignment       H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPamMinusSignal.bigWig   bigWig  exp1
+ pooled  signal  H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPamPlusSignal.bigWig    bigWig  exp1
+ pooled  signal  H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPamRawData.fastq.gz     fastq.gz
+ exp1    pooled  reads   H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPamTssGencV7.gtf.gz     gtf.gz  exp1
+ pooled  gencodeModels   H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPamTssHmm.bedRnaElements.gz
+bedRnaElements.gz       exp1    pooled  hmmModels       H1hesc  n/a
+ cell    no
+hg19/wgEncodeRikenCageH1hescCellPamTssHmmV2.bedRnaElements.gz
+bedRnaElements.gz       exp1    pooled  hmmModels       H1hesc  n/a
+ cell    no
+hg19/wgEncodeRikenCageH1hescCellPapAlnRep1.bam  bam     exp1    1
+ alignment       H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapAlnRep1.bam.bai      bam.bai exp1
+ 1       alignment       H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapAlnRep2.bam  bam     exp1    2
+ alignment       H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapAlnRep2.bam.bai      bam.bai exp1
+ 2       alignment       H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapMinusClustersRep1.bigWig     bigWig
+ exp1    1       clusters        H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapMinusClustersRep2.bigWig     bigWig
+ exp1    2       clusters        H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapMinusSignalRep1.bigWig       bigWig
+ exp1    1       signal  H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapMinusSignalRep2.bigWig       bigWig
+ exp1    2       signal  H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapPlusClustersRep1.bigWig      bigWig
+ exp1    1       clusters        H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapPlusClustersRep2.bigWig      bigWig
+ exp1    2       clusters        H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapPlusSignalRep1.bigWig        bigWig
+ exp1    1       signal  H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapPlusSignalRep2.bigWig        bigWig
+ exp1    2       signal  H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapRawDataRep1.fastq.gz fastq.gz
+ exp1    1       reads   H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapRawDataRep2.fastq.gz fastq.gz
+ exp1    2       reads   H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapTssGencV7.gtf.gz     gtf.gz  exp1
+ pooled  gencodeModels   H1hesc  n/a     cell    no
+hg19/wgEncodeRikenCageH1hescCellPapTssHmm.bedRnaElements.gz
+bedRnaElements.gz       exp1    pooled  hmmModels       H1hesc  n/a
+ cell    no
+hg19/wgEncodeRikenCageH1hescCytosolPapAlnRep2.bam       bam     exp2
+ 2       alignment       H1hesc  n/a     cytosol no
+hg19/wgEncodeRikenCageH1hescCytosolPapAlnRep2.bam.bai   bam.bai exp2
+ 2       alignment       H1hesc  n/a     cytosol no
+hg19/wgEncodeRikenCageH1hescCytosolPapMinusClustersRep2.bigWig  bigWig
+ exp2    2       clusters        H1hesc  n/a     cytosol no
+hg19/wgEncodeRikenCageH1hescCytosolPapMinusSignalRep2.bigWig    bigWig
+ exp2    2       signal  H1hesc  n/a     cytosol no
+hg19/wgEncodeRikenCageH1hescCytosolPapPlusClustersRep2.bigWig   bigWig
+ exp2    2       clusters        H1hesc  n/a     cytosol no
+hg19/wgEncodeRikenCageH1hescCytosolPapPlusSignalRep2.bigWig     bigWig
+ exp2    2       signal  H1hesc  n/a     cytosol no
+hg19/wgEncodeRikenCageH1hescCytosolPapRawDataRep2.fastq.gz
+fastq.gz        exp2    2       reads   H1hesc  n/a     cytosol no
+hg19/wgEncodeRikenCageH1hescCytosolPapTssHmm.bedRnaElements.gz
+bedRnaElements.gz       exp2    pooled  hmmModels       H1hesc  n/a
+ cytosol no
+hg19/wgEncodeRikenCageH1hescNucleusPapAlnRep2.bam       bam     exp3
+ 2       alignment       H1hesc  n/a     nucleus no
+hg19/wgEncodeRikenCageH1hescNucleusPapAlnRep2.bam.bai   bam.bai exp3
+ 2       alignment       H1hesc  n/a     nucleus no
+hg19/wgEncodeRikenCageH1hescNucleusPapMinusClustersRep2.bigWig  bigWig
+ exp3    2       clusters        H1hesc  n/a     nucleus no
+hg19/wgEncodeRikenCageH1hescNucleusPapMinusSignalRep2.bigWig    bigWig
+ exp3    2       signal  H1hesc  n/a     nucleus no
+hg19/wgEncodeRikenCageH1hescNucleusPapPlusClustersRep2.bigWig   bigWig
+ exp3    2       clusters        H1hesc  n/a     nucleus no
+hg19/wgEncodeRikenCageH1hescNucleusPapPlusSignalRep2.bigWig     bigWig
+ exp3    2       signal  H1hesc  n/a     nucleus no
+hg19/wgEncodeRikenCageH1hescNucleusPapRawDataRep2.fastq.gz
+fastq.gz        exp3    2       reads   H1hesc  n/a     nucleus no
+hg19/wgEncodeRikenCageH1hescNucleusPapTssHmm.bedRnaElements.gz
+bedRnaElements.gz       exp3    pooled  hmmModels       H1hesc  n/a
+ nucleus no
+hg19/wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcFt.bigBed     bigBed
+ exp4    pooled  pmPepMapFt      H1hesc  n/a     n/a     no
+hg19/wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcUnFt.bigBed   bigBed
+ exp4    pooled  pmPepMapUnFt    H1hesc  n/a     n/a     no
+hg19/wgEncodeUncBsuProtGencH1hescCellFasppepMapGcFt.bigBed      bigBed
+ exp4    pooled  PepMapFt H1hesc n/a     n/a     no
+hg19/wgEncodeUncBsuProtGencH1hescCellFasppepMapGcUnFt.bigBed    bigBed
+ exp4    pooled  PepMapUnFt      H1hesc  n/a     n/a     no
+hg19/wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcFt.bigBed   bigBed
+ exp4    pooled  mMudMapFt       H1hesc  n/a     n/a     no
+hg19/wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcUnFt.bigBed bigBed
+ exp4    pooled  mMudMapUnFt     H1hesc  n/a     n/a     no
+hg19/wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcFt.bigBed    bigBed
+ exp4    pooled  MudMapFt        H1hesc  n/a     n/a     no
+hg19/wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcUnFt.bigBed  bigBed
+ exp4    pooled  MudMapUnFt      H1hesc  n/a     n/a     no
+mm9/wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xAlnRep1.bam bam
+ exp5    1       alignment       H1hesc  Nrsf    n/a     no
+mm9/wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xAlnRep1.bam.bai
+ bam.bai exp5    1       alignment       C2c12   Nrsf    n/a     no
+mm9/wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xPkRep1.narrowPeak.gz
+       narrowPeak.gz   exp5    1       peaks   C2c12   Nrsf    n/a
+no
+mm9/wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xRawDataRep1.fastq.tgz
+      fastq.tgz       exp5    1       reads   C2c12   Nrsf    n/a
+no
+mm9/wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xSigRep1.bigWig
+ bigWig  exp5    1       signal  C2c12   Nrsf    n/a     no
+
+
+-----------------
+
+I assume that simply hashing the filename should be enough to make it unique.
+
+I need to first read in the validated.txt file if it is there,
+and then use that with the manifest.txt.  -- if the file_name
+stored in the validated hash matches and it has a valid code rather than error,
+and the file size and date are the same too, then accept it and do not
+re-run it.
+
+How important is it to either sort it or to output the new validated.txt?
+No, just use the natural order that is there.
+
+These are tab-separated values.
+
+In theory, the order of the columns in validated.txt could be
+different than in manifest.txt.
+Should that be detected, or does it just not matter?
+Where and when would be decide the allowed types?
+
+Should we begin an encode3 directory under hg?
+I guess so.
+
+hash of fieldname to column#.
+
+The manifestValidator should probably check if the value is an integer
+where appropriate?
+
+Make that be a hard-wired table at first?
+
+Do I want to make it a hash of hashes?
+
+#file_name
+format
+experiment
+replicate
+output_type
+biosample
+target
+localization
+update
+----
+md5_sum
+size
+modified
+valid_key
+
+Some of the code could be like the bed-parser which does tab input?
+
+Probably want to validate the manifest columns.
+
+create another hash for the inputs that simply
+maps record# to values.
+
+one way wants to preserve the original record order.
+one way wants to match on the file_name.
+
+do we parse all the fields, or simply keep the entire row together as a string?
+
+It can easily be made to check that the other columns exist and have
+the same values in validate.txt,
+otherwise, it can re-run the validator and the md5sum which are
+time-intensive operations.
+
+store the field-names list as an slList?
+ also hash field-names with position index? do I need this for sure?
+store the records as hashes,
+ keep an slList of the hashes to preserve the original record order.
+ as well as keeping a hash-of-file_name to them also.
+
+always still have to check the fileExists, fileSize and modified.
+
+------------
+
+It would probably be better NOT to clobber the validate.txt
+until the whole program finishes running?  So use something
+like newValidate.txt and then rename it at the end?
+
+--
+
+Do we need to detect duplicate fieldnames?
+
+
+-------------------
+
+There is 11 GB of stuff there.
+
+[hgwdev:manifest1> du -Lh --apparent-size .
+7.4G    ./hg19
+2.7G    ./mm9
+11G     .
+
+-------------------
+
+"narrowPeak", "bed6+4",
+"broadPeak", "bed6+3",
+"bedRnaElements", "bed6+3",
+"bedLogR", "bed9+1",
+"bedRrbs", "bed9+2",
+"peptideMapping", "bed9+1",
+
+I don't have a broadPeak example yet,
+but I put it in the code.
+
+peptide group did not get funding, so probably
+do not need to support in vm for encode3.
+
+not sure what bedLogR and bedRrbs are,
+or whether they are needed in enc3.
+
+
+
+--------------------

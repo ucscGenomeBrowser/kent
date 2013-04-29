@@ -14,8 +14,6 @@ struct annoStreamVcf
     int numCols;			// Number of columns in autoSql def of VCF.
     int numFileCols;			// Number of columns in VCF file.
     boolean isTabix;			// True if we are accessing compressed VCF via tabix index
-//#*** we need a way to pass the VCF header to the VCF formatter.
-//#*** streamer getHeader method??
 };
 
 
@@ -27,7 +25,7 @@ struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
 if (self->isTabix)
     lineFileSetTabixRegion(self->vcff->lf, chrom, regionStart, regionEnd);
 else if (chrom != NULL)
-    errAbort("annoStreamVcf: setRegion not yet implemented for non-tabix VCF.");
+    errAbort("annoStreamVcf %s: setRegion not yet implemented for non-tabix VCF.", vSelf->name);
 }
 
 static char *asvGetHeader(struct annoStreamer *vSelf)
@@ -76,7 +74,7 @@ self->record = vcfRecordFromRow(self->vcff, words);
 return self->asWords;
 }
 
-static struct annoRow *asvNextRow(struct annoStreamer *vSelf)
+static struct annoRow *asvNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
 /* Return an annoRow encoding the next VCF record, or NULL if there are no more items. */
 {
 struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
@@ -95,7 +93,7 @@ while (annoFilterRowFails(vSelf->filters, words, self->numCols, &rightFail))
     }
 struct vcfRecord *rec = self->record;
 return annoRowFromStringArray(rec->chrom, rec->chromStart, rec->chromEnd,
-			      rightFail, words, self->numCols);
+			      rightFail, words, self->numCols, callerLm);
 }
 
 static void asvClose(struct annoStreamer **pVSelf)
@@ -110,7 +108,8 @@ dyStringFree(&(self->dyGt));
 annoStreamerFree(pVSelf);
 }
 
-struct annoStreamer *annoStreamVcfNew(char *fileOrUrl, boolean isTabix, int maxRecords)
+struct annoStreamer *annoStreamVcfNew(char *fileOrUrl, boolean isTabix, struct annoAssembly *aa,
+				      int maxRecords)
 /* Create an annoStreamer (subclass) object from a VCF file, which may
  * or may not have been compressed and indexed by tabix. */
 {
@@ -121,13 +120,13 @@ if (isTabix)
 else
     vcff = vcfFileMayOpen(fileOrUrl, maxErr, maxRecords, FALSE);
 if (vcff == NULL)
-    errAbort("Unable to open VCF: '%s'", fileOrUrl);
+    errAbort("annoStreamVcfNew: unable to open VCF: '%s'", fileOrUrl);
 struct annoStreamVcf *self;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
 struct asObject *asObj = vcfAsObj();
-annoStreamerInit(streamer, asObj);
-streamer->rowType = arVcf;
+annoStreamerInit(streamer, aa, asObj, fileOrUrl);
+streamer->rowType = arWords;
 streamer->setRegion = asvSetRegion;
 streamer->getHeader = asvGetHeader;
 streamer->nextRow = asvNextRow;

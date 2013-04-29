@@ -1,0 +1,38 @@
+#!/bin/tcsh -efx
+#rm -rf try
+#mkdir try
+
+# Do initial conversion to tab-separated files and various data model files. 
+encodeCvToDb ~/kent/src/hg/makeDb/trackDb/cv/alpha/cv.ra try/all.stats try/all.tree try/all.as try/all.sql try/all.django try/tab
+
+# Spend quite a bit of time dealing with splitting antibody table into ab and abTarget tables.
+# Start out by creating split versions in try/splitAntibody
+verticalSplitSqlTable -mergeOk try/tab/antibody.tab try/antibody.as splitAntibody.ra try/splitAntibody
+
+# Make try/tab have new version, removing old version
+mv try/splitAntibody/ab.tab try/tab/
+mv try/splitAntibody/abTarget.tab try/tab/
+rm try/tab/antibody.tab
+
+# Make up a new.as file that has the middle of all.as replaced with ab and abTarget declarations
+textBetween -withEnds 'table antibody' ')' try/all.as > try/antibody.as
+echo "" >> try/antibody.as
+cat try/splitAntibody/ab.as  > try/both.as
+echo "" >> try/both.as
+cat try/splitAntibody/abTarget.as >> try/both.as
+replaceTextBetween -withEnds 'table antibody' ')' try/all.as try/both.as > try/new.as
+
+# Now run autoSql to generate SQL, and patch that into try/all.sql to make try/new.sql
+autoSql try/both.as try/both -django
+
+# Patch SQL in
+replaceTextBetween -withEnds 'CREATE TABLE antibody (' ');' try/all.sql try/both.sql > try/new.sql
+
+# Patch in try/all.django into try/new.django - a dir with two files
+mkdir -p try/new.django
+echo 'admin.site.register(Ab)' > try/admin.foo
+echo -n 'admin.site.register(AbTarget)' >> try/admin.foo
+replaceTextBetween -withEnds 'admin.site.register(Antibody)' 'admin.site.register(Antibody)' try/all.django/admin.py try/admin.foo > try/new.django/admin.py
+replaceTextBetween -withEnds 'class Antibody(models.Model):' 'return self.term' try/all.django/models.py splitAntibodyModel.py > try/new.django/models.py
+
+# At this point want to create a new database and start it off with new.sql

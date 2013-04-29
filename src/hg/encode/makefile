@@ -10,8 +10,7 @@ DIRS = \
 	hgEncodeDataVersions \
 	hgEncodeVocab \
 	mkEncodeFrameset \
-	paraMd5sum \
-	validateFiles
+	paraMd5sum
 
 # broken
 	#ldGencodeIntron \

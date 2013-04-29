@@ -1,19 +1,11 @@
-include ../../../inc/common.mk
+kentSrc = ../../..
+A = hgGoAssociation
+include $(kentSrc)/inc/userApp.mk
 
-L += $(MYSQLLIBS) -lm
-MYLIBDIR = ../../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
-
-O = hgGoAssociation.o
-
-hgGoAssociation: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgGoAssociation $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/hgGoAssociation${EXE}
-
-test:
+test::
 	hgGoAssociation go goaPart input/test1.goa -tab=output -noLoad -limit=500
 	diff -x CVS -r expected output
-	rm -r output
+	rm -fr output
 
 clean::
-	rm -f ${O}
+	rm -fr output

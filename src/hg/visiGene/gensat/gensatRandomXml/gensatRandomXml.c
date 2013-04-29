@@ -39,7 +39,7 @@ if (outCount < 1)
 
 /* Load and shuffle list. */
 imageSet = gsGensatImageSetLoad(input);
-shuffleList(&imageSet->gsGensatImage, 2);
+shuffleList(&imageSet->gsGensatImage);
 
 /* Truncate list. */
 image = slElementFromIx(imageSet->gsGensatImage, outCount-1);

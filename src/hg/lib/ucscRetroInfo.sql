@@ -38,26 +38,25 @@ CREATE TABLE ucscRetroInfo (
     coverage int unsigned not null,	# % of bases that align to gene col31
     label int not null,	# 1=pseudogene,-1 not pseudogene -2 expressed retroGene col32
     milliBad int unsigned not null,	# milliBad score, pseudogene aligned to genome col33
-    oldScore int unsigned not null,	# another heuristic col34
-    oldIntronCount int not null,	# old simple intron count col35
-    processedIntrons int not null,	# count of introns removed via retrotransposition col36
-    conservedSpliceSites int not null,	# conserved splice site count col37
-    maxOverlap int not null,	# largest overlap with another mrna col38
-    refSeq varchar(255) not null,	# Name of closest regSeq to gene col39
-    rStart int not null,	# refSeq alignment start position col40
-    rEnd int not null,	# refSeq alignment end position col41
-    mgc varchar(255) not null,	# Name of closest mgc to gene col42
-    mStart int not null,	# mgc alignment start position col43
-    mEnd int not null,	# mgc alignment end position col44
-    kgName varchar(255) not null,	# Name of closest knownGene to gene col45
-    kStart int not null,	# kg alignment start position col46
-    kEnd int not null,	# kg alignment end position col47
-    overName varchar(255) not null,	# name of overlapping mrna col48
-    overStart int not null,	# overlapping mrna start position col49
-    overExonCover int not null,	# count of overlapping mrna exons col50
-    overStrand char(2) not null,	# strand of overlapping mrna col51
-    posConf float not null,	# pvalue for positive col52
-    polyAlen int unsigned not null,	# length of polyA col53
+    alignGapCount int not null,	# simple intron count col34
+    processedIntrons int not null,	# count of introns removed via retrotransposition col35
+    conservedSpliceSites int not null,	# conserved splice site count col36
+    maxOverlap int not null,	# largest overlap with another mrna col37
+    refSeq varchar(255) not null,	# Name of closest regSeq to gene col38
+    rStart int not null,	# refSeq alignment start position col39
+    rEnd int not null,	# refSeq alignment end position col40
+    mgc varchar(255) not null,	# Name of closest mgc to gene col41
+    mStart int not null,	# mgc alignment start position col42
+    mEnd int not null,	# mgc alignment end position col43
+    kgName varchar(255) not null,	# Name of closest knownGene to gene col44
+    kStart int not null,	# kg alignment start position col45
+    kEnd int not null,	# kg alignment end position col46
+    overName varchar(255) not null,	# name of overlapping mrna col47
+    overStart int not null,	# overlapping mrna start position col48
+    overExonCover int not null,	# count of overlapping mrna exons col49
+    overStrand char(2) not null,	# strand of overlapping mrna col50
+    posConf float not null,	# pvalue for positive col51
+    polyAlen int unsigned not null,	# length of polyA col52
               #Indices
     PRIMARY KEY(name),
     index(kgName(10)),

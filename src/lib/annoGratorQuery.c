@@ -4,67 +4,38 @@
 #include "errabort.h"
 #include "obscure.h"
 
-struct annoGratorQuery *annoGratorQueryNew(char *assemblyName, struct hash *chromSizes,
-					   struct twoBitFile *tbf,
+struct annoGratorQuery
+/* Representation of a complex query: multiple sources, each with its own filters,
+ * output data and means of integration, aggregated and output by a formatter. */
+    {
+    struct annoAssembly *assembly;	// Genome assembly to which annotations belong
+    struct annoStreamer *primarySource;	// Annotations to be integrated with other annos.
+    struct annoGrator *integrators;	// Annotations & methods for integrating w/primary
+    struct annoFormatter *formatters;	// Writers of output collected from primary & intg's
+    };
+
+struct annoGratorQuery *annoGratorQueryNew(struct annoAssembly *assembly,
 					   struct annoStreamer *primarySource,
 					   struct annoGrator *integrators,
 					   struct annoFormatter *formatters)
 /* Create an annoGratorQuery from all of its components, and introduce components to each other.
- * Either chromSizes or tbf may be NULL.  integrators may be NULL.
- * All other inputs must be non-NULL. */
+ * integrators may be NULL.  All other inputs must be non-NULL. */
 {
-if (assemblyName == NULL)
-    errAbort("annoGratorQueryNew: assemblyName can't be NULL");
-if (chromSizes == NULL && tbf == NULL)
-    errAbort("annoGratorQueryNew: chromSizes and tbf can't both be NULL");
+if (assembly == NULL)
+    errAbort("annoGratorQueryNew: assembly can't be NULL");
 if (primarySource == NULL)
     errAbort("annoGratorQueryNew: primarySource can't be NULL");
 if (formatters == NULL)
     errAbort("annoGratorQueryNew: formatters can't be NULL");
 struct annoGratorQuery *query = NULL;
 AllocVar(query);
-if (tbf != NULL)
-    {
-    if (chromSizes != NULL)
-	{
-	// Ensure that tbf and chromSizes are consistent.
-	struct hashEl *hel;
-	struct hashCookie cookie = hashFirst(chromSizes);
-	while ((hel = hashNext(&cookie)) != NULL)
-	    {
-	    char *chrom = hel->name;
-	    int size = ptToInt(hel->val);
-	    int tbfSize = twoBitSeqSize(tbf, chrom);
-	    if (tbfSize != size)
-		errAbort("Inconsistent size for %s: %s has %d but chromSizes hash has %d",
-			 chrom, tbf->fileName, tbfSize, size);
-	    }
-	}
-    else
-	{
-	// Make our own chromSizes from tbf info.  We will leak this but I don't expect
-	// many annoGratorQuery's in the same process.
-	chromSizes = hashNew(0);
-	struct slName *tbfSeqs = twoBitSeqNames(tbf->fileName), *seq;
-	for (seq = tbfSeqs;  seq != NULL;  seq = seq->next)
-	    hashAddInt(chromSizes, seq->name, twoBitSeqSize(tbf, seq->name));
-	query->csAllocdHere = TRUE;
-	}
-    }
-query->assemblyName = cloneString(assemblyName);
-query->chromSizes = chromSizes;
-query->tbf = tbf;
+query->assembly = assembly;
 query->primarySource = primarySource;
 query->integrators = integrators;
 query->formatters = formatters;
-// Set streamers' and formatters' query pointer.
-primarySource->setQuery(primarySource, query);
-struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
-for (;  grator != NULL;  grator = grator->next)
-    grator->setQuery(grator, query);
 struct annoFormatter *formatter;
 for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
-    formatter->initialize(formatter, query);
+    formatter->initialize(formatter, primarySource, (struct annoStreamer *)integrators);
 return query;
 }
 
@@ -73,7 +44,7 @@ void annoGratorQuerySetRegion(struct annoGratorQuery *query, char *chrom, uint r
 {
 if (chrom != NULL)
     {
-    uint chromSize = (uint)hashIntVal(query->chromSizes, chrom);
+    uint chromSize = annoAssemblySeqSize(query->assembly, chrom);
     if (rEnd < rStart)
 	errAbort("annoGratorQuerySetRegion: rStart (%u) can't be greater than rEnd (%u)",
 		 rStart, rEnd);
@@ -88,8 +59,6 @@ query->primarySource->setRegion(query->primarySource, chrom, rStart, rEnd);
 struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
 for (;  grator != NULL;  grator = grator->next)
     grator->setRegion(grator, chrom, rStart, rEnd);
-//#*** formatters should be told too, in case the info should go in the header, or if
-//#*** they should clip output to search region....
 }
 
 void annoGratorQueryExecute(struct annoGratorQuery *query)
@@ -97,34 +66,41 @@ void annoGratorQueryExecute(struct annoGratorQuery *query)
  * to formatters. */
 {
 struct annoStreamer *primarySrc = query->primarySource;
-struct annoFormatter *formatter = NULL;
+struct annoStreamRows *primaryData = annoStreamRowsNew(primarySrc);
+struct annoStreamRows *gratorData = NULL;
+int gratorCount = slCount(query->integrators);
+if (gratorCount > 0)
+    {
+    struct annoStreamer *gratorStreamList = (struct annoStreamer *)query->integrators;
+    gratorData = annoStreamRowsNew(gratorStreamList);
+    }
 struct annoRow *primaryRow = NULL;
-while ((primaryRow = primarySrc->nextRow(primarySrc)) != NULL)
+struct lm *lm = lmInit(0);
+while ((primaryRow = primarySrc->nextRow(primarySrc, lm)) != NULL)
     {
     if (primaryRow->rightJoinFail)
 	continue;
-    struct slRef *gratorRowList = NULL;
+    primaryData->rowList = primaryRow;
     boolean rjFilterFailed = FALSE;
-    struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
-    for (;  grator != NULL;  grator = grator->next)
+    int i;
+    for (i = 0;  i < gratorCount;  i++)
 	{
-	struct annoGrator *realGrator = (struct annoGrator *)grator;
-	struct annoRow *gratorRows = realGrator->integrate(realGrator, primaryRow, &rjFilterFailed);
-	slAddHead(&gratorRowList, slRefNew(gratorRows));
+
+	struct annoGrator *grator = (struct annoGrator *)gratorData[i].streamer;
+	gratorData[i].rowList = grator->integrate(grator, primaryData, &rjFilterFailed, lm);
 	if (rjFilterFailed)
 	    break;
 	}
-    slReverse(&gratorRowList);
+    struct annoFormatter *formatter = NULL;
     for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
 	if (!rjFilterFailed)
-	    formatter->formatOne(formatter, primaryRow, gratorRowList);
-    annoRowFree(&primaryRow, primarySrc);
-    struct slRef *oneRowList = gratorRowList;
-    grator = (struct annoStreamer *)(query->integrators);
-    for (;  oneRowList != NULL;  oneRowList = oneRowList->next, grator = grator->next)
-	annoRowFreeList((struct annoRow **)&(oneRowList->val), grator);
-    slFreeList(&oneRowList);
+	    formatter->formatOne(formatter, primaryData, gratorData, gratorCount);
+    lmCleanup(&lm);
+    lm = lmInit(0);
     }
+freez(&primaryData);
+freez(&gratorData);
+lmCleanup(&lm);
 }
 
 void annoGratorQueryFree(struct annoGratorQuery **pQuery)
@@ -133,9 +109,6 @@ void annoGratorQueryFree(struct annoGratorQuery **pQuery)
 if (pQuery == NULL)
     return;
 struct annoGratorQuery *query = *pQuery;
-freez(&(query->assemblyName));
-if (query->csAllocdHere)
-    hashFree(&(query->chromSizes));
 query->primarySource->close(&(query->primarySource));
 struct annoStreamer *grator = (struct annoStreamer *)(query->integrators), *nextGrator;
 for (;  grator != NULL;  grator = nextGrator)

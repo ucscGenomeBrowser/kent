@@ -27,7 +27,9 @@
 #include "hCommon.h"
 #include "trackDb.h"
 #include "wikiTrack.h"
+#include "genePred.h"
 #include "hgMaf.h"
+#include "pgSnp.h"
 #if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
@@ -480,6 +482,7 @@ static struct slName *list = NULL;
 if (list == NULL)
     {
     list = slNameNew("phenDis");
+    slAddHead(&list, slNameNew("phenoAllele"));
     slAddHead(&list, slNameNew("varRep"));
     }
 return list;
@@ -735,25 +738,35 @@ dyStringPrintf(dy, "</SELECT>\n");
 return selGroup;
 }
 
-char *makeTrackDropDown(struct dyString *dy, char *selGroup, char *selTrack)
-/* Make track drop-down for selGroup using fullTrackList. If selTrack is NULL,
- * return first track in selGroup; otherwise return selTrack. */
+char *makeTrackDropDown(struct dyString *dy, char *selGroup, char *selTrack, char **retSelTable)
+/* Make track drop-down for selGroup using fullTrackList. If selTrack is NULL
+ * or not in this assembly, return first track in selGroup; otherwise return selTrack. */
 {
 dyStringAppend(dy, "<SELECT NAME='trackSel'>\n");
 boolean allTracks = sameString(selGroup, "All Tracks");
 if (allTracks)
     slSort(&fullTrackList, trackDbCmpShortLabel);
-struct trackDb *track = NULL;
-for (track = fullTrackList; track != NULL; track = track->next)
+struct trackDb *tdb = NULL;
+boolean foundSelTrack = FALSE;
+char *firstTrack = NULL;
+for (tdb = fullTrackList; tdb != NULL; tdb = tdb->next)
     {
-    if (allTracks || sameString(selGroup, track->grp))
+    if (allTracks || sameString(selGroup, tdb->grp))
 	{
-	dyStringPrintf(dy, " <OPTION VALUE=\"%s\"%s>%s\n", track->track,
-		(sameOk(track->track, selTrack) ? " SELECTED" : ""),
-		track->shortLabel);
-	if (selTrack == NULL)
-	    selTrack = track->track;
+	boolean thisIsSelTrack = sameOk(tdb->track, selTrack);
+	if (thisIsSelTrack)
+	    foundSelTrack = TRUE;
+	dyStringPrintf(dy, " <OPTION VALUE=\"%s\"%s>%s\n", tdb->track,
+		(thisIsSelTrack ? " SELECTED" : ""),
+		tdb->shortLabel);
+	if (firstTrack == NULL)
+	    firstTrack = tdb->track;
 	}
+    }
+if (! foundSelTrack)
+    {
+    selTrack = firstTrack;
+    *retSelTable = NULL;
     }
 dyStringPrintf(dy, "</SELECT>\n");
 return selTrack;
@@ -858,18 +871,24 @@ char *makeTableDropDown(struct dyString *dy, char *selTrack, char *selTable)
 {
 dyStringAppend(dy, "<SELECT NAME='tableSel'>\n");
 struct trackDb *track = findTdb(fullTrackList, selTrack);
-struct slName *t, *tableList = tablesForTrack(track);
-if (isEmpty(selTable) && tableList != NULL)
-    selTable = tableList->name;
-for (t = tableList;  t != NULL;  t = t->next)
+if (track == NULL)
+    selTable = NULL;
+else
     {
-    dyStringPrintf(dy, "<OPTION VALUE=\"%s\"%s>",
-	    t->name, (sameOk(t->name, selTable) ? " SELECTED" : ""));
-    struct trackDb *subtrackTdb = findSubtrackTdb(track, t->name);
-    if (subtrackTdb != NULL && differentString(subtrackTdb->shortLabel, track->shortLabel))
-	dyStringPrintf(dy, "%s (%s)\n", t->name, subtrackTdb->shortLabel);
-    else
-	dyStringPrintf(dy, "%s\n", t->name);
+    struct slName *t, *tableList = tablesForTrack(track);
+    if (tableList != NULL &&
+	(isEmpty(selTable) || !slNameInList(tableList, selTable)))
+	selTable = tableList->name;
+    for (t = tableList;  t != NULL;  t = t->next)
+	{
+	dyStringPrintf(dy, "<OPTION VALUE=\"%s\"%s>",
+		       t->name, (sameOk(t->name, selTable) ? " SELECTED" : ""));
+	struct trackDb *subtrackTdb = findSubtrackTdb(track, t->name);
+	if (subtrackTdb != NULL && differentString(subtrackTdb->shortLabel, track->shortLabel))
+	    dyStringPrintf(dy, "%s (%s)\n", t->name, subtrackTdb->shortLabel);
+	else
+	    dyStringPrintf(dy, "%s\n", t->name);
+	}
     }
 dyStringPrintf(dy, "</SELECT>\n");
 return selTable;
@@ -900,6 +919,8 @@ void makeIntersectDropDown(struct dyString *dy, struct sourceConfig *src, char *
 /* Give the user the option of keeping/dropping primary items based on overlap with this track. */
 {
 struct trackDb *tdb = findTdb(fullTrackList, src->selTrack);
+if (tdb == NULL)
+    return;
 if (isEmpty(primaryTrack))
     primaryTrack = "primary track";
 dyStringPrintf(dy, "<SELECT NAME='intersectSel'%s>\n",
@@ -1032,6 +1053,8 @@ void makeFilterSection(struct dyString *dy, struct sourceConfig *src)
  * one for available filters. */
 {
 struct trackDb *tdb = findTdb(fullTrackList, src->selTrack);
+if (tdb == NULL)
+    return;
 dyStringPrintf(dy, "<div name='filter' class='sourceFilter'>\n");
 dyStringPrintf(dy, "<script>activeFilterList['%s'] = [ ", src->name);
 struct dyString *availDy = dyStringCreate("availableFilterList['%s'] = [ ", src->name);
@@ -1082,7 +1105,7 @@ else
     makeGroupDropDown(dy, src->selGroup);
 dyStringPrintf(dy, "<B>&nbsp;track:</B> ");
 if (isNotEmpty(src->selGroup))
-    src->selTrack = makeTrackDropDown(dy, src->selGroup, src->selTrack);
+    src->selTrack = makeTrackDropDown(dy, src->selGroup, src->selTrack, &(src->selTable));
 else
     makeEmptySelect(dy, "trackSel");
 dyStringPrintf(dy, "<B>&nbsp;table:</B> ");
@@ -1121,7 +1144,8 @@ printf("<div id='%s' class='sourceSection'>\n", src->name);
 if (isNotEmpty(src->selTrack))
     {
     struct trackDb *tdb = findTdb(fullTrackList, src->selTrack);
-    src->selGroup = tdb->grp;
+    if (tdb != NULL)
+	src->selGroup = tdb->grp;
     }
 char *contents = buildSourceContents(src, primaryTrack);
 puts(contents);
@@ -1419,7 +1443,7 @@ return tdb->shortLabel;
 void printExtraSource(unsigned short i, struct sourceConfig *src, char *primaryTrack, boolean show)
 /* Print a source section with unrestricted group list and numeric-suffix id. */
 {
-if (src == NULL)
+if (src == NULL || primaryTrack == NULL)
     printDataSourceSection(emptySourceConfig(i), primaryTrack, show);
 else
     {
@@ -1448,6 +1472,7 @@ void printSourcesFromQueryConfig(struct queryConfig *queryConfig)
 /* Show sources with the same order and settings as queryConfig. */
 {
 char *primaryTrack = primaryTrackName(queryConfig);
+
 struct sourceConfig *src;
 unsigned short i;
 for (i = 0, src = queryConfig->sources;  src != NULL;  src = src->next)
@@ -1788,11 +1813,22 @@ else
     return asObjectFromFields(dbTable, fieldList);
 }
 
+struct annoAssembly *getAnnoAssembly(char *db)
+/* Make annoAssembly for db. */
+{
+char *nibOrTwoBitDir = hDbDbNibPath(db);
+char twoBitPath[HDB_MAX_PATH_STRING];
+safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
+return annoAssemblyNew(db, twoBitPath);
+}
+
 struct annoStreamer *streamerFromSource(char *db, char *table, struct trackDb *tdb, char *chrom)
 /* Figure out the source and type of data and make an annoStreamer. */
 {
 struct annoStreamer *streamer = NULL;
 char *dataDb = db, *dbTable = table;
+if (chrom == NULL)
+    chrom = hDefaultChrom(db);
 if (isCustomTrack(table))
     {
     dataDb = CUSTOM_TRASH;
@@ -1807,65 +1843,29 @@ if (isHubTrack(table))
 	   trackDbSettingOrDefault(tdb, "bigDataUrl", "-- doh, no bigDataUrl!"));
     errAbort("hgVarAnnogrator can't do hub track with type '%s'", tdb->type);
     }
+struct annoAssembly *assembly = getAnnoAssembly(db);
 if (startsWith("wig", tdb->type))
-    streamer = annoStreamWigDbNew(dataDb, dbTable, maxOutRows);
+    streamer = annoStreamWigDbNew(dataDb, dbTable, assembly, maxOutRows);
 else if (sameString("vcfTabix", tdb->type))
     {
-    if (chrom == NULL)
-	chrom = hDefaultChrom(db);
     struct sqlConnection *conn = hAllocConn(db);
     char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, chrom);
     hFreeConn(&conn);
-    streamer = annoStreamVcfNew(fileOrUrl, TRUE, maxOutRows);
+    streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
     }
 else
     {
-    struct asObject *asObj = getAutoSqlForTable(db, dataDb, dbTable, tdb);
-    streamer = annoStreamDbNew(dataDb, dbTable, asObj);
+    struct sqlConnection *conn = hAllocConn(db);
+    char maybeSplitTable[1024];
+    if (sqlTableExists(conn, dbTable))
+	safecpy(maybeSplitTable, sizeof(maybeSplitTable), dbTable);
+    else
+	safef(maybeSplitTable, sizeof(maybeSplitTable), "%s_%s", chrom, dbTable);
+    struct asObject *asObj = getAutoSqlForTable(db, dataDb, maybeSplitTable, tdb);
+    streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj);
     }
 return streamer;
 }
-
-boolean looksLikePgSnp(struct asObject *asObj)
-/* Return TRUE if this has characteristic column names of pgSnp. */
-//#*** Replace me with a general autoSql comparator!!
-{
-boolean gotChromStart = FALSE, gotChromEnd = FALSE, gotAlleleCount = FALSE, gotAlleleFreq = FALSE;
-struct asColumn *col;
-for (col = asObj->columnList;  col != NULL;  col = col->next)
-    {
-    if (sameString(col->name, "chromStart"))
-	gotChromStart = TRUE;
-    else if (sameString(col->name, "chromEnd"))
-	gotChromEnd = TRUE;
-    else if (sameString(col->name, "alleleCount"))
-	gotAlleleCount = TRUE;
-    else if (sameString(col->name, "alleleFreq"))
-	gotAlleleFreq = TRUE;
-    }
-return (gotChromStart && gotChromEnd && gotAlleleCount && gotAlleleFreq);
-}
-
-boolean looksLikeGenePred(struct asObject *asObj)
-/* Return TRUE if this has characteristic column names of genePred. */
-//#*** Replace me with a general autoSql comparator!!
-{
-boolean gotTxStart = FALSE, gotTxEnd = FALSE, gotCdsStart = FALSE, gotExonStarts = FALSE;
-struct asColumn *col;
-for (col = asObj->columnList;  col != NULL;  col = col->next)
-    {
-    if (sameString(col->name, "txStart"))
-	gotTxStart = TRUE;
-    else if (sameString(col->name, "txEnd"))
-	gotTxEnd = TRUE;
-    else if (sameString(col->name, "cdsStart"))
-	gotCdsStart = TRUE;
-    else if (sameString(col->name, "exonStarts"))
-	gotExonStarts = TRUE;
-    }
-return (gotTxStart && gotTxEnd && gotCdsStart && gotExonStarts);
-}
-
 
 struct annoGrator *gratorFromSource(char *db, struct sourceConfig *src, struct trackDb *tdb,
 				    char *chrom, struct annoStreamer *primary)
@@ -1881,11 +1881,15 @@ if (isCustomTrack(src->selTable))
 	errAbort("Can't find dbTableName for custom track %s", src->selTable);
     }
 if (startsWith("wig", tdb->type))
-    grator = annoGrateWigDbNew(dataDb, dbTable, maxOutRows);
+    {
+    struct annoAssembly *assembly = getAnnoAssembly(db);
+    grator = annoGrateWigDbNew(dataDb, dbTable, assembly, maxOutRows);
+    }
 else
     {
     struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
-    if (looksLikePgSnp(primary->asObj) && looksLikeGenePred(streamer->asObj))
+    if (asObjectsMatch(primary->asObj, pgSnpAsObj()) &&
+	asObjectsMatchFirstN(streamer->asObj, genePredAsObj(), 10))
 	grator = annoGratorGpVarNew(streamer, FALSE);
     else
 	grator = annoGratorNew(streamer);
@@ -1937,11 +1941,8 @@ for (src = queryConfig->sources;  src != NULL;  src = src->next)
     }
 slReverse(&gratorList);
 struct annoFormatter *formatter = formatterFromOutput(queryConfig);
-char *nibOrTwoBitDir = hDbDbNibPath(db);
-char twoBitPath[HDB_MAX_PATH_STRING];
-safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
-struct twoBitFile *tbf = twoBitOpen(twoBitPath);
-struct annoGratorQuery *agq = annoGratorQueryNew(db, NULL, tbf, primary, gratorList, formatter);
+struct annoAssembly *assembly = getAnnoAssembly(db);
+struct annoGratorQuery *agq = annoGratorQueryNew(assembly, primary, gratorList, formatter);
 if (sameString(regionType, hgvaRegionTypeRange))
     annoGratorQuerySetRegion(agq, chrom, start, end);
 annoGratorQueryExecute(agq);

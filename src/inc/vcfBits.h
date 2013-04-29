@@ -13,6 +13,15 @@
 #include "bits.h"
 #include "elmTree.h"
 
+enum variantType
+/* VCF header defines INFO column components; each component has one of these types: */
+    {
+    vtNoType    = 0,   // uninitialized value (0) or unrecognized type name
+    vtSNP       = 1,   // Single Nucleotide polymorphism (most)
+    vtInsertion = 2,   // Insertion relative to reference genome
+    vtDeletion  = 3,   // Insertion relative to reference genome
+    };
+
 struct variantBits
 // all genotypes/haplotypes/alleles for one record are converted to a bit map
 // One struct per variant record in vcff->records.  One slot per genotype containing
@@ -20,6 +29,7 @@ struct variantBits
     {
     struct variantBits *next;
     struct vcfRecord *record;     // keep track of record for later interpretation
+    enum variantType vType;       // Might as well know this up front
     int genotypeSlots;            // subjects covered in vcf file
     unsigned char haplotypeSlots; // 2 unless haploid or homozygous only
     unsigned char alleleSlots;    // 1 for 1 alt allele, 2 for 2 or 3 alt alleles >3 unsupported
@@ -36,6 +46,7 @@ struct variantBits
         ( (genoHapIx(vBits,genoIx,hapIx) * vBits->alleleSlots) + variantIx)
 #define vBitsSlotCount(vBits) \
         ((vBits)->genotypeSlots * (vBits)->haplotypeSlots * (vBits)->alleleSlots)
+#define vcfBitsSubjectCount(vBits) ((vBits)->genotypeSlots)
 
 struct variantBits *vcfRecordsToVariantBits(struct vcfFile *vcff, struct vcfRecord *records,
                                             boolean phasedOnly, boolean homozygousOnly,
@@ -50,9 +61,34 @@ struct variantBits *vcfRecordsToVariantBits(struct vcfFile *vcff, struct vcfReco
 // If unphasedBits, then vBits->unphased will contain a bitmap with 1s for all unphased genotypes.
 // NOTE: allocated from vcff pool, so closing file or flushing reusePool will invalidate this.
 
-int vcfVariantBitsDropSparse(struct variantBits **vBitsList, int haploGenomeMin);
-// Drops vBits found in less than a minimum number of haplotype genomes.
+Bits *vcfRecordHaploidBits(struct vcfFile *vcff, struct vcfRecord *record);
+// Returns array (1 bit per genotype) for each haploid genotype.
+// This is useful for interpreting chrX.
+
+int vBitsHaploidCount(struct variantBits *vBits);
+// Returns the number of subjects in the VCF dataset that are haploid at this location
+
+//#define vBitsSubjectChromCount(vBits) ((vBits)->genotypeSlots * (vBits)->haplotypeSlots)
+int vBitsSubjectChromCount(struct variantBits *vBits);
+// Returns the chromosomes in the VCF dataset that are covered at this location
+
+int vcfVariantBitsDropSparse(struct variantBits **vBitsList, int haploGenomeMin,
+                             boolean dropRefErrors);
+// Drops vBits found in less than a minimum number of haplotype genomes.  Supplying 1 will
+// drop variants found in no haplotype genomes.  Declaring dropRefErrors will drop variants
+// in all haplotype genomes (variants where reference is wrong).
 // Returns count of vBits structure that were dropped.
+
+int vcfVariantBitsAlleleOccurs(struct variantBits *vBits, unsigned char alleleIx,
+                               boolean homozygousOrHaploid);
+// Counts the number of times a particular allele occurs in the subjects*chroms covered.
+// If homozygousOrHaploid then the allele must occur in both chroms to be counted
+
+int vcfVariantBitsReferenceOccurs(struct vcfFile *vcff, struct variantBits *vBitsList,
+                                  boolean homozygousOrHaploid);
+// For an entire list of vBits structs, counts the times the reference allele occurs.
+// If homozygousOrHaploid then the reference allele must occur in both chroms to be counted
+
 
 int vcfVariantMostPopularCmp(const void *va, const void *vb);
 // Compare to sort variantBits based upon how many genomes/chrom has the variant

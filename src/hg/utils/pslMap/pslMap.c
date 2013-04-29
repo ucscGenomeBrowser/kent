@@ -4,8 +4,7 @@
 #include "pslTransMap.h"
 #include "options.h"
 #include "linefile.h"
-#include "binRange.h"
-#include "chromBins.h"
+#include "genomeRangeTree.h"
 #include "dystring.h"
 #include "psl.h"
 #include "dnautil.h"
@@ -124,28 +123,28 @@ if (swapMap)
 return mapAlnNew(psl, ch->id);
 }
 
-static struct chromBins* loadMapChains(char *chainFile)
-/* read a chain file, convert to mapAln object and chromBins by query locations. */
+static struct genomeRangeTree* loadMapChains(char *chainFile)
+/* read a chain file, convert to mapAln object and genomeRangeTree by query locations. */
 {
-struct chromBins* mapAlns = chromBinsNew((chromBinsFreeFunc*)pslFree);
+struct genomeRangeTree* mapAlns = genomeRangeTreeNew();
 struct chain *ch;
 struct lineFile *chLf = lineFileOpen(chainFile, TRUE);
 while ((ch = chainRead(chLf)) != NULL)
     {
     struct mapAln *mapAln = chainToPsl(ch);
-    chromBinsAdd(mapAlns, mapAln->psl->qName, mapAln->psl->qStart, mapAln->psl->qEnd, mapAln);
+    genomeRangeTreeAddValList(mapAlns, mapAln->psl->qName, mapAln->psl->qStart, mapAln->psl->qEnd, mapAln);
     chainFree(&ch);
     }
 lineFileClose(&chLf);
 return mapAlns;
 }
 
-static struct chromBins* loadMapPsls(char *pslFile)
-/* read a psl file and chromBins by query, linking multiple PSLs for the
+static struct genomeRangeTree* loadMapPsls(char *pslFile)
+/* read a psl file and genomeRangeTree by query, linking multiple PSLs for the
  * same query.*/
 {
 struct dyString* idBuf = NULL;
-struct chromBins* mapAlns = chromBinsNew((chromBinsFreeFunc*)pslFree);
+struct genomeRangeTree* mapAlns = genomeRangeTreeNew();
 int id = 0;
 struct psl* psl;
 struct lineFile *pslLf = pslFileOpen(pslFile);
@@ -153,8 +152,8 @@ while ((psl = pslNext(pslLf)) != NULL)
     {
     if (swapMap)
         pslSwap(psl, FALSE);
-    chromBinsAdd(mapAlns, getMappingId(psl->qName, &idBuf), psl->qStart, psl->qEnd,
-                 mapAlnNew(psl, id));
+    genomeRangeTreeAddValList(mapAlns, getMappingId(psl->qName, &idBuf), psl->qStart, psl->qEnd,
+                              mapAlnNew(psl, id));
     id++;
     }
 lineFileClose(&pslLf);
@@ -249,21 +248,19 @@ pslFree(&mappedPsl);
 return wasMapped;
 }
 
-static void mapQueryPsl(struct psl* inPsl, struct chromBins *mapAlns,
+static void mapQueryPsl(struct psl* inPsl, struct genomeRangeTree *mapAlns,
                         FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh)
 /* map a query psl to all targets  */
 {
 static struct dyString *idBuf = NULL;
-struct binElement *overMapAlns
-    = chromBinsFind(mapAlns, getMappingId(inPsl->tName, &idBuf), inPsl->tStart, inPsl->tEnd);
-struct binElement *overMapAln;
+struct range *overMapAlns = genomeRangeTreeAllOverlapping(mapAlns, getMappingId(inPsl->tName, &idBuf), inPsl->tStart, inPsl->tEnd);
+struct range *overMapAln;
 boolean wasMapped = FALSE;
 for (overMapAln = overMapAlns; overMapAln != NULL; overMapAln = overMapAln->next)
     {
     if (mapPslPair(inPsl, (struct mapAln *)overMapAln->val, outPslFh, mapInfoFh, mappingPslFh))
         wasMapped = TRUE;
     }
-slFreeList(&overMapAlns);
 if ((mapInfoFh != NULL) && !wasMapped)
     writeMapInfo(mapInfoFh, inPsl, NULL, NULL);
 }
@@ -271,7 +268,7 @@ if ((mapInfoFh != NULL) && !wasMapped)
 static void pslMap(char* inPslFile, char *mapFile, char *outPslFile)
 /* project inPsl query through mapFile query to mapFile target */
 {
-struct chromBins *mapAlns;
+struct genomeRangeTree *mapAlns;
 struct psl* inPsl;
 struct lineFile* inPslLf = pslFileOpen(inPslFile);
 FILE *outPslFh, *mapInfoFh = NULL, *mappingPslFh = NULL;

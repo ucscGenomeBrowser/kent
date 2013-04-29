@@ -3,8 +3,16 @@
 #include "annoGrateWig.h"
 #include "annoStreamBigWig.h"
 
+struct annoGrateWig
+{
+    struct annoGrator grator;		// external annoGrator interface
+    struct annoGrator *mySource;	// internal annoGrator of wigDb rows
+    struct lm *lm;			// localmem for rows from mySource
+    int lmRowCount;			// counter for periodic cleanup
+};
+
 static void tidyUp(const struct annoRow *rowIn, struct annoRow **pOutList,
-		   uint primaryStart, uint primaryEnd)
+		   uint primaryStart, uint primaryEnd, struct lm *callerLm)
 /* This takes a wiggle chunk coming from a .wig/database row and makes it into
  * zero or more tidy little NAN-less annoRows.  Trim rowIn to the bounds of
  * primary, trim NANs from beginning and break into multiple rows where there
@@ -30,7 +38,7 @@ while (end > start)
 	    {
 	    // allocate a new row
 	    struct annoRow *rowOut = annoRowWigNew(rowIn->chrom, start, thisEnd, FALSE,
-						   vector + offset);
+						   vector + offset, callerLm);
 	    slAddHead(pOutList, rowOut);
 	    }
 	else
@@ -40,8 +48,8 @@ while (end > start)
 	    uint oldEnd = headRow->end;
 	    uint oldLen = oldEnd - headRow->start;
 	    uint newLen = thisEnd - headRow->start;
-	    headRow->data = needMoreMem(headRow->data, oldLen*sizeof(vector[0]),
-					newLen*sizeof(vector[0]));
+	    headRow->data = lmAllocMoreMem(callerLm, headRow->data, oldLen*sizeof(vector[0]),
+					   newLen*sizeof(vector[0]));
 	    headRow->end = thisEnd;
 	    float *newData = (float *)rowIn->data + (oldEnd - rowIn->start);
 	    float *newSpace = (float *)headRow->data + oldLen;
@@ -52,18 +60,29 @@ while (end > start)
     }
 }
 
-static struct annoRow *agwIntegrate(struct annoGrator *self, struct annoRow *primaryRow,
-				     boolean *retRJFilterFailed)
+static struct annoRow *agwIntegrate(struct annoGrator *gSelf, struct annoStreamRows *primaryData,
+				    boolean *retRJFilterFailed, struct lm *callerLm)
 /* Return wig annoRows that overlap primaryRow position, with NANs weeded out. */
 {
-struct annoRow *rowsIn = annoGratorIntegrate(self, primaryRow, retRJFilterFailed);
+struct annoGrateWig *self = (struct annoGrateWig *)gSelf;
+// Cleanup internal lm every so often:
+if (self->lmRowCount >= 4096)
+    {
+    lmCleanup(&(self->lm));
+    self->lmRowCount = 0;
+    }
+if (self->lm == NULL)
+    self->lm = lmInit(0);
+struct annoRow *rowsIn = annoGratorIntegrate(self->mySource, primaryData, retRJFilterFailed,
+					     self->lm);
+self->lmRowCount += slCount(rowsIn);
 if (retRJFilterFailed && *retRJFilterFailed)
     return NULL;
+struct annoRow *primaryRow = primaryData->rowList;
 struct annoRow *rowIn, *rowOutList = NULL;;
 for (rowIn = rowsIn;  rowIn != NULL;  rowIn = rowIn->next)
-    tidyUp(rowIn, &rowOutList, primaryRow->start, primaryRow->end);
+    tidyUp(rowIn, &rowOutList, primaryRow->start, primaryRow->end, callerLm);
 slReverse(&rowOutList);
-annoRowFreeList(&rowsIn, self->mySource);
 return rowOutList;
 }
 
@@ -71,17 +90,20 @@ struct annoGrator *annoGrateWigNew(struct annoStreamer *wigSource)
 /* Create an annoGrator subclass for source with rowType == arWig. */
 {
 if (wigSource->rowType != arWig)
-    errAbort("annoGrateWigNew: expected source->rowType arWig (%d), got %d",
-	     arWig, wigSource->rowType);
-struct annoGrator *self = annoGratorNew(wigSource);
-self->streamer.rowType = arWig;
-self->integrate = agwIntegrate;
-return self;
+    errAbort("annoGrateWigNew: expected source->rowType arWig (%d), got %d from source %s",
+	     arWig, wigSource->rowType, wigSource->name);
+struct annoGrateWig *self;
+AllocVar(self);
+struct annoGrator *gSelf = (struct annoGrator *)self;
+annoGratorInit(gSelf, wigSource);
+gSelf->integrate = agwIntegrate;
+self->mySource = annoGratorNew(wigSource);
+return gSelf;
 }
 
-struct annoGrator *annoGrateBigWigNew(char *fileOrUrl)
+struct annoGrator *annoGrateBigWigNew(char *fileOrUrl, struct annoAssembly *aa)
 /* Create an annoGrator subclass for bigWig file or URL. */
 {
-struct annoStreamer *bigWigSource = annoStreamBigWigNew(fileOrUrl);
+struct annoStreamer *bigWigSource = annoStreamBigWigNew(fileOrUrl, aa);
 return annoGrateWigNew(bigWigSource);
 }

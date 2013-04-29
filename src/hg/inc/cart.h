@@ -277,6 +277,11 @@ INLINE void cartSetBooleanDb(struct cart *cart, char *db, char *var, boolean val
 cartSetBoolean(cart, _cartVarDbName(db, var), val);
 }
 
+boolean cartTimeoutBoolean(struct cart *cart, char *var, int hours);
+// Returns true if a cart var was set to non-zero less than hours ago
+// If the var has expired or val=0, it will be deleted.
+// If val is non-zero and not a time_t, (e.g. 'set') then the timer is started.
+
 void cartMakeTextVar(struct cart *cart, char *var, char *defaultVal, int charSize);
 /* Make a text control filled with value from cart if it exists or
  * default value otherwise.  If charSize is zero it's calculated to fit
@@ -550,6 +555,10 @@ boolean cartTdbTreeReshapeIfNeeded(struct cart *cart,struct trackDb *tdbComposit
 boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,struct hash *oldVars, struct lm *lm);
 /* When composite/view settings changes, remove subtrack specific settings
    Returns TRUE if any cart vars are removed */
+
+void cartCopyCustomTracks(struct cart *cart);
+/* If cart contains any live custom tracks, save off a new copy of them,
+ * to prevent clashes by multiple uses of the same session.  */
 
 void cgiExitTime(char *cgiName, long enteredMainTime);
 /* single stderr print out called at end of CGI binaries to record run

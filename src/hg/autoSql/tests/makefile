@@ -1,8 +1,8 @@
 include ../../../inc/common.mk
 
 HG_WARN = ${HG_WARN_ERR}
-AUTOSQL = ${BINDIR}/autoSql 
-AUTOSQLJSON = ${BINDIR}/autoSql -json
+AUTOSQL = ${DESTBINDIR}/autoSql
+AUTOSQLJSON = ${AUTOSQL} -json
 DIFF = diff -u
 XINC = -I.
 
@@ -63,6 +63,18 @@ doc2: mkout
 	${DIFF} expected/doc2.sql output/doc2.sql
 	${DIFF} expected/doc2.h   output/doc2.h  
 	${DIFF} expected/doc2.c   output/doc2.c  
+
+# index
+index: mkout
+	${AUTOSQL} input/index.as output/index
+	${DIFF} expected/index.sql output/index.sql
+
+# bin
+binTest: mkout
+	${AUTOSQL} -addBin input/binTest.as output/binTest
+	${DIFF} expected/binTest.sql output/binTest.sql
+	${DIFF} expected/binTest.c output/binTest.c
+	${DIFF} expected/binTest.h output/binTest.h
 
 
 # testHarness

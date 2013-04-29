@@ -19,6 +19,7 @@
 #include "bbiFile.h"
 #include "bigBed.h"
 #include "hubConnect.h"
+#include "trackHub.h"
 #include "hgTables.h"
 #include "asFilter.h"
 #include "xmlEscape.h"
@@ -316,7 +317,7 @@ if (orderedCount < 10000)
 struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, orderedCount, lm);
 
 /* Shuffle list and extract qNames from first count of them. */
-shuffleList(&samList, 1);
+shuffleList(&samList);
 struct slName *randomIdList = NULL;
 int i;
 for (i=0, sam = samList; i<count && sam != NULL; ++i, sam = sam->next)
@@ -332,7 +333,9 @@ return randomIdList;
 void showSchemaBam(char *table, struct trackDb *tdb)
 /* Show schema on bam. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(database))
+    conn = hAllocConn(database);
 char *fileName = bamFileName(table, conn, NULL);
 
 struct asObject *as = bamAsObj();

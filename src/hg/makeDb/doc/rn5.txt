@@ -1622,3 +1622,38 @@ echo -e "0\t$ensName\t$ensSize\t$ucName\t$ucSize"
 done > ensToUcsc.lift
 
 ##############################################################################
+# SWAP Mm9/Mouse lastz (DONE - 2013-03-27 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/mm9/bed/lastzRn5.2013-03-14
+    cat fb.mm9.chainRn5Link.txt
+    #   1762022227 bases of 2620346127 (67.244%) in intersection
+    # mm9 to rn4 was:
+    #   1713323126 bases of 2620346127 (65.385%) in intersection
+
+    #	and this swap
+    mkdir /hive/data/genomes/rn5/bed/blastz.mm9.swap
+    cd /hive/data/genomes/rn5/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzRn5.2013-03-14/DEF \
+	-swap -bigClusterHub=swarm -chainMinScore=5000 -chainLinearGap=medium \
+	-noLoadChainSplit -syntenicNet -workhorse=hgwdev \
+	-smallClusterHub=encodek > swap.log 2>&1 &
+    #   real    5m19.183s
+    # finish netChains manually due to nib directory spec error, then:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzRn5.2013-03-14/DEF \
+	-swap -bigClusterHub=swarm -chainMinScore=5000 -chainLinearGap=medium \
+	-continue=load -syntenicNet -workhorse=hgwdev \
+	-smallClusterHub=encodek > load.log 2>&1 &
+    # and the synteny step too, same error
+    #	real    121m21.029s
+    cat fb.rn5.chainMm9Link.txt 
+    #   1795345063 bases of 2572853723 (69.780%) in intersection
+    # FYI, rn4 was:
+    #   1711034941 bases of 2571531505 (66.538%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/rn5/bed
+    ln -s blastz.mm9.swap lastz.mm9
+
+#########################################################################

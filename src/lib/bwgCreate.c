@@ -796,7 +796,7 @@ slReverse(&outList);
 return outList;
 }
 
-static void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash, 
+void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash, 
 	int blockSize, int itemsPerSlot, boolean doCompress, char *fileName)
 /* Create a bigWig file out of a sorted sectionList. */
 {
@@ -902,8 +902,8 @@ totalSummaryOffsetPos = ftell(f);
 writeOne(f, totalSummaryOffset);
 uncompressBufSizePos = ftell(f);
 writeOne(f, uncompressBufSize);
-for (i=0; i<2; ++i)
-    writeOne(f, reserved32);
+writeOne(f, reserved64);  /* nameIndexOffset */
+assert(ftell(f) == 64);
 
 /* Write summary headers */
 for (i=0; i<summaryCount; ++i)

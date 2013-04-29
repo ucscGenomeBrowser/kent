@@ -1,0 +1,5 @@
+#!/bin/tcsh -efx
+encodeExpToCvDb experiment.tab series.tab result.tab django.py 
+hgLoadSqlTab encode2Meta experiment experiment.sql experiment.tab
+hgLoadSqlTab encode2Meta series series.sql series.tab
+hgLoadSqlTab encode2Meta result result.sql result.tab

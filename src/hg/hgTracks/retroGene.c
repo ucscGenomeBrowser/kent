@@ -2,19 +2,6 @@
 #include "retroGene.h"
 #include "transMapStuff.h"
 
-
-static void addToLabel(struct dyString *label, char *val)
-/* append a label to the label, separating with a space, do nothing if val is
- * NULL.*/
-{
-if (val != NULL)
-    {
-    if (label->stringSize > 0)
-        dyStringAppendC(label, ' ');
-    dyStringAppend(label, val);
-    }
-}
-
 /* bit set of labels to use */
 enum {useOrgCommon = 0x01,
       useOrgAbbrv  = 0x02,
@@ -90,24 +77,6 @@ for (pg = list; pg != NULL; pg = pg->next)
 tg->items = lfList;
 }
 
-void loadRetroGene(struct track *tg)
-/* Load up RetroGenes. */
-{
-enum trackVisibility vis = tg->visibility;
-lfRetroGene(tg);
-if (vis != tvDense)
-    {
-    slSort(&tg->items, linkedFeaturesCmpStart);
-    }
-vis = limitVisibility(tg);
-}
-
-Color retroGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
-/* Return color to draw retroGene in. */
-{
-return hvGfxFindColorIx(hvg, CHROM_20_R, CHROM_20_G, CHROM_20_B);
-}
-
 char *getRetroParentSymbol(struct ucscRetroInfo *r, char *parentName)
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -129,46 +98,6 @@ if (r != NULL)
     }
 hFreeConn(&conn);
 return geneSymbol;
-}
-char *retroName(struct track *tg, void *item)
-/* Get name to use for retroGene item. */
-{
-struct linkedFeatures *lf = item;
-char cartvar[512];
-safef(cartvar, sizeof(cartvar), "%s.label", tg->table);
-char *refGeneLabel = cartUsualString(cart, cartvar, "gene") ;
-boolean useGeneName = sameString(refGeneLabel, "gene")
-    || sameString(refGeneLabel, "both");
-boolean useAcc = sameString(refGeneLabel, "accession")
-    || sameString(refGeneLabel, "both");
-struct dyString *name = dyStringNew(64);
-if  (useAcc || useGeneName)
-    dyStringAppend(name, "retro-");
-char *geneSymbol = NULL;
-if (lf->extra != NULL) 
-   {
-   geneSymbol = getRetroParentSymbol(lf->extra, lf->name);
-   if (geneSymbol != NULL)
-        {
-        dyStringAppend(name, geneSymbol);
-        if (useAcc)
-            dyStringAppendC(name, '/');
-        }
-   }
-if ((useGeneName) && sameString(name->string, "retro-"))
-    dyStringAppend(name, lf->name);
-if (useAcc)
-    dyStringAppend(name, lf->name);
-return dyStringCannibalize(&name);
-}
-
-void retroGeneMethods(struct track *tg)
-/* Make track of retroGenes from bed */
-{
-tg->loadItems = loadRetroGene;
-tg->itemName = retroName;
-tg->mapItemName = refGeneMapName;
-tg->itemColor = retroGeneColor;
 }
 
 static unsigned getLabelTypes(struct track *tg)
@@ -215,18 +144,26 @@ struct ucscRetroInfo *info = NULL;
 info = ucscRetroInfoQuery(conn, retroInfoTbl, lf->name);
 char *geneSymbol = getRetroParentSymbol(info, lf->name);
 //lf->extra = geneSymbol;
-
 struct dyString *label = dyStringNew(64);
+dyStringAppend(label, "retro-");
 if ((labelSet & useGene) && (retroInfoTbl != NULL))
     {
     if ((geneSymbol != NULL) && (strlen(geneSymbol) > 0))
-        addToLabel(label, geneSymbol);
+        dyStringAppend(label, geneSymbol);
     else
         labelSet |= useAcc;  // no gene, so force acc
     }
+/* if both accession and gene are selected, add to item label */
 if (labelSet & useAcc)
-    addToLabel(label, lf->name);
-
+    {
+    if (labelSet & useGene)
+        {
+        dyStringAppend(label, "/");
+        dyStringAppend(label, lf->name);
+        }
+    else
+        dyStringAppend(label, lf->name);
+    }
 ucscRetroInfoFree(&info);
 lf->extra = dyStringCannibalize(&label);
 }
@@ -286,19 +223,9 @@ tg->itemDataName = transMapGetItemDataName;
 
 void retroRegisterTrackHandlers()
 {
-//registerTrackHandler("pseudoGeneLink", retroGeneMethods);
-//registerTrackHandler("pseudoGeneLink2", retroGeneMethods);
-//registerTrackHandler("retroMrnaInfo", retroGeneMethods);
-//registerTrackHandler("retroMrnaInfo2", retroGeneMethods);
-//registerTrackHandler("retroMrnaInfo3", retroGeneMethods);
-registerTrackHandler("ucscRetroInfo", retroGeneMethods);
-registerTrackHandler("ucscRetroInfo1", retroGeneMethods);
-registerTrackHandler("ucscRetroInfo2", retroGeneMethods);
-registerTrackHandler("ucscRetroInfo3", retroGeneMethods);
-//registerTrackHandler("retroCdsAli", retroAliMethods);
-//registerTrackHandler("retroCdsAli3", retroAliMethods);
-registerTrackHandler("ucscRetroAli", retroAliMethods);
 registerTrackHandler("ucscRetroAli1", retroAliMethods);
 registerTrackHandler("ucscRetroAli2", retroAliMethods);
 registerTrackHandler("ucscRetroAli3", retroAliMethods);
+registerTrackHandler("ucscRetroAli4", retroAliMethods);
+registerTrackHandler("ucscRetroAli5", retroAliMethods);
 }

@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-PSLFILT = ${BINDIR}/pslCDnaFilter
+PSLFILT = ${DESTBINDIR}/pslCDnaFilter
 DIFF = diff -u --exclude='.nfs*' -r
 
 test:	noopTest overlapTest maxAlignTest minQSizeTest \
@@ -128,7 +128,7 @@ blackListTest:
 # test for catching PSLs with inconsistent qSize
 inconsistentQSizeTest:
 	@mkdir -p output
-	if pslCDnaFilter input/inconsistentQSize.psl /dev/null 2> output/$@.err ; then  echo "Error: should have failed" >&2; false ; else true ; fi
+	if ${PSLFILT} input/inconsistentQSize.psl /dev/null 2> output/$@.err ; then  echo "Error: should have failed" >&2; false ; else true ; fi
 	diff expected/$@.err output/$@.err
 
 ####

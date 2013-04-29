@@ -54,6 +54,18 @@ struct bed3
 struct bed3 *bed3New(char *chrom, int start, int end);
 /* Make new bed3. */
 
+void bed3Free(struct bed3 **pBed);
+/* Free up bed3 */
+
+void bed3FreeList(struct bed3 **pList);
+/* Free a list of dynamically allocated bed3's */
+
+struct bed3 *bed3LoadAll(char *fileName);
+/* Load three columns from file as bed3. */
+
+long long bed3TotalSize(struct bed3 *bedList);
+/* Return sum of chromEnd-chromStart. */
+
 struct bed4
 /* Browser extensible data - first four fields */
     {
@@ -170,12 +182,22 @@ void bedLoadAllReturnFieldCount(char *fileName, struct bed **retList, int *retFi
 /* Load bed of unknown size and return number of fields as well as list of bed items.
  * Ensures that all lines in bed file have same field count. */
 
+void bedLoadAllReturnFieldCountAndRgb(char *fileName, struct bed **retList, int *retFieldCount, 
+    boolean *retRgb);
+/* Load bed of unknown size and return number of fields as well as list of bed items.
+ * Ensures that all lines in bed file have same field count.  Also returns whether 
+ * column 9 is being used as RGB or not. */
+
 void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
 /* Write a bed of wordCount fields. */
 
 void bedOutputNitemRgb(struct bed *el, int wordCount, FILE *f,
 	char sep, char lastSep);
 /* Write a bed of wordCount fields, interpret column 9 as RGB. */
+
+void bedOutFlexible(struct bed *el, int wordCount, FILE *f,
+	char sep, char lastSep, boolean useItemRgb);
+/* Write a bed of wordCount fields, optionally interpreting field nine as R,G,B values. */
 
 #define bedTabOutNitemRgb(el,wordCount, f) bedOutputNitemRgb(el,wordCount,f,'\t','\n')
 /* Print out bed as a line in a tab-separated file. Interpret

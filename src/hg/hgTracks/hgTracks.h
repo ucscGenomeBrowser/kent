@@ -156,6 +156,7 @@ struct track
     double graphUpperLimit, graphLowerLimit;	/* Limits of actual data in window for wigs. */
     struct preDrawContainer *preDrawContainer;  /* Numbers to graph in wig, one per pixel */
     struct preDrawContainer *(*loadPreDraw)(struct track *tg, int seqStart, int seqEnd, int width);
+    struct wigGraphOutput *wigGraphOutput;  /* Where to draw wig - different for transparency */
     /* Do bits that load the predraw buffer.  Called to set preDrawContainer */
 
     struct bbiFile *bbiFile;	/* Associated bbiFile for bigWig or bigBed. */
@@ -809,9 +810,15 @@ void cytoBandIdeoMethods(struct track *tg);
 void cytoBandMethods(struct track *tg);
 /* Make track for simple repeats. */
 
+#ifdef USE_HAL
+void halSnakeMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* Make track group for hal-based snake alignment. */
+#endif
+
 void snakeMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
-/* Make track group for snake alignment. */
+/* Make track group for chain-based snake alignment. */
 
 void chainMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);

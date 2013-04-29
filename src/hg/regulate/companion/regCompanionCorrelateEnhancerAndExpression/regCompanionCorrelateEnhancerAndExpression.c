@@ -218,7 +218,7 @@ struct hashEl *inEl, *inList = hashElListHash(inHash);
 struct slRef *refList = NULL, *ref;
 for (inEl = inList; inEl != NULL; inEl = inEl->next)
     refAdd(&refList, inEl->val);
-shuffleList(&refList, 1);
+shuffleList(&refList);
 for (inEl = inList, ref=refList; inEl != NULL; inEl=inEl->next, ref=ref->next)
     hashAdd(outHash,inEl->name, ref->val);
 slFreeList(&refList);

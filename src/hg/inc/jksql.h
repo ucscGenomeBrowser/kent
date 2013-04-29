@@ -278,6 +278,9 @@ int sqlQuickNum(struct sqlConnection *conn, char *query);
 int sqlNeedQuickNum(struct sqlConnection *conn, char *query);
 /* Get numerical result or die trying. */
 
+long long sqlQuickLongLong(struct sqlConnection *conn, char *query);
+/* Get long long numerical result from simple query. Returns 0 if query not found */
+
 double sqlQuickDouble(struct sqlConnection *conn, char *query);
 /* Get floating point numerical result from simple query */
 

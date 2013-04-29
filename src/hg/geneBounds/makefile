@@ -39,6 +39,7 @@ DIRS = \
 all: $(USE_DIRS:%=%.all)
 
 %.all:
+	cd lib && $(MAKE)
 	( cd $* && echo $* && $(MAKE) )
 
 test::

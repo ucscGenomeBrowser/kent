@@ -45,26 +45,25 @@ struct ucscRetroInfo
     unsigned coverage;	/* % of bases that align to gene col31 */
     int label;	/* 1=pseudogene,-1 not pseudogene -2 expressed retroGene col32 */
     unsigned milliBad;	/* milliBad score, pseudogene aligned to genome col33 */
-    unsigned oldScore;	/* another heuristic col34 */
-    int oldIntronCount;	/* old simple intron count col35 */
-    int processedIntrons;	/* count of introns removed via retrotransposition col36 */
-    int conservedSpliceSites;	/* conserved splice site count col37 */
-    int maxOverlap;	/* largest overlap with another mrna col38 */
-    char *refSeq;	/* Name of closest regSeq to gene col39 */
-    int rStart;	/* refSeq alignment start position col40 */
-    int rEnd;	/* refSeq alignment end position col41 */
-    char *mgc;	/* Name of closest mgc to gene col42 */
-    int mStart;	/* mgc alignment start position col43 */
-    int mEnd;	/* mgc alignment end position col44 */
-    char *kgName;	/* Name of closest knownGene to gene col45 */
-    int kStart;	/* kg alignment start position col46 */
-    int kEnd;	/* kg alignment end position col47 */
-    char *overName;	/* name of overlapping mrna col48 */
-    int overStart;	/* overlapping mrna start position col49 */
-    int overExonCover;	/* count of overlapping mrna exons col50 */
-    char overStrand[3];	/* strand of overlapping mrna col51 */
-    float posConf;	/* pvalue for positive col52 */
-    unsigned polyAlen;	/* length of polyA col53 */
+    int alignGapCount;	/* simple intron count col34 */
+    int processedIntrons;	/* count of introns removed via retrotransposition col35 */
+    int conservedSpliceSites;	/* conserved splice site count col36 */
+    int maxOverlap;	/* largest overlap with another mrna col37 */
+    char *refSeq;	/* Name of closest regSeq to gene col38 */
+    int rStart;	/* refSeq alignment start position col39 */
+    int rEnd;	/* refSeq alignment end position col40 */
+    char *mgc;	/* Name of closest mgc to gene col41 */
+    int mStart;	/* mgc alignment start position col42 */
+    int mEnd;	/* mgc alignment end position col43 */
+    char *kgName;	/* Name of closest knownGene to gene col44 */
+    int kStart;	/* kg alignment start position col45 */
+    int kEnd;	/* kg alignment end position col46 */
+    char *overName;	/* name of overlapping mrna col47 */
+    int overStart;	/* overlapping mrna start position col48 */
+    int overExonCover;	/* count of overlapping mrna exons col49 */
+    char overStrand[3];	/* strand of overlapping mrna col50 */
+    float posConf;	/* pvalue for positive col51 */
+    unsigned polyAlen;	/* length of polyA col52 */
     };
 
 struct ucscRetroInfo *ucscRetroInfoLoadByQuery(struct sqlConnection *conn, char *query);

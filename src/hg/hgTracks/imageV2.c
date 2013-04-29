@@ -1705,7 +1705,7 @@ if (slice->parentImg && slice->parentImg->file != NULL)
     {
     hPrintf("  <IMG id='img_%s' src='%s' style='left:-%dpx; top: -%dpx;'",
             name,slice->parentImg->file,offsetX,offsetY);
-    // Problem: dragScroll beyond left shows ugly leftLabel!
+    // Problem: dragScroll beyond left shows unsightly leftLabel!
     // Tried clip:rect() but this only works with position:absolute!
     // May need to split image betweeen side label and data!!! That is a big change.
 

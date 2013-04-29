@@ -83,7 +83,7 @@ dbloadTime=$dbloadVar/dbload.time
 # WARNING: must also be changed in etc/gbCommon.pm
 if [ $(hostname) = "hgwbeta" ] ; then
     export HGDB_CONF=$gbRoot/etc/.hg.mysqlbeta.conf
-elif [ $(hostname) = "hgnfs1" ] ; then
+elif [ $(hostname) = "rrnfs1" ] ; then
     export HGDB_CONF=$gbRoot/etc/.hg.mysqlrr.conf
     # FIXME: tmp hack during transtion to Arnolds
     opts="$opts -grepIndexRootDir=/gbdb/genbank/grepIndex"

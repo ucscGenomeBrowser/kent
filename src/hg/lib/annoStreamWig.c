@@ -30,14 +30,6 @@ struct annoStreamWig *self = (struct annoStreamWig *)vSelf;
 self->wigStr->setRegion(self->wigStr, chrom, regionStart, regionEnd);
 }
 
-static void aswSetQuery(struct annoStreamer *vSelf, struct annoGratorQuery *query)
-/* Set query (to be called only by annoGratorQuery which is created after streamers). */
-{
-annoStreamerSetQuery(vSelf, query);
-struct annoStreamWig *self = (struct annoStreamWig *)vSelf;
-self->wigStr->setQuery((struct annoStreamer *)(self->wigStr), query);
-}
-
 static void checkWibFile(struct annoStreamWig *self, char *wibFile)
 /* If self doesn't have a .wib file name and handle open, or if the new wibFile is
  * not the same as the old one, update self to use new wibFile. */
@@ -51,13 +43,13 @@ if (self->wibFile == NULL || !sameString(self->wibFile, wibFile))
     }
 }
 
-static void paranoidCheckSize(struct wiggle *wiggle)
+static void paranoidCheckSize(struct annoStreamWig *self, struct wiggle *wiggle)
 /* paranoid, consider taking this out when code is stable: */
 {
 int bpLen = wiggle->chromEnd - wiggle->chromStart;
 if (bpLen != (wiggle->span * wiggle->count))
-    errAbort("annoStreamWig: length in bases (%u - %u = %d) != span*count (%u * %u = %u)",
-	     wiggle->chromEnd, wiggle->chromStart, bpLen,
+    errAbort("annoStreamWig %s: length in bases (%u - %u = %d) != span*count (%u * %u = %u)",
+	     self->streamer.name, wiggle->chromEnd, wiggle->chromStart, bpLen,
 	     wiggle->span, wiggle->count, (wiggle->span * wiggle->count));
 }
 
@@ -71,7 +63,7 @@ size_t bytesRead = fread(wigBuf, 1, wiggle->count, self->wibF);
 if (bytesRead != wiggle->count)
     errnoAbort("annoStreamWig: failed to read %u bytes from %s (got %llu)\n",
 	       wiggle->count, wiggle->file, (unsigned long long)bytesRead);
-paranoidCheckSize(wiggle);
+paranoidCheckSize(self, wiggle);
 int i, j, validCount = 0;
 for (i = 0;  i < wiggle->count;  i++)
     {
@@ -94,7 +86,7 @@ if (retValidCount != NULL)
     *retValidCount = validCount;
 }
 
-static struct annoRow *aswNextRow(struct annoStreamer *vSelf)
+static struct annoRow *aswNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
 /* Return an annoRow encoding the next chunk of wiggle data, or NULL if there are no more items. */
 {
 struct annoStreamWig *self = (struct annoStreamWig *)vSelf;
@@ -102,7 +94,7 @@ struct annoRow *rowOut = NULL;
 boolean done = FALSE;
 while (!done)
     {
-    struct annoRow *wigRow = self->wigStr->nextRow(self->wigStr);
+    struct annoRow *wigRow = self->wigStr->nextRow(self->wigStr, callerLm);
     if (wigRow == NULL)
 	return NULL;
     struct wiggle wiggle;
@@ -116,10 +108,10 @@ while (!done)
     getFloatArray(self, &wiggle, &rightFail, &validCount, vector);
     if (rightFail || validCount > 0)
 	{
-	rowOut = annoRowWigNew(wigRow->chrom, wigRow->start, wigRow->end, rightFail, vector);
+	rowOut = annoRowWigNew(wigRow->chrom, wigRow->start, wigRow->end, rightFail, vector,
+			       callerLm);
 	done = TRUE;
 	}
-    annoRowFree(&wigRow, self->wigStr);
     }
 return rowOut;
 }
@@ -135,18 +127,18 @@ freeMem(self->wibFile);
 annoStreamerFree(pVSelf);
 }
 
-struct annoStreamer *annoStreamWigDbNew(char *db, char *table, int maxOutput)
+struct annoStreamer *annoStreamWigDbNew(char *db, char *table, struct annoAssembly *aa,
+					int maxOutput)
 /* Create an annoStreamer (subclass) object from a wiggle database table. */
 {
 struct annoStreamWig *self = NULL;
 AllocVar(self);
+self->wigStr = annoStreamDbNew(db, table, aa, asParseText(wiggleAsText));
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, asParseText(annoRowWigAsText));
+annoStreamerInit(streamer, aa, asParseText(annoRowWigAsText), self->wigStr->name);
 streamer->rowType = arWig;
 streamer->setRegion = aswSetRegion;
-streamer->setQuery = aswSetQuery;
 streamer->nextRow = aswNextRow;
 streamer->close = aswClose;
-self->wigStr = annoStreamDbNew(db, table, asParseText(wiggleAsText));
 return (struct annoStreamer *)self;
 }

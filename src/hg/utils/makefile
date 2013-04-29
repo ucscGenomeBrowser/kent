@@ -6,8 +6,10 @@ include ../../inc/common.mk
 
 
 SCRIPT_FILES = \
+	dbNsfpToBed.pl \
 	dumpDb.pl \
-	mergeOverlapBed4.pl
+	mergeOverlapBed4.pl \
+	mergeSortedBed3Plus.pl
 
 # List of directories to build
 USE_DIRS = $(DIRS)
@@ -74,3 +76,7 @@ clean:: $(USE_DIRS:%=%.clean)
 %.clean:
 	(cd $* && ${MAKE} clean)
 
+compile:: $(USE_DIRS:%=%.compile)
+	- find . -name '*.o' -exec rm {} \;
+%.compile:
+	(cd $* && ${MAKE} compile)

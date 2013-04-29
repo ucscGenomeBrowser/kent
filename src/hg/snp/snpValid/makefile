@@ -1,20 +1,8 @@
-include ../../../inc/common.mk
-
-L += ${MYSQLLIBS} -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
+kentSrc = ../../..
 A = snpValid
-O = ${A}.o
+include $(kentSrc)/inc/userApp.mk
 
-${A}: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
-
-compile:: ${O}
-	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
-
-test:
+test::
 	${A} hg16 /cluster/data/hg16/bed/snp/build122/seq -chr=chr22 > hg16-chr22.log 
 
 test2:
@@ -29,8 +17,6 @@ backup: clean
 	scp *.zip screech:/scratch/backups/
 	rm *.zip
 
-clean:
-	rm -f $O
-	rm -f $A
+clean::
 	rm -f *.log
 	rm -f dump

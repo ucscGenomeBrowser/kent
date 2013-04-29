@@ -12,6 +12,9 @@
 # Before executing this script, rebuild the swissprot and proteins databases.
 
 
+# SHOULD REBUILD GO DATABASE BEFORE DOING THIS!!!
+
+
 # Directories
 set genomes = /hive/data/genomes
 set dir = $genomes/hg19/bed/ucsc.14.1
@@ -1312,6 +1315,8 @@ cd $dir
 set oldGeneBed=$oldDb.$db.kg.bed
 txGeneExplainUpdate2 $oldGeneBed ucscGenes.bed kgOldToNew.tab
 hgLoadSqlTab $tempDb kg${lastVer}ToKg${curVer} $kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
+
+# add kg${lastVer}ToKg${curVer} to all.joiner !!!!
 
 # Build kgSpAlias table, which combines content of both kgAlias and kgProtAlias tables.
 

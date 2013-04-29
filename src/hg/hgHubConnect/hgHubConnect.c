@@ -373,14 +373,13 @@ cartRemove(theCart, "hubId");
 static void checkTrackDbs(struct hubConnectStatus *hubList)
 {
 struct hubConnectStatus *hub = hubList;
-struct trackHub *trackHubList = NULL;
 
 for(; hub; hub = hub->next)
     {
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	{
-	hubAddTracks(hub, database, &trackHubList);
+	hubAddTracks(hub, database);
 	}
     errCatchEnd(errCatch);
     if (errCatch->gotError)
@@ -399,7 +398,6 @@ void doMiddle(struct cart *theCart)
 boolean gotDisconnect = FALSE;
 
 cart = theCart;
-setUdcCacheDir();
 
 if (cartVarExists(cart, hgHubDoClear))
     {
@@ -504,7 +502,7 @@ hgHubConnectUnlisted(hubList, publicHash);
 printf("</div>");
 
 printf("<div class=\"tabFooter\">");
-cgiMakeButton("Submit", "Load Selected Hubs");
+cgiMakeButton("Submit", "Use Selected Hubs");
 
 char *emailAddress = cfgOptionDefault("hub.emailAddress","genome@soe.ucsc.edu");
 printf("<span class=\"small\">"
@@ -528,6 +526,7 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 oldVars = hashNew(10);
+setUdcCacheDir();
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgHubConnect", enteredMainTime);

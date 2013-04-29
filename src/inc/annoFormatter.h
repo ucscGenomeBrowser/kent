@@ -4,7 +4,6 @@
 #define ANNOFORMATTER_H
 
 #include "annoOption.h"
-#include "annoRow.h"
 #include "annoStreamer.h"
 
 // The real work of aggregating and formatting data is left to
@@ -24,12 +23,13 @@ struct annoFormatter
     void (*setOptions)(struct annoFormatter *self, struct annoOption *options);
     /* Get and set output options */
 
-    void (*initialize)(struct annoFormatter *self, struct annoGratorQuery *query);
-    /* Initialize output (header, etc) and set query pointer */
+    void (*initialize)(struct annoFormatter *self, struct annoStreamer *primarySource,
+		       struct annoStreamer *integrators);
+    /* Initialize output (print header if applicable, etc). */
 
-    void (*formatOne)(struct annoFormatter *self, struct annoRow *primaryRow,
-		      struct slRef *gratorRowList);
-    /* Aggregate all sources' data for a single primarySource item into output. */
+    void (*formatOne)(struct annoFormatter *self, struct annoStreamRows *primaryData,
+		      struct annoStreamRows gratorData[], int gratorCount);
+    /* Aggregate all sources' data for a single primary-source item into output. */
 
     void (*close)(struct annoFormatter **pSelf);
     /* End of input; finish output, close connection/handle and free self. */

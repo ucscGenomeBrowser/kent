@@ -4,11 +4,9 @@
 #define ANNOROW_H
 
 #include "common.h"
+#include "localmem.h"
 
-enum annoRowType { arUnknown, arWords, arWig, arVcf };
-
-// stub in order to avoid problems with circular .h references:
-struct annoStreamer;
+enum annoRowType { arUnknown, arWords, arWig };
 
 struct annoRow
 /* Representation of a row from a database table or file.  The chrom, start and end
@@ -27,21 +25,19 @@ struct annoRow
     };
 
 struct annoRow *annoRowFromStringArray(char *chrom, uint start, uint end, boolean rightJoinFail,
-				       char **wordsIn, int numCols);
+				       char **wordsIn, int numCols, struct lm *lm);
 /* Allocate & return an annoRow with data cloned from wordsIn. */
 
 struct annoRow *annoRowWigNew(char *chrom, uint start, uint end, boolean rightJoinFail,
-			      float *values);
+			      float *values, struct lm *lm);
 /* Allocate & return an annoRowWig, with clone of values; length of values is (end-start). */
 
-struct annoRow *annoRowClone(struct annoRow *rowIn, struct annoStreamer *source);
-/* Allocate & return a single annoRow cloned from rowIn.
- * numCols is used only if rowIn->type is arWords. */
+struct annoRow *annoRowClone(struct annoRow *rowIn, enum annoRowType rowType, int numCols,
+			     struct lm *lm);
+/* Allocate & return a single annoRow cloned from rowIn.  If rowIn is NULL, return NULL.
+ * If type is arWig, numCols is ignored. */
 
-void annoRowFree(struct annoRow **pRow, struct annoStreamer *source);
-/* Free a single annoRow. */
-
-void annoRowFreeList(struct annoRow **pList, struct annoStreamer *source);
-/* Free a list of annoRows. */
+int annoRowCmp(const void *va, const void *vb);
+/* Compare two annoRows' {chrom, start, end}. */
 
 #endif//ndef ANNOROW_H

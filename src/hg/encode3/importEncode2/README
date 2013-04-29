@@ -1,0 +1,76 @@
+This contains a variety of programs used to reformat ENCODE2 metadata into formats hopefully 
+easier to digest for ENCODE3.   The ENCODE2 data is stored in the hgFixed.encodeExp
+and the genomic databases (hg19, mm9) metaDb tables,  and the cv.ra file.  The ENCODE3 version
+is stored in a hub at encodedcc.sdsc.edu:/data/encode3/encode2/hub/.
+
+There are two major groups of programs here - one that is used to convert to to a relational
+database that was really never used it turns out.  The other is used to convert to a data hub
+including a bunch of big* and bam format files,  fastq.gz files, and also some more encode-specific
+files:  manifest.txt, validated.txt, and meta.txt.  This second pipeline is more important
+and so will be described first.
+
+The programs involved in converting the encode2 data to a hub and the order they are run in are:
+
+0) rsync - Create copy of /hive/groups/encode/dcc/analysis/ftp/pipeline at San Diego - about
+   35 terabytes worth of data.
+1) encode2Manifest - Create a encode3 manifest file for encode2 files by looking at the 
+   metaDb tables in hg19 and mm9.  This program is run at UCSC, and the result manifest.txt copied 
+   to San Diego.
+2) md5sum - This should be run on all files in San Diego and the output stored,  and compared with
+   md5sums in the encode2 database.  It turns out there were some mismatches due to an incomplete
+   update at UCSC.  We made sure it was a wrangler error, not a file system error.  The program
+   here was useful in figuring out the situation:
+ a) encode2CmpMd5 - Do comparisons of md5sums derived from two sources.
+3) encode2AddSumsAndSizes - Add md5sums and sizes to encode2 manifest. Removes files not there.
+   This is run on the manifest.txt with the new md5sums file generated at San Diego.  Produces
+   validated.txt.
+4) encode2MakeEncode3 - Create a makefile that will reformat and copy encode2 files into
+   a parallel directory of encode3 files. Should be run in San Diego after encode2 files are
+   already transfered.  In addition to the makefile it creates all the destination subdirs
+   and a remap file that maps source files to destination files.
+5) make -j 5 -f encode2MakeEncode3.mak - This should be done in the San Diego hub dir. The -j 5
+   will create 5 threads to run in parallel in make,  which is all the i/o system can handle.
+   (More threads will not crash, but will actually cause things to run slower not faster.)
+   This will take about 2 days to run,  mostly doing the untarring/unzipping of the .fastq.tgz
+   files, and then rezipping the individual fastqs.  The makefile will invoke the following
+   programs:
+ a) encode2GffDoctor - fixes up problematic GFF/GTF files.
+ b) encode2BedDoctor - fixes up problematic bed files.
+ c) encode2BedPlusDoctor - fixes up narrowPeak, broadPeak, and other bed variants that 
+    include their own .as file.
+ d) encode2FlattenFastqSubdirs - when the .fastq.tgz tarballs unpack,  sometimes they unpack
+    to a directory tree with multiple levels.  This program will move all filles to the top level
+    and do a light check to see if they are really fastq's  (just looks for a '+' and '@' at the
+    start of the appropriate lines in the first fastq record.)
+ e) Also uses bedToBigBed, gffToBed, and bedClip utilities from UCSC, and general Unix tar,
+    gzip, and sort utilities.
+6) encode2AddTgzContentsToManifest - Go sniff contents of all the .tgz dirs and add them to 
+   manifest file.
+7) encode2Meta - Create hg19Meta.txt and mm9Meta.txt files. This is a hierarchical .ra file 
+   with heirarchy defined by indentation.  You might think of it as a meta tag tree.  It contains 
+   the contents of the hg19 and mm9 metaDb tables (from the production rather than development
+   databases) and the hgFixed.encodeExp table.
+8) makeTgzDirPatch - a little script run in hub directory that makes input for next program.
+9) encode2MetaPatchRenamed - adjusts meta.txt file to go from encode2 to encode3 file names.
+   In some cases (GFF and .fastq.tgz files) there are multiple encode3 files corresponding
+   to a single encode2 file.  In this case it introduces a new level in the heirarchy.
+   This program is run twice - once with the remap file produced by encode2MakeEncode3
+   and again with file produced by makeTgzDirPatch.
+
+These programs and scripts converts into the encode2Meta database with a schema
+described in encode2Meta.as.  This is currently not used, but the programs involved were:
+
+1) encodeCvToDb - reads cv.ra and turns it into a directory of tab-separated files
+   that you can turn into a SQL database.  Also produces Django models which we are
+   no longer using, and .as files for documentation.  A script "tryIt" in the directory
+   layers a process to split up antibody table on top of this.  Result needs to be
+   loaded into MySQL in "kentDjangoTest2" database before you go to next step.
+2) encodeExpToCvDb - reads in metaDb tables and the kentDjangoTest2 database,  produces
+   experiment, series, and results tables to add to that database.
+3) encode2ExpDumpFlat - produceds flattened output of experiment table, where numerical id's in
+   vocab tables are replaced with tags.
+
+Another possibly useful program here (that might be best moved elsewhere):
+1) encode2Md5UpdateManifest - Update md5sum, size, validation key in an encode2 manifest.tab file.
+   Ended up using encode2AddSumsAndSizes instead for the encode2->3 move.
+

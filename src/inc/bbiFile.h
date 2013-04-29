@@ -20,7 +20,7 @@
  *         autoSqlOffset        8 bytes (for bigWig 0) (0 if no autoSql information)
  *         totalSummaryOffset   8 bytes (0 in earlier versions of file lacking totalSummary)
  *         uncompressBufSize    4 bytes (Size of uncompression buffer.  0 if uncompressed.)
- *         reserved             8 bytes (0 for now)
+ *         extensionOffset      8 bytes (Offset to header extension 0 if no such extension)
  *     zoomHeaders		there are zoomLevels number of these
  *         reductionLevel	4 bytes
  *	   reserved		4 bytes
@@ -33,6 +33,19 @@
  *         maxVal              8 bytes float (for bigBed maximum depth of coverage)
  *         sumData             8 bytes float (for bigBed sum of coverage)
  *         sumSquared          8 bytes float (for bigBed sum of coverage squared)
+ *     extendedHeader
+ *         extensionSize       2 size of extended header in bytes - currently 64
+ *         extraIndexCount     2 number of extra fields we will be indexing
+ *         extraIndexListOffset 8 Offset to list of non-chrom/start/end indexes
+ *         reserved            48 All zeroes for now
+ *     extraIndexList - one of these for each extraIndex 
+ *         type                2 Type of index.  Always 0 for bPlusTree now
+ *         fieldCount          2 Number of fields used in this index.  Always 1 for now
+ *         indexOffset         8 offset for this index in file
+ *         reserved            4 All zeroes for now
+ *         fieldList - one of these for each field being used in _this_ index
+ *            fieldId          2 index of field within record
+ *            reserved         2 All zeroes for now
  *     chromosome b+ tree       bPlusTree index
  *     full data
  *         sectionCount		8 bytes (item count for bigBeds)
@@ -51,6 +64,7 @@
  *                 sumData      4 bytes float
  *                 sumSquares   4 bytes float
  *         zoom index        	cirTree index
+ *     extraIndexes [optional]  bPlusTreeIndex for each extra field that is indexed
  *     magic# 		4 bytes - same as magic number at start of header
  */
 
@@ -104,10 +118,17 @@ struct bbiFile
     bits16 fieldCount;		/* Number of columns in bed version. */
     bits16 definedFieldCount;   /* Number of columns using bed standard definitions. */
     bits64 asOffset;		/* Offset to embedded null-terminated AutoSQL file. */
-    bits64 totalSummaryOffset;	/* Offset to total summary information if any.  (On older files have to calculate) */
+    bits64 totalSummaryOffset;	/* Offset to total summary information if any.  
+				   (On older files have to calculate) */
     bits32 uncompressBufSize;	/* Size of uncompression buffer, 0 if uncompressed */
+    bits64 extensionOffset;	/* Start of header extension block or 0 if none. */
     struct cirTreeFile *unzoomedCir;	/* Unzoomed data index in memory - may be NULL. */
     struct bbiZoomLevel *levelList;	/* List of zoom levels. */
+
+    /* Fields based on extension block. */
+    bits16 extensionSize;   /* Size of extension block */
+    bits16 extraIndexCount; /* Number of extra indexes (on fields other than chrom,start,end */ 
+    bits64 extraIndexListOffset;    /* Offset to list of extra indexes */
     };
 
 
@@ -151,6 +172,14 @@ void bbiChromInfoKey(const void *va, char *keyBuf);
 
 void *bbiChromInfoVal(const void *va);
 /* Get val field out of bbiChromInfo. */
+
+char *bbiCachedChromLookup(struct bbiFile *bbi, int chromId, int lastChromId,
+    char *chromBuf, int chromBufSize);
+/* Return chromosome name corresponding to chromId.  Because this is a bit expensive,
+ * if you are doing this repeatedly pass in the chromId used in the previous call to
+ * this in lastChromId,  which will save it from doing the lookup again on the same
+ * chromosome.  Pass in -1 to lastChromId if this is the first time or if you can't be
+ * bothered.  The chromBufSize should be at greater or equal to bbi->keySize+1.  */
 
 struct bbiChromUsage
 /* Information on how many items per chromosome etc.  Used by multipass bbiFile writers. */
@@ -251,7 +280,7 @@ boolean bbiSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 e
 struct bbiSummaryElement bbiTotalSummary(struct bbiFile *bbi);
 /* Return summary of entire file! */
 
-/****** Write side of things - implemented in bbiWrite.c ********/
+/****** Write side of things - implemented in bbiWrite.c.  Few people need this. ********/
 
 struct bbiBoundsArray
 /* Minimum info needed for r-tree indexer - where a section lives on disk and the
@@ -289,7 +318,7 @@ void bbiSumOutStreamWrite(struct bbiSumOutStream *stream, struct bbiSummary *sum
 void bbiOutputOneSummaryFurtherReduce(struct bbiSummary *sum, 
 	struct bbiSummary **pTwiceReducedList, 
 	int doubleReductionSize, struct bbiBoundsArray **pBoundsPt, 
-	struct bbiBoundsArray *boundsEnd, bits32 chromSize, struct lm *lm, 
+	struct bbiBoundsArray *boundsEnd, struct lm *lm, 
 	struct bbiSumOutStream *stream);
 /* Write out sum to file, keeping track of minimal info on it in *pBoundsPt, and also adding
  * it to second level summary. */
@@ -297,8 +326,6 @@ void bbiOutputOneSummaryFurtherReduce(struct bbiSummary *sum,
 struct bbiSummary *bbiSummarySimpleReduce(struct bbiSummary *list, int reduction, struct lm *lm);
 /* Do a simple reduction - where among other things the reduction level is an integral
  * multiple of the previous reduction level, and the list is sorted. Allocate result out of lm. */
-
-#define bbiMaxZoomLevels 10	/* Maximum zoom levels produced by writers. */
 
 void bbiWriteDummyHeader(FILE *f);
 /* Write out all-zero header, just to reserve space for it. */
@@ -327,9 +354,69 @@ void bbiChromUsageFree(struct bbiChromUsage **pUsage);
 void bbiChromUsageFreeList(struct bbiChromUsage **pList);
 /* free a list of bbiChromUsage structures */
 
-struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, 
-	struct hash *chromSizesHash, int *retMinDiff, double *retAveSize, bits64 *retBedCount);
-/* Go through bed file and collect chromosomes and statistics. Free with bbiChromUsageFreeList */
+struct bbNamedFileChunk 
+/* A name associated with an offset into a possibly large file.  Used for extra
+ * indexes in bigBed files. */
+    {
+    char *name;	    /* Name of chunk. */
+    bits64 offset;  /* Start in file. */
+    bits64 size;    /* Size in file. */
+    };
+
+struct bbExIndexMaker
+/* A helper structure to make indexes beyond primary one.  Just used for bigBeds */
+    {
+    bits16 indexCount;          /* Number of extra indexes. */
+        /* Kind of wish next four fields,  all of which are arrays indexed
+         * by the same thing,  were a single array of a structure instead. */
+    bits16 *indexFields;        /* array of field ids, one for each extra index. */
+    int *maxFieldSize;          /* array of maximum sizes seen for this field. */
+    struct bbNamedFileChunk **chunkArrayArray; /* where we keep name/start/size triples */
+    bits64 *fileOffsets;        /* array of file offsets where indexes starts. */
+    int recordCount;            /* number of records in file. */
+    };
+
+struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
+	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount);
+/* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
+ * collect max field sizes there too. */
+
+#define bbiMaxZoomLevels 10	/* Max number of zoom levels */
+#define bbiResIncrement 4	/* Amount to reduce at each zoom level */
+
+int bbiCalcResScalesAndSizes(int aveSize, 
+    int resScales[bbiMaxZoomLevels], int resSizes[bbiMaxZoomLevels]);
+/* Fill in resScales with amount to zoom at each level, and zero out resSizes based
+ * on average span. Returns the number of zoom levels we actually will use. */
+
+typedef struct bbiSummary *bbiWriteReducedOnceReturnReducedTwice(
+	struct bbiChromUsage *usageList, int fieldCount,
+	struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
+	int zoomIncrement, int blockSize, int itemsPerSlot, boolean doCompress,
+	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart,
+	struct bbiSummaryElement *totalSum);
+/* Typedef for a function that writes out data reduced by factor of initial reduction, and
+ * also returns an array of bbiSummaries for the next reduction level. */
+
+int bbiWriteZoomLevels(
+    struct lineFile *lf,    /* Input file. */
+    FILE *f,		    /* Output. */
+    int blockSize,	    /* Size of index block */
+    int itemsPerSlot,	    /* Number of data points bundled at lowest level. */
+    bbiWriteReducedOnceReturnReducedTwice writeReducedOnceReturnReducedTwice,   /* callback */
+    int fieldCount,	    /* Number of fields in bed (4 for bedGraph) */
+    boolean doCompress,	    /* Do we compress.  Answer really should be yes! */
+    bits64 dataSize,	    /* Size of data on disk (after compression if any). */
+    struct bbiChromUsage *usageList, /* Result from bbiChromUsageFromBedFile */
+    int resTryCount, int resScales[], int resSizes[],   /* How much to zoom at each level */
+    bits32 zoomAmounts[bbiMaxZoomLevels],      /* Fills in amount zoomed at each level. */
+    bits64 zoomDataOffsets[bbiMaxZoomLevels],  /* Fills in where data starts for each zoom level. */
+    bits64 zoomIndexOffsets[bbiMaxZoomLevels], /* Fills in where index starts for each level. */
+    struct bbiSummaryElement *totalSum);
+/* Write out all the zoom levels and return the number of levels written.  Writes 
+ * actual zoom amount and the offsets of the zoomed data and index in the last three
+ * parameters.  Sorry for all the parameters - it was this or duplicate a big chunk of
+ * code between bedToBigBed and bedGraphToBigWig. */
 
 int bbiCountSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot);
 /* Count up number of sections needed for data. */

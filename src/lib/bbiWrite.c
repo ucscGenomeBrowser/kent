@@ -1,3 +1,5 @@
+/* bbiWrite.c - Routines to help write bigWig and bigBed files. See also bbiFile.h */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
@@ -132,11 +134,40 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, 
-	struct hash *chromSizesHash, int *retMinDiff, double *retAveSize, bits64 *retBedCount)
-/* Go through bed file and collect chromosomes and statistics. */
+int bbExIndexMakerMaxIndexField(struct bbExIndexMaker *eim)
+/* Return the maximum field we have to index. */
 {
-char *row[3];
+int maxIx = 0;
+int i;
+for (i=0; i<eim->indexCount; ++i)
+    {
+    int ix = eim->indexFields[i];
+    if (ix > maxIx)
+        maxIx = ix;
+    }
+return maxIx;
+}
+
+void bbExIndexMakerUpdateMaxFieldSize(struct bbExIndexMaker *eim, char **row)
+/* Fold in information about row into bbExIndexMaker into eim->maxFieldSize */
+{
+int i;
+for (i=0; i<eim->indexCount; ++i)
+    {
+    int rowIx = eim->indexFields[i];
+    int size = strlen(row[rowIx]);
+    if (size > eim->maxFieldSize[i])
+        eim->maxFieldSize[i] = size;
+    }
+}
+
+struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
+	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount)
+/* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
+ * collect max field sizes there too. */
+{
+int maxRowSize = (eim == NULL ? 3 : bbExIndexMakerMaxIndexField(eim) + 1);
+char *row[maxRowSize];
 struct hash *uniqHash = hashNew(0);
 struct bbiChromUsage *usage = NULL, *usageList = NULL;
 int lastStart = -1;
@@ -148,13 +179,15 @@ lineFileRemoveInitialCustomTrackLines(lf);
 
 for (;;)
     {
-    int rowSize = lineFileChopNext(lf, row, ArraySize(row));
+    int rowSize = lineFileChopNext(lf, row, maxRowSize);
     if (rowSize == 0)
         break;
-    lineFileExpectWords(lf, 3, rowSize);
+    lineFileExpectAtLeast(lf, maxRowSize, rowSize);
     char *chrom = row[0];
     int start = lineFileNeedNum(lf, row, 1);
     int end = lineFileNeedNum(lf, row, 2);
+    if (eim != NULL)
+	bbExIndexMakerUpdateMaxFieldSize(eim, row);
     if (start > end)
         {
 	    errAbort("end (%d) before start (%d) line %d of %s",
@@ -204,6 +237,120 @@ slReverse(&usageList);
 freeHash(&uniqHash);
 return usageList;
 }
+
+int bbiCalcResScalesAndSizes(int aveSize, 
+    int resScales[bbiMaxZoomLevels], int resSizes[bbiMaxZoomLevels])
+/* Fill in resScales with amount to zoom at each level, and zero out resSizes based
+ * on average span. Returns the number of zoom levels we actually will use. */
+{
+int resTryCount = bbiMaxZoomLevels, resTry;
+int resIncrement = bbiResIncrement;
+int minZoom = 10;
+int res = aveSize;
+if (res < minZoom)
+    res = minZoom;
+for (resTry = 0; resTry < resTryCount; ++resTry)
+    {
+    resSizes[resTry] = 0;
+    resScales[resTry] = res;
+    // if aveSize is large, then the initial value of res is large, and we
+    // and we cannot do all 10 levels without overflowing res* integers and other related variables.
+    if (res > 1000000000) 
+	{
+	resTryCount = resTry + 1;  
+	verbose(2, "resTryCount reduced from 10 to %d\n", resTryCount);
+	break;
+	}
+    res *= resIncrement;
+    }
+return resTryCount;
+}
+
+int bbiWriteZoomLevels(
+    struct lineFile *lf,    /* Input file. */
+    FILE *f,		    /* Output. */
+    int blockSize,	    /* Size of index block */
+    int itemsPerSlot,	    /* Number of data points bundled at lowest level. */
+    bbiWriteReducedOnceReturnReducedTwice writeReducedOnceReturnReducedTwice,   /* callback */
+    int fieldCount,	    /* Number of fields in bed (4 for bedGraph) */
+    boolean doCompress,	    /* Do we compress.  Answer really should be yes! */
+    bits64 dataSize,	    /* Size of data on disk (after compression if any). */
+    struct bbiChromUsage *usageList, /* Result from bbiChromUsageFromBedFile */
+    int resTryCount, int resScales[], int resSizes[],   /* How much to zoom at each level */
+    bits32 zoomAmounts[bbiMaxZoomLevels],      /* Fills in amount zoomed at each level. */
+    bits64 zoomDataOffsets[bbiMaxZoomLevels],  /* Fills in where data starts for each zoom level. */
+    bits64 zoomIndexOffsets[bbiMaxZoomLevels], /* Fills in where index starts for each level. */
+    struct bbiSummaryElement *totalSum)
+/* Write out all the zoom levels and return the number of levels written.  Writes 
+ * actual zoom amount and the offsets of the zoomed data and index in the last three
+ * parameters.  Sorry for all the parameters - it was this or duplicate a big chunk of
+ * code between bedToBigBed and bedGraphToBigWig. */
+{
+/* Write out first zoomed section while storing in memory next zoom level. */
+assert(resTryCount > 0);
+int maxReducedSize = dataSize/2;
+int initialReduction = 0, initialReducedCount = 0;
+
+/* Figure out initialReduction for zoom - one that is maxReducedSize or less. */
+int resTry;
+for (resTry = 0; resTry < resTryCount; ++resTry)
+    {
+    bits64 reducedSize = resSizes[resTry] * sizeof(struct bbiSummaryOnDisk);
+    if (doCompress)
+	reducedSize /= 2;	// Estimate!
+    if (reducedSize <= maxReducedSize)
+	{
+	initialReduction = resScales[resTry];
+	initialReducedCount = resSizes[resTry];
+	break;
+	}
+    }
+verbose(2, "initialReduction %d, initialReducedCount = %d\n", 
+    initialReduction, initialReducedCount);
+
+/* Force there to always be at least one zoom.  It may waste a little space on small
+ * files, but it makes files more uniform, and avoids special case code for calculating
+ * overall file summary. */
+if (initialReduction == 0)
+    {
+    initialReduction = resScales[0];
+    initialReducedCount = resSizes[0];
+    }
+
+/* Call routine to make the initial zoom level and also a bit of work towards further levels. */
+struct lm *lm = lmInit(0);
+int zoomIncrement = bbiResIncrement;
+lineFileRewind(lf);
+struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, fieldCount,
+	lf, initialReduction, initialReducedCount,
+	zoomIncrement, blockSize, itemsPerSlot, doCompress, lm, 
+	f, &zoomDataOffsets[0], &zoomIndexOffsets[0], totalSum);
+verboseTime(2, "writeReducedOnceReturnReducedTwice");
+zoomAmounts[0] = initialReduction;
+int zoomLevels = 1;
+
+/* Loop around to do any additional levels of zoom. */
+int zoomCount = initialReducedCount;
+int reduction = initialReduction * zoomIncrement;
+while (zoomLevels < bbiMaxZoomLevels)
+    {
+    int rezoomCount = slCount(rezoomedList);
+    if (rezoomCount >= zoomCount)
+	break;
+    zoomCount = rezoomCount;
+    zoomDataOffsets[zoomLevels] = ftell(f);
+    zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList, 
+	blockSize, itemsPerSlot, doCompress, f);
+    zoomAmounts[zoomLevels] = reduction;
+    ++zoomLevels;
+    reduction *= zoomIncrement;
+    rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction, lm);
+    }
+lmCleanup(&lm);
+verboseTime(2, "further reductions");
+return zoomLevels;
+}
+
 
 int bbiCountSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot)
 /* Count up number of sections needed for data. */
@@ -511,7 +658,7 @@ if (elCount >= stream->allocCount)
 void bbiOutputOneSummaryFurtherReduce(struct bbiSummary *sum, 
 	struct bbiSummary **pTwiceReducedList, 
 	int doubleReductionSize, struct bbiBoundsArray **pBoundsPt, 
-	struct bbiBoundsArray *boundsEnd, bits32 chromSize, struct lm *lm, 
+	struct bbiBoundsArray *boundsEnd, struct lm *lm, 
 	struct bbiSumOutStream *stream)
 /* Write out sum to file, keeping track of minimal info on it in *pBoundsPt, and also adding
  * it to second level summary. */

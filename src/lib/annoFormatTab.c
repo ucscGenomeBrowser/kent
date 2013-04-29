@@ -25,34 +25,31 @@ if (source->rowType == arWig)
 	}
     fputs("\tstart\tend", f);
     }
-struct annoColumn *col;
+struct asColumn *col;
 int i;
-for (col = source->columns, i = 0;  col != NULL;  col = col->next, i++)
+for (col = source->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++)
     {
-    if (! col->included)
-	continue;
     if (isFirst && i == 0)
 	fputc('#', f);
     else
 	fputc('\t', f);
-    fputs(col->def->name, f);
+    fputs(col->name, f);
     }
 }
 
-static void aftInitialize(struct annoFormatter *vSelf, struct annoGratorQuery *query)
+static void aftInitialize(struct annoFormatter *vSelf, struct annoStreamer *primary,
+			  struct annoStreamer *integrators)
 /* Print header, regardless of whether we get any data after this. */
 {
-vSelf->query = query;
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
 if (self->needHeader)
     {
-    struct annoStreamer *primary = query->primarySource;
     char *primaryHeader = primary->getHeader(primary);
     if (isNotEmpty(primaryHeader))
-	printf("# Header from primary input:\n%s", primaryHeader);
+	fprintf(self->f, "# Header from primary input:\n%s", primaryHeader);
     printHeaderColumns(self->f, primary, TRUE);
-    struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
-    for (;  grator != NULL;  grator = grator->next)
+    struct annoStreamer *grator;
+    for (grator = integrators;  grator != NULL;  grator = grator->next)
 	printHeaderColumns(self->f, grator, FALSE);
     fputc('\n', self->f);
     self->needHeader = FALSE;
@@ -106,7 +103,7 @@ if (row == NULL)
     return NULL;
 boolean freeWhenDone = FALSE;
 char **words = NULL;
-if (source->rowType == arWords || source->rowType == arVcf)
+if (source->rowType == arWords)
     words = row->data;
 else if (source->rowType == arWig)
     {
@@ -119,7 +116,8 @@ else if (source->rowType == arWig)
 	words = wordsFromWigRowVals(row);
     }
 else
-    errAbort("annoFormatTab: unrecognized row type %d", source->rowType);
+    errAbort("annoFormatTab: unrecognized row type %d from source %s",
+	     source->rowType, source->name);
 if (retFreeWhenDone != NULL)
     *retFreeWhenDone = freeWhenDone;
 return words;
@@ -145,16 +143,14 @@ if (streamer->rowType == arWig)
     else
 	fputs("\t\t", f);
     }
-struct annoColumn *col;
+int colCount = slCount(streamer->asObj->columnList);
 int i;
-for (col = streamer->columns, i = 0;  col != NULL;  col = col->next, i++)
+for (i = 0;  i < colCount;  i++)
     {
-    if (! col->included)
-	continue;
     if (!isFirst || i > 0)
 	fputc('\t', f);
     if (words != NULL)
-	fputs(words[i], f);
+	fputs((words[i] ? words[i] : ""), f);
     }
 if (freeWhenDone)
     {
@@ -163,33 +159,30 @@ if (freeWhenDone)
     }
 }
 
-static void aftFormatOne(struct annoFormatter *vSelf, struct annoRow *primaryRow,
-			 struct slRef *gratorRowList)
+static void aftFormatOne(struct annoFormatter *vSelf, struct annoStreamRows *primaryData,
+			 struct annoStreamRows *gratorData, int gratorCount)
 /* Print out tab-separated columns that we have gathered in prior calls to aftCollect,
  * and start over fresh for the next line of output. */
 {
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
-// How many rows did each grator give us, and what's the largest # of rows?
+// Got one row from primary; what's the largest # of rows from any grator?
 int maxRows = 1;
-int i;
-struct slRef *grRef;
-int numGrators = slCount(gratorRowList);
-for (i = 0, grRef = gratorRowList;  i < numGrators;  i++, grRef = grRef->next)
+int iG;
+for (iG = 0;  iG < gratorCount;  iG++)
     {
-    int gratorRowCount = slCount(grRef->val);
+    int gratorRowCount = slCount(gratorData[iG].rowList);
     if (gratorRowCount > maxRows)
 	maxRows = gratorRowCount;
     }
 // Print out enough rows to make sure that all grator rows are included.
-struct annoStreamer *primarySource = vSelf->query->primarySource;
-for (i = 0;  i < maxRows;  i++)
+int iR;
+for (iR = 0;  iR < maxRows;  iR++)
     {
-    printColumns(self->f, primarySource, primaryRow, TRUE);
-    struct annoStreamer *grator = (struct annoStreamer *)self->formatter.query->integrators;
-    for (grRef = gratorRowList;  grRef != NULL;  grRef = grRef->next, grator = grator->next)
+    printColumns(self->f, primaryData->streamer, primaryData->rowList, TRUE);
+    for (iG = 0;  iG < gratorCount;  iG++)
 	{
-	struct annoRow *gratorRow = slElementFromIx(grRef->val, i);
-	printColumns(self->f, grator, gratorRow, FALSE);
+	struct annoRow *gratorRow = slElementFromIx(gratorData[iG].rowList, iR);
+	printColumns(self->f, gratorData[iG].streamer, gratorRow, FALSE);
 	}
     fputc('\n', self->f);
     }

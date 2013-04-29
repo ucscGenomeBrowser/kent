@@ -1,16 +1,8 @@
-include ../../../../../inc/common.mk
+kentSrc = ../../../../..
+A = allenCleanup
+include ${kentSrc}/inc/userApp.mk
 
-L += -lm
-MYLIBDIR = ../../../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
-
-O = allenCleanup.o
-
-allenCleanUp: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/allenCleanup $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/allenCleanup${EXE}
-
-test: allenCleanUp
+test:: allenCleanUp
 	allenCleanup \
 	/san/sanvol1/visiGene/offline/allenBrain/imageDisk \
 	/san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain \
@@ -19,5 +11,5 @@ test: allenCleanUp
 	> log
 
 
-clean:
-	rm -f $O
+clean::
+	rm -f log

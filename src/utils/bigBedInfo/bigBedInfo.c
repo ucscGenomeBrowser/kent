@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "udc.h"
+#include "bPlusTree.h"
 #include "bbiFile.h"
 #include "bigBed.h"
 #include "obscure.h"
@@ -20,8 +21,9 @@ errAbort(
   "options:\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   "   -chroms - list all chromosomes and their sizes\n"
-  "   -zooms - list all zoom levels and theier sizes\n"
+  "   -zooms - list all zoom levels and their sizes\n"
   "   -as - get autoSql spec\n"
+  "   -extraIndex - list all the extra indexes\n"
   );
 }
 
@@ -30,6 +32,7 @@ static struct optionSpec options[] = {
    {"chroms", OPTION_BOOLEAN},
    {"zooms", OPTION_BOOLEAN},
    {"as", OPTION_BOOLEAN},
+   {"extraIndex", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -46,8 +49,20 @@ void bigBedInfo(char *fileName)
 {
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 printf("version: %d\n", bbi->version);
+printf("hasHeaderExtension: %s\n", (bbi->extensionOffset != 0 ? "yes" : "no"));
 printf("isCompressed: %s\n", (bbi->uncompressBufSize > 0 ? "yes" : "no"));
 printf("isSwapped: %d\n", bbi->isSwapped);
+printf("extraIndexCount: %d\n", bbi->extraIndexCount);
+if (optionExists("extraIndex"))
+    {
+    struct slName *el, *list = bigBedListExtraIndexes(bbi);
+    for (el = list; el != NULL; el = el->next)
+	{
+	int fieldIx = 0;
+	struct bptFile *bpt = bigBedOpenExtraIndex(bbi, el->name, &fieldIx);
+        printf("    %s (field %d) with %lld items\n", el->name, fieldIx, (long long)bpt->itemCount);
+	}
+    }
 printLabelAndLongNumber("itemCount", bigBedItemCount(bbi));
 printLabelAndLongNumber("primaryDataSize", bbi->unzoomedIndexOffset - bbi->unzoomedDataOffset);
 if (bbi->levelList != NULL)

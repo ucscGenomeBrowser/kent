@@ -1,10 +1,11 @@
-setenv BRANCHNN 279
-setenv TODAY 2013-02-12             # v279 final
-setenv LASTWEEK 2013-01-22          # v278 final 
-setenv REVIEWDAY 2013-02-19         # v280 preview
-setenv LASTREVIEWDAY 2013-01-29     # v279 preview
-setenv REVIEW2DAY 2013-02-26        # v280 preview2
-setenv LASTREVIEW2DAY 2013-02-05    # v279 preview2
+setenv BRANCHNN 282
+setenv TODAY 2013-04-16             # v282 final
+setenv LASTWEEK 2013-03-25          # v281 final 
+setenv REVIEWDAY 2013-04-23         # v283 preview
+setenv LASTREVIEWDAY 2013-04-02     # v282 preview
+setenv REVIEW2DAY 2013-04-09        # v282 preview2
+setenv LASTREVIEW2DAY 2013-03-19    # v281 preview2
+
 
 
 

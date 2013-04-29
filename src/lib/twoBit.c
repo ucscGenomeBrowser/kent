@@ -9,6 +9,8 @@
 #include "bPlusTree.h"
 #include "twoBit.h"
 #include "udc.h"
+#include "net.h"
+#include "portable.h"
 #include <limits.h>
 
 /* following are the wrap functions for the UDC and stdio functoins
@@ -897,6 +899,9 @@ boolean twoBitIsFile(char *fileName)
 boolean useUdc = FALSE;
 if (hasProtocol(fileName))
     useUdc = TRUE;
+else if (!isRegularFile(fileName))
+    return FALSE;
+
 struct twoBitFile *tbf = getTbfAndOpen(fileName, useUdc);
 boolean isSwapped;
 boolean isTwoBit = twoBitSigRead(tbf, &isSwapped);
@@ -1205,4 +1210,17 @@ if (nBlockCount > 0)
     }
 
 return(size);
+}
+
+long long twoBitTotalSizeNoN(struct twoBitFile *tbf)
+/* return the size of the all the sequence in file, not counting N's*/
+{
+struct twoBitIndex *index;
+long long totalSize = 0;
+for (index = tbf->indexList; index != NULL; index = index->next)
+    {
+    int size = twoBitSeqSizeNoNs(tbf, index->name);
+    totalSize += size;
+    }
+return totalSize;
 }

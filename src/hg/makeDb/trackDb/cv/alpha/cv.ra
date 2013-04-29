@@ -1,12 +1,4 @@
 # Controlled vocabulary from ENCODE
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.256 2010/06/07 21:02:41 cline Exp $
-
-# BEFORE YOU EDIT THIS FILE!!!
-# - remember standard cv.ra editing protocol: after you add or modify any stanza,
-# add the keyword "Provisional" to the description line
-#
-# NOTE: the revision history of this file was lost when it was moved in the repository.
-# For history prior to Oct. 11, 2010 see the files v242_cv* in this directory.
 #
 # Human cell types, template below
 # --------------------------
@@ -177,7 +169,6 @@ tier 1
 tissue embryonic stem cell
 vendorId WA01
 vendorName WiCell Research Institute
-#Protocol with H1-ES_protocol.pdf exists on the RR, but is a generic ChIP-Seq protocol and isn't a growth protocol.
 
 term H1-neurons
 tag H1NEURONS
@@ -211,9 +202,6 @@ tier 2
 tissue skeletal muscle myoblast
 vendorId Missing
 vendorName Dr. Woodring Wright
-
-
-###### type 3 cells once they have been submitted.
 
 term 8988T
 tag 8988T
@@ -313,7 +301,6 @@ tier 3
 tissue gingival
 vendorId AG09319
 vendorName Coriell
-#lineage mesoderm
 
 term AG10803
 tag AG10803
@@ -458,7 +445,6 @@ tier 3
 tissue adipose tissue
 vendorId D4234003_A701166
 vendorName BioChain
-#lineage mesoderm
 
 term BC_Adrenal_Gland_H12803N
 tag BCADRENAL
@@ -477,7 +463,6 @@ tier 3
 tissue adrenal gland
 vendorId D1234004_B103117
 vendorName BioChain
-# http://herkules.oulu.fi/isbn951426844X/html/i232188.html
 
 term BC_Bladder_01-11002
 tag BCBLADDER
@@ -900,7 +885,6 @@ tier 3
 tissue placenta
 vendorId D4234200_A603104
 vendorName BioChain
-# lineage decidua basalis, chorion frondosum
 
 term BC_Prostate_Gland_H12817N
 tag BCPROSTATE
@@ -1243,7 +1227,6 @@ tier 2
 tissue monocytes
 vendorId Monocytes-CD14+
 vendorName S. Heimfeld Laboratory, FHCRC
-# Adding a derprecated term CD14+ for reference with other sorted cells.
 
 term CD20+
 tag CD20
@@ -2168,23 +2151,6 @@ tier 3
 tissue blood
 vendorId GM12878-XiMat
 vendorName Hunt Willard at Duke University
-
-# Maybe some day this cell line will have data. ~Jeff
-#term GM12878-XiPat
-#tag GM12878c
-#type Cell Line
-#organism human
-#description lymphoblastoid, cloned for paternal X inactivation, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
-#vendorName Hunt Willard at Duke University
-#vendorId GM12878-XiPat
-#orderUrl http://www.genome.duke.edu/people/faculty/willard/
-#lineage mesoderm
-#childOf GM12878
-#termId BTO:0002062
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
-#sex F
-#tier 3
-#protocol Myers:GM12878-XiPat_Myers_protocol.pdf
 
 term GM12891
 tag GM12891
@@ -3375,7 +3341,6 @@ tier 3
 tissue mammary
 vendorId 7630
 vendorName ScienCell
-# mammary stromal cell line
 
 term hMNC-PB
 tag HMNCPB
@@ -4372,24 +4337,6 @@ tissue epithelium
 vendorId CCL-121
 vendorName ATCC
 
-#This cell line has been superceded by SK-N-SH, HTB-11 was the venderId.
-#term HTB-11
-#tag HTB11
-#type Cell Line
-#organism human
-#description neuroblastoma
-#tissue brain
-#lineage ectoderm
-#vendorName ATCC
-#vendorId HTB-11
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
-#karyotype cancer
-#termId BTO:0001620
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001620&termName=SK-N-SH%20cell
-#sex F
-#tier 3
-#protocol HudsonAlpha:HTB-11_Myers_protocol.pdf
-
 term HTR8svn
 tag HTR8
 type Cell Line
@@ -4456,25 +4403,6 @@ tier 3
 tissue connective
 vendorId 7130
 vendorName ScienCell
-
-#Cricket - duplicate term, need plan to resolve error
-#term HVMF
-#tag HVMF
-#type Cell Line
-#tier 3
-#organism human
-#description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 from villous tissue
-#lineage missing
-#karyotype normal
-#sex M
-#tissue placenta
-#vendorName PromoCell
-#vendorId HVMF
-#orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
-#termId BTO:0001975
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
-#lab Gingeras
-#protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
 
 term HVMF_6100401.3
 tag HVMF61004013
@@ -4587,14 +4515,13 @@ tier 2
 tissue lung
 vendorId CCL-186
 vendorName ATCC
-#formerly tier 3
 
 term iPS
 tag IPS
 type Cell Line
 description induced pluripotent stem cell derived from skin fibroblast
 lineage induced pluripotent stem cell derived from skin fibroblast
-orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
+orderUrl http://intra.ninds.nih.gov/
 organism human
 protocol Crawford:iPS_Crawford_protocol.pdf
 sex B
@@ -4910,24 +4837,6 @@ tier 2
 tissue breast
 vendorId HTB-22
 vendorName ATCC
-#formerly tier 3
-
-#term MCF-10A
-#tag MCF10A
-#type Cell Line
-#organism human
-#description mammary gland, fibrocystic disease
-#tissue breast
-#vendorName ATCC
-#vendorId CRL-10317
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-10317&Template=cellBiology
-#lineage Caucasian
-#karyotype stable, near-diploid
-#termId BTO:0001939
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001939
-#sex F
-#tier 3
-#protocol Yale_TFBS(Struhl):MCF-10A_Struhl_protocol.pdf
 
 term MCF10A-Er-Src
 tag MCF10AES
@@ -5046,10 +4955,6 @@ tier 2
 tissue monocytes
 vendorId Monocytes-CD14+
 vendorName S. Heimfeld Laboratory, FHCRC
-#formerly tier 3
-#there is another Monocytes-CD14+ cell line
-#that is used in UW DNase and Open Chrom Chip
-#leaving this one in as a temporary stub
 
 term Monocytes-CD14+_RO01746
 tag MONOCD14RO1746
@@ -5069,7 +4974,6 @@ tier 2
 tissue monocytes
 vendorId Monocytes-CD14+_RO01746
 vendorName S. Heimfeld Laboratory, FHCRC
-#formerly tier 3
 
 term Monocytes-CD14+_RO01826
 tag MONOCD14RO1826
@@ -5089,7 +4993,6 @@ tier 2
 tissue monocytes
 vendorId Monocytes-CD14+_RO01826
 vendorName S. Heimfeld Laboratory, FHCRC
-# formerly tier 3
 
 term MRT_G401
 tag MRTG401
@@ -5198,8 +5101,6 @@ tier 3
 tissue blood
 vendorId NB4
 vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
-#put universities in for Stam and Snyder
-#orderUrl
 
 term NH-A
 tag NHA
@@ -5649,7 +5550,6 @@ tier 3
 tissue blood
 vendorId PBDE
 vendorName Dr. Peggy Farnham at USC
-#vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 
 term PBDEFetal
 tag PBDEFETAL
@@ -5970,7 +5870,6 @@ tier 2
 tissue brain
 vendorId HTB-11
 vendorName ATCC
-#formerly tier 3
 
 term SK-N-SH_RA
 tag SKNSHRA
@@ -5991,7 +5890,6 @@ tissue brain
 vendorId HTB-11
 vendorName ATCC
 
-#Venkat - old term using SkMC with capital K
 term SKMC
 tag SKMC
 type Cell Line
@@ -6154,7 +6052,6 @@ tissue brain
 vendorId CRL-1690
 vendorName ATCC
 protocol missing 
-#protocol Myers:T98G_Myers_protocol.pdf
 
 term TBEC
 tag TBEC
@@ -6171,7 +6068,6 @@ tier 3
 tissue epithelium
 vendorId DD009C
 vendorName National Disease Research Interchange
-#TIB-152 is a lymphocytic cell line with no relation to TBEC
 
 term Th1
 tag TH1
@@ -6311,25 +6207,6 @@ tissue breast
 vendorId HTB-133
 vendorName ATCC
 
-#NOT USED IN HG19
-#term TL010
-#tag TL010
-#type Cell Line
-#description EBV-transformed lymphoblastoid cell line (LCL) was derived from peripheral blood donated by a male with fragile X syndrome, described in Yu, et al. (1992), Am. J. Hum. Genet. 50:968-980).
-#karyotype normal
-#lab Stam
-#lineage mesoderm
-#orderUrl http://www.gs.washington.edu/faculty/stamj.htm
-#organism human
-#protocol missing
-#sex M
-#termId BTO:0002062
-#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
-#tier 3
-#tissue blood
-#vendorId TL010
-#vendorName Dr. John Stamatoyannopoulos at UW
-
 term Treg_Wb78495824
 tag TREGWB78495824
 type Cell Line
@@ -6398,8 +6275,6 @@ tier 3
 tissue brain
 vendorId HTB-14
 vendorName ATCC
-# There is considerable confusion about the gender of this cell line. It was at first described by the vendor as female and that
-#is how it is mapped in most cases. However, the vendor is now saying the further testing has proven it to be male.
 
 term U2OS
 tag U2OS
@@ -6568,25 +6443,6 @@ tissue blood
 vendorId TIB-208
 vendorName ATCC
 
-#Not used in mm9
-#term AtT-20
-#tag ATT20
-#type Cell Line
-#age immortalized
-#category cellLine
-#color 189,0,157
-#description Pituitary tumor LAF1
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-89
-#organism mouse
-#protocol missing
-#sex M
-#strain Unknown
-#termId 7087
-#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
-#tissue cortex
-#vendorId CCL-89
-#vendorName ATCC
-
 term Adrenal
 tag ADRENAL
 type Cell Line
@@ -6716,25 +6572,6 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
 tissue bone
 vendorId BoneMarrow
 vendorName LICR lab
-
-#NOT USED in mm9
-#term C127
-#tag C127
-#type Cell Line
-#age immortalized
-#category cellLine
-#color 0,158,115
-#description mammary tumor fibroblast
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1616&Template=cellBiology
-#organism mouse
-#protocol missing
-#sex F
-#strain RIII
-#termId 7035
-#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
-#tissue mammary
-#vendorId CRL-1616
-#vendorName ATCC
 
 term C2C12
 tag C2C12
@@ -7686,44 +7523,6 @@ termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0030218
 tissue blood
 vendorId mG/ER
 vendorName Dr. John Stamatoyannopoulos at UW
-
-#NOT USED in mm9
-#term Myocyte
-#tag MYOCYTE
-#type Cell Line
-#age ageUnknown
-#category cellLine
-#color 139,69,19
-#description Myocyte
-#orderUrl http://bmb.psu.edu/directory/rch8
-#organism mouse
-#sex U
-#strain Unknown
-#termId GO:0036194
-#termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0036194
-#tissue blood
-#vendorName Hardison lab
-#protocol missing 
-#protocol PSU(Hardison):Myocyte_Hardison_protocol.pdf
-
-#NOT USED in mm9
-#term Muscle
-#tag MUSCLE
-#type Cell Line
-#age ageUnknown
-#category Tissue
-#color 139,69,19
-#description Muscle
-#orderUrl http://bmb.psu.edu/directory/rch8
-#organism mouse
-#sex U
-#strain Unknown
-#termId 7054
-#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
-#tissue blood
-#vendorName Hardison lab
-#protocol missing
-##protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
 
 term NIH-3T3
 tag NIH3T3
@@ -10068,7 +9867,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K4me1(ab8895)(Dot_blot):human_H3K4me1_ab8895_validation_Bernstein.pdf Mouse_-_H3K4me1(ab8895)(Dot_blot,Western_blot):mouse_H3K4me1_ab8895_validation_Ren.pdf Mouse_-_H3K4me1(ab8895)(Dot_blot):mouse_H3K4me1_ab8895_validation_Hardison.pdf
 vendorId ab8895
 vendorName abcam
-#Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
 
 term H3K4me1_(pAb-037-050)
 tag H3K04ME1b
@@ -10133,7 +9931,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K4me3(Dot_blot):human_H3K4me3_validation_Bernstein.pdf Mouse_-_H3K4me3_(ab8580)(Dot_blot):mouse_H3K4me3_ab8580_validation_Hardison.pdf Mouse_-_H3K4me3_(07-473)(Dot_blot):mouse_H3K4me3_07-473_validation_Hardison.pdf
 vendorId ab8580; 07-473
 vendorName 1)abcam; 2)Millipore
-#Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
 
 term H3K4me3_(04-745)
 tag H3K4ME304745
@@ -10261,7 +10058,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf Mouse_-_H3K9me3_(ab8898)(Dot_blot,Western_blot):mouse_H3K9me3_ab8898_validation_Ren.pdf Mouse_-_H3K9me3_(ab8898)(Dot_blot):mouse_H3K9me3_ab8898_validation_Hardison.pdf
 vendorId ab8898
 vendorName abcam
-#Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
 
 term H3K9me3_(9754)
 tag H3K09ME3b
@@ -10325,7 +10121,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K27me3(Dot_blot):human_H3K27me3_validation_Bernstein.pdf Mouse_-_H3K27me3_(07-449)(Dot_blot):human_H3K27me3_validation_Hardison.pdf
 vendorId 07-449
 vendorName Millipore
-#Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
 
 term H3K27me3_(39155)
 tag H3K27ME339155
@@ -10373,7 +10168,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K36me3(ab9050)(Dot_blot):human_H3K36me3_ab9050_validation_Bernstein.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot,Western_blot):mouse_H3K36me3_ab9050_validation_Ren.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot):mouse_H3K36me3_ab9050_validation_Hardison.pdf
 vendorId ab9050
 vendorName abcam
-#Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
 
 term H3K36me3B
 tag H3K36ME3b
@@ -10389,7 +10183,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K36me3B(Western_blot,Peptide_ELISA):human_H3K36me3B_validation_Farnham.pdf
 vendorId 9763S
 vendorName Cell Signaling Technology
-#lots
 
 term H3K79me2
 tag H3K79ME2
@@ -10857,7 +10650,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation Human_-_JunD(sc-74)(Western_blot,IP-MassSpec):human_JunD_validation_Myers.pdf Mouse_-_:missing
 vendorId sc-74
 vendorName Santa Cruz Biotechnology
-#Only one validation is in the file
 
 term KAP1
 tag KAP1
@@ -11489,7 +11281,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PABPC1
 validation Human_-_PABPC1_(04-1467)(Western_blot,Immunoprecipitation):human_PABPC1_04-1467_validation_Tenenbaum.pdf
 vendorId 04-1467
 vendorName Millipore
-# Note 05-847 equals 04-1467 in millipore database
 
 term PAX5-C20
 tag PAX5
@@ -11507,7 +11298,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation Human_-_PAX5-C20(Immunoprecipitation-Western_blot,IP-MassSpec):human_PAX5-C20_validation_Myers.pdf
 vendorId sc-1974
 vendorName Santa Cruz Biotechnology
-# Note validation document has typo, sc-1794, sc-1974 correct.
 
 term PAX5-N19
 tag PAX5b
@@ -11525,7 +11315,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation Human_-_PAX5-N19(Immunoprecipitation-Western_blot,IP-MassSpec):human_PAX5-N19_validation_Myers.pdf
 vendorId sc-1975
 vendorName Santa Cruz Biotechnology
-# Note validation document has typo, sc-1795, sc-1975 correct.
 
 term PAX5_(N-15)
 tag PAX5c
@@ -11857,20 +11646,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
 validation Human_-_REST_(17-641)(ChIP-seq,Western_blot):human_REST_validation_Bernstein.pdf
 vendorId 17-641
 vendorName Millipore
-
-#term ripInput
-#tag RIPIN
-#type Antibody
-#target ripInput
-#targetDescription Total input for comparison for RIP experiments
-#antibodyDescription Total input. Antibody Target: ripInput
-#vendorId RIP Input
-#vendorName Tenenbaum lab
-#orderUrl http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml
-#lab Tenenbaum
-#targetId (input)
-#validation Human_-_:missing
-#label RIP input
 
 term RNF2
 tag RNF2
@@ -12302,7 +12077,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT5A
 validation Human_-_STAT5A_(sc-74442)(Western_blot,IP-MassSpec):human_STAT5A_SC-74442_validation_Myers.pdf
 vendorId sc-74442
 vendorName Santa Cruz Biotechnology
-# Note: typo of sc-77742 in validation document, actually sc-74442
 
 term SUZ12_(05-1317)
 tag SUZ12051317
@@ -12516,9 +12290,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
 validation Human-_-:missing
 vendorId 2569S
 vendorName Cell Signaling Technology
-# TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
-# TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
-# only on hg18
 
 term TCF7L2
 tag TCF7L2
@@ -13128,6 +12899,24 @@ type mapAlgorithm
 label TopHat v1.3.1
 description TopHat v1.3.1
 
+## quality
+# term (human-readable read type name)
+# tag (machine-readable read type name, no special characters)
+# type (informs pipeline code of stanza type. Should always be readType)
+# description (human-readable description of the read type, unclear where/if it's used)
+
+term caution
+tag QCAUTION
+type quality
+label Caution
+description Moderate quality; likely lower than optimal sensitivity i.e. when all replicates of a dataset have suboptimal moderate scores
+
+term good
+tag QGOOD
+type quality
+label Good
+description High quality; at least one replicate is of high quality allowing rescue OR all replicates are high quality
+
 ### readType
 # term (human-readable read type name)
 # tag (machine-readable read type name, no special characters)
@@ -13221,7 +13010,6 @@ description Paired 101 nt directed reads
 
 #### insertLength
 #### This is being used by the Wold lab as a variable.
-#### I do not think that it needs to be controlled. - Cricket
 
 term 400
 tag IL400
@@ -13281,7 +13069,7 @@ type localization
 label cell
 description Whole cell
 termId GO:0005623
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005623
 
 term nucleus
 tag NUCLEUS
@@ -13289,7 +13077,7 @@ type localization
 label nucleus
 description Large membrane bound part of cell containing chromosomes and the bulk of the cell's DNA
 termId GO:0005634
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005634
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005634
 
 term cytosol
 tag CYTOSOL
@@ -13297,7 +13085,7 @@ type localization
 label cytosol
 description The fluid between the cells outer membrane and the nucleus
 termId GO:0005829
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005829
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005829
 
 term polysome
 tag POLYSOME
@@ -13305,7 +13093,7 @@ type localization
 label polysome
 description Strand of mRNA with ribosomes attached
 termId GO:0005844
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005844
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005844
 
 term chromatin
 tag CHROMATIN
@@ -13313,7 +13101,7 @@ type localization
 label chromatin
 description Nuclear DNA and associated proteins
 termId GO:0000790
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0000790
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0000790
 
 term nucleolus
 tag NUCLEOLUS
@@ -13321,7 +13109,7 @@ type localization
 label nucleolus
 description The part of the nucleus where ribosomal RNA is actively transcribed
 termId GO:0005730
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005730
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005730
 
 term nucleoplasm
 tag NUCLEOPLASM
@@ -13329,14 +13117,14 @@ type localization
 label nucleoplasm
 description That part of the nuclear content other than the chromosomes or the nucleolus
 termId GO:0005654
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005654
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005654
 
 term nuclearMatrix
 tag NUCLEARMATRIX
 type localization
 description The dense fibrillar network lying on the inner side of the nuclear membrane
 termId GO:0016363
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0016363
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0016363
 
 term membraneFraction
 tag MEMBRANEFRACTION
@@ -13344,7 +13132,7 @@ type localization
 label membraneFraction
 description That fraction of cells, prepared by disruptive biochemical methods, that includes the plasma and other membranes.
 termId GO:0005624
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005624
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005624
 
 term mitochondria
 tag MITO
@@ -13352,7 +13140,7 @@ type localization
 label mitochondria
 description Mitochondria
 termId GO:0005739
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005739
 
 ### RNA extracts
 
@@ -13391,7 +13179,6 @@ tag POLYA
 type rnaExtract
 label PolyA+ RNA
 description Isolated Poly(A) RNA
-## This is what Yale and Caltech are using
 
 term nonPolyARRna
 tag NONPOLYARRNA
@@ -13435,8 +13222,6 @@ type control
 label Control
 description This data represents a control being compared with the other tracks in the set.
 
-
-# These are for White Lab from UChicago.  They are only named separatly to have unique names.  They are all really control.
 term Control_eGFP-BACH1
 tag CONTROLBACH1
 type control
@@ -13454,18 +13239,6 @@ tag CONTROLCDKN1B
 type control
 label eGFP-CDKN1B
 description This data represents a control being compared to experiments using antibody eGFP-CDKN1B
-
-#term Control_eGFP-E2F1
-#tag CONTROLE2F1
-#type control
-#label eGFP-E2F1
-#description This data represents a control being compared to experiments using antibody eGFP-E2F1
-#
-#term Control_eGFP-EKLF1
-#tag CONTROLEKLF1
-#type control
-#label eGFP-EKLF1
-#description This data represents a control being compared to experiments using antibody eGFP-EKLF1
 
 term Control_eGFP-ELF1
 tag CONTROLELF1
@@ -13496,12 +13269,6 @@ tag CONTROLHDAC8
 type control
 label eGFP-HDAC8
 description This data represents a control being compared to experiments using antibody eGFP-HDAC8
-
-#term Control_eGFP-HMGB1
-#tag CONTROLHMGB1
-#type control
-#label eGFP-HMGB1
-#description This data represents a control being compared to experiments using antibody eGFP-HMGB1
 
 term Control_eGFP-ILF2
 tag CONTROLILF2
@@ -13545,27 +13312,12 @@ type control
 label eGFP-NR4A1
 description This data represents a control being compared to experiments using antibody eGFP-NR4A1
 
-#term Control_eGFP-SMARCA1
-#tag CONTROLSMARCA1
-#type control
-#label eGFP-SMARCA1
-#description This data represents a control being compared to experiments using antibody eGFP-SMARCA1
-
-#term Control_eGFP-SMARCA2
-#tag CONTROLSMARCA2
-#type control
-#label eGFP-SMARCA2
-#description This data represents a control being compared to experiments using antibody eGFP-SMARCA2
-
 term Control_eGFP-STAT1
 tag CONTROLSTAT1
 type control
 label eGFP-STAT1
 description This data represents a control being compared to experiments using antibody eGFP-STAT1
 
-
-# These 3 are used by Caltech TFBS mouse experiments and Cricket thinks that they only exist to have unique names
- 
 term Control_32bp
 tag CNTRL32B
 type control
@@ -13584,14 +13336,16 @@ type control
 label Control 50bp
 description This data represents a control being compared to experiments using read length of 50 bp
 
-#This is used on all Chip-seq experiments to inicate that there is no antibody
+#Input is used on all Chip-seq experiments to inicate that there is no antibody
+
 term Input
 tag INPUT
 type control
 label Input Control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
 
-#This is used for RIP experiments as an antibody when there is no control
+#ripInput is used for RIP experiments as an antibody when there is no control
+
 term ripInput
 tag RIPIN
 type control
@@ -13636,7 +13390,6 @@ type control
 label Standard Control
 description Standard input signal for most experiments.
 
-# This final set was used by Stanford and can really fit into antibodies
 term IgG-goat
 tag IGGGOAT
 type control
@@ -13704,7 +13457,6 @@ tag TAM
 type treatment
 label 4-OHTAM 1uM 36hr
 description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
-# Changed tag from OHTAM1: 6/9/11
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
@@ -13924,13 +13676,11 @@ term DMSO_0.02pct
 tag DM002P1H
 type treatment
 description 1 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
-#tag DMSO2
 
 term DMSO_0.02pct_24hr
 tag DM002P24H
 type treatment
 description 24 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
-#tag DMSO224H
 
 term DMSO_0.02pct_7d
 tag DM002P7D
@@ -13941,14 +13691,11 @@ term DMSO_2.0pct
 tag DM2P5D
 type treatment
 description 5 d with 2% Dimethyl sufloxide (DMSO) (Weissman)
-#tag DMSO20
 
 term DMSO_4hr
 tag DM002P4H
 type treatment
 description 4 hr with 0.02% Dimethyl sufloxide (DMSO) (Myers)
-#term DMSO_0.02pct_4hr would like to change
-#tag DMSO4hr
 
 term EqS_2.0pct_24hr
 tag E2P24H
@@ -14078,7 +13825,6 @@ term IFNa30
 tag IFNA30
 type treatment
 description 30 m of Interferon alpha (Snyder)
-#missing concentration
 
 term IFNa4h
 tag IFNA4H
@@ -14090,7 +13836,6 @@ term IFNa6h
 tag IFNA6H
 type treatment
 description Interferon alpha treatment - 6 hours (Snyder)
-#missing concentration
 
 term IFNg30
 tag IFNG30
@@ -14639,7 +14384,6 @@ tag MATRIX
 type view
 label Matrix
 description Interaction files in matrix format. The number of sequences mapped to each interaction fills the matrix.
-# Interactions may be a better view for this
 
 term MinusRawSignal
 tag MINUSRAWSIG
@@ -14653,24 +14397,11 @@ type view
 label Minus signal
 description Graphs the base-by-base density of tags on the minus strand
 
-
 term Peaks
 tag PKS
 type view
 label Peaks
 description Regions of enriched signal in experiment
-
-term PeakSeqConservPeaks
-tag PSCPEAKS
-type view
-label PeakSeq Conserved Peaks
-description Regions of conserved enriched signal in experiment performed by PeakSeq
-
-term PeakSeqOptimalPeak
-tag PSOPEAKS
-type view
-label PeakSeq Optimal Peaks
-description Regions of optimal enriched signal in experiment performed by PeakSeq
 
 term pepMapFt
 tag PEPMAPFT
@@ -14848,18 +14579,6 @@ type view
 label Splices
 description Subset of aligned reads that cross splice junctions
 
-term SppConservPeaks
-tag SCPPEAKS
-type view
-label Spp Conservative Peaks
-description Regions of optimal enriched signal in experiment performed by Spp
-
-term SppOptimalPeaks
-tag SOPPEAKS
-type view
-label SPP Optimal Peaks
-description Regions of conserved enriched signal in experiment performed by SPP
-
 term SumSignal
 tag SUMSIG
 type view
@@ -15003,7 +14722,6 @@ type dataType
 label Combined
 dataGroup Other
 description Multi-assay Synthesis
-# Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType (01/14/2011)
 
 term DnaseDgf
 tag DGF
@@ -15193,7 +14911,6 @@ type dataType
 label TFBS Validation
 dataGroup Other
 description Validation of Transcription Factor Binding
-#This is not in the metaDB currently
 
 ### Strain
 # Used in conjunction with mouse submissions
@@ -15209,7 +14926,6 @@ tag 2A4B
 type strain
 label B10.H-2aH-4bp/Wts
 description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
-# Used for the CH12 Cell Line
 
 term B6D2F1/J
 tag B6D2F1J
@@ -15578,9 +15294,6 @@ tag POOL
 type tissueSourceType
 description Tissue obtained from pooling samples from various sample organisms
 
-#Venkat: Trial to add seqPlatform for use for GEO submissions
-#Uses the GEO terms to be conistent and help with GEO submissions
-
 # Seq Platform
 # Expected fields:
 # ---------------
@@ -15596,7 +15309,6 @@ type seqPlatform
 label Illumina Genome Analyzer
 description Illumina Genome Analyzer
 geoPlatformName Illumina Genome Analyzer
-# Matches GA that Kate initially indicated as the term
 
 term Illumina_GA2
 tag ILLUMINAGA2
@@ -15611,7 +15323,6 @@ type seqPlatform
 label Illumina Genome Analyzer IIe
 description Illumina Genome Analyzer IIe
 geoPlatformName Illumina Genome Analyzer II
-# Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
 tag ILLUMINAGA2X
@@ -15619,7 +15330,6 @@ type seqPlatform
 label Illumina Genome Analyzer IIx
 description Illumina Genome Analyzer IIx
 geoPlatformName Illumina Genome Analyzer II
-# Matches GA2x that Kate initally indicated as the term
 
 term Illumina_HiSeq_2000
 tag ILLUMINAHISEQ2000
@@ -15712,7 +15422,6 @@ geoPlatformName FSU NimbleGen Mouse 385K Whole Genome Tiling
 #labPi: 	This is the shortened name that we refer to the PI, usually just last name
 #labPiFull: 	The full name of the PI
 #grantPI: 	Shortened name of the head PI for the grant
-
 #type grant
 #grantInst: 	The name of the institution where the grant is administered from.
 #projectName:
@@ -15879,7 +15588,6 @@ labPiFull Richard Myers
 organism human
 
 ### NHGRI Labs
-###
 
 term NHGRI-Elnitski
 tag NHGRI-ELNITSKI
@@ -16045,7 +15753,6 @@ labPiFull Peggy Farnham
 organism human
 
 ### ARRA human labs
-###
 
 term UNC/BSU
 tag UNCBSU
@@ -16070,7 +15777,7 @@ labPiFull Kevin White
 organism human
 
 ### Gilbert lab
-###
+
 term FSU
 tag FSU
 type lab
@@ -16084,7 +15791,6 @@ organism human
 
 
 ### Mouse labs
-###
 
 term LICR-m
 tag LICRm
@@ -16349,7 +16055,6 @@ type grant
 description Snyder
 grantInst Stanford
 projectName SYDH
-# This is broken for mouse which uses StanfYale
 
 term Ren
 tag REN
@@ -16450,7 +16155,6 @@ term accession
 tag ACCESSION
 type typeOfTerm
 label GEO accession number provided by lab
-# Superceded by geoSample? will be, but for now we can't sort the lab ones into geoSample or geoSeries easily
 cvDefined no
 description A generic GEO accession number provided by the producing lab.
 hidden yes
@@ -16484,7 +16188,6 @@ priority 590
 requiredVars term,tag,type,target,antibodyDescription,targetDescription,vendorName,vendorId,orderUrl,targetId,lab
 searchable no
 validate list: manual,automatic
-# Used on hg18 in SangerGencode
 
 term Antibody
 tag ANTIBODY
@@ -16502,7 +16205,6 @@ term attic
 tag ATTIC
 type typeOfTerm
 label Is this auxillary data
-#It probably should be cv defined, but Venkat will need to define the terms
 cvDefined yes
 description Indicates file status as in the attic or not, hosted for download only, it is an internal piece of metaData.
 hidden yes
@@ -16541,12 +16243,6 @@ term cellType
 tag CELLTYPE
 type typeOfTerm
 label Cell, tissue or DNA sample
-# If this is ever changed to term Cell Line, you will also have to modify the cv Validator
-# to not special case the cellType term.
-### "term cellType", but that requires changing a huge amount of existing code.
-### (11/18/10)
-### Warning should be "term cell line", but the term here has to be a single
-### word. Or, "term cell line" in the cell type definitions should be
 cvDefined yes
 description Cell line or tissue used as the source of experimental material.
 optionalVars label,tissue,vendorId,karyotype,lineage,termUrl,color,protocol,category,lots,lab,age,deprecated,childOf
@@ -16559,9 +16255,6 @@ term composite
 tag COMPOSITE
 type typeOfTerm
 label UCSC Composite Track
-# Are composites used by the browser in the same way?
-# Should be cvDefined
-# This allows convenient selection and configuration. Also provided will be a detailed description of the set of related experiments.
 cvDefined no
 description Related tracks in the UCSC Genome Browser are often grouped into a named composite track.
 optionalVars label,deprecated
@@ -16586,8 +16279,6 @@ term controlId
 tag CONTROLID
 type typeOfTerm
 label ControlId - explicit relationship
-#This is difficult to validate as it could be an experiment ID from the lab or from the DCC or just a list of variables that define the experiment
-#label Control ID - Specific dataset used as the control
 cvDefined no
 description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling. The specification may be a labExpId or a UCSC docId or a list of variables that uniquely define an experiment.
 optionalVars label,deprecated
@@ -16624,7 +16315,6 @@ term dataVersion
 tag DATAVERSION
 type typeOfTerm
 label ENCODE Data Freeze
-# ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
 cvDefined no
 description The ENCODE project declares specific data freezes for data to be used in papers or analysis.
 optionalVars label,deprecated
@@ -16637,7 +16327,6 @@ term dateResubmitted
 tag DATERESUBMITTED
 type typeOfTerm
 label Date resubmitted to UCSC
-# later than dateSubmitted
 cvDefined no
 description Submitted data that was remapped to a new assembly, found to have errors or otherwise needed to be updated will have a date of resubmission.
 optionalVars label,deprecated
@@ -16650,7 +16339,6 @@ term dateSubmitted
 tag DATESUBMITTED
 type typeOfTerm
 label Date submitted to UCSC
-# nine months less than dateUnrestricted
 cvDefined no
 description Date that a particular file was originally submitted to the UCSC Genome Browser.
 optionalVars label,deprecated
@@ -16663,7 +16351,6 @@ term dateUnrestricted
 tag DATEUNRESTRICTED
 type typeOfTerm
 label Date restrictions end
-# nine months more than dateSubmitted
 cvDefined no
 description ENCODE data is made publicly available but with restrictions on use for the first nine months since date submitted. After this date, the data is unrestricted.
 optionalVars label,deprecated
@@ -16738,8 +16425,6 @@ term expVars
 tag EXPVARS
 type typeOfTerm
 label Experimental variables
-# Only defined for objType=composite This is the list of Experiment Defining Variables (EDVs)
-# Perhaps could add a validte option to restrict/require this var for objType=composite
 cvDefined no
 description Experiment defining variables for a given ENCODE composite set of tracks.
 hidden yes
@@ -16775,10 +16460,6 @@ term fragLength
 tag FRAGLENGTH
 type typeOfTerm
 label Mean Length of DNA fragments
-# Cricket's special story (11/19/10): in fields.ra we have fragLength
-# Venkat (4/5/2011): fragLength will be used only for hg18 at the moment, term is retired for hg19, mm9
-# and medianFragLength. fragLength and medianFragLength appear to be
-# redundant, and should be collapsed into fragLength
 cvDefined no
 description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size.
 optionalVars label,deprecated
@@ -16791,7 +16472,6 @@ term fragSize
 tag FRAGSIZE
 type typeOfTerm
 label Length of GIS DNA PET fragments
-# With more investigation, this could be collapsed in with fragLength (11/19/10)
 cvDefined yes
 description length of GIS DNA PET fragments, which has different values than fragLength
 optionalVars label,deprecated
@@ -16840,7 +16520,6 @@ term insertLength
 tag INSERTLENGTH
 type typeOfTerm
 label Insertion length
-# This is Caltech only and we are not supposed to take variation on this variable any more (11/2/2010)
 cvDefined yes
 description The length of the insertion for paired reads for RNA-seq experiments.
 optionalVars label,deprecated
@@ -16909,7 +16588,6 @@ priority 590
 requiredVars term,tag,type,description
 searchable no
 validate list: 1,2,3,1-2
-#Used on 1 track on hg18 SangerGencode
 
 term localization
 tag LOCALIZATION
@@ -16927,7 +16605,6 @@ term mapAlgorithm
 tag MAPALGORITHM
 type typeOfTerm
 label Mapping algorithm
-# This is Caltech only and possibly should be retired. (11/3/10)
 cvDefined yes
 description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome.
 optionalVars label,deprecated
@@ -16967,7 +16644,6 @@ term obtainedBy
 tag OBTAINEDBY
 type typeOfTerm
 label Obtained by
-#(Defined by lab)
 cvDefined no
 description The production group that grew the cells and isolated genomic DNA.
 optionalVars label,deprecated
@@ -16980,7 +16656,6 @@ term organism
 tag ORGANISM
 type typeOfTerm
 label Organism
-#(Defined by lab)
 cvDefined yes
 description The type of organism for an experiment.
 optionalVars label,deprecated
@@ -16993,7 +16668,6 @@ term origAssembly
 tag ORIGASSEMBLY
 type typeOfTerm
 label Assembly originally mapped to
-# Could be cv.ra term
 cvDefined no
 description Some experiments are originally performed and mapped to an earlier assembly of the reference genome and then are remapped or lifted over to a more recent assembly.
 optionalVars label,deprecated
@@ -17006,8 +16680,6 @@ term phase
 tag PHASE
 type typeOfTerm
 label Cell phase
-# Only one exp in hg18: wgEncodeUwDnaseSeqPeaksRep1JurkatG1
-# We have talked about obsoleting this term, but thought there was more data like this coming (11/3/10)
 cvDefined yes
 description The phase in a cell cycle that corresponds to a defined DNA content range determined by flow cytometry measurements that includes G1 (gap phase 1), S phase (the DNA synthesis phase), and G2/M (the gap 2 and mitosis phases; here abbreviated G2). Different portions of S phase are obtained by dividing the cell cycle into seven DNA content windows based on the relative peak positions corresponding to the G1 and G2 cell cycle fractions. The G1 peak position is routinely set at "60" relative UV fluorescence, thus producing G2 peak values in the 116-120 range
 optionalVars label,deprecated
@@ -17032,7 +16704,6 @@ term project
 tag PROJECT
 type typeOfTerm
 label Project funded by
-# Only one so far: all encode is under single project='wgEncode' (11/3/10)
 cvDefined no
 description Project that funded this and a related set of experiments.
 optionalVars label,deprecated
@@ -17057,7 +16728,6 @@ term protocol
 tag PROTOCOL
 type typeOfTerm
 label Library Protocol
-# Currently this also has growth protocol for the HAIB experiments. Growth protocol is usually associated with one cell line/one lab (11/3/10)
 cvDefined yes
 description Lab specific protocol that may cover a number of steps in an experiment. Most typically this identifies methods for building a DNA or RNA library.
 optionalVars label,deprecated
@@ -17066,11 +16736,22 @@ requiredVars term,tag,type,description
 searchable multiSelect
 validate cv or None
 
+term quality
+tag QUALITY
+type typeOfTerm
+label Integrated quality flag
+cvDefined yes
+description Quality assessment based on multiple metrics; manually curated based on automatic flagging 
+optionalVars label,deprecated
+priority 500
+requiredVars term,tag,type,description
+searchable no
+validate cv
+
 term readType
 tag READTYPE
 type typeOfTerm
 label Paired/Single reads lengths
-#description Length of single or paired-end reads in a high-throughput sequencing experiment.
 cvDefined yes
 description Specific information about cDNA sequence reads including length, directionality and single versus paired read.
 optionalVars label,deprecated
@@ -17167,7 +16848,6 @@ term size
 tag SIZE
 type typeOfTerm
 label Mappability windowing size
-# Used in hg19 mappability only (11/3/10)
 cvDefined no
 description The windowing size used, typically in a whole genome computational analysis and characterization dataset.
 optionalVars label,deprecated
@@ -17240,7 +16920,6 @@ term submittedDataVersion
 tag SUBMITTEDDATAVERSION
 type typeOfTerm
 label Version of data if resubmitted
-# Format: "V# - {reason for version}". An example :"V2 - earlier version had a bad smell"
 cvDefined no
 description When submitted data has been publicly released in the Genome Browser, but subsequently corrected and re-released, this data version will advance from the implicit V1.
 optionalVars label,deprecated
@@ -17253,9 +16932,6 @@ term tableName
 tag TABLENAME
 type typeOfTerm
 label Table name at UCSC
-# Only one case has been found where tableName != objName:
-# This should be metaDb variable only for file objects. A table object will have an object name that is the table name. In fact, the object name of the file shouuld also be the table name, so this field could be obsoleted.
-# select * from hg18.metaDb where var = "tableName" and obj != val; # wgEncodeGisPetPlusRawSignalRep1Helas3NucleusLongpolya wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya
 cvDefined no
 description Downloadable files containing data displayed in tracks in the UCSC Genome Browser are often stored in SQL tables. The particular table can be located by this name.
 optionalVars label,deprecated
@@ -17328,8 +17004,6 @@ term uniqueness
 tag UNIQUENESS
 type typeOfTerm
 label Mappability Distinctions
-# It does not vary at all, it was on the possible retire list (11/3/10)
-# Used in hg19 mappability only
 cvDefined no
 description Degree of region uniqueness or mappability disctinctions
 optionalVars label,deprecated

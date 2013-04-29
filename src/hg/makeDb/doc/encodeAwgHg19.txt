@@ -113,6 +113,7 @@ csh ../loadDnase.csh >&! ../loadDnase.out &
     # add composite settings (as in ENCODE UW Dnase track)
     # edit cells, treatments to match CV.  
     mdbUpdate hg19 -test wgEncodeAwgDnaseUniform.ra
+    mdbUpdate hg19 wgEncodeAwgDnaseUniform.ra
 
     popd
     # obtain lab and DCC accession from metaDb
@@ -185,6 +186,8 @@ cat  << 'EOF' > link.csh
     cd /hive/data/genomes/hg19/bed
     mkdir -p wgEncodeAwgTfbsUniform
     cd wgEncodeAwgTfbsUniform
+    set build = `pwd`
+    mkdir logs
 
     mkdir ebi; cd ebi
     # set user = encode-box-01
@@ -208,20 +211,23 @@ cat  << 'EOF' > link.csh
 
     # extract UCSC object names (experiment and control) from peaks file name
     ls ebi/*.narrowPeak.gz > peak.lst
-    regClusterMakeTableOfTables ans02 peak.lst partial.table -verbose=3 >&! regTable.out &
+    regClusterMakeTableOfTables ans02 peak.lst partial.table -verbose=3 >&! logs/regTable.out &
 
     # attach metadata, by antibody and by target
-    #regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table -verbose=3
-    #regClusterAttachMetadataToTableOfTables -antibodyTarget hg19 partial.fixed.table \
-        #withDupes.target.table -verbose=3
+    regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table -verbose=3
+    regClusterAttachMetadataToTableOfTables -antibodyTarget hg19 partial.fixed.table \
+        withDupes.target.table -verbose=3
+    # NOTE: partial.fixed.table corrected HAIB GM12878 Egr-1 to Rep3, but lacks controls
+
+    # NOTE next time rename files immediately, and use UCSC names in scripting
 
     # 91 cell types, 201 antibodies (177 targets), 28 treatments, 9 labs
     ######################
 
     # unzip and rename to UCSC style : wgEncodeAwgTfbs<lab><cell><antibody>[<treatment>]UniPk.narrowPeak
     # load table
-    # zip and md5sum
     # create trackDb and metaDb entries
+    # zip and md5sum
     # save cellType and antibody targets for subGroups at the end
 
 cat > nameTable.csh << 'EOF'
@@ -230,7 +236,7 @@ cat > nameTable.csh << 'EOF'
     set exp = $2
     set vars = `echo $exp | \
         sed -e 's/Control.*AlnRep1//' -e 's/StdAlnRep1//' -e 's/AlnRep1//' -e 's/wgEncode//' \
-            -e 's/Tfbs//' -e 's/BroadHistone/Broad/' -e 's/OpenChromChip/Uta/'`
+            -e 's/AlnRep3//' -e 's/Tfbs//' -e 's/BroadHistone/Broad/' -e 's/OpenChromChip/Uta/'`
     set table = ${base}${vars}UniPk
     echo $table
 'EOF'
@@ -241,12 +247,8 @@ cat > loadOne.csh << 'EOF'
     set exp = $2
     set outdir = $3
     set base = $4
+    set table = `csh nameTable.csh $base $exp`
 
-    set vars = `echo $exp | \
-        sed -e 's/Control.*AlnRep1//' -e 's/StdAlnRep1//' -e 's/AlnRep1//' -e 's/wgEncode//' \
-            -e 's/Tfbs//' -e 's/BroadHistone/Broad/' -e 's/OpenChromChip/Uta/'`
-
-    set table = ${base}${vars}UniPk
     hgLoadBed -noNameIx -fillInScore=signalValue -trimSqlTable \
                 -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable \
                 -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg19 $table $infile
@@ -255,6 +257,15 @@ cat > loadOne.csh << 'EOF'
 
 cat > makeTag.csh << 'EOF'
     echo $1 | perl -wpe 's/[^a-z0-9]+//ig; s/(.*)/\U$1/'
+'EOF'
+
+cat > targetToFactor.csh << 'EOF'
+    set factor = $1
+    if ($factor =~ eGFP-*) then
+        echo $factor | sed 's/^eGFP-//'
+    else
+        echo $factor
+    endif
 'EOF'
 
 cat > trackOne.csh << 'EOF'
@@ -289,10 +300,16 @@ cat > trackOne.csh << 'EOF'
 
     set antibody = $meta[3]
     set factor = `encodeCvTerm antibody $antibody target`
+
+    # special handling of UChicago GFP tagged targets -- strip prefix to get factor
+    set factor = `csh targetToFactor.csh $factor`
+
     if ($#meta == 4) then
         set treatment = $meta[4]
+    else
+        set treatment = "None"
     endif
-    echo "$exp $lab $cell $tier $antibody $treatment"
+    echo -n "$exp $lab $cell $tier $antibody $factor $treatment"
 
     set factorTag = `csh makeTag.csh $factor`
     echo "$factorTag=$factor" >> $factorFile
@@ -316,11 +333,6 @@ cat > trackOne.csh << 'EOF'
         echo "    parent $composite off" >> $trackDb
     endif
 
-    if ($factor != $antibody) then
-        set antibodyLabel = " ($antibody)"
-    else
-        set antibodyLabel = ""
-    endif
     if ($?treatment && $treatment != "None") then
         set treatmentLabel = " ($treatment)"
     else
@@ -328,8 +340,8 @@ cat > trackOne.csh << 'EOF'
     endif
 
     echo "    shortLabel ${cell}${treatmentLabel} $factor" >> $trackDb
-    echo "    longLabel $cell${treatmentLabel} ${factor}${antibodyLabel} TFBS Uniform Peaks from ENCODE/Analysis" >> $trackDb
-    echo "    subGroups tier=a${tier}0 cellType=$cellTag factor=$factorTag" >> $trackDb
+    echo "    longLabel $cell${treatmentLabel} TFBS Uniform Peaks of ${antibody} from ENCODE/${lab}/Analysis" >> $trackDb
+    echo "    subGroups tier=a${tier}0 cellType=$cellTag factor=$factorTag lab=$lab">> $trackDb
     if ($?color) then
         echo "    color $color" >> $trackDb
     endif
@@ -337,33 +349,89 @@ cat > trackOne.csh << 'EOF'
 'EOF'
 
 cat > metaOne.csh << 'EOF'
-    # create metadata
-    #echo "    metaObject $table" >> $m
-    #echo "    objType table" >> $m
-    #echo "    cell $cell" >> $m
-    #echo "    antibody $antibody" >> $m
-    #echo "    controlId $control" >> $m
-    #echo "    lab $lab" >> $m
-    #echo "    treatment None" >> $m
-    #echo "    composite $b" >> $m
-    #echo "    dataType ChipSeq" >> $m
-    #echo "    dataVersion ENCODE Mar 2012 Freeze" >> $m
-    #echo "    dccAccession X" >> $m
-    #echo "    project wgEncode" >> $m
-    #echo "    tableName $table" >> $m
-    #echo "    fileName $f.gz" >> $m
-    #echo "    md5sum $md5sum" >> $m
-    #echo "    view Peaks" >> $m
-    #echo "" >> $m
+    # create metadata file
+
+    set exp = $1
+    set composite = $2
+    set base = $3
+    set table = `csh nameTable.csh $base $exp`
+    set metaDb = ${composite}.metaDb.ra
+
+    # get essential metadata
+    set meta = `mdbPrint hg19 -obj=$exp | \
+                    raToTab stdin -cols=lab,cell,antibody,treatment stdout`
+    if ($status != 0) then
+        echo "ERROR: $exp"
+        continue
+    endif
+
+    set lab = $meta[1]
+    set cell = $meta[2]
+    set antibody = $meta[3]
+    set factor = `encodeCvTerm antibody $antibody target`
+
+    # special handling of UChicago GFP tagged targets -- strip prefix to get factor
+    set factor = `csh targetToFactor.csh $factor`
+
+    if ($#meta == 4) then
+        set treatment = $meta[4]
+    else
+        set treatment = None
+    endif
+
+    # now the control info (very inconsistent)
+    set meta = `mdbPrint hg19 -obj=$exp | \
+                    raToTab stdin -cols=controlId,control stdout`
+    if ($status != 0) then
+        echo "ERROR: $exp"
+        continue
+    endif
+    set controlId = $meta[1]
+
+    # the 'control' term is used In SYDH, but not HAIB
+    if ($#meta == 2) then
+        set control = $meta[2]
+    endif
+
+    # finally, the DCC accession
+    set accession = "X"
+    set meta = `mdbPrint hg19 -obj=$exp | \
+                    raToTab stdin -cols=dccAccession stdout`
+    if ($status == 0) then
+        set accession = $meta
+    endif
+
+    echo "$table :  $exp $lab $cell $antibody $treatment $controlId"
+    echo "metaObject $table" >> $metaDb
+    echo "objType table" >> $metaDb
+    echo "cell $cell" >> $metaDb
+    echo "target $factor" >> $metaDb
+    echo "antibody $antibody" >> $metaDb
+    if ($?control) then
+        echo "control $control" >> $metaDb
+    endif
+    echo "controlId $controlId" >> $metaDb
+    echo "lab $lab" >> $metaDb
+    echo "treatment $treatment" >> $metaDb
+    echo "composite $composite" >> $metaDb
+    echo "dataType ChipSeq" >> $metaDb
+    echo "dataVersion ENCODE Mar 2012 Freeze" >> $metaDb
+    echo "dccAccession $accession" >> $metaDb
+    echo "project wgEncode" >> $metaDb
+    echo "tableName $table" >> $metaDb
+    echo "fileName $table.narrowPeak.gz" >> $metaDb
+    echo "view Peaks" >> $metaDb
+    echo "" >> $metaDb
 'EOF'
 
-cat > zipOne.csh << 'EOF'
-    # rename and gzip
-    #set outfile = $outdir/${table}.narrowPeak
-    # copy file, load, and gzip for downloads
-    #echo cp -p $infile $outfile
-    #gzip $f
-    #set md5sum = `md5sum $f.gz | awk '{print $1}'`
+cat > renameOne.csh << 'EOF'
+    # rename files based on generated table names
+    set exp = $1
+    set base = $2
+    set infile = $3
+    set outdir = $4
+    set table = `csh nameTable.csh $base $exp`
+    cp -p $infile $outdir/$table.narrowPeak.gz
 'EOF'
 
 
@@ -373,23 +441,23 @@ cat > loadTfbs.csh << 'EOF'
     set fileList = $1
     set base = wgEncodeAwgTfbs
     set composite = ${base}Uniform
-    set m = ${composite}.metaDb.ra
 
-    set outdir = narrowPeak
+    set outdir = downloads
     mkdir -p $outdir
 
+    @ ct = 1
     foreach x (`sed 's/\t/|/g' $fileList`)
         set obj = `echo $x | awk -F\| '{print $1, $7, $8}'`
         set infile = $obj[1]
         set exp = $obj[2]
         set ctrl = $obj[3]
 
-        echo "Track $exp"
-        #csh loadOne.csh $infile $exp $outdir $base
-        csh trackOne.csh $exp $composite $base cells.txt factors.txt
-
-        #exit
-
+        echo "${ct} Track $exp composite=$composite base=$base infile=$infile ctrl=$ctrl"
+        @ ct++
+        # csh loadOne.csh $infile $exp $outdir $base
+        # csh trackOne.csh $exp $composite $base cells.txt factors.txt 
+        # csh metaOne.csh $exp $composite $base
+        #csh renameOne.csh $exp $base $infile $outdir
     end
 'EOF'
 
@@ -399,17 +467,299 @@ cat > loadTfbs.csh << 'EOF'
 # consider the Rep3 was used as it was later data and Anshul's filename has Pcr2x 
 # (and try to verify with Anshul).
 # -> handle this one manually
+# NOTE: instructions for this patch may be rough
 
+    # wgEncodeAwgTfbsHaibGm12878Egr1Pcr2xUniPk.narrowPeak.gz is an orphaned file, there is no matching met adata
+    # add in missing dataset
+    cd $build
+    grep Gm12878Egr1 partial.table > haibFix.table  
+    # edit to change to Rep3
+    csh loadTfbs.csh haibFix.table >&! logs/loadHaib.out
+    cp wgEncodeAwgTfbsUniform.metaDb.ra haibFix.metaDb.ra
+    # edit out all but new entry
+    mdbUpdate hg19 haibFix.metaDb.ra
+    mdbPrint hg19 -composite=wgEncodeAwgTfbsUniform > wgEncodeAwgTfbsUniform.metaDb.new.ra
+    diff wgEncodeAwgTfbsUniform.metaDb.new.ra $trackDb/human/hg19/metaDb/alpha
+    # just the HAIB fix
+    pushd $trackDb/human/hg19/metaDb/alpha
+    mdbPrint hg19 -composite=wgEncodeAwgTfbsUniform > wgEncodeAwgTfbsUniform.ra
+    cd $dir/wgEncodeAwgTfbsUniform/releaseLatest
 
-    end
-'EOF'
-
-    csh loadTfbs.csh partial.table >&! loadTfbs.out &
+    csh loadTfbs.csh partial.table >&! logs/loadTfbs.out &
 
     sort factors.txt | uniq | sed 's/$/ \\/' > factors.uniq.txt
     sort cells.txt | uniq | sed 's/$/ \\/' > cells.uniq.txt
+    # insert above as subGroups in trackDb
 
-# insert above as subGroups in trackDb
+    grep track wgEncodeAwgTfbsUniform.ra
+    grep metaObject wgEncodeAwgTfbsUniform.metaDb.ra | wc -l
+    # 707
+    wc -l partial.table
+    # 708
+    grep metaObject *.metaDb.ra | grep -v Uchi | wc -l
+    # 694
+    # NOTE:  lost one here -- need to investigate.  And remove UChicago from metadata.
+    # The lost file (from below): wgEncodeAwgTfbsHaibGm12878Egr1Pcr2xUniPk 
+    # It is a single replicate, Rep3 (?!), so couldn't be located in metadata as Rep1
+
+    set trackDb = ~/kent/src/hg/makeDb/trackDb
+    cp wgEncodeAwgTfbsUniform.ra human/hg19/$trackDb
+    # add composite settings (as in ENCODE SYDH TFBS track)
+    # merge in composite settings from analysis hub, edit labels for length, treatment
+    # note: raToTab and google spreadsheet greatly help with 17-char shortLabel adjustment
+    # We could use a tabToRa too...
+
+    # INVALID cv lookup: control = 'n/a' not found. in obj: wgEncodeAwgTfbsUtaK562CtcfUniPk
+    # 274 of these 
+    # INVALID cv lookup: antibody = 'Pol2(b)' DEPRECATED. in obj: wgEncodeAwgTfbsBroadHelas3Pol2bUniPk
+    # 4 of these
+    pushd $trackDb/human/hg19/metaDb/alpha
+    mdbUpdate -delete hg19 -composite=wgEncodeAwgTfbsUniform.ra
+    mdbUpdate hg19 wgEncodeAwgTfbsUniform.ra
+    # 707 (note -- need to remove UChicago)
+    mdbPrint hg19 -composite=wgEncodeAwgTfbsUniform > wgEncodeAwgTfbsUniform.ra
+    git add wgEncodeAwgTfbsUniform.ra  # commit
+
+    # grab track description from previous version on the Analysis hub
+    # - edit for conformance to browser style
+    # - update with new counts for cell types, etc.
+    # - have Anshul update (done)
+    mkdir html
+    cd html
+    wget -nd -np http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformTfbs.html
+    wget -nd -np http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/trackDb.txt
+    cp uniformTfbs.html ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeAwgTfbsUniform.html
+    cd ..
+
+    # fix up labels
+    # short (<=17)
+    hgsql hg19 -e 'select shortLabel from trackDb_kate where tableName like "wgEncodeAwgTfbs%" and length(shortLabel) > 17' > badShorts.txt
+    # use <cell>+<treatment> <factor>
+    # to distinguish same experiment diff labs, add single char lab id:
+    # h=HudsonAlpha, s=Stanford, t=UTexas-Austin, w=UWashington, c=USC, v=Harvard, y=Yale, b=Broad, i=UChicago (Illinois?)
+    # Add '2, e.g. 'h2, if 2 experiments from same lab (e.g. different control or antibody)
+    hgsql hg19 -e 'select longLabel from trackDb_kate where tableName like "wgEncodeAwgTfbs%" and length(longLabel) > 80' > badLongs.txt
+    # Shorten by abbreviating treatments, and excise 'from' 
+
+    # Add quality scores from Anshul's manual curation :
+    # https://docs.google.com/spreadsheet/ccc?key=0Am6FxqAtrFDwdHdRcHNQUy03SjBoSVMxdUNyZV9Rdnc#gid=9 
+    # add metadata term 'quality'=['good','caution'] for integrated metric [1,0]
+    # drop failed datasets (quality == -1)
+    # add passing U Chicago (total 5)
+
+    cd $build
+    mkdir quality
+    cd quality
+    # download .csv from google spreadsheet above to 
+    wc -l tfbsQualityReport.csv
+    # 712
+
+    ####
+    # rescue good Chicago datasets
+    grep Chicago tfbsQualityReport.csv | awk -F',' '$2 != -1 {print $3}'
+    #wgEncodeUchicagoTfbsK562Ehdac8ControlAlnRep0
+    #wgEncodeUchicagoTfbsK562EjundControlAlnRep0
+    #wgEncodeUchicagoTfbsK562EjunbControlAlnRep0
+    #wgEncodeUchicagoTfbsK562Egata2ControlAlnRep0
+    #wgEncodeUchicagoTfbsK562EfosControlAlnRep0
+
+    grep Uchicago partial.table > chicago.table
+    # edit out all but good datasets, listed above -> chicago.good.table
+
+    csh loadTfbs.csh chicago.good.table >&! logs/loadTfbs.chicago.out &
+
+    ####
+    # remove failed datasets
+    awk -F',' '$2 == -1 {print $3}' tfbsQualityReport.csv | grep -v chicago > bad.table
+    #wgEncodeSydhTfbsGm12878Spt20StdAlnRep0
+    #wgEncodeSydhTfbsGm12878Gcn5StdAlnRep0
+    #wgEncodeHaibTfbsPfsk1Pol24h8V0416101AlnRep0
+    #wgEncodeHaibTfbsA549Sp1V0422111Etoh02AlnRep0
+        # NOTE: this one not in Anshul's file directory
+    #wgEncodeSydhTfbsHepg2CebpzIggrabAlnRep0
+    #wgEncodeSydhTfbsHelas3Gcn5StdAlnRep0
+    #wgEncodeSydhTfbsGm12878Irf3IggmusAlnRep0
+    #wgEncodeSydhTfbsK562Xrcc4StdAlnRep0
+    #wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep0
+    #wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep0
+    #wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep0
+    # 11 total
+
+    # update trackDb: add stanzas, uniquify short labels, add 1 new lab, 2 new factors to subgroups
+        # tweak cell type tags for tiers>3
+    # update track description
+    # update metaDb
+
+    # was 695.  Added 5, removed 10 -> -5. Should be 690.
+    # Read 691 metadata objects from hg19
+    # Yes! (includes composite object)
+
+    # TODO: Histogram of score distributions (may want to normalize to >1std)
+    # Ref JK suggestion during code review 3/26/12
+
+    # TODO: Add 5 chicago and remove 10 baddies links from downloads dir (and releaseLatest)
+
+    # add quality metric from Anshul's spreadsheet
+    cd quality
+cat > getQuality.pl << 'EOF'
+    while (<>) {
+        ($id, $qual, $obj, $junk) = split(",");
+        if ($qual eq "0") {
+            $qual = "caution";
+        } else if ($qual eq "1") {
+            $qual = "good";
+        } else {
+            next;
+        }
+        $obj =~ s/Rep0/Rep1/;
+        print "$obj.$qual\n";
+    }
+'EOF'
+
+    perl getQuality.pl < tfbsQualityReport.csv > quality.lst
+    wc -l quality.lst
+    # 690
+
+cat > addQuality.csh << 'EOF'
+    set qualList = $1
+    foreach q (`cat $qualList`)
+    set obj = $q:r
+    set qual = $q:e
+    set obj = `csh ../nameTable.csh wgEncodeAwgTfbs $obj`
+    echo "metaObject $obj"
+    echo "quality $qual"
+    echo ""
+    end
+'EOF'
+
+    csh addQuality.csh quality.lst < quality.ra
+    mdbUpdate hg19 quality.ra
+    #Affected 689 row(s) in hg19.metaDb_kate
+    # ugh, lost 1
+
+    mdbPrint hg19 -composite=wgEncodeAwgTfbsUniform > wgEncodeAwgTfbsUniform.ra
+
+    # NOTE: add quality typeOfTerm and the two values (caution, good) to cv.ra
+
+# hand-tweak 3 HudsonAlpha that have problematic V02, etc. in filenames
+#wgEncodeAwgTfbsHaibK562CtcfcPcr1xUniPk - peak count matches: wgEncodeHaibTfbsK562CtcfcPcr1xAlnRep0V2 (quality 1)
+#wgEncodeAwgTfbsHaibU87NrsfPcr2xUniPk - peak count matches:wgEncodeHaibTfbsU87NrsfPcr2xAlnRep0V2 (quality 1)
+#wgEncodeAwgTfbsHaibU87Pol24h8V0416101UniPk - peak count matches: wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep0V2  (quality 1)
+
+# Redo scores in tables and files.  Files had no scores -- we will assign using 'reg' scoring
+# method (after evaluating multiple methods with 'bedScore').  Tables had encode pipeline
+# scoring method -- these will be replaced.
+# Tried all 4 scoring methods -- reviewing graphs with Jim, it was decided to use 'reg' scoring,
+# transformed with single normalization value.
+
+
+cat > scoreNarrowPeaks.csh << 'EOF'
+    set method = $1
+    set peakDir = $2
+   set uniformDir = $peakDir/${method}.uniform
+   rm -fr $dir $uniformDir
+   mkdir $dir $uniformDir
+   bedScore -col=7 -verbose=2 -method=$method peaks/*.narrowPeak $dir
+   bedScore -uniform -col=7 -verbose=2 -method=$method peaks/*.narrowPeak $uniformDir
+'EOF'
+
+cat > doScorePeaks.csh << 'EOF'
+    set outDir = scoredPeaks
+    mkdir -p $outDir $outDir/logs
+    foreach method (encode reg std2 asinh)
+        echo "Scoring by $method"
+        csh scoreNarrowPeaks.csh $method $outDir >&! $outDir/logs/$method.log
+    end
+'EOF'
+
+    csh doScorePeaks.csh >&! doScoredPeaks.log
+
+    # We will use files in scoredPeaks/reg.uniform
+
+    # reload tables
+
+cat > loadScored.csh << 'EOF'
+    cd scoredPeaks/reg.uniform
+    foreach path (*.narrowPeak)
+        set table = $path:r
+        echo $table
+        /cluster/bin/x86_64/hgLoadBed -noNameIx -trimSqlTable \
+                -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable \
+                -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg19 $table $path
+    end
+'EOF'
+    csh loadScored.csh >&! logs/loadScored.out &
+
+    # replace downloads
+
+    mv downloads downloads.orig
+
+cat > downloadScored.csh << 'EOF'
+    mkdir -p downloads
+    cd scoredPeaks/reg.uniform
+    foreach file (*.narrowPeak)
+        echo $file
+        gzip -c $file > ../../downloads/$file.gz
+    end
+'EOF'
+    csh downloadScored.csh >&! logs/downloadScored.out &
+
+    # set up file downloads in expected locale
+    set dir = /hive/groups/encode/dcc/pipeline/downloads/hg19
+# must use name of composite
+    mkdir -p $dir/wgEncodeAwgTfbsUniform
+    cd $dir/wgEncodeAwgTfbsUniform
+
+    # link files from build area
+    cd /hive/data/genomes/hg19/bed/wgEncodeAwgTfbsUniform/downloads
+cat  << 'EOF' > link.csh
+    foreach f (*.gz)
+        echo $f
+        ln $f /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeAwgTfbsUniform
+    end
+'EOF'
+    csh link.csh
+
+    # rescue dataset missing from peaks/ so not rescored
+    cd $build
+    csh renameOne.csh wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep1 wgEncodeAwgTfbs ebi/spp.idrOptimal.bf.wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep0.bam_VS_wgEncodeSydhTfbsHepg2InputInslnStdAlnRep0.bam.narrowPeak.gz downloads.orig
+    set f = wgEncodeAwgTfbsSydhHepg2Srebp1InslnUniPk.narrowPeak
+    zcat downloads.orig/$f.gz > peaks/$f
+    bedScore -col=7 -verbose=2 -method=reg -uniform peaks/$f scoredPeaks/reg.uniform/$f
+    set table = $f:r
+    /cluster/bin/x86_64/hgLoadBed -noNameIx -trimSqlTable \
+            -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable \
+            -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg19 $table scoredPeaks/reg.uniform/$f
+    cd scoredPeaks/reg.uniform
+    gzip -c $f > ../../downloads/$f.gz
+    cd /hive/data/genomes/hg19/bed/wgEncodeAwgTfbsUniform/downloads
+    ln $f.gz /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeAwgTfbsUniform
+
+    # add files.txt, md5sum.txt
+    cd /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeAwgTfbsUniform
+    encodeMkFilesList hg19 -md5 -cv=/cluster/home/kate/kent/src/hg/makeDb/trackDb/cv/alpha
+    # wgEncodeAwgTfbsHaibPfsk1Pol24h8V0416101UniPk.narrowPeak.gz is an orphaned file, there is no matching metadata
+    rm wgEncodeAwgTfbsHaibPfsk1Pol24h8V0416101UniPk.narrowPeak.gz
+
+    # setup downloads area in ENCODE 2 standard fashion (as on encodewiki 'Data Wrangler HOWTO')
+    mkdir release1
+    ln -s release1 beta
+    ln -s release1 releaseLatest
+
+    # add composite object to metaDb (use wgEncodeAwgDnaseUniform as example)
+
+    # add README
+    sed 's/wgEncodeHaibTfbs/wgEncodeAwgTfbsUniform/' $dir/wgEncodeHaibTfbs/README.txt > $dir/wgEncodeAwgTfbsUniform/README.txt
+    # edit
+    cp $dir/wgEncodeTfbsUniform/README.txt $dir/wgEncodeAwgTfbsUniform/releaseLatest
+
+    # get file list for pushQ
+    cd ~/kent/src/hg/makeDb/doc/encodeDccHg19
+    /cluster/bin/scripts/encodeMkChangeNotes hg19 wgEncodeAwgTfbsUniform 1 > wgEncodeAwgTfbsUniform.release1.notes
+    # check in notes file
+
+    # QA preview (vs. redmine issue)
+    encodeQaInit hg19 wgEncodeAwgTfbsUniform 1 10042 -t 
 
 ###############################################
 # Master list of 2.9M DNase sites from Analysis   (in progress kate)

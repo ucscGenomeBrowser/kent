@@ -20,6 +20,7 @@
 #include "hgLogin.h"
 #include "gbMembers.h"
 #include "versionInfo.h"
+#include "mailViaPipe.h"
 
 /* ---- Global variables. ---- */
 char msg[4096] = "";
@@ -38,6 +39,26 @@ char brwAddr[256];
 char signature[256];
 char returnAddr[256];
 /* ---- Global helper functions ---- */
+char *cookieNameForUserName()
+/* Return the cookie name used for logged in user name like 'wikidb_mw1_UserName' */
+{
+if isEmpty(cfgOption(CFG_COOKIIENAME_USERNAME))
+    return cloneString("NULL_cookieNameUserName");
+else
+    return cloneString(cfgOption(CFG_COOKIIENAME_USERNAME));
+}
+
+char *cookieNameForUserID()
+/* Return the cookie name used for logged in user ID like 'wikidb_mw1_UserID' */
+{
+if isEmpty(cfgOption(CFG_COOKIIENAME_USERID))
+    return cloneString("NULL_cookieNameUserID");
+else
+    return cloneString(cfgOption(CFG_COOKIIENAME_USERID));
+}
+
+
+
 char *browserName()
 /* Return the browser name like 'UCSC Genome Browser' */
 {
@@ -72,22 +93,6 @@ if isEmpty(cfgOption(CFG_LOGIN_MAIL_RETURN_ADDR))
     return cloneString("NULL_mailReturnAddr");
 else
     return cloneString(cfgOption(CFG_LOGIN_MAIL_RETURN_ADDR));
-}
-
-int mailItOut(char *toAddr, char *subject, char *msg, char *fromAddr)
-/* send mail to toAddr address */
-{
-char cmd[4096];
-char fullMail[4096];
-safef(fullMail,sizeof(fullMail),
-    "From: %s\n"
-    "To: %s\n"
-    "Subject: %s\n"
-    "\n%s",
-    fromAddr, toAddr, subject, msg);
-safef(cmd,sizeof(cmd), "echo '%s' | /usr/sbin/sendmail -t -oi",fullMail);      
-int result = system(cmd);
-return result;
 }
 
 /* ---- password functions depend on optionally installed openssl lib ---- */
@@ -366,7 +371,7 @@ void sendActMailOut(char *email, char *subject, char *msg)
 {
 char *hgLoginHost = wikiLinkHost();
 int result;
-result = mailItOut(email, subject, msg, returnAddr);
+result = mailViaPipe(email, subject, msg, returnAddr);
 
 if (result == -1)
     {
@@ -436,7 +441,7 @@ void sendMailOut(char *email, char *subject, char *msg)
 char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
-result = mailItOut(email, subject, msg, returnAddr);
+result = mailViaPipe(email, subject, msg, returnAddr);
 if (result == -1)
     {
     hPrintf( 
@@ -468,7 +473,7 @@ char *remoteAddr=getenv("REMOTE_ADDR");
 
 safef(subject, sizeof(subject),"Your user name at the %s", brwName);
 safef(msg, sizeof(msg), 
-    "Someone (probably you, from IP address %s) has requested user name(s) associated with this email address at %s: \n\n  %s\n\n%s\n%s", 
+    "Someone (probably you, from IP address %s) has requested user name(s) associated with this email address at the %s: \n\n  %s\n\n%s\n%s", 
    remoteAddr, brwName, users, signature, returnAddr);
 sendMailOut(email, subject, msg);
 }
@@ -503,7 +508,7 @@ void sendPwdMailOut(char *email, char *subject, char *msg, char *username)
 char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
-result = mailItOut(email, subject, msg, returnAddr);
+result = mailViaPipe(email, subject, msg, returnAddr);
 if (result == -1)
     {
     hPrintf(
@@ -533,9 +538,9 @@ char subject[256];
 char msg[4096];
 char *remoteAddr=getenv("REMOTE_ADDR");
 
-safef(subject, sizeof(subject),"New temporary password for %s", brwName);
+safef(subject, sizeof(subject),"New temporary password for your account at the %s", brwName);
 safef(msg, sizeof(msg),
-    "  Someone (probably you, from IP address %s) requested a new password for %s (%s). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\n\n  If someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n\n%s\n%s",
+    "\n  Someone (probably you, from IP address %s) requested a new password for the %s (%s). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\n\n  If someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n\n%s\n%s",
     remoteAddr, brwName, brwAddr, username, password, signature, returnAddr);
 sendPwdMailOut(email, subject, msg, username);
 }
@@ -1175,15 +1180,17 @@ hPrintf(
     "\n");
 /* Set cookies */
 char *domainName=getCookieDomainName();
+char *userNameCookie=cookieNameForUserName();
+char *userIDCookie=cookieNameForUserID();
 hPrintf("<script language=\"JavaScript\">"
     " document.write(\"Login successful, setting cookies now...\");"
     "</script>\n"
     "<script language=\"JavaScript\">"
-    "document.cookie = \"wikidb_mw1_UserName=%s; domain=%s; expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
+    "document.cookie = \"%s=%s; domain=%s; expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
     "\n"
-    "document.cookie = \"wikidb_mw1_UserID=%d; domain=%s; expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
+    "document.cookie = \"%s=%d; domain=%s; expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
     " </script>"
-    "\n", userName, domainName, userID, domainName);
+    "\n", userNameCookie, userName, domainName, userIDCookie, userID, domainName);
 cartRemove(cart,"hgLogin_userName");
 returnToURL(150);
 }
@@ -1265,11 +1272,13 @@ hPrintf(
     "<span style='color:red;'></span>"
     "\n");
 char *domainName=getCookieDomainName();
+char *userNameCookie=cookieNameForUserName();
+char *userIDCookie=cookieNameForUserID();
 hPrintf("<script language=\"JavaScript\">"
-    "document.cookie = \"wikidb_mw1_UserName=; domain=%s; expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
+    "document.cookie = \"%s=; domain=%s; expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
     "\n"
-    "document.cookie = \"wikidb_mw1_UserID=; domain=%s; expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
-    "</script>\n", domainName, domainName);
+    "document.cookie = \"%s=; domain=%s; expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
+    "</script>\n", userNameCookie, domainName, userIDCookie, domainName);
 /* return to "returnto" URL */
 returnToURL(150);
 }

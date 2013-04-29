@@ -21,6 +21,7 @@
 #include "hubConnect.h"
 #include "asFilter.h"
 #include "hgTables.h"
+#include "trackHub.h"
 
 
 boolean isBigBed(char *database, char *table, struct trackDb *parent,
@@ -320,7 +321,7 @@ int orderedCount = count * 4;
 if (orderedCount < 100)
     orderedCount = 100;
 struct bigBedInterval *iv, *ivList = getNElements(bbi, chromList, lm, orderedCount);
-shuffleList(&ivList, 1);
+shuffleList(&ivList);
 // Make a list of item names from intervals.
 int outCount = 0;
 for (iv = ivList;  iv != NULL && outCount < count;  iv = iv->next)
@@ -344,7 +345,9 @@ void showSchemaBigBed(char *table, struct trackDb *tdb)
 /* Show schema on bigBed. */
 {
 /* Figure out bigBed file name and open it.  Get contents for first chromosome as an example. */
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(database))
+    conn = hAllocConn(database);
 char *fileName = bigBedFileName(table, conn);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct bbiChromInfo *chromList = bbiChromList(bbi);

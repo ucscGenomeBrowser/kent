@@ -65,6 +65,7 @@ DIRS = \
 	bedRestrictToPositions \
 	bedToBigBed \
 	bigBedInfo \
+	bigBedNamedItems \
 	bigBedSummary \
 	bigBedToBed \
 	bigWigAverageOverBed \

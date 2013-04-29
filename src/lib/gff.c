@@ -234,11 +234,6 @@ for (;;)
    else if (sameString("transcript_name", type))
        gl->transcriptName = gffFileGetStr(gff, val);
    }
-if (gl->group == NULL)
-    {
-    if (gl->geneId == NULL)
-        warn("No gene_id or transcript_id line %d of %s", lineIx, fileName);
-    }
 }
 
 void gffFileAddRow(struct gffFile *gff, int baseOffset, char *words[], int wordCount, 
@@ -280,6 +275,8 @@ if ((hel = hashLookup(gff->featureHash, words[2])) == NULL)
     el->name = hel->name;
     slAddHead(&gff->featureList, el);
     }
+struct gffFeature *feature = hel->val;
+feature->count += 1;
 gl->feature = hel->name;
 
 if (!isdigit(words[3][0]) || !isdigit(words[4][0]))

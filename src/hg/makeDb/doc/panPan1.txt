@@ -1,0 +1,2958 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the panPan1
+#	Bonobo - Pan paniscus - Mar 2012
+
+#    DATE:   06-Mar-2012
+#    ORGANISM:       Pan paniscus
+#    TAXID:  9597
+#    ASSEMBLY LONG NAME:     panpan1
+#    ASSEMBLY SHORT NAME:    panpan1
+#    ASSEMBLY SUBMITTER:     Max-Planck Institute for Evolutionary Anthropology
+#    ASSEMBLY TYPE:  Haploid
+#    NUMBER OF ASSEMBLY-UNITS:       2
+#    ASSEMBLY ACCESSION:     GCA_000258655.1
+#    ##Below is a 2 column list with assembly-unit id and name.
+#    ##The Primary Assembly unit is listed first.
+#    GCA_000258665.1 Primary Assembly
+#    GCA_000258675.1 non-nuclear
+#    
+#    FTP-RELEASE DATE: 28-May-2012
+http://a-z-animals.com/media/animals/images/original/bonobo3.jpg
+Kabir Bakie
+
+#       photoCreditURL http://a-z-animals.com/media/animals/images/original/bonobo3.jpg
+#       photoCreditName Kabir Bakie
+ 
+#       ncbiGenomeId 10729
+#       ncbiAssemblyId 382348
+#       ncbiAssemblyName Max-Planck LatCha1
+#       ncbiBioProject 49285
+#       genBankAccessionID GCA_000258655.1
+
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AJFE
+#	26X coverage WGS
+
+#	http://www.ncbi.nlm.nih.gov/bioproject/49285
+
+
+http://www.ncbi.nlm.nih.gov/assembly/382348/
+ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Pan_paniscus/panpan1/
+http://www.ncbi.nlm.nih.gov/bioproject/49285
+http://www.ncbi.nlm.nih.gov/assembly/382348/
+http://www.ncbi.nlm.nih.gov/genome/10729
+
+#############################################################################
+# Fetch sequence from genbank (DONE - 2013-02-25 - Chin)
+
+    mkdir -p /hive/data/genomes/panPan1/genbank
+    cd /hive/data/genomes/panPan1/genbank
+
+    time wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+        --no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Pan_paniscus/panpan1/*"
+    #   Downloaded: 21 files, 1.1G in 15m 12s (1.21 MB/s)
+    #   real    15m20.820s
+
+    # measure sequence to be used here
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+    #   2869173508 bases (143284465 N's 2725889043 real 2725889043 upper 0 
+    #   lower) in 10866 sequences in 1 files
+    #   Total size: mean 264050.6 sd 2063222.8 
+    #   min 217 (gi|382949851|gb|AJFE01120895.1|) 
+    #   max 101998900 (gi|385247281|gb|JH650633.1|) median 1258
+
+#############################################################################
+# process into UCSC naming scheme (DONE - 2013-02-25 - Chin)
+    mkdir /hive/data/genomes/panPan1/ucsc
+    cd /hive/data/genomes/panPan1/ucsc
+
+    # verify we don't have any .acc numbers different from .1
+    zcat ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	 | cut -f1 | egrep "^JH|AJFE" \
+	| sed -e 's/^JH[0-9][0-9]*//; s/^AJFE[0-9][0-9]*//' | sort | uniq -c
+    #	231600 .1
+
+    # this is like the unplaced.pl script in other assemblies except it
+    #	does not add chrUn_ to the names since they are all just scaffolds
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, ">unplaced.agp") or die "can not write to unplaced.agp";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\.1//;    
+        printf UC "%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, ">unplaced.fa") or die "can not write to unplaced.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\.1\|.*//;
+        printf UC ">$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+
+    time ./unplaced.pl
+    # real    0m48.797s
+
+    time gzip *.fa *.agp
+    #	real    13m15.845s
+#-rw-rw-r-- 1   3024706 Feb 25 16:28 unplaced.agp.gz
+#-rw-rw-r-- 1 825578535 Feb 25 16:29 unplaced.fa.gz
+
+    # verify nothing lost in the translation, should be the same as above
+    #	except for the name translations
+    faSize *.fa.gz
+# 2869173508 bases (143284465 N's 2725889043 real 2725889043 upper 0 lower) in 
+# 10866 sequences in 1 files
+# Total size: mean 264050.6 sd 2063222.8 min 217 (AJFE01120895) 
+#       max 101998900 (JH650633) median 1258
+
+    # Note: chrM sequence in /hive/data/genomes/panPan1/genbank/non-nuclear
+    # is slightly different from mitoAcc NC_001644.1. Do noy include it 
+    # here. 
+    
+    mv unplaced.agp.gz ucsc.agp.gz
+    mv unplaced.fa.gz ucsc.fa.gz
+    checkAgpAndFa  ucsc.agp.gz ucsc.fa.gz 2>&1 | tail -2
+    # Valid Fasta file entry
+    # All AGP and FASTA entries agree - both files are valid
+
+    # N50
+    cd /hive/data/genomes/panPan1/ucsc
+    mkdir N50
+    zcat ucsc.fa.gz | faCount stdin | awk ' /^(JH|AJFE)/ {print $1, $2}' > N50/chrom.sizes 
+    n50.pl N50/chrom.sizes
+#       reading: N50/chrom.sizes
+#       contig count: 10866, total size: 2869173508, one half size: 1434586754
+# cumulative    N50 count       contig  contig size
+1431997266      72      JH650583        10154712
+1434586754 one half size
+1442122158      73      JH650317        10124892
+
+
+    # Photo
+    mkdir /hive/data/genomes/panPan1/photograph
+    cd /hive/data/genomes/panPan1/photograph
+    wget -O bonobo3.jpg \
+       http://a-z-animals.com/media/animals/images/original/bonobo3.jpg
+    convert -geometry "350x350" bonobo3.jpg Pan_paniscus.jpg
+    # check this .jpg file into the source tree kent/src/hg/htdocs/images/
+    git commit -m "from a-z-animals.com - Kabir Bakie" Pan_paniscus.jpg
+    # and copy to /usr/local/apache/htdocs/images
+    cp -p Pan_paniscus.jpg /usr/local/apache/htdocs/images
+
+
+#############################################################################
+#   Initial browser build (DONE - 2013-02-28 - Chin)
+    cd /hive/data/genomes/panPan1
+    cat << '_EOF_' > panPan1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db panPan1
+clade primate
+genomeCladePriority 10
+scientificName Pan paniscus
+commonName Bonobo
+assemblyDate May. 2012
+assemblyLabel Max-Planck Institute panpan1 (GCA_000258665.1)
+assemblyShortLabel panpan1
+orderKey 242
+mitoAcc NC_001644.1 
+fastaFiles /hive/data/genomes/panPan1/ucsc/ucsc.fa.gz
+agpFiles /hive/data/genomes/panPan1/ucsc/ucsc.agp.gz
+dbDbSpeciesDir bonobo
+photoCreditURL http://a-z-animals.com/animals/bonobo/pictures/2955/
+photoCreditName Photo courtesy of Kabir Bakie
+ncbiGenomeId 10729
+ncbiAssemblyId 382348
+ncbiAssemblyName Max-Planck panpan1
+ncbiBioProject 49285
+genBankAccessionID GCA_000258655.1
+taxId 9597
+'_EOF_'
+    # << happy emacs
+
+
+    time makeGenomeDb.pl -stop=agp panPan1.config.ra > agp.log 2>&1 
+    #	real    3m59.377s
+    # check the end of agp.log to verify it is OK
+    tail -1 agp.log
+    #  *** All done!  (through the 'agp' step)
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
+	-continue=db panPan1.config.ra > db.log 2>&1 
+    #	real    39m18.720s
+
+   tail  db.log
+
+   # Then copy these files to your ~/kent/src/hg/makeDb/trackDb/bonobo/panPan1
+   #  - cd ~/kent/src/hg/makeDb/trackDb
+   #  - edit makefile to add panPan1 to DBS.
+   #  - git add bonobo/panPan1/*.{ra,html}
+   #  - git commit -m "Added panPan1 to DBS." makefile
+   #  - git commit -m "Initial descriptions for panPan1."  bonobo/panPan1/*.{ra,html}
+   #  - git pull; git push
+   #  - Run make update DBS=panPan1 and make alpha when done.
+   #  - (optional) Clean up /cluster/data/panPan1/TemporaryTrackDbCheckout
+
+    ln -s `pwd`/panPan1.unmasked.2bit /gbdb/panPan1/panPan1.2bit
+    #   browser should function now
+
+
+#############################################################################
+# running repeat masker (DONE - 2013-03-04 - Chin)
+    mkdir /hive/data/genomes/panPan1/bed/repeatMasker
+    cd /hive/data/genomes/panPan1/bed/repeatMasker
+    screen -S panPan1-repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek panPan1 > do.log 2>&1 &
+    # real    652m25.160s
+
+    cat faSize.rmsk.txt
+    # 2869190071 bases (143284465 N's 2725905606 real 1359856043 upper 
+    # 1366049563 lower) in 10867 sequences in 1 files
+    # Total size: mean 264027.8 sd 2063129.2 min 217 (AJFE01120895) 
+    # max 101998900 (JH650633) median 1258
+    # %47.61 masked total, %50.11 masked real
+
+    grep -i versi do.log
+    # RepeatMasker version open-4.0.0
+    #    January 10 2013 (open-4-0-0) version of RepeatMasker
+
+    featureBits -countGaps panPan1 rmsk
+    #   366823722 bases of 2869190071 (47.638%) in intersection
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2013-02-28 - Chin)
+    mkdir /hive/data/genomes/panPan1/bed/simpleRepeat
+    cd /hive/data/genomes/panPan1/bed/simpleRepeat
+    screen -S panPan1-simpleRepeatr
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	panPan1 > do.log 2>&1 &
+    #   real    23m47.212s
+
+    cat fb.simpleRepeat
+    #   53605194 bases of 2725953003 (1.966%) in intersection
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-07-26 - Chin)
+    mkdir /hive/data/genomes/panPan1/bed/gap
+    cd /hive/data/genomes/panPan1/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../panPan1.unmasked.2bit > findMotif.txt 2>&1
+    #   real    1m10.093s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits panPan1 -not gap -bed=notGap.bed
+    # 2725953003 bases of 2725953003 (100.000%) in intersection
+    # real    0m18.538s
+
+    # can see now if allGaps.bed actually is all the gaps:
+    hgsql -N -e "select size from gap;" panPan1 | ave stdin | grep total
+    # total 143237068.000000
+    ave -col=5 allGaps.bed | grep total
+    # total 143284465.000000
+    # the rest is unnecessary, they are all marked
+
+    time featureBits panPan1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # 47397 bases of 2725953003 (0.002%) in intersection
+    # real    7m37.214s
+    # Some new gaps, what next?a Do as panTro3 did. 
+ 
+
+    # check if any non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" panPan1 | sort | uniq -c
+    #  110367 yes
+
+    #   what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" panPan1 | sort -n | tail -1
+    #   6370
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" panPan1 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits panPan1 other.bed
+    #   47397 bases of 2725953003 (0.002%) in intersection
+    #   verify chrom names are OK for index length
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+        -noLoad panPan1 otherGap other.bed
+    # Read 45714 elements of size 8 from other.bed
+    #   adding this many:
+    wc -l bed.tab
+    #   45714
+    #   starting with this many
+    hgsql -e "select count(*) from gap;" panPan1
+    #   110367
+    hgsql panPan1 -e 'load data local infile "bed.tab" into table gap;'
+    #   result count:
+    hgsql -e "select count(*) from gap;" panPan1
+    #   156081 == 110367 + 45714
+
+##########################################################################
+## WINDOWMASKER (DONE 2012-03-06 - Chin)
+    mkdir /hive/data/genomes/panPan1/bed/windowMasker
+    cd /hive/data/genomes/panPan1/bed/windowMasker
+    screen -S panPan1.WindowMasher
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev panPan1 > do.log 2>&1 &
+    #   real    221m23.346s
+
+    # Masking statistics
+    twoBitToFa panPan1.wmsk.2bit stdout | faSize stdin
+    # 2869190071 bases (143284465 N's 2725905606 real 1745977560 upper 
+    # 979928046 lower) in 10867 sequences in 1 files
+    # Total size: mean 264027.8 sd 2063129.2 
+    # min 217 (AJFE01120895) max 101998900 (JH650633) median 1258
+    # %34.15 masked total, %35.95 masked real
+
+    twoBitToFa panPan1.wmsk.sdust.2bit stdout | faSize stdin
+    # 2869190071 bases (143284465 N's 2725905606 real 1730577119 upper 
+    # 995328487 lower) in 10867 sequences in 1 files
+    # Total size: mean 264027.8 sd 2063129.2 
+    # min 217 (AJFE01120895) max 101998900 (JH650633) median 1258
+    # %34.69 masked total, %36.51 masked real
+
+    hgLoadBed panPan1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #   Read 15488428 elements of size 3 from windowmasker.sdust.bed.gz
+
+    featureBits -countGaps panPan1 windowmaskerSdust
+    #   1138597860 bases of 2869190071 (39.684%) in intersection
+
+    #   eliminate the gaps from the masking
+    time featureBits panPan1 -not gap -bed=notGap.bed
+    #   2725905606 bases of 2725905606 (100.000%) in intersection
+    #   real    0m17.431s
+
+    time nice -n +19 featureBits panPan1 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #   995328487 bases of 2725905606 (36.514%) in intersection
+    #   real    6m35.223s
+
+    #   reload track to get it clean
+    hgLoadBed panPan1 windowmaskerSdust cleanWMask.bed.gz
+    #   Read 15570438 elements of size 4 from cleanWMask.bed.gz
+    featureBits -countGaps panPan1 windowmaskerSdust
+    #   995328487 bases of 2869190071 (34.690%) in intersection
+    zcat cleanWMask.bed.gz \
+        | twoBitMask ../../panPan1.unmasked.2bit stdin \
+            -type=.bed panPan1.cleanWMSdust.2bit
+    twoBitToFa panPan1.cleanWMSdust.2bit stdout | faSize stdin \
+        > panPan1.cleanWMSdust.faSize.txt
+    #   2869190071 bases (143284465 N's 2725905606 real 1730577119 upper 
+    #   995328487 lower) in 10867 sequences in 1 files
+    #   Total size: mean 264027.8 sd 2063129.2 
+    #   min 217 (AJFE01120895) max 101998900 (JH650633) median 1258
+    #   %34.69 masked total, %36.51 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps panPan1 rmsk windowmaskerSdust
+    #   837096446 bases of 2936052603 (28.511%) in intersection
+
+##########################################################################
+# add simpleRepeats to WindowMasker result (DONE 2013-03-07 - Chin)
+# Note: WindowMasker have 15,570,438 rows far greater than
+#       repeatMaskers's 4, 952,570
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/panPan1
+    twoBitMask -add bed/windowMasker/panPan1.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed panPan1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa panPan1.2bit stdout | faSize stdin > faSize.panPan1.2bit.txt
+    cat faSize.panPan1.2bit.txt
+    #   2869190071 bases (143284465 N's 2725905606 real 1730225460 upper 
+    #   995680146 lower) in 10867 sequences in 1 files
+    #   Total size: mean 264027.8 sd 2063129.2 min 217 (AJFE01120895) 
+    #         max 101998900 (JH650633) median 1258
+    #   %34.70 masked total, %36.53 masked real
+
+    rm /gbdb/panPan1/panPan1.2bit
+    ln -s `pwd`/panPan1.2bit /gbdb/panPan1/panPan1.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2013-03-07 - Chin)
+    mkdir /hive/data/genomes/panPan1/bed/cpgIslands
+    cd /hive/data/genomes/panPan1/bed/cpgIslands
+    screen -S panPan1-cpg
+    time doCpgIslands.pl panPan1 > do.log 2>&1
+    #   real    31m57.438s
+
+    cat fb.panPan1.cpgIslandExt.txt
+    #   16113070 bases of 2725905606 (0.591%) in intersection
+
+#########################################################################
+# genscan - (working - 2013-03-07 - Chin)
+    mkdir /hive/data/genomes/panPan1/bed/genscan
+    cd /hive/data/genomes/panPan1/bed/genscan
+    screen -S panPan1-genScan
+    time doGenscan.pl panPan1 > do.log 2>&1
+    #   real    5167m59.680s
+
+    time doGenscan.pl -continue genscan panPan1 > genscan.log 2>&1
+    #   5133m5.650s
+    # Completed: 10866 of 10867 jobs
+    # Crashed: 1 jobs
+    # CPU time in finished jobs: 54543s     909.05m    15.15h    0.63d  0.002 y
+    # IO & Wait Time:            40808s     680.13m    11.34h    0.47d  0.001 y
+    # Average job time:                 9s       0.15m     0.00h    0.00d
+    # Longest finished job:            6123s     102.05m     1.70h    0.07d
+    # Submission to last job:        394319s    6571.98m   109.53h    4.56d
+
+    # Every contig runs ok except JH650633 which is one with max 101998900 bases
+    # re-run it on hgwdev
+./runGsBig.csh JH650633 002 {check out exists gtf/002/JH650633.gtf} {check out exists pep/002/JH650633.pep} {check out exists subopt/002/JH650633.bed}
+
+    ssh hgwdev
+    screen -S JH650633-genscan 
+    cd /hive/data/genomes/panPan1/bed/genscan
+XXXX 2013-03-18 12:05 PM change window to 2000000
+    /cluster/bin/x86_64/gsBig hardMaskedFa/002/JH650633.fa \ 
+    gtf/002/JH650633.gtf pep/002/JH650633.pep subopt/002/JH650633.bed \
+    -exe=/scratch/data/genscan/genscan \
+    -par=/scratch/data/genscan/HumanIso.smat \  
+    -tmp=/tmp -window=2000000 \
+    > JH650633.gsBig.log 2>&1
+
+/cluster/bin/x86_64/gsBig $seqFile $resultGtf -trans=$resultPep -subopt=$resultSubopt -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/tmp -window=2400000
+
+./runGsBig.csh JH650633 002 {check out exists gtf/002/JH650633.gtf} {check out exists pep/002/JH650633.pep} {check out exists subopt/002/JH650633.bed}
+     
+
+
+
+
+    cat fb.panPan1.genscan.txt
+    #   18118133 bases of 1041286029 (1.740%) in intersection
+    cat fb.panPan1.genscanSubopt.txt
+    #   22582067 bases of 1041286029 (2.169%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-03-08 - Chin)
+    # Use -repMatch=400, based on size -- for human we use 1024
+    # use the "real" number (2725889043) from the faSize measurement
+    # reported above as numerator. 
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2725889043 / 2897316137 \) \* 1024
+    #   ( 2725889043 / 2897316137 ) * 1024 = 963.412430
+
+    #   use -repMatch=950 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+
+
+    cd /hive/data/genomes/panPan1
+    screen -S panPan1_blat
+    time blat panPan1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/panPan1.11.ooc -repMatch=950
+    #  Wrote 31225 overused 11-mers to jkStuff/panPan1.11.ooc
+    #  real    1m15.356s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" panPan1 | sort | uniq -c
+    #   156081 yes
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2013-03-18 - Chin)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst 
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Pan paniscus    425     0       0
+    # to decide which "native" mrna or ests you want to specify in
+    # genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add:
+# panPan1 (bonobo)
+panPan1.serverGenome = /hive/data/genomes/panPan1/panPan1.2bit
+panPan1.clusterGenome = /hive/data/genomes/panPan1/panPan1.2bit
+panPan1.ooc = /hive/data/genomes/panPan1/jkStuff/panPan1.11.ooc
+panPan1.lift = no
+panPan1.perChromTables = no
+panPan1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+panPan1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+panPan1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+panPan1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+panPan1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+panPan1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+panPan1.downloadDir = panPan1
+panPan1.refseq.mrna.native.load  = no
+panPan1.refseq.mrna.xeno.load  = yes
+panPan1.genbank.mrna.xeno.load = yes
+panPan1.genbank.est.native.load = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding panPan1 bonobo" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for panPanNames Pan paniscus" \
+        src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev                  # used to do this on "genbank" machine
+    screen -S panPan1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial panPan1 &
+    #   logFile: var/build/logs/2013.03.15-10:56:31.panPan1.initalign.log
+    #   real    835m9.466s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad panPan1 &
+    #   logFile: var/dbload/hgwdev/logs/2013.03.18-13:10:19.dbload.log
+    #   real    74m22.846s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 -
+    # Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add panPan1 to:
+    vi etc/align.dbs 
+    vi etc/hgwdev.dbs
+    git commit -m "Added panPan1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to FOXP2 gene displays  (working - 2012-08-02 - Chin)
+    hgsql -e \
+'update dbDb set defaultPos="JH739914:135428-435957" where name="panPan1";' \
+	hgcentraltest
+
+############################################################################
+# downloads and pushQ entry (working - 2012-07-27 - Chin)
+    # after adding panPan1 to the all.joiner file and verifying that
+    #   joinerCheck is clean, can construct the downloads:
+    cd /hive/data/genomes/panPan1
+    time makeDownloads.pl -workhorse=hgwdev panPan1
+    #   real    11m40.799s
+
+    mkdir /hive/data/genomes/panPan1/pushQ
+    cd /hive/data/genomes/panPan1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl panPan1 2> stderr.txt | grep -v transMap > panPan1.sql
+    #   real    3m52.778s
+
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/panPan1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/panPan1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/panPan1/bbi/quality.bw
+# WARNING: panPan1 does not have seq
+# WARNING: panPan1 does not have extFile
+# WARNING: panPan1 does not have estOrientInfo
+
+    scp -p panPan1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/panPan1.sql"
+
+##########################################################################
+#  BLATSERVERS ENTRY (working - 2012-08-03 - Chin)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("panPan1", "blat4d", "17806", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("panPan1", "blat4d", "17807", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# lastz melUnd1 Budgerigar (working - 2012-02-29 - Chin)
+    # original alignment
+    cd /hive/data/genomes/melUnd1/bed/lastzGeoFor1.2012-07-28
+    cat fb.melUnd1.chainGeoFor1Link.txt
+    #   832321696 bases of 1086614815 (76.598%) in intersection
+
+    # and this swap:
+
+    mkdir /hive/data/genomes/panPan1/bed/blastz.melUnd1.swap
+    cd /hive/data/genomes/panPan1/bed/blastz.melUnd1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/melUnd1/bed/lastzGeoFor1.2012-07-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > swap.log 2>&1 &
+    #   real    56m32.909s
+
+    cat fb.panPan1.chainMelUnd1Link.txt
+    #   839798431 bases of 1041286029 (80.650%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/panPan1/bed
+    ln -s blastz.melUnd1.swap lastz.melUnd1
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/panPan1/bed/blastz.melUnd1.swap
+    time doRecipBest.pl panPan1 melUnd1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    31m15.597s
+    cd /hive/data/genomes/panPan1/bed/blastz.melUnd1.swap/axtChain
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainTestRBest panPan1.melUnd1.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed panPan1 tLinkMelUnd1 rbest.link.bed
+    #   Read 16927102 elements of size 5 from rbest.link.bed
+    time featureBits panPan1 tLinkMelUnd1
+    #   799972446 bases of 1041286029 (76.825%) in intersection
+    #   real    1m42.662s
+
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainMelGal1RBest panPan1.melUnd1.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed panPan1 tLinkMelUnd1 syntenic.link.bed
+    #   Read 16427533  elements of size 5 from syntenic.link.bed
+    time featureBits panPan1 tLinkMelUnd1
+    #   787091148 bases of 1041286029 (75.588%) in intersection
+    #   real    1m35.489s
+    # cleanup
+    hgsql -e "drop table tLinkMelUnd1;" panPan1
+    rm chain.tab bed.tab
+
+##############################################################################
+# lastz hg19 Human (working - 2012-02-29 - Chin)
+    # original alignment to human
+    cd /hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29
+    cat fb.hg19.chainGeoFor1Link.txt
+    #   101503916 bases of 2897316137 (3.503%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/panPan1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panPan1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    9m10.240s
+    cat  fb.panPan1.chainHg19Link.txt
+    #	88547518 bases of 1041286029 (8.504%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/panPan1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+    # lets see what synNets look like:
+    cd /hive/data/genomes/panPan1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -continue=syntenicNet -chainMinScore=5000 -chainLinearGap=loose \
+        > synNet.log 2>&1 &
+    #   real    2m28.817s
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/panPan1/bed/blastz.hg19.swap
+    time doRecipBest.pl panPan1 hg19 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    8m27.775s
+    # to measure the chain coverage, this test load leaves the file link.tab;
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainHg19RBest panPan1.hg19.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed panPan1 tLinkHg19 rbest.link.bed
+    #   Read 2323598 elements of size 5 from link.bed
+    time featureBits panPan1 tLinkHg19
+    #   83552974 bases of 1041286029 (8.024%) in intersection
+    #   real    0m20.469s
+
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainHg19RBest panPan1.hg19.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed panPan1 tLinkHg19 syntenic.link.bed
+    #   Read 2012071 elements of size 5 from syntenic.link.bed
+    time featureBits panPan1 tLinkHg19
+    #   74395958 bases of 1041286029 (7.145%) in intersection
+    #   real    0m20.854s
+    # cleanup
+    hgsql -e "drop table tLinkHg19;" panPan1
+    rm chain.tab bed.tab
+
+#########################################################################
+# lastz mm10 Mouse (working - 2012-02-29 - Chin)
+    # original alignment to mouse:
+    cd /hive/data/genomes/mm10/bed/lastzGeoFor1.2012-07-29
+    cat fb.mm10.chainGeoFor1Link.txt
+    #   93984241 bases of 2652783500 (3.543%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/panPan1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/panPan1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    10m0.875s
+    cat  fb.panPan1.chainMm10Link.txt
+    #   80273915 bases of 1041286029 (7.709%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/panPan1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+    # lets see what synNets look like:
+    cd /hive/data/genomes/panPan1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/mm10/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -continue=syntenicNet -chainMinScore=5000 -chainLinearGap=loose \
+        > synNet.log 2>&1 &
+    #   real    2m7.016s
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/panPan1/bed/blastz.mm10.swap
+    time doRecipBest.pl panPan1 mm10 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    11m32.814s
+    cd /hive/data/genomes/panPan1/bed/blastz.mm10.swap/axtChain
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainMm10RBest panPan1.mm10.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed panPan1 tLinkMm10 rbest.link.bed
+    #   Read 1956367 elements of size 5 from rbest.link.bed
+    time featureBits panPan1 tLinkMm10
+    #   72866028 bases of 1041286029 (6.998%) in intersection
+    #   real    0m18.893s
+
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainMm10RBest panPan1.mm10.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed panPan1 tLinkMm10 syntenic.link.bed
+    #   Read 1572202 elements of size 5 from syntenic.link.bed
+    time featureBits panPan1 tLinkMm10
+    #   61422245 bases of 1041286029 (5.899%) in intersection
+    #   real    0m15.096s
+
+    # cleanup
+    hgsql -e "drop table tLinkMm10;" panPan1
+    rm chain.tab bed.tab
+
+#########################################################################
+# lastz melGal1 Turkey (working - 2012-02-29 - Chin)
+    # original alignment to turkey:
+    cd /hive/data/genomes/melGal1/bed/lastzGeoFor1.2012-07-28
+    cat fb.melGal1.chainGeoFor1Link.txt
+    #   679715264 bases of 935922386 (72.625%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/panPan1/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/panPan1/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/melGal1/bed/lastzGeoFor1.2012-07-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #   real    43m59.718s
+    cat fb.panPan1.chainHg19Link.txt
+    #   698483400 bases of 1041286029 (67.079%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/panPan1/bed
+    ln -s blastz.melGal1.swap lastz.melGal1
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/panPan1/bed/blastz.melGal1.swap
+    time doRecipBest.pl panPan1 melGal1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    27m31.386s
+    cd /hive/data/genomes/panPan1/bed/blastz.melGal1.swap/axtChain
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainMelGal1RBest panPan1.melGal1.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed panPan1 tLinkMelGal1 rbest.link.bed
+    #   Read 17557206 elements of size 5 from rbest.link.bed
+    time featureBits panPan1 tLinkMelGal1
+    #   665947116 bases of 1041286029 (63.954%) in intersection
+    #   real    1m43.702s
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainMelGal1RBest panPan1.melGal1.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed panPan1 tLinkMelGal1 syntenic.link.bed
+    #   Read 17106461 elements of size 5 from syntenic.link.bed
+    time featureBits panPan1 tLinkMelGal1
+    #   653147512 bases of 1041286029 (62.725%) in intersection
+    #   real    1m42.611s
+    # cleanup
+    hgsql -e "drop table tLinkMelGal1;" panPan1
+    rm chain.tab bed.tab
+
+##############################################################################
+# lastz galGal4 Chicken (working - 2012-02-30 - Chin)
+    # original alignment to turkey:
+    cd /hive/data/genomes/galGal4/bed/lastzGeoFor1.2012-07-27
+    cat fb.galGal4.chainGeoFor1Link.txt
+    #   744451026 bases of 1032854810 (72.077%) in intersection
+
+    # and this swap:
+    mkdir /hive/data/genomes/panPan1/bed/blastz.galGal4.swap
+    cd /hive/data/genomes/panPan1/bed/blastz.galGal4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/galGal4/bed/lastzGeoFor1.2012-07-27/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #   real    81m0.123s
+    cat fb.panPan1.chainGalGal4Link.txt
+    #   736380222 bases of 1041286029 (70.718%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/panPan1/bed
+    ln -s blastz.galGal4.swap lastz.galGal4
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/panPan1/bed/blastz.galGal4.swap
+    time doRecipBest.pl panPan1 galGal4 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    46m34.879s
+    cd /hive/data/genomes/panPan1/bed/blastz.galGal4.swap/axtChain
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainTestRBest panPan1.galGal4.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed panPan1 tLinkGalGal4 rbest.link.bed
+    #   Read 18093500 elements of size 5 from rbest.link.bed
+    time featureBits panPan1 tLinkGalGal4
+    #   702254321 bases of 1041286029 (67.441%) in intersection
+    #   real    1m44.816s
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainTestRBest panPan1.galGal4.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed panPan1 tLinkGalGal4 syntenic.link.bed
+    #   Read 17708098 elements of size 5 from syntenic.link.bed
+    time featureBits panPan1 tLinkGalGal4
+    #   692412176 bases of 1041286029 (66.496%) in intersection
+    #   real    1m44.363s
+    # cleanup
+    hgsql -e "drop table tLinkGalGal4;" panPan1
+    rm chain.tab bed.tab
+
+##############################################################################
+# lastz taeGut1 Finch (working - 2012-02-31 - Chin)
+    # original alignment to turkey:
+    cd /hive/data/genomes/taeGut1/bed/lastzGeoFor1.2012-07-28
+    cat fb.taeGut1.chainGeoFor1Link.txt
+    #   1126123816 bases of 1222864691 (92.089%) in intersection
+
+    # and for this swap:
+    mkdir /hive/data/genomes/panPan1/bed/blastz.taeGut1.swap
+    cd /hive/data/genomes/panPan1/bed/blastz.taeGut1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/taeGut1/bed/lastzGeoFor1.2012-07-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #   real    102m30.103s
+    cat fb.panPan1.chainTaeGut1Link.txt
+    #   963520807 bases of 1041286029 (92.532%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/panPan1/bed
+    ln -s blastz.taeGut1.swap lastz.taeGut1
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/panPan1/bed/blastz.taeGut1.swap
+    time doRecipBest.pl panPan1 taeGut1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    50m20.041s
+    cd /hive/data/genomes/panPan1/bed/blastz.taeGut1.swap/axtChain
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainTestRBest panPan1.taeGut1.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed panPan1 tLinkTaeGut1 rbest.link.bed
+    #   Read 8455294 elements of size 5 from rbest.link.bed
+    time featureBits panPan1 tLinkTaeGut1
+    #   922278077 bases of 1041286029 (88.571%) in intersection
+    #   real    1m3.219s
+    hgLoadChain -test -noBin -tIndex panPan1 \
+        chainTestRBest panPan1.taeGut1.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed panPan1 tLinkTaeGut1 syntenic.link.bed
+    #   Read 8190644 elements of size 5 from syntenic.link.bed
+    time featureBits panPan1 tLinkTaeGut1
+    #   914125880 bases of 1041286029 (87.788%) in intersection
+    #   real    0m52.942s
+    # cleanup
+    hgsql -e "drop table tLinkTaeGut1;" panPan1
+    rm chain.tab bed.tab
+
+##############################################################################
+## 7-Way Multiz (working - 2012-07-31 - Chin)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way
+    cd /hive/data/genomes/panPan1/bed/multiz7way
+
+    # from the 63-way in the source tree, select out the 7 used here:
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but hg19,mm10,melGal1,melUnd1,galGal4,taeGut1,panPan1 \
+        /cluster/home/hiram/kent/src/hg/utils/phyloTrees/63way.nh > 7way.nh
+
+    #	what that looks like:
+    cat 7way.nh
+# ((hg19:0.148845,mm10:0.356483):0.460153,
+# (((panPan1:0.041261,taeGut1:0.034457):0.102066,melUnd1:0.076985):0.224703,
+# (galGal4:0.032946,melGal1:0.035065):0.106045):0.198405);
+
+    #	rearrange to get panPan1 on top:
+    cat << '_EOF_' > panPan1.7way.nh
+((((panPan1:0.041261,taeGut1:0.034457):0.102066,melUnd1:0.076985):0.224703,
+(galGal4:0.0329457,melGal1:0.035065):0.106045):0.198405,
+(hg19:0.148845,mm10:0.356483):0.460153);
+'_EOF_'
+    # << happy emacs
+
+    # extract species list from that .nh file
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        panPan1.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
+        | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
+
+    # construct db to name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+        > db.to.name.txt
+
+    # construct a common name .nh file:
+    /cluster/bin/phast/tree_doctor --rename \
+    "`cat db.to.name.txt`" panPan1.7way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
+        > panPan1.7way.commonNames.nh
+# ((((Medium_ground_finch:0.041261,Zebra_finch:0.034457):0.102066,
+# Budgerigar:0.076985):0.224703,
+# (Chicken:0.032946,Turkey:0.035065):0.106045):0.198405,
+# (Human:0.148845,Mouse:0.356483):0.460153);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/panPan1_7way.png
+
+    /cluster/bin/phast/all_dists panPan1.7way.nh | grep panPan1 \
+        | sed -e "s/panPan1.//" | sort -k2n > 7way.distances.txt
+    #	Use this output to create the table below
+    head 7way.distances.txt
+# taeGut1 0.075718
+# melUnd1 0.220312
+# galGal4 0.507021
+# melGal1 0.509140
+# hg19    1.175433
+# mm10    1.383071
+
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<7way.distances.txt") or
+        die "can not read 7way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/panPan1/bed/lastz.$D/fb.panPan1." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.panPan1/fb.${D}.chainGeoFor1Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+	$swapMeasure =
+	    `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+	chomp $swapMeasure;
+	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
+	$swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %02d  %.4f (%% %06.3f) (%% %06.3f) - %s %s\n", $count, $dist,
+        $chainLinkMeasure, $swapMeasure, $orgName, $D;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+#
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#       featureBits chainLink measures
+#               chainLink
+#  N distance  on panPan1  on other     other species
+# 01  0.0757 (% 92.532) (% 92.089) - Zebra finch taeGut1
+# 02  0.2203 (% 80.650) (% 76.598) - Budgerigar melUnd1
+# 03  0.5070 (% 70.718) (% 72.077) - Chicken galGal4
+# 04  0.5091 (% 67.079) (% 72.625) - Turkey melGal1
+# 05  1.1754 (% 08.504) (% 03.503) - Human hg19
+# 06  1.3831 (% 07.709) (% 03.543) - Mouse mm10
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	panPan1.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+    #   panPan1 taeGut1 melUnd1 galGal4 melGal1 hg19 mm10
+
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/panPan1/bed/multiz7way
+    export H=/hive/data/genomes/panPan1/bed
+    mkdir mafLinks
+    for G in `sed -e "s/panPan1 //" species.list`
+    do
+	mkdir mafLinks/$G
+	if [ -s ${H}/lastz.${G}/mafRBestNet/panPan1.${G}.rbest.maf.gz ]; then
+	    echo "$G - recipBest"
+	    echo ln -s ${H}/lastz.$G/mafRBestNet/*.maf.gz ./mafLinks/$G
+	    ln -s ${H}/lastz.$G/mafRBestNet/*.maf.gz ./mafLinks/$G
+	else
+	    if [ -s ${H}/lastz.${G}/axtChain/panPan1.${G}.synNet.maf.gz ]; then
+		echo "$G - synNet"
+		echo ln -s ${H}/lastz.$G/axtChain/panPan1.${G}.synNet.maf.gz ./mafLinks/$G
+		ln -s ${H}/lastz.$G/axtChain/panPan1.${G}.synNet.maf.gz ./mafLinks/$G
+	    else
+		if [ -s ${H}/lastz.${G}/mafNet/panPan1.${G}.net.maf.gz ]; then
+		    echo "$G - mafNet"
+		    echo ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+		    ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+		else
+		    echo "missing directory lastz.${G}/*Net"
+		fi
+	    fi
+	fi
+    done
+    # would like to use the synNets for the other birds, and recip best
+    #   to human and mouse
+ln -s /hive/data/genomes/panPan1/bed/lastz.taeGut1/axtChain/panPan1.taeGut1.synNet.maf.gz ./mafLinks/taeGut1
+ln -s /hive/data/genomes/panPan1/bed/lastz.melGal1/axtChain/panPan1.melGal1.synNet.maf.gz ./mafLinks/melGal1
+ln -s /hive/data/genomes/panPan1/bed/lastz.galGal4/axtChain/panPan1.galGal4.synNet.maf.gz ./mafLinks/galGal4
+ln -s /hive/data/genomes/panPan1/bed/lastz.melUnd1/axtChain/panPan1.melUnd1.synNet.maf.gz ./mafLinks/melUnd1
+ln -s /hive/data/genomes/panPan1/bed/lastz.hg19/mafRBestNet/panPan1.hg19.rbest.maf.gz ./mafLinks/hg19
+ln -s /hive/data/genomes/panPan1/bed/lastz.mm10/mafRBestNet/panPan1.mm10.rbest.maf.gz ./mafLinks/mm10
+
+    #	verify the alignment type is correct:
+    for D in `grep -v panPan1 /hive/users/hiram/bigWays/panPan1.7way/ordered.list`
+do
+    ls -l mafLinks/$D/*.maf.gz | awk '{print $NF}'
+done
+    #	compare to the list at:
+    #	http://genomewiki.ucsc.edu/index.php/GeoFor1_Genome_size_statistics
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/mafSplit
+    cd /hive/data/genomes/panPan1/bed/multiz7way/mafSplit
+    for D in `sed -e "s/panPan1 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=10 /dev/null . ../../mafLinks/${D}/*.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../mafLinks/${D}/*.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 1294
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 256 maf.list
+
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/splitRun
+    cd /hive/data/genomes/panPan1/bed/multiz7way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = panPan1
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/panPan1/bed/multiz7way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/panPan1/bed/multiz7way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh swarm
+    cd /hive/data/genomes/panPan1/bed/multiz7way/splitRun/run
+    # the tac reverses the list to get the small jobs first
+    gensub2 maf.list single template stdout | tac > jobList
+    para -ram=8g create jobList
+# Completed: 256 of 256 jobs
+# CPU time in finished jobs:      59583s     993.04m    16.55h    0.69d  0.002 y
+# IO & Wait Time:                  6044s     100.74m     1.68h    0.07d  0.000 y
+# Average job time:                 256s       4.27m     0.07h    0.00d
+# Longest finished job:            2781s      46.35m     0.77h    0.03d
+# Submission to last job:          2858s      47.63m     0.79h    0.03d
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    cd /hive/data/genomes/panPan1/bed/multiz7way
+    head -1 splitRun/maf/001.maf > multiz7way.maf
+    for F in splitRun/maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F}
+done >> multiz7way.maf
+    tail -1 splitRun/maf/001.maf >> multiz7way.maf
+
+# -rw-rw-r-- 1 5674242413 Aug  3 08:03 multiz7way.maf
+# -rw-rw-r-- 1 5670181186 Aug  1 14:41 multiz7way.maf.0
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/panPan1/bed/multiz7way
+    mkdir /gbdb/panPan1/multiz7way
+    ln -s `pwd`/multiz7way.maf /gbdb/panPan1/multiz7way
+    cd /scratch/tmp
+    time nice -n +17 hgLoadMaf panPan1 multiz7way
+    #   Loaded 3644645 mafs in 1 files from /gbdb/panPan1/multiz7way
+    #   real    3m40.564s
+
+    time nice -n +17 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 panPan1 multiz7waySummary \
+	/gbdb/panPan1/multiz7way/multiz7way.maf
+    #   Created 328873 summary blocks from 10243549 components
+    #   and 3644645 mafs from /gbdb/panPan1/multiz7way/multiz7way.maf
+    #   real    4m12.044s
+
+    wc -l multiz7way*.tab
+    #   3644645 multiz7way.tab
+    #   328873 multiz7waySummary.tab
+    #   3973518 total
+
+    rm multiz7way*.tab
+
+##############################################################################
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (working - 2012-08-02 - Chin)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.  Need to split of the maf file into individual
+    #   maf files
+    mkdir -p /hive/data/genomes/panPan1/bed/multiz7way/anno/mafSplit
+    cd /hive/data/genomes/panPan1/bed/multiz7way/anno/mafSplit
+
+    # XXX this split directory may have been corrupted by a mistaken run of
+    # this command here at a much later date.  It had an extra level
+    # of splits added, it did not erase the original level
+    time mafSplit -outDirDepth=1 -byTarget -useFullSequenceName \
+        /dev/null . ../../multiz7way.maf
+    #   real    2m49.680s
+
+    find . -type f | wc -l
+    #   2944
+
+    # check for N.bed files everywhere:
+    cd /hive/data/genomes/panPan1/bed/multiz7way/anno
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+        cd /hive/data/genomes/${DB}
+        twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+    else
+        echo "  OK: ${DB}"
+    fi
+done
+
+    cd /hive/data/genomes/panPan1/bed/multiz7way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    screen -S panPan1      # use a screen to control this longish job
+    ssh swarm
+    cd /hive/data/genomes/panPan1/bed/multiz7way/anno
+    mkdir result
+    for D in `ls mafSplit`
+do
+    echo mkdir result/${D}
+    mkdir result/${D}
+done
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/panPan1/panPan1.2bit {check out exists+ result/$(path1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs to one per node with the ram=8g requirement
+    para -ram=8g create jobList
+    para try ... check ... push ...
+# Completed: 2944 of 2944 jobs
+# CPU time in finished jobs:        560s       9.33m     0.16h    0.01d  0.000 y
+# IO & Wait Time:                  8374s     139.57m     2.33h    0.10d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              14s       0.23m     0.00h    0.00d
+# Submission to last job:           161s       2.68m     0.04h    0.00d
+
+    # verify all result files have some content, look for 0 size files:
+    find ./result -type f -size 0
+    # should see none
+    # or in this manner:
+    find ./result -type f | xargs ls -og | sort -k3nr | tail
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    head -q -n 1 result/0/JH739903.maf > panPan1.7way.maf
+    find ./result -type f | while read F
+do
+    echo "${F}" 1>&2
+    grep -h -v "^#" ${F}
+done >> panPan1.7way.maf
+
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/0/JH739903.maf >> panPan1.7way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> panPan1.7way.maf
+    ls -og
+# -rw-rw-r--  1 6488856099 Aug  3 09:02 panPan1.7way.maf
+    du -hsc panPan1.7way.maf
+    #   6.1G    panPan1.7way.maf
+
+    # construct symlinks to get the individual maf files into gbdb:
+    rm /gbdb/panPan1/multiz7way/multiz7way.maf   # remove previous results
+    ln -s `pwd`/panPan1.7way.maf /gbdb/panPan1/multiz7way/multiz7way.maf
+
+    # Load into database
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/panPan1/multiz7way \
+        panPan1 multiz7way
+    #   Loaded 3783877 mafs in 1 files from /gbdb/panPan1/multiz7way
+    #   real    3m9.770s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 panPan1 multiz7waySummary \
+        /gbdb/panPan1/multiz7way/multiz7way.maf
+    #   Created 328873 summary blocks from 10243549 components and 3783877
+    #   mafs from /gbdb/panPan1/multiz7way/multiz7way.maf
+    #   real    3m36.650s
+
+    #   -rw-rw-r--  1  189735418 Aug  3 09:07 multiz7way.tab
+    #   -rw-rw-r--  1   15808340 Aug  3 09:11 multiz7waySummary.tab
+
+    rm multiz7way*.tab
+
+######################################################################
+# MULTIZ7WAY MAF FRAMES (working - 2012-08-02 - Chin)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/frames
+    cd /hive/data/genomes/panPan1/bed/multiz7way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "mgcGenes" || $table == "knownGene" || \
+           $table == "xenoRefGene" ) then
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+            echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql hg19 -N -e \
+            "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql hg19 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    time ./showGenes.csh
+# panPan1: xenoRefGene: 288791, Mrnas: 1
+# taeGut1: ensGene: 19297, refGene: 1176, xenoRefGene: 179552, Mrnas: 98382
+# melGal1: ensGene: 17373, xenoRefGene: 203867, Mrnas: 17703
+# galGal4: refGene: 5666, xenoRefGene: 192547, Mrnas: 636086
+# melUnd1: xenoRefGene: 301402, Mrnas: 26
+# hg19: ensGene: 181648, knownGene: 80922, mgcGenes: 31383, refGene: 43528, xenoRefGene: 150519, Mrnas: 10660434
+# mm10: ensGene: 95533, knownGene: 59121, mgcGenes: 26768, refGene: 30588, xenoRefGene: 147579, Mrnas: 5216433
+    #   real    1m24.097s
+
+    # from that summary, use these gene sets:
+    # xenoRefGene - panPan1 galGal4 melUnd1
+    # ensGene - taeGut1 melGal1
+    # knownGene - hg19 mm10
+
+    mkdir genes
+    #   1. knownGene: hg19 mma0
+    for DB in hg19 mm10
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${DB}.gp.gz
+done
+    #   2. ensGene:
+    for DB in taeGut1 melGal1
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    #   3. xenoRefGene:
+    for DB in panPan1 galGal4 melUnd1
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/galGal4.gp.gz: 13101
+# genes/panPan1.gp.gz: 14809
+# genes/hg19.gp.gz: 20718
+# genes/melGal1.gp.gz: 14050
+# genes/melUnd1.gp.gz: 15306
+# genes/mm10.gp.gz: 20985
+# genes/taeGut1.gp.gz: 17343
+
+    time (cat ../anno/panPan1.7way.maf \
+	| nice -n +19 genePredToMafFrames panPan1 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz7wayFrames.bed.gz)
+    #   real    3m19.528s
+
+    # verify there are frames on everything, should be 7 species:
+    zcat multiz7wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c
+# 140156 galGal4
+# 146124 panPan1
+# 183760 hg19
+# 171778 melGal1
+# 140917 melUnd1
+# 203418 mm10
+# 149897 taeGut1
+
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/panPan1/bed/multiz7way/frames
+    time hgLoadMafFrames panPan1 multiz7wayFrames multiz7wayFrames.bed.gz
+    #   real    0m9.574s
+    time featureBits -countGaps panPan1 multiz7wayFrames
+    #   26482387 bases of 1065292181 (2.486%) in intersection
+    #   real    0m13.589s
+
+    #   enable the trackDb entries:
+# frames multiz7wayFrames
+# irows on
+    #   appears to work OK
+
+#########################################################################
+# Phylogenetic tree from 60-way (working - 2012-08-02 - Chin)
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/4d
+    cd /hive/data/genomes/panPan1/bed/multiz7way/4d
+
+    # the annotated maf is:
+    ../anno/panPan1.7way.maf
+
+    # using xenoRefGene for panPan1, only transcribed genes
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene where cdsEnd > cdsStart" panPan1 \
+        > xenoRefGene.gp
+
+    genePredSingleCover xenoRefGene.gp stdout | sort > xenoRefGeneNR.gp
+    wc -l xenoRefGeneNR.gp
+    #	15328 xenoRefGeneNR.gp
+
+    mkdir annoSplit
+    cd annoSplit
+    time mafSplit -verbose=2 -outDirDepth=1 -byTarget -useFullSequenceName \
+        /dev/null . ../../anno/panPan1.7way.maf
+    find . -type f | wc -l
+    #   2944
+    ssh encodek
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/4d/run
+    cd /hive/data/genomes/panPan1/bed/multiz7way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/panPan1/bed/multiz7way"
+set c = $1
+set infile = $r/4d/annoSplit/$2
+set outDir = $r/4d/mfa/$3:h
+set outfile = $r/4d/mfa/$3
+/bin/mkdir -p $outDir
+cd /scratch/tmp
+/bin/awk -v C=$c '$2 == C {print}' $r/4d/xenoRefGeneNR.gp | sed -e "s/\t$c\t/\tpanPan1.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $infile -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+else
+    echo "" > $outfile
+endif
+/bin/rm -f $c.gp $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(file1) $(path1) {check out line+ ../mfa/$(dir1)/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check
+    para time
+# Completed: 2774 of 2944 jobs
+# Crashed: 170 jobs
+# CPU time in finished jobs:        818s      13.63m     0.23h    0.01d  0.000 y
+# IO & Wait Time:                  8636s     143.93m     2.40h    0.10d  0.000 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest finished job:             184s       3.07m     0.05h    0.00d
+# Submission to last job:           624s      10.40m     0.17h    0.01d
+
+    # not all of them work perfectly.  I checked one of the failures,
+    #   the SS file had no contents beyond the header
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/panPan1/bed/multiz7way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # most interesting, this did not identify files of size 1:
+#    find ./mfa -type f -size 1
+    find ./mfa -type f | xargs ls -og | awk '$3 == 1' | awk '{print $NF}' \
+        > empty.list
+    cat empty.list | xargs rm -f
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    #   >panPan1
+    #   >taeGut1
+    #   >melUnd1
+    #   >galGal4
+    #   >melGal1
+    #   >hg19
+    #   >mm10
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../panPan1.7way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
+    # tree_commas.nh looks like:
+    #   ((((panPan1,taeGut1),(melGal1,galGal4)),melUnd1),(hg19,mm10))
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree_commas.nh 4d.all.mfa
+    #   real    0m3.872s
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE:
+# ((((panPan1:0.0413091,taeGut1:0.0343957):0.101451,melUnd1:0.0837731):0.0304192,(galGal4:0.0329708,melGal1:0.0350493):0.079828):0.218721,(hg19:0.118822,mm10:0.19572):0.218721);
+
+
+    #   manually constructed two different subset lists:
+    #  panPan1 is on each list since it is the reference and is needed for
+    #   everything to work.
+    paste birds.list vertebrate.list
+# panPan1 panPan1
+# taeGut1 hg19
+# melGal1 mm10
+# galGal4
+# melUnd1
+
+    # on organisms that do not have all species in all files, the file names
+    #	need to be filtered.  Using this perl script to extract from
+    # the full mfa files, only the subset of species from the four lists:
+    cat << '_EOF_' > filterMfa.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    printf STDERR "usage: filterMfa.pl <subset.list>\n";
+    exit 255;
+}
+
+my %dbList;
+my $file = shift;
+open (FH, "<$file") or die "can not read $file";
+printf STDERR "using list: $file\n";
+while (my $db = <FH>) {
+    chomp $db;
+    $dbList{$db} = 1;
+}
+close (FH);
+
+my $speciesName = $file;
+$speciesName =~ s/.list//;
+
+$file = "4d.all.mfa";
+#    printf STDERR "processing: %s into %s/%s\n", $file, $speciesName
+open (FH, "<$file") or die "can not read $file";
+open (OF, ">$speciesName.subset.mfa") or die "can not write to $speciesName.subset.mfa";
+my $inGroup = 0;
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+      chomp $line;
+      my $faDbName = $line;
+      $faDbName =~ s/^>//;
+      if (exists($dbList{$faDbName})) {
+          $inGroup = 1;
+            printf OF "> %s\n", $faDbName;
+      } else {
+          $inGroup = 0;
+      }
+    } elsif ($inGroup) {
+        printf OF "%s", $line;
+    }
+}
+close (FH);
+close (OF);
+'_EOF_'
+    # << happy emacs
+    chmod +x filterMfa.pl
+
+    # extract each set from the full mfa files, run msa_view on
+    #   each subset and construct .nh tree for that subset
+    for N in birds vertebrate
+do
+    ./filterMfa.pl ${N}.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ${N}.list|xargs echo`" ${N}.subset.mfa \
+        | sed s/"> "/">"/ > 4d.${N}.mfa
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/tree_doctor \
+        --no-branchlen --prune-all-but="`cat ${N}.list|xargs echo`" \
+        tree_commas.nh > tree_commas.${N}.nh
+done
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    for N in birds vertebrate
+do
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree ./tree_commas.${N}.nh 4d.${N}.mfa
+    mv phyloFit.mod ${N}.mod
+    grep TREE ${N}.mod | sed 's/TREE\:\ //' > ${N}.Nway.nh
+done
+
+    grep TREE all.mod | sed -e 's/TREE: //' > all.nh
+    /cluster/bin/phast/all_dists all.nh |grep panPan1 | sort -k3n \
+        | sed -e "s/panPan1.//"
+    #   taeGut1 0.075705
+    #   melUnd1 0.226533
+    #   galGal4 0.285978
+    #   melGal1 0.288057
+    #   hg19    0.729443
+    #   mm10    0.806341
+
+#########################################################################
+# phastCons 7-way (working - 2012-08-03 - Chin)
+    # split 7way mafs into 10M chunks and generate sufficient statistics
+    # files for # phastCons
+    ssh encodek
+    mkdir -p /hive/data/genomes/panPan1/bed/multiz7way/cons/SS
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/SS
+    mkdir result done
+
+    cat << '_EOF_' > mkSS.csh
+#!/bin/csh -ef
+set d = $1
+set c = $2
+set doneDir = done/$d
+set MAF = /hive/data/genomes/panPan1/bed/multiz7way/anno/result/$d/$c.maf
+set WINDOWS = /hive/data/genomes/panPan1/bed/multiz7way/cons/SS/result/$d/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $3 ) then
+    exit 0
+endif
+if ( -s $3.running ) then
+    exit 0
+endif
+
+/bin/mkdir -p $doneDir
+/bin/date >> $3.running
+
+/bin/rm -fr $WINDOWS
+/bin/mkdir -p $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+/bin/date >> $3
+/bin/rm -f $3.running
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSS.csh
+
+    cat << '_EOF_' > template
+#LOOP
+mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    find ../../anno/result -type f | sed -e "s#../../anno/result/##" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+
+# Completed: 2944 of 2944 jobs
+# CPU time in finished jobs:        748s      12.47m     0.21h    0.01d  0.000 y
+# IO & Wait Time:                  8590s     143.16m     2.39h    0.10d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:             110s       1.83m     0.03h    0.00d
+# Submission to last job:           518s       8.63m     0.14h    0.01d
+
+    # not all of them produce results
+    #	 there isn't much aligned in these MAF files
+    find ./result -type f | wc -l
+    #	 1342
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh encodek
+    mkdir -p /hive/data/genomes/panPan1/bed/multiz7way/cons/run.cons
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/run.cons
+
+    #	there are going to be two phastCon runs using this same script.
+    #   It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  Running:
+    #	all and vertebrates
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+# ../run.cons/doPhast.csh JH741347.1-6434 0/JH741347 JH741347.1-6434.ss
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set d = $2
+set f = $3
+set len = $4
+set cov = $5
+set rho = $6
+set grp = $cwd:t
+set cons = /hive/data/genomes/panPan1/bed/multiz7way/cons
+set tmp = $cons/tmp/$d
+mkdir -p $tmp
+set ssSrc = $cons/SS/result
+set useGrp = "$grp.mod"
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/$d/$f $tmp
+else
+  ln -s $ssSrc/$d/$f $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+else
+  $PHASTBIN/phastCons $f $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+endif
+popd > /dev/null
+mkdir -p pp/$d bed/$d
+sleep 4
+touch pp/$d bed/$d
+rm -f pp/$d/$c.pp
+rm -f bed/$d/$c.bed
+mv $tmp/$c.pp pp/$d
+mv $tmp/$c.bed bed/$d
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(dir1) $(file1) 45 0.3 0.3 {check out line+ pp/$(dir1)/$(root1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
+    wc -l ss.list
+    #	3291 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons
+    mkdir -p all
+    cd all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para create jobList
+    para try ... check ...
+    para push
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       3368s      56.13m     0.94h    0.04d  0.000 y
+# IO & Wait Time:                 12327s     205.46m     3.42h    0.14d  0.000 y
+# Average job time:                  12s       0.19m     0.00h    0.00d
+# Longest finished job:             327s       5.45m     0.09h    0.00d
+# Submission to last job:          1427s      23.78m     0.40h    0.02d
+
+
+    # create Most Conserved track
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/all
+    cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/?/${C} 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+    #   -rw-rw-r--  1 14833537 Aug  3 13:28 tmpMostConserved.bed
+    #   -rw-rw-r--  1 15224375 Aug  3 13:36 mostConserved.bed
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/all
+    time nice -n +19 hgLoadBed panPan1 phastConsElements7way mostConserved.bed
+    #   Read 427825 elements of size 5 from mostConserved.bed
+    #   real    0m6.364s
+
+    # on human we often try for 5% overall cov, and 70% CDS cov
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    featureBits panPan1 -enrichment xenoRefGene:cds phastConsElements7way
+    #   xenoRefGene:cds 1.907%, phastConsElements7way 5.423%, both 1.370%,
+    #   cover 71.82%, enrich 13.24x
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/all
+    mkdir downloads
+
+    # the third sed fixes the chrom names, removing the partition extensions
+    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
+        | gzip -c > downloads/phastCons7way.wigFix.gz)
+    #   real    14m1.183s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/panPan1/chrom.sizes \
+	    phastCons7way.bw) > bigWig.log 2>&1 &
+    tail bigWig.log
+    # pid=620: VmPeak:      11016124 kB
+    #   real    14m51.983s
+
+    bigWigInfo phastCons7way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 1,504,251,616
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: 0.097493
+# min: 0.000000
+# max: 1.000000
+# std: 0.228025
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons7way.wigFix.gz \
+	| wigEncode stdin phastCons7way.wig phastCons7way.wib)
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    6m5.520s
+
+    du -hsc *.wi?
+    #   929M    phastCons7way.wib
+    #   102M    phastCons7way.wig
+    #   1.1G    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons7way.wib /gbdb/panPan1/multiz7way/phastCons7way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/panPan1/multiz7way \
+	panPan1 phastCons7way phastCons7way.wig
+    #   real    0m37.431s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh panPan1 phastCons7way
+# db.table      min max mean count sumData stdDev
+# viewLimits
+# panPan1.phastCons7way   0 1 0.0974934 974030471 9.49615e+07 0.228025
+# viewLimits=0:1
+
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=panPan1 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons7way > histogram.data 2>&1
+    #	real    3m26.324s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch panPan1 Histogram phastCons7way track"
+set xlabel " phastCons7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    #########################################################################
+    ### Create a phastCons data set for Birds
+
+    # setup birds-only run
+    ssh encode
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/cons/birds
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/birds
+
+    # birds-only: get the birds only tree from the 4d directory
+    cp -p ../../4d/birds.mod ./birds.mod
+    # the others become the non-informative list for phastCons to ignore
+    echo "hg19,mm10" > birds.non-inf
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       2553s      42.55m     0.71h    0.03d  0.000 y
+# IO & Wait Time:                  8862s     147.70m     2.46h    0.10d  0.000 y
+# Average job time:                   9s       0.14m     0.00h    0.00d
+# Longest finished job:              35s       0.58m     0.01h    0.00d
+# Submission to last job:           827s      13.78m     0.23h    0.01d
+
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/birds
+    # create Most Conserved track
+    cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/?/${C} 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/birds
+    time nice -n +19 hgLoadBed panPan1 phastConsElements7wayBirds \
+	mostConserved.bed
+    #   Read 330827 elements of size 5 from mostConserved.bed
+    #   real    0m2.449s
+
+    # verify coverage
+    featureBits panPan1 phastConsElements7wayBirds
+    #   57341045 bases of 1041286029 (5.507%) in intersection
+
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits panPan1 -enrichment xenoRefGene:cds phastConsElements7wayBirds
+    #   xenoRefGene:cds 1.907%, phastConsElements7wayBirds 5.507%,
+    #   both 1.154%, cover 60.52%, enrich 10.99x
+
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
+    # sort by chromName, chromStart so that items are in numerical order
+    #  for wigEncode
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/birds
+    mkdir downloads
+    # the third sed fixes the chrom names, removing the partition extensions
+    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
+        | gzip -c > downloads/phastCons7way.birds.wigFix.gz) &
+    #   real    11m12.204s
+
+    #	encode to bigWig
+    #	(warning wigToBigWig process grows to about 36 Gb)
+    #	in bash, to avoid the 32 Gb memory limit:
+    time (zcat downloads/phastCons7way.birds.wigFix.gz \
+        | wigToBigWig stdin ../../../../chrom.sizes phastCons7wayBirds.bw)
+    #   real    15m43.842s
+
+    bigWigInfo phastCons7wayBirds.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 1,510,189,951
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: 0.099020
+# min: 0.000000
+# max: 0.998000
+# std: 0.228021
+
+    # Create merged posterier probability file and wiggle track data files
+    time (zcat downloads/phastCons7way.birds.wigFix.gz \
+	 | wigEncode stdin phastCons7wayBirds.wig phastCons7wayBirds.wib)
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    4m52.174s
+
+    #	if desired to use the bigWig file, loading bigWig table:
+    ln -s `pwd`/phastCons7wayBirds.bw /gbdb/panPan1/bbi
+    hgsql panPan1 -e 'drop table if exists phastCons7wayBirds; \
+            create table phastCons7wayBirds \
+		(fileName varchar(255) not null); \
+            insert into phastCons7wayBirds values
+	("/gbdb/panPan1/bbi/phastCons7wayBirds.bw");'
+
+    ## load table with wiggle data
+    ssh hgwdev
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/birds
+    ln -s `pwd`/phastCons7wayBirds.wib \
+	/gbdb/panPan1/multiz7way/phastCons7wayBirds.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/panPan1/multiz7way panPan1 \
+	phastCons7wayBirds phastCons7wayBirds.wig
+    #   real    0m13.364s
+
+    wigTableStats.sh panPan1 phastCons7wayBirds
+# db.table      min max mean count sumData
+# panPan1.phastCons7wayBirds      0 0.998 0.0990203 974030471 9.64488e+07
+#	stdDev viewLimits
+# 0.228021 viewLimits=0:0.998
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=panPan1 phastCons7wayBirds  > histogram.data 2>&1
+    #   real    1m42.507s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch panPan1 Histogram phastCons7wayBirds track"
+set xlabel " phastCons7wayBirds score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    #########################################################################
+    ### Create a phastCons data set for Vertebrate
+
+    # setup vertebrate-only run
+    ssh encode
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/cons/vertebrate
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/vertebrate
+
+    # vertebrate-only: get the vertebrate only tree from the 4d directory
+    cp -p ../../4d/vertebrate.mod ./vertebrate.mod
+    # the remainders become the non-informative list for phastCons to ignore
+    echo "taeGut1,melUnd1,galGal4,melGal1" > vertebrate.non-inf
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ... push ... etc.
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       2228s      37.14m     0.62h    0.03d  0.000 y
+# IO & Wait Time:                 10120s     168.66m     2.81h    0.12d  0.000 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest finished job:             337s       5.62m     0.09h    0.00d
+# Submission to last job:        239952s    3999.20m    66.65h    2.78d
+
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/vertebrate
+    # create Most Conserved track
+    cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/?/${C} 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+    #   real    5m4.064s
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/vertebrate
+    time nice -n +19 hgLoadBed panPan1 phastConsElements7wayVertebrate \
+	mostConserved.bed
+    #   Read 188142 elements of size 5 from mostConserved.bed
+    #   real    0m1.034s
+
+    # verify coverage
+    featureBits panPan1 phastConsElements7wayVertebrate
+    #   27126923 bases of 1041286029 (2.605%) in intersection
+
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits panPan1 -enrichment xenoRefGene:cds \
+        phastConsElements7wayVertebrate
+    #   xenoRefGene:cds 1.907%, phastConsElements7wayVertebrate 2.605%,
+    #   both 1.246%, cover 65.30%, enrich 25.07x
+
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
+    # sort by chromName, chromStart so that items are in numerical order
+    #  for wigEncode
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/vertebrate
+    mkdir downloads
+    # the third sed fixes the chrom names, removing the partition extensions
+    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
+        | gzip -c > downloads/phastCons7way.vertebrate.wigFix.gz) &
+    #   real    8m46.342s
+
+    #	encode to bigWig
+    time (zcat downloads/phastCons7way.vertebrate.wigFix.gz \
+        | wigToBigWig stdin ../../../../chrom.sizes phastCons7wayVertebrate.bw)
+    #   real    7m5.428s.842s
+
+    bigWigInfo phastCons7wayVertebrate.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 280,864,441
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: 0.032686
+# min: 0.000000
+# max: 1.000000
+# std: 0.157933
+
+    # Create merged posterier probability file and wiggle track data files
+    time (zcat downloads/phastCons7way.vertebrate.wigFix.gz \
+	 | wigEncode stdin phastCons7wayVertebrate.wig \
+        phastCons7wayVertebrate.wib)
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    2m57.533s
+
+    #	if desired to use the bigWig file, loading bigWig table:
+    ln -s `pwd`/phastCons7wayVertebrate.bw /gbdb/panPan1/bbi
+    hgsql panPan1 -e 'drop table if exists phastCons7wayVertebrate; \
+            create table phastCons7wayVertebrate \
+		(fileName varchar(255) not null); \
+            insert into phastCons7wayVertebrate values
+	("/gbdb/panPan1/bbi/phastCons7wayVertebrate.bw");'
+
+    ## load table with wiggle data
+    ssh hgwdev
+    cd /hive/data/genomes/panPan1/bed/multiz7way/cons/vertebrate
+    ln -s `pwd`/phastCons7wayVertebrate.wib \
+	/gbdb/panPan1/multiz7way/phastCons7wayVertebrate.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/panPan1/multiz7way panPan1 \
+	phastCons7wayVertebrate phastCons7wayVertebrate.wig
+    #   real    0m9.678s
+
+    wigTableStats.sh panPan1 phastCons7wayVertebrate
+# db.table      min max mean count sumData
+# panPan1.phastCons7wayVertebrate 0 1 0.0326863 974030471 3.18374e+07
+#	stdDev viewLimits
+#       0.157933 viewLimits=0:0.822352
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=panPan1 phastCons7wayVertebrate  > histogram.data 2>&1
+    #   real    1m36.253s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch panPan1 Histogram phastCons7wayVertebrate track"
+set xlabel " phastCons7wayVertebrate score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# phyloP for 7-way (working - 2012-08-03 - Chin)
+    # run phyloP with score=LRT
+    ssh encodek
+    mkdir /cluster/data/panPan1/bed/multiz7way/consPhyloP
+    cd /cluster/data/panPan1/bed/multiz7way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.485
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/all/all.mod 0.485 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.257500 0.242500 0.242500 0.257500
+    grep BACKGROUND ../../cons/vertebrate/vertebrate.mod \
+        | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.513
+    grep BACKGROUND ../../cons/birds/birds.mod \
+        | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.475
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/birds/birds.mod 0.475 > birds.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK birds.mod
+    #   BACKGROUND: 0.262500 0.237500 0.237500 0.262500
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/vertebrate/vertebrate.mod 0.513 > vertebrate.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK vertebrate.mod
+    #   BACKGROUND: 0.243500 0.256500 0.256500 0.243500
+
+0/JH741347/JH741347.1-6434 wigFix/0/JH741347/JH741347.1-6434.wigFix
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set d = $f:h
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set grp = $cwd:t
+set cons = /hive/data/genomes/panPan1/bed/multiz7way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/panPan1/bed/multiz7way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+/bin/touch $out:h
+/bin/mv $tmp/$file1.wigFix $out
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d:h
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp
+'_EOF_'
+    # << happy emacs
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	5690 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/consPhyloP/all
+    cd /hive/data/genomes/panPan1/bed/multiz7way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # the -ram=8g will allow only one job per node to slow this down since
+    #	it would run too fast otherwise.  Either run on one of the small
+    #	klusters or use the -ram=8g on the para create
+    para -ram=8g create jobList
+    para try ... check ... etc ...
+    para -maxJob=64 push
+    para time > run.time
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       2832s      47.20m     0.79h    0.03d  0.000 y
+# IO & Wait Time:                  9087s     151.45m     2.52h    0.11d  0.000 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest finished job:              58s       0.97m     0.02h    0.00d
+# Submission to last job:           629s      10.48m     0.17h    0.01d
+
+    # make downloads
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP7way.wigFix.gz) &
+    #   real    12m29.754s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/panPan1/chrom.sizes \
+	phyloP7way.bw) > bigWig.log 2>&1 &
+    egrep "real|VmPeak" bigWig.log
+    # pid=9538: VmPeak:     11016120 kB
+    #   real    15m27.107s
+
+    bigWigInfo phyloP7way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 1,473,509,141
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: -0.001963
+# min: -4.711000
+# max: 0.934000
+# std: 0.621009
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigEncode stdin phyloP7way.wig phyloP7way.wib) &
+    #   Converted stdin, upper limit 0.93, lower limit -4.71
+    #   real     5m2.710s
+
+    du -hsc *.wi?
+    #	193M    phyloP7way.wib
+    #	43M     phyloP7way.wig
+    #	236M    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP7way.wib /gbdb/panPan1/multiz7way/phyloP7way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/panPan1/multiz7way panPan1 \
+	phyloP7way phyloP7way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh panPan1 phyloP7way
+# db.table      min max mean count sumData
+# panPan1.phyloP7way      -4.711 0.934 -0.00196263 974030471 -1.91166e+06
+#       stdDev viewLimits
+#       0.621009 viewLimits=-3.10701:0.934
+
+    #	that range is: 0.934+4.711 = 5.645 for hBinSize=0.005645
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.005645 -hBinCount=1000 -hMinVal=-4.711 -verbose=2 \
+	    -db=panPan1 phyloP7way > histogram.data 2>&1
+    #   real    2m8.166s
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000005
+# median 0.000077
+# Q3 0.000478
+# average 0.001038
+# min 0.000000
+# max 0.057772
+# count 963
+# total 1.000007
+# standard deviation 0.003958
+
+    # expanding the X axis a bit by limiting the xrange to -2:1
+    #	create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch panPan1 Histogram phyloP7way track"
+set xlabel " phyloP7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set xrange [-2:1]
+set yrange [0:0.007]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ######################   Running the birds subset  #######################
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/consPhyloP/birds
+    cd /hive/data/genomes/panPan1/bed/multiz7way/consPhyloP/birds
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+    para time
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       2076s      34.60m     0.58h    0.02d  0.000 y
+# IO & Wait Time:                  8982s     149.70m     2.49h    0.10d  0.000 y
+# Average job time:                   8s       0.14m     0.00h    0.00d
+# Longest finished job:              24s       0.40m     0.01h    0.00d
+# Submission to last job:           616s      10.27m     0.17h    0.01d
+
+    cd /cluster/data/panPan1/bed/multiz7way/consPhyloP/birds
+    mkdir downloads
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP7way.birds.wigFix.gz) &
+    #   real    11m58.034s
+
+    # verify data integrity with the bigWig converter:
+    time (zcat downloads/phyloP7way.birds.wigFix.gz \
+	| wigToBigWig stdin ../../../../chrom.sizes phyloP7wayBirds.bw) &
+    #   real    14m41.297s
+
+    bigWigInfo phyloP7wayBirds.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 1,417,786,751
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: -0.017750
+# min: -4.169000
+# max: 0.508000
+# std: 0.612359
+
+    time (zcat downloads/phyloP7way.birds.wigFix.gz \
+	| wigEncode stdin phyloP7wayBirds.wig phyloP7wayBirds.wib \
+	> wigEncode.log 2>&1) &
+    #   real    12m41.561s
+    #	Converted stdin, upper limit 0.51, lower limit -4.17
+
+    #	if you wanted to use the bigWig data for the track, load bigWig table:
+    ln -s `pwd`/phyloP7wayBirds.bw /gbdb/panPan1/bbi
+    hgsql panPan1 -e 'drop table if exists phyloP7wayBirds; \
+            create table phyloP7wayBirds \
+		(fileName varchar(255) not null); \
+            insert into phyloP7wayBirds values
+	("/gbdb/panPan1/bbi/phyloP7wayBirds.bw");'
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP7wayBirds.wib /gbdb/panPan1/multiz7way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/panPan1/multiz7way panPan1 \
+	phyloP7wayBirds phyloP7wayBirds.wig
+    #   real    0m20.548s
+
+    wigTableStats.sh panPan1 phyloP7wayBirds
+# db.table      min max mean count sumData stdDev viewLimits
+# panPan1.phyloP7wayBirds -4.169 0.508 -0.0177497 974030471 -1.72888e+07
+#	stdDev viewLimits
+# 0.612359 viewLimits=-3.07955:0.508
+
+    #	that range is: 0.508+4.169 = 4.677 for hBinSize=0.004677
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.004677 -hBinCount=1000 -hMinVal=-4.169 -verbose=2 \
+	    -db=panPan1 phyloP7wayBirds > histogram.data 2>&1
+    #   real    2m44.184s
+    # to see yrange:
+    grep -v "^#" histogram.data | ave -col=5 stdin
+    #   max 0.038837
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch panPan1 Histogram phyloP7wayBirds track"
+set xlabel " phyloP7wayBirds score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.0388]
+set xrange [-2.5:0.6]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ######################   Running the vertebrate  #######################
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/consPhyloP/vertebrate
+    cd /hive/data/genomes/panPan1/bed/multiz7way/consPhyloP/vertebrate
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+    para time
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       1126s      18.77m     0.31h    0.01d  0.000 y
+# IO & Wait Time:                  9076s     151.26m     2.52h    0.11d  0.000 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest finished job:              19s       0.32m     0.01h    0.00d
+# Submission to last job:        233870s    3897.83m    64.96h    2.71d
+
+    cd /cluster/data/panPan1/bed/multiz7way/consPhyloP/vertebrate
+    mkdir downloads
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP7way.vertebrate.wigFix.gz) &
+    #   real     5m47.255
+
+    # verify data integrity with the bigWig encoder:
+    time (zcat downloads/phyloP7way.vertebrate.wigFix.gz \
+	| wigToBigWig stdin ../../../../chrom.sizes phyloP7wayVertebrate.bw) &
+    #   real      9m24.019s
+    #   real    15m28.263s
+    bigWigInfo phyloP7wayVertebrate.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 367,058,938
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: 0.018190
+# min: -1.282000
+# max: 0.673000
+# std: 0.184936
+
+    #	if you wanted to use the bigWig data, load bigWig table:
+    ln -s `pwd`/phyloP7wayVertebrate.bw /gbdb/panPan1/bbi
+    hgsql panPan1 -e 'drop table if exists phyloP7wayVertebrate; \
+            create table phyloP7wayVertebrate \
+		(fileName varchar(255) not null); \
+            insert into phyloP7wayVertebrate values
+	("/gbdb/panPan1/bbi/phyloP7wayVertebrate.bw");'
+
+    time (zcat downloads/phyloP7way.vertebrate.wigFix.gz \
+	| wigEncode stdin phyloP7wayVertebrate.wig phyloP7wayVertebrate.wib \
+	> wigEncode.log 2>&1) &
+    #   real      3m20.803s
+    #   Converted stdin, upper limit 0.67, lower limit -1.28
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP7wayVertebrate.wib /gbdb/panPan1/multiz7way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/panPan1/multiz7way panPan1 \
+	phyloP7wayVertebrate phyloP7wayVertebrate.wig
+    #   real    0m25.361s
+
+    wigTableStats.sh panPan1 phyloP7wayVertebrate
+# db.table      min max mean count sumData stdDev viewLimits
+# panPan1.phyloP7wayVertebrate    -1.282 0.673 0.0181897 974030471 1.77173e+07
+#	stdDev viewLimits
+#       0.184936 viewLimits=-0.906489:0.673
+
+    #	that range is: 0.673+1.282 = 1.955 for hBinSize=0.001955
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001955 -hBinCount=1000 -hMinVal=-1.282 -verbose=2 \
+	    -db=panPan1 phyloP7wayVertebrate > histogram.data 2>&1
+    #   real    3m5.929s
+    # to see yrange:
+    grep -v "^#" histogram.data | ave -col=5 stdin
+# Q1 0.000006
+# median 0.000024
+# Q3 0.000120
+# average 0.002404
+# min 0.000000
+# max 0.752662
+# count 416
+# total 0.999998
+# standard deviation 0.037246
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch panPan1 Histogram phyloP7wayVertebrate track"
+set xlabel " phyloP7wayVertebrate score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.753]
+set xrange [-0.5:0.5]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# construct download files for 7-way (working - 2012-08-07 - Chin)
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/multiz7way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/multiz7way/maf
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/multiz7way/alignments
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phastCons7way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phastCons7way/birds
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phastCons7way/vertebrate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phastCons7way/panPan1.7way.phastCons
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phyloP7way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phyloP7way/birds
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phyloP7way/vertebrate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phyloP7way/panPan1.7way.phyloP7way
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/downloads
+    cd /hive/data/genomes/panPan1/bed/multiz7way/downloads
+    mkdir multiz7way phastCons7way phyloP7way
+    cd multiz7way
+    mkdir maf alignments
+    cd maf
+    time cp -p ../../../anno/panPan1.7way.maf .
+    #   real    9m1.872s
+    time gzip *.maf
+    #   real    23m59.878s
+    time md5sum *.maf.gz > md5sum.txt
+    #   real    1m55.317s
+    ln -s `pwd`/*.maf.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/multiz7way/maf
+    cd ..
+    du -hsc maf ../../anno/panPan1.7way.maf
+    #   1.5G    maf
+    #   6.1G    ../../anno/panPan1.7way.maf
+    #   7.6G    total
+
+    ln -s ../../panPan1.7way.nh .
+    ln -s ../../panPan1.7way.commonNames.nh .
+    ln -s `pwd`/*.nh \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/multiz7way
+
+    #####################################################################
+    cd /hive/data/genomes/panPan1/bed/multiz7way/downloads/phastCons7way
+    mkdir birds vertebrate panPan1.7way.phastCons
+    cd birds
+    ln -s ../../../cons/birds/downloads/phastCons7way.birds.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m36.881s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phastCons7way/birds
+    cd ../vertebrate
+    ln -s ../../../cons/vertebrate/downloads/phastCons7way.vertebrate.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    real    0m10.940s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phastCons7way/vertebrate
+    cd ../panPan1.7way.phastCons
+    ln -s ../../../cons/all/downloads/phastCons7way.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m24.173s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phastCons7way/panPan1.7way.phastCons
+    cd ..
+    ln -s ../../cons/all/all.mod panPan1.7way.phastCons.mod
+    ln -s ../../cons/birds/birds.mod panPan1.7way.phastCons.birds.mod
+    ln -s ../../cons/vertebrate/vertebrate.mod panPan1.7way.phastCons.vertebrate.mod
+    ln -s ../../cons/all/phastCons7way.bw panPan1.7way.phastCons.bw
+    ln -s ../../cons/birds/phastCons7wayBirds.bw \
+        panPan1.7way.phastCons7wayBirds.bw
+    ln -s ../../cons/vertebrate/phastCons7wayVertebrate.bw \
+        panPan1.7way.phastCons7wayVertebrate.bw
+    time md5sum *.mod *.bw > md5sum.txt
+    #   real    7m35.579s
+    # obtain the README.txt from mm10/phastCons60way and update for this
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/README.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phastCons7way
+
+    #####################################################################
+    cd /hive/data/genomes/panPan1/bed/multiz7way/downloads/phyloP7way
+    mkdir birds vertebrate panPan1.7way.phyloP7way
+    cd birds
+    ln -s ../../../consPhyloP/birds/downloads/phyloP7way.birds.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m51.913s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phyloP7way/birds
+    cd ../vertebrate
+    ln -s ../../../consPhyloP/vertebrate/downloads/phyloP7way.vertebrate.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    0m29.125s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phyloP7way/vertebrate
+    cd ../panPan1.7way.phyloP7way
+    ln -s ../../../consPhyloP/all/downloads/phyloP7way.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m56.253s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phyloP7way/panPan1.7way.phyloP7way
+
+    cd ..
+    ln -s ../../consPhyloP/run.phyloP/all.mod panPan1.7way.phyloP7way.mod
+    ln -s ../../consPhyloP/run.phyloP/birds.mod ./panPan1.7way.phyloP.birds.mod
+    ln -s ../../consPhyloP/run.phyloP/vertebrate.mod ./panPan1.7way.phyloP.vertebrate.mod
+
+    ln -s ../../consPhyloP/all/phyloP7way.bw panPan1.7way.phyloP7way.bw
+    ln -s ../../consPhyloP/birds/phyloP7wayBirds.bw \
+        panPan1.7way.phyloP7wayBirds.bw
+    ln -s ../../consPhyloP/vertebrate/phyloP7wayVertebrate.bw \
+        panPan1.7way.phyloP7wayVertebrate.bw
+
+    time md5sum *.mod *.bw > md5sum.txt &
+    #   real    7m36.111s
+
+    # obtain the README.txt from mm10/phyloP60way and update for this
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/md5sum.txt `pwd`/README.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/phyloP7way
+
+    ###########################################################################
+    ## create upstream refGene maf files
+    cd /hive/data/genomes/panPan1/bed/multiz7way/downloads/multiz7way
+    # bash script
+#!/bin/sh
+export geneTbl="xenoRefGene"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits panPan1 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags panPan1 multiz7way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/panPan1/bed/multiz7way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+    #   real    7m22.875s
+
+    md5sum *.nh *.maf.gz > md5sum.txt
+
+    # obtain the README.txt from mm10/multiz60way and update for this
+    #   situation
+    ln -s `pwd`/*.nh `pwd`/*.maf.gz `pwd`/*.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/panPan1/multiz7way
+
+#############################################################################
+# hgPal downloads (working - Chin - 2012-08-10)
+#   FASTA from 7-way for xenoRefGene
+
+    ssh hgwdev
+    screen -S panPan1HgPal
+    mkdir /hive/data/genomes/panPan1/bed/multiz7way/pal
+    cd /hive/data/genomes/panPan1/bed/multiz7way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    # there are too many scaffolds to allow all the results to end up
+    #   in one directory.  The procedure here will distribute the results
+    #   into ten different directories.  This isn't an actual kluster
+    #   run because the mafGene command needs database access.
+
+    # count the scaffolds
+    wc -l ../../../chrom.sizes
+    #   27239 ../../../chrom.sizes
+    # divide by 10 indicates 2724 files per directory, this script
+    # constructs the file names divided into ten directories:
+export dirCount=0
+export count=0
+for C in `sort -k2n ../../../chrom.sizes | cut -f1`
+do
+    echo "${dirCount}/${C}"
+    count=`echo $count | awk '{print $1+1}'`
+    if [ $count -gt 2723 ]; then
+        dirCount=`echo $dirCount | awk '{print $1+1}'`
+        count=0;
+    fi
+done  > file.list
+
+    # constructing a job list
+    cat << '_EOF_' > template
+#LOOP
+./runOne.csh $(root1) exonNuc/$(path1).fa.gz exonAA/$(path1).fa.gz
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > runOne.csh
+#!/bin/csh -efx
+
+set chrom = $1
+set resultNuc = $2
+set resultAA = $3
+set mz=multiz7way
+set gp=xenoRefGene
+set db=panPan1
+mkdir -p $resultNuc:h
+mkdir -p $resultAA:h
+
+mafGene -chrom=$chrom -exons -noTrans $db $mz $gp order.list stdout | gzip -c > ${resultNuc}
+mafGene -chrom=$chrom -exons $db $mz $gp order.list stdout | gzip -c > ${resultAA}
+'_EOF_'
+    chmod +x runOne.csh
+
+    gensub2 file.list single template jobList
+
+    # run 30 of the jobs at a time on hgwdev:
+    cat << '_EOF_' > run30.sh
+#!/bin/sh
+
+export NL=-1
+cat jobList | while read L
+do
+    NL=`echo $NL | awk '{print $1+1}'`
+    if [ "${NL}" -lt 30 ]; then
+        echo "${L} &"
+        ${L} &
+    else
+        NL=0
+        wait
+        echo "${L} &"
+        ${L} &
+    fi
+done
+
+wait
+'_EOF_'
+
+    chmod +x run30.sh
+    ./run30.sh
+
+    export mz=multiz7way
+    export gp=xenoRefGene
+    export db=panPan1
+    time (find ./exonAA -type f | xargs zcat | gzip -c > $gp.$mz.exonAA.fa.gz)
+    time (find ./exonNuc -type f | xargs zcat | gzip -c > $gp.$mz.exonNuc.fa.gz)
+    #   real    6m30.702s
+
+    # check how many genes are used:
+    zcat xenoRefGene.multiz7way.exonAA.fa.gz | grep panPan1 \
+        | sed -e "s/_panPan1.*//" | sort | uniq -c | sort -rn | wc -l
+    #   162565
+    zcat xenoRefGene.multiz7way.exonNuc.fa.gz | grep panPan1 \
+        | sed -e "s/_panPan1.*//" | sort | uniq -c | sort -rn | wc -l
+    #   162565
+
+    # no longer need these files since they have all been packaged up
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    export mz=multiz7way
+    export gp=xenoRefGene
+    export db=panPan1
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+#############################################################################
+# TODO: cytoBandIdeo
+
+Hiram, Chin, Pauline,
+
+When you build new assemblies, you should include a build of the
+cytoBandIdeo table, so we get an ideogram for navigation/orientation
+above the main graphic.
+
+I checked in a script that does this for assemblies that do not have a formal
+cytogenetic mapping (most do not).  makeCytoBandIdeo.csh  If you have
+/cluster/bin/scripts in your path, it should just work.
+
+thanks,
+
+            --b0b 
+Good Evening Bob:
+
+Thanks for the script, you will want to add -ef to your scripts:
+#!/bin/tcsh -ef
+
+so they will exit on errors and not use garbage
+from user's .tcshrc scripts.  Otherwise they can run
+wild and destroy stuff.
+
+--Hiram 
+
+#############################################################################
+

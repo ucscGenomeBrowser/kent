@@ -137,7 +137,6 @@ boolean ideogramToo =  FALSE;           /* caller wants the ideoGram (when reque
 struct hgPositions *hgp = NULL;
 
 /* Other global variables. */
-struct trackHub *hubList = NULL;	/* List of all relevant hubs. */
 struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test, preview, or public browser */
 char *organization;             /* UCSC */
@@ -421,6 +420,7 @@ if (!IS_KNOWN(track->remoteDataSource))
     //        SET_TO_YES(track->remoteDataSource);
     //    }
     if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type) ||
+	startsWithWord("halSnake",track->tdb->type) ||
 	startsWithWord("bam",track->tdb->type) || startsWithWord("vcfTabix", track->tdb->type))
         {
         SET_TO_YES(track->remoteDataSource);
@@ -3415,36 +3415,12 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
-void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
+void loadTrackHubs(struct track **pTrackList, struct grp **pGrpList)
 /* Load up stuff from data hubs and append to lists. */
 {
-struct hubConnectStatus *hub, *hubList =  hubConnectGetHubs();
-for (hub = hubList; hub != NULL; hub = hub->next)
-    {
-    if (isEmpty(hub->errorMessage))
-	{
+struct trackDb *tdbList = hubCollectTracks(database, pGrpList);
 
-        /* error catching in so it won't just abort  */
-        struct errCatch *errCatch = errCatchNew();
-        if (errCatchStart(errCatch))
-	    {
-	    struct trackDb *tdbList = hubAddTracks(hub, database, pHubList);
-	    addTdbListToTrackList(tdbList, NULL, pTrackList);
-	    // we're going to free the hubConnectStatus list
-            hub->trackHub = NULL;
-	    }
-        errCatchEnd(errCatch);
-        if (errCatch->gotError)
-	    {
-	    warn("%s", errCatch->message->string);
-	    hubUpdateStatus( errCatch->message->string, hub);
-	    }
-	else
-	    hubUpdateStatus(NULL, hub);
-        errCatchFree(&errCatch);
-	}
-    }
-hubConnectStatusFreeList(&hubList);
+addTdbListToTrackList(tdbList, NULL, pTrackList);
 }
 
 boolean restrictionEnzymesOk()
@@ -3491,8 +3467,8 @@ for ( ;subtrack != NULL;subtrack = subtrack->next)
     }
 }
 
-static void groupTracks(struct trackHub *hubList, struct track **pTrackList,
-	struct group **pGroupList, int vis)
+static void groupTracks(struct track **pTrackList,
+	struct group **pGroupList, struct grp *grpList, int vis)
 /* Make up groups and assign tracks to groups.
  * If vis is -1, restore default groups to tracks. */
 {
@@ -3533,34 +3509,28 @@ for (grp = grps; grp != NULL; grp = grp->next)
     }
 grpFreeList(&grps);
 
-/* build group objects from hub */
+double priorityInc;
+double priority;
+if (grpList)
     {
-    int count = slCount(hubList);
-
-    if (count) // if we have track hubs
-	{
-	slSort(&hubList, hubCmpAlpha);	// alphabetize
-	minPriority -= 1.0;             // priority is 1-based
-	// the idea here is to get enough room between priority 1
-        // (which is custom tracks) and the group with the next
-	// priority number, so that the hub nestle inbetween the
-	// custom tracks and everything else at the top of the list
-	// of track groups
-	double priorityInc = (0.9 * minPriority) / count;
-	double priority = 1.0 + priorityInc;
-
-	struct trackHub *hub;
-	for (hub = hubList; hub != NULL; hub = hub->next)
-	    {
-	    AllocVar(group);
-	    group->name = cloneString(hub->name);
-	    group->label = cloneString(hub->shortLabel);
-	    group->defaultPriority = group->priority = priority;
-	    priority += priorityInc;
-	    slAddHead(&list, group);
-	    hashAdd(hash, group->name, group);
-            }
-        }
+    minPriority -= 1.0;             // priority is 1-based
+    // the idea here is to get enough room between priority 1
+    // (which is custom tracks) and the group with the next
+    // priority number, so that the hub nestle inbetween the
+    // custom tracks and everything else at the top of the list
+    // of track groups
+    priorityInc = (0.9 * minPriority) / slCount(grpList);
+    priority = 1.0 + priorityInc;
+    }
+for(; grpList; grpList = grpList->next)
+    {
+    AllocVar(group);
+    group->name = cloneString(grpList->name);
+    group->label = cloneString(grpList->label);
+    group->defaultPriority = group->priority = priority;
+    priority += priorityInc;
+    slAddHead(&list, group);
+    hashAdd(hash, group->name, group);
     }
 
 /* Loop through tracks and fill in their groups.
@@ -3812,13 +3782,10 @@ if (wikiTrackEnabled(database, NULL))
     wikiDisconnect(&conn);
     }
 
-if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
-    { // If a single track was asked for and it is from a hub, then it is already in trackList
-    loadTrackHubs(&trackList, &hubList);
-    slReverse(&hubList);
-    }
+struct grp *grpList = NULL;
+loadTrackHubs(&trackList, &grpList);
 loadCustomTracks(&trackList);
-groupTracks(hubList, &trackList, pGroupList, vis);
+groupTracks( &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide);
@@ -4081,6 +4048,7 @@ char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
 return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bigBed"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
+     || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
      && (bdu && strstr(bdu,"://"))
      && (track->subtracks == NULL);
@@ -5118,6 +5086,7 @@ trashDirFile(&psTn, "hgt", "hgt", ".eps");
 if(!trackImgOnly)
     {
     printMenuBar();
+    printf("<div style=\"margin: 10px\">\n");
     printf("<H1>PDF Output</H1>\n");
     printf("PDF images can be printed with Acrobat Reader "
            "and edited by many drawing programs such as Adobe "
@@ -5130,21 +5099,37 @@ if (strlen(ideoPsTn.forCgi))
     ideoPdfFile = convertEpsToPdf(ideoPsTn.forCgi);
 if (pdfFile != NULL)
     {
-    printf("<UL>\n");
-    printf("<LI><A TARGET=_blank HREF=\"%s\">"
-       "Download the current browser graphic</A> in PDF.\n", pdfFile);
+    printf("<UL style=\"margin-top:5px;\">\n");
+    printf("<LI>Download <A TARGET=_blank HREF=\"%s\">"
+       "the current browser graphic in PDF</A>\n", pdfFile);
     if (ideoPdfFile != NULL)
-        printf("<LI><A TARGET=_blank HREF=\"%s\">"
-               "Download the current chromosome ideogram</A> in PDF.\n", ideoPdfFile);
+        printf("<LI>Download <A TARGET=_blank HREF=\"%s\">"
+               "the current chromosome ideogram in PDF</A>\n", ideoPdfFile);
     printf("</UL>\n");
     freez(&pdfFile);
     freez(&ideoPdfFile);
     // postscript
-    printf("<P><SMALL>\n");
-    printf("We still provide postscript files: <A HREF=\"%s\">browser graphic</A> ", psTn.forCgi);
+    printf("EPS (Postscript) images are a variant of PDF and easier to import into some "
+            "drawing programs.\n");
+    printf("<UL style=\"margin-top: 5px;\">\n");
+    printf("<LI>Download <A HREF=\"%s\">the current browser graphic in EPS</A>", psTn.forCgi);
     if (strlen(ideoPsTn.forCgi))
-        printf("and <A HREF=\"%s\">ideogram</A>", ideoPsTn.forCgi);
-    printf("</SMALL></P>\n");
+        printf("<LI>Download <A HREF=\"%s\">the current chromosome ideogram in EPS</A>", ideoPsTn.forCgi);
+    printf("</UL>\n");
+
+    // see redmine #1077
+    printf("<div style=\"margin-top:15px\">Tips for producing quality images for publication:</div>\n");
+    printf("<UL style=\"margin-top:0px\">\n");
+    printf("<LI>Add assembly name and chromosome range to the image on the\n"
+        "<A HREF=\"hgTrackUi?g=ruler\">configuration page of the base position track</A>.\n");
+    printf("<LI>If using the UCSC Genes track, consider showing only one transcript per gene by turning off splice variants on the track configuration page.\n");
+    printf("<LI>Increase the font size and remove the light blue vertical guidelines in the \n"
+        "<A HREF=\"hgTracks?hgTracksConfigPage=configure\">image configuration menu</A>.");
+    printf("<LI>In the image configuration menu, change the size of the image,\n"
+            "to make it look more square.\n");
+    printf("</UL>\n");
+    printf("</div>\n");
+
 
     }
 else
@@ -5566,7 +5551,10 @@ char *position = cartUsualString(cart, "position", hDefaultPos(database));
 char *defaultChrom = hDefaultChrom(database);
 char *freeze = hFreezeFromDb(database);
 struct dyString *title = dyStringNew(512);
-if (stringIn(database, freeze))
+if (freeze == NULL)
+    dyStringPrintf(title, "%s Browser Sequences",
+		   hOrganism(database));
+else if (stringIn(database, freeze))
     dyStringPrintf(title, "%s %s Browser Sequences",
 		   hOrganism(database), freeze);
 else

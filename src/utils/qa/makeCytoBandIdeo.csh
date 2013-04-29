@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/bin/tcsh -ef
 source `which qaConfig.csh`
 
 set db=""
@@ -77,8 +77,8 @@ if ( $status ) then # process cens
       >> $db.splitChroms
     echo $cenchrom $cen2start $cen2end cen acen | awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5}' \
       >> $db.splitChroms
-    cat $db.splitChroms > $db.cytoBand
   end
+  cat $db.splitChroms > $db.cytoBand
   # remove cen chroms from full list of chroms and format for cytoBandIdeo table
   cat $db.chroms | grep -w -v -f $db.cenNames | sort > $db.chromsNoCens
   cat $db.chromsNoCens | awk '{print $1"\t"0"\t"$2"\t""\t""gneg"}' >> $db.cytoBand

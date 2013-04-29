@@ -1,10 +1,12 @@
 include ../../../inc/common.mk
 
-#blastToPsl = valgrind --tool=memcheck  ${DESTDIR}${BINDIR}/blastToPsl
-blastToPsl = ${DESTDIR}${BINDIR}/blastToPsl
+#blastToPsl = valgrind --tool=memcheck  blastToPsl
+blastToPsl = ${DESTBINDIR}/blastToPsl
 
-#blastXmlToPsl = valgrind --tool=memcheck  ${DESTDIR}${BINDIR}/blastXmlToPsl
-blastXmlToPsl =  ${DESTDIR}${BINDIR}/blastXmlToPsl
+#blastXmlToPsl = valgrind --tool=memcheck  blastXmlToPsl
+blastXmlToPsl =  ${DESTBINDIR}/blastXmlToPsl
+
+pslCheck =  ${DESTBINDIR}/pslCheck
 
 all:
 
@@ -20,73 +22,73 @@ testBlastToPsl:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
 
 protMrnaTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 protDnaTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/kgProtDna1.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 mrnaDnaTest: mkdirs
 	${blastToPsl} input/mrnaDna1.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 mrnaDnaxTest: mkdirs
 	${blastToPsl} -pslx input/mrnaDna1.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # test case that cause huge target block start.
 blockBugTest: mkdirs
 	${blastToPsl} input/blockBug.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # handle id
 identityBugTest: mkdirs
 	${blastToPsl} input/identityBug.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # test E-value threshold filter
 protMrnaEval1Test: mkdirs
 	${blastToPsl} -eVal=1 -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 protMrnaEval2Test: mkdirs
 	${blastToPsl} -eVal=1e-10 -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 longDbNameTest: mkdirs
 	${blastToPsl} input/longDbName.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # multiline description broke parser
 multiLineDescTest: mkdirs
 	${blastToPsl} input/multiLineDesc.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # tblastx
 tblastxTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/tblastx.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 # tblastn
 tblastnTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/tblastn.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
@@ -95,7 +97,7 @@ tblastnTest: mkdirs
 # there are multiple queries for each Database:
 tblastnDbFirstTest: mkdirs
 	${blastToPsl} input/tblastnDbFirst.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 
@@ -104,20 +106,20 @@ tblastnDbFirstTest: mkdirs
 # Database:.
 megaBlastTest: mkdirs
 	${blastToPsl} input/970.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # PSI-BLASTP 
 blastpPsiTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/blastpPsi.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 # PSI-BLASTP with Identities line wrapping
 blastpPsiWrapTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/blastpPsiWrap.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
@@ -132,7 +134,7 @@ psiNoHitsTest: mkdirs
 # are ignored
 psiBadFormatTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/psiBadFormat.blast output/$@.psl >output/$@.err 2>&1
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 	diff -u expected/$@.err output/$@.err
@@ -144,46 +146,46 @@ testBlastXmlToPsl: mrna1Test prot1Test prot2Test prot1NucCoordTest sp1PsiBlastTe
 
 mrna1Test: mkdirs
 	${blastXmlToPsl} -scores=output/$@.bscores input/mrna1.blastn.xml output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 prot1Test: mkdirs
 	${blastXmlToPsl} -scores=output/$@.bscores input/prot1.tblastn.xml output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 prot2Test: mkdirs
 	${blastXmlToPsl} -scores=output/$@.bscores input/prot2.psiblast.xml output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 prot1NucCoordTest: mkdirs
 	${blastXmlToPsl} -convertToNucCoords input/prot1.tblastn.xml output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 sp1PsiBlastTest: mkdirs
 	${blastXmlToPsl} -tName=Hit_accession input/sp1.psiBlast.xml output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 qtName1Test: mkdirs
 	${blastXmlToPsl} -qName=query-ID -tName=Hit_id input/sp1.psiBlast.xml output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 qtName2Test: mkdirs
 	${blastXmlToPsl} -qName=query-def0 -tName=Hit_def0 input/sp1.psiBlast.xml output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # psiblast file that claimes to be blastp
 misclassedPsiBlastTest: mkdirs
 	${blastXmlToPsl} -forcePsiBlast -tName=Hit_accession -scores=output/$@.bscores input/misclassed.psiBlast.xml output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 

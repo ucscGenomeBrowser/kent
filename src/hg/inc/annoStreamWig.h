@@ -5,7 +5,8 @@
 
 #include "annoStreamer.h"
 
-struct annoStreamer *annoStreamWigDbNew(char *db, char *table, int maxOutput);
+struct annoStreamer *annoStreamWigDbNew(char *db, char *table, struct annoAssembly *aa,
+					int maxOutput);
 /* Create an annoStreamer (subclass) object from a wiggle database table. */
 
 #endif//ndef ANNOSTREAMWIG_H

@@ -110,4 +110,9 @@ struct bbiSummary *bwgReduceSectionList(struct bwgSection *sectionList,
 	struct bbiChromInfo *chromInfoArray, int reduction);
 /* Return summary of section list reduced by given amount. */
 
+void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash, 
+	int blockSize, int itemsPerSlot, boolean doCompress, char *fileName);
+/* Create a bigWig file out of a sorted sectionList.  A lower level routine
+ * than the one above. */
+
 #endif /* BIGWIGFILE_H */

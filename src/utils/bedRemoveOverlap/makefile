@@ -1,23 +1,12 @@
-include ../../inc/common.mk
-
-L += -lm
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
-
+kentSrc = ../..
 A = bedRemoveOverlap
-O = bedRemoveOverlap.o
-
-bedRemoveOverlap: ${O} ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
-
-compile:: ${O}
-	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
+include $(kentSrc)/inc/userApp.mk
 
 clean::
-	rm -f ${A}${EXE} ${O}
+	rm -f empty.out one.out test4.out threeLast.out twoFirst.out \
+            twoSecond.out
 
-test:
+test::
 	bedRemoveOverlap empty.bed empty.out
 	diff empty.out empty.expected
 	rm empty.out

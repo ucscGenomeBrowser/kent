@@ -4,10 +4,8 @@
 #include "common.h"
 #include "variant.h"
 
-struct allele  *alleleClip(struct allele *allele, int sx, int ex)
-/* clip allele to be inside region defined by sx..ex.  Returns 
- * pointer to new allele which should be freed by alleleFree, or variantFree
- */
+struct allele  *alleleClip(struct allele *allele, int sx, int ex, struct lm *lm)
+/* Return new allele pointing to new variant, both clipped to region defined by [sx,ex). */
 {
 struct variant *oldVariant = allele->variant;
 int start = oldVariant->chromStart;
@@ -33,27 +31,28 @@ if (end > ex)
     }
 
 struct variant *newVariant;
-AllocVar(newVariant);
-newVariant->chrom = cloneString(oldVariant->chrom);
+lmAllocVar(lm, newVariant);
+newVariant->chrom = lmCloneString(lm, oldVariant->chrom);
 newVariant->chromStart = start;
 newVariant->chromEnd = end;
 newVariant->numAlleles = 1;
+
 struct allele *newAllele;
-AllocVar(newAllele);
+lmAllocVar(lm, newAllele);
 newVariant->alleles = newAllele;
 newAllele->variant = newVariant;
 newAllele->length = allele->length - delRear - delFront;
-assert(newAllele->length > 0);
-newAllele->sequence = cloneString(&allele->sequence[delFront]);
+assert(newAllele->length >= 0);
+newAllele->sequence = lmCloneString(lm, &allele->sequence[delFront]);
 newAllele->sequence[newAllele->length] = 0;   // cut off delRear part
 
 return newAllele;
 }
 
-static char *addDashes(char *input, int count)
+static char *addDashes(char *input, int count, struct lm *lm)
 /* add dashes at the end of a sequence to pad it out so it's length is count */
 {
-char *ret = needMem(count + 1);
+char *ret = lmAlloc(lm, count + 1);
 int inLen = strlen(input);
 
 safecpy(ret, count + 1, input);
@@ -66,26 +65,28 @@ while(count--)
 return ret;
 }
 
-struct variant *variantFromPgSnp(struct pgSnp *pgSnp)
-/* convert pgSnp record to variant record */
+struct variant *variantNew(char *chrom, unsigned start, unsigned end, unsigned numAlleles,
+			   char *slashSepAlleles, struct lm *lm)
+/* Create a variant from basic information that is easy to extract from most other variant
+ * formats: coords, allele count, and string of slash-separated alleles. */
 {
 struct variant *variant;
 
 // this is probably the wrong way to do this.  Alleles in
 // variant should be their size in query bases
-int alleleLength = pgSnp->chromEnd - pgSnp->chromStart;
+int alleleLength = end - start;
 
 // We have a new variant!
-AllocVar(variant);
-variant->chrom = cloneString(pgSnp->chrom);
-variant->chromStart = pgSnp->chromStart;
-variant->chromEnd = pgSnp->chromEnd;
-variant->numAlleles = pgSnp->alleleCount;
+lmAllocVar(lm, variant);
+variant->chrom = lmCloneString(lm, chrom);
+variant->chromStart = start;
+variant->chromEnd = end;
+variant->numAlleles = numAlleles;
 
 // get the alleles.
-char *nextAlleleString = cloneString(pgSnp->name);
+char *nextAlleleString = lmCloneString(lm, slashSepAlleles);
 int alleleNumber = 0;
-for( ; alleleNumber < pgSnp->alleleCount; alleleNumber++)
+for( ; alleleNumber < numAlleles; alleleNumber++)
     {
     if (nextAlleleString == NULL)
 	errAbort("number of alleles in pgSnp doesn't match number in name");
@@ -103,11 +104,16 @@ for( ; alleleNumber < pgSnp->alleleCount; alleleNumber++)
 
     // this check probably not right, could be different per allele
     int alleleStringLength = strlen(thisAlleleString);
-    if (alleleStringLength != alleleLength)
+    if (sameString(thisAlleleString, "-") && alleleLength == 0)
+	{
+	alleleStringLength = 0;
+	thisAlleleString[0] = '\0';
+	}
+    else if (alleleStringLength != alleleLength)
 	{
 	if ( alleleStringLength < alleleLength)
 	    {
-	    thisAlleleString = addDashes(thisAlleleString, alleleLength);
+	    thisAlleleString = addDashes(thisAlleleString, alleleLength, lm);
 	    alleleStringLength = alleleLength;
 	    }
 	}
@@ -119,11 +125,18 @@ for( ; alleleNumber < pgSnp->alleleCount; alleleNumber++)
     allele->variant = variant;
     allele->length = alleleStringLength; 
     toLowerN(thisAlleleString, alleleStringLength);
-    allele->sequence = cloneString(thisAlleleString);
+    allele->sequence = lmCloneString(lm, thisAlleleString);
     }
 
 slReverse(&variant->alleles);
 
 return variant;
+}
+
+struct variant *variantFromPgSnp(struct pgSnp *pgSnp, struct lm *lm)
+/* convert pgSnp record to variant record */
+{
+return variantNew(pgSnp->chrom, pgSnp->chromStart, pgSnp->chromEnd, pgSnp->alleleCount,
+		  pgSnp->name, lm);
 }
 

@@ -338,15 +338,24 @@ char *rTempName(char *dir, char *base, char *suffix)
 char *x;
 static char fileName[PATH_LEN];
 int i;
+char *lastSlash = (lastChar(dir) == '/' ? "" : "/");
 for (i=0;;++i)
     {
     x = semiUniqName(base);
-    safef(fileName, sizeof(fileName), "%s/%s%d%s",
-    	dir, x, i, suffix);
+    safef(fileName, sizeof(fileName), "%s%s%s%d%s",
+    	dir, lastSlash, x, i, suffix);
     if (!fileExists(fileName))
         break;
     }
 return fileName;
+}
+
+void mustRename(char *oldName, char *newName)
+/* Rename file or die trying. */
+{
+int err = rename(oldName, newName);
+if (err < 0)
+    errnoAbort("Couldn't rename %s to %s", oldName, newName);
 }
 
 static void eatSlashSlashInPath(char *path)
@@ -638,4 +647,24 @@ else
 	carefulClose(&f);
     }
 return TRUE;
+}
+
+boolean isRegularFile(char *fileName)
+/* Return TRUE if fileName is a regular file. */
+{
+struct stat st;
+
+if (stat(fileName, &st) < 0)
+    return FALSE;
+if (S_ISREG(st.st_mode))
+    return TRUE;
+return FALSE;
+}
+
+void makeSymLink(char *oldName, char *newName)
+/* Return a symbolic link from newName to oldName or die trying */
+{
+int err = symlink(oldName, newName);
+if (err < 0)
+     errnoAbort("Couldn't make symbolic link from %s to %s\n", oldName, newName);
 }

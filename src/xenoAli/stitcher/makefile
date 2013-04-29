@@ -1,11 +1,5 @@
-include ../../inc/common.mk
-
-
-O = stitcher.o 
-
-stitcher: $(O)
-	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkOwnLib.a ../../lib/$(MACHTYPE)/jkweb.a ${L} -lm
-	mv ${AOUT} ${BINDIR}/stitcher
-
-clean::
-	rm -f "${O}" "${AOUT}"
+kentSrc = ../..
+A = stitcher
+preMyLibs += $(kentSrc)/lib/$(MACHTYPE)/jkOwnLib.a
+include $(kentSrc)/inc/userApp.mk
+L += -lm

@@ -227,12 +227,11 @@ end # huge loop through each database
 
 # remember the hgFixed.trackVersion table
 echo "\n\n----------------------"
-echo "Don't forget to also push (to beta and then to the RR) the appropriate"
-echo "rows from the trackVersion table in the hgFixed database."
-echo "These rows allow the correct version number to be displayed in hgTrackUi."
-echo "\nEdit the following pseudo-SQL statement to include only those"
-echo "assemblies you will be pushing:"
-echo 'hgsql -Ne "SELECT * FROM trackVersion WHERE version = ensGeneUpdateVersion AND db like 'dbsYouWillPush'" hgFixed'
+echo "Don't forget to also push (to beta and then to the RR)"
+echo "the trackVersion table in the hgFixed database."
+echo "There are rows to allow the correct version number to be displayed in hgTrackUi."
+echo "Before you push the table, check the differences with compareWholeTable.csh hgFixed trackVersion"
+echo "See Wiki for more details: http://genomewiki.cse.ucsc.edu/genecats/index.php/Ensembl_QA"
 
 # make sure the date column has been updated
 echo "\n\n----------------------"

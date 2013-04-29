@@ -342,7 +342,7 @@ defaultLinkedTables kgXref
 intronGap 12
 
 track knownAlt
-shortLabel Alt Events
+shortLabel UCSC Alt Events
 longLabel Alternative Splicing, Alternative Promoter and Similar Events in UCSC Genes
 group genes
 priority 34.2
@@ -1590,6 +1590,7 @@ shortLabel Common SNPs(132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Found in >= 1% of Samples
 group varRep
 priority 99.0921
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp132Seq
@@ -3244,7 +3245,7 @@ html numtSeq2012
 
     track numtSMitochondrion
     parent numtSeq2012
-    shortLabel NumtS on mitochondrion
+    shortLabel NumtS on chrM
     longLabel $Organism NumtS on mitochondrion
     useScore 1
     color 0,60,120

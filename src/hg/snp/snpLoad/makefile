@@ -8,13 +8,13 @@ all: snpNcbiToUcsc hapmapPhaseIIISummary
 
 S = snpNcbiToUcsc
 ${S}: ${S}.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/${S} ${S}.o ${MYLIBS} $L
-	${STRIP} ${BINDIR}/${S}${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${S} ${S}.o ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/${S}${EXE}
 
 H = hapmapPhaseIIISummary
 ${H}: ${H}.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/${H} ${H}.o ${MYLIBS} $L
-	${STRIP} ${BINDIR}/${H}${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${H} ${H}.o ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/${H}${EXE}
 
 O = affyLookup.o cnpLookup.o fetchSeq.o \
     hapmap1.o hapmap2.o hapmapLookup.o hapmapMixed.o \

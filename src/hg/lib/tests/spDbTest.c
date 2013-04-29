@@ -129,6 +129,7 @@ for (key = keyList; key != NULL; key = key->next)
     accList = spKeywordSearch(conn, key->name, 0);
     printPartialList("all", key->name, accList, 4);
     slFreeList(&accList);
+    break;	/* This is a little slow, once is enough. */
     }
 slFreeList(&keyList);
 

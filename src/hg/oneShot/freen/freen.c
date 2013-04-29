@@ -1,35 +1,51 @@
 /* freen - My Pet Freen. */
+#include <sys/wait.h>
 #include "common.h"
 #include "linefile.h"
-#include "localmem.h"
 #include "hash.h"
 #include "options.h"
-#include "ra.h"
+#include "portable.h"
 #include "jksql.h"
-#include "trackDb.h"
-#include "hui.h"
-#include "rainbow.h"
 
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen val desiredVal\n");
+         "usage:  freen input\n");
 }
 
-void freen(char *input, char *desiredOutput)
-/* Test some hair-brained thing. */
+static struct optionSpec options[] = {
+   {NULL, 0},
+};
+
+void freen(char *inFile)
 {
-double a = atof(input);
-double desired = atof(desiredOutput);
-double exponent = log(desired)/log(a);
-printf("a = %g, desired = %g, a^%g = %g\n", a, desired, exponent, pow(a, exponent));
+int childId = mustFork();
+if (childId == 0)
+    {
+    int err = system(inFile);
+    printf("child says: err = %d\n", err);
+    if (err != 0)
+	exit(-1);
+        // errAbort("system call '%s' had problems", inFile);
+    else
+	exit(0);
+    }
+else
+    {
+    int status = 0;
+    printf("parent got childId=%d\n", childId);
+    int child = waitpid(-1, &status, 0);
+    printf("parent says after waitPid: child=%d, status=%d\n", child, status);
+    }
 }
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 3)
+optionInit(&argc, argv, options);
+if (argc != 2)
     usage();
-freen(argv[1], argv[2]);
+freen(argv[1]);
 return 0;
 }
