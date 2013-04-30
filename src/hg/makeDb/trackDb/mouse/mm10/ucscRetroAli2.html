@@ -1,0 +1,104 @@
+<H2>Description</H2>
+<P>
+Retrotransposition is a process involving the copying of DNA by a group 
+of enzymes that have the ability to reverse transcribe spliced mRNAs, 
+resulting in single-exon copies of genes and sometime chimeric genes. 
+RetroGenes can be either 
+functional genes that have acquired a promoter from a neighboring gene, 
+non-functional pseudogenes, or transcribed pseudogenes.</P>
+
+<H2>Methods</H2>
+<P>
+All mRNAs of a species from GenBank were aligned to the genome using 
+<A HREF="http://www.bx.psu.edu/~rsharris/lastz/">lastz</A> 
+(Miller lab, Pennsylvania State University). 
+mRNAs that aligned twice in the genome (once with introns and once without 
+introns) were initially screened. Next, a series of features were scored to 
+determine candidates for retrotranspostion events. These features include
+position and length of the polyA tail, degree of synteny with human, coverage 
+of repetitive elements, number of exons that can still be aligned to the 
+retrogene and degree of divergence from the parent gene. Retrogenes are 
+classified using a threshold score function that is a linear combination 
+of this set of features. Retrogenes in the final set are selected using 
+a score threshold based on a ROC plot against the <A HREF="http://vega.sanger.ac.uk">Vega</A> annotated pseudogenes.
+<P>
+<H3>Retrogene Statistics table:</H3>
+<UL><LI><B>Expression of retrogene</B>: The following values are possible: 
+<UL>
+<LI><EM>pseudogene</EM> indicates that the parent gene has been annotated
+by one of NCBI's RefSeq, UCSC Genes or Mammalian Gene Collection (MGC).</LI>
+<LI><EM>mrna</EM> indicates that the parent gene is a spliced mrna that 
+has no annotation in NCBI's RefSeq, UCSC Genes or Mammalian Gene Collection 
+(MGC).</LI>
+<LI><EM>expressed weak</EM> indicates that there is a mRNA overlapping 
+the retrogene, indicating possible transcription.</LI>
+<LI><EM>expressed strong</EM> indicates that there is a mRNA overlapping 
+the retrogene, and at least five spliced Ests indicating probable transcription.</LI>
+<LI><EM>expressed strong shuffle</EM> indicates that the retrogene was inserted into a pre-existing annotated gene.
+</LI></UL>
+<LI><B>Score</B>: Based on features of the potential retrogene. </LI>
+<LI><B>Percent Gene Alignment Coverage (Bases matching Parent)</B>: shows 
+the percentage of the parent gene aligning to this region. 
+<LI><B>Intron Count</B>: Number of introns is the number of gaps in 
+the alignment between the parent mRNA and the genome where gaps are >80 bp and 
+the ratio of the mRNA alignment gap to the genome alignment gap is less than
+30% after removing repeats. </LI>
+<LI><B>Gap Count</B>: Numer of gaps in the alignment of between the parent
+mRNA and the genome after removing repeats. Gaps are not counted if the gap on
+the mRNA side of the alignment is a similar size to the gap in the genome
+alignment. </LI> 
+<LI><B>BESTORF Score</B>: <A HREF="http://linux1.softberry.com/berry.phtml?topic=bestorf&group=help&subgroup=gfind">BESTORF</A> was written by Victor Solovyev. 
+BESTORF predicts potential ORFs in mRNAs/ESTs with very high accuracy using a
+Markov chain model of coding regions and a probabilistic model of translation
+start codon potential. 
+</LI></UL>
+<H3>Break in Orthology table:</H3>
+Retrogenes inserted into the genome since the mouse/human divergence show 
+a break in the human genome syntenic net alignments with the mouse genome. 
+The percentage break represents the portion of the genome that is missing in 
+each species relative to the reference genome (mouse mm10) at the retrogene
+locus as defined by syntenic alignment nets. 
+Breaks in orthology with human and dog tend to be due to genomic insertions 
+in the rodent lineage. Relative orthology of human/mouse and dog/mouse nets 
+are used to avoid false positives due to deletions
+in the human genome. Older retrogenes will not show a break in orthology so
+this feature is weighted lower than other features when scoring putative 
+retrogenes.
+<P>
+These features can be downloaded from the table retroMrnaInfo in many 
+formats using the Table Browser option from the Tools menu on the top blue bar. </P>
+<H3>Break in Orthology table:</H3>
+<H2>Credits</H2>
+<P>
+The RetroFinder program and browser track were developed by 
+<A HREF="mailto:&#98;a&#101;r&#116;&#115;&#99;&#104;&#64;&#115;&#111;&#101;.
+&#117;&#99;sc.&#101;&#100;&#117;">Robert Baertsch</A> at UCSC.</P>
+<!-- above address is baertsch at soe.ucsc.edu -->
+
+<H2>References</H2>
+<P>
+Pei B, Sisu C, Frankish A, Howald C, Habegger L, Mu XJ, Harte R, 
+Balasubramanian S, Tanzer A, Diekhans M <I>et al.</I>
+<A HREF="http://genomebiology.com/content/13/9/R51">The GENCODE pseudogene resource.</A>
+<I>Genome Biology</I> 2012 Sep 26;13(9):R51.      
+<P>
+Baertsch R, Diekhans M, Kent J, Haussler D, Brosius J. 
+<a href="http://www.biomedcentral.com/1471-2164/9/466">Retrocopy contributions to the evolution of the human genome.</a>
+<I>BMC Genomics</I> 2008 Oct 8;9:466.
+<P>
+Deyou Zheng, Adam Frankish, Robert Baertsch, Philipp Kapranov, Alexandre Reymond , Siew Woh Choo , Yontao Lu , France Denoeud , Stylianos E Antonarakis , Michael Snyder , Yijun Ruan, Chia-Lin Wei , Thomas R. Gingeras , Roderic Guigo , Jennifer Harrow , and Mark B. Gerstein 
+<a href="http://genome.cshlp.org/cgi/content/full/17/6/839">Pseudogenes in the ENCODE Regions: Consensus Annotation, Analysis of Transcription and Evolution.</a>
+<I>Genome Res.</i> 2007 Jun;17(6):839-51.
+<P>
+Kent, W.J., Baertsch, R., Hinrichs, A., Miller, W., and Haussler, D.
+<A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1" 
+TARGET=_blank>Evolution's cauldron: 
+Duplication, deletion, and rearrangement in the mouse and human genomes</A>. 
+<I>Proc Natl Acad Sci USA</I> <B>100</B>(20), 11484-11489 (2003).
+<P>
+Schwartz, S., Kent, W.J., Smit, A., Zhang, Z., Baertsch, R., Hardison, R., 
+Haussler, D., and Miller, W.
+<A HREF="http://www.genome.org/cgi/content/abstract/13/1/103" TARGET=_blank>Human-Mouse 
+Alignments with BLASTZ</A>. <em>Genome Res.</em> <B>13</B>(1), 103-7 (2003).
+</P>
+
