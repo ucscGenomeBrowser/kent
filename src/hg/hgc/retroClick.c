@@ -569,9 +569,9 @@ if (pslList != NULL)
 #endif
 printf("<TR><TH>Length of PolyA Tail<TD>%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp </TR><TR><TH>%% A's from Parent PolyA tail (Position)<TD>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
 if (pg->polyAstart < 0)
-    printf("&nbsp;(%d&nbsp;bp&nbsp;before&nbsp;end&nbsp;of&nbsp;retrocopy)<br>\n",-(pg->polyAstart));
+    printf("&nbsp;(%d&nbsp;bp&nbsp;before&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",-(pg->polyAstart));
 else
-    printf("&nbsp;(%d&nbsp;bp&nbsp;past&nbsp;end&nbsp;of&nbsp;retrocopy)<br>\n",pg->polyAstart);
+    printf("&nbsp;(%d&nbsp;bp&nbsp;past&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",pg->polyAstart);
 
 printf("<tr><th>mRNA Expression Evidence<td>");
 if (!sameString(pg->overName, "none"))
