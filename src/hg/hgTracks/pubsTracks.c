@@ -213,13 +213,25 @@ lf->extra = extra;
 hFreeConn(&conn);
 }
 
+static void dyStringPrintfWithSep(struct dyString *ds, char* sep, char *format, ...)
+/*  Printf to end of dyString. Prefix with sep if dyString is not empty. */
+{
+if (ds->stringSize!=0)
+    dyStringAppend(ds, sep);
+va_list args;
+va_start(args, format);
+dyStringVaPrintf(ds, format, args);
+va_end(args);
+}
+
 static void pubsLoadKeywordYearItems(struct track *tg)
 /* load items that fulfill keyword and year filter */
 {
 pubsParseClassColors();
 struct sqlConnection *conn = hAllocConn(database);
-char *keywords = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsKeywords");
-char *yearFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsYear");
+char *keywords = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterKeywords");
+char *yearFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterYear");
+char *publFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterPublisher");
 char *articleTable = pubsArticleTable(tg);
 
 if(yearFilter == NULL || sameWord(yearFilter, "anytime"))
@@ -238,7 +250,7 @@ else
     tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
     freeMem(oldLabel);
 
-    char extra[2048], yearWhere[256], keywordsWhere[1024], prefix[256];
+    char yearWhere[256], keywordsWhere[1024], prefix[256];
     char **row;
     struct linkedFeatures *lfList = NULL;
     struct trackDb *tdb = tg->tdb;
@@ -246,23 +258,46 @@ else
     int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
     boolean useItemRgb = bedItemRgb(tdb);
 
-    safef(prefix, sizeof(prefix),  "name IN (SELECT articleId FROM %s WHERE", articleTable);
-    if(isNotEmpty(keywords))
-        safef(keywordsWhere, sizeof(keywordsWhere), \
-        "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", keywords);
-    if(isNotEmpty(yearFilter))
-        safef(yearWhere, sizeof(yearWhere), "year >= '%s'", sqlEscapeString(yearFilter));
-
-    if(isEmpty(keywords))
-        safef(extra, sizeof(extra), "%s %s)", prefix, yearWhere);
-    else if(isEmpty(yearFilter))
-        safef(extra, sizeof(extra), "%s %s)", prefix, keywordsWhere);
+    char *extra;
+    struct dyString *extraDy = dyStringNew(0);
+    if (sqlColumnExists(conn, tg->table, "year"))
+        // new table schema: filter fields are on main bed table
+        {
+        if (isNotEmpty(keywords))
+            dyStringPrintf(extraDy, "name IN (SELECT articleId FROM %s WHERE " 
+                "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE))",
+                articleTable, keywords);
+        if (isNotEmpty(yearFilter))
+            dyStringPrintfWithSep(extraDy, " AND ", " year >= '%s'", sqlEscapeString(yearFilter));
+        if (isNotEmpty(publFilter))
+            dyStringPrintfWithSep(extraDy, " AND ", " publisher = '%s'", sqlEscapeString(publFilter));
+        extra = extraDy->string;
+        }
     else
-        safef(extra, sizeof(extra), "%s %s AND %s)", prefix, yearWhere, keywordsWhere);
+        // old table schema, filter by doing a join on article table
+        {
+        char extraTmp[4096];
+        safef(prefix, sizeof(prefix),  "name IN (SELECT articleId FROM %s WHERE", articleTable);
+        if(isNotEmpty(keywords))
+            safef(keywordsWhere, sizeof(keywordsWhere), \
+            "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", keywords);
+        if(isNotEmpty(yearFilter))
+            safef(yearWhere, sizeof(yearWhere), "year >= '%s'", sqlEscapeString(yearFilter));
+
+        if(isEmpty(keywords))
+            safef(extraTmp, sizeof(extraTmp), "%s %s)", prefix, yearWhere);
+        else if(isEmpty(yearFilter))
+            safef(extraTmp, sizeof(extraTmp), "%s %s)", prefix, keywordsWhere);
+        else
+            safef(extraTmp, sizeof(extraTmp), "%s %s AND %s)", prefix, yearWhere, keywordsWhere);
+        extra = extraTmp;
+        }
 
     int rowOffset = 0;
     struct sqlResult *sr = hExtendedRangeQuery(conn, tg->table, chromName, winStart, winEnd, extra,
                                                FALSE, NULL, &rowOffset);
+    freeDyString(&extraDy);
+
     while ((row = sqlNextRow(sr)) != NULL)
 	{
         struct bed *bed = bedLoad12(row+rowOffset);
@@ -282,7 +317,7 @@ static void activatePslTrackIfCgi(struct track *tg)
 /* the publications hgc creates links back to the browser with 
  * the cgi param pubsFilterArticleId to show only a single type
  * of feature for the pubsBlatPsl track. 
- * If the parameter was supplied, we save this parameter here
+ * If the parameter was supplied, we save it here 
  * into the cart and activate the track.
  */
 {

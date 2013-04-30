@@ -1999,10 +1999,10 @@ void pubsUi(struct trackDb *tdb)
 {
 #define NUM_YEARS 15  // similar to google scholar, which goes back to 20 years
 
-#define PUBS_KEYWORDS_TAG "pubsKeywords"
-#define PUBS_YEAR_TAG     "pubsYear"
+#define PUBS_KEYWORDS_TAG "pubsFilterKeywords"
+#define PUBS_YEAR_TAG     "pubsFilterYear"
 #define PUBS_COLORBY_TAG    "pubsColorBy"
-#define PUBS_PUBFILT_TAG    "pubsPublisher"
+#define PUBS_PUBFILT_TAG    "pubsFilterPublisher"
 
 // get current set filters from cart
 char *keywords   = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_KEYWORDS_TAG, "");
