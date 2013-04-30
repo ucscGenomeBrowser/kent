@@ -529,7 +529,7 @@ printf("</THEAD><TBODY>\n");
 if (sameString(pg->type, "singleExon"))
     printf("<TR><TH>Type of Parent<TD>%s</tr>\n",pg->type);
 else 
-    printf("<TR><TH>Expression of Retrocopy<TD>%s</TR>\n",pg->type);
+    printf("<TR><TH>Expression of Retrogene<TD>%s</TR>\n",pg->type);
 printf("<TR><TH>Score <TD>%d (range from 0 - %d)</TR>\n",  
         pg->score,
         sqlQuickNum(conn, scoreSql) );
