@@ -41,6 +41,7 @@ for (;;)
     else
 	freez(&pm);
     }
+return NULL;  // avoid compiler warning
 }
 
 
