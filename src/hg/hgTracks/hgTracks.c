@@ -137,7 +137,6 @@ boolean ideogramToo =  FALSE;           /* caller wants the ideoGram (when reque
 struct hgPositions *hgp = NULL;
 
 /* Other global variables. */
-struct trackHub *hubList = NULL;	/* List of all relevant hubs. */
 struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test, preview, or public browser */
 char *organization;             /* UCSC */
@@ -3416,10 +3415,10 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
-void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList, struct grp **pGrpList)
+void loadTrackHubs(struct track **pTrackList, struct grp **pGrpList)
 /* Load up stuff from data hubs and append to lists. */
 {
-struct trackDb *tdbList = hubCollectTracks(database, pHubList, pGrpList);
+struct trackDb *tdbList = hubCollectTracks(database, pGrpList);
 
 addTdbListToTrackList(tdbList, NULL, pTrackList);
 }
@@ -3468,7 +3467,7 @@ for ( ;subtrack != NULL;subtrack = subtrack->next)
     }
 }
 
-static void groupTracks(struct trackHub *hubList, struct track **pTrackList,
+static void groupTracks(struct track **pTrackList,
 	struct group **pGroupList, struct grp *grpList, int vis)
 /* Make up groups and assign tracks to groups.
  * If vis is -1, restore default groups to tracks. */
@@ -3784,9 +3783,9 @@ if (wikiTrackEnabled(database, NULL))
     }
 
 struct grp *grpList = NULL;
-loadTrackHubs(&trackList, &hubList, &grpList);
+loadTrackHubs(&trackList, &grpList);
 loadCustomTracks(&trackList);
-groupTracks(hubList, &trackList, pGroupList, grpList, vis);
+groupTracks( &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide);
