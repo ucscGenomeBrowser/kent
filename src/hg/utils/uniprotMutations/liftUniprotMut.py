@@ -143,7 +143,9 @@ if __name__ == '__main__':
 
         disStatus = set([mut.disRelated for mut in muts])
         comments = [mut.comment for mut in muts if mut.comment!=""]
-        if not "disRelated" in disStatus and mut.featType=="sequence variant" and len(comments)==0:
+        # skip if it's not disease related 
+        if not "disRelated" in disStatus and mut.featType=="sequence variant" \
+            and len(comments)==0 and mut.disease=="":
             noInfoCount +=1
             continue
             
