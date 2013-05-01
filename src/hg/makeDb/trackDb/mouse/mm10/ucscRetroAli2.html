@@ -15,12 +15,14 @@ All mRNAs of a species from GenBank were aligned to the genome using
 mRNAs that aligned twice in the genome (once with introns and once without 
 introns) were initially screened. Next, a series of features were scored to 
 determine candidates for retrotranspostion events. These features include
-position and length of the polyA tail, degree of synteny with mouse, coverage 
+position and length of the polyA tail, degree of synteny with human, coverage 
 of repetitive elements, number of exons that can still be aligned to the 
 retrogene and degree of divergence from the parent gene. Retrogenes are 
 classified using a threshold score function that is a linear combination 
 of this set of features. Retrogenes in the final set are selected using 
-a score threshold based on a ROC plot against the <A HREF="http://vega.sanger.ac.uk" TARGET="_blank">Vega</A> annotated pseudogenes.
+a score threshold based on a ROC plot against the 
+<A HREF="http://vega.sanger.ac.uk" TARGET="_blank">Vega</A> annotated 
+pseudogenes.
 <P>
 <H3>Retrogene Statistics table:</H3>
 <UL><LI><B>Expression of retrogene</B>: The following values are possible: 
@@ -49,19 +51,19 @@ the mRNA side of the alignment is a similar size to the gap in the genome
 alignment. </LI> 
 <LI><B>BESTORF Score</B>: <A HREF="http://linux1.softberry.com/berry.phtml?topic=bestorf&group=help&subgroup=gfind" TARGET="_blank">BESTORF</A> (written 
 by Victor Solovyev) predicts potential ORFs in mRNAs/ESTs with very high 
-accuracy using a Markov chain model of coding regions and a probabilistic 
-model of translation start codon potential. 
+accuracy using a Markov chain model of coding regions and a probabilistic model
+ of translation start codon potential. 
 </LI></UL>
 <H3>Break in Orthology table:</H3>
-Retrogenes inserted into the genome since the human/mouse divergence show 
-a break in the mouse genome syntenic net alignments to the human genome. 
+Retrogenes inserted into the genome since the mouse/human divergence show 
+a break in the human genome syntenic net alignments to the mouse genome. 
 The percentage break represents the portion of the genome that is missing in 
-each species relative to the reference genome (human hg19) at the retrogene
+each species relative to the reference genome (mouse mm10) at the retrogene
 locus as defined by syntenic alignment nets. 
-Breaks in orthology with mouse and dog tend to be due to genomic insertions 
-in the primate lineage. Relative orthology of dog/human and Rhesus
-macque/human nets are used to avoid false positives due to deletions
-in the mouse genome. Older retrogenes will not show a break in orthology so
+Breaks in orthology with human and dog tend to be due to genomic insertions 
+in the rodent lineage. Relative orthology of human/mouse and dog/mouse nets 
+are used to avoid false positives due to deletions
+in the human genome. Older retrogenes will not show a break in orthology so
 this feature is weighted lower than other features when scoring putative 
 retrogenes.
 <P>

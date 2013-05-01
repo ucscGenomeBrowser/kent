@@ -35,6 +35,16 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+boolean pairExists(struct sqlConnection *conn, long long elderId, long long youngerId, char *table)
+/* Return true if elder/younger pair already in table. */
+{
+char query[256];
+safef(query, sizeof(query), 
+    "select count(*) from %s where elderFileId=%lld and youngerFileId=%lld",
+    table, elderId, youngerId);
+return sqlQuickNum(conn, query) != 0;
+}
+
 struct bed3 *edwLoadSampleBed3(struct sqlConnection *conn, struct edwValidFile *vf)
 /* Load up sample bed3 attached to vf */
 {
@@ -68,6 +78,8 @@ void doSampleReplicate(struct sqlConnection *conn, char *format, struct edwAssem
 /* Do correlation analysis between elder and younger and save result to
  * a new edwQaPairSampleOverlap record. Do this for a format where we have a bed3 sample file. */
 {
+if (pairExists(conn, elderEf->id, youngerEf->id, "edwQaPairSampleOverlap"))
+    return;
 struct edwQaPairSampleOverlap *sam;
 AllocVar(sam);
 sam->elderFileId = elderVf->fileId;
@@ -203,6 +215,11 @@ void doBigBedReplicate(struct sqlConnection *conn, char *format, struct edwAssem
 /* Do correlation analysis between elder and younger and save result to
  * a new edwQaPairCorrelation record. Do this for a format where we have a bigBed file. */
 {
+/* If got both pairs, work is done already */
+if (pairExists(conn, elderEf->id, youngerEf->id, "edwQaPairSampleOverlap") 
+    && pairExists(conn, elderEf->id, youngerEf->id, "edwQaPairCorrelation"))
+    return;
+
 int numColIx = 0;
 if (sameString(format, "narrowPeak") || sameString(format, "broadPeak"))
     numColIx = 6;	// signalVal
@@ -231,26 +248,32 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     }
 
 /* Make up correlation structure and save. */
-struct edwQaPairCorrelation *cor;
-AllocVar(cor);
-cor->elderFileId = elderVf->fileId;
-cor->youngerFileId = youngerVf->fileId;
-cor->pearsonOverall = correlateResult(c);
-cor->pearsonInEnriched = correlateResult(cInEnriched);
-edwQaPairCorrelationSaveToDb(conn, cor, "edwQaPairCorrelation", 128);
-freez(&cor);
+if (!pairExists(conn, elderEf->id, youngerEf->id, "edwQaPairCorrelation"))
+    {
+    struct edwQaPairCorrelation *cor;
+    AllocVar(cor);
+    cor->elderFileId = elderVf->fileId;
+    cor->youngerFileId = youngerVf->fileId;
+    cor->pearsonOverall = correlateResult(c);
+    cor->pearsonInEnriched = correlateResult(cInEnriched);
+    edwQaPairCorrelationSaveToDb(conn, cor, "edwQaPairCorrelation", 128);
+    freez(&cor);
+    }
 
 /* Also make up sample structure and save.  */
-struct edwQaPairSampleOverlap *sam;
-AllocVar(sam);
-sam->elderFileId = elderVf->fileId;
-sam->youngerFileId = youngerVf->fileId;
-sam->elderSampleBases = elderTotalSpan;
-sam->youngerSampleBases = youngerTotalSpan;
-sam->sampleOverlapBases = overlapTotalSpan;
-setSampleSampleEnrichment(sam, format, assembly, elderVf, youngerVf);
-edwQaPairSampleOverlapSaveToDb(conn, sam, "edwQaPairSampleOverlap", 128);
-freez(&sam);
+if (!pairExists(conn, elderEf->id, youngerEf->id, "edwQaPairSampleOverlap"))
+    {
+    struct edwQaPairSampleOverlap *sam;
+    AllocVar(sam);
+    sam->elderFileId = elderVf->fileId;
+    sam->youngerFileId = youngerVf->fileId;
+    sam->elderSampleBases = elderTotalSpan;
+    sam->youngerSampleBases = youngerTotalSpan;
+    sam->sampleOverlapBases = overlapTotalSpan;
+    setSampleSampleEnrichment(sam, format, assembly, elderVf, youngerVf);
+    edwQaPairSampleOverlapSaveToDb(conn, sam, "edwQaPairSampleOverlap", 128);
+    freez(&sam);
+    }
 
 genomeRangeTreeFree(&targetGrt);
 correlateFree(&c);
@@ -310,6 +333,8 @@ void doBigWigReplicate(struct sqlConnection *conn, struct edwAssembly *assembly,
 /* Do correlation analysis between elder and younger and save result to
  * a new edwQaPairCorrelation record. Do this for a format where we have a bigWig file. */
 {
+if (pairExists(conn, elderEf->id, youngerEf->id, "edwQaPairCorrelation"))
+    return;
 char *enrichedIn = elderVf->enrichedIn;
 if (!isEmpty(enrichedIn) && !sameString(enrichedIn, "unknown"))
     {

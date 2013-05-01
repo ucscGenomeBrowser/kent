@@ -156,5 +156,10 @@ boolean isRegularFile(char *fileName);
 
 void makeSymLink(char *oldName, char *newName);
 /* Return a symbolic link from newName to oldName or die trying */
+
+long long freeSpaceOnFileSystem(char *path);
+/* Given a path to a file or directory on a file system,  return free space
+ * in bytes. */
+
 #endif /* PORTABLE_H */
 
