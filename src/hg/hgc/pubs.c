@@ -469,16 +469,17 @@ if (stringIn("sciencedirect.com", url))
     pubsIsElsevier = TRUE;
     }
 
+// authors  title
+printf("<DIV style=\"width:800px; font-size:100%%\">\n");
+printf("<P>%s</P>\n", authors);
+printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B></A>\n", url, title);
+
 // logo of publisher
 char *logoUrl = urlToLogoUrl(conn, pubsArticleTable, articleId, url);
 if (logoUrl)
     printf("<a href=\"%s\"><img align=\"right\" hspace=\"20\" src=\"%s\"></a>\n", url, logoUrl);
 freeMem(logoUrl);
-
-printf("<P>%s</P>\n", authors);
-printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B>\n", url, title);
-printf("</A>\n");
-
+printf("</DIV>\n");
 
 printf("<P style=\"width:800px; font-size:80%%\">%s", cit);
 if (strlen(pmid)!=0 && strcmp(pmid, "0"))
