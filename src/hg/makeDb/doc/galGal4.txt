@@ -99,7 +99,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC "chrUn_%s", $line;
     }
 }
@@ -247,11 +247,11 @@ taxId   9031
 '_EOF_'
     # << happy emacs
 
-    time makeGenomeDb.pl -stop=agp galGal4.config.ra > agp.log 2>&1 
+    time makeGenomeDb.pl -stop=agp galGal4.config.ra > agp.log 2>&1
     #	real    1m37.730s
     # check the end of agp.log to verify it is OK
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
-	-continue=db galGal4.config.ra > db.log 2>&1 
+	-continue=db galGal4.config.ra > db.log 2>&1
     #	real    8m20.996s
     # the first attempted failed in the:
     #	featureBits -or -countGaps galGal4 gold gap
@@ -293,7 +293,7 @@ taxId   9031
 	galGal4 > do.log 2>&1 &
     #	about 1 hour
 
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #	10508414 bases of 1032854810 (1.017%) in intersection
 
 XXX - ready for this when rmsk is done
@@ -533,7 +533,7 @@ close (FH);
 # Felis catus	1081	919	354
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add:
@@ -765,3 +765,22 @@ TMPDIR=/scratch/tmp
     #	18576173 bases of 647368134 (2.869%) in intersection
 
 ############################################################################
+# construct liftOver to galGal3 (DONE - 2013-04-30 - Hiram)
+    screen -S galGal4	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/galGal4/bed/blat.galGal3.2013-04-30
+    cd /hive/data/genomes/galGal4/bed/blat.galGal3.2013-04-30
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/galGal4/jkStuff/galGal4.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev galGal4 galGal3 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/galGal4/jkStuff/galGal4.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev galGal4 galGal3 > do.log 2>&1
+    #   real    24m2.551s
+
+    # verify this file exists:
+    #	/gbdb/galGal4/liftOver/galGal4ToGalGal3.over.chain.gz
+    # and try out the conversion on genome-test from galGal4 to galGal3
+############################################################################
+
