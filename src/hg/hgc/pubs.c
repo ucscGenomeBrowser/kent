@@ -27,7 +27,8 @@ static char* articleSource;
 // we need the external article PMC Id for yif links
 static char* extId = NULL;
 
-// internal section types in mysql table
+// section types in mysql table, for all annotations tables
+// we note where the hit is located in the document
 static char *pubsSecNames[] ={
       "header", "abstract",
       "intro", "methods",
@@ -390,17 +391,41 @@ freeMem(sectionList);
 sqlFreeResult(&sr);
 }
 
-static char *urlToLogoUrl(char *urlOrig)
-/* return a string with relative path of logo for publisher given the url of fulltext, has to be freed */
+static char *urlToLogoUrl(struct sqlConnection *conn, char* pubsArticleTable, 
+    char* articleId, char *urlOrig)
+/* return a string with relative path of logo for publisher given the url of
+ * fulltext or a table/articleId, has to be freed 
+*/
 {
-// get top-level domain
-char url[1024];
-memcpy(url, urlOrig, sizeof(url));
-char *urlParts[20];
-int partCount = chopString(url, ".", urlParts, ArraySize(urlParts));
-// construct path
-char *logoUrl = needMem(sizeof(url));
-safef(logoUrl, sizeof(url), "../images/pubs_%s.png", urlParts[partCount-2]);
+char* pubCode = NULL;
+if (hHasField("hgFixed", pubsArticleTable, "publisher"))
+    {
+    char query[4000];
+    safef(query, sizeof(query), "SELECT publisher from %s where articleId=%s", 
+        pubsArticleTable, articleId);
+    pubCode = sqlQuickString(conn, query);
+    }
+else 
+    {
+    // get top-level domain url if not publisher field
+    char url[1024];
+    memcpy(url, urlOrig, sizeof(url));
+    char *slashParts[20];
+    // split http://www.sgi.com/test -> to [http:,www.sgi.com,test]
+    int partCount = chopString(url, "/", slashParts, ArraySize(slashParts));
+    if (partCount<3)
+        return NULL;
+    // split www.sgi.com to [www,sgi,com]
+    char *dotParts[20];
+    partCount = chopString(slashParts[1], ".", dotParts, ArraySize(dotParts));
+    if (partCount<3)
+        return NULL;
+    pubCode = dotParts[partCount-2];
+    }
+    
+// construct path to image
+char *logoUrl = needMem(512);
+safef(logoUrl, 512, "../images/pubs_%s.png", pubCode);
 return logoUrl;
 }
 
@@ -436,7 +461,7 @@ extId          = row[8];
 url = mangleUrl(url);
 if (strlen(abstract)==0) 
         abstract = "(No abstract available for this article. "
-            "Please follow the link to the fulltext above.)";
+            "Please follow the link to the fulltext above by clicking on the titel or the fulltext image.)";
 
 if (stringIn("sciencedirect.com", url)) 
     {
@@ -445,8 +470,9 @@ if (stringIn("sciencedirect.com", url))
     }
 
 // logo of publisher
-char *logoUrl = urlToLogoUrl(url);
-printf("<a href=\"%s\"><img align=\"right\" hspace=\"20\" src=\"%s\"></a>\n", url, logoUrl);
+char *logoUrl = urlToLogoUrl(conn, pubsArticleTable, articleId, url);
+if (logoUrl)
+    printf("<a href=\"%s\"><img align=\"right\" hspace=\"20\" src=\"%s\"></a>\n", url, logoUrl);
 freeMem(logoUrl);
 
 printf("<P>%s</P>\n", authors);
