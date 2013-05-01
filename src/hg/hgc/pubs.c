@@ -217,7 +217,9 @@ if (showSize)
 static void printFilterLink(char *pslTrack, char *articleId, char *articleTable)
 /* print a link to hgTracks with an additional cgi param to activate the single article filter */
 {
-    int start = cgiInt("o");
+    int start = cgiOptionalInt("o", -1);
+    if (start==-1)
+        return;
     int end = cgiInt("t");
     char qBuf[1024];
     struct sqlConnection *conn = hAllocConn(database);
@@ -470,22 +472,26 @@ if (stringIn("sciencedirect.com", url))
     }
 
 // authors  title
-printf("<DIV style=\"width:800px; font-size:100%%\">\n");
+printf("<DIV style=\"width:1024px; font-size:100%%\">\n");
 printf("<P>%s</P>\n", authors);
-printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B></A>\n", url, title);
-
+//
 // logo of publisher
 char *logoUrl = urlToLogoUrl(conn, pubsArticleTable, articleId, url);
 if (logoUrl)
     printf("<a href=\"%s\"><img align=\"right\" hspace=\"20\" src=\"%s\"></a>\n", url, logoUrl);
 freeMem(logoUrl);
+
+printf("<div style=\"width:800px\">");
+printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B></A></div>\n", url, title);
+printf("</DIV>\n");
 printf("</DIV>\n");
 
-printf("<P style=\"width:800px; font-size:80%%\">%s", cit);
+
+printf("<P style=\"width:1024px; font-size:80%%\">%s", cit);
 if (strlen(pmid)!=0 && strcmp(pmid, "0"))
     printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
 printf("</P>\n");
-printf("<P style=\"width:800px; font-size:100%%\">%s</P>\n", abstract);
+printf("<P style=\"width:1024px; font-size:100%%\">%s</P>\n", abstract);
 
 if (pubsIsElsevier)
     printf("<P><SMALL>Copyright 2012 Elsevier B.V. All rights reserved.</SMALL></P>");
@@ -498,6 +504,8 @@ static struct hash *getSeqIdHash(struct sqlConnection *conn, char *trackTable, \
     char *articleId, char *item, char *seqName, int start)
 /* return a hash with the sequence IDs for a given chain of BLAT matches */
 {
+if (start==-1)
+    return NULL;
 char query[512];
 /* check first if the column exists (some debugging tables on hgwdev don't have seqIds) */
 safef(query, sizeof(query), "SHOW COLUMNS FROM %s LIKE 'seqIds';", trackTable);
@@ -549,7 +557,7 @@ if (pubsDebug)
     web2PrintHeaderCell("Identifiers", 30);
 
 if (!isClickedSection && !pubsDebug)
-    web2PrintHeaderCell("Chained matches with this sequence", 20);
+    web2PrintHeaderCell("Link to matching genomic location", 20);
 web2EndThead();
 web2StartTbodyS("font-family: Arial, Helvetica, sans-serif; line-height: 1.5em; font-size: 0.9em;");
 }
@@ -695,7 +703,7 @@ else
 char fullTitle[5000];
 safef(fullTitle, sizeof(fullTitle), 
 "%s&nbsp;<A HREF=\"../cgi-bin/hgc?%s&o=%s&t=%s&g=%s&i=%s&fasta=%d\"><SMALL>(%s format)</SMALL></A>\n", 
-title, cartSidUrlString(cart), cgiString("o"), cgiString("t"), cgiString("g"), cgiString("i"), 
+title, cartSidUrlString(cart), cgiOptionalString("o"), cgiOptionalString("t"), cgiString("g"), cgiString("i"), 
 !fasta, otherFormat);
 
 web2StartSection("pubsSection", "%s", fullTitle);
@@ -844,7 +852,12 @@ if (skippedRows)
     if (stringIn("yif", articleSource))
         docType = "figure";
     char title[1024];
-    safef(title, sizeof(title), "Other Sequences in this %s", docType);
+    if (clickedSeqs)
+        safef(title, sizeof(title), "Other Sequences in this %s", docType);
+    // NO clicked seqs can happen if the hgc was called with no o or t parameters
+    // from somewhere outside the browser, like elsevier or europmc
+    else
+        safef(title, sizeof(title), "Sequences in this %s", docType);
 
     printSeqSection(articleId, title, \
         fileDesc, conn, clickedSeqs, 0, fasta, pslTable, articleTable);
@@ -973,8 +986,8 @@ void doPubsDetails(struct trackDb *tdb, char *item)
 /* publications custom display */
 {
 
-int start        = cgiInt("o");
-int end          = cgiOptionalInt("t", 0);
+int start        = cgiOptionalInt("o", -1);
+int end          = cgiOptionalInt("t", -1);
 char *trackTable = cgiString("g");
 char *aliTable   = cgiOptionalString("aliTable");
 int fasta        = cgiOptionalInt("fasta", 0);
@@ -1007,7 +1020,8 @@ else
     if (stringIn("Marker", trackTable))
         {
         char *markerTable = trackDbRequiredSetting(tdb, "pubsMarkerTable");
-        printPositionAndSize(start, end, 0);
+        if (start!=-1)
+            printPositionAndSize(start, end, 0);
         printMarkerSnippets(conn, articleTable, markerTable, item);
         }
     else
@@ -1017,7 +1031,8 @@ else
         if (articleId!=NULL) 
             {
             char *pslTable = trackDbRequiredSetting(tdb, "pubsPslTrack");
-            printSeqInfo(conn, trackTable, pslTable, articleId, item, seqName, start, pubsHasSupp, fasta, articleTable);
+            printSeqInfo(conn, trackTable, pslTable, articleId, item, \
+                seqName, start, pubsHasSupp, fasta, articleTable);
             }
     }
 }
