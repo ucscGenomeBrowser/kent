@@ -33,6 +33,7 @@ include wgEncodeUwRepliSeq.ra
 include wgEncodeFsuRepliChip.release2.ra
 
 #include wgEncodeRegNorm.ra alpha
+# Jim experimental version
 
 # Nucleosome (wrangler: venkat)
 include wgEncodeSydhNsome.ra
