@@ -537,8 +537,7 @@ table#alleles TD.seq { text-align:left; }
 div#haplotypes .hilite { opacity: 0.2; filters.alpha.opacity:20;  position: absolute;
                                  background-color: #339933; } /* greenish */ 
 div#haplotypes .hiliteSpecial { background-color: #33FFFF; } /* bluish */ 
-div#haplotypes input#allelesShowHide { width:160px; }
-div#haplotypes input.alleleButton { width:220px; }
+div#haplotypes input.toggleButton  { width:160px; height:1.7em; }
 div#haplotypes .textOpt   { color:#0000CD; } /* medium blue */
 div#haplotypes .textInfo  { color:#006600; } /* dark green */
 div#haplotypes .textAlert { color:#DC143C; } /* dark red */
