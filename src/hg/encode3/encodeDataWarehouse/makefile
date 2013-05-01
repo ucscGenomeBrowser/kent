@@ -4,10 +4,9 @@ include ../../../inc/common.mk
 
 
 # List of directories to build
-USE_DIRS = $(DIRS)
+USE_DIRS = $(UTIL_DIRS) $(CGI_DIRS)
 
-DIRS = \
-    lib \
+UTIL_DIRS = \
     edwAddAssembly \
     edwAddQaEnrichTarget \
     edwAddSubscriber \
@@ -16,7 +15,9 @@ DIRS = \
     edwMakeReplicateQa \
     edwMakeValidFile \
     edwRunDaemon \
-    edwSubmit \
+    edwSubmit
+
+CGI_DIRS = \
     edwWebAuthLogin \
     edwWebAuthLogout \
     edwWebBrowse \
@@ -26,7 +27,11 @@ DIRS = \
 TEST_DIRS = \
 	encode2BedDoctor 
 
-all:: utils
+all:: edwLib utils
+
+edwLib:
+	(cd lib && make)
+
 
 utils: $(USE_DIRS:%=%.utils)
 %.utils:
@@ -40,4 +45,8 @@ clean:: $(USE_DIRS:%=%.clean)
 	- find . -name '*.o' -exec rm {} \;
 %.clean:
 	(cd $* && ${MAKE} clean)
+
+alpha:: $(CGI_DIRS:%=%.alpha)
+%.alpha:
+	(cd $* && ${MAKE} alpha)
 
