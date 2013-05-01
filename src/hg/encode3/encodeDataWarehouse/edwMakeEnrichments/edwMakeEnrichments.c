@@ -44,6 +44,7 @@ struct target
     struct genomeRangeTree *grt;       /* Random access intersection structure for target */
     double overlapBases;	       /* Sum of all overlaps with target. */
     long long uniqOverlapBases;	       /* Sum of unique overlaps with target. */
+    boolean skip;		       /* If true skip calcs on this one. */
     };
 
 struct target *targetNew(struct edwQaEnrichTarget *et, struct genomeRangeTree *grt)
@@ -80,6 +81,17 @@ verbose(2, "%s size %lld (%0.3f%%), %s (%0.3f%%), overlap %lld (%0.3f%%)\n",
 return enrich;
 }
 
+boolean enrichmentExists(struct sqlConnection *conn, struct edwFile *ef, 
+    struct edwQaEnrichTarget *target)
+/* Return TRUE if already is a an enrichment in database for this combination. */
+{
+char query[256];
+safef(query, sizeof(query), 
+    "select count(*) from edwQaEnrich"
+    " where fileId=%lld and qaEnrichTargetId=%d", (long long)ef->id, target->id);
+return sqlQuickNum(conn, query) != 0;
+}
+
 void doEnrichmentsFromSampleBed(struct sqlConnection *conn, 
     struct edwFile *ef, struct edwValidFile *vf, 
     struct edwAssembly *assembly, struct target *targetList)
@@ -106,6 +118,8 @@ struct hashEl *chrom, *chromList = hashElListHash(sampleGrt->hash);
 struct target *target;
 for (target = targetList; target != NULL; target = target->next)
     {
+    if (target->skip)
+        continue;
     struct genomeRangeTree *grt = target->grt;
     long long uniqOverlapBases = 0;
     for (chrom = chromList; chrom != NULL; chrom = chrom->next)
@@ -173,6 +187,8 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     struct target *target;
     for (target = targetList; target != NULL; target = target->next)
         {
+	if (target->skip)
+	    continue;
 	struct genomeRangeTree *grt = target->grt;
 	struct rbTree *targetTree = genomeRangeTreeFindRangeTree(grt, chrom->name);
 	if (targetTree != NULL)
@@ -198,6 +214,8 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 struct target *target;
 for (target = targetList; target != NULL; target = target->next)
     {
+    if (target->skip)
+	continue;
     struct edwQaEnrich *enrich = enrichFromOverlaps(ef, vf, assembly, target, 
 	target->overlapBases, target->uniqOverlapBases);
     edwQaEnrichSaveToDb(conn, enrich, "edwQaEnrich", 128);
@@ -315,6 +333,8 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	struct target *target;
 	for (target = targetList; target != NULL; target = target->next)
 	    {
+	    if (target->skip)
+		continue;
 	    struct genomeRangeTree *grt = target->grt;
 	    struct rbTree *targetTree = genomeRangeTreeFindRangeTree(grt, chrom->name);
 	    if (targetTree != NULL)
@@ -346,6 +366,8 @@ verbose(1, "totalBig %0.3f, totalOverlap %0.3f\n", 0.001*totalBigQueryTime, 0.00
 struct target *target;
 for (target = targetList; target != NULL; target = target->next)
     {
+    if (target->skip)
+	continue;
     struct edwQaEnrich *enrich = enrichFromOverlaps(ef, vf, assembly, target, 
 	target->overlapBases, target->uniqOverlapBases);
     edwQaEnrichSaveToDb(conn, enrich, "edwQaEnrich", 128);
@@ -407,26 +429,35 @@ if (!isEmpty(vf->enrichedIn))
 
     /* Loop through targetList zeroing out existing ovelaps. */
     struct target *target;
+    boolean allSkip = TRUE;
     for (target = targetList; target != NULL; target = target->next)
+	{
 	target->overlapBases = target->uniqOverlapBases = 0;
+	target->skip = enrichmentExists(conn, ef, target->target);
+	if (!target->skip)
+	    allSkip = FALSE;
+	}
 
     /* Do a big dispatch based on format. */
-    if (sameString(format, "fastq"))
-	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
-    else if (sameString(format, "bigWig"))
-	doEnrichmentsFromBigWig(conn, ef, vf, assembly, targetList);
-    else if (edwIsSupportedBigBedFormat(format))
-	doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
-    else if (sameString(format, "gtf"))
-	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
-    else if (sameString(format, "gff"))
-	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
-    else if (sameString(format, "bam"))
-	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
-    else if (sameString(format, "unknown"))
-	verbose(2, "Unknown format in doEnrichments(%s), that's chill.", ef->edwFileName);
-    else
-	errAbort("Unrecognized format %s in doEnrichments(%s)", format, path);
+    if (!allSkip)
+	{
+	if (sameString(format, "fastq"))
+	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+	else if (sameString(format, "bigWig"))
+	    doEnrichmentsFromBigWig(conn, ef, vf, assembly, targetList);
+	else if (edwIsSupportedBigBedFormat(format))
+	    doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
+	else if (sameString(format, "gtf"))
+	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+	else if (sameString(format, "gff"))
+	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+	else if (sameString(format, "bam"))
+	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+	else if (sameString(format, "unknown"))
+	    verbose(2, "Unknown format in doEnrichments(%s), that's chill.", ef->edwFileName);
+	else
+	    errAbort("Unrecognized format %s in doEnrichments(%s)", format, path);
+	}
 
     /* Clean up and go home. */
     edwAssemblyFree(&assembly);

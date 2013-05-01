@@ -289,8 +289,7 @@ list = newList;
 if (wikiTrackEnabled(database, NULL))
     wikiTrackDb(&list);
 
-struct trackHub *hubList = NULL;
-struct trackDb *tdbList = hubCollectTracks(database, &hubList, pHubGroups);
+struct trackDb *tdbList = hubCollectTracks(database, pHubGroups);
 list = slCat(list, tdbList);
 
 /* Create dummy group for custom tracks if any. Add custom tracks to list */

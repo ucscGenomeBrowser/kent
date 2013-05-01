@@ -167,8 +167,7 @@ freeMem(base64);
 void edwMakeSid(char *user, char sid[EDW_SID_SIZE])
 /* Convert users to sid */
 {
-/* Salt it well with stuff that is reproducible but hard to guess, and some
- * one time true random stuff. Sneak in user too and time. */
+/* Salt it well with stuff that is reproducible but hard to guess */
 unsigned char inputBuf[512];
 memset(inputBuf, 0, sizeof(inputBuf));
 int i;

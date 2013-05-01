@@ -473,7 +473,7 @@ char *remoteAddr=getenv("REMOTE_ADDR");
 
 safef(subject, sizeof(subject),"Your user name at the %s", brwName);
 safef(msg, sizeof(msg), 
-    "Someone (probably you, from IP address %s) has requested user name(s) associated with this email address at %s: \n\n  %s\n\n%s\n%s", 
+    "  Someone (probably you, from IP address %s) has requested user name(s) associated with this email address at the %s: \n\n  %s\n\n%s\n%s", 
    remoteAddr, brwName, users, signature, returnAddr);
 sendMailOut(email, subject, msg);
 }
@@ -538,9 +538,9 @@ char subject[256];
 char msg[4096];
 char *remoteAddr=getenv("REMOTE_ADDR");
 
-safef(subject, sizeof(subject),"New temporary password for %s", username);
+safef(subject, sizeof(subject),"New temporary password for your account at the %s", brwName);
 safef(msg, sizeof(msg),
-    "Someone (probably you, from IP address %s) requested a new password for %s (%s). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\n\n  If someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n\n%s\n%s",
+    "  Someone (probably you, from IP address %s) requested a new password for the %s (%s). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\n\n  If someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n\n%s\n%s",
     remoteAddr, brwName, brwAddr, username, password, signature, returnAddr);
 sendPwdMailOut(email, subject, msg, username);
 }
@@ -666,7 +666,7 @@ safef(activateURL, sizeof(activateURL),
     sqlEscapeString(encToken));
 safef(subject, sizeof(subject),"%s account e-mail address confirmation", brwName);
 safef(msg, sizeof(msg),
-    "Someone (probably you, from IP address %s) has requested an account %s with this e-mail address on the %s.\nTo confirm that this account really does belong to you on the %s, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n\n%s\n%s", 
+    "  Someone (probably you, from IP address %s) has requested an account %s with this e-mail address on the %s.\nTo confirm that this account really does belong to you on the %s, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n\n%s\n%s", 
      remoteAddr, username, brwName, brwName, activateURL, signature, returnAddr);
 sendActMailOut(email, subject, msg);
 }
