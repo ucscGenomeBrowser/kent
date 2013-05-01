@@ -3668,13 +3668,13 @@ inputTrackTable myCellLineAssociations
 inputTableFieldDisplay cellType treatment lab
     ...</pre>
 <P>This track will show transcription factor (TF)
-binding evidence found in multiple cell lines.  Each item will be
-for a one particlular TF, and also all the cell lines that show
+binding evidence found in multiple cell lines.  Each item represents
+a particular TF, along with the cell lines that show
 evidence of binding in that location.  The secondary <code>sourceTable</code>
 holds the definitions of each cell line abbreviation.  A third
 table is declared with <code>inputTrackTable</code> and carries details for
 each cell line that should be seen in the Browser.  When viewed in
-item detail, 3 fields (cellLine, treatment and lab) will be seen
+item detail, 3 fields (cellType, treatment and lab) will be seen
 for each cell associated with the particular TF binding location.</P>
 </DIV>
 
