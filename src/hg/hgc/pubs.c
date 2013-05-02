@@ -771,6 +771,8 @@ while ((row = sqlNextRow(sr)) != NULL)
         if (showDesc) 
             {
             char linkStr[4096];
+            if (isEmpty(fileDesc))
+                fileDesc = "main text";
             safef(linkStr, sizeof(linkStr), "<a href=\"%s\">%s</a>", fileUrl, fileDesc);
             web2PrintCellS("word-break:break-all", linkStr);
             }
