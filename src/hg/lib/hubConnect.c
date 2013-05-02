@@ -634,7 +634,7 @@ else if (tHub != NULL)
 
     safef(query, sizeof(query),
 	"update %s set shortLabel=\"%s\",longLabel=\"%s\",dbCount=\"%d\",dbList=\"%s\",errorMessage=\"\",lastOkTime=now() where id=%d",
-	getHubStatusTableName(), tHub->shortLabel, tHub->shortLabel, 
+	getHubStatusTableName(), tHub->shortLabel, tHub->longLabel, 
 	dbCount, dbList,
 	hub->id);
     sqlUpdate(conn, query);
