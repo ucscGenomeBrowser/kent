@@ -16,22 +16,22 @@
 #
 include ${kentSrc}/inc/common.mk
 
-MYLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkweb.a
 DEPLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkweb.a
 ifeq ($(findstring src/hg/,${CURDIR}),src/hg/)
   DEPLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkhgap.a ${kentSrc}/lib/${MACHTYPE}/jkweb.a
-  MYLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkhgap.a ${kentSrc}/lib/${MACHTYPE}/jkweb.a ${MYSQLLIBS} -lm
 endif
+
+LINKLIBS = ${DEPLIBS} ${MYSQLLIBS} -lm
 
 O = ${A}.o
 objects = ${O} ${extraObjects} ${externObjects}
 
-${DESTDIR}${BINDIR}/${A}${EXE}: ${O} ${extraObjects} ${DEPLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} ${objects} ${MYLIBS} ${L} -lm
+${DESTDIR}${BINDIR}/${A}${EXE}: ${DEPLIBS} ${O} ${extraObjects}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} ${objects} ${LINKLIBS} ${L} -lm
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-compile:: ${O} ${extraObjects} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} ${objects} ${MYLIBS} ${L} -lm
+compile:: ${DEPLIBS} ${O} ${extraObjects}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} ${objects} ${LINKLIBS} ${L} -lm
 
 install:: compile
 	rm -f ${DESTDIR}${BINDIR}/${A}${EXE}
