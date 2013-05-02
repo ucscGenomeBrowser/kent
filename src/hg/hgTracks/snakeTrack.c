@@ -204,6 +204,9 @@ struct cartOptions
 static int snakeHeight(struct track *tg, enum trackVisibility vis)
 /* calculate height of all the snakes being displayed */
 {
+if (vis == tvDense)
+    return tg->lineHeight;
+
 int height = 0;
 struct slList *item = tg->items;
 
@@ -432,7 +435,8 @@ for (item = tg->items; item != NULL; item = item->next)
     if(tg->itemColor != NULL) 
 	color = tg->itemColor(tg, item, hvg);
     tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-    y += tg->itemHeight(tg, item);
+    if (vis == tvFull)
+	y += tg->itemHeight(tg, item);
     } 
 }
 
@@ -457,11 +461,11 @@ int sClp = (s < winStart) ? winStart : s;
 int x1 = round((sClp - winStart)*scale) + xOff;
 int textX = x1;
 int yOff = y;
-boolean withLabels = (withLeftLabels && (vis == tvPack) && !tg->drawName);
+//boolean withLabels = (withLeftLabels && (vis == tvFull) && !tg->drawName);
 unsigned   labelColor = MG_BLACK;
 
 // draw the labels (this code needs a clean up )
-if (withLabels)
+if (0)//withLabels)
     {
     char *name = tg->itemName(tg, item);
     int nameWidth = mgFontStringWidth(font, name);
@@ -527,7 +531,10 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     {
     qs = sf->qStart;
     qe = sf->qEnd;
-    y = offY + (sf->level * 2) * lineHeight;
+    if (vis == tvDense)
+	y = offY;
+    else
+	y = offY + (sf->level * 2) * lineHeight;
     s = sf->start; e = sf->end;
     tEnd = sf->end;
     int osx;
@@ -563,14 +570,17 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	w -= olap;
 	}
     char qAddress[4096];
-    safef(qAddress, sizeof qAddress, "qName=%s&qs=%d&qe=%d&qWidth=%d",tg->itemName(tg, item),  qs, qe,  winEnd - winStart);
-    mapBoxHgcOrHgGene(hvg, s, e, sx+1, y, w-2, heightPer, tg->track,
-		buffer, buffer, NULL, TRUE, qAddress);
+    if (vis == tvFull)
+	{
+	safef(qAddress, sizeof qAddress, "qName=%s&qs=%d&qe=%d&qWidth=%d",tg->itemName(tg, item),  qs, qe,  winEnd - winStart);
+	mapBoxHgcOrHgGene(hvg, s, e, sx+1, y, w-2, heightPer, tg->track,
+		    buffer, buffer, NULL, TRUE, qAddress);
+	}
     hvGfxBox(hvg, sx, y, w, heightPer, color);
     int ow = w;
 
     // now draw the mismatches if we're at high enough resolution 
-    if (winBaseCount < 50000)
+    if ((winBaseCount < 50000) && (vis == tvFull))
     {
 	char *twoBitString = trackDbSetting(tg->tdb, "twoBit");
 	static struct twoBitFile *tbf = NULL;
@@ -649,6 +659,9 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     lastLevel = sf->level;
     //lastX = x;
     }
+
+if (vis == tvDense)
+    return;
 
 // now we're going to draw the lines between the blocks
 
@@ -792,10 +805,9 @@ static void snakeDrawAt(struct track *tg, void *item,
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
-    
-    if (tg->visibility == tvFull)
-	packSnakeDrawAt(tg, item, hvg, xOff, y, scale, 
-	    font, color, vis);
+if ((tg->visibility == tvFull) || (tg->visibility == tvDense))
+    packSnakeDrawAt(tg, item, hvg, xOff, y, scale, 
+	font, color, vis);
 }
 
 static void fixItems(struct linkedFeatures *lf)
