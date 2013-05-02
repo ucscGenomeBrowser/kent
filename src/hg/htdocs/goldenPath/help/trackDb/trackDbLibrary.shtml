@@ -774,7 +774,7 @@
     <P>
     Put the identifiers for these links into extended
     bigBed fields as explained in example 3 of the <a href="/goldenPath/help/bigBed.html">bigBed documentation</a>.
-    The field names from your .as file are the field names referenced in this statement..
+    The field names from your .as file are the field names referenced in this statement.
     The urls in this statement support the same wildcards as the <A
     onclick="jumpTo(this)" HREF="#">url</A> statement.  Make sure to enclose
     the URLs in double quotes.  The default label for the identifier is the field
@@ -784,6 +784,26 @@
     <P><B>Example:</B></P>
     <pre>
     urls pmid="http://www.ncbi.nlm.nih.gov/pubmed/$$" hgncId="http://www.genenames.org/data/hgnc_data.php?hgnc_id=$$"
+    </pre>
+</DIV>
+
+<DIV class="mouseOverField"><span class="types bigBed"></span>
+    <div class="format">
+        <code>mouseOverField &lt;fieldName1&gt;</code><BR>
+    </div>
+        
+    <P>This adds mouse over text that are different from the name field of a bigBed file.
+    If a particular row does not contain a value in this field, the mouse over will fallback 
+    to the name field. </P>
+    <P>
+    Put the identifiers for the mouse over text into extended
+    bigBed fields as explained in example 3 of the <a href="/goldenPath/help/bigBed.html">bigBed documentation</a>.
+    A field name from your .as file is thefield name referenced in this statement.
+    </P> 
+
+    <P><B>Example:</B></P>
+    <pre>
+    mouseOverField comment
     </pre>
 </DIV>
 
