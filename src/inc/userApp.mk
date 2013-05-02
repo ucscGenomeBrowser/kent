@@ -17,14 +17,16 @@
 include ${kentSrc}/inc/common.mk
 
 MYLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkweb.a
+DEPLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkweb.a
 ifeq ($(findstring src/hg/,${CURDIR}),src/hg/)
+  DEPLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkhgap.a ${kentSrc}/lib/${MACHTYPE}/jkweb.a
   MYLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkhgap.a ${kentSrc}/lib/${MACHTYPE}/jkweb.a ${MYSQLLIBS} -lm
 endif
 
 O = ${A}.o
 objects = ${O} ${extraObjects} ${externObjects}
 
-${DESTDIR}${BINDIR}/${A}${EXE}: ${O} ${extraObjects}
+${DESTDIR}${BINDIR}/${A}${EXE}: ${O} ${extraObjects} ${DEPLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} ${objects} ${MYLIBS} ${L} -lm
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
