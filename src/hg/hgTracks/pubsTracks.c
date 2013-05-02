@@ -4,6 +4,12 @@
 #include "hgFind.h"
 #include "bedCart.h"
 
+// we distinguish between four levels of impact factors <1, <3, <10 and >10
+static struct rgbColor impact1Color  = {80, 80, 80};
+static struct rgbColor impact2Color  = {0, 80, 255};
+static struct rgbColor impact3Color  = {0, 100, 0};
+static struct rgbColor impact4Color  = {255, 0, 0};
+
 static char* pubsArticleTable(struct track *tg)
 /* return the name of the pubs articleTable, either
  * the value from the trackDb statement 'articleTable'
@@ -176,12 +182,20 @@ if ((row = sqlNextRow(sr)) != NULL)
                 }
             else 
                 {
-                if (strcmp(colorBy,"impact")==0) 
+                if (sameString(colorBy,"impact")) 
                     {
-                    char impInt = atoi(impact);
-                    extra->shade = impInt/25;
+                    int impInt = atoi(impact);
+                    if (impInt<=1)
+                        extra->color = &impact1Color;
+                    else if (impInt<=3)
+                        extra->color = &impact2Color;
+                    else if (impInt<=10)
+                        extra->color = &impact3Color;
+                    else
+                        extra->color = &impact4Color;
                     }
-                if (strcmp(colorBy,"year")==0) 
+
+                if (sameString(colorBy,"year")) 
                     {
                     int relYear = (atoi(year)-1990); 
                     extra->shade = min(relYear/3, 10);
