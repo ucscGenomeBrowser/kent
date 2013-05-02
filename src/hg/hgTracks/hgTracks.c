@@ -3783,7 +3783,10 @@ if (wikiTrackEnabled(database, NULL))
     }
 
 struct grp *grpList = NULL;
-loadTrackHubs(&trackList, &grpList);
+if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
+    { // If a single track was asked for and it is from a hub, then it is already in trackList
+    loadTrackHubs(&trackList, &grpList);
+    }
 loadCustomTracks(&trackList);
 groupTracks( &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
