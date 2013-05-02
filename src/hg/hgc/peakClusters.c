@@ -9,10 +9,6 @@
  *                   across a number of transcription factors and cell lines. Stored in bed 15
  *                   plus sourceTable with type factorSource */
  
-#define TO_BE_REMOVED  /* Some code that is brittle we are phasing out */
-                       /* In particular this code demanded all tracks cluster was built on
-		        * still exist, which isn't realistic given ENCODE data thrash */
-
 #include "common.h"
 #include "hash.h"
 #include "jksql.h"
@@ -30,45 +26,6 @@
 #include "ra.h"
 #include "txCluster.h"
 
-#ifdef TO_BE_REMOVED
-char *findGroupTagVal(struct trackDb *tdb, char *tag)
-/* Find value of given tag inside of subgroups field. */ 
-{
-char *subGroups = trackDbSetting(tdb, "subGroups");
-struct slPair *el, *list = slPairFromString(subGroups);
-char *val = NULL;
-for (el = list; el != NULL; el = el->next)
-    {
-    if (sameString(el->name, tag))
-	{
-        val = el->val;
-	break;
-	}
-    }
-return val;
-}
-#endif /* TO_BE_REMOVED */
-
-#ifdef TO_BE_REMOVED
-char *mustFindGroupTagVal(struct trackDb *tdb, char *tag)
-/* Find value of given tag inside of subgroups field or abort with error message. */ 
-{
-char *val = findGroupTagVal(tdb, tag);
-if (val == NULL)
-    errAbort("Couldn't find %s in subGroups tag of %s", tag, tdb->track);
-return val;
-}
-#endif /* TO_BE_REMOVED */
-
-#ifdef TO_BE_REMOVED
-char *findGroupLabel(struct trackDb *tdb, char *group)
-/* Given name of group, ruffle through all subGroupN tags, looking for one that
- * matches group */
-{
-char *groupId = mustFindGroupTagVal(tdb, group);
-return compositeGroupLabel(tdb, group, groupId);
-}
-#endif /* TO_BE_REMOVED */
 
 static void printClusterTableHeader(struct slName *otherCols, 
 	boolean withAbbreviation, boolean withDescription, boolean withSignal)
@@ -86,81 +43,6 @@ if (withDescription)
     webPrintLabelCell("description");
 webPrintLabelCell("more info");
 }
-
-#ifdef TO_BE_REMOVED
-static void printTableInfo(struct trackDb *tdb, struct trackDb *clusterTdb,
-    struct slName *displayGroupList)
-/* Print out info on table. */
-{
-struct slName *displayGroup;
-for (displayGroup = displayGroupList; displayGroup != NULL; displayGroup = displayGroup->next)
-    {
-    char *label = findGroupLabel(tdb, displayGroup->name);
-    char *linkedLabel = compositeLabelWithVocabLink(database, tdb, tdb, displayGroup->name, label);
-    webPrintLinkCell(linkedLabel);
-    }
-webPrintLinkCell(tdb->longLabel);
-webPrintLinkCellStart();
-compositeMetadataToggle(database, tdb, "metadata", TRUE, FALSE);
-webPrintLinkCellEnd();
-}
-#endif /* TO_BE_REMOVED */
-
-#ifdef TO_BE_REMOVED
-static void showOnePeakOrMiss(struct trackDb *tdb, struct trackDb *clusterTdb,
-	struct encodePeak *peakList, struct slName *displayGroupList, int *pIx)
-/* Show info on track and peak.  Peak may be NULL in which case fewer columns will be printed. */
-{
-struct encodePeak *peak;
-*pIx += 1;
-printf("</TR><TR>\n");
-webPrintIntCell(*pIx);
-if (peakList)
-    {
-    webPrintLinkCellRightStart();
-    printf("%g", peakList->signalValue);
-    for (peak = peakList->next; peak != NULL; peak = peak->next)
-	printf(",%g", peak->signalValue);
-    webPrintLinkCellEnd();
-    }
-printTableInfo(tdb, clusterTdb, displayGroupList);
-}
-#endif /* TO_BE_REMOVED */
-
-#ifdef TO_BE_REMOVED
-static void showMatchingTrack(char *track, struct bed *cluster, struct sqlConnection *conn,
-	struct trackDb *clusterTdb, struct slName *displayGroupList, boolean invert, int *pRowIx)
-/* put out a line in an html table that describes the given track. */ 
-{
-struct trackDb *tdb = hashFindVal(trackHash, track);
-if (tdb != NULL)
-    {
-    char **row;
-    int rowOffset = 0;
-    struct sqlResult *sr = hRangeQuery(conn, tdb->table, 
-	    cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, &rowOffset);
-    struct encodePeak *peakList = NULL;
-    struct slDouble *slDoubleNew(double x);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	enum encodePeakType pt = encodePeakInferTypeFromTable(database, tdb->table, tdb->type);
-	struct encodePeak *peak = encodePeakGeneralLoad(row + rowOffset, pt);
-	slAddTail(&peakList, peak);
-	}
-    if (invert)
-	{
-	if (!peakList)
-	    showOnePeakOrMiss(tdb, clusterTdb, NULL, displayGroupList, pRowIx);
-	}
-    else
-	{
-	if (peakList)
-	    showOnePeakOrMiss(tdb, clusterTdb, peakList, displayGroupList, pRowIx);
-	}
-    sqlFreeResult(&sr);
-    }
-}
-#endif /* TO_BE_REMOVED */
 
 static double getSignalAt(char *table, struct bed *cluster)
 /* Get (average) signal from table entries that overlap cluster */
@@ -384,21 +266,6 @@ freez(&vocabFile);
 dyStringFree(&query);
 }
 
-
-static struct slName *findMatchingSubtracks(struct trackDb *tdb)
-/* Find subtracks that match inputTracks tags. */
-{
-/* Just list look up tableName in inputTrackTable and return the list. */
-char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
-struct sqlConnection *conn = hAllocConn(database);
-char query[256];
-safef(query, sizeof(query), "select tableName from %s order by source", inputTrackTable);
-struct slName *matchTrackList = sqlQuickList(conn, query);
-hFreeConn(&conn);
-return matchTrackList;
-}
-
-
 void doPeakClusterListItemsAssayed()
 /* Put up a page that shows all experiments associated with a cluster track. */
 {
@@ -406,7 +273,6 @@ struct trackDb *clusterTdb = tdbForTableArg();
 cartWebStart(cart, database, "List of items assayed in %s", clusterTdb->shortLabel);
 struct sqlConnection *conn = hAllocConn(database);
 
-char *inputTracksSubgroupDisplay = trackDbSetting(clusterTdb, "inputTracksSubgroupDisplay");
 char *inputTableFieldDisplay = trackDbSetting(clusterTdb, "inputTableFieldDisplay");
 webPrintLinkTableStart();
 if (inputTableFieldDisplay)
@@ -417,25 +283,9 @@ if (inputTableFieldDisplay)
     char *inputTrackTable = trackDbRequiredSetting(clusterTdb, "inputTrackTable");
     printPeakClusterInputs(conn, inputTrackTable, fieldList, vocab);
     }
-#ifdef TO_BE_REMOVED
-else if (inputTracksSubgroupDisplay)
-    {
-    struct slName *matchTrackList = findMatchingSubtracks(clusterTdb);
-    struct slName *matchTrack;
-
-    struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
-    printClusterTableHeader(displayGroupList, FALSE, TRUE, FALSE);
-    int rowIx = 0;
-    for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
-	{
-	struct trackDb *tdb = hashFindVal(trackHash, matchTrack->name);
-	showOnePeakOrMiss(tdb, clusterTdb, NULL, displayGroupList, &rowIx);
-	}
-    }
-#endif /* TO_BE_REMOVED */
 else
-    errAbort("Missing required trackDb setting %s or %s for track %s",
-	"inputTracksSubgroupDisplay", "inputTableFieldDisplay", clusterTdb->track);
+    errAbort("Missing required trackDb setting %s for track %s", "inputTableFieldDisplay", 
+                clusterTdb->track);
 webPrintLinkTableEnd();
 hFreeConn(&conn);
 cartWebEnd();
@@ -466,7 +316,6 @@ sqlFreeResult(&sr);
 if (cluster != NULL)
     {
     /* Get list of subgroups to display */
-    char *inputTracksSubgroupDisplay = trackDbSetting(tdb, "inputTracksSubgroupDisplay");
     char *inputTableFieldDisplay = trackDbSetting(tdb, "inputTableFieldDisplay");
     if (inputTableFieldDisplay != NULL)
         {
@@ -486,35 +335,9 @@ if (cluster != NULL)
 	printClusterTableHeader(fieldList, FALSE, FALSE, TRUE);
 	printPeakClusterTableHits(cluster, conn, inputTrackTable, fieldList, vocab);
 	}
-#ifdef TO_BE_REMOVED
-    else if (inputTracksSubgroupDisplay != NULL)
-	{
-	struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
-
-	/* Get list of tracks that match criteria. */
-	struct slName *matchTrackList = findMatchingSubtracks(tdb);
-	struct slName *matchTrack;
-
-	/* Print out some information about the cluster overall. */
-	printf("<B>Items in Cluster:</B> %s of %d<BR>\n", cluster->name, slCount(matchTrackList));
-	printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
-	printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
-
-	/* In a new section put up list of hits. */
-	webNewSection("List of Items in Cluster");
-	webPrintLinkTableStart();
-	printClusterTableHeader(displayGroupList, FALSE, TRUE, TRUE);
-	int rowIx = 0;
-	for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
-	    {
-	    showMatchingTrack(matchTrack->name, cluster, conn, tdb, displayGroupList,
-		    FALSE, &rowIx);
-	    }
-	}
-#endif /* TO_BE_REMOVED */
     else
-	errAbort("Missing required trackDb setting %s or %s for track %s",
-	    "inputTracksSubgroupDisplay", "inputTableFieldDisplay", tdb->track);
+	errAbort("Missing required trackDb setting %s for track %s",
+	    "inputTableFieldDisplay", tdb->track);
     webPrintLinkTableEnd();
     }
 printf("<A HREF=\"%s&g=htcListItemsAssayed&table=%s\" TARGET_blank>", hgcPathAndSettings(),
@@ -631,17 +454,10 @@ if (cluster != NULL)
     safef(query, sizeof(query), 
     	"select tableName from %s where factor='%s' order by source", inputTrackTable, 
 	cluster->name);
-    struct slName *matchTrackList = sqlQuickList(conn, query);
-    struct slName *matchTrack;
 
     /* Next do the lists of hits and misses.  We have the hits from the non-zero signals in
      * cluster->expScores.  We need to figure out the sources actually assayed though
-     * some other way.  We'll do this by one of two techniques.
-     * If the inputTracksSubgroupDisplay is set, we'll try and figure out what was
-     * assayed by looking at the subgroup stuff in trackDb, which works if everythings
-     * part of a composite.  If not, we'll use the inputTrackTable. */
-    /* Get list of subgroups to display */
-    char *inputTracksSubgroupDisplay = trackDbSetting(tdb, "inputTracksSubgroupDisplay");
+     * some other way.  We'll do this by one of two techniques. */
     char *inputTableFieldDisplay = trackDbSetting(tdb, "inputTableFieldDisplay");
     if (inputTableFieldDisplay != NULL)
         {
@@ -663,40 +479,10 @@ if (cluster != NULL)
 		inputTrackTable, fieldList, TRUE, vocab);
 	webPrintLinkTableEnd();
 	}
-#ifdef TO_BE_REMOVED
-    else if (inputTracksSubgroupDisplay != NULL)
-	{
-	struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
-
-	/* In a new section put up list of hits. */
-	webNewSection("List of %s Items in Cluster", cluster->name);
-	webPrintLinkTableStart();
-	printClusterTableHeader(displayGroupList, FALSE, TRUE, TRUE);
-	int rowIx = 0;
-	for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
-	    {
-	    showMatchingTrack(matchTrack->name, cluster, conn, tdb, displayGroupList,
-		    FALSE, &rowIx);
-	    }
-	webPrintLinkTableEnd();
-
-
-	webNewSection("List of cells assayed with %s but without hits in cluster", cluster->name);
-	webPrintLinkTableStart();
-	printClusterTableHeader(displayGroupList, FALSE, TRUE, FALSE);
-	rowIx = 0;
-	for (matchTrack = matchTrackList; matchTrack != NULL; matchTrack = matchTrack->next)
-	    {
-	    showMatchingTrack(matchTrack->name, cluster, conn, tdb, displayGroupList,
-		    TRUE, &rowIx);
-	    }
-	webPrintLinkTableEnd();
-	}
-#endif /* TO_BE_REMOVED */
     else
         {
-	errAbort("Missing required trackDb setting %s or %s for track %s",
-	    "inputTracksSubgroupDisplay", "inputTableFieldDisplay", tdb->track);
+	errAbort("Missing required trackDb setting %s for track %s",
+	    "inputTableFieldDisplay", tdb->track);
 	}
 
     webNewSection("Table of abbreviations for cells");
