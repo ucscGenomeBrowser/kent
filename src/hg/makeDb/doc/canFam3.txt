@@ -696,3 +696,52 @@ wait
     # and try out the conversion on genome-test from canFam3 to canFam2
 
 ############################################################################
+# LASTZ Chimp PanTro4 (WORKING - 2013-04-30 - Hiram)
+    mkdir /hive/data/genomes/canFam3/bed/lastzPanTro4.2013-04-30
+    cd /hive/data/genomes/canFam3/bed/lastzPanTro4.2013-04-30
+
+    cat << '_EOF_' > DEF
+# dog vs. chimp
+
+# TARGET: Dog CanFam3
+SEQ1_DIR=/hive/data/genomes/canFam3/canFam3.2bit
+SEQ1_LEN=/hive/data/genomes/canFam3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chimp PanTro4
+SEQ2_DIR=/hive/data/genomes/panTro4/panTro4.2bit
+SEQ2_LEN=/hive/data/genomes/panTro4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/canFam3/bed/lastzPanTro4.2013-04-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - Tue Apr 30 09:27:15 PDT 2013
+    #	Elapsed time: 16114m13s
+    cat fb.panTro3.chainCanFam2Link.txt
+    #	1496334162 bases of 2900529764 (51.588%) in intersection
+
+    #	running the swap - DONE - 2009-06-02
+    mkdir /hive/data/genomes/canFam2/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/canFam2/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzCanFam2.2011-02-23/DEF \
+	-swap -syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    96m3.779s
+    cat fb.canFam2.chainPanTro3Link.txt
+    #	1438499360 bases of 2384996543 (60.315%) in intersection
+
+############################################################################
