@@ -386,12 +386,12 @@ if ((grandChildId = forkOrDie()) == 0)
     if ( rv == -1 ) 
 	logWarn("error getrlimit RLIMIT_DATA %s", strerror(errno)); 
     else 
-    	logInfo("rlimit_data:%lu,%lu\n", rlim.rlim_max, rlim.rlim_cur); 
+    	logInfo("rlimit_data:%lu,%lu\n", (unsigned long) rlim.rlim_max, (unsigned long) rlim.rlim_cur); 
     rv = getrlimit(RLIMIT_AS,&rlim); 
     if ( rv == -1 ) 
 	logWarn("error getrlimit RLIMIT_AS %s", strerror(errno)); 
     else 
-    	logInfo("rlimit_as:%lu,%lu\n", rlim.rlim_max, rlim.rlim_cur); 
+    	logInfo("rlimit_as:%lu,%lu\n", (unsigned long) rlim.rlim_max, (unsigned long) rlim.rlim_cur); 
     }
 
 
