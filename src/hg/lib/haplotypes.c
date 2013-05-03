@@ -1433,7 +1433,7 @@ void geneHapSetAaVariants(struct haploExtras *he,
 // Determining AA values for variants is tricky, since each location is potentially
 // affected by upstream variants.  Therefore, it is necessary to find the variant
 // location in the aaSeq and then carve out the value in place.  This must be done
-// haploptype by haplotype, unlike DNA variant values which should be common to all
+// haplotype by haplotype, unlike DNA variant values which should be common to all
 // haplotypes that share that variant.
 
 struct haplotype *refHap = hapSet->refHap;
@@ -1763,7 +1763,7 @@ cur += 2;
 // Length
 if (refVar->vType == vtDeletion)
     {
-    safef(cur,(end - cur),"length:%ld ",strlen(refVar->val));
+    safef(cur,(end - cur),"length:%d ",(int)strlen(refVar->val));
     cur += strlen(cur);
     }
 else if (refVar->vType == vtInsertion)
@@ -2174,7 +2174,7 @@ else
 #ifdef ALL_ARE_BUTTONS
 hPrintf("<input type='button' id='" HAPLO_SHOW_SCORES "' value='%s scoring' "
         "onclick='alleles.scoresToggle(this);' class='" TOGGLE_BUTTON "' "
-        "title='Show/Hide all haploptye scores'>\n",(showScores ? "Hide":"Show"));
+        "title='Show/Hide all haplotype scores'>\n",(showScores ? "Hide":"Show"));
 #endif//def ALL_ARE_BUTTONS
 hPrintf("&nbsp;&nbsp;<a href='#' onclick='return alleles.setAndRefresh(\""HAPLO_RESET_ALL"\",1);'>"
         "Reset to defaults</a>\n");
@@ -2196,7 +2196,8 @@ hPrintf("<div id='" HAPLO_TABLE "'><!-- " HAPLO_TABLE " begin -->\n");
 
 // Brief intro
 hPrintf("Generated from <A HREF='http://www.1000genomes.org/' TARGET=_BLANK>1000 Genomes</A> "
-        "Phase1 variants.");
+        "Phase1 variants (<A HREF='../goldenPath/help/haplotypes.html' "
+        "title='Help on Gene haplotype alleles section' TARGET=_BLANK>help</A>).");
 
 boolean rareVars     =  cartTimeoutBoolean(cart, HAPLO_RARE_VAR, HAPLO_CART_TIMEOUT);
 boolean dnaView      =  cartTimeoutBoolean(cart, HAPLO_DNA_VIEW, HAPLO_CART_TIMEOUT);
@@ -2207,15 +2208,15 @@ int variantCount = (noHaps ? 0 : hapSet->variantsCovered);
 
 if (rareVars)
     {
-    hPrintf(" <span id='alleleRareVars' class='textAlert'>All %d variant%s "
-            "(includes synonymous and rare variants with a frequency of less than %d%%).</span>"
-            "<BR>\n",variantCount,(variantCount != 1 ? "s":""),HAPLO_COMMON_VARIANT_MIN_PCT);
+    hPrintf(" <div id='alleleRareVars' class='textAlert'>All %d variant%s "
+            "(includes synonymous and rare variants with a frequency of less than %d%%).</div>\n",
+            variantCount,(variantCount != 1 ? "s":""),HAPLO_COMMON_VARIANT_MIN_PCT);
     }
 else
     {
-    hPrintf(" <span id='alleleRareVars' class='textOpt'>"
+    hPrintf(" <div id='alleleRareVars' class='textOpt'>"
             "Restricted to %d non-synonymous, common variant%s with a frequency of "
-            "occurrence of at least %g%%.</span><BR>\n",variantCount,
+            "occurrence of at least %g%%.</div>\n",variantCount,
             (variantCount != 1 ? "s":""),he->variantMinPct);
     }
 
@@ -2282,7 +2283,7 @@ if (!noHaps)
     {
     // Scoring?
     boolean showScores   = cartTimeoutBoolean(cart, HAPLO_SHOW_SCORES, HAPLO_CART_TIMEOUT);
-    hPrintf("<div style='width:200px; display:inline-block;'title='Show/Hide all haploptye scores'>"
+    hPrintf("<div style='width:200px; display:inline-block;'title='Show/Hide all haplotype scores'>"
             "<input type=checkbox id='" HAPLO_SHOW_SCORES "'%s value='%s' "
             "onclick='alleles.scoresShow(this,this.value);'>Show scoring</div>\n",
             (showScores?" CHECKED":""),(showScores?"[]":"set"));
@@ -2312,10 +2313,10 @@ if (!noHaps)
     {
     // Say something if this is the negative strand
     if (hapSet->strand[0] == '-')
-        hPrintf("<div class='textInfo'>"
-                "All variations and sequence reflect the '-' strand.</div>\n");
+        hPrintf("<div class='textInfo'>All variations and sequence reflect the "
+                "negative ('-' or \"antisense\") strand.</div>\n");
 
-    // Sort in most popular order and make sure the haplotyes are oriented to their strand
+    // Sort in most popular order and make sure the haplotypes are oriented to their strand
     slSort(&(hapSet->haplos),haplotypePopularityCmp);
     slReverse(&(hapSet->haplos));
     haploSetStrandOrient(he,hapSet); // haplos should be oriented as gene strand
@@ -2737,7 +2738,7 @@ double variantSD   = CALC_SD(  hapsFound, variantSumSq);
 
 if (setsFound == 1)
     {
-    fprintf(out, "%s: haplotyes:%-3d hom/hap:%-3d ", commonToken, hapsNr, homsForSet );
+    fprintf(out, "%s: haplotypes:%-3d hom/hap:%-3d ", commonToken, hapsNr, homsForSet );
     //fprintf(out, "wow:%-2d ",     wowsForSet);
     fprintf(out, "variants:%-3d ",hapSet->variantsCovered);
     fprintf(out, "p-Score max ");

@@ -16940,6 +16940,22 @@ requiredVars term,tag,type,description
 searchable freeText
 validate exists
 
+# this is a dummy typeOfTerm -- there are no stanzas of type target.
+# The actual target values appear in the Antibody term stanzas.
+# The typeOfTerm stanza here is here just to allow validator to accept target objects in metaDb.
+
+term target
+tag TARGET
+type typeOfTerm
+label Antibody target
+cvDefined no
+description The gene targeted by an antibody
+optionalVars label
+priority 150
+requiredVars term,tag,type
+searchable no
+validate none
+
 term targetClass
 tag TARGETCLASS
 type typeOfTerm
