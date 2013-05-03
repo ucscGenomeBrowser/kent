@@ -1,4 +1,0 @@
-This directory contains program that generate
-Condor submission files.  This helps run large
-batches of programs on our 2000-2001 100 machine
-computer cluster.

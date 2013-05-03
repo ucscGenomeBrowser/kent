@@ -1,6 +1,0 @@
-# required db variable
-db gorGor3
-# optional nameTranslation, the sed command that will transform
-#	Ensemble names to UCSC names.  With quotes just to make sure.
-# delete commands take out genes that are only in patch sequence
-nameTranslation '/^cutchr/d; /^unplaced/d; s/^\([0-9X][0-9ab]*\)/chr\1/; s/^MT/chrM/;'

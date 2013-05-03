@@ -1,5 +1,0 @@
-machine mysqlbeta.cse.ucsc.edu
-quick true
-dbSpec hg16
-table refGene
-zoomCount 1

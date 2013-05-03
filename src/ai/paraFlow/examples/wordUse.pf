@@ -1,7 +1,0 @@
-string text = fileReadAll(args[0]);
-array of string words = text.tokens();
-dir of int counts = ();
-for (word in words)
-    counts[word.lower()] += 1;
-for (word:count in counts)
-    print("$word $count");

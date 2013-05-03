@@ -1,3 +1,0 @@
-#!/bin/csh
-
-java -jar *.jar --tests all

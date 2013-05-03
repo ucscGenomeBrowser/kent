@@ -1,3 +1,0 @@
-#	"$Id: trackDb.ra,v 1.2 2010/02/25 00:27:09 hiram Exp $";
-
-include trackDb.chainNet.ra

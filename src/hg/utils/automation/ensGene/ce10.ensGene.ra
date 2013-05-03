@@ -1,5 +1,0 @@
-# required db variable
-db ce10
-# optional nameTranslation, the sed command that will transform
-#	Ensemble names to UCSC names.  With quotes just to make sure.
-nameTranslation "s/^\([IVX]\)/chr\1/; s/^MtDNA/chrM/"

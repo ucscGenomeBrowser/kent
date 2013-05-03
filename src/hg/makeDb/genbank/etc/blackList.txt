@@ -1,7 +1,0 @@
-# These accessions represent viral and viral-associated miRNAs.  In
-# general, they are not products of eukaryotic genomes, but given their
-# small sizes, many of them align well to eukaryotic genomes by chance.
-# Consequently, we cannot filter out many of these sequences based on
-# alignment heuristics alone.
-FU971775 FU999999
-FV000001 FV519147

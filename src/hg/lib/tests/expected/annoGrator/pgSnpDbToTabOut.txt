@@ -1,4 +1,0 @@
-#bin	chrom	chromStart	chromEnd	name	alleleCount	alleleFreq	alleleScores
-590	chr1	705881	705882	A/G	2	0,0	100,100
-590	chr1	752565	752566	A	1	0	100
-590	chr1	752720	752721	G	1	0	100

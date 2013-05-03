@@ -1,7 +1,0 @@
-This is most of the code for the Django framework application for the ENCODE controlled vocabulary.
-It supports both the 'admin' interface which lets you edit the database if you have the appropriate
-permissions, as well as a little no-login-required set of pages for just viewing the database.
-These currently are under
-    http://hgwdev.cse.ucsc.edu/django/admin/cvDb
-and
-    http://hgwdev.cse.ucsc.edu/django/cvDb

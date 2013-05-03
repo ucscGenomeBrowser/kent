@@ -1,8 +1,0 @@
-track chainNetGeoFor1 override
-chainMinScore 1000
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-priority 215.3
-
-track chainNetMm10 override
-visibility pack
-priority 470.3

@@ -1,9 +1,0 @@
-class keyVal
-   {
-   int key;
-   string val;
-   }
-keyVal kv = (1, "one");
-print(kv);
-kv.val = kv.val.upper();
-print(kv);

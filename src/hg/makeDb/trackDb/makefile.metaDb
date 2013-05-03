@@ -1,3 +1,0 @@
-
-metaDb: ${LIST} makefile
-	../../../../makeMetaDb ${DB} ${TABLE} ${LIST}

@@ -1,4 +1,0 @@
-# required db variable
-db fr1
-# lift Ensembl scaffolds to UCSC chrUn coordinates
-liftUp /cluster/data/fr1/jkStuff/liftAll.lft

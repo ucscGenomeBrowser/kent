@@ -1,9 +1,0 @@
-
-
-para test(string in)
-    {
-    in = "hello";
-    }
-
-
-test("goodbye");

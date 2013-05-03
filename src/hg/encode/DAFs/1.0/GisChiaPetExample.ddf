@@ -1,9 +1,0 @@
-files	view	cell	antibody	labVersion
-IHM001.fasta	RawData	MCF-7	ERalpha(a)	IHM001
-IHM001.bam	Alignments	MCF-7	ERalpha(a)	IHM001
-IHM001.bed	IntraInteractions	MCF-7	ERalpha(a)	IHM001
-IHM001.cc	Interactions	MCF-7	ERalpha(a)	IHM001
-IHH015.fasta	RawData	MCF-7	ERalpha(b)	IHH015
-IHH015.bam	Alignments	MCF-7	ERalpha(b)	IHH015
-IHH015.bed	IntraInteractions	MCF-7	ERalpha(b)	IHH015
-IHH015.cc	Interactions	MCF-7	ERalpha(b)	IHH015

@@ -1,4 +1,0 @@
-This directory is where users can put stuff that they want source controlled in the tree,
-but not code that they yet want to share with other people.  Once other people do want to
-use your code, consider polishing it up and putting it in the ../lib and ../program directories
-instead.  Code under here is not code-reviewed.  Code in ../lib and ../program is.

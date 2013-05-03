@@ -1,9 +1,0 @@
-{% if list %}
-    <ul>
-    {% for el in list %}
-        <li><a href="{{ el.id }}">{{ el.description }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No data are available.</p>
-{% endif %}

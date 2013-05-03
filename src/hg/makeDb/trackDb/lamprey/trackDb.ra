@@ -1,8 +1,0 @@
-#	"$Id: trackDb.ra,v 1.9 2010/05/11 01:42:13 kent Exp $";
-
-include trackDb.chainNet.ra
-
-track chainOryLat1 override
-release alpha
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-

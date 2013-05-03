@@ -1,6 +1,0 @@
-#	"$Id: trackDb.chainNet.ra,v 1.2 2010/02/25 01:01:25 hiram Exp $";
-
-track chainNetCalJac3 override
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-chainMinScore 3000
-priority 260.3

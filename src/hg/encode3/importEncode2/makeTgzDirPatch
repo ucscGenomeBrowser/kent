@@ -1,7 +1,0 @@
-#!/bin/tcsh -efx
-rm -f tgz.dir.patch
-cd hub
-foreach i (`cat ../tgz.dir.lst`)
-    echo $i `ls -1 $i/*` >> ../tgz.dir.patch
-end
-    

@@ -1,6 +1,0 @@
-inc 3.00, square 4.00
-inc 4.00, square 16.00
-sumDiff 3, -1
-sumDiff 2, 4
-  (which should be the same as)
-sumDiff 2, 4

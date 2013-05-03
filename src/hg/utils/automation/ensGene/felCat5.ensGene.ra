@@ -1,3 +1,0 @@
-# required db variable
-db felCat5
-liftUp /hive/data/genomes/felCat5/jkStuff/ensToUcsc.lift

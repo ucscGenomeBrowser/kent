@@ -1,7 +1,0 @@
-name global
-knownGene rgdGene2
-knownGenePep rgdGene2Pep
-knownToRef rgdGene2ToRefSeq
-nameSql select info from rgdGene2Xref where rgdGeneId = '%s' and infoType='Name'
-descriptionSql select value from rgdGene2ToDescription where name = '%s'
-proteinSql select value from rgdGene2ToUniProt where name = '%s'

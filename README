@@ -1,6 +1,6 @@
 CONTENTS AND COPYRIGHT
 
-This directory contains the entire source tree for the
+This directory contains the partial source tree for the
 UCSC Genome Bioinformatics Group's suite of biological analysis 
 and web display programs as well as some of Jim Kent's own tools.  
 All files are copyrighted, but license is hereby granted for personal, 
@@ -12,10 +12,7 @@ please see
     http://genome.ucsc.edu/license/.
 
 Most source code users will only be interested in the src/inc and 
-src/lib directories, which contain the interfaces and implementations
-to the library routines,  and in a few specific applications.
-The applications are scattered in other directories.  Many of them are web based.  
-The UCSC Genome Browser in particular is mostly found in src/hg/hgTracks.
+src/lib directories, which is all that is contained in this particular branch.
 
 GENERAL INSTALL INSTRUCTIONS
 

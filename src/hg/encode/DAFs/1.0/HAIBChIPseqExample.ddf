@@ -1,9 +1,0 @@
-files	view	cell	antibody	protocol	treatment	replicate	softwareVersion	labVersion
-data/SL735.TagAlign	Alignments	GM12878	PAX5-C20	PCR1x	None	2		6
-data/SL735_Peaks.bed.broadPeak	Peaks	GM12878	PAX5-C20	PCR1x	None	2	MACS	6
-data/SL735.fastq.gz	RawData	GM12878	PAX5-C20	PCR1x	None	2		6
-data/SL675.TagAlign	Alignments	GM12878	PAX5-C20	PCR1x	None	1		5
-data/SL675_Peaks.bed.broadPeak	Peaks	GM12878	PAX5-C20	PCR1x	None	1	MACS	5
-data/SL675.fastq.gz	RawData	GM12878	PAX5-C20	PCR1x	None	1		5
-
-

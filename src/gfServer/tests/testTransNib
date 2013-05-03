@@ -1,4 +1,0 @@
-gfServer start -trans localhost 17768 -canStop input/mCreaGeno.nib input/hCreaGeno.nib > /dev/null 2>&1 &
-sleep 1
-gfServer transQuery localhost 17768 input/mCrea.mrna > $1
-gfServer stop localhost 17768 > /dev/null

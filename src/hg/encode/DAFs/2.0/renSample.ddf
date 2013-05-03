@@ -1,7 +1,0 @@
-files	view	cell	antibody	sex	age	strain	control	replicate	softwareVersion	labVersion
-data/SL1032*rep1.fastq	RawData	Liver	Pol3	F	E13.5	C57BL/6 std	1	ELAND	Machine: Illumina Genome Analyzer GAII, flowcell SL1032
-data/SL1033*rep2.fastq	RawData	Liver	Pol3	F	E13.5	C57BL/6 std	2	ELAND	Machine: Illumina Genome Analyzer GAII, flowcell SL1033
-data/doeLiverPol3*rep1.bam	Alignments	Liver	Pol3	F	E13.5	C57BL/6	std	1	ELAND	Experimenter:Jane Doe, flowcell SL1032
-data/doeLiverPol3*rep2.bam	Alignments	Liver	Pol3	F	E13.5	C57BL/6 std	2	ELAND	Experimenter:Jane Doe, flowcell SL1033
-data/doeLiverPol3*.bigwig	Signal	Liver	Pol3	F	E13.5	C57BL/6	1	sigTool.v1	Experimenter:Jane Doe
-data/doeLiverPol3*.bed	Peaks	Liver	Pol3	F	E13.5	C57BL/6	std	1	PeakSeq.v2	Experimenter:Jane Doe

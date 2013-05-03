@@ -1,4 +1,0 @@
-#strand	qName	qStart	qEnd	tName	tStart	tEnd	bitScore	eVal	qDef	tDef
-+	gi|62287761|gb|AAX78367.1|	298	466	A0PJI6	12	172	234.242	2.42164e-64	gi|62287761|gb|AAX78367.1| CDY [Pan troglodytes]	A0PJI6 Homo sapiens
-+	gi|62287761|gb|AAX78367.1|	131	181	Q9Y6V0	2197	2250	19.6862	7.93374	gi|62287761|gb|AAX78367.1| CDY [Pan troglodytes]	Q9Y6V0 Homo sapiens
-+	gi|62287761|gb|AAX78367.1|	131	181	Q9Y6V0-2	2197	2250	19.6862	8.62411	gi|62287761|gb|AAX78367.1| CDY [Pan troglodytes]	Q9Y6V0-2 Homo sapiens

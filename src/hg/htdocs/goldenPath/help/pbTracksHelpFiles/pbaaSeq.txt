@@ -1,4 +1,0 @@
-<!------------Description----------->
-This track shows the amino acid sequence comprising the protein. The data were
-obtained from the <A HREF="http://www.uniprot.org/"
-TARGET=_blank>UniProtKB</A> and TrEMBL databases.

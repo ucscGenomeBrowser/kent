@@ -1,4 +1,0 @@
-#bin	chrom	chromStart	chromEnd	name	alleleCount	alleleFreq	alleleScores	name	chrom	strand	txStart	txEnd	cdsStart	cdsEnd	exonCount	exonStarts	exonEnds	proteinID	alignID
-590	chr1	705881	705882	A/G	2	0,0	100,100	uc001abo.3	chr1	-	700244	714068	700244	700244	7	700244,701708,703927,704876,708355,709550,713663,	700627,701767,703993,705092,708487,709660,714068,		uc001abo.3
-590	chr1	752565	752566	A	1	0	100												
-590	chr1	752720	752721	G	1	0	100												

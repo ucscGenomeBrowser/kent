@@ -1,3 +1,0 @@
-# seems to work a little better when we start the background runner last.
-mongrel_rails start -p yourPortNumberHere -d
-./pipeline_runner.rb yournamehere >& log/runner.log &

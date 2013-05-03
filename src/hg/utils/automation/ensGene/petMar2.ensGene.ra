@@ -1,6 +1,0 @@
-# required db variable
-db petMar2
-# optional nameTranslation, the sed command that will transform
-#       Ensemble names to UCSC names.  With single quotes to protect
-#	everything in perl
-nameTranslation 's/^MT/chrM/;'

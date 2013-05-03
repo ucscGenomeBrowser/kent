@@ -1,6 +1,0 @@
-name ensemblGenes
-shortLabel Ensembl Genes
-tables ensGene
-idSql select name from ensGene where name = '%s'
-url http://feb2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
-priority 10

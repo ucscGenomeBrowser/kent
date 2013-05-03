@@ -1,2 +1,0 @@
-
-int i = para (string s in names) do print(s);

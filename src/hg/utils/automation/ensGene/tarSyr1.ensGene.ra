@@ -1,4 +1,0 @@
-# required db variable
-db tarSyr1
-# do we need to translate geneScaffold coordinates
-geneScaffolds yes

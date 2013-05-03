@@ -1,7 +1,0 @@
-P19084	Name=HAG3;
-P32234	Name=128up; Synonyms=GTP-bp;
-P15455	Name=CRA1; OrderedLocusNames=At5g44120; ORFNames=MLN1.4;
-P15456	Name=CRB; OrderedLocusNames=At1g03880; ORFNames=F21M11.19;
-O23878	Name=FA02;
-O23880	Name=FA18;
-Q9XFM4	Name=FAGAG1;

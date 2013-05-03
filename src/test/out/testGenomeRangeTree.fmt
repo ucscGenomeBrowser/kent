@@ -1,1 +1,0 @@
-1/4 "%x sig\n" 1/4 "%d version\n" 1/4 "%d headerLen\n" 1/4 "%d numChroms\n" 1/4 "%d valDataSize\n" 1/4 "%d valDataType\n" 1/4 "%d reserved1\n" 1/4 "%d reserved2\n" 1/1 "%d [" 1/1 "%c" 1/1 "%c" 1/1 "%c" 1/1 "%c]\n" 1/4 "%d nodes\n" 1/4 "%d offset\n" 1/1 "%d [" 1/1 "%c" 1/1 "%c" 1/1 "%c" 1/1 "%c]\n" 1/4 "%d nodes\n" 1/4 "%d offset\n"

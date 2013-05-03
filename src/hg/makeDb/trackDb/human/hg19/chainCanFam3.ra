@@ -1,7 +1,0 @@
-        track chainCanFam3
-        subTrack placentalChainNetViewchain off
-        subGroups view=chain species=qDog clade=bLaura
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain canFam3
-        otherDb canFam3

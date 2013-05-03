@@ -1,5 +1,0 @@
-# This lists all genome assemblies supported by GREAT (http://great.stanford.edu).
-hg19
-hg18
-mm9
-danRer7

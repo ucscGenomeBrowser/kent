@@ -1,8 +1,0 @@
-print (1 + 2 + 3)/2 + 2*(2+1) + 1
-four = 4
-print four
-print ten
-ten = 1 + 2 + 3 + 4
-print ten
-ten = ten - 1
-print ten

@@ -1,2 +1,0 @@
-array[4] of array of int aa;
-aa[2][1] = 10;

@@ -1,9 +1,0 @@
-# required db variable
-db vicPac1
-# do we need to translate geneScaffold coordinates
-geneScaffolds yes
-# ignore genes that do not properly convert to a gene pred, and contig
-#	names that are not in the UCSC assembly
-skipInvalid yes
-# ignore the single gene that does not translate properly to UCSC coordinates
-#	5017: ENSVPAT00000009076 no exonFrame on CDS exon 0

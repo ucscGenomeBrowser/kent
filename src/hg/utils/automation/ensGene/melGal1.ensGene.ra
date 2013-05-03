@@ -1,9 +1,0 @@
-# required db variable
-db melGal1
-# optional nameTranslation, the sed command that will transform
-#	Ensemble names to UCSC names.  With quotes just to protect in perl:
-nameTranslation '/^718000.*/d; s/^\([0-9WZ][0-9]*\)/chr\1/; s/^GL\([0-9][0-9]*\).1/chrUn_GL\1/; s/^MT/chrM/;'
-# Ensembl 70 using different mitochondria sequence,  lift MT to chrM
-# required.
-liftMtOver /hive/data/genomes/melGal1/jkStuff/ens.70.Mt.overChain
-

@@ -1,3 +1,0 @@
-# required db variable
-db xenTro3
-nameTranslation "s/^GL1\([0-9][0-9][0-9][0-9][0-9]\)\.1/GL1\1/"

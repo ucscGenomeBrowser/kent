@@ -1,7 +1,0 @@
-browser position chr22:10000000-10025000
-browser hide all
-track name=regulatory	description="TeleGene(tm) Regulatory Regions" visibility=2
-chr22	TeleGene	enhancer	10000000	10001000	500	+	.	touch1
-chr22	TeleGene	promoter	10010000	10010100	900	+	.	touch1
-chr22	TeleGene	promoter	10020000	10025000	800	-	.	touch2
-

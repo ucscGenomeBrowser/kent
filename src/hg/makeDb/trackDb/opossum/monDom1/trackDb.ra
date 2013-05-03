@@ -1,6 +1,0 @@
-#	"$Id: trackDb.ra,v 1.27 2010/02/09 02:16:15 rhead Exp $";
-
-include trackDb.chainNet.ra
-
-track quality override
-type wig 0 68

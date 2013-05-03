@@ -1,7 +1,0 @@
-File Name	Part	Dataset Name	Assembly REF	Data Type REF	Cell Line REF	Raw Data Acc REF	Data Version
-cd4/chr1.wig	1	DNase-HUVEC-Signal	hg17	DukeDnaseSignal	HUVEC	SRA 111	Sep-2007
-cd4/chr2.wig	2	DNase-HUVEC-Signal	hg17	DukeDnaseSignal	HUVEC	SRA 111	Sep-2007
-cd4/sites.bed	1	DNase-HUVEC-Sites	hg17	DukeDnaseSites	HUVEC	SRA 111	Sep-2007
-hela/chr1.wig	1	DNase-HeLa-Signal	hg17	DukeDnaseSignal	HeLaS3	SRA 112	Sep-2007
-hela/chr2.wig	2	DNase-HeLa-Signal	hg17	DukeDnaseSignal	HeLaS3	SRA 112	Sep-2007
-hela/sites.bed	1	DNase-HeLa-Sites	hg17	DukeDnaseSites	HeLaS3	SRA 112	Sep-2007

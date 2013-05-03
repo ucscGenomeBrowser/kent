@@ -1,5 +1,0 @@
-
-array of int a = (1,2,3);
-int i;
-
-int i = para (i in a) min {print i;}
