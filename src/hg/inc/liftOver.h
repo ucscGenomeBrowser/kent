@@ -3,9 +3,8 @@
 #ifndef LIFTOVER_H
 #define LIFTOVER_H
 
-#ifndef LIFTOVERCORE_H
-#include "liftOverCore.h"
-#endif
+#define LIFTOVER_MINMATCH        0.95
+#define LIFTOVER_MINBLOCKS       1.00
 
 enum liftOverFileType
 {
