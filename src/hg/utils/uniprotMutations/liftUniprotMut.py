@@ -61,7 +61,11 @@ def aaToLong(seq):
         res.append(longAa)
     return "-".join(res)
 
-featTypeColors = { "modified residue" : "200,200,0"
+featTypeColors = { "modified residue" : "200,200,0",
+"transmembrane region" : "0,0,100",
+"glycosylation site" : "0,100,100",
+"disulfide bond" : "100,100,100",
+"topological domain" : "100,0,0"
 }
 
 
@@ -149,33 +153,28 @@ if __name__ == '__main__':
             noInfoCount +=1
             continue
             
-        diseases = list(set([mut.disease for mut in muts]))
+        diseases = list(set([mut.disease for mut in muts if mut.disease!=""]))
+        disCodes = list(set([mut.disCode for mut in muts if mut.disCode!=""]))
         acc = muts[0].acc
         dbSnpIds = [mut.dbSnpId for mut in muts]
 
-        # create shorter disease name
-        firstDis = diseases[0].split("|")[0].replace("-", " ").replace(" type", "")
-        disWords = firstDis.split()
-        if len(disWords)==3 and disWords[2]=="of":
-            disWords = disWords[:4]
-        else:
-            disWords = disWords[:3]
-        shortDisName = " ".join(disWords)
-
         # set the bed name field to a disease, to the mutation or something else
-        bed[3] = shortDisName
-        if len(bed[3])==0:
-            if mut.featType=="mutagenesis site" and mut.origAa=="":
-                bed[3] = "deletion"
-            else:
-                bed[3] = "%s:%s->%s" % (mut.begin, mut.origAa, mut.mutAa)
+        if mut.featType in ["mutagenesis site", "sequence variant"] and mut.origAa=="":
+            bed[3] = "%s-%s:del" % (mut.begin, mut.end)
+        else:
+            bed[3] = "%s->%s" % (mut.origAa, mut.mutAa)
+
+        if len(disCodes)>0:
+            bed[3] += " in %s" % ",".join(disCodes)
+        if len(bed[3])>30:
+            bed[3] = bed[3][:30]+"..."
 
         if mut.featType=="sequence variant":
             varType = "Naturally occuring sequence variant"
-            bed[8] = "200,0,0"
+            bed[8] = "100,0,0"
         elif mut.featType=="mutagenesis site":
             varType = "Experimental mutation of amino acids"
-            bed[8] = "0,100,0"
+            bed[8] = "0,0,100"
         else:
             bed[3] = mut.shortFeatType
             varType = mut.featType
@@ -200,14 +199,17 @@ if __name__ == '__main__':
         else:
             #  just position of feature
             if int(mut.end)-int(mut.begin)==1:
-                posStr = "amino acid %s" % mut.begin
+                posStr = "amino acid %s" % str(int(mut.begin)+1)
             else:
                 posStr = "amino acids %s-%s" % (mut.begin, str(int(mut.end)-1))
             posStr += " on protein %s" % mut.acc
             bed.append(posStr)
 
         comments = [com for com in comments if com.strip()!=""]
-        bed.append(", ".join(comments))
+        commentField = ", ".join(comments)
+        if len(diseases)!=0:
+            commentField = ",".join(diseases) + "; " + commentField
+        bed.append(commentField)
         if not options.annot:
             bed.append(htmlLink('var', varIds))
             dbSnpIds = [id for id in dbSnpIds if id.strip()!=""]
