@@ -782,5 +782,105 @@ TMPDIR=/scratch/tmp
     # verify this file exists:
     #	/gbdb/galGal4/liftOver/galGal4ToGalGal3.over.chain.gz
     # and try out the conversion on genome-test from galGal4 to galGal3
+
+############################################################################
+# construct ucscToEnsembl name translation table (DONE - 2013-05-01 - Hiram)
+    mkdir /hive/data/genomes/galGal4/ensembl
+    cd /hive/data/genomes/galGal4/ensembl
+    rsync -a -P  rsync://ftp.ensembl.org/ensembl/pub/mnt2/release-71/fasta/gallus_gallus/dna/Gallus_gallus.Galgal4.71.dna.toplevel.fa.gz ./
+    faCount Gallus_gallus.Galgal4.71.dna.toplevel.fa.gz > ens71.faCount.txt
+    cut -f1,2 ens71.faCount.txt \
+       | egrep -v "^total|^#seq" | sort -k2nr > ens71.chrom.sizes
+    faToTwoBit Gallus_gallus.Galgal4.71.dna.toplevel.fa.gz ens71.galGal4.2bit
+    twoBitDup ens71.galGal4.2bit
+
+    cat > ucscToEns.pl << '_EOF_'
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %ucscChromSizes;
+my %contigToChr;
+
+open (FH, "<../chrom.sizes") or die "can not read ../chrom.sizes";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($chr, $size) = split('\s+', $line);
+  my $ucscChr = $chr;
+  $ucscChromSizes{$chr} = $size;
+  if ($chr =~ m/chrLGE22C19W28_N03011.*_random/) {
+      $chr =~ s/chrLGE22C19W28_N03011/chrLGE22C19W28_AADN03011/;
+  }
+  if ($chr =~ m/_random/) {
+     $chr =~ s/_random//;
+     $chr =~ s/.*_//;
+  }
+  $chr =~ s/^chr[0-9]+_//;
+  $chr =~ s/^chrUn_//;
+  $chr =~ s/^chr//;
+  $contigToChr{$chr} = $ucscChr;
+}
+close (FH);
+
+open (NF, ">not.found.txt") or die "can not write to not.found.txt";
+open (FH, "<ens71.chrom.sizes") or die "can not read ens71.chrom.sizes";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($chr, $size) = split('\s+', $line);
+  $chr = "M" if ($chr =~ m/MT/);
+  my $ucscContig = $chr;
+  $chr = "MT" if ($chr =~ m/M/);
+  $ucscContig =~ s/\.1$//;
+  my $ucscChr = "unknown";
+  my $ucscSize = 0;
+  if (exists($contigToChr{$ucscContig})) {
+     $ucscChr = $contigToChr{$ucscContig};
+     $ucscSize = $ucscChromSizes{$ucscChr};
+     die "sizes not equal ? $chr=$size $ucscChr=$ucscSize" if ($size != $ucscSize);
+     printf "%s\t%s\n", $ucscChr, $chr;
+  } else {
+     $ucscContig = "chr${ucscContig}";
+     if (exists($contigToChr{$ucscContig})) {
+        $ucscChr = $contigToChr{$ucscContig};
+        $ucscSize = $ucscChromSizes{$ucscChr};
+        die "sizes not equal ? $chr=$size $ucscChr=$ucscSize" if ($size != $ucscSize);
+        printf "%s\t%s\n", $ucscChr, $chr;
+     } else {
+       printf STDERR "can not find contig '$chr'\n";
+       printf NF "%s\t%d\n", $chr, $size;
+     }
+  }
+}
+close (FH);
+close (NF);
+'_EOF_'
+    # << happy emacs
+
+    chmod +x ucscToEns.pl
+    ./ucscToEns.pl > ucscToEnsembl.tab
+
+    mkdir /hive/data/genomes/galGal4/bed/ucscToEnsembl
+    cd /hive/data/genomes/galGal4/bed/ucscToEnsembl
+    ln -s ../../ensembl/ucscToEnsembl.tab
+
+    cat > ucscToEnsembl.sql << '_EOF_'
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(30))
+);
+'_EOF_'
+   # << happy emacs
+
+   hgsql galGal4 -e "drop table ucscToEnsembl;"
+   hgsql galGal4 < ucscToEnsembl.sql
+   hgsql galGal4 \
+     -e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+   # verify blue navigation bar will now go to Ensembl
+
 ############################################################################
 
