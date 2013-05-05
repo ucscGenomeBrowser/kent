@@ -12,6 +12,19 @@ CREATE TABLE edwUser (
     UNIQUE(email)
 );
 
+#A script that is authorized to submit on behalf of a user
+CREATE TABLE edwScriptRegistry (
+    id int unsigned auto_increment,	# Autoincremented script ID
+    userId int unsigned default 0,	# Associated user
+    name varchar(255) default '',	# Script name
+    description longblob,	# Script description
+    secretHash varchar(255) default '',	# Hashed script password
+    submitCount int default 0,	# Number of submissions attempted
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(userId)
+);
+
 #A web host we have collected files from - something like www.ncbi.nlm.gov or google.com
 CREATE TABLE edwHost (
     id int unsigned auto_increment,	# Autoincremented host id

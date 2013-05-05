@@ -178,6 +178,204 @@ fputc(lastSep,f);
 }
 
 
+char *edwScriptRegistryCommaSepFieldNames = "id,userId,name,description,secretHash,submitCount";
+
+void edwScriptRegistryStaticLoad(char **row, struct edwScriptRegistry *ret)
+/* Load a row from edwScriptRegistry table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->userId = sqlUnsigned(row[1]);
+ret->name = row[2];
+ret->description = row[3];
+ret->secretHash = row[4];
+ret->submitCount = sqlSigned(row[5]);
+}
+
+struct edwScriptRegistry *edwScriptRegistryLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwScriptRegistry from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwScriptRegistryFreeList(). */
+{
+struct edwScriptRegistry *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwScriptRegistryLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwScriptRegistrySaveToDb(struct sqlConnection *conn, struct edwScriptRegistry *el, char *tableName, int updateSize)
+/* Save edwScriptRegistry as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use edwScriptRegistrySaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s',%d)", 
+	tableName,  el->id,  el->userId,  el->name,  el->description,  el->secretHash,  el->submitCount);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+void edwScriptRegistrySaveToDbEscaped(struct sqlConnection *conn, struct edwScriptRegistry *el, char *tableName, int updateSize)
+/* Save edwScriptRegistry as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than edwScriptRegistrySaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+char  *name, *description, *secretHash;
+name = sqlEscapeString(el->name);
+description = sqlEscapeString(el->description);
+secretHash = sqlEscapeString(el->secretHash);
+
+dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s',%d)", 
+	tableName,  el->id,  el->userId,  name,  description,  secretHash,  el->submitCount);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&name);
+freez(&description);
+freez(&secretHash);
+}
+
+struct edwScriptRegistry *edwScriptRegistryLoad(char **row)
+/* Load a edwScriptRegistry from row fetched with select * from edwScriptRegistry
+ * from database.  Dispose of this with edwScriptRegistryFree(). */
+{
+struct edwScriptRegistry *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->userId = sqlUnsigned(row[1]);
+ret->name = cloneString(row[2]);
+ret->description = cloneString(row[3]);
+ret->secretHash = cloneString(row[4]);
+ret->submitCount = sqlSigned(row[5]);
+return ret;
+}
+
+struct edwScriptRegistry *edwScriptRegistryLoadAll(char *fileName) 
+/* Load all edwScriptRegistry from a whitespace-separated file.
+ * Dispose of this with edwScriptRegistryFreeList(). */
+{
+struct edwScriptRegistry *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwScriptRegistryLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwScriptRegistry *edwScriptRegistryLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwScriptRegistry from a chopper separated file.
+ * Dispose of this with edwScriptRegistryFreeList(). */
+{
+struct edwScriptRegistry *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwScriptRegistryLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwScriptRegistry *edwScriptRegistryCommaIn(char **pS, struct edwScriptRegistry *ret)
+/* Create a edwScriptRegistry out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwScriptRegistry */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->userId = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
+ret->description = sqlStringComma(&s);
+ret->secretHash = sqlStringComma(&s);
+ret->submitCount = sqlSignedComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwScriptRegistryFree(struct edwScriptRegistry **pEl)
+/* Free a single dynamically allocated edwScriptRegistry such as created
+ * with edwScriptRegistryLoad(). */
+{
+struct edwScriptRegistry *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->name);
+freeMem(el->description);
+freeMem(el->secretHash);
+freez(pEl);
+}
+
+void edwScriptRegistryFreeList(struct edwScriptRegistry **pList)
+/* Free a list of dynamically allocated edwScriptRegistry's */
+{
+struct edwScriptRegistry *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwScriptRegistryFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwScriptRegistryOutput(struct edwScriptRegistry *el, FILE *f, char sep, char lastSep) 
+/* Print out edwScriptRegistry.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->userId);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->description);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->secretHash);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->submitCount);
+fputc(lastSep,f);
+}
+
+
 char *edwHostCommaSepFieldNames = "id,name,lastOkTime,lastNotOkTime,firstAdded,errorMessage,openSuccesses,openFails,historyBits";
 
 void edwHostStaticLoad(char **row, struct edwHost *ret)
@@ -228,7 +426,7 @@ void edwHostSaveToDb(struct sqlConnection *conn, struct edwHost *el, char *table
  * If worried about this use edwHostSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%lld,%s,%lld,%lld,%lld)", 
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%lld,'%s',%lld,%lld,%lld)", 
 	tableName,  el->id,  el->name,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  el->errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -437,7 +635,7 @@ void edwSubmitDirSaveToDb(struct sqlConnection *conn, struct edwSubmitDir *el, c
  * If worried about this use edwSubmitDirSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%s,%u,%lld,%lld,%lld,%s,%lld,%lld,%lld)", 
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%lld,%lld,%lld,'%s',%lld,%lld,%lld)", 
 	tableName,  el->id,  el->url,  el->hostId,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  el->errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -654,7 +852,7 @@ void edwFileSaveToDb(struct sqlConnection *conn, struct edwFile *el, char *table
  * If worried about this use edwFileSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%s,%s,%lld,%lld,%lld,%lld,'%s',%s,%s,'%s','%s')", 
+dyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s','%s')", 
 	tableName,  el->id,  el->submitId,  el->submitDirId,  el->submitFileName,  el->edwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->errorMessage,  el->deprecated,  el->replacedBy);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -911,7 +1109,7 @@ void edwSubmitSaveToDb(struct sqlConnection *conn, struct edwSubmit *el, char *t
  * If worried about this use edwSubmitSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%s,%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,%s)", 
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s')", 
 	tableName,  el->id,  el->url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->submitFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  el->errorMessage);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -1137,7 +1335,7 @@ void edwSubscriberSaveToDb(struct sqlConnection *conn, struct edwSubscriber *el,
  * If worried about this use edwSubscriberSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%g,'%s','%s',%s,'%s')", 
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%g,'%s','%s','%s','%s')", 
 	tableName,  el->id,  el->name,  el->runOrder,  el->filePattern,  el->dirPattern,  el->tagPattern,  el->onFileEndUpload);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -2575,7 +2773,7 @@ void edwJobSaveToDb(struct sqlConnection *conn, struct edwJob *el, char *tableNa
  * If worried about this use edwJobSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%s,%lld,%lld,%s,%d)", 
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
 	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -2768,7 +2966,7 @@ void edwSubmitJobSaveToDb(struct sqlConnection *conn, struct edwSubmitJob *el, c
  * If worried about this use edwSubmitJobSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%s,%lld,%lld,%s,%d)", 
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
 	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
