@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+        <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+        <TITLE>UCSC Genome Browser: Genome Allese Guide</TITLE>
+        <LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
+        <script type="text/javascript" src="/js/jquery.js"></script>
+        <script type="text/javascript" src="/js/staticDoc.js"></script>
+</HEAD>
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<A NAME="TOP"></A>
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
+    <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../inc/help.topbar.html"--></TD></TR>
+
+<TR><TD>    
+<!-- - - - - - - Genome Haplotype Alleles Section - - - - - - -->
+<A NAME="Topic5"></A>
+
+        <!--outer table is for border purposes-->
+        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+            <TR><TD>
+                <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+                    <TR><TD>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+                            <TR><TD><FONT SIZE="4"><A
+                            NAME="TOC"></A><B>&nbsp; Gene Haplotype Alleles</B></FONT>
+                            </TD></TR>
+                        </TABLE>
+                        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+                            <TR><TH HEIGHT=10></TH></TR>
+                            <TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+<div id='haplotypes'> <!-- Allows using same CSS as the haplotypes aplet itself  -->
+<P>
+With the availability <A HREF='http://www.1000genomes.org/' TARGET=_BLANK>1000 Genomes</A> Phase 1
+data, there are currently 1092 sets of variations phased across chromosomes.  Using these data, 
+we can now see the actual haplotypes, or sets of variations, falling within the boundaries of 
+protein coding exons as they are seen in healthy adult individuals.  For any given gene there 
+can be no more than 2184 distinct haplotypes (a.k.a alleles) given the data, though in most
+cases there are dramatically fewer (mean 4).  Many haplotypes will have little or no phenotypic
+effect, being defined by synonymous SNPs or resulting in amino acid substitutions of little
+consequence to the overall efficacy of the protein.  It is expected, however, that many haplotypes
+will result in significant variation within humans.  Haplotypes associated with disease may
+show evidence of negative selection, just as haplotypes associated with the immune system may 
+show striking evidence for positive selection.  Occasionally the skew in a haplotype's 
+distribution among populations will give hints to its anthropological history.   However, 
+the vast majority of common haplotypes are represented in all major population groups, which 
+may speak both to the age of individual haplotypes and the ongoing mixing of the human gene pool.  
+</P> 
+
+<H2>How to use the &quot;Gene Haplotype Alleles&quot; section</H2>
+
+<P> 
+Click on any protein-coding gene in the UCSC Genes track and scroll to the <B>Common Gene 
+Haplotype Alleles</B> section. (The feature is currently implemented only on GRCh37/hg19 
+protein-coding genes.)  There will be a table of haplotypes for the protein-coding 
+portion of the gene.  The table is sortable on any column by clicking on the column headers.
+</P> 
+
+<UL>
+<li>If the gene is on the negative ('-' or &quot;antisense&quot;) strand, all varaints and sequences 
+    will be presented with respect to the negative strand.  Note that individual variants displayed 
+    in the 1000 Genomes phase 1 variations track are all shown as they appear on the 
+    positive ('+' or &quot;sense&quot;) strand.</li>
+
+<li>Each haplotype is found in one or more subjects participating in phase 1 of the 
+    1000 Genomes project.  The distribution of the haplotypes across different population 
+    groups can be examined by pressing 
+    <input type='button' style='font-size:.9em;' value='Show populations'
+    title='Show/Hide haplotype distribution across population groups' onclick='return false;'>. 
+    Press
+    <input type='button' style='font-size:.9em;' value='1000 Genome groups' 
+    title='Show haplotype distribution across 1000 Genome population groups' 
+    onclick='return false;'> 
+    to display the distribution across a broader spectrum of groups (defined below).  
+    Press 
+    <input type='button' style='font-size:.9em;' value='Major groups' 
+    title='Show haplotype distribution across major population groups' 
+    onclick='return false;'> 
+    to return to the major grouping and 
+    <input type='button' style='font-size:.9em;' value='Hide populations' 
+    title='Show/Hide haplotype distribution across population groups' onclick='return false;'> 
+    to hide these data again.</li>
+
+<li>By default, only non-synonymous, common variants are displyed. Common variants occur in at 
+    least 1&#37; of 1000 Genomes subject chromosomes. Pressing 
+    <input type='button' style='font-size:.9em;' value='Include all variants' 
+    title='Include or Restrict to non-synonymous, common variants with a frequency of at least 1%' 
+    onclick='return false;'> 
+    will replace the list of haplotypes by the list of <em>all</em> haplotypes found in 
+    1000 Genomes subjects, though many of these haplotypes may have little or no protein-coding
+    effect.  To return to haplotypes defined by common and non-synonmous variation, 
+    press
+    <input type='button' style='font-size:.9em;' value='Common variants only' 
+    title='Include or Restrict to non-synonymous, common variants with a frequency of at least 1%' 
+    onclick='return false;'>. 
+    <em class='textInfo'>Note that haplotype and homozygous frequency calculations depend 
+    upon which variants are included.</em></li>
+    
+<li>Haplotype frequencies are based upon all releveant chromosomes in the data set.  The total
+    number is almost always 2,184 (1,092 for Y and location-dependent for X).  Hover over
+    the frequency calculations to show the number of a particular haplotype in the dataset 
+    (<em>e.g.</em>, <span title='N=1327 of 2184'>"N=1327 of 2184"</span>).  
+    If appropriate, the homozygous frequency will also be shown and will reflect the number 
+    of individuals in the dataset.</li>  
+
+<li>There may be no <em>reference haplotype</em> (made of entirely reference variants) 
+    represented in the 1000 Genomes data. If there is, it will be marked as &quot;reference&quot; 
+    in the table of haplotypes.</li>
+
+<li>By default, all variants are displayed as their predicted effect on amino acid sequence.  
+    Press <input type='button' style='font-size:.9em;' value='Display as DNA bases'
+    to view the variants as DNA bases instead.
+    title='Display variants and sequence as amino acids or DNA bases' onclick='return false;'>.
+    Return to the protein sequence view by pressing 
+    <input type='button' style='font-size:.9em;' value='Display as amino acids' 
+    title='Display variants and sequence as amino acids or DNA bases' onclick='return false;'>.
+    The reference variant is shown at the top of each variant column.  This is the value found
+    in the GRCh37/hg19 reference genome.  In most cases it is a single letter (AA code/DNA base).
+    In the case of an insertion with respect to the reference genome, the reference value
+    will be seen as '-' .  Large deletions will be represented by the first two sequence 
+    letters followed by &quot;+++&quot;.  Note that hovering the pointer over any of these variants 
+    will show a more complete description (example: 
+    <span title='AA:16 A|T chr9:136137554 SNP: G|A (0.995|0.005) rs55917063'>
+    'AA:16 A|T chr9:136137554 SNP: G|A (0.995|0.005) rs55917063'</span>).
+    The description includes the AA residue number and varaints (AA view only), genome location,
+    base level variants and the dbSNP variant name if one is known.  Clicking on any 
+    <em class='textOpt'>non-reference</em> variant shown in the variants section of the table 
+    will link to the full details of that varaint as seen in the 1000 Genomes phase 1 track.</li>
+
+<li>When the full sequence is displayed, columns with variants are highlighted by 
+    <span style='background-color:#CCFFAA;'>green vertical lines</span>. The effects of variants are 
+    highlighted by <B class='textAlert'>bold red letters</B>.  Synonymous changes are only 
+    evident when DNA bases are displayed. Each haplotype allele sequence is generated from 
+    GRCh37/hg19 reference DNA, with variants spliced in, then translated into amino acids.  
+    Note that sorting on a variant column will highlight that one variant with a 
+    <span style='background-color:#CCFFFF;'>blue vertical line</span> 
+    in blue in the full sequence.  This can be used to quickly locate one variant out of many.
+    In AA view, the AA residue is shown when hovering over any part of the sequence.</li> 
+
+<li>By default, only common haplotype alleles are displayed. Common haplotypes occur in at 
+    least 1&#37; of 1000 Genomes subject chromosomes.  Press
+    <input type='button' style='font-size:.9em;' value='Show rare haplotypes' 
+    title='Show/Hide rare haplotypes that occur with a frequency of less than 1%' 
+    onclick='return false;'>     
+    to see all haplotypes and then press 
+    <input type='button' style='font-size:.9em;' value='Hide rare haplotypes' 
+    title='Show/Hide rare haplotypes that occur with a frequency of less than 1%' 
+    onclick='return false;'>     
+    to hide the rare ones again.</li> 
+    
+<li>By default, scoring is hidden. Three types of scores are provided to help users find 
+    haplotype alleles that occur more or less frequently than expected or that have unusual 
+    distributions in populations. See definitions below.  To see the calculated scores, press
+    <input type='button' style='font-size:.9em;' value='Show scoring' 
+    title='Show/Hide all haploptye scores' onclick='return false;'>.  
+    <span class='textInfo'>Note that scores alone cannot be used to draw definitive 
+    conclusions about any haplotype.</span></li>
+
+<!--
+<li>....</li>
+
+<li>Hovering your mouse over any button will display useful hints.</li> 
+
+<li>Clicking on non-reference variants in the summary section takes you to the corresponding 
+    track details pages of the 1000G Ph1 Vars track.</li> --> 
+
+
+</ul> 
+
+<h2>Population Group definitions</h2>
+
+<h3>Major Groups</h3>
+<div class='textOpt'>Includes only major groups for which there are data in phase 1 of the 
+1000 Genomes project.</div>
+<table>
+     <tr><td>AFR</td><td>African          </td><td>246 individuals</td></tr>
+     <tr><td>AMR</td><td>Ad Mixed American</td><td>181 individuals</td></tr>
+     <tr><td>ASN</td><td>East Asian       </td><td>286 individuals</td></tr>
+     <tr><td>EUR</td><td>European         </td><td>379 individuals</td></tr>
+<!-- <tr><td>SAN</td><td>South Asian      </td><td>0 individuals</td></tr>  NOT YET -->
+</table> 
+
+<h3>1000 Genomes Groups</h3>
+<div class='textOpt'>Includes only 1000 Genomes groups for which there are data in phase 1 
+of the project.</div>
+<table>
+    
+     <tr><td></td><td>African:</td><td></td></tr>
+     <tr><td>ASW</td><td>African Ancestry in Southwest US       </td><td>61 individuals</td></tr>
+<!-- <tr><td>ESN</td><td>Esan in Nigeria                        </td><td> 0 individuals</td></tr> -->
+     <tr><td>LWK</td><td>Luhya in Webuye, Kenya                 </td><td>97 individuals</td></tr>
+<!-- <tr><td>GWD</td><td>Gambian in Western Division, The Gambia</td><td> 0 individuals</td></tr> -->
+<!-- <tr><td>MSL</td><td>Mende in Sierra Leone                  </td><td> 0 individuals</td></tr> -->
+     <tr><td>YRI</td><td>Yoruba in Ibadan, Nigeria              </td><td>88 individuals</td></tr>
+
+     <tr><td></td><td><BR>Ad Mixed American:</td><td></td></tr>
+<!-- <tr><td>ACB</td><td>African Caribbean in Barbados              </td><td> 0 individuals</td></tr> -->
+     <tr><td>CLM</td><td>Colombian in Medellin, Colombia            </td><td>60 individuals</td></tr>
+     <tr><td>MXL</td><td>Mexican Ancestry in Los Angeles, California</td><td>66 individuals</td></tr>
+<!-- <tr><td>PEL</td><td>Peruvian in Lima, Peru                     </td><td> 0 individuals</td></tr> -->
+     <tr><td>PUR</td><td>Puerto Rican in Puerto Rico                </td><td>55 individuals</td></tr> 
+
+     <tr><td></td><td><BR>East Asian:</td><td></td></tr>
+<!-- <tr><td>CDX</td><td>Chinese Dai in Xishuangbanna, China       </td><td>  0 individuals</td></tr> -->
+     <tr><td>CHB</td><td>Han Chinese in Beijing, China             </td><td> 97 individuals</td></tr>
+<!-- <tr><td>CHD</td><td>Chinese in Denver, Colorado (pilot 3 only)</td><td>  0 individuals</td></tr> -->
+     <tr><td>CHS</td><td>Han Chinese South                         </td><td>100 individuals</td></tr>
+     <tr><td>JPT</td><td>Japanese in Tokyo, Japan                  </td><td> 89 individuals</td></tr>
+<!-- <tr><td>KHV</td><td>Kinh in Ho Chi Minh City, Vietnam         </td><td>  0 individuals</td></tr> -->
+
+     <tr><td></td><td><BR>Europeans:</td><td></td></tr>
+     <tr><td>CEU</td><td>Utah residents with Northern and Western European ancestry</td><td>85 individuals</td></tr>
+     <tr><td>FIN</td><td>Finnish in Finland                          </td><td>93 individuals</td></tr>
+     <tr><td>GBR</td><td>British in England and Scotland             </td><td>89 individuals</td></tr>
+     <tr><td>IBS</td><td>Iberian populations in Spain                </td><td>14 individuals</td></tr>
+     <tr><td>TSI</td><td>Toscani in Italia                           </td><td>98 individuals</td></tr>
+    
+<!-- <tr><td></td><td><BR>South Asian:</td><td></td></tr> -->
+<!-- <tr><td>BEB</td><td>Belgali in Bangladesh        </td><td>0 individuals</td></tr> -->
+<!-- <tr><td>GIH</td><td>Gujarati Indian in Houston,TX</td><td>0 individuals</td></tr> -->
+<!-- <tr><td>ITU</td><td>Indian Telugu in the UK      </td><td>0 individuals</td></tr> -->
+<!-- <tr><td>PJL</td><td>Punjabi in Lahore,Pakistan   </td><td>0 individuals</td></tr> -->
+<!-- <tr><td>STU</td><td>Sri Lankan Tamil in the UK   </td><td>0 individuals</td></tr> -->
+</table> 
+
+<h2>Scoring definitions</h2>
+
+<dl>
+<dt>Hap score</dt>
+<dd>The &quot;haplotype score&quot; is the normalized (-log10) probability of finding exactly 
+    N subject chromosomes with this haplotype, given the proportions of individual variants. 
+    The score is normalized by dividing by the total number of variants. Normalization allows 
+    comparing the scores between genes with many variants and those with few. The score will 
+    be positive if the haplotype is more frequent than expected by chance and negative if 
+    less frequent.  For haplotyes made from common, non-synonymous varaints, haplotype scores 
+    above 618 are seen in only 2&#37; of genes.  Likewise, a score of less than -205 is only seen 
+    in 2&#37; of genes.</dd> 
+
+<dt>Hom score</dt>
+<dd>The &quot;homozygous score&quot; is the (-log10) probability of finding exactly N individuals 
+    with this haplotype on both chromosomes, given the actual frequency of the haplotype in 
+    subject chromosomes. The score will be positive if the haplotype is found homozygous in 
+    more individuals than expected and negative when found in fewer individuals than expected.
+    Negative values might suggest that the haplotype is deleterious when homozygous.  For 
+    haplotyes made from common, non-synonymous varaints, homozygous scores above 96 are seen 
+    in only 2&#37; of genes.  Likewise, a score of less than -17 is only seen in 2&#37; 
+    of genes.</dd> 
+
+<dt>Pop score</dt>
+<dd>(only visible when population distributions are displayed) The &quot;population score&quot; 
+    is the variance between population groups divided N, the number occurrences of the haplotype. 
+    The most frequently occurring haplotypes will potentially have larger scores, but if N is 
+    small, a skew in population distribution is not unexpected.  Polulation scores are always 
+    greater than or equal to zero.  For haplotyes made from common, non-synonymous varaints, 
+    population scores at or above 33.4 are seen in only 2&#37; of genes and scores above 38.4 are 
+    seen in only 1&#37; of genes.</dd>
+</dl> 
+
+</div> <!-- Allows using same CSS as the haplotypes aplet itself  -->
+
+                                </TD>
+                                <TD WIDTH=15></TD>
+                            </TR>
+                        </TABLE>
+                    <BR></TD></TR>
+                </TABLE>
+            </TD></TR>
+        </TABLE>
+    </TABLE>
+</BODY></HTML>
+

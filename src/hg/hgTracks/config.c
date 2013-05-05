@@ -475,7 +475,10 @@ cgiDown(0.9);
 
 char *freeze = hFreezeFromDb(database);
 char buf[128];
-if (stringIn(database, freeze))
+if (freeze == NULL)
+    safef(buf, sizeof buf, "Configure Tracks on %s %s: %s",
+	  organization, browserName, trackHubSkipHubName(organism));
+else if (stringIn(database, freeze))
     safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s",
 	  organization, browserName, trackHubSkipHubName(organism), freeze);
 else
