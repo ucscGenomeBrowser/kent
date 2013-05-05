@@ -221,19 +221,7 @@ edwMustGetUserFromEmail(conn, userEmail);
 int sd = netUrlMustOpenPastHeader(url);
 close(sd);
 
-/* Create command and add it to edwSubmitJob table. */
-char command[strlen(url) + strlen(userEmail) + 256];
-safef(command, sizeof(command), "edwSubmit '%s' %s", url, userEmail);
-char escapedCommand[2*strlen(command) + 1];
-sqlEscapeString2(escapedCommand, command);
-char query[strlen(escapedCommand)+128];
-safef(query, sizeof(query), "insert edwSubmitJob (commandLine) values('%s')", escapedCommand);
-sqlUpdate(conn, query);
-
-/* Write sync signal (any string ending with newline) to fifo to wake up daemon. */
-FILE *fifo = mustOpen("../userdata/edwSubmit.fifo", "w");
-fputc('\n', fifo);
-carefulClose(&fifo);
+edwAddSubmitJob(conn, userEmail, url);
 
 /* Give the system a half second to react and then put up status info about submission */
 sleep1000(500);
