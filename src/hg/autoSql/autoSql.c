@@ -1037,6 +1037,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    outString = (col->fixedSize > 0) ? "'%s'" : "'%c'";
 	    break;
 	case t_string:
+	case t_lstring:
 	    outString = "'%s'";
 	    break;
 	default:
