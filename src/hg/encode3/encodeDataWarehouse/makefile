@@ -14,14 +14,17 @@ UTIL_DIRS = \
     edwMakeEnrichments \
     edwMakeReplicateQa \
     edwMakeValidFile \
+    edwReallyRemoveFiles \
     edwRunDaemon \
     edwSubmit
 
 CGI_DIRS = \
+    edwScriptSubmit \
     edwWebAuthLogin \
     edwWebAuthLogout \
     edwWebBrowse \
     edwWebCreateUser \
+    edwWebRegisterScript \
     edwWebSubmit
 
 TEST_DIRS = \
