@@ -1471,7 +1471,7 @@ void printIdOrLinks(struct asColumn *col, struct hash *fieldToUrl, struct trackD
 char *url = NULL;
 if (fieldToUrl!=NULL)
     url = (char*)hashFindVal(fieldToUrl, col->name);
-if ((url==NULL)
+if (url==NULL)
     {
     printf("<td>%s</td></tr>\n", idList);
     return;
