@@ -1,5 +1,4 @@
 // geneAlleles - Find gene alleles (haplotypes) from the 1000 Genomes data
-#include <signal.h>
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
@@ -145,7 +144,7 @@ variant->reversed   = FALSE;
 if (variant->chromStart >= variant->chromEnd)
     errAbort("%s:(%d)-(%d) bound by %d %d has negative length.",
              record->name,record->chromStart,record->chromEnd,boundStart,boundEnd);
-if (variant->vType != vtSNP)
+if (variant->vType != vtSNP)  // Clips first base (1000Genomes includes prev base on insert/delete)
     variant->chromStart = max(record->chromStart + 1,boundStart);
 
 if (record->name)
@@ -162,7 +161,7 @@ if (record->alleles && record->alleles[alleleIx] != NULL)
             {
             if(alleleIx == 0 && strlen(val) <= 1) // The reference
                 { // Terrible secret of vcf 1000Genomes deletions. ref does not have sequence.
-                  // Here we fill in up to 10 actual bases.
+                  // Here we fill in up to 10 actual bases. Just a taste, since reference sequence
                 //variant->chromStart++; // Clips first base
                 struct dnaSeq *dnaSeq = hDnaFromSeq(he->db, he->chrom, variant->chromStart + 1,
                                                    min(variant->chromEnd,variant->chromStart + 10),
@@ -481,11 +480,13 @@ return class;
 
 
 int haplotypePopularityCmp(const void *va, const void *vb)
-// Compare to sort haplotypes in commonId, then subject count order
+// Compare to sort haplotypes by frequency of occurrence
 {
 const struct haplotype *a = *((struct haplotype **)va);
 const struct haplotype *b = *((struct haplotype **)vb);
 int ret = a->subjects - b->subjects;
+if (ret == 0)
+    ret = (a->homCount - b->homCount);
 if (ret == 0)
     ret = (a->variantCount - b->variantCount);
 if (ret == 0)
@@ -1433,7 +1434,7 @@ void geneHapSetAaVariants(struct haploExtras *he,
 // Determining AA values for variants is tricky, since each location is potentially
 // affected by upstream variants.  Therefore, it is necessary to find the variant
 // location in the aaSeq and then carve out the value in place.  This must be done
-// haploptype by haplotype, unlike DNA variant values which should be common to all
+// haplotype by haplotype, unlike DNA variant values which should be common to all
 // haplotypes that share that variant.
 
 struct haplotype *refHap = hapSet->refHap;
@@ -1763,7 +1764,7 @@ cur += 2;
 // Length
 if (refVar->vType == vtDeletion)
     {
-    safef(cur,(end - cur),"length:%ld ",strlen(refVar->val));
+    safef(cur,(end - cur),"length:%d ",(int)strlen(refVar->val));
     cur += strlen(cur);
     }
 else if (refVar->vType == vtInsertion)
@@ -1880,6 +1881,7 @@ return refSeq;
 #define HOMOZYGOUS_CLASS   "hom"
 #define SCORE_CLASS        "score"
 #define TOGGLE_BUTTON      "toggleButton"
+#define TOO_MANY_HAPS      100
 
 static void geneAllelesTable(struct cart *cart,
                              struct haploExtras *he, struct haplotypeSet *hapSet,
@@ -1900,6 +1902,7 @@ boolean showRareHaps = cartTimeoutBoolean(cart, HAPLO_RARE_HAPS, HAPLO_CART_TIME
 
 struct haplotype *refHap = hapSet->refHap;
 struct haplotype *haplo  = NULL;
+int ix = 0;
 
 // Need to set up DNA and AA sequences
 //struct hapBlocks *hapBlocks = NULL;
@@ -1911,7 +1914,8 @@ if (!dnaView || fullSeq)
         geneHapSetAaVariants(he, hapSet, NULL);
 
     // Go ahead and set AA vals of all haplos up front.  This ensures titles have AA vals
-    for (haplo = hapSet->haplos ; haplo != NULL; haplo = haplo->next)
+    for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS;
+         haplo = haplo->next, ix++)
         {
         haploDnaSequence(he, hapSet, haplo, FALSE, FALSE);// no gaps or hilite so set in struct
         if (!dnaView)
@@ -2000,7 +2004,7 @@ hPrintf("</TR></THEAD><TBODY>\n");
 
 float minFreq = 0.01;
 boolean countHidden = 0, countRows = 0, countLowInterest = 0;
-for (haplo = hapSet->haplos ; haplo != NULL; haplo = haplo->next)
+for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = haplo->next, ix++)
     {
     if (haplo->subjects == 0) // reference haplotype may not be found in 1000 geneomes data!
         continue;
@@ -2020,8 +2024,8 @@ for (haplo = hapSet->haplos ; haplo != NULL; haplo = haplo->next)
         hPrintf("<TR class='" ALLELE "'>");
 
     // First some numbers
-    hPrintf("<TD abbr='%.3f' title='N=%d of %d'>%.3f</TD>",
-            (1 - hapFreq), // (1 - hapFre) sorts descending
+    hPrintf("<TD abbr='%05d' title='N=%d of %d'>%.3f</TD>",
+            (10000 - haplo->subjects), // (1 - hapFre) sorts descending
             haplo->subjects,hapSet->chromN,hapFreq );
 
     // Would be nice to improve score to better highlight surprise
@@ -2037,11 +2041,11 @@ for (haplo = hapSet->haplos ; haplo != NULL; haplo = haplo->next)
         {
         float homFreq = (float)haplo->homCount/hapSet->subjectN;
         if (haplo->homCount == 0)
-            hPrintf("<TD abbr='2.000' title='Allele not found homozygous'>&nbsp;</TD>");
+            hPrintf("<TD abbr='20000' title='Allele not found homozygous'>&nbsp;</TD>");
         else
             {
-            hPrintf("<TD abbr='%.3f' title='N=%d of %d'>%.3f</TD>",
-                    (1 - homFreq), haplo->homCount, hapSet->subjectN, homFreq );
+            hPrintf("<TD abbr='%05d' title='N=%d of %d'>%.3f</TD>",
+                    (10000 - haplo->homCount), haplo->homCount, hapSet->subjectN, homFreq );
             }
         hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f'>",(showScores ? "" : " hidden"),
                 99999 - haplo->homScore);
@@ -2155,12 +2159,19 @@ if (countLowInterest > 0)
     {
     if (countHidden == 0)
         hPrintf("<span class='textAlert' id='alleleCounts'>"
-                "All gene haplotypes shown: %d of %d</span>\n",
+                "All gene haplotypes shown: %d of %d.</span>\n",
                 (countRows - countHidden), countRows);
     else
         hPrintf("<span class='textOpt' id='alleleCounts'>"
-                "Common gene haplotypes shown: %d of %d</span>\n",
+                "Common gene haplotypes shown: %d of %d.</span>\n",
                 (countRows - countHidden), countRows);
+
+    // If there were too many, say so
+    if (haploCount >= TOO_MANY_HAPS)
+        hPrintf("&nbsp;&nbsp;<span class='textAlert'>A total of %d haplotypes were discovered, "
+                "which is too many to be displayed.  Only the most frequently occurring "
+                "%d have been included.</span>\n", haploCount, TOO_MANY_HAPS);
+
     hPrintf("<BR><input type='button' id='" HAPLO_RARE_HAPS "' value='%s rare haplotypes' "
             "onclick='alleles.rareAlleleToggle(this);' class='" TOGGLE_BUTTON "' "
             "title='Show/Hide rare haplotypes that occur with a frequency of less than %g%%'>",
@@ -2174,7 +2185,7 @@ else
 #ifdef ALL_ARE_BUTTONS
 hPrintf("<input type='button' id='" HAPLO_SHOW_SCORES "' value='%s scoring' "
         "onclick='alleles.scoresToggle(this);' class='" TOGGLE_BUTTON "' "
-        "title='Show/Hide all haploptye scores'>\n",(showScores ? "Hide":"Show"));
+        "title='Show/Hide all haplotype scores'>\n",(showScores ? "Hide":"Show"));
 #endif//def ALL_ARE_BUTTONS
 hPrintf("&nbsp;&nbsp;<a href='#' onclick='return alleles.setAndRefresh(\""HAPLO_RESET_ALL"\",1);'>"
         "Reset to defaults</a>\n");
@@ -2184,8 +2195,10 @@ void geneAllelesTableAndControls(struct cart *cart, char *geneId,
                                  struct haploExtras *he, struct haplotypeSet *hapSet)
 // Outputs the Gene Haplotype Alleles HTML table with button controls and AJAX replaceable div.
 {
-boolean noHaps = (hapSet == NULL
-              || (slCount(hapSet->haplos) == 1 && haploIsReference(hapSet->haplos)));
+int haploCount = (hapSet == NULL ? 0 : slCount(hapSet->haplos));
+boolean tooManyHaps = (haploCount > TOO_MANY_HAPS * 10); // For the present, the first N are shown
+boolean noHaps = (tooManyHaps  // too many means show none!
+                 || hapSet == NULL|| (haploCount == 1 && haploIsReference(hapSet->haplos)));
 
 // alleles table will require ajax
 jsIncludeFile("ajax.js",NULL);
@@ -2196,26 +2209,32 @@ hPrintf("<div id='" HAPLO_TABLE "'><!-- " HAPLO_TABLE " begin -->\n");
 
 // Brief intro
 hPrintf("Generated from <A HREF='http://www.1000genomes.org/' TARGET=_BLANK>1000 Genomes</A> "
-        "Phase1 variants.");
+        "Phase1 variants (<A HREF='../goldenPath/help/haplotypes.html' "
+        "title='Help on Gene haplotype alleles section' TARGET=_BLANK>help</A>).");
 
 boolean rareVars     =  cartTimeoutBoolean(cart, HAPLO_RARE_VAR, HAPLO_CART_TIMEOUT);
 boolean dnaView      =  cartTimeoutBoolean(cart, HAPLO_DNA_VIEW, HAPLO_CART_TIMEOUT);
 boolean fullGeneView =  cartTimeoutBoolean(cart, HAPLO_FULL_SEQ, HAPLO_CART_TIMEOUT);
 boolean tripletView  =  FALSE;
 // Support toggling between common and rare variants
-int variantCount = (noHaps ? 0 : hapSet->variantsCovered);
+int variantCount = (haploCount == 0 ? 0 : hapSet->variantsCovered);
+boolean tooManyVars = (variantCount > TOO_MANY_HAPS * 2);
+if (!tooManyHaps && tooManyVars)
+    {
+    tooManyHaps = noHaps = TRUE;
+    }
 
 if (rareVars)
     {
-    hPrintf(" <span id='alleleRareVars' class='textAlert'>All %d variant%s "
-            "(includes synonymous and rare variants with a frequency of less than %d%%).</span>"
-            "<BR>\n",variantCount,(variantCount != 1 ? "s":""),HAPLO_COMMON_VARIANT_MIN_PCT);
+    hPrintf(" <div id='alleleRareVars' class='textAlert'>All %d variant%s "
+            "(includes synonymous and rare variants with a frequency of less than %d%%).</div>\n",
+            variantCount,(variantCount != 1 ? "s":""),HAPLO_COMMON_VARIANT_MIN_PCT);
     }
 else
     {
-    hPrintf(" <span id='alleleRareVars' class='textOpt'>"
+    hPrintf(" <div id='alleleRareVars' class='textOpt'>"
             "Restricted to %d non-synonymous, common variant%s with a frequency of "
-            "occurrence of at least %g%%.</span><BR>\n",variantCount,
+            "occurrence of at least %g%%.</div>\n",variantCount,
             (variantCount != 1 ? "s":""),he->variantMinPct);
     }
 
@@ -2245,7 +2264,8 @@ if (!noHaps)
 #endif//def ALL_ARE_BUTTONS
 
 // Restrict to common variants
-if (!noHaps || !rareVars)
+if (!noHaps
+||  (tooManyHaps == rareVars)) // too many and and rare or not too many and not rare
     {
     hPrintf("<td><input type='button' id='" HAPLO_RARE_VAR "' class='" TOGGLE_BUTTON "' "
             "value='%s' title='Include or Restrict to non-synonymous, common "
@@ -2282,7 +2302,7 @@ if (!noHaps)
     {
     // Scoring?
     boolean showScores   = cartTimeoutBoolean(cart, HAPLO_SHOW_SCORES, HAPLO_CART_TIMEOUT);
-    hPrintf("<div style='width:200px; display:inline-block;'title='Show/Hide all haploptye scores'>"
+    hPrintf("<div style='width:200px; display:inline-block;'title='Show/Hide all haplotype scores'>"
             "<input type=checkbox id='" HAPLO_SHOW_SCORES "'%s value='%s' "
             "onclick='alleles.scoresShow(this,this.value);'>Show scoring</div>\n",
             (showScores?" CHECKED":""),(showScores?"[]":"set"));
@@ -2312,21 +2332,31 @@ if (!noHaps)
     {
     // Say something if this is the negative strand
     if (hapSet->strand[0] == '-')
-        hPrintf("<div class='textInfo'>"
-                "All variations and sequence reflect the '-' strand.</div>\n");
+        hPrintf("<div class='textInfo'>All variations and sequence reflect the "
+                "negative ('-' or \"antisense\") strand.</div>\n");
 
-    // Sort in most popular order and make sure the haplotyes are oriented to their strand
+    // Sort in most popular order and make sure the haplotypes are oriented to their strand
     slSort(&(hapSet->haplos),haplotypePopularityCmp);
     slReverse(&(hapSet->haplos));
     haploSetStrandOrient(he,hapSet); // haplos should be oriented as gene strand
     }
 
 // Any haplotypes to show?
-if (noHaps)
+if (tooManyHaps)
+    {
+    if (tooManyVars)
+        hPrintf("<div class='textAlert'>%d haplotypes were found using %d varaints.  "
+                "This is too many to be displayed."
+                "</div>\n",haploCount,variantCount);
+    else
+        hPrintf("<div class='textAlert'>%d haplotypes were found which is too many to be displayed."
+                "</div>\n",haploCount);
+    }
+else if (noHaps)
     hPrintf("<BR>0 non-reference haplotypes were found using %s variants.<BR>\n",
             rareVars ?
-            "<span style='color:blue;'>common</span> or <span style='color:#DC143C;'>rare</span>"
-          : "<span style='color:blue;'>common</span>");
+            "<span class='textOpt'>common</span> or <span class='textAlert'>rare</span>"
+          : "<span class='textOpt'>common</span>");
 else // Finally the table of haplotype alleles
     geneAllelesTable(cart, he, hapSet, dnaView, fullGeneView, tripletView );
 
@@ -2512,7 +2542,10 @@ if (he->populationsToo)
     haploOptionalsEnable(he,haplo);
     if (differentString(row[gafPopScore],"nan")
     &&  differentString(row[gafPopScore],"0"  ))
+        {
+        haploOptionalsEnable(he,haplo);
         haplo->ho->popScore   = sqlDouble(row[gafPopScore]);
+        }
     }
 
 bedFree(&bed);
@@ -2737,7 +2770,7 @@ double variantSD   = CALC_SD(  hapsFound, variantSumSq);
 
 if (setsFound == 1)
     {
-    fprintf(out, "%s: haplotyes:%-3d hom/hap:%-3d ", commonToken, hapsNr, homsForSet );
+    fprintf(out, "%s: haplotypes:%-3d hom/hap:%-3d ", commonToken, hapsNr, homsForSet );
     //fprintf(out, "wow:%-2d ",     wowsForSet);
     fprintf(out, "variants:%-3d ",hapSet->variantsCovered);
     fprintf(out, "p-Score max ");

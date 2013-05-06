@@ -18,6 +18,7 @@ FILE *out = pipelineFile(dataPipe);
 fprintf(out, "To: %s\n", toAddress);
 fprintf(out, "From: %s\n", fromAddress);
 fprintf(out, "Subject: %s\n", theSubject);
+fprintf(out, "\n");
 fprintf(out, "%s\n", theBody);
 fflush(out);
 if(ferror(out) || pipelineWait(dataPipe))

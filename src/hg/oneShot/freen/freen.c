@@ -1,11 +1,12 @@
 /* freen - My Pet Freen. */
-#include <sys/wait.h>
+#include <sys/statvfs.h>
+#include <uuid/uuid.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "portable.h"
-#include "jksql.h"
+#include "cheapcgi.h"
 
 void usage()
 {
@@ -17,26 +18,9 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void freen(char *inFile)
+void freen(char *input)
 {
-int childId = mustFork();
-if (childId == 0)
-    {
-    int err = system(inFile);
-    printf("child says: err = %d\n", err);
-    if (err != 0)
-	exit(-1);
-        // errAbort("system call '%s' had problems", inFile);
-    else
-	exit(0);
-    }
-else
-    {
-    int status = 0;
-    printf("parent got childId=%d\n", childId);
-    int child = waitpid(-1, &status, 0);
-    printf("parent says after waitPid: child=%d, status=%d\n", child, status);
-    }
+puts(cgiEncode(input));
 }
 
 

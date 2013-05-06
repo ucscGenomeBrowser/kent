@@ -1,4 +1,4 @@
-# ENCODE Integrated Regulation Track (wranger Jim)
+# ENCODE Integrated Regulation Track (wrangler Kate)
 
 track wgEncodeReg
 superTrack on show
@@ -322,7 +322,6 @@ canPack On
     type bed 5 .
     superTrack wgEncodeReg hide
     inputTrackTable wgEncodeRegDnaseClusteredInputs
-    #inputTracksSubgroupDisplay cellType treatment rep
     inputTableFieldDisplay cellType treatment replicate lab dateUnrestricted
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     visibility dense
@@ -346,6 +345,7 @@ canPack On
     priority 1.6
 
     track wgEncodeRegTfbsClusteredV2
+    release beta, public
     shortLabel Txn Factor ChIP
     longLabel Transcription Factor ChIP-seq from ENCODE
     type factorSource
@@ -354,9 +354,40 @@ canPack On
     inputTrackTable wgEncodeRegTfbsClusteredInputs
     inputTableFieldDisplay cellType factor treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    # inputTracksSubgroupDisplay cellType factor treatment
     visibility dense
     useScore 1
-    priority 1.7
+    priority 1.73
     html wgEncodeRegTfbsClustered.release2
+
+    track wgEncodeRegTfbsClusteredV2
+    release alpha
+    shortLabel Txn Fac ChIP V2
+    longLabel Transcription Factor ChIP-seq Clusters of 148 antibodies (114 targets) from ENCODE
+    type factorSource
+    superTrack wgEncodeReg dense
+    sourceTable wgEncodeRegTfbsCells
+    inputTrackTable wgEncodeRegTfbsClusteredInputs
+    inputTableFieldDisplay cellType factor treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    priority 1.73
+    html wgEncodeRegTfbsClustered.release2
+    dataVersion ENCODE Jan 2011 Freeze
+
+    # NOTE: table name versioning still TBD
+    track wgEncodeRegTfbsClusteredV4
+    release alpha
+    shortLabel Txn Fac ChIP V3a
+    longLabel Transcription Factor ChIP-seq Clusters of 189 antibodies (162 targets) from ENCODE
+    type factorSource
+    superTrack wgEncodeReg dense
+    sourceTable wgEncodeRegTfbsCellsV4
+    inputTrackTable wgEncodeRegTfbsClusteredInputsV4
+    inputTableFieldDisplay cellType factor treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    priority 1.75
+    dataVersion ENCODE Jul 2012 Freeze
 

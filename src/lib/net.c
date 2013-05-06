@@ -570,7 +570,7 @@ return dyStringCannibalize(&dy);
 
 int netWaitForData(int sd, int microseconds)
 /* Wait for descriptor to have some data to read, up to given number of
- * number of microseconds.  Returns amount of data there or zero if timed out. */
+ * microseconds.  Returns amount of data there or zero if timed out. */
 {
 struct timeval tv;
 fd_set set;

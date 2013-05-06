@@ -782,9 +782,15 @@ for(x1 = 0; x1 < width; ++x1)
 /* Fill in colors from alternate track if necessary. */
 if (colorTrack != NULL)
     {
-    struct track *cTrack = hashMustFindVal(trackHash, colorTrack);
-
-    wigFillInColorArray(tg, hvg, colorArray, width, cTrack);
+    struct track *cTrack = hashFindVal(trackHash, colorTrack);
+    if (cTrack == NULL) // rightClick update of wigColorBy track may not have colorTrack in hash
+        {               // so create it on the fly
+        struct trackDb *tdb = hTrackDbForTrack(database,colorTrack);
+        if (tdb != NULL)
+            cTrack = trackFromTrackDb(tdb);
+        }
+    if (cTrack != NULL)
+        wigFillInColorArray(tg, hvg, colorArray, width, cTrack);
     }
 
 return colorArray;

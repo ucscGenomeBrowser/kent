@@ -99,7 +99,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC "chrUn_%s", $line;
     }
 }
@@ -247,11 +247,11 @@ taxId   9031
 '_EOF_'
     # << happy emacs
 
-    time makeGenomeDb.pl -stop=agp galGal4.config.ra > agp.log 2>&1 
+    time makeGenomeDb.pl -stop=agp galGal4.config.ra > agp.log 2>&1
     #	real    1m37.730s
     # check the end of agp.log to verify it is OK
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
-	-continue=db galGal4.config.ra > db.log 2>&1 
+	-continue=db galGal4.config.ra > db.log 2>&1
     #	real    8m20.996s
     # the first attempted failed in the:
     #	featureBits -or -countGaps galGal4 gold gap
@@ -293,7 +293,7 @@ taxId   9031
 	galGal4 > do.log 2>&1 &
     #	about 1 hour
 
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #	10508414 bases of 1032854810 (1.017%) in intersection
 
 XXX - ready for this when rmsk is done
@@ -533,7 +533,7 @@ close (FH);
 # Felis catus	1081	919	354
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add:
@@ -765,3 +765,122 @@ TMPDIR=/scratch/tmp
     #	18576173 bases of 647368134 (2.869%) in intersection
 
 ############################################################################
+# construct liftOver to galGal3 (DONE - 2013-04-30 - Hiram)
+    screen -S galGal4	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/galGal4/bed/blat.galGal3.2013-04-30
+    cd /hive/data/genomes/galGal4/bed/blat.galGal3.2013-04-30
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/galGal4/jkStuff/galGal4.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev galGal4 galGal3 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/galGal4/jkStuff/galGal4.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev galGal4 galGal3 > do.log 2>&1
+    #   real    24m2.551s
+
+    # verify this file exists:
+    #	/gbdb/galGal4/liftOver/galGal4ToGalGal3.over.chain.gz
+    # and try out the conversion on genome-test from galGal4 to galGal3
+
+############################################################################
+# construct ucscToEnsembl name translation table (DONE - 2013-05-01 - Hiram)
+    mkdir /hive/data/genomes/galGal4/ensembl
+    cd /hive/data/genomes/galGal4/ensembl
+    rsync -a -P  rsync://ftp.ensembl.org/ensembl/pub/mnt2/release-71/fasta/gallus_gallus/dna/Gallus_gallus.Galgal4.71.dna.toplevel.fa.gz ./
+    faCount Gallus_gallus.Galgal4.71.dna.toplevel.fa.gz > ens71.faCount.txt
+    cut -f1,2 ens71.faCount.txt \
+       | egrep -v "^total|^#seq" | sort -k2nr > ens71.chrom.sizes
+    faToTwoBit Gallus_gallus.Galgal4.71.dna.toplevel.fa.gz ens71.galGal4.2bit
+    twoBitDup ens71.galGal4.2bit
+
+    cat > ucscToEns.pl << '_EOF_'
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %ucscChromSizes;
+my %contigToChr;
+
+open (FH, "<../chrom.sizes") or die "can not read ../chrom.sizes";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($chr, $size) = split('\s+', $line);
+  my $ucscChr = $chr;
+  $ucscChromSizes{$chr} = $size;
+  if ($chr =~ m/chrLGE22C19W28_N03011.*_random/) {
+      $chr =~ s/chrLGE22C19W28_N03011/chrLGE22C19W28_AADN03011/;
+  }
+  if ($chr =~ m/_random/) {
+     $chr =~ s/_random//;
+     $chr =~ s/.*_//;
+  }
+  $chr =~ s/^chr[0-9]+_//;
+  $chr =~ s/^chrUn_//;
+  $chr =~ s/^chr//;
+  $contigToChr{$chr} = $ucscChr;
+}
+close (FH);
+
+open (NF, ">not.found.txt") or die "can not write to not.found.txt";
+open (FH, "<ens71.chrom.sizes") or die "can not read ens71.chrom.sizes";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($chr, $size) = split('\s+', $line);
+  $chr = "M" if ($chr =~ m/MT/);
+  my $ucscContig = $chr;
+  $chr = "MT" if ($chr =~ m/M/);
+  $ucscContig =~ s/\.1$//;
+  my $ucscChr = "unknown";
+  my $ucscSize = 0;
+  if (exists($contigToChr{$ucscContig})) {
+     $ucscChr = $contigToChr{$ucscContig};
+     $ucscSize = $ucscChromSizes{$ucscChr};
+     die "sizes not equal ? $chr=$size $ucscChr=$ucscSize" if ($size != $ucscSize);
+     printf "%s\t%s\n", $ucscChr, $chr;
+  } else {
+     $ucscContig = "chr${ucscContig}";
+     if (exists($contigToChr{$ucscContig})) {
+        $ucscChr = $contigToChr{$ucscContig};
+        $ucscSize = $ucscChromSizes{$ucscChr};
+        die "sizes not equal ? $chr=$size $ucscChr=$ucscSize" if ($size != $ucscSize);
+        printf "%s\t%s\n", $ucscChr, $chr;
+     } else {
+       printf STDERR "can not find contig '$chr'\n";
+       printf NF "%s\t%d\n", $chr, $size;
+     }
+  }
+}
+close (FH);
+close (NF);
+'_EOF_'
+    # << happy emacs
+
+    chmod +x ucscToEns.pl
+    ./ucscToEns.pl > ucscToEnsembl.tab
+
+    mkdir /hive/data/genomes/galGal4/bed/ucscToEnsembl
+    cd /hive/data/genomes/galGal4/bed/ucscToEnsembl
+    ln -s ../../ensembl/ucscToEnsembl.tab
+
+    cat > ucscToEnsembl.sql << '_EOF_'
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(30))
+);
+'_EOF_'
+   # << happy emacs
+
+   hgsql galGal4 -e "drop table ucscToEnsembl;"
+   hgsql galGal4 < ucscToEnsembl.sql
+   hgsql galGal4 \
+     -e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+   # verify blue navigation bar will now go to Ensembl
+
+############################################################################
+

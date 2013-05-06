@@ -11,9 +11,12 @@
 
 boolean encodeList = FALSE;
 boolean tabList = FALSE;
+boolean useTarget = FALSE;
 char *cellLetter = NULL;
 int scoreCol = 7;
 boolean noLetter = FALSE;
+boolean noLetterOk = FALSE;
+boolean noNormalize = FALSE;
 
 struct hash *cellLetterHash;
 
@@ -27,8 +30,9 @@ errAbort(
   "options:\n"
   "   -cellLetter=file.tab - two column file of form <letter> <name> for cell lines\n"
   "           If not present the first letter of the cell name will be used\n"
-  "   -tabList - the inputFileList is in three column format of form:\n"
-  "           <fileName> <cell> <factor>\n"
+  "   -tabList - the inputFileList is in three or four column format of form:\n"
+  "           <fileName> <cell> <factor-antibody> [factor-target]\n"
+  "   -useTarget - cluster on target (must have 4 column tabList)\n"
   "   -encodeList - the inputFileList is of format you might get from cut and paste of\n"
   "        encode downloads page - tab separated with following columns:\n"
   "             <relDate> <fileName> <fileSize> <submitDate> <metadata>\n"
@@ -37,7 +41,9 @@ errAbort(
   "        and the antibody and cell tags in the metadata are used\n"
   "   -scoreCol=N - The column (starting with 1) with score.  5 for bed, 7 for narrowPeak\n"
   "        default %d\n"
-  "   -noLetter - just list cell types found in the inpuFileList that lack a code in the cellLetter file\n"
+  "   -noLetter - just list cell types found in the inputFileList that lack a code in the cellLetter file\n"
+  "   -noLetterOk - use first letter of cell name (lower-cased) if not found in cell letter file. Strips trailing + qualifiers in cell name before looking up in cell letter file.\n"
+  "   -noNormalize - skip normalization, set norm value to 1 and scoreCol to 4 (score) in cfg file\n"
   , scoreCol
   );
 }
@@ -45,34 +51,49 @@ errAbort(
 static struct optionSpec options[] = {
    {"encodeList", OPTION_BOOLEAN},
    {"tabList", OPTION_BOOLEAN},
+   {"useTarget", OPTION_BOOLEAN},
    {"cellLetter", OPTION_STRING},
    {"scoreCol", OPTION_INT},
    {"noLetter", OPTION_BOOLEAN},
+   {"noLetterOk", OPTION_BOOLEAN},
+   {"noNormalize", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+char *cellAbbrevDefault(char *cell, boolean toLower)
+/* Return default abbreviation of cell-name */
+{
+static char buf[2];
+buf[0] = (toLower ? tolower(cell[0]) : cell[0]);
+buf[1] = 0;
+return buf;
+}
 
 char *cellAbbreviation(char *cell)
 /* Return abbreviated version of cell-name */
 {
-if (cellLetterHash != NULL)
+if (cellLetterHash == NULL)
+    return cellAbbrevDefault(cell, FALSE);
+
+if (noLetterOk)
     {
-    char *val = hashFindVal(cellLetterHash, cell);
-    if (val == NULL)
-        {
-        if (noLetter)
-            uglyf("cell %s isn't in %s\n", cell, cellLetter);
-        else
-            errAbort("cell %s isn't in %s\n", cell, cellLetter);
-        }
+    // strip qualifiers (follow the '+' char)
+    char *plus = stringIn("+", cell);
+    if (plus)
+        *plus = 0;
+    }
+char *val = hashFindVal(cellLetterHash, cell);
+if (val != NULL)
     return val;
-    }
+
+if (noLetterOk)
+    return cellAbbrevDefault(cell, TRUE);
+
+if (noLetter)
+    uglyf("cell %s isn't in %s\n", cell, cellLetter);
 else
-    {
-    static char buf[2];
-    buf[0] = cell[0];
-    buf[1] = 0;
-    return buf;
-    }
+    errAbort("cell %s isn't in %s\n", cell, cellLetter);
+return NULL;
 }
 
 int commonPrefixSize(struct slName *list)
@@ -146,6 +167,8 @@ if (bStart == NULL)
 double calcNormScoreFactor(char *fileName, int scoreCol)
 /* Figure out what to multiply things by to get a nice browser score (0-1000) */
 {
+if (noNormalize)
+    return 1.0;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[scoreCol+1];
 double sum = 0, sumSquares = 0;
@@ -193,11 +216,12 @@ for (in = inList; in != NULL; in = in->next)
 carefulClose(&f);
 }
 
-void makeConfigFromTabList(char *input, char *output)
-/* makeConfigFromFileList - Create config file for hgBedsToBedExps from list of file/cell/ab. */
+void makeConfigFromTabList(char *input, char *output, boolean useTarget)
+/* makeConfigFromFileList - Create config file for hgBedsToBedExps from list of file/cell/ab
+     or file/cell/ab/target. */
 {
 struct lineFile *lf = lineFileOpen(input, TRUE);
-char *row[3];
+char *row[4];
 FILE *f = mustOpen(output, "w");
 
 while (lineFileRow(lf, row))
@@ -205,9 +229,14 @@ while (lineFileRow(lf, row))
     char *fileName = row[0];
     char *cell = row[1];
     char *factor = row[2];
-    verbose(2, "%s\n", fileName);
-    fprintf(f, "%s\t%s\t", factor, cell);
-    fprintf(f, "%s\t", cellAbbreviation(cell));
+    verbose(3, "%s\n", fileName);
+    if (useTarget)
+        // 4 column input file -- output target cell+treatment+factor
+        fprintf(f, "%s\t%s+%s\t", row[3], cell, factor);
+    else
+        // antibody cell+treatment
+        fprintf(f, "%s\t%s", factor, cell);
+    fprintf(f, "\t%s\t", cellAbbreviation(cell));
     fprintf(f, "file\t%d\t", scoreCol-1);
     fprintf(f, "%g\t", calcNormScoreFactor(fileName, scoreCol-1));
     fprintf(f, "%s\n", fileName);
@@ -279,8 +308,8 @@ while (lineFileNextReal(lf, &line))
     fprintf(f, "%s\t%s\t", antibody, cell);
     fprintf(f, "%s\t", cellAbbreviation(cell));
     fprintf(f, "file\t%d\t", scoreCol-1);
-    fprintf(f, "%g\t", calcNormScoreFactor(fileName, scoreCol-1));
-    fprintf(f, "%s\n", fileName);
+    fprintf(f, "%g", calcNormScoreFactor(fileName, scoreCol-1));
+    fprintf(f, "\t%s\n", fileName);
     }
 carefulClose(&f);
 }
@@ -293,7 +322,7 @@ if (cellLetter)
 if (encodeList)
     makeConfigFromEncodeList(input, output);
 else if (tabList)
-    makeConfigFromTabList(input, output);
+    makeConfigFromTabList(input, output, useTarget);
 else
     makeConfigFromFileList(input, output);
 }
@@ -306,9 +335,19 @@ if (argc != 3)
     usage();
 encodeList = optionExists("encodeList");
 tabList = optionExists("tabList");
+useTarget = optionExists("useTarget");
 cellLetter = optionVal("cellLetter", cellLetter);
 scoreCol = optionInt("scoreCol", scoreCol);
 noLetter = optionExists("noLetter");
+noLetterOk = optionExists("noLetterOk");
+noNormalize = optionExists("noNormalize");
+if (noNormalize)
+    // standard score column index added to config file
+    scoreCol = 5;
+else
+    {
+    verbose(2, "Normalizing score using column %d\n", scoreCol);
+    }
 regClusterBedExpCfg(argv[1], argv[2]);
 return 0;
 }

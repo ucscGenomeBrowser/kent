@@ -84,6 +84,88 @@ void edwUserOutput(struct edwUser *el, FILE *f, char sep, char lastSep);
 #define edwUserCommaOut(el,f) edwUserOutput(el,f,',',',');
 /* Print out edwUser as a comma separated list including final comma. */
 
+#define EDWSCRIPTREGISTRY_NUM_COLS 6
+
+extern char *edwScriptRegistryCommaSepFieldNames;
+
+struct edwScriptRegistry
+/* A script that is authorized to submit on behalf of a user */
+    {
+    struct edwScriptRegistry *next;  /* Next in singly linked list. */
+    unsigned id;	/* Autoincremented script ID */
+    unsigned userId;	/* Associated user */
+    char *name;	/* Script name */
+    char *description;	/* Script description */
+    char *secretHash;	/* Hashed script password */
+    int submitCount;	/* Number of submissions attempted */
+    };
+
+void edwScriptRegistryStaticLoad(char **row, struct edwScriptRegistry *ret);
+/* Load a row from edwScriptRegistry table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwScriptRegistry *edwScriptRegistryLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwScriptRegistry from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwScriptRegistryFreeList(). */
+
+void edwScriptRegistrySaveToDb(struct sqlConnection *conn, struct edwScriptRegistry *el, char *tableName, int updateSize);
+/* Save edwScriptRegistry as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use edwScriptRegistrySaveToDbEscaped() */
+
+void edwScriptRegistrySaveToDbEscaped(struct sqlConnection *conn, struct edwScriptRegistry *el, char *tableName, int updateSize);
+/* Save edwScriptRegistry as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than edwScriptRegistrySaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+
+struct edwScriptRegistry *edwScriptRegistryLoad(char **row);
+/* Load a edwScriptRegistry from row fetched with select * from edwScriptRegistry
+ * from database.  Dispose of this with edwScriptRegistryFree(). */
+
+struct edwScriptRegistry *edwScriptRegistryLoadAll(char *fileName);
+/* Load all edwScriptRegistry from whitespace-separated file.
+ * Dispose of this with edwScriptRegistryFreeList(). */
+
+struct edwScriptRegistry *edwScriptRegistryLoadAllByChar(char *fileName, char chopper);
+/* Load all edwScriptRegistry from chopper separated file.
+ * Dispose of this with edwScriptRegistryFreeList(). */
+
+#define edwScriptRegistryLoadAllByTab(a) edwScriptRegistryLoadAllByChar(a, '\t');
+/* Load all edwScriptRegistry from tab separated file.
+ * Dispose of this with edwScriptRegistryFreeList(). */
+
+struct edwScriptRegistry *edwScriptRegistryCommaIn(char **pS, struct edwScriptRegistry *ret);
+/* Create a edwScriptRegistry out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwScriptRegistry */
+
+void edwScriptRegistryFree(struct edwScriptRegistry **pEl);
+/* Free a single dynamically allocated edwScriptRegistry such as created
+ * with edwScriptRegistryLoad(). */
+
+void edwScriptRegistryFreeList(struct edwScriptRegistry **pList);
+/* Free a list of dynamically allocated edwScriptRegistry's */
+
+void edwScriptRegistryOutput(struct edwScriptRegistry *el, FILE *f, char sep, char lastSep);
+/* Print out edwScriptRegistry.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwScriptRegistryTabOut(el,f) edwScriptRegistryOutput(el,f,'\t','\n');
+/* Print out edwScriptRegistry as a line in a tab-separated file. */
+
+#define edwScriptRegistryCommaOut(el,f) edwScriptRegistryOutput(el,f,',',',');
+/* Print out edwScriptRegistry as a comma separated list including final comma. */
+
 #define EDWHOST_NUM_COLS 9
 
 extern char *edwHostCommaSepFieldNames;

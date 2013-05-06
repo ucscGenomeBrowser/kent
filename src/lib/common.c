@@ -2606,7 +2606,13 @@ void mustWriteFd(int fd, void *buf, size_t size)
 {
 ssize_t result = write(fd, buf, size);
 if (result < size)
-    errAbort("mustWriteFd: write failed: %s", strerror(errno));
+    {
+    if (result < 0)
+	errnoAbort("mustWriteFd: write failed");
+    else 
+        errAbort("mustWriteFd only wrote %lld of %lld bytes. Likely the disk is full.",
+	    (long long)result, (long long)size);
+    }
 }
 
 off_t mustLseek(int fd, off_t offset, int whence)

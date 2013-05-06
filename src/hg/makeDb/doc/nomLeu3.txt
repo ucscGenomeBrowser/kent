@@ -109,6 +109,7 @@ foreach my $acc (keys %accToChr) {
     close (FH);
     close (UC);
 }
+'_EOF_'
 
     # << happy emacs
     chmod +x ucscCompositeAgp.pl

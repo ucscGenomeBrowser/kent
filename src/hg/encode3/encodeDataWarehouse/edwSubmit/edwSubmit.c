@@ -286,7 +286,6 @@ if (errCatchStart(errCatch))
 
     /* Rename file both in file system and (via ef) database. */
     edwMakeFileNameAndPath(ef->id, submitFileName, edwFile, edwPath);
-    uglyf("edwFile=%s, edwPath=%s\n", edwFile, edwPath);
     mustRename(tempName, edwPath);
     ef->edwFileName = cloneString(edwFile);
     }
@@ -602,6 +601,8 @@ static void getSubmittedFile(struct sqlConnection *conn, struct edwFile *bf,
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
+    if (freeSpaceOnFileSystem(edwRootDir) < 2*bf->size)
+	errAbort("No space left in warehouse!!");
     int hostId=0, submitDirId = 0;
     int fd = edwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
 	&hostId, &submitDirId);
@@ -651,10 +652,15 @@ struct errCatch *errCatch = errCatchNew();
 char query[256];
 if (errCatchStart(errCatch))
     {
+    /* Make sure they got a bit of space, enough for a reasonable submit file. 
+     * We do this here just because we can make error message more informative. */
+    long long diskFreeSpace = freeSpaceOnFileSystem(edwRootDir);
+    if (diskFreeSpace < 4*1024*1024)
+	errAbort("No space left in warehouse!");
+
     /* Open remote submission file.  This is most likely where we will fail. */
     int hostId=0, submitDirId = 0;
     long long startUploadTime = edwNow();
-    uglyf("edwOpenAndRecordInDir(submitDir=%s, submitFile=%s, submitUrl=%s)\n", submitDir, submitFile, submitUrl);
     int remoteFd = edwOpenAndRecordInDir(conn, submitDir, submitFile, submitUrl, 
 	&hostId, &submitDirId);
 
@@ -667,7 +673,6 @@ if (errCatchStart(errCatch))
     /* Calculate MD5 sum, and see if we already have such a file. */
     char *md5 = md5HexForFile(tempSubmitFile);
     int fileId = findFileGivenMd5AndSubmitDir(conn, md5, submitDirId);
-    uglyf("tempSubmitFile=%s, fileId=%d, md5=%s\n", tempSubmitFile, fileId, md5);
 
     /* If we already have it, then delete temp file, otherwise put file in file table. */
     char submitLocalPath[PATH_LEN];
@@ -707,7 +712,6 @@ if (errCatchStart(errCatch))
 
     /* By now there is a submit file on the local file system.  */
 
-    uglyf("edwParseSubmitFile(%s, %s)\n", submitLocalPath, submitUrl);
     bfList = edwParseSubmitFile(submitLocalPath, submitUrl);
 
     /* Save our progress so far to submit table. */
@@ -753,6 +757,7 @@ safef(query, sizeof(query),
     "update edwSubmit set oldFiles=%d,oldBytes=%lld,byteCount=%lld where id=%u",  
 	oldCount, oldBytes, byteCount, submitId);
 sqlUpdate(conn, query);
+
 
 /* Go through list attempting to load the files if we don't already have them. */
 for (bf = newList; bf != NULL; bf = bf->next)

@@ -6,6 +6,17 @@ table edwUser
     string email unique;   "Email address - required"
     )
 
+table edwScriptRegistry
+"A script that is authorized to submit on behalf of a user"
+    (
+    uint id primary auto;	"Autoincremented script ID"
+    uint userId index;		"Associated user"
+    string name;		"Script name"
+    lstring description;	"Script description"
+    string secretHash;		"Hashed script password"
+    int submitCount;		"Number of submissions attempted"
+    )
+
 table edwHost
 "A web host we have collected files from - something like www.ncbi.nlm.gov or google.com"
     (
