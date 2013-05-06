@@ -154,7 +154,7 @@ void runJob(struct runner *runner, struct edwJob *job)
 {
 /* Create stderr file for child  as a temp file */
 char tempFileName[PATH_LEN];
-safef(tempFileName, PATH_LEN, "%sedwRunnerXXXXXX", edwTempDir());
+safef(tempFileName, PATH_LEN, "%sedwRunDaemonXXXXXX", edwTempDir());
 int errFd = mkstemp(tempFileName);
 if (errFd < 0)
     errnoAbort("Couldn't open temp file %s", tempFileName);

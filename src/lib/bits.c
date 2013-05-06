@@ -370,7 +370,8 @@ fputc('\n', out);
 }
 
 void bitsOut(FILE* out, Bits *bits, int startIx, int bitCount, boolean onlyOnes)
-// Print part or all of bit map as a string of 0s and 1s.  Optionally only print 1s and [bracket].
+// Print part or all of bit map as a string of 0s and 1s.
+// If onlyOnes, enclose result in [] and use ' ' instead of '0'.
 {
 if (onlyOnes)
     fputc('[', out);
@@ -395,7 +396,7 @@ if (onlyOnes)
 Bits *bitsIn(struct lm *lm,char *bitString, int len)
 // Returns a bitmap from a string of 1s and 0s.  Any non-zero, non-blank char sets a bit.
 // Returned bitmap is the size of len even if that is longer than the string.
-// Optionally supply local memory.
+// Optionally supply local memory.  Note does NOT handle enclosing []s printed with bitsOut().
 {
 if (bitString == NULL || len == 0)
     return NULL;

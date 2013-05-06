@@ -135,6 +135,9 @@ long long edwSubmitMaxStartTime(struct edwSubmit *submit, struct sqlConnection *
 int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn);
 /* Count number of new files in submission that have been validated. */
 
+void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url);
+/* Add submission job to table and wake up daemon. */
+
 struct edwValidFile *edwFindElderReplicates(struct sqlConnection *conn, struct edwValidFile *vf);
 /* Find all replicates of same output and format type for experiment that are elder
  * (fileId less than your file Id).  Younger replicates are responsible for taking care 

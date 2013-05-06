@@ -177,7 +177,7 @@ char *haplotypesDiscoverVcfFile(struct haploExtras *he, char *chrom);
 // Discovers, if necessary and returns the VCF File to use
 
 int haplotypePopularityCmp(const void *va, const void *vb);
-// Compare to sort haplotypes in commonId, then subject count order
+// Compare to sort haplotypes by frequency of occurrence
 
 int hapSetSecondIdCmp(const void *va, const void *vb);
 // Compare to sort haplotypes in secondId, then haplotype Id order

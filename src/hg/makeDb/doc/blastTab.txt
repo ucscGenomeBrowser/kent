@@ -448,6 +448,11 @@ done
 
 ###########################################################################
 # updating drBlastTab for new EnsGene release (DONE - 2012-10-12 - Hiram)
+#
+# updating drBlastTab for emsGene v70 release (DONE 2013-04-26 - Chin)
+# same steps are followed for all assemblies listed below, but
+# also update the drBlastTab for sacCer2 and mm9.
+
     mkdir /hive/data/genomes/danRer7/bed/ensGene.68/blastTab
     cd /hive/data/genomes/danRer7/bed/ensGene.68/blastTab
     cat << '_EOF_' > prepFasta.sh

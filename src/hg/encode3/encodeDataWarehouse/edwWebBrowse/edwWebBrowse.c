@@ -191,7 +191,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
     /* Print a little summary information about the submission overall before getting down to the
      * file by file info. */
     if (!isEmpty(submit->errorMessage))
-        printf("<B>%s<B><BR>\n", submit->errorMessage);
+        printf("<B>%s</B><BR>\n", submit->errorMessage);
     printf("%d files in validated.txt including %d already in warehouse<BR>\n", 
 	submit->fileCount, submit->oldFiles);
     printf("%d of %d new files are uploaded<BR>\n", submit->newFiles, 

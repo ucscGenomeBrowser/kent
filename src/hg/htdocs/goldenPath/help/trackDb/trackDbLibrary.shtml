@@ -3668,13 +3668,13 @@ inputTrackTable myCellLineAssociations
 inputTableFieldDisplay cellType treatment lab
     ...</pre>
 <P>This track will show transcription factor (TF)
-binding evidence found in multiple cell lines.  Each item will be
-for a one particlular TF, and also all the cell lines that show
+binding evidence found in multiple cell lines.  Each item represents
+a particular TF, along with the cell lines that show
 evidence of binding in that location.  The secondary <code>sourceTable</code>
 holds the definitions of each cell line abbreviation.  A third
 table is declared with <code>inputTrackTable</code> and carries details for
 each cell line that should be seen in the Browser.  When viewed in
-item detail, 3 fields (cellLine, treatment and lab) will be seen
+item detail, 3 fields (cellType, treatment and lab) will be seen
 for each cell associated with the particular TF binding location.</P>
 </DIV>
 
@@ -4028,7 +4028,7 @@ for each cell associated with the particular TF binding location.</P>
     <li> <code>tag</code>: Used in the code to select
     and sort subtracks based upon their membership.  Tag names
     must be alphanumeric, begin with a letter, and be formed such that the
-    desired sort order of the members will result.</li>
+    desired sort order of the member subtracks will result.</li>
     <li> <code>title</code>: Label of the subgroup as it appears on the 
     selection matrix that is displayed to the user, e.g.,"Antibody". Spaces within
     titles must be replaced by '<code>_</code>'.  A limited amount
@@ -4056,7 +4056,10 @@ for each cell associated with the particular TF binding location.</P>
     selecting subtracks based upon groups, additional settings are
     needed at the composite level.  For a one- or two-dimensional array of
     checkboxes, declare the dimensions X and Y.  Additional dimensions (called
-    "abc") can be declared with this setting as dimA, dimB, etc.</P>
+    "abc") can be declared with this setting as dimA, dimB, etc.</P>  
+    <P>Note that the order of the subgroups in a dimension is exactly the same as 
+    the order they appear in the <code>subGroup#</code> setting, regardless of whether
+    the subtrack list is sorted by tags.</P>
 </DIV>
 
 <DIV class="filterComposite"><span class="types subGroups"></span>
@@ -4121,7 +4124,9 @@ for each cell associated with the particular TF binding location.</P>
     <A onclick="return jumpTo(this);" HREF="#">dragAndDrop</a> may be a better option.
     Currently only subgroups can be defined in the sortOrder, but it
     is anticipated that this will expand to include short and long
-    labels as well.</P>
+    labels as well.  Sorting will occur on the tag values defined in the 
+    <code>subGroup#</code> and <code>subGroups</code> settings.  By sorting
+    on tags, non-alphanumeric orders can be defined.</P>
 </DIV>
 
 <DIV class="fileSortOrder"><span class="types subGroups downloadsOnly"></span>
@@ -4172,8 +4177,8 @@ for each cell associated with the particular TF binding location.</P>
     title of the cellLine subgroup contains a blank space filled in
     with '<code>_</code>'.  The second cell line, "CD14+", includes an HTML encoding
     for '<code>+</code>' in its title, The two subgroups participate in the default
-    sort order, but they each have non-standard sort orders.  In the cellLine subgroup, 
-    GM12878 sorts first by starting its tag with "A".  The 
+    sort order of subtracks, but they each have non-standard sort orders.  In the 
+    cellLine subgroup, GM12878 sorts first by starting its tag with "A".  The 
     antibodies have numbers in their titles, but the tags expand
     the number with "0" to pad the spacing.  This ensures
     H3K4me3 sorts before H3K36me3.</P>
@@ -4213,7 +4218,7 @@ for each cell associated with the particular TF binding location.</P>
     declared as the "A"
     dimension; the user will be able to select subtracks for this
     dimension via a dropdown multi-select filter box.  All three subgroups 
-    participate in the default sort order, and the treatment subgroup is 
+    participate in the default sort order of subtracks, and the treatment subgroup is 
     sorted in reverse order by default.  The "None" treatment
     sorts before all others (in reverse order) by beginning the tag with
     a "Z".  Note that for this "A" dimension,
@@ -4276,8 +4281,8 @@ for each cell associated with the particular TF binding location.</P>
     title of the cellLine subgroup contains a blank space filled in
     with '<code>_</code>'.  The second cell line, "CD14+", includes an HTML encoding
     for '<code>+</code>' in its title, The two subgroups participate in the default
-    sort order, but they each have non-standard sort orders.  In the cellLine subgroup, 
-    GM12878 sorts first by starting its tag with "A".  The 
+    sort order of subtracks, but they each have non-standard sort orders.  In the 
+    cellLine subgroup,  GM12878 sorts first by starting its tag with "A".  The 
     antibodies have numbers in their titles, but the tags expand
     the number with "0" to pad the spacing.  This ensures
     H3K4me3 sorts before H3K36me3.</P>
@@ -4311,7 +4316,7 @@ for each cell associated with the particular TF binding location.</P>
     declared as the "A"
     dimension; the user will be able to select subtracks for this
     dimension via a dropdown multi-select filter box.  All three subgroups 
-    participate in the default sort order, and the treatment subgroup is 
+    participate in the default sort order of subtracks, and the treatment subgroup is 
     sorted in reverse order by default.  The "None" treatment
     sorts before all others (in reverse order) by beginning the tag with
     a "Z".  Note that for this "A" dimension,
