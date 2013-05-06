@@ -393,12 +393,12 @@ freeMem(sectionList);
 sqlFreeResult(&sr);
 }
 
-static char *urlToLogoUrl(struct sqlConnection *conn, char* pubsArticleTable, 
-    char* articleId, char *urlOrig)
+static char *urlToLogoUrl(char* pubsArticleTable, char* articleId, char *urlOrig)
 /* return a string with relative path of logo for publisher given the url of
  * fulltext or a table/articleId, has to be freed 
 */
 {
+struct sqlConnection *conn = hAllocConn(database);
 char* pubCode = NULL;
 if (hHasField("hgFixed", pubsArticleTable, "publisher"))
     {
@@ -476,7 +476,7 @@ printf("<DIV style=\"width:1024px; font-size:100%%\">\n");
 printf("<P>%s</P>\n", authors);
 //
 // logo of publisher
-char *logoUrl = urlToLogoUrl(conn, pubsArticleTable, articleId, url);
+char *logoUrl = urlToLogoUrl(pubsArticleTable, articleId, url);
 if (logoUrl)
     printf("<a href=\"%s\"><img align=\"right\" hspace=\"20\" src=\"%s\"></a>\n", url, logoUrl);
 freeMem(logoUrl);

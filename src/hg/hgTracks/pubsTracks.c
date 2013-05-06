@@ -8,7 +8,7 @@
 static struct rgbColor impact1Color  = {80, 80, 80};
 static struct rgbColor impact2Color  = {0, 80, 255};
 static struct rgbColor impact3Color  = {0, 100, 0};
-static struct rgbColor impact4Color  = {255, 0, 0};
+static struct rgbColor impact4Color  = {255, 255, 0};
 
 static char* pubsArticleTable(struct track *tg)
 /* return the name of the pubs articleTable, either
@@ -250,11 +250,13 @@ char *articleTable = pubsArticleTable(tg);
 
 if(yearFilter == NULL || sameWord(yearFilter, "anytime"))
     yearFilter = NULL;
+if(sameWord(publFilter, "all"))
+    publFilter = NULL;
 
 if(isNotEmpty(keywords))
     keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
 
-if(isEmpty(yearFilter) && isEmpty(keywords))
+if(isEmpty(yearFilter) && isEmpty(keywords) && isEmpty(publFilter))
 {
     loadGappedBed(tg);
 }
@@ -290,6 +292,7 @@ else
     else
         // old table schema, filter by doing a join on article table
         {
+        printf("extra %s", extra);
         char extraTmp[4096];
         safef(prefix, sizeof(prefix),  "name IN (SELECT articleId FROM %s WHERE", articleTable);
         if(isNotEmpty(keywords))
