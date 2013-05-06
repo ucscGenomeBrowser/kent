@@ -727,21 +727,34 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Tue Apr 30 09:27:15 PDT 2013
-    #	Elapsed time: 16114m13s
-    cat fb.panTro3.chainCanFam2Link.txt
-    #	1496334162 bases of 2900529764 (51.588%) in intersection
-
-    #	running the swap - DONE - 2009-06-02
-    mkdir /hive/data/genomes/canFam2/bed/blastz.panTro3.swap
-    cd /hive/data/genomes/canFam2/bed/blastz.panTro3.swap
+    #   real    1278m31.863s
+    # no encodek available, continuing:
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/panTro3/bed/lastzCanFam2.2011-02-23/DEF \
+	-continue=cat `pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=swarm -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > cat.log 2>&1 &
+    #   real    11m42.544s
+    # one chain job failed due to memory limits, finished manually, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-continue=chainMerge `pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > chainMerge.log 2>&1 &
+    #	real    114m33.002s
+    cat fb.canFam3.chainPanTro4Link.txt
+    #	1435182107 bases of 2392715236 (59.981%) in intersection
+
+    #	running the swap - DONE - 2013-05-02
+    mkdir /hive/data/genomes/panTro4/bed/blastz.canFam3.swap
+    cd /hive/data/genomes/panTro4/bed/blastz.canFam3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam3/bed/lastzPanTro4.2013-04-30/DEF \
 	-swap -syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    96m3.779s
-    cat fb.canFam2.chainPanTro3Link.txt
-    #	1438499360 bases of 2384996543 (60.315%) in intersection
+    #   real    113m28.428s
+    cat fb.panTro4.chainCanFam3Link.txt
+    # 1490574959 bases of 2902338967 (51.358%) in intersection
 
 ############################################################################

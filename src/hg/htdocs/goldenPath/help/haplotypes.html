@@ -35,8 +35,8 @@
 <div id='haplotypes'> <!-- Allows using same CSS as the haplotypes aplet itself  -->
 <P>
 With the availability <A HREF='http://www.1000genomes.org/' TARGET=_BLANK>1000 Genomes</A> Phase 1
-data, there currently are 1092 sets of variations phased across chromosomes.  Using these data, 
-we can now see the actual haplotypes or sets of variations falling within the boundaries of 
+data, there are currently 1092 sets of variations phased across chromosomes.  Using these data, 
+we can now see the actual haplotypes, or sets of variations, falling within the boundaries of 
 protein coding exons as they are seen in healthy adult individuals.  For any given gene there 
 can be no more than 2184 distinct haplotypes (a.k.a alleles) given the data, though in most
 cases there are dramatically fewer (mean 4).  Many haplotypes will have little or no phenotypic
@@ -60,8 +60,8 @@ portion of the gene.  The table is sortable on any column by clicking on the col
 </P> 
 
 <UL>
-<li>If the gene is on the negative ('-' or &quot;antisense&quot;) strand, all varaints and sequences will 
-    be presented with respect to the negative strand.  Note that individual variants displayed 
+<li>If the gene is on the negative ('-' or &quot;antisense&quot;) strand, all varaints and sequences 
+    will be presented with respect to the negative strand.  Note that individual variants displayed 
     in the 1000 Genomes phase 1 variations track are all shown as they appear on the 
     positive ('+' or &quot;sense&quot;) strand.</li>
 
@@ -85,7 +85,7 @@ portion of the gene.  The table is sortable on any column by clicking on the col
     to hide these data again.</li>
 
 <li>By default, only non-synonymous, common variants are displyed. Common variants occur in at 
-    least 1% of 1000 Genomes subject chromosomes. Pressing 
+    least 1&#37; of 1000 Genomes subject chromosomes. Pressing 
     <input type='button' style='font-size:.9em;' value='Include all variants' 
     title='Include or Restrict to non-synonymous, common variants with a frequency of at least 1%' 
     onclick='return false;'> 
@@ -101,17 +101,17 @@ portion of the gene.  The table is sortable on any column by clicking on the col
     
 <li>Haplotype frequencies are based upon all releveant chromosomes in the data set.  The total
     number is almost always 2,184 (1,092 for Y and location-dependent for X).  Hover over
-    the frequency calculations to show the number of a particular haplotype in the dataset (<em>e.g.</em>, 
-    <span title='N=1327 of 2184'>"N=1327 of 2184"</span>).  
+    the frequency calculations to show the number of a particular haplotype in the dataset 
+    (<em>e.g.</em>, <span title='N=1327 of 2184'>"N=1327 of 2184"</span>).  
     If appropriate, the homozygous frequency will also be shown and will reflect the number 
     of individuals in the dataset.</li>  
 
 <li>There may be no <em>reference haplotype</em> (made of entirely reference variants) 
-    represented in the 1000 Genomes data. If there is, it will be marked as &quot;reference&quot; in the 
-    table of haplotypes.</li>
+    represented in the 1000 Genomes data. If there is, it will be marked as &quot;reference&quot; 
+    in the table of haplotypes.</li>
 
 <li>By default, all variants are displayed as their predicted effect on amino acid sequence.  
-    Press <input rack style='font-size:.9em;' value='Display as DNA bases'
+    Press <input type='button' style='font-size:.9em;' value='Display as DNA bases'
     to view the variants as DNA bases instead.
     title='Display variants and sequence as amino acids or DNA bases' onclick='return false;'>.
     Return to the protein sequence view by pressing 
@@ -141,7 +141,7 @@ portion of the gene.  The table is sortable on any column by clicking on the col
     In AA view, the AA residue is shown when hovering over any part of the sequence.</li> 
 
 <li>By default, only common haplotype alleles are displayed. Common haplotypes occur in at 
-    least 1% of 1000 Genomes subject chromosomes.  Press
+    least 1&#37; of 1000 Genomes subject chromosomes.  Press
     <input type='button' style='font-size:.9em;' value='Show rare haplotypes' 
     title='Show/Hide rare haplotypes that occur with a frequency of less than 1%' 
     onclick='return false;'>     
@@ -235,21 +235,28 @@ of the project.</div>
     The score is normalized by dividing by the total number of variants. Normalization allows 
     comparing the scores between genes with many variants and those with few. The score will 
     be positive if the haplotype is more frequent than expected by chance and negative if 
-    less frequent.</dd> 
+    less frequent.  For haplotyes made from common, non-synonymous varaints, haplotype scores 
+    above 618 are seen in only 2&#37; of genes.  Likewise, a score of less than -205 is only seen 
+    in 2&#37; of genes.</dd> 
 
 <dt>Hom score</dt>
 <dd>The &quot;homozygous score&quot; is the (-log10) probability of finding exactly N individuals 
     with this haplotype on both chromosomes, given the actual frequency of the haplotype in 
     subject chromosomes. The score will be positive if the haplotype is found homozygous in 
     more individuals than expected and negative when found in fewer individuals than expected.
-    Negative values might suggest 
-    that the haplotype is deleterious when homozygous.</dd> 
+    Negative values might suggest that the haplotype is deleterious when homozygous.  For 
+    haplotyes made from common, non-synonymous varaints, homozygous scores above 96 are seen 
+    in only 2&#37; of genes.  Likewise, a score of less than -17 is only seen in 2&#37; 
+    of genes.</dd> 
 
 <dt>Pop score</dt>
 <dd>(only visible when population distributions are displayed) The &quot;population score&quot; 
     is the variance between population groups divided N, the number occurrences of the haplotype. 
     The most frequently occurring haplotypes will potentially have larger scores, but if N is 
-    small, a skew in population distribution is not unexpected.</dd>
+    small, a skew in population distribution is not unexpected.  Polulation scores are always 
+    greater than or equal to zero.  For haplotyes made from common, non-synonymous varaints, 
+    population scores at or above 33.4 are seen in only 2&#37; of genes and scores above 38.4 are 
+    seen in only 1&#37; of genes.</dd>
 </dl> 
 
 </div> <!-- Allows using same CSS as the haplotypes aplet itself  -->

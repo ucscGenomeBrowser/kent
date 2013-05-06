@@ -731,6 +731,25 @@ safef(query, sizeof(query),
 return sqlQuickNum(conn, query);
 }
 
+void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url)
+/* Add submission job to table and wake up daemon. */
+{
+/* Create command and add it to edwSubmitJob table. */
+char command[strlen(url) + strlen(userEmail) + 256];
+safef(command, sizeof(command), "edwSubmit '%s' %s", url, userEmail);
+char escapedCommand[2*strlen(command) + 1];
+sqlEscapeString2(escapedCommand, command);
+char query[strlen(escapedCommand)+128];
+safef(query, sizeof(query), "insert edwSubmitJob (commandLine) values('%s')", escapedCommand);
+sqlUpdate(conn, query);
+
+/* Write sync signal (any string ending with newline) to fifo to wake up daemon. */
+FILE *fifo = mustOpen("../userdata/edwSubmit.fifo", "w");
+fputc('\n', fifo);
+carefulClose(&fifo);
+}
+
+
 struct edwValidFile *edwFindElderReplicates(struct sqlConnection *conn, struct edwValidFile *vf)
 /* Find all replicates of same output and format type for experiment that are elder
  * (fileId less than your file Id).  Younger replicates are responsible for taking care 
