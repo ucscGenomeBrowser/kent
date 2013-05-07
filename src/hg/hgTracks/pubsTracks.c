@@ -259,7 +259,7 @@ char *articleTable = pubsArticleTable(tg);
 
 if(yearFilter == NULL || sameWord(yearFilter, "anytime"))
     yearFilter = NULL;
-if(sameWord(publFilter, "all"))
+if(publFilter==NULL || sameWord(publFilter, "all"))
     publFilter = NULL;
 
 if(isNotEmpty(keywords))
@@ -283,7 +283,7 @@ else
     int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
     boolean useItemRgb = bedItemRgb(tdb);
 
-    char *extra;
+    char *extra = NULL;
     struct dyString *extraDy = dyStringNew(0);
     if (sqlColumnExists(conn, tg->table, "year"))
         // new table schema: filter fields are on main bed table
