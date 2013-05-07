@@ -350,6 +350,90 @@ cartWebEnd();
 hFreeConn(&conn);
 }
 
+struct factorSourceInfo 
+/* Cell type and description */
+    {
+    struct factorSourceInfo *next;
+    char *name;
+    char *description;
+    };
+
+int factorSourceInfoCmp(const void *va, const void *vb)
+/* Compare two factorSourceInfo's, sorting on description field */
+{
+static char bufA[64], bufB[64];
+const struct factorSourceInfo *a = *((struct factorSourceInfo **)va);
+const struct factorSourceInfo *b = *((struct factorSourceInfo **)vb);
+safef(bufA, 64, "%s+%s", a->name, a->description);
+safef(bufB, 64, "%s+%s", b->name, b->description);
+return strcmp(bufA, bufB);
+}
+
+void factorSourceAbbreviationTable(struct sqlConnection *conn, char *sourceTable, boolean cellsOnly)
+/* Print out table of abbreviations. Optionally, extract cell name only (before '+') and uniqify */
+{
+char *label = "Cell Type";
+if (!cellsOnly)
+    {
+    hPrintAbbreviationTable(conn, sourceTable, label);
+    return;
+    }
+char query[256];
+safef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
+struct sqlResult *sr = sqlGetResult(conn, query);
+webPrintLinkTableStart();
+webPrintLabelCell("Symbol");
+webPrintLabelCell(label);
+char **row;
+char *plus;
+struct factorSourceInfo *source = NULL, *sources = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name = row[0];
+    char *description = row[1];
+    if (cellsOnly)
+        {
+        // truncate description to just the cell type
+        if ((plus = strchr(description, '+')) != NULL)
+            *plus = 0;
+        }
+    AllocVar(source);
+    source->name = cloneString(name);
+    source->description = cloneString(description);
+    slAddHead(&sources, source);
+    }
+slUniqify(&sources, factorSourceInfoCmp, NULL);
+int count = 0;
+/*
+while ((source = slPopHead(&sources)) != NULL)
+    {
+    printf("</TR><TR>\n");
+    webPrintLinkCell(source->name);
+    webPrintLinkCell(source->description);
+    count++;
+    }
+*/
+while ((source = slPopHead(&sources)) != NULL)
+    {
+    printf("</TR><TR>\n");
+    webPrintLinkCell(source->name);
+    webPrintLinkCellStart();
+    puts(source->description);
+    count++;
+    while (sources && sameString(sources->name, source->name))
+        {
+        source = slPopHead(&sources);
+        puts(", ");
+        puts(source->description);
+        count++;
+        }
+    webPrintLinkCellEnd();
+    }
+sqlFreeResult(&sr);
+webPrintLinkTableEnd();
+printf("Total: %d\n", count);
+}
+
 void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start)
 /* Display detailed info about a cluster of peaks from other tracks. */
 {
@@ -472,7 +556,7 @@ if (cluster != NULL)
 		inputTrackTable, fieldList, FALSE, vocab);
 	webPrintLinkTableEnd();
 
-	webNewSection("List of cells assayed with %s but without hits in cluster", cluster->name);
+	webNewSection("List of cells assayed for %s but without hits in cluster", cluster->name);
 	webPrintLinkTableStart();
 	printClusterTableHeader(fieldList, TRUE, FALSE, FALSE);
 	printFactorSourceTableHits(cluster, conn, sourceTable, 
@@ -486,8 +570,8 @@ if (cluster != NULL)
 	}
 
     webNewSection("Table of abbreviations for cells");
-    hPrintAbbreviationTable(conn, sourceTable, "Cell Type");
-
+    boolean cellsOnly = (trackDbSetting(tdb, "sourceAbbrevCellsOnly") != NULL);
+    factorSourceAbbreviationTable(conn, sourceTable, cellsOnly);
     webNewSection("Track Description");
     }
 }
