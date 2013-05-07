@@ -249,9 +249,9 @@ boolean runCmdLine(char *cmdLine)
 //   some of the exec with wait code from the old ENCODE2 pipeline
 //   Maybe the default timeout should be 8 hours.
 //   I am sure that is more than generous enough for validating a single big file.
-verbose(2, "cmdLine=[%s]\n",cmdLine);
+verbose(0, "cmdLine=[%s]\n",cmdLine);
 int retCode = system(cmdLine); 
-verbose(2, "retCode=%d\n", retCode);
+verbose(0, "retCode=%d\n", retCode);
 sleep(1); // give stupid gzip broken pipe errors a chance to happen and print out to stderr
 return (retCode == 0);
 }
@@ -423,7 +423,7 @@ if (!fileExists("manifest.txt"))
     usage();
     }
 
-uglyf("workingDir=%s\n", workingDir);
+uglyf("workingDir=%s\n\n", workingDir);
 
 if (fileExists("validateFiles"))
     validateFilesPath = "./";
@@ -437,7 +437,7 @@ if (quickMd5sum)
 struct slRecord *manifestFields = NULL;
 struct slRecord *manifestRecs = NULL;
 
-uglyf("reading manifest.txt\n");
+uglyf("reading manifest.txt\n\n");
 int mFieldCount = readManifest("manifest.txt", &manifestFields, &manifestRecs);
 
 struct slRecord *vFields = NULL;
@@ -448,7 +448,7 @@ int vFieldCount = -1;
 
 if (fileExists("validated.txt"))  // read in the old validated.txt file to save time
     {
-    uglyf("reading validated.txt\n");
+    uglyf("reading validated.txt\n\n");
     vFieldCount = readManifest("validated.txt", &vFields, &vRecs);
     if (vFieldCount != mFieldCount + 4) // TODO this might be allowed someday if good case exists for it.
 	errAbort("Error: the number of fields in validated.txt %d does not match the number of fields %d in manifest.txt", vFieldCount, mFieldCount);
@@ -587,7 +587,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
     if (fileIsValid && !fileExists(mFileName))
 	{
 	fileIsValid = FALSE;
-	uglyf("ERROR: %s FILE NOT FOUND !!!\n", mFileName);
+	printf("ERROR: %s FILE NOT FOUND !!!\n", mFileName);
 	}
 
     // check experiment field
@@ -597,7 +597,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	if (!startsWith("ENCSR", mExperiment))
 	    {
 	    fileIsValid = FALSE;
-	    uglyf("ERROR: %s is not a valid value for the experiment field.  Must start with ENCSR.\n", mExperiment);
+	    printf("ERROR: %s is not a valid value for the experiment field.  Must start with ENCSR.\n", mExperiment);
 	    }
 	}
     
@@ -612,7 +612,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
        	if (!(startsWith("pooled", mReplicate) || startsWith("n/a", mReplicate) || smallNumber))
 	    {
 	    fileIsValid = FALSE;
-    	    uglyf("ERROR: %s is not a valid value for the experiment field.  Must be pooled or n/a or a small unsigned number.\n", mReplicate);
+    	    printf("ERROR: %s is not a valid value for the experiment field.  Must be pooled or n/a or a small unsigned number.\n", mReplicate);
 	    }
 	}
     
@@ -687,7 +687,10 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	    if (quickMd5sum && mFileSize > 100 * 1024 * 1024)
 		mMd5Hex = fakeMd5sum;  // "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 	    else
+		{
+		verbose(1, "Running md5 checksum on %s\n", mFileName);
 		mMd5Hex = md5HexForFile(mFileName);
+		}
 
 	    mValidKey = encode3CalcValidationKey(mMd5Hex, mFileSize);
 
@@ -701,9 +704,11 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	}
 
 
-    uglyf("mFileName = %s size=%lld time=%ld md5=%s validKey=%s\n", mFileName, (long long)mFileSize, (long)mFileTime, mMd5Hex, mValidKey);
+    printf("mFileName = %s size=%lld time=%ld md5=%s validKey=%s\n", 
+	mFileName, (long long)mFileSize, (long)mFileTime, mMd5Hex, mValidKey);
+    printf("\n");
 
-    // write to output
+    // write to output validated.tmp
     tabSep = "";
     for (i = 0; i < mFieldCount; ++i)
 	{
