@@ -20,16 +20,15 @@ errAbort(
   "This program is meant to be called as a CGI from a web server using https.");
 }
 
-void edwRandomHexed64(char hexed[65])
-/* Create a string of random hexadecimal digits 64 digits long.  Add zero tag at end*/
+void edwRandomHexed64(char hexed[33])
+/* Create a string of random hexadecimal digits 32 digits long.  Add zero tag at end*/
 {
-/* Generate 32 bytes of random sequence with uuid generator */
-unsigned char access[32];
+/* Generate 16 bytes of random sequence with uuid generator */
+unsigned char access[16];
 uuid_generate(access);
-uuid_generate(access+16);
 
 /* Convert to hex. */
-hexBinaryString(access, 32, hexed, 65);
+hexBinaryString(access, 16, hexed, 33);
 }
 
 char *userEmail = NULL;
