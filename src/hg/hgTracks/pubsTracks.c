@@ -193,6 +193,15 @@ if ((row = sqlNextRow(sr)) != NULL)
                         extra->color = &impact3Color;
                     else
                         extra->color = &impact4Color;
+                    
+                    // add impact to mouseover text
+                    struct dyString *mo = dyStringNew(0);
+                    dyStringAppend(mo, extra->mouseOver);
+                    dyStringAppend(mo, " (impact ");
+                    dyStringAppend(mo, impact);
+                    dyStringAppend(mo, ")");
+                    freeMem(extra->mouseOver);
+                    extra->mouseOver = dyStringContents(mo);
                     }
 
                 if (sameString(colorBy,"year")) 
