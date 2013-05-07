@@ -236,7 +236,8 @@ if (theImgBox && tg->limitedVis == tvDense && tdbIsCompositeChild(tg->tdb))
     return;
 
 struct linkedFeatures *lf = item;
-char *mouseOverText   = isEmpty(lf->mouseOver) ? lf->name : lf->mouseOver;
+//char *mouseOverText   = (lf->mouseOver==NULL || isEmpty(lf->mouseOver)) ? lf->name : lf->mouseOver;
+char *mouseOverText   = lf->name;
 mapBoxHc(hvg, start, end, x, y, width, height, tg->track, mapItemName, mouseOverText);
 }
 
