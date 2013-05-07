@@ -523,6 +523,8 @@ if (pubsDebug)
 // split comma-sep list into parts
 char *seqIdCoordString = sqlQuickString(conn, query);
 char *seqIdCoords[1024];
+if (isEmpty(seqIdCoordString))
+    return NULL;
 int partCount = chopString(seqIdCoordString, ",", seqIdCoords, ArraySize(seqIdCoords));
 int i;
 

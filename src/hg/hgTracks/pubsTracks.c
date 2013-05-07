@@ -193,6 +193,15 @@ if ((row = sqlNextRow(sr)) != NULL)
                         extra->color = &impact3Color;
                     else
                         extra->color = &impact4Color;
+                    
+                    // add impact to mouseover text
+                    struct dyString *mo = dyStringNew(0);
+                    dyStringAppend(mo, extra->mouseOver);
+                    dyStringAppend(mo, " (impact ");
+                    dyStringAppend(mo, impact);
+                    dyStringAppend(mo, ")");
+                    freeMem(extra->mouseOver);
+                    extra->mouseOver = dyStringContents(mo);
                     }
 
                 if (sameString(colorBy,"year")) 
@@ -250,7 +259,7 @@ char *articleTable = pubsArticleTable(tg);
 
 if(yearFilter == NULL || sameWord(yearFilter, "anytime"))
     yearFilter = NULL;
-if(sameWord(publFilter, "all"))
+if(publFilter==NULL || sameWord(publFilter, "all"))
     publFilter = NULL;
 
 if(isNotEmpty(keywords))
@@ -274,7 +283,7 @@ else
     int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
     boolean useItemRgb = bedItemRgb(tdb);
 
-    char *extra;
+    char *extra = NULL;
     struct dyString *extraDy = dyStringNew(0);
     if (sqlColumnExists(conn, tg->table, "year"))
         // new table schema: filter fields are on main bed table

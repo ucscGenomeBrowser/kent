@@ -256,7 +256,7 @@ return variantFromPgSnp(&pgSnp, self->lm);
 }
 
 static struct variant *variantFromVcfRow(struct annoGratorGpVar *self, struct annoRow *row)
-/* Translate pgSnp array of words into variant. */
+/* Translate vcf array of words into variant. */
 {
 char *alStr = vcfGetSlashSepAllelesFromWords(row->data, self->dyScratch);
 unsigned alCount = chopByChar(alStr, '/', NULL, 0);
