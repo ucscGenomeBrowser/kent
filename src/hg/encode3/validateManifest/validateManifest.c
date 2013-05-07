@@ -249,9 +249,9 @@ boolean runCmdLine(char *cmdLine)
 //   some of the exec with wait code from the old ENCODE2 pipeline
 //   Maybe the default timeout should be 8 hours.
 //   I am sure that is more than generous enough for validating a single big file.
-verbose(0, "cmdLine=[%s]\n",cmdLine);
+verbose(1, "cmdLine=[%s]\n",cmdLine);
 int retCode = system(cmdLine); 
-verbose(0, "retCode=%d\n", retCode);
+verbose(1, "retCode=%d\n", retCode);
 sleep(1); // give stupid gzip broken pipe errors a chance to happen and print out to stderr
 return (retCode == 0);
 }
