@@ -266,7 +266,7 @@ subGroup3 factor Factor \
 dragAndDrop subTracks 
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder tier=+ cellType=+ factor=+ lab=+
-fileSortOrder cell=Cell_Line Antibody dccAccession=UCSC_Accession fileSize=Size  
+fileSortOrder cell=Cell_Line target=Factor dccAccession=UCSC_Accession fileSize=Size  
 controlledVocabulary encode/cv.ra cellType=cell factor=target lab=lab
 type narrowPeak 
 visibility dense 
