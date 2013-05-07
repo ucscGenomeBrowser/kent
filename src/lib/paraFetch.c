@@ -10,6 +10,7 @@
 #include "https.h"
 #include "sqlNum.h"
 #include "obscure.h"
+#include "paraFetch.h"
 
 
 static void paraFetchWriteStatus(char *origPath, struct parallelConn *pcList, 
@@ -63,7 +64,6 @@ safef(outTemp, sizeof(outTemp), "%s.paraFetch", origPath);
 struct parallelConn *pcList = NULL, *pc = NULL;
 off_t totalDownloaded = 0;
 
-uglyf("paraFetchReadStatus on %s<BR>\n", outStat);
 if (!fileExists(outStat))
     {
     unlink(outTemp);
