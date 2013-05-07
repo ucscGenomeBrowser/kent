@@ -12,17 +12,8 @@
 #include "obscure.h"
 
 
-struct parallelConn
-/* struct to information on a parallel connection */
-    {
-    struct parallelConn *next;  /* next connection */
-    int sd;                     /* socket descriptor */
-    off_t rangeStart;           /* where does the range start */
-    off_t partSize;             /* range size */
-    off_t received;             /* bytes received */
-    };
-
-void writeParaFetchStatus(char *origPath, struct parallelConn *pcList, char *url, off_t fileSize, char *dateString, boolean isFinal)
+static void paraFetchWriteStatus(char *origPath, struct parallelConn *pcList, 
+    char *url, off_t fileSize, char *dateString, boolean isFinal)
 /* Write a status file.
  * This has two purposes.
  * First, we can use it to resume a failed transfer.
@@ -58,12 +49,12 @@ if (isFinal)  /* We are done and just looking to get rid of the file. */
 }
 
 
-boolean readParaFetchStatus(char *origPath, 
-    struct parallelConn **pPcList, char **pUrl, off_t *pFileSize, char **pDateString, off_t *pTotalDownloaded)
-/* Write a status file.
- * This has two purposes.
- * First, we can use it to resume a failed transfer.
- * Second, we can use it to follow progress */
+boolean paraFetchReadStatus(char *origPath, 
+    struct parallelConn **pPcList, char **pUrl, off_t *pFileSize, 
+    char **pDateString, off_t *pTotalDownloaded)
+/* Read a status file - which is just origPath plus .paraFetchStatus.  This is updated during 
+ * transit by parallelFetch. Returns FALSE if status file not there - possibly because
+ * transfer is finished.  Any of the return parameters (pThis and pThat) may be NULL */
 {
 char outTemp[1024];
 char outStat[1024];
@@ -72,6 +63,7 @@ safef(outTemp, sizeof(outTemp), "%s.paraFetch", origPath);
 struct parallelConn *pcList = NULL, *pc = NULL;
 off_t totalDownloaded = 0;
 
+uglyf("paraFetchReadStatus on %s<BR>\n", outStat);
 if (!fileExists(outStat))
     {
     unlink(outTemp);
@@ -135,14 +127,18 @@ if (slCount(pcList) < 1)
     return FALSE;
     }
 
-*pPcList = pcList;
-*pUrl = url;
-*pFileSize = fileSize;
-*pDateString = dateString;
-*pTotalDownloaded = totalDownloaded;
+if (pPcList != NULL)
+    *pPcList = pcList;
+if (pUrl != NULL)
+    *pUrl = url;
+if (pFileSize != NULL)
+    *pFileSize = fileSize;
+if (pDateString != NULL)
+    *pDateString = dateString;
+if (pTotalDownloaded != NULL)
+    *pTotalDownloaded = totalDownloaded;
 
 return TRUE;
-
 }
 
 
@@ -258,7 +254,7 @@ char *restartUrl = NULL;
 off_t restartFileSize = 0;
 char *restartDateString = "";
 off_t restartTotalDownloaded = 0;
-boolean restartable = readParaFetchStatus(origPath, &restartPcList, &restartUrl, &restartFileSize, &restartDateString, &restartTotalDownloaded);
+boolean restartable = paraFetchReadStatus(origPath, &restartPcList, &restartUrl, &restartFileSize, &restartDateString, &restartTotalDownloaded);
 if (fileSize == -1)
     restartable = FALSE;
 
@@ -357,7 +353,7 @@ ssize_t readCount = 0;
 char buf[BUFSIZE];
 
 /* create paraFetchStatus right away for monitoring programs */
-writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, FALSE);
+paraFetchWriteStatus(origPath, pcList, url, fileSize, dateString, FALSE);
 sinceLastStatus = 0;
 
 int retryCount = 0;
@@ -508,7 +504,7 @@ while (TRUE)
 			}
 		    --connOpen;
 		    ++reOpen;
-		    writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, FALSE);
+		    paraFetchWriteStatus(origPath, pcList, url, fileSize, dateString, FALSE);
 		    sinceLastStatus = 0;
 		    continue; 
 		    }
@@ -543,9 +539,9 @@ while (TRUE)
 		pc->received += readCount;
 		totalDownloaded += readCount;
 		sinceLastStatus += readCount;
-		if (sinceLastStatus >= 100*1024*1024)
+		if (sinceLastStatus >= 10*1024*1024)
 		    {
-		    writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, FALSE);
+		    paraFetchWriteStatus(origPath, pcList, url, fileSize, dateString, FALSE);
 		    sinceLastStatus = 0;
 		    }
 		}
@@ -585,7 +581,7 @@ while (TRUE)
 close(out);
 
 /* delete the status file - by passing TRUE */
-writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, TRUE); 
+paraFetchWriteStatus(origPath, pcList, url, fileSize, dateString, TRUE); 
 
 /* restore original file datestamp mtime from last-modified header */
 struct tm tm;
