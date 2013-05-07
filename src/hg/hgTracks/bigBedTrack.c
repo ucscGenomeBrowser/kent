@@ -20,9 +20,6 @@
 #include "errCatch.h"
 #include "trackHub.h"
 
-
-
-
 struct bbiFile *fetchBbiForTrack(struct track *track)
 /* Fetch bbiFile from track, opening it if it is not already open. */
 {
@@ -224,27 +221,9 @@ if (summary)
 freez(&tg->summary);
 }
 
-static void bigBedMapItem(struct track *tg, struct hvGfx *hvg, void *item,
-				char *itemName, char *mapItemName, int start, int end,
-				int x, int y, int width, int height)
-/* Pull out special mouseover text from item->mouseOver. 
- * Fallback to item->name if it's not set.
- * (derived from bedPlusLabelMapItem) */
-{
-// Don't bother if we are imageV2 and a dense child.
-if (theImgBox && tg->limitedVis == tvDense && tdbIsCompositeChild(tg->tdb))
-    return;
-
-struct linkedFeatures *lf = item;
-//char *mouseOverText   = (lf->mouseOver==NULL || isEmpty(lf->mouseOver)) ? lf->name : lf->mouseOver;
-char *mouseOverText   = lf->name;
-mapBoxHc(hvg, start, end, x, y, width, height, tg->track, mapItemName, mouseOverText);
-}
-
 void bigBedMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[])
 /* Set up bigBed methods. */
 {
 complexBedMethods(track, tdb, TRUE, wordCount, words);
-track->mapItem = bigBedMapItem;
 }
