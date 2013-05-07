@@ -303,7 +303,7 @@ wgEncode 1
 
     track wgEncodeAwgTfbsBroadH1hescChd1a301218aUniPk
     parent wgEncodeAwgTfbsUniform off
-    shortLabel H1-hESC CHD1 s
+    shortLabel H1-hESC CHD1 b
     longLabel H1-hESC TFBS Uniform Peaks of CHD1_(A301-218A) from ENCODE/Broad/Analysis
     subGroups tier=a10 cellType=a10H1HESC factor=CHD1 lab=Broad
     color 0,107,27
@@ -1666,7 +1666,7 @@ wgEncode 1
 
     track wgEncodeAwgTfbsHaibK562Atf3V0416101UniPk
     parent wgEncodeAwgTfbsUniform off
-    shortLabel K562 ATF3 a
+    shortLabel K562 ATF3 h
     longLabel K562 TFBS Uniform Peaks of ATF3 from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a10 cellType=a10K562 factor=ATF3 lab=HudsonAlpha
     color 46,0,184
@@ -2452,7 +2452,7 @@ wgEncode 1
 
     track wgEncodeAwgTfbsSydhGm12878CfosUniPk
     parent wgEncodeAwgTfbsUniform off
-    shortLabel GM12878 FOS on
+    shortLabel GM12878 FOS
     longLabel GM12878 TFBS Uniform Peaks of c-Fos from ENCODE/Yale/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=FOS lab=Yale
     color 153,38,0
@@ -2842,7 +2842,7 @@ wgEncode 1
 
     track wgEncodeAwgTfbsSydhH1hescChd1a301218aIggrabUniPk
     parent wgEncodeAwgTfbsUniform off
-    shortLabel H1-hESC CHD1 b
+    shortLabel H1-hESC CHD1 s
     longLabel H1-hESC TFBS Uniform Peaks of CHD1_(A301-218A) from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10H1HESC factor=CHD1 lab=Stanford
     color 0,107,27
