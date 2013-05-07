@@ -83,8 +83,9 @@ int fieldNameRowsCount = 0;
 while (lineFileNext(lf, &row, NULL))
     {
     //uglyf("%s\n", row); // DEBUG REMOVE
-    if ( startsWith("#file_name", row) ||
-	 startsWith("#ucsc_db", row))
+    if ( startsWith("#file_name", row) || 
+	 startsWith("#file"     , row) ||  // catch some misspellings like #filename
+	 startsWith("#ucsc_db"  , row))
 	{
 	if ( fieldNameRowsCount == 0)
 	    {
