@@ -21,7 +21,7 @@
 /* System globals - just a few ... for now.  Please seriously not too many more. */
 char *edwDatabase = "encodeDataWarehouse";
 char *edwLicensePlatePrefix = "ENCFF";
-int edwSingleFileTimeout = 60*60;   // How many seconds we give ourselves to fetch a single file
+int edwSingleFileTimeout = 2*60*60;   // How many seconds we give ourselves to fetch a single file
 
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
 char *edwValDataDir = "/data/encode3/encValData/";
