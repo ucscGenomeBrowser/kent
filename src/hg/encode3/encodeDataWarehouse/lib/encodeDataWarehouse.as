@@ -82,6 +82,7 @@ table edwSubmit
     bigInt oldBytes;         "Bytes in old files."
     bigInt newBytes;         "Bytes in new files (so far)."
     lstring errorMessage; "If non-empty contains last error message. If empty submit is ok"
+    uint fileIdInTransit; "edwFile.id of file currently being transferred or zero"
     )
 
 table edwSubscriber
