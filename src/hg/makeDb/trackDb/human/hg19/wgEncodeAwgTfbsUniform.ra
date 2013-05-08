@@ -154,7 +154,6 @@ subGroup3 factor Factor \
     GTF2B=GTF2B \
     GTF2F1=GTF2F1 \
     GTF3C2=GTF3C2 \
-    HAE2F1=HA-E2F1 \
     HDAC1=HDAC1 \
     HDAC2=HDAC2 \
     HDAC6=HDAC6 \
@@ -3157,9 +3156,9 @@ wgEncode 1
 
     track wgEncodeAwgTfbsSydhHelas3Hae2f1UniPk
     parent wgEncodeAwgTfbsUniform off
-    shortLabel HeLa-S3 HA-E2F1
+    shortLabel HeLa-S3 E2F1
     longLabel HeLa-S3 TFBS Uniform Peaks of HA-E2F1 from ENCODE/USC/Analysis
-    subGroups tier=a20 cellType=a20HELAS3 factor=HAE2F1 lab=USC
+    subGroups tier=a20 cellType=a20HELAS3 factor=E2F1 lab=USC
     color 0,119,158
 
     track wgEncodeAwgTfbsSydhHelas3Ini1IggmusUniPk
@@ -4410,9 +4409,9 @@ wgEncode 1
 
     track wgEncodeAwgTfbsSydhMcf7Hae2f1UcdUniPk
     parent wgEncodeAwgTfbsUniform off
-    shortLabel MCF-7 HA-E2F1
+    shortLabel MCF-7 E2F1
     longLabel MCF-7 TFBS Uniform Peaks of HA-E2F1 from ENCODE/USC/Analysis
-    subGroups tier=a25 cellType=a25MCF7 factor=HAE2F1 lab=USC
+    subGroups tier=a25 cellType=a25MCF7 factor=E2F1 lab=USC
 
     track wgEncodeAwgTfbsSydhMcf7Tcf7l2UcdUniPk
     parent wgEncodeAwgTfbsUniform off
