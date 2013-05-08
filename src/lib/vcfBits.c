@@ -224,11 +224,11 @@ return vBitsList;
 }
 
 int vcfVariantBitsDropSparse(struct variantBits **vBitsList, int haploGenomeMin,
-                             boolean dropRefErrors)
+                             boolean dropRefMissing)
 // Drops vBits found in less than a minimum number of haplotype genomes.  Supplying 1 will
-// drop variants found in no haplotype genomes.  Declaring dropRefErrors will drop variants
-// in all haplotype genomes (variants where reference is wrong).
-// Returns count of vBits structure that were dropped.
+// drop variants found in no haplotype genomes.  Declaring dropRefMissing will drop variants
+// in all haplotype genomes (variants where reference is not represented in dataset and
+// *might* be in error). Returns count of vBits structure that were dropped.
 {
 struct variantBits *vBitsKeep = NULL;
 struct variantBits *vBits = NULL;
@@ -242,7 +242,7 @@ while ((vBits = slPopHead(vBitsList)) != NULL)
     }
 *vBitsList = vBitsKeep;
 
-if (dropRefErrors)
+if (dropRefMissing)
     {
     vBitsKeep = NULL;
     while ((vBits = slPopHead(vBitsList)) != NULL)

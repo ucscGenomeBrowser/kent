@@ -283,15 +283,15 @@ var alleles = (function()
             persistRareHapsShown = ($(btn).val().indexOf('Show') != -1);
             if (persistRareHapsShown) {
                 $(trs).filter('.rare').removeClass('hidden');
-                var counts = $(trs).filter(':visible').length + ' of ' + $(trs).length;
-                $('span#alleleCounts').text( 'All gene haplotypes shown: ' + counts );
+                var counts = $(trs).filter(':visible').length + ' of ' + $(trs).length + ".";
+                $('span#alleleCounts').text( 'All gene haplotypes shown: ' + counts);
                 $('span#alleleCounts').addClass('textAlert'); 
                 $(btn).val('Hide rare haplotypes');
                 if (setCart == undefined || setCart)
                     setCartVar(btn.id,'set');
             } else {
                 $(trs).filter('.rare').addClass('hidden');
-                var counts = $(trs).filter(':visible').length + ' of ' + $(trs).length;
+                var counts = $(trs).filter(':visible').length + ' of ' + $(trs).length + ".";
                 $('span#alleleCounts').text( 'Common gene haplotypes shown: ' + counts );
                 $('span#alleleCounts').removeClass('textAlert'); 
                 $(btn).val('Show rare haplotypes');

@@ -7588,7 +7588,7 @@ md5sum e5465b06bf8d46382b73e5c7a767f5c1
 project wgEncode
 quality good
 tableName wgEncodeAwgTfbsSydhHelas3Hae2f1UniPk
-target HA-E2F1
+target E2F1
 treatment None
 view Peaks
 
@@ -11228,7 +11228,7 @@ md5sum 718bd10fe62537f8976c76424a9d0e8e
 project wgEncode
 quality good
 tableName wgEncodeAwgTfbsSydhMcf7Hae2f1UcdUniPk
-target HA-E2F1
+target E2F1
 treatment None
 view Peaks
 

@@ -16414,6 +16414,12 @@ TMPDIR=/scratch/tmp
 
 see file: ucscGenes10.txt
 
+# QA NOTE: [Steve Heitner, 2013-05-03] mytouch to the following tables 200903031300.00
+#          because they were created after knownGene:
+#          ceBlastTab, dmBlastTab, drBlastTab, mmBlastTab, rnBlastTab,
+#          knownBlastTab,
+#          knownToPfam, knownToSuper, kg2ToKg3
+
 #######################################################################
 # ENCODE Regulation track  (DONE June 2010.  DNAse and TFBS redone April 30
 # 2011 kent)

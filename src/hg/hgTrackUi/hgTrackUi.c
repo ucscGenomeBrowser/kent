@@ -1997,14 +1997,18 @@ puts("&nbsp;<B>position</B>");
 void pubsUi(struct trackDb *tdb)
 /* UI for pubs match track */
 {
-#define NUM_YEARS 30  // similar to google scholar, which goes back to 20 years
+#define NUM_YEARS 15  // similar to google scholar, which goes back to 20 years
 
-#define PUBS_KEYWORDS_TAG "pubsKeywords"
-#define PUBS_YEAR_TAG     "pubsYear"
+#define PUBS_KEYWORDS_TAG "pubsFilterKeywords"
+#define PUBS_YEAR_TAG     "pubsFilterYear"
+#define PUBS_COLORBY_TAG    "pubsColorBy"
+#define PUBS_PUBFILT_TAG    "pubsFilterPublisher"
 
 // get current set filters from cart
 char *keywords   = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_KEYWORDS_TAG, "");
 char *yearFilter = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_YEAR_TAG, "anytime");
+char *colorBy    = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_COLORBY_TAG, "topic");
+char *pubFilter  = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_PUBFILT_TAG, "all");
 
 // print keyword input box
 puts("<P><B>Filter articles by keywords in abstract, title or authors:</B>");
@@ -2012,7 +2016,7 @@ char cgiVar[128];
 safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,PUBS_KEYWORDS_TAG);
 cgiMakeTextVar(cgiVar, keywords, 45);
 
-// generate strings like "since <year>" for last 30 years
+// generate strings like "since <year>" for last 15 years
 char *text[NUM_YEARS + 1];
 char *values[NUM_YEARS + 1];
 text[0] = "anytime";
@@ -2036,9 +2040,26 @@ puts("</P><P>\n");
 printf("<B>Show articles published </B>");
 safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,PUBS_YEAR_TAG);
 cgiDropDownWithTextValsAndExtra(cgiVar, text, values, NUM_YEARS + 1, yearFilter, NULL);
-puts("</P>\n");
-}
 
+// print dropdown box with "filter by publisher" lines
+puts("</P><P>\n");
+printf("<B>Only articles published by </B>");
+char *publText[5] = {"all publishers", "Elsevier", "PubmedCentral", "Nature Publ. Group", "FASEB"};
+char *publVals[5] = {"all", "elsevier", "pmc", "npg", "faseb"};
+safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,PUBS_PUBFILT_TAG);
+cgiDropDownWithTextValsAndExtra(cgiVar, publText, publVals, 5, pubFilter, NULL);
+puts("</P>\n");
+
+// print dropdown box with "color matches" lines
+puts("</P><P>\n");
+printf("<B>Color sequence matches by </B>");
+char *colorText[3] = {"topic", "impact of journal", "year"};
+char *colorVals[3] = {"topic", "impact", "year"};
+safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,PUBS_COLORBY_TAG);
+cgiDropDownWithTextValsAndExtra(cgiVar, colorText, colorVals, 3, colorBy, NULL);
+puts("</P>\n");
+
+}
 
 void oligoMatchUi(struct trackDb *tdb)
 /* UI for oligo match track */

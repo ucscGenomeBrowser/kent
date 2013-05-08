@@ -68,6 +68,9 @@ void edwMakeLicensePlate(char *prefix, int ix, char *out, int outSize);
 /* Make a license-plate type string composed of prefix + funky coding of ix
  * and put result in out. */
 
+void edwMakeBabyName(unsigned long id, char *baseName, int baseNameSize);
+/* Given a numerical ID, make an easy to pronouce file name */
+
 void edwDirForTime(time_t sinceEpoch, char dir[PATH_LEN]);
 /* Return the output directory for a given time. */
 
@@ -134,6 +137,9 @@ long long edwSubmitMaxStartTime(struct edwSubmit *submit, struct sqlConnection *
 
 int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn);
 /* Count number of new files in submission that have been validated. */
+
+void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url);
+/* Add submission job to table and wake up daemon. */
 
 struct edwValidFile *edwFindElderReplicates(struct sqlConnection *conn, struct edwValidFile *vf);
 /* Find all replicates of same output and format type for experiment that are elder
