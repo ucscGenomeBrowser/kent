@@ -98,7 +98,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC "chrUn_%s", $line;
     }
 }
@@ -244,11 +244,11 @@ taxId   9598
 '_EOF_'
     # << happy emacs
 
-    time makeGenomeDb.pl -stop=agp panTro4.config.ra > agp.log 2>&1 
+    time makeGenomeDb.pl -stop=agp panTro4.config.ra > agp.log 2>&1
     #	real    3m25.355s
     # check the end of agp.log to verify it is OK
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
-	-continue=db panTro4.config.ra > db.log 2>&1 
+	-continue=db panTro4.config.ra > db.log 2>&1
     #	about 27 minutes
 
 #############################################################################
@@ -260,11 +260,11 @@ taxId   9598
 	-smallClusterHub=memk panTro4 > do.log 2>&1 &
     #	real    761m6.538s
     # missing IDs:
-# 313  12.3  3.5  1.8  chr14     102404757 102404806 (4140132) +  AluSz6         SINE/Alu                85  135  (177)       
-# 315  16.5  0.0  0.5  chr14     102405794 102405850 (4139088) +  AluJb          SINE/Alu                 1   42  (270)       
-# 1558  14.1  1.2  2.3  chr14     102406616 102406871 (4138067) +  AluJb          SINE/Alu                53  305    (7)       
-# 411  17.2  0.0  0.0  chr22     20433770 20433795 (29304189) +  AluJb          SINE/Alu                44   69  (243)       
-# 1093  15.4  0.0  8.5  chr22     20434607 20434807 (29303177) +  AluJb          SINE/Alu               120  303    (9)       
+# 313  12.3  3.5  1.8  chr14     102404757 102404806 (4140132) +  AluSz6         SINE/Alu                85  135  (177)
+# 315  16.5  0.0  0.5  chr14     102405794 102405850 (4139088) +  AluJb          SINE/Alu                 1   42  (270)
+# 1558  14.1  1.2  2.3  chr14     102406616 102406871 (4138067) +  AluJb          SINE/Alu                53  305    (7)
+# 411  17.2  0.0  0.0  chr22     20433770 20433795 (29304189) +  AluJb          SINE/Alu                44   69  (243)
+# 1093  15.4  0.0  8.5  chr22     20434607 20434807 (29303177) +  AluJb          SINE/Alu               120  303    (9)
 
     # slight problem, 5 entries without IDs, removed them:
     egrep -v "102404757 102404806|102405794 102405850|102406616 102406871|20433770 20433795|20434607 20434807" panTro4.fa.out > panTro4.clean.fa.out
@@ -313,7 +313,7 @@ taxId   9598
 	-continue=filter panTro4 > filter.log 2>&1 &
     #	real    0m56.241s
 
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #	95896404 bases of 2902338967 (3.304%) in intersection
 
     cd /hive/data/genomes/panTro4
@@ -609,7 +609,7 @@ do
     echo "echo waiting before $F" >> cmdList.sh
     echo wait >> cmdList.sh
   fi
-  echo "/cluster/bin/x86_64/gsBig split${C}/${F} gtf/${F}.gtf -trans=pep/${F}.pep -subopt=subopt/${F}.bed -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/dev/shm -window=2400000 &" 
+  echo "/cluster/bin/x86_64/gsBig split${C}/${F} gtf/${F}.gtf -trans=pep/${F}.pep -subopt=subopt/${F}.bed -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/dev/shm -window=2400000 &"
   done >> cmdList.sh
     echo "echo waiting at end" >> cmdList.sh
     echo "wait" >> cmdList.sh
@@ -713,7 +713,7 @@ done
 # Felis catus	1081	919	354
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add:
@@ -815,7 +815,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/panTro4/bed
     ln -s lastzRheMac3.2012-07-19 lastz.rheMac3
 
-    #   running the swap  
+    #   running the swap
     mkdir /hive/data/genomes/rheMac3/bed/blastz.panTro4.swap
     cd /hive/data/genomes/rheMac3/bed/blastz.panTro4.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -877,3 +877,22 @@ TMPDIR=/scratch/tmp
     ln -s blastz.mm10.swap lastz.mm10
 
 ##############################################################################
+# lastz dog canFam3 (DONE - 2014-05-02 - Hiram)
+    # the original alignment on dog:
+    cd /hive/data/genomes/canFam3/bed/lastzPanTro4.2013-04-30
+    cat fb.canFam3.chainPanTro4Link.txt
+    #	1435182107 bases of 2392715236 (59.981%) in intersection
+
+    #	running the swap - DONE - 2013-05-02
+    mkdir /hive/data/genomes/panTro4/bed/blastz.canFam3.swap
+    cd /hive/data/genomes/panTro4/bed/blastz.canFam3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam3/bed/lastzPanTro4.2013-04-30/DEF \
+	-swap -syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    113m28.428s
+    cat fb.panTro4.chainCanFam3Link.txt
+    # 1490574959 bases of 2902338967 (51.358%) in intersection
+
+############################################################################

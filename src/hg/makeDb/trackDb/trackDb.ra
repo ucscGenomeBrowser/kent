@@ -326,7 +326,7 @@ type genePred
 
 track knownGene
 shortLabel UCSC Genes
-longLabel UCSC Genes Based on RefSeq, UniProt, GenBank, CCDS and Comparative Genomics
+longLabel UCSC Genes (RefSeq, GenBank, tRNAs & Comparative Genomics)
 group genes
 priority 34
 visibility pack

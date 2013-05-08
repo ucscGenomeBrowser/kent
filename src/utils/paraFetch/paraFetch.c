@@ -4,6 +4,7 @@
 #include "dystring.h"
 #include "obscure.h"
 #include "net.h"
+#include "paraFetch.h"
 
 void usage()
 /* Explain usage and exit */
