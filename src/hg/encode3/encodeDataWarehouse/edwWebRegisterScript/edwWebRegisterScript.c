@@ -20,16 +20,26 @@ errAbort(
   "This program is meant to be called as a CGI from a web server using https.");
 }
 
-void edwRandomHexed64(char hexed[65])
-/* Create a string of random hexadecimal digits 64 digits long.  Add zero tag at end*/
+void edwRandomHexed32(char hexed[33])
+/* Create a string of random hexadecimal digits 32 digits long.  Add zero tag at end*/
 {
-/* Generate 32 bytes of random sequence with uuid generator */
-unsigned char access[32];
-uuid_generate(access);
-uuid_generate(access+16);
+/* Generate 16 bytes of random sequence with uuid generator */
+unsigned char uuid[16];
+uuid_generate(uuid);
 
 /* Convert to hex. */
-hexBinaryString(access, 32, hexed, 65);
+hexBinaryString(uuid, 16, hexed, 33);
+}
+
+void edwRandomBabble(char babble[33])
+/* Create a string of random syllables up to 33 long. */
+{
+/* Generate 16 bytes of random sequence with uuid generator */
+unsigned char uuid[16];
+uuid_generate(uuid);
+unsigned long ul;
+memcpy(&ul, uuid, sizeof(ul));
+edwMakeBabyName(ul, babble, 33);
 }
 
 char *userEmail = NULL;
@@ -42,14 +52,13 @@ vfprintf(stdout, format, args);
 }
 
 void edwRegisterScript(struct sqlConnection *conn,
-    struct edwUser *user, char *access, char *scriptName, char *description)
+    struct edwUser *user, char *name, char *password, char *description)
 /* Register a new script with the database. */
 {
-scriptName = sqlEscapeString(scriptName);
 description = sqlEscapeString(description);
-struct edwScriptRegistry reg = {.userId=user->id, .name=scriptName, .description=description};
+struct edwScriptRegistry reg = {.userId=user->id, .name=name, .description=description};
 char secretHash[EDW_SID_SIZE];
-edwMakeSid(access, secretHash);
+edwMakeSid(password, secretHash);
 reg.secretHash = secretHash;
 edwScriptRegistrySaveToDb(conn, &reg, "edwScriptRegistry", 256);
 }
@@ -68,38 +77,32 @@ if (userEmail == NULL)
     printf("Please sign in:");
     printf("<INPUT TYPE=BUTTON NAME=\"signIn\" VALUE=\"sign in\" id=\"signin\">");
     }
-else if (cgiVarExists("script"))
+else if (cgiVarExists("description"))
     {
     struct edwUser *user = edwMustGetUserFromEmail(conn, userEmail);
-    char *newScript = trimSpaces(cgiString("script"));
-    if (!isEmpty(newScript))
-	{
-	char query[512];
-	safef(query, sizeof(query), 
-	    "select id from edwScriptRegistry where userId=%u and name='%s'",
-	    user->id,  sqlEscapeString(newScript));
-	if (sqlQuickNum(conn, query) != 0)
-	    errAbort("Script %s already exists, please go back and use a new name.", newScript);
-	char access[65];
-	edwRandomHexed64(access);
-	edwRegisterScript(conn, user, access, newScript, cgiString("description"));
-	printf("Script %s is now registered.<BR>\n", newScript);
-	printf("The script access key is %s.<BR>\n", access);
-	printf("Please save this and the script name someplace. ");
-	puts("Please pass your email address, the script name, and the access key,  and the URL");
-	puts(" of your validated manifest file (validated.txt) to our server to submit data.");
-	puts("Construct a URL of the form:<BR>");
-	printf("<PRE>https://encodedcc.sdsc.edu/cgi-bin/edwScriptSubmit"
-	       "?email=%s&script=%s&access=%s&url=%s\n</PRE>", 
-	       sqlEscapeString(userEmail), sqlEscapeString(newScript), sqlEscapeString(access), 
-	       sqlEscapeString("http://your.host.edu/your_dir/validated.txt"));
-	puts("That is pass the CGI encoded variables email, script, access, and url to the ");
-	puts("web services CGI at");
-	puts("https://encodedcc.sdsc.edu/cgi-bin/edwScriptSubmit. ");
-	puts("You can use the http://encodedcc.sdsc.edu/cgi-bin/edwWebBrowse site to ");
-	puts("monitor your submission interactively. Please contact your wrangler if you ");
-	puts("have any questions.<BR>");
-	}
+    char password[33];
+    edwRandomHexed32(password);
+    char babyName[33];
+    edwRandomBabble(babyName);
+
+    edwRegisterScript(conn, user, babyName, password, cgiString("description"));
+    printf("Script now registered.<BR>\n");
+    printf("The script user name is %s.<BR>\n", babyName);
+    printf("The script password is %s.<BR>\n", password);
+    printf("Please save the script user name and password somewhere. ");
+    puts("Please pass these two and the URL");
+    puts(" of your validated manifest file (validated.txt) to our server to submit data.");
+    puts("Construct a URL of the form:<BR>");
+    printf("<PRE>https://encodedcc.sdsc.edu/cgi-bin/edwScriptSubmit"
+	   "?user=%s&password=%s&url=%s\n</PRE>", 
+	   babyName, password,
+	   sqlEscapeString("http://your.host.edu/your_dir/validated.txt"));
+    puts("That is pass the CGI encoded variables user, password, and url to the ");
+    puts("web services CGI at");
+    puts("https://encodedcc.sdsc.edu/cgi-bin/edwScriptSubmit. ");
+    puts("You can use the http://encodedcc.sdsc.edu/cgi-bin/edwWebBrowse site to ");
+    puts("monitor your submission interactively. Please contact your wrangler if you ");
+    puts("have any questions.<BR>");
     cgiMakeButton("submit", "Register another script");
     printf(" ");
     edwPrintLogOutButton();
@@ -109,9 +112,7 @@ else
     edwMustGetUserFromEmail(conn, userEmail);
     edwPrintLogOutButton();
     printf("%s is authorized to register a new script<BR>\n", userEmail);
-    printf("Script name:\n");
-    cgiMakeTextVar("script", NULL, 40);
-    printf("<BR>Description:\n");
+    printf("<BR>Script description:\n");
     cgiMakeTextVar("description", NULL, 80);
     cgiMakeSubmitButton();
     }

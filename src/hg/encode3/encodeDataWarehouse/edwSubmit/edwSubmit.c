@@ -11,6 +11,7 @@
 #include "sqlNum.h"
 #include "cheapcgi.h"
 #include "net.h"
+#include "paraFetch.h"
 #include "md5.h"
 #include "portable.h"
 #include "obscure.h"
@@ -71,6 +72,7 @@ safef(query, sizeof(query),
     (long long)id);
 sqlUpdate(conn, query);
 }
+
 
 int edwOpenAndRecordInDir(struct sqlConnection *conn, 
 	char *submitDir, char *submitFile, char *url,
@@ -249,14 +251,24 @@ safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", edwTempDir());
 int localFd = mustMkstemp(tempFileName);
 cpFile(remoteFd, localFd);
 mustCloseFd(&localFd);
+
 }
 
 int edwFileFetch(struct sqlConnection *conn, struct edwFile *ef, int fd, 
-	char *submitFileName, unsigned submitId, unsigned submitDirId)
+	char *submitFileName, unsigned submitId, unsigned submitDirId, unsigned hostId)
 /* Fetch file and if successful update a bunch of the fields in ef with the result. 
  * Returns fileId. */
 {
 ef->id = makeNewEmptyFileRecord(conn, submitId, submitDirId, ef->submitFileName, ef->size);
+
+/* Update edwSubmit with file in transit info */
+char query[256];
+safef(query, sizeof(query), "update edwSubmit set fileIdInTransit=%lld where id=%u",
+    (long long)ef->id, submitId);
+sqlUpdate(conn, query);
+
+safef(query, sizeof(query), "select paraFetchStreams from edwHost where id=%u", hostId);
+int paraFetchStreams = sqlQuickNum(conn, query);
 
 /* Wrap getting the file, the actual data transfer, with an error catcher that
  * will remove partly uploaded files.  Perhaps some day we'll attempt to rescue
@@ -280,8 +292,15 @@ if (errCatchStart(errCatch))
 
     /* Do actual upload tracking how long it takes. */
     ef->startUploadTime = edwNow();
+
+#ifdef OLD
     cpFile(fd, localFd);
+#endif /* OLD */
+
     mustCloseFd(&localFd);
+    if (!parallelFetch(submitFileName, tempName, paraFetchStreams, 3, FALSE, FALSE))
+        errAbort("parallel fetch of %s failed", submitFileName);
+
     ef->endUploadTime = edwNow();
 
     /* Rename file both in file system and (via ef) database. */
@@ -301,7 +320,6 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 
 /* Now we got the file.  We'll go ahead and save the file name and stuff. */
-char query[256];
 safef(query, sizeof(query),
        "update edwFile set"
        "  edwFileName='%s', startUploadTime=%lld, endUploadTime=%lld"
@@ -320,7 +338,11 @@ if (errCatchStart(errCatch))
     char md5[33];
     hexBinaryString(md5bin, sizeof(md5bin), md5, sizeof(md5));
     if (!sameWord(md5, ef->md5))
-        errAbort("%s has md5 mismatch: %s != %s.  File may be corrupted in upload, or file may have been changed since validateManifest was run.  Please check that md5 of file before upload is really %s.  If it is then try submitting again,  otherwise rerun validateManifest and then try submitting again. \n", ef->submitFileName, ef->md5, md5, ef->md5);
+        errAbort("%s has md5 mismatch: %s != %s.  File may be corrupted in upload, or file may have "
+	         "been changed since validateManifest was run.  Please check that md5 of file "
+		 "before upload is really %s.  If it is then try submitting again,  otherwise "
+		 "rerun validateManifest and then try submitting again. \n", 
+		 ef->submitFileName, ef->md5, md5, ef->md5);
 
     /* Finish updating a bunch more of edwFile record. Note there is a requirement in 
      * the validFile section that ef->updateTime be updated last.  A nonzero ef->updateTime
@@ -333,6 +355,11 @@ if (errCatchStart(errCatch))
     dyStringPrintf(dy, "' where id=%d", ef->id);
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
+
+    /* Update edwSubmit so file no longer shown as in transit */
+    safef(query, sizeof(query), "update edwSubmit set fileIdInTransit=0 where id=%u", submitId);
+    sqlUpdate(conn, query);
+
     success = TRUE;
     }
 errCatchEnd(errCatch);
@@ -603,10 +630,13 @@ if (errCatchStart(errCatch))
     {
     if (freeSpaceOnFileSystem(edwRootDir) < 2*bf->size)
 	errAbort("No space left in warehouse!!");
+
     int hostId=0, submitDirId = 0;
     int fd = edwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
 	&hostId, &submitDirId);
-    int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
+
+    int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId, hostId);
+
     close(fd);
     edwAddQaJob(conn, fileId);
     tellSubscribers(conn, submitDir, bf->submitFileName, fileId);

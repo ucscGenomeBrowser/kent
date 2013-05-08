@@ -1,13 +1,57 @@
 Here lies code to implement the ENCODE Big Data Warehouse (EDW).  The EDW is designed to track 
-a moderate number (1,000,000's) of big (~1GB) files.  It consists of three parts:
+a moderate number (1,000,000's) of big (>1GB) files.  It consists of three parts:
 1) A Linux file system with a fairly large block size.
 2) A MySQL database with a relatively small number of tables tracking
-    a) Users (by their email name)
+    a) Users (by their email name - we rely on Persona for authentication)
     b) Hubs (by their URLs)
     c) Hosts (by their IP and connectivity)
     d) Submits (by date/submitter/hub)
     e) Files (by hub file name and EDW license plate).
     f) Subscribers (jobs that get started when a file of a particular type arrives).
+    g) Results of automatic quality assurance results on files.
 3) A system to notify subscribers when a file has been recieved.
-
 Note the pipeline code is relatively separate.  The pipeline subscribes to the data warehouse.
+
+The schema for the database is in lib/encodeDataWarehouse.as. There is also a script lib/resetEdw
+that will delete the existing database and create a new one on the test site (hgwdev).  The programs
+that interact with the database directly are in C, and all start with the "edw" prefix.  Ones that
+work over the web start with the "edwWeb" prefix.  Arguably the most important program is edwSubmit.
+This program reads a manifest file that has been validated with validateManifest on the data 
+producer's machine.  This "validated.txt" file is on the data producer's web site,  as are all of
+the files it refers to.   The edwSubmit program transfers the files, updating the edwSubmit table
+with it's progress,  and queues up jobs for the validation/quality assurance phase.  EdwSubmit can
+be run through the command line,  but more often is run indirectly from the web either interactively
+with the edwWebSubmit program,  or under script control with edwScriptSubmit.  These other two 
+programs add an item to the edwSubmitJob table,  and send a message to a Unix FIFO to wake up a
+edwRunDaemon.  The edwRunDaemon manages up to ~5 (the exact number is configurable) edwSubmit 
+processes running in parallel.  A separate edwRunDaemon manages up to ~10 validation/QA processes.
+
+Here is a brief description of the programs involved in this system, starting with the command
+line tools.
+
+edwAddAssembly - Add a new genome assembly to the database.
+edwAddQaEnrichTarget - Add a new enrichment target (like a set of exons or regulatory regions).
+edwAddSubscriber - Add a new subscriber who gets notified of new files.
+edwCreateUser - Add a new user who has database access.
+edwMakeEnrichments - Calculate coverage of enrichment targets vs. coverage of genome.
+edwMakeReplicateQa - Calculate overlap and correlation within overlap of replicates.
+edwMakeValidFile - Check format. Count up items and bases in data set, subsample fastqs and BAMS.
+edwMetaManiToTdb - From a manifest file and a little metadata create a trackDb.txt file.
+edwQaAgent - Little script that runs edwMakeValidFile, edwMakeEnrichments, edwMakeReplicateQa.
+edwReallyRemoveFiles - Remove files that were put in database by mistake.
+edwRunDaemon - Run jobs specified in a database table - either edwJob or edwSubmitJob.
+edwSubmit - Manages transfer of files into database and local file system.
+
+Here is a description of the web based tools. 
+edwScriptSubmit - Scripts can start edwSubmit with this tool using a https based web service.
+edwWebAuthLogin - Part of Persona authentication system.  See also edwPersona.js.
+edwWebAuthLogout - Part of Persona authentication system. Does not directly interact with user.
+edwWebBrowse - A user can log in and view status of all of his submissions with this.
+edwWebCreateUser - A user can grant access to a new user with this.
+edwWebRegisterScript - Scripts for submitting data need to be registered with this form.
+edwWebSubmit - Main interactive submit-a-dataset form.  Also monitors progress of one submission.
+
+Supporting these tools are the lib and inc dirs.  These just contain two modules - 
+encodeDataWarehouse which is autoSql generated from lib/encodeDataWarehouse.as,  and edwLib
+containing the hand-coded parts.
+

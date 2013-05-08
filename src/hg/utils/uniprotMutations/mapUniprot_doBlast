@@ -1,0 +1,18 @@
+#!/usr/bin/env tclsh
+set argVars {targetDb queryFa outPsl}
+set usage "doBlast $argVars"
+
+if {$argc != [llength $argVars]} {
+    error "wrong # args: $usage"
+}
+set blastAll /cluster/bin/blast/x86_64/blast-2.2.16/bin/blastall
+
+foreach var $argVars val $argv {
+    set $var $val
+}
+
+file mkdir [file dirname $outPsl]
+set outPslTmp $outPsl.[exec hostname].[pid]
+
+exec $blastAll -p tblastn -F F -d $targetDb -i $queryFa 2>@stderr | blastToPsl stdin $outPslTmp 2>@stderr
+file rename -force $outPslTmp $outPsl

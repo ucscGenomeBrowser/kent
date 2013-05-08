@@ -2830,6 +2830,39 @@ type bed 4
 hgsid on
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
 
+track lovd
+shortLabel LOVD Variants
+longLabel Leiden Open Variation Database Variants marked as public
+group phenDis
+priority 30
+visibility hide
+type bedDetail 6
+url http://varcache.lovd.nl/redirect/$$
+urlLabel Link to LOVD variant details page
+tableBrowser off lovd
+
+track spMut
+shortLabel UniProt Variants
+longLabel UniProt/SwissProt Amino Acid Substitutions
+group phenDis
+priority 31
+visibility hide
+type bigBed 12 +
+itemRgb on
+urls variationId="http://web.expasy.org/variant_pages/$$.html" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
+
+track spAnnot
+shortLabel UniProt Annotations
+longLabel UniProt/SwissProt Annotations
+group genes
+priority 31
+visibility hide
+type bigBed 12 +
+itemRgb on
+urls uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
+
 searchName cosmicId
 searchTable cosmic
 searchMethod exact
