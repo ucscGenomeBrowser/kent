@@ -255,7 +255,7 @@ mustCloseFd(&localFd);
 }
 
 int edwFileFetch(struct sqlConnection *conn, struct edwFile *ef, int fd, 
-	char *submitFileName, unsigned submitId, unsigned submitDirId)
+	char *submitFileName, unsigned submitId, unsigned submitDirId, unsigned hostId)
 /* Fetch file and if successful update a bunch of the fields in ef with the result. 
  * Returns fileId. */
 {
@@ -266,6 +266,9 @@ char query[256];
 safef(query, sizeof(query), "update edwSubmit set fileIdInTransit=%lld where id=%u",
     (long long)ef->id, submitId);
 sqlUpdate(conn, query);
+
+safef(query, sizeof(query), "select paraFetchStreams from edwHost where id=%u", hostId);
+int paraFetchStreams = sqlQuickNum(conn, query);
 
 /* Wrap getting the file, the actual data transfer, with an error catcher that
  * will remove partly uploaded files.  Perhaps some day we'll attempt to rescue
@@ -295,7 +298,7 @@ if (errCatchStart(errCatch))
 #endif /* OLD */
 
     mustCloseFd(&localFd);
-    if (!parallelFetch(submitFileName, tempName, 10, 3, FALSE, FALSE))
+    if (!parallelFetch(submitFileName, tempName, paraFetchStreams, 3, FALSE, FALSE))
         errAbort("parallel fetch of %s failed", submitFileName);
 
     ef->endUploadTime = edwNow();
@@ -632,7 +635,7 @@ if (errCatchStart(errCatch))
     int fd = edwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
 	&hostId, &submitDirId);
 
-    int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
+    int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId, hostId);
 
     close(fd);
     edwAddQaJob(conn, fileId);
