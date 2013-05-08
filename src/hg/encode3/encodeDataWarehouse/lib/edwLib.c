@@ -241,7 +241,7 @@ int hostId = sqlQuickNum(conn, query);
 if (hostId > 0)
     return hostId;
 
-safef(query, sizeof(query), "insert edwHost (name, firstAdded) values('%s', %lld)", 
+safef(query, sizeof(query), "insert edwHost (name, firstAdded, paraFetchStreams) values('%s', %lld, 10)", 
        hostName, edwNow());
 sqlUpdate(conn, query);
 return sqlLastAutoId(conn);
@@ -328,7 +328,7 @@ while (--e >= start)
 return NULL;
 }
 
-void edwMakeLocalBaseName(int id, char *baseName, int baseNameSize)
+void edwMakeBabyName(unsigned long id, char *baseName, int baseNameSize)
 /* Given a numerical ID, make an easy to pronouce file name */
 {
 char *consonants = "bdfghjklmnprstvwxyz";   // Avoid c and q because make sound ambiguous
@@ -336,7 +336,7 @@ char *vowels = "aeiou";
 int consonantCount = strlen(consonants);
 int vowelCount = strlen(vowels);
 assert(id >= 1);
-int ix = id - 1;   /* We start at zero not 1 */
+unsigned long ix = id - 1;   /* We start at zero not 1 */
 int basePos = 0;
 do
     {
@@ -345,7 +345,7 @@ do
     char c = consonants[ix%consonantCount];
     ix /= consonantCount;
     if (basePos + 2 >= baseNameSize)
-        errAbort("Not enough room for %d in %d letters in edwMakeLocalBaseName", id, baseNameSize);
+        errAbort("Not enough room for %lu in %d letters in edwMakeBabyName", id, baseNameSize);
     baseName[basePos] = c;
     baseName[basePos+1] = v;
     basePos += 2;
@@ -380,7 +380,7 @@ char *suffix = edwFindDoubleFileSuffix(submitFileName);
 
 /* Figure out edw file name, starting with baseName. */
 char baseName[32];
-edwMakeLocalBaseName(edwFileId, baseName, sizeof(baseName));
+edwMakeBabyName(edwFileId, baseName, sizeof(baseName));
 
 /* Figure out directory and make any components not already there. */
 char edwDir[PATH_LEN];
