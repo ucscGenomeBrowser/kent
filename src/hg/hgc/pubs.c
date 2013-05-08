@@ -8,6 +8,7 @@
 #include "trackDb.h"
 #include "web.h"
 #include "hash.h"
+#include "net.h"
 #include "obscure.h"
 #include "common.h"
 #include "string.h"
@@ -21,8 +22,13 @@ static int pubsDebug = 0;
 bool pubsHasSupp = TRUE; 
 // global var for printArticleInfo to indicate if article is elsevier
 bool pubsIsElsevier = FALSE; 
+// the article source is used to modify other parts of the page
+static char* articleSource;
+// we need the external article PMC Id for yif links
+static char* extId = NULL;
 
-// internal section types in mysql table
+// section types in mysql table, for all annotations tables
+// we note where the hit is located in the document
 static char *pubsSecNames[] ={
       "header", "abstract",
       "intro", "methods",
@@ -127,6 +133,16 @@ static void web2EndDiv(char *comment)
 printf("</div> <!-- %s -->\n", comment);
 }
 
+//static void web2Img(char *url, char *alt, int width, int hspace, int vspace) 
+//{
+//printf("<img src=\"%s\" alt=\"%s\" width=\"%d\" hspace=\"%d\" vspace=\"%d\">\n", url, alt, width, hspace, vspace);
+//}
+
+static void web2ImgLink(char *url, char *imgUrl, char *alt, int width, int hspace, int vspace) 
+{
+printf("<a href=\"%s\"><img src=\"%s\" alt=\"%s\" width=\"%d\" hspace=\"%d\" vspace=\"%d\"></a>\n", url, imgUrl, alt, width, hspace, vspace);
+}
+
 static void web2PrintHeaderCell(char *label, int width)
 /* Print th heading cell with given width in percent */
 {
@@ -183,10 +199,27 @@ char *newUrl = replaceChars(longUrl, "article", "svapps");
 return newUrl;
 }
 
+static void printPositionAndSize(int start, int end, bool showSize)
+{
+printf("<B>Position:</B>&nbsp;"
+           "<A HREF=\"%s&amp;db=%s&amp;position=%s%%3A%d-%d\">",
+                  hgTracksPathAndSettings(), database, seqName, start+1, end);
+char startBuf[64], endBuf[64];
+sprintLongWithCommas(startBuf, start + 1);
+sprintLongWithCommas(endBuf, end);
+printf("%s:%s-%s</A><BR>\n", seqName, startBuf, endBuf);
+long size = end - start;
+sprintLongWithCommas(startBuf, size);
+if (showSize)
+    printf("<B>Genomic Size:</B>&nbsp;%s<BR>\n", startBuf);
+}
+
 static void printFilterLink(char *pslTrack, char *articleId, char *articleTable)
 /* print a link to hgTracks with an additional cgi param to activate the single article filter */
 {
-    int start = cgiInt("o");
+    int start = cgiOptionalInt("o", -1);
+    if (start==-1)
+        return;
     int end = cgiInt("t");
     char qBuf[1024];
     struct sqlConnection *conn = hAllocConn(database);
@@ -201,6 +234,8 @@ static void printFilterLink(char *pslTrack, char *articleId, char *articleTable)
 
     printf("Show these sequence matches individually on genome browser</A> (activates track \""
         "Individual matches for article\")</P>");
+
+    printPositionAndSize(start, end, 1);
     printf(
         "      </div> <!-- class: subsection --> \n");
     hFreeConn(&conn);
@@ -242,7 +277,8 @@ char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
 sqlUpdate(conn, "SET SESSION group_concat_max_len = 100000");
 
-safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, pmid, "  
+safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, "  
+    "pmid, extId, "
     "group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s "
     "JOIN %s USING (articleId) "
     "WHERE markerId='%s' AND section in (%s) "
@@ -269,13 +305,13 @@ char *secLabels[] ={
       "Introduction", "Methods",
       "Results", "Discussion",
       "Conclusions", "Acknowledgements",
-      "References", "Not determined" };
+      "References", "Undetermined section (e.g. for a brief communication)" };
 
 int labelCount = sizeof(secLabels)/sizeof(char *);
 
 int i;
 printf("<P>\n");
-printf("<B>Sections of article shown:</B><BR>\n");
+printf("<B>Sections of article searched:</B><BR>\n");
 printf("<FORM ACTION=\"hgc?%s&o=%s&t=%s&g=%s&i=%s\" METHOD=\"get\">\n",
     cartSidUrlString(cart), cgiString("o"), cgiString("t"), cgiString("g"), cgiString("i"));
 
@@ -339,7 +375,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *authors   = row[3];
     char *citation  = row[4];
     char *pmid      = row[5];
-    char *snippets  = row[6];
+    char *snippets  = row[7];
     url = mangleUrl(url);
     printf("<A HREF=\"%s\">%s</A> ", url, title);
     printf("<SMALL>%s</SMALL>; ", authors);
@@ -357,17 +393,41 @@ freeMem(sectionList);
 sqlFreeResult(&sr);
 }
 
-static char *urlToLogoUrl(char *urlOrig)
-/* return a string with relative path of logo for publisher given the url of fulltext, has to be freed */
+static char *urlToLogoUrl(char* pubsArticleTable, char* articleId, char *urlOrig)
+/* return a string with relative path of logo for publisher given the url of
+ * fulltext or a table/articleId, has to be freed 
+*/
 {
-// get top-level domain
-char url[1024];
-memcpy(url, urlOrig, sizeof(url));
-char *urlParts[20];
-int partCount = chopString(url, ".", urlParts, ArraySize(urlParts));
-// construct path
-char *logoUrl = needMem(sizeof(url));
-safef(logoUrl, sizeof(url), "../images/pubs_%s.png", urlParts[partCount-2]);
+struct sqlConnection *conn = hAllocConn(database);
+char* pubCode = NULL;
+if (hHasField("hgFixed", pubsArticleTable, "publisher"))
+    {
+    char query[4000];
+    safef(query, sizeof(query), "SELECT publisher from %s where articleId=%s", 
+        pubsArticleTable, articleId);
+    pubCode = sqlQuickString(conn, query);
+    }
+else 
+    {
+    // get top-level domain url if not publisher field
+    char url[1024];
+    memcpy(url, urlOrig, sizeof(url));
+    char *slashParts[20];
+    // split http://www.sgi.com/test -> to [http:,www.sgi.com,test]
+    int partCount = chopString(url, "/", slashParts, ArraySize(slashParts));
+    if (partCount<3)
+        return NULL;
+    // split www.sgi.com to [www,sgi,com]
+    char *dotParts[20];
+    partCount = chopString(slashParts[1], ".", dotParts, ArraySize(dotParts));
+    if (partCount<3)
+        return NULL;
+    pubCode = dotParts[partCount-2];
+    }
+    
+// construct path to image
+char *logoUrl = needMem(512);
+safef(logoUrl, 512, "../images/pubs_%s.png", pubCode);
 return logoUrl;
 }
 
@@ -376,7 +436,8 @@ static char *printArticleInfo(struct sqlConnection *conn, char *item, char *pubs
 {
 char query[512];
 
-safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract, pmid FROM %s WHERE articleId='%s'", pubsArticleTable, item);
+safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract, pmid, "
+    "source, extId FROM %s WHERE articleId='%s'", pubsArticleTable, item);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -396,11 +457,13 @@ char *authors  = row[3];
 char *cit      = row[4];
 char *abstract = row[5];
 char *pmid     = row[6];
+articleSource  = row[7];
+extId          = row[8];
 
 url = mangleUrl(url);
 if (strlen(abstract)==0) 
         abstract = "(No abstract available for this article. "
-            "Please follow the link to the fulltext above.)";
+            "Please follow the link to the fulltext above by clicking on the titel or the fulltext image.)";
 
 if (stringIn("sciencedirect.com", url)) 
     {
@@ -408,21 +471,27 @@ if (stringIn("sciencedirect.com", url))
     pubsIsElsevier = TRUE;
     }
 
+// authors  title
+printf("<DIV style=\"width:1024px; font-size:100%%\">\n");
+printf("<P>%s</P>\n", authors);
+//
 // logo of publisher
-char *logoUrl = urlToLogoUrl(url);
-printf("<a href=\"%s\"><img align=\"right\" hspace=\"20\" src=\"%s\"></a>\n", url, logoUrl);
+char *logoUrl = urlToLogoUrl(pubsArticleTable, articleId, url);
+if (logoUrl)
+    printf("<a href=\"%s\"><img align=\"right\" hspace=\"20\" src=\"%s\"></a>\n", url, logoUrl);
 freeMem(logoUrl);
 
-printf("<P>%s</P>\n", authors);
-printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B>\n", url, title);
-printf("</A>\n");
+printf("<div style=\"width:800px\">");
+printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B></A></div>\n", url, title);
+printf("</DIV>\n");
+printf("</DIV>\n");
 
 
-printf("<P style=\"width:800px; font-size:80%%\">%s", cit);
+printf("<P style=\"width:1024px; font-size:80%%\">%s", cit);
 if (strlen(pmid)!=0 && strcmp(pmid, "0"))
     printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
 printf("</P>\n");
-printf("<P style=\"width:800px; font-size:100%%\">%s</P>\n", abstract);
+printf("<P style=\"width:1024px; font-size:100%%\">%s</P>\n", abstract);
 
 if (pubsIsElsevier)
     printf("<P><SMALL>Copyright 2012 Elsevier B.V. All rights reserved.</SMALL></P>");
@@ -435,6 +504,8 @@ static struct hash *getSeqIdHash(struct sqlConnection *conn, char *trackTable, \
     char *articleId, char *item, char *seqName, int start)
 /* return a hash with the sequence IDs for a given chain of BLAT matches */
 {
+if (start==-1)
+    return NULL;
 char query[512];
 /* check first if the column exists (some debugging tables on hgwdev don't have seqIds) */
 safef(query, sizeof(query), "SHOW COLUMNS FROM %s LIKE 'seqIds';", trackTable);
@@ -452,6 +523,8 @@ if (pubsDebug)
 // split comma-sep list into parts
 char *seqIdCoordString = sqlQuickString(conn, query);
 char *seqIdCoords[1024];
+if (isEmpty(seqIdCoordString))
+    return NULL;
 int partCount = chopString(seqIdCoordString, ",", seqIdCoords, ArraySize(seqIdCoords));
 int i;
 
@@ -459,6 +532,8 @@ struct hash *seqIdHash = NULL;
 seqIdHash = newHash(0);
 for (i=0; i<partCount; i++) 
     {
+    if (pubsDebug)
+        printf("annotId %s<br>", seqIdCoords[i]);
     hashAdd(seqIdHash, seqIdCoords[i], NULL);
     }
 return seqIdHash;
@@ -473,12 +548,18 @@ web2StartTableC("stdTbl centeredStdTbl");
 web2StartTheadC("stdTblHead");
 if (showDesc)
     web2PrintHeaderCell("Article file", 10);
-web2PrintHeaderCell("One row per sequence, with flanking text, sequence in bold", 60);
+
+// yif sequences have no flanking text at M. Krauthammer's request
+if (stringIn("yif", articleSource))
+    web2PrintHeaderCell("Matching sequences", 60);
+else
+    web2PrintHeaderCell("One row per sequence, with flanking text, sequence in bold", 60);
+
 if (pubsDebug)
     web2PrintHeaderCell("Identifiers", 30);
 
 if (!isClickedSection && !pubsDebug)
-    web2PrintHeaderCell("Chained matches with this sequence", 20);
+    web2PrintHeaderCell("Link to matching genomic location", 20);
 web2EndThead();
 web2StartTbodyS("font-family: Arial, Helvetica, sans-serif; line-height: 1.5em; font-size: 0.9em;");
 }
@@ -550,8 +631,52 @@ for (el = locs; el != NULL; el = el->next)
     }
 }
 
+void removeFlank (char *snippet) 
+/* keep only the parts inside <b> to </b> of a string, modifies the string in place */
+{
+char* startPtr = stringIn("<B>", snippet);
+char* endPtr   = stringIn("</B>", snippet);
+if (startPtr!=0 && endPtr!=0 && startPtr<endPtr) {
+    char* buf = stringBetween("<B>", "</B>", snippet);
+    memcpy(snippet, buf, strlen(buf)+1);
+    freeMem(buf);
+    }
+}
 
 
+static void printYifSection(char *clickedFileUrl)
+/* print section with the image on yif and a link to it */
+{
+
+// parse out yif file Id from yif url to generate link to yif page
+struct netParsedUrl npu;
+netParseUrl(clickedFileUrl, &npu);
+struct hash *params = NULL;
+struct cgiVar* paramList = NULL;
+char *paramStr = strchr(npu.file, '?');
+cgiParseInput(paramStr, &params, &paramList);
+struct cgiVar *var = hashFindVal(params, "file");
+char *figId = NULL;
+if (var!=NULL && var->val!=NULL)
+    figId = var->val;
+
+char yifPageUrl[4096];
+if (figId) 
+    {
+    safef(yifPageUrl, sizeof(yifPageUrl), "http://krauthammerlab.med.yale.edu/imagefinder/Figure.external?sp=S%s%%2F%s", extId, figId);
+    }
+
+if (!yifPageUrl)
+    return;
+
+web2StartSection("section", 
+    "<A href=\"%s\">Yale Image Finder</a>: figure where sequences were found", 
+    yifPageUrl);
+
+web2ImgLink(yifPageUrl, clickedFileUrl, "Image from YIF", 600, 10, 10); 
+
+web2EndSection();
+}
 
 static bool printSeqSection(char *articleId, char *title, bool showDesc, struct sqlConnection *conn, struct hash* clickedSeqs, bool isClickedSection, bool fasta, char *pslTable, char *articleTable)
 /* print a section with a table of sequences, show only sequences with IDs in hash,
@@ -564,7 +689,7 @@ static bool printSeqSection(char *articleId, char *title, bool showDesc, struct 
 // get data from mysql
 char query[4096];
 safef(query, sizeof(query), 
-"SELECT fileDesc, snippet, locations, articleId, fileId, seqId, sequence "
+"SELECT fileDesc, snippet, locations, annotId, sequence, fileUrl "
 "FROM %s WHERE articleId='%s';", pubsSequenceTable, articleId);
 if (pubsDebug)
     puts(query);
@@ -580,40 +705,60 @@ else
 char fullTitle[5000];
 safef(fullTitle, sizeof(fullTitle), 
 "%s&nbsp;<A HREF=\"../cgi-bin/hgc?%s&o=%s&t=%s&g=%s&i=%s&fasta=%d\"><SMALL>(%s format)</SMALL></A>\n", 
-title, cartSidUrlString(cart), cgiString("o"), cgiString("t"), cgiString("g"), cgiString("i"), 
+title, cartSidUrlString(cart), cgiOptionalString("o"), cgiOptionalString("t"), cgiString("g"), cgiString("i"), 
 !fasta, otherFormat);
 
 web2StartSection("pubsSection", "%s", fullTitle);
 
 // print filtering link at start of table & table headers
-if (isClickedSection)
+if (isClickedSection) {
     printFilterLink(pslTable, articleId, articleTable);
+    }
 
 if (!fasta) 
     printSeqHeaders(showDesc, isClickedSection);
 
 // output rows
 char **row;
+
+// the URL of the file from the clicked sequences, for YIF
+char *clickedFileUrl = NULL; 
+
 bool foundSkippedRows = FALSE;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *fileDesc = row[0];
     char *snippet  = row[1];
     char *locString= row[2];
-    char *artId    = row[3];
-    char *fileId   = row[4];
-    char *seqId    = row[5];
-    char *seq      = row[6];
+    //char *artId    = row[3];
+    //char *fileId   = row[4];
+    //char *seqId    = row[5];
+    char *annotId = row[3];
+    char *seq      = row[4];
+    char *fileUrl  = row[5];
 
     // annotation (=sequence) ID is a 64 bit int with 10 digits for 
     // article, 3 digits for file, 5 for annotation
-    char annotId[100];
-    safef(annotId, 100, "%010d%03d%05d", atoi(artId), atoi(fileId), atoi(seqId));
-    if (pubsDebug)
-        printf("%s", annotId);
+    //char annotId[100];
+    
+    // some debugging help
+    //safef(annotId, 100, "%10d%03d%05d", atoi(artId), atoi(fileId), atoi(seqId));
+    //if (pubsDebug)
+        //printf("artId %s, file %s, annot %s -> annotId %s<br>", artId, fileId, seqId, annotId);
 
     // only display this sequence if we're in the right section
     if (clickedSeqs!=NULL && ((hashLookup(clickedSeqs, annotId)!=NULL) != isClickedSection)) {
+        foundSkippedRows = TRUE;
+        continue;
+    }
+    // if we're in the clicked section and the current sequence is one that matched here
+    // then keep the current URL, as we might need it afterwards
+    else
+        clickedFileUrl = cloneString(fileUrl);
+
+    // suppress non-matches if the sequences come from YIF as figures can 
+    // contain tons of non-matching sequences
+    if (stringIn("yif", articleSource) && isEmpty(locString)) {
         foundSkippedRows = TRUE;
         continue;
     }
@@ -625,17 +770,26 @@ while ((row = sqlNextRow(sr)) != NULL)
         web2StartRow();
 
         // column 1: type of file (main or supp)
-        if (showDesc)
-            web2PrintCellS("word-break:break-all", fileDesc);
+        if (showDesc) 
+            {
+            char linkStr[4096];
+            if (isEmpty(fileDesc))
+                fileDesc = "main text";
+            safef(linkStr, sizeof(linkStr), "<a href=\"%s\">%s</a>", fileUrl, fileDesc);
+            web2PrintCellS("word-break:break-all", linkStr);
+            }
         
         // column 2: snippet
         web2StartCellS("word-break:break-all");
+        if (stringIn("yif", articleSource))
+            removeFlank(snippet);
         printAddWbr(snippet, 40);
         web2EndCell();
 
         // optional debug info column
         if (pubsDebug) 
-            web2PrintCellF("article %s, file %s, seq %s, annotId %s", artId, fileId, seqId, annotId);
+            //web2PrintCellF("article %s, file %s, seq %s, annotId %s", artId, fileId, seqId, annotId);
+            web2PrintCellF("annotId %s", annotId);
 
         // column 3: print links to locations, only print this in the 2nd section
         if (!isClickedSection && !pubsDebug) 
@@ -668,6 +822,14 @@ if (!fasta)
     web2EndTable();
 
 web2EndSection();
+/* Yale Image finder files contain links to the image itself */
+if (pubsDebug)
+    printf("%s %s %d", articleSource, clickedFileUrl, isClickedSection);
+if (stringIn("yif", articleSource) && (clickedFileUrl!=NULL) && isClickedSection) 
+    printYifSection(clickedFileUrl);
+
+freeMem(clickedFileUrl);
+
 sqlFreeResult(&sr);
 return foundSkippedRows;
 }
@@ -682,14 +844,28 @@ struct hash *clickedSeqs = getSeqIdHash(conn, trackTable, articleId, item, seqNa
 
 bool skippedRows;
 if (clickedSeqs) 
-    skippedRows = printSeqSection(articleId, "Sequences used to construct this feature", \
+    skippedRows = printSeqSection(articleId, "Sequences matching here", \
         fileDesc, conn, clickedSeqs, 1, fasta, pslTable, articleTable);
 else 
     skippedRows=1;
 
-if (skippedRows)
-    printSeqSection(articleId, "Other Sequences in this article", \
+if (skippedRows) 
+    {
+    // the section title should change if the data comes from the yale image finder = a figure
+    char* docType = "article";
+    if (stringIn("yif", articleSource))
+        docType = "figure";
+    char title[1024];
+    if (clickedSeqs)
+        safef(title, sizeof(title), "Other Sequences in this %s", docType);
+    // NO clicked seqs can happen if the hgc was called with no o or t parameters
+    // from somewhere outside the browser, like elsevier or europmc
+    else
+        safef(title, sizeof(title), "Sequences in this %s", docType);
+
+    printSeqSection(articleId, title, \
         fileDesc, conn, clickedSeqs, 0, fasta, pslTable, articleTable);
+    }
 freeHash(&clickedSeqs);
 }
 
@@ -733,21 +909,6 @@ else
     safef(headerTitle, sizeof(headerTitle), "%s", item);
 
 genericHeader(tdb, headerTitle);
-}
-
-static void printPositionAndSize(int start, int end, bool showSize)
-{
-printf("<B>Position:</B>&nbsp;"
-           "<A HREF=\"%s&amp;db=%s&amp;position=%s%%3A%d-%d\">",
-                  hgTracksPathAndSettings(), database, seqName, start+1, end);
-char startBuf[64], endBuf[64];
-sprintLongWithCommas(startBuf, start + 1);
-sprintLongWithCommas(endBuf, end);
-printf("%s:%s-%s</A><BR>\n", seqName, startBuf, endBuf);
-long size = end - start;
-sprintLongWithCommas(startBuf, size);
-if (showSize)
-    printf("<B>Genomic Size:</B>&nbsp;%s<BR>\n", startBuf);
 }
 
 static bioSeq *getSeq(struct sqlConnection *conn, char *table, char *id)
@@ -829,8 +990,8 @@ void doPubsDetails(struct trackDb *tdb, char *item)
 /* publications custom display */
 {
 
-int start        = cgiInt("o");
-int end          = cgiOptionalInt("t", 0);
+int start        = cgiOptionalInt("o", -1);
+int end          = cgiOptionalInt("t", -1);
 char *trackTable = cgiString("g");
 char *aliTable   = cgiOptionalString("aliTable");
 int fasta        = cgiOptionalInt("fasta", 0);
@@ -863,18 +1024,19 @@ else
     if (stringIn("Marker", trackTable))
         {
         char *markerTable = trackDbRequiredSetting(tdb, "pubsMarkerTable");
-        printPositionAndSize(start, end, 0);
+        if (start!=-1)
+            printPositionAndSize(start, end, 0);
         printMarkerSnippets(conn, articleTable, markerTable, item);
         }
     else
         {
-        printPositionAndSize(start, end, 1);
         pubsSequenceTable = trackDbRequiredSetting(tdb, "pubsSequenceTable");
         char *articleId = printArticleInfo(conn, item, articleTable);
         if (articleId!=NULL) 
             {
             char *pslTable = trackDbRequiredSetting(tdb, "pubsPslTrack");
-            printSeqInfo(conn, trackTable, pslTable, articleId, item, seqName, start, pubsHasSupp, fasta, articleTable);
+            printSeqInfo(conn, trackTable, pslTable, articleId, item, \
+                seqName, start, pubsHasSupp, fasta, articleTable);
             }
     }
 }
