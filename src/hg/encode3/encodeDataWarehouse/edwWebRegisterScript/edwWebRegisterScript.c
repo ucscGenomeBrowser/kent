@@ -72,6 +72,7 @@ if (!cgiServerHttpsIsOn())
 struct sqlConnection *conn = edwConnectReadWrite();
 printf("<FORM ACTION=\"edwWebRegisterScript\" METHOD=POST>\n");
 printf("<B>Register Script with ENCODE Data Warehouse</B><BR>\n");
+uglyf("HTTP_AUTHENTICATION: '%s'<BR>\n", getenv("HTTP_AUTHENTICATION"));
 if (userEmail == NULL)
     {
     printf("Please sign in:");
