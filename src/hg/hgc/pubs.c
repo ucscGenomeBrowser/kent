@@ -665,8 +665,7 @@ if (figId)
     {
     safef(yifPageUrl, sizeof(yifPageUrl), "http://krauthammerlab.med.yale.edu/imagefinder/Figure.external?sp=S%s%%2F%s", extId, figId);
     }
-
-if (!yifPageUrl)
+else
     return;
 
 web2StartSection("section", 
