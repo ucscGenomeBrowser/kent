@@ -83,21 +83,21 @@ Positional and PCR duplicates were also filtered out.</p>
 
 <h3>Quality Control</h3>
 <p>A number of quality metrics for individual replicates listed on the
-ENCODE portal <a href=http://encodeproject.org/ENCODE/qualityMetrics.html>
+ENCODE portal <a href="http://encodeproject.org/ENCODE/qualityMetrics.html" target="_blank">
 Quality Metrics page</a>, including measures of library complexity
 and signal enrichment, were calculated and are available for
-<a target="_blank" href="https://docs.google.com/spreadsheet/ccc?key=0Am6FxqAtrFDwdHdRcHNQUy03SjBoSVMxdUNyZV9Rdnc#gid=7" target="_BLANK">review</a> (Landt et al. 2012, Kundaje et al., 2013a). 
+<a target="_blank" href="https://docs.google.com/spreadsheet/ccc?key=0Am6FxqAtrFDwdHdRcHNQUy03SjBoSVMxdUNyZV9Rdnc#gid=7" target="_BLANK">review</a> (Landt et al., 2012; Kundaje et al., 2013a). 
 The Integrated Quality Flag from this quality assessment was used to assign the
 <a target="_blank" href="/cgi-bin/hgEncodeVocab?type=quality"><em>quality</em> metadata term</a> 
-for each dataset (e.g. <em>Good</em> vs. <em>Caution</em>). 
+for each dataset (e.g., <em>Good</em> vs. <em>Caution</em>). 
 Datasets that did not pass the minimum quality control thresholds are not included in this track.</p>  
 <p>
 
 <h3>Peak Calling</h3>
 <p>Since every ENCODE dataset is represented by at least two biological replicate experiments, 
 a novel measure of consistency and reproducibility of peak calling results between replicates, 
-known as the <i>Irreproducible Discovery Rate (IDR)</i>.  IDR  was used to determine an optimal number
-of reproducible peaks (Li et al., 2011; Kundaje et al., 2013b), and code along with  detailed step-by-step
+known as the <i>Irreproducible Discovery Rate (IDR)</i>, was used to determine an optimal number
+of reproducible peaks (Li et al., 2011; Kundaje et al., 2013b).  Code and detailed step-by-step
 instructions to call peaks using the IDR method are
 <a href="https://sites.google.com/site/anshulkundaje/projects/idr" target="_BLANK">available</a>. 
 In brief, the SPP peak caller (Kharchenko et al., 2008) was used with a relaxed peak calling
@@ -126,7 +126,7 @@ learned from the replicates was used to threshold the ranked set of pooled-data 
 Any thresholds based on reproducibility of peak calling between biological replicates are bounded
 by the quality and enrichment of the worst replicate. Valuable signal is lost in cases for which
 a dataset has one replicate that is significantly worse in data quality than another replicate. 
-A rescue pipeline was used for such cases, in order to balance data quality between a set of
+A rescue pipeline was used for such cases in order to balance data quality between a set of
 replicates. Mapped reads were pooled across all replicates of a dataset, and then randomly 
 sampled (without replacement) to generate two <i>pseudo-replicates</i> with equal numbers of reads.
 This sampling strategy tends to transfer signal from stronger replicates to the weaker 
@@ -145,7 +145,7 @@ to obtain a final consolidated optimal set of peaks.</p>
 All peak sets were then screened against a specially curated empirical blacklist
 of regions in the human genome (<a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeMapability/wgEncodeDacMapabilityConsensusExcludable.bed.gz"
 target="_blank">wgEncodeDacMapabilityConsensusExcludable.bed.gz</a>)
-and peaks overlapping the blacklisted regions were discarded (Kundaje et al.,2013b). 
+and peaks overlapping the blacklisted regions were discarded (Kundaje et al., 2013b). 
 Briefly, these artifact regions typically show the following characteristics:
 <ul>
 
