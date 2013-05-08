@@ -9,7 +9,7 @@ a moderate number (1,000,000's) of big (>1GB) files.  It consists of three parts
     e) Files (by hub file name and EDW license plate).
     f) Subscribers (jobs that get started when a file of a particular type arrives).
     g) Results of automatic quality assurance results on files.
-3) A system to notify subscribers when a file has been recieved.
+3) A system to notify subscribers when a file has been received.
 Note the pipeline code is relatively separate.  The pipeline subscribes to the data warehouse.
 
 The schema for the database is in lib/encodeDataWarehouse.as. There is also a script lib/resetEdw
@@ -19,7 +19,7 @@ work over the web start with the "edwWeb" prefix.  Arguably the most important p
 This program reads a manifest file that has been validated with validateManifest on the data 
 producer's machine.  This "validated.txt" file is on the data producer's web site,  as are all of
 the files it refers to.   The edwSubmit program transfers the files, updating the edwSubmit table
-with it's progress,  and queues up jobs for the validation/quality assurance phase.  EdwSubmit can
+with its progress,  and queues up jobs for the validation/quality assurance phase.  EdwSubmit can
 be run through the command line,  but more often is run indirectly from the web either interactively
 with the edwWebSubmit program,  or under script control with edwScriptSubmit.  These other two 
 programs add an item to the edwSubmitJob table,  and send a message to a Unix FIFO to wake up a
