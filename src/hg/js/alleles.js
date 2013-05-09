@@ -227,7 +227,7 @@ var alleles = (function()
     
         // Don't even bother if full sequence isn't showing
         var fullSeq = $('input#'+sectionName+'_fullSeq');
-        if (fullSeq != undefined && $(fullSeq).val().indexOf('Hide') === -1)
+        if (fullSeq.length != 0 && $(fullSeq).val().indexOf('Hide') === -1)
             return;
         
         // DNA view or AA view?

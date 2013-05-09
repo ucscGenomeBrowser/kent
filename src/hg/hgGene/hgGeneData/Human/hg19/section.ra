@@ -1,0 +1,9 @@
+# hg19 specific sections.
+
+# Immediately before the microarray section
+name geneAlleles
+shortLabel Gene Alleles
+longLabel Common Gene Haplotype Alleles
+priority 38
+
+

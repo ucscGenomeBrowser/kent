@@ -1897,8 +1897,8 @@ if (haploCount == 1)
     return;
     }
 boolean diploid = differentWord(hapSet->chrom,"chrY"); // What, no aliens?
-boolean showScores   = cartTimeoutBoolean(cart, HAPLO_SHOW_SCORES, HAPLO_CART_TIMEOUT);
-boolean showRareHaps = cartTimeoutBoolean(cart, HAPLO_RARE_HAPS, HAPLO_CART_TIMEOUT);
+boolean showScores   = cartUsualBoolean(cart, HAPLO_SHOW_SCORES, FALSE);
+boolean showRareHaps = cartUsualBoolean(cart, HAPLO_RARE_HAPS, FALSE);
 
 struct haplotype *refHap = hapSet->refHap;
 struct haplotype *haplo  = NULL;
@@ -2181,12 +2181,30 @@ else
     {
     hPrintf("<BR>Common gene alleles shown: %d<BR>\n",countRows);
     }
-#define ALL_ARE_BUTTONS
-#ifdef ALL_ARE_BUTTONS
+#define MOVE_POP_BUTTON
+#ifdef MOVE_POP_BUTTON
+// Population distribution buttons
+boolean distMajor =  cartUsualBoolean(cart, HAPLO_MAJOR_DIST, FALSE);
+boolean distMinor =  cartUsualBoolean(cart, HAPLO_MINOR_DIST, FALSE);
+hPrintf("<input type='button' id='" HAPLO_MAJOR_DIST "' class='" TOGGLE_BUTTON "' "
+        "value='%s populations' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
+        "title='Show/Hide haplotype distribution across population groups'>",
+        (distMajor ? "Hide": "Show"),(distMajor ? "[]":"1"));
+if (distMajor)
+    {
+    hPrintf("<input type='button' id='" HAPLO_MINOR_DIST "' class='" TOGGLE_BUTTON "' "
+            "value='%s' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
+            "title='Show haplotype distribution across %s population groups'>",
+            (distMinor ? "Major groups" : "1000 Genome groups"),
+            (distMinor ? "[]":"1"),
+            (distMinor ? "major" : "1000 Genome"));
+    }
+#endif//def MOVE_POP_BUTTON
+
 hPrintf("<input type='button' id='" HAPLO_SHOW_SCORES "' value='%s scoring' "
         "onclick='alleles.scoresToggle(this);' class='" TOGGLE_BUTTON "' "
         "title='Show/Hide all haplotype scores'>\n",(showScores ? "Hide":"Show"));
-#endif//def ALL_ARE_BUTTONS
+
 hPrintf("&nbsp;&nbsp;<a href='#' onclick='return alleles.setAndRefresh(\""HAPLO_RESET_ALL"\",1);'>"
         "Reset to defaults</a>\n");
 }
@@ -2212,9 +2230,9 @@ hPrintf("Generated from <A HREF='http://www.1000genomes.org/' TARGET=_BLANK>1000
         "Phase1 variants (<A HREF='../goldenPath/help/haplotypes.html' "
         "title='Help on Gene haplotype alleles section' TARGET=_BLANK>help</A>).");
 
-boolean rareVars     =  cartTimeoutBoolean(cart, HAPLO_RARE_VAR, HAPLO_CART_TIMEOUT);
-boolean dnaView      =  cartTimeoutBoolean(cart, HAPLO_DNA_VIEW, HAPLO_CART_TIMEOUT);
-boolean fullGeneView =  cartTimeoutBoolean(cart, HAPLO_FULL_SEQ, HAPLO_CART_TIMEOUT);
+boolean rareVars     =  sameOk(geneId,cartOptionalString(cart, HAPLO_RARE_VAR));
+boolean dnaView      =  cartUsualBoolean(cart, HAPLO_DNA_VIEW, FALSE);
+boolean fullGeneView =  sameOk(geneId,cartOptionalString(cart, HAPLO_FULL_SEQ));
 boolean tripletView  =  FALSE;
 // Support toggling between common and rare variants
 int variantCount = (haploCount == 0 ? 0 : hapSet->variantsCovered);
@@ -2241,27 +2259,27 @@ else
 // Table of buttons
 hPrintf("<table BORDER=0 CELLSPACING=1 CELLPADDING=0><tr>\n");
 
-#ifdef ALL_ARE_BUTTONS
+#ifndef MOVE_POP_BUTTON
 // Population distribution buttons
 if (!noHaps)
     {
-    boolean distMajor =  cartTimeoutBoolean(cart, HAPLO_MAJOR_DIST, HAPLO_CART_TIMEOUT);
-    boolean distMinor =  cartTimeoutBoolean(cart, HAPLO_MINOR_DIST, HAPLO_CART_TIMEOUT);
+    boolean distMajor =  cartUsualBoolean(cart, HAPLO_MAJOR_DIST, FALSE);
+    boolean distMinor =  cartUsualBoolean(cart, HAPLO_MINOR_DIST, FALSE);
     hPrintf("<td><input type='button' id='" HAPLO_MAJOR_DIST "' class='" TOGGLE_BUTTON "' "
             "value='%s populations' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
             "title='Show/Hide haplotype distribution across population groups'></td>\n",
-            (distMajor ? "Hide": "Show"),(distMajor ? "[]":"set"));
+            (distMajor ? "Hide": "Show"),(distMajor ? "[]":"1"));
     if (distMajor)
         {
         hPrintf("<td><input type='button' id='" HAPLO_MINOR_DIST "' class='" TOGGLE_BUTTON "' "
                 "value='%s' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
                 "title='Show haplotype distribution across %s population groups'></td>\n",
                 (distMinor ? "Major groups" : "1000 Genome groups"),
-                (distMinor ? "[]":"set"),
+                (distMinor ? "[]":"1"),
                 (distMinor ? "major" : "1000 Genome"));
         }
     }
-#endif//def ALL_ARE_BUTTONS
+#endif//ndef MOVE_POP_BUTTON
 
 // Restrict to common variants
 if (!noHaps
@@ -2272,7 +2290,7 @@ if (!noHaps
             "variants with a frequency of at least %d%%' "
             "onclick='alleles.setAndRefresh(this.id,\"%s\");'></td>\n",
             (rareVars ? "Common variants only":"Include all variants"),
-            HAPLO_COMMON_VARIANT_MIN_PCT,(rareVars ? "[]":"set"));
+            HAPLO_COMMON_VARIANT_MIN_PCT,(rareVars ? "[]":geneId));
     }
 
 // DNA vs. AA, Full sequence
@@ -2281,52 +2299,21 @@ if (!noHaps)
     hPrintf("<td><input type='button' id='" HAPLO_DNA_VIEW "' class='" TOGGLE_BUTTON "' "
             "value='Display as %s' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
             "title='Display variants and sequence as amino acids or DNA bases'></td>\n",
-            (dnaView ? "amino acids" : "DNA bases"), (dnaView ? "[]":"set"));
+            (dnaView ? "amino acids" : "DNA bases"), (dnaView ? "[]":"1"));
 
     hPrintf("<td><input type='button' id='" HAPLO_FULL_SEQ "' class='" TOGGLE_BUTTON "' "
             "value='%s full sequence' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
             "title='Show/Hide predicted full sequence of each gene haplotype'></td>\n",
-            (fullGeneView ? "Hide" : "Show"), (fullGeneView ? "[]":"set"));
+            (fullGeneView ? "Hide" : "Show"), (fullGeneView ? "[]": geneId ));
 
-    tripletView  =  cartTimeoutBoolean(cart, HAPLO_TRIPLETS, HAPLO_CART_TIMEOUT);
+    tripletView  = cartUsualBoolean(cart, HAPLO_TRIPLETS,FALSE);
     if (!dnaView && fullGeneView)
         hPrintf("<td><input type='button' id='" HAPLO_TRIPLETS "' class='" TOGGLE_BUTTON "' "
                 "value='%s DNA triplet code' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
                 "title='Show/Hide DNA sequence above amino acid sequence'>"
-                "</td>\n", (tripletView ? "Hide" : "Show"), (tripletView ? "[]":"set"));
+                "</td>\n", (tripletView ? "Hide" : "Show"), (tripletView ? "[]": "1" ));
     }
 hPrintf("</tr></table>\n");
-
-#ifndef ALL_ARE_BUTTONS
-if (!noHaps)
-    {
-    // Scoring?
-    boolean showScores   = cartTimeoutBoolean(cart, HAPLO_SHOW_SCORES, HAPLO_CART_TIMEOUT);
-    hPrintf("<div style='width:200px; display:inline-block;'title='Show/Hide all haplotype scores'>"
-            "<input type=checkbox id='" HAPLO_SHOW_SCORES "'%s value='%s' "
-            "onclick='alleles.scoresShow(this,this.value);'>Show scoring</div>\n",
-            (showScores?" CHECKED":""),(showScores?"[]":"set"));
-
-    // Population
-    boolean distMajor =  cartTimeoutBoolean(cart, HAPLO_MAJOR_DIST, HAPLO_CART_TIMEOUT);
-    hPrintf("<span title='Show/Hide haplotype distribution across population groups'>"
-            "<input type=checkbox id='" HAPLO_MAJOR_DIST "'%s value='%s' "
-            "onclick='alleles.setAndRefresh(this.id,this.value);'>Show populations",
-            (distMajor?" CHECKED":""),(distMajor?"[]":"set"));
-    if (distMajor)
-        {
-        boolean distMinor =  cartTimeoutBoolean(cart, HAPLO_MINOR_DIST, HAPLO_CART_TIMEOUT);
-        hPrintf(//"<td title='Show haplotype distribution across major or 1000 Genomes groups'>"
-                "<input type=radio id='" HAPLO_MINOR_DIST "'%s value='[]' "
-                "onclick='alleles.setAndRefresh(this.id,this.value);'>Major",
-                (distMinor?"":" CHECKED"));
-        hPrintf("<input type=radio id='" HAPLO_MINOR_DIST "'%s value='set' "
-                "onclick='alleles.setAndRefresh(this.id,this.value);'>1000 Genome groups",
-                (distMinor?" CHECKED":""));
-        }
-    hPrintf("</span>\n");
-    }
-#endif//ndef ALL_ARE_BUTTONS
 
 if (!noHaps)
     {
