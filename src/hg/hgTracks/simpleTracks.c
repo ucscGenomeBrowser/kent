@@ -3502,21 +3502,22 @@ struct linkedFeatures *lf = item;
 return lf->end;
 }
 
-static void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
-				char *itemName, char *mapItemName, int start, int end,
-				int x, int y, int width, int height)
-/* Draw the mouseOver (aka statusLine) text from the mouseOver field of lf
- * Fallback to itemName if there is no mouseOver field.
- * (derived from bedPlusLabelMapItem) */
-{
-// Don't bother if we are imageV2 and a dense child.
-if (theImgBox && tg->limitedVis == tvDense && tdbIsCompositeChild(tg->tdb))
-    return;
 
-struct linkedFeatures *lf = item;
-char *mouseOverText   = (isEmpty(lf->mouseOver)) ? itemName: lf->mouseOver;
-mapBoxHc(hvg, start, end, x, y, width, height, tg->track, mapItemName, mouseOverText);
-}
+//static void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+//				char *itemName, char *mapItemName, int start, int end,
+//				int x, int y, int width, int height)
+///* Draw the mouseOver (aka statusLine) text from the mouseOver field of lf
+// * Fallback to itemName if there is no mouseOver field.
+// * (derived from bedPlusLabelMapItem) */
+//{
+//// Don't bother if we are imageV2 and a dense child.
+//if (theImgBox && tg->limitedVis == tvDense && tdbIsCompositeChild(tg->tdb))
+//    return;
+//
+//struct linkedFeatures *lf = item;
+//char *mouseOverText   = (isEmpty(lf->mouseOver)) ? itemName: lf->mouseOver;
+//mapBoxHc(hvg, start, end, x, y, width, height, tg->track, mapItemName, mouseOverText);
+//}
 
 void linkedFeaturesMethods(struct track *tg)
 /* Fill in track methods for linked features. */
@@ -3526,7 +3527,7 @@ tg->drawItems = linkedFeaturesDraw;
 tg->drawItemAt = linkedFeaturesDrawAt;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
-tg->mapItem = linkedFeaturesMapItem;
+//tg->mapItem = linkedFeaturesMapItem;
 tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
