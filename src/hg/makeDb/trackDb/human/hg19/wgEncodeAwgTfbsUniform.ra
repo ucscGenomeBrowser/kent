@@ -421,7 +421,7 @@ wgEncode 1
     color 224,75,0
 
     track wgEncodeAwgTfbsBroadHuvecPol2bUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HUVEC POLR2A b
     longLabel HUVEC TFBS Uniform Peaks of Pol2(b) from ENCODE/Broad/Analysis
     subGroups tier=a20 cellType=a20HUVEC factor=POLR2A lab=Broad
@@ -470,7 +470,7 @@ wgEncode 1
     color 46,0,184
 
     track wgEncodeAwgTfbsBroadK562P300UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 EP300 b
     longLabel K562 TFBS Uniform Peaks of p300 from ENCODE/Broad/Analysis
     subGroups tier=a10 cellType=a10K562 factor=EP300 lab=Broad
@@ -590,7 +590,7 @@ wgEncode 1
     subGroups tier=a25 cellType=a25A549 factor=CREB1 lab=HudsonAlpha
 
     track wgEncodeAwgTfbsHaibA549Ctcfsc5916Pcr1xDex100nmUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel A549+Dx100n CTCF
     longLabel A549 (DEX_100nM) TFBS Uniform Peaks of CTCF_(SC-5916) ENCODE/HudsonAlph/Analysis
     subGroups tier=a25 cellType=a25A549 factor=CTCF lab=HudsonAlpha
@@ -650,7 +650,7 @@ wgEncode 1
     subGroups tier=a25 cellType=a25A549 factor=NR3C1 lab=HudsonAlpha
 
     track wgEncodeAwgTfbsHaibA549GrPcr2xDex100nmUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel A549+Dx100n NR3C1
     longLabel A549 (DEX_100nM) TFBS Uniform Peaks of GR from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a25 cellType=a25A549 factor=NR3C1 lab=HudsonAlpha
@@ -662,7 +662,7 @@ wgEncode 1
     subGroups tier=a25 cellType=a25A549 factor=REST lab=HudsonAlpha
 
     track wgEncodeAwgTfbsHaibA549P300V0422111Etoh02UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel A549+Et.02 EP300
     longLabel A549 (EtOH .02) TFBS Uniform Peaks of p300 from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a25 cellType=a25A549 factor=EP300 lab=HudsonAlpha
@@ -916,7 +916,7 @@ wgEncode 1
     color 153,38,0
 
     track wgEncodeAwgTfbsHaibGm12878P300Pcr1xUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel GM12878 EP300 h
     longLabel GM12878 TFBS Uniform Peaks of p300 from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=EP300 lab=HudsonAlpha
@@ -1007,7 +1007,7 @@ wgEncode 1
     color 153,38,0
 
     track wgEncodeAwgTfbsHaibGm12878Sp1Pcr1xUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel GM12878 SP1
     longLabel GM12878 TFBS Uniform Peaks of SP1 from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=SP1 lab=HudsonAlpha
@@ -1226,14 +1226,14 @@ wgEncode 1
     color 0,107,27
 
     track wgEncodeAwgTfbsHaibH1hescP300V0416102UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel H1-hESC EP300
     longLabel H1-hESC TFBS Uniform Peaks of p300 from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a10 cellType=a10H1HESC factor=EP300 lab=HudsonAlpha
     color 0,107,27
 
     track wgEncodeAwgTfbsHaibH1hescPol24h8V0416102UniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel H1-hESC POLR2A h
     longLabel H1-hESC TFBS Uniform Peaks of Pol2-4H8 from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a10 cellType=a10H1HESC factor=POLR2A lab=HudsonAlpha
@@ -1384,7 +1384,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeAwgTfbsHaibHelas3Pol2Pcr1xUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel HeLa-S3 POLR2A h
     longLabel HeLa-S3 TFBS Uniform Peaks of Pol2 from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a20 cellType=a20HELAS3 factor=POLR2A lab=HudsonAlpha
@@ -1538,7 +1538,7 @@ wgEncode 1
     color 189,0,157
 
     track wgEncodeAwgTfbsHaibHepg2P300V0416101UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HepG2 EP300 h
     longLabel HepG2 TFBS Uniform Peaks of p300 from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a20 cellType=a20HEPG2 factor=EP300 lab=HudsonAlpha
@@ -1769,7 +1769,7 @@ wgEncode 1
     color 46,0,184
 
     track wgEncodeAwgTfbsHaibK562MaxV0416102UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 MAX h
     longLabel K562 TFBS Uniform Peaks of Max from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a10 cellType=a10K562 factor=MAX lab=HudsonAlpha
@@ -1804,7 +1804,7 @@ wgEncode 1
     color 46,0,184
 
     track wgEncodeAwgTfbsHaibK562Pol24h8V0416101UniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel K562 POLR2A h
     longLabel K562 TFBS Uniform Peaks of Pol2-4H8 from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a10 cellType=a10K562 factor=POLR2A lab=HudsonAlpha
@@ -2034,7 +2034,7 @@ wgEncode 1
     subGroups tier=a30 cellType=SKNSHRA factor=CTCF lab=HudsonAlpha
 
     track wgEncodeAwgTfbsHaibSknshraP300V0416102UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel SK-N-SH_RA EP300
     longLabel SK-N-SH_RA TFBS Uniform Peaks of p300 from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a30 cellType=SKNSHRA factor=EP300 lab=HudsonAlpha
@@ -2094,7 +2094,7 @@ wgEncode 1
     subGroups tier=a30 cellType=T47D factor=GATA3 lab=HudsonAlpha
 
     track wgEncodeAwgTfbsHaibT47dP300V0416102Dm002p1hUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel T-47D+DMSO EP300
     longLabel T-47D (DMSO) TFBS Uniform Peaks of p300 from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a30 cellType=T47D factor=EP300 lab=HudsonAlpha
@@ -2142,21 +2142,21 @@ wgEncode 1
     subGroups tier=a30 cellType=GLIOBLA factor=POLR2A lab=UT-A
 
     track wgEncodeAwgTfbsUtaGm12878CmycUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel GM12878 MYC
     longLabel GM12878 TFBS Uniform Peaks of c-Myc from ENCODE/UT-A/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=MYC lab=UT-A
     color 153,38,0
 
     track wgEncodeAwgTfbsUtaGm12878CtcfUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel GM12878 CTCF t
     longLabel GM12878 TFBS Uniform Peaks of CTCF from ENCODE/UT-A/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=CTCF lab=UT-A
     color 153,38,0
 
     track wgEncodeAwgTfbsUtaGm12878Pol2UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel GM12878 POLR2A t
     longLabel GM12878 TFBS Uniform Peaks of Pol2 from ENCODE/UT-A/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=POLR2A lab=UT-A
@@ -2193,118 +2193,118 @@ wgEncode 1
     subGroups tier=a30 cellType=GM19240 factor=CTCF lab=UT-A
 
     track wgEncodeAwgTfbsUtaH1hescCmycUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel H1-hESC MYC t
     longLabel H1-hESC TFBS Uniform Peaks of c-Myc from ENCODE/UT-A/Analysis
     subGroups tier=a10 cellType=a10H1HESC factor=MYC lab=UT-A
     color 0,107,27
 
     track wgEncodeAwgTfbsUtaH1hescCtcfUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel H1-hESC CTCF t
     longLabel H1-hESC TFBS Uniform Peaks of CTCF from ENCODE/UT-A/Analysis
     subGroups tier=a10 cellType=a10H1HESC factor=CTCF lab=UT-A
     color 0,107,27
 
     track wgEncodeAwgTfbsUtaH1hescPol2UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel H1-hESC POLR2A t
     longLabel H1-hESC TFBS Uniform Peaks of Pol2 from ENCODE/UT-A/Analysis
     subGroups tier=a10 cellType=a10H1HESC factor=POLR2A lab=UT-A
     color 0,107,27
 
     track wgEncodeAwgTfbsUtaHelas3CmycUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HeLa-S3 MYC t
     longLabel HeLa-S3 TFBS Uniform Peaks of c-Myc from ENCODE/UT-A/Analysis
     subGroups tier=a20 cellType=a20HELAS3 factor=MYC lab=UT-A
     color 0,119,158
 
     track wgEncodeAwgTfbsUtaHelas3CtcfUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel HeLa-S3 CTCF t
     longLabel HeLa-S3 TFBS Uniform Peaks of CTCF from ENCODE/UT-A/Analysis
     subGroups tier=a20 cellType=a20HELAS3 factor=CTCF lab=UT-A
     color 0,119,158
 
     track wgEncodeAwgTfbsUtaHelas3Pol2UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HeLa-S3 POLR2A t
     longLabel HeLa-S3 TFBS Uniform Peaks of Pol2 from ENCODE/UT-A/Analysis
     subGroups tier=a20 cellType=a20HELAS3 factor=POLR2A lab=UT-A
     color 0,119,158
 
     track wgEncodeAwgTfbsUtaHepg2CmycUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HepG2 MYC
     longLabel HepG2 TFBS Uniform Peaks of c-Myc from ENCODE/UT-A/Analysis
     subGroups tier=a20 cellType=a20HEPG2 factor=MYC lab=UT-A
     color 189,0,157
 
     track wgEncodeAwgTfbsUtaHepg2CtcfUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel HepG2 CTCF t
     longLabel HepG2 TFBS Uniform Peaks of CTCF from ENCODE/UT-A/Analysis
     subGroups tier=a20 cellType=a20HEPG2 factor=CTCF lab=UT-A
     color 189,0,157
 
     track wgEncodeAwgTfbsUtaHepg2Pol2UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HepG2 POLR2A t
     longLabel HepG2 TFBS Uniform Peaks of Pol2 from ENCODE/UT-A/Analysis
     subGroups tier=a20 cellType=a20HEPG2 factor=POLR2A lab=UT-A
     color 189,0,157
 
     track wgEncodeAwgTfbsUtaHuvecCmycUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HUVEC MYC
     longLabel HUVEC TFBS Uniform Peaks of c-Myc from ENCODE/UT-A/Analysis
     subGroups tier=a20 cellType=a20HUVEC factor=MYC lab=UT-A
     color 224,75,0
 
     track wgEncodeAwgTfbsUtaHuvecCtcfUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel HUVEC CTCF t
     longLabel HUVEC TFBS Uniform Peaks of CTCF from ENCODE/UT-A/Analysis
     subGroups tier=a20 cellType=a20HUVEC factor=CTCF lab=UT-A
     color 224,75,0
 
     track wgEncodeAwgTfbsUtaHuvecPol2UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HUVEC POLR2A t
     longLabel HUVEC TFBS Uniform Peaks of Pol2 from ENCODE/UT-A/Analysis
     subGroups tier=a20 cellType=a20HUVEC factor=POLR2A lab=UT-A
     color 224,75,0
 
     track wgEncodeAwgTfbsUtaK562CmycUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 MYC t
     longLabel K562 TFBS Uniform Peaks of c-Myc from ENCODE/UT-A/Analysis
     subGroups tier=a10 cellType=a10K562 factor=MYC lab=UT-A
     color 46,0,184
 
     track wgEncodeAwgTfbsUtaK562CtcfUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel K562 CTCF t
     longLabel K562 TFBS Uniform Peaks of CTCF from ENCODE/UT-A/Analysis
     subGroups tier=a10 cellType=a10K562 factor=CTCF lab=UT-A
     color 46,0,184
 
     track wgEncodeAwgTfbsUtaK562Pol2UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 POLR2A t
     longLabel K562 TFBS Uniform Peaks of Pol2 from ENCODE/UT-A/Analysis
     subGroups tier=a10 cellType=a10K562 factor=POLR2A lab=UT-A
     color 46,0,184
 
     track wgEncodeAwgTfbsUtaMcf7CmycEstroUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel MCF-7+estrog MYC
     longLabel MCF-7 (estrogen) TFBS Uniform Peaks of c-Myc from ENCODE/UT-A/Analysis
     subGroups tier=a25 cellType=a25MCF7 factor=MYC lab=UT-A
 
     track wgEncodeAwgTfbsUtaMcf7CmycSerumstimUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel MCF-7+stim MYC
     longLabel MCF-7 (serum_stimulated) TFBS Uniform Peaks of c-Myc from ENCODE/UT-A/Analysis
     subGroups tier=a25 cellType=a25MCF7 factor=MYC lab=UT-A
@@ -2334,7 +2334,7 @@ wgEncode 1
     subGroups tier=a25 cellType=a25MCF7 factor=CTCF lab=UT-A
 
     track wgEncodeAwgTfbsUtaMcf7CtcfSerumstimUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel MCF-7+stim CTCF
     longLabel MCF-7 (serum_stimulated) TFBS Uniform Peaks of CTCF from ENCODE/UT-A/Analysis
     subGroups tier=a25 cellType=a25MCF7 factor=CTCF lab=UT-A
@@ -2358,7 +2358,7 @@ wgEncode 1
     subGroups tier=a25 cellType=a25MCF7 factor=POLR2A lab=UT-A
 
     track wgEncodeAwgTfbsUtaMcf7Pol2SerumstimUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel MCF-7+stim POLR2A
     longLabel MCF-7 (serum_stimulated) TFBS Uniform Peaks of Pol2 from ENCODE/UT-A/Analysis
     subGroups tier=a25 cellType=a25MCF7 factor=POLR2A lab=UT-A
@@ -2400,7 +2400,7 @@ wgEncode 1
     subGroups tier=a25 cellType=a25A549 factor=CEBPB lab=Stanford
 
     track wgEncodeAwgTfbsSydhA549MaxIggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel A549 MAX
     longLabel A549 TFBS Uniform Peaks of Max from ENCODE/Stanford/Analysis
     subGroups tier=a25 cellType=a25A549 factor=MAX lab=Stanford
@@ -2520,7 +2520,7 @@ wgEncode 1
     color 153,38,0
 
     track wgEncodeAwgTfbsSydhGm12878MaxIggmusUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel GM12878 MAX
     longLabel GM12878 TFBS Uniform Peaks of Max from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=MAX lab=Stanford
@@ -2576,28 +2576,28 @@ wgEncode 1
     color 153,38,0
 
     track wgEncodeAwgTfbsSydhGm12878P300IggmusUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel GM12878 EP300 s
     longLabel GM12878 TFBS Uniform Peaks of p300 from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=EP300 lab=Stanford
     color 153,38,0
 
     track wgEncodeAwgTfbsSydhGm12878P300bUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel GM12878 EP300 s2
     longLabel GM12878 TFBS Uniform Peaks of p300_(SC-584) from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=EP300 lab=Stanford
     color 153,38,0
 
     track wgEncodeAwgTfbsSydhGm12878Pol2IggmusUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel GM12878 POLR2A s
     longLabel GM12878 TFBS Uniform Peaks of Pol2 from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=POLR2A lab=Stanford
     color 153,38,0
 
     track wgEncodeAwgTfbsSydhGm12878Pol2UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel GM12878 POLR2A y
     longLabel GM12878 TFBS Uniform Peaks of Pol2 from ENCODE/Yale/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=POLR2A lab=Yale
@@ -2611,7 +2611,7 @@ wgEncode 1
     color 153,38,0
 
     track wgEncodeAwgTfbsSydhGm12878Pol3UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel GM12878 POLR3G
     longLabel GM12878 TFBS Uniform Peaks of Pol3 from ENCODE/Yale/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=POLR3G lab=Yale
@@ -2854,14 +2854,14 @@ wgEncode 1
     color 0,107,27
 
     track wgEncodeAwgTfbsSydhH1hescCjunIggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel H1-hESC JUN
     longLabel H1-hESC TFBS Uniform Peaks of c-Jun from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10H1HESC factor=JUN lab=Stanford
     color 0,107,27
 
     track wgEncodeAwgTfbsSydhH1hescCmycIggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel H1-hESC MYC s
     longLabel H1-hESC TFBS Uniform Peaks of c-Myc from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10H1HESC factor=MYC lab=Stanford
@@ -2896,7 +2896,7 @@ wgEncode 1
     color 0,107,27
 
     track wgEncodeAwgTfbsSydhH1hescMaxUcdUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel H1-hESC MAX
     longLabel H1-hESC TFBS Uniform Peaks of Max from ENCODE/USC/Analysis
     subGroups tier=a10 cellType=a10H1HESC factor=MAX lab=USC
@@ -3078,7 +3078,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeAwgTfbsSydhHelas3CfosUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HeLa-S3 FOS
     longLabel HeLa-S3 TFBS Uniform Peaks of c-Fos from ENCODE/Yale/Analysis
     subGroups tier=a20 cellType=a20HELAS3 factor=FOS lab=Yale
@@ -3092,14 +3092,14 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeAwgTfbsSydhHelas3CjunIggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HeLa-S3 JUN
     longLabel HeLa-S3 TFBS Uniform Peaks of c-Jun from ENCODE/Stanford/Analysis
     subGroups tier=a20 cellType=a20HELAS3 factor=JUN lab=Stanford
     color 0,119,158
 
     track wgEncodeAwgTfbsSydhHelas3CmycUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HeLa-S3 MYC y
     longLabel HeLa-S3 TFBS Uniform Peaks of c-Myc from ENCODE/Yale/Analysis
     subGroups tier=a20 cellType=a20HELAS3 factor=MYC lab=Yale
@@ -3120,7 +3120,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeAwgTfbsSydhHelas3E2f4UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HeLa-S3 E2F4
     longLabel HeLa-S3 TFBS Uniform Peaks of E2F4 from ENCODE/USC/Analysis
     subGroups tier=a20 cellType=a20HELAS3 factor=E2F4 lab=USC
@@ -3155,7 +3155,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeAwgTfbsSydhHelas3Hae2f1UniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel HeLa-S3 E2F1 c2
     longLabel HeLa-S3 TFBS Uniform Peaks of HA-E2F1 from ENCODE/USC/Analysis
     subGroups tier=a20 cellType=a20HELAS3 factor=E2F1 lab=USC
@@ -3190,7 +3190,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeAwgTfbsSydhHelas3MaxIggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HeLa-S3 MAX
     longLabel HeLa-S3 TFBS Uniform Peaks of Max from ENCODE/Stanford/Analysis
     subGroups tier=a20 cellType=a20HELAS3 factor=MAX lab=Stanford
@@ -3232,7 +3232,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeAwgTfbsSydhHelas3P300sc584sc584IggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HeLa-S3 EP300
     longLabel HeLa-S3 TFBS Uniform Peaks of p300_(SC-584) from ENCODE/Stanford/Analysis
     subGroups tier=a20 cellType=a20HELAS3 factor=EP300 lab=Stanford
@@ -3421,7 +3421,7 @@ wgEncode 1
     color 189,0,157
 
     track wgEncodeAwgTfbsSydhHepg2CjunIggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HepG2 JUN
     longLabel HepG2 TFBS Uniform Peaks of c-Jun from ENCODE/Stanford/Analysis
     subGroups tier=a20 cellType=a20HEPG2 factor=JUN lab=Stanford
@@ -3498,7 +3498,7 @@ wgEncode 1
     color 189,0,157
 
     track wgEncodeAwgTfbsSydhHepg2MaxIggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HepG2 MAX
     longLabel HepG2 TFBS Uniform Peaks of Max from ENCODE/Stanford/Analysis
     subGroups tier=a20 cellType=a20HEPG2 factor=MAX lab=Stanford
@@ -3547,7 +3547,7 @@ wgEncode 1
     color 189,0,157
 
     track wgEncodeAwgTfbsSydhHepg2Pol2IggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HepG2 POLR2A s
     longLabel HepG2 TFBS Uniform Peaks of Pol2 from ENCODE/Stanford/Analysis
     subGroups tier=a20 cellType=a20HEPG2 factor=POLR2A lab=Stanford
@@ -3631,7 +3631,7 @@ wgEncode 1
     color 224,75,0
 
     track wgEncodeAwgTfbsSydhHuvecCjunUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HUVEC JUN
     longLabel HUVEC TFBS Uniform Peaks of c-Jun from ENCODE/Stanford/Analysis
     subGroups tier=a20 cellType=a20HUVEC factor=JUN lab=Stanford
@@ -3645,27 +3645,27 @@ wgEncode 1
     color 224,75,0
 
     track wgEncodeAwgTfbsSydhHuvecMaxUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HUVEC MAX
     longLabel HUVEC TFBS Uniform Peaks of Max from ENCODE/Stanford/Analysis
     subGroups tier=a20 cellType=a20HUVEC factor=MAX lab=Stanford
     color 224,75,0
 
     track wgEncodeAwgTfbsSydhHuvecPol2UniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel HUVEC POLR2A s
     longLabel HUVEC TFBS Uniform Peaks of Pol2 from ENCODE/Stanford/Analysis
     subGroups tier=a20 cellType=a20HUVEC factor=POLR2A lab=Stanford
     color 224,75,0
 
     track wgEncodeAwgTfbsSydhImr90CebpbIggrabUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel IMR90 CEBPB
     longLabel IMR90 TFBS Uniform Peaks of CEBPB from ENCODE/Stanford/Analysis
     subGroups tier=a25 cellType=a25IMR90 factor=CEBPB lab=Stanford
 
     track wgEncodeAwgTfbsSydhImr90CtcfbIggrabUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel IMR90 CTCF
     longLabel IMR90 TFBS Uniform Peaks of CTCF_(SC-15914) from ENCODE/Stanford/Analysis
     subGroups tier=a25 cellType=a25IMR90 factor=CTCF lab=Stanford
@@ -3677,7 +3677,7 @@ wgEncode 1
     subGroups tier=a25 cellType=a25IMR90 factor=MAFK lab=Stanford
 
     track wgEncodeAwgTfbsSydhImr90Pol2IggrabUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel IMR90 POLR2A
     longLabel IMR90 TFBS Uniform Peaks of Pol2 from ENCODE/Stanford/Analysis
     subGroups tier=a25 cellType=a25IMR90 factor=POLR2A lab=Stanford
@@ -3766,7 +3766,7 @@ wgEncode 1
     color 46,0,184
 
     track wgEncodeAwgTfbsSydhK562CfosUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 FOS y
     longLabel K562 TFBS Uniform Peaks of c-Fos from ENCODE/Yale/Analysis
     subGroups tier=a10 cellType=a10K562 factor=FOS lab=Yale
@@ -3808,7 +3808,7 @@ wgEncode 1
     color 46,0,184
 
     track wgEncodeAwgTfbsSydhK562CjunUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 JUN
     longLabel K562 TFBS Uniform Peaks of c-Jun from ENCODE/Yale/Analysis
     subGroups tier=a10 cellType=a10K562 factor=JUN lab=Yale
@@ -3843,14 +3843,14 @@ wgEncode 1
     color 46,0,184
 
     track wgEncodeAwgTfbsSydhK562CmycIggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 MYC s
     longLabel K562 TFBS Uniform Peaks of c-Myc from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10K562 factor=MYC lab=Stanford
     color 46,0,184
 
     track wgEncodeAwgTfbsSydhK562CmycUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 MYC y
     longLabel K562 TFBS Uniform Peaks of c-Myc from ENCODE/Yale/Analysis
     subGroups tier=a10 cellType=a10K562 factor=MYC lab=Yale
@@ -3871,14 +3871,14 @@ wgEncode 1
     color 46,0,184
 
     track wgEncodeAwgTfbsSydhK562CtcfbIggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 CTCF s
     longLabel K562 TFBS Uniform Peaks of CTCF_(SC-15914) from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10K562 factor=CTCF lab=Stanford
     color 46,0,184
 
     track wgEncodeAwgTfbsSydhK562E2f4UcdUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 E2F4
     longLabel K562 TFBS Uniform Peaks of E2F4 from ENCODE/USC/Analysis
     subGroups tier=a10 cellType=a10K562 factor=E2F4 lab=USC
@@ -3997,7 +3997,7 @@ wgEncode 1
     color 46,0,184
 
     track wgEncodeAwgTfbsSydhK562MaxIggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 MAX s
     longLabel K562 TFBS Uniform Peaks of Max from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10K562 factor=MAX lab=Stanford
@@ -4032,7 +4032,7 @@ wgEncode 1
     color 46,0,184
 
     track wgEncodeAwgTfbsSydhK562NfyaUniPk
-    parent wgEncodeAwgTfbsUniform off
+    parent wgEncodeAwgTfbsUniform on
     shortLabel K562 NFYA
     longLabel K562 TFBS Uniform Peaks of NF-YA from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10K562 factor=NFYA lab=Stanford
@@ -4053,7 +4053,7 @@ wgEncode 1
     color 46,0,184
 
     track wgEncodeAwgTfbsSydhK562P300IggrabUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel K562 EP300 s
     longLabel K562 TFBS Uniform Peaks of p300 from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10K562 factor=EP300 lab=Stanford
@@ -4324,7 +4324,7 @@ wgEncode 1
     subGroups tier=a30 cellType=MCF10AERSRC factor=FOS lab=Harvard
 
     track wgEncodeAwgTfbsSydhMcf10aesCfosTam14hHvdUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel MCF10AEr+T4 FOS
     longLabel MCF10A-Er-Src (TAM 4h) TFBS Uniform Peaks of c-Fos ENCODE/Harvard/Analysis
     subGroups tier=a30 cellType=MCF10AERSRC factor=FOS lab=Harvard
@@ -4348,7 +4348,7 @@ wgEncode 1
     subGroups tier=a30 cellType=MCF10AERSRC factor=MYC lab=Harvard
 
     track wgEncodeAwgTfbsSydhMcf10aesE2f4TamHvdUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel MCF10AEr+T36 E2F4
     longLabel MCF10A-Er-Src (TAM 36h) TFBS Uniform Peaks of E2F4 ENCODE/Harvard/Analysis
     subGroups tier=a30 cellType=MCF10AERSRC factor=E2F4 lab=Harvard
@@ -4432,7 +4432,7 @@ wgEncode 1
     subGroups tier=a30 cellType=NB4 factor=MYC lab=Stanford
 
     track wgEncodeAwgTfbsSydhNb4MaxUniPk
-    parent wgEncodeAwgTfbsUniform on
+    parent wgEncodeAwgTfbsUniform off
     shortLabel NB4 MAX
     longLabel NB4 TFBS Uniform Peaks of Max from ENCODE/Stanford/Analysis
     subGroups tier=a30 cellType=NB4 factor=MAX lab=Stanford
