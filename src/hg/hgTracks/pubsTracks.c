@@ -265,7 +265,7 @@ if(publFilter==NULL || sameWord(publFilter, "all"))
 if(isNotEmpty(keywords))
     keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
 
-if(isEmpty(yearFilter) && isEmpty(keywords) && isEmpty(publFilter))
+if (isEmpty(yearFilter) && isEmpty(keywords) && isEmpty(publFilter))
 {
     loadGappedBed(tg);
 }
