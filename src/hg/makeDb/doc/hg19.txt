@@ -20420,3 +20420,15 @@ ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutE
     #   Read 677957 elements of size 4 from cosmic.bed
 
 ############################################################################
+# SwissProt Mutations track (2013-05-09 - Max)
+
+cd ~/kent/src/hg/utils/uniprotMutations/
+# make a psl file to lift from uniprot to hg19
+# we align from uniprot to refseq, then from refseq to hg19, to handle
+# introns, based on markd's ls-snp pipeline
+makeUniProtToHg.sh
+# reformat the uniProt parser output (publications track) to bed, lift it and add the extra fields
+liftUniprotMut.py
+# load the resulting bigbed track
+load.sh
+############################################################################
