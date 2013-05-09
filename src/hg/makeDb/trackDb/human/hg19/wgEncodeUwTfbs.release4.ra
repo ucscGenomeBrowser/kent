@@ -33,7 +33,7 @@
 
 track wgEncodeUwTfbs
 compositeTrack on
-superTrack wgEncodeTfBindingSuper dense
+superTrack wgEncodeTfBindingSuper hide
 shortLabel UW CTCF Binding
 longLabel CTCF Binding Sites by ChIP-seq from ENCODE/University of Washington
 group regulation

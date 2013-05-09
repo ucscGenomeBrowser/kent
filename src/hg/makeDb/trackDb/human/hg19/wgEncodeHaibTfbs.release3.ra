@@ -1,7 +1,7 @@
 # HAIB TFBS (wrangler: vsmalladi)
 track wgEncodeHaibTfbs
 compositeTrack on
-superTrack wgEncodeTfBindingSuper dense
+superTrack wgEncodeTfBindingSuper hide
 shortLabel HAIB TFBS
 longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/HAIB
 group regulation
