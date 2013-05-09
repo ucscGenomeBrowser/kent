@@ -375,6 +375,22 @@ canPack On
     html wgEncodeRegTfbsClustered.release2
     dataVersion ENCODE Jan 2011 Freeze
 
+    track wgEncodeRegTfbsClusteredV3
+    release alpha
+    shortLabel Txn Factor ChIP V3-
+    longLabel Transcription Factor ChIP-seq Clusters of 201 antibodies (172 targets) from ENCODE (June 2012, 1st cut: 131 sources)
+    type factorSource
+    superTrack wgEncodeReg dense
+    sourceTable wgEncodeRegTfbsCellsV3
+    sourceAbbrevCellsOnly true
+    inputTrackTable wgEncodeRegTfbsClusteredInputsV3
+    inputTableFieldDisplay cellType factor treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    priority 1.74
+    dataVersion ENCODE Jul 2012 Freeze
+
     # NOTE: table name versioning still TBD
     track wgEncodeRegTfbsClusteredV4
     release alpha
@@ -383,6 +399,7 @@ canPack On
     type factorSource
     superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCellsV4
+    sourceAbbrevCellsOnly true
     inputTrackTable wgEncodeRegTfbsClusteredInputsV4
     inputTableFieldDisplay cellType factor treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
@@ -390,4 +407,22 @@ canPack On
     useScore 1
     priority 1.75
     dataVersion ENCODE Jul 2012 Freeze
+
+    track wgEncodeRegTfbsClusteredV5
+    release alpha
+    shortLabel Txn Fac ChIP V3t
+    longLabel Transcription Factor ChIP-seq Clusters of 162 targets (189 antibodies) from ENCODE
+    type factorSource
+    superTrack wgEncodeReg dense
+    sourceTable wgEncodeRegTfbsCellsV5
+    sourceAbbrevCellsOnly true
+    inputTrackTable wgEncodeRegTfbsClusteredInputsV5
+    inputTableFieldDisplay cellType factor antibody treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    priority 1.76
+    dataVersion ENCODE Jul 2012 Freeze
+
+
 
