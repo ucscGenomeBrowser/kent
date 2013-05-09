@@ -1147,37 +1147,6 @@ void cartSetBoolean(struct cart *cart, char *var, boolean val)
 cartSetInt(cart,var,(val?1:0));
 }
 
-boolean cartTimeoutBoolean(struct cart *cart, char *var, int hours)
-// Returns true if a cart var was set to non-zero less than hours ago
-// If the var has expired or val=0, it will be deleted.
-// If val is non-zero and not a time_t, (e.g. 'set') then the timer is started.
-{
-char *s = cartOptionalString(cart, var);
-if (s == NULL)
-    return FALSE;
-if (sameString(s,"0"))
-    {
-    cartRemove(cart, var);
-    return FALSE;
-    }
-
-time_t seconds = clock1();
-time_t val = (time_t)atoll(s);
-if (val < 1000)
-    {
-    char buf[64];
-    safef(buf, sizeof(buf), "%ld", seconds);
-    cartSetString(cart, var, buf);
-    return TRUE;
-    }
-if (val + (hours * 3600) < seconds)
-    {
-    cartRemove(cart, var);
-    return FALSE;
-    }
-return TRUE;
-}
-
 void cartMakeTextVar(struct cart *cart, char *var, char *defaultVal, int charSize)
 /* Make a text control filled with value from cart if it exists or
  * default value otherwise.  If charSize is zero it's calculated to fit

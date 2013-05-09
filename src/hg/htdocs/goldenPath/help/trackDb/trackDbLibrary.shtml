@@ -792,13 +792,14 @@
         <code>mouseOverField &lt;fieldName1&gt;</code><BR>
     </div>
         
-    <P>This adds mouse over text that are different from the name field of a bigBed file.
-    If a particular row does not contain a value in this field, the mouse over will fallback 
-    to the name field. </P>
+    <P>For bigBed files with more than 8 fields, this adds mouse over text that
+    are different from the "name" field of a bigBed file.  If the field is empty
+    then the mouse over will fallback to the name field. </P>
     <P>
-    Put the identifiers for the mouse over text into extended
-    bigBed fields as explained in example 3 of the <a href="/goldenPath/help/bigBed.html">bigBed documentation</a>.
-    A field name from your .as file is thefield name referenced in this statement.
+    To make this work, create a bigBed file with at least 8 columns and put the
+    text for the mouse over into extended an bigBed field as
+    explained in example 3 of the <a href="/goldenPath/help/bigBed.html">bigBed documentation</a>.
+    The field name from your .as file is the field name referenced in this statement.
     </P> 
 
     <P><B>Example:</B></P>
