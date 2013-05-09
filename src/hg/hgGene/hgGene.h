@@ -43,6 +43,8 @@ struct section
     /* Some FlyBase specific stuff. */
     char *flyBaseTable;	/* Which table to use. */
     char *rgdGeneTable;	/* Which table to use. */
+
+    void *extras;        // Contains any section specific stuff
     };
 
 struct section *sectionNew(struct hash *sectionRa, char *name);
@@ -153,6 +155,11 @@ struct section *geneReviewsSection(struct sqlConnection *conn,
         struct hash *sectionRa);
 /* create geneReviews section - print out GeneReviews for this gene. */
 
+#define HGG_GENE_ALLELES "geneAlleles"
+struct section *allelesSection(struct sqlConnection *conn,
+        struct hash *sectionRa);
+// Create Common Gene Haplotype Alleles section.
+
 void prGRShortKg(struct sqlConnection *conn, char *itemName);
 /* print GeneReviews short label associated to this refGene item */
 
@@ -230,6 +237,8 @@ char *aliasString(char *id, struct sqlConnection *conn);
 #define hggDoOtherProteinSeq "hgg_do_otherProteinSeq"
 #define hggDoOtherProteinAli "hgg_do_otherProteinAli"
 #define hggDoTxInfoDescription "hgg_do_txInfoDescription"
+#define hggAjaxSection         "ajaxSection"
+
 
 #define geneCgi "../cgi-bin/hgGene"
 
