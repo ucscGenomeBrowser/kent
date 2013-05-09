@@ -15,7 +15,7 @@ subGroup2 cellType Cell_Line \
     a20HELAS3=HeLa-S3&nbsp;(Tier_2) \
     a20HEPG2=HepG2&nbsp;(Tier_2) \
     a20HUVEC=HUVEC&nbsp;(Tier_2) \
-    a20IMR90=IMR90&nbsp;(Tier_2) \
+    a25IMR90=IMR90&nbsp;(Tier_2*) \
     a25A549=A549&nbsp;(Tier_2*) \
     a25MCF7=MCF-7&nbsp;(Tier_2*) \
     a25SKNSH=SK-N-SH&nbsp;(Tier_2*) \
@@ -3662,31 +3662,31 @@ wgEncode 1
     parent wgEncodeAwgTfbsUniform off
     shortLabel IMR90 CEBPB
     longLabel IMR90 TFBS Uniform Peaks of CEBPB from ENCODE/Stanford/Analysis
-    subGroups tier=a20 cellType=a20IMR90 factor=CEBPB lab=Stanford
+    subGroups tier=a25 cellType=a25IMR90 factor=CEBPB lab=Stanford
 
     track wgEncodeAwgTfbsSydhImr90CtcfbIggrabUniPk
     parent wgEncodeAwgTfbsUniform off
     shortLabel IMR90 CTCF
     longLabel IMR90 TFBS Uniform Peaks of CTCF_(SC-15914) from ENCODE/Stanford/Analysis
-    subGroups tier=a20 cellType=a20IMR90 factor=CTCF lab=Stanford
+    subGroups tier=a25 cellType=a25IMR90 factor=CTCF lab=Stanford
 
     track wgEncodeAwgTfbsSydhImr90MafkIggrabUniPk
     parent wgEncodeAwgTfbsUniform off
     shortLabel IMR90 MAFK
     longLabel IMR90 TFBS Uniform Peaks of MafK_(ab50322) from ENCODE/Stanford/Analysis
-    subGroups tier=a20 cellType=a20IMR90 factor=MAFK lab=Stanford
+    subGroups tier=a25 cellType=a25IMR90 factor=MAFK lab=Stanford
 
     track wgEncodeAwgTfbsSydhImr90Pol2IggrabUniPk
     parent wgEncodeAwgTfbsUniform off
     shortLabel IMR90 POLR2A
     longLabel IMR90 TFBS Uniform Peaks of Pol2 from ENCODE/Stanford/Analysis
-    subGroups tier=a20 cellType=a20IMR90 factor=POLR2A lab=Stanford
+    subGroups tier=a25 cellType=a25IMR90 factor=POLR2A lab=Stanford
 
     track wgEncodeAwgTfbsSydhImr90Rad21IggrabUniPk
     parent wgEncodeAwgTfbsUniform off
     shortLabel IMR90 RAD21
     longLabel IMR90 TFBS Uniform Peaks of Rad21 from ENCODE/Stanford/Analysis
-    subGroups tier=a20 cellType=a20IMR90 factor=RAD21 lab=Stanford
+    subGroups tier=a25 cellType=a25IMR90 factor=RAD21 lab=Stanford
 
     track wgEncodeAwgTfbsSydhK562Arid3asc8821IggrabUniPk
     parent wgEncodeAwgTfbsUniform off
