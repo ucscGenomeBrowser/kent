@@ -1224,3 +1224,16 @@ for (index = tbf->indexList; index != NULL; index = index->next)
     }
 return totalSize;
 }
+
+boolean twoBitIsSequence(struct twoBitFile *tbf, char *chromName)
+/* Return TRUE if chromName is in 2bit file. */
+{
+struct twoBitIndex *index;
+
+for (index = tbf->indexList; index != NULL; index = index->next)
+    {
+    if (sameString(index->name, chromName))
+	return TRUE;
+    }
+return FALSE;
+}

@@ -3112,7 +3112,8 @@ else
 	relStart = relEnd = 0;
 	}
 
-    hgFindSpecGetAllSpecs(db, &shortList, &longList);
+    if (!trackHubDatabase(db))
+	hgFindSpecGetAllSpecs(db, &shortList, &longList);
     for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
 	{
 	if (hgFindUsingSpec(db, hfs, term, hgp, relativeFlag, relStart, relEnd,
@@ -3132,7 +3133,10 @@ else
 	    }
 	/* Lowe lab additions -- would like to replace these with specs, but 
 	 * will leave in for now. */
-	findTigrGenes(db, term, hgp);
+	if (!trackHubDatabase(db))
+	    findTigrGenes(db, term, hgp);
+
+	trackHubFindPos(db, term, hgp);
 	}
     hgFindSpecFreeList(&shortList);
     hgFindSpecFreeList(&longList);
