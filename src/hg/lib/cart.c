@@ -625,6 +625,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
     {
     if (cartVarExists(cart, hgsDoOtherUser))
 	{
+	setUdcCacheDir();
 	char *otherUser = cartString(cart, hgsOtherUserName);
 	char *sessionName = cartString(cart, hgsOtherUserSessionName);
 	struct sqlConnection *conn2 = hConnectCentral();
@@ -635,6 +636,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	}
     else if (cartVarExists(cart, hgsDoLoadUrl))
 	{
+	setUdcCacheDir();
 	char *url = cartString(cart, hgsLoadUrlName);
 	struct lineFile *lf = netLineFileOpen(url);
 	cartLoadSettings(lf, cart, oldVars, hgsDoLoadUrl);
@@ -1145,37 +1147,6 @@ void cartSetBoolean(struct cart *cart, char *var, boolean val)
 {
 // Be explicit because some cartBools overloaded with negative "disabled" values
 cartSetInt(cart,var,(val?1:0));
-}
-
-boolean cartTimeoutBoolean(struct cart *cart, char *var, int hours)
-// Returns true if a cart var was set to non-zero less than hours ago
-// If the var has expired or val=0, it will be deleted.
-// If val is non-zero and not a time_t, (e.g. 'set') then the timer is started.
-{
-char *s = cartOptionalString(cart, var);
-if (s == NULL)
-    return FALSE;
-if (sameString(s,"0"))
-    {
-    cartRemove(cart, var);
-    return FALSE;
-    }
-
-time_t seconds = clock1();
-time_t val = (time_t)atoll(s);
-if (val < 1000)
-    {
-    char buf[64];
-    safef(buf, sizeof(buf), "%ld", seconds);
-    cartSetString(cart, var, buf);
-    return TRUE;
-    }
-if (val + (hours * 3600) < seconds)
-    {
-    cartRemove(cart, var);
-    return FALSE;
-    }
-return TRUE;
 }
 
 void cartMakeTextVar(struct cart *cart, char *var, char *defaultVal, int charSize)

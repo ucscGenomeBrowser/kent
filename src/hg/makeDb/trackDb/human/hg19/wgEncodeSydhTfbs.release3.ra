@@ -14,7 +14,7 @@
 
 track wgEncodeSydhTfbs
 compositeTrack on
-superTrack wgEncodeTfBindingSuper dense
+superTrack wgEncodeTfBindingSuper hide
 shortLabel  SYDH TFBS
 longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale/USC/Harvard
 group regulation
