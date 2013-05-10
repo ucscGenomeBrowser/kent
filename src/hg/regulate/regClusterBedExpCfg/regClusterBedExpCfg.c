@@ -64,7 +64,7 @@ char *cellAbbrevDefault(char *cell, boolean toLower)
 /* Return default abbreviation of cell-name */
 {
 static char buf[2];
-buf[0] = (toLower ? tolower(cell[0]) : cell[0]);
+buf[0] = tolower(cell[0]);
 buf[1] = 0;
 return buf;
 }
