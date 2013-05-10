@@ -681,6 +681,17 @@ struct trackDb *hubCollectTracks( char *database,  struct grp **pGroupList)
 /* Generate trackDb structures for all the tracks in attached hubs.  
  * Make grp structures for each hub. */
 {
+// return the cached copy if it exists
+static struct trackDb *hubTrackDbs;
+static struct grp *hubGroups;
+
+if (hubTrackDbs != NULL)
+    {
+    if (pGroupList != NULL)
+	*pGroupList = hubGroups;
+    return hubTrackDbs;
+    }
+
 struct hubConnectStatus *hub, *hubList =  hubConnectGetHubs();
 struct trackDb *tdbList = NULL;
 for (hub = hubList; hub != NULL; hub = hub->next)
@@ -705,7 +716,7 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 	    if (!trackHubDatabase(database))
 		{
 		struct grp *grp = grpFromHub(hub);
-		slAddHead(pGroupList, grp);
+		slAddHead(&hubGroups, grp);
 		}
 	    hubUpdateStatus(NULL, hub);
 	    }
@@ -717,6 +728,9 @@ for (hub = hubList; hub != NULL; hub = hub->next)
     }
 hubConnectStatusFreeList(&hubList);
 
+hubTrackDbs = tdbList;
+if (pGroupList != NULL)
+    *pGroupList = hubGroups;
 return tdbList;
 }
 

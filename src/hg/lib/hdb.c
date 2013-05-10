@@ -72,8 +72,11 @@ static struct chromInfo *lookupChromInfo(char *db, char *chrom)
 {
 struct chromInfo *ci = NULL;
 
-if (trackHubDatabase(db) && ((ci = trackHubChromInfo(db, chrom)) != NULL))
+if (trackHubDatabase(db))
+    {
+    ci = trackHubMaybeChromInfo(db, chrom);
     return ci;
+    }
 
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
@@ -4087,6 +4090,13 @@ for (trackTable = trackTableList; trackTable != NULL; trackTable = trackTable->n
     }
 slNameFreeList(&trackTableList);
 hFreeConn(&conn);
+
+// now we need to get the track hubs
+struct trackDb *hubTdbList = hubCollectTracks(db, NULL), *tdb;
+
+for(tdb = hubTdbList; tdb; tdb = tdb->next)
+    hashAdd(hash, tdb->table,  tdb->settingsHash);
+
 return hash;
 }
 
