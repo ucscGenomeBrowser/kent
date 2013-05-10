@@ -47,7 +47,7 @@ if (vcff == NULL)
 vcfFileMakeReusePool(vcff,1024 * 1024);
 
 // All or Limit to the 99%
-boolean rareVars = cartUsualBoolean(cart, HAPLO_RARE_VAR, FALSE);
+boolean rareVars =  sameOk(geneId,cartOptionalString(cart, HAPLO_RARE_VAR));
 if (rareVars)
     he->synonymous = TRUE;
 else

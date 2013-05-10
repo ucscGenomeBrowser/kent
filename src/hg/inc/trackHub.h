@@ -122,8 +122,13 @@ struct slName *trackHubAllChromNames(char *database);
 struct chromInfo *trackHubAllChromInfo(char *database);
 /* Return a chromInfo structure for all the chroms in this database. */
 
+struct chromInfo *trackHubMaybeChromInfo(char *database, char *chrom);
+/* Return a chromInfo structure for just this chrom in this database. 
+ * Return NULL if chrom doesn't exist. */
+
 struct chromInfo *trackHubChromInfo(char *database, char *chrom);
-/* Return a chromInfo structure for just this chrom in this database. */
+/* Return a chromInfo structure for just this chrom in this database. 
+ * errAbort if chrom doesn't exist. */
 
 char *trackHubGenomeNameToDb(char *genome);
 /* Return assembly name given a genome name if one exists, otherwise NULL. */
@@ -149,5 +154,9 @@ char *trackHubSkipHubName(char *name);
 
 struct dbDb *trackHubDbDbFromAssemblyDb(char *database);
 /* Return a dbDb structure for just this database. */
+
+struct hgPositions;
+void trackHubFindPos(char *db, char *term, struct hgPositions *hgp);
+/* Look for term in track hubs.  Update hgp if found */
 #endif /* TRACKHUB_H */
 

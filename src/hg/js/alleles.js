@@ -288,7 +288,7 @@ var alleles = (function()
                 $('span#alleleCounts').addClass('textAlert'); 
                 $(btn).val('Hide rare haplotypes');
                 if (setCart == undefined || setCart)
-                    setCartVar(btn.id,'set');
+                    setCartVar(btn.id,'1');
             } else {
                 $(trs).filter('.rare').addClass('hidden');
                 var counts = $(trs).filter(':visible').length + ' of ' + $(trs).length + ".";
@@ -308,7 +308,7 @@ var alleles = (function()
                 $('table#alleles').find('.score').removeClass('hidden');
                 $(btn).val('Hide scoring');
                 if (setCart == undefined || setCart)
-                    setCartVar(btn.id,'set');
+                    setCartVar(btn.id,'1');
             } else {
                 $('table#alleles').find('.score').addClass('hidden');
                 $(btn).val('Show scoring');
