@@ -204,4 +204,6 @@ int twoBitSeqSizeNoNs(struct twoBitFile *tbf, char *seqName);
 long long twoBitTotalSizeNoN(struct twoBitFile *tbf);
 /* return the size of the all the sequence in file, not counting N's*/
 
+boolean twoBitIsSequence(struct twoBitFile *tbf, char *chromName);
+/* Return TRUE if chromName is in 2bit file. */
 #endif /* TWOBIT_H */

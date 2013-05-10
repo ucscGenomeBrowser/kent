@@ -35,6 +35,10 @@
 #include "twoBit.h"
 #include "dbDb.h"
 #include "net.h"
+#include "bbiFile.h"
+#include "bPlusTree.h"
+#include "hgFind.h"
+#include "hubConnect.h"
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
@@ -82,27 +86,36 @@ for(; hubGenome; hubGenome=hubGenome->next)
 return NULL;
 }
 
+struct trackHubGenome *trackHubGetGenome(char *database)
+{
+if (hubAssemblyHash == NULL)
+    errAbort("requesting hub genome with no hubs loaded");
+
+struct hashEl *hel = hashLookup(hubAssemblyHash, database);
+
+if (hel == NULL)
+    return NULL;
+
+return (struct trackHubGenome *)hel->val;
+}
+
 boolean trackHubDatabase(char *database)
 /* Is this an assembly from an Assembly Data hub? */
 {
 if (hubAssemblyHash == NULL)
     return FALSE;
-struct hashEl *hel = hashLookup(hubAssemblyHash, database);
-if (hel == NULL)
-    return FALSE;
-return TRUE;
+
+return trackHubGetGenome(database) != NULL;
 }
 
 char *trackHubAssemblyField(char *database, char *field)
 /* Get data field from a assembly data hub. */
 {
-if (hubAssemblyHash == NULL)
-    errAbort("requesting hub assembly field with no hubs loaded");
-struct hashEl *hel = hashLookup(hubAssemblyHash, database);
-if (hel == NULL)
+struct trackHubGenome *genome = trackHubGetGenome(database);
+
+if (genome == NULL)
     return NULL;
 
-struct trackHubGenome *genome = hel->val;
 char *ret = hashFindVal(genome->settingsHash, field);
 
 return cloneString(ret);
@@ -127,13 +140,11 @@ return db;
 struct dbDb *trackHubDbDbFromAssemblyDb(char *database)
 /* Return a dbDb structure for just this database. */
 {
-if (hubAssemblyHash == NULL)
-    errAbort("requesting hub assembly dbDb with no hubs loaded");
-struct hashEl *hel = hashLookup(hubAssemblyHash, database);
-if (hel == NULL)
+struct trackHubGenome *genome = trackHubGetGenome(database);
+
+if (genome == NULL)
     return NULL;
 
-struct trackHubGenome *genome = hel->val;
 return makeDbDbFromAssemblyGenome(genome);
 }
 
@@ -189,44 +200,36 @@ slReverse(&dbList);
 return dbList;
 }
 
+struct slName *trackHubAllChromNames(char *database)
+/* Return a list of all the chrom names in this assembly hub database. */
+/* Free with slFreeList. */
+{
+struct trackHubGenome *genome = trackHubGetGenome(database);
+if (genome == NULL)
+    return NULL;
+
+struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
+
+return chromList;
+}
+
 int trackHubChromCount(char *database)
 /* Return number of chromosomes in a assembly data hub. */
 {
-struct hashEl *hel = hashLookup(hubAssemblyHash, database);
-if (hel == NULL)
-    return 0;
-
-struct trackHubGenome *genome = hel->val;
-struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
+struct slName *chromList = trackHubAllChromNames(database);
 
 int num = slCount(chromList);
 slFreeList(&chromList);
 return  num;
 }
 
-struct slName *trackHubAllChromNames(char *database)
-/* Return a list of all the chrom names in this assembly hub database. */
-/* Free with slFreeList. */
-{
-struct hashEl *hel = hashLookup(hubAssemblyHash, database);
-if (hel == NULL)
-    return 0;
-
-struct trackHubGenome *genome = hel->val;
-struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
-
-return chromList;
-}
-
 char *trackHubDefaultChrom(char *database)
 /* Return the default chromosome for this track hub assembly. */
 {
-struct hashEl *hel = hashLookup(hubAssemblyHash, database);
-if (hel == NULL)
-    return NULL;
+struct slName *chromList = trackHubAllChromNames(database);
 
-struct trackHubGenome *genome = hel->val;
-struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
+if (chromList == NULL)
+    return NULL;
 
 char *defaultName = cloneString( chromList->name);
 slFreeList(&chromList);
@@ -234,20 +237,18 @@ slFreeList(&chromList);
 return defaultName;
 }
 
-struct chromInfo *trackHubChromInfo(char *database, char *chrom)
-/* Return a chromInfo structure for just this chrom in this database. */
+struct chromInfo *trackHubMaybeChromInfo(char *database, char *chrom)
+/* Return a chromInfo structure for just this chrom in this database. 
+ * Return NULL if chrom doesn't exist. */
 {
-if (hubAssemblyHash == NULL)
+struct trackHubGenome *genome = trackHubGetGenome(database);
+if (genome == NULL)
     return NULL;
 
-struct hashEl *hel = hashLookup(hubAssemblyHash, database);
-
-if (hel == NULL)
+if (!twoBitIsSequence(genome->tbf, chrom))
     return NULL;
 
-struct trackHubGenome *genome = hel->val;
 struct chromInfo *ci;
-
 AllocVar(ci);
 ci->chrom = cloneString(chrom);
 ci->fileName = genome->twoBitPath;
@@ -256,15 +257,25 @@ ci->size = twoBitSeqSize(genome->tbf, chrom);
 return ci;
 }
 
-struct chromInfo *trackHubAllChromInfo(char *db)
+struct chromInfo *trackHubChromInfo(char *database, char *chrom)
+/* Return a chromInfo structure for just this chrom in this database. 
+ * errAbort if chrom doesn't exist. */
+{
+struct chromInfo *ci = trackHubMaybeChromInfo(database, chrom);
+
+if (ci == NULL)
+    errAbort("%s is not in %s", chrom, database);
+
+return ci;
+}
+
+struct chromInfo *trackHubAllChromInfo(char *database)
 /* Return a chromInfo structure for all the chroms in this database. */
 {
-struct hashEl *hel = hashLookup(hubAssemblyHash, db);
-
-if (hel == NULL)
+struct trackHubGenome *genome = trackHubGetGenome(database);
+if (genome == NULL)
     return NULL;
 
-struct trackHubGenome *genome = hel->val;
 struct chromInfo *ci, *ciList = NULL;
 struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
 
@@ -320,15 +331,9 @@ return list;
 struct grp *trackHubLoadGroups(char *database)
 /* Load the grp structures for this track hub database. */
 {
-if (hubAssemblyHash == NULL)
+struct trackHubGenome *genome = trackHubGetGenome(database);
+if (genome == NULL)
     return NULL;
-
-struct hashEl *hel = hashLookup(hubAssemblyHash, database);
-
-if (hel == NULL)
-    return NULL;
-
-struct trackHubGenome *genome = hel->val;
 struct grp *list = readGroupRa(genome->groups);
 return list;
 }
@@ -954,4 +959,88 @@ for (genome = hub->genomeList; genome != NULL; genome = genome->next)
 trackHubClose(&hub);
 
 return retVal;
+}
+
+
+static struct hgPos *bigBedIntervalListToHgPositions(struct bbiFile *bbi, char *term, struct bigBedInterval *intervalList)
+/* Given an open bigBed file, and an interval list, return a pointer to a list of hgPos structures. */
+{
+struct hgPos *posList = NULL;
+char chromName[bbi->chromBpt->keySize+1];
+int lastChromId = -1;
+struct bigBedInterval *interval;
+
+for (interval = intervalList; interval != NULL; interval = interval->next)
+    {
+    struct hgPos *hgPos;
+    AllocVar(hgPos);
+    slAddHead(&posList, hgPos);
+
+    bbiCachedChromLookup(bbi, interval->chromId, lastChromId, chromName, sizeof(chromName));
+    lastChromId = interval->chromId;
+
+    hgPos->chrom = cloneString(chromName);
+    hgPos->chromStart = interval->start;
+    hgPos->chromEnd = interval->end;
+    hgPos->name = term;
+    }
+
+return posList;
+}
+
+static struct hgPos *getPosFromBigBed(char *bigDataUrl, char *indexField, char *term)
+/* Given a bigBed file with a search index, check for term. */
+{
+struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
+int fieldIx;
+struct bptFile *bpt = bigBedOpenExtraIndex(bbi, indexField, &fieldIx);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *intervalList;
+intervalList = bigBedNameQuery(bbi, bpt, fieldIx, term, lm);
+
+return bigBedIntervalListToHgPositions(bbi, term, intervalList);
+}
+
+static void findPosInTdbList(struct trackDb *tdbList, char *term, struct hgPositions *hgp)
+/* Given a trackHub's trackDb entries, check each of them for a searchIndex */
+{
+struct trackDb *tdb;
+
+for(tdb=tdbList; tdb; tdb = tdb->next)
+    {
+    char *indexField = trackDbSetting(tdb, "searchIndex");
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+
+    if (indexField && bigDataUrl)
+	{
+	struct hgPos *posList = getPosFromBigBed(bigDataUrl, indexField, term);
+
+	if (posList != NULL)
+	    {
+	    struct hgPosTable *table;
+
+	    AllocVar(table);
+	    slAddHead(&hgp->tableList, table);
+	    table->description = cloneString(tdb->table);
+	    table->name = cloneString(tdb->table);
+
+	    table->posList = posList;
+	    }
+	}
+    }
+}
+
+void trackHubFindPos(char *db, char *term, struct hgPositions *hgp)
+/* Look for term in track hubs.  Update hgp if found */
+{
+struct trackDb *tdbList = NULL;
+if (trackHubDatabase(db))
+    {
+    struct trackHubGenome *genome = trackHubGetGenome(db);
+    tdbList = trackHubTracksForGenome(genome->trackHub, genome);
+    }
+else
+    tdbList = hubCollectTracks(db, NULL);
+
+findPosInTdbList(tdbList, term, hgp);
 }
