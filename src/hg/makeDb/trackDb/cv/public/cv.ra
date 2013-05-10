@@ -12899,6 +12899,24 @@ type mapAlgorithm
 label TopHat v1.3.1
 description TopHat v1.3.1
 
+## quality
+# term (human-readable read type name)
+# tag (machine-readable read type name, no special characters)
+# type (informs pipeline code of stanza type. Should always be readType)
+# description (human-readable description of the read type, unclear where/if it's used)
+
+term caution
+tag QCAUTION
+type quality
+label Caution
+description Moderate quality; likely lower than optimal sensitivity i.e. when all replicates of a dataset have suboptimal moderate scores
+
+term good
+tag QGOOD
+type quality
+label Good
+description High quality; at least one replicate is of high quality allowing rescue OR all replicates are high quality
+
 ### readType
 # term (human-readable read type name)
 # tag (machine-readable read type name, no special characters)
@@ -13051,7 +13069,7 @@ type localization
 label cell
 description Whole cell
 termId GO:0005623
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005623
 
 term nucleus
 tag NUCLEUS
@@ -13059,7 +13077,7 @@ type localization
 label nucleus
 description Large membrane bound part of cell containing chromosomes and the bulk of the cell's DNA
 termId GO:0005634
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005634
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005634
 
 term cytosol
 tag CYTOSOL
@@ -13067,7 +13085,7 @@ type localization
 label cytosol
 description The fluid between the cells outer membrane and the nucleus
 termId GO:0005829
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005829
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005829
 
 term polysome
 tag POLYSOME
@@ -13075,7 +13093,7 @@ type localization
 label polysome
 description Strand of mRNA with ribosomes attached
 termId GO:0005844
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005844
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005844
 
 term chromatin
 tag CHROMATIN
@@ -13083,7 +13101,7 @@ type localization
 label chromatin
 description Nuclear DNA and associated proteins
 termId GO:0000790
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0000790
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0000790
 
 term nucleolus
 tag NUCLEOLUS
@@ -13091,7 +13109,7 @@ type localization
 label nucleolus
 description The part of the nucleus where ribosomal RNA is actively transcribed
 termId GO:0005730
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005730
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005730
 
 term nucleoplasm
 tag NUCLEOPLASM
@@ -13099,14 +13117,14 @@ type localization
 label nucleoplasm
 description That part of the nuclear content other than the chromosomes or the nucleolus
 termId GO:0005654
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005654
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005654
 
 term nuclearMatrix
 tag NUCLEARMATRIX
 type localization
 description The dense fibrillar network lying on the inner side of the nuclear membrane
 termId GO:0016363
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0016363
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0016363
 
 term membraneFraction
 tag MEMBRANEFRACTION
@@ -13114,7 +13132,7 @@ type localization
 label membraneFraction
 description That fraction of cells, prepared by disruptive biochemical methods, that includes the plasma and other membranes.
 termId GO:0005624
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005624
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005624
 
 term mitochondria
 tag MITO
@@ -13122,7 +13140,7 @@ type localization
 label mitochondria
 description Mitochondria
 termId GO:0005739
-termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0005739
 
 ### RNA extracts
 
@@ -14379,24 +14397,11 @@ type view
 label Minus signal
 description Graphs the base-by-base density of tags on the minus strand
 
-
 term Peaks
 tag PKS
 type view
 label Peaks
 description Regions of enriched signal in experiment
-
-term PeakSeqConservPeaks
-tag PSCPEAKS
-type view
-label PeakSeq Conserved Peaks
-description Regions of conserved enriched signal in experiment performed by PeakSeq
-
-term PeakSeqOptimalPeak
-tag PSOPEAKS
-type view
-label PeakSeq Optimal Peaks
-description Regions of optimal enriched signal in experiment performed by PeakSeq
 
 term pepMapFt
 tag PEPMAPFT
@@ -14573,18 +14578,6 @@ tag SPLICES
 type view
 label Splices
 description Subset of aligned reads that cross splice junctions
-
-term SppConservPeaks
-tag SCPPEAKS
-type view
-label Spp Conservative Peaks
-description Regions of optimal enriched signal in experiment performed by Spp
-
-term SppOptimalPeaks
-tag SOPPEAKS
-type view
-label SPP Optimal Peaks
-description Regions of conserved enriched signal in experiment performed by SPP
 
 term SumSignal
 tag SUMSIG
@@ -16743,6 +16736,18 @@ requiredVars term,tag,type,description
 searchable multiSelect
 validate cv or None
 
+term quality
+tag QUALITY
+type typeOfTerm
+label Integrated quality flag
+cvDefined yes
+description Quality assessment based on multiple metrics; manually curated based on automatic flagging 
+optionalVars label,deprecated
+priority 500
+requiredVars term,tag,type,description
+searchable no
+validate cv
+
 term readType
 tag READTYPE
 type typeOfTerm
@@ -16934,6 +16939,22 @@ priority 970
 requiredVars term,tag,type,description
 searchable freeText
 validate exists
+
+# this is a dummy typeOfTerm -- there are no stanzas of type target.
+# The actual target values appear in the Antibody term stanzas.
+# The typeOfTerm stanza here is here just to allow validator to accept target objects in metaDb.
+
+term target
+tag TARGET
+type typeOfTerm
+label Antibody target
+cvDefined no
+description The gene targeted by an antibody
+optionalVars label
+priority 150
+requiredVars term,tag,type
+searchable no
+validate none
 
 term targetClass
 tag TARGETCLASS
