@@ -60,20 +60,26 @@
                         </p>
 
                         <p>
-                        Under Set Options tab, set Browse ENCODE button to on and select an LD threshold.
+                        Under Set Options tab, set Browse ENCODE button to &quot;on&quot; and select an LD threshold
+                        and reference population.
                         </p>
 
                         <p>
-                        Under Build Query Tab, enter SNP (rsXXXXX)
+                        Under Build Query Tab, enter a SNP (rsXXXXX), a set of SNPs, a genomic region, or select a GWAS
+                        from the drop down menu.
                         </p>
 
                         <p>
-                        HaploReg returns SNPs in LD, their frequency in 3 populations, and also tells you  what evidence
-                        ENCODE has found for regulatory protein binding (mouse over to see the protein names), chromatin
-                        structure (mouse over to see the cell types), and the chromatin state of the region (the chromatin
-                        state can predict an enhancer or promoter), and putative transcription factor binding motifs that are
-                        altered by the variant.  Clicking on the SNP name hyperlink reveals chromosomal position, sequence,
-                        allele frequencies in three populations, and ENCODE chromatin state in 9 cell types.
+                        HaploReg returns SNPs in LD with query SNPs, their frequency in 4 populations 
+                        from 1000 Genomes Phase1, and also tells you what evidence ENCODE has found for 
+                        regulatory protein binding (mouse over to see the protein names), chromatin
+                        structure (mouse over to see the cell types with DNase hypersensitivity), 
+                        the chromatin state of the region (the chromatin  state can predict an enhancer or promoter),
+                        and putative transcription factor binding motifs that are altered by the variant.  Clicking on 
+                        the SNP name hyperlink reveals further details, including cell type metadata and the mechanism of 
+                        disruption/creation of TF binding regulatory motifs (showing the PWM matched and its alignment to
+                        the local sequence context.) SNPs are also intersected with cross-species conserved elements,
+                        chromatin states from the Roadmap Epigenomics Consortium, and lead eQTLs from the GTEx Project browser.
                         </p>
 
                         <p>
@@ -100,6 +106,20 @@
                         <em>Genome Res</em>. 2012 Sep;22(9):1790-7.
                         </li></p>
 
+                        <p><li>
+                        <a class="thick">Spark</a><br>
+                        Spark is an interactive pattern discovery and visualization approach, designed with epigenomic data
+                        in mind. Spark can reveal both known and novel epigentic signatures.
+                       </li> </p>
+                        
+                       <p><li>
+                        Nielsen CB, Younesy H, O'Geen H, Xu X, Jackson AR, Milosavljevic A, Wang T, Costello JF, Hirst M,
+                        Farnham PJ, Jones SJ.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/22960372" target="_blank">
+                          Spark: a navigational paradigm for genomic data exploration</a>.
+                        <em>Genome Res</em>. 2012 Nov;22(11):2262-9. PMID: 22960372; PMCID: PMC3483555 
+                       </li></p>
+     
                         <p><li>
                         <a class="thick">Tutorial on functional annotation of non-coding sequences</a><br>
                         Briefly describes how to display the basic ENCODE tracks, using the UCSC genome browser, at
