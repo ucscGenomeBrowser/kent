@@ -30,6 +30,7 @@ if (gp == NULL || gp->cdsStart == gp->cdsEnd)  // Ain't interested in non-protei
     }
 
 he->chrom = gp->chrom; // Probably not needed
+he->justModel = lmCloneString(he->lm,geneId);
 he->growTree = FALSE; // Tree growing not needed here
 
 // Need to determine the correct vcf file and open it

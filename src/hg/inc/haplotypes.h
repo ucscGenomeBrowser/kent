@@ -80,12 +80,14 @@ void haplotypeExtrasFree(struct haploExtras **pHe);
 // ------------------------------------
 // haplotypes variants support routines
 // ------------------------------------
-struct variant {
+struct hapVar {
 // haplotypes are made up of one or more variants
     // slList Only used for sorting! Always stored as arrays because of multiple uses!
-    struct variant *next;   // Only used for sorting!
+    struct hapVar *next;   // Only used for sorting!
     int chromStart;         // start
     int chromEnd;           // end
+    int origStart;          // UI needs original boundaries
+    int origEnd;            // UI needs original boundaries
     enum variantType vType; // vtSNP, vtInsertion or vtDeletion relative to reference
     char *id;               // id of variant
     boolean reversed;       // true if the sequence reflects the negative strand
@@ -95,7 +97,7 @@ struct variant {
     AA *aaVal;              // May get filled with amino acid value resulting from variance
     int aaOffset;           // May get filled with offset into haplotype's aaSeq
     int aaLen;              // May get filled with length of haplotype's aaSeq that is replaced
-    double proportion;      // proportion of variant allele in dataset
+    double frequency;       // frequency (1=100%) of variant allele in dataset
 };
 
 
@@ -118,7 +120,7 @@ struct haplotype {
                               // Also defines relationships (e.g. uc002zlh.1:ab is the
                               // second variant of first non-ref gene allele of uc002zlh.1).
     int variantCount;         // Count of non-reference variants in this haplotype
-    struct variant **variants;// Array of variants from vcf records (shares structs NOT slList)
+    struct hapVar **variants; // Array of variants from vcf records (shares structs NOT slList)
                               // When build complete, each variant in the reference haplotype
                               // will be the head of the sList for variants at location
     int variantsCovered;      // Count of non-reference variants across all haplotypes per model
@@ -205,7 +207,7 @@ int haploSetStrandOrient(struct haploExtras *he,struct haplotypeSet *hapSet);
 // Code for converting haplotypes to DNA or AA sequence
 // ----------------------------------------------------
 
-char *haploVarId(struct variant *var);
+char *haploVarId(struct hapVar *var);
 // Returns a string to use a the class or ID for a given variant
 
 DNA *haploDnaSequence(struct haploExtras *he, struct haplotypeSet *hapSet,
