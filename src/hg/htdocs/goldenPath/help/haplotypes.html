@@ -251,12 +251,13 @@ of the project.</div>
 <dl>
 <dt>Hap score</dt>
 <dd>The &quot;haplotype score&quot; is the normalized (-log10) probability of finding exactly 
-    N subject chromosomes with this haplotype, given the frequencies of individual variants. 
-    The score is normalized by multiplying by the total number of variants. Normalization allows 
-    comparing the scores between genes with many variants and those with few. The score will 
-    be positive if the haplotype is more frequent than expected by chance and negative if 
-    less frequent.  For haplotyes made from common, non-synonymous variants, haplotype scores 
-    above 606 are seen in only 2&#37; of genes.  Likewise, a score of less than -199 is only seen 
+    N subject chromosomes with this haplotype, given the frequencies of individual variants
+    and assuming they are independent.  The score is normalized by multiplying the base 
+    probability by the total number of variants.  Normalization allows comparing the scores 
+    between genes with many variants and those with few.  The score will be positive if the 
+    haplotype is more frequent than expected by chance and negative if less frequent.  
+    For haplotyes made from common, non-synonymous variants, haplotype scores above 606 
+    are seen in only 2&#37; of genes.  Likewise, a score of less than -199 is only seen 
     in 2&#37; of genes.</dd> 
 
 <dt>Hom score</dt>
@@ -287,6 +288,7 @@ of the project.</div>
     sequences will be presented with respect to the negative strand. Note that individual 
     variants displayed in the 1000 Genomes phase 1 variations track are all shown as they 
     appear on the positive ('+' or "sense") strand. </li>
+<!--  ID seems like a bad idea unless it is it's own column 
 <li id='noteHapId'>Hovering within the table column with the header "Reference Varaints:" will 
     give an <span title='uc004cda.1:jfa'>ID</span> for each non-reference haplotype.  This 
     <span title='uc004cda.1:jfa'>ID</span> is unique across all haplotypes across the entire 
@@ -296,6 +298,7 @@ of the project.</div>
     gene model will reflect the 
     <span title='uc004cda.1:jfa includes all the variants of uc004cda.1:jf'>relationships</span> 
     of the sets variants.</li>
+-->
 <li id='noteVarsIncluded'>
     Haplotype and homozygous frequency calculations depend upon which variants are included.</li>
 <li id='noteNoSplice'>
@@ -320,6 +323,10 @@ of the project.</div>
     and other Genome Browser dataset at the time they are requested.  Consequently, scoring is
     calculated in the context of a single gene model and the variants used to derive haplotypes.
     </li>
+<li id='notePerformance'>Certain viewing options are expensive operations which will slow the
+    gene page response time.  If this section is not being actively used, it is recommended that 
+    previous choices are cleared by pressing "Reset to defaults" at the bottom of this section.
+    </li> 
 </ol> 
 </div>
 
