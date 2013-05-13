@@ -106,8 +106,10 @@ the column headers.
     of these variants will show a more complete description (example: 
     <span title='AA:16 A|T chr9:136137554 SNP: G|A (0.995|0.005) rs55917063'>
     'AA:16 A|T chr9:136137554 SNP: G|A (0.995|0.005) rs55917063'</span>).
-    The description includes the AA residue number and variants (AA view only), genome location,
-    base level variants and the dbSNP variant name if one is known.  Clicking on any 
+    The description includes the <span title='AA:16 A|T'>AA residue number and variants 
+    (AA view only)</span>, <span title='chr9:136137554'>genome location</span>,
+    <span title='SNP: G|A (0.995|0.005)'>base level variants and frequencies</span>, 
+    and the <span title='rs55917063'>dbSNP variant name</span> if one is known.  Clicking on any 
     <em class='textInfo'>non-reference</em> variant shown in the variants section of the table 
     will link to the full details of that variant as seen in the 1000 Genomes phase 1 track.    
     <BR><BR></dd>
@@ -249,12 +251,13 @@ of the project.</div>
 <dl>
 <dt>Hap score</dt>
 <dd>The &quot;haplotype score&quot; is the normalized (-log10) probability of finding exactly 
-    N subject chromosomes with this haplotype, given the frequencies of individual variants. 
-    The score is normalized by multiplying by the total number of variants. Normalization allows 
-    comparing the scores between genes with many variants and those with few. The score will 
-    be positive if the haplotype is more frequent than expected by chance and negative if 
-    less frequent.  For haplotyes made from common, non-synonymous variants, haplotype scores 
-    above 606 are seen in only 2&#37; of genes.  Likewise, a score of less than -199 is only seen 
+    N subject chromosomes with this haplotype, given the frequencies of individual variants
+    and assuming they are independent.  The score is normalized by multiplying the base 
+    probability by the total number of variants.  Normalization allows comparing the scores 
+    between genes with many variants and those with few.  The score will be positive if the 
+    haplotype is more frequent than expected by chance and negative if less frequent.  
+    For haplotyes made from common, non-synonymous variants, haplotype scores above 606 
+    are seen in only 2&#37; of genes.  Likewise, a score of less than -199 is only seen 
     in 2&#37; of genes.</dd> 
 
 <dt>Hom score</dt>
@@ -285,11 +288,19 @@ of the project.</div>
     sequences will be presented with respect to the negative strand. Note that individual 
     variants displayed in the 1000 Genomes phase 1 variations track are all shown as they 
     appear on the positive ('+' or "sense") strand. </li>
-<li id='notVarsIncluded'>
+<!--  ID seems like a bad idea unless it is it's own column 
+<li id='noteHapId'>Hovering within the table column with the header "Reference Varaints:" will 
+    give an <span title='uc004cda.1:jfa'>ID</span> for each non-reference haplotype.  This 
+    <span title='uc004cda.1:jfa'>ID</span> is unique across all haplotypes across the entire 
+    genome given the set of variants used.  That is, haploptyes produced from common variants 
+    will not have the same <span title='uc004cda.1:jfa'>ID</span> when seen with all 
+    variants.  The <span title=':jfa'>ID suffixes</span> of a set of haplotypes for a single 
+    gene model will reflect the 
+    <span title='uc004cda.1:jfa includes all the variants of uc004cda.1:jf'>relationships</span> 
+    of the sets variants.</li>
+-->
+<li id='noteVarsIncluded'>
     Haplotype and homozygous frequency calculations depend upon which variants are included.</li>
-<li id='notePersistence'>
-    The options to include rare variants and or to display full sequence will persist for 
-    only one gene at a time.  Other settings will remain in place for any gene viewed.</li>
 <li id='noteNoSplice'>
     Only variants occurring within coding exons are currently included in haplotypes. 
     Variants occurring within intron splice junctions are not included.</li>
@@ -312,6 +323,10 @@ of the project.</div>
     and other Genome Browser dataset at the time they are requested.  Consequently, scoring is
     calculated in the context of a single gene model and the variants used to derive haplotypes.
     </li>
+<li id='notePerformance'>Certain viewing options are expensive operations which will slow the
+    gene page response time.  If this section is not being actively used, it is recommended that 
+    previous choices are cleared by pressing "Reset to defaults" at the bottom of this section.
+    </li> 
 </ol> 
 </div>
 
