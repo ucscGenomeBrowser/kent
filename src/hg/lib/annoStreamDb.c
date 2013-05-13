@@ -2,6 +2,7 @@
 
 #include "annoStreamDb.h"
 #include "annoGratorQuery.h"
+#include "binRange.h"
 #include "hdb.h"
 #include "sqlNum.h"
 
@@ -292,7 +293,10 @@ self->conn = conn;
 self->table = cloneString(table);
 char *asFirstColumnName = streamer->asObj->columnList->name;
 if (sqlFieldIndex(self->conn, self->table, "bin") == 0)
+    {
     self->hasBin = 1;
+    self->minFinestBin = binFromRange(0, 1);
+    }
 if (self->hasBin && !sameString(asFirstColumnName, "bin"))
     self->omitBin = 1;
 if (!asdInitBed3Fields(self))
