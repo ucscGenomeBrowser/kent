@@ -31,7 +31,7 @@ if (gp == NULL || gp->cdsStart == gp->cdsEnd)  // Ain't interested in non-protei
 
 he->chrom = gp->chrom; // Probably not needed
 he->justModel = lmCloneString(he->lm,geneId);
-he->growTree = FALSE; // Tree growing not needed here
+//he->growTree = FALSE; // Tree growing not needed here
 
 // Need to determine the correct vcf file and open it
 if (haplotypesDiscoverVcfFile(he, gp->chrom) == NULL)
@@ -48,7 +48,7 @@ if (vcff == NULL)
 vcfFileMakeReusePool(vcff,1024 * 1024);
 
 // All or Limit to the 99%
-boolean rareVars =  sameOk(geneId,cartOptionalString(cart, HAPLO_RARE_VAR));
+boolean rareVars =  cartUsualBoolean(cart, HAPLO_RARE_VAR, FALSE);
 if (rareVars)
     he->synonymous = TRUE;
 else

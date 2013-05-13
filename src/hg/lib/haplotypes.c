@@ -1845,9 +1845,11 @@ if (len > largest)
     {
     strncpy(buf, val, (largest-3));
     strcpy(buf +      (largest-3), "+++");
-    return buf;
     }
-return val;
+else
+    strcpy(buf, val); // by always returning buf, strLower, etc can be used with impunity
+
+return buf;
 }
 
 // NOTE: could be made public
@@ -2097,14 +2099,24 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
                 (showScores ? "" : " hidden"),99999 - popScore, popScore );
         }
 
+    // Reference haplotype or not?
+#define HAPLO_ID_HINT
+#ifdef HAPLO_ID_HINT
+    if (haplo->variantCount == 0)
+        hPrintf("<TD title='Contains reference varaints only' class='" REFERENCE_CLASS "'>reference</TD>");
+    else
+        hPrintf("<TD title='%s:%s contains non-reference variants' class='" REFERENCE_CLASS
+                "'>&nbsp;</TD>",hapSet->commonId,haplo->suffixId);
+#else//ifndef HAPLO_ID_HINT
     hPrintf("<TD class='" REFERENCE_CLASS "'>%s</TD>",
             (haplo->variantCount ? "&nbsp;" : "reference"));
-    int bitIx = 0,varSlot = 0;
+#endif//ndef HAPLO_ID_HINT
 
     // Need to set AA variants haplotype by haplotype, because of shared memory
     if (!dnaView)
         geneHapSetAaVariants(he, hapSet, haplo);
 
+    int bitIx = 0,varSlot = 0;
     for (bitIx = 0, varIx = 0; bitIx < haplo->bitCount; varSlot++, bitIx += hapSet->bitsPerVariant)
         {
         struct hapVar *varToUse = refHap->variants[varSlot];
@@ -2132,9 +2144,10 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
             else if (varToUse->aaOffset > haplo->ho->aaLen)
                 val = " ";
             }
+
         if (varToUse != refHap->variants[varSlot])
-            hPrintf("<A HREF='%s'>%s</A></TD>",refVariantLink(cart,hapSet,varSlot),
-                    clipLongVals(val,5,'-'));
+            hPrintf(" <A HREF='%s'>%s</A></TD>",refVariantLink(cart,hapSet,varSlot),
+                    clipLongVals(val,5,'-')); // Note: space before should bring var to top of sort
         else
             hPrintf("%s</TD>",clipLongVals(val,5,'-'));
         }
@@ -2257,9 +2270,9 @@ hPrintf("Generated from <A HREF='http://www.1000genomes.org/' TARGET=_BLANK>1000
         "Phase1 variants (<A HREF='../goldenPath/help/haplotypes.html' "
         "title='Help on Gene haplotype alleles section' TARGET=_BLANK>help</A>).");
 
-boolean rareVars     =  sameOk(geneId,cartOptionalString(cart, HAPLO_RARE_VAR));
+boolean rareVars     =  cartUsualBoolean(cart, HAPLO_RARE_VAR, FALSE);
 boolean dnaView      =  cartUsualBoolean(cart, HAPLO_DNA_VIEW, FALSE);
-boolean fullGeneView =  sameOk(geneId,cartOptionalString(cart, HAPLO_FULL_SEQ));
+boolean fullGeneView =  cartUsualBoolean(cart, HAPLO_FULL_SEQ, FALSE);
 boolean tripletView  =  FALSE;
 // Support toggling between common and rare variants
 int variantCount = (haploCount == 0 ? 0 : hapSet->variantsCovered);
@@ -2317,7 +2330,7 @@ if (!noHaps
             "variants with a frequency of at least %d%%' "
             "onclick='alleles.setAndRefresh(this.id,\"%s\");'></td>\n",
             (rareVars ? "Common variants only":"Include all variants"),
-            HAPLO_COMMON_VARIANT_MIN_PCT,(rareVars ? "[]":geneId));
+            HAPLO_COMMON_VARIANT_MIN_PCT,(rareVars ? "[]":"1"));
     }
 
 // DNA vs. AA, Full sequence
@@ -2331,7 +2344,7 @@ if (!noHaps)
     hPrintf("<td><input type='button' id='" HAPLO_FULL_SEQ "' class='" TOGGLE_BUTTON "' "
             "value='%s full sequence' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
             "title='Show/Hide predicted full sequence of each gene haplotype'></td>\n",
-            (fullGeneView ? "Hide" : "Show"), (fullGeneView ? "[]": geneId ));
+            (fullGeneView ? "Hide" : "Show"), (fullGeneView ? "[]": "1" ));
 
     tripletView  = cartUsualBoolean(cart, HAPLO_TRIPLETS,FALSE);
     if (!dnaView && fullGeneView)
