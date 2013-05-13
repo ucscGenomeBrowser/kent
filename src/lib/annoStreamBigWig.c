@@ -33,7 +33,7 @@ self->nextInterval = self->intervalList = NULL;
 lmCleanup(&(self->intervalQueryLm));
 }
 
-static void asbwDoQuery(struct annoStreamBigWig *self)
+static void asbwDoQuery(struct annoStreamBigWig *self, char *minChrom, uint minEnd)
 /* Store results of an interval query. [Would be nice to make a streaming version of this.] */
 {
 struct annoStreamer *sSelf = &(self->streamer);
@@ -41,8 +41,16 @@ if (self->intervalQueryLm == NULL)
     self->intervalQueryLm = lmInit(0);
 if (sSelf->chrom != NULL)
     {
-    self->intervalList = bigWigIntervalQuery(self->bbi, sSelf->chrom,
-					     sSelf->regionStart, sSelf->regionEnd,
+    uint start = sSelf->regionStart;
+    if (minChrom)
+	{
+	if (differentString(minChrom, sSelf->chrom))
+	    errAbort("annoStreamBigWig %s: nextRow minChrom='%s' but region chrom='%s'",
+		     sSelf->name, minChrom, sSelf->chrom);
+	if (start < minEnd)
+	    start = minEnd;
+	}
+    self->intervalList = bigWigIntervalQuery(self->bbi, sSelf->chrom, start, sSelf->regionEnd,
 					     self->intervalQueryLm);
     }
 else
@@ -52,6 +60,12 @@ else
 	self->queryChrom = self->chromList;
     else
 	self->queryChrom = self->queryChrom->next;
+    if (minChrom != NULL)
+	{
+	// Skip chroms that precede minChrom
+	while (self->queryChrom != NULL && strcmp(self->queryChrom->name, minChrom) < 0)
+	    self->queryChrom = self->queryChrom->next;
+	}
     if (self->queryChrom == NULL)
 	{
 	self->chromList = NULL; // EOF, don't start over!
@@ -60,8 +74,12 @@ else
     else
 	{
 	char *chrom = self->queryChrom->name;
+	int start = 0;
+	if (minChrom != NULL && sameString(chrom, minChrom))
+	    start = minEnd;
 	uint end = self->queryChrom->size;
-	self->intervalList = bigWigIntervalQuery(self->bbi, chrom, 0, end, self->intervalQueryLm);
+	self->intervalList = bigWigIntervalQuery(self->bbi, chrom, start, end,
+						 self->intervalQueryLm);
 	}
     }
 self->nextInterval = self->intervalList;
@@ -90,12 +108,13 @@ for (iv = startIv;  iv != endIv->next;  iv = iv->next)
 return annoRowWigNew(chrom, startIv->start, endIv->end, rightJoinFail, vals, callerLm);
 }
 
-static struct annoRow *asbwNextRow(struct annoStreamer *sSelf, struct lm *callerLm)
+static struct annoRow *asbwNextRow(struct annoStreamer *sSelf, char *minChrom, uint minEnd,
+				   struct lm *callerLm)
 /* Return a single annoRow, or NULL if there are no more items. */
 {
 struct annoStreamBigWig *self = (struct annoStreamBigWig *)sSelf;
 if (self->intervalList == NULL)
-    asbwDoQuery(self);
+    asbwDoQuery(self, minChrom, minEnd);
 if (self->nextInterval == NULL)
     return NULL;
 // Skip past any left-join failures until we get a right-join failure, a passing interval, or EOF.

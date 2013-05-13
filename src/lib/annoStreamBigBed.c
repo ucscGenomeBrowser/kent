@@ -30,7 +30,7 @@ self->nextInterval = self->intervalList = NULL;
 lmCleanup(&(self->intervalQueryLm));
 }
 
-static void asbbDoQuery(struct annoStreamBigBed *self)
+static void asbbDoQuery(struct annoStreamBigBed *self, char *minChrom, uint minEnd)
 /* Store results of an interval query. [Would be nice to make a streaming version of this.] */
 {
 struct annoStreamer *sSelf = &(self->streamer);
@@ -38,8 +38,16 @@ if (self->intervalQueryLm == NULL)
     self->intervalQueryLm = lmInit(0);
 if (sSelf->chrom != NULL)
     {
-    self->intervalList = bigBedIntervalQuery(self->bbi, sSelf->chrom,
-					     sSelf->regionStart, sSelf->regionEnd,
+    uint start = sSelf->regionStart;
+    if (minChrom)
+	{
+	if (differentString(minChrom, sSelf->chrom))
+	    errAbort("annoStreamBigBed %s: nextRow minChrom='%s' but region chrom='%s'",
+		     sSelf->name, minChrom, sSelf->chrom);
+	if (start < minEnd)
+	    start = minEnd;
+	}
+    self->intervalList = bigBedIntervalQuery(self->bbi, sSelf->chrom, start, sSelf->regionEnd,
 					     self->maxItems, self->intervalQueryLm);
     }
 else
@@ -49,6 +57,12 @@ else
 	self->queryChrom = self->chromList;
     else
 	self->queryChrom = self->queryChrom->next;
+    if (minChrom != NULL)
+	{
+	// Skip chroms that precede minChrom
+	while (self->queryChrom != NULL && strcmp(self->queryChrom->name, minChrom) < 0)
+	    self->queryChrom = self->queryChrom->next;
+	}
     if (self->queryChrom == NULL)
 	{
 	self->chromList = NULL; // EOF, don't start over!
@@ -57,8 +71,11 @@ else
     else
 	{
 	char *chrom = self->queryChrom->name;
+	int start = 0;
+	if (minChrom != NULL && sameString(chrom, minChrom))
+	    start = minEnd;
 	uint end = self->queryChrom->size;
-	self->intervalList = bigBedIntervalQuery(self->bbi, chrom, 0, end,
+	self->intervalList = bigBedIntervalQuery(self->bbi, chrom, start, end,
 						 self->maxItems, self->intervalQueryLm);
 	}
     }
@@ -82,12 +99,12 @@ self->nextInterval = self->nextInterval->next;
 return self->row;
 }
 
-static struct annoRow *asbbNextRow(struct annoStreamer *vSelf, struct lm *lm)
+static struct annoRow *asbbNextRow(struct annoStreamer *vSelf, char *minChrom, uint minEnd, struct lm *lm)
 /* Return a single annoRow, or NULL if there are no more items. */
 {
 struct annoStreamBigBed *self = (struct annoStreamBigBed *)vSelf;
 if (self->intervalList == NULL)
-    asbbDoQuery(self);
+    asbbDoQuery(self, minChrom, minEnd);
 char **row = nextRowUnfiltered(self);
 if (row == NULL)
     return NULL;
