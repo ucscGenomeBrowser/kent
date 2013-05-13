@@ -20,9 +20,6 @@
 #include "errCatch.h"
 #include "trackHub.h"
 
-
-
-
 struct bbiFile *fetchBbiForTrack(struct track *track)
 /* Fetch bbiFile from track, opening it if it is not already open. */
 {
@@ -97,6 +94,47 @@ errCatchFree(&errCatch);
 return result;
 }
 
+int bbExtraFieldIndex(struct trackDb *tdb, char* fieldName)
+/* return the index of a given extra field from the bbInterval
+ * 0 is the name-field of bigBed and is used as an error code 
+ * as this is the default anyways */
+{
+if (fieldName==NULL)
+    return 0;
+// copied from hgc.c
+// get .as file for track
+struct sqlConnection *conn = NULL ;
+if (!trackHubDatabase(database))
+    conn = hAllocConnTrack(database, tdb);
+struct asObject *as = asForTdb(conn, tdb);
+hFreeConn(&conn);
+if (as == NULL)
+    return 0;
+
+// search for field name, return index if found
+struct asColumn *col = as->columnList;
+int ix = 0;
+for (;col != NULL;col=col->next, ix+=1)
+    if (sameString(col->name, fieldName))
+        return max(ix-3, 0); // never return a negative value
+return 0;
+}
+
+char* restField(struct bigBedInterval *bb, int fieldIdx) 
+/* return a given field from the bb->rest field, NULL on error */
+{
+if (fieldIdx==0) // we don't return the first(=name) field of bigBed
+    return NULL;
+char *rest = cloneString(bb->rest);
+char *restFields[256];
+int restCount = chopTabs(rest, restFields);
+char *field = NULL;
+if (fieldIdx < restCount)
+    field = cloneString(restFields[fieldIdx]);
+freeMem(rest);
+return field;
+}
+
 void bigBedAddLinkedFeaturesFrom(struct track *track,
 	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb,
 	int fieldCount, struct linkedFeatures **pLfList)
@@ -109,18 +147,23 @@ struct bigBedInterval *bb, *bbList = bigBedSelectRange(track, chrom, start, end,
 char *bedRow[32];
 char startBuf[16], endBuf[16];
 char *scoreFilter = cartOrTdbString(cart, track->tdb, "scoreFilter", NULL);
+char *mouseOverField = cartOrTdbString(cart, track->tdb, "mouseOverField", NULL);
 int minScore = 0;
 if (scoreFilter)
     minScore = atoi(scoreFilter);
 
+int mouseOverIdx = bbExtraFieldIndex(tdb, mouseOverField);
+
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
+    char* mouseOver = restField(bb, mouseOverIdx);
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
     struct bed *bed = bedLoadN(bedRow, fieldCount);
     struct linkedFeatures *lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
     	scoreMin, scoreMax, useItemRgb);
     if (scoreFilter == NULL || lf->score >= minScore)
 	slAddHead(pLfList, lf);
+    lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
     }
 lmCleanup(&lm);
 }

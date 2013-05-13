@@ -762,6 +762,52 @@
     urlLabel NCBI Details:    </pre>
 </DIV>
 
+<DIV class="urls"><span class="types bigBed"></span>
+    <div class="format">
+        <code>urls &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
+    </div>
+        
+    <P>This is similar to the <A onclick="jumpTo(this)" HREF="#">url</A> tag, but allows urls on fields
+    that are not the "name" field. Use this statement if you need multiple
+    linkouts on the details page or if your linkout is not
+    based on the name field. </P>
+    <P>
+    Put the identifiers for these links into extended
+    bigBed fields as explained in example 3 of the <a href="/goldenPath/help/bigBed.html">bigBed documentation</a>.
+    The field names from your .as file are the field names referenced in this statement.
+    The urls in this statement support the same wildcards as the <A
+    onclick="jumpTo(this)" HREF="#">url</A> statement.  Make sure to enclose
+    the URLs in double quotes.  The default label for the identifier is the field
+    description in the .as file (all text after the # mark). 
+    </P> 
+
+    <P><B>Example:</B></P>
+    <pre>
+    urls pmid="http://www.ncbi.nlm.nih.gov/pubmed/$$" hgncId="http://www.genenames.org/data/hgnc_data.php?hgnc_id=$$"
+    </pre>
+</DIV>
+
+<DIV class="mouseOverField"><span class="types bigBed"></span>
+    <div class="format">
+        <code>mouseOverField &lt;fieldName1&gt;</code><BR>
+    </div>
+        
+    <P>For bigBed files with more than 8 fields, this adds mouse over text that
+    are different from the "name" field of a bigBed file.  If the field is empty
+    then the mouse over will fallback to the name field. </P>
+    <P>
+    To make this work, create a bigBed file with at least 8 columns and put the
+    text for the mouse over into extended an bigBed field as
+    explained in example 3 of the <a href="/goldenPath/help/bigBed.html">bigBed documentation</a>.
+    The field name from your .as file is the field name referenced in this statement.
+    </P> 
+
+    <P><B>Example:</B></P>
+    <pre>
+    mouseOverField comment
+    </pre>
+</DIV>
+
 <DIV class="wgEncode"><span class="types all"></span>
 <div class="format"><code>wgEncode on</code></div>
     <P><I>NOT FOR HUBS.</I></P>

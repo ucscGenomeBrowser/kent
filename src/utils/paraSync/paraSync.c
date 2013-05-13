@@ -5,6 +5,7 @@
 #include "obscure.h"
 #include "portable.h"
 #include "net.h"
+#include "paraFetch.h"
 
 void usage()
 /* Explain usage and exit */

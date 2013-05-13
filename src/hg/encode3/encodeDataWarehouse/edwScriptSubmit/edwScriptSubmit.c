@@ -18,33 +18,40 @@ errAbort(
   "This program is meant to be called as a CGI from a web server using https.");
 }
 
+void accessDenied()
+/* Sleep a bit and then deny access. */
+{
+sleep(5);
+errAbort("Access denied!");
+}
+
 void doMiddle()
 /* edwScriptSubmit - Handle submission by a script via web services.. */
 {
+/* Security check - make sure we are on https, and check user/password. */
 if (!cgiServerHttpsIsOn())
      usage();
-char *email = sqlEscapeString(cgiString("email"));
-char *script = sqlEscapeString(cgiString("script"));
-char *access = sqlEscapeString(cgiString("access"));
-char *url = cgiString("url");
+char *user = sqlEscapeString(cgiString("user"));
+char *password = sqlEscapeString(cgiString("password"));
 struct sqlConnection *conn = edwConnectReadWrite();
 char query[256];
-safef(query, sizeof(query), "select id from edwUser where email='%s'", email);
-int userId = sqlQuickNum(conn, query);
-if (userId <= 0)
-    errAbort("Access denied");
-safef(query, sizeof(query), "select * from edwScriptRegistry where userId=%d and name='%s'",
-    userId, script);
+safef(query, sizeof(query), "select * from edwScriptRegistry where name='%s'", user);
 struct edwScriptRegistry *reg = edwScriptRegistryLoadByQuery(conn, query);
 if (reg == NULL)
-    errAbort("%s does not have a registered script named %s", email, script);
+    accessDenied();
 char key[EDW_SID_SIZE];
-edwMakeSid(access, key);
+edwMakeSid(password, key);
 if (!sameString(reg->secretHash, key))
-    errAbort("Access denied");
-safef(query, sizeof(query), 
-    "update edwScriptRegistry set submitCount = submitCount+1 "
-    "where userId=%d and name='%s'", userId, script);
+    accessDenied();
+
+/* Get email associated with script. */
+safef(query, sizeof(query), "select email from edwUser where id=%d", reg->userId);
+char *email = sqlNeedQuickString(conn, query);
+
+/* Add submission URL to the queue. */
+char *url = cgiString("url");
+safef(query, sizeof(query), "update edwScriptRegistry set submitCount = submitCount+1 "
+    "where id=%d", reg->id);
 sqlUpdate(conn, query);
 edwAddSubmitJob(conn, email, url);
 printf("%s submitted", url);

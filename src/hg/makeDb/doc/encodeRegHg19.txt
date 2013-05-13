@@ -871,9 +871,25 @@ cat > getMetaHuge.csh << 'EOF'
     # Read 4385242 elements of size 15 from clusters.target.bed
     hgLoadSqlTab hg19 wgEncodeRegTfbsCellsV5 ~/kent/src/hg/lib/expRecord.sql clusters.target.exps
     # too many! must adapt clusterer to merge repetitive items
-    # same inputs as V4 (690 total)
+
+    # Create inputTrackTable - six columns: <table> <source> <factor> <cell> <treatment> <lab>
+    # For target-based, include antibody in source field
+cat > getTargetInputs.csh << 'EOF'
+    foreach p (`cat $1`)
+        set obj = $p:t:r:r
+        echo -n "$obj\t"
+        # note: strip off treatment=None
+        mdbPrint hg19 -obj=$obj | raToTab stdin -cols=cell,treatment,lab,antibody,target stdout | \
+            perl -wne '($cell, $treat, $lab, $ab, $target) = split; \
+                $source = $cell . "+" . $treat . "+" . $lab . "+" . $ab; \
+                $source =~ s/\+None//; \
+                print $source, "\t", $target, "\t", $ab, "\t", \
+                        $cell, "\t", $treat, "\t", $lab, "\n";'
+    end
+'EOF'
+    csh getTargetInputs.csh peak.lst > wgEncodeRegTfbsClusteredInputsV5.tab
     hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputsV5 \
-        ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputsV4.tab
+        ~/kent/src/hg/lib/clusterInputTrackTable5.sql wgEncodeRegTfbsClusteredInputsV5.tab
 
     # compare coverage of V2-V5
     # V2 - current version.  June 2011 TFBS (425 inputs)
@@ -1025,4 +1041,26 @@ cat > getMetaHuge.csh << 'EOF'
     hgLoadBed hg19 tfbsFimoTransfac TfMotifsFIMO_Transfac.hg19.bed
     # Read 3665198 elements of size 6 from TfMotifsFIMO_Transfac.hg19.bed
 #######################################################################
+
+# more motif exploratory work  -- give Larry M's transRegCode a ride
+
+    cd /hive/data/genomes/hg19/bed/wgEncodeRegV2/tfbs2012
+    mkdir motifs
+    cd motifs
+
+    # lift motif localizations from hg18 (where did they come from originally ?)
+    hgsql hg18 -Ne "select * from wgEncodeRegTfbsClusteredMotifs" | \
+        cut --complement -f 1 | \
+        liftOver -bedPlus=4 stdin /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz \
+                motifs.bed motifs.unmapped
+    hgLoadBed hg19 -as=~/kent/src/hg/lib/bed6FloatScore.as wgEncodeRegTfbsClustered motifs.bed
+    # Read 1750827 elements of size 6 from motifs.bed
+
+
+
+
+
+ 
+
+
 

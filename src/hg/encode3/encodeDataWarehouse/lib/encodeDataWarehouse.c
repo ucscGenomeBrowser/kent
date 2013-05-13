@@ -376,7 +376,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwHostCommaSepFieldNames = "id,name,lastOkTime,lastNotOkTime,firstAdded,errorMessage,openSuccesses,openFails,historyBits";
+char *edwHostCommaSepFieldNames = "id,name,lastOkTime,lastNotOkTime,firstAdded,errorMessage,openSuccesses,openFails,historyBits,paraFetchStreams";
 
 void edwHostStaticLoad(char **row, struct edwHost *ret)
 /* Load a row from edwHost table into ret.  The contents of ret will
@@ -392,6 +392,7 @@ ret->errorMessage = row[5];
 ret->openSuccesses = sqlLongLong(row[6]);
 ret->openFails = sqlLongLong(row[7]);
 ret->historyBits = sqlLongLong(row[8]);
+ret->paraFetchStreams = sqlSigned(row[9]);
 }
 
 struct edwHost *edwHostLoadByQuery(struct sqlConnection *conn, char *query)
@@ -426,8 +427,8 @@ void edwHostSaveToDb(struct sqlConnection *conn, struct edwHost *el, char *table
  * If worried about this use edwHostSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%lld,'%s',%lld,%lld,%lld)", 
-	tableName,  el->id,  el->name,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  el->errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%lld,'%s',%lld,%lld,%lld,%d)", 
+	tableName,  el->id,  el->name,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  el->errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits,  el->paraFetchStreams);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -446,8 +447,8 @@ char  *name, *errorMessage;
 name = sqlEscapeString(el->name);
 errorMessage = sqlEscapeString(el->errorMessage);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%lld,'%s',%lld,%lld,%lld)", 
-	tableName,  el->id,  name,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%lld,'%s',%lld,%lld,%lld,%d)", 
+	tableName,  el->id,  name,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits,  el->paraFetchStreams);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&name);
@@ -470,6 +471,7 @@ ret->errorMessage = cloneString(row[5]);
 ret->openSuccesses = sqlLongLong(row[6]);
 ret->openFails = sqlLongLong(row[7]);
 ret->historyBits = sqlLongLong(row[8]);
+ret->paraFetchStreams = sqlSigned(row[9]);
 return ret;
 }
 
@@ -479,7 +481,7 @@ struct edwHost *edwHostLoadAll(char *fileName)
 {
 struct edwHost *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -497,7 +499,7 @@ struct edwHost *edwHostLoadAllByChar(char *fileName, char chopper)
 {
 struct edwHost *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -527,6 +529,7 @@ ret->errorMessage = sqlStringComma(&s);
 ret->openSuccesses = sqlLongLongComma(&s);
 ret->openFails = sqlLongLongComma(&s);
 ret->historyBits = sqlLongLongComma(&s);
+ret->paraFetchStreams = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -580,6 +583,8 @@ fputc(sep,f);
 fprintf(f, "%lld", el->openFails);
 fputc(sep,f);
 fprintf(f, "%lld", el->historyBits);
+fputc(sep,f);
+fprintf(f, "%d", el->paraFetchStreams);
 fputc(lastSep,f);
 }
 
@@ -1054,7 +1059,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwSubmitCommaSepFieldNames = "id,url,startUploadTime,endUploadTime,userId,submitFileId,submitDirId,fileCount,oldFiles,newFiles,byteCount,oldBytes,newBytes,errorMessage";
+char *edwSubmitCommaSepFieldNames = "id,url,startUploadTime,endUploadTime,userId,submitFileId,submitDirId,fileCount,oldFiles,newFiles,byteCount,oldBytes,newBytes,errorMessage,fileIdInTransit";
 
 void edwSubmitStaticLoad(char **row, struct edwSubmit *ret)
 /* Load a row from edwSubmit table into ret.  The contents of ret will
@@ -1075,6 +1080,7 @@ ret->byteCount = sqlLongLong(row[10]);
 ret->oldBytes = sqlLongLong(row[11]);
 ret->newBytes = sqlLongLong(row[12]);
 ret->errorMessage = row[13];
+ret->fileIdInTransit = sqlUnsigned(row[14]);
 }
 
 struct edwSubmit *edwSubmitLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1109,8 +1115,8 @@ void edwSubmitSaveToDb(struct sqlConnection *conn, struct edwSubmit *el, char *t
  * If worried about this use edwSubmitSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s')", 
-	tableName,  el->id,  el->url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->submitFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  el->errorMessage);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s',%u)", 
+	tableName,  el->id,  el->url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->submitFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  el->errorMessage,  el->fileIdInTransit);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1129,8 +1135,8 @@ char  *url, *errorMessage;
 url = sqlEscapeString(el->url);
 errorMessage = sqlEscapeString(el->errorMessage);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s')", 
-	tableName,  el->id,  url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->submitFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  errorMessage);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s',%u)", 
+	tableName,  el->id,  url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->submitFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  errorMessage,  el->fileIdInTransit);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&url);
@@ -1158,6 +1164,7 @@ ret->byteCount = sqlLongLong(row[10]);
 ret->oldBytes = sqlLongLong(row[11]);
 ret->newBytes = sqlLongLong(row[12]);
 ret->errorMessage = cloneString(row[13]);
+ret->fileIdInTransit = sqlUnsigned(row[14]);
 return ret;
 }
 
@@ -1167,7 +1174,7 @@ struct edwSubmit *edwSubmitLoadAll(char *fileName)
 {
 struct edwSubmit *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[14];
+char *row[15];
 
 while (lineFileRow(lf, row))
     {
@@ -1185,7 +1192,7 @@ struct edwSubmit *edwSubmitLoadAllByChar(char *fileName, char chopper)
 {
 struct edwSubmit *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[14];
+char *row[15];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1220,6 +1227,7 @@ ret->byteCount = sqlLongLongComma(&s);
 ret->oldBytes = sqlLongLongComma(&s);
 ret->newBytes = sqlLongLongComma(&s);
 ret->errorMessage = sqlStringComma(&s);
+ret->fileIdInTransit = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -1283,6 +1291,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->errorMessage);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->fileIdInTransit);
 fputc(lastSep,f);
 }
 
