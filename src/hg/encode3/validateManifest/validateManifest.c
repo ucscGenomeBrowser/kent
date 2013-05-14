@@ -11,7 +11,7 @@
 #include "encode3/encode3Valid.h"
 #include "gff.h"
 
-char *version = "1.4";
+char *version = "1.5";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
