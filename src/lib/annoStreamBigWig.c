@@ -19,6 +19,8 @@ struct annoStreamBigWig
     struct lm *intervalQueryLm;		// localmem object for bigWigIntervalQuery
     struct bbiInterval *intervalList;	// results of bigWigIntervalQuery
     struct bbiInterval *nextInterval;	// next result to be translated into row
+    struct bbiChromInfo *chromList;	// list of chromosomes for which bbi actually has data
+    struct bbiChromInfo *queryChrom;	// most recently queried chrom (or NULL) for whole-genome
     };
 
 
@@ -31,15 +33,55 @@ self->nextInterval = self->intervalList = NULL;
 lmCleanup(&(self->intervalQueryLm));
 }
 
-static void asbwDoQuery(struct annoStreamBigWig *self)
+static void asbwDoQuery(struct annoStreamBigWig *self, char *minChrom, uint minEnd)
 /* Store results of an interval query. [Would be nice to make a streaming version of this.] */
 {
-struct annoStreamer *streamer = &(self->streamer);
+struct annoStreamer *sSelf = &(self->streamer);
 if (self->intervalQueryLm == NULL)
     self->intervalQueryLm = lmInit(0);
-self->intervalList = bigWigIntervalQuery(self->bbi, streamer->chrom,
-					 streamer->regionStart, streamer->regionEnd,
-					 self->intervalQueryLm);
+if (sSelf->chrom != NULL)
+    {
+    uint start = sSelf->regionStart;
+    if (minChrom)
+	{
+	if (differentString(minChrom, sSelf->chrom))
+	    errAbort("annoStreamBigWig %s: nextRow minChrom='%s' but region chrom='%s'",
+		     sSelf->name, minChrom, sSelf->chrom);
+	if (start < minEnd)
+	    start = minEnd;
+	}
+    self->intervalList = bigWigIntervalQuery(self->bbi, sSelf->chrom, start, sSelf->regionEnd,
+					     self->intervalQueryLm);
+    }
+else
+    {
+    // Genome-wide query: break it into chrom-by-chrom queries.
+    if (self->queryChrom == NULL)
+	self->queryChrom = self->chromList;
+    else
+	self->queryChrom = self->queryChrom->next;
+    if (minChrom != NULL)
+	{
+	// Skip chroms that precede minChrom
+	while (self->queryChrom != NULL && strcmp(self->queryChrom->name, minChrom) < 0)
+	    self->queryChrom = self->queryChrom->next;
+	}
+    if (self->queryChrom == NULL)
+	{
+	self->chromList = NULL; // EOF, don't start over!
+	self->intervalList = NULL;
+	}
+    else
+	{
+	char *chrom = self->queryChrom->name;
+	int start = 0;
+	if (minChrom != NULL && sameString(chrom, minChrom))
+	    start = minEnd;
+	uint end = self->queryChrom->size;
+	self->intervalList = bigWigIntervalQuery(self->bbi, chrom, start, end,
+						 self->intervalQueryLm);
+	}
+    }
 self->nextInterval = self->intervalList;
 }
 
@@ -66,18 +108,19 @@ for (iv = startIv;  iv != endIv->next;  iv = iv->next)
 return annoRowWigNew(chrom, startIv->start, endIv->end, rightJoinFail, vals, callerLm);
 }
 
-static struct annoRow *asbwNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
+static struct annoRow *asbwNextRow(struct annoStreamer *sSelf, char *minChrom, uint minEnd,
+				   struct lm *callerLm)
 /* Return a single annoRow, or NULL if there are no more items. */
 {
-struct annoStreamBigWig *self = (struct annoStreamBigWig *)vSelf;
+struct annoStreamBigWig *self = (struct annoStreamBigWig *)sSelf;
 if (self->intervalList == NULL)
-    asbwDoQuery(self);
+    asbwDoQuery(self, minChrom, minEnd);
 if (self->nextInterval == NULL)
     return NULL;
 // Skip past any left-join failures until we get a right-join failure, a passing interval, or EOF.
 boolean rightFail = FALSE;
 struct bbiInterval *startIv = self->nextInterval;
-while (annoFilterWigValueFails(vSelf->filters, self->nextInterval->val, &rightFail))
+while (annoFilterWigValueFails(sSelf->filters, self->nextInterval->val, &rightFail))
     {
     if (rightFail)
 	break;
@@ -85,15 +128,16 @@ while (annoFilterWigValueFails(vSelf->filters, self->nextInterval->val, &rightFa
     if (self->nextInterval == NULL)
 	return NULL;
     }
+char *chrom = sSelf->chrom ? sSelf->chrom : self->queryChrom->name;
 if (rightFail)
-    return annoRowFromContigBbiIntervals(vSelf->name, vSelf->chrom,
-					 startIv, startIv, rightFail, callerLm);
+    return annoRowFromContigBbiIntervals(sSelf->name, chrom, startIv, startIv, rightFail,
+					 callerLm);
 struct bbiInterval *endIv = startIv, *iv;
 int maxCount = 16 * 1024, count;
 for (iv = startIv->next, count = 0;  iv != NULL && count < maxCount;  iv = iv->next, count++)
     {
     // collect contiguous intervals; then make annoRow with vector.
-    if (annoFilterWigValueFails(vSelf->filters, iv->val, &rightFail))
+    if (annoFilterWigValueFails(sSelf->filters, iv->val, &rightFail))
 	break;
     if (iv->start == endIv->end)
 	endIv = iv;
@@ -101,8 +145,7 @@ for (iv = startIv->next, count = 0;  iv != NULL && count < maxCount;  iv = iv->n
 	break;
     }
 self->nextInterval = endIv->next;
-return annoRowFromContigBbiIntervals(vSelf->name, vSelf->chrom,
-				     startIv, endIv, rightFail, callerLm);
+return annoRowFromContigBbiIntervals(sSelf->name, chrom, startIv, endIv, rightFail, callerLm);
 }
 
 static void asbwClose(struct annoStreamer **pVSelf)

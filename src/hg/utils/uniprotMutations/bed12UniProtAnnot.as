@@ -1,4 +1,4 @@
-table bed12UniProtMut
+table bed12UniProtAnnot
 "Browser extensible data (12 fields) plus information about uniProt mutation"
     (
     string chrom;      "Chromosome (or contig, scaffold, etc.)"

@@ -532,8 +532,20 @@ return charSepToSlNames(commaSep, ',');
 void sprintLongWithCommas(char *s, long long l)
 /* Print out a long number with commas a thousands, millions, etc. */
 {
-long long billions, millions, thousands;
-if (l >= 1000000000)
+long long trillions, billions, millions, thousands;
+if (l >= 1000000000000LL)
+    {
+    trillions = l/1000000000000LL;
+    l -= trillions * 1000000000000LL;
+    billions = l/1000000000;
+    l -= billions * 1000000000;
+    millions = l/1000000;
+    l -= millions * 1000000;
+    thousands = l/1000;
+    l -= thousands * 1000;
+    sprintf(s, "%lld,%03lld,%03lld,%03lld,%03lld", trillions, billions, millions, thousands, l);
+    }
+else if (l >= 1000000000)
     {
     billions = l/1000000000;
     l -= billions * 1000000000;

@@ -68,6 +68,9 @@ void edwMakeLicensePlate(char *prefix, int ix, char *out, int outSize);
 /* Make a license-plate type string composed of prefix + funky coding of ix
  * and put result in out. */
 
+void edwMakeBabyName(unsigned long id, char *baseName, int baseNameSize);
+/* Given a numerical ID, make an easy to pronouce file name */
+
 void edwDirForTime(time_t sinceEpoch, char dir[PATH_LEN]);
 /* Return the output directory for a given time. */
 

@@ -13,6 +13,7 @@
 #include "edwLib.h"
 #include "portable.h"
 #include "net.h"
+#include "paraFetch.h"
 
 char *userEmail;	/* Filled in by authentication system. */
 
@@ -50,8 +51,11 @@ struct edwFile *edwFileInProgress(struct sqlConnection *conn, int submitId)
 /* Return file in submission in process of being uploaded if any. */
 {
 char query[256];
-safef(query, sizeof(query), 
-    "select * from edwFile where submitId=%u and endUploadTime=0 limit 1", submitId);
+safef(query, sizeof(query), "select fileIdInTransit from edwSubmit where id=%u", submitId);
+long long fileId = sqlQuickLongLong(conn, query);
+if (fileId == 0)
+    return NULL;
+safef(query, sizeof(query), "select * from edwFile where id=%lld", (long long)fileId);
 return edwFileLoadByQuery(conn, query);
 }
 
@@ -78,6 +82,18 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 return aheadOfUs;
+}
+
+long long paraFetchedSoFar(char *path)
+/* Return amount fetched so far. */
+{
+struct parallelConn *pcList = NULL;
+char *url = NULL;
+off_t fileSize = 0;
+char *dateString = NULL;
+off_t totalDownloaded = 0;
+paraFetchReadStatus(path, &pcList, &url, &fileSize, &dateString, &totalDownloaded);
+return totalDownloaded;
 }
 
 void monitorSubmission(struct sqlConnection *conn)
@@ -151,7 +167,10 @@ else
 		{
 		char path[PATH_LEN];
 		safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
-		curSize = fileSize(path);
+		if (ef->endUploadTime > 0)
+		    curSize = ef->size;
+		else
+		    curSize = paraFetchedSoFar(path);
 		printf("<B>file in route:</B> %s",  ef->submitFileName);
 		printf(" (%d%% transferred)<BR>\n", (int)(100.0 * curSize / ef->size));
 		}
@@ -224,7 +243,7 @@ close(sd);
 edwAddSubmitJob(conn, userEmail, url);
 
 /* Give the system a half second to react and then put up status info about submission */
-sleep1000(500);
+sleep1000(1000);
 monitorSubmission(conn);
 
 #ifdef OLD

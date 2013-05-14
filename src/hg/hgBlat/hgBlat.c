@@ -809,6 +809,8 @@ long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
+setUdcCacheDir();
+
 /* org has precedence over db when changeInfo='orgChange' */
 orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
 if (orgChange)

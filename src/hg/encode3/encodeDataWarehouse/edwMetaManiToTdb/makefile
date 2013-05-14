@@ -1,4 +1,4 @@
 kentSrc = ../../../..
-A = edwRunner
+A = edwMetaManiToTdb
 preMyLibs += ../lib/$(MACHTYPE)/edwlib.a
 include $(kentSrc)/inc/userApp.mk

@@ -2,6 +2,7 @@
 
 #include "annoStreamDb.h"
 #include "annoGratorQuery.h"
+#include "binRange.h"
 #include "hdb.h"
 #include "sqlNum.h"
 
@@ -39,7 +40,7 @@ if (self->sr != NULL)
     sqlFreeResult(&(self->sr));
 }
 
-static void asdDoQuery(struct annoStreamDb *self)
+static void asdDoQuery(struct annoStreamDb *self, char *minChrom, uint minEnd)
 /* Return a sqlResult for a query on table items in position range. */
 // NOTE: it would be possible to implement filters at this level, as in hgTables.
 {
@@ -47,6 +48,9 @@ struct annoStreamer *streamer = &(self->streamer);
 struct dyString *query = dyStringCreate("select * from %s", self->table);
 if (!streamer->positionIsGenome)
     {
+    if (minChrom && differentString(minChrom, streamer->chrom))
+	errAbort("annoStreamDb %s: nextRow minChrom='%s' but region chrom='%s'",
+		 streamer->name, minChrom, streamer->chrom);
     if (self->hasBin)
 	{
 	// Results will be in bin order, but we can restore chromStart order by
@@ -82,12 +86,24 @@ dyStringFree(&query);
 self->sr = sr;
 }
 
-static char **nextRowFiltered(struct annoStreamDb *self, boolean *retRightFail)
+static char **nextRowFiltered(struct annoStreamDb *self, boolean *retRightFail,
+			      char *minChrom, uint minEnd)
 /* Skip past any left-join failures until we get a right-join failure, a passing row,
  * or end of data.  Return row or NULL, and return right-join fail status via retRightFail. */
 {
 int numCols = self->streamer.numCols;
 char **row = sqlNextRow(self->sr);
+if (minChrom != NULL && row != NULL)
+    {
+    // Ignore rows that fall completely before (minChrom, minEnd) - save annoGrator's time
+    int chromIx = self->omitBin+self->chromIx;
+    int endIx = self->omitBin+self->endIx;
+    int chromCmp;
+    while (row &&
+	   ((chromCmp = strcmp(row[chromIx], minChrom)) < 0 || // this chrom precedes minChrom
+	    (chromCmp == 0 && atoll(row[endIx]) < minEnd)))    // on minChrom, but before minEnd
+	row = sqlNextRow(self->sr);
+    }
 boolean rightFail = FALSE;
 struct annoFilter *filterList = self->streamer.filters;
 while (row && annoFilterRowFails(filterList, row+self->omitBin, numCols, &rightFail))
@@ -112,7 +128,8 @@ return annoRowFromStringArray(chrom, chromStart, chromEnd, rightFail, row,
 			      self->streamer.numCols, lm);
 }
 
-static char **getFinestBinItem(struct annoStreamDb *self, char **row, boolean *pRightFail)
+static char **getFinestBinItem(struct annoStreamDb *self, char **row, boolean *pRightFail,
+			       char *minChrom, uint minEnd)
 /* If row is a coarse-bin item, add it to bigItemQueue, get the next row(s) and
  * add any subsequent coarse-bin items to bigItemQueue.  As soon as we get an item from a
  * finest-level bin (or NULL), sort the bigItemQueue and return the finest-bin item/row. */
@@ -123,7 +140,7 @@ while (bin < self->minFinestBin)
     // big item -- store aside in queue for merging later, move on to next item
     slAddHead(&(self->bigItemQueue), rowToAnnoRow(self, row, *pRightFail, self->qLm));
     *pRightFail = FALSE;
-    row = nextRowFiltered(self, pRightFail);
+    row = nextRowFiltered(self, pRightFail, minChrom, minEnd);
     if (row == NULL)
 	break;
     bin = atoi(row[0]);
@@ -174,7 +191,8 @@ int numCols = self->streamer.numCols;
 return annoRowClone(row, rowType, numCols, callerLm);
 }
 
-static struct annoRow *nextRowMergeBins(struct annoStreamDb *self, struct lm *callerLm)
+static struct annoRow *nextRowMergeBins(struct annoStreamDb *self, char *minChrom, uint minEnd,
+					struct lm *callerLm)
 /* Fetch the next filtered row from mysql, merge-sorting coarse-bin items into finest-bin
  * items to maintain chromStart ordering. */
 {
@@ -187,12 +205,12 @@ else
     {
     // We might need to collect initial coarse-bin items, or might already be merge-sorting.
     boolean rightFail = FALSE;
-    char **row = nextRowFiltered(self, &rightFail);
+    char **row = nextRowFiltered(self, &rightFail, minChrom, minEnd);
     if (row && !self->gotFinestBin)
 	{
 	// We are just starting -- queue up coarse-bin items, if any, until we get the first
 	// finest-bin item.
-	row = getFinestBinItem(self, row, &rightFail);
+	row = getFinestBinItem(self, row, &rightFail, minChrom, minEnd);
 	}
     // Time to merge-sort finest-bin items from mysql with coarse-bin items from queue.
     if (row != NULL)
@@ -210,20 +228,21 @@ else
     }
 }
 
-static struct annoRow *asdNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
+static struct annoRow *asdNextRow(struct annoStreamer *vSelf, char *minChrom, uint minEnd,
+				  struct lm *callerLm)
 /* Perform sql query if we haven't already and return a single
  * annoRow, or NULL if there are no more items. */
 {
 struct annoStreamDb *self = (struct annoStreamDb *)vSelf;
 if (self->sr == NULL)
-    asdDoQuery(self);
+    asdDoQuery(self, minChrom, minEnd);
 if (self->sr == NULL)
     // This is necessary only if we're using sqlStoreResult in asdDoQuery, harmless otherwise:
     return NULL;
 if (self->mergeBins)
-    return nextRowMergeBins(self, callerLm);
+    return nextRowMergeBins(self, minChrom, minEnd, callerLm);
 boolean rightFail = FALSE;
-char **row = nextRowFiltered(self, &rightFail);
+char **row = nextRowFiltered(self, &rightFail, minChrom, minEnd);
 if (row == NULL)
     return NULL;
 return rowToAnnoRow(self, row, rightFail, callerLm);
@@ -292,7 +311,10 @@ self->conn = conn;
 self->table = cloneString(table);
 char *asFirstColumnName = streamer->asObj->columnList->name;
 if (sqlFieldIndex(self->conn, self->table, "bin") == 0)
+    {
     self->hasBin = 1;
+    self->minFinestBin = binFromRange(0, 1);
+    }
 if (self->hasBin && !sameString(asFirstColumnName, "bin"))
     self->omitBin = 1;
 if (!asdInitBed3Fields(self))

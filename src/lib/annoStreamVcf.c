@@ -24,8 +24,6 @@ annoStreamerSetRegion(vSelf, chrom, regionStart, regionEnd);
 struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
 if (self->isTabix)
     lineFileSetTabixRegion(self->vcff->lf, chrom, regionStart, regionEnd);
-else if (chrom != NULL)
-    errAbort("annoStreamVcf %s: setRegion not yet implemented for non-tabix VCF.", vSelf->name);
 }
 
 static char *asvGetHeader(struct annoStreamer *vSelf)
@@ -35,7 +33,7 @@ struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
 return cloneString(self->vcff->headerString);
 }
 
-static char **nextRowUnfiltered(struct annoStreamVcf *self)
+static char **nextRowRaw(struct annoStreamVcf *self)
 /* Get the next VCF record and put the row text into autoSql words.
  * Return pointer to self->asWords if we get a row, otherwise NULL. */
 {
@@ -74,11 +72,54 @@ self->record = vcfRecordFromRow(self->vcff, words);
 return self->asWords;
 }
 
-static struct annoRow *asvNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
+static char **nextRowUnfiltered(struct annoStreamVcf *self, char *minChrom, uint minEnd)
+/* Get the next VCF record and put the row text into autoSql words.
+ * Return pointer to self->asWords if we get a row, otherwise NULL. */
+{
+struct annoStreamer *sSelf = (struct annoStreamer *)self;
+char *regionChrom = sSelf->chrom;
+uint regionStart = sSelf->regionStart;
+uint regionEnd = sSelf->regionEnd;
+if (minChrom != NULL)
+    {
+    if (regionChrom == NULL)
+	{
+	regionChrom = minChrom;
+	regionStart = minEnd;
+	regionEnd = annoAssemblySeqSize(sSelf->assembly, minChrom);
+	}
+    else
+	{
+	if (differentString(minChrom, regionChrom))
+	    errAbort("annoStreamVcf %s: nextRow minChrom='%s' but region chrom='%s'",
+		     sSelf->name, minChrom, regionChrom);
+	regionStart = max(regionStart, minEnd);
+	}
+    }
+char **words = nextRowRaw(self);
+if (minChrom != NULL && words != NULL)
+    {
+    if (self->isTabix && strcmp(words[0], minChrom) < 0)
+	{
+	uint regionEnd = sSelf->regionEnd;
+	if (sSelf->chrom == NULL)
+	    regionEnd = annoAssemblySeqSize(sSelf->assembly, minChrom);
+	lineFileSetTabixRegion(self->vcff->lf, minChrom, minEnd, regionEnd);
+	}
+    while (words != NULL &&
+	   (strcmp(words[0], minChrom) < 0 ||
+	    (sameString(words[0], minChrom) && self->record->chromEnd < minEnd)))
+	words = nextRowRaw(self);
+    }
+return words;
+}
+
+static struct annoRow *asvNextRow(struct annoStreamer *vSelf, char *minChrom, uint minEnd,
+				  struct lm *callerLm)
 /* Return an annoRow encoding the next VCF record, or NULL if there are no more items. */
 {
 struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
-char **words = nextRowUnfiltered(self);
+char **words = nextRowUnfiltered(self, minChrom, minEnd);
 if (words == NULL)
     return NULL;
 // Skip past any left-join failures until we get a right-join failure, a passing row, or EOF.
@@ -87,7 +128,7 @@ while (annoFilterRowFails(vSelf->filters, words, self->numCols, &rightFail))
     {
     if (rightFail)
 	break;
-    words = nextRowUnfiltered(self);
+    words = nextRowUnfiltered(self, minChrom, minEnd);
     if (words == NULL)
 	return NULL;
     }
