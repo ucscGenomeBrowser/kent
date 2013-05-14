@@ -323,7 +323,7 @@ double clipMax = mean + 6*std;
 char type[64];
 safef(type, sizeof(type), "bigWig %g %g", 0.0, clipMax);
 fprintf(f, "%stype %s\n", indent, type);
-fprintf(f, "%sviewLimits 1:100\n", indent);
+fprintf(f, "%sviewLimits 0:%g\n", indent, clipMax);
 fprintf(f, "%sminLimit 0\n", indent);
 fprintf(f, "%smaxLimit %g\n", indent, clipMax);
 fprintf(f, "%sautoScale off\n", indent);
