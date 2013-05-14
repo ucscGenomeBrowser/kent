@@ -686,10 +686,15 @@ static bool printSeqSection(char *articleId, char *title, bool showDesc, struct 
  * */
 {
 // get data from mysql
+char* oldQuery = "SELECT fileDesc, snippet, locations, annotId, sequence, \"\" FROM %s WHERE articleId='%s'";
+char* newQuery = "SELECT fileDesc, snippet, locations, annotId, sequence, fileUrl FROM %s WHERE articleId='%s'";
+
+char* queryTemplate = oldQuery;
+if (hHasField("hgFixed", pubsSequenceTable, "fileUrl"))
+    queryTemplate = newQuery;
+
 char query[4096];
-safef(query, sizeof(query), 
-"SELECT fileDesc, snippet, locations, annotId, sequence, fileUrl "
-"FROM %s WHERE articleId='%s';", pubsSequenceTable, articleId);
+safef(query, sizeof(query), queryTemplate, pubsSequenceTable, articleId);
 if (pubsDebug)
     puts(query);
 struct sqlResult *sr = sqlGetResult(conn, query);

@@ -247,6 +247,30 @@ dyStringVaPrintf(ds, format, args);
 va_end(args);
 }
 
+struct hash* searchForKeywords(struct sqlConnection* conn, char* articleTable, char* keywords)
+/* return hash with the articleIds that contain a given keyword in the abstract/title/authors */
+{
+if (isEmpty(keywords))
+    return NULL;
+
+char query[12000];
+safef(query, sizeof(query), "SELECT articleId FROM %s WHERE "
+"MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", articleTable, keywords);
+printf("query %s", query);
+struct slName *artIds = sqlQuickList(conn, query);
+if (artIds==NULL || slCount(artIds)==0)
+    return NULL;
+
+// convert list to hash
+struct hash *hashA = hashNew(0);
+struct slName *el;
+for (el = artIds; el != NULL; el = el->next)
+    hashAddInt(hashA, el->name, 1);
+freeMem(keywords);
+slFreeList(artIds);
+return hashA;
+}
+
 static void pubsLoadKeywordYearItems(struct track *tg)
 /* load items that fulfill keyword and year filter */
 {
@@ -275,7 +299,6 @@ else
     tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
     freeMem(oldLabel);
 
-    char yearWhere[256], keywordsWhere[1024], prefix[256];
     char **row;
     struct linkedFeatures *lfList = NULL;
     struct trackDb *tdb = tg->tdb;
@@ -285,39 +308,28 @@ else
 
     char *extra = NULL;
     struct dyString *extraDy = dyStringNew(0);
+    struct hash *articleIds = searchForKeywords(conn, articleTable, keywords);
     if (sqlColumnExists(conn, tg->table, "year"))
         // new table schema: filter fields are on main bed table
         {
-        if (isNotEmpty(keywords))
-            dyStringPrintf(extraDy, "name IN (SELECT articleId FROM %s WHERE " 
-                "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE))",
-                articleTable, keywords);
         if (isNotEmpty(yearFilter))
             dyStringPrintfWithSep(extraDy, " AND ", " year >= '%s'", sqlEscapeString(yearFilter));
         if (isNotEmpty(publFilter))
             dyStringPrintfWithSep(extraDy, " AND ", " publisher = '%s'", sqlEscapeString(publFilter));
-        extra = extraDy->string;
         }
     else
         // old table schema, filter by doing a join on article table
         {
-        printf("extra %s", extra);
-        char extraTmp[4096];
-        safef(prefix, sizeof(prefix),  "name IN (SELECT articleId FROM %s WHERE", articleTable);
-        if(isNotEmpty(keywords))
-            safef(keywordsWhere, sizeof(keywordsWhere), \
-            "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", keywords);
         if(isNotEmpty(yearFilter))
-            safef(yearWhere, sizeof(yearWhere), "year >= '%s'", sqlEscapeString(yearFilter));
-
-        if(isEmpty(keywords))
-            safef(extraTmp, sizeof(extraTmp), "%s %s)", prefix, yearWhere);
-        else if(isEmpty(yearFilter))
-            safef(extraTmp, sizeof(extraTmp), "%s %s)", prefix, keywordsWhere);
-        else
-            safef(extraTmp, sizeof(extraTmp), "%s %s AND %s)", prefix, yearWhere, keywordsWhere);
-        extra = extraTmp;
+            dyStringPrintf(extraDy, "name IN (SELECT articleId FROM %s WHERE year>='%s')", articleTable, \
+                yearFilter);
         }
+
+
+    if (extraDy->stringSize>0)
+        extra = extraDy->string;
+    else
+        extra = NULL;
 
     int rowOffset = 0;
     struct sqlResult *sr = hExtendedRangeQuery(conn, tg->table, chromName, winStart, winEnd, extra,
@@ -327,7 +339,8 @@ else
     while ((row = sqlNextRow(sr)) != NULL)
 	{
         struct bed *bed = bedLoad12(row+rowOffset);
-        slAddHead(&lfList, bedMungToLinkedFeatures(&bed, tdb, 12, scoreMin, scoreMax, useItemRgb));
+        if (articleIds==NULL || hashFindVal(articleIds, bed->name))
+            slAddHead(&lfList, bedMungToLinkedFeatures(&bed, tdb, 12, scoreMin, scoreMax, useItemRgb));
         }
     sqlFreeResult(&sr);
     slReverse(&lfList);
