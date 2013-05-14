@@ -372,6 +372,19 @@ struct hash *sectionRa = NULL;
 struct section *sectionList = NULL;
 
 readRa("section.ra", &sectionRa);
+
+// Could be an ajax request for a single section!
+char *ajaxSection = cartOptionalString(cart, hggAjaxSection);
+if (ajaxSection != NULL)
+    {
+    // Currently only one section supports ajax update.
+    if (sameString(ajaxSection,HGG_GENE_ALLELES))
+        {
+        addGoodSection(allelesSection(conn, sectionRa), conn, &sectionList);
+        return sectionList;
+        }
+    }
+
 addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 /* disable ortherOrg section for CGB servers for the time being */
 if (!hIsCgbServer()) addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
@@ -413,6 +426,7 @@ addGoodSection(mrnaDescriptionsSection(conn, sectionRa), conn, &sectionList);
 //addGoodSection(pseudoGeneSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(synonymSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(geneReviewsSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(allelesSection(conn, sectionRa), conn, &sectionList);
 
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
 
@@ -678,7 +692,7 @@ cartSetString(cart, "position", cloneString(buffer));
 cartRemovePrefix(cart, hggDoPrefix);
 }
 
-char *excludeVars[] = {"Submit", "submit", NULL};
+char *excludeVars[] = {"Submit", "submit", "ajax", hggAjaxSection, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */

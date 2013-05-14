@@ -121,18 +121,18 @@ struct pubsExtra *extra = NULL;
 /* support two different storage places for article data: either the bed table directly 
  * includes the title + author of the article or we have to look it up from the articles 
  * table. Having a copy of the title in the bed table is faster */
-bool newFormat = false;
+bool newFormat = FALSE;
 if (sqlColumnExists(conn, tg->table, "title")) 
     {
     safef(query, sizeof(query), "SELECT firstAuthor, year, title, impact, classes FROM %s "
     "WHERE chrom = '%s' and chromStart = '%d' and name='%s'", tg->table, chromName, lf->start, lf->name);
-    newFormat = true;
+    newFormat = TRUE;
     }
 else 
     {
     safef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE articleId = '%s'", 
         articleTable, lf->name);
-    newFormat = false;
+    newFormat = FALSE;
     }
 
 sr = sqlGetResult(conn, query);
@@ -265,7 +265,7 @@ if(publFilter==NULL || sameWord(publFilter, "all"))
 if(isNotEmpty(keywords))
     keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
 
-if(isEmpty(yearFilter) && isEmpty(keywords) && isEmpty(publFilter))
+if (isEmpty(yearFilter) && isEmpty(keywords) && isEmpty(publFilter))
 {
     loadGappedBed(tg);
 }

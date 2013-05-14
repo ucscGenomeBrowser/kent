@@ -3025,7 +3025,7 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track knownGene
 shortLabel UCSC Genes
-longLabel UCSC Genes (RefSeq, UniProt, CCDS, Rfam, tRNAs & Comparative Genomics)
+longLabel UCSC Genes (RefSeq, GenBank, CCDS, Rfam, tRNAs & Comparative Genomics)
 group genes
 priority 34
 visibility pack

@@ -105,8 +105,8 @@ return he->inFile;
 int variantCmp(const void *va, const void *vb)
 // Compare to sort variants back to sequence order
 {
-const struct variant *a = *((struct variant **)va);
-const struct variant *b = *((struct variant **)vb);
+const struct hapVar *a = *((struct hapVar **)va);
+const struct hapVar *b = *((struct hapVar **)vb);
 int ret = (a->chromStart - b->chromStart);
 if (ret == 0) // sort deterministically
     ret = (a->chromEnd - b->chromEnd);
@@ -114,8 +114,9 @@ if (ret == 0) // sort deterministically
 return ret;
 }
 
-static struct variant *variantFill(struct haploExtras *he, struct variantBits *vBits,
-                                   unsigned boundStart, unsigned boundEnd, unsigned char alleleIx)
+static struct hapVar *variantFill(struct haploExtras *he, struct variantBits *vBits,
+                                  unsigned boundStart, unsigned boundEnd, char *strand,
+                                  unsigned char alleleIx)
 // Fill one variant struct from a vcf record
 {
 struct vcfRecord *record = vBits->record;
@@ -131,15 +132,17 @@ else
     vBits->variants = lmAlloc(he->lm,sizeof(void *) * record->alleleCount);
 
 // Have to create one then
-struct variant *variant;
+struct hapVar *variant;
 lmAllocVar(he->lm,variant);
 static char *emptyString = "";
 
 int occurs = vcfVariantBitsAlleleOccurs(vBits,alleleIx,FALSE);
-variant->proportion = ((double)occurs / vBitsSubjectChromCount(vBits));
+variant->frequency = ((double)occurs / vBitsSubjectChromCount(vBits));
 variant->vType      = vBits->vType;
 variant->chromStart = max(record->chromStart,boundStart);
 variant->chromEnd   = min(boundEnd,record->chromEnd);
+variant->origStart  = record->chromStart; // UI needs original boundaries
+variant->origEnd    = record->chromEnd;
 variant->reversed   = FALSE;
 if (variant->chromStart >= variant->chromEnd)
     errAbort("%s:(%d)-(%d) bound by %d %d has negative length.",
@@ -161,16 +164,18 @@ if (record->alleles && record->alleles[alleleIx] != NULL)
             {
             if(alleleIx == 0 && strlen(val) <= 1) // The reference
                 { // Terrible secret of vcf 1000Genomes deletions. ref does not have sequence.
-                  // Here we fill in up to 10 actual bases. Just a taste, since reference sequence
-                //variant->chromStart++; // Clips first base
-                struct dnaSeq *dnaSeq = hDnaFromSeq(he->db, he->chrom, variant->chromStart + 1,
-                                                   min(variant->chromEnd,variant->chromStart + 10),
-                                                   dnaUpper);
+                  // Here we fill in with a taste of the deleted seq (ref seq);
+                int end = min(variant->chromEnd,variant->chromStart + 10);
+                if (he->justModel != NULL)   // UI version shows just one model at a time
+                    end = variant->chromEnd; // If single model go ahead and spend the memory
+                struct dnaSeq *dnaSeq = hDnaFromSeq(he->db, he->chrom,
+                                                    variant->chromStart + 1, end,dnaUpper);
                 if (dnaSeq != NULL)
                     {
                     val = lmCloneString(he->lm,dnaSeq->dna);
                     freeMem(dnaSeq);
                     }
+                //variant->chromStart++; // Clips first base  (Not needed)
                 }
             else
                 val++; // Clips first base (1000Genomes includes prev base on insert/delete)
@@ -181,12 +186,14 @@ if (record->alleles && record->alleles[alleleIx] != NULL)
 
     int len = strlen(val);
     int clipFront = (boundStart - variant->chromStart);
-    if (clipFront > 0)
+    if (clipFront > 0
+    && (variant->vType != vtInsertion || strand[0] == '+')) // insertion sequence depend on strand
         {
         val += clipFront;
         len -= clipFront;
         }
-    if (variant->chromEnd > boundEnd)
+    if (variant->chromEnd > boundEnd
+    &&  (variant->vType != vtInsertion || strand[0] == '-')) // insertion sequence depend on strand
         len -= (variant->chromEnd - boundEnd);
     if (len > 0)
         variant->val = lmCloneStringZ(he->lm,val,len);
@@ -210,7 +217,7 @@ for ( ; vBits != NULL; vBits = vBits->next)
     if (vBits->variants == NULL)
         continue;
 
-    struct variant *variantAlleles = NULL;
+    struct hapVar *variantAlleles = NULL;
     int ix = vBits->record->alleleCount - 1;
     for ( ; ix >= 0; ix--)
         {
@@ -461,7 +468,7 @@ return popResult;
 
 
 
-char *haploVarId(struct variant *var)
+char *haploVarId(struct hapVar *var)
 // Returns a string to use a the class or ID for a given variant
 {
 static char class[256];
@@ -596,13 +603,13 @@ if (refHap == NULL)
 if (vBitsList != NULL)
     {
     assert(refHap->variants == NULL);
-    struct variant *variants = NULL; // temporary slList for sorting
-    struct variant *variant = NULL;
+    struct hapVar *variants = NULL; // temporary slList for sorting
+    struct hapVar *variant = NULL;
     int ix = 0;
     struct variantBits *vBits = vBitsList;
     for ( ; vBits != NULL; ix++, vBits = vBits->next)
         {
-        variant = variantFill(he,vBits,hapSet->chromStart,hapSet->chromEnd,0);
+        variant = variantFill(he,vBits,hapSet->chromStart,hapSet->chromEnd,hapSet->strand,0);
         verbose(3,"variantIx %d  id:%s  val:%s\n",ix,variant->id,variant->val);
         slAddHead(&variants,variant);
         }
@@ -610,7 +617,7 @@ if (vBitsList != NULL)
     if (variants != NULL)
         {
         slSort(&variants,variantCmp);  // Must stay in bitmap order!
-        refHap->variants = lmAlloc(he->lm,sizeof(struct variant *) * slCount(variants));
+        refHap->variants = lmAlloc(he->lm,sizeof(struct hapVar *) * slCount(variants));
         ix = 0;
         while ((variant = slPopHead(&variants)) != NULL)
             refHap->variants[ix++] = variant;
@@ -683,8 +690,8 @@ if (vBitsList != NULL)  // Going all out on variants
     int ix = 0;
     int bitIx = 0;
     int bitCount = hBitsSlotCount(hBits);
-    struct variant *variants = NULL; // temporary slList for sorting
-    struct variant *variant = NULL;
+    struct hapVar *variants = NULL; // temporary slList for sorting
+    struct hapVar *variant = NULL;
     for (; ix < hBits->bitsOn && bitIx < bitCount; ix++)
         {
         bitIx = bitFindSet(hBits->bits,bitIx,bitCount);
@@ -693,7 +700,8 @@ if (vBitsList != NULL)  // Going all out on variants
         struct variantBits *vBits = vcfHaploBitIxToVariantBits(hBits, bitIx, vBitsList);
         unsigned char variantIx = vcfHaploBitsToVariantAlleleIx(hBits,bitIx);
         assert(variantIx >= 1 && variantIx <= 3); // 0 is reference so we shouldn't see it!
-        variant = variantFill(he,vBits,hapSet->chromStart,hapSet->chromEnd,variantIx);
+        variant = variantFill(he,vBits,hapSet->chromStart,hapSet->chromEnd,hapSet->strand,
+                              variantIx);
         verbose(3,"variantIx %d  id:%s  val:%s\n",variantIx,variant->id,variant->val);
         slAddHead(&variants,variant);
 
@@ -703,7 +711,7 @@ if (vBitsList != NULL)  // Going all out on variants
         {
         slSort(&variants,variantCmp);
         assert(slCount(variants) == haplo->variantCount);
-        haplo->variants = lmAlloc(he->lm,sizeof(struct variant *) * haplo->variantCount);
+        haplo->variants = lmAlloc(he->lm,sizeof(struct hapVar *) * haplo->variantCount);
         ix = 0;
         while ((variant = slPopHead(&variants)) != NULL)
             haplo->variants[ix++] = variant;
@@ -909,7 +917,7 @@ for ( ; hapSet != NULL; hapSet = hapSet->next)
     // If not nonReference, remove the refHap from the count IF it was found in the VCF data
     if (nonRefOnly && hapSet->refHap->subjects > 0)
         hapCount--;
-    // If counting all haplotypes, then include nonRef even if it was not seen in the data
+    // If counting all haplotypes, then include ref even if it was not seen in the data
     else if (!nonRefOnly && hapSet->refHap->subjects == 0)
         hapCount++;
     }
@@ -931,7 +939,7 @@ if (haplo->variants != NULL)
     for ( ; ixA < ixB; ixA++, ixB--)
         {
         assert(haplo->variants[ixA] != NULL && haplo->variants[ixB] != NULL);
-        struct variant *varA = haplo->variants[ixA];
+        struct hapVar *varA = haplo->variants[ixA];
         haplo->variants[ixA] = haplo->variants[ixB];
         haplo->variants[ixB] = varA;
         }
@@ -940,7 +948,7 @@ if (haplo->variants != NULL)
     ixA = (haplo->variantCount > 0 ? haplo->variantCount : haplo->variantsCovered) - 1;
     for ( ; ixA >= 0; ixA--)
         {
-        struct variant *var = haplo->variants[ixA];
+        struct hapVar *var = haplo->variants[ixA];
         assert(var != NULL);
         if (!var->reversed)
             {
@@ -986,6 +994,36 @@ return reversed;
 #define RANGE_LIMIT(val,min,max) {       if ((val) > (max)) (val) = (max); \
                                    else  if ((val) < (min)) (val) = (min); }
 
+static struct hapVar *variantToUse(struct hapVar *refVar,struct haplotype * haplo)
+// Determines whether this haplotye has the reference or non-reference var
+{
+struct hapVar *varToUse = refVar; // Default to refVar
+if (haplo != NULL && haplo->variantCount > 0) // Non-ref haplotype
+    {
+    // Determine if non-ref variant should be used
+    int nrIx = 0;
+    for( ; nrIx < haplo->variantCount; nrIx++)
+        {
+        if (refVar->id != NULL && haplo->variants[nrIx]->id != NULL)
+            {
+            if (sameString(refVar->id,haplo->variants[nrIx]->id))
+                {
+                varToUse = haplo->variants[nrIx];
+                break;
+                }
+            }
+        else if (refVar->chromStart == haplo->variants[nrIx]->chromStart
+             &&  refVar->chromEnd   == haplo->variants[nrIx]->chromEnd  )
+            {
+            varToUse = haplo->variants[nrIx];
+            break;
+            }
+        }
+    }
+return varToUse;
+}
+
+
 void haploSetCalcScores(struct haploExtras *he,struct haplotypeSet *hapSet,
                         int subjectN, int chromN)
 // Score all haplotypes in a single haplotype set.  Pass in subject and chrom counts of dataset
@@ -1018,36 +1056,11 @@ for ( ; haplo != NULL; haplo = haplo->next)
     for( ; ix < refHap->variantsCovered; ix++)
         {
         assert(refHap->variants[ix]);
-        struct variant *variant = refHap->variants[ix];
-        //boolean thisVarReference = TRUE;
-        if (haplo->variantCount > 0) // Non-ref haplotype
-            {
-            // Determine if non-ref variant should be used
-            int nrIx = 0;
-            for( ; nrIx < haplo->variantCount; nrIx++)
-                {
-                if (variant->id != NULL && haplo->variants[nrIx]->id != NULL)
-                    {
-                    if (sameString(variant->id,haplo->variants[nrIx]->id))
-                        {
-                        variant = haplo->variants[nrIx];
-                        //thisVarReference = FALSE;
-                        break;
-                        }
-                    }
-                else if (variant->chromStart == haplo->variants[nrIx]->chromStart
-                     &&  variant->chromEnd   == haplo->variants[nrIx]->chromEnd  )
-                    {
-                    variant = haplo->variants[nrIx];
-                    //thisVarReference = FALSE;
-                    break;
-                    }
-                }
-            }
-        //if (ix > 0 && thisVarReference == prevVarReference) // markov chain
-        //    hapProb *= (variant->proportion + (1 - variant->proportion)/2);
+        struct hapVar *varToUse = variantToUse(refHap->variants[ix],haplo);
+        //if (ix > 0 && varToUse == prevVarReference) // markov chain
+        //    hapProb *= (varToUse->frequency + (1 - prevVarReference->frequency)/2);
         //else
-            hapProb *= variant->proportion;
+        hapProb *= varToUse->frequency;
         //prevVarReference = thisVarReference;
         }
 
@@ -1139,12 +1152,12 @@ return block;
 }
 
 static struct hapBlocks *makeVariantBlock(struct haploExtras *he, struct genePred *gp,
-                                          int ix,struct variant *refVar)
+                                          int ix,struct hapVar *refVar)
 // Fill in a variant seqBlock sized for the largest variant of the set
 {
 // Determine max length of this variant
 int maxDnaLen = 0;
-struct variant *var = refVar;
+struct hapVar *var = refVar;
 for ( ; var != NULL; var = var->next)
     {
     if (var->val != NULL && var->val[0] != '\0')
@@ -1195,7 +1208,7 @@ int last = hapSet->chromStart;  // confusing but this is correct for + AND -
 int ix = (reverse ? refHap->variantsCovered - 1 : 0);
 for ( ; 0 <= ix && ix < refHap->variantsCovered; ix += (reverse ? -1 : 1))
     {
-    struct variant *refVar = refHap->variants[ix];
+    struct hapVar *refVar = refHap->variants[ix];
     assert(refVar != NULL);
 
     //assert(last <= refVar->chromStart); // Should be going forward without overlap
@@ -1262,7 +1275,7 @@ if (hapSet->hapBlocks == NULL && hapSet->isGenePred)
 
 struct haplotype *refHap = hapSet->refHap;
 
-if (haplo == NULL)
+if (haplo == NULL || haplo == refHap)
     {
     haploOptionalsEnable(he,refHap);
     if (refHap->ho->dnaSeq == NULL)
@@ -1287,6 +1300,7 @@ else
 struct dyString *dy = dyStringNew(2048);
 struct hapBlocks *block = hapSet->hapBlocks;
 int skipLen = 0;
+int skipIx = -1;
 for ( ; block != NULL; block = block->next)
     {
     if (block->ix == -1) // invariant blocks are easy
@@ -1307,30 +1321,34 @@ for ( ; block != NULL; block = block->next)
     else // variant
         {
         assert(block->len > 0);
-        if (skipLen >= block->len)
+        struct hapVar *refVar = refHap->variants[block->ix];
+        boolean deletion = (refVar->vType == vtDeletion);
+        struct hapVar *varToUse = variantToUse(refVar,haplo);
+
+        // Deletion blocks are tricky as they cover no distance in block list
+        // in order to allow them to overlap other variants.
+        if (skipLen > 0 && deletion) // Previous deletion overlapping new deletion
+            {
+            // Ref vars are just skipped, but non-ref vars may require adjusting skipLen
+            if (varToUse != refVar)
+                {
+                assert(skipIx != -1); // Must be set if skipLen is set
+                int startDiff = varToUse->dnaOffset - refHap->variants[skipIx]->dnaOffset;
+                if (skipLen < (startDiff + block->len))
+                    {
+                    skipLen = startDiff + block->len;
+                    skipIx = block->ix;
+                    }
+                }
+            continue;
+            }
+        if (skipLen >= block->len) // Non-deletions are easier
             {
             skipLen -= block->len;
             continue;
             }
 
-        struct variant *refVar = refHap->variants[block->ix];
-        struct variant *varToUse = refVar;
-        boolean deletion = (refVar->vType == vtDeletion);
 
-        // Is there a corresponding var for this haplotype?
-        if (haplo != NULL)
-            {
-            int varIx = 0;
-            for ( ; varIx < haplo->variantCount; varIx++)
-                {
-                struct variant *hapVar = haplo->variants[varIx];
-                if (refVar->chromStart == hapVar->chromStart)
-                    {
-                    varToUse = hapVar;
-                    break;
-                    }
-                }
-            }
         if (hilite)
             dyStringPrintf(dy,"<B class='%s%s'>",haploVarId(varToUse),
                              (varToUse != refVar ? " textAlert" : ""));
@@ -1345,8 +1363,11 @@ for ( ; block != NULL; block = block->next)
             assert(deletion || len <= block->len);
             // Because deletions can overlap other variants, they are treated here
             // as if 0 length.  That way ref shows actual sequence a single char
-            if (deletion && varToUse == refVar)
+            if (deletion)
+                {
+                assert(varToUse == refVar);
                 len = block->len;
+                }
             else
                 {
                 if (skipLen < len)
@@ -1355,7 +1376,15 @@ for ( ; block != NULL; block = block->next)
             skipLen = 0;
             }
         else if (deletion)
+            {
+            assert(varToUse != refVar);
+#ifdef HAPLO_WIP
+            printf("DELETE ix:%d length:%d blockLen:%d<BR>",
+                   block->ix,len,block->len);
+#endif//def HAPLO_WIP
             skipLen = block->len; // special delete accounting requires skipping part of next block
+            skipIx = block->ix;
+            }
 
         // may have to fill in!
         if (alignmentGaps && block->len > len)
@@ -1459,23 +1488,14 @@ for ( ; block != NULL; block = block->next)
         dnaLen += block->len;
     else
         {
-        struct variant *refVar = refHap->variants[block->ix];
+        struct hapVar *refVar = refHap->variants[block->ix];
         int refDnaLen = (refVar->chromEnd - refVar->chromStart);
 
-        if (haplo != NULL)
+        if (haplo != NULL && haplo != hapSet->refHap)
             {
-            int varIx = 0;
-            struct variant *hapVar = NULL;
-            for ( ; varIx < haplo->variantCount; varIx++)
-                {
-                if (refVar->chromStart == haplo->variants[varIx]->chromStart)
-                    {
-                    hapVar = haplo->variants[varIx];
-                    break;
-                    }
-                }
+            struct hapVar *hapVar = variantToUse(refVar,haplo);
             // Is there a matching hapVar?
-            if (hapVar != NULL)
+            if (hapVar != refVar)
                 {
                 hapVar->aaOffset = dnaLen / 3;
                 int varDnaLen = (hapVar->vType == vtDeletion
@@ -1488,9 +1508,10 @@ for ( ; block != NULL; block = block->next)
                         hapVar->aaVal = lmCloneStringZ(he->lm,haplo->ho->aaSeq + hapVar->aaOffset,
                                                        hapVar->aaLen);
 #ifdef HAPLO_WIP
-                        printf("ix:%d AA:%d SNP %s:%d  %c/%s<BR>",block->ix, refVar->aaOffset + 1,
-                               hapSet->chrom,refVar->chromStart,refHap->aaSeq[hapVar->aaOffset],
-                               hapVar->aaVal);
+                        bitsOut(stdout,haplo->bits,0,haplo->bitCount,FALSE);
+                        printf(" ix:%d AA:%d SNP %s:%d  %c/%s<BR>",block->ix,
+                               refVar->aaOffset + 1,hapSet->chrom,refVar->chromStart,
+                               refHap->ho->aaSeq[refVar->aaOffset],hapVar->aaVal);
 #endif//def HAPLO_WIP
                         }
                     //else
@@ -1503,6 +1524,13 @@ for ( ; block != NULL; block = block->next)
                         hapVar->aaVal = lmCloneString(he->lm,"[>>]");
                     else
                         hapVar->aaVal = lmCloneString(he->lm,"[<<]");
+#ifdef HAPLO_WIP
+                    bitsOut(stdout,haplo->bits,0,haplo->bitCount,FALSE);
+                    printf(" ix:%d AA:%d %s %s:%d  %c/%s<BR>",block->ix,
+                           refVar->aaOffset + 1,(hapVar->vType == vtInsertion ? "INS":"DEL"),
+                           hapSet->chrom,refVar->chromStart,
+                           refHap->ho->aaSeq[refVar->aaOffset],hapVar->aaVal);
+#endif//def HAPLO_WIP
                     }
                 if (hapVar->vType != vtDeletion)
                     dnaLen += varDnaLen;
@@ -1516,23 +1544,24 @@ for ( ; block != NULL; block = block->next)
         else // Else just filling refVar
             {
             refVar->aaOffset = dnaLen / 3;
-#ifdef HAPLO_WIP
-            if (refVar->vType != vtInsertion && refHap->dnaSeq[dnaLen] != refVar->val[0])
-                printf("AA:%d %s %s:%d  Expected ref:%c found:%c<BR>",refVar->aaOffset + 1,
-                     (refVar->vType == vtSNP ? "SNP" : refVar->vType == vtDeletion ? "DEL" : "???"),
-                     hapSet->chrom,refVar->chromStart,refHap->dnaSeq[dnaLen],refVar->val[0]);
-#endif//def HAPLO_WIP
             refVar->aaLen = (refDnaLen == 0 ? 0 : 1 + (refDnaLen/3));
             if (refVar->aaLen > 0 && refVar->aaOffset < refHap->ho->aaLen)
                 {
                 //assert(refVar->aaOffset + refVar->aaLen <= refHap->aaLen);
-                int aaLen = (refVar->aaLen > 20 ? 20 : aaLen); // not necessary to waste mem
                 refVar->aaLen = min(refVar->aaLen,(refHap->ho->aaLen - refVar->aaOffset));
                 refVar->aaVal = lmCloneStringZ(he->lm,refHap->ho->aaSeq + refVar->aaOffset,
                                                refVar->aaLen);
                 }
             else
                 refVar->aaVal = NULL;
+
+#ifdef HAPLO_WIP
+            if (refVar->vType != vtInsertion && refHap->ho->dnaSeq[dnaLen] != refVar->val[0])
+                printf("AA:%d %s %s:%d  Expected ref:%c found:%c val:%s<BR>",refVar->aaOffset + 1,
+                     (refVar->vType == vtSNP ? "SNP" : refVar->vType == vtDeletion ? "DEL" : "???"),
+                     hapSet->chrom,refVar->chromStart,refHap->ho->dnaSeq[dnaLen],refVar->val[0],
+                     refVar->aaVal == NULL ? "" : refVar->aaVal);
+#endif//def HAPLO_WIP
 
             if (refVar->vType != vtDeletion) // deletions treated as 0 len blocks to avoid overlap
                 dnaLen += refDnaLen;
@@ -1557,7 +1586,7 @@ struct haplotype *theHap = refHap;
 assert(refHap->ho != NULL && refHap->ho->dnaSeq != NULL);
 if (refHap->ho->aaSeq == NULL)
     refHap->ho->aaSeq  = aaSequence(refHap->ho->dnaSeq,&(refHap->ho->aaLen));
-if (haplo != NULL)
+if (haplo != NULL && haplo != refHap)
     {
     assert(haplo->ho != NULL && haplo->ho->dnaSeq != NULL);
     if (haplo->ho->aaSeq == NULL)
@@ -1587,11 +1616,11 @@ struct dyString *dy = dyStringNew(aaLen  + (hapSet->variantsCovered * 20));
 //assert(refHap->variants != NULL
 //    && (refHap->variants[0]->aaVal != NULL || refHap->variants[0]->vType != vtInsertion));
 char *lastP = aaSeq;
-struct variant *lastVar = NULL;
+struct hapVar *lastVar = NULL;
 int ix = 0;
 for ( ; ix < refHap->variantsCovered; ix++)
     {
-    struct variant *var = refHap->variants[ix];
+    struct hapVar *var = refHap->variants[ix];
     int beg = var->aaOffset;
     if (triplet)
         beg *= 3;
@@ -1644,7 +1673,7 @@ return dyStringCannibalize(&dy);
 // --------------------------------
 
 // ----------- Some repetitive tasks ...
-static char *refVaraintTitle(struct haplotypeSet *hapSet,struct variant *refVar,boolean dnaView)
+static char *refVaraintTitle(struct haplotypeSet *hapSet,struct hapVar *refVar,boolean dnaView)
 // returns the standard variant tooltip title string
 {
 static char title[1024]; // use it or loose it.
@@ -1667,7 +1696,7 @@ if (!dnaView && refVar->aaOffset >= 0)
     //if (refVar->aaLen <= 1)
         {
         // Walk through each allele
-        struct variant *var = refVar;
+        struct hapVar *var = refVar;
         int maxLen = 0;
         for ( ; var != NULL; var = var->next)
             {
@@ -1729,7 +1758,7 @@ else
     }
 
 // Walk through each allele
-struct variant *var = refVar;
+struct hapVar *var = refVar;
 int maxLen = 0;
 for ( ; var != NULL; var = var->next)
     {
@@ -1751,10 +1780,10 @@ cur -= 1;  // overwrite the last '\'
 safecpy(cur,(end - cur)," (");
 cur += 2;
 
-// Now proportions
+// Now variant frequencies
 for (var = refVar; var != NULL; var = var->next)
     {
-    safef(cur,(end - cur),"%.3f|",var->proportion);
+    safef(cur,(end - cur),"%.3f|",var->frequency);
     cur += strlen(cur);
     }
 cur -= 1;  // overwrite the last '\'
@@ -1790,13 +1819,11 @@ static char *refVariantLink(struct cart *cart, struct haplotypeSet *hapSet,int i
 // hgc?hgsid=4750879&c=chr9&o=136132907&t=136132908&g=tgpPhase1&i=rs8176719
 struct haplotype *refHap = hapSet->refHap;
 static char link[512];
-struct variant *refVar = refHap->variants[ix];
+struct hapVar *refVar = refHap->variants[ix];
 safef(link,PATH_LEN,"%s?%s&c=%s&o=%u&t=%u&g=%s&i=%s",
       hgcName(),cartSidUrlString(cart),hapSet->chrom,
-      (refVar->vType != vtSNP ? refVar->chromStart - 1 : refVar->chromStart),
-      refVar->chromEnd,
+      refVar->origStart,refVar->origEnd,
       HAPLO_1000_GENOMES_TRACK,refVar->id);
-      // Note the hgsid would be needed if downloads page ever saved fileSortOrder to cart.
 return link;
 }
 
@@ -1818,9 +1845,11 @@ if (len > largest)
     {
     strncpy(buf, val, (largest-3));
     strcpy(buf +      (largest-3), "+++");
-    return buf;
     }
-return val;
+else
+    strcpy(buf, val); // by always returning buf, strLower, etc can be used with impunity
+
+return buf;
 }
 
 // NOTE: could be made public
@@ -1897,8 +1926,8 @@ if (haploCount == 1)
     return;
     }
 boolean diploid = differentWord(hapSet->chrom,"chrY"); // What, no aliens?
-boolean showScores   = cartTimeoutBoolean(cart, HAPLO_SHOW_SCORES, HAPLO_CART_TIMEOUT);
-boolean showRareHaps = cartTimeoutBoolean(cart, HAPLO_RARE_HAPS, HAPLO_CART_TIMEOUT);
+boolean showScores   = cartUsualBoolean(cart, HAPLO_SHOW_SCORES, FALSE);
+boolean showRareHaps = cartUsualBoolean(cart, HAPLO_RARE_HAPS, FALSE);
 
 struct haplotype *refHap = hapSet->refHap;
 struct haplotype *haplo  = NULL;
@@ -1976,7 +2005,7 @@ for ( ;varIx < refHap->variantsCovered; varIx++)
     hPrintf("%s</TH>",clipLongVals(val,5,'-'));
 
     // Force these reference variants to lower case for future use!
-    if (val != NULL && val[0] != '\0')
+    if (dnaView && val != NULL && val[0] != '\0')
         tolowers(val);
     }
 
@@ -2070,17 +2099,27 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
                 (showScores ? "" : " hidden"),99999 - popScore, popScore );
         }
 
+    // Reference haplotype or not?
+#define HAPLO_ID_HINT
+#ifdef HAPLO_ID_HINT
+    if (haplo->variantCount == 0)
+        hPrintf("<TD title='Contains reference varaints only' class='" REFERENCE_CLASS "'>reference</TD>");
+    else
+        hPrintf("<TD title='%s:%s contains non-reference variants' class='" REFERENCE_CLASS
+                "'>&nbsp;</TD>",hapSet->commonId,haplo->suffixId);
+#else//ifndef HAPLO_ID_HINT
     hPrintf("<TD class='" REFERENCE_CLASS "'>%s</TD>",
             (haplo->variantCount ? "&nbsp;" : "reference"));
-    int bitIx = 0,varSlot = 0;
+#endif//ndef HAPLO_ID_HINT
 
     // Need to set AA variants haplotype by haplotype, because of shared memory
     if (!dnaView)
         geneHapSetAaVariants(he, hapSet, haplo);
 
+    int bitIx = 0,varSlot = 0;
     for (bitIx = 0, varIx = 0; bitIx < haplo->bitCount; varSlot++, bitIx += hapSet->bitsPerVariant)
         {
-        struct variant *varToUse = refHap->variants[varSlot];
+        struct hapVar *varToUse = refHap->variants[varSlot];
         // Only care that a bit is set, not which or how many
         if (bitCountRange(haplo->bits, bitIx, hapSet->bitsPerVariant) > 0)
             {
@@ -2105,9 +2144,10 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
             else if (varToUse->aaOffset > haplo->ho->aaLen)
                 val = " ";
             }
+
         if (varToUse != refHap->variants[varSlot])
-            hPrintf("<A HREF='%s'>%s</A></TD>",refVariantLink(cart,hapSet,varSlot),
-                    clipLongVals(val,5,'-'));
+            hPrintf(" <A HREF='%s'>%s</A></TD>",refVariantLink(cart,hapSet,varSlot),
+                    clipLongVals(val,5,'-')); // Note: space before should bring var to top of sort
         else
             hPrintf("%s</TD>",clipLongVals(val,5,'-'));
         }
@@ -2181,12 +2221,30 @@ else
     {
     hPrintf("<BR>Common gene alleles shown: %d<BR>\n",countRows);
     }
-#define ALL_ARE_BUTTONS
-#ifdef ALL_ARE_BUTTONS
+#define MOVE_POP_BUTTON
+#ifdef MOVE_POP_BUTTON
+// Population distribution buttons
+boolean distMajor =  cartUsualBoolean(cart, HAPLO_MAJOR_DIST, FALSE);
+boolean distMinor =  cartUsualBoolean(cart, HAPLO_MINOR_DIST, FALSE);
+hPrintf("<input type='button' id='" HAPLO_MAJOR_DIST "' class='" TOGGLE_BUTTON "' "
+        "value='%s populations' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
+        "title='Show/Hide haplotype distribution across population groups'>",
+        (distMajor ? "Hide": "Show"),(distMajor ? "[]":"1"));
+if (distMajor)
+    {
+    hPrintf("<input type='button' id='" HAPLO_MINOR_DIST "' class='" TOGGLE_BUTTON "' "
+            "value='%s' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
+            "title='Show haplotype distribution across %s population groups'>",
+            (distMinor ? "Major groups" : "1000 Genome groups"),
+            (distMinor ? "[]":"1"),
+            (distMinor ? "major" : "1000 Genome"));
+    }
+#endif//def MOVE_POP_BUTTON
+
 hPrintf("<input type='button' id='" HAPLO_SHOW_SCORES "' value='%s scoring' "
         "onclick='alleles.scoresToggle(this);' class='" TOGGLE_BUTTON "' "
         "title='Show/Hide all haplotype scores'>\n",(showScores ? "Hide":"Show"));
-#endif//def ALL_ARE_BUTTONS
+
 hPrintf("&nbsp;&nbsp;<a href='#' onclick='return alleles.setAndRefresh(\""HAPLO_RESET_ALL"\",1);'>"
         "Reset to defaults</a>\n");
 }
@@ -2212,9 +2270,9 @@ hPrintf("Generated from <A HREF='http://www.1000genomes.org/' TARGET=_BLANK>1000
         "Phase1 variants (<A HREF='../goldenPath/help/haplotypes.html' "
         "title='Help on Gene haplotype alleles section' TARGET=_BLANK>help</A>).");
 
-boolean rareVars     =  cartTimeoutBoolean(cart, HAPLO_RARE_VAR, HAPLO_CART_TIMEOUT);
-boolean dnaView      =  cartTimeoutBoolean(cart, HAPLO_DNA_VIEW, HAPLO_CART_TIMEOUT);
-boolean fullGeneView =  cartTimeoutBoolean(cart, HAPLO_FULL_SEQ, HAPLO_CART_TIMEOUT);
+boolean rareVars     =  cartUsualBoolean(cart, HAPLO_RARE_VAR, FALSE);
+boolean dnaView      =  cartUsualBoolean(cart, HAPLO_DNA_VIEW, FALSE);
+boolean fullGeneView =  cartUsualBoolean(cart, HAPLO_FULL_SEQ, FALSE);
 boolean tripletView  =  FALSE;
 // Support toggling between common and rare variants
 int variantCount = (haploCount == 0 ? 0 : hapSet->variantsCovered);
@@ -2241,27 +2299,27 @@ else
 // Table of buttons
 hPrintf("<table BORDER=0 CELLSPACING=1 CELLPADDING=0><tr>\n");
 
-#ifdef ALL_ARE_BUTTONS
+#ifndef MOVE_POP_BUTTON
 // Population distribution buttons
 if (!noHaps)
     {
-    boolean distMajor =  cartTimeoutBoolean(cart, HAPLO_MAJOR_DIST, HAPLO_CART_TIMEOUT);
-    boolean distMinor =  cartTimeoutBoolean(cart, HAPLO_MINOR_DIST, HAPLO_CART_TIMEOUT);
+    boolean distMajor =  cartUsualBoolean(cart, HAPLO_MAJOR_DIST, FALSE);
+    boolean distMinor =  cartUsualBoolean(cart, HAPLO_MINOR_DIST, FALSE);
     hPrintf("<td><input type='button' id='" HAPLO_MAJOR_DIST "' class='" TOGGLE_BUTTON "' "
             "value='%s populations' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
             "title='Show/Hide haplotype distribution across population groups'></td>\n",
-            (distMajor ? "Hide": "Show"),(distMajor ? "[]":"set"));
+            (distMajor ? "Hide": "Show"),(distMajor ? "[]":"1"));
     if (distMajor)
         {
         hPrintf("<td><input type='button' id='" HAPLO_MINOR_DIST "' class='" TOGGLE_BUTTON "' "
                 "value='%s' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
                 "title='Show haplotype distribution across %s population groups'></td>\n",
                 (distMinor ? "Major groups" : "1000 Genome groups"),
-                (distMinor ? "[]":"set"),
+                (distMinor ? "[]":"1"),
                 (distMinor ? "major" : "1000 Genome"));
         }
     }
-#endif//def ALL_ARE_BUTTONS
+#endif//ndef MOVE_POP_BUTTON
 
 // Restrict to common variants
 if (!noHaps
@@ -2272,7 +2330,7 @@ if (!noHaps
             "variants with a frequency of at least %d%%' "
             "onclick='alleles.setAndRefresh(this.id,\"%s\");'></td>\n",
             (rareVars ? "Common variants only":"Include all variants"),
-            HAPLO_COMMON_VARIANT_MIN_PCT,(rareVars ? "[]":"set"));
+            HAPLO_COMMON_VARIANT_MIN_PCT,(rareVars ? "[]":"1"));
     }
 
 // DNA vs. AA, Full sequence
@@ -2281,52 +2339,21 @@ if (!noHaps)
     hPrintf("<td><input type='button' id='" HAPLO_DNA_VIEW "' class='" TOGGLE_BUTTON "' "
             "value='Display as %s' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
             "title='Display variants and sequence as amino acids or DNA bases'></td>\n",
-            (dnaView ? "amino acids" : "DNA bases"), (dnaView ? "[]":"set"));
+            (dnaView ? "amino acids" : "DNA bases"), (dnaView ? "[]":"1"));
 
     hPrintf("<td><input type='button' id='" HAPLO_FULL_SEQ "' class='" TOGGLE_BUTTON "' "
             "value='%s full sequence' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
             "title='Show/Hide predicted full sequence of each gene haplotype'></td>\n",
-            (fullGeneView ? "Hide" : "Show"), (fullGeneView ? "[]":"set"));
+            (fullGeneView ? "Hide" : "Show"), (fullGeneView ? "[]": "1" ));
 
-    tripletView  =  cartTimeoutBoolean(cart, HAPLO_TRIPLETS, HAPLO_CART_TIMEOUT);
+    tripletView  = cartUsualBoolean(cart, HAPLO_TRIPLETS,FALSE);
     if (!dnaView && fullGeneView)
         hPrintf("<td><input type='button' id='" HAPLO_TRIPLETS "' class='" TOGGLE_BUTTON "' "
                 "value='%s DNA triplet code' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
                 "title='Show/Hide DNA sequence above amino acid sequence'>"
-                "</td>\n", (tripletView ? "Hide" : "Show"), (tripletView ? "[]":"set"));
+                "</td>\n", (tripletView ? "Hide" : "Show"), (tripletView ? "[]": "1" ));
     }
 hPrintf("</tr></table>\n");
-
-#ifndef ALL_ARE_BUTTONS
-if (!noHaps)
-    {
-    // Scoring?
-    boolean showScores   = cartTimeoutBoolean(cart, HAPLO_SHOW_SCORES, HAPLO_CART_TIMEOUT);
-    hPrintf("<div style='width:200px; display:inline-block;'title='Show/Hide all haplotype scores'>"
-            "<input type=checkbox id='" HAPLO_SHOW_SCORES "'%s value='%s' "
-            "onclick='alleles.scoresShow(this,this.value);'>Show scoring</div>\n",
-            (showScores?" CHECKED":""),(showScores?"[]":"set"));
-
-    // Population
-    boolean distMajor =  cartTimeoutBoolean(cart, HAPLO_MAJOR_DIST, HAPLO_CART_TIMEOUT);
-    hPrintf("<span title='Show/Hide haplotype distribution across population groups'>"
-            "<input type=checkbox id='" HAPLO_MAJOR_DIST "'%s value='%s' "
-            "onclick='alleles.setAndRefresh(this.id,this.value);'>Show populations",
-            (distMajor?" CHECKED":""),(distMajor?"[]":"set"));
-    if (distMajor)
-        {
-        boolean distMinor =  cartTimeoutBoolean(cart, HAPLO_MINOR_DIST, HAPLO_CART_TIMEOUT);
-        hPrintf(//"<td title='Show haplotype distribution across major or 1000 Genomes groups'>"
-                "<input type=radio id='" HAPLO_MINOR_DIST "'%s value='[]' "
-                "onclick='alleles.setAndRefresh(this.id,this.value);'>Major",
-                (distMinor?"":" CHECKED"));
-        hPrintf("<input type=radio id='" HAPLO_MINOR_DIST "'%s value='set' "
-                "onclick='alleles.setAndRefresh(this.id,this.value);'>1000 Genome groups",
-                (distMinor?" CHECKED":""));
-        }
-    hPrintf("</span>\n");
-    }
-#endif//ndef ALL_ARE_BUTTONS
 
 if (!noHaps)
     {
@@ -2384,7 +2411,7 @@ hPrintf("<!-- " HAPLO_TABLE " end --></div>\n");
                   "    variantSizes longblob null,   # Comma delimited list\n"     \
                   "    variantStarts longblob null, # relative to chromStart\n"     \
                   "    variantVals longblob null,  # non-ref values\n"               \
-                  "    variantProps longblob null,# variant proportions in dataset\n" \
+                  "    variantFreqs longblob null,# variant frequencies in dataset\n" \
                   "    variantIds longblob null,                # variant IDs\n"       \
                   "    variantsCovered int unsigned not null, # model variant count\n"  \
                   "    bits varchar(1024) null,             # bits as string\n"          \
@@ -2405,7 +2432,7 @@ hPrintf("<!-- " HAPLO_TABLE " end --></div>\n");
 enum geneAlleleTableFields // enum of geneAlleles table columns (0-based index)
     {
     gafVarVals = HAPLO_STD_BED_FIELDS,  // first non-std-bed column index
-    gafVarProportions,
+    gafVarFrequencies,
     gafVarIds,
     gafVarsCovered,
     gafBits,
@@ -2489,11 +2516,11 @@ else //if (suffix != NULL) // With suffix means non-reference haplotype
         strSwapChar(vals,',','\0');
 
         // PROBABILITIES: floating point
-        assert(row[gafVarProportions] != NULL
-            && countChars(row[gafVarProportions],',') == haplo->variantCount - 1);
-        char *props = lmAlloc(he->lm,strlen(row[gafVarProportions]) + 5);
-        strcpy(props,row[gafVarProportions]);
-        strSwapChar(props,',','\0');
+        assert(row[gafVarFrequencies] != NULL
+            && countChars(row[gafVarFrequencies],',') == haplo->variantCount - 1);
+        char *freqs = lmAlloc(he->lm,strlen(row[gafVarFrequencies]) + 5);
+        strcpy(freqs,row[gafVarFrequencies]);
+        strSwapChar(freqs,',','\0');
 
         // Single variant without ID would have length == 0
         assert(row[gafVarIds] != NULL
@@ -2505,17 +2532,17 @@ else //if (suffix != NULL) // With suffix means non-reference haplotype
         int ix = 0;
         for ( ;ix < haplo->variantCount; ix++)
             {
-            struct variant *variant;
+            struct hapVar *variant;
             lmAllocVar(he->lm,variant);
             haplo->variants[ix] = variant;
             variant->chromStart = hapSet->chromStart + bed->chromStarts[ix];
             variant->chromEnd   = variant->chromStart + bed->blockSizes[ix];
             variant->id         = ids;
             variant->val        = vals;
-            variant->proportion = sqlDouble(props);
+            variant->frequency = sqlDouble(freqs);
             ids  += strlen(ids) + 1;
             vals += strlen(vals) + 1;
-            props += strlen(props) + 1;
+            freqs += strlen(freqs) + 1;
             // TODO: fill in vType somehow?
             }
         // NOTE: no slList of refHap->variants!
@@ -2880,10 +2907,10 @@ fputc(']', out);
 for (; ix < 5; ix++)
     fprintf(out,"  ");
 
-// prob,prob,prob
+// freq,freq,freq
 fprintf(out,"\t(");
 for (ix = 0; ix < haplo->variantCount; ix++)
-    fprintf(out,"%s%.3f",VAR_SEP_NOTAB(ix), haplo->variants[ix]->proportion);
+    fprintf(out,"%s%.3f",VAR_SEP_NOTAB(ix), haplo->variants[ix]->frequency);
 fputc(')', out);
 for (; ix < 5; ix++)
     fprintf(out,"     ");
@@ -2944,9 +2971,9 @@ for (ix = 0; ix < haplo->variantCount; ix++)
 for (ix = 0; ix < haplo->variantCount; ix++)
     fprintf(out,"%c%s",VAR_SEPARATOR(ix),VAL_OR_EMPTY(haplo->variants[ix]->val));
 
-// prop,prop,prop (bed 12 + 14)
+// freq,freq,freq (bed 12 + 14)
 for (ix = 0; ix < haplo->variantCount; ix++)
-    fprintf(out,"%c%5.3f",VAR_SEPARATOR(ix), haplo->variants[ix]->proportion);
+    fprintf(out,"%c%5.3f",VAR_SEPARATOR(ix), haplo->variants[ix]->frequency);
 
 // id,id,id (bed 12 +: 15)
 for (ix = 0; ix < haplo->variantCount; ix++)

@@ -56,7 +56,7 @@ char *edwTempDir()
 static char path[PATH_LEN];
 if (path[0] == 0)
     {
-    /* Note code elsewhere depends on tmp dire being inside of edwRootDir - also good
+    /* Note code elsewhere depends on tmp dir being inside of edwRootDir - also good
      * to have it there so move to a permanent file is quick and unlikely to fail. */
     safef(path, sizeof(path), "%s%s", edwRootDir, "tmp");
     makeDirsOnPath(path);

@@ -227,7 +227,7 @@ var alleles = (function()
     
         // Don't even bother if full sequence isn't showing
         var fullSeq = $('input#'+sectionName+'_fullSeq');
-        if (fullSeq != undefined && $(fullSeq).val().indexOf('Hide') === -1)
+        if (fullSeq.length != 0 && $(fullSeq).val().indexOf('Hide') === -1)
             return;
         
         // DNA view or AA view?
@@ -288,7 +288,7 @@ var alleles = (function()
                 $('span#alleleCounts').addClass('textAlert'); 
                 $(btn).val('Hide rare haplotypes');
                 if (setCart == undefined || setCart)
-                    setCartVar(btn.id,'set');
+                    setCartVar(btn.id,'1');
             } else {
                 $(trs).filter('.rare').addClass('hidden');
                 var counts = $(trs).filter(':visible').length + ' of ' + $(trs).length + ".";
@@ -308,7 +308,7 @@ var alleles = (function()
                 $('table#alleles').find('.score').removeClass('hidden');
                 $(btn).val('Hide scoring');
                 if (setCart == undefined || setCart)
-                    setCartVar(btn.id,'set');
+                    setCartVar(btn.id,'1');
             } else {
                 $('table#alleles').find('.score').addClass('hidden');
                 $(btn).val('Show scoring');

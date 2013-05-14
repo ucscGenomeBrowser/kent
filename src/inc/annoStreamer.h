@@ -36,8 +36,11 @@ struct annoStreamer
     void (*setFilters)(struct annoStreamer *self, struct annoFilter *newFilters);
     /* Get and set filters */
 
-    struct annoRow *(*nextRow)(struct annoStreamer *self, struct lm *lm);
-    /* Get the next item from this source.  Use localmem lm to store returned annoRow. */
+    struct annoRow *(*nextRow)(struct annoStreamer *self, char *minChrom, uint minEnd,
+			       struct lm *lm);
+    /* Get the next item from this source.  If minChrom is non-NULL, optionally use
+     * that as a hint to skip items that precede {minChrom, minEnd}.
+     * Use localmem lm to store returned annoRow. */
 
     void (*close)(struct annoStreamer **pSelf);
     /* Close connection to source and free self. */
