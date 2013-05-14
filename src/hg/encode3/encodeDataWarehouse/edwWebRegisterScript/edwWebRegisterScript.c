@@ -20,7 +20,9 @@ errAbort(
   "This program is meant to be called as a CGI from a web server using https.");
 }
 
-void edwRandomHexed32(char hexed[33])
+#define HEXED_32_SIZE	33    /* Size of 32 hexadecimal digits plus zero tag */
+
+void edwRandomHexed32(char hexed[HEXED_32_SIZE])
 /* Create a string of random hexadecimal digits 32 digits long.  Add zero tag at end*/
 {
 /* Generate 16 bytes of random sequence with uuid generator */
@@ -28,18 +30,18 @@ unsigned char uuid[16];
 uuid_generate(uuid);
 
 /* Convert to hex. */
-hexBinaryString(uuid, 16, hexed, 33);
+hexBinaryString(uuid, 16, hexed, HEXED_32_SIZE);
 }
 
-void edwRandomBabble(char babble[33])
-/* Create a string of random syllables up to 33 long. */
+void edwRandomBabble(char *babble, int babbleSize)
+/* Create a string of random syllables . */
 {
 /* Generate 16 bytes of random sequence with uuid generator */
 unsigned char uuid[16];
 uuid_generate(uuid);
 unsigned long ul;
 memcpy(&ul, uuid, sizeof(ul));
-edwMakeBabyName(ul, babble, 33);
+edwMakeBabyName(ul, babble, babbleSize);
 }
 
 char *userEmail = NULL;
@@ -63,6 +65,15 @@ reg.secretHash = secretHash;
 edwScriptRegistrySaveToDb(conn, &reg, "edwScriptRegistry", 256);
 }
 
+char **mainEnv;
+
+void dumpEnv(char **env)
+{
+char *s;
+while ((s = *env++) != NULL)
+    printf("%s<BR>\n", s);
+}
+
 void doMiddle()
 /* Write what goes between BODY and /BODY */
 {
@@ -72,7 +83,11 @@ if (!cgiServerHttpsIsOn())
 struct sqlConnection *conn = edwConnectReadWrite();
 printf("<FORM ACTION=\"edwWebRegisterScript\" METHOD=POST>\n");
 printf("<B>Register Script with ENCODE Data Warehouse</B><BR>\n");
+#ifdef SOON
 uglyf("HTTP_AUTHENTICATION: '%s'<BR>\n", getenv("HTTP_AUTHENTICATION"));
+uglyf("HTTP_AUTHORIZATION: '%s'<BR>\n", getenv("HTTP_AUTHORIZATION"));
+dumpEnv(mainEnv);
+#endif
 if (userEmail == NULL)
     {
     printf("Please sign in:");
@@ -81,10 +96,10 @@ if (userEmail == NULL)
 else if (cgiVarExists("description"))
     {
     struct edwUser *user = edwMustGetUserFromEmail(conn, userEmail);
-    char password[33];
+    char password[HEXED_32_SIZE];
     edwRandomHexed32(password);
-    char babyName[33];
-    edwRandomBabble(babyName);
+    char babyName[HEXED_32_SIZE];
+    edwRandomBabble(babyName, sizeof(babyName));
 
     edwRegisterScript(conn, user, babyName, password, cgiString("description"));
     printf("Script now registered.<BR>\n");
@@ -120,11 +135,12 @@ else
 printf("</FORM>\n");
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char **env)
 /* Process command line. */
 {
 if (!cgiIsOnWeb())
     usage();
+mainEnv = env;
 userEmail = edwGetEmailAndVerify();
 edwWebHeaderWithPersona("ENCODE Data Warehouse Register Script");
 htmEmptyShell(doMiddle, NULL);
