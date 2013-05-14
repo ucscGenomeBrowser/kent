@@ -823,7 +823,7 @@ if (days > 0)
 seconds -= days*3600*24;
 
 int hours = seconds/3600;
-if (hours > 0)
+if (hours > 0 || days > 0)
     dyStringPrintf(dy, "%d hours", hours);
 seconds -= hours*3600;
 
