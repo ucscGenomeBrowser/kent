@@ -359,7 +359,7 @@ struct factorSourceInfo
     };
 
 int factorSourceInfoCmp(const void *va, const void *vb)
-/* Compare two factorSourceInfo's, sorting on description field */
+/* Compare two factorSourceInfo's, sorting on name and then description fields */
 {
 static char bufA[64], bufB[64];
 const struct factorSourceInfo *a = *((struct factorSourceInfo **)va);
