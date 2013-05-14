@@ -516,7 +516,36 @@ else
    return val;
 }
 
-void mustMakeValidFile(struct sqlConnection *conn, struct edwFile *ef, struct cgiParsedVars *tags)
+void validFileUpdateDb(struct sqlConnection *conn, struct edwValidFile *el, long long id)
+/* Save edwValidFile as a row to the table specified by tableName, replacing existing record at 
+ * id. */
+{
+struct dyString *dy = newDyString(512);
+dyStringAppend(dy, "update edwValidFile set ");
+// omit id and licensePlate fields - one autoupdates and the other depends on this
+// also omit fileId which also really can't change.
+dyStringPrintf(dy, " format='%s',", el->format);
+dyStringPrintf(dy, " outputType='%s',", el->outputType);
+dyStringPrintf(dy, " experiment='%s',", el->experiment);
+dyStringPrintf(dy, " replicate='%s',", el->replicate);
+dyStringPrintf(dy, " validKey='%s',", el->validKey);
+dyStringPrintf(dy, " enrichedIn='%s',", el->enrichedIn);
+dyStringPrintf(dy, " ucscDb='%s',", el->ucscDb);
+dyStringPrintf(dy, " itemCount=%lld,", (long long)el->itemCount);
+dyStringPrintf(dy, " basesInItems=%lld,", (long long)el->basesInItems);
+dyStringPrintf(dy, " sampleCount=%lld,", (long long)el->sampleCount);
+dyStringPrintf(dy, " basesInSample=%lld,", (long long)el->basesInSample);
+dyStringPrintf(dy, " sampleBed='%s',", el->sampleBed);
+dyStringPrintf(dy, " mapRatio=%g,", el->mapRatio);
+dyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
+dyStringPrintf(dy, " depth=%g", el->depth);
+dyStringPrintf(dy, " where id=%lld\n", (long long)id);
+sqlUpdate(conn, dy->string);
+freeDyString(&dy);
+}
+
+void mustMakeValidFile(struct sqlConnection *conn, struct edwFile *ef, struct cgiParsedVars *tags,
+    long long oldValidId)
 /* If possible make a edwValidFile record for this.  Makes sure all the right tags are there,
  * and then parses file enough to determine itemCount and the like.  For some files, like fastqs,
  * it will take a subset of the file as a sample so can do QA without processing the whole thing. */
@@ -597,56 +626,63 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	}
 
     /* Save record except for license plate to DB. */
-    edwValidFileSaveToDb(conn, vf, "edwValidFile", 512);
-    vf->id = sqlLastAutoId(conn);
-
-    /* Create license plate around our ID.  File in warehouse to use license plate
-     * instead of baby-babble IDs. */
+    if (oldValidId == 0)
 	{
-	edwMakeLicensePlate(edwLicensePlatePrefix, vf->id, vf->licensePlate, edwMaxPlateSize);
+	edwValidFileSaveToDb(conn, vf, "edwValidFile", 512);
+	vf->id = sqlLastAutoId(conn);
 
-	/* Create swapped out version of edwFileName in newName. */
-	struct dyString *newName = dyStringNew(0);
-	char *fileName = ef->edwFileName;
-	char *dirEnd = strrchr(fileName, '/');
-	if (dirEnd == NULL)
-	    dirEnd = fileName;
-	else
-	    dirEnd += 1;
-	char *suffix = edwFindDoubleFileSuffix(fileName);
-	dyStringAppendN(newName, fileName, dirEnd - fileName);
-	dyStringAppend(newName, vf->licensePlate);
-	dyStringAppend(newName, suffix);
+	/* Create license plate around our ID.  File in warehouse to use license plate
+	 * instead of baby-babble IDs. */
+	    {
+	    edwMakeLicensePlate(edwLicensePlatePrefix, vf->id, vf->licensePlate, edwMaxPlateSize);
 
-	/* Now build full path names and attempt rename in file system. */
-	char oldPath[PATH_LEN], newPath[PATH_LEN];
-	safef(oldPath, sizeof(oldPath), "%s%s", edwRootDir, fileName);
-	safef(newPath, sizeof(newPath), "%s%s", edwRootDir, newName->string);
-	mustRename(oldPath, newPath);
-	verbose(2, "Renamed %s to %s\n", oldPath, newPath);
+	    /* Create swapped out version of edwFileName in newName. */
+	    struct dyString *newName = dyStringNew(0);
+	    char *fileName = ef->edwFileName;
+	    char *dirEnd = strrchr(fileName, '/');
+	    if (dirEnd == NULL)
+		dirEnd = fileName;
+	    else
+		dirEnd += 1;
+	    char *suffix = edwFindDoubleFileSuffix(fileName);
+	    dyStringAppendN(newName, fileName, dirEnd - fileName);
+	    dyStringAppend(newName, vf->licensePlate);
+	    dyStringAppend(newName, suffix);
 
-	/* Update database with new name - small window of vulnerability here sadly 
-	 * two makeValidates running at same time stepping on each other. */
-	char query[PATH_LEN+256];
-	safef(query, sizeof(query), "update edwFile set edwFileName='%s' where id=%lld",
-	    newName->string, (long long)ef->id);
+	    /* Now build full path names and attempt rename in file system. */
+	    char oldPath[PATH_LEN], newPath[PATH_LEN];
+	    safef(oldPath, sizeof(oldPath), "%s%s", edwRootDir, fileName);
+	    safef(newPath, sizeof(newPath), "%s%s", edwRootDir, newName->string);
+	    mustRename(oldPath, newPath);
+	    verbose(2, "Renamed %s to %s\n", oldPath, newPath);
+
+	    /* Update database with new name - small window of vulnerability here sadly 
+	     * two makeValidates running at same time stepping on each other. */
+	    char query[PATH_LEN+256];
+	    safef(query, sizeof(query), "update edwFile set edwFileName='%s' where id=%lld",
+		newName->string, (long long)ef->id);
+	    sqlUpdate(conn, query);
+
+	    dyStringFree(&newName);
+	    }
+
+	/* Update validFile record with license plate. */
+	char query[256];
+	safef(query, sizeof(query), "update edwValidFile set licensePlate='%s' where id=%lld", 
+	    vf->licensePlate, (long long)vf->id);
 	sqlUpdate(conn, query);
-
-	dyStringFree(&newName);
+	}
+    else
+        {
+	validFileUpdateDb(conn, vf, oldValidId);
 	}
 
-
-
-    /* Update validFile record with license plate. */
-    char query[256];
-    safef(query, sizeof(query), "update edwValidFile set licensePlate='%s' where id=%lld", 
-	vf->licensePlate, (long long)vf->id);
-    sqlUpdate(conn, query);
     }
 freez(&vf);
 }
 
-boolean makeValidFile(struct sqlConnection *conn, struct edwFile *ef, struct cgiParsedVars *tags)
+boolean makeValidFile(struct sqlConnection *conn, struct edwFile *ef, struct cgiParsedVars *tags,
+    long long oldValidId)
 /* Attempt to make validation.  If it fails catch error and attach it to ef->errorMessage as well
  * as sending it to stderr, and return FALSE.  Otherwise return TRUE. */
 {
@@ -654,7 +690,7 @@ struct errCatch *errCatch = errCatchNew();
 boolean success = TRUE;
 if (errCatchStart(errCatch))
     {
-    mustMakeValidFile(conn, ef, tags);
+    mustMakeValidFile(conn, ef, tags, oldValidId);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -674,6 +710,14 @@ errCatchFree(&errCatch);
 return success;
 }
 
+void edwClearFileError(struct sqlConnection *conn, long long fileId)
+/* Clear file error message */
+{
+char query[256];
+safef(query, sizeof(query), "update edwFile set errorMessage='' where id=%lld", fileId);
+sqlUpdate(conn, query);
+}
+
 void edwMakeValidFile(int startId, int endId)
 /* edwMakeValidFile - Add range of ids to valid file table.. */
 {
@@ -686,7 +730,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
     char query[256];
     safef(query, sizeof(query), "select id from edwValidFile where fileId=%lld", (long long)ef->id);
     long long vfId = sqlQuickLongLong(conn, query);
-    if (vfId != 0)
+    if (vfId != 0 && isEmpty(ef->errorMessage))
 	{
         verbose(2, "already validated %s %s\n", ef->edwFileName, ef->submitFileName);
 	}
@@ -697,8 +741,10 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
 	if (!isEmpty(ef->tags)) // All ones we care about have tags
 	    {
+	    if (vfId != 0)
+	        edwClearFileError(conn, ef->id);
 	    struct cgiParsedVars *tags = cgiParsedVarsNew(ef->tags);
-	    if (!makeValidFile(conn, ef, tags))
+	    if (!makeValidFile(conn, ef, tags, vfId))
 	        {
 		if (++errCount >= maxErrCount)
 		    errAbort("Aborting after %d errors", errCount);
