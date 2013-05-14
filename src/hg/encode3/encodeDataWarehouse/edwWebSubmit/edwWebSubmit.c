@@ -243,7 +243,7 @@ close(sd);
 edwAddSubmitJob(conn, userEmail, url);
 
 /* Give the system a half second to react and then put up status info about submission */
-sleep1000(500);
+sleep1000(1000);
 monitorSubmission(conn);
 
 #ifdef OLD

@@ -1,4 +1,4 @@
 kentSrc = ../../../..
-A = edwRunner
+A = edwChangeFormat
 preMyLibs += ../lib/$(MACHTYPE)/edwlib.a
 include $(kentSrc)/inc/userApp.mk
