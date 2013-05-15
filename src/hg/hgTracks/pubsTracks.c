@@ -226,9 +226,8 @@ static void pubsAddExtra(struct track* tg, struct linkedFeatures* lf)
 char *articleTable = trackDbSettingClosestToHome(tg->tdb, "pubsArticleTable");
 if(isEmpty(articleTable))
     return;
-if (lf->extra != NULL) {
+if (lf->extra != NULL) 
     return;
-    }
 
 struct sqlConnection *conn = hAllocConn(database);
 struct pubsExtra* extra = pubsMakeExtra(tg, articleTable, conn, lf);
@@ -281,9 +280,9 @@ char *yearFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFi
 char *publFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterPublisher");
 char *articleTable = pubsArticleTable(tg);
 
-if(yearFilter == NULL || sameWord(yearFilter, "anytime"))
+if(sameOk(yearFilter, "anytime"))
     yearFilter = NULL;
-if(publFilter==NULL || sameWord(publFilter, "all"))
+if(sameOk(publFilter, "all"))
     publFilter = NULL;
 
 if(isNotEmpty(keywords))
