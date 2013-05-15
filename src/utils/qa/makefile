@@ -10,6 +10,7 @@ install:
 	cp -p --remove-destination allowTraffic.csh        ${SCRIPTS}
 	cp -p --remove-destination backupCentral.csh       ${SCRIPTS}
 	cp -p --remove-destination bigPush.csh             ${SCRIPTS}
+	cp -p --remove-destination blatPing.csh            ${SCRIPTS}
 	cp -p --remove-destination browserUsage.csh        ${SCRIPTS}
 	cp -p --remove-destination catchBot.csh            ${SCRIPTS}
 	cp -p --remove-destination chain.csh               ${SCRIPTS}
