@@ -925,12 +925,26 @@ if (errCatchStart(errCatch))
     char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
     int handle = halOpenLOD(fileName);
     int needSeq = (winBaseCount < 50000) ? 1 : 0;
-    struct hal_block_t* head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, needSeq, 1);
-    struct hal_block_t* cur = head;
+    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, needSeq, 1);
+    struct hal_block_t* cur = head->mappedBlocks;
     struct linkedFeatures *lf;
     struct hash *qChromHash = newHash(5);
     struct linkedFeatures *lfList = NULL;
     char buffer[4096];
+
+#ifdef NOTNOW
+    struct hal_target_dupe_list_t* targetDupeBlocks = head->targetDupeBlocks;
+
+    for(;targetDupeBlocks; targetDupeBlocks = targetDupeBlocks->next)
+	{
+	printf("<br>id: %d qChrom %s\n", targetDupeBlocks->id, targetDupeBlocks->qChrom);
+	struct hal_target_range_t *range = targetDupeBlocks->tRange;
+	for(; range; range = range->next)
+	    {
+	    printf("<br>   %ld : %ld\n", range->tStart, range->size);
+	    }
+	}
+#endif
 
     while (cur)
     {
@@ -962,16 +976,8 @@ if (errCatchStart(errCatch))
 	
 	sf->start = cur->tStart;
 	sf->end = cur->tStart + cur->size;
-	if (cur->strand == '-')
-	    {
-	    sf->qStart = cur->qStart;
-	    sf->qEnd = cur->qStart + cur->size;
-	    }
-	else
-	    {
-	    sf->qStart = cur->qStart;
-	    sf->qEnd = cur->qStart + cur->size;
-	    }
+	sf->qStart = cur->qStart;
+	sf->qEnd = cur->qStart + cur->size;
 	sf->orientation = (cur->strand == '+') ? 1 : -1;
 	sf->sequence = cloneString(cur->sequence);
 
