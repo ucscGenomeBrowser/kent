@@ -2275,8 +2275,11 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
         }
 
     // Reference haplotype or not?
-    hPrintf("<TD class='" REFERENCE_CLASS "'>%s</TD>",
-            (haplo->variantCount ? "&nbsp;" : "ref"));
+    if (haplo->variantCount > 0)
+        hPrintf("<TD class='" REFERENCE_CLASS "'>&nbsp;</TD>");
+    else
+        hPrintf("<TD class='" REFERENCE_CLASS "' "
+                "title='This haplotype matches the reference assembly.'>ref</TD>");
 
     // Need to set AA variants haplotype by haplotype, because of shared memory
     if (!dnaView)
