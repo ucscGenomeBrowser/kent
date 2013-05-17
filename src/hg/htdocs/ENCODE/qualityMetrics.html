@@ -130,9 +130,18 @@
                         </p>
 
                         <p><b>PCR Bottleneck Coefficient (PBC):</b><br>
-                        A measure of library complexity.  This is the ratio 
-                        (non-redundant, uniquely mappable reads)/(all uniquely mappable reads), and is further 
-                        described on the ENCODE Software Tools page.  Provisionally, 0-0.5 is severe bottlenecking, 0.5-0.8 
+                        A measure of library complexity, i.e. how skewed the distrubition of read counts per location
+                        is towards 1 read per location.
+                        </p>
+                        <p>
+                        PBC = N1/Nd
+                        </p>
+                        <p>
+                        (where N1= number of genomic locations to which EXACTLY one unique mapping read maps,
+                        and Nd = the number of genomic locations to which AT LEAST one unique mapping read maps,
+                        i.e. the number of non-redunant, unique mapping reads).</p>
+                        <p>
+                        PBC is further described on the ENCODE Software Tools page.  Provisionally, 0-0.5 is severe bottlenecking, 0.5-0.8 
                         is moderate bottlenecking, 0.8-0.9 is mild bottlenecking, while 0.9-1.0 is no bottlenecking.  
                         Very low values can indicate a technical problem, such as PCR bias, or a biological finding, 
                         such as a very rare genomic feature.  Nuclease-based assays (DNase, MNase) detecting features 
