@@ -7685,10 +7685,13 @@ safef(bufB, 64, "%s+%s", b->name, b->description);
 return strcmp(bufA, bufB);
 }
 
-void hPrintFactorSourceAbbrevTable(struct sqlConnection *conn, char *sourceTable, boolean cellsOnly)
-/* Print out table of abbreviations. Optionally, extract cell name only (before '+') and uniqify */
+void hPrintFactorSourceAbbrevTable(struct sqlConnection *conn, struct trackDb *tdb)
+/* Print out table of abbreviations. With 'pack' setting, 
+ * show cell name only (before '+') and uniqify */
 {
 char *label = "Cell Type";
+char *sourceTable = trackDbRequiredSetting(tdb, SOURCE_TABLE);
+boolean cellsOnly = trackDbSettingOn(tdb, SOURCE_TABLE_PACK);
 if (!cellsOnly)
     {
     hPrintAbbreviationTable(conn, sourceTable, label);

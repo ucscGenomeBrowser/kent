@@ -486,8 +486,7 @@ if (cluster != NULL)
 	}
 
     webNewSection("Table of abbreviations for cells");
-    boolean cellsOnly = (trackDbSetting(tdb, "sourceAbbrevCellsOnly") != NULL);
-    hPrintFactorSourceAbbrevTable(conn, sourceTable, cellsOnly);
+    hPrintFactorSourceAbbrevTable(conn, tdb);
     webNewSection("Track Description");
     }
 }

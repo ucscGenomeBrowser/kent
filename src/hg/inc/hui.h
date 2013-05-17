@@ -1234,11 +1234,18 @@ void extraUiLinks(char *db,struct trackDb *tdb);
 boolean chainDbNormScoreAvailable(struct trackDb *tdb);
 /*	check if normScore column is specified in trackDb as available */
 
+/* UI for factorSource track type */
+
+/* trackDb settings: */
+#define SOURCE_TABLE "sourceTable"
+#define SOURCE_TABLE_PACK "sourceTablePack"
+
 void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char *label);
 /* Print out table of abbreviations. */
 
-void hPrintFactorSourceAbbrevTable(struct sqlConnection *conn, char *sourceTable, boolean cellsOnly);
-/* Print out table of abbreviations. Optionally, extract cell name only (before '+') and uniqify */
+void hPrintFactorSourceAbbrevTable(struct sqlConnection *conn, struct trackDb *tdb);
+/* Print out table of abbreviations. With 'pack' setting, 
+ * show cell name only (before '+') and uniqify */
 
 // Four State checkboxes can be checked/unchecked by enable/disabled
 // NOTE: fourState is not a bitmap because it is manipulated in javascript
