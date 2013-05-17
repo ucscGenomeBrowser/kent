@@ -1237,6 +1237,9 @@ boolean chainDbNormScoreAvailable(struct trackDb *tdb);
 void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char *label);
 /* Print out table of abbreviations. */
 
+void hPrintFactorSourceAbbrevTable(struct sqlConnection *conn, char *sourceTable, boolean cellsOnly);
+/* Print out table of abbreviations. Optionally, extract cell name only (before '+') and uniqify */
+
 // Four State checkboxes can be checked/unchecked by enable/disabled
 // NOTE: fourState is not a bitmap because it is manipulated in javascript
 //       and int seemed easier at the time
