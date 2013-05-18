@@ -525,6 +525,7 @@ body.oldStaticPage .sectionContent {
 
 /* Style for geneAlleles (haplotypes) */
 table#alleles { font-size:small; }
+table.topHat {background-color:#FCECC0;} /* 1st of 2 rows in header.  Not '.sortable' */
 table#alleles TR.allele { text-align:center; }
 table#alleles TD.pop { text-align:left; }
 table#alleles TH.ref { text-align:right; }

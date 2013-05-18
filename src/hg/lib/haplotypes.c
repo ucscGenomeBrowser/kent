@@ -2074,8 +2074,6 @@ if (!dnaView || fullSeq)
 hPrintf("<TABLE id='" TABLE_ID "' class='sortable'><THEAD>");
 
 // First Header Row
-hPrintf("<style>.topHat {background-color:#FCECC0;}</style>\n"); // TODO move this to HGStyle.
-
 hPrintf("<TR valign='bottom' align='left'>");
 hPrintf("<TD class='topHat andScore'%s><B>Haplotype</B></TD>", showScores ? " colspan=2" : "");
 if (diploid)
