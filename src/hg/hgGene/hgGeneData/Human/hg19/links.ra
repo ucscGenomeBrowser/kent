@@ -16,4 +16,10 @@ hgsid on
 dbInUrl on
 priority 1
 
+name wikipedia
+shortLabel Wikipedia
+tables knownToWikipedia
+idSql select value from knownToWikipedia where name = '%s';
+url http://plugins.gnf.org/cgi-bin/wp.cgi?id=%s
+priority 11
 
