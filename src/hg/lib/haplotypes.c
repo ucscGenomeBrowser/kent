@@ -500,9 +500,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     double hapFreqGrp = ((double)count / groupSubjects); // haplotype freq
     double probIdentGrp = (hapFreqGrp * hapFreqGrp) + ((1 - hapFreqGrp) * (1 - hapFreqGrp));
     sumOfProbs += probIdentGrp;
-    //warn("%s:%s Fst: count:%d groupSubs:%d probIdentGrp:%f sumOfProbs:%f",
-    //     hapSet->commonId,haplo->suffixId,
-    //     (int)count,(int)groupSubjects,probIdentGrp,sumOfProbs);
 #else//ifndef SCORE_BY_FST_TIMES_N   SCORE_BY_STDDEV
     double diff = (double)count / haplo->subjects - expectFreq; // variance between group freq
     sumOfSquares += (diff * diff); // always positive
@@ -540,9 +537,7 @@ double probIdentTotal = (hapFreq * hapFreq) + ((1 - hapFreq) * (1 - hapFreq));
 double fixationIndex = (probIdentGrp - probIdentTotal) / (1 - probIdentTotal);
 if (fixationIndex < 0)
     fixationIndex *= -1;
-double score = fixationIndex;// * haplo->subjects;
-//warn("%s:%s Fst:%f = (%f - %f) / (1 - %f)  hapFreq:%f",hapSet->commonId,haplo->suffixId,
-//     fixationIndex,probIdentGrp,probIdentTotal,probIdentTotal,hapFreq);
+double score = fixationIndex * haplo->subjects;
 #else//ifndef SCORE_BY_FST_TIMES_N   SCORE_BY_STDDEV
 //int buckets = min(popGroups,haplo->subjects); // Don't count 5 groups for only 1 subject.
 if (rowCount < popGroups)                // fill in for the buckets with zero subjects
@@ -2150,9 +2145,9 @@ if (he->populationsToo)
                 popGroup->name, popGroup->desc, popGroup->chromN, popGroup->name);
         }
     hPrintf("<TH id='" POPULATION_CLASS "S' class='" SCORE_CLASS "%s' abbr='use' title="
-            "'Population score is calculated as the fixation index (Fst) using the frequencies "
-            "of occurrence within groups as opposed to distribution across groups. "
-            //"'Population score is the fixation index multiplied by haplotype count [Fst * N].\n"
+            //"'Population score is calculated as the fixation index (Fst) using the frequencies "
+            //"of occurrence within groups as opposed to distribution across groups. "
+            "'Population score is the fixation index multiplied by haplotype count [Fst * N].\n"
             "Higher scores represent greater skew across populations.'"
             ">Score</TH>",(showScores ? "" : " hidden"));
     }
@@ -2280,14 +2275,14 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
             printFreqAsPercent(popDist);
             hPrintf("</TD>");
             }
-        // hmmm... popScore *= haplo->variantsCovered;
-        //hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f' title='Fst=%.2f N=%d'>",
-        //        (showScores ? "" : " hidden"),99999 - haplo->ho->popScore,
-        //        haplo->ho->popScore / haplo->subjects, haplo->subjects);
-        //printWithSignificantDigits(haplo->ho->popScore, 0, 10000,3);
-        hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%0.5f'>",
-                (showScores ? "" : " hidden"),1 - haplo->ho->popScore);
-        printWithSignificantDigits(haplo->ho->popScore, 0, 1,3);
+        // popScore = Fst*N (based upon within group frequencies as opposed to across group dist).
+        hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f' title='Fst=%.2f N=%d'>",
+                (showScores ? "" : " hidden"),99999 - haplo->ho->popScore,
+                haplo->ho->popScore / haplo->subjects, haplo->subjects);
+        printWithSignificantDigits(haplo->ho->popScore, 0, 10000,3);
+        //hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%0.5f'>",
+        //        (showScores ? "" : " hidden"),1 - haplo->ho->popScore);
+        //printWithSignificantDigits(haplo->ho->popScore, 0, 1,3);
         hPrintf("</TD>");
         }
 
