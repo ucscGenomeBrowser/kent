@@ -14,9 +14,9 @@ all:
 
 # userApps: builds on user application specific programs
 
-userApps: $(UTILS_APPLIST:%=%.uApp)
+userApps: $(UTILS_APPLIST:%=%.userApps)
 
-%.uApp:
+%.userApps:
 	( cd $* && echo $* && $(MAKE) )
 
 scripts:

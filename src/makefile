@@ -70,6 +70,7 @@ HG_LOAD_APPLIST = hgGcPercent
 BLAT_APPLIST = blat gfClient gfServer
 
 userApps: topLibs hgLib
+	cd utils/stringify && echo utils/stringify && ${MAKE}
 	cd utils && echo utils && ${MAKE} userApps
 	cd utils/userApps && echo utils/userApps && ${MAKE}
 	@for P in ${HG_APPLIST}; do \
