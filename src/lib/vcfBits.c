@@ -462,19 +462,24 @@ for (; genoIx < vBitsList->genotypeSlots; genoIx++)
             hBits->haploidIx = haploIx;
             struct vcfRecord *record = vBitsList->record; // any will do
             struct vcfGenotype *gt = &(record->genotypes[genoIx]);
-            if (gt->isHaploid || vBitsList->haplotypeSlots == 1)
-                { // chrX will have haplotypeSlots==2 but be haploid for this subject.
-                  // Meanwhile if vBits were for homozygous only,  haplotypeSlots==1
-                //assert(haploIx == 0);
-                hBits->ids = lmCloneString(lm,gt->id);
-                }
-            else
+
+            if (hBits->bitsOn                   // if including reference, then chrX could
+            ||  haploIx == 0 || !gt->isHaploid) // have unused diploid positions!
                 {
-                int sz = strlen(gt->id) + 3;
-                hBits->ids = lmAlloc(lm,sz);
-                safef(hBits->ids,sz,"%s-%c",gt->id,'a' + haploIx);
+                if (gt->isHaploid || vBitsList->haplotypeSlots == 1)
+                    { // chrX will have haplotypeSlots==2 but be haploid for this subject.
+                      // Meanwhile if vBits were for homozygous only,  haplotypeSlots==1
+                    //assert(haploIx == 0);
+                    hBits->ids = lmCloneString(lm,gt->id);
+                    }
+                else
+                    {
+                    int sz = strlen(gt->id) + 3;
+                    hBits->ids = lmAlloc(lm,sz);
+                    safef(hBits->ids,sz,"%s-%c",gt->id,'a' + haploIx);
+                    }
+                slAddHead(&hBitsList,hBits);
                 }
-            slAddHead(&hBitsList,hBits);
             }
         //else
         //    haploBitsFree(&hBits); // lm so just abandon
