@@ -136,6 +136,7 @@ sub checkOptions {
 		      "distrHost=s",
 		      "dbHost=s",
 		      "workhorse=s",
+		      "blastPath=s",
 		      "verbose=n",
 		      "noSelf",
 		      "targetOnly",

@@ -382,7 +382,7 @@ canPack On
     #type factorSource
     #superTrack wgEncodeReg dense
     #sourceTable wgEncodeRegTfbsCellsV3
-    #sourceAbbrevCellsOnly true
+    #sourceTablePack true
     #inputTrackTable wgEncodeRegTfbsClusteredInputsV3
     #inputTableFieldDisplay cellType factor treatment lab
     #controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
@@ -400,7 +400,7 @@ canPack On
     type factorSource
     superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCellsV5
-    sourceAbbrevCellsOnly true
+    sourceTablePack true
     inputTrackTable wgEncodeRegTfbsClusteredInputsV5
     inputTableFieldDisplay cellType factor antibody treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
@@ -416,7 +416,7 @@ canPack On
     type factorSource
     superTrack wgEncodeReg hide
     sourceTable wgEncodeRegTfbsCellsV4
-    sourceAbbrevCellsOnly true
+    sourceTablePack true
     inputTrackTable wgEncodeRegTfbsClusteredInputsV4
     inputTableFieldDisplay cellType factor treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab

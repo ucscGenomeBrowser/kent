@@ -150,7 +150,7 @@ track->loadItems = loadAll;
 track->itemRightPixels = rightPixels;
 
 /* Get the associated data describing the various sources. */
-track->expTable = trackDbRequiredSetting(track->tdb, "sourceTable");
+track->expTable = trackDbRequiredSetting(track->tdb, SOURCE_TABLE);
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 safef(query, sizeof(query), "select count(*) from %s", track->expTable);

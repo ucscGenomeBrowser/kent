@@ -11,7 +11,7 @@
 #include "encode3/encode3Valid.h"
 #include "gff.h"
 
-char *version = "1.4";
+char *version = "1.5";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
@@ -251,7 +251,7 @@ boolean runCmdLine(char *cmdLine)
 //   I am sure that is more than generous enough for validating a single big file.
 verbose(1, "cmdLine=[%s]\n",cmdLine);
 int retCode = system(cmdLine); 
-verbose(1, "retCode=%d\n", retCode);
+verbose(2, "retCode=%d\n", retCode);   // note 0 = success, 65280 = exit(255) or exit(-1) which is usually errAbort.
 sleep(1); // give stupid gzip broken pipe errors a chance to happen and print out to stderr
 return (retCode == 0);
 }

@@ -90,7 +90,7 @@ else
     self->fileWordCount = self->streamer.numCols;
 }
 
-static char **nextRowUnfiltered(struct annoStreamTab *self)
+static char **nextRowUnfiltered(struct annoStreamTab *self, char *minChrom, uint minEnd)
 /* Get the next row from file, skipping rows that fall before the search region
  * (if a search region is defined).  If the row is strictly after the current region,
  * set self->eof and reuse the line, in case it's the first row of the next region.
@@ -98,14 +98,31 @@ static char **nextRowUnfiltered(struct annoStreamTab *self)
 {
 if (self->eof)
     return NULL;
-char *regionChrom = self->streamer.chrom;
-uint regionStart = self->streamer.regionStart;
-uint regionEnd = self->streamer.regionEnd;
+struct annoStreamer *sSelf = &(self->streamer);
+char *regionChrom = sSelf->chrom;
+uint regionStart = sSelf->regionStart;
+uint regionEnd = sSelf->regionEnd;
+if (minChrom != NULL)
+    {
+    if (regionChrom == NULL)
+	{
+	regionChrom = minChrom;
+	regionStart = minEnd;
+	regionEnd = annoAssemblySeqSize(sSelf->assembly, minChrom);
+	}
+    else
+	{
+	if (differentString(minChrom, regionChrom))
+	    errAbort("annoStreamTab %s: nextRow minChrom='%s' but region chrom='%s'",
+		     sSelf->name, minChrom, sSelf->chrom);
+	regionStart = max(regionStart, minEnd);
+	}
+    }
 boolean done = FALSE;
 while (!done)
     {
     int wordCount;
-    if ((wordCount = lineFileChopNext(self->lf, self->asWords, self->streamer.numCols)) <= 0)
+    if ((wordCount = lineFileChopNext(self->lf, self->asWords, sSelf->numCols)) <= 0)
 	{
 	self->eof = TRUE;
 	return NULL;
@@ -114,7 +131,7 @@ while (!done)
 	checkWordCountAndBin(self, wordCount);
     lineFileExpectWords(self->lf, self->fileWordCount, wordCount);
     if (regionChrom == NULL)
-	// Whole-genome query; no need to check region.
+	// Whole-genome query and no minChrom hint; no need to check region.
 	done = TRUE;
     else
 	{
@@ -122,9 +139,9 @@ while (!done)
 	char *thisChrom = self->asWords[self->omitBin + self->chromIx];
 	uint thisStart = atoll(self->asWords[self->omitBin + self->startIx]);
 	uint thisEnd = atoll(self->asWords[self->omitBin + self->endIx]);
-	int chromDif = strcmp(regionChrom, thisChrom);
-	if (chromDif > 0 ||
-	    (chromDif == 0 && regionStart >= thisEnd))
+	int chromDif = strcmp(thisChrom, regionChrom);
+	if (chromDif < 0 ||
+	    (chromDif == 0 && thisEnd <= regionStart))
 	    // This row precedes the region -- keep looking.
 	    continue;
 	else if (chromDif == 0 && thisEnd > regionStart && thisStart < regionEnd)
@@ -135,7 +152,7 @@ while (!done)
 	    // This row falls after the region. Undo the damage of lineFileChopNext,
             // tell lf to reuse the line, set EOF and return NULL - we are all done
 	    // until & unless region changes.
-	    unChop(self->asWords, self->streamer.numCols);
+	    unChop(self->asWords, sSelf->numCols);
 	    lineFileReuse(self->lf);
 	    self->eof = TRUE;
 	    return NULL;
@@ -145,11 +162,12 @@ while (!done)
 return self->asWords + self->omitBin;
 }
 
-static struct annoRow *astNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
+static struct annoRow *astNextRow(struct annoStreamer *vSelf, char *minChrom, uint minEnd,
+				  struct lm *callerLm)
 /* Return the next annoRow that passes filters, or NULL if there are no more items. */
 {
 struct annoStreamTab *self = (struct annoStreamTab *)vSelf;
-char **words = nextRowUnfiltered(self);
+char **words = nextRowUnfiltered(self, minChrom, minEnd);
 if (words == NULL)
     return NULL;
 // Skip past any left-join failures until we get a right-join failure, a passing row, or EOF.
@@ -158,7 +176,7 @@ while (annoFilterRowFails(vSelf->filters, words, vSelf->numCols, &rightFail))
     {
     if (rightFail)
 	break;
-    words = nextRowUnfiltered(self);
+    words = nextRowUnfiltered(self, minChrom, minEnd);
     if (words == NULL)
 	return NULL;
     }

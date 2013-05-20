@@ -118,18 +118,6 @@ var alleles = (function()
         // Make sure that sort command saves the coumn for persistence
         $('table#alleles').find('TH').click(function (e) { afterSort(this); });
         
-        /*
-        // Want to show rare haplotypes if they were seen before ajax update
-        if (persistRareHapsShown) {
-            alleles.rareAlleleToggle( $('input#' + sectionName + "_rareHaps"), false );
-        }
-        
-        // Want to show scores if they were seen before ajax update
-        if (persistScoresShown) {
-            alleles.scoresToggle( $('input#' + sectionName + "_score"), false );
-        } 
-        */
-        
         // Persist on lighlite as red
         if (hiliteId != '')
             hiliteSpecial( hiliteId );
@@ -169,11 +157,20 @@ var alleles = (function()
             return hId;
         
         var tbl = $('table#alleles');
+        var tripleView = ($(tbl).find('TD.dnaToo').length > 0);
         
-        if (yPx == undefined)
-            yPx = $(tbl).position().top + 2;
-        if (heightPx == undefined || heightPx === 0)
-            heightPx = $(tbl).height() - 8;
+        if (yPx == undefined) {
+            if (tripleView)
+                yPx = $(tbl).position().top + 2;  // span whole height of table
+            else
+                yPx = $(tbl).find('TH#seq').position().top; // skip first row of header
+        }
+        if (heightPx == undefined || heightPx === 0) {
+            if (tripleView)
+                heightPx = $(tbl).height() - 8;  // span whole height of table
+            else
+                heightPx = $(tbl).height() - (2 * $(tbl).find('TH#seq').height()) + 4;
+        }
         
         var div = $("<div class='hilite' id='"+hId+"' style='display:none' />");
         $(tbl).after(div);
@@ -203,8 +200,11 @@ var alleles = (function()
     {   // makes one single hilite more noticeable
  
         $('div.hiliteSpecial').removeClass('hiliteSpecial');
-        if (id != undefined && id != "")
+        if (id != undefined && id != "") {
             $('div.hilite.'+id).addClass('hiliteSpecial');
+            //$('td.var.'+id).addClass('hiliteSpecial');
+            // Need to find column, then highlight each cell in column with some additional style.
+        }
     }
 
     function hilitesResize()
@@ -221,9 +221,6 @@ var alleles = (function()
     
     function hiliteAllDiffs()
     {   // Adds all hilites
-    
-        // TODO:
-        // - handle indels
     
         // Don't even bother if full sequence isn't showing
         var fullSeq = $('input#'+sectionName+'_fullSeq');
@@ -306,11 +303,17 @@ var alleles = (function()
             persistScoresShown = ($(btn).val().indexOf('Show') != -1);
             if (persistScoresShown) {
                 $('table#alleles').find('.score').removeClass('hidden');
+                $('table#alleles').find('.andScore').each(function (ix) { 
+                    $(this).attr('colspan',Number($(this).attr('colspan')) + 1);
+                });
                 $(btn).val('Hide scoring');
                 if (setCart == undefined || setCart)
                     setCartVar(btn.id,'1');
             } else {
                 $('table#alleles').find('.score').addClass('hidden');
+                $('table#alleles').find('.andScore').each(function (ix) { 
+                    $(this).attr('colspan',Number($(this).attr('colspan')) - 1);
+                });
                 $(btn).val('Show scoring');
                 if (setCart == undefined || setCart)
                     setCartVar(btn.id,'[]');
@@ -354,6 +357,11 @@ var alleles = (function()
             return false; // Fake link
         },
         
+        delayedHilites: function ()
+        { // Delayed call of private function
+            hiliteAllDiffs();
+        },
+        
         initialize: function  (sectionId)
         { // Initialize or reinitailze (after ajax) the sortable table
         
@@ -375,20 +383,17 @@ var alleles = (function()
                 seqCharsPerPos = 3;
             seqPxPerPos = 7;
             var fullSeqHeader = normed( $(tbl).find('TH.seq') );
-            if (fullSeqHeader != undefined)
-                {
+            if (fullSeqHeader != undefined) {
                 var seqLen = $(fullSeqHeader).text().length;
-                if (seqCharsPerPos === 3)
-                    seqLen /= 2;
+                //if (seqCharsPerPos === 3)
+                //    seqLen /= 2;
                 seqPxPerPos = Math.round( $(fullSeqHeader).width() / (seqLen / seqCharsPerPos));
                 if ($.browser.msie) 
                     seqPxPerPos = $(fullSeqHeader).width() / (seqLen / seqCharsPerPos);
-                    //seqPxPerPos += 0.075; 
-                
-                }
+            }
             
             // Highlight variants in full sequence
-            hiliteAllDiffs();
+            setTimeout("alleles.delayedHilites()", 200);  // Delay till after page settles
             
             // Want to sort on previos column if there was a sort before ajax update
             persistThroughUpdates();
@@ -402,5 +407,9 @@ $(document).ready(function()
 {
     // Gene Alleles table is sortable
     alleles.initialize();
-
+    
+    // This is really hgGene specific at this point...
+    // If the haplotypes section has full sequence displayed, then other sections would
+    // scroll horrizontally off the page without setting the max-width of those sections.
+    $('div.subheadingBar').parents('table').css({maxWidth:$(window).width()  + "px"});
 });

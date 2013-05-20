@@ -7664,6 +7664,85 @@ sqlFreeResult(&sr);
 webPrintLinkTableEnd();
 }
 
+/* Special info (cell type abbreviations) for factorSource tracks */
+
+struct factorSourceInfo 
+/* Cell type and description */
+    {
+    struct factorSourceInfo *next;
+    char *name;
+    char *description;
+    };
+
+static int factorSourceInfoCmp(const void *va, const void *vb)
+/* Compare two factorSourceInfo's, sorting on name and then description fields */
+{
+static char bufA[64], bufB[64];
+const struct factorSourceInfo *a = *((struct factorSourceInfo **)va);
+const struct factorSourceInfo *b = *((struct factorSourceInfo **)vb);
+safef(bufA, 64, "%s+%s", a->name, a->description);
+safef(bufB, 64, "%s+%s", b->name, b->description);
+return strcmp(bufA, bufB);
+}
+
+void hPrintFactorSourceAbbrevTable(struct sqlConnection *conn, struct trackDb *tdb)
+/* Print out table of abbreviations. With 'pack' setting, 
+ * show cell name only (before '+') and uniqify */
+{
+char *label = "Cell Type";
+char *sourceTable = trackDbRequiredSetting(tdb, SOURCE_TABLE);
+boolean cellsOnly = trackDbSettingOn(tdb, SOURCE_TABLE_PACK);
+if (!cellsOnly)
+    {
+    hPrintAbbreviationTable(conn, sourceTable, label);
+    return;
+    }
+char query[256];
+safef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
+struct sqlResult *sr = sqlGetResult(conn, query);
+webPrintLinkTableStart();
+webPrintLabelCell("Symbol");
+webPrintLabelCell(label);
+char **row;
+char *plus;
+struct factorSourceInfo *source = NULL, *sources = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name = row[0];
+    char *description = row[1];
+    if (cellsOnly)
+        {
+        // truncate description to just the cell type
+        if ((plus = strchr(description, '+')) != NULL)
+            *plus = 0;
+        }
+    AllocVar(source);
+    source->name = cloneString(name);
+    source->description = cloneString(description);
+    slAddHead(&sources, source);
+    }
+slUniqify(&sources, factorSourceInfoCmp, NULL);
+int count = 0;
+while ((source = slPopHead(&sources)) != NULL)
+    {
+    printf("</TR><TR>\n");
+    webPrintLinkCell(source->name);
+    webPrintLinkCellStart();
+    puts(source->description);
+    count++;
+    while (sources && sameString(sources->name, source->name))
+        {
+        source = slPopHead(&sources);
+        puts(", ");
+        puts(source->description);
+        count++;
+        }
+    webPrintLinkCellEnd();
+    }
+sqlFreeResult(&sr);
+webPrintLinkTableEnd();
+printf("Total: %d\n", count);
+}
 
 boolean printPennantIconNote(struct trackDb *tdb)
 // Returns TRUE and prints out the "pennantIcon" and note when found.

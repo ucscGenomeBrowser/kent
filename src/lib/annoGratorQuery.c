@@ -76,7 +76,7 @@ if (gratorCount > 0)
     }
 struct annoRow *primaryRow = NULL;
 struct lm *lm = lmInit(0);
-while ((primaryRow = primarySrc->nextRow(primarySrc, lm)) != NULL)
+while ((primaryRow = primarySrc->nextRow(primarySrc, NULL, 0, lm)) != NULL)
     {
     if (primaryRow->rightJoinFail)
 	continue;
