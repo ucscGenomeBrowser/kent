@@ -2148,7 +2148,7 @@ if (he->populationsToo)
             //"'Population score is calculated as the fixation index (Fst) using the frequencies "
             //"of occurrence within groups as opposed to distribution across groups. "
             "'Population score is the fixation index multiplied by haplotype count [Fst * N].\n"
-            "Higher scores represent greater skew across populations.'"
+            " Higher scores represent greater skew across populations.'"
             ">Score</TH>",(showScores ? "" : " hidden"));
     }
 hPrintf("<TH " REFERENCE_CLASS "'>Ref</TH>");
