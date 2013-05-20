@@ -164,13 +164,6 @@ priority 10
 # dbInUrl on
 # priority 10
 
-# name wikipedia
-# shortLabel Wikipedia
-# tables knownToWikipedia
-# idSql select value from knownToWikipedia where name = '%s';
-# url http://plugins.gnf.org/cgi-bin/wp.cgi?id=%s
-# priority 11
-
 name wikipedia
 shortLabel Wikipedia
 tables knownToLocusLink
