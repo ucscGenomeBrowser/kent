@@ -2238,7 +2238,8 @@ return(ret);
 }
 
 static int getUpdateFieldIndex(struct sqlResult *sr)
-/* Return index of update field. */
+/* Return index of update field. 
+ * Note: does NOT work on innoDB! */
 {
 static int updateFieldIndex = -1;
 if (updateFieldIndex < 0)
@@ -2261,7 +2262,8 @@ return updateFieldIndex;
 }
 
 char *sqlTableUpdate(struct sqlConnection *conn, char *table)
-/* Get last update time for table as an SQL string */
+/* Get last update time for table as an SQL string 
+ * Note: does NOT work on innoDB! */
 {
 char query[512], **row;
 struct sqlResult *sr;
@@ -2279,7 +2281,8 @@ return ret;
 }
 
 time_t sqlTableUpdateTime(struct sqlConnection *conn, char *table)
-/* Get last update time for table. */
+/* Get last update time for table.
+ * Note: does NOT work on innoDB! */
 {
 char *date = sqlTableUpdate(conn, table);
 time_t time = sqlDateToUnixTime(date);
