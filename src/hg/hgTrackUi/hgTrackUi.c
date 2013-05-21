@@ -2482,12 +2482,11 @@ cgiMakeCheckboxGroupWithVals(cartVarName, labelArr, valueArr, refCount, checked,
 hFreeConn(&conn);
 }
 
-static void factorSourceUi(char *db,struct trackDb *tdb)
+static void factorSourceUi(char *db, struct trackDb *tdb)
 {
 printf("<BR><B>Cell Abbreviations:</B><BR>\n");
-char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
 struct sqlConnection *conn = hAllocConn(db);
-hPrintAbbreviationTable(conn, sourceTable, "Cell Type");
+hPrintFactorSourceAbbrevTable(conn, tdb);
 hFreeConn(&conn);
 }
 

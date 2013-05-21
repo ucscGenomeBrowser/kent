@@ -2,6 +2,8 @@
 
 include ../inc/common.mk
 
+# all: builds all utilities here
+
 all:    
 	@for D in $(USE_DIRS) x; do \
 	  if test "$$D" != "x" ; then \
@@ -9,6 +11,13 @@ all:
 	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
 	    fi ;\
 	done
+
+# userApps: builds on user application specific programs
+
+userApps: $(UTILS_APPLIST:%=%.userApps)
+
+%.userApps:
+	( cd $* && echo $* && $(MAKE) )
 
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
@@ -49,31 +58,56 @@ SCRIPT_FILES = \
 	mkMafFrames.pl
 
 # List of directories to build
-USE_DIRS = $(DIRS)
+USE_DIRS = $(DIRS) $(UTILS_APPLIST) $(UCSC_DIRS)
 
-DIRS = \
-	aNotB \
-	addCols \
-	ave \
-	aveCols \
+UCSC_DIRS = \
+	aNotB
+
+UTILS_APPLIST = \
 	bedClip \
-	bedCommonRegions \
-	bedGeneParts \
 	bedGraphToBigWig \
-	bedPileUps \
-	bedRemoveOverlap \
-	bedRestrictToPositions \
 	bedToBigBed \
-	bigBedInfo \
 	bigBedNamedItems \
 	bigBedSummary \
 	bigBedToBed \
-	bigWigAverageOverBed \
+	bigWigAverageOverBed  \
 	bigWigInfo \
 	bigWigMerge \
 	bigWigSummary \
 	bigWigToBedGraph \
-	bigWigToWig \
+	bigWigToWig\
+	faCount \
+	faFrag \
+	faOneRecord \
+	faPolyASizes \
+	faRandomize \
+	faSize \
+	faSomeRecords \
+	faToNib \
+	faToTwoBit \
+	htmlCheck \
+	nibFrag \
+	nibSize \
+	paraFetch \
+	paraSync \
+	sizeof \
+	stringify \
+	textHistogram \
+	twoBitDup \
+	twoBitInfo \
+	twoBitToFa \
+	wigCorrelate \
+	wigToBigWig
+
+DIRS = \
+	addCols \
+	ave \
+	aveCols \
+	bedCommonRegions \
+	bedGeneParts \
+	bedPileUps \
+	bedRemoveOverlap \
+	bedRestrictToPositions \
 	calc \
 	catDir \
 	catUncomment \
@@ -87,27 +121,18 @@ DIRS = \
 	fastqToFa \
 	faAlign \
 	faCmp \
-	faCount \
 	faFilterN \
 	faFilter \
 	faFlyBaseToUcsc \
-	faFrag \
 	faGapLocs \
 	faGapSizes \
 	faNcbiToUcsc \
 	faNoise \
-	faOneRecord \
-	faPolyASizes \
-	faRandomize \
 	faRc \
 	faSimplify \
-	faSize \
-	faSomeRecords \
 	faSplit \
 	faToFastq \
-	faToNib \
 	faToTab \
-	faToTwoBit \
 	faTrans \
 	faTrimPolyA \
 	faTrimRead \
@@ -119,15 +144,10 @@ DIRS = \
 	gitTools \
 	headRest \
 	htmlPics \
-	htmlCheck \
 	jkUniq \
 	lineCount \
 	newProg \
-	nibFrag \
-	nibSize \
 	nt4Frag \
-	paraFetch \
-	paraSync \
 	pslLiftSubrangeBlat \
 	pslToPslx \
 	pslToXa \
@@ -139,32 +159,25 @@ DIRS = \
 	rowsToCols \
 	scaffoldFaToAgp \
 	scrambleFa \
-	sizeof \
 	spacedToTab \
 	splitFile \
 	splitFileByColumn \
-	stringify \
 	subChar \
 	subColumn \
 	subs \
 	tableSum \
 	tailLines \
 	textHist2 \
-	textHistogram \
 	tickToDate \
 	timing \
 	toLower \
 	toUpper \
-	twoBitInfo \
-	twoBitToFa \
 	udcCleanup \
 	undupFa \
 	upper \
 	venn \
 	verticalSplitSqlTable \
 	weedLines \
-	wigCorrelate \
-	wigToBigWig \
 	wigTestMaker \
 	wordLine
 

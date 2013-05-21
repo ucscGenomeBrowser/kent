@@ -1,0 +1,389 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>External Software Tools Used to Create the ENCODE Resource</title>
+    <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
+    <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
+  </head>
+
+  <body>
+    <!--#include virtual="/inc/encodeProjectSoftware.topbar.html"-->
+
+    <div class="encodeHeader">
+      <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
+      <span class="txt">External Software Tools Used to Create the ENCODE Resource</span>
+    </div>
+    <div class="wrapper">
+      <div class="bar"><h4 class="title">External Software Tools Used to Create the ENCODE Resource</h4></div>
+      <div class="content">
+        <ul>
+          
+          <p><li>
+              <a class="thick" href="http://www.openbioinformatics.org/annovar/" target="_blank">ANNOVAR</a><br>
+            </li>
+            ANNOVAR is an efficient software tool to utilize update-to-date information to functionally
+            annotate genetic variants detected from diverse genomes (including human genome hg18, hg19, as
+            well as mouse, worm, fly, yeast and many others). Given a list of variants with
+            chromosome, start position, end position, reference nucleotide and observed
+            nucleotides, ANNOVAR can perform: (i) Gene-based annotation: identify whether
+            SNPs or CNVs cause protein coding changes and the amino acids that are affected.
+            (ii) Region-based annotations: identify variants in specific genomic regions, for
+            example, conserved regions among 44 species, predicted transcription factor binding
+            sites, segmental duplication regions, GWAS hits, database of genomic variants, DNAse
+            I hypersensitivity sites, ENCODE H3K4Me1/H3K4Me3/H3K27Ac/CTCF sites, ChIP-Seq peaks,
+            RNA-Seq peaks, or many other annotations on genomic intervals. (iii) Filter-based
+            annotation: identify variants that are reported in dbSNP, or identify the subset
+            of common SNPs (MAF>1%) in the 1000 Genome Project, or identify subset of non-synonymous
+            SNPs with SIFT score>0.05, or find intergenic variants with GERP++ score>2, or many
+            other annotations on specific mutations.
+          </p>
+          <p>
+            Wang K, Li M, Hakonarson H.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/20601685" target="_blank">
+              ANNOVAR: functional annotation of genetic variants from high-throughput sequencing data</a>.
+            <em>Nucleic Acids Res</em>. 2010 Sep;38(16):e164. PMID: 20601685; PMCID: PMC2938201
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://code.google.com/p/bedtools/" target="_blank">bedtools</a><br>
+            </li>
+            Collectively, the bedtools utilities are a swiss-army knife of tools for
+            a wide-range of genomics analysis tasks. The most widely-used tools enable
+            genome arithmetics: that is, set theory on the genome. For example, bedtools
+            allows one to intersect, merge, count, complement, and shuffle genomic
+            intervals from multiple files in widely-used genomic file formats such
+            as BAM, BED, GFF/GTF, VCF.
+          </p>
+          <p>
+            Quinlan AR, Hall IM.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/20110278" target="_blank">
+              BEDTools: a flexible suite of utilities for comparing genomic features</a>.
+            <em>Bioinformatics</em>. 2010 Mar 15;26(6):841-2. PMID: 20110278; PMCID: PMC2832824 
+          </p>
+
+          
+          <p><li>
+              <a class="thick" href="http://bowtie-bio.sourceforge.net/index.shtml" target="_blank">Bowtie</a><br>
+            </li>
+            Bowtie is an ultrafast, memory-efficient short read aligner. It aligns short
+            DNA sequences (reads) to the human genome at a rate of over 25 million 35-bp
+            reads per hour. Bowtie indexes the genome with a Burrows-Wheeler index to keep
+            its memory footprint small: typically about 2.2 GB for the human genome
+            (2.9 GB for paired-end).  
+          </p>
+          <p>
+            Langmead B, Trapnell C, Pop M, Salzberg SL.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/19261174" target="_blank">
+              Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</a>.
+            <em>Genome Biol</em>. 2009;10(3):R25. PMID: 19261174; PMCID: PMC2690996 
+          </p>
+          
+          <p><li>
+              <a class="thick" href="http://mkweb.bcgsc.ca/circos" target="_blank">Circos</a><br>
+            </li>
+            Circos is a software package for visualizing data and information. It
+            visualizes data in a circular layout for exploring relationships between
+            objects or positions. Circos creates publication-quality infographics and
+            illustrations with a high data-to-ink ratio, layered data and symmetries.
+          </p>
+          <p>
+            Krzywinski M, Schein J, Birol I, Connors J, Gascoyne R, Horsman D, Jones SJ, Marra MA.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/19541911" target="_blank">
+              Circos: an information aesthetic for comparative genomics</a>.
+            <em>Genome Res</em>. 2009 Sep;19(9):1639-45. PMID: 19541911; PMCID: PMC2752132
+          </p>
+          
+          <p><li>
+              <a class="thick" href="http://bonsai.hgc.jp/~mdehoon/software/cluster/" target="_blank">Cluster3.0</a><br>
+            </li>
+            An implementation of k-means clustering, hierarchical clustering and self-organizing
+            maps in a single multi-purpose open-source library of C routines, callable
+            from other C and C++ programs. This library is an improved version of
+            Michael Eisen's well-known Cluster program for Windows, Mac OS X and
+            Linux/Unix. Additionally a Python and a Perl interface to the C Clustering
+            Library is implemented to combine the flexibility of a scripting language
+            with the speed of C.
+          </p>
+          <p>
+            de Hoon MJ, Imoto S, Nolan J, Miyano S.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/14871861" target="_blank">
+              Open source clustering software</a>.
+            <em>Bioinformatics</em>. 2004 Jun 12;20(9):1453-4. PMID: 14871861
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://david.abcc.ncifcrf.gov" target="_blank">DAVID</a><br>
+            </li>
+            DAVID is able to extract biological features/meaning associated with large gene lists.
+            DAVID is able to handle any type of gene list, no matter which genomic platform or software
+            package generated them. DAVID systematically maps a large number of interesting genes in a
+            list to the associated biological annotation (e.g., gene ontology terms), and then
+            statistically highlight the most overrepresented (enriched) biological annotation out
+            of thousands of linked terms and contents. 
+          </p>
+          <p>
+            Huang da W, Sherman BT, Lempicki RA.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/19131956" target="_blank">
+              Systematic and integrative analysis of large gene lists using DAVID bioinformatics resources</a>.
+            <em>Nat Protoc</em>. 2009;4(1):44-57. PMID: 19131956
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://www.minet.uni-jena.de/~wernicke/motifs/" target="_blank">FANMOD</a><br>
+            </li>
+            FANMOD is a tool for fast network motif detection; it relies on recently developed
+            algorithms to improve the efficiency of network motif detection by orders of magnitude.
+            This facilitates the detection of larger motifs in bigger networks than previously
+            possible. Additional benefits of FANMOD are the ability to analyze colored networks,
+            a graphical user interface and the ability to export results to a variety of machine-readable
+            and human-readable file formats including comma-separated values and HTML.
+          </p>
+          <p>
+            Wernicke S, Rasche F.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/16455747" target="_blank">
+              FANMOD: a tool for fast network motif detection</a>.
+            <em>Bioinformatics</em>. 2006 May 1;22(9):1152-3. PMID: 16455747
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://fureylab.web.unc.edu/software/fseq/" target="_blank">F-seq</a><br>
+            </li>
+            F-seq is a software package that generates a continuous density estimation of sequence
+            tags mapped to a reference genome, which can be displayed using the UCSC Genome Browser.
+            The continuous density plots are more intuitive than discrete histogram-like plots used
+            by some applications. Using kernel density estimation, F-seq can aid the identification
+            of biologically meaningful sites.      
+          </p>
+          <p>
+            Boyle AP, Guinney J, Crawford GE, Furey TS.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/18784119" target="_blank">
+              F-Seq: a feature density estimator for high-throughput sequence tags</a>.
+            <em>Bioinformatics</em>. 2008 Nov 1;24(21):2537-8. PMID: 18784119; PMCID: PMC2732284
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html" target="_blank">GERP</a><br>
+            </li>
+            GERP identifies constrained elements in multiple alignments by quantifying substitution deficits.
+            These deficits represent substitutions that would have occurred if the element were neutral DNA,
+            but did not occur because the element has been under functional constraint. These deficits
+            or rejected substitutions are a natural measure of constraint that reflects the strength of
+            past purifying selection on the element. GERP estimates constraint for each alignment column;
+            elements are identified as excess aggregations of constrained columns. A false-positive rate
+            (which is user-settable) is calculated using 'shuffled' alignments in which the order of columns is randomized.
+          </p>
+
+          <p>
+            Davydov EV, Goode DL, Sirota M, Cooper GM, Sidow A, Batzoglou S.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/21152010" target="_blank">
+              Identifying a high fraction of the human genome to be under selective constraint using GERP++</a>.
+            <em>PLoS Comput Biol</em>. 2010 Dec 2;6(12):e1001025. PMID: 21152010; PMCID: PMC2996323 
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://athena.bioc.uvic.ca/virology-ca-tools/gfs/" target="_blank">GFS</a><br>
+            </li>
+            GFS is a program that maps peptide mass fingerprint data directly to raw genomic sequence,
+            enabling rapid, low-cost identification of proteins in genomes for which annotation is lacking.
+            An experimentally obtained peptide mass fingerprint is entered into the program, which then scans
+            a genome sequence of interest, and outputs the most likely regions of the genome from which
+            the mass fingerprint is derived.
+          </p>
+          <p>
+            Giddings MC, Shah AA, Gesteland R, Moore B.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/12518051" target="_blank">
+              Genome-based peptide fingerprint scanning</a>.
+            <em>Proc Natl Acad Sci U S A</em>. 2003 Jan 7;100(1):20-5. PMID: 12518051; PMCID: PMC140871 
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://cbl-gorilla.cs.technion.ac.il/" target="_blank">GOrilla</a><br>
+            </li>
+            GOrilla is a web-based application that identifies enriched GO terms in ranked lists of genes,
+            without requiring the user to provide explicit target and background sets. It also employs a
+            flexible threshold statistical approach to discover GO terms that are significantly enriched
+            at the top of a ranked gene list. Building on a complete theoretical characterization of
+            the underlying distribution, GOrilla computes an exact p-value for the observed enrichment,
+            taking threshold multiple testing into account without the need for simulations. The output
+            of the enrichment analysis is visualized as a hierarchical structure, providing a clear view
+            of the relations between enriched GO terms.
+          </p>
+          <p>
+            Eden E, Navon R, Steinfeld I, Lipson D, Yakhini Z.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/19192299" target="_blank">
+              GOrilla: a tool for discovery and visualization of enriched GO terms in ranked gene lists</a>.
+            <em>BMC Bioinformatics</em>. 2009 Feb 3;10:48. PMID: 19192299; PMCID: PMC2644678
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://www.bioconductor.org/packages/release/bioc/html/GOstats.html" target="_blank">GOstats</a><br>
+            </li>
+            A set of tools implemented in R Bioconductor for interacting with GO and microarray data.
+            A variety of basic manipulation tools for graphs, hypothesis testing including
+            hypergeometric tests, and visualization tools.
+          </p>
+          <p>
+            Falcon S, Gentleman R.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/17098774" target="_blank">
+              Using GOstats to test gene lists for GO term association</a>.
+            <em>Bioinformatics</em>. 2007 Jan 15;23(2):257-8. PMID: 17098774
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://bejerano.stanford.edu/great/public/html/" target="_blank">GREAT</a><br>
+            </li>
+            GREAT assigns biological meaning to a set of non-coding genomic regions by analyzing the
+            annotations of the nearby genes. Thus, it is particularly useful in studying cis functions
+            of sets of non-coding genomic regions. Cis-regulatory regions can be identified via both
+            experimental methods (e.g. ChIP-seq) and by computational methods (e.g. comparative genomics).
+          </p>
+          <p>
+            McLean CY, Bristor D, Hiller M, Clarke SL, Schaar BT, Lowe CB, Wenger AM, Bejerano G.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/20436461" target="_blank">
+              GREAT improves functional interpretation of cis-regulatory regions</a>.
+            <em>Nat Biotechnol</em>. 2010 May;28(5):495-501. PMID: 20436461
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://www.encodestatistics.org/"
+                 target="_blank">GSC (Genome Structure Correction)</a><br>
+            </li>
+            Assessing the significance of observations within large scale genomic studies using
+            random subsampled genomic region is a difficult problem because there often exists a
+            complex dependency structure between observations. GSC is a data subsampling approach
+            based on a block stationary model for genomic features to alleviate the hidden dependencies.
+            This model is motivated by earlier studies of DNA sequences, which show that there are global
+            shifts in base composition, but that certain sequence characteristics are locally unchanging.
+          </p>
+          <p>
+            Bickel PJ, Boley N, Brown JB, Huang H, Zhang NR. 
+            <a href="http://projecteuclid.org/DPubS?service=UI&version=1.0&verb=Display&handle=euclid.aoas/1294167794"
+               target="_blank">Subsampling methods for genomic inference</a>.
+              <em>Annals of Applied Statistics</em>. 2010;4(4):1660-1697
+          </p>
+          
+          <p><li>
+              <a class="thick" href="http://www.hiveplot.com" target="_blank">HiveR</a><br>
+            </li>
+            The hive plot is a visualization method for drawing networks. Nodes are mapped to and
+            positioned on radially distributed linear axes. Edges are drawn as curved links. Hive
+            plots can give quantitatively understanding for important aspects of a network's structure.
+            Hive plots can also manage the visual complexity arising from large number of edges and
+            expose both trends and outlier patterns in network structure.  
+          </p>
+          <p>
+            Krzywinski M, Birol I, Jones SJ, Marra MA.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/22155641" target="_blank">
+              Hive plots--rational approach to visualizing networks</a>.
+            <em>Brief Bioinform</em>. 2012 Sep;13(5):627-44. PMID: 22155641
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://jtreeview.sourceforge.net/" target="_blank">Java Treeview</a><br>
+            </li>
+            Java Treeview is an open source, cross-platform gene expression visualization tool
+            and interactive display of clustered gene expression data, similar to eisen's treeview.
+            It is also extensible starting point for other gene expression visualization tools.  
+          </p>
+          <p>
+            Saldanha AJ.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/15180930" target="_blank">
+              Java Treeview--extensible visualization of microarray data</a>.
+            <em>Bioinformatics</em>. 2004 Nov 22;20(17):3246-8. PMID: 15180930
+          </p>
+
+          <p><li>
+              <a class="thick">KING</a><br>
+            </li>
+            KING is a rapid algorithm for relationship inference using high-throughput genotype
+            data typical of GWAS that allows the presence of unknown population substructure.
+            The relationship of any pair of individuals can be precisely inferred by robust
+            estimation of their kinship coefficient, independent of sample composition or population
+            structure (sample invariance). KING performs properly even under extreme population
+            stratification, while algorithms assuming a homogeneous population give systematically
+            biased results. KING performs relationship inference on millions of pairs of individuals
+            in the order of minutes.
+          </p>
+          <p>
+            Manichaikul A, Mychaleckyj JC, Rich SS, Daly K, Sale M, Chen WM.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/20926424" target="_blank">
+              Robust relationship inference in genome-wide association studies</a>.
+            <em>Bioinformatics</em>. 2010 Nov 15;26(22):2867-73. PMID: 20926424; PMCID: PMC3025716 
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://bioconductor.org/packages/release/bioc/html/lumi.html" target="_blank">lumi package</a><br>
+            </li>
+            The lumi package in R provides an integrated solution for the Illumina microarray data
+            analysis. It includes functions of Illumina BeadStudio (GenomeStudio) data input, quality
+            control, BeadArray-specific variance stabilization, normalization and gene annotation at
+            the probe level. It also includes the functions of processing Illumina methylation microarrays,
+            especially Illumina Infinium methylation microarrays
+          </p>
+          <p>
+            Du P, Kibbe WA, Lin SM.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/18467348" target="_blank">
+              lumi: a pipeline for processing Illumina microarray</a>.
+            <em>Bioinformatics</em>. 2008 Jul 1;24(13):1547-8. PMID: 18467348
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://www.weizmann.ac.il/mcb/UriAlon/" target="_blank">mfinder</a><br>
+            </li>
+            mfinder is a software tool for network motifs detection. Network motifs are defined as
+            basic interaction patterns that recur throughout biological networks, much more often
+            than in random networks. In order to detect network motifs we mfinder implements two methods:
+            a full enumeration of subgraphs and a sampling of subgraphs for estimation of subgraph
+            concentrations. The mfinder generates random networks based on the switching method,
+            the stubs method and &quot;Go with the winners&quot; algorithm.
+          </p>
+          <p>
+            Kashtan N, Itzkovitz S, Milo R, Alon U.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/15001476" target="_blank">
+              Efficient sampling algorithm for estimating subgraph concentrations and detecting network
+              motifs</a>.
+            <em>Bioinformatics</em>. 2004 Jul 22;20(11):1746-58. PMID: 15001476
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://geneffects.com/Peppy" target="_blank">Peppy</a><br>
+            </li>
+            Peppy is software that integrates several critical tasks of proteogenomic searching/proteogenomic
+            mapping such as: Full 6-frame translation and digestion of a genome, peptide/spectrum
+            matching and quality assessment,calculation of false discovery rates.
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://www-stat.stanford.edu/~jhf/r-rulefit/rulefit3/R_RuleFit3.html" target="_blank">RuleFit3</a><br>
+            </li>
+            RuleFit3 is the predictive learning method and interpretational tool. It is based on
+            general regression and classification models, which are constructed as linear combinations
+            of simple rules derived from the data. Each rule consists of a conjunction of small number
+            of simple statements concerning the values of individual input variables.
+          </p>
+
+          <p><li>
+              <a class="thick" href="http://bioinfo.vanderbilt.edu/webgestalt/" target="_blank">Webgestalt</a><br>
+            </li>
+            WebGestalt is a &quot;WEB-based GEne SeT AnaLysis Toolkit&quot;. It is designed for
+            functional genomic, proteomic and large-scale genetic studies from which large number
+            of gene lists (e.g. differentially expressed gene sets, co-expressed gene sets etc)
+            are continuously generated. WebGestalt incorporates information from different public
+            resources and provides an easy way for biologists to make sense out of gene lists.
+          </p>
+          <p>
+            Zhang B, Kirov S, Snoddy J.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/15980575" target="_blank">
+              WebGestalt: an integrated system for exploring gene sets in various biological contexts</a>.
+            <em>Nucleic Acids Res</em>. 2005 Jul 1;33(Web Server issue):W741-8. PMID: 15980575; PMCID: PMC1160236 
+          </p> 
+        </ul>
+      </div><!--end content-->
+    </div><!--end wrapper--> 
+    <p class="date">Updated 15 May 2013</p>
+  </body>
+</html>
+
+
+
