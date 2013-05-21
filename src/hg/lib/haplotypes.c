@@ -353,8 +353,6 @@ return homozygous;
 #define POP_NAME  0
 #define POP_COUNT 1
 #define POP_FEMS 2
-#define POP_TOTAL 2
-#define POP_DESC 3
 
 struct popGroup
 // population group struct
@@ -376,6 +374,7 @@ struct popGroup *popGroups = NULL;
 // Descending order so list will not need to be reversed.
 #define POP_NAME_QUERY "select distinct name, subjects, females, description from " \
                        POP_GROUPS_TABLE " where type = '%s' order by name desc"
+#define POP_DESC 3
 char *type = (minorPopulations ? "minor" : "major");
 char buf[256];
 safef(buf,sizeof(buf),POP_NAME_QUERY,type);
@@ -420,10 +419,12 @@ static char *condenseSubjectsToPopulations(struct haploExtras *he,
 // select distinct commonality, count(*) count from thousandGenomePopulations
 //  where subject in ( "HG00096","HG00607","HG00608","HG00610","NA18517","NA18519")
 //  group by commonality order by count desc;
-#define POP_QUERY_BEG  "select distinct t1.%s grp, count(t1.subject) count, t2.subjects" \
+#define POP_QUERY_BEG  "select distinct t1.%s grp, count(t1.subject) count, " \
+                              "t2.females, t2.subjects" \
                        " from " POP_TABLE " t1, " POP_GROUPS_TABLE " t2" \
                        " where t2.name = t1.%s and t1.subject in ('"
 #define POP_QUERY_END  "') group by grp order by count desc"
+#define POP_TOTAL 3
 
 if (haplo->subjects == 0 || haplo->subjectIds == NULL
 ||  haplo->subjectIds[0] == '\0' || limitPct >= 100)
@@ -471,7 +472,7 @@ if (he->conn == NULL)
 #define SCORE_BY_FST_TIMES_N
 #ifdef SCORE_BY_FST_TIMES_N
 float hapFreq = (double)haplo->subjects / hapSet->chromN;
-double sumOfFreqs = 0;
+double sumOfProbs = 0;
 #else//ifndef SCORE_BY_FST_TIMES_N   SCORE_BY_STDDEV
 float expectFreq = ((double)1 / popGroups);//((float)haplo->subjects / popGroups);
 double sumOfSquares = 0;
@@ -490,8 +491,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     // For skew calculation
 #ifdef SCORE_BY_FST_TIMES_N
     size_t groupSubjects = sqlSigned(row[POP_TOTAL]);
-    groupSubjects *= hapSet->chromN / hapSet->subjectN;  // more chroms than people
-    sumOfFreqs += ((double)count / groupSubjects);
+    // subjects are not people, but chroms so make the adjustment:
+    if (hapSet->chromN == (hapSet->subjectN * 2))   // autosomes and PAR chrX
+        groupSubjects *= 2;  // Diploid
+    else if (lastChar(hapSet->chrom) == 'X') // non-PAR chrX
+        groupSubjects += sqlSigned(row[POP_FEMS]);            // females are dipliod
+    // prob of identity of 2 individuals in population
+    double hapFreqGrp = ((double)count / groupSubjects); // haplotype freq
+    double probIdentGrp = (hapFreqGrp * hapFreqGrp) + ((1 - hapFreqGrp) * (1 - hapFreqGrp));
+    sumOfProbs += probIdentGrp;
 #else//ifndef SCORE_BY_FST_TIMES_N   SCORE_BY_STDDEV
     double diff = (double)count / haplo->subjects - expectFreq; // variance between group freq
     sumOfSquares += (diff * diff); // always positive
@@ -522,10 +530,11 @@ else if (limitPct > 0)
 
 // Finish calculating skew
 #ifdef SCORE_BY_FST_TIMES_N
-if (rowCount < popGroups)                // fill in for the buckets with zero subjects
-    sumOfFreqs += (popGroups - rowCount); // Empty groups have maximal prob of identity
-double meanGroupFreq = (sumOfFreqs / popGroups);
-double fixationIndex = (meanGroupFreq - hapFreq) / (1 - hapFreq);
+if (rowCount < popGroups)                 // fill in for the buckets with zero subjects
+    sumOfProbs += (popGroups - rowCount); // Empty groups have maximal prob of identity
+double probIdentGrp = (sumOfProbs / popGroups);
+double probIdentTotal = (hapFreq * hapFreq) + ((1 - hapFreq) * (1 - hapFreq));
+double fixationIndex = (probIdentGrp - probIdentTotal) / (1 - probIdentTotal);
 if (fixationIndex < 0)
     fixationIndex *= -1;
 double score = fixationIndex * haplo->subjects;
@@ -2136,9 +2145,11 @@ if (he->populationsToo)
                 popGroup->name, popGroup->desc, popGroup->chromN, popGroup->name);
         }
     hPrintf("<TH id='" POPULATION_CLASS "S' class='" SCORE_CLASS "%s' abbr='use' title="
+            //"'Population score is calculated as the fixation index (Fst) using the frequencies "
+            //"of occurrence within groups as opposed to distribution across groups. "
             "'Population score is the fixation index multiplied by haplotype count [Fst * N].\n"
-            "Higher scores represent greater skew across populations "
-            "(variance / N).'>Score</TH>",(showScores ? "" : " hidden"));
+            " Higher scores represent greater skew across populations.'"
+            ">Score</TH>",(showScores ? "" : " hidden"));
     }
 hPrintf("<TH " REFERENCE_CLASS "'>Ref</TH>");
 
@@ -2264,11 +2275,14 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
             printFreqAsPercent(popDist);
             hPrintf("</TD>");
             }
-        // hmmm... popScore *= haplo->variantsCovered;
+        // popScore = Fst*N (based upon within group frequencies as opposed to across group dist).
         hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f' title='Fst=%.2f N=%d'>",
                 (showScores ? "" : " hidden"),99999 - haplo->ho->popScore,
                 haplo->ho->popScore / haplo->subjects, haplo->subjects);
         printWithSignificantDigits(haplo->ho->popScore, 0, 10000,3);
+        //hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%0.5f'>",
+        //        (showScores ? "" : " hidden"),1 - haplo->ho->popScore);
+        //printWithSignificantDigits(haplo->ho->popScore, 0, 1,3);
         hPrintf("</TD>");
         }
 

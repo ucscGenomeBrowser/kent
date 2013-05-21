@@ -200,8 +200,11 @@ var alleles = (function()
     {   // makes one single hilite more noticeable
  
         $('div.hiliteSpecial').removeClass('hiliteSpecial');
-        if (id != undefined && id != "")
+        if (id != undefined && id != "") {
             $('div.hilite.'+id).addClass('hiliteSpecial');
+            //$('td.var.'+id).addClass('hiliteSpecial');
+            // Need to find column, then highlight each cell in column with some additional style.
+        }
     }
 
     function hilitesResize()
@@ -404,5 +407,9 @@ $(document).ready(function()
 {
     // Gene Alleles table is sortable
     alleles.initialize();
-
+    
+    // This is really hgGene specific at this point...
+    // If the haplotypes section has full sequence displayed, then other sections would
+    // scroll horrizontally off the page without setting the max-width of those sections.
+    $('div.subheadingBar').parents('table').css({maxWidth:$(window).width()  + "px"});
 });
