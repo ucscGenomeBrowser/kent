@@ -982,7 +982,7 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
     hgPos->chrom = cloneString(chromName);
     hgPos->chromStart = interval->start;
     hgPos->chromEnd = interval->end;
-    hgPos->name = term;
+    hgPos->name = cloneString(term);
     }
 
 return posList;
