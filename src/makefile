@@ -71,8 +71,7 @@ BLAT_APPLIST = blat gfClient gfServer
 
 userApps: topLibs hgLib
 	cd utils/stringify && echo utils/stringify && ${MAKE}
-	cd utils && echo utils && ${MAKE} userApps
-	cd utils/userApps && echo utils/userApps && ${MAKE}
+	cd utils && echo utils && ${MAKE} userAppsB
 	@for P in ${HG_APPLIST}; do \
 	    ( cd hg/$${P} && echo hg/$${P} && ${MAKE} ) ; \
 	done
@@ -88,6 +87,7 @@ userApps: topLibs hgLib
 	@for P in ${BLAT_APPLIST}; do \
 	    ( cd $${P} && echo $${P} && ${MAKE} ) ; \
 	done
+	cd utils/userApps && echo utils/userApps && ${MAKE}
 
 clean:
 	@for D in ${DIRS} x; do \
