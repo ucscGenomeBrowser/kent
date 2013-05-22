@@ -36,11 +36,16 @@ DIRS = \
 	twinOrfStats2 \
 	twinOrfStats3 
 
+
 all: $(USE_DIRS:%=%.all)
 
-%.all:
+lib.all:
 	cd lib && $(MAKE)
-	( cd $* && echo $* && $(MAKE) )
+
+# make sure lib is built first, even in a parallel make
+
+%.all: lib.all
+	cd $* && echo $* && $(MAKE)
 
 test::
 	cd clusterGenes && ${MAKE} test
@@ -48,4 +53,4 @@ test::
 clean:: $(USE_DIRS:%=%.clean)
 
 %.clean::
-	( cd $* && echo $* && $(MAKE) clean )
+	cd $* && echo $* && $(MAKE) clean
