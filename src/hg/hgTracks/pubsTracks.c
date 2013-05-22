@@ -10,7 +10,7 @@ static struct rgbColor impact2Color  = {0, 80, 255};
 static struct rgbColor impact3Color  = {0, 100, 0};
 static struct rgbColor impact4Color  = {255, 255, 0};
 
-static char* pubsArticleTable(struct track *tg)
+static char *pubsArticleTable(struct track *tg)
 /* return the name of the pubs articleTable, either
  * the value from the trackDb statement 'articleTable'
  * or the default value: <trackName>Article */
@@ -93,10 +93,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-static char* pubsFeatureLabel(char* author, char* year) 
+static char *pubsFeatureLabel(char *author, char *year) 
 /* create label <author><year> given authors and year strings */
 {
-char* authorYear = NULL;
+char *authorYear = NULL;
 
 if (isEmpty(author))
     author = "NoAuthor";
@@ -107,7 +107,7 @@ authorYear  = catTwoStrings(author, year);
 return authorYear;
 }
 
-static struct pubsExtra *pubsMakeExtra(struct track* tg, char* articleTable, 
+static struct pubsExtra *pubsMakeExtra(struct track* tg, char *articleTable, 
     struct sqlConnection* conn, struct linkedFeatures* lf)
 /* bad solution: a function that is called before the extra field is 
  * accessed and that fills it from a sql query. Will need to redo this like gencode, 
@@ -138,11 +138,11 @@ else
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    char* firstAuthor = row[0];
-    char* year    = row[1];
-    char* title   = row[2];
-    char* impact  = NULL;
-    char* classes = NULL;
+    char *firstAuthor = row[0];
+    char *year    = row[1];
+    char *title   = row[2];
+    char *impact  = NULL;
+    char *classes = NULL;
 
 
     extra = needMem(sizeof(struct pubsExtra));
@@ -164,7 +164,7 @@ if ((row = sqlNextRow(sr)) != NULL)
             if ((colorBy==NULL) || strcmp(colorBy,"topic")==0) 
                 {
                 char *classCopy = classes;
-                char* mainClass = cloneNextWordByDelimiter(&classes, ',');
+                char *mainClass = cloneNextWordByDelimiter(&classes, ',');
                 classes = classCopy;
                 if (mainClass!=NULL)
                     {
@@ -235,7 +235,7 @@ lf->extra = extra;
 hFreeConn(&conn);
 }
 
-static void dyStringPrintfWithSep(struct dyString *ds, char* sep, char *format, ...)
+static void dyStringPrintfWithSep(struct dyString *ds, char *sep, char *format, ...)
 /*  Printf to end of dyString. Prefix with sep if dyString is not empty. */
 {
 if (ds->stringSize!=0)
@@ -246,7 +246,7 @@ dyStringVaPrintf(ds, format, args);
 va_end(args);
 }
 
-struct hash* searchForKeywords(struct sqlConnection* conn, char* articleTable, char* keywords)
+struct hash* searchForKeywords(struct sqlConnection* conn, char *articleTable, char *keywords)
 /* return hash with the articleIds that contain a given keyword in the abstract/title/authors */
 {
 if (isEmpty(keywords))
@@ -294,7 +294,9 @@ if (isEmpty(yearFilter) && isEmpty(keywords) && isEmpty(publFilter))
 }
 else
     {
-    char* oldLabel = tg->longLabel;
+    // put together an "extra" query to hExtendedRangeQuery that removes articles
+    // without the keywords specified in hgTrackUi
+    char *oldLabel = tg->longLabel;
     tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
     freeMem(oldLabel);
 
@@ -325,7 +327,7 @@ else
         }
 
 
-    if (extraDy->stringSize>0)
+    if (extraDy->stringSize > 0)
         extra = extraDy->string;
     else
         extra = NULL;
@@ -415,7 +417,7 @@ if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     struct linkedFeatures *lf = item;
     pubsAddExtra(tg, lf);
     struct pubsExtra* extra = lf->extra;
-    char* mouseOver = NULL;
+    char *mouseOver = NULL;
     if (extra != NULL) 
         mouseOver = extra->mouseOver;
     else
@@ -442,7 +444,7 @@ struct bed *bed = item;
 genericMapItem(tg, hvg, item, bed->name, bed->name, start, end, x, y, width, height);
 }
 
-static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* conn, char* articleId, bool getSnippet)
+static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* conn, char *articleId, bool getSnippet)
 /* create a hash with a mapping annotId -> snippet or annotId -> shortSeq for an articleId*/
 {
     char query[LARGEBUF];
@@ -460,10 +462,10 @@ static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* 
     return seqIdHash;
 }
 
-static char *pubsArticleDispId(struct track *tg, struct sqlConnection *conn, char* articleId)
+static char *pubsArticleDispId(struct track *tg, struct sqlConnection *conn, char *articleId)
 /* given an articleId, lookup author and year and create <author><year> label for it */
 {
-char* dispLabel = NULL;
+char *dispLabel = NULL;
 char *articleTable = pubsArticleTable(tg);
 char query[LARGEBUF];
 safef(query, sizeof(query), "SELECT firstAuthor, year FROM %s WHERE articleId = '%s'", 
@@ -493,12 +495,12 @@ if (articleId==NULL)
     return;
 
 struct sqlConnection *conn = hAllocConn(database);
-char* dispLabel = pubsArticleDispId(tg, conn, articleId);
+char *dispLabel = pubsArticleDispId(tg, conn, articleId);
 struct hash *idToSnip = pubsLookupSequences(tg, conn, articleId, TRUE);
 struct hash *idToSeq = pubsLookupSequences(tg, conn, articleId, FALSE);
 
 // change track label 
-char* oldLabel = tg->longLabel;
+char *oldLabel = tg->longLabel;
 tg->longLabel = catTwoStrings("Individual matches for article ", dispLabel);
 freeMem(oldLabel);
 
@@ -516,8 +518,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
     slAddHead(&lfList, lfFromPsl(psl, TRUE));
-    char* shortSeq  = hashFindVal(idToSeq,  lfList->name);
-    char* snip = hashFindVal(idToSnip, lfList->name);
+    char *shortSeq  = hashFindVal(idToSeq,  lfList->name);
+    char *snip = hashFindVal(idToSnip, lfList->name);
     struct pubsExtra *extra = needMem(sizeof(struct pubsExtra));
     extra->mouseOver=snip;
     extra->label=shortSeq;

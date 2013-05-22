@@ -365,7 +365,7 @@ struct popGroup
     int chromN;   // Depends upon chrom and location
     };
 
-static struct popGroup *popGroupsGet(struct haploExtras *he,int totalChromN,
+static struct popGroup *popGroupsGet(struct haploExtras *he,struct haplotypeSet *hapSet,
                                      boolean minorPopulations)
 // Returns popGroup names from thousand Genomes
 {
@@ -392,12 +392,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     popGroup->desc = lmCloneString(he->lm,row[POP_DESC]);
     popGroup->subjectN = sqlSigned(row[POP_COUNT]);
     popGroup->females  = sqlSigned(row[POP_FEMS]);
-    if (totalChromN == THOUSAND_GENOME_SAMPLES) // chrY
-        popGroup->chromN = popGroup->subjectN;
-    else if (totalChromN == (THOUSAND_GENOME_SAMPLES * 2)) // autosome, or chrX PAR
-        popGroup->chromN = (popGroup->subjectN * 2);
-    else  // chr non-PAR
-        popGroup->chromN = popGroup->subjectN + popGroup->females;
+    if (hapSet->chromN == (hapSet->subjectN * 2))      // autosomes and PAR chrX
+        popGroup->chromN = (popGroup->subjectN * 2);  // Diploid
+    else if (lastChar(hapSet->chrom) == 'X')                        // non-PAR chrX
+        popGroup->chromN = popGroup->subjectN + popGroup->females;  // females are dipliod
+    else                                                         // chrY
+        {
+        popGroup->subjectN -= popGroup->females;
+        popGroup->chromN    = popGroup->subjectN;                // haploid
+        }
 
     slAddHead(&popGroups, popGroup);
     }
@@ -493,9 +496,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     size_t groupSubjects = sqlSigned(row[POP_TOTAL]);
     // subjects are not people, but chroms so make the adjustment:
     if (hapSet->chromN == (hapSet->subjectN * 2))   // autosomes and PAR chrX
-        groupSubjects *= 2;  // Diploid
-    else if (lastChar(hapSet->chrom) == 'X') // non-PAR chrX
-        groupSubjects += sqlSigned(row[POP_FEMS]);            // females are dipliod
+        groupSubjects *= 2;                        // Diploid
+    else if (lastChar(hapSet->chrom) == 'X')                  // non-PAR chrX
+        groupSubjects += sqlSigned(row[POP_FEMS]);           // females are dipliod
+    else                                                         // chrY
+        groupSubjects -= sqlSigned(row[POP_FEMS]);              // only males have it
     // prob of identity of 2 individuals in population
     double hapFreqGrp = ((double)count / groupSubjects); // haplotype freq
     double probIdentGrp = (hapFreqGrp * hapFreqGrp) + ((1 - hapFreqGrp) * (1 - hapFreqGrp));
@@ -2091,7 +2096,7 @@ int popGroupCount = 0;
 struct popGroup *popGroups = NULL;
 if (he->populationsToo)
     {
-    popGroups = popGroupsGet(he,hapSet->chromN,he->populationsMinor);
+    popGroups = popGroupsGet(he,hapSet,he->populationsMinor);
     popGroupCount = slCount(popGroups);
     if (he->populationsMinor)
         hPrintf("<TD nowrap class='topHat andScore' colspan=%d "
@@ -2141,7 +2146,7 @@ if (he->populationsToo)
     for( ; popGroup != NULL; popGroup = popGroup->next)
         {
         hPrintf("<TH nowrap id='%s' abbr='use'"
-                "title='%s [N=%d]'>%s %%</TH>",
+                " title='%s [N=%d]'>%s %%</TH>",
                 popGroup->name, popGroup->desc, popGroup->chromN, popGroup->name);
         }
     hPrintf("<TH id='" POPULATION_CLASS "S' class='" SCORE_CLASS "%s' abbr='use' title="
@@ -2264,8 +2269,8 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
             double popFreq = (double)count / popGroup->chromN;
             if (count > 0)
                 {
-                hPrintf("<TD class='%s' abbr='%05d' title='N=%d of %d (found in ",popGroup->name,
-                        (10000 - (int)count),(int)count,haplo->subjects);
+                hPrintf("<TD class='%s' abbr='%06.4f' title='N=%d of %d (found in ",popGroup->name,
+                        ((double)1 - popDist),(int)count,haplo->subjects);
                 printFreqAsPercent(popFreq);
                 hPrintf("%% of all %s)'>",popGroup->name);
                 }
@@ -2276,7 +2281,7 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
             hPrintf("</TD>");
             }
         // popScore = Fst*N (based upon within group frequencies as opposed to across group dist).
-        hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f' title='Fst=%.2f N=%d'>",
+        hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f' title='Fst=%.3f N=%d'>",
                 (showScores ? "" : " hidden"),99999 - haplo->ho->popScore,
                 haplo->ho->popScore / haplo->subjects, haplo->subjects);
         printWithSignificantDigits(haplo->ho->popScore, 0, 10000,3);
