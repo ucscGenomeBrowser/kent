@@ -686,6 +686,8 @@ static bool printSeqSection(char *articleId, char *title, bool showDesc, struct 
  * */
 {
 // get data from mysql
+// I support two different schemas: new and old. On old tables, there is no fileUrl yet on the annotations
+// that means that oldQuery just uses an empty string for the fileUrl field.
 char *oldQuery = "SELECT fileDesc, snippet, locations, annotId, sequence, \"\" FROM %s WHERE articleId='%s'";
 char *newQuery = "SELECT fileDesc, snippet, locations, annotId, sequence, fileUrl FROM %s WHERE articleId='%s'";
 
