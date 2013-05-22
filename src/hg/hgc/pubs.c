@@ -23,9 +23,9 @@ bool pubsHasSupp = TRUE;
 // global var for printArticleInfo to indicate if article is elsevier
 bool pubsIsElsevier = FALSE; 
 // the article source is used to modify other parts of the page
-static char* articleSource;
+static char *articleSource;
 // we need the external article PMC Id for yif links
-static char* extId = NULL;
+static char *extId = NULL;
 
 // section types in mysql table, for all annotations tables
 // we note where the hit is located in the document
@@ -393,13 +393,13 @@ freeMem(sectionList);
 sqlFreeResult(&sr);
 }
 
-static char *urlToLogoUrl(char* pubsArticleTable, char* articleId, char *urlOrig)
+static char *urlToLogoUrl(char *pubsArticleTable, char *articleId, char *urlOrig)
 /* return a string with relative path of logo for publisher given the url of
  * fulltext or a table/articleId, has to be freed 
 */
 {
 struct sqlConnection *conn = hAllocConn(database);
-char* pubCode = NULL;
+char *pubCode = NULL;
 if (hHasField("hgFixed", pubsArticleTable, "publisher"))
     {
     char query[4000];
@@ -634,10 +634,10 @@ for (el = locs; el != NULL; el = el->next)
 void removeFlank (char *snippet) 
 /* keep only the parts inside <b> to </b> of a string, modifies the string in place */
 {
-char* startPtr = stringIn("<B>", snippet);
-char* endPtr   = stringIn("</B>", snippet);
+char *startPtr = stringIn("<B>", snippet);
+char *endPtr   = stringIn("</B>", snippet);
 if (startPtr!=0 && endPtr!=0 && startPtr<endPtr) {
-    char* buf = stringBetween("<B>", "</B>", snippet);
+    char *buf = stringBetween("<B>", "</B>", snippet);
     memcpy(snippet, buf, strlen(buf)+1);
     freeMem(buf);
     }
@@ -686,10 +686,12 @@ static bool printSeqSection(char *articleId, char *title, bool showDesc, struct 
  * */
 {
 // get data from mysql
-char* oldQuery = "SELECT fileDesc, snippet, locations, annotId, sequence, \"\" FROM %s WHERE articleId='%s'";
-char* newQuery = "SELECT fileDesc, snippet, locations, annotId, sequence, fileUrl FROM %s WHERE articleId='%s'";
+// I support two different schemas: new and old. On old tables, there is no fileUrl yet on the annotations
+// that means that oldQuery just uses an empty string for the fileUrl field.
+char *oldQuery = "SELECT fileDesc, snippet, locations, annotId, sequence, \"\" FROM %s WHERE articleId='%s'";
+char *newQuery = "SELECT fileDesc, snippet, locations, annotId, sequence, fileUrl FROM %s WHERE articleId='%s'";
 
-char* queryTemplate = oldQuery;
+char *queryTemplate = oldQuery;
 if (hHasField("hgFixed", pubsSequenceTable, "fileUrl"))
     queryTemplate = newQuery;
 
@@ -856,7 +858,7 @@ else
 if (skippedRows) 
     {
     // the section title should change if the data comes from the yale image finder = a figure
-    char* docType = "article";
+    char *docType = "article";
     if (stringIn("yif", articleSource))
         docType = "figure";
     char title[1024];
