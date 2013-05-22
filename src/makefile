@@ -55,14 +55,6 @@ blatSuite: topLibs hgLib
 # all of these application makefiles have been updated to include use
 #	of DESTDIR and BINDIR
 
-UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
-        bigBedInfo bigBedSummary bigBedToBed bigWigAverageOverBed  \
-	bigWigInfo bigWigSummary bigWigToBedGraph bigWigToWig\
-	faCount faFrag faOneRecord faPolyASizes faRandomize faSize \
-	faSomeRecords faToNib \
-	faToTwoBit htmlCheck nibFrag paraFetch paraSync sizeof stringify \
-	textHistogram twoBitDup twoBitInfo twoBitToFa userApps wigCorrelate wigToBigWig
-
 HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
 	 featureBits ratStuff/mafsInRegion ratStuff/mafSpeciesSubset \
 	 pslCDnaFilter genePredToGtf pslPretty pslReps pslSort 
@@ -78,9 +70,8 @@ HG_LOAD_APPLIST = hgGcPercent
 BLAT_APPLIST = blat gfClient gfServer
 
 userApps: topLibs hgLib
-	@for P in ${UTILS_APPLIST}; do \
-	    ( cd utils/$${P} && echo utils/$${P} && ${MAKE} ) ; \
-	done
+	cd utils/stringify && echo utils/stringify && ${MAKE}
+	cd utils && echo utils && ${MAKE} userAppsB
 	@for P in ${HG_APPLIST}; do \
 	    ( cd hg/$${P} && echo hg/$${P} && ${MAKE} ) ; \
 	done
@@ -96,6 +87,7 @@ userApps: topLibs hgLib
 	@for P in ${BLAT_APPLIST}; do \
 	    ( cd $${P} && echo $${P} && ${MAKE} ) ; \
 	done
+	cd utils/userApps && echo utils/userApps && ${MAKE}
 
 clean:
 	@for D in ${DIRS} x; do \
