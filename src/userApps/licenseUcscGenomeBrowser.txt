@@ -1,0 +1,26 @@
+Obtaining a Commercial License for the Genome Browser
+        
+A license is required for commercial download and/or installation of
+the Genome Browser binaries and source code. No license is needed for
+academic, nonprofit, and personal use. The data displayed by the browser
+is freely available for both public and commercial use with a few exceptions.
+The README.txt file in the download directory of each assembly shows the use 
+restrictions pertaining to that data set.
+
+To purchase a license:
+
+Read and sign the licensing agreement.  (GenomeBrowserLicense.pdf)
+Email a signed copy of the license agreement to
+    William Hale, Office for IP Management: whale3@ucsc.edu.
+
+Follow the instructions in the license agreement for submitting
+    the signed original copy and payment.
+
+After your license application has been processed, you will receive
+instructions for downloading the browser software and data. CDs are
+also available upon request.
+
+Genome Browser licensing inquiries should be made
+to genome-www@soe.ucsc.edu. For information about commercial licensing of Blat,
+see the Kent Informatics website (http://www.kentinformatics.com/)
+or contact kent@soe.ucsc.edu.
