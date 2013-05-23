@@ -29,8 +29,8 @@ libssl
    cd userApps
    make
 
-   This build fetches (with git) approximately 60 Mb of kent source code,
-   and constructs command binaries of approximately 120 Mb.
+   This build fetches (with git) approximately 200 Mb/7,800 files of
+      kent source code, and constructs command binaries of approximately 120 Mb.
 
 3. Install utilities
    The binaries are built into userApps/bin/
