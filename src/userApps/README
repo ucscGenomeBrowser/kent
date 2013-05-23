@@ -20,9 +20,10 @@ libssl
    git archive --format=zip -9 \
       --remote=git://genome-source.cse.ucsc.edu/kent.git \
       HEAD src/userApps > userApps.zip
-   unzip -q userApps.zip
+   unzip -d userApps -j userApps.zip
 
-   Creates the directory ./userApps/
+   Creates the directory: ./userApps/
+   with several files.
 
 2. Build utilities:
    cd userApps
