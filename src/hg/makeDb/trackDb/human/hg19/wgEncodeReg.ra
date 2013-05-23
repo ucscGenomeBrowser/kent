@@ -375,15 +375,15 @@ canPack On
     html wgEncodeRegTfbsClustered.release2
     dataVersion ENCODE Jan 2011 Freeze
 
-    #track wgEncodeRegTfbsClusteredV3
+    #track wgEncodeRegTfbsClusteredV3a
     #release alpha
     #shortLabel Txn Factor ChIP V3-
     #longLabel Transcription Factor ChIP-seq Clusters of 201 antibodies (172 targets) from ENCODE (June 2012, 1st cut: 131 sources)
     #type factorSource
     #superTrack wgEncodeReg dense
-    #sourceTable wgEncodeRegTfbsCellsV3
+    #sourceTable wgEncodeRegTfbsCellsV3a
     #sourceTablePack true
-    #inputTrackTable wgEncodeRegTfbsClusteredInputsV3
+    #inputTrackTable wgEncodeRegTfbsClusteredInputsV3a
     #inputTableFieldDisplay cellType factor treatment lab
     #controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     #visibility dense
@@ -393,18 +393,34 @@ canPack On
 
     # NOTE: table name versioning still TBD
     # This is candidate for release
-    track wgEncodeRegTfbsClusteredV5
+    track wgEncodeRegTfbsClusteredV3
     release alpha
     shortLabel Txn Fac ChIP V3
-    longLabel Transcription Factor ChIP-seq Clusters V3 (162 targets, 189 antibodies) from ENCODE
+    longLabel Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
     type factorSource
     superTrack wgEncodeReg dense
+    sourceTable wgEncodeRegTfbsCellsV3
+    sourceTablePack true
+    inputTrackTable wgEncodeRegTfbsClusteredInputsV3
+    inputTableFieldDisplay cellType factor antibody treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    priority 1.75
+    dataVersion ENCODE Jul 2012 Freeze
+
+    track wgEncodeRegTfbsClusteredV5
+    release alpha
+    shortLabel Txn Fac ChIP V3t
+    longLabel Transcription Factor ChIP-seq Clusters V3- (162 targets, 189 antibodies) from ENCODE
+    type factorSource
+    superTrack wgEncodeReg hide
     sourceTable wgEncodeRegTfbsCellsV5
     sourceTablePack true
     inputTrackTable wgEncodeRegTfbsClusteredInputsV5
     inputTableFieldDisplay cellType factor antibody treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility dense
+    visibility hide
     useScore 1
     priority 1.75
     dataVersion ENCODE Jul 2012 Freeze
