@@ -1,15 +1,35 @@
 #  Makefile for userApps project
 #  performs the operations of fetching selected directories from
 #  the kent source tree using 'git' and then building the utilities
-#  in the kent source tree.
+#  in the kent source tree.  All build results will be kept locally
+#  in this directory.
 
-samtabixDir = ${CURDIR}/samtabix
 DESTDIR = ${CURDIR}
 BINDIR = /bin
-extraCFlags =
-mysqlInc =
-mysqlLibs =
-pngLib =
+MACHTYPE = local
+CGI_BIN = ${DESTDIR}/cgi-bin
+DOCUMENTROOT = ${DESTDIR}/htdocs
+SCRIPTS = ${DESTDIR}/scripts
+SAMTABIXDIR = ${DESTDIR}/samtabix
+USE_SAMTABIX = 1
+USE_SSL = 1
+NOSQLTEST = 1
+
+envVars = DESTDIR=${DESTDIR} BINDIR=${BINDIR} MACHTYPE=${MACHTYPE} \
+	CGI_BIN=${CGI_BIN} DOCUMENTROOT=${DOCUMENTROOT} SCRIPTS=${SCRIPTS} \
+	SAMTABIXDIR=${SAMTABIXDIR} USE_SAMTABIX=1 USE_SSL=1 NOSQLTEST=1
+
+all:  fetchSource libs utils
+
+utils:
+	cd kent/src && ${envVars} ${MAKE} userApps
+
+libs:
+	cd samtabix && ${envVars} ${MAKE}
+	cd kent/src && ${envVars} ${MAKE} libs
+
+clean:
+	cd kent/src && ${envVars} ${MAKE} clean
 
 fetchSource:
 	./fetchKentSource.sh

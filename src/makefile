@@ -69,7 +69,7 @@ HG_LOAD_APPLIST = hgGcPercent
 
 BLAT_APPLIST = blat gfClient gfServer
 
-userApps: topLibs hgLib
+userApps: topLibs hgLib destBin
 	cd utils/stringify && echo utils/stringify && ${MAKE}
 	cd utils && echo utils && ${MAKE} userAppsB
 	@for P in ${HG_APPLIST}; do \
@@ -88,6 +88,9 @@ userApps: topLibs hgLib
 	    ( cd $${P} && echo $${P} && ${MAKE} ) ; \
 	done
 	cd utils/userApps && echo utils/userApps && ${MAKE}
+
+destBin:
+	${MKDIR} ${DESTBINDIR}
 
 clean:
 	@for D in ${DIRS} x; do \
@@ -134,9 +137,8 @@ tags-all:
 etags-all:
 	find . -name '*.[ch]' | etags -
 
-utils: libs
+utils: libs destBin
 	${MKDIR} ${SCRIPTS}
-	${MKDIR} ${DESTDIR}${BINDIR}
 	cd parasol && ${MAKE}
 	@for D in ${DIRS} x; do \
             if test "$$D" != "x" ; then \
@@ -164,8 +166,7 @@ DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta
 cellarDirs = cdnaAli getgene idbQuery reformat scanIntrons tracks wormAli \
 	xenoAli
 
-buildCellar: libs
-	${MKDIR} ${DESTDIR}${BINDIR}
+buildCellar: libs destBin
 	@for D in ${cellarDirs} x; do \
             if test "$$D" != "x" ; then \
                 ( cd $$D && echo $$D && ${MAKE} ) ;\
