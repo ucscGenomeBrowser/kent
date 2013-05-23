@@ -330,6 +330,15 @@ if (x < mg->clipMinX)
     x = mg->clipMinX;
 if (y < mg->clipMinY)
     y = mg->clipMinY;
+if (x2 < mg->clipMinX)
+    x2 = mg->clipMinX;
+if (y2 < mg->clipMinY)
+    y2 = mg->clipMinY;
+
+if (x > mg->clipMaxX)
+    x = mg->clipMaxX;
+if (y > mg->clipMaxY)
+    y = mg->clipMaxY;
 if (x2 > mg->clipMaxX)
     x2 = mg->clipMaxX;
 if (y2 > mg->clipMaxY)
