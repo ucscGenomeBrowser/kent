@@ -31,9 +31,6 @@ TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
 
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
 
-# List of directories to build
-USE_DIRS = $(UTIL_DIRS)
-
 BAD_DIRS = \
 	altGraph \
 	cgiExample \
@@ -45,6 +42,40 @@ BAD_DIRS = \
 	encode \
 	wikiPlot 
 
+# List of directories to build for userApps
+UTILS_APPLIST = \
+	bedSort \
+	liftUp \
+	liftOver \
+	bedIntersect \
+	bedItemOverlapCount \
+	bedToGenePred \
+	blastToPsl \
+	checkCoverageGaps \
+	checkHgFindSpec \
+	checkTableCoords \
+	dbTrash \
+	encode3/validateFiles \
+	encode3/validateManifest \
+	estOrient \
+	featureBits \
+	genePredHisto \
+	genePredSingleCover \
+	genePredToBed \
+	genePredToFakePsl \
+	genePredToMafFrames \
+	gigAssembler/checkAgpAndFa \
+	hgsql \
+	ratStuff/mafsInRegion \
+	ratStuff/mafSpeciesSubset \
+	pslCDnaFilter \
+	genePredCheck \
+	genePredToGtf \
+	pslPretty \
+	pslReps \
+	pslSort
+
+# List of directories to build at UCSC
 UTIL_DIRS = \
 	affyTransciptome \
 	agpCloneCheck \
@@ -57,26 +88,13 @@ UTIL_DIRS = \
 	autoSql \
 	autoXml \
 	bedOrBlocks \
-	bedIntersect \
-	bedItemOverlapCount \
-	bedSort \
-	bedToGenePred \
 	bedSplitOnChrom \
-	blastToPsl \
 	borfBig \
-	checkCoverageGaps \
-	checkHgFindSpec \
-	checkTableCoords \
 	ctgFaToFa \
 	ctgToChromFa \
-	dbTrash \
-	estOrient \
 	embossToPsl \
-	encode3/validateFiles \
-	encode3/validateManifest \
 	fakeFinContigs \
 	fakeOut \
-	featureBits \
 	ffaToFa \
 	fishClones \
 	fqToQa \
@@ -86,17 +104,9 @@ UTIL_DIRS = \
 	gbOneAcc \
 	gbToFaRa \
 	geneBounds \
-	genePredCheck \
-	genePredHisto \
-	genePredSingleCover \
-	genePredToBed \
-	genePredToGtf \
-	genePredToFakePsl \
-	genePredToMafFrames \
 	getFeatDna \
 	getRna \
 	getRnaPred \
-	gigAssembler/checkAgpAndFa \
 	gpStats \
 	gpToGtf \
 	gpcrParser \
@@ -107,7 +117,6 @@ UTIL_DIRS = \
 	hgKnownGeneList \
 	hgSelect \
 	hgSpeciesRna \
-	hgsql \
 	hgsqlLocal \
 	hgsqladmin \
 	hgsqldump \
@@ -120,8 +129,6 @@ UTIL_DIRS = \
 	liftAcross \
 	liftAgp \
 	liftFrags \
-	liftOver \
-	liftUp \
 	lfsOverlap \
 	makeDb \
 	maskOutFa \
@@ -146,7 +153,6 @@ UTIL_DIRS = \
 	orthoMap \
 	patCount \
 	perf \
-	pslCDnaFilter \
 	pslCat \
 	pslCheck \
 	pslCoverage \
@@ -160,13 +166,10 @@ UTIL_DIRS = \
 	pslIntronsOnly \
 	pslPartition \
 	pslPairs \
-	pslPretty \
 	pslQuickFilter \
 	pslRecalcMatch \
-	pslReps \
 	pslSelect \
 	pslSimp \
-	pslSort \
 	pslSortAcc \
 	pslSplitOnTarget \
 	pslStats \
@@ -206,6 +209,8 @@ UTIL_DIRS = \
 	xmlCat \
 	xmlToSql
 
+APPS = $(UTIL_DIRS) $(UTILS_APPLIST)
+USE_DIRS = $(UTIL_DIRS)
 
 all::    cgi utils
 
@@ -213,7 +218,11 @@ hgLib:
 	@./sqlEnvTest.sh
 	cd lib && ${MAKE}
 
-utils: $(USE_DIRS:%=%.utils)
+userApps: $(UTILS_APPLIST:%=%.userApp)
+%.userApp: hgLib
+	( cd $* && echo $* && $(MAKE) )
+
+utils: $(APPS:%=%.utils)
 %.utils: hgLib
 	( cd $* && echo $* && $(MAKE) )
 
