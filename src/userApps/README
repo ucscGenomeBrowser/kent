@@ -60,6 +60,10 @@ Each 'kent' command contains its own documentation.  Simply run the
 commands without any arguments to see the usage message for operating
 instructions.
 
+When the utilities are built here, their usage messages have
+been collected together in one file:
+	kentUtils.Documentation.txt
+
 =========
 
 Installing required packages:

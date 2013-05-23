@@ -24,6 +24,7 @@ all:  fetchSource libs utils
 utils:
 	cd kent/src && ${envVars} ${MAKE} userApps
 	cd kent/src/parasol && ${envVars} ${MAKE}
+	./kent/src/utils/userApps/mkREADME.sh ${DESTDIR}/${BINDIR} ${CURDIR}/kentUtils.Documentation.txt
 
 libs:
 	cd samtabix && ${envVars} ${MAKE}
