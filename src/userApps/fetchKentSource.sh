@@ -35,6 +35,7 @@ src/gfServer \
 src/index \
 src/makefile \
 src/meta \
+src/parasol \
 src/primeMate \
 src/product \
 src/protDust \
@@ -79,8 +80,7 @@ src/hg/fqToQa \
 src/hg/fqToQac \
 src/hg/fragPart \
 src/hg/gbGetEntries \
-src/hg/gbOneAcc \
-src/hg/gbToFaRa > part${partNumber}Src.zip
+src/hg/gbOneAcc > part${partNumber}Src.zip
 
 unzip -o -q part${partNumber}Src.zip
 
@@ -89,6 +89,7 @@ echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
 git archive --format=zip -9 --remote=git://genome-source.cse.ucsc.edu/kent.git \
 --prefix=kent/ HEAD \
+src/hg/gbToFaRa \
 src/hg/geneBounds \
 src/hg/genePredHisto \
 src/hg/genePredSingleCover \
@@ -280,6 +281,7 @@ echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
 git archive --format=zip -9 --remote=git://genome-source.cse.ucsc.edu/kent.git \
 --prefix=kent/ HEAD \
+src/parasol \
 src/hg/makeDb/outside \
 src/hg/makeDb/trackDbRaFormat \
 src/hg/makeDb/trackDbPatch \
