@@ -55,11 +55,6 @@ blatSuite: topLibs hgLib
 # all of these application makefiles have been updated to include use
 #	of DESTDIR and BINDIR
 
-HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
-	 featureBits ratStuff/mafsInRegion ratStuff/mafSpeciesSubset \
-	 pslCDnaFilter genePredToGtf pslPretty pslReps pslSort 
-
-
 HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred gtfToGenePred \
 	hubCheck overlapSelect makeTableList pslMap
 
@@ -72,9 +67,7 @@ BLAT_APPLIST = blat gfClient gfServer
 userApps: topLibs hgLib destBin
 	cd utils/stringify && echo utils/stringify && ${MAKE}
 	cd utils && echo utils && ${MAKE} userAppsB
-	@for P in ${HG_APPLIST}; do \
-	    ( cd hg/$${P} && echo hg/$${P} && ${MAKE} ) ; \
-	done
+	cd hg && echo hg && ${MAKE} userApps
 	@for P in ${HG_UTILS_APPLIST}; do \
 	    ( cd hg/utils/$${P} && echo hg/utils/$${P} && ${MAKE} ) ; \
 	done
