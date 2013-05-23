@@ -31,7 +31,7 @@ libs:
 	cd kent/src && ${envVars} ${MAKE} libs
 
 clean:
-	cd kent/src && ${envVars} ${MAKE} clean
+	cd kent/src && ${envVars} ${MAKE} -i -k clean
 
 fetchSource:
 	./fetchKentSource.sh
