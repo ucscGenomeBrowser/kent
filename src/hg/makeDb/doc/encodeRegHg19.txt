@@ -878,7 +878,8 @@ cat > getMetaHuge.csh << 'EOF'
     #Got 161 factors
 
     hgLoadBed hg19 wgEncodeRegTfbsClusteredV6 clusters.target.bed
-    # Read 4385242 elements of size 15 from clusters.target.bed
+    # V5 with separate HA-E2F1 factor: Read 4385242 elements of size 15 from clusters.target.bed
+    # Read 4380444 elements of size 15 from clusters.target.bed
     hgLoadSqlTab hg19 wgEncodeRegTfbsCellsV6 ~/kent/src/hg/lib/expRecord.sql clusters.target.exps
 
     # Create inputTrackTable - six columns: <table> <source> <factor> <cell> <treatment> <lab>
@@ -922,9 +923,12 @@ cat > getTargetInputs.csh << 'EOF'
 
     # 'V6' - clustered by target. Mar 2012 TFBS, all datasets passing Anshul's qual filter (690)
     featureBits hg19 -noRandom -enrichment wgEncodeRegDnaseClusteredV2 wgEncodeRegTfbsClusteredV6
+    # wgEncodeRegDnaseClusteredV2 13.390%, wgEncodeRegTfbsClusteredV6 13.156%, both 6.690%, cover 49.96%, enrich 3.80x
 
     featureBits hg19 -noRandom -enrichment wgEncodeRegTfbsClusteredV5 wgEncodeRegDnaseClusteredV2 
     # wgEncodeRegTfbsClusteredV5 13.156%, wgEncodeRegDnaseClusteredV2 13.390%, both 6.690%, cover 50.86%, enrich 3.80x
+
+# V6 is release target -- rename the antibody clustering to V3a, and rename V6 to V3
 
 
 #### GOT HERE ####
