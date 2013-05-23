@@ -44,6 +44,22 @@ libssl
    Users add '/usr/local/bin/userApps' to their shell PATH
    to access the commands.
 
+
+4. There are 'parasol' binaries built in kent/src/parasol/bin/
+   Use these binaries to set up a job control system on a compute cluster
+   or large machine with many CPU cores.  See also:
+     http://genecats.cse.ucsc.edu/eng/parasol.htm
+   for more information.  The usage messages from each command will help
+   with the setup.
+
+=========
+
+Documentation:
+
+Each 'kent' command contains its own documentation.  Simply run the
+commands without any arguments to see the usage message for operating
+instructions.
+
 =========
 
 Installing required packages:

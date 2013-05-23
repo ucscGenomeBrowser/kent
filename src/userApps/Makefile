@@ -23,6 +23,7 @@ all:  fetchSource libs utils
 
 utils:
 	cd kent/src && ${envVars} ${MAKE} userApps
+	cd kent/src/parasol && ${envVars} ${MAKE}
 
 libs:
 	cd samtabix && ${envVars} ${MAKE}
