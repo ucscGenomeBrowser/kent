@@ -59,11 +59,11 @@ all:: utils
 
 utils: $(APPS:%=%.utils)
 %.utils:
-	(cd $* && $(MAKE))
+	cd $* && echo $* && $(MAKE)
 
 userApps: $(UTILS_APPLIST:%=%.userApp)
 %.userApp:
-	( cd $* && echo $* && $(MAKE) )
+	cd $* && echo $* && $(MAKE)
 
 scripts: $(SCRIPT_FILES:%=%.scripts)
 %.scripts:

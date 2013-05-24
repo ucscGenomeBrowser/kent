@@ -210,7 +210,6 @@ UTIL_DIRS = \
 	visiGene/knownToVisiGene
 
 APPS = $(UTIL_DIRS) $(UTILS_APPLIST)
-USE_DIRS = $(UTIL_DIRS)
 
 all::    cgi utils
 

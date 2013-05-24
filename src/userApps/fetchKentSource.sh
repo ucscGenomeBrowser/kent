@@ -14,10 +14,10 @@ git clone http://genome-source.cse.ucsc.edu/samtabix.git samtabix \
   > /dev/null 2>&1
 
 # These selective git archive commands only work up to a certain size
-# of fetched source, hence the multiple set of individual fetches to
-# get all the parts
+# of fetched source (number of arguments), hence the multiple set of
+# individual fetches to get all the parts
 
-rm -f part1Src.zip part2Src.zip part3Src.zip part4Src.zip
+rm -f part1Src.zip part2Src.zip part3Src.zip part4Src.zip part5Src.zip
 export partNumber=1
 export ofN="of 5"
 

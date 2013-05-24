@@ -55,28 +55,14 @@ blatSuite: topLibs hgLib
 # all of these application makefiles have been updated to include use
 #	of DESTDIR and BINDIR
 
-HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred gtfToGenePred \
-	hubCheck overlapSelect makeTableList pslMap
-
-HG_HGWIGGLE_APP = hgWiggle
-
-HG_LOAD_APPLIST = hgGcPercent
-
 BLAT_APPLIST = blat gfClient gfServer
 
 userApps: topLibs hgLib destBin
 	cd utils/stringify && echo utils/stringify && ${MAKE}
 	cd utils && echo utils && ${MAKE} userAppsB
 	cd hg && echo hg && ${MAKE} userApps
-	@for P in ${HG_UTILS_APPLIST}; do \
-	    ( cd hg/utils/$${P} && echo hg/utils/$${P} && ${MAKE} ) ; \
-	done
-	@for P in ${HG_HGWIGGLE_APP}; do \
-	    ( cd hg/makeDb/hgLoadWiggle && echo hg/makeDb/hgLoadWiggle && ${MAKE} $${P} ) ; \
-	done
-	@for P in ${HG_LOAD_APPLIST}; do \
-	    ( cd hg/makeDb/$${P} && echo hg/makeDb/$${P} && ${MAKE} $${P} ) ; \
-	done
+	cd hg/utils && echo hg/utils && ${MAKE} userApps
+	cd hg/makeDb && echo hg/makeDb && ${MAKE} userApps
 	@for P in ${BLAT_APPLIST}; do \
 	    ( cd $${P} && echo $${P} && ${MAKE} ) ; \
 	done

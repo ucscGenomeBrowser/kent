@@ -40,13 +40,14 @@ system package management tools.
    make
 
    This build fetches (with git) approximately 200 Mb/7,800 files of
-      kent source code, and constructs command binaries of approximately 200 Mb.
+      kent source code, and constructs about 200 command binaries
+      of approximate size near 500 Mb.
    The resulting binaries are in ./userApps/bin/
 
    Note: there are no required shell environment settings as discussed
          in the genome browser build instructions.  In fact, this build
-         system will ignore any shell environment settings you may have
-         for the genome browser build environment.
+         system will ignore and override any shell environment settings
+         you may have for the genome browser build environment.
 
 3. Install utilities
 
