@@ -19,19 +19,22 @@ envVars = DESTDIR=${DESTDIR} BINDIR=${BINDIR} MACHTYPE=${MACHTYPE} \
 	CGI_BIN=${CGI_BIN} DOCUMENTROOT=${DOCUMENTROOT} SCRIPTS=${SCRIPTS} \
 	SAMTABIXDIR=${SAMTABIXDIR} USE_SAMTABIX=1 USE_SSL=1 NOSQLTEST=1
 
-all:  fetchSource libs utils
+all:  utils
 
-utils:
+utils: libs
 	cd kent/src && ${envVars} ${MAKE} userApps
 	cd kent/src/parasol && ${envVars} ${MAKE}
 	./kent/src/utils/userApps/mkREADME.sh ${DESTDIR}/${BINDIR} ${CURDIR}/kentUtils.Documentation.txt
 
-libs:
+libs: part5Src.zip
 	cd samtabix && ${envVars} ${MAKE}
 	cd kent/src && ${envVars} ${MAKE} libs
 
 clean:
 	cd kent/src && ${envVars} ${MAKE} -i -k clean
+	rm -f part1Src.zip part2Src.zip part3Src.zip part4Src.zip part5Src.zip
+
+part5Src.zip: fetchSource
 
 fetchSource:
 	./fetchKentSource.sh
@@ -39,3 +42,6 @@ fetchSource:
 	@du -hs kent
 	@echo -n "number of files in kent source tree: "
 	@find ./kent -type f | wc -l
+
+update: clean
+	${MAKE} utils

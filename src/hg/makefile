@@ -66,14 +66,37 @@ UTILS_APPLIST = \
 	genePredToMafFrames \
 	gigAssembler/checkAgpAndFa \
 	hgsql \
+	hgsqldump \
+	maskOutFa \
 	ratStuff/mafsInRegion \
 	ratStuff/mafSpeciesSubset \
 	pslCDnaFilter \
 	genePredCheck \
 	genePredToGtf \
+	pslCat \
+	pslCheck \
+	pslDropOverlap \
+	pslFilter \
+	pslHisto \
+	pslPairs \
+	pslPartition \
 	pslPretty \
+	pslRecalcMatch \
 	pslReps \
-	pslSort
+	pslSelect \
+	pslSort \
+	pslStats \
+	pslSwap \
+	pslToBed \
+	pslxToFa \
+	qaToQac \
+	qacAgpLift \
+	qacToQa \
+	qacToWig \
+	sqlToXml \
+	trfBig \
+	xmlCat \
+	xmlToSql
 
 # List of directories to build at UCSC
 UTIL_DIRS = \
@@ -119,7 +142,6 @@ UTIL_DIRS = \
 	hgSpeciesRna \
 	hgsqlLocal \
 	hgsqladmin \
-	hgsqldump \
 	hgsqldumpLocal \
 	hgsqlimport \
         hgsqlSwapTables \
@@ -131,7 +153,6 @@ UTIL_DIRS = \
 	liftFrags \
 	lfsOverlap \
 	makeDb \
-	maskOutFa \
 	mdToNcbiLift \
 	mouseStuff \
 	mrnaToGene \
@@ -153,35 +174,18 @@ UTIL_DIRS = \
 	orthoMap \
 	patCount \
 	perf \
-	pslCat \
-	pslCheck \
 	pslCoverage \
 	pslDiff \
-	pslDropOverlap \
-	pslFilter \
 	pslFilterPrimers \
 	pslGlue \
-	pslHisto \
 	pslHitPercent \
 	pslIntronsOnly \
-	pslPartition \
-	pslPairs \
 	pslQuickFilter \
-	pslRecalcMatch \
-	pslSelect \
 	pslSimp \
 	pslSortAcc \
 	pslSplitOnTarget \
-	pslStats \
-	pslSwap \
-	pslToBed \
 	pslUnpile \
-	pslxToFa \
 	qa \
-	qaToQac \
-	qacAgpLift \
-	qacToQa \
-	qacToWig \
 	ratStuff \
 	relPairs \
 	recycleDb \
@@ -196,18 +200,14 @@ UTIL_DIRS = \
 	spideyToPsl \
 	splitFa \
 	splitFaIntoContigs \
-	sqlToXml \
 	test \
-	trfBig \
 	txCds \
 	txGene \
 	txGraph \
 	utils \
 	uniqSize \
 	updateStsInfo \
-	visiGene/knownToVisiGene \
-	xmlCat \
-	xmlToSql
+	visiGene/knownToVisiGene
 
 APPS = $(UTIL_DIRS) $(UTILS_APPLIST)
 USE_DIRS = $(UTIL_DIRS)
