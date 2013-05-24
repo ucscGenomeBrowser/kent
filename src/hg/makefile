@@ -44,6 +44,9 @@ BAD_DIRS = \
 
 # List of directories to build for userApps
 UTILS_APPLIST = \
+	autoDtd \
+	autoSql \
+	autoXml \
 	bedSort \
 	liftUp \
 	liftOver \
@@ -108,9 +111,6 @@ UTIL_DIRS = \
 	agpToFa \
 	agpToGl \
 	altSplice \
-	autoDtd \
-	autoSql \
-	autoXml \
 	bedOrBlocks \
 	bedSplitOnChrom \
 	borfBig \
