@@ -21,7 +21,7 @@ cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
 # location of the genbank root and files on the remote build server
-rsyncPort="rsh"
+rsyncPort="ssh"
 gbDownloadBuildDir=${gbRoot}/data/ftp
 verbose=""
 #verbose="-verbose"
