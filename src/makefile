@@ -145,18 +145,11 @@ DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta
 cellarDirs = cdnaAli getgene idbQuery reformat scanIntrons tracks wormAli \
 	xenoAli
 
-buildCellar: libs destBin
-	@for D in ${cellarDirs} x; do \
-            if test "$$D" != "x" ; then \
-                ( cd $$D && echo $$D && ${MAKE} ) ;\
-                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-            fi ;\
-	done
+buildCellar: $(cellarDirs:%=%.cellar)
 
-cleanCellar:
-	@for D in ${cellarDirs} x; do \
-            if test "$$D" != "x" ; then \
-                ( cd $$D && echo $$D && ${MAKE} clean ) ;\
-                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-            fi ;\
-	done
+%.cellar: libs destBin
+	cd $* && echo $* && $(MAKE)
+
+cleanCellar: $(cellarDirs:%=%.cellarClean)
+%.cellarClean:
+	cd $* && echo $* && $(MAKE) clean

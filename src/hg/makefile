@@ -68,6 +68,7 @@ UTILS_APPLIST = \
 	hgsql \
 	hgsqldump \
 	maskOutFa \
+	mrnaToGene \
 	ratStuff/mafsInRegion \
 	ratStuff/mafSpeciesSubset \
 	pslCDnaFilter \
@@ -155,7 +156,6 @@ UTIL_DIRS = \
 	makeDb \
 	mdToNcbiLift \
 	mouseStuff \
-	mrnaToGene \
 	near/hgCeOrfToGene \
 	near/hgClusterGenes \
 	near/hgEmblProtLinks \
@@ -219,45 +219,45 @@ hgLib:
 
 userApps: $(UTILS_APPLIST:%=%.userApp)
 %.userApp: hgLib
-	( cd $* && echo $* && $(MAKE) )
+	cd $* && echo $* && $(MAKE)
 
 utils: $(APPS:%=%.utils)
 %.utils: hgLib
-	( cd $* && echo $* && $(MAKE) )
+	cd $* && echo $* && $(MAKE)
 
 # Compile only, the cgi's for those builds without write access
 #	to apache cgi-bin directories  (this compiles and links executables)
 
 compile: ${BROWSER_BINS:%=%.compile} ${BROWSER_LOADERS:%=%.compile}
 %.compile: hgLib
-	( cd $* && echo $* && $(MAKE) compile)
+	cd $* && echo $* && $(MAKE) compile
 
 # Build cgi's
 #   cgi: Destination for the binaries is /usr/local/apache/cgi-bin-${USER}
 
 cgi: ${BROWSER_BINS:%=%.bins} ${BROWSER_LOADERS:%=%.cgi} ${BROWSER_LOADERS:%=%.cgi} ${ENCODE_FILES:%=%.cgi}
 %.bins: hgLib
-	( cd $* && echo $* && $(MAKE) )
+	cd $* && echo $* && $(MAKE)
 %.cgi: hgLib
-	( cd $* && echo $* && $(MAKE) cgi)
+	cd $* && echo $* && $(MAKE) cgi
 
 #   alpha: Destination for the binaries is /usr/local/apache/cgi-bin/
 
 alpha:	 ${BROWSER_BINS:%=%.alpha} ${BROWSER_LOADERS:%=%.alpha} ${ENCODE_FILES:%=%.alpha}
 %.alpha: hgLib
-	( cd $* && echo $* && $(MAKE) alpha)
+	cd $* && echo $* && $(MAKE) alpha
 
 #   beta: Destination for the binaries is /usr/local/apache/cgi-bin-beta/
 
 beta: ${BROWSER_BINS:%=%.beta} ${BROWSER_LOADERS:%=%.beta}
 %.beta: hgLib
-	( cd $* && echo $* && $(MAKE) beta)
+	cd $* && echo $* && $(MAKE) beta
 
 # install: Destination for the binaries is ${DESTDIR}/usr/local/apache/cgi-bin
 
 install: ${BROWSER_BINS:%=%.install} ${BROWSER_LOADERS:%=%.install}
 %.install: hgLib
-	( cd $* && echo $* && $(MAKE) install)
+	cd $* && echo $* && $(MAKE) install
 
 clean::
 	cd lib && ${MAKE} clean
