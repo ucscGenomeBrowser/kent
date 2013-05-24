@@ -9,6 +9,7 @@ BADDIRS = \
 UTILS_APPLIST = \
 	axtChain \
 	axtSort \
+	axtSwap \
 	axtToMaf \
 	axtToPsl \
 	chainAntiRepeat \
@@ -26,7 +27,15 @@ UTILS_APPLIST = \
 	mafFetch \
 	mafRanges \
 	mafToAxt \
-	mafToPsl
+	mafToPsl \
+	netChainSubset \
+	netClass \
+	netFilter \
+	netSplit \
+	netSyntenic \
+	netToAxt \
+	netToBed \
+	pslMrnaCover
 
 # List of directories to build at UCSC
 DIRS = \
@@ -42,7 +51,6 @@ DIRS = \
 	axtRecipBest \
 	axtRescore \
 	axtSplitByTarget \
-	axtSwap \
 	axtToBed \
 	axtToChain \
 	bedCoverage \
@@ -55,18 +63,10 @@ DIRS = \
 	knownVsBlat \
 	libScan \
 	mousePoster \
-	netChainSubset \
-	netClass \
-	netFilter \
-	netSplit \
 	netStats \
-	netSyntenic \
-	netToAxt \
-	netToBed \
 	netToBedWithId \
-	orthologBySynteny \
+        orthologBySynteny \
 	phToPsl \
-	pslMrnaCover \
 	regionPicker \
 	rikenBestInCluster \
 	simpleChain \
