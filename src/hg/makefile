@@ -9,10 +9,10 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert hgHubConnect \
 	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
 	encode/hgEncodeVocab encode/hgEncodeApi \
 	phyloGif hgCustom hgPal hgFileUi hgFileSearch\
-	makeDb/hgCgiData js htdocs/style 
+	makeDb/hgCgiData js htdocs/style
 
 ifdef LOWELAB
-    BROWSER_BINS += $(HOME)/lowelab/src/browser/tooltip $(HOME)/lowelab/src/browser/chooseorg 
+    BROWSER_BINS += $(HOME)/lowelab/src/browser/tooltip $(HOME)/lowelab/src/browser/chooseorg
 endif
 
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf
@@ -40,7 +40,7 @@ BAD_DIRS = \
 	oneShot \
 	synMap \
 	encode \
-	wikiPlot 
+	wikiPlot
 
 # List of directories to build for userApps
 UTILS_APPLIST = \
@@ -218,6 +218,9 @@ hgLib:
 	cd lib && ${MAKE}
 
 userApps: $(UTILS_APPLIST:%=%.userApp)
+	cd mouseStuff && $(MAKE) userApps
+	cd ratStuff && $(MAKE) userApps
+
 %.userApp: hgLib
 	cd $* && echo $* && $(MAKE)
 
