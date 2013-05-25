@@ -69,6 +69,7 @@ DIRS = \
 	bigBedSummary \
 	bigBedToBed \
 	bigWigAverageOverBed \
+	bigWigCorrelate \
 	bigWigInfo \
 	bigWigMerge \
 	bigWigSummary \
