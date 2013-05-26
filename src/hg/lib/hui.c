@@ -7728,13 +7728,13 @@ while ((source = slPopHead(&sources)) != NULL)
     printf("</TR><TR>\n");
     webPrintLinkCell(source->name);
     webPrintLinkCellStart();
-    puts(source->description);
+    fputs(source->description, stdout);
     count++;
     while (sources && sameString(sources->name, source->name))
         {
         source = slPopHead(&sources);
-        puts(", ");
-        puts(source->description);
+        fputs(", ", stdout);
+        fputs(source->description, stdout);
         count++;
         }
     webPrintLinkCellEnd();
