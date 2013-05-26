@@ -382,7 +382,6 @@ canPack On
     #type factorSource
     #superTrack wgEncodeReg dense
     #sourceTable wgEncodeRegTfbsCellsV3a
-    #sourceTablePack true
     #inputTrackTable wgEncodeRegTfbsClusteredInputsV3a
     #inputTableFieldDisplay cellType factor treatment lab
     #controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
@@ -400,27 +399,10 @@ canPack On
     type factorSource
     superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCellsV3
-    sourceTablePack true
     inputTrackTable wgEncodeRegTfbsClusteredInputsV3
     inputTableFieldDisplay cellType factor antibody treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     visibility dense
-    useScore 1
-    priority 1.75
-    dataVersion ENCODE Jul 2012 Freeze
-
-    track wgEncodeRegTfbsClusteredV5
-    release alpha
-    shortLabel Txn Fac ChIP V3t
-    longLabel Transcription Factor ChIP-seq Clusters V3- (162 targets, 189 antibodies) from ENCODE
-    type factorSource
-    superTrack wgEncodeReg hide
-    sourceTable wgEncodeRegTfbsCellsV5
-    sourceTablePack true
-    inputTrackTable wgEncodeRegTfbsClusteredInputsV5
-    inputTableFieldDisplay cellType factor antibody treatment lab
-    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility hide
     useScore 1
     priority 1.75
     dataVersion ENCODE Jul 2012 Freeze
@@ -432,7 +414,6 @@ canPack On
     type factorSource
     superTrack wgEncodeReg hide
     sourceTable wgEncodeRegTfbsCellsV4
-    sourceTablePack true
     inputTrackTable wgEncodeRegTfbsClusteredInputsV4
     inputTableFieldDisplay cellType factor treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab

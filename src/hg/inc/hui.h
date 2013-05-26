@@ -1238,7 +1238,6 @@ boolean chainDbNormScoreAvailable(struct trackDb *tdb);
 
 /* trackDb settings: */
 #define SOURCE_TABLE "sourceTable"
-#define SOURCE_TABLE_PACK "sourceTablePack"
 
 void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char *label);
 /* Print out table of abbreviations. */
