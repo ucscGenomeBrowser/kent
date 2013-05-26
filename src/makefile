@@ -55,39 +55,21 @@ blatSuite: topLibs hgLib
 # all of these application makefiles have been updated to include use
 #	of DESTDIR and BINDIR
 
-HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
-	 featureBits ratStuff/mafsInRegion ratStuff/mafSpeciesSubset \
-	 pslCDnaFilter genePredToGtf pslPretty pslReps pslSort 
-
-
-HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred gtfToGenePred \
-	hubCheck overlapSelect makeTableList pslMap
-
-HG_HGWIGGLE_APP = hgWiggle
-
-HG_LOAD_APPLIST = hgGcPercent
-
 BLAT_APPLIST = blat gfClient gfServer
 
-userApps: topLibs hgLib
+userApps: topLibs hgLib destBin
 	cd utils/stringify && echo utils/stringify && ${MAKE}
-	cd utils && echo utils && ${MAKE} userApps
-	cd utils/userApps && echo utils/userApps && ${MAKE}
-	@for P in ${HG_APPLIST}; do \
-	    ( cd hg/$${P} && echo hg/$${P} && ${MAKE} ) ; \
-	done
-	@for P in ${HG_UTILS_APPLIST}; do \
-	    ( cd hg/utils/$${P} && echo hg/utils/$${P} && ${MAKE} ) ; \
-	done
-	@for P in ${HG_HGWIGGLE_APP}; do \
-	    ( cd hg/makeDb/hgLoadWiggle && echo hg/makeDb/hgLoadWiggle && ${MAKE} $${P} ) ; \
-	done
-	@for P in ${HG_LOAD_APPLIST}; do \
-	    ( cd hg/makeDb/$${P} && echo hg/makeDb/$${P} && ${MAKE} $${P} ) ; \
-	done
+	cd utils && echo utils && ${MAKE} userAppsB
+	cd hg && echo hg && ${MAKE} userApps
+	cd hg/utils && echo hg/utils && ${MAKE} userApps
+	cd hg/makeDb && echo hg/makeDb && ${MAKE} userApps
 	@for P in ${BLAT_APPLIST}; do \
 	    ( cd $${P} && echo $${P} && ${MAKE} ) ; \
 	done
+	cd utils/userApps && echo utils/userApps && ${MAKE}
+
+destBin:
+	${MKDIR} ${DESTBINDIR}
 
 clean:
 	@for D in ${DIRS} x; do \
@@ -134,9 +116,8 @@ tags-all:
 etags-all:
 	find . -name '*.[ch]' | etags -
 
-utils: libs
+utils: libs destBin
 	${MKDIR} ${SCRIPTS}
-	${MKDIR} ${DESTDIR}${BINDIR}
 	cd parasol && ${MAKE}
 	@for D in ${DIRS} x; do \
             if test "$$D" != "x" ; then \
@@ -164,19 +145,11 @@ DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta
 cellarDirs = cdnaAli getgene idbQuery reformat scanIntrons tracks wormAli \
 	xenoAli
 
-buildCellar: libs
-	${MKDIR} ${DESTDIR}${BINDIR}
-	@for D in ${cellarDirs} x; do \
-            if test "$$D" != "x" ; then \
-                ( cd $$D && echo $$D && ${MAKE} ) ;\
-                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-            fi ;\
-	done
+buildCellar: $(cellarDirs:%=%.cellar)
 
-cleanCellar:
-	@for D in ${cellarDirs} x; do \
-            if test "$$D" != "x" ; then \
-                ( cd $$D && echo $$D && ${MAKE} clean ) ;\
-                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-            fi ;\
-	done
+%.cellar: libs destBin
+	cd $* && echo $* && $(MAKE)
+
+cleanCellar: $(cellarDirs:%=%.cellarClean)
+%.cellarClean:
+	cd $* && echo $* && $(MAKE) clean

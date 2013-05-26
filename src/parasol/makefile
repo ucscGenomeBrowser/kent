@@ -1,15 +1,25 @@
-all: 
-	cd lib && ${MAKE}
-	cd gensub2 && ${MAKE}
-	cd para && ${MAKE}
-	cd paraHub && ${MAKE}
-	cd paraHubStop && ${MAKE}
-	cd paraNode && ${MAKE}
-	cd paraNodeStart && ${MAKE}
-	cd paraNodeStatus && ${MAKE}
-	cd paraNodeStop && ${MAKE}
-	cd paraTestJob && ${MAKE}
-	cd parasol && ${MAKE}
+
+USE_DIRS = \
+	gensub2 \
+	para \
+	paraHub \
+	paraHubStop \
+	paraNode \
+	paraNodeStart \
+	paraNodeStatus \
+	paraNodeStop \
+	paraTestJob \
+	parasol
+
+all: $(USE_DIRS:%=%.all)
+
+lib.all:
+	cd lib && $(MAKE)
+
+# make sure lib is built first, even in a parallel make
+
+%.all: lib.all
+	cd $* && echo $* && $(MAKE)
 
 install:
 	@echo 'parasol install, please copy ./bin/*  where desired ...'

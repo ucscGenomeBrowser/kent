@@ -9,10 +9,10 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert hgHubConnect \
 	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
 	encode/hgEncodeVocab encode/hgEncodeApi \
 	phyloGif hgCustom hgPal hgFileUi hgFileSearch\
-	makeDb/hgCgiData js htdocs/style 
+	makeDb/hgCgiData js htdocs/style
 
 ifdef LOWELAB
-    BROWSER_BINS += $(HOME)/lowelab/src/browser/tooltip $(HOME)/lowelab/src/browser/chooseorg 
+    BROWSER_BINS += $(HOME)/lowelab/src/browser/tooltip $(HOME)/lowelab/src/browser/chooseorg
 endif
 
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf
@@ -31,9 +31,6 @@ TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
 
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
 
-# List of directories to build
-USE_DIRS = $(UTIL_DIRS)
-
 BAD_DIRS = \
 	altGraph \
 	cgiExample \
@@ -43,8 +40,69 @@ BAD_DIRS = \
 	oneShot \
 	synMap \
 	encode \
-	wikiPlot 
+	wikiPlot
 
+# List of directories to build for userApps
+UTILS_APPLIST = \
+	autoDtd \
+	autoSql \
+	autoXml \
+	bedSort \
+	liftUp \
+	liftOver \
+	bedIntersect \
+	bedItemOverlapCount \
+	bedToGenePred \
+	blastToPsl \
+	checkCoverageGaps \
+	checkHgFindSpec \
+	checkTableCoords \
+	dbTrash \
+	encode3/validateFiles \
+	encode3/validateManifest \
+	estOrient \
+	featureBits \
+	genePredHisto \
+	genePredSingleCover \
+	genePredToBed \
+	genePredToFakePsl \
+	genePredToMafFrames \
+	gigAssembler/checkAgpAndFa \
+	hgsql \
+	hgsqldump \
+	maskOutFa \
+	mrnaToGene \
+	ratStuff/mafsInRegion \
+	ratStuff/mafSpeciesSubset \
+	pslCDnaFilter \
+	genePredCheck \
+	genePredToGtf \
+	pslCat \
+	pslCheck \
+	pslDropOverlap \
+	pslFilter \
+	pslHisto \
+	pslPairs \
+	pslPartition \
+	pslPretty \
+	pslRecalcMatch \
+	pslReps \
+	pslSelect \
+	pslSort \
+	pslStats \
+	pslSwap \
+	pslToBed \
+	pslxToFa \
+	qaToQac \
+	qacAgpLift \
+	qacToQa \
+	qacToWig \
+	sqlToXml \
+	trfBig \
+	xmlCat \
+	xmlToSql
+
+# List of directories to build at UCSC
 UTIL_DIRS = \
 	affyTransciptome \
 	agpCloneCheck \
@@ -53,30 +111,14 @@ UTIL_DIRS = \
 	agpToFa \
 	agpToGl \
 	altSplice \
-	autoDtd \
-	autoSql \
-	autoXml \
 	bedOrBlocks \
-	bedIntersect \
-	bedItemOverlapCount \
-	bedSort \
-	bedToGenePred \
 	bedSplitOnChrom \
-	blastToPsl \
 	borfBig \
-	checkCoverageGaps \
-	checkHgFindSpec \
-	checkTableCoords \
 	ctgFaToFa \
 	ctgToChromFa \
-	dbTrash \
-	estOrient \
 	embossToPsl \
-	encode3/validateFiles \
-	encode3/validateManifest \
 	fakeFinContigs \
 	fakeOut \
-	featureBits \
 	ffaToFa \
 	fishClones \
 	fqToQa \
@@ -86,17 +128,9 @@ UTIL_DIRS = \
 	gbOneAcc \
 	gbToFaRa \
 	geneBounds \
-	genePredCheck \
-	genePredHisto \
-	genePredSingleCover \
-	genePredToBed \
-	genePredToGtf \
-	genePredToFakePsl \
-	genePredToMafFrames \
 	getFeatDna \
 	getRna \
 	getRnaPred \
-	gigAssembler/checkAgpAndFa \
 	gpStats \
 	gpToGtf \
 	gpcrParser \
@@ -107,10 +141,8 @@ UTIL_DIRS = \
 	hgKnownGeneList \
 	hgSelect \
 	hgSpeciesRna \
-	hgsql \
 	hgsqlLocal \
 	hgsqladmin \
-	hgsqldump \
 	hgsqldumpLocal \
 	hgsqlimport \
         hgsqlSwapTables \
@@ -120,14 +152,10 @@ UTIL_DIRS = \
 	liftAcross \
 	liftAgp \
 	liftFrags \
-	liftOver \
-	liftUp \
 	lfsOverlap \
 	makeDb \
-	maskOutFa \
 	mdToNcbiLift \
 	mouseStuff \
-	mrnaToGene \
 	near/hgCeOrfToGene \
 	near/hgClusterGenes \
 	near/hgEmblProtLinks \
@@ -146,39 +174,18 @@ UTIL_DIRS = \
 	orthoMap \
 	patCount \
 	perf \
-	pslCDnaFilter \
-	pslCat \
-	pslCheck \
 	pslCoverage \
 	pslDiff \
-	pslDropOverlap \
-	pslFilter \
 	pslFilterPrimers \
 	pslGlue \
-	pslHisto \
 	pslHitPercent \
 	pslIntronsOnly \
-	pslPartition \
-	pslPairs \
-	pslPretty \
 	pslQuickFilter \
-	pslRecalcMatch \
-	pslReps \
-	pslSelect \
 	pslSimp \
-	pslSort \
 	pslSortAcc \
 	pslSplitOnTarget \
-	pslStats \
-	pslSwap \
-	pslToBed \
 	pslUnpile \
-	pslxToFa \
 	qa \
-	qaToQac \
-	qacAgpLift \
-	qacToQa \
-	qacToWig \
 	ratStuff \
 	relPairs \
 	recycleDb \
@@ -193,19 +200,16 @@ UTIL_DIRS = \
 	spideyToPsl \
 	splitFa \
 	splitFaIntoContigs \
-	sqlToXml \
 	test \
-	trfBig \
 	txCds \
 	txGene \
 	txGraph \
 	utils \
 	uniqSize \
 	updateStsInfo \
-	visiGene/knownToVisiGene \
-	xmlCat \
-	xmlToSql
+	visiGene/knownToVisiGene
 
+APPS = $(UTIL_DIRS) $(UTILS_APPLIST)
 
 all::    cgi utils
 
@@ -213,43 +217,50 @@ hgLib:
 	@./sqlEnvTest.sh
 	cd lib && ${MAKE}
 
-utils: $(USE_DIRS:%=%.utils)
+userApps: $(UTILS_APPLIST:%=%.userApp)
+	cd mouseStuff && $(MAKE) userApps
+	cd ratStuff && $(MAKE) userApps
+
+%.userApp: hgLib
+	cd $* && echo $* && $(MAKE)
+
+utils: $(APPS:%=%.utils)
 %.utils: hgLib
-	( cd $* && echo $* && $(MAKE) )
+	cd $* && echo $* && $(MAKE)
 
 # Compile only, the cgi's for those builds without write access
 #	to apache cgi-bin directories  (this compiles and links executables)
 
 compile: ${BROWSER_BINS:%=%.compile} ${BROWSER_LOADERS:%=%.compile}
 %.compile: hgLib
-	( cd $* && echo $* && $(MAKE) compile)
+	cd $* && echo $* && $(MAKE) compile
 
 # Build cgi's
 #   cgi: Destination for the binaries is /usr/local/apache/cgi-bin-${USER}
 
 cgi: ${BROWSER_BINS:%=%.bins} ${BROWSER_LOADERS:%=%.cgi} ${BROWSER_LOADERS:%=%.cgi} ${ENCODE_FILES:%=%.cgi}
 %.bins: hgLib
-	( cd $* && echo $* && $(MAKE) )
+	cd $* && echo $* && $(MAKE)
 %.cgi: hgLib
-	( cd $* && echo $* && $(MAKE) cgi)
+	cd $* && echo $* && $(MAKE) cgi
 
 #   alpha: Destination for the binaries is /usr/local/apache/cgi-bin/
 
 alpha:	 ${BROWSER_BINS:%=%.alpha} ${BROWSER_LOADERS:%=%.alpha} ${ENCODE_FILES:%=%.alpha}
 %.alpha: hgLib
-	( cd $* && echo $* && $(MAKE) alpha)
+	cd $* && echo $* && $(MAKE) alpha
 
 #   beta: Destination for the binaries is /usr/local/apache/cgi-bin-beta/
 
 beta: ${BROWSER_BINS:%=%.beta} ${BROWSER_LOADERS:%=%.beta}
 %.beta: hgLib
-	( cd $* && echo $* && $(MAKE) beta)
+	cd $* && echo $* && $(MAKE) beta
 
 # install: Destination for the binaries is ${DESTDIR}/usr/local/apache/cgi-bin
 
 install: ${BROWSER_BINS:%=%.install} ${BROWSER_LOADERS:%=%.install}
 %.install: hgLib
-	( cd $* && echo $* && $(MAKE) install)
+	cd $* && echo $* && $(MAKE) install
 
 clean::
 	cd lib && ${MAKE} clean

@@ -8,6 +8,12 @@
 #include "hPrint.h"
 #include "haplotypes.h"
 
+// Some helpful defines
+#define DIVIDE_SAFE(num, denom, ifZero) ((denom) > 0 ? ((double)(num) / (denom)) : (ifZero) )
+#define CALC_MEAN(sum,  N)      DIVIDE_SAFE(sum, N, 0)
+#define CALC_VAR( sumSq,N)      DIVIDE_SAFE(sumSq, (N - 1), 0)
+#define CALC_SD(  sumSq,N)      sqrt( CALC_VAR(sumSq,N) )
+
 
 struct haploExtras *haplotypeExtrasDefault(char *db,int lmSize)
 // Return a haploExtras support structure with all defaults set.  It will include
@@ -365,14 +371,14 @@ struct popGroup
     int chromN;   // Depends upon chrom and location
     };
 
-static struct popGroup *popGroupsGet(struct haploExtras *he,int totalChromN,
+static struct popGroup *popGroupsGet(struct haploExtras *he,struct haplotypeSet *hapSet,
                                      boolean minorPopulations)
 // Returns popGroup names from thousand Genomes
 {
 struct popGroup *popGroups = NULL;
 
 // Descending order so list will not need to be reversed.
-#define POP_NAME_QUERY "select distinct name, subjects, females, description from " \
+#define POP_NAME_QUERY "select name, subjects, females, description from " \
                        POP_GROUPS_TABLE " where type = '%s' order by name desc"
 #define POP_DESC 3
 char *type = (minorPopulations ? "minor" : "major");
@@ -392,12 +398,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     popGroup->desc = lmCloneString(he->lm,row[POP_DESC]);
     popGroup->subjectN = sqlSigned(row[POP_COUNT]);
     popGroup->females  = sqlSigned(row[POP_FEMS]);
-    if (totalChromN == THOUSAND_GENOME_SAMPLES) // chrY
-        popGroup->chromN = popGroup->subjectN;
-    else if (totalChromN == (THOUSAND_GENOME_SAMPLES * 2)) // autosome, or chrX PAR
-        popGroup->chromN = (popGroup->subjectN * 2);
-    else  // chr non-PAR
-        popGroup->chromN = popGroup->subjectN + popGroup->females;
+    if (hapSet->chromN == (hapSet->subjectN * 2))      // autosomes and PAR chrX
+        popGroup->chromN = (popGroup->subjectN * 2);  // Diploid
+    else if (lastChar(hapSet->chrom) == 'X')                        // non-PAR chrX
+        popGroup->chromN = popGroup->subjectN + popGroup->females;  // females are dipliod
+    else                                                         // chrY
+        {
+        popGroup->subjectN -= popGroup->females;
+        popGroup->chromN    = popGroup->subjectN;                // haploid
+        }
 
     slAddHead(&popGroups, popGroup);
     }
@@ -469,14 +478,18 @@ if (he->conn == NULL)
     he->conn = hAllocConn(he->db);
 
 // Prepare for scoring
-#define SCORE_BY_FST_TIMES_N
-#ifdef SCORE_BY_FST_TIMES_N
-float hapFreq = (double)haplo->subjects / hapSet->chromN;
-double sumOfProbs = 0;
-#else//ifndef SCORE_BY_FST_TIMES_N   SCORE_BY_STDDEV
-float expectFreq = ((double)1 / popGroups);//((float)haplo->subjects / popGroups);
+#define SCORE_BY_FST_VAR
+#ifdef SCORE_BY_FST_VAR
+// Scoring by fixationIndex = varS / (hapFreq*(1-hapFreq)
+// This scoring relies on variance between fequencies for each subgroup
+double hapFreq = (double)haplo->subjects / hapSet->chromN;
+double expectFreq = hapFreq;
+#else//ifndef SCORE_BY_FST_VAR
+// Scoring by simple standard deviation of distribution to each group
+// Note the difference in expected frequency for each group
+double expectFreq = ((double)1 / popGroups);//(double)haplo->subjects / hapSet->chromN;
+#endif//def SCORE_BY_FST_VAR
 double sumOfSquares = 0;
-#endif//ndef SCORE_BY_FST_TIMES_N   SCORE_BY_STDDEV
 
 // Now we are ready to retrieve the results
 char **row = NULL;
@@ -489,21 +502,22 @@ while ((row = sqlNextRow(sr)) != NULL)
     count = sqlSigned(row[POP_COUNT]);
 
     // For skew calculation
-#ifdef SCORE_BY_FST_TIMES_N
-    size_t groupSubjects = sqlSigned(row[POP_TOTAL]);
-    // subjects are not people, but chroms so make the adjustment:
+#ifdef SCORE_BY_FST_VAR
+    size_t groupChromN = sqlSigned(row[POP_TOTAL]);
+    // selected amount is people so convert to chromN
     if (hapSet->chromN == (hapSet->subjectN * 2))   // autosomes and PAR chrX
-        groupSubjects *= 2;  // Diploid
-    else if (lastChar(hapSet->chrom) == 'X') // non-PAR chrX
-        groupSubjects += sqlSigned(row[POP_FEMS]);            // females are dipliod
+        groupChromN *= 2;                          // Diploid
+    else if (lastChar(hapSet->chrom) == 'X')                  // non-PAR chrX
+        groupChromN += sqlSigned(row[POP_FEMS]);             // females are dipliod
+    else                                                         // chrY
+        groupChromN -= sqlSigned(row[POP_FEMS]);                // only males have it
     // prob of identity of 2 individuals in population
-    double hapFreqGrp = ((double)count / groupSubjects); // haplotype freq
-    double probIdentGrp = (hapFreqGrp * hapFreqGrp) + ((1 - hapFreqGrp) * (1 - hapFreqGrp));
-    sumOfProbs += probIdentGrp;
-#else//ifndef SCORE_BY_FST_TIMES_N   SCORE_BY_STDDEV
-    double diff = (double)count / haplo->subjects - expectFreq; // variance between group freq
+    double hapFreqGrp = ((double)count / groupChromN); // haplotype freq
+    double diff = hapFreqGrp - expectFreq; // variance between group freq
+#else//ifndef SCORE_BY_FST_VAR
+    double diff = ((double)count / haplo->subjects) - expectFreq; // variance between group freq
+#endif//def SCORE_BY_FST_VAR
     sumOfSquares += (diff * diff); // always positive
-#endif//ndef SCORE_BY_FST_TIMES_N   SCORE_BY_STDDEV
     rowCount++;
 
     // Add to string only if above limit
@@ -529,41 +543,18 @@ else if (limitPct > 0)
     }
 
 // Finish calculating skew
-#ifdef SCORE_BY_FST_TIMES_N
-if (rowCount < popGroups)                 // fill in for the buckets with zero subjects
-    sumOfProbs += (popGroups - rowCount); // Empty groups have maximal prob of identity
-double probIdentGrp = (sumOfProbs / popGroups);
-double probIdentTotal = (hapFreq * hapFreq) + ((1 - hapFreq) * (1 - hapFreq));
-double fixationIndex = (probIdentGrp - probIdentTotal) / (1 - probIdentTotal);
-if (fixationIndex < 0)
-    fixationIndex *= -1;
-double score = fixationIndex * haplo->subjects;
-#else//ifndef SCORE_BY_FST_TIMES_N   SCORE_BY_STDDEV
-//int buckets = min(popGroups,haplo->subjects); // Don't count 5 groups for only 1 subject.
 if (rowCount < popGroups)                // fill in for the buckets with zero subjects
     sumOfSquares += (popGroups - rowCount) * (expectFreq * expectFreq);
-double variance = (double)(sumOfSquares / (popGroups - 1));
-double stdDev = (double)sqrt(variance);
-double score = stdDev;
-#endif//ndef SCORE_BY_FST_TIMES_N   SCORE_BY_STDDEV
+#ifdef SCORE_BY_FST_VAR
+    // Using macros to calculate ensures no zero denominators!
+    double score = DIVIDE_SAFE( CALC_VAR(sumOfSquares,popGroups), (hapFreq * (1 - hapFreq)), 0);
+    //score *= (double)haplo->subjects / hapSet->chromN;
+#else//ifndef SCORE_BY_FST_VAR
+    double score = CALC_SD(sumOfSquares,popGroups);
+#endif//def SCORE_BY_FST_VAR
 if (skew != NULL)
     *skew = score;
 
-#ifndef SCORE_BY_FST_TIMES_N
-// If we have room, and stdDev is big enough, add it to the end of the population results
-int sz = sizeR - (p - popResult);
-if (score > 0 && sz > 12 && rowCount > 1 && skew == NULL)
-    {
-    if (score >= 1000)
-        safef(p, sizeR - (p - popResult), " [sd:>1000]");
-    else if (score < 1)
-        safef(p, sizeR - (p - popResult), " [sd:%-.3f]",score);
-    else if (score < 10)
-        safef(p, sizeR - (p - popResult), " [sd:%-.2f]",score);
-    else
-        safef(p, sizeR - (p - popResult), " [sd:%-.1f]",score);
-    }
-#endif//ndef SCORE_BY_FST_TIMES_N   SCORE_BY_STDDEV
 verbose(2,"condenseSubjectsToPopulations(): subjects:%d buckets:%d score:%lf %s\n",
         haplo->subjects,popGroups,score,popResult);
 
@@ -2091,7 +2082,7 @@ int popGroupCount = 0;
 struct popGroup *popGroups = NULL;
 if (he->populationsToo)
     {
-    popGroups = popGroupsGet(he,hapSet->chromN,he->populationsMinor);
+    popGroups = popGroupsGet(he,hapSet,he->populationsMinor);
     popGroupCount = slCount(popGroups);
     if (he->populationsMinor)
         hPrintf("<TD nowrap class='topHat andScore' colspan=%d "
@@ -2141,17 +2132,16 @@ if (he->populationsToo)
     for( ; popGroup != NULL; popGroup = popGroup->next)
         {
         hPrintf("<TH nowrap id='%s' abbr='use'"
-                "title='%s [N=%d]'>%s %%</TH>",
+                " title='%s [N=%d]'>%s %%</TH>",
                 popGroup->name, popGroup->desc, popGroup->chromN, popGroup->name);
         }
     hPrintf("<TH id='" POPULATION_CLASS "S' class='" SCORE_CLASS "%s' abbr='use' title="
-            //"'Population score is calculated as the fixation index (Fst) using the frequencies "
-            //"of occurrence within groups as opposed to distribution across groups. "
-            "'Population score is the fixation index multiplied by haplotype count [Fst * N].\n"
-            " Higher scores represent greater skew across populations.'"
+            "'Population score is calculated as the fixation index (Fst) using the frequencies "
+            "of occurrence within groups as opposed to distribution across groups. "
+            "Higher scores are more skewed across groups and affecting more individuals.'"
             ">Score</TH>",(showScores ? "" : " hidden"));
     }
-hPrintf("<TH " REFERENCE_CLASS "'>Ref</TH>");
+hPrintf("<TH abbr='use' id='" REFERENCE_CLASS "'>Ref</TH>");
 
 int varIx=0;
 for ( ;varIx < refHap->variantsCovered; varIx++)
@@ -2264,8 +2254,8 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
             double popFreq = (double)count / popGroup->chromN;
             if (count > 0)
                 {
-                hPrintf("<TD class='%s' abbr='%05d' title='N=%d of %d (found in ",popGroup->name,
-                        (10000 - (int)count),(int)count,haplo->subjects);
+                hPrintf("<TD class='%s' abbr='%06.4f' title='N=%d of %d (found in ",popGroup->name,
+                        ((double)1 - popDist),(int)count,haplo->subjects);
                 printFreqAsPercent(popFreq);
                 hPrintf("%% of all %s)'>",popGroup->name);
                 }
@@ -2275,22 +2265,17 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
             printFreqAsPercent(popDist);
             hPrintf("</TD>");
             }
-        // popScore = Fst*N (based upon within group frequencies as opposed to across group dist).
-        hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f' title='Fst=%.2f N=%d'>",
-                (showScores ? "" : " hidden"),99999 - haplo->ho->popScore,
-                haplo->ho->popScore / haplo->subjects, haplo->subjects);
-        printWithSignificantDigits(haplo->ho->popScore, 0, 10000,3);
-        //hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%0.5f'>",
-        //        (showScores ? "" : " hidden"),1 - haplo->ho->popScore);
-        //printWithSignificantDigits(haplo->ho->popScore, 0, 1,3);
+        hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%0.4f'>",
+                (showScores ? "" : " hidden"),1 - haplo->ho->popScore);
+        printWithSignificantDigits(haplo->ho->popScore, 0, 1,4);
         hPrintf("</TD>");
         }
 
     // Reference haplotype or not?
     if (haplo->variantCount > 0)
-        hPrintf("<TD class='" REFERENCE_CLASS "'>&nbsp;</TD>");
+        hPrintf("<TD abbr='%s' class='" REFERENCE_CLASS "'>&nbsp;</TD>",haplo->suffixId);
     else
-        hPrintf("<TD class='" REFERENCE_CLASS "' "
+        hPrintf("<TD abbr='' class='" REFERENCE_CLASS "' "
                 "title='This haplotype matches the reference assembly.'>ref</TD>");
 
     // Need to set AA variants haplotype by haplotype, because of shared memory
@@ -2869,8 +2854,6 @@ void haploSetsPrintStats(struct haploExtras *he, FILE *out, char *commonToken,
 #define TALLY_ALL(tally,sumsq,max,val) { ACCUM(tally,val); TALLY_TWO(sumsq,max,val); }
 #define TALLY_HIST(hist, count, last) { if ((count) < (last)) (hist)[count]++; \
                                                          else (hist)[last ]++; }
-#define CALC_MEAN(N, val) ((N) > 0 ?     ((double)(val)   / (N)    ) : 0 )
-#define CALC_SD(N, sumSq) ((N) > 1 ? sqrt((double)(sumSq) / (N - 1)) : 0 )
 
 // basic counters: sets, haplotypes, non-reference, homozygous/haploid
 int setsFound = 0, setsNr = 0,                                  setsHom    = 0;
@@ -2950,10 +2933,10 @@ for ( ;hapSet != NULL; hapSet = hapSet->next)
     }
 
 // Every haplo has subjects and variants, so calculate mean and sd for one model or all models
-double subjectMean = CALC_MEAN(hapsFound, subjects    );
-double subjectSD   = CALC_SD(  hapsFound, subjectSumSq);
-double variantMean = CALC_MEAN(hapsFound, variants    );
-double variantSD   = CALC_SD(  hapsFound, variantSumSq);
+double subjectMean = CALC_MEAN(subjects    , hapsFound);
+double subjectSD   = CALC_SD(  subjectSumSq, hapsFound);
+double variantMean = CALC_MEAN(variants    , hapsFound);
+double variantSD   = CALC_SD(  variantSumSq, hapsFound);
 
 if (setsFound == 1)
     {
@@ -2984,14 +2967,14 @@ else if (setsFound > 1)
     RANGE_LIMIT(homScoreMax,-99999,99999);
 
     // Each model may have multiple haplos so calculate means and SDs for all models here
-    double hapsNrMean   = CALC_MEAN(setsFound, hapsNr       );
-    double hapsNrSD     = CALC_SD(  setsFound, hapsNrSumSq  );
-    double hapScoreMean = CALC_MEAN(hapsFound, hapScoreMax  );
-    double hapScoreSD   = CALC_SD(  hapsFound, hapScoreSumSq);
-    double homScoreMean = CALC_MEAN(hapsFound, homScoreMax  );
-    double homScoreSD   = CALC_SD(  hapsFound, homScoreSumSq);
-    double popScoreMean = CALC_MEAN(hapsFound, popScoreMax  );
-    double popScoreSD   = CALC_SD(  hapsFound, popScoreSumSq);
+    double hapsNrMean   = CALC_MEAN(hapsNr       , setsFound);
+    double hapsNrSD     = CALC_SD(  hapsNrSumSq  , setsFound);
+    double hapScoreMean = CALC_MEAN(hapScoreMax  , hapsFound);
+    double hapScoreSD   = CALC_SD(  hapScoreSumSq, hapsFound);
+    double homScoreMean = CALC_MEAN(homScoreMax  , hapsFound);
+    double homScoreSD   = CALC_SD(  homScoreSumSq, hapsFound);
+    double popScoreMean = CALC_MEAN(popScoreMax  , hapsFound);
+    double popScoreSD   = CALC_SD(  popScoreSumSq, hapsFound);
 
     fprintf(out, "\nGene Model Haplotypes (alleles):%d\n",hapsFound);
     fprintf(out, "Models covered:%d  With non-reference haplotypes:%d  "

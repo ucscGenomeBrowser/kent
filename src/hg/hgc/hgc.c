@@ -5765,7 +5765,6 @@ printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
-cartWebEnd(cart);
 }
 
 void printPslFormat(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start,
