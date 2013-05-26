@@ -67,6 +67,9 @@ double udcReadDouble(struct udcFile *file, boolean isSwapped);
 int udcGetChar(struct udcFile *file);
 /* Get next character from file or die trying. */
 
+char *udcReadLine(struct udcFile *file);
+/* Fetch next line from udc cache. */
+
 char *udcReadStringAndZero(struct udcFile *file);
 /* Read in zero terminated string from file.  Do a freeMem of result when done. */
 

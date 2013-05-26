@@ -4027,6 +4027,8 @@ return tdb;
 boolean hTrackCanPack(char *db, char *trackName)
 /* Return TRUE if this track can be packed. */
 {
+if (isHubTrack(trackName))
+    return TRUE; // all the big* files can pack
 struct sqlConnection *conn = hAllocConn(db);
 struct trackDb *tdb = hMaybeTrackInfo(conn, trackName);
 boolean ret = FALSE;
@@ -4048,6 +4050,13 @@ return hTrackCanPack(db, trackName) ? "pack" : "full";
 char *hGetParent(char *db, char *subtrackName)
 /* Given a subtrack table, find its parent */
 {
+// TODO--- hub tracks can have parents.  This is only called from
+// item search, but it should work there too.   We should be able
+// to grab these out of the settings hash, but then why doesn't
+// this happen for mySQL tracks?  It would be a lot faster methinks
+if (isHubTrack(subtrackName))
+    return NULL;
+
 struct sqlConnection *conn = hAllocConn(db);
 struct trackDb *tdb = hMaybeTrackInfo(conn, subtrackName);
 char *ret = NULL;
