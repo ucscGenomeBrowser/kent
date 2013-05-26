@@ -10,7 +10,7 @@ struct trix
     int ixxSize;		/* Size of second level index. */
     int ixxAlloc;	        /* Space allocated for index. */
     struct hash *wordHitHash;	/* Hash of word hitsLists, so search on "the the the" works fast. */
-    boolean useUdc;a            /* are we using UDC or lineFile */
+    boolean useUdc;            /* are we using UDC or lineFile */
     };
 
 struct trixSearchResult
