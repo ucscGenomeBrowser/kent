@@ -6,6 +6,8 @@
 #include "linefile.h"
 #include "trix.h"
 #include "sqlNum.h"
+#include "udc.h"
+#include "net.h"
 
 
 /* Some local structures for the search. */
@@ -192,25 +194,62 @@ memcpy(ixx->prefix, prefix, sizeof(ixx->prefix));
 trix->ixxSize += 1;
 }
 
+// wrappers around the udc or lineFile routines
+static void *ourOpen(struct trix *trix, char *fileName)
+{
+if (trix->useUdc)
+    return (void *)udcFileOpen(fileName, NULL);
+return (void *)lineFileOpen(fileName, TRUE);
+}
+
+static boolean ourReadLine(struct trix *trix, void *lf, char **line)
+{
+if (trix->useUdc)
+    {
+    *line = udcReadLine((struct udcFile *)lf);
+    return *line != NULL;
+    }
+return lineFileNext((struct lineFile *)lf, line, NULL);
+}
+
+static void ourClose(struct trix *trix, void **lf)
+{
+if (trix->useUdc)
+    udcFileClose((struct udcFile **)lf);
+else
+    lineFileClose((struct lineFile **)lf);
+}
+
+void ourSeek(struct trix *trix, off_t ixPos)
+{
+if (trix->useUdc)
+    udcSeek((struct udcFile *)trix->lf, ixPos);
+else
+    lineFileSeek((struct lineFile *)trix->lf, ixPos, SEEK_SET);
+}
+
 struct trix *trixOpen(char *ixFile)
 /* Open up index.  Load second level index in memory. */
 {
+struct trix *trix = trixNew();
+trix->useUdc = FALSE;
+if (hasProtocol(ixFile))
+    trix->useUdc = TRUE;
+
 char ixxFile[PATH_LEN];
-struct trix *trix;
-struct lineFile *lf;
+void *lf;
 char *line;
 
 initUnhexTable();
 safef(ixxFile, sizeof(ixxFile), "%sx", ixFile);
-lf = lineFileOpen(ixxFile, TRUE);
-trix = trixNew();
-while (lineFileNext(lf, &line, NULL))
+lf = ourOpen(trix, ixxFile);
+while (ourReadLine(trix, lf, &line) )
     {
     off_t pos = unhex(line+trixPrefixSize);
     trixAddToIxx(trix, pos, line);
     }
-lineFileClose(&lf);
-trix->lf = lineFileOpen(ixFile, TRUE);
+ourClose(trix, &lf);
+trix->lf = ourOpen(trix, ixFile);
 return trix;
 }
 
@@ -370,8 +409,8 @@ if (hitList == NULL)
     {
     struct trixHitPos *oneHitList;
     off_t ixPos = trixFindIndexStartLine(trix, searchWord);
-    lineFileSeek(trix->lf, ixPos, SEEK_SET);
-    while (lineFileNext(trix->lf, &line, NULL))
+    ourSeek(trix, ixPos);
+    while (ourReadLine(trix, trix->lf, &line))
 	{
 	word = nextWord(&line);
 	if (startsWith(searchWord, word))
