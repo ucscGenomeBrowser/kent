@@ -92,6 +92,7 @@ UTILS_APPLIST = \
 	pslStats \
 	pslSwap \
 	pslToBed \
+	pslToChain \
 	pslxToFa \
 	qaToQac \
 	qacAgpLift \
