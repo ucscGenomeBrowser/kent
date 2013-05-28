@@ -12,7 +12,7 @@ errAbort(
   "   addCols <fileName>\n"
   "adds all columns (up to 16 columns) in the given file, \n"
   "outputs the sum of each column.  <fileName> can be the\n"
-  " name: stdin to accept input from stdin.");
+  "name: stdin to accept input from stdin.");
 }
 
 void addCols(char *fileName)
