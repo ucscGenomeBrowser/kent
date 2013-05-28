@@ -18,6 +18,7 @@ s/chrAsi1/Chrysochloris_asiatica/;
 s/colLiv1/Columba_livia/;
 s/conCri1/Condylura_cristata/;
 s/criGri1/Cricetulus_griseus/;
+s/mesAur1/Mesocricetus_auratus/;
 s/croPor1/Crocodylus_porosus/;
 s/dm4/Drosophila_melanogaster/;
 s/echTel2/Echinops_telfairi/;
@@ -37,19 +38,24 @@ s/neoBri1/Neolamprologus_brichardi/;
 s/ochPri3/Ochotona_princeps/;
 s/octDeg1/Octodon_degus/;
 s/odoRosDiv1/Odobenus_rosmarus_divergens/;
+s/lepWed1/Leptonychotes_weddellii/;
 s/orcOrc1/Orcinus_orca/;
 s/oryAfe1/Orycteropus_afer/;
 s/oviAri3/Ovis_aries/;
 s/panPan1/Pan_paniscus/;
 s/cheMyd1/Chelonia_mydas/;
+s/apaSpi1/Apalone_spinifera/;
+s/anaPla1/Anas_platyrhynchos/;
 s/pelSin1/Pelodiscus_sinensis/;
 s/pseHum1/Pseudopodoces_humilis/;
+s/zonAlb1/Zonotrichia_albicollis/;
 s/pteAle1/Pteropus_alecto/;
 s/punNye1/Pundamilia_nyererei/;
 s/sorAra2/Sorex_araneus/;
 s/taeGut2/Taeniopygia_guttata/;
 s/tupChi1/Tupaia_chinensis/;
 s/xenTro7/Xenopus_tropicalis/;
+s/astMex1/Astyanax_mexicanus/;
 s/xipMac1/Xiphophorus_maculatus/;'
 }
 
