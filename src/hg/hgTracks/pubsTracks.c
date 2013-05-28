@@ -255,7 +255,7 @@ if (isEmpty(keywords))
 char query[12000];
 safef(query, sizeof(query), "SELECT articleId FROM %s WHERE "
 "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", articleTable, keywords);
-printf("query %s", query);
+//printf("query %s", query);
 struct slName *artIds = sqlQuickList(conn, query);
 if (artIds==NULL || slCount(artIds)==0)
     return NULL;
