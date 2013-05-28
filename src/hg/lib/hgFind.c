@@ -33,6 +33,7 @@
 #include "trix.h"
 #include "trackHub.h"
 #include "udc.h"
+#include "hubConnect.h"
 
 
 extern struct cart *cart;
@@ -2407,7 +2408,11 @@ for (table = hgp->tableList; table != NULL; table = table->next)
     if (table->posList != NULL)
 	{
 	char *parent = hGetParent(db, table->name);
-	char *trackName = hGetTrackForTable(db, table->name);
+	char *trackName = table->name;
+	// TODO: should be able to get this from settings hash for
+	// both hub tracks and normal tracks
+	if (!isHubTrack(table->name)) 
+	    trackName = hGetTrackForTable(db, table->name);
         if (trackName == NULL)
             errAbort("no track for table \"%s\" found via a findSpec", table->name); // wish we had searchName
 	char *vis = hCarefulTrackOpenVis(db, trackName);

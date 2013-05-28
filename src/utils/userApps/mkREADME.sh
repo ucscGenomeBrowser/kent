@@ -31,7 +31,7 @@ cd "${DESTDIR}"
 echo "================================================================" \
 	> "${RESULT}"
 
-find . -mindepth 1 -type f | sed -e "s/^.\///; /mkREADME.sh/d" | sort | \
+find . -mindepth 1 -type f | grep -v -w hgsql | sed -e "s/^.\///; /mkREADME.sh/d" | sort | \
 while read F
 do
     if [ -x "${F}" ]; then

@@ -8,112 +8,116 @@ include ../inc/common.mk
 # define the list of user applications to build
 
 UTILS_APPLIST = \
+	ave \
 	bedClip \
 	bedGraphToBigWig \
 	bedToBigBed \
+	bigBedInfo \
 	bigBedNamedItems \
 	bigBedSummary \
 	bigBedToBed \
+	bedCommonRegions \
+	bedGeneParts \
+	bedPileUps \
+	bedRemoveOverlap \
+	bedRestrictToPositions \
 	bigWigAverageOverBed  \
 	bigWigInfo \
 	bigWigMerge \
 	bigWigSummary \
 	bigWigToBedGraph \
 	bigWigToWig \
+	calc \
+	catDir \
+	catUncomment \
+	chopFaLines \
+	colTransform \
+	countChars \
+	fastqToFa \
+	faCmp \
 	faCount \
+	faFilterN \
+	faFilter \
 	faFrag \
 	faOneRecord \
 	faPolyASizes \
 	faRandomize \
+	faRc \
 	faSize \
 	faSomeRecords \
-	faToNib \
+	faSplit \
+	faToFastq \
+	faToTab \
 	faToTwoBit \
+	faTrans \
+	findMotif \
+	headRest \
 	htmlCheck \
+	newProg \
 	nibFrag \
 	nibSize \
 	paraFetch \
 	paraSync \
-	sizeof \
-	stringify \
-	textHistogram \
-	twoBitDup \
-        twoBitInfo \
-	twoBitToFa \
-	wigCorrelate \
-	wigToBigWig
-
-APPS = \
-	addCols \
-	ave \
-	aveCols \
-	bedCommonRegions \
-	bedGeneParts \
-	bedPileUps \
-	bedRemoveOverlap \
-	bedRestrictToPositions \
-	calc \
-	catDir \
-	catUncomment \
-	ccCp \
-	chopFaLines \
-	colTransform \
-	countChars \
-	convolve \
-	detab \
-	endsInLf \
-	fastqToFa \
-	faAlign \
-	faCmp \
-	faFilterN \
-	faFilter \
-	faFlyBaseToUcsc \
-	faGapLocs \
-	faGapSizes \
-	faNcbiToUcsc \
-	faNoise \
-	faRc \
-	faSimplify \
-	faSplit \
-	faToFastq \
-	faToTab \
-	faTrans \
-	faTrimPolyA \
-	faTrimRead \
-	findMotif \
-	fixCr \
-	gapSplit \
-	gffPeek \
-	git-reports \
-	gitTools \
-	headRest \
-	htmlPics \
-	jkUniq \
-	lineCount \
-	newProg \
-	nt4Frag \
 	pslLiftSubrangeBlat \
 	pslToPslx \
-	pslToXa \
 	randomLines \
 	raSqlQuery \
 	raToTab \
 	raToLines \
 	rmFaDups \
 	rowsToCols \
+	sizeof \
+	splitFile \
+	splitFileByColumn \
+	stringify \
+	subChar \
+	subColumn \
+	tailLines \
+	textHistogram \
+	tickToDate \
+	timing \
+	twoBitDup \
+        twoBitInfo \
+	twoBitToFa \
+	wigCorrelate \
+	wigToBigWig
+
+# list of utilities to build of interest only at UCSC
+
+UCSC_APPS = \
+	addCols \
+	aNotB \
+	aveCols \
+	ccCp \
+	convolve \
+	detab \
+	endsInLf \
+	faAlign \
+	faFlyBaseToUcsc \
+	faGapLocs \
+	faGapSizes \
+	faNcbiToUcsc \
+	faNoise \
+	faSimplify \
+	faToNib \
+	faTrimPolyA \
+	faTrimRead \
+	fixCr \
+	gapSplit \
+	gffPeek \
+	git-reports \
+	gitTools \
+	htmlPics \
+	jkUniq \
+	lineCount \
+	nt4Frag \
+	pslToXa \
 	scaffoldFaToAgp \
 	scrambleFa \
 	spacedToTab \
-	splitFile \
-	splitFileByColumn \
-	subChar \
-	subColumn \
 	subs \
 	tableSum \
-	tailLines \
 	textHist2 \
-	tickToDate \
-	timing \
 	toLower \
 	toUpper \
 	udcCleanup \
@@ -124,11 +128,6 @@ APPS = \
 	weedLines \
 	wigTestMaker \
 	wordLine
-
-# list of utilities to build of interest only at UCSC
-
-UCSC_APPS = \
-	aNotB
 
 # list of scripts to install
 
@@ -141,7 +140,7 @@ SCRIPT_FILES = \
 
 # List of all directories to build
 
-ALL_APPS = $(APPS) $(UTILS_APPLIST) $(UCSC_APPS)
+ALL_APPS = $(UTILS_APPLIST) $(UCSC_APPS)
 
 # all: builds all utilities here
 

@@ -324,6 +324,10 @@ struct linkedFeatures
     unsigned highlightColor;            /* highlight color,0 if no highlight */
     enum highlightMode highlightMode;   /* highlight mode,0 if no highlight */
     char* mouseOver;                    /* mouse over text */
+#ifdef USE_HAL
+    boolean isHalSnake;
+    struct hal_target_dupe_list_t *dupeList;
+#endif
     };
 
 struct linkedFeaturesSeries
