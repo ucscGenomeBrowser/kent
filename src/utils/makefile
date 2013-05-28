@@ -8,7 +8,9 @@ include ../inc/common.mk
 # define the list of user applications to build
 
 UTILS_APPLIST = \
+	addCols \
 	ave \
+	aveCols \
 	bedClip \
 	bedGraphToBigWig \
 	bedToBigBed \
