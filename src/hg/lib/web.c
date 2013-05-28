@@ -1133,7 +1133,7 @@ void webPrintWideLabelCell(char *label, int colSpan)
 printf("<TD BGCOLOR='#"HG_COL_TABLE_LABEL"'");
 if (colSpan > 1)
     printf(" COLSPAN=%d", colSpan);
-printf("><span style='color:#FFFFFF;'><B>%s</B></spanT></TD>", label);
+printf("><span style='color:#FFFFFF;'><B>%s</B></span></TD>", label);
 }
 
 void webPrintWideCenteredLabelCell(char *label, int colSpan)
