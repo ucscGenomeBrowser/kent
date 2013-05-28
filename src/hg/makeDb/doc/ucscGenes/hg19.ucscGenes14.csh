@@ -1507,9 +1507,24 @@ synBlastp.csh $ratDb $db rgdGene2 knownGene
 #new number of unique query values: 8399
 #new number of unique target values 8530
 
+
+echo
+echo "see the bottom of the script for details about knownToWikipedia"
+echo
 # Clean up
 rm -r run.*/out
 
 # Last step in setting up isPCR: after the new UCSC Genes with the new Known Gene isPcr
 # is released, take down the old isPcr gfServer  
-#
+
+#######################
+### The following is the process Briam Lee used to pull out only
+#   the genes from knownToLocusLink for which there are Wikipedia articles.
+### get the full knownToLocusLinkTable
+# hgsql -Ne 'select value from knownToLocusLink' hg19 | sort -u >> knToLocusLink
+###   query Wikipedia for each to if there is an article
+# for i in $(cat knToLocusLink); do lynx -dump "http://plugins.gnf.org/cgi-bin/wp.cgi?id="$i | grep -m 1 "no results" >trash ; echo $? $i | grep "1 "| awk '{print $2}'>> workingLinks; done
+###   pull out all isoforms that have permitted LocusLinkIds
+# for i in $(cat workingLinks); do hgsql -Ne 'select * from knownToLocusLink where value like "'$i'"' hg19 >> knownToWikipediaNew; done
+###   then load the table as knownToWikipedia using the knowToLocusLink INDICES.
+
