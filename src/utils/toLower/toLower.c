@@ -9,7 +9,8 @@ void usage()
 errAbort(
   "toLower - Convert upper case to lower case in file. Leave other chars alone\n"
   "usage:\n"
-  "   toLower in out\n");
+  "   toLower inFile outFile\n"
+  "equivalent to the unix commands: cat inFile | tr '[A-Z]' '[a-z]' > outFile");
 }
 
 void toLower(char *inName, char *outName)

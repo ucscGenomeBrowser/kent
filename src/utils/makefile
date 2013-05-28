@@ -41,6 +41,7 @@ UTILS_APPLIST = \
 	faFilterN \
 	faFilter \
 	faFrag \
+	faNoise \
 	faOneRecord \
 	faPolyASizes \
 	faRandomize \
@@ -69,6 +70,7 @@ UTILS_APPLIST = \
 	rmFaDups \
 	rowsToCols \
 	sizeof \
+	spacedToTab \
 	splitFile \
 	splitFileByColumn \
 	stringify \
@@ -78,11 +80,14 @@ UTILS_APPLIST = \
 	textHistogram \
 	tickToDate \
 	timing \
+	toLower \
+	toUpper \
 	twoBitDup \
         twoBitInfo \
 	twoBitToFa \
 	wigCorrelate \
-	wigToBigWig
+	wigToBigWig \
+	wordLine
 
 # list of utilities to build of interest only at UCSC
 
@@ -99,7 +104,6 @@ UCSC_APPS = \
 	faGapLocs \
 	faGapSizes \
 	faNcbiToUcsc \
-	faNoise \
 	faSimplify \
 	faToNib \
 	faTrimPolyA \
@@ -116,20 +120,16 @@ UCSC_APPS = \
 	pslToXa \
 	scaffoldFaToAgp \
 	scrambleFa \
-	spacedToTab \
 	subs \
 	tableSum \
 	textHist2 \
-	toLower \
-	toUpper \
 	udcCleanup \
 	undupFa \
 	upper \
 	venn \
 	verticalSplitSqlTable \
 	weedLines \
-	wigTestMaker \
-	wordLine
+	wigTestMaker
 
 # list of scripts to install
 
