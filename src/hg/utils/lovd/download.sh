@@ -20,5 +20,5 @@ mkdir -p $today
 cd $today
 
 # http request needs to come from hgwdev IP address otherwise file not found error
-wget http://varcache.lovd.nl/bed/hg19 -O - | grep -v track | grep -v ^$ > lovd.hg19.bed
-wget http://varcache.lovd.nl/bed/hg18 -O - | grep -v track | grep -v ^$ > lovd.hg18.bed
+wget -q http://varcache.lovd.nl/bed/hg19 -O - | grep -v track | grep -v ^$ > lovd.hg19.bed
+wget -q http://varcache.lovd.nl/bed/hg18 -O - | grep -v track | grep -v ^$ > lovd.hg18.bed
