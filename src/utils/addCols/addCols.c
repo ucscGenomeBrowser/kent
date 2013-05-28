@@ -9,7 +9,10 @@ void usage()
 errAbort(
   "addCols - Sum columns in a text file.\n"
   "usage:\n"
-  "   addCols XXX\n");
+  "   addCols <fileName>\n"
+  "adds all numbers in all columns (up to 16 columns) "
+  "in the given file.\n"
+  "<fileName> can be the name: stdin to accept input from stdin.");
 }
 
 void addCols(char *fileName)
