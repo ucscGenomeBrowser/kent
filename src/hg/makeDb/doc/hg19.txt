@@ -20539,7 +20539,8 @@ retroFinder/trunk/src/pipeline/ucscStep6.sh DEF
 #added ucscRetroAli to trackDb.ra
 # copied
 # /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228/retro/hg19.5/trackDb.retro
-# entry to kent/src/hg/makeDb/trackDb/human/hg19/trackDb.ra
+# entry to kent/src/hg/makeDb/trackDb/human/hg19/trackDb.ra and edited it
+# to add the version number and date.
 # Scripts copied ucscRetroAli5.psl, ucscRetroInfo5.bed and ucscRetroCds5.tab
 # to /hive/data/genomes/hg19/bed/retro/
 
