@@ -10482,88 +10482,6 @@ EOF
     hgMapToGene hg19 affyU95 knownGene knownToU95
 
 #############################################################################
-# ucscRetro track (2010-03-31, baertsch,hartera DONE)
-mkdir -p /hive/groups/gencode/pseudogenes/retroFinder/retro/hg19
-cd /hive/groups/gencode/pseudogenes/retroFinder/retro/hg19
-
-mkdir -p /hive/data/genomes/hg19/bed/retro/ 
-
-cat << '_EOF_' > DEF
-
-RETRO_OPTIONS="-verbose=4 -minAli=0.98 -nearTop=0.005 -skipBlatMerge "
-DB=hg19
-SCORETHRESH=550
-GENOMENAME='Homo sapiens'
-GBDB=hg
-MRNABASE=/hive/data/genomes/$DB/bed/mrnaBlastz
-TMPMRNA=/hive/groups/gencode/pseudogenes/retroFinder/mrnaBlastz/$DB
-TMPEST=/hive/groups/gencode/pseudogenes/retroFinder/est/$DB
-EST=all_est
-SPLICED_EST=intronEst
-SPLIT_EST=0
-SPLIT_SPLICED_EST=0
-SCRIPT=/cluster/home/baertsch/baertsch/scripts
-GENOME=/hive/data/genomes/
-RETRODIR=$GENOME/$DB/bed/retro
-BASE=/hive/groups/gencode/pseudogenes/retroFinder/retro
-OUTDIR=/hive/groups/gencode/pseudogenes/retroFinder/retro/$DB
-RESULT=$OUTDIR/result
-LOG=$OUTDIR/log
-OUT=$OUTDIR/out
-OVERLAPDIR=$OUTDIR/run.o
-VERSION=2
-TABLE=ucscRetroInfo$VERSION
-ALIGN=ucscRetroAli$VERSION
-LOCAL=/scratch/data/$DB
-NIB=$LOCAL/nib
-RMSK=rmsk
-NET1=netCanFam2 
-NET2=netMm9 
-NET3=netRheMac2 
-GENE1=knownGene
-GENE2=refGene
-GENE3=mgcGenes
-CLUSTER=swarm
-SPECIES="hg19"
-ROOTDIR="/cluster/home/hartera/public_html"
-EXPDIR=exp
-GENEPFAM=knownGene
-PFAM=knownToPfam
-PFAMIDFIELD=name
-PFAMDOMAIN=value
-ARRAY=gnfAtlas2
-ARRAYMEDIAN=hgFixed.gnfHumanAtlas2Median
-ARRAYRATIO=hgFixed.gnfHumanAtlas2AllRatio
-ARRAYABS=hgFixed.gnfHumanAtlas2All
-ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps
-ARRAYEXPALL=hgFixed.gnfHumanAtlas2AllExps
-ARRAYLOOKUP=knownToGnfAtlas2
-ARRAYPSLS="/hive/data/genomes/hg19/bed/geneAtlas2/affyU133A.psl /hive/data/genomes/hg19/bed/geneAtlas2/affyGnf1h.psl"
-ALTSPLICE=
-SPLITBYAGE=$SCRIPT/splitRetrosByAge
-PDB=proteins090821
-
-'_EOF_'
-    # << happy emacs
-
-retroFinder-1.16/scripts/filterMrna.sh DEF
-retroFinder-1.16/scripts/filterEst.sh DEF
-nohup retroFinder-1.16/scripts/ucscRetroStep1.sh DEF
-#check cluster job
-nohup retroFinder-1.16/scripts/ucscRetroStep2.sh DEF
-nohup retroFinder-1.16/scripts/ucscRetroStep3.sh DEF
-#check cluster job
-nohup retroFinder-1.16/scripts/ucscRetroStep4.sh DEF
-    # Load the track
-nohup retroFinder-1.16/scripts/ucscRetroStep5.sh DEF
-nohup retroFinder-1.16/scripts/ucscRetroStep6.sh DEF
-#add ucscRetroAli to trackDb.ra 
-cp  ucscRetroAli.psl /hive/data/genomes/hg19/bed/retro/ 
-cp  ucscRetroInfo.bed /hive/data/genomes/hg19/bed/retro/ 
-cp  ucscRetroCds.tab /hive/data/genomes/hg19/bed/retro/ 
-
-cd /hive/data/genomes/hg19/bed/retro/ 
-#############################################################################
 # UPDATE KEGG TABLES (DONE, Fan, 6/18/10)
 
 mkdir -p /hive/data/genomes/hg19/bed/pathways/kegg
@@ -20516,3 +20434,113 @@ download.sh && check.sh && load.sh
 #Read 3835591 elements of size 7 from pgYoruban3.txt.gz
 
 ############################################################################
+# RETROPOSED GENES ucscRetro track VERSION 5 
+# (2013-02-28 - 2013-04-18, baertsch,hartera DONE)
+mkdir -p /hive/hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228
+cd /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228
+
+mkdir -p /hive/data/genomes/hg19/bed/retro/ 
+cd /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228
+cat << '_EOF_' > DEF
+
+RETRO_OPTIONS="-verbose=4 -minAli=0.98 -nearTop=0.005 -skipBlatMerge "
+VERSION=5
+DB=hg19
+SCORETHRESH=550
+GENOMENAME='Homo sapiens'
+GBDB=hg
+DATE=20130228
+BINDIR=/hive/users/hartera/GencodeWG/retroFinder/trunk/bin
+KENTBINDIR=/cluster/home/hartera/bin/x86_64
+MRNABASE=/hive/data/genomes/$DB/bed/mrnaBlastz.$VERSION/
+TMPMRNA=/hive/groups/gencode/pseudogenes/retroFinder/$DB.$DATE/mrnaBlastz/$DB
+TMPEST=/hive/groups/gencode/pseudogenes/retroFinder/$DB.$DATE/est/$DB
+EST=all_est
+SPLICED_EST=intronEst
+SPLIT_EST=0
+SPLIT_SPLICED_EST=0
+SCRIPT=/hive/users/hartera/GencodeWG/retroFinder/trunk/src/pipeline
+GENOME=/hive/data/genomes/
+RETRODIR=$GENOME/$DB/bed/retro
+BASE=/hive/groups/gencode/pseudogenes/retroFinder/$DB.$DATE/retro
+OUTDIR=${BASE}/${DB}.${VERSION}
+RESULT=$OUTDIR/result
+LOG=$OUTDIR/log
+OUT=$OUTDIR/out
+OVERLAPDIR=$OUTDIR/run.o
+TABLE=ucscRetroInfo$VERSION
+ORTHOTABLE=ucscRetroOrtho$VERSION
+ALIGN=ucscRetroAli$VERSION
+LOCAL=/scratch/data/$DB
+TWOBIT=$GENOME/$DB/$DB.2bit
+NIB=$LOCAL/nib
+RMSK=rmsk
+NET1=netMm10
+NET2=netCanFam3
+NET3=netRheMac3
+# these two nes determine which retros are classified as ancient, use two farthest nets 
+ANCIENT1=netMm10
+ANCIENT2=netCanFam3
+GENE1=knownGene
+GENE2=refGene
+GENE3=ensGene
+CLUSTER=swarm
+SPECIES="hg19 mm10"
+ROOTDIR="~/public_html/retro/hg19Feb13"
+WEBROOT=$ROOTDIR/retro.$VERSION/
+WEBSERVER=http://hgwdev-hartera.cse.ucsc.edu
+EXPDIR=exp
+GENEPFAM=knownGene
+PFAM=knownToPfam
+PFAMIDFIELD=name
+PFAMDOMAIN=value
+ALTSPLICE=sibTxGraph
+SPLITBYAGE=$SCRIPT/splitRetrosByAge
+PDB=proteins121210
+ARRAY=gnfAtlas2
+AFFYPROBE="affyU133A,affyGnf1h"
+ARRAYMEDIAN=hgFixed.gnfHumanAtlas2Median 
+ARRAYRATIO=hgFixed.gnfHumanAtlas2AllRatio
+ARRAYABS=hgFixed.gnfHumanAtlas2All   
+ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps 
+ARRAYEXPALL=hgFixed.gnfHumanAtlas2AllExps
+ARRAYLOOKUP=knownToGnfAtlas2 
+ARRAYPSLS="/hive/data/genomes/hg19/bed/geneAtlas2/affyU133A.psl /hive/data/genomes/hg19/bed/geneAtlas2/affyGnf1h.psl"
+'_EOF_'
+    # << happy emacs
+chmod +x DEF
+mkdir mrnaBlastz
+cd mrnaBlastz
+cp ../DEF .
+# Create S1.len:
+cp /hive/data/genomes/hg19/chrom.sizes S1.len
+# Edit S1.len and remove chrM and random chroms then copy over to hg19
+# genomes directory
+mkdir -p /hive/data/genomes/hg19/bed/mrnaBlastz.5
+cp S1.len /hive/data/genomes/hg19/bed/mrnaBlastz.5
+
+screen
+# Run steps 1 to 6 of RetroFinder pipeline from scripts in CCDS SVN source tree:
+retroFinder/trunk/src/pipeline/ucscStep1.sh DEF
+# check cluster job on swarm
+retroFinder/trunk/src/pipeline/ucscStep2.sh DEF
+retroFinder/trunk/src/pipeline/ucscStep3.sh DEF
+#check cluster job
+retroFinder/trunk/src/pipeline/ucscStep4.sh DEF
+#check cluster job
+    # Load the track
+retroFinder/trunk/src/pipeline/ucscStep5.sh DEF
+cd /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228/retro/hg19.5
+retroFinder/trunk/src/pipeline/filterMrna.sh DEF
+retroFinder/trunk/src/pipeline/filterEst.sh DEF
+retroFinder/trunk/src/pipeline/analyseExpress.sh DEF
+cd /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228/mrnaBlastz
+retroFinder/trunk/src/pipeline/ucscStep6.sh DEF
+#added ucscRetroAli to trackDb.ra
+# copied
+# /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228/retro/hg19.5/trackDb.retro
+# entry to kent/src/hg/makeDb/trackDb/human/hg19/trackDb.ra and edited it
+# to add the version number and date.
+# Scripts copied ucscRetroAli5.psl, ucscRetroInfo5.bed and ucscRetroCds5.tab
+# to /hive/data/genomes/hg19/bed/retro/
+
