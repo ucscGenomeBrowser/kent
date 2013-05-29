@@ -1,0 +1,57 @@
+# Fixes to methyl450 track (RM #10447)  (kate 5/16/13)
+#
+# There are 63 tables, format BED 9:  wgEncodeHaibMethyl450*SitesRep1
+#
+# An alert mailing list user noticed that probe mappings were incorrect:
+# 1) Reverse strand probe is 'flipped'
+# 2) Both are off by one (starting at 1 instead of 0)
+# 3) Should be single nucleotide dataset, not full probe
+
+    cd /hive/groups/encode/dcc/data
+    mkdir HudsonAlphaMethyl450.hg19
+    cd HudsonAlphaMethyl450.hg19
+
+# Post new supplemental file with 'beta values' for users and warn them off download files in track
+
+    wget http://mendel.hudsonalpha.org/Public/fpauli/DCC/wgEncodeHaibMethyl450BetaValues.txt
+
+# Add README.txt file to supplemental directory (text from Flo Pauli, HudsonAlpha)
+
+    cp wgEncodeHaibMethyl450BetaValues.txt README.txt /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeHaibMethyl450/supplemental
+
+# Correct coordinates in tables:
+#  forward strand: start -= 1, end -= 50
+#  reverse strand: end -= 49
+
+cat > fixCoords.pl << 'EOF'
+# correct Illumina Infinium probe mappings and truncate regions to 1 bp (BED 9 format)
+while (<>) {
+    @bed = split;
+    if ($bed[5] =~ /\+/) {
+        $bed[1] -= 1;
+    }
+    $bed[2] = $bed[1] + 1;
+    $bed[6] = $bed[1];
+    $bed[7] = $bed[2];
+    print join("\t", @bed) . "\n";
+}
+'EOF'
+
+# reload tables
+
+cat > reload.csh << 'EOF'
+    set tables = `hgsql hg19 -Ne "select tableName from trackDb where tableName like 'wgEncodeHaibMethyl450%Rep1'"`
+    foreach t ($tables)
+        echo "Reloading: $t"
+        echo "select count(*) from $t" | hgsql -N hg19
+        echo "select * from $t" | hgsql -N hg19 | cut --complement -f 1 | perl fixCoords.pl | \
+            hgLoadBed hg19 $t stdin
+    end
+'EOF'
+csh reload.csh
+
+cp fixCoords.pl /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeHaibMethyl450/fixMethyl450.pl
+
+
+
+

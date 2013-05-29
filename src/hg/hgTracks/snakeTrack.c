@@ -451,9 +451,11 @@ calcPackSnake(tg, item);
 if (lf->components == NULL)
     return;
 
+#ifdef USE_HAL
+boolean isHalSnake = lf->isHalSnake;
+#else
 boolean isHalSnake = FALSE;
-if (lf->original == (void *)1)
-    isHalSnake = TRUE;
+#endif
 
 struct snakeFeature  *sf = (struct snakeFeature *)lf->components, *prevSf = NULL;
 int s = tg->itemStart(tg, item);
@@ -511,6 +513,27 @@ if (0)//withLabels)
             hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, labelColor, font, name);
         }
     }
+
+#ifdef USE_HAL
+// let's draw some blue bars for the duplications
+struct hal_target_dupe_list_t* dupeList = lf->dupeList;
+
+for(; dupeList ; dupeList = dupeList->next)
+    {
+    struct hal_target_range_t *range = dupeList->tRange;
+    for(; range; range = range->next)
+	{
+	int s = range->tStart;
+	int e = range->tStart + range->size;
+	int sClp = (s < winStart) ? winStart : s;
+	int eClp = (e > winEnd) ? winEnd : e;
+	int x1 = round((sClp - winStart)*scale) + xOff;
+	int x2 = round((eClp - winStart)*scale) + xOff;
+	hvGfxLine(hvg, x1, y , x2, y , MG_BLUE);
+	}
+    }
+y+=2;
+#endif
 
 // now we're going to draw the boxes
 
@@ -925,12 +948,26 @@ if (errCatchStart(errCatch))
     char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
     int handle = halOpenLOD(fileName);
     int needSeq = (winBaseCount < 50000) ? 1 : 0;
-    struct hal_block_t* head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, needSeq, 1);
-    struct hal_block_t* cur = head;
+    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, needSeq, 1);
+    struct hal_block_t* cur = head->mappedBlocks;
     struct linkedFeatures *lf;
     struct hash *qChromHash = newHash(5);
     struct linkedFeatures *lfList = NULL;
     char buffer[4096];
+
+#ifdef NOTNOW
+    struct hal_target_dupe_list_t* targetDupeBlocks = head->targetDupeBlocks;
+
+    for(;targetDupeBlocks; targetDupeBlocks = targetDupeBlocks->next)
+	{
+	printf("<br>id: %d qChrom %s\n", targetDupeBlocks->id, targetDupeBlocks->qChrom);
+	struct hal_target_range_t *range = targetDupeBlocks->tRange;
+	for(; range; range = range->next)
+	    {
+	    printf("<br>   %ld : %ld\n", range->tStart, range->size);
+	    }
+	}
+#endif
 
     while (cur)
     {
@@ -941,7 +978,7 @@ if (errCatchStart(errCatch))
 	if ((hel = hashLookup(qChromHash, buffer)) == NULL)
 	    {
 	    AllocVar(lf);
-	    lf->original = (void *)1;
+	    lf->isHalSnake = TRUE;
 	    slAddHead(&lfList, lf);
 	    lf->start = 0;
 	    lf->end = 1000000000;
@@ -950,6 +987,21 @@ if (errCatchStart(errCatch))
 	    lf->extra = cloneString(buffer);
 	    lf->orientation = (cur->strand == '+') ? 1 : -1;
 	    hashAdd(qChromHash, lf->name, lf);
+
+	    // now figure out where the blue bars go
+	    struct hal_target_dupe_list_t* targetDupeBlocks = head->targetDupeBlocks;
+
+	    for(;targetDupeBlocks; targetDupeBlocks = targetDupeBlocks->next)
+		{
+		if (sameString(targetDupeBlocks->qChrom, cur->qChrom))
+		    {
+		    struct hal_target_dupe_list_t* dupeList;
+		    AllocVar(dupeList);
+		    *dupeList = *targetDupeBlocks;
+		    slAddHead(&lf->dupeList, dupeList);
+		    // TODO: should clone the target_range structures
+		    }
+		}
 	    }
 	else
 	    {
@@ -962,16 +1014,8 @@ if (errCatchStart(errCatch))
 	
 	sf->start = cur->tStart;
 	sf->end = cur->tStart + cur->size;
-	if (cur->strand == '-')
-	    {
-	    sf->qStart = cur->qStart;
-	    sf->qEnd = cur->qStart + cur->size;
-	    }
-	else
-	    {
-	    sf->qStart = cur->qStart;
-	    sf->qEnd = cur->qStart + cur->size;
-	    }
+	sf->qStart = cur->qStart;
+	sf->qEnd = cur->qStart + cur->size;
 	sf->orientation = (cur->strand == '+') ? 1 : -1;
 	sf->sequence = cloneString(cur->sequence);
 

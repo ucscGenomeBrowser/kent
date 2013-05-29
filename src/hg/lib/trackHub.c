@@ -39,6 +39,7 @@
 #include "bPlusTree.h"
 #include "hgFind.h"
 #include "hubConnect.h"
+#include "trix.h"
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
@@ -575,6 +576,14 @@ if (hel != NULL)
     hel->val = trackHubRelativeUrl(genome->trackDbFile, oldVal);
     freeMem(oldVal);
     }
+
+hel = hashLookup(tdb->settingsHash, "searchTrix");
+if (hel != NULL)
+    {
+    char *oldVal = hel->val;
+    hel->val = trackHubRelativeUrl(genome->trackDbFile, oldVal);
+    freeMem(oldVal);
+    }
 }
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)
@@ -982,7 +991,7 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
     hgPos->chrom = cloneString(chromName);
     hgPos->chromStart = interval->start;
     hgPos->chromEnd = interval->end;
-    hgPos->name = term;
+    hgPos->name = cloneString(term);
     }
 
 return posList;
@@ -998,8 +1007,44 @@ struct lm *lm = lmInit(0);
 struct bigBedInterval *intervalList;
 intervalList = bigBedNameQuery(bbi, bpt, fieldIx, term, lm);
 
-return bigBedIntervalListToHgPositions(bbi, term, intervalList);
+struct hgPos *posList = bigBedIntervalListToHgPositions(bbi, term, intervalList);
+bbiFileClose(&bbi);
+return posList;
 }
+
+static struct hgPos *doTrixSearch(char *trixFile, char *indexField, char *bigDataUrl, char *term)
+{
+struct trix *trix = trixOpen(trixFile);
+int trixWordCount = 0;
+char *tmp = cloneString(term);
+char *val = nextWord(&tmp);
+char *trixWords[128];
+
+while (val != NULL)
+    {
+    trixWords[trixWordCount] = strLower(val);
+    trixWordCount++;
+    if (trixWordCount == sizeof(trixWords)/sizeof(char*))
+	errAbort("exhausted space for trixWords");
+
+    val = nextWord(&tmp);        
+    }
+
+if (trixWordCount == 0)
+    return NULL;
+
+struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, TRUE);
+struct hgPos *posList = NULL;
+for ( ; tsList != NULL; tsList = tsList->next)
+    {
+    struct hgPos *posList2 = getPosFromBigBed(bigDataUrl, indexField, tsList->itemId);
+
+    posList = slCat(posList, posList2);
+    }
+
+return posList;
+}
+
 
 static void findPosInTdbList(struct trackDb *tdbList, char *term, struct hgPositions *hgp)
 /* Given a trackHub's trackDb entries, check each of them for a searchIndex */
@@ -1010,22 +1055,29 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
     {
     char *indexField = trackDbSetting(tdb, "searchIndex");
     char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    struct hgPos *posList1 = NULL, *posList2 = NULL;
 
     if (indexField && bigDataUrl)
 	{
-	struct hgPos *posList = getPosFromBigBed(bigDataUrl, indexField, term);
+	char *trixFile = trackDbSetting(tdb, "searchTrix");
+	if (trixFile != NULL)
+	    posList1 = doTrixSearch(trixFile, indexField, bigDataUrl, term);
 
-	if (posList != NULL)
-	    {
-	    struct hgPosTable *table;
+	posList2 = getPosFromBigBed(bigDataUrl, indexField, term);
+	}
 
-	    AllocVar(table);
-	    slAddHead(&hgp->tableList, table);
-	    table->description = cloneString(tdb->table);
-	    table->name = cloneString(tdb->table);
+    struct hgPos *posList = slCat(posList1, posList2);
 
-	    table->posList = posList;
-	    }
+    if (posList != NULL)
+	{
+	struct hgPosTable *table;
+
+	AllocVar(table);
+	slAddHead(&hgp->tableList, table);
+	table->description = cloneString(tdb->table);
+	table->name = cloneString(tdb->table);
+
+	table->posList = posList;
 	}
     }
 }

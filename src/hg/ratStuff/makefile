@@ -1,17 +1,6 @@
-# Build all directories 
 
-all:
-	@for D in ${USE_DIRS} x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && ${MAKE} ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	    done
-
-# List of directories to build
-USE_DIRS = ${DIRS}
-
-DIRS = \
+# List of directories to build for userApps
+UTILS_APPLIST = \
 	mafAddIRows \
 	mafAddQRows \
 	mafFilter \
@@ -24,21 +13,28 @@ DIRS = \
 	mafSplit \
 	mafSplitPos \
 	mafsInRegion \
-	mafOrder \
-	stageMultiz 
+	mafOrder
 
-test::
-	@for D in ${USE_DIRS} x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && ${MAKE} test ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	    done
+# List of directories to build at UCSC
+DIRS = \
+	stageMultiz
 
-clean::
-	@for D in ${USE_DIRS} x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && ${MAKE} clean ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	    done
+# List of directories to build
+USE_DIRS = $(DIRS) $(UTILS_APPLIST)
+
+# Build all directories
+all: ${USE_DIRS:%=%.all}
+%.all:
+	cd $* && echo $* && ${MAKE}
+
+test: ${USE_DIRS:%=%.test}
+%.test:
+	cd $* && echo $* && ${MAKE} test
+
+userApps: $(UTILS_APPLIST:%=%.userApp)
+%.userApp:
+	cd $* && echo $* && $(MAKE)
+
+clean: $(USE_DIRS:%=%.clean)
+%.clean:
+	cd $* && echo $* && $(MAKE) clean

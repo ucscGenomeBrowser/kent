@@ -10,8 +10,8 @@ T {text-indent: 30pt;}
 <p>The Infinium Human Methylation 450 platform uses bisulfite treated genomic DNA to assay the methylation status of more than 450,000 CpG sites covering all designatable RefSeq genes, including promoter, 5' and 3' regions, without bias against those lacking CpG islands. Additionally, the assay includes CpG islands and shores, CpG sites outside of CpG islands, non-CpG methylated sites identified in human stem cells, differentially methylated sites identified in tumor versus normal (multiple forms of cancer) and across several tissue types, CpG islands outside of coding regions, miRNA promoter regions, and disease-associated regions identified through GWAS.
 </p>
 <p>
-Detailed information for the CpG targets is in an CSV formatted spreadsheet in the  
-<a target='_blank' href="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethyl450/supplemental/">supplemental directory</a>.
+The detailed protocol, information for CpG targets, and beta values are available from the
+<a target='_blank' href="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethyl450/supplemental/">supplemental directory</a>. 
 </a>
 </p>
 <h2>Display Conventions and Configuration</h2>
@@ -54,13 +54,18 @@ Any beta value equal to or greater than 0.6 was considered fully methylated.  An
 
 <a name="ReleaseNotes"></a><h2> Release Notes </h2>
 <P>
-This is Release 1 (Dec 2011) of the 450K bead array data. However, there are 27K bead array data available on <A target='_blank' href="/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHudsonalphaMethyl27">hg18</A> and on genome-preview.
-</P>
-
-<a name="Errata"></a><h2> Errata </h2>
+This is Release 1 (Dec 2011) of the 450K bead array data, with data corrections applied
+to the displayed data tables in May 2012.  
+A perl script to correct coordinates in the download files has been included in the 
+download directory.</p>
 <p>
-March 2013:  Probes on the reverse strand have incorrect coordinates.  Replacement of this track is in progress.
-</p>
+The initial release had incorrect probe mappings.  The data providers
+also requested these annotations be limited to the first nucleotide in the probe, 
+so the single CpG assayed is displayed instead of the full probe. When the Infinium
+platform was first released, it was thought that methylation states of CpG's within the
+50 bp window could be assigned by assaying a single nucleotide, but it has since been
+determined that methylation states vary even at close distances.
+</P>
 
 <a name="Credits"></a><h2> Credits </h2>
 <p>

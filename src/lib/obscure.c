@@ -533,10 +533,10 @@ void sprintLongWithCommas(char *s, long long l)
 /* Print out a long number with commas a thousands, millions, etc. */
 {
 long long trillions, billions, millions, thousands;
-if (l >= 1000000000000L)
+if (l >= 1000000000000LL)
     {
     trillions = l/1000000000000LL;
-    l -= trillions * 1000000000000;
+    l -= trillions * 1000000000000LL;
     billions = l/1000000000;
     l -= billions * 1000000000;
     millions = l/1000000;

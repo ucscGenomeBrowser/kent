@@ -51,7 +51,58 @@ ifeq (${PNGLIB},)
   endif
 endif
 ifeq (${PNGLIB},)
+  ifneq ($(wildcard /opt/local/lib/libpng.a),)
+      PNGLIB=/opt/local/lib/libpng.a
+  endif
+endif
+ifeq (${PNGLIB},)
   PNGLIB=-lpng
+endif
+ifeq (${PNGINCL},)
+  ifneq ($(wildcard /opt/local/include/png.h),)
+      PNGINCL=-I/opt/local/include
+  endif
+endif
+
+# autodetect where libmysql is installed
+ifeq (${MYSQLINC},)
+  ifneq ($(wildcard /usr/local/mysql/include/mysql.h),)
+      MYSQLINC=/usr/local/mysql/include
+  endif
+endif
+ifeq (${MYSQLINC},)
+  ifneq ($(wildcard /usr/include/mysql/mysql.h),)
+      MYSQLINC=/usr/include/mysql
+  endif
+endif
+ifeq (${MYSQLLIBS},)
+  ifneq ($(wildcard /usr/lib64/mysql/libmysqlclient.a),)
+      MYSQLLIBS=/usr/lib64/mysql/libmysqlclient.a
+  endif
+endif
+ifeq (${MYSQLLIBS},)
+  ifneq ($(wildcard /usr/local/mysql/lib/libmysqlclient.a),)
+      MYSQLLIBS=/usr/local/mysql/lib/libmysqlclient.a
+  endif
+endif
+ifeq (${MYSQLLIBS},)
+  ifneq ($(wildcard /usr/local/mysql/lib/libmysqlclient.a),)
+      MYSQLLIBS=/usr/local/mysql/lib/libmysqlclient.a
+  endif
+endif
+ifeq (${MYSQLLIBS},)
+  ifneq ($(wildcard /usr/lib64/mysql/libmysqlclient.so),)
+      MYSQLLIBS=/usr/lib64/mysql/libmysqlclient.so
+  endif
+endif
+ifeq (${MYSQLLIBS},)
+  ifneq ($(wildcard /usr/lib/libmysqlclient.a),)
+      MYSQLLIBS=/usr/lib/libmysqlclient.a
+  endif
+endif
+# last resort, hoping the compiler can find it in standard locations
+ifeq (${MYSQLLIBS},)
+  MYSQLLIBS="-lmysqlclient"
 endif
 
 L+=${PNGLIB}

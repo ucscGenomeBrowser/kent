@@ -181,6 +181,7 @@ if (reportF != NULL)
     {
     va_start(args, format);
     vfprintf(reportF, format, args);
+    fprintf(reportF, "\n");
     va_end(args);
     }
 
@@ -354,7 +355,7 @@ unsigned *size;
 if (strlen(s) > 0)
     {
     if (chrHash == NULL)
-	reportErrAbort("chrom validation requires the -chromInfo or -chromDb option\n");
+	reportErrAbort("chrom validation requires the -chromInfo or -chromDb option");
     if (chrHash)
 	{
 	if ( (size = hashFindVal(chrHash, s)) != NULL)
@@ -752,7 +753,7 @@ else
 	}
     int len = chromEnd - chromStart;
     if (len > sizeof(bigArr))
-	reportErrAbort("static array not big enough for sequence len %d on line %d\n",
+	reportErrAbort("static array not big enough for sequence len %d on line %d",
 	    len, lf->lineIx);
     g = &ourSeq;
     g->dna = bigArr;
@@ -891,7 +892,7 @@ while (lineFileNext(lf, &row, &size))
 	    ) ) )
 	{
 	verbose(2, "%s\n", row);
-	reportErrAbort("Aborting .. found 1 error\n");
+	reportErrAbort("Aborting ... found 1 error");
 	}
     }
 }
@@ -945,7 +946,7 @@ while (lineFileNextReal(lf, &row))
 	) )
 	{
 	verbose(2, "%s\n", row);
-	reportErrAbort("Aborting .. found 1 error\n");
+	reportErrAbort("Aborting ... found 1 error");
 	}
     }
 }
@@ -1013,12 +1014,12 @@ while (lineFileNextReal(lf, &row))
 	    {
 	    bedP = fieldCount - bedN;
 	    if (bedP < 1)
-		reportErrAbort("Aborting: [file=%s, line=%d] fieldCount input (%d) did not match the specification (%s)\n"
+		reportErrAbort("Aborting: [file=%s, line=%d] fieldCount input (%d) did not match the specification (%s)"
 		    , lf->fileName, lf->lineIx, fieldCount, optionVal("type", ""));
 	    }
 
 	if (fieldCount != bedN + bedP)
-	    reportErrAbort("Aborting: [file=%s, line=%d] fieldCount input (%d) did not match the specification (%s)\n"
+	    reportErrAbort("Aborting: [file=%s, line=%d] fieldCount input (%d) did not match the specification (%s)"
 		, lf->fileName, lf->lineIx, fieldCount, optionVal("type", ""));
 	}
 
@@ -1045,7 +1046,7 @@ while (lineFileNextReal(lf, &row))
     else
 	{
 	verbose(2, "%s\n", row);
-	reportErrAbort("Aborting .. found error.\n");
+	reportErrAbort("Aborting ... found error.");
 	}
     }
 
@@ -1089,9 +1090,9 @@ else
 bedN = sqlUnsigned(type);
 
 if (bedN < 3)
-    reportErrAbort("Aborting .. bed must be 3 or higher, found %d\n", bedN);
+    reportErrAbort("Aborting ... bed must be 3 or higher, found %d", bedN);
 if (bedN > 15)  // maybe someday 15 for microarray data?
-    reportErrAbort("Aborting .. bed must be 15 or lower, found %d\n", bedN);
+    reportErrAbort("Aborting ... bed must be 15 or lower, found %d", bedN);
 
 /* Load up as-object if defined in file. */
 struct asObject *asObj = NULL;
@@ -1133,7 +1134,7 @@ while ( lineFileNext(lf, &seqName, NULL))
 	&& checkSeq(lf, seq, seq, "sequence") ) )
 	{
 	verbose(2, "%s\n%s\n", seqName, seq);
-	reportErrAbort("Aborting .. found 1 error\n");
+	reportErrAbort("Aborting .. found 1 error");
 	}
     }
 }
@@ -1170,7 +1171,7 @@ while ( lineFileNext(lf, &seqName, NULL))
 	&& checkQual(lf, qual, len) ))
 	{
 	verbose(2,"%s\n%s\n%s\n%s\n", seqName, seq, qName, qual);
-	reportErrAbort("Aborting .. found 1 error\n");
+	reportErrAbort("Aborting .. found 1 error");
 	}
     }
 reportLabelAndLongNumber("number of sequences", line / 4);
@@ -1205,7 +1206,7 @@ while (lineFileNext(lf, &seqName, NULL))
 	&& checkSeq(lf, seq, seq, "colorspace sequence") ) )
 	{
 	verbose(2,"%s\n%s\n", seqName, seq);
-	reportErrAbort("Aborting .. found 1 error\n");
+	reportErrAbort("Aborting .. found 1 error");
 	}
     }
 }
@@ -1243,7 +1244,7 @@ while (lineFileNext(lf, &seqName, NULL))
 	&& checkCsQual(lf, qual) ) )
 	{
 	verbose(2,"%s\n%s\n", seqName, qual);
-	reportErrAbort("Aborting .. found 1 error\n");
+	reportErrAbort("Aborting .. found 1 error");
 	}
     }
 }
@@ -1251,23 +1252,23 @@ while (lineFileNext(lf, &seqName, NULL))
 void validateBigWig(struct lineFile *lf)
 {
 if (chrHash == NULL)
-    reportErrAbort("bigWig validation requires the -chromInfo or -chromDb option\n");
+    reportErrAbort("bigWig validation requires the -chromInfo or -chromDb option");
 
 struct bbiFile *bbiFile;
 
 if (!bigWigFileCheckSigs(lf->fileName))
-    reportErrAbort("bad signatures in file %s\n", lf->fileName);
+    reportErrAbort("bad signatures in file %s", lf->fileName);
 
 bbiFile = bigWigFileOpen(lf->fileName);
 
 if (bbiFile == NULL)
-    reportErrAbort("Aborting... Cannot open bigWig file: %s\n", lf->fileName);
+    reportErrAbort("Aborting ... Cannot open bigWig file: %s", lf->fileName);
 
 
 struct bbiChromInfo *bbiChroms = bbiChromList(bbiFile);
 
 if (bbiChroms == NULL)
-    reportErrAbort("Aborting... cannot get bigWig chromosome list in file: %s\n", lf->fileName);
+    reportErrAbort("Aborting ... cannot get bigWig chromosome list in file: %s", lf->fileName);
 
 struct bbiChromInfo *chroms = bbiChroms;
 for(; chroms; chroms = chroms->next)
@@ -1276,14 +1277,14 @@ for(; chroms; chroms = chroms->next)
 
     if ( (size = hashFindVal(chrHash, chroms->name)) == NULL)
         {
-        reportErrAbort("bigWig contains invalid chromosome name: %s\n", chroms->name);
+        reportErrAbort("bigWig contains invalid chromosome name: %s", chroms->name);
         }
     else
         {
         if (*size != chroms->size)
             {
             reportErrAbort("bigWig contains chromosome with wrong length: %s should be %d bases, "
-                           "not %d bases\n", chroms->name, *size, chroms->size);
+                           "not %d bases", chroms->name, *size, chroms->size);
             }
         }
     }
@@ -1540,7 +1541,7 @@ else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos,
     }
     
 if ((bamPercent == 0.0) && (*errs) >= 1)
-    reportErrAbort("Aborting .. found %d errors\n", *errs);
+    reportErrAbort("Aborting ... found %d errors", *errs);
 
 if (strand == '+')
     bd->numPos++;
@@ -1552,18 +1553,18 @@ return 0;
 void validateBAM(struct lineFile *lf)
 {
 if (chrHash == NULL)
-    reportErrAbort("BAM validation requires the -chromInfo or -chromDb option\n");
+    reportErrAbort("BAM validation requires the -chromInfo or -chromDb option");
 
 int errs = 0;
 samfile_t *fh = samopen(lf->fileName, "rb", NULL);
 
 if (fh == NULL)
-    reportErrAbort("Aborting... Cannot open BAM file: %s\n", lf->fileName);
+    reportErrAbort("Aborting ... Cannot open BAM file: %s", lf->fileName);
 
 bam_header_t *head = fh->header;
 
 if (head == NULL)
-    reportErrAbort("Aborting... Bad BAM header in file: %s\n", lf->fileName);
+    reportErrAbort("Aborting ... Bad BAM header in file: %s", lf->fileName);
 
 int ii;
 
@@ -1593,7 +1594,7 @@ for(ii=0; ii < head->n_targets; ii++)
     }
 
 if (errs > 0)
-    reportErrAbort("Aborting... %d errors found in BAM file\n", errs);
+    reportErrAbort("Aborting ... %d errors found in BAM file", errs);
 
 if (!genome)
     return; // only check sequence if 2bit file specified
@@ -1601,7 +1602,7 @@ if (!genome)
 bam_index_t *idx = bam_index_load(lf->fileName);
 
 if (idx == NULL)
-    reportErrAbort("couldn't find index file for %s\n", lf->fileName);
+    reportErrAbort("couldn't find index file for %s", lf->fileName);
 struct bamCallbackData *bd;
 AllocVar(bd);
 
@@ -1817,7 +1818,7 @@ hashAdd(funcs, "bedN",           &validateBedN);
 
 //hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
-    reportErrAbort("Cannot validate %s type files\n", type);
+    reportErrAbort("Cannot validate %s type files", type);
 validateFiles(func, argc, argv);
 return 0;
 }

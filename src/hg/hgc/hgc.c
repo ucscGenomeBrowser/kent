@@ -5765,7 +5765,6 @@ printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
-cartWebEnd(cart);
 }
 
 void printPslFormat(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start,
@@ -8221,7 +8220,6 @@ void htcTrackHtml(struct trackDb *tdb)
 {
 cartWebStart(cart, database, "%s", tdb->shortLabel);
 printTrackHtml(tdb);
-webEnd();
 }
 
 void doViralProt(struct trackDb *tdb, char *geneName)
@@ -13270,7 +13268,6 @@ if (chainId > 0 )
     }
 
 axtInfoFreeList(&aiList);
-webEnd();
 hFreeConn(&conn2);
 }
 
@@ -18639,7 +18636,6 @@ else
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
-webEnd();
 }
 
 void parseSuperDupsChromPointPos(char *pos, char *retChrom, int *retPos,
@@ -18761,7 +18757,6 @@ if (cgiVarExists("o"))
 else
     puts("<P>Click directly on a repeat for specific information on that repeat</P>");
 printTrackHtml(tdb);
-webEnd();
 }
 /* end of Evan Eichler's stuff */
 

@@ -2,9 +2,15 @@
 
 include ../../inc/common.mk
 
-# List of directories to build
-USE_DIRS = $(DIRS)
+# List of directories to build for userApps
+UTILS_APPLIST = \
+	hgLoadBed \
+	hgLoadOut \
+	hgGcPercent \
+	hgLoadWiggle \
+	ldHgGene
 
+# List of directories to build of interest only at UCSC
 DIRS = \
 	hgAar \
 	hgAddLiftOverChain \
@@ -17,7 +23,6 @@ DIRS = \
 	hgExtFileCheck \
 	hgFakeAgp \
 	hgFindSpec \
-	hgGcPercent \
 	hgGeneBands \
 	hgGenericMicroarray \
 	hgPar \
@@ -26,7 +31,6 @@ DIRS = \
 	hgKgMrna \
 	hgKnownMore \
 	hgKnownMore.oo21 \
-	hgLoadBed \
 	hgLoadBlastTab \
 	hgLoadChain \
 	hgLoadChromGraph \
@@ -35,12 +39,10 @@ DIRS = \
 	hgLoadMaf \
 	hgLoadMafFrames \
 	hgLoadNet \
-	hgLoadOut \
 	hgLoadPsl \
 	hgLoadSeq \
 	hgLoadSample \
 	hgLoadSqlTab \
-	hgLoadWiggle \
 	hgMapMicroarray \
 	hgMedianMicroarray \
 	hgNibSeq \
@@ -58,7 +60,6 @@ DIRS = \
 	hgTraceInfo \
 	hgTrackDb \
 	hgWaba \
-	ldHgGene \
 	hgMrnaRefseq \
 	schema \
 	tfbsConsLoc \
@@ -67,9 +68,17 @@ DIRS = \
         trackDbRaFormat \
 	trackDbPatch
 
+USE_DIRS = $(DIRS) $(UTILS_APPLIST)
+
 all: $(USE_DIRS:%=%.all)
 %.all:
-	( cd $* && echo $* && $(MAKE) )
+	cd $* && echo $* && $(MAKE)
+
+userApps: $(UTILS_APPLIST:%=%.userApp)
+	cd schema/dbSnoop  && echo schema/dbSnoop && $(MAKE)
+
+%.userApp:
+	cd $* && echo $* && $(MAKE)
 
 clean::
 	cd hgTomRough && ${MAKE} clean

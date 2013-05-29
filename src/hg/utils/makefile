@@ -4,6 +4,27 @@
 
 include ../../inc/common.mk
 
+# List of directories to build for userApps
+UTILS_APPLIST = \
+	bedExtendRanges \
+	bedToPsl \
+	bedWeedOverlapping \
+	chromGraphFromBin \
+	chromGraphToBin \
+	crTreeIndexBed \
+	crTreeSearchBed \
+	gapToLift \
+	gff3ToGenePred \
+	gff3ToPsl \
+	gtfToGenePred \
+	hubCheck \
+	makeTableList \
+	oligoMatch \
+	overlapSelect \
+	positionalTblCheck \
+	pslMap \
+	tdbQuery \
+	twoBitMask
 
 SCRIPT_FILES = \
 	dbNsfpToBed.pl \
@@ -11,35 +32,15 @@ SCRIPT_FILES = \
 	mergeOverlapBed4.pl \
 	mergeSortedBed3Plus.pl
 
-# List of directories to build
-USE_DIRS = $(DIRS)
-
+# List of directories to build of interest only at UCSC
 DIRS = \
-	bedToPsl \
-	bedExtendRanges \
-	bedWeedOverlapping \
-	chromGraphFromBin \
-	chromGraphToBin \
-	crTreeIndexBed \
-	crTreeSearchBed \
-	gapToLift \
-	hubCheck hubPublicCheck \
-        makeTableList \
-	oligoMatch \
-	positionalTblCheck \
+	hubPublicCheck \
 	safePush \
 	toDev64 \
-	twoBitMask \
-	gff3ToGenePred \
-	gff3ToPsl \
-	gtfToGenePred \
 	automation \
 	refreshNamedSessionCustomTracks \
 	refSeqGet \
-	tdbQuery \
 	wigBedToStep \
-	overlapSelect \
-	pslMap \
 	pslUniq \
 	makeTrackIndex \
 	geoMirrorNode
@@ -52,12 +53,17 @@ TEST_DIRS = \
 	pslMap \
 	refSeqGet
 
+APPS = $(DIRS) $(UTILS_APPLIST)
 
 all:: utils
 
-utils: $(USE_DIRS:%=%.utils)
+utils: $(APPS:%=%.utils)
 %.utils:
-	(cd $* && $(MAKE))
+	cd $* && echo $* && $(MAKE)
+
+userApps: $(UTILS_APPLIST:%=%.userApp)
+%.userApp:
+	cd $* && echo $* && $(MAKE)
 
 scripts: $(SCRIPT_FILES:%=%.scripts)
 %.scripts:
@@ -71,12 +77,12 @@ test::	${TEST_DIRS:%=%.test}
 %.test:
 	(cd $* && ${MAKE} test)
 
-clean:: $(USE_DIRS:%=%.clean)
+clean:: $(APPS:%=%.clean)
 	- find . -name '*.o' -exec rm {} \;
 %.clean:
 	(cd $* && ${MAKE} clean)
 
-compile:: $(USE_DIRS:%=%.compile)
+compile:: $(APPS:%=%.compile)
 	- find . -name '*.o' -exec rm {} \;
 %.compile:
 	(cd $* && ${MAKE} compile)
