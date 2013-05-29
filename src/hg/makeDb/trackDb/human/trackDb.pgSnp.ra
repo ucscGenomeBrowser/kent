@@ -5,14 +5,15 @@ longLabel Personal Genome Variants
 group varRep
 priority 500
 visibility hide
-subGroup1 view Projects A_PSU=PSU_Bushmen B_1kG=1000_Genomes_Pilot C_CG=Complete_Genomics N_1off=Single-Genome_Projects
-subGroup2 id Genome AA_KB1=KB1 AB_NB1=NB1 AC_MD8=MD8 AD_TK1=TK1 AE_ABT=ABT BF_12878=NA12878 BG_12891=NA12891 BH_12892=NA12892 BI_19240=NA19240 BJ_19238=NA19238 BK_19239=NA19239 CA_PUR_731=HG00731 CB_PUR_732=HG00732 CC_PUR_733=HG00733 NL_Venter=Venter NM_Watson=Watson NN_18507=NA18507 NO_YH=YH NP_SJK=SJK NQ_AK1=AK1 NR_Quake=Quake NRS_Irish=Irish NS_Saqqaq=Saqqaq
+subGroup1 view Projects A_PSU=PSU_Bushmen B_1kG=1000_Genomes_Pilot C_CG=Complete_Genomics D_PGP=Personal_Genomes_Project N_1off=Single-Genome_Projects
+subGroup2 type Variant_type SNP=SNP Indel=Indel
+subGroup3 id Genome AA_KB1=KB1 AB_NB1=NB1 AC_MD8=MD8 AD_TK1=TK1 AE_ABT=ABT BF_12878=NA12878 BG_12891=NA12891 BH_12892=NA12892 BI_19240=NA19240 BJ_19238=NA19238 BK_19239=NA19239 CA_PUR_731=HG00731 CB_PUR_732=HG00732 CC_PUR_733=HG00733 NL_Venter=Venter NM_Watson=Watson NN_18507=NA18507 NO_YH=YH NP_SJK=SJK NQ_AK1=AK1 NR_Quake=Quake NRS_Irish=Irish NS_Saqqaq=Saqqaq CA_div_GS19704=NA19704 CI_div_GS20511=NA20511 CK_div_GS18502=NA18502 CD_div_GS20847=NA20847 CG_div_GS19669=NA19669 CG_div_GS19735=NA19735 CC_div_GS18558=NA18558 CE_div_GS18942=NA18942 CH_div_GS21737=NA21737 CPed_GS12877=NA12877 CG_div_GS19649=NA19649 CC_div_GS18537=NA18537 CH_div_GS21732=NA21732 CA_div_GS19701=NA19701 CH_div_GS21767=NA21767 CC_div_GS18555=NA18555 CI_div_GS20510=NA20510 CPed_GS12885=NA12885 CA_div_GS19834=NA19834 CPed_GS12890=NA12890 CC_div_GS18526=NA18526 CPed_GS12883=NA12883 CG_div_GS19670=NA19670 CE_div_GS18956=NA18956 CF_div_GS19017=NA19017 CK_div_GS18501=NA18501 CI_div_GS20502=NA20502 CPed_GS12886=NA12886 CB_div_GS06985=NA06985 CK_div_GS18508=NA18508 CK_div_GS18505=NA18505 CB_div_GS10851=NA10851 CA_div_GS19700=NA19700 CB_div_GS12004=NA12004 CB_div_GS07357=NA07357 CD_div_GS20846=NA20846 CPed_GS12887=NA12887 CB_div_GS06994=NA06994 CD_div_GS20845=NA20845 CPed_GS12884=NA12884 CPed_GS12888=NA12888 CPed_GS12879=NA12879 CPed_GS12882=NA12882 CD_div_GS20850=NA20850 CI_div_GS20509=NA20509 CPed_GS12880=NA12880 CPed_GS12889=NA12889 CF_div_GS19020=NA19020 CA_div_GS19703=NA19703 CF_div_GS19025=NA19025 CPed_GS12881=NA12881 CE_div_GS18940=NA18940 CG_div_GS19648=NA19648 CE_div_GS18947=NA18947 CF_div_GS19026=NA19026 CK_div_GS19129=NA19129 CK_div_GS18517=NA18517 CH_div_GS21733=NA21733 CK_div_GS18504=NA18504 CPed_GS12893=NA12893 D_Church=Church D_Gill=Gill D_Angrist=Angrist D_GatesJr=Gates_Jr D_GatesSr=Gates_Sr NR_Kriek=Kriek NR_Lucier=Lucier
 dragAndDrop subTracks
 configurable on
-dimensions dimX=view dimY=id
-sortOrder view=+ id=+
+dimensions dimX=view dimY=type
+sortOrder view=+ id=+ type=-
 maxItems 50
-type bed 4 +
+type pgSnp
 
     track pgSnpPSU
     shortLabel PSU Bushmen
@@ -22,78 +23,91 @@ type bed 4 +
 
         track pgKb1Indel
         parent pgSnpPSU
-	subGroups view=A_PSU id=AA_KB1
+	subGroups view=A_PSU id=AA_KB1 type=Indel
         shortLabel KB1 indels
         longLabel KB1 indels from 454 and Illumina
 
         track pgKb1Comb
         parent pgSnpPSU
-	subGroups view=A_PSU id=AA_KB1
+	subGroups view=A_PSU id=AA_KB1 type=SNP
         shortLabel KB1
         longLabel KB1 Genome Variants, combination of 454, Illumina, and genotyping
-        pgDbLink pgKb1PhenCode pgKb1Snpedia pgKb1Hgmd
+
+        track pgKb1Illum
+        parent pgSnpPSU
+        shortLabel KB1 Illumina
+        longLabel KB1 Genome Variants, Illumina 23.2X
+        subGroups view=A_PSU id=AA_KB1 type=SNP
+
+        track pgKb1454
+        parent pgSnpPSU
+        shortLabel KB1 454
+        longLabel KB1 Genome Variants, 454
+        subGroups view=A_PSU id=AA_KB1 type=SNP
+
+        track pgYoruban2
+        parent pgSnpPSU
+        shortLabel YRI '8507, SOLiD
+        longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
+        subGroups view=A_PSU id=NN_18507 type=SNP
 
         track pgNb1
         parent pgSnpPSU
-	subGroups view=A_PSU id=AB_NB1
+	subGroups view=A_PSU id=AB_NB1 type=SNP
         shortLabel NB1
         longLabel NB1 Genome Variants (all SNPs, 2X genome plus 16x exome)
-        pgDbLink pgNb1PhenCode pgNb1Snpedia pgNb1Hgmd
 
         track pgNb1Indel
         parent pgSnpPSU
-	subGroups view=A_PSU id=AB_NB1
+	subGroups view=A_PSU id=AB_NB1 type=Indel
         shortLabel NB1 indels
         longLabel NB1 Genome Variants indels
 
         track pgMd8
         parent pgSnpPSU
-	subGroups view=A_PSU id=AC_MD8
+	subGroups view=A_PSU id=AC_MD8 type=SNP
         shortLabel MD8
         longLabel MD8 Genome Variants (all SNPs, 16x exome)
-        pgDbLink pgMd8PhenCode pgMd8Snpedia pgNb1Hgmd
 
         track pgMd8Indel
         parent pgSnpPSU
-	subGroups view=A_PSU id=AC_MD8
+	subGroups view=A_PSU id=AC_MD8 type=Indel
         shortLabel MD8 indels
         longLabel MD8 Genome Variants indels
 
         track pgTk1
         parent pgSnpPSU
-	subGroups view=A_PSU id=AD_TK1
+	subGroups view=A_PSU id=AD_TK1 type=SNP
         shortLabel TK1
         longLabel TK1 Genome Variants (all SNPs, 16x exome)
-        pgDbLink pgTk1PhenCode pgTk1Snpedia pgTk1Hgmd
 
         track pgTk1Indel
         parent pgSnpPSU
-	subGroups view=A_PSU id=AD_TK1
+	subGroups view=A_PSU id=AD_TK1 type=Indel
         shortLabel TK1 indels
         longLabel TK1 Genome Variants indels
 
         track pgAbtSolid
         parent pgSnpPSU
-	subGroups view=A_PSU id=AE_ABT
+	subGroups view=A_PSU id=AE_ABT type=SNP
         shortLabel ABT
         longLabel ABT Genome Variants, SOLiD
-        pgDbLink pgAbtPhenCode pgAbtSnpedia pgAbtHgmd
 
         track pgAbt454
         parent pgSnpPSU
-	subGroups view=A_PSU id=AE_ABT
+	subGroups view=A_PSU id=AE_ABT type=SNP
         shortLabel ABT exome
         longLabel ABT Genome Variants, 454 exome
 
         track pgAbt454indels
         parent pgSnpPSU
-	subGroups view=A_PSU id=AE_ABT
+	subGroups view=A_PSU id=AE_ABT type=Indel
         shortLabel ABT exome indels
         longLabel ABT Genome Variants, 454 exome indels
 
         track pgAbtIllum
         parent pgSnpPSU
-	subGroups view=A_PSU id=AE_ABT
+	subGroups view=A_PSU id=AE_ABT type=SNP
         shortLabel ABT Illum
         longLabel ABT Genome Variants, Illumina 7.2X
 
@@ -105,42 +119,42 @@ type bed 4 +
 
         track pgNA12878
         parent pgSnp1kG
-	subGroups view=B_1kG id=BF_12878
+	subGroups view=B_1kG id=BF_12878 type=SNP
         shortLabel CEU daught '2878
         longLabel CEU Trio Daughter NA12878 (1000 Genomes Project)
         color 128,64,0
 
         track pgNA12891
         parent pgSnp1kG
-	subGroups view=B_1kG id=BG_12891
+	subGroups view=B_1kG id=BG_12891 type=SNP
         shortLabel CEU father '2891
         longLabel CEU Trio Father NA12891 (1000 Genomes Project)
         color 128,64,0
 
         track pgNA12892
         parent pgSnp1kG
-	subGroups view=B_1kG id=BH_12892
+	subGroups view=B_1kG id=BH_12892 type=SNP
         shortLabel CEU mother '2892
         longLabel CEU Trio Mother NA12892 (1000 Genomes Project)
         color 128,64,0
 
         track pgNA19240
         parent pgSnp1kG
-	subGroups view=B_1kG id=BI_19240
+	subGroups view=B_1kG id=BI_19240 type=SNP
         shortLabel YRI daught '9240
         longLabel YRI Trio Daughter NA19240 (1000 Genomes Project)
         color 128,64,0
 
         track pgNA19238
         parent pgSnp1kG
-	subGroups view=B_1kG id=BJ_19238
+	subGroups view=B_1kG id=BJ_19238 type=SNP
         shortLabel YRI mother '9238
         longLabel YRI Trio Mother NA19238 (1000 Genomes Project)
         color 128,64,0
 
         track pgNA19239
         parent pgSnp1kG
-	subGroups view=B_1kG id=BK_19239
+	subGroups view=B_1kG id=BK_19239 type=SNP
         shortLabel YRI father '9239
         longLabel YRI Trio Father NA19239 (1000 Genomes Project)
         color 128,64,0
@@ -153,222 +167,92 @@ type bed 4 +
 
         track pgVenter
         parent pgSnp1off
-	subGroups view=N_1off id=NL_Venter
+	subGroups view=N_1off id=NL_Venter type=SNP
         shortLabel Venter
         longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI)
         color 128,0,128
 
         track pgWatson
         parent pgSnp1off
-	subGroups view=N_1off id=NM_Watson
+	subGroups view=N_1off id=NM_Watson type=SNP
         shortLabel Watson
         longLabel James Watson (CSHL)
         color 153,0,0
 
         track pgYoruban3
         parent pgSnp1off
-	subGroups view=N_1off id=NN_18507
+	subGroups view=N_1off id=NN_18507 type=SNP
         shortLabel YRI NA18507
         longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU)
         color 128,0,128
 
         track pgYh1
         parent pgSnp1off
-	subGroups view=N_1off id=NO_YH
+	subGroups view=N_1off id=NO_YH type=SNP
         shortLabel YanHuang
         longLabel Han Chinese Individual (YanHuang Project)
         color 0,128,128
 
         track pgSjk
         parent pgSnp1off
-	subGroups view=N_1off id=NP_SJK
+	subGroups view=N_1off id=NP_SJK type=SNP
         shortLabel SJK
         longLabel Seong-Jin Kim (SJK, GUMS/KOBIC)
         color 0,128,128
 
         track pgAk1
         parent pgSnp1off
-	subGroups view=N_1off id=NQ_AK1
+	subGroups view=N_1off id=NQ_AK1 type=SNP
         shortLabel AK1
         longLabel Anonymous Korean individual, AK1 (Genomic Medicine Institute)
         color 0,128,64
 
         track pgQuake
         parent pgSnp1off
-	subGroups view=N_1off id=NR_Quake
+	subGroups view=N_1off id=NR_Quake type=SNP
         shortLabel S. Quake
         longLabel Stephen Quake (Stanford)
 
         track pgIrish
         parent pgSnp1off
-        subGroups view=N_1off id=NRS_Irish
+        subGroups view=N_1off id=NRS_Irish type=SNP
         shortLabel Irish Male
         longLabel Anonymous Irish Male
         color 0,100,100
 
         track pgSaqqaq
         parent pgSnp1off
-	subGroups view=N_1off id=NS_Saqqaq
+	subGroups view=N_1off id=NS_Saqqaq type=SNP
         shortLabel Saqqaq
         longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq (Saqqaq Genome Project)
 
         track pgSaqqaqHc
         parent pgSnp1off
-	subGroups view=N_1off id=NS_Saqqaq
+	subGroups view=N_1off id=NS_Saqqaq type=SNP
         shortLabel Saqqaq HC
         longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq, high confidence SNPs (Saqqaq Genome Project)
 
-#track pgSnpDevLifted
-#compositeTrack on
-#shortLabel GenomeVarsDevLifted
-#longLabel Personal Genome Variants lifted - Hgwdev only
-#subGroup1 view Projects A_PSU=PSU_Bushmen B_1kG=1000_Genomes_Pilot C_CG=Complete_Genomics D_PGP=Personal_Genomes_Project N_1off=Single-Genome_Projects
-#subGroup2 id Genome AA_KB1=KB1 AB_NB1=NB1 AC_MD8=MD8 AD_TK1=TK1 AE_ABT=ABT BF_12878=NA12878 BG_12891=NA12891 BH_12892=NA12892 BI_19240=NA19240 BJ_19238=NA19238 BK_19239=NA19239 CA_PUR_731=HG00731 CB_PUR_732=HG00732 CC_PUR_733=HG00733 NL_Venter=Venter NM_Watson=Watson NN_18507=NA18507 NO_YH=YH NP_SJK=SJK NQ_AK1=AK1 NR_Quake=Quake NRS_Irish=Irish NS_Saqqaq=Saqqaq CA_div_GS19704=NA19704 CI_div_GS20511=NA20511 CK_div_GS18502=NA18502 CD_div_GS20847=NA20847 CG_div_GS19669=NA19669 CG_div_GS19735=NA19735 CC_div_GS18558=NA18558 CE_div_GS18942=NA18942 CH_div_GS21737=NA21737 CPed_GS12877=NA12877 CG_div_GS19649=NA19649 CC_div_GS18537=NA18537 CH_div_GS21732=NA21732 CA_div_GS19701=NA19701 CH_div_GS21767=NA21767 CC_div_GS18555=NA18555 CI_div_GS20510=NA20510 CPed_GS12885=NA12885 CA_div_GS19834=NA19834 CPed_GS12890=NA12890 CC_div_GS18526=NA18526 CPed_GS12883=NA12883 CG_div_GS19670=NA19670 CE_div_GS18956=NA18956 CF_div_GS19017=NA19017 CK_div_GS18501=NA18501 CI_div_GS20502=NA20502 CPed_GS12886=NA12886 CB_div_GS06985=NA06985 CK_div_GS18508=NA18508 CK_div_GS18505=NA18505 CB_div_GS10851=NA10851 CA_div_GS19700=NA19700 CB_div_GS12004=NA12004 CB_div_GS07357=NA07357 CD_div_GS20846=NA20846 CPed_GS12887=NA12887 CB_div_GS06994=NA06994 CD_div_GS20845=NA20845 CPed_GS12884=NA12884 CPed_GS12888=NA12888 CPed_GS12879=NA12879 CPed_GS12882=NA12882 CD_div_GS20850=NA20850 CI_div_GS20509=NA20509 CPed_GS12880=NA12880 CPed_GS12889=NA12889 CF_div_GS19020=NA19020 CA_div_GS19703=NA19703 CF_div_GS19025=NA19025 CPed_GS12881=NA12881 CE_div_GS18940=NA18940 CG_div_GS19648=NA19648 CE_div_GS18947=NA18947 CF_div_GS19026=NA19026 CK_div_GS19129=NA19129 CK_div_GS18517=NA18517 CH_div_GS21733=NA21733 CK_div_GS18504=NA18504 CPed_GS12893=NA12893 D_Church=Church D_Gill=Gill D_Angrist=Angrist D_GatesJr=Gates_Jr D_GatesSr=Gates_Sr NR_Kriek=Kriek NR_Lucier=Lucier
-#dragAndDrop subTracks
-#group varRep
-#configurable on
-#dimensions dimX=view dimY=id
-#sortOrder view=+ id=+
-#maxItems 50
-#priority 500.01
-#visibility hide
-#type bed 4 +
-
-    #track pgSnpPSUL
-    #shortLabel PSU Bushmen
-    #view A_PSU
-    #visibility pack
-    #parent pgSnpDevLifted
-
-        #track pgKb1Illum
-        #parent pgSnpPSUL
-        #shortLabel KB1 Illumina
-        #longLabel KB1 Genome Variants, Illumina 23.2X
-        #subGroups view=A_PSU id=AA_KB1
-
-        #track pgKb1454
-        #parent pgSnpPSUL
-        #shortLabel KB1 454
-        #longLabel KB1 Genome Variants, 454
-        #subGroups view=A_PSU id=AA_KB1
-
-        #track pgYoruban2
-        #parent pgSnpPSUL
-        #shortLabel YRI '8507, SOLiD
-        #longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
-        #subGroups view=A_PSU id=NN_18507
-
-    #track pgSnp1offL
-    #shortLabel Single Genomes
-    #view N_1off
-    #visibility pack
-    #parent pgSnpDevLifted
-
-    #track pgSnpPGPL
-    #shortLabel Personal Genome Project
-    #view D_PGP
-    #visibility pack
-    #parent pgSnpHgwdev
-
-        #track pgChurch
-        #parent pgSnpPGPL
-        #subGroups view=D_PGP id=D_Church
-        #shortLabel George Church
-        #longLabel George Church (Personal Genome Project)
-
-        #track pgAngrist
-        #parent pgSnpPGPL
-        #subGroups view=D_PGP id=D_Angrist
-        #shortLabel Misha Angrist
-        #longLabel Misha Angrist (Personal Genome Project)
-
-        #track pgGill
-        #parent pgSnpPGPL
-        #subGroups view=D_PGP id=D_Gill
-        #shortLabel Rosalynn Gill
-        #longLabel Rosalynn Gill (Personal Genome Project)
-
-        #track pgGatesSr
-        #parent pgSnpPGPL
-        #subGroups view=D_PGP id=D_GatesSr
-        #shortLabel Gates Sr
-        #longLabel Henry Louis Gates Sr (Personal Genome Project
-#
-        #track pgGatesJr
-        #parent pgSnpPGPL
-        #subGroups view=D_PGP id=D_GatesJr
-        #shortLabel Gates Jr
-        #longLabel Henry Louis Gates Jr (Personal Genome Project)
-
-
-track pgSnpHgwdev
-compositeTrack on
-shortLabel GenomeVarsHgwdev
-longLabel Personal Genome Variants - Hgwdev only
-subGroup1 view Projects A_PSU=PSU_Bushmen B_1kG=1000_Genomes_Pilot C_CG=Complete_Genomics D_PGP=Personal_Genomes_Project N_1off=Single-Genome_Projects
-subGroup2 type Variant_type SNP=SNP Indel=Indel
-subGroup3 id Genome AA_KB1=KB1 AB_NB1=NB1 AC_MD8=MD8 AD_TK1=TK1 AE_ABT=ABT BF_12878=NA12878 BG_12891=NA12891 BH_12892=NA12892 BI_19240=NA19240 BJ_19238=NA19238 BK_19239=NA19239 CA_PUR_731=HG00731 CB_PUR_732=HG00732 CC_PUR_733=HG00733 NL_Venter=Venter NM_Watson=Watson NN_18507=NA18507 NO_YH=YH NP_SJK=SJK NQ_AK1=AK1 NR_Quake=Quake NRS_Irish=Irish NS_Saqqaq=Saqqaq CA_div_GS19704=NA19704 CI_div_GS20511=NA20511 CK_div_GS18502=NA18502 CD_div_GS20847=NA20847 CG_div_GS19669=NA19669 CG_div_GS19735=NA19735 CC_div_GS18558=NA18558 CE_div_GS18942=NA18942 CH_div_GS21737=NA21737 CPed_GS12877=NA12877 CG_div_GS19649=NA19649 CC_div_GS18537=NA18537 CH_div_GS21732=NA21732 CA_div_GS19701=NA19701 CH_div_GS21767=NA21767 CC_div_GS18555=NA18555 CI_div_GS20510=NA20510 CPed_GS12885=NA12885 CA_div_GS19834=NA19834 CPed_GS12890=NA12890 CC_div_GS18526=NA18526 CPed_GS12883=NA12883 CG_div_GS19670=NA19670 CE_div_GS18956=NA18956 CF_div_GS19017=NA19017 CK_div_GS18501=NA18501 CI_div_GS20502=NA20502 CPed_GS12886=NA12886 CB_div_GS06985=NA06985 CK_div_GS18508=NA18508 CK_div_GS18505=NA18505 CB_div_GS10851=NA10851 CA_div_GS19700=NA19700 CB_div_GS12004=NA12004 CB_div_GS07357=NA07357 CD_div_GS20846=NA20846 CPed_GS12887=NA12887 CB_div_GS06994=NA06994 CD_div_GS20845=NA20845 CPed_GS12884=NA12884 CPed_GS12888=NA12888 CPed_GS12879=NA12879 CPed_GS12882=NA12882 CD_div_GS20850=NA20850 CI_div_GS20509=NA20509 CPed_GS12880=NA12880 CPed_GS12889=NA12889 CF_div_GS19020=NA19020 CA_div_GS19703=NA19703 CF_div_GS19025=NA19025 CPed_GS12881=NA12881 CE_div_GS18940=NA18940 CG_div_GS19648=NA19648 CE_div_GS18947=NA18947 CF_div_GS19026=NA19026 CK_div_GS19129=NA19129 CK_div_GS18517=NA18517 CH_div_GS21733=NA21733 CK_div_GS18504=NA18504 CPed_GS12893=NA12893 D_Church=Church D_Gill=Gill D_Angrist=Angrist D_GatesJr=Gates_Jr D_GatesSr=Gates_Sr NR_Kriek=Kriek NR_Lucier=Lucier
-dragAndDrop subTracks
-group varRep
-configurable on
-dimensions dimX=view dimY=type
-sortOrder view=+ id=+ type=-
-maxItems 50
-priority 500.01
-visibility hide
-type bed 4 +
-
-    track pgSnpPSU2
-    shortLabel PSU Bushmen
-    view A_PSU
-    visibility pack
-    parent pgSnpHgwdev
-
-        track pgKb1Illum
-        parent pgSnpPSU2
-        shortLabel KB1 Illumina
-        longLabel KB1 Genome Variants, Illumina 23.2X
-        subGroups view=A_PSU id=AA_KB1 type=SNP
-
-        track pgKb1454
-        parent pgSnpPSU2
-        shortLabel KB1 454
-        longLabel KB1 Genome Variants, 454
-        subGroups view=A_PSU id=AA_KB1 type=SNP
-
-        track pgYoruban2
-        parent pgSnpPSU2
-        shortLabel YRI '8507, SOLiD
-        longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
-        subGroups view=A_PSU id=NN_18507 type=SNP
-
-    track pgSnp1off2
-    shortLabel Single Genomes
-    view N_1off
-    visibility pack
-    parent pgSnpHgwdev
-
 	track pgKriek
-        parent pgSnp1off2
+        parent pgSnp1off
         subGroups view=N_1off id=NR_Kriek type=SNP
         shortLabel M. Kriek
         longLabel Marjolein Kriek (Leiden University Medical Centre)
 
         track pgLucier
-        parent pgSnp1off2
+        parent pgSnp1off
         subGroups view=N_1off id=NR_Lucier type=SNP
         shortLabel Greg Lucier
         longLabel Gregory Lucier (Life Technologies)
 
 	track pgVenterSnp
-        parent pgSnp1off2
+        parent pgSnp1off
         subGroups view=N_1off id=NL_Venter type=SNP
         shortLabel Venter
         longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI)
         color 128,0,128
 
 	track pgVenterIndel
-        parent pgSnp1off2
+        parent pgSnp1off
         subGroups view=N_1off id=NL_Venter type=Indel
         shortLabel Venter indels
         longLabel J. Craig Venter - Published Method 1, Indels in Original Form (JCVI)
@@ -378,7 +262,7 @@ type bed 4 +
     shortLabel Personal Genome Project
     view D_PGP
     visibility pack
-    parent pgSnpHgwdev
+    parent pgSnp
 
         track pgChurch
         parent pgSnpPGP
@@ -410,839 +294,839 @@ type bed 4 +
         shortLabel Gates Jr
         longLabel Henry Louis Gates Jr (Personal Genome Project)
 
-    track pgSnpCg2
-    parent pgSnpHgwdev
+    track pgSnpCg
+    parent pgSnp
     shortLabel Complete Genomics
     view C_CG
     visibility pack
 
         track pgHG00731
-        parent pgSnpCg2
+        parent pgSnpCg
         shortLabel PUR father '731
         longLabel PUR Trio Father HG00731 (Complete Genomics)
         color 128,64,0
 	subGroups view=C_CG id=CA_PUR_731 type=SNP
     
         track pgHG00732
-        parent pgSnpCg2
+        parent pgSnpCg
         shortLabel PUR mother '732
         longLabel PUR Trio Mother HG00732 (Complete Genomics)
         color 128,64,0
 	subGroups view=C_CG id=CB_PUR_732 type=SNP
     
         track pgHG00733
-        parent pgSnpCg2
+        parent pgSnpCg
         shortLabel PUR daughter '733
         longLabel PUR Trio Daughter HG00733 (Complete Genomics)
         color 128,64,0
 	subGroups view=C_CG id=CC_PUR_733 type=SNP
 
-        track pgGS19704
-        parent pgSnpCg2
+        track pgNA19704
+        parent pgSnpCg
         subGroups view=C_CG id=CA_div_GS19704 type=SNP
         shortLabel ASW NA19704
         longLabel ASW NA19704 (Complete Genomics)
 
-        track pgGS20511
-        parent pgSnpCg2
+        track pgNA20511
+        parent pgSnpCg
         subGroups view=C_CG id=CI_div_GS20511 type=SNP
         shortLabel TSI NA20511
         longLabel TSI NA20511 (Complete Genomics)
 
-        track pgGS18502
-        parent pgSnpCg2
+        track pgNA18502
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18502 type=SNP
         shortLabel YRI NA18502
         longLabel YRI NA18502 (Complete Genomics)
 
-        track pgGS20847
-        parent pgSnpCg2
+        track pgNA20847
+        parent pgSnpCg
         subGroups view=C_CG id=CD_div_GS20847 type=SNP
         shortLabel GIH NA20847
         longLabel GIH NA20847 (Complete Genomics)
 
-        track pgGS19669
-        parent pgSnpCg2
+        track pgNA19669
+        parent pgSnpCg
         subGroups view=C_CG id=CG_div_GS19669 type=SNP
         shortLabel MXL NA19669
         longLabel MXL NA19669 (Complete Genomics)
 
-        track pgGS19735
-        parent pgSnpCg2
+        track pgNA19735
+        parent pgSnpCg
         subGroups view=C_CG id=CG_div_GS19735 type=SNP
         shortLabel MXL NA19735
         longLabel MXL NA19735 (Complete Genomics)
 
-        track pgGS18558
-        parent pgSnpCg2
+        track pgNA18558
+        parent pgSnpCg
         subGroups view=C_CG id=CC_div_GS18558 type=SNP
         shortLabel CHB NA18558
         longLabel CHB NA18558 (Complete Genomics)
 
-        track pgGS18942
-        parent pgSnpCg2
+        track pgNA18942
+        parent pgSnpCg
         subGroups view=C_CG id=CE_div_GS18942 type=SNP
         shortLabel JPT NA18942
         longLabel JPT NA18942 (Complete Genomics)
 
-        track pgGS21737
-        parent pgSnpCg2
+        track pgNA21737
+        parent pgSnpCg
         subGroups view=C_CG id=CH_div_GS21737 type=SNP
         shortLabel MKK NA21737
         longLabel MKK NA21737 (Complete Genomics)
 
-        track pgGS19649
-        parent pgSnpCg2
+        track pgNA19649
+        parent pgSnpCg
         subGroups view=C_CG id=CG_div_GS19649 type=SNP
         shortLabel MXL NA19649
         longLabel MXL NA19649 (Complete Genomics)
 
-        track pgGS18537
-        parent pgSnpCg2
+        track pgNA18537
+        parent pgSnpCg
         subGroups view=C_CG id=CC_div_GS18537 type=SNP
         shortLabel CHB NA18537
         longLabel CHB NA18537 (Complete Genomics)
 
-        track pgGS21732
-        parent pgSnpCg2
+        track pgNA21732
+        parent pgSnpCg
         subGroups view=C_CG id=CH_div_GS21732 type=SNP
         shortLabel MKK NA21732
         longLabel MKK NA21732 (Complete Genomics)
 
-        track pgGS19701
-        parent pgSnpCg2
+        track pgNA19701
+        parent pgSnpCg
         subGroups view=C_CG id=CA_div_GS19701 type=SNP
         shortLabel ASW NA19701
         longLabel ASW NA19701 (Complete Genomics)
 
-        track pgGS21767
-        parent pgSnpCg2
+        track pgNA21767
+        parent pgSnpCg
         subGroups view=C_CG id=CH_div_GS21767 type=SNP
         shortLabel MKK NA21767
         longLabel MKK NA21767 (Complete Genomics)
 
-        track pgGS18555
-        parent pgSnpCg2
+        track pgNA18555
+        parent pgSnpCg
         subGroups view=C_CG id=CC_div_GS18555 type=SNP
         shortLabel CHB NA18555
         longLabel CHB NA18555 (Complete Genomics)
 
-        track pgGS19240
-        parent pgSnpCg2
+        track pgNA19240CG
+        parent pgSnpCg
         subGroups view=C_CG id=BI_19240 type=SNP
         shortLabel YRI NA19240
         longLabel YRI NA19240 (Daughter) (Complete Genomics)
 
-        track pgGS20510
-        parent pgSnpCg2
+        track pgNA20510
+        parent pgSnpCg
         subGroups view=C_CG id=CI_div_GS20510 type=SNP
         shortLabel TSI NA20510
         longLabel TSI NA20510 (Complete Genomics)
 
-        track pgGS19834
-        parent pgSnpCg2
+        track pgNA19834
+        parent pgSnpCg
         subGroups view=C_CG id=CA_div_GS19834 type=SNP
         shortLabel ASW NA19834
         longLabel ASW NA19834 (Complete Genomics)
 
-        track pgGS18526
-        parent pgSnpCg2
+        track pgNA18526
+        parent pgSnpCg
         subGroups view=C_CG id=CC_div_GS18526 type=SNP
         shortLabel CHB NA18526
         longLabel CHB NA18526 (Complete Genomics)
 
-        track pgGS19670
-        parent pgSnpCg2
+        track pgNA19670
+        parent pgSnpCg
         subGroups view=C_CG id=CG_div_GS19670 type=SNP
         shortLabel MXL NA19670
         longLabel MXL NA19670 (Complete Genomics)
 
-        track pgGS18956
-        parent pgSnpCg2
+        track pgNA18956
+        parent pgSnpCg
         subGroups view=C_CG id=CE_div_GS18956 type=SNP
         shortLabel JPT NA18956
         longLabel JPT NA18956 (Complete Genomics)
 
-        track pgGS19017
-        parent pgSnpCg2
+        track pgNA19017
+        parent pgSnpCg
         subGroups view=C_CG id=CF_div_GS19017 type=SNP
         shortLabel LWK NA19017
         longLabel LWK NA19017 (Complete Genomics)
 
-        track pgGS18501
-        parent pgSnpCg2
+        track pgNA18501
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18501 type=SNP
         shortLabel YRI NA18501
         longLabel YRI NA18501 (Complete Genomics)
 
-        track pgGS20502
-        parent pgSnpCg2
+        track pgNA20502
+        parent pgSnpCg
         subGroups view=C_CG id=CI_div_GS20502 type=SNP
         shortLabel TSI NA20502
         longLabel TSI NA20502 (Complete Genomics)
 
-        track pgGS06985
-        parent pgSnpCg2
+        track pgNA06985
+        parent pgSnpCg
         subGroups view=C_CG id=CB_div_GS06985 type=SNP
         shortLabel CEU NA06985
         longLabel CEU NA06985 (Complete Genomics)
 
-        track pgGS18508
-        parent pgSnpCg2
+        track pgNA18508
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18508 type=SNP
         shortLabel YRI NA18508
         longLabel YRI NA18508 (Complete Genomics)
 
-        track pgGS18505
-        parent pgSnpCg2
+        track pgNA18505
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18505 type=SNP
         shortLabel YRI NA18505
         longLabel YRI NA18505 (Complete Genomics)
 
-        track pgGS10851
-        parent pgSnpCg2
+        track pgNA10851
+        parent pgSnpCg
         subGroups view=C_CG id=CB_div_GS10851 type=SNP
         shortLabel CEU NA10851
         longLabel CEU NA10851 (Complete Genomics)
 
-        track pgGS19700
-        parent pgSnpCg2
+        track pgNA19700
+        parent pgSnpCg
         subGroups view=C_CG id=CA_div_GS19700 type=SNP
         shortLabel ASW NA19700
         longLabel ASW NA19700 (Complete Genomics)
 
-        track pgGS12004
-        parent pgSnpCg2
+        track pgNA12004
+        parent pgSnpCg
         subGroups view=C_CG id=CB_div_GS12004 type=SNP
         shortLabel CEU NA12004
         longLabel CEU NA12004 (Complete Genomics)
 
-        track pgGS07357
-        parent pgSnpCg2
+        track pgNA07357
+        parent pgSnpCg
         subGroups view=C_CG id=CB_div_GS07357 type=SNP
         shortLabel CEU NA07357
         longLabel CEU NA07357 (Complete Genomics)
 
-        track pgGS20846
-        parent pgSnpCg2
+        track pgNA20846
+        parent pgSnpCg
         subGroups view=C_CG id=CD_div_GS20846 type=SNP
         shortLabel GIH NA20846
         longLabel GIH NA20846 (Complete Genomics)
 
-        track pgGS06994
-        parent pgSnpCg2
+        track pgNA06994
+        parent pgSnpCg
         subGroups view=C_CG id=CB_div_GS06994 type=SNP
         shortLabel CEU NA06994
         longLabel CEU NA06994 (Complete Genomics)
 
-        track pgGS20845
-        parent pgSnpCg2
+        track pgNA20845
+        parent pgSnpCg
         subGroups view=C_CG id=CD_div_GS20845 type=SNP
         shortLabel GIH NA20845
         longLabel GIH NA20845 (Complete Genomics)
 
-        track pgGS20850
-        parent pgSnpCg2
+        track pgNA20850
+        parent pgSnpCg
         subGroups view=C_CG id=CD_div_GS20850 type=SNP
         shortLabel GIH NA20850
         longLabel GIH NA20850 (Complete Genomics)
 
-        track pgGS20509
-        parent pgSnpCg2
+        track pgNA20509
+        parent pgSnpCg
         subGroups view=C_CG id=CI_div_GS20509 type=SNP
         shortLabel TSI NA20509
         longLabel TSI NA20509 (Complete Genomics)
 
-        track pgGS19238
-        parent pgSnpCg2
+        track pgNA19238CG
+        parent pgSnpCg
         subGroups view=C_CG id=BJ_19238 type=SNP
         shortLabel YRI NA19238
         longLabel YRI NA19238 (Mother) (Complete Genomics)
 
-        track pgGS19020
-        parent pgSnpCg2
+        track pgNA19020
+        parent pgSnpCg
         subGroups view=C_CG id=CF_div_GS19020 type=SNP
         shortLabel LWK NA19020
         longLabel LWK NA19020 (Complete Genomics)
 
-        track pgGS19703
-        parent pgSnpCg2
+        track pgNA19703
+        parent pgSnpCg
         subGroups view=C_CG id=CA_div_GS19703 type=SNP
         shortLabel ASW NA19703
         longLabel ASW NA19703 (Complete Genomics)
 
-        track pgGS19025
-        parent pgSnpCg2
+        track pgNA19025
+        parent pgSnpCg
         subGroups view=C_CG id=CF_div_GS19025 type=SNP
         shortLabel LWK NA19025
         longLabel LWK NA19025 (Complete Genomics)
 
-        track pgGS18940
-        parent pgSnpCg2
+        track pgNA18940
+        parent pgSnpCg
         subGroups view=C_CG id=CE_div_GS18940 type=SNP
         shortLabel JPT NA18940
         longLabel JPT NA18940 (Complete Genomics)
 
-        track pgGS19648
-        parent pgSnpCg2
+        track pgNA19648
+        parent pgSnpCg
         subGroups view=C_CG id=CG_div_GS19648 type=SNP
         shortLabel MXL NA19648
         longLabel MXL NA19648 (Complete Genomics)
 
-        track pgGS18947
-        parent pgSnpCg2
+        track pgNA18947
+        parent pgSnpCg
         subGroups view=C_CG id=CE_div_GS18947 type=SNP
         shortLabel JPT NA18947
         longLabel JPT NA18947 (Complete Genomics)
 
-        track pgGS19239
-        parent pgSnpCg2
+        track pgNA19239CG
+        parent pgSnpCg
         subGroups view=C_CG id=BK_19239 type=SNP
         shortLabel YRI NA19239
         longLabel YRI NA19239 (Father) (Complete Genomics)
 
-        track pgGS19026
-        parent pgSnpCg2
+        track pgNA19026
+        parent pgSnpCg
         subGroups view=C_CG id=CF_div_GS19026 type=SNP
         shortLabel LWK NA19026
         longLabel LWK NA19026 (Complete Genomics)
 
-        track pgGS19129
-        parent pgSnpCg2
+        track pgNA19129
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS19129 type=SNP
         shortLabel YRI NA19129
         longLabel YRI NA19129 (Complete Genomics)
 
-        track pgGS18517
-        parent pgSnpCg2
+        track pgNA18517
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18517 type=SNP
         shortLabel YRI NA18517
         longLabel YRI NA18517 (Complete Genomics)
 
-        track pgGS21733
-        parent pgSnpCg2
+        track pgNA21733
+        parent pgSnpCg
         subGroups view=C_CG id=CH_div_GS21733 type=SNP
         shortLabel MKK NA21733
         longLabel MKK NA21733 (Complete Genomics)
 
-        track pgGS18504
-        parent pgSnpCg2
+        track pgNA18504
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18504 type=SNP
         shortLabel YRI NA18504
         longLabel YRI NA18504 (Complete Genomics)
 
-        track pgGS12877
-        parent pgSnpCg2
+        track pgNA12877
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12877 type=SNP
         shortLabel CEU NA12877
         longLabel CEU pedigree 1463, NA12877 (Complete Genomics)
 
-        track pgGS12878
-        parent pgSnpCg2
+        track pgNA12878CG
+        parent pgSnpCg
         subGroups view=C_CG id=BF_12878 type=SNP
         shortLabel CEU NA12878
         longLabel CEU pedigree 1463, NA12878 (Complete Genomics)
 
-        track pgGS12879
-        parent pgSnpCg2
+        track pgNA12879
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12879 type=SNP
         shortLabel CEU NA12879
         longLabel CEU pedigree 1463, NA12879 (Complete Genomics)
 
-        track pgGS12880
-        parent pgSnpCg2
+        track pgNA12880
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12880 type=SNP
         shortLabel CEU NA12880
         longLabel CEU pedigree 1463, NA12880 (Complete Genomics)
 
-        track pgGS12881
-        parent pgSnpCg2
+        track pgNA12881
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12881 type=SNP
         shortLabel CEU NA12881
         longLabel CEU pedigree 1463, NA12881 (Complete Genomics)
 
-        track pgGS12882
-        parent pgSnpCg2
+        track pgNA12882
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12882 type=SNP
         shortLabel CEU NA12882
         longLabel CEU pedigree 1463, NA12882 (Complete Genomics)
 
-        track pgGS12883
-        parent pgSnpCg2
+        track pgNA12883
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12883 type=SNP
         shortLabel CEU NA12883
         longLabel CEU pedigree 1463, NA12883 (Complete Genomics)
 
-        track pgGS12884
-        parent pgSnpCg2
+        track pgNA12884
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12884 type=SNP
         shortLabel CEU NA12884
         longLabel CEU pedigree 1463, NA12884 (Complete Genomics)
 
-        track pgGS12885
-        parent pgSnpCg2
+        track pgNA12885
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12885 type=SNP
         shortLabel CEU NA12885
         longLabel CEU pedigree 1463, NA12885 (Complete Genomics)
 
-        track pgGS12886
-        parent pgSnpCg2
+        track pgNA12886
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12886 type=SNP
         shortLabel CEU NA12886
         longLabel CEU pedigree 1463, NA12886 (Complete Genomics)
 
-        track pgGS12887
-        parent pgSnpCg2
+        track pgNA12887
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12887 type=SNP
         shortLabel CEU NA12887
         longLabel CEU pedigree 1463, NA12887 (Complete Genomics)
 
-        track pgGS12888
-        parent pgSnpCg2
+        track pgNA12888
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12888 type=SNP
         shortLabel CEU NA12888
         longLabel CEU pedigree 1463, NA12888 (Complete Genomics)
 
-        track pgGS12889
-        parent pgSnpCg2
+        track pgNA12889
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12889 type=SNP
         shortLabel CEU NA12889
         longLabel CEU pedigree 1463, NA12889 (Complete Genomics)
 
-        track pgGS12890
-        parent pgSnpCg2
+        track pgNA12890
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12890 type=SNP
         shortLabel CEU NA12890
         longLabel CEU pedigree 1463, NA12890 (Complete Genomics)
 
-        track pgGS12891
-        parent pgSnpCg2
+        track pgNA12891CG
+        parent pgSnpCg
         subGroups view=C_CG id=BG_12891 type=SNP
         shortLabel CEU NA12891
         longLabel CEU pedigree 1463, NA12891 (Complete Genomics)
 
-        track pgGS12892
-        parent pgSnpCg2
+        track pgNA12892CG
+        parent pgSnpCg
         subGroups view=C_CG id=BH_12892 type=SNP
         shortLabel CEU NA12892
         longLabel CEU pedigree 1463, NA12892 (Complete Genomics)
 
-        track pgGS12893
-        parent pgSnpCg2
+        track pgNA12893
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12893 type=SNP
         shortLabel CEU NA12893
         longLabel CEU pedigree 1463, NA12893 (Complete Genomics)
 
-        track pgGS19704indel
-        parent pgSnpCg2
+        track pgNA19704indel
+        parent pgSnpCg
         subGroups view=C_CG id=CA_div_GS19704 type=Indel
         shortLabel ASW NA19704 indel
         longLabel ASW NA19704 indel (Complete Genomics)
 
-        track pgGS20511indel
-        parent pgSnpCg2
+        track pgNA20511indel
+        parent pgSnpCg
         subGroups view=C_CG id=CI_div_GS20511 type=Indel
         shortLabel TSI NA20511 indel
         longLabel TSI NA20511 indel (Complete Genomics)
 
-        track pgGS18502indel
-        parent pgSnpCg2
+        track pgNA18502indel
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18502 type=Indel
         shortLabel YRI NA18502 indel
         longLabel YRI NA18502 indel (Complete Genomics)
 
-        track pgGS20847indel
-        parent pgSnpCg2
+        track pgNA20847indel
+        parent pgSnpCg
         subGroups view=C_CG id=CD_div_GS20847 type=Indel
         shortLabel GIH NA20847 indel
         longLabel GIH NA20847 indel (Complete Genomics)
 
-        track pgGS19669indel
-        parent pgSnpCg2
+        track pgNA19669indel
+        parent pgSnpCg
         subGroups view=C_CG id=CG_div_GS19669 type=Indel
         shortLabel MXL NA19669 indel
         longLabel MXL NA19669 indel (Complete Genomics)
 
-        track pgGS19735indel
-        parent pgSnpCg2
+        track pgNA19735indel
+        parent pgSnpCg
         subGroups view=C_CG id=CG_div_GS19735 type=Indel
         shortLabel MXL NA19735 indel
         longLabel MXL NA19735 indel (Complete Genomics)
 
-        track pgGS18558indel
-        parent pgSnpCg2
+        track pgNA18558indel
+        parent pgSnpCg
         subGroups view=C_CG id=CC_div_GS18558 type=Indel
         shortLabel CHB NA18558 indel
         longLabel CHB NA18558 indel (Complete Genomics)
 
-        track pgGS12893indel
-        parent pgSnpCg2
+        track pgNA12893indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12893 type=Indel
         shortLabel CEU NA12893 indel
         longLabel CEU NA12893 indel (Complete Genomics)
 
         track pgHG00733indel
-        parent pgSnpCg2
+        parent pgSnpCg
         subGroups view=C_CG id=CC_PUR_733 type=Indel
         shortLabel PUR HG00733 indel
         longLabel PUR HG00733 (Daughter) indel (Complete Genomics)
 
-        track pgGS18942indel
-        parent pgSnpCg2
+        track pgNA18942indel
+        parent pgSnpCg
         subGroups view=C_CG id=CE_div_GS18942 type=Indel
         shortLabel JPT NA18942 indel
         longLabel JPT NA18942 indel (Complete Genomics)
 
-        track pgGS21737indel
-        parent pgSnpCg2
+        track pgNA21737indel
+        parent pgSnpCg
         subGroups view=C_CG id=CH_div_GS21737 type=Indel
         shortLabel MKK NA21737 indel
         longLabel MKK NA21737 indel (Complete Genomics)
 
-        track pgGS12877indel
-        parent pgSnpCg2
+        track pgNA12877indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12877 type=Indel
         shortLabel CEU NA12877 indel
         longLabel CEU NA12877 indel (Complete Genomics)
 
-        track pgGS19649indel
-        parent pgSnpCg2
+        track pgNA19649indel
+        parent pgSnpCg
         subGroups view=C_CG id=CG_div_GS19649 type=Indel
         shortLabel MXL NA19649 indel
         longLabel MXL NA19649 indel (Complete Genomics)
 
-        track pgGS18537indel
-        parent pgSnpCg2
+        track pgNA18537indel
+        parent pgSnpCg
         subGroups view=C_CG id=CC_div_GS18537 type=Indel
         shortLabel CHB NA18537 indel
         longLabel CHB NA18537 indel (Complete Genomics)
 
-        track pgGS21732indel
-        parent pgSnpCg2
+        track pgNA21732indel
+        parent pgSnpCg
         subGroups view=C_CG id=CH_div_GS21732 type=Indel
         shortLabel MKK NA21732 indel
         longLabel MKK NA21732 indel (Complete Genomics)
 
-        track pgGS12892indel
-        parent pgSnpCg2
+        track pgNA12892indel
+        parent pgSnpCg
         subGroups view=C_CG id=BH_12892 type=Indel
         shortLabel CEU NA12892 indel
         longLabel CEU NA12892 indel (Complete Genomics)
 
-        track pgGS19701indel
-        parent pgSnpCg2
+        track pgNA19701indel
+        parent pgSnpCg
         subGroups view=C_CG id=CA_div_GS19701 type=Indel
         shortLabel ASW NA19701 indel
         longLabel ASW NA19701 indel (Complete Genomics)
 
-        track pgGS21767indel
-        parent pgSnpCg2
+        track pgNA21767indel
+        parent pgSnpCg
         subGroups view=C_CG id=CH_div_GS21767 type=Indel
         shortLabel MKK NA21767 indel
         longLabel MKK NA21767 indel (Complete Genomics)
 
-        track pgGS18555indel
-        parent pgSnpCg2
+        track pgNA18555indel
+        parent pgSnpCg
         subGroups view=C_CG id=CC_div_GS18555 type=Indel
         shortLabel CHB NA18555 indel
         longLabel CHB NA18555 indel (Complete Genomics)
 
-        track pgGS19240indel
-        parent pgSnpCg2
+        track pgNA19240indel
+        parent pgSnpCg
         subGroups view=C_CG id=BI_19240 type=Indel
         shortLabel YRI NA19240 indel
         longLabel YRI NA19240 (Daughter) indel (Complete Genomics)
 
-        track pgGS20510indel
-        parent pgSnpCg2
+        track pgNA20510indel
+        parent pgSnpCg
         subGroups view=C_CG id=CI_div_GS20510 type=Indel
         shortLabel TSI NA20510 indel
         longLabel TSI NA20510 indel (Complete Genomics)
 
-        track pgGS12885indel
-        parent pgSnpCg2
+        track pgNA12885indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12885 type=Indel
         shortLabel CEU NA12885 indel
         longLabel CEU NA12885 indel (Complete Genomics)
 
-        track pgGS19834indel
-        parent pgSnpCg2
+        track pgNA19834indel
+        parent pgSnpCg
         subGroups view=C_CG id=CA_div_GS19834 type=Indel
         shortLabel ASW NA19834 indel
         longLabel ASW NA19834 indel (Complete Genomics)
 
-        track pgGS12890indel
-        parent pgSnpCg2
+        track pgNA12890indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12890 type=Indel
         shortLabel CEU NA12890 indel
         longLabel CEU NA12890 indel (Complete Genomics)
 
-        track pgGS18526indel
-        parent pgSnpCg2
+        track pgNA18526indel
+        parent pgSnpCg
         subGroups view=C_CG id=CC_div_GS18526 type=Indel
         shortLabel CHB NA18526 indel
         longLabel CHB NA18526 indel (Complete Genomics)
 
-        track pgGS12883indel
-        parent pgSnpCg2
+        track pgNA12883indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12883 type=Indel
         shortLabel CEU NA12883 indel
         longLabel CEU NA12883 indel (Complete Genomics)
 
-        track pgGS19670indel
-        parent pgSnpCg2
+        track pgNA19670indel
+        parent pgSnpCg
         subGroups view=C_CG id=CG_div_GS19670 type=Indel
         shortLabel MXL NA19670 indel
         longLabel MXL NA19670 indel (Complete Genomics)
 
-        track pgGS18956indel
-        parent pgSnpCg2
+        track pgNA18956indel
+        parent pgSnpCg
         subGroups view=C_CG id=CE_div_GS18956 type=Indel
         shortLabel JPT NA18956 indel
         longLabel JPT NA18956 indel (Complete Genomics)
 
-        track pgGS19017indel
-        parent pgSnpCg2
+        track pgNA19017indel
+        parent pgSnpCg
         subGroups view=C_CG id=CF_div_GS19017 type=Indel
         shortLabel LWK NA19017 indel
         longLabel LWK NA19017 indel (Complete Genomics)
 
-        track pgGS18501indel
-        parent pgSnpCg2
+        track pgNA18501indel
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18501 type=Indel
         shortLabel YRI NA18501 indel
         longLabel YRI NA18501 indel (Complete Genomics)
 
-        track pgGS20502indel
-        parent pgSnpCg2
+        track pgNA20502indel
+        parent pgSnpCg
         subGroups view=C_CG id=CI_div_GS20502 type=Indel
         shortLabel TSI NA20502 indel
         longLabel TSI NA20502 indel (Complete Genomics)
 
-        track pgGS12886indel
-        parent pgSnpCg2
+        track pgNA12886indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12886 type=Indel
         shortLabel CEU NA12886 indel
         longLabel CEU NA12886 indel (Complete Genomics)
 
-        track pgGS06985indel
-        parent pgSnpCg2
+        track pgNA06985indel
+        parent pgSnpCg
         subGroups view=C_CG id=CB_div_GS06985 type=Indel
         shortLabel CEU NA06985 indel
         longLabel CEU NA06985 indel (Complete Genomics)
 
         track pgHG00731indel
-        parent pgSnpCg2
+        parent pgSnpCg
         subGroups view=C_CG id=CA_PUR_731 type=Indel
         shortLabel PUR HG00731 indel
         longLabel PUR HG00731 (Father) indel (Complete Genomics)
 
-        track pgGS18508indel
-        parent pgSnpCg2
+        track pgNA18508indel
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18508 type=Indel
         shortLabel YRI NA18508 indel
         longLabel YRI NA18508 indel (Complete Genomics)
 
-        track pgGS18505indel
-        parent pgSnpCg2
+        track pgNA18505indel
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18505 type=Indel
         shortLabel YRI NA18505 indel
         longLabel YRI NA18505 indel (Complete Genomics)
 
-        track pgGS10851indel
-        parent pgSnpCg2
+        track pgNA10851indel
+        parent pgSnpCg
         subGroups view=C_CG id=CB_div_GS10851 type=Indel
         shortLabel CEU NA10851 indel
         longLabel CEU NA10851 indel (Complete Genomics)
 
-        track pgGS19700indel
-        parent pgSnpCg2
+        track pgNA19700indel
+        parent pgSnpCg
         subGroups view=C_CG id=CA_div_GS19700 type=Indel
         shortLabel ASW NA19700 indel
         longLabel ASW NA19700 indel (Complete Genomics)
 
-        track pgGS12004indel
-        parent pgSnpCg2
+        track pgNA12004indel
+        parent pgSnpCg
         subGroups view=C_CG id=CB_div_GS12004 type=Indel
         shortLabel CEU NA12004 indel
         longLabel CEU NA12004 indel (Complete Genomics)
 
-        track pgGS07357indel
-        parent pgSnpCg2
+        track pgNA07357indel
+        parent pgSnpCg
         subGroups view=C_CG id=CB_div_GS07357 type=Indel
         shortLabel CEU NA07357 indel
         longLabel CEU NA07357 indel (Complete Genomics)
 
-        track pgGS20846indel
-        parent pgSnpCg2
+        track pgNA20846indel
+        parent pgSnpCg
         subGroups view=C_CG id=CD_div_GS20846 type=Indel
         shortLabel GIH NA20846 indel
         longLabel GIH NA20846 indel (Complete Genomics)
 
-        track pgGS12887indel
-        parent pgSnpCg2
+        track pgNA12887indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12887 type=Indel
         shortLabel CEU NA12887 indel
         longLabel CEU NA12887 indel (Complete Genomics)
 
-        track pgGS06994indel
-        parent pgSnpCg2
+        track pgNA06994indel
+        parent pgSnpCg
         subGroups view=C_CG id=CB_div_GS06994 type=Indel
         shortLabel CEU NA06994 indel
         longLabel CEU NA06994 indel (Complete Genomics)
 
-        track pgGS20845indel
-        parent pgSnpCg2
+        track pgNA20845indel
+        parent pgSnpCg
         subGroups view=C_CG id=CD_div_GS20845 type=Indel
         shortLabel GIH NA20845 indel
         longLabel GIH NA20845 indel (Complete Genomics)
 
-        track pgGS12884indel
-        parent pgSnpCg2
+        track pgNA12884indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12884 type=Indel
         shortLabel CEU NA12884 indel
         longLabel CEU NA12884 indel (Complete Genomics)
 
-        track pgGS12888indel
-        parent pgSnpCg2
+        track pgNA12888indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12888 type=Indel
         shortLabel CEU NA12888 indel
         longLabel CEU NA12888 indel (Complete Genomics)
 
-        track pgGS12879indel
-        parent pgSnpCg2
+        track pgNA12879indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12879 type=Indel
         shortLabel CEU NA12879 indel
         longLabel CEU NA12879 indel (Complete Genomics)
 
-        track pgGS12882indel
-        parent pgSnpCg2
+        track pgNA12882indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12882 type=Indel
         shortLabel CEU NA12882 indel
         longLabel CEU NA12882 indel (Complete Genomics)
 
-        track pgGS20850indel
-        parent pgSnpCg2
+        track pgNA20850indel
+        parent pgSnpCg
         subGroups view=C_CG id=CD_div_GS20850 type=Indel
         shortLabel GIH NA20850 indel
         longLabel GIH NA20850 indel (Complete Genomics)
 
-        track pgGS20509indel
-        parent pgSnpCg2
+        track pgNA20509indel
+        parent pgSnpCg
         subGroups view=C_CG id=CI_div_GS20509 type=Indel
         shortLabel TSI NA20509 indel
         longLabel TSI NA20509 indel (Complete Genomics)
 
-        track pgGS19238indel
-        parent pgSnpCg2
+        track pgNA19238indel
+        parent pgSnpCg
         subGroups view=C_CG id=BJ_19238 type=Indel
         shortLabel YRI NA19238 indel
         longLabel YRI NA19238 (Mother) indel (Complete Genomics)
 
-        track pgGS12878indel
-        parent pgSnpCg2
+        track pgNA12878indel
+        parent pgSnpCg
         subGroups view=C_CG id=BF_12878 type=Indel
         shortLabel CEU NA12878 indel
         longLabel CEU NA12878 indel (Complete Genomics)
 
-        track pgGS12880indel
-        parent pgSnpCg2
+        track pgNA12880indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12880 type=Indel
         shortLabel CEU NA12880 indel
         longLabel CEU NA12880 indel (Complete Genomics)
 
-        track pgGS12889indel
-        parent pgSnpCg2
+        track pgNA12889indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12889 type=Indel
         shortLabel CEU NA12889 indel
         longLabel CEU NA12889 indel (Complete Genomics)
 
-        track pgGS19020indel
-        parent pgSnpCg2
+        track pgNA19020indel
+        parent pgSnpCg
         subGroups view=C_CG id=CF_div_GS19020 type=Indel
         shortLabel LWK NA19020 indel
         longLabel LWK NA19020 indel (Complete Genomics)
 
-        track pgGS19703indel
-        parent pgSnpCg2
+        track pgNA19703indel
+        parent pgSnpCg
         subGroups view=C_CG id=CA_div_GS19703 type=Indel
         shortLabel ASW NA19703 indel
         longLabel ASW NA19703 indel (Complete Genomics)
 
-        track pgGS19025indel
-        parent pgSnpCg2
+        track pgNA19025indel
+        parent pgSnpCg
         subGroups view=C_CG id=CF_div_GS19025 type=Indel
         shortLabel LWK NA19025 indel
         longLabel LWK NA19025 indel (Complete Genomics)
 
-        track pgGS12891indel
-        parent pgSnpCg2
+        track pgNA12891indel
+        parent pgSnpCg
         subGroups view=C_CG id=BG_12891 type=Indel
         shortLabel CEU NA12891 indel
         longLabel CEU NA12891 indel (Complete Genomics)
 
-        track pgGS12881indel
-        parent pgSnpCg2
+        track pgNA12881indel
+        parent pgSnpCg
         subGroups view=C_CG id=CPed_GS12881 type=Indel
         shortLabel CEU NA12881 indel
         longLabel CEU NA12881 indel (Complete Genomics)
 
-        track pgGS18940indel
-        parent pgSnpCg2
+        track pgNA18940indel
+        parent pgSnpCg
         subGroups view=C_CG id=CE_div_GS18940 type=Indel
         shortLabel JPT NA18940 indel
         longLabel JPT NA18940 indel (Complete Genomics)
 
         track pgHG00732indel
-        parent pgSnpCg2
+        parent pgSnpCg
         subGroups view=C_CG id=CB_PUR_732 type=Indel
         shortLabel PUR HG00732 indel
         longLabel PUR HG00732 (Mother) indel (Complete Genomics)
 
-        track pgGS19648indel
-        parent pgSnpCg2
+        track pgNA19648indel
+        parent pgSnpCg
         subGroups view=C_CG id=CG_div_GS19648 type=Indel
         shortLabel MXL NA19648 indel
         longLabel MXL NA19648 indel (Complete Genomics)
 
-        track pgGS18947indel
-        parent pgSnpCg2
+        track pgNA18947indel
+        parent pgSnpCg
         subGroups view=C_CG id=CE_div_GS18947 type=Indel
         shortLabel JPT NA18947 indel
         longLabel JPT NA18947 indel (Complete Genomics)
 
-        track pgGS19239indel
-        parent pgSnpCg2
+        track pgNA19239indel
+        parent pgSnpCg
         subGroups view=C_CG id=BK_19239 type=Indel
         shortLabel YRI NA19239 indel
         longLabel YRI NA19239 (Father) indel (Complete Genomics)
 
-        track pgGS19026indel
-        parent pgSnpCg2
+        track pgNA19026indel
+        parent pgSnpCg
         subGroups view=C_CG id=CF_div_GS19026 type=Indel
         shortLabel LWK NA19026 indel
         longLabel LWK NA19026 indel (Complete Genomics)
 
-        track pgGS19129indel
-        parent pgSnpCg2
+        track pgNA19129indel
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS19129 type=Indel
         shortLabel YRI NA19129 indel
         longLabel YRI NA19129 indel (Complete Genomics)
 
-        track pgGS18517indel
-        parent pgSnpCg2
+        track pgNA18517indel
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18517 type=Indel
         shortLabel YRI NA18517 indel
         longLabel YRI NA18517 indel (Complete Genomics)
 
-        track pgGS21733indel
-        parent pgSnpCg2
+        track pgNA21733indel
+        parent pgSnpCg
         subGroups view=C_CG id=CH_div_GS21733 type=Indel
         shortLabel MKK NA21733 indel
         longLabel MKK NA21733 indel (Complete Genomics)
 
-        track pgGS18504indel
-        parent pgSnpCg2
+        track pgNA18504indel
+        parent pgSnpCg
         subGroups view=C_CG id=CK_div_GS18504 type=Indel
         shortLabel YRI NA18504 indel
         longLabel YRI NA18504 indel (Complete Genomics)
