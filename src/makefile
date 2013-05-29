@@ -57,7 +57,7 @@ blatSuite: topLibs hgLib
 
 UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
         bigBedInfo bigBedSummary bigBedToBed bigWigAverageOverBed  \
-	bigWigInfo bigWigSummary bigWigToBedGraph bigWigToWig\
+	bigWigCorrelate bigWigInfo bigWigSummary bigWigToBedGraph bigWigToWig\
 	faCount faFrag faOneRecord faPolyASizes faRandomize faSize \
 	faSomeRecords faToNib \
 	faToTwoBit htmlCheck nibFrag paraFetch paraSync sizeof stringify \
