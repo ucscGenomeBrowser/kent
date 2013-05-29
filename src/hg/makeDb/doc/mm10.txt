@@ -9272,3 +9272,116 @@ EOF
 
 
 #########################################################################
+# RETROPOSED GENES ucscRetro track VERSION 2 
+# (2013-04-03 - 2013-04-17, baertsch,hartera DONE)
+mkdir -p /hive/hive/groups/gencode/pseudogenes/retroFinder/mm10.20130403
+cd /hive/groups/gencode/pseudogenes/retroFinder/mm10.20130403
+
+mkdir -p /hive/data/genomes/mm10/bed/retro/ 
+cd /hive/groups/gencode/pseudogenes/retroFinder/mm10.20130403
+cat << '_EOF_' > DEF
+
+RETRO_OPTIONS="-verbose=4 -minAli=0.98 -nearTop=0.005 "
+RUNDATE="2013-04-03"
+DB=mm10
+SCORETHRESH=510
+GENOMENAME='Mus musculus'
+GBDB=mm
+DATE=20130403
+MRNABASE=/hive/data/genomes/$DB/bed/mrnaBlastz
+TMPMRNA=/hive/groups/gencode/pseudogenes/retroFinder/mm10.${DATE}/mrnaBlastz/$DB
+TMPEST=/hive/groups/gencode/pseudogenes/retroFinder/mm10.${DATE}/est/$DB
+BINDIR=/hive/users/hartera/GencodeWG/retroFinder/trunk/bin
+EST=all_est
+SPLICED_EST=intronEst
+SPLIT_EST=0
+SPLIT_SPLICED_EST=1
+SCRIPT=/hive/users/hartera/GencodeWG/retroFinder/trunk/src/pipeline
+GENOME=/hive/data/genomes
+TWOBIT=$GENOME/$DB/$DB.2bit
+RETRODIR=$GENOME/$DB/bed/retro
+BASE=/hive/groups/gencode/pseudogenes/retroFinder/mm10.${DATE}/retro
+VERSION=2
+OUTDIR=${BASE}/${DB}.${VERSION}
+RESULT=$OUTDIR/result
+LOG=$OUTDIR/log
+OUT=$OUTDIR/out
+OVERLAPDIR=$OUTDIR/run.o
+TABLE=ucscRetroInfo$VERSION
+ORTHOTABLE=ucscRetroOrtho$VERSION
+ALIGN=ucscRetroAli$VERSION
+LOCAL=/scratch/data/$DB
+NIB=$LOCAL/nib
+RMSK=rmsk
+NET1=netHg19 
+NET2=netCanFam3 
+NET3=netRn5
+GENE1=knownGene
+GENE2=refGene
+GENE3=ensGene
+CLUSTER=swarm
+SPECIES="hg19 mm10"
+ROOTDIR="/cluster/home/$USER/public_html/retro/mm10Apr13"
+WEBROOT=$ROOTDIR/retro.$RUNDATE
+WEBSERVER=http://hgwdev-hartera.cse.ucsc.edu
+EXPDIR=exp
+GENEPFAM=knownGene
+PFAM=knownToPfam
+PFAMIDFIELD=name
+PFAMDOMAIN=value
+ARRAY=gnfAtlas2
+AFFYPROBE=affyGnf1m
+ARRAYMEDIAN=hgFixed.gnfMouseAtlas2Median 
+ARRAYRATIO=hgFixed.gnfMouseAtlas2AllRatio
+ARRAYABS=hgFixed.gnfMouseAtlas2All
+ARRAYEXP=hgFixed.gnfMouseAtlas2MedianExps 
+ARRAYEXPALL=hgFixed.gnfMouseAtlas2AllExps
+# ARRAYLOOKUP=knownToGnfAtlas2 
+#ARRAYPSLS="/hive/data/genomes/mm9/bed/geneAtlas2/affyGnf1m.psl"
+ALTSPLICE=sibTxGraph
+SPLITBYAGE=splitRetrosByAgeMouse
+PDB=proteins121210
+BREAKS=0,8,16,24,32
+XLIM=34
+YLIM=0.1
+YLIM1=4000
+YLIM2=160
+MAXDIVERGENCE=32
+'_EOF_'
+    # << happy emacs
+chmod +x DEF
+mkdir mrnaBlastz
+cd mrnaBlastz
+cp ../DEF .
+# Create S1.len:
+cp /hive/data/genomes/mm10/chrom.sizes S1.len
+# Edit S1.len and remove chrM and random chroms then copy over to mm10
+# genomes directory
+mkdir -p /hive/data/genomes/mm10/bed/mrnaBlastz
+cp S1.len /hive/data/genomes/mm10/bed/mrnaBlastz
+
+screen
+# Run steps 1 to 6 of RetroFinder pipeline from scripts in CCDS SVN source tree:
+retroFinder/trunk/src/pipeline/ucscStep1.sh DEF
+# check cluster job on swarm
+retroFinder/trunk/src/pipeline/ucscStep2.sh DEF
+retroFinder/trunk/src/pipeline/ucscStep3.sh DEF
+#check cluster job
+retroFinder/trunk/src/pipeline/ucscStep4.sh DEF
+#check cluster job
+    # Load the track
+retroFinder/trunk/src/pipeline/ucscStep5.sh DEF
+cd /hive/groups/gencode/pseudogenes/retroFinder/mm10.20130403/retro/mm10.2
+retroFinder/trunk/src/pipeline/filterMrna.sh DEF
+retroFinder/trunk/src/pipeline/filterEst.sh DEF
+retroFinder/trunk/src/pipeline/analyseExpress.sh DEF
+cd /hive/groups/gencode/pseudogenes/retroFinder/mm10.20130403/mrnaBlastz
+retroFinder/trunk/src/pipeline/ucscStep6.sh DEF
+#added ucscRetroAli to trackDb.ra
+# copied
+# /hive/groups/gencode/pseudogenes/retroFinder/mm10/20130403/retro/mm10.2/trackDb.retro
+# entry to kent/src/hg/makeDb/trackDb/mouse/mm10/trackDb.ra
+# and edited it to add version number and date.
+# Scripts copied ucscRetroAli2.psl, ucscRetroInfo2.bed and ucscRetroCds2.tab
+# to /hive/data/genomes/mm10/bed/retro/
+
