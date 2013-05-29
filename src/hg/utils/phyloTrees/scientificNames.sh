@@ -13,6 +13,7 @@ echo $1 | sed -e '
 s/amaVit1/Amazona_vittata/;
 s/apiMel4/Apis_mellifera/;
 s/camFer1/Camelus_ferus/;
+s/panHod1/Pantholops_hodgsonii/;
 s/capHir1/Capra_hircus/;
 s/chrAsi1/Chrysochloris_asiatica/;
 s/colLiv1/Columba_livia/;

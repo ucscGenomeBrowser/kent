@@ -56,6 +56,7 @@ susScr3 -> Pig ;
 vicPac1 -> Alpaca ;
 turTru1 -> Dolphin ;
 turTru2 -> Dolphin ;
+panHod1 -> Tibetan_antelope ;
 oviAri1 -> Sheep ;
 oviAri3 -> Sheep ;
 capHir1 -> Goat ;
