@@ -51,15 +51,13 @@ freez(pTree);                /* free this */
 }
 
 struct rbTree *genomeRangeTreeFindRangeTree(struct genomeRangeTree *tree, char *chrom)
-/* Find the rangeTree for this chromosome, if any. Returns NULL if chrom not found.
- * Free with genomeRangeTreeFree. */
+/* Find the rangeTree for this chromosome, if any. Returns NULL if chrom not found. */
 {
 return hashFindVal(tree->hash, chrom);
 }
 
 struct rbTree *genomeRangeTreeFindOrAddRangeTree(struct genomeRangeTree *tree, char *chrom)
-/* Find the rangeTree for this chromosome, or add new chrom and empty rangeTree if not found.
- * Free with genomeRangeTreeFree. */
+/* Find the rangeTree for this chromosome, or add new chrom and empty rangeTree if not found. */
 {
 struct hashEl *hel;
 hel = hashStore(tree->hash, chrom);

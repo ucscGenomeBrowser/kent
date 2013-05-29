@@ -1,4 +1,3 @@
 kentSrc = ../..
-A = pslToChain
+A = bigWigCorrelate
 include $(kentSrc)/inc/userApp.mk
-L += -lm

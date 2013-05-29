@@ -75,6 +75,8 @@ all: $(USE_DIRS:%=%.all)
 	cd $* && echo $* && $(MAKE)
 
 userApps: $(UTILS_APPLIST:%=%.userApp)
+	cd schema/dbSnoop  && echo schema/dbSnoop && $(MAKE)
+
 %.userApp:
 	cd $* && echo $* && $(MAKE)
 

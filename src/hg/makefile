@@ -92,7 +92,6 @@ UTILS_APPLIST = \
 	pslStats \
 	pslSwap \
 	pslToBed \
-	pslToChain \
 	pslxToFa \
 	qaToQac \
 	qacAgpLift \
@@ -185,6 +184,7 @@ UTIL_DIRS = \
 	pslSimp \
 	pslSortAcc \
 	pslSplitOnTarget \
+	pslToChain \
 	pslUnpile \
 	qa \
 	ratStuff \
@@ -219,6 +219,8 @@ hgLib:
 	cd lib && ${MAKE}
 
 userApps: $(UTILS_APPLIST:%=%.userApp)
+	cd altSplice/lib && $(MAKE)
+	cd altSplice/altSplice && $(MAKE) bedToExons
 	cd mouseStuff && $(MAKE) userApps
 	cd ratStuff && $(MAKE) userApps
 
