@@ -71,6 +71,9 @@ vicPac	Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Vicugna
 # Bactrian camel - Camelus ferus
 camFer Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Camelus
 
+# Tibetan antelope - Pantholops hodgsonii
+panHod	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Antilopinae; Pantholops
+
 # Cow - Bos taurus
 bosTau	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos
 
