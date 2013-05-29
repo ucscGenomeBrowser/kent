@@ -8599,7 +8599,7 @@ TMPDIR=/scratch/tmp
 
 #########################################################################
 # PERSONAL GENOME VARIANTS (DONE 12/29/09 giardine)
-
+# OBSOLETE -- see "PERSONAL GENOME VARIANTS - RELOAD" below.
     # This is Angie's attempt to reconstruct Belinda's steps:
     mkdir /hive/data/genomes/hg19/bed/pgSnpLiftOver
     cd /hive/data/genomes/hg19/bed/pgSnpLiftOver
@@ -20354,6 +20354,85 @@ load.sh
 # command:
 cd /hive/data/outside/otto/lovd
 download.sh && check.sh && load.sh
+
+############################################################################
+# PERSONAL GENOME VARIANTS - RELOAD (DONE 5/28/13 angie)
+    # Belinda Giardine provided database dump files for all PSU Personal
+    # Genome Variant subtracks, as well as an updated trackDb.ra.
+    # Download all dump files and (re)load all tables to make sure we
+    # are current w/PSU.
+    mkdir /hive/data/genomes/hg19/bed/pgSnp/2013-05-28
+    cd /hive/data/genomes/hg19/bed/pgSnp/2013-05-28
+    # Complete Genomics samples w/HG* IDs:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/HG\*
+    # Complete Genomics samples w/NA* IDs:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/NA\*
+    # Older Personal Genome Variants tables, many of which Belinda already
+    # loaded on hgwdev:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/pg\*
+    # 1000 Genomes distilled to population allele frequencies:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/1000Genomes2012/\*
+    # Genome of the Netherlands population-wide allele frequencies:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/gonl.pgPop.gz
+
+    # Now transform filenames into table/track names matching Belinda's
+    # trackDb.pgSnp.ra and (re)load tables:
+    set hglbOpts = (-sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable \
+      -type=bed4+ -tab -noNameIx -allowStartEqualEnd)
+    foreach f (HG*.gz)
+      set table = `echo $f:r:r | sed -re 's/\.indel/indel/; s/^/pg/;'`
+      echo $table
+      hgLoadBed $hglbOpts hg19 $table $f
+    end
+# Read 471455 elements of size 7 from HG00731.indel.pgSnp.gz
+# Read 3419274 elements of size 7 from HG00731.pgSnp.gz
+# Read 466400 elements of size 7 from HG00732.indel.pgSnp.gz
+# Read 3457087 elements of size 7 from HG00732.pgSnp.gz
+# Read 429472 elements of size 7 from HG00733.indel.pgSnp.gz
+# Read 3407941 elements of size 7 from HG00733.pgSnp.gz
+
+    # Here's where it gets tricky: several of these NA IDs need to have "CG"
+    # appended to their table names because there were already pgNA* tables
+    # from 1000 Genomes Pilot high-coverage trios.
+    foreach f (NA*.gz)
+      set table = `echo $f:r:r | sed -re 's/\.indel/indel/; s/^/pg/;'`
+      if ($table == pgNA12878 || $table == pgNA12891 || $table == pgNA12892 || \
+          $table == pgNA19238 || $table == pgNA19239 || $table == pgNA19240) then
+        set table = $table"CG"
+      endif
+      echo $table
+      hgLoadBed $hglbOpts hg19 $table $f
+    end
+#Read 497395 elements of size 7 from NA06985.indel.pgSnp.gz
+#... (no errors)
+#Read 4058556 elements of size 7 from NA21767.pgSnp.gz
+
+    # Some of the pg* files/tables are not for pgSnp tracks; skip those.
+    # Also watch out for some files that do already have the bin column.
+    foreach f (pg*.gz)
+      set table = $f:r:r
+      set skipIt = `echo $table \
+        | perl -wne 'if (/(Gwas|Hgmd|PhenCode|Snpedia|Mappable)/) { \
+                       print "1\n"; } else {print "0\n"; }'`
+      if ($skipIt == 1) then
+        echo Skipping $table
+      else
+        echo $table
+        set numCols = `zcat $f | head -1 | perl -wne '$n = s/\t//g + 1; print "$n\n";'`
+        if ($numCols == 8) then
+          hgLoadBed $hglbOpts -hasBin hg19 $table $f
+        else
+          hgLoadBed $hglbOpts hg19 $table $f
+        endif
+      endif
+    end
+#Read 121305 elements of size 7 from pgAbt454.txt.gz
+#...
+#Skipping pgAbtGwas
+#Skipping pgAbtHgmd
+#...
+#Read 3835591 elements of size 7 from pgYoruban3.txt.gz
+
 ############################################################################
 # RETROPOSED GENES ucscRetro track VERSION 5 
 # (2013-02-28 - 2013-04-18, baertsch,hartera DONE)
