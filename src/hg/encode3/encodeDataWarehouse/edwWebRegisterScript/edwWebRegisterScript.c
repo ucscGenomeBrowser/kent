@@ -17,7 +17,7 @@ void usage()
 {
 errAbort(
   "edwWebRegisterScript - Register a script, giving it a random access key. "
-  "This program is meant to be called as a CGI from a web server using https.");
+  "This program is meant to be called as a CGI from a web server using HTTPS.");
 }
 
 #define HEXED_32_SIZE	33    /* Size of 32 hexadecimal digits plus zero tag */

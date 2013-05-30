@@ -15,7 +15,7 @@ void usage()
 {
 errAbort(
   "edwScriptSubmit - Web services CGI for script-driven submission to ENCODE Data Warehouse"
-  "This program is meant to be called as a CGI from a web server using https.");
+  "This program is meant to be called as a CGI from a web server using HTTPS.");
 }
 
 void accessDenied()
