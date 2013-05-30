@@ -25,8 +25,6 @@ errAbort(
   "edwMakeReplicateQa - Do qa level comparisons of replicates.\n"
   "usage:\n"
   "   edwMakeReplicateQa startId endId\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
