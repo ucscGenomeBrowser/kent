@@ -55,6 +55,12 @@ struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email);
 struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email);
 /* Return user associated with email or put up error message. */
 
+struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email);
+/* Return user associated with that email or NULL if not found */
+
+void edwWarnUnregisteredUser(char *email);
+/* Put up warning message about unregistered user and tell them how to register. */
+
 int edwGetHost(struct sqlConnection *conn, char *hostName);
 /* Look up host name in table and return associated ID.  If not found
  * make up new host table entry. */

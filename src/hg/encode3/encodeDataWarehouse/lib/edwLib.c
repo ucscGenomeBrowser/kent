@@ -5,6 +5,7 @@
 #include "hex.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "errabort.h"
 #include "openssl/sha.h"
 #include "base64.h"
 #include "basicBed.h"
@@ -217,16 +218,26 @@ struct edwUser *user = edwUserLoadByQuery(conn, query);
 return user;
 }
 
+void edwWarnUnregisteredUser(char *email)
+/* Put up warning message about unregistered user and tell them how to register. */
+{
+warn("No user exists with email %s.  If you need an account please contact your "
+	 "ENCODE DCC data wrangler, or someone you know who already does have an "
+	 "ENCODE Data Warehouse account, and have them create an account for you with "
+	 "http://%s/cgi-bin/edwWebCreateUser"
+	 , email, getenv("SERVER_NAME"));
+}
+
+
 struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email)
 /* Return user associated with email or put up error message. */
 {
 struct edwUser *user = edwUserFromEmail(conn, email);
 if (user == NULL)
-    errAbort("No user exists with email %s.  If you need an account please contact your "
-             "ENCODE DCC data wrangler, or someone you know who already does have an "
-	     "ENCODE Data Warehouse account, and have them create an account for you with "
-	     "http://%s/cgi-bin/edwWebCreateUser"
-	     , email, getenv("SERVER_NAME"));
+    {
+    edwWarnUnregisteredUser(email);
+    noWarnAbort();
+    }
 return user;
 }
 
