@@ -2877,7 +2877,6 @@ type bigBed 12 +
 itemRgb on
 urls uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
-noScoreFilter .
 release alpha
 
 searchName cosmicId
