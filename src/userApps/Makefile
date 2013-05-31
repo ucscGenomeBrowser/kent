@@ -33,6 +33,7 @@ libs: part5Src.zip
 clean:
 	cd kent/src && ${envVars} ${MAKE} -i -k clean
 	rm -f part1Src.zip part2Src.zip part3Src.zip part4Src.zip part5Src.zip
+	rm -f userApps.zip
 
 part5Src.zip: fetchSource
 
@@ -43,5 +44,11 @@ fetchSource:
 	@echo -n "number of files in kent source tree: "
 	@find ./kent -type f | wc -l
 
-update: clean
+update: clean userApps
 	${MAKE} utils
+
+userApps:
+	git archive --format=zip -9 \
+	    --remote=git://genome-source.cse.ucsc.edu/kent.git \
+	    HEAD src/userApps > userApps.zip
+	unzip -q -o -d . -j userApps.zip 

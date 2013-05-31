@@ -64,7 +64,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Patch10
 	dasNov1 dasNov2 dasNov3 \
 	triMan1 \
 	loxAfr1 loxAfr2 loxAfr3 \
-	echTel1 \
+	echTel1 echTel2 \
 	monDom1 monDom4 monDom5 \
 	allMis1 \
 	chrPic1 \

@@ -92,6 +92,7 @@ UTILS_APPLIST = \
 	pslStats \
 	pslSwap \
 	pslToBed \
+	pslToChain \
 	pslxToFa \
 	qaToQac \
 	qacAgpLift \
@@ -184,7 +185,6 @@ UTIL_DIRS = \
 	pslSimp \
 	pslSortAcc \
 	pslSplitOnTarget \
-	pslToChain \
 	pslUnpile \
 	qa \
 	ratStuff \
