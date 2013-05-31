@@ -3916,6 +3916,7 @@ switch(cType)
                         break;
     case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
+    case cfgPgSnp:      break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
                              cType);
                         break;
