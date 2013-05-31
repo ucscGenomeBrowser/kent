@@ -2853,7 +2853,6 @@ type bigBed 8 .
 url http://www.hgmd.cf.ac.uk/ac/gene.php?gene=$P&accession=$p
 urlLabel Link to HGMD (login req.)
 mouseOverField variantType
-noScoreFilter .
 release alpha
 
 track spMut
@@ -2866,7 +2865,6 @@ type bigBed 12 +
 itemRgb on
 urls variationId="http://web.expasy.org/variant_pages/$$.html" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
-noScoreFilter .
 release alpha
 
 track spAnnot
