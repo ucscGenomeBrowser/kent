@@ -306,15 +306,14 @@ any haplotype.</span>
     only seen in 2&#37; of genes.<BR><BR></dd> 
 
 <dt><B class='textOpt'>Pop score</B></dt>
-<dd>The <B>population score</B> (only visible when population distributions are displayed) 
-    is the fixation index time the number of occurrences of the haplotype (F<sub>ST</sub> * N).
-    Skews in population distribution when N is small are not unexpected, and are therefore 
-    deemphasized by this score.  The fixation index is based upon the frequency of 
-    a haplotype within each population, rather than the distribution of that haplotype across 
-    populations.  Nevertheless, large population scores should reflect large skews in distribution 
-    in more frequently occurring haplotypes.    
-    For haplotypes made from common, non-synonymous variants, 
-    population scores above 446 are seen in only 2&#37; of genes and scores above 548 are 
+<dd>The <B>population score</B> (only visible when population distributions are displayed)
+    is the fixation index (F<sub>ST</sub>) based upon the difference in variance between
+    sub-population haplotype frequencies and the total haplotype frequency.  Note that
+    this calculation is based upon the frequency of haplotype, rather than the distribution of
+    that haplotype across populations.  Nevertheless, large population scores should reflect
+    large skews in distribution in more frequently occurring haplotypes.
+    For haplotypes made from common, non-synonymous variants,
+    population scores above 0.424 are seen in only 2&#37; of genes and scores above 0.506 are
     seen in only 1&#37; of genes.<BR><BR></dd>
 </dl>
 
