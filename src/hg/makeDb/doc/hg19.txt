@@ -20357,7 +20357,7 @@ cd /hive/data/outside/otto/lovd
 download.sh && check.sh && load.sh
 
 ############################################################################
-# PERSONAL GENOME VARIANTS - RELOAD (DONE 5/28/13 angie)
+# PERSONAL GENOME VARIANTS - RELOAD (DONE 5/31/13 angie)
     # Belinda Giardine provided database dump files for all PSU Personal
     # Genome Variant subtracks, as well as an updated trackDb.ra.
     # Download all dump files and (re)load all tables to make sure we
@@ -20433,6 +20433,12 @@ download.sh && check.sh && load.sh
 #Skipping pgAbtHgmd
 #...
 #Read 3835591 elements of size 7 from pgYoruban3.txt.gz
+
+    # 5/31/13: One more file, rename a table:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/pgLucier.pgSnp.gz
+    hgLoadBed $hglbOpts hg19 pgLucier pgLucier.pgSnp.gz
+    hgsql hg19 -e 'drop table pgKb1Comb; rename table pgKb1 to pgKb1Comb;'
+
 
 ############################################################################
 # RETROPOSED GENES ucscRetro track VERSION 5 

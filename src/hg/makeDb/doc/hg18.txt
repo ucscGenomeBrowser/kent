@@ -32145,3 +32145,19 @@ was not actually compressed
    gzip  hg18.tupBel1.net
 
 #############################################################################
+# PERSONAL GENOME VARIANTS - UPDATE (DONE 5/31/13 angie)
+# Belinda Giardine provided a table dump for a new subtrack, pgLucier,
+# and I noticed the download pgQuake file was more recent than what we
+# have on hgwdev, so I reloaded that.
+    cd /hive/data/genomes/hg18/bed/pgSnp/
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg18/pgLucier.pgSnp.gz
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg18/pgQuake.txt.gz
+    set hglbOpts = (-sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable \
+      -type=bed4+ -tab -noNameIx -allowStartEqualEnd)
+    hgLoadBed $hglbOpts hg18 pgLucier pgLucier.pgSnp.gz
+#Read 2852207 elements of size 7 from pgLucier.pgSnp.gz
+    hgLoadBed $hglbOpts hg18 pgQuake pgQuake.txt.gz
+#Read 2794408 elements of size 7 from pgQuake.txt.gz
+
+
+#############################################################################
