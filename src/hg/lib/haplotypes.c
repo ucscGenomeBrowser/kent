@@ -2983,12 +2983,12 @@ else if (setsFound > 1)
     fprintf(out, "\n");
     fprintf(out, "       Haplotypes: max:%-4d   mean:%-5.2lf  sd:%-5.2lf\n",
                                hapsNrMax, hapsNrMean,   hapsNrSD);
-    fprintf(out, "     Haplo pValue: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
+    fprintf(out, "      Haplo Score: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
                              hapScoreMax, hapScoreMean,hapScoreSD);
-    fprintf(out, "  Homo/Hap pValue: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
+    fprintf(out, "   Homo/Hap Score: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
                              homScoreMax,homScoreMean,homScoreSD);
     if (he->populationsToo)
-        fprintf(out, "    Population SD: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
+        fprintf(out, " Population Score: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
                                  popScoreMax,popScoreMean,popScoreSD);
     fprintf(out, "         Variants: max:%-4d   mean:%-5.2lf  sd:%-5.2lf\n",
                               variantMax,variantMean, variantSD);
