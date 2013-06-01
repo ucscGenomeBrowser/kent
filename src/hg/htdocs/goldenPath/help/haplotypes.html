@@ -34,27 +34,15 @@
                             <TR><TD WIDTH=10>&nbsp;</TD><TD>
 
 <div id='haplotypes'> <!-- Allows using same CSS as the haplotypes aplet itself  -->
-<P>
-With the availability <A HREF='http://www.1000genomes.org/' TARGET=_BLANK>1000 Genomes</A> Phase 1
-data, there are currently 1092 sets of variation in humans phased across chromosomes.  Using 
-these data, we can now see the common <em class='textInfo'>haplotypes</em> (a.k.a alleles), 
-or sets of variations occurring on the same chromosome, falling within the (exon) boundaries of 
-protein coding genes as they are seen in healthy adults.  
-While many individual variant sites have been studied, the effect of one SNP allele may not be 
-fully appreciated until it is seen in the context of co-segregating variants falling within the 
-same gene. For any 
-given gene there can be no more than 2184 distinct haplotypes given the data, 
-though in most cases there are dramatically fewer (average 4).  Many haplotypes will have 
-little or no phenotypic effect, being defined by synonymous SNPs or resulting in amino acid 
-substitutions of little consequence to the overall efficacy of a protein.  It is expected, 
-however, that many haplotypes will result in significant phenotypic variation within humans.  
-Haplotypes associated with disease may show evidence of negative selection, just as haplotypes 
-associated with the immune system may show striking evidence for positive selection.  Occasionally 
-the skew in a haplotype's distribution among populations will give hints to its anthropological 
-history.   However, the vast majority of common haplotypes are represented in all major 
-population groups, which may speak both to the age of individual haplotypes and the ongoing 
-mixing of the human gene pool.  
-</P> 
+<p>
+The Gene Haplotype Alleles feature displays the chromosome-phased
+<a href='http://www.1000genomes.org/' target=_blank>1000 Genomes</a> Phase 1 data for protein
+coding regions. These data comprise the genomes of 1,092 individuals from 14 populations in Africa,
+Europe, East Asia and the Americas, constructed using a combination of low-coverage whole-genome
+and exome sequencing.</p>
+<p>
+The variant genotypes have been phased by the 1000 Genomes Project (<em>i.e.</em>, the two alleles
+of each diploid genotype have been assigned to two haplotypes, one inherited from each parent).</p>
 
 <H2>How to use the &quot;Gene Haplotype Alleles&quot; section</H2>
 
@@ -79,13 +67,13 @@ which are always shown as they appear on the positive ('+' or "forward") strand.
     of individuals in the dataset.
     <BR><BR>
 
-    The <em class='textInfo'>reference haplotype</em> (made of entirely reference variants) may 
+    The <em>reference haplotype</em> (made of entirely reference variants) may 
     not be represented in the 1000 Genomes data.  If it is, it will be so marked in the 
     &quot;<B>Ref</B>&quot; column.
     <BR><BR></dd>
 
 <dt><B class='textOpt'>Variant sites</b></dt>
-<dd>By default, only non-synonymous, <em class='textInfo'>common variant</em> sites are displayed. 
+<dd>By default, only non-synonymous, <em>common variant</em> sites are displayed. 
     Common variants occur in at least 1&#37; of 1000 Genomes subject chromosomes. Pressing 
     <input type='button' style='font-size:.9em;' value='Include all variants' 
     title='Include or Restrict to non-synonymous, common variants with a frequency of at least 1%' 
@@ -105,7 +93,7 @@ which are always shown as they appear on the positive ('+' or "forward") strand.
     Return to the protein sequence view by pressing 
     <input type='button' style='font-size:.9em;' value='Display as amino acids' 
     title='Display variants and sequence as amino acids or DNA bases' onclick='return false;'>.
-    The <em class='textInfo'>reference variant</em> is shown at the top of each variant site column.  
+    The <em>reference variant</em> is shown at the top of each variant site column.  
     This is the value found in the GRCh37/hg19 reference genome at that variant site.  In most 
     cases it is a single letter (AA code/DNA base).  In the case of an insertion with respect 
     to the reference genome, the reference value will be seen as '-' .  Large deletions will 
@@ -122,7 +110,7 @@ which are always shown as they appear on the positive ('+' or "forward") strand.
                 "SNP: G|A (0.995|0.005)"</span>, 
     and the <span title='rs55917063'>dbSNP variant name 
                         "rs55917063"</span> if one is known.  Clicking on any 
-    <em class='textInfo'>non-reference</em> variant shown in the variant sites columns 
+    <em>non-reference</em> variant shown in the variant sites columns 
     will link to the full details of that variant site as seen in the 1000 Genomes phase 1 track.    
     <BR><BR></dd>
 
@@ -220,9 +208,9 @@ which are always shown as they appear on the positive ('+' or "forward") strand.
 
 <h2 id='population'>Population Group definitions</h2>
 
-<span class='textInfo'>The numbers listed here are of individuals, but the numbers used in generating 
+<p>The numbers listed here are of individuals, but the numbers used in generating 
 the haplotypes table are frequently the number of relevant chromosomes 
-(<em>e.g.</em> 2184 not 1092).</span>
+(<em>e.g.</em> 2184 not 1092).</p>
 <h3>Major Groups</h3>
 <div class='textOpt'>Includes only major groups for which there are data in phase 1 of the 
 1000 Genomes project.</div>
@@ -358,16 +346,6 @@ any haplotype.</span>
 <li id='noteTooManyVars'>
     If the number of variants covered exceeds 200, then the haplotype table will not be 
     displayed and the reason so noted.</li>
-<!--          Moved into the main text
-<li id='noteRefHap'>
-    The <em class='textInfo'>reference haplotype</em> (made of entirely reference variants) 
-    may not be represented in the 1000 Genomes data. If it is, it will be marked as 
-    &quot;ref&quot; in the table of haplotypes. </li>
--->
-<!--          Moved into the main text
-<li id='noteScoring'>
-    Scores alone cannot be used to draw definitive conclusions about any haplotype.</li>
--->
 <li id='notePerformance'>Certain viewing options are expensive operations which will slow the
     gene page response time.  If this section is not being actively used, it is recommended that 
     previous choices are cleared by pressing "Reset to defaults" at the bottom of this section.
