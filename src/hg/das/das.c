@@ -238,7 +238,7 @@ for (trackDb = trackDbs; trackDb != NULL; trackDb = trackDb->next)
     if (sqlTableExists(conn, trackDb->name))
         {
         char query[128];
-        safef(query, sizeof(query), "select tableName,type,settings from %s", trackDb->name);
+        sqlSafef(query, sizeof(query), "select tableName,type,settings from %s", trackDb->name);
         struct sqlResult *sr = sqlGetResult(conn, query);
         char **row;
         while ((row = sqlNextRow(sr)) != NULL)
@@ -303,7 +303,7 @@ char *table, *root;
 boolean isSplit, hasBin;
 char chromField[32], startField[32], endField[32];
 
-sr = sqlGetResult(conn, "show tables");
+sr = sqlGetResult(conn, "NOSQLINJ show tables");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     table = root = row[0];
@@ -594,14 +594,14 @@ if (segmentList == NULL)
     {
     if (td->splitTables == NULL)
         {
-	sprintf(query, "select count(*) from %s", td->name);
+	sqlSafef(query, sizeof query, "select count(*) from %s", td->name);
 	acc = sqlQuickNum(conn, query);
 	}
     else
         {
 	for (n = td->splitTables; n != NULL; n = n->next)
 	    {
-	    sprintf(query, "select count(*) from %s", n->name);
+	    sqlSafef(query, sizeof query, "select count(*) from %s", n->name);
 	    acc += sqlQuickNum(conn, query);
 	    }
 	}
@@ -614,7 +614,7 @@ else
 	    {
 	    if (td->splitTables == NULL)
 	        {
-		sprintf(query, "select count(*) from %s where %s = '%s'", 
+		sqlSafef(query, sizeof query, "select count(*) from %s where %s = '%s'", 
 			td->name, td->chromField, segment->seq);
 		acc += sqlQuickNum(conn, query);
 		}
@@ -623,7 +623,7 @@ else
 		sprintf(chrTable, "%s_%s", segment->seq, td->name);
 		if (sqlTableExists(conn, chrTable))
 		    {
-		    sprintf(query, "select count(*) from %s", 
+		    sqlSafef(query, sizeof query, "select count(*) from %s", 
 			    chrTable);
 		    acc += sqlQuickNum(conn, query);
 		    }
@@ -633,7 +633,7 @@ else
 	    {
 	    if (td->splitTables == NULL)
 	        {
-		sprintf(query, "select count(*) from %s where %s = '%s' and %s < %d and %s > %d",
+		sqlSafef(query, sizeof query, "select count(*) from %s where %s = '%s' and %s < %d and %s > %d",
 		     td->name, td->chromField, segment->seq,
 		     td->startField, segment->end, td->endField, segment->start);
 		acc += sqlQuickNum(conn, query);
@@ -643,7 +643,7 @@ else
 		sprintf(chrTable, "%s_%s", segment->seq, td->name);
 		if (sqlTableExists(conn, chrTable))
 		    {
-		    sprintf(query, "select count(*) from %s where %s < %d and %s > %d", chrTable, 
+		    sqlSafef(query, sizeof query, "select count(*) from %s where %s < %d and %s > %d", chrTable, 
 			 td->startField, segment->end, td->endField, segment->start);
 		    acc += sqlQuickNum(conn, query);
 		    }
@@ -961,7 +961,7 @@ printf("<DASEP>\n");
 printf("<ENTRY_POINTS href=\"%s\" version=\"7.00\">\n",
 	currentUrl());
 
-sr = sqlGetResult(conn, "select * from chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ci = chromInfoLoad(row);

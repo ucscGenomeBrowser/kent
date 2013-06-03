@@ -62,7 +62,7 @@ struct sqlResult *sr;
 char **row;
 struct otherSeq *os;
 
-sprintf(query, "select chrom,fileName from %s", table);
+sqlSafef(query, sizeof query, "select chrom,fileName from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

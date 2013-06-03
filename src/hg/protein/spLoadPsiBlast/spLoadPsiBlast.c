@@ -194,7 +194,7 @@ writePairs(mapper, tabFh);
 if (gLoad)
     {
     char query[1024];
-    safef(query, sizeof(query), createString, table);
+    sqlSafef(query, sizeof(query), createString, table);
     if (gAppend)
         sqlMaybeMakeTable(conn, table, query);
     else

@@ -84,9 +84,7 @@ void altGraphSaveToDb(struct sqlConnection *conn, struct altGraph *el, char *tab
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use altGraphSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *vTypesArray, *vPositionsArray, *edgeStartsArray, *edgeEndsArray, *mrnaRefsArray;
@@ -95,7 +93,7 @@ vPositionsArray = sqlSignedArrayToString(el->vPositions, el->vertexCount);
 edgeStartsArray = sqlSignedArrayToString(el->edgeStarts, el->edgeCount);
 edgeEndsArray = sqlSignedArrayToString(el->edgeEnds, el->edgeCount);
 mrnaRefsArray = sqlStringArrayToString(el->mrnaRefs, el->mrnaRefCount);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%d,%d,'%s',%u,'%s','%s',%u,'%s','%s',%d,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%d,%d,'%s',%u,'%s','%s',%u,'%s','%s',%d,'%s')", 
 	tableName,  el->id,  el->tName,  el->tStart,  el->tEnd,  el->strand,  el->vertexCount,  vTypesArray ,  vPositionsArray ,  el->edgeCount,  edgeStartsArray ,  edgeEndsArray ,  el->mrnaRefCount,  mrnaRefsArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -106,37 +104,6 @@ freez(&edgeEndsArray);
 freez(&mrnaRefsArray);
 }
 
-void altGraphSaveToDbEscaped(struct sqlConnection *conn, struct altGraph *el, char *tableName, int updateSize)
-/* Save altGraph as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than altGraphSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *tName, *strand, *vTypesArray, *vPositionsArray, *edgeStartsArray, *edgeEndsArray, *mrnaRefsArray;
-tName = sqlEscapeString(el->tName);
-strand = sqlEscapeString(el->strand);
-
-vTypesArray = sqlUbyteArrayToString(el->vTypes, el->vertexCount);
-vPositionsArray = sqlSignedArrayToString(el->vPositions, el->vertexCount);
-edgeStartsArray = sqlSignedArrayToString(el->edgeStarts, el->edgeCount);
-edgeEndsArray = sqlSignedArrayToString(el->edgeEnds, el->edgeCount);
-mrnaRefsArray = sqlStringArrayToString(el->mrnaRefs, el->mrnaRefCount);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%d,%d,'%s',%u,'%s','%s',%u,'%s','%s',%d,'%s')", 
-	tableName, el->id ,  tName, el->tStart , el->tEnd ,  strand, el->vertexCount ,  vTypesArray ,  vPositionsArray , el->edgeCount ,  edgeStartsArray ,  edgeEndsArray , el->mrnaRefCount ,  mrnaRefsArray );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&tName);
-freez(&strand);
-freez(&vTypesArray);
-freez(&vPositionsArray);
-freez(&edgeStartsArray);
-freez(&edgeEndsArray);
-freez(&mrnaRefsArray);
-}
 
 struct altGraph *altGraphCommaIn(char **pS, struct altGraph *ret)
 /* Create a altGraph out of a comma separated string. 

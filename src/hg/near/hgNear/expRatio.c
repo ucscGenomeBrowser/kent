@@ -186,7 +186,7 @@ struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(16);
 
-safef(query, sizeof(query), "select name,expScores from %s", table);
+sqlSafef(query, sizeof(query), "select name,expScores from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -213,7 +213,7 @@ struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(16);
 
-safef(query, sizeof(query), "select %s,%s from %s", keyField, valField,table);
+sqlSafef(query, sizeof(query), "select %s,%s from %s", keyField, valField,table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -724,13 +724,13 @@ char expName[64];
 float maxVal = -10000;
 boolean noLookup = sameWord(col->table, "null");
 if (!noLookup)
-    safef(query, sizeof(query), "select value from %s where name = '%s'", 
+    sqlSafef(query, sizeof(query), "select value from %s where name = '%s'", 
 	  col->table, gp->name);
 if (noLookup || 
     (sqlQuickQuery(conn, query, expName, sizeof(expName)) != NULL))
     {
     char *commaString = NULL;
-    safef(query, sizeof(query), "select expScores from %s where name = '%s'",
+    sqlSafef(query, sizeof(query), "select expScores from %s where name = '%s'",
 	  col->posTable, (noLookup) ? gp->name : expName);
     if ((commaString = sqlQuickString(fConn, query)) != NULL)
         {

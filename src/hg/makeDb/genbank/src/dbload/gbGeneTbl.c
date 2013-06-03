@@ -200,7 +200,7 @@ void gbGeneTblRebuild(struct gbGeneTbl *ggt, struct gbStatus* status,
 /* rebuild a gene from an alignment that is already loaded in a table */
 {
 char where[128];
-safef(where, sizeof(where), "qName = \"%s\"", status->acc);
+sqlSafefFrag(where, sizeof(where), "qName = \"%s\"", status->acc);
 struct psl *psls = pslReaderLoadQuery(conn, ggt->alnTbl, where);
 struct psl *psl;
 for (psl = psls; psl != NULL; psl = psl->next)

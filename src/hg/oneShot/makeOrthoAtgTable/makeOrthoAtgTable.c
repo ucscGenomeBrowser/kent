@@ -84,9 +84,9 @@ splitPath(fileName, NULL, dbName, NULL);
 
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
-safef(query, sizeof(query), "select organism from dbDb where name='%s'", dbName);
+sqlSafef(query, sizeof(query), "select organism from dbDb where name='%s'", dbName);
 char *organism = sqlQuickString(conn, query);
-safef(query, sizeof(query), "select scientificName from dbDb where name='%s'", dbName);
+sqlSafef(query, sizeof(query), "select scientificName from dbDb where name='%s'", dbName);
 char *scientificName = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
 

@@ -34,7 +34,7 @@ char **row;
 
 ret = newHash(0);
 
-sr = sqlGetResult(conn, "select * from chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = chromInfoLoad(row);
@@ -131,7 +131,7 @@ verbose(1, "reading snps...\n");
 for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
     {
 
-    safef(query, sizeof(query), "select snp_id, ctg_id, loc_type, phys_pos_from, "
+    sqlSafef(query, sizeof(query), "select snp_id, ctg_id, loc_type, phys_pos_from, "
       "phys_pos, orientation, allele from ContigLoc where snp_type = 'rs' and ctg_id = '%s'", contigPtr->name);
     verbose(1, "ctg_id = %d\n", contigPtr->name);
 
@@ -196,7 +196,7 @@ struct slName *el = NULL;
 int count = 0;
 
 verbose(1, "getting contigs...\n");
-safef(query, sizeof(query), "select ctg_id from ContigInfo where contig_chr = '%s'", chromName);
+sqlSafef(query, sizeof(query), "select ctg_id from ContigInfo where contig_chr = '%s'", chromName);
 verbose(5, "query = %s\n", query);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -227,7 +227,7 @@ boolean errorFound = FALSE;
 verbose(5, "looking up contig chrom...\n");
 for (el = list; el != NULL; el = el->next)
     {
-    safef(query, sizeof(query), "select contig_chr, contig_start, contig_end, group_term from ContigInfo "
+    sqlSafef(query, sizeof(query), "select contig_chr, contig_start, contig_end, group_term from ContigInfo "
       "where ctg_id = '%s'", el->chrom);
     sr = sqlGetResult(conn, query);
     /* have a joiner check rule that assumes the contig is unique */
@@ -268,7 +268,7 @@ verbose(1, "looking up function...\n");
 for (el = list; el != NULL; el = el->next)
     {
     if (sameString(el->chrom, "ERROR")) continue;
-    safef(query, sizeof(query), "select fxn_class from ContigLocusId where snp_id = '%s'", el->name);
+    sqlSafef(query, sizeof(query), "select fxn_class from ContigLocusId where snp_id = '%s'", el->name);
     sr = sqlGetResult(conn, query);
     /* need a joiner check rule for this */
     row = sqlNextRow(sr);
@@ -327,7 +327,7 @@ verbose(1, "looking up heterozygosity...\n");
 for (el = list; el != NULL; el = el->next)
     {
     if (sameString(el->chrom, "ERROR")) continue;
-    safef(query, sizeof(query), "select avg_heterozygosity, het_se from SNP where snp_id = '%s'", el->name);
+    sqlSafef(query, sizeof(query), "select avg_heterozygosity, het_se from SNP where snp_id = '%s'", el->name);
     sr = sqlGetResult(conn, query);
     /* need a joiner check rule for this */
     row = sqlNextRow(sr);

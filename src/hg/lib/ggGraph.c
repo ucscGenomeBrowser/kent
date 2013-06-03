@@ -161,7 +161,7 @@ for (da = mc->mrnaList; da != NULL; da = da->next)
 
 AllocVar(gg);
 /* Fill in other info from ci and mc. */
-snprintf(gg->strand, sizeof(gg->strand), "%s", mc->strand);
+safef(gg->strand, sizeof(gg->strand), "%s", mc->strand);
 gg->tName = cloneString(ci->tName);
 gg->tStart = mc->tStart;
 gg->tEnd = mc->tEnd;

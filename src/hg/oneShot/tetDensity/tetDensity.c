@@ -51,7 +51,7 @@ struct sqlResult *sr;
 char **row;
 int chromPos;
 
-sprintf(query, "select chromStart from %s_tet_waba", chrom);
+sqlSafef(query, sizeof query, "select chromStart from %s_tet_waba", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -69,7 +69,7 @@ int islandCountInChrom(struct sqlConnection *conn, char *chrom)
 {
 char query[512];
 
-sprintf(query, "select count(*) from cpgIsland where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select count(*) from cpgIsland where chrom = '%s'", chrom);
 return sqlQuickNum(conn, query);
 }
 
@@ -78,7 +78,7 @@ int knownCount(struct sqlConnection *conn, char *chrom)
 {
 char query[512];
 
-sprintf(query, "select count(*) from genieKnown where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select count(*) from genieKnown where chrom = '%s'", chrom);
 return sqlQuickNum(conn, query);
 }
 
@@ -96,7 +96,7 @@ struct sqlResult *sr;
 char **row;
 int chromPos;
 
-sprintf(query, "select size from chromInfo where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select size from chromInfo where chrom = '%s'", chrom);
 chromSize = sqlQuickNum(conn, query);
 tetCount = tetCountInChrom(conn, chrom);
 printf("%5s %6.3f %6.3f %6.3f\n", chrom, 

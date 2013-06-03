@@ -38,7 +38,7 @@ static struct cgapSageLib *loadLibTable(struct sqlConnection *conn)
 {
 struct cgapSageLib *libs = NULL;
 char query[256];
-safef(query, sizeof(query), "select * from cgapSageLib");
+sqlSafef(query, sizeof(query), "select * from cgapSageLib");
 libs = cgapSageLibLoadByQuery(conn, query);
 return libs;
 }

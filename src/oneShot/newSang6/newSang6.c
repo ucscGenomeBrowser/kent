@@ -23,7 +23,7 @@ char query[256];
 /* Get new versions. */
 conn = sqlConnect("h");
 sr = sqlGetResult(conn, 
-	"select bac.acc,cytoMap.name from bac,seq,cytoMap "
+	"NOSQLINJ select bac.acc,cytoMap.name from bac,seq,cytoMap "
 	"where bac.center = 2160 and bac.phase=3 "
 	"and seq.gb_date >= '1999-12-23' and bac.chromosome = 3530972 "
 	"and bac.id = seq.id "
@@ -44,7 +44,7 @@ slReverse(&nfList);
 conn = sqlConnect("hgap");
 for (nf = nfList; nf != NULL; nf = nf->next)
     {
-    sprintf(query, "select phase from bac where acc = '%s'", nf->acc);
+    sqlSafef(query, sizeof query, "select phase from bac where acc = '%s'", nf->acc);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{

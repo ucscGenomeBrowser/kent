@@ -33,7 +33,7 @@ char **row;
 char buf[256];
 struct bed *bedList = NULL, *bed;
 
-safef(buf, sizeof(buf), "select chrom,chromStart,chromEnd,name from %s", table);
+sqlSafef(buf, sizeof(buf), "select chrom,chromStart,chromEnd,name from %s", table);
 sr = sqlGetResult(conn, buf);
 while ((row = sqlNextRow(sr)) != NULL)
     {

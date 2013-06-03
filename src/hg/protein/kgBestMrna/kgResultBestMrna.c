@@ -247,7 +247,7 @@ while (fgets(line, 1000, inf) != NULL)
 	snprintf(outDir, (size_t) sizeof(outDir), "prot%05d", proteinCount );
 	}
 
-    sprintf(query2,"select mrnaID from %sTemp.spMrna where spID='%s';",genomeRelease, proteinID);
+    sqlSafef(query2, sizeof query2, "select mrnaID from %sTemp.spMrna where spID='%s';",genomeRelease, proteinID);
 	
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);

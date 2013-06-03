@@ -60,7 +60,7 @@ static char *createString =
     "    refs longblob not null	# Reference numbers\n"
     ")\n";
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }

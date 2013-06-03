@@ -107,44 +107,15 @@ void liftOverChainSaveToDb(struct sqlConnection *conn, struct liftOverChain *el,
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use liftOverChainSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%s,%g,%u,%u,'%s',%g,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%s,%g,%u,%u,'%s',%g,'%s')", 
 	tableName,  el->fromDb,  el->toDb,  el->path,  el->minMatch,  el->minChainT,  el->minSizeQ,  el->multiple,  el->minBlocks,  el->fudgeThick);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void liftOverChainSaveToDbEscaped(struct sqlConnection *conn, struct liftOverChain *el, char *tableName, int updateSize)
-/* Save liftOverChain as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than liftOverChainSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *fromDb, *toDb, *path, *multiple, *fudgeThick;
-fromDb = sqlEscapeString(el->fromDb);
-toDb = sqlEscapeString(el->toDb);
-path = sqlEscapeString(el->path);
-multiple = sqlEscapeString(el->multiple);
-fudgeThick = sqlEscapeString(el->fudgeThick);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%g,%u,%u,'%s',%g,'%s')", 
-	tableName,  fromDb,  toDb,  path, el->minMatch , el->minChainT , el->minSizeQ ,  multiple, el->minBlocks ,  fudgeThick);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&fromDb);
-freez(&toDb);
-freez(&path);
-freez(&multiple);
-freez(&fudgeThick);
-}
 
 struct liftOverChain *liftOverChainCommaIn(char **pS, struct liftOverChain *ret)
 /* Create a liftOverChain out of a comma separated string. 
@@ -234,7 +205,7 @@ boolean liftOverChainExists(struct sqlConnection *conn, char *tableName,
 /* Return TRUE if row where fromDb and toDb match */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
         "select count(*) from %s where fromDb = '%s' and toDb = '%s'",
 	        tableName, fromDb, toDb);
 return sqlQuickNum(conn, query) > 0;
@@ -245,7 +216,7 @@ void liftOverChainRemove(struct sqlConnection *conn, char *tableName,
 /* Remove rows where fromDb and toDb match */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
         "delete from %s where fromDb = '%s' and toDb = '%s'",
 	        tableName, fromDb, toDb);
 sqlUpdate(conn, query);

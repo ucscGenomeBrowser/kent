@@ -58,7 +58,7 @@ for (side = 0; side < ArraySize(names); ++side)
     char *table = tables[side];
     struct sqlResult *sr;
     char query[256], **row;
-    safef(query, sizeof(query), "select * from %s where name = '%s'",
+    sqlSafef(query, sizeof(query), "select * from %s where name = '%s'",
     	table, geneId);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -156,7 +156,7 @@ struct rnaFold *loadFold(struct sqlConnection *conn,
 struct rnaFold *fold = NULL;
 struct sqlResult *sr;
 char query[256], **row;
-safef(query, sizeof(query), "select * from %s where name = '%s'",
+sqlSafef(query, sizeof(query), "select * from %s where name = '%s'",
     table, name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)

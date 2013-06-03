@@ -59,7 +59,7 @@ static void createTable(struct sqlConnection *conn, char *table)
 {
 char query[1024];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 "CREATE TABLE %s (\n"
 "    dbObjectId varchar(255) not null,	# Database accession - like 'Q13448'\n"
 "    dbObjectSymbol varchar(255) not null,	# Name - like 'CIA1_HUMAN'\n"

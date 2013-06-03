@@ -45,7 +45,7 @@ for (i=0; i<vertexCount; ++i)
 for (i=0; i<ag->edgeCount; ++i)
     em[ag->edgeStarts[i]][ag->edgeEnds[i]] = TRUE;
 
-snprintf(gg->strand, sizeof(gg->strand), "%s", ag->strand);
+safef(gg->strand, sizeof(gg->strand), "%s", ag->strand);
 gg->tStart = ag->tStart;
 gg->tEnd = ag->tEnd;
 gg->mrnaRefCount = ag->mrnaRefCount;

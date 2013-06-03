@@ -144,7 +144,7 @@ if (breakUp)
     {
     if (sameString(startField, "tStart"))
 	{
-	dyStringPrintf(query, "select * from %s where tStart >= %d and tEnd < %d",
+	sqlDyStringPrintf(query, "select * from %s where tStart >= %d and tEnd < %d",
 	    table, chromStart, chromEnd);
 	dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
 	if (where != NULL)
@@ -175,7 +175,7 @@ if (breakUp)
 	}
     else if (sameString(startField, "txStart"))
         {
-	dyStringPrintf(query, "select * from %s where txStart >= %d and txEnd < %d",
+	sqlDyStringPrintf(query, "select * from %s where txStart >= %d and txEnd < %d",
 	    table, chromStart, chromEnd);
 	dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
 	if (where != NULL)
@@ -202,7 +202,7 @@ if (breakUp)
     }
 else
     {
-    dyStringPrintf(query, "select %s,%s from %s where %s >= %d and %s < %d", 
+    sqlDyStringPrintf(query, "select %s,%s from %s where %s >= %d and %s < %d", 
 	    startField, endField, table,
 	    startField, chromStart, endField, chromEnd);
     dyStringPrintf(query, " and %s = '%s'", chromField, chrom);

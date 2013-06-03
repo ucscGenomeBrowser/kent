@@ -230,7 +230,7 @@ for (i=0; i<totalVertexCount; ++i)
 	    ++edgeCount;
     }
 AllocVar(ag);
-snprintf(ag->strand, sizeof(ag->strand), "%s", gg->strand);
+safef(ag->strand, sizeof(ag->strand), "%s", gg->strand);
 ag->tName = cloneString(gg->tName);
 ag->tStart = gg->tStart;
 ag->tEnd = gg->tEnd;
@@ -424,7 +424,7 @@ for(i=0; i< mrnaCount; ++i)
 	char **row = NULL;
 	char query[256];
 	assert(gg->mrnaRefs[i]);
-	snprintf(query, sizeof(query), "select library, tissue from gbCdnaInfo where acc='%s'", gg->mrnaRefs[i]);
+	sqlSafef(query, sizeof(query), "select library, tissue from gbCdnaInfo where acc='%s'", gg->mrnaRefs[i]);
 	sr = sqlGetResult(conn, query);
 	row = sqlNextRow(sr);
 	if(row == NULL)
@@ -545,7 +545,7 @@ for (i=0; i<totalVertexCount; ++i)
 	    ++edgeCount;
     }
 AllocVar(ag);
-snprintf(ag->strand, sizeof(ag->strand), "%s", gg->strand);
+safef(ag->strand, sizeof(ag->strand), "%s", gg->strand);
 ag->tName = cloneString(gg->tName);
 ag->tStart = gg->tStart;
 ag->tEnd = gg->tEnd;
@@ -636,7 +636,7 @@ gg->tName = cloneString(ag->tName);
 gg->tStart = ag->tStart;
 gg->tEnd = ag->tEnd;
 gg->vertexCount = ag->vertexCount;
-snprintf(gg->strand, sizeof(gg->strand), "%s", ag->strand);
+safef(gg->strand, sizeof(gg->strand), "%s", ag->strand);
     gg->mrnaRefCount = ag->mrnaRefCount;
 gg->mrnaTissues = CloneArray(ag->mrnaTissues, ag->mrnaRefCount);
 gg->mrnaLibs = CloneArray(ag->mrnaLibs, ag->mrnaRefCount);

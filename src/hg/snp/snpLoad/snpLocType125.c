@@ -59,7 +59,7 @@ struct sqlResult *sr;
 char **row;
 char chromName[64];
 
-safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
+sqlSafef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -123,7 +123,7 @@ safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
 
 f = mustOpen(fileName, "w");
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select snp_id, ctg_id, loc_type, start, end, orientation, allele, weight from %s", tableName);
 
 sr = sqlGetResult(conn, query);
@@ -217,7 +217,7 @@ char *createString =
 struct dyString *dy = newDyString(1024);
 
 safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 hFreeConn(&conn);

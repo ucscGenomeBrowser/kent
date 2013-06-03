@@ -135,7 +135,8 @@ if(ic != NULL)
     /* first try looking for the image clones themselves... */
     for(i=0; i<ic->numGenbank; i++) 
 	{
-	sprintf(buff, "select * from all_est where qName='%s'", ic->genbankIds[i]);
+	char query[1024];
+	sqlSafef(query, sizeof query, "select * from all_est where qName='%s'", ic->genbankIds[i]);
 	pslList = pslLoadByQuery(conn, buff);
 	if(pslList != NULL) 
 	    {

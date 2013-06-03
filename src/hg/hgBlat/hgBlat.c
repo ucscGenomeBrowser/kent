@@ -60,16 +60,16 @@ char **row;
 char dbActualName[32];
 
 /* If necessary convert database description to name. */
-safef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
+sqlSafef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
 if (!sqlExists(conn, query))
     {
-    sprintf(query, "select name from dbDb where description = '%s'", db);
+    sqlSafef(query, sizeof(query), "select name from dbDb where description = '%s'", db);
     if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
         db = dbActualName;
     }
 
 /* Do a little join to get data to fit into the serverTable. */
-safef(query, sizeof(query), "select dbDb.name,dbDb.description,blatServers.isTrans"
+sqlSafef(query, sizeof(query), "select dbDb.name,dbDb.description,blatServers.isTrans"
                ",blatServers.host,blatServers.port,dbDb.nibPath "
 	       "from dbDb,blatServers where blatServers.isTrans = %d and "
 	       "dbDb.name = '%s' and dbDb.name = blatServers.db", 
@@ -101,15 +101,15 @@ void findClosestServer(char **pDb, char **pOrg)
 char *db = *pDb, *org = *pOrg;
 struct sqlConnection *conn = hConnectCentral();
 char query[256];
-safef(query, sizeof(query), "select db from blatServers where db = '%s'", db);
+sqlSafef(query, sizeof(query), "select db from blatServers where db = '%s'", db);
 if (!sqlExists(conn, query))
     {
-    safef(query, sizeof(query), "select blatServers.db from blatServers,dbDb "
+    sqlSafef(query, sizeof(query), "select blatServers.db from blatServers,dbDb "
 	  "where blatServers.db = dbDb.name and dbDb.genome = '%s'", org);
     char *db = sqlQuickString(conn, query);
     if (db == NULL)
 	{
-	safef(query, sizeof(query), "select blatServers.db from blatServers,dbDb "
+	sqlSafef(query, sizeof(query), "select blatServers.db from blatServers,dbDb "
 	      "where blatServers.db = dbDb.name order by dbDb.orderKey,dbDb.name desc");
 	char *db = sqlQuickString(conn, query);
 	if (db == NULL)

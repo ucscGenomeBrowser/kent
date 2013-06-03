@@ -241,15 +241,15 @@ if (isSplit)
     force = "force index (bin)";
 
 if (chainId == -1)
-    dyStringPrintf(query, 
+    sqlDyStringPrintf(query, 
 	"select chainId,tStart,tEnd,qStart from %sLink %s where ",
 	fullName, force);
 else
-    dyStringPrintf(query, 
+    sqlDyStringPrintf(query, 
 	"select chainId, tStart,tEnd,qStart from %sLink where chainId=%d and ",
 	fullName, chainId);
 if (!isSplit)
-    dyStringPrintf(query, "tName='%s' and ", chromName);
+    sqlDyStringPrintf(query, "tName='%s' and ", chromName);
 hAddBinToQuery(start, end, query);
 dyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
 sr = sqlGetResult(conn, query->string);

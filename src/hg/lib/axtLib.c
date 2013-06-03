@@ -163,11 +163,11 @@ char **row;
 struct axtInfo *ai = NULL;
 
 if (alignment != NULL)
-    snprintf(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	     "select * from axtInfo where chrom = '%s' and species = '%s' and alignment = '%s'",
 	     chrom, toDb, alignment);
 else
-    snprintf(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	     "select * from axtInfo where chrom = '%s' and species = '%s'",
 	     chrom, toDb);
 sr = sqlGetResult(conn, query);

@@ -71,7 +71,7 @@ while (lineFileNextReal(lf, &line))
     char *h = strchr(line, '#');
     if (h != NULL)
         *h = '\0';
-    dyStringAppend(sql, line);
+    sqlDyStringAppend(sql, line);
     }
 lineFileClose(&lf);
 return dyStringCannibalize(&sql);

@@ -111,7 +111,7 @@ for(; beds; beds = beds->next)
     {
     char where[10 * 1024];
 
-    safef(where, sizeof where,
+    sqlSafefFrag(where, sizeof where,
 	"name = '%s' and chrom='%s' and txEnd > %d and txStart <= %d",
 	beds->name, beds->chrom, beds->chromStart, beds->chromEnd);
 
@@ -172,7 +172,7 @@ char *ret = NULL;
 for(; dbl; dbl = dbl->next)
     {
     char query[512];
-    safef(query, sizeof query,
+    sqlSafef(query, sizeof query,
 	"select tableName from %s where shortLabel='Conservation'", dbl->name);
 
     struct sqlResult *sr = sqlGetResult(conn, query);

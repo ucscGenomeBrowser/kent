@@ -983,7 +983,7 @@ char chrom[32];
 char post[64];
 char fullName[128];
 
-strcpy(query, "SHOW TABLES");
+strcpy(query, "NOSQLINJ SHOW TABLES");
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
     {
@@ -1308,7 +1308,7 @@ char query[256];
 char name[128];
 char *newVal;
 
-snprintf(query, sizeof(query), "DESCRIBE %s", fullTblName);
+sqlSafef(query, sizeof(query), "DESCRIBE %s", fullTblName);
 sr = sqlGetResult(conn, query);
 
 puts("<TABLE><TR><TD>\n");
@@ -1967,7 +1967,7 @@ if ((constraints != NULL) && (constraints[0] != 0) &&
     struct sqlResult *sr;
     struct dyString *query = newDyString(512);
     // Null query will cause errAbort if there's a syntax error, no-op if OK.
-    dyStringPrintf(query, "SELECT 1 FROM %s WHERE 0 AND %s",
+    sqlDyStringPrintf(query, "SELECT 1 FROM %s WHERE 0 AND %s",
 		   fullTblName, constraints);
     sr = sqlGetResult(conn, query->string);
     dyStringFree(&query);
@@ -2644,7 +2644,7 @@ else
     struct sqlResult *sr;
     char **row;
     char query[256];
-    snprintf(query, sizeof(query), "DESCRIBE %s", fullTableName);
+    sqlSafef(query, sizeof(query), "DESCRIBE %s", fullTableName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -2919,7 +2919,7 @@ if (sqlTableExists(conn, asTableName))
     struct tableDescriptions *asi = NULL;
     char query[512];
     char **row = NULL;
-    safef(query, sizeof(query), "select * from %s where tableName = '%s'",
+    sqlSafef(query, sizeof(query), "select * from %s where tableName = '%s'",
 	  asTableName, table);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -2979,7 +2979,7 @@ for (tPtr=tableList;  tPtr != NULL;  tPtr=tPtr->next)
 printf("<P>Table %s has %d rows total.<BR>\n", table, count);
 if (count > 0)
     {
-    dyStringPrintf(query, "select * from %s limit %d", tableList->name, n);
+    sqlDyStringPrintf(query, "select * from %s limit %d", tableList->name, n);
     sr = sqlGetResult(conn, query->string);
     printf ("Example rows of table %s (not necessarily from current position!):<BR>\n",
 	    table);
@@ -3014,7 +3014,7 @@ boolean tooBig = (sqlTableSize(conn, fullTableName) > TOO_BIG_FOR_HISTO);
 char button[64];
 char query[256];
 
-safef(query, sizeof(query), "desc %s", fullTableName);
+sqlSafef(query, sizeof(query), "describe %s", fullTableName);
 sr = sqlGetResult(conn, query);
 // For some reason BORDER=1 does not work in our web.c nested table scheme.
 // So use web.c's trick of using an enclosing table to provide a border.
@@ -3218,11 +3218,11 @@ if (tableIsSplit)
 	if (! sqlTableExists(conn, fullTableName))
 	    continue;
 	dyStringClear(query);
-	dyStringPrintf(query, "SELECT %s FROM %s",
+	sqlDyStringPrintf(query, "SELECT %s FROM %s",
 		       fieldSpec->string, fullTableName);
 	if ((! allGenome) && tableIsPositional)
 	    {
-	    dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
+	    sqlDyStringPrintf(query, " WHERE %s < %d AND %s > %d",
 			   hti->startField, winEnd, hti->endField, winStart);
 	    if ((constraints != NULL) && (constraints[0] != 0))
 		dyStringPrintf(query, " AND %s", constraints);
@@ -3237,11 +3237,11 @@ if (tableIsSplit)
 else
     {
     dyStringClear(query);
-    dyStringPrintf(query, "SELECT %s FROM %s",
+    sqlDyStringPrintf(query, "SELECT %s FROM %s",
 		   fieldSpec->string, fullTableName);
     if ((! allGenome) && tableIsPositional)
 	{
-	dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
+	sqlDyStringPrintf(query, " WHERE %s < %d AND %s > %d",
 		       hti->startField, winEnd, hti->endField, winStart);
 	if (! sameString("", hti->chromField))
 	    dyStringPrintf(query, " AND %s = \'%s\'",
@@ -4107,7 +4107,7 @@ else
     printf("No constraints selected on fields of %s.<P>\n", table);
 
 dyStringClear(query);
-dyStringPrintf(query, "select count(*) from %s%s%s", table,
+sqlDyStringPrintf(query, "select count(*) from %s%s%-s", table,
 	       (constraints ? " where "   : ""),
 	       (constraints ? constraints : ""));
 conn = hAllocOrConnect(db);
@@ -4869,14 +4869,14 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
     dyStringClear(query);
     if (isBatch() && hti->nameField[0] != 0)
 	{
-	dyStringPrintf(query, "SELECT %s,%s FROM %s", field, hti->nameField,
+	sqlDyStringPrintf(query, "SELECT %s,%s FROM %s", field, hti->nameField,
 		       fullTableName);
 	}
     else
-	dyStringPrintf(query, "SELECT %s FROM %s", field, fullTableName);
+	sqlDyStringPrintf(query, "SELECT %s FROM %s", field, fullTableName);
     if (tableIsPositional)
 	{
-	dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
+	sqlDyStringPrintf(query, " WHERE %s < %d AND %s > %d",
 		       hti->startField, winEnd, hti->endField, winStart);
 	if (! sameString("", hti->chromField))
 	    dyStringPrintf(query, " AND %s = \'%s\'",

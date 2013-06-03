@@ -42,7 +42,7 @@ outf = fopen("bioCycPathway.tmp", "w");
 conn2= hAllocConn(gdb);
 conn3= hAllocConn(gdb);
 	
-sprintf(query2, "select * from %s.pathways;", bioCycDb);
+sqlSafef(query2, sizeof query2,  "select * from %s.pathways;", bioCycDb);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -51,7 +51,7 @@ while (row2 != NULL)
     for (i=0; i<63; i++)
     	{
 	/* first get kgId of genes with the same gene symbol */
-    	sprintf(query3, "select gene_name%d from %s.pathways where UNIQUE_ID='%s'", 
+    	sqlSafef(query3, sizeof query3,  "select gene_name%d from %s.pathways where UNIQUE_ID='%s'", 
     	    i+1, bioCycDb, pathway);
 
     	sr3 = sqlMustGetResult(conn3, query3);
@@ -62,7 +62,7 @@ while (row2 != NULL)
 	
 	if (strcmp(symbol, "") != 0)
 	    {
-	    sprintf(query3, "select kgId from %s.kgXref where geneSymbol = '%s'", gdb, symbol);
+	    sqlSafef(query3, sizeof query3,  "select kgId from %s.kgXref where geneSymbol = '%s'", gdb, symbol);
 
     	    sr3 = sqlMustGetResult(conn3, query3);
     	    row3 = sqlNextRow(sr3);
@@ -78,7 +78,7 @@ while (row2 != NULL)
     	    sqlFreeResult(&sr3);
 	    }
 	/* then get kgIds with the same UniProt accession via Ensembl gene IDs */
-	sprintf(query3, "select gene_id%d from %s.pathways where UNIQUE_ID='%s'", 
+	sqlSafef(query3, sizeof query3,  "select gene_id%d from %s.pathways where UNIQUE_ID='%s'", 
     	    i+1, bioCycDb, pathway);
     	sr3 = sqlMustGetResult(conn3, query3);
     	row3 = sqlNextRow(sr3);
@@ -90,7 +90,7 @@ while (row2 != NULL)
 	if (geneId != NULL) 
 	    if (strcmp(geneId, "") != 0)
 	    	{
-            	safef(query3, sizeof(query3),
+            	sqlSafef(query3, sizeof(query3),
                       "select kgId from %s.kgXref k, %s.ensGeneXref e where e.gene_id='%s' and k.spId=e.external_name and external_db like 'UniProt%%'", 
                       gdb, ensGdb, geneId);
     	    	sr3 = sqlMustGetResult(conn3, query3);

@@ -17,7 +17,7 @@
 char* SEQ_TBL = "gbSeq";
 static char* createSql =
 /* This keeps track of a sequence. */
-"create table gbSeq ("
+"NOSQLINJ create table gbSeq ("
   "id int unsigned not null primary key," /* Unique ID across all tables. */
   "acc char(12) not null,"                /* Unique accession. */
   "version smallint unsigned not null,"   /* genbank version number */
@@ -143,7 +143,7 @@ HGID seqTblGetId(struct seqTbl *st, struct sqlConnection *conn, char* acc)
 {
 char query[256];
 
-safef(query, sizeof(query), "SELECT id FROM gbSeq WHERE acc='%s'", acc);
+sqlSafef(query, sizeof(query), "SELECT id FROM gbSeq WHERE acc='%s'", acc);
 return sqlQuickNum(conn, query);
 }
 
@@ -168,7 +168,7 @@ static void buildSelect(struct gbSelect* select, char* query,
 /* Build up a sql select for accessions based on the gbSelect */
 {
 int len = 0;
-len = safef(query, queryBufSize,
+len = sqlSafef(query, queryBufSize,
             "SELECT acc from gbSeq WHERE (srcDb='%s') AND (type='%s')",
             ((select->release->srcDb == GB_REFSEQ) ? SEQ_REFSEQ
              : SEQ_GENBANK),

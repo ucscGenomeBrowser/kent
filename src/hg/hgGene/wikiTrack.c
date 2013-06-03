@@ -77,7 +77,7 @@ struct sqlResult *sr;
 char **row;
 char query[1024];
 
-safef(query, ArraySize(query), "SELECT e.transcript,e.protein FROM "
+sqlSafef(query, ArraySize(query), "SELECT e.transcript,e.protein FROM "
 	"knownCanonical e, knownIsoforms j "
 	"WHERE e.clusterId = j.clusterId AND j.transcript ='%s'", id);
 
@@ -120,7 +120,7 @@ if (! (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "kgXref")))
     return NULL;
     }
 
-safef(query, ArraySize(query),
+sqlSafef(query, ArraySize(query),
 	"SELECT e.chrom,e.txStart,e.txEnd,e.alignID,e.strand "
 	"FROM knownGene e, kgXref j WHERE e.alignID = j.kgID AND "
 	"j.geneSymbol ='%s' ORDER BY e.chrom,e.txStart", geneSymbol);
@@ -245,7 +245,7 @@ newItem->descriptionKey = cloneString("0");
 newItem->id = 0;
 newItem->geneSymbol = cloneString(geneSymbol);
 
-wikiTrackSaveToDbEscaped(wikiConn, newItem, WIKI_TRACK_TABLE, 1024);
+wikiTrackSaveToDb(wikiConn, newItem, WIKI_TRACK_TABLE, 1024);
 
 int id = sqlLastAutoId(wikiConn);
 char descriptionKey[256];
@@ -261,7 +261,7 @@ else
 wikiTrackFree(&newItem);
 
 char query[1024];
-safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s' WHERE id='%d'",
+sqlSafef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s' WHERE id='%d'",
     WIKI_TRACK_TABLE, descriptionKey, id);
 
 sqlUpdate(wikiConn,query);

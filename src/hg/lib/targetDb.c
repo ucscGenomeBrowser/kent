@@ -251,20 +251,19 @@ struct targetDb *targetList = NULL;
 struct sqlConnection *conn2 = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
-char query[2048];
-safef(query, sizeof(query), "select * from targetDb where db = '%s' "
-      "%s%s%s order by priority", db,
-      isNotEmpty(name) ? "and name = '" : "",
-      isNotEmpty(name) ? name : "",
-      isNotEmpty(name) ? "' " : "");
-
-sr = sqlGetResult(conn, query);
+struct dyString *dy = dyStringNew(0);
+sqlDyStringPrintf(dy, "select * from targetDb where db = '%s' ", db);
+if (isNotEmpty(name))
+    sqlDyStringPrintf(dy, "and name = '%s' ", name);
+dyStringAppend(dy, "order by priority");
+sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct targetDb *newTarg = targetDbMaybeLoad(conn2, row);
     if (newTarg)
 	slAddHead(&targetList, newTarg);
     }
+dyStringFree(&dy);
 hFreeConn(&conn2);
 hDisconnectCentral(&conn);
 return targetList;

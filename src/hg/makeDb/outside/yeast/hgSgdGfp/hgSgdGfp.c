@@ -26,7 +26,7 @@ void createLocTable(struct sqlConnection *conn, char *tableName)
 /* Create our name/value table, dropping if it already exists. */
 {
 sqlRemakeTable(conn, tableName, 
-"CREATE TABLE  sgdLocalization (\n"
+"NOSQLINJ CREATE TABLE  sgdLocalization (\n"
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
 "              #Indices\n"
@@ -39,7 +39,7 @@ void createAbTable(struct sqlConnection *conn, char *tableName)
 /* Create abundance table, dropping if it already exists. */
 {
 sqlRemakeTable(conn, tableName,
-"CREATE TABLE sgdAbundance (\n"
+"NOSQLINJ CREATE TABLE sgdAbundance (\n"
 "    name varchar(10) not null, # ORF name in sgdGene table\n"
 "    abundance float not null,  # Absolute abundance from 41 to 1590000\n"
 "    error varchar(10) not null,        # Error - either a floating point number or blank\n"

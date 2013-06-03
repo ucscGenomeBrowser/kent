@@ -85,7 +85,7 @@ char *snpId;
 
 FILE *outputFileHandle = mustOpen("snpOrtho.tab", "w");
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select chrom, chromStart, chromEnd, name, score, strand, refUCSC, observed, class, locType, weight from %s", 
       tableName);
 sr = sqlGetResult(conn, query);

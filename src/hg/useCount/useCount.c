@@ -39,11 +39,11 @@ if (conn)
     char query[1024];
     if (sqlTableExists(conn, useCount))
 	{
-	safef(query, sizeof(query), "INSERT %s VALUES(0,\"%s\",\"%s\",now(),\"%s\")",
+	sqlSafef(query, sizeof(query), "INSERT %s VALUES(0,\"%s\",\"%s\",now(),\"%s\")",
             useCount, safeAgent, safeAddr, safeVersion);
         sqlUpdate(conn,query);
 	count = sqlLastAutoId(conn);
-	safef(query, sizeof(query), "SELECT dateTime FROM %s WHERE count=%d",
+	sqlSafef(query, sizeof(query), "SELECT dateTime FROM %s WHERE count=%d",
 	    useCount, count);
 	(void) sqlQuickQuery(conn, query, dateTime, sizeof(dateTime));
 	}

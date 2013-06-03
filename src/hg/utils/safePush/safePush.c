@@ -75,7 +75,7 @@ struct hash *getMysqlVars(char *host)
 {
 struct hash *hash = hashNew(0);
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, "mysql");
-struct sqlResult *sr = sqlGetResult(conn, "show variables");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ show variables");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(hash, row[0], cloneString(row[1]));
@@ -150,7 +150,7 @@ struct hash *tableTimeHash(char *host, boolean is5, char *database)
 {
 struct hash *hash = hashNew(0);
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
-struct sqlResult *sr = sqlGetResult(conn, "show table status");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ show table status");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -205,7 +205,7 @@ struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
 char query[512];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "show tables like '%s'", pattern);
+sqlSafef(query, sizeof(query), "show tables like '%s'", pattern);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     slNameAddHead(&list, row[0]);
@@ -283,7 +283,7 @@ if (allDatabases)
     {
     struct sqlConnection *conn = 
     	sqlConnectRemote(sourceHost, user, password, "mysql");
-    struct sqlResult *sr = sqlGetResult(conn, "show databases");
+    struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ show databases");
     char **row;
     while ((row = sqlNextRow(sr)) != NULL)
         {

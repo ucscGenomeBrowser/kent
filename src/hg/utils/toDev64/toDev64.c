@@ -120,7 +120,7 @@ struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
 char query[512];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "show table status like '%s'", tablePattern);
+sqlSafef(query, sizeof(query), "show table status like '%s'", tablePattern);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -181,7 +181,7 @@ struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
 char query[512];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "show tables like '%s'", pattern);
+sqlSafef(query, sizeof(query), "show tables like '%s'", pattern);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     slNameAddHead(&list, row[0]);

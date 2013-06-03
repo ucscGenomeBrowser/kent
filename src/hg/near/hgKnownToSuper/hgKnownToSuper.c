@@ -55,8 +55,8 @@ struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(16);
 struct hash *tnToPep = 
-	hashTwoColumn(conn, "select transcript,protein from ensGtp", chopVersion);
-sr = sqlGetResult(conn, "select name,value from knownToEnsembl");
+	hashTwoColumn(conn, "NOSQLINJ select transcript,protein from ensGtp", chopVersion);
+sr = sqlGetResult(conn, "NOSQLINJ select name,value from knownToEnsembl");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *protein;
@@ -76,7 +76,7 @@ void createTable(struct sqlConnection *conn, char *tableName)
 /* Create our name/value table, dropping if it already exists. */
 {
 struct dyString *dy = dyStringNew(0);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
 "CREATE TABLE %s (\n"
 "    gene varchar(255) not null,        # Known gene ID\n"
 "    superfamily int not null,  # Superfamily ID\n"

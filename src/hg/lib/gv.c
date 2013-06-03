@@ -101,44 +101,15 @@ void gvSaveToDb(struct sqlConnection *conn, struct gv *el, char *tableName, int 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use gvSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s',%u)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s',%u)", 
 	tableName,  el->id,  el->name,  el->srcId,  el->baseChangeType,  el->location,  el->coordinateAccuracy);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void gvSaveToDbEscaped(struct sqlConnection *conn, struct gv *el, char *tableName, int updateSize)
-/* Save gv as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than gvSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *id, *name, *srcId, *baseChangeType, *location;
-id = sqlEscapeString(el->id);
-name = sqlEscapeString(el->name);
-srcId = sqlEscapeString(el->srcId);
-baseChangeType = sqlEscapeString(el->baseChangeType);
-location = sqlEscapeString(el->location);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s',%u)", 
-	tableName,  id,  name,  srcId,  baseChangeType,  location, el->coordinateAccuracy );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&id);
-freez(&name);
-freez(&srcId);
-freez(&baseChangeType);
-freez(&location);
-}
 
 struct gv *gvCommaIn(char **pS, struct gv *ret)
 /* Create a gv out of a comma separated string. 
@@ -310,42 +281,15 @@ void gvPosSaveToDb(struct sqlConnection *conn, struct gvPos *el, char *tableName
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use gvPosSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->strand,  el->label);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void gvPosSaveToDbEscaped(struct sqlConnection *conn, struct gvPos *el, char *tableName, int updateSize)
-/* Save gvPos as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than gvPosSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *label;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-label = sqlEscapeString(el->label);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name,  strand,  label);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&label);
-}
 
 struct gvPos *gvPosCommaIn(char **pS, struct gvPos *ret)
 /* Create a gvPos out of a comma separated string. 
@@ -507,40 +451,15 @@ void gvSrcSaveToDb(struct sqlConnection *conn, struct gvSrc *el, char *tableName
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use gvSrcSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
 	tableName,  el->srcId,  el->src,  el->lsdb);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void gvSrcSaveToDbEscaped(struct sqlConnection *conn, struct gvSrc *el, char *tableName, int updateSize)
-/* Save gvSrc as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than gvSrcSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *srcId, *src, *lsdb;
-srcId = sqlEscapeString(el->srcId);
-src = sqlEscapeString(el->src);
-lsdb = sqlEscapeString(el->lsdb);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
-	tableName,  srcId,  src,  lsdb);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&srcId);
-freez(&src);
-freez(&lsdb);
-}
 
 struct gvSrc *gvSrcCommaIn(char **pS, struct gvSrc *ret)
 /* Create a gvSrc out of a comma separated string. 
@@ -687,40 +606,15 @@ void gvAttrSaveToDb(struct sqlConnection *conn, struct gvAttr *el, char *tableNa
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use gvAttrSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
 	tableName,  el->id,  el->attrType,  el->attrVal);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void gvAttrSaveToDbEscaped(struct sqlConnection *conn, struct gvAttr *el, char *tableName, int updateSize)
-/* Save gvAttr as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than gvAttrSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *id, *attrType, *attrVal;
-id = sqlEscapeString(el->id);
-attrType = sqlEscapeString(el->attrType);
-attrVal = sqlEscapeString(el->attrVal);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
-	tableName,  id,  attrType,  attrVal);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&id);
-freez(&attrType);
-freez(&attrVal);
-}
 
 struct gvAttr *gvAttrCommaIn(char **pS, struct gvAttr *ret)
 /* Create a gvAttr out of a comma separated string. 
@@ -871,44 +765,15 @@ void gvLinkSaveToDb(struct sqlConnection *conn, struct gvLink *el, char *tableNa
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use gvLinkSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->id,  el->attrType,  el->raKey,  el->acc,  el->displayVal);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void gvLinkSaveToDbEscaped(struct sqlConnection *conn, struct gvLink *el, char *tableName, int updateSize)
-/* Save gvLink as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than gvLinkSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *id, *attrType, *raKey, *acc, *displayVal;
-id = sqlEscapeString(el->id);
-attrType = sqlEscapeString(el->attrType);
-raKey = sqlEscapeString(el->raKey);
-acc = sqlEscapeString(el->acc);
-displayVal = sqlEscapeString(el->displayVal);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
-	tableName,  id,  attrType,  raKey,  acc,  displayVal);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&id);
-freez(&attrType);
-freez(&raKey);
-freez(&acc);
-freez(&displayVal);
-}
 
 struct gvLink *gvLinkCommaIn(char **pS, struct gvLink *ret)
 /* Create a gvLink out of a comma separated string. 
@@ -1067,40 +932,15 @@ void gvAttrLongSaveToDb(struct sqlConnection *conn, struct gvAttrLong *el, char 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use gvAttrLongSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%s)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%s)", 
 	tableName,  el->id,  el->attrType,  el->attrVal);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void gvAttrLongSaveToDbEscaped(struct sqlConnection *conn, struct gvAttrLong *el, char *tableName, int updateSize)
-/* Save gvAttrLong as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than gvAttrLongSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *id, *attrType, *attrVal;
-id = sqlEscapeString(el->id);
-attrType = sqlEscapeString(el->attrType);
-attrVal = sqlEscapeString(el->attrVal);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
-	tableName,  id,  attrType,  attrVal);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&id);
-freez(&attrType);
-freez(&attrVal);
-}
 
 struct gvAttrLong *gvAttrLongCommaIn(char **pS, struct gvAttrLong *ret)
 /* Create a gvAttrLong out of a comma separated string. 

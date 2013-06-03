@@ -35,7 +35,7 @@ FILE *f = mustOpen("knownBlastTab.tab", "w");
 int i, knownCount = 0, allCount = 0, goodCount = 0;
 
 /* Build up list of good ones. */
-safef(query, sizeof(query), "select name from knownGene");
+sqlSafef(query, sizeof(query), "select name from knownGene");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -48,7 +48,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 printf("%d known genes\n", knownCount);
 
-safef(query, sizeof(query), "select * from knownBlastTab");
+sqlSafef(query, sizeof(query), "select * from knownBlastTab");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

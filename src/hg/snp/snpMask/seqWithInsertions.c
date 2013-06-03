@@ -58,7 +58,7 @@ f = mustOpen(fileName, "w");
 
 tbf = twoBitOpen(sequenceFile);
 
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, observed from %s", snpTable);
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, observed from %s", snpTable);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

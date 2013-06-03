@@ -83,7 +83,7 @@ char query[512];
 char **row;
 struct sqlResult *sr;
 
-sprintf(query, "select * from chromInfo");
+sqlSafef(query, sizeof query, "select * from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -108,7 +108,7 @@ struct wabaChromHit *wchList = NULL, *wch;
 sprintf(table, "%s_tet_waba", chromName);
 if (!sqlTableExists(conn, table))
     return NULL;
-sprintf(query, "select * from %s", table);
+sqlSafef(query, sizeof query, "select * from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -134,7 +134,7 @@ Bits *b = bitAlloc(chrom->size);
 int allCount = 0;
 int simpCount = 0;
 
-sprintf(query, "select * from %s_rmsk",
+sqlSafef(query, sizeof query, "select * from %s_rmsk",
     chrom->chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

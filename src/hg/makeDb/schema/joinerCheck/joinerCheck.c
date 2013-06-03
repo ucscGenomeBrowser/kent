@@ -155,7 +155,7 @@ if (splitPrefix != NULL || splitSuffix != NULL)
     {
     char query[256], **row;
     struct sqlResult *sr;
-    safef(query, sizeof(query), "show tables like '%s%s%s'", 
+    sqlSafef(query, sizeof(query), "show tables like '%s%s%s'", 
     	emptyForNull(splitPrefix), table, emptyForNull(splitSuffix));
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -263,7 +263,7 @@ int sqlTableRows(struct sqlConnection *conn, char *table)
 /* REturn number of rows in table. */
 {
 char query[256];
-safef(query, sizeof(query), "select count(*) from %s", table);
+sqlSafef(query, sizeof(query), "select count(*) from %s", table);
 return sqlQuickNum(conn, query);
 }
 
@@ -357,7 +357,7 @@ else
 	keyHash = hashNew(hashSize);
 	for (table = tableList; table != NULL; table = table->next)
 	    {
-	    safef(query, sizeof(query), "select %s from %s", 
+	    sqlSafef(query, sizeof(query), "select %s from %s", 
 		keyField->field, table->name);
 	    sr = sqlGetResult(conn, query);
 	    while ((row = sqlNextRow(sr)) != NULL)
@@ -482,7 +482,7 @@ if (conn != NULL)
 	{
 	char query[256], **row;
 	struct sqlResult *sr;
-	safef(query, sizeof(query), "select %s from %s", 
+	sqlSafef(query, sizeof(query), "select %s from %s", 
 		jf->field, table->name);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -757,7 +757,7 @@ if (sqlWildcardIn(spec))
     {
     struct sqlResult *sr;
     char query[512], **row;
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "show tables like '%s'", spec);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)

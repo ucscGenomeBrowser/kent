@@ -462,9 +462,9 @@ char *tbl;
 struct sqlConnection *conn = hAllocConnProfileTbl(db, tblSpec, &tbl);
 char query[512];
 if (where != NULL)
-    safef(query, sizeof(query), "select * from %s where %s", tbl, where);
+    sqlSafef(query, sizeof(query), "select * from %s where %s", tbl, where);
 else
-    safef(query, sizeof(query), "select * from %s", tbl);
+    sqlSafef(query, sizeof(query), "select * from %s", tbl);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -497,7 +497,7 @@ struct hgFindSpec *hgFindSpecGetSpecs(char *db, boolean shortCircuit)
  * searchPriority. */
 {
 char where[64];
-safef(where, sizeof(where), "shortCircuit = %d", shortCircuit);
+sqlSafefFrag(where, sizeof(where), "shortCircuit = %d", shortCircuit);
 struct hgFindSpec *hfsList = loadFindSpecs(db, where);
 slSort(&hfsList, hgFindSpecPriCmp);
 return(hfsList);

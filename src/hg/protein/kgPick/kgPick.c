@@ -52,7 +52,7 @@ int i;
 char condStr[256];
 char *displayId;
 
-safef(query, sizeof(query), "select * from %s.kgCandidate where alignID='%s'", kgTempDb, alignID);
+sqlSafef(query, sizeof(query), "select * from %s.kgCandidate where alignID='%s'", kgTempDb, alignID);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 while (row != NULL)
@@ -121,7 +121,7 @@ strcpy(printedMrna, "");
 strcpy(printedProt, "");
 
 /* go through each unique cds structure */
-safef(query2, sizeof(query2), "select distinct cdsId from %s.kgCandidateZ", kgTempDb);
+sqlSafef(query2, sizeof(query2), "select distinct cdsId from %s.kgCandidateZ", kgTempDb);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 
@@ -133,7 +133,7 @@ while (row2 != NULL)
     /* ranking reflects CDS quaility and preference for RefSeq and MGC */
     /* Swiss-Prot is prefered than TrEMBL */
     /* finally, higher prot-Mrna alignment score is prefered */
-    safef(query3, sizeof(query3), 
+    sqlSafef(query3, sizeof(query3), 
     "select * from %s.kgCandidateZ where cdsId='%s' order by ranking, protDbId, score desc", 
     	    kgTempDb, cdsId);
     sr3  = sqlMustGetResult(conn3, query3);

@@ -154,7 +154,7 @@ char **row;
 int start = 0;
 int end = 0;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select name, chromStart, strand, observed, chrom, chromEnd, class, locType from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

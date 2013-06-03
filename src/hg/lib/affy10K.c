@@ -101,36 +101,15 @@ void affy10KSaveToDb(struct sqlConnection *conn, struct affy10K *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use affy10KSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,%u)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,%u)", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->affyId);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void affy10KSaveToDbEscaped(struct sqlConnection *conn, struct affy10K *el, char *tableName, int updateSize)
-/* Save affy10K as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than affy10KSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom;
-chrom = sqlEscapeString(el->chrom);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,%u)", 
-	tableName,  chrom, el->chromStart , el->chromEnd , el->affyId );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-}
 
 struct affy10K *affy10KCommaIn(char **pS, struct affy10K *ret)
 /* Create a affy10K out of a comma separated string. 

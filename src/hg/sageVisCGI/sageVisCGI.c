@@ -192,16 +192,16 @@ char **row;
 int count=0;
 struct sqlResult *sr = NULL;
 sc = sqlConnectRemote("localhost", user, password, db);
-dyStringPrintf(query, "%s", "select * from sage where ");
+sqlDyStringPrintf(query, "select * from sage where ");
 for(nm=nmList;nm!=NULL;nm=nm->next)
     {
     if (count++)
         {
-        dyStringPrintf(query," or uni=%s ", nm->name );
+        sqlDyStringPrintf(query," or uni=%s ", nm->name );
         }
     else
 	{
-	dyStringPrintf(query," uni=%s ", nm->name);
+	sqlDyStringPrintf(query," uni=%s ", nm->name);
 	}
     }
 sr = sqlGetResult(sc,query->string);
@@ -229,16 +229,14 @@ struct sageExp *seList = NULL, *se=NULL;
 char **row;
 struct sqlResult *sr = NULL;
 char *db = cgiUsualString("db", "hgFixed");
-char *tmp= cloneString("select * from sageExp order by num");
 sc = sqlConnectRemote("localhost", user, password, db);
-sprintf(query,"%s",tmp);
+sqlSafef(query, sizeof query, "select * from sageExp order by num");
 sr = sqlGetResult(sc,query);
 while((row = sqlNextRow(sr)) != NULL)
     {
     se = sageExpLoad(row);
     slAddHead(&seList,se);
     }
-freez(&tmp);
 sqlFreeResult(&sr);
 sqlDisconnect(&sc);
 slReverse(&seList);

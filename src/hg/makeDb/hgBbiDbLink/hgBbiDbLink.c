@@ -26,16 +26,16 @@ void hgBbiDbLink(char *db, char *track, char *fileName)
 {
 struct sqlConnection *conn = sqlConnect(db);
 char sql[512];
-safef(sql, sizeof(sql), "DROP TABLE IF EXISTS %s", track);
+sqlSafef(sql, sizeof(sql), "DROP TABLE IF EXISTS %s", track);
 sqlUpdate(conn, sql);
-safef(sql, sizeof(sql), 
+sqlSafef(sql, sizeof(sql), 
     "CREATE TABLE %s ("
     "  fileName varchar(255) NOT NULL"
     ")"
     , track);
 sqlUpdate(conn, sql);
 
-safef(sql, sizeof(sql),
+sqlSafef(sql, sizeof(sql),
     "INSERT %s VALUES('%s')", track, fileName);
 sqlUpdate(conn, sql);
 

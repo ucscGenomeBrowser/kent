@@ -477,7 +477,7 @@ char *where = NULL;
 char query[256];
 
 /*see if we have a summary table*/
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select name from %s where name = '%s' limit 1", 
 	tg->table, tg->shortLabel);
 //errAbort( "%s", query );
@@ -488,7 +488,7 @@ if(tg->visibility == tvDense)
     {
     if(hasDense != NULL)
 	{
-	safef(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	sqlSafefFrag(query, sizeof(query), " name = '%s' ", tg->shortLabel);
 	where = cloneString(query);
 	}
     }
@@ -784,7 +784,7 @@ char option[64];
 zooSpeciesHashInit();
 
 /*see if we have a summary table*/
-safef(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->table, tg->shortLabel);
+sqlSafef(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->table, tg->shortLabel);
 //errAbort( "%s", query );
 hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
 
@@ -793,7 +793,7 @@ if(tg->visibility == tvDense)
     {
     if(hasDense != NULL)
 	{
-	safef(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	sqlSafefFrag(query, sizeof(query), " name = '%s' ", tg->shortLabel);
 	where = cloneString(query);
 	}
     }
@@ -881,11 +881,11 @@ else
 
 /*see if we have a summary table*/
 if(hTableExists(database, tableName))
-    safef(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tableName, tg->shortLabel);
+    sqlSafef(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tableName, tg->shortLabel);
 else
     {
     warn("<p>Couldn't find table %s<br><br>", tableName);
-    safef(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tg->table, tg->shortLabel);
+    sqlSafef(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tg->table, tg->shortLabel);
     safef(tableName, sizeof(tableName), "%s", tg->table);
     }
 
@@ -896,7 +896,7 @@ if(tg->visibility == tvDense)
     {
     if(hasDense != NULL)
 	{
-	safef(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	sqlSafefFrag(query, sizeof(query), " name = '%s' ", tg->shortLabel);
 	where = cloneString(query);
 	}
     }

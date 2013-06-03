@@ -153,7 +153,7 @@ char *mayRenameFile(struct sqlConnection *conn, char *table, char *oldFileName, 
 char buffer[10 * 1024];
 char fileName[10 * 1024];
 
-safef(buffer, sizeof buffer, "select fileName from %s limit 1", table);
+sqlSafef(buffer, sizeof buffer, "select fileName from %s limit 1", table);
 if (sqlQuickQuery(conn, buffer, fileName, sizeof fileName) == NULL)
     errAbort("couldn't get fileName from table %s\n", table);
 
@@ -219,7 +219,7 @@ if (sqlTableExists(conn, oldTableName))
             // change fileName in table
             char query[10 * 1024];
 
-            safef(query, sizeof query, "update %s set fileName='%s'", 
+            sqlSafef(query, sizeof query, "update %s set fileName='%s'", 
                 oldTableName, newPath);
 
             verbose(2, "sending query '%s' to database\n", query);

@@ -52,7 +52,7 @@ conn = hAllocConn(genomeDb);
 connEnsGene= hAllocConn(genomeDb);
 connSf= hAllocConn(genomeDb);
 
-safef(query2,sizeof(query2),"select * from %s.ensGene;", genomeDb);
+sqlSafef(query2,sizeof(query2),"select * from %s.ensGene;", genomeDb);
 
 sr2 = sqlMustGetResult(connEnsGene, query2);
 row2 = sqlNextRow(sr2);
@@ -97,7 +97,7 @@ while (row2 != NULL)
     	chp = strstr(translation_name, ".");
     	if (chp != NULL) *chp = '\0';
 
-    	sprintf(query, "select * from %s.sfAssign where seqID='%s'", superfamDb, translation_name);
+    	sqlSafef(query, sizeof query, "select * from %s.sfAssign where seqID='%s'", superfamDb, translation_name);
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
 

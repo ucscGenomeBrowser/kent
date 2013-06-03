@@ -76,7 +76,7 @@ lineFileClose(&lf);
 }
 
 char *createCtgPos =
-"CREATE TABLE ctgPos (\n"
+"NOSQLINJ CREATE TABLE ctgPos (\n"
 "   contig varchar(255) not null,	# Name of contig\n"
 "   size int unsigned not null,	# Size of contig\n"
 "   chrom varchar(255) not null,	# Chromosome name\n"
@@ -107,8 +107,8 @@ fclose(f);
  * already in it, and fill it up from tab file. */
 printf("Loading ctgPos table\n");
 sqlMaybeMakeTable(conn, "ctgPos", createCtgPos);
-sqlUpdate(conn, "DELETE from ctgPos");
-dyStringPrintf(ds, "LOAD data local infile '%s' into table ctgPos", 
+sqlUpdate(conn, "NOSQLINJ DELETE from ctgPos");
+sqlDyStringPrintf(ds, "LOAD data local infile '%s' into table ctgPos", 
     tabFileName);
 sqlUpdate(conn, ds->string);
 

@@ -38,7 +38,7 @@ void initRunning(struct sqlConnection *conn)
 /* create running table if not exist */
 {
 char sql[512] = 
-"create table running ("
+"NOSQLINJ create table running ("
 "  pid int(10) unsigned,"
 "  project int(10) unsigned,"
 "  jobType varchar(255),"
@@ -109,7 +109,7 @@ void getProjectTypeData(struct sqlConnection *conn, int project,
 {
 char query[256];
 
-safef(query,sizeof(query),"select t.validator, t.type_params, t.time_out"
+sqlSafef(query,sizeof(query),"select t.validator, t.type_params, t.time_out"
     " from projects p, project_types t"
     " where p.project_type_id = t.id" 
     " and p.id = '%d'", 
@@ -141,7 +141,7 @@ void getProjectLoadData(struct sqlConnection *conn, int project,
 {
 char query[256];
 
-safef(query,sizeof(query),"select t.loader, t.load_params, t.load_time_out"
+sqlSafef(query,sizeof(query),"select t.loader, t.load_params, t.load_time_out"
     " from projects p, project_types t"
     " where p.project_type_id = t.id" 
     " and p.id = '%d'", 
@@ -173,7 +173,7 @@ void getProjectUnloadData(struct sqlConnection *conn, int project,
 {
 char query[256];
 
-safef(query,sizeof(query),"select t.unloader, t.unload_params, t.unload_time_out"
+sqlSafef(query,sizeof(query),"select t.unloader, t.unload_params, t.unload_time_out"
     " from projects p, project_types t"
     " where p.project_type_id = t.id" 
     " and p.id = '%d'", 
@@ -204,7 +204,7 @@ void getRunningData(struct sqlConnection *conn, int project,
 /* return data from project record */
 {
 char query[256];
-safef(query,sizeof(query),"select * from running"
+sqlSafef(query,sizeof(query),"select * from running"
     " where project = '%d'", 
     project);
 struct sqlResult *rs;
@@ -295,14 +295,14 @@ else
     else
 	errAbort("unexpected jobType=[%s]", jobType);
     }
-safef(query, sizeof(query), "delete from running where project=%d", 
+sqlSafef(query, sizeof(query), "delete from running where project=%d", 
     project);
 sqlUpdate(conn, query);
-safef(query, sizeof(query), "update projects set status = '%s' where id=%d", 
+sqlSafef(query, sizeof(query), "update projects set status = '%s' where id=%d", 
     jobStatus, project);
 sqlUpdate(conn, query);
 /* log new status value */
-safef(query, sizeof(query), "insert into project_status_logs"
+sqlSafef(query, sizeof(query), "insert into project_status_logs"
     " set project_id=%d, status = '%s', created_at=now()", 
     project, jobStatus);
 sqlUpdate(conn, query);
@@ -333,7 +333,7 @@ char *jobType=NULL;
 int timeOut = 60;   // debug restore: 3600;  // seconds
 char commandLine[256];
 char query[256];
-safef(query, sizeof(query), "select status from projects where id = %d", project);
+sqlSafef(query, sizeof(query), "select status from projects where id = %d", project);
 char *status = sqlQuickString(conn, query);
 if (sameOk(status, "schedule loading"))
     jobType = "load";
@@ -387,7 +387,7 @@ else if (sameString(jobType,"upload"))
      uglyf("url=[%s]\n",url);
 
     char query[256];
-    safef(query, sizeof(query), "select archive_count from projects where id=%d", project);
+    sqlSafef(query, sizeof(query), "select archive_count from projects where id=%d", project);
     int nextArchiveNo = sqlQuickNum(conn, query) + 1;
 
     plainName = url; // oldway:  strrchr(url,'/')+1;
@@ -464,14 +464,14 @@ else
 	jobStatus = "re-expanding all archives";
     else
 	errAbort("unexpected jobType=[%s]", jobType);
-    safef(query, sizeof(query), "insert into running values (%d, %d, '%s', %d, %d, '%s')", 
-	pid, project, jobType, (int)now, timeOut, sqlEscapeString(commandLine));
+    sqlSafef(query, sizeof(query), "insert into running values (%d, %d, '%s', %d, %d, '%s')", 
+	pid, project, jobType, (int)now, timeOut, commandLine);
     sqlUpdate(conn, query);
-    safef(query, sizeof(query), "update projects set status = '%s' where id=%d", 
+    sqlSafef(query, sizeof(query), "update projects set status = '%s' where id=%d", 
 	jobStatus, project);
     sqlUpdate(conn, query);
     /* log new status value */
-    safef(query, sizeof(query), "insert into project_status_logs"
+    sqlSafef(query, sizeof(query), "insert into project_status_logs"
 	" set project_id=%d, status = '%s', created_at=now()", 
     	project, jobStatus);
     sqlUpdate(conn, query);
@@ -505,11 +505,11 @@ initRunning(conn);
 //  at least removed from the running table?
 
 struct slInt *e, *list = NULL;
-safef(query,sizeof(query),"select count(*) from running");
+sqlSafef(query,sizeof(query),"select count(*) from running");
 if (sqlQuickNum(conn,query) < 10) // only allow max 10 jobs at once 
     {
     /* start loading any projects that are ready */
-    safef(query,sizeof(query),"select id from projects"
+    sqlSafef(query,sizeof(query),"select id from projects"
 	" where status = 'schedule validating'"
 	" or status = 'schedule loading'"
 	" or status = 'schedule unloading'"
@@ -545,7 +545,7 @@ conn = sqlConnect(db);
 
 
 /* scan for old jobs that have timed out */
-safef(query,sizeof(query),"select project from running"
+sqlSafef(query,sizeof(query),"select project from running"
     " where unix_timestamp() - startTime > timeOut");
 int project = 0;
 while((project = sqlQuickNum(conn,query)))
@@ -562,7 +562,7 @@ while((project = sqlQuickNum(conn,query)))
     time_t now = time(NULL);
     int age = ((int) now - startTime)/60;
     char message[256];
-    safef(message, sizeof(message), "load timed out age = %d minutes\n", age);
+    sqlSafef(message, sizeof(message), "load timed out age = %d minutes\n", age);
     /* save status in result file in build area */
     updateErrorFile(project, jobType, message);
 

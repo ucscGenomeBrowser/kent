@@ -122,7 +122,7 @@ static void loadTable(struct bed4 *beds, char *db, char *parTable)
 {
 struct sqlConnection *conn = sqlConnect(db);
 char sqlCmd[256];
-safef(sqlCmd, sizeof(sqlCmd), createSql, parTable);
+sqlSafef(sqlCmd, sizeof(sqlCmd), createSql, parTable);
 sqlRemakeTable(conn, parTable, sqlCmd);
 
 FILE *tabFh = hgCreateTabFile(NULL, parTable);

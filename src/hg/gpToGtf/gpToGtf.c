@@ -31,7 +31,7 @@ char **row;
 struct genePred *gp;
 int i;
 
-snprintf(query, sizeof(query), "select * from %s", table);
+sqlSafef(query, sizeof(query), "select * from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

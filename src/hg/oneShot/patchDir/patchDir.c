@@ -34,7 +34,7 @@ struct hash *ra;
 FILE *f;
 int autMatchCount = 0, fiveCount = 0, threeCount = 0;
 
-sprintf(query, "select name from author where id = %s", authorId);
+sqlSafef(query, sizeof query, "select name from author where id = %s", authorId);
 if (sqlQuickQuery(conn, query, authors, sizeof(authors)) == NULL)
     errAbort("%s is not a valid author ID", authorId);
 printf("scanning %s for %s\n", raFile, authors);
@@ -73,7 +73,7 @@ printf("Got %d matches including %d 5' and %d 3'\n",
 lineFileClose(&lf);
 
 f = mustOpen(outTab, "w");
-sprintf(query, "select * from mrna where author = %s", authorId);
+sqlSafef(query, sizeof query, "select * from mrna where author = %s", authorId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

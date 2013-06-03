@@ -93,7 +93,7 @@ struct slName *compositeGGList = NULL, *comp;
 
 /* Get initial information from metaChromGraph table */
 if (sqlTableExists(conn, "metaChromGraph"))
-    compositeGGList = sqlQuickList(conn, "select name from metaChromGraph where binaryFile='composite'");
+    compositeGGList = sqlQuickList(conn, "NOSQLINJ select name from metaChromGraph where binaryFile='composite'");
 
 /* Build a hash of genoGraphs out of composite trackDbs and fill in from cart. */
 for (comp = compositeGGList; comp != NULL; comp = comp->next)
@@ -130,7 +130,7 @@ char **row;
 /* Get initial information from metaChromGraph table */
 if (sqlTableExists(conn, "metaChromGraph"))
     {
-    sr = sqlGetResult(conn, "select name,binaryFile from metaChromGraph where binaryFile!='composite'");
+    sr = sqlGetResult(conn, "NOSQLINJ select name,binaryFile from metaChromGraph where binaryFile!='composite'");
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	char *table = row[0], *binaryFile = row[1];

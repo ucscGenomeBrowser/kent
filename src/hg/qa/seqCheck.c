@@ -31,7 +31,7 @@ char **row;
 int count = 0;
 
 verbose(2, "reading in from seq...\n");
-safef(query, sizeof(query), "select distinct(extFile) from seq");
+sqlSafef(query, sizeof(query), "select distinct(extFile) from seq");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -66,7 +66,7 @@ verbose(2, "checking....\n");
 
 for (id1 = idList; id1 != NULL; id1 = id1->next)
     {
-    safef(query, sizeof(query), "select path from extFile where id = %d", id1->id);
+    sqlSafef(query, sizeof(query), "select path from extFile where id = %d", id1->id);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row == NULL) 

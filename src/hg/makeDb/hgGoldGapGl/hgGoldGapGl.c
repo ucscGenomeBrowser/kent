@@ -224,13 +224,13 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 
     /* Create gold table and load it up. */
     dyStringClear(ds);
-    dyStringPrintf(ds, createGold, goldName);
-    dyStringPrintf(ds, goldSplitIndex, maxFragNameSize);
+    sqlDyStringPrintf(ds, createGold, goldName);
+    sqlDyStringPrintf(ds, goldSplitIndex, maxFragNameSize);
     verbose(2, "%s", ds->string);
     if (! noLoad)
 	sqlRemakeTable(conn, goldName, ds->string);
     dyStringClear(ds);
-    dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+    sqlDyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
         goldFileName, goldName);
     if (! noLoad)
 	{
@@ -240,7 +240,7 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 
     /* Create gap table and load it up. */
     dyStringClear(ds);
-    dyStringPrintf(ds, createGap, gapName);
+    sqlDyStringPrintf(ds, createGap, gapName);
     dyStringAppend(ds, gapSplitIndex);
     verbose(2, "%s", ds->string);
     if (! noLoad)
@@ -249,7 +249,7 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 	sqlMaybeMakeTable(conn, gapName, ds->string);
 	}
     dyStringClear(ds);
-    dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+    sqlDyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
         gapFileName, gapName);
     if (! noLoad)
 	{
@@ -304,17 +304,17 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     if ( (! noLoad) && sqlTableExists(conn, glTable))
 	{
 	dyStringClear(ds);
-	dyStringPrintf(ds, "DROP table %s", glTable);
+	sqlDyStringPrintf(ds, "DROP table %s", glTable);
 	sqlUpdate(conn, ds->string);
 	}
     dyStringClear(ds);
-    dyStringPrintf(ds, createGl, glTable, maxFragNameSize);
+    sqlDyStringPrintf(ds, createGl, glTable, maxFragNameSize);
     verbose(2, "%s", ds->string);
     if (! noLoad)
 	sqlMaybeMakeTable(conn, glTable, ds->string);
     dyStringClear(ds);
     addGlBin(glFileName, tab);
-    dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+    sqlDyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
         tab, glTable);
     if (! noLoad)
 	sqlUpdate(conn, ds->string);
@@ -422,13 +422,13 @@ splitAgp(agpFile, goldTabName, gapTabName);
 
 /* Create gold table and load it up. */
 dyStringClear(ds);
-dyStringPrintf(ds, createGold, "gold");
-dyStringPrintf(ds, goldIndex, maxChromNameSize, maxChromNameSize, maxFragNameSize);
+sqlDyStringPrintf(ds, createGold, "gold");
+sqlDyStringPrintf(ds, goldIndex, maxChromNameSize, maxChromNameSize, maxFragNameSize);
 verbose(2, "%s", ds->string);
 if (! noLoad)
     sqlRemakeTable(conn, "gold", ds->string);
 dyStringClear(ds);
-dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+sqlDyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
     goldTabName, "gold");
 if (! noLoad)
     {
@@ -438,8 +438,8 @@ if (! noLoad)
 
 /* Create gap table and load it up. */
 dyStringClear(ds);
-dyStringPrintf(ds, createGap, "gap");
-dyStringPrintf(ds, gapIndex, maxChromNameSize, maxChromNameSize);
+sqlDyStringPrintf(ds, createGap, "gap");
+sqlDyStringPrintf(ds, gapIndex, maxChromNameSize, maxChromNameSize);
 verbose(2, "%s", ds->string);
 if (! noLoad)
     {
@@ -447,7 +447,7 @@ if (! noLoad)
     sqlMaybeMakeTable(conn, "gap", ds->string);
     }
 dyStringClear(ds);
-dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+sqlDyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
     gapTabName, "gap");
 if (! noLoad)
     {

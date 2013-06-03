@@ -49,7 +49,7 @@ conn3= hAllocConn(dbName);
 
 o1 = fopen("j.dat", "w");
     
-sprintf(query2,"select * from %sTemp.locus2Ref0;", dbName);
+sqlSafef(query2, sizeof query2, "select * from %sTemp.locus2Ref0;", dbName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -61,7 +61,7 @@ while (row2 != NULL)
     proteinAC2 	= row2[4];
     taxID2 	= row2[5];
 		
-    sprintf(query, "select * from %sTemp.locus2Acc0 where locusID=%s and seqType='m';", dbName, locusID2);
+    sqlSafef(query, sizeof query, "select * from %sTemp.locus2Acc0 where locusID=%s and seqType='m';", dbName, locusID2);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     while (row != NULL)

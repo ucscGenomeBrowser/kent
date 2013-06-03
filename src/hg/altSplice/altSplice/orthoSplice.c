@@ -550,7 +550,7 @@ struct chain *chain = NULL;
 
 if (!hFindSplitTable(db, chrom, track, table, &rowOffset))
     errAbort("No %s track in database", track);
-snprintf(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	 "select * from %s where id = %d", table, id);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -1375,7 +1375,7 @@ if(!usingChromKeeper)
     char query[256];
     struct sqlConnection *orthoConn = NULL; 
     orthoConn = hAllocConn(orthoDb);
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	  "select * from %s where tName='%s' and tStart<%d and tEnd>%d and strand like '%c'",
 	  altTable, chrom, chromEnd, chromStart, strand);
     agxList = altGraphXLoadByQuery(orthoConn, query);
@@ -1889,7 +1889,7 @@ mRnaWeight = optionInt("weightMrna", 1);
 assert(chrom);
 
 /* Hash all of the mrna accesions. */
-safef(query, sizeof(query), "select qName from %s_mrna", chrom);
+sqlSafef(query, sizeof(query), "select qName from %s_mrna", chrom);
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
     {
@@ -1898,7 +1898,7 @@ while((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 /* Hash all of the refSeq accesions. */
-safef(query, sizeof(query), "select qName from refSeqAli where tName like '%s'", chrom);
+sqlSafef(query, sizeof(query), "select qName from refSeqAli where tName like '%s'", chrom);
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
     {

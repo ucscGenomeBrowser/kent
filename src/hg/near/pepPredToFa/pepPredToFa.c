@@ -34,7 +34,7 @@ char **row;
 char query[512];
 struct pepPred pp;
 
-safef(query, sizeof(query), "select * from %s", table);
+sqlSafef(query, sizeof(query), "select * from %s", table);
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
     {

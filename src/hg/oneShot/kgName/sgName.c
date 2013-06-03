@@ -38,7 +38,7 @@ if (hTableExists(infoTable))
     char buf[64];
     //if (ptr != NULL)
 //	*ptr = 0;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select value from %s where name = '%s';", infoTable, name);
     if ((symbol = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
 	name = symbol;
@@ -61,7 +61,7 @@ if (hTableExists(infoTable))
     char buf[64];
     //if (ptr != NULL)
 //	*ptr = 0;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select value from %s where name = '%s';", infoTable, name);
     if ((symbol = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
 	name = symbol;

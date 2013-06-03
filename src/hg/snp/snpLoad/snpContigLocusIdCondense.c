@@ -72,7 +72,7 @@ int functionIndex = 0;
 
 f = hgCreateTabFile(".", "ContigLocusIdCondense");
 
-safef(query, sizeof(query), "select snp_id, fxn_class from ContigLocusIdFilter");
+sqlSafef(query, sizeof(query), "select snp_id, fxn_class from ContigLocusIdFilter");
 
 initArray();
 sr = sqlGetResult(conn, query);
@@ -115,7 +115,7 @@ void createTable()
 {
 struct sqlConnection *conn = hAllocConn();
 char *createString =
-"CREATE TABLE ContigLocusIdCondense (\n"
+"NOSQLINJ CREATE TABLE ContigLocusIdCondense (\n"
 "    snp_id int(11) not null,       \n"
 "    fxn_class varchar(255) not null\n"
 ");\n";

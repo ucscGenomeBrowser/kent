@@ -45,7 +45,7 @@ conn3= hAllocConn(database);
 outFn   = argv[2];
 outf    = mustOpen(outFn, "w");
 
-sprintf(query1, "select omimId, geneId from omim2geneNew where geneId <>'-' and entryType='gene' ");
+sqlSafef(query1, sizeof query1, "select omimId, geneId from omim2geneNew where geneId <>'-' and entryType='gene' ");
 sr1 = sqlMustGetResult(conn1, query1);
 row1 = sqlNextRow(sr1);
 while (row1 != NULL)
@@ -55,7 +55,7 @@ while (row1 != NULL)
     geneId = row1[1];
 
     /* get different chroms from RefSeq for each geneId */
-    sprintf(query3,
+    sqlSafef(query3, sizeof query3, 
     "select distinct r.chrom from refGene r, refLink where mrnaAcc=r.name and locusLinkId = %s order by chrom", geneId);
     sr3 = sqlMustGetResult(conn3, query3);
     row3 = sqlNextRow(sr3);
@@ -63,9 +63,9 @@ while (row1 != NULL)
     	{
     	chrom= row3[0];
     	/* get corresponding RefSeq data, ordered by length of the gene */
-    	sprintf(query2,
     	// added mrnaAcc as the 2nd ordering condition
     	// added txStart as the 3rd ordering condition
+    	sqlSafef(query2, sizeof query2, 
     	"select r.chrom, r.txStart, r.txEnd, r.name, r.txEnd-r.txStart, mrnaAcc from refGene r, refLink where mrnaAcc=r.name and locusLinkId = %s and r.chrom = '%s' order by txEnd-txStart desc, mrnaAcc desc, txStart asc", geneId, chrom);
     	sr2 = sqlMustGetResult(conn2, query2);
     	row2 = sqlNextRow(sr2);

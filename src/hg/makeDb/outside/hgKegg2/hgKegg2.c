@@ -42,7 +42,7 @@ conn3= hAllocConn(roDbName);
 o1 = fopen("j.dat",  "w");
 o2 = fopen("jj.dat", "w");
     
-sprintf(query, "select kgID, refseq from %s.kgXref", roDbName);
+sqlSafef(query, sizeof query, "select kgID, refseq from %s.kgXref", roDbName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 while (row != NULL)
@@ -54,7 +54,7 @@ while (row != NULL)
     locusID = sqlGetField("entrez", "entrezRefProt", "geneID", cond_str);
     if (locusID != NULL)
 	{
-        sprintf(query3, "select * from %s.keggList where locusID = '%s'", kgTempDbName, locusID);
+        sqlSafef(query3, sizeof query3, "select * from %s.keggList where locusID = '%s'", kgTempDbName, locusID);
         sr3 = sqlGetResult(conn3, query3);
         while ((row3 = sqlNextRow(sr3)) != NULL)
             {

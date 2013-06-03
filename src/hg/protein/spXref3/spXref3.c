@@ -59,7 +59,7 @@ ontology_term_id = sqlGetField(proteinDatabaseName, "ontology_term",
                                "ontology_term_id", cond_str); 
 
 sprintf(proteinDatabaseName, "proteins%s", proteinDataDate);
-sprintf(query2,"select * from biosql%s.bioentry;", proteinDataDate);
+sqlSafef(query2, sizeof query2, "select * from biosql%s.bioentry;", proteinDataDate);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -71,7 +71,7 @@ while (row2 != NULL)
     entry_version	= row2[4];  
     division		= row2[5];
 			       
-    sprintf(query,
+    sqlSafef(query, sizeof query,
 	    "select qualifier_value from biosql%s.bioentry_qualifier_value where bioentry_id=%s and ontology_term_id=%s;",
 	    proteinDataDate, bioentry_id, ontology_term_id);
 

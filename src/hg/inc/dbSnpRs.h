@@ -58,18 +58,7 @@ void dbSnpRsSaveToDb(struct sqlConnection *conn, struct dbSnpRs *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use dbSnpRsSaveToDbEscaped() */
-
-void dbSnpRsSaveToDbEscaped(struct sqlConnection *conn, struct dbSnpRs *el, char *tableName, int updateSize);
-/* Save dbSnpRs as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than dbSnpRsSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct dbSnpRs *dbSnpRsCommaIn(char **pS, struct dbSnpRs *ret);
 /* Create a dbSnpRs out of a comma separated string. 

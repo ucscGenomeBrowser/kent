@@ -26,7 +26,7 @@ void txAbFragFind(char *database, char *output)
 {
 FILE *f = mustOpen(output, "w");
 struct sqlConnection *conn =  sqlConnect(database);
-struct sqlResult *sr = sqlGetResult(conn, "select id,name from description");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select id,name from description");
 char **row;
 struct hash *descriptionIdHash = hashNew(18);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -68,7 +68,7 @@ verbose(1, "Found %d descriptions that match\n", descriptionIdHash->elCount);
 
 int totalCount = 0;
 int matchCount = 0;
-sr = sqlGetResult(conn, "select description,acc from gbCdnaInfo where type='mRNA'");
+sr = sqlGetResult(conn, "NOSQLINJ select description,acc from gbCdnaInfo where type='mRNA'");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ++totalCount;

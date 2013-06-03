@@ -257,7 +257,7 @@ char *createString =
 ")\n";
 
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }

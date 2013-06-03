@@ -56,18 +56,7 @@ void omiciaAutoSaveToDb(struct sqlConnection *conn, struct omiciaAuto *el, char 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use omiciaAutoSaveToDbEscaped() */
-
-void omiciaAutoSaveToDbEscaped(struct sqlConnection *conn, struct omiciaAuto *el, char *tableName, int updateSize);
-/* Save omiciaAuto as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than omiciaAutoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct omiciaAuto *omiciaAutoCommaIn(char **pS, struct omiciaAuto *ret);
 /* Create a omiciaAuto out of a comma separated string. 
@@ -137,18 +126,7 @@ void omiciaHandSaveToDb(struct sqlConnection *conn, struct omiciaHand *el, char 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use omiciaHandSaveToDbEscaped() */
-
-void omiciaHandSaveToDbEscaped(struct sqlConnection *conn, struct omiciaHand *el, char *tableName, int updateSize);
-/* Save omiciaHand as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than omiciaHandSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct omiciaHand *omiciaHandCommaIn(char **pS, struct omiciaHand *ret);
 /* Create a omiciaHand out of a comma separated string. 
@@ -216,18 +194,7 @@ void omiciaLinkSaveToDb(struct sqlConnection *conn, struct omiciaLink *el, char 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use omiciaLinkSaveToDbEscaped() */
-
-void omiciaLinkSaveToDbEscaped(struct sqlConnection *conn, struct omiciaLink *el, char *tableName, int updateSize);
-/* Save omiciaLink as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than omiciaLinkSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct omiciaLink *omiciaLinkCommaIn(char **pS, struct omiciaLink *ret);
 /* Create a omiciaLink out of a comma separated string. 
@@ -293,18 +260,7 @@ void omiciaAttrSaveToDb(struct sqlConnection *conn, struct omiciaAttr *el, char 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use omiciaAttrSaveToDbEscaped() */
-
-void omiciaAttrSaveToDbEscaped(struct sqlConnection *conn, struct omiciaAttr *el, char *tableName, int updateSize);
-/* Save omiciaAttr as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than omiciaAttrSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct omiciaAttr *omiciaAttrCommaIn(char **pS, struct omiciaAttr *ret);
 /* Create a omiciaAttr out of a comma separated string. 

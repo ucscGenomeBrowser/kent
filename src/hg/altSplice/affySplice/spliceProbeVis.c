@@ -110,7 +110,7 @@ int i = 0;
 char eventQuery[256];
 struct mouseAPSetEventMap *event = NULL;
 struct sqlConnection *conn = hAllocConn();
-safef(eventQuery, sizeof(eventQuery), 
+sqlSafef(eventQuery, sizeof(eventQuery), 
       "select * from mouseAPSetEventMap where skipPSet = '%s';",
       skipPSet);
 
@@ -125,7 +125,7 @@ if(event == NULL)
 
 assert(query);
 dyStringClear(query);
-dyStringPrintf(query, "select * from %s where ", tableName);
+sqlDyStringPrintf(query, "select * from %s where ", tableName);
 for(i = 0; i < event->incCount; i++) 
     dyStringPrintf(query, "name like '%s' or ", event->incPSets[i]);
 for(i = 0; i < event->geneCount; i++) 
@@ -285,15 +285,15 @@ else
     makeTempName(&regPlot, "sp", ".png");
 touchBlank(regPlot.forCgi);
 
-safef(query, sizeof(query), "select * from %s where name like '%%%s%%';", 
+sqlSafef(query, sizeof(query), "select * from %s where name like '%%%s%%';", 
       incTable, skipPset);
 inc = dataFromTable(incTable, query);
 
-safef(query, sizeof(query), "select * from %s where name like '%%%s%%';", 
+sqlSafef(query, sizeof(query), "select * from %s where name like '%%%s%%';", 
       skipTable, skipPset);
 skip = dataFromTable(skipTable, query);
 
-safef(query, sizeof(query), "select * from %s where name like '%%%s%%';", 
+sqlSafef(query, sizeof(query), "select * from %s where name like '%%%s%%';", 
       geneTable, skipPset);
 gene = dataFromTable(geneTable, query);
 

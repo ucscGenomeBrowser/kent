@@ -55,7 +55,7 @@ static char *createString = "CREATE TABLE %s (\n"
 "    INDEX(query(12))\n"
 ")\n";
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }

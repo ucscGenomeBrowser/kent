@@ -25,7 +25,6 @@ char query[256], query2[256];
 struct sqlResult *sr, *sr2;
 char **row, **row2;
 char buf[128];
-char *answer;
 char *database;
 char *genome, *genomeDesc;  
 char *kgID, *chrom, *txStart, *txEnd;
@@ -42,7 +41,7 @@ if (!hTableExistsDb(database, "knownGene"))
     return;
     }
 
-sprintf(query, "select description from dbDb where name = '%s'", database);
+sqlSafef(query, sizeof query, "select description from dbDb where name = '%s'", database);
 genomeDesc = strdup(sqlQuickQuery(connCentral, query, buf, sizeof(buf)));
 hDisconnectCentral(&connCentral);
 
@@ -51,11 +50,11 @@ printf("<H2>%s Genome (%s Assembly)</H2>\n", genome, genomeDesc);
 conn = hAllocConn(database);
 conn2= hAllocConn(database);
 
-sprintf(query2,"select kgID from %s.kgXref order by geneSymbol;",
+sqlSafef(query2, sizeof query2, "select kgID from %s.kgXref order by geneSymbol;",
 	database);
 
 /* use the following for quck testing */
-/*sprintf(query2,"select kgID, geneSymbol, description, spID, refseq from %s.kgXref order by geneSymbol limit 10;", database);
+/*sqlSafef(query2, sizeof query2, "select kgID, geneSymbol, description, spID, refseq from %s.kgXref order by geneSymbol limit 10;", database);
 */
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -63,7 +62,7 @@ while (row2 != NULL)
     {
     kgID = row2[0];
     
-    sprintf(query,"select chrom, txSTart, txEnd  from %s.knownGene where name='%s'", database, kgID);
+    sqlSafef(query, sizeof query, "select chrom, txSTart, txEnd  from %s.knownGene where name='%s'", database, kgID);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     chrom 	= row[0];
