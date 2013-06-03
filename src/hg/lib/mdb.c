@@ -234,6 +234,31 @@ fputc('}',f);
 #define MDB_METAOBJ_RAKEY "metaObject"
 #define MDB_METAVAR_RAKEY "metaVariable"
 
+// ------- Sorts for low level mdb structs -------
+int mdbCmp(const void *va, const void *vb)
+// Compare mdb to sort on obj,var, case-sensitive.  Needed to override ORDER_BY performance hit
+{
+const struct mdb *a = *((struct mdb **)va);
+const struct mdb *b = *((struct mdb **)vb);
+int ret = strcmp(a->obj, b->obj);
+if (ret == 0)
+    ret = strcmp(a->var, b->var);
+return ret;
+}
+
+int mdbVarValCmp(const void *va, const void *vb)
+// Compare mdb to sort on var,val case-sensitive.  Needed to override ORDER_BY performance hit
+{
+const struct mdb *a = *((struct mdb **)va);
+const struct mdb *b = *((struct mdb **)vb);
+int ret = strcmp(a->var, b->var);
+if (ret == 0)
+    ret = strcmp(a->val, b->val);
+if (ret == 0)
+    ret = strcmp(a->obj, b->obj);
+return ret;
+}
+
 // ------- (static) convert from autoSql -------
 static void mdbLeafObjFree(struct mdbLeafObj **leafObjPtr)
 // Frees a single mdbVar struct
@@ -917,7 +942,8 @@ char *sqlCreate =
     "    val varchar(2048) not null,     # Metadata value.\n"
     "  #Indices\n"
     "    PRIMARY KEY(obj,var),\n"
-    "    INDEX varKey (var,val(32),obj)\n"
+    "    INDEX varKey (var),\n"
+    "    INDEX valKey (val(64))\n"
     ")";
 
 if (sqlTableExists(conn,tblName))
@@ -1224,10 +1250,10 @@ if (mdbObj != NULL && mdbObj->obj != NULL)
     if (mdbObj->vars != NULL)
         dyStringPrintf(dy, ")");
     }
-dyStringPrintf(dy, " order by binary obj, var");    // binary forces case-sensitive sort
-verbose(3, "Requesting query:\n\t%s;\n",dyStringContents(dy));
+verbose(2, "Requesting mdbObjQuery query:\n\t%s;\n",dyStringContents(dy));
 
 struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
+slSort(&mdb,mdbCmp);  // Use internal sort instead of ORDER BY because of mysql inefficiency
 struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,buildHash);
 verbose(3, "Returned %d object(s) with %d var(s).\n",
         mdbObjCount(mdbObjs,TRUE),mdbObjCount(mdbObjs,FALSE));
@@ -1312,11 +1338,11 @@ for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
         dyStringPrintf(dy, ")");
     dyStringPrintf(dy, ")");
     }
-dyStringPrintf(dy, " order by var, val, obj");
-verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
+verbose(2, "Requesting mdbByVarsQuery query:\n\t%s;\n",dyStringContents(dy));
 
 struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
 verbose(3, "rows (vars) returned: %d\n",slCount(mdb));
+slSort(&mdb,mdbVarValCmp);  // Use internal sort instead of ORDER BY because of mysql inefficiency
 struct mdbByVar *mdbByVarsFromMem = mdbByVarsLoadFromMemory(&mdb,TRUE);
 verbose(3, "Returned %d vars(s) with %d val(s) with %d object(s).\n",
         mdbByVarCount(mdbByVarsFromMem,TRUE,FALSE),
@@ -1344,48 +1370,39 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 {
 // MOST POPULAR WAY TO QUERY MDB.  Building example queries like:
 // "cell=GM12878" or "cell!=GM12878"
-//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
-//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
-//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val = 'GM12878')
-//           ORDER BY T1.obj, T1.var;
-//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
-//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
-//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val != 'GM12878')
+//   => SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//        JOIN metaDb T2 WHERE T1.obj = T2.obj AND T2.var = 'cell' AND T2.val = 'GM12878'
+//       ORDER BY T1.obj, T1.var;
+//   => SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//        JOIN metaDb T2 WHERE T1.obj = T2.obj AND T2.var = 'cell' AND T2.val != 'GM12878'
 //       ORDER BY T1.obj, T1.var;
 // "cell=GM%" or "cell!=GM%"
-//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
-//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
-//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%')
+//   => SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//        JOIN metaDb T2 WHERE T1.obj = T2.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%'
 //       ORDER BY T1.obj, T1.var;
-//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
-//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
-//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val NOT LIKE 'GM%')
+//   => SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//        JOIN metaDb T2 WHERE T1.obj = T2.obj AND T2.var = 'cell' AND T2.val NOT LIKE 'GM%'
 //       ORDER BY T1.obj, T1.var;
-// "cell=" or "cell!="
-//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
-//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
-//                      WHERE T2.obj = T1.obj AND T2.var = 'cell')
+// "cell=" or "cell!="  NOTE the tricky and inscrutable left join for cell!=
+//   => SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//        JOIN metaDb T2 WHERE T1.obj = T2.obj AND T2.var = 'cell'
 //       ORDER BY T1.obj, T1.var;
-//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
-//       WHERE NOT EXISTS (SELECT T2.obj FROM metaDb T2
-//                          WHERE T2.obj = T1.obj AND T2.var = 'cell')
+//   => SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//        LEFT JOIN metaDb T2 WHERE T1.obj = T2.obj AND T2.var = 'cell' WHERE T2.obj IS NULL
 //       ORDER BY T1.obj, T1.var;
 // "cell=GM12878,K562" or "cell!=GM12878,K562"
-//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
-//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
-//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val IN ('GM12878','K562'))
+//   => SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//        JOIN metaDb T2 WHERE T1.obj = T2.obj
+//                         AND T2.var = 'cell' AND T2.val IN ('GM12878','K562')'
 //       ORDER BY T1.obj, T1.var;
-//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
-//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
-//                      WHERE T2.obj = T1.obj AND T2.var = 'cell'
-//                        AND T2.val NOT IN ('K562','GM12878'))
+//   => SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//        JOIN metaDb T2 WHERE T1.obj = T2.obj
+//                         AND T2.var = 'cell' AND T2.val NOT IN ('GM12878','K562')'
 //       ORDER BY T1.obj, T1.var;
 // "cell=GM% cell!=GM12878"  (very powerful)
 //      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
-//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
-//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%')
-//         AND EXISTS (SELECT T3.obj FROM metaDb T3
-//                      WHERE T3.obj = T1.obj AND T3.var = 'cell' AND T3.val != 'GM12878')
+//        JOIN metaDb T2 WHERE T1.obj = T2.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%'
+//        JOIN metaDb T3 WHERE T1.obj = T3.obj AND T3.var = 'cell' AND T3.val != 'GM12878'
 //       ORDER BY T1.obj, T1.var;
 
 if (table == NULL)
@@ -1397,44 +1414,37 @@ struct dyString *dy = newDyString(4096);
 dyStringPrintf(dy, "SELECT T1.obj,T1.var,T1.val FROM %s T1", table);
 
 struct mdbByVar *rootVar;
-boolean gotVar = FALSE;
 int tix;
 for (rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
     {
-    boolean hasVal = (rootVar->vals != NULL);
-    //boolean hasVal = (  rootVar->vals != NULL
-    //                 && rootVar->vals->val != NULL
-    //                 && strlen(rootVar->vals->val) > 0);
-    if (!gotVar)
-        {
-        dyStringPrintf(dy, " WHERE ");
-        gotVar=TRUE;
-        }
-    else
-        dyStringPrintf(dy, " AND ");
+    boolean hasVal  = (rootVar->vals != NULL);
+    boolean varWild = (strchr(rootVar->var,'%') != NULL);
 
+    // If you want objects where var='cell' does not exist, then we need the tricky and inscrutable
+    // LEFT JOIN metaDb T2 ON T2.obj = T1.obj AND T2.var = 'cell' WHERE T2.obj is NULL
     if (!hasVal && rootVar->notEqual)
-        dyStringPrintf(dy, "NOT EXISTS ");
-    else
-        dyStringPrintf(dy, "EXISTS ");
+        dyStringAppend(dy, " LEFT");
 
-    dyStringPrintf(dy, "(SELECT T%d.obj FROM %s T%d WHERE T%d.obj = T1.obj AND T%d.var ",
-                   tix,table,tix,tix,tix);
+    dyStringPrintf(dy, " JOIN %s T%d ON T%d.obj = T1.obj AND T%d.var ",table,tix,tix,tix);
 
+    // var = 'x' || var != 'x' || var LIKE 'x%' || var NOT LIKE 'x%'
     if (hasVal && rootVar->notEqual && rootVar->vals == NULL)
-        dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
+        dyStringAppend(dy, (varWild ? "NOT " : "!"));
+    dyStringPrintf(dy, "%s '%s'",(varWild ? "LIKE" : "="), rootVar->var);
 
-    dyStringPrintf(dy, "%s '%s'",
-                   (strchr(rootVar->var,'%') ? "LIKE" : "="), rootVar->var);
+    // Finish the tricky and inscrutable LEFT JOIN / WHERE NULL
+    if (!hasVal && rootVar->notEqual)
+        dyStringPrintf(dy, " WHERE T%d.obj IS NULL",tix);
 
+    // Now 1 or more vals.  First some booleans
     struct mdbLimbVal *limbVal;
     boolean multiVals = (rootVar->vals != NULL && rootVar->vals->next != NULL);
     boolean wilds = FALSE;
-    for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
-        {
-        if (strchr(limbVal->val,'%') != NULL)
-            wilds = TRUE;
-        }
+    for (limbVal=rootVar->vals;wilds == FALSE && limbVal!=NULL; limbVal=limbVal->next)
+        wilds = (limbVal->val != NULL && strchr(limbVal->val,'%') != NULL); // breaks when true
+
+    // Now walk through vals creating:
+    // AND (val = 'x' or val = 'y') or val IN ('a','b','c') or val NOT LIKE 'd%'
     for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
         {
         if (limbVal->val == NULL || strlen(limbVal->val) < 1)
@@ -1443,41 +1453,37 @@ for (rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
         if (limbVal==rootVar->vals) // First val
             {
             if (wilds && multiVals)
-                dyStringPrintf(dy, " AND (T%d.val ",tix);
+                dyStringAppend(dy, " AND ("); // starts AND (val LIKE 'd%' or ...)
             else
-                dyStringPrintf(dy, " AND T%d.val ",tix);
+                dyStringAppend(dy, " AND ");  // starts AND val = 'a' || AND val IN ('a','b'...)
+            dyStringPrintf(dy, "T%d.val ",tix);
             }
         else                      // successive vals
             {
             if (wilds && multiVals)
-                dyStringPrintf(dy, " or T%d.val ",tix);
+                dyStringPrintf(dy, " or T%d.val ",tix); // continues LIKE 'd%'
             else
-                dyStringPrintf(dy, ",");
+                dyStringAppend(dy, ",");                // continues IN ('a'
             }
 
         if (limbVal==rootVar->vals   // First val
-        ||  (wilds && multiVals))      // and successive if wildcards
+        ||  (wilds && multiVals))    // and successive if wildcards
             {
+            boolean valWild = (strchr(limbVal->val,'%') != NULL);
             if (rootVar->notEqual)
-                dyStringPrintf(dy, "%s",(strchr(limbVal->val,'%') || limbVal->next)?"NOT ":"!");
-            if (strchr(limbVal->val,'%') != NULL)
-                dyStringPrintf(dy, "LIKE ");
-            else if (!multiVals || wilds)
-                dyStringPrintf(dy, "= ");
-            else
-                dyStringPrintf(dy, "IN (");
+                dyStringAppend(dy, (valWild || limbVal->next)?"NOT ":"!");
+            dyStringAppend(dy,     (valWild ? "LIKE " : (!multiVals || wilds ? "= " : "IN (")));
             }
         dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
         }
     if (multiVals)
-        dyStringPrintf(dy, ")");
-    dyStringPrintf(dy, ")");
+        dyStringPrintf(dy, ")"); // closes IN ('a','b','c') || AND (val LIKE 'd%' or val LIKE 'e%')
     }
-dyStringPrintf(dy, " ORDER BY binary T1.obj, T1.var");  // binary forces case sensitive sort
-verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
+verbose(2, "Requesting mdbObjsQueryByVars query:\n\t%s;\n",dyStringContents(dy));
 
 struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
 verbose(3, "rows (vars) returned: %d\n",slCount(mdb));
+slSort(&mdb,mdbCmp);  // Use internal sort instead of ORDER BY because of mysql inefficiency
 struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,TRUE);
 verbose(3, "Returned %d object(s) with %d var(s).\n",
         mdbObjCount(mdbObjs,TRUE),mdbObjCount(mdbObjs,FALSE));
@@ -3324,7 +3330,7 @@ struct dyString *dyQuery = dyStringNew(512);
 dyStringPrintf(dyQuery,"select l1.obj, l1.var, l1.val from %s l1",tableName);
 
 if (var != NULL || val != NULL)
-    dyStringPrintf(dyQuery," where exists (select l2.obj from %s l2 where l2.obj = l1.obj and ",
+    dyStringPrintf(dyQuery," JOIN %s l2 ON l2.obj = l1.obj and ",
                    tableName);
 if (var != NULL)
     dyStringPrintf(dyQuery,"l2.var = '%s'", var);
@@ -3343,11 +3349,11 @@ if (val != NULL)
     else
         dyStringPrintf(dyQuery,"= '%s'", val);
     }
-dyStringAppendC(dyQuery,')');
-dyStringAppend(dyQuery," order by obj");
+verbose(2, "Requesting mdbObjSearch query:\n\t%s;\n",dyStringContents(dyQuery));
 
 struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dyQuery));
 verbose(3, "rows (vars) returned: %d\n",slCount(mdb));
+slSort(&mdb,mdbCmp);  // Use internal sort instead of ORDER BY because of mysql inefficiency
 struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,TRUE);
 
 return mdbObjs;
