@@ -56,18 +56,7 @@ void landmarkSaveToDb(struct sqlConnection *conn, struct landmark *el, char *tab
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use landmarkSaveToDbEscaped() */
-
-void landmarkSaveToDbEscaped(struct sqlConnection *conn, struct landmark *el, char *tableName, int updateSize);
-/* Save landmark as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than landmarkSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct landmark *landmarkCommaIn(char **pS, struct landmark *ret);
 /* Create a landmark out of a comma separated string. 
@@ -134,18 +123,7 @@ void landmarkAttrSaveToDb(struct sqlConnection *conn, struct landmarkAttr *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use landmarkAttrSaveToDbEscaped() */
-
-void landmarkAttrSaveToDbEscaped(struct sqlConnection *conn, struct landmarkAttr *el, char *tableName, int updateSize);
-/* Save landmarkAttr as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than landmarkAttrSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct landmarkAttr *landmarkAttrCommaIn(char **pS, struct landmarkAttr *ret);
 /* Create a landmarkAttr out of a comma separated string. 
@@ -212,18 +190,7 @@ void landmarkAttrLinkSaveToDb(struct sqlConnection *conn, struct landmarkAttrLin
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use landmarkAttrLinkSaveToDbEscaped() */
-
-void landmarkAttrLinkSaveToDbEscaped(struct sqlConnection *conn, struct landmarkAttrLink *el, char *tableName, int updateSize);
-/* Save landmarkAttrLink as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than landmarkAttrLinkSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct landmarkAttrLink *landmarkAttrLinkCommaIn(char **pS, struct landmarkAttrLink *ret);
 /* Create a landmarkAttrLink out of a comma separated string. 

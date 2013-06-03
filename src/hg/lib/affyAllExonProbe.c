@@ -115,44 +115,15 @@ void affyAllExonProbeSaveToDb(struct sqlConnection *conn, struct affyAllExonProb
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use affyAllExonProbeSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,'%s',%u,%u,'%s',%u,%u,%u,'%s','%s',%u,%u)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,'%s',%u,%u,'%s',%u,%u,%u,'%s','%s',%u,%u)", 
 	tableName,  el->name,  el->numIndependentProbes,  el->exonClusterId,  el->numNonOverlapProbes,  el->probeCount,  el->transcriptClustId,  el->probesetType,  el->numXHybeProbe,  el->psrId,  el->level,  el->evidence,  el->bounded,  el->cds);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void affyAllExonProbeSaveToDbEscaped(struct sqlConnection *conn, struct affyAllExonProbe *el, char *tableName, int updateSize)
-/* Save affyAllExonProbe as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than affyAllExonProbeSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *exonClusterId, *transcriptClustId, *level, *evidence;
-name = sqlEscapeString(el->name);
-exonClusterId = sqlEscapeString(el->exonClusterId);
-transcriptClustId = sqlEscapeString(el->transcriptClustId);
-level = sqlEscapeString(el->level);
-evidence = sqlEscapeString(el->evidence);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%u,'%s',%u,%u,'%s',%u,%u,%u,'%s','%s',%u,%u)", 
-	tableName,  name, el->numIndependentProbes ,  exonClusterId, el->numNonOverlapProbes , el->probeCount ,  transcriptClustId, el->probesetType , el->numXHybeProbe , el->psrId ,  level,  evidence, el->bounded , el->cds );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&exonClusterId);
-freez(&transcriptClustId);
-freez(&level);
-freez(&evidence);
-}
 
 struct affyAllExonProbe *affyAllExonProbeCommaIn(char **pS, struct affyAllExonProbe *ret)
 /* Create a affyAllExonProbe out of a comma separated string. 

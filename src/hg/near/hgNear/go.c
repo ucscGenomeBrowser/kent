@@ -55,7 +55,7 @@ if (gp->protein != NULL && gp->protein[0] != 0)
     	proteinAcc = spFindAcc(col->uniProtConn, gp->protein);
         }
     
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "select term.name from goaPart,term where goaPart.%s = '%s' and goaPart.goId = term.acc", col->goaIdColumn, proteinAcc);
     sr = sqlGetResult(col->goConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -103,7 +103,7 @@ if (gp->protein != NULL && gp->protein[0] != 0)
     	proteinAcc = spFindAcc(col->uniProtConn, gp->protein);
         }
 
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "select term.name,term.acc from goaPart,term "
 	    "where goaPart.%s = '%s' "
 	    "and goaPart.goId = term.acc", 
@@ -158,13 +158,13 @@ if (searchString != NULL )
 	{
 	if (startsWith("GO:", term->name))
 	    {
-	    safef(query, sizeof(query),
+	    sqlSafef(query, sizeof(query),
 		"select %s from goaPart "
 		"where goId = '%s'", col->goaIdColumn, term->name);
 	    }
 	else
 	    {
-	    safef(query, sizeof(query), 
+	    sqlSafef(query, sizeof(query), 
 		    "select goaPart.%s from goaPart,term "
 		    "where term.name = '%s' and term.acc = goaPart.goId"
 		    , col->goaIdColumn, term->name);

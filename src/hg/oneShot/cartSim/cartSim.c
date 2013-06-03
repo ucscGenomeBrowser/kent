@@ -95,7 +95,7 @@ int contentsFieldIx = sqlFieldIndex(conn, table, "contents");
 if (contentsFieldIx < 0)
     errAbort("%s.%s doesn't have a contents field", database, table);
 char query[256];
-safef(query, sizeof(query), "select contents from %s limit 1", table);
+sqlSafef(query, sizeof(query), "select contents from %s limit 1", table);
 char *firstContents = sqlQuickString(conn, query);
 if (firstContents != NULL && !startsWith(fakePrefix, firstContents))
     errAbort("%s.%s.contents doesn't start with '%s'", database, table, firstContents);
@@ -111,7 +111,7 @@ int contentsFieldIx = sqlFieldIndex(conn, table, "contents");
 if (contentsFieldIx < 0)
     errAbort("%s.%s doesn't have a contents field", database, table);
 char query[256];
-safef(query, sizeof(query), "select contents from %s limit 1", table);
+sqlSafef(query, sizeof(query), "select contents from %s limit 1", table);
 char *firstContents = sqlQuickString(conn, query);
 if (firstContents != NULL && !startsWith(fakePrefix, firstContents))
     errAbort("no goot test database %s: %s.contents doesn't start with '%s'", 
@@ -157,7 +157,7 @@ void createEmptyDatabase(char *host, char *user, char *password, char *database)
 {
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, NULL);
 char query[512];
-safef(query, sizeof(query), "create database %s", database);
+sqlSafef(query, sizeof(query), "create database %s", database);
 sqlUpdate(conn, query);
 sqlDisconnect(&conn);
 }
@@ -171,7 +171,7 @@ if (databaseExists(host, user, password, database))
     if (sqlTableExists(conn, userTable))
 	{
 	char query[512];
-	safef(query, sizeof(query), "drop table %s", userTable);
+	sqlSafef(query, sizeof(query), "drop table %s", userTable);
 	sqlUpdate(conn, query);
 	}
     sqlDisconnect(&conn);
@@ -186,7 +186,7 @@ if (!databaseExists(host, user, password, database))
     createEmptyDatabase(host, user, password, database);
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
 char query[1024];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 "CREATE TABLE %s  (\n"
 "    id integer unsigned not null auto_increment,	# Cart ID\n"
 "    contents longblob not null,	# Contents - encoded variables\n"
@@ -207,7 +207,7 @@ void createFakeEntry(struct sqlConnection *conn, int size)
 {
 struct dyString *contents = fakeCart(size);
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "INSERT %s VALUES(0,'%s',0,now(),now(),0)", userTable, contents->string);
+sqlDyStringPrintf(query, "INSERT %s VALUES(0,'%s',0,now(),now(),0)", userTable, contents->string);
 sqlUpdate(conn, query->string);
 dyStringClear(query);
 dyStringFree(&contents);
@@ -240,7 +240,7 @@ void fakeCloneOldTable(struct sqlConnection *oldConn, struct sqlConnection *newC
  * contents field to help mark it as fake. */
 {
 char query[256];
-safef(query, sizeof(query), "select * from %s", table);
+sqlSafef(query, sizeof(query), "select * from %s", table);
 struct sqlResult *sr = sqlGetResult(oldConn, query);
 char **row;
 FILE *f = hgCreateTabFile(NULL, table);
@@ -274,7 +274,7 @@ int *getSomeInts(struct sqlConnection *conn, char *table, char *field, int limit
 {
 int *result, i;
 char query[512];
-safef(query, sizeof(query), "select %s from %s limit %d", field, table, limit);
+sqlSafef(query, sizeof(query), "select %s from %s limit %d", field, table, limit);
 struct sqlResult *sr = sqlGetResult(conn, query);
 AllocArray(result, limit);
 for (i=0; i<limit; ++i)
@@ -292,7 +292,7 @@ void updateOne(struct sqlConnection *conn, char *table, char *contents, int id, 
 /* Update one of cart tables with new contents. */
 {
 struct dyString *dy = dyStringNew(0);
-dyStringPrintf(dy, "UPDATE %s SET contents='", table);
+sqlDyStringPrintf(dy, "UPDATE %s SET contents='", table);
 dyStringAppend(dy, contents);
 dyStringPrintf(dy, "',lastUse=now(),useCount=%d ", useCount+1);
 dyStringPrintf(dy, " where id=%u", id);
@@ -305,7 +305,7 @@ int dummyQuery(struct sqlConnection *conn, char *table, int id, char **retConten
 {
 char *contents = "";
 char query[256];
-safef(query, sizeof(query), "select useCount,contents from %s where id=%d", table, id);
+sqlSafef(query, sizeof(query), "select useCount,contents from %s where id=%d", table, id);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 int useCount = 0;
@@ -323,7 +323,7 @@ int dummyInsert(struct sqlConnection *conn, char *table)
 /* Insert new row into cart table and return ID */
 {
 char query[256];
-safef(query, sizeof(query), "INSERT %s VALUES(0,\"\",0,now(),now(),0)",
+sqlSafef(query, sizeof(query), "INSERT %s VALUES(0,\"\",0,now(),now(),0)",
       table);
 sqlUpdate(conn, query);
 return sqlLastAutoId(conn);
@@ -341,7 +341,7 @@ void cartSimulate(char *host, char *user, char *password, char *database)
 {
 /* Figure out size of tables. */
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
-int userDbSize = sqlQuickNum(conn, "select count(*) from userDb");
+int userDbSize = sqlQuickNum(conn, "NOSQLINJ select count(*) from userDb");
 if (userDbSize == 0)
     errAbort("%s.%s table is empty", database, userTable);
 int maxSampleSize = 1024*1024;
@@ -421,7 +421,7 @@ void cleanupTable(char *host, char *user, char *password, char *database, char *
 uglyTime(NULL);
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "select count(*) from %s", table);
+sqlDyStringPrintf(query, "select count(*) from %s", table);
 int initialCount = sqlQuickNum(conn, query->string);
 uglyTime("%d initial vs %d target", initialCount, target);
 if (target < initialCount)
@@ -429,12 +429,12 @@ if (target < initialCount)
     /* Query database for id's ordered by age */
 
     dyStringClear(query);
-    dyStringPrintf(query, "select id,now()-lastUse age from %s order by age", table);
+    sqlDyStringPrintf(query, "select id,now()-lastUse age from %s order by age", table);
     struct sqlResult *sr = sqlGetResult(conn, query->string);
 
     /* Build up new query that'll delete old things. */
     dyStringClear(query);
-    dyStringPrintf(query, "delete from %s where id in (", table);
+    sqlDyStringPrintf(query, "delete from %s where id in (", table);
     int i=0;
     boolean addComma = FALSE;
     char **row;

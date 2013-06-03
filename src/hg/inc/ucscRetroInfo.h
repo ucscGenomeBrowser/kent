@@ -78,18 +78,7 @@ void ucscRetroInfoSaveToDb(struct sqlConnection *conn, struct ucscRetroInfo *el,
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use ucscRetroInfoSaveToDbEscaped() */
-
-void ucscRetroInfoSaveToDbEscaped(struct sqlConnection *conn, struct ucscRetroInfo *el, char *tableName, int updateSize);
-/* Save ucscRetroInfo as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than ucscRetroInfoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct ucscRetroInfo *ucscRetroInfoLoad(char **row);
 /* Load a ucscRetroInfo from row fetched with select * from ucscRetroInfo

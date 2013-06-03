@@ -143,7 +143,7 @@ char table[64];
 boolean hasBin;
 
 hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, "altGraphX", table, &hasBin);
-safef(query, sizeof(query), "select * from %s where name='%s'", table, altId);
+sqlSafef(query, sizeof(query), "select * from %s where name='%s'", table, altId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {

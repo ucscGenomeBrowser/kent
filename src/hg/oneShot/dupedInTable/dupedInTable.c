@@ -40,7 +40,7 @@ char query[256];
 struct hash *hash = newHash(18);
 struct nameCount *ncList = NULL, *nc;
 
-safef(query, sizeof(query), "select %s from %s", field, table);
+sqlSafef(query, sizeof(query), "select %s from %s", field, table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

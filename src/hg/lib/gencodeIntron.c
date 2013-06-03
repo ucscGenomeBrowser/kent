@@ -105,46 +105,15 @@ void gencodeIntronSaveToDb(struct sqlConnection *conn, struct gencodeIntron *el,
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use gencodeIntronSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s','%s','%s','%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->status,  el->strand,  el->transcript,  el->geneId);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void gencodeIntronSaveToDbEscaped(struct sqlConnection *conn, struct gencodeIntron *el, char *tableName, int updateSize)
-/* Save gencodeIntron as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than gencodeIntronSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *status, *strand, *transcript, *geneId;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-status = sqlEscapeString(el->status);
-strand = sqlEscapeString(el->strand);
-transcript = sqlEscapeString(el->transcript);
-geneId = sqlEscapeString(el->geneId);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s','%s','%s','%s','%s')", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name,  status,  strand,  transcript,  geneId);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&status);
-freez(&strand);
-freez(&transcript);
-freez(&geneId);
-}
 
 struct gencodeIntron *gencodeIntronCommaIn(char **pS, struct gencodeIntron *ret)
 /* Create a gencodeIntron out of a comma separated string. 
@@ -247,7 +216,7 @@ char *createString =
 "    INDEX(chrom(%d),chromEnd)\n"
 ")\n";
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, createString, tableName, indexSize, indexSize, indexSize);
+sqlDyStringPrintf(dy, createString, tableName, indexSize, indexSize, indexSize);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }

@@ -117,46 +117,15 @@ void encodeRnaSaveToDb(struct sqlConnection *conn, struct encodeRna *el, char *t
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use encodeRnaSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s',%g,%u,%u,%u,%u,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s',%g,%u,%u,%u,%u,'%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->source,  el->type,  el->fullScore,  el->isPsuedo,  el->isRmasked,  el->isTranscribed,  el->isPrediction,  el->transcribedIn);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void encodeRnaSaveToDbEscaped(struct sqlConnection *conn, struct encodeRna *el, char *tableName, int updateSize)
-/* Save encodeRna as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than encodeRnaSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *source, *type, *transcribedIn;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-source = sqlEscapeString(el->source);
-type = sqlEscapeString(el->type);
-transcribedIn = sqlEscapeString(el->transcribedIn);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s',%g,%u,%u,%u,%u,'%s')", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  source,  type, el->fullScore , el->isPsuedo , el->isRmasked , el->isTranscribed , el->isPrediction ,  transcribedIn);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&source);
-freez(&type);
-freez(&transcribedIn);
-}
 
 struct encodeRna *encodeRnaCommaIn(char **pS, struct encodeRna *ret)
 /* Create a encodeRna out of a comma separated string. 

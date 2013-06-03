@@ -34,7 +34,7 @@ void createTable(struct sqlConnection *conn, char *tableName)
 /* Create our name/value table, dropping if it already exists. */
 {
 struct dyString *dy = dyStringNew(512);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
 "CREATE TABLE  %s (\n"
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
@@ -71,7 +71,7 @@ void foldIntoHash(struct sqlConnection *conn, char *table, char *keyField, char 
 struct sqlResult *sr;
 char query[256];
 char **row;
-safef(query, sizeof(query), "select %s,%s from %s", keyField, valField, table);
+sqlSafef(query, sizeof(query), "select %s,%s from %s", keyField, valField, table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(hash, row[0], cloneString(row[1]));
@@ -102,7 +102,6 @@ FILE *f = hgCreateTabFile(tempDir, outTable);
 struct sqlConnection *hConn = sqlConnect(database);
 struct sqlConnection *iConn = sqlConnect("bioImage");
 struct sqlResult *sr;
-char query[512];
 char **row;
 struct hash *geneImageHash = newHash(18);
 struct hash *locusLinkImageHash = newHash(18);
@@ -116,7 +115,7 @@ struct hash *dupeHash = newHash(17);
 
 /* Go through and make up hashes of images keyed by various fields. */
 sr = sqlGetResult(iConn, 
-	"select id,priority,gene,locusLink,refSeq,genbank from image");
+	"NOSQLINJ select id,priority,gene,locusLink,refSeq,genbank from image");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int id = sqlUnsigned(row[0]);
@@ -130,7 +129,7 @@ uglyf("Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSeqImag
 sqlFreeResult(&sr);
 
 /* Build up list of known genes. */
-sr = sqlGetResult(hConn, "select name from knownGene");
+sr = sqlGetResult(hConn, "NOSQLINJ select name from knownGene");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];

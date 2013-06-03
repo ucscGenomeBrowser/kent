@@ -90,7 +90,7 @@ da->vertexCount = vCount;
 da->ma = ma;
 mc->mrnaList = da;
 mc->tName = cloneString(ma->tName);
-snprintf(mc->strand, sizeof(mc->strand), "%s", ma->strand);
+safef(mc->strand, sizeof(mc->strand), "%s", ma->strand);
 mc->tStart = ma->tStart;
 mc->tEnd = ma->tEnd;
 mc->genoSeq = genoSeq;

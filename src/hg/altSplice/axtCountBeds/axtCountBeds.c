@@ -322,9 +322,9 @@ bedList = bedLoadAll(bedFile);
 hSetDb(db);
 conn = hAllocConn();
 if(sameString(chrom, "all"))
-    safef(query, sizeof(query), "select chrom from chromInfo where chrom like '%%' order by chrom;");
+    sqlSafef(query, sizeof(query), "select chrom from chromInfo where chrom like '%%' order by chrom;");
 else
-    safef(query, sizeof(query), "select chrom from chromInfo where chrom like '%s';", chrom);
+    sqlSafef(query, sizeof(query), "select chrom from chromInfo where chrom like '%s';", chrom);
 sr = sqlGetResult(conn, query);
 out = mustOpen(outFile, "w");
 outputHeader(out);

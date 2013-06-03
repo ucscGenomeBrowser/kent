@@ -318,10 +318,10 @@ if (setting != (char *) NULL)
 if (tableIsSplit)
     {
     getFullTableName(wigFullTableName, hDefaultChromDb(db), table);
-    snprintf(query, sizeof(query), "show table status like '%s'", wigFullTableName);
+    sqlSafef(query, sizeof(query), "show table status like '%s'", wigFullTableName);
     }
 else
-    snprintf(query, sizeof(query), "show table status like '%s'", table);
+    sqlSafef(query, sizeof(query), "show table status like '%s'", table);
 
 sr = sqlMustGetResult(conn,query);
 row = sqlNextRow(sr);

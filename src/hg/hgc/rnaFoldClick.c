@@ -168,7 +168,7 @@ if (chp != NULL)
     *chp = '\0';
     }
 
-safef(query, sizeof(query), "select organism from dbDb where name = '%s'", database);
+sqlSafef(query, sizeof(query), "select organism from dbDb where name = '%s'", database);
 if(sqlQuickQuery(connCentral, query, buf, sizeof(buf)) == NULL)
     // this can happen in mirrors (see #8490).
     errAbort("organism '%s' not found in dbDb", database);

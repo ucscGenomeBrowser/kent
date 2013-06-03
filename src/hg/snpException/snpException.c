@@ -32,7 +32,7 @@ struct sqlResult     *sr    = NULL;
 char                **row   = NULL;
 struct slName        *list  = NULL;
 struct slName        *el    = NULL;
-char                 *query = "select chrom from chromInfo";
+char                 *query = "NOSQLINJ select chrom from chromInfo";
 
 sr = sqlGetResult(conn, query);
 while ((row=sqlNextRow(sr))!=NULL)
@@ -56,7 +56,7 @@ struct slName        *list  = NULL;
 struct slName        *el    = NULL;
 char                  query[256];
 
-safef(query,sizeof(query),"select name from snp %s", group);
+sqlSafef(query,sizeof(query),"select name from snp %s", group);
 sr = sqlGetResult(conn, query);
 while ((row=sqlNextRow(sr))!=NULL)
     {
@@ -77,10 +77,10 @@ struct sqlResult     *sr         = NULL;
 char                **row        = NULL;
 struct snpExceptions *list       = NULL;
 struct snpExceptions *el         = NULL;
-char                  query[256] = "select * from snpExceptions";
+char                  query[256] = "NOSQLINJ select * from snpExceptions";
 
 if (inputExceptionId>0)
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	  "select * from snpExceptions where exceptionId=%d", inputExceptionId);
 sr = sqlGetResult(conn, query);
 while ((row=sqlNextRow(sr))!=NULL)
@@ -125,8 +125,8 @@ for (el=exceptionList; el!=NULL; el=el->next)
 	for (chrom=chromList; chrom!=NULL; chrom=chrom->next)
 	    {
 	    fflush(outFile); /* to keep an eye on output progress */
-	    safef(query, sizeof(query),
-		  "%s and chrom='%s'", el->query, chrom->name);
+	    sqlSafef(query, sizeof(query),
+		  "%-s and chrom='%s'", el->query, chrom->name);
 	    sr = sqlGetResult(conn, query);
 	    colCount = sqlCountColumns(sr);
 	    while ((row = sqlNextRow(sr))!=NULL)
@@ -149,7 +149,7 @@ for (el=exceptionList; el!=NULL; el=el->next)
 	nameList = getGroupList(db, el->query);
 	for (name=nameList; name!=NULL; name=name->next)
 	    {
-	    safef(query, sizeof(query),
+	    sqlSafef(query, sizeof(query),
 		  "select chrom,chromStart,chromEnd,name,%d as score,class,locType,observed "
 		  "from snp where name='%s'", el->exceptionId, name->name);
 	    sr = sqlGetResult(conn, query);
@@ -173,7 +173,7 @@ for (el=exceptionList; el!=NULL; el=el->next)
     printf("Invariant %d has %lu exceptions, written to this file: %s\n", 
 	   el->exceptionId, invariantCount, thisFile);
     fflush(stdout);
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "update snpExceptions set num=%lu where exceptionId=%d",
 	  invariantCount, el->exceptionId);    
     sr=sqlGetResult(conn, query); /* there's probably a better way to do this */

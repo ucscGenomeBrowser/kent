@@ -66,7 +66,7 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select * from snpMap where chrom='%s' order by name", chrom);
+sqlSafef(query, sizeof(query), "select * from snpMap where chrom='%s' order by name", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -137,7 +137,7 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select rsId, assembly from hgFixed.%s order by rsId", tbl);
+sqlSafef(query, sizeof(query), "select rsId, assembly from hgFixed.%s order by rsId", tbl);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -214,7 +214,7 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select affyId, rsId, sequenceA from hgFixed.affy10KDetails order by affyId");
+sqlSafef(query, sizeof(query), "select affyId, rsId, sequenceA from hgFixed.affy10KDetails order by affyId");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -288,7 +288,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 /* added cast in order by clause because we must match the sort order of snpMap.name which is a string */
-safef(query, sizeof(query), "select affyId, rsId, sequenceA from hgFixed.affy120KDetails order by cast(affyId as char)");
+sqlSafef(query, sizeof(query), "select affyId, rsId, sequenceA from hgFixed.affy120KDetails order by cast(affyId as char)");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

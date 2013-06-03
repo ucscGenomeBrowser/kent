@@ -24,7 +24,7 @@ if (hTableExists(sqlGetDatabase(conn), "ucscRetroInfo"))
     struct sqlResult *sr;
     char **row;
     char query[255];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
           "select name from ucscRetroInfo where name='%s' or kgName='%s' or refseq='%s'",
 	  geneId, geneId, geneId);
     sr = sqlGetResult(conn, query);
@@ -59,7 +59,7 @@ webPrintLabelCell("Genome Location");
 webPrintLabelCell("Description");
 hPrintf("</TR>\n<TR>");
 emptyStr = cloneString("");
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select distinct name, chrom, chromStart, chromEnd, refseq, type, score from ucscRetroInfo where name='%s' or kgName='%s' or refseq='%s'",
       geneId, geneId, geneId);
 sr = sqlGetResult(conn, query);

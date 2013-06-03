@@ -152,7 +152,7 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 
-safef(query, sizeof(query), "select now()");
+sqlSafef(query, sizeof(query), "select now()");
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -169,7 +169,7 @@ struct sqlResult *sr;
 char **row;
 int ret = 0;
 
-safef(query, sizeof(query), "select unix_timestamp(now())");
+sqlSafef(query, sizeof(query), "select unix_timestamp(now())");
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -197,7 +197,7 @@ if (write500)
     outputFileHandle = mustOpen(fileName, "w");
     }
 
-safef(query, sizeof(query), "select remote_host, machine_id, status, time_stamp, "
+sqlSafef(query, sizeof(query), "select remote_host, machine_id, status, time_stamp, "
                             "request_method, request_uri, request_line, referer, agent "
                             "from access_log where time_stamp > %d", startTime);
 sr = sqlGetResult(conn, query);
@@ -230,7 +230,7 @@ int startTime = secondsNow - (minutes * 60);
 int hits = 0;
 
 verbose(2, "\nheavy hitters overall (all status values, less than 5 seconds between average hits):\n");
-safef(query, sizeof(query), "select count(*), remote_host from access_log where time_stamp > %d group by remote_host", startTime);
+sqlSafef(query, sizeof(query), "select count(*), remote_host from access_log where time_stamp > %d group by remote_host", startTime);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -252,7 +252,7 @@ int startTime = secondsNow - (minutes * 60);
 
 if (status500)
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select from_unixtime(time_stamp), remote_host, machine_id, request_uri, referer "
 	  "from access_log "
 	  "where time_stamp > %d and status = 500 order by time_stamp desc limit 20\n", startTime);
@@ -263,7 +263,7 @@ if (status500)
     return;
     }
 
-safef(query, sizeof(query), "select count(*) from access_log where time_stamp > %d and status = 500 and referer = '-'", startTime);
+sqlSafef(query, sizeof(query), "select count(*) from access_log where time_stamp > %d and status = 500 and referer = '-'", startTime);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -273,7 +273,7 @@ else
 sqlFreeResult(&sr);
 
 verbose(2, "\nmachine_ids (non-robots):\n");
-safef(query, sizeof(query), "select count(*), machine_id from access_log where time_stamp > %d and status = 500 and "
+sqlSafef(query, sizeof(query), "select count(*), machine_id from access_log where time_stamp > %d and status = 500 and "
                             "referer != '-' group by machine_id", startTime);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -281,14 +281,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 verbose(2, "\nremote_hosts:\n");
-safef(query, sizeof(query), "select count(*), remote_host from access_log where time_stamp > %d and status = 500 group by remote_host", startTime);
+sqlSafef(query, sizeof(query), "select count(*), remote_host from access_log where time_stamp > %d and status = 500 group by remote_host", startTime);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     verbose(2, "%s\t%s\n", row[0], row[1]);
 sqlFreeResult(&sr);
 
 verbose(2, "\ndistinct request_uris:\n");
-safef(query, sizeof(query), "select distinct(request_uri) from access_log where time_stamp > %d and status = 500", startTime);
+sqlSafef(query, sizeof(query), "select distinct(request_uri) from access_log where time_stamp > %d and status = 500", startTime);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     verbose(2, "%s\n", row[0]);

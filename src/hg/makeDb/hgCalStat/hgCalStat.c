@@ -133,7 +133,7 @@ while (fgets(line, 1000, inf) != NULL)
     orderedCnt = orderedCnt + atoi(ctgCnt);
 
     /* calculate N50 for ordered contigs */
-    sprintf(query2, "select contig, size from %s.ctgPos where chrom='%s' order by size desc", genomeDBname, chrom);
+    sqlSafef(query2, sizeof query2, "select contig, size from %s.ctgPos where chrom='%s' order by size desc", genomeDBname, chrom);
     	
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
@@ -164,7 +164,7 @@ while (fgets(line, 1000, inf) != NULL)
         sprintf(cond_str, "chrom='%s'", chromRandom);
         ctgRandomCnt = sqlGetField(conn2, genomeDBname, "ctgPos", "count(*)", cond_str);
 	
-    	sprintf(query2, 
+    	sqlSafef(query2, sizeof query2,
 		"select contig, size from %s.ctgPos where chrom='%s' order by size desc", 
 		genomeDBname, chromRandom);
     	
@@ -198,7 +198,7 @@ while (fgets(line, 1000, inf) != NULL)
     }
 
 /* first calculate total chromosome size */
-sprintf(query2, 
+sqlSafef(query2, sizeof query2,
     "select chrom, size from %s.ctgPos where chrom not like '%crandom%c' and chrom not like '%chap%c' order by size desc", 
     genomeDBname, '%', '%', '%', '%');
     	
@@ -218,7 +218,7 @@ sqlFreeResult(&sr2);
 halfTotalSize = (int)(sumL/2L);
 
 /* calculate N50 totoal */
-sprintf(query2, 
+sqlSafef(query2, sizeof query2,
     "select chrom, size from %s.ctgPos where chrom not like '%crandom%c' and chrom not like '%chap%c' order by size desc", 
     genomeDBname, '%', '%', '%', '%');
     	
@@ -244,7 +244,7 @@ while ((row2 != NULL) && !chromDone)
 sqlFreeResult(&sr2);
 
 /* calculate total random chromosome size */
-sprintf(query2, 
+sqlSafef(query2, sizeof query2,
     "select chrom, size from %s.ctgPos where chrom like '%crandom%c' order by size desc", 
     genomeDBname, '%', '%');
     	
@@ -264,7 +264,7 @@ sqlFreeResult(&sr2);
 halfTotalRandomSize = (int)(sumL/2L);
 
 /* calculate N50 of randome total */
-sprintf(query2, 
+sqlSafef(query2, sizeof query2,
     "select chrom, size from %s.ctgPos where chrom like '%crandom%c' order by size desc", 
     genomeDBname, '%', '%');
     	

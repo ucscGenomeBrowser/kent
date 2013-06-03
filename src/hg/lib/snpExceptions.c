@@ -99,40 +99,15 @@ void snpExceptionsSaveToDb(struct sqlConnection *conn, struct snpExceptions *el,
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use snpExceptionsSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s')", 
 	tableName,  el->exceptionId,  el->query,  el->num,  el->description,  el->resultPath);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void snpExceptionsSaveToDbEscaped(struct sqlConnection *conn, struct snpExceptions *el, char *tableName, int updateSize)
-/* Save snpExceptions as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than snpExceptionsSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *query, *description, *resultPath;
-query = sqlEscapeString(el->query);
-description = sqlEscapeString(el->description);
-resultPath = sqlEscapeString(el->resultPath);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s')", 
-	tableName, el->exceptionId ,  query, el->num ,  description,  resultPath);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&query);
-freez(&description);
-freez(&resultPath);
-}
 
 struct snpExceptions *snpExceptionsCommaIn(char **pS, struct snpExceptions *ret)
 /* Create a snpExceptions out of a comma separated string. 

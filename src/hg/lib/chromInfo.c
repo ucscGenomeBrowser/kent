@@ -140,7 +140,7 @@ boolean exists = FALSE;
 /* if the database exists, check for the chromInfo file */
 if (sqlDatabaseExists(db))
     {
-    safef(query, sizeof(query), "select fileName from chromInfo where chrom = '%s'", chrom);
+    sqlSafef(query, sizeof(query), "select fileName from chromInfo where chrom = '%s'", chrom);
     res = sqlQuickQuery(conn, query, seqFile, 512);
     sqlDisconnect(&conn);
     }
@@ -175,11 +175,11 @@ struct chromInfo *ret = NULL;
 unsigned totalSize = 0;
 /* do the query */
 if (!name || sameWord(name, "all"))
-    sr = sqlGetResult(conn, "select * from chromInfo");
+    sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
 else
     {
     char select[256];
-    safef(select, ArraySize(select), "select * from chromInfo where chrom='%s'", name);
+    sqlSafef(select, ArraySize(select), "select * from chromInfo where chrom='%s'", name);
     sr = sqlGetResult(conn, select);
     }
 /* read the rows and build the chromInfo list */

@@ -108,7 +108,7 @@ if (sqlTable != NULL)
 else if (!oldTable)
     {
     /* Create definition statement. */
-    dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
+    sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");
     dyStringAppend(dy, "  tName varchar(255) not null,\n");
@@ -133,7 +133,7 @@ else if (!oldTable)
     }
 
 dyStringClear(dy);
-dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
+sqlDyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
 sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
 }
@@ -160,7 +160,7 @@ if (sqlTable != NULL)
 else if (!oldTable)
     {
     /* Create definition statement. */
-    dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
+    sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");
     dyStringAppend(dy, "  score double not null,\n");
@@ -202,7 +202,7 @@ else if (!oldTable)
     sqlRemakeTable(conn, track, dy->string);
     }
 dyStringClear(dy);
-dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
+sqlDyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
 sqlUpdate(conn, dy->string);
 /* add a comment to the history table and finish up connection */
 hgHistoryComment(conn, "Loaded %d chains into %s chain table", count, track);

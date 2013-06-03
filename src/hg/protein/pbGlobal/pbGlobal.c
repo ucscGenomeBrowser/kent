@@ -296,7 +296,7 @@ fflush(stdout);
 
 /* See if a UCSC Genome Browser exist for this organism.  If so, display BLAT link. */
 connCentral = hConnectCentral();
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select defaultDb.name from dbDb, defaultDb where dbDb.scientificName='%s' and dbDb.name=defaultDb.name",
       sciName);
 sr = sqlGetResult(connCentral, query);

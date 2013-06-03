@@ -10,6 +10,7 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/annoGratorTester \
 	${BIN_DIR}/binTest \
 	${BIN_DIR}/customTrackTester 
+	${BIN_DIR}/sqlCheck 
 
 test: binTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest
 	rm -r output
@@ -49,6 +50,10 @@ customTrackTest: ${BIN_DIR}/customTrackTester loaders mkdirs
 binTest: mkdirs ${BIN_DIR}/binTest
 	@./binTest.sh
 
+sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
+	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
+
+
 ${BIN_DIR}/genePredTester: genePredTester.o ${MYLIBS}
 	@${MKDIR} ${BIN_DIR}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
@@ -66,6 +71,10 @@ ${BIN_DIR}/binTest: binTest.o ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 
 ${BIN_DIR}/customTrackTester: customTrackTester.o ${MYLIBS}
+	@${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
+
+${BIN_DIR}/sqlCheck: sqlCheck.o ${MYLIBS}
 	@${MKDIR} ${BIN_DIR}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 

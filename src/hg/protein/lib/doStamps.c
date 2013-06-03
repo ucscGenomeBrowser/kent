@@ -405,7 +405,7 @@ struct pbStamp *pbStampPtr;
 int i;
 
 conn2= hAllocConn(database);
-safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", database, stampName);
+sqlSafef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", database, stampName);
 
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -417,7 +417,7 @@ if (row2 == NULL)
     }
 sqlFreeResult(&sr2);
     
-safef(query2, sizeof(query2), "select * from %s.%s;", database, pbStampPtr->stampTable);
+sqlSafef(query2, sizeof(query2), "select * from %s.%s;", database, pbStampPtr->stampTable);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
     	

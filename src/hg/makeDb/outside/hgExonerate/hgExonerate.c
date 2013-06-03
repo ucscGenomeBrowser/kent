@@ -40,16 +40,16 @@ void loadIntoDb(char *tabFile, char *database, char *table, boolean clear)
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(2048);
 
-dyStringPrintf(dy, createString, table);
+sqlDyStringPrintf(dy, createString, table);
 sqlMaybeMakeTable(conn, table, dy->string);
 if (clear)
     {
     dyStringClear(dy);
-    dyStringPrintf(dy, "delete from %s", table);
+    sqlDyStringPrintf(dy, "delete from %s", table);
     sqlUpdate(conn, dy->string);
     }
 dyStringClear(dy);
-dyStringPrintf(dy, "LOAD data local infile '%s' into table %s", tabFile, table);
+sqlDyStringPrintf(dy, "LOAD data local infile '%s' into table %s", tabFile, table);
 sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
 }

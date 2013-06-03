@@ -28,7 +28,7 @@ int start = 0;
 int end = 0;
 int bin = 0;
 
-safef(query, sizeof(query), "select * from chrX_snp126 where chromEnd < 2709520");
+sqlSafef(query, sizeof(query), "select * from chrX_snp126 where chromEnd < 2709520");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -39,7 +39,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
-safef(query, sizeof(query), "select * from chrX_snp126 where chromEnd > 154584237");
+sqlSafef(query, sizeof(query), "select * from chrX_snp126 where chromEnd > 154584237");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -67,13 +67,13 @@ char **row;
 int start = 0;
 int end = 0;
 
-safef(query, sizeof(query), "select * from snp126Exceptions where chrom = 'chrX' and chromEnd < 2709520");
+sqlSafef(query, sizeof(query), "select * from snp126Exceptions where chrom = 'chrX' and chromEnd < 2709520");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     fprintf(exceptionFileHandle, "chrY\t%s\t%s\t%s\t%s\n", row[1], row[2], row[3], row[4]);
 sqlFreeResult(&sr);
 
-safef(query, sizeof(query), "select * from snp126Exceptions where chrom = 'chrX' and chromEnd > 154584237");
+sqlSafef(query, sizeof(query), "select * from snp126Exceptions where chrom = 'chrX' and chromEnd > 154584237");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

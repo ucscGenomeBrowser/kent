@@ -284,7 +284,7 @@ boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
 printf("<H3>My Sessions</H3>\n");
 printf("<TABLE BORDERWIDTH=0>\n");
-safef(query, sizeof(query), "SELECT sessionName, shared, firstUse from %s "
+sqlSafef(query, sizeof(query), "SELECT sessionName, shared, firstUse from %s "
       "WHERE userName = '%s' ORDER BY sessionName;",
       namedSessionTable, encUserName);
 sr = sqlGetResult(conn, query);
@@ -625,7 +625,7 @@ if (sqlTableExists(conn, namedSessionTable))
     char firstUseBuf[32];
 
     /* If this session already existed, preserve its firstUse and useCount. */
-    dyStringPrintf(dy, "SELECT firstUse, useCount FROM %s "
+    sqlDyStringPrintf(dy, "SELECT firstUse, useCount FROM %s "
 		       "WHERE userName = '%s' AND sessionName = '%s';",
 		   namedSessionTable, encUserName, encSessionName);
     sr = sqlGetResult(conn, dy->string);
@@ -639,19 +639,22 @@ if (sqlTableExists(conn, namedSessionTable))
 
     /* Remove pre-existing session (if any) before updating. */
     dyStringClear(dy);
-    dyStringPrintf(dy, "DELETE FROM %s WHERE userName = '%s' AND "
+    sqlDyStringPrintf(dy, "DELETE FROM %s WHERE userName = '%s' AND "
 		       "sessionName = '%s';",
 		   namedSessionTable, encUserName, encSessionName);
     sqlUpdate(conn, dy->string);
 
     dyStringClear(dy);
-    dyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
+    sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
     dyStringAppend(dy, "(userName, sessionName, contents, shared, "
 		       "firstUse, lastUse, useCount) VALUES (");
     dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
     dyStringAppend(dy, "'");
     cleanHgSessionFromCart(cart);
-    cartEncodeState(cart, dy);
+    struct dyString *encoded = newDyString(4096);
+    cartEncodeState(cart, encoded);
+    sqlDyAppendEscaped(dy, encoded->string);
+    dyStringFree(&encoded);
     dyStringAppend(dy, "', ");
     dyStringPrintf(dy, "%d, ", (shareSession ? 1 : 0));
     dyStringPrintf(dy, "%s, now(), %d);", firstUse, useCount);
@@ -808,7 +811,7 @@ if (cartHelList != NULL)
     struct hash *sharedHash = hashNew(0);
     char **row;
     struct sqlResult *sr;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select sessionName,shared from %s where userName = '%s'",
 	  namedSessionTable, encUserName);
     sr = sqlGetResult(conn, query);
@@ -823,7 +826,7 @@ if (cartHelList != NULL)
 	boolean shared  = cartUsualBoolean(cart, hel->name, TRUE);
 	if (shared != alreadyShared)
 	    {
-	    safef(query, sizeof(query), "UPDATE %s SET shared = %d "
+	    sqlSafef(query, sizeof(query), "UPDATE %s SET shared = %d "
 		  "WHERE userName = '%s' AND sessionName = '%s';",
 		  namedSessionTable, shared, encUserName, encSessionName);
 	    sqlUpdate(conn, query);
@@ -859,7 +862,7 @@ for (hel = cartHelList;  hel != NULL;  hel = hel->next)
     {
     char *encSessionName = hel->name + strlen(hgsDeletePrefix);
     char *sessionName = cgiDecodeClone(encSessionName);
-    safef(query, sizeof(query), "DELETE FROM %s "
+    sqlSafef(query, sizeof(query), "DELETE FROM %s "
 	  "WHERE userName = '%s' AND sessionName = '%s';",
 	  namedSessionTable, encUserName, encSessionName);
     sqlUpdate(conn, query);
@@ -1014,11 +1017,11 @@ webPushErrHandlersCart(cart);
 boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
 if (gotSettings)
-    safef(query, sizeof(query), "SELECT shared, firstUse, settings from %s "
+    sqlSafef(query, sizeof(query), "SELECT shared, firstUse, settings from %s "
 	  "WHERE userName = '%s' AND sessionName = '%s'",
           namedSessionTable, encUserName, encSessionName);
 else
-    safef(query, sizeof(query), "SELECT shared, firstUse from %s "
+    sqlSafef(query, sizeof(query), "SELECT shared, firstUse from %s "
 	  "WHERE userName = '%s' AND sessionName = '%s'",
           namedSessionTable, encUserName, encSessionName);
 sr = sqlGetResult(conn, query);
@@ -1120,11 +1123,11 @@ char *settings = NULL;
 boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
 if (gotSettings)
-    safef(query, sizeof(query), "SELECT shared, settings from %s "
+    sqlSafef(query, sizeof(query), "SELECT shared, settings from %s "
 	  "WHERE userName = '%s' AND sessionName = '%s'",
           namedSessionTable, encUserName, encSessionName);
 else
-    safef(query, sizeof(query), "SELECT shared from %s "
+    sqlSafef(query, sizeof(query), "SELECT shared from %s "
 	  "WHERE userName = '%s' AND sessionName = '%s'",
           namedSessionTable, encUserName, encSessionName);
 sr = sqlGetResult(conn, query);
@@ -1142,7 +1145,7 @@ char *newName = cartOptionalString(cart, hgsNewSessionName);
 if (isNotEmpty(newName) && !sameString(sessionName, newName))
     {
     char *encNewName = cgiEncodeFull(newName);
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "UPDATE %s set sessionName = '%s' WHERE userName = '%s' AND sessionName = '%s';",
 	  namedSessionTable, encNewName, encUserName, encSessionName);
 	sqlUpdate(conn, query);
@@ -1160,7 +1163,7 @@ if (cgiBooleanDefined(varName))
     boolean newShared = cartBoolean(cart, varName);
     if (newShared != shared)
 	{
-	safef(query, sizeof(query),
+	sqlSafef(query, sizeof(query),
 	      "UPDATE %s set shared = %d WHERE userName = '%s' AND sessionName = '%s';",
 	      namedSessionTable, newShared, encUserName, encSessionName);
 	sqlUpdate(conn, query);
@@ -1180,15 +1183,16 @@ if (gotSettings)
     char *newDescription = cartOptionalString(cart, hgsNewSessionDescription);
     if (newDescription != NULL)
 	{
-	newDescription = replaceChars(newDescription, "\\", "\\\\\\\\");
-	newDescription = replaceChars(newDescription, "\r", "\\\\r");
-	newDescription = replaceChars(newDescription, "\n", "\\\\n");
+	// newline escaping of \n is needed for ra syntax.
+        // not sure why \r and \ are being escaped, but it may be too late to change
+        // since there are probably records in the database that way now.
+	newDescription = replaceChars(newDescription, "\\", "\\\\");
+	newDescription = replaceChars(newDescription, "\r", "\\r");
+	newDescription = replaceChars(newDescription, "\n", "\\n");
 	}
     else
 	newDescription = "";
-    if (description != NULL)
-	description = replaceChars(description, "\\", "\\\\");
-    else
+    if (description == NULL)
 	description = "";
     if (!sameString(description, newDescription))
 	{
@@ -1198,17 +1202,13 @@ if (gotSettings)
 	struct hashEl *hel = hashElListHash(settingsHash);
 	while (hel != NULL)
 	    {
-	    if (sameString(hel->name, "description"))
-		dyStringPrintf(dyRa, "%s %s\n", hel->name, newDescription);
-	    else
-		dyStringPrintf(dyRa, "%s %s\n", hel->name, (char *)hel->val);
+	    dyStringPrintf(dyRa, "%s %s\n", hel->name, (char *)hel->val);
 	    hel = hel->next;
 	    }
 	struct dyString *dyQuery = dyStringNew(1024);
-	dyStringPrintf(dyQuery, "UPDATE %s set settings = ", namedSessionTable);
-	dyStringQuoteString(dyQuery, '"', dyRa->string);
-	dyStringPrintf(dyQuery, "WHERE userName = '%s' AND sessionName = '%s';",
-		       encUserName, encSessionName);
+	sqlDyStringPrintf(dyQuery, "UPDATE %s set settings = '%s' "
+				   "WHERE userName = '%s' AND sessionName = '%s';",
+			namedSessionTable, dyRa->string, encUserName, encSessionName);
 	sqlUpdate(conn, dyQuery->string);
 	dyStringPrintf(dyMessage, "Updated description of <B>%s</B>.\n", sessionName);
 	}

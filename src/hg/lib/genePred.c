@@ -16,7 +16,7 @@
 /* SQL to create a genePred table */
 static char *createSql = 
 "CREATE TABLE %s ("
-"   %s"                                 /* bin column goes here */
+"   %-s"                                 /* bin column goes here */
 "   name varchar(255) not null,"	/* mrna accession of gene */
 "   chrom varchar(255) not null,"	/* Chromosome name */
 "   strand char(1) not null,"		/* + or - for strand */
@@ -1287,7 +1287,7 @@ char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options,
 /* the >= is used so that we create preceeding fields. */
 char sqlCmd[1024];
 
-safef(sqlCmd, sizeof(sqlCmd), createSql, table,
+sqlSafef(sqlCmd, sizeof(sqlCmd), createSql, table,
       ((options & genePredWithBin) ? binFieldSql : noBinIndexSql));
 if (optFields >= genePredScoreFld)
     safecat(sqlCmd, sizeof(sqlCmd), scoreFieldSql);
@@ -1324,7 +1324,7 @@ if (*list == NULL)
     AllocVar(*list);
     conn = hAllocConn(db);
     AllocVar(gene);
-    safef(query, sizeof(query), "select * from %s", table);
+    sqlSafef(query, sizeof(query), "select * from %s", table);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {

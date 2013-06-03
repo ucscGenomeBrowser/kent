@@ -36,7 +36,7 @@ char fileName[64];
 
 ret = newHash(0);
 verbose(1, "getting chroms...\n");
-safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
+sqlSafef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -64,7 +64,7 @@ char *chromName;
 
 verbose(1, "reading ContigLocFilter...\n");
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select snp_id, ctg_id, chromName, loc_type, phys_pos_from, phys_pos, orientation, allele from ContigLocFilter");
 
 sr = sqlGetResult(conn, query);
@@ -103,7 +103,7 @@ char *createString =
 struct dyString *dy = newDyString(1024);
 
 safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 hFreeConn(&conn);

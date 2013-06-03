@@ -244,7 +244,7 @@ struct sqlResult *sr;
 char **row;
 struct bed *bedList = NULL, *bed;
 char query[512];
-sprintf(query, "select * from %s", table);
+sqlSafef(query, sizeof query, "select * from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -264,7 +264,7 @@ static struct expRecord * loadExpRecord(char *table, char *database)
 struct sqlConnection *conn = sqlConnect(database);
 char query[256];
 struct expRecord *erList = NULL;
-snprintf(query, sizeof(query), "select * from %s", table);
+sqlSafef(query, sizeof(query), "select * from %s", table);
 erList = expRecordLoadByQuery(conn, query);
 sqlDisconnect(&conn);
 return erList;

@@ -53,7 +53,7 @@ webPrintWideCellStart(colCount, HG_COL_TABLE);
 if (sqlTableExists(conn, table))
     {
     char query[512];
-    safef(query, sizeof(query), "select count(*) from %s where name = '%s'",
+    sqlSafef(query, sizeof(query), "select count(*) from %s where name = '%s'",
     	table, geneId);
     if (sqlExists(conn, query))
         {
@@ -88,7 +88,7 @@ void printProteinSeqLink(struct sqlConnection *conn, char *geneId)
 char *table = genomeSetting("knownGenePep");
 char query[256];
 char title[128];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select length(seq) from %s where name='%s'" , table,  geneId);
 int protSize = sqlQuickNum(conn, query);
 if (protSize > 0)
@@ -125,11 +125,11 @@ printProteinSeqLink(conn,geneId);
 webPrintLinkTableEnd();
 
 /* Print out any additional positions. */
-dyStringPrintf(query, "select chrom,txStart,txEnd from %s", table);
-dyStringPrintf(query, " where name = '%s'", curGeneId);
-dyStringPrintf(query, " and (chrom != '%s'", curGeneChrom);
-dyStringPrintf(query, " or txStart != %d", curGeneStart);
-dyStringPrintf(query, " or txEnd != %d)", curGeneEnd);
+sqlDyStringPrintf(query, "select chrom,txStart,txEnd from %s", table);
+sqlDyStringPrintf(query, " where name = '%s'", curGeneId);
+sqlDyStringPrintf(query, " and (chrom != '%s'", curGeneChrom);
+sqlDyStringPrintf(query, " or txStart != %d", curGeneStart);
+sqlDyStringPrintf(query, " or txEnd != %d)", curGeneEnd);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -164,7 +164,7 @@ struct sqlResult *sr;
 char **row;
 hPrintf("<TT><PRE>");
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select seq from %s where name = '%s'", table, geneId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -196,7 +196,7 @@ char query[256];
 boolean hasBin = hIsBinned(sqlGetDatabase(conn), table);
 
 hPrintf("<TT><PRE>");
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select * from %s where name='%s'"
     " and chrom='%s' and txStart=%d and txEnd=%d", 
     table, geneId, curGeneChrom, curGeneStart, curGeneEnd);

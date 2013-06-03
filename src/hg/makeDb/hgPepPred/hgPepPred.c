@@ -45,7 +45,7 @@ void makeCustomTable(char *database, char *table, char *defString)
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *ds = newDyString(2048);
 
-dyStringPrintf(ds, defString, table);
+sqlDyStringPrintf(ds, defString, table);
 sqlRemakeTable(conn, table, ds->string);
 sqlDisconnect(&conn);
 freeDyString(&ds);
@@ -56,7 +56,7 @@ void loadTableFromTabFile(char *database, char *table, char *tabFile)
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *ds = newDyString(2048);
-dyStringPrintf(ds, 
+sqlDyStringPrintf(ds, 
    "load data local infile '%s' into table %s", tabFile, table);
 sqlUpdate(conn, ds->string);
 sqlDisconnect(&conn);
@@ -160,7 +160,7 @@ struct hash *hash = newHash(16);
 
 if (!sqlTableExists(conn, table))
      errAbort("No %s table, need to build that first", table);
-safef(query, sizeof(query), "select protein,transcript from %s", table);
+sqlSafef(query, sizeof(query), "select protein,transcript from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

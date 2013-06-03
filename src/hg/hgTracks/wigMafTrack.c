@@ -1823,7 +1823,7 @@ if (hIsGsidServer())
     {
     /* decide the value of mafOrigOffset to be used to display xxAaMaf tracks. */
     struct sqlConnection *conn = hAllocConn(database);
-    safef(query, sizeof(query), "select chromStart from %s", track->table);
+    sqlSafef(query, sizeof(query), "select chromStart from %s", track->table);
     mafOrig = atoi(sqlNeedQuickString(conn, query));
     mafOrigOffset = (mafOrig % 3) - 1;
     /* offset has to be non-negative */

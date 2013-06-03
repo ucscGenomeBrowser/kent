@@ -95,7 +95,7 @@ int rowCount = 0;
 if (clump != NULL)
     clumpList = maMedSpecReadAll(clump);
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select * from %s", absTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

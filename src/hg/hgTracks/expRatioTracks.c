@@ -37,7 +37,7 @@ char **row;
 struct simpleClinical *clinicalItem = NULL;
 
 ret = newHash(16);
-safef(query, sizeof(query), "select id, er, pr from %s", tableName);
+sqlSafef(query, sizeof(query), "select id, er, pr from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -390,7 +390,7 @@ expTypes = newHash(6);
 expIndexesToNames = newHash(6);
 
 /* load the experiment information */
-snprintf(buff, sizeof(buff), "select * from %s order by id asc", table);
+sqlSafef(buff, sizeof(buff), "select * from %s order by id asc", table);
 erList = expRecordLoadByQuery(conn, buff);
 if(erList == NULL)
     errAbort("hgTracks::msBedGroupByIndex() - can't get any records for %s in table %s\n", buff, table);

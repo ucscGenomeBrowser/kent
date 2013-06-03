@@ -33,7 +33,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr;
 while (lineFileRow(lf, words))
     {
-    sprintf(query, "select * from %s where qName = '%s'", table, words[0]);
+    sqlSafef(query, sizeof query, "select * from %s where qName = '%s'", table, words[0]);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {

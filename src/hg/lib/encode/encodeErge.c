@@ -99,15 +99,13 @@ void encodeErgeSaveToDb(struct sqlConnection *conn, struct encodeErge *el, char 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use encodeErgeSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *blockSizesArray, *chromStartsArray;
 blockSizesArray = sqlUnsignedArrayToString(el->blockSizes, el->blockCount);
 chromStartsArray = sqlUnsignedArrayToString(el->chromStarts, el->blockCount);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->reserved,  el->blockCount,  blockSizesArray ,  chromStartsArray ,  el->Id,  el->color);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -115,37 +113,6 @@ freez(&blockSizesArray);
 freez(&chromStartsArray);
 }
 
-void encodeErgeSaveToDbEscaped(struct sqlConnection *conn, struct encodeErge *el, char *tableName, int updateSize)
-/* Save encodeErge as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than encodeErgeSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *blockSizesArray, *chromStartsArray, *Id, *color;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-Id = sqlEscapeString(el->Id);
-color = sqlEscapeString(el->color);
-
-blockSizesArray = sqlUnsignedArrayToString(el->blockSizes, el->blockCount);
-chromStartsArray = sqlUnsignedArrayToString(el->chromStarts, el->blockCount);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s')", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand, el->thickStart , el->thickEnd , el->reserved , el->blockCount ,  blockSizesArray ,  chromStartsArray ,  Id,  color);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&blockSizesArray);
-freez(&chromStartsArray);
-freez(&Id);
-freez(&color);
-}
 
 struct encodeErge *encodeErgeCommaIn(char **pS, struct encodeErge *ret)
 /* Create a encodeErge out of a comma separated string. 

@@ -86,7 +86,7 @@ if(motifTable != NULL)
         char where[256];
         char **row;
 
-        safef(where, sizeof(where), "name = '%s'", bed->name);
+        sqlSafefFrag(where, sizeof(where), "name = '%s'", bed->name);
         sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", bed->chrom, bed->chromStart,
                          bed->chromEnd, where, &rowOffset);
         while((row = sqlNextRow(sr)) != NULL)
@@ -153,9 +153,9 @@ track->itemRightPixels = rightPixels;
 track->expTable = trackDbRequiredSetting(track->tdb, SOURCE_TABLE);
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
-safef(query, sizeof(query), "select count(*) from %s", track->expTable);
+sqlSafef(query, sizeof(query), "select count(*) from %s", track->expTable);
 track->sourceCount = sqlQuickNum(conn, query);
-safef(query, sizeof(query), "select * from %s order by id", track->expTable);
+sqlSafef(query, sizeof(query), "select * from %s order by id", track->expTable);
 struct expRecord *exp, *expList = expRecordLoadByQuery(conn, query);
 int expIx;
 AllocArray(track->sources, track->sourceCount);

@@ -50,40 +50,15 @@ void mdbSaveToDb(struct sqlConnection *conn, struct mdb *el, char *tableName, in
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include"
- * If worried about this use mdbSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s set obj='%s', var='%s', val='%s'",
+sqlDyStringPrintf(update, "insert into %s set obj='%s', var='%s', val='%s'",
                tableName,  el->obj,  el->var,  el->val);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void mdbSaveToDbEscaped(struct sqlConnection *conn, struct mdb *el, char *tableName, int updateSize)
-/* Save mdb as a row to the table specified by tableName.
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically
- * escapes all simple strings (not arrays of string) but may be slower than mdbSaveToDb().
- * For example automatically copies and converts:
- * "autosql's features include" --> "autosql\'s features include"
- * before inserting into database. */
-{
-struct dyString *update = newDyString(updateSize);
-char  *obj, *var, *val;
-obj = sqlEscapeString(el->obj);
-var = sqlEscapeString(el->var);
-val = sqlEscapeString(el->val);
-
-dyStringPrintf(update, "insert into %s set obj='%s', var='%s', val='%s'",
-               tableName,  obj,  var,  val);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&obj);
-freez(&var);
-freez(&val);
-}
 
 struct mdb *mdbLoad(char **row)
 /* Load a mdb from row fetched with select * from mdb
@@ -950,7 +925,7 @@ if (sqlTableExists(conn,tblName))
     verbose(2, "Table '%s' already exists.  It will be recreated.\n",tblName);
 
 struct dyString *dy = newDyString(512);
-dyStringPrintf(dy, sqlCreate, tblName);
+sqlDyStringPrintf(dy, sqlCreate, tblName);
 verbose(2, "Requesting table creation:\n%s;\n", dyStringContents(dy));
 if (!testOnly)
     sqlRemakeTable(conn, tblName, dyStringContents(dy));
@@ -1068,12 +1043,12 @@ for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
         {
         if (mdbObj->vars == NULL) // deletes all
             {
-            safef(query, sizeof(query),"%s where obj = '%s'",tableName,mdbObj->obj);
+            sqlSafef(query, sizeof(query),"%s where obj = '%s'",sqlCheckTableName(tableName),sqlCheckQuotedLiteral(mdbObj->obj));  // NOSQLINJ
             int delCnt = sqlRowCount(conn,query);
 
             if (delCnt>0)
                 {
-                safef(query, sizeof(query),
+                sqlSafef(query, sizeof(query),
                       "delete from %s where obj = '%s'",tableName,mdbObj->obj);
                 verbose(2, "Requesting delete of %d rows:\n\t%s;\n",delCnt, query);
                 if (!testOnly)
@@ -1085,12 +1060,12 @@ for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
             {
             for (mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
                 {
-                safef(query, sizeof(query),
+                sqlSafef(query, sizeof(query),
                       "select obj from %s where obj = '%s' and var = '%s'",
                       tableName,mdbObj->obj,mdbVar->var);
                 if (sqlExists(conn,query))
                     {
-                    safef(query, sizeof(query),
+                    sqlSafef(query, sizeof(query),
                           "delete from %s where obj = '%s' and var = '%s'",
                           tableName,mdbObj->obj,mdbVar->var);
                     verbose(2, "Requesting delete of 1 row:\n\t%s;\n",query);
@@ -1104,12 +1079,12 @@ for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
         }
     else if (replace)  // If replace then clear out deadwood before inserting new vars
         {
-        safef(query, sizeof(query),"%s where obj = '%s'",tableName,mdbObj->obj);
+        sqlSafef(query, sizeof(query),"%s where obj = '%s'",sqlCheckTableName(tableName),sqlCheckQuotedLiteral(mdbObj->obj));  // NOSQLINJ
         int delCnt = sqlRowCount(conn,query);
 
         if (delCnt>0)
             {
-            safef(query, sizeof(query),
+            sqlSafef(query, sizeof(query),
                   "delete from %s where obj = '%s'",tableName,mdbObj->obj);
             verbose(2, "Requesting replacement of %d rows:\n\t%s;\n",delCnt, query);
             if (!testOnly)
@@ -1131,9 +1106,9 @@ for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
                 {
                 if (differentString(mdbVar->val,objExists->vars->val))
                     {
-                    safef(query, sizeof(query),
+                    sqlSafef(query, sizeof(query),
                           "update %s set val = '%s' where obj = '%s' and var = '%s'",
-                          tableName, sqlEscapeString(mdbVar->val), mdbObj->obj, mdbVar->var);
+                          tableName, mdbVar->val, mdbObj->obj, mdbVar->var);
                     verbose(2, "Requesting update of 1 row:\n\t%s;\n",query);
                     if (!testOnly)
                         sqlUpdate(conn, query);
@@ -1144,9 +1119,9 @@ for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
                 }
             }
         // Finally ready to insert new vars
-        safef(query, sizeof(query),
+        sqlSafef(query, sizeof(query),
               "insert into %s set obj='%s', var='%s', val='%s'",
-              tableName,mdbObj->obj,mdbVar->var,sqlEscapeString(mdbVar->val));
+              tableName,mdbObj->obj,mdbVar->var,mdbVar->val);
         verbose(2, "Requesting insert of one row:\n\t%s;\n",query);
         if (!testOnly)
             sqlUpdate(conn, query);
@@ -1179,7 +1154,7 @@ verboseTime(2, "past mdbObjPrintToTabFile()");
 
 // Disable keys in hopes of speeding things up.  No danger since it only disables non-unique keys
 char query[8192];
-safef(query, sizeof(query),"alter table %s disable keys",tableName);
+sqlSafef(query, sizeof(query),"alter table %s disable keys",tableName);
 sqlUpdate(conn, query);
 
 // Quick? load
@@ -1188,7 +1163,7 @@ sqlLoadTabFile(conn, MDB_TEMPORARY_TAB_FILE, tableName,
 verboseTime(2, "past sqlLoadTabFile()");
 
 // Enabling the keys again
-safef(query, sizeof(query),"alter table %s enable keys",tableName);
+sqlSafef(query, sizeof(query),"alter table %s enable keys",tableName);
 sqlUpdate(conn, query);
 verboseTime(2, "Past alter table");
 
@@ -1214,11 +1189,11 @@ else if (!sqlTableExists(conn,table))
     return NULL;
 
 struct dyString *dy = newDyString(4096);
-dyStringPrintf(dy, "select obj,var,val from %s", table);
+sqlDyStringPrintf(dy, "select obj,var,val from %s", table);
 if (mdbObj != NULL && mdbObj->obj != NULL)
     {
-    dyStringPrintf(dy, " where obj %s '%s'",
-                   (strchr(mdbObj->obj,'%') ? "like" : "="),mdbObj->obj);
+    sqlDyStringPrintf(dy, " where obj %-s '%s'",
+                   (strchr(mdbObj->obj,'%') ? "like" : "="), mdbObj->obj);
 
     struct mdbVar *mdbVar;
     for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
@@ -1231,15 +1206,15 @@ if (mdbObj != NULL && mdbObj->obj != NULL)
             {
             if (mdbVar->val != NULL)
                 dyStringPrintf(dy, "(");
-            dyStringPrintf(dy, "var %s '%s'",
-                           (strchr(mdbVar->var,'%') ? "like" : "="),mdbVar->var);
+            sqlDyStringPrintf(dy, "var %-s '%s'",
+                           (strchr(mdbVar->var,'%') ? "like" : "="), mdbVar->var);
             }
         if (mdbVar->val != NULL)
             {
             if (mdbVar->var != NULL)
                 dyStringPrintf(dy, " and ");
-            dyStringPrintf(dy, "val %s '%s'",
-                           (strchr(mdbVar->val,'%') ? "like" : "="), sqlEscapeString(mdbVar->val));
+            sqlDyStringPrintf(dy, "val %-s '%s'",
+                           (strchr(mdbVar->val,'%') ? "like" : "="), mdbVar->val);
             if (mdbVar->var != NULL)
                 dyStringPrintf(dy, ")");
             }
@@ -1286,7 +1261,7 @@ else if (!sqlTableExists(conn,table))
     return NULL;
 
 struct dyString *dy = newDyString(4096);
-dyStringPrintf(dy, "select obj,var,val from %s", table);
+sqlDyStringPrintf(dy, "select obj,var,val from %s", table);
 
 struct mdbByVar *rootVar;
 for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
@@ -1297,12 +1272,12 @@ for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
         dyStringPrintf(dy, " OR (var ");
 
     if (rootVar->notEqual && rootVar->vals == NULL)
-        dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
+        dyStringPrintf(dy, "%s", strchr(rootVar->var,'%') ? "NOT " : "!");
                                         // one of: "NOT LIKE". "!=" or "NOT EXISTS"
 
     if (rootVar->vals != NULL && rootVar->vals->val != NULL && strlen(rootVar->vals->val) > 0)
         {
-        dyStringPrintf(dy, "%s '%s'",
+        sqlDyStringPrintf(dy, "%-s '%s'",
                        (strchr(rootVar->var,'%') ? "like" : "="), rootVar->var);
         }
     else
@@ -1319,11 +1294,11 @@ for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
             {
             dyStringPrintf(dy, " and val ");
             if (rootVar->notEqual)
-                dyStringPrintf(dy, "%s",strchr(limbVal->val,'%')?"NOT ":"!");
+                dyStringPrintf(dy, "%s", strchr(limbVal->val,'%') ? "NOT " : "!");
             if (limbVal->next == NULL) // only one val
                 {
-                dyStringPrintf(dy, "%s '%s'",
-                    (strchr(limbVal->val,'%')?"like":"="), sqlEscapeString(limbVal->val));
+                sqlDyStringPrintf(dy, "%-s '%s'",
+                    (strchr(limbVal->val,'%')?"like":"="), limbVal->val);
                 break;
                 }
             else
@@ -1332,7 +1307,7 @@ for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
             }
         else
             dyStringPrintf(dy, ",");
-        dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
+        sqlDyStringPrintf(dy, "'%s'", limbVal->val);
         }
     if (multiVals)
         dyStringPrintf(dy, ")");
@@ -1411,7 +1386,7 @@ else if (!sqlTableExists(conn,table))
     return NULL;
 
 struct dyString *dy = newDyString(4096);
-dyStringPrintf(dy, "SELECT T1.obj,T1.var,T1.val FROM %s T1", table);
+sqlDyStringPrintf(dy, "SELECT T1.obj,T1.var,T1.val FROM %s T1", table);
 
 struct mdbByVar *rootVar;
 int tix;
@@ -1425,12 +1400,12 @@ for (rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
     if (!hasVal && rootVar->notEqual)
         dyStringAppend(dy, " LEFT");
 
-    dyStringPrintf(dy, " JOIN %s T%d ON T%d.obj = T1.obj AND T%d.var ",table,tix,tix,tix);
+    sqlDyStringPrintf(dy, " JOIN %s T%d ON T%d.obj = T1.obj AND T%d.var ",table,tix,tix,tix);
 
     // var = 'x' || var != 'x' || var LIKE 'x%' || var NOT LIKE 'x%'
     if (hasVal && rootVar->notEqual && rootVar->vals == NULL)
         dyStringAppend(dy, (varWild ? "NOT " : "!"));
-    dyStringPrintf(dy, "%s '%s'",(varWild ? "LIKE" : "="), rootVar->var);
+    sqlDyStringPrintf(dy, "%-s '%s'",(varWild ? "LIKE" : "="), rootVar->var);
 
     // Finish the tricky and inscrutable LEFT JOIN / WHERE NULL
     if (!hasVal && rootVar->notEqual)
@@ -1474,7 +1449,7 @@ for (rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
                 dyStringAppend(dy, (valWild || limbVal->next)?"NOT ":"!");
             dyStringAppend(dy,     (valWild ? "LIKE " : (!multiVals || wilds ? "= " : "IN (")));
             }
-        dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
+        sqlDyStringPrintf(dy, "'%s'", limbVal->val);
         }
     if (multiVals)
         dyStringPrintf(dy, ")"); // closes IN ('a','b','c') || AND (val LIKE 'd%' or val LIKE 'e%')
@@ -3327,13 +3302,13 @@ char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
 // Build a query string
 struct dyString *dyQuery = dyStringNew(512);
-dyStringPrintf(dyQuery,"select l1.obj, l1.var, l1.val from %s l1",tableName);
+sqlDyStringPrintf(dyQuery,"select l1.obj, l1.var, l1.val from %s l1",tableName);
 
 if (var != NULL || val != NULL)
-    dyStringPrintf(dyQuery," JOIN %s l2 ON l2.obj = l1.obj and ",
+    sqlDyStringPrintf(dyQuery," JOIN %s l2 ON l2.obj = l1.obj and ",
                    tableName);
 if (var != NULL)
-    dyStringPrintf(dyQuery,"l2.var = '%s'", var);
+    sqlDyStringPrintf(dyQuery,"l2.var = '%s'", var);
 if (var != NULL && val != NULL)
     dyStringAppend(dyQuery," and ");
 if (val != NULL)
@@ -3343,11 +3318,11 @@ if (val != NULL)
         dyStringPrintf(dyQuery,"in (%s)", val);
                               // Note, must be a formatted string already: 'a','b','c' or  1,2,3
     else if (sameString(op, "contains") || sameString(op, "like"))
-        dyStringPrintf(dyQuery,"like '%%%s%%'", val);
+        sqlDyStringPrintf(dyQuery,"like '%%%s%%'", val);
     else if (limit > 0 && strlen(val) != limit)
-        dyStringPrintf(dyQuery,"like '%.*s%%'", limit, val);
+        sqlDyStringPrintf(dyQuery,"like '%.*s%%'", limit, val);
     else
-        dyStringPrintf(dyQuery,"= '%s'", val);
+        sqlDyStringPrintf(dyQuery,"= '%s'", val);
     }
 verbose(2, "Requesting mdbObjSearch query:\n\t%s;\n",dyStringContents(dyQuery));
 
@@ -3444,13 +3419,13 @@ char nextLtr = letter + 1;
 if (hasTableName && !hasFileName)
     {
     // objType=table may have fileNames associated, but objType=file will not have tableNames
-    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
+    sqlDyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
                            "%c.var='objType' and %c.val = '%s')",nextLtr,tableName,nextLtr,nextLtr,
                            letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE);
     }
 else // tables OR files (but not objType=composite)
     {
-    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
+    sqlDyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
                            "%c.var='objType' and %c.val in ('%s','%s'))",nextLtr,tableName,nextLtr,
                            nextLtr,letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE,MDB_OBJ_TYPE_FILE);
     }
@@ -3458,7 +3433,7 @@ nextLtr++;
 
 // last of 3 possibilites objType either table or file but must have fileName var
 if (!hasTableName && hasFileName)
-    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
+    sqlDyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
                            "%c.var in ('%s','%s'))",nextLtr,tableName,nextLtr,nextLtr,letter,
                            nextLtr,MDB_VAR_FILENAME,MDB_VAR_FILEINDEX);
 }
@@ -3481,11 +3456,11 @@ char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 char letter = 'A';
 struct dyString *dyQuery = dyStringNew(512);
 if (limit > 0)
-    dyStringPrintf(dyQuery,"select distinct LEFT(%c.val,%d)",letter,limit);
+    sqlDyStringPrintf(dyQuery,"select distinct LEFT(%c.val,%d)",letter,limit);
 else
-    dyStringPrintf(dyQuery,"select distinct %c.val",letter);
+    sqlDyStringPrintf(dyQuery,"select distinct %c.val",letter);
 
-dyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
+sqlDyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
 
 mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName, letter, hasTableName, hasFileName);
 
@@ -3506,6 +3481,7 @@ struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limi
 // Return is case insensitive sorted on label (cv label or else val).
 // If requested, return cv tag instead of mdb val.
 {  // TODO: Change this to use normal mdb struct routines?
+
 if (!hasTableName && !hasFileName)
     errAbort("mdbValLabelSearch requests vals associated with neither table nor files.\n");
 
@@ -3514,11 +3490,11 @@ char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 char letter = 'A';
 struct dyString *dyQuery = dyStringNew(512);
 if (limit > 0)
-    dyStringPrintf(dyQuery,"select distinct LEFT(%c.val,%d)",letter,limit);
+    sqlDyStringPrintf(dyQuery,"select distinct LEFT(%c.val,%d)",letter,limit);
 else
-    dyStringPrintf(dyQuery,"select distinct %c.val",letter);
+    sqlDyStringPrintf(dyQuery,"select distinct %c.val",letter);
 
-dyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
+sqlDyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
 
 mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
 //warn("%s",dyStringContents(dyQuery));
@@ -3584,7 +3560,7 @@ while (cvApproved != NULL)
     {
     struct slPair *oneVar = slPopHead(&cvApproved);
     dyStringClear(dyQuery);
-    dyStringPrintf(dyQuery, "select count(DISTINCT %c.val) from %s %c where %c.var = '%s'",
+    sqlDyStringPrintf(dyQuery, "select count(DISTINCT %c.val) from %s %c where %c.var = '%s'",
                    letter,tableName,letter,letter,oneVar->name);
 
     mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);

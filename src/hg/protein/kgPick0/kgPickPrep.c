@@ -39,7 +39,7 @@ conn2= hAllocConn();
 oldCds = strdup("");
 
 /* go through each KG candidate */
-safef(query2, sizeof(query2), "select * from %s.kgCandidateY", kgTempDb);
+sqlSafef(query2, sizeof(query2), "select * from %s.kgCandidateY", kgTempDb);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)

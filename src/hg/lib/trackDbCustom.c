@@ -1278,7 +1278,7 @@ if (fileName != NULL)
     return cloneString(fileName);
 
 char query[256];
-safef(query, sizeof(query), "select fileName from %s", tdb->table);
+sqlSafef(query, sizeof(query), "select fileName from %s", tdb->table);
 return sqlQuickString(conn, query);
 }
 

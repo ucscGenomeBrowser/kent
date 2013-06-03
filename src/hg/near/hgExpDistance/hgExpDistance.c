@@ -60,7 +60,7 @@ static char *createString = "CREATE TABLE %s (\n"
 "    distance float not null	# Distance in expression space\n"
 ")\n";
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
@@ -176,7 +176,7 @@ char query[256];
 
 /* Load up hash from lookup table.  We are doing inverse lookup on it
  * actually. */
-safef(query, sizeof(query), "select name,value from %s", table);
+sqlSafef(query, sizeof(query), "select name,value from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -229,7 +229,7 @@ char *tempDir = ".";
 FILE *f = hgCreateTabFile(tempDir, outTable);
 
 /* Get list/hash of all items with expression values. */
-safef(query, sizeof(query), "select name,expCount,expScores from %s", posTable);
+sqlSafef(query, sizeof(query), "select name,expCount,expScores from %s", posTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -299,12 +299,12 @@ hgLoadTabFile(conn, tempDir, outTable, &f);
 printf("Loaded %s\n", outTable);
 
 /* Add indices. */
-safef(query, sizeof(query), "alter table %s add index(query(12))", outTable);
+sqlSafef(query, sizeof(query), "alter table %s add index(query(12))", outTable);
 sqlUpdate(conn, query);
 printf("Made query index\n");
 if (optionExists("targetIndex"))
     {
-    safef(query, sizeof(query), "alter table %s add index(target(12))", outTable);
+    sqlSafef(query, sizeof(query), "alter table %s add index(target(12))", outTable);
     sqlUpdate(conn, query);
     printf("Made target index\n");
     }

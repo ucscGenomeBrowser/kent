@@ -57,7 +57,7 @@ char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
 // If so, we may wish to remove the loop below since that was added by Larry and reformulate
 // it as it was originally done by Galt.  However it does not seem to affect performance so we can leave it for now.
 
-safef(query, sizeof query, 
+sqlSafef(query, sizeof query, 
     "select ipStart, ipEnd, node from geoIpNode%s where %u >= ipStart and %u <= ipEnd order by ipStart desc limit 1"
     , geoSuffix, ip, ip);
 char **row;
@@ -96,7 +96,7 @@ if (geoMirrorEnabled())
     // get the gbNode table
     char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
     char query[256];
-    safef(query, sizeof query, "SELECT node, domain, shortLabel from gbNode%s order by node", geoSuffix);
+    sqlSafef(query, sizeof query, "SELECT node, domain, shortLabel from gbNode%s order by node", geoSuffix);
     struct sqlResult *sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{

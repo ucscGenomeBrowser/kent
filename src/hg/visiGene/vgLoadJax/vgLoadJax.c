@@ -59,7 +59,7 @@ return sqlQuickString(conn, s);
 struct slName *jaxSpecList(struct sqlConnection *conn)
 /* Get list of specimen id's. */
 {
-return sqlQuickList(conn, "select _Specimen_key from GXD_Specimen");
+return sqlQuickList(conn, "NOSQLINJ select _Specimen_key from GXD_Specimen");
 }
 
 void dumpRow(char **row, int size)
@@ -170,7 +170,7 @@ if (key > 0)
     /* Figure out genotype.  Create string that looks something like:
      *     adh:cheap date,antp:+,  
      * That is a comma separated list gene:allele. */
-    dyStringPrintf(query, 
+    sqlDyStringPrintf(query, 
     	"select MRK_Marker.symbol,ALL_Allele.symbol "
 	"from GXD_AlleleGenotype,MRK_Marker,ALL_Allele "
 	"where GXD_AlleleGenotype._Genotype_key = %s "
@@ -185,7 +185,7 @@ if (key > 0)
 
     /* Figure out strain */
     dyStringClear(query);
-    dyStringPrintf(query,
+    sqlDyStringPrintf(query,
         "select PRB_Strain.strain from GXD_Genotype,PRB_Strain "
 	"where GXD_Genotype._Genotype_key = %s "
 	"and GXD_Genotype._Strain_key = PRB_Strain._Strain_key"
@@ -211,7 +211,7 @@ struct dyString *query = dyStringNew(0);
 struct sqlResult *sr;
 char **row;
 
-dyStringPrintf(query, 
+sqlDyStringPrintf(query, 
     "select GXD_Structure.printName,GXD_InSituResult._Strength_key,GXD_Pattern.pattern "
     "from GXD_Structure,GXD_InSituResult,GXD_InSituResultImage,"
     "GXD_ISResultStructure,GXD_Pattern,GXD_Specimen "
@@ -305,7 +305,7 @@ tab = mustOpen(tabName, "w");
 cap = mustOpen(capName, "w");
 
 
-dyStringAppend(query, "select authors,journal,title,year from BIB_Refs where ");
+sqlDyStringAppend(query, "select authors,journal,title,year from BIB_Refs where ");
 dyStringPrintf(query, "_Refs_key = %s", ref);
 sr = sqlGetResultVerbose(conn, query->string);
 row = sqlNextRow(sr);
@@ -359,7 +359,7 @@ sqlFreeResult(&sr);
 
 /* Add in link to PubMed record on publication. */
 dyStringClear(query);
-dyStringPrintf(query,
+sqlDyStringPrintf(query,
    "select ACC_Accession.accID from ACC_Accession,ACC_LogicalDB "
    "where ACC_Accession._Object_key = %s "
    "and ACC_Accession._LogicalDB_key = ACC_LogicalDB._LogicalDB_key "
@@ -370,7 +370,7 @@ if (pubMed != NULL)
 freez(&pubMed);
 
 dyStringClear(query);
-dyStringAppend(query, 
+sqlDyStringAppend(query, 
 	"select distinct MRK_Marker.symbol as gene,"
                "GXD_Specimen.sex as sex,"
 	       "GXD_Specimen.age as age,"
@@ -482,7 +482,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	lookedForCopyright = TRUE;
 
 	dyStringClear(query);
-	dyStringPrintf(query, 
+	sqlDyStringPrintf(query, 
 	     "select note from MGI_NoteChunk,MGI_Note,MGI_NoteType,ACC_MGIType "
 	     "where MGI_Note._Object_key = %s "
 	     "and ACC_MGIType.name = 'Image' "
@@ -561,7 +561,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    /* Fixme: make sure that reporterGene's end up in probeType table. */
 	    char *name = NULL;
 	    dyStringClear(query);
-	    dyStringPrintf(query, 
+	    sqlDyStringPrintf(query, 
 	    	"select term from VOC_Term where _Term_key = %s", 
 	    	reporterGeneKey);
 	    name = sqlQuickStringVerbose(conn2, query->string);
@@ -580,7 +580,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    char *name = NULL;
 	    dyStringClear(query);
-	    dyStringPrintf(query, 
+	    sqlDyStringPrintf(query, 
 	      "select GXD_VisualizationMethod.visualization "
 	      "from GXD_VisualizationMethod,GXD_ProbePrep "
 	      "where GXD_ProbePrep._ProbePrep_key = %s "
@@ -594,7 +594,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    if (probeColor[0] == 0)
 	        {
 		dyStringClear(query);
-		dyStringPrintf(query, 
+		sqlDyStringPrintf(query, 
 			"select GXD_Label.label from GXD_Label,GXD_ProbePrep "
 		        "where GXD_ProbePrep._ProbePrep_key = %s " 
 			"and GXD_ProbePrep._Label_key = GXD_Label._Label_key"
@@ -611,7 +611,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    char *name = NULL;
 	    dyStringClear(query);
-	    dyStringPrintf(query, 
+	    sqlDyStringPrintf(query, 
 		  "select GXD_Label.label from GXD_Label,GXD_AntibodyPrep "
 		  "where GXD_AntibodyPrep._AntibodyPrep_key = %s "
 		  "and GXD_AntibodyPrep._Label_key = GXD_Label._Label_key"
@@ -632,7 +632,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	int orgKey = 0;
 	char **row;
 	dyStringClear(query);
-	dyStringPrintf(query, 
+	sqlDyStringPrintf(query, 
 		"select antibodyName,_Organism_key,GXD_Antibody._Antibody_key "
 		"from GXD_AntibodyPrep,GXD_Antibody "
 		"where GXD_AntibodyPrep._AntibodyPrep_key = %s "
@@ -653,7 +653,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    char *latinName = NULL, *commonName = NULL;
 	    int spTaxon = 0;
 	    dyStringClear(query);
-	    dyStringPrintf(query, "select latinName from MGI_Organism "
+	    sqlDyStringPrintf(query, "select latinName from MGI_Organism "
 	                          "where _Organism_key = %d", orgKey);
 	    latinName = sqlQuickStringVerbose(conn2, query->string);
 	    if (latinName != NULL 
@@ -668,7 +668,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    else
 	        {
 		dyStringClear(query);
-		dyStringPrintf(query, "select commonName from MGI_Organism "
+		sqlDyStringPrintf(query, "select commonName from MGI_Organism "
 	                          "where _Organism_key = %d", orgKey);
 		commonName = sqlQuickStringVerbose(conn2, query->string);
 		if (commonName != NULL 
@@ -695,7 +695,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	struct sqlResult *sr = NULL;
 	char **row;
 	dyStringClear(query);
-	dyStringPrintf(query,
+	sqlDyStringPrintf(query,
 	    "select primer1sequence,primer2sequence "
 	    "from PRB_Probe,GXD_ProbePrep "
 	    "where PRB_Probe._Probe_key = GXD_ProbePrep._Probe_key "
@@ -721,7 +721,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	struct sqlResult *sr = NULL;
 	char **row;
 	dyStringClear(query);
-	dyStringPrintf(query,
+	sqlDyStringPrintf(query,
 	    "select PRB_Notes.note from GXD_ProbePrep, PRB_Notes"
 	    " where GXD_ProbePrep._ProbePrep_key = %s"
 	    "  and GXD_ProbePrep._Probe_key = PRB_Notes._Probe_key"
@@ -812,7 +812,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	hashAdd(uniqImageHash, imageKey, NULL);
 	dyStringClear(caption);
 	dyStringClear(query);
-	dyStringPrintf(query, 
+	sqlDyStringPrintf(query, 
 	     "select note from MGI_NoteChunk,MGI_Note,MGI_NoteType,ACC_MGIType "
 	     "where MGI_Note._Object_key = %s "
 	     "and ACC_MGIType.name = 'Image' "
@@ -901,7 +901,7 @@ void submitToDir(struct sqlConnection *conn, struct sqlConnection *conn2, struct
  * each submission set.   Returns outDir. */
 {
 struct dyString *query = dyStringNew(0);
-struct slName *ref, *refList = sqlQuickList(conn, "select distinct(_Refs_key) from GXD_Assay");
+struct slName *ref, *refList = sqlQuickList(conn, "NOSQLINJ select distinct(_Refs_key) from GXD_Assay");
 int refCount = 0;
 
 makeDir(outDir);
@@ -916,7 +916,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
      * have already in the database from a higher resolution
      * source. */
     dyStringClear(query);
-    dyStringPrintf(query, "select title from BIB_Refs where _Refs_key = %s", 
+    sqlDyStringPrintf(query, "select title from BIB_Refs where _Refs_key = %s", 
     	ref->name);
 
     pub = sqlQuickString(conn, query->string);

@@ -73,7 +73,7 @@ char **row;
 
 verbose(1, "reading exceptions...\n");
 ret = newHash(0);
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, exception from %s", tableName);
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, exception from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -100,7 +100,7 @@ struct hashEl *hel = NULL;
 
 verbose(1, "creating SNP hash...\n");
 ret = newHash(16);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select name, chrom, chromStart, chromEnd, strand, observed, class, locType from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -245,7 +245,7 @@ struct snpSubset *subsetElement = NULL;
 char *rsId = NULL;
 
 verbose(1, "process SNPs...\n");
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, observed from %s", hapmapTable);
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, observed from %s", hapmapTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

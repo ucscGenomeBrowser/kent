@@ -109,50 +109,15 @@ void trackVersionSaveToDb(struct sqlConnection *conn, struct trackVersion *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use trackVersionSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->ix,  el->db,  el->name,  el->who,  el->version,  el->updateTime,  el->comment,  el->source,  el->dateReference);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void trackVersionSaveToDbEscaped(struct sqlConnection *conn, struct trackVersion *el, char *tableName, int updateSize)
-/* Save trackVersion as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than trackVersionSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *db, *name, *who, *version, *updateTime, *comment, *source, *dateReference;
-db = sqlEscapeString(el->db);
-name = sqlEscapeString(el->name);
-who = sqlEscapeString(el->who);
-version = sqlEscapeString(el->version);
-updateTime = sqlEscapeString(el->updateTime);
-comment = sqlEscapeString(el->comment);
-source = sqlEscapeString(el->source);
-dateReference = sqlEscapeString(el->dateReference);
-
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->ix,  db,  name,  who,  version,  updateTime,  comment,  source,  dateReference);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&db);
-freez(&name);
-freez(&who);
-freez(&version);
-freez(&updateTime);
-freez(&comment);
-freez(&source);
-freez(&dateReference);
-}
 
 struct trackVersion *trackVersionCommaIn(char **pS, struct trackVersion *ret)
 /* Create a trackVersion out of a comma separated string. 
@@ -258,7 +223,7 @@ if (trackVersionExists)
     char query[256];
     struct sqlConnection *conn = hAllocConn(database);
 
-    safef(query, sizeof(query), "select * from hgFixed.trackVersion where db = '%s' AND name = '%s' order by ix DESC limit 1", database, track);
+    sqlSafef(query, sizeof(query), "select * from hgFixed.trackVersion where db = '%s' AND name = '%s' order by ix DESC limit 1", database, track);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     if ((row = sqlNextRow(sr)) != NULL)

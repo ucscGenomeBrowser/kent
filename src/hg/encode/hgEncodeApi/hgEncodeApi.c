@@ -104,7 +104,7 @@ if (database)
     int idOffset = encodeExpIdOffset();
     maxId = encodeExpIdMax(connExp);
     conn = hAllocConn(database);
-    safef(query, sizeof(query), "select distinct(%s) from %s where %s='%s'",
+    sqlSafef(query, sizeof(query), "select distinct(%s) from %s where %s='%s'",
                     MDB_VAL, MDB_DEFAULT_NAME, MDB_VAR, MDB_VAR_DCC_ACCESSION);
     sr = sqlGetResult(conn, query);
     AllocArray(ids, maxId + 1); // ids start with 1

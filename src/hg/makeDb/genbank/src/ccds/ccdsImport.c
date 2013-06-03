@@ -49,7 +49,7 @@ if (conn == NULL)
     {
     char sql[256];
     verbose(1, "creating databases %s\n", db);
-    safef(sql, sizeof(sql), "create database %s", db);
+    sqlSafef(sql, sizeof(sql), "create database %s", db);
     conn = sqlConnectProfile(defaultProfileName, NULL);
     sqlUpdate(conn, sql);
     sqlDisconnect(&conn);
@@ -226,7 +226,7 @@ FILE *loadFh = hgCreateTabFile(".", table);
 
 convertDumpFile(dumpFile, fieldInfoList, table, loadFh);
     
-safef(query, sizeof(query), "truncate table %s", table);
+sqlSafef(query, sizeof(query), "truncate table %s", table);
 sqlUpdate(conn, query);
 hgLoadTabFileOpts(conn, ".", table, SQL_TAB_FILE_ON_SERVER, &loadFh);
 if (!keep)
@@ -238,12 +238,12 @@ static void addExtraIndices(struct sqlConnection *conn)
 {
 static char *adds[] =
     {
-    "ALTER TABLE Groups ADD INDEX (tax_id);",
-    "ALTER TABLE GroupVersions ADD INDEX (group_version_uid);",
-    "ALTER TABLE GroupVersions ADD INDEX (ccds_status_val_uid);",
-    "ALTER TABLE GroupVersions ADD INDEX (ncbi_build_number);",
-    "ALTER TABLE GroupVersions ADD INDEX (first_ncbi_build_version);",
-    "ALTER TABLE GroupVersions ADD INDEX (last_ncbi_build_version);",
+    "NOSQLINJ ALTER TABLE Groups ADD INDEX (tax_id);",
+    "NOSQLINJ ALTER TABLE GroupVersions ADD INDEX (group_version_uid);",
+    "NOSQLINJ ALTER TABLE GroupVersions ADD INDEX (ccds_status_val_uid);",
+    "NOSQLINJ ALTER TABLE GroupVersions ADD INDEX (ncbi_build_number);",
+    "NOSQLINJ ALTER TABLE GroupVersions ADD INDEX (first_ncbi_build_version);",
+    "NOSQLINJ ALTER TABLE GroupVersions ADD INDEX (last_ncbi_build_version);",
     NULL
     };
 int i;

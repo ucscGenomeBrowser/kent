@@ -132,11 +132,11 @@ struct chromInfo *ret = NULL;
 unsigned totalSize = 0;
 
 if (sameWord(name, "all"))
-    sr = sqlGetResult(conn, "select * from chromInfo");
+    sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
 else
     {
     char select[256];
-    safef(select, ArraySize(select), "select * from chromInfo where chrom='%s'",
+    sqlSafef(select, ArraySize(select), "select * from chromInfo where chrom='%s'",
 	name);
     sr = sqlGetResult(conn, select);
     }
@@ -249,7 +249,7 @@ void check(struct sqlConnection *conn, char *table)
 char query[256], **row;
 struct sqlResult *sr;
 int lastEnd = -1, lastStart = -1, start, end;
-sprintf(query, "select chromStart,chromEnd from %s", table);
+sqlSafef(query, sizeof query, "select chromStart,chromEnd from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -592,7 +592,7 @@ if (hTableExists(db, "gap"))
     int totalGapsThisChrom = 0;
     
     sr = sqlGetResult(conn,
-	"select chrom,chromStart,chromEnd from gap order by chrom");
+	"NOSQLINJ select chrom,chromStart,chromEnd from gap order by chrom");
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	int gapSize = sqlUnsigned(row[2]) - sqlUnsigned(row[1]);

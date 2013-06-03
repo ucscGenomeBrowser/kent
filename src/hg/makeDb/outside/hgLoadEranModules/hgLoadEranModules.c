@@ -65,7 +65,7 @@ struct hash *loadGeneToModule(struct sqlConnection *conn, char *fileName, char *
 /* Load up simple two-column file into a lookup type table. */
 {
 struct dyString *dy = dyStringNew(512);
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
 "CREATE TABLE  %s (\n"
 "    gene varchar(255) not null,\n"
 "    module int not null,\n"
@@ -311,7 +311,7 @@ lineFileClose(&lf);
 	fprintf(f, "%c\t", pos->strand);
 	fprintf(f, "%s\n", pos->name);
 	}
-    dyStringPrintf(dy,
+    sqlDyStringPrintf(dy,
     "CREATE TABLE  %s (\n"
     "    bin smallInt unsigned not null,\n"
     "    chrom varChar(255) not null,\n"
@@ -340,7 +340,7 @@ lineFileClose(&lf);
     FILE *f = hgCreateTabFile(tmpDir, regionTable);
     struct genomePos *pos;
     dyStringClear(dy);
-    dyStringPrintf(dy,
+    sqlDyStringPrintf(dy,
     "CREATE TABLE  %s (\n"
     "    bin smallInt unsigned not null,\n"
     "    chrom varChar(255) not null,\n"
@@ -398,7 +398,7 @@ while (lineFileNextReal(lf, &line))
 	hashAdd2(hash, module, motif, NULL);
 	}
     }
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
 "CREATE TABLE  %s (\n"
 "    module int not null,\n"
 "    motif varchar(255) not null,\n"
@@ -471,7 +471,7 @@ for (motif = motifs->esmMotif; motif != NULL; motif = motif->next)
     dnaMotifTabOut(dm, f);
     hashAdd(hash, dm->name, dm);
     }
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
 "CREATE TABLE %s (\n"
 "    name varchar(16) not null,	# Motif name.\n"
 "    columnCount int not null,	# Count of columns in motif.\n"
@@ -506,7 +506,7 @@ int reusedMotifCount = 0;
 int fatalErrorCount = 0;
 
 /* Load up motif hash */
-safef(query, sizeof(query), "select name from %s", motifWeights);
+sqlSafef(query, sizeof(query), "select name from %s", motifWeights);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -517,7 +517,7 @@ sqlFreeResult(&sr);
 /* Load up moduleToMotif table and note how many times
  * a motif is used more than once just for curiousity
  * (this is not an error condition). */
-safef(query, sizeof(query), "select module,motif from %s", moduleToMotif);
+sqlSafef(query, sizeof(query), "select module,motif from %s", moduleToMotif);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -543,7 +543,7 @@ verbose(1, "Cross-checking tables\n");
 
 /* Load up geneToModule table, and make sure that all modules actually
  * exist in moduleToMotif table. */
-safef(query, sizeof(query), "select gene,module from %s", geneToModule);
+sqlSafef(query, sizeof(query), "select gene,module from %s", geneToModule);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -562,7 +562,7 @@ sqlFreeResult(&sr);
 
 /* Scan again through moduleToMotif table and make sure that
  * all modules are present in geneToModule. */
-safef(query, sizeof(query), "select module from %s", moduleToMotif);
+sqlSafef(query, sizeof(query), "select module from %s", moduleToMotif);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -577,7 +577,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 /* Scan through geneToMotif table checking things. */
-safef(query, sizeof(query), "select gene,name from %s", geneToMotif);
+sqlSafef(query, sizeof(query), "select gene,name from %s", geneToMotif);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

@@ -69,7 +69,7 @@ static char *expProbe(struct sqlConnection *conn, char *table,
 /* Lookup geneId in table */
 {
 char query[256];
-safef(query, sizeof(query), "select value from %s where name='%s'",
+sqlSafef(query, sizeof(query), "select value from %s where name='%s'",
 	table, geneId);
 return sqlQuickString(conn, query);
 }
@@ -80,7 +80,7 @@ char *checkProbeData(struct sqlConnection *conn, char *table, char *probe)
 char query[256];
 if (probe == NULL)
     return NULL;
-safef(query, sizeof(query), "select count(*) from %s where name = '%s'",
+sqlSafef(query, sizeof(query), "select count(*) from %s where name = '%s'",
 	table, probe);
 if (sqlQuickNum(conn, query) <= 0)
     probe = NULL;

@@ -231,7 +231,7 @@ accWhere[0] = '\0';
 if (select->accPrefix != NULL)
     safef(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
           select->accPrefix);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "SELECT * FROM gbSeq WHERE (type='%s') AND (srcDb='%s')%s",
       ((select->type == GB_MRNA) ? "mRNA" : "EST"),
       ((select->release->srcDb == GB_GENBANK) ? "GenBank" : "RefSeq"),
@@ -282,7 +282,7 @@ char query[512];
 char **row;
 struct sqlResult* result;
 gbVerbMsg(2, "load gbSeq peptide table data");
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "SELECT * FROM gbSeq WHERE (type='PEP') AND (srcDb='RefSeq')");
 
 result = sqlGetResult(conn, query);

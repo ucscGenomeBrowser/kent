@@ -22,13 +22,13 @@ if (ecNumber == NULL)
     return;
 if (conn == NULL)
     return;
-safef(query,sizeof(query), "select distinct e.description from ecAttribute a , ecCode e where a.ec = \"%s\" and a.level1 = e.level1 and e.level2 = 0 ",ecNumber);
+sqlSafef(query,sizeof(query), "select distinct e.description from ecAttribute a , ecCode e where a.ec = \"%s\" and a.level1 = e.level1 and e.level2 = 0 ",ecNumber);
 level1 = sqlQuickString(conn, query);
-safef(query,sizeof(query), "select distinct e.description from ecAttribute a , ecCode e where a.ec = \"%s\" and a.level1 = e.level1 and a.level2 = e.level2 and e.level3 = 0 ",ecNumber);
+sqlSafef(query,sizeof(query), "select distinct e.description from ecAttribute a , ecCode e where a.ec = \"%s\" and a.level1 = e.level1 and a.level2 = e.level2 and e.level3 = 0 ",ecNumber);
 level2 = sqlQuickString(conn, query);
-safef(query,sizeof(query), "select distinct e.description from ecAttribute a , ecCode e where a.ec = \"%s\" and a.level1 = e.level1 and a.level2 = e.level2 and a.level3 = e.level3 and e.level4 = 0 ",ecNumber);
+sqlSafef(query,sizeof(query), "select distinct e.description from ecAttribute a , ecCode e where a.ec = \"%s\" and a.level1 = e.level1 and a.level2 = e.level2 and a.level3 = e.level3 and e.level4 = 0 ",ecNumber);
 level3 = sqlQuickString(conn, query);
-//safef(query,sizeof(query), "select distinct description from ecAttribute a where a.ec = \"%s\" ",ecNumber);
+//sqlSafef(query,sizeof(query), "select distinct description from ecAttribute a where a.ec = \"%s\" ",ecNumber);
 //level4 = sqlQuickString(conn, query);
 
 printf("[ %s / %s / %s ] <BR>",
@@ -37,14 +37,14 @@ printf("[ %s / %s / %s ] <BR>",
         (level3 != NULL) ? level3 :"n/a"
 //        (level4 != NULL) ? level4 :"n/a"
         );
-safef(query,sizeof(query), "select * from ecAttribute a where a.ec = \"%s\"",ecNumber);
+sqlSafef(query,sizeof(query), "select * from ecAttribute a where a.ec = \"%s\"",ecNumber);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *attrDesc = NULL;
     struct sqlConnection *conn2 = hAllocConn("ec");
     ecAttributeStaticLoad(row, &attr);
-    safef(query,sizeof(query), "select description from ecAttributeCode where type = \"%s\" ",attr.type);
+    sqlSafef(query,sizeof(query), "select description from ecAttributeCode where type = \"%s\" ",attr.type);
     attrDesc = sqlQuickString(conn2, query);
     if (differentString(attr.type, "DR"))
         printf("<B>EC %s:</B> %s<BR>", attrDesc != NULL ? attrDesc : "n/a",attr.description);

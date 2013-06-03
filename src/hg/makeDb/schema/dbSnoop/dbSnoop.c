@@ -177,7 +177,7 @@ ti->status = status;
 slAddTail(pTiList, ti);
 
 /* List fields. */
-safef(query, sizeof(query), "describe `%s`", ti->name);
+sqlSafef(query, sizeof(query), "describe `%s`", ti->name);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -240,7 +240,7 @@ struct tableInfo *ti, *newList = NULL, *next;
 struct hash *splitHash = hashNew(0);
 
 chromList = sqlQuickList(conn,
-	"select chrom from chromInfo order by length(chrom) desc");
+	"NOSQLINJ select chrom from chromInfo order by length(chrom) desc");
 if (chromList == NULL)
     errAbort("Can't use unsplit because database has no chromInfo table");
 
@@ -343,7 +343,7 @@ if (unsplit)
 /* Build up information on indexes in this table by processing
  * mysql show indexes command results.  This command returns 
  * a separate row for each field in each index.  We'll group these. */
-safef(query, sizeof(query), "show indexes from `%s`", tableName);
+sqlSafef(query, sizeof(query), "show indexes from `%s`", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -404,7 +404,7 @@ struct sqlConnection *conn = dbConnect(database);
 struct sqlConnection *conn2 = dbConnect(database);
 int majorVersion = sqlMajorVersion(conn);
 int minorVersion = sqlMinorVersion(conn);
-struct sqlResult *sr = sqlGetResult(conn, "show table status");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ show table status");
 char **row;
 struct hash *fieldHash = hashNew(0);
 struct hash *typeHash = hashNew(0);

@@ -96,7 +96,7 @@ for (bed = bedList; bed != NULL; )
     /* Query database to find out bounds of all genes on this chromosome
      * and if they overlap any of the regions then put them in the hash. */
     char query[512];
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"select name,txStart,txEnd from %s where chrom='%s'", geneTable, chrom);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;

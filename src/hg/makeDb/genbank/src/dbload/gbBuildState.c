@@ -461,7 +461,7 @@ struct sqlResult* sr;
 char **row;
 bool changed = FALSE;
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "SELECT type FROM gbSeq WHERE acc = '%s'", status->acc);
 sr = sqlGetResult(conn, query);
 if ((sr != NULL) && ((row = sqlNextRow(sr)) != NULL))

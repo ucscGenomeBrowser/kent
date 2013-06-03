@@ -101,7 +101,7 @@ struct bed *bed;
 
 
 /* Get translation from mRNA to protein from refLink table. */
-sr = sqlGetResult(conn, "select mrnaAcc,protAcc from refLink");
+sr = sqlGetResult(conn, "NOSQLINJ select mrnaAcc,protAcc from refLink");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *protAcc = row[1];
@@ -197,7 +197,7 @@ else
 	    hashAdd(hash, bed->name, NULL);
 
 	/* Scan through table, outputting ones that match. */
-	safef(query, sizeof(query), "select name, seq from %s", table);
+	sqlSafef(query, sizeof(query), "select name, seq from %s", table);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {

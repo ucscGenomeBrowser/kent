@@ -51,7 +51,7 @@ void createTable(struct sqlConnection *conn, char *tableName)
 /* Create our name/value table, dropping if it already exists. */
 {
 struct dyString *dy = dyStringNew(512);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
 "CREATE TABLE  %s (\n"
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
@@ -91,7 +91,7 @@ void foldIntoHash(struct sqlConnection *conn, char *table, char *keyField, char 
 struct sqlResult *sr;
 char query[512];
 char **row;
-safef(query, sizeof(query), "select %s,%s from %s", keyField, valField, table);
+sqlSafef(query, sizeof(query), "select %s,%s from %s", keyField, valField, table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -114,7 +114,7 @@ struct hash *keepersForChroms(struct sqlConnection *conn)
 /* Create hash of binKeepers keyed by chromosome */
 {
 struct hash *keeperHash = hashNew(0);
-struct sqlResult *sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -233,7 +233,7 @@ vgAllProbes = sqlTableExists(probesConn,"vgAllProbes");
 
 /* Go through and make up hashes of images keyed by various fields. */
 sr = sqlGetResult(iConn,
-        "select image.id,imageFile.priority,gene.name,gene.locusLink,gene.refSeq,gene.genbank"
+        "NOSQLINJ select image.id,imageFile.priority,gene.name,gene.locusLink,gene.refSeq,gene.genbank"
 	",probe.id,submissionSet.privateUser,vgPrbMap.vgPrb,gene.id"
 	" from image,imageFile,imageProbe,probe,gene,submissionSet,vgPrbMap"
 	" where image.imageFile = imageFile.id"
@@ -267,7 +267,7 @@ verbose(2, "Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSe
 sqlFreeResult(&sr);
 
 /* Build up list of known genes. */
-sr = sqlGetResult(hConn, "select * from knownGene");
+sr = sqlGetResult(hConn, "NOSQLINJ select * from knownGene");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct genePred *known = genePredLoad(row);

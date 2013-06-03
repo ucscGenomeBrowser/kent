@@ -108,7 +108,7 @@ else
     char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
     if (doScoreCtFilter && (topTable != NULL) && hTableExists(database, topTable))
 	{
-	safef(query, sizeof(query),"select * from %s order by score desc limit %d",
+	sqlSafef(query, sizeof(query),"select * from %s order by score desc limit %d",
 	      topTable, scoreFilterCt);
 	sr = sqlGetResult(conn, query);
 	rowOffset = hOffsetPastBin(database, hDefaultChrom(database), topTable);

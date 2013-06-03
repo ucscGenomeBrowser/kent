@@ -97,7 +97,7 @@ while (faPepSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     freez(&description);
 
     /* Transfer gene logic. */
-    safef(query, sizeof(query), "select val from geneLogic where acc = '%s'", acc);
+    sqlSafef(query, sizeof(query), "select val from geneLogic where acc = '%s'", acc);
     char *geneLogic = sqlQuickString(conn, query);
     if (geneLogic != NULL)
         fprintf(varGeneLogic, "%s-%s\t%s\n", acc, version, geneLogic);

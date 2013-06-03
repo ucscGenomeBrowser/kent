@@ -265,7 +265,7 @@ struct lineFile *lf = lineFileOpen(omimTxtFileName, TRUE);
 conn2= hAllocConn();
 	
 /* loop thru all recordd in the omimField table */
-sprintf(query2,"select * from %s.omimField where fieldType='AV'", omimDb);
+sqlSafef(query2, sizeof query2, "select * from %s.omimField where fieldType='AV'", omimDb);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)

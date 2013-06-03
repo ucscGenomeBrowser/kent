@@ -52,7 +52,7 @@ struct sqlResult *sr;
 char **row;
 struct genePred *gpList = NULL, *gp;
 
-sprintf(query, "select * from %s where chrom = '%s'", refTrack, chrom);
+sqlSafef(query, sizeof query, "select * from %s where chrom = '%s'", refTrack, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -152,7 +152,7 @@ int estCount = 0;
 struct estExtraInfo *est;
 
 /* Set up hash and list of libraries. */
-sprintf(query, "select id,name from library");
+sqlSafef(query, sizeof query, "select id,name from library");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -165,7 +165,7 @@ sqlFreeResult(&sr);
 uglyf("Got %d libraries\n", slCount(libList));
 
 /* Read all ESTs and lump them into libraries. */
-sprintf(query, "select acc,direction,library from gbCdnaInfo where type = 'EST'");
+sqlSafef(query, sizeof query, "select acc,direction,library from gbCdnaInfo where type = 'EST'");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

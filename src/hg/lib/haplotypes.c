@@ -428,7 +428,7 @@ static char *condenseSubjectsToPopulations(struct haploExtras *he,
 // select distinct commonality, count(*) count from thousandGenomePopulations
 //  where subject in ( "HG00096","HG00607","HG00608","HG00610","NA18517","NA18519")
 //  group by commonality order by count desc;
-#define POP_QUERY_BEG  "select distinct t1.%s grp, count(t1.subject) count, " \
+#define POP_QUERY_BEG  "NOSQLINJ select distinct t1.%s grp, count(t1.subject) count, " \
                               "t2.females, t2.subjects" \
                        " from " POP_TABLE " t1, " POP_GROUPS_TABLE " t2" \
                        " where t2.name = t1.%s and t1.subject in ('"
@@ -445,7 +445,7 @@ char *pop = (minorPopulations ? POP_MINOR : POP_MAJOR);
 static int popGroups = 0;
 if (popGroups == 0)
     { // Do not expect major vs. minor to change within a single run
-    #define POP_QUERY_GROUP_SIZE  "select count(distinct %s) from " POP_TABLE
+    #define POP_QUERY_GROUP_SIZE  "NOSQLINJ select count(distinct %s) from " POP_TABLE
     char buf[128];
     safef(buf,sizeof(buf),POP_QUERY_GROUP_SIZE,pop);
     popGroups = sqlQuickNum(he->conn, buf);
@@ -921,7 +921,7 @@ char *secondId = NULL;
 if (sameString(he->geneTable,HAPLO_GENES_TABLE))
     {
     char query[256];
-    safef(query, sizeof(query), "select geneSymbol from " HAPLO_GENES_2ND_ID_TABLE
+    sqlSafef(query, sizeof(query), "select geneSymbol from " HAPLO_GENES_2ND_ID_TABLE
                                 " where kgID = '%s'",commonId);
     if (he->conn == NULL)
         he->conn = hAllocConn(he->db);
@@ -3244,7 +3244,7 @@ else
 // Drop/recreate table if not appending
 if (!he->append)
     {
-    dyStringPrintf(dy, HAPLO_BED, he->outTableOrFile);
+    sqlDyStringPrintf(dy, HAPLO_BED, he->outTableOrFile);
     verbose(2,"%s", dy->string);
     sqlRemakeTable(he->conn, he->outTableOrFile, dy->string);
     }

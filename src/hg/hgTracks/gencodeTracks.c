@@ -357,20 +357,20 @@ if (highlightBySupportLevelSelected(row, gencodeQuery) || highlightByTranscriptT
 static void addQueryTables(struct track *tg, struct gencodeQuery *gencodeQuery)
 /* add required from tables and joins */
 {
-dyStringPrintf(gencodeQuery->from, "%s g", tg->table);
+sqlDyStringPrintf(gencodeQuery->from, "%s g", tg->table);
 if (gencodeQuery->joinAttrs)
     {
-    dyStringPrintf(gencodeQuery->from, ", %s attrs", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs"));
+    sqlDyStringPrintf(gencodeQuery->from, ", %s attrs", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs"));
     dyStringAppend(gencodeQuery->where, " and (attrs.transcriptId = g.name)");
     }
 if (gencodeQuery->joinTransSrc)
     {
-    dyStringPrintf(gencodeQuery->from, ", %s transSrc", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTranscriptSource"));
+    sqlDyStringPrintf(gencodeQuery->from, ", %s transSrc", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTranscriptSource"));
     dyStringAppend(gencodeQuery->where, " and (transSrc.transcriptId = g.name)");
     }
 if (gencodeQuery->joinSupportLevel)
     {
-    dyStringPrintf(gencodeQuery->from, ", %s supLevel", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTranscriptionSupportLevel"));
+    sqlDyStringPrintf(gencodeQuery->from, ", %s supLevel", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTranscriptionSupportLevel"));
     dyStringAppend(gencodeQuery->where, " and (supLevel.transcriptId = g.name)");
     }
 }
@@ -400,7 +400,7 @@ dyStringAppend(gencodeQuery->fields, (gencodeQuery->isGenePredX ? genePredXField
 
 // bin range overlap part
 hAddBinToQuery(winStart, winEnd, gencodeQuery->where);
-dyStringPrintf(gencodeQuery->where, "(g.chrom = \"%s\") and (g.txStart < %u) and (g.txEnd > %u)", chromName, winEnd, winStart);
+sqlDyStringPrintf(gencodeQuery->where, "(g.chrom = \"%s\") and (g.txStart < %u) and (g.txEnd > %u)", chromName, winEnd, winStart);
 
 gencodeFilterBySetQuery(tg, gencodeQuery);
 gencodeHighlightBySetQuery(tg, gencodeQuery);
@@ -412,7 +412,7 @@ static struct sqlResult *gencodeMakeQuery(struct sqlConnection *conn, struct gen
 /* make the actual SQL query */
 {
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "select %s from %s where %s", dyStringContents(gencodeQuery->fields), dyStringContents(gencodeQuery->from), dyStringContents(gencodeQuery->where));
+sqlDyStringPrintf(query, "select %-s from %s where %-s", sqlCkIl(dyStringContents(gencodeQuery->fields)), dyStringContents(gencodeQuery->from), dyStringContents(gencodeQuery->where));
 struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
 dyStringFree(&query);
 return sr;

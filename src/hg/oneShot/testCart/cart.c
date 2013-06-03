@@ -60,7 +60,7 @@ if (id == 0)
 else
    {
    char where[64];
-   sprintf(where, "id = %u", id);
+   sqlSafeFrag(where, "id = %u", id);
    return  cartDbLoadWhere(conn, table, where);
    }
 }
@@ -79,7 +79,7 @@ if ((cdb = cartDbLoadFromId(conn, table, id)) != NULL)
     }
 else
     {
-    sprintf(query, "INSERT %s VALUES(0,\"\",0,now(),now(),0)", table);
+    sqlSafef(query, sizeof query, "INSERT %s VALUES(0,\"\",0,now(),now(),0)", table);
     sqlUpdate(conn, query);
     id = sqlLastAutoId(conn);
     if ((cdb = cartDbLoadFromId(conn,table,id)) == NULL)
@@ -126,11 +126,10 @@ static void updateOne(struct sqlConnection *conn,
 /* Update cdb in database. */
 {
 struct dyString *dy = newDyString(4096);
-
-dyStringPrintf(dy, "UPDATE %s SET contents='", table);
-dyStringAppendN(dy, contents, contentSize);
-dyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
-dyStringPrintf(dy, " where id=%u", cdb->id);
+sqlDyStringPrintf(dy, "UPDATE %s SET contents='", table);
+sqlDyAppendEscaped(dy, contents);
+sqlDyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
+sqlDyStringPrintf(dy, " where id=%u", cdb->id);
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }

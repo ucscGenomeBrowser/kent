@@ -35,7 +35,7 @@ for (pos=0; pos<size; pos += stepSize)
     {
     int rowOffset = 0;
     char query[512];
-    safef(query, sizeof(query), "select name from stsMap where chrom='%s' and chromStart >= %d && chromStart < %d", chrom, pos, pos+stepSize);
+    sqlSafef(query, sizeof(query), "select name from stsMap where chrom='%s' and chromStart >= %d && chromStart < %d", chrom, pos, pos+stepSize);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row = sqlNextRow(sr);
     if (row != NULL)

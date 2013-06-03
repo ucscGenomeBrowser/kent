@@ -64,9 +64,7 @@ else if (!strcmp(cmd, "metaDb"))
     if (metaDbExists)
         {
         char *var = cgiOptionalString("var");
-        if (var)
-            var = sqlEscapeString(var);
-        else
+        if (!var)
             errAbort("Missing var parameter");
         boolean fileSearch = (cgiOptionalInt("fileSearch",0) == 1);
         struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE,
@@ -99,9 +97,7 @@ else if (startsWith(METADATA_VALUE_PREFIX, cmd))
     if (metaDbExists)
         {
         char *var = cgiOptionalString("var");
-        if (var)
-            var = sqlEscapeString(var);
-        else
+        if (!var)
             errAbort("Missing var parameter");
 
         int ix = atoi(cmd+strlen(METADATA_VALUE_PREFIX)); // 1 based index
@@ -192,7 +188,7 @@ else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
     char *table = cgiString("table");
     int num = cgiInt("num");
     struct sqlConnection *conn = hAllocConn(database);
-    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where name = '%s'", sqlEscapeString(table), sqlEscapeString(name));
+    sqlSafef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where name = '%s'", table, name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {

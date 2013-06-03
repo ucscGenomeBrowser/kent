@@ -32,7 +32,7 @@ int count = 0;
 struct dyString *bands = newDyString(0);
 char band[64];
 
-sprintf(query, "select * from refGene where name = '%s'", rl->mrnaAcc);
+sqlSafef(query, sizeof query, "select * from refGene where name = '%s'", rl->mrnaAcc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -60,7 +60,7 @@ char **row;
 struct refLink rl;
 FILE *f = mustOpen(outFile, "w");
 
-sr = sqlGetResult(conn, "select * from refLink");
+sr = sqlGetResult(conn, "NOSQLINJ select * from refLink");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     refLinkStaticLoad(row, &rl);

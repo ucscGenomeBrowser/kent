@@ -54,19 +54,19 @@ conn3= hAllocConn(genomeDb);
 
 icnt = 1;
 /* go through each put back RefSeq */
-safef(query2, sizeof(query2), "select distinct acc from %s.%s", kgTempDb, putBackTable);
+sqlSafef(query2, sizeof(query2), "select distinct acc from %s.%s", kgTempDb, putBackTable);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
     {
     kgId = row2[0];
     
-    safef(query3, sizeof(query3), 
+    sqlSafef(query3, sizeof(query3), 
           "select * from %s.refGene where name='%s'", genomeDb, kgId);
     sr3  = sqlMustGetResult(conn3, query3);
     row3 = sqlNextRow(sr3);
 	{
-        safef(query, sizeof(query), 
+        sqlSafef(query, sizeof(query), 
             "select d.val,score from %s.protMrnaScore,%s.displayId d where mrnaAcc='%s' and d.acc=protAcc order by score desc",
 	    kgTempDb, spDb, kgId);
     	sr  = sqlMustGetResult(conn, query);

@@ -55,7 +55,7 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select * from snp126 where chrom='%s' and chromStart >= %d and chromEnd <= %d and avHet > 0.01", chrom, chromStart, chromEnd);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
