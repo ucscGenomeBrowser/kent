@@ -29,6 +29,7 @@ struct annoStreamDb
     struct lm *qLm;			// localmem for merge-sorting queues
     int minFinestBin;			// Smallest bin number for finest bin level
     boolean gotFinestBin;		// Flag that it's time to merge-sort with bigItemQueue
+    int maxOutRows;			// Maximum number of rows we can output.
     };
 
 static void asdSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionStart, uint regionEnd)
@@ -81,6 +82,8 @@ if (!streamer->positionIsGenome)
     }
 else if (self->notSorted)
     dyStringPrintf(query, " order by %s,%s", self->chromField, self->startField);
+if (self->maxOutRows > 0)
+    dyStringPrintf(query, " limit %d", self->maxOutRows);
 struct sqlResult *sr = sqlGetResult(self->conn, query->string);
 dyStringFree(&query);
 self->sr = sr;
@@ -290,7 +293,7 @@ return indexName;
 }
 
 struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly *aa,
-				     struct asObject *asObj)
+				     struct asObject *asObj, int maxOutRows)
 /* Create an annoStreamer (subclass) object from a database table described by asObj. */
 {
 struct sqlConnection *conn = hAllocConn(db);
@@ -325,5 +328,6 @@ if (!asdInitBed3Fields(self))
 self->endFieldIndexName = sqlTableIndexOnField(self->conn, self->table, self->endField);
 self->notSorted = FALSE;
 self->mergeBins = FALSE;
+self->maxOutRows = maxOutRows;
 return (struct annoStreamer *)self;
 }

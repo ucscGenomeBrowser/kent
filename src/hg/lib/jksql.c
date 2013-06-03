@@ -1095,6 +1095,11 @@ boolean sqlTableExists(struct sqlConnection *sc, char *table)
 {
 char query[256];
 struct sqlResult *sr;
+if (sameString(table,""))
+    {
+    sqlCheckError("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table);  
+    return FALSE;
+    }
 // TODO If the ability to supply a list of tables is hardly used,
 // then we could switch it to simply %s below supporting a single
 // table at a time more securely.
@@ -1104,7 +1109,7 @@ if (strchr(table,','))
 if (strchr(table,'%'))
     {
     // verbose is better than warn for early code calls?
-    dumpStack("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table);  
+    sqlCheckError("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table);  
     return FALSE;
     }
 // DEBUG END

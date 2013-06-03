@@ -1,0 +1,5 @@
+#track type=pgSnp visibility=pack db=hg19 name=myVariants description="Unfiltered variants"
+0	chr19	45405965	45405966	C/A	2	0,0	0,0
+0	chr19	45406349	45406350	C/T	2	0,0	0,0
+0	chr19	45417439	45417440	A/G	2	0,0	0,0
+0	chr19	45419475	45419476	G/A	2	0,0	0,0
