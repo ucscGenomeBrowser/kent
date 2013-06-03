@@ -27,7 +27,7 @@ user:
 	    ${MAKE} doStaticInstall DEST=${DOCUMENTROOT}-${USER}/js; \
 	else \
 	    ${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}; \
-	    ${MAKE} doStaticInstall DEST=${DOCUMENTROOT}/js/; \
+	    echo "No user version of htdocs directory exists; skipping static files ..."; \
 	fi
 
 alpha:

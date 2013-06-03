@@ -7,13 +7,12 @@ CGI or the library that uses them:
    hui.js       included by hui.c library code.
    utils.js     common utilities included by multiple CGIs.
 
-The "make alpha" command should place all files in JS_FILES in apache/htdocs/js/,
-while "make" will place them in apache/htdocs-{user}/js if it exists, and otherwise
-in apache/htdocs/js/{user}.  The one exception is that "make" will place any files
-listed in STATIC_FILES in apache/htdocs-{user}/js if it exists (with everything else),
-and otherwise in apache/htdocs/js.  This is because static documents are hard-coded to
-look in /js.  Files listed in both STATIC_FILES and JS_FILES will be placed in both
-locations.
+The "make alpha" command will place all files in JS_FILES and STATIC_FILES in
+apache/htdocs/js/.  "make user" will place both sets in apache/htdocs-{user}/js if it
+exists, and otherwise will place JS_FILES in apache/htdocs/js/{user} and skip
+STATIC_FILES.  STATIC_FILES cannot be installed to apache/htdocs/js/{user} because
+the static documents won't know to look there, and cannot be installed to htdocs/js
+because that would require "make user" to clobber files placed by "make alpha".
 
 In order to avoid caching errors by client browsers, the CGIs reference these files by
 a symlink that contains the timestamp of the file.  The symlink is created by the CGIs if
