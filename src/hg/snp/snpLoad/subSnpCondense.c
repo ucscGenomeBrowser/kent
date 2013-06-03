@@ -38,7 +38,7 @@ char lastBuild[32];
 
 f = hgCreateTabFile(".", "SNPSubSNPLinkCondense");
 
-safef(query, sizeof(query), "select snp_id, subsnp_id, build_id from SNPSubSNPLink");
+sqlSafef(query, sizeof(query), "select snp_id, subsnp_id, build_id from SNPSubSNPLink");
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -91,7 +91,7 @@ void createTable()
 {
 struct sqlConnection *conn = hAllocConn();
 char *createString =
-"CREATE TABLE SNPSubSNPLinkCondense (\n"
+"NOSQLINJ CREATE TABLE SNPSubSNPLinkCondense (\n"
 "    snp_id int(11) not null,       \n"
 "    subsnpIds blob not null,\n"
 "    buildIds blob not null,\n"

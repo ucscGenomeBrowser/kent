@@ -174,7 +174,7 @@ errFn   = argv[3];
 outf    = mustOpen(outFn, "w");
 errf    = mustOpen(errFn, "w");
 
-sprintf(query2,"select avId, omimId, dbSnpId, repl2, description from omimAvNew");
+sqlSafef(query2, sizeof query2, "select avId, omimId, dbSnpId, repl2, description from omimAvNew");
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)

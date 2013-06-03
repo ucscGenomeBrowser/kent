@@ -154,9 +154,9 @@ AllocVar(gpr);
 gpr->table = cloneString(table);
 
 if (where != NULL)
-    safef(query, sizeof(query), "select * from %s where %s", table, where);
+    sqlSafef(query, sizeof(query), "select * from %s where %-s", table, where);
 else
-    safef(query, sizeof(query), "select * from %s", table);
+    sqlSafef(query, sizeof(query), "select * from %s", table);
 gpr->sr = sqlGetResult(conn, query);
 buildResultFieldMap(gpr);
 

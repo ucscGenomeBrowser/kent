@@ -43,7 +43,7 @@ outFn     = argv[3];
 outf = mustOpen(outFn, "w");
 
 conn2= hAllocConn(database);
-sprintf(query2,"select name, expCount, expScores from %s", tableName);
+sqlSafef(query2, sizeof query2, "select name, expCount, expScores from %s", tableName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 expCnt = 0;

@@ -558,7 +558,7 @@ if (haveGbCdnaInfo)
     {
     char query[256], buf[256], *cdsStr;
     struct sqlConnection *conn = hAllocConn(database);
-    sprintf(query, "select cds.name from gbCdnaInfo,cds where (acc = '%s') and (gbCdnaInfo.cds = cds.id)", acc);
+    sqlSafef(query, sizeof query, "select cds.name from gbCdnaInfo,cds where (acc = '%s') and (gbCdnaInfo.cds = cds.id)", acc);
     cdsStr = sqlQuickQuery(conn, query, buf, sizeof(buf));
     if (cdsStr != NULL)
         genbankCdsParse(cdsStr, cds);

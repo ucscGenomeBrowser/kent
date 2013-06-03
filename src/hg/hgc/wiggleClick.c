@@ -261,7 +261,7 @@ char *fileName = trackDbSetting(tdb, "bigDataUrl");
 if (fileName == NULL)
     {
     char query[256];
-    safef(query, sizeof(query), "select fileName from %s", tdb->table);
+    sqlSafef(query, sizeof(query), "select fileName from %s", tdb->table);
     fileName = sqlQuickString(conn, query);
     if (fileName == NULL)
 	errAbort("Missing fileName in %s table", tdb->table);

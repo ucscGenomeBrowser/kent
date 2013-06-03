@@ -103,40 +103,15 @@ void landmarkSaveToDb(struct sqlConnection *conn, struct landmark *el, char *tab
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use landmarkSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->landmarkId,  el->landmarkType);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void landmarkSaveToDbEscaped(struct sqlConnection *conn, struct landmark *el, char *tableName, int updateSize)
-/* Save landmark as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than landmarkSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *landmarkType;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-landmarkType = sqlEscapeString(el->landmarkType);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->landmarkId ,  landmarkType);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&landmarkType);
-}
 
 struct landmark *landmarkCommaIn(char **pS, struct landmark *ret)
 /* Create a landmark out of a comma separated string. 
@@ -297,38 +272,15 @@ void landmarkAttrSaveToDb(struct sqlConnection *conn, struct landmarkAttr *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use landmarkAttrSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s')", 
 	tableName,  el->landmarkId,  el->linkId,  el->attribute,  el->attrVal);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void landmarkAttrSaveToDbEscaped(struct sqlConnection *conn, struct landmarkAttr *el, char *tableName, int updateSize)
-/* Save landmarkAttr as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than landmarkAttrSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *attribute, *attrVal;
-attribute = sqlEscapeString(el->attribute);
-attrVal = sqlEscapeString(el->attrVal);
-
-dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s')", 
-	tableName, el->landmarkId , el->linkId ,  attribute,  attrVal);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&attribute);
-freez(&attrVal);
-}
 
 struct landmarkAttr *landmarkAttrCommaIn(char **pS, struct landmarkAttr *ret)
 /* Create a landmarkAttr out of a comma separated string. 
@@ -477,40 +429,15 @@ void landmarkAttrLinkSaveToDb(struct sqlConnection *conn, struct landmarkAttrLin
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use landmarkAttrLinkSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s')", 
 	tableName,  el->attrId,  el->raKey,  el->attrAcc,  el->displayVal);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void landmarkAttrLinkSaveToDbEscaped(struct sqlConnection *conn, struct landmarkAttrLink *el, char *tableName, int updateSize)
-/* Save landmarkAttrLink as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than landmarkAttrLinkSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *raKey, *attrAcc, *displayVal;
-raKey = sqlEscapeString(el->raKey);
-attrAcc = sqlEscapeString(el->attrAcc);
-displayVal = sqlEscapeString(el->displayVal);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s')", 
-	tableName, el->attrId ,  raKey,  attrAcc,  displayVal);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&raKey);
-freez(&attrAcc);
-freez(&displayVal);
-}
 
 struct landmarkAttrLink *landmarkAttrLinkCommaIn(char **pS, struct landmarkAttrLink *ret)
 /* Create a landmarkAttrLink out of a comma separated string. 

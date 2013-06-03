@@ -34,7 +34,7 @@ struct hashEl *helName = NULL;
 int count = 0;
 
 ret = newHash(18);
-safef(query, sizeof(query), "select %s from %s", columnName, tableName);
+sqlSafef(query, sizeof(query), "select %s from %s", columnName, tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

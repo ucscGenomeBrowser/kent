@@ -724,7 +724,7 @@ void findAccPosition(struct sqlConnection *conn, struct position *pos, struct fi
 
   name = cloneString(pos->name);
   strcat(name, "%"); 
-  safef(query, sizeof(query), "select * from clonePos where name like '%s'", name);
+  sqlSafef(query, sizeof(query), "select * from clonePos where name like '%s'", name);
   sr = sqlGetResult(conn, query);
   if ((row = sqlNextRow(sr)) != NULL) 
     {
@@ -769,17 +769,17 @@ void findStsPosition(struct sqlConnection *conn, struct position *pos, struct fi
   struct position *newPos;
   boolean found = FALSE;
 
-  safef(query, sizeof(query), "select * from stsMap where name = '%s'", pos->name);
+  sqlSafef(query, sizeof(query), "select * from stsMap where name = '%s'", pos->name);
   sr = sqlGetResult(conn, query);
   if ((row = sqlNextRow(sr)) == NULL)
     {
       sqlFreeResult(&sr);
-      safef(query, sizeof(query), "select * from stsAlias where alias = '%s'", pos->name);
+      sqlSafef(query, sizeof(query), "select * from stsAlias where alias = '%s'", pos->name);
       sr1 = sqlGetResult(conn1, query);
       if ((row1 = sqlNextRow(sr1)) != NULL)
 	{
 	  a = stsAliasLoad(row1);
-	  safef(query, sizeof(query), "select * from stsMap where name = '%s'", a->trueName);
+	  sqlSafef(query, sizeof(query), "select * from stsMap where name = '%s'", a->trueName);
 	  stsAliasFree(&a);
 	  sr = sqlGetResult(conn, query);      
 	  if ((row = sqlNextRow(sr)) != NULL)
@@ -821,7 +821,7 @@ void findBacEndPairPosition(struct sqlConnection *conn, struct fishClone *fc)
   struct lfs *be;
   struct position *newPos;
 
-  safef(query, sizeof(query), "select * from bacEndPairs where name = '%s' order by (chromEnd - chromStart)", fc->cloneName);
+  sqlSafef(query, sizeof(query), "select * from bacEndPairs where name = '%s' order by (chromEnd - chromStart)", fc->cloneName);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {

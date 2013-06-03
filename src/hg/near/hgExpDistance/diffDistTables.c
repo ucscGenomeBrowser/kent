@@ -72,7 +72,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 
-safef(query, sizeof(query), "select query,target,distance from %s", table);
+sqlSafef(query, sizeof(query), "select query,target,distance from %s", table);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)

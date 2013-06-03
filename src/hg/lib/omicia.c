@@ -103,40 +103,15 @@ void omiciaAutoSaveToDb(struct sqlConnection *conn, struct omiciaAuto *el, char 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use omiciaAutoSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void omiciaAutoSaveToDbEscaped(struct sqlConnection *conn, struct omiciaAuto *el, char *tableName, int updateSize)
-/* Save omiciaAuto as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than omiciaAutoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-}
 
 struct omiciaAuto *omiciaAutoCommaIn(char **pS, struct omiciaAuto *ret)
 /* Create a omiciaAuto out of a comma separated string. 
@@ -302,40 +277,15 @@ void omiciaHandSaveToDb(struct sqlConnection *conn, struct omiciaHand *el, char 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use omiciaHandSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void omiciaHandSaveToDbEscaped(struct sqlConnection *conn, struct omiciaHand *el, char *tableName, int updateSize)
-/* Save omiciaHand as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than omiciaHandSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-}
 
 struct omiciaHand *omiciaHandCommaIn(char **pS, struct omiciaHand *ret)
 /* Create a omiciaHand out of a comma separated string. 
@@ -497,44 +447,15 @@ void omiciaLinkSaveToDb(struct sqlConnection *conn, struct omiciaLink *el, char 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use omiciaLinkSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->id,  el->attrType,  el->raKey,  el->acc,  el->displayVal);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void omiciaLinkSaveToDbEscaped(struct sqlConnection *conn, struct omiciaLink *el, char *tableName, int updateSize)
-/* Save omiciaLink as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than omiciaLinkSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *id, *attrType, *raKey, *acc, *displayVal;
-id = sqlEscapeString(el->id);
-attrType = sqlEscapeString(el->attrType);
-raKey = sqlEscapeString(el->raKey);
-acc = sqlEscapeString(el->acc);
-displayVal = sqlEscapeString(el->displayVal);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
-	tableName,  id,  attrType,  raKey,  acc,  displayVal);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&id);
-freez(&attrType);
-freez(&raKey);
-freez(&acc);
-freez(&displayVal);
-}
 
 struct omiciaLink *omiciaLinkCommaIn(char **pS, struct omiciaLink *ret)
 /* Create a omiciaLink out of a comma separated string. 
@@ -693,40 +614,15 @@ void omiciaAttrSaveToDb(struct sqlConnection *conn, struct omiciaAttr *el, char 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use omiciaAttrSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
 	tableName,  el->id,  el->attrType,  el->attrVal);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void omiciaAttrSaveToDbEscaped(struct sqlConnection *conn, struct omiciaAttr *el, char *tableName, int updateSize)
-/* Save omiciaAttr as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than omiciaAttrSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *id, *attrType, *attrVal;
-id = sqlEscapeString(el->id);
-attrType = sqlEscapeString(el->attrType);
-attrVal = sqlEscapeString(el->attrVal);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
-	tableName,  id,  attrType,  attrVal);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&id);
-freez(&attrType);
-freez(&attrVal);
-}
 
 struct omiciaAttr *omiciaAttrCommaIn(char **pS, struct omiciaAttr *ret)
 /* Create a omiciaAttr out of a comma separated string. 

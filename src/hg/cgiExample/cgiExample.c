@@ -15,7 +15,7 @@ char query[256];
 static char buf[256];
 char *result;
 
-sprintf(query, "select name from %s where id = %u", table, id);
+sqlSafef(query, sizeof query, "select name from %s where id = %u", table, id);
 result = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (result == NULL)
     result = "n/a";
@@ -35,7 +35,7 @@ char **row;
 char query[256];
 
 /* Get a list of all that have that ID. */
-sprintf(query, "select * from knownInfo where transId = '%s'", transId);
+sqlSafef(query, sizeof query, "select * from knownInfo where transId = '%s'", transId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

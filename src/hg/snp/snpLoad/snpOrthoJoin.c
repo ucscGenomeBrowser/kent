@@ -48,7 +48,7 @@ struct orthoSnp *orthoSnpInstance = NULL;
 struct hash *ret = newHash(16);
 int count = 0;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select name, species, orthoChrom, orthoChromStart, orthoChromEnd, orthoStrand, orthoAllele from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -100,7 +100,7 @@ missingData->end = 0;
 missingData->strand = cloneString("?");
 missingData->allele = cloneString("?");
 
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refUCSC, observed from %s", tableName);
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refUCSC, observed from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

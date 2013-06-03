@@ -185,7 +185,7 @@ if (!hTableExists(tableName)) return;
 safef(fileName, ArraySize(fileName), "%s_snp%d.tab", chromName, version);
 f = mustOpen(fileName, "w");
 
-safef(query, sizeof(query), "select * from %s", tableName);
+sqlSafef(query, sizeof(query), "select * from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

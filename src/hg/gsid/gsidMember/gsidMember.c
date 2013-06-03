@@ -151,7 +151,7 @@ char **row;
 FILE *out = mustOpen("../conf/passwords", "w");
 
 sr = sqlGetResult(conn,
-"select email,password from members where activated='Y'"
+"NOSQLINJ select email,password from members where activated='Y'"
 " and (expireDate='' or (current_date() < expireDate))");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -192,11 +192,12 @@ void appendSqlField(struct dyString* dy, char *varName, struct cgiVar *cgiVars)
 {
 boolean isFirstField = dy->stringSize == 0;
 if (isFirstField)
-    dyStringAppend(dy,"insert into transactions set ");
-dyStringPrintf(dy,"%s%s='%s'",
+    sqlDyStringAppend(dy,"insert into transactions set ");
+
+sqlDyStringPrintf(dy,"%-s%s='%s'",
     isFirstField ? "" : ", ",
-    sqlEscapeString(varName),
-    sqlEscapeString(cgiUsualString(varName,"")));
+    varName,
+    cgiUsualString(varName,""));
 struct cgiVar *this = NULL;
 for(this=cgiVars;this;this=this->next)
     {
@@ -334,16 +335,17 @@ appendSqlField(dy,"charset",cgiVars);
 appendSqlField(dy,"custom",cgiVars);
 appendSqlField(dy,"notify_version",cgiVars);
 appendSqlField(dy,"verify_sign",cgiVars);
+struct dyString *dyOther=newDyString(256);
 /* catchall for fields we did not anticipate, or future fields */
-dyStringPrintf(dy,", otherFields='");
 for(this=cgiVars;this;this=this->next)
     {
     if (!this->saved)
-	dyStringPrintf(dy,"%s=%s\\n",sqlEscapeString(this->name),sqlEscapeString(this->val));
+	dyStringPrintf(dyOther,"%s=%s\\n", this->name, this->val);
     /* remove these vars from the cart for better security/privacy */
     cartRemove(cart, this->name);
     }
-dyStringPrintf(dy,"'");
+sqlDyStringPrintf(dy,", otherFields='%s'", dyOther->string);
+dyStringFree(&dyOther);
 
 //debug  TODO: clean that out of trash
 //writeGulp("../trash/debug.sql", dy->string, dy->stringSize);
@@ -380,7 +382,7 @@ safef(expireDate,sizeof(expireDate),"%4d-%02d-%02d",1900+tm->tm_year+1,tm->tm_mo
 
 /* use invoice# to map back to user's email */
 char query[256];
-safef(query,sizeof(query), "select email from invoices where id=%s", invoice);
+sqlSafef(query,sizeof(query), "select email from invoices where id=%s", invoice);
 char *email = sqlQuickString(conn, query);
 if (!email)
     {
@@ -417,7 +419,7 @@ if (!sameString("Completed",paymentStatus))
 /* Write payment info to the members table
  *  email field has been stored in the invoice field */
 dyStringClear(dy);
-dyStringPrintf(dy,"update members set "
+sqlDyStringPrintf(dy,"update members set "
 "activated='Y',"
 //P means paied but not activated until GA
 //"activated='P',"
@@ -428,7 +430,7 @@ dyStringPrintf(dy,"update members set "
 , cgiUsualString("payment_gross","")
 , paymentDate
 , expireDate
-, sqlEscapeString(email)
+, email
 );
 
 //debug  TODO: clean that out of trash
@@ -472,7 +474,7 @@ hPrintf("<h1>Members</h1>");
 hPrintf("<table>");
 hPrintf("<th>email</th><th>password</th>");
 
-sr = sqlGetResult(conn, "select * from members");
+sr = sqlGetResult(conn, "NOSQLINJ select * from members");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hPrintf("<tr><td>%s</td><td>%s</td></tr>",row[0],row[1]);
@@ -524,7 +526,7 @@ if (!email || sameString(email,""))
     lostPasswordPage(conn);
     return;
     }
-safef(query,sizeof(query), "select password from members where email='%s'", email);
+sqlSafef(query,sizeof(query), "select password from members where email='%s'", email);
 char *password = sqlQuickString(conn, query);
 if (!password)
     {
@@ -538,7 +540,7 @@ password = generateRandomPassword();
 char encPwd[35] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
 
-safef(query,sizeof(query), "update members set password='%s' where email='%s'", sqlEscapeString(encPwd), sqlEscapeString(email));
+sqlSafef(query,sizeof(query), "update members set password='%s' where email='%s'", encPwd, email);
 sqlUpdate(conn, query);
 
 updatePasswordsFile(conn);
@@ -630,7 +632,7 @@ if (!newPassword || sameString(newPassword,""))
     changePasswordPage(conn);
     return;
     }
-safef(query,sizeof(query), "select password from members where email='%s'", email);
+sqlSafef(query,sizeof(query), "select password from members where email='%s'", email);
 char *password = sqlQuickString(conn, query);
 if (!password)
     {
@@ -665,7 +667,7 @@ if (!checkPwdCharClasses(newPassword))
     }
 char encPwd[35] = "";
 encryptNewPwd(newPassword, encPwd, sizeof(encPwd));
-safef(query,sizeof(query), "update members set password='%s' where email='%s'", sqlEscapeString(encPwd), sqlEscapeString(email));
+sqlSafef(query,sizeof(query), "update members set password='%s' where email='%s'", encPwd, email);
 sqlUpdate(conn, query);
 
 hPrintf
@@ -743,7 +745,7 @@ void drawPaymentButton(struct sqlConnection *conn, char *type)
 char query[256];
 char *email = cartUsualString(cart, "gsidM_email", "");
 
-safef(query, sizeof(query), "insert into invoices values(default, '%s')", sqlEscapeString(email));
+sqlSafef(query, sizeof(query), "insert into invoices values(default, '%s')", email);
 sqlUpdate(conn, query);
 int id = sqlLastAutoId(conn);
 char invoice[20];
@@ -864,7 +866,7 @@ if (!email || sameString(email,""))
     signupPage(conn);
     return;
     }
-safef(query,sizeof(query), "select password from members where email='%s'", email);
+sqlSafef(query,sizeof(query), "select password from members where email='%s'", email);
 char *password = sqlQuickString(conn, query);
 if (password)
     {
@@ -929,9 +931,9 @@ if (!type || sameString(type,""))
 
 char encPwd[35] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
-safef(query,sizeof(query), "insert into members set "
+sqlSafef(query,sizeof(query), "insert into members set "
     "email='%s',password='%s',activated='%s',name='%s',phone='%s',institution='%s',type='%s'",
-    sqlEscapeString(email), sqlEscapeString(encPwd), "N", sqlEscapeString(name), sqlEscapeString(phone), sqlEscapeString(institution), type);
+    email, encPwd, "N", name, phone, institution, type);
 sqlUpdate(conn, query);
 
 
@@ -1094,7 +1096,7 @@ if (sameString(password,""))
     return;
     }
 
-safef(query,sizeof(query),"select * from members where email='%s'", email);
+sqlSafef(query,sizeof(query),"select * from members where email='%s'", email);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     {
@@ -1125,7 +1127,7 @@ if (checkPwd(password,m->password))
 
 
     /* add payment button if needed */
-    char *currentDate=sqlQuickString(conn, "select current_date()");
+    char *currentDate=sqlQuickString(conn, "NOSQLINJ select current_date()");
     if (!sameString(m->activated,"Y") || strcmp(currentDate,m->expireDate)>0)
 	{
 	drawPaymentButton(conn, m->type);
@@ -1151,14 +1153,14 @@ void upgradeMembersTable(struct sqlConnection* conn)
 {
 char query[256];
 
-safef(query,sizeof(query),"select email from members");
+sqlSafef(query,sizeof(query),"select email from members");
 struct slName *email=NULL,*list = sqlQuickList(conn,query);
 for(email=list;email;email=email->next)
     {
 
     uglyf("email=%s<br>\n",email->name);
 
-    safef(query,sizeof(query),"select password from members where email='%s'", email->name);
+    sqlSafef(query,sizeof(query),"select password from members where email='%s'", email->name);
     char *password = sqlQuickString(conn,query);
 
     uglyf("password=%s<br>\n",password);
@@ -1170,8 +1172,8 @@ for(email=list;email;email=email->next)
 	    uglyf("does not start with $1$<br>\n");
 	    char encPwd[35] = "";
     	    encryptNewPwd(password, encPwd, sizeof(encPwd));
-	    safef(query,sizeof(query),"update members set password = '%s' where email='%s'",
-		sqlEscapeString(encPwd), sqlEscapeString(email->name));
+	    sqlSafef(query,sizeof(query),"update members set password = '%s' where email='%s'",
+		encPwd, email->name);
 	    uglyf("query: %s<br>\n",query);
 	    sqlUpdate(conn,query);
 	    }

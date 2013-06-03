@@ -25,7 +25,7 @@ for (si = siList; si != NULL; si = si->next)
     {
     char *subjId = si->fields[1];
     /* currently just 3 Thailand or 4 US */
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
         "select id, seq from %s s, gisaidXref g where g.subjId='%s' and g.%s=s.id", 
 	tableName, subjId, xrefField);
     sr = sqlGetResult(conn, query);

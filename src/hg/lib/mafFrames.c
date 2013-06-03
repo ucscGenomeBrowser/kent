@@ -228,6 +228,6 @@ char *mafFramesGetSql(char *table, unsigned options, int chromIdxLen)
  * are currently defined.*/
 {
 char sql[512];
-safef(sql, sizeof(sql), createSql, table, chromIdxLen, chromIdxLen);
+sqlSafef(sql, sizeof(sql), createSql, table, chromIdxLen, chromIdxLen);
 return cloneString(sql);
 }

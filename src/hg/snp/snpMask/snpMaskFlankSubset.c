@@ -183,7 +183,7 @@ char *class = NULL;
 char *locType = NULL;
 struct hashEl *helName = NULL;
 
-safef(query, sizeof(query), "select name, chromStart, chromEnd, class, locType, strand, observed from snp where chrom='%s'", chrom);
+sqlSafef(query, sizeof(query), "select name, chromStart, chromEnd, class, locType, strand, observed from snp where chrom='%s'", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -223,7 +223,7 @@ struct sqlResult *sr;
 char **row;
 int count = 0;
 
-safef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
+sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

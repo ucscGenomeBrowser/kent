@@ -52,7 +52,7 @@ o1 = fopen("j.dat",  "w");
 o2 = fopen("jj.dat", "w");
     
 table = optionVal("table", "knownGene");
-safef(query, sizeof(query), "select name from %s.%s", roDbName, table);
+sqlSafef(query, sizeof(query), "select name from %s.%s", roDbName, table);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 while (row != NULL)
@@ -74,7 +74,7 @@ while (row != NULL)
 
     if (locusID != NULL)
 	{
-        safef(query3, sizeof(query3), "select * from %s.keggList where locusID = '%s'", kgTempDbName, locusID);
+        sqlSafef(query3, sizeof(query3), "select * from %s.keggList where locusID = '%s'", kgTempDbName, locusID);
         sr3 = sqlGetResult(conn3, query3);
         while ((row3 = sqlNextRow(sr3)) != NULL)
             {
@@ -93,7 +93,7 @@ while (row != NULL)
             {
             safef(cond_str, sizeof(cond_str), "name='%s'", kgId);
             locusID = sqlGetField(roDbName, table, "name2", cond_str);
-            safef(query3, sizeof(query3), "select * from %s.keggList where locusID = '%s'", kgTempDbName, kgId);
+            sqlSafef(query3, sizeof(query3), "select * from %s.keggList where locusID = '%s'", kgTempDbName, kgId);
             sr3 = sqlGetResult(conn3, query3);
             while ((row3 = sqlNextRow(sr3)) != NULL)
                 {

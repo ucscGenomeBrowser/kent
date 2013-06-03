@@ -165,7 +165,7 @@ void snpFastaTableCreate(struct sqlConnection *conn)
 /* create a snpFasta table */
 {
 char *createString =
-"CREATE TABLE snpFasta (\n"
+"NOSQLINJ CREATE TABLE snpFasta (\n"
 "    rsId varchar(255) not null,       \n"
 "    chrom varchar(255) not null,       \n"
 "    molType varchar(255) not null, \n"

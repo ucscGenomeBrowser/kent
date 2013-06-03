@@ -144,13 +144,13 @@ else
     /* Do black and white on single track.  Fetch less than we need from database. */
     if (hFindSplitTable(database, chromName, tg->table, table, &hasBin))
         {
-	dyStringPrintf(query, "select genoStart,genoEnd from %s where ", table);
+	sqlDyStringPrintf(query, "select genoStart,genoEnd from %s where ", table);
 	if (hasBin)
 	    hAddBinToQuery(winStart, winEnd, query);
 	dyStringPrintf(query, "genoStart<%u and genoEnd>%u ", winEnd, winStart);
 	/* if we're using a single rmsk table, add genoName to the where clause */
 	if (startsWith("rmsk", table))
-	    dyStringPrintf(query, " and genoName = '%s' ", chromName);
+	    sqlDyStringPrintf(query, " and genoName = '%s' ", chromName);
 	sr = sqlGetResult(conn, query->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {

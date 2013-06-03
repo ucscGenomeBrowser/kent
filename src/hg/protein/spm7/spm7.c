@@ -167,7 +167,7 @@ while (fgets(line_in, 10000, inf) != NULL)
 	}
     else
 	{
-	safef(query2, sizeof(query2), "select * from %sTemp.knownGene0 where alignID='%s';", genomeDBname, alignID);
+	sqlSafef(query2, sizeof(query2), "select * from %sTemp.knownGene0 where alignID='%s';", genomeDBname, alignID);
 	sr2 = sqlMustGetResult(conn2, query2);
     	row2 = sqlNextRow(sr2);
     	while (row2 != NULL)

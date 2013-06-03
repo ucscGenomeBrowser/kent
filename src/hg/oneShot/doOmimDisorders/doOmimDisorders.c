@@ -43,7 +43,7 @@ conn2= hAllocConn(database);
 outFn   = argv[2];
 outf    = mustOpen(outFn, "w");
 
-sprintf(query2,
+sqlSafef(query2, sizeof query2,
 "select omimId, concat(disorders1,' ',disorders2, ' ',disorders3), geneSymbol, location from omimGeneMap where disorders1 <>''");
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);

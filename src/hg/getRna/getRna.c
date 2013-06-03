@@ -47,7 +47,7 @@ char *getCdsString(struct sqlConnection *conn, char *acc)
 {
 char query[256];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "SELECT cds.name FROM gbCdnaInfo,cds WHERE (gbCdnaInfo.acc = '%s') AND (gbCdnaInfo.cds != 0) AND (gbCdnaInfo.cds = cds.id)",
       acc);
 return sqlQuickString(conn, query);
@@ -96,7 +96,7 @@ int getVersion(struct sqlConnection *conn, char *acc)
 {
 char query[256];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "SELECT version FROM gbCdnaInfo WHERE (gbCdnaInfo.acc = '%s')",
       acc);
 return  sqlQuickNum(conn, query);

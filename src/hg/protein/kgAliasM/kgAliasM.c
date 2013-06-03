@@ -50,11 +50,11 @@ while (!bothDone)
     {
     if (doingAlias)
 	{
-    	sprintf(query2,"select symbol, aliases from %s.hgnc;", proteinDB);
+    	sqlSafef(query2, sizeof query2, "select symbol, aliases from %s.hgnc;", proteinDB);
 	}
     else
 	{
-        sprintf(query2,"select symbol, prvSymbols from %s.hgnc;", proteinDB);
+        sqlSafef(query2, sizeof query2, "select symbol, prvSymbols from %s.hgnc;", proteinDB);
     	}
     
     sr2 = sqlMustGetResult(conn2, query2);

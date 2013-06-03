@@ -104,13 +104,13 @@ void getNameDescrFromRefSeq(char *refseq, struct sqlConnection *gConn, char **ge
 {    
 char query[256];
 struct sqlResult *sr;
-safef(query, sizeof(query), "select name,product from refLink where mrnaAcc='%s'", refseq);
+sqlSafef(query, sizeof(query), "select name,product from refLink where mrnaAcc='%s'", refseq);
 sr = sqlGetResult(gConn, query);
 char **row = sqlNextRow(sr);
 if (row != NULL)
     *geneSymbol = cloneString(row[0]);
 sqlFreeResult(&sr);
-safef(query, sizeof(query), "select d.name from gbCdnaInfo g, description d where g.description = d.id and g.acc = '%s'", refseq);
+sqlSafef(query, sizeof(query), "select d.name from gbCdnaInfo g, description d where g.description = d.id and g.acc = '%s'", refseq);
 sr = sqlGetResult(gConn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -171,7 +171,7 @@ for (info = infoList; info != NULL; info = info->next)
 
     /* Fill in gene symbol and description from an overlapping refseq if possible. */
     struct sqlResult *sr;
-    safef(query, sizeof(query), "select value from knownToRefSeq where name='%s'", kgID);
+    sqlSafef(query, sizeof(query), "select value from knownToRefSeq where name='%s'", kgID);
     sr = sqlGetResult(tConn, query);
     char **row = sqlNextRow(sr);
     if (row != NULL)
@@ -312,7 +312,7 @@ for (info = infoList; info != NULL; info = info->next)
 		    chopSuffix(acc);
 		    if (geneSymbol == NULL && description == NULL)
 			{
-			safef(query, sizeof(query), 
+			sqlSafef(query, sizeof(query), 
 			      "select geneName.name from gbCdnaInfo,geneName "
 			      "where geneName.id=gbCdnaInfo.geneName "
 			      "and geneName.name != 'n/a'"
@@ -321,7 +321,7 @@ for (info = infoList; info != NULL; info = info->next)
 			geneSymbol = sqlQuickString(gConn, query);
 			if (geneSymbol != NULL) 
 			    {
-			    safef(query, sizeof(query), 
+			    sqlSafef(query, sizeof(query), 
 				  "select description.name " 
 				  "from gbCdnaInfo,description "
 				  "where description.id=gbCdnaInfo.description "
@@ -352,7 +352,7 @@ for (info = infoList; info != NULL; info = info->next)
                 chopSuffix(acc);
                 if (geneSymbol == NULL)
                     {
-                    safef(query, sizeof(query),
+                    sqlSafef(query, sizeof(query),
                         "select geneName.name from gbCdnaInfo,geneName "
 			  "where geneName.id=gbCdnaInfo.geneName and gbCdnaInfo.acc = '%s'", acc);
                     geneSymbol = sqlQuickString(gConn, query);
@@ -364,7 +364,7 @@ for (info = infoList; info != NULL; info = info->next)
                     }
                 if (description == NULL)
                     {
-                    safef(query, sizeof(query),
+                    sqlSafef(query, sizeof(query),
                         "select description.name from gbCdnaInfo,description "
                         "where description.id=gbCdnaInfo.description "
 			  "and gbCdnaInfo.acc = '%s'", acc);

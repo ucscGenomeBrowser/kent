@@ -171,14 +171,14 @@ int count = 0;
 
 if (strict)
     {
-    safef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
+    sqlSafef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
     "where chrom='%s' and chromEnd = chromStart + 1 and class = 'snp' and locType = 'exact' "
     "and chromStart >= %d and chromEnd <= %d", chrom, gene->txStart, gene->txEnd);
     }
 else
     {
     /* this includes snps that are larger than one base */
-    safef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
+    sqlSafef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
     "where chrom='%s' and class = 'snp' "
     "and chromStart >= %d and chromEnd <= %d", chrom, gene->txStart, gene->txEnd);
     }
@@ -208,7 +208,7 @@ struct sqlResult *sr;
 char **row;
 int count = 0;
 
-safef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
+sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

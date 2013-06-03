@@ -72,7 +72,7 @@ duplicateNameHash = newHash(16);
 
 verbose(1, "getDuplicateNameHash for %s...\n", tableName);
 
-safef(query, sizeof(query), "select name from %s", tableName);
+sqlSafef(query, sizeof(query), "select name from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -99,7 +99,7 @@ struct snpSubsetList *el = NULL;
 int count = 0;
 struct hash *duplicateNameHash = getDuplicateNameHash(tableName);
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select name, chrom, chromStart, chromEnd, strand, observed, class, locType from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -140,7 +140,7 @@ int count = 0;
 struct hash *duplicateNameHash = getDuplicateNameHash(tableName);
 
 ret = newHash(16);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select name, chrom, chromStart, chromEnd, strand, observed, class, locType from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

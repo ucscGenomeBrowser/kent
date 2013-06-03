@@ -35,7 +35,7 @@ char **row;
 char *weight, *riskFactor;
 char *comment;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select gender, age, race, geography, riskFactor, weight, comment from gsidSubjInfo where subjId='%s'", 
       subjId);
 sr = sqlMustGetResult(conn, query);

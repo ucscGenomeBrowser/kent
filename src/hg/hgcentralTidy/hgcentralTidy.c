@@ -88,7 +88,7 @@ long long dataFree = 0;
 struct sqlResult *sr;
 char **row;
 char query[256];
-safef(query, sizeof(query), "show table status like '%s'", table );
+sqlSafef(query, sizeof(query), "show table status like '%s'", table );
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (!row)
@@ -163,7 +163,7 @@ while(TRUE)
     {
     verbose(2, "maxId: %d   count=%d  delCount=%d   dc=%d\n", maxId, count, delCount, dc);
 
-    safef(query,sizeof(query),
+    sqlSafef(query,sizeof(query),
 	"select id, firstUse, lastUse, useCount from %s"
 	" where id > %d order by id limit %d"
 	, table
@@ -252,7 +252,7 @@ while(TRUE)
 	for (i=delList;i;i=i->next)
 	    {
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "delete from %s where id=%d", table, i->val);
+	    sqlDyStringPrintf(dy, "delete from %s where id=%d", table, i->val);
 	    sqlUpdate(conn,dy->string);
 	    }
 	slFreeList(&delList);
@@ -298,7 +298,7 @@ while (TRUE)
     //verbose(1,"bin a=%d, b=%d, m=%d\n", a, b, m);
     while (TRUE)
 	{
-	safef(query, sizeof(query), "select firstUse from %s where id=%d", table, ids[m]);
+	sqlSafef(query, sizeof(query), "select firstUse from %s where id=%d", table, ids[m]);
 	char *firstUse = sqlQuickString(conn,query);
 	if (firstUse)
 	    {
@@ -352,7 +352,7 @@ if (totalRows==0)
 AllocArray(ids, totalRows);
 
 // This is a super-fast query because it only needs to read the index which is cached in memory.
-safef(query,sizeof(query), "select id from %s" , table);
+sqlSafef(query,sizeof(query), "select id from %s" , table);
 sr = sqlGetResult(conn, query);
 int i = 0;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -392,7 +392,7 @@ else  // figure out purge-ranges automatically
     if (sameString(table, userDbTableName))
 	firstUseAge = 365;
 
-    int day = sqlQuickNum(conn, "select dayofweek(now())");
+    int day = sqlQuickNum(conn, "NOSQLINJ select dayofweek(now())");
 
     // These old records take a long time to go through, 5k sessionDb to 55k userDb old recs to look at,
     //  and typically produce only a few hundred deletions.

@@ -74,49 +74,18 @@ void expRecordSaveToDb(struct sqlConnection *conn, struct expRecord *el, char *t
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use expRecordSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *extrasArray;
 extrasArray = sqlStringArrayToString(el->extras, el->numExtras);
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s',%u,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s',%u,'%s')", 
 	tableName,  el->id,  el->name,  el->description,  el->url,  el->ref,  el->credit,  el->numExtras,  extrasArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&extrasArray);
 }
 
-void expRecordSaveToDbEscaped(struct sqlConnection *conn, struct expRecord *el, char *tableName, int updateSize)
-/* Save expRecord as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than expRecordSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *description, *url, *ref, *credit, *extrasArray;
-name = sqlEscapeString(el->name);
-description = sqlEscapeString(el->description);
-url = sqlEscapeString(el->url);
-ref = sqlEscapeString(el->ref);
-credit = sqlEscapeString(el->credit);
-
-extrasArray = sqlStringArrayToString(el->extras, el->numExtras);
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s',%u,'%s')", 
-	tableName, el->id ,  name,  description,  url,  ref,  credit, el->numExtras ,  extrasArray );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&description);
-freez(&url);
-freez(&ref);
-freez(&credit);
-freez(&extrasArray);
-}
 
 struct expRecord *expRecordCommaIn(char **pS, struct expRecord *ret)
 /* Create a expRecord out of a comma separated string. 
@@ -226,7 +195,7 @@ void expRecordCreateTable(struct sqlConnection *conn, char *table)
 {
 char query[1024];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 "CREATE TABLE %s (\n"
 "    id int unsigned not null,	# internal id of experiment\n"
 "    name varchar(255) not null,	# name of experiment\n"
@@ -248,7 +217,7 @@ struct expRecord *expRecordLoadTable(struct sqlConnection *conn, char *table)
 char query[256];
 char **row;
 struct expRecord *ers = NULL;
-safef(query, sizeof(query), "select * from  %s", table);
+sqlSafef(query, sizeof(query), "select * from  %s", table);
 struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

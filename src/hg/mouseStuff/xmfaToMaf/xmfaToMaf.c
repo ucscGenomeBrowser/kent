@@ -172,7 +172,7 @@ while(myFaReadMixedNext(input, TRUE, "default name", TRUE, &commentLine, &sequen
         safef(srcName, sizeof(srcName), "%s.%s", optionVal(org, org), chrom);
         comp->src = cloneString(srcName);
 
-        snprintf(buffer, 1024, "SELECT size FROM %s.chromInfo WHERE chrom = \"%s\"", optionVal(org, org), chrom);
+        sqlSafef(buffer, 1024, "SELECT size FROM %s.chromInfo WHERE chrom = \"%s\"", optionVal(org, org), chrom);
         assert(sqlQuickQuery(conn, buffer, buffer, 1024) != 0);
         comp->srcSize = atoi(buffer);
 

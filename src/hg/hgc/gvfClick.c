@@ -23,7 +23,7 @@ void doGvf(struct trackDb *tdb, char *item)
 struct sqlConnection *conn = hAllocConn(database);
 int start = cartInt(cart, "o");
 char query[1024];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
       tdb->table, item, seqName, start);
 struct sqlResult *sr = sqlGetResult(conn, query);

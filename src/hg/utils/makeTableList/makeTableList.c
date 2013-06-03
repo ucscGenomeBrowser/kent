@@ -45,7 +45,7 @@ char buf[1024];
 char tmpTable[512];
 FILE *fd = mustOpen(tmp, "w");
 
-sr = sqlGetResult(conn, "SHOW TABLES");
+sr = sqlGetResult(conn, "NOSQLINJ SHOW TABLES");
 while ((row = sqlNextRow(sr)) != NULL)
     fprintf(fd, "%s\n", row[0]);
 sqlFreeResult(&sr);
@@ -54,21 +54,21 @@ carefulClose(&fd);
 // now load show tables data into a temporary table
 safef(tmpTable, sizeof(tmpTable), "tableList%ld", (long) getpid());
 sqlDropTable(conn, tmpTable);
-safef(buf, sizeof(buf), "CREATE TABLE %s (name varchar(255) not null, PRIMARY KEY(name))", tmpTable);
+sqlSafef(buf, sizeof(buf), "CREATE TABLE %s (name varchar(255) not null, PRIMARY KEY(name))", tmpTable);
 sqlUpdate(conn, buf);
-safef(buf, sizeof(buf), "LOAD DATA LOCAL INFILE '%s' INTO TABLE %s", tmp, tmpTable);
+sqlSafef(buf, sizeof(buf), "LOAD DATA LOCAL INFILE '%s' INTO TABLE %s", tmp, tmpTable);
 sqlUpdate(conn, buf);
 
 if(sqlTableExists(conn, tableListName))
     {
     sqlDropTable(conn, "tableListOld");
-    safef(buf, sizeof(buf), "RENAME TABLE tableList to tableListOld, %s TO %s", tmpTable, tableListName);
+    sqlSafef(buf, sizeof(buf), "RENAME TABLE tableList to tableListOld, %s TO %s", tmpTable, tableListName);
     sqlUpdate(conn, buf);
     sqlDropTable(conn, "tableListOld");
     }
 else
     {
-    safef(buf, sizeof(buf), "RENAME TABLE %s TO %s", tmpTable, tableListName);
+    sqlSafef(buf, sizeof(buf), "RENAME TABLE %s TO %s", tmpTable, tableListName);
     sqlUpdate(conn, buf);
     }
 unlink(tmp);
@@ -84,7 +84,7 @@ struct slName *dbs = NULL;
 if(all)
     {
     struct sqlConnection *conn = hConnectCentral();
-    sr = sqlGetResult(conn, "select name from dbDb");
+    sr = sqlGetResult(conn, "NOSQLINJ select name from dbDb");
     while ((row = sqlNextRow(sr)) != NULL)
         slNameAddHead(&dbs, row[0]);
     sqlFreeResult(&sr);

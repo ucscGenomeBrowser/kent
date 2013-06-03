@@ -378,11 +378,11 @@ if (!noLoad)
     struct sqlConnection *conn = sqlConnect(database);
     int indexLen = hGetMinIndexLength(database);
     char query[1024];
-    safef(query, sizeof(query), createTable, indexLen);
+    sqlSafef(query, sizeof(query), createTable, indexLen);
     verbose(1, "#\tLoading gcPercent table\n");
     sqlRemakeTable(conn, "gcPercent", query);
-    sqlUpdate(conn, "DELETE from gcPercent");
-    safef(query, sizeof(query),
+    sqlUpdate(conn, "NOSQLINJ DELETE from gcPercent");
+    sqlSafef(query, sizeof(query),
 	  "LOAD data local infile '%s' into table gcPercent", tabFileName);
     sqlUpdate(conn, query);
     sqlDisconnect(&conn);

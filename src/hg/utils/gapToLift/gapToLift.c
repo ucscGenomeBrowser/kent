@@ -53,10 +53,10 @@ int chromCount = 0;
 cInfoHash = newHash(0);
 
 if (workChr)
-    safef(query, ArraySize(query), "SELECT * FROM chromInfo WHERE "
+    sqlSafef(query, ArraySize(query), "SELECT * FROM chromInfo WHERE "
 	"chrom='%s' ORDER BY chrom DESC", workChr);
 else
-    safef(query, ArraySize(query),
+    sqlSafef(query, ArraySize(query),
 	"SELECT * FROM chromInfo ORDER BY chrom DESC");
 
 struct sqlResult *sr = sqlGetResult(conn, query);

@@ -47,7 +47,7 @@ outf    = mustOpen(outFn, "w");
 
 tgtChrom = argv[3];
 
-sprintf(query2,"select secStr, name, chrom, chromStart, chromEnd, strand from evofold where chrom='%s'", tgtChrom);
+sqlSafef(query2, sizeof query2, "select secStr, name, chrom, chromStart, chromEnd, strand from evofold where chrom='%s'", tgtChrom);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)

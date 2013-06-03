@@ -36,10 +36,10 @@ static void createTable(struct uniqueStrTbl* ust, struct sqlConnection *conn)
 {
 static char* NA_STR = "n/a";
 char query[1024];
-safef(query, sizeof(query), createSql, ust->updater->table);
+sqlSafef(query, sizeof(query), createSql, ust->updater->table);
 sqlRemakeTable(conn, ust->updater->table, query);
 /* Add entry for null value, which will display n/a. */
-safef(query, sizeof(query), "INSERT INTO %s VALUES(0,'%s',%u)",
+sqlSafef(query, sizeof(query), "INSERT INTO %s VALUES(0,'%s',%u)",
       ust->updater->table, NA_STR, hashCrc(NA_STR));
 sqlUpdate(conn, query);
 ust->nextId = 1;
@@ -51,7 +51,7 @@ static void loadTable(struct uniqueStrTbl* ust, struct sqlConnection *conn)
 char query[128];
 struct sqlResult* sr;
 char **row;
-safef(query, sizeof(query), "SELECT id,name FROM %s", ust->updater->table);
+sqlSafef(query, sizeof(query), "SELECT id,name FROM %s", ust->updater->table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -93,13 +93,12 @@ static struct hashEl *loadStr(struct uniqueStrTbl *ust,
 {
 struct hashEl* hel = NULL;
 bits32 crc = hashCrc(str);
-char *escStr = sqlEscapeString2(alloca(2*strlen(str)+1), str);
-int qlen = strlen(escStr)+256;
+int qlen = 2*strlen(str)+1+256;
 char *query = alloca(qlen);
 HGID id;
 
-safef(query, qlen, "SELECT id FROM %s WHERE (crc = %u) and (name = '%s')",
-      ust->updater->table, crc, escStr);
+sqlSafef(query, qlen, "SELECT id FROM %s WHERE (crc = %u) and (name = '%s')",
+      ust->updater->table, crc, str);
 
 id = sqlQuickNum(conn, query);
 if (id != 0)

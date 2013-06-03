@@ -41,7 +41,7 @@ conn = hAllocConn(database);
 conn2= hAllocConn(database);
 o2 = fopen("jj.dat", "w");
 
-sprintf(query2,"select name, proteinID from %s.knownGene;", database);
+sqlSafef(query2, sizeof query2, "select name, proteinID from %s.knownGene;", database);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -63,7 +63,7 @@ while (row2 != NULL)
     // get Genbank protein accession numbers
     if (strstr(kgID, "NM_") != NULL)
 	{
-	sprintf(query,"select protAcc from %s.refLink where mrnaAcc = '%s';", ro_db, kgID);
+	sqlSafef(query, sizeof query,"select protAcc from %s.refLink where mrnaAcc = '%s';", ro_db, kgID);
 	sr = sqlMustGetResult(conn, query);
 	row = sqlNextRow(sr);
 	while (row != NULL)
@@ -76,7 +76,7 @@ while (row2 != NULL)
 	}
     else
 	{
-	sprintf(query,"select proteinAC from %sTemp.locus2Acc0 where gbAC like '%s%c';", database, kgID, '%');
+	sqlSafef(query, sizeof query,"select proteinAC from %sTemp.locus2Acc0 where gbAC like '%s%c';", database, kgID, '%');
 	sr = sqlMustGetResult(conn, query);
 	row = sqlNextRow(sr);
 	while (row != NULL)

@@ -140,7 +140,7 @@ jcnt = 0;
 
 conn2 = hAllocConn(spDbName);
 
-safef(query2, sizeof(query2), "select acc, val from %s.protein;", spDbName);
+sqlSafef(query2, sizeof(query2), "select acc, val from %s.protein;", spDbName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 

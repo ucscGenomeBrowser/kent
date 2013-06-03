@@ -58,7 +58,7 @@ for (i=0; i<expCount; ++i)
         names[i] = NULL;
     else
 	{
-	safef(query, sizeof(query), "select name from %s where id = %d", 
+	sqlSafef(query, sizeof(query), "select name from %s where id = %d", 
 	    table, expIds[i]);
 	if ((name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf))) == NULL)
 	    name = "unknown";
@@ -145,15 +145,15 @@ char **row;
 boolean ok = FALSE;
 if (!sameWord(lookupTable, "null"))
     {
-    safef(query, sizeof(query), "select value from %s where name = '%s'", 
+    sqlSafef(query, sizeof(query), "select value from %s where name = '%s'", 
 	  lookupTable, name);
     if (sqlQuickQuery(lookupConn, query, expName, sizeof(expName)) == NULL)
 	return FALSE;
-    safef(query, sizeof(query), "select expScores from %s where name = '%s'",
+    sqlSafef(query, sizeof(query), "select expScores from %s where name = '%s'",
 	  dataTable, expName);
     }
 else
-    safef(query, sizeof(query), "select expScores from %s where name = '%s'",
+    sqlSafef(query, sizeof(query), "select expScores from %s where name = '%s'",
 	  dataTable, name);    
 sr = sqlGetResult(dataConn, query);
 if ((row = sqlNextRow(sr)) != NULL)

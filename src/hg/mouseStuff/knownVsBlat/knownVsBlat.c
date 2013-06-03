@@ -473,7 +473,7 @@ struct geneIsoforms *giList = NULL, *gi;
 struct genePred *gp;
 char *geneName;
 
-sprintf(query, "select * from refGene where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select * from refGene where chrom = '%s'", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -535,9 +535,9 @@ if (hTableExists(database, table))
     {
     struct sqlConnection *conn = hAllocConn(database);
     if (isSplit)
-	sprintf(query, "select * from %s", table);
+	sqlSafef(query, sizeof query, "select * from %s", table);
     else
-	sprintf(query, "select * from %s where qName = '%s'", table, chrom);
+	sqlSafef(query, sizeof query, "select * from %s where qName = '%s'", table, chrom);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -569,9 +569,9 @@ if (hTableExists(database, table))
     {
     struct sqlConnection *conn = hAllocConn(database);
     if (isSplit)
-	sprintf(query, "select chrom,chromStart,chromEnd from %s", table);
+	sqlSafef(query, sizeof query, "select chrom,chromStart,chromEnd from %s", table);
     else
-	sprintf(query, "select chrom,chromStart,chromEnd from %s where chrom = '%s'", 
+	sqlSafef(query, sizeof query, "select chrom,chromStart,chromEnd from %s where chrom = '%s'", 
 		table, chrom);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -680,7 +680,7 @@ struct sqlResult *sr;
 struct refLink rl;
 char **row;
 
-sr = sqlGetResult(conn, "select * from refLink");
+sr = sqlGetResult(conn, "NOSQLINJ select * from refLink");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     refLinkStaticLoad(row, &rl);

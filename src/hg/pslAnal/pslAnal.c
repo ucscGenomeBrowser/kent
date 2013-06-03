@@ -418,7 +418,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 
-safef(query, sizeof(query), "select version from gbCdnaInfo where acc = '%s'", name); 
+sqlSafef(query, sizeof(query), "select version from gbCdnaInfo where acc = '%s'", name); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     ret = cloneString(row[0]);
@@ -592,14 +592,14 @@ int id = -1;
 wordCount = chopByChar(a, '.', accs, ArraySize(accs)); 
 if (wordCount > 2) 
 errAbort("Accession not standard, %s\n", acc->name);*/
-safef(query, sizeof(query), "select organism from gbCdnaInfo where acc = '%s'", acc->name); 
+sqlSafef(query, sizeof(query), "select organism from gbCdnaInfo where acc = '%s'", acc->name); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     id = sqlUnsigned(row[0]);
 sqlFreeResult(&sr);
 if (id != -1)
     {
-    safef(query, sizeof(query), "select name from organism where id = %d", id);   
+    sqlSafef(query, sizeof(query), "select name from organism where id = %d", id);   
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
       acc->organism = cloneString(row[0]);
@@ -622,7 +622,7 @@ struct clone *ret = NULL;
 AllocVar(ret);
 ret->next = NULL;
 
-safef(query, sizeof(query), "select mrnaClone from gbCdnaInfo where acc = '%s'", acc); 
+sqlSafef(query, sizeof(query), "select mrnaClone from gbCdnaInfo where acc = '%s'", acc); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -630,7 +630,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     ret->imageId = 0;
     }
 sqlFreeResult(&sr);
-safef(query, sizeof(query), "select imageId from imageClone where acc = '%s'", acc); 
+sqlSafef(query, sizeof(query), "select imageId from imageClone where acc = '%s'", acc); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     ret->imageId = sqlUnsigned(row[0]);
@@ -649,7 +649,7 @@ struct clone *ret = NULL;
 AllocVar(ret);
 ret->next = NULL;
 
-safef(query, sizeof(query), "select library from gbCdnaInfo where acc = '%s'", acc); 
+sqlSafef(query, sizeof(query), "select library from gbCdnaInfo where acc = '%s'", acc); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {

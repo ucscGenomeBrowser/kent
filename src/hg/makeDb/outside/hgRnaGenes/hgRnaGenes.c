@@ -142,9 +142,9 @@ printf("Importing into database %s\n", database);
 conn = sqlConnect(database);
 if (!sqlTableExists(conn, table))
     errAbort("You need to create the table first (with %s.sql)", table);
-sprintf(query, "delete from %s", table);
+sqlSafef(query, sizeof query, "delete from %s", table);
 sqlUpdate(conn, query);
-sprintf(query, "load data local infile '%s' into table %s", tempName, table);
+sqlSafef(query, sizeof query, "load data local infile '%s' into table %s", tempName, table);
 sqlUpdate(conn, query);
 sqlDisconnect(&conn);
 }

@@ -127,7 +127,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 		pattern[len-1] = '*';
 		}
 	    anyWild = (strchr(pattern, '*') != NULL || strchr(pattern, '?') != NULL);
-	    sprintf(query, "select id,name from %s", fil->table);
+	    sqlSafef(query, sizeof query, "select id,name from %s", fil->table);
 	    touppers(pattern);
 	    sr = sqlGetResult(conn, query);
 	    while ((row = sqlNextRow(sr)) != NULL)
@@ -156,7 +156,7 @@ for (lf = *pLfList; lf != NULL; lf = next)
     {
     boolean passed = andLogic;
     next = lf->next;
-    sprintf(query, "select * from gbCdnaInfo where acc = '%s'", lf->name);
+    sqlSafef(query, sizeof query, "select * from gbCdnaInfo where acc = '%s'", lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -347,11 +347,11 @@ conn= hAllocConn(database);
 
 if (hIsGsidServer())
     {
-    sprintf(query,"select subjId from gsIdXref where dnaSeqId='%s'", seqId);
+    sqlSafef(query, sizeof query, "select subjId from gsIdXref where dnaSeqId='%s'", seqId);
     }
 else
     {
-    sprintf(query,"select subjId from gisaidXref where dnaSeqId='%s'", seqId);
+    sqlSafef(query, sizeof query, "select subjId from gisaidXref where dnaSeqId='%s'", seqId);
     }
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

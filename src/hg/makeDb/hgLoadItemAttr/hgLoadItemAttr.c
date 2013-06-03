@@ -85,7 +85,7 @@ void makeTable(struct sqlConnection *conn, char *table)
 /* setup the database table */
 {
 char query[1024];
-safef(query, sizeof(query), createSql, table);
+sqlSafef(query, sizeof(query), createSql, table);
 if (gAppend)
     sqlMaybeMakeTable(conn, table, query);
 else

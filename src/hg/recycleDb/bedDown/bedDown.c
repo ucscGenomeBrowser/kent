@@ -26,7 +26,7 @@ struct sqlResult *sr;
 char **row;
 struct agpFrag *fragList = NULL, *frag;
 
-sprintf(query, "select * from %s_gold", chrom);
+sqlSafef(query, sizeof query, "select * from %s_gold", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -88,7 +88,7 @@ char *destName;
 char *destStrand;
 
 
-sprintf(query, "select chrom,chromStart,chromEnd,name from %s order by chrom,chromStart", table);
+sqlSafef(query, sizeof query, "select chrom,chromStart,chromEnd,name from %s order by chrom,chromStart", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -112,7 +112,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	strcpy(nibChrom, bed.chrom);
 	nibSize = nibStart = nibEnd = 0;
-	sprintf(query, "select fileName from chromInfo where chrom = '%s'", bed.chrom);
+	sqlSafef(query, sizeof query, "select fileName from chromInfo where chrom = '%s'", bed.chrom);
 	sqlQuickQuery(conn2, query, nibFileName, sizeof(nibFileName));
 	carefulClose(&nib);
 	nibOpenVerify(nibFileName, &nib, &chromSize);

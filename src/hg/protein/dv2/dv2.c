@@ -62,7 +62,7 @@ conn= hAllocConn();
 /* NOTE: the query below may not always return single answer, */
 /* and kgProtMap and knownGene alignments may not be identical, so pick the closest one. */
 
-safef(query,sizeof(query), "select qName, qSize, qStart, qEnd, tName, tSize, tStart, tEnd, blockCount, blockSizes, qStarts, tStarts, strand from %s.%s where qName='%s';",
+sqlSafef(query,sizeof(query), "select qName, qSize, qStart, qEnd, tName, tSize, tStart, tEnd, blockCount, blockSizes, qStarts, tStarts, strand from %s.%s where qName='%s';",
         database, "kgProtMap", proteinID);
 sr  = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -268,7 +268,7 @@ outf = mustOpen(outFileName, "w");
 conn2 = sqlConnect(proteinDb);
 conn3 = sqlConnect(proteinDb);
 	
-sprintf(query2,"select * from %s.dv", database);
+sqlSafef(query2, sizeof query2, "select * from %s.dv", database);
 
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -285,7 +285,7 @@ while (row2 != NULL)
     varLen = atoi(lenStr);
    
     /* get protein sequence */
-    sprintf(query3, "select val from %s.protein where acc='%s'", proteinDb, acc);
+    sqlSafef(query3, sizeof query3, "select val from %s.protein where acc='%s'", proteinDb, acc);
     sr3      = sqlMustGetResult(conn3, query3);
     row3     = sqlNextRow(sr3);
     aaSeq    = row3[0];

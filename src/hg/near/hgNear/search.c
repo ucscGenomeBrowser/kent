@@ -26,7 +26,7 @@ struct genePos *gpList = NULL, *gp;
 
 if (search != NULL)
     {
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"select name,chrom,txStart,txEnd from %s where name = '%s'", 
 		table, search);
     sr = sqlGetResult(conn, query);
@@ -66,16 +66,16 @@ struct searchResult *el;
 for (el = list; el != NULL; el = el->next)
     {
     dyStringClear(dy);
-    dyStringPrintf(dy, 
+    sqlDyStringPrintf(dy, 
     	"select %s.transcript,%s.chrom,%s.chromStart,%s.chromEnd,%s.protein ",
 	cannon, cannon, cannon, cannon, cannon);
-    dyStringPrintf(dy,
+    sqlDyStringPrintf(dy,
 	"from %s,%s ",
 	isoform, cannon);
-    dyStringPrintf(dy,
+    sqlDyStringPrintf(dy,
         "where %s.transcript = '%s' ",
 	isoform, el->gp.name);
-    dyStringPrintf(dy,
+    sqlDyStringPrintf(dy,
         "and %s.clusterId = %s.clusterId",
 	isoform, cannon);
     sr = sqlGetResult(conn, dy->string);
@@ -236,9 +236,9 @@ char *cannon = genomeSetting("canonicalTable");
 char *isoform = genomeSetting("isoformTable");
 char buf[128];
 char *result = NULL;
-dyStringPrintf(dy, "select %s.transcript from %s,%s where %s.transcript = '%s'",
+sqlDyStringPrintf(dy, "select %s.transcript from %s,%s where %s.transcript = '%s'",
 	       cannon, isoform, cannon, isoform, transcript);
-dyStringPrintf(dy, " and %s.clusterId = %s.clusterId", isoform, cannon);
+sqlDyStringPrintf(dy, " and %s.clusterId = %s.clusterId", isoform, cannon);
 result = sqlQuickQuery(conn, dy->string, buf, sizeof(buf));
 if (result != NULL)
     return(cloneString(result));

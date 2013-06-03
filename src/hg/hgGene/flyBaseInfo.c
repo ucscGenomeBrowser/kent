@@ -27,7 +27,7 @@ if (sqlTableExists(conn, "bdgpGeneInfo"))
     char *e = strchr(cutId, '-');
     if (e != NULL) 
 	*e = 0;
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	  "select flyBaseId from bdgpGeneInfo where bdgpName = '%s'", cutId);
     freeMem(cutId);
     return sqlQuickString(conn, query);
@@ -35,7 +35,7 @@ if (sqlTableExists(conn, "bdgpGeneInfo"))
 else if (sqlTableExists(conn, "flyBase2004Xref"))
     {
     char query[256];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select fbgn from flyBase2004Xref where name = '%s'", geneId);
     return sqlQuickString(conn, query);
     }
@@ -56,7 +56,7 @@ if (!sqlTableExists(conn, section->flyBaseTable) )
     return FALSE;
 if (!sqlTablesExist(conn, "fbAllele fbGene fbRef") )
     return FALSE;
-safef(query, sizeof(query), "select count(*) from %s where geneId = '%s'", 
+sqlSafef(query, sizeof(query), "select count(*) from %s where geneId = '%s'", 
 	section->flyBaseTable, flyBaseId);
 roleCount = sqlQuickNum(conn, query);
 freeMem(flyBaseId);
@@ -131,7 +131,7 @@ static void printCite(struct sqlConnection *conn, int id)
 {
 char query[256];
 char *refText;
-safef(query, sizeof(query), "select text from fbRef where id=%d", id);
+sqlSafef(query, sizeof(query), "select text from fbRef where id=%d", id);
 refText = sqlQuickString(conn, query);
 if (refText != NULL)
     {
@@ -158,7 +158,7 @@ struct fbAlleleInfo *alleleList = NULL, *allele;
 struct hash *alleleHash = newHash(10);
 struct fbRole *role = NULL;
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select * from %s where geneId='%s'", section->flyBaseTable, flyBaseId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -174,7 +174,7 @@ for (allele = alleleList; allele != NULL; allele = allele->next)
     char *alleleName = NULL;
     if (allele->id != 0)
         {
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 		"select name from fbAllele where id=%d", allele->id);
 	alleleName = sqlQuickString(conn, query);
 	if (alleleName != NULL)
@@ -235,7 +235,7 @@ struct sqlResult *sr;
 
 if (flyBaseId != NULL)
     {
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "select geneSym,geneName from fbGene where geneId = '%s'", 
 	    flyBaseId);
     sr = sqlGetResult(conn, query);
@@ -263,7 +263,7 @@ hPrintf("<BR>\n");
 if (flyBaseId != NULL)
     {
     struct slName *synList = NULL, *syn;
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "select name from fbSynonym where geneId = '%s'", 
 	    flyBaseId);
     sr = sqlGetResult(conn, query);
@@ -316,7 +316,7 @@ struct sqlResult *sr;
 
 if (flyBaseId != NULL)
     {
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "select * from bdgpExprLink where flyBaseId = '%s'", 
 	    flyBaseId);
     sr = sqlGetResult(conn, query);
@@ -363,7 +363,7 @@ if (flyBaseId != NULL && sqlTableExists(conn, "bdgpExprLink"))
     {
     char query[256], **row;
     struct sqlResult *sr;
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "select flyBaseId from bdgpExprLink where flyBaseId = '%s'", 
 	    flyBaseId);
     sr = sqlGetResult(conn, query);

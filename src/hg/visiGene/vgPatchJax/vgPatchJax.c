@@ -42,7 +42,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
     char *submitSet = hashMustFindVal(hash, "submitSet");
     char *year = hashMustFindVal(hash, "year");
     dyStringClear(query);
-    dyStringPrintf(query,
+    sqlDyStringPrintf(query,
     	"update submissionSet set year=%s "
 	"where name = '%s'"
 	, year, submitSet);

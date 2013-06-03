@@ -277,18 +277,18 @@ struct bdgpGeneInfo *result = NULL, *this=NULL;
 struct dyString *query=newDyString(512);
 char *sep = "where";
 struct slName *sn = geneNames;
-dyStringPrintf(query,"select * from %s",table);
+sqlDyStringPrintf(query,"select * from %s",table);
 while(sn)
     {
     char * nm = sn->name;
     if (startsWith("CG",nm))
 	{
-	dyStringPrintf(query," %s bdgpName='%s'",sep,nm);
+	sqlDyStringPrintf(query," %s bdgpName='%s'",sep,nm);
         sep = "or";
 	}
     else if (!startsWith("FBgn",nm))
 	{
-	dyStringPrintf(query," %s symbol='%s'",sep,nm);
+	sqlDyStringPrintf(query," %s symbol='%s'",sep,nm);
         sep = "or";
 	}
     sn = sn->next;
@@ -317,7 +317,7 @@ struct dyString *query=newDyString(512);
 char *sep = "where";
 struct slName *sn = geneNames;
 getGeneAliasesFromTable("bdgpGeneInfo"); /* load aliases into hash */
-dyStringPrintf(query,"select * from %s",table);
+sqlDyStringPrintf(query,"select * from %s",table);
 while(sn)
     {
     struct hashEl *hel = NULL, *hf=NULL;
@@ -346,7 +346,7 @@ while(sn)
 	slAddHead(&allNodes,nl); /* all nodes going in hash are added to all-nodes list */
 	hel->val = n;
 	}
-    dyStringPrintf(query," %s fromX='%s' or toY='%s'",sep,nm,nm);
+    sqlDyStringPrintf(query," %s fromX='%s' or toY='%s'",sep,nm,nm);
     sep = "or";
     sn = sn->next;
     }

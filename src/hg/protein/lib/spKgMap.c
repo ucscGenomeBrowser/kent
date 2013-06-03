@@ -47,7 +47,7 @@ if (slCount(kgXrefFields) != KGXREF_NUM_COLS)
 slFreeList(kgXrefFields);
 
 
-safef(query, sizeof(query), "SELECT * from kgXref");
+sqlSafef(query, sizeof(query), "SELECT * from kgXref");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -68,7 +68,7 @@ struct kgProtAlias kgPA;
 struct sqlResult *sr;
 char **row;
 
-safef(query, sizeof(query), "SELECT * from kgProtAlias");
+sqlSafef(query, sizeof(query), "SELECT * from kgProtAlias");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -97,7 +97,7 @@ char query[1024];
 struct sqlResult *sr;
 char **row;
 
-safef(query, sizeof(query), "SELECT acc,val FROM otherAcc");
+sqlSafef(query, sizeof(query), "SELECT acc,val FROM otherAcc");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     addSpSecondaryAcc(spKgMap, row[0], row[1]);

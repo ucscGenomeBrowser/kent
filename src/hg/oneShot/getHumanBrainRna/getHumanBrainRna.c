@@ -28,7 +28,7 @@ struct hash *getBadLibs(struct sqlConnection *conn)
 {
 struct hash *hash = hashNew(0);
 struct sqlResult *sr = sqlGetResult(conn,
-    "select id from library where "
+    "NOSQLINJ select id from library where "
     "name like 'Athersys RAGE%' or name like '%ORESTES%'");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -44,7 +44,7 @@ struct hash *getGoodTissues(struct sqlConnection *conn)
 {
 struct hash *hash = hashNew(0);
 struct sqlResult *sr = sqlGetResult(conn,
-    "select id from tissue where "
+    "NOSQLINJ select id from tissue where "
     "name like '%brain%' or name like '%amygdala%' or "
     "name like '%hippocampus%' or name like '%cortex%' or "
     "name like '%straitum%'");
@@ -64,7 +64,7 @@ struct hash *getGoodAccs(struct sqlConnection *conn,
  * given tissues, and not of given libraries. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
    "select acc,library,tissue from gbCdnaInfo where organism = %d ",
    orgId);
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -99,7 +99,7 @@ void writeMatchingPsl(struct sqlConnection *conn, char *table,
 /* Write all psls in table where qName is in qHash to f */
 {
 char query[256];
-safef(query, sizeof(query), "select * from %s", table);
+sqlSafef(query, sizeof(query), "select * from %s", table);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 int count = 0;
@@ -121,7 +121,7 @@ void savePsl(struct sqlConnection *conn, struct hash *accHash, char *fileName)
 {
 FILE *f = mustOpen(fileName, "w");
 struct slName *table, *splicedEstList;
-splicedEstList = sqlQuickList(conn, "show tables like 'chr%_intronEst'");
+splicedEstList = sqlQuickList(conn, "NOSQLINJ show tables like 'chr%_intronEst'");
 writeMatchingPsl(conn, "all_mrna", accHash, f);
 for (table = splicedEstList; table != NULL; table = table->next)
     writeMatchingPsl(conn, table->name, accHash, f);
@@ -139,7 +139,7 @@ verbose(1, "Got %d bad libraries\n", badLibHash->elCount);
 struct hash *goodTissueHash = getGoodTissues(conn);
 verbose(1, "Got %d good tissues\n", goodTissueHash->elCount);
 int humanId = sqlQuickNum(conn, 
-	"select id from organism where name = 'Homo sapiens'");
+	"NOSQLINJ select id from organism where name = 'Homo sapiens'");
 struct hash *goodAccHash = getGoodAccs(conn, goodTissueHash, 
 	badLibHash, humanId);
 verbose(1, "Got %d good accessions\n", goodAccHash->elCount);

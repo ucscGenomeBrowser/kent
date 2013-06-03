@@ -161,7 +161,7 @@ char *ccdsGeneMapGetCreateSql(char *table)
 /* Get SQL command to create ccdsGeneMap table. Result should be freed. */
 {
 char sql[1024];
-safef(sql, sizeof(sql), createSql, table);
+sqlSafef(sql, sizeof(sql), createSql, table);
 return cloneString(sql);
 }
 
@@ -176,7 +176,7 @@ char query[128];
 struct sqlResult *sr = NULL;
 char **row = NULL;
 
-safef(query, sizeof(query), "select * from %s where (ccdsId='%s') and (chrom='%s') and (cdsSimilarity >= %f)",
+sqlSafef(query, sizeof(query), "select * from %s where (ccdsId='%s') and (chrom='%s') and (cdsSimilarity >= %f)",
       mapTable, ccdsId, chrom, minSimilarity);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -199,7 +199,7 @@ simExpr[0] = '\0';
 if (minSimilarity > 0.0)
     safef(simExpr, sizeof(simExpr), "and cdsSimilarity >= %f", minSimilarity);
 
-safef(query, sizeof(query), "select * from %s where geneId='%s' %s",
+sqlSafef(query, sizeof(query), "select * from %s where geneId='%s' %s",
       mapTable, geneId, simExpr);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

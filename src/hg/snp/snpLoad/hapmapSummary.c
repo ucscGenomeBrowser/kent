@@ -72,7 +72,7 @@ char **row;
 struct orthoAllele *a = NULL;
 
 ret = newHash(0);
-safef(query, sizeof(query), "select name, score, orthoAllele from %s", tableName);
+sqlSafef(query, sizeof(query), "select name, score, orthoAllele from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -139,7 +139,7 @@ struct alleleSummary *as = NULL;
 int popCount = 0;
 int score = 0;
 
-safef(query, sizeof(query), "select * from %s", inputTableName);
+sqlSafef(query, sizeof(query), "select * from %s", inputTableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

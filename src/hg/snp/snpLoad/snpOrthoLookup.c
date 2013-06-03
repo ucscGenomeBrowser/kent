@@ -48,7 +48,7 @@ struct hash *ret = newHash(16);
 int count = 0;
 
 verbose(1, "get base snp data\n");
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select chrom, chromStart, chromEnd, name, strand, refUCSC, observed from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -84,7 +84,7 @@ int start = 0;
 int end = 0;
 
 verbose(1, "write results...\n");
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, species, strand, allele from %s", tableName);
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, species, strand, allele from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

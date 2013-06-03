@@ -22,7 +22,7 @@ char **row;
 char query[256];
 struct genePred *gp;
 
-sprintf(query, 
+sqlSafef(query, sizeof query, 
    "select * from genieKnown where chrom = '%s' and txStart >= %d and txStart < %d", 
    chromosome, start, end);
 sr = sqlGetResult(conn, query);

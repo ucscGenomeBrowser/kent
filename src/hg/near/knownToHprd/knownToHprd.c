@@ -37,7 +37,7 @@ void createTable(struct sqlConnection *conn, char *tableName)
 /* Create our name/value table, dropping if it already exists. */
 {
 struct dyString *dy = dyStringNew(512);
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
 "CREATE TABLE  %s (\n"
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
@@ -66,7 +66,7 @@ struct hash *spIdHash = newHash(18);
 struct hash *kgIdHash = newHash(18);
 int missing=0;  // how many recs had no match via kgXref
 
-sr = sqlGetResult(hConn, "select kgId, mRNA, spId from kgXref");
+sr = sqlGetResult(hConn, "NOSQLINJ select kgId, mRNA, spId from kgXref");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *kgId = row[0];

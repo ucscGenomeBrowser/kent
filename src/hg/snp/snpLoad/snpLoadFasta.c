@@ -102,7 +102,7 @@ char *createString =
 struct dyString *dy = newDyString(1024);
 
 safef(tableName, ArraySize(tableName), "chr%s_snpFasta", chromName);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 hFreeConn(&conn);
@@ -113,11 +113,10 @@ void addIndex(char *chromName)
 {
 struct sqlConnection *conn = hAllocConn();
 char tableName[64];
-char *alterString = "ALTER TABLE %s add index rsId(rsId(12))";
 struct dyString *dy = newDyString(512);
 
 safef (tableName, ArraySize(tableName), "chr%s_snpFasta", chromName);
-dyStringPrintf(dy, alterString, tableName);
+sqlDyStringPrintf(dy, "ALTER TABLE %s add index rsId(rsId(12))", tableName);
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 hFreeConn(&conn);

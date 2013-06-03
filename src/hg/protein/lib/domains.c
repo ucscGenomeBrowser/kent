@@ -63,7 +63,7 @@ if (list != NULL)
     hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/ISpy?mode=single&ac=%s\" TARGET=_blank>",
     	swissProtAcc);
     hPrintf("Graphical view of domain structure</A><BR>\n<UL>");fflush(stdout);
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     	"select extAcc1,extAcc2 from extDbRef,extDb"
 	" where extDbRef.acc = '%s'"
 	" and extDb.val = 'Interpro' and extDb.id = extDbRef.extDb"
@@ -97,7 +97,7 @@ if (kgVersion == KG_III)
 	    {
 	    char query[256];
 	    char *description;
-	    safef(query, sizeof(query), 
+	    sqlSafef(query, sizeof(query), 
 	          "select description from %s.pfamDesc where pfamAC='%s'", database, el->name);
 	    description = sqlQuickString(hgConn, query);
 	    if (description == NULL)
@@ -121,7 +121,7 @@ if (kgVersion == KG_III)
 	    {
 	    char query[256];
 	    char *description;
-	    safef(query, sizeof(query), 
+	    sqlSafef(query, sizeof(query), 
 	          "select description from %s.scopDesc where acc='%s'", database, el->name);
 	    description = sqlQuickString(hgConn, query);
 	    if (description == NULL)
@@ -145,7 +145,7 @@ else
 	    {
 	    char query[256];
 	    char *description;
-            safef(query, sizeof(query), "select description from %s.pfamDesc where pfamAC='%s'", 
+            sqlSafef(query, sizeof(query), "select description from %s.pfamDesc where pfamAC='%s'", 
 		  protDbName, el->name);
 	    description = sqlQuickString(spConn, query);
 	    if (description == NULL)
@@ -168,7 +168,7 @@ if (list != NULL)
     struct sqlResult *sr;
     int column = 0, maxColumn=4, rowCount=0;
     hPrintf("<B>Protein Data Bank (PDB) 3-D Structure</B><BR>");
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     	"select extAcc1,extAcc2 from extDbRef,extDb"
 	" where extDbRef.acc = '%s'"
 	" and extDb.val = 'PDB' and extDb.id = extDbRef.extDb"

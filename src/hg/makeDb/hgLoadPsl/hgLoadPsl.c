@@ -4,6 +4,7 @@
 #include "jksql.h"
 #include "dystring.h"
 #include "psl.h"
+#include "pslReader.h"
 #include "xAli.h"
 #include "hdb.h"
 #include "hgRelate.h"

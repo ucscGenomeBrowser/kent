@@ -188,7 +188,7 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 int errCount = 0;
 char buf[512];
-safef(buf, sizeof(buf), "select %s from %s", field, table);
+sqlSafef(buf, sizeof(buf), "select %s from %s", field, table);
 sr = sqlGetResult(conn, buf);
 while ((row = sqlNextRow(sr)) != NULL)
     {

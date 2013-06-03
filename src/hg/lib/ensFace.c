@@ -75,7 +75,7 @@ ensemblName[0] = 0;
 if (sqlTableExists(conn, UCSC_TO_ENSEMBL))
     {
     char query[256];
-    safef(query, ArraySize(query), "select ensembl from %s where ucsc='%s'",
+    sqlSafef(query, ArraySize(query), "select ensembl from %s where ucsc='%s'",
 	UCSC_TO_ENSEMBL, chrom);
     (void) sqlQuickQuery(conn,query,ensemblName,ArraySize(ensemblName));
     }
@@ -92,7 +92,7 @@ struct sqlConnection *conn = hAllocConn(database);
 if (sqlTableExists(conn, ENSEMBL_LIFT))
     {
     char query[256];
-    safef(query, ArraySize(query), "select offset from %s where chrom='%s'",
+    sqlSafef(query, ArraySize(query), "select offset from %s where chrom='%s'",
 	ENSEMBL_LIFT, chrom);
     offset = sqlQuickNum(conn,query); // returns 0 for failed query
     }
@@ -154,7 +154,7 @@ if (trackVersionExists)
     {
     struct sqlConnection *conn = hAllocConn("hgFixed");
     char query[256];
-    safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' and name = 'ensGene' order by updateTime DESC limit 1", database);
+    sqlSafef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' and name = 'ensGene' order by updateTime DESC limit 1", database);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
 

@@ -91,7 +91,7 @@ int testChromSize(char *chrom)
 {
 struct sqlConnection *conn = hAllocConn(db);
 char query[1024];
-safef(query, sizeof(query), "select size from chromInfo where chrom = '%s'",
+sqlSafef(query, sizeof(query), "select size from chromInfo where chrom = '%s'",
       chrom);
 int size = sqlQuickNum(conn, query);
 hFreeConn(&conn);
@@ -102,7 +102,7 @@ struct slName *getTableNames(struct sqlConnection *conn)
 /* Return a list of names of tables that have not been excluded by 
  * command line options. */
 {
-char *query = hoursOld ? "show table status" : "show tables";
+char *query = hoursOld ? "NOSQLINJ show table status" : "NOSQLINJ show tables";
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct slName *tableList = NULL;
 char **row = NULL;
@@ -461,12 +461,12 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 		{
 		struct dyString *bigQuery = newDyString(1024);
 		dyStringClear(bigQuery);
-		dyStringPrintf(bigQuery, "select count(*) from %s where ",
+		sqlDyStringPrintf(bigQuery, "select count(*) from %s where ",
 			       table);
 		for (chromPtr=chromList; chromPtr != NULL;
 		       chromPtr=chromPtr->next)
 		    {
-		    dyStringPrintf(bigQuery, "%s != '%s' ",
+		    sqlDyStringPrintf(bigQuery, "%s != '%s' ",
 				   hti->chromField, chromPtr->name);
 		    if (chromPtr->next != NULL)
 			dyStringAppend(bigQuery, "AND ");

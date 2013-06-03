@@ -38,7 +38,8 @@ conn2= hAllocConn(database);
 conn3= hAllocConn(database);
 	
 /* first get all RefSeq entries that begin with "NR_" and have related OMIM entries */
-sprintf(query2,"select g.chrom, g.txStart, g.txEnd, omimId from refGene g, refLink l, omimGene o where l.mrnaAcc=g.name and g.name like 'NR_%c' and omimId <>0 limit 1000", '%');
+sqlSafef(query2, sizeof query2, "select g.chrom, g.txStart, g.txEnd, omimId from refGene g, refLink l, omimGene o "
+    "where l.mrnaAcc=g.name and g.name like 'NR_%c' and omimId <>0 limit 1000", '%');
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -49,7 +50,7 @@ while (row2 != NULL)
     omimId	= row2[3];
 
     /* then check if this omimId is already in the omimGene table */
-    sprintf(query3,"select name from %s.omimGene where name='%s'",
+    sqlSafef(query3, query3, "select name from %s.omimGene where name='%s'",
     	    database, omimId);
     sr3 = sqlMustGetResult(conn3, query3);
     row3 = sqlNextRow(sr3);

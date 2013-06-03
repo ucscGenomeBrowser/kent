@@ -46,7 +46,7 @@ char **row;
 
 verbose(1, "reading exceptions...\n");
 ret = newHash(0);
-safef(query, sizeof(query), "select name, exception from %s", tableName);
+sqlSafef(query, sizeof(query), "select name, exception from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -71,7 +71,7 @@ struct snpSubset *subsetElement = NULL;
 
 verbose(1, "creating SNP hash...\n");
 ret = newHash(20);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select name, chrom, chromStart, chromEnd, strand, observed, class, locType from %s", 
       tableName);
 sr = sqlGetResult(conn, query);
@@ -164,7 +164,7 @@ FILE *plusminus = mustOpen("plusminus", "w");
 FILE *minusminus = mustOpen("minusminus", "w");
 
 verbose(1, "logging...\n");
-safef(query, sizeof(query), "select name, chrom, chromStart, strand, observed from %s", illuminaTable);
+sqlSafef(query, sizeof(query), "select name, chrom, chromStart, strand, observed from %s", illuminaTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -217,7 +217,7 @@ char *strand = NULL;
 char *observed = NULL;
 
 verbose(1, "process SNPs...\n");
-safef(query, sizeof(query), "select name, chrom, chromStart, strand, observed from %s", illuminaTable);
+sqlSafef(query, sizeof(query), "select name, chrom, chromStart, strand, observed from %s", illuminaTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

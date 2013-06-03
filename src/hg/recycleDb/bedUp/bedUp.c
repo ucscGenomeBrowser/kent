@@ -166,7 +166,7 @@ enum {definedCol = 4};
 int rowCount = 0;
 
 
-sprintf(query, "select * from %s", oldTable);
+sqlSafef(query, sizeof query, "select * from %s", oldTable);
 sr = sqlGetResult(conn, query);
 columnCount = sqlCountColumns(sr);
 extraCount = columnCount - definedCol;
@@ -199,7 +199,7 @@ char **row;
 char name[128];
 struct clonePos *el, *list = NULL;
 
-sr = sqlGetResult(conn, "select * from clonePos");
+sr = sqlGetResult(conn, "NOSQLINJ select * from clonePos");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = clonePosLoad(row);

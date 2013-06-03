@@ -78,8 +78,8 @@ char **row;
 struct wabaChromHit *wch, *wchList = NULL;
 
 /* Get the frags and load into tg->items. */
-sprintf(table, "%s%s", chromName, (char *)tg->customPt);
-sprintf(query, "select * from %s where chromStart<%u and chromEnd>%u",
+safef(table, sizeof table, "%s%s", chromName, (char *)tg->customPt);
+sqlSafef(query, sizeof query, "select * from %s where chromStart<%u and chromEnd>%u",
     table, winEnd, winStart);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

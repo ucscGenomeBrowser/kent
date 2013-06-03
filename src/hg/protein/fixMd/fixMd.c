@@ -41,7 +41,7 @@ conn2= hAllocConn();
 
 oldChrom = strdup("");
 
-sprintf(query2,"select * from %s.seq_contig", database);
+sqlSafef(query2, sizeof query2, "select * from %s.seq_contig", database);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)

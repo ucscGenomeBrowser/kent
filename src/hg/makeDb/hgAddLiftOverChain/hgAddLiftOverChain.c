@@ -76,7 +76,7 @@ if (!sqlTableExists(conn, TABLE_NAME))
     struct dyString *dy = newDyString(1024);
     /* Create definition statement and make table */
     verbose(1, "Creating table %s\n", TABLE_NAME);
-    dyStringPrintf(dy, "CREATE TABLE %s (\n", TABLE_NAME);
+    sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", TABLE_NAME);
     dyStringPrintf(dy, "  fromDb varchar(255) not null,\n");
     dyStringPrintf(dy, "  toDb varchar(255) not null,\n");
     dyStringPrintf(dy, "  path longblob not null,\n");
@@ -120,7 +120,7 @@ loChain.multiple[0] = (multiple) ? 'Y' : 'N';
 loChain.minBlocks = minBlocks;
 loChain.fudgeThick[0] = (fudgeThick) ? 'Y' : 'N';
 
-liftOverChainSaveToDbEscaped(conn, &loChain, TABLE_NAME, 1024);
+liftOverChainSaveToDb(conn, &loChain, TABLE_NAME, 1024);
 hDisconnectCentral(&conn);
 }
 

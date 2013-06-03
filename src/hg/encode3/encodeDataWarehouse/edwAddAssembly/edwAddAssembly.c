@@ -41,7 +41,7 @@ int taxon = sqlUnsigned(taxonString);
 /* See if we have assembly with this name already and abort with error if we do. */
 struct sqlConnection *conn = sqlConnect(edwDatabase);
 char query[256 + PATH_LEN];
-safef(query, sizeof(query), "select id from edwAssembly where name='%s'", name);
+sqlSafef(query, sizeof(query), "select id from edwAssembly where name='%s'", name);
 int asmId = sqlQuickNum(conn, query);
 if (asmId != 0)
    errAbort("Assembly %s already exists", name);
@@ -62,7 +62,7 @@ edwUpdateFileTags(conn, ef->id, tags);
 dyStringFree(&tags);
 
 /* Insert info into edwAssembly record. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
    "insert edwAssembly (taxon,name,ucscDb,twoBitId,baseCount,realBaseCount) "
                 "values(%d, '%s', '%s', %lld, %lld, %lld)"
 		, taxon, name, ucscDb, (long long)ef->id, baseCount, realBaseCount);
