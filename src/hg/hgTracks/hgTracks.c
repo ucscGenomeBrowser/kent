@@ -737,7 +737,7 @@ if (target != NULL)
 	char *itemAcc = pcrResultItemAccession(tpsl->tName);
 	char *itemName = pcrResultItemName(tpsl->tName);
 	/* Query target->pslTable to get target-to-genomic mapping: */
-	safef(query, sizeof(query), "select * from %s where qName = '%s'",
+	sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'",
 	      target->pslTable, itemAcc);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -5470,17 +5470,17 @@ char msg1[512], msg2[512];
 int seqCount = 0;
 boolean truncating;
 
-seqCount = sqlQuickNum(conn, "select count(*) from chromInfo");
+seqCount = sqlQuickNum(conn, "NOSQLINJ select count(*) from chromInfo");
 truncating = (limit > 0) && (seqCount > limit);
 
 if (!truncating)
     {
-    sr = sqlGetResult(conn, "select chrom,size from chromInfo order by size desc");
+    sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo order by size desc");
     }
 else
     {
 
-    safef(query, sizeof(query), "select chrom,size from chromInfo order by size desc limit %d", limit);
+    sqlSafef(query, sizeof(query), "select chrom,size from chromInfo order by size desc limit %d", limit);
     sr = sqlGetResult(conn, query);
     }
 
@@ -5516,7 +5516,7 @@ else
     puts(msg2);
     cgiTableFieldEnd();
     sqlFreeResult(&sr);
-    safef(query, sizeof(query), "select count(*),sum(size) from chromInfo");
+    sqlSafef(query, sizeof(query), "select count(*),sum(size) from chromInfo");
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{

@@ -76,14 +76,11 @@ remove(run->errFileName);
 
 /* Update database with job results */
 struct dyString *dy = dyStringNew(0);
-dyStringPrintf(dy, "update %s set endTime=%lld, stderr='", clTable, job->endTime);
-char *escaped = sqlEscapeString(trimSpaces(job->stderr));
-dyStringAppend(dy, escaped);
-dyStringPrintf(dy, "', returnCode=%d where id=%u", job->returnCode, job->id);
+sqlDyStringPrintf(dy, "update %s set endTime=%lld, stderr='%s', returnCode=%d where id=%u",
+    clTable, job->endTime, trimSpaces(job->stderr), job->returnCode, job->id);
 struct sqlConnection *conn = sqlConnect(clDatabase);
 sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
-freez(&escaped);
 dyStringFree(&dy);
 
 /* Free up runner resources. */
@@ -165,7 +162,7 @@ job->startTime = edwNow();
 /* Save start time to database. */
 struct sqlConnection *conn = sqlConnect(clDatabase);
 char query[256];
-safef(query, sizeof(query), "update %s set startTime=%lld where id=%lld", 
+sqlSafef(query, sizeof(query), "update %s set startTime=%lld where id=%lld", 
     clTable, job->startTime, (long long)job->id);
 sqlUpdate(conn, query);
 sqlDisconnect(&conn);
@@ -247,7 +244,7 @@ for (;;)
     /* Get next bits of work from database. */
     struct sqlConnection *conn = sqlConnect(database);
     char query[256];
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	"select * from %s where startTime = 0 and id > %lld order by id", table, lastId);
     struct edwJob *newJobs = edwJobLoadByQuery(conn, query);
     int newJobCount = slCount(newJobs);

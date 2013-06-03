@@ -49,7 +49,7 @@ o3 = fopen("j.dat", "w");
 conn2= hAllocConn(hDefaultDb());
 conn3= hAllocConn(hDefaultDb());
 	
-sprintf(query2,"select * from %sTemp.refGene;", genomeRelease);
+sqlSafef(query2, sizeof query2, "select * from %sTemp.refGene;", genomeRelease);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -65,7 +65,7 @@ while (row2 != NULL)
     exonStarts= row2[8]; 
     exonEnds  = row2[9];	
 
-    sprintf(query3, "select * from proteins%s.spXref2 where extAC='%s' and extDB='EMBL';",
+    sqlSafef(query3, sizeof query3,  "select * from proteins%s.spXref2 where extAC='%s' and extDB='EMBL';",
     	    proteinDataDate, name);
 
     sr3 = sqlMustGetResult(conn3, query3);

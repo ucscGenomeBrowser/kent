@@ -51,11 +51,11 @@ struct edwFile *edwFileInProgress(struct sqlConnection *conn, int submitId)
 /* Return file in submission in process of being uploaded if any. */
 {
 char query[256];
-safef(query, sizeof(query), "select fileIdInTransit from edwSubmit where id=%u", submitId);
+sqlSafef(query, sizeof(query), "select fileIdInTransit from edwSubmit where id=%u", submitId);
 long long fileId = sqlQuickLongLong(conn, query);
 if (fileId == 0)
     return NULL;
-safef(query, sizeof(query), "select * from edwFile where id=%lld", (long long)fileId);
+sqlSafef(query, sizeof(query), "select * from edwFile where id=%lld", (long long)fileId);
 return edwFileLoadByQuery(conn, query);
 }
 
@@ -63,7 +63,7 @@ int positionInQueue(struct sqlConnection *conn, char *url)
 /* Return position of our URL in submission queue */
 {
 char query[256];
-safef(query, sizeof(query), "select commandLine from edwSubmitJob where startTime = 0");
+sqlSafef(query, sizeof(query), "select commandLine from edwSubmitJob where startTime = 0");
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 int aheadOfUs = -1;

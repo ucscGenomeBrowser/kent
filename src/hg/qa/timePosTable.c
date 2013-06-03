@@ -144,7 +144,7 @@ double elapsed = ((double)(clock1000()-startTime))/1000.0;
 printf("pass: %d  range size: %d  ranges: %d  time: %g seconds\n", pass, size,
        slCount(ranges), elapsed);
 slFreeList(&ranges);
-sqlUpdate(conn, "flush tables");
+sqlUpdate(conn, "NOSQLINJ flush tables");
 return elapsed;
 }
 

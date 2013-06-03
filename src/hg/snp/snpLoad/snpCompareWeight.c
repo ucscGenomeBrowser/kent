@@ -67,7 +67,7 @@ duplicateNameHash = newHash(16);
 
 verbose(1, "getDuplicateNameHash for %s...\n", tableName);
 
-safef(query, sizeof(query), "select name from %s", tableName);
+sqlSafef(query, sizeof(query), "select name from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -93,7 +93,7 @@ struct weightList *el = NULL;
 int count = 0;
 struct hash *duplicateNameHash = getDuplicateNameHash(tableName);
 
-safef(query, sizeof(query), "select name, weight from %s", tableName);
+sqlSafef(query, sizeof(query), "select name, weight from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -126,7 +126,7 @@ int count = 0;
 struct hash *duplicateNameHash = getDuplicateNameHash(tableName);
 
 ret = newHash(16);
-safef(query, sizeof(query), "select name, weight from %s", tableName);
+sqlSafef(query, sizeof(query), "select name, weight from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

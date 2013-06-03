@@ -46,7 +46,7 @@ void recordIntoHistory(struct sqlConnection *conn, unsigned id, char *table, boo
 /* Get historyBits and fold status into it. */
 char quickResult[32];
 char query[256];
-safef(query, sizeof(query), "select historyBits from %s where id=%u", table, id);
+sqlSafef(query, sizeof(query), "select historyBits from %s where id=%u", table, id);
 if (sqlQuickQuery(conn, query, quickResult, sizeof(quickResult)) == NULL)
     internalErr();
 char *lastTimeField;
@@ -65,7 +65,7 @@ else
     openResultField = "openFails";
     }
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "update %s set historyBits=%lld, %s=%s+1, %s=%lld "
     "where id=%lld",
     table, historyBits, openResultField, openResultField, lastTimeField, edwNow(),
@@ -187,13 +187,11 @@ return bfList;
 int makeNewEmptySubmitRecord(struct sqlConnection *conn, char *submitUrl, unsigned userId)
 /* Create a submit record around URL and return it's id. */
 {
-char *escapedUrl = sqlEscapeString(submitUrl);
 struct dyString *query = dyStringNew(0);
-dyStringAppend(query, "insert edwSubmit (url, startUploadTime, userId) ");
-dyStringPrintf(query, "VALUES('%s', %lld,  %d)", escapedUrl, edwNow(), userId);
+sqlDyStringAppend(query, "insert edwSubmit (url, startUploadTime, userId) ");
+sqlDyStringPrintf(query, "VALUES('%s', %lld,  %d)", submitUrl, edwNow(), userId);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
-freez(&escapedUrl);
 return sqlLastAutoId(conn);
 }
 
@@ -202,12 +200,10 @@ int makeNewEmptyFileRecord(struct sqlConnection *conn, unsigned submitId, unsign
 /* Make a new, largely empty, record around file and submit info. */
 {
 struct dyString *query = dyStringNew(0);
-char *escapedFileName = sqlEscapeString(submitFileName);
-dyStringAppend(query, "insert edwFile (submitId, submitDirId, submitFileName, size) ");
-dyStringPrintf(query, "VALUES(%u, %u, '%s', %lld)", submitId, submitDirId, escapedFileName, size);
+sqlDyStringAppend(query, "insert edwFile (submitId, submitDirId, submitFileName, size) ");
+dyStringPrintf(query, "VALUES(%u, %u, '%s', %lld)", submitId, submitDirId, submitFileName, size);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
-freez(&escapedFileName);
 return sqlLastAutoId(conn);
 }
 
@@ -263,11 +259,11 @@ ef->id = makeNewEmptyFileRecord(conn, submitId, submitDirId, ef->submitFileName,
 
 /* Update edwSubmit with file in transit info */
 char query[256];
-safef(query, sizeof(query), "update edwSubmit set fileIdInTransit=%lld where id=%u",
+sqlSafef(query, sizeof(query), "update edwSubmit set fileIdInTransit=%lld where id=%u",
     (long long)ef->id, submitId);
 sqlUpdate(conn, query);
 
-safef(query, sizeof(query), "select paraFetchStreams from edwHost where id=%u", hostId);
+sqlSafef(query, sizeof(query), "select paraFetchStreams from edwHost where id=%u", hostId);
 int paraFetchStreams = sqlQuickNum(conn, query);
 
 /* Wrap getting the file, the actual data transfer, with an error catcher that
@@ -285,7 +281,7 @@ if (errCatchStart(errCatch))
 
     /* Update file name in database with temp file name so web app can track us. */
     char query[PATH_LEN+128];
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	"update edwFile set edwFileName='%s' where id=%lld", 
 	tempName + strlen(edwRootDir), (long long)ef->id);
     sqlUpdate(conn, query);
@@ -320,7 +316,7 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 
 /* Now we got the file.  We'll go ahead and save the file name and stuff. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
        "update edwFile set"
        "  edwFileName='%s', startUploadTime=%lld, endUploadTime=%lld"
        "  where id = %d"
@@ -348,7 +344,7 @@ if (errCatchStart(errCatch))
      * the validFile section that ef->updateTime be updated last.  A nonzero ef->updateTime
      * is used as a sign of record complete. */
     struct dyString *dy = dyStringNew(0);  /* Includes tag so query may be long */
-    dyStringPrintf(dy, "update edwFile set md5='%s',size=%lld,updateTime=%lld",
+    sqlDyStringPrintf(dy, "update edwFile set md5='%s',size=%lld,updateTime=%lld",
 	    md5, ef->size, ef->updateTime);
     dyStringAppend(dy, ", tags='");
     dyStringAppend(dy, ef->tags);
@@ -357,7 +353,7 @@ if (errCatchStart(errCatch))
     dyStringFree(&dy);
 
     /* Update edwSubmit so file no longer shown as in transit */
-    safef(query, sizeof(query), "update edwSubmit set fileIdInTransit=0 where id=%u", submitId);
+    sqlSafef(query, sizeof(query), "update edwSubmit set fileIdInTransit=0 where id=%u", submitId);
     sqlUpdate(conn, query);
 
     success = TRUE;
@@ -374,7 +370,7 @@ int findFileGivenMd5AndSubmitDir(struct sqlConnection *conn, char *md5, int subm
 /* Given hexed md5 and a submitDir see if we have a matching file. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select file.id from edwSubmit sub,edwFile file "
     "where file.md5 = '%s' and file.submitId = sub.id and sub.submitDirId = %d"
     , md5, submitDirId);
@@ -419,7 +415,7 @@ void tellSubscribers(struct sqlConnection *conn, char *submitDir, char *submitFi
 /* Tell subscribers that match about file of given id */
 {
 char query[256];
-safef(query, sizeof(query), "select tags from edwFile where id=%u", id);
+sqlSafef(query, sizeof(query), "select tags from edwFile where id=%u", id);
 char *tagsString = sqlQuickString(conn, query);
 struct hash *tagHash=NULL;
 struct cgiVar *tagList=NULL;
@@ -428,7 +424,7 @@ if (!isEmpty(tagsString))
 
 
 char **row;
-struct sqlResult *sr = sqlGetResult(conn, "select * from edwSubscriber order by runOrder,id");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select * from edwSubscriber order by runOrder,id");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct edwSubscriber *subscriber = edwSubscriberLoad(row);
@@ -710,7 +706,7 @@ if (errCatchStart(errCatch))
 	{
 	remove(tempSubmitFile);
 	char submitRelativePath[PATH_LEN];
-	safef(query, sizeof(query), "select edwFileName from edwFile where id=%d", fileId);
+	sqlSafef(query, sizeof(query), "select edwFileName from edwFile where id=%d", fileId);
 	sqlNeedQuickQuery(conn, query, submitRelativePath, sizeof(submitRelativePath));
 	safef(submitLocalPath, sizeof(submitLocalPath), "%s%s", edwRootDir, submitRelativePath);
 	}
@@ -730,7 +726,7 @@ if (errCatchStart(errCatch))
 	off_t size = fileSize(submitLocalPath);
 
 	/* Update file table which now should be complete including updateTime. */
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 	    "update edwFile set "
 	    " updateTime=%lld, size=%lld, md5='%s', edwFileName='%s',"
 	    " startUploadTime=%lld, endUploadTime=%lld"
@@ -745,7 +741,7 @@ if (errCatchStart(errCatch))
     bfList = edwParseSubmitFile(submitLocalPath, submitUrl);
 
     /* Save our progress so far to submit table. */
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	"update edwSubmit"
 	"  set submitFileId=%lld, submitDirId=%lld, fileCount=%d where id=%d",  
 	    (long long)fileId, (long long)submitDirId, slCount(bfList), submitId);
@@ -783,7 +779,7 @@ for (bf = bfList; bf != NULL; bf = bfNext)
 bfList = NULL;
 
 /* Update database with oldFile count. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "update edwSubmit set oldFiles=%d,oldBytes=%lld,byteCount=%lld where id=%u",  
 	oldCount, oldBytes, byteCount, submitId);
 sqlUpdate(conn, query);
@@ -807,7 +803,7 @@ for (bf = newList; bf != NULL; bf = bf->next)
 	    verbose(1, "Fetching %s\n", bf->submitFileName);
 	    getSubmittedFile(conn, bf, submitDir, submitUrl, submitId);
 	    newBytes += bf->size;
-	    safef(query, sizeof(query), 
+	    sqlSafef(query, sizeof(query), 
 		"update edwSubmit set newFiles=newFiles+1,newBytes=%lld where id=%d", 
 		newBytes, submitId);
 	    sqlUpdate(conn, query);
@@ -817,14 +813,14 @@ for (bf = newList; bf != NULL; bf = bf->next)
     else
 	{
 	verbose(2, "Already got %s\n", bf->submitFileName);
-	safef(query, sizeof(query), "update edwSubmit set oldFiles=oldFiles+1 where id=%d", 
+	sqlSafef(query, sizeof(query), "update edwSubmit set oldFiles=oldFiles+1 where id=%d", 
 	    submitId);
 	sqlUpdate(conn, query);
 	}
     }
 
 /* If we made it here, update submit endUploadTime */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"update edwSubmit set endUploadTime=%lld where id=%d", 
 	edwNow(), submitId);
 sqlUpdate(conn, query);

@@ -44,7 +44,7 @@ conn3= hAllocConn(dbName);
 o1 = fopen("j.dat",  "w");
 o2 = fopen("jj.dat", "w");
     
-sprintf(query2,"select * from %sTemp.locus2Ref0;", dbName);
+sqlSafef(query2, sizeof query2, "select * from %sTemp.locus2Ref0;", dbName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -52,7 +52,7 @@ while (row2 != NULL)
     locusID2 	= row2[0];
     refAC 	= row2[1];
     
-    sprintf(query, "select * from %sTemp.locus2Acc0 where locusID=%s and seqType='m';", 
+    sqlSafef(query, sizeof query, "select * from %sTemp.locus2Acc0 where locusID=%s and seqType='m';", 
 		   dbName, locusID2);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -70,7 +70,7 @@ while (row2 != NULL)
         kgID = sqlGetField(dbName, "knownGene", "name", cond_str);
 	if (kgID != NULL)
 	    {
-            sprintf(query3, "select * from %sTemp.keggList where locusID = '%s'", dbName, locusID);
+            sqlSafef(query3, sizeof query3, "select * from %sTemp.keggList where locusID = '%s'", dbName, locusID);
             sr3 = sqlGetResult(conn3, query3);
             while ((row3 = sqlNextRow(sr3)) != NULL)
                 {

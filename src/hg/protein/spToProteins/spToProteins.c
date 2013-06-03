@@ -58,9 +58,9 @@ conn3 = sqlConnect(proteinDatabaseName);
 
 bioentryId = 0;
 
-safef(query2, sizeof(query2), "select count(*) from %s.info", proteinDatabaseName);
+sqlSafef(query2, sizeof(query2), "select count(*) from %s.info", proteinDatabaseName);
 int totalIds = sqlQuickNum(conn2, query2);
-safef(query2, sizeof(query2), "select acc, isCurated from %s.info;", proteinDatabaseName);
+sqlSafef(query2, sizeof(query2), "select acc, isCurated from %s.info;", proteinDatabaseName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -113,7 +113,7 @@ while (row2 != NULL)
     fprintf(o2, "%s\t%s\t%d\t%d\t%d\t%s\t%s\t%s\n", accession, displayId, 
 	   taxon, bioentryId, bioDatabase, desc, hugoSymbol, hugoDesc);
     
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	    "select extAcc1, extDb.val from sp%s.extDb, sp%s.extDbRef where extDbRef.acc='%s' %s",
 	    proteinDataDate, proteinDataDate, accession, "and extDb.id = extDbRef.extDb;"); 
     sr = sqlMustGetResult(conn, query);

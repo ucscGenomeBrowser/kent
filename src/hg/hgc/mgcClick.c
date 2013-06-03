@@ -38,7 +38,7 @@ static char *getAccVersion(struct sqlConnection *conn, char *acc)
 /* given a accession, get acc.ver */
 {
 char query[256], accver[64];
-safef(query, sizeof(query), "SELECT version FROM gbCdnaInfo WHERE acc=\"%s\"", acc);
+sqlSafef(query, sizeof(query), "SELECT version FROM gbCdnaInfo WHERE acc=\"%s\"", acc);
 safef(accver, sizeof(accver), "%s.%d", acc, sqlNeedQuickNum(conn, query));
 return cloneString(accver);
 }
@@ -172,7 +172,7 @@ struct sqlConnection *fconn = sqlMayConnect("hgFixed");
 if ((fconn != NULL) && sqlTableExists(fconn, "mgcMBLabValid"))
     {
     char query[64], buf[32];
-    safef(query, sizeof(query), "select acc from mgcMBLabValid where acc=\"%s\"",
+    sqlSafef(query, sizeof(query), "select acc from mgcMBLabValid where acc=\"%s\"",
           acc);
     if (sqlQuickQuery(fconn, query, buf, sizeof(buf)) != NULL)
         inMBLabValidDb = TRUE;
@@ -186,7 +186,7 @@ static void cdnaInfoLoad(struct cloneInfo *ci, struct sqlConnection *conn)
 {
 // data from gbCdnaInfo and friends
 char query[1024];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select "
       "description.name, organism.name, tissue.name, library.name,"
       "development.name, geneName.name, productName.name, mrnaClone.name,"

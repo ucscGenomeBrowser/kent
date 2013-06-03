@@ -56,18 +56,7 @@ void oregannoSaveToDb(struct sqlConnection *conn, struct oreganno *el, char *tab
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use oregannoSaveToDbEscaped() */
-
-void oregannoSaveToDbEscaped(struct sqlConnection *conn, struct oreganno *el, char *tableName, int updateSize);
-/* Save oreganno as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than oregannoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct oreganno *oregannoCommaIn(char **pS, struct oreganno *ret);
 /* Create a oreganno out of a comma separated string. 
@@ -133,18 +122,7 @@ void oregannoAttrSaveToDb(struct sqlConnection *conn, struct oregannoAttr *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use oregannoAttrSaveToDbEscaped() */
-
-void oregannoAttrSaveToDbEscaped(struct sqlConnection *conn, struct oregannoAttr *el, char *tableName, int updateSize);
-/* Save oregannoAttr as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than oregannoAttrSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct oregannoAttr *oregannoAttrCommaIn(char **pS, struct oregannoAttr *ret);
 /* Create a oregannoAttr out of a comma separated string. 
@@ -211,18 +189,7 @@ void oregannoLinkSaveToDb(struct sqlConnection *conn, struct oregannoLink *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use oregannoLinkSaveToDbEscaped() */
-
-void oregannoLinkSaveToDbEscaped(struct sqlConnection *conn, struct oregannoLink *el, char *tableName, int updateSize);
-/* Save oregannoLink as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than oregannoLinkSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct oregannoLink *oregannoLinkCommaIn(char **pS, struct oregannoLink *ret);
 /* Create a oregannoLink out of a comma separated string. 

@@ -121,7 +121,7 @@ while (lineFileRowTab(lf, words))
 	    outProt(fProt, id, acc, old);
 
 	/* Throw in old swissProt accessions. */
-	safef(query, sizeof(query), "select val from otherAcc where acc = '%s'", acc);
+	sqlSafef(query, sizeof(query), "select val from otherAcc where acc = '%s'", acc);
 	sr = sqlGetResult(uConn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -146,12 +146,12 @@ while (lineFileRowTab(lf, words))
 	int i;
 	for (i=0; i<ev->accCount; ++i)
 	    {
-	    safef(query, sizeof(query), "select geneName from gbCdnaInfo where acc='%s'", acc);
+	    sqlSafef(query, sizeof(query), "select geneName from gbCdnaInfo where acc='%s'", acc);
 	    int nameId = sqlQuickNum(gConn, query);
 	    if (nameId != 0)
 		{
 		char name[64];
-		safef(query, sizeof(query), "select name from geneName where id=%d", nameId);
+		sqlSafef(query, sizeof(query), "select name from geneName where id=%d", nameId);
 		if (sqlQuickQuery(gConn, query, name, sizeof(name)))
 		    outAlias(fAlias, id, name);
 		}

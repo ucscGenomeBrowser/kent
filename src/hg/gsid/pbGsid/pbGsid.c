@@ -170,7 +170,7 @@ hPrintf("<BR><font size=4><B>Protein: ");
 hPrintf("%s</B>", proteinID);
 
 /* Please note the hiv database name is hard wired here.*/
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 "select subjId from hivVax003Vax004.gsIdXref where aaSeqId = '%s'", proteinID);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

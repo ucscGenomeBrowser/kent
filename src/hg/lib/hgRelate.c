@@ -27,7 +27,7 @@ static char extFileCreate[] =
 
 static char historyCreate[] =	
 /* This contains a row for each update made to database. */
-"create table history ("
+"NOSQLINJ create table history ("
   "ix int not null auto_increment primary key,"  /* Update number. */
   "startId int unsigned not null,"              /* Start this session's ids. */
   "endId int unsigned not null,"                /* First id for next session. */
@@ -45,7 +45,7 @@ char **row = NULL;
 HGID maxId;
 struct sqlResult *sr;
 
-safef(query, sizeof(query), "SELECT MAX(id) from %s", tableName);
+sqlSafef(query, sizeof(query), "SELECT MAX(id) from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 if (sr != NULL)
@@ -75,15 +75,13 @@ static void hgHistoryEnterVa(struct sqlConnection *conn, int startId, int endId,
 // create SQL encoded string for comment
 struct dyString *commentBuf = dyStringNew(256);
 dyStringVaPrintf(commentBuf, comment, args);
-char *commentStr = sqlEscapeString(commentBuf->string);
-dyStringFree(&commentBuf);
 struct dyString *query = dyStringNew(256);
 ensureHistoryTableExists(conn);
-dyStringPrintf(query, "INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,%d,%d,'%s',\"%s\",NOW(), NULL)",
-               startId, endId, getUser(), commentStr);
+sqlDyStringPrintf(query, "INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES (NULL,%d,%d,'%s','%s',NOW(), NULL)",
+               startId, endId, getUser(), commentBuf->string);
 sqlUpdate(conn,query->string);
 dyStringFree(&query); 
-freeMem(commentStr);
+dyStringFree(&commentBuf);
 }
 
 void hgHistoryComment(struct sqlConnection *conn, char *comment, ...)
@@ -213,7 +211,7 @@ long long size = fileSize(path);
 if (!sqlTableExists(conn, extFileTbl))
     {
     char query[1024];
-    safef(query, sizeof(query), extFileCreate, extFileTbl);
+    sqlSafef(query, sizeof(query), extFileCreate, extFileTbl);
     sqlMaybeMakeTable(conn, extFileTbl, query);
     }
 
@@ -224,12 +222,12 @@ splitPath(path, NULL, root, ext);
 safef(name, sizeof(name), "%s%s", root, ext);
 
 /* Delete it from database. */
-dyStringPrintf(dy, "delete from %s where path = '%s'", extFileTbl, path);
+sqlDyStringPrintf(dy, "delete from %s where path = '%s'", extFileTbl, path);
 sqlUpdate(conn, dy->string);
 
 /* Add it to table. */
 dyStringClear(dy);
-dyStringPrintf(dy, "INSERT into %s (id, name, path, size) VALUES(%u,'%s','%s',%lld)",
+sqlDyStringPrintf(dy, "INSERT into %s (id, name, path, size) VALUES(%u,'%s','%s',%lld)",
                extFileTbl, id, name, path, size);
 sqlUpdate(conn, dy->string);
 hgHistoryCommentWithIds(conn, id, id, "extFile table %s: added %s (%lld)", extFileTbl, path, size);
@@ -252,7 +250,7 @@ void hgPurgeExtFileTbl(int id, struct sqlConnection *conn, char *extFileTbl)
 struct dyString *dy = newDyString(1024);
 
 /* Delete it from database. */
-dyStringPrintf(dy, "delete from %s where id = '%d'", extFileTbl, id);
+sqlDyStringPrintf(dy, "delete from %s where id = '%d'", extFileTbl, id);
 sqlUpdate(conn, dy->string);
 
 dyStringFree(&dy);

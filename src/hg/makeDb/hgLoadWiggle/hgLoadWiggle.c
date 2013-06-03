@@ -82,7 +82,7 @@ char **row;
 conn = hAllocConn(database);
 ret = newHash(0);
 
-sr = sqlGetResult(conn, "select * from chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = chromInfoLoad(row);
@@ -309,7 +309,7 @@ if ((!oldTable) && (!noLoad))
     /* Create definition statement. */
     verbose(1, "Creating wiggle table definition in %s.%s\n",
 	    database, track);
-    dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
+    sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");
     dyStringAppend(dy, "  chrom varchar(255) not null,\n");
@@ -346,7 +346,7 @@ if (! noLoad)
     char pathAdded[192];
     verbose(1, "Loading %s\n", database);
     dyStringClear(dy);
-    dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
+    sqlDyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
     sqlUpdate(conn, dy->string);
     if (pathPrefix)
 	safef(pathAdded, sizeof(pathAdded), "%s/", pathPrefix);

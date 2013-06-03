@@ -72,7 +72,7 @@ else if (!oldTable)
     {
     /* Create definition statement. */
     verbose(1, "Creating table definition for %s\n", track);
-    dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
+    sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
 	dyStringAppend(dy, "  bin smallint unsigned not null,\n");
     dyStringAppend(dy, "  level int unsigned not null,\n");
@@ -109,7 +109,7 @@ else if (!oldTable)
     }
 
 dyStringClear(dy);
-dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
+sqlDyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
 verbose(1, "Loading %s into %s\n", track, database);
 sqlUpdate(conn, dy->string);
 /* add a comment to the history table and finish up connection */

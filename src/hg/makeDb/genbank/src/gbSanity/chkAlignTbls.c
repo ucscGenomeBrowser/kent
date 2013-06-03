@@ -32,7 +32,7 @@ struct sqlResult *sr;
 char **row;
 gChromSizes = hashNew(8);
 
-sr = sqlGetResult(conn, "SELECT chrom,size FROM chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ SELECT chrom,size FROM chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     unsigned sz = gbParseUnsigned(NULL, row[1]);
@@ -156,7 +156,7 @@ else
     if (select->accPrefix != NULL)
         safef(accWhere, sizeof(accWhere), " WHERE qName LIKE '%s%%'",
               select->accPrefix);
-    safef(query, sizeof(query), "SELECT * FROM %s%s", table, accWhere);
+    sqlSafef(query, sizeof(query), "SELECT * FROM %s%s", table, accWhere);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -229,7 +229,7 @@ if (sqlFieldIndex(conn, table, "bin") >= 0)
     rowOff++;
 
 char query[512];
-safef(query, sizeof(query), "SELECT * FROM %s", table);
+sqlSafef(query, sizeof(query), "SELECT * FROM %s", table);
 struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

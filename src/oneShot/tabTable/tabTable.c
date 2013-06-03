@@ -30,7 +30,7 @@ database = argv[1];
 table = argv[2];
 outName = argv[3];
 conn = sqlConnect(database);
-dyStringPrintf(ds, "select * from %s", table);
+sqlDyStringPrintf(ds, "select * from %s", table);
 if (argc > 4)
     dyStringPrintf(ds, " where id >= %s", argv[4]);
 if (argc > 5)

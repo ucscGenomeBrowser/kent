@@ -174,7 +174,7 @@ void chromGraphDataRange(char *trackName, struct sqlConnection *conn,
 char query[256];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select minVal,maxVal from metaChromGraph where name='%s'",
     trackName);
 sr = sqlGetResult(conn, query);
@@ -192,7 +192,7 @@ struct slName *chromGraphListAll(struct sqlConnection *conn)
 if (!sqlTableExists(conn, "metaChromGraph"))
     return NULL;
 else
-    return sqlQuickList(conn, "select name from metaChromGraph");
+    return sqlQuickList(conn, "NOSQLINJ select name from metaChromGraph");
 }
 
 char *chromGraphBinaryFileName(char *trackName, struct sqlConnection *conn)
@@ -200,7 +200,7 @@ char *chromGraphBinaryFileName(char *trackName, struct sqlConnection *conn)
  * if no such file or track. FreeMem result when done. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select binaryFile from metaChromGraph where name='%s'", trackName);
 return sqlQuickString(conn, query);
 }

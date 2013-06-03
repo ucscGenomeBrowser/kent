@@ -125,56 +125,15 @@ void encodePrimateAllelesSaveToDb(struct sqlConnection *conn, struct encodePrima
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use encodePrimateAllelesSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%c','%c','%c','%s',%u,'%c','%s',%u,'%s',%u,'%c','%s',%u)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%c','%c','%c','%s',%u,'%c','%s',%u,'%s',%u,'%c','%s',%u)", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->refAllele,  el->otherAllele,  el->chimpChrom,  el->chimpPos,  el->chimpStrand,  el->chimpAllele,  el->chimpQual,  el->rhesusChrom,  el->rhesusPos,  el->rhesusStrand,  el->rhesusAllele,  el->rhesusQual);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void encodePrimateAllelesSaveToDbEscaped(struct sqlConnection *conn, struct encodePrimateAlleles *el, char *tableName, int updateSize)
-/* Save encodePrimateAlleles as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than encodePrimateAllelesSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *refAllele, *otherAllele, *chimpChrom, *chimpStrand, *chimpAllele, *rhesusChrom, *rhesusStrand, *rhesusAllele;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-refAllele = sqlEscapeString(el->refAllele);
-otherAllele = sqlEscapeString(el->otherAllele);
-chimpChrom = sqlEscapeString(el->chimpChrom);
-chimpStrand = sqlEscapeString(el->chimpStrand);
-chimpAllele = sqlEscapeString(el->chimpAllele);
-rhesusChrom = sqlEscapeString(el->rhesusChrom);
-rhesusStrand = sqlEscapeString(el->rhesusStrand);
-rhesusAllele = sqlEscapeString(el->rhesusAllele);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s',%u,'%s','%s',%u,'%s',%u,'%s','%s',%u)", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  refAllele,  otherAllele,  chimpChrom, el->chimpPos ,  chimpStrand,  chimpAllele, el->chimpQual ,  rhesusChrom, el->rhesusPos ,  rhesusStrand,  rhesusAllele, el->rhesusQual );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&refAllele);
-freez(&otherAllele);
-freez(&chimpChrom);
-freez(&chimpStrand);
-freez(&chimpAllele);
-freez(&rhesusChrom);
-freez(&rhesusStrand);
-freez(&rhesusAllele);
-}
 
 struct encodePrimateAlleles *encodePrimateAllelesCommaIn(char **pS, struct encodePrimateAlleles *ret)
 /* Create a encodePrimateAlleles out of a comma separated string. 

@@ -145,7 +145,7 @@ struct gl gl;
 struct cloneInfo *info;
 struct sqlConnection *conn = hAllocConn();
 
-sprintf(query, "select * from chr18_gl");
+sqlSafef(query, sizeof query, "select * from chr18_gl");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -185,7 +185,7 @@ struct clonePos *posList = NULL, *pos;
 struct cloneInfo *info;
 struct sqlConnection *conn = hAllocConn();
 
-sprintf(query, "select * from chr18_frags");
+sqlSafef(query, sizeof query, "select * from chr18_frags");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

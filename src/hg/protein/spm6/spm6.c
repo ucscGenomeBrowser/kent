@@ -225,7 +225,7 @@ while (fgets(line, 1000, inf) != NULL)
         exit(1);
         }
 	
-    sprintf(query2, "select * from %sTemp.mrnaGene where name='%s';", genomeDBname, mrnaName);
+    sqlSafef(query2, sizeof query2,  "select * from %sTemp.mrnaGene where name='%s';", genomeDBname, mrnaName);
     	
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);

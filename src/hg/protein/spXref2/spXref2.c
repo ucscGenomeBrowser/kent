@@ -48,7 +48,7 @@ conn = hAllocConn();
 conn2= hAllocConn();
 conn3= hAllocConn();
 
-sprintf(query2,"select * from biosql%s.bioentry;", proteinDataDate);
+sqlSafef(query2, sizeof query2, "select * from biosql%s.bioentry;", proteinDataDate);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -60,7 +60,7 @@ while (row2 != NULL)
     entry_version	= row2[4];  
     division		= row2[5];
 			       
-    sprintf(query, "select * from biosql%s.bioentry_direct_links where source_bioentry_id='%s';",
+    sqlSafef(query, sizeof query, "select * from biosql%s.bioentry_direct_links where source_bioentry_id='%s';",
 	    proteinDataDate, bioentry_id);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -70,7 +70,7 @@ while (row2 != NULL)
     	source_bioentry_id = row[1];
    	dbxref_id = row[2];
     
-        sprintf(query3, "select * from biosql%s.dbxref where dbxref_id=%s;",
+        sqlSafef(query3, sizeof query3,  "select * from biosql%s.dbxref where dbxref_id=%s;",
 		proteinDataDate, dbxref_id);
 	sr3  = sqlMustGetResult(conn3, query3);
     	row3 = sqlNextRow(sr3);

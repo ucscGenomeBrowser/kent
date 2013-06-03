@@ -36,14 +36,14 @@ conn = hAllocConn(database);
 conn2= hAllocConn(database);
 o2 = mustOpen("jj.dat", "w");
 
-sprintf(query2,"select name, proteinID from %s.knownGene;", database);
+sqlSafef(query2, sizeof query2, "select name, proteinID from %s.knownGene;", database);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
     {
     kgID = row2[0];
     proteinID = row2[1];
-    sprintf(query,"select geneSymbol from %s.kgXref where kgID = '%s';", database, kgID);
+    sqlSafef(query, sizeof query,"select geneSymbol from %s.kgXref where kgID = '%s';", database, kgID);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     while (row != NULL)

@@ -118,7 +118,7 @@ static char *otherOrgId(struct otherOrg *otherOrg, struct sqlConnection *conn,
 if (geneId != NULL)
     {
     char query[256];
-    safef(query, sizeof(query), otherOrg->idSql, geneId);
+    sqlSafef(query, sizeof(query), otherOrg->idSql, geneId);
     return sqlQuickString(conn, query);
     }
 else
@@ -135,7 +135,7 @@ if (hti == NULL)
 
 struct sqlConnection *conn = hAllocConn(otherOrg->db);
 char query[512];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select concat(%s, ':', %s+1, '-', %s) from %s "
       "where %s = '%s'",
       hti->chromField, hti->startField, hti->endField,
@@ -188,7 +188,7 @@ if (otherOrg->db != NULL && otherId != NULL && otherOrg->idToProtIdSql != NULL
     {
     struct sqlConnection *conn = hAllocConn(otherOrg->db);
     char query[512];
-    safef(query, sizeof(query), otherOrg->idToProtIdSql, otherId);
+    sqlSafef(query, sizeof(query), otherOrg->idToProtIdSql, otherId);
     protId = sqlQuickString(conn, query);
     hFreeConn(&conn);
     }
@@ -211,11 +211,11 @@ if (localId != NULL)
 	{
 	struct sqlConnection *conn = hAllocConn(otherOrg->db);
 	char query[512];
-	safef(query, sizeof(query), otherOrg->otherIdSql, localId);
+	sqlSafef(query, sizeof(query), otherOrg->otherIdSql, localId);
 	otherId = sqlQuickString(conn, query);
 	if (otherId == NULL && otherOrg->otherIdSql2 != NULL)
 	    {
-	    safef(query, sizeof(query), otherOrg->otherIdSql2, localId);
+	    sqlSafef(query, sizeof(query), otherOrg->otherIdSql2, localId);
 	    otherId = sqlQuickString(conn, query);
 	    }
 	hFreeConn(&conn);
@@ -276,7 +276,7 @@ if (id != NULL)
 	    struct sqlResult *sr;
 	    char **row;
 	    char query[256];
-	    safef(query, sizeof(query), "select seq from %s where name = '%s'",
+	    sqlSafef(query, sizeof(query), "select seq from %s where name = '%s'",
 	    	dbTable, id);
 	    sr = sqlGetResult(conn, query);
 	    if ((row = sqlNextRow(sr)) != NULL)
@@ -393,7 +393,7 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 bioSeq *seq = NULL;
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select seq from %s where name = '%s'", table, id);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)

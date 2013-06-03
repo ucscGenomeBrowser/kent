@@ -312,7 +312,7 @@ char **row;
 char *observedActual;
 
 AllocVar(si);
-safef(query, sizeof(query), "select * from %s", tableName);
+sqlSafef(query, sizeof(query), "select * from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

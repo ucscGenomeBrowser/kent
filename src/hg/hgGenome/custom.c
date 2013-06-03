@@ -213,7 +213,7 @@ if (ct->dbTrack)
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     struct sqlResult *sr = NULL;
 
-    safef(query, sizeof(query), "select * from %s where chrom='%s'", ct->dbTableName, chrom);
+    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s'", ct->dbTableName, chrom);
     sr = sqlGetResult(conn, query);
     if (sameString("bin",sqlFieldName(sr)))
 	++rowOffset;

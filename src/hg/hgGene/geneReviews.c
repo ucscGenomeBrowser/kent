@@ -13,9 +13,9 @@ static void geneReviewsPrint(struct section *section,
 {
 char query[256];
 char * geneSymbol;
-if (sqlTablesExist(conn, "geneReviewsRefGene"))
+if (sqlTableExists(conn, "geneReviewsRefGene"))
     {
-    safef(query, sizeof(query), "select geneSymbol from kgXref where kgId = '%s'", itemName);
+    sqlSafef(query, sizeof(query), "select geneSymbol from kgXref where kgId = '%s'", itemName);
     geneSymbol = sqlQuickString(conn, query);
     if (geneSymbol != NULL)
         {
@@ -35,7 +35,7 @@ char **row;
 char query[512];
 boolean firstTime = TRUE;
 
-safef(query, sizeof(query), "select  geneSymbol, grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
+sqlSafef(query, sizeof(query), "select  geneSymbol, grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -61,13 +61,13 @@ char query[256];
 char * geneSymbol;
 char * grSymbol;
 
-if (sqlTablesExist(conn, "geneReviewsRefGene"))
+if (sqlTableExists(conn, "geneReviewsRefGene"))
     {
-       safef(query, sizeof(query), "select geneSymbol from kgXref where kgId = '%s'", geneId);
+       sqlSafef(query, sizeof(query), "select geneSymbol from kgXref where kgId = '%s'", geneId);
        geneSymbol = sqlQuickString(conn, query);
        if (geneSymbol != NULL)
           {
-             safef(query, sizeof(query), "select  geneSymbol from geneReviewsRefGene where geneSymbol='%s'", geneSymbol);
+             sqlSafef(query, sizeof(query), "select  geneSymbol from geneReviewsRefGene where geneSymbol='%s'", geneSymbol);
              grSymbol = sqlQuickString(conn, query);
              if (grSymbol != NULL)
                 {

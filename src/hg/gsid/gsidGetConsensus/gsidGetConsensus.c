@@ -158,7 +158,7 @@ conn2= hAllocConn(database);
 
 outf = mustOpen(faOutputFile, "w");
 	
-sprintf(query2,"select id,seq from %s.%s", database, table);
+sqlSafef(query2, sizeof query2, "select id,seq from %s.%s", database, table);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 

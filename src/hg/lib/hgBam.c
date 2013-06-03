@@ -19,18 +19,18 @@ if (checkSeqName && bamSeqName == NULL)
 	     table);
 char query[512];
 if (checkSeqName)
-    safef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
+    sqlSafef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
 	  table, bamSeqName);
 else
-    safef(query, sizeof(query), "select fileName from %s", table);
+    sqlSafef(query, sizeof(query), "select fileName from %s", table);
 char *fileName = sqlQuickString(conn, query);
 if (fileName == NULL && checkSeqName)
     {
     if (startsWith("chr", bamSeqName))
-	safef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
+	sqlSafef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
 	      table, bamSeqName+strlen("chr"));
     else
-	safef(query, sizeof(query), "select fileName from %s where seqName = 'chr%s'",
+	sqlSafef(query, sizeof(query), "select fileName from %s where seqName = 'chr%s'",
 	      table, bamSeqName);
     fileName = sqlQuickString(conn, query);
     }

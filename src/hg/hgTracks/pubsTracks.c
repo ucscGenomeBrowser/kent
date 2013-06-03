@@ -71,7 +71,7 @@ if (!sqlTableExists(conn, "hgFixed.pubsClassColors"))
     {
     return;
     }
-char *query = "SELECT class, rgbColor FROM hgFixed.pubsClassColors";
+char *query = "NOSQLINJ SELECT class, rgbColor FROM hgFixed.pubsClassColors";
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -124,13 +124,13 @@ struct pubsExtra *extra = NULL;
 bool newFormat = FALSE;
 if (sqlColumnExists(conn, tg->table, "title")) 
     {
-    safef(query, sizeof(query), "SELECT firstAuthor, year, title, impact, classes FROM %s "
+    sqlSafef(query, sizeof(query), "SELECT firstAuthor, year, title, impact, classes FROM %s "
     "WHERE chrom = '%s' and chromStart = '%d' and name='%s'", tg->table, chromName, lf->start, lf->name);
     newFormat = TRUE;
     }
 else 
     {
-    safef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE articleId = '%s'", 
+    sqlSafef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE articleId = '%s'", 
         articleTable, lf->name);
     newFormat = FALSE;
     }
@@ -235,14 +235,14 @@ lf->extra = extra;
 hFreeConn(&conn);
 }
 
-static void dyStringPrintfWithSep(struct dyString *ds, char *sep, char *format, ...)
+static void sqlDyStringPrintfWithSep(struct dyString *ds, char* sep, char *format, ...)
 /*  Printf to end of dyString. Prefix with sep if dyString is not empty. */
 {
 if (ds->stringSize!=0)
     dyStringAppend(ds, sep);
 va_list args;
 va_start(args, format);
-dyStringVaPrintf(ds, format, args);
+sqlDyStringVaPrintfFrag(ds, format, args);
 va_end(args);
 }
 
@@ -253,7 +253,7 @@ if (isEmpty(keywords))
     return NULL;
 
 char query[12000];
-safef(query, sizeof(query), "SELECT articleId FROM %s WHERE "
+sqlSafef(query, sizeof(query), "SELECT articleId FROM %s WHERE "
 "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", articleTable, keywords);
 //printf("query %s", query);
 struct slName *artIds = sqlQuickList(conn, query);
@@ -286,7 +286,7 @@ if(sameOk(publFilter, "all"))
     publFilter = NULL;
 
 if(isNotEmpty(keywords))
-    keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
+    keywords = makeMysqlMatchStr(keywords);
 
 if (isEmpty(yearFilter) && isEmpty(keywords) && isEmpty(publFilter))
 {
@@ -314,15 +314,15 @@ else
         // new table schema: filter fields are on main bed table
         {
         if (isNotEmpty(yearFilter))
-            dyStringPrintfWithSep(extraDy, " AND ", " year >= '%s'", sqlEscapeString(yearFilter));
+            sqlDyStringPrintfWithSep(extraDy, " AND ", " year >= '%s'", yearFilter);
         if (isNotEmpty(publFilter))
-            dyStringPrintfWithSep(extraDy, " AND ", " publisher = '%s'", sqlEscapeString(publFilter));
+            sqlDyStringPrintfWithSep(extraDy, " AND ", " publisher = '%s'", publFilter);
         }
     else
         // old table schema, filter by doing a join on article table
         {
         if(isNotEmpty(yearFilter))
-            dyStringPrintf(extraDy, "name IN (SELECT articleId FROM %s WHERE year>='%s')", articleTable, \
+            sqlDyStringPrintfFrag(extraDy, "name IN (SELECT articleId FROM %s WHERE year>='%s')", articleTable, \
                 yearFilter);
         }
 
@@ -455,10 +455,10 @@ static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* 
     else
         selectValSql = "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))";
 
-    safef(query, sizeof(query), "SELECT annotId, %s  FROM %s WHERE articleId='%s' ", 
+    sqlSafef(query, sizeof(query), "SELECT annotId, %s  FROM %s WHERE articleId='%s' ", 
         selectValSql, sequenceTable, articleId);
     struct hash *seqIdHash = sqlQuickHash(conn, query);
-    //freeMem(sequenceTable); // XX Why does this crash??
+    //freeMem(sequenceTable); // XX Why does this crash?? because trackDbRequiredSetting returns a value in a hash. do not free.
     return seqIdHash;
 }
 
@@ -468,7 +468,7 @@ static char *pubsArticleDispId(struct track *tg, struct sqlConnection *conn, cha
 char *dispLabel = NULL;
 char *articleTable = pubsArticleTable(tg);
 char query[LARGEBUF];
-safef(query, sizeof(query), "SELECT firstAuthor, year FROM %s WHERE articleId = '%s'", 
+sqlSafef(query, sizeof(query), "SELECT firstAuthor, year FROM %s WHERE articleId = '%s'", 
     articleTable, articleId);
 struct sqlResult *sr = sqlGetResult(conn, query);
 if (sr!=NULL)

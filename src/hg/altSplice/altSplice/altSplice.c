@@ -531,7 +531,7 @@ tissLibHash = newHash(12);
 /* Now load up all of the accessions for this organism. */
 for(i = 0; i < numDbTables; i++)
     {
-    safef(query, sizeof(query), "select library, tissue, acc from %s inner join gbCdnaInfo on qName = acc",
+    sqlSafef(query, sizeof(query), "select library, tissue, acc from %s inner join gbCdnaInfo on qName = acc",
 	  dbTables[i]);
     warn("%s", query);
     sr = sqlGetResult(conn, query);

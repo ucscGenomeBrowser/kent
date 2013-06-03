@@ -77,7 +77,7 @@ static struct hash *loadChromInfoSizes(struct sqlConnection *conn)
 {
 struct hash *sizes = hashNew(20);
 char **row;
-struct sqlResult *sr = sqlGetResult(conn, "select * from chromInfo");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct chromInfo *ci = chromInfoLoad(row);
@@ -197,7 +197,7 @@ static void checkPslTbl(struct sqlConnection *conn, char *tbl, FILE *errFh,
 /* Check one psl table */
 {
 char query[1024], **row;
-safef(query, sizeof(query), "select * from %s", tbl);
+sqlSafef(query, sizeof(query), "select * from %s", tbl);
 struct sqlResult *sr = sqlGetResult(conn, query);
 int rowOff = (sqlFieldColumn(sr, "bin") >= 0) ? 1 : 0;
 

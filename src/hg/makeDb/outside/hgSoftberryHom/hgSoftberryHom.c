@@ -53,7 +53,7 @@ lineFileClose(&lf);
 }
 
 /* #Protein homologies behind Softberry genes */
-char *createTable = "CREATE TABLE softberryHom (\n"
+char *createTable = "NOSQLINJ CREATE TABLE softberryHom (\n"
     "name varchar(255) not null,	# Softberry gene name\n"
     "giString varchar(255) not null,	# String with Genbank gi and accession\n"
     "description longblob not null,	# Freeform (except for no tabs) description\n"
@@ -85,10 +85,10 @@ carefulClose(&f);
 conn = sqlConnect(database);
 printf("Loading %s table\n", table);
 sqlMaybeMakeTable(conn, table, createTable);
-dyStringPrintf(ds, "DELETE from %s", table);
+sqlDyStringPrintf(ds, "DELETE from %s", table);
 sqlUpdate(conn, ds->string);
 dyStringClear(ds);
-dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+sqlDyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
     tabFileName, table);
 sqlUpdate(conn, ds->string);
 sqlDisconnect(&conn);

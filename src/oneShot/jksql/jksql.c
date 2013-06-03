@@ -272,7 +272,7 @@ struct sqlResult *sr;
 struct ensFeature *efList = NULL, *ef;
 long startTime, endTime;
 
-sprintf(query, "select * from feature where contig like '%s%%'", clone);
+sqlSafef(query, sizeof query, "select * from feature where contig like '%s%%'", clone);
 startTime = clock1000();
 sr = sqlQueryUse(conn, query);
 if (sr == NULL)
@@ -301,7 +301,7 @@ char query[512];
 struct sqlResult *sr;
 struct slName *geneList = 0, *gene;
 
-sprintf(query,
+sqlSafef(query, sizeof query,
   "SELECT transcript.gene "
   "FROM geneclone_neighbourhood,transcript,translation "
   "WHERE geneclone_neighbourhood.clone = '%s' "
@@ -332,7 +332,7 @@ char query[512];
 struct sqlResult *sr;
 struct slName *geneList = 0, *gene;
 
-sprintf(query,
+sqlSafef(query,
   "SELECT transcript.gene "
   "FROM geneclone_neighbourhood,transcript,translation "
   "WHERE geneclone_neighbourhood.clone = '%s' "

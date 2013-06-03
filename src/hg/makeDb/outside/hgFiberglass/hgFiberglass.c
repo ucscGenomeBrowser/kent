@@ -19,7 +19,7 @@ errAbort(
 }
 
 char *createString = 
-"CREATE TABLE fiberMouse (\n"
+"NOSQLINJ CREATE TABLE fiberMouse (\n"
     "chrom varchar(255) not null,	# Human chromosome or FPC contig\n"
     "chromStart int unsigned not null,	# Start position in chromosome\n"
     "chromEnd int unsigned not null,	# End position in chromosome\n"
@@ -71,7 +71,7 @@ carefulClose(&f);
 
 printf("Loading database\n");
 sqlMaybeMakeTable(conn, "fiberMouse", createString);
-sprintf(query, "LOAD data local infile '%s' into table %s", tabName, "fiberMouse");
+sqlSafef(query, sizeof query, "LOAD data local infile '%s' into table %s", tabName, "fiberMouse");
 sqlUpdate(conn, query);
 sqlDisconnect(&conn);
 }

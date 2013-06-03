@@ -103,7 +103,7 @@ void lsSnpPdbChimeraSnpAnn(struct sqlConnection *conn,
 {
 getOutFile(pdbId, primarySnpId, outName);
 char where[512];
-safef(where, sizeof(where), "(pdbId=\"%s\")", pdbId);
+sqlSafefFrag(where, sizeof(where), "(pdbId=\"%s\")", pdbId);
 chimeraxGen(conn, pdbId, where, primarySnpId, outName->forCgi);
 }
 
@@ -114,7 +114,7 @@ struct slName *lsSnpPdbChimeraGetSnpPdbs(struct sqlConnection *conn,
 if (!sqlTableExists(conn, "lsSnpPdb"))
     return NULL;
 char query[256];
-safef(query, sizeof(query), "SELECT distinct pdbId FROM lsSnpPdb WHERE (snpId = \"%s\")",
+sqlSafef(query, sizeof(query), "SELECT distinct pdbId FROM lsSnpPdb WHERE (snpId = \"%s\")",
       snpId);
 struct slName *pdbIds = sqlQuickList(conn, query);
 slNameSort(&pdbIds);
@@ -127,7 +127,7 @@ char *lsSnpPdbChimeraGetStructType(struct sqlConnection *conn, char *pdbId)
 {
 
 char query[256], buf[32];
-safef(query, sizeof(query), "SELECT structType FROM lsSnpPdb WHERE (pdbId = \"%s\")",
+sqlSafef(query, sizeof(query), "SELECT structType FROM lsSnpPdb WHERE (pdbId = \"%s\")",
       pdbId);
 char *structType = sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
 if (sameString(structType, "XRay"))
@@ -144,7 +144,7 @@ boolean lsSnpPdbHasPdb(struct sqlConnection *conn, char *pdbId)
 if (!sqlTableExists(conn, "lsSnpPdb"))
     return FALSE;
 char query[256], buf[64];
-safef(query, sizeof(query), "SELECT chain FROM lsSnpPdb WHERE (pdbId = \"%s\")", pdbId);
+sqlSafef(query, sizeof(query), "SELECT chain FROM lsSnpPdb WHERE (pdbId = \"%s\")", pdbId);
 return (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 }
 

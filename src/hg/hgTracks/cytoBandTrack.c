@@ -90,7 +90,7 @@ static void loadCytoBandsIdeo(struct track *tg)
 /* Load up cytoBandIdeo from database table to track items. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select * from cytoBandIdeo where chrom like '%s'", chromName);
 if(hTableExists(database, "cytoBandIdeo"))
     bedLoadItemByQuery(tg, "cytoBandIdeo", query, (ItemLoader)cytoBandLoad);

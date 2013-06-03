@@ -57,18 +57,7 @@ void ldSaveToDb(struct sqlConnection *conn, struct ld *el, char *tableName, int 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use ldSaveToDbEscaped() */
-
-void ldSaveToDbEscaped(struct sqlConnection *conn, struct ld *el, char *tableName, int updateSize);
-/* Save ld as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than ldSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct ld *ldCommaIn(char **pS, struct ld *ret);
 /* Create a ld out of a comma separated string. 

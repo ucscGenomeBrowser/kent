@@ -521,7 +521,7 @@ void validFileUpdateDb(struct sqlConnection *conn, struct edwValidFile *el, long
  * id. */
 {
 struct dyString *dy = newDyString(512);
-dyStringAppend(dy, "update edwValidFile set ");
+sqlDyStringAppend(dy, "update edwValidFile set ");
 // omit id and licensePlate fields - one autoupdates and the other depends on this
 // also omit fileId which also really can't change.
 dyStringPrintf(dy, " format='%s',", el->format);
@@ -576,7 +576,7 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	{
 	char *ucscDb = vf->ucscDb;
 	char query[256];
-	safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", vf->ucscDb);
+	sqlSafef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", vf->ucscDb);
 	assembly = edwAssemblyLoadByQuery(conn, query);
 	if (assembly == NULL)
 	    errAbort("Couldn't find assembly corresponding to %s", ucscDb);
@@ -659,7 +659,7 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	    /* Update database with new name - small window of vulnerability here sadly 
 	     * two makeValidates running at same time stepping on each other. */
 	    char query[PATH_LEN+256];
-	    safef(query, sizeof(query), "update edwFile set edwFileName='%s' where id=%lld",
+	    sqlSafef(query, sizeof(query), "update edwFile set edwFileName='%s' where id=%lld",
 		newName->string, (long long)ef->id);
 	    sqlUpdate(conn, query);
 
@@ -668,7 +668,7 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 
 	/* Update validFile record with license plate. */
 	char query[256];
-	safef(query, sizeof(query), "update edwValidFile set licensePlate='%s' where id=%lld", 
+	sqlSafef(query, sizeof(query), "update edwValidFile set licensePlate='%s' where id=%lld", 
 	    vf->licensePlate, (long long)vf->id);
 	sqlUpdate(conn, query);
 	}
@@ -702,7 +702,7 @@ if (errCatch->gotError)
 else
     {
     char query[256];
-    safef(query, sizeof(query), "update edwFile set errorMessage='' where id=%lld",
+    sqlSafef(query, sizeof(query), "update edwFile set errorMessage='' where id=%lld",
 	(long long)ef->id);
     sqlUpdate(conn, query);
     }
@@ -714,7 +714,7 @@ void edwClearFileError(struct sqlConnection *conn, long long fileId)
 /* Clear file error message */
 {
 char query[256];
-safef(query, sizeof(query), "update edwFile set errorMessage='' where id=%lld", fileId);
+sqlSafef(query, sizeof(query), "update edwFile set errorMessage='' where id=%lld", fileId);
 sqlUpdate(conn, query);
 }
 
@@ -728,7 +728,7 @@ struct edwFile *ef, *efList = edwFileAllIntactBetween(conn, startId, endId);
 for (ef = efList; ef != NULL; ef = ef->next)
     {
     char query[256];
-    safef(query, sizeof(query), "select id from edwValidFile where fileId=%lld", (long long)ef->id);
+    sqlSafef(query, sizeof(query), "select id from edwValidFile where fileId=%lld", (long long)ef->id);
     long long vfId = sqlQuickLongLong(conn, query);
     if (vfId != 0 && isEmpty(ef->errorMessage))
 	{

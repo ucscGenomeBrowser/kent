@@ -19,7 +19,7 @@ char *tableName = ct->dbTableName;
 char *trackName = ct->tdb->track;
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 char query[512];
-safef(query, sizeof(query), "select * from %s where id=%s", tableName, idString);
+sqlSafef(query, sizeof(query), "select * from %s where id=%s", tableName, idString);
 struct sqlResult *sr = sqlGetResult(conn, query);
 
 char **row;

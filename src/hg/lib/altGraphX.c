@@ -172,9 +172,7 @@ void altGraphXSaveToDb(struct sqlConnection *conn, struct altGraphX *el, char *t
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use altGraphXSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *vTypesArray, *vPositionsArray, *edgeStartsArray, *edgeEndsArray, *edgeTypesArray, *mrnaRefsArray, *mrnaTissuesArray, *mrnaLibsArray;
@@ -186,7 +184,7 @@ edgeTypesArray = sqlSignedArrayToString(el->edgeTypes, el->edgeCount);
 mrnaRefsArray = sqlStringArrayToString(el->mrnaRefs, el->mrnaRefCount);
 mrnaTissuesArray = sqlSignedArrayToString(el->mrnaTissues, el->mrnaRefCount);
 mrnaLibsArray = sqlSignedArrayToString(el->mrnaLibs, el->mrnaRefCount);
-dyStringPrintf(update, "insert into %s values ( '%s',%d,%d,'%s',%u,'%s',%u,'%s','%s',%u,'%s','%s', NULL ,'%s',%d,'%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%d,%d,'%s',%u,'%s',%u,'%s','%s',%u,'%s','%s', NULL ,'%s',%d,'%s','%s','%s')", 
 	tableName,  el->tName,  el->tStart,  el->tEnd,  el->name,  el->id,  el->strand,  el->vertexCount,  vTypesArray ,  vPositionsArray ,  el->edgeCount,  edgeStartsArray ,  edgeEndsArray ,  edgeTypesArray ,  el->mrnaRefCount,  mrnaRefsArray ,  mrnaTissuesArray ,  mrnaLibsArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -200,45 +198,6 @@ freez(&mrnaTissuesArray);
 freez(&mrnaLibsArray);
 }
 
-void altGraphXSaveToDbEscaped(struct sqlConnection *conn, struct altGraphX *el, char *tableName, int updateSize)
-/* Save altGraphX as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than altGraphXSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *tName, *name, *strand, *vTypesArray, *vPositionsArray, *edgeStartsArray, *edgeEndsArray, *edgeTypesArray, *mrnaRefsArray, *mrnaTissuesArray, *mrnaLibsArray;
-tName = sqlEscapeString(el->tName);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-
-vTypesArray = sqlUbyteArrayToString(el->vTypes, el->vertexCount);
-vPositionsArray = sqlSignedArrayToString(el->vPositions, el->vertexCount);
-edgeStartsArray = sqlSignedArrayToString(el->edgeStarts, el->edgeCount);
-edgeEndsArray = sqlSignedArrayToString(el->edgeEnds, el->edgeCount);
-edgeTypesArray = sqlSignedArrayToString(el->edgeTypes, el->edgeCount);
-mrnaRefsArray = sqlStringArrayToString(el->mrnaRefs, el->mrnaRefCount);
-mrnaTissuesArray = sqlSignedArrayToString(el->mrnaTissues, el->mrnaRefCount);
-mrnaLibsArray = sqlSignedArrayToString(el->mrnaLibs, el->mrnaRefCount);
-dyStringPrintf(update, "insert into %s values ( '%s',%d,%d,'%s',%u,'%s',%u,'%s','%s',%u,'%s','%s', NULL ,'%s',%d,'%s','%s','%s')", 
-	tableName,  tName, el->tStart , el->tEnd ,  name, el->id ,  strand, el->vertexCount ,  vTypesArray ,  vPositionsArray , el->edgeCount ,  edgeStartsArray ,  edgeEndsArray ,  edgeTypesArray , el->mrnaRefCount ,  mrnaRefsArray ,  mrnaTissuesArray ,  mrnaLibsArray );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&tName);
-freez(&name);
-freez(&strand);
-freez(&vTypesArray);
-freez(&vPositionsArray);
-freez(&edgeStartsArray);
-freez(&edgeEndsArray);
-freez(&edgeTypesArray);
-freez(&mrnaRefsArray);
-freez(&mrnaTissuesArray);
-freez(&mrnaLibsArray);
-}
 
 struct altGraphX *altGraphXCommaIn(char **pS, struct altGraphX *ret)
 /* Create a altGraphX out of a comma separated string. 
@@ -1043,7 +1002,7 @@ struct bed *bed;
 int numBlocks = 3;
 AllocVar(bed);
 bed->chrom = cloneString(ag->tName);
-snprintf(bed->strand, sizeof(bed->strand), "%s", ag->strand);
+safef(bed->strand, sizeof(bed->strand), "%s", ag->strand);
 bed->chromStart = bed->thickStart = vPos[starts[fpEdge]];
 bed->chromEnd = bed->thickEnd = vPos[ends[tpEdge]];
 bed->name = cloneString(ag->name);
@@ -1769,9 +1728,9 @@ for(i=0; i<ag->vertexCount; i++)
 	ag->vTypes[i] = ggSoftEnd;
     }
 if(sameString(ag->strand, "+"))
-    snprintf(ag->strand, sizeof(ag->strand), "%s", "-");
+    safef(ag->strand, sizeof(ag->strand), "%s", "-");
 else if(sameString(ag->strand, "-"))
-    snprintf(ag->strand, sizeof(ag->strand), "%s", "+");
+    safef(ag->strand, sizeof(ag->strand), "%s", "+");
 else
     errAbort("altGraphX::altGraphXReverseComplement() - Don't recognize strand: %s", ag->strand);
 tmp = ag->edgeEnds;

@@ -56,7 +56,7 @@ sprintf(spDbName,   "sp%s", protDbDate);
 
 conn= hAllocConn(roDbName);
 conn2= hAllocConn(roDbName);
-sprintf(query2,"select name, proteinID from %s.knownGene;", roDbName);
+sqlSafef(query2, sizeof query2, "select name, proteinID from %s.knownGene;", roDbName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)

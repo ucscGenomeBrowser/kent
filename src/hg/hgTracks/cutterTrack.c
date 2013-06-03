@@ -39,7 +39,7 @@ else
 	Color baseHighlight = getBlueColor();
 
 	baseHighlight = lighterColor(hvg, baseHighlight);
-	safef(query, sizeof(query), "select * from cutters where name=\'%s\'", s);
+	sqlSafef(query, sizeof(query), "select * from cutters where name=\'%s\'", s);
 	cut = cutterLoadByQuery(conn, query);
 	letterWidth = round(((double)w)/cut->size);
 	cuts[0] = x1 + cut->cut * letterWidth;
@@ -100,7 +100,7 @@ struct bed *bedList = NULL;
 int winSize = winEnd - winStart;
 
 conn = hAllocConn("hgFixed");
-cutters = cutterLoadByQuery(conn, "select * from cutters");
+cutters = cutterLoadByQuery(conn, "NOSQLINJ select * from cutters");
 windowDna = hDnaFromSeq(database, chromName, winStart, winEnd, dnaUpper);
 
 /* Do different things based on window size. */

@@ -231,7 +231,7 @@ char **row;
 char query[512];
 struct sqlConnection *conn = hAllocConn(db);
 
-safef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart = %d and chromEnd = %d",
+sqlSafef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart = %d and chromEnd = %d",
     tableName, item->chrom, item->chromStart, item->chromEnd);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

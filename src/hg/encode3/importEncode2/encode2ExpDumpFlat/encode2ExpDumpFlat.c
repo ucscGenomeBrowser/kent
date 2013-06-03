@@ -84,11 +84,11 @@ safef(buf, sizeof(buf), "%s%s", tablePrefix, name);
 sti->tableName = cloneString(buf);
 sti->fieldName = cloneString(name);
 char query[256];
-safef(query, sizeof(query), "select max(id) from %s", sti->tableName);
+sqlSafef(query, sizeof(query), "select max(id) from %s", sti->tableName);
 sti->maxId = sqlQuickNum(conn, query);
 verbose(2, "%s maxId %d\n", sti->tableName, sti->maxId);
 AllocArray(sti->termsForIds, sti->maxId+1);
-safef(query, sizeof(query), "select id,term from %s", sti->tableName);
+sqlSafef(query, sizeof(query), "select id,term from %s", sti->tableName);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -176,17 +176,17 @@ for (i=0; i<ArraySize(starFields); ++i)
     stiArray[i] = starTableInfoNew(conn, starFields[i]);
 
 struct dyString *query = dyStringNew(2000);
-dyStringPrintf(query, "select ");
+sqlDyStringPrintf(query, "select ");
 for (i=0; i<ArraySize(flatFields); ++i)
     {
     if (i != 0)
        dyStringAppendC(query, ',');
-    dyStringAppend(query, flatFields[i]);
+    sqlDyStringPrintf(query, "%s", flatFields[i]);
     }
 for (i=0; i<ArraySize(starFields); ++i)
     {
     dyStringAppendC(query, ',');
-    dyStringAppend(query, starFields[i]);
+    sqlDyStringPrintf(query, "%s", starFields[i]);
     }
 dyStringPrintf(query, " from %s%s", tablePrefix, "experiment");
 

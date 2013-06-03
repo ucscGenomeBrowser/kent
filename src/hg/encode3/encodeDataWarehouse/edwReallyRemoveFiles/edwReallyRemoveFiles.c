@@ -47,24 +47,24 @@ void maybeRemoveFile(struct sqlConnection *conn, long long fileId, boolean reall
 char query[256];
 
 /* Delete from all the auxiliarry tables. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "delete from edwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld", 
     fileId, fileId);
 maybeDoUpdate(conn, query, really);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "delete from edwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld", 
     fileId, fileId);
 maybeDoUpdate(conn, query, really);
-safef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
+sqlSafef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
 maybeDoUpdate(conn, query, really);
-safef(query, sizeof(query), "delete from edwValidFile where fileId=%lld", fileId);
+sqlSafef(query, sizeof(query), "delete from edwValidFile where fileId=%lld", fileId);
 maybeDoUpdate(conn, query, really);
 
 /* Get file name */
 char *path = edwPathForFileId(conn, fileId);
 
 /* Delete from edwFileTable */
-safef(query, sizeof(query), "delete from edwFile where id=%lld", fileId);
+sqlSafef(query, sizeof(query), "delete from edwFile where id=%lld", fileId);
 maybeDoUpdate(conn, query, really);
 
 /* Delete file */
@@ -89,8 +89,8 @@ for (i = 0; i<fileCount; ++i)
 struct sqlConnection *conn = edwConnectReadWrite();
 struct edwUser *user = edwMustGetUserFromEmail(conn, email);
 char query[256];
-safef(query, sizeof(query), "select id,fileCount from edwSubmit where userId=%d and url='%s'",
-    user->id, sqlEscapeString(submitUrl));
+sqlSafef(query, sizeof(query), "select id,fileCount from edwSubmit where userId=%d and url='%s'",
+    user->id, submitUrl);
 struct hash *submitHash = sqlQuickHash(conn, query);
 
 /* Make sure that files and submission really go together. */
@@ -98,7 +98,7 @@ for (i=0; i<fileCount; ++i)
     {
     long long fileId = ids[i];
     char buf[64];
-    safef(query, sizeof(query), "select submitId from edwFile where id=%lld", fileId);
+    sqlSafef(query, sizeof(query), "select submitId from edwFile where id=%lld", fileId);
     char *result = sqlQuickQuery(conn, query, buf, sizeof(buf));
     if (result == NULL)
         errAbort("%lld is not a fileId in the warehouse", fileId);

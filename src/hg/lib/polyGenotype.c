@@ -105,38 +105,15 @@ void polyGenotypeSaveToDb(struct sqlConnection *conn, struct polyGenotype *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use polyGenotypeSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,%d,%d,%d,%g,%g)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%d,%d,%d,%d,%g,%g)", 
 	tableName,  el->name,  el->ethnicGroup,  el->plusPlus,  el->plusMinus,  el->minusMinus,  el->sampleSize,  el->alleleFrequency,  el->unbiasedHeterozygosity);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void polyGenotypeSaveToDbEscaped(struct sqlConnection *conn, struct polyGenotype *el, char *tableName, int updateSize)
-/* Save polyGenotype as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than polyGenotypeSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *ethnicGroup;
-name = sqlEscapeString(el->name);
-ethnicGroup = sqlEscapeString(el->ethnicGroup);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,%d,%d,%d,%g,%g)", 
-	tableName,  name,  ethnicGroup, el->plusPlus , el->plusMinus , el->minusMinus , el->sampleSize , el->alleleFrequency , el->unbiasedHeterozygosity );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&ethnicGroup);
-}
 
 struct polyGenotype *polyGenotypeCommaIn(char **pS, struct polyGenotype *ret)
 /* Create a polyGenotype out of a comma separated string. 

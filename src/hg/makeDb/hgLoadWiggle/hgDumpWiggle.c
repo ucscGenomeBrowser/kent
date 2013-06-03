@@ -66,9 +66,9 @@ if (db)
     for (i=0; i<trackCount; ++i)
 	{
 	if (chr)
-	    snprintf(query, 256, "select * from %s where chrom = \"%s\"\n", tracks[i], chr);
+	    sqlSafef(query, 256, "select * from %s where chrom = \"%s\"\n", tracks[i], chr);
 	else
-	    snprintf(query, 256, "select * from %s\n", tracks[i]);
+	    sqlSafef(query, 256, "select * from %s\n", tracks[i]);
 	verbose(2, "#\t%s\n", query);
 	sr = sqlGetResult(conn,query);
 	while ((row = sqlNextRow(sr)) != NULL)

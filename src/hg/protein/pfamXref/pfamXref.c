@@ -51,7 +51,7 @@ o2 = mustOpen("jj.dat", "w");
 /* Build up hash for quick access to displayIds. */
 struct hash *displayIdHash = hashNew(20);
 struct sqlConnection *conn = sqlConnect(proteinDB);
-struct sqlResult *sr = sqlGetResult(conn, "select accession,displayID from spXref3");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select accession,displayID from spXref3");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(displayIdHash, row[0], cloneString(row[1]));

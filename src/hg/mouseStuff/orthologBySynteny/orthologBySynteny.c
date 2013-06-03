@@ -125,11 +125,11 @@ struct sqlConnection *conn = hAllocConn(db);
 char **row;
 
 if (alignment != NULL)
-    snprintf(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	     "select * from axtInfo where chrom = '%s' and species = '%s' and alignment = '%s'",
 	     chrom, db2, alignment);
 else
-    snprintf(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	     "select * from axtInfo where chrom = '%s' and species = '%s'",
 	     chrom, db2);
 sr = sqlGetResult(conn, query);
@@ -652,7 +652,7 @@ char query[512];
 static char retName[255];
 char *tFieldName = optionVal("tName", "name");
 
-    sprintf(query, "select %s, txStart, txEnd from %s where chrom = '%s' and txStart <= %d and txEnd >= %d",tFieldName, geneTable,chrom,gEnd, gStart);
+    sqlSafef(query, sizeof query, "select %s, txStart, txEnd from %s where chrom = '%s' and txStart <= %d and txEnd >= %d",tFieldName, geneTable,chrom,gEnd, gStart);
     /*printf("%s\n",query);*/
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -675,10 +675,10 @@ void mustGetMrnaStartStop( char *acc, unsigned *cdsStart, unsigned *cdsEnd )
 
 	/* Get cds start and stop, if available */
 	conn = hAllocConn(db);
-	sprintf(query, "select cds from mrna where acc = '%s'", acc);
+	sqlSafef(query, sizeof query, "select cds from mrna where acc = '%s'", acc);
 	sr = sqlGetResult(conn, query);
 	assert((row = sqlNextRow(sr)) != NULL);
-       	sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
+       	sqlSafef(query, sizeof query, "select name from cds where id = '%d'", atoi(row[0]));
     	sqlFreeResult(&sr);
        	sr = sqlGetResult(conn, query);
     	assert((row = sqlNextRow(sr)) != NULL);
@@ -710,9 +710,9 @@ filter = optionInt("filter",2000000);
 
                 verifyAlist(axtList);
 if (psl)
-    sprintf(query, "select g.qName, g.tName, g.strand, g.tStart, g.tEnd, g.qStart, g.qEnd, g.blockCount, g.tStarts, g.blockSizes, g.%s,n.chainId, n.type, n.level, n.qName, n.qStart, n.qEnd, g.qSize, g.qStarts, g.tSize from %s g, %s n where n.tName = '%s' and n.tStart <= g.tEnd and n.tEnd >=  g.tStart and g.tName = '%s' and type <> 'gap' order by g.%s, g.tStart, score desc",fieldName, geneTable,netTable, chrom,chrom, fieldName );
+    sqlSafef(query, sizeof query, "select g.qName, g.tName, g.strand, g.tStart, g.tEnd, g.qStart, g.qEnd, g.blockCount, g.tStarts, g.blockSizes, g.%s,n.chainId, n.type, n.level, n.qName, n.qStart, n.qEnd, g.qSize, g.qStarts, g.tSize from %s g, %s n where n.tName = '%s' and n.tStart <= g.tEnd and n.tEnd >=  g.tStart and g.tName = '%s' and type <> 'gap' order by g.%s, g.tStart, score desc",fieldName, geneTable,netTable, chrom,chrom, fieldName );
 else
-    sprintf(query, "select g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds,  g.%s, n.chainId, n.type, n.level, n.qName, n.qStart, n.qEnd from %s g, %s n where n.tName = '%s' and n.tStart <= g.txEnd and n.tEnd >=  g.txStart and chrom = '%s' and n.type <> 'gap' order by g.%s, g.txStart, score desc",fieldName, geneTable,netTable, chrom,chrom, fieldName );
+    sqlSafef(query, sizeof query, "select g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds,  g.%s, n.chainId, n.type, n.level, n.qName, n.qStart, n.qEnd from %s g, %s n where n.tName = '%s' and n.tStart <= g.txEnd and n.tEnd >=  g.txStart and chrom = '%s' and n.type <> 'gap' order by g.%s, g.txStart, score desc",fieldName, geneTable,netTable, chrom,chrom, fieldName );
 //fprintf(stderr,"query\n%s\n",query);
 sr = sqlGetResult(conn, query);
 

@@ -25,7 +25,7 @@ char *xyzCellVal(struct column *col, struct genePos *gp,
 /* Make comma separated list of matches to association table. */
 {
 char query[1000];
-safef(query, sizeof(query), "select %s from %s where %s = '%s'",
+sqlSafef(query, sizeof(query), "select %s from %s where %s = '%s'",
       col->valField, col->table, col->keyField, gp->name);
 return sqlQuickString(conn, query);
 }
@@ -70,7 +70,7 @@ struct searchResult *resList = NULL, *res;
 
 /* Construct query */
 char query[1000];
-safef(query, sizeof(query), "select %s,%s from %s where %s='%s'", 
+sqlSafef(query, sizeof(query), "select %s,%s from %s where %s='%s'", 
 	col->keyField, col->valField, col->table, col->valField, search);
 
 /* Get results from database and store in results list. */
@@ -111,7 +111,7 @@ if (term != NULL)
     char query[1000];
     char **row;
     struct sqlResult *sr;
-    safef(query, sizeof(query), "select %s from %s where %s='%s'", 
+    sqlSafef(query, sizeof(query), "select %s from %s where %s='%s'", 
 	col->keyField, col->table, col->valField, term);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)

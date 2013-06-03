@@ -47,7 +47,7 @@ struct track *track = hashMustFindVal(trackHash, trackName);
 struct customTrack *ct = track->customPt;
 char *tableName = ct->dbTableName;
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-makeItemsItemSaveToDbEscaped(conn, item, tableName, 0);
+makeItemsItemSaveToDb(conn, item, tableName, 0);
 hFreeConn(&conn);
 
 freez(&dupeCommand);
@@ -69,11 +69,9 @@ safef(varName, sizeof(varName), "%s_%s", trackName, fieldName);
 char *newVal = cartOptionalString(cart, varName);
 if (newVal != NULL)
     {
-    char *escapedVal = sqlEscapeString(newVal);
-    safef(sql, sizeof(sql), "update %s set %s='%s' where id=%d",
-	    tableName, fieldName, escapedVal, id);
+    sqlSafef(sql, sizeof(sql), "update %s set %s='%s' where id=%d",
+	    tableName, fieldName, newVal, id);
     sqlUpdate(conn, sql);
-    freez(&escapedVal);
     cartRemove(cart, varName);	/* We don't need it any more. */
     }
 }
@@ -105,7 +103,7 @@ if (idString != NULL)
     if (cartVarExists(cart, varName))
         {
 	cartRemove(cart, varName);	// Especially only want to do deletes once!
-	safef(sql, sizeof(sql), "delete from %s where id=%d", tableName, id);
+	sqlSafef(sql, sizeof(sql), "delete from %s where id=%d", tableName, id);
 	sqlUpdate(conn, sql);
 	return;
 	}

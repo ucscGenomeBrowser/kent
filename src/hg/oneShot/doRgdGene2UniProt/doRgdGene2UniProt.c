@@ -42,7 +42,7 @@ conn2= hAllocConn(database);
 outFn = argv[2];
 outf = mustOpen(outFn, "w");
 
-sprintf(query2,"select gene_rgd_id, uniprot_id from rgdGene2Raw where uniprot_id <> \"\"");
+sqlSafef(query2, sizeof query2, "select gene_rgd_id, uniprot_id from rgdGene2Raw where uniprot_id <> \"\"");
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)

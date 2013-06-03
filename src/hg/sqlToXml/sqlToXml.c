@@ -311,7 +311,7 @@ for (table = tableList; table != NULL; table = table->next)
     char query[256], **row;
     struct sqlResult *sr;
     struct typedField *fieldList = NULL, *field;
-    safef(query, sizeof(query), "describe %s", table->name);
+    sqlSafef(query, sizeof(query), "describe %s", table->name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -429,7 +429,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		int newDepth = depth;
 		if (!tree->hideTable)
 		    newDepth += 1;
-		dyStringPrintf(sql, "select * from %s where %s = ",
+		sqlDyStringPrintf(sql, "select * from %s where %s = ",
 			branch->targetTable, target);
 		if (branch->needsQuote)
 		    dyStringPrintf(sql, "\"%s\"", row[branch->fieldIx]);
@@ -478,7 +478,7 @@ if (optionExists("query"))
     dyStringAppend(sql, query);
     }
 else
-    dyStringPrintf(sql, "select * from %s", table);
+    sqlDyStringPrintf(sql, "select * from %s", table);
 
 if (maxList > 0)
     dyStringPrintf(sql, " limit %d", maxList);

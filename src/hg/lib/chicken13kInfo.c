@@ -113,58 +113,15 @@ void chicken13kInfoSaveToDb(struct sqlConnection *conn, struct chicken13kInfo *e
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use chicken13kInfoSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s',%s,'%s',%s,%s,%s)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s',%s,'%s',%s,%s,%s)", 
 	tableName,  el->id,  el->source,  el->pcr,  el->library,  el->clone,  el->gbkAcc,  el->blat,  el->sourceAnnot,  el->tigrTc,  el->tigrTcAnnot,  el->blastAnnot,  el->comment);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void chicken13kInfoSaveToDbEscaped(struct sqlConnection *conn, struct chicken13kInfo *el, char *tableName, int updateSize)
-/* Save chicken13kInfo as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than chicken13kInfoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *id, *source, *pcr, *library, *clone, *gbkAcc, *blat, *sourceAnnot, *tigrTc, *tigrTcAnnot, *blastAnnot, *comment;
-id = sqlEscapeString(el->id);
-source = sqlEscapeString(el->source);
-pcr = sqlEscapeString(el->pcr);
-library = sqlEscapeString(el->library);
-clone = sqlEscapeString(el->clone);
-gbkAcc = sqlEscapeString(el->gbkAcc);
-blat = sqlEscapeString(el->blat);
-sourceAnnot = sqlEscapeString(el->sourceAnnot);
-tigrTc = sqlEscapeString(el->tigrTc);
-tigrTcAnnot = sqlEscapeString(el->tigrTcAnnot);
-blastAnnot = sqlEscapeString(el->blastAnnot);
-comment = sqlEscapeString(el->comment);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  id,  source,  pcr,  library,  clone,  gbkAcc,  blat,  sourceAnnot,  tigrTc,  tigrTcAnnot,  blastAnnot,  comment);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&id);
-freez(&source);
-freez(&pcr);
-freez(&library);
-freez(&clone);
-freez(&gbkAcc);
-freez(&blat);
-freez(&sourceAnnot);
-freez(&tigrTc);
-freez(&tigrTcAnnot);
-freez(&blastAnnot);
-freez(&comment);
-}
 
 struct chicken13kInfo *chicken13kInfoCommaIn(char **pS, struct chicken13kInfo *ret)
 /* Create a chicken13kInfo out of a comma separated string. 

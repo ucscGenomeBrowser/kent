@@ -207,7 +207,7 @@ struct sqlResult *sr;
 char **row;
 int count = 0;
 
-sr = sqlGetResult(conn, "select LLid, MGIid from MGIid");
+sr = sqlGetResult(conn, "NOSQLINJ select LLid, MGIid from MGIid");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *jaxId = cloneString(row[1]);
@@ -305,7 +305,7 @@ struct sqlResult *sr;
 char **row;
 
 /* Using ensembl fillFirstColumnHash(diseaseFile, diseaseHash); */
-sr = sqlGetResult(conn, "select mrnaAcc,locusLinkId from refLink");
+sr = sqlGetResult(conn, "NOSQLINJ select mrnaAcc,locusLinkId from refLink");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *acc = row[0];
@@ -444,7 +444,7 @@ slSort(&gpList, cmpGenePred);
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
     keepGene = FALSE;
-    sprintf(query, "select * from refLink where mrnaAcc = '%s'", gp->name);
+    sqlSafef(query, sizeof query, "select * from refLink where mrnaAcc = '%s'", gp->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -946,7 +946,7 @@ struct agpGap gap;
 int baseTotal = chromEnd - chromStart;
 int nCount = 0, s, e, size;
 
-sprintf(query, "select * from %s_gap where chromStart < %d and chromEnd > %d",
+sqlSafef(query, sizeof query, "select * from %s_gap where chromStart < %d and chromEnd > %d",
 	chrom, chromEnd, chromStart);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

@@ -19,7 +19,7 @@ errAbort(
   );
 }
 
-char createString[] = "CREATE TABLE softPromoter (\n"
+char createString[] = "NOSQLINJ CREATE TABLE softPromoter (\n"
     "chrom varchar(255) not null,	# Human chromosome or FPC contig\n"
     "chromStart int unsigned not null,	# Start position in chromosome\n"
     "chromEnd int unsigned not null,	# End position in chromosome\n"
@@ -100,8 +100,8 @@ char query[256];
 
 printf("Loading %s from %s\n", database, fileName);
 sqlMaybeMakeTable(conn, "softPromoter", createString);
-sqlUpdate(conn, "delete from softPromoter");
-sprintf(query, "load data local infile '%s' into table softPromoter", fileName);
+sqlUpdate(conn, "NOSQLINJ delete from softPromoter");
+sqlSafef(query, sizeof query, "load data local infile '%s' into table softPromoter", fileName);
 sqlUpdate(conn, query);
 sqlDisconnect(&conn);
 }

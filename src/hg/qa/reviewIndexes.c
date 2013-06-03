@@ -42,7 +42,7 @@ int count = 0;
 struct table *table, *list = NULL;
 
 verbose(2, "show tables...\n");
-safef(query, sizeof(query), "show tables");
+sqlSafef(query, sizeof(query), "show tables");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -90,7 +90,7 @@ for (table1 = tableList; table1 != NULL; table1 = table1->next)
     {
     /* check for bin index */
     gotBin = FALSE;
-    safef(query, sizeof(query), "show index from %s", table1->name);
+    sqlSafef(query, sizeof(query), "show index from %s", table1->name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -99,7 +99,7 @@ for (table1 = tableList; table1 != NULL; table1 = table1->next)
 	}
     if (!gotBin) continue;
     sqlFreeResult(&sr);
-    safef(query, sizeof(query), "show index from %s", table1->name);
+    sqlSafef(query, sizeof(query), "show index from %s", table1->name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {  

@@ -560,7 +560,7 @@ warn("Loading tree.");
 for(i=0; i<ArraySize(tableNames); i++)
     {
     warn("Loading table: %s", tableNames[i]);
-    safef(query,sizeof(query),"select * from %s", tableNames[i]);
+    sqlSafef(query,sizeof(query),"select * from %s", tableNames[i]);
     sr = sqlGetResult(conn, query);
     while((row = sqlNextRow(sr)) != NULL)
 	{

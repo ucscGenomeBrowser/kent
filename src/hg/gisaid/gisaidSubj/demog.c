@@ -28,7 +28,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select %s from gisaidSubjInfo where subjId='%s'", 
       colName, subjId);
 sr = sqlMustGetResult(conn, query);

@@ -51,7 +51,7 @@ struct dyString *query = newDyString(1024);
 
 if (hti == NULL)
     errAbort("table %s.gap doesn't exist", db);
-dyStringPrintf(query, "select chromStart,chromEnd from ");
+sqlDyStringPrintf(query, "select chromStart,chromEnd from ");
 if (hti->isSplit)
     dyStringPrintf(query, "%s_gap where ", chrom);
 else
@@ -85,7 +85,7 @@ struct dyString *query = newDyString(1024);
 
 if (hti == NULL)
     errAbort("table %s.rmsk doesn't exist", db);
-dyStringPrintf(query, "select genoStart,genoEnd from ");
+sqlDyStringPrintf(query, "select genoStart,genoEnd from ");
 if (hti->isSplit)
     dyStringPrintf(query, "%s_rmsk where ", chrom);
 else

@@ -46,7 +46,7 @@ conn3 = hAllocConn();
 conn4 = hAllocConn();
 	
 /* loop over all InterPro entry for the specific InterPro xref table for this organism */
-sprintf(query2, "select distinct interProId from proteome.%s", tableName);
+sqlSafef(query2, sizeof query2, "select distinct interProId from proteome.%s", tableName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -54,7 +54,7 @@ while (row2 != NULL)
     interProId  = row2[0];
     
     /* get all start/end positions of this InterPro domain */ 
-    sprintf(query3, 
+    sqlSafef(query3, sizeof query3,
     "select accession, start, end, description from proteome.%s where interProId='%s'", 
     tableName, interProId);
     sr3 = sqlMustGetResult(conn3, query3);
@@ -84,7 +84,7 @@ while (row2 != NULL)
     sqlFreeResult(&sr3);
     
     /* fetch the corresponding AA sequence of the domain having the max length */
-    sprintf(query4, "select substring(val, %s, %d) from uniProt.protein where acc='%s'",
+    sqlSafef(query4, sizeof query4, "select substring(val, %s, %d) from uniProt.protein where acc='%s'",
     	    maxStart, maxLen, maxAcc);
     sr4 = sqlMustGetResult(conn4, query4);
     row4 = sqlNextRow(sr4);

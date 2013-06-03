@@ -68,7 +68,9 @@ struct dyString *query = dyStringNew(256);
 struct sqlResult *sr;
 char **row;
 
-dyStringPrintf(query, "select * from %s", table);
+// should be changed to sqlDyStringPrintf for NOSQLINJ
+// but that would perhaps require moving this code to someplace under hg/ ?
+dyStringPrintf(query, "select * from %s", table); 
 if (where != NULL)
     dyStringPrintf(query, " where %s", where);
 sr = sqlGetResult(conn, query->string);

@@ -96,15 +96,13 @@ void mouseAPSetEventMapSaveToDb(struct sqlConnection *conn, struct mouseAPSetEve
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use mouseAPSetEventMapSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *incPSetsArray, *genePSetsArray;
 incPSetsArray = sqlStringArrayToString(el->incPSets, el->incCount);
 genePSetsArray = sqlStringArrayToString(el->genePSets, el->geneCount);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%u,'%s',%u,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%u,'%s',%u,'%s')", 
 	tableName,  el->geneName,  el->skipPSet,  el->incCount,  incPSetsArray ,  el->geneCount,  genePSetsArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -112,31 +110,6 @@ freez(&incPSetsArray);
 freez(&genePSetsArray);
 }
 
-void mouseAPSetEventMapSaveToDbEscaped(struct sqlConnection *conn, struct mouseAPSetEventMap *el, char *tableName, int updateSize)
-/* Save mouseAPSetEventMap as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than mouseAPSetEventMapSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *geneName, *skipPSet, *incPSetsArray, *genePSetsArray;
-geneName = sqlEscapeString(el->geneName);
-skipPSet = sqlEscapeString(el->skipPSet);
-
-incPSetsArray = sqlStringArrayToString(el->incPSets, el->incCount);
-genePSetsArray = sqlStringArrayToString(el->genePSets, el->geneCount);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%u,'%s',%u,'%s')", 
-	tableName,  geneName,  skipPSet, el->incCount ,  incPSetsArray , el->geneCount ,  genePSetsArray );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&geneName);
-freez(&skipPSet);
-freez(&incPSetsArray);
-freez(&genePSetsArray);
-}
 
 struct mouseAPSetEventMap *mouseAPSetEventMapCommaIn(char **pS, struct mouseAPSetEventMap *ret)
 /* Create a mouseAPSetEventMap out of a comma separated string. 

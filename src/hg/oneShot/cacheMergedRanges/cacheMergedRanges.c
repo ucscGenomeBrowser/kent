@@ -115,11 +115,11 @@ if (! hti->isPos)
     errAbort("Table must be positional, but looks like %s.%s isn't",
 	     db, table);
 if (sortByChromStart)
-    safef(query, sizeof(query), "select %s,%s,%s from %s order by %s,%s",
+    sqlSafef(query, sizeof(query), "select %s,%s,%s from %s order by %s,%s",
 	  hti->chromField, hti->startField, hti->endField, table,
 	  hti->chromField, hti->startField);
 else
-    safef(query, sizeof(query), "select %s,%s,%s from %s order by %s",
+    sqlSafef(query, sizeof(query), "select %s,%s,%s from %s order by %s",
 	  hti->chromField, hti->startField, hti->endField, table,
 	  hti->chromField);
 return(cloneString(query));
@@ -282,7 +282,7 @@ struct sqlResult *sr = NULL;
 struct hash *chromTrees = NULL;
 int startMs = 0, endMs = 0, totalMs = 0;
 
-sqlUpdate(conn, "reset query cache");
+sqlUpdate(conn, "NOSQLINJ reset query cache");
 startMs = clock1000();
 sr = sqlGetResult(conn, query);
 endMs = clock1000();
@@ -316,7 +316,7 @@ struct sqlResult *sr = NULL;
 struct hash *chromTrees = NULL;
 int startMs = 0, endMs = 0, totalMs = 0;
 
-sqlUpdate(conn, "reset query cache");
+sqlUpdate(conn, "NOSQLINJ reset query cache");
 startMs = clock1000();
 sr = sqlGetResult(conn, query);
 endMs = clock1000();
@@ -395,7 +395,7 @@ struct sqlResult *sr = NULL;
 struct hash *chromTrees = NULL;
 int startMs = 0, endMs = 0, totalMs = 0;
 
-sqlUpdate(conn, "reset query cache");
+sqlUpdate(conn, "NOSQLINJ reset query cache");
 startMs = clock1000();
 sr = sqlGetResult(conn, query);
 endMs = clock1000();

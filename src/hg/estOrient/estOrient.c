@@ -80,7 +80,7 @@ safecpy(gbCacheAcc, sizeof(gbCacheAcc), acc);
 gbCacheDir = -1;
 gbCacheVer = -1;
 char query[512];
-safef(query, sizeof(query), "select version, direction from gbCdnaInfo where acc='%s'", acc);
+sqlSafef(query, sizeof(query), "select version, direction from gbCdnaInfo where acc='%s'", acc);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 if (row != NULL)
@@ -128,7 +128,7 @@ if (chrom != NULL)
 else
     {
     rowOff = (sqlFieldIndex(conn, "estOrientInfo", "bin") < 0) ? 0 : 1;
-    sr = sqlGetResult(conn, "select * from estOrientInfo where (intronOrientation != 0)");
+    sr = sqlGetResult(conn, "NOSQLINJ select * from estOrientInfo where (intronOrientation != 0)");
     }
 
 while ((row = sqlNextRow(sr)) != NULL)

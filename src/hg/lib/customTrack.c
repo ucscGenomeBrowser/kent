@@ -61,12 +61,13 @@ static void createMetaInfo(struct sqlConnection *conn)
 /*	create the metaInfo table in customTrash db	*/
 {
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, "CREATE TABLE %s (\n", CT_META_INFO);
-dyStringPrintf(dy, "name varchar(255) not null,\n");
-dyStringPrintf(dy, "useCount int not null,\n");
-dyStringPrintf(dy, "lastUse datetime not null,\n");
-dyStringPrintf(dy, "PRIMARY KEY(name)\n");
-dyStringPrintf(dy, ")\n");
+sqlDyStringPrintf(dy, "CREATE TABLE %s (\n"
+    "name varchar(255) not null,\n"
+    "useCount int not null,\n"
+    "lastUse datetime not null,\n"
+    "PRIMARY KEY(name)\n"
+    ")\n", 
+    CT_META_INFO);
 sqlUpdate(conn,dy->string);
 dyStringFree(&dy);
 }
@@ -89,7 +90,7 @@ if (status)
     {
     struct sqlResult *sr = NULL;
     char **row = NULL;
-    safef(query, sizeof(query), "SELECT useCount FROM %s WHERE name=\"%s\"",
+    sqlSafef(query, sizeof(query), "SELECT useCount FROM %s WHERE name=\"%s\"",
 	CT_META_INFO, table);
     sr = sqlGetResult(conn,query);
     row = sqlNextRow(sr);
@@ -97,21 +98,21 @@ if (status)
 	{
 	int useCount = sqlUnsigned(row[0]);
 	sqlFreeResult(&sr);
-	safef(query, sizeof(query), "UPDATE %s SET useCount=%d,lastUse=now() WHERE name=\"%s\"",
+	sqlSafef(query, sizeof(query), "UPDATE %s SET useCount=%d,lastUse=now() WHERE name=\"%s\"",
 	    CT_META_INFO, useCount+1, table);
 	sqlUpdate(conn,query);
 	}
     else
 	{
 	sqlFreeResult(&sr);
-	safef(query, sizeof(query), "INSERT %s VALUES(\"%s\",1,now())",
+	sqlSafef(query, sizeof(query), "INSERT %s VALUES(\"%s\",1,now())",
 	    CT_META_INFO, table);
 	sqlUpdate(conn,query);
 	}
     }
 else
     {
-    safef(query, sizeof(query), "DELETE FROM %s WHERE name=\"%s\"",
+    sqlSafef(query, sizeof(query), "DELETE FROM %s WHERE name=\"%s\"",
 	CT_META_INFO, table);
     sqlUpdate(conn,query);
     }
@@ -121,7 +122,7 @@ boolean verifyWibExists(struct sqlConnection *conn, char *table)
 /* given a ct database wiggle table, see if the wib file is there */
 {
 char query[1024];
-safef(query, sizeof(query), "SELECT file FROM %s LIMIT 1", table);
+sqlSafef(query, sizeof(query), "SELECT file FROM %s LIMIT 1", table);
 char **row = NULL;
 struct sqlResult *sr = NULL;
 sr = sqlGetResult(conn,query);
@@ -248,7 +249,7 @@ if (!customTrackNeedsLift(ctList))
 struct hash *ctgHash = newHash(0);
 struct ctgPos *ctg, *ctgList = NULL;
 struct sqlConnection *conn = hAllocConn(db);
-struct sqlResult *sr = sqlGetResult(conn, "select * from ctgPos");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select * from ctgPos");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
    {

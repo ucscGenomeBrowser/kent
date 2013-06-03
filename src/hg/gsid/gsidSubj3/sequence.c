@@ -36,7 +36,7 @@ int i, l;
 char *chp;
 
 printf("<B>gp120 DNA Sequences</B><BR>");
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select dnaSeqId, seq from gsIdXref, dnaSeq where subjId = '%s' and id = dnaSeqId order by dnaSeqId", subjId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -67,7 +67,7 @@ while (row != NULL)
 sqlFreeResult(&sr);
 
 printf("<B>gp120 Protein Sequences</B><BR>");
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select aaSeqId, seq from gsIdXref, aaSeq where subjId = '%s' and aaSeqId = id order by aaSeqId", subjId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

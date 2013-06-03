@@ -41,7 +41,7 @@ int *getSomeInts(struct sqlConnection *conn, char *table, char *field, int limit
 {
 int *result, i;
 char query[512];
-safef(query, sizeof(query), "select %s from %s limit %d", field, table, limit);
+sqlSafef(query, sizeof(query), "select %s from %s limit %d", field, table, limit);
 struct sqlResult *sr = sqlGetResult(conn, query);
 AllocArray(result, limit);
 for (i=0; i<limit; ++i)
@@ -65,8 +65,8 @@ int iterations = sqlUnsigned(iterationString);
 
 /* Figure out size of tables. */
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
-int userDbSize = sqlQuickNum(conn, "select count(*) from userDb");
-int sessionDbSize = sqlQuickNum(conn, "select count(*) from sessionDb");
+int userDbSize = sqlQuickNum(conn, "NOSQLINJ select count(*) from userDb");
+int sessionDbSize = sqlQuickNum(conn, "NOSQLINJ select count(*) from sessionDb");
 int sampleSize = min(userDbSize, sessionDbSize);
 int maxSampleSize = 8*1024;
 sampleSize = min(sampleSize, maxSampleSize);
@@ -102,23 +102,23 @@ for (;;)
 	struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
 	long connectTime = clock1000();
 
-	safef(query, querySize, "select contents from userDb where id=%d", 
+	sqlSafef(query, querySize, "select contents from userDb where id=%d", 
 		userIds[randomIx]);
 	char *userContents = sqlQuickString(conn, query);
 	long userReadTime = clock1000();
 
-	safef(query, querySize, "select contents from sessionDb where id=%d", 
+	sqlSafef(query, querySize, "select contents from sessionDb where id=%d", 
 		sessionIds[randomIx]);
 	char *sessionContents = sqlQuickString(conn, query);
 	long sessionReadTime = clock1000();
 
-	safef(query, querySize, "update userDb set contents='%s' where id=%d",
+	sqlSafef(query, querySize, "update userDb set contents='%s' where id=%d",
 		userContents, userIds[randomIx]);
 	if (!readOnly)
 	    sqlUpdate(conn, query);
 	long userWriteTime = clock1000();
 
-	safef(query, querySize, "update sessionDb set contents='%s' where id=%d",
+	sqlSafef(query, querySize, "update sessionDb set contents='%s' where id=%d",
 		sessionContents, sessionIds[randomIx]);
 	if (!readOnly)
 	    sqlUpdate(conn, query);

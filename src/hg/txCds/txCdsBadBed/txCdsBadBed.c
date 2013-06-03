@@ -84,7 +84,7 @@ for (bed = intronyList; bed != NULL; bed = bed->next)
 
 /* Read in refGene, and write out larger 3' UTRs, and occassional antisense copies.  */
 char query[512];
-safef(query, sizeof(query), "select * from %s", refTrack);
+sqlSafef(query, sizeof(query), "select * from %s", refTrack);
 int rowOffset = 0;
 if (sqlFieldIndex(conn, refTrack, "bin") == 0)
     rowOffset = 1;
@@ -117,7 +117,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 /* Write out vega pseudo-genes. */
-safef(query, sizeof(query), "select * from %s", vegaPseudo);
+sqlSafef(query, sizeof(query), "select * from %s", vegaPseudo);
 rowOffset = 0;
 if (sqlFieldIndex(conn, vegaPseudo, "bin") == 0)
     rowOffset = 1;
@@ -129,7 +129,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 /* Write out retroGenes. */
-safef(query, sizeof(query), "select * from %s where score > 600", retroPseudo);
+sqlSafef(query, sizeof(query), "select * from %s where score > 600", retroPseudo);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

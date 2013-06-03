@@ -45,7 +45,7 @@ static void buildLsSnpPdb(char *lsSnpProf, char *lsSnpDb, char *tabFile)
 struct sqlConnection *conn = sqlConnectProfile(lsSnpProf, lsSnpDb);
 FILE *fh = mustOpen(tabFile, "w");
 char *query =
-    "SELECT distinct pr.accession,ps.pdb_id,pstr.struct_type,ps.chain,SNP.name,ps.snp_position "
+    "NOSQLINJ SELECT distinct pr.accession,ps.pdb_id,pstr.struct_type,ps.chain,SNP.name,ps.snp_position "
     "FROM Protein pr,PDB_SNP ps, SNP, PDB_Structure pstr "
     "WHERE (ps.snp_id = SNP.snp_id) AND (pr.prot_id = ps.prot_id) "
     "AND (pstr.pdb_id = ps.pdb_id)";
@@ -129,16 +129,16 @@ sqlDropTable(conn, newTbl);
 sqlDropTable(conn, oldTbl);
 
 // load into tmp table
-safef(query, sizeof(query), createSql, newTbl);
+sqlSafef(query, sizeof(query), createSql, newTbl);
 sqlUpdate(conn, query);
 sqlLoadTabFile(conn, tmpTabFile, newTbl, 0);
 
 // rename into place
 if (sqlTableExists(conn, table))
-    safef(query, sizeof(query), "rename table %s to %s, %s to %s",
+    sqlSafef(query, sizeof(query), "rename table %s to %s, %s to %s",
           table, oldTbl, newTbl, table);
 else
-    safef(query, sizeof(query), "rename table %s to %s",
+    sqlSafef(query, sizeof(query), "rename table %s to %s",
           newTbl, table);
 sqlUpdate(conn, query);
 

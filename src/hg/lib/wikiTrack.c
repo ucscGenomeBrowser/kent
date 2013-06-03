@@ -122,56 +122,15 @@ void wikiTrackSaveToDb(struct sqlConnection *conn, struct wikiTrack *el, char *t
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use wikiTrackSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->db,  el->owner,  el->color,  el->class,  el->creationDate,  el->lastModifiedDate,  el->descriptionKey,  el->id,  el->geneSymbol);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void wikiTrackSaveToDbEscaped(struct sqlConnection *conn, struct wikiTrack *el, char *tableName, int updateSize)
-/* Save wikiTrack as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than wikiTrackSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *db, *owner, *color, *class, *creationDate, *lastModifiedDate, *descriptionKey, *geneSymbol;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-db = sqlEscapeString(el->db);
-owner = sqlEscapeString(el->owner);
-color = sqlEscapeString(el->color);
-class = sqlEscapeString(el->class);
-creationDate = sqlEscapeString(el->creationDate);
-lastModifiedDate = sqlEscapeString(el->lastModifiedDate);
-descriptionKey = sqlEscapeString(el->descriptionKey);
-geneSymbol = sqlEscapeString(el->geneSymbol);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  db,  owner,  color,  class,  creationDate,  lastModifiedDate,  descriptionKey, el->id ,  geneSymbol);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&db);
-freez(&owner);
-freez(&color);
-freez(&class);
-freez(&creationDate);
-freez(&lastModifiedDate);
-freez(&descriptionKey);
-freez(&geneSymbol);
-}
 
 struct wikiTrack *wikiTrackCommaIn(char **pS, struct wikiTrack *ret)
 /* Create a wikiTrack out of a comma separated string. 
@@ -317,7 +276,7 @@ static void savePosInTextBox(char *chrom, int start, int end)
 {
 char position[128];
 char *newPos;
-snprintf(position, 128, "%s:%d-%d", chrom, start, end);
+safef(position, 128, "%s:%d-%d", chrom, start, end);
 newPos = addCommasToPos(position);
 cgiMakeTextVar("getDnaPos", newPos, strlen(newPos) + 2);
 cgiContinueHiddenVar("db");
@@ -455,11 +414,11 @@ static char *createString =
 char *wikiTrackGetCreateSql(char *tableName)
 /* return sql create statement for wiki track with tableName */
 {
-struct dyString *createTable = dyStringNew(512);
+struct dyString *dy = dyStringNew(512);
 
-dyStringPrintf(createTable, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 
-return (dyStringCannibalize(&createTable));
+return (dyStringCannibalize(&dy));
 }
 
 char *wikiDbName()
@@ -499,7 +458,7 @@ struct wikiTrack *item;
 char query[256];
 struct sqlConnection *wikiConn = wikiConnect();
 
-safef(query, ArraySize(query), "SELECT * FROM %s WHERE id='%s' limit 1",
+sqlSafef(query, ArraySize(query), "SELECT * FROM %s WHERE id='%s' limit 1",
 	WIKI_TRACK_TABLE, wikiItemId);
 
 item = wikiTrackLoadByQuery(wikiConn, query);
@@ -520,7 +479,7 @@ if (db && geneSymbol)
     {
     char query[256];
     struct sqlConnection *wikiConn = wikiConnect();
-    safef(query, ArraySize(query),
+    sqlSafef(query, ArraySize(query),
 	"SELECT * FROM %s WHERE db='%s' AND geneSymbol='%s' limit 1",
 	    WIKI_TRACK_TABLE, db, geneSymbol);
 
@@ -542,7 +501,7 @@ if (name && db)
     {
     char query[256];
     struct sqlConnection *wikiConn = wikiConnect();
-    safef(query, ArraySize(query),
+    sqlSafef(query, ArraySize(query),
 	"SELECT * FROM %s WHERE db='%s' AND name='%s' limit 1",
 	    WIKI_TRACK_TABLE, db, name);
 
@@ -814,7 +773,7 @@ if (!(wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2)))
 	userSignature = dyStringCannibalize(&tt);
 	recreateHeader = TRUE;
 	}
-    snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
+    safef(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
     newPos = addCommasToPos(database, position);
     
     if (extraHeader)
@@ -952,7 +911,7 @@ else
 	userSignature = dyStringCannibalize(&tt);
 	recreateHeader = TRUE;
 	}
-    snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
+    safef(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
     newPos = addCommasToPos(database, position);
     if (extraHeader)
 	{

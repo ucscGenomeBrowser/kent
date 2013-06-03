@@ -20,7 +20,7 @@
 
 static char* GB_DELETE_TMP = "gbDelete_tmp";
 static char* createGbDeleteTmp = 
-"CREATE TABLE gbDelete_tmp ("
+"NOSQLINJ CREATE TABLE gbDelete_tmp ("
 "   acc varchar(20) not null primary key,"
 "   unique(acc)"
 ")"; 
@@ -110,7 +110,7 @@ struct slName* acc;
 
 for (acc = sd->accs; acc != NULL; acc = acc->next)
     {
-    safef(query, sizeof(query), "DELETE QUICK FROM %s WHERE %s = '%s'",
+    sqlSafef(query, sizeof(query), "DELETE QUICK FROM %s WHERE %s = '%s'",
           table, column, acc->name);
     sqlUpdate(conn, query);
     }
@@ -141,7 +141,7 @@ sqlDropTable(conn, oldTmpTable);
 gbSqlDupTableDef(conn, table, newTmpTable);
 
 /* do join into new table of entries not in accession table */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "INSERT INTO %s SELECT %s.* FROM %s LEFT JOIN %s "
       "ON (%s.%s = %s.acc) WHERE %s.acc IS NULL",
       newTmpTable, table, table, GB_DELETE_TMP, table, column,
@@ -149,7 +149,7 @@ safef(query, sizeof(query),
 sqlUpdate(conn, query);
 
 /* Now swap the table into place */
-safef(query, sizeof(query), "RENAME TABLE %s TO %s, %s TO %s",
+sqlSafef(query, sizeof(query), "RENAME TABLE %s TO %s, %s TO %s",
       table, oldTmpTable, newTmpTable, table);
 sqlUpdate(conn, query);
 sqlDropTable(conn, oldTmpTable);

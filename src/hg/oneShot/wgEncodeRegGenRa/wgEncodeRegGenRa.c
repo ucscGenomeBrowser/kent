@@ -104,7 +104,7 @@ for (i=0; i<ArraySize(marks); ++i)
 	    {
 	    tableExists = TRUE;
 	    char query[512];
-	    safef(query, sizeof(query), "select fileName from %s", table);
+	    sqlSafef(query, sizeof(query), "select fileName from %s", table);
 	    char *fileName = sqlQuickString(conn, query);
 	    struct bbiFile *bbi = bigWigFileOpen(fileName);
 	    struct bbiSummaryElement sum = bbiTotalSummary(bbi);

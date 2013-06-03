@@ -73,7 +73,7 @@ char **row;
 
 /* Do a little join to get data to fit into the pcrServer. */
 sr = sqlGetResult(conn, 
-   "select dbDb.name,dbDb.genome,dbDb.description,blatServers.host,"
+   "NOSQLINJ select dbDb.name,dbDb.genome,dbDb.description,blatServers.host,"
    "blatServers.port,dbDb.nibPath "
    "from dbDb,blatServers where "
    "dbDb.name = blatServers.db "
@@ -120,18 +120,16 @@ struct sqlConnection *conn = hConnectCentral();
 struct sqlConnection *conn2 = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
-char query[2048];
+struct dyString *dy = dyStringNew(0);
 
-safef(query, sizeof(query),
+sqlDyStringPrintf(dy, 
       "select b.host, b.port, t.* from targetDb as t, blatServers as b "
-      "where b.db = t.name and t.db = '%s' and b.canPcr = 1 "
-      "%s%s%s"
-      "order by t.priority",
-      db,
-      isNotEmpty(name) ? "and t.name = '" : "",
-      isNotEmpty(name) ? name : "",
-      isNotEmpty(name) ? "' " : "");
-sr = sqlGetResult(conn, query);
+      "where b.db = t.name and t.db = '%s' and b.canPcr = 1 ",
+      db);
+if (isNotEmpty(name))
+    sqlDyStringPrintf(dy, "and t.name = '%s' ", name);
+dyStringAppend(dy, "order by t.priority");
+sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     /* Keep this server only if its timestamp is newer than the tables
@@ -146,6 +144,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	slAddHead(&serverList, server);
 	}
     }
+dyStringFree(&dy);
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 hFreeConn(&conn2);

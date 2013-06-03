@@ -60,7 +60,7 @@ struct minGeneInfo* getGbProtCodeInfo(struct sqlConnection *conn, char* dbName, 
     }
     if (hTableExists(dbName, "gbProtCodeXra"))
     {
-        sprintf(query, "select * from %s where name = '%s'", gbProtCodeXra, geneName);
+    sqlSafef(query, sizeof query, "select * from %s where name = '%s'", gbProtCodeXra, geneName);
     sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
     ginfo = minGeneInfoLoad(row);
@@ -77,13 +77,13 @@ void getGenomeClade(struct sqlConnection *conn, char *dbName, char *genome, char
     char **rowDb;
     struct sqlConnection *connCentral = hConnectCentral();
 
-    sprintf(query, "select count(*) from genomeClade a, dbDb b, clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
+    sqlSafef(query, sizeof query, "select count(*) from genomeClade a, dbDb b, clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
             dbName);
     srDb = sqlGetResult(connCentral, query);
     if ((rowDb = sqlNextRow(srDb)) != NULL)
     {
         sqlFreeResult(&srDb);
-        sprintf(query, "select a.genome, c.label from genomeClade a, dbDb b, clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
+        sqlSafef(query, sizeof query, "select a.genome, c.label from genomeClade a, dbDb b, clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
                 dbName);
         srDb = sqlGetResult(connCentral, query);
         if ((rowDb = sqlNextRow(srDb)) != NULL)

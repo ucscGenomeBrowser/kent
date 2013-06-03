@@ -21,7 +21,7 @@ static char *somePath(struct sqlConnection *conn, int id, char *locationField)
 char query[256], path[PATH_LEN];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select fileLocation.name,imageFile.fileName from image,imageFile,fileLocation"
 	" where image.id = %d and image.imageFile = imageFile.id "
 	" and fileLocation.id=imageFile.%s", id, locationField);
@@ -59,7 +59,7 @@ char *genePixOrganism(struct sqlConnection *conn, int id)
  * FreeMem this when done. */
 {
 char query[256], buf[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select uniProt.taxon.binomial from image,uniProt.taxon"
          " where image.id = %d and image.taxon = uniProt.taxon.id",
 	 id);
@@ -77,7 +77,7 @@ double daysPassed;
 char *startMarker;
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select isEmbryo,age from image where id = %d", id);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
@@ -113,7 +113,7 @@ struct slName *list = NULL, *el = NULL;
 struct sqlResult *sr;
 char **row;
 char query[256], buf[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select gene.name,gene.locusLink,gene.refSeq,gene.genbank,gene.uniProt"
       " from imageProbe,probe,gene"
       " where imageProbe.image = %d"
@@ -156,7 +156,7 @@ struct slName *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select gene.%s from imageProbe,probe,gene"
       " where imageProbe.image = %d"
       " and imageProbe.probe = probe.id"
@@ -198,7 +198,7 @@ char *genePixSubmitId(struct sqlConnection *conn, int id)
  * FreeMem this when done. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select imageFile.submitId from image,imageFile "
     "where image.id = %d and image.imageFile = imageFile.id", id);
 return sqlQuickString(conn, query);
@@ -208,7 +208,7 @@ static char *indirectString(struct sqlConnection *conn, int id, char *table, cha
 /* Return value on table that is connected via id to image. */
 {
 char query[256], buf[512];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select %s.%s from image,%s "
 	"where image.id=%d and image.%s = %s.id",
 	table, valField, table, id, table, table);
@@ -238,7 +238,7 @@ static char *stringFieldInSubmissionSet(struct sqlConnection *conn, int id,
 /* Return some string field in submissionSet table when you have image id. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
      "select submissionSet.%s from image,imageFile,submissionSet"
      " where image.id = %d"
      " and image.imageFile = imageFile.id "
@@ -290,13 +290,13 @@ static void appendMatchHow(struct dyString *dy, char *pattern,
 switch (how)
     {
     case gpsExact:
-        dyStringPrintf(dy, " = \"%s\"", pattern);
+        sqlDyStringPrintf(dy, " = \"%s\"", pattern);
 	break;
     case gpsPrefix:
-        dyStringPrintf(dy, " like \"%s%%\"", pattern);
+        sqlDyStringPrintf(dy, " like \"%s%%\"", pattern);
 	break;
     case gpsLike:
-        dyStringPrintf(dy, " like \"%s\"", pattern);
+        sqlDyStringPrintf(dy, " like \"%s\"", pattern);
 	break;
     default:
         internalErr();
@@ -315,7 +315,7 @@ struct dyString *dy = dyStringNew(0);
 char **row;
 struct sqlResult *sr;
 
-dyStringPrintf(dy, "select id from gene where name ");
+sqlDyStringPrintf(dy, "select id from gene where name ");
 appendMatchHow(dy, name, how);
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -326,7 +326,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 dyStringClear(dy);
-dyStringPrintf(dy, "select gene from geneSynonym where name ");
+sqlDyStringPrintf(dy, "select gene from geneSynonym where name ");
 appendMatchHow(dy, name, how);
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -340,9 +340,9 @@ sqlFreeResult(&sr);
 for (geneEl = geneList; geneEl != NULL; geneEl = geneEl->next)
     {
     dyStringClear(dy);
-    dyStringAppend(dy, "select imageProbe.image from probe,imageProbe");
-    dyStringPrintf(dy, " where probe.gene = %s ", geneEl->name);
-    dyStringAppend(dy, " and probe.id = imageProbe.probe");
+    sqlDyStringAppend(dy, "select imageProbe.image from probe,imageProbe");
+    sqlDyStringPrintf(dy, " where probe.gene = '%s' ", geneEl->name);
+    sqlDyStringAppend(dy, " and probe.id = imageProbe.probe");
     sr = sqlGetResult(conn, dy->string);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -371,7 +371,7 @@ char query[256], **row;
 
 if (acc[0] == 0)
     return NULL;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select imageProbe.image from gene,probe,imageProbe"
     " where gene.%s = '%s'"
     " and gene.id = probe.gene"
@@ -438,12 +438,12 @@ if (init == NULL && taxon == 0 && contributors == NULL &&
     errAbort("must select something on genePixSelectMulti");
 if (contributors)
     {
-    dyStringAppend(dy, "select image.id from ");
+    sqlDyStringAppend(dy, "select image.id from ");
     dyStringAppend(dy, "image,imageFile,submissionSet,submissionContributor,contributor");
     }
 else
     {
-    dyStringAppend(dy, "select id from image");
+    sqlDyStringAppend(dy, "select id from image");
     }
 dyStringAppend(dy, " where");
 if (taxon != 0)

@@ -42,7 +42,7 @@ struct snpSubset *subsetElement = NULL;
 
 verbose(1, "creating SNP hash...\n");
 ret = newHash(16);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select name, chrom, chromStart, chromEnd, strand, observed, class, locType from %s", 
       tableName);
 sr = sqlGetResult(conn, query);
@@ -82,7 +82,7 @@ FILE *output = mustOpen("illuminaLookup.out", "w");
 FILE *errors = mustOpen("illuminaLookup.err", "w");
 
 verbose(1, "process SNPs...\n");
-safef(query, sizeof(query), "select * from %s", illuminaTable);
+sqlSafef(query, sizeof(query), "select * from %s", illuminaTable);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

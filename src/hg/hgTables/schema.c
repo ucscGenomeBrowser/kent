@@ -89,9 +89,9 @@ boolean showItemRgb = FALSE;
 showItemRgb=bedItemRgb(findTdbForTable(db, curTrack, table, ctLookupName));
 // should we expect itemRgb instead of "reserved"
 
-safef(query, sizeof(query), "select * from %s limit 1", table);
+sqlSafef(query, sizeof(query), "select * from %s limit 1", table);
 exampleList = storeRow(conn, query);
-safef(query, sizeof(query), "describe %s", table);
+sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 
 hTableStart();
@@ -218,7 +218,7 @@ showItemRgb=bedItemRgb(findTdbForTable(database, curTrack, table, ctLookupName))
 // should we expect itemRgb     instead of "reserved"
 
 /* Make table with header row containing name of fields. */
-safef(query, sizeof(query), "describe %s", table);
+sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 hTableStart();
 hPrintf("<TR>");
@@ -237,7 +237,7 @@ hPrintf("</TR>");
 sqlFreeResult(&sr);
 
 /* Get some sample fields. */
-safef(query, sizeof(query), "select * from %s limit %d", table, sampleCount);
+sqlSafef(query, sizeof(query), "select * from %s limit %d", table, sampleCount);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -731,14 +731,14 @@ if (sqlTableExists(conn, "tableDescriptions"))
         {
         char query[256];
 
-        safef(query, sizeof(query),
+        sqlSafef(query, sizeof(query),
               "select autoSqlDef from tableDescriptions where tableName='%s'", table);
         char *asText = asText = sqlQuickString(conn, query);
 
         // If no result try split table. (not likely)
         if (asText == NULL)
             {
-            safef(query, sizeof(query),
+            sqlSafef(query, sizeof(query),
                   "select autoSqlDef from tableDescriptions where tableName='chrN_%s'", table);
             asText = sqlQuickString(conn, query);
             }

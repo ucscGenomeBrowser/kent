@@ -47,7 +47,7 @@ char *snpId = NULL;
 char *exception = NULL;
 
 exceptionsHash = newHash(0);
-safef(query, sizeof(query), "select name, exception from %s", exceptionsTable);
+sqlSafef(query, sizeof(query), "select name, exception from %s", exceptionsTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -104,7 +104,7 @@ char *observed = NULL;
 
 struct hashEl *hel;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select chrom, chromStart, chromEnd, name, strand, observed, weight from %s", snpTable);
 
 sr = sqlGetResult(conn, query);

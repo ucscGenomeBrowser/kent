@@ -245,15 +245,13 @@ void retroMrnaInfoSaveToDb(struct sqlConnection *conn, struct retroMrnaInfo *el,
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use retroMrnaInfoSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *blockSizesArray, *chromStartsArray;
 blockSizesArray = sqlSignedArrayToString(el->blockSizes, el->blockCount);
 chromStartsArray = sqlSignedArrayToString(el->chromStarts, el->blockCount);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%d,'%s','%s',%d,%d,'%s','%s',%d,%d,'%s',%u,%u,%u,%d,%d,%u,%u,%u,%u,%u,%u,%d,%d,%u,%d,%u,%u,%d,%d,%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%g,%u,%g)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%d,'%s','%s',%d,%d,'%s','%s',%d,%d,'%s',%u,%u,%u,%d,%d,%u,%u,%u,%u,%u,%u,%d,%d,%u,%d,%u,%u,%d,%d,%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%g,%u,%g)", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->reserved,  el->blockCount,  blockSizesArray ,  chromStartsArray ,  el->retroExonCount,  el->axtScore,  el->type,  el->gChrom,  el->gStart,  el->gEnd,  el->gStrand,  el->parentSpliceCount,  el->geneOverlap,  el->polyA,  el->polyAstart,  el->exonCover,  el->intronCount,  el->bestAliCount,  el->matches,  el->qSize,  el->qEnd,  el->tReps,  el->overlapRhesus,  el->overlapMouse,  el->coverage,  el->label,  el->milliBad,  el->oldScore,  el->oldIntronCount,  el->processedIntrons,  el->conservedSpliceSites,  el->maxOverlap,  el->refSeq,  el->rStart,  el->rEnd,  el->mgc,  el->mStart,  el->mEnd,  el->kgName,  el->kStart,  el->kEnd,  el->overName,  el->overStart,  el->overExonCover,  el->overStrand,  el->overlapDog,  el->posConf,  el->polyAlen,  el->kaku);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -261,49 +259,6 @@ freez(&blockSizesArray);
 freez(&chromStartsArray);
 }
 
-void retroMrnaInfoSaveToDbEscaped(struct sqlConnection *conn, struct retroMrnaInfo *el, char *tableName, int updateSize)
-/* Save retroMrnaInfo as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than retroMrnaInfoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *blockSizesArray, *chromStartsArray, *type, *gChrom, *gStrand, *refSeq, *mgc, *kgName, *overName, *overStrand;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-type = sqlEscapeString(el->type);
-gChrom = sqlEscapeString(el->gChrom);
-gStrand = sqlEscapeString(el->gStrand);
-refSeq = sqlEscapeString(el->refSeq);
-mgc = sqlEscapeString(el->mgc);
-kgName = sqlEscapeString(el->kgName);
-overName = sqlEscapeString(el->overName);
-overStrand = sqlEscapeString(el->overStrand);
-
-blockSizesArray = sqlSignedArrayToString(el->blockSizes, el->blockCount);
-chromStartsArray = sqlSignedArrayToString(el->chromStarts, el->blockCount);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%d,'%s','%s',%d,%d,'%s','%s',%d,%d,'%s',%u,%u,%u,%d,%d,%u,%u,%u,%u,%u,%u,%d,%d,%u,%d,%u,%u,%d,%d,%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%g,%u,%g)", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand, el->thickStart , el->thickEnd , el->reserved , el->blockCount ,  blockSizesArray ,  chromStartsArray , el->retroExonCount , el->axtScore ,  type,  gChrom, el->gStart , el->gEnd ,  gStrand, el->parentSpliceCount , el->geneOverlap , el->polyA , el->polyAstart , el->exonCover , el->intronCount , el->bestAliCount , el->matches , el->qSize , el->qEnd , el->tReps , el->overlapRhesus , el->overlapMouse , el->coverage , el->label , el->milliBad , el->oldScore , el->oldIntronCount , el->processedIntrons , el->conservedSpliceSites , el->maxOverlap ,  refSeq, el->rStart , el->rEnd ,  mgc, el->mStart , el->mEnd ,  kgName, el->kStart , el->kEnd ,  overName, el->overStart , el->overExonCover ,  overStrand, el->overlapDog , el->posConf , el->polyAlen , el->kaku );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&blockSizesArray);
-freez(&chromStartsArray);
-freez(&type);
-freez(&gChrom);
-freez(&gStrand);
-freez(&refSeq);
-freez(&mgc);
-freez(&kgName);
-freez(&overName);
-freez(&overStrand);
-}
 
 struct retroMrnaInfo *retroMrnaInfoCommaIn(char **pS, struct retroMrnaInfo *ret)
 /* Create a retroMrnaInfo out of a comma separated string. 

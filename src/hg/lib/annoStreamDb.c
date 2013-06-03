@@ -45,7 +45,7 @@ static void asdDoQuery(struct annoStreamDb *self, char *minChrom, uint minEnd)
 // NOTE: it would be possible to implement filters at this level, as in hgTables.
 {
 struct annoStreamer *streamer = &(self->streamer);
-struct dyString *query = dyStringCreate("select * from %s", self->table);
+struct dyString *query = sqlDyStringCreate("select * from %s", self->table);
 if (!streamer->positionIsGenome)
     {
     if (minChrom && differentString(minChrom, streamer->chrom))
@@ -274,7 +274,7 @@ char *sqlTableIndexOnField(struct sqlConnection *conn, char *table, char *field)
 {
 char *indexName = NULL;
 char query[512];
-safef(query, sizeof(query), "show index from %s", table);
+sqlSafef(query, sizeof(query), "show index from %s", table);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
