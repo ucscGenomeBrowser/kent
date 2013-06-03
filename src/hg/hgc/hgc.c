@@ -4081,7 +4081,7 @@ void doGetDna1()
 {
 struct hTableInfo *hti = NULL;
 char *tbl = cgiUsualString("table", "");
-if (dbIsFound)
+if (dbIsFound && tbl[0] != 0)
     {
     char rootName[256];
     char parsedChrom[32];
