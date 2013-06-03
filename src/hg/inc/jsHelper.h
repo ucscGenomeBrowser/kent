@@ -130,6 +130,11 @@ void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, ch
 /* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's
  * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. */
 
+void jsBeginCollapsibleSectionFontSize(struct cart *cart, char *track, char *section,
+				       char *sectionTitle, boolean isOpenDefault, char *fontSize);
+/* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's
+ * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. */
+
 void jsEndCollapsibleSection();
 /* End the collapsible <TR id=...>. */
 

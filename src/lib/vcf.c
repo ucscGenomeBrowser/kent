@@ -1082,25 +1082,55 @@ struct asObject *vcfAsObj()
 return asParseText(vcfDataLineAutoSqlString);
 }
 
-char *vcfGetSlashSepAllelesFromWords(char **words, struct dyString *dy)
-/* Overwrite dy with a /-separated allele string from VCF words;
- * return dy->string for convenience. */
+char *vcfGetSlashSepAllelesFromWords(char **words, struct dyString *dy,
+				     boolean *retSkippedFirstBase)
+/* Overwrite dy with a /-separated allele string from VCF words,
+ * skipping the extra initial base that VCF requires for indel alleles if necessary.
+ * Return dy->string for convenience. */
 {
 dyStringClear(dy);
 // VCF reference allele gets its own column:
-dyStringAppend(dy, words[3]);
-// VCF alternate alleles are comma-separated, make them /-separated:
-if (isNotEmpty(words[4]))
+char *refAllele = words[3];
+char *altAlleles = words[4];
+// First determine whether there is an extra initial base that we need to skip:
+boolean allStartSame = TRUE;
+char *p;
+while ((p = strchr(altAlleles, ',')) != NULL)
     {
-    char *altAlleles = words[4], *p;
+    if (altAlleles[0] != refAllele[0])
+	allStartSame = FALSE;
+    altAlleles = p+1;
+    }
+if (altAlleles[0] != refAllele[0])
+    allStartSame = FALSE;
+int offset = allStartSame ? 1 : 0;
+if (refAllele[offset] == '\0')
+    dyStringAppendC(dy, '-');
+else
+    dyStringAppend(dy, refAllele+offset);
+// VCF alternate alleles are comma-separated, make them /-separated:
+altAlleles = words[4];
+if (isNotEmpty(altAlleles) && differentString(altAlleles, "."))
+    {
+    // Now construct the string:
     while ((p = strchr(altAlleles, ',')) != NULL)
 	{
 	dyStringAppendC(dy, '/');
-	dyStringAppendN(dy, altAlleles, p-altAlleles);
+	int len = p - altAlleles - offset;
+	if (len == 0)
+	    dyStringAppendC(dy, '-');
+	else
+	    dyStringAppendN(dy, altAlleles+offset, len);
 	altAlleles = p+1;
 	}
     dyStringAppendC(dy, '/');
-    dyStringAppend(dy, altAlleles);
+    int len = strlen(altAlleles) - offset;
+    if (len == 0)
+	dyStringAppendC(dy, '-');
+    else
+	dyStringAppendN(dy, altAlleles+offset, len);
     }
+if (retSkippedFirstBase)
+    *retSkippedFirstBase = offset;
 return dy->string;
 }

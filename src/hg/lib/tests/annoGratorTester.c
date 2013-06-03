@@ -10,6 +10,7 @@
 #include "annoGrateWigDb.h"
 #include "annoFormatTab.h"
 #include "annoFormatVep.h"
+#include "bigBed.h"
 #include "dystring.h"
 #include "genePred.h"
 #include "hdb.h"
@@ -33,6 +34,7 @@ static const char *vcfEx2 = "vcfEx2";
 static const char *bigBedToTabOut = "bigBedToTabOut";
 static const char *snpBigWigToTabOut = "snpBigWigToTabOut";
 static const char *vepOut = "vepOut";
+static const char *gpFx = "gpFx";
 
 void usage()
 /* explain usage and exit */
@@ -53,9 +55,10 @@ errAbort(
     "    %s\n"
     "    %s\n"
     "    %s\n"
+    "    %s\n"
     , pgSnpDbToTabOut, pgSnpKgDbToTabOutShort, pgSnpKgDbToTabOutLong,
     snpConsDbToTabOutShort, snpConsDbToTabOutLong,
-    vcfEx1, vcfEx2, bigBedToTabOut, snpBigWigToTabOut, vepOut
+    vcfEx1, vcfEx2, bigBedToTabOut, snpBigWigToTabOut, vepOut, gpFx
     );
 }
 
@@ -93,7 +96,8 @@ struct annoStreamer *streamer = NULL;
 if (info->type == arWig)
     streamer = annoStreamWigDbNew(info->sqlDb, info->tableFileUrl, info->assembly, BIGNUM);
 else if (info->sqlDb != NULL)
-    streamer = annoStreamDbNew(info->sqlDb, info->tableFileUrl, info->assembly, info->asObj);
+    streamer = annoStreamDbNew(info->sqlDb, info->tableFileUrl, info->assembly, info->asObj,
+			       BIGNUM);
 else if (info->asObj && asObjectsMatch(info->asObj, vcfAsObj()))
     {
     //#*** this is kludgey, should test for .tbi file:
@@ -136,7 +140,7 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
 	{
 	struct annoStreamer *src = streamerFromInfo(grInfo);
 	if (doGpFx && grInfo->asObj && asObjectsMatchFirstN(grInfo->asObj, genePredAsObj(), 10))
-	    grator = annoGratorGpVarNew(src, FALSE);
+	    grator = annoGratorGpVarNew(src);
 	else
 	    grator = annoGratorNew(src);
 	}
@@ -145,6 +149,15 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
 slReverse(&gratorList);
 *retPrimary = primary;
 *retGrators = gratorList;
+}
+
+struct asObject *bigBedAsFromFileName(char *fileName)
+/* Look up bigBed filename in table and get its internally stored autoSql definition. */
+{
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct asObject *asObj = bigBedAs(bbi);
+bigBedFileClose(&bbi);
+return asObj;
 }
 
 void dbToTabOut(struct streamerInfo *infoList, char *outFile,
@@ -182,7 +195,8 @@ if (!doAllTests)
 	sameString(argv[2], vcfEx2) ||
 	sameString(argv[2], bigBedToTabOut) ||
 	sameString(argv[2], snpBigWigToTabOut) ||
-	sameString(argv[2], vepOut))
+	sameString(argv[2], vepOut) ||
+	sameString(argv[2], gpFx))
 	test = cloneString(argv[2]);
     else
 	{
@@ -249,24 +263,25 @@ if (doAllTests || sameString(test, vcfEx2))
 
 if (doAllTests || sameString(test, pgSnpKgDbToGpFx))
     {
+    struct streamerInfo pg2SnpInfo = { NULL, assembly, NULL,
+				       "input/annoGrator/pgForTestingGpFx.pgSnp.tab",
+				       arWords, pgSnpAsObj() };
+    pg2SnpInfo.next = &kgInfo;
+
     // intron +
-    dbToTabOut(&pgSnpInfo, "stdout", "chr1", 161480984, 161481058, TRUE);
+    dbToTabOut(&pg2SnpInfo, "stdout", "chr1", 161480984, 161481058, TRUE);
 
     // upstream +
-    dbToTabOut(&pgSnpInfo, "stdout", "chr1", 161473787, 161475284, TRUE);
+    dbToTabOut(&pg2SnpInfo, "stdout", "chr1", 161473787, 161475284, TRUE);
 
     // non-synonymous +
-    dbToTabOut(&pgSnpInfo, "stdout", "chr1", 161476196, 161476223, TRUE);
+    dbToTabOut(&pg2SnpInfo, "stdout", "chr1", 161476196, 161476223, TRUE);
 
     // non-synonymous - chr22:17,264,528-17,264,606
-    dbToTabOut(&pgSnpInfo, "stdout", "chr22", 17264528, 17264606, TRUE);
+    dbToTabOut(&pg2SnpInfo, "stdout", "chr22", 17264528, 17264606, TRUE);
 
     // synonymous - chr22:17,264,871-17,264,940
-    dbToTabOut(&pgSnpInfo, "stdout", "chr22", 17264871, 17264940, TRUE);
-
-    struct streamerInfo pg2SnpInfo = { NULL, assembly, db, "pgHG00733indel", arWords,
-				       pgSnpAsObj() };
-    pg2SnpInfo.next = &kgInfo;
+    dbToTabOut(&pg2SnpInfo, "stdout", "chr22", 17264871, 17264940, TRUE);
 
     // 3base substitution CDS + chr1:21,806,596-21,806,642 
     dbToTabOut(&pg2SnpInfo, "stdout", "chr1", 21806596, 21806642, TRUE);
@@ -326,17 +341,51 @@ if (doAllTests || sameString(test, vepOut))
     struct annoStreamer *primary = NULL;
     struct annoGrator *gratorList = NULL;
     sourcesFromInfoList(primaryInfo, TRUE, &primary, &gratorList);
-    struct annoFormatVepConfig config = { primary,
-					  (struct annoStreamer *)gratorList,        // gpVar source
-					  ((struct annoStreamer *)gratorList)->next,// dbSNP source
-					  NULL				// no extra columns for now
-					};
-
-    struct annoFormatter *vepOut = annoFormatVepNew("stdout", &config);
+    struct annoStreamer *gpVarSource = (struct annoStreamer *)gratorList;
+    struct annoStreamer *snpSource = gpVarSource->next;
+    struct annoFormatter *vepOut = annoFormatVepNew("stdout", primary, gpVarSource, snpSource);
     struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
     annoGratorQuerySetRegion(query, "chr1", 876900, 886920);
     annoGratorQueryExecute(query);
     annoGratorQuerySetRegion(query, "chr5", 135530, 145535);
+    annoGratorQueryExecute(query);
+    annoGratorQueryFree(&query);
+    }
+
+if (doAllTests || sameString(test, gpFx))
+    {
+    struct streamerInfo variants = { NULL, assembly, NULL,
+					   "input/annoGrator/moreVariants.pgSnp.tab",
+					   arWords, asParseFile("../pgSnp.as") };
+    struct streamerInfo kgInfo = { NULL, assembly, db, "knownGene", arWords,
+				   asParseFile("../knownGene.as") };
+    struct streamerInfo snpInfo = { NULL, assembly, db, "snp137", arWords,
+				    asParseFile("../snp132Ext.as") };
+    struct asObject *dbNsfpSeqChangeAs =
+	bigBedAsFromFileName("/gbdb/hg19/dbNsfp/dbNsfpSeqChange.bb");
+    struct streamerInfo dbNsfpSeqChange =
+	{ NULL, assembly, NULL, "/gbdb/hg19/dbNsfp/dbNsfpSeqChange.bb",
+	  arWords, dbNsfpSeqChangeAs };
+    struct asObject *dbNsfpSiftAs = bigBedAsFromFileName("/gbdb/hg19/dbNsfp/dbNsfpSift.bb");
+    struct streamerInfo dbNsfpSift = { NULL, assembly, NULL, "/gbdb/hg19/dbNsfp/dbNsfpSift.bb",
+				       arWords, dbNsfpSiftAs };
+    variants.next = &kgInfo;
+    kgInfo.next = &snpInfo;
+    snpInfo.next = &dbNsfpSeqChange;
+    dbNsfpSeqChange.next = &dbNsfpSift;
+    // Instead of dbToTabOut, we need to make a VEP config data structure and
+    // use it to create an annoFormatVep.
+    struct streamerInfo *primaryInfo = &variants;
+    struct annoStreamer *primary = NULL;
+    struct annoGrator *gratorList = NULL;
+    sourcesFromInfoList(primaryInfo, TRUE, &primary, &gratorList);
+    struct annoStreamer *gpVarSource = (struct annoStreamer *)gratorList;
+    struct annoStreamer *snpSource = gpVarSource->next;
+    struct annoStreamer *dbNsfpSource = snpSource->next->next;
+    struct annoFormatter *vepOut = annoFormatVepNew("stdout", primary, gpVarSource, snpSource);
+    annoFormatVepAddExtraItem(vepOut, dbNsfpSource, "SIFT", "SIFT score from dbNSFP", "");
+    struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
+    annoGratorQuerySetRegion(query, "chr19", 45405960, 45419476);
     annoGratorQueryExecute(query);
     annoGratorQueryFree(&query);
     }
