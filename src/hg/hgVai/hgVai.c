@@ -458,7 +458,7 @@ boolean findSnpBed4(char *suffix, char **retFileName, struct trackDb **retTdb)
 if (suffix == NULL)
     suffix = "";
 char query[64];
-safef(query, sizeof(query), "show tables like 'snp1__%s'", suffix);
+sqlSafef(query, sizeof(query), "show tables like 'snp1__%s'", suffix);
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *snpNNNTables = sqlQuickList(conn, query);
 hFreeConn(&conn);
@@ -812,7 +812,7 @@ char *fileNameFromTable(char *table)
 {
 struct sqlConnection *conn = hAllocConn(database);
 char query[512];
-safef(query, sizeof(query), "select fileName from %s", table);
+sqlSafef(query, sizeof(query), "select fileName from %s", table);
 char *fileName = sqlQuickString(conn, query);
 hFreeConn(&conn);
 return fileName;
