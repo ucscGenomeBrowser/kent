@@ -3489,7 +3489,7 @@ return ds;
 
 void sqlCheckError(char *format, ...)
 /* A sql injection error has occurred. Check for settings and respond
- * as appropriate with error, warning, ignore, dumpstack.
+ * as appropriate with error, warning, logOnly, ignore, dumpstack.
  * Then abort if needed. NOTE: unless it aborts, this function will return! */
 {
 va_list args;
@@ -3517,6 +3517,11 @@ if (noSqlInjLevel)
     	va_copy(dump_args, args);
 	vaDumpStack(format, dump_args);
 	va_end(dump_args);
+	}
+
+    if (sameString(noSqlInjLevel, "logOnly"))
+	{
+	vfprintf(stderr, format, args);
 	}
 
     if (sameString(noSqlInjLevel, "warn"))
