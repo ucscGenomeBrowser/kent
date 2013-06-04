@@ -37,6 +37,7 @@ system package management tools.
 2. Build the utilities:
 
    cd userApps
+   make fetchSource
    make
 
    This build fetches (with git) approximately 200 Mb/7,800 files of

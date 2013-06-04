@@ -1,6 +1,9 @@
 # Build all directories in makeDb 
 
-include ../../inc/common.mk
+kentSrc = ../..
+
+include ${kentSrc}/inc/localEnvironment.mk
+include ${kentSrc}/inc/common.mk
 
 # List of directories to build for userApps
 UTILS_APPLIST = \

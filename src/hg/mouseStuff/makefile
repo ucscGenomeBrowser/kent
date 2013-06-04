@@ -1,6 +1,9 @@
 # Build all directories in makeDb 
 
-include ../../inc/common.mk
+kentSrc = ../..
+
+include ${kentSrc}/inc/localEnvironment.mk
+include ${kentSrc}/inc/common.mk
 
 BADDIRS = \
         correctEst

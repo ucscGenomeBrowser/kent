@@ -1,7 +1,9 @@
-include ../../../inc/common.mk
+kentSrc = ../../..
+include ${kentSrc}/inc/localEnvironment.mk
+include ${kentSrc}/inc/common.mk
 
 L += ${MYSQLLIBS} -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBDIR = ${kentSrc}/lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 H = rowReader.h chromAnn.h chromAnnMap.h selectTable.h coordCols.h

@@ -2870,8 +2870,8 @@ release alpha
 track spAnnot
 shortLabel UniProt Annotations
 longLabel UniProt/SwissProt Annotations
-group genes
-priority 31
+group x
+priority 35
 visibility hide
 type bigBed 12 +
 itemRgb on

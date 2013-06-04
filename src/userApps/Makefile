@@ -4,38 +4,32 @@
 #  in the kent source tree.  All build results will be kept locally
 #  in this directory.
 
-DESTDIR = ${CURDIR}
-BINDIR = /bin
-MACHTYPE = local
-CGI_BIN = ${DESTDIR}/cgi-bin
-DOCUMENTROOT = ${DESTDIR}/htdocs
-SCRIPTS = ${DESTDIR}/scripts
-SAMTABIXDIR = ${DESTDIR}/samtabix
-USE_SAMTABIX = 1
-USE_SSL = 1
-NOSQLTEST = 1
-
-envVars = DESTDIR=${DESTDIR} BINDIR=${BINDIR} MACHTYPE=${MACHTYPE} \
-	CGI_BIN=${CGI_BIN} DOCUMENTROOT=${DOCUMENTROOT} SCRIPTS=${SCRIPTS} \
-	SAMTABIXDIR=${SAMTABIXDIR} USE_SAMTABIX=1 USE_SSL=1 NOSQLTEST=1
+export DESTDIR = ${CURDIR}
+export BINDIR = /bin
+export MACHTYPE = local
+export CGI_BIN = ${DESTDIR}/cgi-bin
+export DOCUMENTROOT = ${DESTDIR}/htdocs
+export SCRIPTS = ${DESTDIR}/scripts
+export SAMTABIXDIR = ${DESTDIR}/samtabix
+export USE_SAMTABIX = 1
+export USE_SSL = 1
+export NOSQLTEST = 1
 
 all:  utils
 
 utils: libs
-	cd kent/src && ${envVars} ${MAKE} userApps
-	cd kent/src/parasol && ${envVars} ${MAKE}
+	cd kent/src && ${MAKE} userApps
+	cd kent/src/parasol && ${MAKE}
 	./kent/src/utils/userApps/mkREADME.sh ${DESTDIR}/${BINDIR} ${CURDIR}/kentUtils.Documentation.txt
 
-libs: part5Src.zip
-	cd samtabix && ${envVars} ${MAKE}
-	cd kent/src && ${envVars} ${MAKE} libs
+libs:
+	cd samtabix && ${MAKE}
+	cd kent/src && ${MAKE} libs
 
 clean:
-	cd kent/src && ${envVars} ${MAKE} -i -k clean
+	cd kent/src && ${MAKE} -i -k clean
 	rm -f part1Src.zip part2Src.zip part3Src.zip part4Src.zip part5Src.zip
 	rm -f userApps.zip
-
-part5Src.zip: fetchSource
 
 fetchSource:
 	./fetchKentSource.sh
@@ -43,8 +37,27 @@ fetchSource:
 	@du -hs kent
 	@echo -n "number of files in kent source tree: "
 	@find ./kent -type f | wc -l
+	@${MAKE} installEnvironment
+
+# this installEnvironment will add all the shell environment variables
+# to the kent/src/inc/localEnvironment.mk file which is included
+# from the kent/src/inc/userApps.mk to allow any 'make' to function
+# properly when inside this extracted source tree.
+
+installEnvironment:
+	@echo -e "export DESTDIR = ${DESTDIR}\n\
+export BINDIR = ${BINDIR}\n\
+export MACHTYPE = ${MACHTYPE}\n\
+export CGI_BIN = ${CGI_BIN}\n\
+export DOCUMENTROOT = ${DOCUMENTROOT}\n\
+export SCRIPTS = ${SCRIPTS}\n\
+export SAMTABIXDIR = ${SAMTABIXDIR}\n\
+export USE_SAMTABIX = 1\n\
+export USE_SSL = 1\n\
+export NOSQLTEST = 1" > kent/src/inc/localEnvironment.mk
 
 update: clean userApps
+	${MAKE} fetchSource
 	${MAKE} utils
 
 userApps:
