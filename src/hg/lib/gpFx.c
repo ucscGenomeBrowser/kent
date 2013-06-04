@@ -100,6 +100,9 @@ if (variantWidth != clipAllele->length && retNewPred != NULL)
     // OK, now we have to make a new genePred that matches the changed sequence
     int basesAdded = clipAllele->length - variantWidth;
     struct genePred *newPred = lmCloneVar(lm, pred);
+    size_t size = pred->exonCount * sizeof(pred->exonStarts[0]);
+    newPred->exonStarts = lmCloneMem(lm, pred->exonStarts, size);
+    newPred->exonEnds = lmCloneMem(lm, pred->exonEnds, size);
     int alEnd = clipAllele->variant->chromEnd;
     if (newPred->cdsStart > alEnd)
 	newPred->cdsStart += basesAdded;
@@ -284,7 +287,7 @@ else if (variant->chromStart < pred->txEnd && variant->chromEnd > pred->cdsEnd)
     term = (*pred->strand == '-') ? _5_prime_UTR_variant : _3_prime_UTR_variant;
 if (term != 0)
     {
-    gpFx = gpFxNew(allele->sequence, pred->name, term, nonCodingExon, lm);
+    gpFx = gpFxNew("", pred->name, term, nonCodingExon, lm);
     setNCExonVals(gpFx, exonNum, cDnaPosition);
     }
 return gpFx;
@@ -294,8 +297,7 @@ struct gpFx *gpFxChangedNoncodingExon(struct allele *allele, struct genePred *pr
 				      int exonNum, int cDnaPosition, struct lm *lm)
 /* generate an effect for a variant in a non-coding transcript */
 {
-struct gpFx *gpFx = gpFxNew(allele->sequence, pred->name, non_coding_exon_variant, nonCodingExon,
-			    lm);
+struct gpFx *gpFx = gpFxNew("", pred->name, non_coding_exon_variant, nonCodingExon, lm);
 if (*pred->strand == '-')
     exonNum = pred->exonCount - exonNum - 1;
 setNCExonVals(gpFx, exonNum, cDnaPosition);
@@ -393,8 +395,13 @@ else
 	    // Single aa change
 	    if (cc->pepPosition == 0 && cc->aaOld[0] == 'M')
 		effect->soNumber = initiator_codon_variant;
-	    else if (cc->pepPosition == oldAaSize-1 && oldAa[oldAaSize-1] != 'Z')
-		effect->soNumber = incomplete_terminal_codon_variant;
+	    else if (cc->pepPosition == oldAaSize-1)
+		{
+		if (oldAa[oldAaSize-1] == 'Z')
+		    effect->soNumber = stop_lost;
+		else
+		    effect->soNumber = incomplete_terminal_codon_variant;
+		}
 	    else
 		effect->soNumber = missense_variant;
 	    }

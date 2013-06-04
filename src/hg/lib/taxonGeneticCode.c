@@ -101,43 +101,13 @@ void taxonGeneticCodeSaveToDb(struct sqlConnection *conn, struct taxonGeneticCod
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use taxonGeneticCodeSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s')", 
 	tableName,  el->id,  el->abbr,  el->name,  el->tranlsation,  el->starts,  el->comments);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
-}
-
-void taxonGeneticCodeSaveToDbEscaped(struct sqlConnection *conn, struct taxonGeneticCode *el, char *tableName, int updateSize)
-/* Save taxonGeneticCode as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than taxonGeneticCodeSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *abbr, *name, *tranlsation, *starts, *comments;
-abbr = sqlEscapeString(el->abbr);
-name = sqlEscapeString(el->name);
-tranlsation = sqlEscapeString(el->tranlsation);
-starts = sqlEscapeString(el->starts);
-comments = sqlEscapeString(el->comments);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s')", 
-	tableName, el->id ,  abbr,  name,  tranlsation,  starts,  comments);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&abbr);
-freez(&name);
-freez(&tranlsation);
-freez(&starts);
-freez(&comments);
 }
 
 struct taxonGeneticCode *taxonGeneticCodeCommaIn(char **pS, struct taxonGeneticCode *ret)

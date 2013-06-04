@@ -185,7 +185,7 @@ void loadTableTask(char *db, char *table, char* gpFile)
 /* Implements the loadTable task */
 {
 struct genePredReader* gpr = genePredReaderFile(gpFile, gChrom);
-char* sqlCmd = genePredGetCreateSql(table, gOptFields, gCreateOpts, 0);
+char *sqlCmd = genePredGetCreateSql(table, gOptFields, gCreateOpts, 0);
 struct sqlConnection *conn;
 struct genePred* gp;
 int numRows = 0;

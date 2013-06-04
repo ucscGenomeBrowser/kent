@@ -127,7 +127,7 @@ struct bac *list=NULL, *el;
 char query[512];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 "select e.chrom, e.chromStart, e.chromEnd, e.strand, pe.id"
 " from probe p, vgPrbMap m, vgPrb pe, bac b, %s.bacEndPairs e"
 " where p.bac = b.id and p.id = m.probe and pe.id = m.vgPrb"
@@ -182,7 +182,7 @@ static int findVgPrbBySeq(struct sqlConnection *conn, char *seq, int taxon)
 char *fmt = "select id from vgPrb where seq = '%s' and taxon=%d";
 int size = strlen(fmt)+strlen(seq)+4;
 char *sql = needMem(size);
-safef(sql,size,fmt,seq,taxon);
+sqlSafef(sql,size,fmt,seq,taxon);
 return sqlQuickNum(conn,sql);
 freez(&sql);
 }
@@ -197,7 +197,7 @@ struct sqlConnection *conn2 = sqlConnect(database);
 struct sqlConnection *conn3 = sqlConnect(database);
 int probeCount=0, vgPrbCount=0;
 
-dyStringAppend(dy, 
+sqlDyStringAppend(dy, 
 "select p.id,p.gene,antibody,probeType,fPrimer,rPrimer,p.seq,bac,g.taxon"
 " from probe p join gene g"
 " left join vgPrbMap m on m.probe = p.id"
@@ -263,7 +263,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (vgPrb == 0)
 	{
 	dyStringClear(dy);
-	dyStringAppend(dy, "insert into vgPrb set");
+	sqlDyStringAppend(dy, "insert into vgPrb set");
 	dyStringPrintf(dy, " id=default,\n");
 	dyStringPrintf(dy, " type='%s',\n", peType);
 	dyStringAppend(dy, " seq='");
@@ -283,7 +283,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
 	
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into vgPrbMap set");
+    sqlDyStringAppend(dy, "insert into vgPrbMap set");
     dyStringPrintf(dy, " probe=%d,\n", peProbe);
     dyStringPrintf(dy, " vgPrb=%d \n", vgPrb);
     verbose(2, "%s\n", dy->string);
@@ -359,7 +359,7 @@ while(more)
     probeid = atoi(word); 
 
     dyStringClear(dy);
-    dyStringPrintf(dy, "select count(*) from vgPrb where id=%d and state='new'",probeid);
+    sqlDyStringPrintf(dy, "select count(*) from vgPrb where id=%d and state='new'",probeid);
     if (sqlQuickNum(conn,dy->string)>0)
 	{
 	/* record exists and hasn't already been updated */
@@ -369,7 +369,7 @@ while(more)
 	if (vgPrb == 0)
 	    {
 	    dyStringClear(dy);
-	    dyStringAppend(dy, "update vgPrb set");
+	    sqlDyStringAppend(dy, "update vgPrb set");
 	    dyStringAppend(dy, " seq='");
 	    dyStringAppend(dy, dna);
 	    dyStringAppend(dy, "',\n");
@@ -388,11 +388,11 @@ while(more)
 	    { 
 	    /* just re-map the probe table recs to it */
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "update vgPrbMap set vgPrb=%d where vgPrb=%d",vgPrb,probeid);
+	    sqlDyStringPrintf(dy, "update vgPrbMap set vgPrb=%d where vgPrb=%d",vgPrb,probeid);
 	    sqlUpdate(conn, dy->string);
 	    /* and delete it from vgPrb */
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "delete from vgPrb where id=%d",probeid);
+	    sqlDyStringPrintf(dy, "delete from vgPrb where id=%d",probeid);
 	    sqlUpdate(conn, dy->string);
 	    }
 	}
@@ -438,7 +438,7 @@ for(bac=bacs;bac;bac=bac->next)
 
 
     dyStringClear(dy);
-    dyStringPrintf(dy, "select count(*) from vgPrb where id=%d and state='new'",bac->probe);
+    sqlDyStringPrintf(dy, "select count(*) from vgPrb where id=%d and state='new'",bac->probe);
     if (sqlQuickNum(conn,dy->string)>0)
 	{
 	/* record exists and hasn't already been updated */
@@ -448,7 +448,7 @@ for(bac=bacs;bac;bac=bac->next)
 	if (vgPrb == 0)
 	    {
 	    dyStringClear(dy);
-	    dyStringAppend(dy, "update vgPrb set");
+	    sqlDyStringAppend(dy, "update vgPrb set");
 	    dyStringAppend(dy, " seq='");
 	    dyStringAppend(dy, dna);
 	    dyStringAppend(dy, "',\n");
@@ -467,11 +467,11 @@ for(bac=bacs;bac;bac=bac->next)
 	    { 
 	    /* just re-map the probe table recs to it */
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "update vgPrbMap set vgPrb=%d where vgPrb=%d",vgPrb,bac->probe);
+	    sqlDyStringPrintf(dy, "update vgPrbMap set vgPrb=%d where vgPrb=%d",vgPrb,bac->probe);
 	    sqlUpdate(conn, dy->string);
 	    /* and delete it from vgPrb */
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "delete from vgPrb where id=%d",bac->probe);
+	    sqlDyStringPrintf(dy, "delete from vgPrb where id=%d",bac->probe);
 	    sqlUpdate(conn, dy->string);
 	    }
 	    
@@ -505,7 +505,7 @@ char path1[256];
 char path2[256];
 
 dyStringClear(dy);
-dyStringAppend(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
+sqlDyStringAppend(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
 dyStringPrintf(dy, " where p.id = m.probe and m.vgPrb = e.id and g.id = p.gene and g.taxon = %d",taxon);
 dyStringAppend(dy, " and e.state = 'new' and e.type='primersMrna'");
 rc = sqlSaveQuery(conn, dy->string, "primers.query", FALSE);
@@ -515,7 +515,7 @@ if (rc > 0) /* something to do */
     {
 
     dyStringClear(dy);
-    dyStringPrintf(dy, "select qName from %s.all_mrna",db);
+    sqlDyStringPrintf(dy, "select qName from %s.all_mrna",db);
     rc = 0;
     rc = sqlSaveQuery(conn, dy->string, "accFile.txt", FALSE);
     safef(cmdLine,sizeof(cmdLine),"getRna %s accFile.txt mrna.fa",db);
@@ -537,7 +537,7 @@ unlink("primers.query");
  * them to type primersGenome
  */
 dyStringClear(dy);
-dyStringAppend(dy, "update vgPrb set type='primersGenome'"); 
+sqlDyStringAppend(dy, "update vgPrb set type='primersGenome'"); 
 dyStringPrintf(dy, " where taxon = %d",taxon);
 dyStringAppend(dy, " and state = 'new' and type='primersMrna'");
 sqlUpdate(conn, dy->string);
@@ -547,7 +547,7 @@ sqlUpdate(conn, dy->string);
 /* get primers for those probes that did not find mrna isPcr matches 
  * and then do them against the genome instead */
 dyStringClear(dy);
-dyStringAppend(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
+sqlDyStringAppend(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
 dyStringPrintf(dy, " where p.id = m.probe and m.vgPrb = e.id and g.id = p.gene and g.taxon = %d",taxon);
 dyStringAppend(dy, " and e.state = 'new' and e.type='primersGenome'");
 rc = 0;
@@ -578,7 +578,7 @@ unlink("primers.query");
  * them to type refSeq
  */
 dyStringClear(dy);
-dyStringAppend(dy, "update vgPrb set type='refSeq'"); 
+sqlDyStringAppend(dy, "update vgPrb set type='refSeq'"); 
 dyStringPrintf(dy, " where taxon = %d",taxon);
 dyStringAppend(dy, " and state = 'new' and type='primersGenome'");
 sqlUpdate(conn, dy->string);
@@ -599,7 +599,7 @@ rc = doBacs(conn, taxon, db); verbose(1,"found seq for %d bacEndPairs\n",rc);
  */
 dyStringClear(dy);
 
-dyStringAppend(dy, "update vgPrb set type='refSeq'"); 
+sqlDyStringAppend(dy, "update vgPrb set type='refSeq'"); 
 dyStringPrintf(dy, " where taxon = %d",taxon);
 dyStringAppend(dy, " and state = 'new' and type='bac'");
 
@@ -616,7 +616,7 @@ static void setTName(struct sqlConnection *conn, int taxon, char *db, char *type
 {
 struct dyString *dy = dyStringNew(0);
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
     "update vgPrb e, vgPrbMap m, probe p, gene g"
     " set e.seq = '', e.tName = g.%s"
     " where e.id = m.vgPrb and m.probe = p.id and p.gene = g.id"
@@ -635,7 +635,7 @@ static void setTNameMapped(struct sqlConnection *conn, int taxon, char *db, char
 {
 struct dyString *dy = dyStringNew(0);
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
 "update vgPrb e, vgPrbMap m, probe p, gene g, %s.%s f"
 " set e.seq = '', e.tName = f.%s"
 " where e.id = m.vgPrb and m.probe = p.id and p.gene = g.id"
@@ -680,7 +680,7 @@ while(more)
 	{
 	int oldProbe = 0;
 	dyStringClear(dy);
-	dyStringPrintf(dy, "select id from vgPrb "
+	sqlDyStringPrintf(dy, "select id from vgPrb "
 	   "where taxon=%d and type='%s' and tName='%s' and state='new'",taxon,type,name);
 	oldProbe = sqlQuickNum(conn,dy->string);
 	if (oldProbe==0)
@@ -693,7 +693,7 @@ while(more)
 	if (vgPrb == 0)
 	    {
 	    dyStringClear(dy);
-	    dyStringAppend(dy, "update vgPrb set");
+	    sqlDyStringAppend(dy, "update vgPrb set");
 	    dyStringAppend(dy, " seq = '");
 	    dyStringAppend(dy, dna);
 	    dyStringAppend(dy, "',\n");
@@ -708,11 +708,11 @@ while(more)
 	    { 
 	    /* just re-map the probe table recs to it */
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "update vgPrbMap set vgPrb=%d where vgPrb=%d",vgPrb,oldProbe);
+	    sqlDyStringPrintf(dy, "update vgPrbMap set vgPrb=%d where vgPrb=%d",vgPrb,oldProbe);
 	    sqlUpdate(conn, dy->string);
 	    /* and delete it from vgPrb */
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "delete from vgPrb where id=%d",oldProbe);
+	    sqlDyStringPrintf(dy, "delete from vgPrb where id=%d",oldProbe);
 	    sqlUpdate(conn, dy->string);
 	    }
 	    
@@ -735,7 +735,7 @@ int rc = 0;
 struct dyString *dy = dyStringNew(0);
 char cmdLine[256];
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
     "select distinct e.tName from vgPrb e, %s.%s m"
     " where e.tName = m.qName"
     " and e.taxon = %d and e.type = '%s' and e.tName <> '' and e.state = 'new'"
@@ -763,7 +763,7 @@ static void advanceType(struct sqlConnection *conn, int taxon, char *oldType, ch
 { 
 struct dyString *dy = dyStringNew(0);
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
  "update vgPrb set type='%s', tName=''"
  " where taxon = %d and state = 'new' and type='%s'"
  ,newType,taxon,oldType);
@@ -859,7 +859,7 @@ static void populateMissingVgPrbAli(struct sqlConnection *conn, int taxon, char 
 {
 struct dyString *dy = dyStringNew(0);
 dyStringClear(dy);
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
 "insert into %s"
 " select distinct '%s', e.id, 'new' from vgPrb e"
 " left join %s a on e.id = a.vgPrb and a.db = '%s'"
@@ -885,7 +885,7 @@ if (!sqlTableExists(conn, dbTrk))
     sqlDisconnect(&conn2);
     }
 dyStringClear(dy);
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
 "update %s a, %s.%s v"
 " set a.status = 'ali'"
 " where v.qName = concat('vgPrb_',a.vgPrb)"
@@ -901,7 +901,7 @@ static void markNoneVgPrbAli(struct sqlConnection *conn, int fromTaxon, char *db
 {
 struct dyString *dy = dyStringNew(0);
 dyStringClear(dy);
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
 "update %s a, vgPrb e"
 " set a.status = 'none'"
 " where a.status = 'new'"
@@ -921,7 +921,7 @@ int rc = 0;
 struct dyString *dy = dyStringNew(0);
 char outName[256];
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
     "select m.matches,m.misMatches,m.repMatches,m.nCount,m.qNumInsert,m.qBaseInsert,"
     "m.tNumInsert,m.tBaseInsert,m.strand,"
     "concat(\"vgPrb_\",e.id),"
@@ -946,7 +946,7 @@ int rc = 0;
 struct dyString *dy = dyStringNew(0);
 char outName[256];
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
     "select matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,"
     "tNumInsert,tBaseInsert,strand,"
     "qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,"
@@ -1011,7 +1011,7 @@ int rc = 0;
 struct dyString *dy = dyStringNew(0);
 /* create fake psls as blatBAC.psl */
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
     "select length(e.seq), 0, 0, 0, 0, 0, 0, 0, e.tStrand, concat('vgPrb_',e.id), length(e.seq),"
     " 0, length(e.seq), e.tName, ci.size, e.tStart, e.tEnd, 1,"
     " concat(length(e.seq),','), concat(0,','), concat(e.tStart,',')"
@@ -1039,7 +1039,7 @@ struct dyString *dy = dyStringNew(0);
 
 /* (non-BACs needing alignment) */
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
     "select concat(\"vgPrb_\",e.id), e.seq"
     " from vgPrb e, vgPrbAli a"
     " where e.id = a.vgPrb"
@@ -1185,7 +1185,7 @@ char sql[256];
 int taxon = 0;
 char *fmt = "select ncbi_taxa_id from go.species "
 "where concat(genus,' ',species) = '%s'";
-safef(sql,sizeof(sql),fmt,hScientificName(db));
+sqlSafef(sql,sizeof(sql),fmt,hScientificName(db));
 taxon = sqlQuickNum(conn, sql);
 if (taxon == 0) 
     {
@@ -1223,13 +1223,13 @@ static void init(struct sqlConnection *conn)
 if (!sqlTableExists(conn, "vgPrb"))
     {
     initTable(conn, "vgPrb", FALSE);  / * this most important table should never be nuked automatically * /
-    sqlUpdate(conn, "create index tName on vgPrb(tName(20));");
-    sqlUpdate(conn, "create index seq on vgPrb(seq(40));");
+    sqlUpdate(conn, "NOSQLINJ create index tName on vgPrb(tName(20));");
+    sqlUpdate(conn, "NOSQLINJ create index seq on vgPrb(seq(40));");
     }
 
 initTable(conn, "vgPrbMap", TRUE);
-sqlUpdate(conn, "create index probe on vgPrbMap(probe);");
-sqlUpdate(conn, "create index vgPrb on vgPrbMap(vgPrb);");
+sqlUpdate(conn, "NOSQLINJ create index probe on vgPrbMap(probe);");
+sqlUpdate(conn, "NOSQLINJ create index vgPrb on vgPrbMap(vgPrb);");
 
 initTable(conn, "vgPrbAli", TRUE);
 initTable(conn, "vgPrbAliAll", TRUE);
@@ -1275,7 +1275,7 @@ struct dyString *dy = dyStringNew(0);
 char outName[256];
 /* get {non-}bac $db.vgProbes not yet aligned */
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
     "select m.matches,m.misMatches,m.repMatches,m.nCount,m.qNumInsert,m.qBaseInsert,"
     "m.tNumInsert,m.tBaseInsert,m.strand,"
     "m.qName,m.qSize,m.qStart,m.qEnd,m.tName,m.tSize,m.tStart,m.tEnd,m.blockCount,"
@@ -1300,7 +1300,7 @@ int rc = 0;
 struct dyString *dy = dyStringNew(0);
 /* get .fa for pslRecalcMatch use */
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
     "select concat(\"vgPrb_\",e.id), e.seq"
     " from vgPrb e, vgPrbAliAll a"
     " where e.id = a.vgPrb"
@@ -1428,7 +1428,7 @@ if (!fileExists(fasta))
 
 if (sqlTableExists(conn, "vgRemapTemp"))
     {
-    sqlUpdate(conn, "drop table vgRemapTemp;");
+    sqlUpdate(conn, "NOSQLINJ drop table vgRemapTemp;");
     }
 
 safef(cmd,sizeof(cmd),
@@ -1437,12 +1437,12 @@ safef(cmd,sizeof(cmd),
 verbose(1,"%s\n",cmd); system(cmd);
 
 /* required for mysql 5 longtext for case-insensitive comparisons of blobs */
-sqlUpdate(conn, "ALTER table vgRemapTemp modify seq longtext;");
-sqlUpdate(conn, "create index seq on vgRemapTemp(seq(40));");
+sqlUpdate(conn, "NOSQLINJ ALTER table vgRemapTemp modify seq longtext;");
+sqlUpdate(conn, "NOSQLINJ create index seq on vgRemapTemp(seq(40));");
 
 /* get remapped psl probes not yet aligned */
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
     "select m.matches,m.misMatches,m.repMatches,m.nCount,m.qNumInsert,m.qBaseInsert,"
     "m.tNumInsert,m.tBaseInsert,m.strand,"
     "concat('vgPrb_',e.id),m.qSize,m.qStart,m.qEnd,m.tName,m.tSize,m.tStart,m.tEnd,m.blockCount,"
@@ -1458,7 +1458,7 @@ rc = 0;
 rc = sqlSaveQuery(conn, dy->string, "vgPrbReMap.psl", FALSE);
 verbose(1,"Count of Psls found for reMap: %d\n", rc);
 
-sqlUpdate(conn, "drop table vgRemapTemp;");
+sqlUpdate(conn, "NOSQLINJ drop table vgRemapTemp;");
 
 dyStringFree(&dy);
 
@@ -1534,7 +1534,7 @@ char gbdbPath[256];
 char *fname=NULL;
 struct dyString *dy = dyStringNew(0);
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
 "select distinct concat('vgPrb_',e.id), e.seq"
 " from vgPrb e join %s.%s v"
 " left join %s.seq s on s.acc = v.qName"

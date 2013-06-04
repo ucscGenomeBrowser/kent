@@ -20,7 +20,7 @@ char *geneSymbol;
 
 if (sqlTableExists(conn, "gadAll") == TRUE)
     {
-    safef(condStr, sizeof(condStr), 
+    sqlSafefFrag(condStr, sizeof(condStr), 
     "k.kgId='%s' and k.geneSymbol = g.geneSymbol", geneId);
     geneSymbol = sqlGetField(database, "kgXref k, gadAll g", "k.geneSymbol", condStr);
     if (geneSymbol != NULL) return(TRUE);
@@ -48,7 +48,7 @@ char *itemName;
 
 if (url != NULL && url[0] != 0)
     {
-    safef(condStr, sizeof(condStr), 
+    sqlSafefFrag(condStr, sizeof(condStr), 
     "k.kgId='%s' and k.geneSymbol = g.geneSymbol", geneId);
     itemName = sqlGetField(database, "kgXref k, gadAll g", "k.geneSymbol", condStr);
     showCompleteGadList = FALSE;
@@ -74,7 +74,7 @@ if (url != NULL && url[0] != 0)
     printf("%s</B></A>\n", itemName);
 
     /* List diseases associated with the gene */
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen",
     itemName);
     sr = sqlMustGetResult(conn, query);
@@ -104,7 +104,7 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     refPrinted = 0;
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
        "select broadPhen,reference,title,journal, pubMed, conclusion from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen",
        itemName);
     sr = sqlMustGetResult(conn, query);

@@ -144,7 +144,7 @@ void snp125ExceptionsTableCreate(struct sqlConnection *conn)
 /* create a snp125Exceptions table */
 {
 char *createString =
-"CREATE TABLE snp125Exceptions (\n"
+"NOSQLINJ CREATE TABLE snp125Exceptions (\n"
 "    chrom varchar(15) not null,\n"
 "    chromStart int(10) unsigned not null,\n"
 "    chromEnd int(10) unsigned not null,\n"

@@ -37,7 +37,7 @@ struct docIdSub *docIdSub;
 char query[10 * 1024];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof query, "select * from %s", docIdTable);
+sqlSafef(query, sizeof query, "select * from %s", docIdTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

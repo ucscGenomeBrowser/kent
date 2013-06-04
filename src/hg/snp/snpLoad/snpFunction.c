@@ -33,7 +33,7 @@ char *functionString = NULL;
 
 verbose(1, "building function hash...\n");
 ret = newHash(18);
-safef(query, sizeof(query), "select snp_id, fxn_class from ContigLocusIdCondense");
+sqlSafef(query, sizeof(query), "select snp_id, fxn_class from ContigLocusIdCondense");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -66,7 +66,7 @@ safef(fileName, ArraySize(fileName), "%s_snpTmp.tab", chromName);
 
 f = mustOpen(fileName, "w");
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select snp_id, chromStart, chromEnd, loc_type, class, orientation, "
     "allele, refUCSC, refUCSCReverseComp, observed, weight from %s", tableName);
 
@@ -111,7 +111,7 @@ char *createString =
 struct dyString *dy = newDyString(1024);
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 hFreeConn(&conn);

@@ -147,9 +147,11 @@ struct hash *passHash = newHash(16); /* Hash of items passing filter. */
 int assocCount = 0;
 struct sqlResult *sr;
 char **row;
+char query[1024];
+sqlSafef(query, sizeof query, "%-s", col->queryFull); // purely for side-effect of adding NOSQLINJ prefix
 
 /* Build up associations. */
-sr = sqlGetResult(conn, col->queryFull);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ++assocCount;
@@ -203,7 +205,7 @@ if (col->protKey)
 for (term = termList; term != NULL; term = term->next)
     {
     char query[1024];
-    safef(query, sizeof(query), col->invQueryOne, term->name);
+    sqlSafef(query, sizeof(query), col->invQueryOne, term->name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -274,7 +276,7 @@ char *key = (col->protKey
 struct hash *uniqHash = NULL;
 
 if (col->weedDupes) uniqHash = newHash(8);
-safef(query, sizeof(query), col->queryOne, key);
+sqlSafef(query, sizeof(query), col->queryOne, key);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -319,7 +321,7 @@ struct hash *uniqHash = NULL;
 
 if (col->weedDupes) uniqHash = newHash(8);
 hPrintf("<TD>");
-safef(query, sizeof(query), col->queryOne, key);
+sqlSafef(query, sizeof(query), col->queryOne, key);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -386,7 +388,7 @@ char **row;
 struct searchResult *resList = NULL, *res;
 struct sqlConnection *conn2 = hAllocConn(database);
 
-dyStringPrintf(query, col->invQueryOne, search);
+sqlDyStringPrintf(query, col->invQueryOne, search);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -479,7 +481,7 @@ if (ord->protKey)
 /* Build up hash full of all go IDs associated with gene. */
 if (geneId != NULL)
     {
-    safef(query, sizeof(query), ord->queryOne, geneId);
+    sqlSafef(query, sizeof(query), ord->queryOne, geneId);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -489,7 +491,8 @@ if (geneId != NULL)
     }
 
 /* Stream through association table counting matches. */
-sr = sqlGetResult(conn, ord->queryAll);
+sqlSafef(query, sizeof(query), "%-s", ord->queryOne);  // purely for side-effect of adding NOSQLINJ prefix
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (hashLookup(curTerms, row[1]))

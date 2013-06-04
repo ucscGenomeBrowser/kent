@@ -41,7 +41,7 @@ void createTable(struct sqlConnection *conn, char *tableName)
 /* Create our name/value table, dropping if it already exists. */
 {
 struct dyString *dy = dyStringNew(512);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
 "CREATE TABLE  %s (\n"
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
@@ -72,14 +72,14 @@ FILE *f = hgCreateTabFile(tempDir, outTable);
 struct hash *uniqHash = newHash(18);
 
 /* Look up id for swissprot external database. */
-safef(query, sizeof(query), "select id from extDb where val = '%s'", spExtDb);
+sqlSafef(query, sizeof(query), "select id from extDb where val = '%s'", spExtDb);
 spExtDbId = sqlQuickString(spConn, query);
 if (spExtDbId == NULL)
     errAbort("Couldn't find %s in UniProt.extDb", spExtDb);
 
 /* Stream through input table. */
 printf("Looking up %s.%s in UniProt database\n", inTable, spIdField);
-safef(geneQuery, sizeof(geneQuery), 
+sqlSafef(geneQuery, sizeof(geneQuery), 
 	"select %s,%s from %s", nameField, spIdField, inTable);
 geneSr = sqlGetResult(dbConn, geneQuery);
 while ((geneRow = sqlNextRow(geneSr)) != NULL)
@@ -92,7 +92,7 @@ while ((geneRow = sqlNextRow(geneSr)) != NULL)
 	/* chop off the tail, if the protein is a variant splice isoform. */
 	chp = strstr(acc, "-");
 	if (chp != NULL) *chp = '\0';
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 		"select extAcc1 from extDbRef where acc='%s' and extDb=%s",
 		acc, spExtDbId);
 	sr = sqlGetResult(spConn, query);

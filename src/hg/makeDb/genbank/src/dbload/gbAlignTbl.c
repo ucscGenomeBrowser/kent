@@ -8,6 +8,7 @@
 #include "linefile.h"
 #include "jksql.h"
 #include "psl.h"
+#include "pslReader.h"
 #include "estOrientInfo.h"
 #include "hdb.h"
 #include "gbIndex.h"

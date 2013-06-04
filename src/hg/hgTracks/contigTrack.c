@@ -18,7 +18,7 @@ char **row;
 struct ctgPos *ctgList = NULL, *ctg;
 
 /* Get the contigs and load into tg->items. */
-sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
+sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
     tg->table, chromName, winEnd, winStart);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

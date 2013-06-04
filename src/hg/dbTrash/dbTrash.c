@@ -84,7 +84,7 @@ if (! sqlTableExists(conn, CT_EXTFILE))
     return;
     }
 
-safef(query,sizeof(query),"select id,path from %s",CT_EXTFILE);
+sqlSafef(query,sizeof(query),"select id,path from %s",CT_EXTFILE);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -104,7 +104,7 @@ sqlFreeResult(&sr);
 struct slName *one;
 for(one = list; one; one = one->next)
     {
-    safef(query,sizeof(query),"delete from %s where id='%s'",
+    sqlSafef(query,sizeof(query),"delete from %s where id='%s'",
 	CT_EXTFILE, one->name);
     if (extDel)
 	sqlUpdate(conn, query);
@@ -177,13 +177,13 @@ if (extFileCheck)
     checkExtFile(conn);
 
 time_t ageSeconds = (time_t)(ageHours * 3600);	/*	age in seconds	*/
-safef(query,sizeof(query),"select name,UNIX_TIMESTAMP(lastUse) from %s WHERE "
+sqlSafef(query,sizeof(query),"select name,UNIX_TIMESTAMP(lastUse) from %s WHERE "
     "lastUse < DATE_SUB(NOW(), INTERVAL %ld SECOND);", CT_META_INFO,ageSeconds);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAddInt(expiredHash, row[0], sqlSigned(row[1]));
 sqlFreeResult(&sr);
-safef(query,sizeof(query),"select name,UNIX_TIMESTAMP(lastUse) from %s WHERE "
+sqlSafef(query,sizeof(query),"select name,UNIX_TIMESTAMP(lastUse) from %s WHERE "
     "lastUse >= DATE_SUB(NOW(), INTERVAL %ld SECOND);",CT_META_INFO,ageSeconds);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -193,7 +193,7 @@ sqlFreeResult(&sr);
 if (tableStatus)  // show table status is very expensive, use only when asked
     {
     /*	run through the table status business to get table size information */
-    safef(query,sizeof(query),"show table status");
+    sqlSafef(query,sizeof(query),"show table status");
     STATUS_INIT;
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -249,7 +249,7 @@ if (tableStatus)  // show table status is very expensive, use only when asked
     }
 else
     {	// simple 'show tables' is more efficient than 'show table status'
-    safef(query,sizeof(query),"show tables");
+    sqlSafef(query,sizeof(query),"show tables");
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -299,7 +299,7 @@ else
 		continue;
 	    boolean oneTableOnly = FALSE; // protect against multiple tables
 	    /*	get table time information to see if it is expired */
-	    safef(query,sizeof(query),"show table status like '%s'", el->name);
+	    sqlSafef(query,sizeof(query),"show table status like '%s'", el->name);
 	    STATUS_INIT;
 
 	    while ((row = sqlNextRow(sr)) != NULL)

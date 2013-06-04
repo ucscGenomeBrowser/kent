@@ -46,7 +46,7 @@ struct snpData *sel;
 
 /* could increase the default size */
 snpDataHash = newHash(16);
-safef(query, sizeof(query), "select snp_id, validation_status, avg_heterozygosity, het_se from SNP");
+sqlSafef(query, sizeof(query), "select snp_id, validation_status, avg_heterozygosity, het_se from SNP");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -85,7 +85,7 @@ safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 safef(fileName, ArraySize(fileName), "%s_snpTmp.tab", chromName);
 f = mustOpen(fileName, "w");
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
      "select snp_id, chromStart, chromEnd, loc_type, class, orientation, fxn_class, "
      "allele, refUCSC, refUCSCReverseComp, observed, weight from %s ", tableName);
 sr = sqlGetResult(conn, query);
@@ -144,7 +144,7 @@ char *createString =
 struct dyString *dy = newDyString(1024);
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 hFreeConn(&conn);

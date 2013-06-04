@@ -69,7 +69,7 @@ int count = 0;
 char *class = NULL;
 char *locType = NULL;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select name, chromStart, chromEnd, class, locType from %s where chrom='%s' and chromStart >= %d and chromEnd <= %d", 
     snpTable, chrom, start, end);
 sr = sqlGetResult(conn, query);
@@ -103,7 +103,7 @@ struct sqlResult *sr;
 char **row;
 int count = 0;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select tName, tStart, tEnd, qName, qStart, qEnd, qStrand, id from %s", chainTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

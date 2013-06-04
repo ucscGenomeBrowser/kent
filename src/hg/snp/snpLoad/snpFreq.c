@@ -42,7 +42,7 @@ struct sqlResult *sr;
 char **row;
 
 alleleHash = newHash(0);
-safef(query, sizeof(query), "select allele_id, allele from Allele");
+sqlSafef(query, sizeof(query), "select allele_id, allele from Allele");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(alleleHash, cloneString(row[0]), cloneString(row[1]));
@@ -61,7 +61,7 @@ struct coords *coordsInstance = NULL;
 int count = 0;
 
 snpHash = newHash(0);
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name from %s", snpTable);
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name from %s", snpTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -103,7 +103,7 @@ struct coords *coordsInstance = NULL;
 char snpName[32];
 int bin = 0;
 
-safef(query, sizeof(query), "select snp_id, allele_id, freq from SNPAlleleFreq");
+sqlSafef(query, sizeof(query), "select snp_id, allele_id, freq from SNPAlleleFreq");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

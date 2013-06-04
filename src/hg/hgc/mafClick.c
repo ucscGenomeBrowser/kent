@@ -1112,7 +1112,7 @@ else
     if (speciesOrder == NULL)
 	speciesOrder = trackDbSetting(tdb, "speciesOrder");
 
-    safef(query, sizeof(query), "select chromStart from %s", tdb->table);
+    sqlSafef(query, sizeof(query), "select chromStart from %s", tdb->table);
     mafOrig = atoi(sqlNeedQuickString(conn, query));
 
     for (maf = mafList; maf != NULL; maf = maf->next)

@@ -167,7 +167,7 @@ for (i = 0; mgcStatusList[i] != NULL; i++)
         dyStringAppendC(statusVals, ',');
     dyStringPrintf(statusVals, "'%s'", mgcStatusList[i]->dbValue);
     }
-safef(query, sizeof(query), mgcStatusCreateSql, tblName, statusVals->string);
+sqlSafef(query, sizeof(query), mgcStatusCreateSql, tblName, statusVals->string);
 sqlRemakeTable(conn, tblName, query);
 dyStringFree(&statusVals);
 }

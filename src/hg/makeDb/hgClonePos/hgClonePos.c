@@ -34,7 +34,7 @@ int maxErr = 0;
 int maxWarn = 10;
 
 char *createClonePos = 
-"CREATE TABLE clonePos (\n"
+"NOSQLINJ CREATE TABLE clonePos (\n"
 "   name varchar(255) not null,	# Name of clone including version\n"
 "   seqSize int unsigned not null,	# base count not including gaps\n"
 "   phase tinyint unsigned not null,	# htg phase\n"
@@ -313,8 +313,8 @@ fclose(f);
  * already in it, and fill it up from tab file. */
 printf("Loading clonePos table\n");
 sqlMaybeMakeTable(conn, "clonePos", createClonePos);
-sqlUpdate(conn, "DELETE from clonePos");
-dyStringPrintf(ds, "LOAD data local infile '%s' into table clonePos", 
+sqlUpdate(conn, "NOSQLINJ DELETE from clonePos");
+sqlDyStringPrintf(ds, "LOAD data local infile '%s' into table clonePos", 
     tn.forCgi);
 sqlUpdate(conn, ds->string);
 

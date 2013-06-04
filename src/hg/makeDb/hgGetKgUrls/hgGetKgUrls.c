@@ -35,7 +35,7 @@ serverName = argv[2];
    
 conn2= hAllocConn();
 	
-sprintf(query2,"select name, chrom, strand, txStart, txEnd from %s.knownGene", database);
+sqlSafef(query2, sizeof query2, "select name, chrom, strand, txStart, txEnd from %s.knownGene", database);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)

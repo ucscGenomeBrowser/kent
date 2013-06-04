@@ -265,7 +265,7 @@ if (sameWord(curSubjId, ""))
     }
 else
     {
-    safef(query, sizeof(query), "select subjId from %s.gisaidSubjInfo where subjId = '%s'",
+    sqlSafef(query, sizeof(query), "select subjId from %s.gisaidSubjInfo where subjId = '%s'",
     	  database, curSubjId);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);

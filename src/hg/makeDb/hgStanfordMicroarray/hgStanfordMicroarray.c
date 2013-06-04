@@ -281,7 +281,7 @@ void createExpTable(struct sqlConnection *conn, char *table)
 /* Create empty experiment table. */
 {
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, "CREATE TABLE %s (\n", table);
+sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", table);
 dyStringAppend(dy, 
 "    id int unsigned not null,	# internal id of experiment\n"
 "    name varchar(255) not null,	# name of experiment\n"
@@ -302,7 +302,7 @@ void createGeneTable(struct sqlConnection *conn, char *table)
 /* Create empty gene expression table. */
 {
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, "CREATE TABLE %s (\n", table);
+sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", table);
 dyStringAppend(dy,
    " name varchar(255) not null, # Name of gene\n"
    " expCount int unsigned not null, # Number of experiments\n"

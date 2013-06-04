@@ -176,7 +176,7 @@ icnt = jExon = pcnt = 0;
 pIcnt = 0;
 molWtCnt = 0;
 
-safef(query2, sizeof(query2), "select acc from %s.accToTaxon where taxon=%s;", proteinDatabaseName, taxon);
+sqlSafef(query2, sizeof(query2), "select acc from %s.accToTaxon where taxon=%s;", proteinDatabaseName, taxon);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 

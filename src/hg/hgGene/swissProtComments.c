@@ -30,7 +30,7 @@ struct spComment *list = NULL, *com;
 char *acc = swissProtAcc;
 if (acc != NULL)
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"select commentType,commentVal from comment where acc='%s'" , acc);
     sr = sqlGetResult(spConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -43,30 +43,30 @@ if (acc != NULL)
 	}
     slReverse(&list);
     section->items = list;
-    }
-if (!commentFound)
-    {
-    /* check if the acc has become a secondary ID */
-    safef(query, sizeof(query),
-	"select accession from proteome.spSecondaryID where accession2='%s'" , acc);
-    sr = sqlGetResult(spConn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-    	{
-	acc = cloneString(row[0]);
-	sqlFreeResult(&sr);
-	safef(query, sizeof(query),
-	      "select commentType,commentVal from comment where acc='%s'" , acc);
-    	sr = sqlGetResult(spConn, query);
-    	while ((row = sqlNextRow(sr)) != NULL)
+    if (!commentFound)
+	{
+	/* check if the acc has become a secondary ID */
+	sqlSafef(query, sizeof(query),
+	    "select accession from proteome.spSecondaryID where accession2='%s'" , acc);
+	sr = sqlGetResult(spConn, query);
+	row = sqlNextRow(sr);
+	if (row != NULL)
 	    {
-	    AllocVar(com);
-	    com->typeId = atoi(row[0]);
-	    com->valId = atoi(row[1]);
-	    slAddHead(&list, com);
+	    acc = cloneString(row[0]);
+	    sqlFreeResult(&sr);
+	    sqlSafef(query, sizeof(query),
+		  "select commentType,commentVal from comment where acc='%s'" , acc);
+	    sr = sqlGetResult(spConn, query);
+	    while ((row = sqlNextRow(sr)) != NULL)
+		{
+		AllocVar(com);
+		com->typeId = atoi(row[0]);
+		com->valId = atoi(row[1]);
+		slAddHead(&list, com);
+		}
+	    slReverse(&list);
+	    section->items = list;
 	    }
-        slReverse(&list);
-        section->items = list;
 	}
     }
 

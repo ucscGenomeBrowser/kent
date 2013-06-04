@@ -209,7 +209,7 @@ void remakeTables(struct sqlConnection *conn)
 {
 sqlRemakeTable(conn, "fbGene", 
 "#Links FlyBase IDs, gene symbols and gene names\n"
-"CREATE TABLE fbGene (\n"
+"NOSQLINJ CREATE TABLE fbGene (\n"
 "    geneId varchar(255) not null,	# FlyBase ID\n"
 "    geneSym varchar(255) not null,	# Short gene symbol\n"
 "    geneName varchar(255) not null,	# Gene name - up to a couple of words\n"
@@ -221,7 +221,7 @@ sqlRemakeTable(conn, "fbGene",
 
 sqlRemakeTable(conn, "fbTranscript", 
 "#Links FlyBase gene IDs and BDGP transcripts\n"
-"CREATE TABLE fbTranscript (\n"
+"NOSQLINJ CREATE TABLE fbTranscript (\n"
 "    geneId varchar(255) not null,	# FlyBase ID\n"
 "    transcriptId varchar(255) not null,	# BDGP Transcript ID\n"
 "              #Indices\n"
@@ -231,7 +231,7 @@ sqlRemakeTable(conn, "fbTranscript",
 
 sqlRemakeTable(conn, "fbSynonym", 
 "#Links all the names we call a gene to it's flybase ID\n"
-"CREATE TABLE fbSynonym (\n"
+"NOSQLINJ CREATE TABLE fbSynonym (\n"
 "    geneId varchar(255) not null,	# FlyBase ID\n"
 "    name varchar(255) not null,	# A name (synonym or real\n"
 "              #Indices\n"
@@ -241,7 +241,7 @@ sqlRemakeTable(conn, "fbSynonym",
 
 sqlRemakeTable(conn, "fbAllele", 
 "#The alleles of a gene\n"
-"CREATE TABLE fbAllele (\n"
+"NOSQLINJ CREATE TABLE fbAllele (\n"
 "    id int not null,	# Allele ID\n"
 "    geneId varchar(255) not null,	# Flybase ID of gene\n"
 "    name varchar(255) not null,	# Allele name\n"
@@ -252,7 +252,7 @@ sqlRemakeTable(conn, "fbAllele",
 
 sqlRemakeTable(conn, "fbRef", 
 "#A literature or sometimes database reference\n"
-"CREATE TABLE fbRef (\n"
+"NOSQLINJ CREATE TABLE fbRef (\n"
 "    id int not null,	# Reference ID\n"
 "    text longblob not null,	# Usually begins with flybase ref ID, but not always\n"
 "              #Indices\n"
@@ -261,7 +261,7 @@ sqlRemakeTable(conn, "fbRef",
 
 sqlRemakeTable(conn, "fbRole", 
 "#Role of gene in wildType\n"
-"CREATE TABLE fbRole (\n"
+"NOSQLINJ CREATE TABLE fbRole (\n"
 "    geneId varchar(255) not null,	# Flybase Gene ID\n"
 "    fbAllele int not null,	# ID in fbAllele table or 0 if not allele-specific\n"
 "    fbRef int not null,	# ID in fbRef table\n"
@@ -272,7 +272,7 @@ sqlRemakeTable(conn, "fbRole",
 
 sqlRemakeTable(conn, "fbPhenotype", 
 "#Observed phenotype in mutant.  Sometimes contains gene function info\n"
-"CREATE TABLE fbPhenotype (\n"
+"NOSQLINJ CREATE TABLE fbPhenotype (\n"
 "    geneId varchar(255) not null,	# Flybase Gene ID\n"
 "    fbAllele int not null,	# ID in fbAllele table or 0 if not allele-specific\n"
 "    fbRef int not null,	# ID in fbRef table\n"
@@ -283,7 +283,7 @@ sqlRemakeTable(conn, "fbPhenotype",
 
 sqlRemakeTable(conn, "fbGo", 
 "#Links FlyBase gene IDs and GO IDs/aspects\n"
-"CREATE TABLE fbGo (\n"
+"NOSQLINJ CREATE TABLE fbGo (\n"
 "    geneId varchar(255) not null,	# FlyBase ID\n"
 "    goId varchar(255) not null,	# GO ID\n"
 "    aspect varchar(255) not null,      # P (process), F (function) or C (cellular component)"
@@ -294,7 +294,7 @@ sqlRemakeTable(conn, "fbGo",
 
 sqlRemakeTable(conn, "fbUniProt", 
 "#Links FlyBase gene IDs and UniProt IDs/aspects\n"
-"CREATE TABLE fbUniProt (\n"
+"NOSQLINJ CREATE TABLE fbUniProt (\n"
 "    geneId varchar(255) not null,	# FlyBase ID\n"
 "    uniProtId varchar(255) not null,	# UniProt ID\n"
 "              #Indices\n"
@@ -328,7 +328,7 @@ struct hash *bdgpHash = newHash(16);	/* Keyed by bdgp gene id. */
 struct slName *n;
 
 /* First build up list of all genes with flybase and bdgp ids. */
-safef(query, sizeof(query), "select bdgpName,flyBaseId from bdgpGeneInfo");
+sqlSafef(query, sizeof(query), "select bdgpName,flyBaseId from bdgpGeneInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -342,7 +342,7 @@ sqlFreeResult(&sr);
 slReverse(&altList);
 
 /* Now associate splicing variants. */
-safef(query, sizeof(query), "select name from %s", geneTable);
+sqlSafef(query, sizeof(query), "select name from %s", geneTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

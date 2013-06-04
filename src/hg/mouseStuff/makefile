@@ -12,8 +12,11 @@ UTILS_APPLIST = \
 	axtSwap \
 	axtToMaf \
 	axtToPsl \
+	bedCoverage \
 	chainAntiRepeat \
+	chainFilter \
 	chainMergeSort \
+	chainNet \
 	chainPreNet \
 	chainSort \
 	chainSplit \
@@ -53,11 +56,8 @@ DIRS = \
 	axtSplitByTarget \
 	axtToBed \
 	axtToChain \
-	bedCoverage \
 	calcGap \
 	chainDbToFile \
-	chainFilter \
-	chainNet \
 	chainStats \
 	gcForBed \
 	knownVsBlat \

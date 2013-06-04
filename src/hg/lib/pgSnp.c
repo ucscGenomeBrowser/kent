@@ -108,42 +108,15 @@ void pgSnpSaveToDb(struct sqlConnection *conn, struct pgSnp *el, char *tableName
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include"
- * If worried about this use pgSnpSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%d,'%s','%s')",
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%d,'%s','%s')",
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->alleleCount,  el->alleleFreq,  el->alleleScores);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void pgSnpSaveToDbEscaped(struct sqlConnection *conn, struct pgSnp *el, char *tableName, int updateSize)
-/* Save pgSnp as a row to the table specified by tableName.
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically
- * escapes all simple strings (not arrays of string) but may be slower than pgSnpSaveToDb().
- * For example automatically copies and converts:
- * "autosql's features include" --> "autosql\'s features include"
- * before inserting into database. */
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *alleleFreq, *alleleScores;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-alleleFreq = sqlEscapeString(el->alleleFreq);
-alleleScores = sqlEscapeString(el->alleleScores);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%d,'%s','%s')",
-	tableName,  el->bin,  chrom,  el->chromStart,  el->chromEnd,  name,  el->alleleCount,  alleleFreq,  alleleScores);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&alleleFreq);
-freez(&alleleScores);
-}
 
 struct pgSnp *pgSnpCommaIn(char **pS, struct pgSnp *ret)
 /* Create a pgSnp out of a comma separated string.
@@ -401,7 +374,7 @@ if (!sqlTableExists(conn, genePredTable))
     hFreeConn(&conn);
     return;
     }
-safef(query, sizeof(query), "select chrom, txStart, txEnd, name, 0, strand, cdsStart, cdsEnd, "
+sqlSafef(query, sizeof(query), "select chrom, txStart, txEnd, name, 0, strand, cdsStart, cdsEnd, "
       "0, exonCount, exonEnds, exonStarts  from %s "
       "where chrom = '%s' and cdsStart <= %d and cdsEnd >= %d",
       genePredTable, item->chrom, item->chromStart, item->chromEnd);
@@ -632,7 +605,7 @@ if (tabs == NULL)
 tot = chopByWhite(tabs, dbList, ArraySize(dbList));
 for(i=0;i<tot;i++)
     {
-    safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, srcUrl from %s where chrom = '%s' and chromStart = %d and chromEnd = %d",
+    sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, srcUrl from %s where chrom = '%s' and chromStart = %d and chromEnd = %d",
     dbList[i], item->chrom, item->chromStart, item->chromEnd);
 
     sr = sqlGetResult(conn, query);

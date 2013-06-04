@@ -52,7 +52,7 @@ struct sqlResult *sr;
 char **row, query[256];
 int count = 0;
 
-safef(query, sizeof(query), "select * from %s", tableName);
+sqlSafef(query, sizeof(query), "select * from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

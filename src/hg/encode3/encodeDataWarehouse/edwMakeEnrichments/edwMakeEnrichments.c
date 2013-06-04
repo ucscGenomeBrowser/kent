@@ -86,7 +86,7 @@ boolean enrichmentExists(struct sqlConnection *conn, struct edwFile *ef,
 /* Return TRUE if already is a an enrichment in database for this combination. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select count(*) from edwQaEnrich"
     " where fileId=%lld and qaEnrichTargetId=%d", (long long)ef->id, target->id);
 return sqlQuickNum(conn, query) != 0;
@@ -384,7 +384,7 @@ struct target *targetsForAssembly(struct sqlConnection *conn, struct edwAssembly
 /* Get list of enrichment targets for given assembly */
 {
 char query[128];
-safef(query, sizeof(query), "select * from edwQaEnrichTarget where assemblyId=%d", assembly->id);
+sqlSafef(query, sizeof(query), "select * from edwQaEnrichTarget where assemblyId=%d", assembly->id);
 struct edwQaEnrichTarget *et, *etList = edwQaEnrichTargetLoadByQuery(conn, query);
 
 /* Wrap a new structure around the enrichment targets where we'll store summary info. */

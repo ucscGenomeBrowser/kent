@@ -892,7 +892,7 @@ conn  = hAllocConn(database);
 conn2 = hAllocConn(database);
 conn3 = hAllocConn(database);
 
-safef(query2, sizeof(query), 
+sqlSafef(query2, sizeof(query), 
     "select distinct sfID, seqID from %s.ensemblXref3 x, %s.sfAssign a where (swissAcc='%s' or tremblAcc='%s') and seqID=x.protein and protein != '' and evalue <= 0.02",
       protDbName, protDbName, proteinID, proteinID);
 sr2  = sqlMustGetResult(conn2, query2);
@@ -903,7 +903,7 @@ while (row2 != NULL)
     sfID = row2[0];
     seqID= row2[1];
     
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	  "select region from %s.sfAssign where sfID='%s' and seqID='%s' and evalue <=0.02", 
 	  protDbName, sfID, seqID);
     sr = sqlMustGetResult(conn, query);
@@ -1035,7 +1035,7 @@ else
 
 ensPepName = ensPep;
 
-safef(query, sizeof(query), "select * from %s.sfAssign where seqID='%s' and evalue <= 0.02;", database, ensPep);
+sqlSafef(query, sizeof(query), "select * from %s.sfAssign where seqID='%s' and evalue <= 0.02;", database, ensPep);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL) return(0);

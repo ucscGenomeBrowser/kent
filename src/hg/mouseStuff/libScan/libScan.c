@@ -97,7 +97,7 @@ struct hash *libHash = newHash(0);
 FILE *f = mustOpen(outName, "w");
 boolean isEst;
 
-sr = sqlGetResult(conn, "select id,name from library");
+sr = sqlGetResult(conn, "NOSQLINJ select id,name from library");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(lib);
@@ -109,7 +109,7 @@ sqlFreeResult(&sr);
 slReverse(&libList);
 printf("Got %d libraries in %s\n", slCount(libList), database);
 
-sr = sqlGetResult(conn, "select type,library,author,acc from mrna");
+sr = sqlGetResult(conn, "NOSQLINJ select type,library,author,acc from mrna");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     dotOut();
@@ -149,7 +149,7 @@ for (lib = libList; lib != NULL; lib = lib->next)
     if (lib->estCount > 50 && !isOrestesForm(lib->name))
 	{
 	char date[16];
-	sprintf(query, "select gb_date from seq where acc = '%s'", lib->sampleAcc);
+	sqlSafef(query, sizeof query, "select gb_date from seq where acc = '%s'", lib->sampleAcc);
 	sqlQuickQuery(conn, query, date, sizeof(date));
 	if (!startsWith("0000", date) && strcmp(date, "1999") > 0)
 	    {

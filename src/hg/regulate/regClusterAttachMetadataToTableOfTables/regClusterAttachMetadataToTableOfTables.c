@@ -35,9 +35,9 @@ boolean getMetaFromMetaDb(struct sqlConnection *conn,
 char query[256];
 struct hash *cvTerm = NULL;
 
-safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='cell'", obj);
+sqlSafef(query, sizeof(query), "select val from metaDb where obj='%s' and var='cell'", obj);
 *retCell = sqlQuickString(conn, query);
-safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='antibody'", obj);
+sqlSafef(query, sizeof(query), "select val from metaDb where obj='%s' and var='antibody'", obj);
 *retAntibody = sqlQuickString(conn, query);
 if (antibodyTarget)
     {
@@ -47,9 +47,9 @@ if (antibodyTarget)
         *retAntibody = hashOptionalVal(cvTerm, CV_TARGET, *retAntibody);
         }
     }
-safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='treatment'", obj);
+sqlSafef(query, sizeof(query), "select val from metaDb where obj='%s' and var='treatment'", obj);
 *retTreatment = sqlQuickString(conn, query);
-safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='lab'", obj);
+sqlSafef(query, sizeof(query), "select val from metaDb where obj='%s' and var='lab'", obj);
 *retLab = sqlQuickString(conn, query);
 return *retCell != NULL || *retAntibody != NULL || *retTreatment != NULL;
 }

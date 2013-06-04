@@ -41,7 +41,7 @@ struct sqlResult *sr;
 char **row;
 
 geneHash = newHash(0);
-safef(query, sizeof(query), "select distinct(name) from refGene");
+sqlSafef(query, sizeof(query), "select distinct(name) from refGene");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(geneHash, cloneString(row[0]), NULL);
@@ -63,7 +63,7 @@ int validCount = 0;
 
 contigHash = newHash(0);
 missingHash = newHash(0);
-safef(query, sizeof(query), "select snp_id, mrna_acc from ContigLocusIdFilter where mrna_acc != ''");
+sqlSafef(query, sizeof(query), "select snp_id, mrna_acc from ContigLocusIdFilter where mrna_acc != ''");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -102,7 +102,7 @@ char **row;
 struct slName *el = NULL;
 struct slName *ret = NULL;
 
-safef(query, sizeof(query), "select name from snp125 where chrom = '%s' and chromStart >= %d and chromEnd <= %d", 
+sqlSafef(query, sizeof(query), "select name from snp125 where chrom = '%s' and chromStart >= %d and chromEnd <= %d", 
                              chromName, start, end);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -126,7 +126,7 @@ struct slName *snpPtr = NULL;
 struct slName *snpList = NULL;
 char *geneName = NULL;
 
-safef(query, sizeof(query), "select name, txStart, txEnd from refGene where chrom = '%s'", chromName);
+sqlSafef(query, sizeof(query), "select name, txStart, txEnd from refGene where chrom = '%s'", chromName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

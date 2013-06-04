@@ -56,58 +56,15 @@ void gbMembersSaveToDb(struct sqlConnection *conn, struct gbMembers *el, char *t
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use gbMembersSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->idx,  el->userName,  el->realName,  el->password,  el->email,  el->lastUse,  el->newPassword,  el->newPasswordExpire,  el->dateActivated,  el->emailToken,  el->emailTokenExpires,  el->passwordChangeRequired,  el->accountActivated);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void gbMembersSaveToDbEscaped(struct sqlConnection *conn, struct gbMembers *el, char *tableName, int updateSize)
-/* Save gbMembers as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than gbMembersSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *userName, *realName, *password, *email, *lastUse, *newPassword, *newPasswordExpire, *dateActivated, *emailToken, *emailTokenExpires, *passwordChangeRequired, *accountActivated;
-userName = sqlEscapeString(el->userName);
-realName = sqlEscapeString(el->realName);
-password = sqlEscapeString(el->password);
-email = sqlEscapeString(el->email);
-lastUse = sqlEscapeString(el->lastUse);
-newPassword = sqlEscapeString(el->newPassword);
-newPasswordExpire = sqlEscapeString(el->newPasswordExpire);
-dateActivated = sqlEscapeString(el->dateActivated);
-emailToken = sqlEscapeString(el->emailToken);
-emailTokenExpires = sqlEscapeString(el->emailTokenExpires);
-passwordChangeRequired = sqlEscapeString(el->passwordChangeRequired);
-accountActivated = sqlEscapeString(el->accountActivated);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->idx,  userName,  realName,  password,  email,  lastUse,  newPassword,  newPasswordExpire,  dateActivated,  emailToken,  emailTokenExpires,  passwordChangeRequired,  accountActivated);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&userName);
-freez(&realName);
-freez(&password);
-freez(&email);
-freez(&lastUse);
-freez(&newPassword);
-freez(&newPasswordExpire);
-freez(&dateActivated);
-freez(&emailToken);
-freez(&emailTokenExpires);
-freez(&passwordChangeRequired);
-freez(&accountActivated);
-}
 
 struct gbMembers *gbMembersLoad(char **row)
 /* Load a gbMembers from row fetched with select * from gbMembers

@@ -17,7 +17,7 @@ static char *orfToGene(struct sqlConnection *conn, char *orf)
 {
 char gene[256];
 char query[256];
-safef(query, sizeof(query), "select value from sgdToName where name = '%s'",
+sqlSafef(query, sizeof(query), "select value from sgdToName where name = '%s'",
     orf);
 if (sqlQuickQuery(conn, query, gene, sizeof(gene)) == NULL)
     return NULL;
@@ -45,7 +45,7 @@ struct dnaMotif *dnaMotifLoadNamed(struct sqlConnection *conn,
  * motif. */
 {
 char where[256];
-safef(where, sizeof(where), "name='%s'", name);
+sqlSafefFrag(where, sizeof(where), "name='%s'", name);
 return dnaMotifLoadWhere(conn, table, where);
 }
 

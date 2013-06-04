@@ -125,6 +125,10 @@ See also:
 
 Known Problems:
 
+   Please advise UCSC if you have the recommended installed libraries
+   and development system and this build will not function.
+   email to:  genome-www@soe.ucsc.edu
+
 1. These procedures will not work as-is on sparc or alpha machines or
    with the Sun Solaris operating system.
 

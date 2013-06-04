@@ -139,14 +139,14 @@ if (!isCustomTrack(curTable))
 	    plainCurTable = curTable;
 	safef(tmpTable, sizeof(tmpTable), "hgTemp.tmp%s%s", plainCurTable, xrefTable);
 	if (differentString(xrefTable, curTable))
-	    safef(query, sizeof(query),
+	    sqlSafef(query, sizeof(query),
 		  "create temporary table %s select %s.%s as %s from %s,%s "
 		  "where %s.%s = %s.%s and %s.%s != %s.%s limit 100000",
 		  tmpTable, xrefTable, aliasField, aliasField, xrefTable, curTable,
 		  xrefTable, xrefIdField, curTable, idField,
 		  xrefTable, xrefIdField, xrefTable, aliasField);
 	else
-	    safef(query, sizeof(query),
+	    sqlSafef(query, sizeof(query),
 		  "create temporary table %s select %s from %s "
 		  "where %s != %s limit 100000",
 		  tmpTable, aliasField, xrefTable, aliasField, xrefIdField);
@@ -241,7 +241,7 @@ struct dyString *query = dyStringNew(0);
 for (table = tableList;  table != NULL;  table = table->next)
     {
     dyStringClear(query);
-    dyStringPrintf(query, "select %s from %s", idField, table->name);
+    sqlDyStringPrintf(query, "select %s from %s", idField, table->name);
     if (extraWhere != NULL)
 	dyStringPrintf(query, " where %s", extraWhere);
     sr = sqlGetResult(conn, query->string);
@@ -270,10 +270,10 @@ struct sqlResult *sr;
 char **row;
 struct dyString *query = dyStringNew(0);
 if (sameString(xrefTable, curTable))
-    dyStringPrintf(query, "select %s,%s from %s", aliasField, xrefIdField, xrefTable);
+    sqlDyStringPrintf(query, "select %s,%s from %s", aliasField, xrefIdField, xrefTable);
 else
     /* Get only the aliases for items actually in curTable.idField: */
-    dyStringPrintf(query,
+    sqlDyStringPrintf(query,
 	  "select %s.%s,%s.%s from %s,%s where %s.%s = %s.%s",
 	  xrefTable, aliasField, xrefTable, xrefIdField,
 	  xrefTable, curTable,
@@ -281,7 +281,7 @@ else
 if (extraWhere != NULL)
     // extraWhere begins w/ID field of curTable=xrefTable.  Skip that field name and
     // use "xrefTable.aliasField" with the IN (...) condition that follows:
-    dyStringPrintf(query, " %s %s.%s %s",
+    sqlDyStringPrintf(query, " %s %s.%s %-s",
 		   (sameString(xrefTable, curTable) ? "where" : "and"),
 		   xrefTable, aliasField, skipToSpaces(extraWhere));
 sr = sqlGetResult(conn, query->string);
@@ -337,7 +337,7 @@ static char *slNameToInExpression(char *field, struct slName *allTerms)
  * to be used in a WHERE clause. */
 {
 struct dyString *dy = dyStringNew(0);
-dyStringPrintf(dy, "%s in (", field);
+sqlDyStringPrintfFrag(dy, "%s in (", field);
 boolean first = TRUE;
 struct slName *term;
 for (term = allTerms;  term != NULL;  term = term->next)
@@ -346,7 +346,7 @@ for (term = allTerms;  term != NULL;  term = term->next)
 	first = FALSE;
     else
 	dyStringAppend(dy, ", ");
-    dyStringPrintf(dy, "'%s'", term->name);
+    sqlDyStringPrintf(dy, "'%s'", term->name);
     }
 dyStringAppend(dy, ")");
 return dyStringCannibalize(&dy);

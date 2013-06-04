@@ -146,7 +146,7 @@ while (fgets(line_in, 500, inf) != NULL)
 	strcpy(oldInfo, newInfo);
 	isDuplicate = 0;
 
-	safef(query2, sizeof(query2), 
+	sqlSafef(query2, sizeof(query2), 
 	      "select * from %s.kgCandidate2 where name='%s' and proteinID='%s' and chrom='%s' and cdsStart='%s' and cdsEnd='%s'", 
 	      kgTempDb, mrnaStr, proteinStr, chrom, cdsStart, cdsEnd);
 	sr2 = sqlMustGetResult(conn2, query2);

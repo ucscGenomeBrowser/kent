@@ -216,154 +216,15 @@ void affy120KDetailsSaveToDb(struct sqlConnection *conn, struct affy120KDetails 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use affy120KDetailsSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s',%f,%f,%f,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s',%f,%f,%f,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->affyId,  el->rsId,  el->baseA,  el->baseB,  el->sequenceA,  el->sequenceB,  el->enzyme,  el->minFreq,  el->hetzyg,  el->avHetSE,  el->NA04477,  el->NA04479,  el->NA04846,  el->NA11036,  el->NA11038,  el->NA13056,  el->NA17011,  el->NA17012,  el->NA17013,  el->NA17014,  el->NA17015,  el->NA17016,  el->NA17101,  el->NA17102,  el->NA17103,  el->NA17104,  el->NA17105,  el->NA17106,  el->NA17201,  el->NA17202,  el->NA17203,  el->NA17204,  el->NA17205,  el->NA17206,  el->NA17207,  el->NA17208,  el->NA17210,  el->NA17211,  el->NA17212,  el->NA17213,  el->PD01,  el->PD02,  el->PD03,  el->PD04,  el->PD05,  el->PD06,  el->PD07,  el->PD08,  el->PD09,  el->PD10,  el->PD11,  el->PD12,  el->PD13,  el->PD14,  el->PD15,  el->PD16,  el->PD17,  el->PD18,  el->PD19,  el->PD20,  el->PD21,  el->PD22,  el->PD23,  el->PD24);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void affy120KDetailsSaveToDbEscaped(struct sqlConnection *conn, struct affy120KDetails *el, char *tableName, int updateSize)
-/* Save affy120KDetails as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than affy120KDetailsSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *rsId, *baseA, *baseB, *sequenceA, *sequenceB, *enzyme, *NA04477, *NA04479, *NA04846, *NA11036, *NA11038, *NA13056, *NA17011, *NA17012, *NA17013, *NA17014, *NA17015, *NA17016, *NA17101, *NA17102, *NA17103, *NA17104, *NA17105, *NA17106, *NA17201, *NA17202, *NA17203, *NA17204, *NA17205, *NA17206, *NA17207, *NA17208, *NA17210, *NA17211, *NA17212, *NA17213, *PD01, *PD02, *PD03, *PD04, *PD05, *PD06, *PD07, *PD08, *PD09, *PD10, *PD11, *PD12, *PD13, *PD14, *PD15, *PD16, *PD17, *PD18, *PD19, *PD20, *PD21, *PD22, *PD23, *PD24;
-rsId = sqlEscapeString(el->rsId);
-baseA = sqlEscapeString(el->baseA);
-baseB = sqlEscapeString(el->baseB);
-sequenceA = sqlEscapeString(el->sequenceA);
-sequenceB = sqlEscapeString(el->sequenceB);
-enzyme = sqlEscapeString(el->enzyme);
-NA04477 = sqlEscapeString(el->NA04477);
-NA04479 = sqlEscapeString(el->NA04479);
-NA04846 = sqlEscapeString(el->NA04846);
-NA11036 = sqlEscapeString(el->NA11036);
-NA11038 = sqlEscapeString(el->NA11038);
-NA13056 = sqlEscapeString(el->NA13056);
-NA17011 = sqlEscapeString(el->NA17011);
-NA17012 = sqlEscapeString(el->NA17012);
-NA17013 = sqlEscapeString(el->NA17013);
-NA17014 = sqlEscapeString(el->NA17014);
-NA17015 = sqlEscapeString(el->NA17015);
-NA17016 = sqlEscapeString(el->NA17016);
-NA17101 = sqlEscapeString(el->NA17101);
-NA17102 = sqlEscapeString(el->NA17102);
-NA17103 = sqlEscapeString(el->NA17103);
-NA17104 = sqlEscapeString(el->NA17104);
-NA17105 = sqlEscapeString(el->NA17105);
-NA17106 = sqlEscapeString(el->NA17106);
-NA17201 = sqlEscapeString(el->NA17201);
-NA17202 = sqlEscapeString(el->NA17202);
-NA17203 = sqlEscapeString(el->NA17203);
-NA17204 = sqlEscapeString(el->NA17204);
-NA17205 = sqlEscapeString(el->NA17205);
-NA17206 = sqlEscapeString(el->NA17206);
-NA17207 = sqlEscapeString(el->NA17207);
-NA17208 = sqlEscapeString(el->NA17208);
-NA17210 = sqlEscapeString(el->NA17210);
-NA17211 = sqlEscapeString(el->NA17211);
-NA17212 = sqlEscapeString(el->NA17212);
-NA17213 = sqlEscapeString(el->NA17213);
-PD01 = sqlEscapeString(el->PD01);
-PD02 = sqlEscapeString(el->PD02);
-PD03 = sqlEscapeString(el->PD03);
-PD04 = sqlEscapeString(el->PD04);
-PD05 = sqlEscapeString(el->PD05);
-PD06 = sqlEscapeString(el->PD06);
-PD07 = sqlEscapeString(el->PD07);
-PD08 = sqlEscapeString(el->PD08);
-PD09 = sqlEscapeString(el->PD09);
-PD10 = sqlEscapeString(el->PD10);
-PD11 = sqlEscapeString(el->PD11);
-PD12 = sqlEscapeString(el->PD12);
-PD13 = sqlEscapeString(el->PD13);
-PD14 = sqlEscapeString(el->PD14);
-PD15 = sqlEscapeString(el->PD15);
-PD16 = sqlEscapeString(el->PD16);
-PD17 = sqlEscapeString(el->PD17);
-PD18 = sqlEscapeString(el->PD18);
-PD19 = sqlEscapeString(el->PD19);
-PD20 = sqlEscapeString(el->PD20);
-PD21 = sqlEscapeString(el->PD21);
-PD22 = sqlEscapeString(el->PD22);
-PD23 = sqlEscapeString(el->PD23);
-PD24 = sqlEscapeString(el->PD24);
-
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s',%f,%f,%f,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
-	tableName, el->affyId ,  rsId,  baseA,  baseB,  sequenceA,  sequenceB,  enzyme, el->minFreq , el->hetzyg , el->avHetSE ,  NA04477,  NA04479,  NA04846,  NA11036,  NA11038,  NA13056,  NA17011,  NA17012,  NA17013,  NA17014,  NA17015,  NA17016,  NA17101,  NA17102,  NA17103,  NA17104,  NA17105,  NA17106,  NA17201,  NA17202,  NA17203,  NA17204,  NA17205,  NA17206,  NA17207,  NA17208,  NA17210,  NA17211,  NA17212,  NA17213,  PD01,  PD02,  PD03,  PD04,  PD05,  PD06,  PD07,  PD08,  PD09,  PD10,  PD11,  PD12,  PD13,  PD14,  PD15,  PD16,  PD17,  PD18,  PD19,  PD20,  PD21,  PD22,  PD23,  PD24);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&rsId);
-freez(&baseA);
-freez(&baseB);
-freez(&sequenceA);
-freez(&sequenceB);
-freez(&enzyme);
-freez(&NA04477);
-freez(&NA04479);
-freez(&NA04846);
-freez(&NA11036);
-freez(&NA11038);
-freez(&NA13056);
-freez(&NA17011);
-freez(&NA17012);
-freez(&NA17013);
-freez(&NA17014);
-freez(&NA17015);
-freez(&NA17016);
-freez(&NA17101);
-freez(&NA17102);
-freez(&NA17103);
-freez(&NA17104);
-freez(&NA17105);
-freez(&NA17106);
-freez(&NA17201);
-freez(&NA17202);
-freez(&NA17203);
-freez(&NA17204);
-freez(&NA17205);
-freez(&NA17206);
-freez(&NA17207);
-freez(&NA17208);
-freez(&NA17210);
-freez(&NA17211);
-freez(&NA17212);
-freez(&NA17213);
-freez(&PD01);
-freez(&PD02);
-freez(&PD03);
-freez(&PD04);
-freez(&PD05);
-freez(&PD06);
-freez(&PD07);
-freez(&PD08);
-freez(&PD09);
-freez(&PD10);
-freez(&PD11);
-freez(&PD12);
-freez(&PD13);
-freez(&PD14);
-freez(&PD15);
-freez(&PD16);
-freez(&PD17);
-freez(&PD18);
-freez(&PD19);
-freez(&PD20);
-freez(&PD21);
-freez(&PD22);
-freez(&PD23);
-freez(&PD24);
-}
 
 struct affy120KDetails *affy120KDetailsCommaIn(char **pS, struct affy120KDetails *ret)
 /* Create a affy120KDetails out of a comma separated string. 

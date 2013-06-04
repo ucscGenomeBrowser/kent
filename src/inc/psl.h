@@ -31,9 +31,6 @@ struct rbTree;
 #define PSL_NUM_COLS  21  /* number of columns in a PSL */
 #define PSLX_NUM_COLS 23  /* number of columns in a PSLX */
 
-/* Options to pslGetCreateSql */
-#define PSL_TNAMEIX   0x01  /* create target name index */
-#define PSL_WITH_BIN  0x02  /* add bin column */
 #define PSL_XA_FORMAT 0x04  /* add XA format columns */
 
 /* options for pslFromAlign */
@@ -245,13 +242,6 @@ struct psl *pslTrimToTargetRange(struct psl *oldPsl, int tMin, int tMax);
 struct psl *pslTrimToQueryRange(struct psl *oldPsl, int qMin, int qMax);
 /* Return psl trimmed to fit inside qMin/qMax.  Note this does not
  * update the match/misMatch and related fields. */
-
-char* pslGetCreateSql(char* table, unsigned options, int tNameIdxLen);
-/* Get SQL required to create PSL table.  Options is a bit set consisting
- * of PSL_TNAMEIX, PSL_WITH_BIN, and PSL_XA_FORMAT.  tNameIdxLen is
- * the number of characters in target name to index.  If greater than
- * zero, must specify PSL_TNAMEIX.  If zero and PSL_TNAMEIX is specified,
- * to will default to 8. */
 
 int pslCheck(char *pslDesc, FILE* out, struct psl* psl);
 /* Validate a PSL for consistency.  pslDesc is printed the error messages

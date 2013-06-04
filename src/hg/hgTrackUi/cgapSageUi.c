@@ -9,12 +9,17 @@ static struct slName *getListFromCgapSageLibs(struct sqlConnection *conn, char *
 /* Return [unique] list of tissues sorted alphabetically. */
 {
 struct slName *list = NULL;
-char query[256];
+struct dyString *dy = dyStringNew(0);
 char **row;
 struct sqlResult *sr;
-safef(query, sizeof(query), "select %s%s%s from cgapSageLib order by %s", (distinct) ? "distinct " : "", 
-      column, (returnIds) ? ",libId" : "", column);
-sr = sqlGetResult(conn, query);
+sqlDyStringPrintf(dy, "select ");
+if (distinct)
+    dyStringAppend(dy, "distinct ");
+sqlDyStringPrintf(dy, "%s", column);
+if (returnIds)
+    dyStringAppend(dy, ",libId");
+sqlDyStringPrintf(dy, " from cgapSageLib order by %s", column);
+sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *word = (returnIds) ? row[1] : row[0];
@@ -22,6 +27,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&list);
 sqlFreeResult(&sr);
+dyStringFree(&dy);
 return list;
 }
 

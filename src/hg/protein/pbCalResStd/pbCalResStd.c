@@ -140,7 +140,7 @@ for (i=0; i<20; i++)
 conn  = hAllocConn(hDefaultDb());
 conn2 = hAllocConn(hDefaultDb());
 
-safef(query2, sizeof(query2), "select proteinID from %s.knownGene;", database);
+sqlSafef(query2, sizeof(query2), "select proteinID from %s.knownGene;", database);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 icnt = 0;

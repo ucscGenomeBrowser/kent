@@ -20,7 +20,7 @@ errAbort(
   );
 }
 
-char *create = "CREATE TABLE tilingPath (\n"
+char *create = "NOSQLINJ CREATE TABLE tilingPath (\n"
     "chrom varchar(255) not null,	# Chromosome name: chr1, chr2, etc.\n"
     "accession varchar(255) not null,	# Clone accession or ? or GAP\n"
     "clone varchar(255) not null,	# Clone name in BAC library\n"
@@ -38,7 +38,7 @@ struct sqlConnection *conn = sqlConnect(database);
 char query[1024];
 
 sqlRemakeTable(conn, "tilingPath", create);
-sprintf(query, "load data local infile '%s' into table tilingPath",
+sqlSafef(query, sizeof query, "load data local infile '%s' into table tilingPath",
     fileName);
 sqlUpdate(conn, query);
 sqlDisconnect(&conn);

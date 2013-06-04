@@ -89,7 +89,7 @@ accWhere[0] = '\0';
 if (select->accPrefix != NULL)
     safef(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
           select->accPrefix);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "SELECT acc,id,version,moddate,type,direction,"
       /*        0  1       2       3    4         5 */
       "source,organism,library,mrnaClone,sex,tissue,development,cell,cds,"
@@ -139,7 +139,7 @@ char** row;
 
 gbVerbMsg(2, "load refSeqStatus table data");
 
-result = sqlGetResult(conn, "SELECT mrnaAcc,status FROM refSeqStatus");
+result = sqlGetResult(conn, "NOSQLINJ SELECT mrnaAcc,status FROM refSeqStatus");
 while ((row = sqlNextRow(result)) != NULL)
     loadRefSeqStatusRow(metaDataTbls, conn, row);
 sqlFreeResult(&result);
@@ -196,7 +196,7 @@ char** row;
 
 gbVerbMsg(2, "load relLink table data");
 
-result = sqlGetResult(conn, "SELECT mrnaAcc,name,product,protAcc,geneName,"
+result = sqlGetResult(conn, "NOSQLINJ SELECT mrnaAcc,name,product,protAcc,geneName,"
                       "prodName,locusLinkId,omimId from refLink");
 while ((row = sqlNextRow(result)) != NULL)
     loadRefLinkRow(metaDataTbls, conn, row);
@@ -284,7 +284,7 @@ accWhere[0] = '\0';
 if (select->accPrefix != NULL)
     safef(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
           select->accPrefix);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "SELECT acc,version,modDate,type,srcDb,orgCat,gbSeq,numAligns "
       "FROM gbStatus WHERE (type='%s') AND (srcDb='%s')%s",
       ((select->type == GB_MRNA) ? "mRNA" : "EST"),

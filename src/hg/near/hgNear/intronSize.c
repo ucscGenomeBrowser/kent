@@ -72,7 +72,7 @@ int intronSize = 0;
 
 /* Set up query */
 char query[1000];
-safef(query, sizeof(query), "select exonStarts, exonEnds from %s where name='%s'",
+sqlSafef(query, sizeof(query), "select exonStarts, exonEnds from %s where name='%s'",
 	col->table, gp->name);
 
 /* Get row we need. */
@@ -124,7 +124,7 @@ if (minString != NULL || maxString != NULL)
     char query[1000];
     char **row;
     struct sqlResult *sr;
-    safef(query, sizeof(query), "select name,exonStarts,exonEnds from %s", 
+    sqlSafef(query, sizeof(query), "select name,exonStarts,exonEnds from %s", 
         col->table);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)

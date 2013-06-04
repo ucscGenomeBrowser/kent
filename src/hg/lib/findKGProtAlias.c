@@ -34,7 +34,7 @@ struct dyString      *ds    = newDyString(256);
 struct kgProtAlias *kapList = NULL;
 char   fullTableName[256];
 
-snprintf(fullTableName, 250, "%s.%s", dataBase, "kgProtAlias");
+safef(fullTableName, 250, "%s.%s", dataBase, "kgProtAlias");
 if (!sqlTableExists(conn, fullTableName))
     {
     errAbort("Table %s.kgProtAlias does not exist.\n", dataBase);
@@ -42,15 +42,15 @@ if (!sqlTableExists(conn, fullTableName))
 
 if (sameString(mode, "E"))
     {
-    dyStringPrintf(ds, "select * from %s.kgProtAlias where alias = '%s'", dataBase, spec);
+    sqlDyStringPrintf(ds, "select * from %s.kgProtAlias where alias = '%s'", dataBase, spec);
     }
 else if (sameString(mode, "F"))
     {
-    dyStringPrintf(ds, "select * from %s.kgProtAlias where alias like '%%%s%%'", dataBase, spec);
+    sqlDyStringPrintf(ds, "select * from %s.kgProtAlias where alias like '%%%s%%'", dataBase, spec);
     }
 else if (sameString(mode, "P"))
     {
-    dyStringPrintf(ds, "select * from %s.kgProtAlias where alias like '%s%%'", dataBase, spec);
+    sqlDyStringPrintf(ds, "select * from %s.kgProtAlias where alias like '%s%%'", dataBase, spec);
     }
 else
     {

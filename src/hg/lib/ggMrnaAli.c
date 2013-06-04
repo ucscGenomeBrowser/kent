@@ -80,32 +80,15 @@ void ggMrnaBlockSaveToDb(struct sqlConnection *conn, struct ggMrnaBlock *el, cha
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use ggMrnaBlockSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,%d,%d,%d)", 
+sqlDyStringPrintf(update, "insert into %s values ( %d,%d,%d,%d)", 
 	tableName,  el->qStart,  el->qEnd,  el->tStart,  el->tEnd);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void ggMrnaBlockSaveToDbEscaped(struct sqlConnection *conn, struct ggMrnaBlock *el, char *tableName, int updateSize)
-/* Save ggMrnaBlock as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than ggMrnaBlockSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,%d,%d,%d)", 
-	tableName, el->qStart , el->qEnd , el->tStart , el->tEnd );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-}
 
 struct ggMrnaBlock *ggMrnaBlockCommaIn(char **pS, struct ggMrnaBlock *ret)
 /* Create a ggMrnaBlock out of a comma separated string. 
@@ -238,40 +221,15 @@ void ggMrnaAliSaveToDb(struct sqlConnection *conn, struct ggMrnaAli *el, char *t
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use ggMrnaAliSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%d,%d,'%s','%s',%d,%d,%u,%d,%d,%d,%d, NULL )", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%d,%d,'%s','%s',%d,%d,%u,%d,%d,%d,%d, NULL )", 
 	tableName,  el->tName,  el->tStart,  el->tEnd,  el->strand,  el->qName,  el->qStart,  el->qEnd,  el->baseCount,  el->orientation,  el->hasIntrons,  el->milliScore,  el->blockCount);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void ggMrnaAliSaveToDbEscaped(struct sqlConnection *conn, struct ggMrnaAli *el, char *tableName, int updateSize)
-/* Save ggMrnaAli as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than ggMrnaAliSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *tName, *strand, *qName;
-tName = sqlEscapeString(el->tName);
-strand = sqlEscapeString(el->strand);
-qName = sqlEscapeString(el->qName);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%d,%d,'%s','%s',%d,%d,%u,%d,%d,%d,%d, NULL )", 
-	tableName,  tName, el->tStart , el->tEnd ,  strand,  qName, el->qStart , el->qEnd , el->baseCount , el->orientation , el->hasIntrons , el->milliScore , el->blockCount );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&tName);
-freez(&strand);
-freez(&qName);
-}
 
 struct ggMrnaAli *ggMrnaAliCommaIn(char **pS, struct ggMrnaAli *ret)
 /* Create a ggMrnaAli out of a comma separated string. 
@@ -421,7 +379,7 @@ ma->qStart = psl->qStart;
 ma->qEnd = psl->qEnd;
 ma->baseCount = psl->qSize;
 ma->milliScore = psl->match + psl->repMatch - psl->misMatch - (psl->blockCount-1)*2;
-snprintf(ma->strand, sizeof(ma->strand), "%s", strand);
+safef(ma->strand, sizeof(ma->strand), "%s", strand);
 ma->hasIntrons = (iOrientation == 0 ? FALSE : TRUE);
 ma->tName = cloneString(psl->tName);
 ma->tStart = psl->tStart;
@@ -543,7 +501,7 @@ AllocVar(mi);
 mi->tName = maList->tName;
 mi->tStart = maList->tStart;
 mi->tEnd = maList->tEnd;
-snprintf(mi->strand, sizeof(mi->strand), "%s", maList->strand);
+safef(mi->strand, sizeof(mi->strand), "%s", maList->strand);
 mi->genoSeq = genoSeq;
 mi->maList = maList;
 return mi;

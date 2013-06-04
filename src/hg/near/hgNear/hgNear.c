@@ -363,7 +363,7 @@ char *xrefNameField = hashFindVal(col->settings, "xrefNameField");
 char *xrefAliasField = hashFindVal(col->settings, "xrefAliasField");
 char query[1024];
 if (xrefDb)
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select %s.%s.%s "
 	  "from %s.%s, %s "
 	  "where %s.%s = '%s' "
@@ -373,7 +373,7 @@ if (xrefDb)
 	  col->table, col->keyField,   gp->name,
 	  col->table, col->valField,   xrefDb, xrefTable, xrefNameField);
 else
-    safef(query, sizeof(query), "select %s from %s where %s = '%s'",
+    sqlSafef(query, sizeof(query), "select %s from %s where %s = '%s'",
 	  col->valField, col->table, col->keyField, gp->name);
 return sqlQuickString(conn, query);
 }
@@ -382,7 +382,7 @@ char *lookupItemUrlVal(struct column *col, char *sVal,
         struct sqlConnection *conn)
 {
 char query[512];
-safef(query, sizeof(query), col->itemUrlQuery, sVal);
+sqlSafef(query, sizeof(query), col->itemUrlQuery, sVal);
 return sqlQuickString(conn, query);
 }
 
@@ -732,14 +732,14 @@ struct sqlResult *sr;
 char **row;
 struct searchResult *resList = NULL, *res;
 
-dyStringPrintf(query, "select %s,%s from %s where %s ",
+sqlDyStringPrintf(query, "select %s,%s from %s where %s ",
 	col->keyField, col->valField, col->table, col->valField);
 if (sameString(searchHow, "fuzzy"))
-    dyStringPrintf(query, "like '%%%s%%'", search);
+    sqlDyStringPrintf(query, "like '%%%s%%'", search);
 else if (sameString(searchHow, "prefix"))
-    dyStringPrintf(query, "like '%s%%'", search);
+    sqlDyStringPrintf(query, "like '%s%%'", search);
 else
-    dyStringPrintf(query, " = '%s'", search);
+    sqlDyStringPrintf(query, " = '%s'", search);
 sr = sqlGetResult(searchConn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -809,7 +809,7 @@ if (wild != NULL || keyHash != NULL)
     struct sqlResult *sr;
     char **row;
     struct slName *wildList = stringToSlNames(wild);
-    safef(query, sizeof(query), "select %s,%s from %s",
+    sqlSafef(query, sizeof(query), "select %s,%s from %s",
     	col->keyField, col->valField, col->table);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -883,7 +883,7 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 char *res = NULL;
-safef(query, sizeof(query), "select %s from %s where %s = '%s' and %s = '%s'",
+sqlSafef(query, sizeof(query), "select %s from %s where %s = '%s' and %s = '%s'",
 	col->valField, col->table, col->keyField, gp->name, col->curGeneField, curGeneId->name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -936,12 +936,12 @@ else
 if (minString != NULL || maxString != NULL)
     {
     struct dyString *dy = newDyString(512);
-    dyStringPrintf(dy, "select %s from %s where", col->keyField, col->table);
-    dyStringPrintf(dy, " %s='%s'", col->curGeneField, name);
+    sqlDyStringPrintf(dy, "select %s from %s where", col->keyField, col->table);
+    sqlDyStringPrintf(dy, " %s='%s'", col->curGeneField, name);
     if (minString)
-         dyStringPrintf(dy, " and %s >= %s", col->valField, minString);
+         sqlDyStringPrintf(dy, " and %s >= %s", col->valField, minString);
     if (maxString)
-         dyStringPrintf(dy, " and %s <= %s", col->valField, maxString);
+         sqlDyStringPrintf(dy, " and %s <= %s", col->valField, maxString);
     list = advFilterFromQuery(conn, dy->string, list);
     dyStringFree(&dy);
     }
@@ -988,14 +988,14 @@ char *maxString = advFilterVal(col, "max");
 if (minString != NULL || maxString != NULL)
     {
     struct dyString *dy = newDyString(512);
-    dyStringPrintf(dy, "select %s from %s where ", col->keyField, col->table);
+    sqlDyStringPrintf(dy, "select %s from %s where ", col->keyField, col->table);
     if (minString && maxString)
-       dyStringPrintf(dy, "%s >= %s and %s <= %s",
+       sqlDyStringPrintf(dy, "%s >= %s and %s <= %s",
        		col->valField, minString, col->valField, maxString);
     else if (minString)
-       dyStringPrintf(dy, "%s >= %s", col->valField, minString);
+       sqlDyStringPrintf(dy, "%s >= %s", col->valField, minString);
     else
-       dyStringPrintf(dy, "%s <= %s", col->valField, maxString);
+       sqlDyStringPrintf(dy, "%s <= %s", col->valField, maxString);
     list = advFilterFromQuery(conn, dy->string, list);
     dyStringFree(&dy);
     }
@@ -1428,7 +1428,7 @@ char *protToGeneId(struct sqlConnection *conn, char *protId)
 {
 char *table = genomeSetting("geneTable");
 char query[256];
-safef(query, sizeof(query), "select name from %s where proteinId='%s'",
+sqlSafef(query, sizeof(query), "select name from %s where proteinId='%s'",
 	table, protId);
 return sqlQuickString(conn, query);
 }
@@ -1702,12 +1702,12 @@ char buf[64];
 
 if (kgVersion == KG_III)
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"select spDisplayID from kgXref where kgId='%s'", mrnaName);
     }
 else
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"select protein from %s where transcript='%s'",
 	genomeSetting("canonicalTable"), mrnaName);
     }

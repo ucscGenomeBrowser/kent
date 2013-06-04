@@ -164,7 +164,7 @@ while (fgets(line, 1000, IN) != NULL)
     fprintf(aaOut, ">%s\n%s\n", proteinID, aaSeq);
     fclose(aaOut);
 
-    sprintf(query2,"select mrnaID from %s.spMrna where spID='%s';",kgTempDb, proteinID);
+    sqlSafef(query2, sizeof query2, "select mrnaID from %s.spMrna where spID='%s';",kgTempDb, proteinID);
 	
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);

@@ -66,7 +66,7 @@ for (med = medList; med != NULL; med = med->next)
     {
     /* Load expression record from old table of first
      * thing in median. */
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     	"select * from %s where id = %d", oldTable, med->ids[0]);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) == NULL)

@@ -360,6 +360,9 @@ var alleles = (function()
         delayedHilites: function ()
         { // Delayed call of private function
             hiliteAllDiffs();
+            // Persist on lighlite as red
+            if (hiliteId != '')
+                hiliteSpecial( hiliteId );
         },
         
         initialize: function  (sectionId)

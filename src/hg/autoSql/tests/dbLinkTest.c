@@ -62,7 +62,7 @@ while(lineFileNextReal(lf, &line))
 	*tmp = '\0';
 	}
     subChar(line, '\t', ' ');
-    dyStringPrintf(ds, "%s", line);
+    sqlDyStringPrintf(ds, "%-s", line);
     }
 update = replaceChars(ds->string, "PRIMARY KEY", "UNIQUE");
 sqlUpdate(conn, update);
@@ -75,7 +75,7 @@ void dropTable(struct sqlConnection *conn)
 /* Drop the test table that was created in setupTable(). */
 {
 char update[256];
-snprintf(update, sizeof(update), "drop table %s", testTableName);
+sqlSafef(update, sizeof(update), "drop table %s", testTableName);
 sqlUpdate(conn, update);
 }
 
@@ -276,11 +276,11 @@ if(escaped)
     freez(&at->longName);
     at->longName = cloneString("autoSql's autoTest longName");
     at->id++;
-    autoTestSaveToDbEscaped(conn, at, testTableName, 1024);
+    autoTestSaveToDb(conn, at, testTableName, 1024);
     }
 else 
     autoTestSaveToDb(conn, at, testTableName, 1024);
-snprintf(query, sizeof(query), "select * from %s where id = %d", testTableName, at->id);
+sqlSafef(query, sizeof(query), "select * from %s where id = %d", testTableName, at->id);
 atFromDb = autoTestLoadByQuery(conn, query);
 result = autoTestsIdentical(at, atFromDb);
 

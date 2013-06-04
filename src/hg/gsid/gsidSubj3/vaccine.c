@@ -56,7 +56,7 @@ char **row;
 
 printf("<TABLE>");
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select art_daei, art_sequencing from hgFixed.artDaei where subjId='%s'", 
       subjId);
 sr = sqlMustGetResult(conn, query);
@@ -68,7 +68,7 @@ if (row != NULL)
     }
 sqlFreeResult(&sr);
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select immunStatus, daysInfectF, daysInfectL, injections from gsidSubjInfo where subjId='%s'", 
       subjId);
 sr = sqlMustGetResult(conn, query);
@@ -82,7 +82,7 @@ if (row != NULL)
     }
 sqlFreeResult(&sr);
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select startDate,lastSeroNegDay,firstSeroPosDay,firstRNAPosDay,ESDBasis,seqDay from hgFixed.testDates where subjId='%s'", subjId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

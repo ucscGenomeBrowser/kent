@@ -38,6 +38,7 @@ struct annoGrator
     struct annoRow *qHead;		// head of FIFO queue of rows from internal source
     struct annoRow *qTail;		// head of FIFO queue of rows from internal source
     struct lm *qLm;			// localmem for FIFO queue
+    int qSkippedCount;			// Number of qLm-allocated rows skipped
     char *prevPChrom;			// for detection of unsorted input from primary
     uint prevPStart;			// for detection of unsorted input from primary
     boolean eof;			// stop asking internal source for rows when it's done

@@ -27,12 +27,13 @@ char *getKnownGeneUrl(struct sqlConnection *conn, int geneId)
  * species. */
 {
 char query[256];
+char tableName[256];
 int taxon;
 char *url = NULL;
 char *genomeDb = NULL;
 
 /* Figure out taxon. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select taxon from gene where id = %d", geneId);
 taxon = sqlQuickNum(conn, query);
 
@@ -41,8 +42,8 @@ if (genomeDb != NULL)
     {
     /* Make sure known genes track exists - we may need
      * to tweak this at some point for model organisms. */
-    safef(query, sizeof(query), "%s.knownToVisiGene", genomeDb);
-    if (!sqlTableExists(conn, query))
+    safef(tableName, sizeof(tableName), "%s.knownToVisiGene", genomeDb);
+    if (!sqlTableExists(conn, tableName))
 	genomeDb = NULL;
     }
 
@@ -50,32 +51,32 @@ if (genomeDb != NULL)
 if (genomeDb == NULL)
     genomeDb = hDefaultDb();
 
-safef(query, sizeof(query), "%s.knownToVisiGene", genomeDb);
-if (sqlTableExists(conn, query))
+safef(tableName, sizeof(tableName), "%s.knownToVisiGene", genomeDb);
+if (sqlTableExists(conn, tableName))
     {
     struct dyString *dy = dyStringNew(0);
     char *knownGene = NULL;
-    if (sqlCountColumnsInTable(conn, query) == 3)
+    if (sqlCountColumnsInTable(conn, tableName) == 3)
 	{
-	dyStringPrintf(dy, 
+	sqlDyStringPrintf(dy, 
 	   "select name from %s.knownToVisiGene where geneId = %d", genomeDb, geneId);
 	}
     else
 	{
 	struct slName *imageList, *image;
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 	    "select imageProbe.image from probe,imageProbe "
 	    "where probe.gene=%d and imageProbe.probe=probe.id", geneId);
 	imageList = sqlQuickList(conn, query);
 	if (imageList != NULL)
 	    {
-	    dyStringPrintf(dy, 
+	    sqlDyStringPrintf(dy, 
 	       "select name from %s.knownToVisiGene ", genomeDb);
 	    dyStringAppend(dy,
 	       "where value in(");
 	    for (image = imageList; image != NULL; image = image->next)
 		{
-		dyStringPrintf(dy, "'%s'", image->name);
+		sqlDyStringPrintf(dy, "'%s'", image->name);
 		if (image->next != NULL)
 		    dyStringAppendC(dy, ',');
 		}
@@ -88,10 +89,10 @@ if (sqlTableExists(conn, query))
 	knownGene = sqlQuickString(conn, dy->string);
 	if (knownGene != NULL)
 	    {
-	    dyStringClear(dy);
-	    dyStringPrintf(dy, "../cgi-bin/hgGene?db=%s&hgg_gene=%s&hgg_chrom=none",
+	    char temp[1024];
+	    safef(temp, sizeof temp, "../cgi-bin/hgGene?db=%s&hgg_gene=%s&hgg_chrom=none",
 		genomeDb, knownGene);
-	    url = dyStringCannibalize(&dy);
+	    url = cloneString(temp);
 	    }
 	}
     dyStringFree(&dy);
@@ -111,7 +112,7 @@ struct probeAndColor *pcList = NULL, *pc;
 int probeCount = 0;
 
 /* Make up a list of all probes in this image. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
    "select probe,probeColor from imageProbe where image=%d", id);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -132,7 +133,7 @@ for (pc = pcList; pc != NULL; pc = pc->next)
     char *geneUrl = NULL;
 
     /* Get gene ID and name. */
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"select gene from probe where id = %d", probe);
     geneId = sqlQuickNum(conn, query);
     geneName = vgGeneNameFromId(conn, geneId);
@@ -155,7 +156,7 @@ for (pc = pcList; pc != NULL; pc = pc->next)
     if (probeCount > 1)
         {
 	char *color;
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 	    "select probeColor.name from probeColor "
 	    "where probeColor.id = %d"
 	    , pc->probeColor);
@@ -185,11 +186,11 @@ struct slInt *probeList = NULL, *probe;
 int submissionSource = 0;
 
 /* Make up a list of all probes in this image. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
    "select probe from imageProbe where image=%d", id);
 probeList = sqlQuickNumList(conn, query);
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
    "select submissionSet.submissionSource from image, submissionSet"
    " where image.submissionSet = submissionSet.id and image.id=%d", id);
 submissionSource = sqlQuickNum(conn, query);
@@ -202,7 +203,7 @@ for (probe = probeList; probe != NULL; probe = probe->next)
     dyStringClear(dy);
     dyStringPrintf(dy, "<A HREF=\"%s?%s&%s=%d&%s=%d\" target=_parent>",
     	hgVisiGeneCgiName(), sidUrl, hgpDoProbe, probe->val, hgpSs, submissionSource);
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"select probeType.name from probeType,probe where probe.id = %d "
 	"and probe.probeType = probeType.id", 
 	probe->val);
@@ -211,7 +212,7 @@ for (probe = probeList; probe != NULL; probe = probe->next)
     if (sameWord(type, "antibody"))
         {
 	char *abName;
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 	   "select antibody.name from probe,antibody "
 	   "where probe.id = %d and probe.antibody = antibody.id"
 	   , probe->val);
@@ -224,13 +225,13 @@ for (probe = probeList; probe != NULL; probe = probe->next)
 	}
     else if (sameWord(type, "RNA"))
         {
-	safef(query, sizeof(query),
+	sqlSafef(query, sizeof(query),
 	    "select length(seq) from probe where id=%d", probe->val);
 	if (sqlQuickNum(conn, query) > 0)
 	    dyStringPrintf(dy, " sequenced");
 	else
 	    {
-	    safef(query, sizeof(query),
+	    sqlSafef(query, sizeof(query),
 		"select length(fPrimer) from probe where id=%d", probe->val);
 	    if (sqlQuickNum(conn, query) > 0)
 	        dyStringPrintf(dy, " from primers");
@@ -239,7 +240,7 @@ for (probe = probeList; probe != NULL; probe = probe->next)
     else if (sameWord(type, "BAC"))
         {
 	char *name;
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 	   "select bac.name from probe,bac "
 	   "where probe.id = %d and probe.bac = bac.id"
 	   , probe->val);
@@ -271,7 +272,7 @@ char *scientificName = visiGeneOrganism(conn, imageId);
 struct sqlConnection *cConn = hConnectCentral();
 char query[256];
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select defaultDb.name from defaultDb,dbDb where "
 	"defaultDb.genome = dbDb.organism and "
 	"dbDb.active = 1 and "
@@ -420,7 +421,7 @@ struct dyString *dy = dyStringNew(0);
 struct slName *tissueList = NULL, *tissue;
 char query[512], **row;
 struct sqlResult *sr;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
    "select bodyPart.name,expressionLevel.level,expressionPattern.description "
    "from expressionLevel join bodyPart join imageProbe "
    "left join expressionPattern on expressionLevel.expressionPattern = expressionPattern.id "
@@ -503,7 +504,7 @@ struct sqlResult *sr;
 
 /* Get list of probes associated with image, and start building
  * expList around it. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
    "select imageProbe.probe,probe.gene from imageProbe,probe "
    "where imageProbe.image = %d "
    "and imageProbe.probe = probe.id", imageId);
@@ -622,7 +623,7 @@ char query[256];
 struct dyString *html;
 
 /* Look up genotype ID. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select specimen.genotype from image,specimen "
     "where image.id=%d and image.specimen = specimen.id", id);
 genotypeId = sqlQuickNum(conn, query);
@@ -630,7 +631,7 @@ if (genotypeId == 0)
     return NULL;
 
 /* Get list of genes involved. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select distinct allele.gene from genotypeAllele,allele "
     "where genotypeAllele.genotype=%d "
     "and genotypeAllele.allele = allele.id"
@@ -649,14 +650,14 @@ for (geneId = geneIdList; geneId != NULL; geneId = geneId->next)
     boolean needsSlash = FALSE;
 
     /* Get gene name. */
-    safef(query, sizeof(query), "select name from gene where id=%s",
+    sqlSafef(query, sizeof(query), "select name from gene where id=%s",
         geneId->name);
     geneName = sqlQuickString(conn, query);
     if (geneName == NULL)
         internalErr();
 
     /* Process each allele of gene. */
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"select allele.name from genotypeAllele,allele "
 	"where genotypeAllele.genotype=%d "
 	"and genotypeAllele.allele = allele.id "
@@ -838,7 +839,7 @@ static int visiGeneForwardedImageFile(struct sqlConnection *conn,
  * caption info.  If no such better info, just return zero. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
         "select toIf from imageFileFwd where fromIf = %d "
         , imageFile);
 return sqlQuickNum(conn, query);
@@ -855,7 +856,7 @@ int forwardedImageFile = visiGeneForwardedImageFile(conn, imageFile);
 if (forwardedImageFile)
      {
      char query[256];
-     safef(query, sizeof(query), 
+     sqlSafef(query, sizeof(query), 
      	"select id from image where imageFile=%d",
         forwardedImageFile);
      forwardedImage = sqlQuickNum(conn, query);

@@ -94,7 +94,7 @@ int findExactSubmissionId(struct sqlConnection *conn,
 /* Find ID of submissionSet that matches all parameters.  Return 0 if none found. */
 {
 char query[1024];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select id from submissionSet "
       "where contributors = \"%s\" "
       "and publication = \"%s\" "
@@ -109,12 +109,12 @@ int findOrAddIdTable(struct sqlConnection *conn, char *table, char *field,
 {
 char query[256];
 int id;
-safef(query, sizeof(query), "select id from %s where %s = \"%s\"",
+sqlSafef(query, sizeof(query), "select id from %s where %s = \"%s\"",
 	table, field, value);
 id = sqlQuickNum(conn, query);
 if (id == 0)
     {
-    safef(query, sizeof(query), "insert into %s values(default, \"%s\")",
+    sqlSafef(query, sizeof(query), "insert into %s values(default, \"%s\")",
     	table, value);
     sqlUpdate(conn, query);
     id = sqlLastAutoId(conn);
@@ -132,7 +132,7 @@ struct slName *contribList = NULL, *contrib;
 int submissionSetId;
 char query[1024];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "insert into submissionSet "
     "values(default, \"%s\", \"%s\", '%s', '%s', '%s')",
     contributors, publication, pubUrl, setUrl, itemUrl);
@@ -144,7 +144,7 @@ for (contrib = contribList; contrib != NULL; contrib = contrib->next)
     {
     int contribId = findOrAddIdTable(conn, "contributor", "name", 
     	skipLeadingSpaces(contrib->name));
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
           "insert into submissionContributor values(%d, %d)",
 	  submissionSetId, contribId);
     sqlUpdate(conn, query);
@@ -285,14 +285,14 @@ while (lineFileNextRowTab(lf, words, rowSize))
 	    sectionId = ptToInt(hel->val);
 	else
 	    {
-	    sqlUpdate(conn, "insert into sectionSet values(default)");
+	    sqlUpdate(conn, "NOSQLINJ insert into sectionSet values(default)");
 	    sectionId = sqlLastAutoId(conn);
 	    hashAdd(sectionSetHash, sectionSet, intToPt(sectionId));
 	    }
 	}
 
     dyStringClear(dy);
-    dyStringAppend(dy, "select id from image ");
+    sqlDyStringAppend(dy, "select id from image ");
     dyStringPrintf(dy, "where fileName = '%s' ", fileName);
     dyStringPrintf(dy, "and fullLocation = %d",  fullDir);
     oldId = sqlQuickNum(conn, dy->string);
@@ -301,7 +301,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
 	if (replace)
 	    {
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "delete from image where id = %d", oldId);
+	    sqlDyStringPrintf(dy, "delete from image where id = %d", oldId);
 	    sqlUpdate(conn, dy->string);
 	    }
 	else
@@ -310,7 +310,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
 	}
 
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into image set\n");
+    sqlDyStringAppend(dy, "insert into image set\n");
     dyStringPrintf(dy, " id = default,\n");
     dyStringPrintf(dy, " fileName = '%s',\n", fileName);
     dyStringPrintf(dy, " fullLocation = %d,\n", fullDir);

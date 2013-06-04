@@ -25,7 +25,7 @@ errAbort(
     "   -noRandom - Exclude *_random pseudo-chromsomes\n"
     "   -noHap - Exclude *_hap* pseudo-chromsomes\n"
     "   -where=where \n"
-    "   -joinTbls=tbls - comman seperated list other tables, if required\n"
+    "   -joinTbls=tbls - comman separated list other tables, if required\n"
     "    by -where\n"
     "   -verbose=n - 2 outputs SQL\n",
     msg);
@@ -89,17 +89,16 @@ if (where != NULL)
     {
     addWhereOrAnd(query, clauseCnt++);
     dyStringPrintf(query, " %s", where);
-    ;
     }
 if (!tblInfo->isSplit && noRandom)
     {
     addWhereOrAnd(query, clauseCnt++);
-    dyStringPrintf(query, " (%s not like \"%%__random\")", tblInfo->chromField);
+    sqlDyStringPrintf(query, " (%s not like \"%%__random\")", tblInfo->chromField);
     }
 if (!tblInfo->isSplit && noHap)
     {
     addWhereOrAnd(query, clauseCnt++);
-    dyStringPrintf(query, " (%s not like \"%%__hap%%\")", tblInfo->chromField);
+    sqlDyStringPrintf(query, " (%s not like \"%%__hap%%\")", tblInfo->chromField);
     }
 }
 
@@ -108,9 +107,9 @@ static void selectFromTable(char *table, struct hTableInfo *tblInfo,
 /* select from a table and output rows */
 {
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "SELECT %s.* FROM %s", table, table);
+sqlDyStringPrintf(query, "SELECT %s.* FROM %s", table, table);
 if (joinTbls != NULL)
-    dyStringPrintf(query, ",%s", joinTbls);
+    dyStringPrintf(query, ",%s", sqlCkIl(joinTbls));
 addWhereClause(tblInfo, query);
 verbose(2, "query: %s\n", query->string);
 

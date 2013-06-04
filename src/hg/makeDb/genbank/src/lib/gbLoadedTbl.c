@@ -9,7 +9,7 @@
 
 static char* GB_LOADED_TBL = "gbLoaded";
 static char* createSql =
-"create table gbLoaded ("
+"NOSQLINJ create table gbLoaded ("
   "srcDb enum('GenBank','RefSeq') not null,"   /* source database */
   "type enum('EST','mRNA') not null,"          /* mRNA or EST */
   "loadRelease char(8) not null,"              /* release version */
@@ -112,7 +112,7 @@ static void addedExtFileUpdCol(struct sqlConnection *conn)
 /* add the new extFileUpdated column to a table that doesn't have it */
 {
 char sql[128];
-safef(sql, sizeof(sql), "ALTER TABLE %s ADD COLUMN extFileUpdated tinyint(1) not null",
+sqlSafef(sql, sizeof(sql), "ALTER TABLE %s ADD COLUMN extFileUpdated tinyint(1) not null",
       GB_LOADED_TBL);
 sqlUpdate(conn, sql);
 }
@@ -147,7 +147,7 @@ char *dotPtr = strchr(relName, '.');
 char **row;
 boolean have;
 *dotPtr = '\0';
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "SELECT count(*) FROM gbLoaded WHERE (srcDb = '%s') AND (loadRelease = '%s')",
       relName, dotPtr+1);
 *dotPtr = '.';
@@ -164,7 +164,7 @@ static void loadRelease(struct gbLoadedTbl* loadedTbl,
 char query[256];
 struct sqlResult *result;
 char **row;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "SELECT loadUpdate, type, accPrefix, extFileUpdated FROM gbLoaded"
       " WHERE (srcDb = '%s') AND (loadRelease = '%s')",
       gbSrcDbName(release->srcDb), release->version);
@@ -277,7 +277,7 @@ static void insertRow(struct gbLoadedTbl* loadedTbl, struct gbLoaded *loaded)
 {
 char query[512];
 /* null inserts current time */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "INSERT INTO %s VALUES('%s', '%s', '%s', '%s', '%s', NULL, '%d')",
       GB_LOADED_TBL, gbSrcDbName(loaded->srcDb), gbTypeName(loaded->type), 
       loaded->loadRelease, loaded->loadUpdate,
@@ -290,7 +290,7 @@ static void updateRow(struct gbLoadedTbl* loadedTbl, struct gbLoaded *loaded)
 /* update a row in the table.  Only the extFileUpdated field can be updated */
 {
 char query[512];
-safef(query, sizeof(query), "UPDATE %s SET extFileUpdated=%d",
+sqlSafef(query, sizeof(query), "UPDATE %s SET extFileUpdated=%d",
       GB_LOADED_TBL,  loaded->extFileUpdated);
 sqlUpdate(loadedTbl->conn, query);
 }

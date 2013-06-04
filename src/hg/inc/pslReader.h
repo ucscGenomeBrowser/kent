@@ -2,6 +2,18 @@
 #ifndef PSLREADER_H
 #define PSLREADER_H
 
+/* Options to pslGetCreateSql */
+#define PSL_TNAMEIX   0x01  /* create target name index */
+#define PSL_WITH_BIN  0x02  /* add bin column */
+
+char* pslGetCreateSql(char* table, unsigned options, int tNameIdxLen);
+/* Get SQL required to create PSL table.  Options is a bit set consisting
+ * of PSL_TNAMEIX, PSL_WITH_BIN, and PSL_XA_FORMAT.  tNameIdxLen is
+ * the number of characters in target name to index.  If greater than
+ * zero, must specify PSL_TNAMEIX.  If zero and PSL_TNAMEIX is specified,
+ * to will default to 8. */
+
+
 struct pslReader;
 struct sqlConnection;
 

@@ -63,7 +63,7 @@ conn2= hAllocConn(database);
 
 outf = mustOpen(outWigFn, "w");
 	
-sprintf(query2,"select seq from %s.%s where id='%s'", database, table, baseAcc);
+sqlSafef(query2, sizeof query2, "select seq from %s.%s where id='%s'", database, table, baseAcc);
 
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -71,7 +71,7 @@ baseGenomeSeq = cloneString(row2[0]);
 baseSeqLen=strlen(baseGenomeSeq);
 sqlFreeResult(&sr2);
 
-sprintf(query2,"select * from %s.%s", database, table);
+sqlSafef(query2, sizeof query2, "select * from %s.%s", database, table);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 

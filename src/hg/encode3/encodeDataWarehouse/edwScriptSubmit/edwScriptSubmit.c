@@ -31,11 +31,11 @@ void doMiddle()
 /* Security check - make sure we are on https, and check user/password. */
 if (!cgiServerHttpsIsOn())
      usage();
-char *user = sqlEscapeString(cgiString("user"));
-char *password = sqlEscapeString(cgiString("password"));
+char *user = cgiString("user");
+char *password = cgiString("password");
 struct sqlConnection *conn = edwConnectReadWrite();
 char query[256];
-safef(query, sizeof(query), "select * from edwScriptRegistry where name='%s'", user);
+sqlSafef(query, sizeof(query), "select * from edwScriptRegistry where name='%s'", user);
 struct edwScriptRegistry *reg = edwScriptRegistryLoadByQuery(conn, query);
 if (reg == NULL)
     accessDenied();
@@ -45,12 +45,12 @@ if (!sameString(reg->secretHash, key))
     accessDenied();
 
 /* Get email associated with script. */
-safef(query, sizeof(query), "select email from edwUser where id=%d", reg->userId);
+sqlSafef(query, sizeof(query), "select email from edwUser where id=%d", reg->userId);
 char *email = sqlNeedQuickString(conn, query);
 
 /* Add submission URL to the queue. */
 char *url = cgiString("url");
-safef(query, sizeof(query), "update edwScriptRegistry set submitCount = submitCount+1 "
+sqlSafef(query, sizeof(query), "update edwScriptRegistry set submitCount = submitCount+1 "
     "where id=%d", reg->id);
 sqlUpdate(conn, query);
 edwAddSubmitJob(conn, email, url);

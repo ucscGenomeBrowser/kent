@@ -282,6 +282,7 @@ echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 git archive --format=zip -9 --remote=git://genome-source.cse.ucsc.edu/kent.git \
 --prefix=kent/ HEAD \
 src/parasol \
+src/hg/pslToChain \
 src/hg/makeDb/outside \
 src/hg/makeDb/trackDbRaFormat \
 src/hg/makeDb/trackDbPatch \

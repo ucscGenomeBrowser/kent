@@ -34,7 +34,7 @@ if (!tables)
 conn = sqlConnect(db);
 for (table = tables; table != NULL; table = table->next)
     {
-    safef(query, sizeof query, "DROP TABLE %s", table->name);
+    sqlSafef(query, sizeof query, "DROP TABLE %s", table->name);
     sqlUpdate(conn, query);
     }
 }

@@ -416,6 +416,7 @@ typedef enum _eCfgType
     cfgBam      =9,
     cfgPsl      =10,
     cfgVcf      =11,
+    cfgPgSnp    =12,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 

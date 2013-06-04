@@ -41,7 +41,7 @@ printf("<TD style='text-align:center; background-color:#8686D1; color:#FFFFFF; f
 printf("</TR>\n");
 
 /* complex query to ensure date is correctly sorted */
-safef(bigQuery, sizeof(bigQuery),
+sqlSafef(bigQuery, sizeof(bigQuery),
 "select specimenId, labCode, daysCollection, hivQuan, cd4Count from gsidClinicRec where subjId='%s' order by daysCollection",
 subjId);
 

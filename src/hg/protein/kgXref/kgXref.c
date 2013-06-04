@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 
     o1 = mustOpen("j.dat", "w");
 	
-    sprintf(query2,"select name, proteinID from %s.knownGene;", database);
+    sqlSafef(query2, sizeof query2, "select name, proteinID from %s.knownGene;", database);
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
     while (row2 != NULL)

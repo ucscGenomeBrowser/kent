@@ -58,7 +58,7 @@ if (name == NULL)
     struct sqlResult *sr;
     int nameSize = strlen(binomial);
     name = cloneString(binomial);
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     	"select commonName.val from commonName,taxon "
 	"where taxon.binomial = '%s' and taxon.id = commonName.taxon"
 	, binomial);
@@ -137,7 +137,7 @@ int visiGeneMaxImageId(struct sqlConnection *conn)
  * being true. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select max(id) from image");
 return sqlQuickNum(conn, query);
 }
@@ -187,7 +187,7 @@ for (match = matchList; match != NULL; match = next)
     char hashName[16];
     int imageFile;
     next = match->next;
-    safef(query, sizeof(query), "select imageFile from image where id=%d",
+    sqlSafef(query, sizeof(query), "select imageFile from image where id=%d",
     	match->imageId);
     imageFile = sqlQuickNum(conn, query);
     if (imageFile != 0)
@@ -458,7 +458,7 @@ for (match = matchList; match != NULL; match = match->next)
 
     /* Fetch priority. */
     dyStringClear(dy);
-    dyStringPrintf(dy,
+    sqlDyStringPrintf(dy,
     	"select imageFile.priority from imageFile,image "
 	"where image.id = %d and image.imageFile = imageFile.id"
 	, match->imageId);
@@ -466,7 +466,7 @@ for (match = matchList; match != NULL; match = match->next)
 
     /* Fetch age. */
     dyStringClear(dy);
-    dyStringPrintf(dy,
+    sqlDyStringPrintf(dy,
         "select specimen.age from image,specimen "
 	"where image.id = %d and image.specimen = specimen.id"
 	, match->imageId);
@@ -488,7 +488,7 @@ for (match = matchList; match != NULL; match = next)
     char *genotype;
     char query[256];
     next = match->next;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
         "select genotype.alleles from image,specimen,genotype "
 	"where image.id=%d and image.specimen=specimen.id "
 	"and specimen.genotype=genotype.id", match->imageId);

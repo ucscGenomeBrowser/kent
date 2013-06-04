@@ -10,24 +10,27 @@
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 
+char *tagToChange="format";
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwChangeFormat - Change format and force a revalidation for a file.\n"
+  "edwChangeFormat - Change format or other tag and force a revalidation for a file.\n"
   "usage:\n"
-  "   edwChangeFormat newFormat id1 id2 ... idN\n"
+  "   edwChangeFormat newValue id1 id2 ... idN\n"
   "change format of files with given ids to new format. File will keep it's license plate but end\n"
   "up with an error message if there's a problem validating it in the new format.  This is mostly\n"
   "used in practice on things submitted as 'unknown' where we now have validators for the format.\n"
   "Also this has been used to correct glitches in load from ENCODE2.\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -tagToChange=tagName What tag to update with a new value - default is format.\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"tagToChange", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -58,25 +61,25 @@ struct edwFile *ef = edwFileFromId(conn, fileId);
 
 /* Update database to let people know format revalidation is in progress. */
 char query[4*1024];
-safef(query, sizeof(query), "update edwFile set errorMessage = '%s' where id=%lld",
+sqlSafef(query, sizeof(query), "update edwFile set errorMessage = '%s' where id=%lld",
      "Format revalidation in progress.", fileId); 
 sqlUpdate(conn, query);
 
 /* Update tags for file with new format. */
-char *newTags = cgiStringNewValForVar(ef->tags, "format", format);
-safef(query, sizeof(query), "update edwFile set tags='%s' where id=%lld", newTags, fileId);
+char *newTags = cgiStringNewValForVar(ef->tags, tagToChange, format);
+sqlSafef(query, sizeof(query), "update edwFile set tags='%s' where id=%lld", newTags, fileId);
 sqlUpdate(conn, query);
     
 /* Get rid of existing qa tables. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "delete from edwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
     fileId, fileId);
 sqlUpdate(conn, query);
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "delete from edwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld",
     fileId, fileId);
 sqlUpdate(conn, query);
-safef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
+sqlSafef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
 sqlUpdate(conn, query);
 
 /* schedule validator */
@@ -114,6 +117,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+tagToChange = optionVal("tagToChange", tagToChange);
 if (argc < 3)
     usage();
 edwChangeFormat(argv[1], argc-2, argv+2);

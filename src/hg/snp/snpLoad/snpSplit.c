@@ -59,7 +59,7 @@ char **row;
 
 ret = newHash(0);
 
-sr = sqlGetResult(conn, "select * from chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = chromInfoLoad(row);
@@ -193,7 +193,7 @@ for (el = list; el != NULL; el = el->next)
     strcpy(snpName, el->name);
     stripString(snpName, "rs");
 
-    safef(query, sizeof(query), "select count(*) from ContigLocusId where snp_id = %s and ctg_id = %s", snpName, el->contigName);
+    sqlSafef(query, sizeof(query), "select count(*) from ContigLocusId where snp_id = %s and ctg_id = %s", snpName, el->contigName);
     funcCount = sqlQuickNum(conn, query);
     if (funcCount == 0)
         {
@@ -201,7 +201,7 @@ for (el = list; el != NULL; el = el->next)
         continue;
         }
 
-    safef(query, sizeof(query), "select fxn_class from ContigLocusId where snp_id = %s and ctg_id = %s", snpName, el->contigName);
+    sqlSafef(query, sizeof(query), "select fxn_class from ContigLocusId where snp_id = %s and ctg_id = %s", snpName, el->contigName);
     sr = sqlGetResult(conn, query);
 
     while ((row = sqlNextRow(sr)) != NULL)
@@ -244,7 +244,7 @@ for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
     {
     contigCount++;
     verbose(1, "contig count = %d\n", contigCount);
-    safef(query, sizeof(query), "select snp_id, ctg_id, loc_type, lc_ngbr, rc_ngbr, phys_pos_from, "
+    sqlSafef(query, sizeof(query), "select snp_id, ctg_id, loc_type, lc_ngbr, rc_ngbr, phys_pos_from, "
       "phys_pos, orientation, allele from ContigLoc where snp_type = 'rs' and ctg_id = '%s'", contigPtr->name);
     verbose(3, "ctg_id = %d\n", contigPtr->name);
 
@@ -304,7 +304,7 @@ struct slName *el = NULL;
 int count = 0;
 
 verbose(1, "getting contigs...\n");
-safef(query, sizeof(query), "select ctg_id from ContigInfo where contig_chr = '%s' and group_term = '%s'", chromName, contigGroup);
+sqlSafef(query, sizeof(query), "select ctg_id from ContigInfo where contig_chr = '%s' and group_term = '%s'", chromName, contigGroup);
 verbose(5, "query = %s\n", query);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

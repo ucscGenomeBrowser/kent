@@ -176,7 +176,7 @@ int chromSize;
 int querySize=0,midPos=0;
 int chromStart,chromEnd,nibStart=0;
 nibFileName[0] = '\0';
-safef(query, sizeof(query), "select fileName from chromInfo where chrom='%s'",
+sqlSafef(query, sizeof(query), "select fileName from chromInfo where chrom='%s'",
       ccr->from->chrom);
 sqlQuickQuery(conn, query, nibFileName, sizeof(nibFileName));
 if(strlen(nibFileName) == 0)
@@ -490,7 +490,7 @@ struct sqlResult *sr = NULL;
 char **row;
 struct dbDb *dbList = NULL, *db = NULL;
 char query[256];
-snprintf(query, sizeof(query), "select * from dbDb where name='%s'", database);
+sqlSafef(query, sizeof(query), "select * from dbDb where name='%s'", database);
 
 /* Scan through dbDb table, loading into list */
 sr = sqlGetResult(conn, query);

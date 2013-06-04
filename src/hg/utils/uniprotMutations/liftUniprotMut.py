@@ -46,9 +46,11 @@ def run(cmd):
 
 threeToOne = \
     {'Cys': 'C', 'Asp': 'D', 'Ser': 'S', 'Gln': 'Q', 'Lys': 'K',
-     'Ile': 'I', 'Pro': 'P', 'Thr': 'T', 'Phe': 'F', 'Asn': 'N', 
-     'Gly': 'G', 'His': 'H', 'Leu': 'L', 'Arg': 'R', 'Trp': 'W', 
-     'Ala': 'A', 'Val':'V',  'Glu': 'E', 'Tyr': 'Y', 'Met': 'M'}
+     'Ile': 'I', 'Pro': 'P', 'Thr': 'T', 'Phe': 'F', 'Asn': 'N',
+     'Gly': 'G', 'His': 'H', 'Leu': 'L', 'Arg': 'R', 'Trp': 'W',
+     'Ala': 'A', 'Val':'V',  'Glu': 'E', 'Tyr': 'Y', 'Met': 'M',
+     'Sec': 'U' # very very rare amino acid (=stop codon)
+     }
 
 oneToThree = dict([[v,k] for k,v in threeToOne.items()])
 
@@ -62,7 +64,7 @@ def aaToLong(seq):
         res.append(longAa)
     return "-".join(res)
 
-featTypeColors = { 
+featTypeColors = {
 "modified residue" : "200,200,0",
 "transmembrane region" : "0,0,100",
 "glycosylation site" : "0,100,100",

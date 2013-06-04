@@ -57,12 +57,12 @@ if (filter != NULL)
 if (optionExists("est"))
     type = "EST";
 conn = hAllocConn(database);
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select id from organism where name = '%s %s'", genus, species);
 taxon = sqlQuickNum(conn, query);
 if (taxon <= 0)
     errAbort("Can't find taxon for %s %s", genus, species);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select acc from gbCdnaInfo where organism=%d and type='%s'",
     taxon, type);
 sr = sqlGetResult(conn, query);

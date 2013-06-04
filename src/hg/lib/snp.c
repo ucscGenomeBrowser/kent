@@ -121,56 +121,15 @@ void snpSaveToDb(struct sqlConnection *conn, struct snp *el, char *tableName, in
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use snpSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%g,%g,'%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%g,%g,'%s','%s','%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->observed,  el->molType,  el->class,  el->valid,  el->avHet,  el->avHetSE,  el->func,  el->locType,  el->source,  el->exception);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void snpSaveToDbEscaped(struct sqlConnection *conn, struct snp *el, char *tableName, int updateSize)
-/* Save snp as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than snpSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *observed, *molType, *class, *valid, *func, *locType, *source, *exception;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-observed = sqlEscapeString(el->observed);
-molType = sqlEscapeString(el->molType);
-class = sqlEscapeString(el->class);
-valid = sqlEscapeString(el->valid);
-func = sqlEscapeString(el->func);
-locType = sqlEscapeString(el->locType);
-source = sqlEscapeString(el->source);
-exception = sqlEscapeString(el->exception);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%g,%g,'%s','%s','%s','%s')", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  observed,  molType,  class,  valid, el->avHet , el->avHetSE ,  func,  locType,  source,  exception);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&observed);
-freez(&molType);
-freez(&class);
-freez(&valid);
-freez(&func);
-freez(&locType);
-freez(&source);
-freez(&exception);
-}
 
 struct snp *snpCommaIn(char **pS, struct snp *ret)
 /* Create a snp out of a comma separated string. 

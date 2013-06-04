@@ -693,6 +693,8 @@ else if (startsWith("psl", type))
     cType = cfgPsl;
 else if (sameWord("vcfTabix",type))
     cType = cfgVcf;
+else if (sameWord("pgSnp",type))
+    cType = cfgPgSnp;
 // TODO: Only these are configurable so far
 
 if (cType == cfgNone && warnIfNecessary)
@@ -722,7 +724,8 @@ if (ctPopup > cfgNone)
     ||  regexMatch(tdb->track, "^cons[0-9]+way") // (matches logic in json setup in imageV2.c)
     ||  startsWith("hapmapSnps", tdb->track)
     ||  startsWith("hapmapAlleles", tdb->track)
-    ||  trackDbSettingBlocksConfiguration(tdb,TRUE))
+    ||  trackDbSettingBlocksConfiguration(tdb,TRUE)
+    ||  ctPopup == cfgPgSnp)
         ctPopup *= -1;
     }
 return ctPopup;
@@ -1275,7 +1278,7 @@ if (fileName != NULL)
     return cloneString(fileName);
 
 char query[256];
-safef(query, sizeof(query), "select fileName from %s", tdb->table);
+sqlSafef(query, sizeof(query), "select fileName from %s", tdb->table);
 return sqlQuickString(conn, query);
 }
 

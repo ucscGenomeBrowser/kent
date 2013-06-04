@@ -34,7 +34,7 @@ int count = 0;
 
 ret = newHash(0);
 verbose(1, "getting contigs...\n");
-safef(query, sizeof(query), "select contig_acc, group_term from ContigInfo");
+sqlSafef(query, sizeof(query), "select contig_acc, group_term from ContigInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -62,7 +62,7 @@ FILE *f;
 
 f = hgCreateTabFile(".", "ContigLocusIdFilter");
 
-safef(query, sizeof(query), "select snp_id, contig_acc, fxn_class, mrna_acc, protein_acc from ContigLocusId");
+sqlSafef(query, sizeof(query), "select snp_id, contig_acc, fxn_class, mrna_acc, protein_acc from ContigLocusId");
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -84,7 +84,7 @@ void createTable()
 {
 struct sqlConnection *conn = hAllocConn();
 char *createString =
-"CREATE TABLE ContigLocusIdFilter (\n"
+"NOSQLINJ CREATE TABLE ContigLocusIdFilter (\n"
 "    snp_id int(11) not null,\n"
 "    contig_acc varchar(32) not null,\n"
 "    fxn_class tinyint(4) not null,\n"

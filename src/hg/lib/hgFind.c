@@ -374,8 +374,8 @@ struct lineFile *lf = NULL;
 char *id, *rest, *line;
 char *keyWords[HGFIND_MAX_KEYWORDS];
 char **cmds[HGFIND_MAX_KEYWORDS+1];
-/* No need to escape special chars here, it's already been done: */
-char *escapedKey = cloneString(key);
+/* escape special chars here */
+char *escapedKey = sqlEscapeString(key); /* presumably this is the right way escape it? -Galt*/ 
 int keyCount;
 
 touppers(escapedKey);
@@ -427,7 +427,7 @@ char *result = NULL;
 conn = hAllocConn(db);
 if (sqlTableExists(conn, "refLink"))
     {
-    safef(query, sizeof(query), "SELECT mrnaAcc FROM refLink WHERE name='%s'",
+    sqlSafef(query, sizeof(query), "SELECT mrnaAcc FROM refLink WHERE name='%s'",
           geneName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -457,7 +457,7 @@ char * result;
 conn = hAllocConn(db);
 query = newDyString(256);
 
-dyStringPrintf(query, "SELECT mrnaID FROM spMrna WHERE spID='%s'", proteinID);
+sqlDyStringPrintf(query, "SELECT mrnaID FROM spMrna WHERE spID='%s'", proteinID);
 sr = sqlGetResult(conn, query->string);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -494,7 +494,7 @@ if (!hTableExists(db, tableName))
 rowOffset = hOffsetPastBin(db, NULL, tableName);
 conn = hAllocConn(db);
 query = newDyString(256);
-dyStringPrintf(query, 
+sqlDyStringPrintf(query, 
 	       "SELECT chrom, txStart, txEnd, name FROM %s WHERE name='%s'", 
 		tableName, localName);
 sr = sqlGetResult(conn, query->string);
@@ -504,8 +504,6 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	ok = TRUE;
 	AllocVar(table);
-	dyStringClear(query);
-	dyStringPrintf(query, "%s Gene Predictions", tableName);
 	if (hTableExists(db, "kgProtMap2"))
 	    table->description = cloneString("UCSC Genes");
 	else
@@ -607,13 +605,11 @@ for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
 
 /* Stream through knownGenes table and make up a pos
  * for each mapping of each gene matching search. */
-dyStringAppend(dy, 
+sqlDyStringAppend(dy, 
 	"select name,chrom,txStart,txEnd from knownGene where name in (");
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     {
-    dyStringAppendC(dy, '"');
-    dyStringAppend(dy, tsr->itemId);
-    dyStringAppendC(dy, '"');
+    sqlDyStringPrintf(dy, "'%s'", tsr->itemId);
     if (tsr->next != NULL)
         dyStringAppendC(dy, ',');
     }
@@ -634,13 +630,11 @@ sqlFreeResult(&sr);
 
 /* Stream through kgXref table adding description and geneSymbol */
 dyStringClear(dy);
-dyStringAppend(dy, 
+sqlDyStringAppend(dy, 
 	"select kgID,geneSymbol,description from kgXref where kgID in (");
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     {
-    dyStringAppendC(dy, '"');
-    dyStringAppend(dy, tsr->itemId);
-    dyStringAppendC(dy, '"');
+    sqlDyStringPrintf(dy, "'%s'", tsr->itemId);
     if (tsr->next != NULL)
         dyStringAppendC(dy, ',');
     }
@@ -727,7 +721,7 @@ if (!hTableExists(db, tableName))
 rowOffset = hOffsetPastBin(db, NULL, tableName);
 conn = hAllocConn(db);
 query = newDyString(256);
-dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name, description FROM %s, kgXref "
+sqlDyStringPrintf(query, "SELECT chrom, txStart, txEnd, name, description FROM %s, kgXref "
 	       "WHERE description LIKE '%%%s%%' and kgId=name",
 	       tableName, localName);
 sr = sqlGetResult(conn, query->string);
@@ -774,7 +768,7 @@ if (!hTableExists(db, tableName))
 rowOffset = hOffsetPastBin(db, NULL, tableName);
 conn = hAllocConn(db);
 query = newDyString(256);
-dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s "
+sqlDyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s "
 	       "WHERE name LIKE '%s%%'",
 	       tableName, localName);
 sr = sqlGetResult(conn, query->string);
@@ -919,7 +913,7 @@ struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
 char **row;
 
-sr = sqlGetResult(conn, "select * from cytoBand");
+sr = sqlGetResult(conn, "NOSQLINJ select * from cytoBand");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = cytoBandLoad(row);
@@ -1102,7 +1096,7 @@ boolean foundIt = FALSE;
 /* In case this is a scaffold-based assembly, check for unsplit table first: */
 if (sqlTableExists(conn, "gold"))
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select chrom,chromStart,chromEnd from gold where frag = '%s'",
 	  name);
     sr = sqlMustGetResult(conn, query);
@@ -1127,7 +1121,7 @@ else
 	safef(tableName, sizeof(tableName), "%s_gold", chromPtr->name);
 	if (! sqlTableExists(conn, tableName))
 	    continue;
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 	      "select chromStart,chromEnd from %s where frag = '%s'",
 	      tableName, name);
 	sr = sqlMustGetResult(conn, query);
@@ -1176,7 +1170,7 @@ struct sqlResult *sr;
 char **row;
 int ret;
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select type from gbCdnaInfo where acc = '%s'", acc);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -1277,7 +1271,7 @@ if (sqlTableExists(conn, table))
     {
     int rowOffset = hOffsetPastBin(db, NULL, table);
     char query[256];
-    safef(query, sizeof(query), "select * from %s where qName = '%s'", table, acc);
+    sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", table, acc);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     while ((row = sqlNextRow(sr)) != NULL)
@@ -1438,6 +1432,7 @@ return NULL;
 static struct slName *genbankGrepQuery(char *indexFile, char *table, char *key)
 /* grep -i key indexFile, return a list of ids (first word of each line). */
 {
+//verbose(1,"genbankGrepQuery table=[%s] key=[%s]\n", table, key); // DEBUG REMOVE
 char *extraOptions = "";
 if (sameString(table, "author"))
     extraOptions = "-w";
@@ -1449,14 +1444,15 @@ static struct slName *genbankSqlFuzzyQuery(struct sqlConnection *conn,
 /* Perform a fuzzy sql search for %key% in table.name; return list of 
  * corresponding table.id's.  */
 {
+//verbose(1,"genbankSqlFuzzyQuery table=[%s] key=[%s]\n", table, key); // DEBUG REMOVE
 struct slName *idList = NULL, *idEl = NULL;
 if (!isTooCommon(table, key))
     {
     struct sqlResult *sr;
     char **row;
     char query[256];
-    safef(query, sizeof(query),
-	  "select id,name from %s where name like '%%%s%%'", table, key);
+    sqlSafef(query, sizeof(query),
+	  "select id,name from %s where name like '%%%s%%'", table, key);  
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1488,6 +1484,7 @@ static void findHitsToTables(char *db, struct hgFindSpec *hfs,
 			     struct hash **retHash, struct slName **retList)
 /* Return all unique accessions that match any table. */
 {
+//verbose(1,"findHitsToTables db=[%s] key=[%s]\n", db, key); // DEBUG REMOVE
 struct slName *list = NULL, *el;
 struct hash *hash = newHash(0);
 struct sqlConnection *conn = hAllocConn(db);
@@ -1515,7 +1512,8 @@ for (i = 0; i<tableCount; ++i)
     for (idEl = idList; idEl != NULL; idEl = idEl->next)
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
-	safef(query, sizeof(query),
+	//verbose(1,"findHitsToTables field=[%s] idEl->name=[%s]\n", field, idEl->name); // DEBUG REMOVE
+	sqlSafef(query, sizeof(query),
 	      "select acc, organism from gbCdnaInfo where %s = %s "
 	      " and type = 'mRNA'",
 	      field, idEl->name);
@@ -1576,7 +1574,7 @@ static boolean mrnaAligns(struct sqlConnection *conn, char *table, char *acc)
  * this assumes that we've already checked that the table exists) */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select count(*) from %s where qName = '%s'", table, acc);
 return (sqlQuickNum(conn, query) > 0);
 }
@@ -1619,7 +1617,7 @@ for (el = *pAccList; el != NULL; el = el->next)
     /* check if item matches xeno criterion */
     if (hTableExists(db, "gbStatus"))
 	{
-	safef(query, sizeof(query),
+	sqlSafef(query, sizeof(query),
           "select (orgCat = 'native' && srcDb != 'RefSeq') from gbStatus where acc = '%s'", acc); /* redmine #3301 */
 	if (isXeno == sqlQuickNum(conn, query))
 	    continue;
@@ -1661,14 +1659,14 @@ for (el = *pAccList; el != NULL; el = el->next)
 
     /* print description for item, or lacking that, the product name */
     safef(description, sizeof(description), "%s", "n/a"); 
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
         "select description.name from gbCdnaInfo,description"
         " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.description = description.id", acc);
     sqlQuickQuery(conn, query, description, sizeof(description));
     if (sameString(description, "n/a"))
         {
         /* look for product name */
-        safef(query, sizeof(query), 
+        sqlSafef(query, sizeof(query), 
             "select productName.name from gbCdnaInfo,productName"
             " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.productName = productName.id",
                  acc);
@@ -1676,7 +1674,7 @@ for (el = *pAccList; el != NULL; el = el->next)
         if (!sameString(product, "n/a"))
             {
             /* get organism name */
-            safef(query, sizeof(query), 
+            sqlSafef(query, sizeof(query), 
                 "select organism.name from gbCdnaInfo,organism"
                 " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
             *organism = 0;
@@ -1867,7 +1865,7 @@ if (kaList != NULL)
 
         hashAdd(hash, kl->kgID, kl);
 	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from knownGene where name = '%s'",
+	sqlDyStringPrintf(ds, "select * from knownGene where name = '%s'",
 		       kl->kgID);
 	sr = sqlGetResult(conn, ds->string);
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -1955,7 +1953,7 @@ if (kpaList != NULL)
 
         hashAdd(hash, kl->kgID, kl);
 	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from knownGene where name = '%s'",
+	sqlDyStringPrintf(ds, "select * from knownGene where name = '%s'",
 		       kl->kgID);
 	sr = sqlGetResult(conn, ds->string);
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -2022,7 +2020,7 @@ char query[256];
 
 for (accEl = accList;  accEl != NULL;  accEl = accEl->next)
     {
-    safef(query, sizeof(query), "select * from refLink where mrnaAcc = '%s'",
+    sqlSafef(query, sizeof(query), "select * from refLink where mrnaAcc = '%s'",
 	  accEl->name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -2038,6 +2036,7 @@ static boolean findRefGenes(char *db, struct hgFindSpec *hfs, char *spec,
 			    struct hgPositions *hgp)
 /* Look up refSeq genes in table. */
 {
+//verbose(1,"findRefGenes db=[%s] spec=[%s]\n", db, spec); // DEBUG REMOVE
 struct sqlConnection *conn = hAllocConn(db);
 struct dyString *ds = newDyString(256);
 struct refLink *rlList = NULL, *rl;
@@ -2045,32 +2044,32 @@ boolean gotRefLink = hTableExists(db, "refLink");
 boolean found = FALSE;
 char *specNoVersion = cloneString(spec);
 (void) chopPrefix(specNoVersion);
-
+//verbose(1,"findRefGenes specNoVersion=[%s]\n", specNoVersion); // DEBUG REMOVE
 if (gotRefLink)
     {
     if (startsWith("NM_", specNoVersion) || startsWith("NR_", specNoVersion) || startsWith("XM_", specNoVersion))
 	{
-	dyStringPrintf(ds, "select * from refLink where mrnaAcc = '%s'", specNoVersion);
+	sqlDyStringPrintf(ds, "select * from refLink where mrnaAcc = '%s'", specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	}
     else if (startsWith("NP_", specNoVersion) || startsWith("XP_", specNoVersion))
         {
-	dyStringPrintf(ds, "select * from refLink where protAcc = '%s'", specNoVersion);
+	sqlDyStringPrintf(ds, "select * from refLink where protAcc = '%s'", specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	}
     else if (isUnsignedInt(specNoVersion))
         {
-	dyStringPrintf(ds, "select * from refLink where locusLinkId = %s",
+	sqlDyStringPrintf(ds, "select * from refLink where locusLinkId = %s",
 		       specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from refLink where omimId = %s", specNoVersion);
+	sqlDyStringPrintf(ds, "select * from refLink where omimId = %s", specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	}
     else 
 	{
 	char *indexFile = getGenbankGrepIndex(db, hfs, "refLink", "mrnaAccProduct");
-	dyStringPrintf(ds, "select * from refLink where name like '%s%%'",
+	sqlDyStringPrintf(ds, "select * from refLink where name like '%s%%'",
 		       specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	if (indexFile != NULL)
@@ -2082,7 +2081,7 @@ if (gotRefLink)
 	else
 	    {
 	    dyStringClear(ds);
-	    dyStringPrintf(ds, "select * from refLink where product like '%%%s%%'",
+	    sqlDyStringPrintf(ds, "select * from refLink where product like '%%%s%%'",
 			   specNoVersion);
 	    addRefLinks(conn, ds, &rlList);
 	    }
@@ -2106,7 +2105,7 @@ if (rlList != NULL)
             }
 
         hashAdd(hash, rl->mrnaAcc, rl);
-        safef(where, sizeof where, "name = '%s'", rl->mrnaAcc);
+        sqlSafefFrag(where, sizeof where, "name = '%s'", rl->mrnaAcc);
         gpr = genePredReaderQuery(conn, hfs->searchTable, where);
 	while ((gp = genePredReaderNext(gpr)) != NULL)
 	    {
@@ -2178,13 +2177,13 @@ boolean gotTIGRkeys = sqlTableExists(conn, "tigrCmrORFsInfo");
 
 if (gotTIGRkeys)
     {
-    dyStringPrintf(ds, "select * from tigrCmrORFsInfo where tigrCommon like '%%%s%%'", spec);
+    sqlDyStringPrintf(ds, "select * from tigrCmrORFsInfo where tigrCommon like '%%%s%%'", spec);
     addTigrCmrGenes(conn, ds, &tigrList);
     dyStringClear(ds);
-    dyStringPrintf(ds, "select * from tigrCmrORFsInfo where tigrMainRole like '%%%s%%'", spec);
+    sqlDyStringPrintf(ds, "select * from tigrCmrORFsInfo where tigrMainRole like '%%%s%%'", spec);
     addTigrCmrGenes(conn, ds, &tigrList);
     dyStringClear(ds);
-    dyStringPrintf(ds, "select * from tigrCmrORFsInfo where tigrSubRole like '%%%s%%'", spec);
+    sqlDyStringPrintf(ds, "select * from tigrCmrORFsInfo where tigrSubRole like '%%%s%%'", spec);
     addTigrCmrGenes(conn, ds, &tigrList);
     dyStringClear(ds);
     }
@@ -2205,7 +2204,7 @@ if (tigrList != NULL)
             }
         hashAdd(hash, tigr->name, tigr);
 	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from tigrCmrORFs where name = '%s'", tigr->name);
+	sqlDyStringPrintf(ds, "select * from tigrCmrORFs where name = '%s'", tigr->name);
 	sr = sqlGetResult(conn, ds->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -2252,7 +2251,7 @@ if (!hTableExists(db, tableName))
 rowOffset = hOffsetPastBin(db, NULL, tableName);
 conn = hAllocConn(db);
 query = newDyString(256);
-dyStringPrintf(query,
+sqlDyStringPrintf(query,
 	      "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'",
 	      tableName, pattern);
 sr = sqlGetResult(conn, query->string);
@@ -2330,20 +2329,20 @@ if (hTableExists(db, "sgdGene"))
     {
     struct hash *uniqHash = newHash(0);
     boolean gotNames = FALSE, gotDescriptions = FALSE;
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
         "select name from sgdGene where name = '%s'", pattern);
     addUniqYeastGene(db, uniqHash, conn, query, hgp, "sgdGene", &table);
     if (hTableExists(db, "sgdToName"))
 	{
 	gotNames = TRUE;
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 	    "select name from sgdToName where value like '%s%%'", pattern);
 	addUniqYeastGene(db, uniqHash, conn, query, hgp, "sgdGene", &table);
 	}
     if (hTableExists(db, "sgdDescription"))
         {
 	gotDescriptions = TRUE;
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 	    "select name from sgdDescription where description like '%%%s%%'", 
 	    pattern);
 	addUniqYeastGene(db, uniqHash, conn, query, hgp, "sgdGene", &table);
@@ -2359,7 +2358,7 @@ if (hTableExists(db, "sgdGene"))
 	    struct dyString *dy = newDyString(1024);
 	    if (gotNames)
 		{
-		safef(query, sizeof(query),
+		sqlSafef(query, sizeof(query),
 		   "select value from sgdToName where name = '%s'", pos->name);
 	        sr = sqlGetResult(conn, query);
 		while ((row = sqlNextRow(sr)) != NULL)
@@ -2368,7 +2367,7 @@ if (hTableExists(db, "sgdGene"))
 		}
 	    if (gotDescriptions)
 		{
-		safef(query, sizeof(query),
+		sqlSafef(query, sizeof(query),
 		   "select description from sgdDescription where name = '%s'", 
 		   pos->name);
 	        sr = sqlGetResult(conn, query);
@@ -2594,10 +2593,12 @@ static boolean searchSpecial(char *db, struct hgFindSpec *hfs, char *term,
 /* Handle searchTypes for which we have special code.  Return true if 
  * we have special code.  Set retFind according to whether we find term. */
 {
+//verbose(1,"searchSpecial db=[%s] term=[%s]\n", db, term); // DEBUG REMOVE
 boolean isSpecial = TRUE;
 boolean found = FALSE;
 char *upcTerm = cloneString(term);
 touppers(upcTerm);
+//verbose(1,"searchSpecial hfs->searchType=[%s]\n", hfs->searchType); // DEBUG REMOVE
 if (sameString(hfs->searchType, "knownGene"))
     {
     if (gotFullText(db))
@@ -2659,6 +2660,7 @@ else
     }
 *retFound = found;
 freeMem(upcTerm);
+//verbose(1,"searchSpecial done isSpecial=%d\n", isSpecial); // DEBUG REMOVE
 return(isSpecial);
 }
 
@@ -2666,15 +2668,29 @@ return(isSpecial);
 static struct slPair *getXrefTerms(char *db, struct hgFindSpec *hfs, char *term)
 /* Search xrefTable for xrefQuery with term.  Return all matching names. */
 {
+//verbose(1,"getXrefTerms db=[%s] term=[%s]\n", db, term); // DEBUG REMOVE
 struct slPair *xrefList = NULL, *xrefPtr = NULL;
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
 char **row;
-char buf[512];
 boolean isFuzzy = sameWord(hfs->searchMethod, "fuzzy");
 
-safef(buf, sizeof(buf), hfs->xrefQuery, hfs->xrefTable, term);
-sr = sqlGetResult(conn, buf);
+// TODO wonder if we could re-work this better to get to upstream sql creation and 
+//  then be able to avoid this complexity:?
+// hfs->refTable sometimes contains a comma-separated table list
+// but we do not have control over the original sql since it is in trackDb.ra 
+
+// example from human/hg19/trackDb.ra
+// xrefTable kgXref, ucscRetroInfo5
+// xrefQuery select ucscRetroInfo5.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID
+
+struct dyString *dy = dyStringNew(256);
+dyStringAppend(dy, "NOSQLINJ ");
+// in particular, if we could get to the upstream and change the first %s to %-s for the param corresponding to xrefTable, 
+// that would be nice.
+dyStringPrintf(dy, hfs->xrefQuery, sqlCkIl(hfs->xrefTable), sqlEscapeString(term)); // keep this sqlEscape
+sr = sqlGetResult(conn, dy->string);
+dyStringFree(&dy);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (!isFuzzy || keyIsPrefixIgnoreCase(term, row[1]))
@@ -2723,6 +2739,7 @@ static boolean doQuery(char *db, struct hgFindSpec *hfs, char *xrefTerm, char *t
 /* Perform a query as specified in hfs, assuming table existence has been 
  * checked and xref'ing has been taken care of. */
 {
+//verbose(1,"doQuery term=[%s]\n", term); // DEBUG REMOVE
 struct slName *tableList = hSplitTableNames(db, hfs->searchTable);
 struct slName *tPtr = NULL;
 struct hgPosTable *table = NULL;
@@ -2755,8 +2772,10 @@ if (hgp->tableList != NULL &&
 
 for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
     {
-    safef(buf, sizeof(buf), hfs->query, tPtr->name, term);
-    sr = sqlGetResult(conn, buf);
+    // we do not have control over the original sql since it comes from trackDb.ra or elsewhere?
+    char query[2048];
+    sqlSafef(query, sizeof(query), hfs->query, tPtr->name, term);
+    sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	if(table == NULL)
@@ -2817,6 +2836,7 @@ boolean hgFindUsingSpec(char *db, struct hgFindSpec *hfs, char *term,
 /* Perform the search described by hfs on term.  If successful, put results
  * in hgp and return TRUE.  (If not, don't modify hgp.) */
 {
+//verbose(1,"hgFindUsingSpec db=[%s] term=[%s]\n", db, term); // DEBUG REMOVE
 struct slPair *xrefList = NULL, *xrefPtr = NULL; 
 boolean found = FALSE;
 
@@ -2838,13 +2858,19 @@ if (isNotEmpty(hfs->searchType) && searchSpecial(db, hfs, term, hgp, relativeFla
 						 relStart, relEnd, &found))
     return(found);
 
+//verbose(1,"hgFindUsingSpec hfs->xrefTable=[%s]\n", hfs->xrefTable); // DEBUG REMOVE
 if (isNotEmpty(hfs->xrefTable))
     {
     struct sqlConnection *conn = hAllocConn(db);
-    boolean exists = sqlTableExists(conn, hfs->xrefTable);
+    // NOTE hfs->xrefTable can sometimes contain a comma-separated table list, 
+    // rather than just a single table. 
+    char *tables = replaceChars(hfs->xrefTable, ",", " ");
+    boolean exists = sqlTablesExist(conn, tables);
     hFreeConn(&conn);
+    freeMem(tables);
     if (! exists)
 	return(FALSE);
+    
     xrefList = getXrefTerms(db, hfs, term);
     }
 else
@@ -2948,7 +2974,7 @@ if (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "knownCanonical") 
     sqlTableExists(conn, "kgXref"))
     {
     char query[512];
-    safef(query, sizeof(query), "select chrom,chromStart,chromEnd,kgID from knownCanonical,kgXref "
+    sqlSafef(query, sizeof(query), "select chrom,chromStart,chromEnd,kgID from knownCanonical,kgXref "
 	  "where kgXref.geneSymbol = '%s' and kgXref.kgId = knownCanonical.transcript;", term);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
@@ -3081,9 +3107,10 @@ if ((canonicalSpec =
 	}
     relativeFlag = TRUE;
     }
-term = sqlEscapeString(term);
+//term = sqlEscapeString(term);  // term is pre-escaped !  // DEBUG REMOVE
+term = cloneString(term); // DEBUG KEEP?
 
-if (hgOfficialChromName(db, term) != NULL)
+if (hgOfficialChromName(db, term) != NULL) // this mangles the term
     {
     char *chrom;
     int start, end;
@@ -3113,7 +3140,8 @@ else
     if (singleBaseSpec)
 	{
 	singleBaseSpec = relativeFlag = FALSE;
-	term = sqlEscapeString(originalTerm);
+	//term = sqlEscapeString(originalTerm);  // DEBUG REMOVE
+	term = cloneString(originalTerm);  // DEBUG KEEP
 	relStart = relEnd = 0;
 	}
 

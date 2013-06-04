@@ -46,7 +46,7 @@ if (slCount(kgXrefFields) != KGXREF_NUM_COLS)
     }
 slFreeList(kgXrefFields);
 
-struct sqlResult *sr = sqlGetResult(conn, "select * from kgXref");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select * from kgXref");
 struct kgXref *kgList = NULL, *kg;
 char **row;
 struct hash *uniqHash = hashNew(18);
@@ -71,7 +71,7 @@ struct hash *getRefSeqSummary(struct sqlConnection *conn)
 {
 struct hash *hash = hashNew(16);
 char query[256];
-safef(query, sizeof(query), "select mrnaAcc,summary from %s", summaryTable);
+sqlSafef(query, sizeof(query), "select mrnaAcc,summary from %s", summaryTable);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -110,7 +110,7 @@ char query[256], **row;
 struct sqlResult *sr;
 
 fprintf(f, "\t");
-safef(query, sizeof(query), "select %s from %s where %s='%s'", 
+sqlSafef(query, sizeof(query), "select %s from %s where %s='%s'", 
     valField, table, idField, id);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -158,13 +158,13 @@ if (refSeqHash != NULL)
     fprintf(f, "\t%s", s);
     }
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select commentVal.val from comment,commentVal "
     "where comment.acc='%s' and comment.commentVal=commentVal.id"
     , spAcc);
 addText(query, spConn, f);
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select term.name from goaPart,term "
     "where goaPart.dbObjectId='%s' "
     "and goaPart.goId=term.acc"

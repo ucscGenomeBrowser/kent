@@ -65,7 +65,7 @@ struct slInt *imageList = NULL, *imageProbeList = NULL;
 int imageFileCount, contributorCount;
 
 /* As a sanity check get the name of submission set and print it */
-dyStringPrintf(query, "select name from submissionSet where id=%d",
+sqlDyStringPrintf(query, "select name from submissionSet where id=%d",
 	submitId);
 submitName = sqlQuickString(conn, query->string);
 if (submitName == NULL)
@@ -74,21 +74,21 @@ verbose(1, "Removing submissionSet named %s\n", submitName);
 
 /* Figure out how many submissionContributors we'll delete. */
 dyStringClear(query);
-dyStringPrintf(query, 
+sqlDyStringPrintf(query, 
 	"select count(*) from submissionContributor where submissionSet=%d",
 	submitId);
 contributorCount = sqlQuickNum(conn, query->string);
 
 /* Actually delete submissionContributors. */
 dyStringClear(query);
-dyStringPrintf(query, 
+sqlDyStringPrintf(query, 
     "delete from submissionContributor where submissionSet=%d", submitId);
 maybeUpdate(conn, query->string);
 verbose(1, "Deleted %d submissionContributors\n", contributorCount);
 
 /* Get list of images we'll delete. */
 dyStringClear(query);
-dyStringPrintf(query, 
+sqlDyStringPrintf(query, 
     "select id from image where submissionSet=%d", submitId);
 imageList = sqlQuickNumList(conn, query->string);
 
@@ -96,7 +96,7 @@ imageList = sqlQuickNumList(conn, query->string);
 if (imageList != NULL)
     {
     dyStringClear(query);
-    dyStringAppend(query, 
+    sqlDyStringAppend(query, 
 	"select id from imageProbe where image ");
     intInClause(query, imageList);
     imageProbeList = sqlQuickNumList(conn, query->string);
@@ -106,14 +106,14 @@ if (imageList != NULL)
 /* Delete expressionLevel's tied to imageProbes. */
 if (imageProbeList != NULL)
     {
-    int oldExpLevel = sqlQuickNum(conn, "select count(*) from expressionLevel");
+    int oldExpLevel = sqlQuickNum(conn, "NOSQLINJ select count(*) from expressionLevel");
     int newExpLevel;
     dyStringClear(query);
-    dyStringAppend(query, 
+    sqlDyStringAppend(query, 
 	"delete from expressionLevel where imageProbe ");
     intInClause(query, imageProbeList);
     maybeUpdate(conn, query->string);
-    newExpLevel = sqlQuickNum(conn, "select count(*) from expressionLevel");
+    newExpLevel = sqlQuickNum(conn, "NOSQLINJ select count(*) from expressionLevel");
     verbose(1, "Deleted %d expressionLevels\n", oldExpLevel - newExpLevel);
     }
 
@@ -121,7 +121,7 @@ if (imageProbeList != NULL)
 if (imageProbeList != NULL)
     {
     dyStringClear(query);
-    dyStringAppend(query, 
+    sqlDyStringAppend(query, 
 	"delete from imageProbe where image ");
     intInClause(query, imageList);
     maybeUpdate(conn, query->string);
@@ -130,24 +130,24 @@ verbose(1, "Deleted %d image probes.\n", slCount(imageProbeList));
 
 /* Delete images. */
 dyStringClear(query);
-dyStringPrintf(query, "delete from image where submissionSet=%d", submitId);
+sqlDyStringPrintf(query, "delete from image where submissionSet=%d", submitId);
 maybeUpdate(conn, query->string);
 verbose(1, "Deleted %d images.\n", slCount(imageList));
 
 /* Delete imageFiles. */
 dyStringClear(query);
-dyStringPrintf(query, "select count(*) from imageFile where submissionSet=%d", 
+sqlDyStringPrintf(query, "select count(*) from imageFile where submissionSet=%d", 
 	submitId);
 imageFileCount = sqlQuickNum(conn, query->string);
 dyStringClear(query);
-dyStringPrintf(query, "delete from imageFile where submissionSet=%d", 
+sqlDyStringPrintf(query, "delete from imageFile where submissionSet=%d", 
 	submitId);
 maybeUpdate(conn, query->string);
 verbose(1, "Deleted %d imageFile records.\n", imageFileCount);
 
 /* Delete submissionSet record. */
 dyStringClear(query);
-dyStringPrintf(query, "delete from submissionSet where id=%d", submitId);
+sqlDyStringPrintf(query, "delete from submissionSet where id=%d", submitId);
 maybeUpdate(conn, query->string);
 
 dyStringFree(&query);

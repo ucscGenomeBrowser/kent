@@ -10,7 +10,9 @@ errAbort(
   "aveCols - average together columns\n"
   "usage:\n"
   "   aveCols file\n"
-  "File may be stdin.");
+  "adds all columns (up to 16 columns) in the given file, \n"
+  "outputs the average (sum/#ofRows) of each column.  <fileName> can be the\n"
+  "name: stdin to accept input from stdin.");
 }
 
 void aveCols(char *fileName)

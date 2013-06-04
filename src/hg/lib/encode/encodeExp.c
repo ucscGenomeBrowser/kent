@@ -10,7 +10,6 @@
 
 // WARNING: autogen section has been manually updated to support fields that can be NULL
 
-
 void encodeExpStaticLoad(char **row, struct encodeExp *ret)
 /* Load a row from encodeExp table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -48,31 +47,8 @@ sqlFreeResult(&sr);
 return list;
 }
 
-static void encodeExpSaveToDbMayBeEscaped(struct sqlConnection *conn, struct encodeExp *el, char *tableName, int updateSize, boolean escaped);
-
-void encodeExpSaveToDb(struct sqlConnection *conn, struct encodeExp *el, char *tableName, int updateSize)
-/* Save encodeExp as a row to the table specified by tableName.
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include"
- * If worried about this use encodeExpSaveToDbEscaped() */
-{
-encodeExpSaveToDbMayBeEscaped(conn, el, tableName, updateSize, FALSE);
-}
-
-void encodeExpSaveToDbEscaped(struct sqlConnection *conn, struct encodeExp *el, char *tableName, int updateSize)
-/* Save encodeExp as a row to the table specified by tableName.
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically
- * escapes all simple strings (not arrays of string) but may be slower than encodeExpSaveToDb().
- * For example automatically copies and converts:
- * "autosql's features include" --> "autosql\'s features include"
- * before inserting into database. */
-{
-encodeExpSaveToDbMayBeEscaped(conn, el, tableName, updateSize, TRUE);
-}
+// Forward declaration
+void encodeExpSaveToDb(struct sqlConnection *conn, struct encodeExp *el, char *tableName, int updateSize);
 
 struct encodeExp *encodeExpLoad(char **row)
 /* Load a encodeExp from row fetched with select * from encodeExp
@@ -414,7 +390,7 @@ else if sameString(action, "delete")
     which = "OLD";
 else
     errAbort("Invalid SQL trigger action: %s", action);
-dy = dyStringCreate(
+dy = sqlDyStringCreate(
     "CREATE TRIGGER %s_%s AFTER %s ON %s FOR EACH ROW INSERT INTO %s%s VALUES \n"
     "(%s.ix, %s.organism, %s.lab, %s.dataType, %s.cellType, %s.expVars, %s.accession, NOW(), '%c', USER(), '')",
         tableName, action, action, tableName,
@@ -431,7 +407,7 @@ struct dyString *dy;
 if (differentString(action, "insert") && differentString(action, "update") &&
     differentString(action, "delete"))
         errAbort("Invalid SQL trigger action: %s", action);
-dy = dyStringCreate("DROP TRIGGER IF EXISTS %s_%s", tableName, action);
+dy = sqlDyStringCreate("DROP TRIGGER IF EXISTS %s_%s", tableName, action);
 sqlUpdate(conn, dyStringCannibalize(&dy));
 }
 
@@ -497,28 +473,28 @@ void encodeExpTableCreate(struct sqlConnection *conn, char *tableName)
 /* Create an encodeExp table */
 {
 struct dyString *dy;
-dy = dyStringCreate(sqlCreate, tableName);
+dy = sqlDyStringCreate(sqlCreate, tableName);
 sqlRemakeTable(conn, tableName, dyStringCannibalize(&dy));
 
 /* Create history table -- a clone with 3 additional columns (action, changedBy, why).
  * 'why' is only required for deletes
  * Remove auto-inc attribute on ix, and use ix and updateTime as primary key  */
-dy = dyStringCreate("CREATE TABLE %s%s LIKE %s",
+dy = sqlDyStringCreate("CREATE TABLE %s%s LIKE %s",
                 tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, tableName);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN %s CHAR(1) DEFAULT ''",
+dy = sqlDyStringCreate("ALTER TABLE %s%s ADD COLUMN %s CHAR(1) DEFAULT ''",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_HISTORY_FIELD_WHAT);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN %s VARCHAR(77) NOT NULL",
+dy = sqlDyStringCreate("ALTER TABLE %s%s ADD COLUMN %s VARCHAR(77) NOT NULL",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_HISTORY_FIELD_WHO);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s ADD COLUMN %s VARCHAR(255) NOT NULL",
+dy = sqlDyStringCreate("ALTER TABLE %s%s ADD COLUMN %s VARCHAR(255) NOT NULL",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_HISTORY_FIELD_WHY);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s MODIFY COLUMN %s INT DEFAULT 0",
+dy = sqlDyStringCreate("ALTER TABLE %s%s MODIFY COLUMN %s INT DEFAULT 0",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_FIELD_IX);
 sqlUpdate(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate("ALTER TABLE %s%s DROP PRIMARY KEY",
+dy = sqlDyStringCreate("ALTER TABLE %s%s DROP PRIMARY KEY",
                         tableName, ENCODE_EXP_HISTORY_TABLE_SUFFIX);
 
 sqlUpdate(conn, dyStringCannibalize(&dy));
@@ -529,15 +505,37 @@ sqlUpdate(conn, dyStringCannibalize(&dy));
 encodExpAddTriggers(conn, tableName);
 }
 
+int encodeExpIdMax(struct sqlConnection *conn) 
+/* Return largest ix value */
+{
+return sqlQuickNum(conn, "NOSQLINJ select max(ix) from " ENCODE_EXP_TABLE);
+}
+
+/* END schema-dependent section */
+
+struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *tableName)
+/* Load all encodeExp in table */
+{
+struct encodeExp *exps = NULL;
+
+if (!sqlTableExists(conn, tableName))
+    return NULL;
+struct dyString *dy = newDyString(0);
+sqlDyStringPrintf(dy, "select * from %s", tableName);
+exps = encodeExpLoadByQuery(conn, dyStringContents(dy));
+dyStringFree(&dy);
+return exps;
+}
+
 static void encodeExpAddToLatestHistory(struct sqlConnection *conn, char *table, int id, char *field, char *value)
 /* Add user name to history table record */
 {
-struct dyString *dy = dyStringCreate(
+struct dyString *dy = sqlDyStringCreate(
         "select max(updateTime) from %s%s where %s='%d'",
                         table, ENCODE_EXP_HISTORY_TABLE_SUFFIX, ENCODE_EXP_FIELD_IX, id);
 verbose(3, "%s\n", dy->string);
 char *updateTime = sqlQuickString(conn, dyStringCannibalize(&dy));
-dy = dyStringCreate(
+dy = sqlDyStringCreate(
         "update %s%s set %s='%s' where updateTime = '%s'",
                         table, ENCODE_EXP_HISTORY_TABLE_SUFFIX, field, value, updateTime);
 verbose(3, "%s\n", dy->string);
@@ -556,54 +554,31 @@ static void encodeExpAddWhyToLatestHistory(struct sqlConnection *conn, char *tab
 encodeExpAddToLatestHistory(conn, table, id, ENCODE_EXP_HISTORY_FIELD_WHY, why);
 }
 
-static void encodeExpSaveToDbMayBeEscaped(struct sqlConnection *conn, struct encodeExp *el, char *tableName, int updateSize, boolean escaped)
+void encodeExpSaveToDb(struct sqlConnection *conn, struct encodeExp *el, char *tableName, int updateSize)
 /* Save encodeExp as a row to the table specified by tableName.
  * As blob fields may be arbitrary size updateSize specifies the approx size.
  * of a string that would contain the entire query. Automatically
- * escapes all simple strings (not arrays of string) but may be slower than encodeExpSaveToDb().
- * For example automatically copies and converts:
- * "autosql's features include" --> "autosql\'s features include"
- * before inserting into database. */
+ * escapes all simple strings (not arrays of string). */
 {
-// NOTE: Manually updated to handle NULL fields, including setting NULL
+// NOTE: Manually updated to handle NULL fields, including setting NULL (for expVars and accession)
 struct dyString *update = newDyString(updateSize);
-char  *organism, *lab, *dataType, *cellType, *expVars, *accession;
-if (escaped)
-    {
-    organism = sqlEscapeString(el->organism);
-    lab = sqlEscapeString(el->lab);
-    dataType = sqlEscapeString(el->dataType);
-    cellType = sqlEscapeString(el->cellType);
-    if (expVars != NULL)
-        expVars = sqlEscapeString(el->expVars);
-    if (accession != NULL)
-        accession = sqlEscapeString(el->accession);
-    }
-else
-    {
-    organism = el->organism;
-    lab = el->lab;
-    dataType = el->dataType;
-    cellType = el->cellType;
-    expVars = el->expVars;
-    accession = el->accession;
-    }
-dyStringPrintf(update, "insert into %s set %s=%u, %s='%s', %s='%s', %s='%s', %s='%s'", tableName,
+sqlDyStringPrintf(update, "insert into %s set %s=%u, %s='%s', %s='%s', %s='%s', %s='%s'", tableName,
                 ENCODE_EXP_FIELD_IX, el->ix,
-                ENCODE_EXP_FIELD_ORGANISM, organism,
-                ENCODE_EXP_FIELD_LAB, lab,
-                ENCODE_EXP_FIELD_DATA_TYPE, dataType,
-                ENCODE_EXP_FIELD_CELL_TYPE, cellType);
-dyStringPrintf(update, ", %s=", ENCODE_EXP_FIELD_FACTORS);
-if (expVars == NULL)
+                ENCODE_EXP_FIELD_ORGANISM, el->organism,
+                ENCODE_EXP_FIELD_LAB, el->lab,
+                ENCODE_EXP_FIELD_DATA_TYPE, el->dataType,
+                ENCODE_EXP_FIELD_CELL_TYPE, el->cellType);
+// Note: The sql literal NULL is not quoted in the final sql string.
+sqlDyStringPrintf(update, ", %s=", ENCODE_EXP_FIELD_FACTORS);
+if (el->expVars == NULL)
     dyStringAppend(update, "NULL");
 else
-    dyStringQuoteString(update, '\'', expVars);
-dyStringPrintf(update, ", %s=", ENCODE_EXP_FIELD_ACCESSION);
-if (accession == NULL)
+    sqlDyStringPrintf(update, "'%s'", el->expVars);
+sqlDyStringPrintf(update, ", %s=", ENCODE_EXP_FIELD_ACCESSION);
+if (el->accession == NULL)
     dyStringAppend(update, "NULL");
 else
-    dyStringQuoteString(update, '\'', accession);
+    sqlDyStringPrintf(update, "'%s'", el->accession);
 
 sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
 sqlUpdate(conn, update->string);
@@ -612,40 +587,8 @@ encodeExpAddUserToLatestHistory(conn, tableName, id);
 sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
 
 freeDyString(&update);
-if (escaped)
-    {
-    freez(&organism);
-    freez(&lab);
-    freez(&dataType);
-    freez(&cellType);
-    if (expVars != NULL)
-        freez(&expVars);
-    if (accession != NULL)
-        freez(&accession);
-    }
 }
 
-int encodeExpIdMax(struct sqlConnection *conn) 
-/* Return largest ix value */
-{
-return sqlQuickNum(conn, "select max(ix) from " ENCODE_EXP_TABLE);
-}
-
-/* END schema-dependent section */
-
-struct encodeExp *encodeExpLoadAllFromTable(struct sqlConnection *conn, char *tableName)
-/* Load all encodeExp in table */
-{
-struct encodeExp *exps = NULL;
-
-if (!sqlTableExists(conn, tableName))
-    return NULL;
-struct dyString *dy = newDyString(0);
-dyStringPrintf(dy, "select * from %s", tableName);
-exps = encodeExpLoadByQuery(conn, dyStringContents(dy));
-dyStringFree(&dy);
-return exps;
-}
 
 struct encodeExp *encodeExpFromMdb(struct sqlConnection *conn, char *db, struct mdbObj *mdb)
 /* Create an encodeExp from an ENCODE metaDb object */
@@ -801,7 +744,7 @@ struct encodeExp *encodeExpGetByIdFromTable(struct sqlConnection *conn, char *ta
 {
 struct dyString *query = NULL;
 
-query = dyStringCreate("select * from %s where %s=\'%d\'", tableName, ENCODE_EXP_FIELD_IX, id);
+query = sqlDyStringCreate("select * from %s where %s=\'%d\'", tableName, ENCODE_EXP_FIELD_IX, id);
 return encodeExpLoadByQuery(conn, dyStringCannibalize(&query));
 }
 
@@ -863,7 +806,7 @@ if (add)
 else
     safecpy(queryAcc, sizeof(queryAcc), "NULL");
 
-query = dyStringCreate("update %s set %s=%s where %s=%d", tableName,
+query = sqlDyStringCreate("update %s set %s=%s where %s=%d", tableName,
                         ENCODE_EXP_FIELD_ACCESSION, queryAcc,
                         ENCODE_EXP_FIELD_IX, exp->ix);
 sqlUpdate(conn, dyStringCannibalize(&query));
@@ -910,7 +853,7 @@ char query[256];
 struct encodeExp *exp2 = encodeExpGetByIdFromTable(conn, tableName, exp->ix);
 if (encodeExpSame(exp, exp2))
     {
-    safef(query, sizeof(query), "delete from %s where %s=%d",
+    sqlSafef(query, sizeof(query), "delete from %s where %s=%d",
                                 tableName, ENCODE_EXP_FIELD_IX, exp->ix);
     sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
     sqlUpdate(conn, query);
@@ -987,7 +930,7 @@ if (encodeExpIsFieldVar(var))
         if (differentString(val, oldVal))
             errAbort("Mismatch: id %d has %s=%s, not %s in table %s", id, var, val, oldVal, tableName);
         }
-    dy = dyStringCreate("update %s set %s=\'%s\' ", tableName, var, newVal);
+    dy = sqlDyStringCreate("update %s set %s=\'%s\' ", tableName, var, newVal);
     }
 else
     {
@@ -1021,7 +964,7 @@ else
         verbose(1, "WARNING: not verifying %s is valid expVar for this experiment\n", var);
         }
     char *expVars = slPairListToString(varPairs, FALSE);
-    dy = dyStringCreate("update %s set %s=\'%s\' ", tableName, ENCODE_EXP_FIELD_FACTORS, expVars);
+    dy = sqlDyStringCreate("update %s set %s=\'%s\' ", tableName, ENCODE_EXP_FIELD_FACTORS, expVars);
     }
 dyStringPrintf(dy, " where ix=%d", id);
 sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
@@ -1068,7 +1011,7 @@ if (cell == NULL)
 
 struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
 
-struct dyString *dy = dyStringCreate(
+struct dyString *dy = sqlDyStringCreate(
         "select * from %s where %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s=\'%s\' and %s",
                 table,
                 ENCODE_EXP_FIELD_ORGANISM, organism,

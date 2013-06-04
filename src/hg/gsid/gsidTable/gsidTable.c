@@ -966,7 +966,7 @@ char *queryCellVal(struct column *col, struct subjInfo *si,
 {
 char query[256];
 char *answer;
-safef(query, sizeof(query), col->query, si->fields[0]);
+sqlSafef(query, sizeof(query), col->query, si->fields[0]);
 answer = sqlQuickString(conn, query);
 if ((answer == NULL) && sameWord(col->type, "integer"))
     {
@@ -1166,7 +1166,7 @@ char **row;
 char query[256];
 struct slName *list=NULL, *el;
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select distinct %s from gsidSubjInfo", col->name);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1204,7 +1204,7 @@ char **row;
 char query[256];
 struct slName *list=NULL, *el;
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select distinct %s from gsidSubjInfo", col->name);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1514,7 +1514,7 @@ while (subjList)
     {
     fprintf(outF, "%s\n", subjList->fields[0]);
 
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select dnaSeqId from gsIdXref where subjId='%s'",
 	  subjList->fields[0]);
 

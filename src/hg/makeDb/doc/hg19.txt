@@ -8599,7 +8599,7 @@ TMPDIR=/scratch/tmp
 
 #########################################################################
 # PERSONAL GENOME VARIANTS (DONE 12/29/09 giardine)
-
+# OBSOLETE -- see "PERSONAL GENOME VARIANTS - RELOAD" below.
     # This is Angie's attempt to reconstruct Belinda's steps:
     mkdir /hive/data/genomes/hg19/bed/pgSnpLiftOver
     cd /hive/data/genomes/hg19/bed/pgSnpLiftOver
@@ -10481,88 +10481,6 @@ EOF
     # Added knownToU95 table
     hgMapToGene hg19 affyU95 knownGene knownToU95
 
-#############################################################################
-# ucscRetro track (2010-03-31, baertsch,hartera DONE)
-mkdir -p /hive/groups/gencode/pseudogenes/retroFinder/retro/hg19
-cd /hive/groups/gencode/pseudogenes/retroFinder/retro/hg19
-
-mkdir -p /hive/data/genomes/hg19/bed/retro/ 
-
-cat << '_EOF_' > DEF
-
-RETRO_OPTIONS="-verbose=4 -minAli=0.98 -nearTop=0.005 -skipBlatMerge "
-DB=hg19
-SCORETHRESH=550
-GENOMENAME='Homo sapiens'
-GBDB=hg
-MRNABASE=/hive/data/genomes/$DB/bed/mrnaBlastz
-TMPMRNA=/hive/groups/gencode/pseudogenes/retroFinder/mrnaBlastz/$DB
-TMPEST=/hive/groups/gencode/pseudogenes/retroFinder/est/$DB
-EST=all_est
-SPLICED_EST=intronEst
-SPLIT_EST=0
-SPLIT_SPLICED_EST=0
-SCRIPT=/cluster/home/baertsch/baertsch/scripts
-GENOME=/hive/data/genomes/
-RETRODIR=$GENOME/$DB/bed/retro
-BASE=/hive/groups/gencode/pseudogenes/retroFinder/retro
-OUTDIR=/hive/groups/gencode/pseudogenes/retroFinder/retro/$DB
-RESULT=$OUTDIR/result
-LOG=$OUTDIR/log
-OUT=$OUTDIR/out
-OVERLAPDIR=$OUTDIR/run.o
-VERSION=2
-TABLE=ucscRetroInfo$VERSION
-ALIGN=ucscRetroAli$VERSION
-LOCAL=/scratch/data/$DB
-NIB=$LOCAL/nib
-RMSK=rmsk
-NET1=netCanFam2 
-NET2=netMm9 
-NET3=netRheMac2 
-GENE1=knownGene
-GENE2=refGene
-GENE3=mgcGenes
-CLUSTER=swarm
-SPECIES="hg19"
-ROOTDIR="/cluster/home/hartera/public_html"
-EXPDIR=exp
-GENEPFAM=knownGene
-PFAM=knownToPfam
-PFAMIDFIELD=name
-PFAMDOMAIN=value
-ARRAY=gnfAtlas2
-ARRAYMEDIAN=hgFixed.gnfHumanAtlas2Median
-ARRAYRATIO=hgFixed.gnfHumanAtlas2AllRatio
-ARRAYABS=hgFixed.gnfHumanAtlas2All
-ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps
-ARRAYEXPALL=hgFixed.gnfHumanAtlas2AllExps
-ARRAYLOOKUP=knownToGnfAtlas2
-ARRAYPSLS="/hive/data/genomes/hg19/bed/geneAtlas2/affyU133A.psl /hive/data/genomes/hg19/bed/geneAtlas2/affyGnf1h.psl"
-ALTSPLICE=
-SPLITBYAGE=$SCRIPT/splitRetrosByAge
-PDB=proteins090821
-
-'_EOF_'
-    # << happy emacs
-
-retroFinder-1.16/scripts/filterMrna.sh DEF
-retroFinder-1.16/scripts/filterEst.sh DEF
-nohup retroFinder-1.16/scripts/ucscRetroStep1.sh DEF
-#check cluster job
-nohup retroFinder-1.16/scripts/ucscRetroStep2.sh DEF
-nohup retroFinder-1.16/scripts/ucscRetroStep3.sh DEF
-#check cluster job
-nohup retroFinder-1.16/scripts/ucscRetroStep4.sh DEF
-    # Load the track
-nohup retroFinder-1.16/scripts/ucscRetroStep5.sh DEF
-nohup retroFinder-1.16/scripts/ucscRetroStep6.sh DEF
-#add ucscRetroAli to trackDb.ra 
-cp  ucscRetroAli.psl /hive/data/genomes/hg19/bed/retro/ 
-cp  ucscRetroInfo.bed /hive/data/genomes/hg19/bed/retro/ 
-cp  ucscRetroCds.tab /hive/data/genomes/hg19/bed/retro/ 
-
-cd /hive/data/genomes/hg19/bed/retro/ 
 #############################################################################
 # UPDATE KEGG TABLES (DONE, Fan, 6/18/10)
 
@@ -20278,6 +20196,13 @@ TMPDIR=/scratch/tmp
         $f /hive/data/genomes/hg19/chrom.sizes $track.bb
     end
 
+    # Load database tables
+    mkdir /gbdb/hg19/dbNsfp
+    foreach f (dbNsfp*.{bb,bw})
+      ln -s `pwd`/$f /gbdb/hg19/dbNsfp/
+      hgBbiDbLink hg19 $f:r /gbdb/hg19/dbNsfp/$f
+    end
+
     # Clean up: remove large files that can be re-unzipped or regenerated:
     rm -f search_db* dbNS*_variant.chr* dbNs*.bed
 
@@ -20430,10 +20355,239 @@ makeUniProtToHg.sh
 liftUniprotMut.py
 # load the resulting bigbed track into the browser
 load.sh
+
 ############################################################################
 # LOVD Variants track (2013-05-09 - Max)
 # the LOVD track is fully ottomatized, it's updated daily with this
 # command:
 cd /hive/data/outside/otto/lovd
 download.sh && check.sh && load.sh
+
+############################################################################
+# PERSONAL GENOME VARIANTS - RELOAD (DONE 5/31/13 angie)
+    # Belinda Giardine provided database dump files for all PSU Personal
+    # Genome Variant subtracks, as well as an updated trackDb.ra.
+    # Download all dump files and (re)load all tables to make sure we
+    # are current w/PSU.
+    mkdir /hive/data/genomes/hg19/bed/pgSnp/2013-05-28
+    cd /hive/data/genomes/hg19/bed/pgSnp/2013-05-28
+    # Complete Genomics samples w/HG* IDs:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/HG\*
+    # Complete Genomics samples w/NA* IDs:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/NA\*
+    # Older Personal Genome Variants tables, many of which Belinda already
+    # loaded on hgwdev:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/pg\*
+    # 1000 Genomes distilled to population allele frequencies:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/1000Genomes2012/\*
+    # Genome of the Netherlands population-wide allele frequencies:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/gonl.pgPop.gz
+
+    # Now transform filenames into table/track names matching Belinda's
+    # trackDb.pgSnp.ra and (re)load tables:
+    set hglbOpts = (-sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable \
+      -type=bed4+ -tab -noNameIx -allowStartEqualEnd)
+    foreach f (HG*.gz)
+      set table = `echo $f:r:r | sed -re 's/\.indel/indel/; s/^/pg/;'`
+      echo $table
+      hgLoadBed $hglbOpts hg19 $table $f
+    end
+# Read 471455 elements of size 7 from HG00731.indel.pgSnp.gz
+# Read 3419274 elements of size 7 from HG00731.pgSnp.gz
+# Read 466400 elements of size 7 from HG00732.indel.pgSnp.gz
+# Read 3457087 elements of size 7 from HG00732.pgSnp.gz
+# Read 429472 elements of size 7 from HG00733.indel.pgSnp.gz
+# Read 3407941 elements of size 7 from HG00733.pgSnp.gz
+
+    # Here's where it gets tricky: several of these NA IDs need to have "CG"
+    # appended to their table names because there were already pgNA* tables
+    # from 1000 Genomes Pilot high-coverage trios.
+    foreach f (NA*.gz)
+      set table = `echo $f:r:r | sed -re 's/\.indel/indel/; s/^/pg/;'`
+      if ($table == pgNA12878 || $table == pgNA12891 || $table == pgNA12892 || \
+          $table == pgNA19238 || $table == pgNA19239 || $table == pgNA19240) then
+        set table = $table"CG"
+      endif
+      echo $table
+      hgLoadBed $hglbOpts hg19 $table $f
+    end
+#Read 497395 elements of size 7 from NA06985.indel.pgSnp.gz
+#... (no errors)
+#Read 4058556 elements of size 7 from NA21767.pgSnp.gz
+
+    # Some of the pg* files/tables are not for pgSnp tracks; skip those.
+    # Also watch out for some files that do already have the bin column.
+    foreach f (pg*.gz)
+      set table = $f:r:r
+      set skipIt = `echo $table \
+        | perl -wne 'if (/(Gwas|Hgmd|PhenCode|Snpedia|Mappable)/) { \
+                       print "1\n"; } else {print "0\n"; }'`
+      if ($skipIt == 1) then
+        echo Skipping $table
+      else
+        echo $table
+        set numCols = `zcat $f | head -1 | perl -wne '$n = s/\t//g + 1; print "$n\n";'`
+        if ($numCols == 8) then
+          hgLoadBed $hglbOpts -hasBin hg19 $table $f
+        else
+          hgLoadBed $hglbOpts hg19 $table $f
+        endif
+      endif
+    end
+#Read 121305 elements of size 7 from pgAbt454.txt.gz
+#...
+#Skipping pgAbtGwas
+#Skipping pgAbtHgmd
+#...
+#Read 3835591 elements of size 7 from pgYoruban3.txt.gz
+
+    # 5/31/13: One more file, rename a table:
+    wget ftp://ftp.bx.psu.edu/data/bx_browser/hg19/pgLucier.pgSnp.gz
+    hgLoadBed $hglbOpts hg19 pgLucier pgLucier.pgSnp.gz
+    hgsql hg19 -e 'drop table pgKb1Comb; rename table pgKb1 to pgKb1Comb;'
+
+
+############################################################################
+# RETROPOSED GENES ucscRetro track VERSION 5 
+# (2013-02-28 - 2013-04-18, baertsch,hartera DONE)
+mkdir -p /hive/hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228
+cd /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228
+
+mkdir -p /hive/data/genomes/hg19/bed/retro/ 
+cd /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228
+cat << '_EOF_' > DEF
+
+RETRO_OPTIONS="-verbose=4 -minAli=0.98 -nearTop=0.005 -skipBlatMerge "
+VERSION=5
+DB=hg19
+SCORETHRESH=550
+GENOMENAME='Homo sapiens'
+GBDB=hg
+DATE=20130228
+BINDIR=/hive/users/hartera/GencodeWG/retroFinder/trunk/bin
+KENTBINDIR=/cluster/home/hartera/bin/x86_64
+MRNABASE=/hive/data/genomes/$DB/bed/mrnaBlastz.$VERSION/
+TMPMRNA=/hive/groups/gencode/pseudogenes/retroFinder/$DB.$DATE/mrnaBlastz/$DB
+TMPEST=/hive/groups/gencode/pseudogenes/retroFinder/$DB.$DATE/est/$DB
+EST=all_est
+SPLICED_EST=intronEst
+SPLIT_EST=0
+SPLIT_SPLICED_EST=0
+SCRIPT=/hive/users/hartera/GencodeWG/retroFinder/trunk/src/pipeline
+GENOME=/hive/data/genomes/
+RETRODIR=$GENOME/$DB/bed/retro
+BASE=/hive/groups/gencode/pseudogenes/retroFinder/$DB.$DATE/retro
+OUTDIR=${BASE}/${DB}.${VERSION}
+RESULT=$OUTDIR/result
+LOG=$OUTDIR/log
+OUT=$OUTDIR/out
+OVERLAPDIR=$OUTDIR/run.o
+TABLE=ucscRetroInfo$VERSION
+ORTHOTABLE=ucscRetroOrtho$VERSION
+ALIGN=ucscRetroAli$VERSION
+LOCAL=/scratch/data/$DB
+TWOBIT=$GENOME/$DB/$DB.2bit
+NIB=$LOCAL/nib
+RMSK=rmsk
+NET1=netMm10
+NET2=netCanFam3
+NET3=netRheMac3
+# these two nes determine which retros are classified as ancient, use two farthest nets 
+ANCIENT1=netMm10
+ANCIENT2=netCanFam3
+GENE1=knownGene
+GENE2=refGene
+GENE3=ensGene
+CLUSTER=swarm
+SPECIES="hg19 mm10"
+ROOTDIR="~/public_html/retro/hg19Feb13"
+WEBROOT=$ROOTDIR/retro.$VERSION/
+WEBSERVER=http://hgwdev-hartera.cse.ucsc.edu
+EXPDIR=exp
+GENEPFAM=knownGene
+PFAM=knownToPfam
+PFAMIDFIELD=name
+PFAMDOMAIN=value
+ALTSPLICE=sibTxGraph
+SPLITBYAGE=$SCRIPT/splitRetrosByAge
+PDB=proteins121210
+ARRAY=gnfAtlas2
+AFFYPROBE="affyU133A,affyGnf1h"
+ARRAYMEDIAN=hgFixed.gnfHumanAtlas2Median 
+ARRAYRATIO=hgFixed.gnfHumanAtlas2AllRatio
+ARRAYABS=hgFixed.gnfHumanAtlas2All   
+ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps 
+ARRAYEXPALL=hgFixed.gnfHumanAtlas2AllExps
+ARRAYLOOKUP=knownToGnfAtlas2 
+ARRAYPSLS="/hive/data/genomes/hg19/bed/geneAtlas2/affyU133A.psl /hive/data/genomes/hg19/bed/geneAtlas2/affyGnf1h.psl"
+'_EOF_'
+    # << happy emacs
+chmod +x DEF
+mkdir mrnaBlastz
+cd mrnaBlastz
+cp ../DEF .
+# Create S1.len:
+cp /hive/data/genomes/hg19/chrom.sizes S1.len
+# Edit S1.len and remove chrM and random chroms then copy over to hg19
+# genomes directory
+mkdir -p /hive/data/genomes/hg19/bed/mrnaBlastz.5
+cp S1.len /hive/data/genomes/hg19/bed/mrnaBlastz.5
+
+screen
+# Run steps 1 to 6 of RetroFinder pipeline from scripts in CCDS SVN source tree:
+retroFinder/trunk/src/pipeline/ucscStep1.sh DEF
+# check cluster job on swarm
+retroFinder/trunk/src/pipeline/ucscStep2.sh DEF
+retroFinder/trunk/src/pipeline/ucscStep3.sh DEF
+#check cluster job
+retroFinder/trunk/src/pipeline/ucscStep4.sh DEF
+#check cluster job
+    # Load the track
+retroFinder/trunk/src/pipeline/ucscStep5.sh DEF
+cd /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228/retro/hg19.5
+retroFinder/trunk/src/pipeline/filterMrna.sh DEF
+retroFinder/trunk/src/pipeline/filterEst.sh DEF
+retroFinder/trunk/src/pipeline/analyseExpress.sh DEF
+cd /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228/mrnaBlastz
+retroFinder/trunk/src/pipeline/ucscStep6.sh DEF
+#added ucscRetroAli to trackDb.ra
+# copied
+# /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228/retro/hg19.5/trackDb.retro
+# entry to kent/src/hg/makeDb/trackDb/human/hg19/trackDb.ra and edited it
+# to add the version number and date.
+# Scripts copied ucscRetroAli5.psl, ucscRetroInfo5.bed and ucscRetroCds5.tab
+# to /hive/data/genomes/hg19/bed/retro/
+
+############################################################################
+# HGMD Variants track (2013-05-29 - Max)
+wget ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/2013.1-hgmd-public.tsv
+# HGMD seems to use 1-based coordinates
+# for insertions, this will also make 2bp features that go over the insert
+# position
+cat << '_EOF_' > hgmd.as
+table Bed8Hgmd
+"Browser extensible data (8 fields) plus information about hgmd mutation"
+    (
+    string chrom;        "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart;   "Start position in chromosome"
+    uint   chromEnd;     "End position in chromosome"
+    string name;         "Name of item"
+    uint   score;        "not used for HGMD"
+    char[1] strand;    "+ or -"
+    uint   thickStart;   "not used for HGMD"
+    uint   thickEnd;     "not used for HGMD"
+    lstring gene;        "Annotated Gene"
+    lstring accession;   "Accession of Variant"
+    lstring variantType; "Type of Variant"
+    )
+'_EOF_'
+
+# create an extended bigbed file
+cat 2013.1-hgmd-public.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-2; end=$4} else {start=$4-1; end=$4} print "chr"$3,start,end,$2":"$1,0,"",start,end,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
+bedToBigBed hgmd.bed /hive/data/genomes/hg19/chrom.sizes hgmd.bb -type=bed4+2 -as=hgmd.as -tab
+mkdir /hive/data/genomes/hg19/bed/hgmd/
+cp hgmd.bb /hive/data/genomes/hg19/bed/hgmd/
+ln -s /hive/data/genomes/hg19/bed/hgmd/hgmd.bb /gbdb/hg19/bbi/hgmd.bb
+hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
+
 ############################################################################

@@ -24,17 +24,21 @@ endif
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
 	    ${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}/js; \
+	    ${MAKE} doStaticInstall DEST=${DOCUMENTROOT}-${USER}/js; \
 	else \
 	    ${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}; \
+	    echo "No user version of htdocs directory exists; skipping static files ..."; \
 	fi
 
 alpha:
 	${GITUP}
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
+	${MAKE} doStaticInstall DEST=${DOCUMENTROOT}/js
 
 beta:
 	${GITUP} 
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
+	${MAKE} doStaticInstall DEST=${DOCUMENTROOT}/js
 
 clean:
 
@@ -42,7 +46,14 @@ compile:
 
 install:
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
+	${MAKE} doStaticInstall DEST=${DOCUMENTROOT}/js
 
 doInstall:
 	@mkdir -p ${DEST}/
 	../utils/cpAndLinkToResourceFiles.pl -exclude='makefile' -versionFile=../inc/versionInfo.h -destDir=${DEST} ${JS_FILES}
+
+doStaticInstall:
+	@mkdir -p ${DEST}/
+	for file in ${STATIC_FILES}; do \
+	    cp -p --update $$file ${DEST}; \
+	done

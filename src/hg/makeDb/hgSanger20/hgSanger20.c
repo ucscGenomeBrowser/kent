@@ -159,7 +159,7 @@ struct dyString *ds = newDyString(2048);
 dyStringPrintf(ds, createString, table);
 sqlRemakeTable(conn, table, ds->string);
 dyStringClear(ds);
-dyStringPrintf(ds, 
+sqlDyStringPrintf(ds, 
    "LOAD data local infile '%s' into table %s", tabName, table);
 sqlUpdate(conn, ds->string);
 sqlDisconnect(&conn);

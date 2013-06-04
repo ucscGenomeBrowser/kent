@@ -186,14 +186,14 @@ char *sep = "";
 struct sqlResult *result;
 char **row;
 
-dyStringPrintf(query, "select id, acc, version, type from gbSeq where (srcDb=\"%s\")",
+sqlDyStringPrintf(query, "select id, acc, version, type from gbSeq where (srcDb=\"%s\")",
                gbSrcDbName(select->release->srcDb));
 if (select->release->srcDb == GB_REFSEQ)
     dyStringPrintf(query, " and ((type=\"mRNA\") or (type=\"PEP\"))");
 else
-    dyStringPrintf(query, " and (type=\"%s\")", gbTypeName(select->type));
+    sqlDyStringPrintf(query, " and (type=\"%s\")", gbTypeName(select->type));
 if (select->accPrefix != NULL)
-    dyStringPrintf(query, " and (acc like \"%s%%\")", select->accPrefix);
+    sqlDyStringPrintf(query, " and (acc like \"%s%%\")", select->accPrefix);
 
 if (extFiles != NULL)
     {
@@ -222,7 +222,7 @@ static int checkGbStatusVer(char *db, char *acc)
 struct sqlConnection *conn = hAllocConn(db);
 int ver;
 char query[256];
-safef(query, sizeof(query), "select version from gbStatus where acc=\"%s\"",
+sqlSafef(query, sizeof(query), "select version from gbStatus where acc=\"%s\"",
       acc);
 ver = sqlQuickNum(conn, query);
 hFreeConn(&conn);
@@ -234,7 +234,7 @@ static boolean isPepInRefLink(char *db, char *pepAcc)
 {
 struct sqlConnection *conn = hAllocConn(db);
 char buf[128], query[256], *acc;
-safef(query, sizeof(query), "select mrnaAcc from refLink where protAcc=\"%s\"",
+sqlSafef(query, sizeof(query), "select mrnaAcc from refLink where protAcc=\"%s\"",
       pepAcc);
 acc = sqlQuickQuery(conn, query, buf, sizeof(buf));
 hFreeConn(&conn);

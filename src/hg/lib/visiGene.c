@@ -20,7 +20,7 @@ int visiGeneImageFile(struct sqlConnection *conn, int id)
  * con contain multiple images. */
 {
 char query[256];
-safef(query, sizeof(query), "select imageFile from image where id=%d",
+sqlSafef(query, sizeof(query), "select imageFile from image where id=%d",
 	id);
 return sqlQuickNum(conn, query);
 }
@@ -32,7 +32,7 @@ struct slInt *visiGeneImagesForFile(struct sqlConnection *conn,
 char query[256], **row;
 struct sqlResult *sr;
 struct slInt *el, *list = NULL;
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select id from image where imageFile = %d "
 	"order by paneLabel"
 	, imageFile);
@@ -53,7 +53,7 @@ char *visiGenePaneLabel(struct sqlConnection *conn, int id)
 {
 char query[256];
 char *label;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select paneLabel from image where id=%d", id);
 label = sqlQuickString(conn, query);
 if (label != NULL && label[0] == 0)
@@ -69,7 +69,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 boolean result = FALSE;
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select imageFile.imageWidth, imageFile.imageHeight from image,imageFile"
 	" where image.id = %d and image.imageFile = imageFile.id "
 	, id);
@@ -94,7 +94,7 @@ static char *somePath(struct sqlConnection *conn, int id, char *locationField)
 char query[256], path[PATH_LEN];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select fileLocation.name,imageFile.fileName from image,imageFile,fileLocation"
 	" where image.id = %d and image.imageFile = imageFile.id "
 	" and fileLocation.id=imageFile.%s", id, locationField);
@@ -143,7 +143,7 @@ char *visiGeneOrganism(struct sqlConnection *conn, int id)
  * FreeMem this when done. */
 {
 char query[256], buf[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select uniProt.taxon.binomial from image,specimen,uniProt.taxon"
          " where image.id = %d and"
 	 " image.specimen = specimen.id and"
@@ -169,7 +169,7 @@ struct dyString *dy = dyStringNew(256);
 
 
 /* Figure out days since conception and species. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select specimen.age,genotype.taxon "
     "from image,specimen,genotype "
     "where image.id = %d "
@@ -185,7 +185,7 @@ sqlFreeResult(&sr);
 
 /* Try and look things up in lifeTime table, figuring
  * out stage name, age, and letter. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select birth,adult from lifeTime where taxon = %d", taxon);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -229,7 +229,7 @@ if (doLong)
     dyStringPrintf(dy, "%s old %s", timeBuf, stageName);
 
     /* See if have nice developmental staging scheme for this organism. */
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
        "select id,name from lifeStageScheme where taxon = %d", taxon);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -242,7 +242,7 @@ if (doLong)
     /* Add developmental stage info. */
     if (stageScheme != 0)
         {
-	safef(query, sizeof(query),
+	sqlSafef(query, sizeof(query),
 	    "select name from lifeStage "
 	    "where lifeStageScheme = %d and age <= %f "
 	    "order by age desc"
@@ -272,7 +272,7 @@ struct sqlResult *sr;
 char *result = "";
 char **row;
 char query[256], buf[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select name,locusLink,refSeq,genbank,uniProt from gene"
       " where id = %d", geneId);
 sr = sqlGetResult(conn, query);
@@ -313,7 +313,7 @@ struct slName *visiGeneGeneName(struct sqlConnection *conn, int id)
 struct slInt *geneList, *gene;
 struct slName *nameList = NULL, *name;
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select probe.gene from imageProbe,probe "
     " where imageProbe.image = %d"
     " and imageProbe.probe = probe.id", id);
@@ -339,7 +339,7 @@ struct slName *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select gene.%s from imageProbe,probe,gene"
       " where imageProbe.image = %d"
       " and imageProbe.probe = probe.id"
@@ -381,7 +381,7 @@ char *visiGeneSubmitId(struct sqlConnection *conn, int id)
  * FreeMem this when done. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select imageFile.submitId from image,imageFile "
     "where image.id = %d and image.imageFile = imageFile.id", id);
 return sqlQuickString(conn, query);
@@ -391,7 +391,7 @@ char *visiGeneBodyPart(struct sqlConnection *conn, int id)
 /* Return body part if any.  FreeMem this when done. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select bodyPart.name from image,specimen,bodyPart "
     "where image.id = %d "
     "and image.specimen = specimen.id "
@@ -404,7 +404,7 @@ char *visiGeneSex(struct sqlConnection *conn, int id)
 /* Return sex if known.  FreeMem this when done. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select sex.name from image,specimen,sex "
     "where image.id = %d "
     "and image.specimen = specimen.id "
@@ -417,7 +417,7 @@ char *visiGeneStrain(struct sqlConnection *conn, int id)
 /* Return strain of organism if any.  FreeMem this when done. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select strain.name from image,specimen,genotype,strain "
     "where image.id = %d "
     "and image.specimen = specimen.id "
@@ -435,7 +435,7 @@ char query[256];
 char *genotypesComma = NULL;  /* comma-separated list of genotypes */
 struct slName *nameList = NULL;
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select genotype.alleles from image,specimen,genotype "
     "where image.id = %d "
     "and image.specimen = specimen.id "
@@ -457,7 +457,7 @@ char *visiGeneSliceType(struct sqlConnection *conn, int id)
 /* Return slice type if any.  FreeMem this when done. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select sliceType.name from image,preparation,sliceType "
     "where image.id = %d "
     "and image.preparation = preparation.id "
@@ -470,7 +470,7 @@ char *visiGeneFixation(struct sqlConnection *conn, int id)
 /* Return fixation conditions if any.  FreeMem this when done.*/
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select fixation.description from image,preparation,fixation "
     "where image.id = %d "
     "and image.preparation = preparation.id "
@@ -483,7 +483,7 @@ char *visiGeneEmbedding(struct sqlConnection *conn, int id)
 /* Return fixation conditions if any.  FreeMem this when done.*/
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select embedding.description from image,preparation,embedding "
     "where image.id = %d "
     "and image.preparation = preparation.id "
@@ -496,7 +496,7 @@ char *visiGenePermeablization(struct sqlConnection *conn, int id)
 /* Return permeablization conditions if any.  FreeMem this when done.*/
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select permeablization.description from image,preparation,permeablization "
     "where image.id = %d "
     "and image.preparation = preparation.id "
@@ -509,7 +509,7 @@ char *visiGeneCaption(struct sqlConnection *conn, int id)
 /* Return free text caption if any. FreeMem this when done. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select caption.caption from image,imageFile,caption "
     "where image.id = %d "
     "and image.imageFile = imageFile.id "
@@ -523,7 +523,7 @@ static char *stringFieldInSubmissionSet(struct sqlConnection *conn, int id,
 /* Return some string field in submissionSet table when you have image id. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
      "select submissionSet.%s from image,imageFile,submissionSet"
      " where image.id = %d"
      " and image.imageFile = imageFile.id "
@@ -535,8 +535,8 @@ static char *stringFieldInSubmissionSource(struct sqlConnection *conn, int id,
 	char *field)
 /* Return some string field in submissionSource table when you have image id. */
 {
-char query[256];
-safef(query, sizeof(query),
+char query[512];
+sqlSafef(query, sizeof(query),
     "select submissionSource.%s "
     "from image,imageFile,submissionSet,submissionSource "
     "where image.id = %d "
@@ -617,7 +617,7 @@ char *visiGeneCopyright(struct sqlConnection *conn, int id)
  * FreeMem this when done. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select copyright.notice from image,imageFile,submissionSet,copyright "
     "where image.id = %d "
     "and image.imageFile = imageFile.id "
@@ -634,13 +634,13 @@ static void appendMatchHow(struct dyString *dy, char *pattern,
 switch (how)
     {
     case vgsExact:
-        dyStringPrintf(dy, " = \"%s\"", pattern);
+        sqlDyStringPrintf(dy, " = \"%s\"", pattern);
 	break;
     case vgsPrefix:
-        dyStringPrintf(dy, " like \"%s%%\"", pattern);
+        sqlDyStringPrintf(dy, " like \"%s%%\"", pattern);
 	break;
     case vgsLike:
-        dyStringPrintf(dy, " like \"%s\"", pattern);
+        sqlDyStringPrintf(dy, " like \"%s\"", pattern);
 	break;
     default:
         internalErr();
@@ -659,7 +659,7 @@ struct dyString *dy = dyStringNew(0);
 char **row;
 struct sqlResult *sr;
 
-dyStringPrintf(dy, "select id from gene where name ");
+sqlDyStringPrintf(dy, "select id from gene where name ");
 appendMatchHow(dy, name, how);
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -670,7 +670,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 dyStringClear(dy);
-dyStringPrintf(dy, "select gene from geneSynonym where name ");
+sqlDyStringPrintf(dy, "select gene from geneSynonym where name ");
 appendMatchHow(dy, name, how);
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -684,7 +684,7 @@ sqlFreeResult(&sr);
 for (geneEl = geneList; geneEl != NULL; geneEl = geneEl->next)
     {
     dyStringClear(dy);
-    dyStringAppend(dy, "select imageProbe.image from probe,imageProbe");
+    sqlDyStringAppend(dy, "select imageProbe.image from probe,imageProbe");
     dyStringPrintf(dy, " where probe.gene = %s ", geneEl->name);
     dyStringAppend(dy, " and probe.id = imageProbe.probe");
     sr = sqlGetResult(conn, dy->string);
@@ -715,7 +715,7 @@ char query[256], **row;
 
 if (acc[0] == 0)
     return NULL;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select imageProbe.image from gene,probe,imageProbe"
     " where gene.%s = \"%s\""
     " and gene.id = probe.gene"

@@ -15,7 +15,7 @@ char *getEncodeRegionDescr(char *name)
     char buf[128];
     char query[256];
     char *res = NULL;
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	  "select descr from encodeRegionInfo where name = '%s'", name);
     if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
             {

@@ -46,7 +46,7 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[256];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select tName,chainId,tStart,tEnd,qStart from %sLink", chainTblName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -95,7 +95,7 @@ for (chainTbl = chainTables;  chainTbl != NULL;  chainTbl = chainTbl->next)
     {
     boolean hasBin = hOffsetPastBin(database, NULL, chainTbl->name);
     struct hash *h = hashLinks(database, chainTbl->name);
-    safef(query, sizeof(query), "select * from %s", chainTbl->name);
+    sqlSafef(query, sizeof(query), "select * from %s", chainTbl->name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{

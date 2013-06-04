@@ -348,7 +348,7 @@ struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(17);
 
-sr = sqlGetResult(conn, "select mrnaAcc,name,locusLinkId from refLink where name != ''");
+sr = sqlGetResult(conn, "NOSQLINJ select mrnaAcc,name,locusLinkId from refLink where name != ''");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct refSeqInfo *rsi;
@@ -369,7 +369,7 @@ struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(17);
 
-sr = sqlGetResult(conn, "select mrnaAcc,name,locusLinkId from refLink where locusLinkId != 0");
+sr = sqlGetResult(conn, "NOSQLINJ select mrnaAcc,name,locusLinkId from refLink where locusLinkId != 0");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct refSeqInfo *rsi;

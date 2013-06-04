@@ -49,7 +49,7 @@ struct coords *cel = NULL;
 coordHash = newHash(18);
 nameHash = newHash(0);
 verbose(1, "creating hashes...\n");
-safef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from snp126");
+sqlSafef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from snp126");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

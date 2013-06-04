@@ -38,7 +38,7 @@ if (hTableExists(infoTable))
     char buf[64];
     if (ptr != NULL)
 	*ptr = 0;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select symbol from %s where bdgpName = '%s';", infoTable, name);
     symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
     hFreeConn(&conn);
