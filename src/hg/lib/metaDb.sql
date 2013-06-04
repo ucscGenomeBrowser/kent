@@ -5,6 +5,5 @@ CREATE TABLE metaDb (
     val varchar(2048) not null,	        # Metadata value.
               #Indices
     PRIMARY KEY(obj,var),
-    INDEX varKey (var),
-    INDEX valKey (val(64))
+    INDEX varKey (var,val(64))
 );
