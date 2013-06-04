@@ -37,6 +37,24 @@ fetchSource:
 	@du -hs kent
 	@echo -n "number of files in kent source tree: "
 	@find ./kent -type f | wc -l
+	@${MAKE} installEnvironment
+
+# this installEnvironment will add all the shell environment variables
+# to the kent/src/inc/localEnvironment.mk file which is included
+# from the kent/src/inc/userApps.mk to allow any 'make' to function
+# properly when inside this extracted source tree.
+
+installEnvironment:
+	@echo -e "export DESTDIR = ${DESTDIR}\n\
+export BINDIR = ${BINDIR}\n\
+export MACHTYPE = ${MACHTYPE}\n\
+export CGI_BIN = ${CGI_BIN}\n\
+export DOCUMENTROOT = ${DOCUMENTROOT}\n\
+export SCRIPTS = ${SCRIPTS}\n\
+export SAMTABIXDIR = ${SAMTABIXDIR}\n\
+export USE_SAMTABIX = 1\n\
+export USE_SSL = 1\n\
+export NOSQLTEST = 1" > kent/src/inc/localEnvironment.mk
 
 update: clean userApps
 	${MAKE} fetchSource
