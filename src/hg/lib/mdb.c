@@ -917,8 +917,7 @@ char *sqlCreate =
     "    val varchar(2048) not null,     # Metadata value.\n"
     "  #Indices\n"
     "    PRIMARY KEY(obj,var),\n"
-    "    INDEX varKey (var),\n"
-    "    INDEX valKey (val(64))\n"
+    "    INDEX varKey (var,val(64))\n"
     ")";
 
 if (sqlTableExists(conn,tblName))

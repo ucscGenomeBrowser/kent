@@ -14,6 +14,7 @@
 # use other libraries BEFORE jkweb.a
 #     preMyLibs += path/to/lib/other.a
 #
+include ${kentSrc}/inc/localEnvironment.mk
 include ${kentSrc}/inc/common.mk
 
 DEPLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkweb.a

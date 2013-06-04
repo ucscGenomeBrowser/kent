@@ -84,7 +84,7 @@ fprintf(xfh, "\ndisplayPdb(\"%s\", (", pdbId);
 struct lsSnpPdb *pdbSnp, *pdbSnps = NULL;
 if (sqlTableExists(conn, "lsSnpPdb"))
     pdbSnps = sqlQueryObjs(conn, (sqlLoadFunc)lsSnpPdbLoad, sqlQueryMulti,
-                           "SELECT * FROM lsSnpPdb WHERE %s", where);
+                           "SELECT * FROM lsSnpPdb WHERE %-s", where);
 for (pdbSnp = pdbSnps; pdbSnp != NULL; pdbSnp = pdbSnp->next)
     prSnp(xfh, pdbSnp, primarySnpId);
 lsSnpPdbFreeList(&pdbSnps);
