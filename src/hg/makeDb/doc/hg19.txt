@@ -20196,6 +20196,13 @@ TMPDIR=/scratch/tmp
         $f /hive/data/genomes/hg19/chrom.sizes $track.bb
     end
 
+    # Load database tables
+    mkdir /gbdb/hg19/dbNsfp
+    foreach f (dbNsfp*.{bb,bw})
+      ln -s `pwd`/$f /gbdb/hg19/dbNsfp/
+      hgBbiDbLink hg19 $f:r /gbdb/hg19/dbNsfp/$f
+    end
+
     # Clean up: remove large files that can be re-unzipped or regenerated:
     rm -f search_db* dbNS*_variant.chr* dbNs*.bed
 

@@ -47,6 +47,7 @@ if (self->qHead == NULL)
     // Queue is empty - clean up lm
     lmCleanup(&(self->qLm));
     self->qLm = lmInit(0);
+    self->qSkippedCount = 0;
     }
 }
 
@@ -98,6 +99,17 @@ while (!self->eof &&
 	    if (cDifNewP > 0)
 		// newRow->chrom comes after chrom; we're done for now
 		break;
+	    }
+	// If we're skipping past large regions, keep qLm size under control:
+	else
+	    {
+	    self->qSkippedCount++;
+	    if (self->qSkippedCount > 1024 && self->qHead == NULL && self->qTail == NULL)
+		{
+		lmCleanup(&(self->qLm));
+		self->qLm = lmInit(0);
+		self->qSkippedCount = 0;
+		}
 	    }
 	}
     }
@@ -178,6 +190,7 @@ self->eof = FALSE;
 lmCleanup(&(self->qLm));
 self->qLm = lmInit(0);
 self->qHead = self->qTail = NULL;
+self->qSkippedCount = 0;
 }
 
 static boolean filtersHaveRJInclude(struct annoFilter *filters)

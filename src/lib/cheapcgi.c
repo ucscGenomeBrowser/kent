@@ -70,7 +70,10 @@ return getenv("CONTENT_LENGTH");
 char *cgiScriptName()
 /* Return name of script so libs can do context-sensitive stuff. */
 {
-return getenv("SCRIPT_NAME");
+char *scriptName = getenv("SCRIPT_NAME");
+if (scriptName == NULL)
+    scriptName = "cgiSpoofedScript";
+return scriptName;
 }
 
 char *cgiServerName()
