@@ -103,9 +103,7 @@ void putaInfoSaveToDb(struct sqlConnection *conn, struct putaInfo *el, char *tab
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use putaInfoSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *tExonsArray, *qExonsArray, *qBasesArray, *repeatsArray, *stopsArray, *idArray;
@@ -115,7 +113,7 @@ qBasesArray = sqlUnsignedArrayToString(el->qBases, 4);
 repeatsArray = sqlUnsignedArrayToString(el->repeats, 2);
 stopsArray = sqlUnsignedArrayToString(el->stops, el->blockCount);
 idArray = sqlDoubleArrayToString(el->id, 2);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->oChrom,  el->oChromStart,  el->oChromEnd,  el->blockCount,  el->stop,  tExonsArray ,  qExonsArray ,  qBasesArray ,  repeatsArray ,  stopsArray ,  idArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -127,43 +125,6 @@ freez(&stopsArray);
 freez(&idArray);
 }
 
-void putaInfoSaveToDbEscaped(struct sqlConnection *conn, struct putaInfo *el, char *tableName, int updateSize)
-/* Save putaInfo as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than putaInfoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *oChrom, *tExonsArray, *qExonsArray, *qBasesArray, *repeatsArray, *stopsArray, *idArray;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-oChrom = sqlEscapeString(el->oChrom);
-
-tExonsArray = sqlUnsignedArrayToString(el->tExons, 2);
-qExonsArray = sqlUnsignedArrayToString(el->qExons, 4);
-qBasesArray = sqlUnsignedArrayToString(el->qBases, 4);
-repeatsArray = sqlUnsignedArrayToString(el->repeats, 2);
-stopsArray = sqlUnsignedArrayToString(el->stops, el->blockCount);
-idArray = sqlDoubleArrayToString(el->id, 2);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s')", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  oChrom, el->oChromStart , el->oChromEnd , el->blockCount , el->stop ,  tExonsArray ,  qExonsArray ,  qBasesArray ,  repeatsArray ,  stopsArray ,  idArray );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&oChrom);
-freez(&tExonsArray);
-freez(&qExonsArray);
-freez(&qBasesArray);
-freez(&repeatsArray);
-freez(&stopsArray);
-freez(&idArray);
-}
 
 struct putaInfo *putaInfoCommaIn(char **pS, struct putaInfo *ret)
 /* Create a putaInfo out of a comma separated string. 

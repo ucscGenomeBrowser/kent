@@ -107,7 +107,7 @@ int findExactSubmissionId(struct sqlConnection *conn,
 /* Find ID of submissionSet that matches all parameters.  Return 0 if none found. */
 {
 char query[1024];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select id from submissionSet "
       "where contributors = \"%s\" "
       "and name = \"%s\" "
@@ -134,12 +134,12 @@ else
     else
 	{
 	char *escValue = makeEscapedString(value, '"');
-	safef(query, sizeof(query), "select id from %s where %s = \"%s\"",
+	sqlSafef(query, sizeof(query), "select id from %s where %s = \"%s\"",
 		table, field, escValue);
 	id = sqlQuickNum(conn, query);
 	if (id == 0)
 	    {
-	    safef(query, sizeof(query), "insert into %s values(default, \"%s\")",
+	    sqlSafef(query, sizeof(query), "insert into %s values(default, \"%s\")",
 		table, escValue);
 	    verbose(2, "%s\n", query);
 	    sqlUpdate(conn, query);
@@ -158,13 +158,13 @@ int findOrAddSubmissionSource(struct sqlConnection *conn, char *name,
  * submissionSource table. */
 {
 char query[256];
-safef(query, sizeof(query), "select id from submissionSource where name = \"%s\"",
+sqlSafef(query, sizeof(query), "select id from submissionSource where name = \"%s\"",
 	name);
 int id = sqlQuickNum(conn, query);
 if (id == 0)
     {
     struct dyString *dy = dyStringNew(0);
-    dyStringPrintf(dy,
+    sqlDyStringPrintf(dy,
         "insert into submissionSource values(default, ");
     dyStringPrintf(dy, "\"%s\", ", name);
     dyStringPrintf(dy, "\"%s\", ", acknowledgement);
@@ -189,12 +189,12 @@ else
     struct dyString *dy = dyStringNew(0);
     int id = 0;
 
-    dyStringPrintf(dy, "select id from journal where name = '%s'", name);
+    sqlDyStringPrintf(dy, "select id from journal where name = '%s'", name);
     id = sqlQuickNum(conn, dy->string);
     if (id == 0)
 	{
 	dyStringClear(dy);
-	dyStringPrintf(dy, "insert into journal set");
+	sqlDyStringPrintf(dy, "insert into journal set");
 	dyStringPrintf(dy, " id=default,\n");
 	dyStringPrintf(dy, " name=\"%s\",\n", name);
 	dyStringPrintf(dy, " url=\"%s\"\n", url);
@@ -223,7 +223,7 @@ int journalId = doJournal(conn, journal, journalUrl);
 struct dyString *dy = dyStringNew(0);
 char query[1024];
 
-dyStringPrintf(dy, "insert into submissionSet set");
+sqlDyStringPrintf(dy, "insert into submissionSet set");
 dyStringPrintf(dy, " id = default,\n");
 dyStringPrintf(dy, " name = \"%s\",\n", name);
 dyStringPrintf(dy, " contributors = \"%s\",\n", contributors);
@@ -242,7 +242,7 @@ for (contrib = contribList; contrib != NULL; contrib = contrib->next)
     {
     int contribId = findOrAddIdTable(conn, "contributor", "name", 
     	skipLeadingSpaces(contrib->name), contributorCache);
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
           "insert into submissionContributor values(%d, %d)",
 	  submissionSetId, contribId);
     verbose(2, "%s\n", query);
@@ -320,10 +320,10 @@ if (sectionSet[0] != 0 && !sameString(sectionSet, "0"))
     {
     char query[256];
     id = atoi(sectionSet);
-    safef(query, sizeof(query), "select id from sectionSet where id=%d", id);
+    sqlSafef(query, sizeof(query), "select id from sectionSet where id=%d", id);
     if (!sqlQuickNum(conn, query))
         {
-	safef(query, sizeof(query), "insert into sectionSet values(%d)", id);
+	sqlSafef(query, sizeof(query), "insert into sectionSet values(%d)", id);
 	sqlUpdate(conn, query);
 	}
     }
@@ -351,7 +351,7 @@ if (gene[0] == 0 && locusLink[0] == 0 && refSeq[0] == 0
 	     " specified line %d of %s", lf->lineIx, lf->fileName);
 
 /* Create query string that will catch relevant existing genes. */
-dyStringPrintf(dy, "select id,name,locusLink,refSeq,genbank,uniProt from gene ");
+sqlDyStringPrintf(dy, "select id,name,locusLink,refSeq,genbank,uniProt from gene ");
 dyStringPrintf(dy, "where taxon = %s and (",  taxon);
 needOr = optionallyAddOr(dy, "name", gene, needOr);
 needOr = optionallyAddOr(dy, "locusLink", locusLink, needOr);
@@ -416,7 +416,7 @@ sqlFreeResult(&sr);
 if (geneId == 0)
    {
    dyStringClear(dy);
-   dyStringAppend(dy, "insert into gene set\n");
+   sqlDyStringAppend(dy, "insert into gene set\n");
    dyStringPrintf(dy, " id = default,\n");
    dyStringPrintf(dy, " name = '%s',\n", gene);
    dyStringPrintf(dy, " locusLink = '%s',\n", locusLink);
@@ -434,14 +434,14 @@ else
 
    /* Handle updating name field - possibly creating a synonym. */
    dyStringClear(dy);
-   dyStringPrintf(dy, "select name from gene where id = %d", geneId);
+   sqlDyStringPrintf(dy, "select name from gene where id = %d", geneId);
    oldName = sqlQuickString(conn, dy->string);
    if (gene[0] != 0)
        {
        if (oldName[0] == 0)
 	   {
 	   dyStringClear(dy);
-	   dyStringPrintf(dy, "update gene set" );
+	   sqlDyStringPrintf(dy, "update gene set" );
 	   dyStringPrintf(dy, " name = '%s'", gene);
 	   dyStringPrintf(dy, " where id = %d", geneId);
 	   verbose(2, "%s\n", dy->string);
@@ -450,12 +450,12 @@ else
        else if (differentWord(oldName, gene))
 	   {
 	   dyStringClear(dy);
-	   dyStringAppend(dy, "select count(*) from geneSynonym where ");
+	   sqlDyStringAppend(dy, "select count(*) from geneSynonym where ");
 	   dyStringPrintf(dy, "gene = %d and name = '%s'", geneId, gene);
 	   if (sqlQuickNum(conn, dy->string) == 0)
 	       {
 	       dyStringClear(dy);
-	       dyStringPrintf(dy, "insert into geneSynonym "
+	       sqlDyStringPrintf(dy, "insert into geneSynonym "
 			     "values(%d,\"%s\")", geneId, gene);
 	       verbose(2, "%s\n", dy->string);
 	       sqlUpdate(conn, dy->string);
@@ -465,7 +465,7 @@ else
 
    /* Update other fields. */
    dyStringClear(dy);
-   dyStringAppend(dy, "update gene set\n");
+   sqlDyStringAppend(dy, "update gene set\n");
    if (locusLink[0] != 0)
        dyStringPrintf(dy, " locusLink = '%s',", locusLink);
    if (refSeq[0] != 0)
@@ -494,7 +494,7 @@ if (antibody > 0 && abSubmitId != NULL && abSubmitId[0] != 0)
     struct dyString *dy = dyStringNew(0);
 
     /* Try to hook up with existing antibody record. */
-    dyStringAppend(dy, "select abSubmitId from antibodySource");
+    sqlDyStringAppend(dy, "select abSubmitId from antibodySource");
     dyStringPrintf(dy, " where antibody=%d and submissionSource=%d", antibody, submissionSource);
     char *submitId = sqlQuickString(conn, dy->string);
     if (submitId != NULL)
@@ -504,7 +504,7 @@ if (antibody > 0 && abSubmitId != NULL && abSubmitId[0] != 0)
 	    if (differentString(submitId,abSubmitId))
 		{
 		dyStringClear(dy);
-		dyStringPrintf(dy, "update antibodySource set abSubmitId = '%s'", abSubmitId);
+		sqlDyStringPrintf(dy, "update antibodySource set abSubmitId = '%s'", abSubmitId);
 		dyStringPrintf(dy, " where antibody = %d and submissionSource=%d", antibody, submissionSource);
 		verbose(2, "%s\n", dy->string);
 		sqlUpdate(conn, dy->string);
@@ -514,7 +514,7 @@ if (antibody > 0 && abSubmitId != NULL && abSubmitId[0] != 0)
     else
 	{
 	dyStringClear(dy);
-	dyStringAppend(dy, "insert into antibodySource set");
+	sqlDyStringAppend(dy, "insert into antibodySource set");
 	dyStringPrintf(dy, " antibody = %d,",antibody);
 	dyStringPrintf(dy, " submissionSource = %d,", submissionSource);
 	dyStringPrintf(dy, " abSubmitId = '%s'", abSubmitId);
@@ -541,7 +541,7 @@ if (abName[0] != 0)
     struct dyString *dy = dyStringNew(0);
 
     /* Try to hook up with existing antibody record. */
-    dyStringAppend(dy, "select id,name,description,taxon from antibody");
+    sqlDyStringAppend(dy, "select id,name,description,taxon from antibody");
     dyStringPrintf(dy, " where name = '%s'", abName);
     sr = sqlGetResult(conn, dy->string);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -576,7 +576,7 @@ if (abName[0] != 0)
     if (antibodyId == 0)
 	{
 	dyStringClear(dy);
-	dyStringAppend(dy, "insert into antibody set");
+	sqlDyStringAppend(dy, "insert into antibody set");
 	dyStringPrintf(dy, " id = default,\n");
 	dyStringPrintf(dy, " name = '%s',\n", abName);
 	dyStringPrintf(dy, " description = \"%s\",\n", abDescription);
@@ -592,7 +592,7 @@ if (abName[0] != 0)
 	if (abDescription[0] != 0)
 	    {
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "update antibody set description = \"%s\"",
+	    sqlDyStringPrintf(dy, "update antibody set description = \"%s\"",
 		    abDescription);
 	    dyStringPrintf(dy, " where id = %d", antibodyId);
 	    verbose(2, "%s\n", dy->string);
@@ -601,7 +601,7 @@ if (abName[0] != 0)
 	if (abTaxon[0] != 0)
 	    {
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "update antibody set taxon = %s", abTaxon);
+	    sqlDyStringPrintf(dy, "update antibody set taxon = %s", abTaxon);
 	    dyStringPrintf(dy, " where id = %d", antibodyId);
 	    verbose(2, "%s\n", dy->string);
 	    sqlUpdate(conn, dy->string);
@@ -643,12 +643,12 @@ else if (bacId)
     }
 
 /* Handle probe type */
-dyStringPrintf(dy, "select id from probeType where name = '%s'", probeType);
+sqlDyStringPrintf(dy, "select id from probeType where name = '%s'", probeType);
 probeTypeId = sqlQuickNum(conn, dy->string);
 if (probeTypeId == 0)
     {
     dyStringClear(dy);
-    dyStringPrintf(dy, "insert into probeType values(default, '%s')", 
+    sqlDyStringPrintf(dy, "insert into probeType values(default, '%s')", 
     	probeType);
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
@@ -656,7 +656,7 @@ if (probeTypeId == 0)
     }
 
 dyStringClear(dy);
-dyStringAppend(dy, "select id from probe ");
+sqlDyStringAppend(dy, "select id from probe ");
 dyStringPrintf(dy, "where gene=%d and antibody=%d ", geneId, antibodyId);
 dyStringPrintf(dy, "and probeType=%d ", probeTypeId);
 dyStringPrintf(dy, "and fPrimer='%s' and rPrimer='%s' ", fPrimer, rPrimer);
@@ -671,7 +671,7 @@ probeId = sqlQuickNum(conn, dy->string);
 if (probeId == 0)
     {
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into probe set");
+    sqlDyStringAppend(dy, "insert into probe set");
     dyStringPrintf(dy, " id=default,\n");
     dyStringPrintf(dy, " gene=%d,\n", geneId);
     dyStringPrintf(dy, " antibody=%d,\n", antibodyId);
@@ -710,7 +710,7 @@ else
     if (captionText == NULL)
         errAbort("captionId %s line %d of %s not found in caption text file",
 		captionExtId, lf->lineIx, lf->fileName);
-    dyStringAppend(query, "insert into caption values(default, \"");
+    sqlDyStringAppend(query, "insert into caption values(default, \"");
     dyStringAppend(query, captionText);
     dyStringAppend(query, "\")");
     verbose(2, "%s\n", query->string);
@@ -731,14 +731,14 @@ int doImageFile(struct lineFile *lf, struct sqlConnection *conn,
 int imageFileId = 0;
 struct dyString *dy = newDyString(0);
 
-dyStringAppend(dy, "select id from imageFile where ");
+sqlDyStringAppend(dy, "select id from imageFile where ");
 dyStringPrintf(dy, "fileName='%s' and fullLocation=%d", 
 	fileName, fullDir);
 imageFileId = sqlQuickNum(conn, dy->string);
 if (imageFileId == 0)
     {
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into imageFile set");
+    sqlDyStringAppend(dy, "insert into imageFile set");
     dyStringPrintf(dy, " id = default,\n");
     dyStringPrintf(dy, " fileName = '%s',\n", fileName);
     dyStringPrintf(dy, " priority = %s,\n", priority);
@@ -764,13 +764,13 @@ int doStrain(struct lineFile *lf, struct sqlConnection *conn, char *taxon,
 int id = 0;
 struct dyString *dy = newDyString(0);
 
-dyStringAppend(dy, "select id from strain where ");
+sqlDyStringAppend(dy, "select id from strain where ");
 dyStringPrintf(dy, "taxon=%s and name='%s'", taxon, strain);
 id = sqlQuickNum(conn, dy->string);
 if (id == 0)
     {
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into strain set");
+    sqlDyStringAppend(dy, "insert into strain set");
     dyStringPrintf(dy, " id = default,\n");
     dyStringPrintf(dy, " taxon = %s,\n", taxon);
     dyStringPrintf(dy, " name = '%s'", strain);
@@ -797,7 +797,7 @@ slSort(&geneAlleleList, slNameCmp);
 for (el = geneAlleleList; el != NULL; el = el->next)
     dyStringPrintf(alphabetical, "%s,", el->name);
 
-dyStringAppend(dy, "select id from genotype where ");
+sqlDyStringAppend(dy, "select id from genotype where ");
 dyStringPrintf(dy, "taxon=%s and strain=%d and alleles='%s'", 
 	taxon, strainId, alphabetical->string);
 id = sqlQuickNum(conn, dy->string);
@@ -805,7 +805,7 @@ if (id == 0)
     {
     /* Create main genotype record. */
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into genotype set");
+    sqlDyStringAppend(dy, "insert into genotype set");
     dyStringPrintf(dy, " id = default,\n");
     dyStringPrintf(dy, " taxon = %s,\n", taxon);
     dyStringPrintf(dy, " strain = %d,\n", strainId);
@@ -831,13 +831,13 @@ if (id == 0)
 
 	    /* Get or make gene ID. */
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "select id from gene where ");
+	    sqlDyStringPrintf(dy, "select id from gene where ");
 	    dyStringPrintf(dy, "name = \"%s\" and taxon=%s", gene, taxon);
 	    geneId = sqlQuickNum(conn, dy->string);
 	    if (geneId == 0)
 	        {
 		dyStringClear(dy);
-		dyStringAppend(dy, "insert into gene set");
+		sqlDyStringAppend(dy, "insert into gene set");
 		dyStringPrintf(dy, " id = default,\n");
 		dyStringPrintf(dy, " name = \"%s\",\n", gene);
 		dyStringPrintf(dy, " locusLink = '',\n");
@@ -852,13 +852,13 @@ if (id == 0)
 
 	    /* Get or make allele ID. */
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "select id from allele where ");
+	    sqlDyStringPrintf(dy, "select id from allele where ");
 	    dyStringPrintf(dy, "gene = %d and name = \"%s\"", geneId, allele);
 	    alleleId = sqlQuickNum(conn, dy->string);
 	    if (alleleId == 0)
 	        {
 		dyStringClear(dy);
-		dyStringAppend(dy, "insert into allele set");
+		sqlDyStringAppend(dy, "insert into allele set");
 		dyStringPrintf(dy, " id = default,\n");
 		dyStringPrintf(dy, " gene = %d,\n", geneId);
 		dyStringPrintf(dy, " name = \"%s\"", allele);
@@ -869,7 +869,7 @@ if (id == 0)
 
 	    /* Add genotypeAllele record. */
 	    dyStringClear(dy);
-	    dyStringAppend(dy, "insert into genotypeAllele set ");
+	    sqlDyStringAppend(dy, "insert into genotypeAllele set ");
 	    dyStringPrintf(dy, "genotype = %d, allele=%d\n", id, alleleId);
 	    verbose(2, "%s\n", dy->string);
 	    sqlUpdate(conn, dy->string);
@@ -901,7 +901,7 @@ struct dyString *dy = newDyString(0);
 
 if (minAge[0] == 0) minAge = age;
 if (maxAge[0] == 0) maxAge = age;
-dyStringAppend(dy, "select id from specimen where ");
+sqlDyStringAppend(dy, "select id from specimen where ");
 dyStringPrintf(dy, "name = \"%s\" and ", name);
 dyStringPrintf(dy, "taxon = %s and ", taxon);
 dyStringPrintf(dy, "genotype = %d and ", genotype);
@@ -915,7 +915,7 @@ id = sqlQuickNum(conn, dy->string);
 if (id == 0)
     {
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into specimen set");
+    sqlDyStringAppend(dy, "insert into specimen set");
     dyStringPrintf(dy, " id = default,\n");
     dyStringPrintf(dy, "name = \"%s\",\n", name);
     dyStringPrintf(dy, "taxon = %s,\n", taxon);
@@ -942,7 +942,7 @@ int doPreparation(struct lineFile *lf, struct sqlConnection *conn,
 int id = 0;
 struct dyString *dy = newDyString(0);
 
-dyStringAppend(dy, "select id from preparation where ");
+sqlDyStringAppend(dy, "select id from preparation where ");
 dyStringPrintf(dy, "fixation = %d and ", fixation);
 dyStringPrintf(dy, "embedding = %d and ", embedding);
 dyStringPrintf(dy, "permeablization = %d and ", permeablization);
@@ -952,7 +952,7 @@ id = sqlQuickNum(conn, dy->string);
 if (id == 0)
     {
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into preparation set");
+    sqlDyStringAppend(dy, "insert into preparation set");
     dyStringPrintf(dy, " id = default,\n");
     dyStringPrintf(dy, " fixation = %d,\n", fixation);
     dyStringPrintf(dy, " embedding = %d,\n", embedding);
@@ -975,7 +975,7 @@ int doImage(struct lineFile *lf, struct sqlConnection *conn,
 int id = 0;
 struct dyString *dy = newDyString(0);
 
-dyStringAppend(dy, "select id from image where ");
+sqlDyStringAppend(dy, "select id from image where ");
 dyStringPrintf(dy, "submissionSet = %d and ", submissionSet);
 dyStringPrintf(dy, "imageFile = %d and ", imageFile);
 dyStringPrintf(dy, "imagePos = %d and ", imagePos);
@@ -988,7 +988,7 @@ id = sqlQuickNum(conn, dy->string);
 if (id == 0)
     {
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into image set ");
+    sqlDyStringAppend(dy, "insert into image set ");
     dyStringPrintf(dy, " id=default,");
     dyStringPrintf(dy, "submissionSet = %d,", submissionSet);
     dyStringPrintf(dy, "imageFile = %d,", imageFile);
@@ -1013,14 +1013,14 @@ int doImageProbe(struct sqlConnection *conn,
 {
 struct dyString *dy = dyStringNew(0);
 int id = 0;
-dyStringAppend(dy, "select id from imageProbe where ");
+sqlDyStringAppend(dy, "select id from imageProbe where ");
 dyStringPrintf(dy, "image=%d and probe=%d and probeColor=%d",
     image, probe, probeColor);
 id = sqlQuickNum(conn, dy->string);
 if (id == 0)
     {
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into imageProbe set");
+    sqlDyStringAppend(dy, "insert into imageProbe set");
     dyStringPrintf(dy, " id=default,");
     dyStringPrintf(dy, " image=%d,", image);
     dyStringPrintf(dy, " probe=%d,", probe);
@@ -1050,12 +1050,12 @@ double lev = atof(level);
 if (lev < 0 || lev > 1.0)
     errAbort("expression level %s out of range (0 to 1) line %d of %s", 
     	level, lf->lineIx, lf->fileName);
-dyStringAppend(dy, "select count(*) from expressionLevel where ");
+sqlDyStringAppend(dy, "select count(*) from expressionLevel where ");
 dyStringPrintf(dy, "imageProbe=%d and bodyPart=%d", imageProbe, bodyPartId);
 if (sqlQuickNum(conn, dy->string) == 0)
     {
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into expressionLevel set");
+    sqlDyStringAppend(dy, "insert into expressionLevel set");
     dyStringPrintf(dy, " imageProbe=%d,", imageProbe);
     dyStringPrintf(dy, " bodyPart=%d,", bodyPartId);
     dyStringPrintf(dy, " level=%f,", lev);

@@ -43,7 +43,7 @@ char *edwPathForFileId(struct sqlConnection *conn, long long fileId)
 {
 char query[256];
 char fileName[PATH_LEN];
-safef(query, sizeof(query), "select edwFileName from edwFile where id=%lld", fileId);
+sqlSafef(query, sizeof(query), "select edwFileName from edwFile where id=%lld", fileId);
 sqlNeedQuickQuery(conn, query, fileName, sizeof(fileName));
 char path[512];
 safef(path, sizeof(path), "%s%s", edwRootDir, fileName);
@@ -93,13 +93,13 @@ long edwGettingFile(struct sqlConnection *conn, char *submitDir, char *submitFil
 {
 /* First see if we have even got the directory. */
 char query[PATH_LEN+512];
-safef(query, sizeof(query), "select id from edwSubmitDir where url='%s'", submitDir);
+sqlSafef(query, sizeof(query), "select id from edwSubmitDir where url='%s'", submitDir);
 int submitDirId = sqlQuickNum(conn, query);
 if (submitDirId <= 0)
     return -1;
 
 /* Then see if we have file that matches submitDir and submitFileName. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select id from edwFile "
     "where submitFileName='%s' and submitDirId = %d and errorMessage = '' and deprecated=''"
     " and (endUploadTime > startUploadTime or startUploadTime < %lld) "
@@ -117,7 +117,7 @@ long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileNam
 {
 /* First see if we have even got the directory. */
 char query[PATH_LEN+512];
-safef(query, sizeof(query), "select id from edwSubmitDir where url='%s'", submitDir);
+sqlSafef(query, sizeof(query), "select id from edwSubmitDir where url='%s'", submitDir);
 int submitDirId = sqlQuickNum(conn, query);
 if (submitDirId <= 0)
     return -1;
@@ -125,7 +125,7 @@ if (submitDirId <= 0)
 /* The complex truth is that we may have gotten this file multiple times. 
  * We return the most recent version where it got uploaded and passed the post-upload
  * MD5 sum, and thus where the MD5 field is filled in the database. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select md5,id from edwFile "
     "where submitFileName='%s' and submitDirId = %d and md5 != '' "
     "order by submitId desc limit 1"
@@ -210,9 +210,7 @@ struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email)
 /* Return user associated with that email or NULL if not found */
 {
 char query[256];
-char *escapedEmail = sqlEscapeString(email);
-safef(query, sizeof(query), "select * from edwUser where email='%s'", escapedEmail);
-freez(&escapedEmail);
+sqlSafef(query, sizeof(query), "select * from edwUser where email='%s'", email);
 struct edwUser *user = edwUserLoadByQuery(conn, query);
 return user;
 }
@@ -236,12 +234,11 @@ int edwGetHost(struct sqlConnection *conn, char *hostName)
 {
 /* If it's already in table, just return ID. */
 char query[512];
-safef(query, sizeof(query), "select id from edwHost where name='%s'", hostName);
+sqlSafef(query, sizeof(query), "select id from edwHost where name='%s'", hostName);
 int hostId = sqlQuickNum(conn, query);
 if (hostId > 0)
     return hostId;
-
-safef(query, sizeof(query), "insert edwHost (name, firstAdded, paraFetchStreams) values('%s', %lld, 10)", 
+sqlSafef(query, sizeof(query), "insert edwHost (name, firstAdded, paraFetchStreams) values('%s', %lld, 10)", 
        hostName, edwNow());
 sqlUpdate(conn, query);
 return sqlLastAutoId(conn);
@@ -252,12 +249,12 @@ int edwGetSubmitDir(struct sqlConnection *conn, int hostId, char *submitDir)
 {
 /* If it's already in table, just return ID. */
 char query[512];
-safef(query, sizeof(query), "select id from edwSubmitDir where url='%s'", submitDir);
+sqlSafef(query, sizeof(query), "select id from edwSubmitDir where url='%s'", submitDir);
 int dirId = sqlQuickNum(conn, query);
 if (dirId > 0)
     return dirId;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
    "insert edwSubmitDir (url, firstAdded, hostId) values('%s', %lld, %d)", 
    submitDir, edwNow(), hostId);
 sqlUpdate(conn, query);
@@ -434,11 +431,11 @@ static int getLocalHost(struct sqlConnection *conn)
 /* Make up record for local host if it is not there already. */
 {
 char query[256];
-safef(query, sizeof(query), "select id from edwHost where name = '%s'", localHostName);
+sqlSafef(query, sizeof(query), "select id from edwHost where name = '%s'", localHostName);
 int hostId = sqlQuickNum(conn, query);
 if (hostId == 0)
     {
-    safef(query, sizeof(query), "insert edwHost(name, firstAdded) values('%s', %lld)",
+    sqlSafef(query, sizeof(query), "insert edwHost(name, firstAdded) values('%s', %lld)",
 	localHostName,  edwNow());
     sqlUpdate(conn, query);
     hostId = sqlLastAutoId(conn);
@@ -451,12 +448,12 @@ static int getLocalSubmitDir(struct sqlConnection *conn)
 {
 int hostId = getLocalHost(conn);
 char query[256];
-safef(query, sizeof(query), "select id from edwSubmitDir where url='%s' and hostId=%d", 
+sqlSafef(query, sizeof(query), "select id from edwSubmitDir where url='%s' and hostId=%d", 
     localHostDir, hostId);
 int dirId = sqlQuickNum(conn, query);
 if (dirId == 0)
     {
-    safef(query, sizeof(query), "insert edwSubmitDir(url,hostId,firstAdded) values('%s',%d,%lld)",
+    sqlSafef(query, sizeof(query), "insert edwSubmitDir(url,hostId,firstAdded) values('%s',%d,%lld)",
 	localHostDir, hostId, edwNow());
     sqlUpdate(conn, query);
     dirId = sqlLastAutoId(conn);
@@ -469,11 +466,11 @@ static int getLocalSubmit(struct sqlConnection *conn)
 {
 int dirId = getLocalSubmitDir(conn);
 char query[256];
-safef(query, sizeof(query), "select id from edwSubmit where submitDirId='%d'", dirId);
+sqlSafef(query, sizeof(query), "select id from edwSubmit where submitDirId='%d'", dirId);
 int submitId = sqlQuickNum(conn, query);
 if (submitId == 0)
     {
-    safef(query, sizeof(query), "insert edwSubmit (submitDirId,startUploadTime) values(%d,%lld)",
+    sqlSafef(query, sizeof(query), "insert edwSubmit (submitDirId,startUploadTime) values(%d,%lld)",
 	dirId, edwNow());
     sqlUpdate(conn, query);
     submitId = sqlLastAutoId(conn);
@@ -495,7 +492,7 @@ void edwUpdateFileTags(struct sqlConnection *conn, long long fileId, struct dySt
 /* Update tags field in edwFile with given value */
 {
 struct dyString *query = dyStringNew(0);
-dyStringAppend(query, "update edwFile set tags='");
+sqlDyStringAppend(query, "update edwFile set tags='");
 dyStringAppend(query, tags->string);
 dyStringPrintf(query, "' where id=%lld", fileId);
 sqlUpdate(conn, query->string);
@@ -520,7 +517,7 @@ long long updateTime = fileModTime(localAbsolutePath);
 int submitDirId = getLocalSubmitDir(conn);
 int submitId = getLocalSubmit(conn);
 char query[256+PATH_LEN];
-safef(query, sizeof(query), "select * from edwFile where submitId=%d and submitFileName='%s'",
+sqlSafef(query, sizeof(query), "select * from edwFile where submitId=%d and submitFileName='%s'",
     submitId, localAbsolutePath);
 struct edwFile *ef = edwFileLoadByQuery(conn, query);
 
@@ -531,7 +528,7 @@ if (ef != NULL && ef->updateTime == updateTime && ef->size == size)
 
 /* If we got here, then we need to make a new file record. Start with pretty empty record
  * that just has file ID, submitted file name and a few things*/
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "insert edwFile (submitId,submitDirId,submitFileName,startUploadTime) "
             " values(%d, %d, '%s', %lld)"
 	    , submitId, submitDirId, localAbsolutePath, edwNow());
@@ -558,14 +555,14 @@ else
     }
 
 /* Update file record. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "update edwFile set edwFileName='%s', endUploadTime=%lld,"
                        "updateTime=%lld, size=%lld, md5='%s' where id=%lld"
 			, edwFile, edwNow(), updateTime, size, md5, fileId);
 sqlUpdate(conn, query);
 
 /* Now, it's a bit of a time waste, but cheap in code, to just load it back from DB. */
-safef(query, sizeof(query), "select * from edwFile where id=%lld", fileId);
+sqlSafef(query, sizeof(query), "select * from edwFile where id=%lld", fileId);
 return edwFileLoadByQuery(conn, query);
 }
 
@@ -574,7 +571,7 @@ struct edwFile *edwFileAllIntactBetween(struct sqlConnection *conn, int startId,
  * with file IDs between startId and endId - including endId */
 {
 char query[128];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select * from edwFile where id>=%d and id<=%d and endUploadTime != 0 "
     "and updateTime != 0 and deprecated = ''", 
     startId, endId);
@@ -585,7 +582,7 @@ struct edwFile *edwFileFromId(struct sqlConnection *conn, long long fileId)
 /* Return edwValidFile given fileId - return NULL if not found. */
 {
 char query[128];
-safef(query, sizeof(query), "select * from edwFile where id=%lld", fileId);
+sqlSafef(query, sizeof(query), "select * from edwFile where id=%lld", fileId);
 return edwFileLoadByQuery(conn, query);
 }
 
@@ -602,7 +599,7 @@ struct edwValidFile *edwValidFileFromFileId(struct sqlConnection *conn, long lon
 /* Return edwValidFile give fileId - returns NULL if not validated. */
 {
 char query[128];
-safef(query, sizeof(query), "select * from edwValidFile where fileId=%lld", fileId);
+sqlSafef(query, sizeof(query), "select * from edwValidFile where fileId=%lld", fileId);
 return edwValidFileLoadByQuery(conn, query);
 }
 
@@ -620,7 +617,7 @@ struct edwAssembly *edwAssemblyForUcscDb(struct sqlConnection *conn, char *ucscD
 /* Get assembly for given UCSC ID or die trying */
 {
 char query[256];
-safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", ucscDb);
+sqlSafef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", ucscDb);
 struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
 if (assembly == NULL)
     errAbort("Can't find assembly for %s", ucscDb);
@@ -662,11 +659,9 @@ void edwWriteErrToTable(struct sqlConnection *conn, char *table, int id, char *e
 /* Write out error message to errorMessage field of table. */
 {
 char *trimmedError = trimSpaces(err);
-char escapedErrorMessage[2*strlen(trimmedError)+1];
-sqlEscapeString2(escapedErrorMessage, trimmedError);
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "update %s set errorMessage='%s' where id=%d", 
-    table, escapedErrorMessage, id);
+sqlDyStringPrintf(query, "update %s set errorMessage='%s' where id=%d", 
+    table, trimmedError, id);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 }
@@ -683,7 +678,7 @@ void edwAddJob(struct sqlConnection *conn, char *command)
 /* Add job to queue to run. */
 {
 char query[256+strlen(command)];
-safef(query, sizeof(query), "insert into edwJob (commandLine) values('%s')", command);
+sqlSafef(query, sizeof(query), "insert into edwJob (commandLine) values('%s')", command);
 sqlUpdate(conn, query);
 }
 
@@ -699,12 +694,9 @@ struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url)
 /* Return most recent submission, possibly in progress, from this url */
 {
 int urlSize = strlen(url);
-char escapedUrl[2*urlSize+1];
-sqlEscapeString2(escapedUrl, url);
-int escapedSize = strlen(escapedUrl);
-char query[128 + escapedSize];
-safef(query, sizeof(query), 
-    "select * from edwSubmit where url='%s' order by id desc limit 1", escapedUrl);
+char query[128 + 2*urlSize + 1];
+sqlSafef(query, sizeof(query), 
+    "select * from edwSubmit where url='%s' order by id desc limit 1", url);
 return edwSubmitLoadByQuery(conn, query);
 }
 
@@ -713,7 +705,7 @@ long long edwSubmitMaxStartTime(struct edwSubmit *submit, struct sqlConnection *
  * we started if not files started yet. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select max(startUploadTime) from edwFile where submitId=%u", submit->id);
 long long maxStartTime = sqlQuickLongLong(conn, query);
 if (maxStartTime == 0)
@@ -725,7 +717,7 @@ int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn)
 /* Count number of new files in submission that have been validated. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select count(*) from edwFile e,edwValidFile v where e.id = v.fileId and e.submitId=%u",
     submit->id);
 return sqlQuickNum(conn, query);
@@ -737,10 +729,8 @@ void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url)
 /* Create command and add it to edwSubmitJob table. */
 char command[strlen(url) + strlen(userEmail) + 256];
 safef(command, sizeof(command), "edwSubmit '%s' %s", url, userEmail);
-char escapedCommand[2*strlen(command) + 1];
-sqlEscapeString2(escapedCommand, command);
-char query[strlen(escapedCommand)+128];
-safef(query, sizeof(query), "insert edwSubmitJob (commandLine) values('%s')", escapedCommand);
+char query[strlen(command)+128];
+sqlSafef(query, sizeof(query), "insert edwSubmitJob (commandLine) values('%s')", command);
 sqlUpdate(conn, query);
 
 /* Write sync signal (any string ending with newline) to fifo to wake up daemon. */
@@ -758,7 +748,7 @@ struct edwValidFile *edwFindElderReplicates(struct sqlConnection *conn, struct e
 if (sameString(vf->format, "unknown"))
     return NULL;
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select * from edwValidFile where id<%d and experiment='%s' and format='%s'"
     " and outputType='%s'"
     , vf->id, vf->experiment, vf->format, vf->outputType);
@@ -794,14 +784,13 @@ void edwCreateNewUser(char *email)
 /* Now make sure user is not already in user table. */
 struct sqlConnection *conn = edwConnectReadWrite();
 struct dyString *query = dyStringNew(0);
-char *escapedEmail = sqlEscapeString(email);
-dyStringPrintf(query, "select count(*) from edwUser where email = '%s'", escapedEmail);
+sqlDyStringPrintf(query, "select count(*) from edwUser where email = '%s'", email);
 if (sqlQuickNum(conn, query->string) > 0)
     errAbort("User %s already exists", email);
 
 /* Do database insert. */
 dyStringClear(query);
-dyStringPrintf(query, "insert into edwUser (email) values('%s')", escapedEmail);
+sqlDyStringPrintf(query, "insert into edwUser (email) values('%s')", email);
 sqlUpdate(conn, query->string);
 
 sqlDisconnect(&conn);

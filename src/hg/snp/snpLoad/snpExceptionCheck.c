@@ -44,7 +44,7 @@ struct coords *cel = NULL;
 
 coordHash = newHash(18);
 verbose(1, "creating hash...\n");
-safef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from snp125");
+sqlSafef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from snp125");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -75,7 +75,7 @@ int start = 0;
 int end = 0;
 
 verbose(1, "checking exceptions...\n");
-safef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from snp125Exceptions");
+sqlSafef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from snp125Exceptions");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

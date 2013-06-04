@@ -55,7 +55,7 @@ char **row;
 char query[256];
 
 conn = sqlConnectRemote(host, user, password, database);
-sprintf(query, "show tables");
+sqlSafef(query, sizeof query, "show tables");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -68,7 +68,7 @@ slReverse(&list);
 
 for (el = list; el != NULL; el = el->next)
     {
-    sprintf(query, "select count(*) from %s", el->name);
+    sqlSafef(query, sizeof query, "select count(*) from %s", el->name);
     el->itemCount = sqlQuickNum(conn, query);
     }
 sqlDisconnect(&conn);

@@ -473,7 +473,7 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
 	char query[256], buf[256];
 	strcpy(accOnly, ci->name);
 	chopSuffix(accOnly);
-	sprintf(query, "select accession from tilingPath where accession = '%s'", accOnly);
+	sqlSafef(query, sizeof query,"select accession from tilingPath where accession = '%s'", accOnly);
         if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
 	    bgColor = hilight;
 	}
@@ -539,7 +539,7 @@ if (realiCloneList == NULL)
 
     /* Load in clone extents from database. */
     realiCloneHash = newHash(12);
-    sprintf(query, 
+    sqlSafef(query, sizeof query,
     	"select * from cloneAliPos where chrom='%s'and chromStart<%u and chromEnd>%u",
 	chromName, winEnd, winStart);
     sr = sqlGetResult(conn, query);
@@ -557,7 +557,7 @@ if (realiCloneList == NULL)
     sqlFreeResult(&sr);
 
     /* Load in alignments from database and sort them by clone. */
-    sprintf(query, "select * from %s_frags where tStart<%u and tEnd>%u",
+    sqlSafef(query, sizeof query, "select * from %s_frags where tStart<%u and tEnd>%u",
 	chromName, winEnd, winStart);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)

@@ -137,9 +137,7 @@ void autoTestSaveToDb(struct sqlConnection *conn, struct autoTest *el, char *tab
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use autoTestSaveToDbEscaped() */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *aliasesArray, *ptsArray, *difsArray, *valsArray;
@@ -147,40 +145,10 @@ aliasesArray = sqlStringArrayToString(el->aliases, 3);
 ptsArray = sqlShortArrayToString(el->pts, el->ptCount);
 difsArray = sqlUbyteArrayToString(el->difs, el->difCount);
 valsArray = sqlStringArrayToString(el->vals, el->valCount);
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%d,'%s',%d,'%s', NULL ,%d,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%d,'%s',%d,'%s', NULL ,%d,'%s')", 
 	tableName,  el->id,  el->shortName,  el->longName,  aliasesArray ,  el->ptCount,  ptsArray ,  el->difCount,  difsArray ,  el->valCount,  valsArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
-freez(&aliasesArray);
-freez(&ptsArray);
-freez(&difsArray);
-freez(&valsArray);
-}
-
-void autoTestSaveToDbEscaped(struct sqlConnection *conn, struct autoTest *el, char *tableName, int updateSize)
-/* Save autoTest as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than autoTestSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *shortName, *longName, *aliasesArray, *ptsArray, *difsArray, *valsArray;
-shortName = sqlEscapeString(el->shortName);
-longName = sqlEscapeString(el->longName);
-
-aliasesArray = sqlStringArrayToString(el->aliases, 3);
-ptsArray = sqlShortArrayToString(el->pts, el->ptCount);
-difsArray = sqlUbyteArrayToString(el->difs, el->difCount);
-valsArray = sqlStringArrayToString(el->vals, el->valCount);
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%d,'%s',%d,'%s', NULL ,%d,'%s')", 
-	tableName,  el->id,  shortName,  longName,  aliasesArray ,  el->ptCount,  ptsArray ,  el->difCount,  difsArray ,  el->valCount,  valsArray );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&shortName);
-freez(&longName);
 freez(&aliasesArray);
 freez(&ptsArray);
 freez(&difsArray);

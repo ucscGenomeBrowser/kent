@@ -73,7 +73,7 @@ while ((list = raNextRecordAsSlPairList(lf)) != NULL)
     /* Get min/max dataValues in fields.  Do it ourselves rather than using SQL min/max because sometimes
      * the data field is a name column.... */
     char query[512];
-    safef(query, sizeof(query), "select chromStart,chromEnd,%s from %s", field, track);
+    sqlSafef(query, sizeof(query), "select chromStart,chromEnd,%s from %s", field, track);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     row = sqlNextRow(sr);

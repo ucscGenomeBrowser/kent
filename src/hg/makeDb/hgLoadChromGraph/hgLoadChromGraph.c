@@ -49,7 +49,7 @@ char *createString =
 ");\n";
 
 char *metaCreateString = 
-"CREATE TABLE metaChromGraph (\n"
+"NOSQLINJ CREATE TABLE metaChromGraph (\n"
 "    name varchar(255) not null,        # Corresponds to chrom graph table name\n"
 "    minVal double not null,    # Minimum value observed\n"
 "    maxVal double not null,    # Maximum value observed\n"
@@ -82,7 +82,7 @@ struct hash *posHash = newHash(24);
 struct sqlResult *sr = NULL;
 char query[256];
 char **row;
-safef(query, sizeof(query), "select name,chrom,chromStart from %s", table);
+sqlSafef(query, sizeof(query), "select name,chrom,chromStart from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -181,7 +181,7 @@ if (doLoad)
 
     /* Set up connection to database and create main table. */
     conn = hAllocConn(db);
-    dyStringPrintf(dy, createString, track, hGetMinIndexLength(db));
+    sqlDyStringPrintf(dy, createString, track, hGetMinIndexLength(db));
     sqlRemakeTable(conn, track, dy->string);
 
     /* Load main table and clean up file handle. */
@@ -194,7 +194,7 @@ if (doLoad)
     else
         {
 	dyStringClear(dy);
-	dyStringPrintf(dy, "delete from metaChromGraph where name = '%s'", 
+	sqlDyStringPrintf(dy, "delete from metaChromGraph where name = '%s'", 
 		track);
 	sqlUpdate(conn, dy->string);
 	}
@@ -208,7 +208,7 @@ if (doLoad)
 
     /* Create new line in meta table */
     dyStringClear(dy);
-    dyStringPrintf(dy, "insert into metaChromGraph values('%s',%f,%f,'%s');",
+    sqlDyStringPrintf(dy, "insert into metaChromGraph values('%s',%f,%f,'%s');",
     	track, minVal, maxVal, gbdbPath);
     sqlUpdate(conn, dy->string);
     }

@@ -168,12 +168,12 @@ if (!test)
     char query[1024];
     if (drop)
         {
-        safef(query, sizeof(query), "drop table if exists %s", seqTbl);
+        sqlSafef(query, sizeof(query), "drop table if exists %s", seqTbl);
         sqlUpdate(conn, query);
-        safef(query, sizeof(query), "drop table if exists %s", extFileTbl);
+        sqlSafef(query, sizeof(query), "drop table if exists %s", extFileTbl);
         sqlUpdate(conn, query);
         }
-    safef(query, sizeof(query), seqTableCreate, seqTbl);
+    sqlSafef(query, sizeof(query), seqTableCreate, seqTbl);
     sqlMaybeMakeTable(conn, seqTbl, query);
     firstSeqId = nextSeqId = hgGetMaxId(conn, seqTbl) + 1;
     }

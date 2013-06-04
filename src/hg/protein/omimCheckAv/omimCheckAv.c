@@ -56,7 +56,7 @@ conn3= hAllocConn();
 conn4= hAllocConn();
 	
 /* loop thru all recordd in the omimAvPos table */
-sprintf(query2,"select * from %s.omimAvPos", genomeDb);
+sqlSafef(query2, sizeof query2, "select * from %s.omimAvPos", genomeDb);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -73,7 +73,7 @@ while (row2 != NULL)
     aaPos 	= atoi(pos);
     
     /* find corresponding protein for each OMIM record */
-    sprintf(query3, 
+    sqlSafef(query3, sizeof query3,  
         "select distinct accession, extDB, extAC from %s.spXref2 where extAC='%s' and extDB='MIM';",
     	    PROTEOME_DB_NAME, id);
 

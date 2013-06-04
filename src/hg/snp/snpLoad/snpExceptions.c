@@ -47,7 +47,7 @@ if (!sqlTableExists(conn, tableName))
     return;
 
 /* not checking chrom */
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refNCBI, refUCSC, "
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refNCBI, refUCSC, "
                             "observed, class, locType from %s", tableName);
 
 sr = sqlGetResult(conn, query);

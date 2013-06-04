@@ -229,7 +229,7 @@ if (tdbSpanList)
 else
     {
     /* just use first span if trackDb doesn't have spanList */
-    safef(query, ArraySize(query),
+    sqlSafef(query, ArraySize(query),
 	"SELECT span from %s where chrom = '%s' limit 1", table, chrom);
     char *tmpSpan = sqlQuickString(conn, query);
     // if there's no data on this chrom just return 1 arbitrarily
@@ -268,7 +268,7 @@ boolean withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 /*	winEnd less than 1 (i.e. == 0), we need to find this chrom size	*/
 if (winEnd < 1)
     {
-    safef(query, ArraySize(query),
+    sqlSafef(query, ArraySize(query),
 	"SELECT size from chromInfo where chrom = '%s'", chrom);
     sr = sqlMustGetResult(conn,query);
     if ((row = sqlNextRow(sr)) == NULL)
@@ -281,7 +281,7 @@ if (winEnd < 1)
 
 /*	This is a time expensive query,
  *	~3 to 6 seconds on large chroms full of data	*/
-safef(query, ArraySize(query),
+sqlSafef(query, ArraySize(query),
     "SELECT span from %s where chrom = '%s' group by span", table, chrom);
 
 sr = sqlMustGetResult(conn,query);
@@ -361,7 +361,7 @@ if (sameWord("NONE",tdbDefault))
 else if( sameWord("first",tdbDefault))
     {
     char query[1024];
-    snprintf(query, sizeof(query), "SELECT span FROM %s limit 1", tdb->table );
+    sqlSafef(query, sizeof(query), "SELECT span FROM %s limit 1", tdb->table );
     char *tmpSpan = sqlQuickString(conn, query);
     AllocArray(ret,2);
     ret[0] = sqlUnsigned(tmpSpan);
@@ -612,7 +612,7 @@ AllocVar(bed);
 bed->chrom = cloneString(chrom);
 bed->chromStart = start;
 bed->chromEnd = end;
-snprintf(name, sizeof(name), "%s.%u",
+safef(name, sizeof(name), "%s.%u",
     chrom, lineCount);
 bed->name = cloneString(name);
 return bed;
@@ -826,11 +826,11 @@ if (constraints)
     }
 
 if (bewareConstraints)
-    snprintf(query, sizeof(query),
-	"SELECT span from %s where chrom = '%s' AND %s group by span",
+    sqlSafef(query, sizeof(query),
+	"SELECT span from %s where chrom = '%s' AND %-s group by span",
 	table, chromName, constraints );
 else
-    snprintf(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"SELECT span from %s where chrom = '%s' group by span",
 	table, chromName );
 
@@ -843,7 +843,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     ++rowCount;
 
-    snprintf(spanName, sizeof(spanName), "%u", span);
+    safef(spanName, sizeof(spanName), "%u", span);
     el = hashLookup(spans, spanName);
     if ( el == NULL)
 	{
@@ -867,11 +867,11 @@ while ((! reachedDataLimit) && (el = hashNext(&cookie)) != NULL)
 
     if (bewareConstraints)
 	{
-	snprintf(whereSpan, sizeof(whereSpan), "((span = %s) AND %s)", el->name,
+	sqlSafef(whereSpan, sizeof(whereSpan), "((span = %s) AND %-s)", el->name,
 	    constraints);
 	}
     else
-	snprintf(whereSpan, sizeof(whereSpan), "span = %s", el->name);
+	sqlSafef(whereSpan, sizeof(whereSpan), "span = %s", el->name);
 
     span = atoi(el->name);
 

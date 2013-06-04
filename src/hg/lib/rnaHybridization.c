@@ -129,58 +129,15 @@ void rnaHybridizationSaveToDb(struct sqlConnection *conn, struct rnaHybridizatio
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use rnaHybridizationSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s',%g,%u,%u)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s',%g,%u,%u)", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->dummy,  el->strand,  el->chromTarget,  el->chromStartTarget,  el->chromEndTarget,  el->strandTarget,  el->refSeqTarget,  el->aorfTarget,  el->igenicsTarget,  el->trnaTarget,  el->JGITarget,  el->patternSeq,  el->targetSeq,  el->gcContent,  el->matchLength,  el->targetAnnotation);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void rnaHybridizationSaveToDbEscaped(struct sqlConnection *conn, struct rnaHybridization *el, char *tableName, int updateSize)
-/* Save rnaHybridization as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than rnaHybridizationSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *chromTarget, *strandTarget, *refSeqTarget, *aorfTarget, *igenicsTarget, *trnaTarget, *JGITarget, *patternSeq, *targetSeq;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-chromTarget = sqlEscapeString(el->chromTarget);
-strandTarget = sqlEscapeString(el->strandTarget);
-refSeqTarget = sqlEscapeString(el->refSeqTarget);
-aorfTarget = sqlEscapeString(el->aorfTarget);
-igenicsTarget = sqlEscapeString(el->igenicsTarget);
-trnaTarget = sqlEscapeString(el->trnaTarget);
-JGITarget = sqlEscapeString(el->JGITarget);
-patternSeq = sqlEscapeString(el->patternSeq);
-targetSeq = sqlEscapeString(el->targetSeq);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s',%g,%u,%u)", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->dummy ,  strand,  chromTarget, el->chromStartTarget , el->chromEndTarget ,  strandTarget,  refSeqTarget,  aorfTarget,  igenicsTarget,  trnaTarget,  JGITarget,  patternSeq,  targetSeq, el->gcContent , el->matchLength , el->targetAnnotation );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&chromTarget);
-freez(&strandTarget);
-freez(&refSeqTarget);
-freez(&aorfTarget);
-freez(&igenicsTarget);
-freez(&trnaTarget);
-freez(&JGITarget);
-freez(&patternSeq);
-freez(&targetSeq);
-}
 
 struct rnaHybridization *rnaHybridizationCommaIn(char **pS, struct rnaHybridization *ret)
 /* Create a rnaHybridization out of a comma separated string. 

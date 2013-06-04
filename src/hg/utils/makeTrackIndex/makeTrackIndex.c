@@ -38,7 +38,7 @@ printf("%s ", tdb->track);
 printf("%s ", tdb->shortLabel);
 if(metaDbExists)
     {
-    safef(query, sizeof(query), "select val from %s where obj = '%s'",
+    sqlSafef(query, sizeof(query), "select val from %s where obj = '%s'",
         metaDbName, tdb->track);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)

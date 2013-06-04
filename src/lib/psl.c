@@ -20,38 +20,6 @@
 #include "rangeTree.h"
 
 
-static char *createString = 
-"CREATE TABLE %s (\n"
-    "%s"				/* Optional bin */
-    "matches int unsigned not null,	# Number of bases that match that aren't repeats\n"
-    "misMatches int unsigned not null,	# Number of bases that don't match\n"
-    "repMatches int unsigned not null,	# Number of bases that match but are part of repeats\n"
-    "nCount int unsigned not null,	# Number of 'N' bases\n"
-    "qNumInsert int unsigned not null,	# Number of inserts in query\n"
-    "qBaseInsert int unsigned not null,	# Number of bases inserted in query\n"
-    "tNumInsert int unsigned not null,	# Number of inserts in target\n"
-    "tBaseInsert int unsigned not null,	# Number of bases inserted in target\n"
-    "strand char(2) not null,	# + or - for strand.  First character is query, second is target.\n"
-    "qName varchar(255) not null,	# Query sequence name\n"
-    "qSize int unsigned not null,	# Query sequence size\n"
-    "qStart int unsigned not null,	# Alignment start position in query\n"
-    "qEnd int unsigned not null,	# Alignment end position in query\n"
-    "tName varchar(255) not null,	# Target sequence name\n"
-    "tSize int unsigned not null,	# Target sequence size\n"
-    "tStart int unsigned not null,	# Alignment start position in target\n"
-    "tEnd int unsigned not null,	# Alignment end position in target\n"
-    "blockCount int unsigned not null,	# Number of blocks in alignment\n"
-    "blockSizes longblob not null,	# Size of each block\n"
-    "qStarts longblob not null,	# Start of each block in query.\n"
-    "tStarts longblob not null,	# Start of each block in target.\n";
-
-static char *indexString = 
-	  "#Indices\n"
-    "%s"                            /* Optional bin. */
-    "INDEX(qName(12))\n"
-")\n";
-
-
 struct psl *pslxLoad(char **row)
 /* Load a psl from row fetched with select * from psl
  * from database.  Dispose of this with pslFree(). */
@@ -1453,47 +1421,6 @@ for (i=0; i<oldBlockCount; ++i)
     }
 pslRecalcBounds(newPsl);
 return newPsl;
-}
-char* pslGetCreateSql(char* table, unsigned options, int tNameIdxLen)
-/* Get SQL required to create PSL table.  Options is a bit set consisting
- * of PSL_TNAMEIX, PSL_WITH_BIN, and PSL_XA_FORMAT.  tNameIdxLen is
- * the number of characters in target name to index.  If greater than
- * zero, must specify PSL_TNAMEIX.  If zero and PSL_TNAMEIX is specified,
- * to will default to 8. */
-{
-struct dyString *sqlCmd = newDyString(2048);
-char *sqlCmdStr;
-char binIx[32];
-
-binIx[0] = '\0';
-
-/* check and default tNameIdxLen */
-if ((tNameIdxLen > 0) && !(options & PSL_TNAMEIX))
-    errAbort("pslGetCreateSql: must specify PSL_TNAMEIX with tNameIdxLen > 0");
-if ((options & PSL_TNAMEIX) && (tNameIdxLen == 0))
-    tNameIdxLen = 8;
-
-/* setup tName and bin index fields */
-if (options & PSL_WITH_BIN)
-    {
-    if (options & PSL_TNAMEIX)
-	safef(binIx, sizeof(binIx), "INDEX(tName(%d),bin),\n", tNameIdxLen);
-    else
-	safef(binIx, sizeof(binIx), "INDEX(bin),\n");
-    }
-else if (options & PSL_TNAMEIX)
-    safef(binIx, sizeof(binIx), "INDEX(tName(%d)),\n", tNameIdxLen);
-dyStringPrintf(sqlCmd, createString, table, 
-    ((options & PSL_WITH_BIN) ? "bin smallint unsigned not null,\n" : ""));
-if (options & PSL_XA_FORMAT)
-    {
-    dyStringPrintf(sqlCmd, "qSeq longblob not null,\n");
-    dyStringPrintf(sqlCmd, "tSeq longblob not null,\n");
-    }
-dyStringPrintf(sqlCmd, indexString, binIx);
-sqlCmdStr = cloneString(sqlCmd->string);
-dyStringFree(&sqlCmd);
-return sqlCmdStr;
 }
 
 static void printPslDesc(char* pslDesc, FILE* out, struct psl* psl)

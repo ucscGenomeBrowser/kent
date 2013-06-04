@@ -111,15 +111,15 @@ slSort(&xaList, xaAliCmpTstart);
 sprintf(fullTable, "waba%s", species);
 sprintf(chromTable, "%s_waba%s", chromosome, species);
 dyStringClear(query);
-dyStringPrintf(query, wabaFullCreate, fullTable);
+sqlDyStringPrintf(query, wabaFullCreate, fullTable);
 sqlMaybeMakeTable(conn, fullTable, query->string);
 dyStringClear(query);
-dyStringPrintf(query, wabaChromCreate, chromTable);
+sqlDyStringPrintf(query, wabaChromCreate, chromTable);
 sqlMaybeMakeTable(conn, chromTable, query->string);
 if (chromOffset == 0)
     {
     dyStringClear(query);
-    dyStringPrintf(query, "DELETE from %s", chromTable);
+    sqlDyStringPrintf(query, "DELETE from %s", chromTable);
     sqlUpdate(conn, query->string);
     }
 
@@ -156,13 +156,13 @@ fclose(chromTab);
 
 printf("Loading %s table in %s\n", chromTable, database);
 dyStringClear(query);
-dyStringPrintf(query, 
+sqlDyStringPrintf(query, 
    "LOAD data local infile '%s' into table %s", chromTabName, chromTable);
 sqlUpdate(conn, query->string);
 
 printf("Loading %s table in %s\n", fullTable, database);
 dyStringClear(query);
-dyStringPrintf(query, 
+sqlDyStringPrintf(query, 
    "LOAD data local infile '%s' into table %s", fullTabName, fullTable);
 sqlUpdate(conn, query->string);
 

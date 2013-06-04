@@ -17,7 +17,7 @@ struct sqlConnection *conn = hAllocConn(database);
 if (sqlTableExists(conn, txInfoTable))
     {
     char query[512];
-    safef(query, sizeof(query), "select * from %s where name='%s'", txInfoTable, geneName);
+    sqlSafef(query, sizeof(query), "select * from %s where name='%s'", txInfoTable, geneName);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     if ((row = sqlNextRow(sr)) != NULL)
@@ -201,11 +201,11 @@ if (sqlTableExists(conn, evTable))
     {
     webNewSection("CDS Prediction Information");
     char query[512];
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "select count(*) from %s where name='%s'", evTable, geneName);
     if (sqlQuickNum(conn, query) > 0)
 	{
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 		"select * from %s where name='%s' order by score desc", evTable, geneName);
 	struct sqlResult *sr = sqlGetResult(conn, query);
 	char **row;

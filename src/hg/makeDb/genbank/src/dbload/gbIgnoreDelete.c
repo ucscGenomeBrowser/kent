@@ -34,7 +34,7 @@ static boolean inGbStatusTable(struct sqlConnection *conn, char* acc,
 /* check if the specified accession is in the gbStatus table */
 {
 char query[512];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "SELECT count(*) FROM gbStatus WHERE (acc='%s') AND (modDate='%s')",
       acc, gbFormatDate(modDate));
 return (sqlQuickNum(conn, query) > 0);

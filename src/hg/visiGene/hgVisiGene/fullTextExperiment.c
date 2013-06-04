@@ -72,7 +72,7 @@ if (sqlFieldIndex(conn, "submissionSet", "privateUser") >= 0)
     {
     struct sqlResult *sr;
     char **row;
-    sr = sqlGetResult(conn, "select id from submissionSet where privateUser!=0");
+    sr = sqlGetResult(conn, "NOSQLINJ select id from submissionSet where privateUser!=0");
     while ((row = sqlNextRow(sr)) != NULL)
         hashAdd(hash, row[0], NULL);
     sqlFreeResult(&sr);
@@ -86,7 +86,7 @@ static boolean isPrivate(struct sqlConnection *conn,
 {
 char *src, buf[16];
 char query[256];
-safef(query, sizeof(query), "select submissionSet from image where id=%s",
+sqlSafef(query, sizeof(query), "select submissionSet from image where id=%s",
 	imageId);
 src = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (src != NULL && hashLookup(privateHash, src) != NULL)

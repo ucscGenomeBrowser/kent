@@ -29,7 +29,7 @@ struct sqlResult *sr;
 char **row;
 char *altName = needMem(32);
 
-safef(query, sizeof(query), "select name from refLink where mrnaAcc = '%s' ", name);
+sqlSafef(query, sizeof(query), "select name from refLink where mrnaAcc = '%s' ", name);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL) 
@@ -52,7 +52,7 @@ struct sqlResult *sr;
 char **row;
 int count = 0;
 
-safef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
+sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -92,7 +92,7 @@ for (gene = genes; gene != NULL; gene = gene->next)
     start = gene->txStart;
     end = gene->txEnd;
 
-    safef(query1, sizeof(query1), 
+    sqlSafef(query1, sizeof(query1), 
         "select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd >= %d", chromName, start, start);
     sr = sqlGetResult(conn, query1);
     // check for zero results
@@ -102,7 +102,7 @@ for (gene = genes; gene != NULL; gene = gene->next)
         sprintf(name1, "%s", row[0]);
 	}
 
-    safef(query2, sizeof(query2), 
+    sqlSafef(query2, sizeof(query2), 
         "select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd >= %d", chromName, end, end);
     sr = sqlGetResult(conn, query2);
     // check for zero results

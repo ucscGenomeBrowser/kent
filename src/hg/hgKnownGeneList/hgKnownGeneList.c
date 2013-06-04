@@ -80,7 +80,7 @@ int kgIdCnt = 0;
 if (argc != 2) usage();
 database = argv[1];
 
-sprintf(query, "select genome from dbDb where name = '%s'", database);
+sqlSafef(query, sizeof query, "select genome from dbDb where name = '%s'", database);
 answer = sqlQuickQuery(connCentral, query, buf, sizeof(buf));
 if (answer == NULL)
     {
@@ -98,7 +98,7 @@ if (!hTableExists(database, "knownGene"))
     exit(1);
     }
 
-sprintf(query, "select description from dbDb where name = '%s'", database);
+sqlSafef(query, sizeof query, "select description from dbDb where name = '%s'", database);
 
 genomeDesc = strdup(sqlQuickQuery(connCentral, query, buf, sizeof(buf)));
 hDisconnectCentral(&connCentral);
@@ -121,21 +121,21 @@ geneSymbol = NULL;
 char *protAcc = NULL;
 
 /* figure out how many pages in total */
-safef(query2, sizeof(query2), "select count(k.name) from %s.knownGene k, %s.kgXref x where k.name=x.kgId and geneSymbol != ''", database, database);
+sqlSafef(query2, sizeof(query2), "select count(k.name) from %s.knownGene k, %s.kgXref x where k.name=x.kgId and geneSymbol != ''", database, database);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 totalKgCnt = atoi(row2[0]);
 sqlFreeResult(&sr2);
 
 /* figure out how many KG IDs in total */
-safef(query2, sizeof(query2), "select count(*) from %s.kgXref where geneSymbol !=''", database);
+sqlSafef(query2, sizeof(query2), "select count(*) from %s.kgXref where geneSymbol !=''", database);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 totalKgId = atoi(row2[0]);
 sqlFreeResult(&sr2);
 totalKgPage = totalKgId/LINKSPERPAGE + 1;
 
-safef(query2, sizeof(query2),
+sqlSafef(query2, sizeof(query2),
       "select kgID, geneSymbol, description from %s.kgXref where geneSymbol!= '' order by geneSymbol",
       database);
 
@@ -155,7 +155,7 @@ while (kgIdCnt < totalKgId)
     kgID 	= row2[0];
     geneSymbol  = strdup(row2[1]);
     desc 	= row2[2];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     "select chrom,txSTart,txEnd,proteinID from %s.knownGene where name='%s'", database, kgID);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -201,7 +201,7 @@ while (kgIdCnt < totalKgId)
     	fprintf(outf,"</A>");
     	fprintf(outf,"</TD>\n");
 
-	safef(query3,sizeof(query3),"select spID from %s.kgXref where kgID = '%s'", database, kgID);
+	sqlSafef(query3,sizeof(query3),"select spID from %s.kgXref where kgID = '%s'", database, kgID);
 	spID = cloneString(sqlQuickQuery(conn3, query3, buf, sizeof(buf)));
 	if (spID == NULL)
 	    {
@@ -212,7 +212,7 @@ while (kgIdCnt < totalKgId)
 	    if (sameWord(spID,"")) spID = emptyString;
 	    }
 
-	safef(query3,sizeof(query3),"select mRNA from %s.kgXref where kgID = '%s'", database, kgID);
+	sqlSafef(query3,sizeof(query3),"select mRNA from %s.kgXref where kgID = '%s'", database, kgID);
 	mRNA = cloneString(sqlQuickQuery(conn3, query3, buf, sizeof(buf)));
 	if (mRNA == NULL)
 	    {
@@ -223,7 +223,7 @@ while (kgIdCnt < totalKgId)
 	    if (sameWord(mRNA,"")) mRNA = emptyString;
 	    }
 
-	safef(query3,sizeof(query3),"select protAcc from %s.kgXref where kgID = '%s'", database, kgID);
+	sqlSafef(query3,sizeof(query3),"select protAcc from %s.kgXref where kgID = '%s'", database, kgID);
 	protAcc = sqlQuickQuery(conn3, query3, buf, sizeof(buf));
 	if (protAcc == NULL)
 	    {

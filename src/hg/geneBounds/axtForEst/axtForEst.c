@@ -120,7 +120,7 @@ char **row;
 int count = 0;
 struct dyString *query = newDyString(512);
 
-dyStringPrintf(query, "select mrna.acc from mrna,library "
+sqlDyStringPrintf(query, "select mrna.acc from mrna,library "
 		   "where mrna.library = library.id "
 		   "and library.name like '%s'", lib);
 sr = sqlGetResult(conn, query->string);

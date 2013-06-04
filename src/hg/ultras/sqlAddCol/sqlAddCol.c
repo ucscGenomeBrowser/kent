@@ -38,7 +38,7 @@ void addNewColumn(struct sqlConnection *conn, char *table, char *column, char *t
 /* Add a new column to the table. */
 {
 char sql[512];
-safef(sql, sizeof(sql), "ALTER TABLE %s ADD COLUMN %s %s not null", table, column, type);
+sqlSafef(sql, sizeof(sql), "ALTER TABLE %s ADD COLUMN %s %s not null", table, column, type);
 sqlUpdate(conn, sql);
 }
 
@@ -84,7 +84,7 @@ lf = lineFileOpen(keyValFile, TRUE);
 while (lineFileNextReal(lf, &line))
     {
     word = nextWord(&line);
-    safef(sql, sizeof(sql), "update %s set %s = '%s' where %s = '%s'",
+    sqlSafef(sql, sizeof(sql), "update %s set %s = '%s' where %s = '%s'",
     	table, column, line, key, word);
     sqlUpdate(conn, sql);
     }
@@ -92,13 +92,13 @@ lineFileClose(&lf);
 
 if (optionExists("unique"))
     {
-    safef(sql, sizeof(sql), "create unique index %s on %s (%s)",
+    sqlSafef(sql, sizeof(sql), "create unique index %s on %s (%s)",
     	column, table, column);
     sqlUpdate(conn, sql);
     }
 else if (optionExists("index"))
     {
-    safef(sql, sizeof(sql), "create index %s on %s (%s)",
+    sqlSafef(sql, sizeof(sql), "create index %s on %s (%s)",
     	column, table, column);
     sqlUpdate(conn, sql);
     }

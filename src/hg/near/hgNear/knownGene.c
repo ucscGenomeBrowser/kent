@@ -47,7 +47,7 @@ else
     char *pos = NULL;
     char **row;
 
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"select chrom,txStart,txEnd from %s where name = '%s'",
 	table, gp->name);
     sr = sqlGetResult(conn, query);
@@ -176,7 +176,7 @@ if (pos == NULL)
     char query[256];
     struct sqlResult *sr;
     char **row;
-    safef(query, sizeof(query), "select tName, tStart, tEnd from %s where qName = '%s'",
+    sqlSafef(query, sizeof(query), "select tName, tStart, tEnd from %s where qName = '%s'",
 	"all_mrna", gp->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -192,8 +192,10 @@ static struct genePos *genePosFromQuery(struct sqlConnection *conn, char *query,
 struct sqlResult *sr;
 char **row;
 struct genePos *gpList = NULL, *gp;
+char query2[1024];
+sqlSafef(query2, sizeof query2, "%-s", query); // just for side-effect of adding NOSQLINJ prefix
 
-sr = sqlGetResult(conn, query);
+sr = sqlGetResult(conn, query2);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(gp);
@@ -219,7 +221,7 @@ struct genePos *knownPosOne(struct sqlConnection *conn, char *name)
 /* Get all positions of named gene. */
 {
 char query[1024];
-safef(query, sizeof(query), genomeSetting("oneGeneQuery"), name);
+sqlSafef(query, sizeof(query), genomeSetting("oneGeneQuery"), name);
 return genePosFromQuery(conn, query, FALSE);
 }
 
@@ -292,7 +294,7 @@ AllocVar(sr);
 sr->gp.name = cloneString(kgID);
 
 /* Get gene symbol into short label if possible. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select geneSymbol from kgXref where kgID = '%s'", kgID);
 if (sqlQuickQuery(conn, query, name, sizeof(name)))
     sr->shortLabel = cloneString(name);
@@ -304,7 +306,7 @@ if (alias != NULL && !sameWord(name, alias))
     dyStringPrintf(dy, "(aka %s) ", alias);
 
 /* Add description to long label. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select description from kgXref where kgID = '%s'", kgID);
 if (sqlQuickQuery(conn, query, description, sizeof(description)))
     dyStringAppend(dy, description);

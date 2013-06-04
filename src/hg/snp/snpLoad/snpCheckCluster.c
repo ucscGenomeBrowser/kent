@@ -121,7 +121,7 @@ struct slName *observedList = NULL;
 struct slName *nameList = NULL;
 struct slName *element = NULL;
 
-safef(query, sizeof(query), "select chromStart, chromEnd, name, strand, observed from %s where chrom = '%s'", 
+sqlSafef(query, sizeof(query), "select chromStart, chromEnd, name, strand, observed from %s where chrom = '%s'", 
       snpTable, chromName);
 
 sr = sqlGetResult(conn, query);

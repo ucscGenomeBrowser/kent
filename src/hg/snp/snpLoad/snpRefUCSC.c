@@ -44,7 +44,7 @@ struct chromInfo *el;
 char tableName[64];
 
 ret = newHash(0);
-safef(query, sizeof(query), "select chrom, size from chromInfo");
+sqlSafef(query, sizeof(query), "select chrom, size from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -100,7 +100,7 @@ seq = hFetchSeq(nibName, chromName, 0, chromSize-1);
 touppers(seq->dna);
 seqPtr = seq->dna;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele, weight from %s", tableName);
 
 sr = sqlGetResult(conn, query);
@@ -167,7 +167,7 @@ char *createString =
 struct dyString *dy = newDyString(1024);
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 hFreeConn(&conn);

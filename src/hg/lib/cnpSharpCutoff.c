@@ -95,36 +95,15 @@ void cnpSharpCutoffSaveToDb(struct sqlConnection *conn, struct cnpSharpCutoff *e
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use cnpSharpCutoffSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%g)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%g)", 
 	tableName,  el->sample,  el->batch,  el->value);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void cnpSharpCutoffSaveToDbEscaped(struct sqlConnection *conn, struct cnpSharpCutoff *el, char *tableName, int updateSize)
-/* Save cnpSharpCutoff as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than cnpSharpCutoffSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *sample;
-sample = sqlEscapeString(el->sample);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%g)", 
-	tableName,  sample, el->batch , el->value );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&sample);
-}
 
 struct cnpSharpCutoff *cnpSharpCutoffCommaIn(char **pS, struct cnpSharpCutoff *ret)
 /* Create a cnpSharpCutoff out of a comma separated string. 

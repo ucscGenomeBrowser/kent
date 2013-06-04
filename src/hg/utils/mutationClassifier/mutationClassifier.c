@@ -449,13 +449,13 @@ struct hash *geneHash = newHash(16);
 if(sameString(geneModel, "knownCanonical"))
     {
     // get geneSymbols for output purposes
-    safef(query, sizeof(query), "select x.kgID, x.geneSymbol from knownCanonical k, kgXref x where k.transcript = x.kgID");
+    sqlSafef(query, sizeof(query), "select x.kgID, x.geneSymbol from knownCanonical k, kgXref x where k.transcript = x.kgID");
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         hashAdd(geneHash, row[0], (void *) cloneString(row[1]));
     sqlFreeResult(&sr);
 
-    safef(query, sizeof(query), "select k.* from knownGene k, knownCanonical c where k.cdsStart != k.cdsEnd and k.name = c.transcript");
+    sqlSafef(query, sizeof(query), "select k.* from knownGene k, knownCanonical c where k.cdsStart != k.cdsEnd and k.name = c.transcript");
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -473,7 +473,7 @@ if(sameString(geneModel, "knownCanonical"))
     }
 else if(sqlTableExists(conn, geneModel))
     {
-    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where cdsStart != cdsEnd", geneModel);
+    sqlSafef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where cdsStart != cdsEnd", geneModel);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -590,7 +590,7 @@ else
     {
     char where[256];
     struct sqlConnection *conn = sqlConnect(database);
-    safef(where, sizeof(where), "name = '%s'", name);
+    sqlSafefFrag(where, sizeof(where), "name = '%s'", name);
     struct dnaMotif *motif = dnaMotifLoadWhere(conn, "transRegCodeMotifPseudoCounts", where);
     hashAdd(motifHash, name, (void *) motif);
     sqlDisconnect(&conn);
@@ -705,14 +705,14 @@ if(motifTable)
     char where[256];
     struct sqlResult *sr;
     char **row;
-    safef(query, sizeof(query), "select name from %s", motifTable);
+    sqlSafef(query, sizeof(query), "select name from %s", motifTable);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         slAddHead(&motifNames, slNameNew(row[0]));
     sqlFreeResult(&sr);
     for(motifName = motifNames; motifName != NULL; motifName = motifName->next)
         {
-        safef(where, sizeof(where), "name = '%s'", motifName->name);
+        sqlSafefFrag(where, sizeof(where), "name = '%s'", motifName->name);
         motif = dnaMotifLoadWhere(conn, motifTable, where);
         if(motif == NULL)
             errAbort("couldn't find motif '%s'", motifName->name);
@@ -975,7 +975,7 @@ while(!done)
             genomeRangeTreeAddVal(tree, bed->chrom, bed->chromStart, bed->chromEnd, (void *) bed, NULL);
         verbose(2, "cluster genomeRangeTreeAddVal took: %ld ms\n", clock1000() - time);
 
-        safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s", clusterTable);
+        sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s", clusterTable);
         sr = sqlGetResult(conn, query);
         while ((row = sqlNextRow(sr)) != NULL)
             {

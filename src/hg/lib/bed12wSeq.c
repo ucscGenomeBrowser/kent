@@ -104,15 +104,13 @@ void bed12wSeqSaveToDb(struct sqlConnection *conn, struct bed12wSeq *el, char *t
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use bed12wSeqSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *blockSizesArray, *chromStartsArray;
 blockSizesArray = sqlSignedArrayToString(el->blockSizes, el->blockCount);
 chromStartsArray = sqlSignedArrayToString(el->chromStarts, el->blockCount);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%d,'%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%d,'%s','%s','%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->reserved,  el->blockCount,  blockSizesArray ,  chromStartsArray ,  el->seq1,  el->seq2);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -120,37 +118,6 @@ freez(&blockSizesArray);
 freez(&chromStartsArray);
 }
 
-void bed12wSeqSaveToDbEscaped(struct sqlConnection *conn, struct bed12wSeq *el, char *tableName, int updateSize)
-/* Save bed12wSeq as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than bed12wSeqSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *blockSizesArray, *chromStartsArray, *seq1, *seq2;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-seq1 = sqlEscapeString(el->seq1);
-seq2 = sqlEscapeString(el->seq2);
-
-blockSizesArray = sqlSignedArrayToString(el->blockSizes, el->blockCount);
-chromStartsArray = sqlSignedArrayToString(el->chromStarts, el->blockCount);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%d,'%s','%s','%s','%s')", 
-	tableName,  chrom,  el->chromStart,  el->chromEnd,  name,  el->score,  strand,  el->thickStart,  el->thickEnd,  el->reserved,  el->blockCount,  blockSizesArray ,  chromStartsArray ,  seq1,  seq2);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&blockSizesArray);
-freez(&chromStartsArray);
-freez(&seq1);
-freez(&seq2);
-}
 
 struct bed12wSeq *bed12wSeqCommaIn(char **pS, struct bed12wSeq *ret)
 /* Create a bed12wSeq out of a comma separated string. 

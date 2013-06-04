@@ -95,7 +95,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
 	 cg->chrom = hel->name;
 	 }
      size = atoi(words[3]);
-     sprintf(query, "select * from ctgPos where contig = '%s'", words[2]);
+     sqlSafef(query, sizeof query, "select * from ctgPos where contig = '%s'", words[2]);
      sr = sqlGetResult(conn, query);
      if ((row = sqlNextRow(sr)) == NULL)
         errAbort("Couldn't find %s from %s in database", words[2], lf->fileName);

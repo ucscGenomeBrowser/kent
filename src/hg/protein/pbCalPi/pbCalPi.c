@@ -98,7 +98,7 @@ char *outfName  = argv[2];
 FILE *f = mustOpen(outfName, "w");
 
 struct sqlConnection *conn = sqlConnect(spDb);
-struct sqlResult *sr = sqlGetResult(conn, "select acc,val from protein");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select acc,val from protein");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {

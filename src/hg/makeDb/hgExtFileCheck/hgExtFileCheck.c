@@ -70,7 +70,7 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 
-safef(query, sizeof(query), "select path,size from %s", table);
+sqlSafef(query, sizeof(query), "select path,size from %s", table);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)

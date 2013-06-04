@@ -233,7 +233,7 @@ struct dyString *dy = newDyString(128);
 if (!hFindSplitTable(database, chrom, track, table, &hasBin))
    errAbort("%s table is not in %s", track, database);
 conn = sqlConnect(database);
-snprintf(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select * from %s where id = %d", table, id);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
@@ -244,15 +244,15 @@ sqlFreeResult(&sr);
 /* Load links. */
 if (loadAll)
     {
-    dyStringPrintf(dy, 
+    sqlDyStringPrintf(dy, 
 	 "select * from %sLink where chainId = %d", table, id);
     }
 else
     {
-    dyStringPrintf(dy, 
+    sqlDyStringPrintf(dy, 
 	 "select * from %sLink where ",table );
     hAddBinToQuery(start, end, dy);
-    dyStringPrintf(dy," chainId = %d and tStart < %d and tEnd > %d", id, end, start);
+    sqlDyStringPrintf(dy," chainId = %d and tStart < %d and tEnd > %d", id, end, start);
     }
 sr = sqlGetResult(conn, dy->string);
 chainLinkAddResult(sr, hasBin, chain);

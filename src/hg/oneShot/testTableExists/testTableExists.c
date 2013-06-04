@@ -49,7 +49,7 @@ void testSqlTableExists(struct sqlConnection *sc, char *sql, char *table, int *r
 char query[256];
 struct sqlResult *sr;
 int count=0;
-safef(query, sizeof(query), sql, table);
+sqlSafef(query, sizeof(query), sql, table);
 sr=sqlGetResultExt(sc,query, errorNo, NULL);
 if (sr)
     {
@@ -64,7 +64,7 @@ void useDb(char *db)
 /* Use db changes default db. */
 {
 char query[256];
-safef(query, sizeof(query), "use %s", db);
+sqlSafef(query, sizeof(query), "use %s", db);
 sqlUpdate(conn,query);
 }
 

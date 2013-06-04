@@ -131,58 +131,15 @@ void tigrCmrGeneSaveToDb(struct sqlConnection *conn, struct tigrCmrGene *el, cha
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use tigrCmrGeneSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,'%s',%u,%u,'%s',%u,'%s',%s,'%s','%s','%s',%u,%u,%s,%s,'%s','%s',%f,%f,%f,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %d,'%s',%u,%u,'%s',%u,'%s',%s,'%s','%s','%s',%u,%u,%s,%s,'%s','%s',%f,%f,%f,'%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->tigrCommon,  el->tigrGene,  el->tigrECN,  el->primLocus,  el->tigrLength,  el->tigrPepLength,  el->tigrMainRole,  el->tigrSubRole,  el->swissProt,  el->genbank,  el->tigrMw,  el->tigrPi,  el->tigrGc,  el->goTerm);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void tigrCmrGeneSaveToDbEscaped(struct sqlConnection *conn, struct tigrCmrGene *el, char *tableName, int updateSize)
-/* Save tigrCmrGene as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than tigrCmrGeneSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *tigrCommon, *tigrGene, *tigrECN, *primLocus, *tigrMainRole, *tigrSubRole, *swissProt, *genbank, *goTerm;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-tigrCommon = sqlEscapeString(el->tigrCommon);
-tigrGene = sqlEscapeString(el->tigrGene);
-tigrECN = sqlEscapeString(el->tigrECN);
-primLocus = sqlEscapeString(el->primLocus);
-tigrMainRole = sqlEscapeString(el->tigrMainRole);
-tigrSubRole = sqlEscapeString(el->tigrSubRole);
-swissProt = sqlEscapeString(el->swissProt);
-genbank = sqlEscapeString(el->genbank);
-goTerm = sqlEscapeString(el->goTerm);
-
-dyStringPrintf(update, "insert into %s values ( %d,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%u,%u,'%s','%s','%s','%s',%f,%f,%f,'%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  tigrCommon,  tigrGene,  tigrECN,  primLocus, el->tigrLength , el->tigrPepLength ,  tigrMainRole,  tigrSubRole,  swissProt,  genbank, el->tigrMw , el->tigrPi , el->tigrGc ,  goTerm);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&tigrCommon);
-freez(&tigrGene);
-freez(&tigrECN);
-freez(&primLocus);
-freez(&tigrMainRole);
-freez(&tigrSubRole);
-freez(&swissProt);
-freez(&genbank);
-freez(&goTerm);
-}
 
 struct tigrCmrGene *tigrCmrGeneCommaIn(char **pS, struct tigrCmrGene *ret)
 /* Create a tigrCmrGene out of a comma separated string. 

@@ -48,36 +48,15 @@ void edwUserSaveToDb(struct sqlConnection *conn, struct edwUser *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwUserSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s')", 
 	tableName,  el->id,  el->email);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwUserSaveToDbEscaped(struct sqlConnection *conn, struct edwUser *el, char *tableName, int updateSize)
-/* Save edwUser as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwUserSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *email;
-email = sqlEscapeString(el->email);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s')", 
-	tableName,  el->id,  email);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&email);
-}
 
 struct edwUser *edwUserLoad(char **row)
 /* Load a edwUser from row fetched with select * from edwUser
@@ -220,40 +199,15 @@ void edwScriptRegistrySaveToDb(struct sqlConnection *conn, struct edwScriptRegis
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwScriptRegistrySaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s',%d)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s',%d)", 
 	tableName,  el->id,  el->userId,  el->name,  el->description,  el->secretHash,  el->submitCount);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwScriptRegistrySaveToDbEscaped(struct sqlConnection *conn, struct edwScriptRegistry *el, char *tableName, int updateSize)
-/* Save edwScriptRegistry as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwScriptRegistrySaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *description, *secretHash;
-name = sqlEscapeString(el->name);
-description = sqlEscapeString(el->description);
-secretHash = sqlEscapeString(el->secretHash);
-
-dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s',%d)", 
-	tableName,  el->id,  el->userId,  name,  description,  secretHash,  el->submitCount);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&description);
-freez(&secretHash);
-}
 
 struct edwScriptRegistry *edwScriptRegistryLoad(char **row)
 /* Load a edwScriptRegistry from row fetched with select * from edwScriptRegistry
@@ -422,38 +376,15 @@ void edwHostSaveToDb(struct sqlConnection *conn, struct edwHost *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwHostSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%lld,'%s',%lld,%lld,%lld,%d)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%lld,'%s',%lld,%lld,%lld,%d)", 
 	tableName,  el->id,  el->name,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  el->errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits,  el->paraFetchStreams);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwHostSaveToDbEscaped(struct sqlConnection *conn, struct edwHost *el, char *tableName, int updateSize)
-/* Save edwHost as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwHostSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *errorMessage;
-name = sqlEscapeString(el->name);
-errorMessage = sqlEscapeString(el->errorMessage);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%lld,'%s',%lld,%lld,%lld,%d)", 
-	tableName,  el->id,  name,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits,  el->paraFetchStreams);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&errorMessage);
-}
 
 struct edwHost *edwHostLoad(char **row)
 /* Load a edwHost from row fetched with select * from edwHost
@@ -635,38 +566,15 @@ void edwSubmitDirSaveToDb(struct sqlConnection *conn, struct edwSubmitDir *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwSubmitDirSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%lld,%lld,%lld,'%s',%lld,%lld,%lld)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%lld,%lld,%lld,'%s',%lld,%lld,%lld)", 
 	tableName,  el->id,  el->url,  el->hostId,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  el->errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwSubmitDirSaveToDbEscaped(struct sqlConnection *conn, struct edwSubmitDir *el, char *tableName, int updateSize)
-/* Save edwSubmitDir as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwSubmitDirSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *url, *errorMessage;
-url = sqlEscapeString(el->url);
-errorMessage = sqlEscapeString(el->errorMessage);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%lld,%lld,%lld,'%s',%lld,%lld,%lld)", 
-	tableName,  el->id,  url,  el->hostId,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&url);
-freez(&errorMessage);
-}
 
 struct edwSubmitDir *edwSubmitDirLoad(char **row)
 /* Load a edwSubmitDir from row fetched with select * from edwSubmitDir
@@ -852,48 +760,15 @@ void edwFileSaveToDb(struct sqlConnection *conn, struct edwFile *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwFileSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s','%s')", 
 	tableName,  el->id,  el->submitId,  el->submitDirId,  el->submitFileName,  el->edwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->errorMessage,  el->deprecated,  el->replacedBy);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwFileSaveToDbEscaped(struct sqlConnection *conn, struct edwFile *el, char *tableName, int updateSize)
-/* Save edwFile as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwFileSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *submitFileName, *edwFileName, *md5, *tags, *errorMessage, *deprecated, *replacedBy;
-submitFileName = sqlEscapeString(el->submitFileName);
-edwFileName = sqlEscapeString(el->edwFileName);
-md5 = sqlEscapeString(el->md5);
-tags = sqlEscapeString(el->tags);
-errorMessage = sqlEscapeString(el->errorMessage);
-deprecated = sqlEscapeString(el->deprecated);
-replacedBy = sqlEscapeString(el->replacedBy);
-
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s','%s')", 
-	tableName,  el->id,  el->submitId,  el->submitDirId,  submitFileName,  edwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  md5,  tags,  errorMessage,  deprecated,  replacedBy);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&submitFileName);
-freez(&edwFileName);
-freez(&md5);
-freez(&tags);
-freez(&errorMessage);
-freez(&deprecated);
-freez(&replacedBy);
-}
 
 struct edwFile *edwFileLoad(char **row)
 /* Load a edwFile from row fetched with select * from edwFile
@@ -1110,38 +985,15 @@ void edwSubmitSaveToDb(struct sqlConnection *conn, struct edwSubmit *el, char *t
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwSubmitSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s',%u)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s',%u)", 
 	tableName,  el->id,  el->url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->submitFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  el->errorMessage,  el->fileIdInTransit);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwSubmitSaveToDbEscaped(struct sqlConnection *conn, struct edwSubmit *el, char *tableName, int updateSize)
-/* Save edwSubmit as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwSubmitSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *url, *errorMessage;
-url = sqlEscapeString(el->url);
-errorMessage = sqlEscapeString(el->errorMessage);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s',%u)", 
-	tableName,  el->id,  url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->submitFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  errorMessage,  el->fileIdInTransit);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&url);
-freez(&errorMessage);
-}
 
 struct edwSubmit *edwSubmitLoad(char **row)
 /* Load a edwSubmit from row fetched with select * from edwSubmit
@@ -1340,44 +1192,15 @@ void edwSubscriberSaveToDb(struct sqlConnection *conn, struct edwSubscriber *el,
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwSubscriberSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%g,'%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%g,'%s','%s','%s','%s')", 
 	tableName,  el->id,  el->name,  el->runOrder,  el->filePattern,  el->dirPattern,  el->tagPattern,  el->onFileEndUpload);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwSubscriberSaveToDbEscaped(struct sqlConnection *conn, struct edwSubscriber *el, char *tableName, int updateSize)
-/* Save edwSubscriber as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwSubscriberSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *filePattern, *dirPattern, *tagPattern, *onFileEndUpload;
-name = sqlEscapeString(el->name);
-filePattern = sqlEscapeString(el->filePattern);
-dirPattern = sqlEscapeString(el->dirPattern);
-tagPattern = sqlEscapeString(el->tagPattern);
-onFileEndUpload = sqlEscapeString(el->onFileEndUpload);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%g,'%s','%s','%s','%s')", 
-	tableName,  el->id,  name,  el->runOrder,  filePattern,  dirPattern,  tagPattern,  onFileEndUpload);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&filePattern);
-freez(&dirPattern);
-freez(&tagPattern);
-freez(&onFileEndUpload);
-}
 
 struct edwSubscriber *edwSubscriberLoad(char **row)
 /* Load a edwSubscriber from row fetched with select * from edwSubscriber
@@ -1553,38 +1376,15 @@ void edwAssemblySaveToDb(struct sqlConnection *conn, struct edwAssembly *el, cha
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwAssemblySaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,%lld,%lld)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,%lld,%lld)", 
 	tableName,  el->id,  el->taxon,  el->name,  el->ucscDb,  el->twoBitId,  el->baseCount,  el->realBaseCount);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwAssemblySaveToDbEscaped(struct sqlConnection *conn, struct edwAssembly *el, char *tableName, int updateSize)
-/* Save edwAssembly as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwAssemblySaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *ucscDb;
-name = sqlEscapeString(el->name);
-ucscDb = sqlEscapeString(el->ucscDb);
-
-dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,%lld,%lld)", 
-	tableName,  el->id,  el->taxon,  name,  ucscDb,  el->twoBitId,  el->baseCount,  el->realBaseCount);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&ucscDb);
-}
 
 struct edwAssembly *edwAssemblyLoad(char **row)
 /* Load a edwAssembly from row fetched with select * from edwAssembly
@@ -1762,52 +1562,15 @@ void edwValidFileSaveToDb(struct sqlConnection *conn, struct edwValidFile *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwValidFileSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g)", 
 	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwValidFileSaveToDbEscaped(struct sqlConnection *conn, struct edwValidFile *el, char *tableName, int updateSize)
-/* Save edwValidFile as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwValidFileSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *licensePlate, *format, *outputType, *experiment, *replicate, *validKey, *enrichedIn, *ucscDb, *sampleBed;
-licensePlate = sqlEscapeString(el->licensePlate);
-format = sqlEscapeString(el->format);
-outputType = sqlEscapeString(el->outputType);
-experiment = sqlEscapeString(el->experiment);
-replicate = sqlEscapeString(el->replicate);
-validKey = sqlEscapeString(el->validKey);
-enrichedIn = sqlEscapeString(el->enrichedIn);
-ucscDb = sqlEscapeString(el->ucscDb);
-sampleBed = sqlEscapeString(el->sampleBed);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g)", 
-	tableName,  el->id,  licensePlate,  el->fileId,  format,  outputType,  experiment,  replicate,  validKey,  enrichedIn,  ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&licensePlate);
-freez(&format);
-freez(&outputType);
-freez(&experiment);
-freez(&replicate);
-freez(&validKey);
-freez(&enrichedIn);
-freez(&ucscDb);
-freez(&sampleBed);
-}
 
 struct edwValidFile *edwValidFileLoad(char **row)
 /* Load a edwValidFile from row fetched with select * from edwValidFile
@@ -2036,36 +1799,15 @@ void edwQaEnrichTargetSaveToDb(struct sqlConnection *conn, struct edwQaEnrichTar
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwQaEnrichTargetSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%u,%lld)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%u,%lld)", 
 	tableName,  el->id,  el->assemblyId,  el->name,  el->fileId,  el->targetSize);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwQaEnrichTargetSaveToDbEscaped(struct sqlConnection *conn, struct edwQaEnrichTarget *el, char *tableName, int updateSize)
-/* Save edwQaEnrichTarget as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwQaEnrichTargetSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name;
-name = sqlEscapeString(el->name);
-
-dyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%u,%lld)", 
-	tableName,  el->id,  el->assemblyId,  name,  el->fileId,  el->targetSize);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-}
 
 struct edwQaEnrichTarget *edwQaEnrichTargetLoad(char **row)
 /* Load a edwQaEnrichTarget from row fetched with select * from edwQaEnrichTarget
@@ -2222,32 +1964,15 @@ void edwQaEnrichSaveToDb(struct sqlConnection *conn, struct edwQaEnrich *el, cha
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwQaEnrichSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%g,%g,%g)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%g,%g,%g)", 
 	tableName,  el->id,  el->fileId,  el->qaEnrichTargetId,  el->targetBaseHits,  el->targetUniqHits,  el->coverage,  el->enrichment,  el->uniqEnrich);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwQaEnrichSaveToDbEscaped(struct sqlConnection *conn, struct edwQaEnrich *el, char *tableName, int updateSize)
-/* Save edwQaEnrich as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwQaEnrichSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%g,%g,%g)", 
-	tableName,  el->id,  el->fileId,  el->qaEnrichTargetId,  el->targetBaseHits,  el->targetUniqHits,  el->coverage,  el->enrichment,  el->uniqEnrich);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-}
 
 struct edwQaEnrich *edwQaEnrichLoad(char **row)
 /* Load a edwQaEnrich from row fetched with select * from edwQaEnrich
@@ -2412,32 +2137,15 @@ void edwQaPairSampleOverlapSaveToDb(struct sqlConnection *conn, struct edwQaPair
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwQaPairSampleOverlapSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%lld,%g)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%lld,%g)", 
 	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->elderSampleBases,  el->youngerSampleBases,  el->sampleOverlapBases,  el->sampleSampleEnrichment);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwQaPairSampleOverlapSaveToDbEscaped(struct sqlConnection *conn, struct edwQaPairSampleOverlap *el, char *tableName, int updateSize)
-/* Save edwQaPairSampleOverlap as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwQaPairSampleOverlapSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%lld,%g)", 
-	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->elderSampleBases,  el->youngerSampleBases,  el->sampleOverlapBases,  el->sampleSampleEnrichment);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-}
 
 struct edwQaPairSampleOverlap *edwQaPairSampleOverlapLoad(char **row)
 /* Load a edwQaPairSampleOverlap from row fetched with select * from edwQaPairSampleOverlap
@@ -2597,32 +2305,15 @@ void edwQaPairCorrelationSaveToDb(struct sqlConnection *conn, struct edwQaPairCo
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwQaPairCorrelationSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%g)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%g)", 
 	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->pearsonInEnriched,  el->pearsonOverall,  el->pearsonClipped);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwQaPairCorrelationSaveToDbEscaped(struct sqlConnection *conn, struct edwQaPairCorrelation *el, char *tableName, int updateSize)
-/* Save edwQaPairCorrelation as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwQaPairCorrelationSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%g)", 
-	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->pearsonInEnriched,  el->pearsonOverall,  el->pearsonClipped);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-}
 
 struct edwQaPairCorrelation *edwQaPairCorrelationLoad(char **row)
 /* Load a edwQaPairCorrelation from row fetched with select * from edwQaPairCorrelation
@@ -2778,38 +2469,15 @@ void edwJobSaveToDb(struct sqlConnection *conn, struct edwJob *el, char *tableNa
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwJobSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
 	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwJobSaveToDbEscaped(struct sqlConnection *conn, struct edwJob *el, char *tableName, int updateSize)
-/* Save edwJob as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwJobSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *commandLine, *stderr;
-commandLine = sqlEscapeString(el->commandLine);
-stderr = sqlEscapeString(el->stderr);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
-	tableName,  el->id,  commandLine,  el->startTime,  el->endTime,  stderr,  el->returnCode);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&commandLine);
-freez(&stderr);
-}
 
 struct edwJob *edwJobLoad(char **row)
 /* Load a edwJob from row fetched with select * from edwJob
@@ -2971,38 +2639,15 @@ void edwSubmitJobSaveToDb(struct sqlConnection *conn, struct edwSubmitJob *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwSubmitJobSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
 	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwSubmitJobSaveToDbEscaped(struct sqlConnection *conn, struct edwSubmitJob *el, char *tableName, int updateSize)
-/* Save edwSubmitJob as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwSubmitJobSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *commandLine, *stderr;
-commandLine = sqlEscapeString(el->commandLine);
-stderr = sqlEscapeString(el->stderr);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
-	tableName,  el->id,  commandLine,  el->startTime,  el->endTime,  stderr,  el->returnCode);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&commandLine);
-freez(&stderr);
-}
 
 struct edwSubmitJob *edwSubmitJobLoad(char **row)
 /* Load a edwSubmitJob from row fetched with select * from edwSubmitJob

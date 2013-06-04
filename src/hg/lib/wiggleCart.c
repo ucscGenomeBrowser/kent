@@ -67,7 +67,7 @@ if (debugOpened)
 
 #ifdef NOT
 /*	example usage:	*/
-snprintf(dbgMsg, DBGMSGSZ, "%s pixels: min,default,max: %d:%d:%d", tdb->track, wigCart->minHeight, wigCart->defaultHeight, wigCart->maxHeight);
+safef(dbgMsg, DBGMSGSZ, "%s pixels: min,default,max: %d:%d:%d", tdb->track, wigCart->minHeight, wigCart->defaultHeight, wigCart->maxHeight);
 wigDebugPrint("wigFetch");
 #endif
 

@@ -54,7 +54,7 @@ conn2 = hAllocConn(hDefaultDb());
 icnt =0;
 
 /* first read in extDb table */
-safef(query, sizeof(query), "select * from sp%s.extDb", uniprotDataDate);
+sqlSafef(query, sizeof(query), "select * from sp%s.extDb", uniprotDataDate);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 while (row != NULL)
@@ -76,7 +76,7 @@ sqlFreeResult(&sr);
 iii=0;
 
 /* Reuse the first 5 fields from the spXref3 table */
-safef(query2, sizeof(query2), 
+sqlSafef(query2, sizeof(query2), 
       "select accession, displayID, division, bioentryID, biodatabaseID from proteins%s.spXref3;",
       proteomeDataDate);
 sr2 = sqlMustGetResult(conn2, query2);
@@ -90,7 +90,7 @@ while (row2 != NULL)
     bioentryID          = row2[3];
     bioDatabase         = row2[4];
   
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select extAcc1, extDb.id from sp%s.extDb, sp%s.extDbRef where extDbRef.acc='%s' %s",
 	  uniprotDataDate, uniprotDataDate, accession, "and extDb.id = extDbRef.extDb;"); 
     sr = sqlMustGetResult(conn, query);

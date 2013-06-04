@@ -123,13 +123,13 @@ if (! noLoad)
     {
     struct dyString *ds = newDyString(2048);
     if (unsplit)
-	dyStringPrintf(ds,  createGapUnsplit, gapTableName,
+	sqlDyStringPrintf(ds,  createGapUnsplit, gapTableName,
 		maxChromNameSize, maxChromNameSize);
     else
-	dyStringPrintf(ds,  createGapSplit, gapTableName);
+	sqlDyStringPrintf(ds, createGapSplit, gapTableName);
     char query[1024];
     sqlRemakeTable(conn, gapTableName, ds->string);
-    safef(query, sizeof(query), "LOAD data local infile '%s' into table %s", 
+    sqlSafef(query, sizeof(query), "LOAD data local infile '%s' into table %s", 
 	  tabFileName, gapTableName);
     sqlUpdate(conn, query);
     remove(tabFileName);

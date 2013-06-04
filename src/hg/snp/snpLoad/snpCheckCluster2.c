@@ -37,7 +37,7 @@ int chromSize = hChromSize(chromName);
 
 verbose(1, "constructing binKeeper...\n");
 snps = binKeeperNew(0, chromSize);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select chromStart, chromEnd, name from %s where chrom = '%s'", snpTable, chromName);
 
 sr = sqlGetResult(conn, query);
@@ -72,7 +72,7 @@ int candidateCount = 0;
 int matchCount = 0;
 
 verbose(1, "checking for collisions...\n");
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select chromStart, chromEnd, name from %s where chrom = '%s'", snpTable, chromName);
 
 sr = sqlGetResult(conn, query);

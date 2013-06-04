@@ -85,10 +85,9 @@ struct sqlResult *sr;
 char **row = NULL;
 struct slName *list = NULL;
 struct slName *el = NULL;
-char  *queryString = "select   chrom "
+char  *queryString = "NOSQLINJ select   chrom "
                      "from     chromInfo "
                      "where    chrom not like '%random' " 
-/*                     "where    chrom = 'chrY' " */
                      "order by size desc";
 sr = sqlGetResult(conn, queryString);
 while ((row=sqlNextRow(sr)))
@@ -127,7 +126,7 @@ struct dyString *query = newDyString(256);
 char   rsId[20];
 unsigned long int snpCount = 0;
 
-dyStringPrintf(query, "select chromStart, "
+sqlDyStringPrintf(query, "select chromStart, "
 	       "       name "
 	       "from   %s "
 	       "where  chrom = '%s' "

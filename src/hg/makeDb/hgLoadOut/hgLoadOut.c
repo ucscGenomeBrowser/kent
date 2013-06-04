@@ -259,13 +259,13 @@ struct dyString *query = newDyString(1024);
 verbose(1, "Loading up table %s\n", tableName);
 if (sqlTableExists(conn, tableName))
     {
-    dyStringPrintf(query, "DROP table %s", tableName);
+    sqlDyStringPrintf(query, "DROP table %s", tableName);
     sqlUpdate(conn, query->string);
     }
 
 /* Create first part of table definitions, the fields. */
 dyStringClear(query);
-dyStringPrintf(query, createRmskOut, tableName);
+sqlDyStringPrintf(query, createRmskOut, tableName);
 
 /* Create the indexes */
 if (!noSplit)
@@ -275,14 +275,14 @@ if (!noSplit)
 else
     {
     int indexLen = hGetMinIndexLength(database);
-    dyStringPrintf(query, "   INDEX(genoName(%d),bin))\n", indexLen);
+    sqlDyStringPrintf(query, "   INDEX(genoName(%d),bin))\n", indexLen);
     }
 
 sqlUpdate(conn, query->string);
 
 /* Load database from tab-file. */
 dyStringClear(query);
-dyStringPrintf(query, "LOAD data local infile '%s' into table %s",
+sqlDyStringPrintf(query, "LOAD data local infile '%s' into table %s",
 	       tempName, tableName);
 sqlUpdate(conn, query->string);
 remove(tempName);

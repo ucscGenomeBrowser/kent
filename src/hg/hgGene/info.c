@@ -120,7 +120,7 @@ static void showInfoTable(struct sqlConnection *conn, char *geneName, char *txIn
 if (!sqlTableExists(conn, txInfoTable))
     return;
 char query[512];
-safef(query, sizeof(query), "select * from %s where name='%s'", txInfoTable, geneName);
+sqlSafef(query, sizeof(query), "select * from %s where name='%s'", txInfoTable, geneName);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 if ((row = sqlNextRow(sr)) != NULL)
@@ -206,7 +206,7 @@ static boolean infoExists(struct section *section,
 	struct sqlConnection *conn, char *geneId)
 /* Return TRUE if info exists and has data. */
 {
-return sqlTablesExist(conn, "kgTxInfo");
+return sqlTableExists(conn, "kgTxInfo");
 }
 
 struct section *infoSection(struct sqlConnection *conn,

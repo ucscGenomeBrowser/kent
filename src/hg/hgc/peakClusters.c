@@ -121,10 +121,10 @@ static void queryInputTrackTable(struct dyString *query, char *inputTrackTable,
 {
 struct dyString *fields = dyStringNew(0);
 struct slName *field;
-dyStringPrintf(query, "select tableName ");
+sqlDyStringPrintf(query, "select tableName ");
 for (field = fieldList; field != NULL; field = field->next)
-    dyStringPrintf(fields, ",%s", field->name);
-dyStringPrintf(query, "%s from %s", fields->string, inputTrackTable);
+    sqlDyStringPrintfFrag(fields, ",%s", field->name);
+sqlDyStringPrintf(query, "%-s from %s", fields->string, inputTrackTable);
 if (fieldList != NULL)
     // skip leading comma
     dyStringPrintf(query, " order by %s", fields->string+1);
@@ -220,14 +220,14 @@ if (vocab)
 
 /* Make the monster SQL query to get all assays*/
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "select %s.id,%s.name,%s.tableName", sourceTable, sourceTable, 
+sqlDyStringPrintf(query, "select %s.id,%s.name,%s.tableName", sourceTable, sourceTable, 
 	inputTrackTable);
 struct slName *field;
 for (field = fieldList; field != NULL; field = field->next)
-    dyStringPrintf(query, ",%s.%s", inputTrackTable, field->name);
-dyStringPrintf(query, " from %s,%s ", inputTrackTable, sourceTable);
-dyStringPrintf(query, " where %s.source = %s.description", inputTrackTable, sourceTable);
-dyStringPrintf(query, " and factor='%s' order by %s.source", cluster->name, inputTrackTable);
+    sqlDyStringPrintf(query, ",%s.%s", inputTrackTable, field->name);
+sqlDyStringPrintf(query, " from %s,%s ", inputTrackTable, sourceTable);
+sqlDyStringPrintf(query, " where %s.source = %s.description", inputTrackTable, sourceTable);
+sqlDyStringPrintf(query, " and factor='%s' order by %s.source", cluster->name, inputTrackTable);
 
 int displayNo = 0;
 int fieldCount = slCount(fieldList);
@@ -304,7 +304,7 @@ struct bed *cluster = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 
 cartWebStart(cart, database, "%s item details", tdb->shortLabel);
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -325,7 +325,7 @@ if (cluster != NULL)
 
 	/* Print out some information about the cluster overall. */
 	printf("<B>Items in Cluster:</B> %s of %d<BR>\n", cluster->name, 
-	    sqlRowCount(conn, inputTrackTable));
+	    sqlRowCount(conn, sqlCheckTableName(inputTrackTable)));
 	printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
 	printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
 
@@ -362,7 +362,7 @@ char *motifTable = NULL;
 motifTable = TXCLUSTER_MOTIFS_TABLE;
 #endif
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	tdb->table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -386,7 +386,7 @@ if (cluster != NULL)
         char where[256];
 
         motif = loadDnaMotif(item, "transRegCodeMotif");
-        safef(where, sizeof(where), "name = '%s'", item);
+        sqlSafefFrag(where, sizeof(where), "name = '%s'", item);
         sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", cluster->chrom, cluster->chromStart,
                          cluster->chromEnd, where, &rowOffset);
         while ((row = sqlNextRow(sr)) != NULL)
@@ -421,7 +421,7 @@ if (cluster != NULL)
             char query[256];
             float maxScore = -1;
 
-            safef(query, sizeof(query), 
+            sqlSafef(query, sizeof(query), 
 	    	"select max(score) from %s where name = '%s'", 
 		"wgEncodeRegTfbsClusteredMotifs", item);
             sr = sqlGetResult(conn, query);
@@ -451,7 +451,7 @@ if (cluster != NULL)
 
     /* Get list of tracks we'll look through for input. */
     char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"select tableName from %s where factor='%s' order by source", inputTrackTable, 
 	cluster->name);
 

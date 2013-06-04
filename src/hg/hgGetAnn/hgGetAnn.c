@@ -387,7 +387,7 @@ struct sqlResult *sr;
 char query[512];
 int rowCnt = 0;
 
-safef(query, sizeof(query), "select * from %s where (%s = '%s')",
+sqlSafef(query, sizeof(query), "select * from %s where (%s = '%s')",
       realTable, tableInfo->nameField, pos->name);
 
 sr = sqlGetResult(conn, query);
@@ -406,7 +406,7 @@ struct sqlResult *sr;
 char query[512];
 int rowCnt = 0;
 
-safef(query, sizeof(query), "select * from %s where (%s = '%s') and (%s = %d) and (%s = %d)",
+sqlSafef(query, sizeof(query), "select * from %s where (%s = '%s') and (%s = %d) and (%s = %d)",
       getTableName(pos->chrom, tableInfo), 
       tableInfo->chromField, pos->chrom,
       tableInfo->startField, pos->chromStart, 

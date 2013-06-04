@@ -196,7 +196,7 @@ char *createString =
 
 struct dyString *dy = newDyString(512);
 
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }

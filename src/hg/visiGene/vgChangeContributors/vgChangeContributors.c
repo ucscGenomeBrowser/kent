@@ -31,13 +31,13 @@ int findOrAddIdTable(struct sqlConnection *conn, char *table, char *field,
 char query[256];
 int id;
 char *escValue = makeEscapedString(value, '"');
-safef(query, sizeof(query), "select id from %s where %s = \"%s\"",
+sqlSafef(query, sizeof(query), "select id from %s where %s = \"%s\"",
 	table, field, escValue);
 verbose(2, "%s\n", query);
 id = sqlQuickNum(conn, query);
 if (id == 0)
     {
-    safef(query, sizeof(query), "insert into %s values(default, \"%s\")",
+    sqlSafef(query, sizeof(query), "insert into %s values(default, \"%s\")",
     	table, escValue);
     verbose(2, "%s\n", query);
     sqlUpdate(conn, query);
@@ -55,14 +55,14 @@ struct sqlConnection *conn = sqlConnect(database);
 struct slName *contrib, *contribList = slNameListFromComma(contributors);
 struct dyString *dy = dyStringNew(0);
 
-dyStringAppend(dy, "update submissionSet set contributors='");
+sqlDyStringAppend(dy, "update submissionSet set contributors='");
 dyStringAppend(dy, contributors);
 dyStringPrintf(dy, "' where id=%d", submissionSetId);
 verbose(2, dy->string);
 sqlUpdate(conn, dy->string);
 
 dyStringClear(dy);
-dyStringPrintf(dy, "delete from submissionContributor where submissionSet=%d", 
+sqlDyStringPrintf(dy, "delete from submissionContributor where submissionSet=%d", 
     submissionSetId);
 verbose(2, dy->string);
 sqlUpdate(conn, dy->string);
@@ -72,7 +72,7 @@ for (contrib = contribList; contrib != NULL; contrib = contrib->next)
     int contribId = findOrAddIdTable(conn, "contributor", "name", 
     	skipLeadingSpaces(contrib->name));
     dyStringClear(dy);
-    dyStringPrintf(dy, 
+    sqlDyStringPrintf(dy, 
           "insert into submissionContributor values(%d, %d)",
 	  submissionSetId, contribId);
     verbose(2, "%s\n", dy->string);

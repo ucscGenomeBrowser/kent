@@ -74,13 +74,13 @@ currentCgiUrl = cgiUrlString();
 /* List chemicals related to this gene */
 if (isRgdGene(conn))
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
           "select ChemicalId, ChemicalName from rgdGene2Xref x, hgFixed.ctdSorted c where x.info=c.GeneSymbol and rgdGeneId='%s' and infoType='Name'", 
 	  geneId);
     }
 else
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
           "select ChemicalId, ChemicalName from kgXref x, hgFixed.ctdSorted c where x.geneSymbol=c.GeneSymbol and kgId='%s'", 
 	  geneId);
     }

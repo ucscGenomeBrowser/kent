@@ -64,7 +64,7 @@ while ((wordCount = lineFileChopNextTab(lf, words, ArraySize(words))) > 0)
     char *knownGeneId = NULL;
 
     /* BioCycId is really an ENSEMBL Gene ID.  Use following SQL to look it up. */
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
        "select distinct(knownCanonical.transcript)  "
        "from ensGtp,knownToEnsembl,knownIsoforms,knownCanonical "
        "where ensGtp.gene = '%s' "
@@ -77,7 +77,7 @@ while ((wordCount = lineFileChopNextTab(lf, words, ArraySize(words))) > 0)
     if (knownGeneId == NULL)
         {
 	char *escSym = makeEscapedString(symbol, '\'');
-	safef(query, sizeof(query), "select distinct(knownCanonical.transcript) "
+	sqlSafef(query, sizeof(query), "select distinct(knownCanonical.transcript) "
 	"from kgXref,knownIsoforms,knownCanonical "
 	"where kgXref.geneSymbol = '%s' "
 	"and kgXref.kgID=knownIsoforms.transcript "
@@ -179,7 +179,7 @@ while ((wordCount = lineFileChopNextTab(lf, words, ArraySize(words))) > 0)
 	   char *ucscId = hashFindVal(hash, gene);
 	   if (ucscId != NULL)
 	       {
-	       safef(query, sizeof(query), "select geneSymbol from kgXref where kgID = '%s'",
+	       sqlSafef(query, sizeof(query), "select geneSymbol from kgXref where kgID = '%s'",
 		    ucscId);
 	       char *geneSymbol = sqlQuickString(conn, query);
 	       fprintf(fPathway, "%s\t%s\t%s\n", ucscId, geneSymbol, pathwayId);

@@ -293,7 +293,7 @@ struct chain *chain = NULL;
 
 if (!hFindSplitTable(db, chrom, track, table, &rowOffset))
     errAbort("No %s track in database", track);
-snprintf(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	 "select * from %s where id = %d", table, id);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -834,7 +834,7 @@ else if(altGraphXTableName != NULL)
     {
     char query[256];
     warn("Reading altGraphX Records from table %s.", altGraphXTableName);
-    safef(query, sizeof(query), "select * from %s where tName like '%s'", altGraphXTableName, chrom);
+    sqlSafef(query, sizeof(query), "select * from %s where tName like '%s'", altGraphXTableName, chrom);
     agList = altGraphXLoadByQuery(conn, query);
     }
 else

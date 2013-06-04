@@ -35,7 +35,7 @@ conn = sqlConnect(db);
 for (table = tables; table != NULL; table = table->next)
     {
     char *new = replaceChars(table->name, oldRoot, newRoot);
-    safef(query, sizeof query, "ALTER TABLE %s RENAME TO %s", table->name, new);
+    sqlSafef(query, sizeof query, "ALTER TABLE %s RENAME TO %s", table->name, new);
     sqlUpdate(conn, query);
     }
 }

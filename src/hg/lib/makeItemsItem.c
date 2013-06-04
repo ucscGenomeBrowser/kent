@@ -55,42 +55,15 @@ void makeItemsItemSaveToDb(struct sqlConnection *conn, struct makeItemsItem *el,
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include"
- * If worried about this use makeItemsItemSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%s,%u)",
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%s,%u)",
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->itemRgb,  el->description,  el->id);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void makeItemsItemSaveToDbEscaped(struct sqlConnection *conn, struct makeItemsItem *el, char *tableName, int updateSize)
-/* Save makeItemsItem as a row to the table specified by tableName.
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically
- * escapes all simple strings (not arrays of string) but may be slower than makeItemsItemSaveToDb().
- * For example automatically copies and converts:
- * "autosql's features include" --> "autosql\'s features include"
- * before inserting into database. */
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *description;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-description = sqlEscapeString(el->description);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,'%s',%u)",
-	tableName,  el->bin,  chrom,  el->chromStart,  el->chromEnd,  name,  el->score,  strand,  el->thickStart,  el->thickEnd,  el->itemRgb,  description,  el->id);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&description);
-}
 
 struct makeItemsItem *makeItemsItemLoad(char **row)
 /* Load a makeItemsItem from row fetched with select * from makeItemsItem

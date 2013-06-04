@@ -258,7 +258,7 @@ void createClusterTable(struct sqlConnection *conn,
 /* Create cluster table. */
 {
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
     "CREATE TABLE %s (\n"
     " clusterId int unsigned not null,\n"
     " transcript varchar(255) not null,\n"
@@ -274,7 +274,7 @@ void createCannonicalTable(struct sqlConnection *conn,
 /* Create cannonical representative of cluster table. */
 {
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
     "CREATE TABLE %s (\n"
     " chrom varchar(255) not null,\n"
     " chromStart int not null,\n"
@@ -326,11 +326,12 @@ if (!noProt)
     {
     protHash = newHash(16);
     if (sangerLinks)
-	safef(query, sizeof(query), "select orfName,protName from sangerLinks");
+	sqlSafef(query, sizeof(query), "select orfName,protName from sangerLinks");
     else if (isNotEmpty(protAccQuery))
-	safecpy(query, sizeof(query), protAccQuery);
+	// accepting special user query without checking
+	sqlSafef(query, sizeof(query), "%-s", protAccQuery);  
     else
-	safef(query, sizeof(query), "select name, proteinId from %s", geneTable);
+	sqlSafef(query, sizeof(query), "select name, proteinId from %s", geneTable);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	hashAdd(protHash, row[0], cloneString(row[1]));

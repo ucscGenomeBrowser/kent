@@ -40,7 +40,7 @@ if (hTableExists("kgXref"))
     struct sqlResult *sr;
     char **row;
 
-    sprintf(query, "select geneSymbol from kgXref where mRNA = '%s'", id);
+    sqlSafef(query, sizeof query, "select geneSymbol from kgXref where mRNA = '%s'", id);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -81,14 +81,14 @@ if (hTableExists("refLink") && hTableExists("knownGeneLink"))
 	    }
 	else
 	    {
-	    sprintf(query,"select refseq from %s.mrnaRefseq where mrna = '%s';",  
+	    sqlSafef(query, sizeof query,"select refseq from %s.mrnaRefseq where mrna = '%s';",  
 		    database, id);
 
 	    sr = sqlGetResult(conn, query);
 	    row = sqlNextRow(sr);
 	    if (row != NULL)
 		{
-		sprintf(query, "select * from refLink where mrnaAcc = '%s'", row[0]);
+		sqlSafef(query, sizeof query, "select * from refLink where mrnaAcc = '%s'", row[0]);
 		sqlFreeResult(&sr);
 		sr = sqlGetResult(conn, query); 
 		if ((row = sqlNextRow(sr)) != NULL)
@@ -118,7 +118,7 @@ if (hTableExists("kgXref"))
     struct sqlResult *sr;
     char **row;
 
-    sprintf(query, "select spID from kgXref where mRNA = '%s'", id);
+    sqlSafef(query, sizeof query, "select spID from kgXref where mRNA = '%s'", id);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)

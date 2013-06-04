@@ -371,7 +371,7 @@ if (startsWithWord("bedGraph", tdb->type))
 	if (wordCount > 1)
 	    table->bedGraphColumnNum = sqlUnsigned(words[1]);
 	freez(&typeLine);
-	safef(query, ArraySize(query), "describe %s", table->actualTable);
+	sqlSafef(query, ArraySize(query), "describe %s", table->actualTable);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {

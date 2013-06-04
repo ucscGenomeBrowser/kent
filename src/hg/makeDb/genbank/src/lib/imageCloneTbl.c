@@ -10,7 +10,7 @@ char *IMAGE_CLONE_TBL = "imageClone";
 
 /* SQL to create the table */
 static char *createSql =
-"create table imageClone ("
+"NOSQLINJ create table imageClone ("
 "    imageId int not null,"                         /* imageId */
 "    acc char(12) not null,"                        /* GenBank accession */
 "    type enum('EST','mRNA') not null,"             /* EST or mRNA? */
@@ -128,7 +128,7 @@ unsigned imageCloneTblGetId(struct sqlConnection *conn, char *acc)
 /* get id for an acc, or 0 if none */
 {
 char query[256];
-safef(query, sizeof(query), "SELECT imageId from %s WHERE acc = '%s'",
+sqlSafef(query, sizeof(query), "SELECT imageId from %s WHERE acc = '%s'",
       IMAGE_CLONE_TBL, acc);
 return sqlQuickNum(conn, query);
 }
@@ -154,7 +154,7 @@ if (!((direction == '5') || (direction == '3') || (direction == '0')))
     errAbort("invalid direction value for imageCLone table: %d", direction);
 
 /* if type changes, entry is already deleted */
-safef(query, sizeof(query), "imageId = %u, direction = '%c' WHERE acc = '%s'",
+sqlSafefFrag(query, sizeof(query), "imageId = %u, direction = '%c' WHERE acc = '%s'",
       imageId, direction, acc);
 
 sqlUpdaterModRow(ict->updater, 1, "%s", query);

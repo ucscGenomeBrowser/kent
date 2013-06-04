@@ -38,7 +38,7 @@ struct sqlConnection *conn = sqlConnect(database);
 char query[256];
 
 /* Make something like "select * from knownGene" */
-safef(query, sizeof(query), "select * from %s", table);
+sqlSafef(query, sizeof(query), "select * from %s", table);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)

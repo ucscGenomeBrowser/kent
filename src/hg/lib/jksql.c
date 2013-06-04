@@ -19,6 +19,7 @@
 #include "jksql.h"
 #include "sqlNum.h"
 #include "hgConfig.h"
+#include "cheapcgi.h"
 
 
 /* flags controlling sql monitoring facility */
@@ -563,7 +564,9 @@ return sc->conn->host;
 struct slName *sqlGetAllDatabase(struct sqlConnection *sc)
 /* Get a list of all database on the server */
 {
-struct sqlResult *sr = sqlGetResult(sc, "show databases");
+char query[32];
+sqlSafef(query, sizeof query, "show databases");
+struct sqlResult *sr = sqlGetResult(sc, query);
 char **row;
 struct slName *databases = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -591,7 +594,7 @@ if (tableList != NULL)
     if(sqlTableExists(conn, tableList))
         {
         char query[256];
-        safef(query, sizeof(query), "select * from %s order by name desc", tableList);
+        sqlSafef(query, sizeof(query), "select * from %s order by name desc", tableList);
         sr = sqlGetResult(conn, query);
         while ((row = sqlNextRow(sr)) != NULL)
             {
@@ -606,7 +609,9 @@ if (tableList != NULL)
     }
 else
     {
-    sr = sqlGetResult(conn, "show tables");
+    char query[256];
+    sqlSafef(query, sizeof(query), "show tables");
+    sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
         el = slNameNew(row[0]);
@@ -625,7 +630,7 @@ char query[256];
 char **row;
 struct slName *list = NULL, *el;
 struct sqlResult *sr = NULL;
-safef(query, sizeof(query), "describe %s", table);
+sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -648,7 +653,7 @@ char **row;
 char fullName[512];
 for (table = tableList; table != NULL; table = table->next)
     {
-    safef(query, sizeof(query), "describe %s", table->name);
+    sqlSafef(query, sizeof(query), "describe %s", table->name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -882,11 +887,29 @@ assert(!sc->isFree);
 MYSQL *conn = sc->conn;
 struct sqlResult *res = NULL;
 long deltaTime;
+boolean fixedMultipleNOSQLINJ = FALSE;
 
 ++sqlTotalQueries;
 
 if (monitorFlags & JKSQL_TRACE)
     monitorPrintQuery(sc, query);
+
+if (startsWith("NOSQLINJ ", query))
+    {
+    query += strlen("NOSQLINJ "); // We know this query has been vetted for sql injection, skip over this tag.
+    }
+else
+    {
+    sqlCheckError("Unvetted query: %s", query);
+    }
+
+// additional check finds errors of multiple NOSQLINJ tags
+if (strstr(query, "NOSQLINJ "))
+    {
+    sqlCheckError("Oops, multiple occurrences of NOSQLINJ tag in query: %s", query);
+    query = replaceChars(query, "NOSQLINJ ", "");
+    fixedMultipleNOSQLINJ = TRUE;
+    }
 
 monitorEnter();
 if (mysql_real_query(conn, query, strlen(query)) != 0)
@@ -894,6 +917,7 @@ if (mysql_real_query(conn, query, strlen(query)) != 0)
     if (abort)
         {
         monitorLeave();
+	dumpStack("oops DEBUG"); // DEBUG REMOVE
 	sqlAbort(sc, "Can't start query:\n%s\n", query);
         }
     }
@@ -920,6 +944,8 @@ else
 deltaTime = monitorLeave();
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_TIME", "%0.3fs", ((double)deltaTime)/1000.0);
+if (fixedMultipleNOSQLINJ)
+    freeMem(query);
 return res;
 }
 
@@ -927,7 +953,7 @@ void sqlRenameTable(struct sqlConnection *sc, char *table1, char *table2)
 /* Rename table1 to table2 */
 {
 char query[256];
-safef(query, sizeof(query), "rename table %s to %s", table1, table2);
+sqlSafef(query, sizeof(query), "rename table %s to %s", table1, table2);
 sqlUpdate(sc, query);
 }
 
@@ -937,7 +963,7 @@ void sqlDropTable(struct sqlConnection *sc, char *table)
 if (sqlTableExists(sc, table))
     {
     char query[256];
-    safef(query, sizeof(query), "drop table %s", table);
+    sqlSafef(query, sizeof(query), "drop table %s", table);
     sqlUpdate(sc, query);
     }
 }
@@ -949,9 +975,9 @@ char query[256];
 
 if (table1 == NULL || table2 == NULL)
     return;
-safef(query, sizeof(query), "create table %s like %s", table2, table1);
+sqlSafef(query, sizeof(query), "create table %s like %s", table2, table1);
 sqlUpdate(sc, query);
-safef(query, sizeof(query), "insert into %s select * from  %s", table2, table1);
+sqlSafef(query, sizeof(query), "insert into %s select * from  %s", table2, table1);
 sqlUpdate(sc, query);
 }
 
@@ -964,7 +990,7 @@ char query[256];
 struct sqlResult *res;
 char **row = NULL;
 
-safef(query, sizeof(query), "select get_lock('%s', 1000)", name);
+sqlSafef(query, sizeof(query), "select get_lock('%s', 1000)", name);
 res = sqlGetResult(sc, query);
 while ((row=sqlNextRow(res)))
     {
@@ -983,7 +1009,7 @@ void sqlReleaseLock(struct sqlConnection *sc, char *name)
 {
 char query[256];
 
-safef(query, sizeof(query), "select release_lock('%s')", name);
+sqlSafef(query, sizeof(query), "select release_lock('%s')", name);
 sqlUpdate(sc, query);
 }
 
@@ -992,7 +1018,9 @@ void sqlHardUnlockAll(struct sqlConnection *sc)
 {
 if (sc->hasHardLock)
     {
-    sqlUpdate(sc, "unlock tables");
+    char query[32];
+    sqlSafef(query, sizeof query, "unlock tables");
+    sqlUpdate(sc, query);
     sc->hasHardLock = FALSE;
     }
 }
@@ -1007,10 +1035,10 @@ char *how = (isWrite ? "WRITE" : "READ");
 
 if (sc->hasHardLock)
     errAbort("sqlHardLockTables repeated without sqlHardUnlockAll.");
-dyStringAppend(dy, "LOCK TABLES ");
+sqlDyStringPrintf(dy, "LOCK TABLES ");
 for (table = tableList; table != NULL; table = table->next)
     {
-    dyStringPrintf(dy, "%s %s", table->name, how);
+    sqlDyStringPrintf(dy, "%s %s", table->name, how);
     if (table->next != NULL)
        dyStringAppendC(dy, ',');
     }
@@ -1067,10 +1095,32 @@ boolean sqlTableExists(struct sqlConnection *sc, char *table)
 {
 char query[256];
 struct sqlResult *sr;
-
-safef(query, sizeof(query), "SELECT 1 FROM %s LIMIT 0", table);
+if (sameString(table,""))
+    {
+    sqlCheckError("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table);  
+    return FALSE;
+    }
+// TODO If the ability to supply a list of tables is hardly used,
+// then we could switch it to simply %s below supporting a single
+// table at a time more securely.
+// DEBUG informational
+if (strchr(table,','))
+    dumpStack("sqlTableExists called on multiple tables with table=[%s]\n", table);
+if (strchr(table,'%'))
+    {
+    // verbose is better than warn for early code calls?
+    sqlCheckError("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table);  
+    return FALSE;
+    }
+// DEBUG END
+//verbose(1,"DEBUG sqlTableExists table=[%s]\n", table); // DEBUG REMOVE
+sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(table));  // DEBUG RESTORE
+//safef(query, sizeof(query), "NOSQLINJ SELECT 1 FROM %s LIMIT 0", table);  // DEBUG REMOVE
 if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
     return FALSE;
+// TODO consider using sqlGetResultExt or something that would
+// allow you to abort on all errors except the actual table not found:
+// ERROR 1146 (42S02): Table 'hg19.chr_est' doesn't exist
 sqlFreeResult(&sr);
 return TRUE;
 }
@@ -1078,11 +1128,11 @@ return TRUE;
 bool sqlColumnExists(struct sqlConnection *conn, char *tableName, char *column)
 /* return TRUE if column exists in table. tableName can contain sql wildcards  */
 {
-    char query[1024];
-    safef(query, 1024, "SHOW COLUMNS FROM `%s` LIKE '%s'", tableName, column);
-    char buf[1024];
-    char *ret = sqlQuickQuery(conn, query, buf, 1024);
-    return (ret!=NULL);
+char query[1024];
+sqlSafef(query, 1024, "SHOW COLUMNS FROM `%s` LIKE '%s'", tableName, column);
+char buf[1024];
+char *ret = sqlQuickQuery(conn, query, buf, 1024);
+return (ret!=NULL);
 }
 
 int sqlTableSizeIfExists(struct sqlConnection *sc, char *table)
@@ -1093,7 +1143,7 @@ struct sqlResult *sr;
 char **row = 0;
 int ret = 0;
 
-safef(query, sizeof(query), "select count(*) from %s", table);
+sqlSafef(query, sizeof(query), "select count(*) from %s", table);
 if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
     return -1;
 row = sqlNextRow(sr);
@@ -1130,7 +1180,7 @@ struct sqlResult *sr;
 char **row;
 boolean exists;
 
-safef(query, sizeof(query), "show tables like '%s'", table);
+sqlSafef(query, sizeof(query), "show tables like '%s'", table);
 sr = sqlGetResult(sc, query);
 exists = ((row = sqlNextRow(sr)) != NULL);
 sqlFreeResult(&sr);
@@ -1250,7 +1300,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 struct dyString *dy = dyStringNew(0);
-safef(query,sizeof(query),"show warnings limit 0, %d", numberOfWarnings);
+sqlSafef(query,sizeof(query),"show warnings limit 0, %d", numberOfWarnings);
 sr = sqlGetResult(conn, query);
 dyStringPrintf(dy, "Level Code Message\n");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1265,7 +1315,9 @@ dyStringFree(&dy);
 int sqlWarnCount(struct sqlConnection *conn)
 /* Return the number of warnings. New feature in mysql5. */
 {
-return sqlQuickNum(conn, "SHOW COUNT(*) WARNINGS");
+char query[32];
+sqlSafef(query, sizeof query, "SHOW COUNT(*) WARNINGS");
+return sqlQuickNum(conn, query);
 }
 
 
@@ -1326,7 +1378,7 @@ else
         {
         /* disable update of indexes during load. Inompatible with concurrent,
          * since enable keys locks other's out. */
-        safef(query, sizeof(query), "ALTER TABLE %s DISABLE KEYS", table);
+        sqlSafef(query, sizeof(query), "ALTER TABLE %s DISABLE KEYS", table);
         sqlUpdate(conn, query);
         }
     }
@@ -1336,7 +1388,7 @@ if (options & SQL_TAB_REPLACE)
 else
     dupOpt = "";
 
-safef(query, sizeof(query),  "LOAD DATA %s %s INFILE '%s' %s INTO TABLE %s",
+sqlSafef(query, sizeof(query),  "LOAD DATA %s %s INFILE '%s' %s INTO TABLE %s",
       concurrentOpt, localOpt, tabPath, dupOpt, table);
 sr = sqlGetResult(conn, query);
 monitorEnter();
@@ -1380,7 +1432,7 @@ if ((numSkipped > 0) || (numWarnings > 0))
 if (((options & SQL_TAB_FILE_CONCURRENT) == 0) && doDisableKeys)
     {
     /* reenable update of indexes */
-    safef(query, sizeof(query), "ALTER TABLE %s ENABLE KEYS", table);
+    sqlSafef(query, sizeof(query), "ALTER TABLE %s ENABLE KEYS", table);
     sqlUpdate(conn, query);
     }
 }
@@ -1411,7 +1463,7 @@ boolean sqlRowExists(struct sqlConnection *conn,
 /* Return TRUE if row where field = key is in table. */
 {
 char query[256];
-safef(query, sizeof(query), "select count(*) from %s where %s = '%s'",
+sqlSafef(query, sizeof(query), "select count(*) from %s where %s = '%s'",
 	table, field, key);
 return sqlQuickNum(conn, query) > 0;
 }
@@ -1421,7 +1473,8 @@ int sqlRowCount(struct sqlConnection *conn, char *queryTblAndCondition)
  * should contain everying after "select count(*) FROM " */
 {
 char query[256];
-safef(query, sizeof(query), "select count(*) from %s",queryTblAndCondition);
+sqlSafef(query, sizeof(query), "select count(*) from %-s",queryTblAndCondition);  
+// NOSQLINJ since we cannot check the queryTblAndCondition here, the users of this function have been fixed.
 return sqlQuickNum(conn, query);
 }
 
@@ -1505,7 +1558,7 @@ char **row;
 int count;
 
 /* Read table description and count rows. */
-safef(query, sizeof(query), "describe %s", table);
+sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(sc, query);
 count = 0;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1718,7 +1771,7 @@ int sqlTableSize(struct sqlConnection *conn, char *table)
 /* Find number of rows in table. */
 {
 char query[128];
-safef(query, sizeof(query), "select count(*) from %s", table);
+sqlSafef(query, sizeof(query), "select count(*) from %s", table);
 return sqlQuickNum(conn, query);
 }
 
@@ -1732,7 +1785,7 @@ char **row;
 int i = 0, ix=-1;
 
 /* Read table description into hash. */
-safef(query, sizeof(query), "describe %s", table);
+sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1754,7 +1807,7 @@ struct slName *list = NULL;
 char query[256];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "describe %s", table);
+sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     slNameAddHead(&list, row[0]);
@@ -2036,6 +2089,22 @@ if (conn != NULL)
     }
 }
 
+// where am I using this?
+void sqlDyAppendEscaped(struct dyString *dy, char *s)
+/* Append to dy an escaped s */
+{
+dyStringBumpBufSize(dy, dy->stringSize + strlen(s)*2);
+int realSize = sqlEscapeString3(dy->string+dy->stringSize, s);
+dy->stringSize += realSize;
+}
+
+unsigned long sqlEscapeString3(char *to, const char* from)
+/* Prepares a string for inclusion in a sql statement.  Output string
+ * must be 2*strlen(from)+1.  Returns actual escaped size not counting term 0. */
+{
+return mysql_escape_string(to, from, strlen(from));
+}
+
 char *sqlEscapeString2(char *to, const char* from)
 /* Prepares a string for inclusion in a sql statement.  Output string
  * must be 2*strlen(from)+1 */
@@ -2194,7 +2263,7 @@ struct tm *tm = NULL;
 long clockTime = 0;
 
 if (sqlDate == NULL)
-    errAbort("Null string passed to sqlDateToClockTime()");
+    errAbort("Null string passed to sqlDateToUnixTime()");
 AllocVar(tm);
 if (sscanf(sqlDate, "%4d-%2d-%2d %2d:%2d:%2d",
 	   &(tm->tm_year), &(tm->tm_mon), &(tm->tm_mday),
@@ -2231,7 +2300,7 @@ else
 
 ret = (char *)needMem(25*sizeof(char));  /* 25 is good for a billion years */
 
-snprintf(ret, 25*sizeof(char), "%d-%02d-%02d %02d:%02d:%02d",
+safef(ret, 25*sizeof(char), "%d-%02d-%02d %02d:%02d:%02d",
     1900+tm->tm_year, 1+tm->tm_mon, tm->tm_mday,
     tm->tm_hour, tm->tm_min, tm->tm_sec);
 return(ret);
@@ -2269,7 +2338,7 @@ char query[512], **row;
 struct sqlResult *sr;
 int updateIx;
 char *ret;
-safef(query, sizeof(query), "show table status like '%s'", table);
+sqlSafef(query, sizeof(query), "show table status like '%s'", table);
 sr = sqlGetResult(conn, query);
 updateIx = getUpdateFieldIndex(sr);
 row = sqlNextRow(sr);
@@ -2297,7 +2366,7 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 char *key = NULL;
-safef(query, sizeof(query), "describe %s", table);
+sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2315,8 +2384,10 @@ char *sqlVersion(struct sqlConnection *conn)
 /* Return version of MySQL database.  This will be something
  * of the form 5.0.18-standard. */
 {
+char query[32];
 char **row;
-struct sqlResult *sr = sqlGetResult(conn, "show variables like 'version'");
+sqlSafef(query, sizeof query, "show variables like 'version'");
+struct sqlResult *sr = sqlGetResult(conn, query);
 char *version = NULL;
 if ((row = sqlNextRow(sr)) != NULL)
     version = cloneString(row[1]);
@@ -2368,7 +2439,7 @@ int numValues, i;
 char **enumDef;
 
 /* get enum definition */
-safef(query, sizeof(query), "describe %s", table);
+sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while (((row = sqlNextRow(sr)) != NULL) && !sameString(row[0], colName))
     continue;
@@ -2423,13 +2494,13 @@ if (plainTable)
     plainTable++;
 else
     plainTable = table;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "create temporary table hgTemp.tmp%s select %s from %s limit 100000",
       plainTable, field, table);
 sqlUpdate(conn, query);
 if (seed != -1)
     safef(seedString,sizeof(seedString),"%d",seed);
-safef(query, sizeof(query), "select distinct %s from hgTemp.tmp%s "
+sqlSafef(query, sizeof(query), "select distinct %s from hgTemp.tmp%s "
       "order by rand(%s) limit %d",
       field, plainTable, seedString, count);
 sr = sqlGetResult(conn, query);
@@ -2486,7 +2557,7 @@ struct sqlResult *sr;
 char **row;
 struct sqlFieldInfo *fiList = NULL;
 
-safef(query, sizeof(query), "SHOW COLUMNS FROM %s", table);
+sqlSafef(query, sizeof(query), "SHOW COLUMNS FROM %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     slSafeAddHead(&fiList, sqlFieldInfoParse(row));
@@ -2531,7 +2602,7 @@ struct slList *objs = NULL;
 struct sqlResult *sr;
 char **row;
 
-vasafef(query, sizeof(query), queryFmt, args);
+vaSqlSafef(query, sizeof(query), queryFmt, args);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL) {
 slSafeAddHead(&objs, loadFunc(row));
@@ -2687,3 +2758,783 @@ void sqlPrintStats(FILE *fh)
 fprintf(fh, "sqlStats: connects: %d maxOpen: %d\n", totalNumConnects, maxNumConnections);
 }
     
+/* --------- input checks to prevent sql injection --------------------------------------- */
+
+// 0 means char is allowed
+// 1 means char is disallowed
+
+// although the mysql escape function can escape binary data,
+// we don't need to support escaping 0 for strings here.
+
+static boolean sqlCheckAllowedChars(char *s, char disAllowed[256])
+/* Check each character of input against allowed character set */
+{
+if (!s)
+    {
+    sqlCheckError("sqlCheckAllowedChars - Cannot check NULL");
+    return FALSE;
+    }
+char *sOriginal = s;
+unsigned char c;
+while((c = *s++) != 0)
+    {
+    if (disAllowed[c])
+	{
+	verbose(1,"character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
+
+	// DEBUG REMOVE Temporary for trying to track down some weird error 
+	//  because the stackdump should appear but does not.
+	//dumpStack("character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
+
+	// TODO for some reason the warn stack is messed up sometimes very eary. -- happening in hgTables position search on brca
+	//warn("character %c disallowed in sql string part %s", c, sOriginal);
+
+	return FALSE;  // might want to look at hg.conf settings and if debugging, show details.
+	}
+    }
+return TRUE;
+}
+
+static void sqlCheckDisallowAllChars(char disAllowed[256])
+/* Disallow all chars by setting to 1 */
+{
+int i;
+for(i=0;i<256;++i)
+    disAllowed[i] = 1;
+}
+
+static void sqlCheckAllowAllChars(char disAllowed[256])
+/* Allow all chars by setting to 0 */
+{
+int i;
+for(i=0;i<256;++i)
+    disAllowed[i] = 0;
+}
+
+static void sqlCheckAllowLowerChars(char allowed[256])
+/* Allow lower case chars by setting to 0 */
+{
+unsigned char c;
+for(c='a';c<='z';++c)
+    allowed[c] = 0;
+}
+
+static void sqlCheckAllowUpperChars(char allowed[256])
+/* Allow upper case chars by setting to 0 */
+{
+unsigned char c;
+for(c='A';c<='Z';++c)
+    allowed[c] = 0;
+}
+
+static void sqlCheckAllowDigitChars(char allowed[256])
+/* Allow digit chars by setting to 0 */
+{
+unsigned char c;
+for(c='0';c<='9';++c)
+    allowed[c] = 0;
+}
+
+static void sqlCheckAllowChar(unsigned char c, char allowed[256])
+/* Allow a char by setting to 0 */
+{
+allowed[c] = 0;
+}
+
+static void sqlCheckDisallowChar(unsigned char c, char allowed[256])
+/* Allow a char by setting to 0 */
+{
+allowed[c] = 1;
+}
+
+static void sqlCheckAllowAlphaChars(char allowed[256])
+/* Allow all chars by setting to 0 */
+{
+sqlCheckAllowUpperChars(allowed);
+sqlCheckAllowLowerChars(allowed);
+}
+
+static void sqlCheckAllowAlphaNumChars(char allowed[256])
+/* Allow all chars by setting to 0 */
+{
+sqlCheckAllowAlphaChars(allowed);
+sqlCheckAllowDigitChars(allowed);
+}
+
+static boolean sqlCheckNeedsEscape(char *s)
+/* Check if string s needs escaping. Usually it doesn't need it. */
+{
+static boolean init = FALSE;
+static char disallowed[256];
+if (!init)
+    {
+    sqlCheckAllowAllChars(disallowed);
+    sqlCheckDisallowChar('\''  , disallowed);  // single-quote
+    sqlCheckDisallowChar('"'   , disallowed);  // double-quote
+    sqlCheckDisallowChar('\\'  , disallowed);  // back-slash
+    sqlCheckDisallowChar('\r'  , disallowed);  // carriage-return
+    sqlCheckDisallowChar('\n'  , disallowed);  // newline or linefeed
+    sqlCheckDisallowChar('\x1a', disallowed);  // ctrl-Z or 26 dec or 1a hex.
+    // technically, 0 can be escaped but we are doing strings and not general binary data here.
+    init = TRUE;
+    }
+if (sqlCheckAllowedChars(s, disallowed))
+    {
+    return FALSE;
+    }
+return TRUE;
+}
+
+// TODO This is probably not needed
+char *sqlEscapeIfNeeded(char *s, char **pS)
+/* Escape if needed.  if *pS is not null, free it.  */
+{
+char *ret = NULL;
+if (sqlCheckNeedsEscape(s))
+    {
+    ret = sqlEscapeString(s);
+    if (pS)
+	*pS = ret;
+    }
+else
+    {
+    if (pS)
+	*pS = NULL;
+    ret = s;
+    }
+return ret;
+}
+
+char *sqlCheckQuotedLiteral(char *s)
+/* Check that none of the chars needing to be escaped are in the string s */
+{
+if (sqlCheckNeedsEscape(s))
+    {
+    sqlCheckError("Forbidden characters like quotes, newlines, or backslashes found in quoted string literal %s", s);
+    }
+return s;
+}
+
+char *sqlCheckAlphaNum(char *word)
+/* Check that only valid alpha numeric characters are used in word */
+{
+static boolean init = FALSE;
+static char allowed[256];
+if (!init)
+    {
+    sqlCheckDisallowAllChars(allowed);
+    sqlCheckAllowAlphaNumChars(allowed);
+    init = TRUE;
+    }
+if (!sqlCheckAllowedChars(word, allowed))
+    {
+    sqlCheckError("Illegal character found in %s", word);
+    }
+return word;
+}
+
+// TODO as much as I liked this function sqlCheckIdentifiersList,
+// it may not be used much, so see if you can remove it
+// and just add a little workaound for the remaining place(s) that use it.
+char *sqlCheckIdentifiersList(char *identifiers)
+/* Check that only valid identifier characters are used in a comma-separated list */
+{
+static boolean init = FALSE;
+static char allowed[256];
+if (!init)
+    {
+    sqlCheckDisallowAllChars(allowed);
+    sqlCheckAllowAlphaNumChars(allowed);
+    sqlCheckAllowChar('.', allowed);
+    sqlCheckAllowChar('_', allowed);
+    // sqlTableExists looks like a single table check, but apparently it has become abused
+    // to support multiple tables e.g. sqlTableExists 
+    sqlCheckAllowChar(' ', allowed);
+    sqlCheckAllowChar(',', allowed);
+    // NOTE it is important for security that no other characters be allowed here
+    init = TRUE;
+    }
+if (!sqlCheckAllowedChars(identifiers, allowed))
+    {
+    sqlCheckError("Illegal character found in identifier list %s", identifiers);
+    return identifiers;
+    }
+// Unfortunately, just checking that the characters are legal is far from enough to ensure safety.
+// the comma is required. Currently aliases and tick quotes are not supported.
+int len = strlen(identifiers);
+char c = 0;
+int i = 0;
+boolean needText = TRUE;
+boolean spaceOk = FALSE;
+// Currently identifiers list must start with an identifier, no leading spaces or comma allowed.
+// Currently the comma must immediately follow the identifier
+// Currently zero or one spaces may follow the comma
+// List should end with an identifier. No trailing comma or space allowed.
+// NOTE it is important for security that commas separate values.
+// We do not want to support multiple words separated by spaces.
+while (i < len)
+    {
+    c = identifiers[i];
+    if (c == ' ')
+	{
+	if (!spaceOk)
+	    {
+	    sqlCheckError("Invalid Identifiers List [%s] unexpected space character", identifiers);
+	    return identifiers;
+	    }
+	spaceOk = FALSE;
+	}
+    else if (c == ',')
+	{
+	if (needText)
+	    {
+	    sqlCheckError("Invalid Identifiers List [%s] unexpected comma character", identifiers);
+	    return identifiers;
+	    }
+	spaceOk = TRUE;
+	needText = TRUE;
+	}
+    else // other chars are part of the identifier
+	{
+	needText = FALSE;
+	spaceOk = FALSE;
+	}
+    
+    ++i;	    
+    }
+if (needText || spaceOk)
+    {
+    sqlCheckError("Invalid Identifiers List [%s] unexpected trailing comma or space character", identifiers);
+    return identifiers;
+    }
+
+return identifiers;
+}
+
+static char *sqlCheckIdentifierKind(char *identifier, char *kind)
+/* Check that only valid identifier characters are used */
+{
+static boolean init = FALSE;
+static char allowed[256];
+if (!init)
+    {
+    sqlCheckDisallowAllChars(allowed);
+    sqlCheckAllowAlphaNumChars(allowed);
+    sqlCheckAllowChar('.', allowed);
+    sqlCheckAllowChar('_', allowed);
+    // NOTE it is important for security that no other characters be allowed here
+    init = TRUE;
+    }
+if (!sqlCheckAllowedChars(identifier, allowed))
+    {
+    sqlCheckError("Illegal character found in %s %s", kind, identifier);
+    }
+return identifier;
+}
+
+char *sqlCheckIdentifier(char *identifier)
+/* Check that only valid identifier characters are used */
+{
+return sqlCheckIdentifierKind(identifier, "identifier");
+}
+
+// TODO not sure this one is really needed. Regular identifier check works well enough.
+// included this one originally in case it was used alot and needed to be a 
+// little different from identifier check.
+char *sqlCheckTableName(char *table)
+/* Check that only valid table name characters are used */
+{
+return sqlCheckIdentifierKind(table, "table");
+}
+
+// TODO not sure we really need this function. could probably just use sqlCheckIdentifier instead.
+char *sqlCheckCgiEncodedName(char *name)
+/* Check that only valid cgi-encoded characters are used */
+{
+static boolean init = FALSE;
+static char allowed[256];
+if (!init)
+    {
+    sqlCheckDisallowAllChars(allowed);
+    sqlCheckAllowAlphaNumChars(allowed);
+    sqlCheckAllowChar('.', allowed);
+    sqlCheckAllowChar('_', allowed);
+    sqlCheckAllowChar('%', allowed);
+    init = TRUE;
+    }
+if (!sqlCheckAllowedChars(name, allowed))
+    {
+    sqlCheckError("Illegal character found in table name %s", name);
+    }
+return name;
+}
+
+
+/* --------------------------- */
+
+int sqlEscapeAllStrings(char *buffer, char *s, int bufSize, char escPunc)
+/* Escape all strings demarked by escPunc char. *
+ * Returns final size not including terminating 0. 
+ * User needs to pre-allocate enough space that mysql_escape will never run out of space.
+ * This function should be efficient on statements with many strings to be escaped. */
+{
+char *sOrig = s;
+int sz = 0;
+int remainder = bufSize;
+boolean done = FALSE;
+while (1)
+    {
+    char *start = strchr(s, escPunc);
+    char *end = NULL;
+    if (start)
+	{
+    	end = strchr(start+1, escPunc); // skip over punc mark
+	if (!end)
+	    errAbort("Unexpected error in sqlEscapeAllStrings. s=[%s]", sOrig);
+	}
+    else
+	{
+	// just copy remainder of the input string to output
+    	start = strchr(s, 0); // find end of string
+	done = TRUE;	
+	}
+    // move any non-escaped part
+    int moveSize = start - s;
+    if (moveSize > remainder)
+	errAbort("Buffer too small in sqlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
+    memmove(buffer, s, moveSize);
+    buffer += moveSize;
+    sz += moveSize;
+    remainder -= moveSize;
+    if (done)
+	{
+	if (remainder < 1)
+	    errAbort("Buffer too small for termintating zero in sqlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
+	--remainder;
+	*buffer++ = 0;  // terminating 0
+	// do not include term 0 in sz count;
+	break;
+	}
+    // escape the quoted part
+    s = start + 1;
+    *end = 0;  // mark end of "input" string, replacing escPunc. input string is temporary anyway.
+    int inputSize = end - s;
+    int worstCase = inputSize*2 + 1;
+    if (worstCase > remainder)
+	errAbort("Buffer too small for escaping in sqlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
+    int escSize = mysql_escape_string(buffer, s, inputSize);
+    buffer += escSize;
+    sz += escSize;
+    remainder -= escSize;
+    s = end + 1;	
+    }
+return sz;
+}
+
+
+int vaSqlSafefNoAbort(char* buffer, int bufSize, boolean newString, char *format, va_list args)
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte.
+ * Scans string parameters for illegal sql chars. 
+ * Automatically escapes quoted string values.
+ * This function should be efficient on statements with many strings to be escaped. */
+{
+va_list orig_args;
+va_copy(orig_args, args);
+int formatLen = strlen(format);
+
+char escPunc = 0x01;  // using char 1 as special char to denote strings needing escaping
+//char escPunc = '`';  // DEBUG REMOVE
+char *newFormat = NULL;
+int newFormatSize = 2*formatLen + 1;
+if (newString)
+    newFormatSize += strlen("NOSQLINJ ");
+newFormat = needMem(newFormatSize);
+char *nf = newFormat;
+if (newString)
+    nf += safef(newFormat, newFormatSize, "%s", "NOSQLINJ ");
+char *lastPct = NULL;
+int escStringsCount = 0;
+int escStringsSize = 0;
+
+char c = 0;
+int i = 0;
+char quote = 0;
+boolean inPct = FALSE;
+boolean isLong = FALSE;
+boolean isLongLong = FALSE;
+boolean isNegated = FALSE;
+while (i < formatLen)
+    {
+    c = format[i];
+    *nf++ = c;
+    // start quote
+    if (quote==0 && (c == '\'' || c == '"' || c == '`'))
+	quote = c;
+    // end quote
+    else if (c == quote)
+	quote = 0;
+    else if (c == '%' && !inPct)
+	{
+	inPct = TRUE;
+	lastPct = nf - 1;  // remember where the start was.
+	}
+    else if (c == '%' && inPct)
+	inPct = FALSE;
+    else if (inPct) 
+        {
+	if (c == 'l')
+	    {
+	    if (isLong)
+		isLongLong = TRUE;
+	    else
+		isLong = TRUE;
+	    }
+	else if (strchr("diuoxXeEfFgGpcs",c))
+	    {
+	    inPct = FALSE;
+	    // convert to equivalent types
+	    if (c == 'i') c = 'd';  
+	    if (c == 'E') c = 'e';  
+	    if (c == 'F') c = 'f';  
+	    if (c == 'G') c = 'g';  
+	    if (c == 'o') c = 'u';  
+	    if (c == 'x') c = 'u';  
+	    if (c == 'X') c = 'u';  
+	    // we finally have the expected format
+	    // for all except s, we just want to skip it, but va_arg is the only way to do it!
+	    // signed integers
+	    if      (c == 'd' && !isLong)               { va_arg(args,                    int); }
+	    else if (c == 'd' && isLong && !isLongLong) { va_arg(args,               long int); }
+	    else if (c == 'd' && isLong && isLongLong)  { va_arg(args,          long long int); }
+	    // unsigned integers
+	    else if (c == 'u' && !isLong)               { va_arg(args, unsigned           int); }
+	    else if (c == 'u' && isLong && !isLongLong) { va_arg(args, unsigned      long int); }
+	    else if (c == 'u' && isLong && isLongLong)  { va_arg(args, unsigned long long int); }
+	    else if (c == 'e')                          { va_arg(args,                 double); }
+	    else if (c == 'f')                          { va_arg(args,                 double); }
+	    else if (c == 'g')                          { va_arg(args,                 double); }
+	    // pointer is void *
+	    else if (c == 'p')                          { va_arg(args,                 void *); }
+	    // char get promoted to int by varargs process
+	    else if (c == 'c')                          { va_arg(args,                    int); }
+	    // finally, the string we care about!
+	    else if (c == 's')
+		{
+		char *s = va_arg(args, char *);
+		if (s == NULL)
+    		    sqlCheckError("%%s value is NULL which is incorrect.");
+		if (quote == 0)
+		    { // check identifier
+		    if (!isNegated) // Not a Pre-escaped String
+			sqlCheckIdentifier(s);
+		    }
+		else
+		    { // check quoted literal
+		    if (!isNegated) // Not a Pre-escaped String
+			{
+			// go back and insert escPunc before the leading % char saved in lastPct
+			// move the accumulated %s descriptor
+			memmove(lastPct+1, lastPct, nf - lastPct); // this is typically very small, src and dest overlap.
+			++nf;
+			*lastPct  = escPunc;
+			*nf++ = escPunc;
+			++escStringsCount;
+			if (s == NULL)
+			    {
+			    escStringsSize += strlen("(null)");
+			    }
+			else
+			    {
+			    escStringsSize += strlen(s);  // TODO do we need this variable?
+			    // DEBUG temporary check for signs of double-escaping, can remove later for a minor speedup:
+			    //if (strstr(s, "\\\\\\\\"))  // this is really 4 backslashes
+			    if (strstr(s, "\\\\"))  // this is really 2 backslashes
+				{
+				dumpStack("potential sign of double sql-escaping in string [%s]", s);
+				}
+			    }
+			}
+		    }
+		}
+	    else
+		{
+		errAbort("unexpected error processing vaSqlSafef, format: %s", format);
+		}		
+
+	    isLong = FALSE;
+	    isLongLong = FALSE;
+	    isNegated = FALSE;
+	    }
+	else if (strchr("+-.1234567890",c))
+	    {
+	    if (c == '-')
+		isNegated = TRUE;
+	    }
+	else
+	    errAbort("string format not understood in vaSqlSafef: %s", format);
+	}
+    ++i;	    
+    }
+
+verbose(2, "format=[%s]\nnewFormat=[%s]\n", format, newFormat); // DEBUG REMOVE
+
+int sz = 0; 
+if (escStringsCount > 0)
+    {
+    verbose(2, "newFormatSize=%d escStringsSize=%d \n", newFormatSize, escStringsSize); // DEBUG REMOVE
+    int tempSize = bufSize + 2*escStringsCount;  // if it won't fit in this it will never fit.
+    verbose(2, "trying tempSize=%d\n", tempSize); // DEBUG REMOVE
+    char *tempBuf = needMem(tempSize);
+    sz = vsnprintf(tempBuf, tempSize, newFormat, orig_args);
+    /* note that some versions return -1 if too small */
+    if (sz != -1 && sz + 1 <= tempSize)
+	{
+	verbose(2, "tempBuf=[%s] tempSize=%d strlen=%d sz=%d\n", tempBuf, tempSize, (int)strlen(tempBuf), sz); // DEBUG REMOVE
+	// unfortunately we have to copy the string 1 more time unless we want
+	// to force the user to allocate extra "safety space" for mysql_escape.
+	int tempSize2 = sz + 1 + escStringsSize;  // handle worst-case
+	char *tempBuf2 = needMem(tempSize2);
+	sz = sqlEscapeAllStrings(tempBuf2, tempBuf, tempSize2, escPunc);
+	verbose(2, "sz after sqlEscapeAllStrings=%d tempSize2=%d final bufSize=%d\n", sz, tempSize2, bufSize); // DEBUG REMOVE
+	if (sz + 1 > tempSize2)
+	    errAbort("unexpected error in vaSqlSafefNoAbort: tempBuf2 overflowed. tempSize2=%d sz=%d", tempSize, sz); 
+	if (sz + 1 <= bufSize) // NO buffer overflow
+	    {
+	    verbose(2, "tempBuf2=[%s]\n", tempBuf2); // DEBUG REMOVE
+	    // copy string to its final destination.
+	    memmove(buffer, tempBuf2, sz+1); // +1 for terminating 0;
+	    }
+	freeMem(tempBuf2);
+	}
+    freeMem(tempBuf);
+    }
+else
+    {
+    sz = vsnprintf(buffer, bufSize, newFormat, orig_args);
+    /* note that some version return -1 if too small */
+    }
+
+freeMem(newFormat);
+va_end(orig_args);
+va_end(args);
+
+return sz;
+
+}
+
+
+
+
+
+int vaSqlSafef(char* buffer, int bufSize, char *format, va_list args)
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. */
+{
+int sz = vaSqlSafefNoAbort(buffer, bufSize, TRUE, format, args);
+if ((sz < 0) || (sz >= bufSize))
+    {
+    buffer[bufSize-1] = (char) 0;
+    errAbort("buffer overflow, size %d, format: %s, buffer: '%s'", bufSize, format, buffer);
+    }
+return sz;
+}
+
+int sqlSafef(char* buffer, int bufSize, char *format, ...)
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. 
+ * Scans string parameters for illegal sql chars. */
+{
+int sz;
+va_list args;
+va_start(args, format);
+sz = vaSqlSafef(buffer, bufSize, format, args);
+va_end(args);
+return sz;
+}
+
+
+int vaSqlSafefFrag(char* buffer, int bufSize, char *format, va_list args)
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. 
+ * This version does not add the tag since it is assumed to be just a fragment of
+ * the entire sql string. */
+{
+int sz = vaSqlSafefNoAbort(buffer, bufSize, FALSE, format, args);
+if ((sz < 0) || (sz >= bufSize))
+    {
+    buffer[bufSize-1] = (char) 0;
+    errAbort("buffer overflow, size %d, format: %s, buffer: '%s'", bufSize, format, buffer);
+    }
+return sz;
+}
+
+int sqlSafefFrag(char* buffer, int bufSize, char *format, ...)
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. 
+ * Scans string parameters for illegal sql chars. 
+ * This version does not add the tag since it is assumed to be just a fragment of
+ * the entire sql string. */
+{
+int sz;
+va_list args;
+va_start(args, format);
+sz = vaSqlSafefFrag(buffer, bufSize, format, args);
+va_end(args);
+return sz;
+}
+
+
+
+/* --------------------------- */
+
+
+void sqlDyStringVaPrintfExt(struct dyString *ds, boolean isFrag, char *format, va_list args)
+/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars. */
+{
+/* attempt to format the string in the current space.  If there
+ * is not enough room, increase the buffer size and try again */
+int avail, sz;
+while (TRUE)
+    {
+    va_list argscp;
+    va_copy(argscp, args);
+    avail = ds->bufSize - ds->stringSize;
+    if (avail <= 0)
+        {
+        /* Don't pass zero sized buffers to vsnprintf, because who knows
+         * if the library function will handle it. */
+        dyStringBumpBufSize(ds, ds->bufSize+ds->bufSize);
+        avail = ds->bufSize - ds->stringSize;
+        }
+    sz = vaSqlSafefNoAbort(ds->string + ds->stringSize, avail, ds->stringSize==0 && !isFrag, format, argscp);
+    va_end(argscp);
+
+    /* note that some version return -1 if too small */
+    if ((sz < 0) || (sz >= avail))
+	{
+        dyStringBumpBufSize(ds, ds->bufSize+ds->bufSize);
+	}
+    else
+        {
+        ds->stringSize += sz;
+        break;
+        }
+    }
+}
+
+void sqlDyStringVaPrintf(struct dyString *ds, char *format, va_list args)
+/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars. */
+{
+sqlDyStringVaPrintfExt(ds, FALSE, format, args);
+}
+
+void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
+/*  Printf to end of dyString after scanning string parameters for illegal sql chars. */
+{
+va_list args;
+va_start(args, format);
+sqlDyStringVaPrintf(ds, format, args);
+va_end(args);
+}
+
+void sqlDyStringVaPrintfFrag(struct dyString *ds, char *format, va_list args)
+/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars. NOSLQINJ tag is not added. */
+{
+sqlDyStringVaPrintfExt(ds, TRUE, format, args);
+}
+
+void sqlDyStringPrintfFrag(struct dyString *ds, char *format, ...)
+/*  Printf to end of dyString after scanning string parameters for illegal sql chars. NOSLQINJ tag is not added. */
+{
+va_list args;
+va_start(args, format);
+sqlDyStringVaPrintfFrag(ds, format, args);
+va_end(args);
+}
+
+
+void sqlDyStringAppend(struct dyString *ds, char *string)
+/* Append zero terminated string to end of dyString.
+ * Makes sure the NOSQLINJ prefix gets added if needed */
+{
+if (ds->stringSize == 0)
+    dyStringAppend(ds, "NOSQLINJ ");
+dyStringAppendN(ds, string, strlen(string));
+}
+
+
+// TODO probably do not need this one now that we have sqlDyStringPrintfFrag
+char *sqlDyStringFrag(struct dyString *ds)
+/* If ds is only a sql fragment, do not need leading NOSQLINJ tag */
+{
+if (startsWith("NOSQLINJ ", ds->string))
+    return ds->string + strlen("NOSQLINJ ");
+return ds->string;
+}
+
+struct dyString *sqlDyStringCreate(char *format, ...)
+/* Create a dyString with a printf style initial content 
+ * Makes sure the NOSQLINJ prefix gets added if needed */
+{
+int len = strlen(format) * 3;
+struct dyString *ds = newDyString(len);
+va_list args;
+va_start(args, format);
+sqlDyStringVaPrintf(ds, format, args);
+va_end(args);
+return ds;
+}
+
+
+void sqlCheckError(char *format, ...)
+/* A sql injection error has occurred. Check for settings and respond
+ * as appropriate with error, warning, logOnly, ignore, dumpstack.
+ * Then abort if needed. NOTE: unless it aborts, this function will return! */
+{
+va_list args;
+va_start(args, format);
+
+char *noSqlInjLevel = cfgOption("noSqlInj.level");
+char *noSqlInjDumpStack = cfgOption("noSqlInj.dumpStack");
+char *browserDumpStack = cfgOption("browser.dumpStack");
+
+char *scriptName = cgiScriptName();
+
+if (noSqlInjLevel)
+    { 
+    // don't dump if if we are going to do it during errAbort anyway
+    if (sameOk(noSqlInjDumpStack, "on") 
+	&& (!(sameString(noSqlInjLevel, "abort") 
+	      && cgiIsOnWeb() 
+	      && sameOk(browserDumpStack, "on"))
+	    || endsWith(scriptName, "hgSuggest")
+           ) // note: this doesn't work for hgSuggest because it doesn't set the dumpStack handler.
+               // TODO find or add a better method to tell if it would already dumpStack on abort.
+       )
+	{
+	va_list dump_args;
+    	va_copy(dump_args, args);
+	vaDumpStack(format, dump_args);
+	va_end(dump_args);
+	}
+
+    if (sameString(noSqlInjLevel, "logOnly"))
+	{
+	vfprintf(stderr, format, args);
+	}
+
+    if (sameString(noSqlInjLevel, "warn"))
+	{
+	vaWarn(format, args);
+	}
+
+    if (sameString(noSqlInjLevel, "abort"))
+	{
+	vaErrAbort(format, args);
+	}
+    }
+
+va_end(args);
+
+}

@@ -45,11 +45,11 @@ struct dyString *dy = newDyString(1024);
 
 if (!cgiBoolean("add"))
     {
-    dyStringPrintf(dy, createString, track);
+    sqlDyStringPrintf(dy, createString, track);
     sqlRemakeTable(conn, track, dy->string);
     dyStringClear(dy);
     }
-dyStringPrintf(dy, "load data local infile '%s' into table %s",
+sqlDyStringPrintf(dy, "load data local infile '%s' into table %s",
 	tabName, track);
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);

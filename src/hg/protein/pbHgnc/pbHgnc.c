@@ -35,7 +35,7 @@ char proteinsDb[1024];
 safef(proteinsDb, sizeof proteinsDb, "proteins%s", proteinDataDate);
 conn2= hAllocConn(proteinsDb);
 
-safef(query2, sizeof query2,
+sqlSafef(query2, sizeof query2,
 	"select hgncId, symbol, name, refSeqMapped, refSeqIds, uniProtMapped, entrezMapped, locusType from hgnc where status not like '%%Withdrawn%%'");
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);

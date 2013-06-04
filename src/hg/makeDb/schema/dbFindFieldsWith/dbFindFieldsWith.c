@@ -49,12 +49,12 @@ int err = regcomp(&re, regExp, REG_NOSUB|REG_EXTENDED);
 if (err < 0)
    errAbort("regcomp failed code %d", err);
 struct sqlConnection *conn = sqlConnect(database);
-struct slName *table, *tableList = sqlQuickList(conn, "show tables");
+struct slName *table, *tableList = sqlQuickList(conn, "NOSQLINJ show tables");
 FILE *f = mustOpen(output, "w");
 for (table = tableList; table != NULL; table = table->next)
     {
     char query[256];
-    safef(query, sizeof(query), "select * from %s limit %d", table->name, maxRows);
+    sqlSafef(query, sizeof(query), "select * from %s limit %d", table->name, maxRows);
     verbose(2, "%s.%s\n", database, table->name);
     struct sqlResult *sr = sqlGetResult(conn, query);
     if (sr != NULL)

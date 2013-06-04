@@ -44,7 +44,7 @@ else
     char **row;
     struct sqlResult *sr = NULL;
     
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	  "select distinct chrom, chromStart, chromEnd, name "
 	  "from %s order by name", regionSource);
     sr = sqlGetResult(conn, query);

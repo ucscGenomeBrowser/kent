@@ -47,7 +47,7 @@ conn2= hAllocConn(database);
 outf = mustOpen(outfileName, "w");
 
 /* loop thru all psitively selected sites */
-sprintf(query2, "select * from %s.%s", buildDb, modelTable);
+sqlSafef(query2, sizeof query2, "select * from %s.%s", buildDb, modelTable);
 sr2 = sqlMustGetResult(conn2, query2);
 row3 = sqlNextRow(sr2);
               
@@ -58,7 +58,7 @@ while (row3 != NULL)
     Pr    = atof(row3[2]);
 
     /* Query target->pslTable to get target-to-genomic mapping: */
-    safef(query, sizeof(query), "select * from %s", pslTable);
+    sqlSafef(query, sizeof(query), "select * from %s", pslTable);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     	{

@@ -30,7 +30,7 @@ else
 	name = nameCol->cellVal(nameCol, gp, conn);
     else
         name = cloneString(geneId);
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	"select seq from %s where name = '%s'", table, geneId);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)

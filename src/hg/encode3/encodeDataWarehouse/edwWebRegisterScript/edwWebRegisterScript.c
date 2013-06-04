@@ -57,7 +57,6 @@ void edwRegisterScript(struct sqlConnection *conn,
     struct edwUser *user, char *name, char *password, char *description)
 /* Register a new script with the database. */
 {
-description = sqlEscapeString(description);
 struct edwScriptRegistry reg = {.userId=user->id, .name=name, .description=description};
 char secretHash[EDW_SID_SIZE];
 edwMakeSid(password, secretHash);
@@ -112,7 +111,7 @@ else if (cgiVarExists("description"))
     printf("<PRE>https://encodedcc.sdsc.edu/cgi-bin/edwScriptSubmit"
 	   "?user=%s&password=%s&url=%s\n</PRE>", 
 	   babyName, password,
-	   sqlEscapeString("http://your.host.edu/your_dir/validated.txt"));
+	   sqlEscapeString("http://your.host.edu/your_dir/validated.txt")); 
     puts("That is pass the CGI encoded variables user, password, and url to the ");
     puts("web services CGI at");
     puts("https://encodedcc.sdsc.edu/cgi-bin/edwScriptSubmit. ");

@@ -279,7 +279,7 @@ char query[512];
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, observed, locType "
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, observed, locType "
 "from snp where chrom='%s' order by name", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

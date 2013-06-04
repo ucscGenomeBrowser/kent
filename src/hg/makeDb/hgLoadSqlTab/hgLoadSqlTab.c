@@ -55,7 +55,7 @@ if (word == NULL || !sameWord(word, "table"))
 word = nextWord(&line);
 if (word == NULL)
     errAbort("Expecting table name on same line as CREATE TABLE");
-dyStringPrintf(dy, "CREATE TABLE %s ", table);
+sqlDyStringPrintf(dy, "CREATE TABLE %s ", table);
 if (line != NULL)
     dyStringAppend(dy, line);
 dyStringAppendC(dy, '\n');

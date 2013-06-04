@@ -1958,7 +1958,7 @@ if(db == NULL)
 struct sqlConnection *conn = NULL;
 hSetDb(db);
 conn = hAllocConn();
-snprintf(query, sizeof(query), "select acc from gbCdnaInfo where type = 2");
+sqlSafef(query, sizeof(query), "select acc from gbCdnaInfo where type = 2");
 hashRow0(conn, query, hash);
 }
 

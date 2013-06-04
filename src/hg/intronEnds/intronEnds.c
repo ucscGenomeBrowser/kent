@@ -47,7 +47,7 @@ char strand;
 
 rowOffset = hOffsetPastBin(database, NULL, table);
 conn = hAllocConn(database);
-dyStringPrintf(query, "select * from %s", table);
+sqlDyStringPrintf(query, "select * from %s", table);
 if (chromName != NULL)
     dyStringPrintf(query, " where chrom = '%s'", chromName);
 if (cgiBoolean("withUtr"))

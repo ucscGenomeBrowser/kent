@@ -51,7 +51,7 @@ seq = hFetchSeq(sequenceFile, chromName, 0, chromSize);
 touppers(seq->dna);
 seqPtr = seq->dna;
 
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name from %s", snpTable);
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name from %s", snpTable);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

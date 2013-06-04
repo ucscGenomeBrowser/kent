@@ -89,7 +89,7 @@ hPrintf(" TARGET=_blank>%s</A> (pdf)<BR>\n", itemName);
 hPrintf("<B>&nbsp;&nbsp;&nbsp;&nbsp;Close Homologs:</B> \n");
 
 conn2= hAllocConn(database);
-sprintf(query2,
+sqlSafef(query2, sizeof query2, 
     "select homologID,eValue,SCOPdomain,chain from %s.protHomolog where proteinID='%s' and evalue <= 0.01 order by evalue;",
     database, itemName);
 sr2 = sqlMustGetResult(conn2, query2);

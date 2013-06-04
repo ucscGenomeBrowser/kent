@@ -104,7 +104,7 @@ char **row;
 int count = 0;
 
 verbose(1, "reading in from %s...\n", affyTable);
-safef(query, sizeof(query), "select name, chrom, chromStart, chromEnd, strand, observed from %s ", affyTable);
+sqlSafef(query, sizeof(query), "select name, chrom, chromStart, chromEnd, strand, observed from %s ", affyTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -142,7 +142,7 @@ for (snp = snps; snp != NULL; snp = snp->next)
     count++;
     verbose(2, "----------------------\n");
     verbose(2, "%d: %s:%d-%d\n", count, snp->chrom, snp->chromStart, snp->chromEnd);
-    safef(query, sizeof(query), "select name, chrom, chromStart, chromEnd, strand, observed from %s"
+    sqlSafef(query, sizeof(query), "select name, chrom, chromStart, chromEnd, strand, observed from %s"
           " where chrom = '%s' and chromStart = %d and chromEnd = %d", lookupTable, snp->chrom, snp->chromStart, snp->chromEnd);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);

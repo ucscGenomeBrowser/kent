@@ -78,7 +78,7 @@ while(lineFileRow(lf, words))
 
     char query[10 * 1024];
 
-    safef(query, sizeof query, "update %s set md5sum='%s' where ix=%s",
+    sqlSafef(query, sizeof query, "update %s set md5sum='%s' where ix=%s",
 	docIdTable, words[0], docId);
     verbose(2,"query %s\n", query);
     char *result = sqlQuickString(conn, query);
@@ -148,7 +148,7 @@ trashDirFile(&tn, "docId", "meta", ".txt");
 char *tempFile = tn.forCgi;
 struct toDoList *toDoList = NULL;
 
-safef(query, sizeof query, "select * from %s", docIdTable);
+sqlSafef(query, sizeof query, "select * from %s", docIdTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

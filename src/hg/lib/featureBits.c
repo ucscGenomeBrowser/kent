@@ -324,18 +324,18 @@ if (fbQual == NULL)
 if (sameString(fbQual, "whole"))
     qual[0] = 0;
 else if (sameString(fbQual, "exon"))
-    snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbExonBases"));
+    safef(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbExonBases"));
 else if (sameString(fbQual, "intron"))
-    snprintf(qual, sizeof(qual), "%s:%s", fbQual,
+    safef(qual, sizeof(qual), "%s:%s", fbQual,
 			 cgiString("fbIntronBases"));
 else if (sameString(fbQual, "upstreamAll"))
-    snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbUpBases"));
+    safef(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbUpBases"));
 else if (sameString(fbQual, "upstream"))
-    snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbUpBases"));
+    safef(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbUpBases"));
 else if (sameString(fbQual, "endAll"))
-    snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbDownBases"));
+    safef(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbDownBases"));
 else if (sameString(fbQual, "end"))
-    snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbDownBases"));
+    safef(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbDownBases"));
 else
     strcpy(qual, fbQual);
 return(cloneString(qual));

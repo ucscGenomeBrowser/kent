@@ -88,7 +88,7 @@ if (isCustomTrack(curTable))
 else
     conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
 
-safef(query, ArraySize(query), "describe %s", table);
+sqlSafef(query, ArraySize(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
