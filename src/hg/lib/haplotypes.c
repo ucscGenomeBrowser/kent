@@ -2010,10 +2010,16 @@ return refSeq;
 static void printWithSignificantDigits(double number, int min, int max,int digits)
 // Prints out a frequency as a percent
 {
-if (number >= max)
+if (number > max)
+    hPrintf(">%d",max);
+else if (number == max)
     hPrintf("%d",max);
-else if (number <= min)
+else if (number < min)
+    hPrintf("<%d",min);
+else if (number == min)
     hPrintf("%d",min);
+else if (number > pow(10,digits - 1) - 1) // special case when rounding close to max
+    hPrintf("%.1f", number);
 else
     {
     int places = digits;
@@ -2214,10 +2220,7 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
     // Would be nice to improve score to better highlight surprise
     hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f'>",(showScores ? "" : " hidden"),
             99999 - haplo->haploScore);
-    if (haplo->haploScore >= 1000)
-        hPrintf(">1000");
-    else //if (haplo->haploScore > 0)
-        hPrintf("%.1f",haplo->haploScore);
+    printWithSignificantDigits(haplo->haploScore, -1000, 1000,2);
     hPrintf("</TD>");
 
     if (diploid)
@@ -2235,10 +2238,8 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
                 99999 - haplo->homScore);
         if (haplo->homCount == 0 && haplo->homScore == 0)
             hPrintf("&nbsp;");
-        else if (haplo->homScore >= 1000)
-            hPrintf(">1000");
-        else //if (haplo->homScore > 0)
-            hPrintf("%.1f",haplo->homScore);
+        else
+            printWithSignificantDigits(haplo->homScore, -1000, 1000,2);
         hPrintf("</TD>");
         }
 
