@@ -130,6 +130,7 @@ tetNig1 -> Tetraodon ;
 tetNig2 -> Tetraodon ;
 fr2 -> Fugu ;
 fr3 -> Fugu ;
+takFla1 -> Yellowbelly_pufferfish ;
 oreNil1 -> Tilapia ;
 oreNil2 -> Tilapia ;
 hapBur1 -> Burton_s_mouthbreeder ;

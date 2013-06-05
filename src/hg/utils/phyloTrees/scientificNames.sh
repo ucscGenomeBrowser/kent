@@ -52,6 +52,7 @@ s/pseHum1/Pseudopodoces_humilis/;
 s/zonAlb1/Zonotrichia_albicollis/;
 s/pteAle1/Pteropus_alecto/;
 s/punNye1/Pundamilia_nyererei/;
+s/takFla1/Takifugu_flavidus/;
 s/sorAra2/Sorex_araneus/;
 s/taeGut2/Taeniopygia_guttata/;
 s/tupChi1/Tupaia_chinensis/;
