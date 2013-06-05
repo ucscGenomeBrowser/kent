@@ -553,7 +553,9 @@ if (sqlTable != NULL && !oldTable)
             sql = replaceChars(oldSql, tableName, track);
             }
         verbose(1, "Creating table definition for %s\n", track);
-        sqlRemakeTable(conn, track, sql);
+	// add NOSQLINJ tag
+	sqlDyStringPrintf(dy, "%-s", sql);
+        sqlRemakeTable(conn, track, dy->string);
         if (!noBin) 
 	    addBinToEmptyTable(conn, track);
 	adjustSqlTableColumns(conn, track, bedSize);
