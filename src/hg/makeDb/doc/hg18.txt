@@ -32161,3 +32161,66 @@ was not actually compressed
 
 
 #############################################################################
+# Chimp Lastz run (DONE - 2013-06-05 - Hiram)
+    mkdir /hive/data/genomes/hg18/bed/lastzPanTro4.2013-06-04
+    cd /hive/data/genomes/hg18/bed/lastzPanTro4.2013-06-04
+    cat << '_EOF_' > DEF
+# human vs chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/hg18.2bit
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Chimp PanTro4
+SEQ2_DIR=/hive/data/genomes/panTro4/panTro4.2bit
+SEQ2_LEN=/hive/data/genomes/panTro4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=200
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg18/bed/lastzPanTro4.2013-06-04
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    screen # use screen to manage this long-running job
+    doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > do.log 2>&1
+    # Elapsed time: 369m29s
+
+    cat fb.hg18.chainPanTro4Link.txt
+#  2745746162 bases of 2881515245 (95.288%) in intersection
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg18 panTro4 > rbest.log 2>&1
+    # real    64m51.890s
+
+    # running the swap
+    mkdir /hive/data/genomes/panTro4/bed/blastz.hg18.swap
+    cd /hive/data/genomes/panTro4/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg18/bed/lastzPanTro4.2013-06-04/DEF \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > swap.log 2>&1
+    # real    103m8.330s
+    cat fb.panTro4.chainHg18Link.txt
+# 2771644923 bases of 2902338967 (95.497%) in intersection
+
+#############################################################################
