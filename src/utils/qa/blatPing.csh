@@ -1,6 +1,8 @@
 #!/bin/tcsh
 source `which qaConfig.csh`
 
+onintr cleanup
+
 cd ${HOME}
 
 if ( "$HOST" != "hgwdev" ) then
@@ -9,16 +11,16 @@ if ( "$HOST" != "hgwdev" ) then
 endif
 
 hgsql -h $sqlrr hgcentral -B -N -e "SELECT db, host, port FROM blatServers \
-  ORDER BY db, host, port" > blatList
+  ORDER BY db, host, port" > blatList$$
 
 #Need to do it in two steps so list is not too long giving word too long error.
-set list = (`head -100 blatList`)
-set list2 = (`tail --lines=+101 blatList`)
+set list = (`head -100 blatList$$`)
+set list2 = (`tail --lines=+101 blatList$$`)
 
 # next line just for testing:
 #set list = (xx1 blat13 17779 xx2 blat14 17779 xx3 blat12 17779)
 set problems = ()
-while ( "$list2" != "" && "$list" != "" )
+while ( "$list" != "" )
     while ( "$list" != "" )
 	set db = $list[1]
 	shift list
@@ -28,7 +30,6 @@ while ( "$list2" != "" && "$list" != "" )
 	shift list
 	#-- use to remove monotonous long running blat failures:
 	#if ("$db" != "rn2") then
-	 echo "$db $host $port"
 	 gfServer status $host $port > /dev/null
 	 set err = $status
 	 if ( $err ) then
@@ -40,13 +41,10 @@ while ( "$list2" != "" && "$list" != "" )
     set list = ( $list2 )
     set list2 = ()
 end
-echo
-echo "Summary:"
 if ( "$problems" != "") then
+    echo "Summary:"
     echo "problems:"
     echo "$problems"
-    echo "$problems" | mail -s "BLAT ping failures." galt kuhn donnak ann rhead  # DEBUG RESTORE
-else
-    echo "blat ping all ok."
-    rm -f blatList
 endif
+cleanup:
+    rm -f blatList$$
