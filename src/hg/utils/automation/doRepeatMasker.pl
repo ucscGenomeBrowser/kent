@@ -465,11 +465,13 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-if (-e RMPart/000) then
-  rm -rf RMPart/???
-endif
 if (-e $db.fa.align) then
   gzip $db.fa.align
+endif
+rm -rf RMPart/*
+rm -f RMPart
+if ( -d /hive/data/genomes/$db/RMPart ) then
+   rmdir /hive/data/genomes/$db/RMPart
 endif
 _EOF_
   );
