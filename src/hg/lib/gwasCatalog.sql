@@ -14,7 +14,7 @@ CREATE TABLE gwasCatalog (
     author varchar(255) not null,	# First author of publication
     pubDate varchar(255) not null,	# Date of publication
     journal varchar(255) not null,	# Journal of publication
-    title varchar(255) not null,	# Title of publication
+    title varchar(1024) not null,	# Title of publication
     trait varchar(255) not null,	# Disease or trait assessed in study
     initSample longblob not null,	# Initial sample size
     replSample longblob not null,	# Replication sample size

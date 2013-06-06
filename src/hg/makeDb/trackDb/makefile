@@ -72,7 +72,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Patch10
 	amaVit1 geoFor1 melUnd1 \
 	galGal2 galGal3 galGal4 \
 	melGal1 \
-	taeGut1 \
+	taeGut1 taeGut2 \
 	latCha1 \
 	xenTro1 xenTro2 xenTro3 \
 	tetNig1 tetNig2 \
