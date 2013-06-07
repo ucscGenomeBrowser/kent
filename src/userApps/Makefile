@@ -27,7 +27,7 @@ libs: installEnvironment
 	cd kent/src && ${MAKE} libs
 
 clean:
-	cd kent/src && ${MAKE} -i -k clean
+	test ! -d kent/src || (cd kent/src && ${MAKE} -i -k clean)
 	rm -f part1Src.zip part2Src.zip part3Src.zip part4Src.zip part5Src.zip
 	rm -f userApps.zip
 
