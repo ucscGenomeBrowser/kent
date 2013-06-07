@@ -5,6 +5,7 @@
 
 #include "annoFormatVep.h"
 #include "annoStreamVcf.h"
+#include "annoGrator.h"
 
 boolean lookupPosition(struct cart *cart, char *cartVar);
 /* Look up position if it is not already seq:start-end.

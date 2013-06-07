@@ -122,13 +122,15 @@ slSort(list, trackDbCmp);
 
 static struct trackDb *getFullTrackList(struct cart *cart, struct hubConnectStatus *hubList,
 					struct grp **pHubGroups)
-/* Get all tracks including custom tracks if any. */
+/* Get all tracks including custom tracks if any. *pHubGroups is reversed. */
 {
 char *db = cartString(cart, "db");
 struct trackDb *list = hTrackDb(db);
 struct customTrack *ctList, *ct;
 
 /* exclude any track with a 'tableBrowser off' setting */
+//#*** NOTE: this only scans top-level tdb's, and would miss a setting applied
+//#*** only to lower levels.  So far we have not encountered such a track.
 struct trackDb *tdb, *nextTdb, *newList = NULL;
 for (tdb = list;  tdb != NULL;  tdb = nextTdb)
     {
@@ -179,10 +181,7 @@ struct trackDb *track;
 
 /* Stream through track list building up hash of active groups. */
 for (track = trackList; track != NULL; track = track->next)
-    {
-    if (!hashLookup(groupsInTrackList,track->grp))
-        hashAdd(groupsInTrackList, track->grp, NULL);
-    }
+    hashStoreName(groupsInTrackList, track->grp);
 
 /* Scan through group table, putting in ones where we have data. */
 groupsAll = hLoadGrps(db);
@@ -203,7 +202,7 @@ struct grp *addAfter = NULL;
 if (sameString(groupList->name, "user"))
     addAfter = groupList;
 
-/* Add in groups from hubs. */
+/* Add in groups from hubs.  *pHubGrpList is reversed, so we add at head to restore order. */
 for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpList))
     {
     /* check to see if we're inserting hubs rather than
@@ -385,7 +384,7 @@ else if (sameString("bam", tdb->type))
     {
     warn("Sorry, BAM is not yet supported");
     }
-else if (sameString("bigBed", tdb->type))
+else if (startsWith("bigBed", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(db, tdb, selTable, chrom);
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
@@ -418,6 +417,7 @@ if (isCustomTrack(selTable))
     {
     dataDb = CUSTOM_TRASH;
     dbTable = trackDbSetting(tdb, "dbTableName");
+    //#*** Catch custom bigBed & bigWig here.
     if (dbTable == NULL)
 	errAbort("Can't find dbTableName for custom track %s", selTable);
     }
