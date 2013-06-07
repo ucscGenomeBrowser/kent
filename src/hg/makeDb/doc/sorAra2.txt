@@ -1,10 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
-# Anolis carolinensis 2.0 sequence:
-# ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/
-#	Anolis_carolinensis/
-
-#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAWZ00
+# Sorex araneus 2.0 sequence:
+# ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Sorex_araneus/SorAra2.0/
 
 ##########################################################################
 # Download sequence (DONE - 2012-08-27 - Hiram)
@@ -12,7 +9,7 @@
     cd /hive/data/genomes/sorAra2/genbank
 
     rsync -a -P \
-ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Sorex_araneus/SorAra2.0/ \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Sorex_araneus/SorAra2.0/ \
 ./ > fetch.log 2>&1
 
 ###########################################################################
@@ -85,34 +82,35 @@ taxId 42254
     # add the trackDb business to the source tree
 
 ##########################################################################
-# running repeat masker (WORKING - 2013-05-29 - Hiram)
+# running repeat masker (DONE - 2013-05-29 - Hiram)
     mkdir /hive/data/genomes/sorAra2/bed/repeatMasker
     cd /hive/data/genomes/sorAra2/bed/repeatMasker
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
-	-smallClusterHub=memk sorAra2 > do.log 2>&1 &
-    #	real    35m31.331s
+	-smallClusterHub=encodek sorAra2 > do.log 2>&1 &
+    #	Elapsed time: 476m34s
     cat faSize.rmsk.txt
-# 1799143587 bases (97789820 N's 1701353767 real 1565234655
-#	upper 136119112 lower) in 6457 sequences in 1 files
-#	%7.57 masked total, %8.00 masked real
+# 2423158183 bases (231054757 N's 2192103426 real 1476627246 upper
+#    715476180 lower) in 12845 sequences in 1 files
+# Total size: mean 188646.0 sd 2097082.5 min 1000 (AALT02201788)
+#    max 60238417 (JH798146) median 1461
+# %29.53 masked total, %32.64 masked real
 
     grep -i versi do.log
-# RepeatMasker version development-$Id: RepeatMasker,v 1.25 2010/09/08 21:32:26 angie Exp $
-#    June 30 2010 (open-3-2-9) version of RepeatMasker
+# RepeatMasker version open-4.0.0
+#    January 10 2013 (open-4-0-0) version of RepeatMasker
 
 ##########################################################################
-# running simple repeat (WORKING - 2013-04-29 - Hiram)
+# running simple repeat (DONE - 2013-05-29 - Hiram)
     mkdir /hive/data/genomes/sorAra2/bed/simpleRepeat
     cd /hive/data/genomes/sorAra2/bed/simpleRepeat
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
-	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	sorAra2 > do.log 2>&1 &
-    #	real    23m18.960s
+    # about 15 minutes
 
-    #	real    198m33.953s
     cat fb.simpleRepeat
-    #	66211508 bases of 2752505800 (2.405%) in intersection
+    #	49169633 bases of 2192103426 (2.243%) in intersection
 
     cd /hive/data/genomes/sorAra2
     twoBitMask sorAra2.rmsk.2bit \
@@ -121,16 +119,18 @@ taxId 42254
 
     twoBitToFa sorAra2.2bit stdout | faSize stdin > faSize.sorAra2.2bit.txt
     cat faSize.sorAra2.2bit.txt
-# 2914958544 bases (162452744 N's 2752505800 real 1439244378 upper
-#	1313261422 lower) in 14205 sequences in 1 files
-#	%45.05 masked total, %47.71 masked real
+# 2423158183 bases (231054757 N's 2192103426 real 1474029646 upper
+#    718073780 lower) in 12845 sequences in 1 files
+# Total size: mean 188646.0 sd 2097082.5 min 1000 (AALT02201788)
+#    max 60238417 (JH798146) median 1461
+# %29.63 masked total, %32.76 masked real
 
     rm /gbdb/sorAra2/sorAra2.2bit
     ln -s `pwd`/sorAra2.2bit /gbdb/sorAra2/sorAra2.2bit
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(WORKING - 2013-04-29 - Hiram)
+#	(DONE - 2013-05-29 - Hiram)
     mkdir /hive/data/genomes/sorAra2/bed/gap
     cd /hive/data/genomes/sorAra2/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
@@ -138,99 +138,51 @@ taxId 42254
     #	real    0m40.949s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     featureBits sorAra2 -not gap -bed=notGap.bed
-    #	1701353770 bases of 1701353770 (100.000%) in intersection
-    featureBits sorAra2 allGaps.bed notGap.bed -bed=new.gaps.bed
-    #	3 bases of 1701353770 (0.000%) in intersection
-    # not worth it:
-    cat new.gaps.bed
-chrM    9797    9798    chrM.1
-chrM    15667   15668   chrM.2
-chrM    15783   15784   chrM.3
+    #	2192103426 bases of 2192103426 (100.000%) in intersection
+
+    time featureBits sorAra2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # 0 bases of 2192103426 (0.000%) in intersection
+    # real    12m10.066s
 
 ##########################################################################
-## WINDOWMASKER (WORKING - 2013-04-29 - Hiram)
+## WINDOWMASKER (DONE - 2013-05-29 - Hiram)
     mkdir /hive/data/genomes/sorAra2/bed/windowMasker
     cd /hive/data/genomes/sorAra2/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev sorAra2 > do.log 2>&1 &
-    #	real    116m26.778s
+    # about 3h 18m
 
     # Masking statistics
-    twoBitToFa sorAra2.wmsk.2bit stdout | faSize stdin
-    #	1799143587 bases (97789820 N's 1701353767 real 996337045 upper
-    #	705016722 lower) in 6457 sequences in 1 files
-    #	%39.19 masked total, %41.44 masked real
-    twoBitToFa sorAra2.wmsk.sdust.2bit stdout | faSize stdin
-    #	1799143587 bases (97789820 N's 1701353767 real 987278282 upper
-    #	714075485 lower) in 6457 sequences in 1 files
-    #	%39.69 masked total, %41.97 masked real
+    cat faSize.sorAra2.cleanWMSdust.txt
+# 2423158183 bases (231054757 N's 2192103426 real 1336787616 upper
+#    855315810 lower) in 12845 sequences in 1 files
+# Total size: mean 188646.0 sd 2097082.5 min 1000 (AALT02201788)
+#    max 60238417 (JH798146) median 1461
+# %35.30 masked total, %39.02 masked real
 
-    hgLoadBed sorAra2 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 8198619 elements of size 3
-
-    featureBits -countGaps sorAra2 windowmaskerSdust
-    #	811865302 bases of 1799143587 (45.125%) in intersection
-
-    #	eliminate the gaps from the masking
-    featureBits sorAra2 -not gap -bed=notGap.bed
-    #	1701353770 bases of 1701353770 (100.000%) in intersection
-    time nice -n +19 featureBits sorAra2 windowmaskerSdust notGap.bed \
-        -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	714075485 bases of 1701353770 (41.971%) in intersection
-    #	reload track to get it clean
-    hgLoadBed sorAra2 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 8199653 elements of size 4
-    featureBits -countGaps sorAra2 windowmaskerSdust
-    #	714075485 bases of 1799143587 (39.690%) in intersection
-    #	mask the sequence with this clean mask
-    zcat cleanWMask.bed.gz \
-	| twoBitMask ../../sorAra2.unmasked.2bit stdin \
-	    -type=.bed sorAra2.cleanWMSdust.2bit
-    twoBitToFa sorAra2.cleanWMSdust.2bit stdout | faSize stdin \
-        > sorAra2.cleanWMSdust.faSize.txt
-    cat sorAra2.cleanWMSdust.faSize.txt
-    #	1799143587 bases (97789820 N's 1701353767 real 987278282 upper
-    #	714075485 lower) in 6457 sequences in 1 files
-    #	%39.69 masked total, %41.97 masked real
+    cat fb.sorAra2.rmsk.windowmaskerSdust.txt
+# 519681347 bases of 2423158183 (21.446%) in intersection
 
 #########################################################################
-# MASK SEQUENCE WITH WM+TRF (WORKING - 2013-04-29 - Hiram)
-    cd /hive/data/genomes/sorAra2
-    twoBitMask -add bed/windowMasker/sorAra2.cleanWMSdust.2bit \
-	bed/simpleRepeat/trfMask.bed sorAra2.2bit
-    #	safe to ignore the warnings about BED file with >=13 fields
-    twoBitToFa sorAra2.2bit stdout | faSize stdin > faSize.sorAra2.txt
-    cat faSize.sorAra2.txt
-    #	1799143587 bases (97789820 N's 1701353767 real 987044085 upper
-    #	714309682 lower) in 6457 sequences in 1 files
-    #	%39.70 masked total, %41.98 masked real
-
-    #	create symlink to gbdb
-    ssh hgwdev
-    rm /gbdb/sorAra2/sorAra2.2bit
-    ln -s `pwd`/sorAra2.2bit /gbdb/sorAra2/sorAra2.2bit
-
-########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (WORKING - 2013-04-29 - Hiram)
-    # Use -repMatch=650, based on size -- for human we use 1024
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (WORKING - 2013-06-06 - Hiram)
+    # Use -repMatch=800, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 1701353767 / 2897316137 \) \* 1024
-    #	( 1701353767 / 2897316137 ) * 1024 = 601.310377
-    # round up to 650
+    calc \( 2192103426 / 2897316137 \) \* 1024
+    #	( 2192103426 / 2897316137 ) * 1024 = 774.756292
+    # round up to 800
+
+    # sorAra1 had: -repMatch=700
+    #	Wrote 26119 overused 11-mers to sorAra1.11.ooc
 
     cd /hive/data/genomes/sorAra2
     blat sorAra2.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/sorAra2.11.ooc -repMatch=650
-    #	Wrote 27991 overused 11-mers to jkStuff/sorAra2.11.ooc
+      -makeOoc=jkStuff/sorAra2.11.ooc -repMatch=800
+    #	Wrote 26682 overused 11-mers to jkStuff/sorAra2.11.ooc
 
-    #	copy all of this stuff to the klusters:
-    cd /hive/data/genomes/sorAra2/jkStuff
-    gapToLift sorAra2 nonBridged.lift -bedFile=nonBridged.bed
-    cd /hive/data/genomes/sorAra2
-    mkdir /hive/data/staging/data/sorAra2
-    cp -p jkStuff/sorAra2.11.ooc jkStuff/nonBridged.lift chrom.sizes \
-	sorAra2.2bit /hive/data/staging/data/sorAra2
+    # there are *only* bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" sorAra2 | sort | uniq -c
+    #   188953 yes
 
 #########################################################################
 # AUTO UPDATE GENBANK (TBD - Hiram)
@@ -238,46 +190,47 @@ chrM    15783   15784   chrM.3
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Anolis carolinensis     115     156803  0
+# Sorex araneus   1       0       0
+
     # to decide which "native" mrna or ests you want to specify in genbank.conf
     # this appears that sorAra2 has plenty of native est's
 
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
-    # edit etc/genbank.conf to add sorAra2 before anoCar1 and commit to GIT
-# sorAra2 (A. carolinensis)
+    # edit etc/genbank.conf to add sorAra2 before sorAra1 and commit to GIT
+# sorAra2 (common shrew)
 sorAra2.serverGenome = /hive/data/genomes/sorAra2/sorAra2.2bit
-sorAra2.clusterGenome = /scratch/data/sorAra2/sorAra2.2bit
-sorAra2.ooc = /scratch/data/sorAra2/sorAra2.11.ooc
-sorAra2.lift = /scratch/data/sorAra2/nonBridged.lift
+sorAra2.clusterGenome = /hive/data/genomes/sorAra2/sorAra2.2bit
+sorAra2.ooc = /hive/data/genomes/sorAra2/jkStuff/sorAra2.11.ooc
+sorAra2.lift = no
 sorAra2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
 sorAra2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
 sorAra2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
 sorAra2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
 sorAra2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
 sorAra2.refseq.mrna.native.load = no
-sorAra2.genbank.est.native.load = yes
 sorAra2.refseq.mrna.xeno.load = yes
-sorAra2.genbank.mrna.xeno.load = yes
+sorAra2.genbank.mrna.xeno.load = no
+sorAra2.genbank.est.native.load = no
 sorAra2.downloadDir = sorAra2
 sorAra2.perChromTables = no
 
-
     # end of section added to etc/genbank.conf
-    git commit -m "adding sorAra2 lizard" genbank.conf
+    git commit -m "adding sorAra2 common shrew refs #9348" etc/genbank.conf
     git push
     make etc-update
 
     # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
-    # anoCar genome information, if this is a new species, need to add stuff
+    # sorAra1 genome information, if this is a new species, need to add stuff
     # there
 
     ssh hgwdev			# used to do this on "genbank" machine
     screen			# long running job managed in screen
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial sorAra2 &
-    #	var/build/logs/2011.04.13-21:34:22.sorAra2.initalign.log
+    #	var/build/logs/2013.06.06-13:55:59.sorAra2.initalign.log
+XXX - running - Thu Jun  6 13:56:15 PDT 2013
     #	real    805m44.341s
     # 5h33m
 

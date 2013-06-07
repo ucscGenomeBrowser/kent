@@ -90,20 +90,10 @@ strftime(nowBuf, sizeof nowBuf, "%Y-%m-%d %H:%M:%S", theTime);
 return cloneString(nowBuf);
 }
 
-void resetAllSuggFields()
-/* clear all suggestion fields */
-{
-cartRemove(cart, "suggestCfmEmail");
-cartRemove(cart, "suggestDetails");
-cartRemove(cart, "suggestEmail");
-cartRemove(cart, "suggestName");
-cartRemove(cart, "suggestSubject");
-cartRemove(cart, "suggestSummary");
-}
 
 /* javascript functions */
 void printMainForm()
-/* javascript to print mainForm */
+/* Create the main suggestion form */
 {
 hPrintf(
     "     <FORM ACTION=\"../cgi-bin/hgUserSuggestion?do.suggestSendMail=1\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\" onLoad=\"document.forms.mainForm.name.focus()\">\n");
@@ -368,21 +358,18 @@ void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
 char *db, *organism;
-
 cart = theCart;
 getDbAndGenome(cart, &db, &organism, oldVars);
-
-    cartWebStart(theCart, db, "User Suggestion");
-
+cartWebStart(theCart, db, "User Suggestion");
 if (cartVarExists(cart, "do.suggestSendMail"))
-{
+    {
     submitSuggestion();
     cartRemove(cart, "do.suggestSendMail");
     return;
-}
+    }
 
-    askForSuggest(organism,db);
-    cartWebEnd();
+askForSuggest(organism,db);
+cartWebEnd();
 }
 
 /* Null terminated list of CGI Variables we don't want to save

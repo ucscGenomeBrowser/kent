@@ -1,0 +1,618 @@
+# for emacs: -*- mode: sh; -*-
+
+#	DATE:   08-Feb-2013
+#	ORGANISM:       Taeniopygia guttata
+#	TAXID:  59729
+#	ASSEMBLY LONG NAME:     Taeniopygia_guttata-3.2.4
+#	ASSEMBLY SHORT NAME:    Taeniopygia_guttata-3.2.4
+#	ASSEMBLY SUBMITTER:     Washington University Genome Sequencing Center
+#	ASSEMBLY TYPE:  Haploid
+#	NUMBER OF ASSEMBLY-UNITS:       1
+#	ASSEMBLY ACCESSION:     GCA_000151805.2
+#	FTP-RELEASE DATE: 12-Feb-2013
+
+
+#       http://www.ncbi.nlm.nih.gov/genome/367
+#       http://www.ncbi.nlm.nih.gov/genome/assembly/524908
+#       http://www.ncbi.nlm.nih.gov/bioproject/17289
+
+#       http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABQF01
+#       Genome Coverage : 5.5x  PCAP v. 2008
+
+#       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=59729
+
+# rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Taeniopygia_guttata/Taeniopygia_guttata-3.2.4/
+
+##########################################################################
+# Download sequence (DONE - 2013-06-05 - Hiram)
+    mkdir -p /hive/data/genomes/taeGut2/genbank
+    cd /hive/data/genomes/taeGut2/genbank
+
+    time rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Taeniopygia_guttata/Taeniopygia_guttata-3.2.4/
+    #   real    real    22m54.139s
+
+    # verify the size of the sequence here:
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz \
+Primary_Assembly/unlocalized_scaffolds/FASTA/chr*.unlocalized.scaf.fa.gz \
+Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+
+# 1232118738 bases (9270900 N's 1222847838 real 1222847838 upper 0 lower)
+#    in 37095 sequences in 69 files
+# Total size: mean 33215.2 sd 1455020.7
+#   min 783 (gi|197861094|gb|ABQF01053133.1|)
+#   max 156412533 (gi|209446643|gb|CM000518.1|) median 3541
+
+##########################################################################
+# fixup names for UCSC standards (DONE - 2013-06-05 - Hiram)
+    mkdir /hive/data/genomes/taeGut2/ucsc
+    cd /hive/data/genomes/taeGut2/ucsc
+
+    ########################  Assembled Chromosomes
+    cat << '_EOF_' > ucscCompositeAgp.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+open (FH, "<../genbank/Primary_Assembly/assembled_chromosomes/chr2acc") or
+        die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+}
+close (FH);
+
+foreach my $acc (keys %accToChr) {
+    my $chrN =  $accToChr{$acc};
+    print "$acc $accToChr{$acc}\n";
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.comp.agp.gz|") or die "can not read chr${chrN}.comp.agp.gz";
+    open (UC, ">chr${chrN}.agp") or die "can not write to chr${chrN}.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            $line =~ s/^$acc/chr${chrN}/;
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/FASTA/chr${chrN}.fa.gz|") or die "can not read chr${chrN}.fa.gz";
+    open (UC, ">chr${chrN}.fa") or die "can not write to chr${chrN}.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            printf UC ">chr${chrN}\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+
+    # << happy emacs
+    chmod +x ucscCompositeAgp.pl
+    time ./ucscCompositeAgp.pl
+    # real    0m16.041s
+
+    gzip *.fa *.agp &
+
+    ########################  Unplaced scaffolds
+    # verify we don't have any .acc numbers different from .1
+    zcat \
+    ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| cut -f1 | grep -v '^#' \
+	| sed -e 's/[A-Z0-9]*//i' | sort | uniq -c
+    #   81153 .1
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, ">chrUn.agp") or die "can not write to chrUn.agp";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\.1//;
+        printf UC "chrUn_%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, ">chrUn.fa") or die "can not write to chrUn.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\.1. .*//;
+        printf UC ">chrUn_$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+    time ./unplaced.pl
+    # real    0m5.659s
+
+    gzip chrUn.agp chrUn.fa &
+
+    # make sure none of the names got to be over 31 characers long:
+    zcat chrUn.agp.gz | grep -v "^#" | cut -f1 | awk '{print length($1)}' | sort -rn | head -1
+    # 18
+
+    # Unlocalized scaffolds
+
+    cat << '_EOF_' > unlocalized.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+my %chrNames;
+
+open (FH, "<../genbank/Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf") or
+        die "can not read Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $acc =~ s/\.1$//;
+    $accToChr{$acc} = $chrN;
+    $chrNames{$chrN} += 1;
+}
+close (FH);
+
+foreach my $chrN (keys %chrNames) {
+    my $agpFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/AGP/chr$chrN.unlocalized.scaf.agp.gz";
+    my $fastaFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/FASTA/chr$chrN.unlocalized.scaf.fa.gz";
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    open (UC, ">chr${chrN}_random.agp") or die "can not write to chr${chrN}_random.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            chomp $line;
+            my (@a) = split('\t', $line);
+            my $acc = $a[0];
+            $acc =~ s/\.1//;
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${acc}_random";
+            printf UC "%s", $ucscName;
+            for (my $i = 1; $i < scalar(@a); ++$i) {
+                printf UC "\t%s", $a[$i];
+            }
+            printf UC "\n";
+        }
+    }
+    close (FH);
+    close (UC);
+    printf "chr%s\n", $chrN;
+    open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+    open (UC, ">chr${chrN}_random.fa") or die "can not write to chr${chrN}_random.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            chomp $line;
+            my $acc = $line;
+            $acc =~ s/.*gb\|//;
+            $acc =~ s/\.1. .*//;
+            $acc =~ s/\.1//;
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${acc}_random";
+            printf UC ">$ucscName\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+
+    chmod +x unlocalized.pl
+    time ./unlocalized.pl
+    # real    0m2.140s
+
+    gzip *.fa *.agp
+
+    # verify nothing lost from original:
+    time faSize *.fa.gz
+    # real    0m32.541s
+
+# 1232118738 bases (9270900 N's 1222847838 real 1222847838 upper 0 lower)
+#    in 37095 sequences in 69 files
+# Total size: mean 33215.2 sd 1455020.7 min 783 (chr5_ABQF01053133_random)
+#    max 156412533 (chr2) median 3541
+
+
+    # make sure none of the names got to be over 31 characers long:
+    zcat *.agp.gz | grep -v "^#" | cut -f1 | awk '{print length($0)}' \
+        | sort -rn | uniq -c | head
+
+##########################################################################
+# Initial makeGenomeDb.pl (DONE - 2013-06-05 - Hiram)
+    cd /hive/data/genomes/taeGut2
+    cat << '_EOF_' > taeGut2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db taeGut2
+clade vertebrate
+genomeCladePriority 68
+scientificName Taeniopygia guttata
+commonName Zebra finch
+assemblyDate Feb. 2013
+assemblyLabel Washington University School of Medicine
+assemblyShortLabel WashU taeGut324
+orderKey 436
+mitoAcc NC_007897
+fastaFiles /cluster/data/taeGut2/ucsc/chr*.fa.gz
+agpFiles /cluster/data/taeGut2/ucsc/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir zebraFinch
+photoCreditURL http://www.physci.ucla.edu/html/arnold.htm
+photoCreditName UCLA Department of Physiological Science
+ncbiGenomeId 367
+ncbiAssemblyId 524908
+ncbiAssemblyName Taeniopygia_guttata-3.2.4
+ncbiBioProject 17289
+genBankAccessionID GCA_000151805.2
+taxId   59729
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and agp are OK
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -stop=agp taeGut2.config.ra > agp.log 2>&1
+    # verify no problem:
+    tail -1 agp.log
+    #  *** All done!  (through the 'agp' step)
+
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -continue=db taeGut2.config.ra > db.log 2>&1
+    # real    10m29.132s
+    #
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/taeGut2.unmasked.2bit /gbdb/taeGut2/taeGut2.2bit
+    #	browser should function now in sandbox
+    #   trackDb files here:
+    #   /hive/data/genomes/taeGut2/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/gibbon/taeGut2/
+    #   into source tree
+    #   now browser should function on hgwdev
+
+#########################################################################
+# running repeat masker (DONE - 2013-06-05 - Hiram)
+    mkdir /hive/data/genomes/taeGut2/bed/repeatMasker
+    cd /hive/data/genomes/taeGut2/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek taeGut2 > do.log 2>&1 &
+    # real    220m20.455s
+
+    cat faSize.rmsk.txt
+    # 1232135591 bases (9270900 N's 1222864691 real 1125277738 upper
+    #   97586953 lower) in 37096 sequences in 1 files
+    # Total size: mean 33214.8 sd 1455001.1 min 783 (chr5_ABQF01053133_random)
+    #   max 156412533 (chr2) median 3541
+    # %7.92 masked total, %7.98 masked real
+
+    egrep -i "versi|relea" do.log
+    #    January 10 2013 (open-4-0-0) version of RepeatMasker
+    #  CC   RELEASE 20120418; 
+
+    time featureBits -countGaps taeGut2 rmsk
+    # 97640353 bases of 1232135591 (7.924%) in intersection
+    # real    0m16.657s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2013-06-05 - Hiram)
+    mkdir /hive/data/genomes/taeGut2/bed/simpleRepeat
+    cd /hive/data/genomes/taeGut2/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	taeGut2 > do.log 2>&1
+    # about 14m30s
+
+    cat fb.simpleRepeat
+    #   25800814 bases of 1222864691 (2.110%) in intersection
+
+    # considering rmsk %8 vs. WM %20 and this is a small genome,
+    # use the rmsk result in order to have the classifications from
+    # that available
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/taeGut2
+    twoBitMask taeGut2.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed taeGut2.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa taeGut2.2bit stdout | faSize stdin > faSize.taeGut2.2bit.txt
+    cat faSize.taeGut2.2bit.txt
+
+    # 1232135591 bases (9270900 N's 1222864691 real 1123697742 upper
+    #    99166949 lower) in 37096 sequences in 1 files
+    # Total size: mean 33214.8 sd 1455001.1 min 783 (chr5_ABQF01053133_random)
+    #    max 156412533 (chr2) median 3541
+    # %8.05 masked total, %8.11 masked real
+
+    rm /gbdb/taeGut2/taeGut2.2bit
+    ln -s `pwd`/taeGut2.2bit /gbdb/taeGut2/taeGut2.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2013-06-05 - Hiram)
+
+    mkdir /hive/data/genomes/taeGut2/bed/gap
+    cd /hive/data/genomes/taeGut2/bed/gap
+
+    time nice findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../taeGut2.unmasked.2bit > findMotif.txt 2>&1
+    #   real	1m2.760s
+
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits taeGut2 -not gap -bed=notGap.bed
+    # 1222864691 bases of 1222864691 (100.000%) in intersection
+    # real    0m9.762s
+
+    time featureBits taeGut2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # 0 bases of 1222864691 (0.000%) in intersection
+    #  real    19m53.371s
+
+    # are there non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" taeGut2 | sort | uniq -c
+    #     326 no
+    #   87384 yes
+
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-05 - Hiram)
+    mkdir /hive/data/genomes/taeGut2/bed/windowMasker
+    cd /hive/data/genomes/taeGut2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev taeGut2 > do.log 2>&1 &
+    # real    66m52.863s
+
+    # Masking statistics
+    faSize.taeGut2.cleanWMSdust.txt
+# 1232135591 bases (9270900 N's 1222864691 real 973147255 upper
+#     249717436 lower) in 37096 sequences in 1 files
+# Total size: mean 33214.8 sd 1455001.1 min 783 (chr5_ABQF01053133_random)
+#     max 156412533 (chr2) median 3541
+# %20.27 masked total, %20.42 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps taeGut2 rmsk windowmaskerSdust
+    #   54554911 bases of 1232135591 (4.428%) in intersection
+
+########################################################################
+# cpgIslands - (DONE - 2013-06-06 - Hiram)
+    mkdir /hive/data/genomes/taeGut2/bed/cpgIslands
+    cd /hive/data/genomes/taeGut2/bed/cpgIslands
+    time doCpgIslands.pl taeGut2 > do.log 2>&1
+    #  real    17m40.265s
+
+    cat fb.taeGut2.cpgIslandExt.txt
+    #   16473980 bases of 1222864691 (1.347%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2013-03-05 - Pauline)
+    mkdir /hive/data/genomes/taeGut2/bed/genscan
+    cd /hive/data/genomes/taeGut2/bed/genscan
+    time doGenscan.pl taeGut2 > do.log 2>&1 
+XXX - running -
+Thu Jun  6 08:11:30 PDT 2013
+    #   NomLeu2 run elapsed time: 66m40s (couldn't recover time from this run)
+
+    cat fb.taeGut2.genscan.txt
+    #   49283434 bases of 2756609047 (1.788%) in intersection
+    cat fb.taeGut2.genscanSubopt.txt
+    #   50711544 bases of 2756609047 (1.840%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-06 - Hiram)
+    # Use -repMatch=500, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1222864691 / 2897316137 \) \* 1024
+    #  ( 1222864691 / 2897316137 ) * 1024 = 432.197725
+
+    # round up to 500 (taeGut1 used 1024)
+
+    cd /hive/data/genomes/taeGut2
+    time blat taeGut2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/taeGut2.11.ooc -repMatch=500
+    # Wrote 12162 overused 11-mers to jkStuff/taeGut2.11.ooc
+    # real    0m32.994s
+
+    # there are non-bridged gaps, therefore, a lift file is needed for genbank
+    hgsql -N -e "select bridge from gap;" taeGut2 | sort | uniq -c
+    #      326 no
+    #    87384 yes
+
+    cd /hive/data/genomes/taeGut2/jkStuff
+    gapToLift taeGut2 taeGut2.nonBridged.lift -bedFile=taeGut2.nonBridged.bed
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' taeGut2.nonBridged.bed | sort -nr | head
+    #   56928224 chr5   4758199 61686423        chr5.07
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2013-03-08 - Pauline)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+#Nomascus leucogenys     18      1       0
+
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add taeGut2 just after ce2
+
+# taeGut2 (Gibbon)
+taeGut2.serverGenome = /hive/data/genomes/taeGut2/taeGut2.2bit
+taeGut2.clusterGenome = /hive/data/genomes/taeGut2/taeGut2.2bit
+taeGut2.ooc = /hive/data/genomes/taeGut2/taeGut2.11.ooc
+taeGut2.lift = /hive/data/genomes/taeGut2/jkStuff/taeGut2.nonBridged.lift
+taeGut2.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+taeGut2.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+taeGut2.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+taeGut2.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+taeGut2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+taeGut2.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+taeGut2.refseq.mrna.native.load  = no
+taeGut2.refseq.mrna.xeno.load = yes
+taeGut2.genbank.mrna.native.load = no
+taeGut2.genbank.mrna.xeno.load = yes
+taeGut2.genbank.est.native.load = no
+taeGut2.downloadDir = taeGut2
+taeGut2.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding taeGut2 Gibbon refs #9812" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S taeGut2           # long running job managed in screen
+    cd /cluster/data/genbank
+/usr/bin/time -p nice ./bin/gbAlignStep -initial taeGut2 &
+#  logFile: var/build/logs/2013.03.06-11:36:35.taeGut2.initalign.log
+#	 var/build/logs/2012.05.07-10:21:12.taeGut2.initalign.log
+#   real    2135m50.446s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+
+    /usr/bin/time -p nice ./bin/gbDbLoadStep -drop -initialLoad taeGut2 &
+    #   logFile: var/dbload/hgwdev/logs/2013.03.08-09:52:00.dbload.log
+   #   real 2453.76
+
+    # enable daily alignment and update of hgwdev (DONE - 2013-03-08 - Pauline)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add taeGut2 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added taeGut2. refs #9812" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to RHO gene displays  (DONE - 2013-03-08 -Pauline)
+    hgsql -e \
+'update dbDb set defaultPos="chr21:52,409,568-52,414,485" where name="taeGut2";' \
+	hgcentraltest
+    # a bit wider for a little more context (2013-03-28 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr21:52408339-52415715" where name="taeGut2";' \
+	hgcentraltest
+
+############################################################################
+# downloads and pushQ entry (DONE - 2013-03-08 - Pauline)
+    # after adding taeGut2 to the all.joiner file and verifying that
+    #   joinerCheck is clean (i.e. run joinerCheck w -times and -keys flags
+    #   to make sure there are no errors), can construct the downloads:
+    cd /hive/data/genomes/taeGut2
+    /usr/bin/time -p makeDownloads.pl -workhorse=hgwdev taeGut2
+    #   real 1400.59
+
+    mkdir /hive/data/genomes/taeGut2/pushQ
+    cd /hive/data/genomes/taeGut2/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl taeGut2 2> stderr.txt > taeGut2.sql
+    #  real	2m55.404s
+
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/taeGut2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/taeGut2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/taeGut2/bbi/quality.bw
+# WARNING: taeGut2 does not have seq
+# WARNING: taeGut2 does not have extFile
+# WARNING: taeGut2 does not have estOrientInfo
+
+    scp -p taeGut2.sql hgwbeta:/tmp/
+    ssh hgwbeta "hgsql qapushq < /tmp/taeGut2.sql"
+
+
+############################################################################
+# construct liftOver to taeGut2 (DONE - 2013-03-07 - Pauline)
+    screen -S lift	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/nomLeu2/bed/blat.taeGut2.2013-03-06
+    cd /hive/data/genomes/nomLeu2/bed/blat.taeGut2.2013-03-06
+    # check it with -debug first to see if it is going to work:
+    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev nomLeu2 taeGut2
+    #   real    0m1.838s
+    # if that is OK, then run it:
+    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev nomLeu2 taeGut2 >& do.log
+    #	real    277m26.138s
+
+    # verify this file exists:
+    #	/gbdb/nomLeu2/liftOver/nomLeu2.over.chain.gz
+    # and try out the conversion on genome-test from nomLeu2 to taeGut2
+
+############################################################################
+ #  BLATSERVERS ENTRY (DONE - 2013-03-12 - Pauline)
+ #	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+ 	VALUES ("taeGut2", "blat4c", "17840", "1", "0"); \
+ 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+ 	VALUES ("taeGut2", "blat4c", "17841", "0", "1");' \
+ 	    hgcentraltest
+     #	test it with some sequence
+
+############################################################################
+# reset dbDb description to be like the previous nomLeu
+#       (DONE - 2013-03-21 - Hiram)
+    hgsql hgcentraltest -e 'update dbDb set description = "Oct. 2012 (GGSC Nleu3.0/taeGut2)"" where name = "taeGut2";' \
+          | hgsql -h genome-testdb hgcentraltest
+
+############################################################################
+# SWAP hg19/Human chain/net (DONE - 2013-03-26 - Pauline)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzTaeGut2.2013-03-06
+    cat fb.hg19.chainTaeGut2Link.txt
+    #   2542790081 bases of 2897316137 (87.764%) in intersection
+
+    #   running this swap - DONE - 2013-03-26
+    mkdir /hive/data/genomes/taeGut2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/taeGut2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzTaeGut2.2013-03-06/DEF \
+        -swap -syntenicNet \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > swap.log 2>&1 &
+    #   real   138m48s
+    cat fb.taeGut2.chainHg19Link.txt
+    #   2479386532 bases of 2756609047 (89.943%) in intersection
+
+##############################################################################

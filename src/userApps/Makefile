@@ -42,7 +42,9 @@ fetchSource:
 # this installEnvironment will add all the shell environment variables
 # to the kent/src/inc/localEnvironment.mk file which is included
 # from the kent/src/inc/userApps.mk to allow any 'make' to function
-# properly when inside this extracted source tree.
+# properly when inside this extracted source tree.  The 'sed' operation
+# removes the '-e' from the echo for systems where the echo command doesn't
+# recognize the '-e' argument
 
 installEnvironment:
 	@echo -e "export DESTDIR = ${DESTDIR}\n\
@@ -54,7 +56,7 @@ export SCRIPTS = ${SCRIPTS}\n\
 export SAMTABIXDIR = ${SAMTABIXDIR}\n\
 export USE_SAMTABIX = 1\n\
 export USE_SSL = 1\n\
-export NOSQLTEST = 1" > kent/src/inc/localEnvironment.mk
+export NOSQLTEST = 1" | sed -e 's/-e //' > kent/src/inc/localEnvironment.mk
 
 update: clean userApps
 	${MAKE} fetchSource
