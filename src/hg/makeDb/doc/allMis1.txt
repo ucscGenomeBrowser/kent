@@ -123,36 +123,41 @@ taxId 8496
         hgcentraltest
 
 ##########################################################################
-# running repeat masker (DONE - 2012-07-26 - Hiram)
-    mkdir /hive/data/genomes/allMis1/bed/repeatMasker
-    cd /hive/data/genomes/allMis1/bed/repeatMasker
-    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
-	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
-	-smallClusterHub=encodek allMis1 > do.log 2>&1 &
-    #   real     50m40.986s
-XXX - finished ! - checking with Robert Hubley about this
-    # try this again with special library via John St. John - David Ray
-    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
-	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
-        -customLib `pwd`/aMiss.rmsk.lib.v2.fa \
-	-smallClusterHub=encodek allMis1 > do.log 2>&1 &
-    #   real    160m45.535s
-XXX - finished ! - checking with Robert Hubley about this for a newer repeat lib
+# running repeat masker (DONE - 2013-06-07 - Hiram)
+    # with new repeat masker version that includes the Alligator repeats
+    mkdir /hive/data/genomes/allMis1/bed/rmsk.2013-06-06
+    cd /hive/data/genomes/allMis1/bed/rmsk.2013-06-06
+
+    # the clusterRun portion:
+    # real    1251m59.513s
+    # user    0m34.986s
+    # sys     0m19.211s
+# Completed: 6152 of 6152 jobs
+# CPU time in finished jobs:   16757781s  279296.34m  4654.94h  193.96d  0.531 y
+# IO & Wait Time:               1074282s   17904.71m   298.41h   12.43d  0.034 y
+# Average job time:                2899s      48.31m     0.81h    0.03d
+# Longest finished job:            4741s      79.02m     1.32h    0.05d
+# Submission to last job:         74762s    1246.03m    20.77h    0.87d
+
+    time doRepeatMasker.pl -buildDir=`pwd` \
+        -continue=cat -dbHost=hgwdev \
+        -bigClusterHub=swarm -workhorse=hgwdev allMis1 > cat.log 2>&1
+    # real    42m20.999s
 
     cat faSize.rmsk.txt
-    #   2174259888 bases (45539765 N's 2128720123 real 1587364247 upper
-    #   541355876 lower) in 14645 sequences in 1 files
-    #   Total size: mean 148464.3 sd 283017.8 min 816 (AKHW01085896)
-    #   max 4958242 (JH738473) median 25754
-    #   %24.90 masked total, %25.43 masked real
+# 2174259888 bases (45539765 N's 2128720123 real 1337574861 upper
+#    791145262 lower) in 14645 sequences in 1 files
+# Total size: mean 148464.3 sd 283017.8 min 816 (AKHW01085896)
+#    max 4958242 (JH738473) median 25754
+# %36.39 masked total, %37.17 masked real
 
     egrep -i "versi|relea" do.log
-#    April 26 2011 (open-3-3-0) version of RepeatMasker
-# CC   RELEASE 20110920;
-# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+# RepeatMasker version open-4.0.2
+#    April 29 2013 (open-4-0-2) version of RepeatMasker
+# CC   RELEASE 20130422;
 
     featureBits -countGaps allMis1 rmsk
-    #   60063362 bases of 1065292181 (5.638%) in intersection
+    # 793968795 bases of 2174259888 (36.517%) in intersection
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -169,6 +174,24 @@ XXX - finished ! - checking with Robert Hubley about this for a newer repeat lib
 
     cat fb.simpleRepeat
     #   22565360 bases of 2129659933 (1.060%) in intersection
+
+    # considering rmsk %37 vs. WM %29, using RM and TRF
+    cd /hive/data/genomes/allMis1
+    twoBitMask allMis1.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed allMis1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa allMis1.2bit stdout | faSize stdin > faSize.allMis1.2bit.txt
+    cat faSize.allMis1.2bit.txt
+
+    # 2174259888 bases (45539765 N's 2128720123 real 1337312569 upper
+    #    791407554 lower) in 14645 sequences in 1 files
+    # Total size: mean 148464.3 sd 283017.8 min 816 (AKHW01085896)
+    #    max 4958242 (JH738473) median 25754
+    # %36.40 masked total, %37.18 masked real
+
+    rm /gbdb/allMis1/allMis1.2bit
+    ln -s `pwd`/allMis1.2bit /gbdb/allMis1/allMis1.2bit
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
@@ -193,11 +216,10 @@ XXX - finished ! - checking with Robert Hubley about this for a newer repeat lib
     time featureBits allMis1 allGaps.bed notGap.bed -bed=new.gaps.bed
     #   939810 bases of 2129659933 (0.044%) in intersection
     #   real    44m59.537s
-XXX - ready to continue this
 
     # check if any non-bridged gaps here:
     hgsql -N -e "select bridge from gap;" allMis1 | sort | uniq -c
-    #  68589 yes
+    #  99514 yes
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2012-07-26 - Hiram)
@@ -206,7 +228,6 @@ XXX - ready to continue this
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev allMis1 > do.log 2>&1 &
     #   real    161m54.809s
-XXX - ready to continue - Wed Aug 29 11:13:21 PDT 2012
 
     # Masking statistics
     cat faSize.allMis1.wmsk.txt
@@ -235,9 +256,11 @@ XXX - ready to continue - Wed Aug 29 11:13:21 PDT 2012
 
     # how much does this window masker and repeat masker overlap:
     # can be done after rmsk is done
-XXX - waiting for RM to finish - Wed Aug 29 11:20:00 PDT 2012
-    featureBits -countGaps allMis1 rmsk windowmaskerSdust
-    #   32967187 bases of 1065292181 (3.095%) in intersection
+    time featureBits -countGaps allMis1 rmsk windowmaskerSdust \
+        > fb.allMis1.rmsk.windowmaskerSdust.txt 2>&1
+
+    cat fb.allMis1.rmsk.windowmaskerSdust.txt
+    #   460348480 bases of 2174259888 (21.173%) in intersection
 
 ##########################################################################
 # add simpleRepeats to WindowMasker result (DONE - 2012-07-26 - Hiram)
@@ -259,20 +282,22 @@ XXX - waiting for RM to finish - Wed Aug 29 11:20:00 PDT 2012
     ln -s `pwd`/allMis1.2bit /gbdb/allMis1/allMis1.2bit
 
 ##########################################################################
-# cpgIslands - (DONE - 2012-07-26 - Hiram)
+# cpgIslands - (DONE - 2013-06-07 - Hiram)
     mkdir /hive/data/genomes/allMis1/bed/cpgIslands
     cd /hive/data/genomes/allMis1/bed/cpgIslands
-    time doCpgIslands.pl allMis1 > do.log 2>&1
+    time doCpgIslands.pl allMis1 > do.log 2>&1 &
+XXX - running - Fri Jun  7 13:35:27 PDT 2013
     #   real    17m6.876s
 
     cat fb.allMis1.cpgIslandExt.txt
     #   5087816 bases of 1041286029 (0.489%) in intersection
 
 #########################################################################
-# genscan - (DONE - 2012-07-26 - Hiram)
+# genscan - (DONE - 2013-06-07 - Hiram)
     mkdir /hive/data/genomes/allMis1/bed/genscan
     cd /hive/data/genomes/allMis1/bed/genscan
-    time doGenscan.pl allMis1 > do.log 2>&1
+    time doGenscan.pl allMis1 > do.log 2>&1 &
+XXX - running - Fri Jun  7 13:35:27 PDT 2013
     #   real    31m32.788s
 # Completed: 27239 of 27239 jobs
 # CPU time in finished jobs:         28s       0.47m     0.01h    0.00d  0.000 y
