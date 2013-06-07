@@ -679,7 +679,7 @@ return grp;
 
 struct trackDb *hubCollectTracks( char *database,  struct grp **pGroupList)
 /* Generate trackDb structures for all the tracks in attached hubs.  
- * Make grp structures for each hub. */
+ * Make grp structures for each hub. Returned group list is reversed. */
 {
 // return the cached copy if it exists
 static struct trackDb *hubTrackDbs;
