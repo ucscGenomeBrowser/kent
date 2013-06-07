@@ -22,7 +22,7 @@ utils: libs
 	cd kent/src/parasol && ${MAKE}
 	./kent/src/utils/userApps/mkREADME.sh ${DESTDIR}/${BINDIR} ${CURDIR}/kentUtils.Documentation.txt
 
-libs:
+libs: installEnvironment
 	cd samtabix && ${MAKE}
 	cd kent/src && ${MAKE} libs
 
@@ -37,7 +37,6 @@ fetchSource:
 	@du -hs kent
 	@echo -n "number of files in kent source tree: "
 	@find ./kent -type f | wc -l
-	@${MAKE} installEnvironment
 
 # this installEnvironment will add all the shell environment variables
 # to the kent/src/inc/localEnvironment.mk file which is included
