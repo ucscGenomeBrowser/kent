@@ -12,12 +12,14 @@ UCSC genome browser 'kent' bioinformatic utilities
 System Requirements:
 
 Linux/Ubuntu/CentOS/Unix/MacOSX operating system
-'git' source code management: http://git-scm.com/downloads
 gnu gcc - C code development system - http://www.gnu.org/software/gcc/
 gnu make - http://www.gnu.org/software/make/
 MySQL development system and libraries - http://dev.mysql.com/
 libpng runtime and development packages - http://www.libpng.org/
 libssl runtime and development packages - http://www.openssl.org/
+
+Optional:
+'git' source code management: http://git-scm.com/downloads
 
 It is best to install these packages with your standard operating
 system package management tools.
@@ -25,14 +27,25 @@ system package management tools.
 
 ========================================================================
 
-1. Fetch the userApps directory from the kent source:
+1. Fetch the userApps directory:
+
+   Alternative to 'git' command, a gzipped tar file is available
+   with all the source, via FTP or HTTP:
+     ftp://hgdownload.cse.ucsc.edu/apache/htdocs/admin/exe/userApps.src.tgz
+     http://hgdownload.cse.ucsc.edu/admin/exe/userApps.src.tgz
+
+   Unpacking that file (tar xvzf userApps.src.tgz)
+   creates a directory: ./userApps/
+   with all the source.  Proceed to step 2 to build this directory.
+
+   Using 'git' to fetch the source, creates a directory ./userApps/
 
    git archive --format=zip -9 \
       --remote=git://genome-source.cse.ucsc.edu/kent.git \
       HEAD src/userApps > userApps.zip
    unzip -d userApps -j userApps.zip
-
-   Creates the directory: ./userApps/ with several small files.
+   cd userApps
+   make fetchSource
 
 2. Build the utilities:
 
@@ -40,8 +53,8 @@ system package management tools.
    make
 
    This build fetches (with git) approximately 200 Mb/7,800 files of
-      kent source code, and constructs about 200 command binaries
-      of approximate size near 500 Mb.
+      kent source code, and constructs about 223 command binaries
+      of approximate size near 600 Mb.
    The resulting binaries are in ./userApps/bin/
 
    Note: there are no required shell environment settings as discussed
@@ -64,6 +77,14 @@ system package management tools.
    to access the commands.
 
 4. Update utilities
+
+   This procedure expects the 'git' command to be available.
+   Without the 'git' command, run a 'make clean' to clean up the
+   existing source tree, then repeat the fetch and unpack of the
+   userApps.src.tgz file as mentioned in step 1.
+
+   With the 'git' command available, the 'make update' will refresh
+   the source tree and rebuild:
 
    cd userApps
    make update
@@ -124,6 +145,10 @@ See also:
 ========================================================================
 
 Known Problems:
+
+   Please advise UCSC if you have the recommended installed libraries
+   and development system and this build will not function.
+   email to:  genome-www@soe.ucsc.edu
 
 1. These procedures will not work as-is on sparc or alpha machines or
    with the Sun Solaris operating system.

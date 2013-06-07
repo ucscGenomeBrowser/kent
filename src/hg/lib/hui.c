@@ -3486,7 +3486,7 @@ static char *filterByClauseStd(filterBy_t *filterBy)
 {
 int count = slCount(filterBy->slChoices);
 struct dyString *dyClause = newDyString(256);
-dyStringAppend(dyClause, filterBy->column);
+dyStringAppend(dyClause, sqlCkId(filterBy->column));
 if (count == 1)
     dyStringPrintf(dyClause, " = ");
 else
@@ -3500,9 +3500,9 @@ for (slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
         dyStringAppend(dyClause, ",");
     first = FALSE;
     if (filterBy->useIndex)
-        dyStringAppend(dyClause, slChoice->name);
+        dyStringAppend(dyClause, slChoice->name); // a number converted to a string
     else
-        dyStringPrintf(dyClause, "\"%s\"",slChoice->name);
+        sqlDyStringPrintf(dyClause, "\"%s\"",slChoice->name);
     }
 if (dyStringLen(dyClause) == 0)
     {
@@ -4612,7 +4612,7 @@ if (parentLevel)
     }
 
 printf("<TR valign=center><th align=right>Type of graph:</th><td align=left>");
-snprintf( option, sizeof(option), "%s.%s", name, LINEBAR );
+safef( option, sizeof(option), "%s.%s", name, LINEBAR );
 wiggleGraphDropDown(option, lineBar);
 if (boxed)
     {
@@ -4622,7 +4622,7 @@ if (boxed)
 puts("</td></TR>");
 
 printf("<TR valign=center><th align=right>Track height:</th><td align=left colspan=3>");
-snprintf(option, sizeof(option), "%s.%s", name, HEIGHTPER );
+safef(option, sizeof(option), "%s.%s", name, HEIGHTPER );
 cgiMakeIntVarWithLimits(option, defaultHeight, "Track height",0, minHeightPixels, maxHeightPixels);
 printf("pixels&nbsp;(range: %d to %d)",
        minHeightPixels, maxHeightPixels);
@@ -4630,46 +4630,46 @@ puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Vertical viewing range:</th>"
        "<td align=left>&nbsp;min:&nbsp;");
-snprintf(option, sizeof(option), "%s.%s", name, MIN_Y );
+safef(option, sizeof(option), "%s.%s", name, MIN_Y );
 cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);
 printf("</td><td align=leftv colspan=2>max:&nbsp;");
-snprintf(option, sizeof(option), "%s.%s", name, MAX_Y );
+safef(option, sizeof(option), "%s.%s", name, MAX_Y );
 cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, NO_VALUE, NO_VALUE);
 printf("&nbsp;(range: %g to %g)",
        tDbMinY, tDbMaxY);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
-snprintf(option, sizeof(option), "%s.%s", name, AUTOSCALE );
+safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
 wiggleScaleDropDown(option, autoScale);
-snprintf(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
+safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
 printf("Always include zero:&nbsp");
 wiggleAlwaysZeroDropDown(option, alwaysZero);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Transform function:</th><td align=left>");
-snprintf(option, sizeof(option), "%s.%s", name, TRANSFORMFUNC);
+safef(option, sizeof(option), "%s.%s", name, TRANSFORMFUNC);
 printf("Transform data points by:&nbsp");
 wiggleTransformFuncDropDown(option, transformFunc);
 
 printf("<TR valign=center><th align=right>Windowing function:</th><td align=left>");
-snprintf(option, sizeof(option), "%s.%s", name, WINDOWINGFUNCTION );
+safef(option, sizeof(option), "%s.%s", name, WINDOWINGFUNCTION );
 wiggleWindowingDropDown(option, windowingFunction);
 
 printf("<th align=right>Smoothing window:</th><td align=left>");
-snprintf(option, sizeof(option), "%s.%s", name, SMOOTHINGWINDOW );
+safef(option, sizeof(option), "%s.%s", name, SMOOTHINGWINDOW );
 wiggleSmoothingDropDown(option, smoothingWindow);
 puts("&nbsp;pixels</TD></TR>");
 
 printf("<TR valign=center><td align=right><b>Draw y indicator lines:</b>"
        "<td align=left colspan=2>");
 printf("at y = 0.0:");
-snprintf(option, sizeof(option), "%s.%s", name, HORIZGRID );
+safef(option, sizeof(option), "%s.%s", name, HORIZGRID );
 wiggleGridDropDown(option, horizontalGrid);
 printf("&nbsp;&nbsp;&nbsp;at y =");
-snprintf(option, sizeof(option), "%s.%s", name, YLINEMARK );
+safef(option, sizeof(option), "%s.%s", name, YLINEMARK );
 cgiMakeDoubleVarWithLimits(option, yLineMark, "Indicator at Y", 0, tDbMinY, tDbMaxY);
-snprintf(option, sizeof(option), "%s.%s", name, YLINEONOFF );
+safef(option, sizeof(option), "%s.%s", name, YLINEONOFF );
 wiggleYLineMarkDropDown(option, yLineMarkOnOff);
 printf("</td>");
 if (boxed)
@@ -5269,17 +5269,17 @@ if (scoreFilterOk)
     if (!bigBed && filterByRange)
         {
         puts("<B>Filter score range:  min:</B>");
-        snprintf(option, sizeof(option), "%s.%s", name,SCORE_FILTER _MIN);
+        safef(option, sizeof(option), "%s.%s", name,SCORE_FILTER _MIN);
         cgiMakeIntVarWithLimits(option, minVal, "Minimum score",0, minLimit,maxLimit);
         puts("<B>max:</B>");
-        snprintf(option, sizeof(option), "%s.%s", name,SCORE_FILTER _MAX);
+        safef(option, sizeof(option), "%s.%s", name,SCORE_FILTER _MAX);
         cgiMakeIntVarWithLimits(option, maxVal, "Maximum score",0,minLimit,maxLimit);
         printf("(%d to %d)\n",minLimit,maxLimit);
         }
     else
         {
         printf("<b>Show only items with score at or above:</b> ");
-        snprintf(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
+        safef(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
         cgiMakeIntVarWithLimits(option, minVal, "Minimum score",0, minLimit,maxLimit);
         printf("&nbsp;&nbsp;(range: %d to %d)\n", minLimit, maxLimit);
         if (!boxed)
@@ -5333,7 +5333,7 @@ char filterVar[256];
 char *filterVal = "";
 
 printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
-snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->track);
+safef(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->track);
 filterSetting = cartUsualString(cart, filterVar, filterVal);
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 15);
 }
@@ -5349,7 +5349,7 @@ char *colorSetting;
 char *colorDefault = trackDbSettingOrDefault(tdb, "colorChromDefault", "on");
 
 printf("<p><b>Color track based on chromosome:</b> ");
-snprintf(colorVar, sizeof(colorVar), "%s.color", tdb->track);
+safef(colorVar, sizeof(colorVar), "%s.color", tdb->track);
 colorSetting = cartUsualString(cart, colorVar, colorDefault);
 cgiMakeRadioButton(colorVar, "on", sameString(colorSetting, "on"));
 printf(" on ");
@@ -6042,7 +6042,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
         if (chp != NULL)
             {
             *chp = '\0';
-            safef(query, sizeof(query),
+            sqlSafef(query, sizeof(query),
                   "select id from %sMsa where id = 'ss.%s'", trackName, label);
 
             conn = hAllocConn(db);
@@ -6219,11 +6219,11 @@ else
         genePredDropDown(cart, makeTrackHash(db, chromosome), NULL, option);
 
 #else
-        snprintf(option, sizeof(option), "%s.%s", name, BASE_COLORS_VAR);
+        safef(option, sizeof(option), "%s.%s", name, BASE_COLORS_VAR);
         puts("&nbsp; Alternate colors every");
         cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
         puts("bases<BR>");
-        snprintf(option, sizeof(option), "%s.%s", name,
+        safef(option, sizeof(option), "%s.%s", name,
 			    BASE_COLORS_OFFSET_VAR);
         puts("&nbsp; Offset alternate colors by");
         cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
@@ -7646,7 +7646,7 @@ void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char
 /* Print out table of abbreviations. */
 {
 char query[256];
-safef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
+sqlSafef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
 struct sqlResult *sr = sqlGetResult(conn, query);
 webPrintLinkTableStart();
 webPrintLabelCell("Symbol");
@@ -7692,7 +7692,7 @@ void hPrintFactorSourceAbbrevTable(struct sqlConnection *conn, struct trackDb *t
 char *label = "Cell Type";
 char *sourceTable = trackDbRequiredSetting(tdb, SOURCE_TABLE);
 char query[256];
-safef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
+sqlSafef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
 struct sqlResult *sr = sqlGetResult(conn, query);
 webPrintLinkTableStart();
 webPrintLabelCell("Symbol");
@@ -8004,14 +8004,14 @@ else
         char *asText = NULL;
 
         // Try unsplit table first.
-        safef(query, sizeof(query),
+        sqlSafef(query, sizeof(query),
               "select autoSqlDef from tableDescriptions where tableName='%s'",tdb->table);
         asText = sqlQuickString(conn, query);
 
         // If no result try split table.
         if (asText == NULL)
             {
-            safef(query, sizeof(query),
+            sqlSafef(query, sizeof(query),
                   "select autoSqlDef from tableDescriptions where tableName='chrN_%s'",tdb->table);
             asText = sqlQuickString(conn, query);
             }

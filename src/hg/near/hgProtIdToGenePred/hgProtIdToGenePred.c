@@ -33,7 +33,7 @@ struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(18);
 printf("looking up proteins\n");
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
    "select %s,%s from %s", geneField, protField, linkTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -55,14 +55,14 @@ struct slName *gene, *geneList = NULL;
 
 /* Create new column not filled with anything. */
 printf("Adding column\n");
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
    "alter table %s add column (proteinID varchar(40) not null)",
    geneTable);
 sqlUpdate(conn, query);
 
 /* Get list of genes. */
 printf("scanning genes\n");
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
    "select name from %s", geneTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -80,7 +80,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     char *prot = hashFindVal(protHash, gene->name);
     if (prot == NULL)
         prot = "n/a";
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"update %s set proteinID = '%s' where name = '%s'",
 	geneTable, prot, gene->name);
     sqlUpdate(conn, query);
@@ -88,7 +88,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 
 /* Add new index. */
 printf("indexing\n");
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "create index proteinID on %s (proteinID(10))", geneTable);
 sqlUpdate(conn, query);
 }

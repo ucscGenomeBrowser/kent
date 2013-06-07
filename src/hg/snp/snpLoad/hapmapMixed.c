@@ -47,7 +47,7 @@ int countCHB = 0;
 int countJPT = 0;
 int countYRI = 0;
 
-safef(query, sizeof(query), "select * from hapmapSnpsCombined");
+sqlSafef(query, sizeof(query), "select * from hapmapSnpsCombined");
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

@@ -269,7 +269,7 @@ safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 if (!hTableExists(tableName)) return;
 
 verbose(1, "chrom = %s\n", chromName);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select snp_id, chromStart, chromEnd, loc_type, class, observed, refUCSC, refUCSCReverseComp, orientation from %s", tableName);
 
 sr = sqlGetResult(conn, query);

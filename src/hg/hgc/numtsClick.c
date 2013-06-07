@@ -33,7 +33,7 @@ safecat(itemNameDash,64,"_");
 safecpy(itemNameTrimmed, sizeof(itemNameTrimmed),itemName);
 chopSuffixAt(itemNameTrimmed, '_');
 
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s where name='%s'",
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s where name='%s'",
       table, itemName);
 sr = sqlGetResult(conn, query);
 int sSize=0;
@@ -49,7 +49,7 @@ if (sameString("hg18", database))
 {
   if (sameString("numtS", table) || sameString("numtSAssembled", table))
       {
-      safef(query, sizeof(query),
+      sqlSafef(query, sizeof(query),
           "select  chrom, chromStart, chromEnd, name, score, strand "
           "from numtSMitochondrionChrPlacement where ( "
           "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
@@ -59,7 +59,7 @@ if (sameString("hg18", database))
       }
     else if (sameString("numtSMitochondrion", table))
       {
-      safef(query, sizeof(query),
+      sqlSafef(query, sizeof(query),
           "select  chrom, chromStart, chromEnd, name, score, strand "
           "from numtS where ( "
           "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
@@ -69,7 +69,7 @@ if (sameString("hg18", database))
         }
     else if (sameString("numtSMitochondrionChrPlacement", table))
       {
-      safef(query, sizeof(query),
+      sqlSafef(query, sizeof(query),
           "select  chrom, chromStart, chromEnd, name, score, strand "
           "from numtS where ( "
           "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
@@ -82,11 +82,11 @@ if (sameString("hg18", database))
     {
       if (sameString("hg19", database) || sameString("mm9", database))
       {  
-          safef(query, sizeof(query),
+          sqlSafef(query, sizeof(query),
               "select  chrom, chromStart, chromEnd, name, score, strand "
               "from numtSMitochondrion where name = '%s'  ", itemName);
       } else {
-          safef(query, sizeof(query),
+          sqlSafef(query, sizeof(query),
               "select  chrom, chromStart, chromEnd, name, score, strand "
             "from numtSMitochondrion where name = '%s'  ", itemNameTrimmed);
       }  
@@ -94,7 +94,7 @@ if (sameString("hg18", database))
      }
   else if (sameString("numtSMitochondrion", table))
      {
-      safef(query, sizeof(query),
+      sqlSafef(query, sizeof(query),
           "select  chrom, chromStart, chromEnd, name, score, strand "
           "from numtS where name like '%s%%'", itemName);
       clickMsg = openMsg1;

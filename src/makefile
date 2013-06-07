@@ -1,5 +1,5 @@
+include inc/localEnvironment.mk
 include inc/common.mk
-
 
 all: utils cgi blatSuite
 
@@ -63,6 +63,8 @@ userApps: topLibs hgLib destBin
 	cd hg && echo hg && ${MAKE} userApps
 	cd hg/utils && echo hg/utils && ${MAKE} userApps
 	cd hg/makeDb && echo hg/makeDb && ${MAKE} userApps
+	cd ameme && echo ameme && ${MAKE}
+	cd index/ixIxx && echo index/ixIxx && ${MAKE}
 	@for P in ${BLAT_APPLIST}; do \
 	    ( cd $${P} && echo $${P} && ${MAKE} ) ; \
 	done

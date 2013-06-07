@@ -1,6 +1,8 @@
-include ../../../inc/common.mk
+kentSrc = ../../..
+include ${kentSrc}/inc/localEnvironment.mk
+include ${kentSrc}/inc/common.mk
 
-MYLIBDIR = ../../../lib/$(MACHTYPE)
+MYLIBDIR = ${kentSrc}/lib/$(MACHTYPE)
 MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 L += -lm
 

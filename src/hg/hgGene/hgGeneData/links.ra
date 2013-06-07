@@ -109,7 +109,7 @@ name treeFam
 shortLabel Treefam
 tables knownToTreefam
 idSql select value from knownToTreefam where name = '%s';
-url http://www.treefam.org/cgi-bin/TFinfo.pl?ac=%s
+url http://www.treefam.org/family/%s
 priority 10
 
 name cgap

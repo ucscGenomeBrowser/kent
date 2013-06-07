@@ -65,7 +65,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         {
 	char query[512];
 	char *description;
-	safef(query, sizeof(query),
+	sqlSafef(query, sizeof(query),
 	    "select description.name from gbCdnaInfo,description"
 	    " where gbCdnaInfo.acc='%s' and gbCdnaInfo.description = description.id"
 	    , psl->qName);

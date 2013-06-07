@@ -275,7 +275,7 @@ char query[1024 * 1024];
 fillNull(&docIdSub->valReport);
 fillNull(&docIdSub->md5sum);
 
-safef(query, sizeof query, "insert into %s (status, assembly, submitDate, md5sum, valReport, valVersion, metaData, submitPath, submitter) values (\"%d\",\"%s\",\"%s\",\"%s\", \"%s\", \"%s\", \"%s\",\"%s\",\"%s\")\n", docIdTable,
+sqlSafef(query, sizeof query, "insert into %s (status, assembly, submitDate, md5sum, valReport, valVersion, metaData, submitPath, submitter) values (\"%d\",\"%s\",\"%s\",\"%s\", \"%s\", \"%s\", \"%s\",\"%s\",\"%s\")\n", docIdTable,
     docIdSub->status, docIdSub->assembly, docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, docIdSub->valVersion, docIdSub->metaData, docIdSub->submitPath, docIdSub->submitter);
     //docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, "null", docIdSub->submitPath, docIdSub->submitter);
 //printf("query is %s\n", query);
@@ -283,7 +283,7 @@ char *response = sqlQuickString(conn, query);
 
 printf("submitted got response %s\n", response);
 
-safef(query, sizeof query, "select last_insert_id()");
+sqlSafef(query, sizeof query, "select last_insert_id()");
 char *docId = cloneString(sqlQuickString(conn, query));
 
 printf("submitted got docId %s\n", docId);

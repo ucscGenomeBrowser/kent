@@ -103,7 +103,7 @@ struct sqlConnection *wikiConn = wikiConnect();
 char query[1024];
 struct bed *bedList = NULL;
 
-safef(query, ArraySize(query), "SELECT chrom,chromStart,chromEnd,id FROM %s "
+sqlSafef(query, ArraySize(query), "SELECT chrom,chromStart,chromEnd,id FROM %s "
     "WHERE descriptionKey='%s' ORDER BY chrom,chromStart;",
 	WIKI_TRACK_TABLE, item->descriptionKey);
 sr = sqlGetResult(wikiConn, query);
@@ -398,7 +398,7 @@ static void updateLastModifiedDate(int id)
 char query[512];
 struct sqlConnection *wikiConn = wikiConnect();
 
-safef(query, ArraySize(query),
+sqlSafef(query, ArraySize(query),
     "UPDATE %s set lastModifiedDate=now() WHERE id='%d'",
 	WIKI_TRACK_TABLE, id);
 sqlUpdate(wikiConn,query);
@@ -410,7 +410,7 @@ static void deleteItem(int id)
 {
 char query[512];
 struct sqlConnection *wikiConn = wikiConnect();
-safef(query, ArraySize(query), "DELETE FROM %s WHERE id='%d'",
+sqlSafef(query, ArraySize(query), "DELETE FROM %s WHERE id='%d'",
 	WIKI_TRACK_TABLE, id);
 sqlUpdate(wikiConn,query);
 wikiDisconnect(&wikiConn);
@@ -546,7 +546,7 @@ newItem->descriptionKey = cloneString(descriptionKey);
 newItem->id = 0;
 newItem->geneSymbol = cloneString("0");
 
-wikiTrackSaveToDbEscaped(wikiConn, newItem, WIKI_TRACK_TABLE, 1024);
+wikiTrackSaveToDb(wikiConn, newItem, WIKI_TRACK_TABLE, 1024);
 
 int id = sqlLastAutoId(wikiConn);
 safef(descriptionKey,ArraySize(descriptionKey),
@@ -559,14 +559,14 @@ char query[512];
 if (sameWord(itemName,NEW_ITEM_NAME))
     {
     safef(newItemName, ArraySize(newItemName), "%s-%d", database, id);
-    safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s',name='%s-%d' WHERE id='%d'",
+    sqlSafef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s',name='%s-%d' WHERE id='%d'",
 	WIKI_TRACK_TABLE, descriptionKey, database, id, id);
     
     }
 else
     {
     safef(newItemName, ArraySize(newItemName), "%s", itemName);
-    safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s' WHERE id='%d'",
+    sqlSafef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s' WHERE id='%d'",
 	WIKI_TRACK_TABLE, descriptionKey, id);
     }
 sqlUpdate(wikiConn,query);

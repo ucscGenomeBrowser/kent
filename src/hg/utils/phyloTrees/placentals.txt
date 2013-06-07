@@ -43,6 +43,8 @@ micOch1 Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Cr
 # Chinese hamster Cricetulus griseus
 criGri	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Cricetidae; Cricetinae; Cricetulus
 
+# golden hamster - Mesocricetus auratus
+mesAur  Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Cricetidae; Cricetinae; Mesocricetus
 
 # Mouse Mus musculus
 mm	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Muridae; Murinae; Mus
@@ -68,6 +70,9 @@ vicPac	Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Vicugna
 
 # Bactrian camel - Camelus ferus
 camFer Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Camelus
+
+# Tibetan antelope - Pantholops hodgsonii
+panHod	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Antilopinae; Pantholops
 
 # Cow - Bos taurus
 bosTau	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos
@@ -113,6 +118,9 @@ ailMel	Eutheria; Laurasiatheria; Carnivora; Caniformia; Ursidae; Ailuropoda
 
 # Pacific walrus - Odobenus rosmarus divergens
 odoRosDiv	Eutheria; Laurasiatheria; Carnivora; Caniformia; Odobenidae; Odobenus; Odobenus rosmarus
+
+# Weddell seal - Leptonychotes weddellii
+lepWed  Eutheria; Laurasiatheria; Carnivora; Caniformia; Phocidae; Leptonychotes
 
 # Hedgehog Erinaceus europaeus
 eriEur	Eutheria; Laurasiatheria; Insectivora; Erinaceidae; Erinaceinae; Erinaceus

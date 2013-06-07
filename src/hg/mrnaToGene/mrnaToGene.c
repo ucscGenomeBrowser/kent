@@ -133,7 +133,7 @@ if (gCdsTable != NULL)
 else
     {
     char query[512];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
           "SELECT cds.name FROM cds,gbCdnaInfo WHERE (gbCdnaInfo.acc = '%s') AND (gbCdnaInfo.cds !=0) AND (gbCdnaInfo.cds = cds.id)",
           acc);
     return sqlQuickQuery(conn, query, cdsBuf, cdsBufSize);
@@ -269,7 +269,7 @@ char query[512], **row;
 struct sqlResult *sr;
 
 /* generate join of cds with psls */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "SELECT cds.name,matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts "
       "FROM cds,%s,gbCdnaInfo WHERE (%s.qName = gbCdnaInfo.acc) AND (gbCdnaInfo.cds !=0) AND (gbCdnaInfo.cds = cds.id)",
       pslTable, pslTable);

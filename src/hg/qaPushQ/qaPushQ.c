@@ -266,7 +266,7 @@ void encryptPWD(char *password, char *salt, char *buf, int bufsize)
 /* encrypt a password */
 {
 /* encrypt user's password. */
-safef(buf,bufsize,crypt(password, salt));
+safef(buf,bufsize,"%s",crypt(password, salt));
 }
 
 
@@ -325,7 +325,7 @@ struct sqlResult *rs;
 char **row = NULL;
 bool result = FALSE;
 
-safef(query, sizeof(query), "select get_lock('%s', %d)", name, timeout);
+sqlSafef(query, sizeof(query), "select get_lock('%s', %d)", name, timeout);
 rs = sqlGetResult(conn, query);
 row=sqlNextRow(rs);
 if (row[0] == NULL)
@@ -346,7 +346,7 @@ void mySqlReleaseLock(char *name)
 /* Releases an advisory lock created by GET_LOCK in mySqlGetLock */
 {
 char query[256];
-safef(query, sizeof(query), "select release_lock('%s')", name);
+sqlSafef(query, sizeof(query), "select release_lock('%s')", name);
 sqlUpdate(conn, query);
 }
 
@@ -978,34 +978,28 @@ void doDisplay()
 struct pushQ *ki, *kiList = NULL;
 struct sqlResult *sr;
 char **row;
-char query[256];
+struct dyString *dy = dyStringNew(0);
 char lastP = ' ';
 int c = 0;
-char monthsql[256];
 char comment[256];
 
 /* initialize column display order */
 initColsFromString();
 
-safef(monthsql,sizeof(monthsql),"%s","");
+/* Get a list of all (or in month). */
+sqlDyStringPrintf(dy, "select * from %s", pushQtbl);
 if (!sameString(month,""))
     {
-    safef(monthsql,sizeof(monthsql)," where priority='L' and qadate like '%s%%' ",month);
+    sqlDyStringPrintf(dy," where priority='L' and qadate like '%s%%' ",month);
     }
-
-/* Get a list of all (or in month). */
-safef(query, sizeof(query), "select * from %s%s%s",
-    pushQtbl,
-    monthsql,
-    " order by priority, rank, qadate desc, qid desc limit 200"
-    );
-
-sr = sqlGetResult(conn, query);
+dyStringAppend(dy, " order by priority, rank, qadate desc, qid desc limit 200");
+sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ki = pushQLoad(row);
     slAddHead(&kiList, ki);
     }
+dyStringFree(&dy);
 sqlFreeResult(&sr);
 slReverse(&kiList);
 
@@ -1146,7 +1140,7 @@ char **row;
 struct sqlResult *sr;
 char query[256];
 struct pushQ *q = NULL;
-safef(query, sizeof(query), "select * from %s where qid = '%s'",pushQtbl,qid);
+sqlSafef(query, sizeof(query), "select * from %s where qid = '%s'",pushQtbl,qid);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row)
@@ -1177,17 +1171,17 @@ q=mustLoadPushQ(cgiString("qid"));
 if (sameString(q->lockUser,"") && sameString(q->pushState,"Y"))
     { /* not already locked and pushState=Y */
 
-    safef(q->lastdate, sizeof(q->lastdate), q->qadate);
+    safef(q->lastdate, sizeof(q->lastdate), "%s", q->qadate);
     strftime (q->qadate  , sizeof(q->qadate  ), "%Y-%m-%d", loctime); /* today's date */
 
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
           "update %s set rank = 0, priority ='L', pushState='D', qadate='%s', lastdate='%s' "
           "where qid = '%s' ", pushQtbl, q->qadate, q->lastdate, q->qid);
     sqlUpdate(conn, query);
 
 
     /* first close the hole where it was */
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
           "update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
           pushQtbl, q->priority, q->rank);
     sqlUpdate(conn, query);
@@ -1219,18 +1213,18 @@ struct pushQ *q;
 char query[256];
 char newQid[sizeof(q->qid)] = "";
 
-safef(newQid, sizeof(newQid), cgiString("qid"));
+safef(newQid, sizeof(newQid), "%s", cgiString("qid"));
 
 q = mustLoadPushQ(newQid);
 
 if ((q->rank > 1) && (change>0))
     {
     /* swap places with rank-1 */
-    safef(query, sizeof(query), "update %s set rank = rank + 1 where priority ='%s' and rank = %d ",
+    sqlSafef(query, sizeof(query), "update %s set rank = rank + 1 where priority ='%s' and rank = %d ",
             pushQtbl, q->priority, q->rank-1);
     sqlUpdate(conn, query);
     q->rank--;
-    safef(query, sizeof(query), "update %s set rank = %d where qid ='%s'",
+    sqlSafef(query, sizeof(query), "update %s set rank = %d where qid ='%s'",
             pushQtbl, q->rank, q->qid);
     sqlUpdate(conn, query);
     }
@@ -1238,12 +1232,12 @@ if ((q->rank > 1) && (change>0))
 if (change<0)
     {
     /* swap places with rank+1 */
-    safef(query, sizeof(query), "update %s set rank = rank - 1 where priority ='%s' and rank = %d ",
+    sqlSafef(query, sizeof(query), "update %s set rank = rank - 1 where priority ='%s' and rank = %d ",
             pushQtbl, q->priority, q->rank+1);
     if (sqlUpdateRows(conn, query, NULL)>0)
         {
         q->rank++;
-        safef(query, sizeof(query), "update %s set rank = %d where qid ='%s'",
+        sqlSafef(query, sizeof(query), "update %s set rank = %d where qid ='%s'",
                 pushQtbl, q->rank, q->qid);
         sqlUpdate(conn, query);
         }
@@ -1275,11 +1269,11 @@ struct pushQ q;
 int newqid = 0;
 char query[256];
 char *quickres = NULL;
-safef(query, sizeof(query), "select max(qid) from %s",pushQtbl);
+sqlSafef(query, sizeof(query), "select max(qid) from %s",pushQtbl);
 quickres = sqlQuickString(conn, query);
 if (quickres != NULL)
     {
-    safef(q.qid, sizeof(q.qid), quickres);
+    safef(q.qid, sizeof(q.qid), "%s", quickres);
     sscanf(q.qid,"%d",&newqid);
     freez(&quickres);
     }
@@ -1293,7 +1287,7 @@ int getNextAvailRank(char *priority)
 struct pushQ q;
 char query[256];
 char *quickres = NULL;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select rank from %s where priority='%s' order by rank desc limit 1",
     pushQtbl, priority);
 quickres = sqlQuickString(conn, query);
@@ -1318,17 +1312,17 @@ struct pushQ *q;
 char query[256];
 char newQid[sizeof(q->qid)] = "";
 
-safef(newQid, sizeof(newQid), cgiString("qid"));
+safef(newQid, sizeof(newQid), "%s", cgiString("qid"));
 
 q = mustLoadPushQ(newQid);
 
 /* first close the hole where it was */
-safef(query, sizeof(query), "update %s set rank = rank + 1 where priority ='%s' and rank < %d ",
+sqlSafef(query, sizeof(query), "update %s set rank = rank + 1 where priority ='%s' and rank < %d ",
         pushQtbl, q->priority, q->rank);
 sqlUpdate(conn, query);
 
 q->rank = 1;
-safef(query, sizeof(query), "update %s set rank = %d where qid = '%s' ",
+sqlSafef(query, sizeof(query), "update %s set rank = %d where qid = '%s' ",
         pushQtbl, q->rank, q->qid);
 sqlUpdate(conn, query);
 
@@ -1344,17 +1338,17 @@ struct pushQ *q;
 char query[256];
 char newQid[sizeof(q->qid)] = "";
 
-safef(newQid, sizeof(newQid), cgiString("qid"));
+safef(newQid, sizeof(newQid), "%s", cgiString("qid"));
 
 q = mustLoadPushQ(newQid);
 
 /* first close the hole where it was */
-safef(query, sizeof(query), "update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
+sqlSafef(query, sizeof(query), "update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
         pushQtbl, q->priority, q->rank);
 sqlUpdate(conn, query);
 
 q->rank = getNextAvailRank(q->priority);
-safef(query, sizeof(query)," update %s set rank = %d where qid = '%s' ",
+sqlSafef(query, sizeof(query), "update %s set rank = %d where qid = '%s' ",
         pushQtbl, q->rank, q->qid);
 sqlUpdate(conn, query);
 
@@ -1366,7 +1360,7 @@ doDisplay();
 
 /* too bad this isn't part of autoSql's code generation */
 
-void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tableName, int updateSize)
+void pushQUpdate(struct sqlConnection *conn, struct pushQ *el, char *tableName, int updateSize)
 /* Update pushQ row to the table specified by tableName.
  * As blob fields may be arbitrary size updateSize specifies the approx size.
  * of a string that would contain the entire query. Automatically
@@ -1376,92 +1370,32 @@ void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tabl
  * before inserting into database. */
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *featureBits, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lastdate, *lockUser, *lockDateTime, *releaseLog, *releaseLogUrl, *importance;
-qid = sqlEscapeString(el->qid);
-pqid = sqlEscapeString(el->pqid);
-priority = sqlEscapeString(el->priority);
-qadate = sqlEscapeString(el->qadate);
-newYN = sqlEscapeString(el->newYN);
-track = sqlEscapeString(el->track);
-dbs = sqlEscapeString(el->dbs);
-tbls = sqlEscapeString(el->tbls);
-cgis = sqlEscapeString(el->cgis);
-files = sqlEscapeString(el->files);
-currLoc = sqlEscapeString(el->currLoc);
-makeDocYN = sqlEscapeString(el->makeDocYN);
-onlineHelp = sqlEscapeString(el->onlineHelp);
-ndxYN = sqlEscapeString(el->ndxYN);
-joinerYN = sqlEscapeString(el->joinerYN);
-stat = sqlEscapeString(el->stat);
-featureBits = sqlEscapeString(el->featureBits);
-sponsor = sqlEscapeString(el->sponsor);
-reviewer = sqlEscapeString(el->reviewer);
-extSource = sqlEscapeString(el->extSource);
-openIssues = sqlEscapeString(el->openIssues);
-notes = sqlEscapeString(el->notes);
-pushState = sqlEscapeString(el->pushState);
-initdate = sqlEscapeString(el->initdate);
-lastdate = sqlEscapeString(el->lastdate);
-lockUser = sqlEscapeString(el->lockUser);
-lockDateTime = sqlEscapeString(el->lockDateTime);
-releaseLog = sqlEscapeString(el->releaseLog);
-releaseLogUrl = sqlEscapeString(el->releaseLogUrl);
-importance = sqlEscapeString(el->importance);
 
 /* had to split this up because dyStringPrintf only up to 4000 chars at one time */
-dyStringPrintf(update,
+sqlDyStringPrintf(update,
     "update %s set "
     "pqid='%s',priority='%s',rank=%u,qadate='%s',newYN='%s',track='%s',",
-    tableName,  pqid,  priority, el->rank,  qadate, newYN, track);
-dyStringPrintf(update, "dbs='%s',",dbs);
-dyStringPrintf(update, "tbls='%s',",tbls);
-dyStringPrintf(update, "cgis='%s',",cgis);
-dyStringPrintf(update, "files='%s',",files);
-dyStringPrintf(update, "sizeMB=%u,currLoc='%s',"
+    tableName,  el->pqid,  el->priority, el->rank,  el->qadate, el->newYN, el->track);
+sqlDyStringPrintf(update, "dbs='%s',",el->dbs);
+sqlDyStringPrintf(update, "tbls='%s',",el->tbls);
+sqlDyStringPrintf(update, "cgis='%s',",el->cgis);
+sqlDyStringPrintf(update, "files='%s',",el->files);
+sqlDyStringPrintf(update, "sizeMB=%u,currLoc='%s',"
     "makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
     "sponsor='%s',reviewer='%s',extSource='%s',",
-    el->sizeMB ,  currLoc,  makeDocYN,
-    onlineHelp,  ndxYN,  joinerYN,  stat,
-    sponsor,  reviewer,  extSource);
-dyStringPrintf(update, "openIssues='%s',",openIssues);
-dyStringPrintf(update, "notes='%s',",notes);
-dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',"
+    el->sizeMB ,  el->currLoc,  el->makeDocYN,
+    el->onlineHelp,  el->ndxYN,  el->joinerYN,  el->stat,
+    el->sponsor,  el->reviewer,  el->extSource);
+sqlDyStringPrintf(update, "openIssues='%s',",el->openIssues);
+sqlDyStringPrintf(update, "notes='%s',",el->notes);
+sqlDyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',"
                        "lockDateTime='%s',releaseLog='%s',featureBits='%s',releaseLogUrl='%s',"
                        "importance='%s' where qid='%s'",
-                       pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime,
-                       releaseLog, featureBits, releaseLogUrl, importance, qid	);
+                       el->pushState, el->initdate, el->lastdate, el->bounces, el->lockUser, el->lockDateTime,
+                       el->releaseLog, el->featureBits, el->releaseLogUrl, el->importance, el->qid	);
 
 sqlUpdate(conn, update->string);
 freeDyString(&update);
-freez(&qid);
-freez(&pqid);
-freez(&priority);
-freez(&qadate);
-freez(&newYN);
-freez(&track);
-freez(&dbs);
-freez(&tbls);
-freez(&cgis);
-freez(&files);
-freez(&currLoc);
-freez(&makeDocYN);
-freez(&onlineHelp);
-freez(&ndxYN);
-freez(&joinerYN);
-freez(&stat);
-freez(&sponsor);
-freez(&reviewer);
-freez(&extSource);
-freez(&openIssues);
-freez(&notes);
-freez(&pushState);
-freez(&initdate);
-freez(&lastdate);
-freez(&lockUser);
-freez(&lockDateTime);
-freez(&releaseLog);
-freez(&releaseLogUrl);
-freez(&importance);
 }
 
 void getCgiData(bool *isOK, bool isPtr, void *ptr, int size, char *name)
@@ -1495,7 +1429,7 @@ if (isPtr)
     }
 else
     {
-    safef(fld, size, cloneStringZ(cgi,size-1));  /* for non-ptr strings, copy into existing buffer */
+    safef(fld, size, "%s", cloneStringZ(cgi,size-1));  /* for non-ptr strings, copy into existing buffer */
     }
 }
 
@@ -1536,7 +1470,7 @@ bool lockOK = TRUE;    /* assume for now lock state OK */
 char newQid     [sizeof(q->qid)]      = "";
 char newPriority[sizeof(q->priority)] = "";
 
-safef(newQid, sizeof(newQid), cgiString("qid"));
+safef(newQid, sizeof(newQid), "%s", cgiString("qid"));
 
 if (sameString(newQid,""))
     {
@@ -1556,7 +1490,7 @@ if (!isNew)
         /* true means optional, it was asked if we could tolerate this,
          *  e.g. delete, then hit back-button
          * user is trying to use back button to recover deleted rec
-        safef(newQid, sizeof(newQid), "");
+        safef(newQid, sizeof(newQid), "%s", "");
         isNew = TRUE;
         */
 
@@ -1566,16 +1500,16 @@ if (!isNew)
 	{  /* unlock record */
 	safef(q->lockUser, sizeof(q->lockUser), "%s", "");
 	safef(q->lockDateTime, sizeof(q->lockDateTime), "%s", "");
-	pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
+	pushQUpdate(conn, q, pushQtbl, updateSize);
 	lockOK = FALSE;
 	}
     else if (sameString(lockbutton,"Lock"))  /* try to lock the record for editing */
 	{
 	if (sameString(q->lockUser,""))  /* q->lockUser blank if nobody has lock */
 	    {
-	    safef(q->lockUser, sizeof(q->lockUser), qaUser);
+	    safef(q->lockUser, sizeof(q->lockUser), "%s", qaUser);
 	    strftime(q->lockDateTime, sizeof(q->lockDateTime), "%Y-%m-%d %H:%M", loctime);
-	    pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
+	    pushQUpdate(conn, q, pushQtbl, updateSize);
 	    lockOK = FALSE;
 	    }
 	else
@@ -1587,7 +1521,7 @@ if (!isNew)
 	{ /* if lock was lost, what do we do now? */
 	if (sameString(q->lockUser,""))
 	    {
-	    safef(msg,sizeof(msg),"Lost lock-> Must refresh data->");
+	    safef(msg,sizeof(msg), "%s", "Lost lock-> Must refresh data->");
 	    }
 	else
 	    {
@@ -1615,7 +1549,7 @@ if (isNew)
     }
 
 
-safef(newPriority, sizeof(newPriority), cgiString("priority"));
+safef(newPriority, sizeof(newPriority), "%s", cgiString("priority"));
 
 
 /* dates */
@@ -1749,14 +1683,14 @@ if (isRedo)
 if (sameString(bouncebutton,"bounce"))
     {
     safef(newPriority, sizeof(newPriority), "B");
-    safef(q->lastdate, sizeof(q->lastdate), q->qadate);
+    safef(q->lastdate, sizeof(q->lastdate), "%s", q->qadate);
     strftime (q->qadate, sizeof(q->qadate), "%Y-%m-%d", loctime); /* set to today's date */
     q->bounces++;
     }
 if (sameString(bouncebutton,"unbounce"))
     {
     safef(newPriority, sizeof(newPriority), "A");
-    safef(q->lastdate, sizeof(q->lastdate), q->qadate);
+    safef(q->lastdate, sizeof(q->lastdate), "%s", q->qadate);
     strftime (q->qadate, sizeof(q->qadate), "%Y-%m-%d", loctime); /* set to today's date */
     }
 
@@ -1765,7 +1699,7 @@ if (sameString(bouncebutton,"unbounce"))
 if ( (!sameString(newPriority,q->priority)) || (sameString(delbutton,"delete")) )
     {
     /* first close the hole where it was */
-    safef(query, sizeof(query), "update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
+    sqlSafef(query, sizeof(query), "update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
             pushQtbl, q->priority, q->rank);
     sqlUpdate(conn, query);
     }
@@ -1776,7 +1710,7 @@ if (!sameString(delbutton,"delete"))
     if ((!sameString(newPriority,q->priority)) || isNew)
 	{
 	q->rank = getNextAvailRank(newPriority);
-	safef(q->priority, sizeof(q->priority), newPriority);
+	safef(q->priority, sizeof(q->priority), "%s", newPriority);
 	}
     }
 
@@ -1795,14 +1729,14 @@ if (sameString(pushbutton,"push requested"))
 if (sameString(delbutton,"delete"))
     {
     /* delete old record */
-    safef(query, sizeof(query), "delete from %s where qid ='%s'", pushQtbl, q->qid);
+    sqlSafef(query, sizeof(query), "delete from %s where qid ='%s'", pushQtbl, q->qid);
     sqlUpdate(conn, query);
     }
 else
     {
     if (sameString(showSizes,"Show Sizes") || sameString(transfer,"Transfer"))
 	{ /* mark record as locked */
-	safef(q->lockUser, sizeof(q->lockUser), qaUser);
+	safef(q->lockUser, sizeof(q->lockUser), "%s", qaUser);
 	strftime(q->lockDateTime, sizeof(q->lockDateTime), "%Y-%m-%d %H:%M", loctime);
 	}
     else
@@ -1814,26 +1748,26 @@ else
 	{
 	/* save new record */
 	safef(msg, sizeof(msg), "%%0%dd", (int)sizeof(q->qid)-1);
-	safef(newQid,sizeof(newQid),msg,newqid);
-	safef(q->qid, sizeof(q->qid), newQid);
+	safef(newQid, sizeof(newQid), msg, newqid);
+	safef(q->qid, sizeof(q->qid), "%s", newQid);
     	safef(msg, sizeof(msg), "%s", "");
-	pushQSaveToDbEscaped(conn, q, pushQtbl, updateSize);
+	pushQSaveToDb(conn, q, pushQtbl, updateSize);
 	}
     else
 	{
 	/* update existing record */
-	pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
+	pushQUpdate(conn, q, pushQtbl, updateSize);
 	}
     }
 
 if (sameString(clonebutton,"clone"))
     {
     /* save new clone */
-    safef(q->pqid,sizeof(q->pqid), q->qid);  /* daughter will point to parent */
+    safef(q->pqid,sizeof(q->pqid), "%s", q->qid);  /* daughter will point to parent */
     newqid = getNextAvailQid();
     safef(msg, sizeof(msg), "%%0%dd", (int)sizeof(q->qid)-1);
-    safef(newQid,sizeof(newQid),msg,newqid);
-    safef(q->qid, sizeof(q->qid), newQid);
+    safef(newQid, sizeof(newQid), msg, newqid);
+    safef(q->qid, sizeof(q->qid), "%s", newQid);
     safef(msg, sizeof(msg), "%s", "");
     if (q->priority[0]=='L')
 	{
@@ -1844,7 +1778,7 @@ if (sameString(clonebutton,"clone"))
 	q->rank = getNextAvailRank(q->priority);
 	}
     safef(q->pushState,sizeof(q->pushState),"N");  /* default to: push not done yet */
-    pushQSaveToDbEscaped(conn, q, pushQtbl, updateSize);
+    pushQSaveToDb(conn, q, pushQtbl, updateSize);
     }
 
 
@@ -1903,9 +1837,9 @@ if ( sameString(qaUser,"kuhn") ||
 	{
 	if (sameString(q->lockUser,""))  /* q->lockUser blank if nobody has lock */
 	    {
-	    safef(q->lockUser, sizeof(q->lockUser), qaUser);
+	    safef(q->lockUser, sizeof(q->lockUser), "%s", qaUser);
 	    strftime(q->lockDateTime, sizeof(q->lockDateTime), "%Y-%m-%d %H:%M", loctime);
-	    pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
+	    pushQUpdate(conn, q, pushQtbl, updateSize);
 	    }
 	}
     else /* we are coming back from a post? so return to display automatically */
@@ -1931,7 +1865,7 @@ if (!q)
     printf("Queue Id %s not found.", cgiString("qid"));
     return;
     }
-safef(tempSizeMB,sizeof(tempSizeMB), cgiUsualString("sizeMB",""));
+safef(tempSizeMB,sizeof(tempSizeMB), "%s", cgiUsualString("sizeMB",""));
 if (!sameString(tempSizeMB,""))
     {
     if (sscanf(tempSizeMB,"%u",&q->sizeMB) != 1)
@@ -1939,7 +1873,7 @@ if (!sameString(tempSizeMB,""))
 	q->sizeMB = 0;
 	}
     }
-pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
+pushQUpdate(conn, q, pushQtbl, updateSize);
 doEdit();
 pushQFree(&q);
 }
@@ -2031,7 +1965,7 @@ char query[256];
 char **row;
 struct sqlResult *sr;
 
-safef(query, sizeof(query), "select * from users where user = '%s'",u->user);
+sqlSafef(query, sizeof(query), "select * from users where user = '%s'",u->user);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -2067,7 +2001,7 @@ if ((qaUser == NULL) || (sameString(qaUser,"")))
     {
     return;
     }
-safef(myUser.user,sizeof(myUser.user),qaUser);
+safef(myUser.user, sizeof(myUser.user), "%s", qaUser);
 readAUser(&myUser, FALSE);
 
 while(parseList(myUser.contents,'?',i,tempVar,sizeof(tempVar)))
@@ -2084,12 +2018,12 @@ while(parseList(myUser.contents,'?',i,tempVar,sizeof(tempVar)))
 
     if (sameString(tempVarName,"org"))
 	{
-	safef(pushQtbl,sizeof(pushQtbl),tempVal);
+	safef(pushQtbl, sizeof(pushQtbl), "%s", tempVal);
 	}
 
     if (sameString(tempVarName,"month"))
 	{
-	safef(month,sizeof(month),tempVal);
+	safef(month, sizeof(month), "%s", tempVal);
 	}
 
     if (sameString(tempVarName,"oldRandState"))
@@ -2127,7 +2061,7 @@ userPassword = cgiString("password");
 ZeroVar(&u);
 
 u.next = NULL;
-safef(u.user,  sizeof(u.user), cgiString("user"));
+safef(u.user,  sizeof(u.user), "%s", cgiString("user"));
 
 conn = sqlConnectRemote(host, user, password, database);  /* do db conn here special for login */
 
@@ -2147,7 +2081,7 @@ else
         else
             {
             encryptNewPWD(userPassword, u.password, sizeof(u.password));
-            safef(query, sizeof(query), "update %s set password = '%s' where user = '%s' ",
+            sqlSafef(query, sizeof(query), "update %s set password = '%s' where user = '%s' ",
                     tbl, u.password, u.user);
             sqlUpdate(conn, query);
             loginOK = TRUE;
@@ -2201,7 +2135,7 @@ if ((qaUser == NULL) || (sameString(qaUser,"")))
     {
     return;
     }
-dyStringPrintf(query,
+sqlDyStringPrintf(query,
     "update %s set contents = '?showColumns=%s?org=%s?month=%s?oldRandState=%s' where user = '%s'",
     tbl, showColumns, pushQtbl, month, oldRandState, myUser.user);
 sqlUpdate(conn, query->string);
@@ -2225,7 +2159,7 @@ char tempSwap  [256] = "";
 struct dyString * s = NULL;
 s = newDyString(2048);  /* need room */
 
-safef(target, sizeof(target), cgiString("col"));
+safef(target, sizeof(target), "%s", cgiString("col"));
 
 while(TRUE)
     {
@@ -2240,9 +2174,9 @@ while(TRUE)
 	if (change==1)
 	    {
 	    /*  swap places with Before */
-	    safef(tempSwap  , sizeof(tempSwap  ), tempBefore);
-	    safef(tempBefore, sizeof(tempBefore), tempVal   );
-	    safef(tempVal   , sizeof(tempVal   ), tempSwap  );
+	    safef(tempSwap  , sizeof(tempSwap  ), "%s", tempBefore);
+	    safef(tempBefore, sizeof(tempBefore), "%s", tempVal   );
+	    safef(tempVal   , sizeof(tempVal   ), "%s", tempSwap  );
 	    }
 	if (change==0)
 	    {
@@ -2252,9 +2186,9 @@ while(TRUE)
 	if (change==-1)
 	    {
 	    /* swap places with After */
-	    safef(tempSwap  , sizeof(tempSwap  ), tempAfter );
-	    safef(tempAfter , sizeof(tempAfter ), tempVal   );
-	    safef(tempVal   , sizeof(tempVal   ), tempSwap  );
+	    safef(tempSwap  , sizeof(tempSwap  ), "%s", tempAfter );
+	    safef(tempAfter , sizeof(tempAfter ), "%s", tempVal   );
+	    safef(tempVal   , sizeof(tempVal   ), "%s", tempSwap  );
 	    }
 
 	change = 99;  /* just suppress any more changes */
@@ -2265,8 +2199,8 @@ while(TRUE)
 	dyStringPrintf(s, "%s,", tempBefore);
 	}
     /* roll 'em! */
-    safef(tempBefore, sizeof(tempBefore), tempVal  );
-    safef(tempVal   , sizeof(tempVal)   , tempAfter);
+    safef(tempBefore, sizeof(tempBefore), "%s", tempVal  );
+    safef(tempVal   , sizeof(tempVal)   , "%s", tempAfter);
     i++;
     }
 
@@ -2380,7 +2314,7 @@ printf("<br>\n");
 printf("<A href=qaPushQ?action=display&month=current&cb=%s>Current</A><br>\n", newRandState);
 printf("<br>\n");
 
-safef(query, sizeof(query), "select distinct substring(qadate,1,7) from %s where priority='L' order by qadate desc",pushQtbl);
+sqlSafef(query, sizeof(query), "select distinct substring(qadate,1,7) from %s where priority='L' order by qadate desc",pushQtbl);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2405,7 +2339,7 @@ int f = 0, i = 0, n = 0, c = 0;
 char lastKeyName[256]="";
 
 
-safef(query, sizeof(query), "show index from %s",tbl);
+sqlSafef(query, sizeof(query), "show index from %s",tbl);
 sr = sqlGetResult(conn, query);
 f = 0;
 i = 0;
@@ -2438,7 +2372,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    strcat(s,", ");
 	    }
 	strcat(s, row[i]);
-	safef(lastKeyName,sizeof(lastKeyName),row[n]);
+	safef(lastKeyName, sizeof(lastKeyName), "%s", row[n]);
 	}
     }
 sqlFreeResult(&sr);
@@ -2456,14 +2390,14 @@ s[0]=0;
 temp = needMem(slength);
 while (size >= 1000)
     {
-    safef(temp,slength,s);
+    safef(temp, slength, "%s", s);
     safef(s,slength,"%03d%s%s",(int)(size%1000),sep,temp);
     size/=1000;
     safef(sep,sizeof(sep),",");
     }
 if (size > 0)
     {
-    safef(temp,slength,s);
+    safef(temp, slength, "%s", s);
     safef(s,slength,"%3d%s%s",(int)size,sep,temp);
     }
 else
@@ -2515,7 +2449,7 @@ if ((sameString(utsName.nodename,"hgwdev")) && (sameString(rhost,"hgwbeta")))
 
 conn = sqlConnectRemote(host, user, password, db);
 
-safef(query, sizeof(query), "show table status like '%s'",tbl);
+sqlSafef(query, sizeof(query), "show table status like '%s'",tbl);
 sr = sqlGetResult(conn, query);
 f = 0;
 d = 0;
@@ -2662,7 +2596,7 @@ char *found=NULL;
 struct fileInfo *fi = NULL;
 char *crossUrl = "";
 
-safef(newQid, sizeof(newQid), cgiString("qid"));
+safef(newQid, sizeof(newQid), "%s", cgiString("qid"));
 
 printf("<H2>Show File Sizes </H2>\n");
 
@@ -3058,7 +2992,7 @@ char tempUrl[256];
 
 ZeroVar(&q);
 
-safef(newQid, sizeof(newQid), cgiString("qid"));
+safef(newQid, sizeof(newQid), "%s", cgiString("qid"));
 
 printf("<H2>Transfer Queue Entry %s:%s to Another Queue </H2>\n", pushQtbl, newQid);
 
@@ -3094,13 +3028,13 @@ origQid = cloneString(cgiString("qid"));  /* required cgi var */
 q = mustLoadPushQ(origQid);
 
 /* first close the hole where it was */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 "update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
 pushQtbl, q->priority, q->rank);
 sqlUpdate(conn, query);
 
 /* delete old record */
-safef(query, sizeof(query), "delete from %s where qid ='%s'", pushQtbl, origQid);
+sqlSafef(query, sizeof(query), "delete from %s where qid ='%s'", pushQtbl, origQid);
 sqlUpdate(conn, query);
 
 /* temporarily set pushQtbl to target */
@@ -3113,8 +3047,8 @@ safef(q->lockDateTime, sizeof(q->lockDateTime), "%s","");
 /* get the maxQid from the target Q tbl */
 newqid = getNextAvailQid();
 safef(msg, sizeof(msg), "%%0%dd", (int)sizeof(q->qid)-1);
-safef(newQid,sizeof(newQid),msg,newqid);
-safef(q->qid, sizeof(q->qid), newQid);
+safef(newQid, sizeof(newQid), msg, newqid);
+safef(q->qid, sizeof(q->qid), "%s", newQid);
 safef(msg, sizeof(msg), "%s", "");
 
 /* get the maxrank from the target Q tbl for given priority */
@@ -3131,7 +3065,7 @@ else
 safef(q->pqid, sizeof(q->pqid), "%s", "");
 
 /* save record into new target Q */
-pushQSaveToDbEscaped(conn, q, pushQtbl, updateSize);
+pushQSaveToDb(conn, q, pushQtbl, updateSize);
 
 /* restore pushQtbl */
 safef(pushQtbl, sizeof(pushQtbl), "%s", savePushQtbl);
@@ -3187,7 +3121,7 @@ void doShowEditHelp()
 {
 struct pushQ q;
 ZeroVar(&q);
-safef(q.qid,sizeof(q.qid),cgiString("qid"));
+safef(q.qid, sizeof(q.qid), "%s", cgiString("qid"));
 printf("<h4>Details/Edit Help</h4>\n");
 printf("<br>\n");
 printf("CANCEL - click to return to main display without saving changes.<br>\n");
@@ -3234,7 +3168,7 @@ void doShowSizesHelp()
 {
 struct pushQ q;
 ZeroVar(&q);
-safef(q.qid,sizeof(q.qid),cgiString("qid"));
+safef(q.qid, sizeof(q.qid), "%s", cgiString("qid"));
 printf("<h4>Show File Sizes Help</h4>\n");
 printf("<br>\n");
 printf("Tables: Shows sizes of database data and indexes.<br>\n");
@@ -3267,7 +3201,7 @@ boolean verifyTableIsQueue(char *table)
 boolean result = TRUE;
 char query[256];
 char *field = NULL;
-safef(query, sizeof(query), "desc %s",table);
+sqlSafef(query, sizeof(query), "describe %s",table);
 checkConn2();
 field = sqlQuickString(conn2, query);
 result = sameString(field,"qid");
@@ -3288,7 +3222,7 @@ if (!(isTransfer && sameString(pushQtbl,"pushQ")))
     printf("<A href=qaPushQ?%s=%s%s&cb=%s>Main Push Queue</A>%s<br>\n",action,"pushQ",monthChange,newRandState,extra);
     printf("<br>\n");
     }
-safef(query, sizeof(query), "show tables");
+sqlSafef(query, sizeof(query), "show tables");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3336,7 +3270,7 @@ safef(q->lockUser, sizeof(q->lockUser), "%s","");
 safef(q->lockDateTime, sizeof(q->lockDateTime), "%s","");
 
 /* update existing record */
-pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
+pushQUpdate(conn, q, pushQtbl, updateSize);
 
 pushQFree(&q);
 
@@ -3394,7 +3328,7 @@ betaconn = sqlConnectRemote(chost, cuser, cpassword, centraldb);
 
 printf(" This page contains track and table release information for the following genome assemblies:<br>\n");
 
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
     "select * from dbDb "
     "where active=1 "
     "order by orderKey, name desc");
@@ -3417,7 +3351,7 @@ struct dbDb *newList=NULL, *kiNext;
 for (ki = kiList; ki != NULL; ki = kiNext)
     {
     kiNext = ki->next;
-    safef(query,sizeof(query),
+    sqlSafef(query,sizeof(query),
           "select count(*) from pushQ "
           "where priority='L' and releaseLog != '' and ("
           "dbs like '%s' or "
@@ -3446,7 +3380,7 @@ printf("<li><a CLASS=\"toc\" HREF=\"#recent\" ><b>10 Latest Changes (all assembl
 /* regular log index #links */
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
-    safef(tempName,sizeof(tempName),ki->organism);
+    safef(tempName, sizeof(tempName), "%s", ki->organism);
     if (!sameString(ki->organism, ki->genome))
 	{
 	safef(tempName,sizeof(tempName),"<em>%s</em>",ki->genome);
@@ -3472,7 +3406,7 @@ printf("<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%%;'>\n"
     "<TD nowrap><B style='color:#006666;'>Release Date</B></TD>\n"
     "</TR>\n"
     );
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
     "select releaseLog, dbs, qadate, releaseLogUrl from pushQ "
     "where priority='L' and releaseLog != '' and dbs != '' %s"
     "order by qadate desc, qid desc ", encodeClause
@@ -3546,7 +3480,7 @@ printf("</table>\n");
 /* REGULAR LOG */
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
-    safef(tempName,sizeof(tempName),ki->organism);
+    safef(tempName, sizeof(tempName), "%s", ki->organism);
     if (!sameString(ki->organism, ki->genome))
 	{
 	safef(tempName,sizeof(tempName),"<em>%s</em>",ki->genome);
@@ -3559,7 +3493,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
            "    <TD nowrap><B style='color:#006666;'>Release Date</B>\n"
            "</TD></TR>\n");
 
-    safef(query,sizeof(query),
+    sqlSafef(query,sizeof(query),
           "select releaseLog, qadate, releaseLogUrl from pushQ "
           "where priority='L' and releaseLog != '' and ("
           "dbs like '%s' or "
@@ -3690,11 +3624,11 @@ readMyUser();
 org = cgiUsualString("org","");  /* get org, defaults to display of main push queue */
 if (!sameString(org,""))
     {
-    safef(pushQtbl,sizeof(pushQtbl),org);
+    safef(pushQtbl, sizeof(pushQtbl), "%s", org);
     }
 if (!sqlTableExists(conn, pushQtbl))  /* if pushQtbl no longer exists, switch to main "pushQ" and set action to "display" */
     {
-    safef(pushQtbl,sizeof(pushQtbl),"pushQ");
+    safef(pushQtbl, sizeof(pushQtbl), "pushQ");
     action=cloneString("display");    /* do not need to free action because it just points to a cgi-var hash element */
     }
 
@@ -3711,7 +3645,7 @@ if (!sameString(newmonth,""))
 	safef(temp, strlen(newmonth)+1+3, "%s-01",newmonth);
 	if (isDateValid(temp))
 	    {
-	    safef(month,sizeof(month),newmonth);
+	    safef(month, sizeof(month), "%s", newmonth);
 	    }
 	}
     }

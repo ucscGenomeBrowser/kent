@@ -99,7 +99,7 @@ conn3= hAllocConn(genomeReadOnly);
 proteinCount = 0; 
 snprintf(dirName, (size_t) sizeof(dirName), "%s", "./clusterRun" );
 
-sprintf(query,"select qName, tName, matches, qSize, tSize from %s.%s", kgTempDb, protRefTableName);
+sqlSafef(query, sizeof query,"select qName, tName, matches, qSize, tSize from %s.%s", kgTempDb, protRefTableName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 while (row != NULL)

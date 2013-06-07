@@ -78,11 +78,9 @@ if (format != NULL)
     dyStringVaPrintf(dy, format, args);
     verbose(defaultVerboseLevel, "%s", dy->string);
     struct dyString *dySql = dyStringNew(256);
-    char *escStr = sqlEscapeString(dy->string);
-    dyStringPrintf(dySql, "update encodeRenamerLog set changes = concat(changes, '%s') where id = %d", 
-	escStr, encodeRenamerLogId);
+    sqlDyStringPrintf(dySql, "update encodeRenamerLog set changes = concat(changes, '%s') where id = %d", 
+	dy->string, encodeRenamerLogId);
     sqlUpdate(conn, dySql->string);
-    freeMem(escStr);
     dyStringFree(&dy);
     dyStringFree(&dySql);
     }
@@ -110,11 +108,9 @@ if (format != NULL)
     dyStringVaPrintf(dy, format, args);
     dyStringAppend(dy,"\n");
     struct dyString *dySql = dyStringNew(256);
-    char *escStr = sqlEscapeString(dy->string);
-    dyStringPrintf(dySql, "update encodeRenamerLog set errors = concat(errors, '%s') where id = %d", 
-	escStr, encodeRenamerLogId);
+    sqlDyStringPrintf(dySql, "update encodeRenamerLog set errors = concat(errors, '%s') where id = %d", 
+	dy->string, encodeRenamerLogId);
     sqlUpdate(conn, dySql->string);
-    freeMem(escStr);
     dyStringFree(&dy);
     dyStringFree(&dySql);
     }
@@ -175,7 +171,7 @@ void updateEncodeRenamerLogRecord(char *state)
 /* Update record status */
 {
 char sql[1024];
-safef(sql, sizeof sql, "update encodeRenamerLog set state = '%s' where id = %d", state, encodeRenamerLogId);
+sqlSafef(sql, sizeof sql, "update encodeRenamerLog set state = '%s' where id = %d", state, encodeRenamerLogId);
 sqlUpdate(conn, sql);
 }
 
@@ -183,7 +179,7 @@ unsigned int initializeEncodeRenamerLogRecord()
 /* Create a record with the information */
 {
 char sql[1024];
-safef(sql, sizeof sql, "insert into encodeRenamerLog (oldObj, newObj, user, `when`, state, errors, changes) values ('%s','%s','%s',now(),'starting','','')", 
+sqlSafef(sql, sizeof sql, "insert into encodeRenamerLog (oldObj, newObj, user, `when`, state, errors, changes) values ('%s','%s','%s',now(),'starting','','')", 
     oldObj, newObj, getenv("USER"));
 sqlUpdate(conn, sql);
 return sqlLastAutoId(conn);
@@ -430,7 +426,7 @@ if (pass == 1)
 
     // update mdb_$USER
     char sql[1024];
-    safef(sql, sizeof sql, 
+    sqlSafef(sql, sizeof sql, 
 	"update %s set val='%s' where obj='%s' and var='fileName'",
 	metaUser, newFileNames->string, oldObj);
     if (sqlUpdateRows(conn, sql, NULL) == 0)
@@ -454,7 +450,7 @@ if (pass == 1)
 
 	// update mdb_$USER
 	char sql[1024];
-	safef(sql, sizeof sql, 
+	sqlSafef(sql, sizeof sql, 
 	    "update %s set val=concat('%s',substring(val,1+length('%s'))) where obj='%s' and var='fileIndex'",
 	    metaUser, newObj, oldObj, oldObj);
 	if (sqlUpdateRows(conn, sql, NULL) == 0)
@@ -604,7 +600,7 @@ slFreeList(&fnames);
 if (!bbiTable)
     return;
 
-safef(buffer, sizeof buffer, "select fileName from %s limit 1", oldObj);
+sqlSafef(buffer, sizeof buffer, "select fileName from %s limit 1", oldObj);
 if (sqlQuickQuery(conn, buffer, fileName, sizeof fileName) != NULL)
     {
     while(1)  // loop to catch .bai as well as .bam
@@ -773,7 +769,7 @@ if (sqlQuickQuery(conn, buffer, fileName, sizeof fileName) != NULL)
 	    chopSuffix(newFileName);  // trim it off
 	logChange("updating fileName field of table %s to %s\n", oldObj, newFileName);
 	char query[256];
-	safef(query, sizeof query, "update %s set fileName = '%s'", oldObj, newFileName);
+	sqlSafef(query, sizeof query, "update %s set fileName = '%s'", oldObj, newFileName);
 	logChange("query: [%s]\n", query);
 	sqlUpdate(conn, query);
 
@@ -848,7 +844,7 @@ if (pass == 1)
 
     // update mdb_$USER
     char sql[1024];
-    safef(sql, sizeof sql, 
+    sqlSafef(sql, sizeof sql, 
 	"update %s set val=concat('%s',substring(val,1+length('%s'))) where obj='%s' and var='tableName'",
     	metaUser, newObj, oldObj, oldObj);
     if (sqlUpdateRows(conn, sql, NULL) == 0)
@@ -915,7 +911,7 @@ logChange("Renamed mdb->obj %s to %s\n", oldObj, newObj);
 
 // update mdb_$USER
 char sql[1024];
-safef(sql, sizeof sql, 
+sqlSafef(sql, sizeof sql, 
     "update %s set obj='%s' where obj='%s'",
     metaUser, newObj, oldObj);
 if (sqlUpdateRows(conn, sql, NULL) == 0)
@@ -1111,7 +1107,7 @@ if (!hasMetaUserTable)
 
 // does the old object exist in meta_$USER table?
 char sql[1024];
-safef(sql, sizeof sql, "select count(*) from metaDb_%s where obj = '%s'", getenv("USER"), oldObj);
+sqlSafef(sql, sizeof sql, "select count(*) from metaDb_%s where obj = '%s'", getenv("USER"), oldObj);
 if (sqlQuickNum(conn, sql) == 0)
     {
     logErrAbort("missing oldObj %s in user mdb table %s", oldObj,  metaUser);

@@ -29,7 +29,7 @@ struct slName *getColumn(char *db, char *table, char *column, struct lm *lm)
 struct slName *list = NULL, *el;
 struct sqlConnection *conn = sqlConnect(db);
 char query[512];
-safef(query, sizeof(query), "select %s from %s", column, table);
+sqlSafef(query, sizeof(query), "select %s from %s", column, table);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)

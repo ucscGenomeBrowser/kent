@@ -14,6 +14,7 @@ USE_DIRS = \
 all: $(USE_DIRS:%=%.all)
 
 lib.all:
+	mkdir -p bin
 	cd lib && $(MAKE)
 
 # make sure lib is built first, even in a parallel make
@@ -26,7 +27,7 @@ install:
 
 clean:
 	rm -f */*.o lib/*/*.a
-	rm -rf bin
+	rm -f bin/*
 
 broad:
 	cd lib && ${MAKE}

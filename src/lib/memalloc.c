@@ -8,6 +8,7 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
+#include <pthread.h>
 #include "common.h"
 #include "obscure.h"
 #include "memalloc.h"
@@ -223,6 +224,8 @@ void *pt = *ppt;
 freeMem(pt);
 }
 
+static pthread_mutex_t carefulMutex = PTHREAD_MUTEX_INITIALIZER;
+
 static int carefulAlignSize;    /* Alignment size for machine - 8 bytes for DEC alpha, 4 for Sparc. */
 static int carefulAlignAdd;     /* Do aliSize = *(unaliSize+carefulAlignAdd)&carefulAlignMask); */
 
@@ -277,6 +280,7 @@ static void *carefulAlloc(size_t size)
 /* Allocate extra memory for cookies and list node, and then
  * return memory block. */
 {
+pthread_mutex_lock( &carefulMutex );
 struct carefulMemBlock *cmb;
 char *pEndCookie;
 size_t newAlloced = size + carefulAlloced;
@@ -288,6 +292,7 @@ if (newAlloced > carefulMaxToAlloc)
     char allocRequest[32];
     sprintLongWithCommas(maxAlloc, (long long)carefulMaxToAlloc);
     sprintLongWithCommas(allocRequest, (long long)newAlloced);
+    pthread_mutex_unlock( &carefulMutex );
     errAbort("carefulAlloc: Allocated too much memory - more than %s bytes (%s)",
 	maxAlloc, allocRequest);
     }
@@ -300,12 +305,14 @@ pEndCookie = (char *)(cmb+1);
 pEndCookie += size;
 memcpy(pEndCookie, cmbEndCookie, sizeof(cmbEndCookie));
 dlAddHead(cmbAllocedList, (struct dlNode *)cmb);
+pthread_mutex_unlock( &carefulMutex );
 return (void *)(cmb+1);
 }
 
 static void carefulFree(void *vpt)
 /* Check cookies and free. */
 {
+pthread_mutex_lock( &carefulMutex );
 struct carefulMemBlock *cmb = ((struct carefulMemBlock *)vpt)-1;
 size_t size = cmb->size;
 char *pEndCookie;
@@ -313,14 +320,21 @@ char *pEndCookie;
 carefulAlloced -= size;
 pEndCookie = (((char *)(cmb+1)) + size);
 if (cmb->startCookie != cmbStartCookie)
+    {
+    pthread_mutex_unlock( &carefulMutex );
     errAbort("Bad start cookie %x freeing %llx\n", cmb->startCookie,
              ptrToLL(vpt));
+    }
 if (memcmp(pEndCookie, cmbEndCookie, sizeof(cmbEndCookie)) != 0)
+    {
+    pthread_mutex_unlock( &carefulMutex );
     errAbort("Bad end cookie %x%x%x%x freeing %llx\n", 
         pEndCookie[0], pEndCookie[1], pEndCookie[2], pEndCookie[3],
              ptrToLL(vpt));
+    }
 dlRemove((struct dlNode *)cmb);
 carefulParent->free(cmb);
+pthread_mutex_unlock( &carefulMutex );
 }
 
 
@@ -342,6 +356,7 @@ void carefulCheckHeap()
 /* Walk through allocated memory and make sure that all cookies are
  * in place. */
 {
+pthread_mutex_lock( &carefulMutex );
 int maxPieces = 10000000;    /* Assume no more than this many pieces allocated. */
 struct carefulMemBlock *cmb;
 char *pEndCookie;
@@ -364,18 +379,25 @@ for (cmb = (struct carefulMemBlock *)(cmbAllocedList->head); cmb->next != NULL; 
     if (--maxPieces == 0)
         errAbort("Loop or more than 10000000 pieces in memory list");
     }
+pthread_mutex_unlock( &carefulMutex );
 }
 
 int carefulCountBlocksAllocated()
 /* How many memory items are allocated? */
 {
-return dlCount(cmbAllocedList);
+pthread_mutex_lock( &carefulMutex );
+int result = dlCount(cmbAllocedList);
+pthread_mutex_unlock( &carefulMutex );
+return result;
 }
 
-long carefulTotalAllocated()
+size_t carefulTotalAllocated()
 /* Return total bases allocated */
 {
-return carefulAlloced;
+pthread_mutex_lock( &carefulMutex );
+size_t result = carefulAlloced;
+pthread_mutex_unlock( &carefulMutex );
+return result;
 }
 
 static struct memHandler carefulMemHandler = 

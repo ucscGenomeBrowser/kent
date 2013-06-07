@@ -768,7 +768,7 @@ void getTestRegion(char *db, char region[256], int regionSize)
  * from the middle of it. */
 {
 struct sqlConnection *conn = sqlConnect(db);
-struct sqlResult *sr = sqlGetResult(conn, "select * from chromInfo limit 1");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo limit 1");
 char **row;
 struct chromInfo ci;
 int start,end,middle;

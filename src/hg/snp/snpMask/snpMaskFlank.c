@@ -183,7 +183,7 @@ int end = 0;
 char *class = NULL;
 char *locType = NULL;
 
-safef(query, sizeof(query), "select name, chromStart, chromEnd, class, "
+sqlSafef(query, sizeof(query), "select name, chromStart, chromEnd, class, "
     "locType, strand, observed, func from %s where chrom='%s' ", snpTable, chrom);
 
 sr = sqlGetResult(conn, query);
@@ -219,7 +219,7 @@ char **row;
 int count = 0;
 
 verbose(1, "readGenes...\n");
-safef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
+sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

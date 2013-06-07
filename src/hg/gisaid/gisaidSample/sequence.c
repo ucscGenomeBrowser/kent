@@ -37,8 +37,7 @@ char *chp;
 char *subjId, *gene;
 
 printf("<B>DNA Sequences</B><BR>");
-safef(query, sizeof(query), 
-      //"select dnaSeqId, seq from gisaidXref, dnaSeq where sampleId = '%s' and id = dnaSeqId order by dnaSeqId", sampleId);
+sqlSafef(query, sizeof(query), 
       "select seqId, seq, strain, geneSymbol from h1n1SeqXref, dnaSeq where islId = '%s' and id = seqId order by seqId", sampleId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -73,10 +72,7 @@ while (row != NULL)
 sqlFreeResult(&sr);
 
 printf("<B>Protein Sequences</B><BR>");
-safef(query, sizeof(query), 
-      //"select dnaSeqId, seq from gisaidXref, dnaSeq where sampleId = '%s' and id = dnaSeqId order by dnaSeqId", sampleId);
-      //"select aaSeqId, seq from gisaidXref, aaSeq where sampleId = '%s' order by aaSeqId", sampleId);
-      //"select seqId, seq from h1n1SeqXref, dnaSeq where islId = '%s' and id = seqId order by seqId", sampleId);
+sqlSafef(query, sizeof(query), 
       "select aaSeqId, seq, strain from h1n1SeqXref i, gisaidXref, aaSeq where islId = '%s' and i.seqId=dnaSeqId and aaSeqId = id order by aaSeqId", sampleId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

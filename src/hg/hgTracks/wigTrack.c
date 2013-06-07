@@ -456,7 +456,7 @@ spanMinimum = max(1,
 	minSpan(conn, dbTableName, chromName, winStart, winEnd, cart, tdb));
 
 itemsLoaded = 0;
-safef(whereSpan, sizeof(whereSpan), "span=%d limit 1", spanMinimum);
+sqlSafefFrag(whereSpan, sizeof(whereSpan), "span=%d limit 1", spanMinimum);
 
 sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
     whereSpan, &rowOffset);

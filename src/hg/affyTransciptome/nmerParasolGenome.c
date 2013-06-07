@@ -25,7 +25,7 @@ char buff[512];
 char *tmpMark = NULL;
 int buffSize = 512;
 
-snprintf(query, sizeof(query), "select nibPath from dbDb where name='%s'", db);
+sqlSafef(query, sizeof(query), "select nibPath from dbDb where name='%s'", db);
 if(sqlQuickQuery(conn, query, buff, buffSize) == NULL)
     errAbort("Coun't find nib dir for genome %s\n", db);
 dirName = needMem(buffSize*sizeof(char));

@@ -223,7 +223,7 @@ static void printFilterLink(char *pslTrack, char *articleId, char *articleTable)
     int end = cgiInt("t");
     char qBuf[1024];
     struct sqlConnection *conn = hAllocConn(database);
-    safef(qBuf, sizeof(qBuf), "SELECT CONCAT(firstAuthor, year) FROM %s WHERE articleId='%s';", articleTable, articleId);
+    sqlSafef(qBuf, sizeof(qBuf), "SELECT CONCAT(firstAuthor, year) FROM %s WHERE articleId='%s';", articleTable, articleId);
     char *dispId = sqlQuickString(conn, qBuf);
 
     printf(
@@ -275,9 +275,9 @@ static struct sqlResult *queryMarkerRows(struct sqlConnection *conn, char *marke
 {
 char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
-sqlUpdate(conn, "SET SESSION group_concat_max_len = 100000");
+sqlUpdate(conn, "NOSQLINJ SET SESSION group_concat_max_len = 100000");
 
-safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, "  
+sqlSafef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, "  
     "pmid, extId, "
     "group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s "
     "JOIN %s USING (articleId) "
@@ -344,7 +344,7 @@ static void printLimitWarning(struct sqlConnection *conn, char *markerTable,
     char *item, int itemLimit, char *sectionList)
 {
 char query[4000];
-safef(query, sizeof(query), "SELECT COUNT(*) from %s WHERE markerId='%s' AND section in (%s) ", markerTable, item, sectionList);
+sqlSafef(query, sizeof(query), "SELECT COUNT(*) from %s WHERE markerId='%s' AND section in (%s) ", markerTable, item, sectionList);
 if (sqlNeedQuickNum(conn, query) > itemLimit) 
 {
     printf("<b>This marker is mentioned more than %d times</b><BR>\n", itemLimit);
@@ -403,7 +403,7 @@ char *pubCode = NULL;
 if (hHasField("hgFixed", pubsArticleTable, "publisher"))
     {
     char query[4000];
-    safef(query, sizeof(query), "SELECT publisher from %s where articleId=%s", 
+    sqlSafef(query, sizeof(query), "SELECT publisher from %s where articleId=%s", 
         pubsArticleTable, articleId);
     pubCode = sqlQuickString(conn, query);
     }
@@ -436,7 +436,7 @@ static char *printArticleInfo(struct sqlConnection *conn, char *item, char *pubs
 {
 char query[512];
 
-safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract, pmid, "
+sqlSafef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract, pmid, "
     "source, extId FROM %s WHERE articleId='%s'", pubsArticleTable, item);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -508,14 +508,14 @@ if (start==-1)
     return NULL;
 char query[512];
 /* check first if the column exists (some debugging tables on hgwdev don't have seqIds) */
-safef(query, sizeof(query), "SHOW COLUMNS FROM %s LIKE 'seqIds';", trackTable);
+sqlSafef(query, sizeof(query), "SHOW COLUMNS FROM %s LIKE 'seqIds';", trackTable);
 char *seqIdPresent = sqlQuickString(conn, query);
 if (!seqIdPresent) {
     return NULL;
 }
 
 /* get sequence-Ids for feature that was clicked (item&startPos are unique) and return as hash*/
-safef(query, sizeof(query), "SELECT seqIds,'' FROM %s WHERE name='%s' "
+sqlSafef(query, sizeof(query), "SELECT seqIds,'' FROM %s WHERE name='%s' "
     "and chrom='%s' and chromStart=%d;", trackTable, item, seqName, start);
 if (pubsDebug)
     printf("%s<br>", query);
@@ -696,7 +696,7 @@ if (hHasField("hgFixed", pubsSequenceTable, "fileUrl"))
     queryTemplate = newQuery;
 
 char query[4096];
-safef(query, sizeof(query), queryTemplate, pubsSequenceTable, articleId);
+sqlSafef(query, sizeof(query), queryTemplate, pubsSequenceTable, articleId);
 if (pubsDebug)
     puts(query);
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -886,7 +886,7 @@ boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
 if (trackVersionExists)
     {
     char query[256];
-    safef(query, sizeof(query), \
+    sqlSafef(query, sizeof(query), \
     "SELECT version,dateReference FROM hgFixed.trackVersion "
     "WHERE db = '%s' AND name = 'pubs' ORDER BY updateTime DESC limit 1", database);
     struct sqlResult *sr = sqlGetResult(conn, query);
@@ -924,7 +924,7 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 bioSeq *seq = NULL;
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select sequence from %s where annotId = '%s'", table, id);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)

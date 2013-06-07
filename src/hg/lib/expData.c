@@ -136,7 +136,7 @@ void expDataCreateTable(struct sqlConnection *conn, char *table)
 {
 char query[512];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 "CREATE TABLE %s (\n"
 "    name varchar(255) not null,\n"
 "    expCount int unsigned not null,\n"
@@ -156,7 +156,7 @@ struct expData *exps = NULL;
 struct sqlResult *sr = NULL;
 if (limitRows < 0)
     return NULL;
-safef(query, sizeof(query), "select name, expCount, expScores from %s", table);
+sqlSafef(query, sizeof(query), "select name, expCount, expScores from %s", table);
 sr = sqlGetResult(conn, query);
 if (limitRows > 0)
     {

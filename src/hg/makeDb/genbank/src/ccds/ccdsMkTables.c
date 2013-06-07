@@ -303,7 +303,7 @@ static void findPartialMatches(struct sqlConnection *conn, struct genomeInfo *ge
 {
 verbose(2, "begin findPartialMatches\n");
 char select[4096];
-safef(select, sizeof(select),
+sqlSafef(select, sizeof(select),
       "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version "
       "FROM %s, CcdsStatusVals, Interpretations, InterpretationSubtypes "
@@ -335,7 +335,7 @@ static void findReplaced(struct sqlConnection *conn, struct genomeInfo *genome,
 {
 verbose(2, "begin findReplaced\n");
 static char select[4096];
-safef(select, sizeof(select),
+sqlSafef(select, sizeof(select),
       "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version "
       "FROM %s, Interpretations, InterpretationSubtypes "
@@ -380,7 +380,7 @@ static char *mkCcdsInfoSelect(struct genomeInfo *genome, struct sqlConnection *c
 {
 static char select[4096];
 boolean inclStatus = selectByStatus();
-safef(select, sizeof(select),
+sqlSafef(select, sizeof(select),
       "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version, "
       "Organizations.name, "
@@ -531,7 +531,7 @@ static char select[4096];
  */
 boolean inclStatus = selectByStatus();
 
-safef(select, sizeof(select),
+sqlSafef(select, sizeof(select),
       "SELECT "
       "Interpretations.ccds_uid, Interpretations.integer_val, date_format(Interpretations.date_time, \"%%Y-%%m-%%d\"), Interpretations.comment "
       "FROM %s, Interpretations, InterpretationSubtypes "
@@ -542,7 +542,7 @@ safef(select, sizeof(select),
       "AND (InterpretationSubtypes.interpretation_subtype = \"Public note\")",
       mkCommonFrom(inclStatus), mkCommonWhere(genome, conn, inclStatus));
 #else
-safef(select, sizeof(select),
+sqlSafef(select, sizeof(select),
       "SELECT "
       "Interpretations.ccds_uid, Interpretations.integer_val, date_format(Interpretations.date_time, \"%%Y-%%m-%%d\"), Interpretations.comment "
       "FROM Interpretations, InterpretationSubtypes "
@@ -621,7 +621,7 @@ static char *mkCcdsGeneSelect(struct genomeInfo *genome, struct sqlConnection *c
 {
 boolean inclStatus = selectByStatus();
 static char select[4096];
-safef(select, sizeof(select),
+sqlSafef(select, sizeof(select),
       "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version, "
       "Locations_GroupVersions.chromosome, "

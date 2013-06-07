@@ -10,7 +10,7 @@ Examples:
 
 Mapping cDNAs between organism using syntenic chains of genomic alignments:
 
-   # to map a psl of mouse cDNA to genomoic (mm8) alignments to hg18
+   # to map a psl of mouse cDNA to genomic (mm8) alignments to hg18
    # in mmCDna.mm8.psl
 
    chainDir=/cluster/data/mm8/bed/blastz.hg18/axtChain

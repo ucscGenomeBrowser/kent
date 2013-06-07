@@ -150,7 +150,7 @@ if (sameString(link->name, "tbSchema"))
     return dyStringCannibalize(&dy);
     }
 geneId = cloneAndCut(geneId, link->preCutAt);
-safef(query, sizeof(query), link->idSql, geneId);
+sqlSafef(query, sizeof(query), link->idSql, geneId);
 
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -183,7 +183,7 @@ if (nameSql == NULL)
      nameSql = link->idSql;
 if (format == NULL)
      format = "%s";
-safef(query, sizeof(query), nameSql, geneId);
+sqlSafef(query, sizeof(query), nameSql, geneId);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)

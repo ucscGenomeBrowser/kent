@@ -55,7 +55,7 @@ outf = mustOpen(outFileNameDna, "w");
 outf2= mustOpen(outFileNameAa,  "w");
 
 /* read in all MSA sequences */
-sprintf(query2,"select id,seq from hiv1.%sMsa", seqDataSet);
+sqlSafef(query2, sizeof query2, "select id,seq from hiv1.%sMsa", seqDataSet);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)

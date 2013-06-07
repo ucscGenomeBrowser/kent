@@ -34,13 +34,13 @@ void edwAddQaEnrichTarget(char *name, char *db, char *path)
 /* Figure out if we have this genome assembly */
 struct sqlConnection *conn = sqlConnect(edwDatabase);
 char query[256 + PATH_LEN];
-safef(query, sizeof(query), "select id from edwAssembly where ucscDb='%s'", db);
+sqlSafef(query, sizeof(query), "select id from edwAssembly where ucscDb='%s'", db);
 int assemblyId = sqlQuickNum(conn, query);
 if (assemblyId == 0)
     errAbort("Assembly %s doesn't exist in warehouse. Typo or time for edwAddAssembly?", db);
 
 /* See if we have target with this name and assembly already and abort with error if we do. */
-safef(query, sizeof(query), "select id from edwQaEnrichTarget where name='%s' and assemblyId=%d", 
+sqlSafef(query, sizeof(query), "select id from edwQaEnrichTarget where name='%s' and assemblyId=%d", 
     name, assemblyId);
 int targetId = sqlQuickNum(conn, query);
 if (targetId != 0)
@@ -67,7 +67,7 @@ edwUpdateFileTags(conn, ef->id, tags);
 dyStringFree(&tags);
 
 /* Add record describing target to database. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
    "insert edwQaEnrichTarget (assemblyId,name,fileId,targetSize) values(%d, '%s', %lld, %lld)"
    , assemblyId, name, (long long)ef->id, targetSize);
 sqlUpdate(conn, query);

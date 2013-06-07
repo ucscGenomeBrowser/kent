@@ -21,7 +21,7 @@ char* GB_STATUS_TBL = "gbStatus";
 
 /* sql to create the table */
 static char* createSql =
-"create table gbStatus ("
+"NOSQLINJ create table gbStatus ("
   "acc char(12) not null primary key,"         /* Genbank accession */
   "version smallint unsigned not null,"        /* genbank version number */
   "modDate date not null,"                     /* last modified date */
@@ -70,27 +70,27 @@ char query[1024];
 int len;
 boolean haveWhere = FALSE;
 
-len = safef(query, sizeof(query),
+len = sqlSafef(query, sizeof(query),
             "SELECT acc,version,modDate,type,srcDb,orgCat,gbSeq,numAligns,"
             "seqRelease,seqUpdate,metaRelease,metaUpdate,"
             "extRelease,extUpdate,time FROM gbStatus");
 if ((select & GB_TYPE_MASK) != (GB_MRNA|GB_EST))
     {
     /* type subset */
-    len += safef(query+len, sizeof(query)-len,
+    len += sqlSafefFrag(query+len, sizeof(query)-len,
                  " WHERE (type='%s')", gbTypeName(select & GB_TYPE_MASK));
     haveWhere = TRUE;
     }
 if ((select & GB_SRC_DB_MASK) != (GB_GENBANK|GB_REFSEQ))
     {
-    len += safef(query+len, sizeof(query)-len,
+    len += sqlSafefFrag(query+len, sizeof(query)-len,
                  " %s (srcDb='%s')", (haveWhere ? " AND " : " WHERE "),
                  gbSrcDbName(select & GB_SRC_DB_MASK));
     haveWhere = TRUE;
     }
 if (accPrefix != NULL)
     {
-    len += safef(query+len, sizeof(query)-len,
+    len += sqlSafefFrag(query+len, sizeof(query)-len,
                  " %s (acc LIKE '%s%%')", (haveWhere ? " AND " : " WHERE "),
                  accPrefix);
     haveWhere = TRUE;
@@ -274,19 +274,19 @@ char query[2048];
 int len = 0;
 
 if (status->stateChg & GB_SEQ_CHG)
-    len += safef(query+len, sizeof(query)-len,
+    len += sqlSafefFrag(query+len, sizeof(query)-len,
                  "version=%d, numAligns=%d, seqRelease='%s', "
                  "seqUpdate='%s', ", status->version, status->numAligns,
                  status->seqRelease, status->seqUpdate);
 
 if (status->stateChg & GB_META_CHG)
-    len += safef(query+len, sizeof(query)-len,
+    len += sqlSafefFrag(query+len, sizeof(query)-len,
                  "modDate='%s', metaRelease='%s', metaUpdate='%s', ",
                  gbFormatDate(status->modDate),
                  status->metaRelease, status->metaUpdate);
 
 if (status->stateChg & GB_EXT_CHG)
-    len += safef(query+len, sizeof(query)-len,
+    len += sqlSafefFrag(query+len, sizeof(query)-len,
                  "extRelease='%s', extUpdate='%s', ",
                  status->extRelease, status->extUpdate);
 

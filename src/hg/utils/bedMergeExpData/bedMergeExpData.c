@@ -26,7 +26,7 @@ char **row;
 struct sqlConnection *conn = sqlConnect(db);
 struct sqlResult *sr = NULL;
 struct hash *hash = NULL;
-safef(query, ArraySize(query), "select * from %s", table);
+sqlSafef(query, ArraySize(query), "select * from %s", table);
 sr = sqlGetResult(conn, query);
 hash = newHash(15);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -155,7 +155,7 @@ char query[200];
 char **row;
 int binOffset = 0;
 int numFields = countBedFields(conn, table, &binOffset);
-safef(query, ArraySize(query), "select * from %s", table);
+sqlSafef(query, ArraySize(query), "select * from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

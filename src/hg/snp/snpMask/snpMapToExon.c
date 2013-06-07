@@ -51,7 +51,7 @@ int count = 0;
 char *class = NULL;
 char *locType = NULL;
 
-safef(query, sizeof(query), "select name, chromStart, chromEnd, class, locType from %s where chrom='%s' ", snpTable, chrom);
+sqlSafef(query, sizeof(query), "select name, chromStart, chromEnd, class, locType from %s where chrom='%s' ", snpTable, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -83,7 +83,7 @@ struct sqlResult *sr;
 char **row;
 int count = 0;
 
-safef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
+sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

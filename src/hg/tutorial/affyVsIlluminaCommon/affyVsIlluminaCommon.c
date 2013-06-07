@@ -29,7 +29,7 @@ struct sqlConnection *conn = sqlConnect(database);
 
 /* Make up a hash full of all rsIDs from Affy 250k table. */
 struct hash *affyHash = hashNew(18);
-struct sqlResult *sr = sqlGetResult(conn, "select rsId from snpArrayAffy250Nsp");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select rsId from snpArrayAffy250Nsp");
 char **row;
 int affyCount = 0;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -40,7 +40,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 /* Loop through Illumina counting up what's shared. */
-sr = sqlGetResult(conn, "select name from snpArrayIllumina300");
+sr = sqlGetResult(conn, "NOSQLINJ select name from snpArrayIllumina300");
 int illuminaCount = 0;
 int bothCount = 0;
 while ((row = sqlNextRow(sr)) != NULL)

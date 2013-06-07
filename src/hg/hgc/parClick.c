@@ -13,7 +13,7 @@ static struct bed *loadParTable(struct trackDb *tdb)
 struct bed *pars = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 char query[512];
-safef(query, sizeof(query), "select * from %s", tdb->table);
+sqlSafef(query, sizeof(query), "select * from %s", tdb->table);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)

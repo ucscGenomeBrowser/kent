@@ -39,5 +39,10 @@ run: load mkdirs ${TESTS}
 
 ${TESTS}:
 	${CTC} test ${@}Good
-	-${CTC} test ${@}Bad -verbose=2 > output/${@}Bad.out
+	-${CTC} test ${@}Bad > output/${@}Bad.out
 	diff expected/${@}Bad.out output/${@}Bad.out
+
+# angie I removed -verbose=2 from the Bad test because it is unstable.
+# if somebody adds some extra statements in libraries and utilities with verbose,
+# then the output changes and is not stable and leads to false failures.  
+# You could use a different flag though perhaps instead of -verbose=2?

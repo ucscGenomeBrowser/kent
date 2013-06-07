@@ -86,7 +86,7 @@ if (isPositional)
 else
     {
     struct dyString *query = dyStringNew(0);
-    dyStringPrintf(query, "select %s from %s", fields, table);
+    sqlDyStringPrintf(query, "select %s from %s", fields, table);
     if (extraWhere)
          {
          dyStringAppend(query, " where ");
@@ -682,7 +682,7 @@ if (sqlTableExists(conn, "tableAccessControl"))
     struct sqlResult *sr = NULL;
     char **row = NULL;
     acHash = newHash(8);
-    sr = sqlGetResult(conn, "select name,host from tableAccessControl");
+    sr = sqlGetResult(conn, "NOSQLINJ select name,host from tableAccessControl");
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	struct slName *sln = slNameNew(chopAtFirstDot(row[1]));

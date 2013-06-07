@@ -51,7 +51,7 @@ int prevStart = 0, start;
 off_t irow = 0;
 
 char query[512];
-safef(query, sizeof(query), "SELECT %s,%s FROM %s", chromFld, startFld, tbl);
+sqlSafef(query, sizeof(query), "SELECT %s,%s FROM %s", chromFld, startFld, tbl);
 struct sqlResult *sr = sqlGetResult(conn, query);
 while (nextRow(sr, &chrom, &start))
     {

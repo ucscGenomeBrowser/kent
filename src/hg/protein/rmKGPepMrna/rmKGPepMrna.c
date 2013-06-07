@@ -51,7 +51,7 @@ sprintf(spDbName, "sp%s",   argv[2]);
 
 conn= hAllocConn(ro_dbName);
 conn2= hAllocConn(ro_dbName);
-sprintf(query2,"select name from %s.knownGene;", dbName);
+sqlSafef(query2, sizeof query2, "select name from %s.knownGene;", dbName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)

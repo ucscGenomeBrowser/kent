@@ -79,7 +79,7 @@ struct genoLayChrom *genoLayDbChromsExt(struct sqlConnection *conn,
 struct sqlResult *sr;
 char **row;
 struct genoLayChrom *chrom, *chromList = NULL;
-sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];
@@ -515,7 +515,7 @@ if (sqlTableExists(conn, bandTable) && !gl->allOneLine)
 	int y = chrom->y + yOffset;
 
 	/* Fetch bands from database and draw them. */
-	safef(query, sizeof(query), "select * from %s where chrom='%s'",
+	sqlSafef(query, sizeof(query), "select * from %s where chrom='%s'",
 		bandTable, chrom->fullName);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)

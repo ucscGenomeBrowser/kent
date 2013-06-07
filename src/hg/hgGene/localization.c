@@ -17,9 +17,9 @@ static boolean localizationExists(struct section *section,
 {
 char query[256];
 /* mitopred - prediction of nuclear-encoded mitochondrial proteins */
-if (swissProtAcc != NULL && sqlTablesExist(conn, "mitopred"))
+if (swissProtAcc != NULL && sqlTableExists(conn, "mitopred"))
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select count(*) from mitopred where name = '%s' or name = '%s'",
 	  swissProtAcc, spAnyAccToId(spConn, swissProtAcc));
     if (sqlQuickNum(conn, query) > 0)
@@ -28,11 +28,11 @@ if (swissProtAcc != NULL && sqlTablesExist(conn, "mitopred"))
 /* SGD (Sacchromyces Genome Database) localization & abundance data */
 if (sqlTablesExist(conn, "sgdLocalization sgdAbundance"))
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select count(*) from sgdLocalization where name = '%s'", geneId);
     if (sqlQuickNum(conn, query) > 0)
 	return TRUE;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select count(*) from sgdAbundance where name = '%s'", geneId);
     if (sqlQuickNum(conn, query) > 0)
 	return TRUE;
@@ -48,9 +48,9 @@ char query[256], **row, *s = NULL;
 struct sqlResult *sr;
 boolean firstTime = TRUE;
 /* mitopred - prediction of nuclear-encoded mitochondrial proteins */
-if (swissProtAcc != NULL && sqlTablesExist(conn, "mitopred"))
+if (swissProtAcc != NULL && sqlTableExists(conn, "mitopred"))
     {
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	  "select confidence from mitopred where name = '%s' or name = '%s'",
 	  swissProtAcc, spAnyAccToId(spConn, swissProtAcc));
     sr = sqlGetResult(conn, query);
@@ -82,7 +82,7 @@ if (swissProtAcc != NULL && sqlTablesExist(conn, "mitopred"))
 /* SGD (Sacchromyces Genome Database) localization & abundance data */
 if (sqlTablesExist(conn, "sgdLocalization sgdAbundance"))
     {
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	  "select value from sgdLocalization where name = '%s'", geneId);
     sr = sqlGetResult(conn, query);
     firstTime = TRUE;
@@ -105,7 +105,7 @@ if (sqlTablesExist(conn, "sgdLocalization sgdAbundance"))
 	hPrintf("<BR>");
 	}
 
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	  "select abundance from sgdAbundance where name = '%s'", geneId);
     s = sqlQuickString(conn, query);
     if (s != NULL)

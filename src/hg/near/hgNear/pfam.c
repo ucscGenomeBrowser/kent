@@ -66,7 +66,7 @@ if (terms != NULL)
 	else
 	    {
 	    char *sqlWild = sqlLikeFromWild(term->name);
-	    safef(query, sizeof(query),
+	    sqlSafef(query, sizeof(query),
 	    	"select pfamAC from pfamDesc where description like '%s'",
 		sqlWild);
 	    sr = sqlGetResult(conn, query);
@@ -82,10 +82,10 @@ if (terms != NULL)
 	    {
 	    /* Build up query that includes all IDs. */
 	    dyStringClear(dy);
-	    dyStringPrintf(dy, "select name from %s where ", col->table);
-	    dyStringPrintf(dy, "value='%s'", idList->name);
+	    sqlDyStringPrintf(dy, "select name from %s where ", col->table);
+	    sqlDyStringPrintf(dy, "value='%s'", idList->name);
 	    for (id = idList->next; id != NULL; id = id->next)
-		dyStringPrintf(dy, "or value='%s'", id->name);
+		sqlDyStringPrintf(dy, "or value='%s'", id->name);
 
 	    /* Execute query and put matchers into hash. */
 	    sr = sqlGetResult(defaultConn, dy->string);

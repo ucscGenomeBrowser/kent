@@ -58,7 +58,7 @@ while (targetSize < motif->columnCount)
 printf("to:\n");
 dnaMotifPrintProb(motif, uglyOut);
 
-dyStringPrintf(dy, "update %s set ", motifTable);
+sqlDyStringPrintf(dy, "update %s set ", motifTable);
 formatProb(dy, "aProb", motif->aProb, motif->columnCount);
 formatProb(dy, "cProb", motif->cProb, motif->columnCount);
 formatProb(dy, "gProb", motif->gProb, motif->columnCount);
@@ -97,7 +97,7 @@ boolean anyMotifNotFound = FALSE;
 struct dnaMotif *motif;
 
 /* Stream through site table collecting data about motif sizes. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select name,chromEnd-chromStart from %s", siteTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -136,7 +136,7 @@ if (!anyMinNotMax)
     warn("All sizes agree in %s", siteTable);
 
 /* Stream through motifs and add to msList. */
-safef(query, sizeof(query), "select * from %s", motifTable);
+sqlSafef(query, sizeof(query), "select * from %s", motifTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

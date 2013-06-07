@@ -64,7 +64,7 @@ conn2= hAllocConn(genomeDb);
 conn3= hAllocConn(genomeDb);
 
 /* go through each protein */
-safef(query2, sizeof(query2), "select * from %s.%s", kgTempDb, candTable);
+sqlSafef(query2, sizeof(query2), "select * from %s.%s", kgTempDb, candTable);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -75,7 +75,7 @@ while (row2 != NULL)
     txEnd   = row2[4];
     
     /* retrieve gene-check results */
-    safef(query3, sizeof(query3), 
+    sqlSafef(query3, sizeof(query3), 
           "select * from %s.%s where acc='%s' and chrStart=%s and chrEnd = %s",
           kgTempDb, chkTable, name, txStart, txEnd);
     sr3  = sqlMustGetResult(conn3, query3);

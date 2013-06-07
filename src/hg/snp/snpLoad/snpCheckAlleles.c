@@ -47,7 +47,7 @@ safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 if (!hTableExists(tableName)) return;
 
 verbose(1, "chrom = %s\n", chromName);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select snp_id, chromStart, chromEnd, loc_type, orientation, allele, refUCSC, refUCSCReverseComp from %s where loc_type != 3", 
      tableName);
 

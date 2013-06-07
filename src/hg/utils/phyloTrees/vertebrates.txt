@@ -25,17 +25,24 @@ falChe	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 # Peregrine falcon - Falco peregrinus
 falPer	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Falconiformes; Falconidae; Falco
 
+# Mallard duck Anas platyrhynchos
+anaPla  Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Anseriformes; Anatidae; Anas
+
 # Turkey Meleagris gallopavo
 melGal	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Meleagridinae; Meleagris
 
 # Chicken Gallus gallus
 galGal	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Phasianinae; Gallus
 
+
 # Collared Flycatcher - Ficedula albicollis
 ficAlb	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Muscicapidae; Ficedula
 
 # Tibetan ground jay - Pseudopodoces humilis
 pseHum	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Paridae; Pseudopodoces
+
+# White-throated sparrow Zonotrichia albicollis
+zonAlb  Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Fringillidae; Emberizinae; Emberizini; Zonotrichia
 
 # Zebra finch Taeniopygia guttata
 taeGut	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Estrildidae; Estrildinae; Taeniopygia
@@ -47,7 +54,7 @@ geoFor  Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arc
 melUnd	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Psittaciformes; Psittacidae; Melopsittacus
 
 # Puerto Rican parrot - Amazona vittata
-emaVit	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Psittaciformes; Psittacidae; Amazona
+amaVit	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Psittaciformes; Psittacidae; Amazona
 
 # Australian Saltwater crocodile Crocodylus porosus
 croPor	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Crocodylidae; Crocodylinae; Crocodylus
@@ -63,6 +70,9 @@ cheMyd	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Testudines; 
 
 # Soft-shell Turtle - Pelodiscus sinensis
 pelSin	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Testudines; Cryptodira; Trionychoidea; Trionychidae; Pelodiscus
+
+# spiny softshell turtle - Apalone spinifera
+apaSpi  Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Testudines; Cryptodira; Trionychoidea; Trionychidae; Apalone
 
 # Western painted turtle Chrysemys picta bellii
 chrPic	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Testudines; Cryptodira; Testudinoidea; Emydidae; Chrysemys; Chrysemys picta
@@ -100,6 +110,10 @@ punNye	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanth
 # Nile tilapia Oreochromis niloticus
 oreNil	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Perciformes; Labroidei; Cichlidae; African cichlids; Pseudocrenilabrinae; Tilapiini; Oreochromis
 
+
+# sansaifugu Yellowbelly puffer fish - Takifugu flavidus
+takFla	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Takifugu
+
 # tiger puffer Fugu Takifugu rubripes
 fr	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Takifugu
 
@@ -112,6 +126,8 @@ tetNig	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanth
 # zebrafish Danio rerio
 danRer	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Clupeocephala; Otocephala; Ostariophysi; Otophysi; Cypriniphysi; Cypriniformes; Cyprinoidea; Cyprinidae; Danio
 
+# Mexican tetra (cavefish) - Astyanax mexicanus
+astMex  Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Clupeocephala; Otocephala; Ostariophysi; Otophysi; Characiphysi; Characiformes; Characidae; Characidae incertae sedis; Astyanax clade; Astyanax
 
 # sea lamprey Petromyzon marinus
 #	several levels up different from all above

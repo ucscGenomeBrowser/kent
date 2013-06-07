@@ -32,7 +32,7 @@ FILE *musOut = mustOpen(mouseFa, "w");
 
 hSetDb(database);
 conn = hAllocConn();
-sprintf(query, "select * from blatMouse where tName = '%s'", chrom);
+sqlSafef(query, sizeof query, "select * from blatMouse where tName = '%s'", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

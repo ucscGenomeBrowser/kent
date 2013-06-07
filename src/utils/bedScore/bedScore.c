@@ -203,7 +203,7 @@ struct scorer
 
     float a = (1000-minScore) / (max - min);
     float b = 1000 - ((1000-minScore) * max) / (max - min);
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
         "update %s set score = round((%f * %s) + %f)",
             track, a, fillInScoreColumn, b);
 */

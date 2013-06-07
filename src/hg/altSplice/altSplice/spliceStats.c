@@ -121,7 +121,7 @@ void addMrnaAccsToHash(struct hash *hash)
 char query[256];
 struct sqlConnection *conn = NULL;
 conn = hAllocConn();
-snprintf(query, sizeof(query), "select acc from mrna where type = 2");
+sqlSafef(query, sizeof(query), "select acc from mrna where type = 2");
 hashRow0(conn, query, hash);
 }
 

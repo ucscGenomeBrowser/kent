@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
     emptyStr = strdup("");
 
-    sprintf(query2,"select name, proteinID from %s.knownGene;", kgTempDb);
+    sqlSafef(query2, sizeof query2, "select name, proteinID from %s.knownGene;", kgTempDb);
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
     while (row2 != NULL)

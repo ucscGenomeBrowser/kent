@@ -22,7 +22,7 @@ static struct hash *libTissueHash(struct sqlConnection *conn)
 {
 struct hash *ret = newHash(9);
 struct sqlResult *sr = NULL;
-char query[40] = "select libId,tissue from cgapSageLib";
+char query[49] = "NOSQLINJ select libId,tissue from cgapSageLib";
 char **row;
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -239,7 +239,7 @@ return libList;
 struct hash *getTotTagsHashFromTable(struct sqlConnection *conn)
 /* Load the cgapSageLib table for the db then call getTotTagsHash. */
 {
-struct cgapSageLib *libs = cgapSageLibLoadByQuery(conn, "select * from cgapSageLib");
+struct cgapSageLib *libs = cgapSageLibLoadByQuery(conn, "NOSQLINJ select * from cgapSageLib");
 struct hash *libTotHash = getTotTagsHash(libs);
 cgapSageLibFreeList(&libs);
 return libTotHash;

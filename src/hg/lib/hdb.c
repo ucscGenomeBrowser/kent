@@ -82,7 +82,7 @@ struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[256];
-safef(query, sizeof(query), "select * from chromInfo where chrom = '%s'",
+sqlSafef(query, sizeof(query), "select * from chromInfo where chrom = '%s'",
       chrom);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -229,7 +229,7 @@ for(; tdbList; tdbList = tdbList->next)
     if (hTableExists(sqlGetDatabase(conn), tdbList->name))
         {
         char query[1024];
-        safef(query, sizeof query,
+        sqlSafef(query, sizeof query,
             "select tableName from %s where type like '%s'", tdbList->name, type);
 
         struct sqlResult *sr = sqlGetResult(conn, query);
@@ -267,7 +267,7 @@ struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
 boolean res = FALSE;
-safef(query, sizeof(query), "select name from dbDbArch where name = '%s'",
+sqlSafef(query, sizeof(query), "select name from dbDbArch where name = '%s'",
       database);
 res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 hDisconnectCentral(&conn);
@@ -299,9 +299,7 @@ if (trackHubDatabase(database))
 struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
-char *escaped = sqlEscapeString(database);
-safef(query, sizeof(query), "select name from dbDb where name = '%s'", escaped);
-freez(&escaped);
+sqlSafef(query, sizeof(query), "select name from dbDb where name = '%s'", database);
 boolean res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 if (res)
     {
@@ -340,7 +338,7 @@ struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
 boolean res = FALSE;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select name from dbDb where name = '%s' and active = 1", database);
 res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 hDisconnectCentral(&conn);
@@ -373,7 +371,7 @@ if (NULL == genome)
     }
 
 /* Get proper default from defaultDb table */
-safef(query, sizeof(query), "select * from defaultDb where genome = '%s'",
+sqlSafef(query, sizeof(query), "select * from defaultDb where genome = '%s'",
       genome);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -386,7 +384,7 @@ if (db == NULL)
      *	This is for the product browser which may have none of
      *	the usual UCSC genomes, but it needs to be able to function.
      */
-    safef(query, sizeof(query), "%s", "select * from defaultDb");
+    sqlSafef(query, sizeof(query), "%s", "select * from defaultDb");
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -416,7 +414,7 @@ char query[512];
 /* Get the top-priority genome *with an active database* so if genomeClade
  * gets pushed from hgwdev to hgwbeta/RR with genomes whose dbs haven't been
  * pushed yet, they'll be ignored. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select genomeClade.genome from genomeClade,dbDb "
       "where genomeClade.clade = '%s' and genomeClade.genome = dbDb.genome "
       "and dbDb.active = 1 "
@@ -434,7 +432,7 @@ char *db = NULL;
 char query[256];
 struct sqlConnection *centralConn = hConnectCentral();
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select defaultDb.name from dbDb,defaultDb "
     "where dbDb.scientificName='%s' "
     "and dbDb.name = defaultDb.name ", sciName);
@@ -454,7 +452,7 @@ char query[256];
 /* Figure out scientific name. */
 if (taxon != 0)
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"select binomial from uniProt.taxon where id=%d", taxon);
     binomial = sqlQuickString(conn, query);
     }
@@ -462,7 +460,7 @@ if (taxon != 0)
 if (binomial != NULL)
     {
     struct sqlConnection *centralConn = hConnectCentral();
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
         "select defaultDb.name from dbDb,defaultDb "
 	"where dbDb.scientificName='%s' "
 	"and dbDb.name not like 'zoo%%' "
@@ -498,7 +496,7 @@ if (hel->val == NULL)
     {
     struct sqlConnection *conn = hAllocConn(db);
     if (sqlTableExists(conn, "chromInfo"))
-	hel->val = sqlQuickString(conn, "select chrom from chromInfo limit 1");
+	hel->val = sqlQuickString(conn, "NOSQLINJ select chrom from chromInfo limit 1");
     hFreeConn(&conn);
     }
 return hel->val;
@@ -510,7 +508,7 @@ int hChromCount(char *db)
 if (trackHubDatabase(db))
     return trackHubChromCount(db);
 struct sqlConnection *conn = hAllocConn(db);
-int count = sqlQuickNum(conn, "select count(*) from chromInfo");
+int count = sqlQuickNum(conn, "NOSQLINJ select count(*) from chromInfo");
 hFreeConn(&conn);
 return count;
 }
@@ -1127,7 +1125,7 @@ char *s;
 boolean ok = TRUE;
 boolean isDmel = startsWith("dm", sqlGetDatabase(conn));
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d",
 	chrom, pos, pos);
 buf[0] = 0;
@@ -1177,7 +1175,7 @@ else
     char **row;
     int chromStart, chromEnd;
     int scaffoldStart, scaffoldEnd;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"SELECT frag, chromStart, chromEnd FROM %s WHERE chromStart <= %d ORDER BY chromStart DESC LIMIT 1", table, start);
     sr = sqlGetResult(conn, query);
     if (sr != NULL)
@@ -1246,7 +1244,7 @@ struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 
-sr = sqlGetResult(conn, "select chrom from chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select chrom from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct slName *el = slNameNew(row[0]);
@@ -1272,7 +1270,7 @@ char **row;
 long long dbSize, diskSize;
 char *path;
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select path,size from %s where id = %u", extFileTable, extFileId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
@@ -1430,7 +1428,7 @@ char dbBuf[64];
 char *seqDb = dbTblParse(db, seqTbl, &seqTbl, dbBuf, sizeof(dbBuf));
 struct sqlConnection *conn = hAllocConn(seqDb);
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select extFile,file_offset,file_size from %s where acc = '%s'",
       seqTbl, acc);
 struct sqlResult *sr = sqlMustGetResult(conn, query);
@@ -1516,7 +1514,7 @@ boolean gotIt = FALSE;
 if (hTableExists(sqlGetDatabase(conn), seqTbl))
     {
     char query[256];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
        "select id, %s, file_offset, file_size from %s where acc = '%s'",
           extFileFld, seqTbl, acc);
     struct sqlResult *sr = sqlMustGetResult(conn, query);
@@ -1641,7 +1639,7 @@ boolean inTable = FALSE;
 char query[256];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select 0 from %s where %s = \"%s\"",
+sqlSafef(query, sizeof(query), "select 0 from %s where %s = \"%s\"",
       table, column, acc);
 sr = sqlGetResult(conn, query);
 inTable = ((row = sqlNextRow(sr)) != NULL);
@@ -1687,7 +1685,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 
-safef(query, sizeof(query), "select name,seq from %s where name = '%s'",
+sqlSafef(query, sizeof(query), "select name,seq from %s where name = '%s'",
       table, acc);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -1801,13 +1799,13 @@ genbankDropVer(accId, acc);
 
 if (native && genbankIsRefSeqAcc(accId))
     {
-    safef(query, sizeof(query), "select product from refLink where mrnaAcc = \"%s\"", accId);
+    sqlSafef(query, sizeof(query), "select product from refLink where mrnaAcc = \"%s\"", accId);
     desc = sqlQuickString(conn, query);
     }
 
 if (desc == NULL)
     {
-    safef(query, sizeof(query), "select description.name from description,gbCdnaInfo "
+    sqlSafef(query, sizeof(query), "select description.name from description,gbCdnaInfo "
           "where gbCdnaInfo.acc = \"%s\" "
           "and gbCdnaInfo.description = description.id", accId);
     desc = sqlQuickString(conn, query);
@@ -1857,30 +1855,30 @@ canDoIntrons = hti->hasBlocks;
 
 dyStringClear(query);
 // row[0], row[1] -> start, end
-dyStringPrintf(query, "SELECT %s,%s", hti->startField, hti->endField);
+sqlDyStringPrintf(query, "SELECT %s,%s", hti->startField, hti->endField);
 // row[2] -> name or placeholder
 if (hti->nameField[0] != 0)
-    dyStringPrintf(query, ",%s", hti->nameField);
+    sqlDyStringPrintf(query, ",%s", hti->nameField);
 else
     dyStringAppend(query, ",0");
 // row[3] -> score or placeholder
 if (hti->scoreField[0] != 0)
-    dyStringPrintf(query, ",%s", hti->scoreField);
+    sqlDyStringPrintf(query, ",%s", hti->scoreField);
 else
     dyStringAppend(query, ",0");
 // row[4] -> strand or placeholder
 if (hti->strandField[0] != 0)
-    dyStringPrintf(query, ",%s", hti->strandField);
+    sqlDyStringPrintf(query, ",%s", hti->strandField);
 else
     dyStringAppend(query, ",0");
 // row[5], row[6] -> cdsStart, cdsEnd or placeholders
 if (hti->cdsStartField[0] != 0)
-    dyStringPrintf(query, ",%s,%s", hti->cdsStartField, hti->cdsEndField);
+    sqlDyStringPrintf(query, ",%s,%s", hti->cdsStartField, hti->cdsEndField);
 else
     dyStringAppend(query, ",0,0");
 // row[7], row[8], row[9] -> count, starts, ends/sizes or empty.
 if (hti->startsField[0] != 0)
-    dyStringPrintf(query, ",%s,%s,%s", hti->countField, hti->startsField,
+    sqlDyStringPrintf(query, ",%s,%s,%s", hti->countField, hti->startsField,
 		   hti->endsSizesField);
 else
     dyStringAppend(query, ",0,0,0");
@@ -1889,16 +1887,16 @@ if (sameString("tStarts", hti->startsField))
     dyStringAppend(query, ",tSize");
 else
     dyStringAppend(query, ",0");
-dyStringPrintf(query, " FROM %s", fullTableName);
+sqlDyStringPrintf(query, " FROM %s", fullTableName);
 if (chromEnd != 0)
     {
-    dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
+    sqlDyStringPrintf(query, " WHERE %s < %d AND %s > %d",
 		   hti->startField, chromEnd, hti->endField, chromStart);
     gotWhere = TRUE;
     }
 if (hti->chromField[0] != 0)
     {
-    dyStringPrintf(query, " %s %s = '%s'",
+    sqlDyStringPrintf(query, " %s %s = '%s'",
 		   (gotWhere ? "AND" : "WHERE"), hti->chromField, chrom);
     gotWhere = TRUE;
     }
@@ -1921,7 +1919,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedItem->name   = cloneString(row[2]);
     else
 	{
-	snprintf(rangeStr, sizeof(rangeStr), "%s:%d-%d", chrom,
+	safef(rangeStr, sizeof(rangeStr), "%s:%d-%d", chrom,
 		 bedItem->chromStart+1,  bedItem->chromEnd);
 	bedItem->name   = cloneString(rangeStr);
 	}
@@ -2095,16 +2093,16 @@ else
     safef(fullTableName, sizeof(fullTableName), "%s", rootName);
 
 dyStringClear(query);
-dyStringPrintf(query, "SELECT count(*) FROM %s", fullTableName);
+sqlDyStringPrintf(query, "SELECT count(*) FROM %s", fullTableName);
 if (chromEnd != 0)
     {
-    dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
+    sqlDyStringPrintf(query, " WHERE %s < %d AND %s > %d",
 		   hti->startField, chromEnd, hti->endField, chromStart);
     gotWhere = TRUE;
     }
 if (hti->chromField[0] != 0)
     {
-    dyStringPrintf(query, " %s %s = '%s'",
+    sqlDyStringPrintf(query, " %s %s = '%s'",
 		   (gotWhere ? "AND" : "WHERE"), hti->chromField, chrom);
     gotWhere = TRUE;
     }
@@ -2164,9 +2162,9 @@ char *ret = NULL;
 struct dyString *dy = newDyString(128);
 
 if (database != NULL)
-    dyStringPrintf(dy, "select description from dbDb where name = '%s'", database);
+    sqlDyStringPrintf(dy, "select description from dbDb where name = '%s'", database);
 else if (freeze != NULL)
-    dyStringPrintf(dy, "select name from dbDb where description = '%s'", freeze);
+    sqlDyStringPrintf(dy, "select name from dbDb where description = '%s'", freeze);
 else
     internalErr();
 sr = sqlGetResult(conn, dy->string);
@@ -2200,7 +2198,7 @@ boolean hgNearOk(char *database)
 struct sqlConnection *conn = hConnectCentral();
 char query[256];
 boolean ok;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select hgNearOk from dbDb where name = '%s'", database);
 ok = sqlQuickNum(conn, query);
 hDisconnectCentral(&conn);
@@ -2213,7 +2211,7 @@ boolean hgPcrOk(char *database)
 struct sqlConnection *conn = hConnectCentral();
 char query[256];
 boolean ok;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select canPcr from blatServers where db = '%s' and isTrans=0", database);
 ok = sqlQuickNum(conn, query);
 hDisconnectCentral(&conn);
@@ -2238,7 +2236,7 @@ if (archive)
 else
     safef(dbDbTable, sizeof(dbDbTable), "dbDb");
 
-safef(query, sizeof(query), "select %s from %s where name = '%s'",
+sqlSafef(query, sizeof(query), "select %s from %s where name = '%s'",
       field, dbDbTable, database);
 if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
     res = cloneString(buf);
@@ -2369,7 +2367,7 @@ char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 int ret;
 
-safef(query, sizeof(query), "select id from organism where name = '%s'",
+sqlSafef(query, sizeof(query), "select id from organism where name = '%s'",
 				    hScientificName(database));
 ret = sqlQuickNum(conn, query);
 hFreeConn(&conn);
@@ -2403,7 +2401,7 @@ struct sqlConnection *conn = hConnectCentral();
 if (hGotCladeConn(conn))
     {
     char query[512];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select clade from genomeClade where genome = '%s'", genome);
     clade = sqlQuickString(conn, query);
     hDisconnectCentral(&conn);
@@ -2435,7 +2433,7 @@ char **row;
 struct dbDb *db = NULL;
 
 struct dyString *ds = dyStringNew(0);
-dyStringPrintf(ds, "select * from dbDb where name='%s'", database);
+sqlDyStringPrintf(ds, "select * from dbDb where name='%s'", database);
 sr = sqlGetResult(conn, ds->string);
 if ((row = sqlNextRow(sr)) != NULL)
     db = dbDbLoad(row);
@@ -2456,7 +2454,7 @@ char **row;
 struct dbDb *dbList = NULL, *db;
 struct hash *hash = sqlHashOfDatabases();
 
-sr = sqlGetResult(conn, "select * from dbDb order by orderKey,name desc");
+sr = sqlGetResult(conn, "NOSQLINJ select * from dbDb order by orderKey,name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
@@ -2529,7 +2527,7 @@ conn = hConnectCentral();
 if (conn)
     {
     /* NOTE: archive orderKey convention is opposite of production server! */
-    sr = sqlGetResult(conn, "select * from dbDbArch order by orderKey desc,name desc");
+    sr = sqlGetResult(conn, "NOSQLINJ select * from dbDbArch order by orderKey desc,name desc");
     while ((row = sqlNextRow(sr)) != NULL)
         {
         db = archiveDbDbLoad(row);
@@ -2675,7 +2673,7 @@ char **row;
 boolean binned = FALSE;
 
 /* Read table description into hash. */
-safef(query, sizeof(query), "describe %s", table);
+sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2711,7 +2709,7 @@ char **row = NULL;
 boolean gotIndex = FALSE;
 char query[512];
 
-safef(query, sizeof(query), "show index from %s", table);
+sqlSafef(query, sizeof(query), "show index from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2767,7 +2765,7 @@ retEndsSizes[0] = 0;
 retSpan[0] = 0;
 
 /* Read table description into hash. */
-safef(query, sizeof(query), "describe %s", table);
+sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3296,9 +3294,9 @@ for (i=0; i<levels; ++i)
     if (i != 0)
 	dyStringAppend(query, " or ");
     if (startBin == endBin)
-        dyStringPrintf(query, "%s=%u", binField, startBin + offset);
+        sqlDyStringPrintf(query, "%s=%u", binField, startBin + offset);
     else
-        dyStringPrintf(query, "%s>=%u and %s<=%u",
+        sqlDyStringPrintf(query, "%s>=%u and %s<=%u",
 		binField, startBin + offset, binField, endBin + offset);
     startBin >>= bNextShift;
     endBin >>= bNextShift;
@@ -3348,7 +3346,9 @@ if (hti == NULL)
     }
 else
     {
-    dyStringPrintf(query, "select %s from ", fields);
+    if (!sameString(fields,"*"))
+	sqlCkIl(fields);
+    sqlDyStringPrintf(query, "select %-s from ", fields);
     if (hti->isSplit)
 	{
 	char fullTable[HDB_MAX_TABLE_STRING];
@@ -3358,13 +3358,13 @@ else
 	else
 	    {
 	    table = fullTable;
-	    dyStringPrintf(query, "%s where ", table);
+	    sqlDyStringPrintf(query, "%s where ", table);
 	    }
 	}
     else
         {
 	table = rootTable;
-	dyStringPrintf(query, "%s where %s='%s' and ",
+	sqlDyStringPrintf(query, "%s where %s='%s' and ",
 	    table, hti->chromField, chrom);
 	}
     }
@@ -3375,7 +3375,7 @@ if (table != NULL)
 	hAddBinToQuery(start, end, query);
 	rowOffset = 1;
 	}
-    dyStringPrintf(query, "%s<%u and %s>%u",
+    sqlDyStringPrintf(query, "%s<%u and %s>%u",
     	hti->startField, end, hti->endField, start);
     if (extraWhere)
         {
@@ -3386,7 +3386,7 @@ if (table != NULL)
         dyStringPrintf(query, " %s", extraWhere);
         }
     if (order)
-        dyStringPrintf(query, " order by %s", hti->startField);
+        sqlDyStringPrintf(query, " order by %s", hti->startField);
     sr = sqlGetResult(conn, query->string);
     }
 freeDyString(&query);
@@ -3442,19 +3442,23 @@ else
     rowOffset = hti->hasBin;
     if (hti->isSplit)
 	{
-        dyStringPrintf(query, "select %s from %s_%s", fields, chrom, rootTable);
+	if (!sameString(fields,"*"))
+	    sqlCkIl(fields);
+        sqlDyStringPrintf(query, "select %-s from %s_%s", fields, chrom, rootTable);
 	if (extraWhere != NULL)
 	    dyStringPrintf(query, " where %s", extraWhere);
 	}
     else
 	{
-        dyStringPrintf(query, "select %s from %s where %s='%s'",
+	if (!sameString(fields,"*"))
+	    sqlCkIl(fields);
+        sqlDyStringPrintf(query, "select %-s from %s where %s='%s'",
 		fields, rootTable, hti->chromField, chrom);
 	if (extraWhere != NULL)
 	    dyStringPrintf(query, " and (%s)", extraWhere);
 	}
     if (order)
-        dyStringPrintf(query, " order by %s", hti->startField);
+        sqlDyStringPrintf(query, " order by %s", hti->startField);
     sr = sqlGetResult(conn, query->string);
     }
 freeDyString(&query);
@@ -3821,7 +3825,7 @@ static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn,
 struct trackDb *trackTdb = NULL;
 char where[256];
 
-safef(where, sizeof(where), "tableName = '%s'", track);
+sqlSafefFrag(where, sizeof(where), "tableName = '%s'", track);
 trackTdb = loadAndLookupTrackDb(conn, where);
 if (!trackTdb)
     return NULL;
@@ -4086,7 +4090,7 @@ for (trackTable = trackTableList; trackTable != NULL; trackTable = trackTable->n
     if (hTableExists(db, trackTable->name))
         {
 	char query[512];
-	safef(query, sizeof(query), "select tableName,settings from %s", trackTable->name);
+	sqlSafef(query, sizeof(query), "select tableName,settings from %s", trackTable->name);
 	struct sqlResult *sr = sqlGetResult(conn, query);
 	char **row;
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -4202,7 +4206,7 @@ dbList = trackHubGetDbDbs(theClade);
 if (theClade != NULL)
     {
     char query[1024];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select dbDb.* from dbDb,genomeClade where dbDb.active = 1 and "
 	  "dbDb.genome = genomeClade.genome and genomeClade.clade = \"%s\" "
 	  "order by dbDb.orderKey,dbDb.name desc", theClade);
@@ -4210,7 +4214,7 @@ if (theClade != NULL)
     }
     else
 	sr = sqlGetResult(conn,
-	   "select * from dbDb where active = 1 order by orderKey,name desc");
+	   "NOSQLINJ select * from dbDb where active = 1 order by orderKey,name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
@@ -4438,7 +4442,7 @@ if (! hTableExists(db, "axtInfo"))
     }
 
 /* "species" is a misnomer, we're really looking up database names. */
-sr = sqlGetResult(conn, "select species from axtInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select species from axtInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     // uniquify database names and make sure the databases still exist
@@ -4456,7 +4460,7 @@ hFreeConn(&conn);
  * a different organism, then for db's with this organism. */
 conn = hConnectCentral();
 dyStringClear(query);
-dyStringAppend(query, "SELECT * from dbDb");
+sqlDyStringAppend(query, "SELECT * from dbDb");
 count = 0;
 for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
     {
@@ -4465,10 +4469,10 @@ for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
 	{
 	count++;
 	if (count == 1)
-	    dyStringPrintf(query, " where active = 1 and (name = '%s'",
+	    sqlDyStringPrintf(query, " where active = 1 and (name = '%s'",
 			   dbName->name);
 	else
-	    dyStringPrintf(query, " or name = '%s'", dbName->name);
+	    sqlDyStringPrintf(query, " or name = '%s'", dbName->name);
 	}
     }
 dyStringPrintf(query, ") order by orderKey desc");
@@ -4483,7 +4487,7 @@ if (count > 0)
     sqlFreeResult(&sr);
     }
 dyStringClear(query);
-dyStringAppend(query, "SELECT * from dbDb");
+sqlDyStringAppend(query, "SELECT * from dbDb");
 count = 0;
 for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
     {
@@ -4492,10 +4496,10 @@ for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
 	{
 	count++;
 	if (count == 1)
-	    dyStringPrintf(query, " where active = 1 and (name = '%s'",
+	    sqlDyStringPrintf(query, " where active = 1 and (name = '%s'",
 			   dbName->name);
 	else
-	    dyStringPrintf(query, " or name = '%s'", dbName->name);
+	    sqlDyStringPrintf(query, " or name = '%s'", dbName->name);
 	}
     }
 dyStringPrintf(query, ") order by orderKey, name desc");
@@ -4528,7 +4532,7 @@ char **row;
 struct axtInfo *aiList = NULL, *ai;
 char query[256];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select * from axtInfo where species = '%s' and chrom = '%s' "
       "order by sort",
       otherDb, hDefaultChrom(db));
@@ -4555,7 +4559,7 @@ char **row;
 struct axtInfo *aiList = NULL, *ai;
 char query[256];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select * from axtInfo where species = '%s' and chrom = '%s'",
       otherDb, chrom);
 /* Scan through axtInfo table, loading into list */
@@ -4583,13 +4587,13 @@ char **row;
 struct dbDb *dbList = NULL, *db;
 
 /* Get hash of active blat servers. */
-sr = sqlGetResult(conn, "select db from blatServers");
+sr = sqlGetResult(conn, "NOSQLINJ select db from blatServers");
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(hash, row[0], NULL);
 sqlFreeResult(&sr);
 
 /* Scan through dbDb table, keeping ones that are indexed. */
-sr = sqlGetResult(conn, "select * from dbDb order by orderKey,name desc");
+sr = sqlGetResult(conn, "NOSQLINJ select * from dbDb order by orderKey,name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
@@ -4615,7 +4619,7 @@ struct sqlConnection *conn = hConnectCentral();
 boolean gotIx;
 char query[256];
 
-safef(query, sizeof(query), "select db from blatServers where db = '%s'", db);
+sqlSafef(query, sizeof(query), "select db from blatServers where db = '%s'", db);
 gotIx = sqlExists(conn, query);
 hDisconnectCentral(&conn);
 return gotIx;
@@ -4634,17 +4638,17 @@ char **row;
 char dbActualName[32];
 
 /* If necessary convert database description to name. */
-safef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
+sqlSafef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
 if (!sqlExists(conn, query))
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select name from dbDb where description = '%s'", db);
     if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
         db = dbActualName;
     }
 
 /* Do a little join to get data to fit into the blatServerTable. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
                "select dbDb.name,dbDb.description,blatServers.isTrans"
                ",blatServers.host,blatServers.port,dbDb.nibPath "
 	       "from dbDb,blatServers where blatServers.isTrans = %d and "
@@ -4679,8 +4683,8 @@ char **row;
 char *answer;
 
 answer = NULL;
-safef(query, sizeof(query), "select %s from %s.%s  where %s;",
-      fldName, db, tblName, condition);
+sqlSafef(query, sizeof(query), "select %s from %s.%-s  where %-s;",
+      fldName, db, tblName, condition);  // note some callers pass an entire tables list with aliases in tblName
 //printf("<br>%s\n", query); fflush(stdout);
 sr  = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -4702,7 +4706,7 @@ struct sqlConnection *conn = sqlConnect(db);
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(0);
-sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     hashAddInt(hash, row[0], sqlUnsigned(row[1]));
 sqlFreeResult(&sr);
@@ -4714,7 +4718,7 @@ struct slName *hChromList(char *db)
 /* Get the list of chrom names from the database's chromInfo table. */
 {
 struct sqlConnection *conn = hAllocConn(db);
-struct slName *list = sqlQuickList(conn, "select chrom from chromInfo");
+struct slName *list = sqlQuickList(conn, "NOSQLINJ select chrom from chromInfo");
 hFreeConn(&conn);
 return list;
 }
@@ -4856,7 +4860,7 @@ for (table = tables; table != NULL; table = table->next)
     struct sqlConnection *conn = hAllocConnProfileTbl(db, table->name, &actualTableName);
     if (sqlTableExists(conn, actualTableName))
 	{
-	safef(query, sizeof(query), "select * from %s", actualTableName);
+	sqlSafef(query, sizeof(query), "select * from %s", actualTableName);
 	oneTable = grpLoadByQuery(conn, query);
 	}
     slUniqify(&oneTable, grpCmpName, grpFree);
@@ -5042,7 +5046,7 @@ char lowerCaseName[255];
 safef(lowerCaseName, sizeof(lowerCaseName), "%s", domainDb);
 lowerCaseName[0] = tolower(lowerCaseName[0]);
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select distinct acc from ucsc%s u, %sDesc p"
     " where ucscId  = '%s' and u.domainName=p.name "
     , domainDb, lowerCaseName, ucscGeneId);
@@ -5060,7 +5064,7 @@ char lowerCaseName[255];
 safef(lowerCaseName, sizeof(lowerCaseName), "pfam");
 lowerCaseName[0] = tolower(lowerCaseName[0]);
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select distinct value from knownToPfam k, %sDesc p"
     " where name = '%s' and value=p.pfamAC "
     , lowerCaseName, ucscGeneId);
@@ -5078,7 +5082,7 @@ char *hGenbankModDate(char *acc, struct sqlConnection *conn)
  * Free resulting string. */
 {
 char query[128];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select moddate from gbCdnaInfo where (acc = '%s')", acc);
 return sqlQuickString(conn, query);
 }
@@ -5164,20 +5168,20 @@ if (checkSeqName && seqName == NULL)
 	     table);
 char query[512];
 if (checkSeqName)
-    safef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
+    sqlSafef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
 	  table, seqName);
 else
-    safef(query, sizeof(query), "select fileName from %s", table);
+    sqlSafef(query, sizeof(query), "select fileName from %s", table);
 char *fileName = sqlQuickString(conn, query);
 if (fileName == NULL)
     {
     if (checkSeqName)
 	{
 	if (startsWith("chr", seqName))
-	    safef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
+	    sqlSafef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
 		  table, seqName+strlen("chr"));
 	else
-	    safef(query, sizeof(query), "select fileName from %s where seqName = 'chr%s'",
+	    sqlSafef(query, sizeof(query), "select fileName from %s where seqName = 'chr%s'",
 		  table, seqName);
 	fileName = sqlQuickString(conn, query);
 	}

@@ -50,7 +50,7 @@ int end = 0;
 
 contigChroms = newHash(0);
 verbose(1, "reading ContigInfo...\n");
-safef(query, sizeof(query), "select ctg_id, contig_chr, contig_end, orient, group_term from ContigInfo");
+sqlSafef(query, sizeof(query), "select ctg_id, contig_chr, contig_end, orient, group_term from ContigInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -88,7 +88,7 @@ struct hashEl *hel = NULL;
 weightHash = newHash(16);
 
 verbose(1, "hashing MapInfo...\n");
-safef(query, sizeof(query), "select snp_id, weight, assembly from MapInfo");
+sqlSafef(query, sizeof(query), "select snp_id, weight, assembly from MapInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -180,7 +180,7 @@ int loc_type = 0;
 
 f = hgCreateTabFile(".", "ContigLocFilter");
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select snp_id, ctg_id, loc_type, phys_pos_from, phys_pos, orientation, allele from ContigLoc");
 
 sr = sqlGetResult(conn, query);
@@ -223,7 +223,7 @@ void createTable()
 {
 struct sqlConnection *conn = hAllocConn();
 char *createString =
-"CREATE TABLE ContigLocFilter (\n"
+"NOSQLINJ CREATE TABLE ContigLocFilter (\n"
 "    snp_id int(11) not null,       \n"
 "    ctg_id int(11) not null,       \n"
 "    chromName varchar(32) not null,\n"

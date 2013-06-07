@@ -414,7 +414,7 @@ void createTable(struct sqlConnection *conn, char *tableName, boolean unique)
 {
 char *indexType =  (unique ? "UNIQUE" : "INDEX");
 struct dyString *dy = dyStringNew(512);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
 "CREATE TABLE  %s (\n"
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
@@ -477,7 +477,7 @@ char *tdbType(struct sqlConnection *conn, char *track)
 {
 char query[512];
 char *type, typeBuf[128];
-safef(query, sizeof(query), "select type from %s where tableName = '%s'", trackDb, track);
+sqlSafef(query, sizeof(query), "select type from %s where tableName = '%s'", trackDb, track);
 type = sqlQuickQuery(conn, query, typeBuf, sizeof(typeBuf));
 if (type == NULL)
     errAbort("Can't find track %s in trackDb", track);

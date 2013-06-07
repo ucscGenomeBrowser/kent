@@ -306,7 +306,7 @@ struct dyString *regionSelect(struct region *region, struct hTableInfo *hti)
 /* Return a dyString with a SELECT SQL_NO_CACHE query for table in region. */
 {
 char *table = hti->rootName; // not supporting split tables
-struct dyString *dy = dyStringCreate("select SQL_NO_CACHE * from %s ", table);
+struct dyString *dy = sqlDyStringCreate("select SQL_NO_CACHE * from %s ", table);
 if (! region->isGenome)
     {
     if (sameString(table, "knownGene"))
@@ -475,7 +475,7 @@ struct sqlConnection *handlerOpen(char *db, char *table)
 {
 struct sqlConnection *conn = hAllocConn(db);
 char query[512];
-safef(query, sizeof(query), "handler %s open", table);
+sqlSafef(query, sizeof(query), "handler %s open", table);
 long startTime = clock1000();
 sqlUpdate(conn, query);
 printf("Handler open: %ld ms\n", clock1000() - startTime);
@@ -488,7 +488,7 @@ void handlerClose(struct sqlConnection **pConn, char *table)
 if (pConn == NULL)
     return;
 char query[512];
-safef(query, sizeof(query), "handler %s close", table);
+sqlSafef(query, sizeof(query), "handler %s close", table);
 long startTime = clock1000();
 sqlUpdate(*pConn, query);
 printf("Handler close: %ld ms\n", clock1000() - startTime);
@@ -518,13 +518,13 @@ for (i = 0;  i < numLevels;  i++)
     while (!doneWithLevel)
 	{
 	if (first)
-	    safef(query, sizeof(query), "handler %s read %s >= ('%s', %u) limit %d",
+	    sqlSafef(query, sizeof(query), "handler %s read %s >= ('%s', %u) limit %d",
 		  hti->rootName, hti->chromField, chrom, startBins[i], limit);
 	else
 	    {
 	    if (limit < 10000)
 		limit *= 10;
-	    safef(query, sizeof(query), "handler %s read %s next limit %d",
+	    sqlSafef(query, sizeof(query), "handler %s read %s next limit %d",
 		  hti->rootName, hti->chromField, limit);
 	    }
 	int rowCount = 0;
@@ -565,7 +565,7 @@ void timeHandlerChromStart(struct sqlConnection *conn, struct hTableInfo *hti,
  * checks to see if we have run past the end of the region. */
 {
 char query[512];
-safef(query, sizeof(query), "handler %s read %s = ('%s') where %s > %d and %s < %d limit %d",
+sqlSafef(query, sizeof(query), "handler %s read %s = ('%s') where %s > %d and %s < %d limit %d",
       hti->rootName, hti->chromField, chrom, hti->endField, start, hti->startField, end, BIGNUM);
 int rowCount = 0;
 long startTime = logNewQuery(query);
@@ -600,7 +600,7 @@ if (region->isGenome)
     FILE *f = NULL;
     if (writeFiles)
 	f = outFileForQuery(db, hti, region, "handlerRaw");
-    safef(query, sizeof(query), "handler %s read next limit %d", table, BIGNUM);
+    sqlSafef(query, sizeof(query), "handler %s read next limit %d", table, BIGNUM);
     timeQueryConn(conn, query, NULL, f);
     carefulClose(&f);
     }
@@ -609,7 +609,7 @@ else if (region->isWholeChrom)
     FILE *f = NULL;
     if (writeFiles)
 	f = outFileForQuery(db, hti, region, "handlerMerge");
-    safef(query, sizeof(query), "handler %s read chrom = ('%s') limit %d",
+    sqlSafef(query, sizeof(query), "handler %s read chrom = ('%s') limit %d",
 	  table, region->chrom, BIGNUM);
     timeQueryConn(conn, query, hti, f);
     carefulClose(&f);

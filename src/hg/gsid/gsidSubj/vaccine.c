@@ -35,7 +35,7 @@ struct sqlResult *sr;
 char **row;
 printf("<TABLE>");
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select immunStatus, daysInfectF, daysInfectL, injections from gsidSubjInfo where subjId='%s'", subjId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

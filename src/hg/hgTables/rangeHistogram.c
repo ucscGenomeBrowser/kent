@@ -21,7 +21,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
    "select %s, count(*) as count from %s group by %s order by count desc",
    field, table, field);
 sr = sqlGetResult(conn, query);
@@ -72,7 +72,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
    "select min(%s), max(%s), avg(%s) from %s", field, field, field, table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

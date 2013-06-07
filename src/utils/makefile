@@ -1,6 +1,9 @@
 # Build all directories in utils
 
-include ../inc/common.mk
+kentSrc = ..
+
+include ${kentSrc}/inc/localEnvironment.mk
+include ${kentSrc}/inc/common.mk
 
 # note: lists such as the following need to be defined *before*
 # they are used in the wildcard target rules.  An oddity of gnu make
@@ -8,7 +11,9 @@ include ../inc/common.mk
 # define the list of user applications to build
 
 UTILS_APPLIST = \
+	addCols \
 	ave \
+	aveCols \
 	bedClip \
 	bedGraphToBigWig \
 	bedToBigBed \
@@ -22,6 +27,7 @@ UTILS_APPLIST = \
 	bedRemoveOverlap \
 	bedRestrictToPositions \
 	bigWigAverageOverBed  \
+	bigWigCorrelate \
 	bigWigInfo \
 	bigWigMerge \
 	bigWigSummary \
@@ -39,6 +45,7 @@ UTILS_APPLIST = \
 	faFilterN \
 	faFilter \
 	faFrag \
+	faNoise \
 	faOneRecord \
 	faPolyASizes \
 	faRandomize \
@@ -67,6 +74,7 @@ UTILS_APPLIST = \
 	rmFaDups \
 	rowsToCols \
 	sizeof \
+	spacedToTab \
 	splitFile \
 	splitFileByColumn \
 	stringify \
@@ -76,11 +84,14 @@ UTILS_APPLIST = \
 	textHistogram \
 	tickToDate \
 	timing \
+	toLower \
+	toUpper \
 	twoBitDup \
         twoBitInfo \
 	twoBitToFa \
 	wigCorrelate \
-	wigToBigWig
+	wigToBigWig \
+	wordLine
 
 # list of utilities to build of interest only at UCSC
 
@@ -97,7 +108,6 @@ UCSC_APPS = \
 	faGapLocs \
 	faGapSizes \
 	faNcbiToUcsc \
-	faNoise \
 	faSimplify \
 	faToNib \
 	faTrimPolyA \
@@ -114,20 +124,16 @@ UCSC_APPS = \
 	pslToXa \
 	scaffoldFaToAgp \
 	scrambleFa \
-	spacedToTab \
 	subs \
 	tableSum \
 	textHist2 \
-	toLower \
-	toUpper \
 	udcCleanup \
 	undupFa \
 	upper \
 	venn \
 	verticalSplitSqlTable \
 	weedLines \
-	wigTestMaker \
-	wordLine
+	wigTestMaker
 
 # list of scripts to install
 

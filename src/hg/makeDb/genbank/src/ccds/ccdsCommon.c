@@ -35,7 +35,7 @@ void ccdsRenameTable(struct sqlConnection *conn, char *oldTable, char *newTable)
 /* rename a database table */
 {
 char query[2048];
-safef(query, sizeof(query), "RENAME TABLE %s TO %s", oldTable, newTable);
+sqlSafef(query, sizeof(query), "RENAME TABLE %s TO %s", oldTable, newTable);
 sqlDropTable(conn, newTable);
 sqlUpdate(conn, query);
 }
@@ -46,7 +46,7 @@ struct hash *ccdsStatusValLoad(struct sqlConnection *conn)
 {
 struct hash *statusVals = hashNew(0);
 struct sqlResult *sr = sqlGetResult(conn, 
-                                    "SELECT ccds_status_val_uid, ccds_status FROM CcdsStatusVals");
+                                    "NOSQLINJ SELECT ccds_status_val_uid, ccds_status FROM CcdsStatusVals");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {

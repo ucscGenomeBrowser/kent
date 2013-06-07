@@ -31,7 +31,7 @@ void createTable(struct sqlConnection *conn, char *tableName, boolean unique)
 {
 char *indexType =  (unique ? "UNIQUE" : "INDEX");
 struct dyString *dy = dyStringNew(512);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
 "CREATE TABLE  %s (\n"
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
@@ -82,7 +82,7 @@ lineFileClose(&lf);
 /* For each orf in gene table write out gene name if possible,
  * otherwise orf name. */
 conn = sqlConnect(database);
-safef(query, sizeof(query), "select name from %s", geneTable);
+sqlSafef(query, sizeof(query), "select name from %s", geneTable);
 sr = sqlGetResult(conn,query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

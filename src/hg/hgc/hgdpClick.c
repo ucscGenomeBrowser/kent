@@ -407,7 +407,7 @@ int start = cartInt(cart, "o");
 genericHeader(tdb, item);
 int hasBin=1;
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
       tdb->table, item, seqName, start);
 sr = sqlGetResult(conn, query);

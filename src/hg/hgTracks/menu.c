@@ -101,7 +101,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 "select * from chrUn_gold where chrom = '%s' and chromStart<%u and chromEnd>%u",
 chromName, winEnd, winStart);
 sr = sqlGetResult(conn, query);
@@ -193,7 +193,7 @@ if (differentWord(database,"susScr2"))
                 struct sqlResult *sr = NULL;
                 char **row = NULL;
                 char query[256];
-                safef(query, sizeof(query),
+                sqlSafef(query, sizeof(query),
                       "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
                       ctgPos, chromName, winEnd, winStart);
                 sr = sqlGetResult(conn, query);

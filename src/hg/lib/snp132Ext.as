@@ -6,7 +6,7 @@ table snp132Ext
     uint     chromEnd;   "End position in chrom"
     string   name;       "dbSNP Reference SNP (rs) identifier"
     uint     score;      "Not used"
-    string   strand;     "Which DNA strand contains the observed alleles"
+    char[1]  strand;     "Which DNA strand contains the observed alleles"
     lstring  refNCBI;  	 "Reference genomic sequence from dbSNP"
     lstring  refUCSC;    "Reference genomic sequence from UCSC lookup of chrom,chromStart,chromEnd"
     string   observed;   "The sequences of the observed alleles from rs-fasta files"

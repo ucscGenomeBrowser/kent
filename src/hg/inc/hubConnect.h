@@ -141,6 +141,6 @@ struct hubConnectStatus *hubConnectGetHubs();
 
 struct trackDb *hubCollectTracks( char *database, struct grp **pGroupList);
 /* Generate trackDb structures for all the tracks in attached hubs.  
- * Make grp structures for each hub. */
+ * Make grp structures for each hub. Returned group list is reversed. */
 
 #endif /* HUBCONNECT_H */

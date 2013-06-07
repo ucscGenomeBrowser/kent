@@ -70,7 +70,7 @@ safef(fastaTableName, ArraySize(fastaTableName), "%s_snpFasta", adjustedChromNam
 if(!hTableExistsDb(snpDb, fastaTableName)) 
     errAbort("can't get table %s\n", fastaTableName);
 
-safef(query, sizeof(query), "select rsId, molType, class, observed from %s", fastaTableName);
+sqlSafef(query, sizeof(query), "select rsId, molType, class, observed from %s", fastaTableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -139,7 +139,7 @@ safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 safef(fileName, ArraySize(fileName), "%s_snpTmp.tab", chromName);
 f = mustOpen(fileName, "w");
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
      "select snp_id, chromStart, chromEnd, loc_type, orientation, allele, refUCSC, refUCSCReverseComp, weight from %s ", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -197,7 +197,7 @@ char *createString =
 struct dyString *dy = newDyString(1024);
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 hFreeConn(&conn);

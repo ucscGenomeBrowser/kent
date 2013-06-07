@@ -23,7 +23,7 @@ if (!sameString(columns->name,"EPI_ISOLATE_ID"))
     {
     errAbort("EPI_ISOLATE_ID must be the first column in columnDb.ra %s", columns->name);
     }
-dyStringAppend(query,"select ");
+sqlDyStringAppend(query,"select ");
 for (column=columns;column;column=column->next)
     {
     // skip non-main table columns which have "query" setting

@@ -122,7 +122,7 @@ if (!sqlTableExists(conn, statusTable))
 FILE *fBed = mustOpen(outBed, "w");
 FILE *fCds = mustOpen(outCds, "w");
 char *query =
-   "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds "
+   "NOSQLINJ select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds "
    "from refGene r,refSeqStatus s where r.name=s.mrnaAcc and s.status='Reviewed'";
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;

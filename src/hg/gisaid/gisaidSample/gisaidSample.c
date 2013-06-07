@@ -264,7 +264,7 @@ if (sameWord(curSampleId, ""))
     }
 else
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     	  "select EPI_ISOLATE_ID from %s.gisaidSubjInfo where EPI_ISOLATE_ID = '%s'",
     	  database, curSampleId);
     sr = sqlMustGetResult(conn, query);

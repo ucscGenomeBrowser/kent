@@ -133,7 +133,6 @@ int nearCountUniqAccRows(struct htmlPage *page)
 /* Count number of unique rows in table containing just hyperlinked 
  * accessions. */
 {
-char *startTable, *endTable, *startRow;
 char *s, *e, *row, *acc;
 int count = 0;
 struct hash *uniqHash = hashNew(0);
@@ -223,8 +222,6 @@ void testCol(struct htmlPage *emptyConfig, char *org, char *db, char *col, char 
 /* Test one column. */
 {
 struct htmlPage *printPage = NULL;
-struct blatTest *test;
-struct qaStatus *qs;
 char visVar[256];
 safef(visVar, sizeof(visVar), "near.col.%s.vis", col);
 htmlPageSetVar(emptyConfig, NULL, visVar, "on");
@@ -341,7 +338,6 @@ void testDbSorts(struct htmlPage *dbPage, char *org, char *db,
 /* Test on one database. */
 {
 struct htmlPage *emptyConfig;
-struct slName *colList = NULL, *col;
 struct htmlFormVar *sortVar = htmlFormVarGet(dbPage->forms, orderVarName);
 struct slName *gene, *sort;
 
@@ -633,8 +629,8 @@ return result;
 void inheritRa(char **pvar, struct hash *ra, char *name)
 /* override previous value if non-null value found */
 {
-char *temp=NULL;
-if (temp = hashFindVal(ra, name))
+char *temp = hashFindVal(ra, name);
+if (temp)
     {
     *pvar = temp;
     }
@@ -647,7 +643,7 @@ struct sqlConnection *conn = sqlConnect(db);
 char query[256], **row;
 struct sqlResult *sr;
 char *result=NULL;
-safef(query, sizeof(query), "select %s from %s where %s = '%s'", 
+sqlSafef(query, sizeof(query), "select %s from %s where %s = '%s'", 
 	field, table, whereField, whereValue);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -684,7 +680,7 @@ struct dnaSeq *seq = NULL;
 struct sqlConnection *conn = sqlConnect(db);
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select fileName from chromInfo where chrom='%s'", seqName);
+sqlSafef(query, sizeof(query), "select fileName from chromInfo where chrom='%s'", seqName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -760,7 +756,7 @@ int rowOffset = 0;
 char *fld=NULL;
 int f = 0;
 
-safef(query, sizeof(query), "select * from %s where name = '%s'", table, geneName);
+sqlSafef(query, sizeof(query), "select * from %s where name = '%s'", table, geneName);
 sr = sqlGetResult(conn, query);
 while ((fld = sqlFieldName(sr)) != NULL)
     {
@@ -805,7 +801,6 @@ char *dnaColumn = NULL;
 char *lnkColumn = NULL;
 char *proColumn = NULL;
 char *method = NULL;
-char *temp = NULL;
 
 genomeRa=findRaSection(raList,"global");
 if (!genomeRa)
@@ -928,11 +923,9 @@ struct htmlPage *dbPage;
 
 //debug
     struct dyString *dy = newDyString(0);
-    int geneCount = slCount(geneList);
     struct slName *gene;
     //char *dna = NULL;
     //HGID retId = 0;
-    char *tempdna = NULL;
     struct dnaSeq *dnaseq=NULL;
     aaSeq *proseq=NULL;
 

@@ -48,7 +48,7 @@ void createTable(struct sqlConnection *conn, char *tableName)
 /* Create our name/value table, dropping if it already exists. */
 {
 struct dyString *dy = dyStringNew(512);
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
 "CREATE TABLE  %s (\n"
 "    query varchar(255) not null,\n"
 "    target varchar(255) not null,\n"

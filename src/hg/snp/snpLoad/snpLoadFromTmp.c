@@ -35,7 +35,7 @@ char **row;
 
 ret = newHash(0);
 
-sr = sqlGetResult(conn, "select * from chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = chromInfoLoad(row);
@@ -81,7 +81,7 @@ if (!sqlTableExists(conn, tableName))
     return list;
 
 /* not checking chrom */
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refNCBI, locType, func from %s", tableName);
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refNCBI, locType, func from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -198,7 +198,7 @@ for (el = list; el != NULL; el = el->next)
     {
     strcpy(snpName, el->name);
     stripString(snpName, "rs");
-    safef(query, sizeof(query), "select avg_heterozygosity, validation_status, het_se from SNP where snp_id = %s", snpName);
+    sqlSafef(query, sizeof(query), "select avg_heterozygosity, validation_status, het_se from SNP where snp_id = %s", snpName);
     sr = sqlGetResult(conn, query);
     /* need a joiner check rule for this */
     row = sqlNextRow(sr);
@@ -230,7 +230,7 @@ char **row;
 verbose(1, "query snpFasta for molType, class, observed...\n");
 for (el = list; el != NULL; el = el->next)
     {
-    safef(query, sizeof(query), "select molType, class, observed from snpFasta where rsId = '%s'", el->name);
+    sqlSafef(query, sizeof(query), "select molType, class, observed from snpFasta where rsId = '%s'", el->name);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row == NULL)

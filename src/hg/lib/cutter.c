@@ -111,16 +111,14 @@ void cutterSaveToDb(struct sqlConnection *conn, struct cutter *el, char *tableNa
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use cutterSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *scizsArray, *companiesArray, *refsArray;
 scizsArray = sqlStringArrayToString(el->scizs, el->numSciz);
 companiesArray = sqlCharArrayToString(el->companies, el->numCompanies);
 refsArray = sqlUnsignedArrayToString(el->refs, el->numRefs);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,%d,%u,%u,%u,'%s',%u,'%s',%u,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,%d,%u,%u,%u,'%s',%u,'%s',%u,'%s')", 
 	tableName,  el->name,  el->size,  el->matchSize,  el->seq,  el->cut,  el->overhang,  el->palindromic,  el->semicolon,  el->numSciz,  scizsArray ,  el->numCompanies,  companiesArray ,  el->numRefs,  refsArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -129,33 +127,6 @@ freez(&companiesArray);
 freez(&refsArray);
 }
 
-void cutterSaveToDbEscaped(struct sqlConnection *conn, struct cutter *el, char *tableName, int updateSize)
-/* Save cutter as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than cutterSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *seq, *scizsArray, *companiesArray, *refsArray;
-name = sqlEscapeString(el->name);
-seq = sqlEscapeString(el->seq);
-
-scizsArray = sqlStringArrayToString(el->scizs, el->numSciz);
-companiesArray = sqlCharArrayToString(el->companies, el->numCompanies);
-refsArray = sqlUnsignedArrayToString(el->refs, el->numRefs);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,%d,%u,%u,%u,'%s',%u,'%s',%u,'%s')", 
-	tableName,  name, el->size , el->matchSize ,  seq, el->cut , el->overhang , el->palindromic , el->semicolon , el->numSciz ,  scizsArray , el->numCompanies ,  companiesArray , el->numRefs ,  refsArray );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&seq);
-freez(&scizsArray);
-freez(&companiesArray);
-freez(&refsArray);
-}
 
 struct cutter *cutterCommaIn(char **pS, struct cutter *ret)
 /* Create a cutter out of a comma separated string. 

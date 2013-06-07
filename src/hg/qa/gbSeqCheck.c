@@ -32,7 +32,7 @@ char **row;
 int count = 0;
 
 verbose(1, "reading in from gbSeq...\n");
-safef(query, sizeof(query), "select distinct(gbExtFile) from gbSeq");
+sqlSafef(query, sizeof(query), "select distinct(gbExtFile) from gbSeq");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -67,7 +67,7 @@ verbose(1, "checking....\n");
 
 for (id1 = idList; id1 != NULL; id1 = id1->next)
     {
-    safef(query, sizeof(query), "select path from gbExtFile where id = %d", id1->id);
+    sqlSafef(query, sizeof(query), "select path from gbExtFile where id = %d", id1->id);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row == NULL) 

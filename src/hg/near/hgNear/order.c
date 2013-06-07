@@ -92,7 +92,7 @@ static void pairCalcDistances(struct order *ord, struct sqlConnection *conn,
 /* Fill in distance fields in geneList. */
 {
 struct dyString *query = dyStringNew(1024);
-dyStringPrintf(query, "select %s,%s from %s where %s='%s'", 
+sqlDyStringPrintf(query, "select %s,%s from %s where %s='%s'", 
 	ord->keyField, ord->valField, ord->table, ord->curGeneField, 
 	curGeneId->name);
 distancesFromQuery(conn, query->string, geneHash, maxCount, 
@@ -123,7 +123,7 @@ static void groupCalcDistances(struct order *ord, struct sqlConnection *conn,
 struct dyString *query = dyStringNew(1024);
 char *group;
 int count = 0;
-dyStringPrintf(query, "select %s from %s where %s='%s'", 
+sqlDyStringPrintf(query, "select %s from %s where %s='%s'", 
 	ord->groupField, ord->table, ord->curGeneField, curGeneId->name);
 group = sqlQuickString(conn, query->string);
 if (group != NULL)
@@ -131,7 +131,7 @@ if (group != NULL)
     struct sqlResult *sr;
     char **row;
     dyStringClear(query);
-    dyStringPrintf(query, "select %s from %s where %s=%s",
+    sqlDyStringPrintf(query, "select %s from %s where %s=%s",
     	ord->curGeneField, ord->table, ord->groupField, group);
     sr = sqlGetResult(conn, query->string);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -186,7 +186,7 @@ char query[512];
 char curName[128];
 int sameLen, nameLen;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select %s from %s where %s = '%s'", 
 	ord->valField, ord->table, ord->keyField, 
 	curGeneId->name);
@@ -198,7 +198,7 @@ if (!sqlQuickQuery(conn, query, curName, sizeof(curName)))
 nameLen = strlen(curName);
 
 /* Scan table for names and sort by similarity. */
-safef(query, sizeof(query), "select %s,%s from %s", 
+sqlSafef(query, sizeof(query), "select %s,%s from %s", 
 	ord->keyField, ord->valField, ord->table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -260,7 +260,7 @@ char **row;
 char query[512];
 
 /* Make up a list keyed by name with genePos vals, and sort it */
-safef(query, sizeof(query), "select %s,%s from %s", 
+sqlSafef(query, sizeof(query), "select %s,%s from %s", 
 	ord->keyField, ord->valField, ord->table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

@@ -121,7 +121,7 @@ if (sqlTableExists(goConn,"goaPart") &&
 for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
     {
     boolean hasFirst = FALSE;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
           "select term.acc,term.name"
           " from goaPart,term"
           " where goaPart.dbObjectId = '%s'"
@@ -161,7 +161,7 @@ char *extraTable = "gbProtCodeXra";
 char *keggTable = "keggPathway";
 if (hTableExists(database, extraTable))
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
             "select x.name, x.gene, x.product from %s k1, %s x  "
             "where k1.mapID = '%s' and "
             "k1.kgID = x.name ;"
@@ -191,7 +191,7 @@ void keggLink(struct sqlConnection *conn, char *geneId,
 char query[512], **row;
 struct sqlResult *sr;
 struct sqlConnection *conn2 = hAllocConn(database);
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select keggPathway.locusID,keggPathway.mapID,keggMapDesc.description"
     " from keggPathway,keggMapDesc"
     " where keggPathway.kgID='%s'"
@@ -218,7 +218,7 @@ char query[256];
 char *keggTable = "keggPathway";
 if (!hTableExists(database, keggTable))
     return 0;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select count(*) from %s where kgID='%s'", keggTable, geneId);
 return sqlQuickNum(conn, query);
 }
@@ -250,7 +250,7 @@ char query[512];
 char *blastpHitsTable = "blastpHits";
 if (!hTableExists(database, blastpHitsTable))
     return 0;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select count(*) from %s where query = '%s' and target like '%s:%%' and target != '%s:%s'",
 	blastpHitsTable, geneId, database, database, geneId);
 return sqlQuickNum(conn, query);
@@ -270,12 +270,12 @@ struct blastTab* loadSelfBlastpHits(struct sqlConnection *conn, char* queryName,
     {
 		if (self)
 		{
-			sprintf(query, "select * from %s where query = '%s' and target like '%s:%%'",
+			sqlSafef(query, sizeof query, "select * from %s where query = '%s' and target like '%s:%%'",
 					blastpHitsTable, queryName, database);
 		}
 		else
 		{
-			sprintf(query, "select * from %s where query = '%s' and target like '%s:%%' and target != '%s:%s'",
+			sqlSafef(query, sizeof query, "select * from %s where query = '%s' and target like '%s:%%' and target != '%s:%s'",
 					blastpHitsTable, queryName, database, database, queryName);
 		}
         srBlastpHits = sqlGetResult(conn, query);
@@ -332,7 +332,7 @@ void printSelfHomologs(struct sqlConnection *conn, struct blastTab *blastpHitsLi
 
 		if (hTableExists(blastpTarget[0], "lookup"))
 		{
-			sprintf(query, "select lookupValue from %s.lookup where lookupCode = 'annotRev'", blastpTarget[0]);
+			sqlSafef(query, sizeof query, "select lookupValue from %s.lookup where lookupCode = 'annotRev'", blastpTarget[0]);
 			sr = sqlGetResult(conn, query);
 			if ((row = sqlNextRow(sr)) != NULL)
 			{
@@ -348,7 +348,7 @@ void printSelfHomologs(struct sqlConnection *conn, struct blastTab *blastpHitsLi
 		}
 		if (findTable)
 		{
-			sprintf(query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
+			sqlSafef(query, sizeof query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
 					refSeq, blastpTarget[1]);
 			sr = sqlGetResult(conn, query);
 			if ((row = sqlNextRow(sr)) != NULL)
@@ -368,7 +368,7 @@ void printSelfHomologs(struct sqlConnection *conn, struct blastTab *blastpHitsLi
 
 		if (hTableExists(blastpTarget[0], "lookup"))
 		{
-			sprintf(query, "select lookupValue from %s.lookup where lookupCode = 'annotRevXra'", blastpTarget[0]);
+			sqlSafef(query, sizeof query, "select lookupValue from %s.lookup where lookupCode = 'annotRevXra'", blastpTarget[0]);
 			sr = sqlGetResult(conn, query);
 			if ((row = sqlNextRow(sr)) != NULL)
 			{
@@ -378,7 +378,7 @@ void printSelfHomologs(struct sqlConnection *conn, struct blastTab *blastpHitsLi
 			else
 				strcpy(product, "N/A");
 
-			sprintf(query, "select product from %s where name = '%s'", xraTable, blastpTarget[1]);
+			sqlSafef(query, sizeof query, "select product from %s where name = '%s'", xraTable, blastpTarget[1]);
 			sr = sqlGetResult(conn, query);
 			if ((row = sqlNextRow(sr)) != NULL)
 			{
@@ -422,7 +422,7 @@ int getGeneTree(struct sqlConnection *conn, char *geneId, char *treeFileName)
 
 	if (!hTableExists(database, geneTreeTable))
 		return 0;
-	safef(query, sizeof(query),
+	sqlSafef(query, sizeof(query),
 		"select * from %s where name = '%s'", geneTreeTable, geneId);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -498,15 +498,15 @@ char pepTableName[64];
 char extraTableName[64];
 
 if (startsWith("annotRev", table))
-{
-    sprintf(pepTableName, "%s%s", table, pepTable);
-    sprintf(extraTableName, "%s%s", table, extraTable);
-}
+    {
+    safef(pepTableName, sizeof pepTableName, "%s%s", table, pepTable);
+    safef(extraTableName, sizeof extraTableName, "%s%s", table, extraTable);
+    }
 else
-{
-    strcpy(pepTableName, pepTable);
-    strcpy(extraTableName, extraTable);
-}
+    {
+    safecpy(pepTableName, sizeof pepTableName, pepTable);
+    safecpy(extraTableName, sizeof extraTableName, extraTable);
+    }
 
 spConn = sqlConnect(UNIPROT_DB_NAME);
 genericHeader(tdb, item);
@@ -516,7 +516,7 @@ if (wordCount > 1)
 if (num < 3) num = 3;
 if (extraTableName != NULL && hTableExists(database, extraTableName))
 {
-    sprintf(query, "select * from %s where name = '%s'", extraTableName, item);
+    sqlSafef(query, sizeof query, "select * from %s where name = '%s'", extraTableName, item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -578,7 +578,7 @@ printf("<a name=\"positions\"></a><b>Positions and Sequence</b><br></td></tr>\n"
 printf("<tr><td>\n");
 
 hFindSplitTable(database, seqName, table, tableName, &hasBin);
-safef(query, sizeof(query), "name = \"%s\"", item);
+sqlSafefFrag(query, sizeof(query), "name = \"%s\"", item);
 gpList = genePredReaderLoadQuery(conn, tableName, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
 {
@@ -602,7 +602,7 @@ printf("<tr><td>\n");
 itemCount = 0;
 if (hTableExists(database, "COG"))
 {
-    sprintf(query, "select * from COG where name = '%s'", item);
+    sqlSafef(query, sizeof query, "select * from COG where name = '%s'", item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -613,7 +613,7 @@ if (hTableExists(database, "COG"))
         for(x=0; x<length; x++)
         {
 	        conn2 = hAllocConn(database);
-	        sprintf(query2, "select * from COGXra where name = '%s'", temparray[x]);
+	        sqlSafef(query2, sizeof query2, "select * from COGXra where name = '%s'", temparray[x]);
                 sr2 = sqlGetResult(conn2, query2);
 	        while ((row2 = sqlNextRow(sr2)) != NULL)
             {
@@ -646,7 +646,7 @@ if (hTableExists(database, "arCOGs"))
     //infoload = arCOGsLoad(row);
 
     row = NULL;
-    sprintf(query, "select * from arCOGs where gene = '%s'", item);
+    sqlSafef(query, sizeof query, "select * from arCOGs where gene = '%s'", item);
     sr = sqlGetResult(conn, query);
     conn2 = hAllocConn(database);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -654,7 +654,7 @@ if (hTableExists(database, "arCOGs"))
         infoload = arCOGsLoad(row+rowOffset);
         if(infoload!=NULL)
         {
-            sprintf(query2, "select * from mgCommonDb.arcogdesc where name = '%s'",infoload->name );
+            sqlSafef(query2, sizeof query2, "select * from mgCommonDb.arcogdesc where name = '%s'",infoload->name );
             sr2 = sqlGetResult(conn2, query2);
             while ((row2 = sqlNextRow(sr2)) != NULL)
             {
@@ -676,7 +676,7 @@ if (hTableExists(database, "arCOGs"))
 arcogCount = 0;
 hasArCOG = FALSE;
 row = NULL;
-sprintf(query, "show databases like 'arCogsDb'");
+sqlSafef(query, sizeof query, "show databases like 'arCogsDb'");
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
 {
@@ -691,7 +691,7 @@ if (hasArCOG)
 	memset(clade, 0, 50);
 	getGenomeClade(conn, database, genome, clade);
 
-	sprintf(query, "select distinct a.arcog_id, a.anntation, c.class_id from arCogsDb.arcogDef a, arCogsDb.arcog b, arCogsDb.arcogFun c where a.arcog_id = b.arcog_id and a.arcog_id = c.arcog_id and db_name = '%s' and name = '%s'",
+	sqlSafef(query, sizeof query, "select distinct a.arcog_id, a.anntation, c.class_id from arCogsDb.arcogDef a, arCogsDb.arcog b, arCogsDb.arcogFun c where a.arcog_id = b.arcog_id and a.arcog_id = c.arcog_id and db_name = '%s' and name = '%s'",
 			database, item);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -736,7 +736,7 @@ if (list != NULL)
     printf("<A HREF=\"http://www.ebi.ac.uk/interpro/IProteinStructures?ac=%s\" TARGET=_blank>",
         spAcc);
     printf("Graphical view of domain structure</A><BR>");
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
         "select extAcc1,extAcc2 from extDbRef,extDb"
     " where extDbRef.acc = '%s'"
     " and extDb.val = 'Interpro' and extDb.id = extDbRef.extDb"
@@ -748,7 +748,7 @@ if (list != NULL)
         safef(interPro, 128, "%s.interProXref", pdb);
             if (hTableExists(database, interPro))
                 {
-                safef(query, sizeof(query),
+                sqlSafef(query, sizeof(query),
                         "select description from %s where accession = '%s' and interProId = '%s'",
                         interPro, spAcc, row[0]);
                 sr2 = sqlGetResult(conn, query);
@@ -778,11 +778,11 @@ if (list != NULL)
     {
     char query[256];
     char *description;
-    safef(query, sizeof(query), "select description from proteome.pfamDesc where pfamAC='%s'", el->name);
+    sqlSafef(query, sizeof(query), "select description from proteome.pfamDesc where pfamAC='%s'", el->name);
     description = sqlQuickString(spConn, query);
     if (description == NULL)
         {
-        safef(query, sizeof(query),
+        sqlSafef(query, sizeof(query),
         "select extDbRef.extAcc1 from extDbRef,extDb "
         "where extDbRef.acc = '%s' "
         "and extDbRef.extDb = extDb.id "
@@ -810,7 +810,7 @@ if (list != NULL)
     struct sqlResult *sr;
     int column = 0, maxColumn=4, rowCount=0;
     printf("<B>Protein Data Bank (PDB) 3-D Structure</B><BR>");
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
         "select extAcc1,extAcc2 from extDbRef,extDb"
     " where extDbRef.acc = '%s'"
     " and extDb.val = 'PDB' and extDb.id = extDbRef.extDb"
@@ -1011,7 +1011,7 @@ if (num < 3) num = 3;
 genericBedClick(conn, tdb, trnaName, start, num);
 rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
-sprintf(query, "select * from %s where name = '%s'", tdb->table, trnaName);
+sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, trnaName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     cb=bedLoadN(row+1, 6);
@@ -1022,7 +1022,7 @@ dashlength=sequenceLength/60;
 
 /*Query the database for the extrainfo file for sargassoSea*/
 conn=hAllocConn(database);/*sqlConnect(dupe);*/
-safef(tempstring, sizeof(tempstring),"select * from sargassoSeaXra where qname = '%s'", trnaName);
+sqlSafef(tempstring, sizeof(tempstring),"select * from sargassoSeaXra where qname = '%s'", trnaName);
 sr = sqlGetResult(conn, tempstring);
 
 /*Load the required data from the database*/
@@ -1218,7 +1218,7 @@ dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
 rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-sprintf(query, "select * from %s where chrom = '%s' and name = '%s'", tdb->table, chrom, trnaName);
+sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and name = '%s'", tdb->table, chrom, trnaName);
 sr = sqlGetResult(conn, query);
 printf("<TABLE>\n");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1284,7 +1284,7 @@ dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
 rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-sprintf(query, "select * from %s where name = '%s'", tdb->table, snornaName);
+sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, snornaName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
   {
@@ -1330,7 +1330,7 @@ wordCount = chopLine(dupe, words);
 
 
 rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-sprintf(query, "select * from %s where name = '%s'", tdb->table, gbRnaName);
+sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, gbRnaName);
 sr = sqlGetResult(conn, query);
 
 
@@ -1372,7 +1372,7 @@ int rowOffset;
 
 genericHeader(tdb,egName);
 rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-sprintf(query, "select * from %s where name = '%s'", tdb->table, egName);
+sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, egName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     slAddTail(&egList,easyGeneLoad(row+rowOffset));
@@ -1430,7 +1430,7 @@ if (num < 3) num = 3;
 genericBedClick(conn, tdb, trnaName, start, num);
 rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
-sprintf(query, "select * from %s where name = '%s'", tdb->table, trnaName);
+sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, trnaName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1443,7 +1443,7 @@ sequenceLength=sequenceLength/3;
 dashlength=sequenceLength/60;
 
 conn=hAllocConn(database);/*sqlConnect(dupe);*/
-sprintf(query, "select * from gbProtCodePep where name = '%s'", trnaName);
+sqlSafef(query, sizeof query, "select * from gbProtCodePep where name = '%s'", trnaName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1453,7 +1453,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 /*Query the database for the extrainfo file for codeBlast*/
 conn=hAllocConn(database);/*sqlConnect(dupe);*/
-safef(tempstring, sizeof(tempstring), "select * from codeBlastScore where qname = '%s'", trnaName);
+sqlSafef(tempstring, sizeof(tempstring), "select * from codeBlastScore where qname = '%s'", trnaName);
 
 sr = sqlGetResult(conn, tempstring);
 
@@ -1766,7 +1766,7 @@ if (pepTable != NULL && hTableExists(database, pepTable))
     char *pepNameCol = sameString(pepTable, "gbSeq") ? "acc" : "name";
     conn = hAllocConn(database);
     /* simple query to see if pepName has a record in pepTable: */
-    safef(query, sizeof(query), "select 0 from %s where %s = '%s'",
+    sqlSafef(query, sizeof(query), "select 0 from %s where %s = '%s'",
       pepTable, pepNameCol, item);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -1779,7 +1779,7 @@ if (pepTable != NULL && hTableExists(database, pepTable))
 if (extraTable != NULL && hTableExists(database, extraTable))
     {
     conn = hAllocConn(database);
-    sprintf(query, "select * from %s where name = '%s'", extraTable, item);
+    sqlSafef(query, sizeof query, "select * from %s where name = '%s'", extraTable, item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1792,7 +1792,7 @@ if (extraTable != NULL && hTableExists(database, extraTable))
 if (hTableExists(database, "COG"))
     {
     conn = hAllocConn(database);
-    sprintf(query, "select * from COG where name = '%s'", item);
+    sqlSafef(query, sizeof query, "select * from COG where name = '%s'", item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1803,7 +1803,7 @@ if (hTableExists(database, "COG"))
         for(x=0; x<length; x++)
         {
         conn2 = hAllocConn(database);
-        sprintf(query2, "select * from COGXra where name = '%s'", temparray[x]);
+        sqlSafef(query2, sizeof query2, "select * from COGXra where name = '%s'", temparray[x]);
                 sr2 = sqlGetResult(conn2, query2);
         while ((row2 = sqlNextRow(sr2)) != NULL)
                 {
@@ -1840,7 +1840,7 @@ if (wordCount > 1)
     num = atoi(words[1]);
 if (num < 3) num = 3;
 genericBedClick(conn, tdb, opName, start, num);
-sprintf(query, "select * from %sInfo where name = '%s'", tdb->table, opName);
+sqlSafef(query, sizeof query, "select * from %sInfo where name = '%s'", tdb->table, opName);
 sr = sqlGetResult(conn, query);*/
 /* Make the operon table like on the TIGR web page. */
 /*if ((row = sqlNextRow(sr)) != NULL)
@@ -1903,7 +1903,7 @@ void doTigrCmrGene(struct trackDb *tdb, char *tigrName)
   wordCount = chopLine(dupe, words);
 
   rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-  sprintf(query, "select * from %s where name = '%s'", tdb->table, tigrName);
+  sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, tigrName);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1967,7 +1967,7 @@ void doJgiGene(struct trackDb *tdb, char *jgiName)
   wordCount = chopLine(dupe, words);
 
   rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-  sprintf(query, "select * from %s where name = '%s'", tdb->table, jgiName);
+  sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, jgiName);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2018,17 +2018,17 @@ void doPfamHit(struct trackDb *tdb, char *hitName)
 
   rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", tdb->table, hitName,seqName,start);
+  sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", tdb->table, hitName,seqName,start);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
       pfamHit = lowelabPfamHitsLoad(row+rowOffset);
 
-      safef(query, sizeof(query), "select description from proteome.pfamDesc where pfamAC='%s'", pfamHit->pfamAC);
+      sqlSafef(query, sizeof(query), "select description from proteome.pfamDesc where pfamAC='%s'", pfamHit->pfamAC);
 
     if (!sqlTableExists(spConn,"proteome.pfamDesc"))
         {
-        safef(query, sizeof(query),
+        sqlSafef(query, sizeof(query),
         "select extDbRef.extAcc1 from extDbRef,extDb "
         "where extDbRef.acc = '%s' "
         "and extDbRef.extDb = extDb.id "
@@ -2095,7 +2095,7 @@ void doTigrOperons(struct trackDb *tdb, char *tigrOperonName)
     if (bedSize < 3) bedSize = 3;
 
     rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-    sprintf(query, "select * from %s where name = '%s'", tdb->table, tigrOperonName);
+    sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, tigrOperonName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2130,7 +2130,7 @@ void doTigrOperons(struct trackDb *tdb, char *tigrOperonName)
     printf("<td width=\"25%%\"><b>Number of Conserved Genomes</b></td>\n");
     printf("</tr>\n");
 
-    sprintf(query, "select * from lowelabTIGROperonScore where name = '%s'", tigrOperonName);
+    sqlSafef(query, sizeof query, "select * from lowelabTIGROperonScore where name = '%s'", tigrOperonName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2188,7 +2188,7 @@ void doArkinOperons(struct trackDb *tdb, char *arkinOperonName)
     if (bedSize < 3) bedSize = 3;
 
     rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-    sprintf(query, "select * from %s where name = '%s'", tdb->table, arkinOperonName);
+    sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, arkinOperonName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2223,7 +2223,7 @@ void doArkinOperons(struct trackDb *tdb, char *arkinOperonName)
     printf("<td width=\"25%%\"><b>Gene neighbor score</b></td>\n");
     printf("</tr>\n");
 
-    sprintf(query, "select * from lowelabArkinOperonScore where name = '%s'", arkinOperonName);
+    sqlSafef(query, sizeof query, "select * from lowelabArkinOperonScore where name = '%s'", arkinOperonName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2282,7 +2282,7 @@ struct bed * getBlastpTrackRecord(struct sqlConnection *conn, struct trackDb *td
     if (bedSize < 3) bedSize = 3;
 
     rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-    sprintf(query, "select distinct * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = %d",
+    sqlSafef(query, sizeof query, "select distinct * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = %d",
             tdb->table, targetName, chrom, start, end);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -2316,7 +2316,7 @@ void printQueryGeneInfo(struct sqlConnection *conn, struct bed *blastpTrack, cha
     if (hTableExists(database, queryTable) && hTableExists(database, blastpHits))
     {
         /* Get query gene from refSeq */
-        sprintf(query, "select count(*) from %s where chrom = '%s' and strand = '%s' and cdsStart <= %u and cdsEnd >= %u",
+        sqlSafef(query, sizeof query, "select count(*) from %s where chrom = '%s' and strand = '%s' and cdsStart <= %u and cdsEnd >= %u",
                 queryTable, blastpTrack->chrom, blastpTrack->strand, blastpTrack->chromStart, blastpTrack->chromEnd);
         srRefSeq = sqlGetResult(conn, query);
         if ((row = sqlNextRow(srRefSeq)) != NULL)
@@ -2326,7 +2326,7 @@ void printQueryGeneInfo(struct sqlConnection *conn, struct bed *blastpTrack, cha
 
         if (geneCount == 1)
             {
-                sprintf(query, "select name, cdsStart, cdsEnd from %s where chrom = '%s' and strand = '%s' and cdsStart <= %u and cdsEnd >= %u",
+                sqlSafef(query, sizeof query, "select name, cdsStart, cdsEnd from %s where chrom = '%s' and strand = '%s' and cdsStart <= %u and cdsEnd >= %u",
                         queryTable, blastpTrack->chrom, blastpTrack->strand, blastpTrack->chromStart, blastpTrack->chromEnd);
                 srRefSeq = sqlGetResult(conn, query);
                 if ((row = sqlNextRow(srRefSeq)) != NULL)
@@ -2340,7 +2340,7 @@ void printQueryGeneInfo(struct sqlConnection *conn, struct bed *blastpTrack, cha
             else
             {
                 /* Check blastpHits if more than 1 query gene is found within the region */
-                sprintf(query, "select a.name, a.cdsStart, a.cdsEnd from %s a, %s b where a.chrom = '%s' and a.strand = '%s' and a.cdsStart <= %u and a.cdsEnd >= %u and a.name = b.query and b.target like '%%%s'",
+                sqlSafef(query, sizeof query, "select a.name, a.cdsStart, a.cdsEnd from %s a, %s b where a.chrom = '%s' and a.strand = '%s' and a.cdsStart <= %u and a.cdsEnd >= %u and a.name = b.query and b.target like '%%%s'",
                         queryTable, blastpHits,
                         blastpTrack->chrom, blastpTrack->strand, blastpTrack->chromStart, blastpTrack->chromEnd, targetGeneName[0]);
                 srRefSeq = sqlGetResult(conn, query);
@@ -2395,7 +2395,7 @@ struct slName* getAllClades(struct sqlConnection *conn)
     struct slName *list = NULL;
     char clade[50];
 
-    sprintf(query, "select label from %s.clade", cfgOption("central.db"));
+    sqlSafef(query, sizeof query, "select label from %s.clade", cfgOption("central.db"));
     srDb = sqlGetResult(conn, query);
     while ((rowDb = sqlNextRow(srDb)) != NULL)
     {
@@ -2419,7 +2419,7 @@ struct blastTab* loadBlastpHits(struct sqlConnection *conn, char* queryName)
 
     if (hTableExists(database, blastpHitsTable))
     {
-        sprintf(query, "select * from %s where query = '%s'", blastpHitsTable, queryName);
+        sqlSafef(query, sizeof query, "select * from %s where query = '%s'", blastpHitsTable, queryName);
         srBlastpHits = sqlGetResult(conn, query);
         while ((row = sqlNextRow(srBlastpHits)) != NULL)
         {
@@ -2512,7 +2512,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
             {
                 if (hTableExists(blastpTarget[0], "lookup"))
                 {
-                    sprintf(query, "select lookupValue from %s.lookup where lookupCode = 'annotRev'", blastpTarget[0]);
+                    sqlSafef(query, sizeof query, "select lookupValue from %s.lookup where lookupCode = 'annotRev'", blastpTarget[0]);
                     sr = sqlGetResult(conn, query);
                     if ((row = sqlNextRow(sr)) != NULL)
                     {
@@ -2528,7 +2528,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
                 }
                 if (findTable)
                 {
-                    sprintf(query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
+                    sqlSafef(query, sizeof query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
                             refSeq, blastpTarget[1]);
                     sr = sqlGetResult(conn, query);
                     if ((row = sqlNextRow(sr)) != NULL)
@@ -2553,7 +2553,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
             {
                 if (hTableExists(blastpTarget[0], "lookup"))
                 {
-                    sprintf(query, "select lookupValue from %s.lookup where lookupCode = 'annotRevXra'", blastpTarget[0]);
+                    sqlSafef(query, sizeof query, "select lookupValue from %s.lookup where lookupCode = 'annotRevXra'", blastpTarget[0]);
                     sr = sqlGetResult(conn, query);
                     if ((row = sqlNextRow(sr)) != NULL)
                     {
@@ -2563,7 +2563,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
                     else
                         strcpy(product, "N/A");
 
-                    sprintf(query, "select product from %s.%s where name = '%s'", blastpTarget[0], xraTable, blastpTarget[1]);
+                    sqlSafef(query, sizeof query, "select product from %s.%s where name = '%s'", blastpTarget[0], xraTable, blastpTarget[1]);
                     sr = sqlGetResult(conn, query);
                     if ((row = sqlNextRow(sr)) != NULL)
                     {
@@ -2628,7 +2628,7 @@ void doBlastP(struct trackDb *tdb, char *targetName)
 
     if (hTableExists(database, "lookup"))
     {
-        sprintf(query, "select lookupValue from lookup where lookupCode = 'annotRev'");
+        sqlSafef(query, sizeof query, "select lookupValue from lookup where lookupCode = 'annotRev'");
         sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -2669,7 +2669,7 @@ void doSelfHomologs(struct trackDb *tdb, char *targetName)
 
     if (hTableExists(database, "lookup"))
     {
-        sprintf(query, "select lookupValue from lookup where lookupCode = 'annotRev'");
+        sqlSafef(query, sizeof query, "select lookupValue from lookup where lookupCode = 'annotRev'");
         sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -2711,7 +2711,7 @@ void printQuerySequenceInfo(struct sqlConnection *conn, struct bed *blastxTrack,
     if (hTableExists(database, queryTable) && hTableExists(database, blastxHits))
     {
         /* Get query sequence from query table */
-        sprintf(query, "select count(*) from %s where chrom = '%s' and chromStart <= %u and chromEnd >= %u",
+        sqlSafef(query, sizeof query, "select count(*) from %s where chrom = '%s' and chromStart <= %u and chromEnd >= %u",
                 queryTable, blastxTrack->chrom, blastxTrack->chromStart, blastxTrack->chromEnd);
         srQuerySeq = sqlGetResult(conn, query);
         if ((row = sqlNextRow(srQuerySeq)) != NULL)
@@ -2721,7 +2721,7 @@ void printQuerySequenceInfo(struct sqlConnection *conn, struct bed *blastxTrack,
 
             if (seqCount == 1)
             {
-                sprintf(query, "select name, chromStart, chromEnd from %s where chrom = '%s' and chromStart <= %u and chromEnd >= %u",
+                sqlSafef(query, sizeof query, "select name, chromStart, chromEnd from %s where chrom = '%s' and chromStart <= %u and chromEnd >= %u",
                         queryTable, blastxTrack->chrom, blastxTrack->chromStart, blastxTrack->chromEnd);
                 srQuerySeq = sqlGetResult(conn, query);
                 if ((row = sqlNextRow(srQuerySeq)) != NULL)
@@ -2735,7 +2735,7 @@ void printQuerySequenceInfo(struct sqlConnection *conn, struct bed *blastxTrack,
             else
             {
                 /* Check blastxHits if more than 1 query sequence is found within the region */
-                sprintf(query, "select a.name, a.chromStart, a.chromEnd from %s a, %s b where a.chrom = '%s' and a.chromStart <= %u and a.chromEnd >= %u and a.name = b.query and b.target like '%%%s'",
+                sqlSafef(query, sizeof query, "select a.name, a.chromStart, a.chromEnd from %s a, %s b where a.chrom = '%s' and a.chromStart <= %u and a.chromEnd >= %u and a.name = b.query and b.target like '%%%s'",
                         queryTable, blastxHits,
                         blastxTrack->chrom, blastxTrack->chromStart, blastxTrack->chromEnd, targetGeneName[0]);
                 srQuerySeq = sqlGetResult(conn, query);
@@ -2800,7 +2800,7 @@ struct blastTab* loadBlastxHits(struct sqlConnection *conn, char* queryName, cha
     if (hTableExists(database, queryTable) && hTableExists(database, blastxHitsTable))
     {
         rowOffset = hOffsetPastBin(database, seqName, queryTable);
-        sprintf(query, "select * from %s where name = '%s'", queryTable, queryName);
+        sqlSafef(query, sizeof query, "select * from %s where name = '%s'", queryTable, queryName);
         srQuery = sqlGetResult(conn, query);
         if ((rowQuery = sqlNextRow(srQuery)) != NULL)
         {
@@ -2811,7 +2811,7 @@ struct blastTab* loadBlastxHits(struct sqlConnection *conn, char* queryName, cha
         sqlFreeResult(&srQuery);
         srQuery = NULL;
 
-        sprintf(query, "select * from %s where query = '%s'", blastxHitsTable, queryName);
+        sqlSafef(query, sizeof query, "select * from %s where query = '%s'", blastxHitsTable, queryName);
         srBlastxHits = sqlGetResult(conn, query);
         while ((row = sqlNextRow(srBlastxHits)) != NULL)
         {
@@ -2917,7 +2917,7 @@ void printBlastxResult(struct sqlConnection *conn, struct blastTab *blastxHitsLi
             strcat(refSeq, ".refSeq");
             if (hDbExists(blastxTarget[0]) && hTableExists(blastxTarget[0], "refSeq"))
             {
-                sprintf(query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
+                sqlSafef(query, sizeof query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
                         refSeq, blastxTarget[1]);
                 sr = sqlGetResult(conn, query);
                 if ((row = sqlNextRow(sr)) != NULL)
@@ -3138,7 +3138,7 @@ void doPrimers(struct trackDb *tdb, char *primerName)
     if (bedSize < 3) bedSize = 3;
 
     rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-    sprintf(query, "select * from %s where name = '%s'", tdb->table, primerName);
+    sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, primerName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3193,28 +3193,28 @@ void doPrimers(struct trackDb *tdb, char *primerName)
     if (strcmp(primer->strand, "+") == 0)
     {
         if (hTableExists(database, "genomePcrPrimers"))
-            sprintf(query, "select *, 'Array PCR' primerType from genomePcrPrimers where chrom = '%s' and chromStart > %d and strand = '-'", primer->chrom, primer->chromEnd);
+            sqlSafef(query, sizeof query, "select *, 'Array PCR' primerType from genomePcrPrimers where chrom = '%s' and chromStart > %d and strand = '-'", primer->chrom, primer->chromEnd);
         if (hTableExists(database, "goldRTprimers"))
         {
             if (strcmp(query, "") != 0)
-                sprintf(query, "%s union ", query);
-            sprintf(query, "%sselect *, 'GOLD RT' primerType from goldRTprimers where chrom = '%s' and chromStart > %d and strand = '-'",
+                sqlSafef(query, sizeof query, "%s union ", query);
+            sqlSafef(query, sizeof query, "%sselect *, 'GOLD RT' primerType from goldRTprimers where chrom = '%s' and chromStart > %d and strand = '-'",
                     query, primer->chrom, primer->chromEnd);
         }
-        sprintf(query, "%s order by chromStart", query);
+        sqlSafef(query, sizeof query, "%s order by chromStart", query);
     }
     else
     {
         if (hTableExists(database, "genomePcrPrimers"))
-            sprintf(query, "select *, 'Array PCR' primerType from genomePcrPrimers where chrom = '%s' and chromEnd < %d and strand = '+'", primer->chrom, primer->chromStart);
+            sqlSafef(query, sizeof query, "select *, 'Array PCR' primerType from genomePcrPrimers where chrom = '%s' and chromEnd < %d and strand = '+'", primer->chrom, primer->chromStart);
         if (hTableExists(database, "goldRTprimers"))
         {
             if (strcmp(query, "") != 0)
-                sprintf(query, "%s union ", query);
-            sprintf(query, "%sselect *, 'GOLD RT' primerType from goldRTprimers where chrom = '%s' and chromEnd < %d and strand = '+'",
+                sqlSafef(query, sizeof query, "%s union ", query);
+            sqlSafef(query, sizeof query, "%sselect *, 'GOLD RT' primerType from goldRTprimers where chrom = '%s' and chromEnd < %d and strand = '+'",
                     query, primer->chrom, primer->chromStart);
         }
-        sprintf(query, "%s order by chromStart desc", query);
+        sqlSafef(query, sizeof query, "%s order by chromStart desc", query);
     }
 
     sr = sqlGetResult(conn, query);
@@ -3333,7 +3333,7 @@ void doRNAHybridization(struct trackDb *tdb, char *itemName)
   if (hTableExists(database, rnaHybridizationTable))
     {
       /* Get query gene from refSeq */
-      sprintf(query, "select * from %s where name='%s'", rnaHybridizationTable, itemName);
+      sqlSafef(query, sizeof query, "select * from %s where name='%s'", rnaHybridizationTable, itemName);
       sr = sqlGetResult(conn, query);
       if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3424,8 +3424,8 @@ void doarCOGs(struct trackDb *tdb, char *itemName)
   int end = cartInt(cart, "t");
 
 
-    sprintf(query, "select * from mgCommonDb.arcogdesc where name = '%s'", itemName);
-    //sprintf(query, "select * from %s where query = '%s'", blastpHitsTable, queryName);
+    sqlSafef(query, sizeof query, "select * from mgCommonDb.arcogdesc where name = '%s'", itemName);
+    //sqlSafef(query, sizeof query, "select * from %s where query = '%s'", blastpHitsTable, queryName);
     struct sqlResult *srarcogdesc = sqlGetResult(conn, query);
 
 
@@ -3445,7 +3445,7 @@ void doarCOGs(struct trackDb *tdb, char *itemName)
 
   rowOffset = hOffsetPastBin(database,seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
+  sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3496,7 +3496,7 @@ void doloweOrthologs(struct trackDb *tdb, char *itemName)
 
   rowOffset = hOffsetPastBin(database,seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
+  sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3538,8 +3538,8 @@ void doCddInfo(struct trackDb *tdb, char *itemName)
         bedSize = atoi(words[1]);
     if (bedSize < 3) bedSize = 3;
 
-    sprintf(query, "select * from mgCommonDb.cddDesc where accession = '%s'", itemName);
-    //sprintf(query, "select * from %s where query = '%s'", blastpHitsTable, queryName);
+    sqlSafef(query, sizeof query, "select * from mgCommonDb.cddDesc where accession = '%s'", itemName);
+    //sqlSafef(query, sizeof query, "select * from %s where query = '%s'", blastpHitsTable, queryName);
     struct sqlResult *srCddDesc = sqlGetResult(conn, query);
 
 
@@ -3558,7 +3558,7 @@ void doCddInfo(struct trackDb *tdb, char *itemName)
 
   rowOffset = hOffsetPastBin(database,seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
+  sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3606,7 +3606,7 @@ void domegablastInfo(struct trackDb *tdb, char *itemName)
 
   rowOffset = hOffsetPastBin(database,seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
+  sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", tdb->table, itemName,seqName,start, end);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3667,7 +3667,7 @@ void doAlignInfo(struct trackDb *tdb, char *itemName)
 
   rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d;", tdb->table, itemName,seqName,start);
+  sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d;", tdb->table, itemName,seqName,start);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3720,7 +3720,7 @@ void doCRISPRs(struct trackDb *tdb, char *crisprName)
     if (bedSize < 3) bedSize = 3;
 
     rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-    safef(query, ArraySize(query), "select * from %s where name = '%s'", tdb->table, crisprName);
+    sqlSafef(query, ArraySize(query), "select * from %s where name = '%s'", tdb->table, crisprName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     {

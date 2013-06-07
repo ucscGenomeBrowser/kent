@@ -41,7 +41,7 @@ outf = fopen(outFileName, "w");
 conn2= hAllocConn(genomeRelease);
 conn3= hAllocConn(genomeRelease);
 	
-sprintf(query2,"select subjId, labCode from %s.labCodeSubjId", genomeRelease);
+sqlSafef(query2, sizeof query2, "select subjId, labCode from %s.labCodeSubjId", genomeRelease);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -77,7 +77,7 @@ while (row2 != NULL)
 	continue;
 	}
 
-    sprintf(query3,"select id from %s.aaSeq where id like 'p1.%s%c' order by id", 
+    sqlSafef(query3, sizeof query3, "select id from %s.aaSeq where id like 'p1.%s%c' order by id", 
 	    genomeRelease, labCode, '%');
 
     sr3 = sqlMustGetResult(conn3, query3);

@@ -133,56 +133,15 @@ void genotypeFreqsSaveToDb(struct sqlConnection *conn, struct genotypeFreqs *el,
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use genotypeFreqsSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%c','%s','%s','%s','%s','%s','%s',%f,%d,'%s',%f,%d,'%s',%f,%d,%d,%f)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%c','%s','%s','%s','%s','%s','%s',%f,%d,'%s',%f,%d,'%s',%f,%d,%d,%f)", 
 	tableName,  el->rsId,  el->chrom,  el->chromStart,  el->strand,  el->assembly,  el->center,  el->protLSID,  el->assayLSID,  el->panelLSID,  el->majGt,  el->majFreq,  el->majCount,  el->hetGt,  el->hetFreq,  el->hetCount,  el->minGt,  el->minFreq,  el->minCount,  el->totCount,  el->minAlFreq);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void genotypeFreqsSaveToDbEscaped(struct sqlConnection *conn, struct genotypeFreqs *el, char *tableName, int updateSize)
-/* Save genotypeFreqs as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than genotypeFreqsSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *rsId, *chrom, *strand, *assembly, *center, *protLSID, *assayLSID, *panelLSID, *majGt, *hetGt, *minGt;
-rsId = sqlEscapeString(el->rsId);
-chrom = sqlEscapeString(el->chrom);
-strand = sqlEscapeString(el->strand);
-assembly = sqlEscapeString(el->assembly);
-center = sqlEscapeString(el->center);
-protLSID = sqlEscapeString(el->protLSID);
-assayLSID = sqlEscapeString(el->assayLSID);
-panelLSID = sqlEscapeString(el->panelLSID);
-majGt = sqlEscapeString(el->majGt);
-hetGt = sqlEscapeString(el->hetGt);
-minGt = sqlEscapeString(el->minGt);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%s','%s','%s','%s','%s','%s','%s',%f,%d,'%s',%f,%d,'%s',%f,%d,%d,%f)", 
-	tableName,  rsId,  chrom, el->chromStart ,  strand,  assembly,  center,  protLSID,  assayLSID,  panelLSID,  majGt, el->majFreq , el->majCount ,  hetGt, el->hetFreq , el->hetCount ,  minGt, el->minFreq , el->minCount , el->totCount , el->minAlFreq );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&rsId);
-freez(&chrom);
-freez(&strand);
-freez(&assembly);
-freez(&center);
-freez(&protLSID);
-freez(&assayLSID);
-freez(&panelLSID);
-freez(&majGt);
-freez(&hetGt);
-freez(&minGt);
-}
 
 struct genotypeFreqs *genotypeFreqsCommaIn(char **pS, struct genotypeFreqs *ret)
 /* Create a genotypeFreqs out of a comma separated string. 
