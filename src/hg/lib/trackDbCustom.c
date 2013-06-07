@@ -697,7 +697,8 @@ else if (sameWord("vcfTabix",type))
 
 if (cType == cfgNone && warnIfNecessary)
     {
-    if (!startsWith("bed ", type) && !startsWith("bedDetail", type) && !startsWith("bigBed", type) && !startsWith("gvf", type)
+    if (!startsWith("bed ", type) && !startsWith("bedDetail", type) && !startsWith("bigBed", type)
+	&& !startsWith("gvf", type) && !sameString("pgSnp", type)
         && subgroupFind(tdb, "view", NULL))
         warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",type,tdb->track);
     }
