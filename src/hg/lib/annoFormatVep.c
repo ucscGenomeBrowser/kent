@@ -45,8 +45,11 @@ struct annoFormatVepConfig
     // that provide data for VEP output columns.
     {
     struct annoStreamer *variantSource;		// Primary source: variants
+    char *variantDescription;			// Description to appear in output header
     struct annoStreamer *gpVarSource;		// annoGratorGpVar makes the core predictions
+    char *gpVarDescription;			// Description to appear in output header
     struct annoStreamer *snpSource;		// Latest dbSNP provides IDs of known variants
+    char *snpDescription;			// Description to appear in output header
     struct annoFormatVepExtraSource *extraSources;	// Everything else that may be tacked on
     };
 
@@ -70,63 +73,6 @@ struct annoFormatVep
     };
 
 
-static struct asObject *dbNsfpSiftAsO = NULL;	// autoSql object for dbNsfpSift
-static struct asObject *dbNsfpPPAsO = NULL;   // autoSql object for dbNsfpPolyPhen2
-
-//#*** These belongs in different .h/.c...
-struct asObject *dbNsfpSiftAsObj()
-// Return asObject describing fields of dbNsfpSift.
-{
-return asParseText(
-"table dbNsfpSift\n"
-"\"SIFT scores provided by dbNSFP (http://dbnsfp.houstonbioinformatics.org/)\"\n"
-"    (\n"
-"    string chrom;      \"Reference sequence chromosome or scaffold\"\n"
-"    uint   chromStart; \"Start position in chromosome\"\n"
-"    uint   chromEnd;   \"End position in chromosome\"\n"
-"    enum('A','C','G','T') refAl;   \"Allele found in reference assembly\"\n"
-"    lstring ensTxId;   \"Ensembl transcript ID(s), if dbNSFP has data for >1 transcript set at this position; otherwise '.' to save space\"\n"
-"    enum('A','C','G','T') altAl1;     \"alternate allele #1\"\n"
-"    string score1;      \"SIFT score for altAl1 (or '.' if n/a): < 0.05 is 'Damaging', otherwise 'Tolerated'\"\n"
-"    enum('A','C','G','T','.') altAl2; \"alternate allele #2\"\n"
-"    string score2;      \"SIFT score for altAl2 (or '.' if n/a): < 0.05 is 'Damaging', otherwise 'Tolerated'\"\n"
-"    enum('A','C','G','T','.') altAl3; \"alternate allele #3\"\n"
-"    string score3;      \"SIFT score for altAl3 (or '.' if n/a): < 0.05 is 'Damaging', otherwise 'Tolerated'\"\n"
-"    )\n");
-}
-
-struct asObject *dbNsfpPPAsObj()
-// Return asObject describing fields of dbNsfpPolyPhen2.
-{
-return asParseText(
-"table dbNsfpPolyPhen2\n"
-"\"PolyPhen2 scores provided by dbNSFP (http://dbnsfp.houstonbioinformatics.org/)\"\n"
-"    (\n"
-"    string chrom;      \"Reference sequence chromosome or scaffold\"\n"
-"    uint   chromStart; \"Start position in chromosome\"\n"
-"    uint   chromEnd;   \"End position in chromosome\"\n"
-"    enum('A','C','G','T') refAl;       \"Allele found in reference assembly\"\n"
-"    string uniProtAaPos;               \"Offset of changed amino acid (1-based) in UniProt sequence; can be comma-sep'd list parallel to UniProt IDs in dbNsfpUniProt\"\n"
-"    enum('A','C','G','T') altAl1;  \"alternate allele #1\"\n"
-"    string hDivScore1;                 \"Probability score for altAl1 from HumDiv training set, or '.' if n/a\"\n"
-"    enum('D','P','B','.') hDivPred1;   \"Prediction for altAl1 from HumDiv: Damaging, Possibly damaging, Benign, not given\"\n"
-"    string hVarScore1;                 \"Probability score for altAl1 from HumVar training set, or '.' if n/a\"\n"
-"    enum('D','P','B','.') hVarPred1;   \"Prediction for altAl1 from HumVar: Damaging, Possibly damaging, Benign, not given\"\n"
-"    enum('A','C','G','T','.') altAl2;  \"alternate allele #2\"\n"
-"    string hDivScore2;                 \"Probability score for altAl2 from HumDiv training set, or '.' if n/a\"\n"
-"    enum('D','P','B','.') hDivPred2;   \"Prediction for altAl2 from HumDiv: Damaging, Possibly damaging, Benign, not given\"\n"
-"    string hVarScore2;                 \"Probability score for altAl2 from HumVar training set, or '.' if n/a\"\n"
-"    enum('D','P','B','.') hVarPred2;   \"Prediction for altAl2 from HumVar: Damaging, Possibly damaging, Benign, not given\"\n"
-"    enum('A','C','G','T','.') altAl3;  \"alternate allele #3\"\n"
-"    string hDivScore3;                 \"Probability score for altAl3 from HumDiv training set, or '.' if n/a\"\n"
-"    enum('D','P','B','.') hDivPred3;   \"Prediction for altAl3 from HumDiv: Damaging, Possibly damaging, Benign, not given\"\n"
-"    string hVarScore3;                 \"Probability score for altAl3 from HumVar training set, or '.' if n/a\"\n"
-"    enum('D','P','B','.') hVarPred3;   \"Prediction for altAl3 from HumVar: Damaging, Possibly damaging, Benign, not given\"\n"
-"    )\n"
-);
-}
-
-
 static void afVepPrintHeaderExtraTags(struct annoFormatVep *self)
 /* For each extra column described in config, write out its tag and a brief description. */
 {
@@ -138,7 +84,8 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
     {
     struct annoFormatVepExtraItem *extraItem;
     for (extraItem = extraSrc->items;  extraItem != NULL;  extraItem = extraItem->next)
-	fprintf(self->f, "## %s: %s\n", extraItem->tag, extraItem->description);
+	if (isNotEmpty(extraItem->tag))
+	    fprintf(self->f, "## %s: %s\n", extraItem->tag, extraItem->description);
     }
 }
 
@@ -158,8 +105,11 @@ FILE *f = self->f;
 fprintf(f, "## ENSEMBL VARIANT EFFECT PREDICTOR format (UCSC Variant Annotation Integrator)\n");
 afVepPrintHeaderDate(f);
 fprintf(f, "## Connected to UCSC database %s\n", db);
-fprintf(f, "## Variants: %s\n", self->config->variantSource->name);
-fprintf(f, "## Transcripts: %s\n", self->config->gpVarSource->name);
+struct annoFormatVepConfig *config = self->config;
+fprintf(f, "## Variants: %s (%s)\n", config->variantDescription, config->variantSource->name);
+fprintf(f, "## Transcripts: %s (%s)\n", config->gpVarDescription, config->gpVarSource->name);
+if (config->snpSource != NULL)
+    fprintf(f, "## dbSNP: %s (%s)\n", config->snpDescription, config->snpSource->name);
 afVepPrintHeaderExtraTags(self);
 fputs("Uploaded Variation\tLocation\tAllele\tGene\tFeature\tFeature type\tConsequence\t"
       "Position in cDNA\tPosition in CDS\tPosition in protein\tAmino acid change\t"
@@ -405,7 +355,7 @@ return NULL;
 }
 
 static void afVepPrintDbNsfpSift(struct annoFormatVep *self,
-				 struct annoFormatVepExtraItem *extraItemList,
+				 struct annoFormatVepExtraSource *extraSrc,
 				 struct annoRow *extraRows, struct gpFx *gpFx, char *ensTxId,
 				 boolean *pGotExtra)
 /* Match the allele from gpFx to the per-allele scores in row from dbNsfpSift. */
@@ -414,7 +364,7 @@ static void afVepPrintDbNsfpSift(struct annoFormatVep *self,
 static int ensTxIdIx=-1, altAl1Ix, score1Ix, altAl2Ix, score2Ix, altAl3Ix, score3Ix;
 if (ensTxIdIx == -1)
     {
-    struct asColumn *columns = dbNsfpSiftAsO->columnList;
+    struct asColumn *columns = extraSrc->source->asObj->columnList;
     ensTxIdIx = asColumnFindIx(columns, "ensTxId");
     altAl1Ix = asColumnFindIx(columns, "altAl1");
     score1Ix = asColumnFindIx(columns, "score1");
@@ -433,29 +383,32 @@ for (row = extraRows;  row != NULL;  row = row->next)
     if (differentString(ensTxId, ".") && differentString(words[ensTxIdIx], ".") &&
 	commaSepFindIx(ensTxId, words[ensTxIdIx]) < 0)
 	continue;
-//#*** TODO: loop on extraItems and use tag to determine whether we need to show score
-//#*** or prediction deduced from score
-    struct annoFormatVepExtraItem *extraItem = extraItemList;
-    char *score = NULL;
+    struct annoFormatVepExtraItem *extraItem = extraSrc->items;
+    char *scoreStr = NULL;
     if (sameString(gpFx->allele, words[altAl1Ix]))
-	score = words[score1Ix];
+	scoreStr = words[score1Ix];
     else if (sameString(gpFx->allele, words[altAl2Ix]))
-	score = words[score2Ix];
+	scoreStr = words[score2Ix];
     else if (sameString(gpFx->allele, words[altAl3Ix]))
-	score = words[score3Ix];
-    if (isNotEmpty(score) && differentString(score, "."))
+	scoreStr = words[score3Ix];
+    double score = atof(scoreStr);
+    char prediction = '?';
+    if (score < 0.05)
+	prediction = 'D';
+    else
+	prediction = 'T';
+    if (isNotEmpty(scoreStr) && differentString(scoreStr, "."))
 	{
 	if (*pGotExtra)
 	    fputc(';', self->f);
-	fprintf(self->f, "%s=", extraItem->tag);
-	fputs(score, self->f);
+	fprintf(self->f, "%s=%c(%s)", extraItem->tag, prediction, scoreStr);
 	*pGotExtra = TRUE;
 	}
     }
 }
 
 static void afVepPrintDbNsfpPolyPhen2(struct annoFormatVep *self,
-				      struct annoFormatVepExtraItem *extraItemList,
+				      struct annoFormatVepExtraSource *extraSrc,
 				      struct annoRow *extraRows, struct gpFx *gpFx,
 				      boolean *pGotExtra)
 /* Match the allele from gpFx to the per-allele scores in each row from dbNsfpPolyPhen2. */
@@ -467,7 +420,7 @@ static int aaPosIx=-1,
     altAl3Ix, hDivScore3Ix, hDivPred3Ix, hVarScore3Ix, hVarPred3Ix;
 if (aaPosIx == -1)
     {
-    struct asColumn *columns = dbNsfpPPAsO->columnList;
+    struct asColumn *columns = extraSrc->source->asObj->columnList;
     aaPosIx = asColumnFindIx(columns, "uniProtAaPos");
     altAl1Ix = asColumnFindIx(columns, "altAl1");
     hDivScore1Ix = asColumnFindIx(columns, "hDivScore1");
@@ -498,31 +451,204 @@ for (row = extraRows;  row != NULL;  row = row->next)
     int txIx = commaSepFindIntIx(cc->pepPosition+1, words[aaPosIx]);
     if (txIx < 0)
 	continue;
-//#*** TODO: loop on extraItemList and use extraItem->tag to determine which is wanted: h{Div,Var}{Score,Pred}
-    struct annoFormatVepExtraItem *extraItem = extraItemList;
-    char *pred = NULL;
-    if (sameString(gpFx->allele, words[altAl1Ix]))
-	pred = words[hVarPred1Ix];
-    else if (sameString(gpFx->allele, words[altAl2Ix]))
-	pred = words[hVarPred2Ix];
-    else if (sameString(gpFx->allele, words[altAl3Ix]))
-	pred = words[hVarPred3Ix];
-    if (pred == NULL || sameString(pred, "."))
-	continue;
-    pred = commaSepWordFromIx(txIx, pred, self->lm);
-    if (isNotEmpty(pred))
+    struct annoFormatVepExtraItem *extraItem = extraSrc->items;
+    for (;  extraItem != NULL;  extraItem = extraItem->next)
 	{
-	if (count == 0)
+	boolean isHdiv = (stringIn("HDIV", extraItem->tag) != NULL);
+	int predIx = -1, scoreIx = -1;
+	if (sameString(gpFx->allele, words[altAl1Ix]))
 	    {
-	    if (*pGotExtra)
-		fputc(';', self->f);
-	    fprintf(self->f, "%s=", extraItem->tag);
+	    predIx = isHdiv ? hDivPred1Ix : hVarPred1Ix;
+	    scoreIx = isHdiv ? hDivScore1Ix : hVarScore1Ix;
 	    }
-	else
-	    fputc(',', self->f);
-	fputs(pred, self->f);
+	else if (sameString(gpFx->allele, words[altAl2Ix]))
+	    {
+	    predIx = isHdiv ? hDivPred2Ix : hVarPred2Ix;
+	    scoreIx = isHdiv ? hDivScore2Ix : hVarScore2Ix;
+	    }
+	else if (sameString(gpFx->allele, words[altAl3Ix]))
+	    {
+	    predIx = isHdiv ? hDivPred3Ix : hVarPred3Ix;
+	    scoreIx = isHdiv ? hDivScore3Ix : hVarScore3Ix;
+	    }
+	char *pred = (predIx < 0) ? NULL : words[predIx];
+	if (pred == NULL || sameString(pred, "."))
+	    continue;
+	pred = commaSepWordFromIx(txIx, pred, self->lm);
+	if (isNotEmpty(pred))
+	    {
+	    if (count == 0)
+		{
+		if (*pGotExtra)
+		    fputc(';', self->f);
+		fprintf(self->f, "%s=", extraItem->tag);
+		}
+	    else
+		fputc(',', self->f);
+	    char *score = (scoreIx < 0) ? "?" : commaSepWordFromIx(txIx, words[scoreIx], self->lm);
+	    fprintf(self->f, "%s(%s)", pred, score);
+	    *pGotExtra = TRUE;
+	    count++;
+	    }
+	}
+    }
+}
+
+static void afVepPrintDbNsfpMutationTA(struct annoFormatVep *self,
+				       struct annoFormatVepExtraSource *extraSrc,
+				       struct annoRow *extraRows, struct gpFx *gpFx, char *ensTxId,
+				       boolean *pGotExtra)
+/* Match the allele from gpFx to the per-allele scores in row from dbNsfpMutationTaster
+ * or dbNsfpMutationAssessor -- they have identical column indices. */
+{
+// Look up column indices only once:
+static int ensTxIdIx=-1, altAl1Ix, score1Ix, pred1Ix,
+    altAl2Ix, score2Ix, pred2Ix, altAl3Ix, score3Ix, pred3Ix;
+if (ensTxIdIx == -1)
+    {
+    struct asColumn *columns = extraSrc->source->asObj->columnList;
+    ensTxIdIx = asColumnFindIx(columns, "ensTxId");
+    altAl1Ix = asColumnFindIx(columns, "altAl1");
+    score1Ix = asColumnFindIx(columns, "score1");
+    pred1Ix = asColumnFindIx(columns, "pred1");
+    altAl2Ix = asColumnFindIx(columns, "altAl2");
+    score2Ix = asColumnFindIx(columns, "score2");
+    pred2Ix = asColumnFindIx(columns, "pred2");
+    altAl3Ix = asColumnFindIx(columns, "altAl3");
+    score3Ix = asColumnFindIx(columns, "score3");
+    pred3Ix = asColumnFindIx(columns, "pred3");
+    }
+
+struct annoRow *row;
+for (row = extraRows;  row != NULL;  row = row->next)
+    {
+    // Skip this row unless it contains the ensTxId found by getDbNsfpEnsTx
+    // (but handle rare cases where dbNsfpSeqChange has "." for ensTxId, lame)
+    char **words = row->data;
+    if (differentString(ensTxId, ".") && differentString(words[ensTxIdIx], ".") &&
+	commaSepFindIx(ensTxId, words[ensTxIdIx]) < 0)
+	continue;
+    struct annoFormatVepExtraItem *extraItem = extraSrc->items;
+    char *score = NULL, *pred = NULL;
+    if (sameString(gpFx->allele, words[altAl1Ix]))
+	{
+	score = words[score1Ix];
+	pred = words[pred1Ix];
+	}
+    else if (sameString(gpFx->allele, words[altAl2Ix]))
+	{
+	score = words[score2Ix];
+	pred = words[pred2Ix];
+	}
+    else if (sameString(gpFx->allele, words[altAl3Ix]))
+	{
+	score = words[score3Ix];
+	pred = words[pred3Ix];
+	}
+    if (isNotEmpty(score) && differentString(score, "."))
+	{
+	if (*pGotExtra)
+	    fputc(';', self->f);
+	if (isEmpty(pred))
+	    pred = "?";
+	fprintf(self->f, "%s=%s(%s)", extraItem->tag, pred, score);
 	*pGotExtra = TRUE;
-	count++;
+	}
+    }
+}
+
+static void afVepPrintDbNsfpLrt(struct annoFormatVep *self,
+				struct annoFormatVepExtraSource *extraSrc,
+				struct annoRow *extraRows, struct gpFx *gpFx, char *ensTxId,
+				boolean *pGotExtra)
+/* Match the allele from gpFx to the per-allele scores in row from dbNsfpLrt --
+ * it also has omega{1,2,3} columns, but I'm not sure what those mean so am leaving out for now. */
+{
+// Look up column indices only once:
+static int ensTxIdIx=-1, altAl1Ix, score1Ix, pred1Ix,
+    altAl2Ix, score2Ix, pred2Ix, altAl3Ix, score3Ix, pred3Ix;
+if (ensTxIdIx == -1)
+    {
+    struct asColumn *columns = extraSrc->source->asObj->columnList;
+    ensTxIdIx = asColumnFindIx(columns, "ensTxId");
+    altAl1Ix = asColumnFindIx(columns, "altAl1");
+    score1Ix = asColumnFindIx(columns, "score1");
+    pred1Ix = asColumnFindIx(columns, "pred1");
+    altAl2Ix = asColumnFindIx(columns, "altAl2");
+    score2Ix = asColumnFindIx(columns, "score2");
+    pred2Ix = asColumnFindIx(columns, "pred2");
+    altAl3Ix = asColumnFindIx(columns, "altAl3");
+    score3Ix = asColumnFindIx(columns, "score3");
+    pred3Ix = asColumnFindIx(columns, "pred3");
+    }
+
+struct annoRow *row;
+for (row = extraRows;  row != NULL;  row = row->next)
+    {
+    // Skip this row unless it contains the ensTxId found by getDbNsfpEnsTx
+    // (but handle rare cases where dbNsfpSeqChange has "." for ensTxId, lame)
+    char **words = row->data;
+    if (differentString(ensTxId, ".") && differentString(words[ensTxIdIx], ".") &&
+	commaSepFindIx(ensTxId, words[ensTxIdIx]) < 0)
+	continue;
+    struct annoFormatVepExtraItem *extraItem = extraSrc->items;
+    char *score = NULL, *pred = NULL;
+    if (sameString(gpFx->allele, words[altAl1Ix]))
+	{
+	score = words[score1Ix];
+	pred = words[pred1Ix];
+	}
+    else if (sameString(gpFx->allele, words[altAl2Ix]))
+	{
+	score = words[score2Ix];
+	pred = words[pred2Ix];
+	}
+    else if (sameString(gpFx->allele, words[altAl3Ix]))
+	{
+	score = words[score3Ix];
+	pred = words[pred3Ix];
+	}
+    if (isNotEmpty(score) && differentString(score, "."))
+	{
+	if (*pGotExtra)
+	    fputc(';', self->f);
+	if (isEmpty(pred))
+	    pred = "?";
+	fprintf(self->f, "%s=%s(%s)", extraItem->tag, pred, score);
+	*pGotExtra = TRUE;
+	}
+    }
+}
+
+static void afVepPrintDbNsfpInterPro(struct annoFormatVep *self,
+				     struct annoFormatVepExtraSource *extraSrc,
+				     struct annoRow *extraRows, struct gpFx *gpFx, char *ensTxId,
+				     boolean *pGotExtra)
+/* Print out any overlapping (comma-sep list, HTML-encoded ',' and '=') InterPro domains. */
+{
+// Look up column indices only once:
+static int domainsIx = -1;
+if (domainsIx == -1)
+    {
+    struct asColumn *columns = extraSrc->source->asObj->columnList;
+    domainsIx = asColumnFindIx(columns, "domains");
+    }
+
+struct annoRow *row;
+for (row = extraRows;  row != NULL;  row = row->next)
+    {
+    char **words = row->data;
+    struct annoFormatVepExtraItem *extraItem = extraSrc->items;
+    char *domains = words[domainsIx];
+    int lastC = strlen(domains) - 1;
+    if (domains[lastC] == ',')
+	domains[lastC] = '\0';
+    if (isNotEmpty(domains) && differentString(domains, "."))
+	{
+	if (*pGotExtra)
+	    fputc(';', self->f);
+	fprintf(self->f, "%s=%s", extraItem->tag, domains);
+	*pGotExtra = TRUE;
 	}
     }
 }
@@ -561,7 +687,7 @@ int i;
 for (i = 0;  i < gratorCount;  i++)
     {
     struct annoStreamer *source = gratorData[i].streamer;
-    if (!endsWith(source->name, "dbNsfpSeqChange.bb")) //#*** god awful!
+    if (!sameString(source->asObj->name, "dbNsfpSeqChange")) //#*** need metadata!
 	continue;
     struct codingChange *cc = &(gpFx->details.codingChange);
     struct annoRow *extraRows = getRowsFromSource(source, gratorData, gratorCount);
@@ -602,30 +728,32 @@ char *ensTxId = getDbNsfpEnsTx(self, gpFx, gratorData, gratorCount);
 struct annoFormatVepExtraSource *extras = self->config->extraSources, *extraSrc;
 for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
     {
-    if (!stringIn("dbNsfp", extraSrc->source->name))
+    char *asObjName = extraSrc->source->asObj->name;
+    if (!startsWith("dbNsfp", asObjName))
 	continue;
     struct annoRow *extraRows = getRowsFromSource(extraSrc->source, gratorData, gratorCount);
-    if (endsWith(extraSrc->source->name, "dbNsfpPolyPhen2.bb"))
+    if (sameString(asObjName, "dbNsfpPolyPhen2"))
 	{
 	// PolyPhen2 is based on UniProt proteins, not GENCODE/Ensembl transcripts,
 	// so ensTxId doesn't apply.
-	afVepPrintDbNsfpPolyPhen2(self, extraSrc->items, extraRows, gpFx, pGotExtra);
+	afVepPrintDbNsfpPolyPhen2(self, extraSrc, extraRows, gpFx, pGotExtra);
 	if (ensTxId == NULL)
 	    break; // all done now, no need to keep looking
 	}
     else if (ensTxId != NULL)
 	{
-	if (endsWith(extraSrc->source->name, "dbNsfpSift.bb"))
-	    afVepPrintDbNsfpSift(self, extraSrc->items, extraRows, gpFx, ensTxId, pGotExtra);
-	else if (endsWith(extraSrc->source->name, "dbNsfpMutationTaster.bb"))
-	    {
-	    }
-	else if (endsWith(extraSrc->source->name, "dbNsfpMutationAssessor.bb"))
-	    {
-	    }
-	else if (endsWith(extraSrc->source->name, "dbNsfpLrt.bb"))
-	    {
-	    }
+	if (sameString(asObjName, "dbNsfpSift"))
+	    afVepPrintDbNsfpSift(self, extraSrc, extraRows, gpFx, ensTxId, pGotExtra);
+	else if (sameString(asObjName, "dbNsfpMutationTaster") ||
+		 sameString(asObjName, "dbNsfpMutationAssessor"))
+	    afVepPrintDbNsfpMutationTA(self, extraSrc, extraRows, gpFx, ensTxId, pGotExtra);
+	else if (sameString(asObjName, "dbNsfpLrt"))
+	    afVepPrintDbNsfpLrt(self, extraSrc, extraRows, gpFx, ensTxId, pGotExtra);
+	else if (sameString(asObjName, "dbNsfpInterPro"))
+	    afVepPrintDbNsfpInterPro(self, extraSrc, extraRows, gpFx, ensTxId, pGotExtra);
+	else if (!sameString(asObjName, "dbNsfpSeqChange"))
+	    errAbort("Unrecognized asObj->name '%s' from dbNSFP source '%s'",
+		     asObjName, extraSrc->source->name);
 	}
     }
 }
@@ -694,7 +822,8 @@ static void afVepPrintExtrasOther(struct annoFormatVep *self, struct annoRow *va
 struct annoFormatVepExtraSource *extras = self->config->extraSources, *extraSrc;
 for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
     {
-    if (stringIn("dbNsfp", extraSrc->source->name))
+    char *asObjName = extraSrc->source->asObj->name;
+    if (startsWith("dbNsfp", asObjName))
 	continue;
     struct annoRow *extraRows = getRowsFromSource(extraSrc->source, gratorData, gratorCount);
     if (extraRows != NULL)
@@ -834,22 +963,31 @@ else
 }
 
 struct annoFormatVepConfig *annoFormatVepConfigNew(struct annoStreamer *variantSource,
+						   char *variantDescription,
 						   struct annoStreamer *gpVarSource,
-						   struct annoStreamer *snpSource)
+						   char *gpVarDescription,
+						   struct annoStreamer *snpSource,
+						   char *snpDescription)
 /* Return a basic configuration for VEP output.  variantSource and gpVarSource must be
  * provided; snpSource can be NULL. */
 {
 struct annoFormatVepConfig *config;
 AllocVar(config);
 config->variantSource = variantSource;
+config->variantDescription = cloneString(variantDescription);
 config->gpVarSource = gpVarSource;
+config->gpVarDescription = cloneString(gpVarDescription);
 config->snpSource = snpSource;
+config->snpDescription = cloneString(snpDescription);
 return config;
 }
 
 struct annoFormatter *annoFormatVepNew(char *fileName, struct annoStreamer *variantSource,
+				       char *variantDescription,
 				       struct annoStreamer *gpVarSource,
-				       struct annoStreamer *snpSource)
+				       char *gpVarDescription,
+				       struct annoStreamer *snpSource,
+				       char *snpDescription)
 /* Return a formatter that will write functional predictions in the same format as Ensembl's
  * Variant Effect Predictor to fileName (can be "stdout").
  * variantSource and gpVarSource must be provided; snpSource can be NULL. */
@@ -867,10 +1005,10 @@ self->f = mustOpen(fileName, "w");
 self->lm = lmInit(0);
 self->dyScratch = dyStringNew(0);
 self->needHeader = TRUE;
-struct annoFormatVepConfig *config = annoFormatVepConfigNew(variantSource, gpVarSource, snpSource);
+struct annoFormatVepConfig *config = annoFormatVepConfigNew(variantSource, variantDescription,
+							    gpVarSource, gpVarDescription,
+							    snpSource, snpDescription);
 afVepSetConfig(self, config);
-dbNsfpSiftAsO = dbNsfpSiftAsObj();
-dbNsfpPPAsO = dbNsfpPPAsObj();
 return (struct annoFormatter *)self;
 }
 
@@ -878,7 +1016,7 @@ void annoFormatVepAddExtraItem(struct annoFormatter *fSelf, struct annoStreamer 
 			       char *tag, char *description, char *column)
 /* Tell annoFormatVep that it should include the given column of extraSource
  * in the EXTRAS column with tag.  The VEP header will include tag's description.
- * For some special-cased sources e.g. dbNsfp files, column may be ignored. */
+ * For some special-cased sources e.g. dbNsfp files, column may be NULL/ignored. */
 {
 struct annoFormatVep *self = (struct annoFormatVep *)fSelf;
 struct annoFormatVepExtraSource *src;
@@ -899,6 +1037,8 @@ struct annoFormatVepExtraItem *item;
 AllocVar(item);
 item->tag = cloneString(tag);
 item->description = cloneString(description);
-item->rowIx = asColumnFindIx(extraSource->asObj->columnList, column);
+item->rowIx = -1;
+if (isNotEmpty(column))
+    item->rowIx = asColumnFindIx(extraSource->asObj->columnList, column);
 slAddTail(&(src->items), item);
 }

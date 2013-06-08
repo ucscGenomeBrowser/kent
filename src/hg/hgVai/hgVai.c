@@ -374,33 +374,61 @@ for (ref = trackRefList;  ref != NULL;  ref = ref->next)
 puts("</SELECT><BR>");
 }
 
-char *dbNsfpDescFromTableName(char *tableName)
+//#*** We really need a dbNsfp.[ch]:
+enum PolyPhen2Subset { noSubset, HDIV, HVAR };
+
+char *formatDesc(char *url, char *name, char *details, boolean doHtml)
+/* Return a description with URL for name plus extra details.  If doHtml,
+ * wrap URL in <A ...>...</A>. */
+{
+char desc[1024];
+if (doHtml)
+    safef(desc, sizeof(desc), "<A HREF='%s' TARGET=_BLANK>%s</A> %s",
+	  url, name, details);
+else
+    safef(desc, sizeof(desc), "(%s) %s %s",
+	  url, name, details);
+return cloneString(desc);
+}
+
+char *dbNsfpDescFromTableName(char *tableName, enum PolyPhen2Subset subset, boolean doHtml)
 /* Return a description for table name... if these become tracks, use tdb of course. */
 {
 if (sameString(tableName, "dbNsfpSift"))
-    return "<A HREF='http://sift.bii.a-star.edu.sg/' TARGET=_BLANK>"
-	"SIFT</A> scores";
+    return formatDesc("http://sift.bii.a-star.edu.sg/", "SIFT",
+		      "(D = damaging, T = tolerated)", doHtml);
 else if (sameString(tableName, "dbNsfpPolyPhen2"))
-    return "<A HREF='http://genetics.bwh.harvard.edu/pph2/' TARGET=_BLANK>"
-	"PolyPhen-2</A> scores and predictions (HDIV, HVAR, UniProt...)";
+    {
+    if (subset == HDIV)
+	return formatDesc("http://genetics.bwh.harvard.edu/pph2/", "PolyPhen-2",
+			  "with HumDiv training set "
+			  "(D = probably damaging, P = possibly damaging, B = benign)", doHtml);
+    else if (subset == HVAR)
+	return formatDesc("http://genetics.bwh.harvard.edu/pph2/", "PolyPhen-2",
+			  "with HumVar training set "
+			  "(D = probably damaging, P = possibly damaging, B = benign)", doHtml);
+    else
+	errAbort("dbNsfpDescFromTableName: invalid PolyPhen2 subset type (%d)", subset);
+    }
 else if (sameString(tableName, "dbNsfpMutationTaster"))
-    return "<A HREF='http://www.mutationtaster.org/' TARGET=_BLANK>"
-	"MutationTaster</A> scores and predictions";
+	return formatDesc("http://www.mutationtaster.org/", "MutationTaster",
+			  "(A = disease causing automatic, D = disease causing, "
+			  "N = polymorphism, P = polymorphism automatic)", doHtml);
 else if (sameString(tableName, "dbNsfpMutationAssessor"))
-    return "<A HREF='http://mutationassessor.org/' TARGET=_BLANK>"
-	"MutationAssessor</A> scores and predictions";
-//else if (sameString(tableName, "dbNsfpGerpNr"))
-//    return "<A HREF='http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html' "
-//	"TARGET=_BLANK>GERP++</A> neutral rate (NR) score";
-//else if (sameString(tableName, "dbNsfpGerpRs"))
-//    return "<A HREF='http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html' "
-//	"TARGET=_BLANK>GERP++</A> Rejected Substitutions (RS) score";
+	return formatDesc("http://mutationassessor.org/", "MutationAssessor",
+			  "(high or medium: predicted functional; "
+			  "low or neutral: predicted non-functional)", doHtml);
 else if (sameString(tableName, "dbNsfpLrt"))
-    return "<A HREF='http://www.mutationtaster.org' TARGET=_BLANK>"
-	"Likelihood ratio test (LRT)</A> scores";
-else if (sameString(tableName, "dbNsfpInterpro"))
-    return "Protein domains from <A HREF='http://www.ebi.ac.uk/interpro/' TARGET=_BLANK"
-	"Interpro</A>";
+	return formatDesc("http://www.mutationtaster.org/", "Likelihood ratio test (LRT)",
+			  "(D = deleterious, N = Neutral, U = unknown)", doHtml);
+else if (sameString(tableName, "dbNsfpGerpNr"))
+	return formatDesc("http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html",
+			  "GERP++", "Neutral Rate (NR)", doHtml);
+else if (sameString(tableName, "dbNsfpGerpRs"))
+	return formatDesc("http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html",
+			  "GERP++", "Rejected Substitutions (RS)", doHtml);
+else if (sameString(tableName, "dbNsfpInterPro"))
+	return formatDesc("http://www.ebi.ac.uk/interpro/", "InterPro", "protein domains", doHtml);
 return NULL;
 }
 
@@ -408,9 +436,29 @@ struct slName *findDbNsfpTables()
 /* See if this database contains dbNSFP tables. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-struct slName *dbNsfpTables = sqlQuickList(conn, "show tables like 'dbNsfp%'");
+struct slName *dbNsfpTables = sqlQuickList(conn, "NOSQLINJ show tables like 'dbNsfp%'");
 hFreeConn(&conn);
 return dbNsfpTables;
+}
+
+void printDbNsfpSource(char *table, enum PolyPhen2Subset subset)
+/* If we know what to do with table, make a checkbox with descriptive label. */
+{
+char *description = dbNsfpDescFromTableName(table, subset, TRUE);
+if (description != NULL)
+    {
+    char cartVar[512];
+    if (subset == HDIV)
+	safef(cartVar, sizeof(cartVar), "hgva_track_%s_%s:HDIV", database, table);
+    else if (subset == HVAR)
+	safef(cartVar, sizeof(cartVar), "hgva_track_%s_%s:HVAR", database, table);
+    else
+	safef(cartVar, sizeof(cartVar), "hgva_track_%s_%s", database, table);
+    boolean defaultChecked = (sameString("dbNsfpSift", table) ||
+			      sameString("dbNsfpPolyPhen2", table));
+    cartMakeCheckBox(cart, cartVar, defaultChecked);
+    printf("%s<BR>\n", description);
+    }
 }
 
 void selectDbNsfp(struct slName *dbNsfpTables)
@@ -418,10 +466,12 @@ void selectDbNsfp(struct slName *dbNsfpTables)
 {
 if (dbNsfpTables == NULL)
     return;
-startCollapsibleSection("dbNsfp", "Non-synonymous functional predictions", FALSE);
-printf("The "
-       "<A HREF='https://sites.google.com/site/jpopgen/dbNSFP' TARGET=_BLANK>"
-       "Database of Non-Synonymous Functional Predictions (dbNSFP)</A> release 2.0 "
+startCollapsibleSection("dbNsfp", "Database of Non-synonymous Functional Predictions (dbNSFP)",
+			FALSE);
+printf("<A HREF='https://sites.google.com/site/jpopgen/dbNSFP' TARGET=_BLANK>dbNSFP</A> "
+       "(<A HREF='http://onlinelibrary.wiley.com/doi/10.1002/humu.21517/abstract' "
+       "TARGET=_BLANK>Liu <em>et al.</em> 2011</A>) "
+       "release 2.0 "
        "provides pre-computed scores and predictions of functional significance "
        "from a variety of tools.  Every possible coding change to transcripts in "
  //#*** hardcoded version info... sigh, we need trackDb... or metaDb??
@@ -435,16 +485,13 @@ slReverse(&dbNsfpTables);
 struct slName *table;
 for (table = dbNsfpTables;  table != NULL;  table = table->next)
     {
-    char *description = dbNsfpDescFromTableName(table->name);
-    if (description != NULL)
+    if (sameString(table->name, "dbNsfpPolyPhen2"))
 	{
-	char cartVar[512];
-	safef(cartVar, sizeof(cartVar), "hgva_track_%s_%s", database, table->name);
-	boolean defaultChecked = (sameString("dbNsfpSift", table->name) ||
-				  sameString("dbNsfpPolyPhen2", table->name));
-	cartMakeCheckBox(cart, cartVar, defaultChecked);
-	printf("%s<BR>\n", description);
+	printDbNsfpSource(table->name, HDIV);
+	printDbNsfpSource(table->name, HVAR);
 	}
+    else
+	printDbNsfpSource(table->name, 0);
     }
 puts("<BR>");
 endCollapsibleSection();
@@ -464,6 +511,7 @@ struct slName *snpNNNTables = sqlQuickList(conn, query);
 hFreeConn(&conn);
 if (snpNNNTables == NULL)
     return FALSE;
+boolean foundIt = FALSE;
 // Skip to last in list -- highest number (show tables can't use rlike or 'order by'):
 struct slName *table = snpNNNTables;
 while (table->next != NULL && isdigit(table->next->name[4]) && isdigit(table->next->name[5]))
@@ -475,7 +523,7 @@ if (fileExists(fileName))
     {
     if (retFileName != NULL)
 	*retFileName = cloneString(fileName);
-    return TRUE;
+    foundIt = TRUE;
     }
 // Not bed4; try just .bb:
 safef(fileName, sizeof(fileName), "/gbdb/%s/vai/%s.bb", database, table->name);
@@ -483,8 +531,10 @@ if (fileExists(fileName))
     {
     if (retFileName != NULL)
 	*retFileName = cloneString(fileName);
-    return TRUE;
+    foundIt = TRUE;
     }
+if (foundIt && retTdb == NULL)
+    return TRUE;
 struct trackDb *tdb = tdbForTrack(database, table->name, &fullTrackList);
 if (tdb != NULL)
     {
@@ -492,7 +542,7 @@ if (tdb != NULL)
 	*retTdb = tdb;
     return TRUE;
     }
-return FALSE;
+return foundIt;
 }
 
 void selectDbSnp(boolean gotSnp)
@@ -502,7 +552,8 @@ if (!gotSnp)
     return;
 startCollapsibleSection("dbSnp", "Known variation", FALSE);
 cartMakeCheckBox(cart, "hgva_rsId", TRUE);
-printf("Include dbSNP rs# ID if one exists<BR>\n");
+printf("Include <A HREF='http://www.ncbi.nlm.nih.gov/projects/SNP/' TARGET=_BLANK>dbSNP</A> "
+       "rs# ID if one exists<BR>\n");
 puts("<BR>");
 endCollapsibleSection();
 }
@@ -826,37 +877,252 @@ char *compressType = cartUsualString(cart, "hgva_compressType", textOutCompressG
 compressPipeline = textOutInit(fileName, compressType);
 }
 
-struct annoGrator *gratorForSnp(char *suffix, struct annoAssembly *assembly, char *chrom,
-				enum annoGratorOverlap overlapRule)
-/* Look up snpNNNsuffix; if we find it, return a grator, otherwise return NULL. */
+void setGpVarFuncFilter(struct annoGrator *gpVarGrator)
+/* Use cart variables to configure gpVarGrator's filtering by functional category. */
+{
+struct annoGratorGpVarFuncFilter aggvFuncFilter;
+ZeroVar(&aggvFuncFilter);
+aggvFuncFilter.intergenic = cartUsualBoolean(cart, "hgva_include_intergenic", FALSE);
+aggvFuncFilter.upDownstream = cartUsualBoolean(cart, "hgva_include_upDownstream", TRUE);
+aggvFuncFilter.utr = cartUsualBoolean(cart, "hgva_include_utr", TRUE);
+aggvFuncFilter.cdsSyn = cartUsualBoolean(cart, "hgva_include_cdsSyn", TRUE);
+aggvFuncFilter.cdsNonSyn = cartUsualBoolean(cart, "hgva_include_cdsNonSyn", TRUE);
+aggvFuncFilter.intron = cartUsualBoolean(cart, "hgva_include_intron", TRUE);
+aggvFuncFilter.splice = cartUsualBoolean(cart, "hgva_include_splice", TRUE);
+aggvFuncFilter.nonCodingExon = cartUsualBoolean(cart, "hgva_include_nonCodingExon", TRUE);
+annoGratorGpVarSetFuncFilter(gpVarGrator, &aggvFuncFilter);
+}
+
+#define NO_MAXROWS 0
+
+struct annoGrator *gratorForSnpBed4(struct hash *gratorsByName, char *suffix,
+				    struct annoAssembly *assembly, char *chrom,
+				    enum annoGratorOverlap overlapRule,
+				    char **retDescription)
+/* Look up snpNNNsuffix; if we find it, return a grator (possibly for a bigBed 4 file),
+ * otherwise return NULL. */
 {
 char *fileName = NULL;
 struct trackDb *tdb = NULL;
 if (! findSnpBed4(suffix, &fileName, &tdb))
     return NULL;
 struct annoGrator *grator = NULL;
-if (fileName != NULL)
+// First look in gratorsByName to see if this grator has already been constructed:
+if (tdb != NULL)
     {
-    struct annoStreamer *streamer = annoStreamBigBedNew(fileName, assembly, BIGNUM);
-    grator = annoGratorNew(streamer);
+    grator = hashFindVal(gratorsByName, tdb->table);
+    if (retDescription)
+	*retDescription = cloneString(tdb->longLabel);
+    }
+if (grator != NULL)
+    {
+    // Set its overlap behavior and we're done.
     grator->setOverlapRule(grator, overlapRule);
+    return grator;
     }
+// If not in gratorsByName, then attempt to construct it here:
+if (fileName != NULL)
+    grator = gratorFromBigDataFileOrUrl(fileName, assembly, NO_MAXROWS, overlapRule);
 else
-    {
-    grator = gratorFromTrack(assembly, tdb->table, tdb, chrom, BIGNUM, NULL, overlapRule);
-    }
+    grator = gratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL, overlapRule);
+if (grator != NULL)
+    hashAdd(gratorsByName, tdb->table, grator);
 return grator;
 }
 
-void updateGratorLists(struct annoGrator *grator, struct annoGrator **pGratorList,
-		       struct annoGrator **pFirstExtra)
-/* If grator is non-NULL, add it to gratorList; if *pFirstExtra is NULL, set it to grator. */
+char *tableNameFromSourceName(char *sourceName)
+/* Strip sourceName (file path or db.table) to just the basename or table name. */
 {
-if (grator != NULL)
+char *tableName = cloneString(sourceName);
+char *p = strrchr(tableName, '/');
+if (p != NULL)
     {
-    slAddHead(pGratorList, grator);
-    if (pFirstExtra != NULL && *pFirstExtra == NULL)
-	*pFirstExtra = grator;
+    // file path; strip to basename
+    char dir[PATH_LEN], name[FILENAME_LEN], extension[FILEEXT_LEN];
+    splitPath(tableName, dir, name, extension);
+    safecpy(tableName, strlen(tableName)+1, name);
+    }
+else
+    {
+    // database.table -- skip database.
+    p = strchr(tableName, '.');
+    if (p != NULL)
+	tableName = p+1;
+    }
+return tableName;
+}
+
+char *tagFromTableName(char *tableName, char *suffix)
+/* Generate a tag for VEP's extras column or VCF's info column. */
+{
+char *p = strstr(tableName, "dbNsfp");
+if (p != NULL)
+    tableName = p + strlen("dbNsfp");
+int suffixLen = (suffix == NULL) ? 0 : strlen(suffix);
+int tagSize = strlen(tableName) + suffixLen + 1;
+char *tag = cloneStringZ(tableName, tagSize);
+if (isNotEmpty(suffix))
+    safecat(tag, tagSize, suffix);
+touppers(tag);
+return tag;
+}
+
+enum PolyPhen2Subset stripSubsetFromTrackName(char *trackName)
+/* trackName may have a _suffix for a subset of PolyPhen2; convert that to enum
+ * and zero out the suffix so we have the real trackName. */
+{
+enum PolyPhen2Subset subset = noSubset;
+char *p = strchr(trackName, ':');
+if (p != NULL)
+    {
+    if (sameString(p+1, "HDIV"))
+	subset = HDIV;
+    else if (sameString(p+1, "HVAR"))
+	subset = HVAR;
+    else
+	errAbort("unrecognized suffix in track_suffix '%s'", trackName);
+    *p = '\0';
+    }
+return subset;
+}
+
+void updateGratorListAndVepExtra(struct annoGrator *grator, struct annoGrator **pGratorList,
+				 struct annoFormatter *vepOut, enum PolyPhen2Subset subset,
+				 char *column, char *description)
+/* If grator is non-NULL, add it to gratorList and vepOut's list of items for EXTRAs column. */
+{
+if (grator == NULL)
+    return;
+slAddHead(pGratorList, grator);
+if (vepOut != NULL)
+    {
+    char *tableName = tableNameFromSourceName(grator->streamer.name);
+    char *suffix = NULL;
+    if (subset == HDIV)
+	suffix = "HDIV";
+    else if (subset == HVAR)
+	suffix = "HVAR";
+    char *tag = tagFromTableName(tableName, suffix);
+    if (isEmpty(description))
+	description = grator->streamer.name;
+    annoFormatVepAddExtraItem(vepOut, (struct annoStreamer *)grator, tag, description, column);
+    }
+}
+
+INLINE void updateGratorList(struct annoGrator *grator, struct annoGrator **pGratorList)
+/* If grator is non-NULL, add it to gratorList. */
+{
+updateGratorListAndVepExtra(grator, pGratorList, NULL, 0, NULL, NULL);
+}
+
+void addDbNsfpSeqChange(char *trackName, struct annoAssembly *assembly, struct hash *gratorsByName,
+			struct annoGrator **pGratorList)
+// If the user has selected dbNsfp* data, we also need the underlying dbNsfpSeqChange
+// data, so annoFormatVep can tell whether the variant and gpFx are consistent with the
+// variant and transcript that dbNsfp used to calculate scores.
+{
+//#*** Yet another place where we need metadata:
+char *seqChangeTable = "dbNsfpSeqChange";
+if (hashFindVal(gratorsByName, seqChangeTable) == NULL)
+    {
+    char *fileName = fileNameFromTable(seqChangeTable);
+    if (fileName == NULL)
+	errAbort("'%s' requested, but I can't find fileName for %s",
+		 trackName, seqChangeTable);
+    struct annoGrator *grator = gratorFromBigDataFileOrUrl(fileName, assembly, NO_MAXROWS,
+							   agoNoConstraint);
+    updateGratorList(grator, pGratorList);
+    hashAdd(gratorsByName, seqChangeTable, grator);
+    }
+}
+
+void addOutputTracks(struct annoGrator **pGratorList, struct hash *gratorsByName,
+		     struct annoFormatter *vepOut, struct annoAssembly *assembly, char *chrom)
+// Construct grators for tracks selected to appear in EXTRAS column
+{
+char trackPrefix[128];
+safef(trackPrefix, sizeof(trackPrefix), "hgva_track_%s_", database);
+int trackPrefixLen = strlen(trackPrefix);
+struct slPair *trackVar, *trackVars = cartVarsWithPrefix(cart, trackPrefix);
+for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
+    {
+    char *val = trackVar->val;
+    if (! (sameWord(val, "on") || atoi(val) > 0))
+	continue;
+    char *trackName = trackVar->name + trackPrefixLen;
+    if (sameString(trackName, "dbNsfpPolyPhen2"))
+	// PolyPhen2 must have a suffix now -- skip obsolete cartVar from existing carts
+	continue;
+    struct annoGrator *grator = hashFindVal(gratorsByName, trackName);
+    if (grator != NULL)
+	// We already have this as a grator:
+	continue;
+    enum PolyPhen2Subset subset = noSubset;
+    char *description = NULL;
+    char *column = NULL;
+    if (startsWith("dbNsfp", trackName))
+	{
+	// trackName for PolyPhen2 has a suffix for subset -- strip it if we find it:
+	subset = stripSubsetFromTrackName(trackName);
+	description = dbNsfpDescFromTableName(trackName, subset, FALSE);
+	addDbNsfpSeqChange(trackName, assembly, gratorsByName, pGratorList);
+	char *fileName = fileNameFromTable(trackName);
+	if (fileName != NULL)
+	    grator = gratorFromBigDataFileOrUrl(fileName, assembly, NO_MAXROWS, agoNoConstraint);
+	}
+    else
+	{
+	struct trackDb *tdb = tdbForTrack(database, trackName, &fullTrackList);
+	if (tdb != NULL)
+	    {
+	    grator = gratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL,
+				       agoNoConstraint);
+	    if (grator != NULL)
+		//#*** Need something more sophisticated but this works for our
+		//#*** limited selection of extra tracks:
+		if (asColumnFind(grator->streamer.asObj, "name") != NULL)
+		    column = "name";
+	    description = tdb->longLabel;
+	    }
+	}
+    updateGratorListAndVepExtra(grator, pGratorList, vepOut, subset, column, description);
+    if (grator != NULL)
+	hashAdd(gratorsByName, trackName, grator);
+    }
+}
+
+void addFilterTracks(struct annoGrator **pGratorList, struct hash *gratorsByName,
+		     struct annoAssembly *assembly, char *chrom)
+// Add grators for filters (not added to vepOut):
+{
+if (cartUsualBoolean(cart, "hgva_exclude_snpCommon", FALSE))
+    {
+    struct annoGrator *grator = gratorForSnpBed4(gratorsByName, "Common", assembly, chrom,
+						 agoMustNotOverlap, NULL);
+    updateGratorList(grator, pGratorList);
+    }
+
+if (cartUsualBoolean(cart, "hgva_exclude_snpMult", FALSE))
+    {
+    struct annoGrator *grator = gratorForSnpBed4(gratorsByName, "Mult", assembly, chrom,
+						 agoMustNotOverlap, NULL);
+    updateGratorList(grator, pGratorList);
+    }
+
+if (cartUsualBoolean(cart, "hgva_require_consEl", FALSE))
+    {
+    char *consElTrack = cartString(cart, "hgva_require_consEl_track");
+    struct annoGrator *grator = hashFindVal(gratorsByName, consElTrack);
+    if (grator == NULL)
+	{
+	struct trackDb *tdb = tdbForTrack(database, consElTrack, &fullTrackList);
+	if (tdb != NULL)
+	    grator = gratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL,
+				       agoMustOverlap);
+	updateGratorList(grator, pGratorList);
+	}
+    else
+	grator->setOverlapRule(grator, agoMustOverlap);
     }
 }
 
@@ -894,26 +1160,25 @@ struct annoStreamer *primary = streamerFromTrack(assembly, varTdb->table, varTdb
 						 maxVarRows);
 
 struct trackDb *geneTdb = tdbForTrack(database, geneTrack, &fullTrackList);
+if (geneTdb == NULL)
+    {
+    warn("Can't find tdb for gene track %s", geneTrack);
+    doUi();
+    return;
+    }
 enum annoGratorOverlap geneOverlapRule = agoMustOverlap;
-struct annoGrator *gpVarGrator = gratorFromTrack(assembly, geneTdb->table, geneTdb, chrom,
-						 BIGNUM, primary->asObj, geneOverlapRule);
-struct annoGratorGpVarFuncFilter aggvFuncFilter;
-ZeroVar(&aggvFuncFilter);
-aggvFuncFilter.intergenic = cartUsualBoolean(cart, "hgva_include_intergenic", FALSE);
-aggvFuncFilter.upDownstream = cartUsualBoolean(cart, "hgva_include_upDownstream", TRUE);
-aggvFuncFilter.utr = cartUsualBoolean(cart, "hgva_include_utr", TRUE);
-aggvFuncFilter.cdsSyn = cartUsualBoolean(cart, "hgva_include_cdsSyn", TRUE);
-aggvFuncFilter.cdsNonSyn = cartUsualBoolean(cart, "hgva_include_cdsNonSyn", TRUE);
-aggvFuncFilter.intron = cartUsualBoolean(cart, "hgva_include_intron", TRUE);
-aggvFuncFilter.splice = cartUsualBoolean(cart, "hgva_include_splice", TRUE);
-aggvFuncFilter.nonCodingExon = cartUsualBoolean(cart, "hgva_include_nonCodingExon", TRUE);
-annoGratorGpVarSetFuncFilter(gpVarGrator, &aggvFuncFilter);
+struct annoGrator *gpVarGrator = gratorFromTrackDb(assembly, geneTdb->table, geneTdb, chrom,
+						   NO_MAXROWS, primary->asObj, geneOverlapRule);
+setGpVarFuncFilter(gpVarGrator);
+
+// Some grators may be used as both filters and output values. To avoid making
+// multiple grators for the same source, hash them by trackName:
+struct hash *gratorsByName = hashNew(8);
 
 struct annoGrator *snpGrator = NULL;
+char *snpDesc = NULL;
 if (cartBoolean(cart, "hgva_rsId"))
-    {
-    snpGrator = gratorForSnp("", assembly, chrom, agoNoConstraint);
-    }
+    snpGrator = gratorForSnpBed4(gratorsByName, "", assembly, chrom, agoNoConstraint, &snpDesc);
 
 // Now construct gratorList in the order in which annoFormatVep wants to see them,
 // i.e. first the gpVar, then the snpNNN, then whatever else:
@@ -921,121 +1186,16 @@ struct annoGrator *gratorList = NULL;
 slAddHead(&gratorList, gpVarGrator);
 if (snpGrator != NULL)
     slAddHead(&gratorList, snpGrator);
-// extraGrators will point to the first grator in gratorList after snpGrator;
-// i.e. first grator that is meant for the EXTRAS column and/or used by a filter
-struct annoGrator *extraGrators = NULL;
-if (cartUsualBoolean(cart, "hgva_exclude_snpCommon", FALSE))
-    {
-    struct annoGrator *grator = gratorForSnp("Common", assembly, chrom, agoMustNotOverlap);
-    updateGratorLists(grator, &gratorList, &extraGrators);
-    }
-if (cartUsualBoolean(cart, "hgva_exclude_snpMult", FALSE))
-    {
-    struct annoGrator *grator = gratorForSnp("Mult", assembly, chrom, agoMustNotOverlap);
-    updateGratorLists(grator, &gratorList, &extraGrators);
-    }
-// If we're including Conserved Elements as a filter, and it has also been selected as an
-// extra output value, don't make two grators for it:
-char *consElTrack = NULL;
-if (cartUsualBoolean(cart, "hgva_require_consEl", FALSE))
-    {
-    struct annoGrator *grator = NULL;
-    consElTrack = cartString(cart, "hgva_require_consEl_track");
-    struct trackDb *tdb = tdbForTrack(database, consElTrack, &fullTrackList);
-    if (tdb != NULL)
-	grator = gratorFromTrack(assembly, tdb->table, tdb, chrom, BIGNUM, NULL, agoMustOverlap);
-    updateGratorLists(grator, &gratorList, &extraGrators);
-    }
-
-boolean addedDbNsfpSeqChange = FALSE;
-char trackPrefix[128];
-safef(trackPrefix, sizeof(trackPrefix), "hgva_track_%s_", database);
-int trackPrefixLen = strlen(trackPrefix);
-struct slPair *trackVar, *trackVars = cartVarsWithPrefix(cart, trackPrefix);
-for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
-    {
-    char *val = trackVar->val;
-    if (! (sameWord(val, "on") || atoi(val) > 0))
-	continue;
-    char *trackName = trackVar->name + trackPrefixLen;
-    if (sameOk(consElTrack, trackName))
-	// We already have this as a grator because it's a filter (above):
-	continue;
-    struct trackDb *tdb = tdbForTrack(database, trackName, &fullTrackList);
-    struct annoGrator *grator = NULL;
-    if (tdb != NULL)
-	grator = gratorFromTrack(assembly, tdb->table, tdb, chrom, BIGNUM, NULL, agoNoConstraint);
-    else if (startsWith("dbNsfp", trackName))
-	{
-	// If the user has selected dbNsfp* data, we also need the underlying dbNsfpSeqChange
-	// data, so annoFormatVep can tell whether the variant and gpFx are consistent with the
-	// variant and transcript that dbNsfp used to calculate scores.
-	if (!addedDbNsfpSeqChange)
-	    {
-	    char *fileName = fileNameFromTable("dbNsfpSeqChange");
-	    if (fileName == NULL)
-		errAbort("'%s' requested, but I can't find fileName for dbNsfpSeqChange",
-			 trackName);
-	    struct annoStreamer *streamer = annoStreamBigBedNew(fileName, assembly, BIGNUM);
-	    grator = annoGratorNew(streamer);
-	    updateGratorLists(grator, &gratorList, &extraGrators);
-	    addedDbNsfpSeqChange = TRUE;
-	    }
-	char *fileName = fileNameFromTable(trackName);
-	if (fileName != NULL)
-	    {
-	    struct annoStreamer *streamer = annoStreamBigBedNew(fileName, assembly, BIGNUM);
-	    grator = annoGratorNew(streamer);
-	    }
-	}
-    updateGratorLists(grator, &gratorList, &extraGrators);
-    }
-slReverse(&gratorList);
-
-struct annoFormatter *vepOut = annoFormatVepNew("stdout", primary,
+struct annoFormatter *vepOut = annoFormatVepNew("stdout", primary, varTdb->longLabel,
 						(struct annoStreamer *)gpVarGrator,
-						(struct annoStreamer *)snpGrator);
-//#*** can all the extraItem config smarts be pulled inside annoFormatVep?
-struct annoStreamer *extraSource = (struct annoStreamer *)extraGrators;
-for (;  extraSource != NULL;  extraSource = extraSource->next)
-    {
-    char *tableName = extraSource->name;
-    char *tag = cloneString(tableName);
-    char *p = strrchr(tag, '/');
-    if (p != NULL)
-	{
-	// file path; strip to basenaem
-	tableName = tag = p+1;
-	p = strchr(tag, '.');
-        if (p != NULL)
-	    *p = '\0';
-	}
-    p = strstr(tag, "dbNsfp");
-    if (p != NULL)
-	{
-	tableName = p;
-	tag = p + strlen("dbNsfp");
-	}
-    else
-	{
-	// database.table -- skip database.
-	p = strchr(tag, '.');
-	if (p != NULL)
-	    tag = p+1;
-	}
-    touppers(tag);
-    char *description = dbNsfpDescFromTableName(tableName);
-    if (description == NULL)
-	description = extraSource->name;
-//#*** This is where the smarts probably can't all be pulled into annoFormatVep:
-    char *column = "ignoredVepKnowsBetterOrOverlapExcludesVariant";
-    if (extraSource->rowType == arWords)
-	{
-	if (asColumnFindIx(extraSource->asObj->columnList, "name") >= 0)
-	    column = "name";
-	}
-    annoFormatVepAddExtraItem(vepOut, extraSource, tag, description, column);
-    }
+						geneTdb->longLabel,
+						(struct annoStreamer *)snpGrator,
+						snpDesc);
+
+addOutputTracks(&gratorList, gratorsByName, vepOut, assembly, chrom);
+addFilterTracks(&gratorList, gratorsByName, assembly, chrom);
+
+slReverse(&gratorList);
 
 // Undo the htmlPushEarlyHandlers() because after this point they make ugly text:
 popWarnHandler();
