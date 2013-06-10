@@ -16,8 +16,8 @@ modify those files and see the changes, you need to either have your own htdocs 
 or test your changes on "make alpha".
 
 In order to avoid caching errors by client browsers, the CGIs reference these files by
-a symlink that contains the timestamp of the file.  The symlink is created by the CGIs if
-not found.
+symlinks that contain the timestamps of the files.  The symlinks are created by this
+makefile, which runs cpAndLinkToResourceFiles.pl on the JS_FILES list.
 
 IMPORTANT:
 In for a user to test changes to javascript files on a named browser a setting must be 
