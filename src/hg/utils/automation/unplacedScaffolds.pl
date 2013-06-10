@@ -109,4 +109,5 @@ if (scalar(@extensions) > 1) {
     if ( -s "../${db}.unmasked.2bit" );
   `faToTwoBit ${db}.ucsc.fa.gz ../${db}.unmasked.2bit`;
   `checkAgpAndFa ${db}.ucsc.agp ../${db}.unmasked.2bit 2>&1 | tail -5 > checkAgp.result.txt`;
+  `twoBitInfo ../${db}.unmasked.2bit stdout | sort -k2,2nr > ../chrom.sizes`;
 }

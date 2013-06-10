@@ -319,7 +319,6 @@ snpTable bed
 snpVersion bed
 sortOrder *
 sourceTable factorSource
-sourceTablePack factorSource
 spanList *
 speciesCodonDefault wigMafProt wigMaf
 speciesDefaultOff wigMaf

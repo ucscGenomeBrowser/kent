@@ -9514,7 +9514,7 @@ printTrackHtml(tdb);
 char *gbCdnaGetDescription(struct sqlConnection *conn, char *acc)
 /* return mrna description, or NULL if not available. freeMem result */
 {
-char query[128];
+char query[1024];
 sqlSafef(query, sizeof(query),
       "select description.name from gbCdnaInfo,description where (acc = '%s') and (gbCdnaInfo.description = description.id)", acc);
 char *desc = sqlQuickString(conn, query);

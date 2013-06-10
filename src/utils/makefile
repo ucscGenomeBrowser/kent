@@ -1,6 +1,9 @@
 # Build all directories in utils
 
-include ../inc/common.mk
+kentSrc = ..
+
+include ${kentSrc}/inc/localEnvironment.mk
+include ${kentSrc}/inc/common.mk
 
 # note: lists such as the following need to be defined *before*
 # they are used in the wildcard target rules.  An oddity of gnu make

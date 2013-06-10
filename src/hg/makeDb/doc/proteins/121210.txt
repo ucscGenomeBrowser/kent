@@ -33,17 +33,17 @@ hgsql $db -e 'load data local infile "hgncXref.tab" into table hgncXref'
 #########################################################
 # CREATE REACTOME TABLES 
 
-# we're up to 42 now.  Got these from RM #7458
-mkdir -p /hive/data/outside/reactome/reactome42
-cd /hive/data/outside/reactome/reactome42
+# we're up to 44 now.  Got these from RM #9856
+mkdir -p /hive/data/outside/reactome/reactome44
+cd /hive/data/outside/reactome/reactome44
 
-unzip reactome-ucsc_v42.zip
-rm -rf __MACOSX/ reactome-ucsc_v42.zip
-tail -n +7 ucsc_entity42 > ucsc_entity42.tab
-tail -n +5 ucsc_events42 > ucsc_events42.tab
+unzip UCSC_Reactome_v44.zip
+rm -rf __MACOSX/ UCSC_Reactome_v44.zip
+tail -n +7 ucsc_entity44 > ucsc_entity44.tab
+tail -n +5 ucsc_events44 > ucsc_events44.tab
 
-hgLoadSqlTab $db spReactomeEvent ~/kent/src/hg/lib/spReactomeEvent.sql ucsc_events42.tab
-hgLoadSqlTab $db spReactomeId ~/kent/src/hg/lib/spReactomeId.sql ucsc_entity42.tab
+hgLoadSqlTab $db spReactomeEvent ~/kent/src/hg/lib/spReactomeEvent.sql ucsc_events44.tab
+hgLoadSqlTab $db spReactomeId ~/kent/src/hg/lib/spReactomeId.sql ucsc_entity44.tab
 
 cd ..
 rm current reactome

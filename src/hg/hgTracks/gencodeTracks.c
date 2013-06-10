@@ -357,7 +357,7 @@ if (highlightBySupportLevelSelected(row, gencodeQuery) || highlightByTranscriptT
 static void addQueryTables(struct track *tg, struct gencodeQuery *gencodeQuery)
 /* add required from tables and joins */
 {
-sqlDyStringPrintf(gencodeQuery->from, "%s g", tg->table);
+sqlDyStringPrintfFrag(gencodeQuery->from, "%s g", tg->table);
 if (gencodeQuery->joinAttrs)
     {
     sqlDyStringPrintf(gencodeQuery->from, ", %s attrs", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs"));
@@ -412,7 +412,8 @@ static struct sqlResult *gencodeMakeQuery(struct sqlConnection *conn, struct gen
 /* make the actual SQL query */
 {
 struct dyString *query = dyStringNew(0);
-sqlDyStringPrintf(query, "select %-s from %s where %-s", sqlCkIl(dyStringContents(gencodeQuery->fields)), dyStringContents(gencodeQuery->from), dyStringContents(gencodeQuery->where));
+sqlDyStringPrintf(query, "select %-s from %-s where %-s", 
+    sqlCkIl(dyStringContents(gencodeQuery->fields)), dyStringContents(gencodeQuery->from), dyStringContents(gencodeQuery->where));
 struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
 dyStringFree(&query);
 return sr;

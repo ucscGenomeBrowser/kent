@@ -38,7 +38,7 @@ int carefulCountBlocksAllocated();
 /* How many memory items are allocated? (Since called
  * pushCarefulMemHandler(). */
 
-long carefulTotalAllocated();
+size_t carefulTotalAllocated();
 /* Return total bases allocated */
 
 void setMaxAlloc(size_t s);

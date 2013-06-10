@@ -693,13 +693,12 @@ else if (startsWith("psl", type))
     cType = cfgPsl;
 else if (sameWord("vcfTabix",type))
     cType = cfgVcf;
-else if (sameWord("pgSnp",type))
-    cType = cfgPgSnp;
 // TODO: Only these are configurable so far
 
 if (cType == cfgNone && warnIfNecessary)
     {
-    if (!startsWith("bed ", type) && !startsWith("bedDetail", type) && !startsWith("bigBed", type) && !startsWith("gvf", type)
+    if (!startsWith("bed ", type) && !startsWith("bedDetail", type) && !startsWith("bigBed", type)
+	&& !startsWith("gvf", type) && !sameString("pgSnp", type)
         && subgroupFind(tdb, "view", NULL))
         warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",type,tdb->track);
     }
@@ -724,8 +723,7 @@ if (ctPopup > cfgNone)
     ||  regexMatch(tdb->track, "^cons[0-9]+way") // (matches logic in json setup in imageV2.c)
     ||  startsWith("hapmapSnps", tdb->track)
     ||  startsWith("hapmapAlleles", tdb->track)
-    ||  trackDbSettingBlocksConfiguration(tdb,TRUE)
-    ||  ctPopup == cfgPgSnp)
+    ||  trackDbSettingBlocksConfiguration(tdb,TRUE))
         ctPopup *= -1;
     }
 return ctPopup;

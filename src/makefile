@@ -1,5 +1,5 @@
+include inc/localEnvironment.mk
 include inc/common.mk
-
 
 all: utils cgi blatSuite
 

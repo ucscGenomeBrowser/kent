@@ -1,13 +1,18 @@
 # Build all directories in makeDb 
 
-include ../../inc/common.mk
+kentSrc = ../..
+
+include ${kentSrc}/inc/localEnvironment.mk
+include ${kentSrc}/inc/common.mk
 
 # List of directories to build for userApps
 UTILS_APPLIST = \
+	hgFindSpec \
 	hgLoadBed \
 	hgLoadOut \
 	hgGcPercent \
 	hgLoadWiggle \
+	hgTrackDb \
 	ldHgGene
 
 # List of directories to build of interest only at UCSC
@@ -22,7 +27,6 @@ DIRS = \
 	hgExperiment \
 	hgExtFileCheck \
 	hgFakeAgp \
-	hgFindSpec \
 	hgGeneBands \
 	hgGenericMicroarray \
 	hgPar \
@@ -58,7 +62,6 @@ DIRS = \
 	hgTomRough \
 	hgTpf \
 	hgTraceInfo \
-	hgTrackDb \
 	hgWaba \
 	hgMrnaRefseq \
 	schema \

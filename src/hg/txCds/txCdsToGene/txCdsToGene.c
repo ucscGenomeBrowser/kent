@@ -297,8 +297,9 @@ for (blockIx=0; blockIx<cds->cdsCount; ++blockIx)
     int rnaSize = cds->cdsSizes[blockIx];
     if (rnaSize%3 != 0)
         {
-	errAbort("size of block (%d) not multiple of 3 in %s (source %s %s)",
-		 rnaSize, cds->name, cds->source, cds->accession);
+	warn("size of block (%d) #%d not multiple of 3 in %s (source %s %s)",
+		 rnaSize, blockIx, cds->name, cds->source, cds->accession);
+	return FALSE;
 	}
     int aaSize = rnaSize/3;
     int i;

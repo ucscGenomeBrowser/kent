@@ -15,7 +15,7 @@ else if (differentString(primaryRow->chrom, self->prevPChrom))
     self->prevPChrom = cloneString(primaryRow->chrom);
     }
 else if (primaryRow->start < self->prevPStart)
-    errAbort("annoGrator %s:Unsorted input from primary source (%s, %u < %u)",
+    errAbort("annoGrator %s: Unsorted input from primary source (%s, %u < %u)",
 	     self->streamer.name, primaryRow->chrom, primaryRow->start, self->prevPStart);
 self->prevPStart = primaryRow->start;
 }

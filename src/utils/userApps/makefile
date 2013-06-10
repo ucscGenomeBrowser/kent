@@ -1,4 +1,7 @@
-include ../../inc/common.mk
+kentSrc = ../..
+
+include ${kentSrc}/inc/localEnvironment.mk
+include ${kentSrc}/inc/common.mk
 
 CMD_LIST = fetchChromSizes
 DOC_LIST = 
