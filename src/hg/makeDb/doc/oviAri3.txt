@@ -227,23 +227,23 @@ taxId 9940
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek oviAri3 > do.log 2>&1 &
-XXX - running - Sun Jun  9 17:05:14 PDT 2013
-    # real    220m20.455s
+    # real    566m7.955s
 
     cat faSize.rmsk.txt
-    # 1232135591 bases (9270900 N's 1222864691 real 1125277738 upper
-    #   97586953 lower) in 37096 sequences in 1 files
-    # Total size: mean 33214.8 sd 1455001.1 min 783 (chr5_ABQF01053133_random)
-    #   max 156412533 (chr2) median 3541
-    # %7.92 masked total, %7.98 masked real
+    # 2619054388 bases (84718522 N's 2534335866 real 1389945274 upper
+    #  1144390592 lower) in 5698 sequences in 1 files
+    # Total size: mean 459644.5 sd 7762308.2 min 1001 (chrUn_AMGL01128047)
+    #  max 275612895 (chr1) median 2902
+    # %43.69 masked total, %45.16 masked real
 
     egrep -i "versi|relea" do.log
-    #    January 10 2013 (open-4-0-0) version of RepeatMasker
-    #  CC   RELEASE 20120418; 
+    # RepeatMasker version open-4.0.2
+    #    April 29 2013 (open-4-0-2) version of RepeatMasker
+    # CC   RELEASE 20130422;
 
     time featureBits -countGaps oviAri3 rmsk
-    # 97640353 bases of 1232135591 (7.924%) in intersection
-    # real    0m16.657s
+    # 1154400674 bases of 2619054388 (44.077%) in intersection
+    # real    0m32.325s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -261,11 +261,7 @@ XXX - running - Sun Jun  9 17:05:14 PDT 2013
     cat fb.simpleRepeat
     #   42019675 bases of 2534344180 (1.658%) in intersection
 
-XXX - waiting for RM and WM results - Sun Jun  9 17:18:50 PDT 2013
-    # considering rmsk %8 vs. WM %20 and this is a small genome,
-    # use the rmsk result in order to have the classifications from
-    # that available
-    # add to rmsk after it is done:
+    # add to rmsk after it is done since RM is better masking that WM:
     cd /hive/data/genomes/oviAri3
     twoBitMask oviAri3.rmsk.2bit \
 	-add bed/simpleRepeat/trfMask.bed oviAri3.2bit
@@ -273,12 +269,11 @@ XXX - waiting for RM and WM results - Sun Jun  9 17:18:50 PDT 2013
 
     twoBitToFa oviAri3.2bit stdout | faSize stdin > faSize.oviAri3.2bit.txt
     cat faSize.oviAri3.2bit.txt
-
-    # 1232135591 bases (9270900 N's 1222864691 real 1123697742 upper
-    #    99166949 lower) in 37096 sequences in 1 files
-    # Total size: mean 33214.8 sd 1455001.1 min 783 (chr5_ABQF01053133_random)
-    #    max 156412533 (chr2) median 3541
-    # %8.05 masked total, %8.11 masked real
+    # 2619054388 bases (84718522 N's 2534335866 real 1389211740 upper
+    #   1145124126 lower) in 5698 sequences in 1 files
+    # Total size: mean 459644.5 sd 7762308.2 min 1001 (chrUn_AMGL01128047)
+    #   max 275612895 (chr1) median 2902
+    # %43.72 masked total, %45.18 masked real
 
     rm /gbdb/oviAri3/oviAri3.2bit
     ln -s `pwd`/oviAri3.2bit /gbdb/oviAri3/oviAri3.2bit
@@ -354,41 +349,44 @@ close (FH);
     #    125067 scaffold
 
 ##########################################################################
-## WINDOWMASKER (DONE- 2013-06-05 - Hiram)
+## WINDOWMASKER (DONE- 2013-06-09 - Hiram)
     mkdir /hive/data/genomes/oviAri3/bed/windowMasker
     cd /hive/data/genomes/oviAri3/bed/windowMasker
     time doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev oviAri3 > do.log 2>&1 &
-XXX - running - Sun Jun  9 17:06:25 PDT 2013
-    # real    66m52.863s
+    # real    199m52.017s
 
     # Masking statistics
-    faSize.oviAri3.cleanWMSdust.txt
-# 1232135591 bases (9270900 N's 1222864691 real 973147255 upper
-#     249717436 lower) in 37096 sequences in 1 files
-# Total size: mean 33214.8 sd 1455001.1 min 783 (chr5_ABQF01053133_random)
-#     max 156412533 (chr2) median 3541
-# %20.27 masked total, %20.42 masked real
+    cat faSize.oviAri3.cleanWMSdust.txt
+    # 2619054388 bases (84718522 N's 2534335866 real 1554240396 upper
+    #    980095470 lower) in 5698 sequences in 1 files
+    # Total size: mean 459644.5 sd 7762308.2 min 1001 (chrUn_AMGL01128047)
+    #    max 275612895 (chr1) median 2902
+    # %37.42 masked total, %38.67 masked real
 
     # how much does this window masker and repeat masker overlap:
-    featureBits -countGaps oviAri3 rmsk windowmaskerSdust
-    #   54554911 bases of 1232135591 (4.428%) in intersection
+    time featureBits -countGaps oviAri3 rmsk windowmaskerSdust \
+        > fb.oviAri3.rmsk.windowmaskerSdust.txt 2>&1
+    cat fb.oviAri3.rmsk.windowmaskerSdust.txt
+    #   737831652 bases of 2619054388 (28.172%) in intersection
 
 ########################################################################
-# cpgIslands - (DONE - 2013-06-06 - Hiram)
+# cpgIslands - (DONE - 2013-06-10 - Hiram)
     mkdir /hive/data/genomes/oviAri3/bed/cpgIslands
     cd /hive/data/genomes/oviAri3/bed/cpgIslands
-    time doCpgIslands.pl oviAri3 > do.log 2>&1
+    time doCpgIslands.pl oviAri3 > do.log 2>&1 &
+XXX - running - Mon Jun 10 08:59:35 PDT 2013
     #  real    17m40.265s
 
     cat fb.oviAri3.cpgIslandExt.txt
     #   16473980 bases of 1222864691 (1.347%) in intersection
 
 #########################################################################
-# genscan - (DONE - 2013-06-06 - Hiram)
+# genscan - (DONE - 2013-06-10 - Hiram)
     mkdir /hive/data/genomes/oviAri3/bed/genscan
     cd /hive/data/genomes/oviAri3/bed/genscan
-    time doGenscan.pl oviAri3 > do.log 2>&1 
+    time doGenscan.pl oviAri3 > do.log 2>&1  &
+XXX - running - Mon Jun 10 09:00:08 PDT 2013
     #  real    47m7.823s
     # XXX failed four jobs, running manually on hgwdev: chr9 chr1A chr3 chr2
     # with -window=2000000 - all bug chr9 finished
@@ -400,7 +398,7 @@ XXX - running - Sun Jun  9 17:06:25 PDT 2013
 # user    9m59.182s
 # sys     0m13.720s
 
-    time doGenscan.pl -continue=makeBed oviAri3 > makeBed.log 2>&1 
+    time doGenscan.pl -continue=makeBed oviAri3 > makeBed.log 2>&1
     # real    30m4.119s
 
     cat fb.oviAri3.genscan.txt
@@ -409,74 +407,71 @@ XXX - running - Sun Jun  9 17:06:25 PDT 2013
     #   28313661 bases of 1222864691 (2.315%) in intersection
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-06 - Hiram)
-    # Use -repMatch=500, based on size -- for human we use 1024
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-10 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 1222864691 / 2897316137 \) \* 1024
-    #  ( 1222864691 / 2897316137 ) * 1024 = 432.197725
-
-    # round up to 500 (taeGut1 used 1024)
+    calc \( 2534335866 / 2897316137 \) \* 1024
+    #  ( 2534335866 / 2897316137 ) * 1024 = 895.711688
+    # round up to 900 (oviAri1 used 400)
 
     cd /hive/data/genomes/oviAri3
     time blat oviAri3.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/oviAri3.11.ooc -repMatch=500
-    # Wrote 12162 overused 11-mers to jkStuff/oviAri3.11.ooc
-    # real    0m32.994s
+      -makeOoc=jkStuff/oviAri3.11.ooc -repMatch=900
+    # Wrote 30413 overused 11-mers to jkStuff/oviAri3.11.ooc
+    # real    1m22.326s
 
-    # there are non-bridged gaps, therefore, a lift file is needed for genbank
+    #	oviAri1: Wrote 19704 overused 11-mers to jkStuff/oviAri1.11.ooc
+
+    # there are *no* non-bridged gaps, therefore, no lift file for genbank
     hgsql -N -e "select bridge from gap;" oviAri3 | sort | uniq -c
-    #      326 no
-    #    87384 yes
-
-    cd /hive/data/genomes/oviAri3/jkStuff
-    gapToLift oviAri3 oviAri3.nonBridged.lift -bedFile=oviAri3.nonBridged.bed
-    # largest non-bridged contig:
-    awk '{print $3-$2,$0}' oviAri3.nonBridged.bed | sort -nr | head
-    #   56928224 chr5   4758199 61686423        chr5.07
+    #    126619 yes
 
 #########################################################################
-# AUTO UPDATE GENBANK (DONE - 2013-03-08 - Pauline)
+# AUTO UPDATE GENBANK (DONE - 2013-06-10 - Pauline)
     # examine the file:
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Taeniopygia guttata     5086    92144   987
+# Ovis aries      3064    338574  795
 
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
-    # edit etc/genbank.conf to add oviAri3 just after ce2
+    # edit etc/genbank.conf to add oviAri3 just after before oviAri1
 
-# oviAri3 - Zebra Finch
+# oviAri3 (Sheep)
 oviAri3.serverGenome = /hive/data/genomes/oviAri3/oviAri3.2bit
 oviAri3.clusterGenome = /hive/data/genomes/oviAri3/oviAri3.2bit
 oviAri3.ooc = /hive/data/genomes/oviAri3/jkStuff/oviAri3.11.ooc
-oviAri3.align.unplacedChroms = chrUn_*,chr*_random
-oviAri3.lift = /hive/data/genomes/oviAri3/jkStuff/oviAri3.nonBridged.lift
-oviAri3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-oviAri3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
-oviAri3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
-oviAri3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
-oviAri3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
-oviAri3.refseq.mrna.native.load = yes
-oviAri3.refseq.mrna.xeno.load = yes
-oviAri3.genbank.mrna.xeno.load = yes
+oviAri3.lift = no
+oviAri3.perChromTables = no
+oviAri3.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+oviAri3.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+oviAri3.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+oviAri3.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+oviAri3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+oviAri3.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
 oviAri3.downloadDir = oviAri3
+oviAri3.refseq.mrna.native.load  = yes
+oviAri3.refseq.mrna.xeno.load = yes
+oviAri3.refseq.mrna.xeno.loadDesc  = yes
+oviAri3.genbank.mrna.xeno.load  = yes
 oviAri3.upstreamGeneTbl = refGene
 
     # end of section added to etc/genbank.conf
-    git commit -m "adding oviAri3 Zebra finch refs #10190" etc/genbank.conf
+    git commit -m "adding oviAri3 Sheep refs #9409" etc/genbank.conf
     git push
     make etc-update
 
     ssh hgwdev			# used to do this on "genbank" machine
     screen -S oviAri3           # long running job managed in screen
     cd /cluster/data/genbank
-    time -p nice -n 19 ./bin/gbAlignStep -initial oviAri3 &
-#  logFile: var/build/logs/2013.06.06-14:23:44.oviAri3.initalign.log
+    time ./bin/gbAlignStep -initial oviAri3 &
+#  logFile: var/build/logs/2013.06.10-09:12:43.oviAri3.initalign.log
+XXX - running - Mon Jun 10 09:13:09 PDT 2013
     # real 90291.12
     # user 19200.27
     # sys 11190.97
