@@ -10,10 +10,14 @@ struct annoAssembly
     {
     char *name;			// UCSC symbolic name for assembly, e.g. "hg19"
     struct twoBitFile *tbf;	// Opened twoBit sequence file for assembly
+    char *twoBitPath;		// twoBit file name
     };
 
 struct annoAssembly *annoAssemblyNew(char *name, char *twoBitPath);
 /* Return an annoAssembly with open twoBitFile. */
+
+struct slName *annoAssemblySeqNames(struct annoAssembly *aa);
+/* Return a list of sequence names in this assembly. */
 
 uint annoAssemblySeqSize(struct annoAssembly *aa, char *seqName);
 /* Return the number of bases in seq which must be in aa's twoBitFile. */

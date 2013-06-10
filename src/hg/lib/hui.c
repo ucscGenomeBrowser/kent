@@ -7691,12 +7691,6 @@ void hPrintFactorSourceAbbrevTable(struct sqlConnection *conn, struct trackDb *t
 {
 char *label = "Cell Type";
 char *sourceTable = trackDbRequiredSetting(tdb, SOURCE_TABLE);
-boolean cellsOnly = trackDbSettingOn(tdb, SOURCE_TABLE_PACK);
-if (!cellsOnly)
-    {
-    hPrintAbbreviationTable(conn, sourceTable, label);
-    return;
-    }
 char query[256];
 sqlSafef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -7710,12 +7704,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];
     char *description = row[1];
-    if (cellsOnly)
-        {
-        // truncate description to just the cell type
-        if ((plus = strchr(description, '+')) != NULL)
-            *plus = 0;
-        }
+    // truncate description to just the cell type
+    if ((plus = strchr(description, '+')) != NULL)
+        *plus = 0;
     AllocVar(source);
     source->name = cloneString(name);
     source->description = cloneString(description);
