@@ -122,18 +122,17 @@ done
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek vicPac2 > do.log 2>&1 &
-XXX - running - Sun Jun  9 17:37:45 PDT 2013
-    #   real    390m14.722s
+    #   real    831m16.606s
     cat faSize.rmsk.txt
-# 2947024286 bases (341827925 N's 2605196361 real 1869498320 upper
-#       735698041 lower) in 8402 sequences in 1 files
-# Total size: mean 350752.7 sd 4055776.1 min 1000 (AAIY02277568) max
-#       111700974 (JH980293) median 2033
-# %24.96 masked total, %28.24 masked real
+    # 2172177994 bases (93595138 N's 2078582856 real 1343652421 upper
+    #    734930435 lower) in 276611 sequences in 1 files
+    # Total size: mean 7852.8 sd 265315.8 min 200 (ABRR02450950)
+    #    max 38452041 (KB632434) median 353
+    # %33.83 masked total, %35.36 masked real
 
     grep -i versi do.log
-# RepeatMasker version open-4.0.0
-#    January 10 2013 (open-4-0-0) version of RepeatMasker
+    # RepeatMasker version open-4.0.2
+    #    April 29 2013 (open-4-0-2) version of RepeatMasker
 
 ##########################################################################
 # running simple repeat (DONE - 2013-06-09 - Hiram)
@@ -142,15 +141,12 @@ XXX - running - Sun Jun  9 17:37:45 PDT 2013
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	vicPac2 > do.log 2>&1 &
-XXX - running - Sun Jun  9 17:38:05 PDT 2013
-    # real    17m17.690s
+    # real    309m54.441s
 
-    #	real    198m33.953s
     cat fb.simpleRepeat
-    #	25511877 bases of 2605196361 (0.979%) in intersection
+    # 29433046 bases of 2078582856 (1.416%) in intersection
 
-    # using RMSK and TRF since RMSK is enough masking even though
-    # WM is pretty good
+    # using RMSK and TRF since RMSK is better than WM
     cd /hive/data/genomes/vicPac2
     twoBitMask vicPac2.rmsk.2bit \
 	-add bed/simpleRepeat/trfMask.bed vicPac2.2bit
@@ -158,11 +154,11 @@ XXX - running - Sun Jun  9 17:38:05 PDT 2013
 
     twoBitToFa vicPac2.2bit stdout | faSize stdin > faSize.vicPac2.2bit.txt
     cat faSize.vicPac2.2bit.txt
-# 2947024286 bases (341827925 N's 2605196361 real 1868909316 upper
-#    736287045 lower) in 8402 sequences in 1 files
-# Total size: mean 350752.7 sd 4055776.1 min 1000 (AAIY02277568)
-#    max 111700974 (JH980293) median 2033
-# %24.98 masked total, %28.26 masked real
+# 2172177994 bases (93595138 N's 2078582856 real 1342723412 upper
+#   735859444 lower) in 276611 sequences in 1 files
+# Total size: mean 7852.8 sd 265315.8 min 200 (ABRR02450950)
+#   max 38452041 (KB632434) median 353
+# %33.88 masked total, %35.40 masked real
 
     rm /gbdb/vicPac2/vicPac2.2bit
     ln -s `pwd`/vicPac2.2bit /gbdb/vicPac2/vicPac2.2bit
@@ -180,11 +176,28 @@ XXX - running - Sun Jun  9 17:38:05 PDT 2013
     # 2078582856 bases of 2078582856 (100.000%) in intersection
     # real    1m5.303s
 
+    # used to do this featureBits, but it is really really slow if there
+    # are a log of contigs
+    # time featureBits vicPac2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # 0 bases of 2078582856 (0.000%) in intersection
+    # real    472m17.520s
 
-    time featureBits vicPac2 allGaps.bed notGap.bed -bed=new.gaps.bed
-XXX - running - Sun Jun  9 17:40:58 PDT 2013
-    # 0 bases of 2605196361 (0.000%) in intersection
-    # real    13m21.473s
+    # this is much faster:
+    awk '{print $3-$2,$0}' notGap.bed | sort -rn > notGap.sizes.txt
+    # largest contiguous sequence:
+    head -1 notGap.sizes.txt | awk '{print $1}'
+    # 513588
+    # minimal coverage 1 base out of that largest sequence:
+    echo 513588 | awk '{printf "%15.10f\n", 1/(2*$1)}' | sed -e 's/ //g'
+    # 0.0000009735
+    time bedIntersect -minCoverage=0.0000009735 allGaps.bed notGap.bed \
+      test.new.gaps.bed
+    # real    0m22.922s
+    # no new gaps:
+    # -rw-rw-r-- 1        0 Jun 10 09:29 test.new.gaps.bed
+    # if there were gaps, this is the number of bases in these new gaps:
+    awk '{print $3-$2}' test.new.gaps.bed | ave stdin | grep total
+    # total 8314.000000
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2013-06-09 - Hiram)
@@ -192,17 +205,16 @@ XXX - running - Sun Jun  9 17:40:58 PDT 2013
     cd /hive/data/genomes/vicPac2/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev vicPac2 > do.log 2>&1 &
-XXX - running - Sun Jun  9 17:38:28 PDT 2013
-    #   real    301m9.805s
+    # real    556m33.825s
 
     cat faSize.vicPac2.cleanWMSdust.txt
-# 2947024286 bases (341827925 N's 2605196361 real 1655356294 upper
-#    949840067 lower) in 8402 sequences in 1 files
-# Total size: mean 350752.7 sd 4055776.1 min 1000 (AAIY02277568) max
-#    111700974 (JH980293) median 2033
-# %32.23 masked total, %36.46 masked real
+# 2172177994 bases (93595138 N's 2078582856 real 1526270768 upper
+#    552312088 lower) in 276611 sequences in 1 files
+# Total size: mean 7852.8 sd 265315.8 min 200 (ABRR02450950)
+#    max 38452041 (KB632434) median 353
+# %25.43 masked total, %26.57 masked real
 
-    #  This is pretty good for WM, but RMSK isn't that bad either,
+    #  This is pretty good for WM, but RMSK is better
     #  so, using the RMSK result to mask the genome
 
     featureBits -countGaps vicPac2 rmsk windowmaskerSdust  > fb.vicPac2.rmsk.windowmaskerSdust.txt 2>&1
@@ -210,33 +222,71 @@ XXX - running - Sun Jun  9 17:38:28 PDT 2013
 #  416158057 bases of 2947024286 (14.121%) in intersection
 
 ########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-06 - Hiram)
-    # Use -repMatch=950, based on size -- for human we use 1024
+# cpgIslands - (DONE - 2013-06-10 - Hiram)
+    mkdir /hive/data/genomes/vicPac2/bed/cpgIslands
+    cd /hive/data/genomes/vicPac2/bed/cpgIslands
+    time doCpgIslands.pl vicPac2 > do.log 2>&1 &
+XXX - running - Mon Jun 10 09:38:51 PDT 2013
+    #  real    14m42.645s
+
+    cat fb.vicPac2.cpgIslandExt.txt
+    #   19288346 bases of 2534335866 (0.761%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2013-06-10 - Hiram)
+    mkdir /hive/data/genomes/vicPac2/bed/genscan
+    cd /hive/data/genomes/vicPac2/bed/genscan
+    time doGenscan.pl vicPac2 > do.log 2>&1  &
+XXX - running - Mon Jun 10 09:39:11 PDT 2013
+    #  real    47m7.823s
+    # XXX failed four jobs, running manually on hgwdev: chr9 chr1A chr3 chr2
+    # with -window=2000000 - all bug chr9 finished
+# real    57m16.383s
+# user    133m46.445s
+# sys     2m55.584s
+    # running chr9 with -window=1000000
+# real    10m14.291s
+# user    9m59.182s
+# sys     0m13.720s
+
+    time doGenscan.pl -continue=makeBed vicPac2 > makeBed.log 2>&1
+    # real    30m4.119s
+
+    cat fb.vicPac2.genscan.txt
+    #   52986693 bases of 1222864691 (4.333%) in intersection
+    cat fb.vicPac2.genscanSubopt.txt
+    #   28313661 bases of 1222864691 (2.315%) in intersection
+
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-10 - Hiram)
+    # Use -repMatch=750, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 2605196361 / 2897316137 \) \* 1024
-    #	( 2605196361 / 2897316137 ) * 1024 = 920.755951
-    # round up to 950
+    calc \( 2078582856 / 2897316137 \) \* 1024
+    # ( 2078582856 / 2897316137 ) * 1024 = 734.634656
+    # round up to 750
 
-    # echTel1 was: -repMatch=1024
-    #  Wrote 9721 overused 11-mers to /cluster/bluearc/echTel1/11.ooc
+    # vicPac1 was: -repMatch=700
+    # vicPac1: Wrote 25830 overused 11-mers to vicPac1.11.ooc
 
     cd /hive/data/genomes/vicPac2
     blat vicPac2.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/vicPac2.11.ooc -repMatch=950
-    #	Wrote 21134 overused 11-mers to jkStuff/vicPac2.11.ooc
+      -makeOoc=jkStuff/vicPac2.11.ooc -repMatch=750
+    #	Wrote 19794 overused 11-mers to jkStuff/vicPac2.11.ooc
 
     # there are *only* bridged gaps, no lift file needed for genbank
     hgsql -N -e "select bridge from gap;" vicPac2 | sort | uniq -c
-    #   269444 yes
+    #   174225 yes
 
 #########################################################################
-# AUTO UPDATE GENBANK (WORKING - 2013-06-06 - Hiram)
+# AUTO UPDATE GENBANK (WORKING - 2013-06-10 - Hiram)
     # examine the file:
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Echinops telfairi       5       0       0
+# Vicugna pacos   169     7289    0
+# Vicugna vicugna 3       0       0
     # to decide which "native" mrna or ests you want to specify in genbank.conf
     # this appears that vicPac2 has plenty of native est's
 
@@ -264,19 +314,16 @@ vicPac2.downloadDir = vicPac2
 vicPac2.perChromTables = no
 
     # end of section added to etc/genbank.conf
-    git commit -m "adding vicPac2 tenrec refs #9693" etc/genbank.conf
+    git commit -m "adding vicPac2 alpaca refs #10833" etc/genbank.conf
     git push
     make etc-update
-
-    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
-    # anoCar genome information, if this is a new species, need to add stuff
-    # there
 
     ssh hgwdev			# used to do this on "genbank" machine
     screen			# long running job managed in screen
     cd /cluster/data/genbank
-    time nice -n +19 ./bin/gbAlignStep -initial vicPac2 &
-    #	var/build/logs/2013.06.06-14:36:22.vicPac2.initalign.log
+    time ./bin/gbAlignStep -initial vicPac2 &
+    #	var/build/logs/2013.06.10-09:51:04.vicPac2.initalign.log
+XXX - running - Mon Jun 10 09:51:21 PDT 2013
     #	real    217m40.528s
 
     # load database when finished
@@ -1824,89 +1871,6 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     mkdir -p $pd
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-
-############################################################################
-# running cpgIsland business (TBD - Hiram)
-    mkdir /hive/data/genomes/vicPac2/bed/cpgIsland
-    cd /hive/data/genomes/vicPac2/bed/cpgIsland
-    ln -s ../../../danRer6/bed/cpgIsland/cpglh.exe .
-
-    mkdir -p hardMaskedFa
-    cut -f1 ../../chrom.sizes | while read C
-do
-    echo ${C}
-    twoBitToFa ../../vicPac2.2bit:$C stdout \
-	| maskOutFa stdin hard hardMaskedFa/${C}.fa
-done
-
-    ssh encodek
-    cd /hive/data/genomes/vicPac2/bed/cpgIsland
-    mkdir results
-    cut -f1 ../../chrom.sizes > chr.list
-    cat << '_EOF_' > template
-#LOOP
-./runOne $(root1) {check out exists results/$(root1).cpg}
-#ENDLOOP
-'_EOF_'
-    # << happy emacs
-
-    #	the faCount business is to make sure there is enough sequence to
-    #	work with in the fasta.  cpglh.exe does not like files with too many
-    #	N's - it gets stuck
-    cat << '_EOF_' > runOne
-#!/bin/csh -fe
-set C = `faCount hardMaskedFa/$1.fa | egrep "^chr|^Zv" | awk '{print  $2 - $7 }'`
-if ( $C > 200 ) then
-    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
-    mv /scratch/tmp/$1.$$ $2
-else
-    touch $2
-endif
-'_EOF_'
-    # << happy emacs
-    chmod +x runOne
-
-    gensub2 chr.list single template jobList
-    para create jobList
-    para try
-    para check ... etc
-    para time
-# Completed: 6457 of 6457 jobs
-# CPU time in finished jobs:        135s       2.25m     0.04h    0.00d  0.000 y
-# IO & Wait Time:                 16267s     271.11m     4.52h    0.19d  0.001 y
-# Average job time:                   3s       0.04m     0.00h    0.00d
-# Longest finished job:              28s       0.47m     0.01h    0.00d
-# Submission to last job:           871s      14.52m     0.24h    0.01d
-
-    # Transform cpglh output to bed +
-    catDir results | awk '{
-$2 = $2 - 1;
-width = $3 - $2;
-printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
-       $1, $2, $3, $5,$6, width,
-       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
-}' > cpgIsland.bed
-
-    # verify longest unique chrom name:
-    cut -f1 cpgIsland.bed | sed -e 's/_random//' \
-	| awk '{print length($0)}' | sort -rn | head -1
-    #	18
-    # update the length 14 in the template to be 16:
-    sed -e "s/14/18/" $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
-
-    cd /hive/data/genomes/vicPac2/bed/cpgIsland
-    hgLoadBed vicPac2 cpgIslandExt -tab -sqlTable=cpgIslandExt.sql cpgIsland.bed
-# Loaded 15374 elements of size 10
-
-
-    featureBits vicPac2 cpgIslandExt
-    #	6520314 bases of 1701353770 (0.383%) in intersection
-
-    # there should be no output from checkTableCoords:
-    checkTableCoords -verboseBlocks -table=cpgIslandExt vicPac2
-
-    #	cleanup
-    rm -fr hardMaskedFa
 
 ############################################################################
 ## LASTZ Lizard vicPac2 (TBD - Hiram)

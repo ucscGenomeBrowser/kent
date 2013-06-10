@@ -10,9 +10,10 @@ CGI or the library that uses them:
 The "make alpha", "make beta", and "make install" commands will place all files in
 JS_FILES and STATIC_FILES in apache/htdocs/js/.  "make user" will place both sets in
 apache/htdocs-{user}/js if it exists, and otherwise will place both sets in
-apache/htdocs/js/{user} while printing a warning that static documents will ignore any
-changes you made to these files.  Static documents are hardcoded to look in /js,
-not /js/{user}.
+apache/htdocs/js/{user}.  Static documents are hardcoded to look in /js, not /js/{user},
+so any changes placed in /js/{user} will be ignored by static documents.  If you want to
+modify those files and see the changes, you need to either have your own htdocs directory
+or test your changes on "make alpha".
 
 In order to avoid caching errors by client browsers, the CGIs reference these files by
 a symlink that contains the timestamp of the file.  The symlink is created by the CGIs if
