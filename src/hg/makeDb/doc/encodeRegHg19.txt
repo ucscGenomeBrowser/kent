@@ -737,6 +737,7 @@ cat > getHistones.csh << 'EOF'
     cd /hive/data/genomes/hg19/bed/wgEncodeRegV2
     mkdir -p tfbs2012
     cd tfbs2012
+    set dir = `pwd`
     mkdir logs
 
     # use high-quality uniform peaks used to build Uniform TFBS track
@@ -878,9 +879,11 @@ cat > getMetaHuge.csh << 'EOF'
     #Got 161 factors
 
     hgLoadBed hg19 wgEncodeRegTfbsClusteredV6 clusters.target.bed
+    ln -s clusters.target.bed wgEncodeRegTfbsClusteredV6.tab
     # V5 with separate HA-E2F1 factor: Read 4385242 elements of size 15 from clusters.target.bed
     # Read 4380444 elements of size 15 from clusters.target.bed
     hgLoadSqlTab hg19 wgEncodeRegTfbsCellsV6 ~/kent/src/hg/lib/expRecord.sql clusters.target.exps
+    ln -s clusters.targets.exps wgEncodeRegTfbsCellsV6.tab
 
     # Create inputTrackTable - six columns: <table> <source> <factor> <cell> <treatment> <lab>
     # For target-based, include antibody in source field
@@ -928,10 +931,55 @@ cat > getTargetInputs.csh << 'EOF'
     featureBits hg19 -noRandom -enrichment wgEncodeRegTfbsClusteredV5 wgEncodeRegDnaseClusteredV2 
     # wgEncodeRegTfbsClusteredV5 13.156%, wgEncodeRegDnaseClusteredV2 13.390%, both 6.690%, cover 50.86%, enrich 3.80x
 
-# V6 is release target -- rename the antibody clustering to V3a, and rename V6 to V3
-
-
 #### GOT HERE ####
+    # V6 is release target -- rename the antibody clustering to V3a, and rename V6 to V3 (use symlinks in build dir)
+
+    # Set up downloads
+    set dir = /hive/data/genomes/hg19/bed/wgEncodeRegV2/tfbs2012
+    cd $dir
+    mkdir downloads
+    gzip -c wgEncodeRegTfbsClusteredV3.bed > downloads/wgEncodeRegTfbsClusteredV3.bed.gz
+    # disallow name truncation
+    gzip -c -n wgEncodeRegTfbsClusteredInputsV3.tab > downloads/wgEncodeRegTfbsClusteredInputsV3.tab.gz
+    gzip -c wgEncodeRegTfbsCellsV3.tab > downloads/wgEncodeRegTfbsCellsV3.tab.gz
+
+    # use (existing) ENCODE DCC downloads dir
+    set dload = /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeRegTfbsClustered
+    cd $dload
+
+    # new release dir
+    mkdir release3
+    ln -s release3 beta
+    ln -s release3 releaseLatest
+    cd $dir/downloads
+    ln wgEncodeRegTfbsClusteredV3.bed.gz wgEncodeRegTfbsClusteredInputsV3.tab.gz wgEncodeRegTfbsCellsV3.tab.gz $dload
+    cd $dload
+    ln wgEncodeRegTfbsClusteredV3.bed.gz wgEncodeRegTfbsClusteredInputsV3.tab.gz wgEncodeRegTfbsCellsV3.tab.gz releaseLatest
+    # include older files as well 
+    cp wgEncodeRegTfbsClusteredV2.bed.gz wgEncodeRegTfbsClusteredInputs.tab.gz wgEncodeRegTfbsCells.tab.gz releaseLatest
+    cp README.txt releaseLatest
+    # clean up bogus names embedded in zips)
+    # gunzip wgEncodeRegTfbsClusteredV2.bed.gz wgEncodeRegTfbsClusteredInputs.tab.gz wgEncodeRegTfbsCells.tab.gz
+    md5sum *.gz > md5sum.txt
+    # vim README.txt
+    # use wgEncodeRegDnaseClustered for basics
+    cp README.txt md5sum.txt ..
+
+    # add minimal metaObject to metaDb to associate new table with (pseudo-)composite 
+    # wgEncodeRegTfbsClustered -- this allows hgTrackUi to locate downloads
+    cd $dir
+    cat > wgEncodeRegTfbsClustered.ra << 'EOF'
+metaObject wgEncodeRegTfbsClusteredV3
+objType table
+composite wgEncodeRegTfbsClustered
+fileName wgEncodeRegTfbsClusteredV3.bed.gz
+tableName wgEncodeRegTfbsClusteredV3
+project wgEncode
+'EOF'
+    # mdbUpdate, mdbPrint
+
+
+###################
 
     # First shot at clustering by Kate:  -> V3
     # This version worked directly from Anshul's files, using similar methods to

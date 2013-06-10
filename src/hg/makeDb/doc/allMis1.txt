@@ -286,104 +286,86 @@ taxId 8496
     mkdir /hive/data/genomes/allMis1/bed/cpgIslands
     cd /hive/data/genomes/allMis1/bed/cpgIslands
     time doCpgIslands.pl allMis1 > do.log 2>&1 &
-XXX - running - Fri Jun  7 13:35:27 PDT 2013
-    #   real    17m6.876s
+    # real    72m55.069s
 
     cat fb.allMis1.cpgIslandExt.txt
-    #   5087816 bases of 1041286029 (0.489%) in intersection
+    #   20404153 bases of 2129659933 (0.958%) in intersection
 
 #########################################################################
 # genscan - (DONE - 2013-06-07 - Hiram)
     mkdir /hive/data/genomes/allMis1/bed/genscan
     cd /hive/data/genomes/allMis1/bed/genscan
     time doGenscan.pl allMis1 > do.log 2>&1 &
-XXX - running - Fri Jun  7 13:35:27 PDT 2013
-    #   real    31m32.788s
-# Completed: 27239 of 27239 jobs
-# CPU time in finished jobs:         28s       0.47m     0.01h    0.00d  0.000 y
-# IO & Wait Time:                 96830s    1613.83m    26.90h    1.12d  0.003 y
-# Average job time:                   4s       0.06m     0.00h    0.00d
-# Longest finished job:              16s       0.27m     0.00h    0.00d
-# Submission to last job:           154s       2.57m     0.04h    0.00d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
+    # real    89m34.019s
 
     cat fb.allMis1.genscan.txt
-    #   18118133 bases of 1041286029 (1.740%) in intersection
+    #   48525950 bases of 2129659933 (2.279%) in intersection
     cat fb.allMis1.genscanSubopt.txt
-    #   22582067 bases of 1041286029 (2.169%) in intersection
+    #   53173655 bases of 2129659933 (2.497%) in intersection
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-07-26 - Hiram)
-    # Use -repMatch=400, based on size -- for human we use 1024
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-08 - Hiram)
+    # Use -repMatch=800, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 1041286029 / 2897316137 \) \* 1024
-    #   ( 1041286029 / 2897316137 ) * 1024 = 368.022281
+    calc \( 2128720123 / 2897316137 \) \* 1024
+    #   ( 2128720123 / 2897316137 ) * 1024 = 752.354698
 
-    # round up to 400 (melUnd1 was also 400)
+    # round up to 800
 
     cd /hive/data/genomes/allMis1
     time blat allMis1.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/allMis1.11.ooc -repMatch=400
-    #   Wrote 14450 overused 11-mers to jkStuff/allMis1.11.ooc
-    #   real    0m32.689s
-    #   melUnd1 was: Wrote 14287 overused 11-mers to jkStuff/melUnd1.11.ooc
+      -makeOoc=jkStuff/allMis1.11.ooc -repMatch=800
+    #   Wrote 12702 overused 11-mers to jkStuff/allMis1.11.ooc
+    #   real    0m43.678s
 
     # there are no non-bridged gaps, no lift file needed for genbank
     hgsql -N -e "select bridge from gap;" allMis1 | sort | uniq -c
     #   68589 yes
-#    cd /hive/data/genomes/allMis1/jkStuff
-#    gapToLift allMis1 allMis1.nonBridged.lift -bedFile=allMis1.nonBridged.bed
-    # largest non-bridged contig:
-#    awk '{print $3-$2,$0}' allMis1.nonBridged.bed | sort -nr | head
-    #   123773608 chrX  95534   123869142       chrX.01
 
 #########################################################################
-# AUTO UPDATE GENBANK (DONE - 2012-07-26 - Hiram)
+# AUTO UPDATE GENBANK (WORKING - 2013-06-08 - Hiram)
     # examine the file:
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Geospiza fortis	1	0	0
+# Alligator mississippiensis      107     5428    0
+# Alligator sinensis      16      0       0
+
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add allMis1 just after ce2
-# allMis1 (Medium Ground Finch - Darwin finch)
+# allMis1 - Alligator mississippiensis
 allMis1.serverGenome = /hive/data/genomes/allMis1/allMis1.2bit
 allMis1.clusterGenome = /hive/data/genomes/allMis1/allMis1.2bit
-allMis1.ooc = /hive/data/genomes/allMis1/jkStuff/allMis1.11.ooc
+allMis1.ooc = /hive/data/genomes/allMis1/allMis1.11.ooc
 allMis1.lift = no
 allMis1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
 allMis1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
 allMis1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
 allMis1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
 allMis1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
-allMis1.refseq.mrna.native.load = no
+allMis1.refseq.mrna.native.load = yes
 allMis1.refseq.mrna.xeno.load = yes
-allMis1.genbank.mrna.xeno.load = no
-allMis1.genbank.est.native.load = no
+allMis1.genbank.mrna.xeno.load = yes
 allMis1.downloadDir = allMis1
+allMis1.upstreamGeneTbl = refGene
 allMis1.perChromTables = no
 
     # end of section added to etc/genbank.conf
-    git commit -m "adding allMis1 medium ground finch" etc/genbank.conf
+    git commit -m "updating allMis0 to allMis1 refs #8750" etc/genbank.conf
     git push
     make etc-update
-
-    git pull
-    # Edit src/lib/gbGenome.c to add new species.
-    git commit -m "adding definition for geoForNames" src/lib/gbGenome.c
-    git push
-    make install-server
 
     ssh hgwdev			# used to do this on "genbank" machine
     screen -S allMis1           # long running job managed in screen
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial allMis1 &
-    #   var/build/logs/2012.07.26-22:50:11.allMis1.initalign.log
+    #   var/build/logs/2013.06.08-20:00:53.allMis1.initalign.log
+XXX - running - Sat Jun  8 20:01:06 PDT 2013
     #   real    175m22.294s
     # load database when finished
     ssh hgwdev

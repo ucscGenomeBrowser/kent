@@ -11,7 +11,16 @@ struct annoAssembly *aa;
 AllocVar(aa);
 aa->name = cloneString(name);
 aa->tbf = twoBitOpen(twoBitPath);
+aa->twoBitPath = cloneString(twoBitPath);
 return aa;
+}
+
+struct slName *annoAssemblySeqNames(struct annoAssembly *aa)
+/* Return a list of sequence names in this assembly. */
+{
+struct slName *seqNames = twoBitSeqNames(aa->twoBitPath);
+slSort(&seqNames, slNameCmp);
+return seqNames;
 }
 
 uint annoAssemblySeqSize(struct annoAssembly *aa, char *seqName)
@@ -27,6 +36,7 @@ if (*pAa == NULL)
     return;
 struct annoAssembly *aa = *pAa;
 freeMem(aa->name);
+freeMem(aa->twoBitPath);
 twoBitClose(&(aa->tbf));
 freez(pAa);
 }

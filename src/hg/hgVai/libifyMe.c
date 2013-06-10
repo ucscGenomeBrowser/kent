@@ -404,10 +404,30 @@ else
 return streamer;
 }
 
-struct annoGrator *gratorFromTrack(struct annoAssembly *assembly, char *selTable,
-				   struct trackDb *tdb, char *chrom, int maxOutRows,
-				   struct asObject *primaryAsObj,
-				   enum annoGratorOverlap overlapRule)
+struct annoGrator *gratorFromBigDataFileOrUrl(char *fileOrUrl, struct annoAssembly *assembly,
+					      int maxOutRows, enum annoGratorOverlap overlapRule)
+/* Determine what kind of big data file/url we have and make streamer & grator for it. */
+{
+struct annoStreamer *streamer = NULL;
+struct annoGrator *grator = NULL;
+if (endsWith(fileOrUrl, ".bb"))
+    streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
+else if (endsWith(fileOrUrl, ".vcf.gz"))
+    streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
+else if (endsWith(fileOrUrl, ".bw"))
+    grator = annoGrateBigWigNew(fileOrUrl, assembly);
+else
+    errAbort("Can't tell bigData type of file or url '%s'", fileOrUrl);
+if (grator == NULL)
+    grator = annoGratorNew(streamer);
+grator->setOverlapRule(grator, overlapRule);
+return grator;
+}
+
+struct annoGrator *gratorFromTrackDb(struct annoAssembly *assembly, char *selTable,
+				     struct trackDb *tdb, char *chrom, int maxOutRows,
+				     struct asObject *primaryAsObj,
+				     enum annoGratorOverlap overlapRule)
 /* Figure out the source and type of data, make an annoStreamer & wrap in annoGrator.
  * If not NULL, primaryAsObj is used to determine whether we can make an annoGratorGpVar. */
 {
@@ -417,9 +437,14 @@ if (isCustomTrack(selTable))
     {
     dataDb = CUSTOM_TRASH;
     dbTable = trackDbSetting(tdb, "dbTableName");
-    //#*** Catch custom bigBed & bigWig here.
     if (dbTable == NULL)
-	errAbort("Can't find dbTableName for custom track %s", selTable);
+	{
+	char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+	if (bigDataUrl != NULL)
+	    grator = gratorFromBigDataFileOrUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
+	else
+	    errAbort("Can't find dbTableName or bigDataUrl for custom track %s", selTable);
+	}
     }
 if (startsWith("wig", tdb->type))
     {

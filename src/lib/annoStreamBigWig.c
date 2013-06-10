@@ -20,7 +20,8 @@ struct annoStreamBigWig
     struct bbiInterval *intervalList;	// results of bigWigIntervalQuery
     struct bbiInterval *nextInterval;	// next result to be translated into row
     struct bbiChromInfo *chromList;	// list of chromosomes for which bbi actually has data
-    struct bbiChromInfo *queryChrom;	// most recently queried chrom (or NULL) for whole-genome
+    struct bbiChromInfo *queryChrom;	// most recently queried chrom for whole-genome (or NULL)
+    boolean eof;			// TRUE when we are done
     };
 
 
@@ -30,6 +31,8 @@ static void asbwSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionSt
 annoStreamerSetRegion(vSelf, chrom, regionStart, regionEnd);
 struct annoStreamBigWig *self = (struct annoStreamBigWig *)vSelf;
 self->nextInterval = self->intervalList = NULL;
+self->queryChrom = NULL;
+self->eof = FALSE;
 lmCleanup(&(self->intervalQueryLm));
 }
 
@@ -68,7 +71,7 @@ else
 	}
     if (self->queryChrom == NULL)
 	{
-	self->chromList = NULL; // EOF, don't start over!
+	self->eof = TRUE;
 	self->intervalList = NULL;
 	}
     else
@@ -173,6 +176,7 @@ streamer->rowType = arWig;
 streamer->setRegion = asbwSetRegion;
 streamer->nextRow = asbwNextRow;
 streamer->close = asbwClose;
+self->chromList = bbiChromList(bbi);
 self->bbi = bbi;
 return (struct annoStreamer *)self;
 }

@@ -56,12 +56,13 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Patch10
 	equCab1 \
 	equCab2 \
 	cerSim1 \
-	oviAri1 \
+	oviAri1 oviAri3 \
 	susScr1 susScr2 susScr3 \
 	eriEur1 eriEur2 \
 	sorAra1 sorAra2 \
 	turTru1 turTru2 \
-	vicPac1 pteVam1 tarSyr1 \
+	vicPac1 vicPac2 \
+	pteVam1 tarSyr1 \
 	dipOrd1 proCap1 ochPri2 \
 	myoLuc1 myoLuc2 \
 	micMur1 \
