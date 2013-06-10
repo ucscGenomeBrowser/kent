@@ -23,60 +23,52 @@ struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 
 /* ---- Global helper functions ---- */
+void checkHgConfForSuggestion()
+/* Abort if hg.conf has not been set up to accept suggestion */
+{
+if (isEmpty(cfgOption(CFG_SUGGEST_MAILTOADDR)) ||
+    isEmpty(cfgOption(CFG_SUGGEST_MAILFROMADDR)) ||
+    isEmpty(cfgOption(CFG_FILTERKEYWORD))        ||
+    isEmpty(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE)) ||
+    isEmpty(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR)) ||
+    isEmpty(cfgOption(CFG_SUGGEST_BROWSER_NAME)))
+    errAbort("This Genome Browser has not been configured to accept suggestion yet. Please contact the browser administrator for more information.");
+}
+
 char *mailToAddr()
 /* Return the address to send suggestion to  */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAILTOADDR))
-    return cloneString("NULL_suggest.mailToAddr");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAILTOADDR));
+return cloneString(cfgOption(CFG_SUGGEST_MAILTOADDR));
 }
 
 char *mailFromAddr()
 /* Return the bogus sender address to help filter out spam */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAILFROMADDR))
-    return cloneString("NULL_suggest.mailFromAddr");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAILFROMADDR));
+return cloneString(cfgOption(CFG_SUGGEST_MAILFROMADDR));
 }
 
 char *filterKeyword()
 /* Return the keyword used to filter out spam  */
 {
-if isEmpty(cfgOption(CFG_FILTERKEYWORD))
-    return cloneString("NULL_suggest.filterKeyword");
-else
-    return cloneString(cfgOption(CFG_FILTERKEYWORD));
+return cloneString(cfgOption(CFG_FILTERKEYWORD));
 }
 
 char *mailSignature()
-/* Return the signature to be used by outbound mail or NULL. Allocd
- * here. */
+/* Return the signature to be used by outbound mail. */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE))
-    return cloneString("NULL_mailSignature");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE));
+return cloneString(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE));
 }
 
 char *mailReturnAddr()
-/* Return the return addr. to be used by outbound mail or NULL. Allocd
- * here. */
+/* Return the return addr. to be used by outbound mail. */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR))
-    return cloneString("NULL_mailReturnAddr");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR));
+return cloneString(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR));
 }
 
 char *browserName()
 /* Return the browser name like 'UCSC Genome Browser' */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_BROWSER_NAME))
-    return cloneString("NULL_browserName");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_BROWSER_NAME));
+return cloneString(cfgOption(CFG_SUGGEST_BROWSER_NAME));
 }
 
 static char *now()
@@ -361,6 +353,7 @@ char *db, *organism;
 cart = theCart;
 getDbAndGenome(cart, &db, &organism, oldVars);
 cartWebStart(theCart, db, "User Suggestion");
+checkHgConfForSuggestion();
 if (cartVarExists(cart, "do.suggestSendMail"))
     {
     submitSuggestion();
