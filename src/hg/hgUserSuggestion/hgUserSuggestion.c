@@ -113,7 +113,7 @@ hPrintf(
     "     </div>\n");
 hPrintf(
     "         <p>\n"
-    "           <label for=\"code\">Write CAPTCHA security code below  > <span id=\"txtCaptchaDiv\" style=\"color:#F00\"></span><BR><!-- this is where the script will place the generated code --> \n"
+    "           <label for=\"code\">Enter the following value below: <span id=\"txtCaptchaDiv\" style=\"color:#F00\"></span><BR><!-- this is where the script will place the generated code --> \n"
     "           <input type=\"hidden\" id=\"txtCaptcha\" /></label><!-- this is where the script will place a copy of the code for validation: this is a hidden field -->\n"
     "           <input type=\"text\" name=\"txtInput\" id=\"txtInput\" size=\"30\" />\n"
     "         </p>\n");
@@ -121,7 +121,7 @@ hPrintf(
     "      <div class=\"formControls\">\n"
     "        <input id=\"sendButton\" type=\"button\" value=\"Send\" onclick=\"submitform()\"/> \n"
     "        <input type=\"reset\" name=\"suggestClear\" value=\"Clear\" class=\"largeButton\"> \n"
-    "        <input type=\"cancel\" name=\"Cancel\" value=\"Cancel\" class=\"largeButton\">\n"
+//    "        <input type=\"cancel\" name=\"Cancel\" value=\"Cancel\" class=\"largeButton\">\n"
     "      </div>\n"
     "      \n"
     "     </FORM>\n\n");
