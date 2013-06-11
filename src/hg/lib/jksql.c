@@ -2089,7 +2089,8 @@ if (conn != NULL)
     }
 }
 
-// where am I using this?
+// where am I using this? probably just cart.c and maybe cartDb.c ?
+// but it is worth keeping just for the cart.
 void sqlDyAppendEscaped(struct dyString *dy, char *s)
 /* Append to dy an escaped s */
 {
@@ -2936,6 +2937,7 @@ return word;
 // TODO as much as I liked this function sqlCheckIdentifiersList,
 // it may not be used much, so see if you can remove it
 // and just add a little workaound for the remaining place(s) that use it.
+// This one is probably here to stay.
 char *sqlCheckIdentifiersList(char *identifiers)
 /* Check that only valid identifier characters are used in a comma-separated list */
 {
@@ -3497,21 +3499,23 @@ va_start(args, format);
 
 char *noSqlInjLevel = cfgOption("noSqlInj.level");
 char *noSqlInjDumpStack = cfgOption("noSqlInj.dumpStack");
-char *browserDumpStack = cfgOption("browser.dumpStack");
-
-char *scriptName = cgiScriptName();
+// I tried to incorporate this setting so as to avoid duplicate dumpStacks
+// but it is not working that well, and I would rather have two than zero dumps.
+//char *browserDumpStack = cfgOption("browser.dumpStack");
+//char *scriptName = cgiScriptName();
 
 if (noSqlInjLevel)
     { 
     // don't dump if if we are going to do it during errAbort anyway
-    if (sameOk(noSqlInjDumpStack, "on") 
-	&& (!(sameString(noSqlInjLevel, "abort") 
+    if (sameOk(noSqlInjDumpStack, "on"))
+	/* && (!(sameString(noSqlInjLevel, "abort") 
 	      && cgiIsOnWeb() 
 	      && sameOk(browserDumpStack, "on"))
 	    || endsWith(scriptName, "hgSuggest")
            ) // note: this doesn't work for hgSuggest because it doesn't set the dumpStack handler.
                // TODO find or add a better method to tell if it would already dumpStack on abort.
        )
+        */
 	{
 	va_list dump_args;
     	va_copy(dump_args, args);

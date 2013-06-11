@@ -1082,12 +1082,12 @@ if (isNotEmpty(splitPrefix))
     safef(t2, sizeof(t2), "%s%s", splitPrefix, table);
 else
     safef(t2, sizeof(t2), "%s", table);
-boolean hasSqlWildcard = (strchr(table, '%') || strchr(table, '_'));
+boolean hasSqlWildcard = (strchr(t2, '%') || strchr(t2, '_'));
 boolean exists = hasSqlWildcard ? sqlTableWildExists(conn, t2) : sqlTableExists(conn, t2);
 if (!exists && isNotEmpty(splitPrefix))
     {
-    safef(t2, sizeof(t2), "%s", table);
-    exists = hasSqlWildcard ? sqlTableWildExists(conn, t2) : sqlTableExists(conn, t2);
+    hasSqlWildcard = (strchr(table, '%') || strchr(table, '_'));
+    exists = hasSqlWildcard ? sqlTableWildExists(conn, table) : sqlTableExists(conn, table);
     }
 hFreeConn(&conn);
 return exists;
