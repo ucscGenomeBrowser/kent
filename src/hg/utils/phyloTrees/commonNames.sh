@@ -54,6 +54,7 @@ ochPri3 -> Pika ;
 susScr2 -> Pig ;
 susScr3 -> Pig ;
 vicPac1 -> Alpaca ;
+vicPac2 -> Alpaca ;
 turTru1 -> Dolphin ;
 turTru2 -> Dolphin ;
 panHod1 -> Tibetan_antelope ;

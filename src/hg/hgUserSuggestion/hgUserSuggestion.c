@@ -23,60 +23,52 @@ struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 
 /* ---- Global helper functions ---- */
+void checkHgConfForSuggestion()
+/* Abort if hg.conf has not been set up to accept suggestion */
+{
+if (isEmpty(cfgOption(CFG_SUGGEST_MAILTOADDR)) ||
+    isEmpty(cfgOption(CFG_SUGGEST_MAILFROMADDR)) ||
+    isEmpty(cfgOption(CFG_FILTERKEYWORD))        ||
+    isEmpty(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE)) ||
+    isEmpty(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR)) ||
+    isEmpty(cfgOption(CFG_SUGGEST_BROWSER_NAME)))
+    errAbort("This Genome Browser has not been configured to accept suggestion yet. Please contact the browser administrator for more information.");
+}
+
 char *mailToAddr()
 /* Return the address to send suggestion to  */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAILTOADDR))
-    return cloneString("NULL_suggest.mailToAddr");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAILTOADDR));
+return cloneString(cfgOption(CFG_SUGGEST_MAILTOADDR));
 }
 
 char *mailFromAddr()
 /* Return the bogus sender address to help filter out spam */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAILFROMADDR))
-    return cloneString("NULL_suggest.mailFromAddr");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAILFROMADDR));
+return cloneString(cfgOption(CFG_SUGGEST_MAILFROMADDR));
 }
 
 char *filterKeyword()
 /* Return the keyword used to filter out spam  */
 {
-if isEmpty(cfgOption(CFG_FILTERKEYWORD))
-    return cloneString("NULL_suggest.filterKeyword");
-else
-    return cloneString(cfgOption(CFG_FILTERKEYWORD));
+return cloneString(cfgOption(CFG_FILTERKEYWORD));
 }
 
 char *mailSignature()
-/* Return the signature to be used by outbound mail or NULL. Allocd
- * here. */
+/* Return the signature to be used by outbound mail. */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE))
-    return cloneString("NULL_mailSignature");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE));
+return cloneString(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE));
 }
 
 char *mailReturnAddr()
-/* Return the return addr. to be used by outbound mail or NULL. Allocd
- * here. */
+/* Return the return addr. to be used by outbound mail. */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR))
-    return cloneString("NULL_mailReturnAddr");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR));
+return cloneString(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR));
 }
 
 char *browserName()
 /* Return the browser name like 'UCSC Genome Browser' */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_BROWSER_NAME))
-    return cloneString("NULL_browserName");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_BROWSER_NAME));
+return cloneString(cfgOption(CFG_SUGGEST_BROWSER_NAME));
 }
 
 static char *now()
@@ -90,20 +82,10 @@ strftime(nowBuf, sizeof nowBuf, "%Y-%m-%d %H:%M:%S", theTime);
 return cloneString(nowBuf);
 }
 
-void resetAllSuggFields()
-/* clear all suggestion fields */
-{
-cartRemove(cart, "suggestCfmEmail");
-cartRemove(cart, "suggestDetails");
-cartRemove(cart, "suggestEmail");
-cartRemove(cart, "suggestName");
-cartRemove(cart, "suggestSubject");
-cartRemove(cart, "suggestSummary");
-}
 
 /* javascript functions */
 void printMainForm()
-/* javascript to print mainForm */
+/* Create the main suggestion form */
 {
 hPrintf(
     "     <FORM ACTION=\"../cgi-bin/hgUserSuggestion?do.suggestSendMail=1\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\" onLoad=\"document.forms.mainForm.name.focus()\">\n");
@@ -131,7 +113,7 @@ hPrintf(
     "     </div>\n");
 hPrintf(
     "         <p>\n"
-    "           <label for=\"code\">Write CAPTCHA security code below (disabled) > <span id=\"txtCaptchaDiv\" style=\"color:#F00\"></span><BR><!-- this is where the script will place the generated code --> \n"
+    "           <label for=\"code\">Enter the following value below: <span id=\"txtCaptchaDiv\" style=\"color:#F00\"></span><BR><!-- this is where the script will place the generated code --> \n"
     "           <input type=\"hidden\" id=\"txtCaptcha\" /></label><!-- this is where the script will place a copy of the code for validation: this is a hidden field -->\n"
     "           <input type=\"text\" name=\"txtInput\" id=\"txtInput\" size=\"30\" />\n"
     "         </p>\n");
@@ -139,7 +121,7 @@ hPrintf(
     "      <div class=\"formControls\">\n"
     "        <input id=\"sendButton\" type=\"button\" value=\"Send\" onclick=\"submitform()\"/> \n"
     "        <input type=\"reset\" name=\"suggestClear\" value=\"Clear\" class=\"largeButton\"> \n"
-    "        <input type=\"cancel\" name=\"Cancel\" value=\"Cancel\" class=\"largeButton\">\n"
+//    "        <input type=\"cancel\" name=\"Cancel\" value=\"Cancel\" class=\"largeButton\">\n"
     "      </div>\n"
     "      \n"
     "     </FORM>\n\n");
@@ -219,11 +201,11 @@ hPrintf(
     "                 var why = \"\";\n"
     "                  \n"
     "                 if(theform.txtInput.value == \"\"){\n"
-    "                         why += \"- Security code should not be empty.\n\";\n"
+    "                         why += \"- Security code should not be empty.\";\n"
     "                 }\n"
     "                 if(theform.txtInput.value != \"\"){\n"
     "                         if(ValidCaptcha(theform.txtInput.value) == false){\n"
-    "                                 why += \"- Security code did not match.\n\";\n"
+    "                                 why += \"- Security code did not match.\";\n"
     "                         }\n"
     "                 }\n"
     "                 if(why != \"\"){\n"
@@ -266,8 +248,7 @@ hPrintf(
     "     <script type=\"text/javascript\">\n"
     "     function submitform()\n"
     "     {\n"
-    "      if ( validateMainForm(document.forms[\"mainForm\"]) )\n"
-//    "      if ( validateMainForm(document.forms[\"mainForm\"]) && checkCaptcha(document.forms[\"mainForm\"]))\n"
+    "      if ( validateMainForm(document.forms[\"mainForm\"]) && checkCaptcha(document.forms[\"mainForm\"]))\n"
     "        {\n"
     "          document.forms[\"mainForm\"].submit();\n"
     "        }\n"
@@ -368,21 +349,19 @@ void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
 char *db, *organism;
-
 cart = theCart;
 getDbAndGenome(cart, &db, &organism, oldVars);
-
-    cartWebStart(theCart, db, "User Suggestion");
-
+cartWebStart(theCart, db, "User Suggestion");
+checkHgConfForSuggestion();
 if (cartVarExists(cart, "do.suggestSendMail"))
-{
+    {
     submitSuggestion();
     cartRemove(cart, "do.suggestSendMail");
     return;
-}
+    }
 
-    askForSuggest(organism,db);
-    cartWebEnd();
+askForSuggest(organism,db);
+cartWebEnd();
 }
 
 /* Null terminated list of CGI Variables we don't want to save

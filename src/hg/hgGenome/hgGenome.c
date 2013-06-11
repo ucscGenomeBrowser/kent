@@ -30,6 +30,7 @@
 #include "hPrint.h"
 #include "jsHelper.h"
 #include "hgGenome.h"
+#include "trackHub.h"
 
 
 /* ---- Global variables. ---- */
@@ -542,6 +543,8 @@ void dispatchLocation()
 {
 struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &database, &genome, oldVars);
+if (trackHubDatabase(database))
+    errAbort("Assembly Data Hubs not supported in Genome Graphs");
 cartSetString(cart, "db", database); /* Some custom tracks code needs this */
 withLabels = cartUsualBoolean(cart, hggLabels, TRUE);
 conn = hAllocConn(database);

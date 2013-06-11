@@ -22,12 +22,12 @@ utils: libs
 	cd kent/src/parasol && ${MAKE}
 	./kent/src/utils/userApps/mkREADME.sh ${DESTDIR}/${BINDIR} ${CURDIR}/kentUtils.Documentation.txt
 
-libs:
+libs: installEnvironment
 	cd samtabix && ${MAKE}
 	cd kent/src && ${MAKE} libs
 
 clean:
-	cd kent/src && ${MAKE} -i -k clean
+	test ! -d kent/src || (cd kent/src && ${MAKE} -i -k clean)
 	rm -f part1Src.zip part2Src.zip part3Src.zip part4Src.zip part5Src.zip
 	rm -f userApps.zip
 
@@ -37,12 +37,13 @@ fetchSource:
 	@du -hs kent
 	@echo -n "number of files in kent source tree: "
 	@find ./kent -type f | wc -l
-	@${MAKE} installEnvironment
 
 # this installEnvironment will add all the shell environment variables
 # to the kent/src/inc/localEnvironment.mk file which is included
 # from the kent/src/inc/userApps.mk to allow any 'make' to function
-# properly when inside this extracted source tree.
+# properly when inside this extracted source tree.  The 'sed' operation
+# removes the '-e' from the echo for systems where the echo command doesn't
+# recognize the '-e' argument
 
 installEnvironment:
 	@echo -e "export DESTDIR = ${DESTDIR}\n\
@@ -54,7 +55,7 @@ export SCRIPTS = ${SCRIPTS}\n\
 export SAMTABIXDIR = ${SAMTABIXDIR}\n\
 export USE_SAMTABIX = 1\n\
 export USE_SSL = 1\n\
-export NOSQLTEST = 1" > kent/src/inc/localEnvironment.mk
+export NOSQLTEST = 1" | sed -e 's/-e //' > kent/src/inc/localEnvironment.mk
 
 update: clean userApps
 	${MAKE} fetchSource

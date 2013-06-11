@@ -38,6 +38,7 @@ struct annoStreamBigBed *self = (struct annoStreamBigBed *)vSelf;
 self->nextInterval = self->intervalList = NULL;
 self->queryChrom = NULL;
 self->eof = FALSE;
+self->doNextChunk = FALSE;
 lmCleanup(&(self->intervalQueryLm));
 }
 
@@ -63,6 +64,8 @@ if (queryMaxItems == ASBB_CHUNK_SIZE)
 	    }
 	lastIv->next = NULL;
 	}
+    else
+	self->doNextChunk = FALSE;
     }
 else
     self->doNextChunk = FALSE;
@@ -72,7 +75,8 @@ static void asbbDoQuery(struct annoStreamBigBed *self, char *minChrom, uint minE
 /* Store results of an interval query. */
 {
 struct annoStreamer *sSelf = &(self->streamer);
-if (sSelf->chrom != NULL && self->intervalList != NULL)
+if (sSelf->chrom != NULL && self->intervalList != NULL && !self->doNextChunk)
+    // We're doing a region query, we already got some rows, and don't need another chunk:
     self->eof = TRUE;
 if (self->useMaxItems)
     {

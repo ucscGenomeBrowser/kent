@@ -1305,6 +1305,28 @@
     with scores greater than or equal to 900 above will display in dark blue.</P>
 </DIV>
 
+<DIV class="searchIndex"><span class="types bed bigBed"></span>
+<div class="format"><code>searchIndex &lt;str&gt;</code></div>
+    <P> Specifies the list of field names on which a index has been made.
+    When a user enters a string in the position search box of the browser,
+    this index will be searched to find that name, and if the string is in 
+    the index, the user will either be navigated to that position in the 
+    browser, or if there are more than one matches of that string, 
+    will be give a list of the positions to choose from.
+    <P><B>Example:</B></P>
+    <pre>   searchIndex name</pre>
+</DIV>
+
+<DIV class="searchTrix"><span class="types bed bigBed"></span>
+<div class="format"><code>searchTrix &lt;url/relativePath&gt;</code></div>
+    <P> Specifies the URL to a TRIX file that maps free text to
+    a set of indices that are assumed to have indicies in the associated
+    bigBed file.  See <A HREF="../trix.html"> HERE </A>for instructions on how to build a TRIX file.
+    <P><B>Example:</B></P>
+    <pre>   searchTrix url or relative path </pre>
+</DIV>
+
+
 <DIV class="thickDrawItem"><span class="types bed bigBed"></span>
 <div class="format"><code>thickDrawItem &lt;off/on&gt;</code></div>
     <P>In bed tracks that

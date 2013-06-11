@@ -1862,7 +1862,7 @@ else
     else
 	safef(maybeSplitTable, sizeof(maybeSplitTable), "%s_%s", chrom, dbTable);
     struct asObject *asObj = getAutoSqlForTable(db, dataDb, maybeSplitTable, tdb);
-    streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj);
+    streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj, maxOutRows);
     }
 return streamer;
 }
@@ -1890,7 +1890,7 @@ else
     struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
     if (asObjectsMatch(primary->asObj, pgSnpAsObj()) &&
 	asObjectsMatchFirstN(streamer->asObj, genePredAsObj(), 10))
-	grator = annoGratorGpVarNew(streamer, FALSE);
+	grator = annoGratorGpVarNew(streamer);
     else
 	grator = annoGratorNew(streamer);
     }

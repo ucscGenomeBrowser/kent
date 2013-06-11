@@ -101,7 +101,7 @@ taxId 9371
 #    January 10 2013 (open-4-0-0) version of RepeatMasker
 
 ##########################################################################
-# running simple repeat (DONE - 2013-04-29 - Hiram)
+# running simple repeat (DONE - 2013-05-29 - Hiram)
     mkdir /hive/data/genomes/echTel2/bed/simpleRepeat
     cd /hive/data/genomes/echTel2/bed/simpleRepeat
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
@@ -122,16 +122,18 @@ taxId 9371
 
     twoBitToFa echTel2.2bit stdout | faSize stdin > faSize.echTel2.2bit.txt
     cat faSize.echTel2.2bit.txt
-# 2914958544 bases (162452744 N's 2752505800 real 1439244378 upper
-#	1313261422 lower) in 14205 sequences in 1 files
-#	%45.05 masked total, %47.71 masked real
+# 2947024286 bases (341827925 N's 2605196361 real 1868909316 upper
+#    736287045 lower) in 8402 sequences in 1 files
+# Total size: mean 350752.7 sd 4055776.1 min 1000 (AAIY02277568)
+#    max 111700974 (JH980293) median 2033
+# %24.98 masked total, %28.26 masked real
 
     rm /gbdb/echTel2/echTel2.2bit
     ln -s `pwd`/echTel2.2bit /gbdb/echTel2/echTel2.2bit
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(DONE - 2013-04-29 - Hiram)
+#	(DONE - 2013-05-29 - Hiram)
     mkdir /hive/data/genomes/echTel2/bed/gap
     cd /hive/data/genomes/echTel2/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
@@ -143,12 +145,11 @@ taxId 9371
     # real    0m24.729s
 
     time featureBits echTel2 allGaps.bed notGap.bed -bed=new.gaps.bed
-    time featureBits echTel2 allGaps.bed notGap.bed -bed=new.gaps.bed
     # 0 bases of 2605196361 (0.000%) in intersection
     # real    13m21.473s
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2013-04-29 - Hiram)
+## WINDOWMASKER (DONE - 2013-05-30 - Hiram)
     mkdir /hive/data/genomes/echTel2/bed/windowMasker
     cd /hive/data/genomes/echTel2/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
@@ -165,63 +166,66 @@ taxId 9371
     #  This is pretty good for WM, but RMSK isn't that bad either,
     #  so, using the RMSK result to mask the genome
 
+    featureBits -countGaps echTel2 rmsk windowmaskerSdust  > fb.echTel2.rmsk.windowmaskerSdust.txt 2>&1
+    cat fb.echTel2.rmsk.windowmaskerSdust.txt
+#  416158057 bases of 2947024286 (14.121%) in intersection
+
 ########################################################################
-XXX - ready to do this 2013-05-30
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (WORKING - 2013-04-29 - Hiram)
-    # Use -repMatch=650, based on size -- for human we use 1024
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-06 - Hiram)
+    # Use -repMatch=950, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 1701353767 / 2897316137 \) \* 1024
-    #	( 1701353767 / 2897316137 ) * 1024 = 601.310377
-    # round up to 650
+    calc \( 2605196361 / 2897316137 \) \* 1024
+    #	( 2605196361 / 2897316137 ) * 1024 = 920.755951
+    # round up to 950
+
+    # echTel1 was: -repMatch=1024
+    #  Wrote 9721 overused 11-mers to /cluster/bluearc/echTel1/11.ooc
 
     cd /hive/data/genomes/echTel2
     blat echTel2.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/echTel2.11.ooc -repMatch=650
-    #	Wrote 27991 overused 11-mers to jkStuff/echTel2.11.ooc
+      -makeOoc=jkStuff/echTel2.11.ooc -repMatch=950
+    #	Wrote 21134 overused 11-mers to jkStuff/echTel2.11.ooc
 
-    #	copy all of this stuff to the klusters:
-    cd /hive/data/genomes/echTel2/jkStuff
-    gapToLift echTel2 nonBridged.lift -bedFile=nonBridged.bed
-    cd /hive/data/genomes/echTel2
-    mkdir /hive/data/staging/data/echTel2
-    cp -p jkStuff/echTel2.11.ooc jkStuff/nonBridged.lift chrom.sizes \
-	echTel2.2bit /hive/data/staging/data/echTel2
+    # there are *only* bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" echTel2 | sort | uniq -c
+    #   269444 yes
 
 #########################################################################
-# AUTO UPDATE GENBANK (TBD - Hiram)
+# AUTO UPDATE GENBANK (WORKING - 2013-06-06 - Hiram)
     # examine the file:
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Anolis carolinensis     115     156803  0
+# Echinops telfairi       5       0       0
     # to decide which "native" mrna or ests you want to specify in genbank.conf
     # this appears that echTel2 has plenty of native est's
 
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
-    # edit etc/genbank.conf to add echTel2 before anoCar1 and commit to GIT
-# echTel2 (A. carolinensis)
+    # edit etc/genbank.conf to add echTel2 before echTel1 and commit to GIT
+# echTel2 (tenrec)
 echTel2.serverGenome = /hive/data/genomes/echTel2/echTel2.2bit
-echTel2.clusterGenome = /scratch/data/echTel2/echTel2.2bit
-echTel2.ooc = /scratch/data/echTel2/echTel2.11.ooc
-echTel2.lift = /scratch/data/echTel2/nonBridged.lift
+echTel2.clusterGenome = /hive/data/genomes/echTel2/echTel2.2bit
+echTel2.ooc = /hive/data/genomes/echTel2/jkStuff/echTel2.11.ooc
+echTel2.lift = no
 echTel2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
 echTel2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
 echTel2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
 echTel2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
 echTel2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
 echTel2.refseq.mrna.native.load = no
-echTel2.genbank.est.native.load = yes
 echTel2.refseq.mrna.xeno.load = yes
-echTel2.genbank.mrna.xeno.load = yes
+echTel2.genbank.mrna.xeno.load = no
+echTel2.genbank.est.native.load = no
+echTel2.genbank.mrna.native.load = no
+echTel2.genbank.mrna.native.loadDesc = no
 echTel2.downloadDir = echTel2
 echTel2.perChromTables = no
 
-
     # end of section added to etc/genbank.conf
-    git commit -m "adding echTel2 lizard" genbank.conf
+    git commit -m "adding echTel2 tenrec refs #9693" etc/genbank.conf
     git push
     make etc-update
 
@@ -233,7 +237,8 @@ echTel2.perChromTables = no
     screen			# long running job managed in screen
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial echTel2 &
-    #	var/build/logs/2011.04.13-21:34:22.echTel2.initalign.log
+    #	var/build/logs/2013.06.06-14:36:22.echTel2.initalign.log
+XXX - running - Thu Jun  6 14:36:36 PDT 2013
     #	real    805m44.341s
     # 5h33m
 

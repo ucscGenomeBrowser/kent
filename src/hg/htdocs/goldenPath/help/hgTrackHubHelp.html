@@ -88,9 +88,12 @@ NAME="TOC"></A><B>&nbsp; What Are Track Hubs?</B></FONT>
 			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
 				<P>
 Track hubs are web-accessible directories of genomic data that can
-be viewed on the UCSC Genome Browser alongside native annotation
-tracks. Hubs are a useful tool for visualizing a large number of genome-wide 
-data sets. For example, a project that has produced several wiggle plots of data
+be viewed on the UCSC Genome Browser.  
+Track hubs can be displayed on genomes that UCSC directly supports, or on
+your own sequence.
+Hubs are a useful tool for visualizing a large number of genome-wide 
+data sets.
+For example, a project that has produced several wiggle plots of data
 can use the hub utility to organize the tracks into composite and
 super-tracks, making it possible to show the data for a large collection of 
 tissues and experimental conditions in a visually elegant way, similar to how 
@@ -101,11 +104,14 @@ from around the world through the familiar Genome Browser interface.
 Browser users can display tracks from any public track hub that has been
 registered with UCSC. Additionally, users can import data from unlisted hubs
 or can set up, display, and share their own track hubs.
+Genome assemblies that UCSC does not support can be loaded and viewed with associated data.
 <P>
-The data underlying the tracks in a hub reside on the remote 
+The data underlying the tracks and optional sequence in a hub reside on the remote 
 server of the data provider rather than at UCSC. 
-The data are stored in compressed binary indexed files in bigBed, bigWig, BAM or VCF
+Genomic annotations are stored in compressed binary indexed files in bigBed, bigWig, BAM or VCF
 format that contain the data at several resolutions.
+In the case of assemblies that UCSC does not support
+genomic sequence is stored in the efficient twoBit format.
 When a hub track is displayed in the Genome Browser, only the
 relevant data needed to support the view of the current genomic region are 
 transmitted rather than the entire file. The transmitted data are cached
@@ -124,10 +130,12 @@ to compressed binary indexed formats that can be remotely hosted. However, the
 custom tracks utility does not offer the data persistence and track
 configurability provided by the track hub mechanism: hub tracks can be 
 grouped into composite or super-tracks and configured to display the data 
-using a wide variety of options. In general, for users who have large data 
+using a wide variety of options. 
+There is no way to create a browser on your own sequence with custom tracks.
+In general, for users who have large data 
 sets that would be prohibitive to upload, need to ensure the persistence of 
-their data, or would like to take full advantage of track functionality, track 
-hubs are a better solution. 
+their data, or would like to take full advantage of track functionality, or create a browser on sequence not natively supported by UCSC or a genome browser mirror, 
+track hubs are a better solution. 
 Both mechanisms give data providers the flexibility to directly add, update, 
 and remove data from their display as needed.
 </P>
@@ -189,6 +197,8 @@ the hub's URL to the browser URL. If you add hubUrl=[URL] to your hgTracks URL l
 it will add the hub directly into the browser
 (e.g. <A HREF="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt">
 http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt</A>).
+If the hub you've selected is an assembly hub, the supported assemblies will be selectable from the gateway page by selecting the name of the track hub in the group pulldown.
+<P>
 If the browser is unable to load the track hub, it will
 display an error message. Some common causes for an import to
 fail include typos in the URL, attempting to add a track hub from a different
@@ -206,15 +216,16 @@ Hubs list, click the &quot;Disconnect&quot; button next to the track hub you wis
 discard.
 <P>
 Occasionally, remote track hubs may be missing, off-line, or otherwise 
-unavailable. When a track hub is no longer accessible from the Genome
-Browser, it is automatically removed from the Track Hubs page. If a user
+unavailable.  If a user
 is already browsing data from the remote hub when it disconnects, a yellow 
 error message will be displayed instead of the expected data.
 <P>
 The track sets in hubs are genome assembly specific. The Track Hubs page 
 lists each hub and the assemblies it supports. To switch to a different assembly, click the
 Genomes link in the top menu bar, then select the new assembly from the
-Gateway page.
+Gateway page. 
+If the hub supports assemblies that are not natively supported by UCSC or the mirror you're visiting, 
+the assembly can be selected by choosing the track hub name under the group menu.
 <P>
 Tracks accessed through a hub can be used in Genome Browser 
 <A HREF="hgSessionHelp.html">sessions</A> and 
@@ -260,6 +271,8 @@ supported by the Genome Browser: bigBed, bigWig, BAM or VCF
 <LI>
 a set of text files that specify properties for the track hub and for each of
 the data tracks within it
+<LI>
+a twoBit file with your sequence if you are setting up an assembly text hub.
 <LI>
 an Internet-enabled web server or ftp server 
 <!--Question: do we have some general minimum requirements for this?-->
@@ -465,6 +478,28 @@ this tag.</p>
 designated by the <em>genome</em> tag. By convention, the trackDb file is 
 located in a subdirectory of the hub directory. However, the trackDb tag 
 may also specify a complete URL.</p>
+<P>
+If this genomes.txt file is for an assembly that does not have native support in the browser, the following fields must also be present:
+
+<P><em>twoBitPath</em> - refers to the .2bit file containing the sequence for this assembly. Typically this file is constructed from the original fasta files for the sequence using the kent program faToTwoBit. See <A href="twoBit.html"> HERE </A>for instructions on how to build a 2bit file.</p>
+<P><em>groups</em> - a file which defines the track groups on this genome browser. Track groups are the sections of related tracks grouped together under the primary genome browser graphics display image.
+The groups.txt file defines the grouping of track controls under the primary genome browser image display. The example referenced here has the usual definitions as found in the UCSC Genome Browser.
+Each group is defined, for example the Mapping group:<BR>
+<BLOCKQUOTE><TT>
+name map<BR>
+label Mapping<BR>
+priority 2<BR>
+defaultIsClosed 0<BR>
+</TT></BLOCKQUOTE>
+The name is used in the trackDb.txt track definition group, to assign a particular track to this group.
+The label is displayed on the genome browser as the title of this group of track controls
+The priority orders this track group with the other track groups
+The defaultIsClosed determines if this track group is expanded or closed by default. Values to use are 0 or 1</p>
+<P><em>description</em> - will be displayed for user information on the gateway page and most title pages of this genome assembly browser. It is the name displayed in the assembly pull-down menu on the browser gateway page.</p>
+<P><em>organism</em> - the string which is displayed along with the description on most title pages in the genome browser. Adjust your names in organism and description until they are appropriate.  This organism name is the name that appears in the genome pull-down menu on the browser gateway page.</p>
+<P><em>defaultPos</em> - specifies the default position the genome browser will open when a user first views this assembly. This is usually selected to highlight a popular gene or region of interest in the genome assembly.</p>
+<P><em>orderKey </em> - used with other genome definitions at this hub to order the pull-down menu ordering the genome pull-down menu.</p>
+<P><em>htmlPath</em> - refers to an html file that is used on the gateway page to display information about the assembly.</p>
 
 <P><B><em>Example 3:</em></B> Sample genomes.txt file defining attributes for the hub
 shown in <em>Example 1</em>.</p>
@@ -475,6 +510,18 @@ shown in <em>Example 1</em>.</p>
 <BR>
 <B>genome</B> hg19<BR>
 <B>trackDb</B> hg19/trackDb.txt<BR>
+<BR>
+<B>genome</B> newOrg1<BR>
+<B>trackDb</B> newOrg1/trackDb.txt<BR>
+<B>twoBitPath</B> newOrg1/newOrg1.2bit<BR>
+<B>groups</B> newOrg1/groups.txt<BR>
+<B>description</B> Big Foot V4<BR>
+<B>organism</B> BigFoot<BR>
+<B>defaultPos</B> chr21:33031596-33033258<BR>
+<B>orderKey</B> 4800<BR>
+<B>scientificName</B> Biggus Footus<BR>
+<B>htmlPath</B> newOrg1/description.html<BR>
+
 </TT></BLOCKQUOTE>
 
 
@@ -666,6 +713,38 @@ i.e. <em>udcTimeout=300</em>.
 	    </TD></TR>
 	</TABLE>
 
+<!-- ========== Debugging and Updating Track Hubs ============================== -->
+<A NAME="Debug"></A><BR>
+
+	<!--outer table is for border purposes-->
+	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+	    <TR><TD>	
+    		<TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+		    <TR><TD>	
+			<TABLE BGCOLOR="#D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
+			    <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Setting Up Track Item Search</B></FONT>
+			    </TD></TR>
+			</TABLE>
+			<TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
+			    <TR><TH HEIGHT=10></TH></TR>
+			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
+The genome browser supports searching for items within bigBed tracks in track data hubs.
+To support this behavior you have to add an index to the bigBed file when you initally create the the bigBed file from the bed file input.   
+Indices are usually created on the name field of the bed, 
+but can be created on any field of the bed.
+Free-text searches can also be enabled by creating a TRIX index file that maps id's in the track to free-text metadata.
+
+<P>
+See the searchIndex and searchTrix fields in the Hub Track Database Definition document for information on how to set up your bigBed to enable searching.
+
+			        </TD>
+			        <TD WIDTH=15></TD>
+			    </TR>
+			</TABLE>
+		    <BR></TD></TR>
+		</TABLE>
+	    </TD></TR>
+	</TABLE>
 <!-- ========== Track Hubs and Sessions ============================== -->
 <A NAME="Session"></A><BR>
 

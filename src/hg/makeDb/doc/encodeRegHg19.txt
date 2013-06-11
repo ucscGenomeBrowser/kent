@@ -723,8 +723,6 @@ cat > getHistones.csh << 'EOF'
 
     ls -1 peaks/*.bed > peak.lst
 
-####### Experiments/Old ########
-
 ######
 # TFBS from July 2012 freeze
 #  Uniform processing with slightly more relaxed threshold (2% FDR vs 1% based on
@@ -737,6 +735,7 @@ cat > getHistones.csh << 'EOF'
     cd /hive/data/genomes/hg19/bed/wgEncodeRegV2
     mkdir -p tfbs2012
     cd tfbs2012
+    set dir = `pwd`
     mkdir logs
 
     # use high-quality uniform peaks used to build Uniform TFBS track
@@ -841,7 +840,6 @@ cat > getInputs.csh << 'EOF'
 
     hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputsV4 ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputsV4.tab
 
-
     # Clustering by target
 
 cat > getMetaHuge.csh << 'EOF'
@@ -878,9 +876,11 @@ cat > getMetaHuge.csh << 'EOF'
     #Got 161 factors
 
     hgLoadBed hg19 wgEncodeRegTfbsClusteredV6 clusters.target.bed
+    ln -s clusters.target.bed wgEncodeRegTfbsClusteredV6.tab
     # V5 with separate HA-E2F1 factor: Read 4385242 elements of size 15 from clusters.target.bed
     # Read 4380444 elements of size 15 from clusters.target.bed
     hgLoadSqlTab hg19 wgEncodeRegTfbsCellsV6 ~/kent/src/hg/lib/expRecord.sql clusters.target.exps
+    ln -s clusters.targets.exps wgEncodeRegTfbsCellsV6.tab
 
     # Create inputTrackTable - six columns: <table> <source> <factor> <cell> <treatment> <lab>
     # For target-based, include antibody in source field
@@ -928,113 +928,63 @@ cat > getTargetInputs.csh << 'EOF'
     featureBits hg19 -noRandom -enrichment wgEncodeRegTfbsClusteredV5 wgEncodeRegDnaseClusteredV2 
     # wgEncodeRegTfbsClusteredV5 13.156%, wgEncodeRegDnaseClusteredV2 13.390%, both 6.690%, cover 50.86%, enrich 3.80x
 
-# V6 is release target -- rename the antibody clustering to V3a, and rename V6 to V3
+    # V6 is release target -- rename the antibody clustering to V3a, and rename V6 to V3 (use symlinks in build dir)
 
+    # Set up downloads
+    set dir = /hive/data/genomes/hg19/bed/wgEncodeRegV2/tfbs2012
+    cd $dir
+    mkdir downloads
+    gzip -c wgEncodeRegTfbsClusteredV3.bed > downloads/wgEncodeRegTfbsClusteredV3.bed.gz
+    # disallow name truncation
+    gzip -c -n wgEncodeRegTfbsClusteredInputsV3.tab > downloads/wgEncodeRegTfbsClusteredInputsV3.tab.gz
+    gzip -c wgEncodeRegTfbsCellsV3.tab > downloads/wgEncodeRegTfbsCellsV3.tab.gz
 
-#### GOT HERE ####
+    # use (existing) ENCODE DCC downloads dir
+    set dload = /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeRegTfbsClustered
+    cd $dload
 
-    # First shot at clustering by Kate:  -> V3
-    # This version worked directly from Anshul's files, using similar methods to
-    # V2.   
+    # new release dir
+    mkdir release3
+    ln -s release3 beta
+    ln -s release3 releaseLatest
+    cd $dir/downloads
+    ln wgEncodeRegTfbsClusteredV3.bed.gz wgEncodeRegTfbsClusteredInputsV3.tab.gz wgEncodeRegTfbsCellsV3.tab.gz $dload
+    cd $dload
+    ln wgEncodeRegTfbsClusteredV3.bed.gz wgEncodeRegTfbsClusteredInputsV3.tab.gz wgEncodeRegTfbsCellsV3.tab.gz releaseLatest
+    # include older files as well 
+    cp wgEncodeRegTfbsClusteredV2.bed.gz wgEncodeRegTfbsClusteredInputs.tab.gz wgEncodeRegTfbsCells.tab.gz releaseLatest
+    cp README.txt releaseLatest
+    # clean up bogus names embedded in zips)
+    # gunzip wgEncodeRegTfbsClusteredV2.bed.gz wgEncodeRegTfbsClusteredInputs.tab.gz wgEncodeRegTfbsCells.tab.gz
+    md5sum *.gz > md5sum.txt
+    # vim README.txt
+    # use wgEncodeRegDnaseClustered for basics
+    cp README.txt md5sum.txt ..
 
-    # cluster by antibody, and by target
-    regClusterAttachMetadataToTableOfTables hg19 partial.fixed.table withDupes.table -verbose=3
-    regClusterAttachMetadataToTableOfTables -antibodyTarget hg19 partial.fixed.table withDupes.target.table -verbose=3
+    # add minimal metaObject to metaDb to associate new table with (pseudo-)composite 
+    # wgEncodeRegTfbsClustered -- this allows hgTrackUi to locate downloads
+    cd $dir
+    cat > wgEncodeRegTfbsClustered.ra << 'EOF'
+metaObject wgEncodeRegTfbsClusteredV3
+objType table
+composite wgEncodeRegTfbsClustered
+fileName wgEncodeRegTfbsClusteredV3.bed.gz
+tableName wgEncodeRegTfbsClusteredV3
+project wgEncode
+'EOF'
+    # also, add aux tables, then mdbUpdate, mdbPrint
 
-    # find dupes in target-based table (already done for antibody-based)
-
-    # 91 cell types, 201 antibodies (177 targets), 28 treatments, 9 labs
-
-    # limit to single cell/factor/treatment (remove cross-lab duplication).
-    # Consider pooling instead ??  Or picking based on quality metrics ?
-    # -> wait for Anshul's recommendations (he will summarize) -- now they are too
-    #   hard to compare:
-    # https://docs.google.com/spreadsheet/ccc?key=0Am6FxqAtrFDwdHdRcHNQUy03SjBoSVMxdUNyZV9Rdnc#gid=7 
-    # eg., there are GM12878-CTCF from 4 labs, and all have some error highlighting
-    # Reusing Jim's priorities (Broad, Snyd, OpenChrom, Haib); I'm ranking UW just below OpenChrom (Kate)
-    # Also, when multiple from a single lab prioritizing what appear to be newer controls & protocols:
-    # HAIB: V<date>, PCR?x
-    # SYDH: iggrab, iggmus, std
-    # One more complication - there are often several cases where there is
-    # more than one data set on the same cell+treatment+antibody combination. 
-    # For good reasons hgBedToBedExps only wants one.
-    # This next bit filters them out based on a picks file that was hand
-    # created - picksFromDupes.  This was based on the criteria that
-    # the Broad CTCF were used,  and that Snyd was used in preference
-    # to OpenChromatin, which in turn was used in preference over Haib.
-    # The rational for this is the Broad CTCF set has been in use for a 
-    # while with no complaints,  and when examing the Pol2 signals, which
-    # were with CTCF the main component of the Dupes, the Haib were the
-    # weakest and the Snyd the strongest.  
-    cp ~/src/hg/regulate/wgEncodeReg/picksFromDupes.tab .
-    wgEncodeRegTfbsDedupeHelp withDupes.table picksFromDupes.tab peak.table
-
-    # wc -l peak.table
-    # 656
-    # reduced by 52
-
-    # Make three column file: fileName, cell+treatment, antibody
-    awk -F '\t' '{printf ( "%s\t%s\t%s\n", $1, ($10 == "None" ? $8 : $8 "+" $10), $9 ) ; }' peak.table > fileCellAb.tab
-    awk -F '\t' '{printf ( "%s\t%s\t%s\n", $1, ($10 == "None" ? $8 : $8 "+" $10), $9 ) ; }' withDupes.target.table > fileCellAb.target.tab
-
-    # Create config file out for clustering job, using a table assigning
-    # cell lines+treatments to single letter codes edited by hand.
-
-    # Find cell types that aren't yet in cellLetter file:
-    cp ~/kent/src/hg/regulate/regClusterBedExpCfg/cellLetter2.tab cellLetter3.tab
-    regClusterBedExpCfg -tabList fileCellAb.tab cluster.cfg -cellLetter=cellLetter3.tab -noLetter > & ! noLetter.out &
-    sort noLetter.out | uniq | awk '{print $2}' > noLetter.txt
-    wc -l noLetter.txt
-    # 43 new cell type+treatment combos
-    cat noLetter.txt >> cellLetter3.tab
-
-    # hand-edit in codes, promoting Tier 2.5 to caps (A549, MCF-7, SK-N-SH, IMR90)
-
-    regClusterBedExpCfg -tabList fileCellAb.tab cluster.cfg -cellLetter=cellLetter3.tab
-    regClusterBedExpCfg -tabList fileCellAb.target.tab cluster.target.cfg -cellLetter=cellLetter3.tab -noLetter
-
-    # Do the actual clustering 
-    hgBedsToBedExps -dupeLetterOk cluster.cfg peak.bed peak.exps >&! beds2exps.out
-    # 17 errs (dupes detected) --> add these to picksFromDupes2 and hand edit
-    # NOTE: 4 of these were from same lab, different protocols, etc.:
-    # USF-1, A549+EtOH; NRSF, HepG2; NRSF, SK-N-SH; Pol2(phosphS2), K562
-    # Leaving these out for now (hand-editing peak.table), saving in file dupesBad.txt
-    cat picksFromDupes.tab beds2exps.out | sort >  picksFromDupes2.tab
-    wc -l picksFromDupes2.tab
-    # 52
-    wgEncodeRegTfbsDedupeHelp withDupes.table picksFromDupes2.tab peak.table
-
-    # Prune above 4 dupes, and redo config & clustering
-    wc -l peak.table
-    # 635
-    awk -F '\t' '{printf ( "%s\t%s\t%s\n", $1, ($10 == "None" ? $8 : $8 "+" $10), $9 ) ; }' peak.table > fileCellAb.tab
-    regClusterBedExpCfg -tabList fileCellAb.tab cluster.cfg -cellLetter=cellLetter3.tab
-    hgBedsToBedExps -dupeLetterOk cluster.cfg peak.bed peak.exps > beds2exps2.out
-    # Loaded 635 records from cluster.cfg
-    # Got 131 sources
-    # Got 201 factors
-    # sample row of peak.exps
-    # id    name      desc    url    ref      credit  count  extras
-    # 0       d       Dnd41   n/a     n/a     n/a     3       n/a,n/a/,Dnd41,
-
-    # Load database
-    hgLoadBed hg19 wgEncodeRegTfbsClusteredV3 peak.bed
-    # Read 4735242 elements of size 15 from peak.bed
-    # was 2750490 in previous version 
-    hgLoadSqlTab hg19 wgEncodeRegTfbsCellsV3 ~/kent/src/hg/lib/expRecord.sql peak.exps
-
-    # Create inputTrackTable - six columns: <table> <source> <factor> <cell> <treatment> <lab>
-    awk '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $7, ($10 == "None" ? $8 : $8 "+" $10), $9, $8, $10, $11);}' peak.table > wgEncodeRegTfbsClusteredInputs3.tab
-    hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputsV3 ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputsV3.tab
-
-#######################################################################
-
-    # continue with target-based clustering
-    hgBedsToBedExps -dupeLetterOk cluster.target.cfg peak.target.bed peak.target.exps >&! beds2exps.target.out
-    wc -l beds2exps.target.out
-    # 95 dupes
-
-    # NOTE: this was too laborious by hand.  When redone, script to list pairs in date submitted/resubmitted or experiment ID order, to ease picking later experiment
+   # This script creates a BED5+ download file with clusters and cell info
+   clusterAddSources.pl wgEncodeRegTfbsClusteredV3.bed wgEncodeTfbsClusteredInputsV3.tab > \
+        wgEncodeRegTfbsClusteredWithCellsV3.bed
+    gzip -c -n wgEncodeRegTfbsClusteredWithCellsV3.bed > downloads/wgEncodeRegTfbsClusteredWithCellsV3.bed.gz
+    cd downloads
+    ln wgEncodeRegTfbsClusteredWithCellsV3.bed.gz $dload
+    cd $dload
+    ln wgEncodeRegTfbsClusteredWithCellsV3.bed.gz releaseLatest
+    md5sum *.gz > md5sum.txt
+    # vim README.txt
+    cp README.txt md5sum.txt ..
 
 #######################################################################
 
