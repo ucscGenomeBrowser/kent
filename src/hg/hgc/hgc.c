@@ -24878,6 +24878,10 @@ else if (sameWord(table, "esRegGeneToMotif"))
     {
     doTriangle(tdb, item, "esRegMotif");
     }
+else if (sameWord(table, "wgEncodeRegTfbsClusteredMotifs"))
+    {
+    doTriangle(tdb, item, "transRegCodeMotif");
+    }
 else if (sameWord(table, "transRegCode"))
     {
     doTransRegCode(tdb, item, "transRegCodeMotif");

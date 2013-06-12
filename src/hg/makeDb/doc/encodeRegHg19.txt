@@ -1065,7 +1065,7 @@ cat > getTargetInputs.csh << 'EOF'
         cut --complement -f 1 | \
         liftOver -bedPlus=4 stdin /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz \
                 motifs.bed motifs.unmapped
-    hgLoadBed hg19 -as=~/kent/src/hg/lib/bed6FloatScore.as wgEncodeRegTfbsClustered motifs.bed
+    hgLoadBed hg19 -as=~/kent/src/hg/lib/bed6FloatScore.as wgEncodeRegTfbsClusteredMotifs motifs.bed
     # Read 1750827 elements of size 6 from motifs.bed
 
 
