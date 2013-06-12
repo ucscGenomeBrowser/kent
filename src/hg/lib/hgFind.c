@@ -1432,7 +1432,6 @@ return NULL;
 static struct slName *genbankGrepQuery(char *indexFile, char *table, char *key)
 /* grep -i key indexFile, return a list of ids (first word of each line). */
 {
-//verbose(1,"genbankGrepQuery table=[%s] key=[%s]\n", table, key); // DEBUG REMOVE
 char *extraOptions = "";
 if (sameString(table, "author"))
     extraOptions = "-w";
@@ -1444,7 +1443,6 @@ static struct slName *genbankSqlFuzzyQuery(struct sqlConnection *conn,
 /* Perform a fuzzy sql search for %key% in table.name; return list of 
  * corresponding table.id's.  */
 {
-//verbose(1,"genbankSqlFuzzyQuery table=[%s] key=[%s]\n", table, key); // DEBUG REMOVE
 struct slName *idList = NULL, *idEl = NULL;
 if (!isTooCommon(table, key))
     {
@@ -1484,7 +1482,6 @@ static void findHitsToTables(char *db, struct hgFindSpec *hfs,
 			     struct hash **retHash, struct slName **retList)
 /* Return all unique accessions that match any table. */
 {
-//verbose(1,"findHitsToTables db=[%s] key=[%s]\n", db, key); // DEBUG REMOVE
 struct slName *list = NULL, *el;
 struct hash *hash = newHash(0);
 struct sqlConnection *conn = hAllocConn(db);
@@ -1512,7 +1509,6 @@ for (i = 0; i<tableCount; ++i)
     for (idEl = idList; idEl != NULL; idEl = idEl->next)
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
-	//verbose(1,"findHitsToTables field=[%s] idEl->name=[%s]\n", field, idEl->name); // DEBUG REMOVE
 	sqlSafef(query, sizeof(query),
 	      "select acc, organism from gbCdnaInfo where %s = %s "
 	      " and type = 'mRNA'",
@@ -2036,7 +2032,6 @@ static boolean findRefGenes(char *db, struct hgFindSpec *hfs, char *spec,
 			    struct hgPositions *hgp)
 /* Look up refSeq genes in table. */
 {
-//verbose(1,"findRefGenes db=[%s] spec=[%s]\n", db, spec); // DEBUG REMOVE
 struct sqlConnection *conn = hAllocConn(db);
 struct dyString *ds = newDyString(256);
 struct refLink *rlList = NULL, *rl;
@@ -2044,7 +2039,6 @@ boolean gotRefLink = hTableExists(db, "refLink");
 boolean found = FALSE;
 char *specNoVersion = cloneString(spec);
 (void) chopPrefix(specNoVersion);
-//verbose(1,"findRefGenes specNoVersion=[%s]\n", specNoVersion); // DEBUG REMOVE
 if (gotRefLink)
     {
     if (startsWith("NM_", specNoVersion) || startsWith("NR_", specNoVersion) || startsWith("XM_", specNoVersion))
@@ -2593,12 +2587,10 @@ static boolean searchSpecial(char *db, struct hgFindSpec *hfs, char *term,
 /* Handle searchTypes for which we have special code.  Return true if 
  * we have special code.  Set retFind according to whether we find term. */
 {
-//verbose(1,"searchSpecial db=[%s] term=[%s]\n", db, term); // DEBUG REMOVE
 boolean isSpecial = TRUE;
 boolean found = FALSE;
 char *upcTerm = cloneString(term);
 touppers(upcTerm);
-//verbose(1,"searchSpecial hfs->searchType=[%s]\n", hfs->searchType); // DEBUG REMOVE
 if (sameString(hfs->searchType, "knownGene"))
     {
     if (gotFullText(db))
@@ -2660,7 +2652,6 @@ else
     }
 *retFound = found;
 freeMem(upcTerm);
-//verbose(1,"searchSpecial done isSpecial=%d\n", isSpecial); // DEBUG REMOVE
 return(isSpecial);
 }
 
@@ -2668,7 +2659,6 @@ return(isSpecial);
 static struct slPair *getXrefTerms(char *db, struct hgFindSpec *hfs, char *term)
 /* Search xrefTable for xrefQuery with term.  Return all matching names. */
 {
-//verbose(1,"getXrefTerms db=[%s] term=[%s]\n", db, term); // DEBUG REMOVE
 struct slPair *xrefList = NULL, *xrefPtr = NULL;
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
@@ -2739,7 +2729,6 @@ static boolean doQuery(char *db, struct hgFindSpec *hfs, char *xrefTerm, char *t
 /* Perform a query as specified in hfs, assuming table existence has been 
  * checked and xref'ing has been taken care of. */
 {
-//verbose(1,"doQuery term=[%s]\n", term); // DEBUG REMOVE
 struct slName *tableList = hSplitTableNames(db, hfs->searchTable);
 struct slName *tPtr = NULL;
 struct hgPosTable *table = NULL;
@@ -2836,7 +2825,6 @@ boolean hgFindUsingSpec(char *db, struct hgFindSpec *hfs, char *term,
 /* Perform the search described by hfs on term.  If successful, put results
  * in hgp and return TRUE.  (If not, don't modify hgp.) */
 {
-//verbose(1,"hgFindUsingSpec db=[%s] term=[%s]\n", db, term); // DEBUG REMOVE
 struct slPair *xrefList = NULL, *xrefPtr = NULL; 
 boolean found = FALSE;
 
@@ -2858,7 +2846,6 @@ if (isNotEmpty(hfs->searchType) && searchSpecial(db, hfs, term, hgp, relativeFla
 						 relStart, relEnd, &found))
     return(found);
 
-//verbose(1,"hgFindUsingSpec hfs->xrefTable=[%s]\n", hfs->xrefTable); // DEBUG REMOVE
 if (isNotEmpty(hfs->xrefTable))
     {
     struct sqlConnection *conn = hAllocConn(db);
@@ -3107,8 +3094,7 @@ if ((canonicalSpec =
 	}
     relativeFlag = TRUE;
     }
-//term = sqlEscapeString(term);  // term is pre-escaped !  // DEBUG REMOVE
-term = cloneString(term); // DEBUG KEEP?
+term = cloneString(term); // because hgOfficialChromName mangles it
 
 if (hgOfficialChromName(db, term) != NULL) // this mangles the term
     {
@@ -3140,8 +3126,7 @@ else
     if (singleBaseSpec)
 	{
 	singleBaseSpec = relativeFlag = FALSE;
-	//term = sqlEscapeString(originalTerm);  // DEBUG REMOVE
-	term = cloneString(originalTerm);  // DEBUG KEEP
+	term = cloneString(originalTerm);  // restore original term
 	relStart = relEnd = 0;
 	}
 
