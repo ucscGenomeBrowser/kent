@@ -294,7 +294,7 @@ int result;
 result = mailViaPipe(mailTo, subject, msg, mailFrom);
 }
 
-void sendConfirmMail(char *emailAddr, char *suggestID)
+void sendConfirmMail(char *emailAddr, char *suggestID, char *summary, char *details)
 /* send user suggestion confirm mail */
 {
 char subject[256];
@@ -309,8 +309,8 @@ safecpy(signature,sizeof(signature), mailSignature());
 
 safef(subject, sizeof(subject),"Thank you for your suggestion to the %s", brwName);
 safef(msg, sizeof(msg),
-    "  Someone (probably you, from IP address %s) submitted a suggestion to the %s.\nThe suggestion has been assigned an ID \"%s\".\nPlease use this ID for all future communications related to ths suggestion.\n\nThanks!\n%s\n%s",
-remoteAddr, brwName, suggestID, signature, returnAddr);
+    "  Someone (probably you, from IP address %s) submitted a suggestion to the %s regarding %s.\n\n  The suggestion has been assigned a reference number of \"%s\". If you wish to follow up on the progress of this suggestion with browser staff, you may contact us at %s. Please include the reference number of your suggestion in the email.\n\nThank you for your input,\n%s\n\nYour suggestion:\n\n  %s",
+remoteAddr, brwName, summary, suggestID, returnAddr, signature, details);
 int result;
 result = mailViaPipe(emailAddr, subject, msg, returnAddr);
 }
@@ -339,13 +339,13 @@ char *sSummary=cartUsualString(cart,"suggestSummary","");
 char *sDetails=cartUsualString(cart,"suggestDetails","");
 
 char suggestID[256];
-safef(suggestID, sizeof(suggestID),"%s-%s", sEmail, now());
+safef(suggestID, sizeof(suggestID),"%s %s", sEmail, now());
 char subject[256];
 safef(subject, sizeof(subject),"%s %s", filter, suggestID);
 /* send back the suggestion */
 sendSuggestionBack(sName, sEmail, sCategory, sSummary, sDetails, suggestID);
 /* send confirmation mail to user */
-sendConfirmMail(sEmail,suggestID);
+sendConfirmMail(sEmail,suggestID, sSummary, sDetails);
 /* display confirmation page */
 printSuggestionConfirmed(sSummary, suggestID, sEmail, mailReturnAddr(), sDetails);
 cartRemove(cart, "do.suggestSendMail");
