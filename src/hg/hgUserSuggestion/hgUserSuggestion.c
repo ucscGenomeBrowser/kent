@@ -32,7 +32,7 @@ if (isEmpty(cfgOption(CFG_SUGGEST_MAILTOADDR)) ||
     isEmpty(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE)) ||
     isEmpty(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR)) ||
     isEmpty(cfgOption(CFG_SUGGEST_BROWSER_NAME)))
-    errAbort("This Genome Browser has not been configured to accept suggestion yet. Please contact the browser administrator for more information.");
+    errAbort("This Genome Browser has not been configured to accept suggestions yet. Please contact the browser administrator for more information.");
 }
 
 char *mailToAddr()
@@ -121,7 +121,6 @@ hPrintf(
     "      <div class=\"formControls\">\n"
     "        <input id=\"sendButton\" type=\"button\" value=\"Send\" onclick=\"submitform()\"/> \n"
     "        <input type=\"reset\" name=\"suggestClear\" value=\"Clear\" class=\"largeButton\"> \n"
-//    "        <input type=\"cancel\" name=\"Cancel\" value=\"Cancel\" class=\"largeButton\">\n"
     "      </div>\n"
     "      \n"
     "     </FORM>\n\n");
@@ -256,18 +255,25 @@ hPrintf(
     "     </script>\n\n");
 }
 
-void printSuggestionConfirmed()
+void printSuggestionConfirmed(char *summary, char * refID, char *userAddr, char *adminAddr, char *details)
+/* display suggestion confirm page */
 {
 hPrintf(
     "<h2>Thank you for your suggestion!</h2>");
 hPrintf(
     "<p>"
-    "Thank you for your suggestion regarding the UCSC Genome Browser.<BR>"
-    "A confirmation mail has send to you containing an unique suggestion ID,<BR>"
-"Please use this ID for all future communications related to this suggestion.</p><BR>");
+    "Thank you for your suggestion regarding %s. <BR>"
+    "You may follow up on the status of your request at any time by sending email to %s "
+    "and quoting your reference number:<BR><BR>%s<BR><BR>"
+    "A copy of this information has also been sent to you at %s.<BR></p>",
+    summary, adminAddr, refID, userAddr); 
 hPrintf(
-    "<p><a href=\"hgUserSuggestion\">Click here for more suggestions</a><BR></p>");
-
+    "<p><a href=\"hgUserSuggestion\">Click here if you wish to make additional suggestions.</a></p>");
+hPrintf(
+    "<p>"
+    "Your suggestion:<BR>"
+    "%s</p>",
+    details);
 } 
 
 void sendSuggestionBack(char *sName, char *sEmail, char *sCategory, char *sSummary, char *sDetails, char *suggestID)
@@ -341,7 +347,7 @@ sendSuggestionBack(sName, sEmail, sCategory, sSummary, sDetails, suggestID);
 /* send confirmation mail to user */
 sendConfirmMail(sEmail,suggestID);
 /* display confirmation page */
-printSuggestionConfirmed();
+printSuggestionConfirmed(sSummary, suggestID, sEmail, mailReturnAddr(), sDetails);
 cartRemove(cart, "do.suggestSendMail");
 }
 
