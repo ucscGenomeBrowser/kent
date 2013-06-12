@@ -559,16 +559,6 @@ struct sqlResult *sqlStoreResult(struct sqlConnection *sc, char *query);
 
 /* --------- input checks to prevent sql injection --------------------------------------- */
 
-#define sqlCkQl sqlCheckQuotedLiteral
-char *sqlCheckQuotedLiteral(char *s);
-/* Check that none of the chars needing to be escaped are in the string s */
-
-char *sqlCheckAlphaNum(char *word);
-/* Check that only valid alpha numeric characters are used in word */
-
-char *sqlEscapeIfNeeded(char *s, char **pS);
-/* Escape if needed.  if *pS is not null, free it.  */
-
 #define sqlCkIl sqlCheckIdentifiersList
 char *sqlCheckIdentifiersList(char *identifiers);
 /* Check that only valid identifier characters are used in a comma-separated list */
@@ -576,13 +566,6 @@ char *sqlCheckIdentifiersList(char *identifiers);
 #define sqlCkId sqlCheckIdentifier
 char *sqlCheckIdentifier(char *identifier);
 /* Check that only valid identifier characters are used */
-
-#define sqlCkTbl sqlCheckTableName
-char *sqlCheckTableName(char *table);
-/* check that only valid table name characters are used */
-
-char *sqlCheckCgiEncodedName(char *name);
-/* check that only valid cgi-encoded characters are used */
 
 
 // =============================
@@ -650,9 +633,6 @@ __attribute__((format(printf, 2, 3)))
 void sqlDyStringAppend(struct dyString *ds, char *string);
 /* Append zero terminated string to end of dyString.
  * Make sure the NOSQLINJ prefix gets added if needed */
-
-char *sqlDyStringFrag(struct dyString *ds);
-/* If ds is only a sql fragment, do not need leading NOSQLINJ tag */
 
 struct dyString *sqlDyStringCreate(char *format, ...)
 /* Create a dyString with a printf style initial content 
