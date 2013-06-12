@@ -95,7 +95,7 @@ struct dnaMotif *loadDnaMotif(char *motifName, char *motifTable)
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct dnaMotif *motif;
-sqlSafef(query, sizeof query, "name = '%s'", motifName);
+sqlSafefFrag(query, sizeof query, "name = '%s'", motifName);
 motif = dnaMotifLoadWhere(conn, motifTable, query);
 hFreeConn(&conn);
 return motif;
