@@ -1457,3 +1457,23 @@ echTel1.perChromTables = no
     ln -s blastz.hg19.swap lastz.hg19
 
 ##############################################################################
+# construct liftOver to echTel2 (DONE - 2013-06-10 - Hiram)
+    screen -S echTel2	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/echTel1/bed/blat.echTel2.2013-06-10
+    cd /hive/data/genomes/echTel1/bed/blat.echTel2.2013-06-10
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/echTel1/jkStuff/echTel1.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev echTel1 echTel2
+    #   real    0m1.838s
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/echTel1/jkStuff/echTel1.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev echTel1 echTel2 > do.log 2>&1
+    #   real    1748m31.042s
+
+    # verify this file exists:
+    #	/gbdb/echTel1/liftOver/echTel1ToEchTel2.over.chain.gz
+    # and try out the conversion on genome-test from echTel1 to echTel2
+
+############################################################################

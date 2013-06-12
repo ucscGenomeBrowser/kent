@@ -2,35 +2,58 @@
 <p>
 This track shows regions
 where transcription factors, proteins responsible for
-modulating gene transcription, bind to DNA as assayed by ChIP-seq (chromatin immunoprecipitation with antibodies 
+modulating gene transcription, bind to DNA as assayed by ChIP-seq (chromatin 
+immunoprecipitation with antibodies 
 specific to the transcription factor followed by sequencing of the precipitated DNA).
-Additional views of this dataset and additional documentation on the methods used
-for this track are available at the
-<a href="../cgi-bin/hgTrackUi?g=wgEncodeTfBindingSuper" target="_blank">ENC TF Binding Supertrack</a> page.
-The peaks were computed using a uniform pipeline developed by Anshul Kundaje that uses the
-variation between the two replicates to develop sensible peak thresholds. This track combines
-data from many different cell lines and transcription-factor targeting antibodies into a
-relatively dense display. 
+The peaks of TF binding underyling this track were computed using a uniform pipeline 
+that uses the variation between the two replicates to guide peak thresholds. This track combines
+data from 91 cell types and 189 transcription-factor targeting antibodies into a
+summary display. 
+Additional views of this data and additional documentation on the methods used
+to generate the data underlying this track are available from the
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgTfbsUniform" 
+target="_blank">ENCODE Uniform TFBS</a> track description.
 </p>
 <h2>Display Conventions</h2>
 <p>
-A gray box encompasses the peaks of transcription factor occupancy.  The darkness of the box 
-is proportional to the maximum signal strength observed in any cell line.  The name to the left
+A gray box encompasses the peak clusters of transcription factor occupancy.  
+The darkness of the box is proportional to the maximum signal strength observed in any cell line
+contributing to the cluster.  The name to the left
 of the box is the transcription factor. The letters to the right represent the cell lines where
 a signal is detected.  The darkness of the letter is proportional to the signal strength in
-the cell line. Click on an item in the track to see the cell lines spelled out. Abbreviations
-starting with capital letters designate Tier1 and Tier2 cell lines, while those starting with
-lowercase letters designate Tier3 cell lines.
+the cell line. 
+Abbreviations
+starting with capital letters designate 
+<a target=_blank href="http://encodeproject.org/ENCODE/cellTypes.html">ENCODE cell types</a>
+identified for intensive study - Tier 1 and Tier 2 - 
+while those starting with lowercase letters designate Tier 3 cell lines.
+Click on an item in the track to see the cell lines spelled out. 
+</p>
+
+<h2>Methods</h2>
+<p>
+<p>
+Peaks of transcription factor occupancy from uniform processing of ENCODE ChIP-seq data at
+a .9% FDR threshold from datasets provided by the ENCODE Analysis Working Group 
+that passed the integrated quality metric
+(<a target=_blank href=../cgi-bin/hgTrackUi?g=wgEncodeAwgTfbsUniform>Uniform TFBS</a>) 
+were clustered using UCSC hgBedsToBedExps.  The cluster score is the highest score for any
+peak contributing to the cluster.
 </p>
 
 <h2>Release Notes</h2>
 <p>
-Release 3 (May 2013) of this track includes more datasets (through ENCODE March 2012 data freeze).
-The previous datasets were also reprocessed with less stringent peak calling thresholds.
-The peaks that were used to generate these clusters are displayed as individual
-tracks in the ENCODE Uniform TFBS track available at the
-<a href="../cgi-bin/hgTrackUi?g=wgEncodeTfBindingSuper" target="_bank">ENC TF Binding Supertrack</a> page.
-The clustering for V3 differed from V2 by basing the clustering on factor target rather than antibody.
+Release 3 (June 2013) of this track includes more datasets (690 total,
+vs. 486 in the previous release) representing all
+ENCODE TF ChIP-seq passing quality assessment through the ENCODE June 2012 data freeze.
+The peaks used to generate these clusters were called with less stringent thresholds than 
+used during the January 2011 uniform processing shown in Release 2 of this track.
+The peaks that were used to generate the clusters in this version are displayed as individual
+tracks in the ENCODE Uniform TFBS track, which is  available along with the primary data tracks
+at the <a href="../cgi-bin/hgTrackUi?g=wgEncodeTfBindingSuper" 
+target="_blank">ENC TF Binding Supertrack</a> page.
+The clustering for V3 is based on the TF target, differing from V2 in which clustering was 
+based on antibody used.
 </p>
 
 <h2>Credits</h2>
@@ -38,33 +61,27 @@ The clustering for V3 differed from V2 by basing the clustering on factor target
 This track shows data from the <a href='http://myers.hudsonalpha.org/'
 target="_blank">Myers Lab</a> at the <a href='http://www.hudsonalpha.org/'
 target="_blank">HudsonAlpha Institute for Biotechnology</a> and by the labs of
-<a href="http://snyderlab.stanford.edu/"
-  class="external text" title="http://www.yale.edu/snyder/"
-  target="_blank">Michael Snyder</a>,
-<a href="http://bioinfo.mbb.yale.edu/"
-  class="external text"
-  title="http://bioinfo.mbb.yale.edu/"
-  target="_blank">Mark Gerstein</a> and
-<a href="http://bbs.yale.edu/people/sherman_weissman.profile"
-  class="external text" title="http://bbs.yale.edu/people/sherman_weissman.profile"
-  target="_blank">Sherman Weissman</a> at Yale University;
-<a href="http://www.genomecenter.ucdavis.edu/farnham/"
-  class="external text" title="http://www.genomecenter.ucdavis.edu/farnham/"
-  target="_blank">Peggy Farnham</a> at UC Davis; and
-<a href="http://struhl.med.harvard.edu/"
-  class="external text" title="http://struhl.med.harvard.edu/"
-  target="_blank">Kevin Struhl</a> at Harvard; and
-<a href="http://www.igsb.org/labs/kevin-white/"
-  class="external text" title="http://www.igsb.org/labs/kevin-white/"
-  target="_blank">Kevin White</a> at The University of Chicago; and
-<a href="http://microarray.icmb.utexas.edu/research.html"
-  class="external text" title="http://microarray.icmb.utexas.edu/research.html"
-  target="_blank">Vishy Iyer</a> at The University of Texas Austin.
+<a href="http://snyderlab.stanford.edu/" target="_blank">Michael Snyder</a>,
+<a href="http://bioinfo.mbb.yale.edu/" target="_blank">Mark Gerstein</a>,
+<a href="http://bbs.yale.edu/people/sherman_weissman.profile" target="_blank">Sherman Weissman</a>
+at Yale University,
+<a href="http://www.farnhamlab.com/" target="_blank">Peggy Farnham</a> 
+at the University of Southern California,
+<a href="http://struhl.med.harvard.edu/" target="_blank">Kevin Struhl</a> at Harvard,
+<a href="http://www.igsb.org/labs/kevin-white/" target="_blank">Kevin White</a> 
+at the University of Chicago, and
+<a href="http://microarray.icmb.utexas.edu/research.html" target="_blank">Vishy Iyer</a> 
+at the University of Texas, Austin.
+These data were processed into uniform peak calls by the ENCODE Analysis Working Group pipeline
+developed by
+<a href="https://sites.google.com/site/anshulkundaje" target=_balnk">Anshul Kundaje</a>
+The clustering of the uniform peaks was performed by UCSC.
 </p>
 
 <h2>Data Release Policy</h2>
-
-<p>Data users may freely use ENCODE data, but may not, without prior
-consent, submit publications that use an unpublished ENCODE dataset until
-nine months following the release of the dataset.  The full data release policy
-for ENCODE is available <a href="../ENCODE/terms.html" target="_blank">here</a>.</p>
+<p>
+While primary ENCODE data was subject to a restriction period as described in the 
+<a href="../ENCODE/terms.html" target="_blank">
+ENCODE data release policy</a>, this restriction does not apply to the integrative 
+analysis results, and all primary data underyling this track have passed the restriction date. 
+The data in this track are freely available.</p>
