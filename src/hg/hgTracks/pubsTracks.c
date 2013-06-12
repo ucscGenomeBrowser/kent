@@ -457,7 +457,7 @@ static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* 
         dyStringAppend(dy, "replace(replace(snippet, \"<B>\", \"\\n>>> \"), \"</B>\", \" <<<\\n\")" );
     else
         dyStringAppend(dy, "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))" );
-    dyStringPrintf(dy, " FROM %s WHERE articleId='%s' ", sequenceTable, articleId);
+    sqlDyStringPrintf(dy, " FROM %s WHERE articleId='%s' ", sequenceTable, articleId);
     // end sql injection fix
 
     struct hash *seqIdHash = sqlQuickHash(conn, dy->string);
