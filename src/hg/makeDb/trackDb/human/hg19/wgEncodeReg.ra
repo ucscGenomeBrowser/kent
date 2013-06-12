@@ -440,3 +440,13 @@ canPack On
     useScore 1
     priority 1.76
     dataVersion ENCODE Jul 2012 Freeze
+
+###
+
+    track wgEncodeRegTfbsClusteredMotifs
+    release alpha
+    shortLabel Txn Fac Motifs
+    longLabel Transcription Factor Motifs identified in ENCODE ChIP-seq
+    type bed 6 +
+    superTrack wgEncodeReg hide
+    priority 1.8
