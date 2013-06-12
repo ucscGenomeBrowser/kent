@@ -258,6 +258,10 @@ if (self->hasBin)
     self->mergeBins = TRUE;
     self->qLm = lmInit(0);
     }
+if (self->endFieldIndexName != NULL)
+    // Don't let mysql use a (chrom, chromEnd) index because that messes up
+    // sorting by chromStart.
+    dyStringPrintf(query, "IGNORE INDEX (%s) ", self->endFieldIndexName);
 if (sSelf->chrom != NULL)
     {
     uint start = sSelf->regionStart;
@@ -305,12 +309,21 @@ else
 	if (self->doNextChunk && start < self->nextChunkStart)
 	    start = self->nextChunkStart;
 	uint end = annoAssemblySeqSize(self->streamer.assembly, self->queryChrom->name);
-	dyStringPrintf(query, "where %s = '%s' and ", self->chromField, chrom);
-	if (self->hasBin)
-	    hAddBinToQuery(start, end, query);
-	dyStringPrintf(query, "%s < %u and %s > %u limit %d",
-		       self->startField, end, self->endField, start, queryMaxItems);
+	dyStringPrintf(query, "where %s = '%s' ", self->chromField, chrom);
+	if (start > 0)
+	    {
+	    dyStringAppend(query, "and ");
+	    if (self->hasBin)
+		hAddBinToQuery(start, end, query);
+	    // region end is chromSize, so no need to constrain startField here:
+	    dyStringPrintf(query, "%s > %u ",
+			   self->endField, start);
+	    }
+	dyStringPrintf(query, "limit %d", queryMaxItems);
 	bufferRowsFromSqlQuery(self, query->string, queryMaxItems);
+	// If there happens to be no items on chrom, try again with the next chrom:
+	if (! self->eof && self->rowBuf.size == 0)
+	    asdDoQueryChunking(self, minChrom, minEnd);
 	}
     }
 dyStringFree(&query);
@@ -567,6 +580,7 @@ self->endFieldIndexName = sqlTableIndexOnField(self->conn, self->table, self->en
 self->notSorted = FALSE;
 self->mergeBins = FALSE;
 self->maxOutRows = maxOutRows;
+self->useMaxOutRows = (maxOutRows > 0);
 self->needQuery = TRUE;
 self->chromList = annoAssemblySeqNames(aa);
 if (slCount(self->chromList) > 1000)

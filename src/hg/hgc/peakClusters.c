@@ -325,7 +325,7 @@ if (cluster != NULL)
 
 	/* Print out some information about the cluster overall. */
 	printf("<B>Items in Cluster:</B> %s of %d<BR>\n", cluster->name, 
-	    sqlRowCount(conn, sqlCheckTableName(inputTrackTable)));
+	    sqlRowCount(conn, sqlCheckIdentifier(inputTrackTable)));
 	printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
 	printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
 

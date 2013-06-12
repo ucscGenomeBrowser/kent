@@ -1042,7 +1042,7 @@ for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
         {
         if (mdbObj->vars == NULL) // deletes all
             {
-            sqlSafef(query, sizeof(query),"%s where obj = '%s'",sqlCheckTableName(tableName),sqlCheckQuotedLiteral(mdbObj->obj));  // NOSQLINJ
+            sqlSafefFrag(query, sizeof(query),"%s where obj = '%s'", tableName, mdbObj->obj);
             int delCnt = sqlRowCount(conn,query);
 
             if (delCnt>0)
@@ -1078,7 +1078,7 @@ for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
         }
     else if (replace)  // If replace then clear out deadwood before inserting new vars
         {
-        sqlSafef(query, sizeof(query),"%s where obj = '%s'",sqlCheckTableName(tableName),sqlCheckQuotedLiteral(mdbObj->obj));  // NOSQLINJ
+        sqlSafefFrag(query, sizeof(query),"%s where obj = '%s'", tableName, mdbObj->obj);
         int delCnt = sqlRowCount(conn,query);
 
         if (delCnt>0)

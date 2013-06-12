@@ -748,7 +748,7 @@ puts("<TD VALIGN=\"TOP\">");
 puts("<TABLE BORDER=0>");
 
 /* button to add custom tracks */
-int buttonWidth = 13;
+int buttonWidth = 18;
 puts("<TR><TD>");
 printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" STYLE=\"width:%dem\">",
                 hgCtDoAdd, "add custom tracks", buttonWidth);
@@ -783,6 +783,16 @@ printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tab
 cartSaveSession(cart);
 printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
         "go to table browser", buttonWidth);
+puts("</FORM>");
+puts("</TD></TR>");
+
+/* button for VAI navigation */
+puts("<TR><TD>");
+printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"vaiForm\">\n",
+           hgVaiName());
+cartSaveSession(cart);
+printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
+        "go to variant annotation integrator", buttonWidth);
 puts("</FORM>");
 puts("</TD></TR>");
 
