@@ -90,9 +90,11 @@ void printMainForm()
 hPrintf(
     "     <FORM ACTION=\"../cgi-bin/hgUserSuggestion?do.suggestSendMail=1\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\" onLoad=\"document.forms.mainForm.name.focus()\">\n");
 hPrintf(
-    "     <H2>User Suggestion Form</H2>\n"
-    "     <P> Please use this form to submit ... </P>\n"
-);
+    "<H2>User Suggestion Form</H2>\n"
+    "<P>If you have ideas about how we can improve the value of the Genome Browser to your research,  we'd like to hear from you. Please provide a concise description below. A copy of the suggestion will be sent to your email address along with a reference number. You may follow up on the status of your request at any time by sending email to %s and quoting the reference number.</P>",
+    mailReturnAddr());    
+hPrintf("<P>Please note: this form is not the proper place to submit questions regarding browser use or bug reports. Use the links on our contact page instead.</P>");
+hPrintf("<HR><BR>"); 
 hPrintf(
     "      <div id=\"suggest\">  \n"
     "       <label for=\"name\">Your Name:</label><input type=\"text\" name=\"suggestName\" id=\"name\" size=\"50\" /><BR>\n"
@@ -101,10 +103,10 @@ hPrintf(
     "          name=\"suggestCfmEmail\" id=\"cfmemail\" size=\"50\" /><BR>   \n");
 hPrintf(
     "       <label for=\"category\">Category:</label><select name=\"suggestCategory\" id=\"category\">\n"
-    "         <option selected>New feature request</option> \n"
-    "         <option>New utilities request</option>\n"
-    "         <option>New/Update genome request</option>\n"
-    "         <option>New track request</option>\n"
+    "         <option selected>Tracks</option> \n"
+    "         <option>Genome Assemblies</option>\n"
+    "         <option>Browser Tools</option>\n"
+    "         <option>Command-line Utilities</option>\n"
     "         <option>Others</option>\n"
     "         </select><BR>\n");
 hPrintf(
@@ -113,8 +115,8 @@ hPrintf(
     "     </div>\n");
 hPrintf(
     "         <p>\n"
-    "           <label for=\"code\">Enter the following value below: <span id=\"txtCaptchaDiv\" style=\"color:#F00\"></span><BR><!-- this is where the script will place the generated code --> \n"
-    "           <input type=\"hidden\" id=\"txtCaptcha\" /></label><!-- this is where the script will place a copy of the code for validation: this is a hidden field -->\n"
+    "           <label for=\"code\">Enter the following value below: <span id=\"txtCaptchaDiv\" style=\"color:#F00\"></span><BR> \n"
+    "           <input type=\"hidden\" id=\"txtCaptcha\" /></label>\n"
     "           <input type=\"text\" name=\"txtInput\" id=\"txtInput\" size=\"30\" />\n"
     "         </p>\n");
 hPrintf(
