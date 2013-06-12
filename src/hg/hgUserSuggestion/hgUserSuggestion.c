@@ -23,60 +23,52 @@ struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 
 /* ---- Global helper functions ---- */
+void checkHgConfForSuggestion()
+/* Abort if hg.conf has not been set up to accept suggestion */
+{
+if (isEmpty(cfgOption(CFG_SUGGEST_MAILTOADDR)) ||
+    isEmpty(cfgOption(CFG_SUGGEST_MAILFROMADDR)) ||
+    isEmpty(cfgOption(CFG_FILTERKEYWORD))        ||
+    isEmpty(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE)) ||
+    isEmpty(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR)) ||
+    isEmpty(cfgOption(CFG_SUGGEST_BROWSER_NAME)))
+    errAbort("This Genome Browser has not been configured to accept suggestions yet. Please contact the browser administrator for more information.");
+}
+
 char *mailToAddr()
 /* Return the address to send suggestion to  */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAILTOADDR))
-    return cloneString("NULL_suggest.mailToAddr");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAILTOADDR));
+return cloneString(cfgOption(CFG_SUGGEST_MAILTOADDR));
 }
 
 char *mailFromAddr()
 /* Return the bogus sender address to help filter out spam */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAILFROMADDR))
-    return cloneString("NULL_suggest.mailFromAddr");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAILFROMADDR));
+return cloneString(cfgOption(CFG_SUGGEST_MAILFROMADDR));
 }
 
 char *filterKeyword()
 /* Return the keyword used to filter out spam  */
 {
-if isEmpty(cfgOption(CFG_FILTERKEYWORD))
-    return cloneString("NULL_suggest.filterKeyword");
-else
-    return cloneString(cfgOption(CFG_FILTERKEYWORD));
+return cloneString(cfgOption(CFG_FILTERKEYWORD));
 }
 
 char *mailSignature()
-/* Return the signature to be used by outbound mail or NULL. Allocd
- * here. */
+/* Return the signature to be used by outbound mail. */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE))
-    return cloneString("NULL_mailSignature");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE));
+return cloneString(cfgOption(CFG_SUGGEST_MAIL_SIGNATURE));
 }
 
 char *mailReturnAddr()
-/* Return the return addr. to be used by outbound mail or NULL. Allocd
- * here. */
+/* Return the return addr. to be used by outbound mail. */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR))
-    return cloneString("NULL_mailReturnAddr");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR));
+return cloneString(cfgOption(CFG_SUGGEST_MAIL_RETURN_ADDR));
 }
 
 char *browserName()
 /* Return the browser name like 'UCSC Genome Browser' */
 {
-if isEmpty(cfgOption(CFG_SUGGEST_BROWSER_NAME))
-    return cloneString("NULL_browserName");
-else
-    return cloneString(cfgOption(CFG_SUGGEST_BROWSER_NAME));
+return cloneString(cfgOption(CFG_SUGGEST_BROWSER_NAME));
 }
 
 static char *now()
@@ -98,9 +90,11 @@ void printMainForm()
 hPrintf(
     "     <FORM ACTION=\"../cgi-bin/hgUserSuggestion?do.suggestSendMail=1\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\" onLoad=\"document.forms.mainForm.name.focus()\">\n");
 hPrintf(
-    "     <H2>User Suggestion Form</H2>\n"
-    "     <P> Please use this form to submit ... </P>\n"
-);
+    "<H2>User Suggestion Form</H2>\n"
+    "<P>If you have ideas about how we can improve the value of the Genome Browser to your research,  we'd like to hear from you. Please provide a concise description below. A copy of the suggestion will be sent to your email address along with a reference number. You may follow up on the status of your request at any time by sending email to %s and quoting the reference number.</P>",
+    mailReturnAddr());    
+hPrintf("<P>Please note: this form is not the proper place to submit questions regarding browser use or bug reports. Use the links on our contact page instead.</P>");
+hPrintf("<HR><BR>"); 
 hPrintf(
     "      <div id=\"suggest\">  \n"
     "       <label for=\"name\">Your Name:</label><input type=\"text\" name=\"suggestName\" id=\"name\" size=\"50\" /><BR>\n"
@@ -109,10 +103,10 @@ hPrintf(
     "          name=\"suggestCfmEmail\" id=\"cfmemail\" size=\"50\" /><BR>   \n");
 hPrintf(
     "       <label for=\"category\">Category:</label><select name=\"suggestCategory\" id=\"category\">\n"
-    "         <option selected>New feature request</option> \n"
-    "         <option>New utilities request</option>\n"
-    "         <option>New/Update genome request</option>\n"
-    "         <option>New track request</option>\n"
+    "         <option selected>Tracks</option> \n"
+    "         <option>Genome Assemblies</option>\n"
+    "         <option>Browser Tools</option>\n"
+    "         <option>Command-line Utilities</option>\n"
     "         <option>Others</option>\n"
     "         </select><BR>\n");
 hPrintf(
@@ -121,15 +115,14 @@ hPrintf(
     "     </div>\n");
 hPrintf(
     "         <p>\n"
-    "           <label for=\"code\">Write CAPTCHA security code below (disabled) > <span id=\"txtCaptchaDiv\" style=\"color:#F00\"></span><BR><!-- this is where the script will place the generated code --> \n"
-    "           <input type=\"hidden\" id=\"txtCaptcha\" /></label><!-- this is where the script will place a copy of the code for validation: this is a hidden field -->\n"
+    "           <label for=\"code\">Enter the following value below: <span id=\"txtCaptchaDiv\" style=\"color:#F00\"></span><BR> \n"
+    "           <input type=\"hidden\" id=\"txtCaptcha\" /></label>\n"
     "           <input type=\"text\" name=\"txtInput\" id=\"txtInput\" size=\"30\" />\n"
     "         </p>\n");
 hPrintf(
     "      <div class=\"formControls\">\n"
     "        <input id=\"sendButton\" type=\"button\" value=\"Send\" onclick=\"submitform()\"/> \n"
     "        <input type=\"reset\" name=\"suggestClear\" value=\"Clear\" class=\"largeButton\"> \n"
-    "        <input type=\"cancel\" name=\"Cancel\" value=\"Cancel\" class=\"largeButton\">\n"
     "      </div>\n"
     "      \n"
     "     </FORM>\n\n");
@@ -209,11 +202,11 @@ hPrintf(
     "                 var why = \"\";\n"
     "                  \n"
     "                 if(theform.txtInput.value == \"\"){\n"
-    "                         why += \"- Security code should not be empty.\n\";\n"
+    "                         why += \"- Security code should not be empty.\";\n"
     "                 }\n"
     "                 if(theform.txtInput.value != \"\"){\n"
     "                         if(ValidCaptcha(theform.txtInput.value) == false){\n"
-    "                                 why += \"- Security code did not match.\n\";\n"
+    "                                 why += \"- Security code did not match.\";\n"
     "                         }\n"
     "                 }\n"
     "                 if(why != \"\"){\n"
@@ -256,8 +249,7 @@ hPrintf(
     "     <script type=\"text/javascript\">\n"
     "     function submitform()\n"
     "     {\n"
-    "      if ( validateMainForm(document.forms[\"mainForm\"]) )\n"
-//    "      if ( validateMainForm(document.forms[\"mainForm\"]) && checkCaptcha(document.forms[\"mainForm\"]))\n"
+    "      if ( validateMainForm(document.forms[\"mainForm\"]) && checkCaptcha(document.forms[\"mainForm\"]))\n"
     "        {\n"
     "          document.forms[\"mainForm\"].submit();\n"
     "        }\n"
@@ -265,18 +257,25 @@ hPrintf(
     "     </script>\n\n");
 }
 
-void printSuggestionConfirmed()
+void printSuggestionConfirmed(char *summary, char * refID, char *userAddr, char *adminAddr, char *details)
+/* display suggestion confirm page */
 {
 hPrintf(
     "<h2>Thank you for your suggestion!</h2>");
 hPrintf(
     "<p>"
-    "Thank you for your suggestion regarding the UCSC Genome Browser.<BR>"
-    "A confirmation mail has send to you containing an unique suggestion ID,<BR>"
-"Please use this ID for all future communications related to this suggestion.</p><BR>");
+    "Thank you for your suggestion regarding %s. <BR>"
+    "You may follow up on the status of your request at any time by sending email to %s "
+    "and quoting your reference number:<BR><BR>%s<BR><BR>"
+    "A copy of this information has also been sent to you at %s.<BR></p>",
+    summary, adminAddr, refID, userAddr); 
 hPrintf(
-    "<p><a href=\"hgUserSuggestion\">Click here for more suggestions</a><BR></p>");
-
+    "<p><a href=\"hgUserSuggestion\">Click here if you wish to make additional suggestions.</a></p>");
+hPrintf(
+    "<p>"
+    "Your suggestion:<BR>"
+    "%s</p>",
+    details);
 } 
 
 void sendSuggestionBack(char *sName, char *sEmail, char *sCategory, char *sSummary, char *sDetails, char *suggestID)
@@ -297,7 +296,7 @@ int result;
 result = mailViaPipe(mailTo, subject, msg, mailFrom);
 }
 
-void sendConfirmMail(char *emailAddr, char *suggestID)
+void sendConfirmMail(char *emailAddr, char *suggestID, char *summary, char *details)
 /* send user suggestion confirm mail */
 {
 char subject[256];
@@ -312,8 +311,8 @@ safecpy(signature,sizeof(signature), mailSignature());
 
 safef(subject, sizeof(subject),"Thank you for your suggestion to the %s", brwName);
 safef(msg, sizeof(msg),
-    "  Someone (probably you, from IP address %s) submitted a suggestion to the %s.\nThe suggestion has been assigned an ID \"%s\".\nPlease use this ID for all future communications related to ths suggestion.\n\nThanks!\n%s\n%s",
-remoteAddr, brwName, suggestID, signature, returnAddr);
+    "  Someone (probably you, from IP address %s) submitted a suggestion to the %s regarding %s.\n\n  The suggestion has been assigned a reference number of \"%s\". If you wish to follow up on the progress of this suggestion with browser staff, you may contact us at %s. Please include the reference number of your suggestion in the email.\n\nThank you for your input,\n%s\n\nYour suggestion:\n\n  %s",
+remoteAddr, brwName, summary, suggestID, returnAddr, signature, details);
 int result;
 result = mailViaPipe(emailAddr, subject, msg, returnAddr);
 }
@@ -342,15 +341,15 @@ char *sSummary=cartUsualString(cart,"suggestSummary","");
 char *sDetails=cartUsualString(cart,"suggestDetails","");
 
 char suggestID[256];
-safef(suggestID, sizeof(suggestID),"%s-%s", sEmail, now());
+safef(suggestID, sizeof(suggestID),"%s %s", sEmail, now());
 char subject[256];
 safef(subject, sizeof(subject),"%s %s", filter, suggestID);
 /* send back the suggestion */
 sendSuggestionBack(sName, sEmail, sCategory, sSummary, sDetails, suggestID);
 /* send confirmation mail to user */
-sendConfirmMail(sEmail,suggestID);
+sendConfirmMail(sEmail,suggestID, sSummary, sDetails);
 /* display confirmation page */
-printSuggestionConfirmed();
+printSuggestionConfirmed(sSummary, suggestID, sEmail, mailReturnAddr(), sDetails);
 cartRemove(cart, "do.suggestSendMail");
 }
 
@@ -361,6 +360,7 @@ char *db, *organism;
 cart = theCart;
 getDbAndGenome(cart, &db, &organism, oldVars);
 cartWebStart(theCart, db, "User Suggestion");
+checkHgConfForSuggestion();
 if (cartVarExists(cart, "do.suggestSendMail"))
     {
     submitSuggestion();

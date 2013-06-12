@@ -176,6 +176,24 @@ priority 68
 bedFilter on
 url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
 
+track greenMin
+shortLabel mira
+longLabel Mira alignment
+group regulation
+visibility hide
+color 30,90,30
+type bed 12
+priority 69
+
+track zfPred
+shortLabel ZF predictions on SVA
+longLabel zf.princeton.edu seq predictions
+group regulation
+visibility hide
+color 30,90,30
+type bed 12
+priority 70
+
 track myWgEncodeRegDnaseClustered
 shortLabel Dnase Clusters 
 longLabel Encode Dnase Clusters

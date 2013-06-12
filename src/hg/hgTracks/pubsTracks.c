@@ -447,18 +447,23 @@ genericMapItem(tg, hvg, item, bed->name, bed->name, start, end, x, y, width, hei
 static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* conn, char *articleId, bool getSnippet)
 /* create a hash with a mapping annotId -> snippet or annotId -> shortSeq for an articleId*/
 {
-    char query[LARGEBUF];
+    struct dyString *dy = dyStringNew(LARGEBUF);
     char *sequenceTable = trackDbRequiredSetting(tg->tdb, "pubsSequenceTable");
-    char *selectValSql = NULL;
-    if (getSnippet)
-        selectValSql = "replace(replace(snippet, \"<B>\", \"\\n>>> \"), \"</B>\", \" <<<\\n\")";
-    else
-        selectValSql = "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))";
 
-    sqlSafef(query, sizeof(query), "SELECT annotId, %s  FROM %s WHERE articleId='%s' ", 
-        selectValSql, sequenceTable, articleId);
-    struct hash *seqIdHash = sqlQuickHash(conn, query);
-    //freeMem(sequenceTable); // XX Why does this crash?? because trackDbRequiredSetting returns a value in a hash. do not free.
+    // work around sql injection fix problem, suggested by galt
+    sqlDyStringPrintf(dy, "SELECT annotId, ");
+
+     if (getSnippet)
+        dyStringAppend(dy, "replace(replace(snippet, \"<B>\", \"\\n>>> \"), \"</B>\", \" <<<\\n\")" );
+    else
+        dyStringAppend(dy, "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))" );
+    sqlDyStringPrintf(dy, " FROM %s WHERE articleId='%s' ", sequenceTable, articleId);
+    // end sql injection fix
+
+    struct hash *seqIdHash = sqlQuickHash(conn, dy->string);
+
+    //freeMem(sequenceTable); // trackDbRequiredSetting returns a value in a hash, so do not free
+    freeDyString(&dy);
     return seqIdHash;
 }
 

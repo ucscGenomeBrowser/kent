@@ -116,7 +116,7 @@ if (hIsGsidServer())
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
   " line attributes as described in the \n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
-  " URLs for data in the bigBed, bigWig, BAM and VCF formats must be embedded in a track\n"
+  " Data in the bigBed, bigWig, BAM and VCF formats must be provided via a URL embedded in a track\n"
   " line in the box below.\n"
   );
   }
@@ -144,7 +144,7 @@ else
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
   " line attributes as described in the \n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
-  " URLs for data in the bigBed, bigWig, BAM and VCF formats must be embedded in a track\n"
+  " Data in the bigBed, bigWig, BAM and VCF formats must be provided via a URL embedded in a track\n"
   " line in the box below.\n"
   " Publicly available custom tracks are listed\n"
   " <A HREF='../goldenPath/customTracks/custTracks.html'>here</A>.\n"

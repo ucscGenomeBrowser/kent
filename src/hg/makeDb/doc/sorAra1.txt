@@ -358,3 +358,23 @@ sorAra1.perChromTables = no
     ssh hgwbeta "hgsql qapushq < /tmp/sorAra1.sql"
 
 ############################################################################
+# construct liftOver to sorAra2 (DONE - 2013-06-10 - Hiram)
+    screen -S sorAra2	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/sorAra1/bed/blat.sorAra2.2013-06-10
+    cd /hive/data/genomes/sorAra1/bed/blat.sorAra2.2013-06-10
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/sorAra1/jkStuff/sorAra1.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev sorAra1 sorAra2
+    #   real    0m1.838s
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/sorAra1/jkStuff/sorAra1.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev sorAra1 sorAra2 > do.log 2>&1
+    #	real    1146m9.559s
+
+    # verify this file exists:
+    #	/gbdb/sorAra1/liftOver/sorAra1ToSorAra2.over.chain.gz
+    # and try out the conversion on genome-test from sorAra1 to sorAra2
+
+############################################################################

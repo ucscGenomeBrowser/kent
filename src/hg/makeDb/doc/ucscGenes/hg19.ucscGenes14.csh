@@ -9,7 +9,7 @@
 
 #
 # Prerequisites
-# Before executing this script, rebuild the swissprot and proteins databases.
+# Before executing this script, rebuild the swissprot ,proteins, and go databases.
 
 
 # SHOULD REBUILD GO DATABASE BEFORE DOING THIS!!!
@@ -733,6 +733,13 @@ tawk '{print $4}' oldToNew.tab | sort | uniq -c
 #    870 lost
 #   2687 new
 
+# check to make sure we don't have any dups.  These two numbers should
+# be the same.   
+awk '{print $2}' txToAcc.tab | sed 's/\..*//' | sort -u | wc -l
+# 82738
+awk '{print $2}' txToAcc.tab | sed 's/\..*//' | sort  | wc -l
+# 82739
+
 echo "select * from knownGene" | hgsql $db | sort > $db.knownGene.gp
 grep lost oldToNew.tab | awk '{print $2}' | sort > lost.txt
 join lost.txt $db.knownGene.gp > $db.lost.gp
@@ -941,7 +948,6 @@ hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db gnfAtlas2 knownGene knownTo
 cd $dir
 hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db ensGene knownGene knownToEnsembl -noLoad
 
-#TODO TODO!!
 $kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
 grep -v -e ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam $kent/src/hg/lib/knownTo.sql knownToTreefam.tab
@@ -1366,7 +1372,6 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     hgLoadSqlTab $tempDb bioCycPathway $kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab $tempDb bioCycMapDesc $kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
-#if 0  didn't do this  KEGG is built separately TODO TODO TODO
 # Do KEGG Pathways build (borrowing Fan Hus's strategy from hg19.txt)
     mkdir -p $dir/kegg
     cd $dir/kegg
@@ -1385,9 +1390,9 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     # to LocusLink IDs and to KEGG pathways.  First, make a table that maps 
     # LocusLink IDs to KEGG pathways from the downloaded data.  Store it temporarily
     # in the keggPathway table, overloading the schema.
-    cp /cluster/data/mm9/bed/ucsc.12/kegg/mmu_pathway.list .
+    cp /cluster/data/hg19/bed/ucsc.13/kegg/hsa_pathway.list .
 
-    cat mmu_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
+    cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
     hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql j.tmp
 
     # Next, use the temporary contents of the keggPathway table to join with
@@ -1405,7 +1410,6 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
    hgLoadSqlTab $tempDb knownToKeggEntrez $kent/src/hg/lib/knownToKeggEntrez.sql \
         knownToKeggEntrez.tab
     hgsql $tempDb -e "delete k from knownToKeggEntrez k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
-#endif
 
 # Make spMrna table (useful still?)
    cd $dir
@@ -1452,6 +1456,9 @@ ln -s $dir/kgTargetSeq${curVer}.2bit /gbdb/$db/targetDb/
 cut -f 1-10 ucscGenes.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
 hgLoadPsl $tempDb kgTargetAli.psl
 
+#
+# At this point we should save a list of the tables in tempDb!!!
+
 #if 0 # didn't do this first time through
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
@@ -1469,7 +1476,7 @@ hgsql -e "drop table chromInfo" $tempDb
 hgsql -e "drop table tableList" $tempDb
 
 # Swap in new tables, moving old tables to backup database.
-sudo ~kent/bin/swapInMysqlTempDb $tempDb $db ${db}Backup
+sudo ~kent/bin/swapInMysqlTempDb $tempDb $db ${db}BackupBraney
 
 # Update database links.
 sudo rm /var/lib/mysql/uniProt
@@ -1534,6 +1541,12 @@ synBlastp.csh $ratDb $db rgdGene2 knownGene
 #new number of unique query values: 8399
 #new number of unique target values 8530
 
+# need to generate multiz downloads
+#/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/knownCanonical.exonAA.fa.gz
+#/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/knownCanonical.exonNuc.fa.gz
+#/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/knownGene.exonAA.fa.gz
+#/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/knownGene.exonNuc.fa.gz
+#/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/md5sum.txt
 
 echo
 echo "see the bottom of the script for details about knownToWikipedia"

@@ -268,35 +268,7 @@ if (doAllTests || sameString(test, pgSnpKgDbToGpFx))
 				       arWords, pgSnpAsObj() };
     pg2SnpInfo.next = &kgInfo;
 
-    // intron +
-    dbToTabOut(&pg2SnpInfo, "stdout", "chr1", 161480984, 161481058, TRUE);
-
-    // upstream +
-    dbToTabOut(&pg2SnpInfo, "stdout", "chr1", 161473787, 161475284, TRUE);
-
-    // non-synonymous +
-    dbToTabOut(&pg2SnpInfo, "stdout", "chr1", 161476196, 161476223, TRUE);
-
-    // non-synonymous - chr22:17,264,528-17,264,606
-    dbToTabOut(&pg2SnpInfo, "stdout", "chr22", 17264528, 17264606, TRUE);
-
-    // synonymous - chr22:17,264,871-17,264,940
-    dbToTabOut(&pg2SnpInfo, "stdout", "chr22", 17264871, 17264940, TRUE);
-
-    // 3base substitution CDS + chr1:21,806,596-21,806,642 
-    dbToTabOut(&pg2SnpInfo, "stdout", "chr1", 21806596, 21806642, TRUE);
-
-    // 6base deletion CDS - chr1:150,199,045-150,199,062
-    dbToTabOut(&pg2SnpInfo, "stdout", "chr1", 150199045 , 150199062, TRUE);
-
-    // 2base substitution CDS - chr1:152,185,806-152,185,825
-    dbToTabOut(&pg2SnpInfo, "stdout", "chr1", 152185806 , 152185825, TRUE);
-
-    // 6base cross codon deletion + chr1:87,045,875-87,045,934
-    dbToTabOut(&pg2SnpInfo, "stdout", "chr1", 87045875,87045934, TRUE);
-
-    // 2base deletion CDS + chr3:40,085,609-40,085,638
-    dbToTabOut(&pg2SnpInfo, "stdout", "chr3",40085609,40085638, TRUE);
+    dbToTabOut(&pg2SnpInfo, "stdout", NULL, 0, 0, TRUE);
 
     /*
     FIXME
@@ -343,7 +315,9 @@ if (doAllTests || sameString(test, vepOut))
     sourcesFromInfoList(primaryInfo, TRUE, &primary, &gratorList);
     struct annoStreamer *gpVarSource = (struct annoStreamer *)gratorList;
     struct annoStreamer *snpSource = gpVarSource->next;
-    struct annoFormatter *vepOut = annoFormatVepNew("stdout", primary, gpVarSource, snpSource);
+    struct annoFormatter *vepOut = annoFormatVepNew("stdout", primary, "vepSamplePgSnp",
+						    gpVarSource, "UCSC Genes ...",
+						    snpSource, "just dbSNP 135");
     struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
     annoGratorQuerySetRegion(query, "chr1", 876900, 886920);
     annoGratorQueryExecute(query);
@@ -382,7 +356,9 @@ if (doAllTests || sameString(test, gpFx))
     struct annoStreamer *gpVarSource = (struct annoStreamer *)gratorList;
     struct annoStreamer *snpSource = gpVarSource->next;
     struct annoStreamer *dbNsfpSource = snpSource->next->next;
-    struct annoFormatter *vepOut = annoFormatVepNew("stdout", primary, gpVarSource, snpSource);
+    struct annoFormatter *vepOut = annoFormatVepNew("stdout", primary, "some more variants",
+						    gpVarSource, "UCSC Genes of course",
+						    snpSource, "now snp137.");
     annoFormatVepAddExtraItem(vepOut, dbNsfpSource, "SIFT", "SIFT score from dbNSFP", "");
     struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
     annoGratorQuerySetRegion(query, "chr19", 45405960, 45419476);
