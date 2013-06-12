@@ -2394,7 +2394,10 @@ char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
 boolean containerDivPrinted = FALSE;
 
 if (useWeb)
+    {
     webStart(cart, db, "Select Position");
+    db = cartString(cart, "db");
+    }
 
 for (table = hgp->tableList; table != NULL; table = table->next)
     {

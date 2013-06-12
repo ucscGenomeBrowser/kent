@@ -14,6 +14,7 @@ static char *_hgTrackUiName = "../cgi-bin/hgTrackUi"; /* Path to extended ui pro
 static char *_hgFileUiName = "../cgi-bin/hgFileUi";   /* Path to downloladable files CGI. */
 static char *_hgTextName = "../cgi-bin/hgText"; /* Path back to the text browser. */
 static char *_hgTablesName = "../cgi-bin/hgTables"; /* Path back to the table browser. */
+static char *_hgVaiName = "../cgi-bin/hgVai"; /* Path back to the variant annotation integrator. */
 static char *_hgCustomName = "../cgi-bin/hgCustom"; /* Path back to the custom tracks manager. */
 static char *_hgHubConnectName = "../cgi-bin/hgHubConnect"; /* Path back to the track hub manager. */
 static char *_hgSessionName = "../cgi-bin/hgSession";	/* Path to session manager. */
@@ -60,6 +61,12 @@ char *hgTablesName()
 /* Relative URL to table browser. */
 {
 return _hgTablesName;
+}
+
+char *hgVaiName()
+/* Relative URL to variant annotation integrator. */
+{
+return _hgVaiName;
 }
 
 char *hgCustomName()
