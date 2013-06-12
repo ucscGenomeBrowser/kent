@@ -13,7 +13,6 @@ printf(
  " sqlCheck type value\n"
  "\n"
  "where type can be \n"
- "  QL for Quoted Literal testing -- these should not allow quotes, backslash, control-Z, newline or carriage-return\n"
  "  ID for Identifier -- these should be alphanumeric, underscore, and period but not allow spaces, quotes, etc\n"
  "  ES for Escape the string using mysql -- this should allow all and escape all characters except 0 (which is useful for binary but not strings)\n"
  "  EE for Escape Every evil character -- this should append escaped all forbidden characters except 0 (which is useful for binary but not strings)\n"
@@ -30,11 +29,7 @@ if (argc != 3)
 char *theType = argv[1];
 char *value   = argv[2];
 
-if (sameString(theType,"QL"))
-    {
-    printf("SELECT * FROM TABLE WHERE FIELD = '%s';\n", sqlCheckQuotedLiteral(value));  // typically a quoted literal which should NOT need escaping
-    }
-else if (sameString(theType,"ID"))
+if (sameString(theType,"ID"))
     {
     printf("SELECT * FROM %s;\n", sqlCheckIdentifier(value));  // typically a table name or field name etc, is not quoted or escaped.
     }
