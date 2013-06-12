@@ -992,6 +992,7 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
     hgPos->chromStart = interval->start;
     hgPos->chromEnd = interval->end;
     hgPos->name = cloneString(term);
+    hgPos->browserName = cloneString(term);
     }
 
 return posList;

@@ -20344,6 +20344,34 @@ ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutE
     #   real    0m27.062s
     #   Read 677957 elements of size 4 from cosmic.bed
 
+#########################################################################
+# UPDATE COSMIC TRACK - v65 (DONE - 2013-06-10 - Hiram)
+    # take a look at:
+    # ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/
+    # to see what the new version file name is, then:
+
+    cd /hive/data/genomes/hg19/bed/cosmic
+
+    time ~/kent/src/hg/utils/automation/loadCosmic.pl -dryRun hg19 \
+ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v65_100613.csv.gz
+#	New length: 868893
+#	Old length: 677957
+#	Percent bed overlap with previous version: 77.53%
+#	Number of deleted IDs: 163277
+#	Number of added IDs: 354213
+
+#       real    0m42.584s
+
+    # that created files in: /hive/data/genomes/hg19/bed/cosmic/v65/
+
+    # then:
+    cd /hive/data/genomes/hg19/bed/cosmic/v65/
+    time ~/kent/src/hg/utils/automation/loadCosmic.pl hg19 \
+ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v65_100613.csv.gz \
+        > do.log 2>&1
+    #   real    0m39.941s
+    #   Read 868893 elements of size 4 from cosmic.bed
+
 ############################################################################
 # SwissProt Mutations track (spMut) (2013-05-09 - Max)
 cd ~/kent/src/hg/utils/uniprotMutations/

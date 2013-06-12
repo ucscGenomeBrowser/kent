@@ -75,6 +75,6 @@ dataType Cluster
 fileName wgEncodeRegTfbsClusteredV3.bed.gz
 md5sum 455daeadc569926daa9d45e292cc288d
 project wgEncode
-tableName wgEncodeRegTfbsClusteredV2
+tableName wgEncodeRegTfbsClusteredV3
 
-# MAGIC: 1877008465
+# MAGIC: 1877008467
