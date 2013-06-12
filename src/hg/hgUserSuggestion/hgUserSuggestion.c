@@ -309,16 +309,17 @@ char *remoteAddr=getenv("REMOTE_ADDR");
 char brwName[256];
 char returnAddr[256];
 char signature[256];
+char userEmailAddr[256];
 safecpy(brwName,sizeof(brwName), browserName());
 safecpy(returnAddr,sizeof(returnAddr), mailReturnAddr());
 safecpy(signature,sizeof(signature), mailSignature());
-
+safecpy(userEmailAddr, sizeof(userEmailAddr),emailAddr);
 safef(subject, sizeof(subject),"Thank you for your suggestion to the %s", brwName);
 safef(msg, sizeof(msg),
     "  Someone (probably you, from IP address %s) submitted a suggestion to the %s regarding %s.\n\n  The suggestion has been assigned a reference number of \"%s\". If you wish to follow up on the progress of this suggestion with browser staff, you may contact us at %s. Please include the reference number of your suggestion in the email.\n\nThank you for your input,\n%s\n\nYour suggestion summary:\n%s\n\nYour suggestion details:\n%s",
 remoteAddr, brwName, summary, suggestID, returnAddr, signature, summary, details);
 int result;
-result = mailViaPipe(emailAddr, subject, msg, returnAddr);
+result = mailViaPipe(userEmailAddr, subject, msg, returnAddr);
 }
 
 void askForSuggest(char *organism, char *db)
