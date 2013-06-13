@@ -254,7 +254,7 @@ struct sqlResult *sr;
 char **row;
 struct ccdsInfo *ccdsInfos = NULL;
 
-sqlSafef(query, sizeof(query), "select * from ccdsInfo where ccds = \"%s\"%s",
+sqlSafef(query, sizeof(query), "select * from ccdsInfo where ccds = '%s'%-s",
       ccdsId, getSrcDbWhere(srcDb));
 sr = sqlGetResult(conn, query);
 
@@ -275,10 +275,10 @@ char **row;
 struct ccdsInfo *ccdsInfo = NULL;
 
 if (genbankIsRefSeqAcc(mrnaAcc) && (strchr(mrnaAcc, '.') == NULL))
-    sqlSafef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc like \"%s.%%\"",
+    sqlSafef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc like '%s.%%'",
           mrnaAcc);
 else
-    sqlSafef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc = \"%s\"",
+    sqlSafef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc = '%s'",
           mrnaAcc);
 sr = sqlGetResult(conn, query);
 

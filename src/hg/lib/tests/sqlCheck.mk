@@ -24,10 +24,6 @@ simpleTest: mkout
 	diff ${OUT}/sqlCheck.3 ${EXP}/sqlCheck.3
 	-${TESTER} ID "'myTable" 2>&1 | grep -v '0x' >& ${OUT}/sqlCheck.4
 	diff ${OUT}/sqlCheck.4 ${EXP}/sqlCheck.4
-	${TESTER} QL 'my Table' >& ${OUT}/sqlCheck.5
-	diff ${OUT}/sqlCheck.5 ${EXP}/sqlCheck.5
-	-${TESTER} QL 'my "Table' 2>&1 | grep -v '0x' >& ${OUT}/sqlCheck.6
-	diff ${OUT}/sqlCheck.6 ${EXP}/sqlCheck.6
 	${TESTER} ES 'my "Table' >& ${OUT}/sqlCheck.7
 	diff ${OUT}/sqlCheck.7 ${EXP}/sqlCheck.7
 	${TESTER} EE "" >& ${OUT}/sqlCheck.8

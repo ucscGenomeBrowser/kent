@@ -467,7 +467,7 @@ void selectDbNsfp(struct slName *dbNsfpTables)
 if (dbNsfpTables == NULL)
     return;
 startCollapsibleSection("dbNsfp", "Database of Non-synonymous Functional Predictions (dbNSFP)",
-			FALSE);
+			TRUE);
 printf("<A HREF='https://sites.google.com/site/jpopgen/dbNSFP' TARGET=_BLANK>dbNSFP</A> "
        "(<A HREF='http://onlinelibrary.wiley.com/doi/10.1002/humu.21517/abstract' "
        "TARGET=_BLANK>Liu <em>et al.</em> 2011</A>) "
@@ -550,7 +550,7 @@ void selectDbSnp(boolean gotSnp)
 {
 if (!gotSnp)
     return;
-startCollapsibleSection("dbSnp", "Known variation", FALSE);
+startCollapsibleSection("dbSnp", "Known variation", TRUE);
 cartMakeCheckBox(cart, "hgva_rsId", TRUE);
 printf("Include <A HREF='http://www.ncbi.nlm.nih.gov/projects/SNP/' TARGET=_BLANK>dbSNP</A> "
        "rs# ID if one exists<BR>\n");
@@ -639,7 +639,7 @@ void selectFiltersFunc()
 {
 startCollapsibleSection("filtersFunc", "Functional role", FALSE);
 printf("Include variants annotated as<BR>\n");
-cartMakeCheckBox(cart, "hgva_include_intergenic", FALSE);
+cartMakeCheckBox(cart, "hgva_include_intergenic", TRUE);
 printf("intergenic<BR>\n");
 cartMakeCheckBox(cart, "hgva_include_upDownstream", TRUE);
 printf("upstream/downstream of gene<BR>\n");

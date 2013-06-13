@@ -2804,14 +2804,6 @@ for(i=0;i<256;++i)
     disAllowed[i] = 1;
 }
 
-static void sqlCheckAllowAllChars(char disAllowed[256])
-/* Allow all chars by setting to 0 */
-{
-int i;
-for(i=0;i<256;++i)
-    disAllowed[i] = 0;
-}
-
 static void sqlCheckAllowLowerChars(char allowed[256])
 /* Allow lower case chars by setting to 0 */
 {
@@ -2842,12 +2834,6 @@ static void sqlCheckAllowChar(unsigned char c, char allowed[256])
 allowed[c] = 0;
 }
 
-static void sqlCheckDisallowChar(unsigned char c, char allowed[256])
-/* Allow a char by setting to 0 */
-{
-allowed[c] = 1;
-}
-
 static void sqlCheckAllowAlphaChars(char allowed[256])
 /* Allow all chars by setting to 0 */
 {
@@ -2862,82 +2848,8 @@ sqlCheckAllowAlphaChars(allowed);
 sqlCheckAllowDigitChars(allowed);
 }
 
-static boolean sqlCheckNeedsEscape(char *s)
-/* Check if string s needs escaping. Usually it doesn't need it. */
-{
-static boolean init = FALSE;
-static char disallowed[256];
-if (!init)
-    {
-    sqlCheckAllowAllChars(disallowed);
-    sqlCheckDisallowChar('\''  , disallowed);  // single-quote
-    sqlCheckDisallowChar('"'   , disallowed);  // double-quote
-    sqlCheckDisallowChar('\\'  , disallowed);  // back-slash
-    sqlCheckDisallowChar('\r'  , disallowed);  // carriage-return
-    sqlCheckDisallowChar('\n'  , disallowed);  // newline or linefeed
-    sqlCheckDisallowChar('\x1a', disallowed);  // ctrl-Z or 26 dec or 1a hex.
-    // technically, 0 can be escaped but we are doing strings and not general binary data here.
-    init = TRUE;
-    }
-if (sqlCheckAllowedChars(s, disallowed))
-    {
-    return FALSE;
-    }
-return TRUE;
-}
 
-// TODO This is probably not needed
-char *sqlEscapeIfNeeded(char *s, char **pS)
-/* Escape if needed.  if *pS is not null, free it.  */
-{
-char *ret = NULL;
-if (sqlCheckNeedsEscape(s))
-    {
-    ret = sqlEscapeString(s);
-    if (pS)
-	*pS = ret;
-    }
-else
-    {
-    if (pS)
-	*pS = NULL;
-    ret = s;
-    }
-return ret;
-}
-
-char *sqlCheckQuotedLiteral(char *s)
-/* Check that none of the chars needing to be escaped are in the string s */
-{
-if (sqlCheckNeedsEscape(s))
-    {
-    sqlCheckError("Forbidden characters like quotes, newlines, or backslashes found in quoted string literal %s", s);
-    }
-return s;
-}
-
-char *sqlCheckAlphaNum(char *word)
-/* Check that only valid alpha numeric characters are used in word */
-{
-static boolean init = FALSE;
-static char allowed[256];
-if (!init)
-    {
-    sqlCheckDisallowAllChars(allowed);
-    sqlCheckAllowAlphaNumChars(allowed);
-    init = TRUE;
-    }
-if (!sqlCheckAllowedChars(word, allowed))
-    {
-    sqlCheckError("Illegal character found in %s", word);
-    }
-return word;
-}
-
-// TODO as much as I liked this function sqlCheckIdentifiersList,
-// it may not be used much, so see if you can remove it
-// and just add a little workaound for the remaining place(s) that use it.
-// This one is probably here to stay.
+/* Currently used 10 times in the code via define sqlChkIl. */
 char *sqlCheckIdentifiersList(char *identifiers)
 /* Check that only valid identifier characters are used in a comma-separated list */
 {
@@ -3013,7 +2925,7 @@ if (needText || spaceOk)
 return identifiers;
 }
 
-static char *sqlCheckIdentifierKind(char *identifier, char *kind)
+char *sqlCheckIdentifier(char *identifier)
 /* Check that only valid identifier characters are used */
 {
 static boolean init = FALSE;
@@ -3029,46 +2941,9 @@ if (!init)
     }
 if (!sqlCheckAllowedChars(identifier, allowed))
     {
-    sqlCheckError("Illegal character found in %s %s", kind, identifier);
+    sqlCheckError("Illegal character found in identifier %s", identifier);
     }
 return identifier;
-}
-
-char *sqlCheckIdentifier(char *identifier)
-/* Check that only valid identifier characters are used */
-{
-return sqlCheckIdentifierKind(identifier, "identifier");
-}
-
-// TODO not sure this one is really needed. Regular identifier check works well enough.
-// included this one originally in case it was used alot and needed to be a 
-// little different from identifier check.
-char *sqlCheckTableName(char *table)
-/* Check that only valid table name characters are used */
-{
-return sqlCheckIdentifierKind(table, "table");
-}
-
-// TODO not sure we really need this function. could probably just use sqlCheckIdentifier instead.
-char *sqlCheckCgiEncodedName(char *name)
-/* Check that only valid cgi-encoded characters are used */
-{
-static boolean init = FALSE;
-static char allowed[256];
-if (!init)
-    {
-    sqlCheckDisallowAllChars(allowed);
-    sqlCheckAllowAlphaNumChars(allowed);
-    sqlCheckAllowChar('.', allowed);
-    sqlCheckAllowChar('_', allowed);
-    sqlCheckAllowChar('%', allowed);
-    init = TRUE;
-    }
-if (!sqlCheckAllowedChars(name, allowed))
-    {
-    sqlCheckError("Illegal character found in table name %s", name);
-    }
-return name;
 }
 
 
@@ -3345,7 +3220,8 @@ return sz;
 int sqlSafef(char* buffer, int bufSize, char *format, ...)
 /* Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. 
- * Scans string parameters for illegal sql chars. */
+ * Scans unquoted string parameters for illegal literal sql chars.
+ * Escapes quoted string parameters. */
 {
 int sz;
 va_list args;
@@ -3359,7 +3235,7 @@ return sz;
 int vaSqlSafefFrag(char* buffer, int bufSize, char *format, va_list args)
 /* Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. 
- * This version does not add the tag since it is assumed to be just a fragment of
+ * This version does not add the NOSQLINJ tag since it is assumed to be just a fragment of
  * the entire sql string. */
 {
 int sz = vaSqlSafefNoAbort(buffer, bufSize, FALSE, format, args);
@@ -3375,7 +3251,7 @@ int sqlSafefFrag(char* buffer, int bufSize, char *format, ...)
 /* Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. 
  * Scans string parameters for illegal sql chars. 
- * This version does not add the tag since it is assumed to be just a fragment of
+ * This version does not add the NOSQLINJ tag since it is assumed to be just a fragment of
  * the entire sql string. */
 {
 int sz;
@@ -3432,7 +3308,7 @@ sqlDyStringVaPrintfExt(ds, FALSE, format, args);
 }
 
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
-/*  Printf to end of dyString after scanning string parameters for illegal sql chars. */
+/* Printf to end of dyString after scanning string parameters for illegal sql chars. */
 {
 va_list args;
 va_start(args, format);
@@ -3441,13 +3317,15 @@ va_end(args);
 }
 
 void sqlDyStringVaPrintfFrag(struct dyString *ds, char *format, va_list args)
-/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars. NOSLQINJ tag is not added. */
+/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars. 
+ * NOSLQINJ tag is not added. */
 {
 sqlDyStringVaPrintfExt(ds, TRUE, format, args);
 }
 
 void sqlDyStringPrintfFrag(struct dyString *ds, char *format, ...)
-/*  Printf to end of dyString after scanning string parameters for illegal sql chars. NOSLQINJ tag is not added. */
+/* Printf to end of dyString after scanning string parameters for illegal sql chars. 
+ * NOSLQINJ tag is not added. */
 {
 va_list args;
 va_start(args, format);
@@ -3465,15 +3343,6 @@ if (ds->stringSize == 0)
 dyStringAppendN(ds, string, strlen(string));
 }
 
-
-// TODO probably do not need this one now that we have sqlDyStringPrintfFrag
-char *sqlDyStringFrag(struct dyString *ds)
-/* If ds is only a sql fragment, do not need leading NOSQLINJ tag */
-{
-if (startsWith("NOSQLINJ ", ds->string))
-    return ds->string + strlen("NOSQLINJ ");
-return ds->string;
-}
 
 struct dyString *sqlDyStringCreate(char *format, ...)
 /* Create a dyString with a printf style initial content 

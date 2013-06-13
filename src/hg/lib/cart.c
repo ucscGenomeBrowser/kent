@@ -1797,7 +1797,7 @@ if (hIsGsidServer())
     while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
         {
         sqlSafef(query, sizeof(query),
-	      "select id from %s where id like '%%%s'", msaTable, sqlCheckAlphaNum(words[0]));
+	      "select id from %s where id like '%%%s'", msaTable, words[0]);
 	sr = sqlGetResult(conn, query);
 	if (sqlNextRow(sr) != NULL)
             {

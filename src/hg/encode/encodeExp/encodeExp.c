@@ -134,7 +134,7 @@ char *accession;
 char *key;
 
 verbose(1, "Restoring experiments from file \'%s\' to table \'%s\'\n", file, table);
-if (sqlRowCount(connExp, sqlCheckTableName(table)) != 0)
+if (sqlRowCount(connExp, sqlCheckIdentifier(table)) != 0)
     errAbort("ERROR: table for restore must exist and be empty");
 
 while ((ra = raNextRecord(lf)) != NULL)

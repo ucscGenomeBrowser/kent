@@ -424,7 +424,6 @@ writeRefSeqSummaryHtml(conn, ccdsId, rsCcds);
 htmlHorizontalLine();
 
 printTrackHtml(tdb);
-cartWebEnd();
 ccdsInfoFreeList(&rsCcds);
 ccdsInfoFreeList(&vegaCcds);
 ccdsInfoFreeList(&ensCcds);

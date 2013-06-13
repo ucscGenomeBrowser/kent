@@ -82,6 +82,58 @@ strftime(nowBuf, sizeof nowBuf, "%Y-%m-%d %H:%M:%S", theTime);
 return cloneString(nowBuf);
 }
 
+int spc_email_isvalid(const char *address) {
+/* Check the format of an email address syntactically. Return 1 if
+ * valid, else 0 */
+/* Code copied from the book: 
+"Secure Programming Cookbook for C and C++"
+By: John Viega; Matt Messier
+Publisher: O'Reilly Media, Inc.
+Pub. Date: July 14, 2003
+Print ISBN-13: 978-0-596-00394-4
+*/
+int  count = 0;
+const char *c, *domain;
+static char *rfc822_specials = "()<>@,;:\\\"[]";
+
+/* first we validate the name portion (name@domain) */
+for (c = address;  *c;  c++)
+    {
+    if (*c == '\"' && (c == address || *(c - 1) == '.' || *(c - 1) ==  '\"'))
+        {
+        while (*++c)
+            {
+            if (*c == '\"') break;
+            if (*c == '\\' && (*++c == ' ')) continue;
+            if (*c <= ' ' || *c >= 127) return 0;
+            }
+         if (!*c++) return 0;
+         if (*c == '@') break;
+         if (*c != '.') return 0;
+         continue;
+        }
+    if (*c == '@') break;
+    if (*c <= ' ' || *c >= 127) return 0;
+    if (strchr(rfc822_specials, *c)) return 0;
+    }
+if (c == address || *(c - 1) == '.') return 0;
+
+/* next we validate the domain portion (name@domain) */
+if (!*(domain = ++c)) return 0;
+do
+    {
+    if (*c == '.')
+        {
+        if (c == domain || *(c - 1) == '.') return 0;
+        count++;
+        }
+    if (*c <= ' ' || *c >= 127) return 0;
+    if (strchr(rfc822_specials, *c)) return 0;
+    } while (*++c);
+
+return (count >= 1);
+}
+
 
 /* javascript functions */
 void printMainForm()
@@ -91,16 +143,18 @@ hPrintf(
     "     <FORM ACTION=\"../cgi-bin/hgUserSuggestion?do.suggestSendMail=1\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\" onLoad=\"document.forms.mainForm.name.focus()\">\n");
 hPrintf(
     "<H2>User Suggestion Form</H2>\n"
-    "<P>If you have ideas about how we can improve the value of the Genome Browser to your research,  we'd like to hear from you. Please provide a concise description below. A copy of the suggestion will be sent to your email address along with a reference number. You may follow up on the status of your request at any time by sending email to %s and quoting the reference number.</P>",
-    mailReturnAddr());    
+    "<P>If you have ideas about how we can improve the value of the Genome Browser to your research, "
+    "we'd like to hear from you. Please provide a concise description below. "
+    "A copy of the suggestion will be sent to your email address along with a reference number. "
+    "You may follow up on the status of your request at any time by <a href=\"../contacts.html#followup\">contacting us</a> and quoting the reference number.</P>");
 hPrintf("<P>Please note: this form is not the proper place to submit questions regarding browser use or bug reports. Use the links on our contact page instead.</P>");
 hPrintf("<HR><BR>"); 
 hPrintf(
     "      <div id=\"suggest\">  \n"
-    "       <label for=\"name\">Your Name:</label><input type=\"text\" name=\"suggestName\" id=\"name\" size=\"50\" /><BR>\n"
-    "       <label for=\"email\">Your Email:</label><input type=\"text\" name=\"suggestEmail\" id=\"email\" size=\"50\" /><BR>   \n"
+    "       <label for=\"name\">Your Name:</label><input type=\"text\" name=\"suggestName\" id=\"name\" size=\"50\" /><BR><BR>\n"
+    "       <label for=\"email\">Your Email:</label><input type=\"text\" name=\"suggestEmail\" id=\"email\" size=\"50\" /><BR><BR>\n"
     "       <label for=\"confirmEmail\">Re-enter Your Email:</label><input type=\"text\" \n"
-    "          name=\"suggestCfmEmail\" id=\"cfmemail\" size=\"50\" /><BR>   \n");
+    "          name=\"suggestCfmEmail\" id=\"cfmemail\" size=\"50\" /><BR><BR>\n");
 hPrintf(
     "       <label for=\"category\">Category:</label><select name=\"suggestCategory\" id=\"category\">\n"
     "         <option selected>Tracks</option> \n"
@@ -108,10 +162,10 @@ hPrintf(
     "         <option>Browser Tools</option>\n"
     "         <option>Command-line Utilities</option>\n"
     "         <option>Others</option>\n"
-    "         </select><BR>\n");
+    "         </select><BR><BR>\n");
 hPrintf(
-    "       <label for=\"summary\">Summary:</label><input type=\"text\" name=\"suggestSummary\" id=\"summary\" size=\"50\" /><BR>\n"
-    "       <label for=\"details\">Details:</label><BR><textarea name=\"suggestDetails\" id=\"details\" cols=\"100\" rows=\"10\"></textarea><BR>  \n"
+    "       <label for=\"summary\">Summary:</label><input type=\"text\" name=\"suggestSummary\" id=\"summary\" size=\"50\" /><BR><BR>\n"
+    "       <label for=\"details\">Details:</label><BR><textarea name=\"suggestDetails\" id=\"details\" cols=\"100\" rows=\"10\"></textarea><BR><BR>\n"
     "     </div>\n");
 hPrintf(
     "         <p>\n"
@@ -264,19 +318,33 @@ hPrintf(
     "<h2>Thank you for your suggestion!</h2>");
 hPrintf(
     "<p>"
-    "Thank you for your suggestion regarding %s. <BR>"
-    "You may follow up on the status of your request at any time by sending email to %s "
-    "and quoting your reference number:<BR><BR>%s<BR><BR>"
+    "You may follow up on the status of your request at any time by "
+    "<a href=\"../contacts.html#followup\">contacting us</a> and quoting your reference number:<BR><BR>%s<BR><BR>"
     "A copy of this information has also been sent to you at %s.<BR></p>",
-    summary, adminAddr, refID, userAddr); 
+     refID, userAddr); 
 hPrintf(
     "<p><a href=\"hgUserSuggestion\">Click here if you wish to make additional suggestions.</a></p>");
 hPrintf(
     "<p>"
-    "Your suggestion:<BR>"
-    "%s</p>",
-    details);
+    "<B>Your suggestion summary:</B><BR>"
+    "%s<BR>"
+    "<B>Your suggestion details:</B><BR>"
+    "<pre>%s</pre>"
+    "</p>",
+    summary, details);
 } 
+
+void printInvalidEmailAddr(char *invalidEmailAddr)
+/* display suggestion confirm page */
+{
+hPrintf(
+    "<h2>Invalid email address format.</h2>");
+hPrintf(
+    "<p>"
+    "The email address \"%s\" is invalid. Please correct it and "
+    "<a href=\"javascript: history.go(-1)\">submit</a> again.</p>",
+    invalidEmailAddr);
+}
 
 void sendSuggestionBack(char *sName, char *sEmail, char *sCategory, char *sSummary, char *sDetails, char *suggestID)
 /* send back the suggestion */
@@ -305,16 +373,17 @@ char *remoteAddr=getenv("REMOTE_ADDR");
 char brwName[256];
 char returnAddr[256];
 char signature[256];
+char userEmailAddr[256];
 safecpy(brwName,sizeof(brwName), browserName());
 safecpy(returnAddr,sizeof(returnAddr), mailReturnAddr());
 safecpy(signature,sizeof(signature), mailSignature());
-
+safecpy(userEmailAddr, sizeof(userEmailAddr),emailAddr);
 safef(subject, sizeof(subject),"Thank you for your suggestion to the %s", brwName);
 safef(msg, sizeof(msg),
-    "  Someone (probably you, from IP address %s) submitted a suggestion to the %s regarding %s.\n\n  The suggestion has been assigned a reference number of \"%s\". If you wish to follow up on the progress of this suggestion with browser staff, you may contact us at %s. Please include the reference number of your suggestion in the email.\n\nThank you for your input,\n%s\n\nYour suggestion:\n\n  %s",
-remoteAddr, brwName, summary, suggestID, returnAddr, signature, details);
+    "  Someone (probably you, from IP address %s) submitted a suggestion to the %s regarding %s.\n\n  The suggestion has been assigned a reference number of \"%s\". If you wish to follow up on the progress of this suggestion with browser staff, you may contact us at %s. Please include the reference number of your suggestion in the email.\n\nThank you for your input,\n%s\n\nYour suggestion summary:\n%s\n\nYour suggestion details:\n%s",
+remoteAddr, brwName, summary, suggestID, returnAddr, signature, summary, details);
 int result;
-result = mailViaPipe(emailAddr, subject, msg, returnAddr);
+result = mailViaPipe(userEmailAddr, subject, msg, returnAddr);
 }
 
 void askForSuggest(char *organism, char *db)
@@ -344,12 +413,19 @@ char suggestID[256];
 safef(suggestID, sizeof(suggestID),"%s %s", sEmail, now());
 char subject[256];
 safef(subject, sizeof(subject),"%s %s", filter, suggestID);
-/* send back the suggestion */
-sendSuggestionBack(sName, sEmail, sCategory, sSummary, sDetails, suggestID);
-/* send confirmation mail to user */
-sendConfirmMail(sEmail,suggestID, sSummary, sDetails);
-/* display confirmation page */
-printSuggestionConfirmed(sSummary, suggestID, sEmail, mailReturnAddr(), sDetails);
+/* Send back suggestion only with valid user email address */
+if (spc_email_isvalid(sEmail) != 0)
+{
+    /* send back the suggestion */
+    sendSuggestionBack(sName, sEmail, sCategory, sSummary, sDetails, suggestID);
+    /* send confirmation mail to user */
+    sendConfirmMail(sEmail,suggestID, sSummary, sDetails);
+    /* display confirmation page */
+    printSuggestionConfirmed(sSummary, suggestID, sEmail, mailReturnAddr(), sDetails);
+} else {
+    /* save all field value in cart */
+     printInvalidEmailAddr(sEmail);
+}
 cartRemove(cart, "do.suggestSendMail");
 }
 
