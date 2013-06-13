@@ -410,11 +410,12 @@ if (cluster != NULL)
 	}
     printf("<B>Factor:</B> %s<BR>\n", factorLink);
     printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
-    if(motif != NULL && hits != NULL)
+    if (motif != NULL && hits != NULL)
         {
         struct bed6FloatScore *hit = NULL;
         int i;
         seqs = needMem(sizeof(struct dnaSeq *) * slCount(hits));
+        char posLink[1024];
         for (hit = hits, i = 0; hit != NULL; hit = hit->next, i++)
             {
             char query[256];
@@ -438,7 +439,14 @@ if (cluster != NULL)
             if(hit->strand[0] == '-')
                 reverseComplement(seq->dna, seq->size);
             seqs[i] = seq;
-            printf("<B>Motif Score #%d:</B>  %.2f (max: %.2f)<BR>\n", i + 1, hit->score, maxScore);
+
+            // TODO: move to hgc.c (with other pos printers)
+            safef(posLink, sizeof(posLink),"<a href=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a>",
+                    hgTracksPathAndSettings(), database, 
+                        cluster->chrom, hit->chromStart+1, hit->chromEnd,
+                        cluster->chrom, hit->chromStart+1, hit->chromEnd);
+            printf("<b>Motif Score #%d:</b>  %.2f (max: %.2f) at %s<br>", i + 1, 
+                        hit->score, maxScore, posLink);
             }
         }
     printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
