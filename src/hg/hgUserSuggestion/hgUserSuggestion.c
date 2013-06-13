@@ -74,7 +74,7 @@ return cloneString(cfgOption(CFG_SUGGEST_BROWSER_NAME));
 static char *now()
 /* Return a mysql-formatted time like "2008-05-19 15:33:34". */
 {
-char nowBuf[256];
+char nowBuf[512];
 time_t curtime;
 curtime = time (NULL); 
 struct tm *theTime = localtime(&curtime);
@@ -151,12 +151,12 @@ hPrintf("<P>Please note: this form is not the proper place to submit questions r
 hPrintf("<HR><BR>"); 
 hPrintf(
     "      <div id=\"suggest\">  \n"
-    "       <label for=\"name\">Your Name:</label><input type=\"text\" name=\"suggestName\" id=\"name\" size=\"50\"style=\"margin-left:20px\" /><BR><BR>\n"
-    "       <label for=\"email\">Your Email:</label><input type=\"text\" name=\"suggestEmail\" id=\"email\" size=\"50\" style=\"margin-left:70px\"/><BR><BR>\n"
+    "       <label for=\"name\">Your Name:</label><input type=\"text\" name=\"suggestName\" id=\"name\" size=\"50\"style=\"margin-left:20px\" maxlength=\"256\"/><BR><BR>\n"
+    "       <label for=\"email\">Your Email:</label><input type=\"text\" name=\"suggestEmail\" id=\"email\" size=\"50\" style=\"margin-left:70px\" maxlength=\"254\"/><BR><BR>\n"
     "       <label for=\"confirmEmail\">Re-enter Your Email:</label><input type=\"text\" \n"
-    "          name=\"suggestCfmEmail\" id=\"cfmemail\" size=\"50\" style=\"margin-left:20px\"/><BR><BR>\n");
+    "          name=\"suggestCfmEmail\" id=\"cfmemail\" size=\"50\" style=\"margin-left:20px\" maxlength=\"254\"/><BR><BR>\n");
 hPrintf(
-    "       <label for=\"category\">Category:</label><select name=\"suggestCategory\" id=\"category\" style=\"margin-left:20px\">\n"
+    "       <label for=\"category\">Category:</label><select name=\"suggestCategory\" id=\"category\" style=\"margin-left:20px\" maxlength=\"256\">\n"
     "         <option selected>Tracks</option> \n"
     "         <option>Genome Assemblies</option>\n"
     "         <option>Browser Tools</option>\n"
@@ -164,8 +164,8 @@ hPrintf(
     "         <option>Others</option>\n"
     "         </select><BR><BR>\n");
 hPrintf(
-    "       <label for=\"summary\">Summary:</label><input type=\"text\" name=\"suggestSummary\" id=\"summary\" size=\"74\" style=\"margin-left:20px\"/><BR><BR>\n"
-    "       <label for=\"details\">Details:</label><BR><textarea name=\"suggestDetails\" id=\"details\" cols=\"100\" rows=\"15\"></textarea><BR><BR>\n"
+    "       <label for=\"summary\">Summary:</label><input type=\"text\" name=\"suggestSummary\" id=\"summary\" size=\"74\" style=\"margin-left:20px\" maxlength=\"256\"/><BR><BR>\n"
+    "       <label for=\"details\">Details:</label><BR><textarea name=\"suggestDetails\" id=\"details\" cols=\"100\" rows=\"15\" maxlength=\"4096\"></textarea><BR><BR>\n"
     "     </div>\n");
 hPrintf(
     "         <p>\n"
@@ -346,8 +346,8 @@ void sendSuggestionBack(char *sName, char *sEmail, char *sCategory, char *sSumma
 char *mailTo = mailToAddr();
 char *mailFrom=mailFromAddr();
 char *filter=filterKeyword();
-char subject[256];
-char msg[4096]; /* need to make larger */
+char subject[512];
+char msg[4608]; /* need to make larger */
 safef(msg, sizeof(msg),
     "SuggestionID:: %s\nUserName:: %s\nUserEmail:: %s\nCategory:: %s\nSummary:: %s\n\n\nDetails::\n%s",
     suggestID, sName, sEmail, sCategory, sSummary, sDetails);
@@ -360,13 +360,13 @@ result = mailViaPipe(mailTo, subject, msg, mailFrom);
 void sendConfirmMail(char *emailAddr, char *suggestID, char *summary, char *details)
 /* send user suggestion confirm mail */
 {
-char subject[256];
-char msg[4096];
+char subject[512];
+char msg[4608];
 char *remoteAddr=getenv("REMOTE_ADDR");
-char brwName[256];
-char returnAddr[256];
-char signature[256];
-char userEmailAddr[256];
+char brwName[512];
+char returnAddr[512];
+char signature[512];
+char userEmailAddr[512];
 safecpy(brwName,sizeof(brwName), browserName());
 safecpy(returnAddr,sizeof(returnAddr), mailReturnAddr());
 safecpy(signature,sizeof(signature), mailSignature());
@@ -402,9 +402,9 @@ char *sCategory=cartUsualString(cart,"suggestCategory","");
 char *sSummary=cartUsualString(cart,"suggestSummary","");
 char *sDetails=cartUsualString(cart,"suggestDetails","");
 
-char suggestID[256];
+char suggestID[512];
 safef(suggestID, sizeof(suggestID),"%s %s", sEmail, now());
-char subject[256];
+char subject[512];
 safef(subject, sizeof(subject),"%s %s", filter, suggestID);
 /* Send back suggestion only with valid user email address */
 if (spc_email_isvalid(sEmail) != 0)
