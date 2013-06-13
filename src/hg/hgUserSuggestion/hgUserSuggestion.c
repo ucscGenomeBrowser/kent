@@ -224,15 +224,8 @@ hPrintf(
     "      theform.suggestSummary.focus() ;\n"
     "      return false;\n"
     "      }          \n"
-    "    var z=theform.suggestDetails.value;\n"
-    "    if (z==null || z==\"\")\n"
-    "      {\n"
-    "      alert(\"Details field must be filled out\");\n"
-    "      theform.suggestDetails.focus() ;\n"
-    "      return false;\n"
-    "      }\n"
     "    return true; \n"
-    "    }\n\n");
+    "    }");
 hPrintf(
     "    function validateMailAddr(x)\n"
     "    {\n"
