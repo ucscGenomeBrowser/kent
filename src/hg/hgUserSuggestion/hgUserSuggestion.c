@@ -196,6 +196,13 @@ hPrintf(
     "      return false;\n"
     "      }\n");
 hPrintf(
+    "    var y=theform.suggestEmail.value;\n"
+    "    if (y==null || y==\"\")\n"
+    "      {\n"
+    "      alert(\"Email field must be filled out\");\n"
+    "      theform.suggestEmail.focus() ;\n"
+    "      return false;\n"
+    "      }\n"
     "    if (!validateMailAddr(theform.suggestEmail.value))\n"
     "      {\n"
     "      alert(\"Not a valid e-mail address\");\n"
