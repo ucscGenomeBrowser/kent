@@ -151,12 +151,12 @@ hPrintf("<P>Please note: this form is not the proper place to submit questions r
 hPrintf("<HR><BR>"); 
 hPrintf(
     "      <div id=\"suggest\">  \n"
-    "       <label for=\"name\">Your Name:</label><input type=\"text\" name=\"suggestName\" id=\"name\" size=\"50\" /><BR><BR>\n"
-    "       <label for=\"email\">Your Email:</label><input type=\"text\" name=\"suggestEmail\" id=\"email\" size=\"50\" /><BR><BR>\n"
+    "       <label for=\"name\">Your Name:</label><input type=\"text\" name=\"suggestName\" id=\"name\" size=\"50\"style=\"margin-left:20px\" /><BR><BR>\n"
+    "       <label for=\"email\">Your Email:</label><input type=\"text\" name=\"suggestEmail\" id=\"email\" size=\"50\" style=\"margin-left:70px\"/><BR><BR>\n"
     "       <label for=\"confirmEmail\">Re-enter Your Email:</label><input type=\"text\" \n"
-    "          name=\"suggestCfmEmail\" id=\"cfmemail\" size=\"50\" /><BR><BR>\n");
+    "          name=\"suggestCfmEmail\" id=\"cfmemail\" size=\"50\" style=\"margin-left:20px\"/><BR><BR>\n");
 hPrintf(
-    "       <label for=\"category\">Category:</label><select name=\"suggestCategory\" id=\"category\">\n"
+    "       <label for=\"category\">Category:</label><select name=\"suggestCategory\" id=\"category\" style=\"margin-left:20px\">\n"
     "         <option selected>Tracks</option> \n"
     "         <option>Genome Assemblies</option>\n"
     "         <option>Browser Tools</option>\n"
@@ -164,8 +164,8 @@ hPrintf(
     "         <option>Others</option>\n"
     "         </select><BR><BR>\n");
 hPrintf(
-    "       <label for=\"summary\">Summary:</label><input type=\"text\" name=\"suggestSummary\" id=\"summary\" size=\"50\" /><BR><BR>\n"
-    "       <label for=\"details\">Details:</label><BR><textarea name=\"suggestDetails\" id=\"details\" cols=\"100\" rows=\"10\"></textarea><BR><BR>\n"
+    "       <label for=\"summary\">Summary:</label><input type=\"text\" name=\"suggestSummary\" id=\"summary\" size=\"74\" style=\"margin-left:20px\"/><BR><BR>\n"
+    "       <label for=\"details\">Details:</label><BR><textarea name=\"suggestDetails\" id=\"details\" cols=\"100\" rows=\"15\"></textarea><BR><BR>\n"
     "     </div>\n");
 hPrintf(
     "         <p>\n"
@@ -380,7 +380,7 @@ safecpy(signature,sizeof(signature), mailSignature());
 safecpy(userEmailAddr, sizeof(userEmailAddr),emailAddr);
 safef(subject, sizeof(subject),"Thank you for your suggestion to the %s", brwName);
 safef(msg, sizeof(msg),
-    "  Someone (probably you, from IP address %s) submitted a suggestion to the %s regarding %s.\n\n  The suggestion has been assigned a reference number of \"%s\". If you wish to follow up on the progress of this suggestion with browser staff, you may contact us at %s. Please include the reference number of your suggestion in the email.\n\nThank you for your input,\n%s\n\nYour suggestion summary:\n%s\n\nYour suggestion details:\n%s",
+    "  Someone (probably you, from IP address %s) submitted a suggestion to the %s regarding \"%s\".\n\n  The suggestion has been assigned a reference number of \"%s\". If you wish to follow up on the progress of this suggestion with browser staff, you may contact us at %s. Please include the reference number of your suggestion in the email.\n\nThank you for your input,\n%s\n\nYour suggestion summary:\n%s\n\nYour suggestion details:\n%s",
 remoteAddr, brwName, summary, suggestID, returnAddr, signature, summary, details);
 int result;
 result = mailViaPipe(userEmailAddr, subject, msg, returnAddr);
