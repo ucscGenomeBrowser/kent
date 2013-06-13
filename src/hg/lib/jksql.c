@@ -2848,10 +2848,11 @@ sqlCheckAllowAlphaChars(allowed);
 sqlCheckAllowDigitChars(allowed);
 }
 
-
 /* Currently used 10 times in the code via define sqlChkIl. */
 char *sqlCheckIdentifiersList(char *identifiers)
-/* Check that only valid identifier characters are used in a comma-separated list */
+/* Check that only valid identifier characters are used in a comma-separated list
+ * '.' is allowed also since some code uses it in place of an actual field name.
+ * See hgTables/bedList.c::bedSqlFieldsExceptForChrom(). */
 {
 static boolean init = FALSE;
 static char allowed[256];
@@ -2865,6 +2866,7 @@ if (!init)
     // to support multiple tables e.g. sqlTableExists 
     sqlCheckAllowChar(' ', allowed);
     sqlCheckAllowChar(',', allowed);
+    sqlCheckAllowChar('\'', allowed); // single quote allowed for special case fieldname is '.'
     // NOTE it is important for security that no other characters be allowed here
     init = TRUE;
     }
@@ -2880,6 +2882,7 @@ char c = 0;
 int i = 0;
 boolean needText = TRUE;
 boolean spaceOk = FALSE;
+boolean textDone = FALSE;
 // Currently identifiers list must start with an identifier, no leading spaces or comma allowed.
 // Currently the comma must immediately follow the identifier
 // Currently zero or one spaces may follow the comma
@@ -2907,11 +2910,37 @@ while (i < len)
 	    }
 	spaceOk = TRUE;
 	needText = TRUE;
+	textDone = FALSE;
 	}
     else // other chars are part of the identifier
 	{
+	if (textDone)
+	    {
+	    sqlCheckError("Invalid Identifiers List [%s] expected comma", identifiers);
+	    return identifiers;
+	    }
 	needText = FALSE;
 	spaceOk = FALSE;
+	if (c == '\'') // check for '.' exception allowed
+	    {
+	    if (i+strlen("'.'") > len)
+		{
+		sqlCheckError("Invalid Identifiers List [%s] quoted-literal not supported", identifiers);
+		return identifiers;
+		}
+	    if (identifiers[i+1] != '.') // next char must be a period
+		{
+		sqlCheckError("Invalid Identifiers List [%s] quoted-literal not supported", identifiers);
+		return identifiers;
+		}
+	    if (identifiers[i+2] != '\'') // next char must be a single-quote
+		{
+		sqlCheckError("Invalid Identifiers List [%s] quoted-literal not supported", identifiers);
+		return identifiers;
+		}
+	    i += 2;
+	    textDone = TRUE;
+	    }
 	}
     
     ++i;	    
@@ -2924,6 +2953,7 @@ if (needText || spaceOk)
 
 return identifiers;
 }
+
 
 char *sqlCheckIdentifier(char *identifier)
 /* Check that only valid identifier characters are used */
@@ -2945,6 +2975,7 @@ if (!sqlCheckAllowedChars(identifier, allowed))
     }
 return identifier;
 }
+
 
 
 /* --------------------------- */
