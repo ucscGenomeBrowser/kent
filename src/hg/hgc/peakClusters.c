@@ -356,9 +356,10 @@ char **row;
 struct sqlResult *sr;
 char query[256];
 char *motifTable = NULL;
-#ifdef TXCLUSTER_MOTIFS_TABLE
+// TODO: deal with hard-coded table names
+//#ifdef TXCLUSTER_MOTIFS_TABLE
 motifTable = TXCLUSTER_MOTIFS_TABLE;
-#endif
+//#endif
 
 sqlSafef(query, sizeof(query),
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",

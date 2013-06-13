@@ -54,9 +54,11 @@ int i, rowOffset;
 struct bed *bed = item;
 double maxScore = 0.0;
 char *motifTable = NULL;
-#ifdef TXCLUSTER_MOTIFS_TABLE
+// TODO: motifTable shouldn't be hard coded.  There may be different versions suitable
+// for different TFBS tracks
+//#ifdef TXCLUSTER_MOTIFS_TABLE
 motifTable = TXCLUSTER_MOTIFS_TABLE;
-#endif
+//#endif
 
 for (i=0; i<track->sourceCount; ++i)
     {
@@ -76,9 +78,12 @@ if (w < 1)
     w = 1;
 hvGfxBox(hvg, x1, y, w, heightPer, color);
 
-if(motifTable != NULL)
+if (motifTable != NULL)
     {
     // Draw region with highest motif score
+    // QUESTION: appears to draw all, not just highest scoring ?
+    // NOTE: but just motif for the factor, so hides co-binding potential
+    // NOTE: current table has single motif per factor
     struct sqlConnection *conn = hAllocConn(database);
     if(sqlTableExists(conn, motifTable))
         {
@@ -87,10 +92,14 @@ if(motifTable != NULL)
         char **row;
 
         sqlSafefFrag(where, sizeof(where), "name = '%s'", bed->name);
+        // TODO: hard-coded tablename to remove
+        // QUESTION: Is performance adequate with this design ?  Could query table once and
+        // add motif ranges to items.
         sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", bed->chrom, bed->chromStart,
                          bed->chromEnd, where, &rowOffset);
         while((row = sqlNextRow(sr)) != NULL)
             {
+            // highlight motif regions in green
             Color color = hvGfxFindColorIx(hvg, 28, 226, 40);
             int start = sqlUnsigned(row[rowOffset+1]);
             int end = sqlUnsigned(row[rowOffset+2]);
