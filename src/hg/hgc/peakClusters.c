@@ -288,7 +288,6 @@ else
                 clusterTdb->track);
 webPrintLinkTableEnd();
 hFreeConn(&conn);
-cartWebEnd();
 }
 
 void doPeakClusters(struct trackDb *tdb, char *item)
@@ -346,7 +345,6 @@ printf("List all items assayed");
 printf("</A><BR>\n");
 webNewSection("Track Description");
 printTrackHtml(tdb);
-cartWebEnd();
 hFreeConn(&conn);
 }
 
