@@ -7,7 +7,8 @@
 
 #include "annoFormatter.h"
 
-struct annoFormatter *annoFormatVepNew(char *fileName, struct annoStreamer *variantSource,
+struct annoFormatter *annoFormatVepNew(char *fileName, boolean doHtml,
+				       struct annoStreamer *variantSource,
 				       char *variantDescription,
 				       struct annoStreamer *gpVarSource,
 				       char *gpVarDescription,

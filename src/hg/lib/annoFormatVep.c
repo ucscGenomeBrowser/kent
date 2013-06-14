@@ -70,50 +70,147 @@ struct annoFormatVep
     boolean needHeader;			// TRUE if we should print out the header
     boolean primaryIsVcf;		// TRUE if primary rows are VCF
     boolean skippedFirstBase;		// 1 if VCF included 1 extra initial identical base (indel)
+    boolean doHtml;			// TRUE if we should include html tags & make a <table>.
     };
 
 
-static void afVepPrintHeaderExtraTags(struct annoFormatVep *self)
-/* For each extra column described in config, write out its tag and a brief description. */
+INLINE void afVepLineBreak(FILE *f, boolean doHtml)
+/* Depending on whether we're printing HTML, print either a newline or <BR>. */
+{
+if (doHtml)
+    fputs("<BR>", f);
+fputc('\n', f);
+}
+
+INLINE void afVepStartRow(FILE *f, boolean doHtml)
+/* If we're printing HTML, print a <TR><TD>. */
+{
+if (doHtml)
+    fputs("<TR><TD>", f);
+}
+
+INLINE void afVepNextColumn(FILE *f, boolean doHtml)
+/* Depending on whether we're printing HTML, print either a tab or </TD><TD>. */
+{
+if (doHtml)
+    fputs("</TD><TD>", f);
+else
+    fputc('\t', f);
+}
+
+INLINE void afVepEndRow(FILE *f, boolean doHtml)
+/* If we're printing HTML, print a </TD></TR>, otherwise, just a newline. */
+{
+if (doHtml)
+    fputs("</TD></TR>\n", f);
+else
+    fputc('\n', f);
+}
+
+static void afVepPrintHeaderExtraTags(struct annoFormatVep *self, char *bStart, char *bEnd)
+/* For each extra column described in config, write out its tag and a brief description.
+ * bStart and bEnd are for bold output in HTML, or if not HTML, starting the line with "## ". */
 {
 struct annoFormatVepExtraSource *extras = self->config->extraSources, *extraSrc;
 if (extras == NULL)
     return;
-fprintf(self->f, "## Extra column keys:\n");
+fprintf(self->f, "%sExtra column keys:%s", bStart, bEnd);
+afVepLineBreak(self->f, self->doHtml);
 for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
     {
     struct annoFormatVepExtraItem *extraItem;
     for (extraItem = extraSrc->items;  extraItem != NULL;  extraItem = extraItem->next)
 	if (isNotEmpty(extraItem->tag))
-	    fprintf(self->f, "## %s: %s\n", extraItem->tag, extraItem->description);
+	    {
+	    fprintf(self->f, "%s%s%s: %s", bStart, extraItem->tag, bEnd, extraItem->description);
+	    afVepLineBreak(self->f, self->doHtml);
+	    }
     }
 }
 
-static void afVepPrintHeaderDate(FILE *f)
+static void afVepPrintHeaderDate(FILE *f, boolean doHtml)
 /* VEP header includes a date formatted like "2012-06-16 16:09:38" */
 {
 long now = clock1();
 struct tm *tm = localtime(&now);
-fprintf(f, "## Output produced at %d-%02d-%02d %02d:%02d:%02d\n",
+fprintf(f, "## Output produced at %d-%02d-%02d %02d:%02d:%02d",
 	1900 + tm->tm_year, 1 + tm->tm_mon, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
+afVepLineBreak(f, doHtml);
+}
+
+static char *columnLabels[] = { "Uploaded Variation",
+				"Location",
+				"Allele",
+				"Gene",
+				"Feature",
+				"Feature type",
+				"Consequence",
+				"Position in cDNA",
+				"Position in CDS",
+				"Position in protein",
+				"Amino acid change",
+				"Codon change",
+				"Co-located Variation",
+				"Extra",
+				NULL };
+
+static void afVepPrintColumnLabels(struct annoFormatVep *self)
+/* If we're printing HTML, begin a table and use TH for labels; otherwise just
+ * print out a tab-sep text line with labels.  VEP doesn't begin this line with a #! */
+{
+char **pLabel = columnLabels;
+if (self->doHtml)
+    {
+    fputs("<BR><TABLE class='stdTbl'>\n<TR><TH>", self->f);
+    fputs(*pLabel++, self->f);
+    while (*pLabel != NULL)
+	{
+	fputs("</TH><TH>", self->f);
+	fputs(*pLabel++, self->f);
+	}
+    fputs("</TH></TR>\n", self->f);
+    }
+else
+    {
+    fputs(*pLabel++, self->f);
+    while (*pLabel != NULL)
+	{
+	fputc('\t', self->f);
+	fputs(*pLabel++, self->f);
+	}
+    fputc('\n', self->f);
+    }
 }
 
 static void afVepPrintHeader(struct annoFormatVep *self, char *db)
 /* Print a header that looks almost like a VEP header. */
 {
 FILE *f = self->f;
-fprintf(f, "## ENSEMBL VARIANT EFFECT PREDICTOR format (UCSC Variant Annotation Integrator)\n");
-afVepPrintHeaderDate(f);
-fprintf(f, "## Connected to UCSC database %s\n", db);
+boolean doHtml = self->doHtml;
+char *bStart = doHtml ? "<B>" : "## ";
+char *bEnd = doHtml ? "</B>" : "";
+if (!doHtml)
+    {
+    // Suppress these lines from HTML output -- IMO they're better suited for a file header:
+    fprintf(f, "## ENSEMBL VARIANT EFFECT PREDICTOR format (UCSC Variant Annotation Integrator)");
+    afVepLineBreak(f, doHtml);
+    afVepPrintHeaderDate(f, doHtml);
+    fprintf(f, "## Connected to UCSC database %s", db);
+    afVepLineBreak(f, doHtml);
+    }
 struct annoFormatVepConfig *config = self->config;
-fprintf(f, "## Variants: %s (%s)\n", config->variantDescription, config->variantSource->name);
-fprintf(f, "## Transcripts: %s (%s)\n", config->gpVarDescription, config->gpVarSource->name);
+fprintf(f, "%sVariants:%s %s (%s)", bStart, bEnd,
+	config->variantDescription, config->variantSource->name);
+afVepLineBreak(f, doHtml);
+fprintf(f, "%sTranscripts:%s %s (%s)", bStart, bEnd,
+	config->gpVarDescription, config->gpVarSource->name);
+afVepLineBreak(f, doHtml);
 if (config->snpSource != NULL)
-    fprintf(f, "## dbSNP: %s (%s)\n", config->snpDescription, config->snpSource->name);
-afVepPrintHeaderExtraTags(self);
-fputs("Uploaded Variation\tLocation\tAllele\tGene\tFeature\tFeature type\tConsequence\t"
-      "Position in cDNA\tPosition in CDS\tPosition in protein\tAmino acid change\t"
-      "Codon change\tCo-located Variation\tExtra\n", f);
+    fprintf(f, "%sdbSNP:%s %s (%s)", bStart, bEnd,
+	    config->snpDescription, config->snpSource->name);
+afVepLineBreak(f, doHtml);
+afVepPrintHeaderExtraTags(self, bStart, bEnd);
+afVepPrintColumnLabels(self);
 self->needHeader = FALSE;
 }
 
@@ -126,6 +223,21 @@ if (self->needHeader)
     afVepPrintHeader(self, primarySource->assembly->name);
 }
 
+static void compressDashes(char *string)
+/* If string has a run of '-' characters, turn it into single '-'. */
+{
+char *p = string;
+while ((p = strchr(p, '-')) != NULL)
+    {
+    char *end = p+1;
+    while (*end == '-')
+	end++;
+    if (end > p+1)
+	memmove(p+1, end, strlen(end)+1);
+    p++;
+    }
+}
+
 static void afVepPrintNameAndLoc(struct annoFormatVep *self, struct annoRow *varRow)
 /* Print variant name and position in genome. */
 {
@@ -133,7 +245,10 @@ char **varWords = (char **)(varRow->data);
 uint start1Based = varRow->start + 1;
 // Use variant name if available, otherwise construct an identifier:
 if (self->varNameIx >= 0)
-    fprintf(self->f, "%s\t", varWords[self->varNameIx]);
+    {
+    fputs(varWords[self->varNameIx], self->f);
+    afVepNextColumn(self->f, self->doHtml);
+    }
 else
     {
     char *alleles = NULL;
@@ -144,22 +259,25 @@ else
 	alleles = varWords[self->varAllelesIx];
     else
 	errAbort("annoFormatVep: afVepSetConfig didn't specify how to get alleles");
+    compressDashes(alleles);
     if (self->skippedFirstBase)
 	start1Based++;
-    fprintf(self->f, "%s_%u_%s\t", varRow->chrom, start1Based, alleles);
+    fprintf(self->f, "%s_%u_%s", varRow->chrom, start1Based, alleles);
+    afVepNextColumn(self->f, self->doHtml);
     }
 // Location is chr:start for single-base, chr:start-end for indels:
 if (varRow->end == start1Based)
-    fprintf(self->f, "%s:%u\t", varRow->chrom, start1Based);
+    fprintf(self->f, "%s:%u", varRow->chrom, start1Based);
 else if (start1Based > varRow->end)
-    fprintf(self->f, "%s:%u-%u\t", varRow->chrom, varRow->end, start1Based);
+    fprintf(self->f, "%s:%u-%u", varRow->chrom, varRow->end, start1Based);
 else
-    fprintf(self->f, "%s:%u-%u\t", varRow->chrom, start1Based, varRow->end);
+    fprintf(self->f, "%s:%u-%u", varRow->chrom, start1Based, varRow->end);
+afVepNextColumn(self->f, self->doHtml);
 }
 
-INLINE void afVepPrintPlaceholders(FILE *f, int count)
+INLINE void afVepPrintPlaceholders(FILE *f, int count, boolean doHtml)
 /* VEP uses "-" for N/A.  Sometimes there are several consecutive N/A columns.
- * Count = 0 means print "-" with no tab. Count > 0 means print that many "-\t"s. */
+ * Count = 0 means print "-" with no tab. Count > 0 means print that many "-" columns. */
 {
 if (count == 0)
     fputc('-', f);
@@ -167,11 +285,14 @@ else
     {
     int i;
     for (i = 0;  i < count;  i++)
-	fputs("-\t", f);
+	{
+	fputc('-', f);
+	afVepNextColumn(f, doHtml);
+	}
     }
 }
 
-#define afVepPrintPlaceholder(f) afVepPrintPlaceholders(f, 1)
+#define afVepPrintPlaceholder(f, doHtml) afVepPrintPlaceholders(f, 1, doHtml)
 
 #define placeholderForEmpty(val) (isEmpty(val) ? "-" : val)
 
@@ -183,10 +304,11 @@ static void afVepPrintGene(struct annoFormatVep *self, struct annoRow *gpvRow)
 if (self->geneNameIx >= 0)
     {
     char **words = (char **)(gpvRow->data);
-    fprintf(self->f, "%s\t", placeholderForEmpty(words[self->geneNameIx]));
+    fputs(placeholderForEmpty(words[self->geneNameIx]), self->f);
+    afVepNextColumn(self->f, self->doHtml);
     }
 else
-    afVepPrintPlaceholder(self->f);
+    afVepPrintPlaceholder(self->f, self->doHtml);
 }
 
 static void tweakStopCodonAndLimitLength(char *aaSeq, char *codonSeq, boolean isFrameshift)
@@ -224,51 +346,65 @@ static void afVepPrintPredictions(struct annoFormatVep *self, struct annoRow *gp
 // variant allele used to calculate the consequence
 // For upstream/downstream variants, gpFx leaves allele empty which I think is appropriate,
 // but VEP uses non-reference allele... #*** can we determine that here?
-fprintf(self->f, "%s\t", placeholderForEmpty(gpFx->allele));
+fputs(placeholderForEmpty(gpFx->allele), self->f);
+afVepNextColumn(self->f, self->doHtml);
 // ID of affected gene
 afVepPrintGene(self, gpvRow);
 // ID of feature
-fprintf(self->f, "%s\t", placeholderForEmpty(gpFx->transcript));
+fprintf(self->f, "%s", placeholderForEmpty(gpFx->transcript));
+afVepNextColumn(self->f, self->doHtml);
 // type of feature {Transcript, RegulatoryFeature, MotifFeature}
 if (gpFx->soNumber == intergenic_variant)
-    afVepPrintPlaceholder(self->f);
+    afVepPrintPlaceholder(self->f, self->doHtml);
 else
-    fputs("Transcript\t", self->f);
+    {
+    fputs("Transcript", self->f);
+    afVepNextColumn(self->f, self->doHtml);
+    }
 // consequence: SO term e.g. splice_region_variant
-fprintf(self->f, "%s\t", soTermToString(gpFx->soNumber));
+fputs(soTermToString(gpFx->soNumber), self->f);
+afVepNextColumn(self->f, self->doHtml);
 if (gpFx->detailType == codingChange)
     {
     struct codingChange *change = &(gpFx->details.codingChange);
     if (isInsertion)
 	{
-	fprintf(self->f, "%u-%u\t", change->cDnaPosition, change->cDnaPosition+1);
-	fprintf(self->f, "%u-%u\t", change->cdsPosition, change->cdsPosition+1);
+	fprintf(self->f, "%u-%u", change->cDnaPosition, change->cDnaPosition+1);
+	afVepNextColumn(self->f, self->doHtml);
+	fprintf(self->f, "%u-%u", change->cdsPosition, change->cdsPosition+1);
+	afVepNextColumn(self->f, self->doHtml);
 	}
     else
 	{
-	fprintf(self->f, "%u\t", change->cDnaPosition+1);
-	fprintf(self->f, "%u\t", change->cdsPosition+1);
+	fprintf(self->f, "%u", change->cDnaPosition+1);
+	afVepNextColumn(self->f, self->doHtml);
+	fprintf(self->f, "%u", change->cdsPosition+1);
+	afVepNextColumn(self->f, self->doHtml);
 	}
-    fprintf(self->f, "%u\t", change->pepPosition+1);
+    fprintf(self->f, "%u", change->pepPosition+1);
+    afVepNextColumn(self->f, self->doHtml);
     boolean isFrameshift = (gpFx->soNumber == frameshift_variant);
     tweakStopCodonAndLimitLength(change->aaOld, change->codonOld, isFrameshift);
     tweakStopCodonAndLimitLength(change->aaNew, change->codonNew, isFrameshift);
-    fprintf(self->f, "%s/%s\t", change->aaOld, change->aaNew);
-    fprintf(self->f, "%s/%s\t", change->codonOld, change->codonNew);
+    fprintf(self->f, "%s/%s", change->aaOld, change->aaNew);
+    afVepNextColumn(self->f, self->doHtml);
+    fprintf(self->f, "%s/%s", change->codonOld, change->codonNew);
+    afVepNextColumn(self->f, self->doHtml);
     }
 else if (gpFx->detailType == nonCodingExon)
     {
     int cDnaPosition = gpFx->details.nonCodingExon.cDnaPosition;
     if (isInsertion)
-	fprintf(self->f, "%u-%u\t", cDnaPosition, cDnaPosition+1);
+	fprintf(self->f, "%u-%u", cDnaPosition, cDnaPosition+1);
     else
-	fprintf(self->f, "%u\t", cDnaPosition+1);
+	fprintf(self->f, "%u", cDnaPosition+1);
+    afVepNextColumn(self->f, self->doHtml);
     // Coding effect columns (except for cDnaPosition) are N/A:
-    afVepPrintPlaceholders(self->f, 4);
+    afVepPrintPlaceholders(self->f, 4, self->doHtml);
     }
 else
     // Coding effect columns are N/A:
-    afVepPrintPlaceholders(self->f, 5);
+    afVepPrintPlaceholders(self->f, 5, self->doHtml);
 }
 
 static void afVepPrintExistingVar(struct annoFormatVep *self, struct annoRow *varRow,
@@ -296,14 +432,14 @@ if (self->snpNameIx >= 0)
 		}
 	    }
 	if (count == 0)
-	    afVepPrintPlaceholder(self->f);
-	fputc('\t', self->f);
+	    afVepPrintPlaceholder(self->f, self->doHtml);
+	afVepNextColumn(self->f, self->doHtml);
 	}
     else
-	afVepPrintPlaceholder(self->f);
+	afVepPrintPlaceholder(self->f, self->doHtml);
     }
 else
-    afVepPrintPlaceholder(self->f);
+    afVepPrintPlaceholder(self->f, self->doHtml);
 }
 
 static boolean isCodingSnv(struct annoRow *primaryRow, struct gpFx *gpFx)
@@ -369,6 +505,20 @@ errAbort("commaSepWordFromIx: Bad index %d for string '%s'", ix, s);
 return NULL;
 }
 
+INLINE void afVepNewExtra(struct annoFormatVep *self, boolean *pGotExtra)
+/* If we already printed an extra item, print the extra column's separator; set pGotExtra. */
+{
+assert(pGotExtra);
+if (*pGotExtra)
+    {
+    if (self->doHtml)
+	fputs("; ", self->f);
+    else
+	fputc(';', self->f);
+    }
+*pGotExtra = TRUE;
+}
+
 static void afVepPrintDbNsfpSift(struct annoFormatVep *self,
 				 struct annoFormatVepExtraSource *extraSrc,
 				 struct annoRow *extraRows, struct gpFx *gpFx, char *ensTxId,
@@ -414,10 +564,8 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	prediction = 'T';
     if (isNotEmpty(scoreStr) && differentString(scoreStr, "."))
 	{
-	if (*pGotExtra)
-	    fputc(';', self->f);
+	afVepNewExtra(self, pGotExtra);
 	fprintf(self->f, "%s=%c(%s)", extraItem->tag, prediction, scoreStr);
-	*pGotExtra = TRUE;
 	}
     }
 }
@@ -494,15 +642,13 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	    {
 	    if (count == 0)
 		{
-		if (*pGotExtra)
-		    fputc(';', self->f);
+		afVepNewExtra(self, pGotExtra);
 		fprintf(self->f, "%s=", extraItem->tag);
 		}
 	    else
 		fputc(',', self->f);
 	    char *score = (scoreIx < 0) ? "?" : commaSepWordFromIx(txIx, words[scoreIx], self->lm);
 	    fprintf(self->f, "%s(%s)", pred, score);
-	    *pGotExtra = TRUE;
 	    count++;
 	    }
 	}
@@ -562,12 +708,10 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	}
     if (isNotEmpty(score) && differentString(score, "."))
 	{
-	if (*pGotExtra)
-	    fputc(';', self->f);
+	afVepNewExtra(self, pGotExtra);
 	if (isEmpty(pred))
 	    pred = "?";
 	fprintf(self->f, "%s=%s(%s)", extraItem->tag, pred, score);
-	*pGotExtra = TRUE;
 	}
     }
 }
@@ -625,12 +769,10 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	}
     if (isNotEmpty(score) && differentString(score, "."))
 	{
-	if (*pGotExtra)
-	    fputc(';', self->f);
+	afVepNewExtra(self, pGotExtra);
 	if (isEmpty(pred))
 	    pred = "?";
 	fprintf(self->f, "%s=%s(%s)", extraItem->tag, pred, score);
-	*pGotExtra = TRUE;
 	}
     }
 }
@@ -660,10 +802,8 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	domains[lastC] = '\0';
     if (isNotEmpty(domains) && differentString(domains, "."))
 	{
-	if (*pGotExtra)
-	    fputc(';', self->f);
+	afVepNewExtra(self, pGotExtra);
 	fprintf(self->f, "%s=%s", extraItem->tag, domains);
-	*pGotExtra = TRUE;
 	}
     }
 }
@@ -781,9 +921,6 @@ static void afVepPrintExtraWig(struct annoFormatVep *self,
 //#*** just listing them doesn't show where gaps are. overlap is possible too.
 //#*** Look into what VEP does for numerics.
 {
-if (*pGotExtra)
-    fputc(';', self->f);
-fprintf(self->f, "%s=", extraItem->tag);
 int i;
 struct annoRow *row;
 for (i = 0, row = extraRows;  row != NULL;  i++, row = row->next)
@@ -793,11 +930,15 @@ for (i = 0, row = extraRows;  row != NULL;  i++, row = row->next)
     int j;
     for (j = 0;  j < len;  j++)
 	{
-	if (i+j > 0)
+	if (i+j == 0)
+	    {
+	    afVepNewExtra(self, pGotExtra);
+	    fprintf(self->f, "%s=", extraItem->tag);
+	    }
+	else
 	    fputc(',', self->f);
 	fprintf(self->f, "%g", vector[j]);
 	}
-    *pGotExtra = TRUE;
     }
 }
 
@@ -808,14 +949,16 @@ static void afVepPrintExtraWords(struct annoFormatVep *self,
 {
 if (extraItem->rowIx < 0)
     errAbort("annoFormatVep: invalid rowIx for tag %s", extraItem->tag);
-if (*pGotExtra)
-    fputc(';', self->f);
-fprintf(self->f, "%s=", extraItem->tag);
 int i;
 struct annoRow *row;
 for (i = 0, row = extraRows;  row != NULL;  i++, row = row->next)
     {
-    if (i > 0)
+    if (i == 0)
+	{
+	afVepNewExtra(self, pGotExtra);
+	fprintf(self->f, "%s=", extraItem->tag);
+	}
+    else
 	fputc(',', self->f);
     char **words = row->data;
     char *val = words[extraItem->rowIx];
@@ -824,7 +967,6 @@ for (i = 0, row = extraRows;  row != NULL;  i++, row = row->next)
     subChar(val, '=', '_');
     subChar(val, ';', '_');
     fputs(val, self->f);
-    *pGotExtra = TRUE;
     }
 }
 
@@ -851,8 +993,7 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
 // VEP automatically adds DISTANCE for upstream/downstream variants
 if (gpFx->soNumber == upstream_gene_variant || gpFx->soNumber == downstream_gene_variant)
     {
-    if (*pGotExtra)
-	fputc(';', self->f);
+    afVepNewExtra(self, pGotExtra);
     // Using varRow->start for both up & down -- just seems more natural,
     // and also it's possible for the variant to overlap txStart or txEnd
     // Note: I think it should be gpvRow->end - varRow->start and varRow->start - gpvRow->end
@@ -861,7 +1002,6 @@ if (gpFx->soNumber == upstream_gene_variant || gpFx->soNumber == downstream_gene
     if (distance < 0)
 	distance = varRow->end - gpvRow->end;
     fprintf(self->f, "DISTANCE=%d", distance);
-    *pGotExtra = TRUE;
     }
 boolean includeExonNumber = TRUE;  //#*** optional in VEP
 if (includeExonNumber)
@@ -877,15 +1017,13 @@ if (includeExonNumber)
 	exonNum = gpFx->details.intron.intronNumber;
     if (exonNum >= 0)
 	{
-	if (*pGotExtra)
-	    fputc(';', self->f);
+	afVepNewExtra(self, pGotExtra);
 	char *exonCount = ((char **)(gpvRow->data))[7];
 	fprintf(self->f, "%s=%d/%s", (deType == intron ? "INTRON" : "EXON"), exonNum+1, exonCount);
-	*pGotExtra = TRUE;
 	}
     }
 if (!*pGotExtra)
-    afVepPrintPlaceholders(self->f, 0);
+    afVepPrintPlaceholders(self->f, 0, self->doHtml);
 }
 
 static void afVepLmCleanup(struct annoFormatVep *self)
@@ -908,6 +1046,7 @@ static void afVepPrintOneLine(struct annoFormatVep *self, struct annoStreamRows 
 afVepLmCleanup(self);
 struct annoRow *varRow = varData->rowList;
 struct gpFx *gpFx = annoGratorGpVarGpFxFromRow(self->config->gpVarSource, gpvRow, self->lm);
+afVepStartRow(self->f, self->doHtml);
 afVepPrintNameAndLoc(self, varRow);
 boolean isInsertion = (varRow->start == varRow->end);
 afVepPrintPredictions(self, gpvRow, gpFx, isInsertion);
@@ -915,7 +1054,7 @@ afVepPrintExistingVar(self, varRow, gratorData, gratorCount);
 boolean gotExtra = FALSE;
 afVepPrintExtrasDbNsfp(self, varRow, gpvRow, gpFx, gratorData, gratorCount, &gotExtra);
 afVepPrintExtrasOther(self, varRow, gpvRow, gpFx, gratorData, gratorCount, &gotExtra);
-fputc('\n', self->f);
+afVepEndRow(self->f, self->doHtml);
 }
 
 static void afVepFormatOne(struct annoFormatter *fSelf, struct annoStreamRows *primaryData,
@@ -928,12 +1067,19 @@ for (gpvRow = gpVarRows;  gpvRow != NULL;  gpvRow = gpvRow->next)
     afVepPrintOneLine(self, primaryData, gpvRow, gratorData, gratorCount);
 }
 
+static void afVepEndHtml(struct annoFormatVep *self)
+{
+fputs("</TABLE><BR>\n", self->f);
+}
+
 static void afVepClose(struct annoFormatter **pFSelf)
 /* Close file handle, free self. */
 {
 if (pFSelf == NULL)
     return;
 struct annoFormatVep *self = *(struct annoFormatVep **)pFSelf;
+if (self->doHtml)
+    afVepEndHtml(self);
 freeMem(self->fileName);
 carefulClose(&(self->f));
 lmCleanup(&(self->lm));
@@ -999,7 +1145,8 @@ config->snpDescription = cloneString(snpDescription);
 return config;
 }
 
-struct annoFormatter *annoFormatVepNew(char *fileName, struct annoStreamer *variantSource,
+struct annoFormatter *annoFormatVepNew(char *fileName, boolean doHtml,
+				       struct annoStreamer *variantSource,
 				       char *variantDescription,
 				       struct annoStreamer *gpVarSource,
 				       char *gpVarDescription,
@@ -1022,6 +1169,7 @@ self->f = mustOpen(fileName, "w");
 self->lm = lmInit(0);
 self->dyScratch = dyStringNew(0);
 self->needHeader = TRUE;
+self->doHtml = doHtml;
 struct annoFormatVepConfig *config = annoFormatVepConfigNew(variantSource, variantDescription,
 							    gpVarSource, gpVarDescription,
 							    snpSource, snpDescription);
