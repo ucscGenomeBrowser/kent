@@ -10,23 +10,18 @@ struct allele  *alleleClip(struct allele *allele, int sx, int ex, struct lm *lm)
 struct variant *oldVariant = allele->variant;
 int start = oldVariant->chromStart;
 int end = oldVariant->chromEnd;
-int oldVariantWidth = end - start;
 int delFront = 0;
 int delRear = 0;
 
 if (start < sx)
     {
-    if (oldVariantWidth != allele->length)	 /* FIXME */
-	errAbort("cannot clip alleles that are a different length than variant region");
-    delFront = sx - start;
+    delFront = min(sx - start, allele->length);
     start = sx;
     }
 
 if (end > ex)
     {
-    if (oldVariantWidth != allele->length)	 /* FIXME */
-	errAbort("cannot clip alleles that are a different length than variant region");
-    delRear = end - ex;
+    delRear = min(end - ex, allele->length - delFront);
     end = ex;
     }
 

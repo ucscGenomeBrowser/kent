@@ -828,6 +828,8 @@ else
     }
 printf("</FORM>");
 
+jsReloadOnBackButton(cart);
+
 webNewSection("Using the Variant Annotation Integrator");
 webIncludeHelpFile("hgVaiHelpText", FALSE);
 }
