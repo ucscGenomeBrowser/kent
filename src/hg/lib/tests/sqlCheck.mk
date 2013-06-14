@@ -28,6 +28,8 @@ simpleTest: mkout
 	diff ${OUT}/sqlCheck.7 ${EXP}/sqlCheck.7
 	${TESTER} EE "" >& ${OUT}/sqlCheck.8
 	diff ${OUT}/sqlCheck.8 ${EXP}/sqlCheck.8
+	${TESTER} IL "chromStart,chromEnd,'.',score" >& ${OUT}/sqlCheck.9
+	diff ${OUT}/sqlCheck.9 ${EXP}/sqlCheck.9
 
 mkout:
 	@${MKDIR} ${OUT}
