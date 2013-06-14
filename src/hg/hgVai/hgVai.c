@@ -1217,6 +1217,7 @@ annoGratorQueryFree(&query);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 if (hIsPrivateHost())
     pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
@@ -1263,5 +1264,6 @@ else if (webGotWarnings())
 // then it wrote HTML showing multiple position matches & links.
 
 cartCheckout(&cart);
+cgiExitTime("hgVai", enteredMainTime);
 return 0;
 }
