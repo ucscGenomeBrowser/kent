@@ -199,6 +199,7 @@ if (queryMaxItems == ASD_CHUNK_SIZE && rowBuf->size == ASD_CHUNK_SIZE)
 	    {
 	    rowBuf->size = ix+1;
 	    self->nextChunkStart = lastStart;
+	    break;
 	    }
 	}
     }
