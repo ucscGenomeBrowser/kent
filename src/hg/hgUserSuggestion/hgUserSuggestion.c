@@ -435,7 +435,7 @@ void doMiddle(struct cart *theCart)
 char *db, *organism;
 cart = theCart;
 getDbAndGenome(cart, &db, &organism, oldVars);
-cartWebStart(theCart, db, "User Suggestion");
+cartWebStart(theCart, db, "UCSC Genome Browser: Suggestion Box");
 checkHgConfForSuggestion();
 if (cartVarExists(cart, "do.suggestSendMail"))
     {
@@ -458,11 +458,7 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-
-htmlSetStyleSheet("/style/userAccounts.css");
-htmlSetFormClass("accountScreen");
-cartHtmlShell("User Suggestion",doMiddle, hUserCookie(), excludeVars, oldVars);
-//cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgUserSuggestion", enteredMainTime);
 return 0;
 }
