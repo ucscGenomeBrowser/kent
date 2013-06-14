@@ -49,20 +49,15 @@ newAllele->sequence[newAllele->length] = 0;   // cut off delRear part
 return newAllele;
 }
 
-static char *addDashes(char *input, int count, struct lm *lm)
-/* add dashes at the end of a sequence to pad it out so it's length is count */
+static boolean isDash(char *string)
+/* Return TRUE if the only char in string is '-'
+ * (possibly repeated like the darn pgVenter alleles). */
 {
-char *ret = lmAlloc(lm, count + 1);
-int inLen = strlen(input);
-
-safecpy(ret, count + 1, input);
-count -= inLen;
-
-char *ptr = &ret[inLen];
-while(count--)
-    *ptr++ = '-';
-
-return ret;
+char *p;
+for (p = string;  p != NULL && *p != '\0';  p++)
+    if (*p != '-')
+	return FALSE;
+return TRUE;
 }
 
 struct variant *variantNew(char *chrom, unsigned start, unsigned end, unsigned numAlleles,
@@ -71,10 +66,6 @@ struct variant *variantNew(char *chrom, unsigned start, unsigned end, unsigned n
  * formats: coords, allele count, and string of slash-separated alleles. */
 {
 struct variant *variant;
-
-// this is probably the wrong way to do this.  Alleles in
-// variant should be their size in query bases
-int alleleLength = end - start;
 
 // We have a new variant!
 lmAllocVar(lm, variant);
@@ -102,20 +93,11 @@ for( ; alleleNumber < numAlleles; alleleNumber++)
 	nextAlleleString++;
 	}
 
-    // this check probably not right, could be different per allele
     int alleleStringLength = strlen(thisAlleleString);
-    if (sameString(thisAlleleString, "-") && alleleLength == 0)
+    if (isDash(thisAlleleString))
 	{
 	alleleStringLength = 0;
 	thisAlleleString[0] = '\0';
-	}
-    else if (alleleStringLength != alleleLength)
-	{
-	if ( alleleStringLength < alleleLength)
-	    {
-	    thisAlleleString = addDashes(thisAlleleString, alleleLength, lm);
-	    alleleStringLength = alleleLength;
-	    }
 	}
 
     // we have a new allele!
