@@ -189,9 +189,11 @@ else
     afVepPrintPlaceholder(self->f);
 }
 
-static void tweakStopCodon(char *aaSeq, char *codonSeq)
-/* If aa from gpFx has a stop 'Z', replace it with '*'
- * and truncate codons following the stop if necessary just in case they run on. */
+static void tweakStopCodonAndLimitLength(char *aaSeq, char *codonSeq, boolean isFrameshift)
+/* If aa from gpFx has a stop 'Z', replace it with '*' and truncate 
+ * codons following the stop if necessary just in case they run on.
+ * Then if isFrameshift and the strings are very long, truncate with
+ * a note about how long they are. */
 {
 char *earlyStop = strchr(aaSeq, 'Z');
 if (earlyStop)
@@ -200,6 +202,18 @@ if (earlyStop)
     earlyStop[1] = '\0';
     int earlyStopIx = (earlyStop - aaSeq + 1) * 3;
     codonSeq[earlyStopIx] = '\0';
+    }
+if (isFrameshift)
+    {
+    int len = strlen(aaSeq);
+    char lengthNote[512];
+    safef(lengthNote, sizeof(lengthNote), "...(%d bases)", len);
+    if (len > 5 + strlen(lengthNote))
+	safecpy(aaSeq+5, len+1-5, lengthNote);
+    len = strlen(codonSeq);
+    safef(lengthNote, sizeof(lengthNote), "...(%d bases)", len);
+    if (len > 12 + strlen(lengthNote))
+	safecpy(codonSeq+12, len+1-12, lengthNote);
     }
 }
 
@@ -236,8 +250,9 @@ if (gpFx->detailType == codingChange)
 	fprintf(self->f, "%u\t", change->cdsPosition+1);
 	}
     fprintf(self->f, "%u\t", change->pepPosition+1);
-    tweakStopCodon(change->aaOld, change->codonOld);
-    tweakStopCodon(change->aaNew, change->codonNew);
+    boolean isFrameshift = (gpFx->soNumber == frameshift_variant);
+    tweakStopCodonAndLimitLength(change->aaOld, change->codonOld, isFrameshift);
+    tweakStopCodonAndLimitLength(change->aaNew, change->codonNew, isFrameshift);
     fprintf(self->f, "%s/%s\t", change->aaOld, change->aaNew);
     fprintf(self->f, "%s/%s\t", change->codonOld, change->codonNew);
     }
@@ -840,9 +855,11 @@ if (gpFx->soNumber == upstream_gene_variant || gpFx->soNumber == downstream_gene
 	fputc(';', self->f);
     // Using varRow->start for both up & down -- just seems more natural,
     // and also it's possible for the variant to overlap txStart or txEnd
+    // Note: I think it should be gpvRow->end - varRow->start and varRow->start - gpvRow->end
+    // here, but this matches Ensembl output and gets the general idea across:
     int distance = gpvRow->start - varRow->start;
     if (distance < 0)
-	distance = varRow->start - gpvRow->end;
+	distance = varRow->end - gpvRow->end;
     fprintf(self->f, "DISTANCE=%d", distance);
     *pGotExtra = TRUE;
     }

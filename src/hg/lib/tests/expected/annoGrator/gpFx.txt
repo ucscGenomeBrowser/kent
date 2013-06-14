@@ -16,7 +16,7 @@ chr19_45406350_C/T	chr19:45406350	C	O96008	uc002ozx.4	Transcript	missense_varian
 chr19_45406350_C/T	chr19:45406350	C	O96008	uc002ozy.4	Transcript	missense_variant	1114	1010	337	L/P	CTG/CCG	-	SIFT=D(0.010000);EXON=10/10
 chr19_45406350_C/T	chr19:45406350	C	O96008	uc002paa.4	Transcript	missense_variant	1206	1010	337	L/P	CTG/CCG	-	SIFT=D(0.010000);EXON=9/9
 chr19_45406350_C/T	chr19:45406350	-	P02649	uc002pab.3	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=2689
-chr19_45417440_A/G	chr19:45417440	-	P02649	uc002pab.3	Transcript	downstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=4789
+chr19_45417440_A/G	chr19:45417440	-	P02649	uc002pab.3	Transcript	downstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=4790
 chr19_45417440_A/G	chr19:45417440	-	P02654	uc002pac.1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=137
 chr19_45417440_A/G	chr19:45417440	-	P02654	uc002pad.1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=137
 chr19_45417440_A/G	chr19:45417440	-	P02654	uc002pae.1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=481

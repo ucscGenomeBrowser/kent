@@ -111,7 +111,7 @@ else if (cgiVarExists("description"))
     printf("<PRE>https://encodedcc.sdsc.edu/cgi-bin/edwScriptSubmit"
 	   "?user=%s&password=%s&url=%s\n</PRE>", 
 	   babyName, password,
-	   sqlEscapeString("http://your.host.edu/your_dir/validated.txt")); 
+	   cgiEncode("http://your.host.edu/your_dir/validated.txt")); 
     puts("That is pass the CGI encoded variables user, password, and url to the ");
     puts("web services CGI at");
     puts("https://encodedcc.sdsc.edu/cgi-bin/edwScriptSubmit. ");
