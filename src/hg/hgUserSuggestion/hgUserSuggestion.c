@@ -147,7 +147,7 @@ hPrintf(
     "we'd like to hear from you. Please provide a concise description below. "
     "A copy of the suggestion will be sent to your email address along with a reference number. "
     "You may follow up on the status of your request at any time by <a href=\"../contacts.html#followup\">contacting us</a> and quoting the reference number.</P>");
-hPrintf("<P>Please note: this form is not the proper place to submit questions regarding browser use or bug reports. Use the links on our contact page instead.</P>");
+hPrintf("<P>Please note: this form is not the proper place to submit questions regarding browser use or bug reports. Use the links on our <a href=\"../contacts.html\">contact page</a> instead.</P>");
 hPrintf("<HR><BR>"); 
 hPrintf(
     "      <div id=\"suggest\">  \n"
@@ -252,6 +252,7 @@ void printCheckCaptchaScript()
 {
 hPrintf( 
     " <script type=\"text/javascript\">\n"
+    " // The Simple JavaScript CAPTCHA Generator code is copied from typicalwhiner.com/190/simple-javascript-captcha-generator \n"
     "         function checkCaptcha(theform){\n"
     "                 var why = \"\";\n"
     "                  \n"
