@@ -164,14 +164,14 @@ static void rowBufInit(struct rowBuf *rowBuf, int size)
 resetRowBuf(rowBuf);
 rowBuf->lm = lmInit(0);
 rowBuf->size = size;
-AllocArray(rowBuf->buf, size);
+lmAllocArray(rowBuf->lm, rowBuf->buf, size);
 }
 
 static char **lmCloneRow(struct lm *lm, char **row, int colCount)
 /* Use lm to allocate an array of strings and its contents copied from row. */
 {
 char **cloneRow = NULL;
-AllocArray(cloneRow, colCount);
+lmAllocArray(lm, cloneRow, colCount);
 int i;
 for (i = 0;  i < colCount;  i++)
     cloneRow[i] = lmCloneString(lm, row[i]);
@@ -190,15 +190,17 @@ if (queryMaxItems == ASD_CHUNK_SIZE && rowBuf->size == ASD_CHUNK_SIZE)
     // Starting at the last row in rowBuf, work back to find a value with a different start.
     int ix = rowBuf->size - 1;
     char **words = rowBuf->buf[ix];
-    uint lastStart = atoll(words[self->startIx]);
+    int startIx = self->startIx + self->omitBin;
+    uint lastStart = atoll(words[startIx]);
     for (ix = rowBuf->size - 2;  ix >= 0;  ix--)
 	{
 	words = rowBuf->buf[ix];
-	uint thisStart = atoll(words[self->startIx]);
+	uint thisStart = atoll(words[startIx]);
 	if (thisStart != lastStart)
 	    {
 	    rowBuf->size = ix+1;
 	    self->nextChunkStart = lastStart;
+	    break;
 	    }
 	}
     }
@@ -254,9 +256,11 @@ if (self->hasBin)
     // Results will be in bin order, but we can restore chromStart order by
     // accumulating initial coarse-bin items and merge-sorting them with
     // subsequent finest-bin items which will be in chromStart order.
-    resetMergeState(self);
+    if (self->doNextChunk && self->mergeBins && !self->gotFinestBin)
+	errAbort("annoStreamDb can't continue merge in chunking query; increase ASD_CHUNK_SIZE");
     self->mergeBins = TRUE;
-    self->qLm = lmInit(0);
+    if (self->qLm == NULL)
+	self->qLm = lmInit(0);
     }
 if (self->endFieldIndexName != NULL)
     // Don't let mysql use a (chrom, chromEnd) index because that messes up
@@ -277,7 +281,14 @@ if (sSelf->chrom != NULL)
 	start = self->nextChunkStart;
     dyStringPrintf(query, "where %s = '%s' and ", self->chromField, sSelf->chrom);
     if (self->hasBin)
+	{
+	if (self->doNextChunk && self->gotFinestBin)
+	    // It would be way more elegant to make a hAddBinTopLevelOnly but this will do:
+	    dyStringPrintf(query, "bin > %d and ", self->minFinestBin);
 	hAddBinToQuery(start, sSelf->regionEnd, query);
+	}
+    if (self->doNextChunk)
+	dyStringPrintf(query, "%s >= %u and ", self->startField, self->nextChunkStart);
     dyStringPrintf(query, "%s < %u and %s > %u limit %d", self->startField, sSelf->regionEnd,
 		   self->endField, start, queryMaxItems);
     bufferRowsFromSqlQuery(self, query->string, queryMaxItems);
@@ -310,14 +321,20 @@ else
 	    start = self->nextChunkStart;
 	uint end = annoAssemblySeqSize(self->streamer.assembly, self->queryChrom->name);
 	dyStringPrintf(query, "where %s = '%s' ", self->chromField, chrom);
-	if (start > 0)
+	if (start > 0 || self->doNextChunk)
 	    {
 	    dyStringAppend(query, "and ");
 	    if (self->hasBin)
+		{
+		if (self->doNextChunk && self->gotFinestBin)
+		    // It would be way more elegant to make a hAddBinTopLevelOnly but this will do:
+		    dyStringPrintf(query, "bin > %d and ", self->minFinestBin);
 		hAddBinToQuery(start, end, query);
+		}
+	    if (self->doNextChunk)
+		dyStringPrintf(query, "%s >= %u and ", self->startField, self->nextChunkStart);
 	    // region end is chromSize, so no need to constrain startField here:
-	    dyStringPrintf(query, "%s > %u ",
-			   self->endField, start);
+	    dyStringPrintf(query, "%s > %u ", self->endField, start);
 	    }
 	dyStringPrintf(query, "limit %d", queryMaxItems);
 	bufferRowsFromSqlQuery(self, query->string, queryMaxItems);
@@ -418,7 +435,7 @@ struct annoRow *outRow = aRow;
 if (self->bigItemQueue == NULL)
     {
     // No coarse-bin items to merge-sort, just stream finest-bin items from here on out.
-    self->mergeBins = FALSE;
+    resetMergeState(self);
     }
 else if (annoRowCmp(&(self->bigItemQueue), &aRow) < 0)
     {

@@ -66,7 +66,7 @@ printf("<style>\n"
 INLINE void startCollapsibleSection(char *sectionSuffix, char *title, boolean onByDefault)
 // Wrap shared args to jsBeginCollapsibleSectionFontSize
 {
-jsBeginCollapsibleSectionFontSize(cart, "hgva", sectionSuffix, title, FALSE, "1.1em");
+jsBeginCollapsibleSectionFontSize(cart, "hgva", sectionSuffix, title, onByDefault, "1.1em");
 }
 
 #define endCollapsibleSection jsEndCollapsibleSection
@@ -827,6 +827,8 @@ else
     submitAndDisclaimer();
     }
 printf("</FORM>");
+
+jsReloadOnBackButton(cart);
 
 webNewSection("Using the Variant Annotation Integrator");
 webIncludeHelpFile("hgVaiHelpText", FALSE);
