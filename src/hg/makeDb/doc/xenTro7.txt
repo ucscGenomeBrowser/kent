@@ -1,0 +1,459 @@
+# for emacs: -*- mode: sh; -*-
+
+#	DATE:   26-Sep-2012
+#	ORGANISM:       Xenopus (Silurana) tropicalis
+#	TAXID:  8364
+#	ASSEMBLY LONG NAME:     Xtropicalis_v7
+#	ASSEMBLY SHORT NAME:    Xtropicalis_v7
+#	ASSEMBLY SUBMITTER:     DOE Joint Genome Institute
+#	ASSEMBLY TYPE:  Haploid
+#	NUMBER OF ASSEMBLY-UNITS:       1
+#	ASSEMBLY ACCESSION:     GCA_000004195.2
+#	FTP-RELEASE DATE: 28-Dec-2012
+
+#       http://www.ncbi.nlm.nih.gov/genome/80
+#       http://www.ncbi.nlm.nih.gov/genome/assembly/515038
+#       http://www.ncbi.nlm.nih.gov/bioproject/12348
+
+#       http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAMC02
+#       Genome Coverage : 7.44X  ABI 3739 ARACHNE v. 20071016_modified
+
+#       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=8364
+
+# rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Xenopus_tropicalis/Xtropicalis_v7/
+
+##########################################################################
+# Download sequence (DONE - 2013-02-26 - Hiram)
+    mkdir -p /hive/data/genomes/xenTro7/genbank
+    cd /hive/data/genomes/xenTro7/genbank
+
+    time rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Xenopus_tropicalis/Xtropicalis_v7/ ./
+
+    # verify the size of the sequence here:
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+# 1437513269 bases (71594132 N's 1365919137 real 1365919137 upper 0 lower)
+#    in 7727 sequences in 1 files
+# Total size: mean 186037.7 sd 4782867.2 min 1002 (gi|431812709|gb|KB029368.1|)
+#    max 215906545 (gi|431820428|gb|KB021649.1|) median 4920
+
+##########################################################################
+# fixup names for UCSC standards (DONE - 2013-03-25 - Hiram)
+    cd /hive/data/genomes/xenTro7
+    $HOME/kent/src/hg/utils/automation/unplacedScaffolds.pl
+    # constructs /hive/data/genomes/xenTro7/ucsc/
+#-rw-rw-r-- 1   5760083 Mar 25 23:36 xenTro7.ucsc.agp
+#-rw-rw-r-- 1 404452385 Mar 25 23:42 xenTro7.ucsc.fa.gz
+#-rw-rw-r-- 1       212 Mar 25 23:43 checkAgp.result.txt
+    # and not-needed here: 
+    cd /hive/data/genomes/xenTro7
+#-rw-rw-r-- 1 359984712 Mar 25 23:43 xenTro7.unmasked.2bit
+    rm -f xenTro7.unmasked.2bit
+
+##########################################################################
+# Initial makeGenomeDb.pl (DONE - 2013-06-14 - Hiram)
+    cd /hive/data/genomes/xenTro7
+    cat << '_EOF_' > xenTro7.config.ra
+# Config parameters for makeGenomeDb.pl:
+db xenTro7
+clade vertebrate
+# genomeCladePriority 80
+scientificName Xenopus (Silurana) tropicalis
+commonName X. tropicalis
+assemblyDate Sep. 2012
+assemblyLabel US DOE Joint Genome Institute (JGI-PGF)
+assemblyShortLabel Xtropicalis v7
+orderKey 4439
+mitoAcc NC_006839
+fastaFiles /cluster/data/xenTro7/ucsc/xenTro7.ucsc.fa.gz
+agpFiles /cluster/data/xenTro7/ucsc/xenTro7.ucsc.agp
+dbDbSpeciesDir xenTro
+photoCreditURL http://www.unc.edu/
+photoCreditName UNC Chapel Hill, Chris Showell, all rights reserved
+ncbiGenomeId 80
+ncbiAssemblyId 515038
+ncbiAssemblyName Xtropicalis_v7
+ncbiBioProject 12348
+genBankAccessionID GCA_000004195.2
+taxId 8364
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and agp are OK
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -stop=agp xenTro7.config.ra > agp.log 2>&1
+
+    # verify no problem:
+    tail -1 agp.log
+    #  *** All done!  (through the 'agp' step)
+
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -continue=db xenTro7.config.ra > db.log 2>&1
+    # real    10m42.484s
+    # failed due to species name not matching photo name.
+    # temporarily set the name to "Xenopus tropicalis" and finish it:
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -continue=trackDb xenTro7.config.ra > trackDb.log 2>&1
+    #
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/xenTro7.unmasked.2bit /gbdb/xenTro7/xenTro7.2bit
+    #	browser should function now in sandbox
+    #   trackDb files here:
+    #   /hive/data/genomes/xenTro7/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/xenTro/xenTro7/
+    #   into source tree
+    #   now browser should function on hgwdev
+
+#########################################################################
+# running repeat masker (DONE - 2013-06-14 - Hiram)
+    mkdir /hive/data/genomes/xenTro7/bed/repeatMasker
+    cd /hive/data/genomes/xenTro7/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek xenTro7 > do.log 2>&1 &
+XXX - running - Fri Jun 14 19:12:33 PDT 2013
+    # real    220m20.455s
+
+    cat faSize.rmsk.txt
+    # 1232135591 bases (9270900 N's 1222864691 real 1125277738 upper
+    #   97586953 lower) in 37096 sequences in 1 files
+    # Total size: mean 33214.8 sd 1455001.1 min 783 (chr5_ABQF01053133_random)
+    #   max 156412533 (chr2) median 3541
+    # %7.92 masked total, %7.98 masked real
+
+    egrep -i "versi|relea" do.log
+    #    January 10 2013 (open-4-0-0) version of RepeatMasker
+    #  CC   RELEASE 20120418; 
+
+    time featureBits -countGaps xenTro7 rmsk
+    # 97640353 bases of 1232135591 (7.924%) in intersection
+    # real    0m16.657s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2013-06-14 - Hiram)
+    mkdir /hive/data/genomes/xenTro7/bed/simpleRepeat
+    cd /hive/data/genomes/xenTro7/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	xenTro7 > do.log 2>&1
+XXX - running - Fri Jun 14 19:12:33 PDT 2013
+    # about 14m30s
+
+    cat fb.simpleRepeat
+    #   25800814 bases of 1222864691 (2.110%) in intersection
+
+    # considering rmsk %8 vs. WM %20 and this is a small genome,
+    # use the rmsk result in order to have the classifications from
+    # that available
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/xenTro7
+    twoBitMask xenTro7.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed xenTro7.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa xenTro7.2bit stdout | faSize stdin > faSize.xenTro7.2bit.txt
+    cat faSize.xenTro7.2bit.txt
+
+    # 1232135591 bases (9270900 N's 1222864691 real 1123697742 upper
+    #    99166949 lower) in 37096 sequences in 1 files
+    # Total size: mean 33214.8 sd 1455001.1 min 783 (chr5_ABQF01053133_random)
+    #    max 156412533 (chr2) median 3541
+    # %8.05 masked total, %8.11 masked real
+
+    rm /gbdb/xenTro7/xenTro7.2bit
+    ln -s `pwd`/xenTro7.2bit /gbdb/xenTro7/xenTro7.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2013-06-14 - Hiram)
+
+    mkdir /hive/data/genomes/xenTro7/bed/gap
+    cd /hive/data/genomes/xenTro7/bed/gap
+
+    time nice findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../xenTro7.unmasked.2bit > findMotif.txt 2>&1
+    #   real	1m2.760s
+
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits xenTro7 -not gap -bed=notGap.bed
+    # 1365936747 bases of 1365936747 (100.000%) in intersection
+    # real    0m11.365s
+
+    awk '{print $3-$2,$0}' notGap.bed | sort -rn > notGap.sizes.txt
+    # largest contiguous sequence:
+    head -1 notGap.sizes.txt | awk '{print $1}'
+    # 671191
+    # minimal coverage 1 base out of that largest sequence:
+    echo 671191 | awk '{printf "%15.10f\n", 1/(2*$1)}' | sed -e 's/ //g'
+    # 0.0000007449
+    time bedIntersect -minCoverage=0.0000007449 allGaps.bed notGap.bed \
+      test.new.gaps.bed
+    # real    0m0.546s
+    # no new gaps:
+    # -rw-rw-r-- 1        0 Jun 14 19:16 test.new.gaps.bed
+    # if there were gaps, this is the number of bases in these new gaps:
+    awk '{print $3-$2}' test.new.gaps.bed | ave stdin | grep total
+    # total 8314.000000
+
+    # 0 bases of 1222864691 (0.000%) in intersection
+    #  real    19m53.371s
+
+    # there are *no* non-bridged gaps here, lift file not needed for genbank
+    hgsql -N -e "select bridge from gap;" xenTro7 | sort | uniq -c
+    #   47422 yes
+
+#########################################################################
+# cytoBandIdeo - (DONE - 2013-06-14 - Hiram)
+    mkdir /hive/data/genomes/xenTro7/bed/cytoBand
+    cd /hive/data/genomes/xenTro7/bed/cytoBand
+    makeCytoBandIdeo.csh xenTro7
+
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-14 - Hiram)
+    mkdir /hive/data/genomes/xenTro7/bed/windowMasker
+    cd /hive/data/genomes/xenTro7/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev xenTro7 > do.log 2>&1 &
+XXX - running - Fri Jun 14 19:12:33 PDT 2013
+    # real    66m52.863s
+
+    # Masking statistics
+    faSize.xenTro7.cleanWMSdust.txt
+# 1232135591 bases (9270900 N's 1222864691 real 973147255 upper
+#     249717436 lower) in 37096 sequences in 1 files
+# Total size: mean 33214.8 sd 1455001.1 min 783 (chr5_ABQF01053133_random)
+#     max 156412533 (chr2) median 3541
+# %20.27 masked total, %20.42 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps xenTro7 rmsk windowmaskerSdust
+    #   54554911 bases of 1232135591 (4.428%) in intersection
+
+########################################################################
+# cpgIslands - (TBD - 2013-06-06 - Hiram)
+    mkdir /hive/data/genomes/xenTro7/bed/cpgIslands
+    cd /hive/data/genomes/xenTro7/bed/cpgIslands
+    time doCpgIslands.pl xenTro7 > do.log 2>&1
+    #  real    17m40.265s
+
+    cat fb.xenTro7.cpgIslandExt.txt
+    #   16473980 bases of 1222864691 (1.347%) in intersection
+
+#########################################################################
+# genscan - (TBD - 2013-06-06 - Hiram)
+    mkdir /hive/data/genomes/xenTro7/bed/genscan
+    cd /hive/data/genomes/xenTro7/bed/genscan
+    time doGenscan.pl xenTro7 > do.log 2>&1 
+    #  real    47m7.823s
+    # XXX failed four jobs, running manually on hgwdev: chr9 chr1A chr3 chr2
+    # with -window=2000000 - all bug chr9 finished
+# real    57m16.383s
+# user    133m46.445s
+# sys     2m55.584s
+    # running chr9 with -window=1000000
+# real    10m14.291s
+# user    9m59.182s
+# sys     0m13.720s
+
+    time doGenscan.pl -continue=makeBed xenTro7 > makeBed.log 2>&1 
+    # real    30m4.119s
+
+    cat fb.xenTro7.genscan.txt
+    #   52986693 bases of 1222864691 (4.333%) in intersection
+    cat fb.xenTro7.genscanSubopt.txt
+    #   28313661 bases of 1222864691 (2.315%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (TBD - 2013-06-06 - Hiram)
+    # Use -repMatch=500, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1222864691 / 2897316137 \) \* 1024
+    #  ( 1222864691 / 2897316137 ) * 1024 = 432.197725
+
+    # round up to 500 (taeGut1 used 1024)
+
+    cd /hive/data/genomes/xenTro7
+    time blat xenTro7.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/xenTro7.11.ooc -repMatch=500
+    # Wrote 12162 overused 11-mers to jkStuff/xenTro7.11.ooc
+    # real    0m32.994s
+
+    # there are non-bridged gaps, therefore, a lift file is needed for genbank
+    hgsql -N -e "select bridge from gap;" xenTro7 | sort | uniq -c
+    #      326 no
+    #    87384 yes
+
+    cd /hive/data/genomes/xenTro7/jkStuff
+    gapToLift xenTro7 xenTro7.nonBridged.lift -bedFile=xenTro7.nonBridged.bed
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' xenTro7.nonBridged.bed | sort -nr | head
+    #   56928224 chr5   4758199 61686423        chr5.07
+
+#########################################################################
+# AUTO UPDATE GENBANK (TBD - 2013-03-08 - Pauline)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Taeniopygia guttata     5086    92144   987
+
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add xenTro7 just after ce2
+
+# xenTro7 - Zebra Finch
+xenTro7.serverGenome = /hive/data/genomes/xenTro7/xenTro7.2bit
+xenTro7.clusterGenome = /hive/data/genomes/xenTro7/xenTro7.2bit
+xenTro7.ooc = /hive/data/genomes/xenTro7/jkStuff/xenTro7.11.ooc
+xenTro7.align.unplacedChroms = chrUn_*,chr*_random
+xenTro7.lift = /hive/data/genomes/xenTro7/jkStuff/xenTro7.nonBridged.lift
+xenTro7.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+xenTro7.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+xenTro7.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+xenTro7.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+xenTro7.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+xenTro7.refseq.mrna.native.load = yes
+xenTro7.refseq.mrna.xeno.load = yes
+xenTro7.genbank.mrna.xeno.load = yes
+xenTro7.downloadDir = xenTro7
+xenTro7.upstreamGeneTbl = refGene
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding xenTro7 Zebra finch refs #10190" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S xenTro7           # long running job managed in screen
+    cd /cluster/data/genbank
+    time ./bin/gbAlignStep -initial xenTro7 &
+#  logFile: var/build/logs/2013.06.12-13:36:41.xenTro7.initalign.log
+XXX - running - Wed Jun 12 13:37:23 PDT 2013
+
+    # real 90291.12
+    # user 19200.27
+    # sys 11190.97
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+
+    time ./bin/gbDbLoadStep -drop -initialLoad xenTro7 &
+    #   logFile: var/dbload/hgwdev/logs/2013.06.08-18:59:10.dbload.log
+   #   real    29m9.092s
+XXX failed loading:
+Can't open work/hgwdev/dbload/genbank.195.0/xenTro7/mrna/chrUn_EQ843409_est.tab to write: Too many open files
+command failed: gbLoadRna -workdir=work/hgwdev/dbload -initialLoad xenTro7 at /hive/data/outside/genbank/bin/../lib/gbCommon.pm line 275. at /hive/data/outside/genbank/bin/../lib/gbCommon.pm line 275.
+
+    # enable daily alignment and update of hgwdev (TBD - 2013-03-08 - Pauline)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add xenTro7 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added xenTro7. refs #9812" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to RHO gene displays  (TBD - 2013-03-08 -Pauline)
+    hgsql -e \
+'update dbDb set defaultPos="chr21:52,409,568-52,414,485" where name="xenTro7";' \
+	hgcentraltest
+    # a bit wider for a little more context (2013-03-28 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr21:52408339-52415715" where name="xenTro7";' \
+	hgcentraltest
+
+############################################################################
+# downloads and pushQ entry (TBD - 2013-03-08 - Pauline)
+    # after adding xenTro7 to the all.joiner file and verifying that
+    #   joinerCheck is clean (i.e. run joinerCheck w -times and -keys flags
+    #   to make sure there are no errors), can construct the downloads:
+    cd /hive/data/genomes/xenTro7
+    /usr/bin/time -p makeDownloads.pl -workhorse=hgwdev xenTro7
+    #   real 1400.59
+
+    mkdir /hive/data/genomes/xenTro7/pushQ
+    cd /hive/data/genomes/xenTro7/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl xenTro7 2> stderr.txt > xenTro7.sql
+    #  real	2m55.404s
+
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/xenTro7/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/xenTro7/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/xenTro7/bbi/quality.bw
+# WARNING: xenTro7 does not have seq
+# WARNING: xenTro7 does not have extFile
+# WARNING: xenTro7 does not have estOrientInfo
+
+    scp -p xenTro7.sql hgwbeta:/tmp/
+    ssh hgwbeta "hgsql qapushq < /tmp/xenTro7.sql"
+
+
+############################################################################
+# construct liftOver to xenTro7 (TBD - 2013-03-07 - Pauline)
+    screen -S lift	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/nomLeu2/bed/blat.xenTro7.2013-03-06
+    cd /hive/data/genomes/nomLeu2/bed/blat.xenTro7.2013-03-06
+    # check it with -debug first to see if it is going to work:
+    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev nomLeu2 xenTro7
+    #   real    0m1.838s
+    # if that is OK, then run it:
+    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev nomLeu2 xenTro7 >& do.log
+    #	real    277m26.138s
+
+    # verify this file exists:
+    #	/gbdb/nomLeu2/liftOver/nomLeu2.over.chain.gz
+    # and try out the conversion on genome-test from nomLeu2 to xenTro7
+
+############################################################################
+ #  BLATSERVERS ENTRY (TBD - 2013-03-12 - Pauline)
+ #	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+ 	VALUES ("xenTro7", "blat4c", "17840", "1", "0"); \
+ 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+ 	VALUES ("xenTro7", "blat4c", "17841", "0", "1");' \
+ 	    hgcentraltest
+     #	test it with some sequence
+
+############################################################################
+# reset dbDb description to be like the previous nomLeu
+#       (TBD - 2013-03-21 - Hiram)
+    hgsql hgcentraltest -e 'update dbDb set description = "Oct. 2012 (GGSC Nleu3.0/xenTro7)"" where name = "xenTro7";' \
+          | hgsql -h genome-testdb hgcentraltest
+
+############################################################################
+# SWAP hg19/Human chain/net (TBD - 2013-03-26 - Pauline)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzXenTro7.2013-03-06
+    cat fb.hg19.chainXenTro7Link.txt
+    #   2542790081 bases of 2897316137 (87.764%) in intersection
+
+    #   running this swap - TBD - 2013-03-26
+    mkdir /hive/data/genomes/xenTro7/bed/blastz.hg19.swap
+    cd /hive/data/genomes/xenTro7/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzXenTro7.2013-03-06/DEF \
+        -swap -syntenicNet \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > swap.log 2>&1 &
+    #   real   138m48s
+    cat fb.xenTro7.chainHg19Link.txt
+    #   2479386532 bases of 2756609047 (89.943%) in intersection
+
+##############################################################################
