@@ -339,10 +339,20 @@ if (isFrameshift)
     }
 }
 
-static void afVepPrintPredictions(struct annoFormatVep *self, struct annoRow *gpvRow,
-				  struct gpFx *gpFx, boolean isInsertion)
+INLINE char *dashForEmpty(char *s)
+/* Represent empty alleles in insertions/deletions by the customary "-". */
+{
+if (isEmpty(s))
+    return "-";
+else
+    return s;
+}
+
+static void afVepPrintPredictions(struct annoFormatVep *self, struct annoRow *varRow,
+				  struct annoRow *gpvRow, struct gpFx *gpFx)
 /* Print VEP columns computed by annoGratorGpVar (or placeholders) */
 {
+boolean isInsertion = (varRow->start == varRow->end);
 // variant allele used to calculate the consequence
 // For upstream/downstream variants, gpFx leaves allele empty which I think is appropriate,
 // but VEP uses non-reference allele... #*** can we determine that here?
@@ -383,12 +393,18 @@ if (gpFx->detailType == codingChange)
 	}
     fprintf(self->f, "%u", change->pepPosition+1);
     afVepNextColumn(self->f, self->doHtml);
+    int variantFrame = change->cdsPosition % 3;
+    strLower(change->codonOld);
+    toUpperN(change->codonOld+variantFrame, varRow->end - varRow->start);
+    strLower(change->codonNew);
+    int alleleLength = sameString(gpFx->allele, "") ? 0 : strlen(gpFx->allele);
+    toUpperN(change->codonNew+variantFrame, alleleLength);
     boolean isFrameshift = (gpFx->soNumber == frameshift_variant);
     tweakStopCodonAndLimitLength(change->aaOld, change->codonOld, isFrameshift);
     tweakStopCodonAndLimitLength(change->aaNew, change->codonNew, isFrameshift);
-    fprintf(self->f, "%s/%s", change->aaOld, change->aaNew);
+    fprintf(self->f, "%s/%s", dashForEmpty(change->aaOld), dashForEmpty(change->aaNew));
     afVepNextColumn(self->f, self->doHtml);
-    fprintf(self->f, "%s/%s", change->codonOld, change->codonNew);
+    fprintf(self->f, "%s/%s", dashForEmpty(change->codonOld), dashForEmpty(change->codonNew));
     afVepNextColumn(self->f, self->doHtml);
     }
 else if (gpFx->detailType == nonCodingExon)
@@ -1048,8 +1064,7 @@ struct annoRow *varRow = varData->rowList;
 struct gpFx *gpFx = annoGratorGpVarGpFxFromRow(self->config->gpVarSource, gpvRow, self->lm);
 afVepStartRow(self->f, self->doHtml);
 afVepPrintNameAndLoc(self, varRow);
-boolean isInsertion = (varRow->start == varRow->end);
-afVepPrintPredictions(self, gpvRow, gpFx, isInsertion);
+afVepPrintPredictions(self, varRow, gpvRow, gpFx);
 afVepPrintExistingVar(self, varRow, gratorData, gratorCount);
 boolean gotExtra = FALSE;
 afVepPrintExtrasDbNsfp(self, varRow, gpvRow, gpFx, gratorData, gratorCount, &gotExtra);
