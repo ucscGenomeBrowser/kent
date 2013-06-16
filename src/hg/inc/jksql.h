@@ -559,16 +559,6 @@ struct sqlResult *sqlStoreResult(struct sqlConnection *sc, char *query);
 
 /* --------- input checks to prevent sql injection --------------------------------------- */
 
-#define sqlCkQl sqlCheckQuotedLiteral
-char *sqlCheckQuotedLiteral(char *s);
-/* Check that none of the chars needing to be escaped are in the string s */
-
-char *sqlCheckAlphaNum(char *word);
-/* Check that only valid alpha numeric characters are used in word */
-
-char *sqlEscapeIfNeeded(char *s, char **pS);
-/* Escape if needed.  if *pS is not null, free it.  */
-
 #define sqlCkIl sqlCheckIdentifiersList
 char *sqlCheckIdentifiersList(char *identifiers);
 /* Check that only valid identifier characters are used in a comma-separated list */
@@ -577,29 +567,29 @@ char *sqlCheckIdentifiersList(char *identifiers);
 char *sqlCheckIdentifier(char *identifier);
 /* Check that only valid identifier characters are used */
 
-#define sqlCkTbl sqlCheckTableName
-char *sqlCheckTableName(char *table);
-/* check that only valid table name characters are used */
-
-char *sqlCheckCgiEncodedName(char *name);
-/* check that only valid cgi-encoded characters are used */
-
 
 // =============================
 
 int vaSqlSafefNoAbort(char* buffer, int bufSize, boolean newString, char *format, va_list args);
-/* Format string to buffer, vsprintf style, only with buffer overflow
+/* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte.
- * Scans string parameters for illegal sql chars. */
+ * Scans string parameters for illegal sql chars. 
+ * Automatically escapes quoted string values.
+ * This function should be efficient on statements with many strings to be escaped. */
 
 int vaSqlSafef(char* buffer, int bufSize, char *format, va_list args);
-/* Format string to buffer, vsprintf style, only with buffer overflow
- * checking.  The resulting string is always terminated with zero byte. */
+/* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. 
+ * Scans unquoted string parameters for illegal literal sql chars.
+ * Escapes quoted string parameters. 
+ * NOSLQINJ tag is added to beginning. */
 
 int sqlSafef(char* buffer, int bufSize, char *format, ...)
 /* Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. 
- * Scans string parameters for illegal sql chars. */
+ * Scans unquoted string parameters for illegal literal sql chars.
+ * Escapes quoted string parameters. 
+ * NOSLQINJ tag is added to beginning. */
 #ifdef __GNUC__
 __attribute__((format(printf, 3, 4)))
 #endif
@@ -607,16 +597,19 @@ __attribute__((format(printf, 3, 4)))
 
 
 int vaSqlSafefFrag(char* buffer, int bufSize, char *format, va_list args);
-/* Format string to buffer, vsprintf style, only with buffer overflow
- * checking.  The resulting string is always terminated with zero byte. 
- * This version does not add the tag since it is assumed to be just a fragment of
+/* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte.
+ * Scans unquoted string parameters for illegal literal sql chars.
+ * Escapes quoted string parameters. 
+ * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
  * the entire sql string. */
 
 int sqlSafefFrag(char* buffer, int bufSize, char *format, ...)
 /* Format string to buffer, vsprintf style, only with buffer overflow
- * checking.  The resulting string is always terminated with zero byte. 
- * Scans string parameters for illegal sql chars. 
- * This version does not add the NOSQLINJ tag since it is assumed to be just a fragment of
+ * checking.  The resulting string is always terminated with zero byte.
+ * Scans unquoted string parameters for illegal literal sql chars.
+ * Escapes quoted string parameters. 
+ * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
  * the entire sql string. */
 #ifdef __GNUC__
 __attribute__((format(printf, 3, 4)))
@@ -624,24 +617,36 @@ __attribute__((format(printf, 3, 4)))
 ;
 
 
-void sqlDyStringVaPrintfExt(struct dyString *ds, boolean isFrag, char *format, va_list args);
-/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars. */
+void vaSqlDyStringPrintfExt(struct dyString *ds, boolean isFrag, char *format, va_list args);
+/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
+ * Strings inside quotes are automatically escaped.  
+ * NOSLQINJ tag is added to beginning if it is a new empty string and isFrag is FALSE. */
 
-void sqlDyStringVaPrintf(struct dyString *ds, char *format, va_list args);
-/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars. */
+void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args);
+/* Printf to end of dyString after scanning string parameters for illegal sql chars.
+ * Strings inside quotes are automatically escaped.  
+ * NOSLQINJ tag is added to beginning if it is a new empty string. */
 
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
-/*  Printf to end of dyString after scanning string parameters for illegal sql chars. */
+/* Printf to end of dyString after scanning string parameters for illegal sql chars.
+ * Strings inside quotes are automatically escaped.  
+ * NOSLQINJ tag is added to beginning if it is a new empty string. */
 #ifdef __GNUC__
 __attribute__((format(printf, 2, 3)))
 #endif
 ;
 
-void sqlDyStringVaPrintfFrag(struct dyString *ds, char *format, va_list args);
-/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars. NOSLQINJ tag is not added. */
+void vaSqlDyStringPrintfFrag(struct dyString *ds, char *format, va_list args);
+/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
+ * Strings inside quotes are automatically escaped.
+ * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
+ * the entire sql string. */
 
 void sqlDyStringPrintfFrag(struct dyString *ds, char *format, ...)
-/*  Printf to end of dyString after scanning string parameters for illegal sql chars. NOSLQINJ tag is not added. */
+/* Printf to end of dyString after scanning string parameters for illegal sql chars.
+ * Strings inside quotes are automatically escaped.
+ * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
+ * the entire sql string. */
 #ifdef __GNUC__
 __attribute__((format(printf, 2, 3)))
 #endif
@@ -649,14 +654,11 @@ __attribute__((format(printf, 2, 3)))
 
 void sqlDyStringAppend(struct dyString *ds, char *string);
 /* Append zero terminated string to end of dyString.
- * Make sure the NOSQLINJ prefix gets added if needed */
-
-char *sqlDyStringFrag(struct dyString *ds);
-/* If ds is only a sql fragment, do not need leading NOSQLINJ tag */
+ * Adds the NOSQLINJ prefix if dy string is empty. */
 
 struct dyString *sqlDyStringCreate(char *format, ...)
-/* Create a dyString with a printf style initial content 
- * Make sure the NOSQLINJ prefix gets added if needed */
+/* Create a dyString with a printf style initial content
+ * Adds the NOSQLINJ prefix. */
 #ifdef __GNUC__
 __attribute__((format(printf, 1, 2)))
 #endif
@@ -664,7 +666,7 @@ __attribute__((format(printf, 1, 2)))
 
 void sqlCheckError(char *format, ...)
 /* A sql injection error has occurred. Check for settings and respond
- * as appropriate with error, warning, ignore, dumpstack.
+ * as appropriate with error, warning, logOnly, ignore, dumpstack.
  * Then abort if needed. NOTE: unless it aborts, this function will return! */
 #ifdef __GNUC__
 __attribute__((format(printf, 1, 2)))

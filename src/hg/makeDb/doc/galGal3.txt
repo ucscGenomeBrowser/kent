@@ -2974,5 +2974,34 @@ TMPDIR=/scratch/tmp
     # verify this file exists:
     #	/gbdb/galGal3/liftOver/galGal3ToGalGal4.over.chain.gz
     # and try out the conversion on genome-test from galGal3 to galGal4 
+
+############################################################################
+# NUMTS TRACK (DONE 2013-06-15 - Chin)
+
+# copy and unzip
+# http://193.204.182.50/files/tracks.zip and
+# http://193.204.182.50/files/other%20NumtS%20tracks.zip
+# to /hive/data/outside/NumtS/2012/tracks
+
+    mkdir /hive/data/genomes/galGal3/bed/NumtS
+    cd /hive/data/genomes/galGal3/bed/NumtS
+    cp /hive/data/outside/NumtS/2012/tracks/Gallus_gallus_3/* .
+    /hive/data/genomes/galGal3/bed/NumtS] cat tracks_nuclear_NumtS_GalGal3 | grep -v "^track" > galGal3NumtS.bed
+    cat tracks_NumtS-assembled_GalGal3 | grep -v "^track" > galGal3NumtSAssembled.bed
+    cat tracks_mit_NumtS_galgal3 | grep -v "^track" > galGal3NumtSMitochondrion.bed
+
+    # load the 3 bed files to galGal3
+    hgLoadBed galGal3  numtSAssembled  galGal3NumtSAssembled.bed
+    hgLoadBed galGal3 numtS galGal3NumtS.bed
+    hgLoadBed galGal3 numtSMitochondrion galGal3NumtSMitochondrion.bed
+
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/galGal3/NumtS
+    ln -s `pwd`/GG-3_NumtS_seqs.sorted.bam{,.bai} /gbdb/galGal3/NumtS/
+    hgBbiDbLink galGal3 bamAllNumtSSorted /gbdb/galGal3/NumtS/GG3_NumtS_seqs.sorted.bam
+    # setup trackDb for galGal3 and search rules
+
+
+
 ############################################################################
 
