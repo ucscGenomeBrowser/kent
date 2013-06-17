@@ -38,7 +38,7 @@ if (list != NULL)
     char query[256], **row, **row2;
     struct sqlResult *sr, *sr2;
     hPrintf("<B>InterPro Domains: </B> ");
-    hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/entry/%s\" TARGET=_blank>",
+    hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/protein/%s\" TARGET=_blank>",
     	swissProtAcc);
     hPrintf("Graphical view of domain structure</A><BR>");
     sqlSafef(query, sizeof(query),

@@ -46,7 +46,7 @@ struct gpFx
 	} details;
     };
 
-struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
+struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred, char *refAllele,
 			    struct dnaSeq *transcriptSequence, struct lm *lm);
 // return the predicted effect(s) of a variation list on a genePred
 

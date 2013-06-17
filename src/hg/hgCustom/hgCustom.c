@@ -116,7 +116,7 @@ if (hIsGsidServer())
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
   " line attributes as described in the \n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
-  " URLs for data in the bigBed, bigWig, BAM and VCF formats must be embedded in a track\n"
+  " Data in the bigBed, bigWig, BAM and VCF formats must be provided via a URL embedded in a track\n"
   " line in the box below.\n"
   );
   }
@@ -144,7 +144,7 @@ else
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
   " line attributes as described in the \n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
-  " URLs for data in the bigBed, bigWig, BAM and VCF formats must be embedded in a track\n"
+  " Data in the bigBed, bigWig, BAM and VCF formats must be provided via a URL embedded in a track\n"
   " line in the box below.\n"
   " Publicly available custom tracks are listed\n"
   " <A HREF='../goldenPath/customTracks/custTracks.html'>here</A>.\n"
@@ -748,7 +748,7 @@ puts("<TD VALIGN=\"TOP\">");
 puts("<TABLE BORDER=0>");
 
 /* button to add custom tracks */
-int buttonWidth = 13;
+int buttonWidth = 18;
 puts("<TR><TD>");
 printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" STYLE=\"width:%dem\">",
                 hgCtDoAdd, "add custom tracks", buttonWidth);
@@ -783,6 +783,16 @@ printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tab
 cartSaveSession(cart);
 printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
         "go to table browser", buttonWidth);
+puts("</FORM>");
+puts("</TD></TR>");
+
+/* button for VAI navigation */
+puts("<TR><TD>");
+printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"vaiForm\">\n",
+           hgVaiName());
+cartSaveSession(cart);
+printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
+        "go to variant annotation integrator", buttonWidth);
 puts("</FORM>");
 puts("</TD></TR>");
 

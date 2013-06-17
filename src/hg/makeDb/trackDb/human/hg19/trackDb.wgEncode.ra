@@ -7,14 +7,17 @@ include wgEncodeGencodeV4.ra alpha
 include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV11.ra alpha
 include wgEncodeGencodeV13.ra alpha
+include wgEncodeGencodeV15.ra alpha
 
-# GENCODE trackDb changes in transition to public to support highlighting
-include wgEncodeGencodeV7.release3.ra
+# GENCODE public tracks
+include wgEncodeGencodeV7.release3.ra beta,public
+include wgEncodeGencodeV7.release4.ra alpha
 include wgEncodeGencodeV10.release3.ra
-include wgEncodeGencodeV12.release3.ra
+include wgEncodeGencodeV12.release3.ra beta,public
+include wgEncodeGencodeV12.release4.ra alpha
 include wgEncodeGencodeV14.ra beta,public
 include wgEncodeGencodeV14.release2.ra alpha
-include wgEncodeGencodeV15.ra alpha
+include wgEncodeGencodeV16.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.release2.ra

@@ -1832,4 +1832,31 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     ln -s blastz.bosTau7.swap lastz.bosTau7
 
 
+
+############################################################################
+# NUMTS TRACK (DONE 2013-06-16 - Chin)
+
+# copy and unzip
+# http://193.204.182.50/files/tracks.zip and 
+# http://193.204.182.50/files/other%20NumtS%20tracks.zip
+# to /hive/data/outside/NumtS/2012/tracks
+
+    mkdir /hive/data/genomes/ornAna1/bed/NumtS
+    cd /hive/data/genomes/ornAna1/bed/NumtS
+    cp /hive/data/outside/NumtS/2012/tracks/Ornythoryncus_anatinus_1/* .
+    cat  tracks_nuclear_NumtS_new_ornAna1.txt | grep -v "^track" > ornAna1NumtS.bed
+    cat tracks_NumtS_assembled_new_platypus.txt | grep -v "^track" > ornAna1NumtSAssembled.bed
+    cat tracks_mitochondrion_NumtS_new_ornAna1.txt | grep -v "^track" >  ornAna1NumtSMitochondrion.bed
+
+    # load the 3 bed files to ornAna1 
+    hgLoadBed ornAna1  numtSAssembled  ornAna1NumtSAssembled.bed
+    hgLoadBed ornAna1 numtS ornAna1NumtS.bed
+    hgLoadBed ornAna1 numtSMitochondrion ornAna1NumtSMitochondrion.bed
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/ornAna1/NumtS
+    ln -s `pwd`/OrnAna-1_NumtS_seqs.sorted.bam{,.bai} /gbdb/ornAna1/NumtS/
+    hgBbiDbLink ornAna1 bamAllNumtSSorted /gbdb/ornAna1/NumtS/RatNor_NumtS_seqs.sorted.bam
+    # setup trackDb for ornAna1
+
+
 ############################################################################

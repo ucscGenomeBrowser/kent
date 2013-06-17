@@ -449,3 +449,23 @@ vicPac1.perChromTables = no
     ssh hgwbeta "hgsql qapushq < /tmp/vicPac1.sql"
 
 ############################################################################
+# construct liftOver to vicPac2 (DONE - 2013-06-10 - Hiram)
+    screen -S vicPac2	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/vicPac1/bed/blat.vicPac2.2013-06-10
+    cd /hive/data/genomes/vicPac1/bed/blat.vicPac2.2013-06-10
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/vicPac1/jkStuff/vicPac1.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev vicPac1 vicPac2
+    #   real    0m1.838s
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/vicPac1/jkStuff/vicPac1.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev vicPac1 vicPac2 > do.log 2>&1
+    #	real    3064m58.156s
+
+    # verify this file exists:
+    #	/gbdb/vicPac1/liftOver/vicPac1ToVicPac2.over.chain.gz
+    # and try out the conversion on genome-test from vicPac1 to vicPac2
+
+############################################################################

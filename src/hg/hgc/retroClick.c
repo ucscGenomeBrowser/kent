@@ -733,7 +733,6 @@ pslList = getParentAligns(conn, mi, &table);
 displayParentAligns(mi, pslList, table);
 pslFreeList(&pslList);
 printTrackHtml(tdb);
-cartWebEnd();
 #if 0
 geneCheckFree(&gc);
 #endif

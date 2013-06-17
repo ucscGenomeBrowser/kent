@@ -848,7 +848,6 @@ prSeqLinks(conn, ci);
 prAligns(conn, ci);
 prMiscDiffs(conn, acc);
 prMethodsLink(conn, tdb->track);
-cartWebEnd();
 cloneInfoFree(&ci);
 hFreeConn(&conn);
 }
