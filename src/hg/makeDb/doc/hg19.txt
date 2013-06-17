@@ -20685,10 +20685,9 @@ hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
     make cmpRelease
 
     # update all.joiner and validate
-    cd kent/src/hg/makeDb/schema
-
     # look for the last section `begin Gencode V??' in all.joiner
     # and copy and update version
-
+    # repeat this until happy, editing minCheck as needed
+    for tbl in $(hgsql -Ne 'show tables like "wgEncodeGencode%V16"' hg19) ; do runJoiner.csh hg19 $tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >&check/joiner.out
 
 ############################################################################
