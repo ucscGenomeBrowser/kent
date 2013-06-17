@@ -6,22 +6,22 @@
 ## Extra column keys:
 ## SIFT: SIFT score from dbNSFP
 Uploaded Variation	Location	Allele	Gene	Feature	Feature type	Consequence	Position in cDNA	Position in CDS	Position in protein	Amino acid change	Codon change	Co-located Variation	Extra
-chr19_45405966_C/A	chr19:45405966	-	O96008-2	uc002ozz.3	Transcript	3_prime_UTR_variant	2449	-	-	-	-	-	EXON=9/9
-chr19_45405966_C/A	chr19:45405966	-	O96008	uc002ozx.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=9/10
-chr19_45405966_C/A	chr19:45405966	-	O96008	uc002ozy.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=9/10
-chr19_45405966_C/A	chr19:45405966	-	O96008	uc002paa.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=8/9
-chr19_45405966_C/A	chr19:45405966	-	P02649	uc002pab.3	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=3073
-chr19_45406350_C/T	chr19:45406350	-	O96008-2	uc002ozz.3	Transcript	3_prime_UTR_variant	2833	-	-	-	-	-	EXON=9/9
-chr19_45406350_C/T	chr19:45406350	C	O96008	uc002ozx.4	Transcript	missense_variant	1111	1010	337	L/P	CTG/CCG	-	SIFT=D(0.010000);EXON=10/10
-chr19_45406350_C/T	chr19:45406350	C	O96008	uc002ozy.4	Transcript	missense_variant	1114	1010	337	L/P	CTG/CCG	-	SIFT=D(0.010000);EXON=10/10
-chr19_45406350_C/T	chr19:45406350	C	O96008	uc002paa.4	Transcript	missense_variant	1206	1010	337	L/P	CTG/CCG	-	SIFT=D(0.010000);EXON=9/9
-chr19_45406350_C/T	chr19:45406350	-	P02649	uc002pab.3	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=2689
-chr19_45417440_A/G	chr19:45417440	-	P02649	uc002pab.3	Transcript	downstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=4790
-chr19_45417440_A/G	chr19:45417440	-	P02654	uc002pac.1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=137
-chr19_45417440_A/G	chr19:45417440	-	P02654	uc002pad.1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=137
-chr19_45417440_A/G	chr19:45417440	-	P02654	uc002pae.1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=481
-chr19_45417440_A/G	chr19:45417440	-	-	uc002paf.1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=1994
-chr19_45419476_G/A	chr19:45419476	A	P02654	uc002pac.1	Transcript	missense_variant	340	88	30	V/I	GTC/ATC	rs72654455	SIFT=T(0.840000);EXON=4/5
-chr19_45419476_G/A	chr19:45419476	A	P02654	uc002pad.1	Transcript	missense_variant	278	88	30	V/I	GTC/ATC	rs72654455	SIFT=T(0.840000);EXON=3/4
-chr19_45419476_G/A	chr19:45419476	A	P02654	uc002pae.1	Transcript	missense_variant	178	88	30	V/I	GTC/ATC	rs72654455	SIFT=T(0.840000);EXON=3/4
-chr19_45419476_G/A	chr19:45419476	-	-	uc002paf.1	Transcript	non_coding_exon_variant	43	-	-	-	-	rs72654455	EXON=1/2
+chr19_45405966_C/A	chr19:45405966	A	O96008-2	uc002ozz.3	Transcript	3_prime_UTR_variant	2449	-	-	-	-	-	EXON=9/9
+chr19_45405966_C/A	chr19:45405966	A	O96008	uc002ozx.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=9/10
+chr19_45405966_C/A	chr19:45405966	A	O96008	uc002ozy.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=9/10
+chr19_45405966_C/A	chr19:45405966	A	O96008	uc002paa.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=8/9
+chr19_45405966_C/A	chr19:45405966	A	P02649	uc002pab.3	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=3073
+chr19_45406350_C/T	chr19:45406350	C	O96008-2	uc002ozz.3	Transcript	3_prime_UTR_variant	2833	-	-	-	-	-	EXON=9/9
+chr19_45406350_C/T	chr19:45406350	C	O96008	uc002ozx.4	Transcript	missense_variant	1111	1010	337	L/P	cTg/cCg	-	EXON=10/10
+chr19_45406350_C/T	chr19:45406350	C	O96008	uc002ozy.4	Transcript	missense_variant	1114	1010	337	L/P	cTg/cCg	-	EXON=10/10
+chr19_45406350_C/T	chr19:45406350	C	O96008	uc002paa.4	Transcript	missense_variant	1206	1010	337	L/P	cTg/cCg	-	EXON=9/9
+chr19_45406350_C/T	chr19:45406350	C	P02649	uc002pab.3	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=2689
+chr19_45417440_A/G	chr19:45417440	G	P02649	uc002pab.3	Transcript	downstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=4790
+chr19_45417440_A/G	chr19:45417440	G	P02654	uc002pac.1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=137
+chr19_45417440_A/G	chr19:45417440	G	P02654	uc002pad.1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=137
+chr19_45417440_A/G	chr19:45417440	G	P02654	uc002pae.1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=481
+chr19_45417440_A/G	chr19:45417440	G	-	uc002paf.1	Transcript	upstream_gene_variant	-	-	-	-	-	rs111575056	DISTANCE=1994
+chr19_45419476_G/A	chr19:45419476	A	P02654	uc002pac.1	Transcript	missense_variant	340	88	30	V/I	Gtc/Atc	rs72654455	EXON=4/5
+chr19_45419476_G/A	chr19:45419476	A	P02654	uc002pad.1	Transcript	missense_variant	278	88	30	V/I	Gtc/Atc	rs72654455	EXON=3/4
+chr19_45419476_G/A	chr19:45419476	A	P02654	uc002pae.1	Transcript	missense_variant	178	88	30	V/I	Gtc/Atc	rs72654455	EXON=3/4
+chr19_45419476_G/A	chr19:45419476	A	-	uc002paf.1	Transcript	non_coding_exon_variant	43	-	-	-	-	rs72654455	EXON=1/2

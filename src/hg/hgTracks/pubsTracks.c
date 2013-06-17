@@ -242,7 +242,7 @@ if (ds->stringSize!=0)
     dyStringAppend(ds, sep);
 va_list args;
 va_start(args, format);
-sqlDyStringVaPrintfFrag(ds, format, args);
+vaSqlDyStringPrintfFrag(ds, format, args);
 va_end(args);
 }
 

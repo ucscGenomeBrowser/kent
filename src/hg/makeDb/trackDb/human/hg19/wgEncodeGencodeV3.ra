@@ -7,7 +7,7 @@ group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 fileSortOrder tableName=Contents dccAccession=UCSC_Accession
 dragAndDrop subTracks
-priority 34.307
+priority 34.199
 visibility hide
 color 12,12,120
 type genePred
@@ -76,14 +76,14 @@ searchMethod exact
 searchType genePred
 termRegex ENST[0-9]+
 #termRegex OTTHUMT[0-9]+
-searchPriority 2.2
+searchPriority 2.29901
 
 searchName wgEncodeGencodeManualV3Otter
 searchTable wgEncodeGencodeManualV3
 searchMethod exact
 searchType genePred
 termRegex OTTHUMT[0-9]+
-searchPriority 2.2
+searchPriority 2.29902
 #query select t1.chrom, t1.txStart, t1.txEnd, t2.ottTranscriptId from %s t1,wgEncodeGencodeClassesV3 t2 where t1.name = t2.name and t2.ottTranscriptId like '%s'
 xrefTable wgEncodeGencodeClassesV3
 xrefQuery select name,ottTranscriptId from %s where ottTranscriptId = '%s'
@@ -93,14 +93,14 @@ searchTable wgEncodeGencodeAutoV3
 searchMethod exact
 searchType genePred
 termRegex ENST[0-9]+
-searchPriority 2.3
+searchPriority 2.29903
 
 searchName wgEncodeGencodeManualV3Gene
 searchTable wgEncodeGencodeManualV3
 searchMethod exact
 searchType genePred
 #termRegex [a-z][a-z0-9][0-9]+
-searchPriority 2.4
+searchPriority 2.29904
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodeAutoV3Gene
@@ -108,6 +108,6 @@ searchTable wgEncodeGencodeAutoV3
 searchMethod exact
 searchType genePred
 #termRegex [a-z][a-z0-9][0-9]+
-searchPriority 2.5
+searchPriority 2.29905
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 

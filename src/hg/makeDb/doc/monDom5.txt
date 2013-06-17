@@ -2217,4 +2217,33 @@ wait
     cd /hive/data/genomes/cerSim1/bed
     ln -s blastz.monDom5.swap lastz.monDom5
 
+
+############################################################################
+# NUMTS TRACK (DONE 2013-06-16 - Chin)
+
+# copy and unzip
+# http://193.204.182.50/files/tracks.zip and 
+# http://193.204.182.50/files/other%20NumtS%20tracks.zip
+# to /hive/data/outside/NumtS/2012/tracks
+
+    mkdir /hive/data/genomes/monDom5/bed/NumtS
+    cd /hive/data/genomes/monDom5/bed/NumtS
+    cp /hive/data/outside/NumtS/2012/tracks/Monodelphis_domestica_5/* .
+    cat tracks_nucleare_NumtS_unassembled_MonDom5 | grep -v "^track" > monDom5NumtS.bed
+    cat Tracks_NumtS_assembled_MonDom5 | grep -v "^track" > monDom5NumtSAssembled.bed
+    cat Tracks_Mitocondriale_NumtS_MonDom5 | grep -v "^track" >  monDom5NumtSMitochondrion.bed
+
+    # load the 3 bed files to monDom5 
+    hgLoadBed monDom5  numtSAssembled  monDom5NumtSAssembled.bed
+    hgLoadBed monDom5 numtS monDom5NumtS.bed
+    hgLoadBed monDom5 numtSMitochondrion monDom5NumtSMitochondrion.bed
+    
+    # The dataprovider does not produce the bam file yet, skip
+    # Make /gbdb/ links and load bam
+    // mkdir /gbdb/monDom5/NumtS
+    // ln -s `pwd`/OrnAna-1_NumtS_seqs.sorted.bam{,.bai} /gbdb/monDom5/NumtS/
+    //hgBbiDbLink monDom5 bamAllNumtSSorted /gbdb/monDom5/NumtS/RatNor_NumtS_seqs.sorted.bam
+    # setup trackDb for monDom5
+
+
 #########################################################################
