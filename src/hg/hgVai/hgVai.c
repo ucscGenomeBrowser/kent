@@ -66,7 +66,7 @@ printf("<style>\n"
 INLINE void startCollapsibleSection(char *sectionSuffix, char *title, boolean onByDefault)
 // Wrap shared args to jsBeginCollapsibleSectionFontSize
 {
-jsBeginCollapsibleSectionFontSize(cart, "hgva", sectionSuffix, title, FALSE, "1.1em");
+jsBeginCollapsibleSectionFontSize(cart, "hgva", sectionSuffix, title, onByDefault, "1.1em");
 }
 
 #define endCollapsibleSection jsEndCollapsibleSection
@@ -740,9 +740,10 @@ void selectOutput()
 puts("<BR>");
 printf("<div class='sectionLiteHeader'>Configure Output</div>\n");
 printf("<B>output format: </B>");
-char *selected = cartUsualString(cart, "hgva_outFormat", "");
+char *selected = cartUsualString(cart, "hgva_outFormat", "vepTab");
 printf("<SELECT ID='hgva_outFormat' NAME='hgva_outFormat'>\n");
 printOption("vepTab", selected, "Variant Effect Predictor (tab-separated text)");
+printOption("vepHtml", selected, "Variant Effect Predictor (HTML)");
 printf("</SELECT><BR>\n");
 char *compressType = cartUsualString(cart, "hgva_compressType", textOutCompressGzip);
 char *fileName = cartUsualString(cart, "hgva_outFile", "");
@@ -827,6 +828,8 @@ else
     submitAndDisclaimer();
     }
 printf("</FORM>");
+
+jsReloadOnBackButton(cart);
 
 webNewSection("Using the Variant Annotation Integrator");
 webIncludeHelpFile("hgVaiHelpText", FALSE);
@@ -1037,7 +1040,8 @@ if (hashFindVal(gratorsByName, seqChangeTable) == NULL)
 }
 
 void addOutputTracks(struct annoGrator **pGratorList, struct hash *gratorsByName,
-		     struct annoFormatter *vepOut, struct annoAssembly *assembly, char *chrom)
+		     struct annoFormatter *vepOut, struct annoAssembly *assembly, char *chrom,
+		     boolean doHtml)
 // Construct grators for tracks selected to appear in EXTRAS column
 {
 char trackPrefix[128];
@@ -1064,7 +1068,7 @@ for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
 	{
 	// trackName for PolyPhen2 has a suffix for subset -- strip it if we find it:
 	subset = stripSubsetFromTrackName(trackName);
-	description = dbNsfpDescFromTableName(trackName, subset, FALSE);
+	description = dbNsfpDescFromTableName(trackName, subset, doHtml);
 	addDbNsfpSeqChange(trackName, assembly, gratorsByName, pGratorList);
 	char *fileName = fileNameFromTable(trackName);
 	if (fileName != NULL)
@@ -1186,35 +1190,51 @@ struct annoGrator *gratorList = NULL;
 slAddHead(&gratorList, gpVarGrator);
 if (snpGrator != NULL)
     slAddHead(&gratorList, snpGrator);
-struct annoFormatter *vepOut = annoFormatVepNew("stdout", primary, varTdb->longLabel,
+
+// Text or HTML output?
+char *outFormat = cartUsualString(cart, "hgva_outFormat", "vepTab");
+boolean doHtml = sameString(outFormat, "vepHtml");
+
+// Initialize VEP formatter:
+struct annoFormatter *vepOut = annoFormatVepNew("stdout", doHtml,
+						primary, varTdb->longLabel,
 						(struct annoStreamer *)gpVarGrator,
 						geneTdb->longLabel,
 						(struct annoStreamer *)snpGrator,
 						snpDesc);
-
-addOutputTracks(&gratorList, gratorsByName, vepOut, assembly, chrom);
+addOutputTracks(&gratorList, gratorsByName, vepOut, assembly, chrom, doHtml);
 addFilterTracks(&gratorList, gratorsByName, assembly, chrom);
 
 slReverse(&gratorList);
 
-// Undo the htmlPushEarlyHandlers() because after this point they make ugly text:
-popWarnHandler();
-popAbortHandler();
-textOpen();
-webStartText();
-
+if (doHtml)
+    {
+    webStart(cart, database, "Annotated Variants in VEP/HTML format");
+    }
+else
+    {
+    // Undo the htmlPushEarlyHandlers() because after this point they make ugly text:
+    popWarnHandler();
+    popAbortHandler();
+    textOpen();
+    webStartText();
+    }
 struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
 if (chrom != NULL)
     annoGratorQuerySetRegion(query, chrom, start, end);
 annoGratorQueryExecute(query);
-
-textOutClose(&compressPipeline);
 annoGratorQueryFree(&query);
+
+if (doHtml)
+    webEnd();
+else
+    textOutClose(&compressPipeline);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 if (hIsPrivateHost())
     pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
@@ -1261,5 +1281,6 @@ else if (webGotWarnings())
 // then it wrote HTML showing multiple position matches & links.
 
 cartCheckout(&cart);
+cgiExitTime("hgVai", enteredMainTime);
 return 0;
 }

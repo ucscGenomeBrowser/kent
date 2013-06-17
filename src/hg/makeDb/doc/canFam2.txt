@@ -3270,3 +3270,29 @@ TMPDIR=/scratch/tmp
     # and try out the conversion on genome-test from canFam2 to canFam3 
 
 ############################################################################
+# NUMTS TRACK (DONE 2013-06-16 - Chin)
+
+# copy and unzip
+# http://193.204.182.50/files/tracks.zip and 
+# http://193.204.182.50/files/other%20NumtS%20tracks.zip
+# to /hive/data/outside/NumtS/2012/tracks
+
+    mkdir /hive/data/genomes/canFam2/bed/NumtS
+    cd /hive/data/genomes/canFam2/bed/NumtS
+    cp /hive/data/outside/NumtS/2012/tracks/Canis_lupus_familiaris_2/* .
+    cat Tracks_nuclear_NumtS_CAmFAm2 | grep -v "^track" > canFam2NumtS.bed
+    cat  Tracks_NumtS_assembled_CanFam2 | grep -v "^track" > canFam2NumtSAssembled.bed
+    cat Tracks_mit_NumtS_CanFam2 | grep -v "^track" >  canFam2NumtSMitochondrion.bed
+
+    # load the 3 bed files to canFam2
+    hgLoadBed canFam2  numtSAssembled  canFam2NumtSAssembled.bed
+    hgLoadBed canFam2 numtS canFam2NumtS.bed
+    hgLoadBed canFam2 numtSMitochondrion canFam2NumtSMitochondrion.bed
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/canFam2/NumtS
+    ln -s `pwd`/CanFam-2_NumtS_seqs.sorted.bam{,.bai} /gbdb/canFam2/NumtS/
+    hgBbiDbLink canFam2 bamAllNumtSSorted /gbdb/canFam2/NumtS/CanFam-2_NumtS_seqs.sorted.bam
+    # setup trackDb for canFam2
+
+
+############################################################################
