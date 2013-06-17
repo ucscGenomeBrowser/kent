@@ -243,6 +243,12 @@ txSeq->size = txLen;
 return txSeq;
 }
 
+char *variantToGenomicSequence(struct variant *variant, char *chromSeq, struct lm *lm)
+/* Return variant's reference allele. */
+{
+return lmCloneStringZ(lm, chromSeq+variant->chromStart, (variant->chromEnd - variant->chromStart));
+}
+
 static struct annoRow *aggvGenRows( struct annoGratorGpVar *self, struct variant *variant,
 				    struct genePred *pred, struct annoRow *inRow,
 				    struct lm *callerLm)
@@ -262,7 +268,8 @@ if (self->curChromSeq == NULL || differentString(self->curChromSeq->name, pred->
 // drop it.
 struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, self->curChromSeq->dna,
 							      self->lm);
-struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence, self->lm);
+char *refAllele = variantToGenomicSequence(variant, self->curChromSeq->dna, self->lm);
+struct gpFx *effects = gpFxPredEffect(variant, pred, refAllele, transcriptSequence, self->lm);
 struct annoRow *rows = NULL;
 
 for(; effects; effects = effects->next)
