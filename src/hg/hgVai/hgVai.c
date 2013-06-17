@@ -246,10 +246,12 @@ void askUserForVariantCustomTrack()
 /* Tell the user that we need a custom track of variants to work on. */
 {
 puts("<BR>");
-printf("<div class='sectionLiteHeader'>Upload Variants as Custom Track</div>\n");
-printf("Please create a custom track containing your variants of interest, using either "
+printf("<div class='sectionLiteHeader'>Upload Variants</div>\n");
+printf("Please provide a set of variant calls to annotate, as either a custom track in "
        "<A HREF='../FAQ/FAQformat.html#format10' TARGET=_BLANK>pgSnp</A> or "
-       "<A HREF='../goldenPath/help/vcf.html' TARGET=_BLANK>VCF</A> format:<BR>\n");
+       "<A HREF='../goldenPath/help/vcf.html' TARGET=_BLANK>VCF</A> format, "
+       "or a VCF track on your "
+       "<A HREF='../goldenPath/help/hgTrackHubHelp.html' TARGET=_BLANK>track hub</A>:<BR>\n");
 printCtAndHubButtons();
 puts("<BR>");
 }
@@ -319,10 +321,10 @@ void selectVariants(struct slRef *varGroupList, struct slRef *varTrackList)
 /* Offer selection of user's variant custom tracks. */
 {
 printf("<div class='sectionLiteHeader'>Select Variants</div>\n");
-printf("If you have more than one custom track in "
+printf("If you have more than one custom track or hub track in "
        "<A HREF='../FAQ/FAQformat.html#format10' TARGET=_BLANK>pgSnp</A> or "
        "<A HREF='../goldenPath/help/vcf.html' TARGET=_BLANK>VCF</A> format, "
-       "please select the one you wish to annotate.<BR>\n");
+       "please select the one you wish to annotate:<BR>\n");
 printf("<B>variants: </B>");
 printf("<SELECT ID='hgva_variantTrack' NAME='hgva_variantTrack'>\n");
 char *selected = cartUsualString(cart, "hgva_variantTrack", "");
@@ -669,13 +671,14 @@ if (!gotCommon && !gotMult)
 startCollapsibleSection("filtersVar", "Known variation", FALSE);
 if (gotMult)
     {
-    cartMakeCheckBox(cart, "hgva_exclude_snpMult", FALSE);
-    printf("Exclude variants mapped to multiple genomic locations by dbSNP<BR>\n");
+    cartMakeCheckBox(cart, "hgva_include_snpMult", TRUE);
+    printf("Include variants even if they are co-located with variants that have been mapped to "
+	   "multiple genomic locations by dbSNP<BR>\n");
     }
 if (gotCommon)
     {
-    cartMakeCheckBox(cart, "hgva_exclude_snpCommon", FALSE);
-    printf("Exclude \"common\" variants "
+    cartMakeCheckBox(cart, "hgva_include_snpCommon", TRUE);
+    printf("Include variants even if they are co-located with \"common\" variants "
 	   "(uniquely mapped variants with global minor allele frequency (MAF) "
 	   "of at least 1%% according to dbSNP)<BR>\n");
     }
@@ -745,7 +748,7 @@ printf("<SELECT ID='hgva_outFormat' NAME='hgva_outFormat'>\n");
 printOption("vepTab", selected, "Variant Effect Predictor (tab-separated text)");
 printOption("vepHtml", selected, "Variant Effect Predictor (HTML)");
 printf("</SELECT><BR>\n");
-char *compressType = cartUsualString(cart, "hgva_compressType", textOutCompressGzip);
+char *compressType = cartUsualString(cart, "hgva_compressType", textOutCompressNone);
 char *fileName = cartUsualString(cart, "hgva_outFile", "");
 printf("<B>output file:</B>&nbsp;");
 cgiMakeTextVar("hgva_outFile", fileName, 29);
@@ -1099,14 +1102,14 @@ void addFilterTracks(struct annoGrator **pGratorList, struct hash *gratorsByName
 		     struct annoAssembly *assembly, char *chrom)
 // Add grators for filters (not added to vepOut):
 {
-if (cartUsualBoolean(cart, "hgva_exclude_snpCommon", FALSE))
+if (!cartUsualBoolean(cart, "hgva_include_snpCommon", TRUE))
     {
     struct annoGrator *grator = gratorForSnpBed4(gratorsByName, "Common", assembly, chrom,
 						 agoMustNotOverlap, NULL);
     updateGratorList(grator, pGratorList);
     }
 
-if (cartUsualBoolean(cart, "hgva_exclude_snpMult", FALSE))
+if (!cartUsualBoolean(cart, "hgva_include_snpMult", TRUE))
     {
     struct annoGrator *grator = gratorForSnpBed4(gratorsByName, "Mult", assembly, chrom,
 						 agoMustNotOverlap, NULL);
