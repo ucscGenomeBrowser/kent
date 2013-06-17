@@ -20639,7 +20639,7 @@ hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
 
     # obtain transcription support level analysis from UCSC GENCODE group (markd/rachel)
     mkdir -p data
-    cp /cluster/home/markd/compbio/ccds/branches/transSupV16.1/modules/gencodeTransSupport/exprs/classDev/runs/2013-06-10/results/gencode.v16.transcriptionSupportLevel.{tab,tsv} data/
+    cp /cluster/home/markd/compbio/ccds/branches/transSupV16.1/modules/gencodeTransSupport/exprs/classDev/runs/2013-06-16/results/gencode.v16.transcriptionSupportLevel.{tab,tsv} data/
 
     # create Makefile from previous one.  
     cp ../gencodeV15/Makefile .
@@ -20677,9 +20677,18 @@ hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
     # priority - set to previous version priority minus 0.001
     # searchPriority - set each to previous -0.001 
 
- and searchPriority
     ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
     ### track handler for this version of gencode:
     registerTrackHandler("wgEncodeGencodeV16", gencodeGeneMethods);
+
+    # sanity check number of rows in each table
+    make cmpRelease
+
+    # update all.joiner and validate
+    cd kent/src/hg/makeDb/schema
+
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+
 
 ############################################################################
