@@ -6,7 +6,7 @@ longLabel Gene Annotations from ENCODE/GENCODE Version 4
 group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 dragAndDrop subTracks
-priority 34.306
+priority 34.198
 #visibility pack
 color 12,12,120
 #url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx

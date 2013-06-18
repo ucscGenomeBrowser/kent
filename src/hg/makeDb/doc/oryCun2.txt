@@ -796,4 +796,30 @@ liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
     cd /hive/data/genomes/oryCun2/bed
     ln -s blastz.mm10.swap lastz.mm10
 
+
+############################################################################
+# NUMTS TRACK (DONE 2013-06-16 - Chin)
+# copy and unzip
+# http://193.204.182.50/files/tracks.zip and 
+# http://193.204.182.50/files/other%20NumtS%20tracks.zip
+# to /hive/data/outside/NumtS/2012/tracks
+
+    mkdir /hive/data/genomes/oryCun2/bed/NumtS
+    cd /hive/data/genomes/oryCun2/bed/NumtS
+    cp /hive/data/outside/NumtS/2012/tracks/Oryctolagus_cuniculus_2/* .
+    cat tracks_numtS_nuclear_OryCun2 | grep -v "^track" > oryCun2NumtS.bed
+    cat tracks_NumtS_assembled_OryCun2 | grep -v "^track" > oryCun2NumtSAssembled.bed
+    cat tracks_mit_NumtS_OryCun2 | grep -v "^track" >  oryCun2NumtSMitochondrion.bed
+
+    # load the 3 bed files to oryCun2 
+    hgLoadBed oryCun2  numtSAssembled  oryCun2NumtSAssembled.bed
+    hgLoadBed oryCun2 numtS oryCun2NumtS.bed
+    hgLoadBed oryCun2 numtSMitochondrion oryCun2NumtSMitochondrion.bed
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/oryCun2/NumtS
+    ln -s `pwd`/Rabbit-2_NumtS_seqs.sorted.bam{,.bai} /gbdb/oryCun2/NumtS/
+    hgBbiDbLink oryCun2 bamAllNumtSSorted /gbdb/oryCun2/NumtS/Rabbit-2_seqs.sorted.bam
+    # setup trackDb for oryCun2
+
+
 ##############################################################################

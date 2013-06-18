@@ -307,6 +307,13 @@ else
 	    {
 	    self->queryChrom = self->queryChrom->next;
 	    self->doNextChunk = FALSE;
+	    resetMergeState(self);
+	    }
+	if (self->hasBin)
+	    {
+	    self->mergeBins = TRUE;
+	    if (self->qLm == NULL)
+		self->qLm = lmInit(0);
 	    }
 	}
     if (self->queryChrom == NULL)

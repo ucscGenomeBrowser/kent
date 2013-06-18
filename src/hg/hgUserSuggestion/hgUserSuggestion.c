@@ -134,6 +134,24 @@ do
 return (count >= 1);
 }
 
+boolean validateCategory(char *category)
+/* Validate the Category from the request */
+{
+const char *cat[5];
+cat[0] = "Tracks";
+cat[1] = "Genome Assemblies";
+cat[2] = "Browser Tools";
+cat[3] = "Command-line Utilities";
+cat[4] = "Others";
+
+int i;
+for(i=0;i<5;i++)
+{
+    if (strcmp(cat[i], category)==0) return TRUE;
+}
+return FALSE;
+}
+
 
 /* javascript functions */
 void printMainForm()
@@ -335,6 +353,18 @@ hPrintf(
     summary, details);
 } 
 
+void printInvalidCategory(char *invalidCategory)
+/* display suggestion confirm page */
+{
+hPrintf(
+    "<h2>Invalid Category.</h2>");
+hPrintf(
+    "<p>"
+    "The category \"%s\" is invalid. Please correct it and "
+    "<a href=\"javascript: history.go(-1)\">submit</a> again.</p>",
+    invalidCategory);
+}
+
 void printInvalidEmailAddr(char *invalidEmailAddr)
 /* display suggestion confirm page */
 {
@@ -414,6 +444,14 @@ char suggestID[512];
 safef(suggestID, sizeof(suggestID),"%s %s", sEmail, now());
 char subject[512];
 safef(subject, sizeof(subject),"%s %s", filter, suggestID);
+
+/* reject suggestion if category is invalid */
+if (!validateCategory(sCategory))
+{
+    printInvalidCategory(sCategory);
+    return;  
+} 
+
 /* Send back suggestion only with valid user email address */
 if (spc_email_isvalid(sEmail) != 0)
 {

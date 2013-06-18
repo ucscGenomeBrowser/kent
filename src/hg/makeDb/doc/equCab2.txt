@@ -2554,7 +2554,7 @@ TMPDIR=/scratch/tmp
 XXX - running - Mon Nov  5 10:39:45 PST 2012
 
 ############################################################################
-# NUMTS TRACK (working 2013-02-05 - Chin)
+# NUMTS TRACK (DONE 2013-06-15 - Chin)
 
 # copy and unzip
 # http://193.204.182.50/files/tracks.zip and

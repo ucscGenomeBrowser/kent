@@ -264,7 +264,7 @@ gpFx->details.nonCodingExon.exonNumber = exonNum;
 gpFx->details.nonCodingExon.cDnaPosition = cDnaPosition;
 }
 
-struct gpFx *gpFxCheckUtr( struct allele *allele, struct genePred *pred, 
+struct gpFx *gpFxCheckUtr( struct allele *allele, struct genePred *pred,
 			   int exonNum, int cDnaPosition, struct lm *lm)
 /* check for effects in UTR of coding gene -- caller ensures it's in exon, pred is coding
  * and exonNum has been strand-adjusted */
@@ -280,7 +280,7 @@ else if (variant->chromStart < pred->txEnd && variant->chromEnd > pred->cdsEnd)
     term = (*pred->strand == '-') ? _5_prime_UTR_variant : _3_prime_UTR_variant;
 if (term != 0)
     {
-    gpFx = gpFxNew("", pred->name, term, nonCodingExon, lm);
+    gpFx = gpFxNew(allele->sequence, pred->name, term, nonCodingExon, lm);
     setNCExonVals(gpFx, exonNum, cDnaPosition);
     }
 return gpFx;
@@ -290,7 +290,8 @@ struct gpFx *gpFxChangedNoncodingExon(struct allele *allele, struct genePred *pr
 				      int exonNum, int cDnaPosition, struct lm *lm)
 /* generate an effect for a variant in a non-coding transcript */
 {
-struct gpFx *gpFx = gpFxNew("", pred->name, non_coding_exon_variant, nonCodingExon, lm);
+struct gpFx *gpFx = gpFxNew(allele->sequence, pred->name, non_coding_exon_variant, nonCodingExon,
+			    lm);
 if (*pred->strand == '-')
     exonNum = pred->exonCount - exonNum - 1;
 setNCExonVals(gpFx, exonNum, cDnaPosition);
@@ -414,7 +415,7 @@ char *oldCodingSequence, *newCodingSequence, *oldaa, *newaa;
 getSequences(pred, transcriptSequence->dna, &oldCodingSequence, &oldaa, lm);
 getSequences(newPred, newSequence, &newCodingSequence, &newaa, lm);
 
-// if coding sequence hasn't changed, we're done (allele == reference allele)
+// if coding sequence hasn't changed (just UTR), we're done
 if (sameString(oldCodingSequence, newCodingSequence))
     return effectsList;
 
@@ -467,7 +468,7 @@ return effectsList;
 }
 
 
-struct gpFx *gpFxInExon(struct allele *allele, struct genePred *pred, int exonNum,
+struct gpFx *gpFxInExon(struct allele *allele, struct genePred *pred, char *refAllele, int exonNum,
 			int exonQStart, struct dnaSeq *transcriptSequence, struct lm *lm)
 /* generate an effect from a different allele in an exon */
 {
@@ -478,7 +479,13 @@ char *newSequence = gpFxModifySequence(allele, pred, exonNum, exonQStart,
 				       &cdsPosition, &cdsBasesAdded, lm);
 
 if (sameString(newSequence, transcriptSequence->dna))
-    return NULL;  // no change in transcript
+    {
+    struct variant *variant = allele->variant;
+    errAbort("gpFxInExon: %s:%d-%d, allele='%s', refAllele='%s', no change, shouldn't be here",
+	     variant->chrom, variant->chromStart+1, variant->chromEnd, allele->sequence,
+	     refAllele);
+    return NULL;  // no change in transcript -- but allele should always be non-reference
+    }
 
 struct gpFx *effectsList;
 if (pred->cdsStart != pred->cdsEnd)
@@ -493,8 +500,29 @@ else
 return effectsList;
 }
 
+static boolean hasAltAllele(struct allele *alleles, char *refAllele)
+/* Make sure there's something to work on here... */
+{
+while (alleles != NULL && sameString(alleles->sequence, refAllele))
+    alleles = alleles->next;
+return (alleles != NULL);
+}
+
+static char *firstAltAllele(struct allele *alleles, char *refAllele)
+/* Ensembl always reports an alternate allele, even if that allele is not being used
+ * to calculate any consequence.  When allele doesn't really matter, just use the
+ * first alternate allele that is given. */
+{
+while (alleles != NULL && sameString(alleles->sequence, refAllele))
+    alleles = alleles->next;
+if (alleles == NULL)
+    errAbort("firstAltAllele: no alt allele in list");
+return alleles->sequence;
+}
+
 static struct gpFx *gpFxCheckExons(struct variant *variantList, struct genePred *pred,
-				   struct dnaSeq *transcriptSequence, struct lm *lm)
+				   char *refAllele, struct dnaSeq *transcriptSequence,
+				   struct lm *lm)
 // check to see if the variant is in an exon
 {
 struct gpFx *effectsList = NULL;
@@ -516,15 +544,18 @@ for (ii=0; ii < pred->exonCount; ii++)
 	    if (size != end - variant->chromStart)
 		{
 		// variant is not completely in exon
-		struct gpFx *effect = gpFxNew("", pred->name,
-					      complex_transcript_variant, none, lm);
+		char *altAllele = firstAltAllele(variant->alleles, refAllele);
+		struct gpFx *effect = gpFxNew(altAllele, pred->name, complex_transcript_variant,
+					      none, lm);
 		effectsList = slCat(effectsList, effect);
 		}
 	    struct allele *allele = variant->alleles;
 	    for(; allele ; allele = allele->next)
 		{
-		effectsList = slCat(effectsList, gpFxInExon(allele, pred, ii, exonQStart,
-							    transcriptSequence, lm));
+		if (differentString(allele->sequence, refAllele))
+		    effectsList = slCat(effectsList,
+					gpFxInExon(allele, pred, refAllele, ii, exonQStart,
+						   transcriptSequence, lm));
 		}
 	    }
 	}
@@ -534,7 +565,8 @@ for (ii=0; ii < pred->exonCount; ii++)
 return effectsList;
 }
 
-static struct gpFx *gpFxCheckIntrons(struct variant *variant, struct genePred *pred, struct lm *lm)
+static struct gpFx *gpFxCheckIntrons(struct variant *variant, struct genePred *pred,
+				     char *altAllele, struct lm *lm)
 // check to see if a single variant overlaps an intron (and possibly splice region)
 //#*** TODO: watch out for "introns" that are actually indels between tx seq and ref genome!
 {
@@ -558,7 +590,7 @@ for (ii=0; ii < pred->exonCount - 1; ii++)
 		 (variant->chromEnd > intronEnd-8 && variant->chromStart < intronEnd+3))
 	    // Within 3 to 8 bases of intron start or end:
 	    soNumber = splice_region_variant;
-	struct gpFx *effects = gpFxNew("", pred->name, soNumber, intron, lm);
+	struct gpFx *effects = gpFxNew(altAllele, pred->name, soNumber, intron, lm);
 	effects->details.intron.intronNumber = minusStrand ? (pred->exonCount - ii - 1) : ii;
 	slAddHead(&effectsList, effects);
 	}
@@ -567,7 +599,8 @@ for (ii=0; ii < pred->exonCount - 1; ii++)
 	{
 	// if variant is in exon *but* within 3 bases of splice site,
 	// it also qualifies as splice_region_variant:
-	struct gpFx *effects = gpFxNew("", pred->name, splice_region_variant, intron, lm);
+	struct gpFx *effects = gpFxNew(altAllele, pred->name,
+				       splice_region_variant, intron, lm);
 	effects->details.intron.intronNumber = minusStrand ? (pred->exonCount - ii - 1) : ii;
 	slAddHead(&effectsList, effects);
 	}
@@ -577,15 +610,16 @@ return effectsList;
 
 
 static struct gpFx *gpFxCheckBackground(struct variant *variant, struct genePred *pred,
-					struct lm *lm)
+					char *refAllele, struct lm *lm)
 // check to see if the variant is up or downstream or in intron of the gene 
 {
 struct gpFx *effectsList = NULL;
+char *altAllele = firstAltAllele(variant->alleles, refAllele);
 
 for(; variant ; variant = variant->next)
     {
     // is this variant in an intron
-    effectsList = slCat(effectsList, gpFxCheckIntrons(variant, pred, lm));
+    effectsList = slCat(effectsList, gpFxCheckIntrons(variant, pred, altAllele, lm));
 
     // Is this variant to the left or right of transcript?
     enum soTerm soNumber = 0;
@@ -607,7 +641,7 @@ for(; variant ; variant = variant->next)
 	}
     if (soNumber != 0)
 	{
-	struct gpFx *effects = gpFxNew("", pred->name, soNumber, none, lm);
+	struct gpFx *effects = gpFxNew(altAllele, pred->name, soNumber, none, lm);
 	effectsList = slCat(effectsList, effects);
 	}
     }
@@ -628,7 +662,7 @@ for(; variant; variant = variant->next)
 	errAbort("gpFxPredEffect needs either 1 variant, or only 1 allele in all variants");
 }
 
-struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
+struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred, char *refAllele,
 			    struct dnaSeq *transcriptSequence, struct lm *lm)
 // return the predicted effect(s) of a variation list on a genePred
 {
@@ -637,13 +671,17 @@ struct gpFx *effectsList = NULL;
 // make sure we can deal with the variants that are coming in
 checkVariantList(variant);
 
-// check to see if SNP is up or downstream in intron 
-effectsList = slCat(effectsList, gpFxCheckBackground(variant, pred, lm));
+// If only the reference allele has been observed, skip it:
+if (! hasAltAllele(variant->alleles, refAllele))
+    return NULL;
+
+// check to see if SNP is up or downstream or in intron
+effectsList = slCat(effectsList, gpFxCheckBackground(variant, pred, refAllele, lm));
 
 // check to see if SNP is in the transcript
-effectsList = slCat(effectsList, gpFxCheckExons(variant, pred, transcriptSequence, lm));
+effectsList = slCat(effectsList, gpFxCheckExons(variant, pred, refAllele, transcriptSequence, lm));
 
-//#*** sort by position
+//#*** sort by transcript name?  transcript start?
 
 return effectsList;
 }

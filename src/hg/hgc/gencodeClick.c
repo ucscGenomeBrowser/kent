@@ -193,7 +193,7 @@ prExtIdAnchor(id, urlTemplate);
 static void writePosLink(char *chrom, int chromStart, int chromEnd)
 /* write link to a genomic position */
 {
-printf("<a href=\"%s&db=%s&position=%s%%3A%d-%d\" target=_blank>%s:%d-%d</A>",
+printf("<a href=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>",
        hgTracksPathAndSettings(), database,
        chrom, chromStart, chromEnd, chrom, chromStart+1, chromEnd);
 }
