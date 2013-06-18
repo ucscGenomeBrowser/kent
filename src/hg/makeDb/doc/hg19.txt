@@ -20672,10 +20672,12 @@ hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
     cp human/hg19/wgEncodeGencodeV15.html human/hg19/wgEncodeGencodeV16.html
 
     # edit these plus human/hg19/trackDb.wgEncode.ra
-    # set priorities in wgEncodeGencodeV16.ra in reverse order with previous
-    # tracks so newest shows up first
-    # priority - set to previous version priority minus 0.001
-    # searchPriority - set each to previous -0.001 
+    # - set priorities in wgEncodeGencodeV16.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous -0.001 
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
 
     ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
     ### track handler for this version of gencode:
