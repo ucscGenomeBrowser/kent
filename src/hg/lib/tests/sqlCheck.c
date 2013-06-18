@@ -14,6 +14,7 @@ printf(
  "\n"
  "where type can be \n"
  "  ID for Identifier -- these should be alphanumeric, underscore, and period but not allow spaces, quotes, etc\n"
+ "  IL for Identifier List -- these should be identifiers comma-separated list. Currently '.' is allowed as a special exception.\n"
  "  ES for Escape the string using mysql -- this should allow all and escape all characters except 0 (which is useful for binary but not strings)\n"
  "  EE for Escape Every evil character -- this should append escaped all forbidden characters except 0 (which is useful for binary but not strings)\n"
  "\n"
@@ -32,6 +33,10 @@ char *value   = argv[2];
 if (sameString(theType,"ID"))
     {
     printf("SELECT * FROM %s;\n", sqlCheckIdentifier(value));  // typically a table name or field name etc, is not quoted or escaped.
+    }
+else if (sameString(theType,"IL"))
+    {
+    printf("SELECT %s FROM table;\n", sqlCheckIdentifiersList(value));  // typically a comma-separated list of table or field names.
     }
 else if (sameString(theType,"ES"))
     {

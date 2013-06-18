@@ -1519,21 +1519,7 @@ printf("</div>\n"); // sourceContainerPlus (extend down a bit so sections can be
 printOutputSection(queryConfig);
 printSubmitSection();
 
-// __detectback trick from http://siphon9.net/loune/2009/07/detecting-the-back-or-refresh-button-click/
-printf("<script>\n"
-       "document.write(\"<form style='display: none'><input name='__detectback' id='__detectback' "
-       "value=''></form>\");\n"
-       "function checkPageBackOrRefresh() {\n"
-       "  if (document.getElementById('__detectback').value) {\n"
-       "    return true;\n"
-       "  } else {\n"
-       "    document.getElementById('__detectback').value = 'been here';\n"
-       "    return false;\n"
-       "  }\n"
-       "}\n"
-       "window.onload = function() { "
-       "  if (checkPageBackOrRefresh()) { window.location.replace('%s?%s'); } };\n"
-       "</script>\n", getScriptName(), cartSidUrlString(cart));
+jsReloadOnBackButton(cart);
 
 //#*** ------------------ more verbatim from mainPage.c ---------------
 /* Hidden form for jumping to custom tracks CGI. */

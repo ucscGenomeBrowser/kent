@@ -2848,10 +2848,11 @@ sqlCheckAllowAlphaChars(allowed);
 sqlCheckAllowDigitChars(allowed);
 }
 
-
 /* Currently used 10 times in the code via define sqlChkIl. */
 char *sqlCheckIdentifiersList(char *identifiers)
-/* Check that only valid identifier characters are used in a comma-separated list */
+/* Check that only valid identifier characters are used in a comma-separated list
+ * '.' is allowed also since some code uses it in place of an actual field name.
+ * See hgTables/bedList.c::bedSqlFieldsExceptForChrom(). */
 {
 static boolean init = FALSE;
 static char allowed[256];
@@ -2865,6 +2866,7 @@ if (!init)
     // to support multiple tables e.g. sqlTableExists 
     sqlCheckAllowChar(' ', allowed);
     sqlCheckAllowChar(',', allowed);
+    sqlCheckAllowChar('\'', allowed); // single quote allowed for special case fieldname is '.'
     // NOTE it is important for security that no other characters be allowed here
     init = TRUE;
     }
@@ -2880,6 +2882,7 @@ char c = 0;
 int i = 0;
 boolean needText = TRUE;
 boolean spaceOk = FALSE;
+boolean textDone = FALSE;
 // Currently identifiers list must start with an identifier, no leading spaces or comma allowed.
 // Currently the comma must immediately follow the identifier
 // Currently zero or one spaces may follow the comma
@@ -2907,11 +2910,37 @@ while (i < len)
 	    }
 	spaceOk = TRUE;
 	needText = TRUE;
+	textDone = FALSE;
 	}
     else // other chars are part of the identifier
 	{
+	if (textDone)
+	    {
+	    sqlCheckError("Invalid Identifiers List [%s] expected comma", identifiers);
+	    return identifiers;
+	    }
 	needText = FALSE;
 	spaceOk = FALSE;
+	if (c == '\'') // check for '.' exception allowed
+	    {
+	    if (i+strlen("'.'") > len)
+		{
+		sqlCheckError("Invalid Identifiers List [%s] quoted-literal not supported", identifiers);
+		return identifiers;
+		}
+	    if (identifiers[i+1] != '.') // next char must be a period
+		{
+		sqlCheckError("Invalid Identifiers List [%s] quoted-literal not supported", identifiers);
+		return identifiers;
+		}
+	    if (identifiers[i+2] != '\'') // next char must be a single-quote
+		{
+		sqlCheckError("Invalid Identifiers List [%s] quoted-literal not supported", identifiers);
+		return identifiers;
+		}
+	    i += 2;
+	    textDone = TRUE;
+	    }
 	}
     
     ++i;	    
@@ -2924,6 +2953,7 @@ if (needText || spaceOk)
 
 return identifiers;
 }
+
 
 char *sqlCheckIdentifier(char *identifier)
 /* Check that only valid identifier characters are used */
@@ -2945,6 +2975,7 @@ if (!sqlCheckAllowedChars(identifier, allowed))
     }
 return identifier;
 }
+
 
 
 /* --------------------------- */
@@ -3010,7 +3041,7 @@ return sz;
 
 
 int vaSqlSafefNoAbort(char* buffer, int bufSize, boolean newString, char *format, va_list args)
-/* Format string to buffer, vsprintf style, only with buffer overflow
+/* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte.
  * Scans string parameters for illegal sql chars. 
  * Automatically escapes quoted string values.
@@ -3205,7 +3236,7 @@ return sz;
 
 
 int vaSqlSafef(char* buffer, int bufSize, char *format, va_list args)
-/* Format string to buffer, vsprintf style, only with buffer overflow
+/* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. */
 {
 int sz = vaSqlSafefNoAbort(buffer, bufSize, TRUE, format, args);
@@ -3221,7 +3252,8 @@ int sqlSafef(char* buffer, int bufSize, char *format, ...)
 /* Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. 
  * Scans unquoted string parameters for illegal literal sql chars.
- * Escapes quoted string parameters. */
+ * Escapes quoted string parameters. 
+ * NOSLQINJ tag is added to beginning. */
 {
 int sz;
 va_list args;
@@ -3233,9 +3265,11 @@ return sz;
 
 
 int vaSqlSafefFrag(char* buffer, int bufSize, char *format, va_list args)
-/* Format string to buffer, vsprintf style, only with buffer overflow
- * checking.  The resulting string is always terminated with zero byte. 
- * This version does not add the NOSQLINJ tag since it is assumed to be just a fragment of
+/* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte.
+ * Scans unquoted string parameters for illegal literal sql chars.
+ * Escapes quoted string parameters. 
+ * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
  * the entire sql string. */
 {
 int sz = vaSqlSafefNoAbort(buffer, bufSize, FALSE, format, args);
@@ -3249,9 +3283,10 @@ return sz;
 
 int sqlSafefFrag(char* buffer, int bufSize, char *format, ...)
 /* Format string to buffer, vsprintf style, only with buffer overflow
- * checking.  The resulting string is always terminated with zero byte. 
- * Scans string parameters for illegal sql chars. 
- * This version does not add the NOSQLINJ tag since it is assumed to be just a fragment of
+ * checking.  The resulting string is always terminated with zero byte.
+ * Scans unquoted string parameters for illegal literal sql chars.
+ * Escapes quoted string parameters. 
+ * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
  * the entire sql string. */
 {
 int sz;
@@ -3267,8 +3302,10 @@ return sz;
 /* --------------------------- */
 
 
-void sqlDyStringVaPrintfExt(struct dyString *ds, boolean isFrag, char *format, va_list args)
-/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars. */
+void vaSqlDyStringPrintfExt(struct dyString *ds, boolean isFrag, char *format, va_list args)
+/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
+ * Strings inside quotes are automatically escaped.  
+ * NOSLQINJ tag is added to beginning if it is a new empty string and isFrag is FALSE. */
 {
 /* attempt to format the string in the current space.  If there
  * is not enough room, increase the buffer size and try again */
@@ -3301,42 +3338,51 @@ while (TRUE)
     }
 }
 
-void sqlDyStringVaPrintf(struct dyString *ds, char *format, va_list args)
-/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars. */
+void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args)
+/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
+ * Strings inside quotes are automatically escaped.  
+ * NOSLQINJ tag is added to beginning if it is a new empty string. */
 {
-sqlDyStringVaPrintfExt(ds, FALSE, format, args);
+vaSqlDyStringPrintfExt(ds, FALSE, format, args);
 }
 
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
-/* Printf to end of dyString after scanning string parameters for illegal sql chars. */
+/* Printf to end of dyString after scanning string parameters for illegal sql chars.
+ * Strings inside quotes are automatically escaped.  
+ * NOSLQINJ tag is added to beginning if it is a new empty string. */
 {
 va_list args;
 va_start(args, format);
-sqlDyStringVaPrintf(ds, format, args);
+vaSqlDyStringPrintf(ds, format, args);
 va_end(args);
 }
 
-void sqlDyStringVaPrintfFrag(struct dyString *ds, char *format, va_list args)
-/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars. 
- * NOSLQINJ tag is not added. */
+void vaSqlDyStringPrintfFrag(struct dyString *ds, char *format, va_list args)
+/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
+ * Strings inside quotes are automatically escaped.
+ * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
+ * the entire sql string. */
 {
-sqlDyStringVaPrintfExt(ds, TRUE, format, args);
+vaSqlDyStringPrintfExt(ds, TRUE, format, args);
 }
 
 void sqlDyStringPrintfFrag(struct dyString *ds, char *format, ...)
-/* Printf to end of dyString after scanning string parameters for illegal sql chars. 
- * NOSLQINJ tag is not added. */
+/* Printf to end of dyString after scanning string parameters for illegal sql chars.
+ * Strings inside quotes are automatically escaped.
+ * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
+ * the entire sql string. */
+
 {
 va_list args;
 va_start(args, format);
-sqlDyStringVaPrintfFrag(ds, format, args);
+vaSqlDyStringPrintfFrag(ds, format, args);
 va_end(args);
 }
 
 
 void sqlDyStringAppend(struct dyString *ds, char *string)
 /* Append zero terminated string to end of dyString.
- * Makes sure the NOSQLINJ prefix gets added if needed */
+ * Adds the NOSQLINJ prefix if dy string is empty. */
 {
 if (ds->stringSize == 0)
     dyStringAppend(ds, "NOSQLINJ ");
@@ -3346,13 +3392,13 @@ dyStringAppendN(ds, string, strlen(string));
 
 struct dyString *sqlDyStringCreate(char *format, ...)
 /* Create a dyString with a printf style initial content 
- * Makes sure the NOSQLINJ prefix gets added if needed */
+ * Adds the NOSQLINJ prefix. */
 {
 int len = strlen(format) * 3;
 struct dyString *ds = newDyString(len);
 va_list args;
 va_start(args, format);
-sqlDyStringVaPrintf(ds, format, args);
+vaSqlDyStringPrintf(ds, format, args);
 va_end(args);
 return ds;
 }

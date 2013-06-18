@@ -488,6 +488,11 @@ registerTrackHandler("wgEncodeGencodeV12", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV13", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV14", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV15", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV16", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV17", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV18", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV19", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV20", gencodeGeneMethods);
 }
 
 static void gencodePilotGeneMethods(struct track *tg)

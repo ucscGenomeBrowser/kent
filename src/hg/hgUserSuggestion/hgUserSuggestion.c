@@ -74,7 +74,7 @@ return cloneString(cfgOption(CFG_SUGGEST_BROWSER_NAME));
 static char *now()
 /* Return a mysql-formatted time like "2008-05-19 15:33:34". */
 {
-char nowBuf[256];
+char nowBuf[512];
 time_t curtime;
 curtime = time (NULL); 
 struct tm *theTime = localtime(&curtime);
@@ -134,6 +134,24 @@ do
 return (count >= 1);
 }
 
+boolean validateCategory(char *category)
+/* Validate the Category from the request */
+{
+const char *cat[5];
+cat[0] = "Tracks";
+cat[1] = "Genome Assemblies";
+cat[2] = "Browser Tools";
+cat[3] = "Command-line Utilities";
+cat[4] = "Others";
+
+int i;
+for(i=0;i<5;i++)
+{
+    if (strcmp(cat[i], category)==0) return TRUE;
+}
+return FALSE;
+}
+
 
 /* javascript functions */
 void printMainForm()
@@ -147,16 +165,16 @@ hPrintf(
     "we'd like to hear from you. Please provide a concise description below. "
     "A copy of the suggestion will be sent to your email address along with a reference number. "
     "You may follow up on the status of your request at any time by <a href=\"../contacts.html#followup\">contacting us</a> and quoting the reference number.</P>");
-hPrintf("<P>Please note: this form is not the proper place to submit questions regarding browser use or bug reports. Use the links on our contact page instead.</P>");
+hPrintf("<P>Please note: this form is not the proper place to submit questions regarding browser use or bug reports. Use the links on our <a href=\"../contacts.html\">contact page</a> instead.</P>");
 hPrintf("<HR><BR>"); 
 hPrintf(
     "      <div id=\"suggest\">  \n"
-    "       <label for=\"name\">Your Name:</label><input type=\"text\" name=\"suggestName\" id=\"name\" size=\"50\" /><BR><BR>\n"
-    "       <label for=\"email\">Your Email:</label><input type=\"text\" name=\"suggestEmail\" id=\"email\" size=\"50\" /><BR><BR>\n"
+    "       <label for=\"name\">Your Name:</label><input type=\"text\" name=\"suggestName\" id=\"name\" size=\"50\"style=\"margin-left:20px\" maxlength=\"256\"/><BR><BR>\n"
+    "       <label for=\"email\">Your Email:</label><input type=\"text\" name=\"suggestEmail\" id=\"email\" size=\"50\" style=\"margin-left:70px\" maxlength=\"254\"/><BR><BR>\n"
     "       <label for=\"confirmEmail\">Re-enter Your Email:</label><input type=\"text\" \n"
-    "          name=\"suggestCfmEmail\" id=\"cfmemail\" size=\"50\" /><BR><BR>\n");
+    "          name=\"suggestCfmEmail\" id=\"cfmemail\" size=\"50\" style=\"margin-left:20px\" maxlength=\"254\"/><BR><BR>\n");
 hPrintf(
-    "       <label for=\"category\">Category:</label><select name=\"suggestCategory\" id=\"category\">\n"
+    "       <label for=\"category\">Category:</label><select name=\"suggestCategory\" id=\"category\" style=\"margin-left:20px\" maxlength=\"256\">\n"
     "         <option selected>Tracks</option> \n"
     "         <option>Genome Assemblies</option>\n"
     "         <option>Browser Tools</option>\n"
@@ -164,8 +182,8 @@ hPrintf(
     "         <option>Others</option>\n"
     "         </select><BR><BR>\n");
 hPrintf(
-    "       <label for=\"summary\">Summary:</label><input type=\"text\" name=\"suggestSummary\" id=\"summary\" size=\"50\" /><BR><BR>\n"
-    "       <label for=\"details\">Details:</label><BR><textarea name=\"suggestDetails\" id=\"details\" cols=\"100\" rows=\"10\"></textarea><BR><BR>\n"
+    "       <label for=\"summary\">Summary:</label><input type=\"text\" name=\"suggestSummary\" id=\"summary\" size=\"74\" style=\"margin-left:20px\" maxlength=\"256\"/><BR><BR>\n"
+    "       <label for=\"details\">Details:</label><BR><textarea name=\"suggestDetails\" id=\"details\" cols=\"100\" rows=\"15\" maxlength=\"4096\"></textarea><BR><BR>\n"
     "     </div>\n");
 hPrintf(
     "         <p>\n"
@@ -196,6 +214,13 @@ hPrintf(
     "      return false;\n"
     "      }\n");
 hPrintf(
+    "    var y=theform.suggestEmail.value;\n"
+    "    if (y==null || y==\"\")\n"
+    "      {\n"
+    "      alert(\"Email field must be filled out\");\n"
+    "      theform.suggestEmail.focus() ;\n"
+    "      return false;\n"
+    "      }\n"
     "    if (!validateMailAddr(theform.suggestEmail.value))\n"
     "      {\n"
     "      alert(\"Not a valid e-mail address\");\n"
@@ -224,15 +249,8 @@ hPrintf(
     "      theform.suggestSummary.focus() ;\n"
     "      return false;\n"
     "      }          \n"
-    "    var z=theform.suggestDetails.value;\n"
-    "    if (z==null || z==\"\")\n"
-    "      {\n"
-    "      alert(\"Details field must be filled out\");\n"
-    "      theform.suggestDetails.focus() ;\n"
-    "      return false;\n"
-    "      }\n"
     "    return true; \n"
-    "    }\n\n");
+    "    }");
 hPrintf(
     "    function validateMailAddr(x)\n"
     "    {\n"
@@ -252,6 +270,7 @@ void printCheckCaptchaScript()
 {
 hPrintf( 
     " <script type=\"text/javascript\">\n"
+    " // The Simple JavaScript CAPTCHA Generator code is copied from typicalwhiner.com/190/simple-javascript-captcha-generator \n"
     "         function checkCaptcha(theform){\n"
     "                 var why = \"\";\n"
     "                  \n"
@@ -334,6 +353,18 @@ hPrintf(
     summary, details);
 } 
 
+void printInvalidCategory(char *invalidCategory)
+/* display suggestion confirm page */
+{
+hPrintf(
+    "<h2>Invalid Category.</h2>");
+hPrintf(
+    "<p>"
+    "The category \"%s\" is invalid. Please correct it and "
+    "<a href=\"javascript: history.go(-1)\">submit</a> again.</p>",
+    invalidCategory);
+}
+
 void printInvalidEmailAddr(char *invalidEmailAddr)
 /* display suggestion confirm page */
 {
@@ -353,8 +384,8 @@ void sendSuggestionBack(char *sName, char *sEmail, char *sCategory, char *sSumma
 char *mailTo = mailToAddr();
 char *mailFrom=mailFromAddr();
 char *filter=filterKeyword();
-char subject[256];
-char msg[4096]; /* need to make larger */
+char subject[512];
+char msg[4608]; /* need to make larger */
 safef(msg, sizeof(msg),
     "SuggestionID:: %s\nUserName:: %s\nUserEmail:: %s\nCategory:: %s\nSummary:: %s\n\n\nDetails::\n%s",
     suggestID, sName, sEmail, sCategory, sSummary, sDetails);
@@ -367,20 +398,20 @@ result = mailViaPipe(mailTo, subject, msg, mailFrom);
 void sendConfirmMail(char *emailAddr, char *suggestID, char *summary, char *details)
 /* send user suggestion confirm mail */
 {
-char subject[256];
-char msg[4096];
+char subject[512];
+char msg[4608];
 char *remoteAddr=getenv("REMOTE_ADDR");
-char brwName[256];
-char returnAddr[256];
-char signature[256];
-char userEmailAddr[256];
+char brwName[512];
+char returnAddr[512];
+char signature[512];
+char userEmailAddr[512];
 safecpy(brwName,sizeof(brwName), browserName());
 safecpy(returnAddr,sizeof(returnAddr), mailReturnAddr());
 safecpy(signature,sizeof(signature), mailSignature());
 safecpy(userEmailAddr, sizeof(userEmailAddr),emailAddr);
 safef(subject, sizeof(subject),"Thank you for your suggestion to the %s", brwName);
 safef(msg, sizeof(msg),
-    "  Someone (probably you, from IP address %s) submitted a suggestion to the %s regarding %s.\n\n  The suggestion has been assigned a reference number of \"%s\". If you wish to follow up on the progress of this suggestion with browser staff, you may contact us at %s. Please include the reference number of your suggestion in the email.\n\nThank you for your input,\n%s\n\nYour suggestion summary:\n%s\n\nYour suggestion details:\n%s",
+    "  Someone (probably you, from IP address %s) submitted a suggestion to the %s regarding \"%s\".\n\n  The suggestion has been assigned a reference number of \"%s\". If you wish to follow up on the progress of this suggestion with browser staff, you may contact us at %s. Please include the reference number of your suggestion in the email.\n\nThank you for your input,\n%s\n\nYour suggestion summary:\n%s\n\nYour suggestion details:\n%s",
 remoteAddr, brwName, summary, suggestID, returnAddr, signature, summary, details);
 int result;
 result = mailViaPipe(userEmailAddr, subject, msg, returnAddr);
@@ -409,10 +440,18 @@ char *sCategory=cartUsualString(cart,"suggestCategory","");
 char *sSummary=cartUsualString(cart,"suggestSummary","");
 char *sDetails=cartUsualString(cart,"suggestDetails","");
 
-char suggestID[256];
+char suggestID[512];
 safef(suggestID, sizeof(suggestID),"%s %s", sEmail, now());
-char subject[256];
+char subject[512];
 safef(subject, sizeof(subject),"%s %s", filter, suggestID);
+
+/* reject suggestion if category is invalid */
+if (!validateCategory(sCategory))
+{
+    printInvalidCategory(sCategory);
+    return;  
+} 
+
 /* Send back suggestion only with valid user email address */
 if (spc_email_isvalid(sEmail) != 0)
 {
@@ -435,7 +474,7 @@ void doMiddle(struct cart *theCart)
 char *db, *organism;
 cart = theCart;
 getDbAndGenome(cart, &db, &organism, oldVars);
-cartWebStart(theCart, db, "User Suggestion");
+cartWebStart(theCart, db, "UCSC Genome Browser: Suggestion Box");
 checkHgConfForSuggestion();
 if (cartVarExists(cart, "do.suggestSendMail"))
     {
@@ -458,11 +497,7 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-
-htmlSetStyleSheet("/style/userAccounts.css");
-htmlSetFormClass("accountScreen");
-cartHtmlShell("User Suggestion",doMiddle, hUserCookie(), excludeVars, oldVars);
-//cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgUserSuggestion", enteredMainTime);
 return 0;
 }

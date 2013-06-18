@@ -389,6 +389,7 @@ canPack On
     visibility dense
     useScore 1
     priority 1.71
+    maxWindowToDraw 10000000
     dataVersion ENCODE Jul 2012 Freeze
 
     # This is alternate cluster version -- antibody-based, as done in V2

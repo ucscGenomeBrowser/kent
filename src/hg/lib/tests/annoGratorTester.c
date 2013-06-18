@@ -315,7 +315,7 @@ if (doAllTests || sameString(test, vepOut))
     sourcesFromInfoList(primaryInfo, TRUE, &primary, &gratorList);
     struct annoStreamer *gpVarSource = (struct annoStreamer *)gratorList;
     struct annoStreamer *snpSource = gpVarSource->next;
-    struct annoFormatter *vepOut = annoFormatVepNew("stdout", primary, "vepSamplePgSnp",
+    struct annoFormatter *vepOut = annoFormatVepNew("stdout", FALSE, primary, "vepSamplePgSnp",
 						    gpVarSource, "UCSC Genes ...",
 						    snpSource, "just dbSNP 135");
     struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
@@ -356,7 +356,7 @@ if (doAllTests || sameString(test, gpFx))
     struct annoStreamer *gpVarSource = (struct annoStreamer *)gratorList;
     struct annoStreamer *snpSource = gpVarSource->next;
     struct annoStreamer *dbNsfpSource = snpSource->next->next;
-    struct annoFormatter *vepOut = annoFormatVepNew("stdout", primary, "some more variants",
+    struct annoFormatter *vepOut = annoFormatVepNew("stdout", FALSE, primary, "some more variants",
 						    gpVarSource, "UCSC Genes of course",
 						    snpSource, "now snp137.");
     annoFormatVepAddExtraItem(vepOut, dbNsfpSource, "SIFT", "SIFT score from dbNSFP", "");
