@@ -2853,6 +2853,7 @@ type bigBed 8 .
 url http://www.hgmd.cf.ac.uk/ac/gene.php?gene=$P&accession=$p
 urlLabel Link to HGMD (login req.)
 mouseOverField variantType
+tableBrowser off hgmd
 release alpha
 
 track spMut
