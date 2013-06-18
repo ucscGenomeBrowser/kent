@@ -242,29 +242,28 @@ static void afVepPrintNameAndLoc(struct annoFormatVep *self, struct annoRow *var
 /* Print variant name and position in genome. */
 {
 char **varWords = (char **)(varRow->data);
-uint start1Based = varRow->start + 1;
+int varStart = varRow->start + self->skippedFirstBase;
+uint start1Based = varStart + 1;
+// Whether or not we need the alleles for VCF, parse them out anyway to find out
+// if we need to bump up the start coord (self->skippedFirstBase):
+char *alleles = NULL;
+if (self->primaryIsVcf)
+    alleles = vcfGetSlashSepAllelesFromWords(varWords, self->dyScratch, &(self->skippedFirstBase));
 // Use variant name if available, otherwise construct an identifier:
-if (self->varNameIx >= 0)
-    {
+if (self->varNameIx >= 0 && !sameString(varWords[self->varNameIx], "."))
     fputs(varWords[self->varNameIx], self->f);
-    afVepNextColumn(self->f, self->doHtml);
-    }
 else
     {
-    char *alleles = NULL;
-    if (self->primaryIsVcf)
-	alleles = vcfGetSlashSepAllelesFromWords(varWords, self->dyScratch,
-						 &(self->skippedFirstBase));
-    else if (self->varAllelesIx >= 0)
+    if (self->varAllelesIx >= 0)
 	alleles = varWords[self->varAllelesIx];
-    else
+    else if (!self->primaryIsVcf)
 	errAbort("annoFormatVep: afVepSetConfig didn't specify how to get alleles");
     compressDashes(alleles);
     if (self->skippedFirstBase)
 	start1Based++;
     fprintf(self->f, "%s_%u_%s", varRow->chrom, start1Based, alleles);
-    afVepNextColumn(self->f, self->doHtml);
     }
+afVepNextColumn(self->f, self->doHtml);
 // Location is chr:start for single-base, chr:start-end for indels:
 if (varRow->end == start1Based)
     fprintf(self->f, "%s:%u", varRow->chrom, start1Based);
@@ -352,7 +351,9 @@ static void afVepPrintPredictions(struct annoFormatVep *self, struct annoRow *va
 				  struct annoRow *gpvRow, struct gpFx *gpFx)
 /* Print VEP columns computed by annoGratorGpVar (or placeholders) */
 {
-boolean isInsertion = (varRow->start == varRow->end);
+int varStart = varRow->start + self->skippedFirstBase;
+boolean isInsertion = (varStart == varRow->end);
+boolean isDeletion = isEmpty(gpFx->allele);
 // variant allele used to calculate the consequence
 // For upstream/downstream variants, gpFx leaves allele empty which I think is appropriate,
 // but VEP uses non-reference allele... #*** can we determine that here?
@@ -382,20 +383,26 @@ if (gpFx->detailType == codingChange)
 	fprintf(self->f, "%u-%u", change->cDnaPosition, change->cDnaPosition+1);
 	afVepNextColumn(self->f, self->doHtml);
 	fprintf(self->f, "%u-%u", change->cdsPosition, change->cdsPosition+1);
+	}
+    else if (isDeletion)
+	{
+	uint altLength = varRow->end - varStart;
+	fprintf(self->f, "%u-%u", change->cDnaPosition+1, change->cDnaPosition+altLength);
 	afVepNextColumn(self->f, self->doHtml);
+	fprintf(self->f, "%u-%u", change->cdsPosition+1, change->cdsPosition+altLength);
 	}
     else
 	{
 	fprintf(self->f, "%u", change->cDnaPosition+1);
 	afVepNextColumn(self->f, self->doHtml);
 	fprintf(self->f, "%u", change->cdsPosition+1);
-	afVepNextColumn(self->f, self->doHtml);
 	}
+    afVepNextColumn(self->f, self->doHtml);
     fprintf(self->f, "%u", change->pepPosition+1);
     afVepNextColumn(self->f, self->doHtml);
     int variantFrame = change->cdsPosition % 3;
     strLower(change->codonOld);
-    toUpperN(change->codonOld+variantFrame, varRow->end - varRow->start);
+    toUpperN(change->codonOld+variantFrame, varRow->end - varStart);
     strLower(change->codonNew);
     int alleleLength = sameString(gpFx->allele, "") ? 0 : strlen(gpFx->allele);
     toUpperN(change->codonNew+variantFrame, alleleLength);
@@ -449,7 +456,8 @@ if (self->snpNameIx >= 0)
 	    }
 	if (count == 0)
 	    afVepPrintPlaceholder(self->f, self->doHtml);
-	afVepNextColumn(self->f, self->doHtml);
+	else
+	    afVepNextColumn(self->f, self->doHtml);
 	}
     else
 	afVepPrintPlaceholder(self->f, self->doHtml);
@@ -1010,13 +1018,20 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
 if (gpFx->soNumber == upstream_gene_variant || gpFx->soNumber == downstream_gene_variant)
     {
     afVepNewExtra(self, pGotExtra);
-    // Using varRow->start for both up & down -- just seems more natural,
-    // and also it's possible for the variant to overlap txStart or txEnd
-    // Note: I think it should be gpvRow->end - varRow->start and varRow->start - gpvRow->end
-    // here, but this matches Ensembl output and gets the general idea across:
-    int distance = gpvRow->start - varRow->start;
+    int varStart = varRow->start + self->skippedFirstBase;
+    // In order to really understand the boundary conditions of Ensembl's DISTANCE function,
+    // I'll have to read the code someday.  Upstream deletions on + strand still not handled
+    // quite right.
+    int ensemblFudge = 0;
+    char strand = ((char **)(gpvRow->data))[5][0];
+    if (gpFx->soNumber == upstream_gene_variant && strand == '+')
+	ensemblFudge = 1;
+    int distance = gpvRow->start - varStart + ensemblFudge;
     if (distance < 0)
-	distance = varRow->end - gpvRow->end;
+	{
+	ensemblFudge = 1;
+	distance = varStart - gpvRow->end + ensemblFudge;
+	}
     fprintf(self->f, "DISTANCE=%d", distance);
     }
 boolean includeExonNumber = TRUE;  //#*** optional in VEP
@@ -1117,7 +1132,7 @@ if (asObjectsMatch(config->variantSource->asObj, pgSnpAsObj()))
 else if (asObjectsMatch(config->variantSource->asObj, vcfAsObj()))
     {
     self->primaryIsVcf = TRUE;
-    self->varNameIx = asColumnFindIx(varAsColumns, "name");
+    self->varNameIx = asColumnFindIx(varAsColumns, "id");
     }
 else
     errAbort("afVepSetConfig: variant source %s doesn't look like pgSnp or VCF",

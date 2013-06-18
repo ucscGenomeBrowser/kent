@@ -987,6 +987,30 @@ project wgEncode
     cp README.txt md5sum.txt ..
 
 #######################################################################
+# performance eval
+
+# try changing expIds and expScores to varchar 2048 from blob
+# create table
+alter table kateTemp disable keys;
+insert into kateTemp (select * from wgEncodeTfbsClusteredV3)
+
+# try bigBed
+
+    set dir = /cluster/data/hg19/bed/wgEncodeRegV2/tfbs2012
+    cd $dir
+    set track = wgEncodeRegTfbsClusteredV3
+    bedSort clusters.target.bed clusters.target.sorted.bed
+    /cluster/bin/x86_64/bedToBigBed -type=bed15 -tab clusters.target.sorted.bed \
+        /hive/data/genomes/hg19/chrom.sizes $track.bb
+    # Error line 1 of xx.bed: expecting 690 elements in expIds list (bed field 14)
+    # Might be a bogus error -- looks OK on inspection
+    # GOT HERE
+    ln -s `pwd`/$track.bb /gbdb/hg19/wgEncodeReg
+    hgBbiDbLink hg19 $track wg/gbdb/hg19/wgEncodeReg/$track.bb
+
+# for now, adding maxWindowToDraw 1M setting to trackDb to limit performance hit
+
+#######################################################################
 
 # EXPERIMENTAL:  TF motif tracks, from EMBL/Aus (MEME toolkit)
 # These are generated using FIMO tool:
@@ -1017,12 +1041,5 @@ project wgEncode
                 motifs.bed motifs.unmapped
     hgLoadBed hg19 -as=~/kent/src/hg/lib/bed6FloatScore.as wgEncodeRegTfbsClustered motifs.bed
     # Read 1750827 elements of size 6 from motifs.bed
-
-
-
-
-
- 
-
 
 
