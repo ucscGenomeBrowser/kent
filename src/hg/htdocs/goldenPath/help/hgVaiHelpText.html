@@ -1,7 +1,30 @@
 <!-- This file is included in hgVai's "Using the Variant Annotation Integrator" section. -->
+<!-- HREF paths are relative to cgi-bin, not goldenPath/help. -->
 
 <P>
-The Variant Annotation Integrator is a research tool for associating
+The Variant Annotation Integrator (VAI) is a research tool for associating
 annotations from the UCSC database, track hubs and custom tracks
 with your uploaded set of variant calls.
+It cannot diagnose any genetic condition and should never be used to make
+any kind of medical decision.  We urge users seeking information about a
+personal medical or genetic condition to consult with a qualified physician
+for diagnosis and for answers to personal questions.
 </P>
+<P>
+In order to use the VAI, you must provide variant calls in either the
+<A HREF="../FAQ/FAQformat.html#format10" TARGET=_BLANK>Personal Genome SNP (pgSnp)</A> or
+<A HREF="../goldenPath/help/vcf.html" TARGET=_BLANK>VCF</A> format.
+pgSnp-formatted variants may be uploaded as a
+<A HREF="../goldenPath/help/hgTracksHelp.html#CustomTracks"
+TARGET=_BLANK>Custom Track</A>.
+Compressed and indexed VCF files on a web server (HTTP, HTTPS or FTP) can
+be used to make Custom Tracks, or if you happen to have a
+<A HREF="../goldenPath/help/hgTrackHubHelp.html" TARGET=_BLANK>Track Hub</A>,
+as hub tracks.
+</P>
+<P>
+When you have configured at least one pgSnp or VCF custom track or hub track,
+various options are provided to associate additional data and to apply filters
+to reduce the volume of output.
+</P>
+
