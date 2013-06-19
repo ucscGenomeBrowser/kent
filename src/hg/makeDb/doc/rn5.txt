@@ -1657,3 +1657,46 @@ done > ensToUcsc.lift
     ln -s blastz.mm9.swap lastz.mm9
 
 #########################################################################
+##  CYTOBAND - ideogram track (DONE - 2013-06-18 - Hiram)
+    mkdir /hive/data/genomes/rn5/bed/cytoBand
+    cd /hive/data/genomes/rn5/bed/cytoBand
+    # fetch the ideogram file:
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/pub/gdp/ideogram_10116_GCF_000000225.3_NA_V1 ./
+
+    # Create bed file
+    $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl \
+       ideogram_10116_GCF_000000225.3_NA_V1
+
+    ## can now verify before load:
+    $HOME/kent/src/utils/ncbi/cytoBandVerify.pl
+    #	everything checks out OK on 21 chroms
+    # Load the bed file
+    hgLoadBed -noBin -sqlTable=$HOME/kent/src/hg/lib/cytoBand.sql \
+	rn5 cytoBand cytoBand.bed
+    #   Read 403 elements of size 5 from cytoBand.bed
+    # Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # The cytoBandIdeo is just a replicate of the cytoBand track.
+    hgsql -e "CREATE TABLE cytoBandIdeo SELECT * FROM cytoBandIdeo;" rn5
+    hgsql rn5 -e "CREATE TABLE cytoBandIdeo (index(chrom(25),chromStart)) as SELECT * from cytoBand;"
+
+    # dump existing table
+    hgsql -N -e "SELECT * FROM cytoBandIdeo" rn5 > rn5.cytoBandIdeo
+
+    # find chroms already covered
+    hgsql -N -e 'SELECT chrom FROM cytoBandIdeo' rn5 \
+       | sort -u > rn5.coveredNames
+    # make cytoBand records for chroms not already covered
+    hgsql -N -e 'SELECT chrom, size FROM chromInfo' rn5 \
+      | grep -wvf rn5.coveredNames \
+      | awk '{print $1"\t0\t"$2"\t\tgneg"}' > rn5.cytoBandNew
+    # check
+    wc -l rn5.*
+    # combine and sort
+    cat rn5.cytoBandNew rn5.cytoBandIdeo | sort -k1,1 -k2,2n \
+        > rn5.cytoBandIdeoFull
+    # replace exsting table
+    hgsql -e "DROP TABLE cytoBandIdeo" rn5
+    hgLoadSqlTab rn5 cytoBandIdeo $HOME/kent/src/hg/lib/cytoBandIdeo.sql \
+           rn5.cytoBandIdeoFull
+
+##########################################################################
