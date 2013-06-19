@@ -369,7 +369,7 @@ if (protAcc != NULL)
 	*chp = '\0';
 	
         /* show variant splice protein and the UniProt link here */
-	hPrintf("<A HREF=\"http://www.uniprot.org/uniprot%s\" "
+	hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" "
 	    "TARGET=_blank>%s</A></B>, splice isoform of ",
 	    kgProteinID, kgProteinID);
         hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" "
