@@ -3,6 +3,7 @@
 
 # Define databases used for various organisms
 set ailMel ailMel1
+set allMis allMis1
 set anoCar anoCar1,anoCar2
 set anoGam anoGam1
 set apiMel apiMel1,apiMel2
@@ -95,14 +96,14 @@ set vicPac vicPac1,vicPac2
 set xenTro xenTro1,xenTro2,xenTro3
 
 # Define all organism/assembly-specific databases.
-set gbd $ailMel,$anoCar,$anoGam,$apiMel,$aplCal,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$cavPor,$cb,$ce,$cerSim,$choHof,$chrPic,$ci,$cioSav,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$echTel,$equCab,$eriEur,$felCat,$fr,$gadMor,$galGal,$gasAcu,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$musFur,$myoLuc,$nomLeu,$ochPri,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rn,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$turTru,$vicPac,$xenTro
+set gbd $ailMel,$allMis,$anoCar,$anoGam,$apiMel,$aplCal,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$cavPor,$cb,$ce,$cerSim,$choHof,$chrPic,$ci,$cioSav,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$echTel,$equCab,$eriEur,$felCat,$fr,$gadMor,$galGal,$gasAcu,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$musFur,$myoLuc,$nomLeu,$ochPri,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rn,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$turTru,$vicPac,$xenTro
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
-set wgs $ailMel,$aplCal,$bosTau,$bruMal,$calJac,$canFam,$cavPor,$choHof,$chrPic,$cioSav,$dasNov,$dipOrd,$echTel,$eriEur,$felCat,$fr,$galGal,$haeCon,$hetGla,$macEug,$melGal,$melHap,$melInc,$micMur,$monDom,$musFur,$myoLuc,$nomLeu,$ochPri,$otoGar,$oryCun,$oryLat,$oviAri,$panTro,$proCap,$pteVam,$rn,$sarHar,$sorAra,$speTri,$susScr,$taeGut,$tarSyr,$tetNig,$tupBel,$turTru,$vicPac
+set wgs $ailMel,$allMis,$aplCal,$bosTau,$bruMal,$calJac,$canFam,$cavPor,$choHof,$chrPic,$cioSav,$dasNov,$dipOrd,$echTel,$eriEur,$felCat,$fr,$galGal,$haeCon,$hetGla,$macEug,$melGal,$melHap,$melInc,$micMur,$monDom,$musFur,$myoLuc,$nomLeu,$ochPri,$otoGar,$oryCun,$oryLat,$oviAri,$panTro,$proCap,$pteVam,$rn,$sarHar,$sorAra,$speTri,$susScr,$taeGut,$tarSyr,$tetNig,$tupBel,$turTru,$vicPac
 
 # Define organism databases for which we build a xenoRefGene track:
-set xrg $ailMel,$anoCar,$aplCal,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$calJac,$canFam,$cb,$ce,$cerSim,$choHof,$chrPic,$ci,danRer6,danRer7,$dasNov,$dipOrd,$dp,$droMult,$droYak,$echTel,$eriEur,$felCat,$gadMor,$galGal,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$musFur,$myoLuc,$nomLeu,$ochPri,$oreNil,$oryCun,$oryLat,$otoGar,$oviAri,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rn,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$triMan,$tupBel,$turTru,$vicPac
+set xrg $ailMel,$allMis,$anoCar,$aplCal,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$calJac,$canFam,$cb,$ce,$cerSim,$choHof,$chrPic,$ci,danRer6,danRer7,$dasNov,$dipOrd,$dp,$droMult,$droYak,$echTel,$eriEur,$felCat,$gadMor,$galGal,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$musFur,$myoLuc,$nomLeu,$ochPri,$oreNil,$oryCun,$oryLat,$otoGar,$oviAri,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rn,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$triMan,$tupBel,$turTru,$vicPac
 
 # Ensembl gene track lists constructed from update procedure
 set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,canFam3,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,echTel2,eriEur1,equCab2,felCat3,felCat5,fr2,fr3,galGal3,galGal4,gasAcu1,gorGor3,hg19,latCha1,loxAfr3,macEug1,melGal1,micMur1,mm9,mm10,monDom5,musFur1,myoLuc2,nomLeu1,ochPri2,oreNil1,ornAna1,oryCun2,oryLat2,otoGar3,panTro2,panTro4,petMar2,ponAbe2,proCap1,pteVam1,rheMac2,rn4,rn5,sacCer3,sarHar1,sorAra1,sorAra2,speTri2,susScr1,susScr3,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,vicPac2,xenTro3
@@ -1797,7 +1798,7 @@ identifier wgsContigName
     $wgs.contigAcc.contig
     $wgs,!panTro1.gold.frag $split full
 
-set notProteinAccession !echTel2,!cerSim1,!braFlo2,!petMar2,!dm3,!sorAra2,!vicPac2
+set notProteinAccession !echTel2,!cerSim1,!braFlo2,!petMar2,!dm3,!sorAra2,!vicPac2,!allMis1
 
 identifier proteinAccession typeOf=genbankAccession fuzzy
 "Genbank protein accession."
@@ -2256,7 +2257,7 @@ identifier humanFosmidEndId
 ## TYPED TO HERE %%%
 # Mapping Stuff, STS, etc.
 
-set notDbStsId !sacCer3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2
+set notDbStsId !sacCer3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1
 
 identifier dbStsId external=dbSts fuzzy
 "NCBI dbSTS (Sequenced Tagged Site, aka mapping sequence) ID"
@@ -2277,7 +2278,7 @@ identifier ucscMouseStsId
     $mm.all_sts_primer.qName chopAfter=_ minCheck=0.99
     $mm.stsMapMouseNew.identNo
 
-set notStsName !sacCer3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2
+set notStsName !sacCer3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1
 
 identifier stsName fuzzy
 "STS (Sequenced Tagged Site, aka mapping sequence) Name"
@@ -2377,7 +2378,7 @@ identifier wormBaseIsoformCluster
     $ce.sangerCanonical.clusterId
     $ce.sangerIsoforms.clusterId full
 
-set notWormBaseId !rn3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2
+set notWormBaseId !rn3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1
 
 identifier wormBaseId external=WormBase dependency
 "WormBase (C. elegans) ORF ID"
@@ -2421,7 +2422,7 @@ identifier flyBaseAlleleId
     $dm.fbAllele.id
     $dm.fbPhenotype.fbAllele exclude=0
 
-set notFlyBaseGeneId !cerSim1,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!mm10,!rn3,!rn4,!ce2,!ce6,!ce9,!ce10,!sacCer1,!sacCer2,!sacCer3,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2
+set notFlyBaseGeneId !cerSim1,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!mm10,!rn3,!rn4,!ce2,!ce6,!ce9,!ce10,!sacCer1,!sacCer2,!sacCer3,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1
 
 identifier flyBaseGeneId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
@@ -2532,7 +2533,7 @@ identifier sgdProtHomologId
 identifier sgdId external=SGD
 "Sacchromyces Genome Database ID - Coding or other"
 
-set notSgdCodingId !cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2
+set notSgdCodingId !cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1
 
 identifier sgdCodingId typeOf=sgdId dependency
 "Sacchromyces Genome Database ID"
@@ -2672,7 +2673,7 @@ identifier ensemblProteinId3 external=Ensembl
     $gbd.ensemblXref3.protein dupeOk
     $gbd.sfAssign.seqID minCheck=0.01
 
-set notEnsemblTranscriptId !braFlo2,!ce10,!cerSim1,!felCat3,!vicPac2
+set notEnsemblTranscriptId !braFlo2,!ce10,!cerSim1,!felCat3,!vicPac2,!allMis1
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
