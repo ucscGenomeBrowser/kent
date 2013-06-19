@@ -24,7 +24,7 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Sore
 # -rw-rw-r-- 1  22718263 Mar 25 23:09 sorAra2.ucsc.agp
 # -rw-rw-r-- 1 671856471 Mar 25 23:20 sorAra2.ucsc.fa.gz
 # -rw-rw-r-- 1       209 Mar 25 23:21 checkAgp.result.txt
-    cat checkAgp.result.txt 
+    cat checkAgp.result.txt
 # AALT02201788 1 1000 1 W AALT02201788.1 1 1000 +
 # agpFrag->chromStart: 0, agpFrag->chromEnd: 1000, dnaOffset: 0
 # FASTA sequence entry
@@ -144,6 +144,12 @@ taxId 42254
     # 0 bases of 2192103426 (0.000%) in intersection
     # real    12m10.066s
 
+#########################################################################
+# cytoBandIdeo - (DONE - 2013-06-12 - Hiram)
+    mkdir /hive/data/genomes/sorAra2/bed/cytoBand
+    cd /hive/data/genomes/sorAra2/bed/cytoBand
+    makeCytoBandIdeo.csh sorAra2
+
 ##########################################################################
 ## WINDOWMASKER (DONE - 2013-05-29 - Hiram)
     mkdir /hive/data/genomes/sorAra2/bed/windowMasker
@@ -162,6 +168,28 @@ taxId 42254
 
     cat fb.sorAra2.rmsk.windowmaskerSdust.txt
 # 519681347 bases of 2423158183 (21.446%) in intersection
+
+########################################################################
+# cpgIslands - (DONE - 2013-06-12 - Hiram)
+    mkdir /hive/data/genomes/sorAra2/bed/cpgIslands
+    cd /hive/data/genomes/sorAra2/bed/cpgIslands
+    time doCpgIslands.pl sorAra2 > do.log 2>&1
+    #   real    9m27.905s
+
+    cat fb.sorAra2.cpgIslandExt.txt
+    #   57978513 bases of 2192103426 (2.645%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2013-06-12 - Hiram)
+    mkdir /hive/data/genomes/sorAra2/bed/genscan
+    cd /hive/data/genomes/sorAra2/bed/genscan
+    time doGenscan.pl sorAra2 > do.log 2>&1
+    #    real    38m51.895s
+
+    cat fb.sorAra2.genscan.txt
+    #   61328825 bases of 2192103426 (2.798%) in intersection
+    cat fb.sorAra2.genscanSubopt.txt
+    #   50722612 bases of 2192103426 (2.314%) in intersection
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (WORKING - 2013-06-06 - Hiram)
@@ -247,20 +275,29 @@ sorAra2.perChromTables = no
     git push
     make etc-update
 
+############################################################################
+# construct liftOver from sorAra1 to sorAra2 (DONE - 2013-06-10 - Hiram)
+    # documentation for this step is in sorAra1 - remember to do this
+
 ###########################################################################
-# construct downloads files (TBD - Hiram)
+# construct downloads files (DONE - 2013-06-12 - Hiram)
+#   before starting downloads, the joinerCheck should be clean
+#   after sorAra2 is added to all.joiner:
+    joinerCheck -keys -database=sorAra2 all.joiner
+
     cd /hive/data/genomes/sorAra2
     makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev sorAra2 \
 	> downloads.log 2>&1
-    # edit the README.txt files to set project URL and check
-    #	the text
+    # real    31m49.766s
+    # verify the text in the goldenPath/*/README.txt files is correct
 
-###########################################################################
 ###########################################################################
 # ready for first pushQ entry (TBD - Hiram)
     mkdir /hive/data/genomes/sorAra2/pushQ
     cd /hive/data/genomes/sorAra2/pushQ
-    makePushQSql.pl sorAra2 > sorAra2.sql 2> stderr.out
+    time makePushQSql.pl sorAra2 > sorAra2.sql 2> stderr.out
+    # real    3m48.583s
+
     # some errors are legitimate and OK:
      head stderr.out
 # WARNING: hgwdev does not have /gbdb/sorAra2/wib/gc5Base.wib
@@ -268,6 +305,8 @@ sorAra2.perChromTables = no
 # WARNING: hgwdev does not have /gbdb/sorAra2/bbi/quality.bw
 # WARNING: sorAra2 does not have seq
 # WARNING: sorAra2 does not have extFile
+# WARNING: sorAra2 does not have estOrientInfo
+
     scp -p sorAra2.sql hgwbeta:/tmp
     ssh hgwbeta
     cd /tmp
@@ -339,20 +378,22 @@ CREATE TABLE ucscToEnsembl (
     #	88296392 bases of 1701353770 (5.190%) in intersection
 
 ############################################################################
+# blat servers (DONE - 2013-06-10 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("sorAra2", "blat2", "17780", "1", "0"); \
+	VALUES ("sorAra2", "blat4b", "17846", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("sorAra2", "blat2", "17781", "0", "1");' \
+	VALUES ("sorAra2", "blat4b", "17847", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 #########################################################################
-## Default position set at LFNG (TBD - Hiram)
+## Default position to same as sorAra1 found via blat
+##  (DONE - 2013-06-10 - Hiram)
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr5:23430070-23476097"
+    hgsql -e 'update dbDb set defaultPos="JH798167:6989994-6998804"
 	where name="sorAra2";' hgcentraltest
 
 #########################################################################
@@ -1976,3 +2017,25 @@ track quality override
 type wig 0 50
 
 ##########################################################################
+# lastz swap Mouse/Mm10 (DONE - 2013-06-17 - Hiram)
+    # alignment to mouse
+    cd /hive/data/genomes/mm10/bed/lastzSorAra2.2013-06-12
+    cat fb.mm10.chainSorAra2Link.txt
+    #   354499462 bases of 2652783500 (13.363%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/sorAra2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/sorAra2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzSorAra2.2013-06-12/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    39m53.463s
+    cat fb.sorAra2.chainMm10Link.txt
+    #  343760052 bases of 2192103426 (15.682%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/sorAra2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################
