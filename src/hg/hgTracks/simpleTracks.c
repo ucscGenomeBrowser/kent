@@ -3664,7 +3664,7 @@ struct linkedFeaturesSeries *lfsFromBed(struct lfs *lfsbed)
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
-char **row, rest[32];
+char **row, rest[64];
 int rowOffset, i;
 struct linkedFeaturesSeries *lfs;
 struct linkedFeatures *lfList = NULL, *lf;
@@ -3679,7 +3679,7 @@ lfs->orientation = orientFromChar(lfsbed->strand[0]);
 for (i = 0; i < lfsbed->lfCount; i++)
     {
     AllocVar(lf);
-    sqlSafef(rest, sizeof rest, "qName = '%s'", lfsbed->lfNames[i]);
+    sqlSafefFrag(rest, sizeof rest, "qName = '%s'", lfsbed->lfNames[i]);
     sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom, lfsbed->lfStarts[i],
                      lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
     if ((row = sqlNextRow(sr)) != NULL)
