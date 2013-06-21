@@ -75,6 +75,11 @@ ifeq (${MYSQLINC},)
       MYSQLINC=/usr/include/mysql
   endif
 endif
+ifeq (${MYSQLINC},)
+  ifneq ($(wildcard /opt/local/include/mysql55/mysql/mysql.h),)
+      MYSQLINC=/opt/local/include/mysql55/mysql
+  endif
+endif
 ifeq (${MYSQLLIBS},)
   ifneq ($(wildcard /usr/lib64/mysql/libmysqlclient.a),)
       MYSQLLIBS=/usr/lib64/mysql/libmysqlclient.a
@@ -98,6 +103,16 @@ endif
 ifeq (${MYSQLLIBS},)
   ifneq ($(wildcard /usr/lib/libmysqlclient.a),)
       MYSQLLIBS=/usr/lib/libmysqlclient.a
+  endif
+endif
+ifeq (${MYSQLLIBS},)
+  ifneq ($(wildcard /opt/local/lib/mysql55/mysql/libmysqlclient.a),)
+      MYSQLLIBS=/opt/local/lib/mysql55/mysql/libmysqlclient.a
+  endif
+endif
+ifeq ($(findstring src/hg/,${CURDIR}),src/hg/)
+  ifeq (${MYSQLINC},)
+    $(error can not find installed mysql development system)
   endif
 endif
 # last resort, hoping the compiler can find it in standard locations
