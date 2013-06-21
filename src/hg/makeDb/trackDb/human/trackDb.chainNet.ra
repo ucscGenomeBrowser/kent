@@ -1,5 +1,11 @@
 #	"$Id: trackDb.chainNet.ra,v 1.41 2010/04/09 17:13:34 mary Exp $";
 
+track chainNetPanTro4 override
+priority 210.3
+
+track chainNetPanTro3 override
+priority 210.3
+
 track chainNetPanTro2 override
 priority 210.3
 chainMinScore 5000
