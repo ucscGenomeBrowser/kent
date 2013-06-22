@@ -1199,6 +1199,86 @@ identifier wgEncodeGencodeAnnotationRemarkV16
 
 # end Gencode V16
 
+# begin Gencode V17
+
+# gencode genepreds with no associations
+# wgEncodeGencodePolyaV17
+# wgEncodeGencode2wayConsPseudoV17
+
+# gencode genepreds with joining through wgEncodeGencodeAttrsV17
+identifier wgEncodeGencodeBasicAttrsV17
+"Link together Gencode Basic Table with Attributes table"
+    hg19.wgEncodeGencodeAttrsV17.transcriptId
+    hg19.wgEncodeGencodeBasicV17.name
+
+identifier wgEncodeGencodeCompAttrsV17
+"Link together Gencode Comprehensive Table with Attributes table"
+    hg19.wgEncodeGencodeAttrsV17.transcriptId
+    hg19.wgEncodeGencodeCompV17.name
+
+identifier wgEncodeGencodePseudoGeneAttrsV17
+"Link together Gencode PseudoGene Table with Attributes table"
+    hg19.wgEncodeGencodeAttrsV17.transcriptId
+    hg19.wgEncodeGencodePseudoGeneV17.name
+
+# gencode association tables (joined through wgEncodeGencodeAttrsV17)
+identifier wgEncodeGencodeExonSupportV17
+"Link together Gencode Exon Support table with Attributes table"
+    hg19.wgEncodeGencodeExonSupportV17.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV17.transcriptId minCheck=0.98202
+
+identifier wgEncodeGencodeGeneSourceV17
+"Link together Gencode Gene Source table with Attributes table"
+    hg19.wgEncodeGencodeGeneSourceV17.geneId
+    hg19.wgEncodeGencodeAttrsV17.geneId
+
+identifier wgEncodeGencodePdbV17
+"Link together Gencode Pdb table with Attributes table"
+    hg19.wgEncodeGencodePdbV17.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV17.transcriptId minCheck=0.02
+
+identifier wgEncodeGencodePubMedV17
+"Link together Gencode Pubmed table with Attributes table"
+    hg19.wgEncodeGencodePubMedV17.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV17.transcriptId  minCheck=0.635488
+
+identifier wgEncodeGencodeRefSeqV17
+"Link together Gencode RefSeq table with Attributes table"
+    hg19.wgEncodeGencodeRefSeqV17.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV17.transcriptId minCheck=0.05
+
+identifier wgEncodeGencodeTagV17
+"Link together Gencode Tag table with Attributes table"
+    hg19.wgEncodeGencodeTagV17.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV17.transcriptId minCheck=0.373378
+
+identifier wgEncodeGencodeTranscriptSourceV17
+"Link together Gencode Transcript Source table with Attributes table"
+    hg19.wgEncodeGencodeTranscriptSourceV17.transcriptId
+    hg19.wgEncodeGencodeAttrsV17.transcriptId
+
+identifier wgEncodeGencodeTranscriptSupportV17
+"Link together Gencode Transcript Support table with Attributes table"
+    hg19.wgEncodeGencodeTranscriptSupportV17.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV17.transcriptId minCheck=0.25
+
+identifier wgEncodeGencodeTranscriptionSupportLevelV17
+"Link together Gencode Transcription Support Level table with Attributes table"
+    hg19.wgEncodeGencodeTranscriptionSupportLevelV17.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV17.transcriptId minCheck=0.30
+
+identifier wgEncodeGencodeUniProtV17
+"Link together Gencode UniProt Support table with Attributes table"
+    hg19.wgEncodeGencodeUniProtV17.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV17.transcriptId minCheck=0.358209
+
+identifier wgEncodeGencodeAnnotationRemarkV17
+"Link together Gencode Annotation Remark table with Attributes table"
+    hg19.wgEncodeGencodeAnnotationRemarkV17.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV17.transcriptId minCheck=0.10 
+
+# end Gencode V17
+
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"
     hg19.wgEncodeGencodeClassesV3.name
