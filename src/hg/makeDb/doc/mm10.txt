@@ -9078,7 +9078,7 @@ TMPDIR=/scratch/tmp
 db mm10
 orgDir mouse_10090
 build 137
-buildAssembly 
+buildAssembly
 liftUp /hive/data/genomes/mm10/jkStuff/liftContigs.lft
 EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
@@ -9089,7 +9089,7 @@ EOF
 db mm10
 orgDir mouse_10090
 build 137
-buildAssembly 
+buildAssembly
 liftUp /hive/data/outside/dbSNP/137/mouse/suggested.lft
 refAssemblyLabel GRCm38
 EOF
@@ -9107,7 +9107,7 @@ EOF
 db mm10
 orgDir mouse_10090
 build 137
-buildAssembly 
+buildAssembly
 liftUp /hive/data/outside/dbSNP/137/mouse/suggested.lft
 refAssemblyLabel GRCm38
 ignoreDbSnpContigsFile /hive/data/outside/dbSNP/137/mouse/ignoreAltAssemblyContigs.txt
@@ -9272,12 +9272,12 @@ EOF
 
 
 #########################################################################
-# RETROPOSED GENES ucscRetro track VERSION 2 
+# RETROPOSED GENES ucscRetro track VERSION 2
 # (2013-04-03 - 2013-04-17, baertsch,hartera DONE)
 mkdir -p /hive/hive/groups/gencode/pseudogenes/retroFinder/mm10.20130403
 cd /hive/groups/gencode/pseudogenes/retroFinder/mm10.20130403
 
-mkdir -p /hive/data/genomes/mm10/bed/retro/ 
+mkdir -p /hive/data/genomes/mm10/bed/retro/
 cd /hive/groups/gencode/pseudogenes/retroFinder/mm10.20130403
 cat << '_EOF_' > DEF
 
@@ -9313,8 +9313,8 @@ ALIGN=ucscRetroAli$VERSION
 LOCAL=/scratch/data/$DB
 NIB=$LOCAL/nib
 RMSK=rmsk
-NET1=netHg19 
-NET2=netCanFam3 
+NET1=netHg19
+NET2=netCanFam3
 NET3=netRn5
 GENE1=knownGene
 GENE2=refGene
@@ -9331,12 +9331,12 @@ PFAMIDFIELD=name
 PFAMDOMAIN=value
 ARRAY=gnfAtlas2
 AFFYPROBE=affyGnf1m
-ARRAYMEDIAN=hgFixed.gnfMouseAtlas2Median 
+ARRAYMEDIAN=hgFixed.gnfMouseAtlas2Median
 ARRAYRATIO=hgFixed.gnfMouseAtlas2AllRatio
 ARRAYABS=hgFixed.gnfMouseAtlas2All
-ARRAYEXP=hgFixed.gnfMouseAtlas2MedianExps 
+ARRAYEXP=hgFixed.gnfMouseAtlas2MedianExps
 ARRAYEXPALL=hgFixed.gnfMouseAtlas2AllExps
-# ARRAYLOOKUP=knownToGnfAtlas2 
+# ARRAYLOOKUP=knownToGnfAtlas2
 #ARRAYPSLS="/hive/data/genomes/mm9/bed/geneAtlas2/affyGnf1m.psl"
 ALTSPLICE=sibTxGraph
 SPLITBYAGE=splitRetrosByAgeMouse
@@ -9385,3 +9385,133 @@ retroFinder/trunk/src/pipeline/ucscStep6.sh DEF
 # Scripts copied ucscRetroAli2.psl, ucscRetroInfo2.bed and ucscRetroCds2.tab
 # to /hive/data/genomes/mm10/bed/retro/
 
+##############################################################################
+# LASTZ shrew sorAra2 (DONE - 2013-06-12 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10SorAra2
+    mkdir /hive/data/genomes/mm10/bed/lastzSorAra2.2013-06-12
+    cd /hive/data/genomes/mm10/bed/lastzSorAra2.2013-06-12
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    cat << '_EOF_' > DEF
+# shrew vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: shrew SorAra2
+SEQ2_DIR=/hive/data/genomes/sorAra2/sorAra2.2bit
+SEQ2_LEN=/hive/data/genomes/sorAra2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/mm10/bed/lastzSorAra2.2013-06-12
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    # real    785m32.163s
+
+    cat fb.mm10.chainSorAra2Link.txt
+    #   354499462 bases of 2652783500 (13.363%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzSorAra2.2013-06-12 lastz.sorAra2
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzSorAra2.2013-06-12
+    time doRecipBest.pl mm10 sorAra2 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    24m38.069s
+
+    mkdir /hive/data/genomes/sorAra2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/sorAra2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzSorAra2.2013-06-12/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    39m53.463s
+    cat fb.sorAra2.chainMm10Link.txt
+    #  343760052 bases of 2192103426 (15.682%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/sorAra2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################
+# LASTZ tenrec echTel2 (DONE - 2013-06-12 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10EchTel2
+    mkdir /hive/data/genomes/mm10/bed/lastzEchTel2.2013-06-12
+    cd /hive/data/genomes/mm10/bed/lastzEchTel2.2013-06-12
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    cat << '_EOF_' > DEF
+# tenrec vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: tenrec EchTel2
+SEQ2_DIR=/hive/data/genomes/echTel2/echTel2.2bit
+SEQ2_LEN=/hive/data/genomes/echTel2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/mm10/bed/lastzEchTel2.2013-06-12
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   real    1006m3.874s
+
+    cat fb.mm10.chainEchTel2Link.txt
+    #	384570981 bases of 2652783500 (14.497%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzEchTel2.2013-06-12 lastz.echTel2
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzEchTel2.2013-06-12
+    time doRecipBest.pl mm10 echTel2 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    27m58.816s
+
+    # and, for the swap
+    mkdir /hive/data/genomes/echTel2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/echTel2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzEchTel2.2013-06-12/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    43m0.194s
+    cat fb.echTel2.chainMm10Link.txt
+    #	380872172 bases of 2605196361 (14.620%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/echTel2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################

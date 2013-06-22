@@ -1097,23 +1097,26 @@ char query[256];
 struct sqlResult *sr;
 if (sameString(table,""))
     {
-    sqlCheckError("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table);  
+    dumpStack("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table); fflush(stderr); // log only
     return FALSE;
     }
 // TODO If the ability to supply a list of tables is hardly used,
 // then we could switch it to simply %s below supporting a single
 // table at a time more securely.
-// DEBUG informational
 if (strchr(table,','))
     dumpStack("sqlTableExists called on multiple tables with table=[%s]\n", table);
 if (strchr(table,'%'))
     {
-    // verbose is better than warn for early code calls?
-    sqlCheckError("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table);  
+    dumpStack("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table); fflush(stderr); // log only
     return FALSE;
     }
-// DEBUG END
-//verbose(1,"DEBUG sqlTableExists table=[%s]\n", table); // DEBUG REMOVE
+if (strchr(table,'-'))
+    {
+    return FALSE;  // mysql does not allow tables with dash (-) so it will not be found.
+    // hg/lib/hdb.c can generate an invalid table names with dashes while looking for split tables,
+    // if the first chrom name has a dash in it. Examples found were: scaffold_0.1-193456 scaffold_0.1-13376 HERVE_a-int 1-1
+    // Assembly hubs also may have dashes in chrom names.
+    }
 sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(table));  // DEBUG RESTORE
 //safef(query, sizeof(query), "NOSQLINJ SELECT 1 FROM %s LIMIT 0", table);  // DEBUG REMOVE
 if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)

@@ -35,6 +35,7 @@
  * files for every GENCODE version if a URL was added or changed. */
 //FIXME: clean up RA files when CGIs no longer need them
 static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/gencode_biotypes.html";
+static char *gencodeTagsUrl = "http://www.gencodegenes.org/gencode_tags.html";
 static char *ensemblTranscriptIdUrl = "http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s";
 static char *ensemblGeneIdUrl = "http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s";
 static char *vegaTranscriptIdUrl = "http://vega.sanger.ac.uk/Homo_sapiens/Transcript/Summary?db=core;t=%s";
@@ -603,7 +604,7 @@ static void writeTagLinkHtml(struct wgEncodeGencodeTag *tags)
 /* write HTML links to Tag */
 {
 printf("<table class=\"hgcCcds\"><thead>\n");
-printf("<tr><th colspan=3>Tags</tr>\n");
+printf("<tr><th colspan=3><a href=\"%s\">Tags</a></tr>\n", gencodeTagsUrl);
 printf("</thead><tbody>\n");
 int i, rowCnt = 0;
 struct wgEncodeGencodeTag *tag = tags;

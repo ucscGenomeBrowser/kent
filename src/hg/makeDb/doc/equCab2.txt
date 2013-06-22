@@ -277,6 +277,27 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     rm /gbdb/equCab2/equCab2.2bit
     ln -s /cluster/data/equCab2/equCab2.2bit /gbdb/equCab2/equCab2.2bit
 
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/equCab2/bed/windowMasker
+    cd /hive/data/genomes/equCab2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev equCab2 > do.log 2>&1 &
+    # real     196m46.229s
+
+    # Masking statistics
+    faSize.equCab2.cleanWMSdust.txt
+# 2484532062 bases (55741889 N's 2428790173 real 1691195365
+#    upper 737594808 lower) in 34 sequences in 1 files
+# Total size: mean 73074472.4 sd 37307637.2 min 16660 (chrM)
+#    max 185838109 (chr1) median 80757907
+# %29.69 masked total, %30.37 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps equCab2 rmsk windowmaskerSdust \
+       > fb.equCab2.rmsk.windowmaskerSdust.txt 2>&1
+    #   477862630 bases of 2484532062 (19.234%) in intersection
+
 ########################################################################
 #	add ctgPos2 track (DONE - 2008-04-04 - larrym)
 

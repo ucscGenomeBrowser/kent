@@ -219,6 +219,27 @@ taxId 9103
     hgsql -e "select count(*) from gap;" melGal1
     #	 146748
 
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/melGal1/bed/windowMasker
+    cd /hive/data/genomes/melGal1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev melGal1 > do.log 2>&1 &
+    # real     78m16.273s
+
+    # Masking statistics
+    faSize.melGal1.cleanWMSdust.txt
+# 1061817101 bases (125894715 N's 935922386 real 751712369
+#    upper 184210017 lower) in 5891 sequences in 1 files
+# Total size: mean 180243.9 sd 3949064.0 min 66 (chrUn_GL429765)
+#    max 204065131 (chr1) median 1560
+# %17.35 masked total, %19.68 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps melGal1 rmsk windowmaskerSdust \
+       > fb.melGal1.rmsk.windowmaskerSdust.txt 2>&1
+    #   38671759 bases of 1061817101 (3.642%) in intersection
+
 ########################################################################
 # Create kluster run files (DONE 2010-11-05 - Chin)
     # numerator is melGal1 gapless bases "real" as reported by: 

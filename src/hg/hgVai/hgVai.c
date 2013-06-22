@@ -527,13 +527,16 @@ if (fileExists(fileName))
 	*retFileName = cloneString(fileName);
     foundIt = TRUE;
     }
-// Not bed4; try just .bb:
-safef(fileName, sizeof(fileName), "/gbdb/%s/vai/%s.bb", database, table->name);
-if (fileExists(fileName))
+else
     {
-    if (retFileName != NULL)
-	*retFileName = cloneString(fileName);
-    foundIt = TRUE;
+    // Not bed4; try just .bb:
+    safef(fileName, sizeof(fileName), "/gbdb/%s/vai/%s.bb", database, table->name);
+    if (fileExists(fileName))
+	{
+	if (retFileName != NULL)
+	    *retFileName = cloneString(fileName);
+	foundIt = TRUE;
+	}
     }
 if (foundIt && retTdb == NULL)
     return TRUE;

@@ -110,7 +110,7 @@ void liftOverChainSaveToDb(struct sqlConnection *conn, struct liftOverChain *el,
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%s,%g,%u,%u,'%s',%g,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%g,%u,%u,'%s',%g,'%s')", 
 	tableName,  el->fromDb,  el->toDb,  el->path,  el->minMatch,  el->minChainT,  el->minSizeQ,  el->multiple,  el->minBlocks,  el->fudgeThick);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
