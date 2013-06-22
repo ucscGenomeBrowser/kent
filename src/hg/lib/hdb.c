@@ -1829,7 +1829,7 @@ char **row;
 char parsedChrom[HDB_MAX_CHROM_STRING];
 char rootName[256];
 char fullTableName[256];
-char rangeStr[32];
+char rangeStr[1024];
 int count;
 boolean canDoUTR, canDoIntrons;
 boolean useSqlConstraints = sqlConstraints != NULL && sqlConstraints[0] != 0;
