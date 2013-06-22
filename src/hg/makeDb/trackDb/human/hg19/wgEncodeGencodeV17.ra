@@ -4,14 +4,14 @@
 #    registerTrackHandler for new gencode versions.
 #  - Must ensure attrs.transcriptType matches current transcriptTypes.
 ##
-track wgEncodeGencodeV16
+track wgEncodeGencodeV17
 compositeTrack on
-superTrack wgEncodeGencodeSuper hide
-shortLabel GENCODE Genes V16
-longLabel Gene Annotations from ENCODE/GENCODE Version 16
+superTrack wgEncodeGencodeSuper pack
+shortLabel GENCODE Genes V17
+longLabel Gene Annotations from ENCODE/GENCODE Version 17
 group genes
 dragAndDrop subTracks
-priority 34.189
+priority 34.188
 visibility hide
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
@@ -20,29 +20,29 @@ sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred 
 configurable off
-wgEncodeGencodeVersion 16
-wgEncodeGencodeAttrs wgEncodeGencodeAttrsV16
-wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV16
-wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV16
-wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV16
-wgEncodeGencodePdb wgEncodeGencodePdbV16
-wgEncodeGencodePubMed wgEncodeGencodePubMedV16
-wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqV16
-wgEncodeGencodeTag wgEncodeGencodeTagV16
-wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV16
-wgEncodeGencodeUniProt wgEncodeGencodeUniProtV16
-wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV16
-wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV16
-wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV16
+wgEncodeGencodeVersion 17
+wgEncodeGencodeAttrs wgEncodeGencodeAttrsV17
+wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV17
+wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV17
+wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV17
+wgEncodeGencodePdb wgEncodeGencodePdbV17
+wgEncodeGencodePubMed wgEncodeGencodePubMedV17
+wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqV17
+wgEncodeGencodeTag wgEncodeGencodeTagV17
+wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV17
+wgEncodeGencodeUniProt wgEncodeGencodeUniProtV17
+wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV17
+wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV17
+wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV17
 
-    track wgEncodeGencodeV16ViewGenes
+    track wgEncodeGencodeV17ViewGenes
     shortLabel Genes
     view aGenes
     configurable on
-    visibility full
-    subTrack wgEncodeGencodeV16
+    visibility pack
+    subTrack wgEncodeGencodeV17
     type genePred
-    itemClassTbl wgEncodeGencodeAttrsV16
+    itemClassTbl wgEncodeGencodeAttrsV17
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass
     cdsDrawDefault genomic\ codons
@@ -67,197 +67,197 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     highlightBy supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA \
                 attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncrna,ambiguous_orf,antisense,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,misc_RNA,Mt_rRNA,Mt_tRNA,nonsense_mediated_decay,non_coding,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,retrotransposed,rRNA,sense_intronic,sense_overlapping,snoRNA,snRNA,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,TR_C_gene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene
     
-        track wgEncodeGencodeBasicV16
-        subTrack wgEncodeGencodeV16ViewGenes on
+        track wgEncodeGencodeBasicV17
+        subTrack wgEncodeGencodeV17ViewGenes on
         shortLabel Basic
         subGroups view=aGenes name=Basic
-        longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version 16
+        longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version 17
         type genePred
         priority 1
     
-        track wgEncodeGencodeCompV16
-        subTrack wgEncodeGencodeV16ViewGenes off
+        track wgEncodeGencodeCompV17
+        subTrack wgEncodeGencodeV17ViewGenes off
         subGroups view=aGenes name=Comprehensive
         shortLabel Comprehensive
-        longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE Version 16 
+        longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE Version 17 
         type genePred
         priority 2
     
-        track wgEncodeGencodePseudoGeneV16
-        subTrack wgEncodeGencodeV16ViewGenes off
+        track wgEncodeGencodePseudoGeneV17
+        subTrack wgEncodeGencodeV17ViewGenes off
         subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
-        longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version 16
+        longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version 17
         type genePred
         color 255,51,255
         priority 3
     
-    track wgEncodeGencodeV16View2Way 
+    track wgEncodeGencodeV17View2Way 
     shortLabel 2-Way
     view 42-Way 
     visibility hide
-    subTrack wgEncodeGencodeV16
+    subTrack wgEncodeGencodeV17
     type genePred
     configurable off
 
-        track wgEncodeGencode2wayConsPseudoV16
-        subTrack wgEncodeGencodeV16View2Way off
+        track wgEncodeGencode2wayConsPseudoV17
+        subTrack wgEncodeGencodeV17View2Way off
         subGroups view=b2-way name=yTwo-way
         shortLabel 2-way Pseudogenes
-        longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE Version 16
+        longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE Version 17
         type genePred
         color 255,51,255
         priority 4
     
-    track wgEncodeGencodeV16ViewPolya
+    track wgEncodeGencodeV17ViewPolya
     shortLabel PolyA
     view cPolya
     visibility hide
-    subTrack wgEncodeGencodeV16
+    subTrack wgEncodeGencodeV17
     type genePred
     configurable off
 
-        track wgEncodeGencodePolyaV16
-        subTrack wgEncodeGencodeV16ViewPolya off
+        track wgEncodeGencodePolyaV17
+        subTrack wgEncodeGencodeV17ViewPolya off
         subGroups view=cPolya name=zPolyA
         shortLabel PolyA
-        longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE Version 16
+        longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE Version 17
         type genePred
         color 0,0,0
         priority 5
     
 # searchs for basic
-searchName wgEncodeGencodeBasicV16
-searchTable wgEncodeGencodeBasicV16
+searchName wgEncodeGencodeBasicV17
+searchTable wgEncodeGencodeBasicV17
 searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
-searchPriority 2.29001
+searchPriority 2.28001
 
-searchName wgEncodeGencodeBasicGeneSymV16
-searchTable wgEncodeGencodeBasicV16
+searchName wgEncodeGencodeBasicGeneSymV17
+searchTable wgEncodeGencodeBasicV17
 searchMethod exact
 searchType genePred
-searchPriority 2.29002
+searchPriority 2.28002
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
-searchName wgEncodeGencodeBasicGeneV16
-searchTable wgEncodeGencodeBasicV16
+searchName wgEncodeGencodeBasicGeneV17
+searchTable wgEncodeGencodeBasicV17
 searchMethod prefix
 searchType genePred
 termRegex ENSG[0-9.]+
-searchPriority 2.29003
-xrefTable wgEncodeGencodeAttrsV16
+searchPriority 2.28003
+xrefTable wgEncodeGencodeAttrsV17
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
-searchName wgEncodeGencodeBasicHavanaTranscriptV16
-searchTable wgEncodeGencodeBasicV16
+searchName wgEncodeGencodeBasicHavanaTranscriptV17
+searchTable wgEncodeGencodeBasicV17
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMT[0-9.]+
-searchPriority 2.29004
-xrefTable wgEncodeGencodeAttrsV16
+searchPriority 2.28004
+xrefTable wgEncodeGencodeAttrsV17
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
-searchName wgEncodeGencodeBasicHavanaGeneV16
-searchTable wgEncodeGencodeBasicV16
+searchName wgEncodeGencodeBasicHavanaGeneV17
+searchTable wgEncodeGencodeBasicV17
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMG[0-9.]+
-searchPriority 2.29005
-xrefTable wgEncodeGencodeAttrsV16
+searchPriority 2.28005
+xrefTable wgEncodeGencodeAttrsV17
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
 # searchs for comp
-searchName wgEncodeGencodeCompV16
-searchTable wgEncodeGencodeCompV16
+searchName wgEncodeGencodeCompV17
+searchTable wgEncodeGencodeCompV17
 searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
-searchPriority 2.29006
+searchPriority 2.28006
 
-searchName wgEncodeGencodeCompGeneSymV16
-searchTable wgEncodeGencodeCompV16
+searchName wgEncodeGencodeCompGeneSymV17
+searchTable wgEncodeGencodeCompV17
 searchMethod exact
 searchType genePred
-searchPriority 2.29007
+searchPriority 2.28007
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
-searchName wgEncodeGencodeCompGeneV16
-searchTable wgEncodeGencodeCompV16
+searchName wgEncodeGencodeCompGeneV17
+searchTable wgEncodeGencodeCompV17
 searchMethod prefix
 searchType genePred
 termRegex ENSG[0-9.]+
-searchPriority 2.29008
-xrefTable wgEncodeGencodeAttrsV16
+searchPriority 2.28008
+xrefTable wgEncodeGencodeAttrsV17
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
-searchName wgEncodeGencodeCompHavanaTranscriptV16
-searchTable wgEncodeGencodeCompV16
+searchName wgEncodeGencodeCompHavanaTranscriptV17
+searchTable wgEncodeGencodeCompV17
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMT[0-9.]+
-searchPriority 2.29009
-xrefTable wgEncodeGencodeAttrsV16
+searchPriority 2.28009
+xrefTable wgEncodeGencodeAttrsV17
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
-searchName wgEncodeGencodeCompHavanaGeneV16
-searchTable wgEncodeGencodeCompV16
+searchName wgEncodeGencodeCompHavanaGeneV17
+searchTable wgEncodeGencodeCompV17
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMG[0-9.]+
-searchPriority 2.29010
-xrefTable wgEncodeGencodeAttrsV16
+searchPriority 2.28010
+xrefTable wgEncodeGencodeAttrsV17
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
 # searchs for pseudogene
-searchName wgEncodeGencodePseudoGeneV16
-searchTable wgEncodeGencodePseudoGeneV16
+searchName wgEncodeGencodePseudoGeneV17
+searchTable wgEncodeGencodePseudoGeneV17
 searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
-searchPriority 2.29011
+searchPriority 2.28011
 
-searchName wgEncodeGencodePseudoGeneGeneSymV16
-searchTable wgEncodeGencodePseudoGeneV16
+searchName wgEncodeGencodePseudoGeneGeneSymV17
+searchTable wgEncodeGencodePseudoGeneV17
 searchMethod exact
 searchType genePred
-searchPriority 2.29012
+searchPriority 2.28012
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
-searchName wgEncodeGencodePseudoGeneGeneV16
-searchTable wgEncodeGencodePseudoGeneV16
+searchName wgEncodeGencodePseudoGeneGeneV17
+searchTable wgEncodeGencodePseudoGeneV17
 searchMethod prefix
 searchType genePred
 termRegex ENSG[0-9.]+
-searchPriority 2.29013
-xrefTable wgEncodeGencodeAttrsV16
+searchPriority 2.28013
+xrefTable wgEncodeGencodeAttrsV17
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
-searchName wgEncodeGencodePseudoGeneHavanaTranscriptV16
-searchTable wgEncodeGencodePseudoGeneV16
+searchName wgEncodeGencodePseudoGeneHavanaTranscriptV17
+searchTable wgEncodeGencodePseudoGeneV17
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMT[0-9.]+
-searchPriority 2.29014
-xrefTable wgEncodeGencodeAttrsV16
+searchPriority 2.28014
+xrefTable wgEncodeGencodeAttrsV17
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
-searchName wgEncodeGencodePseudoGeneHavanaGeneV16
-searchTable wgEncodeGencodePseudoGeneV16
+searchName wgEncodeGencodePseudoGeneHavanaGeneV17
+searchTable wgEncodeGencodePseudoGeneV17
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMG[0-9.]+
-searchPriority 2.29015
-xrefTable wgEncodeGencodeAttrsV16
+searchPriority 2.28015
+xrefTable wgEncodeGencodeAttrsV17
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
 # searchs for 2-way consensus
-searchName wgEncodeGencode2wayConsPseudoV16
-searchTable wgEncodeGencode2wayConsPseudoV16
+searchName wgEncodeGencode2wayConsPseudoV17
+searchTable wgEncodeGencode2wayConsPseudoV17
 searchMethod exact
 searchType genePred
 termRegex PGOHUM[0-9.]+
-searchPriority 2.29016
+searchPriority 2.28016
 
 
