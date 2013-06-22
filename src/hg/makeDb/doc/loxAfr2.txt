@@ -176,4 +176,25 @@ _EOF_
 # add NCBI identifiers to the dbDb (DONE - 2008-10-22 - Hiram)
     hgsql -e 'update dbDb set
 sourceName="Broad Institute loxAfr2 (NCBI project 12569, AAGU02000000)" where name="loxAfr2";' hgcentraltest
+
 ###########################################################################
+# construct liftOver to loxAfr3 (DONE - 2013-06-18 - Hiram)
+    screen -S loxAfr3	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/loxAfr2/bed/blat.loxAfr3.2013-06-18
+    cd /hive/data/genomes/loxAfr2/bed/blat.loxAfr3.2013-06-18
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/loxAfr2/loxAfr2.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev loxAfr2 loxAfr3
+    #   real    0m1.838s
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/loxAfr2/loxAfr2.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev loxAfr2 loxAfr3 > do.log 2>&1
+    #	real    4272m55.864s
+
+    # verify this file exists:
+    #	/gbdb/loxAfr2/liftOver/loxAfr2ToLoxAfr3.over.chain.gz
+    # and try out the conversion on genome-test from loxAfr2 to loxAfr3
+
+############################################################################
