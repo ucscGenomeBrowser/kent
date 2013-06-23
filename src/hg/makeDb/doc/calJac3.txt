@@ -135,6 +135,27 @@ taxId 9483
     rm /gbdb/calJac3/calJac3.2bit
     ln -s `pwd`/calJac3.2bit /gbdb/calJac3/calJac3.2bit
 
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/windowMasker
+    cd /hive/data/genomes/calJac3/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev calJac3 > do.log 2>&1 &
+    # real    267m27.325s
+
+    # Masking statistics
+    faSize.calJac3.cleanWMSdust.txt
+# 2914958544 bases (162452744 N's 2752505800 real 1739687951
+#    upper 1012817849 lower) in 14205 sequences in 1 files
+# Total size: mean 205206.5 sd 5236162.4
+#    min 1031 (chr17_ACFV01172182_random) max 210400635 (chr1) median 4713
+# %34.75 masked total, %36.80 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps calJac3 rmsk windowmaskerSdust \
+       > fb.calJac3.rmsk.windowmaskerSdust.txt 2>&1
+    #   752340288 bases of 2914958544 (25.810%) in intersection
+
 #########################################################################
 # MAKE 11.OOC FILES FOR BLAT (DONE - 2010-02-03 - Hiram)
     ssh kolossus

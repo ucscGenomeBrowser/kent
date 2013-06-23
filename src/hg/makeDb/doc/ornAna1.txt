@@ -188,6 +188,26 @@ sed -e 's/^.*://' $1 \
     ssh hgwdev
     ln -s /cluster/data/ornAna1/ornAna1.2bit /gbdb/ornAna1/ornAna1.2bit
 
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/ornAna1/bed/windowMasker
+    cd /hive/data/genomes/ornAna1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev ornAna1 > do.log 2>&1 &
+    # real     854m2.558s
+
+    # Masking statistics
+    cat faSize.ornAna1.cleanWMSdust.txt
+# 1996811212 bases (154575690 N's 1842235522 real 985350929
+#    upper 856884593 lower) in 201523 sequences in 1 files
+# Total size: mean 9908.6 sd 331992.5 min 108 (Contig271463)
+#    max 59581953 (chr3) median 1069
+# %42.91 masked total, %46.51 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps ornAna1 rmsk windowmaskerSdust \
+       > fb.ornAna1.rmsk.windowmaskerSdust.txt 2>&1
+    #  715714681 bases of 1996811212 (35.843%) in intersection
 
 #########################################################################
 # MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 12/21/06 angie - REDONE 2/6/07 - REDONE 7/24/07)
