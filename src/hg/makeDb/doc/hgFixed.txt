@@ -1055,3 +1055,29 @@ textHistogram -real -binSize=0.2 -maxBinCount=1100 -minVal=-200 \
 # Belinda Giardine April 2007
 # gv* tables: 
 #	reload tables, additions and corrections, details in hg18 doc
+
+#############################################################################
+## Add CTD data	
+
+    mkdir /hive/data/outside/ctdbase
+    cd /hive/data/outside/ctdbase
+
+#   Download chem_gene_ixns.tsv from CTD site, http://ctd.mdibl.org/downloads/.
+    wget "http://ctdbase.org/reports/CTD_chem_gene_ixns.tsv.gz"
+    gunzip CTD_chem_gene_ixns.tsv.gz
+
+
+    hgsql hg18 -e 'create database ctdBraney'
+    hgsql ctdBraney < ~/kent/src/hg/lib/chem_gene_ixns.sql
+
+    hgsql ctdBraney -e 'load data local infile "CTD_chem_gene_ixns.tsv" into table chem_gene_ixns'
+
+# create sorted data
+
+    hgsql hg19 -N -e \
+    'select x.geneSymbol, ChemicalId, count(distinct Interaction), ChemicalName from kgXref x, ctdBraney.chem_gene_ixns c where x.geneSymbol=c.GeneSymbol group by x.geneSymbol, ChemicalId'|\
+    sort -k 1,1 -k 3,3nr -k 4,4 >ctdSorted.tab
+
+    hgsql hgFixed < ~/kent/src/hg/lib/ctdSorted.sql
+    hgsql hgFixed -e 'load data local infile "ctdSorted.tab" into table ctdSorted'
+
