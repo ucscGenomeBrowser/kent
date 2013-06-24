@@ -784,7 +784,7 @@ printf("&nbsp;<img id='loadingImg' src='../images/loading.gif' />\n");
 printf("<span id='loadingMsg'></span>\n");
 cgiMakeButtonWithOnClick("startQuery", "Go!",
 			 "get the results of your query",
-			 "loadingImage.run(); $('#mainForm').submit();");
+			 "loadingImage.run(); return true;");
 }
 
 /*
