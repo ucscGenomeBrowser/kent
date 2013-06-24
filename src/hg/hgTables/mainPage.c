@@ -992,10 +992,11 @@ webNewSection("<A NAME=\"Help\"></A>Using the Table Browser\n");
 printMainHelp();
 }
 
-void doMainPage(struct sqlConnection *conn)
+void doMainPage(struct sqlConnection *conn, boolean webStarted)
 /* Put up the first page user sees. */
 {
-htmlOpen("Table Browser");
+if (!webStarted)
+    htmlOpen("Table Browser");
 mainPageAfterOpen(conn);
 htmlClose();
 }

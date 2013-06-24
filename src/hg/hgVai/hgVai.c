@@ -784,7 +784,7 @@ printf("&nbsp;<img id='loadingImg' src='../images/loading.gif' />\n");
 printf("<span id='loadingMsg'></span>\n");
 cgiMakeButtonWithOnClick("startQuery", "Go!",
 			 "get the results of your query",
-			 "loadingImage.run(); $('#mainForm').submit();");
+			 "loadingImage.run(); return true;");
 }
 
 /*
@@ -810,6 +810,11 @@ cgiMakeButtonWithOnClick("startQuery", "Go!",
 void doMainPage()
 /* Print out initial HTML of control page. */
 {
+jsInit();
+jsIncludeFile("jquery-ui.js", NULL);
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("hgVarAnnogrator.js", NULL);
+addSomeCss();
 printAssemblySection();
 
 /* Check for variant custom tracks.  If there are none, tell user they need to
@@ -845,11 +850,6 @@ void doUi()
 /* Set up globals and make web page */
 {
 cartWebStart(cart, database, "Variant Annotation Integrator");
-jsInit();
-jsIncludeFile("jquery-ui.js", NULL);
-webIncludeResourceFile("jquery-ui.css");
-jsIncludeFile("hgVarAnnogrator.js", NULL);
-addSomeCss();
 doMainPage();
 cartWebEnd();
 /* Save variables. */
@@ -1267,9 +1267,9 @@ if (udcCacheTimeout() < timeout)
 knetUdcInstall();
 #endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
+initGroupsTracksTables(cart, &fullTrackList, &fullGroupList);
 if (lookupPosition(cart, hgvaRange))
     {
-    initGroupsTracksTables(cart, &fullTrackList, &fullGroupList);
     if (startQuery)
 	doQuery();
     else
