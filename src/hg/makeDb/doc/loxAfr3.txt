@@ -74,6 +74,27 @@ taxId 9785
 	-add bed/simpleRepeat/trfMask.bed loxAfr3.2bit
     twoBitToFa loxAfr3.2bit stdout | faSize stdin > faSize.loxAfr3.2bit.txt
 
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/loxAfr3/bed/windowMasker
+    cd /hive/data/genomes/loxAfr3/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev loxAfr3 > do.log 2>&1 &
+    # real    260m2.629s
+
+    # Masking statistics
+    faSize.loxAfr3.cleanWMSdust.txt
+# 3196760833 bases (78195493 N's 3118565340 real 1683497170
+#    upper 1435068170 lower) in 2353 sequences in 1 files
+# Total size: mean 1358589.4 sd 8404246.1 min 3026 (scaffold_2351)
+#    max 129759341 (scaffold_0) median 10119
+# %44.89 masked total, %46.02 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps loxAfr3 rmsk windowmaskerSdust \
+       > fb.loxAfr3.rmsk.windowmaskerSdust.txt 2>&1
+    #   1000702369 bases of 3196760833 (31.304%) in intersection
+
 #############################################################################
 # create ooc file and populate /scratch/data (DONE - 2009-07-16 - Hiram)
     #	repMatch = 1024 * sizeof(loxAfr3)/sizeof(hg19)

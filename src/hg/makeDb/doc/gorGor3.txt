@@ -247,6 +247,25 @@ close (FH);
     #	426860 yes
 
 ##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/gorGor3/bed/windowMasker
+    cd /hive/data/genomes/gorGor3/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev gorGor3 > do.log 2>&1 &
+    # real     409m44.858s
+
+    # Masking statistics
+    cat faSize.gorGor3.cleanWMSdust.txt
+# 3029553646 bases (206793566 N's 2822760080 real 1745769531 upper 1076990549 lower) in 46823 sequences in 1 files
+# Total size: mean 64702.3 sd 2985096.0 min 360 (CABD02412127) max 229507203 (chr1) median 1350
+# %35.55 masked total, %38.15 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps gorGor3 rmsk windowmaskerSdust \
+       > fb.gorGor3.rmsk.windowmaskerSdust.txt 2>&1
+    #   770918913 bases of 3029553646 (25.447%) in intersection
+
+##########################################################################
 #  gorGor3 - Gorilla - Ensembl Genes version 64  (DONE - 2011-10-12 - hiram)
     ssh hgwdev
     cd /hive/data/genomes/gorGor3
