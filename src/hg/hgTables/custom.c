@@ -617,6 +617,6 @@ if (theCtList)
     removeNamedCustom(&theCtList, curTable);
 customTracksSaveCart(database, cart, theCtList);
 initGroupsTracksTables();
-doMainPage(conn);
+doMainPage(conn, FALSE);
 }
 
