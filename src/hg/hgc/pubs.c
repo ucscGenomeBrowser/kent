@@ -290,7 +290,7 @@ sqlDyStringPrintf(query,
 sqlDyStringPrintf(query, "JOIN %s USING (articleId) ", articleTable);
 sqlDyStringPrintf(query, "WHERE markerId='%s' AND section in (", item);
 // this part triggered sql injection warning as the section list includes ' and ,
-sqlDyStringAppend(query, sectionList);
+sqlDyStringPrintf(query, "%-s", sectionList);
 sqlDyStringPrintf(query, ") GROUP BY articleId ORDER BY year DESC LIMIT %d", itemLimit);
 
 if (pubsDebug)
