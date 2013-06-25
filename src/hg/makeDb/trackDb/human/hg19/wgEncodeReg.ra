@@ -413,7 +413,17 @@ canPack On
     track wgEncodeRegTfbsClusteredMotifs
     release alpha
     shortLabel Txn Fac Motifs
-    longLabel Transcription Factor Motifs identified in ENCODE ChIP-seq
-    type bed 6 +
-    superTrack wgEncodeReg hide
+    longLabel Transcription Factor Motifs identified in ENCODE ChIP-seq (FactorBook)
+    type bed 4 +
+    superTrack wgEncodeReg dense
+    color 0,128,0
+    priority 1.8
+
+    track wgEncodeRegTfbsClusteredMotifs_larry
+    release alpha
+    shortLabel Txn Fac Motifs LM
+    longLabel Transcription Factor Motifs identified in ENCODE ChIP-seq (LarryM)
+    type bed 6
+    color 0,250,50
+    superTrack wgEncodeReg dense
     priority 1.8
