@@ -277,26 +277,25 @@ static struct sqlResult *queryMarkerRows(struct sqlConnection *conn, char *marke
     char *articleTable, char *item, int itemLimit, char *sectionList)
 /* query marker rows from mysql, based on http parameters  */
 {
+char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
 sqlUpdate(conn, "NOSQLINJ SET SESSION group_concat_max_len = 100000");
-
-// rather ugly compared to single safef line, but needed to rewrite with dyString for sql inj
-struct dyString *query = newDyString(4000);
-sqlDyStringPrintf(query,"SELECT distinct ");
-sqlDyStringPrintf(query, "%s.articleId,url,title,authors,citation,pmid,extId, ", markerTable);
-sqlDyStringPrintf(query, 
-    "group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s ",
-    markerTable);
-sqlDyStringPrintf(query, "JOIN %s USING (articleId) ", articleTable);
-sqlDyStringPrintf(query, "WHERE markerId='%s' AND section in (", item);
-// this part triggered sql injection warning as the section list includes ' and ,
-sqlDyStringPrintf(query, "%-s", sectionList);
-sqlDyStringPrintf(query, ") GROUP BY articleId ORDER BY year DESC LIMIT %d", itemLimit);
+ 
+// no need to check for illegal characters in sectionList
+sqlSafef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, "  
+    "pmid, extId, "
+    "group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s "
+    "JOIN %s USING (articleId) "
+    "WHERE markerId='%s' AND section in (%-s) "
+    "GROUP by articleId "
+    "ORDER BY year DESC "
+    "LIMIT %d",
+    markerTable, markerTable, articleTable, item, sectionList, itemLimit);
 
 if (pubsDebug)
-    printf("%s", query->string);
+    printf("%s", query);
 
-struct sqlResult *sr = sqlGetResult(conn, query->string);
+struct sqlResult *sr = sqlGetResult(conn, query);
 
 return sr;
 }
@@ -349,20 +348,15 @@ printf("</FORM><P>\n");
 static void printLimitWarning(struct sqlConnection *conn, char *markerTable, 
     char *item, int itemLimit, char *sectionList)
 {
-//char query[4000];
-struct dyString *query = newDyString(4000);
-sqlDyStringPrintf(query, "SELECT COUNT(*) from ");
-dyStringAppend(query, markerTable); 
-sqlDyStringPrintf(query, " WHERE markerId='%s' AND section in ", item);
-dyStringPrintf(query, " (%s) ", sectionList); // no need to check for illegal characters here
-
-//sqlSafef(query, sizeof(query), "SELECT COUNT(*) from %s WHERE markerId='%s' AND section in (%s) ", markerTable, item, sectionList);
-if (sqlNeedQuickNum(conn, query->string) > itemLimit) 
-{
+char query[4000];
+// no need to check for illegal characters in sectionList
+sqlSafef(query, sizeof(query), "SELECT COUNT(*) from %s WHERE markerId='%s' AND section in (%-s) ", markerTable, item, sectionList);
+if (sqlNeedQuickNum(conn, query) > itemLimit) 
+    {
     printf("<b>This marker is mentioned more than %d times</b><BR>\n", itemLimit);
     printf("The results would take too long to load in your browser and are "
     "therefore limited to %d articles.<P>\n", itemLimit);
-}
+    }
 }
 
 static void printMarkerSnippets(struct sqlConnection *conn, char *articleTable, char *markerTable, char *item)
