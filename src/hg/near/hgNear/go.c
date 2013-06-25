@@ -44,7 +44,7 @@ struct hash *hash = newHash(6);
 
 if (gp->protein != NULL && gp->protein[0] != 0)
     {
-    char *proteinAcc;
+    char *proteinAcc = NULL;
     
     if (kgVersion == KG_III)
     	{
@@ -55,23 +55,26 @@ if (gp->protein != NULL && gp->protein[0] != 0)
     	proteinAcc = spFindAcc(col->uniProtConn, gp->protein);
         }
     
-    sqlSafef(query, sizeof(query), 
-	    "select term.name from goaPart,term where goaPart.%s = '%s' and goaPart.goId = term.acc", col->goaIdColumn, proteinAcc);
-    sr = sqlGetResult(col->goConn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	char *name = row[0];
-	if (!hashLookup(hash, name))
+    if (proteinAcc)
+	{	    
+	sqlSafef(query, sizeof(query), 
+		"select term.name from goaPart,term where goaPart.%s = '%s' and goaPart.goId = term.acc", col->goaIdColumn, proteinAcc);
+	sr = sqlGetResult(col->goConn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    hashAdd(hash, name, NULL);
-	    gotOne = TRUE;
-	    dyStringAppend(dy, "'");
-	    dyStringAppend(dy, name);
-	    dyStringAppend(dy, "'");
-	    dyStringAppendC(dy, ',');
+	    char *name = row[0];
+	    if (!hashLookup(hash, name))
+		{
+		hashAdd(hash, name, NULL);
+		gotOne = TRUE;
+		dyStringAppend(dy, "'");
+		dyStringAppend(dy, name);
+		dyStringAppend(dy, "'");
+		dyStringAppendC(dy, ',');
+		}
 	    }
+	sqlFreeResult(&sr);
 	}
-    sqlFreeResult(&sr);
     }
 if (gotOne)
     result = cloneString(dy->string);
@@ -92,7 +95,7 @@ struct hash *hash = newHash(6);
 hPrintf("<TD>");
 if (gp->protein != NULL && gp->protein[0] != 0)
     {
-    char *proteinAcc;
+    char *proteinAcc = NULL;
     
     if (kgVersion == KG_III)
     	{
@@ -102,35 +105,37 @@ if (gp->protein != NULL && gp->protein[0] != 0)
     	{
     	proteinAcc = spFindAcc(col->uniProtConn, gp->protein);
         }
-
-    sqlSafef(query, sizeof(query), 
-	    "select term.name,term.acc from goaPart,term "
-	    "where goaPart.%s = '%s' "
-	    "and goaPart.goId = term.acc", 
-	    col->goaIdColumn, proteinAcc);
-    sr = sqlGetResult(col->goConn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	char *name = row[0];
-	if (!hashLookup(hash, name))
+    if (proteinAcc)
+	{	    
+	sqlSafef(query, sizeof(query), 
+		"select term.name,term.acc from goaPart,term "
+		"where goaPart.%s = '%s' "
+		"and goaPart.goId = term.acc", 
+		col->goaIdColumn, proteinAcc);
+	sr = sqlGetResult(col->goConn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    hashAdd(hash, name, NULL);
-	    if (!gotOne)
-		gotOne = TRUE;
-	    else
-		hPrintf("&nbsp;");
-	    hPrintf("'");
-	    
-	    hPrintf("<A HREF=\"http://amigo.geneontology.org/cgi-bin/amigo/go.cgi?view=details&search_constraint=terms&depth=0&query=%s\" TARGET=_blank>", row[1]);
-	    // hPrintf("<A HREF=\"http://www.ebi.ac.uk/ego/GSearch?query=%s&mode=id\" TARGET=_blank>", row[1]);
-	    // hPrintf("<A HREF=\"http://www.ebi.ac.uk/ego/DisplayGoTerm?id=%s&viz=tree\" TARGET=_blank>", row[1]);
+	    char *name = row[0];
+	    if (!hashLookup(hash, name))
+		{
+		hashAdd(hash, name, NULL);
+		if (!gotOne)
+		    gotOne = TRUE;
+		else
+		    hPrintf("&nbsp;");
+		hPrintf("'");
+		
+		hPrintf("<A HREF=\"http://amigo.geneontology.org/cgi-bin/amigo/go.cgi?view=details&search_constraint=terms&depth=0&query=%s\" TARGET=_blank>", row[1]);
+		// hPrintf("<A HREF=\"http://www.ebi.ac.uk/ego/GSearch?query=%s&mode=id\" TARGET=_blank>", row[1]);
+		// hPrintf("<A HREF=\"http://www.ebi.ac.uk/ego/DisplayGoTerm?id=%s&viz=tree\" TARGET=_blank>", row[1]);
 
-	    hPrintEncodedNonBreak(row[0]);
-	    hPrintf("</A>");
-	    hPrintf("'");
+		hPrintEncodedNonBreak(row[0]);
+		hPrintf("</A>");
+		hPrintf("'");
+		}
 	    }
+	sqlFreeResult(&sr);
 	}
-    sqlFreeResult(&sr);
     }
 if (!gotOne)
     hPrintf("n/a");
