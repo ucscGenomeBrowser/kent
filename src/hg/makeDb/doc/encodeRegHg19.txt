@@ -1010,6 +1010,14 @@ insert into kateTemp (select * from wgEncodeTfbsClusteredV3)
 
 # for now, adding maxWindowToDraw 1M setting to trackDb to limit performance hit
 
+# shrink table format to BED5+, with columns 6 and 7 non-sparse comma-sep lists
+# of exp id's and scores
+
+    clusterShrinkExps.pl clusters.target.sorted.bed > clusters.shrunk.bed
+
+    hgLoadBed -sqlTable=~/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+        hg19 wgEncodeRegTfbsClusteredShrunk test.shrink.bed
+
 #######################################################################
 
 # EXPERIMENTAL:  TF motif tracks, from EMBL/Aus (MEME toolkit)
