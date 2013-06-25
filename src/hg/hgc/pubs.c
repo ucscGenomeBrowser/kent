@@ -12,16 +12,20 @@
 #include "obscure.h"
 #include "common.h"
 #include "string.h"
-//include "hgTrackUi.h"
+#include "dystring.h"
 
 // cgi var to activate debug output
 static int pubsDebug = 0;
 
 // global var for printArticleInfo to indicate if article has suppl info 
-// Most publishers have supp data
+// Most publishers have supp data.
+// If they don't have it, we can skip the fileType column in the table
 bool pubsHasSupp = TRUE; 
+
 // global var for printArticleInfo to indicate if article is elsevier
+// If it's elsevier, we print the copyright line
 bool pubsIsElsevier = FALSE; 
+
 // the article source is used to modify other parts of the page
 static char *articleSource;
 // we need the external article PMC Id for yif links
@@ -276,12 +280,13 @@ static struct sqlResult *queryMarkerRows(struct sqlConnection *conn, char *marke
 char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
 sqlUpdate(conn, "NOSQLINJ SET SESSION group_concat_max_len = 100000");
-
+ 
+// no need to check for illegal characters in sectionList
 sqlSafef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, "  
     "pmid, extId, "
     "group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s "
     "JOIN %s USING (articleId) "
-    "WHERE markerId='%s' AND section in (%s) "
+    "WHERE markerId='%s' AND section in (%-s) "
     "GROUP by articleId "
     "ORDER BY year DESC "
     "LIMIT %d",
@@ -344,13 +349,14 @@ static void printLimitWarning(struct sqlConnection *conn, char *markerTable,
     char *item, int itemLimit, char *sectionList)
 {
 char query[4000];
-sqlSafef(query, sizeof(query), "SELECT COUNT(*) from %s WHERE markerId='%s' AND section in (%s) ", markerTable, item, sectionList);
+// no need to check for illegal characters in sectionList
+sqlSafef(query, sizeof(query), "SELECT COUNT(*) from %s WHERE markerId='%s' AND section in (%-s) ", markerTable, item, sectionList);
 if (sqlNeedQuickNum(conn, query) > itemLimit) 
-{
+    {
     printf("<b>This marker is mentioned more than %d times</b><BR>\n", itemLimit);
     printf("The results would take too long to load in your browser and are "
     "therefore limited to %d articles.<P>\n", itemLimit);
-}
+    }
 }
 
 static void printMarkerSnippets(struct sqlConnection *conn, char *articleTable, char *markerTable, char *item)

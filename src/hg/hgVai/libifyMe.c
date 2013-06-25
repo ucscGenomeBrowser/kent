@@ -33,7 +33,7 @@ char retAddr[512];
 char position[512];
 char *chrom = NULL;
 int start=0, end=0;
-char *db = cartString(cart, "db");
+char *db = cloneString(cartString(cart, "db")); // gets clobbered if position is not found!
 safef(retAddr, sizeof(retAddr), "%s", cgiScriptName());
 hgp = findGenomePosWeb(db, range, &chrom, &start, &end,
 	cart, TRUE, retAddr);

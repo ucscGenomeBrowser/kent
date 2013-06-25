@@ -384,7 +384,7 @@ if (db == NULL)
      *	This is for the product browser which may have none of
      *	the usual UCSC genomes, but it needs to be able to function.
      */
-    sqlSafef(query, sizeof(query), "%s", "select * from defaultDb");
+    sqlSafef(query, sizeof(query), "select * from defaultDb");
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1829,7 +1829,7 @@ char **row;
 char parsedChrom[HDB_MAX_CHROM_STRING];
 char rootName[256];
 char fullTableName[256];
-char rangeStr[32];
+char rangeStr[1024];
 int count;
 boolean canDoUTR, canDoIntrons;
 boolean useSqlConstraints = sqlConstraints != NULL && sqlConstraints[0] != 0;

@@ -112,6 +112,27 @@ taxId 9646
     ln -s `pwd`/ailMel1.2bit /gbdb/ailMel1/ailMel1.2bit
 
 ##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/ailMel1/bed/windowMasker
+    cd /hive/data/genomes/ailMel1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev ailMel1 > do.log 2>&1 &
+    # real    297m2.445s
+
+    # Masking statistics
+    cat faSize.ailMel1.cleanWMSdust.txt
+# 2299509015 bases (54196184 N's 2245312831 real 1581962638
+#    upper 663350193 lower) in 81467 sequences in 1 files
+# Total size: mean 28226.3 sd 212558.2 min 100 (GL273803.1)
+#    max 6047896 (GL192338.1) median 210
+# %28.85 masked total, %29.54 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps ailMel1 rmsk windowmaskerSdust \
+       > fb.ailMel1.rmsk.windowmaskerSdust.txt 2>&1
+    #   417756550 bases of 2299509015 (18.167%) in intersection
+
+##########################################################################
 #  BLATSERVERS ENTRY (DONE - 2009-12-23 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev

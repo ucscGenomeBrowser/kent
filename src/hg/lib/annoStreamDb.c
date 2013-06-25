@@ -135,22 +135,22 @@ if (!streamer->positionIsGenome)
     if (self->endFieldIndexName != NULL)
 	// Don't let mysql use a (chrom, chromEnd) index because that messes up
 	// sorting by chromStart.
-	dyStringPrintf(query, " IGNORE INDEX (%s)", self->endFieldIndexName);
-    dyStringPrintf(query, " where %s='%s'", self->chromField, streamer->chrom);
+	sqlDyStringPrintf(query, " IGNORE INDEX (%s)", self->endFieldIndexName);
+    sqlDyStringPrintf(query, " where %s='%s'", self->chromField, streamer->chrom);
     int chromSize = annoAssemblySeqSize(streamer->assembly, streamer->chrom);
     if (streamer->regionStart != 0 || streamer->regionEnd != chromSize)
 	{
 	dyStringAppend(query, " and ");
 	if (self->hasBin)
 	    hAddBinToQuery(streamer->regionStart, streamer->regionEnd, query);
-	dyStringPrintf(query, "%s < %u and %s > %u", self->startField, streamer->regionEnd,
+	sqlDyStringPrintf(query, "%s < %u and %s > %u", self->startField, streamer->regionEnd,
 		       self->endField, streamer->regionStart);
 	}
     if (self->notSorted)
-	dyStringPrintf(query, " order by %s", self->startField);
+	sqlDyStringPrintf(query, " order by %s", self->startField);
     }
 else if (self->notSorted)
-    dyStringPrintf(query, " order by %s,%s", self->chromField, self->startField);
+    sqlDyStringPrintf(query, " order by %s,%s", self->chromField, self->startField);
 if (self->maxOutRows > 0)
     dyStringPrintf(query, " limit %d", self->maxOutRows);
 struct sqlResult *sr = sqlGetResult(self->conn, query->string);
@@ -265,7 +265,7 @@ if (self->hasBin)
 if (self->endFieldIndexName != NULL)
     // Don't let mysql use a (chrom, chromEnd) index because that messes up
     // sorting by chromStart.
-    dyStringPrintf(query, "IGNORE INDEX (%s) ", self->endFieldIndexName);
+    sqlDyStringPrintf(query, "IGNORE INDEX (%s) ", self->endFieldIndexName);
 if (sSelf->chrom != NULL)
     {
     uint start = sSelf->regionStart;
@@ -279,7 +279,7 @@ if (sSelf->chrom != NULL)
 	}
     if (self->doNextChunk && start < self->nextChunkStart)
 	start = self->nextChunkStart;
-    dyStringPrintf(query, "where %s = '%s' and ", self->chromField, sSelf->chrom);
+    sqlDyStringPrintf(query, "where %s = '%s' and ", self->chromField, sSelf->chrom);
     if (self->hasBin)
 	{
 	if (self->doNextChunk && self->gotFinestBin)
@@ -288,8 +288,8 @@ if (sSelf->chrom != NULL)
 	hAddBinToQuery(start, sSelf->regionEnd, query);
 	}
     if (self->doNextChunk)
-	dyStringPrintf(query, "%s >= %u and ", self->startField, self->nextChunkStart);
-    dyStringPrintf(query, "%s < %u and %s > %u limit %d", self->startField, sSelf->regionEnd,
+	sqlDyStringPrintf(query, "%s >= %u and ", self->startField, self->nextChunkStart);
+    sqlDyStringPrintf(query, "%s < %u and %s > %u limit %d", self->startField, sSelf->regionEnd,
 		   self->endField, start, queryMaxItems);
     bufferRowsFromSqlQuery(self, query->string, queryMaxItems);
     }
@@ -327,7 +327,7 @@ else
 	if (self->doNextChunk && start < self->nextChunkStart)
 	    start = self->nextChunkStart;
 	uint end = annoAssemblySeqSize(self->streamer.assembly, self->queryChrom->name);
-	dyStringPrintf(query, "where %s = '%s' ", self->chromField, chrom);
+	sqlDyStringPrintf(query, "where %s = '%s' ", self->chromField, chrom);
 	if (start > 0 || self->doNextChunk)
 	    {
 	    dyStringAppend(query, "and ");
@@ -339,9 +339,9 @@ else
 		hAddBinToQuery(start, end, query);
 		}
 	    if (self->doNextChunk)
-		dyStringPrintf(query, "%s >= %u and ", self->startField, self->nextChunkStart);
+		sqlDyStringPrintf(query, "%s >= %u and ", self->startField, self->nextChunkStart);
 	    // region end is chromSize, so no need to constrain startField here:
-	    dyStringPrintf(query, "%s > %u ", self->endField, start);
+	    sqlDyStringPrintf(query, "%s > %u ", self->endField, start);
 	    }
 	dyStringPrintf(query, "limit %d", queryMaxItems);
 	bufferRowsFromSqlQuery(self, query->string, queryMaxItems);

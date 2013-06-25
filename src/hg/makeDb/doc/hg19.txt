@@ -897,7 +897,7 @@ if (match(ctgName,$1)) {
 } else {
     if (length(ctgName) > 0) {
         size=ctgEnd - ctgStart
-printf "%s\t%d\tchr%s_%s_random\t%d\t%d\n", ctgName, size, chrom, ctgNameLower, 
+printf "%s\t%d\tchr%s_%s_random\t%d\t%d\n", ctgName, size, chrom, ctgNameLower,
 ctgStart, ctgEnd
     }
     ctgStart = $2 - 1
@@ -909,7 +909,7 @@ ctgStart, ctgEnd
 }
 END {
 size=ctgEnd - ctgStart
-printf "%s\t%d\tchr%s_%s_random\t%d\t%d\n", ctgName, size, chrom, ctgNameLower, 
+printf "%s\t%d\tchr%s_%s_random\t%d\t%d\n", ctgName, size, chrom, ctgNameLower,
 ctgStart, ctgEnd
 }
 '
@@ -1663,7 +1663,7 @@ runOne.csh $(file1) $(root2) {check out line+ psl/$(file1)/$(root2).psl}
     #	And, for the randoms
     mkdir /hive/data/outside/ncbi/sts.2009-04/primerAlign/runRandoms
     cd /hive/data/outside/ncbi/sts.2009-04/primerAlign/runRandoms
-    
+
     partitionSequence.pl 40000000 20000 /scratch/data/hg19/hg19.2bit \
 	/scratch/data/hg19/chrom.sizes 100 -lstDir tParts \
 	| egrep "tParts|random|_hap|chrUn" \
@@ -1927,7 +1927,7 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
 ##############################################################################
 # FISH CLONES (WORKING - 2009-04-29 - Hiram)
 # The STS Marker and BAC End Pairs tracks must be completed prior to
-# creating this track.  
+# creating this track.
 
     mkdir /hive/data/outside/ncbi/fishClones/fishClones.2009-04/
     cd /hive/data/outside/ncbi/fishClones/fishClones.2009-04/
@@ -2225,7 +2225,7 @@ CREATE TABLE ucscToEnsembl (
 # UCSC offset to Ensembl coordinates
 CREATE TABLE ensemblLift (
     chrom varchar(255) not null,      # Ensembl chromosome name
-    offset int unsigned not null,     # offset to add to UCSC position 
+    offset int unsigned not null,     # offset to add to UCSC position
               #Indices
     PRIMARY KEY(chrom(15))
 );
@@ -2257,7 +2257,7 @@ SEQ2_SMSK=/scratch/data/mm9/notInOthers
 SEQ2_LEN=/scratch/data/mm9/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
-    
+
 BASE=/hive/data/genomes/hg19/bed/lastzMm9.2009-05-13
 TMPDIR=/scratch/tmp
 '_EOF_'
@@ -2270,7 +2270,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    cat fb.hg19.chainMm9Link.txt 
+    cat fb.hg19.chainMm9Link.txt
     #	1022734273 bases of 2897316137 (35.299%) in intersection
 
     #	and the swap
@@ -2282,7 +2282,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    131m58.763s
-    cat fb.mm9.chainHg19Link.txt 
+    cat fb.mm9.chainHg19Link.txt
     #	1013880568 bases of 2620346127 (38.693%) in intersection
 
 #########################################################################
@@ -2321,7 +2321,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    cat fb.hg19.chainCanFam2Link.txt 
+    cat fb.hg19.chainCanFam2Link.txt
     #	1532073507 bases of 2897316137 (52.879%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -2333,7 +2333,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    200m17.158s
-    cat fb.canFam2.chainHg19Link.txt 
+    cat fb.canFam2.chainHg19Link.txt
     #	1480018167 bases of 2384996543 (62.055%) in intersection
 #########################################################################
 # LASTZ Chicken GalGal3 (DONE - 2009-05-13 - Hiram)
@@ -2375,7 +2375,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-    cat fb.hg19.chainGalGal3Link.txt 
+    cat fb.hg19.chainGalGal3Link.txt
     #	104053179 bases of 2897316137 (3.591%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -2388,7 +2388,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
     #	real    16m45.090s
-    cat fb.galGal3.chainHg19Link.txt 
+    cat fb.galGal3.chainHg19Link.txt
     #	91605899 bases of 1042591351 (8.786%) in intersection
 
 #########################################################################
@@ -2436,7 +2436,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    760m22.810s
-    cat fb.hg19.chainRheMac2Link.txt 
+    cat fb.hg19.chainRheMac2Link.txt
     #	2397361211 bases of 2897316137 (82.744%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -2449,7 +2449,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    83m51.483s
-    cat fb.rheMac2.chainHg19Link.txt 
+    cat fb.rheMac2.chainHg19Link.txt
     #	2313806886 bases of 2646704109 (87.422%) in intersection
 #########################################################################
 # LASTZ Rat Rn4 (DONE - 2009-05-13 - Hiram)
@@ -2473,7 +2473,7 @@ SEQ2_SMSK=/scratch/data/rn4/linSpecRep.notInHuman
 SEQ2_LEN=/scratch/data/rn4/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
-    
+
 BASE=/hive/data/genomes/hg19/bed/lastzRn4.2009-05-13
 TMPDIR=/scratch/tmp
 '_EOF_'
@@ -2487,7 +2487,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
     #	real    314m18.227s
-    cat fb.hg19.chainRn4Link.txt 
+    cat fb.hg19.chainRn4Link.txt
     #	952605822 bases of 2897316137 (32.879%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -2499,7 +2499,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    188m0.163s
-    cat fb.rn4.chainHg19Link.txt 
+    cat fb.rn4.chainHg19Link.txt
     #	947862300 bases of 2571531505 (36.860%) in intersection
 ##############################################################################
 # LASTZ Orangutan PonAbe2 (DONE - 2009-05-13 - Hiram)
@@ -2547,7 +2547,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> do.log 2>&1 &
-    cat fb.hg19.chainPonAbe2Link.txt 
+    cat fb.hg19.chainPonAbe2Link.txt
     #	2646687531 bases of 2897316137 (91.350%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -2560,7 +2560,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> swap.log 2>&1 &
     #	real    124m3.610s
-    cat fb.ponAbe2.chainHg19Link.txt 
+    cat fb.ponAbe2.chainHg19Link.txt
     #	2772351468 bases of 3093572278 (89.617%) in intersection
 ##############################################################################
 # LASTZ Lamprey PetMar1 (DONE - 2009-05-14 - Hiram)
@@ -2603,7 +2603,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
 	> do.log 2>&1 &
     #	real    113m20.116s
-    cat fb.hg19.chainPetMar1Link.txt 
+    cat fb.hg19.chainPetMar1Link.txt
     #	31347143 bases of 2897316137 (1.082%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -2616,7 +2616,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
 	-swap > swap.log 2>&1 &
     #	real    59m14.813s
-    cat fb.petMar1.chainHg19Link.txt 
+    cat fb.petMar1.chainHg19Link.txt
     #	26615001 bases of 831696438 (3.200%) in intersection
 ##############################################################################
 # LASTZ Fugu Fr2 (DONE - 2009-05-14 - Hiram)
@@ -2672,7 +2672,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=encodek \
 	> cat.log 2>&1 &
-    cat fb.hg19.chainFr2Link.txt 
+    cat fb.hg19.chainFr2Link.txt
     #	49309456 bases of 2897316137 (1.702%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -2685,7 +2685,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=encodek \
 	-swap > swap.log 2>&1 &
     #	real    25m8.491s
-    cat fb.fr2.chainHg19Link.txt 
+    cat fb.fr2.chainHg19Link.txt
     #	42984130 bases of 393312790 (10.929%) in intersection
 
 ##############################################################################
@@ -2728,7 +2728,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> do.log 2>&1 &
     #	real    166m19.745s
-    cat fb.hg19.chainTetNig1Link.txt 
+    cat fb.hg19.chainTetNig1Link.txt
     #	58038079 bases of 2897316137 (2.003%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -2740,7 +2740,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-swap > swap.log 2>&1 &
     #	real    29m20.968s
-    cat fb.tetNig1.chainHg19Link.txt 
+    cat fb.tetNig1.chainHg19Link.txt
     #	49453375 bases of 342403326 (14.443%) in intersection
 
 ##############################################################################
@@ -2783,7 +2783,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> do.log 2>&1 &
     #	real    174m40.659s
-    cat fb.hg19.chainGasAcu1Link.txt 
+    cat fb.hg19.chainGasAcu1Link.txt
     #	55509003 bases of 2897316137 (1.916%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -2795,7 +2795,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-swap > swap.log 2>&1 &
     #	real    29m41.433s
-    cat fb.gasAcu1.chainHg19Link.txt 
+    cat fb.gasAcu1.chainHg19Link.txt
     #	49909819 bases of 446627861 (11.175%) in intersection
 ##############################################################################
 # LASTZ Marmoset CalJac1 (DONE - 2009-05-14,22 - Hiram)
@@ -2842,7 +2842,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    214m16.294s
-    cat fb.hg19.chainCalJac1Link.txt 
+    cat fb.hg19.chainCalJac1Link.txt
     #	2053025318 bases of 2897316137 (70.860%) in intersection
     time doRecipBest.pl -buildDir=`pwd` hg19 calJac1 > rbest.log 2>&1 &
     #	real    97m17.207s
@@ -2857,7 +2857,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    162m52.189s
-    cat fb.calJac1.chainHg19Link.txt 
+    cat fb.calJac1.chainHg19Link.txt
     #	2105959656 bases of 2929139385 (71.897%) in intersection
 
 #########################################################################
@@ -2956,7 +2956,7 @@ TMPDIR=/scratch/tmp
     #	real    157m0.230s
     #	the running the rest of loadUp.csh after the hgLoadChain
     #	real    26m8.263s
-    cat fb.hg19.chainTarSyr1Link.txt 
+    cat fb.hg19.chainTarSyr1Link.txt
     #	1385797066 bases of 2897316137 (47.830%) in intersection
     #	Continuing:
     time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
@@ -3006,7 +3006,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    762m56.055s
-    cat fb.hg19.chainOtoGar1Link.txt 
+    cat fb.hg19.chainOtoGar1Link.txt
     #	1264492372 bases of 2897316137 (43.644%) in intersection
     time doRecipBest.pl -buildDir=`pwd` hg19 otoGar1 > rbest.log 2>&1 &
     #	real    271m39.925s
@@ -3054,7 +3054,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> cat.log 2>&1 &
     #	real    388m25.032s
-    cat fb.hg19.chainMicMur1Link.txt 
+    cat fb.hg19.chainMicMur1Link.txt
     #	1347792207 bases of 2897316137 (46.519%) in intersection
     time doRecipBest.pl -buildDir=`pwd` hg19 micMur1 > rbest.log 2>&1
     #	about 4h30m
@@ -3115,7 +3115,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-    cat fb.hg19.chainPapHam1Link.txt 
+    cat fb.hg19.chainPapHam1Link.txt
     #	2399269031 bases of 2897316137 (82.810%) in intersection
 
     time doRecipBest.pl -buildDir=`pwd` hg19 papHam1 > rbest.log 2>&1
@@ -3360,7 +3360,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> do.log 2>&1 &
     #	real    124m5.298s
-    cat fb.hg19.chainOryLat2Link.txt 
+    cat fb.hg19.chainOryLat2Link.txt
     #	53571737 bases of 2897316137 (1.849%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -3373,7 +3373,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-swap > swap.log 2>&1 &
     #	real    28m35.174s
-    cat fb.oryLat2.chainHg19Link.txt 
+    cat fb.oryLat2.chainHg19Link.txt
     #	46961818 bases of 700386597 (6.705%) in intersection
 ##############################################################################
 # LASTZ Opossum MonDom5 (DONE - 2009-05-23,29 - Hiram)
@@ -3428,7 +3428,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-continue=cat > cat.log 2>&1 &
     #	real    1508m18.471s ==	about 25h08m
-    cat fb.hg19.chainMonDom5Link.txt 
+    cat fb.hg19.chainMonDom5Link.txt
     #	415997117 bases of 2897316137 (14.358%) in intersection
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
@@ -3445,7 +3445,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap -syntenicNet > swap.log 2>&1 &
     #	real    297m13.041s
-    cat fb.monDom5.chainHg19Link.txt 
+    cat fb.monDom5.chainHg19Link.txt
     #	406727849 bases of 3501660299 (11.615%) in intersection
 
 ##############################################################################
@@ -3491,7 +3491,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-continue=cat > cat.log 2>&1 &
     #	real    458m11.304s
-    cat fb.hg19.chainDasNov2Link.txt 
+    cat fb.hg19.chainDasNov2Link.txt
     #	971847303 bases of 2897316137 (33.543%) in intersection
     time nice -n +19 doRecipBest.pl -buildDir=`pwd` hg19 dasNov2 \
 	> rbest.log 2>&1
@@ -3545,7 +3545,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-continue=cat > cat.log 2>&1 &
     #	real    369m1.678s
-    cat fb.hg19.chainProCap1Link.txt 
+    cat fb.hg19.chainProCap1Link.txt
     #	894221652 bases of 2897316137 (30.864%) in intersection
     time nice -n +19 doRecipBest.pl -buildDir=`pwd` hg19 proCap1 \
 	> rbest.log 2>&1
@@ -3593,7 +3593,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-qRepeats=windowmaskerSdust > do.log 2>&1 &
-    cat fb.hg19.chainTaeGut1Link.txt 
+    cat fb.hg19.chainTaeGut1Link.txt
     #	real    192m48.479s
     #	101295490 bases of 2897316137 (3.496%) in intersection
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -3614,7 +3614,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-qRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    real    16m45.080s
-    cat fb.taeGut1.chainHg19Link.txt 
+    cat fb.taeGut1.chainHg19Link.txt
     #	95320369 bases of 1222864691 (7.795%) in intersection
 
 ##############################################################################
@@ -3656,7 +3656,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-qRepeats=windowmaskerSdust > do.log 2>&1 &
     #	real    168m32.016s
-    cat fb.hg19.chainAnoCar1Link.txt 
+    cat fb.hg19.chainAnoCar1Link.txt
     #	104045950 bases of 2897316137 (3.591%) in intersection
     time doRecipBest.pl -buildDir=`pwd` hg19 anoCar1 > rbest.log 2>&1
     #	real    45m58.001s
@@ -3679,7 +3679,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    34m55.857s
-    cat fb.anoCar1.chainHg19Link.txt 
+    cat fb.anoCar1.chainHg19Link.txt
     #	89608316 bases of 1741478929 (5.146%) in intersection
 ##############################################################################
 # LASTZ X. tropicalis XenTro2 (DONE - 2009-05-26 - Hiram)
@@ -3727,7 +3727,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-continue=cat > cat.log 2>&1 &
     #	time about 1h30m
-    cat fb.hg19.chainXenTro2Link.txt 
+    cat fb.hg19.chainXenTro2Link.txt
     #	92015242 bases of 2897316137 (3.176%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -3739,7 +3739,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    130m53.860s
-    cat fb.xenTro2.chainHg19Link.txt 
+    cat fb.xenTro2.chainHg19Link.txt
     #	92070065 bases of 1359412157 (6.773%) in intersection
 
 ##############################################################################
@@ -3781,7 +3781,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    311m39.817s
-    cat fb.hg19.chainDanRer5Link.txt 
+    cat fb.hg19.chainDanRer5Link.txt
     #	74229561 bases of 2897316137 (2.562%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -3793,7 +3793,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    26m54.605s
-    cat fb.danRer5.chainHg19Link.txt 
+    cat fb.danRer5.chainHg19Link.txt
     #	73852780 bases of 1435609608 (5.144%) in intersection
 
 ##############################################################################
@@ -3835,7 +3835,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    572m18.808s
-    cat fb.hg19.chainOrnAna1Link.txt 
+    cat fb.hg19.chainOrnAna1Link.txt
     #	220977689 bases of 2897316137 (7.627%) in intersection
     time doRecipBest.pl -buildDir=`pwd` hg19 ornAna1 > rbest.log 2>&1
     #	time about 1h32m
@@ -3849,7 +3849,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    146m52.638s
-    cat fb.ornAna1.chainHg19Link.txt 
+    cat fb.ornAna1.chainHg19Link.txt
     #	207415519 bases of 1842236818 (11.259%) in intersection
 
 ##############################################################################
@@ -3887,7 +3887,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     # time about 3h23m
-    cat fb.hg19.chainLoxAfr2Link.txt 
+    cat fb.hg19.chainLoxAfr2Link.txt
     #	1018502258 bases of 2897316137 (35.153%) in intersection
 
     time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr2 > rbest.log 2>&1
@@ -3928,7 +3928,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    1153m34.595s
-    cat fb.hg19.chainEchTel1Link.txt 
+    cat fb.hg19.chainEchTel1Link.txt
     #	669856841 bases of 2897316137 (23.120%) in intersection
     time doRecipBest.pl -buildDir=`pwd` hg19 echTel1 > rbest.log 2>&1
     # time about 7h13m
@@ -4040,7 +4040,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	time about 23h26m
-    cat fb.hg19.chainSorAra1Link.txt 
+    cat fb.hg19.chainSorAra1Link.txt
     #	572519288 bases of 2897316137 (19.760%) in intersection
 
     time doRecipBest.pl -buildDir=`pwd` hg19 sorAra1 > rbest.log 2>&1
@@ -4081,7 +4081,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	time about 23h09m
-    cat fb.hg19.chainOryCun1Link.txt 
+    cat fb.hg19.chainOryCun1Link.txt
     #	975693323 bases of 2897316137 (33.676%) in intersection
 
     time doRecipBest.pl -buildDir=`pwd` hg19 oryCun1 > rbest.log 2>&1
@@ -4122,7 +4122,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> do.log 2>&1 &
     #	real    2043m33.198s
-    cat fb.hg19.chainEriEur1Link.txt 
+    cat fb.hg19.chainEriEur1Link.txt
     #	560965051 bases of 2897316137 (19.362%) in intersection
     time doRecipBest.pl -buildDir=`pwd` hg19 eriEur1 > rbest.log 2>&1
     #	real    350m17.737s
@@ -4162,7 +4162,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    393m42.569s
-    cat fb.hg19.chainOchPri2Link.txt 
+    cat fb.hg19.chainOchPri2Link.txt
     #	804516397 bases of 2897316137 (27.768%) in intersection
     time doRecipBest.pl -buildDir=`pwd` hg19 ochPri2 > rbest.log 2>&1
     #	real    224m47.979s
@@ -4242,7 +4242,7 @@ SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY: squirrel speTri1 
+# QUERY: squirrel speTri1
 SEQ2_DIR=/hive/data/genomes/speTri1/speTri1.2bit
 SEQ2_LEN=/hive/data/genomes/speTri1/chrom.sizes
 SEQ2_LIMIT=100
@@ -4266,7 +4266,7 @@ sed 's/speTri1/bosTau4/g; s/squirrel/cow/;' lastz.speTr1/DEF | \
 sed 's/speTri1/pteVam1/g; s/squirrel/megabat/;' lastz.speTr1/DEF | \
    sed 's/SEQ1_CHUNK=1/SEQ1_CHUNK=2/; s/SEQ2_LIMIT=1/SEQ2_LIMIT=2/' \
    > lastz.pteVam1/DEF
-sed 's/cavPor3/equCab2/g; s/guinea pig/horse/' lastz.cavPor3/DEF | \ 
+sed 's/cavPor3/equCab2/g; s/guinea pig/horse/' lastz.cavPor3/DEF | \
    sed 's/SEQ2_LIMIT=1/SEQ2_LIMIT=3/' > lastz.equCab2/DEF
 sed 's/equCab2/vicPac1/g; s/horse/alpaca/' lastz.equCab2/DEF > lastz.vicPac1/DEF
 sed 's/pteVam1/myoLuc1/g; s/megabat/microbat/' lastz.pteVam1/DEF | \
@@ -4376,7 +4376,7 @@ time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
   cavPor3.DEF >& cavPor3.doAfterLoad.log
 #real    5m45.122s
 
-# syntenic nets 
+# syntenic nets
 
 screen -r bosTau4
 time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
@@ -4403,7 +4403,7 @@ mkdir recipRun
 cd recipRun/
 cat > gsub << 'EOF'
 #LOOP
-./doRecip.sh $(path1) 
+./doRecip.sh $(path1)
 #ENDLOOP
 'EOF'
 cat > doRecip.sh << 'EOF'
@@ -4427,8 +4427,8 @@ para create jobList
 para push
 # finished overnight
 exit # to hgwdev
-for log in *.recipBest.log; do 
-  db=${log%.recipBest.log}; 
+for log in *.recipBest.log; do
+  db=${log%.recipBest.log};
   echo $db;
   doRecipBest.pl -workhorse=hgwdev -continue=download \
     -buildDir=/hive/data/genomes/hg19/bed/lastz.$db \
@@ -4497,7 +4497,7 @@ TMPDIR=/scratch/tmp
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium
     #	real    5162m58.743s
-    cat fb.hg19.chainCanFamPoodle1Link.txt 
+    cat fb.hg19.chainCanFamPoodle1Link.txt
     #	898034247 bases of 2897316137 (30.995%) in intersection
     #	the original canFam2 measured:
     #	1532073507 bases of 2897316137 (52.879%) in intersection
@@ -4757,9 +4757,9 @@ done > species.list
     mkdir maf run
     cd run
     mkdir penn
-    cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn 
-    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn 
-    cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn
 
     #	set the db and pairs directories here
     cat > autoMultiz.csh << '_EOF_'
@@ -4844,7 +4844,7 @@ endif
 head -q -n 1 maf/hg19_${C}.*.maf | sort -u > ../maf/${C}.maf
 grep -h "^#" maf/hg19_${C}.*.maf | egrep -v "maf version=1|eof maf" | \
     sed -e "s#${C}.[0-9][0-9]*#${C}#g; s#_MZ_[^ ]* # #g;" \
-        | sort -u >> ../maf/${C}.maf 
+        | sort -u >> ../maf/${C}.maf
 grep -h -v "^#" `ls maf/hg19_${C}.*.maf | sort -t. -k2,2n` >> ../maf/${C}.maf
 tail -q -n 1 maf/hg19_${C}.*.maf | sort -u >> ../maf/${C}.maf
 '_EOF_'
@@ -5075,11 +5075,11 @@ TMPDIR=/scratch/tmp
 	>& do.log &
     #	real about one hour but one job hung
 
-    # resuming from failure 
+    # resuming from failure
     # edited loadUp.csh, commenting out the first completed step
     # and removing the unneeded -qRepeats=windowmaskerSdust
     # from the next step, now run it to complete the load step.
-    /hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08/axtChain/loadUp.csh \ 
+    /hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08/axtChain/loadUp.csh \
         >& continue-loadUp.log&
 
     # continue from step 'download'
@@ -5089,8 +5089,8 @@ TMPDIR=/scratch/tmp
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
         -continue download \
         >& continue-download.log &
- 
-    cat fb.hg19.chainAplCal1Link.txt 
+
+    cat fb.hg19.chainAplCal1Link.txt
     #   19675762 bases of 2897316137 (0.679%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -5119,7 +5119,7 @@ TMPDIR=/scratch/tmp
         -continue download \
 	-swap >& continue-download.log &
 
-    cat fb.aplCal1.chainHg19Link.txt 
+    cat fb.aplCal1.chainHg19Link.txt
     #   14163455 bases of 619228098 (2.287%) in intersection
 
 #########################################################################
@@ -5260,7 +5260,7 @@ nscanGene (2009-06-22 markd)
     cd /hive/data/genomes/hg19/bed/multiz46way/4dX/run
     mkdir ../mfa
 
-# whole chrom mafs version, using new version of 
+# whole chrom mafs version, using new version of
 # uses memory-efficient version of phast, from Melissa Hubisz at Cornell
 #	mjhubisz at gmail.com
 
@@ -5273,7 +5273,7 @@ set infile = $r/maf/$2
 set outfile = $3
 cd /scratch/tmp
 # 'clean' maf
-perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
 awk -v C=$c '$2 == C {print}' $r/4dX/refSeqReviewedNR.gp > $c.gp
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
 $PHASTBIN/msa_view --4d --features $c.gp --do-cats 3 -i MAF $c.maf -o SS > $c.ss
@@ -5388,7 +5388,7 @@ BEGIN { good = 1 }
     cd /hive/data/genomes/hg19/bed/multiz46way/4dNoX/run
     mkdir ../mfa
 
-# whole chrom mafs version, using new version of 
+# whole chrom mafs version, using new version of
 # uses memory-efficient version of phast, from Melissa Hubisz at Cornell
 #	mjhubisz at gmail.com
 
@@ -5401,7 +5401,7 @@ set infile = $r/maf/$2
 set outfile = $3
 cd /scratch/tmp
 # 'clean' maf
-perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
 awk -v C=$c '$2 == C {print}' $r/4dNoX/refSeqReviewedNR.gp > $c.gp
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
 $PHASTBIN/msa_view --4d --features $c.gp --do-cats 3 -i MAF $c.maf -o SS > $c.ss
@@ -5499,7 +5499,7 @@ XXX - running Tue Oct 27 13:21:49 PDT 2009
 #	This was an early first time experiment.  All this was redone
 #	above for chrX only and non-chrX trees
 
-    # Extract 4-fold degenerate sites based on 
+    # Extract 4-fold degenerate sites based on
     # of RefSeq Reviewed, coding
     mkdir /hive/data/genomes/hg19/bed/multiz46way/4d
     cd /hive/data/genomes/hg19/bed/multiz46way/4d
@@ -5518,7 +5518,7 @@ XXX - running Tue Oct 27 13:21:49 PDT 2009
     cd /hive/data/genomes/hg19/bed/multiz46way/4d/run
     mkdir ../mfa
 
-# whole chrom mafs version, using new version of 
+# whole chrom mafs version, using new version of
 # uses memory-efficient version of phast, from Melissa Hubisz at Cornell
 #	mjhubisz at gmail.com
     cat << '_EOF_' > 4d.csh
@@ -5529,7 +5529,7 @@ set infile = $r/maf/$2
 set outfile = $3
 cd /scratch/tmp
 # 'clean' maf
-perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
 awk -v C=$c '$2 == C {print}' $r/4d/refSeqReviewedNR.gp > $c.gp
 set PHASTBIN=/cluster/bin/phast.2008-12-18
 $PHASTBIN/msa_view --4d --features $c.gp --do-cats 3 -i MAF $c.maf -o SS > $c.ss
@@ -5589,7 +5589,7 @@ XXX - ready to go here - 2009-07-06
     #	was unable to split the full chrom MAF files, now working on the
     #	maf files as they were split up during multiz
 
-    # split 46way mafs into 10M chunks and generate sufficient statistics 
+    # split 46way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh swarm
     mkdir -p /hive/data/genomes/hg19/bed/multiz46way/cons/msa.split
@@ -5782,7 +5782,7 @@ rm -fr $tmp
     # create Most Conserved track
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
     cut -f1 ../../../../chrom.sizes | while read C
-do  
+do
     ls -d bed/${C}.[0-9][0-9] 2> /dev/null | while read D
     do
         cat ${D}/${C}*.bed
@@ -5798,7 +5798,7 @@ done > tmpMostConserved.bed
     #	Loaded 5163775 elements of size 6
     #	real     1m44.439s
 
-    # Try for 5% overall cov, and 70% CDS cov 
+    # Try for 5% overall cov, and 70% CDS cov
     featureBits hg19 -enrichment refGene:cds phastConsElements46way
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     #	refGene:cds 1.187%, phastConsElements46way 5.065%,
@@ -5841,7 +5841,7 @@ done
     #	in bash, to avoid the 32 Gb memory limit:
 sizeG=188743680
 export sizeG
-ulimit -d $sizeG 
+ulimit -d $sizeG
 ulimit -v $sizeG
     zcat downloads/*.wigFix.gz \
         | wigToBigWig stdin ../../../../chrom.sizes phastCons46way.bw
@@ -5929,7 +5929,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/primates
     # create Most Conserved track
     cut -f1 ../../../../chrom.sizes | while read C
-do  
+do
     ls -d bed/${C}.[0-9][0-9] 2> /dev/null | while read D
     do
         cat ${D}/${C}*.bed
@@ -5963,7 +5963,7 @@ done > tmpMostConserved.bed
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
     #	is calculated
-    # sort by chromName, chromStart so that items are in numerical order 
+    # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/primates
     mkdir downloads
@@ -5997,7 +5997,7 @@ done
     #	in bash, to avoid the 32 Gb memory limit:
 sizeG=188743680
 export sizeG
-ulimit -d $sizeG 
+ulimit -d $sizeG
 ulimit -v $sizeG
 
     zcat downloads/*.wigFix.gz \
@@ -6082,7 +6082,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     # create Most Conserved track
     cut -f1 ../../../../chrom.sizes | while read C
-do  
+do
     ls -d bed/${C}.[0-9][0-9] 2> /dev/null | while read D
     do
         cat ${D}/${C}*.bed
@@ -6112,7 +6112,7 @@ done > tmpMostConserved.bed
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
     #	is calculated
-    # sort by chromName, chromStart so that items are in numerical order 
+    # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/placental
     mkdir downloads
@@ -6146,7 +6146,7 @@ done
     #	in bash, to avoid the 32 Gb memory limit:
 sizeG=188743680
 export sizeG
-ulimit -d $sizeG 
+ulimit -d $sizeG
 ulimit -v $sizeG
 
     zcat downloads/*.wigFix.gz \
@@ -6267,7 +6267,7 @@ doSplit.csh $(path1) {check out exists+ done/$(path1).done}
 # Submission to last job:          2965s      49.42m     0.82h    0.03d
 
 
-    # run phyloP with score=LRT 
+    # run phyloP with score=LRT
     ssh swarm
     cd /cluster/data/hg18/bed/multiz44way/consPhyloP
     mkdir run.phyloP
@@ -6670,7 +6670,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-continue=chainMerge > chainMerge.log 2>&1 &
     #	real    167m6.930s
-    cat fb.hg19.chainDanRer6Link.txt 
+    cat fb.hg19.chainDanRer6Link.txt
     #	88391631 bases of 2897316137 (3.051%) in intersection
 
     #	running the swap - DONE - 2009-06-02
@@ -6682,7 +6682,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    183m21.102s
-    cat fb.danRer6.chainHg19Link.txt 
+    cat fb.danRer6.chainHg19Link.txt
     #	96424507 bases of 1506896106 (6.399%) in intersection
 
 ##############################################################################
@@ -6729,7 +6729,7 @@ TMPDIR=/scratch/tmp
     #	real    217m25.159s
 
     # time about 3h23m
-    cat fb.hg19.chainLoxAfr3Link.txt 
+    cat fb.hg19.chainLoxAfr3Link.txt
     #	1351200080 bases of 2897316137 (46.636%) in intersection
 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -6751,7 +6751,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    220m16.839s
-    cat fb.loxAfr3.chainHg19Link.txt 
+    cat fb.loxAfr3.chainHg19Link.txt
     #	1323201500 bases of 3118565340 (42.430%) in intersection
 
 ##############################################################################
@@ -6774,8 +6774,8 @@ for table in `echo show tables like \'agilent%\' | hgsql hg18 | tail -n +2 | gre
     echo $table; echo "select * from $table" | hgsql hg18 | \
         tail -n +2 | cut -f2- > ${table}.hg18.bed; liftOver ${table}.hg18.bed \
           /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz ${table}.hg19.{bed,unmapped};
-    hgLoadBed hg19 $table ${table}.hg19.bed; 
-    echo done with $table; 
+    hgLoadBed hg19 $table ${table}.hg19.bed;
+    echo done with $table;
 done
 for unmap in *.unmapped; do
    table=${unmap%.hg19.unmapped}
@@ -6848,7 +6848,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> load.log 2>&1 &
     #	real    5m53.096s
-    cat fb.hg19.chainTetNig2Link.txt 
+    cat fb.hg19.chainTetNig2Link.txt
     #	49611132 bases of 2897316137 (1.712%) in intersection
 
     #	running the swap
@@ -6870,7 +6870,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > load.log 2>&1 &
     #	real    4m7.559s
-    cat fb.tetNig2.chainHg19Link.txt 
+    cat fb.tetNig2.chainHg19Link.txt
     #	42910930 bases of 302314788 (14.194%) in intersection
 
 
@@ -7212,7 +7212,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    516m41.981s
-    cat fb.hg19.chainOryCun2Link.txt 
+    cat fb.hg19.chainOryCun2Link.txt
     #	1283994337 bases of 2897316137 (44.317%) in intersection
     #	should have run syntenicNet in that first run
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -7224,14 +7224,14 @@ TMPDIR=/scratch/tmp
 
     mkdir /hive/data/genomes/oryCun2/bed/blastz.hg19.swap
     cd /hive/data/genomes/oryCun2/bed/blastz.hg19.swap
-    
+
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/hg19/bed/lastzOryCun2.2009-08-12/DEF \
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-swap -syntenicNet > swap.log 2>&1 &
     #	real    176m35.932s
-    cat fb.oryCun2.chainHg19Link.txt 
+    cat fb.oryCun2.chainHg19Link.txt
     #	1260477501 bases of 2604023284 (48.405%) in intersection
 
 ##############################################################################
@@ -7367,22 +7367,22 @@ see doc/builds.txt for specific details.
 ############################################################################
 # BURGE	LAB DATA MAPPED WITH GEMMAPPER. PROVIDED BY THOMAS DERRIEN FROM RODERIC
 # GUIGO'S LAB AT CRG. (E-MAIL: thomas.derrien@crg.es). Data received on
-# 09/14/09. 
-# (hartera, 2009-09-28, DONE) 
-# 2009-12-14, hartera. Set cdsStart = cdsEnd = 0. Moved track data directory to 
+# 09/14/09.
+# (hartera, 2009-09-28, DONE)
+# 2009-12-14, hartera. Set cdsStart = cdsEnd = 0. Moved track data directory to
 # /hive/data/genomes/hg18/bed.
 # 2010-01-04, hartera. Change the data to BED format and re-loaded tables. BED
 # is more appropriate for this data type.
 # The data is too dense in places (feedback from QA) so it would be more
-# appropriate to have a Signal track as for the ENCODE RNA-seq data tracks. 
+# appropriate to have a Signal track as for the ENCODE RNA-seq data tracks.
 # 2010-02-09, hartera. Create bedGraph Signal subtracks for each tissue/cell
 # using reads/per million mapped reads as the data value.
 # 2010-02-17, hartera. Updated trackDb.ra entry to include views.
 # 2010-02-18, hartera. Loaded the bedGraph tables for the Raw Signal
 # subtracks.
-# 2010-05-15 and 2010-05-16, hartera. Re-created the Signal subtracks using 
-# the -bed12 option of bedItemOverlapCount so that blocks are used. 
- 
+# 2010-05-15 and 2010-05-16, hartera. Re-created the Signal subtracks using
+# the -bed12 option of bedItemOverlapCount so that blocks are used.
+
    mkdir /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign
    cd /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign
 
@@ -7403,26 +7403,26 @@ wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burg
 wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode3/GSM325487_HCT203_s2468.fa.GEM_index.GRCh37.gencode.v3.annotation.GRCh37.exon.gtf.length_32.gff.gz"
 wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode3/GSM325488_HCT206_s2468_.fa.GEM_index.GRCh37.gencode.v3.annotation.GRCh37.exon.gtf.length_32.gff.gz"
 wget --timestamping "http://genome.imim.es/~tderrien/Gencode/For_Rachel/GFF_Burge_32bp_Gencode3/GSM325489_HCT207_s2468_.fa.GEM_index.GRCh37.gencode.v3.annotation.GRCh37.exon.gtf.length_32.gff.gz"
-  
+
    # Load this data into tables for hg19.
    # Unzip the files:
-   gunzip *.gff.gz 
+   gunzip *.gff.gz
    # Create a file with the list of file names and tissues.
    ls *.gff > burgeDataFiles.txt
    GSM325486_HCT202_s2468	breast
    GSM325487_HCT203_s2468	MCF-7
-   GSM325488_HCT206_s2468	MB435 
+   GSM325488_HCT206_s2468	MB435
    GSM325489_HCT207_s2468	T47D
-   # Did not map these two as they are not 32 bp. 
+   # Did not map these two as they are not 32 bp.
    GSM325490_brain_s1368	MAQC	mixed human brain tissue/cell lines
    GSM325491_UHR_s247		MAQC_UHR mixed human cell lines
    # Edit the file above to add a tab separation between file name and tissue
-   # name. Then remove the "read_name: " from the last field in each 
+   # name. Then remove the "read_name: " from the last field in each
    # file otherwise it gets included in the name and load the data into hg18.
-   # Write a script to do this: 
+   # Write a script to do this:
 cat << '_EOF_' > formatAndLoadData
 #!/bin/bash -e
-   
+
 # Assign variables
 # Tab-separated file of file names and tissue/cell line names
 DATAFILES=$1
@@ -7433,9 +7433,9 @@ DATABASE=$3
 
 cat $DATAFILES | while read file tissue; do
     subTrack=`echo $TRACK$tissue`
-    echo $subTrack   
+    echo $subTrack
     sed -e 's/read_name:\s//' $file > ${subTrack}.gff
-    ldHgGene -exon=read $DATABASE ${subTrack} ${subTrack}.gff 
+    ldHgGene -exon=read $DATABASE ${subTrack} ${subTrack}.gff
 done
 '_EOF_'
    chmod +x formatAndLoadData
@@ -7446,7 +7446,7 @@ done
    # ccds/trunk/gencode/browser/trackDb/human/hg19/trackDb.ra
 
    # 2009-12-14, Need to change cdsStart = cdsEnd = 0 in the tables as this
-   # data should have no CDS defined. Currently cdsStart = cdsEnd = txEnd. 
+   # data should have no CDS defined. Currently cdsStart = cdsEnd = txEnd.
    cd /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign
    hgsql -Ne 'show tables like "burge%";' hg19 > burgeTables
    foreach t (`cat burgeTables`)
@@ -7458,39 +7458,39 @@ done
    cd /hive/data/genomes/hg19/bed
    mv /hive/groups/gencode/browser/hg19/burgeRnaSeqGemMapperAlign ./
 
-   # 2010-01-04 Change the data to BED format. For genePred format, 
+   # 2010-01-04 Change the data to BED format. For genePred format,
    # there is always a track configuration added for colouring tracks by
    # genomic codons which does not make sense for this data. Also, BED is
    # more appropriate for this data type.
    cd /hive/data/genomes/hg19/bed/burgeRnaSeqGemMapperAlign
    # Convert gff to genePred and then genePred to BED, drop old table and
    # then load database with BED format data. Need to fix the cdStart and
-   # cdsEnd fields to be 0. 
+   # cdsEnd fields to be 0.
    foreach f (`ls burgeRnaSeqGemMapperAlign*.gff`)
      echo $f >> bed.log
      set g=$f:r
      echo $g
      ldHgGene -exon=read -nobin -out=${g}.gp hg19 $g $f >>& bed.log
      awk 'BEGIN {FS="\t"} {OFS="\t"} {print $1,$2,$3,$4,$5,0,0,$8,$9,$10}' \
-         ${g}.gp > ${g}Fixed.gp 
-     genePredToBed ${g}Fixed.gp > ${g}.bed 
+         ${g}.gp > ${g}Fixed.gp
+     genePredToBed ${g}Fixed.gp > ${g}.bed
      echo "Dropping table $g"
      hgsql -e "drop table ${g};" hg19
-     hgLoadBed hg19 $g ${g}.bed >>& bed.log 
+     hgLoadBed hg19 $g ${g}.bed >>& bed.log
    end
-   # Changed track type in trackDb/human/trackDb.ra to bed 12 and 
+   # Changed track type in trackDb/human/trackDb.ra to bed 12 and
    # then did make alpha in trackDb directory.
 
    # trackDb/human/trackDb.ra entry was updated to include views for Raw Signal
    # and Alignment subtracks (2010-02-17)
-   # 2010-05-15 and 2010-05-16. Add a Signal track so it is easier to view the data in 
-   # regions where there is a high density of reads. 
+   # 2010-05-15 and 2010-05-16. Add a Signal track so it is easier to view the data in
+   # regions where there is a high density of reads.
    cd /hive/data/genomes/hg19/bed/burgeRnaSeqGemMapperAlign
    # Use bedItemOverlapCount to get counts of overlapping items for each base.
    # Need to sort the bed files and then get the number of reads mapped for
-   # that tissue. Divide the counts by the number of million mapped reads to 
-   # get the number of reads per million mapped reads as the data value. 
-   # Re-make the subtracks using the -bed12 option so that blocks are used 
+   # that tissue. Divide the counts by the number of million mapped reads to
+   # get the number of reads per million mapped reads as the data value.
+   # Re-make the subtracks using the -bed12 option so that blocks are used
    # instead of just the first three fields of the BED file as is the default.
    rm *.count *.bedGraph
    foreach f (`ls *.bed`)
@@ -7504,11 +7504,11 @@ done
    foreach f (`ls *.bedGraph`)
       echo $f
       set g=$f:r
-      hgsql -e "drop table ${g}AllRawSignal;" hg19 
+      hgsql -e "drop table ${g}AllRawSignal;" hg19
       hgLoadBed -bedGraph=4 hg19 ${g}AllRawSignal $f >>& loadSignal.log
    end
 
-  
+
 ##########################################################################
 # BUILD ALLEN BRAIN TRACK (DONE 09/30/09 kent)
 
@@ -7819,7 +7819,7 @@ done
 
 #############################################################################
 # AFFY U133AB (Done - 2009-09-30 - Jim)
-    # Align probes 
+    # Align probes
     ssh swarm
     cd /cluster/data/hg19/bed
     mkdir -p affyProbes/affyU133/run
@@ -7986,34 +7986,34 @@ blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
 # see visiGene.txt make doc
 # uses nibbImageProbes and vgProbeTrack utility
 # creates vgAllProbes and knownToVisiGene
-#    25931 
+#    25931
 # updates visiGene.vgPrbAliAll.
 # creates and runs hgLoadSeq on /gbdb/hg19/visiGene/*.fa
 
 ##########################################################################
 # make new grp table to match hg18 (DONE  2009-10-01 kuhn)
-# to split regulation from expression 
+# to split regulation from expression
 # phenDis group is also missing in hg19
 # and add one more column: defaultIsClosed
 
-# get the hg18.grp table into hg19 
+# get the hg18.grp table into hg19
 
-# copy the hg18.grp table into hg19.grpNew and edit 
+# copy the hg18.grp table into hg19.grpNew and edit
    hgsql hg19
    CREATE TABLE grpNew SELECT * FROM hg18.grp;
    # 24 rows in set (0.00 sec)
-   
+
    DELETE FROM grpNew WHERE name LIKE "encode%";
-   DELETE FROM grpNew WHERE name LIKE "remc%"; 
+   DELETE FROM grpNew WHERE name LIKE "remc%";
    DELETE FROM grpNew WHERE name LIKE "tcga%";
-   DELETE FROM grpNew WHERE name LIKE "cancer%"; 
+   DELETE FROM grpNew WHERE name LIKE "cancer%";
    DELETE FROM grpNew WHERE name LIKE "jk%";
    # 10 rows in set (0.00 sec)
-   
+
 # move the new table into place quickly
    DROP TABLE grp;
    RENAME TABLE grpNew TO grp;
- 
+
 #########################################################################
 # BUILD OMIM RELATED GENES TRACK (done 2009-10-13 jk)
 
@@ -8039,11 +8039,11 @@ hgLoadSqlTab -warn hg19 omimGeneMap omimGeneMap.sql genemap.tab
 rm x.c x.h
 cd ..
 cat omim/morbidmap|sed -e 's/|/\t/g' > mobidmap.tab
-autoSql ~/src/hg/lib/omimMorbidMap.as x 
+autoSql ~/src/hg/lib/omimMorbidMap.as x
 cat x.sql |sed -e 's/PRIMARY KEY(description)/KEY(omimId)/' >omimMorbidMap.sql
 hgLoadSqlTab -warn hg19 omimMorbidMap omimMorbidMap.sql mobidmap.tab
 
-# get all UCSC genes (from the knownGene table) that cross-reference to a RefSeq gene 
+# get all UCSC genes (from the knownGene table) that cross-reference to a RefSeq gene
 # that has a non-empty OMIM ID according to the refLink table.  And use OMIM ID as
 # the gene name for this new table.  Please note the alignId field still holds the KG ID.
 
@@ -8064,8 +8064,8 @@ cat o1.tab o2.tab |sort -u >o3.tab
 # load the result into a temp table, fanO3
 hgLoadSqlTab hg19 fanO3 ~/src/hg/lib/knownGene.sql o3.tab
 
-# while holding onto the OMIM ID, get the canonical gene (via the knownGene, knowIsoforms, 
-# and knownCanonical tables) that represent a cluster which contains 
+# while holding onto the OMIM ID, get the canonical gene (via the knownGene, knowIsoforms,
+# and knownCanonical tables) that represent a cluster which contains
 # initial OMIM gene in the fanO3 table
 
 hgsql hg19 -N -e \
@@ -8164,7 +8164,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 
 #########################################################################
 # hgPal downloads (DONE braney 2009-11-03)
-#   FASTA from 46way for refGene, knownGene, knownCanonical 
+#   FASTA from 46way for refGene, knownGene, knownCanonical
 
     ssh hgwdev
     screen
@@ -8321,26 +8321,26 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # in Evan Eichler's lab on 01/28/10. This is a data update since it was
 # thought that the last data set was incorrect so the pipeline had to be
 # re-run.
-# NOTE: Received e-mail from Tin Louie suggesting that the otherSize 
-# column could be dropped. It is just the size of the otherChrom and it 
+# NOTE: Received e-mail from Tin Louie suggesting that the otherSize
+# column could be dropped. It is just the size of the otherChrom and it
 # does not seem to be used for the track display or details page. It has the
-# correct description in the table schema so it is ok to keep it for now. 
-# In the future, this column could be dropped if it not useful. 
-# There are a number of columns that could be dropped as they are 
+# correct description in the table schema so it is ok to keep it for now.
+# In the future, this column could be dropped if it not useful.
+# There are a number of columns that could be dropped as they are
 # meaningless but decided to keep them as the code for the details page
 # expect them to be there.
 # 01/28/10 Received new data as previous run of the pipeline may have
-# produced incorrect results. 
+# produced incorrect results.
 # 2010-02-02 Loader aborted on data since in some lines there was an empty
 # field so the loader read only 28 words instead of 29. E-mailed Tin to
-# ask for the data to be fixed. 
+# ask for the data to be fixed.
 # 2010-02-03 Received new data as the previous data had empty fields.
 # 2010-02-04 Loaded new data into hg19 database.
 # 2010-02-09 Received new data on 02/08/10 as there were more errors in the
 # code that caused the data to have empty fields.
 # 2010-02-19 Changed the posBasesHit column values to match those for hg18.
 # 2011-09-26 Rebuilt, using corrected (10th col) from data provider.
-# In hg18, they are all 1000, but this is meaningless. 
+# In hg18, they are all 1000, but this is meaningless.
     mkdir /hive/data/genomes/hg19/bed/genomicSuperDups/0926_2011
     cd /hive/data/genomes/hg19/bed/genomicSuperDups/0926_2011
     wget --timestamping \
@@ -8352,7 +8352,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # time.
     awk '{print $1}' hg19genomicSuperDups.fixed.tab | sort | uniq > chroms
     awk '{print $7}' hg19genomicSuperDups.fixed.tab | sort | uniq > otherChroms
-    hgsql -Ne 'select chrom from chromInfo;' hg19 | sort | uniq > chromInfo.txt 
+    hgsql -Ne 'select chrom from chromInfo;' hg19 | sort | uniq > chromInfo.txt
     comm -23 chroms chromInfo.txt
     comm -23 otherChroms chromInfo.txt
     # chroms and otherChroms match chromosome names in chromInfo.
@@ -8373,24 +8373,24 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # Saving bed.tab
 # Loading hg19
 
-    # 2009-11-05: 
-    # Updated details page with suggested text and an additional reference. 
+    # 2009-11-05:
+    # Updated details page with suggested text and an additional reference.
     # src/hg/makeDb/trackDb/genomicSuperDups.html
     # 2010-02-04: Updated the schema description as below in
     # src/hg/lib/genomicSuperDups.sql. Kept score as it is used in older
-    # datasets e.g. on hg18 -  
+    # datasets e.g. on hg18 -
     # Suggestions by Tin Louie for the schema description:
 # I suggest that the description of those meaningless columns (on the webpage
 # 'Schema for Segmental Dups') be changed to "for future use". The meaningless
 # columns are:  score, posBasesHit, testResult, verdict, chits, ccov
 # The descriptions of other columns should be changed for clarification:
 # otherSize -- equal to otherEnd minus otherStart
-# uid -- id shared by the query & subject of a hit 
-     # 2010-02-19 Changed the posBasesHit column to be 1000. Checked with 
+# uid -- id shared by the query & subject of a hit
+     # 2010-02-19 Changed the posBasesHit column to be 1000. Checked with
      # data provider about doing this so that the values are the same as for
      # those in the hg18 table.
      # hgsql -e 'update genomicSuperDups set posBasesHit = 1000;' hg19
-# New corrected data fixed the above problem. 
+# New corrected data fixed the above problem.
 ############################################################################
 # ADD LINK TO GENENETWORK (DONE. 12/02/09 Fan).
 
@@ -8404,12 +8404,12 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     hgsql hg19 -e \
     'load data local infile "GN_human_RefSeq.txt" into table geneNetworkId'
 
-######################################################################## 
+########################################################################
 # EXONIPHY (2009-12-28, hartera, DONE)
 # 2010-01-05, hartera. Moved trackDb entry for exoniphy up to human directory
 # level as it is the same for all assemblies.
-    # New predictions for hg19 run by Melissa Hubisz 
-    # (mjhubisz at gmail.com) for hg19 and sent by 
+    # New predictions for hg19 run by Melissa Hubisz
+    # (mjhubisz at gmail.com) for hg19 and sent by
     # Adam Siepel (acs4 at cornell.edu) on 2009-12-18
     mkdir -p /hive/data/genomes/hg19/bed/exoniphy.2009-12-18
     cd /hive/data/genomes/hg19/bed/exoniphy.2009-12-18
@@ -8423,13 +8423,13 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # Read 620689 transcripts in 647299 lines in 1 files
     # 620689 groups 24 seqs 1 sources 4 feature types
     # 186601 gene predictions
-    # Added a copy of the hg18 track description to trackDb/human/hg19 and 
+    # Added a copy of the hg18 track description to trackDb/human/hg19 and
     # updated it and added a trackDb entry to the trackDb.ra there.
     # 2010-01-04. Moved exoniphy trackDb entry up to the human level
     # trackDb.ra since the entry is the same for hg16-19. Removed the entry in
     # trackDb.ra in each of those assembly directories.
 
-######################################################################## 
+########################################################################
 # Vega gene update (DONE - 2010-01-15 - Hiram)
     #	lookup version number at the Vega WEB site:
     #	http://vega.sanger.ac.uk/index.html
@@ -8493,7 +8493,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 #1249 ambigStrand.txt
 
 
-######################################################################## 
+########################################################################
 # ailMel1 Panda alignment (DONE - 2010-02-04 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzAilMel1.2010-02-04
     cd /hive/data/genomes/hg19/bed/lastzAilMel1.2010-02-04
@@ -8536,7 +8536,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
     #	real    434m21.792s
-    cat fb.hg19.chainAilMel1Link.txt 
+    cat fb.hg19.chainAilMel1Link.txt
     #	1453400264 bases of 2897316137 (50.164%) in intersection
 
     mkdir /hive/data/genomes/ailMel1/bed/blastz.hg19.swap
@@ -8547,7 +8547,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     real    124m14.393s
-    cat fb.ailMel1.chainHg19Link.txt 
+    cat fb.ailMel1.chainHg19Link.txt
     #	1411953704 bases of 2245312831 (62.884%) in intersection
 
 #########################################################################
@@ -8583,7 +8583,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
     #	real    1072m48.949s
-    cat fb.hg19.chainSusScr1Link.txt 
+    cat fb.hg19.chainSusScr1Link.txt
     #	1198793067 bases of 2897316137 (41.376%) in intersection
 
     mkdir /hive/data/genomes/susScr1/bed/blastz.hg19.swap
@@ -8594,7 +8594,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    119m14.040s
-    cat fb.susScr1.chainHg19Link.txt 
+    cat fb.susScr1.chainHg19Link.txt
     #	1272787231 bases of 2231332019 (57.042%) in intersection
 
 #########################################################################
@@ -8615,7 +8615,7 @@ TMPDIR=/scratch/tmp
     liftOver $hg18Dir/koref.sub.pgSnp $chainFile koref.hg19.pgSnp{,.unmapped}
     # Why pgVenter2?
     liftOver $hg18Dir/pgVenter.bed $chainFile pgVenter2.hg19.pgSnp{,.unmapped}
- 
+
     # remove variants that are homozygous matches to hg19
 cat > addRefNt.pl <<'_EOF_'
 #!/usr/bin/perl -w
@@ -8674,24 +8674,24 @@ while (<>) {
 ########################################################################
 # CRG MAPABILITY (2010-01-19 - 2010-01-28, hartera, DONE)
 # Data was provided by Thomas Derrien (thomas.derrien.crg.es) and Paolo Ribeca
-# from the Guigo lab at the Center for Genomic Regulation (CRG) in Barcelona. 
-# Data was produced using their GEM mapper aligner taking sliding k-mers 
-# window of the human genome that were mapped back onto the genome with up 
-# to 2mismatches. For each window, a mappability score is computed 
-# S = 1/(nb of match_found) and the BigWig index was created according to 
-# this score. 
+# from the Guigo lab at the Center for Genomic Regulation (CRG) in Barcelona.
+# Data was produced using their GEM mapper aligner taking sliding k-mers
+# window of the human genome that were mapped back onto the genome with up
+# to 2mismatches. For each window, a mappability score is computed
+# S = 1/(nb of match_found) and the BigWig index was created according to
+# this score.
 # 2010-01-26 Loaded tables and added data to /gbdb/
 # 2010-01-28 Changed the table names to have the "enc" prefix for consistency
-# going forward with hg19 ENCODE tracks. Added trackDb entry for this 
-# ENCODE Mapability track. 
+# going forward with hg19 ENCODE tracks. Added trackDb entry for this
+# ENCODE Mapability track.
 # 2010-02-05 Added a 40mer sequence subtrack received on 2010-02-04.
 # 2010-03-16 - 2010-03-18. Added metadata to trackDb for the subtracks and
 # added downloads for the bigWig data files.
-# 2010-04-28. Received new data from Thomas Derrien. Downloaded data and 
+# 2010-04-28. Received new data from Thomas Derrien. Downloaded data and
 # added it to /gbdb/. A bug was found in a library used by bedGraphToBigWig so
-# sent a new binary to data providers and they re-created the bigWig files. 
+# sent a new binary to data providers and they re-created the bigWig files.
 # 2010-05-11. All ENCODE tracks need to be preceded by the wgEncode prefix now
-# on all assemblies. Update the file names in /gbdb/hg19/bbi and the 
+# on all assemblies. Update the file names in /gbdb/hg19/bbi and the
 # table names. (hartera)
 # 2010-05-12. Added 24mer track to trackDb entry. Updated downloads with the
 # new data.
@@ -8718,7 +8718,7 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg19_H.sapiens.genome
      # Add data to gbdb
      mkdir -p /gbdb/hg19/bbi/
      # Symlink files with names as crgMapabilityAlignXmer.bw to /gbdb/hg18/bbi
-     # and load file name into a table - one per dataset. Each table 
+     # and load file name into a table - one per dataset. Each table
      # represents a subtrack.
      foreach f (`ls *.bw`)
         echo $f
@@ -8734,18 +8734,18 @@ http://genome.imim.es/~tderrien/UCSC_Tracks/ALL_mappablity_hg19_H.sapiens.genome
      end
 
      # 2010-01-28
-     # Renamed the tables to have a enc prefix for consistency going 
+     # Renamed the tables to have a enc prefix for consistency going
      # forward with hg19.
      cd /hive/data/genomes/hg19/bed/crgMapability
      hgsql -Ne 'show tables like "crg%";' hg19 > tables.txt
      foreach t (`cat tables.txt`)
         set g=`echo $t | sed -e 's/c/C/'`
         hgsql -e "alter table ${t} rename enc${g};" hg19
-     end 
-     # Added a trackDb entry for this ENCODE Mapability 
-     # track in kent/src/hg/makeDb/trackDb/human/hg19/trackDb.enc.ra 
-     # Copied track from the hg18/trackDb.wgEncode.ra entry.  
-     # use bigWigInfo to check min and max values. 
+     end
+     # Added a trackDb entry for this ENCODE Mapability
+     # track in kent/src/hg/makeDb/trackDb/human/hg19/trackDb.enc.ra
+     # Copied track from the hg18/trackDb.wgEncode.ra entry.
+     # use bigWigInfo to check min and max values.
 
      # Added data for a 40mer subtrack - 2010-02-05
      cd /hive/data/genomes/hg19/bed/crgMapability
@@ -8758,22 +8758,22 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
      create table encCrgMapabilityAlign40mer (fileName varchar(255) not null); \
      insert into encCrgMapabilityAlign40mer values \
 ('/gbdb/hg19/bbi/crgMapabilityAlign40mer');"
-    # Added a subtrack to trackDb/human/hg19/trackDb.enc.ra to the 
+    # Added a subtrack to trackDb/human/hg19/trackDb.enc.ra to the
     # Mapability track.
 
     # 2010-03-16 - 2010-03-18
-    # Added metadata to the trackDb entries for the subtracks and 
+    # Added metadata to the trackDb entries for the subtracks and
     # added downloads for these data files.
     mkdir -p /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/encMapability
     cd /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/encMapability
     cp -p /gbdb/hg19/bbi/crg*.bw .
     gzip crg*.bw
-    # Copied over hg18/encodeDCC/wgEncodeMapability/preamble.html 
-    # and edited it to only mention the CRG dataset. 
+    # Copied over hg18/encodeDCC/wgEncodeMapability/preamble.html
+    # and edited it to only mention the CRG dataset.
     # Run encodeDownloadsPage.pl to generate the index page for downloads.
     # It does not capture all the information probably because the subtrack
-    # name is different to the downloads name so change the file names and 
-    # re-load the tables and make the downloads. 
+    # name is different to the downloads name so change the file names and
+    # re-load the tables and make the downloads.
     cd /hive/data/genomes/hg19/bed/crgMapability
     foreach f (`ls *.bw`)
        echo $f
@@ -8789,20 +8789,20 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
      create table encCrgMapabilityAlign${mer} (fileName varchar(255) not null); \
      insert into encCrgMapabilityAlign${mer} values ('/gbdb/hg19/bbi/${nf}');"
      end
-     
+
      cd /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/encMapability
      rm crg*
      cp -p /gbdb/hg19/bbi/encCrg*.bw .
      gzip encCrg*.bw
      # Then run encodeDownloadsPages.pl
      /cluster/home/hartera/bin/encodeDownloadsPage.pl -db=hg19 -checksum \
-          -preamble=preamble.html index.html . 
+          -preamble=preamble.html index.html .
 
-     # Downloaded and added new bigWig files to /gbdb/hg19/bbi 
-     # (2010-04-28 and 2010-04-30, hartera). New files were created as 
-     # there was a bug in the older version of bedGraphToBigWig.          
+     # Downloaded and added new bigWig files to /gbdb/hg19/bbi
+     # (2010-04-28 and 2010-04-30, hartera). New files were created as
+     # there was a bug in the older version of bedGraphToBigWig.
      cd /hive/data/genomes/hg19/bed/crgMapability
-     rm temp download.csh download.log 
+     rm temp download.csh download.log
 cat << 'EOF' > temp
 #!/bin/tcsh -ef
 http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappability-100.bw.bz2
@@ -8818,7 +8818,7 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
      chmod +x download.csh
      ./download.csh >& download.log &
 
-     # Add data to /gbdb/. The file names in /gbdb/ are the same as before 
+     # Add data to /gbdb/. The file names in /gbdb/ are the same as before
      # so the tables do not need to be reloaded.
      cd /hive/data/genomes/hg19/bed/crgMapability
      bunzip2 *.bz2
@@ -8834,7 +8834,7 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
      end
 
      # 2010-05-11, hartera. Re-name bigWig files and update tables
-     # as all ENCODE tracks should now have the wgEncode prefix on all 
+     # as all ENCODE tracks should now have the wgEncode prefix on all
      # assemblies.
     cd /hive/data/genomes/hg19/bed/crgMapability
     foreach f (`ls *.bw`)
@@ -8852,14 +8852,14 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
      insert into wgEncodeCrgMapabilityAlign${mer} values ('/gbdb/hg19/bbi/${nf}');"
      end
      # Then change the subtrack names to match the new table names in
-     # kent/src/hg/makeDb/trackDb/human/hg19/trackDb.wgEncode.ra as 
-     # the contents of trackDb.enc.ra has been moved there. 
+     # kent/src/hg/makeDb/trackDb/human/hg19/trackDb.wgEncode.ra as
+     # the contents of trackDb.enc.ra has been moved there.
 
      # 2010-05-12
-     # Added subtrack for the new 24mer table. 
+     # Added subtrack for the new 24mer table.
      # Updated the downloads for the new data.
      cd /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC
-     # Change name of downloads directory to be consistent with the 
+     # Change name of downloads directory to be consistent with the
      # new track name.
      mv encMapability wgEncodeMapability
      cd wgEncodeMapability
@@ -8868,8 +8868,8 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
      gzip wgEncodeCrg*.bw
      # Then run encodeDownloadsPage.pl script to update the index.html and
      # regenerate the md5sum.txt file.
-     encodeDownloadsPage.pl -db=hg19 -checksum index.html 
- 
+     encodeDownloadsPage.pl -db=hg19 -checksum index.html
+
 #####################################################################
 # tRNAs track (2010-01-13, Fan DONE)
 # tRNAs track (2010-03-10, Fan RE-BUILT WITH UPDATED DATA FROM TODD LOWE)
@@ -8943,7 +8943,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    287m24.258s
-    cat fb.hg19.chainCalJac3Link.txt 
+    cat fb.hg19.chainCalJac3Link.txt
     #	2047068864 bases of 2897316137 (70.654%) in intersection
 
     mkdir /hive/data/genomes/calJac3/bed/blastz.hg19.swap
@@ -8954,7 +8954,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    120m42.991s
-    cat fb.calJac3.chainHg19Link.txt 
+    cat fb.calJac3.chainHg19Link.txt
     #	2030475813 bases of 2752505800 (73.768%) in intersection
 
 #############################################################################
@@ -9121,9 +9121,9 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-    # doBlastzChainNet from step chainRun after para stop, para freeBatch 
-    # After para stop para freeBatch in 
-    # /hive/data/genomes/hg19/bed/lastzFelCat4.2010-06-07/axtChain/run] 
+    # doBlastzChainNet from step chainRun after para stop, para freeBatch
+    # After para stop para freeBatch in
+    # /hive/data/genomes/hg19/bed/lastzFelCat4.2010-06-07/axtChain/run]
     # rm the run directory,  and use memk/swarm this time
 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -9138,10 +9138,10 @@ TMPDIR=/scratch/tmp
     # *** Make sure that goldenPath/hg19/vsFelCat4/README.txt is accurate.
     # *** Add {chain,net}FelCat4 tracks to trackDb.ra if necessary.
 
-    cat fb.hg19.chainFelCat4Link.txt 
+    cat fb.hg19.chainFelCat4Link.txt
     #  1266003011 bases of 2897316137 (43.696%) in intersection
     # make it time independent and indicate that it is really done
-    cd /hive/data/genomes/hg19/bed 
+    cd /hive/data/genomes/hg19/bed
     ln -s  lastzFelCat4.2010-06-07 lastz.felCat4
 
     # Swap
@@ -9154,7 +9154,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     # real    432m36.917s
-    cat fb.felCat4.chainHg19Link.txt 
+    cat fb.felCat4.chainHg19Link.txt
     #   1211702270 bases of 1990635005 (60.870%) in intersection
 
 #####################################################################
@@ -9190,7 +9190,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
     #	Elapsed time: 842m23s
-    cat fb.hg19.chainSusScr2Link.txt 
+    cat fb.hg19.chainSusScr2Link.txt
     #	1198794058 bases of 2897316137 (41.376%) in intersection
 
     mkdir /hive/data/genomes/susScr2/bed/blastz.hg19.swap
@@ -9202,7 +9202,7 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	Elapsed time: 112m40s
 
-    cat fb.susScr2.chainHg19Link.txt 
+    cat fb.susScr2.chainHg19Link.txt
     #	1272785114 bases of 2231298548 (57.042%) in intersection
 
 #########################################################################
@@ -9281,9 +9281,9 @@ TMPDIR=/scratch/tmp
 
     cat fb.oviAri1.chainHg19Link.txt
     #   824310420 bases of 1201271277 (68.620%) in intersection
-    
 
-######################################################################## 
+
+########################################################################
 # H-Inv 7.0 Gene track (DONE - 2010-04-07 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/hinv
     cd /hive/data/genomes/hg19/bed/hinv
@@ -9295,7 +9295,7 @@ TMPDIR=/scratch/tmp
 
     hgLoadBed hg19 hinv70NonCoding fcdna.nonCoding.bed
     #	Loaded 22625 elements of size 12
-    featureBits hg19 hinv70NonCoding 
+    featureBits hg19 hinv70NonCoding
     #	1350960 bases of 2897316137 (0.047%) in intersection
 
     hgLoadBed hg19 hinv70PseudoGene fcdna.pseudoGene.bed
@@ -9312,7 +9312,7 @@ TMPDIR=/scratch/tmp
     featureBits hg19 hinv70PseudoGene hinv70NonCoding
     #	9642 bases of 2897316137 (0.000%) in intersection
 
-######################################################################## 
+########################################################################
 # Updating the ucscToEnsembl table (DONE - 2010-04-06 - Hiram)
     #	as of Ensembl V57, their naming scheme changed for the randoms
     cd /hive/data/genomes/hg19/bed/ucscToEnsembl
@@ -9449,7 +9449,7 @@ done > ucscToEnsemblV57.tab
 
     # Compare contig list between our ctgPos and reference contigs in ContigInfo.
     # If they are identical, sweet, we probably have a $db/jkStuff/liftContigs.lft
-    # or similar file to use below.  If they are not identical, need to make 
+    # or similar file to use below.  If they are not identical, need to make
     # lift file using available information.
     hgsql hg19 -N -B -e 'select contig from ctgPos;' \
     | sort > /tmp/1
@@ -9462,7 +9462,7 @@ done > ucscToEnsemblV57.tab
     # NC_001807 entrez sez "Record removed.This sequence was removed
     # since the accepted reference sequence for the Homo sapiens
     # mitochondrion is the rCRS/Mitomap sequence, which is now
-    # available as the record NC_012920".  
+    # available as the record NC_012920".
     # They align w/gaps on both q & t, so liftUp won't do, we need liftOver:
     blat -noHead NC_012920.fa /hive/data/genomes/hg19/M/chrM.fa stdout \
     | axtChain -psl -linearGap=medium stdin -faT NC_012920.fa /hive/data/genomes/hg19/hg19.2bit \
@@ -9545,7 +9545,7 @@ done > ucscToEnsemblV57.tab
     # Also extract NCBI's annotations of coding SNPs' effects on translation.
     # We extract ContigLocusId info only for reference assembly mapping.
     # Some SNP's functional annotations are for an alternate assembly, so we will
-    # have no NCBI functional annotations to display for those (but our own are 
+    # have no NCBI functional annotations to display for those (but our own are
     # available).
     cd /hive/data/outside/dbSNP/131/human
     # Add indices to tables for a big join (5 or 6 minutes):
@@ -9593,7 +9593,7 @@ EOF
     hgLoadSqlTab hg19snp131 ucscFunc{,.sql,.txt}
     # 10/12/10: Those coords are NCBI's 0-based, fully-closed, 2-base-wide insertions.
     # We need to leave the coords alone here so ucscFunc can be joined below.
-    # Make a list of SNPs with func anno's that are insertion SNPs, so we can use 
+    # Make a list of SNPs with func anno's that are insertion SNPs, so we can use
     # the list to determine what type of coord fix to apply to each annotation
     # when making snp130CodingDbSnp below.
     hgsql hg19snp131 -NBe \
@@ -9655,11 +9655,11 @@ EOF
                                 and uf.asn_from = cl.asn_from;' \
       > ucscNcbiSnp.ctg.bed
 #75.815u 13.622s 32:04.35 4.6%   0+0k 0+0io 0pf+0w
-    wc -l ucscNcbiSnp.ctg.bed 
+    wc -l ucscNcbiSnp.ctg.bed
 #27500025 ucscNcbiSnp.ctg.bed
     # Use liftUp for everything except mito, then liftOver for mito:
-    # There are some weird cases of length=1 but locType=range... in all the cases 
-    # that I checked, the length really seems to be 1 so I'm not sure where they got 
+    # There are some weird cases of length=1 but locType=range... in all the cases
+    # that I checked, the length really seems to be 1 so I'm not sure where they got
     # the locType=range.  Tweak locType in those cases so we can keep those SNPs:
     grep -vw ^NC_012920 ucscNcbiSnp.ctg.bed \
     | awk -F"\t" 'BEGIN{OFS="\t";}  $2 == $3 && $14 == 1 {$14=2; numTweaked++;}  {print;} \
@@ -9684,7 +9684,7 @@ EOF
 #27500023 ucscNcbiSnp.bed
 
     # Translate NCBI's encoding into UCSC's, and perform a bunch of checks.
-    # This is where developer involvement is most likely as NCBI extends the 
+    # This is where developer involvement is most likely as NCBI extends the
     # encodings used in dbSNP.
     cd /hive/data/outside/dbSNP/131/human/
     snpNcbiToUcsc ucscNcbiSnp.bed /hive/data/genomes/hg19/hg19.2bit snp131
@@ -9792,7 +9792,7 @@ EOF
 # http://redmine.soe.ucsc.edu/issues/559
     cd /hive/data/outside/dbSNP/131/human/data
     wget --timestamping ftp://ftp.ncbi.nlm.nih.gov/snp/database/organism_data/human_9606/SNP_bitfield.bcp.gz
-    # I did a little analysis of the bitfields -- see file 
+    # I did a little analysis of the bitfields -- see file
     # /hive/data/outside/dbSNP/131/human/data/bitfield_breakdown.txt .
     cd /hive/data/outside/dbSNP/131/human
     zcat data/SNP_bitfield.bcp.gz \
@@ -9842,7 +9842,7 @@ EOF
 #22944618 snp131Unique.bed
 
     # Next, separate the uniquely mapped SNPs into HapMap and/or 1000 Genomes
-    # (the ones that we are certain have been observed in a large number of 
+    # (the ones that we are certain have been observed in a large number of
     # apparently healthy samples) vs. other ones (rarer SNPs, maybe clinical SNPs).
 
 #*** NOTE *** To do this right, we need to get allele freq data from dbSNP and use it
@@ -9861,7 +9861,7 @@ EOF
 #2373 snp131CommonButClinical.bed
     calc 2373 / 16605
 #2373 / 16605 = 0.142909
-    # A higher percentage than I expected... are 15% of OMIM / LSDB SNPs common?  
+    # A higher percentage than I expected... are 15% of OMIM / LSDB SNPs common?
     # Spot-checking, OMIM will mention SNPs from GWAS, or as endpoints of an interval...
     # the SNPs are clearly common but sometimes common variants are associated with
     # a disorder.
@@ -10056,8 +10056,8 @@ EOF
 #                found some strange function codes and notified dbSNP.
 # originally done 6/2/09
     cd /hive/data/outside/dbSNP/131/human
-    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.  
-    # For anything except an insertion (0 bases between flanks), 
+    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
+    # For anything except an insertion (0 bases between flanks),
     # we need to add 1 to the end coord.  For an insertion, we need
     # to add 1 to the start coord.  Make a hash of the insertion IDs,
     # then look up each ID in ncbiFuncAnnotations.txt to tell which
@@ -10264,7 +10264,7 @@ EOF
 ##############################################################################
 #  RE-BUILD sno/miRNA TRACK (DONE - 04-20-2010 - Chin)
 
-    # The data in this track is out of date so update the track. 
+    # The data in this track is out of date so update the track.
     mkdir -p /hive/data/genomes/hg19/bed/wgRna-2010-04-20
     cd /hive/data/genomes/hg19/bed/wgRna-2010-04-20
 
@@ -10290,7 +10290,7 @@ EOF
     # and those in Ensembl.
     # Confirmed with Sam Griffith-Jones (one of the authors of miRBase,
     # sam.griffith-jones@manchester.ac.uk) that these GFF coordinates
-    # are 1-based. 
+    # are 1-based.
     # Also add thickStart and thickEnd columns and "miRNA" for type.
     awk 'BEGIN {FS="\t"} {OFS="\t"} \
         {if ($0 !~ /#/ && $7 == "+") \
@@ -10301,7 +10301,7 @@ EOF
 
     # 2010-04-21
     # Down load the current snoRNABase coordinates (version 3, based on hg19)
-    #  from 
+    #  from
     # http://www-snorna.biotoul.fr/coordinates.php
     #   to
     # /hive/data/genomes/hg19/bed/wgRna-2010-04-20/snoRNABaseVer3Coords.xls
@@ -10320,7 +10320,7 @@ EOF
        snoRNABaseVer3Coords.txt > snoRNABaseVer3Coords.bed
     # 2010-08-02: snoRnaBase team has not response to hg19 update request.
     # use liftOver to convert the 400 coordinates to hg19 directly.
-    liftOver snoRNABaseVer3Coords.bed -bedPlus=3 \ 
+    liftOver snoRNABaseVer3Coords.bed -bedPlus=3 \
       /hive/data/genomes/hg18/bed/liftOver10K/hg18ToHg19.over.chain.gz \
         snoRNABaseHg19Coords.bed unMapped
     # Reading liftover chains
@@ -10364,7 +10364,7 @@ EOF
 
 #############################################################################
 # AFFY U133Plus2 (DONE 2010-10-04 Chin) (Removed prefixes 2010-11-29 galt)
-    # Align probes 
+    # Align probes
     ssh swarm
     cd /hive/data/genomes/hg19/bed
     mkdir -p affyProbes/affyU133Plus2/run
@@ -10416,7 +10416,7 @@ EOF
     #   Updating seq table
     #   All done
     #  hgsql -e "select count(*) from affyU133Plus2;" hg19
-    #     58592  
+    #     58592
 
 
     # Added knownToU133Plus2 table
@@ -10425,7 +10425,7 @@ EOF
 
 #############################################################################
 # AFFY U95 (DONE 2010-10-07 Chin)  (Removed prefixes 2010-11-29 galt)
-    # Align probes 
+    # Align probes
     ssh swarm
     cd /hive/data/genomes/hg19/bed
     mkdir -p affyProbes/affyU95/run
@@ -10602,7 +10602,7 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
       }' \
     | sort -k 1,1 -k 2n,2n > hgIkmc.bed
 #Got 46392 genes.
-    
+
     # Make an alias-style table with associated info (MGI ID and status):
     zcat 20120518_human.gff.gz \
     | sed -e 's/^chrUn|NT_167216.1/chrUn_gl000222/' \
@@ -10645,7 +10645,7 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
 
     #	take a look through the downloaded files to find the name
     #	correspondence.  The fasta names are in:
-    zcat patch_release_1/FASTA/alt.scaf.fa.gz | grep "^>" 
+    zcat patch_release_1/FASTA/alt.scaf.fa.gz | grep "^>"
     # the other names are in:
     cat patch_release_1/alt_scaffold_placement.txt
     #	Decide on UCSC chrom names
@@ -10894,7 +10894,7 @@ done
 -rw-rw-r-- 1    165090 Jul 23 16:01 nib/chr9_gl339450.nib
 -rw-rw-r-- 1   34676 Jul 23 16:27 lineageSpecificRepeats/chr9_gl339450.out.spec
 -rw-rw-r-- 1     386 Jul 23 16:27 lineageSpecificRepeats/chrM_NC_012920.out.spec
--rw-rw-r-- 1  221381 Jul 23 16:27 lineageSpecificRepeats/chr5_ctg1_hap1.out.spec 
+-rw-rw-r-- 1  221381 Jul 23 16:27 lineageSpecificRepeats/chr5_ctg1_hap1.out.spec
 #############################################################################
 # Update BlastTab tables for hg19 (Done, Fan, 8/6/2010)
     ssh hgwdev
@@ -10996,10 +10996,10 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
     #	hg18.  Due to gsBig errors, the chroms are split into 2,000,000 bp
     #   segments and the -windowSize is set to the default value of 1,200,000.
     #   The results are then collected and lifted to original chrom
-    #   coordinates and then loaded into 3 genscan tables. 
+    #   coordinates and then loaded into 3 genscan tables.
 
     ssh hgwdev
-    
+
     mkdir -p /hive/data/genomes/hg19/bed/genscan
     cd /hive/data/genomes/hg19/bed/genscan
 
@@ -11031,22 +11031,22 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 '_EOF_'
 
 # create the chunk2, lift, and runBlat subdir structures
-    
+
     mkdir -p chunk2
     mkdir -p lift
     mkdir -p runBlat
-    
+
     for f in `cat chrom.list`
 	do
 	mkdir -p lift/$f
 	mkdir -p chunk2/$f
-	mkdir -p runBlat/$f/gtf 
-	mkdir -p runBlat/$f/pep 
+	mkdir -p runBlat/$f/gtf
+	mkdir -p runBlat/$f/pep
 	mkdir -p runBlat/$f/subopt
         cp ./template runBlat/$f
         done
 
-# split the chrom fa files into chunks of 2,000,000 bases or less 
+# split the chrom fa files into chunks of 2,000,000 bases or less
 # and create corresponding lift files
 
     for f in `cat chrom.list`
@@ -11057,7 +11057,7 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 	cd ../..
 	done
 
-# LATER FOUND THAT THE SEQUENCE ID IN THE .fa FILES UNDER 
+# LATER FOUND THAT THE SEQUENCE ID IN THE .fa FILES UNDER
 # /hive/data/genomes/hg19/* ARE NOT ALWAYS THE SAME AS THE CHROM ID.
 # THIS CAUSED INCORRECT CHROM IDs GENERATED IN THE .lft FILES.
 # PERFORM THE FOLLOWING TO FIX THE .lft FILES.
@@ -11083,7 +11083,7 @@ cat /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft |grep $2
 cat /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft |sed -e
 "s/${2}/${1}/g" >new/$1.lft
 cat new/$1.lft |grep $1
-cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft 
+cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft
 '_EOF_'
 
     chmod +x fix*
@@ -11136,7 +11136,7 @@ cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft
     ssh hgwdev
     cd /hive/data/genomes/hg19/bed/genscan/newTry
 
-# collect ptf results and lift them and then load into the genscan table 
+# collect ptf results and lift them and then load into the genscan table
 
     mkdir -p gtf
     for f in `cat chrom.list`
@@ -11179,8 +11179,8 @@ cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft
 ################################################################
 # HUMAN FETAL BRAIN EXON ARRAYS (YALE) (DONE 2010-08-03 - Chin)
 # Note from Andy: All primary data files were lost, The table
-# has all of the original data. 
-# The "kent/src/hg/makeDb/hgCgiData/Human/microarrayGroups.ra" file should 
+# has all of the original data.
+# The "kent/src/hg/makeDb/hgCgiData/Human/microarrayGroups.ra" file should
 # still be valid.  The hgFixed table sestanBrainAtlasExps should be ok.
 # So it's just a matter of getting the hg18.sestanBrainAtlas table in
 #  hg19 coordinates.
@@ -11205,7 +11205,7 @@ cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft
     wc -l sestanBrainAtlasHg1*.bed
     # 877877 sestanBrainAtlasHg18.bed
     # 877469 sestanBrainAtlasHg19.bed
-    cat unMapped | awk ' /^chr/ {print $1}' | wc -l       
+    cat unMapped | awk ' /^chr/ {print $1}' | wc -l
     408
     cat unMapped | awk ' /^#/|| /^chr/ {print $1, $2, $3,_}' \
        > summaryUnMapped.txt
@@ -11225,7 +11225,7 @@ cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft
     # Saving bed.tab
     # Loading hg19
 
-    # track stuff done from hg18 days: 
+    # track stuff done from hg18 days:
     # kent/src/hg/makeDb/trackDb/human/sestanBrainAtlas.html
     # kent/src/hg/makeDb/trackDb/human/trackDb.ra
 
@@ -11627,7 +11627,7 @@ close (FH);
     ./mkHapLocate.pl ctgPos.txt \
 ../patches/patch_release_2/PATCHES/alt_scaffolds/alt_scaffold_placement.txt \
     > haplotypeLocations.bed
-    hgLoadBed -oldTable hg19 haplotypeLocations haplotypeLocations.bed 
+    hgLoadBed -oldTable hg19 haplotypeLocations haplotypeLocations.bed
 
     mkdir simpleRepeat
     cd simpleRepeat
@@ -11660,7 +11660,7 @@ rm -f ${ctg}.fa
 '_EOF_'
     # << happy emacs
     chmod +x runOne
-    
+
     ls ctgs > ctg.list
     cat << '_EOF_' > template
 #LOOP
@@ -11706,7 +11706,7 @@ runOne $(root1) {check out line+ out/$(root1)/$(root1).fa.out}
         simpleRepeat/trfMask.bed hg19.patch2.2bit
     twoBitToFa hg19.patch2.2bit stdout | faSize stdin \
 	> faSize.hg19.patch2.2bit.txt
-    
+
 #############################################################################
 # new blat server for the hg19.patch2 sequence (DONE - 2010-08-18 - Hiram)
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
@@ -12017,7 +12017,7 @@ while (my $line = <FH>) {
             printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
             $chr = $c; $start = $s; $end = $e;
         } else {
-            if ($s == $end) { 
+            if ($s == $end) {
                 $end = $e;
             } else {
                 printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
@@ -12205,7 +12205,7 @@ grep "^[0-9]" raw.psl \
 	$HOME/kent/src/hg/lib/fosEndPairs.sql > hg19FosEndPairs.sql
     sed -e "s/all_fosends/hg19AllFosEnds/" hg19.fosEndPairs.bed \
 	| sort -u | hgLoadBed -notItemRgb hg19 hg19FosEndPairs stdin \
-	    -sqlTable=hg19FosEndPairs.sql 
+	    -sqlTable=hg19FosEndPairs.sql
     # Loaded 229708 elements
     # why so few compared to before:
     hgsql -e "select count(*) from fosEndPairs" hg19
@@ -12290,7 +12290,7 @@ grep "^[0-9]" raw.psl \
     # How many distinct SNPs in there?  (compare to 657000 from HGDP):
     cut -f 1 snp131CoordsAndRef.txt | uniq | wc -l
 #656332
-    # Join files to make a track table -- well, first we'll need to 
+    # Join files to make a track table -- well, first we'll need to
     # normalize alleles to the + strand:
     join -e ERROR -t'	' -o 1.2,1.3,1.4,1.1,2.2,2.3,2.4,1.5 \
       snp131CoordsAndRef.txt /hive/data/outside/hgdpGeo/hgdpGeoCoordless.txt \
@@ -12300,7 +12300,7 @@ grep "^[0-9]" raw.psl \
     wc -l hgdpGeo.fixme
 #667392 hgdpGeo.fixme
     # Use the snp131 reference allele to detect when we need to rev-comp
-    # the alleles to match the + strand.  Also, throw out SNPs for which 
+    # the alleles to match the + strand.  Also, throw out SNPs for which
     # the ref allele is multi-base -- it's questionable whether we're giving
     # the right coords (some funny things happen with dbSNP's clustering...):
     cat > fixAlleles.pl <<'_EOF_'
@@ -12379,7 +12379,7 @@ while (<>) {
 # Convert files to proper format
 # which requires the "inserts" file
     # get the size of true chrom:
-    cd  /hive/data/genomes/hg19/bed/recombRate  
+    cd  /hive/data/genomes/hg19/bed/recombRate
     cat /hive/data/genomes/hg19/chrom.sizes | awk '$1 !~/_/ && !/^chrM/ \
     {print $1, $2}'  > chr.sizes
 
@@ -12393,7 +12393,7 @@ my $db = hg19;
 my $ordDir = "/hive/data/genomes/hg19/bed/recombRate/orderedCtg";
 @chroms = (1..22, X, Y);
 
-foreach $chr (@chroms) 
+foreach $chr (@chroms)
 {
 my $chrName = "chr$chr";
 my $chrFile = "chr$chr.ol";
@@ -12408,7 +12408,7 @@ system(" $sqlstmt  > $ordFile");
     chmod +x orderCtg.pl
     ./orderCtg.pl
 
-    # create the inserts file 
+    # create the inserts file
     cat << '_EOF_' > createInserts.pl
 #!/usr/local/bin/perl
 # FILE: createInserts
@@ -12464,7 +12464,7 @@ foreach $chr (@chroms) {
 		    @fields1 = split("\t", $line1);
 		    # This contig ends where gap begins
 		    if (($fields1[0] + $fields1[2] + 1) == $start[$i]) {
-			$ctg1[$i] = $fields1[1]; 
+			$ctg1[$i] = $fields1[1];
 			# Succeeding contig is in next record
 			if ($line1 = <ORDCTG>) {
 			    @fields1 = split("\t", $line1);
@@ -12493,7 +12493,7 @@ foreach $chr (@chroms) {
 		    }
 		}
 	    }
-	    close(ORDCTG); 
+	    close(ORDCTG);
 	    $i++;
 	}
     }
@@ -12515,14 +12515,14 @@ for ($i = 0; $i < $num; $i++) {
 	    $type[$i] = "short_arm";
 	}
 	# Only want large heterochromatic regions, not telomeres
-	if (($type[$i] ne "heterochromatin") || ($size[$i] > 1000000)) { 
+	if (($type[$i] ne "heterochromatin") || ($size[$i] > 1000000)) {
 	    print "$chr[$i]\t$ctg1[$i]\t$ctg2[$i]\t$size[$i]\t$type[$i]\n";
 	}
     }
 }
 '_EOF_'
     # << happy emacs
- 
+
     chmod +x createInserts.pl
     ./createInserts.pl > inserts
 
@@ -12552,7 +12552,7 @@ $window = $basewind * 1000;
 open(INSERT, "<$insfile") || die("Could not open $insfile\n");
 $line = <INSERT>; #header
 while ($line = <INSERT>) {
-  next if (substr($line, 0, 1) eq "#"); 
+  next if (substr($line, 0, 1) eq "#");
   chomp($line);
   ($chr, $first, $second, $length, $type) = split(' ',$line);
 
@@ -12599,7 +12599,7 @@ while ($line = <RR>) {
 close(RR);
 '_EOF_'
     # << happy emacs
-    
+
     chmod +x convRecombRate.pl
 
 
@@ -12639,14 +12639,14 @@ mkdir chrom
 
     cat << '_EOF_' > runClusterRna
 #!/bin/csh -fe
-foreach f (/hive/data/genomes/hg19/nib/chr*.nib) 
-    set c = $f:t:r 
-    set out = chrom/$c.bed 
-    # Exclude accesions in the RAGE file 
-    echo clusterRna -mrnaExclude=hg19.rage.libs hg19 /dev/null $out  -chrom=$c 
+foreach f (/hive/data/genomes/hg19/nib/chr*.nib)
+    set c = $f:t:r
+    set out = chrom/$c.bed
+    # Exclude accesions in the RAGE file
+    echo clusterRna -mrnaExclude=hg19.rage.libs hg19 /dev/null $out  -chrom=$c
     clusterRna -mrnaExclude=hg19.rage.libs -verbose=2 \
-    -rna=all_mrna -est=intronEst \ 
-    hg19 /dev/null $out -chrom=$c 
+    -rna=all_mrna -est=intronEst \
+    hg19 /dev/null $out -chrom=$c
  end
 '_EOF_'
     # << happy emacs
@@ -12786,7 +12786,7 @@ hgLoadBed hg19 rnaCluster chrom/*.bed
     # That probably will allow some false positives from coord matches,
     # but we can clean those up afterward.
     zcat ContigInfo.gz | g -w GRCh37 | cut -f 1 | sort -n > GRCh37ContigInfo.ctg_id.txt
-    wc -l GRCh37ContigInfo.ctg_id.txt 
+    wc -l GRCh37ContigInfo.ctg_id.txt
 #259 GRCh37ContigInfo.ctg_id.txt
     zcat ContigLoc.gz \
     | grep -Fwf GRCh37ContigInfo.ctg_id.txt \
@@ -12830,7 +12830,7 @@ hgLoadBed hg19 rnaCluster chrom/*.bed
     # Also extract NCBI's annotations of coding SNPs' effects on translation.
     # We extract ContigLocusId info only for reference assembly mapping.
     # Some SNP's functional annotations are for an alternate assembly, so we will
-    # have no NCBI functional annotations to display for those (but our own are 
+    # have no NCBI functional annotations to display for those (but our own are
     # available).
     cd /hive/data/outside/dbSNP/132/human
     # Add indices to tables for a big join (5 or 6 minutes):
@@ -12878,7 +12878,7 @@ EOF
     hgLoadSqlTab hg19snp132 ucscFunc{,.sql,.txt}
     # ucscFunc coords are NCBI's 0-based, fully-closed, 2-base-wide insertions.
     # We need to leave the coords alone here so ucscFunc can be joined below.
-    # Make a list of SNPs with func anno's that are insertion SNPs, so we can use 
+    # Make a list of SNPs with func anno's that are insertion SNPs, so we can use
     # the list to determine what type of coord fix to apply to each annotation
     # when making snp130CodingDbSnp below.
     hgsql hg19snp132 -NBe \
@@ -12942,12 +12942,12 @@ EOF
                                 and uf.asn_from = cl.asn_from;' \
       > ucscNcbiSnp.ctg.bed
 #73.036u 12.668s 25:32.42 5.5%   0+0k 0+0io 0pf+0w
-    wc -l ucscNcbiSnp.ctg.bed 
+    wc -l ucscNcbiSnp.ctg.bed
 #34610479 ucscNcbiSnp.ctg.bed
 
     # Use liftUp for everything except mito, then liftOver for mito.
-    # There are some weird cases of length=1 but locType=range... in all the cases 
-    # that I checked, the length really seems to be 1 so I'm not sure where they got 
+    # There are some weird cases of length=1 but locType=range... in all the cases
+    # that I checked, the length really seems to be 1 so I'm not sure where they got
     # the locType=range.  Tweak locType in those cases so we can keep those SNPs:
     grep -vw ^NC_012920 ucscNcbiSnp.ctg.bed \
     | awk -F"\t" 'BEGIN{OFS="\t";} \
@@ -12990,7 +12990,7 @@ EOF
 
     # Translate NCBI's encoding into UCSC's, and perform a bunch of checks.
     cd /hive/data/outside/dbSNP/132/human/
-    # Updated snpNcbiToUCSC for new MAX_SNPID (80M -> 120M), 
+    # Updated snpNcbiToUCSC for new MAX_SNPID (80M -> 120M),
     # new named alleles oddball formats: CHLC.GGAA2D04, GDB:190880, SHGC-35515, =D22S272
     # new MAX_SNPSIZE (1k -> 16k)
     snpNcbiToUcsc ucscNcbiSnp.bed /hive/data/genomes/hg19/hg19.2bit snp132
@@ -13251,11 +13251,11 @@ EOF
 ############################################################################
 # DBSNP CODING ANNOTATIONS (132) (DONE 11/17/10 angie)
 # These annotations are not restricted to the ones that we display,
-# so it wasn't necessary to rebuild this after rebuilding snp132 to 
+# so it wasn't necessary to rebuild this after rebuilding snp132 to
 # include SNPs missing from the first rs_fasta dump.
     cd /hive/data/outside/dbSNP/132/human
-    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.  
-    # For anything except an insertion (0 bases between flanks), 
+    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
+    # For anything except an insertion (0 bases between flanks),
     # we need to add 1 to the end coord.  For an insertion, we need
     # to add 1 to the start coord.  Make a hash of the insertion IDs,
     # then look up each ID in ncbiFuncAnnotations.txt to tell which
@@ -13452,7 +13452,7 @@ hgLoadBed hg19 darned allChroms.bed
     cd /hive/data/outside/dbSNP/132/human
     # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
     # to find the subdir name to use as orgDir below (human_9606 in this case).
-    # Then click into that directory and look for file names like 
+    # Then click into that directory and look for file names like
     #    b(1[0-9][0-9])_*_([0-9]+_[0-9])
     # -- use the first num for build and the second num_num for buildAssembly.
     # jkStuff/liftContigs.lft maps NCBI contig names to chroms; use that for liftUp.
@@ -13535,7 +13535,7 @@ mkdir lifted.2009-07-28/
 mv * lifted.2009-07-28/
 # FTP download from ftp.agilent.com using given user/pass from Anniek De-witte
 # (anniek_de-witte@agilent.com)
-# downloaded files are gzipped beds. The files are typically located in a 
+# downloaded files are gzipped beds. The files are typically located in a
 # directory called "FOR_UCSC" or something like that.  The user/pass and the
 # directory are deleted after it's confirmed they're received, so it's not
 # too helpful to mention specifics here.
@@ -13588,12 +13588,12 @@ wget ftp://ftp.sanger.ac.uk/pub/databases/Rfam/CURRENT/genome.gff3.tar.gz
 tar xzvf genome.gff3.tar.gz
 mkdir hg19
 cat /hive/data/genomes/hg19/chrom.aliases \
- |awk '{ print("cat /hive/data/outside/Rfam/111130/genome_gff/" $1 ".gff3",  
+ |awk '{ print("cat /hive/data/outside/Rfam/111130/genome_gff/" $1 ".gff3",
                "|sed", sprintf("%c", 39) "s/" $1 "/" $2 "/" sprintf("%c", 39))}' |bash \
  |grep -v -e "^#" \
- |awk '{ print($1 "\t" $4 - 1 "\t" $5 "\t" $9 "\t1\t" $7 "\t" 
+ |awk '{ print($1 "\t" $4 - 1 "\t" $5 "\t" $9 "\t1\t" $7 "\t"
                $4 - 1 "\t" $5 "\t0\t1\t" $5 - $4 + 1 "\t0"  }' \
-> hg19/Rfam.bed      
+> hg19/Rfam.bed
 
 
 
@@ -13614,7 +13614,7 @@ cd /hive/data/genomes/hg19/bed/vistaEnhancers
 # download data file from the vista browser (coordinates are for hg19)
 wget -O enhancerbrowser.datadownload.txt 'http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?page_size=100;show=1;search.result=yes;form=search;search.form=no;action=search;search.sequence=1'
 
-# give elements with positive label a score of 900, 
+# give elements with positive label a score of 900,
 # give elements with negative label a score of 200.
 # print to 5-field bed file
 cat enhancerbrowser.datadownload.txt \
@@ -13627,7 +13627,7 @@ cat enhancerbrowser.datadownload.txt \
         | sed -e 's/positive/900/'\
         | sed -e 's/negative/200/' \
         | awk '{print $1"\t"$2"\t"$3"\telement_"$6"\t"$8}' \
-        | grep -P -v "^chr\t" \  
+        | grep -P -v "^chr\t" \
         > vistaEnhancers.bed
 hgLoadBed hg19 vistaEnhancers vistaEnhancers.bed
 #Loaded 1339 elements of size 5
@@ -13665,7 +13665,7 @@ url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experim
     ls -1S \
     /hive/data/genomes/hg19/bed/uniGene/101210/Hs.seq.uniq.simpleHeader.fa \
       > uniGene.lst
-    
+
     cat << '_EOF_' > template.sub
 #LOOP
 /cluster/bin/x86_64/blat -repeats=lower -minIdentity=95 ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(root1)_$(root2).psl}
@@ -13691,7 +13691,7 @@ url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experim
     cat raw.psl|\
     pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
       stdin hg19.uniGene.pslReps.psl /dev/null
-    
+
     gzip raw.psl
 
     ssh hgwdev
@@ -13730,7 +13730,7 @@ grep -i split hg19.unmapped | wc -l
 #18
 grep -i part hg19.unmapped | wc -l
 #5
-for table in gadAll gadList; do 
+for table in gadAll gadList; do
     hgsqldump hg18 $table | hgsql hg19
 done
 
@@ -13924,7 +13924,7 @@ checkAll >j.check
 
 # create symbolic links
 
-ln -s /hive/data/genomes/hg19/bed/evofold/doEvoFold/evoFold  /gbdb/hg19/evoFold 
+ln -s /hive/data/genomes/hg19/bed/evofold/doEvoFold/evoFold  /gbdb/hg19/evoFold
 ln -s /gbdb/hg19/evoFold /usr/local/apache/htdocs/evoFold/hg19
 
 ##########################################################################
@@ -13985,7 +13985,7 @@ done
 
 cd /hive/data/genomes/hg19/bed/hg18MassiveLift
 mkdir decipher rgdQtl rgdRatQtl
-for tab in decipher rgdQtl rgdRatQtl; do 
+for tab in decipher rgdQtl rgdRatQtl; do
   echo "select * from "$tab | hgsql hg18 | tail -n +2 | cut -f2- > ${tab}/hg18.bed
   liftOver ${tab}/hg18.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz ${tab}/hg19.{bed,unmapped}
   hgLoadBed hg19 $tab ${tab}/hg19.bed
@@ -14001,7 +14001,7 @@ wc -l {decipher,rgdQtl,rgdRatQtl}/hg1{8,9}.bed
 ## This isn't very good.  In each case, the unmapped % is over 2%.
 ## DECIPHER: 95.8%, RGD QTL: 88.6%, RGD RAT QTL: 96.2%
 ## update for rgdQtl:
-hgsqldump hg18 rgdQtlLink | hgsql hg19 
+hgsqldump hg18 rgdQtlLink | hgsql hg19
 hgsqldump hg18 rgdRatQtlLink | hgsql hg19
 
 #############################################################################
@@ -14011,7 +14011,7 @@ cd /hive/data/genomes/hg19/bed/hg18MassiveLift
 mkdir fishClones
 cd fishClones/
 echo "select * from fishClones" | hgsql hg18 | tail -n +2 > hg18.bed5p
-liftOver -bedPlus=5 hg18.bed5p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.bed5p hg19.unmapped 
+liftOver -bedPlus=5 hg18.bed5p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.bed5p hg19.unmapped
 wc -l *.bed5p
 #   9788 hg18.bed5p
 #   9758 hg19.bed5p
@@ -14029,7 +14029,7 @@ cd /hive/data/genomes/hg19/bed/hg18MassiveLift
 mkdir cgapSage
 cd cgapSage
 echo "select * from cgapSage" | hgsql hg18 -N > hg18.bed8p
-liftOver -tab -bedPlus=8 -hasBin hg18.bed8p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.bed8p hg19.unmapped 
+liftOver -tab -bedPlus=8 -hasBin hg18.bed8p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.bed8p hg19.unmapped
 wc -l *.bed8p
 #  276905 hg18.bed8p
 #  276865 hg19.bed8p
@@ -14084,7 +14084,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	Elapsed time: 1698m29s
-    cat fb.hg19.chainDanRer7Link.txt 
+    cat fb.hg19.chainDanRer7Link.txt
     #	80849592 bases of 2897316137 (2.790%) in intersection
 
     #	running the swap
@@ -14096,11 +14096,11 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    42m52.920s
-    cat fb.danRer7.chainHg19Link.txt 
+    cat fb.danRer7.chainHg19Link.txt
     #	86716552 bases of 1409770109 (6.151%) in intersection
 
 ##############################################################################
-# UMass Med School brain histone ChIP-seq 
+# UMass Med School brain histone ChIP-seq
 # (DONE - 2010-12-17 - Kate)
 #
 # From Troy Whitfield, submitting for Zhiping Weng, collab with Akbarian
@@ -14109,7 +14109,7 @@ TMPDIR=/scratch/tmp
 # Tissue:  Prefrontal cortex (PFC)
 #
 # 11 individuals, age .5 to 69 years
-# 13 bigWigs of H3K4me3 enrichment: 11 neuronal, 2 non-neuronal 
+# 13 bigWigs of H3K4me3 enrichment: 11 neuronal, 2 non-neuronal
 # 3 peaks files (bed5FloatScore)
 # Neuronal cells selected by FACS sorting, based on NeuN marker (NeuN+)
 # Non-neuronal (NeuN-) cells are largely glia, microglia, and endothelium
@@ -14210,7 +14210,7 @@ end
 # SwitchDB TSS Track (DONE 2010-12-17 galt)
 #
 # This liftover is tricky because of the gmStart and gmEnd, which
-# are not lifted automatically.  
+# are not lifted automatically.
 # The gm coordinates have to be lifted separately.
 
 ssh hgwdev
@@ -14228,7 +14228,7 @@ mysql> select count(*) from switchDbTssTemp;
 +----------+
 | count(*) |
 +----------+
-|   132332 | 
+|   132332 |
 +----------+
 
 hgsql -N hg19 -e "select distinct chrom, gmChromStart, gmChromEnd, gmName from switchDbTssTemp" > gmLoc.hg17.bed4
@@ -14250,7 +14250,7 @@ mysql> select count(*) from switchDbTss;
 +----------+
 | count(*) |
 +----------+
-|   131780 | 
+|   131780 |
 +----------+
 
 hgsql hg19 -e "drop table switchDbTssTemp"
@@ -14284,7 +14284,7 @@ wc -l hg19*.bed12
 awk -f toFosEndPairs.awk hg19.fosEndPairs.good.bed12 > hg19.fosEndPairs.fep.bed
 
 cp ~/kent/src/hg/lib/fosEndPairs.sql .
-hgLoadBed -sqlTable=fosEndPairs.sql -notItemRgb hg19 fosEndPairs hg19.fosEndPairs.fep.bed 
+hgLoadBed -sqlTable=fosEndPairs.sql -notItemRgb hg19 fosEndPairs hg19.fosEndPairs.fep.bed
 hgLoadPsl -table=all_fosends hg19 hg19.all_fosends.psl
 
 wc -l *.fep.bed
@@ -14295,7 +14295,7 @@ wc -l *.fep.bed
 ## Now we need the sequences from all_fosends to be loaded into the seq table in hg19
 
 mkdir /gbdb/hg19/fosends
-ln -s /gbdb/hg18/fosends/fosEnds.fa /gbdb/hg19/fosEnds.fromHg18.fa 
+ln -s /gbdb/hg18/fosends/fosEnds.fa /gbdb/hg19/fosEnds.fromHg18.fa
 hgLoadSeq hg19 /gbdb/hg19/fosends/fosEnds.fromHg18.fa
 
 #############################################################################
@@ -14341,16 +14341,16 @@ hgLoadBed -noLoad hg19 gl hg19.gl.bed
 mv bed.tab hg19.gl.withBin.bed
 awk 'BEGIN{OFS="\t";}{fname=$2"_gl.txt"; print $1, $5, $3, $4, $7 >> fname;}' hg19.gl.withBin.bed
 cd ../
-for tab in `echo show tables like "'chr%_gl'" | hgsql hg19 | tail -n +2`; do 
-  echo select frag from $tab | hgsql hg19 | tail -n +2  >> gl.names; 
+for tab in `echo show tables like "'chr%_gl'" | hgsql hg19 | tail -n +2`; do
+  echo select frag from $tab | hgsql hg19 | tail -n +2  >> gl.names;
 done
 sed 's/_.*//' gl.names | sort | uniq > uniq.gl.names
 cut -f4 hg19.clonePos.bed4p > hg19.clonePos.names
 diff uniq.gl.names hg19.clonePos.names | grep '<' | sed 's/< //' > bad_gl.names
-for f in chr*.txt; do 
+for f in chr*.txt; do
    tab=${f%.txt}
    grep -v -f ../bad_gl.names $f > ${tab}.update.txt
-   hgLoadSqlTab hg19 ${tab} hg18.chr1_gl.sql ${tab}.update.txt; 
+   hgLoadSqlTab hg19 ${tab} hg18.chr1_gl.sql ${tab}.update.txt;
 done
 
 #############################################################################
@@ -14388,8 +14388,8 @@ hgsqldump hg18 HInv | hgsql hg19
 
 #############################################################################
 # SIB ALT-SPLICING LIFT (DONE 2010-12-30, Andy)
-# Note: 
-# Obsolete. See the section "SIB Transcriptome (DONE 2011-12-02 Chin)" 
+# Note:
+# Obsolete. See the section "SIB Transcriptome (DONE 2011-12-02 Chin)"
 # down below and redmine track #5630 for more details
 
 cd /hive/data/genomes/hg19/bed/hg18MassiveLift
@@ -14397,7 +14397,7 @@ mkdir sibTxGraph
 cd sibTxGraph/
 ## there is positional data in the 9th column, so I'll convert it to a bed12+
 ## and back to the native format later.  Again, the awk scripts to do that
-## are aptly named, and reside in the hg19 directory with the data. 
+## are aptly named, and reside in the hg19 directory with the data.
 hgsql hg18 --skip-column-names -e "select * from sibTxGraph" | cut -f2- | awk -f toBed12Plus.awk > hg18.sibTxGraph.bed12p
 liftOver -tab -bedPlus=12 hg18.sibTxGraph.bed12p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.sibTxGraph.{bed12p,unmapped}
 awk -f toSib.awk hg19.sibTxGraph.bed12p > hg19.sibTxGraph.txt
@@ -14405,7 +14405,7 @@ cut -f1-3 hg19.sibTxGraph.bed12p > hg19.sibTxGraph.bed3
 hgLoadBed -noLoad hg19 sibTxGraph hg19.sibTxGraph.bed3
 cut -f1 bed.tab > hg19.sibTxGraph.bins
 paste hg19.sibTxGraph.bins hg19.sibTxGraph.txt > hg19.sibTxGraph.withBin.txt
-## Oddly, there's no .sql file for this in the kent source-tree, so I'll 
+## Oddly, there's no .sql file for this in the kent source-tree, so I'll
 ## make one directly from hg18 that's suitable for hgLoadSqlTab
 hgsqldump --no-data --compact hg18 sibTxGraph | sed '/^SET/d;s/ENGINE.*//'  > sibTxGraph.sql
 hgLoadSqlTab hg19 sibTxGraph sibTxGraph.sql hg19.sibTxGraph.withBin.txt
@@ -14449,11 +14449,11 @@ cd /hive/data/genomes/hg19/bed/hg18MassiveLift
 mkdir eioJcviNAS
 cd eioJcviNAS/
 for tab in eioJcviNASNeg eioJcviNASPos; do
-   hgsql hg18 --skip-column-names -e "select * from "$tab > hg18.${tab}.bed 
+   hgsql hg18 --skip-column-names -e "select * from "$tab > hg18.${tab}.bed
    liftOver hg18.${tab}.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${tab}.{bed,unmapped}
    hgLoadBed hg19 ${tab} hg19.${tab}.bed
 done
-wc -l *.bed 
+wc -l *.bed
 #  338278 hg18.eioJcviNASNeg.bed
 #  130535 hg18.eioJcviNASPos.bed
 #  338238 hg19.eioJcviNASNeg.bed
@@ -14548,7 +14548,7 @@ done
 #   26767318 hg18.ucsfRnaSeqBrainSmartReads.bed
 #   26766288 hg19.ucsfRnaSeqBrainSmartReads.bed
 ## getting old now, we get it... it lifts.
-    
+
 for tab in ucsfChipSeqH3K4me3BrainCoverage ucsfMreSeqBrainCpG ucsfMedipSeqBrainCpG ucsfMedipSeqBrainCoverage ucsfRnaSeqBrainAllCoverage ucsfRnaSeqBrainSmartCoverage; do
    hgsql hg18 --skip-column-names -e "select * from "$tab | cut -f2- > hg18.${tab}.bg
    liftOver -bedPlus=3 hg18.${tab}.bg /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${tab}.{bg,unmapped}
@@ -14574,7 +14574,7 @@ for f in *; do gzip $f; echo $f zipped; done
 
 ## One more thing: remove overlapping items in lifted bedGraphs:
 
-for f in hg19*.bg.gz; do 
+for f in hg19*.bg.gz; do
     pre=${f%.bg.gz};
     tab=${pre#hg19.};
     echo $tab;
@@ -14590,7 +14590,7 @@ mkdir snpArray
 cd snpArray/
 
 ## 12 arrays:
-## 
+##
 ## snpArrayAffy6                   (bed6+, 8 fields)
 ## snpArrayAffy6SV                 (bed6)
 ## snpArrayAffy5                   (bed6+, 8 fields)
@@ -14643,7 +14643,7 @@ done
 
 ## Now there's a few "Raw" tables to lift. Convert them to bed3+ first:
 
-for tab in `echo show tables like "'snpArray%Raw'" | hgsql hg18 | tail -n +2`; do 
+for tab in `echo show tables like "'snpArray%Raw'" | hgsql hg18 | tail -n +2`; do
   hgsql hg18 --skip-column-names -e "select * from "$table | awk 'BEGIN{FS="\t";OFS="\t"}{print "chr"$6, $7 - 1, $7, $1, $2, $3, $4, $5}' > hg18.${table}.bed3p
   liftOver -bedPlus=3 -tab hg18.${table}.bed3p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${table}.{bed3p,unmapped}
   awk 'BEGIN{FS="\t";OFS="\t"}{print $4, $5, $6, $7, $8, substr($1, 4), $3;}' hg19.${table}.bed3p > hg19.${table}.txt
@@ -14661,7 +14661,7 @@ cd /hive/data/genomes/hg19/bed/hg18MassiveLift/hapmapSnps
 for table in `grep -B1 "parent hapmapSnps" ~/kent/src/hg/makeDb/trackDb/human/trackDb.ra | grep track | sed 's/.*track\ //'`; do
    echo $table >> tables.txt;
 done
-for table in `cat tables.txt`; do 
+for table in `cat tables.txt`; do
    hgsql hg18 --skip-column-names -e "select * from "$table | cut -f2- > hg18.${table}.bed6p;
    liftOver -bedPlus=6 -tab hg18.${table}.bed6p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${table}.{bed6p,unmapped};
    hgsqldump --no-data --compact hg18 $table | sed '/^SET/d;s/ENGINE.*//' > ${table}.sql
@@ -14699,7 +14699,7 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
     # comparing it to mm8 and cf2 (canFam2).
     unzip igs-hg18mm8cf2.zip
     mv *.gff ./data/
-    cd /hive/data/genomes/hg19/bed/consIndels/data    
+    cd /hive/data/genomes/hg19/bed/consIndels/data
 
     for f in *.gff
     do
@@ -14709,7 +14709,7 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
 
     cd /hive/data/genomes/hg19/bed/consIndels/	
     cat allNoHeader.tmp | \
-    awk '{print $1,$4,$5,$6,$9,$10,$11}' > consIndels.bed7p       
+    awk '{print $1,$4,$5,$6,$9,$10,$11}' > consIndels.bed7p
 
     liftOver -bedPlus=3 consIndels.bed7p \
       /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
@@ -14724,13 +14724,13 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
     # 66
     rm allNoHeader.tmp
     rm consIndels.bed7p
-   
+
     # strip off the end of the name e.g. IGS0001.1:p=.74; FDR 0.27
     # so that the name displayed is short - IGS0001.1. The score field
     # is used to determine colouring and this is calculated from FDR
     cd /cluster/data/hg19/bed/consIndels
-    cat  consIndelsHg19Mm8CanFam2.bed7p | 
-      awk '{print $1,$2, $3, $5, $4}' | 
+    cat  consIndelsHg19Mm8CanFam2.bed7p |
+      awk '{print $1,$2, $3, $5, $4}' |
       sed -e 's/:p[=<]\.[0-9][0-9]*;//' \
        > consIndelsHg19Mm8CanFam2.bed
 
@@ -14763,7 +14763,7 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
     # there are no GFF files for the haplotype chroms
     # Reuse $HOME/kent/src/hg/lib/itemConf.* for the table of identifier,
     # posterior probability and false discovery rate (FDR).
-    
+
     cd /hive/data/genomes/hg19/bed/consIndels
     hgLoadSqlTab hg19 consIndelsHgMmCanFamConf \
          $HOME/kent/src/hg/lib/itemConf.sql \
@@ -14797,12 +14797,12 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
 #
 
     # Data files and program:
-    # "Bin Tian" <btian@umdnj.edu> provided the following two 
+    # "Bin Tian" <btian@umdnj.edu> provided the following two
     # data files at /hive/data/outside/polyA:
     #   hg18.polyadb.bed  hg19.polyadb.bed
     # Andy found the SVM program he used before, and in here:
     #  /hive/data/genomes/hg18/bed/polyaDB/polya_svm_2.2.tar.gz
-    # Copy it to /hive/data/outside/polyA. Unzip the program to 
+    # Copy it to /hive/data/outside/polyA. Unzip the program to
     # polya_svm_2.2
 
     mkdir /hive/data/genomes/hg19/bed/polyaDB
@@ -14810,7 +14810,7 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
     cp /hive/data/outside/polyA/hg19.polyadb.bed .
     hgLoadBed hg19 polyaDb hg19.polyadb.bed
     # add trackDb entry in human/hg19
-    # polyA.html is at top human level 
+    # polyA.html is at top human level
 
     # since hg19.polyadb.bed provided is lifted over from hg18.polyadb.bed,
     # it it safe to lift polyaPredict table from hg18 to hg19 without re-run
@@ -14896,12 +14896,12 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
 # The decipher track is built by an automated process.  The following two scripts:
 
 #   kent/src/utils/decipher/checkDecipher.sh
-#   kent/src/utils/decipher/buildDecipher 
+#   kent/src/utils/decipher/buildDecipher
 
 #are used to automatically detect update on DECIPHER ftp sites and then
 #download and build the decipher track.
 
-# checkDecipher.sh is invoked by a cron job, it will call buildDecipher to build 
+# checkDecipher.sh is invoked by a cron job, it will call buildDecipher to build
 # the decipher track after the new data are downloaded.
 
 #############################################################################
@@ -14951,7 +14951,7 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
     ls -1S \
     /hive/data/genomes/hg19/bed/uniGene/022211/Hs.seq.uniq.simpleHeader.fa \
       > uniGene.lst
-    
+
     cat << '_EOF_' > template.sub
 #LOOP
 /cluster/bin/x86_64/blat -repeats=lower -minIdentity=95 ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(root1)_$(root2).psl}
@@ -14977,7 +14977,7 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
     cat raw.psl|\
     pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
       stdin hg19.uniGene.pslReps.psl /dev/null
-    
+
     gzip raw.psl
 
     ssh hgwdev
@@ -15044,10 +15044,10 @@ TMPDIR=/scratch/tmp
 	-continue=chainMerge -syntenicNet > chainMerge.log 2>&1 &
     #	real    103m34.088s
 
-    cat fb.hg19.chainPanTro3Link.txt 
+    cat fb.hg19.chainPanTro3Link.txt
     #	2760939621 bases of 2897316137 (95.293%) in intersection
 
-    # filter with doRecipBest.pl 
+    # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 panTro3 > rbest.log 2>&1
     # real    50m49.740s
@@ -15062,7 +15062,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-syntenicNet > swap.log 2>&1 &
 #	real    86m49.706s
-    cat fb.panTro3.chainHg19Link.txt 
+    cat fb.panTro3.chainHg19Link.txt
     #	2772816267 bases of 2900529764 (95.597%) in intersection
 
 ############################################################################
@@ -15193,15 +15193,15 @@ ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_37_Aug10.human.genes/AceView.ncbi_3
 
     # Filter out empty lines, lines where the product_id has a stray
     # newline before it, and $chr|Hs# IDs that don't appear liftable.
-    # (Note: the new gff does not have these two cases anymore.) 
+    # (Note: the new gff does not have these two cases anymore.)
     # Add 'chr' prefix to chrom number at field 1
     egrep -h -v '^(| ?product_id.*|..?\|Hs.*)$' AceView.ncbi_37.genes_gff.gff \
     | sed -e 's/^/chr/;' \
       > acembly.gff
     # fixed the chrmito prefix to chrM
     mv acembly.gff acembly.tmp
-    cat acembly.tmp | sed -e 's/^chrmito/chrM/;' > acembly.gff 
-    
+    cat acembly.tmp | sed -e 's/^chrmito/chrM/;' > acembly.gff
+
 
     # Extract annotation classes from original gff:
     cat AceView.ncbi_37.genes_gff.gff | awk  '{print $12}' | sort | uniq
@@ -15307,7 +15307,7 @@ for line in fileinput.input():
             filename = string.replace(filename, ".bed", ".probe.bed")
         filehandle = open(filename, 'w')
     filehandle.write(line)
-        
+
 
 # scripts/mergeAcrossChromosomes.bash (below)
 #!/usr/bin/env bash
@@ -15315,7 +15315,7 @@ for line in fileinput.input():
 
 PATHNAME="/hive/users/cline/Affy/"
 tail -n +2 $PATHNAME/Affy-HuEx-hg19-split-bed/HuEx-1_0-st-v2.hg19.*.$1.bed \
-  |grep -v "==>" > $PATHNAME/mergedBeds/AffyHuEx.$1.bed 
+  |grep -v "==>" > $PATHNAME/mergedBeds/AffyHuEx.$1.bed
 
 
 # scripts/splitByProbesetType.py (below)
@@ -15392,11 +15392,11 @@ for line in bedInput:
 
 
 # 1. Given data from the vendor, one file per chromosome with four types of
-# bed entries per file (one file per chromosome), split them into four bed 
+# bed entries per file (one file per chromosome), split them into four bed
 # files (yielding four bed files per chromosome).
 ls Affy-HuEx-hg19-bed/*bed \
     | awk '{ print "scripts/splitAffyExonBeds.py", $1 }' |bash
- 
+
 # 2. Given a subdirectory with four bed files per chromosome for probeset
 # and probe bed files, merge them into one bed file for probeset data
 # and one bed file per probe data.  From here, we are ignoring the exon
@@ -15485,7 +15485,7 @@ TMPDIR=/scratch/tmp
     ln -s  lastzMelGal1.2011-03-28 lastz.melGal1
 
 
-    #   running the swap 
+    #   running the swap
     mkdir /hive/data/genomes/melGal1/bed/blastz.hg19.swap
     cd /hive/data/genomes/melGal1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -15501,15 +15501,15 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #############################################################################
-# BUILD seudoYale60 TRACK 
+# BUILD seudoYale60 TRACK
 # Rachel built this for Gencode first, Fan adopted for UCSC GB, DONE, 3/31/2011.
 #
 # First, how Rachel built it:
-# YALE PSEUDOPIPE PSEUDOGENE PREDICTIONS BASED ON ENSEMBL 60 
+# YALE PSEUDOPIPE PSEUDOGENE PREDICTIONS BASED ON ENSEMBL 60
 # (hartera, 2011-01-10, DONE)
-# FTP site e-mailed by Suganthi Balasubramanian (suganthi.bala@yale.edu) from 
-# the Gerstein lab. Data is from their PseudoPipe pipeline and it is based on 
-# proteins from Ensembl Build 60 (pseudogene data from December 2010?). 
+# FTP site e-mailed by Suganthi Balasubramanian (suganthi.bala@yale.edu) from
+# the Gerstein lab. Data is from their PseudoPipe pipeline and it is based on
+# proteins from Ensembl Build 60 (pseudogene data from December 2010?).
 
 mkdir -p /hive/groups/gencode/browser/hg19/gencodeYalePseudoBuild60
 cd /hive/groups/gencode/browser/hg19/gencodeYalePseudoBuild60
@@ -15527,7 +15527,7 @@ PolyA   Disablements    Exons   Introns Class   Sequence        Link
 
 # urls are of type:
 # http://tables.pseudogene.org/human60/<ID> so this can be added to the
-# trackDb as for the previous track. 
+# trackDb as for the previous track.
 
 # Get list of haplotype chroms:
 grep _ Human60YalePseudo.txt | awk '{print $2}' | sort | uniq
@@ -15542,8 +15542,8 @@ HSCHR6_MHC_SSTO
 
 # These correspond to the haplotype chroms in GRCh37 (hg19).
 # Convert data to genePred:
-# chromsomomes are 1-22, X, Y, chr17_ctg5_hap1 (HSCHR17_1) and the chr6 
-# haplotypes e.g. chr6_cox_hap1 (HSCHR6_MHC_COX) 
+# chromsomomes are 1-22, X, Y, chr17_ctg5_hap1 (HSCHR17_1) and the chr6
+# haplotypes e.g. chr6_cox_hap1 (HSCHR6_MHC_COX)
 
 cat << '_EOF_' > formatPseudogenesToGenePred
 #!/usr/bin/awk -f
@@ -15556,41 +15556,41 @@ cat << '_EOF_' > formatPseudogenesToGenePred
 # Parse the data lines
 BEGIN {FS="\t"} {OFS="\t"} {
   gsub(/\[/, "", $19);
-  gsub(/\]/, "", $19); 
+  gsub(/\]/, "", $19);
   split($19, exons, ",");
-  # Count the number of start and end coordinates for exons and 
+  # Count the number of start and end coordinates for exons and
   # calculate the number of exons.
   count=(length(exons))/2;
   # Write out genePred. Add chr in front of chrom only if not haplotype.
   if ($2 !~ /HSCHR/) {
-     printf "%s\tchr%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count; 
+     printf "%s\tchr%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count;
   }
   else {
-     printf "%s\t%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count; 
+     printf "%s\t%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count;
   }
   # get list of exon starts, convert from 1-based to 0-based
   for (i=1; i <= length(exons); i+=2) {
-     printf "%d,", exons[i]-1","; 
+     printf "%d,", exons[i]-1",";
   }
   printf "\t";
   # get list of exon ends
   for (i=2; i <= length(exons); i+=2) {
-     printf "%d,", exons[i]","; 
+     printf "%d,", exons[i]",";
   }
-  printf "\n"; 
+  printf "\n";
 }
 '_EOF_'
 
 chmod +x formatPseudogenesToGenePred
 # format the Yale pseudogenes data to genePred.
 ./formatPseudogenesToGenePred Human60YalePseudo.txt \
-    > gencodeYalePseudoBuild60.gp 
+    > gencodeYalePseudoBuild60.gp
 
-# The Genome Browser represents just the haplotype region as a separate 
+# The Genome Browser represents just the haplotype region as a separate
 # "chromosome" whereas the coordinates represent the haplotype region embedded
 # into chr6.
 cp -p /hive/data/genomes/hg19/jkStuff/ensGene.haplotype.lift .
-# The lift file assumes the following chrom names 
+# The lift file assumes the following chrom names
 -69170076       HSCHR4_1        191154276       chr4_ctg9_hap1  590426
 -43384863       HSCHR17_1       81195210        chr17_ctg5_hap1 1680828
 -28696603       HSCHR6_MHC_APD  171115067       chr6_apd_hap1   4622290
@@ -15609,8 +15609,8 @@ liftUp -type=.gp gencodeYalePseudoBuild60HapsLifted.gp \
 wc -l gencode*.gp
 17888 gencodeYalePseudoBuild60.gp
 17888 gencodeYalePseudoBuild60HapsLifted.gp
- 
-# Load table and then check some haplotype regions. See if look plausible. 
+
+# Load table and then check some haplotype regions. See if look plausible.
 # Load the genePred file into hg19
 hgLoadGenePred hg19 gencodeYalePseudoBuild60 \
 gencodeYalePseudoBuild60HapsLifted.gp
@@ -15645,13 +15645,13 @@ hgLoadGenePred hg19 gencodeYalePseudoBuild60 \
 
 # Add trackDb.ra entry for track, add a search and make sure
 # there is a description page, copy over from the gencodeYalePseudoBuild59
-# html. Commit these to SVN. 
-# Add to the html description, the list of 12 IDs of genes that were removed 
+# html. Commit these to SVN.
+# Add to the html description, the list of 12 IDs of genes that were removed
 # due to overlapping exon coordinates. This was also a problem for the Yale
 # pseudogenes based on Ensembl Build 53 and 55 but there were 10 problem IDs
-# for those builds. 
+# for those builds.
 
-# Build class table for colouring pseudogenes by type. 
+# Build class table for colouring pseudogenes by type.
 # copy over class table definition from a previous set of Yale pseudogenes.
 cp -p ../gencodeYalePseudoBuild55/gencodeYalePseudoBuild55Class.sql \
  gencodeYalePseudoBuild60Class.sql
@@ -15668,12 +15668,12 @@ hgsql -e 'select distinct(class) from gencodeYalePseudoBuild60Class;' hg19
 +------------+
 | class      |
 +------------+
-| Ambiguous  | 
-| Processed  | 
-| Duplicated | 
+| Ambiguous  |
+| Processed  |
+| Duplicated |
 +------------+
 
-# Add these classes to the trackDb.ra entry for the geneClasses field and 
+# Add these classes to the trackDb.ra entry for the geneClasses field and
 # to the list of classes with colours.
 
 # Next, how Fan adopted it:
@@ -15727,7 +15727,7 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
 	-bigClusterHub=swarm -qRepeats=windowmaskerSdust > do.log 2>&1 &
     #	real    195m52.809s
-    cat fb.hg19.chainAnoCar2Link.txt 
+    cat fb.hg19.chainAnoCar2Link.txt
     #	102917023 bases of 2897316137 (3.552%) in intersection
 
     #	running the swap - DONE - 2011-04-19
@@ -15739,7 +15739,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-syntenicNet -swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    20m45.683s
-    cat fb.anoCar2.chainHg19Link.txt 
+    cat fb.anoCar2.chainHg19Link.txt
     #	88296392 bases of 1701353770 (5.190%) in intersection
 
 ##############################################################################
@@ -15881,7 +15881,7 @@ hg19.hapLoc.bed >> altSequence.bed
     #   Read 80 elements of size 6 from stdin
     hgLoadBed hg19 altSeqPatches altSeqPatchesP9.tab
     #   Read 82 elements of size 6 from altSeqPatchesP9.tab
- 
+
 ##############################################################################
 #  hg19 - Human - Ensembl Genes version 62  (DONE - 2011-04-22 - hiram)
     # This human gene set need a lot of work to get the name translation
@@ -15955,7 +15955,7 @@ SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY: Cow bosTau6 
+# QUERY: Cow bosTau6
 SEQ2_DIR=/scratch/data/bosTau6/bosTau6.2bit
 SEQ2_LEN=/scratch/data/bosTau6/chrom.sizes
 SEQ2_CHUNK=10000000
@@ -15971,7 +15971,7 @@ TMPDIR=/scratch/tmp
         -noLoadChainSplit \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
-    # real    481m23.263s 
+    # real    481m23.263s
     cat fb.hg19.chainBosTau6Link.txt
     # 1370696434 bases of 2897316137 (47.309%) in intersection
     # Create link
@@ -15979,7 +15979,7 @@ TMPDIR=/scratch/tmp
     ln -s  lastzBosTau6.2011-05-16 lastz.bosTau6
 
 
-    #   running the swap 
+    #   running the swap
     mkdir /hive/data/genomes/bosTau6/bed/blastz.hg19.swap
     cd /hive/data/genomes/bosTau6/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -16005,10 +16005,10 @@ cd omim/05172011
 
 # obtain the following files from OMIM and place them at this subdirectory
 
-       genemap.txt  
-       mim2gene.txt  
+       genemap.txt
+       mim2gene.txt
        mimAV.txt
-       script1.pl  
+       script1.pl
        script2.pl
 
 cat genemap.txt|sed -e 's/|/\t/g' > genemap.tab
@@ -16024,16 +16024,16 @@ hgsql hg19 -e 'load data local infile "mim2gene.txt" into table mim2gene ignore 
 doOmimDisorders hg19 omimDisorderMap.tab
 hgsql hg19 -e "drop table omimDisorderMap"
 hgsql hg19 < ~/kent/src/hg/lib/omimDisorderMap.sql
-hgLoadSqlTab -warn hg19 omimDisorderMap ~/kent/src/hg/lib/omimDisorderMap.sql omimDisorderMap.tab 
+hgLoadSqlTab -warn hg19 omimDisorderMap ~/kent/src/hg/lib/omimDisorderMap.sql omimDisorderMap.tab
 
 # build omimGeneSymbol table
 
 doOmimGeneSymbols hg19 j.out
 cat j.out |sort -u >omimGeneSymbol.tab
-hgLoadSqlTab -warn hg19 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab 
+hgLoadSqlTab -warn hg19 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab
 
 perl ./script1.pl --gene-map-file=genemap.txt >omimPhenotype.tab
-hgLoadSqlTab -warn hg19 omimPhenotype ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab 
+hgLoadSqlTab -warn hg19 omimPhenotype ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab
 
 hgsql hg19 -e 'update omimPhenotype set phenotypeClass = -1 where
 phenotypeClass=0'
@@ -16144,7 +16144,7 @@ hgsql hg19 -e "delete from omimLocation where name='${1}'"
     cp /hive/data/outside/Numts/hg19/*.* .
 
 
-    # split the all_hg19_NumtS_tracks.txt into 3 bed files 
+    # split the all_hg19_NumtS_tracks.txt into 3 bed files
     # numtSAssembled.bed, numtS.bed, an numtSMitochondrion.bed
 
     cat all_hg19_NumtS_tracks.txt | awk ' /^track name/ {print $_}'  > tracks.list
@@ -16157,7 +16157,7 @@ hgsql hg19 -e "delete from omimLocation where name='${1}'"
     # Make /gbdb/ links and load bam
     mkdir /gbdb/hg19/NumtS
     ln -s `pwd`/allNumtS.sorted.bam{,.bai} /gbdb/hg19/NumtS/
-    hgBbiDbLink hg19 bamAllNumtSSorted /gbdb/hg19/NumtS/allNumtS.sorted.bam 
+    hgBbiDbLink hg19 bamAllNumtSSorted /gbdb/hg19/NumtS/allNumtS.sorted.bam
 
     # setup trackDb for hg19
 
@@ -16190,7 +16190,7 @@ mkdir /hive/data/outside/cosmic/20110711
 mkdir /hive/data/genomes/hg19/bed/cosmic/20110711
 cd /hive/data/genomes/hg19/bed/cosmic/20110711
 
-cp -p /hive/data/outside/cosmic/20110711/EnsMutExp_v54_080711.csv . 
+cp -p /hive/data/outside/cosmic/20110711/EnsMutExp_v54_080711.csv .
 
 cat EnsMutExp_v54_080711.csv|sed -e 's/\t//g' |sed -e 's/,/\t/g' |\
 grep -v COSMIC_MUTATION_ID |grep -v 'selected'|grep COSM
@@ -16202,7 +16202,7 @@ hgsql hg19 < ~/kent/src/hg/lib/cosmicRaw.sql
 hgLoadSqlTab hg19 cosmicRaw ~/kent/src/hg/lib/cosmicRaw.sql
 EnsMutExp_v54_080711.tab
 
-# use  grch37_start-1 for our zero based chromStart and 
+# use  grch37_start-1 for our zero based chromStart and
 # conver their chr23 and chr24 to chrX and chrY.
 
 hgsql hg19 -N -e 'select "chr", chromosome, grch37_start-1, grch37_stop,
@@ -16775,7 +16775,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    395m51.626s
-    cat fb.hg19.chainXenTro3Link.txt  
+    cat fb.hg19.chainXenTro3Link.txt
     #	87928753 bases of 2897316137 (3.035%) in intersection
     cd /hive/data/genomes/hg19/bed
     ln -s lastzXenTro3.2011-09-20 lastz.xenTro3
@@ -16789,7 +16789,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    37m7.001s
-    cat fb.xenTro3.chainHg19Link.txt 
+    cat fb.xenTro3.chainHg19Link.txt
     #	90929066 bases of 1358334882 (6.694%) in intersection
 
 ############################################################################
@@ -16815,7 +16815,7 @@ TMPDIR=/scratch/tmp
     # Create geneReviewsRefGene table
     cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsRefGene.sql
 CREATE TABLE geneReviewsRefGene (
-    geneSymbol  varchar(255) not null,   # refSeq gene symbol         
+    geneSymbol  varchar(255) not null,   # refSeq gene symbol
     grShort     varchar(255) not null,   # short name for GeneReviews article
     diseaseID   int unsigned not null,   # Disease ID of the review article
     diseaseName varchar(255) not null,   # Disease name of the review article
@@ -16836,7 +16836,7 @@ CREATE TABLE geneReviewsRefGene (
     #   3729 disease_gene_GR.txt
     #   1111 grData.tab
     #    946 grRefGene.lst
-  
+
     # for each refGen in grRefGene.lst, create a non-overlapping bed row.
     cat grRefGene.lst | while read G
       do
@@ -16853,7 +16853,7 @@ CREATE TABLE geneReviewsRefGene (
     # load the collapsed bed4 file to hg19,
     hgLoadBed hg19 geneReviews geneReviews.tab
 
-    # addGeneReviewToBed.pl will add the geneReviews detail in html format to 
+    # addGeneReviewToBed.pl will add the geneReviews detail in html format to
     # the bed 4 file
     cat << '_EOF_' > $HOME/kent/src/utils/geneReviews/addGeneReviewToBed.pl
 #!/usr/bin/perl
@@ -16895,7 +16895,7 @@ foreach $grBed(@geneReviews) {
       $details .= "-----------------------------------------------------------";
       $details .= "-----------------------------------------------------------";
       $details .= "----------------------------------<BR>";
-      } 
+      }
       $details .= "<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/" . $f5[0] . "\" TARGET=_blank><B>" . $f5[0] . "</B></A>";
       if (length($f5[0]) <= 15) {
         for ($j = 0; $j <  15-length($f5[0]); $j ++ )
@@ -16915,7 +16915,7 @@ foreach $grBed(@geneReviews) {
     # Add geneReview item in html format format as field 5
     $HOME/kent/src/utils/geneReviews//addGeneReviewToBed.pl hg19 > hg19.geneReviews.bed5
 
-    # Convert to bigBed format 
+    # Convert to bigBed format
     cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsBed5.as
 table geneReviewsBed5
 "GeneReviews  bigBed 4 + with extra field for detail page"
@@ -16946,12 +16946,12 @@ table geneReviewsBed5
     #  Image File:Hg19.geneReviews.bb usage:
 
     cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsBB.sql
-# sql to create geneReviewsBB table 
+# sql to create geneReviewsBB table
 DROP TABLE IF EXISTS geneReviewsBB;
 CREATE TABLE geneReviewsBB (
     fileName varchar(255) not null      # geneReviews.bb location (url)
 );
-'_EOF_' 
+'_EOF_'
     # << happy emacs
     hgsql hg19 -e "source $HOME/kent/src/hg/lib/geneReviewsBB.sql;"
     hgsql hg19 -e 'insert into geneReviewsBB values ("http://genomewiki.ucsc.edu/images/b/b9/Hg19.geneReviews.bb");'
@@ -16959,7 +16959,7 @@ CREATE TABLE geneReviewsBB (
 
 ##############################################################################
 # hgPal downloads redone for new knownGene (re-DONE 2012-01-06 braney)
-#   FASTA from 46way for  knownGene, knownCanonical 
+#   FASTA from 46way for  knownGene, knownCanonical
 
     ssh hgwdev
     screen
@@ -17082,7 +17082,7 @@ hgsql hg19 < ~/kent/src/hg/lib/cosmicRaw.sql
 
 hgLoadSqlTab hg19 cosmicRaw ~/kent/src/hg/lib/cosmicRaw.sql UCSCMutExp_v55_090911.tab
 
-# use  grch37_start-1 for our zero based chromStart and 
+# use  grch37_start-1 for our zero based chromStart and
 # conver their chr23 and chr24 to chrX and chrY.
 
 hgsql hg19 -N -e 'select "chr", chromosome, grch37_start-1, grch37_stop, cosmic_mutation_id from cosmicRaw' \
@@ -17134,7 +17134,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    159m46.598s
-    cat fb.hg19.chainGorGor3Link.txt  
+    cat fb.hg19.chainGorGor3Link.txt
     #	2603997992 bases of 2897316137 (89.876%) in intersection
 
     cd /hive/data/genomes/hg19/bed
@@ -17150,7 +17150,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    69m39.685s
-    cat fb.gorGor3.chainHg19Link.txt 
+    cat fb.gorGor3.chainHg19Link.txt
     #	2571797450 bases of 2822760080 (91.109%) in intersection
 
 ############################################################################
@@ -17244,11 +17244,11 @@ TMPDIR=/scratch/tmp
 
     hgLoadBed -bedGraph=4 hg19 iscaPathLossCum iscaPathLoss.bedGraph
 #Read 3567 elements of size 4 from iscaPathLoss.bedGraph
- 
+
     # End of track build instructions; historical notes follow.
 
   # trackDb (these values from original load, not update)
-  # get 2 stdDev value to set default maxHeightPixels 
+  # get 2 stdDev value to set default maxHeightPixels
     # use average of: median + 2 SD - would mean be better?
     # use same viewLimit for both:  average the two
     # note that chr21 (Down's) is overrepresented in the dataset
@@ -17257,18 +17257,18 @@ TMPDIR=/scratch/tmp
 #    average 20.970921
 #    max 105.000000
 #    standard deviation 25.652712
-    median + 2SD = 60 
+    median + 2SD = 60
 
     ave  hg19.iscaPathLoss.bedGraph -col=4
 #    median 6.000000
 #    average 15.998146
 #    max 171.000000
 #    standard deviation 23.526095
-    median + 2SD = 53 
- 
-  # move some settings down to existing subtracks:  
-       type gvf 
-       noScoreFilter . 
+    median + 2SD = 53
+
+  # move some settings down to existing subtracks:
+       type gvf
+       noScoreFilter .
   # add settings to parent track:
       type bed
       noInherit on
@@ -17306,7 +17306,7 @@ TMPDIR=/scratch/tmp
 #!/usr/bin/perl
 # Create expData table form a microarray bed15 file
 # for further analysis
-# usage: ./createExpDataByCellType.pl <bed15File> 
+# usage: ./createExpDataByCellType.pl <bed15File>
 use strict;
 use warnings;
 my $line;
@@ -17348,7 +17348,7 @@ for($i = 0; $i < scalar(@cellType); $i++) {
      chomp($line);
      @bF = split('\t', $line);
      printf(FHOUT "%s\t%s\t%s\t%s\t",
-                  $bF[0],$bF[1],$bF[2],$bF[3]); 
+                  $bF[0],$bF[1],$bF[2],$bF[3]);
      $bF[14] =~ s/,$//;
      $expScores = $bF[14];
      @expScore = split(",",$expScores);
@@ -17367,7 +17367,7 @@ for($i = 0; $i < scalar(@cellType); $i++) {
        } else {
          $fScore = sprintf("%3d",$tScore);
        }
-     printf(FHOUT "%s\t%s\t%s\n",$fScore, $expScore[$i],$sLog2);     
+     printf(FHOUT "%s\t%s\t%s\n",$fScore, $expScore[$i],$sLog2);
   } # end while
   close FHIN;
   close FHOUT;
@@ -17375,7 +17375,7 @@ for($i = 0; $i < scalar(@cellType); $i++) {
 '_EOF_'
     # << happy emacs
     chmod +x createExpDataByCellType.pl
-    ./createExpDataByCellType.pl Cabili_etal_BodyMapLincRNAs.bed 
+    ./createExpDataByCellType.pl Cabili_etal_BodyMapLincRNAs.bed
 
     cat << '_EOF_' > deleteCTTables.sh
 #!/bin/sh
@@ -17393,7 +17393,7 @@ done
     # << happy emacs
     chmod +x deleteCTTables.sh
     ./deleteCTTables.sh
-   
+
     cat << '_EOF_' > lincRNAsCTTemp.sql
 CREATE TABLE lincRNAsCTTemp (
     chrom varchar(255) not null,        # Human chromosome or FPC contig
@@ -17721,7 +17721,7 @@ EOF
       hg19 snp135OrthoPt3Pa2Rm2 snp135OrthoPt3Pa2Rm2.bed
 #Loaded 43184090 elements of size 22
     # Cleanup:
-    rm -r run*/split tmp.txt *.orthoGlom.txt snp135Simple.bed 
+    rm -r run*/split tmp.txt *.orthoGlom.txt snp135Simple.bed
     gzip snp135ExcludeIds.txt snp135ForLiftOver.bed &
 
 
@@ -17872,12 +17872,12 @@ EOF
 # SIB Transcriptome (DONE 2011-12-02 Chin)
 
     # Create working directory and download data from where Christian
-    # Iseli (Christian.Iseli at licr.org) put it, and unpack. 
+    # Iseli (Christian.Iseli at licr.org) put it, and unpack.
     mkdir -p /hive/data/outside/lirc
     cd /hive/data/outside/lirc
-    wget --timestamping ftp://ftp.licr.org/pub/hg19/HTr.gtf.gz 
-    wget --timestamping ftp://ftp.licr.org/pub/hg19/txg.tar.gz 
- 
+    wget --timestamping ftp://ftp.licr.org/pub/hg19/HTr.gtf.gz
+    wget --timestamping ftp://ftp.licr.org/pub/hg19/txg.tar.gz
+
     cd /hive/data/genomes/hg19/bed/
     mkdir sibTranscriptome
     cd sibTranscriptome
@@ -17928,7 +17928,7 @@ cd 052012
 wget -O hgnc.txt "http://www.genenames.org/cgi-bin/hgnc_downloads.cgi?title=HGNC+output+data&hgnc_dbtag=on&preset=all&status=Approved&status=Entry+Withdrawn&status_opt=2&level=pri&=on&where=&order_by=gd_app_sym_sort&limit=&format=text&submit=submit&.cgifields=&.cgifields=level&.cgifields=chr&.cgifields=status&.cgifields=hgnc_dbtag"
 
 tail -n +2 hgnc.txt |grep -v withdrawn \
- | hgLoadSqlTab hg19 hgnc ~/kent/src/hg/lib/hgnc.sql stdin       
+ | hgLoadSqlTab hg19 hgnc ~/kent/src/hg/lib/hgnc.sql stdin
 #########################################################################
 # LASTZ Cow BosTau7 (DONE - 2012-01-23 - Chin)
     mkdir /hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23
@@ -17945,13 +17945,13 @@ SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY: Cow bosTau7 
+# QUERY: Cow bosTau7
 SEQ2_DIR=/scratch/data/bosTau7/bosTau7.2bit
 SEQ2_LEN=/scratch/data/bosTau7/chrom.sizes
 SEQ2_CHUNK=10000000
-SEQ2_LAP=0    
+SEQ2_LAP=0
 
-    
+
 BASE=/hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23
 TMPDIR=/scratch/tmp
 '_EOF_'
@@ -18019,17 +18019,17 @@ cd /hive/data/genomes/hg19/bed/polyA
 mkdir /hive/data/genomes/{hg18,hg19,canFam2,mm9,rn4,rheMac2}/bed/polyASeq
 mkdir -p /gbdb/{hg18,hg19,canFam2,mm9,rn4,rheMac2}/bbi
 for set in `ls -1 | grep -v orig | grep -v table`; do
-  suff=`echo $set | sed 's/^[a-z]\+_//'`; 
+  suff=`echo $set | sed 's/^[a-z]\+_//'`;
   db=`echo $suff | sed 's/\_.*//'`;
   tiss=`echo $suff | sed 's/.\+\_//; s/^[a-z]/\U&/; s/-[a-z]/\U&/; s/-//'`;
-  Db=`echo $db | sed 's/^[a-z]/\U&/'`; 
+  Db=`echo $db | sed 's/^[a-z]/\U&/'`;
   printf "%s\t%s\t%s\t%s\t%s\n" $set $db $Db $tiss $suff
 done > table.info
 for set in `ls -1 | grep -v orig | grep -v table`; do
-  suff=`echo $set | sed 's/^[a-z]\+_//'`; 
+  suff=`echo $set | sed 's/^[a-z]\+_//'`;
   db=`echo $suff | sed 's/\_.*//'`;
   tiss=`echo $suff | sed 's/.\+\_//; s/^[a-z]/\U&/; s/-[a-z]/\U&/; s/-//'`;
-  Db=`echo $db | sed 's/^[a-z]/\U&/'`; 
+  Db=`echo $db | sed 's/^[a-z]/\U&/'`;
   fwdTable=polyASeqSites${tiss}Fwd
   revTable=polyASeqSites${tiss}Rev
   fwdBg=/hive/data/genomes/${db}/bed/polyASeq/${fwdTable}.bedGraph
@@ -18047,9 +18047,9 @@ for set in `ls -1 | grep -v orig | grep -v table`; do
 done
 # silly loop to take care of the majority of the trackDb.
 # the rest copy/paste
-cat table.info | while read -a line; do 
+cat table.info | while read -a line; do
   db=${line[1]}
-  for Strand in Fwd Rev; do 
+  for Strand in Fwd Rev; do
      strand=`echo $Strand | tr [:upper:] [:lower:]`
      bg=${line[0]}/polyaseq_sites_${strand}_strand.bedgraph
      tiss=${line[3]}
@@ -18066,10 +18066,10 @@ cat table.info | while read -a line; do
      echo "        color 153,51,51"
      else
      echo "        color 0,0,0"
-     fi 
+     fi
      echo "        type bigWig "$min" "$max
      echo
-  done >> ${db}.ra 
+  done >> ${db}.ra
 done
 
 ##############################################################################
@@ -18216,7 +18216,7 @@ export PATH=/cluster/home/max/bin/x86_64:/cluster/bin/x86_64:/cluster/home/max/s
 # pmc
 cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
 pubBlat init /hive/data/inside/literature/blat/pmc/ /hive/data/inside/literature/text/pmc
-ssh swarm 
+ssh swarm
 cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
 pubBlat steps:annot-tables
 exit
@@ -19418,7 +19418,7 @@ my $tsvPath = $ARGV[0];
 chomp $tsvPath;
 $tsvPath =~ m/^(InDels|SNCs)\/Genome_VEP(|(_genic(_ccds)?_(3utr|5utr|nonsyn_grantham|frameshift_coding|inframe_nonsyn|splice|syn))|(_regul(_motif)?(_highinfo)?))_formatted_(fixed|highfreq)/ || die;
 my ($vType, $ccds, $gType, $reg, $regMo, $regHi, $fType) = ($1, $4 || "", $5 || "", $6 || "",
-                                                            $7 || "", $8 || "", $9 || ""); 
+                                                            $7 || "", $8 || "", $9 || "");
 # Reformat file name components: _ to inital uppercase, etc.
 $vType =~ s/s$//;
 $ccds =~ s/_(\w)/\u$1/g;
@@ -19837,7 +19837,7 @@ time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
     cp /hive/groups/encode/dcc/data/gencodeV13/Makefile .
     # edit to set version:
     ver = 14
-   
+
     # on code in the CCDS subversion tree:
     #   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
     # and markd's python library (it will be moved to the hausslerlab
@@ -20127,7 +20127,7 @@ TMPDIR=/scratch/tmp
         -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         > swap.log 2>&1 &
-    #   real   138m48s  
+    #   real   138m48s
     cat fb.nomLeu3.chainHg19Link.txt
     #   2479386532 bases of 2756609047 (89.943%) in intersection
 
@@ -20281,11 +20281,11 @@ TMPDIR=/scratch/tmp
     mkdir -p data
     cp /cluster/home/markd/compbio/ccds/branches/transSupV15.1/modules/gencodeTransSupport/exprs/classDev/runs/2013-03-28/results/gencode.v15.transcriptionSupportLevel.{tab,tsv} data/
 
-    # create Makefile from previous one.  
+    # create Makefile from previous one.
     cp ../gencodeV14/Makefile .
     # edit to set version:
     ver = 15
-   
+
     # on code in the CCDS subversion tree:
     #   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
     # and markd's python library may need to update
@@ -20476,12 +20476,12 @@ download.sh && check.sh && load.sh
 
 
 ############################################################################
-# RETROPOSED GENES ucscRetro track VERSION 5 
+# RETROPOSED GENES ucscRetro track VERSION 5
 # (2013-02-28 - 2013-04-18, baertsch,hartera DONE)
 mkdir -p /hive/hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228
 cd /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228
 
-mkdir -p /hive/data/genomes/hg19/bed/retro/ 
+mkdir -p /hive/data/genomes/hg19/bed/retro/
 cd /hive/groups/gencode/pseudogenes/retroFinder/hg19.20130228
 cat << '_EOF_' > DEF
 
@@ -20520,7 +20520,7 @@ RMSK=rmsk
 NET1=netMm10
 NET2=netCanFam3
 NET3=netRheMac3
-# these two nes determine which retros are classified as ancient, use two farthest nets 
+# these two nes determine which retros are classified as ancient, use two farthest nets
 ANCIENT1=netMm10
 ANCIENT2=netCanFam3
 GENE1=knownGene
@@ -20541,12 +20541,12 @@ SPLITBYAGE=$SCRIPT/splitRetrosByAge
 PDB=proteins121210
 ARRAY=gnfAtlas2
 AFFYPROBE="affyU133A,affyGnf1h"
-ARRAYMEDIAN=hgFixed.gnfHumanAtlas2Median 
+ARRAYMEDIAN=hgFixed.gnfHumanAtlas2Median
 ARRAYRATIO=hgFixed.gnfHumanAtlas2AllRatio
-ARRAYABS=hgFixed.gnfHumanAtlas2All   
-ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps 
+ARRAYABS=hgFixed.gnfHumanAtlas2All
+ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps
 ARRAYEXPALL=hgFixed.gnfHumanAtlas2AllExps
-ARRAYLOOKUP=knownToGnfAtlas2 
+ARRAYLOOKUP=knownToGnfAtlas2
 ARRAYPSLS="/hive/data/genomes/hg19/bed/geneAtlas2/affyU133A.psl /hive/data/genomes/hg19/bed/geneAtlas2/affyGnf1h.psl"
 '_EOF_'
     # << happy emacs
@@ -20641,11 +20641,11 @@ hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
     mkdir -p data
     cp /cluster/home/markd/compbio/ccds/branches/transSupV16.1/modules/gencodeTransSupport/exprs/classDev/runs/2013-06-16/results/gencode.v16.transcriptionSupportLevel.{tab,tsv} data/
 
-    # create Makefile from previous one.  
+    # create Makefile from previous one.
     cp ../gencodeV15/Makefile .
     # edit to set version:
     ver = 16
-   
+
     # on code in the CCDS subversion tree:
     #   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
     # and markd's python library may need to update
@@ -20672,10 +20672,12 @@ hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
     cp human/hg19/wgEncodeGencodeV15.html human/hg19/wgEncodeGencodeV16.html
 
     # edit these plus human/hg19/trackDb.wgEncode.ra
-    # set priorities in wgEncodeGencodeV16.ra in reverse order with previous
-    # tracks so newest shows up first
-    # priority - set to previous version priority minus 0.001
-    # searchPriority - set each to previous -0.001 
+    # - set priorities in wgEncodeGencodeV16.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous -0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
 
     ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
     ### track handler for this version of gencode:
@@ -20685,10 +20687,440 @@ hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
     make cmpRelease
 
     # update all.joiner and validate
-    cd kent/src/hg/makeDb/schema
-
     # look for the last section `begin Gencode V??' in all.joiner
     # and copy and update version
-
+    # repeat this until happy, editing minCheck as needed
+    for tbl in $(hgsql -Ne 'show tables like "wgEncodeGencode%V16"' hg19) ; do runJoiner.csh hg19 $tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >&check/joiner.out
 
 ############################################################################
+# LASTZ Tenrec EchTel2 (DONE - 2013-06-12 - Hiram)
+    screen -S hg19EchTel2  # use screen to manage the long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzEchTel2.2013-06-12
+    cd /hive/data/genomes/hg19/bed/lastzEchTel2.2013-06-12
+
+    cat << '_EOF_' > DEF
+# Human vs. Tenrec
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Tenrec
+SEQ2_DIR=/hive/data/genomes/echTel2/echTel2.2bit
+SEQ2_LEN=/hive/data/genomes/echTel2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzEchTel2.2013-06-12
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    # real    917m59.931s
+    # XXX failed during chaining on chr19, finish the one job on hgwdev
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=chainMerge -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > chainMerge.log 2>&1 &
+XXX - running - Mon Jun 17 22:25:34 PDT 2013
+
+    cat fb.hg19.chainEchTel2Link.txt
+    #	669856841 bases of 2897316137 (23.120%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzEchTel2.2013-06-12 lastz.echTel2
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/hg19/bed/lastzEchTel2.2013-06-12
+    time doRecipBest.pl hg19 echTel2 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1201m39.275s
+
+    # and, for the swap
+    mkdir /hive/data/genomes/echTel2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/echTel2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzEchTel2.2013-06-12/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    269m52.619s
+    cat fb.echTel2.chainMm10Link.txt
+    #	298082139 bases of 2111581369 (14.117%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/echTel2/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+##############################################################################
+# LASTZ Pika OchPri3 (DONE - 2013-06-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzOchPri3.2013-06-17
+    cd /hive/data/genomes/hg19/bed/lastzOchPri3.2013-06-17
+
+    cat << '_EOF_' > DEF
+# Human vs. Pika
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Pika
+SEQ2_DIR=/hive/data/genomes/ochPri3/ochPri3.2bit
+SEQ2_LEN=/hive/data/genomes/ochPri3/chrom.sizes
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzOchPri3.2013-06-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running - Mon Jun 17 10:05:41 PDT 2013
+    #	real    1057m2.114s
+XXX - missing database ochPri3 ! - need to build that browser
+    cat fb.hg19.chainOchPri3Link.txt
+    #	804516397 bases of 2897316137 (27.768%) in intersection
+    time doRecipBest.pl -buildDir=`pwd` hg19 ochPri3 > rbest.log 2>&1
+    #	real    224m47.979s
+
+##############################################################################
+# LASTZ Sheep OviAri3 (DONE - 2013-06-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzOviAri3.2013-06-17
+    cd /hive/data/genomes/hg19/bed/lastzOviAri3.2013-06-17
+
+    cat << '_EOF_' > DEF
+# Human vs. Sheep
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Sheep
+SEQ2_DIR=/hive/data/genomes/oviAri3/oviAri3.2bit
+SEQ2_LEN=/hive/data/genomes/oviAri3/chrom.sizes
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzOviAri3.2013-06-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    1303m1.839s
+XXX - broken while chaining chr19, finish manually Tue Jun 18 12:41:58 PDT 2013
+    cat fb.hg19.chainOviAri3Link.txt
+    #	804516397 bases of 2897316137 (27.768%) in intersection
+    time doRecipBest.pl -buildDir=`pwd` hg19 oviAri3 > rbest.log 2>&1
+    #	real    224m47.979s
+
+##############################################################################
+# LASTZ Shrew SorAra2 (DONE - 2013-06-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzSorAra2.2013-06-17
+    cd /hive/data/genomes/hg19/bed/lastzSorAra2.2013-06-17
+
+    cat << '_EOF_' > DEF
+# Human vs. Shrew
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Shrew
+SEQ2_DIR=/hive/data/genomes/sorAra2/sorAra2.2bit
+SEQ2_LEN=/hive/data/genomes/sorAra2/chrom.sizes
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=40
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzSorAra2.2013-06-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    # real   1671m27.543s
+    # stuck in chaining chr19 - running lastOne manually on hgwdev
+    # real    49m31.906s
+    # then continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-continue=chainMerge `pwd`/DEF \
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> chainMerge.log 2>&1 &
+    #   Elapsed time: 87m15s
+    cat fb.hg19.chainSorAra2Link.txt
+    #	802006172 bases of 2897316137 (27.681%) in intersection
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 sorAra2 > rbest.log 2>&1
+XXX - running - Wed Jun 19 09:24:50 PDT 2013
+
+    # and for the swap:
+    mkdir /hive/data/genomes/sorAra2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/sorAra2/bed/blastz.hg19.swap
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+       /hive/data/genomes/hg19/bed/lastzSorAra2.2013-06-17/DEF \
+       -swap -syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+       -bigClusterHub=swarm -chainMinScore=3000 -chainLinearGap=medium \
+       > swap.log 2>&1
+XXX - running - Wed Jun 19 09:26:40 PDT 2013
+    # real    39m53.463s
+    cat fb.sorAra2.chainMm10Link.txt
+    #  343760052 bases of 2192103426 (15.682%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/sorAra2/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+##############################################################################
+# LASTZ Zebra finch TaeGut2 (DONE - 2013-06-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzTaeGut2.2013-06-17
+    cd /hive/data/genomes/hg19/bed/lastzTaeGut2.2013-06-17
+
+    cat << '_EOF_' > DEF
+# Human vs. Zebra finch
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+# distant settings
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Zebra finch
+SEQ2_DIR=/hive/data/genomes/taeGut2/taeGut2.2bit
+SEQ2_LEN=/hive/data/genomes/taeGut2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzTaeGut2.2013-06-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #   real    811m51.660s
+
+    cat fb.hg19.chainTaeGut2Link.txt
+    #	154165978 bases of 2897316137 (5.321%) in intersection
+    # finished download step manually to get the liftOverChain in hgcentraltest
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-continue=cleanup `pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> cleanup.log 2>&1 &
+XXX - running - Wed Jun 19 09:34:28 PDT 2013
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 taeGut2 > rbest.log 2>&1
+    #    real    286m17.228s
+
+    # and, for the swap
+    mkdir /hive/data/genomes/taeGut2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/taeGut2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzTaeGut2.2013-06-17/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    42m46.344s
+
+    cat fb.taeGut2.chainHg19Link.txt
+    #	142016629 bases of 1222864691 (11.613%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/taeGut2/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+##############################################################################
+# LASTZ Shrew VicPac2 (DONE - 2013-06-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzVicPac2.2013-06-17
+    cd /hive/data/genomes/hg19/bed/lastzVicPac2.2013-06-17
+
+    cat << '_EOF_' > DEF
+# Human vs. Alpaca
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Alpaca
+SEQ2_DIR=/hive/data/genomes/vicPac2/vicPac2.2bit
+SEQ2_LEN=/hive/data/genomes/vicPac2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=800
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzVicPac2.2013-06-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    1130m42.615s
+    cat fb.hg19.chainVicPac2Link.txt
+    #	1454261693 bases of 2897316137 (50.193%) in intersection
+    # manually finished the 'download' step after fixing bugs in
+    # the hgAddLiftOverChain, then continue:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-continue=cleanup `pwd`/DEF \
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> cleanup.log 2>&1 &
+    #   Elapsed time: 32m56s
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 vicPac2 > rbest.log 2>&1
+    #	real    447m22.629s
+
+    # and, for the swap
+    mkdir /hive/data/genomes/vicPac2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/vicPac2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzVicPac2.2013-06-17/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    206m52.132s
+    cat fb.vicPac2.chainHg19Link.txt
+    #	1428125689 bases of 2078582856 (68.707%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/vicPac2/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+##############################################################################
+2013-06-19: import of UCSC GENCODE group processing of GENCODE V17 (markd)
+    # Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
+    # (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
+    # GENCODE mitochondrial sequences are lifted to UCSC chrM.
+    # Thus is the first release to include haplotype regions
+
+    # download files
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV17/data
+    cd /hive/data/genomes/hg19/bed/gencodeV17
+
+    # download gencode release
+    cd data
+    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/release_17
+    mv ftp.sanger.ac.uk/pub/gencode/release_17 .
+    rm -rf ftp.sanger.ac.uk/
+
+    cd /hive/data/genomes/hg19/bed/gencodeV17
+
+    # obtain transcription support level analysis from UCSC GENCODE group (markd/rachel)
+    mkdir -p data
+    cp /cluster/home/markd/compbio/ccds/branches/transSupV17.1/modules/gencodeTransSupport/exprs/classDev/runs/2013-06-19/results/gencode.v17.transcriptionSupportLevel.{tab,tsv} data/
+
+    # create Makefile from previous one.
+    cp ../gencodeV16/Makefile .
+    # edit to set version:
+    ver = 17
+
+    # on code in the CCDS subversion tree:
+    #   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
+    # and markd's python library may need to update
+        ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
+    # to add new biotypes, use this command to verify and update as needed
+    # be sure to do a make in ccds2/modules/gencode
+    make checkAttrs
+
+    # build and load tables
+    (time nice make -j 10) >&build.out&
+
+    # compare tables from previous release to see if number chnaged made
+    # sense.
+        make cmpRelease
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsV17 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg19/wgEncodeGencodeV16.ra human/hg19/wgEncodeGencodeV17.ra
+    cp human/hg19/wgEncodeGencodeV16.html human/hg19/wgEncodeGencodeV17.html
+
+    # edit these plus human/hg19/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV17.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous -0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+
+    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
+    ### track handler for this version of gencode:
+    registerTrackHandler("wgEncodeGencodeV17", gencodeGeneMethods);
+
+    # sanity check number of rows in each table
+    make cmpRelease
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    for tbl in $(hgsql -Ne 'show tables like "wgEncodeGencode%V17"' hg19) ; do runJoiner.csh hg19 $tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >&check/joiner.out
+
+##############################################################################

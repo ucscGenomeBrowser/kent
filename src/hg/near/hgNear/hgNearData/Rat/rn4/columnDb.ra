@@ -10,7 +10,7 @@ visibility on
 priority 2.05
 itemUrl http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=%s
 type acc
-type lookup rgdGene2 name substring(name,5)
+type lookup rgdGene2 name name
 search exact
 
 name proteinName

@@ -819,7 +819,7 @@ if (gotResults)
     {
     flushCustomTracks();
     initGroupsTracksTables();
-    doMainPage(conn);
+    doMainPage(conn, FALSE);
     }
 }
 

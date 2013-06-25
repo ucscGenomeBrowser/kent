@@ -242,7 +242,7 @@ if (isSplit)
 
 if (chainId == -1)
     sqlDyStringPrintf(query, 
-	"select chainId,tStart,tEnd,qStart from %sLink %s where ",
+	"select chainId,tStart,tEnd,qStart from %sLink %-s where ",
 	fullName, force);
 else
     sqlDyStringPrintf(query, 

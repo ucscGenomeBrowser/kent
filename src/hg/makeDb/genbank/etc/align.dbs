@@ -2,7 +2,9 @@
 # genome databases to be aligned
 # Please keep in alphabetical for easy comparisons
 ##
+CHM1
 ailMel1
+allMis1
 anoCar1
 anoCar2
 anoGam1
@@ -119,6 +121,7 @@ oryLat1
 oryLat2
 otoGar3
 oviAri1
+oviAri3
 panPan1
 panTro1
 panTro2
@@ -158,6 +161,7 @@ triMan1
 tupBel1
 turTru2
 vicPac1
+vicPac2
 xenTro1
 xenTro2
 xenTro3
