@@ -2125,6 +2125,12 @@ identifier knownGeneId dependency
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
 
+identifier knownGeneOld6Id dependency
+"Previous UCSC Gene build"
+    $kgDb.knownGeneOld6.name
+    $kgDb.k65ToKg7.oldId full
+    $kgDb.kgXrefOld6.kgID full
+
 identifier knownGeneOld5Id dependency
 "Previous UCSC Gene build"
     $kgDb.knownGeneOld5.name
