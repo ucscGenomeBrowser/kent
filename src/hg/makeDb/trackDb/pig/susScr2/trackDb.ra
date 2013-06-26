@@ -69,4 +69,27 @@ xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex [A-Z57][-A-Z0-9_]+
 
+searchTable numtSMitochondrion
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex SS_NumtS_.*
+
+searchTable numtS
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex SS_NumtS_.*
+
+searchTable numtSAssembled
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex SS_NumtS_.*
 
