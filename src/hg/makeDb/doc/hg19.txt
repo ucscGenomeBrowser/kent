@@ -18704,6 +18704,39 @@ EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue bigJoin \
       >>& do.log & tail -f do.log
 
+    # NOTE FOR NEXT TIME - 6/26/13
+    # In MLQ #, a user reported missing SNP IDs and I suspect that some of the
+    # losses might have something to do with IDs mapped to patch contigs losing
+    # the primary reference contigs.  There are ~2500 rs's in the first SNPContigLoc
+    # that have patch, but not primary mappings.  Next time do this early in the
+    # process in case they haven't fixed they pipeline:
+    # Look for reference assembly mappings that may have been lost due to patch mappings (?)
+    cd /hive/data/outside/dbSNP/137/human/data
+    # Make lists of primary and patch contig IDs, prefixed by "^" because we'll grep
+    # for those words at the beginning of lines in the next step.
+    zcat b137_ContigInfo.bcp.gz | g GRCh37 | g -v PATCHES \
+    | cut -f 1 | sed -re 's/^/^/' \
+      > primaryContigIds.txt
+    zcat b137_ContigInfo.bcp.gz | g -w PATCHES \
+    | cut -f 1 | sed -re 's/^/^/' \
+      > patchContigIds.txt
+    # Make lists of SNPs mapped to primary contigs and patch contigs.
+    # Put contig IDs first because we're grepping to find them at the beginning of the line.
+    zcat b137_SNPContigLoc.orig.bcp.gz | awk '{print $3, $2;}' > contigIdsAndRsIds.txt
+    grep -wf primaryContigIds.txt contigIdsAndRsIds.txt > primaryContigsAndRsIds.txt
+    grep -wf patchContigIds.txt contigIdsAndRsIds.txt > patchContigsAndRsIds.txt
+    # Now trim to keep just rs IDs:
+    awk '{print $2;}' primaryContigsAndRsIds.txt | uniq > rsIdsOnPrimary.txt
+    awk '{print $2;}' patchContigsAndRsIds.txt | uniq > rsIdsOnPatches.txt
+    # Compare to find rs IDs mapped to patch contigs but not to primary contigs:
+    sort rsIdsOnPrimary.txt > rsIdsOnPrimary.alphaSort.txt
+    sort rsIdsOnPatches.txt > rsIdsOnPatches.alphaSort.txt
+    comm -13 rsIdsOnPrimary.alphaSort.txt rsIdsOnPatches.alphaSort.txt \
+    | sort -nu \
+      > rsIdsOnPatchesNotPrimary.txt
+    wc -l rsIdsOnPatchesNotPrimary.txt
+#2566 rsIdsOnPatchesNotPrimary.txt
+
 
 #############################################################################
 # FILTER SNP137 (DONE 11/10/12 angie)
