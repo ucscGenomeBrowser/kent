@@ -2784,8 +2784,6 @@ while((c = *s++) != 0)
     {
     if (disAllowed[c])
 	{
-	fprintf(stderr, "character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
-
 	// DEBUG REMOVE Temporary for trying to track down some weird error 
 	//  because the stackdump should appear but does not.
 	//dumpStack("character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
@@ -2793,7 +2791,16 @@ while((c = *s++) != 0)
 	// TODO for some reason the warn stack is messed up sometimes very eary. -- happening in hgTables position search on brca
 	//warn("character %c disallowed in sql string part %s", c, sOriginal);
 
-	return FALSE;  // might want to look at hg.conf settings and if debugging, show details.
+	// DEBUG REMOVE GALT 
+	// just using this as a work-around
+	// until the problem with early errors and warn/abort stacks has been fixed.
+	char *noSqlInjLevel = cfgOption("noSqlInj.level");
+	if (noSqlInjLevel && !sameString(noSqlInjLevel, "ignore"))
+	    {
+    	    fprintf(stderr, "character %c disallowed in sql string part %s\n", c, sOriginal);  
+	    }
+
+	return FALSE;
 	}
     }
 return TRUE;
