@@ -2784,7 +2784,7 @@ while((c = *s++) != 0)
     {
     if (disAllowed[c])
 	{
-	verbose(1,"character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
+	fprintf(stderr, "character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
 
 	// DEBUG REMOVE Temporary for trying to track down some weird error 
 	//  because the stackdump should appear but does not.
@@ -3188,31 +3188,24 @@ while (i < formatLen)
     ++i;	    
     }
 
-verbose(2, "format=[%s]\nnewFormat=[%s]\n", format, newFormat); // DEBUG REMOVE
-
 int sz = 0; 
 if (escStringsCount > 0)
     {
-    verbose(2, "newFormatSize=%d escStringsSize=%d \n", newFormatSize, escStringsSize); // DEBUG REMOVE
     int tempSize = bufSize + 2*escStringsCount;  // if it won't fit in this it will never fit.
-    verbose(2, "trying tempSize=%d\n", tempSize); // DEBUG REMOVE
     char *tempBuf = needMem(tempSize);
     sz = vsnprintf(tempBuf, tempSize, newFormat, orig_args);
     /* note that some versions return -1 if too small */
     if (sz != -1 && sz + 1 <= tempSize)
 	{
-	verbose(2, "tempBuf=[%s] tempSize=%d strlen=%d sz=%d\n", tempBuf, tempSize, (int)strlen(tempBuf), sz); // DEBUG REMOVE
 	// unfortunately we have to copy the string 1 more time unless we want
 	// to force the user to allocate extra "safety space" for mysql_escape.
 	int tempSize2 = sz + 1 + escStringsSize;  // handle worst-case
 	char *tempBuf2 = needMem(tempSize2);
 	sz = sqlEscapeAllStrings(tempBuf2, tempBuf, tempSize2, escPunc);
-	verbose(2, "sz after sqlEscapeAllStrings=%d tempSize2=%d final bufSize=%d\n", sz, tempSize2, bufSize); // DEBUG REMOVE
 	if (sz + 1 > tempSize2)
 	    errAbort("unexpected error in vaSqlSafefNoAbort: tempBuf2 overflowed. tempSize2=%d sz=%d", tempSize, sz); 
 	if (sz + 1 <= bufSize) // NO buffer overflow
 	    {
-	    verbose(2, "tempBuf2=[%s]\n", tempBuf2); // DEBUG REMOVE
 	    // copy string to its final destination.
 	    memmove(buffer, tempBuf2, sz+1); // +1 for terminating 0;
 	    }
