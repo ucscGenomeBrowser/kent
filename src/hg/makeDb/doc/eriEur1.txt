@@ -335,3 +335,23 @@ eriEur1.perChromTables = no
     hgsql qapushq < eriEur1.sql
 
 ############################################################################
+# construct liftOver to eriEur2 (DONE - 2013-06-18 - Hiram)
+    screen -S eriEur2	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/eriEur1/bed/blat.eriEur2.2013-06-18
+    cd /hive/data/genomes/eriEur1/bed/blat.eriEur2.2013-06-18
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/eriEur1/eriEur1.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev eriEur1 eriEur2
+    #   real    0m1.838s
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/eriEur1/eriEur1.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev eriEur1 eriEur2 > do.log 2>&1
+    #	real    4518m56.098s
+
+    # verify this file exists:
+    #	/gbdb/eriEur1/liftOver/eriEur1ToEriEur2.over.chain.gz
+    # and try out the conversion on genome-test from eriEur1 to eriEur2
+
+############################################################################
