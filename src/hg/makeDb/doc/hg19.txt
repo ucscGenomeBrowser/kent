@@ -21178,7 +21178,7 @@ TMPDIR=/scratch/tmp
     for tbl in $(hgsql -Ne 'show tables like "wgEncodeGencode%V17"' hg19) ; do runJoiner.csh hg19 $tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >&check/joiner.out
 
 ##############################################################################
-# LASTZ Chicken ZonAlb1 (DONE - 2013-06-26 - Hiram)
+# LASTZ White-throated sparrow ZonAlb1 (DONE - 2013-06-26 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzZonAlb1.2013-06-26
     cd /hive/data/genomes/hg19/bed/lastzZonAlb1.2013-06-26
 
@@ -21249,6 +21249,337 @@ TMPDIR=/scratch/tmp
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/zonAlb1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# LASTZ Saker falcon falChe1 (DONE - 2013-06-27 - Hiram)
+    screen -S falChe1    # screen to manage this job
+    mkdir /hive/data/genomes/hg19/bed/lastzFalChe1.2013-06-27
+    cd /hive/data/genomes/hg19/bed/lastzFalChe1.2013-06-27
+
+    cat << '_EOF_' > DEF
+# human vs Saker falcon
+# distant settings for human-aves alignment
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Saker falcon
+SEQ2_DIR=/hive/data/genomes/falChe1/falChe1.2bit
+SEQ2_LEN=/hive/data/genomes/falChe1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzFalChe1.2013-06-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+XXX - running - Thu Jun 27 13:58:34 PDT 2013
+    #  real    100m7.452s
+
+    cat fb.hg19.chainFalChe1Link.txt 2>&1
+    #   100700835 bases of 2897316137 (3.476%) in intersection
+
+    # good to have recip best here
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+          hg19 falChe1 > rbest.log 2>&1 &
+    #  real    100m9.728s
+
+    # and, for the swap
+    mkdir /hive/data/genomes/falChe1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/falChe1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzFalChe1.2013-06-27/DEF \
+	-swap -qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    9m27.735s
+
+    cat fb.falChe1.chainHg19Link.txt
+    #	86760815 bases of 1006303327 (8.622%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/falChe1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# LASTZ Peregrine falcon falPer1 (DONE - 2013-06-27 - Hiram)
+    screen -S falPer1    # screen to manage this job
+    mkdir /hive/data/genomes/hg19/bed/lastzFalPer1.2013-06-27
+    cd /hive/data/genomes/hg19/bed/lastzFalPer1.2013-06-27
+
+    cat << '_EOF_' > DEF
+# human vs Peregrine falcon
+# distant settings for human-aves alignment
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Peregrine falcon
+SEQ2_DIR=/hive/data/genomes/falPer1/falPer1.2bit
+SEQ2_LEN=/hive/data/genomes/falPer1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzFalPer1.2013-06-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+XXX - running - Thu Jun 27 13:58:34 PDT 2013
+    #  real    100m7.452s
+
+    cat fb.hg19.chainFalPer1Link.txt 2>&1
+    #   100700835 bases of 2897316137 (3.476%) in intersection
+
+    # good to have recip best here
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+          hg19 falPer1 > rbest.log 2>&1 &
+    #  real    100m9.728s
+
+    # and, for the swap
+    mkdir /hive/data/genomes/falPer1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/falPer1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzFalPer1.2013-06-27/DEF \
+	-swap -qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    9m27.735s
+
+    cat fb.falPer1.chainHg19Link.txt
+    #	86760815 bases of 1006303327 (8.622%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/falPer1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# LASTZ Mallard duck anaPla1 (DONE - 2013-06-27 - Hiram)
+    screen -S anaPla1    # screen to manage this job
+    mkdir /hive/data/genomes/hg19/bed/lastzAnaPla1.2013-06-27
+    cd /hive/data/genomes/hg19/bed/lastzAnaPla1.2013-06-27
+
+    cat << '_EOF_' > DEF
+# human vs Mallard duck
+# distant settings for human-aves alignment
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Mallard duck
+SEQ2_DIR=/hive/data/genomes/anaPla1/anaPla1.2bit
+SEQ2_LEN=/hive/data/genomes/anaPla1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzAnaPla1.2013-06-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+XXX - running - Thu Jun 27 13:58:34 PDT 2013
+    #  real    100m7.452s
+
+    cat fb.hg19.chainAnaPla1Link.txt 2>&1
+    #   100700835 bases of 2897316137 (3.476%) in intersection
+
+    # good to have recip best here
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+          hg19 anaPla1 > rbest.log 2>&1 &
+    #  real    100m9.728s
+
+    # and, for the swap
+    mkdir /hive/data/genomes/anaPla1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/anaPla1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzAnaPla1.2013-06-27/DEF \
+	-swap -qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    9m27.735s
+
+    cat fb.anaPla1.chainHg19Link.txt
+    #	86760815 bases of 1006303327 (8.622%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/anaPla1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# LASTZ Parrot amaVit1 (DONE - 2013-06-27 - Hiram)
+    screen -S amaVit1    # screen to manage this job
+    mkdir /hive/data/genomes/hg19/bed/lastzAmaVit1.2013-06-27
+    cd /hive/data/genomes/hg19/bed/lastzAmaVit1.2013-06-27
+
+    cat << '_EOF_' > DEF
+# human vs Parrot
+# distant settings for human-aves alignment
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Parrot
+SEQ2_DIR=/hive/data/genomes/amaVit1/amaVit1.2bit
+SEQ2_LEN=/hive/data/genomes/amaVit1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=600
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzAmaVit1.2013-06-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+XXX - running - Thu Jun 27 13:58:34 PDT 2013
+    #  real    100m7.452s
+
+    cat fb.hg19.chainAmaVit1Link.txt 2>&1
+    #   100700835 bases of 2897316137 (3.476%) in intersection
+
+    # good to have recip best here
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+          hg19 amaVit1 > rbest.log 2>&1 &
+    #  real    100m9.728s
+
+    # and, for the swap
+    mkdir /hive/data/genomes/amaVit1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/amaVit1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzAmaVit1.2013-06-27/DEF \
+	-swap -qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    9m27.735s
+
+    cat fb.amaVit1.chainHg19Link.txt
+    #	86760815 bases of 1006303327 (8.622%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/amaVit1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# LASTZ Budgerigar melUnd1 (DONE - 2013-06-27 - Hiram)
+    screen -S melUnd1    # screen to manage this job
+    mkdir /hive/data/genomes/hg19/bed/lastzMelUnd1.2013-06-27
+    cd /hive/data/genomes/hg19/bed/lastzMelUnd1.2013-06-27
+
+    cat << '_EOF_' > DEF
+# human vs Budgerigar
+# distant settings for human-aves alignment
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Budgerigar
+SEQ2_DIR=/hive/data/genomes/melUnd1/melUnd1.2bit
+SEQ2_LEN=/hive/data/genomes/melUnd1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzMelUnd1.2013-06-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+    # forgot to capture the output in do.log
+XXX - running - Thu Jun 27 14:11:06 PDT 2013
+    #  real    100m7.452s
+
+    cat fb.hg19.chainMelUnd1Link.txt 2>&1
+    #   100700835 bases of 2897316137 (3.476%) in intersection
+
+    # good to have recip best here
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+          hg19 melUnd1 > rbest.log 2>&1 &
+    #  real    100m9.728s
+
+    # and, for the swap
+    mkdir /hive/data/genomes/melUnd1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/melUnd1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzMelUnd1.2013-06-27/DEF \
+	-swap -qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    9m27.735s
+
+    cat fb.melUnd1.chainHg19Link.txt
+    #	86760815 bases of 1006303327 (8.622%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/melUnd1/bed
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
