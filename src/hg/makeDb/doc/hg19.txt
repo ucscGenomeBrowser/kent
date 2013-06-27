@@ -21211,24 +21211,44 @@ TMPDIR=/scratch/tmp
 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
-	-stop=load -syntenicNet \
+	-stop=load -qRepeats=windowmaskerSdust-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running Wed Jun 26 16:12:22 PDT 2013
-    cat fb.hg19.chainZonAlb1Link.txt
-    #	104053179 bases of 2897316137 (3.591%) in intersection
+    #  real    100m7.452s
+    #  as expected, failed in the netClass operation due to no zonAlb1 db
+    #  That's OK, don't need the net table loaded, run this
+    # to get measurement of chainLinks:
+    cd /hive/data/genomes/hg19/bed/lastzZonAlb1.2013-06-26
+    featureBits hg19 chainZonAlb1Link > fb.hg19.chainZonAlb1Link.txt 2>&1
+    #   100700835 bases of 2897316137 (3.476%) in intersection
 
-    #	running the swap - DONE - 2009-06-02
+    # after setting up zonAlb1 database, proper netClassing and loading
+    # the net track.  Can finish this off:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=download -qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > download.log 2>&1
+
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+          hg19 zonAlb1 > rbest.log 2>&1 &
+    #  real    100m9.728s
+
+    # and, for the swap
     mkdir /hive/data/genomes/zonAlb1/bed/blastz.hg19.swap
     cd /hive/data/genomes/zonAlb1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/hg19/bed/lastzZonAlb1.2013-06-26/DEF \
-	-swap \
-	-noLoadChainSplit \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
-	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
-    #	real    16m45.090s
+        /hive/data/genomes/hg19/bed/lastzZonAlb1.2013-06-26/DEF \
+	-swap -qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    9m27.735s
+
     cat fb.zonAlb1.chainHg19Link.txt
-    #	91605899 bases of 1042591351 (8.786%) in intersection
+    #	86760815 bases of 1006303327 (8.622%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/zonAlb1/bed
+    ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
