@@ -1882,48 +1882,56 @@ priority 450
 track chainNetPoodle override
 priority 451
 
+# Some, but not all subtracks of pgSnp (Personal Genome Variants) were lifted
+track pgAk1 override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
+
 track pgVenter override
-longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI) (from Human Mar. 2006 assembly)
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
+
+track pgVenterSnp override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
+
+track pgVenterIndel override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgWatson override
-longLabel James Watson (CSHL) (from Human Mar. 2006 assembly)
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
+
+track pgYoruban2 override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgYoruban3 override
-longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU) (from Human Mar. 2006 assembly)
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgYh1 override
-longLabel Han Chinese Individual (YanHuang Project) (from Human Mar. 2006 assembly)
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgSjk override
-longLabel Seong-Jin Kim (SJK, GUMS/KOBIC) (from Human Mar. 2006 assembly)
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNA12878 override
-longLabel CEU Trio Daughter NA12878 (1000 Genomes Project) (from Human Mar. 2006 assembly)
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNA12891 override
-longLabel CEU Trio Father NA12891 (1000 Genomes Project) (from Human Mar. 2006 assembly)
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNA12892 override
-longLabel CEU Trio Mother NA12892 (1000 Genomes Project) (from Human Mar. 2006 assembly)
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNA19240 override
-longLabel YRI Trio Daughter NA19240 (1000 Genomes Project) (from Human Mar. 2006 assembly)
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -2024,6 +2032,10 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgSaqqaqHc override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
+
+track pgLucier override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
