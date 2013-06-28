@@ -295,7 +295,7 @@ echTel2.perChromTables = no
     # documentation for this step is in echTel1 - remember to do this
 
 ###########################################################################
-# construct downloads files (DONE - 2013-06-12 - Hiram)
+# construct downloads files (DONE - 2013-06-28 - Hiram)
 #   before starting downloads, the joinerCheck should be clean
 #   after echTel2 is added to all.joiner:
     joinerCheck -keys -database=echTel2 all.joiner
@@ -303,11 +303,11 @@ echTel2.perChromTables = no
     cd /hive/data/genomes/echTel2
     time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev echTel2 \
 	> downloads.log 2>&1
-    # about 40 minutes
+    # real    27m35.022s
     # examine the README.txt files to verify the text
 
 ###########################################################################
-# ready for first pushQ entry (DONE - 2013-06-12 - Hiram)
+# ready for first pushQ entry (DONE - 2013-06-28 - Hiram)
     mkdir /hive/data/genomes/echTel2/pushQ
     cd /hive/data/genomes/echTel2/pushQ
     time makePushQSql.pl echTel2 > echTel2.sql 2> stderr.out
