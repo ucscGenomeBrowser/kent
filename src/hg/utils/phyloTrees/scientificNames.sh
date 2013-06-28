@@ -11,8 +11,11 @@ fi
 notYetInDbDb() {
 echo $1 | sed -e '
 s/amaVit1/Amazona_vittata/;
+s/araMac1/Ara_macao/;
 s/apiMel4/Apis_mellifera/;
+s/macFas5/Macaca_fascicularis/;
 s/camFer1/Camelus_ferus/;
+s/chlSab1/Chlorocebus_sabaeus/;
 s/panHod1/Pantholops_hodgsonii/;
 s/capHir1/Capra_hircus/;
 s/chrAsi1/Chrysochloris_asiatica/;

@@ -1,9 +1,13 @@
 
-all::   105way.commonNames.nh 105way.scientificNames.nh \
+all::   108way.commonNames.nh 108way.scientificNames.nh \
+	105way.commonNames.nh 105way.scientificNames.nh \
 	104way.commonNames.nh 104way.scientificNames.nh \
 	103way.commonNames.nh 103way.scientificNames.nh \
 	97way.commonNames.nh 97way.scientificNames.nh \
 	96way.commonNames.nh 96way.scientificNames.nh
+
+108way.commonNames.nh: 108way.nh
+	./commonNames.sh $< | ./asciiTree.pl /dev/stdin > $@
 
 105way.commonNames.nh: 105way.nh
 	./commonNames.sh $< | ./asciiTree.pl /dev/stdin > $@
@@ -19,6 +23,9 @@ all::   105way.commonNames.nh 105way.scientificNames.nh \
 
 96way.commonNames.nh: 96way.nh
 	./commonNames.sh $< | ./asciiTree.pl /dev/stdin > $@
+
+108way.scientificNames.nh: 108way.nh
+	./scientificNames.sh $< | ./asciiTree.pl /dev/stdin > $@
 
 105way.scientificNames.nh: 105way.nh
 	./scientificNames.sh $< | ./asciiTree.pl /dev/stdin > $@
