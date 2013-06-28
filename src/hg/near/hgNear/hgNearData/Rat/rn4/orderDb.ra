@@ -13,7 +13,7 @@ queryOne select value from rgdGene2ToPfam where name='%s'
 queryAll select name,value from rgdGene2ToPfam
 
 name nameSimilarity
-type nameSimilarity flyBase2004Xref name symbol
+type nameSimilarity rgdGene2ToSymbol rgdId geneSymbol
 
 name goSimilarity
 queryOne select goId from go.goaPart where dbObjectId='%s'

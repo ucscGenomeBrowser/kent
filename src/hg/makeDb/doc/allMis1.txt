@@ -221,6 +221,12 @@ taxId 8496
     hgsql -N -e "select bridge from gap;" allMis1 | sort | uniq -c
     #  99514 yes
 
+#########################################################################
+# cytoBandIdeo - (DONE - 2013-06-18 - Hiram)
+    mkdir /hive/data/genomes/allMis1/bed/cytoBand
+    cd /hive/data/genomes/allMis1/bed/cytoBand
+    makeCytoBandIdeo.csh allMis1
+
 ##########################################################################
 ## WINDOWMASKER (DONE - 2012-07-26 - Hiram)
     mkdir /hive/data/genomes/allMis1/bed/windowMasker
@@ -324,7 +330,7 @@ taxId 8496
     #   68589 yes
 
 #########################################################################
-# AUTO UPDATE GENBANK (WORKING - 2013-06-08 - Hiram)
+# AUTO UPDATE GENBANK (DONE - 2013-06-12,18 - Hiram)
     # examine the file:
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
@@ -364,25 +370,25 @@ allMis1.perChromTables = no
     screen -S allMis1           # long running job managed in screen
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial allMis1 &
-    #   var/build/logs/2013.06.08-20:00:53.allMis1.initalign.log
-XXX - running - Sat Jun  8 20:01:06 PDT 2013
-    #   real    175m22.294s
+    #   var/build/logs/2013.06.12-15:21:37.allMis1.initalign.log
+    # real    1444m27.582s
+
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad allMis1 &
-    #   real    9m57.487s
-    #   var/dbload/hgwdev/logs/2012.07.27-14:05:35.dbload.log
+    #   var/dbload/hgwdev/logs/2013.06.18-13:52:33.dbload.log
+    #   real    108m47.912s
 
     # check the end of that dbload.log to see if it was successful
-    #   hgwdev 2012.07.27-14:15:33 dbload: finish
+    #   hgwdev 2013.06.18-15:41:20 dbload: finish
 
     # enable daily alignment and update of hgwdev (DONE - 2012-05-09 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add allMis1 to:
     vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added allMis1." etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added allMis1 refs #8750" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -418,14 +424,14 @@ XXX - running - Sat Jun  8 20:01:06 PDT 2013
     ssh hgwbeta "hgsql qapushq < /tmp/allMis1.sql"
 
 ##########################################################################
-#  BLATSERVERS ENTRY (DONE - 2012-08-03 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2013-06-26 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("allMis1", "blat4d", "17806", "1", "0"); \
+	VALUES ("allMis1", "blat4a", "17848", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("allMis1", "blat4d", "17807", "0", "1");' \
+	VALUES ("allMis1", "blat4a", "17849", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 

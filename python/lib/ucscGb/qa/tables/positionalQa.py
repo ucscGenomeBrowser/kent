@@ -11,11 +11,11 @@ genbankTableListDev = "/cluster/data/genbank/etc/genbank.tbls"
 genbankTableListBeta = "/genbank/etc/genbank.tbls"
 
 # group the types of positional tables by the name of the column that contains the chrom
-# couldn't find any existing chromGraph or pgSnp tables, so left them out for now
+# couldn't find any existing chromGraph tables, so left it out for now
 chromTypes = frozenset(['bed', 'genePred', 'axt', 'clonePos', 'ctgPos', 'expRatio', 'maf', 'sample',
                         'wigMaf', 'wig', 'bedGraph', 'factorSource', 'bedDetail', 'Ld2',
                         'bed5FloatScore', 'bedRnaElements', 'broadPeak', 'gvf', 'narrowPeak',
-                        'peptideMapping'])
+                        'peptideMapping', 'pgSnp'])
 tNameTypes = frozenset(['chain', 'psl', 'altGraphX', 'netAlign'])
 genoNameTypes = frozenset(['rmsk'])
 
