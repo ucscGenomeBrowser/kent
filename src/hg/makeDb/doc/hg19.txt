@@ -20799,9 +20799,8 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Wed Jun 26 14:18:07 PDT 2013
-    #	real    269m52.619s
-    cat fb.echTel2.chainMm10Link.txt
+    #	real    80m29s
+    cat fb.echTel2.chainHg19Link.txt
     #	852830619 bases of 2605196361 (32.736%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
@@ -20893,12 +20892,33 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> chainMerge.log 2>&1 &
-XXX - running - Wed Jun 26 14:21:29 PDT 2013
+    #  real    123m11.588s
 
     cat fb.hg19.chainOviAri3Link.txt
-    #	804516397 bases of 2897316137 (27.768%) in intersection
-    time doRecipBest.pl -buildDir=`pwd` hg19 oviAri3 > rbest.log 2>&1
+    #	1356890439 bases of 2897316137 (46.833%) in intersection
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 oviAri3 > rbest.log 2>&1 &
+XXX - running - Fri Jun 28 09:27:58 PDT 2013
     #	real    224m47.979s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.hg19.swap
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+       /hive/data/genomes/hg19/bed/lastzOviAri3.2013-06-17/DEF \
+       -swap -syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+       -bigClusterHub=swarm -chainMinScore=3000 -chainLinearGap=medium \
+       > swap.log 2>&1
+XXX - running - Fri Jun 28 09:27:58 PDT 2013
+    #  real    77m5.017s
+
+    cat fb.oviAri3.chainHg19Link.txt
+    #  778513475 bases of 2192103426 (35.514%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/oviAri3/bed
+    ln -s blastz.hg19.swap lastz.hg19
 
 ##############################################################################
 # LASTZ Shrew SorAra2 (DONE - 2013-06-17 - Hiram)
@@ -21289,15 +21309,15 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running - Thu Jun 27 13:58:34 PDT 2013
-    #  real    100m7.452s
+    #  real    523m19.990s
 
-    cat fb.hg19.chainFalChe1Link.txt 2>&1
-    #   100700835 bases of 2897316137 (3.476%) in intersection
+    cat fb.hg19.chainFalChe1Link.txt
+    #   110443921 bases of 2897316137 (3.812%) in intersection
 
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 falChe1 > rbest.log 2>&1 &
+XXX - running - Fri Jun 28 09:18:49 PDT 2013
     #  real    100m9.728s
 
     # and, for the swap
@@ -21308,6 +21328,7 @@ XXX - running - Thu Jun 27 13:58:34 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+XXX - running - Fri Jun 28 09:18:49 PDT 2013
     #   real    9m27.735s
 
     cat fb.falChe1.chainHg19Link.txt
@@ -21355,16 +21376,22 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running - Thu Jun 27 13:58:34 PDT 2013
-    #  real    100m7.452s
+    #  real    511m18.114s
 
-    cat fb.hg19.chainFalPer1Link.txt 2>&1
-    #   100700835 bases of 2897316137 (3.476%) in intersection
+    cat fb.hg19.chainFalPer1Link.txt
+    #   112378981 bases of 2897316137 (3.879%) in intersection
+
+    # forgot to have the falPer1 database ready, finish the load, then:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=download -qRepeats=windowmaskerSdust -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > download.log 2>&1 &
 
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 falPer1 > rbest.log 2>&1 &
-    #  real    100m9.728s
+    #  about 17 minutes
 
     # and, for the swap
     mkdir /hive/data/genomes/falPer1/bed/blastz.hg19.swap
@@ -21374,10 +21401,10 @@ XXX - running - Thu Jun 27 13:58:34 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    9m27.735s
+    #   real    17m25.640s
 
     cat fb.falPer1.chainHg19Link.txt
-    #	86760815 bases of 1006303327 (8.622%) in intersection
+    #	96477634 bases of 1153404357 (8.365%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/falPer1/bed
@@ -21421,16 +21448,15 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running - Thu Jun 27 13:58:34 PDT 2013
-    #  real    100m7.452s
+    #  real    584m8.015s
 
-    cat fb.hg19.chainAnaPla1Link.txt 2>&1
-    #   100700835 bases of 2897316137 (3.476%) in intersection
+    cat fb.hg19.chainAnaPla1Link.txt
+    #   101670707 bases of 2897316137 (3.509%) in intersection
 
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 anaPla1 > rbest.log 2>&1 &
-    #  real    100m9.728s
+    #  real    12m35.684s
 
     # and, for the swap
     mkdir /hive/data/genomes/anaPla1/bed/blastz.hg19.swap
@@ -21440,10 +21466,10 @@ XXX - running - Thu Jun 27 13:58:34 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    9m27.735s
+    #  real    14m11.895s
 
     cat fb.anaPla1.chainHg19Link.txt
-    #	86760815 bases of 1006303327 (8.622%) in intersection
+    #	87894467 bases of 1069972754 (8.215%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/anaPla1/bed
@@ -21487,16 +21513,15 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running - Thu Jun 27 13:58:34 PDT 2013
-    #  real    100m7.452s
+    #  real    710m51.907s
 
-    cat fb.hg19.chainAmaVit1Link.txt 2>&1
-    #   100700835 bases of 2897316137 (3.476%) in intersection
+    cat fb.hg19.chainAmaVit1Link.txt
+    #   95543127 bases of 2897316137 (3.298%) in intersection
 
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 amaVit1 > rbest.log 2>&1 &
-    #  real    100m9.728s
+    #  about 21 minutes
 
     # and, for the swap
     mkdir /hive/data/genomes/amaVit1/bed/blastz.hg19.swap
@@ -21506,10 +21531,10 @@ XXX - running - Thu Jun 27 13:58:34 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    9m27.735s
+    #  real    74m7.469s
 
     cat fb.amaVit1.chainHg19Link.txt
-    #	86760815 bases of 1006303327 (8.622%) in intersection
+    #	88086731 bases of 1128255752 (7.807%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/amaVit1/bed
@@ -21580,6 +21605,69 @@ XXX - running - Thu Jun 27 14:11:06 PDT 2013
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/melUnd1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# lastz alligator allMis1 (DONE - 2013-06-28 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S hg19AllMis1
+    mkdir /hive/data/genomes/hg19/bed/lastzAllMis1.2013-06-28
+    cd /hive/data/genomes/hg19/bed/lastzAllMis1.2013-06-28
+
+    cat << '_EOF_' > DEF
+# Human vs. alligator
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: alligator allMis1
+SEQ2_DIR=/hive/data/genomes/allMis1/allMis1.2bit
+SEQ2_LEN=/hive/data/genomes/allMis1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/hg19/bed/lastzAllMis1.2013-06-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+XXX - running - Fri Jun 28 10:36:38 PDT 2013
+    #	real    103m17.133s
+
+    cat fb.hg19.chainAllMis1Link.txt
+    #	88356459 bases of 2652783500 (3.331%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzAllMis1.2013-06-28 lastz.allMis1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/allMis1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/allMis1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzAllMis1.2013-06-28/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    97m50.599s
+    cat  fb.allMis1.chainHg19Link.txt
+    #	84865552 bases of 1701353770 (4.988%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/allMis1/bed
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
