@@ -20910,11 +20910,10 @@ XXX - running - Fri Jun 28 09:27:58 PDT 2013
        -swap -syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
        -bigClusterHub=swarm -chainMinScore=3000 -chainLinearGap=medium \
        > swap.log 2>&1
-XXX - running - Fri Jun 28 09:27:58 PDT 2013
-    #  real    77m5.017s
+    #  real    107m13.938s
 
     cat fb.oviAri3.chainHg19Link.txt
-    #  778513475 bases of 2192103426 (35.514%) in intersection
+    #  1316305922 bases of 2534335866 (51.939%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/oviAri3/bed
@@ -21317,8 +21316,7 @@ TMPDIR=/scratch/tmp
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 falChe1 > rbest.log 2>&1 &
-XXX - running - Fri Jun 28 09:18:49 PDT 2013
-    #  real    100m9.728s
+    #  real    12m28.141s
 
     # and, for the swap
     mkdir /hive/data/genomes/falChe1/bed/blastz.hg19.swap
@@ -21328,11 +21326,9 @@ XXX - running - Fri Jun 28 09:18:49 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-XXX - running - Fri Jun 28 09:18:49 PDT 2013
-    #   real    9m27.735s
-
+    #   real    10m46.936s
     cat fb.falChe1.chainHg19Link.txt
-    #	86760815 bases of 1006303327 (8.622%) in intersection
+    #	94752559 bases of 1150993769 (8.232%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/falChe1/bed
@@ -21579,16 +21575,15 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
     # forgot to capture the output in do.log
-XXX - running - Thu Jun 27 14:11:06 PDT 2013
-    #  real    100m7.452s
+    #  real    539m3.747s
 
-    cat fb.hg19.chainMelUnd1Link.txt 2>&1
-    #   100700835 bases of 2897316137 (3.476%) in intersection
+    cat fb.hg19.chainMelUnd1Link.txt
+    #   103624916 bases of 2897316137 (3.577%) in intersection
 
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 melUnd1 > rbest.log 2>&1 &
-    #  real    100m9.728s
+    # real    11m14.969s
 
     # and, for the swap
     mkdir /hive/data/genomes/melUnd1/bed/blastz.hg19.swap
@@ -21598,10 +21593,10 @@ XXX - running - Thu Jun 27 14:11:06 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    9m27.735s
+    #   real    12m1.732s
 
     cat fb.melUnd1.chainHg19Link.txt
-    #	86760815 bases of 1006303327 (8.622%) in intersection
+    #	89509004 bases of 1086614815 (8.237%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/melUnd1/bed
