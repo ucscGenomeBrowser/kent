@@ -917,7 +917,7 @@ if (mysql_real_query(conn, query, strlen(query)) != 0)
     if (abort)
         {
         monitorLeave();
-	dumpStack("oops DEBUG"); // DEBUG REMOVE
+	dumpStack("DEBUG Can't start query"); // Extra debugging info. DEBUG REMOVE
 	sqlAbort(sc, "Can't start query:\n%s\n", query);
         }
     }
@@ -2798,6 +2798,7 @@ while((c = *s++) != 0)
 	if (noSqlInjLevel && !sameString(noSqlInjLevel, "ignore"))
 	    {
     	    fprintf(stderr, "character %c disallowed in sql string part %s\n", c, sOriginal);  
+	    fflush(stderr);
 	    }
 
 	return FALSE;
@@ -3444,6 +3445,8 @@ if (noSqlInjLevel)
     if (sameString(noSqlInjLevel, "logOnly"))
 	{
 	vfprintf(stderr, format, args);
+	fprintf(stderr, "\n");
+	fflush(stderr);
 	}
 
     if (sameString(noSqlInjLevel, "warn"))

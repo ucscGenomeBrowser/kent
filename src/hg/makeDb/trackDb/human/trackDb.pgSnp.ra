@@ -230,7 +230,7 @@ type pgSnp
         parent pgSnp1off
 	subGroups view=N_1off id=NS_Saqqaq type=SNP
         shortLabel Saqqaq HC
-        longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq, high confidence SNPs (Saqqaq Genome Project)
+        longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq, high confidence SNPs
 
 	track pgKriek
         parent pgSnp1off
