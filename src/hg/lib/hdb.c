@@ -4684,8 +4684,7 @@ char *answer;
 
 answer = NULL;
 sqlSafef(query, sizeof(query), "select %s from %s.%-s  where %-s;",
-      fldName, db, tblName, condition);  // note some callers pass an entire tables list with aliases in tblName
-//printf("<br>%s\n", query); fflush(stdout);
+      fldName, db, sqlCheckIdentifiersList(tblName), condition);  // note some callers pass an entire tables list with aliases in tblName
 sr  = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 

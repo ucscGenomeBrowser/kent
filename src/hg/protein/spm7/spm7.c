@@ -238,10 +238,10 @@ while (fgets(line_in, 10000, inf) != NULL)
 		
 	    cdsLen = aalen;
 
-            safef(cond_str, sizeof(cond_str), "val='%s'", proteinID);
+            sqlSafefFrag(cond_str, sizeof(cond_str), "val='%s'", proteinID);
             acc = sqlGetField(spDB, "displayId", "acc", cond_str);
 
-            safef(cond_str, sizeof(cond_str), "acc='%s'", acc);
+            sqlSafefFrag(cond_str, sizeof(cond_str), "acc='%s'", acc);
             aaStr=sqlGetField(spDB, "protein", "val", cond_str);
     	    aaLen = strlen(aaStr);
 

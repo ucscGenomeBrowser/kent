@@ -74,11 +74,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     score	= sqlUnsigned(row[6]);
    
     desc = emptyStr;
-    safef(condStr, sizeof(condStr), "acc='%s'", refseq);
+    sqlSafefFrag(condStr, sizeof(condStr), "acc='%s'", refseq);
     descID= sqlGetField(database, "gbCdnaInfo", "description", condStr);
     if (descID != NULL)
     	{
-    	safef(condStr, sizeof(condStr), "id=%s", descID);
+    	sqlSafefFrag(condStr, sizeof(condStr), "id=%s", descID);
     	desc = sqlGetField(database, "description", "name", condStr);
 	if (desc == NULL) desc = emptyStr;
 	}

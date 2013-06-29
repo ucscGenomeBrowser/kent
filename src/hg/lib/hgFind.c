@@ -1875,7 +1875,7 @@ if (kaList != NULL)
  	    pos->browserName = cloneString(kl->alias); // highlight change
 #endif
 	    pos->browserName = cloneString(kl->kgID);
-	    safef(cond_str, sizeof(cond_str), "kgID = '%s'", kl->kgID);
+	    sqlSafefFrag(cond_str, sizeof(cond_str), "kgID = '%s'", kl->kgID);
 	    answer = sqlGetField(db, "kgXref", "description", cond_str);
 	    if (answer != NULL) 
 		{
@@ -1961,7 +1961,7 @@ if (kpaList != NULL)
 /* 	    pos->browserName = cloneString(kl->alias); highlight change */
 	    pos->browserName = cloneString(kl->kgID);
 
-	    safef(cond_str, sizeof(cond_str), "kgID = '%s'", kl->kgID);
+	    sqlSafefFrag(cond_str, sizeof(cond_str), "kgID = '%s'", kl->kgID);
 	    answer = sqlGetField(db, "kgXref", "description", cond_str);
 	    if (answer != NULL) 
 		{

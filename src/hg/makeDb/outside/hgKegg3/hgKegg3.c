@@ -59,16 +59,16 @@ while (row != NULL)
     {
     kgId = row[0];
 	
-    safef(cond_str, sizeof(cond_str), "kgId='%s'", kgId);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "kgId='%s'", kgId);
     mRNA = sqlGetField(roDbName, "kgXref", "mRNA", cond_str);
     
-    safef(cond_str, sizeof(cond_str), "mrna='%s'", mRNA);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "mrna='%s'", mRNA);
     locusID = sqlGetField("entrez", "entrezMrna", "geneId", cond_str);
     
     /* look for RefSeq if not found in mRNAs */
     if (locusID == NULL)
     	{
-    	safef(cond_str, sizeof(cond_str), "refseq='%s'", mRNA);
+    	sqlSafefFrag(cond_str, sizeof(cond_str), "refseq='%s'", mRNA);
     	locusID = sqlGetField("entrez", "entrezRefseq", "geneId", cond_str);
 	}
 
@@ -91,7 +91,7 @@ while (row != NULL)
 	/* printf("%s not found in Entrez.\n", kgId);fflush(stdout);*/
         if (differentString(table, "knownGene"))
             {
-            safef(cond_str, sizeof(cond_str), "name='%s'", kgId);
+            sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", kgId);
             locusID = sqlGetField(roDbName, table, "name2", cond_str);
             sqlSafef(query3, sizeof(query3), "select * from %s.keggList where locusID = '%s'", kgTempDbName, kgId);
             sr3 = sqlGetResult(conn3, query3);

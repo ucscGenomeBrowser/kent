@@ -86,13 +86,13 @@ if (r != NULL)
     {
     if (hTableExists(database, "kgXref") )
         {
-        safef(cond_str, sizeof(cond_str), "kgID='%s'", parentName);
+        sqlSafefFrag(cond_str, sizeof(cond_str), "kgID='%s'", parentName);
         geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
         }
 
     if (hTableExists(database, "refLink") )
         {
-        safef(cond_str, sizeof(cond_str), "mrnaAcc = '%s'", r->refSeq);
+        sqlSafefFrag(cond_str, sizeof(cond_str), "mrnaAcc = '%s'", r->refSeq);
         geneSymbol = sqlGetField(database, "refLink", "name", cond_str);
         }
     }

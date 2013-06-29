@@ -17,7 +17,7 @@ char *samGenomeDb(char *proteinId)
 char condStr[128];
 char *taxon;
 
-safef(condStr, sizeof(condStr), "acc='%s'", proteinId);
+sqlSafefFrag(condStr, sizeof(condStr), "acc='%s'", proteinId);
 taxon = sqlGetField(UNIPROT_DB_NAME, "accToTaxon", "taxon", condStr);
 if (taxon == NULL) return(NULL);
 
@@ -51,7 +51,7 @@ char *kgId = NULL;
 /* There may be cases that a specific variant may have some domain spliced out */
 /* But, it is better to cover most of them, than none at all */
 
-safef(condStr, sizeof(condStr), "variant='%s'", swissProtAcc);
+sqlSafefFrag(condStr, sizeof(condStr), "variant='%s'", swissProtAcc);
 parentId = sqlGetField(PROTEOME_DB_NAME, "spVariant", "parent", condStr);
 
 list = spExtDbAcc1List(spConn, parentId, "Interpro");
@@ -84,7 +84,7 @@ if (kgVersion == KG_III)
     struct sqlConnection *hgConn;   /* Connection to genome database. */
     hgConn = sqlConnect(database);
    
-    safef(condStr, sizeof(condStr), "spId='%s'", swissProtAcc);
+    sqlSafefFrag(condStr, sizeof(condStr), "spId='%s'", swissProtAcc);
     kgId = sqlGetField(database, "kgXref", "kgId", condStr);
    
     /* Do Pfam domains here. */
