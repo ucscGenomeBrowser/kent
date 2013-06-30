@@ -21841,8 +21841,7 @@ TMPDIR=/scratch/tmp
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 araMac1 > rbest.log 2>&1 &
-XXX - running - Sat Jun 29 23:48:27 PDT 2013
-    # real    11m14.969s
+    # real    8m57.897s
 
     # and, for the swap
     mkdir /hive/data/genomes/araMac1/bed/blastz.hg19.swap
@@ -21852,11 +21851,10 @@ XXX - running - Sat Jun 29 23:48:27 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-XXX - running - Sat Jun 29 23:48:27 PDT 2013
-    #   real    12m1.732s
+    #   Elapsed time: 45m27s
 
     cat fb.araMac1.chainHg19Link.txt
-    #	89509004 bases of 1086614815 (8.237%) in intersection
+    #	73025327 bases of 997636166 (7.320%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/araMac1/bed
@@ -21908,8 +21906,7 @@ TMPDIR=/scratch/tmp
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 galGal4 > rbest.log 2>&1 &
-XXX - running - Sat Jun 29 23:41:07 PDT 2013
-    # real    11m14.969s
+    #   real    13m39.680s
 
     # and, for the swap
     mkdir /hive/data/genomes/galGal4/bed/blastz.hg19.swap
@@ -21919,11 +21916,10 @@ XXX - running - Sat Jun 29 23:41:07 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-XXX - running - Sat Jun 29 23:41:07 PDT 2013
-    #   real    12m1.732s
+    #  real    12m22.704s
 
     cat fb.galGal4.chainHg19Link.txt
-    #	89509004 bases of 1086614815 (8.237%) in intersection
+    #	92856222 bases of 1032854810 (8.990%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/galGal4/bed
