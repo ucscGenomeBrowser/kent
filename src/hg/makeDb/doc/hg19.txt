@@ -22116,3 +22116,127 @@ XXX - running - Sun Jun 30 13:51:54 PDT 2013
 #2773561724 bases of 2902338967 (95.563%) in intersection
 
 #########################################################################
+# squirrel monkey/saiBol1 Lastz run (DONE - 2013-06-30 - Hiram)
+    screen -S saiBol1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzSaiBol1.2013-06-30
+    cd /hive/data/genomes/hg19/bed/lastzSaiBol1.2013-06-30
+    cat << '_EOF_' > DEF
+# human vs squirrel monkey
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: squirrel monkey SaiBol1
+SEQ2_DIR=/hive/data/genomes/saiBol1/saiBol1.2bit
+SEQ2_LEN=/hive/data/genomes/saiBol1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=200
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzSaiBol1.2013-06-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > do.log 2>&1
+XXX - running - Sun Jun 30 13:58:50 PDT 2013
+    #  real    211m59.612s
+
+    cat fb.hg19.chainSaiBol1Link.txt
+    #   2504623210 bases of 2897316137 (86.446%) in intersection
+
+    # filter with doRecipBest.pl
+    doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 saiBol1 > rbest.log 2>&1 &
+
+    # running the swap
+    mkdir /hive/data/genomes/saiBol1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/saiBol1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzSaiBol1.2013-06-30/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > swap.log 2>&1
+
+    cat fb.saiBol1.chainHg19Link.txt
+#2773561724 bases of 2902338967 (95.563%) in intersection
+
+#########################################################################
+# bushbaby/otoGar3 Lastz run (DONE - 2013-06-30 - Hiram)
+    screen -S otoGar3    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzOtoGar3.2013-06-30
+    cd /hive/data/genomes/hg19/bed/lastzOtoGar3.2013-06-30
+    cat << '_EOF_' > DEF
+# human vs bushbaby
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: bushbaby OtoGar3
+SEQ2_DIR=/hive/data/genomes/otoGar3/otoGar3.2bit
+SEQ2_LEN=/hive/data/genomes/otoGar3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=200
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzOtoGar3.2013-06-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > do.log 2>&1
+XXX - running - Sun Jun 30 14:02:44 PDT 2013
+    #  real    211m59.612s
+
+    cat fb.hg19.chainOtoGar3Link.txt
+    #   2504623210 bases of 2897316137 (86.446%) in intersection
+
+    # filter with doRecipBest.pl
+    doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 otoGar3 > rbest.log 2>&1 &
+
+    # running the swap
+    mkdir /hive/data/genomes/otoGar3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/otoGar3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzOtoGar3.2013-06-30/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > swap.log 2>&1
+
+    cat fb.otoGar3.chainHg19Link.txt
+#2773561724 bases of 2902338967 (95.563%) in intersection
+
+#########################################################################
