@@ -21991,3 +21991,62 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
+# Green monkey/chlSab1 Lastz run (DONE - 2013-06-30 - Hiram)
+    screen -S chlSab1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzChlSab1.2013-06-30
+    cd /hive/data/genomes/hg19/bed/lastzChlSab1.2013-06-30
+    cat << '_EOF_' > DEF
+# human vs green monkey
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: green monkey ChlSab1
+SEQ2_DIR=/hive/data/genomes/chlSab1/chlSab1.2bit
+SEQ2_LEN=/hive/data/genomes/chlSab1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=200
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzChlSab1.2013-06-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > do.log 2>&1
+XXX - running - Sun Jun 30 09:33:24 PDT 2013
+
+    cat fb.hg19.chainChlSab1Link.txt
+#2760526412 bases of 2897316137 (95.279%) in intersection
+
+    # filter with doRecipBest.pl
+    doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 chlSab1 >& rbest.log & tail -f rbest.log
+
+    # running the swap
+    mkdir /hive/data/genomes/chlSab1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/chlSab1/bed/blastz.hg19.swap
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzChlSab1.2013-06-30/DEF \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet >& swap.log & tail -f swap.log
+    cat fb.chlSab1.chainHg19Link.txt
+#2773561724 bases of 2902338967 (95.563%) in intersection
+
