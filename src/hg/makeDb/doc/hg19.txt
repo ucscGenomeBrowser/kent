@@ -21703,16 +21703,15 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running - Sat Jun 29 14:22:56 PDT 2013
-    #  real    539m3.747s
+    #  real    256m49.711s
 
     cat fb.hg19.chainColLiv1Link.txt
-    #   103624916 bases of 2897316137 (3.577%) in intersection
+    #   106693699 bases of 2897316137 (3.683%) in intersection
 
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 colLiv1 > rbest.log 2>&1 &
-    # real    11m14.969s
+    #   real    6m40.777s
 
     # and, for the swap
     mkdir /hive/data/genomes/colLiv1/bed/blastz.hg19.swap
@@ -21722,10 +21721,10 @@ XXX - running - Sat Jun 29 14:22:56 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    12m1.732s
+    #   real    10m6.608s
 
     cat fb.colLiv1.chainHg19Link.txt
-    #	89509004 bases of 1086614815 (8.237%) in intersection
+    #	92036020 bases of 1086925875 (8.468%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/colLiv1/bed
@@ -21769,16 +21768,15 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running - Sat Jun 29 14:26:48 PDT 2013
-    #  real    539m3.747s
+    #  real    324m27.608s
 
     cat fb.hg19.chainFicAlb2Link.txt
-    #   103624916 bases of 2897316137 (3.577%) in intersection
+    #   107639589 bases of 2897316137 (3.715%) in intersection
 
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 ficAlb2 > rbest.log 2>&1 &
-    # real    11m14.969s
+    #   real    12m23.760s
 
     # and, for the swap
     mkdir /hive/data/genomes/ficAlb2/bed/blastz.hg19.swap
@@ -21788,10 +21786,10 @@ XXX - running - Sat Jun 29 14:26:48 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    12m1.732s
+    #   real    11m28.655s
 
     cat fb.ficAlb2.chainHg19Link.txt
-    #	89509004 bases of 1086614815 (8.237%) in intersection
+    #	95070548 bases of 1102325870 (8.625%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/ficAlb2/bed
@@ -21835,15 +21833,15 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running - Sat Jun 29 14:30:46 PDT 2013
-    #  real    539m3.747s
+    #  real    518m3.915s
 
     cat fb.hg19.chainAraMac1Link.txt
-    #   103624916 bases of 2897316137 (3.577%) in intersection
+    #   84373956 bases of 2897316137 (2.912%) in intersection
 
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 araMac1 > rbest.log 2>&1 &
+XXX - running - Sat Jun 29 23:48:27 PDT 2013
     # real    11m14.969s
 
     # and, for the swap
@@ -21854,6 +21852,7 @@ XXX - running - Sat Jun 29 14:30:46 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+XXX - running - Sat Jun 29 23:48:27 PDT 2013
     #   real    12m1.732s
 
     cat fb.araMac1.chainHg19Link.txt
@@ -21901,15 +21900,15 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running - Sat Jun 29 14:34:49 PDT 2013
-    #  real    539m3.747s
+    #  real    170m30.547s
 
     cat fb.hg19.chainGalGal4Link.txt
-    #   103624916 bases of 2897316137 (3.577%) in intersection
+    #   106728507 bases of 2897316137 (3.684%) in intersection
 
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 galGal4 > rbest.log 2>&1 &
+XXX - running - Sat Jun 29 23:41:07 PDT 2013
     # real    11m14.969s
 
     # and, for the swap
@@ -21920,6 +21919,7 @@ XXX - running - Sat Jun 29 14:34:49 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+XXX - running - Sat Jun 29 23:41:07 PDT 2013
     #   real    12m1.732s
 
     cat fb.galGal4.chainHg19Link.txt
@@ -21967,16 +21967,15 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running - Sat Jun 29 14:40:08 PDT 2013
-    #  real    539m3.747s
+    #  real    275m15.275s
 
     cat fb.hg19.chainPseHum1Link.txt
-    #   103624916 bases of 2897316137 (3.577%) in intersection
+    #   115368965 bases of 2897316137 (3.982%) in intersection
 
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 pseHum1 > rbest.log 2>&1 &
-    # real    11m14.969s
+    #  real    8m31.432s
 
     # and, for the swap
     mkdir /hive/data/genomes/pseHum1/bed/blastz.hg19.swap
@@ -21986,10 +21985,10 @@ XXX - running - Sat Jun 29 14:40:08 PDT 2013
 	-swap -qRepeats=windowmaskerSdust -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    12m1.732s
+    #   real    10m5.748s
 
     cat fb.pseHum1.chainHg19Link.txt
-    #	89509004 bases of 1086614815 (8.237%) in intersection
+    #	99760063 bases of 1030030436 (9.685%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/pseHum1/bed
