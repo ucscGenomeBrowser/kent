@@ -20851,14 +20851,13 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> download.log 2>&1 &
-XXX - running - Sun Jun 30 22:45:43 PDT 2013
+    #  real    27m40.806s
 
     cat fb.hg19.chainOchPri3Link.txt
     #	1004662072 bases of 2897316137 (34.676%) in intersection
 
     time doRecipBest.pl -buildDir=`pwd` hg19 ochPri3 > rbest.log 2>&1
-XXX - running - Sun Jun 30 22:45:43 PDT 2013
-    #	real    224m47.979s
+    #	real    266m38.281s
 
     mkdir /hive/data/genomes/ochPri3/bed/blastz.hg19.swap
     cd /hive/data/genomes/ochPri3/bed/blastz.hg19.swap
@@ -20868,12 +20867,13 @@ XXX - running - Sun Jun 30 22:45:43 PDT 2013
 	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
-XXX - running - Sun Jun 30 22:45:43 PDT 2013
+    #  real    71m5.679s
 
     cat fb.ochPri3.chainHg19Link.txt
+    #  969182988 bases of 1943987870 (49.855%) in intersection
 
     cd /hive/data/genomes/ochPri3/bed
-    ln -s blastz.hg19.swap lastz.ochPri3
+    ln -s blastz.hg19.swap lastz.hg19
 
 ##############################################################################
 # LASTZ Sheep OviAri3 (DONE - 2013-06-17 - Hiram)
@@ -21675,6 +21675,11 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/hg19/bed
     ln -s lastzAllMis1.2013-06-28 lastz.allMis1
 
+    # good to have recip best here
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+          hg19 allMis1 > rbest.log 2>&1 &
+XXX - running - Mon Jul  1 07:45:25 PDT 2013
+
     #	and for the swap
     mkdir /hive/data/genomes/allMis1/bed/blastz.hg19.swap
     cd /hive/data/genomes/allMis1/bed/blastz.hg19.swap
@@ -21682,11 +21687,11 @@ TMPDIR=/scratch/tmp
 	/hive/data/genomes/hg19/bed/lastzAllMis1.2013-06-28/DEF \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-XXX - running - Sun Jun 30 22:25:13 PDT 2013
     #   forgot to get stderr in the swap.log
-    #	real    97m50.599s
+    #	real    27m54.364s
+
     cat  fb.allMis1.chainHg19Link.txt
-    #	84865552 bases of 1701353770 (4.988%) in intersection
+    #	172919308 bases of 2129659933 (8.120%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/allMis1/bed
@@ -22131,7 +22136,7 @@ TMPDIR=/scratch/tmp
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 macFas5 > rbest.log 2>&1 &
-XXX - running - Sun Jun 30 22:19:21 PDT 2013
+    # real    57m59.876s
 
     # running the swap
     mkdir /hive/data/genomes/macFas5/bed/blastz.hg19.swap
@@ -22141,10 +22146,10 @@ XXX - running - Sun Jun 30 22:19:21 PDT 2013
         -chainMinScore=5000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
-XXX - running - Sun Jun 30 22:19:21 PDT 2013
+    # real    83m44.043s
 
     cat fb.macFas5.chainHg19Link.txt
-#2773561724 bases of 2902338967 (95.563%) in intersection
+    #  2432538960 bases of 2803866698 (86.757%) in intersection
 
     cd /hive/data/genomes/macFas5/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -22248,9 +22253,8 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > do.log 2>&1
-XXX - running - Sun Jun 30 14:02:44 PDT 2013
-    #  real    275m13.348s
-
+    #  real    395m56.229s
+XXX failed on chr19 chaining, finish on hgwdev, then continuing:
 
     cat fb.hg19.chainOtoGar3Link.txt
     #   480745065 bases of 2897316137 (16.593%) in intersection
