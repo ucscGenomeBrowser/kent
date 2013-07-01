@@ -3,8 +3,8 @@ setenv TODAY 2013-06-18             # v285 final
 setenv LASTWEEK 2013-05-27          # v284 final 
 setenv REVIEWDAY 2013-06-24         # v286 preview
 setenv LASTREVIEWDAY 2013-06-04     # v285 preview
-setenv REVIEW2DAY 2013-06-11        # v285 preview2
-setenv LASTREVIEW2DAY 2013-05-21    # v284 preview2
+setenv REVIEW2DAY 2013-07-02        # v286 preview2
+setenv LASTREVIEW2DAY 2013-06-11    # v285 preview2
 
 
 
