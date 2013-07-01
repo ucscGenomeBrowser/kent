@@ -564,6 +564,25 @@ if (fstat(fd, &buf) < 0)
 return S_ISFIFO(buf.st_mode);
 }
 
+void childExecFailedExit(char *msg)
+/* Child exec failed, so quit without atexit cleanup */
+{
+fprintf(stderr, "child exec failed: %s\n", msg);
+fflush(stderr);
+_exit(1);  // Let the parent know that the child failed by returning 1.
+
+/* Explanation:
+_exit() is not the normal exit().  
+_exit() avoids the usual atexit() cleanup.
+The MySQL library that we link to uses atexit() cleanup to close any open MySql connections.
+However, because the child's mysql connections are shared by the parent,
+this causes the parent MySQL connections to become invalid,
+and causes the puzzling "MySQL has gone away" error in the parent
+when it tries to use its now invalid MySQL connections.
+*/
+
+}
+
 static void execPStack(pid_t ppid)
 /* exec pstack on the specified pid */
 {
@@ -578,7 +597,9 @@ if (dup2(2, 1) < 0)
     errAbort("dup2 failed");
 
 execvp(cmd[0], cmd);
-errAbort("exec failed: %s", cmd[0]);
+
+childExecFailedExit(cmd[0]); // cannot use the normal errAbort.
+
 }
 
 void vaDumpStack(char *format, va_list args)

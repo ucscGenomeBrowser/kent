@@ -30,14 +30,14 @@ if (sqlTableExists(conn, "hgFixed.ctdSorted") == TRUE)
     {
     if (isRgdGene(conn))
 	{
-    	safef(condStr, sizeof(condStr), 
+    	sqlSafefFrag(condStr, sizeof(condStr), 
 	"x.info=c.GeneSymbol and infoType = 'Name' and rgdGeneId='%s' limit 1", geneId);
     	geneSymbol = sqlGetField(database, "rgdGene2Xref x, hgFixed.ctdSorted c", 
 			"ChemicalId", condStr);
 	}
     else
         {
-    	safef(condStr, sizeof(condStr), "x.geneSymbol=c.GeneSymbol and kgId='%s' limit 1", geneId);
+    	sqlSafefFrag(condStr, sizeof(condStr), "x.geneSymbol=c.GeneSymbol and kgId='%s' limit 1", geneId);
         geneSymbol = sqlGetField(database, "kgXref x, hgFixed.ctdSorted c", "ChemicalId", condStr);
 	}
 

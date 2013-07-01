@@ -157,12 +157,12 @@ else
     }
 if (isRgdGene(conn))
     {
-    safef(condStr, sizeof(condStr), "name='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", geneId);
     spID = sqlGetField(database, "rgdGene2ToUniProt", "value", condStr);
     }
 else
     {
-    safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "kgID='%s'", geneId);
     spID = sqlGetField(database, "kgXref", "spID", condStr);
     }
 
@@ -296,12 +296,12 @@ else
 
 if (isRgdGene(conn))
     {
-    safef(condStr, sizeof(condStr), "name='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", geneId);
     spID = sqlGetField(database, "rgdGene2ToUniProt", "value", condStr);
     }
 else
     {
-    safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "kgID='%s'", geneId);
     spID = sqlGetField(database, "kgXref", "spID", condStr);
     }
 

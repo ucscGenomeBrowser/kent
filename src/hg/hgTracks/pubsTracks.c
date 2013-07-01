@@ -11,7 +11,7 @@ static struct rgbColor impact3Color  = {0, 100, 0};
 static struct rgbColor impact4Color  = {255, 255, 0};
 
 // the cgi can handle "old" or "new" table formats
-// seqTableFormat can be is either 0 (=uninitialized), 1 (=old) or 2(=new)
+// seqTableFormat can be is either uninitialized, old (bed that needs a join) or new (denormalized bed)
 int seqTableFormat = 0;
 #define SEQTABLE_NEW 1
 #define SEQTABLE_OLD 2

@@ -66,7 +66,7 @@ while (!bothDone)
 
 	if ( (symbol  != NULL) && (strlen(symbol) != 0) )
 	    {
-            sprintf(cond_str, "geneSymbol = '%s'", symbol);
+            sqlSafefFrag(cond_str, sizeof cond_str, "geneSymbol = '%s'", symbol);
             answer = sqlGetField(database, "kgXref", "kgID", cond_str);
 	    if (answer != NULL)
 		{

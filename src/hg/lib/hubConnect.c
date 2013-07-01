@@ -721,12 +721,9 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 	    hubUpdateStatus(NULL, hub);
 	    }
 
-	// we're going to free the hubConnectStatus list
-	hub->trackHub = NULL;
         errCatchFree(&errCatch);
 	}
     }
-hubConnectStatusFreeList(&hubList);
 
 hubTrackDbs = tdbList;
 if (pGroupList != NULL)

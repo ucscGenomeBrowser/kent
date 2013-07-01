@@ -272,7 +272,7 @@ if (getH1n1Model(gene, modelPdbUrl))
 return;
 
 gotPDBFile = 0;
-safef(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
+sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
 
 printf("<TABLE>\n");
 printf("<TR><TD ALIGN=\"center\">Front</TD>\n");
@@ -304,7 +304,7 @@ return;
 
 if (sqlGetField(database, "protHomolog", "proteinID", cond_str) != NULL)
     {
-    safef(cond_str, sizeof(cond_str), "proteinID='%s'", item);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s'", item);
     predFN = sqlGetField(database, "protPredFile", "predFileName", cond_str);
     if (predFN != NULL)
 	{
@@ -417,7 +417,7 @@ mkChimerax(item, pdbUrl, NULL, &chimerax);
 printf("<A HREF=\"%s\" TARGET=_blank>%s</A>, view with <A HREF=\"%s\">Chimera</A><BR>\n", pdbUrl, item, chimerax.forHtml);
 
 gotPDBFile = 0;
-safef(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
+sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
 
 printf("<TABLE>\n");
 printf("<TR><TD ALIGN=\"center\">Front</TD>\n");
@@ -449,7 +449,7 @@ return;
 
 if (sqlGetField(database, "protHomolog", "proteinID", cond_str) != NULL)
     {
-    safef(cond_str, sizeof(cond_str), "proteinID='%s'", item);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s'", item);
     predFN = sqlGetField(database, "protPredFile", "predFileName", cond_str);
     if (predFN != NULL)
 	{
