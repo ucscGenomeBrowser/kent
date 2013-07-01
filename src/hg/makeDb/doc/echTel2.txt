@@ -295,22 +295,24 @@ echTel2.perChromTables = no
     # documentation for this step is in echTel1 - remember to do this
 
 ###########################################################################
-# construct downloads files (DONE - 2013-06-12 - Hiram)
+# construct downloads files (DONE - 2013-06-28 - Hiram)
 #   before starting downloads, the joinerCheck should be clean
 #   after echTel2 is added to all.joiner:
     joinerCheck -keys -database=echTel2 all.joiner
 
     cd /hive/data/genomes/echTel2
-    makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev echTel2 \
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev echTel2 \
 	> downloads.log 2>&1
-    # about 40 minutes
+    # real    27m35.022s
     # examine the README.txt files to verify the text
 
 ###########################################################################
-# ready for first pushQ entry (DONE - 2013-06-12 - Hiram)
+# ready for first pushQ entry (DONE - 2013-06-28 - Hiram)
     mkdir /hive/data/genomes/echTel2/pushQ
     cd /hive/data/genomes/echTel2/pushQ
-    makePushQSql.pl echTel2 > echTel2.sql 2> stderr.out
+    time makePushQSql.pl echTel2 > echTel2.sql 2> stderr.out
+    #  real    3m58.285s
+
     # some errors are legitimate and OK:
      head stderr.out
 # WARNING: hgwdev does not have /gbdb/echTel2/wib/gc5Base.wib
@@ -319,18 +321,17 @@ echTel2.perChromTables = no
 # WARNING: echTel2 does not have seq
 # WARNING: echTel2 does not have extFile
     scp -p echTel2.sql hgwbeta:/tmp
-    ssh hgwbeta
-    cd /tmp
-    hgsql qapushq < echTel2.sql
+    ssh hgwbeta 'hgsql qapushq < /tmp/echTel2.sql'
+    # look at the pushQ and verify all the files can be seen
 
 ###########################################################################
-# lastz alignment with Human/hg19 (TBD - Hiram)
+# lastz alignment with Human/hg19 (DONE - 2013-06-26 - Hiram)
     #	the original alignment
-    cd /hive/data/genomes/hg19/bed/lastzEchTel2.2011-04-19
+    cd /hive/data/genomes/hg19/bed/lastzEchTel2.2013-06-12
     cat fb.hg19.chainEchTel2Link.txt
-    #	102917023 bases of 2897316137 (3.552%) in intersection
+    #	873117393 bases of 2897316137 (30.135%) in intersection
 
-    #	running the swap
+    #	running this swap
     mkdir /hive/data/genomes/echTel2/bed/blastz.hg19.swap
     cd /hive/data/genomes/echTel2/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -340,7 +341,7 @@ echTel2.perChromTables = no
 	-syntenicNet -swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    20m45.683s
     cat fb.echTel2.chainHg19Link.txt
-    #	88296392 bases of 1701353770 (5.190%) in intersection
+    #	852830619 bases of 2605196361 (32.736%) in intersection
 
 ############################################################################
 # blat servers (DONE - 2013-06-10 - Hiram)

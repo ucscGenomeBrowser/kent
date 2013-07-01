@@ -51,6 +51,7 @@ if (format != NULL) {
     fflush(stdout);
     vfprintf(stderr, format, args);
     fprintf(stderr, "\n");
+    fflush(stderr);
     }
 }
 

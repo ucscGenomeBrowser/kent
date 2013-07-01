@@ -5,7 +5,7 @@ longLabel Personal Genome Variants
 group varRep
 priority 500
 visibility hide
-subGroup1 view Projects A_PSU=PSU_Bushmen B_1kG=1000_Genomes_Pilot C_CG=Complete_Genomics D_PGP=Personal_Genomes_Project N_1off=Single-Genome_Projects
+subGroup1 view Projects A_PSU=PSU_Bushmen B_1kG=1000_Genomes_March_2010 C_CG=Complete_Genomics D_PGP=Personal_Genomes_Project N_1off=Single-Genome_Projects
 subGroup2 type Variant_type SNP=SNP Indel=Indel
 subGroup3 id Genome AA_KB1=KB1 AB_NB1=NB1 AC_MD8=MD8 AD_TK1=TK1 AE_ABT=ABT BF_12878=NA12878 BG_12891=NA12891 BH_12892=NA12892 BI_19240=NA19240 BJ_19238=NA19238 BK_19239=NA19239 CA_PUR_731=HG00731 CB_PUR_732=HG00732 CC_PUR_733=HG00733 NL_Venter=Venter NM_Watson=Watson NN_18507=NA18507 NO_YH=YH NP_SJK=SJK NQ_AK1=AK1 NR_Quake=Quake NRS_Irish=Irish NS_Saqqaq=Saqqaq CA_div_GS19704=NA19704 CI_div_GS20511=NA20511 CK_div_GS18502=NA18502 CD_div_GS20847=NA20847 CG_div_GS19669=NA19669 CG_div_GS19735=NA19735 CC_div_GS18558=NA18558 CE_div_GS18942=NA18942 CH_div_GS21737=NA21737 CPed_GS12877=NA12877 CG_div_GS19649=NA19649 CC_div_GS18537=NA18537 CH_div_GS21732=NA21732 CA_div_GS19701=NA19701 CH_div_GS21767=NA21767 CC_div_GS18555=NA18555 CI_div_GS20510=NA20510 CPed_GS12885=NA12885 CA_div_GS19834=NA19834 CPed_GS12890=NA12890 CC_div_GS18526=NA18526 CPed_GS12883=NA12883 CG_div_GS19670=NA19670 CE_div_GS18956=NA18956 CF_div_GS19017=NA19017 CK_div_GS18501=NA18501 CI_div_GS20502=NA20502 CPed_GS12886=NA12886 CB_div_GS06985=NA06985 CK_div_GS18508=NA18508 CK_div_GS18505=NA18505 CB_div_GS10851=NA10851 CA_div_GS19700=NA19700 CB_div_GS12004=NA12004 CB_div_GS07357=NA07357 CD_div_GS20846=NA20846 CPed_GS12887=NA12887 CB_div_GS06994=NA06994 CD_div_GS20845=NA20845 CPed_GS12884=NA12884 CPed_GS12888=NA12888 CPed_GS12879=NA12879 CPed_GS12882=NA12882 CD_div_GS20850=NA20850 CI_div_GS20509=NA20509 CPed_GS12880=NA12880 CPed_GS12889=NA12889 CF_div_GS19020=NA19020 CA_div_GS19703=NA19703 CF_div_GS19025=NA19025 CPed_GS12881=NA12881 CE_div_GS18940=NA18940 CG_div_GS19648=NA19648 CE_div_GS18947=NA18947 CF_div_GS19026=NA19026 CK_div_GS19129=NA19129 CK_div_GS18517=NA18517 CH_div_GS21733=NA21733 CK_div_GS18504=NA18504 CPed_GS12893=NA12893 D_Church=Church D_Gill=Gill D_Angrist=Angrist D_GatesJr=Gates_Jr D_GatesSr=Gates_Sr NR_Kriek=Kriek NR_Lucier=Lucier
 dragAndDrop subTracks
@@ -112,9 +112,9 @@ type pgSnp
         longLabel ABT Genome Variants, Illumina 7.2X
 
     track pgSnp1kG
-    shortLabel 1000GenomesPilot
+    shortLabel 1000 Genomes March 2010
     view B_1kG
-    visibility pack
+    visibility hide
     parent pgSnp
 
         track pgNA12878
@@ -162,7 +162,7 @@ type pgSnp
     track pgSnp1off
     shortLabel Single Genomes
     view N_1off
-    visibility pack
+    visibility hide
     parent pgSnp
 
         track pgVenter
@@ -206,6 +206,7 @@ type pgSnp
         shortLabel AK1
         longLabel Anonymous Korean individual, AK1 (Genomic Medicine Institute)
         color 0,128,64
+        visibility pack
 
         track pgQuake
         parent pgSnp1off
@@ -225,12 +226,14 @@ type pgSnp
 	subGroups view=N_1off id=NS_Saqqaq type=SNP
         shortLabel Saqqaq
         longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq (Saqqaq Genome Project)
+        visibility pack
 
         track pgSaqqaqHc
         parent pgSnp1off
 	subGroups view=N_1off id=NS_Saqqaq type=SNP
         shortLabel Saqqaq HC
-        longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq, high confidence SNPs (Saqqaq Genome Project)
+        longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq, high confidence SNPs
+        visibility pack
 
 	track pgKriek
         parent pgSnp1off
@@ -261,7 +264,7 @@ type pgSnp
     track pgSnpPGP
     shortLabel Personal Genome Project
     view D_PGP
-    visibility pack
+    visibility hide
     parent pgSnp
 
         track pgChurch
@@ -298,7 +301,7 @@ type pgSnp
     parent pgSnp
     shortLabel Complete Genomics
     view C_CG
-    visibility pack
+    visibility hide
 
         track pgHG00731
         parent pgSnpCg

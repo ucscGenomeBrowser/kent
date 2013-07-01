@@ -425,7 +425,7 @@ return WEXITSTATUS(status);
 
 static void pipelineExec(struct pipeline* pl, int stdinFd, int stdoutFd, int stderrFd,
                          void *otherEndBuf, size_t otherEndBufSize)
-/* Fork the group leader, which then launches all all processes in a pipeline,
+/* Fork the group leader, which then launches all processes in a pipeline,
  * stdinFd and stdoutFd are the ends of the pipeline, stderrFd is applied to
  * all processes, including group leader */
 {

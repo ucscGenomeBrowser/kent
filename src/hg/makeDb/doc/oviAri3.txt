@@ -294,9 +294,26 @@ taxId 9940
     # 2534344180 bases of 2534344180 (100.000%) in intersection
     # real    0m12.828s
 
-    time featureBits oviAri3 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # used to do this featureBits, but it is really really slow if there
+    # are a log of contigs
+    # time featureBits oviAri3 allGaps.bed notGap.bed -bed=new.gaps.bed
     # 8314 bases of 2534344180 (0.000%) in intersection
     #  real    3m33.473s
+
+    # this is much faster:
+    awk '{print $3-$2,$0}' notGap.bed | sort -rn > notGap.sizes.txt
+    # largest contiguous sequence:
+    head -1 notGap.sizes.txt | awk '{print $1}'
+    # 383429
+    # minimal coverage 1 base out of that largest sequence:
+    echo 383429 | awk '{printf "%15.10f\n", 1/(2*$1)}' | sed -e 's/ //g'
+    # 0.0000013040
+    time bedIntersect -minCoverage=0.0000013040 allGaps.bed notGap.bed \
+      test.new.gaps.bed
+    # real    0m0.724s
+    # number of bases in these new gaps:
+    awk '{print $3-$2}' test.new.gaps.bed | ave stdin | grep total
+    # total 8314.000000
 
     #	what is the highest index in the existing gap table:
     hgsql -N -e "select ix from gap;" oviAri3 | sort -n | tail -1
@@ -341,12 +358,9 @@ close (FH);
     gapToLift -minGap=1 oviAri3 nonBridged.lift -bedFile=nonBridged.bed
     # see example in danRer7.txt
 
-    # are there no non-bridged gaps here:
+    # are there *only* bridged gaps, no need for genbank lift file
     hgsql -N -e "select bridge from gap;" oviAri3 | sort | uniq -c
     #   126619 yes
-    hgsql -N -e "select type from gap;" oviAri3 | sort | uniq -c
-    #      1552 other
-    #    125067 scaffold
 
 ##########################################################################
 ## WINDOWMASKER (DONE- 2013-06-09 - Hiram)
@@ -375,36 +389,22 @@ close (FH);
     mkdir /hive/data/genomes/oviAri3/bed/cpgIslands
     cd /hive/data/genomes/oviAri3/bed/cpgIslands
     time doCpgIslands.pl oviAri3 > do.log 2>&1 &
-XXX - running - Mon Jun 10 08:59:35 PDT 2013
-    #  real    17m40.265s
+    #  real    14m42.645s
 
     cat fb.oviAri3.cpgIslandExt.txt
-    #   16473980 bases of 1222864691 (1.347%) in intersection
+    #   19288346 bases of 2534335866 (0.761%) in intersection
 
 #########################################################################
 # genscan - (DONE - 2013-06-10 - Hiram)
     mkdir /hive/data/genomes/oviAri3/bed/genscan
     cd /hive/data/genomes/oviAri3/bed/genscan
     time doGenscan.pl oviAri3 > do.log 2>&1  &
-XXX - running - Mon Jun 10 09:00:08 PDT 2013
-    #  real    47m7.823s
-    # XXX failed four jobs, running manually on hgwdev: chr9 chr1A chr3 chr2
-    # with -window=2000000 - all bug chr9 finished
-# real    57m16.383s
-# user    133m46.445s
-# sys     2m55.584s
-    # running chr9 with -window=1000000
-# real    10m14.291s
-# user    9m59.182s
-# sys     0m13.720s
-
-    time doGenscan.pl -continue=makeBed oviAri3 > makeBed.log 2>&1
-    # real    30m4.119s
+    #  real    115m34.625s
 
     cat fb.oviAri3.genscan.txt
-    #   52986693 bases of 1222864691 (4.333%) in intersection
+    #   53897560 bases of 2534335866 (2.127%) in intersection
     cat fb.oviAri3.genscanSubopt.txt
-    #   28313661 bases of 1222864691 (2.315%) in intersection
+    #   52669785 bases of 2534335866 (2.078%) in intersection
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-10 - Hiram)
@@ -428,7 +428,7 @@ XXX - running - Mon Jun 10 09:00:08 PDT 2013
     #    126619 yes
 
 #########################################################################
-# AUTO UPDATE GENBANK (DONE - 2013-06-10 - Pauline)
+# AUTO UPDATE GENBANK (DONE - 2013-06-10,19 - Hiram)
     # examine the file:
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
@@ -470,42 +470,41 @@ oviAri3.upstreamGeneTbl = refGene
     screen -S oviAri3           # long running job managed in screen
     cd /cluster/data/genbank
     time ./bin/gbAlignStep -initial oviAri3 &
-#  logFile: var/build/logs/2013.06.10-09:12:43.oviAri3.initalign.log
-XXX - running - Mon Jun 10 09:13:09 PDT 2013
-    # real 90291.12
-    # user 19200.27
-    # sys 11190.97
+    #  logFile: var/build/logs/2013.06.10-09:12:43.oviAri3.initalign.log
+    # real 127433.58
+    # user 19976.10
+    # sys 12191.65
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
 
     time ./bin/gbDbLoadStep -drop -initialLoad oviAri3 &
-    #   logFile: var/dbload/hgwdev/logs/2013.06.08-18:59:10.dbload.log
-XXX - running - Sat Jun  8 18:59:23 PDT 2013
-   #   real 2453.76
+    #   logFile: var/dbload/hgwdev/logs/2013.06.18-10:58:46.dbload.log
+    #   real 98m19.378s
 
-    # enable daily alignment and update of hgwdev (DONE - 2013-03-08 - Pauline)
+    # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add oviAri3 to:
     vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added oviAri3. refs #9812" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added oviAri3. refs #9409" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
+############################################################################
+# construct liftOver from oviAri1 to oviAri3 (DONE - 2013-06-19 - Hiram)
+    # documentation for this step is in oviAri1 - remember to do this
+
 #########################################################################
-# set default position to RHO gene displays  (DONE - 2013-03-08 -Pauline)
+# set default position to RHO gene displays  (TBD - 2013-06-28 - Hiram)
     hgsql -e \
 'update dbDb set defaultPos="chr21:52,409,568-52,414,485" where name="oviAri3";' \
 	hgcentraltest
-    # a bit wider for a little more context (2013-03-28 - Hiram)
-    hgsql -e \
-'update dbDb set defaultPos="chr21:52408339-52415715" where name="oviAri3";' \
-	hgcentraltest
 
 ############################################################################
-# downloads and pushQ entry (DONE - 2013-03-08 - Pauline)
+XXX ready for this 
+# downloads and pushQ entry (TBD - 2013-03-08 - Hiram)
     # after adding oviAri3 to the all.joiner file and verifying that
     #   joinerCheck is clean (i.e. run joinerCheck w -times and -keys flags
     #   to make sure there are no errors), can construct the downloads:
@@ -530,36 +529,15 @@ XXX - running - Sat Jun  8 18:59:23 PDT 2013
     scp -p oviAri3.sql hgwbeta:/tmp/
     ssh hgwbeta "hgsql qapushq < /tmp/oviAri3.sql"
 
-
 ############################################################################
-# construct liftOver to oviAri3 (DONE - 2013-03-07 - Pauline)
-    screen -S lift	# manage this longish running job in a screen
-    mkdir /hive/data/genomes/nomLeu2/bed/blat.oviAri3.2013-03-06
-    cd /hive/data/genomes/nomLeu2/bed/blat.oviAri3.2013-03-06
-    # check it with -debug first to see if it is going to work:
-    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
-	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
-	-debug -dbHost=hgwdev -workhorse=hgwdev nomLeu2 oviAri3
-    #   real    0m1.838s
-    # if that is OK, then run it:
-    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
-	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
-	-dbHost=hgwdev -workhorse=hgwdev nomLeu2 oviAri3 >& do.log
-    #	real    277m26.138s
-
-    # verify this file exists:
-    #	/gbdb/nomLeu2/liftOver/nomLeu2.over.chain.gz
-    # and try out the conversion on genome-test from nomLeu2 to oviAri3
-
-############################################################################
- #  BLATSERVERS ENTRY (DONE - 2013-03-12 - Pauline)
- #	After getting a blat server assigned by the Blat Server Gods,
+#  BLATSERVERS ENTRY (DONE - 2013-06-26 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
      ssh hgwdev
 
      hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
- 	VALUES ("oviAri3", "blat4c", "17840", "1", "0"); \
+ 	VALUES ("oviAri3", "blat4c", "17850", "1", "0"); \
  	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
- 	VALUES ("oviAri3", "blat4c", "17841", "0", "1");' \
+ 	VALUES ("oviAri3", "blat4c", "17851", "0", "1");' \
  	    hgcentraltest
      #	test it with some sequence
 
@@ -570,23 +548,28 @@ XXX - running - Sat Jun  8 18:59:23 PDT 2013
           | hgsql -h genome-testdb hgcentraltest
 
 ############################################################################
-# SWAP hg19/Human chain/net (DONE - 2013-03-26 - Pauline)
+# SWAP hg19/Human chain/net (DONE - 2013-06-28 - Hiram)
     # original alignment
-    cd /hive/data/genomes/hg19/bed/lastzOviAri3.2013-03-06
+    cd /hive/data/genomes/hg19/bed/lastzOviAri3.2013-06-17
     cat fb.hg19.chainOviAri3Link.txt
-    #   2542790081 bases of 2897316137 (87.764%) in intersection
+    #	1356890439 bases of 2897316137 (46.833%) in intersection
 
-    #   running this swap - DONE - 2013-03-26
+    # and for the swap:
     mkdir /hive/data/genomes/oviAri3/bed/blastz.hg19.swap
     cd /hive/data/genomes/oviAri3/bed/blastz.hg19.swap
+
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hg19/bed/lastzOviAri3.2013-03-06/DEF \
-        -swap -syntenicNet \
-        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        > swap.log 2>&1 &
-    #   real   138m48s
+       /hive/data/genomes/hg19/bed/lastzOviAri3.2013-06-17/DEF \
+       -swap -syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+       -bigClusterHub=swarm -chainMinScore=3000 -chainLinearGap=medium \
+       > swap.log 2>&1
+    #  real    107m13.938s
+
     cat fb.oviAri3.chainHg19Link.txt
-    #   2479386532 bases of 2756609047 (89.943%) in intersection
+    #  1316305922 bases of 2534335866 (51.939%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/oviAri3/bed
+    ln -s blastz.hg19.swap lastz.hg19
 
 ##############################################################################

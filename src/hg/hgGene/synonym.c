@@ -336,7 +336,7 @@ if (refSeqAcc[0] != 0)
     }
 else if (mrnaAcc[0] != 0)
     {
-    safef(condStr, sizeof(condStr), "acc = '%s'", mrnaAcc);
+    sqlSafefFrag(condStr, sizeof(condStr), "acc = '%s'", mrnaAcc);
     if (sqlGetField(database, "gbCdnaInfo", "acc", condStr) != NULL)
         {
     	hPrintf("<B>Representative RNA: </B> <A HREF=\"");
@@ -356,7 +356,7 @@ if (protAcc != NULL)
         && (isNotEmpty(curGeneChrom) &&
 	      differentWord(curGeneChrom,"none")))
     	{
-    	safef(condStr, sizeof(condStr), "name = '%s' and chrom = '%s' and txStart=%d and txEnd=%d", 
+    	sqlSafefFrag(condStr, sizeof(condStr), "name = '%s' and chrom = '%s' and txStart=%d and txEnd=%d", 
 	        id, curGeneChrom, curGeneStart, curGeneEnd);
     	kgProteinID = sqlGetField(database, "knownGene", "proteinID", condStr);
     	}

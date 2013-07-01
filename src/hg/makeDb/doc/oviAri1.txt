@@ -12,9 +12,9 @@
 # file template copied from susScr2.txt
 
 
-# Ovis aries (NCBI Project ID: 10709, Accession: GCA_000005525.1) 
+# Ovis aries (NCBI Project ID: 10709, Accession: GCA_000005525.1)
 #   by International Sheep Genomics Consortium (ISGC)
-#    assembly] sequence: 
+#    assembly] sequence:
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/
 #    Ovis_aries/Ovis_aries_1.0
 
@@ -29,7 +29,7 @@
 "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Ovis_aries/Ovis_aries_1.0/*"
     # FINISHED --09:05:15--
     # Downloaded: 151 files, 1.3G in 7m 42s (2.98 MB/s)
-    # Read ASSEMBLY_INFO 
+    # Read ASSEMBLY_INFO
 
     mkdir ucscChr
     # stay at genbank directory
@@ -54,18 +54,18 @@ do
     zcat ${S}/FASTA/chr${C}.fa.gz | grep -v "^>" >> ucscChr/chr${C}.fa
     gzip ucscChr/chr${C}.fa &
 done
-   # Check them with faSize 
+   # Check them with faSize
     faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz
     #   2784748484 bases (1600136831 N's 1184611653 real 1184611653 upper
     #   0 lower) in 27 sequences in 27 files
     faSize ucscChr/chr*.fa.gz
-    #   2784748484 bases (1600136831 N's 1184611653 real 1184611653 upper 
+    #   2784748484 bases (1600136831 N's 1184611653 real 1184611653 upper
     #   0 lower) in 27 sequences in 27 files
 
     # For unplaced scalfolds, named them as chrUn_xxxxxxxx
-    #   where xxxxxx is the original access id as: chrUn_GL340781.1  
+    #   where xxxxxx is the original access id as: chrUn_GL340781.1
     #   The ".1" at the end need to be filter out since
-    #   MySQL does not allow "." as part of the table name and 
+    #   MySQL does not allow "." as part of the table name and
     #   will casue problems in genbank task step later
 
 export S=Primary_Assembly/unplaced_scaffolds
@@ -82,7 +82,7 @@ zcat ${S}/FASTA/unplaced.scaf.fa.gz \
 zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
    #      1190    1190   19040
 
-   # Check them with faSize 
+   # Check them with faSize
    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
    #  75747883 bases (59104875 N's 16643008 real 16643008 upper 0 lower)
    #     in 1190 sequences in 1 files
@@ -133,7 +133,7 @@ taxId 9940
     #   - (optional) Clean up /cluster/data/oviAri1/TemporaryTrackDbCheckout
     #   - cvsup your ~/kent/src/hg/makeDb/trackDb and make future edits there.
     #	browser should function now
-    #  and checkin the *.ra and *.html files. in 
+    #  and checkin the *.ra and *.html files. in
     #     /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/sheep/oviAri1
 
 
@@ -146,7 +146,7 @@ taxId 9940
 	-workhorse=hgwdev -bigClusterHub=swarm -noSplit oviAri1 > do.log 2>&1 &
     #   real    178m52.467s
     cat faSize.rmsk.txt
-    #   2860512983 bases (1659241706 N's 1201271277 real 954826276 upper 
+    #   2860512983 bases (1659241706 N's 1201271277 real 954826276 upper
     #    246445001 lower) in 1218 sequences in 1 files
     #   %8.62 masked total, %20.52 masked real
 
@@ -158,7 +158,7 @@ taxId 9940
     time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-bigClusterHub=pk -smallClusterHub=pk oviAri1 > do.log 2>&1 &
     #   real    3m23.411s
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #   4278474 bases of 1201962925 (0.356%) in intersection
 
     #	add to the repeatMasker
@@ -232,7 +232,7 @@ close (FH);
 
 ########################################################################
 # Create kluster run files (DONE - 2010-04-15 - Chin)
-    # numerator is oviAri1 gapless bases "real" as reported by: 
+    # numerator is oviAri1 gapless bases "real" as reported by:
     featureBits -noRandom -noHap oviAri1 gap
     #     1600136831 bases of 1184628269 (135.075%) in intersection
 
@@ -398,7 +398,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     # based on result of
     # hgsql -N -e "select type from ctgPos2;" oviAri1 | sort | uniq
     # W
-    # prepare the src/hg/makeDb/trackDb/sheep/ctgPos2.html 
+    # prepare the src/hg/makeDb/trackDb/sheep/ctgPos2.html
 
 
 
@@ -470,7 +470,7 @@ limit vmemoryuse 163840m
      ./loadUp.csh > loadUp.log 2>&1 &
  ulimit -d  163840000
  ulimit -v 163840000
-    cat fb.bosTau4.chainOviAri1Link.txt 
+    cat fb.bosTau4.chainOviAri1Link.txt
     #   1319167970 bases of 2731830700 (48.289%) in intersection
     #	then continuing:
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -478,7 +478,7 @@ limit vmemoryuse 163840m
 	-continue=download -noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > download.part3.log 2>&1 &
-    # failed again with 
+    # failed again with
     #    needLargeMem: Out of memory - request size 1073741824 bytes, errno: 12
     #   add the following to netSynteny.csh
 # limit at 160 Gb
@@ -488,7 +488,7 @@ limit vmemoryuse 163840m
 
      tcsh
      cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16/axtChain
-     ./netSynteny.csh > & netSynteny_tcsh.log 
+     ./netSynteny.csh > & netSynteny_tcsh.log
 
    #   and the swap (working 2011-02-04)
     mkdir /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
@@ -506,7 +506,7 @@ limit vmemoryuse 163840m
 #  SWAP mm9 lastz (DONE - 2010-04-12 - Chin)
     #	original alignment
     cd	/hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-16
-    cat fb.mm9.chainOviAri1Link.txt 
+    cat fb.mm9.chainOviAri1Link.txt
     #   406407377 bases of 2620346127 (15.510%) in intersection
 
     #	and the swap
@@ -527,7 +527,7 @@ limit vmemoryuse 163840m
 #  SWAP hg19 lastz (DONE 2010-04-12 - Chin)
     #	original alignment
     cd /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-16
-    cat fb.hg19.chainOviAri1Link.txt 
+    cat fb.hg19.chainOviAri1Link.txt
     #   878545517 bases of 2897316137 (30.323%) in intersection
 
     #	and the swap
@@ -570,7 +570,7 @@ limit vmemoryuse 163840m
     #   original alignment
     cd /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-16
     cat fb.equCab2.chainOviAri1Link.txt
-    #   1012763540 bases of 2428790173 (41.698%) in intersection 
+    #   1012763540 bases of 2428790173 (41.698%) in intersection
 
 
     #   and the swap
@@ -601,7 +601,7 @@ limit vmemoryuse 163840m
     sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
     mv tmp.c cpg_lh.c
     make
-    cd ../../ 
+    cd ../../
     ln -s hg3rdParty/cpgIslands/cpglh.exe
     mkdir -p hardMaskedFa
     cut -f1 ../../chrom.sizes | while read C
@@ -637,7 +637,7 @@ endif
 '_EOF_'
     # << happy emacs
 
-    chmod 775 runOne 
+    chmod 775 runOne
     gensub2 chr.list single template jobList
     para create jobList
     para try
@@ -712,5 +712,24 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     hgsql qapushq < oviAri1.pushQ.sql
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
+
+############################################################################
+# construct liftOver to oviAri3 (DONE - 2013-06-19 - Hiram)
+    screen -S oviAri3	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/oviAri1/bed/blat.oviAri3.2013-06-19
+    cd /hive/data/genomes/oviAri1/bed/blat.oviAri3.2013-06-19
+    # check it with -debug first to see if it is going to work:
+    doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/oviAri1/jkStuff/oviAri1.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev oviAri1 oviAri3
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/oviAri1/jkStuff/oviAri1.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev oviAri1 oviAri3 > do.log 2>&1
+    #	real    106m33.304s
+
+    # verify this file exists:
+    #	/gbdb/oviAri1/liftOver/oviAri1ToOviAri3.over.chain.gz
+    # and try out the conversion on genome-test from oviAri1 to oviAri3
 
 ############################################################################
