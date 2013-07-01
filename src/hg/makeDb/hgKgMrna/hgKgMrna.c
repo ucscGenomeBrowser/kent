@@ -476,7 +476,7 @@ while ((psl = pslNext(lf)) != NULL)
 	dotOut();
 	}
    
-    sprintf(cond_str, "extAC='%s'", psl->qName);
+    sqlSafefFrag(cond_str, sizeof cond_str, "extAC='%s'", psl->qName);
     answer = sqlGetField(proteinDB, "spXref2", "displayID", cond_str);
 	       
     if (answer == NULL)

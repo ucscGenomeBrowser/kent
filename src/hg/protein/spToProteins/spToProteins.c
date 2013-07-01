@@ -88,7 +88,7 @@ while (row2 != NULL)
 	    bioDatabase = 2;
 	    }
 	}
-    safef(cond_str, sizeof(cond_str), "acc='%s'", accession);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "acc='%s'", accession);
     displayId = sqlGetField(proteinDatabaseName, "displayId", "val", cond_str);
 
     // !!! the divsion field probably should be eliminated later
@@ -102,9 +102,9 @@ while (row2 != NULL)
 	fprintf(o3, "%s\t%s\n", displayId, name->name);
 	}
 
-    safef(cond_str, sizeof(cond_str), "acc='%s'", accession);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "acc='%s'", accession);
     desc = sqlGetField(proteinDatabaseName, "description", "val", cond_str);
-    safef(cond_str, sizeof(cond_str), "uniProt='%s'", accession);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "uniProt='%s'", accession);
     hugoSymbol = sqlGetField(proteinsDB, "hgnc", "symbol", cond_str);
     hugoDesc = sqlGetField(proteinsDB, "hgnc", "name", cond_str);
     if (hugoSymbol==NULL) hugoSymbol = empty_str;

@@ -396,11 +396,11 @@ proteinID = cartOptionalString(cart, "proteinID");
 
 /* check proteinID to see if it is a valid SWISS-PROT/TrEMBL accession or display ID */
 /* then assign the accession number to global variable proteinID */
-safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
 if (proteinAC == NULL)
     {
-    safef(cond_str, sizeof(cond_str), "displayID='%s'", proteinID);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "displayID='%s'", proteinID);
     proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
@@ -414,13 +414,13 @@ if (proteinAC == NULL)
     }
 else
     {
-    safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
     protDisplayID = sqlGetField(protDbName, "spXref3", "displayID", cond_str);
     }
 
 if (spFindAcc(spConn, proteinID) == NULL)
     {
-    safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
     answer = sqlGetField(protDbName, "spXref3", "biodatabaseID", cond_str);
     if (sameWord(answer, "3"))
         {
@@ -445,16 +445,16 @@ else
   }
 if (kgVersion == KG_III)
     {
-    safef(cond_str, sizeof(cond_str), "spID='%s'", proteinID);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "spID='%s'", proteinID);
     mrnaID = sqlGetField(database, "kgXref", "kgId", cond_str);
     }
 else
     {
-    safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
     mrnaID = sqlGetField(database, "knownGene", "name", cond_str);
     }
 
-safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 description = sqlGetField(protDbName, "spXref3", "description", cond_str);
 
 /* obtain previous genome position range selected by the Genome Browser user */

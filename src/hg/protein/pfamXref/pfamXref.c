@@ -132,7 +132,7 @@ while (!done)
 		else
 		    {
 		    // ACs missing from spXref3 might be found from spSecondardy table
-		    sprintf(cond_str, "accession2 = '%s'", swissAC);
+		    sqlSafefFrag(cond_str, sizeof cond_str, "accession2 = '%s'", swissAC);
     		    answer = sqlGetField(proteinDB, "spSecondaryID", "displayID", cond_str);
 		    if (answer != NULL)
 		    	{

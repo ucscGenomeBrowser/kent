@@ -66,7 +66,7 @@ while (row2 != NULL)
 	chp = strstr(refAC, ".");
 	if (chp != NULL) *chp = '\0';
     
-	sprintf(cond_str, "name='%s'", gbAC);
+	sqlSafefFrag(cond_str, sizeof cond_str, "name='%s'", gbAC);
         kgID = sqlGetField(dbName, "knownGene", "name", cond_str);
 	if (kgID != NULL)
 	    {
