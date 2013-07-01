@@ -50,7 +50,7 @@ while (my $line = <FH>) {
 	if ($partLength != $checkLength);
     my $strand = "+";
     $strand = "-" if ($ori < 0);
-    if ($asmName =~ m/^GeneScaffold_/ && (($cmpName =~ m/^scaffold_/) || ($cmpName =~ m/^Scaffold/)) ) {
+    if ($asmName =~ m/^GeneScaffold_/ && (($cmpName =~ m/^scaffold_/) || ($cmpName =~ m/^Scaffold/) || ($cmpName =~ m/^contig/)) ) {
 	printf "%s\t%s\t%s\t%s\t%s\t%s\n", $asmName, $asmStart-1, $asmEnd,
 		$cmpName, $cmpStart-1, $strand;
     }
