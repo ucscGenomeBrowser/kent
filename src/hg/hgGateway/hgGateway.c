@@ -316,7 +316,7 @@ if (thisNodeStr)
             int newUriSize = strlen(uri) + 1024;
             char *newUri = needMem(newUriSize);
             safef(newUri, newUriSize, "http%s://%s:%s%s%sredirect=auto&source=%s", 
-		cgiServerHttpsIsOn ? "s" : "", newDomain, port, uri, sep, oldDomain);
+		cgiServerHttpsIsOn() ? "s" : "", newDomain, port, uri, sep, oldDomain);
             struct dyString *dy = dyStringNew(256);
             dyStringPrintf(dy,
                            "HTTP/1.1 302 found: \n"
