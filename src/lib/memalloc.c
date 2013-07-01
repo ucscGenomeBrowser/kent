@@ -356,30 +356,46 @@ void carefulCheckHeap()
 /* Walk through allocated memory and make sure that all cookies are
  * in place. */
 {
-pthread_mutex_lock( &carefulMutex );
 int maxPieces = 10000000;    /* Assume no more than this many pieces allocated. */
 struct carefulMemBlock *cmb;
 char *pEndCookie;
 size_t size;
+char errMsg[1024];
+boolean errFound = FALSE;
 
 if (carefulParent == NULL)
     return;
 
+pthread_mutex_lock( &carefulMutex );
 for (cmb = (struct carefulMemBlock *)(cmbAllocedList->head); cmb->next != NULL; cmb = cmb->next)
     {
     size = cmb->size;
     pEndCookie = (((char *)(cmb+1)) + size);
     if (cmb->startCookie != cmbStartCookie)
-        errAbort("Bad start cookie %x checking %llx\n", cmb->startCookie,
+	{
+        safef(errMsg, sizeof errMsg, "Bad start cookie %x checking %llx\n", cmb->startCookie,
                  ptrToLL(cmb+1));
+	errFound = TRUE;
+	break;
+	}
     if (memcmp(pEndCookie, cmbEndCookie, sizeof(cmbEndCookie)) != 0)
-        errAbort("Bad end cookie %x%x%x%x checking %llx\n", 
+	{
+        safef(errMsg, sizeof errMsg, "Bad end cookie %x%x%x%x checking %llx\n", 
                  pEndCookie[0], pEndCookie[1], pEndCookie[2], pEndCookie[3],
                  ptrToLL(cmb+1));
+	errFound = TRUE;
+	break;
+	}
     if (--maxPieces == 0)
-        errAbort("Loop or more than 10000000 pieces in memory list");
+	{
+        safef(errMsg, sizeof errMsg, "Loop or more than 10000000 pieces in memory list");
+	errFound = TRUE;
+	break;
+	}
     }
 pthread_mutex_unlock( &carefulMutex );
+if (errFound)
+    errAbort("%s", errMsg);
 }
 
 int carefulCountBlocksAllocated()
