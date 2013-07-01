@@ -1,4 +1,4 @@
-##
+#
 # genome databases to be aligned
 # Please keep in alphabetical for easy comparisons
 ##
@@ -165,3 +165,4 @@ vicPac2
 xenTro1
 xenTro2
 xenTro3
+xenTro7
