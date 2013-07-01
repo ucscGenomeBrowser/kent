@@ -100,7 +100,6 @@ hgsql -e "select displayId.val, displayId.acc, otherAcc.val from displayId, \
 
 hgLoadSqlTab $db spSecondaryID $kent/src/hg/lib/spSecondaryID.sql ./spSecondaryID.tab
 
-#stopped here
 #	Build pfamXref and pfamDesc tables
 # First get pfam info into /hive/data/outside/pfam/current/Pfam-A.full.gz somehow.
 # Did it this time with
@@ -121,6 +120,8 @@ cd /hive/data/inside/proteins/$date
 hgsql $spdb -N -e 'select extAcc1, d.val from extDbRef x, displayId d, extDb where x.acc=d.acc and extDb.val="PDB" and x.extDb=extDb.id'|sort -u >pdbSP.tab
 
 hgLoadSqlTab $db pdbSP $kent/src/hg/lib/pdbSP.sql pdbSP.tab
+
+#stopped here
 
 #	Build the spDisease table
 cd /hive/data/inside/proteins/$date

@@ -1318,7 +1318,7 @@ dyStringFree(&dy);
 int sqlWarnCount(struct sqlConnection *conn)
 /* Return the number of warnings. New feature in mysql5. */
 {
-char query[32];
+char query[64];
 sqlSafef(query, sizeof query, "SHOW COUNT(*) WARNINGS");
 return sqlQuickNum(conn, query);
 }
@@ -2388,7 +2388,7 @@ char *sqlVersion(struct sqlConnection *conn)
 /* Return version of MySQL database.  This will be something
  * of the form 5.0.18-standard. */
 {
-char query[32];
+char query[64];
 char **row;
 sqlSafef(query, sizeof query, "show variables like 'version'");
 struct sqlResult *sr = sqlGetResult(conn, query);

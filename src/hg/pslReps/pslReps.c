@@ -310,12 +310,10 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	fprintf(repFile, "%d,", packetVal[i]);
     fprintf(repFile, "\n");
 
-    carefulCheckHeap();
     freeMem(packetSize);
     freeMem(packetVal);
     }
 
-carefulCheckHeap();
 freeMem(repTrack);
 freeMem(scoreTrack);
 }

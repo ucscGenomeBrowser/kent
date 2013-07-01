@@ -239,20 +239,8 @@ if (endsWith(scriptName, "hgGateway") && geoMirrorEnabled())
         // We don't bother maintaining stuff in request URI, because it may contain items like hgsid and other host specific values
         int newUriSize = 2048;
 	char *newUri = needMem(newUriSize);
-	// TODO what about https?
-	safef(newUri, newUriSize, "http://%s:%s/cgi-bin/hgGateway?redirect=manual&source=%s", source, port, domain);
-
-	//empty TD disappears
-	/*
-	printf("<TR><TD COLSPAN=3 id='redirectTd' onclick=\"javascript:document.getElementById('redirectTd').innerHTML='';\">"
-	    "<center>"
-	    "You've been redirected to your nearest mirror - %s<br>"
-	    "<a href=\"%s\">Take me back to %s</a>"
-	    "</center>"
-	    "</TD></TR>\n"
-	    , domain, newUri, source );
-	    "<h3 style=\"background-color: #2636d1; text-align: center; color:#E0F0F0; margin-top:0px;\">"
-	*/
+	safef(newUri, newUriSize, "http%s://%s:%s/cgi-bin/hgGateway?redirect=manual&source=%s", 
+	    cgiServerHttpsIsOn() ? "s" : "", source, port, domain);
 
 	printf("<TR><TD COLSPAN=3 id='redirectTd' onclick=\"javascript:document.getElementById('redirectTd').innerHTML='';\">"
 	    "<div style=\"margin: 10px 25%%; border-style:solid; border-width:thin; border-color:#97D897;\">"
