@@ -137,13 +137,8 @@ return (count >= 1);
 boolean validateCategory(char *category)
 /* Validate the Category from the request */
 {
-const char *cat[5];
-cat[0] = "Tracks";
-cat[1] = "Genome Assemblies";
-cat[2] = "Browser Tools";
-cat[3] = "Command-line Utilities";
-cat[4] = "Others";
-
+const char *cat[5] = {"Tracks", "Genome Assemblies",  "Browser Tools", 
+                      "Command-line Utilities", "Others"};
 int i;
 for(i=0;i<5;i++)
 {
@@ -184,6 +179,7 @@ hPrintf(
 hPrintf(
     "       <label for=\"summary\">Summary:</label><input type=\"text\" name=\"suggestSummary\" id=\"summary\" size=\"74\" style=\"margin-left:20px\" maxlength=\"256\"/><BR><BR>\n"
     "       <label for=\"details\">Details:</label><BR><textarea name=\"suggestDetails\" id=\"details\" cols=\"100\" rows=\"15\" maxlength=\"4096\"></textarea><BR><BR>\n"
+    "<input type=\"text\" name=\"suggestWebsite\" style=\"display: none;\" />"
     "     </div>\n");
 hPrintf(
     "         <p>\n"
@@ -353,8 +349,20 @@ hPrintf(
     summary, details);
 } 
 
+void printInvalidForm()
+/* display invalid form page */
+{
+hPrintf(
+    "<h2>Invalid Form.</h2>");
+hPrintf(
+    "<p>"
+    "The form is invalid. Please correct it and "
+    "<a href=\"javascript: history.go(-1)\">submit</a> again.</p>"
+    );
+}
+
 void printInvalidCategory(char *invalidCategory)
-/* display suggestion confirm page */
+/* display invalid category page */
 {
 hPrintf(
     "<h2>Invalid Category.</h2>");
@@ -439,11 +447,19 @@ char *sEmail=cartUsualString(cart,"suggestEmail","");
 char *sCategory=cartUsualString(cart,"suggestCategory","");
 char *sSummary=cartUsualString(cart,"suggestSummary","");
 char *sDetails=cartUsualString(cart,"suggestDetails","");
-
+char *sWebsite=cartUsualString(cart,"suggestWebsite","");
 char suggestID[512];
 safef(suggestID, sizeof(suggestID),"%s %s", sEmail, now());
 char subject[512];
 safef(subject, sizeof(subject),"%s %s", filter, suggestID);
+
+/* reject if the hidden field is not blank */
+if (isNotEmpty(sWebsite))
+{
+    printInvalidForm();
+    cartSetString(cart, "suggestWebsite", "");
+    return;
+}
 
 /* reject suggestion if category is invalid */
 if (!validateCategory(sCategory))

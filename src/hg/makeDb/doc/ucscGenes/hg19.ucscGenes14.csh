@@ -1303,6 +1303,15 @@ hgLoadSqlTab $tempDb knownToPfam $kent/src/hg/lib/knownTo.sql knownToPfam.tab
 hgLoadSqlTab $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
 hgsql $tempDb -e "delete k from knownToPfam k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 
+cd $dir/pfam
+genePredToFakePsl hg19 knownGene knownGene.psl cdsOut.tab
+sort cdsOut.tab | sed 's/\.\./   /' > sortCdsOut.tab
+sort ucscPfam.tab> sortPfam.tab
+awk '{print $10, $11}' knownGene.psl > gene.sizes
+join sortCdsOut.tab sortPfam.tab |  awk '{print $1, $2 + 3 * $4, $2 + 3 * $5, $6}' | bedToPsl gene.sizes stdin domainToGene.psl
+pslMap domainToGene.psl knownGene.psl stdout | sort | uniq | pslToBed stdin domainToGenome.bed 
+hgLoadBed $tempDb ucscGenePfam domainToGenome.bed
+
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /hive/data/outside/scop/scop.hmm 
 # used existing ones...TODO
