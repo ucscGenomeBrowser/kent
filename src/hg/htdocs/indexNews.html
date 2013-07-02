@@ -25,6 +25,74 @@
           TARGET=_blank>genome-announce</A> mailing list.</P>
 
     <!-- start news -->
+        <p>
+        <font face="courier" size="3"><b>2 July 2013
+	- Assembly Data Hubs</b></font>
+        </p>
+	<p>
+	We are pleased to announce a new feature in the UCSC Genome Browser:
+	Assembly Data Hubs.
+	</p>
+	<p>
+	Assembly Data Hubs extend the functionality of Track Data Hubs to
+	assemblies that are not hosted natively on the Browser. Assembly Data
+	Hubs were developed to address the increasing need for researchers to
+	annotate sequence for which UCSC does not provide an annotation
+	database. They allow researchers to include the underlying reference
+	sequence, as well as data tracks that annotate that sequence. Sequence
+	is stored in the UCSC twoBit format, and the annotation tracks are
+	stored in the same manner as Track Data Hubs.
+	</p>
+        <p>
+	To read more about using Assembly Data Hubs, or about creating your
+	own, please see these guides:
+	</p>
+	<p>
+	<a href="http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html">
+	http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html</a>
+	</p>
+	<p>
+	<a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs">
+	http://genomewiki.ucsc.edu/index.php/Assembly_Hubs</a>
+	</p>
+	<p>
+	Many thanks to Hiram Clawson, Brian Raney, and Pauline Fujita for their work on this feature.
+	</p>
+	
+	<p>
+        <font face="courier" size="3"><b>2 July 2013
+	- New Gene Alleles feature on the details pages of UCSC genes</b></font>
+        </p>
+	<p>
+	We are excited to announce the release the new Gene Alleles feature on
+	the details pages of UCSC genes. For each protein-coding gene in the
+	UCSC Genes track, variant data from the 2,184 (per autosome) phased
+	chromosomes from Phase 1 of the 1000 Genomes Project have been
+	distilled into "gene haplotype alleles."  Each haplotype allele is a
+	distinct set of variants found on at least one of the 1000 Genomes
+	subject chromosomes. For each haplotype, we display its frequency in
+	the 1000 Genomes populations and indicate the frequency with which it
+	occurs homozygously in each population. Unexpected frequencies of
+	occurrence may thus be used to identify alleles that merit further
+	study. Predicted protein sequence for common haplotypes can also be
+	displayed, allowing differences among alleles to be used to identify
+	differences at the amino acid level.
+	</p>
+	<p>
+	To see the Gene Alleles feature, go to the details page for any
+	protein-coding gene in the UCSC Genes track and click the "Gene
+	Alleles" link in the top right cell of the "Page Index" matrix. This
+	will take you to the "Common Gene Haplotype Alleles" section. For
+	more information on this feature please see this help doc:
+	</p>
+	<p>
+	<a href="http://genome.ucsc.edu/goldenPath/help/haplotypes.html">
+	http://genome.ucsc.edu/goldenPath/help/haplotypes.html</a>
+	</p>
+	<p>
+	Many thanks to Tim Dreszer, Brooke Rhead and Pauline Fujita for their work on this feature.
+	</p>
+
  	<p>
  	<font face="courier" size="3"><b>28 June 2013
 	- New UCSC Genes Track Released for GRCh37/hg19</b></font>
@@ -60,79 +128,14 @@
 	</p> 
  
         <p>
-        <font face="courier" size="3"><b>27 June 2013
-        - New Official European Mirror Released</b></font>
-        </p>
-
-        <p>
-        The UCSC Genome Browser is pleased to announce the
-        introduction of a new mirror site to serve our users
-        in Europe.  Genome-euro is an official European mirror
-        site of the UCSC Genome Browser, at
-        <A HREF = "http://genome-euro.ucsc.edu" TARGET = _BLANK>
-        http://genome-euro.ucsc.edu</A>. The server is physically
-        located at the Universit&auml;t Bielefeld Center for
-        Biotechnology in Bielefeld, Germany, and is administered
-        by UCSC. Genome-euro is meant to be an alternate, faster
-        access point for those Browser users who are geographically
-        closer to central Europe than to the western United States.
-        </p>
-        <p>
-        All functionality will be the same as on the US server,
-        although Custom Tracks will not be transfered. Saved Sessions
-        containing Custom Tracks will require some manual <A HREF =
-        "http://genome.ucsc.edu/goldenPath/help/genomeEuro.html#sessions"
-        TARGET = _BLANK>intervention</A>.
-        </p>
-        <p>
-        When European users navigate to the US server home page
-        and click the "Genomes" menu item, they will receive a
-        notification that they have been
-        redirected to the more geographically-appropriate server.
-        They will have the option to remain on the US server, as
-        described in our
-        <A HREF = "http://genome.ucsc.edu/goldenPath/help/genomeEuro.html"
-        TARGET = _BLANK>documentation</A>.
-        </p>
-        <p>
-        The backup mirror in <A HREF = "http://genome-mirror.moma.ki.au.dk/"
-        TARGET = _BLANK>Aarhus, Denmark</A> will continue to serve as an
-        emergency site in the event of the official sites in California
-        and Germany malfunctioning.
-        </p>
-        <p>
-        We wish to express our special thanks to our colleagues at the
-        Universit&auml;t Bielefeld Bioinformatics, especially Jens Stoye,
-        for making this possible.
-        </p>
-
-	<p>
-	<font face="courier" size="3"><b>26 June 2013
-	- Suggestion Box Released</b></font>
-	</p>
-	<p>
-	Due to popular demand, we have created a suggestion box for track, assembly,
-	tool, and other requests. All suggestions will be assigned a reference
-	number so that you may follow up on their progress with our staff. Please
-	limit the use of this form to requests for new features; questions and reports
-	of problems about existing features and data should continue to be directed to
-	our mailing lists. You may reach the suggestion box from the
-	<a href="contacts.html">Contact Us</a> page or by
-	<a href="cgi-bin/hgUserSuggestion">clicking here</a>.
-	</p>
-	<p>
- 
-        <!-- start archives -->
 	<hr>
-
-    <!-- staged for archive use
 
         <p>
         <font face="courier" size="3"><b>27 June 2013
         - New Official European Mirror Released</b></font> Announcing
         an official mirror for European users, with automatic
         redirection.
-        <a href="goldenPath/newsarch.html#062713">Read more</a>.</p>
+        <a href="goldenPath/newsarch.html#062713">Read more</a>.
         </p>
 
 	<p>
@@ -141,26 +144,29 @@
 	Due to popular demand, we have created a suggestion box for track, assembly,
 	tool, and other feature requests.
 	<a href="goldenPath/newsarch.html#062613">Read more</a>.</p>
-    -->
+
+        <!-- start archives -->
+	<hr>
+
+
+    <!-- staged for archive use
+       <p>
+        <font face="courier" size="3"><b>2 July 2013
+        - Assembly Data Hubs</b></font>
+        </p>
+	<p>
+        <a href="goldenPath/newsarch.html#070213">Read more</a>.
+        </p>
 
         <p>
-        <font face="courier" size="3"><b>12 June 2013
-        - Ferret Genome Browser Released:</b></font>
-        A Genome Browser is now available for the Ferret
-        (<em>Mustela putorius furo</em>) assembly released by the Ferret Genome Sequencing Consortium
-        April  2011 (version MusPutFur1.0, UCSC version musFur1).
-	<a href="goldenPath/newsarch.html#061213">Read more</a>.</p>
+        <font face="courier" size="3"><b>2 July 2013
+        - New Gene Alleles feature on the details pages of UCSC genes</b></font>
+        </p>
+        <a href="goldenPath/newsarch.html#070213b">Read more</a>.
+        </p>
 
 
- 	<p>
-        <font face="courier" size="3"><b>22 May 2013
-        - Gibbon Genome Browser Released:</b></font>
-        A Genome Browser is now available for the Gibbon
-        (<em>Nomascus leucogenys</em>) assembly released by the Gibbon Genome Sequencing Consortium
-	October 2012 (version Nleu_3.0, UCSC version nomLeu3).
-        <a href="goldenPath/newsarch.html#052213">Read more</a>.</p>
-
-==> <a href="goldenPath/newsarch.html">News Archives</a>
+    -->
 
             </TD><TD WIDTH=15>
          </TD></TR></TABLE>
