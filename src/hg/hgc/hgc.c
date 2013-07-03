@@ -9266,9 +9266,9 @@ chromStart = cartOptionalString(cart, "o");
 chromEnd   = cartOptionalString(cart, "t");
 
 sqlSafef(query, sizeof(query),
-      "select %s,%s from cosmicRaw where cosmic_mutation_id='%s'",
-      "source,cosmic_mutation_id,gene_name,accession_number,mut_description,mut_syntax_cds,mut_syntax_aa",
-      "chromosome,grch37_start,grch37_stop,mut_nt,mut_aa,tumour_site,mutated_samples,examined_samples,mut_freq",
+      "select source,cosmic_mutation_id,gene_name,accession_number,mut_description,mut_syntax_cds,mut_syntax_aa,"
+      "chromosome,grch37_start,grch37_stop,mut_nt,mut_aa,tumour_site,mutated_samples,examined_samples,mut_freq"
+      " from cosmicRaw where cosmic_mutation_id='%s'",
       itemName);
 
 sr = sqlMustGetResult(conn, query);
@@ -9341,8 +9341,8 @@ if (row != NULL)
     sqlFreeResult(&sr2);
 
     sqlSafef(query2, sizeof(query2),
-      "select %s from cosmicRaw where cosmic_mutation_id='%s' order by tumour_site",
-      "tumour_site,mutated_samples,examined_samples,mut_freq ",
+      "select tumour_site,mutated_samples,examined_samples,mut_freq "
+      " from cosmicRaw where cosmic_mutation_id='%s' order by tumour_site",
       itemName);
 
     sr2 = sqlMustGetResult(conn2, query2);
