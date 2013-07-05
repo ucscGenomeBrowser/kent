@@ -137,6 +137,7 @@ void printMenuBar()
 {
 struct hotLink *link, *links = NULL;
 int i, len;
+struct sqlConnection *conn = hAllocConn(database);
 char *menuStr, buf[4096], uiVars[1024];
 safef(uiVars, sizeof(uiVars), "%s=%u", cartSessionVarName(), cartSessionId(cart));
 
@@ -159,7 +160,9 @@ if (differentWord(database,"susScr2"))
     char ensVersionString[256], ensDateReference[256];
     ensGeneTrackVersion(database, ensVersionString, ensDateReference, sizeof(ensVersionString));
 
-    if (sameWord(database,"hg19"))
+    if (sqlTableExists(conn, UCSC_TO_ENSEMBL))
+        printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
+    else if (sameWord(database,"hg19"))
         {
         printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
         }
@@ -189,7 +192,6 @@ if (differentWord(database,"susScr2"))
             else if (hTableExists(database, ctgPos))
                 /* see if we are entirely within a single contig */
                 {
-                struct sqlConnection *conn = hAllocConn(database);
                 struct sqlResult *sr = NULL;
                 char **row = NULL;
                 char query[256];
@@ -209,7 +211,6 @@ if (differentWord(database,"susScr2"))
                         break;
                     }
                 sqlFreeResult(&sr);
-                hFreeConn(&conn);
                 if (1 == itemCount)
                     {   // verify *entirely* within single contig
                     if ((winEnd <= ctgItem->chromEnd) &&
@@ -230,6 +231,7 @@ if (differentWord(database,"susScr2"))
             }
         }
     }
+hFreeConn(&conn);
 
 if (sameString(database, "hg18"))
     {
