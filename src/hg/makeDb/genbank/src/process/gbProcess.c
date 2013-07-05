@@ -89,7 +89,7 @@ static FILE *gbIdxFile = NULL;
 static struct hash *openedFiles = NULL;
 static struct gbFa *gPepFa = NULL;
 
-static unsigned gbType = 0;     /* GB_MRNA, GB_EST */
+static unsigned gbType = 0;     /* GB_MRNA, GB_EST, GB_DNA */
 static boolean inclXMs = FALSE; /* Should XM_ refseqs be included? */
 
 struct authorExample
@@ -525,16 +525,29 @@ else if (gbGuessSrcDb(acc) == GB_REFSEQ)
     return (startsWith("NM_", acc) || startsWith("NR_", acc)
             || ((startsWith("XM_", acc) && inclXMs)));
     }
-else if (sameString(cat, "GSS") || sameString(cat, "HTG") || sameString(cat, "STS") || sameString(cat, "CON"))
+else if (sameString(cat, "GSS") || 
+         sameString(cat, "HTG") || 
+        (sameString(cat, "STS") && (gbType!=GB_DNA)) || 
+        (sameString(cat, "CON") && (gbType!=GB_DNA)))
     return FALSE;   // division to ignore
 else
     {
-    if (sameString(cat, "EST"))
+    printf("%s %s\n", acc, cat);
+    if (sameString(cat, "EST")) {
+        printf("is est\n");
         return (gbType & GB_EST) != 0;
+        }
     else if (gbType & GB_MRNA)
         {
+        printf("is rna\n");
         // not an EST, keep any type of RNA
         return containsStringNoCase(kvtGet(kvt, "mol")->val, "RNA") != NULL;
+        }
+    else if (gbType & GB_DNA)
+        {
+        printf("is dna\n");
+        // keep any type of DNA if DNA filter set
+        return containsStringNoCase(kvtGet(kvt, "mol")->val, "DNA") != NULL;
         }
     else
         return FALSE;
@@ -767,7 +780,7 @@ errAbort("gbProcess - Convert GenBank flat format file to an fa file containing\
          "usage:\n"
          "   gbProcess [options] faFile raFile genBankFile(s)\n"
          "options:\n"
-         "     -type=mrna|est - genbank type (note: mRNA gets other RNAs)\n"
+         "     -type=mrna|est|dna - genbank type (note: mRNA gets other RNAs)\n"
          "     -inclXMs - don't drop XM entries\n"
          "     -byAccPrefix=n - separate into files by the first n,\n"
          "      case-insensitive letters of the accession\n"
