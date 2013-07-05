@@ -532,20 +532,16 @@ else if (sameString(cat, "GSS") ||
     return FALSE;   // division to ignore
 else
     {
-    printf("%s %s\n", acc, cat);
     if (sameString(cat, "EST")) {
-        printf("is est\n");
         return (gbType & GB_EST) != 0;
         }
     else if (gbType & GB_MRNA)
         {
-        printf("is rna\n");
         // not an EST, keep any type of RNA
         return containsStringNoCase(kvtGet(kvt, "mol")->val, "RNA") != NULL;
         }
     else if (gbType & GB_DNA)
         {
-        printf("is dna\n");
         // keep any type of DNA if DNA filter set
         return containsStringNoCase(kvtGet(kvt, "mol")->val, "DNA") != NULL;
         }
