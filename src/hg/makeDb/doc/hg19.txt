@@ -4517,7 +4517,7 @@ time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit -workhorse=hgw
 real    192m39.792s
 
 ##########################################################################
-# lastz Megabat/pteVam1 swap (DONE - 2013-07-01 - Hiram)
+# lastz Megabat/pteVam1 swap (DONE - 2013-07-05 - Hiram)
     # original alignment
     cd /hive/data/genomes/hg19/bed/lastzPteVam1.2009-06-04
     cat fb.hg19.chainPteVam1Link.txt
@@ -4527,15 +4527,85 @@ real    192m39.792s
     mkdir /hive/data/genomes/pteVam1/bed/blastz.hg19.swap
     cd /hive/data/genomes/pteVam1/bed/blastz.hg19.swap
 
-    time nice +19 doBlastzChainNet.pl -verbose=2 \
+    time doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/hg19/bed/lastzPteVam1.2009-06-04/DEF \
-	-chainMinScore=3000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
-	-swap > swap.log  2>&1
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=encodek \
+	-swap > swap.log 2>&1
+XXX - running - Fri Jul  5 14:52:26 PDT 2013
 
     cat fb.pteVam1.chainHg19Link.txt
 
     cd /hive/data/genomes/pteVam1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+##########################################################################
+# lastz Sloth/choHof1 swap (DONE - 2013-07-05 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzChoHof1.2009-06-04
+    cat fb.hg19.chainChoHof1Link.txt
+    #  996000365 bases of 2897316137 (34.377%) in intersection
+
+    # and this swap:
+    mkdir /hive/data/genomes/choHof1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/choHof1/bed/blastz.hg19.swap
+
+    time doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzChoHof1.2009-06-04/DEF \
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=encodek \
+	-swap > swap.log 2>&1
+XXX - running - Fri Jul  5 14:52:26 PDT 2013
+
+    cat fb.choHof1.chainHg19Link.txt
+
+    cd /hive/data/genomes/choHof1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+##########################################################################
+# lastz Rock hyrax/proCap1 swap (DONE - 2013-07-05 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzProCap1.2009-05-23
+    cat fb.hg19.chainProCap1Link.txt
+    #  894221652 bases of 2897316137 (30.864%) in intersection
+
+    # and this swap:
+    mkdir /hive/data/genomes/proCap1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/proCap1/bed/blastz.hg19.swap
+
+    time doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzProCap1.2009-05-23/DEF \
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap > swap.log 2>&1
+XXX - running - Fri Jul  5 15:02:05 PDT 2013
+
+    cat fb.proCap1.chainHg19Link.txt
+
+    cd /hive/data/genomes/proCap1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+##########################################################################
+# lastz Kangaroo rat/dipOrd1 swap (DONE - 2013-07-05 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzDipOrd1.2009-05-29
+    cat fb.hg19.chainDipOrd1Link.txt
+    #  786938637 bases of 2897316137 (27.161%) in intersection
+
+    # and this swap:
+    mkdir /hive/data/genomes/dipOrd1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/dipOrd1/bed/blastz.hg19.swap
+
+    time doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzDipOrd1.2009-05-29/DEF \
+	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap > swap.log 2>&1
+XXX - running - Fri Jul  5 15:05:46 PDT 2013
+
+    cat fb.dipOrd1.chainHg19Link.txt
+
+    cd /hive/data/genomes/dipOrd1/bed
     ln -s blastz.hg19.swap lastz.hg19
 
 ##########################################################################
