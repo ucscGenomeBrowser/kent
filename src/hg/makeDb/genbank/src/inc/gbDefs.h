@@ -14,8 +14,9 @@
 /* type of entry */
 #define GB_MRNA       0x1   /* is a mRNA */
 #define GB_EST        0x2   /* is a EST */
-#define GB_TYPE_MASK  (GB_MRNA|GB_EST)
-#define GB_NUM_TYPES  2
+#define GB_DNA        0x4   /* is DNA */
+#define GB_TYPE_MASK  (GB_MRNA|GB_EST|GB_DNA)
+#define GB_NUM_TYPES  3
 
 /* Category relative to genome being aligned (organism category) */
 #define GB_NATIVE  0x4   /* is the native species */
