@@ -4609,7 +4609,7 @@ XXX - running - Fri Jul  5 14:52:26 PDT 2013
 	-continue=download -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-swap > download.log 2>&1
-XXX - running - Fri Jul  5 20:59:57 PDT 2013
+    #  real    27m35.952s
 
     cat fb.dipOrd1.chainHg19Link.txt
     #  776300419 bases of 1844961421 (42.077%) in intersection
@@ -22474,23 +22474,15 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > do.log 2>&1
-XXX - running - Fri Jul  5 15:29:14 PDT 2013
-
-    #  real    395m56.229s
-    #  failed on chr19 chaining, finish on hgwdev, then continuing:
-    #  real    158m41.105s
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
-        -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -continue=chainMerge -syntenicNet > chainMerge.log 2>&1
-    #   real    128m1.356s
+    #  real    1334m42.001s
 
     cat fb.hg19.chainTupChi1Link.txt
-    #   1588586980 bases of 2897316137 (54.830%) in intersection
+    #   1348933101 bases of 2897316137 (46.558%) in intersection
 
     # filter with doRecipBest.pl
     doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 tupChi1 > rbest.log 2>&1 &
+XXX - running - Sun Jul  7 13:29:53 PDT 2013
     # about 1 hour
 
     # running the swap
@@ -22540,6 +22532,8 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > do.log 2>&1
+    #   real    781m31.547s
+    # chaining failed on chr19, finish manually on hgwdev
 XXX - running - Fri Jul  5 15:33:31 PDT 2013
 XXX - need to get qRepeats=windowmaskerSdust on for chaining
 
