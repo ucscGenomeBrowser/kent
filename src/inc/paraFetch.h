@@ -23,4 +23,7 @@ boolean paraFetchReadStatus(char *origPath,
  * transit by parallelFetch. Returns FALSE if status file not there - possibly because
  * transfer is finished.  Any of the return parameters (pThis and pThat) may be NULL */
 
+time_t paraFetchTempUpdateTime(char *origPath);
+/* Return last mod date of temp file - which is useful to see if process has stalled. */
+
 #endif /* PARAFETCH_H */
