@@ -98,18 +98,13 @@ if (minChrom != NULL)
 	}
     }
 char **words = nextRowRaw(self);
-if (minChrom != NULL && words != NULL)
+if (regionChrom != NULL && words != NULL)
     {
-    if (self->isTabix && strcmp(words[0], minChrom) < 0)
-	{
-	uint regionEnd = sSelf->regionEnd;
-	if (sSelf->chrom == NULL)
-	    regionEnd = annoAssemblySeqSize(sSelf->assembly, minChrom);
-	lineFileSetTabixRegion(self->vcff->lf, minChrom, minEnd, regionEnd);
-	}
+    if (self->isTabix && strcmp(words[0], regionChrom) < 0)
+	lineFileSetTabixRegion(self->vcff->lf, regionChrom, regionStart, regionEnd);
     while (words != NULL &&
-	   (strcmp(words[0], minChrom) < 0 ||
-	    (sameString(words[0], minChrom) && self->record->chromEnd < minEnd)))
+	   (strcmp(words[0], regionChrom) < 0 ||
+	    (sameString(words[0], regionChrom) && self->record->chromEnd < regionEnd)))
 	words = nextRowRaw(self);
     }
 return words;
