@@ -20,6 +20,7 @@ UTIL_DIRS = \
 
 CGI_DIRS = \
     edwScriptSubmit \
+    edwScriptSubmitStatus \
     edwWebAuthLogin \
     edwWebAuthLogout \
     edwWebBrowse \
