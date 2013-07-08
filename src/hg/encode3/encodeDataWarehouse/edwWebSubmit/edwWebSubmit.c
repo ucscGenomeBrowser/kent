@@ -47,43 +47,6 @@ printf("<BR>Submission by %s", userEmail);
 edwPrintLogOutButton();
 }
 
-struct edwFile *edwFileInProgress(struct sqlConnection *conn, int submitId)
-/* Return file in submission in process of being uploaded if any. */
-{
-char query[256];
-safef(query, sizeof(query), "select fileIdInTransit from edwSubmit where id=%u", submitId);
-long long fileId = sqlQuickLongLong(conn, query);
-if (fileId == 0)
-    return NULL;
-safef(query, sizeof(query), "select * from edwFile where id=%lld", (long long)fileId);
-return edwFileLoadByQuery(conn, query);
-}
-
-int positionInQueue(struct sqlConnection *conn, char *url)
-/* Return position of our URL in submission queue */
-{
-char query[256];
-safef(query, sizeof(query), "select commandLine from edwSubmitJob where startTime = 0");
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-int aheadOfUs = -1;
-int pos = 0;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *line = row[0];
-    char *edwSubmit = nextQuotedWord(&line);
-    char *lineUrl = nextQuotedWord(&line);
-    if (sameOk(edwSubmit, "edwSubmit") && sameOk(url, lineUrl))
-        {
-	aheadOfUs = pos;
-	break;
-	}
-    ++pos;
-    }
-sqlFreeResult(&sr);
-return aheadOfUs;
-}
-
 long long paraFetchedSoFar(char *path)
 /* Return amount fetched so far. */
 {
@@ -104,7 +67,7 @@ cgiMakeHiddenVar("url", url);
 struct edwSubmit *sub = edwMostRecentSubmission(conn, url);
 if (sub == NULL)
     {
-    int posInQueue = positionInQueue(conn, url);
+    int posInQueue = edwSubmitPositionInQueue(conn, url);
     if (posInQueue == 0)
 	printf("%s is first in the submission queue, but upload has not started<BR>\n", url);
     else if (posInQueue > 0)

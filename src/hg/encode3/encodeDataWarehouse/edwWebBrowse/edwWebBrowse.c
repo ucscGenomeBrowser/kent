@@ -5,6 +5,7 @@
 #include "options.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
+#include "portable.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 
@@ -73,9 +74,19 @@ else if (submit->endUploadTime != 0)
 else   /* Upload not complete. */
     {
     long long lastAlive = edwSubmitMaxStartTime(submit, conn);
+    struct edwFile *ef = edwFileInProgress(conn, submit->id);
+    if (ef != NULL)
+        {
+	char path[PATH_LEN];
+	safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
+	lastAlive = fileModTime(path);
+	}
     long long now = edwNow();
     long long duration = now - lastAlive;
-    if (duration < edwSingleFileTimeout)
+
+
+    int oneHourInSeconds = 60*60;
+    if (duration < oneHourInSeconds)  
         {
 	struct dyString *time = edwFormatDuration(now - submit->startUploadTime);
 	printf("has been in progress for %s", time->string);
