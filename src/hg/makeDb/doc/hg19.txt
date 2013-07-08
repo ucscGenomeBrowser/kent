@@ -22799,3 +22799,60 @@ XXX - running - Sun Jul  7 19:43:07 PDT 2013
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
+# hedgehog/eriEur2 Lastz run (DONE - 2013-07-08 - Hiram)
+    screen -S eriEur2    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzEriEur2.2013-07-08
+    cd /hive/data/genomes/hg19/bed/lastzEriEur2.2013-07-08
+    cat << '_EOF_' > DEF
+# human vs hedgehog
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: hedgehog EriEur2
+SEQ2_DIR=/hive/data/genomes/eriEur2/eriEur2.2bit
+SEQ2_LEN=/hive/data/genomes/eriEur2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/hg19/bed/lastzEriEur2.2013-07-08
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > do.log 2>&1
+XXX - running - Mon Jul  8 09:49:25 PDT 2013
+    #   real    781m31.547s
+
+    cat fb.hg19.chainEriEur2Link.txt
+    #   1199059384 bases of 2897316137 (41.385%) in intersection
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 eriEur2 > rbest.log 2>&1 &
+    # about 1 hour
+
+    # running the swap
+    mkdir /hive/data/genomes/eriEur2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/eriEur2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzEriEur2.2013-07-08/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        syntenicNet > swap.log 2>&1
+    #  real    123m31.066s
+
+    cat fb.eriEur2.chainHg19Link.txt
+    #  1534315855 bases of 2359530453 (65.026%) in intersection
+
+    cd /hive/data/genomes/eriEur2/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
