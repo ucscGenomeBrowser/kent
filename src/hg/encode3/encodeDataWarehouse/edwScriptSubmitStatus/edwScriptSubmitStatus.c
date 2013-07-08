@@ -18,32 +18,6 @@ errAbort(
   "This program is meant to be called as a CGI from a web server using HTTPS.");
 }
 
-void accessDenied()
-/* Sleep a bit and then deny access. */
-{
-sleep(5);
-errAbort("Access denied!");
-}
-
-struct edwScriptRegistry *edwScriptRegistryFromCgi()
-/* Get script registery from cgi variables.  Does authentication too. */
-{
-struct sqlConnection *conn = edwConnect();
-char *user = sqlEscapeString(cgiString("user"));
-char *password = sqlEscapeString(cgiString("password"));
-char query[256];
-safef(query, sizeof(query), "select * from edwScriptRegistry where name='%s'", user);
-struct edwScriptRegistry *reg = edwScriptRegistryLoadByQuery(conn, query);
-if (reg == NULL)
-    accessDenied();
-char key[EDW_SID_SIZE];
-edwMakeSid(password, key);
-if (!sameString(reg->secretHash, key))
-    accessDenied();
-sqlDisconnect(&conn);
-return reg;
-}
-
 void addErrFile(struct dyString *dy, int errCount, char *fileName, char *err)
 /* Add file and error message to JSON in dy */
 {
