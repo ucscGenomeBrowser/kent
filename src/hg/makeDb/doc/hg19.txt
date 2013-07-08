@@ -22534,17 +22534,22 @@ TMPDIR=/scratch/tmp
         -syntenicNet > do.log 2>&1
     #   real    781m31.547s
     # chaining failed on chr19, finish manually on hgwdev
-XXX - running - Fri Jul  5 15:33:31 PDT 2013
-XXX - need to get qRepeats=windowmaskerSdust on for chaining
+    #   real    156m20.850s
 
-    #  real    395m56.229s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-qRepeats=windowmaskerSdust \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -continue=chainMerge -syntenicNet > chainMerge.log 2>&1
+XXX - running - Sun Jul  7 17:51:40 PDT 2013
 
     cat fb.hg19.chainOctDeg1Link.txt
-    #   1588586980 bases of 2897316137 (54.830%) in intersection
+    #   1199059384 bases of 2897316137 (41.385%) in intersection
 
     # filter with doRecipBest.pl
-    doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 octDeg1 > rbest.log 2>&1 &
+XXX - running - Sun Jul  7 19:12:36 PDT 2013
     # about 1 hour
 
     # running the swap
@@ -22552,15 +22557,245 @@ XXX - need to get qRepeats=windowmaskerSdust on for chaining
     cd /hive/data/genomes/octDeg1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         -swap /hive/data/genomes/hg19/bed/lastzOctDeg1.2013-07-05/DEF \
+	-qRepeats=windowmaskerSdust \
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
+XXX - running - Sun Jul  7 19:12:36 PDT 2013
     #  real    123m31.066s
 
     cat fb.octDeg1.chainHg19Link.txt
     #  1534315855 bases of 2359530453 (65.026%) in intersection
 
     cd /hive/data/genomes/octDeg1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# aardvark/oryAfe1 Lastz run (DONE - 2013-07-07 - Hiram)
+    screen -S oryAfe1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzOryAfe1.2013-07-07
+    cd /hive/data/genomes/hg19/bed/lastzOryAfe1.2013-07-07
+    cat << '_EOF_' > DEF
+# human vs aardvark
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: aardvark OryAfe1
+SEQ2_DIR=/hive/data/genomes/oryAfe1/oryAfe1.2bit
+SEQ2_LEN=/hive/data/genomes/oryAfe1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=400
+
+BASE=/hive/data/genomes/hg19/bed/lastzOryAfe1.2013-07-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > do.log 2>&1
+XXX - running - Sun Jul  7 19:23:44 PDT 2013
+    #   real    781m31.547s
+
+    cat fb.hg19.chainOryAfe1Link.txt
+    #   1199059384 bases of 2897316137 (41.385%) in intersection
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 oryAfe1 > rbest.log 2>&1 &
+    # about 1 hour
+
+    # running the swap
+    mkdir /hive/data/genomes/oryAfe1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/oryAfe1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzOryAfe1.2013-07-07/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > swap.log 2>&1
+    #  real    123m31.066s
+
+    cat fb.oryAfe1.chainHg19Link.txt
+    #  1534315855 bases of 2359530453 (65.026%) in intersection
+
+    cd /hive/data/genomes/oryAfe1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# cape golden mole/chrAsi1 Lastz run (DONE - 2013-07-07 - Hiram)
+    screen -S chrAsi1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzChrAsi1.2013-07-07
+    cd /hive/data/genomes/hg19/bed/lastzChrAsi1.2013-07-07
+    cat << '_EOF_' > DEF
+# human vs cape golden mole
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: cape golden mole ChrAsi1
+SEQ2_DIR=/hive/data/genomes/chrAsi1/chrAsi1.2bit
+SEQ2_LEN=/hive/data/genomes/chrAsi1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=400
+
+BASE=/hive/data/genomes/hg19/bed/lastzChrAsi1.2013-07-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > do.log 2>&1
+XXX - running - Sun Jul  7 19:30:07 PDT 2013
+    #   real    781m31.547s
+
+    cat fb.hg19.chainChrAsi1Link.txt
+    #   1199059384 bases of 2897316137 (41.385%) in intersection
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 chrAsi1 > rbest.log 2>&1 &
+    # about 1 hour
+
+    # running the swap
+    mkdir /hive/data/genomes/chrAsi1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/chrAsi1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzChrAsi1.2013-07-07/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > swap.log 2>&1
+    #  real    123m31.066s
+
+    cat fb.chrAsi1.chainHg19Link.txt
+    #  1534315855 bases of 2359530453 (65.026%) in intersection
+
+    cd /hive/data/genomes/chrAsi1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# cape elephant shrew/eleEdw1 Lastz run (DONE - 2013-07-07 - Hiram)
+    screen -S eleEdw1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzEleEdw1.2013-07-07
+    cd /hive/data/genomes/hg19/bed/lastzEleEdw1.2013-07-07
+    cat << '_EOF_' > DEF
+# human vs cape elephant shrew
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: cape elephant shrew EleEdw1
+SEQ2_DIR=/hive/data/genomes/eleEdw1/eleEdw1.2bit
+SEQ2_LEN=/hive/data/genomes/eleEdw1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=200
+
+BASE=/hive/data/genomes/hg19/bed/lastzEleEdw1.2013-07-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -qRepeats=windowmaskerSdust -syntenicNet > do.log 2>&1
+XXX - running - Sun Jul  7 19:30:07 PDT 2013
+    #   real    781m31.547s
+
+    cat fb.hg19.chainEleEdw1Link.txt
+    #   1199059384 bases of 2897316137 (41.385%) in intersection
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 eleEdw1 > rbest.log 2>&1 &
+    # about 1 hour
+
+    # running the swap
+    mkdir /hive/data/genomes/eleEdw1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/eleEdw1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzEleEdw1.2013-07-07/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        --qRepeats=windowmaskerSdust syntenicNet > swap.log 2>&1
+    #  real    123m31.066s
+
+    cat fb.eleEdw1.chainHg19Link.txt
+    #  1534315855 bases of 2359530453 (65.026%) in intersection
+
+    cd /hive/data/genomes/eleEdw1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# armadillo/dasNov3 Lastz run (DONE - 2013-07-07 - Hiram)
+    screen -S dasNov3    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzDasNov3.2013-07-07
+    cd /hive/data/genomes/hg19/bed/lastzDasNov3.2013-07-07
+    cat << '_EOF_' > DEF
+# human vs armadillo
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: armadillo DasNov3
+SEQ2_DIR=/hive/data/genomes/dasNov3/dasNov3.2bit
+SEQ2_LEN=/hive/data/genomes/dasNov3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=300
+
+BASE=/hive/data/genomes/hg19/bed/lastzDasNov3.2013-07-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > do.log 2>&1
+XXX - running - Sun Jul  7 19:43:07 PDT 2013
+    #   real    781m31.547s
+
+    cat fb.hg19.chainDasNov3Link.txt
+    #   1199059384 bases of 2897316137 (41.385%) in intersection
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 dasNov3 > rbest.log 2>&1 &
+    # about 1 hour
+
+    # running the swap
+    mkdir /hive/data/genomes/dasNov3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/dasNov3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzDasNov3.2013-07-07/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        syntenicNet > swap.log 2>&1
+    #  real    123m31.066s
+
+    cat fb.dasNov3.chainHg19Link.txt
+    #  1534315855 bases of 2359530453 (65.026%) in intersection
+
+    cd /hive/data/genomes/dasNov3/bed
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
