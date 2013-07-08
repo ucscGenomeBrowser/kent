@@ -6,6 +6,7 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "portable.h"
+#include "paraFetch.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 
@@ -75,13 +76,16 @@ else   /* Upload not complete. */
     {
     long long lastAlive = edwSubmitMaxStartTime(submit, conn);
     struct edwFile *ef = edwFileInProgress(conn, submit->id);
+    long long now = edwNow();
     if (ef != NULL)
         {
 	char path[PATH_LEN];
 	safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
-	lastAlive = fileModTime(path);
+	if (ef->endUploadTime > 0)
+	    lastAlive = fileModTime(path);
+	else
+	    lastAlive =  paraFetchTempUpdateTime(path);
 	}
-    long long now = edwNow();
     long long duration = now - lastAlive;
 
 
