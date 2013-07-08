@@ -2876,7 +2876,7 @@ priority 35
 visibility hide
 type bigBed 12 +
 itemRgb on
-urls uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
 release alpha
 

@@ -15,15 +15,20 @@ static boolean gadExists(struct section *section,
 	struct sqlConnection *conn, char *geneId)
 /* Return TRUE if gadAll table exists and it has an entry with the gene symbol */
 {
-char condStr[255];
+char query[1024];
 char *geneSymbol;
 
 if (sqlTableExists(conn, "gadAll") == TRUE)
     {
+    sqlSafef(query, sizeof(query), "select k.geneSymbol from kgXref k, gadAll g"
+	" where k.kgId='%s' and k.geneSymbol = g.geneSymbol", geneId);
+    geneSymbol = sqlQuickString(conn, query);
+    if (geneSymbol != NULL) return(TRUE);
+/*
     sqlSafefFrag(condStr, sizeof(condStr), 
     "k.kgId='%s' and k.geneSymbol = g.geneSymbol", geneId);
     geneSymbol = sqlGetField(database, "kgXref k, gadAll g", "k.geneSymbol", condStr);
-    if (geneSymbol != NULL) return(TRUE);
+*/
     }
 return(FALSE);
 }
@@ -35,8 +40,7 @@ static void gadPrint(struct section *section,
 int refPrinted = 0;
 boolean showCompleteGadList;
 
-char condStr[256];
-char query[256];
+char query[1024];
 struct sqlResult *sr;
 char **row;
 struct dyString *currentCgiUrl;
@@ -48,9 +52,9 @@ char *itemName;
 
 if (url != NULL && url[0] != 0)
     {
-    sqlSafefFrag(condStr, sizeof(condStr), 
-    "k.kgId='%s' and k.geneSymbol = g.geneSymbol", geneId);
-    itemName = sqlGetField(database, "kgXref k, gadAll g", "k.geneSymbol", condStr);
+    sqlSafef(query, sizeof(query), "select k.geneSymbol from kgXref k, gadAll g"
+	" where k.kgId='%s' and k.geneSymbol = g.geneSymbol", geneId);
+    itemName = sqlQuickString(conn, query);
     showCompleteGadList = FALSE;
     if (cgiOptionalString("showAllRef") != NULL)
     	{

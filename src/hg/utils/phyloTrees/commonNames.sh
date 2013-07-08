@@ -107,6 +107,7 @@ pseHum1 -> Tibetan_ground_jay ;
 zonAlb1 -> White_throated_sparrow ;
 geoFor1 -> Medium_ground_finch ;
 ficAlb1 -> Collared_flycatcher ;
+ficAlb2 -> Collared_flycatcher ;
 amaVit1 -> Puerto_Rican_parrot ;
 araMac1 -> Scarlet_macaw ;
 falChe1 -> Saker_falcon ;

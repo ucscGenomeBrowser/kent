@@ -113,6 +113,8 @@ while (*next != '\0')
         type |= GB_MRNA;
     else if (strncasecmp(next, "est", len) == 0)
         type |= GB_EST;
+    else if (strncasecmp(next, "dna", len) == 0)
+        type |= GB_DNA;
     else
         errAbort("invalid type \"%.*s\", expected \"mrna\" or \"est\"",
                  len, next);

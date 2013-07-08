@@ -32,6 +32,7 @@ s/eriEur2/Erinaceus_europaeus/;
 s/falChe1/Falco_cherrug/;
 s/falPer1/Falco_peregrinus/;
 s/ficAlb1/Ficedula_albicollis/;
+s/ficAlb2/Ficedula_albicollis/;
 s/hapBur1/Haplochromis_burtoni/;
 s/jacJac1/Jaculus_jaculus/;
 s/lepOcu1/Lepisosteus_oculatus/;
