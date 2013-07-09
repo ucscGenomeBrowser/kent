@@ -534,7 +534,7 @@ else if (gbGuessSrcDb(acc) == GB_REFSEQ)
 else if ((sameString(cat, "GSS") || 
          sameString(cat, "HTG") || 
         sameString(cat, "STS") || 
-        sameString(cat, "CON")) && (gbType!=GB_DNA))
+        sameString(cat, "CON")) && !(gbType & GB_DNA))
     return FALSE;   // division to ignore
 else
     {
