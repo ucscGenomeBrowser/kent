@@ -4556,9 +4556,10 @@ real    192m39.792s
 	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=encodek \
 	-swap > swap.log 2>&1
-XXX - running - Fri Jul  5 14:52:26 PDT 2013
+    #  real    844m59.111s
 
     cat fb.choHof1.chainHg19Link.txt
+    #   1013601302 bases of 2060419685 (49.194%) in intersection
 
     cd /hive/data/genomes/choHof1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -22482,8 +22483,7 @@ TMPDIR=/scratch/tmp
     # filter with doRecipBest.pl
     doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 tupChi1 > rbest.log 2>&1 &
-XXX - running - Sun Jul  7 13:29:53 PDT 2013
-    # about 1 hour
+    # about 53 minutes
 
     # running the swap
     mkdir /hive/data/genomes/tupChi1/bed/blastz.hg19.swap
@@ -22493,10 +22493,10 @@ XXX - running - Sun Jul  7 13:29:53 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
-    #  real    123m31.066s
+    #  real    118m8.921s
 
     cat fb.tupChi1.chainHg19Link.txt
-    #  1534315855 bases of 2359530453 (65.026%) in intersection
+    #  1360938926 bases of 2706389135 (50.286%) in intersection
 
     cd /hive/data/genomes/tupChi1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -22541,7 +22541,7 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -continue=chainMerge -syntenicNet > chainMerge.log 2>&1
-XXX - running - Sun Jul  7 17:51:40 PDT 2013
+    #   real    101m24.482s
 
     cat fb.hg19.chainOctDeg1Link.txt
     #   1199059384 bases of 2897316137 (41.385%) in intersection
@@ -22549,8 +22549,7 @@ XXX - running - Sun Jul  7 17:51:40 PDT 2013
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 octDeg1 > rbest.log 2>&1 &
-XXX - running - Sun Jul  7 19:12:36 PDT 2013
-    # about 1 hour
+    # about 47 minutes
 
     # running the swap
     mkdir /hive/data/genomes/octDeg1/bed/blastz.hg19.swap
@@ -22561,11 +22560,10 @@ XXX - running - Sun Jul  7 19:12:36 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
-XXX - running - Sun Jul  7 19:12:36 PDT 2013
-    #  real    123m31.066s
+    #  real    105m14.455s
 
     cat fb.octDeg1.chainHg19Link.txt
-    #  1534315855 bases of 2359530453 (65.026%) in intersection
+    #  1202975420 bases of 2526254702 (47.619%) in intersection
 
     cd /hive/data/genomes/octDeg1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -22600,8 +22598,10 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > do.log 2>&1
-XXX - running - Sun Jul  7 19:23:44 PDT 2013
-    #   real    781m31.547s
+    #   real    1825m38.733s
+    # finish chr19 chain manually on hgwdev:
+    time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
+XXX - running - Tue Jul  9 08:51:53 PDT 2013
 
     cat fb.hg19.chainOryAfe1Link.txt
     #   1199059384 bases of 2897316137 (41.385%) in intersection
@@ -22657,8 +22657,10 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > do.log 2>&1
-XXX - running - Sun Jul  7 19:30:07 PDT 2013
-    #   real    781m31.547s
+    #   real    1869m30.259s
+    # finish chr19 chain manually on hgwdev:
+    time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
+XXX - running - Tue Jul  9 08:54:31 PDT 2013
 
     cat fb.hg19.chainChrAsi1Link.txt
     #   1199059384 bases of 2897316137 (41.385%) in intersection
@@ -22771,8 +22773,10 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > do.log 2>&1
-XXX - running - Sun Jul  7 19:43:07 PDT 2013
-    #   real    781m31.547s
+    #   real    1779m53.947s
+    # finish chr19 chain manually on hgwdev:
+    time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
+XXX - running - Tue Jul  9 08:49:45 PDT 2013
 
     cat fb.hg19.chainDasNov3Link.txt
     #   1199059384 bases of 2897316137 (41.385%) in intersection
@@ -22828,7 +22832,7 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > do.log 2>&1
-XXX - running - Mon Jul  8 09:49:25 PDT 2013
+XXX - running - Mon Jul  8 19:47:35 PDT 2013
     #   real    781m31.547s
 
     cat fb.hg19.chainEriEur2Link.txt

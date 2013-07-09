@@ -41,8 +41,9 @@ static char *orgCgiName = "org";
 static char *cladeCgiName = "clade";
 static char *extraStyle = NULL;
 
-/* global: a cart for use in error handlers. */
+/* globals: a cart and db for use in error handlers. */
 static struct cart *errCart = NULL;
+static char *errDb = NULL;
 
 void textVaWarn(char *format, va_list args)
 {
@@ -66,10 +67,11 @@ pushAbortHandler(softAbort);
 hDumpStackPushAbortHandler();
 }
 
-void webPushErrHandlersCart(struct cart *cart)
-/* Push warn and abort handler for errAbort(); save cart for use in handlers. */
+void webPushErrHandlersCartDb(struct cart *cart, char *db)
+/* Push warn and abort handler for errAbort(); save cart and db for use in handlers. */
 {
 errCart = cart;
+errDb = db;
 webPushErrHandlers();
 }
 
@@ -431,12 +433,14 @@ void webVaWarn(char *format, va_list args)
 gotWarnings = TRUE;
 boolean needStart = !webHeadAlreadyOutputed;
 if (needStart)
-    webStart(errCart, NULL, "Error");
+    {
+    // All callers of this (via webPushErrHandlersCartDb) have skipped Content-type
+    // because they want to output text unless we hit this condition:
+    puts("Content-type:text/html\n");
+    cartWebStart(errCart, errDb, "Error");
+    }
 htmlVaWarn(format, args);
-printf("\n<!-- HGERROR -->\n");
-printf("\n\n");
-if (needStart)
-    webEnd();
+printf("\n<!-- HGERROR -->\n\n\n");
 }
 
 

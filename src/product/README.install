@@ -93,10 +93,6 @@ The sequence of instructions here are similar to the Mirror site
 6.  Copy CGI binaries:
 	rsync -avP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/
 	This set of binaries are for x86_64 types of Linux machines.
-	If you need i386 32-bit binaries, run the above rsync to fetch
-	everything, then, overlay with the i386 binaries:
-	rsync -avP rsync://hgdownload.cse.ucsc.edu/cgi-bin-i386/ \
-		${WEBROOT}/cgi-bin/
 	If you need to instead build binaries for your platform,
 	follow the instructions in: README.building.source
 	See also: scripts/kentSrcUpdate.sh
