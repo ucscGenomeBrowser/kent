@@ -931,8 +931,8 @@ char *sql = trackDbSetting(tdb, "idInUrlSql");
 char *id = itemName;
 if (sql != NULL)
     {
-    char query[256];
-    sqlSafef(query, sizeof(query), sql, itemName);
+    char buf[256];
+    sqlSafef(buf, sizeof(buf), sql, itemName);
     struct sqlConnection *conn = hAllocConn(database);
     id = sqlQuickString(conn, query);
     hFreeConn(&conn);
@@ -1010,18 +1010,49 @@ char* eUrl = replaceInUrl(tdb, url, idInUrl, encode);
 return eUrl;
 }
 
+void printIframe(struct trackDb *tdb, char *itemName)
+/* print an iframe with the URL specified in trackDb (iframeUrl), can have 
+ * the standard codes in it (like $$ for itemName, etc)
+ */
+{
+char* eUrl = constructUrl(tdb, "iframeUrl", itemName, FALSE);
+if (eUrl==NULL)
+    return;
+
+char *iframeOptions = trackDbSettingOrDefault(tdb, "iframeOptions", "width='100%%' height='1024'");
+// Resizing requires the hgcDetails pages to include a bit of javascript.
+//
+// Explanation how this works and why the javascript is needed:
+// http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content
+// In short:
+// - iframes have a fixed size in html, resizing can only be done in javascript
+// - the iframed page cannot call the resize() function in the hgc html directly, as they have
+//   been loaded from different webservers
+// - one way around it is that the iframed page includes a helper page on our server and 
+//   send their size to the helper page (pages can call functions of included pages)
+// - the helper page then sends the size back to hgc (pages on the same server can
+//   call each others' functions)
+//   width='%s' height='%s' src='%s' seamless scrolling='%s' frameborder='%s'
+
+printf(" \
+<script> \
+function resizeIframe(height) \
+{ \
+     document.getElementById('hgcIframe').height = parseInt(height)+10; \
+} \
+</script> \
+ \
+<iframe id='hgcIframe' src='%s' %s></iframe> \
+<p>", eUrl, iframeOptions);
+}
+
 void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabel, char *urlSetting, boolean encode)
 /* Print custom URL specified in trackDb settings. */
 {
 char urlLabelSetting[32];
 
-// first try to resolve itemName via an optional sql statement to something else
-char *idInUrl = getIdInUrl(tdb, itemName);
-if (idInUrl == NULL)
-    return;
-
 // replace the $$ and other wildchards with the url given in tdb 
-char* eUrl = constructUrl(tdb, urlSetting, idInUrl, encode);
+char* eUrl = constructUrl(tdb, urlSetting, itemName, encode);
 if (eUrl==NULL)
     return;
 
@@ -1034,11 +1065,11 @@ printf("<A HREF=\"%s\" target=_blank>", eUrl);
 
 if (sameWord(tdb->table, "npredGene"))
     {
-    printf("%s (%s)</A><BR>\n", idInUrl, "NCBI MapView");
+    printf("%s (%s)</A><BR>\n", itemName, "NCBI MapView");
     }
 else
     {
-    char *label = idInUrl;
+    char *label = itemName;
     if (isNotEmpty(itemLabel) && !sameString(itemName, itemLabel))
         label = itemLabel;
     printf("%s</A><BR>\n", label);
@@ -3846,7 +3877,11 @@ if (container == NULL && wordCount > 0)
 
 /* Print header. */
 genericHeader(tdb, headerItem);
+
+itemForUrl = getIdInUrl(tdb, item);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+printIframe(tdb, itemForUrl);
+
 if (plus != NULL)
     {
     fputs(plus, stdout);
