@@ -931,8 +931,8 @@ char *sql = trackDbSetting(tdb, "idInUrlSql");
 char *id = itemName;
 if (sql != NULL)
     {
-    char buf[256];
-    sqlSafef(buf, sizeof(buf), sql, itemName);
+    char query[1024];
+    sqlSafef(query, sizeof(query), sql, itemName);
     struct sqlConnection *conn = hAllocConn(database);
     id = sqlQuickString(conn, query);
     hFreeConn(&conn);
