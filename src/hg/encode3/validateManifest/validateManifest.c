@@ -1,4 +1,4 @@
-/* validate ENCODE3 manifest.txt creating output validate.txt */
+/* validate ENCODE3 manifest.txt creating output validated.txt */
 
 #include "common.h"
 #include "linefile.h"
@@ -11,7 +11,7 @@
 #include "encode3/encode3Valid.h"
 #include "gff.h"
 
-char *version = "1.5";
+char *version = "1.6";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
@@ -35,10 +35,10 @@ errAbort(
     "\n"
     "   Input files in the working directory: \n"
     "     manifest.txt - current input manifest file\n"
-    "     validate.txt - input from previous run of validateManifest\n" 
+    "     validated.txt - input from previous run of validateManifest\n" 
     "\n"
     "   Output file in the working directory: \n"
-    "     validate.txt - results of validated input\n"
+    "     validated.txt - results of validated input\n"
     "\n"
     , version, encValData
     );
@@ -413,7 +413,7 @@ return result;
 
 
 void validateManifest(char *workingDir)
-/* Validate the manifest.txt input file creating validate.txt output */
+/* Validate the manifest.txt input file creating validated.txt output */
 {
 
 chdir(workingDir);
@@ -557,6 +557,10 @@ fprintf(f,"\n");
 
 fprintf(f,"##validateManifest version %s\n", version);  // write vm version as a comment
 
+// hash for output_type checking for unique format 
+// catches problem some users were using the same output_type on the wrong format.
+struct hash *outputTypeHash = newHash(12);
+
 // loop through manifest recs
 struct slRecord *rec = NULL;
 int recNo = 1;
@@ -589,6 +593,23 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	fileIsValid = FALSE;
 	printf("ERROR: %s FILE NOT FOUND !!!\n", mFileName);
 	}
+
+    char *mFormat = rec->words[mFormatIdx];
+
+    // check that each output_type is only used with one format
+    char *mOutputType = rec->words[mOutputTypeIdx];
+    struct hashEl *el = hashLookup(outputTypeHash, mOutputType);
+    if (el)
+	{
+	char *existingFormat = (char *) el->val;
+	if (!sameString(mFormat, existingFormat))
+	    {
+	    errAbort("Error: Each output_type can only be used with one format.  output_type %s is being used with both format %s and %s.",
+		mOutputType, mFormat, existingFormat);
+	    }		    
+	}
+    else
+	hashAdd(outputTypeHash, mOutputType, cloneString(mFormat));
 
     // check experiment field
     char *mExperiment = rec->words[mExperimentIdx];
@@ -694,7 +715,6 @@ for(rec = manifestRecs; rec; rec = rec->next)
 
 	    mValidKey = encode3CalcValidationKey(mMd5Hex, mFileSize);
 
-	    char *mFormat = rec->words[mFormatIdx];
 	    fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
 	    if (!fileIsValid)
 		mValidKey = "ERROR";

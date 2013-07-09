@@ -2,10 +2,10 @@ kentSrc = ../../..
 A = validateManifest
 include $(kentSrc)/inc/userApp.mk
 
-test:: $A
+test:: $(HOME)/bin/$(MACHTYPE)/$A
 	validateManifest -dir=/hive/groups/encode/encode3/testSets/manifest1 -quickMd5sum
 
-test2: $A
+test2: $(HOME)/bin/$(MACHTYPE)/$A
 	rm -f /hive/groups/encode/encode3/testSets/manifest1/validated.txt
 	validateManifest -dir=/hive/groups/encode/encode3/testSets/manifest1 -quickMd5sum
 
