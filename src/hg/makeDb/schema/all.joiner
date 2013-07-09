@@ -68,7 +68,7 @@ set ornAna ornAna1
 set oryCun oryCun2
 set oryLat oryLat2
 set otoGar otoGar1,otoGar3
-set oviAri oviAri1
+set oviAri oviAri1,oviAri3
 set panTro panTro1,panTro2,panTro3,panTro4
 set papAnu papAnu2
 set papHam papHam1
@@ -174,7 +174,7 @@ set ccdsDb hg19,hg18,hg17,mm8,mm9,mm10
 set split splitPrefix=chr%\_
 
 # Databases with the tRNAs track
-set tRNAsDbs hg18,hg19,mm9,mm10,rn4,ailMel1,caePb1,canFam2,danRer5,felCat3,gorGor3,ornAna1,panTro3,susScr2,anoCar2,caePb2,cavPor3,danRer6,felCat4,loxAfr3,oryCun2,petMar1,taeGut1,bosTau4,caeRem2,cb3,danRer7,fr2,fr3,melGal1,oryLat2,ponAbe2,tetNig2,bosTau6,caeRem3,ce4,equCab1,galGal3,monDom5,oviAri1,priPac1,xenTro3,caeJap1,calJac3,ce6,equCab2,gasAcu1,nomLeu1,panTro2,rheMac2,sarHar1
+set tRNAsDbs hg18,hg19,mm9,mm10,rn4,ailMel1,caePb1,canFam2,danRer5,felCat3,gorGor3,ornAna1,panTro3,susScr2,anoCar2,caePb2,cavPor3,danRer6,felCat4,loxAfr3,oryCun2,petMar1,taeGut1,bosTau4,caeRem2,cb3,danRer7,fr2,fr3,melGal1,oryLat2,ponAbe2,tetNig2,bosTau6,caeRem3,ce4,equCab1,galGal3,monDom5,oviAri1,oviAri3,priPac1,xenTro3,caeJap1,calJac3,ce6,equCab2,gasAcu1,nomLeu1,panTro2,rheMac2,sarHar1
 
 # Databases with the CGAP SAGE track
 set cgapSageDbs hg18,hg19,mm8
@@ -1878,7 +1878,7 @@ identifier wgsContigName
     $wgs.contigAcc.contig
     $wgs,!panTro1.gold.frag $split full
 
-set notProteinAccession !echTel2,!cerSim1,!braFlo2,!petMar2,!dm3,!sorAra2,!vicPac2,!allMis1,!eriEur2
+set notProteinAccession !echTel2,!cerSim1,!braFlo2,!petMar2,!dm3,!sorAra2,!vicPac2,!allMis1,!eriEur2,!oviAri3
 
 identifier proteinAccession typeOf=genbankAccession fuzzy
 "Genbank protein accession."
@@ -2343,7 +2343,7 @@ identifier humanFosmidEndId
 ## TYPED TO HERE %%%
 # Mapping Stuff, STS, etc.
 
-set notDbStsId !sacCer3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1,!eriEur2
+set notDbStsId !sacCer3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1,!eriEur2,!oviAri3
 
 identifier dbStsId external=dbSts fuzzy
 "NCBI dbSTS (Sequenced Tagged Site, aka mapping sequence) ID"
@@ -2364,7 +2364,7 @@ identifier ucscMouseStsId
     $mm.all_sts_primer.qName chopAfter=_ minCheck=0.99
     $mm.stsMapMouseNew.identNo
 
-set notStsName !sacCer3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1,!eriEur2
+set notStsName !sacCer3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1,!eriEur2,!oviAri3
 
 identifier stsName fuzzy
 "STS (Sequenced Tagged Site, aka mapping sequence) Name"
@@ -2464,7 +2464,7 @@ identifier wormBaseIsoformCluster
     $ce.sangerCanonical.clusterId
     $ce.sangerIsoforms.clusterId full
 
-set notWormBaseId !rn3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1,!eriEur2
+set notWormBaseId !rn3,!cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1,!eriEur2,!oviAri3
 
 identifier wormBaseId external=WormBase dependency
 "WormBase (C. elegans) ORF ID"
@@ -2508,7 +2508,7 @@ identifier flyBaseAlleleId
     $dm.fbAllele.id
     $dm.fbPhenotype.fbAllele exclude=0
 
-set notFlyBaseGeneId !cerSim1,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!mm10,!rn3,!rn4,!ce2,!ce6,!ce9,!ce10,!sacCer1,!sacCer2,!sacCer3,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1,!eriEur2
+set notFlyBaseGeneId !cerSim1,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!mm10,!rn3,!rn4,!ce2,!ce6,!ce9,!ce10,!sacCer1,!sacCer2,!sacCer3,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1,!eriEur2,!oviAri3
 
 identifier flyBaseGeneId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
@@ -2619,7 +2619,7 @@ identifier sgdProtHomologId
 identifier sgdId external=SGD
 "Sacchromyces Genome Database ID - Coding or other"
 
-set notSgdCodingId !cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1,!eriEur2
+set notSgdCodingId !cerSim1,!petMar2,!braFlo2,!echTel2,!sorAra2,!vicPac2,!allMis1,!eriEur2,!oviAri3
 
 identifier sgdCodingId typeOf=sgdId dependency
 "Sacchromyces Genome Database ID"
@@ -2759,7 +2759,7 @@ identifier ensemblProteinId3 external=Ensembl
     $gbd.ensemblXref3.protein dupeOk
     $gbd.sfAssign.seqID minCheck=0.01
 
-set notEnsemblTranscriptId !braFlo2,!ce10,!cerSim1,!felCat3,!vicPac2,!allMis1
+set notEnsemblTranscriptId !braFlo2,!ce10,!cerSim1,!felCat3,!vicPac2,!allMis1,!oviAri3
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
