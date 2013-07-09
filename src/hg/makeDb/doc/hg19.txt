@@ -4556,9 +4556,10 @@ real    192m39.792s
 	-syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=encodek \
 	-swap > swap.log 2>&1
-XXX - running - Fri Jul  5 14:52:26 PDT 2013
+    #  real    844m59.111s
 
     cat fb.choHof1.chainHg19Link.txt
+    #   1013601302 bases of 2060419685 (49.194%) in intersection
 
     cd /hive/data/genomes/choHof1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -22597,8 +22598,10 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > do.log 2>&1
-XXX - running - Sun Jul  7 19:23:44 PDT 2013
-    #   real    781m31.547s
+    #   real    1825m38.733s
+    # finish chr19 chain manually on hgwdev:
+    time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
+XXX - running - Tue Jul  9 08:51:53 PDT 2013
 
     cat fb.hg19.chainOryAfe1Link.txt
     #   1199059384 bases of 2897316137 (41.385%) in intersection
@@ -22654,8 +22657,10 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > do.log 2>&1
-XXX - running - Sun Jul  7 19:30:07 PDT 2013
-    #   real    781m31.547s
+    #   real    1869m30.259s
+    # finish chr19 chain manually on hgwdev:
+    time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
+XXX - running - Tue Jul  9 08:54:31 PDT 2013
 
     cat fb.hg19.chainChrAsi1Link.txt
     #   1199059384 bases of 2897316137 (41.385%) in intersection
@@ -22768,8 +22773,10 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > do.log 2>&1
-XXX - running - Sun Jul  7 19:43:07 PDT 2013
-    #   real    781m31.547s
+    #   real    1779m53.947s
+    # finish chr19 chain manually on hgwdev:
+    time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
+XXX - running - Tue Jul  9 08:49:45 PDT 2013
 
     cat fb.hg19.chainDasNov3Link.txt
     #   1199059384 bases of 2897316137 (41.385%) in intersection
