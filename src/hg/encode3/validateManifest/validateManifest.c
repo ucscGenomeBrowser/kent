@@ -370,6 +370,35 @@ safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+3 -as=%s -chromInf
 return runCmdLine(cmdLine);
 }
 
+boolean validateRcc(char *fileName)
+/* Validate RCC file */
+{
+boolean result = (fileSize(fileName) > 0);
+if (result)
+    warn("File %s has type rcc", fileName);
+else
+    warn("Error: rcc file %s has size 0", fileName);
+return result;
+}
+ 
+boolean validateIdat(char *fileName)
+/* Validate IDAT file */
+{
+boolean result = (fileSize(fileName) > 0);
+if (result)
+    warn("File %s has type idat", fileName);
+else
+    warn("Error: idat file %s has size 0", fileName);
+return result;
+}
+ 
+boolean validateUnknown(char *fileName)
+/* Validate Unknown type file */
+{
+warn("File %s has type unknown", fileName);
+return TRUE;
+}
+ 
 
 boolean validateFile(char *fileName, char *format)
 /* call validateFiles for the file and format */
@@ -400,8 +429,12 @@ else if (startsWith(format,"narrowPeak"))
     result = validateNarrowPeak(fileName);
 else if (startsWith(format,"broadPeak"))
     result = validateBroadPeak(fileName);
+else if (startsWith(format,"rcc"))
+    result = validateRcc(fileName);
+else if (startsWith(format,"idat"))
+    result = validateIdat(fileName);
 else if (startsWith(format,"unknown"))
-    result = TRUE;
+    result = validateUnknown(fileName);
 else
     {
     warn("Unrecognized format: %s", format);
