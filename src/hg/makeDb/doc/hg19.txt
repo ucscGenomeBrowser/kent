@@ -22606,14 +22606,15 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -continue=chainMerge -syntenicNet > chainMerge.log 2>&1
-XXX - running - Tue Jul  9 12:13:57 PDT 2013
+    #   real    121m35.148s
 
     cat fb.hg19.chainOryAfe1Link.txt
-    #   1199059384 bases of 2897316137 (41.385%) in intersection
+    #   1207247367 bases of 2897316137 (41.668%) in intersection
 
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 oryAfe1 > rbest.log 2>&1 &
+XXX - running - Tue Jul  9 16:10:53 PDT 2013
     # about 1 hour
 
     # running the swap
@@ -22624,6 +22625,7 @@ XXX - running - Tue Jul  9 12:13:57 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
+XXX - running - Tue Jul  9 16:10:53 PDT 2013
     #  real    123m31.066s
 
     cat fb.oryAfe1.chainHg19Link.txt
@@ -22670,14 +22672,16 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -continue=chainMerge -syntenicNet > chainMerge.log 2>&1
-XXX - running - Tue Jul  9 12:19:37 PDT 2013
+    #   real    113m20.012s
 
     cat fb.hg19.chainChrAsi1Link.txt
-    #   1199059384 bases of 2897316137 (41.385%) in intersection
+    #   991149670 bases of 2897316137 (34.209%) in intersection
+
 
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 chrAsi1 > rbest.log 2>&1 &
+XXX - running - Tue Jul  9 16:12:07 PDT 2013
     # about 1 hour
 
     # running the swap
@@ -22688,6 +22692,7 @@ XXX - running - Tue Jul  9 12:19:37 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
+XXX - running - Tue Jul  9 16:12:07 PDT 2013
     #  real    123m31.066s
 
     cat fb.chrAsi1.chainHg19Link.txt
@@ -22791,14 +22796,15 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -continue=chainMerge -syntenicNet > chainMerge.log 2>&1
-XXX - running - Tue Jul  9 13:28:54 PDT 2013
+    #   real    133m23.375s
 
     cat fb.hg19.chainDasNov3Link.txt
-    #   1199059384 bases of 2897316137 (41.385%) in intersection
+    #   1349317168 bases of 2897316137 (46.571%) in intersection
 
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 dasNov3 > rbest.log 2>&1 &
+XXX - running - Tue Jul  9 16:09:08 PDT 2013
     # about 1 hour
 
     # running the swap
@@ -22809,6 +22815,7 @@ XXX - running - Tue Jul  9 13:28:54 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
+XXX - running - Tue Jul  9 16:09:08 PDT 2013
     #  real    123m31.066s
 
     cat fb.dasNov3.chainHg19Link.txt
