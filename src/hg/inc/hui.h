@@ -11,6 +11,9 @@
 
 struct lineFile;
 
+void setUdcTimeout(struct cart *cart);
+/* set the udc cache timeout */
+
 void setUdcCacheDir();
 /* set the path to the udc cache dir */
 

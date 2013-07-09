@@ -246,6 +246,8 @@ struct trackHubGenome *genome = trackHubGetGenome(database);
 if (genome == NULL)
     return NULL;
 
+if (genome->tbf == NULL)
+    genome->tbf = twoBitOpen(genome->twoBitPath);
 if (!twoBitIsSequence(genome->tbf, chrom))
     return NULL;
 
@@ -277,6 +279,8 @@ struct trackHubGenome *genome = trackHubGetGenome(database);
 if (genome == NULL)
     return NULL;
 
+if (genome->tbf == NULL)
+    genome->tbf = twoBitOpen(genome->twoBitPath);
 struct chromInfo *ci, *ciList = NULL;
 struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
 
@@ -448,7 +452,6 @@ while ((ra = raNextRecord(lf)) != NULL)
 	hashReplace(ra, "organism", el->organism);
 	el->defaultPos  = hashFindVal(ra, "defaultPos");
 	el->twoBitPath = trackHubRelativeUrl(url, twoBitPath);
-	el->tbf = twoBitOpen(el->twoBitPath);
 	hashReplace(ra, "htmlPath",trackHubRelativeUrl(url, hashFindVal(ra, "htmlPath")));
 	if (groups != NULL)
 	    el->groups = trackHubRelativeUrl(url, groups);

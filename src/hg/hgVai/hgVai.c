@@ -1256,6 +1256,8 @@ else
 
 /* Set up global variables. */
 getDbAndGenome(cart, &database, &genome, oldVars);
+if (trackHubDatabase(database))
+    errAbort("Assembly Data Hubs not yet supported by the Variant Annotaion Integrator");
 regionType = cartUsualString(cart, hgvaRegionType, hgvaRegionTypeGenome);
 if (isEmpty(cartOptionalString(cart, hgvaRange)))
     cartSetString(cart, hgvaRange, hDefaultPos(database));
