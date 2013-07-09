@@ -1,4 +1,4 @@
-/* validate ENCODE3 manifest.txt creating output validate.txt */
+/* validate ENCODE3 manifest.txt creating output validated.txt */
 
 #include "common.h"
 #include "linefile.h"
@@ -11,7 +11,7 @@
 #include "encode3/encode3Valid.h"
 #include "gff.h"
 
-char *version = "1.5";
+char *version = "1.6";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
@@ -35,10 +35,10 @@ errAbort(
     "\n"
     "   Input files in the working directory: \n"
     "     manifest.txt - current input manifest file\n"
-    "     validate.txt - input from previous run of validateManifest\n" 
+    "     validated.txt - input from previous run of validateManifest\n" 
     "\n"
     "   Output file in the working directory: \n"
-    "     validate.txt - results of validated input\n"
+    "     validated.txt - results of validated input\n"
     "\n"
     , version, encValData
     );
@@ -370,6 +370,35 @@ safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+3 -as=%s -chromInf
 return runCmdLine(cmdLine);
 }
 
+boolean validateRcc(char *fileName)
+/* Validate RCC file */
+{
+boolean result = (fileSize(fileName) > 0);
+if (result)
+    warn("File %s has type rcc", fileName);
+else
+    warn("Error: rcc file %s has size 0", fileName);
+return result;
+}
+ 
+boolean validateIdat(char *fileName)
+/* Validate IDAT file */
+{
+boolean result = (fileSize(fileName) > 0);
+if (result)
+    warn("File %s has type idat", fileName);
+else
+    warn("Error: idat file %s has size 0", fileName);
+return result;
+}
+ 
+boolean validateUnknown(char *fileName)
+/* Validate Unknown type file */
+{
+warn("File %s has type unknown", fileName);
+return TRUE;
+}
+ 
 
 boolean validateFile(char *fileName, char *format)
 /* call validateFiles for the file and format */
@@ -400,8 +429,12 @@ else if (startsWith(format,"narrowPeak"))
     result = validateNarrowPeak(fileName);
 else if (startsWith(format,"broadPeak"))
     result = validateBroadPeak(fileName);
+else if (startsWith(format,"rcc"))
+    result = validateRcc(fileName);
+else if (startsWith(format,"idat"))
+    result = validateIdat(fileName);
 else if (startsWith(format,"unknown"))
-    result = TRUE;
+    result = validateUnknown(fileName);
 else
     {
     warn("Unrecognized format: %s", format);
@@ -413,7 +446,7 @@ return result;
 
 
 void validateManifest(char *workingDir)
-/* Validate the manifest.txt input file creating validate.txt output */
+/* Validate the manifest.txt input file creating validated.txt output */
 {
 
 chdir(workingDir);
@@ -557,6 +590,10 @@ fprintf(f,"\n");
 
 fprintf(f,"##validateManifest version %s\n", version);  // write vm version as a comment
 
+// hash for output_type checking for unique format 
+// catches problem some users were using the same output_type on the wrong format.
+struct hash *outputTypeHash = newHash(12);
+
 // loop through manifest recs
 struct slRecord *rec = NULL;
 int recNo = 1;
@@ -589,6 +626,23 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	fileIsValid = FALSE;
 	printf("ERROR: %s FILE NOT FOUND !!!\n", mFileName);
 	}
+
+    char *mFormat = rec->words[mFormatIdx];
+
+    // check that each output_type is only used with one format
+    char *mOutputType = rec->words[mOutputTypeIdx];
+    struct hashEl *el = hashLookup(outputTypeHash, mOutputType);
+    if (el)
+	{
+	char *existingFormat = (char *) el->val;
+	if (!sameString(mFormat, existingFormat))
+	    {
+	    errAbort("Error: Each output_type can only be used with one format.  output_type %s is being used with both format %s and %s.",
+		mOutputType, mFormat, existingFormat);
+	    }		    
+	}
+    else
+	hashAdd(outputTypeHash, mOutputType, cloneString(mFormat));
 
     // check experiment field
     char *mExperiment = rec->words[mExperimentIdx];
@@ -694,7 +748,6 @@ for(rec = manifestRecs; rec; rec = rec->next)
 
 	    mValidKey = encode3CalcValidationKey(mMd5Hex, mFileSize);
 
-	    char *mFormat = rec->words[mFormatIdx];
 	    fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
 	    if (!fileIsValid)
 		mValidKey = "ERROR";

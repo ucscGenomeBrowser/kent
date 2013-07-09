@@ -924,7 +924,7 @@ char *doLoad(boolean fromUrl, char *actionVar)
 {
 struct dyString *dyMessage = dyStringNew(1024);
 struct lineFile *lf = NULL;
-webPushErrHandlersCart(cart);
+webPushErrHandlersCartDb(cart, cartUsualString(cart, "db", NULL));
 if (fromUrl)
     {
     char *url = trimSpaces(cartString(cart, hgsLoadUrlName));
@@ -1013,7 +1013,7 @@ struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[512];
-webPushErrHandlersCart(cart);
+webPushErrHandlersCartDb(cart, cartUsualString(cart, "db", NULL));
 boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
 if (gotSettings)
@@ -1108,7 +1108,7 @@ char *doSessionChange(char *oldSessionName)
 /* Process changes to session from session details page. */
 {
 struct dyString *dyMessage = dyStringNew(1024);
-webPushErrHandlersCart(cart);
+webPushErrHandlersCartDb(cart, cartUsualString(cart, "db", NULL));
 char *sessionName = oldSessionName;
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encOldSessionName = encSessionName;

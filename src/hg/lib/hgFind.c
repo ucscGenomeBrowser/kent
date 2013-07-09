@@ -2565,7 +2565,7 @@ struct hgPositions *findGenomePosWeb(char *db, char *spec, char **retChromName,
 {
 struct hgPositions *hgp;
 if (useWeb)
-    webPushErrHandlersCart(cart);
+    webPushErrHandlersCartDb(cart, db);
 hgp = genomePos(db, spec, retChromName, retWinStart, retWinEnd, cart, TRUE,
 		useWeb, hgAppName);
 if (useWeb)

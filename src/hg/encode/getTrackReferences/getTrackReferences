@@ -16,15 +16,19 @@ def parsePubmed(doc, id):
                 for j in i:
                     infoDict['Authors'].append(j.text)
                 continue
+            if i.attrib['Name'] == "ArticleIds":
+                for j in i:
+                    if (j.attrib['Name'] == 'pubmed'):
+                        infoDict[j.attrib['Name']] = j.text
+                    if (j.attrib['Name'] == 'pmc'):
+                        infoDict[j.attrib['Name']] = j.text
+                continue
             if i.attrib['Name'] in attribList:
                 infoDict[i.attrib['Name']] = i.text
 
     return infoDict
 
 def parsePmc(doc, id):
-    infoDict = dict()
-    infoDict['url'] = "http://www.ncbi.nlm.nih.gov/pmc/articles/%s" % id
-    attribList = ['Title', 'PubDate', 'Journal', 'Volume', 'Issue', 'Pagination', 'CollectiveName']
     for node in doc.iter("ArticleId"):
         foundPubMedId = 0
         for child in node:
@@ -103,11 +107,17 @@ def makeHtml(infoDict, original, plain):
         dateStr = dateStr1 + dateStr
     if not re.search("\.$", dateStr):
         dateStr = dateStr + "."
+    # construct hyperlinks for PMID and PMCID (if it exists)
+    idStr = "PMID: <a href=\"%s\" target=\"_blank\">%s</a>" % (htmlEscape(infoDict['url']), infoDict['pubmed'])
+    if 'pmc' in infoDict:
+        idStr = idStr + "; PMC: <a href=\"http://www.ncbi.nlm.nih.gov/pmc/articles/%s\" target=\"_blank\">%s</a>" % (infoDict['pmc'], infoDict['pmc'])
+
+    # now that the pubmed link has been constructed, we can overwrite the url if need be
     origComment = ""
     if original:
         fetch = urllib2.urlopen(infoDict['url'])
         doc = fetch.read()
-        m = re.search('<div class="icons"><a href="(\S+)"', doc)
+        m = re.search('<div class="icons"><div><a href="(\S+)"', doc)
         if m:
             if m.group(1):
                 infoDict['url'] = m.group(1).replace("&amp;", "&")
@@ -119,10 +129,11 @@ def makeHtml(infoDict, original, plain):
     htmlLines.append("<a href=\"%s\" target=\"_blank\">" % htmlEscape(infoDict['url']))
     htmlLines.append("%s</a>." % htmlEscape(title))
     htmlLines.append("<em>%s</em>. %s" % (htmlEscape(journal), dateStr))
+    htmlLines.append("%s" % idStr)
     htmlLines.append("</p>")
     if plain:
         htmlLines = list()
-        htmlLines.append("%s %s. %s. %s %s" % (authStr, title, journal, dateStr, infoDict['url']))
+        htmlLines.append("%s %s. %s. %s %s. %s" % (authStr, title, journal, dateStr, idStr, infoDict['url']))
     if not plain and origComment:
         htmlLines.append("%s" %  origComment)
     sep = "\n"
@@ -141,7 +152,8 @@ def main():
         epilog='example: getTrackReferences PMC3039671 21347206'
         )
     parser.add_argument('ids', metavar='IDs', type=str, nargs='+', help='The list of PubMed and PubMedCentral Ids')
-    parser.add_argument('-o', '--original', action="store_true", default=0, help="Use original article link instead of PubMed link, if possible.")
+    # setting the default for -o to on, refs #10192 on 07/08/2013
+    parser.add_argument('-o', '--original', action="store_true", default=1, help="Use original article link instead of PubMed link, if possible.")
     parser.add_argument('-p', '--plain', action="store_true", default=0, help="Output the references in plain-text instead of html.")
     #if len(sys.argv) <= 1:
     #    parser.print_help()
