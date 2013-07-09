@@ -934,7 +934,7 @@ if (sql != NULL)
     char buf[256];
     sqlSafef(buf, sizeof(buf), sql, itemName);
     struct sqlConnection *conn = hAllocConn(database);
-    id = sqlQuickString(conn, bug);
+    id = sqlQuickString(conn, buf);
     hFreeConn(&conn);
     }
 return id;
