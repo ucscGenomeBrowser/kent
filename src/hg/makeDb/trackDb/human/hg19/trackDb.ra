@@ -611,14 +611,10 @@ html hg19primateChainNet
         type chain micMur1
         otherDb micMur1
 
-        track chainOtoGar1
-    #replaces record chainOtoGar1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
-        subTrack primateChainNetViewchain off
-        subGroups view=chain species=jBushbaby clade=dStrep
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain otoGar1
-        otherDb otoGar1
+include chainNetOtoGar1.ra alpha,beta,public
+include chainNetOtoGar3.ra alpha
+include chainNetRBestOtoGar1.ra alpha
+include chainNetRBestOtoGar3.ra alpha
 
     track primateChainNetViewnet
     shortLabel Nets
@@ -712,15 +708,6 @@ html hg19primateChainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign micMur1 chainMicMur1
         otherDb micMur1
-
-        track netOtoGar1
-    #replaces record netOtoGar1 in parent dir missing/extra group,priority,visibility,spectrum
-        subTrack primateChainNetViewnet on
-        subGroups view=net species=jBushbaby clade=dStrep
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign otoGar1 chainOtoGar1
-        otherDb otoGar1
 
 track placentalChainNet
 compositeTrack on
@@ -1198,7 +1185,7 @@ compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aWallaby=Wallaby bOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken faMedium_Ground_Finch=Medium_Ground_Finch fbZebra_Finch=Zebra_Finch gLizard=Lizard hX_Tro=X._tropicalis iTetraodon=Tetraodon jFugu=Fugu kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nLamprey=Lamprey
+subGroup2 species Species aWallaby=Wallaby bOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken faMedium_Ground_Finch=Medium_Ground_Finch fbZebra_Finch=Zebra_Finch fcAlligator=Alligator gLizard=Lizard hX_Tro=X._tropicalis iTetraodon=Tetraodon jFugu=Fugu kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nLamprey=Lamprey
 subGroup3 clade Clade aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria dAmph=Amphibia eTele=Teleostei fHyper=Hyperoartia
 dragAndDrop subTracks
 visibility hide
@@ -1283,6 +1270,14 @@ html hg19vertChainNet
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain anoCar2
         otherDb anoCar2
+
+        track chainAllMis1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=fcAlligator clade=cLepi
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain allMis1
+        otherDb allMis1
 
         track chainXenTro3
     #replaces record chainXenTro3 in parent dir missing/extra priority
@@ -1409,6 +1404,14 @@ html hg19vertChainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign anoCar2 chainAnoCar2
         otherDb anoCar2
+
+        track netAllMis1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=fcAlligator clade=cLepi
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign allMis1 chainAllMis1
+        otherDb allMis1
 
         track netXenTro3
     #replaces record netXenTro3 in parent dir missing/extra priority

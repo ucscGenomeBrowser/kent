@@ -1,0 +1,15 @@
+        track chainOtoGar3
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=jBushbaby clade=dStrep
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain otoGar3
+        otherDb otoGar3
+
+        track netOtoGar3
+        subTrack primateChainNetViewnet on
+        subGroups view=net species=jBushbaby clade=dStrep
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign otoGar3 chainOtoGar3
+        otherDb otoGar3
