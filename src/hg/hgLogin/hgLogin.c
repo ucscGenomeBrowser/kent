@@ -398,7 +398,6 @@ void  displayMailSuccess()
 /* display mail success confirmation box */
 {
 char *sendMailTo = cartUsualString(cart, "hgLogin_sendMailTo", "");
-char *sendMailContain = cartUsualString(cart, "hgLogin_sendMailContain", "");
 hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
