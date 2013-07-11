@@ -3,8 +3,8 @@ compositeTrack on
 shortLabel Legacy Chain/Net
 longLabel Previous genome versions, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aChimp=Chimp cRat=Rat aWallaby=Wallaby bOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken faMedium_Ground_Finch=Medium_Ground_Finch fbBudgerigar=Budgerigar fbZebra_Finch=Zebra_Finch fcAlligator=Alligator gLizard=Lizard hX_Tro=X._tropicalis iTetraodon=Tetraodon jFugu=Fugu kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nLamprey=Lamprey
-subGroup3 clade Clade aHom=Hominidae aEuarch=Euarchontoglires aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria dAmph=Amphibia eTele=Teleostei fHyper=Hyperoartia
+subGroup2 species Species aChimp=Chimp bGorilla=Gorilla dGibbon=Gibbon eRhesus=Rhesus kTree_Shrew=Tree_Shrew lMouse=Mouse mRat=Rat nKangaroo=Kangaroo_Rat nGuinea=Guinea_Pig oSquirrel=Squirrel pRabbit=Rabbit qPika=Pika rAlpaca=Alpaca sDolphin=Dolphin tSheep=Sheep uCow=Cow vPig=Pig wHorse=Horse xWhite_Rhinoceros=White_Rhinoceros yCat=Cat zDog=Dog zaPanda=Panda zbMicrobat=Microbat zcMegabat=Megabat zdHedgehog=Hedgehog zeShrew=Shrew zfElephant=Elephant zgRock_Hyrax=Rock_Hyrax zhTenrec=Tenrec ziArmadillo=Armadillo zjSloth=Sloth zkWallaby=Wallaby zlOpossum=Opossum zmPlatypus=Platypus znTurkey=Turkey zoChicken=Chicken zpMedium_Ground_Finch=Medium_Ground_Finch zqBudgerigar=Budgerigar zrZebra_Finch=Zebra_Finch zsAlligator=Alligator ztLizard=Lizard zuX_Tro=X._tropicalis zvTetraodon=Tetraodon zwFugu=Fugu zxStickleback=Stickleback zyMedaka=Medaka zzZebrafish=Zebrafish zzzLamprey=Lamprey
+subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cHaplo=Haplorrhini dStrep=Strepsirrhini eEuarch=Euarchontoglires fMammal=Mammalia gDino=Dinosauria hLepi=Lepidosauria iAmph=Amphibia jTele=Teleostei kHyper=Hyperoartia
 dragAndDrop subTracks
 visibility hide
 group compGeno
@@ -15,7 +15,7 @@ altColor 255,255,0
 type bed 3
 chainLinearGap loose
 chainMinScore 5000
-dimensions dimensionX=clade dimensionY=species 
+dimensions dimensionX=clade dimensionY=species
 sortOrder  species=+ view=+ clade=+
 configurable on
 otherDb hg19
@@ -29,7 +29,7 @@ html chainNet
     spectrum on
 
         track chainPanTro2
-        subTrack legacyChainNetViewchain on 
+        subTrack legacyChainNetViewchain on
         subGroups view=chain species=aChimp clade=aHom
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -37,24 +37,48 @@ html chainNet
         otherDb panTro2
 
         track chainPanTro3
-        subTrack legacyChainNetViewchain on 
+        subTrack legacyChainNetViewchain on
         subGroups view=chain species=aChimp clade=aHom
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain panTro3
         otherDb panTro3
 
+        track chainGorGor1
+        subTrack legacyChainNetViewchain on
+        subGroups view=chain species=bGorilla clade=aHom
+        shortLabel $o_db Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain gorGor1
+        otherDb gorGor1
+
+        track chainNomLeu1
+        subTrack legacyChainNetViewchain on
+        subGroups view=chain species=dGibbon clade=aHom
+        shortLabel $o_db Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain nomLeu1
+        otherDb nomLeu1
+
+        track chainRheMac2
+        subTrack legacyChainNetViewchain on
+        subGroups view=chain species=eRhesus clade=bCerco
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rheMac2
+        otherDb rheMac2
+
         track chainRn4
-        subTrack legacyChainNetViewchain on 
-        subGroups view=chain species=cRat clade=aEuarch
+        subTrack legacyChainNetViewchain on
+        subGroups view=chain species=mRat clade=eEuarch
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain rn4
         otherDb rn4
 
         track chainGalGal3
-        subTrack legacyChainNetViewchain on 
-        subGroups view=chain species=eChicken clade=bDino
+        subTrack legacyChainNetViewchain on
+        subGroups view=chain species=zoChicken clade=gDino
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain galGal3
@@ -67,7 +91,7 @@ html chainNet
     subTrack legacyChainNet
 
         track netPanTro2
-        subTrack legacyChainNetViewnet on 
+        subTrack legacyChainNetViewnet on
         subGroups view=net species=aChimp clade=aHom
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -75,24 +99,48 @@ html chainNet
         otherDb panTro2
 
         track netPanTro3
-        subTrack legacyChainNetViewnet on 
+        subTrack legacyChainNetViewnet on
         subGroups view=net species=aChimp clade=aHom
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign panTro3 chainPanTro3
         otherDb panTro3
 
+        track netGorGor1
+        subTrack legacyChainNetViewnet on
+        subGroups view=net species=bGorilla clade=aHom
+        shortLabel $o_db Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign gorGor1 chainGorGor1
+        otherDb gorGor1
+
+        track netNomLeu1
+        subTrack legacyChainNetViewnet on
+        subGroups view=net species=dGibbon clade=aHom
+        shortLabel $o_db Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign nomLeu1 chainNomLeu1
+        otherDb nomLeu1
+
+        track netRheMac2
+        subTrack legacyChainNetViewnet on
+        subGroups view=net species=eRhesus clade=bCerco
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign rheMac2 chainRheMac2
+        otherDb rheMac2
+
         track netRn4
-        subTrack legacyChainNetViewnet on 
-        subGroups view=net species=cRat clade=aEuarch
+        subTrack legacyChainNetViewnet on
+        subGroups view=net species=mRat clade=eEuarch
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rn4 chainRn4
         otherDb rn4
 
         track netGalGal3
-        subTrack legacyChainNetViewnet on 
-        subGroups view=net species=eChicken clade=bDino
+        subTrack legacyChainNetViewnet on
+        subGroups view=net species=zoChicken clade=gDino
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign galGal3 chainGalGal3

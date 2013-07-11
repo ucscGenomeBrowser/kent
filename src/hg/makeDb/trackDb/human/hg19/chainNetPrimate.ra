@@ -15,7 +15,7 @@ altColor 255,255,0
 type bed 3
 chainLinearGap medium
 chainMinScore 5000
-dimensions dimensionX=clade dimensionY=species 
+dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on
 html hg19primateChainNet
@@ -122,7 +122,7 @@ include chainNetRBestOtoGar3.ra alpha
     subTrack primateChainNet
 
         track netPanTro4
-        subTrack primateChainNetViewnet on 
+        subTrack primateChainNetViewnet on
         subGroups view=net species=aChimp clade=aHom
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -138,7 +138,7 @@ include chainNetRBestOtoGar3.ra alpha
         otherDb gorGor3
 
         track netPonAbe2
-        subTrack primateChainNetViewnet on 
+        subTrack primateChainNetViewnet on
         subGroups view=net species=cOrangutan clade=aHom
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -164,7 +164,7 @@ include chainNetRBestOtoGar3.ra alpha
         otherDb nomLeu3
 
         track netRheMac3
-        subTrack primateChainNetViewnet on 
+        subTrack primateChainNetViewnet on
         subGroups view=net species=eRhesus clade=bCerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -180,7 +180,7 @@ include chainNetRBestOtoGar3.ra alpha
         otherDb papHam1
 
         track netCalJac3
-        subTrack primateChainNetViewnet on 
+        subTrack primateChainNetViewnet on
         subGroups view=net species=gMarmoset clade=cHaplo
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
