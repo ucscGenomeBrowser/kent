@@ -1,0 +1,306 @@
+track vertebrateChainNet
+compositeTrack on
+shortLabel Vertebrate Chain/Net
+longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
+subGroup1 view Views chain=Chains net=Nets
+subGroup2 species Species aWallaby=Wallaby bOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken faMedium_Ground_Finch=Medium_Ground_Finch fbBudgerigar=Budgerigar fbZebra_Finch=Zebra_Finch fcAlligator=Alligator gLizard=Lizard hX_Tro=X._tropicalis iTetraodon=Tetraodon jFugu=Fugu kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nLamprey=Lamprey
+subGroup3 clade Clade aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria dAmph=Amphibia eTele=Teleostei fHyper=Hyperoartia
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 498
+color 0,0,0
+altColor 255,255,0
+type bed 3
+chainLinearGap loose
+chainMinScore 5000
+dimensions dimensionX=clade dimensionY=species 
+sortOrder  species=+ view=+ clade=+
+configurable on
+html hg19vertChainNet
+
+    track vertebrateChainNetViewchain
+    shortLabel Chains
+    view chain
+    visibility pack
+    subTrack vertebrateChainNet
+    spectrum on
+
+        track chainMacEug1
+    #replaces record chainMacEug1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=aWallaby clade=aMammal
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain macEug1
+        otherDb macEug1
+
+        track chainMonDom5 override
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=bOpossum clade=aMammal
+        otherDb monDom5
+
+        track chainOrnAna1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=cPlatypus clade=aMammal
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain ornAna1
+        otherDb ornAna1
+
+        track chainMelGal1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=dTurkey clade=bDino
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain melGal1
+        otherDb melGal1
+
+        track chainGalGal3
+        subTrack vertebrateChainNetViewchain on 
+        subGroups view=chain species=eChicken clade=bDino
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain galGal3
+        otherDb galGal3
+
+        track chainGeoFor1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=faMedium_Ground_Finch clade=bDino
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain geoFor1
+        otherDb geoFor1
+
+        track chainMelUnd1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=fbBudgerigar clade=bDino
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain melUnd1
+        otherDb melUnd1
+
+        track chainTaeGut1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=fbZebra_Finch clade=bDino
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain taeGut1
+        otherDb taeGut1
+
+        track chainAnoCar2
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=gLizard clade=cLepi
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain anoCar2
+        otherDb anoCar2
+
+        track chainAllMis1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=fcAlligator clade=cLepi
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain allMis1
+        otherDb allMis1
+
+        track chainXenTro3
+    #replaces record chainXenTro3 in parent dir missing/extra priority
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=hX_Tro clade=dAmph
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain xenTro3
+        otherDb xenTro3
+
+        track chainGasAcu1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=kStickleback clade=eTele
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain gasAcu1
+        otherDb gasAcu1
+
+        track chainFr2
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=jFugu clade=eTele
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain fr2
+        otherDb fr2
+
+        track chainDanRer7
+    #replaces record chainDanRer5 in parent dir missing/extra priority
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=mZebrafish clade=eTele
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain danRer7
+        otherDb danRer7
+
+        track chainTetNig2
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=iTetraodon clade=eTele
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain tetNig2
+        otherDb tetNig2
+
+        track chainOryLat2
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=lMedaka clade=eTele
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain oryLat2
+        otherDb oryLat2
+
+        track chainPetMar2
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=nLamprey clade=fHyper
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain petMar2
+        otherDb petMar2
+
+    track vertebrateChainNetViewnet
+    shortLabel Nets
+    view net
+    visibility dense
+    subTrack vertebrateChainNet
+
+        track netMacEug1
+    #replaces record netMacEug1 in parent dir missing/extra group,priority,visibility,spectrum
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=aWallaby clade=aMammal
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign macEug1 chainMacEug1
+        otherDb macEug1
+
+        track netMonDom5 override
+        subTrack vertebrateChainNetViewnet on
+        subGroups view=net species=bOpossum clade=aMammal
+        otherDb monDom5
+
+        track netOrnAna1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=cPlatypus clade=aMammal
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign ornAna1 chainOrnAna1
+        otherDb ornAna1
+
+        track netMelGal1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=dTurkey clade=bDino
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign melGal1 chainMelGal1
+        otherDb melGal1
+
+        track netGalGal3
+        subTrack vertebrateChainNetViewnet on 
+        subGroups view=net species=eChicken clade=bDino
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign galGal3 chainGalGal3
+        otherDb galGal3
+
+        track netGeoFor1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=faMedium_Ground_Finch clade=bDino
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign geoFor1 chainGeoFor1
+        otherDb geoFor1
+
+        track netMelUnd1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=fbBudgerigar clade=bDino
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign melUnd1 chainMelUnd1
+        otherDb melUnd1
+
+        track netTaeGut1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=fbZebra_Finch clade=bDino
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign taeGut1 chainTaeGut1
+        otherDb taeGut1
+
+        track netAnoCar2
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=gLizard clade=cLepi
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign anoCar2 chainAnoCar2
+        otherDb anoCar2
+
+        track netAllMis1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=fcAlligator clade=cLepi
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign allMis1 chainAllMis1
+        otherDb allMis1
+
+        track netXenTro3
+    #replaces record netXenTro3 in parent dir missing/extra priority
+        subTrack vertebrateChainNetViewnet on 
+        subGroups view=net species=hX_Tro clade=dAmph
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign xenTro3 chainXenTro3
+        otherDb xenTro3
+
+        track netGasAcu1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=kStickleback clade=eTele
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign gasAcu1 chainGasAcu1
+        otherDb gasAcu1
+
+        track netFr2
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=jFugu clade=eTele
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign fr2 chainFr2
+        otherDb fr2
+
+        track netDanRer7
+    #replaces record netDanRer5 in parent dir missing/extra priority
+        subTrack vertebrateChainNetViewnet on 
+        subGroups view=net species=mZebrafish clade=eTele
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign danRer6 chainDanRer7
+        otherDb danRer7
+
+        track netTetNig2
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=iTetraodon clade=eTele
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign tetNig2 chainTetNig2
+        otherDb tetNig2
+
+        track netOryLat2
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=lMedaka clade=eTele
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign oryLat2 chainOryLat2
+        otherDb oryLat2
+
+        track netPetMar2
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=nLamprey clade=fHyper
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign petMar2 chainPetMar2
+        otherDb petMar2
