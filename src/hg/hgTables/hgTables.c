@@ -937,7 +937,8 @@ for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpLis
 
 /* Do some error checking for tracks with group names that are
  * not in database.  Just warn about them. */
-for (track = trackList; track != NULL; track = track->next)
+if (!trackHubDatabase(database))
+    for (track = trackList; track != NULL; track = track->next)
     {
     if (!hashLookup(groupsInDatabase, track->grp))
          warn("Track %s has group %s, which isn't in grp table",

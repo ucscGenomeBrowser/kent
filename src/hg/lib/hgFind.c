@@ -3203,16 +3203,19 @@ else
 		  trackHubSkipHubName(database),
 		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
-if (htmlPath != NULL && fileExists(htmlPath))
-    readInGulp(htmlPath, &htmlString, &htmlStrLength);
-else if (   startsWith("http://" , htmlPath) ||
-	    startsWith("https://", htmlPath) ||
-	    startsWith("ftp://"  , htmlPath))
+if (htmlPath != NULL) 
     {
-    struct lineFile *lf = udcWrapShortLineFile(htmlPath, NULL, 256*1024);
-    htmlString =  lineFileReadAll(lf);
-    htmlStrLength = strlen(htmlString);
-    lineFileClose(&lf);
+    if (fileExists(htmlPath))
+	readInGulp(htmlPath, &htmlString, &htmlStrLength);
+    else if (   startsWith("http://" , htmlPath) ||
+		startsWith("https://", htmlPath) ||
+		startsWith("ftp://"  , htmlPath))
+	{
+	struct lineFile *lf = udcWrapShortLineFile(htmlPath, NULL, 256*1024);
+	htmlString =  lineFileReadAll(lf);
+	htmlStrLength = strlen(htmlString);
+	lineFileClose(&lf);
+	}
     }
 
 if (htmlStrLength > 0)
