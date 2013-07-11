@@ -1,0 +1,15 @@
+        track chainRn4
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=cRat clade=aEuarch
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rn4
+        otherDb rn4
+
+        track netRn4
+        subTrack placentalChainNetViewnet on 
+        subGroups view=net species=cRat clade=aEuarch
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign rn4 chainRn4
+        otherDb rn4

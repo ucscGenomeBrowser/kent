@@ -1724,7 +1724,7 @@ html chainNet
         track chainOryLat2
         parent chainNetOryLat2Viewchain
         subGroups view=chain
-        shortLabel $o_Organism Chain 
+        shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain oryLat2
         otherDb oryLat2
@@ -1780,7 +1780,7 @@ html chainNet
         release alpha
         parent chainNetOryLat1Viewchain
         subGroups view=chain
-        shortLabel $o_db Chain 
+        shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain oryLat1
         otherDb oryLat1
@@ -2365,10 +2365,6 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign anoCar1 chainAnoCar1
         html chainNet
-
-# changes to perMar[12] here need to also correspond to
-# the same tags in mouse/mm10/trackDb.vertebrateChainNet.ra
-# and the chainNetPetMar1 override in medaka/trackDb.chainNet.ra
 
 include chainNetPetMar2.ra
 
@@ -4206,9 +4202,9 @@ longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
-group compGeno 
+group compGeno
 noInherit on
-priority 230 
+priority 230
 color 0,0,0
 altColor 100,50,0
 type bed 3
@@ -4217,9 +4213,9 @@ matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
 otherDb oviAri1
 chainMinScore 3000
-chainLinearGap medium 
+chainLinearGap medium
 spectrum on
-html chainNet 
+html chainNet
 
     track chainNetOviAri1Viewchain
     shortLabel Chain
@@ -4227,7 +4223,7 @@ html chainNet
     visibility pack
     parent chainNetOviAri1
     spectrum on
-    
+
         track chainOviAri1
         parent chainNetOviAri1Viewchain
         subGroups view=chain
@@ -4241,7 +4237,7 @@ html chainNet
     view net
     visibility full
     parent chainNetOviAri1
-    
+
         track netOviAri1
         parent chainNetOviAri1Viewnet
         subGroups view=net
@@ -4301,7 +4297,7 @@ html chainNet
         type netAlign bosTau7 chainBosTau7
         html chainNet
 
-track chainNetBosTau6 
+track chainNetBosTau6
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -4322,7 +4318,7 @@ chainMinScore 3000
 chainLinearGap medium
 spectrum on
 html chainNet
-    
+
     track chainNetBosTau6Viewchain
     shortLabel Chain
     view chain
