@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 seed = optionInt("seed", seed);
+srand(seed);
 if (argc != 5)
     usage();
 sampleBam(argv[1],argv[2], argv[3], argv[4]);
