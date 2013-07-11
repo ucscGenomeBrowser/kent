@@ -25,6 +25,7 @@ tdb->html = hFileContentsOrWarning(hHelpFile(tdb->track));
 tdb->type = "none";
 tdb->grp = "map";
 tdb->canPack = FALSE;
+tdb->settingsHash = newHash(5);
 
 slAddHead(list, tdb);
 slSort(list, trackDbCmp);

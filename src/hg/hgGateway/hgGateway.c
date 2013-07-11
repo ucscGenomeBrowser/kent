@@ -264,7 +264,7 @@ else
     /* tell html routines *not* to escape htmlOut strings*/
     htmlNoEscape();
     buffer[0] = 0;
-    if (*scientificName != 0)
+    if ((scientificName != NULL) && (*scientificName != 0))
 	{
 	if (sameString(clade,"ancestor"))
 	    safef(buffer, sizeof(buffer), "(<I>%s</I> Ancestor) ", scientificName);
