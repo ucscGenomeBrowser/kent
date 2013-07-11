@@ -318,7 +318,7 @@ if (pidInUseValid && pthread_equal(pid, pidInUse))
     // which should be a rare occurrence.
     char *errMsg = "errAbort re-entered due to out-of-memory condition. Exiting.\n";
     write(STDERR_FILENO, errMsg, strlen(errMsg)); 
-    _exit(1);   // out of memory is a serious problem, exit immediately without running atexit cleanup.
+    exit(1);   // out of memory is a serious problem, exit immediately, but allow atexit cleanup.
     }
 pthread_mutex_unlock( &pidInUseMutex );
 
