@@ -4,7 +4,7 @@ shortLabel Legacy Chain/Net
 longLabel Previous genome versions, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species aRat=Rat bNMRat=Naked_mole_rat cChimp=Chimp dGibbon=Gibbon eCat=Cat eCow=Cow fPig=Pig gArmadillo=Armadillo hDolphin=Dolphin iTilapia=Nile_tilapia tLamprey=Lamprey
-subGroup3 clade Clade aRodent=Rodent bHom=Hominidae cXena=Xenarthra dLaura=Laurasiatheria eCarn=Carnivora fPerco=Percomorpha fPetro=Petromyzon
+subGroup3 clade Clade aRodent=Rodent bHom=Hominidae cXena=Xenarthra dLaura=Laurasiatheria eCarn=Carnivora fPerco=Percomorpha gPetro=Petromyzon
 dragAndDrop subTracks
 visibility hide
 group compGeno
