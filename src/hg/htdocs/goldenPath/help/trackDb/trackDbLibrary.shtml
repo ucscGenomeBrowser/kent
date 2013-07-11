@@ -1312,7 +1312,7 @@
     this index will be searched to find that name, and if the string is in 
     the index, the user will either be navigated to that position in the 
     browser, or if there are more than one matches of that string, 
-    will be give a list of the positions to choose from. See <A HREF="../bigBed.html#Ex3"> HERE </A>
+    will be give a list of the positions to choose from. See <A HREF="../bigBed.html#Ex3">HERE</A>
     for instructions on how to build an index for a bigBed file.
     <P><B>Example:</B></P>
     <pre>   searchIndex name</pre>
@@ -1322,7 +1322,7 @@
 <div class="format"><code>searchTrix &lt;url/relativePath&gt;</code></div>
     <P> Specifies the URL to a TRIX file that maps free text to
     a set of indices that are assumed to have indicies in the associated
-    bigBed file.  See <A HREF="../trix.html"> HERE </A>for instructions on how to build a TRIX file.
+    bigBed file.  See <A HREF="../trix.html">HERE</A>for instructions on how to build a TRIX file.
     <P><B>Example:</B></P>
     <pre>   searchTrix url or relative path </pre>
 </DIV>
