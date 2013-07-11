@@ -100,6 +100,14 @@ html chainNet
         type chain oviAri1
         otherDb oviAri1
 
+        track chainVicPac1
+        subTrack legacyChainNetViewchain on
+        subGroups view=chain species=rAlpaca clade=fLaura
+        shortLabel $o_db Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain vicPac1
+        otherDb vicPac1
+
         track chainOryCun1
         subTrack legacyChainNetViewchain on
         subGroups view=chain species=pRabbit clade=eEuarch
@@ -217,6 +225,14 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oviAri1 chainOviAri1
         otherDb oviAri1
+
+        track netVicPac1
+        subTrack legacyChainNetViewnet on
+        subGroups view=net species=rAlpaca clade=fLaura
+        shortLabel $o_db Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign vicPac1 chainVicPac1
+        otherDb vicPac1
 
         track netOryCun1
         subTrack legacyChainNetViewnet on

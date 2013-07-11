@@ -69,13 +69,8 @@ html hg19mammalChainNet
         type chain speTri1
         otherDb speTri1
 
-        track chainVicPac1
-        subTrack placentalChainNetViewchain off
-        subGroups view=chain species=iAlpaca clade=bLaura
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain vicPac1
-        otherDb vicPac1
+include chainNetVicPac1.ra beta,public
+include chainNetVicPac2.ra alpha
 
         track chainChoHof1
         subTrack placentalChainNetViewchain off
@@ -275,14 +270,6 @@ include chainNetOviAri3.ra alpha
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign speTri1 chainSpeTri1
         otherDb speTri1
-
-        track netVicPac1
-        subTrack placentalChainNetViewnet off
-        subGroups view=net species=iAlpaca clade=bLaura
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign vicPac1 chainVicPac1
-        otherDb vicPac1
 
         track netChoHof1
         subTrack placentalChainNetViewnet off

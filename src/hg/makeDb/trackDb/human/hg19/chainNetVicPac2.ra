@@ -1,0 +1,15 @@
+        track chainVicPac2
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=iAlpaca clade=bLaura
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain vicPac2
+        otherDb vicPac2
+
+        track netVicPac2
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=iAlpaca clade=bLaura
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign vicPac2 chainVicPac2
+        otherDb vicPac2
