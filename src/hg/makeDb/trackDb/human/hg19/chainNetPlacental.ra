@@ -189,13 +189,8 @@ html hg19mammalChainNet
         type chain eriEur1
         otherDb eriEur1
 
-        track chainEchTel1
-        subTrack placentalChainNetViewchain off
-        subGroups view=chain species=yTenrec clade=cAfro
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain echTel1
-        otherDb echTel1
+include chainNetEchTel1.ra beta,public
+include chainNetEchTel2.ra alpha
 
         track chainMm10
         subTrack placentalChainNetViewchain on
@@ -405,14 +400,6 @@ include chainNetRn5.ra alpha
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign eriEur1 chainEriEur1
         otherDb eriEur1
-
-        track netEchTel1
-        subTrack placentalChainNetViewnet off
-        subGroups view=net species=yTenrec clade=cAfro
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign echTel1 chainEchTel1
-        otherDb echTel1
 
         track netMm10
         subTrack placentalChainNetViewnet on
