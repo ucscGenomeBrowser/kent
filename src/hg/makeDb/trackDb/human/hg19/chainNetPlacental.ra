@@ -109,7 +109,13 @@ html hg19mammalChainNet
         type chain felCat4
         otherDb felCat4
 
-include chainCanFam3.ra
+        track chainCanFam3
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=qDog clade=bLaura
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain canFam3
+        otherDb canFam3
 
         track chainDasNov2
         subTrack placentalChainNetViewchain off
@@ -118,7 +124,7 @@ include chainCanFam3.ra
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain dasNov2
         otherDb dasNov2
-        
+
         track chainOryCun2
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=gRabbit clade=aEuarch
@@ -192,7 +198,7 @@ include chainCanFam3.ra
         otherDb echTel1
 
         track chainMm10
-        subTrack placentalChainNetViewchain on 
+        subTrack placentalChainNetViewchain on
         subGroups view=chain species=bMouse clade=aEuarch
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -305,7 +311,7 @@ include chainNetRn5.ra alpha
         otherDb pteVam1
 
         track netLoxAfr3
-        subTrack placentalChainNetViewnet on 
+        subTrack placentalChainNetViewnet on
         subGroups view=net species=wElephant clade=cAfro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -320,16 +326,22 @@ include chainNetRn5.ra alpha
         type netAlign felCat4 chainFelCat4
         otherDb felCat4
 
-include netCanFam3.ra
+        track netCanFam3
+        subTrack placentalChainNetViewnet on
+        subGroups view=net species=qDog clade=bLaura
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign canFam3 chainCanFam3
+        otherDb canFam3
 
         track netDasNov2
-        subTrack placentalChainNetViewnet on 
+        subTrack placentalChainNetViewnet on
         subGroups view=net species=zArmadillo clade=dXenar
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign dasNov2 chainDasNov2
         otherDb dasNov2
-        
+
         track netOryCun2
         subTrack placentalChainNetViewnet off
         subGroups view=net species=gRabbit clade=aEuarch
@@ -347,7 +359,7 @@ include netCanFam3.ra
         otherDb myoLuc1
 
         track netBosTau7
-        subTrack placentalChainNetViewnet on 
+        subTrack placentalChainNetViewnet on
         subGroups view=net species=lCow clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
