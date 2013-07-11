@@ -22968,14 +22968,15 @@ TMPDIR=/scratch/tmp
         -chainMinScore=5000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -continue=chainMerge -syntenicNet > chainMerge.log 2>&1
-XXX - running - Thu Jul 11 14:19:28 PDT 2013
+    #   real    56m29.109s
 
     cat fb.hg19.chainMacEug2Link.txt
-    #   1199059384 bases of 2897316137 (41.385%) in intersection
+    #   189299569 bases of 2897316137 (6.534%) in intersection
 
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 macEug2 > rbest.log 2>&1 &
+XXX - running - Thu Jul 11 16:03:27 PDT 2013
     # about 1 hour
 
     # running the swap
@@ -22986,6 +22987,7 @@ XXX - running - Thu Jul 11 14:19:28 PDT 2013
         -chainMinScore=5000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
+XXX - running - Thu Jul 11 16:03:27 PDT 2013
     #  real    123m31.066s
 
     cat fb.macEug2.chainHg19Link.txt
