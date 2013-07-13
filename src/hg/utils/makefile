@@ -46,7 +46,8 @@ DIRS = \
 	wigBedToStep \
 	pslUniq \
 	makeTrackIndex \
-	geoMirrorNode
+	geoMirrorNode \
+	mysqlSecurityCheck
 
 TEST_DIRS = \
 	gff3ToGenePred \
