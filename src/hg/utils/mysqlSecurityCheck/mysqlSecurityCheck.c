@@ -235,6 +235,8 @@ int problemsFound = 0;
 for (config = configList; config; config = config->next)
     {
     printf("Config %s\n", config->name);
+    printf("%s.host=%s\n", config->name, getCfgOption(config->name, "host"));
+    printf("%s.user=%s\n", config->name, getCfgOption(config->name, "user"));
     boolean problemFound = mysqlCheckSecurityOfConfig(config->name);
     if (problemFound)
 	{
@@ -247,8 +249,10 @@ for (config = configList; config; config = config->next)
 	}
     printf("\n");
     }
-printf("\nproblemsFound = %d\n", problemsFound);
+printf("\nProblems Found in %d out of %d Configs\n\n", problemsFound, slCount(configList));
 
+if (problemsFound > 1)
+    return 1;
 
 return 0;  
 }
