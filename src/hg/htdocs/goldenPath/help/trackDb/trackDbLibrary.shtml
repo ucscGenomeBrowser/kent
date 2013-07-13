@@ -1322,7 +1322,7 @@
 <div class="format"><code>searchTrix &lt;url/relativePath&gt;</code></div>
     <P> Specifies the URL to a TRIX file that maps free text to
     a set of indices that are assumed to have indicies in the associated
-    bigBed file.  See <A HREF="../trix.html">HERE</A>for instructions on how to build a TRIX file.
+    bigBed file.  See <A HREF="../trix.html">HERE</A> for instructions on how to build a TRIX file.
     <P><B>Example:</B></P>
     <pre>   searchTrix url or relative path </pre>
 </DIV>
