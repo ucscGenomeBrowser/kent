@@ -23155,8 +23155,7 @@ TMPDIR=/scratch/tmp
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 lepWed1 > rbest.log 2>&1 &
-XXX - running - Fri Jul 12 11:39:00 PDT 2013
-    #   real    56m41.559s
+    #   real    59m0.523s
 
     # running the swap
     mkdir /hive/data/genomes/lepWed1/bed/blastz.hg19.swap
@@ -23166,11 +23165,10 @@ XXX - running - Fri Jul 12 11:39:00 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
-XXX - running - Fri Jul 12 11:39:00 PDT 2013
-    #  real    93m49.833s
+    #  real    100m46.082s
 
     cat fb.lepWed1.chainHg19Link.txt
-    #  1026037326 bases of 1682542007 (60.981%) in intersection
+    #  1457672837 bases of 2223164129 (65.567%) in intersection
 
     cd /hive/data/genomes/lepWed1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -23205,8 +23203,9 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > do.log 2>&1
-XXX - running - Thu Jul 11 14:31:13 PDT 2013
-    #   real    1470m34.378s
+    #   real    1408m3.295s
+XXX chaining chr19 on hgwdev
+XXX - running - Fri Jul 12 23:10:57 PDT 2013
 
     cat fb.hg19.chainFelCat5Link.txt
     #   1072983049 bases of 2897316137 (37.034%) in intersection
@@ -23284,11 +23283,10 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
-XXX - running - Fri Jul 12 09:57:18 PDT 2013
-    #  real    93m49.833s
+    #  real    113m35.370s
 
     cat fb.musFur1.chainHg19Link.txt
-    #  1026037326 bases of 1682542007 (60.981%) in intersection
+    #  1419772812 bases of 2277906570 (62.328%) in intersection
 
     cd /hive/data/genomes/musFur1/bed
     ln -s blastz.hg19.swap lastz.hg19
