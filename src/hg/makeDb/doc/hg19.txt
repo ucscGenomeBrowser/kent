@@ -23210,13 +23210,15 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -continue=chainMerge -syntenicNet > chainMerge.log 2>&1
+    #   real    132m29.811s
 
     cat fb.hg19.chainFelCat5Link.txt
-    #   1072983049 bases of 2897316137 (37.034%) in intersection
+    #   1518956396 bases of 2897316137 (52.426%) in intersection
 
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 felCat5 > rbest.log 2>&1 &
+XXX - running - Sat Jul 13 20:34:50 PDT 2013
     #   real    56m41.559s
 
     # running the swap
@@ -23227,6 +23229,7 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
+XXX - running - Sat Jul 13 20:34:50 PDT 2013
     #  real    93m49.833s
 
     cat fb.felCat5.chainHg19Link.txt
@@ -23337,8 +23340,7 @@ TMPDIR=/scratch/tmp
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 camFer1 > rbest.log 2>&1 &
-XXX - running - Sat Jul 13 08:40:26 PDT 2013
-    #   real    71m34.431s
+    #   real    51m50.739s
 
     # running the swap
     mkdir /hive/data/genomes/camFer1/bed/blastz.hg19.swap
@@ -23348,11 +23350,10 @@ XXX - running - Sat Jul 13 08:40:26 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
-XXX - running - Sat Jul 13 08:40:26 PDT 2013
-    #  real    93m49.833s
+    #  real    97m20.985s
 
     cat fb.camFer1.chainHg19Link.txt
-    #  1026037326 bases of 1682542007 (60.981%) in intersection
+    #    1413721651 bases of 1985442806 (71.204%) in intersection
 
     cd /hive/data/genomes/camFer1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -23399,8 +23400,7 @@ TMPDIR=/scratch/tmp
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 odoRosDiv1 > rbest.log 2>&1 &
-XXX - running - Sat Jul 13 08:42:36 PDT 2013
-    #   real    71m34.431s
+    #   real    55m27.877s
 
     # running the swap
     mkdir /hive/data/genomes/odoRosDiv1/bed/blastz.hg19.swap
@@ -23410,11 +23410,10 @@ XXX - running - Sat Jul 13 08:42:36 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -noDbNameCheck -syntenicNet > swap.log 2>&1
-XXX - running - Sat Jul 13 08:42:36 PDT 2013
-    #  real    93m49.833s
+    #   real    101m51.331s
 
     cat fb.odoRosDiv1.chainHg19Link.txt
-    #  1026037326 bases of 1682542007 (60.981%) in intersection
+    #    1490487100 bases of 2300235512 (64.797%) in intersection
 
     cd /hive/data/genomes/odoRosDiv1/bed
     ln -s blastz.hg19.swap lastz.hg19
