@@ -3400,7 +3400,7 @@ return mdbNames;
 }
 
 static void mdbSearchableQueryRestictForTablesOrFiles(struct dyString *dyQuery,char *tableName,
-                                            char letter,boolean hasTableName, boolean hasFileName)
+                                            char letter, boolean hasTableName, boolean hasFileName)
 // Append table and file restrictions onto an mdb query.
 // letter (e.g. 'A') should be used in original query to alias table name:
 //                           "select A.val from metaDb A where A.val = 'fred'".
@@ -3408,7 +3408,7 @@ static void mdbSearchableQueryRestictForTablesOrFiles(struct dyString *dyQuery,c
 // A note about tables and files: objType=table may have fileNames associated,
 //   but objType=file will not have tableNames
 // While objType=table should have a var=tableName, this is redundant because the obj=tableName
-// So the lopsided 'exists' queries below are meant to be the most flexible/efficent
+// So the lopsided 'JOIN' queries below are meant to be the most flexible/efficient
 
 assert(isalpha(letter) && isalpha(letter + 2)); // will need one or two sub-queries.
 char nextLtr = letter + 1;
@@ -3418,22 +3418,22 @@ char nextLtr = letter + 1;
 if (hasTableName && !hasFileName)
     {
     // objType=table may have fileNames associated, but objType=file will not have tableNames
-    sqlDyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
-                           "%c.var='objType' and %c.val = '%s')",nextLtr,tableName,nextLtr,nextLtr,
+    sqlDyStringPrintf(dyQuery," JOIN %s %c ON %c.obj = %c.obj and "
+                           "%c.var='objType' and %c.val = '%s'",tableName,nextLtr,nextLtr,
                            letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE);
     }
 else // tables OR files (but not objType=composite)
     {
-    sqlDyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
-                           "%c.var='objType' and %c.val in ('%s','%s'))",nextLtr,tableName,nextLtr,
+    sqlDyStringPrintf(dyQuery," JOIN %s %c ON %c.obj = %c.obj and "
+                           "%c.var='objType' and %c.val in ('%s','%s')",tableName,nextLtr,
                            nextLtr,letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE,MDB_OBJ_TYPE_FILE);
     }
 nextLtr++;
 
 // last of 3 possibilites objType either table or file but must have fileName var
 if (!hasTableName && hasFileName)
-    sqlDyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
-                           "%c.var in ('%s','%s'))",nextLtr,tableName,nextLtr,nextLtr,letter,
+    sqlDyStringPrintf(dyQuery," JOIN %s %c ON %c.obj = %c.obj and "
+                           "%c.var in ('%s','%s')",tableName,nextLtr,nextLtr,letter,
                            nextLtr,MDB_VAR_FILENAME,MDB_VAR_FILEINDEX);
 }
 
@@ -3459,11 +3459,12 @@ if (limit > 0)
 else
     sqlDyStringPrintf(dyQuery,"select distinct %c.val",letter);
 
-sqlDyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
+sqlDyStringPrintf(dyQuery," from %s %c",tableName,letter);
 
 mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName, letter, hasTableName, hasFileName);
 
-dyStringPrintf(dyQuery," order by %c.val",letter);
+// Need to append 'where' AFTER qualifying joins!
+sqlDyStringPrintf(dyQuery, " where %c.var='%s' order by %c.val", letter,var,letter);
 
 retVal = sqlQuickList(conn, dyStringCannibalize(&dyQuery));
 slNameSortCase(&retVal);
@@ -3493,9 +3494,12 @@ if (limit > 0)
 else
     sqlDyStringPrintf(dyQuery,"select distinct %c.val",letter);
 
-sqlDyStringPrintf(dyQuery," from %s %c where %c.var='%s'",tableName,letter,letter,var);
+sqlDyStringPrintf(dyQuery," from %s %c",tableName,letter);
 
 mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
+
+// Need to append 'where' AFTER qualifying joins!
+sqlDyStringPrintf(dyQuery, " where %c.var='%s'",letter,var);
 //warn("%s",dyStringContents(dyQuery));
 
 struct hash *varHash = (struct hash *)cvTermHash(var);
@@ -3551,27 +3555,45 @@ if (!hasTableName && !hasFileName)
 
 char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
-char letter = 'A';
+// Start with what cv says is searchable
 struct slPair *cvApproved = cvWhiteList(TRUE,FALSE);
-struct slPair *relevant = NULL;
+assert(cvApproved != NULL);
+
+// Now construct single select to find all vars in the mdb
+// (belonging to table and/or file objs)
+// Note the second selected column which is only to there to make sqlQuckHash happy
+char letter = 'A';
 struct dyString *dyQuery = dyStringNew(256);
+sqlDyStringPrintf(dyQuery, "select distinct %c.var,'.' from %s %c",letter,tableName,letter);
+
+mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName, letter, hasTableName, hasFileName);
+
+// Need to append 'where' AFTER qualifying joins!
+// On the RR it is more efficient when selecting only the whitelisted vars.
+struct slPair *oneVar = cvApproved;
+sqlDyStringPrintf(dyQuery, " where %c.var in (", letter);
+for ( ; oneVar != NULL; oneVar = oneVar->next)
+    sqlDyStringPrintf(dyQuery, "'%s'%c", oneVar->name,(oneVar->next != NULL? ',':')'));
+//sqlDyStringPrintf(dyQuery, " group by %c.var",letter); // redundant, less efficient?
+//warn("%s",dyStringContents(dyQuery));
+
+// Which vars are in the mdb at this time?
+struct hash *inTable = sqlQuickHash(conn,dyStringContents(dyQuery)); // could use sqlQuickList
+dyStringFree(&dyQuery);
+if (inTable == NULL)
+    return NULL;
+
+// Filter cv approved by eliminating those vars not currently in the mdb.
+struct slPair *relevant = NULL;
 while (cvApproved != NULL)
     {
     struct slPair *oneVar = slPopHead(&cvApproved);
-    dyStringClear(dyQuery);
-    sqlDyStringPrintf(dyQuery, "select count(DISTINCT %c.val) from %s %c where %c.var = '%s'",
-                   letter,tableName,letter,letter,oneVar->name);
-
-    mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
-    int count = sqlQuickNum(conn,dyStringContents(dyQuery));
-    //warn("%d %s",count,dyStringContents(dyQuery));
-
-    if (count > 1) // If there is only one value then searching on that variable is useless!
+    if (hashFindVal(inTable, oneVar->name) != NULL)
         slAddHead(&relevant, oneVar);
     else
         slPairFree(&oneVar);
     }
-dyStringFree(&dyQuery);
+hashFree(&inTable);
 slReverse(&relevant);
 return relevant;
 }

@@ -1,0 +1,15 @@
+        track chainOviAri3
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=kSheep clade=bLaura
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain oviAri3
+        otherDb oviAri3
+
+        track netOviAri3
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=kSheep clade=bLaura
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign oviAri3 chainOviAri3
+        otherDb oviAri3

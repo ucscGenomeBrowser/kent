@@ -398,15 +398,14 @@ void  displayMailSuccess()
 /* display mail success confirmation box */
 {
 char *sendMailTo = cartUsualString(cart, "hgLogin_sendMailTo", "");
-char *sendMailContain = cartUsualString(cart, "hgLogin_sendMailContain", "");
 hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
 hPrintf(
-    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">An email has been sent to <B>%s</B> "
-  "containing %s information that you requested.<BR><BR>"
+    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">All usernames on file (if any) for <B>%s</B> "
+  "have been sent to that address.<BR><BR>"
     "  If <B>%s</B> is not your registered email address, you will not receive an email."
-    " If you can't find the message we sent you, please contact %s for help.</p>", sendMailTo, sendMailContain, sendMailTo, returnAddr);
+    " If you can't find the message we sent you, please contact %s for help.</p>", sendMailTo, sendMailTo, returnAddr);
 hPrintf(
     "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>");
 cartRemove(cart, "hgLogin_helpWith");

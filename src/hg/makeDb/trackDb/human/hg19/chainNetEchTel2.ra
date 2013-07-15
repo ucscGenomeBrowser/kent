@@ -1,0 +1,15 @@
+        track chainEchTel2
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=yTenrec clade=cAfro
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain echTel2
+        otherDb echTel2
+
+        track netEchTel2
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=yTenrec clade=cAfro
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign echTel2 chainEchTel2
+        otherDb echTel2

@@ -169,8 +169,10 @@ highlightColor genePred
 html *
 htmlFile customTracks
 htmlUrl customTracks
-idInUrlSql altGraphX genePred
+idInUrlSql altGraphX genePred chain
 idXref genePred
+iframeUrl *
+iframeOptions *
 indelDoubleInsert psl bam
 indelPolyA psl bam
 indelQueryInsert psl bam
