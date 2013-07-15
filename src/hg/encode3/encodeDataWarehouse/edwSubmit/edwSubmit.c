@@ -525,7 +525,8 @@ return TRUE;
          
 char *edwSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf", 
     "bigWig", "bigBed", "bedLogR", "bedRnaElements", "bedRrbs", "broadPeak", 
-    "narrowPeak", "openChromCombinedPeaks", "peptideMapping", "shortFrags", };
+    "narrowPeak", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
+    "rcc", "idat"};
 int edwSupportedFormatsCount = ArraySize(edwSupportedFormats);
 
 char *edwSupportedEnrichedIn[] = {"unknown", "exon", "intron", "promoter", "coding", 
