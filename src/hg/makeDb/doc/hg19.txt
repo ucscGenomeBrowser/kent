@@ -5134,7 +5134,6 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg19/hg19.2bit $outMaf
 	-pathPrefix=/gbdb/hg19/multiz46way/maf hg19 multiz46way
     #	real    113m11.709s
     #	Loaded 33612571 mafs in 93 files from /gbdb/hg19/multiz46way/maf
-XXX - done to here
 
     time nice -n +19 cat /gbdb/hg19/multiz46way/maf/*.maf \
 	| hgLoadMafSummary hg19 -minSize=30000 -mergeGap=1500 \
@@ -5625,7 +5624,6 @@ BEGIN { good = 1 }
     time /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/phyloFit \
 	--EM --precision MED --msa-format FASTA --subst-mod REV \
 	--tree ../tree-commas.nh 4dNoX.all.mfa
-XXX - running Tue Oct 27 13:21:49 PDT 2009
     #	about 40 minutes
     mv phyloFit.mod phyloFit.NoChrX.mod
 
@@ -5707,7 +5705,6 @@ rm -f $c.gp $c.maf $c.ss
     # << happy emacs
 
     gensub2 maf.list single template stdout | tac > jobList
-XXX - ready to go here - 2009-07-06
     rm -fr /cluster/data/hg19/bed/multiz46way/4d/mfa
     mkdir /cluster/data/hg19/bed/multiz46way/4d/mfa
     para create jobList
@@ -12315,8 +12312,6 @@ pslReps  -nearTop=0.01 -minCover=0.70 -minAli=0.85 -noIntrons ${tResult} \
     #	Processed 64042919 alignments
     #	real    11m9.402s
     #	-rw-rw-r-- 1   299504257 Jul 13 15:18 hg19.fosEnds.psl
-
-XXX - running - Wed Jul 13 15:08:08 PDT 2011
 
     # FYI: to see all minimum covers:
 grep "^[0-9]" raw.psl \
@@ -23218,8 +23213,7 @@ TMPDIR=/scratch/tmp
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 felCat5 > rbest.log 2>&1 &
-XXX - running - Sat Jul 13 20:34:50 PDT 2013
-    #   real    56m41.559s
+    #   real    68m58.182s
 
     # running the swap
     mkdir /hive/data/genomes/felCat5/bed/blastz.hg19.swap
@@ -23229,11 +23223,10 @@ XXX - running - Sat Jul 13 20:34:50 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -syntenicNet > swap.log 2>&1
-XXX - running - Sat Jul 13 20:34:50 PDT 2013
-    #  real    93m49.833s
+    #  real    106m53.116s
 
     cat fb.felCat5.chainHg19Link.txt
-    #  1026037326 bases of 1682542007 (60.981%) in intersection
+    #  1453539854 bases of 2364296207 (61.479%) in intersection
 
     cd /hive/data/genomes/felCat5/bed
     ln -s blastz.hg19.swap lastz.hg19
