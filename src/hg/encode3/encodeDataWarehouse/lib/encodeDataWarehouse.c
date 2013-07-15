@@ -822,7 +822,7 @@ safecpy(ret->md5, sizeof(ret->md5), row[9]);
 ret->tags = row[10];
 ret->errorMessage = row[11];
 ret->deprecated = row[12];
-ret->replacedBy = row[13];
+ret->replacedBy = sqlUnsigned(row[13]);
 }
 
 struct edwFile *edwFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -857,7 +857,7 @@ void edwFileSaveToDb(struct sqlConnection *conn, struct edwFile *el, char *table
  * If worried about this use edwFileSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s','%s')", 
+dyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s',%u)", 
 	tableName,  el->id,  el->submitId,  el->submitDirId,  el->submitFileName,  el->edwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->errorMessage,  el->deprecated,  el->replacedBy);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -873,17 +873,16 @@ void edwFileSaveToDbEscaped(struct sqlConnection *conn, struct edwFile *el, char
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *submitFileName, *edwFileName, *md5, *tags, *errorMessage, *deprecated, *replacedBy;
+char  *submitFileName, *edwFileName, *md5, *tags, *errorMessage, *deprecated;
 submitFileName = sqlEscapeString(el->submitFileName);
 edwFileName = sqlEscapeString(el->edwFileName);
 md5 = sqlEscapeString(el->md5);
 tags = sqlEscapeString(el->tags);
 errorMessage = sqlEscapeString(el->errorMessage);
 deprecated = sqlEscapeString(el->deprecated);
-replacedBy = sqlEscapeString(el->replacedBy);
 
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s','%s')", 
-	tableName,  el->id,  el->submitId,  el->submitDirId,  submitFileName,  edwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  md5,  tags,  errorMessage,  deprecated,  replacedBy);
+dyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s',%u)", 
+	tableName,  el->id,  el->submitId,  el->submitDirId,  submitFileName,  edwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  md5,  tags,  errorMessage,  deprecated,  el->replacedBy);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&submitFileName);
@@ -892,7 +891,6 @@ freez(&md5);
 freez(&tags);
 freez(&errorMessage);
 freez(&deprecated);
-freez(&replacedBy);
 }
 
 struct edwFile *edwFileLoad(char **row)
@@ -915,7 +913,7 @@ safecpy(ret->md5, sizeof(ret->md5), row[9]);
 ret->tags = cloneString(row[10]);
 ret->errorMessage = cloneString(row[11]);
 ret->deprecated = cloneString(row[12]);
-ret->replacedBy = cloneString(row[13]);
+ret->replacedBy = sqlUnsigned(row[13]);
 return ret;
 }
 
@@ -977,7 +975,7 @@ sqlFixedStringComma(&s, ret->md5, sizeof(ret->md5));
 ret->tags = sqlStringComma(&s);
 ret->errorMessage = sqlStringComma(&s);
 ret->deprecated = sqlStringComma(&s);
-ret->replacedBy = sqlStringComma(&s);
+ret->replacedBy = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -994,7 +992,6 @@ freeMem(el->edwFileName);
 freeMem(el->tags);
 freeMem(el->errorMessage);
 freeMem(el->deprecated);
-freeMem(el->replacedBy);
 freez(pEl);
 }
 
@@ -1052,9 +1049,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->deprecated);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->replacedBy);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%u", el->replacedBy);
 fputc(lastSep,f);
 }
 

@@ -359,7 +359,7 @@ struct edwFile
     char *tags;	/* CGI encoded name=val pairs from manifest */
     char *errorMessage;	/* If non-empty contains last error message from upload. If empty upload is ok */
     char *deprecated;	/* If non-empty why you shouldn't use this file any more. */
-    char *replacedBy;	/* If non-empty license plate of file that replaces this one. */
+    unsigned replacedBy;	/* If non-zero id of file that replaces this one. */
     };
 
 void edwFileStaticLoad(char **row, struct edwFile *ret);
