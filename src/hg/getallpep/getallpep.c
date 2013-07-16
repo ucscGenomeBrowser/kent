@@ -15,29 +15,16 @@ errAbort(
 
 int main(int argc, char *argv[])
 {
-char *before, *after = "", *s;
-char startString[64], endString[64];
-
-struct sqlConnection *conn, *conn2, *conn3, *conn4;
-char query[256], query2[256], query3[256], query4[256];
-struct sqlResult *sr, *sr2, *sr3, *sr4;
-char **row, **row2, **row3, **row4;
+struct sqlConnection *conn2, *conn3, *conn4;
+char query2[256], query3[256], query4[256];
+struct sqlResult *sr2, *sr3, *sr4;
+char **row2, **row3, **row4;
 
 FILE *o3;
 char *chp;
 
-char *displayID;
-char *extDB;
-char *extAC;
-
 char *proteinDataDate;
 
-char *swissID, *pdb;
-    
-char *acc;
-char *seq_str;
-char *bioentryID;
-char *databaseID;
 int maxlen = {0};
 int len;
 
@@ -62,7 +49,7 @@ conn4= hAllocConn();
     
 o3 = fopen("allPep.tab", "w");
     
-sprintf(query3, "select * from biosql%s.bioentry;", proteinDataDate);
+sqlSafef(query3, sizeof query3, "select * from biosql%s.bioentry;", proteinDataDate);
 
 sr3 = sqlMustGetResult(conn3, query3);
 row3 = sqlNextRow(sr3);
@@ -76,7 +63,7 @@ while (row3 != NULL)
         
     division 	= row3[5];
     	
-    sprintf(query2,"select * from biosql%s.biosequence where bioentry_id='%s';", 
+    sqlSafef(query2, sizeof query2, "select * from biosql%s.biosequence where bioentry_id='%s';", 
 	           proteinDataDate, bioentry_id);
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
@@ -88,7 +75,7 @@ while (row3 != NULL)
 	if (maxlen < len) maxlen = len;
 	}
 		
-    sprintf(query4,
+    sqlSafef(query4, sizeof query4,
 	    "select * from biosql%s.bioentry_qualifier_value where bioentry_id='%s';",
 	    proteinDataDate, bioentry_id);
     

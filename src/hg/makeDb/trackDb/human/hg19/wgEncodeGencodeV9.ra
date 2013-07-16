@@ -11,7 +11,7 @@ shortLabel GENCODE Genes V9
 longLabel Gene Annotations from ENCODE/GENCODE Version 9
 group genes
 dragAndDrop subTracks
-priority 34.304
+priority 34.196
 visibility hide
 ensemblTranscriptIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
 ensemblGeneIdUrl http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s
@@ -135,13 +135,13 @@ searchTable wgEncodeGencodeBasicV9
 searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
-searchPriority 2.2
+searchPriority 2.29701
 
 searchName wgEncodeGencodeBasicGeneSymV9
 searchTable wgEncodeGencodeBasicV9
 searchMethod exact
 searchType genePred
-searchPriority 2.4
+searchPriority 2.29702
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodeBasicGeneV9
@@ -149,7 +149,7 @@ searchTable wgEncodeGencodeBasicV9
 searchMethod prefix
 searchType genePred
 termRegex ENSG[0-9.]+
-searchPriority 2.4
+searchPriority 2.29703
 xrefTable wgEncodeGencodeAttrsV9
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
@@ -158,7 +158,7 @@ searchTable wgEncodeGencodeBasicV9
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMT[0-9.]+
-searchPriority 2.4
+searchPriority 2.29704
 xrefTable wgEncodeGencodeAttrsV9
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
@@ -167,7 +167,7 @@ searchTable wgEncodeGencodeBasicV9
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMG[0-9.]+
-searchPriority 2.4
+searchPriority 2.29705
 xrefTable wgEncodeGencodeAttrsV9
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
@@ -177,13 +177,13 @@ searchTable wgEncodeGencodeCompV9
 searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
-searchPriority 2.2
+searchPriority 2.29706
 
 searchName wgEncodeGencodeCompGeneSymV9
 searchTable wgEncodeGencodeCompV9
 searchMethod exact
 searchType genePred
-searchPriority 2.4
+searchPriority 2.29707
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodeCompGeneV9
@@ -191,7 +191,7 @@ searchTable wgEncodeGencodeCompV9
 searchMethod prefix
 searchType genePred
 termRegex ENSG[0-9.]+
-searchPriority 2.4
+searchPriority 2.29708
 xrefTable wgEncodeGencodeAttrsV9
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
@@ -200,7 +200,7 @@ searchTable wgEncodeGencodeCompV9
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMT[0-9.]+
-searchPriority 2.4
+searchPriority 2.29709
 xrefTable wgEncodeGencodeAttrsV9
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
@@ -209,7 +209,7 @@ searchTable wgEncodeGencodeCompV9
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMG[0-9.]+
-searchPriority 2.4
+searchPriority 2.29710
 xrefTable wgEncodeGencodeAttrsV9
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
@@ -219,6 +219,6 @@ searchTable wgEncodeGencode2wayConsPseudoV9
 searchMethod exact
 searchType genePred
 termRegex PGOHUM[0-9.]+
-searchPriority 2.6
+searchPriority 2.29711
 
 

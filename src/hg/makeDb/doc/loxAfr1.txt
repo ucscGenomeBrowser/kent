@@ -1054,4 +1054,25 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# construct liftOver to loxAfr3 (DONE - 2013-06-18 - Hiram)
+    screen -S loxAfr3	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/loxAfr1/bed/blat.loxAfr3.2013-06-18
+    cd /hive/data/genomes/loxAfr1/bed/blat.loxAfr3.2013-06-18
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/loxAfr1/11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev loxAfr1 loxAfr3
+    #   real    0m1.838s
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/loxAfr1/11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev loxAfr1 loxAfr3 > do.log 2>&1
+    #	real    4160m6.881s
+
+    # verify this file exists:
+    #	/gbdb/loxAfr1/liftOver/loxAfr1ToLoxAfr3.over.chain.gz
+    # and try out the conversion on genome-test from loxAfr1 to loxAfr3
+
 ############################################################################

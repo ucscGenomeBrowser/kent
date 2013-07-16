@@ -140,7 +140,7 @@ for (i=0; i<20; i++)
 conn  = hAllocConn(hDefaultDb());
 conn2 = hAllocConn(hDefaultDb());
 
-safef(query2, sizeof(query2), "select proteinID from %s.knownGene;", database);
+sqlSafef(query2, sizeof(query2), "select proteinID from %s.knownGene;", database);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 icnt = 0;
@@ -154,12 +154,12 @@ for (j=0; j<MAXRES; j++)
 while (row2 != NULL)
     {
     protDisplayId = row2[0];   
-    safef(cond_str, sizeof(cond_str),  "val='%s'", protDisplayId);
+    sqlSafefFrag(cond_str, sizeof(cond_str),  "val='%s'", protDisplayId);
     accession = sqlGetField(proteinDatabaseName, "displayId", "acc", cond_str);
 
     if (accession == NULL)
 	{
-        safef(cond_str, sizeof(cond_str),  "acc='%s'", protDisplayId);
+        sqlSafefFrag(cond_str, sizeof(cond_str),  "acc='%s'", protDisplayId);
     	accession = sqlGetField(proteinDatabaseName, "displayId", "acc", cond_str);
 	if (accession == NULL)
 	    {
@@ -168,7 +168,7 @@ while (row2 != NULL)
 	    }
 	}
     
-    safef(cond_str, sizeof(cond_str),  "accession='%s'", accession);
+    sqlSafefFrag(cond_str, sizeof(cond_str),  "accession='%s'", accession);
     answer = sqlGetField("proteins040115", "spXref2", "biodatabaseID", cond_str);
     if (answer == NULL)
 	{
@@ -181,7 +181,7 @@ while (row2 != NULL)
 	goto skip;
 	}
     
-    safef(cond_str, sizeof(cond_str),  "acc='%s'", accession);
+    sqlSafefFrag(cond_str, sizeof(cond_str),  "acc='%s'", accession);
     aaSeq = sqlGetField(proteinDatabaseName, "protein", "val", cond_str);
     if (aaSeq == NULL)
 	{

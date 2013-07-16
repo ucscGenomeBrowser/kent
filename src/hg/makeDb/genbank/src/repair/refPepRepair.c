@@ -177,7 +177,7 @@ static void brokenRefPepGetBrokenLinks(struct sqlConnection *conn,
                                        struct brokenRefPepTbl *brpTbl)
 /* load refSeq peps that are not linked to gbSeq */
 {
-static char *query = "select gbSeq.id, gbSeq.acc, gbSeq.version from gbSeq "
+static char *query = "NOSQLINJ select gbSeq.id, gbSeq.acc, gbSeq.version from gbSeq "
     "left join gbExtFile on gbSeq.gbExtFile=gbExtFile.id "
     "where ((gbSeq.acc like \"NP__%\") or (gbSeq.acc like \"YP__%\")) "
     "and (gbExtFile.id is NULL)";
@@ -202,7 +202,7 @@ char **row;
 if (!(startsWith("NP_", acc) || startsWith("YP_", acc)))
     errAbort("%s is not a RefSeq protein accession", acc);
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select gbSeq.id, gbSeq.acc, gbSeq.version from gbSeq "
       "where acc=\"%s\"", acc);
 sr = sqlGetResult(conn, query);
@@ -250,7 +250,7 @@ static void brokenRefPepGetSeqScan(struct sqlConnection *conn,
 /* load refSeq peps that have seq or extFile problems, including
  * checking fasta file contents*/
 {
-static char *query = "select id, acc, version, size, gbExtFile, file_offset, file_size "
+static char *query = "NOSQLINJ select id, acc, version, size, gbExtFile, file_offset, file_size "
     "from gbSeq where (acc like \"NP__%\") or (acc like \"YP__%\")";
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -289,7 +289,7 @@ static void brokenRefPepGetPath(struct sqlConnection *conn,
 char query[512], **row;
 struct sqlResult *sr;
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select refLink.mrnaAcc, gbExtFile.path "
       "from refLink,gbSeq,gbExtFile "
       "where refLink.protAcc=\"%s\" and gbSeq.acc=refLink.mrnaAcc and gbSeq.gbExtFile=gbExtFile.id",

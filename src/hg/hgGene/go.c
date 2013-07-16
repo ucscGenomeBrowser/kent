@@ -21,7 +21,7 @@ if (!sqlDatabaseExists("go"))
     return(FALSE);
 if (useFbGo)
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select count(*) from fbGo where geneId = '%s'",
 	  fbAcc);
     return sqlQuickNum(conn, query) > 0;
@@ -30,7 +30,7 @@ else
     {
     if (swissProtAcc == NULL || !sqlTableExists(conn, "go.goaPart"))
 	return FALSE;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select count(*) from go.goaPart where dbObjectId = '%s'",
 	  swissProtAcc);
     return sqlQuickNum(conn, query) > 0;
@@ -60,7 +60,7 @@ for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
     {
     boolean hasFirst = FALSE;
     if (useFbGo)
-	safef(query, sizeof(query),
+	sqlSafef(query, sizeof(query),
 	      "select term.acc,term.name"
 	      " from %s.fbGo,term"
 	      " where %s.fbGo.geneId = '%s'"
@@ -68,7 +68,7 @@ for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
 	      " and %s.fbGo.aspect = '%s'",
 	      database, database, acc, database, database, aspects[aspectIx]);
     else
-	safef(query, sizeof(query),
+	sqlSafef(query, sizeof(query),
 	      "select term.acc,term.name"
 	      " from goaPart,term"
 	      " where goaPart.dbObjectId = '%s'"

@@ -407,7 +407,7 @@ slFreeList(&fnames);
 if (!bbiTable)
     return;
 
-safef(buffer, sizeof buffer, "select fileName from %s limit 1", table);
+sqlSafef(buffer, sizeof buffer, "select fileName from %s limit 1", table);
 if (sqlQuickQuery(conn, buffer, fileName, sizeof fileName) != NULL)
     {
     while(1)  // loop to catch .bai as well as .bam
@@ -539,7 +539,7 @@ char buffer[10 * 1024];
 verbose(1, "----------------------------------------------\n");
 verbose(1, "Checking that tables starting with composite in db are in metaDb\n (also checks dummy table and the bbi symlink and its target)\n");
 verbose(1, "----------------------------------------------\n");
-safef(buffer, sizeof buffer, "show tables like '%s%%'", composite);
+sqlSafef(buffer, sizeof buffer, "show tables like '%s%%'", composite);
 
 struct sqlResult *sr;
 sr = sqlGetResult(conn, buffer);

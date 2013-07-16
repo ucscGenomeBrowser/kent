@@ -36,7 +36,7 @@ struct sqlResult *sr;
 
 if (isRgdGene(conn))
 {
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select distinct k.locusID, k.mapID, keggMapDesc.description"
 	" from rgdGene2KeggPathway k, keggMapDesc, rgdGene2 x"
 	" where k.rgdId=x.name "
@@ -46,7 +46,7 @@ safef(query, sizeof(query),
 }
 else
 {
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select k.locusID, k.mapID, keggMapDesc.description"
 	" from keggPathway k, keggMapDesc, kgXref x"
 	" where k.kgID=x.kgId "
@@ -72,12 +72,12 @@ static int keggCount(struct pathwayLink *pl, struct sqlConnection *conn,
 char query[256];
 if (!isRgdGene(conn))
     {
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	"select count(*) from keggPathway k, kgXref x where k.kgID=x.kgId and x.kgId='%s'", geneId);
     }
 else
     {
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	"select count(*) from rgdGene2KeggPathway k, rgdGene2 x where k.rgdId=x.name and x.name='%s'", geneId);
     }
 return sqlQuickNum(conn, query);
@@ -90,8 +90,10 @@ static void bioCycLink(struct pathwayLink *pl, struct sqlConnection *conn,
 char query[512], **row;
 struct sqlResult *sr;
 char *oldMapId = cloneString("");
+char *upperCaseGenome = cloneString(genome);
+toUpperN(upperCaseGenome, strlen(upperCaseGenome));
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select bioCycPathway.mapId,description"
 	" from bioCycPathway,bioCycMapDesc"
 	" where bioCycPathway.kgId='%s'"
@@ -104,7 +106,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!sameWord(oldMapId, row[0]))
     	{
 	hPrintf("<A HREF=\"http://biocyc.org/%s/new-image?type=PATHWAY&object=%s&detail-level=2\" TARGET=_blank>",
-    		genome, row[0]);
+    		upperCaseGenome, row[0]);
     	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
 	}
     oldMapId = cloneString(row[0]);	
@@ -117,7 +119,7 @@ static int bioCycCount(struct pathwayLink *pl, struct sqlConnection *conn,
 /* Count up number of hits. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select count(*) from bioCycPathway where kgID='%s'", geneId);
 return sqlQuickNum(conn, query);
 }
@@ -126,7 +128,7 @@ static char *getCgapId(struct sqlConnection *conn)
 /* Get cgap ID. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select cgapId from cgapAlias where alias=\"%s\"", curGeneName);
 return sqlQuickString(conn, query);
 }
@@ -155,12 +157,12 @@ else
     }
 if (isRgdGene(conn))
     {
-    safef(condStr, sizeof(condStr), "name='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", geneId);
     spID = sqlGetField(database, "rgdGene2ToUniProt", "value", condStr);
     }
 else
     {
-    safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "kgID='%s'", geneId);
     spID = sqlGetField(database, "kgXref", "spID", condStr);
     }
 
@@ -175,7 +177,7 @@ if (spID != NULL)
     , spID, spID);
 
     conn2= hAllocConn(database);
-    safef(query2,sizeof(query2), 
+    sqlSafef(query2,sizeof(query2), 
     	  "select eventID, eventDesc from proteome.spReactomeEvent where spID='%s'", spID);
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
@@ -200,7 +202,7 @@ static void rgdPathwayLink(struct pathwayLink *pl, struct sqlConnection *conn,
 char query[512], **row;
 struct sqlResult *sr;
 char *rgdId = geneId;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     	"select x.pathwayId, description from rgdPathway p, rgdGenePathway x "
 	" where p.pathwayId = x.pathwayId "
 	" and x.geneId = '%s'"
@@ -224,7 +226,7 @@ if (cgapId != NULL)
     struct hash *uniqHash = newHash(8);
     char query[512], **row;
     struct sqlResult *sr;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     	"select cgapBiocDesc.mapID,cgapBiocDesc.description "
 	" from cgapBiocPathway,cgapBiocDesc"
 	" where cgapBiocPathway.cgapID='%s'"
@@ -255,7 +257,7 @@ char *cgapId = getCgapId(conn);
 if (cgapId != NULL)
     {
     char query[256];
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "select count(*) from cgapBiocPathway where cgapID='%s'", cgapId);
     ret = sqlQuickNum(conn, query);
     freez(&cgapId);
@@ -268,7 +270,7 @@ char *geneId)
 /* Count up number of hits. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select count(*) from rgdGenePathway where geneId ='%s'", geneId);
 return sqlQuickNum(conn, query);
 }
@@ -294,12 +296,12 @@ else
 
 if (isRgdGene(conn))
     {
-    safef(condStr, sizeof(condStr), "name='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", geneId);
     spID = sqlGetField(database, "rgdGene2ToUniProt", "value", condStr);
     }
 else
     {
-    safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "kgID='%s'", geneId);
     spID = sqlGetField(database, "kgXref", "spID", condStr);
     }
 
@@ -312,13 +314,13 @@ if (spID != NULL)
 
     if (!isRgdGene(conn))
         {
-        safef(query, sizeof(query), 
+        sqlSafef(query, sizeof(query), 
 	  "select count(*) from %s.spReactomeEvent, %s.spVariant, %s.kgXref where kgID='%s' and kgXref.spID=variant and variant = '%s' and spReactomeEvent.spID=parent", 
 	  PROTEOME_DB_NAME, PROTEOME_DB_NAME, database, geneId, origSpID);
 	}
     else
     	{
-        safef(query, sizeof(query), 
+        sqlSafef(query, sizeof(query), 
 	  "select count(*) from %s.spReactomeEvent, %s.spVariant, %s.rgdGene2ToUniProt where name='%s' and value=variant and variant = '%s' and spReactomeEvent.spID=parent", 
 	  PROTEOME_DB_NAME, PROTEOME_DB_NAME, database, geneId, origSpID);
 	}

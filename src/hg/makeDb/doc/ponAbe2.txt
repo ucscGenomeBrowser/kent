@@ -174,6 +174,27 @@ done
     cd ..
     rmdir ponAbe2
 
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/ponAbe2/bed/windowMasker
+    cd /hive/data/genomes/ponAbe2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev ponAbe2 > do.log 2>&1 &
+    # real    311m24.618s
+
+    # Masking statistics
+    cat faSize.ponAbe2.cleanWMSdust.txt
+# 3446771396 bases (353228224 N's 3093543172 real 1915679670
+#    upper 1177863502 lower) in 55 sequences in 1 files
+# Total size: mean 62668570.8 sd 66228345.9 min 16499 (chrM)
+#    max 229942017 (chr1) median 23176937
+# %34.17 masked total, %38.07 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps ponAbe2 rmsk windowmaskerSdust \
+       > fb.ponAbe2.rmsk.windowmaskerSdust.txt 2>&1
+    # 924905073 bases of 3446771396 (26.834%) in intersection
+
 ############################################################################
 #  BLATSERVERS ENTRY (DONE - 2007-09-19 - Hiram)
 #	Replaced the ponAbe1 blat server with this sequence

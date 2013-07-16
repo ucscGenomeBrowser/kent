@@ -28,6 +28,8 @@
 #include "hui.h"
 #include "botDelay.h"
 
+extern char *database;
+
 
 /* these variables are used for testing mode */
 boolean hgTest = FALSE;          /* are we in testing mode ? */
@@ -109,7 +111,7 @@ struct sqlResult *sr = NULL;
 char **row;
 struct dbDb *dbList = NULL, *db = NULL;
 char query[256];
-snprintf(query, sizeof(query), "select * from dbDb where name='%s'", database);
+sqlSafef(query, sizeof(query), "select * from dbDb where name='%s'", database);
 
 /* Scan through dbDb table, loading into list */
 sr = sqlGetResult(conn, query);
@@ -121,7 +123,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 if(slCount(dbList) != 1)
-    errAbort("coordConv.c::loadDbInformation() - expecting 1 dbDb record for %s got %d", db, slCount(dbList));
+    errAbort("coordConv.c::loadDbInformation() - expecting 1 dbDb record for %s got %d", db->name, slCount(dbList));
 return dbList;
 }
 
@@ -215,7 +217,7 @@ snprintf(buff, sizeof(buff), "Expecting position in the form chrN:10000-20000 go
 webAbort("Error:", buff );
 }
 
-void parsePosition(char *origPos, char **chr, int *s, int *e)
+void parseThePosition(char *origPos, char **chr, int *s, int *e)
 /** Parse the coordinate information from the user text */
 {
 /* trying to parse something that looks like chrN:10000-20000 */
@@ -249,10 +251,10 @@ char *ret = NULL;
 struct dyString *dy = newDyString(128);
 
 if (database != NULL)
-    dyStringPrintf(dy,"select description from dbDb where name = '%s' and (genome like '%s' "
+    sqlDyStringPrintf(dy,"select description from dbDb where name = '%s' and (genome like '%s' "
                       "or genome like 'Zoo')", database, org);
 else if (freeze != NULL)
-    dyStringPrintf(dy,"select name from dbDb where description = '%s' and (genome like '%s' "
+    sqlDyStringPrintf(dy,"select name from dbDb where description = '%s' and (genome like '%s' "
                       "or genome like 'Zoo')", freeze, org);
 else
     internalErr();
@@ -288,7 +290,7 @@ if(hgTest)
 /* parse the position string and make sure that it makes sense */
 if (position != NULL && position[0] != 0)
     {
-    parsePosition(cloneString(position), &chrom, &chromStart, &chromEnd);
+    parseThePosition(cloneString(position), &chrom, &chromStart, &chromEnd);
     }
 if (chromStart > chromEnd)
     {
@@ -484,11 +486,9 @@ boolean convertCoordinatesZoo(FILE *goodOut, FILE *badOut,
  goodResult and badResult either generate html or tesxt
  if we are in cgi or testing mode respectively. */
 {
-struct blatServerTable *serve = NULL;
 struct coordConvRep *ccr = createCoordConvRep_mod();
 struct dbDb *newDbRec = NULL, *oldDbRec = NULL;
 struct sqlConnection *conn = sqlConnect(origGenome);
-struct linkedFeatures *lfList = NULL, *lf;
 struct sqlResult *sr = NULL;
 
 boolean success = FALSE;
@@ -708,7 +708,6 @@ else
 char *chooseDb(char *db1, char *db2)
 /* match up our possible databases with the date version i.e. Dec 17, 2000 */
 {
-int i;
 if (db1 != NULL)
     {
     if(strstr(db1, "hg") == db1)
@@ -733,9 +732,8 @@ void doFormZoo(struct cart *lCart)
 char **genomeList = NULL;
 int genomeCount = 0;
 char *dbChoice = NULL;
-int i = 0;
 cart = lCart;
-cartWebStart(cart, databases, "Converting Coordinates Between Species");
+cartWebStart(cart, database, "Converting Coordinates Between Species");
 puts(
      "<p>This page attempts to convert coordinates from one Zoo species' CFTR region\n"
      "to another. The mechanism for doing this is to use the blastz alignments which have been\n"
@@ -789,9 +787,8 @@ void doForm(struct cart *lCart)
 char **genomeList = NULL;
 int genomeCount = 0;
 char *dbChoice = NULL;
-int i = 0;
 cart = lCart;
-cartWebStart(cart, databases, "Converting Coordinates Between Drafts");
+cartWebStart(cart, database, "Converting Coordinates Between Drafts");
 puts(
      "<p>This page attempts to convert coordinates from one draft of the human genome\n"
      "to another. The mechanism for doing this is to cut out and align pieces from the\n"
@@ -845,7 +842,7 @@ unsigned getChromSize(char *chrom, char *db)
 char chromSize[512];
 char query[512];
 struct sqlConnection *conn = sqlConnect(db);
-sprintf(query, "select size from chromInfo where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select size from chromInfo where chrom = '%s'", chrom);
 sqlQuickQuery(conn, query, chromSize, sizeof(chromSize));
 sqlDisconnect(&conn);
 assert(chromSize != NULL);
@@ -923,21 +920,19 @@ fflush(f);
 void runSamples(char *goodFile, char *badFile, char *newDb, char *oldDb, int numToRun)
 /* run a bunch of tests */
 {
-int i,j,k;
+int i;
 FILE *good = mustOpen(goodFile, "w");
 FILE *bad = mustOpen(badFile, "w");
-char *tmp = NULL;
 int numGood=0, numBad=0, tooManyNs=0;
 boolean success = FALSE;
 struct dnaSeq *seq = NULL;
 printf("Running Tests\t");
 for(i=0;i<numToRun;i++)
     {
-    struct coordConvRep *ccr = NULL;
     struct coordConv *cc = NULL;
     if(!(i%10)) putTic();
     cc = getRandomCoord(oldDb);
-    seq = hDnaFromSeq(cc->chrom, cc->chromStart, cc->chromEnd, dnaLower);
+    seq = hDnaFromSeq(database, cc->chrom, cc->chromStart, cc->chromEnd, dnaLower);
     if(!(strstr(seq->dna, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")))
 	{
 	chrom = cc->chrom;

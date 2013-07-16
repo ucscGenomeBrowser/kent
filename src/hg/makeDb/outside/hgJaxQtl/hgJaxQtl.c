@@ -21,19 +21,19 @@ char *getStsId(struct sqlConnection *conn3, char *database, char *stsName)
 {
 char cond_str[255];
 char *identNo;
-safef(cond_str, sizeof(cond_str), "name='%s'", stsName);
+sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", stsName);
 identNo = sqlGetField(database, "stsMapMouseNew", "identNo", cond_str);
 
 if (identNo == NULL) 
     {
     /* check to see if stsAlias has it */
-    safef(cond_str, sizeof(cond_str), "alias='%s'", stsName);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "alias='%s'", stsName);
     identNo = sqlGetField(database, "stsAlias", "identNo", cond_str);
     
     /* now make sure that stsMapMouseNew has an entry for this identNo */
     if (identNo != NULL)
     	{
-	safef(cond_str, sizeof(cond_str), "identNo=%s", identNo);
+	sqlSafefFrag(cond_str, sizeof(cond_str), "identNo=%s", identNo);
     	identNo = sqlGetField(database, "stsMapMouseNew", "identNo", cond_str);
     	}
     }
@@ -84,7 +84,7 @@ outF = fopen("jaxQTL3.tab", "w");
 conn2= hAllocConn(database);
 conn3= hAllocConn(database);
 	
-sprintf(query2,"select * from %s.jaxQtlRaw", database);
+sqlSafef(query2, sizeof query2, "select * from %s.jaxQtlRaw", database);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -131,7 +131,7 @@ while (row2 != NULL)
 	if (identNo != NULL)
 	    {
 	    qtlValid = 1;
-	    sprintf(query3, "select * from %s.stsMapMouseNew where identNo=%s", database, identNo);
+	    sqlSafef(query3, sizeof query3, "select * from %s.stsMapMouseNew where identNo=%s", database, identNo);
 
             sr3 = sqlMustGetResult(conn3, query3);
             row3 = sqlNextRow(sr3);
@@ -168,7 +168,7 @@ while (row2 != NULL)
 		identNo = getStsId(conn3, database, flanks[iFlank]);
 		if (identNo != NULL)
 		    {
-		    sprintf(query3,"select * from %s.stsMapMouseNew where identNo=%s",database,identNo);
+		    sqlSafef(query3, sizeof query3, "select * from %s.stsMapMouseNew where identNo=%s",database,identNo);
 
 		    sr3 = sqlMustGetResult(conn3, query3);
 		    row3 = sqlNextRow(sr3);

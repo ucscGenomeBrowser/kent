@@ -99,7 +99,7 @@ char *defDb = database;
  * since the sequence is different.
  */
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select gbCdnaInfo.version, geneName.name, description.name "
       "from %s.gbCdnaInfo, %s.geneName, %s.description "
       "where gbCdnaInfo.acc=\"%s\" and gbCdnaInfo.geneName=geneName.id and gbCdnaInfo.description = description.id",
@@ -228,7 +228,7 @@ if (hTableExists(database, orthoTable))
     {
     struct sqlResult *sr;
     char **row;
-    safef(query, sizeof(query), "select * from %s where name = '%s' ", 
+    sqlSafef(query, sizeof(query), "select * from %s where name = '%s' ", 
             orthoTable, pg->name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -261,7 +261,7 @@ char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 
 hFindSplitTable(database, seqName, table, splitTable, &hasBin);
-safef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s' and tEnd > %d and tStart < %d", splitTable, qName, tName, tStart, tEnd);
+sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s' and tEnd > %d and tStart < %d", splitTable, qName, tName, tStart, tEnd);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -434,13 +434,13 @@ if (startsWith("August",mi->geneSet))
         char **row;
         int targetSize = 0;
         *table = cloneString( "augustusX");
-        safef(query, sizeof(query), "select * from augustusX where chrom = '%s' and txEnd > %d and txStart < %d and name like '%s%%'", 
+        sqlSafef(query, sizeof(query), "select * from augustusX where chrom = '%s' and txEnd > %d and txStart < %d and name like '%s%%'", 
                 pg->gChrom, pg->gStart, pg->gEnd , mi->seqId );
         sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
             {
             struct genePred *gp = genePredLoad(row+1);
-            safef(query, sizeof(query), 
+            sqlSafef(query, sizeof(query), 
                     "select size from chromInfo where chrom = '%s' " , gp->chrom); 
             sqlFreeResult(&sr);
             targetSize = sqlNeedQuickNum(conn, query) ;
@@ -514,12 +514,12 @@ float maxOverlap = 0;
 if (mi->suffix == NULL)
     {
     safef(alignTbl, sizeof(alignTbl), "%s%sAli", mi->tblPre, mi->geneSet);
-    safef(scoreSql, sizeof(scoreSql), "select max(score) from %s%sInfo", mi->tblPre, mi->geneSet);
+    sqlSafef(scoreSql, sizeof(scoreSql), "select max(score) from %s%sInfo", mi->tblPre, mi->geneSet);
     }
 else
     {
     safef(alignTbl, sizeof(alignTbl), "%s%sAli%s", mi->tblPre, mi->geneSet, mi->suffix);
-    safef(scoreSql, sizeof(scoreSql), "select max(score) from %s%sInfo%s", mi->tblPre, mi->geneSet, mi->suffix);
+    sqlSafef(scoreSql, sizeof(scoreSql), "select max(score) from %s%sInfo%s", mi->tblPre, mi->geneSet, mi->suffix);
     }
 printf("<TABLE class=\"transMap\">\n");
 printf("<H3>Retrogene Statistics:</H3>\n");
@@ -612,7 +612,7 @@ if (pg->kaku > 0 && pg->kaku < 1000000)
     printf("<TR><TH>KA/KU mutation rate in non-syn sites vs utr with repect to parent gene<TD>%4.2f</TR>\n",  pg->kaku);
 #endif
 #ifdef xxx
-safef(query, sizeof(query), "select * from refGene where chrom = '%d' and txEnd > %d and txStart %d and name = '%s'", 
+sqlSafef(query, sizeof(query), "select * from refGene where chrom = '%d' and txEnd > %d and txStart %d and name = '%s'", 
         pg->chrom, pg->gStart, pg->gEnd , pg->overName );
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -627,7 +627,7 @@ printf("</tr>\n");
 if ( differentString("none",pg->overName) &&
     sqlFieldIndex(conn, "refGene", "exonFrames") != -1)
     {
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
             "select concat(exonFrames,'(',cdsStart,')') from refGene where name = '%s' and chrom = '%s'" , 
             pg->overName, pg->chrom);
     if (sqlQuickString(conn, query) != NULL)
@@ -637,7 +637,7 @@ if ( differentString("none",pg->overName) &&
 
 name = cloneString(pg->name);
 chopSuffix(name);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
         "select concat(exonFrames,'(',cdsStart,')') from rbRetroParent where name like '%s%%' and chrom = '%s'" , 
         name, pg->chrom);
 if (hTableExists(database, "rbRetroParent"))
@@ -733,7 +733,6 @@ pslList = getParentAligns(conn, mi, &table);
 displayParentAligns(mi, pslList, table);
 pslFreeList(&pslList);
 printTrackHtml(tdb);
-cartWebEnd();
 #if 0
 geneCheckFree(&gc);
 #endif
@@ -749,7 +748,7 @@ struct sqlResult *sr;
 struct genbankCds cds;
 char **row;
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select cds.name "
       "from %s.gbCdnaInfo, %s.cds "
       "where gbCdnaInfo.acc=\"%s\" and gbCdnaInfo.cds=cds.id",
@@ -778,7 +777,7 @@ else
     safef(rootTable, sizeof(rootTable), "%s%sAli%s", mi->tblPre, mi->geneSet,mi->suffix);
 hFindSplitTable(database, seqName, rootTable, table, &hasBin);
 
-safef(query, sizeof(query), "select * from %s where qName = '%s' and tStart = %d",
+sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tStart = %d",
       table, mi->pg->name, start);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

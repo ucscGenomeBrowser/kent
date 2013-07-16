@@ -186,7 +186,7 @@ char *ccdsInfoGetCreateSql(char *table)
 /* Get sql command to create ccdsInfo table. Result should be freed. */
 {
 char sql[1024];
-safef(sql, sizeof(sql), createSql, table);
+sqlSafef(sql, sizeof(sql), createSql, table);
 return cloneString(sql);
 }
 
@@ -254,7 +254,7 @@ struct sqlResult *sr;
 char **row;
 struct ccdsInfo *ccdsInfos = NULL;
 
-safef(query, sizeof(query), "select * from ccdsInfo where ccds = \"%s\"%s",
+sqlSafef(query, sizeof(query), "select * from ccdsInfo where ccds = '%s'%-s",
       ccdsId, getSrcDbWhere(srcDb));
 sr = sqlGetResult(conn, query);
 
@@ -275,10 +275,10 @@ char **row;
 struct ccdsInfo *ccdsInfo = NULL;
 
 if (genbankIsRefSeqAcc(mrnaAcc) && (strchr(mrnaAcc, '.') == NULL))
-    safef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc like \"%s.%%\"",
+    sqlSafef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc like '%s.%%'",
           mrnaAcc);
 else
-    safef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc = \"%s\"",
+    sqlSafef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc = '%s'",
           mrnaAcc);
 sr = sqlGetResult(conn, query);
 

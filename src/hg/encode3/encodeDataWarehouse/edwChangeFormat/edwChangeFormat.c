@@ -61,25 +61,25 @@ struct edwFile *ef = edwFileFromId(conn, fileId);
 
 /* Update database to let people know format revalidation is in progress. */
 char query[4*1024];
-safef(query, sizeof(query), "update edwFile set errorMessage = '%s' where id=%lld",
+sqlSafef(query, sizeof(query), "update edwFile set errorMessage = '%s' where id=%lld",
      "Format revalidation in progress.", fileId); 
 sqlUpdate(conn, query);
 
 /* Update tags for file with new format. */
 char *newTags = cgiStringNewValForVar(ef->tags, tagToChange, format);
-safef(query, sizeof(query), "update edwFile set tags='%s' where id=%lld", newTags, fileId);
+sqlSafef(query, sizeof(query), "update edwFile set tags='%s' where id=%lld", newTags, fileId);
 sqlUpdate(conn, query);
     
 /* Get rid of existing qa tables. */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "delete from edwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
     fileId, fileId);
 sqlUpdate(conn, query);
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "delete from edwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld",
     fileId, fileId);
 sqlUpdate(conn, query);
-safef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
+sqlSafef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
 sqlUpdate(conn, query);
 
 /* schedule validator */

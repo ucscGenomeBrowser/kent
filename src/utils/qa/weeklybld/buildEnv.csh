@@ -1,10 +1,10 @@
-setenv BRANCHNN 284
-setenv TODAY 2013-05-27             # v284 final
-setenv LASTWEEK 2013-05-07          # v283 final 
-setenv REVIEWDAY 2013-05-14         # v284 preview
-setenv LASTREVIEWDAY 2013-04-23     # v283 preview
-setenv REVIEW2DAY 2013-05-21        # v284 preview2
-setenv LASTREVIEW2DAY 2013-04-30    # v283 preview2
+setenv BRANCHNN 286
+setenv TODAY 2013-07-09             # v286 final
+setenv LASTWEEK 2013-06-18          # v285 final 
+setenv REVIEWDAY 2013-06-24         # v286 preview
+setenv LASTREVIEWDAY 2013-06-04     # v285 preview
+setenv REVIEW2DAY 2013-07-02        # v286 preview2
+setenv LASTREVIEW2DAY 2013-06-11    # v285 preview2
 
 
 
@@ -20,13 +20,10 @@ setenv CVS_RSH ssh
 setenv MYSQLINC /usr/include/mysql
 if ( "$MACHTYPE" == "x86_64" ) then
     setenv MYSQLLIBS '/usr/lib64/mysql/libmysqlclient.a -lz'
-else #9403# 
-    setenv MYSQLLIBS '/usr/lib/mysql/libmysqlclient.a -lz' #9403# 
+else  
+    setenv MYSQLLIBS '/usr/lib/mysql/libmysqlclient.a -lz'  
 endif
 
-#9403# if ( "$HOST" == "$BOX32" ) then
-#9403#     setenv BUILDDIR /scratch/releaseBuild
-#9403# endif
 if ( "$HOST" == "hgwbeta" ) then
     setenv BUILDDIR /data/releaseBuild
 endif

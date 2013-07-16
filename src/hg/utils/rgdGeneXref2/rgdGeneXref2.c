@@ -45,7 +45,7 @@ outf = mustOpen(outfileName, "w");
 
 conn= hAllocConn(dataBase);
 	
-sprintf(query,"select feature, rgdId from rgdGeneRaw0 where feature = 'gene'");
+sqlSafef(query, sizeof query,"select feature, rgdId from rgdGeneRaw0 where feature = 'gene'");
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 while (row != NULL)

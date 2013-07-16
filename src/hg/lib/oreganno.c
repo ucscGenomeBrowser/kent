@@ -103,42 +103,15 @@ void oregannoSaveToDb(struct sqlConnection *conn, struct oreganno *el, char *tab
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use oregannoSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->id,  el->strand,  el->name);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void oregannoSaveToDbEscaped(struct sqlConnection *conn, struct oreganno *el, char *tableName, int updateSize)
-/* Save oreganno as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than oregannoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *id, *strand, *name;
-chrom = sqlEscapeString(el->chrom);
-id = sqlEscapeString(el->id);
-strand = sqlEscapeString(el->strand);
-name = sqlEscapeString(el->name);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  id,  strand,  name);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&id);
-freez(&strand);
-freez(&name);
-}
 
 struct oreganno *oregannoCommaIn(char **pS, struct oreganno *ret)
 /* Create a oreganno out of a comma separated string. 
@@ -299,40 +272,15 @@ void oregannoAttrSaveToDb(struct sqlConnection *conn, struct oregannoAttr *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use oregannoAttrSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
 	tableName,  el->id,  el->attribute,  el->attrVal);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void oregannoAttrSaveToDbEscaped(struct sqlConnection *conn, struct oregannoAttr *el, char *tableName, int updateSize)
-/* Save oregannoAttr as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than oregannoAttrSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *id, *attribute, *attrVal;
-id = sqlEscapeString(el->id);
-attribute = sqlEscapeString(el->attribute);
-attrVal = sqlEscapeString(el->attrVal);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
-	tableName,  id,  attribute,  attrVal);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&id);
-freez(&attribute);
-freez(&attrVal);
-}
 
 struct oregannoAttr *oregannoAttrCommaIn(char **pS, struct oregannoAttr *ret)
 /* Create a oregannoAttr out of a comma separated string. 
@@ -481,42 +429,15 @@ void oregannoLinkSaveToDb(struct sqlConnection *conn, struct oregannoLink *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use oregannoLinkSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s')", 
 	tableName,  el->id,  el->attribute,  el->raKey,  el->attrAcc);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void oregannoLinkSaveToDbEscaped(struct sqlConnection *conn, struct oregannoLink *el, char *tableName, int updateSize)
-/* Save oregannoLink as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than oregannoLinkSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *id, *attribute, *raKey, *attrAcc;
-id = sqlEscapeString(el->id);
-attribute = sqlEscapeString(el->attribute);
-raKey = sqlEscapeString(el->raKey);
-attrAcc = sqlEscapeString(el->attrAcc);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s')", 
-	tableName,  id,  attribute,  raKey,  attrAcc);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&id);
-freez(&attribute);
-freez(&raKey);
-freez(&attrAcc);
-}
 
 struct oregannoLink *oregannoLinkCommaIn(char **pS, struct oregannoLink *ret)
 /* Create a oregannoLink out of a comma separated string. 

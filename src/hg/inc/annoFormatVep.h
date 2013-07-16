@@ -7,37 +7,21 @@
 
 #include "annoFormatter.h"
 
-struct annoFormatVepExtraItem
-    // A single input column whose value should be placed in the Extras output column,
-    // identified by tag.
-    {
-    struct annoFormatVepExtraItem *next;
-    char *tag;					// Keyword to use in extras column (tag=value;)
-    char *description;				// Text description for output header
-    int rowIx;					// Offset of column in row from data source
-						// (N/A for wig sources)
-    };
-
-struct annoFormatVepExtraSource
-    // A streamer or grator that supplies at least one value for Extras output column.
-    {
-    struct annoFormatVepExtraSource *next;
-    struct annoStreamer *source;		// streamer or grator: same pointers as below
-    struct annoFormatVepExtraItem *items;	// one or more columns of source and their tags
-    };
-
-struct annoFormatVepConfig
-    // Describe the primary source and grators (whose rows must be delivered in this order)
-    // that provide data for VEP output columns.
-    {
-    struct annoStreamer *variantSource;		// Primary source: variants
-    struct annoStreamer *gpVarSource;		// annoGratorGpVar makes the core predictions
-    struct annoStreamer *snpSource;		// Latest dbSNP provides IDs of known variants
-    struct annoFormatVepExtraSource *extraSources;	// Everything else that may be tacked on
-    };
-
-struct annoFormatter *annoFormatVepNew(char *fileName, struct annoFormatVepConfig *config);
+struct annoFormatter *annoFormatVepNew(char *fileName, boolean doHtml,
+				       struct annoStreamer *variantSource,
+				       char *variantDescription,
+				       struct annoStreamer *gpVarSource,
+				       char *gpVarDescription,
+				       struct annoStreamer *snpSource,
+				       char *snpDescription);
 /* Return a formatter that will write functional predictions in the same format as Ensembl's
- * Variant Effect Predictor to fileName, interpreting input rows according to config. */
+ * Variant Effect Predictor to fileName (can be "stdout").
+ * variantSource and gpVarSource must be provided; snpSource can be NULL. */
+
+void annoFormatVepAddExtraItem(struct annoFormatter *self, struct annoStreamer *extraSource,
+			       char *tag, char *description, char *column);
+/* Tell annoFormatVep that it should include the given column of extraSource
+ * in the EXTRAS column with tag.  The VEP header will include tag's description.
+ * For some special-cased sources e.g. dbNsfp files, column may be ignored. */
 
 #endif//ndef ANNOFORMATVEP_H

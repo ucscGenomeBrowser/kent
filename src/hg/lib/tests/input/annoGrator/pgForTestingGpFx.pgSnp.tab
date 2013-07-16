@@ -1,0 +1,23 @@
+# Brian picked SNVs from hg19.pgNA12878, and indels from hg19.pgHG00733indel,
+# but then the data changed, so we have this tab file now:
+# 3base substitution CDS +
+751     chr1    21806618        21806621        CTG/TTT 2       21,29   126,126
+# 6base cross codon deletion +
+1249    chr1    87045901        87045907        -       1       50      47
+# 6base deletion CDS -
+1730    chr1    150199050       150199056       TTCCTC/-        2       10,20   65,120
+# 2base substitution CDS -
+1746    chr1    152185814       152185816       AG      1       33      113
+# upstream +
+1816	chr1	161473872	161473873	C/A	2	0,0	100,100
+# non-synonymous +
+1816	chr1	161476203	161476204	T/C	2	0,0	100,100
+1816	chr1	161476204	161476205	G/A	2	0,0	100,100
+# intron +
+1817	chr1	161481035	161481036	A/G	2	0,0	100,100
+# non-synonymous -
+716	chr22	17264564	17264565	T	1	0	100
+# synonymous -
+716	chr22	17264903	17264904	G/A	2	0,0	100,100
+# 2base deletion CDS +
+890     chr3    40085622        40085625        T/ATG   2       4,12    114,81

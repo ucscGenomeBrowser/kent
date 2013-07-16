@@ -14,7 +14,7 @@ static char *somePath(struct sqlConnection *conn, int id, char *locationField)
 char query[256], path[PATH_LEN];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select location.name,image.fileName from image,location"
 	" where image.id = %d and location.id=image.%s", id, locationField);
 sr = sqlGetResult(conn, query);
@@ -56,7 +56,7 @@ char *bioImageOrganism(struct sqlConnection *conn, int id)
  * FreeMem this when done. */
 {
 char query[256], buf[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select uniProt.taxon.binomial from image,uniProt.taxon"
          " where image.id = %d and image.taxon = uniProt.taxon.id",
 	 id);
@@ -73,7 +73,7 @@ double daysPassed;
 char *startMarker;
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select isEmbryo,age from image where id = %d", id);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
@@ -105,28 +105,28 @@ char *bioImageGeneName(struct sqlConnection *conn, int id)
 /* Return gene name  - HUGO if possible, RefSeq/GenBank, etc if not. */
 {
 char query[256], buf[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select gene from image where id=%d", id);
 sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
 if (buf[0] == 0)
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
         "select refSeq from image where id=%d", id);
     sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
     if (buf[0] == 0)
         {
-	safef(query, sizeof(query),
+	sqlSafef(query, sizeof(query),
 	    "select genbank from image where id=%d", id);
 	sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
 	if (buf[0] == 0)
 	    {
 	    char locusLink[32];
-	    safef(query, sizeof(query), 
+	    sqlSafef(query, sizeof(query), 
 		"select locusLink from image where id=%d", id);
 	    sqlNeedQuickQuery(conn, query, locusLink, sizeof(locusLink));
 	    if (locusLink[0] == 0)
 	        {
-		safef(query, sizeof(query),
+		sqlSafef(query, sizeof(query),
 		    "select submitId from image where id=%d", id);
 		sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
 		}
@@ -144,12 +144,12 @@ char *bioImageAccession(struct sqlConnection *conn, int id)
 /* Return RefSeq/Genbank accession or n/a if none available. */
 {
 char query[256], buf[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select refSeq from image where id=%d", id);
 sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
 if (buf[0] == 0)
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
         "select genbank from image where id=%d", id);
     sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
     }
@@ -160,7 +160,7 @@ char *bioImageSubmitId(struct sqlConnection *conn, int id)
 /* Return submitId  for image. */
 {
 char query[256], buf[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select submitId from image"
 	" where image.id=%d", id);
 return cloneString(sqlQuickQuery(conn, query, buf, sizeof(buf)));
@@ -171,7 +171,7 @@ char *bioImageType(struct sqlConnection *conn, int id)
  * FreeMem this when done. */
 {
 char query[256], buf[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select imageType.name from image,imageType "
 	"where image.id=%d and imageType.id = image.imageType", id);
 return cloneOrNull(sqlQuickQuery(conn, query, buf, sizeof(buf)));
@@ -181,7 +181,7 @@ static char *indirectString(struct sqlConnection *conn, int id, char *table, cha
 /* Return value on table that is connected via id to image. */
 {
 char query[256], buf[512];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select %s.%s from image,%s "
 	"where image.id=%d and image.%s = %s.id",
 	table, valField, table, id, table, table);
@@ -259,7 +259,7 @@ struct slInt *list = NULL, *el;
 
 
 /* Fetch all the gene ID data. */
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
     "select gene,refSeq,locusLink,genBank,submitId,submissionSet "
     "from image where id=%d", id);
 sr = sqlGetResult(conn, dy->string);
@@ -275,17 +275,17 @@ sqlFreeResult(&sr);
 
 /* Fetch everything that refers to same gene. */
 dyStringClear(dy);
-dyStringPrintf(dy, "select id from image ");
+sqlDyStringPrintf(dy, "select id from image ");
 dyStringPrintf(dy, "where (image.submissionSet=%d and image.submitId='%s') ",
 	submissionSet, submitId);
 if (gene != NULL)
-    dyStringPrintf(dy, "or image.gene = '%s' ", gene);
+    sqlDyStringPrintf(dy, "or image.gene = '%s' ", gene);
 if (refSeq != NULL)
-    dyStringPrintf(dy, "or image.refSeq = '%s' ", refSeq);
+    sqlDyStringPrintf(dy, "or image.refSeq = '%s' ", refSeq);
 if (locusLink != NULL)
-    dyStringPrintf(dy, "or image.locusLink = '%s' ", locusLink);
+    sqlDyStringPrintf(dy, "or image.locusLink = '%s' ", locusLink);
 if (genbank != NULL)
-    dyStringPrintf(dy, "or image.genbank = '%s' ", genbank);
+    sqlDyStringPrintf(dy, "or image.genbank = '%s' ", genbank);
 dyStringPrintf(dy, "order by priority");
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -305,6 +305,5 @@ freeMem(submitId);
 dyStringFree(&dy);
 return list;
 }
-
 
 

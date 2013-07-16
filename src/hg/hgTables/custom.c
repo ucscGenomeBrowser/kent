@@ -428,7 +428,7 @@ if (ct->dbTrack)
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     struct sqlResult *sr = NULL;
 
-    safef(query, sizeof(query), "select * from %s", ct->dbTableName);
+    sqlSafef(query, sizeof(query), "select * from %s", ct->dbTableName);
     sr = hRangeQuery(conn, ct->dbTableName, region->chrom,
 	region->start, region->end, NULL, &rowOffset);
 
@@ -617,6 +617,6 @@ if (theCtList)
     removeNamedCustom(&theCtList, curTable);
 customTracksSaveCart(database, cart, theCtList);
 initGroupsTracksTables();
-doMainPage(conn);
+doMainPage(conn, FALSE);
 }
 

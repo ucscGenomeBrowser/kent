@@ -24,9 +24,9 @@ char tempDbName[40];
 boolean checkMrna(char *locusID)
 {
 struct sqlConnection *conn, *conn2;
-char query[256], query2[256];
-struct sqlResult *sr, *sr2;
-char **row, **row2;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
 boolean result;
 char cond_str[256];
 
@@ -39,7 +39,7 @@ conn   = hAllocConn();
 conn2  = hAllocConn();
 result = FALSE;
 
-sprintf(query2,"select gbAC from %s.locus2Acc0 where locusID=%s and seqType='m';",
+sqlSafef(query2, sizeof query2, "select gbAC from %s.locus2Acc0 where locusID=%s and seqType='m';",
 		tempDbName, locusID);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -51,8 +51,8 @@ while (row2 != NULL)
     chp = strstr(gbID, ".");
     if (chp != NULL) *chp = '\0';
 
-    sprintf(cond_str, "name = '%s';", gbID);
-    knownGeneID = sqlGetField(conn, dbName, "knownGene", "name", cond_str);
+    sqlSafefFrag(cond_str, sizeof cond_str, "name = '%s';", gbID);
+    knownGeneID = sqlGetField(dbName, "knownGene", "name", cond_str);
     if (knownGeneID != NULL)
 	{
 	result=TRUE;
@@ -69,12 +69,10 @@ return(result);
 
 int main(int argc, char *argv[])
 {
-char startString[64], endString[64];
-
 struct sqlConnection *conn, *conn2, *conn3, *conn5;
-char query[256], query2[256], query3[256], query5[256];
-struct sqlResult *sr, *sr2, *sr3, *sr5;
-char **row, **row2, **row3, **row5;
+char query2[256], query3[256], query5[256];
+struct sqlResult *sr2, *sr3, *sr5;
+char **row2, **row3, **row5;
 char cond_str[512];
 
 char *chp;
@@ -94,12 +92,12 @@ char *taxID2;		/* tax id */
 
 char *protDbName;
 
-char *refSeq, *seqAC, chType;
+char *refSeq;
 
 char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
      *exonCount, *exonStarts, *exonEnds;
 
-char *mseq, *gseq, *hseq, *swissprot;
+char *gseq, *hseq, *swissprot;
 int alignmentID=0;
 
 if (argc != 4) usage();
@@ -123,7 +121,7 @@ o2 = fopen("j.dat", "w");
  
 // scan all RefSeq entries
 
-sprintf(query2,"select * from %s.locus2Ref0;", tempDbName);
+sqlSafef(query2, sizeof query2, "select * from %s.locus2Ref0;", tempDbName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -145,25 +143,25 @@ while (row2 != NULL)
     hasKGmRNA = checkMrna(locusID);	
 
     /* check if this RefSeq has 'g' type sequence(s) referenced */
-    sprintf(cond_str, "locusID=%s and seqType='g';", locusID);
-    gseq = sqlGetField(conn, tempDbName, "locus2Acc0", "gbac", cond_str);
+    sqlSafefFrag(cond_str, sizeof cond_str, "locusID=%s and seqType='g';", locusID);
+    gseq = sqlGetField(tempDbName, "locus2Acc0", "gbac", cond_str);
 
     /* process only 'g' type record which does not have corresponding KG entry */
     if ((!hasKGmRNA) && (gseq != NULL))
 	{
-	sprintf(cond_str, "name='%s'", refAC);
-	hseq = sqlGetField(conn, genomeReadOnly, "refGene", "name", cond_str);
+	sqlSafefFrag(cond_str, sizeof cond_str, "name='%s'", refAC);
+	hseq = sqlGetField(genomeReadOnly, "refGene", "name", cond_str);
 	if (hseq != NULL)
 	    {
-	    sprintf(cond_str, "refseq='%s';", refAC);
-	    swissprot = sqlGetField(conn, protDbName, "hugo", "swissprot", cond_str);
+	    sqlSafefFrag(cond_str, sizeof cond_str, "refseq='%s';", refAC);
+	    swissprot = sqlGetField(protDbName, "hugo", "swissprot", cond_str);
 	    if (swissprot != NULL) 
 		{
 		if (strlen(swissprot) >0)	
 		    {
 		    // HUGO has an entry with swissprot ID, get display ID
-		    sprintf(cond_str, "accession='%s';", swissprot);
-		    proteinDisplayID = sqlGetField(conn, protDbName, 
+		    sqlSafefFrag(cond_str, sizeof cond_str, "accession='%s';", swissprot);
+		    proteinDisplayID = sqlGetField(protDbName, 
 						   "spXref2", "displayID", cond_str);
 		    if (proteinDisplayID == NULL) 
 			{
@@ -183,7 +181,7 @@ while (row2 != NULL)
 	    if (proteinDisplayID == NULL)
 		{
 		// get gbAC and check if spXref2 actually has it
-		sprintf(query3, "select gbAC from %s.locus2Acc0 where locusID=%s;", 
+		sqlSafef(query3, sizeof query3, "select gbAC from %s.locus2Acc0 where locusID=%s;", 
 				tempDbName, locusID);
         	sr3 = sqlMustGetResult(conn3, query3);
         	row3 = sqlNextRow(sr3);
@@ -193,8 +191,8 @@ while (row2 != NULL)
                     gbAC = row3[0];
 		    chp = strstr(gbAC, ".");
 		    if (chp != NULL) *chp = '\0';
-		    sprintf(cond_str, "extAC='%s'", gbAC);
-		    proteinDisplayID = sqlGetField(conn, protDbName, 
+		    sqlSafefFrag(cond_str, sizeof cond_str, "extAC='%s'", gbAC);
+		    proteinDisplayID = sqlGetField(protDbName, 
 						   "spXref2", "displayID", cond_str);
 		    if (proteinDisplayID == NULL) 
 			{
@@ -216,7 +214,7 @@ while (row2 != NULL)
 		{
 		// generate KG entry
 					
-                sprintf(query5,"select * from %s.refGene where name='%s';", genomeReadOnly, refAC);
+                sqlSafef(query5, sizeof query5, "select * from %s.refGene where name='%s';", genomeReadOnly, refAC);
 		sr5 = sqlMustGetResult(conn5, query5);
     		row5 = sqlNextRow(sr5);
     		while (row5 != NULL)

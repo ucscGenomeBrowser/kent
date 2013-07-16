@@ -953,7 +953,7 @@ tableList[i++] = "dbRIPAlu";
 tableList[i++] = "dbRIPL1";
 tableList[i++] = "dbRIPSVA";
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 "SELECT genoRegion FROM dbRIPAlu GROUP BY genoRegion ORDER BY genoRegion DESC");
 sr = sqlGetResult(conn, query);
 
@@ -992,7 +992,7 @@ freez(&menu);
 
 for (i = 0; i < 3; ++i)
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     "SELECT polySubfamily FROM %s GROUP BY polySubfamily ORDER BY polySubfamily DESC", tableList[i]);
     sr = sqlGetResult(conn, query);
 
@@ -1018,7 +1018,7 @@ cgiMakeDropList(POLY_SUBFAMILY, menu, menuSize,
 slFreeList(&sList);
 freez(&menu);
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 "SELECT ethnicGroup FROM polyGenotype GROUP BY ethnicGroup ORDER BY ethnicGroup DESC");
 sr = sqlGetResult(conn, query);
 
@@ -1592,7 +1592,7 @@ void knownGeneIdConfig(struct trackDb *tdb)
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 char *omimAvail = NULL;
-safef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
+sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
 omimAvail = sqlQuickString(conn, query);
 hFreeConn(&conn);
 
@@ -1708,7 +1708,7 @@ if (sameString(tdb->track, "refGene"))
     {
     struct sqlConnection *conn = hAllocConn(database);
     char query[128];
-    safef(query, sizeof(query), "select refLink.omimId from refLink, refGene where refLink.mrnaAcc = refGene.name and refLink.omimId != 0 limit 1");
+    sqlSafef(query, sizeof(query), "select refLink.omimId from refLink, refGene where refLink.mrnaAcc = refGene.name and refLink.omimId != 0 limit 1");
     omimAvail = sqlQuickNum(conn, query);
     hFreeConn(&conn);
     }
@@ -2441,7 +2441,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select reference,pubMedId from %s group by pubMedId order by reference;", tdb->table);
 sr = sqlGetResult(conn, query);
 printf("<BR><B>Filter by publication reference:</B>\n");

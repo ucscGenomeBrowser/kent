@@ -129,7 +129,7 @@ char *genoQuery(char *id, char *settingName, struct sqlConnection *conn)
 {
 char query[256];
 char *sql = genomeSetting(settingName);
-safef(query, sizeof(query), sql, id);
+sqlSafef(query, sizeof(query), sql, id);
 return sqlQuickString(conn, query);
 }
 
@@ -156,7 +156,7 @@ if (isRgdGene(conn))
     return(getRgdGeneUniProtAcc(curGeneId, conn));
     }
 
-safef(query, sizeof(query), proteinSql, geneId);
+sqlSafef(query, sizeof(query), proteinSql, geneId);
 someAcc = sqlQuickString(conn, query);
 if (someAcc == NULL || someAcc[0] == 0)
     return NULL;
@@ -172,7 +172,7 @@ boolean idInAllMrna(char *id, struct sqlConnection *conn)
 /* Return TRUE if id is in allMrna table */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select count(*) from all_mrna where qName = '%s'", id);
 return sqlQuickNum(conn, query) > 0;
 }
@@ -181,12 +181,12 @@ boolean idInRefseq(char *id, struct sqlConnection *conn)
 /* Return TRUE if id is in refGene table */
 {
 char query[256];
-if (!sqlTablesExist(conn, "refGene"))
+if (!sqlTableExists(conn, "refGene"))
     {
     return(FALSE);
     }
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select count(*) from refGene where name = '%s'", id);
 return sqlQuickNum(conn, query) > 0;
 }
@@ -524,7 +524,7 @@ static char *findGeneId(struct sqlConnection *conn, char *name)
 /* Just check if it's in the main gene table, and if so return input name. */
 char *mainTable = genomeSetting("knownGene");
 char query[256];
-safef(query, sizeof(query), "select count(*) from %s where name = '%s'", mainTable, name);
+sqlSafef(query, sizeof(query), "select count(*) from %s where name = '%s'", mainTable, name);
 if (sqlQuickNum(conn, query) > 0)
     return name;
 else
@@ -532,16 +532,16 @@ else
     /* check OMIM gene symbol table first */
     if (sqlTableExists(conn, "omimGeneSymbol"))
     	{
-    	safef(query, sizeof(query), "select geneSymbol from omimGeneSymbol where geneSymbol= '%s'", name);
+    	sqlSafef(query, sizeof(query), "select geneSymbol from omimGeneSymbol where geneSymbol= '%s'", name);
     	char *symbol = sqlQuickString(conn, query);
     	if (symbol != NULL)
 	    {
-    	    safef(query, sizeof(query), "select kgId from kgXref where geneSymbol = '%s'", symbol);
+    	    sqlSafef(query, sizeof(query), "select kgId from kgXref where geneSymbol = '%s'", symbol);
     	    char *kgId = sqlQuickString(conn, query);
 	    if (kgId != NULL)
 	    	{
     	    	/* The canonical gene is preferred */
-	        safef(query, sizeof(query), 
+	        sqlSafef(query, sizeof(query), 
 		"select c.transcript from knownCanonical c,knownIsoforms i where i.transcript = '%s' and i.clusterId=c.clusterId", kgId);
     	        char *canonicalKgId = sqlQuickString(conn, query);
 	    	if (canonicalKgId != NULL) 
@@ -558,7 +558,7 @@ else
 char *alias = genomeOptionalSetting("kgAlias");
 if (alias != NULL && sqlTableExists(conn, alias))
      {
-     safef(query, sizeof(query), "select kgID from %s where alias = '%s'", alias, name);
+     sqlSafef(query, sizeof(query), "select kgID from %s where alias = '%s'", alias, name);
      char *id = sqlQuickString(conn, query);
      if (id == NULL)
          hUserAbort("Couldn't find %s in %s.%s or %s.%s", name, database, mainTable, database, alias);
@@ -576,7 +576,7 @@ char *table = genomeSetting("knownGene");
 char query[256];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select chrom,txStart,txEnd from %s where name = '%s'"
     , table, curGeneId);
 sr = sqlGetResult(conn, query);
@@ -603,7 +603,7 @@ struct sqlResult *sr;
 char **row;
 struct genePred *gp = NULL;
 hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, track, table, &hasBin);
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select * from %s where name = '%s' "
 	"and chrom = '%s' and txStart=%d and txEnd=%d"
 	, table, curGeneId, curGeneChrom, curGeneStart, curGeneEnd);

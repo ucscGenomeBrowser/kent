@@ -52,7 +52,7 @@ conn = hAllocConn(genomeDb);
 connEnsGene= hAllocConn(genomeDb);
 connSf= hAllocConn(genomeDb);
 
-safef(query2,sizeof(query2),"select * from %s.ensGene;", genomeDb);
+sqlSafef(query2,sizeof(query2),"select * from %s.ensGene;", genomeDb);
 
 sr2 = sqlMustGetResult(connEnsGene, query2);
 row2 = sqlNextRow(sr2);
@@ -78,12 +78,12 @@ while (row2 != NULL)
 
     if (hTableExists(genomeDb, "ensGeneXref"))
         {
-        safef(cond_str, sizeof(cond_str), "transcript_name='%s'", name);
+        sqlSafefFrag(cond_str, sizeof(cond_str), "transcript_name='%s'", name);
         translation_name = sqlGetField(genomeDb, "ensGeneXref", "translation_name", cond_str);
         }
     if (hTableExists(genomeDb,"ensemblXref3") && translation_name == NULL)
         {
-        safef(cond_str, sizeof(cond_str), "transcript='%s'", name);
+        sqlSafefFrag(cond_str, sizeof(cond_str), "transcript='%s'", name);
         translation_name = sqlGetField(genomeDb, "ensemblXref3", "protein", cond_str);
         }
     if (translation_name == NULL) 
@@ -97,7 +97,7 @@ while (row2 != NULL)
     	chp = strstr(translation_name, ".");
     	if (chp != NULL) *chp = '\0';
 
-    	sprintf(query, "select * from %s.sfAssign where seqID='%s'", superfamDb, translation_name);
+    	sqlSafef(query, sizeof query, "select * from %s.sfAssign where seqID='%s'", superfamDb, translation_name);
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
 
@@ -117,7 +117,7 @@ while (row2 != NULL)
  	    sfID	= row[5];
  	    sfDesc	= row[6];	/* 0302 and other supfam releases has an error here */
 		
-	    sprintf(cond_str, "id=%s", sfID);
+	    sqlSafefFrag(cond_str, sizeof cond_str, "id=%s", sfID);
 	    sfDesc  = sqlGetField(superfamDb, "des", "description", cond_str);
 
 	    E = atof(eValue);

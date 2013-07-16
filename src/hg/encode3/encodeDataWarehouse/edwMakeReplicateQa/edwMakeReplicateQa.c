@@ -37,7 +37,7 @@ boolean pairExists(struct sqlConnection *conn, long long elderId, long long youn
 /* Return true if elder/younger pair already in table. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select count(*) from %s where elderFileId=%lld and youngerFileId=%lld",
     table, elderId, youngerId);
 return sqlQuickNum(conn, query) != 0;
@@ -195,7 +195,7 @@ static struct genomeRangeTree *genomeRangeTreeForTarget(struct sqlConnection *co
 /* Return genome range tree filled with enrichment target for assembly */
 {
 char query[256];
-safef(query, sizeof(query), "select * from edwQaEnrichTarget where assemblyId=%d and name='%s'", 
+sqlSafef(query, sizeof(query), "select * from edwQaEnrichTarget where assemblyId=%d and name='%s'", 
     assembly->id, enrichedIn);
 struct edwQaEnrichTarget *target = edwQaEnrichTargetLoadByQuery(conn, query);
 if (target == NULL)
@@ -444,7 +444,7 @@ void edwMakeReplicateQa(int startId, int endId)
 /* Make list with all files in ID range */
 struct sqlConnection *conn = sqlConnect(edwDatabase);
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select * from edwFile where id>=%d and id<=%d and endUploadTime != 0 "
     "and updateTime != 0 and deprecated = ''", 
     startId, endId);

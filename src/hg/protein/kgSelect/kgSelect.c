@@ -43,14 +43,14 @@ conn3= hAllocConn();
 conn4= hAllocConn();
 
 /* go through each protein */
-safef(query2, sizeof(query2), "select distinct protAcc from %s.protMrnaScore", kgTempDb);
+sqlSafef(query2, sizeof(query2), "select distinct protAcc from %s.protMrnaScore", kgTempDb);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
     {
     /* get all prot/mRna pairs in score table with this protein, ordered by score */
     protAcc = row2[0];
-    safef(query3, sizeof(query3), 
+    sqlSafef(query3, sizeof(query3), 
             "select mrnaAcc, score from %s.protMrnaScore where protAcc='%s' order by score desc limit 1", 
     	    kgTempDb, protAcc);
     sr3  = sqlMustGetResult(conn3, query3);
@@ -62,7 +62,7 @@ while (row2 != NULL)
    	mrnaAcc = row3[0];
 	score   = row3[1];
 	safef(protMrnaName, sizeof(protMrnaName), "%s_%s", protAcc, mrnaAcc);
-	safef(query4, sizeof(query4), 
+	sqlSafef(query4, sizeof(query4), 
 		"select * from %s.kgCandidate where name='%s' or name='%s'", 
 		kgTempDb, mrnaAcc, protMrnaName);
     	sr4  = sqlMustGetResult(conn4, query4);

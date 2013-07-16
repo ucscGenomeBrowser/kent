@@ -38,10 +38,10 @@ if (list != NULL)
     char query[256], **row, **row2;
     struct sqlResult *sr, *sr2;
     hPrintf("<B>InterPro Domains: </B> ");
-    hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/entry/%s\" TARGET=_blank>",
+    hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/protein/%s\" TARGET=_blank>",
     	swissProtAcc);
     hPrintf("Graphical view of domain structure</A><BR>");
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     	"select extAcc1,extAcc2 from extDbRef,extDb"
 	" where extDbRef.acc = '%s'"
 	" and extDb.val = 'Interpro' and extDb.id = extDbRef.extDb"
@@ -56,7 +56,7 @@ if (list != NULL)
         safef(interPro, 128, "%s.interProXref", pdb);
         if (hTableExists(db, interPro))
                 {
-                safef(query, sizeof(query),
+                sqlSafef(query, sizeof(query),
                         "select description from %s where accession = '%s' and interProId = '%s'",
                         interPro, swissProtAcc, row[0]);
                 sr2 = sqlGetResult(conn, query);
@@ -87,7 +87,7 @@ if (kgVersion == KG_III)
 	    {
 	    char query[256];
 	    char *description;
-	    safef(query, sizeof(query), 
+	    sqlSafef(query, sizeof(query), 
 	          "select description from pfamDesc where pfamAC='%s'", el->name);
 	    description = sqlQuickString(conn, query);
 	    if (description == NULL)
@@ -110,7 +110,7 @@ if (kgVersion == KG_III)
 	    {
 	    char query[256];
 	    char *description;
-	    safef(query, sizeof(query), 
+	    sqlSafef(query, sizeof(query), 
 	          "select description from scopDesc where acc='%s'", el->name);
 	    description = sqlQuickString(conn, query);
 	    if (description == NULL)
@@ -135,7 +135,7 @@ else
 	    {
 	    char query[256];
 	    char *description;
-	    safef(query, sizeof(query), pfamDescSql, el->name);
+	    sqlSafef(query, sizeof(query), pfamDescSql, el->name);
 	    description = sqlQuickString(conn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
@@ -157,7 +157,7 @@ if (list != NULL)
     struct sqlResult *sr;
     int column = 0, maxColumn=3, rowCount=0;
     hPrintf("<B>Protein Data Bank (PDB) 3-D Structure</B><BR>");
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     	"select extAcc1,extAcc2 from extDbRef,extDb"
 	" where extDbRef.acc = '%s'"
 	" and extDb.val = 'PDB' and extDb.id = extDbRef.extDb"

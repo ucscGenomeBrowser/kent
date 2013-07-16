@@ -1,0 +1,467 @@
+# for emacs: -*- mode: sh; -*-
+
+# Alpaca:
+# ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Erinaceus_europaeus/VicPac2.0/
+
+##########################################################################
+# Download sequence (DONE - 2013-06-07 - Hiram)
+    mkdir -p /hive/data/genomes/vicPac2/genbank
+    cd /hive/data/genomes/vicPac2/genbank
+
+    rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Erinaceus_europaeus/VicPac2.0/ ./ > fetch.log 2>&1
+
+###########################################################################
+# fixup to UCSC names (DONE - 2013-03-25 - Hiram)
+    cd /hive/data/genomes/vicPac2
+
+    $HOME/kent/src/hg/utils/automation/unplacedScaffolds.pl
+    # constructs the directory: /hive/data/genomes/vicPac2/ucsc
+    # with files:
+    cd /hive/data/genomes/vicPac2/ucsc
+    ls -ogrt
+# -rwxrwxr-x 1       355 Jun  7 12:04 fetchChrM.sh
+# -rw-rw-r-- 1     17780 Jun  7 12:04 NC_002080.fa
+# -rw-rw-r-- 1     17704 Jun  7 12:04 chrM.fa
+# -rw-rw-r-- 1        37 Jun  7 12:04 chrM.agp
+# -rw-rw-r-- 1  25068539 Jun  7 12:37 vicPac2.ucsc.agp
+# -rw-rw-r-- 1 711064733 Jun  7 12:39 vicPac2.ucsc.fa.gz
+
+    # NOTE: the chrM sequence was manually added to the fa.gz and .agp file
+    # see the fetchChrM.sh script there
+
+    # this script also constructs the vicPac2.unmasked.2bit file, but
+    # this is not needed with the makeGenomeDb.pl script:
+    rm -f /hive/data/genomes/vicPac2/vicPac2.unmasked.2bit
+
+###########################################################################
+# Initial genome build (DONE - 2013-06-07 - Hiram)
+    cd /hive/data/genomes/vicPac2
+
+    cat << '_EOF_' > vicPac2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db vicPac2
+clade mammal
+# genomeCladePriority 35
+scientificName Vicugna pacos
+# for chrM fetching only:
+# scientificName Lama pacos
+commonName Alpaca
+assemblyDate Mar. 2013
+assemblyLabel Broad Institute
+assemblyShortLabel Vicugna_pacos-2.0.1
+orderKey 2359
+mitoAcc NC_002504
+fastaFiles /cluster/data/vicPac2/ucsc/vicPac2.clean.fa.gz
+agpFiles /cluster/data/vicPac2/ucsc/vicPac2.clean.agp
+# qualFiles none
+dbDbSpeciesDir alpaca
+photoCreditURL http://genome.wustl.edu/genomes/view/vicugna_pacos/
+photoCreditName Photo courtesy of the USDA
+ncbiGenomeId 905
+ncbiAssemblyId 557168
+ncbiAssemblyName Vicugna_pacos-2.0.1
+ncbiBioProject 30567
+genBankAccessionID GCA_000164845.2
+taxId 30538
+'_EOF_'
+
+    # run step wise to confirm sequence and AGP files match each other
+    time makeGenomeDb.pl -stop=agp vicPac2.config.ra > genomeDb.agp.log 2>&1
+    # XXX - failed due to identical contigs via twoBitDup
+
+    cd /hive/data/genomes/vicPac2/ucsc
+    twoBitDup ../vicPac2.unmasked.2bit > ident.contig.list
+    sed -e 's/.* and //; s/ are identical//' ident.contig.list \
+       > remove.identicals.txt
+    faSomeRecords -exclude vicPac2.ucsc.fa.gz remove.identicals.txt stdout \
+       | gzip -c > vicPac2.clean.fa.gz
+
+    cp vicPac2.ucsc.agp /dev/shm/vicPac2.temp1.agp 
+    cat remove.identicals.txt | while read C
+do
+    echo $C
+    grep -v "${C}" /dev/shm/vicPac2.temp1.agp > /dev/shm/vicPac2.temp2.agp
+    rm -f /dev/shm/vicPac2.temp1.agp
+    mv /dev/shm/vicPac2.temp2.agp /dev/shm/vicPac2.temp1.agp
+done
+
+    # verify this is all OK now:
+    cp -p /dev/shm/vicPac2.temp1.agp ./vicPac2.clean.agp
+    faToTwoBit vicPac2.clean.fa.gz clean.2bit
+
+    checkAgpAndFa vicPac2.clean.agp clean.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+    rm clean.2bit
+
+    # fixup the .ra file and rerun the agp verification step:
+    cd /hive/data/genomes/vicPac2
+    rm -fr bed jkStuff M vicPac2.unmasked.2bit
+    # the chrM sequence is named "Lama pacos"
+    # temporarily set the sci name in the config.ra file to "Lama pacos"
+    # to the chrM sequence verified
+    time makeGenomeDb.pl -stop=agp vicPac2.config.ra > genomeDb.agp.log 2>&1
+    # real    3m9.129s
+    # verify it is OK:
+    tail -1 genomeDb.agp.log
+    # *** All done!  (through the 'agp' step)
+
+    # continue with the config.ra sci name set back to Vicugna pacos
+
+    time nice -n +19 makeGenomeDb.pl -fileServer=hgwdev \
+	-workhorse=hgwdev -continue=db vicPac2.config.ra \
+        > genomeDb.db.log 2>&1
+    # real    18m20.067s
+
+    # add the trackDb business to the source tree
+
+##########################################################################
+# running repeat masker (DONE - 2013-06-09 - Hiram)
+    mkdir /hive/data/genomes/vicPac2/bed/repeatMasker
+    cd /hive/data/genomes/vicPac2/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek vicPac2 > do.log 2>&1 &
+    #   real    831m16.606s
+    cat faSize.rmsk.txt
+    # 2172177994 bases (93595138 N's 2078582856 real 1343652421 upper
+    #    734930435 lower) in 276611 sequences in 1 files
+    # Total size: mean 7852.8 sd 265315.8 min 200 (ABRR02450950)
+    #    max 38452041 (KB632434) median 353
+    # %33.83 masked total, %35.36 masked real
+
+    grep -i versi do.log
+    # RepeatMasker version open-4.0.2
+    #    April 29 2013 (open-4-0-2) version of RepeatMasker
+
+##########################################################################
+# running simple repeat (DONE - 2013-06-09 - Hiram)
+    mkdir /hive/data/genomes/vicPac2/bed/simpleRepeat
+    cd /hive/data/genomes/vicPac2/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	vicPac2 > do.log 2>&1 &
+    # real    309m54.441s
+
+    cat fb.simpleRepeat
+    # 29433046 bases of 2078582856 (1.416%) in intersection
+
+    # using RMSK and TRF since RMSK is better than WM
+    cd /hive/data/genomes/vicPac2
+    twoBitMask vicPac2.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed vicPac2.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa vicPac2.2bit stdout | faSize stdin > faSize.vicPac2.2bit.txt
+    cat faSize.vicPac2.2bit.txt
+# 2172177994 bases (93595138 N's 2078582856 real 1342723412 upper
+#   735859444 lower) in 276611 sequences in 1 files
+# Total size: mean 7852.8 sd 265315.8 min 200 (ABRR02450950)
+#   max 38452041 (KB632434) median 353
+# %33.88 masked total, %35.40 masked real
+
+    rm /gbdb/vicPac2/vicPac2.2bit
+    ln -s `pwd`/vicPac2.2bit /gbdb/vicPac2/vicPac2.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2013-06-09 - Hiram)
+    mkdir /hive/data/genomes/vicPac2/bed/gap
+    cd /hive/data/genomes/vicPac2/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../vicPac2.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m22.379s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits vicPac2 -not gap -bed=notGap.bed
+    # 2078582856 bases of 2078582856 (100.000%) in intersection
+    # real    1m5.303s
+
+    # used to do this featureBits, but it is really really slow if there
+    # are a log of contigs
+    # time featureBits vicPac2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # 0 bases of 2078582856 (0.000%) in intersection
+    # real    472m17.520s
+
+    # this is much faster:
+    awk '{print $3-$2,$0}' notGap.bed | sort -rn > notGap.sizes.txt
+    # largest contiguous sequence:
+    head -1 notGap.sizes.txt | awk '{print $1}'
+    # 513588
+    # minimal coverage 1 base out of that largest sequence:
+    echo 513588 | awk '{printf "%15.10f\n", 1/(2*$1)}' | sed -e 's/ //g'
+    # 0.0000009735
+    time bedIntersect -minCoverage=0.0000009735 allGaps.bed notGap.bed \
+      test.new.gaps.bed
+    # real    0m22.922s
+    # no new gaps:
+    # -rw-rw-r-- 1        0 Jun 10 09:29 test.new.gaps.bed
+    # if there were gaps, this is the number of bases in these new gaps:
+    awk '{print $3-$2}' test.new.gaps.bed | ave stdin | grep total
+    # total 8314.000000
+
+#########################################################################
+# cytoBandIdeo - (DONE - 2013-06-12 - Hiram)
+    mkdir /hive/data/genomes/vicPac2/bed/cytoBand
+    cd /hive/data/genomes/vicPac2/bed/cytoBand
+    makeCytoBandIdeo.csh vicPac2
+
+##########################################################################
+## WINDOWMASKER (DONE - 2013-06-09 - Hiram)
+    mkdir /hive/data/genomes/vicPac2/bed/windowMasker
+    cd /hive/data/genomes/vicPac2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev vicPac2 > do.log 2>&1 &
+    # real    556m33.825s
+
+    cat faSize.vicPac2.cleanWMSdust.txt
+# 2172177994 bases (93595138 N's 2078582856 real 1526270768 upper
+#    552312088 lower) in 276611 sequences in 1 files
+# Total size: mean 7852.8 sd 265315.8 min 200 (ABRR02450950)
+#    max 38452041 (KB632434) median 353
+# %25.43 masked total, %26.57 masked real
+
+    #  This is pretty good for WM, but RMSK is better
+    #  so, using the RMSK result to mask the genome
+
+    featureBits -countGaps vicPac2 rmsk windowmaskerSdust  > fb.vicPac2.rmsk.windowmaskerSdust.txt 2>&1
+    cat fb.vicPac2.rmsk.windowmaskerSdust.txt
+#  416158057 bases of 2947024286 (14.121%) in intersection
+
+########################################################################
+# cpgIslands - (DONE - 2013-06-10 - Hiram)
+    mkdir /hive/data/genomes/vicPac2/bed/cpgIslands
+    cd /hive/data/genomes/vicPac2/bed/cpgIslands
+    time doCpgIslands.pl vicPac2 > do.log 2>&1 &
+    # real    3138m13.803s
+    # a couple of broken jobs on the swarm, finished off, then continuing:
+
+    time doCpgIslands.pl -continue=makeBed vicPac2 > makeBed.log 2>&1 &
+    # real    23m51.699s
+
+    cat fb.vicPac2.cpgIslandExt.txt
+    #   24481278 bases of 2078582856 (1.178%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2013-06-10 - Hiram)
+    mkdir /hive/data/genomes/vicPac2/bed/genscan
+    cd /hive/data/genomes/vicPac2/bed/genscan
+    time doGenscan.pl vicPac2 > do.log 2>&1  &
+    # real    3186m9.004s
+    cat fb.vicPac2.genscan.txt
+    #   57972157 bases of 2078582856 (2.789%) in intersection
+    cat fb.vicPac2.genscanSubopt.txt
+    #   51601490 bases of 2078582856 (2.483%) in intersection
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-10 - Hiram)
+    # Use -repMatch=750, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2078582856 / 2897316137 \) \* 1024
+    # ( 2078582856 / 2897316137 ) * 1024 = 734.634656
+    # round up to 750
+
+    # vicPac1 was: -repMatch=700
+    # vicPac1: Wrote 25830 overused 11-mers to vicPac1.11.ooc
+
+    cd /hive/data/genomes/vicPac2
+    blat vicPac2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/vicPac2.11.ooc -repMatch=750
+    #	Wrote 19794 overused 11-mers to jkStuff/vicPac2.11.ooc
+
+    # there are *only* bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" vicPac2 | sort | uniq -c
+    #   174225 yes
+
+#########################################################################
+# AUTO UPDATE GENBANK (WORKING - 2013-06-10 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Vicugna pacos   169     7289    0
+# Vicugna vicugna 3       0       0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # this appears that vicPac2 has plenty of native est's
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add vicPac2 before echTel1 and commit to GIT
+# vicPac2 (tenrec)
+vicPac2.serverGenome = /hive/data/genomes/vicPac2/vicPac2.2bit
+vicPac2.clusterGenome = /hive/data/genomes/vicPac2/vicPac2.2bit
+vicPac2.ooc = /hive/data/genomes/vicPac2/jkStuff/vicPac2.11.ooc
+vicPac2.lift = no
+vicPac2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+vicPac2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+vicPac2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+vicPac2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+vicPac2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+vicPac2.refseq.mrna.native.load = no
+vicPac2.refseq.mrna.xeno.load = yes
+vicPac2.genbank.mrna.xeno.load = no
+vicPac2.genbank.est.native.load = no
+vicPac2.genbank.mrna.native.load = no
+vicPac2.genbank.mrna.native.loadDesc = no
+vicPac2.downloadDir = vicPac2
+vicPac2.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding vicPac2 alpaca refs #10833" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time ./bin/gbAlignStep -initial vicPac2 &
+    #	var/build/logs/2013.06.10-09:51:04.vicPac2.initalign.log
+    #	about 9 hours 10 minutes
+    #   from 2013.06.10-09:51:08 to 2013.06.10-19:05:46
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad vicPac2 &
+    #	logFile: var/dbload/hgwdev/logs/2013.06.18-09:56:16.dbload.log
+    #	real    22m47.950s
+
+    # enable daily alignment and update of hgwdev (TBD - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add vicPac2 to: etc/align.dbs etc/hgwdev.dbs
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added vicPac2 to daily hgwdev build refs #10833" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
+# construct liftOver from vicPac1 to vicPac2 (DONE - 2013-06-10 - Hiram)
+    # documentation for this step is in vicPac1 - remember to do this
+
+############################################################################
+# lastz swap Human/hg19 (DONE - 2013-06-18 - Hiram)
+    # alignment to human
+    cd /hive/data/genomes/hg19/bed/lastzVicPac2.2013-06-17
+    cat fb.hg19.chainVicPac2Link.txt
+    #	1454261693 bases of 2897316137 (50.193%) in intersection
+
+    # and, for this swap
+    mkdir /hive/data/genomes/vicPac2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/vicPac2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzVicPac2.2013-06-17/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    206m52.132s
+    cat fb.vicPac2.chainHg19Link.txt
+    #	1428125689 bases of 2078582856 (68.707%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/vicPac2/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+###########################################################################
+# add to all.joiner (DONE - 2013-06-18 - Hiram)
+    # add vicPac2 to all.joiner every where there is a vicPac1
+    # this command should be clean:
+    joinerCheck -database=vicPac2 -keys all.joiner
+
+    # THIS HAS TO HAPPEN BEFORE DOWNLOADS OR PUSHQ BUSINESS ! ! !
+
+###########################################################################
+# construct downloads files (DONE - 2013-06-28 - Hiram)
+    cd /hive/data/genomes/vicPac2
+    time makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev vicPac2 \
+	> downloads.log 2>&1 &
+    # real    20m37.803s
+
+    # verify the README.txt files are good
+
+###########################################################################
+# ready for first pushQ entry (DONE - 2013-06-28 - Hiram)
+    mkdir /hive/data/genomes/vicPac2/pushQ
+    cd /hive/data/genomes/vicPac2/pushQ
+    time makePushQSql.pl vicPac2 > vicPac2.sql 2> stderr.out
+    #  real    4m0.757s
+
+    # some errors are legitimate and OK:
+     head stderr.out
+# WARNING: hgwdev does not have /gbdb/vicPac2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/vicPac2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/vicPac2/bbi/quality.bw
+# WARNING: vicPac2 does not have seq
+# WARNING: vicPac2 does not have extFile
+    scp -p vicPac2.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    ssh hgwbeta 'hgsql qapushq < /tmp/vicPac2.sql'
+
+###########################################################################
+# lastz alignment with Human/hg19 (DONE - 2013-06-18 - Hiram)
+    #	the original alignment
+    cd /hive/data/genomes/hg19/bed/lastzVicPac2.2013-06-17
+    cat fb.hg19.chainVicPac2Link.txt
+    #	1454261693 bases of 2897316137 (50.193%) in intersection
+
+    # and, for the swap
+    mkdir /hive/data/genomes/vicPac2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/vicPac2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzVicPac2.2013-06-17/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    206m52.132s
+    cat fb.vicPac2.chainHg19Link.txt
+    #	1428125689 bases of 2078582856 (68.707%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/vicPac2/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+############################################################################
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("vicPac2", "blat4d", "17848", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("vicPac2", "blat4d", "17849", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+#########################################################################
+## Default position set to same as vicPac1 via liftOver
+#    (DONE - 2013-06-28 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="KB632466:7430155-7447383"
+	where name="vicPac2";' hgcentraltest
+
+#########################################################################
+# lastz Mouse Mm10 (DONE - 2013-06-26 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzVicPac2.2013-06-19
+    cat fb.mm10.chainVicPac2Link.txt
+    #	797843091 bases of 2652783500 (30.076%) in intersection
+
+    # and for this swap
+    mkdir /hive/data/genomes/vicPac2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/vicPac2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzVicPac2.2013-06-19/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    85m53.924s
+
+    cat fb.vicPac2.chainMm10Link.txt
+    #	783682127 bases of 2078582856 (37.703%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/vicPac2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################

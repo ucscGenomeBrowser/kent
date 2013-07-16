@@ -50,11 +50,11 @@ while (!bothDone)
     {
     if (doingAlias)
 	{
-    	sprintf(query2,"select symbol, aliases from %s.hgnc;", proteinDB);
+    	sqlSafef(query2, sizeof query2, "select symbol, aliases from %s.hgnc;", proteinDB);
 	}
     else
 	{
-        sprintf(query2,"select symbol, prvSymbols from %s.hgnc;", proteinDB);
+        sqlSafef(query2, sizeof query2, "select symbol, prvSymbols from %s.hgnc;", proteinDB);
     	}
     
     sr2 = sqlMustGetResult(conn2, query2);
@@ -66,7 +66,7 @@ while (!bothDone)
 
 	if ( (symbol  != NULL) && (strlen(symbol) != 0) )
 	    {
-            sprintf(cond_str, "geneSymbol = '%s'", symbol);
+            sqlSafefFrag(cond_str, sizeof cond_str, "geneSymbol = '%s'", symbol);
             answer = sqlGetField(database, "kgXref", "kgID", cond_str);
 	    if (answer != NULL)
 		{

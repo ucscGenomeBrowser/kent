@@ -151,7 +151,7 @@ outputHits(tabFh, mapper);
 
 if (gLoad)
     {
-    safef(query, sizeof(query), createString, table);
+    sqlSafef(query, sizeof(query), createString, table);
     if (gAppend)
         sqlMaybeMakeTable(conn, table, query);
     else

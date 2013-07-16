@@ -123,56 +123,15 @@ void variomeSaveToDb(struct sqlConnection *conn, struct variome *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use variomeSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->db,  el->owner,  el->color,  el->class,  el->creationDate,  el->lastModifiedDate,  el->descriptionKey,  el->id,  el->geneSymbol);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void variomeSaveToDbEscaped(struct sqlConnection *conn, struct variome *el, char *tableName, int updateSize)
-/* Save variome as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than variomeSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *db, *owner, *color, *class, *creationDate, *lastModifiedDate, *descriptionKey, *geneSymbol;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-db = sqlEscapeString(el->db);
-owner = sqlEscapeString(el->owner);
-color = sqlEscapeString(el->color);
-class = sqlEscapeString(el->class);
-creationDate = sqlEscapeString(el->creationDate);
-lastModifiedDate = sqlEscapeString(el->lastModifiedDate);
-descriptionKey = sqlEscapeString(el->descriptionKey);
-geneSymbol = sqlEscapeString(el->geneSymbol);
-
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s')", 
-	tableName,  el->bin,  chrom,  el->chromStart,  el->chromEnd,  name,  el->score,  strand,  db,  owner,  color,  class,  creationDate,  lastModifiedDate,  descriptionKey,  el->id,  geneSymbol);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&db);
-freez(&owner);
-freez(&color);
-freez(&class);
-freez(&creationDate);
-freez(&lastModifiedDate);
-freez(&descriptionKey);
-freez(&geneSymbol);
-}
 
 struct variome *variomeCommaIn(char **pS, struct variome *ret)
 /* Create a variome out of a comma separated string. 
@@ -328,7 +287,7 @@ struct variome *item;
 char query[256];
 struct sqlConnection *conn = wikiConnect();
 
-safef(query, ArraySize(query), "SELECT * FROM variome WHERE id='%s' limit 1",
+sqlSafef(query, ArraySize(query), "SELECT * FROM variome WHERE id='%s' limit 1",
         wikiItemId);
 
 item = variomeLoadByQuery(conn, query);
@@ -371,7 +330,7 @@ newItem->descriptionKey = cloneString("0");
 newItem->id = 0;
 newItem->geneSymbol = cloneString(geneSymbol);
 
-variomeSaveToDbEscaped(conn, newItem, "variome", 1024);
+variomeSaveToDb(conn, newItem, "variome", 1024);
 
 int id = sqlLastAutoId(conn);
 char descriptionKey[256];
@@ -387,7 +346,7 @@ else
 variomeFree(&newItem);
 
 char query[1024];
-safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s' WHERE id='%d'",
+sqlSafef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s' WHERE id='%d'",
     "variome", descriptionKey, id);
 
 sqlUpdate(conn,query);
@@ -401,7 +360,7 @@ void updateVariomeLastModifiedDate(char *db, int id)
 char query[512];
 struct sqlConnection *conn = wikiConnect();
 
-safef(query, ArraySize(query),
+sqlSafef(query, ArraySize(query),
     "UPDATE %s set lastModifiedDate=now() WHERE id='%d'",
         "variome", id);
 sqlUpdate(conn,query);
@@ -413,7 +372,7 @@ void deleteVariomeItem(char *db, int id)
 {
 char query[512];
 struct sqlConnection *conn = wikiConnect();
-safef(query, ArraySize(query), "DELETE FROM %s WHERE id='%d'",
+sqlSafef(query, ArraySize(query), "DELETE FROM %s WHERE id='%d'",
         "variome", id);
 sqlUpdate(conn,query);
 wikiDisconnect(&conn);

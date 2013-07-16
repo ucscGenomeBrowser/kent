@@ -170,11 +170,11 @@ struct sqlResult *sr = NULL;
 char **row;
 
 if (onlyChrom != NULL)
-    safef(query, sizeof query, 
+    sqlSafef(query, sizeof query, 
 	"select distinct(name) from %s where src='%s' and chrom='%s'\n",
 	frameTable, org, onlyChrom);
 else
-    safef(query, sizeof query, 
+    sqlSafef(query, sizeof query, 
 	"select distinct(name) from %s where src='%s'\n",
 	frameTable, org);
 
@@ -204,7 +204,7 @@ char query[1024];
 struct sqlResult *sr = NULL;
 char **row;
 
-safef(query, sizeof query, 
+sqlSafef(query, sizeof query, 
 	"select * from %s where src='%s' and name='%s' \n",
 	frameTable, org, geneName);
 
@@ -328,7 +328,7 @@ char query[1024];
 struct sqlResult *sr = NULL;
 char **row;
 
-safef(query, sizeof query, 
+sqlSafef(query, sizeof query, 
     "select geneSymbol from kgXref where kgID='%s'\n", ucName);
 sr = sqlGetResult(conn, query);
 

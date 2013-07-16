@@ -170,7 +170,7 @@ hPrintf("<BR><font size=4><B>Protein: ");
 hPrintf("%s</B>", proteinID);
 
 /* Please note the hiv database name is hard wired here.*/
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 "select subjId from hivVax003Vax004.gsIdXref where aaSeqId = '%s'", proteinID);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -461,13 +461,13 @@ else
     if (proteinInSupportedGenome)
         {
         spConn = sqlConnect(database);
-        safef(cond_str, sizeof(cond_str), "alias='%s'", queryID);
+        sqlSafefFrag(cond_str, sizeof cond_str, "alias='%s'", queryID);
         proteinID = sqlGetField(database, "kgSpAlias", "spID", cond_str);
     	
-        safef(cond_str, sizeof(cond_str), "spID='%s'", proteinID);
+        sqlSafefFrag(cond_str, sizeof cond_str, "spID='%s'", proteinID);
         answer = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
     	
-	safef(cond_str, sizeof(cond_str), "proteinID='%s'", answer);
+	sqlSafefFrag(cond_str, sizeof cond_str, "proteinID='%s'", answer);
     	chromStr    = sqlGetField(database, "knownGene", "chrom", cond_str);
 	if (chromStr)
 	    {
@@ -509,17 +509,17 @@ else
 
 /* check proteinID to see if it is a valid SWISS-PROT/TrEMBL accession or display ID */
 /* then assign the accession number to global variable proteinID */
-safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+sqlSafefFrag(cond_str, sizeof cond_str, "accession='%s'", proteinID);
 proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
 if (proteinAC == NULL)
     {
-    safef(cond_str, sizeof(cond_str), "displayID='%s'", proteinID);
+    sqlSafefFrag(cond_str, sizeof cond_str, "displayID='%s'", proteinID);
     proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
 	if (hIsGsidServer())
 	    {
-    	    safef(cond_str, sizeof(cond_str), "acc='%s'", proteinID);
+    	    sqlSafefFrag(cond_str, sizeof cond_str, "acc='%s'", proteinID);
     	    proteinAC = sqlGetField(protDbName, "uniProtAlias", "acc", cond_str);
 	    if (proteinAC != NULL)	
 		{
@@ -546,7 +546,7 @@ if (proteinAC == NULL)
     }
 else
     {
-    safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    sqlSafefFrag(cond_str, sizeof cond_str, "accession='%s'", proteinID);
     protDisplayID = sqlGetField(protDbName, "spXref3", "displayID", cond_str);
     }
     
@@ -554,12 +554,12 @@ if (proteinInSupportedGenome)
     {
     if (kgVersion == KG_III)
     	{
-    	safef(cond_str, sizeof(cond_str), "spId='%s'", proteinID);
+    	sqlSafefFrag(cond_str, sizeof cond_str, "spId='%s'", proteinID);
     	mrnaID = sqlGetField(database, "kgXref", "kgId", cond_str);
 	}
     else
     	{
-    	safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
+    	sqlSafefFrag(cond_str, sizeof cond_str, "proteinID='%s'", protDisplayID);
     	mrnaID = sqlGetField(database, "knownGene", "name", cond_str);
     	}
     }
@@ -569,7 +569,7 @@ else
     positionStr = NULL;
     }
 
-safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+sqlSafefFrag(cond_str, sizeof cond_str, "accession='%s'", proteinID);
 description = sqlGetField(protDbName, "spXref3", "description", cond_str);
 
 if (positionStr != NULL)

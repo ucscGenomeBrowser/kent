@@ -141,7 +141,7 @@ char *ccdsNotesGetCreateSql(char *table)
 /* Get sql command to create ccdsNotes table. Result should be freed. */
 {
 char sql[1024];
-safef(sql, sizeof(sql), createSql, table);
+sqlSafef(sql, sizeof(sql), createSql, table);
 return cloneString(sql);
 }
 

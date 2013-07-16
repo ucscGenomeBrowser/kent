@@ -452,7 +452,7 @@ static boolean colAlreadyThere(struct sqlConnection *conn, char *tableName, char
 /* Check to see if there's a field in the table already */
 {
 char existsSql[128];
-safef(existsSql, sizeof(existsSql), "desc %s %s", tableName, col);
+sqlSafef(existsSql, sizeof(existsSql), "desc %s %s", tableName, col);
 return sqlExists(conn, existsSql);
 }
 
@@ -463,13 +463,13 @@ if (!colAlreadyThere(conn, tableName, "bin"))
     {
     char addBinSql[256];
     char addIndexSql[256];
-    safef(addBinSql, sizeof(addBinSql), "alter table %s add column bin smallint unsigned not null first;", tableName);
+    sqlSafef(addBinSql, sizeof(addBinSql), "alter table %s add column bin smallint unsigned not null first;", tableName);
     sqlUpdate(conn, addBinSql);
     /* add related index */
     if (colAlreadyThere(conn, tableName, "chrom"))
-	safef(addIndexSql, sizeof(addIndexSql), "create index binChrom on %s (chrom,bin)", tableName);
+	sqlSafef(addIndexSql, sizeof(addIndexSql), "create index binChrom on %s (chrom,bin)", tableName);
     else
-	safef(addIndexSql, sizeof(addIndexSql), "create index bin on %s (bin)", tableName);
+	sqlSafef(addIndexSql, sizeof(addIndexSql), "create index bin on %s (bin)", tableName);
     sqlUpdate(conn, addIndexSql);
     }
 }
@@ -499,7 +499,7 @@ if (numFields != bedSize)
 	     && (oneName != NULL); i++, oneName = oneName->next)
 	{
 	char query[256];
-	safef(query, sizeof(query), "alter table %s drop column %s", tableName, oneName->name);
+	sqlSafef(query, sizeof(query), "alter table %s drop column %s", tableName, oneName->name);
 	sqlUpdate(conn, query);
 	} 
     }
@@ -553,7 +553,9 @@ if (sqlTable != NULL && !oldTable)
             sql = replaceChars(oldSql, tableName, track);
             }
         verbose(1, "Creating table definition for %s\n", track);
-        sqlRemakeTable(conn, track, sql);
+	// add NOSQLINJ tag
+	sqlDyStringPrintf(dy, "%-s", sql);
+        sqlRemakeTable(conn, track, dy->string);
         if (!noBin) 
 	    addBinToEmptyTable(conn, track);
 	adjustSqlTableColumns(conn, track, bedSize);
@@ -575,7 +577,7 @@ else if (!oldTable)
 
     /* Create definition statement. */
     verbose(1, "Creating table definition for %s\n", track);
-    dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
+    sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");
     dyStringAppend(dy, "  chrom varchar(255) not null,\n");
@@ -648,13 +650,13 @@ if ( ! noLoad )
         char query[500];
         char buf[500];
         struct sqlResult *sr;
-        safef(query, sizeof(query), "select sum(score) from %s", track);
+        sqlSafef(query, sizeof(query), "select sum(score) from %s", track);
         if(sqlQuickQuery(conn, query, buf, sizeof(buf)))
             {
             unsigned sum = sqlUnsigned(buf);
             if (!sum)
                 {
-                safef(query, sizeof(query), "select min(%s), max(%s) from %s", fillInScoreColumn, fillInScoreColumn, track);
+                sqlSafef(query, sizeof(query), "select min(%s), max(%s) from %s", fillInScoreColumn, fillInScoreColumn, track);
                 if ((sr = sqlGetResult(conn, query)) != NULL)
                     {
                     char **row = sqlNextRow(sr);
@@ -672,7 +674,7 @@ if ( ! noLoad )
 			    float a = (1000-minScore) / (max - min);
 			    float b = 1000 - ((1000-minScore) * max) / (max - min);
 
-			    safef(query, sizeof(query), "update %s set score = round((%f * %s) + %f)",  track, a, fillInScoreColumn, b);
+			    sqlSafef(query, sizeof(query), "update %s set score = round((%f * %s) + %f)",  track, a, fillInScoreColumn, b);
 			    int changed = sqlUpdateRows(conn, query, NULL);
 			    verbose(2, "update query: %s; changed: %d\n", query, changed);
 			    }

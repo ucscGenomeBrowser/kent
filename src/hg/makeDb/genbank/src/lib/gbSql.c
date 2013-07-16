@@ -3,6 +3,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "psl.h"
+#include "pslReader.h"
 #include "dystring.h"
 #include "genbank.h"
 #include "genePred.h"
@@ -17,7 +18,7 @@ struct sqlResult* sr;
 char** row;
 
 /* Returns two columns of table name and command */
-safef(query, sizeof(query), "SHOW CREATE TABLE %s", table);
+sqlSafef(query, sizeof(query), "SHOW CREATE TABLE %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -29,7 +30,7 @@ if (row == NULL)
 createArgs = strchr(row[1], '(');
 if (createArgs == NULL)
     errAbort("don't understand returned create table command: %s", row[1]);
-safef(query, sizeof(query), "CREATE TABLE %s %s", newTable, createArgs);
+sqlSafef(query, sizeof(query), "CREATE TABLE %s %s", newTable, createArgs);
 sqlFreeResult(&sr);
 sqlUpdate(conn, query);
 }
@@ -64,7 +65,7 @@ struct slName* gbSqlListTablesLike(struct sqlConnection *conn, char *like)
 /* get list of tables matching a pattern */
 {
 char query[256];
-safef(query, sizeof(query), "show tables like '%s'", like);
+sqlSafef(query, sizeof(query), "show tables like '%s'", like);
 return sqlQuickList(conn, query);
 }
 
@@ -81,7 +82,7 @@ char query[128];
 int got;
 if (db == NULL)
     db = sqlGetDatabase(conn);
-safef(query, sizeof(query), "SELECT GET_LOCK(\"%s.%s\", 0)", db, GB_LOCK_NAME);
+sqlSafef(query, sizeof(query), "SELECT GET_LOCK(\"%s.%s\", 0)", db, GB_LOCK_NAME);
 got = sqlNeedQuickNum(conn, query);
 if (!got)
     errAbort("failed to get lock %s.%s", db, GB_LOCK_NAME);
@@ -93,7 +94,7 @@ void gbUnlockDb(struct sqlConnection *conn, char *db)
 char query[128];
 if (db == NULL)
     db = sqlGetDatabase(conn);
-safef(query, sizeof(query), "SELECT RELEASE_LOCK(\"%s.%s\")", db, GB_LOCK_NAME);
+sqlSafef(query, sizeof(query), "SELECT RELEASE_LOCK(\"%s.%s\")", db, GB_LOCK_NAME);
 sqlUpdate(conn, query);
 }
 
@@ -160,7 +161,7 @@ for (i = 0; tables[i] != NULL; i++)
     tblBldDrop(conn, tables[i], TBLBLD_OLD_TABLE);
 
 struct dyString* sql = dyStringNew(1024);
-dyStringAppend(sql, "RENAME TABLE ");
+sqlDyStringAppend(sql, "RENAME TABLE ");
 for (i = 0; tables[i] != NULL; i++)
     {
     if (i > 0)
@@ -217,7 +218,7 @@ FILE *tabFh = mustOpen(tabFile, "w");
  * of "n/a" */
 char *pslCols = "matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts";
 char query[512];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "SELECT cds.name,%s "
       "FROM cds,%s,gbCdnaInfo WHERE (%s.qName = gbCdnaInfo.acc) AND (gbCdnaInfo.cds = cds.id)",
       pslCols, pslTbl, pslTbl);

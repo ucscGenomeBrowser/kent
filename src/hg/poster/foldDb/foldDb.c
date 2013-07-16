@@ -331,7 +331,7 @@ boolean inCen = FALSE, lastInCen = FALSE;
 boolean cenStart = BIGNUM, cenEnd = -BIGNUM;
 
 printf("  getting heterochromatin\n");
-sprintf(query, "select * from cytoBand where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select * from cytoBand where chrom = '%s'", chrom);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -486,7 +486,7 @@ printf("  finding known genes for %s, chrom\n");
 
 
 /* Get list of known genes. */
-sprintf(query, "select * from genieKnown where chrom = '%s' order by cdsStart", chrom);
+sqlSafef(query, sizeof query, "select * from genieKnown where chrom = '%s' order by cdsStart", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -502,7 +502,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     {
     keepGene = FALSE;
     isDisease = FALSE;
-    sprintf(query, "select * from knownMore where transId = '%s'", gp->name);
+    sqlSafef(query, sizeof query, "select * from knownMore where transId = '%s'", gp->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -631,7 +631,7 @@ char query[256];
 struct genePred *gp;
 
 printf("  Getting %s predicted genes\n", table);
-sprintf(query, "select * from %s where chrom = '%s' order by cdsStart", table, chrom);
+sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' order by cdsStart", table, chrom);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -652,7 +652,7 @@ char **row;
 char query[256];
 struct cpgIsland el;
 
-sprintf(query, "select * from cpgIsland where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select * from cpgIsland where chrom = '%s'", chrom);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -672,7 +672,7 @@ char **row;
 char query[256];
 struct exoFish el;
 
-sprintf(query, "select * from exoFish where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select * from exoFish where chrom = '%s'", chrom);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -694,7 +694,7 @@ char query[256];
 struct rnaGene el;
 int r,g,b;
 
-sprintf(query, "select * from rnaGene where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select * from rnaGene where chrom = '%s'", chrom);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -726,7 +726,7 @@ char **row;
 char query[256];
 struct wabAli el;
 
-sprintf(query, "select * from waba_tet where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select * from waba_tet where chrom = '%s'", chrom);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -747,7 +747,7 @@ char **row;
 char query[256];
 struct est3 *el;
 
-sprintf(query, "select * from %s where chrom = '%s'", "est3", chrom);
+sqlSafef(query, sizeof query, "select * from %s where chrom = '%s'", "est3", chrom);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -770,7 +770,7 @@ struct psl *psl;
 int lastEnd = -BIGNUM;
 int sepDistance = 20000;
 
-sprintf(query, "select * from %s_intronEst", chrom);
+sqlSafef(query, sizeof query, "select * from %s_intronEst", chrom);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -803,7 +803,7 @@ char query[256];
 struct gcPercent *el;
 
 printf("  getting GC wiggle\n");
-sprintf(query, "select * from %s where chrom = '%s'", "gcPercent", chrom);
+sqlSafef(query, sizeof query, "select * from %s where chrom = '%s'", "gcPercent", chrom);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -888,7 +888,7 @@ fflush(stdout);
 
 /* Count up repeats in each window. */
 AllocArray(winRepBases, winsPerChrom);
-sprintf(query, "select * from %s_rmsk where repClass = '%s'", chrom, repClass);
+sqlSafef(query, sizeof query, "select * from %s_rmsk where repClass = '%s'", chrom, repClass);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -898,7 +898,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 /* Count up bases in each window. */
 AllocArray(winBases, winsPerChrom);
-sprintf(query, "select * from %s_gold", chrom);
+sqlSafef(query, sizeof query, "select * from %s_gold", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -967,7 +967,7 @@ char **row;
 int coverage;
 char stage;
 
-sprintf(query, "select * from clonePos");
+sqlSafef(query, sizeof query, "select * from clonePos");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1102,7 +1102,7 @@ int winSize = 1024*1024*64;
 
 printf("  getting coverage\n");
 initDraftCols();
-sprintf(query, "select * from %s_gl", chrom);
+sqlSafef(query, sizeof query, "select * from %s_gl", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1156,7 +1156,7 @@ struct agpGap gap;
 int baseTotal = chromEnd - chromStart;
 int nCount = 0, s, e, size;
 
-sprintf(query, "select * from %s_gap where chromStart < %d and chromEnd > %d",
+sqlSafef(query, sizeof query, "select * from %s_gap where chromStart < %d and chromEnd > %d",
 	chrom, chromEnd, chromStart);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1179,7 +1179,7 @@ int countSnps(struct sqlConnection *conn,
 {
 char query[256];
 
-sprintf(query, 
+sqlSafef(query, sizeof query, 
     "select count(*) from snpTsc where chrom = '%s' and chromStart < %d and chromEnd > %d",
     chrom, chromEnd, chromStart);
 return sqlQuickNum(conn, query);
@@ -1245,7 +1245,7 @@ fflush(stdout);
 
 /* Count up SNPs in each window. */
 AllocArray(winRepBases, winsPerChrom);
-sprintf(query, "select * from snpTsc where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select * from snpTsc where chrom = '%s'", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1256,7 +1256,7 @@ sqlFreeResult(&sr);
 
 /* Count up bases in each window. */
 AllocArray(winBases, winsPerChrom);
-sprintf(query, "select * from %s_gold", chrom);
+sqlSafef(query, sizeof query, "select * from %s_gold", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1299,7 +1299,7 @@ int r,g,b;
 char *stain;
 
 printf("  getting bands\n");
-sprintf(query, "select * from cytoBand where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select * from cytoBand where chrom = '%s'", chrom);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1380,7 +1380,7 @@ char query[256];
 char geneName[256];
 
 printf("Looking for duplicated HUGO genes:\n");
-sr = sqlGetResult(conn, "select name from genieKnown");
+sr = sqlGetResult(conn, "NOSQLINJ select name from genieKnown");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     txId = newSlName(row[0]);
@@ -1391,7 +1391,7 @@ sqlFreeResult(&sr);
 
 for (txId = txIdList; txId != NULL; txId = txId->next)
     {
-    sprintf(query, "select name from knownMore where transId = '%s'",
+    sqlSafef(query, sizeof query, "select name from knownMore where transId = '%s'",
 		   txId->name);
     if (sqlQuickQuery(conn, query, geneName, sizeof(geneName)))
 	{

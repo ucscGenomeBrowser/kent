@@ -1758,7 +1758,7 @@ struct liftOverChain *liftOverChainList()
 struct sqlConnection *conn = hConnectCentral();
 struct liftOverChain *list = NULL;
 
-list = liftOverChainLoadByQuery(conn, "select * from liftOverChain");
+list = liftOverChainLoadByQuery(conn, "NOSQLINJ select * from liftOverChain");
 hDisconnectCentral(&conn);
 return list;
 }
@@ -1807,10 +1807,10 @@ struct sqlConnection *conn = hConnectCentral();
 struct liftOverChain *list = NULL;
 char query[512];
 if (isNotEmpty(fromDb))
-    safef(query, sizeof(query), "select * from liftOverChain where fromDb='%s'",
+    sqlSafef(query, sizeof(query), "select * from liftOverChain where fromDb='%s'",
 	  fromDb);
 else
-    safecpy(query, sizeof(query), "select * from liftOverChain");
+    safecpy(query, sizeof(query), "NOSQLINJ select * from liftOverChain");
 list = liftOverChainLoadByQuery(conn, query);
 hDisconnectCentral(&conn);
 return list;
@@ -1826,7 +1826,7 @@ char *path = NULL;
 
 if (conn)
     {
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
             "select * from liftOverChain where fromDb='%s' and toDb='%s'",
                         fromDb, toDb);
     chain = liftOverChainLoadByQuery(conn, query);

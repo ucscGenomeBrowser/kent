@@ -138,7 +138,7 @@ static void processProtSeq(FILE *fh, struct sqlConnection *conn, struct refSeqVe
 /* get an protein sequence, which already includes version in name. Don't duplicate NPs */
 {
 char query[128];
-safef(query, sizeof(query), "SELECT protAcc FROM refLink WHERE mrnaAcc = \"%s\"", rsvi->acc);
+sqlSafef(query, sizeof(query), "SELECT protAcc FROM refLink WHERE mrnaAcc = \"%s\"", rsvi->acc);
 char *protAcc = sqlNeedQuickString(conn, query);
 if (isNotEmpty(protAcc) && hashLookup(doneProts, protAcc) == NULL)
     {
@@ -183,7 +183,7 @@ static char *getCds(struct sqlConnection *conn, char *acc)
 /* get CDS for an NM, results should be freed */
 {
 char query[128];
-safef(query, sizeof(query), "SELECT cds.name FROM gbCdnaInfo,cds WHERE (gbCdnaInfo.acc = \"%s\") AND (gbCdnaInfo.cds = cds.id)", acc);
+sqlSafef(query, sizeof(query), "SELECT cds.name FROM gbCdnaInfo,cds WHERE (gbCdnaInfo.acc = \"%s\") AND (gbCdnaInfo.cds = cds.id)", acc);
 return sqlNeedQuickString(conn, query);
 }
 
@@ -192,7 +192,7 @@ static void processMetaData(FILE *fh, struct sqlConnection *conn, struct sqlConn
 {
 boolean isCoding = genbankIsRefSeqCodingMRnaAcc(rsvi->acc);
 char query[256];
-safef(query, sizeof(query), "SELECT rl.name,rl.product,rl.protAcc,rl.locusLinkId,rs.status FROM refLink rl, refSeqStatus rs WHERE (rl.mrnaAcc = \"%s\") and (rs.mrnaAcc = rl.mrnaAcc)", rsvi->acc);
+sqlSafef(query, sizeof(query), "SELECT rl.name,rl.product,rl.protAcc,rl.locusLinkId,rs.status FROM refLink rl, refSeqStatus rs WHERE (rl.mrnaAcc = \"%s\") and (rs.mrnaAcc = rl.mrnaAcc)", rsvi->acc);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 if (row == NULL)

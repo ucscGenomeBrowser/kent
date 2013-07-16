@@ -1683,7 +1683,7 @@ static void wigDbGetLimits(struct sqlConnection *conn, char *tableName,
 /* Figure out upper/lower limits of wiggle table. */
 {
 char query[512];
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
  "select min(lowerLimit),max(lowerLimit+dataRange) from %s",
     tableName);
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -1694,7 +1694,7 @@ if ((row = sqlNextRow(sr)) != NULL);
     if (row[1]) *retUpperLimit = sqlDouble(row[1]);
     }
 sqlFreeResult(&sr);
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
      "select span from %s group by span", tableName);
 int span = sqlQuickNum(conn, query);
 if (span == 0)
@@ -2300,13 +2300,13 @@ char *tableFormat =
 "    INDEX(chrom(16),bin)\n"
 ")";
 struct dyString *createSql = dyStringNew(0);
-dyStringPrintf(createSql, tableFormat, tableName);
+sqlDyStringPrintf(createSql, tableFormat, tableName);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 if (sqlMaybeMakeTable(conn, tableName, createSql->string))
     {
     struct makeItemsItem *item;
     for (item = list; item != NULL; item = item->next)
-	makeItemsItemSaveToDbEscaped(conn, item, tableName, 1000+strlen(item->description));
+	makeItemsItemSaveToDb(conn, item, tableName, 1000+strlen(item->description));
     }
 dyStringFree(&createSql);
 hFreeConn(&conn);

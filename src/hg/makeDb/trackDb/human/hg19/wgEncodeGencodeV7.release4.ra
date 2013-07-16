@@ -1,0 +1,223 @@
+##
+# WARNING: 
+#  - Must update hgTracks/simpleTracks.c to add calls to
+#    registerTrackHandlerOnFamily for new gencode versions.
+#  - Must ensure attrs.transcriptType matches current transcriptTypes.
+##
+track wgEncodeGencodeV7
+compositeTrack on
+superTrack wgEncodeGencodeSuper hide
+shortLabel GENCODE Genes V7
+longLabel Gene Annotations from ENCODE/GENCODE Version 7
+group genes
+dragAndDrop subTracks
+priority 34.197
+visibility hide
+ensemblTranscriptIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
+ensemblGeneIdUrl http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s
+vegaTranscriptIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Transcript/Summary?db=core;t=%s
+vegaGeneIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Gene/Summary?db=core;g=%s
+yalePseudoUrl http://tables.pseudogene.org/%s
+subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
+subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
+allButtonPair on
+sortOrder name=+ view=+
+fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
+type genePred 
+configurable off
+wgEncode 1
+wgEncodeGencodeVersion 7
+wgEncodeGencodeAttrs wgEncodeGencodeAttrsV7
+wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV7
+wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV7
+wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV7
+wgEncodeGencodePdb wgEncodeGencodePdbV7
+wgEncodeGencodePubMed wgEncodeGencodePubMedV7
+wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqV7
+wgEncodeGencodeTag wgEncodeGencodeTagV7
+wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV7
+wgEncodeGencodeUniProt wgEncodeGencodeUniProtV7
+wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV7
+
+    track wgEncodeGencodeV7ViewGenes
+    shortLabel Genes
+    view aGenes
+    configurable on
+    visibility full
+    subTrack wgEncodeGencodeV7
+    type genePred
+    itemClassTbl wgEncodeGencodeAttrsV7
+    itemClassNameColumn transcriptId
+    itemClassClassColumn transcriptClass
+    cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    geneClasses coding nonCoding pseudo problem
+    gClass_coding 12,12,120
+    gClass_nonCoding 0,153,0
+    gClass_pseudo 255,51,255
+    gClass_problem 254,0,0
+    highlightColor 255,255,0
+    # filterBy notes:
+    #  - attrs is an alias for the current wgEncodeGencodeAttrs in the sql
+    #  - transcriptMethod is a pseudo-column name, which is handled explictly in the code
+    #  - attrs.transcriptType must be updated as biotypes change.  This will get the current list of values:
+    #    hgsql -Ne 'select distinct(transcriptType) from wgEncodeGencodeAttrsV?? order by transcriptType' hg19 | tr '\n' ','
+    #  - supportLevel is a pseudo-column name handled in the code
+    filterBy attrs.transcriptClass:Transcript_Class=coding,nonCoding,pseudo,problem \
+             transcriptMethod:Transcript_Annotation_Method=manual,automatic,manual_only,automatic_only \
+             attrs.transcriptType:Transcript_Biotype=ambiguous_orf,antisense,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,ncrna_host,nonsense_mediated_decay,non_coding,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNA_pseudogene,TR_C_gene,TR_J_gene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene
+    highlightBy attrs.transcriptType:Transcript_Biotype=ambiguous_orf,antisense,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,ncrna_host,nonsense_mediated_decay,non_coding,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNA_pseudogene,TR_C_gene,TR_J_gene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene
+    
+        track wgEncodeGencodeBasicV7
+        subTrack wgEncodeGencodeV7ViewGenes on
+        shortLabel Basic
+        subGroups view=aGenes name=Basic
+        longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version 7
+        type genePred
+        priority 1
+    
+        track wgEncodeGencodeCompV7
+        subTrack wgEncodeGencodeV7ViewGenes off
+        subGroups view=aGenes name=Comprehensive
+        shortLabel Comprehensive
+        longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE Version 7 
+        type genePred
+        priority 2
+    
+        track wgEncodeGencodePseudoGeneV7
+        subTrack wgEncodeGencodeV7ViewGenes off
+        subGroups view=aGenes name=Pseudogenes 
+        shortLabel Pseudogenes
+        longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version 7
+        type genePred
+        color 255,51,255
+        priority 3
+    
+    track wgEncodeGencodeV7View2Way 
+    shortLabel 2-Way
+    view 42-Way 
+    visibility hide
+    subTrack wgEncodeGencodeV7
+    type genePred
+    configurable off
+
+        track wgEncodeGencode2wayConsPseudoV7
+        subTrack wgEncodeGencodeV7View2Way off
+        subGroups view=b2-way name=yTwo-way
+        shortLabel 2-way Pseudogenes
+        longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE Version 7
+        type genePred
+        color 255,51,255
+        priority 4
+    
+    track wgEncodeGencodeV7ViewPolya
+    shortLabel PolyA
+    view cPolya
+    visibility hide
+    subTrack wgEncodeGencodeV7
+    type genePred
+    configurable off
+
+        track wgEncodeGencodePolyaV7
+        subTrack wgEncodeGencodeV7ViewPolya off
+        subGroups view=cPolya name=zPolyA
+        shortLabel PolyA
+        longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE Version 7
+        type genePred
+        color 0,0,0
+        priority 5
+    
+# searchs for basic
+searchName wgEncodeGencodeBasicV7
+searchTable wgEncodeGencodeBasicV7
+searchMethod prefix
+searchType genePred
+termRegex ENST[0-9.]+
+searchPriority 2.29801
+
+searchName wgEncodeGencodeBasicGeneSymV7
+searchTable wgEncodeGencodeBasicV7
+searchMethod exact
+searchType genePred
+searchPriority 2.29802
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeBasicGeneV7
+searchTable wgEncodeGencodeBasicV7
+searchMethod prefix
+searchType genePred
+termRegex ENSG[0-9.]+
+searchPriority 2.29803
+xrefTable wgEncodeGencodeAttrsV7
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodeBasicHavanaTranscriptV7
+searchTable wgEncodeGencodeBasicV7
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMT[0-9.]+
+searchPriority 2.29804
+xrefTable wgEncodeGencodeAttrsV7
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodeBasicHavanaGeneV7
+searchTable wgEncodeGencodeBasicV7
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMG[0-9.]+
+searchPriority 2.29805
+xrefTable wgEncodeGencodeAttrsV7
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searchs for comp
+searchName wgEncodeGencodeCompV7
+searchTable wgEncodeGencodeCompV7
+searchMethod prefix
+searchType genePred
+termRegex ENST[0-9.]+
+searchPriority 2.29806
+
+searchName wgEncodeGencodeCompGeneSymV7
+searchTable wgEncodeGencodeCompV7
+searchMethod exact
+searchType genePred
+searchPriority 2.29807
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeCompGeneV7
+searchTable wgEncodeGencodeCompV7
+searchMethod prefix
+searchType genePred
+termRegex ENSG[0-9.]+
+searchPriority 2.29808
+xrefTable wgEncodeGencodeAttrsV7
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodeCompHavanaTranscriptV7
+searchTable wgEncodeGencodeCompV7
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMT[0-9.]+
+searchPriority 2.29809
+xrefTable wgEncodeGencodeAttrsV7
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodeCompHavanaGeneV7
+searchTable wgEncodeGencodeCompV7
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMG[0-9.]+
+searchPriority 2.29810
+xrefTable wgEncodeGencodeAttrsV7
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searchs for 2-way consensus
+searchName wgEncodeGencode2wayConsPseudoV7
+searchTable wgEncodeGencode2wayConsPseudoV7
+searchMethod exact
+searchType genePred
+termRegex PGOHUM[0-9.]+
+searchPriority 2.29811
+
+

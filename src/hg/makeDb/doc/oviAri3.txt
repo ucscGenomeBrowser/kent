@@ -1,0 +1,575 @@
+# for emacs: -*- mode: sh; -*-
+
+#	DATE:	22-Aug-2012
+#	ORGANISM:	Ovis aries
+#	TAXID:	9940
+#	ASSEMBLY LONG NAME:	Oar_v3.1
+#	ASSEMBLY SHORT NAME:	Oar_v3.1
+#	ASSEMBLY SUBMITTER:	International Sheep Genome Consortium
+#	ASSEMBLY TYPE:	Haploid
+#	NUMBER OF ASSEMBLY-UNITS:	1
+#	ASSEMBLY ACCESSION:	GCA_000298735.1
+#	FTP-RELEASE DATE: 15-Oct-2012
+
+
+#	http://www.ncbi.nlm.nih.gov/assembly/457978/ ISGC Oar_v3.1
+#	http://www.ncbi.nlm.nih.gov/genome/83
+#	http://www.ncbi.nlm.nih.gov/bioproject/PRJNA179263 - RefSeq
+#	http://www.ncbi.nlm.nih.gov/assembly/GCF_000298735.1/ - RefSeq
+#	http://www.ncbi.nlm.nih.gov/bioproject/PRJNA169880
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AMGL01
+
+#	Assembly Method : SOAPdenovo v. 1.03
+#	Assembly Name   : Oar_v3.1
+#	Genome Coverage : 142x Illumina; 4x 454
+#	Sequencing Technology   : Illumina GAII; 454
+
+#	http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9940
+#	Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi; Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Mammalia; Theria; Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Caprinae; Ovis
+
+# rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Ovis_aries/Oar_v3.1/
+
+##########################################################################
+# Download sequence (DONE - 2013-02-26 - Hiram)
+    mkdir -p /hive/data/genomes/oviAri3/genbank
+    cd /hive/data/genomes/oviAri3/genbank
+
+    time rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Ovis_aries/Oar_v3.1/ ./
+
+    # verify the size of the sequence here:
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz \
+        Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+# 2619037772 bases (84718522 N's 2534319250 real 2534319250 upper 0 lower)
+#    in 5697 sequences in 28 files
+# Total size: mean 459722.3 sd 7762987.3
+#    min 1001 (gi|406379182|gb|AMGL01128047.1|)
+#    max 275612895 (gi|406684590|gb|CM001582.1|) median 2901
+
+##########################################################################
+# fixup names for UCSC standards (DONE - 2013-06-09 - Hiram)
+    mkdir /hive/data/genomes/oviAri3/ucsc
+    cd /hive/data/genomes/oviAri3/ucsc
+
+    ########################  Assembled Chromosomes
+    cat << '_EOF_' > ucscCompositeAgp.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+open (FH, "<../genbank/Primary_Assembly/assembled_chromosomes/chr2acc") or
+        die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+}
+close (FH);
+
+foreach my $acc (keys %accToChr) {
+    my $chrN =  $accToChr{$acc};
+    print "$acc $accToChr{$acc}\n";
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.comp.agp.gz|") or die "can not read chr${chrN}.comp.agp.gz";
+    open (UC, ">chr${chrN}.agp") or die "can not write to chr${chrN}.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            $line =~ s/^$acc/chr${chrN}/;
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/FASTA/chr${chrN}.fa.gz|") or die "can not read chr${chrN}.fa.gz";
+    open (UC, ">chr${chrN}.fa") or die "can not write to chr${chrN}.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            printf UC ">chr${chrN}\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+
+    # << happy emacs
+    chmod +x ucscCompositeAgp.pl
+    time ./ucscCompositeAgp.pl
+
+    ########################  Unplaced scaffolds
+    # verify we don't have any .acc numbers different from .1
+    zcat \
+    ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| cut -f1 | grep -v '^#' \
+	| sed -e 's/[A-Z0-9]*//i' | sort | uniq -c
+    #   16286 .1
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, ">chrUn.agp") or die "can not write to chrUn.agp";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\.1//;
+        printf UC "chrUn_%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, ">chrUn.fa") or die "can not write to chrUn.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\.1. .*//;
+        printf UC ">chrUn_$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+    time ./unplaced.pl
+
+    gzip chr*.agp chr*.fa
+
+    # make sure none of the names got to be over 31 characers long:
+    zcat chrUn.agp.gz | grep -v "^#" | cut -f1 | awk '{print length($1)}' | sort -rn | head -1
+    # 18
+
+    # verify nothing lost from original:
+    time faSize *.fa.gz
+    # real    0m32.541s
+
+# 2619037772 bases (84718522 N's 2534319250 real 2534319250 upper 0 lower)
+#    in 5697 sequences in 28 files
+# Total size: mean 459722.3 sd 7762987.3 min 1001 (chrUn_AMGL01128047)
+#    max 275612895 (chr1) median 2901
+
+    # make sure none of the names got to be over 31 characers long:
+    zcat *.agp.gz | grep -v "^#" | cut -f1 | awk '{print length($0)}' \
+        | sort -rn | uniq -c | head
+    #    2310 18
+    #   13976 14
+    #   99413 5
+    #  140132 4
+
+##########################################################################
+# Initial makeGenomeDb.pl (DONE - 2013-06-09 - Hiram)
+    cd /hive/data/genomes/oviAri3
+    cat << '_EOF_' > oviAri3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db oviAri3
+clade mammal
+# genomeCladePriority 31
+scientificName Ovis aries
+commonName Sheep
+assemblyDate Aug. 2012
+assemblyLabel International Sheep Genome Consortium
+assemblyShortLabel ISGC Oar_v3.1
+orderKey 2369
+mitoAcc NC_001941
+fastaFiles /hive/data/genomes/oviAri3/ucsc/chr*.fa.gz
+agpFiles /hive/data/genomes/oviAri3/ucsc/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir sheep
+photoCreditURL http://www.ars.usda.gov/is/graphics/photos/
+photoCreditName Agricultural Research Service
+ncbiGenomeId 83
+ncbiAssemblyId 457978
+ncbiAssemblyName Oar_v3.1
+ncbiBioProject 179263
+genBankAccessionID GCA_000298735.1
+taxId 9940
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and agp are OK
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -stop=agp oviAri3.config.ra > agp.log 2>&1
+    # real 2m24.183s
+
+    # verify no problem:
+    tail -1 agp.log
+    #  *** All done!  (through the 'agp' step)
+
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -continue=db oviAri3.config.ra > db.log 2>&1
+    # real    19m28.374s
+    #
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/oviAri3.unmasked.2bit /gbdb/oviAri3/oviAri3.2bit
+
+#########################################################################
+# running repeat masker (DONE - 2013-06-09 - Hiram)
+    mkdir /hive/data/genomes/oviAri3/bed/repeatMasker
+    cd /hive/data/genomes/oviAri3/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek oviAri3 > do.log 2>&1 &
+    # real    566m7.955s
+
+    cat faSize.rmsk.txt
+    # 2619054388 bases (84718522 N's 2534335866 real 1389945274 upper
+    #  1144390592 lower) in 5698 sequences in 1 files
+    # Total size: mean 459644.5 sd 7762308.2 min 1001 (chrUn_AMGL01128047)
+    #  max 275612895 (chr1) median 2902
+    # %43.69 masked total, %45.16 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.2
+    #    April 29 2013 (open-4-0-2) version of RepeatMasker
+    # CC   RELEASE 20130422;
+
+    time featureBits -countGaps oviAri3 rmsk
+    # 1154400674 bases of 2619054388 (44.077%) in intersection
+    # real    0m32.325s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2013-06-05 - Hiram)
+    mkdir /hive/data/genomes/oviAri3/bed/simpleRepeat
+    cd /hive/data/genomes/oviAri3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	oviAri3 > do.log 2>&1 &
+    # real    11m50.561s
+
+    cat fb.simpleRepeat
+    #   42019675 bases of 2534344180 (1.658%) in intersection
+
+    # add to rmsk after it is done since RM is better masking that WM:
+    cd /hive/data/genomes/oviAri3
+    twoBitMask oviAri3.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed oviAri3.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa oviAri3.2bit stdout | faSize stdin > faSize.oviAri3.2bit.txt
+    cat faSize.oviAri3.2bit.txt
+    # 2619054388 bases (84718522 N's 2534335866 real 1389211740 upper
+    #   1145124126 lower) in 5698 sequences in 1 files
+    # Total size: mean 459644.5 sd 7762308.2 min 1001 (chrUn_AMGL01128047)
+    #   max 275612895 (chr1) median 2902
+    # %43.72 masked total, %45.18 masked real
+
+    rm /gbdb/oviAri3/oviAri3.2bit
+    ln -s `pwd`/oviAri3.2bit /gbdb/oviAri3/oviAri3.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2013-06-09 - Hiram)
+
+    mkdir /hive/data/genomes/oviAri3/bed/gap
+    cd /hive/data/genomes/oviAri3/bed/gap
+
+    time nice findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../oviAri3.unmasked.2bit > findMotif.txt 2>&1
+    #   real	0m19.891s
+
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits oviAri3 -not gap -bed=notGap.bed
+    # 2534344180 bases of 2534344180 (100.000%) in intersection
+    # real    0m12.828s
+
+    # used to do this featureBits, but it is really really slow if there
+    # are a log of contigs
+    # time featureBits oviAri3 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # 8314 bases of 2534344180 (0.000%) in intersection
+    #  real    3m33.473s
+
+    # this is much faster:
+    awk '{print $3-$2,$0}' notGap.bed | sort -rn > notGap.sizes.txt
+    # largest contiguous sequence:
+    head -1 notGap.sizes.txt | awk '{print $1}'
+    # 383429
+    # minimal coverage 1 base out of that largest sequence:
+    echo 383429 | awk '{printf "%15.10f\n", 1/(2*$1)}' | sed -e 's/ //g'
+    # 0.0000013040
+    time bedIntersect -minCoverage=0.0000013040 allGaps.bed notGap.bed \
+      test.new.gaps.bed
+    # real    0m0.724s
+    # number of bases in these new gaps:
+    awk '{print $3-$2}' test.new.gaps.bed | ave stdin | grep total
+    # total 8314.000000
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" oviAri3 | sort -n | tail -1
+    #	25768
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" oviAri3 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits -countGaps oviAri3 other.bed
+    #	8314 bases of 2619054388 (0.000%) in intersection
+    wc -l other.bed
+    #	1552
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad oviAri3 otherGap other.bed
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" oviAri3
+    #	125067
+    hgsql oviAri3 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" oviAri3
+    #	126619
+    # == 125067 + 1552
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 oviAri3 nonBridged.lift -bedFile=nonBridged.bed
+    # see example in danRer7.txt
+
+    # are there *only* bridged gaps, no need for genbank lift file
+    hgsql -N -e "select bridge from gap;" oviAri3 | sort | uniq -c
+    #   126619 yes
+
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-09 - Hiram)
+    mkdir /hive/data/genomes/oviAri3/bed/windowMasker
+    cd /hive/data/genomes/oviAri3/bed/windowMasker
+    time doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev oviAri3 > do.log 2>&1 &
+    # real    199m52.017s
+
+    # Masking statistics
+    cat faSize.oviAri3.cleanWMSdust.txt
+    # 2619054388 bases (84718522 N's 2534335866 real 1554240396 upper
+    #    980095470 lower) in 5698 sequences in 1 files
+    # Total size: mean 459644.5 sd 7762308.2 min 1001 (chrUn_AMGL01128047)
+    #    max 275612895 (chr1) median 2902
+    # %37.42 masked total, %38.67 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    time featureBits -countGaps oviAri3 rmsk windowmaskerSdust \
+        > fb.oviAri3.rmsk.windowmaskerSdust.txt 2>&1
+    cat fb.oviAri3.rmsk.windowmaskerSdust.txt
+    #   737831652 bases of 2619054388 (28.172%) in intersection
+
+########################################################################
+# cpgIslands - (DONE - 2013-06-10 - Hiram)
+    mkdir /hive/data/genomes/oviAri3/bed/cpgIslands
+    cd /hive/data/genomes/oviAri3/bed/cpgIslands
+    time doCpgIslands.pl oviAri3 > do.log 2>&1 &
+    #  real    14m42.645s
+
+    cat fb.oviAri3.cpgIslandExt.txt
+    #   19288346 bases of 2534335866 (0.761%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2013-06-10 - Hiram)
+    mkdir /hive/data/genomes/oviAri3/bed/genscan
+    cd /hive/data/genomes/oviAri3/bed/genscan
+    time doGenscan.pl oviAri3 > do.log 2>&1  &
+    #  real    115m34.625s
+
+    cat fb.oviAri3.genscan.txt
+    #   53897560 bases of 2534335866 (2.127%) in intersection
+    cat fb.oviAri3.genscanSubopt.txt
+    #   52669785 bases of 2534335866 (2.078%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-10 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2534335866 / 2897316137 \) \* 1024
+    #  ( 2534335866 / 2897316137 ) * 1024 = 895.711688
+    # round up to 900 (oviAri1 used 400)
+
+    cd /hive/data/genomes/oviAri3
+    time blat oviAri3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/oviAri3.11.ooc -repMatch=900
+    # Wrote 30413 overused 11-mers to jkStuff/oviAri3.11.ooc
+    # real    1m22.326s
+
+    #	oviAri1: Wrote 19704 overused 11-mers to jkStuff/oviAri1.11.ooc
+
+    # there are *no* non-bridged gaps, therefore, no lift file for genbank
+    hgsql -N -e "select bridge from gap;" oviAri3 | sort | uniq -c
+    #    126619 yes
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2013-06-10,19 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Ovis aries      3064    338574  795
+
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add oviAri3 just after before oviAri1
+
+# oviAri3 (Sheep)
+oviAri3.serverGenome = /hive/data/genomes/oviAri3/oviAri3.2bit
+oviAri3.clusterGenome = /hive/data/genomes/oviAri3/oviAri3.2bit
+oviAri3.ooc = /hive/data/genomes/oviAri3/jkStuff/oviAri3.11.ooc
+oviAri3.lift = no
+oviAri3.perChromTables = no
+oviAri3.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+oviAri3.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+oviAri3.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+oviAri3.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+oviAri3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+oviAri3.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+oviAri3.downloadDir = oviAri3
+oviAri3.refseq.mrna.native.load  = yes
+oviAri3.refseq.mrna.xeno.load = yes
+oviAri3.refseq.mrna.xeno.loadDesc  = yes
+oviAri3.genbank.mrna.xeno.load  = yes
+oviAri3.upstreamGeneTbl = refGene
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding oviAri3 Sheep refs #9409" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S oviAri3           # long running job managed in screen
+    cd /cluster/data/genbank
+    time ./bin/gbAlignStep -initial oviAri3 &
+    #  logFile: var/build/logs/2013.06.10-09:12:43.oviAri3.initalign.log
+    # real 127433.58
+    # user 19976.10
+    # sys 12191.65
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+
+    time ./bin/gbDbLoadStep -drop -initialLoad oviAri3 &
+    #   logFile: var/dbload/hgwdev/logs/2013.06.18-10:58:46.dbload.log
+    #   real 98m19.378s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add oviAri3 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added oviAri3. refs #9409" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
+# construct liftOver from oviAri1 to oviAri3 (DONE - 2013-06-19 - Hiram)
+    # documentation for this step is in oviAri1 - remember to do this
+
+#########################################################################
+# set default position to RHO gene displays  (TBD - 2013-06-28 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr21:52,409,568-52,414,485" where name="oviAri3";' \
+	hgcentraltest
+
+############################################################################
+XXX ready for this 
+# downloads and pushQ entry (TBD - 2013-03-08 - Hiram)
+    # after adding oviAri3 to the all.joiner file and verifying that
+    #   joinerCheck is clean (i.e. run joinerCheck w -times and -keys flags
+    #   to make sure there are no errors), can construct the downloads:
+    cd /hive/data/genomes/oviAri3
+    /usr/bin/time -p makeDownloads.pl -workhorse=hgwdev oviAri3
+    #   real 1400.59
+
+    mkdir /hive/data/genomes/oviAri3/pushQ
+    cd /hive/data/genomes/oviAri3/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl oviAri3 2> stderr.txt > oviAri3.sql
+    #  real	2m55.404s
+
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/oviAri3/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/oviAri3/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/oviAri3/bbi/quality.bw
+# WARNING: oviAri3 does not have seq
+# WARNING: oviAri3 does not have extFile
+# WARNING: oviAri3 does not have estOrientInfo
+
+    scp -p oviAri3.sql hgwbeta:/tmp/
+    ssh hgwbeta "hgsql qapushq < /tmp/oviAri3.sql"
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2013-06-26 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+ 	VALUES ("oviAri3", "blat4c", "17850", "1", "0"); \
+ 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+ 	VALUES ("oviAri3", "blat4c", "17851", "0", "1");' \
+ 	    hgcentraltest
+     #	test it with some sequence
+
+############################################################################
+# reset dbDb description to be like the previous nomLeu
+#       (DONE - 2013-03-21 - Hiram)
+    hgsql hgcentraltest -e 'update dbDb set description = "Oct. 2012 (GGSC Nleu3.0/oviAri3)"" where name = "oviAri3";' \
+          | hgsql -h genome-testdb hgcentraltest
+
+############################################################################
+# SWAP hg19/Human chain/net (DONE - 2013-06-28 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzOviAri3.2013-06-17
+    cat fb.hg19.chainOviAri3Link.txt
+    #	1356890439 bases of 2897316137 (46.833%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.hg19.swap
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+       /hive/data/genomes/hg19/bed/lastzOviAri3.2013-06-17/DEF \
+       -swap -syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+       -bigClusterHub=swarm -chainMinScore=3000 -chainLinearGap=medium \
+       > swap.log 2>&1
+    #  real    107m13.938s
+
+    cat fb.oviAri3.chainHg19Link.txt
+    #  1316305922 bases of 2534335866 (51.939%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/oviAri3/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+##############################################################################

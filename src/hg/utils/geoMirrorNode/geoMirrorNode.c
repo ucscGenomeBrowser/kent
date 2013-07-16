@@ -42,14 +42,14 @@ if(thisNodeStr == NULL)
 
 // make a lookup list for nodes so we can print out domains as well as nodes.
 
-safef(query, sizeof query, "select max(node) from gbNode");
+sqlSafef(query, sizeof query, "select max(node) from gbNode");
 numNodes = sqlQuickNum(centralConn, query);
 if(numNodes == 0)
     // This shouldn't happen, but just being really careful
     errAbort("Can't find any nodes in gbNode");
 
 nodes = needMem(sizeof(int) * numNodes);
-safef(query, sizeof query, "SELECT node, domain FROM gbNode ORDER BY CAST(node AS UNSIGNED)");
+sqlSafef(query, sizeof query, "SELECT node, domain FROM gbNode ORDER BY CAST(node AS UNSIGNED)");
 sr = sqlGetResult(centralConn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

@@ -1519,21 +1519,7 @@ printf("</div>\n"); // sourceContainerPlus (extend down a bit so sections can be
 printOutputSection(queryConfig);
 printSubmitSection();
 
-// __detectback trick from http://siphon9.net/loune/2009/07/detecting-the-back-or-refresh-button-click/
-printf("<script>\n"
-       "document.write(\"<form style='display: none'><input name='__detectback' id='__detectback' "
-       "value=''></form>\");\n"
-       "function checkPageBackOrRefresh() {\n"
-       "  if (document.getElementById('__detectback').value) {\n"
-       "    return true;\n"
-       "  } else {\n"
-       "    document.getElementById('__detectback').value = 'been here';\n"
-       "    return false;\n"
-       "  }\n"
-       "}\n"
-       "window.onload = function() { "
-       "  if (checkPageBackOrRefresh()) { window.location.replace('%s?%s'); } };\n"
-       "</script>\n", getScriptName(), cartSidUrlString(cart));
+jsReloadOnBackButton(cart);
 
 //#*** ------------------ more verbatim from mainPage.c ---------------
 /* Hidden form for jumping to custom tracks CGI. */
@@ -1862,7 +1848,7 @@ else
     else
 	safef(maybeSplitTable, sizeof(maybeSplitTable), "%s_%s", chrom, dbTable);
     struct asObject *asObj = getAutoSqlForTable(db, dataDb, maybeSplitTable, tdb);
-    streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj);
+    streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj, maxOutRows);
     }
 return streamer;
 }
@@ -1890,7 +1876,7 @@ else
     struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
     if (asObjectsMatch(primary->asObj, pgSnpAsObj()) &&
 	asObjectsMatchFirstN(streamer->asObj, genePredAsObj(), 10))
-	grator = annoGratorGpVarNew(streamer, FALSE);
+	grator = annoGratorGpVarNew(streamer);
     else
 	grator = annoGratorNew(streamer);
     }

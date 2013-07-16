@@ -329,7 +329,7 @@ struct sqlResult *sr;
 char **row;
 struct region *region, *regionList = NULL;
 
-sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(region);
@@ -381,7 +381,7 @@ struct sqlResult *sr;
 char **row;
 struct region *list = NULL, *region;
 
-sr = sqlGetResult(conn, "select chrom,chromStart,chromEnd,name from encodeRegions order by name desc");
+sr = sqlGetResult(conn, "NOSQLINJ select chrom,chromStart,chromEnd,name from encodeRegions order by name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(region);
@@ -528,7 +528,7 @@ if (isPositional)
 else
     {
     struct dyString *query = dyStringNew(0);
-    dyStringPrintf(query, "select %s from %s", fields, table);
+    sqlDyStringPrintf(query, "select %-s from %s", sqlCkIl(fields), table);
     if (extraWhere)
          {
 	 dyStringAppend(query, " where ");
@@ -714,7 +714,7 @@ if (sqlTableExists(conn, "chromInfo"))
     {
     char chromName[64];
     struct hTableInfo *hti;
-    sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
+    sqlQuickQuery(conn, "NOSQLINJ select chrom from chromInfo limit 1",
 	chromName, sizeof(chromName));
     hti = hFindTableInfo(db, chromName, table);
     if (hti != NULL)
@@ -800,7 +800,7 @@ struct sqlFieldType *ft, *list = NULL;
 char query[512];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "describe %s", table);
+sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -937,7 +937,8 @@ for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpLis
 
 /* Do some error checking for tracks with group names that are
  * not in database.  Just warn about them. */
-for (track = trackList; track != NULL; track = track->next)
+if (!trackHubDatabase(database))
+    for (track = trackList; track != NULL; track = track->next)
     {
     if (!hashLookup(groupsInDatabase, track->grp))
          warn("Track %s has group %s, which isn't in grp table",
@@ -1295,7 +1296,7 @@ showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" *
 /* If they didn't pass in a field list assume they want all fields. */
 if (fields != NULL)
     {
-    dyStringAppend(fieldSpec, fields);
+    dyStringAppend(fieldSpec, sqlCkIl(fields));
     fieldCount = countChars(fields, ',') + 1;
     }
 else
@@ -1317,7 +1318,7 @@ if (idField != NULL)
 	if (isEmpty(identifierFilter))
 	    {
 	    dyStringAppendC(fieldSpec, ',');
-	    dyStringAppend(fieldSpec, idField);
+	    dyStringAppend(fieldSpec, sqlCkId(idField));
 	    }
 	}
     }
@@ -1570,7 +1571,7 @@ void doLookupPosition(struct sqlConnection *conn)
 /* Handle lookup button press.   The work has actually
  * already been done, so just call main page. */
 {
-doMainPage(conn);
+doMainPage(conn, FALSE);
 }
 
 /* Remove any meta data variables from the cart. (Copied from above!) */
@@ -1590,19 +1591,19 @@ char *query = "";
 if (cartVarExists(cart, hgtaMetaStatus))
     {
     printf("Table status for database %s\n", database);
-    query = "SHOW TABLE STATUS";
+    query = "NOSQLINJ SHOW TABLE STATUS";
     }
 else if (cartVarExists(cart, hgtaMetaVersion))
     {
-    query = "SELECT @@VERSION";
+    query = "NOSQLINJ SELECT @@VERSION";
     }
 else if (cartVarExists(cart, hgtaMetaDatabases))
     {
-    query = "SHOW DATABASES";
+    query = "NOSQLINJ SHOW DATABASES";
     }
 else if (cartVarExists(cart, hgtaMetaTables))
     {
-    query = "SHOW TABLES";
+    query = "NOSQLINJ SHOW TABLES";
     }
 struct sqlResult *sr;
 char **row;
@@ -1781,7 +1782,7 @@ if (hIsCgbServer() || hIsGsidServer())
 else if (cartVarExists(cart, hgtaDoTest))
     doTest();
 else if (cartVarExists(cart, hgtaDoMainPage))
-    doMainPage(conn);
+    doMainPage(conn, FALSE);
 else if (cartVarExists(cart, hgtaDoSchema))
     doSchema(conn);
 else if (cartVarExists(cart, hgtaDoTopSubmit))
@@ -1889,8 +1890,9 @@ else if (cartVarExists(cart, hgtaDoClearUserRegions))
 else if (cartVarExists(cart, hgtaDoMetaData))
     doMetaData(conn);
 else	/* Default - put up initial page. */
-    doMainPage(conn);
+    doMainPage(conn, FALSE);
 cartRemovePrefix(cart, hgtaDo);
+hFreeConn(&conn);
 }
 
 char *excludeVars[] = {"Submit", "submit", NULL};
@@ -1972,15 +1974,22 @@ if (udcCacheTimeout() < timeout)
 knetUdcInstall();
 #endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
+/* Init track and group lists and figure out what page to put up. */
+initGroupsTracksTables();
 if (lookupPosition())
     {
-    /* Init track and group lists and figure out what page to put up. */
-    initGroupsTracksTables();
-
     if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
         doGetGreatOutput(dispatch);
     else
         dispatch();
+    }
+else
+    {
+    struct sqlConnection *conn = NULL;
+    if (!trackHubDatabase(database))
+	conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
+    doMainPage(conn, TRUE);
+    hFreeConn(&conn);
     }
 /* Save variables. */
 cartCheckout(&cart);

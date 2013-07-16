@@ -383,7 +383,7 @@ struct popGroup *popGroups = NULL;
 #define POP_DESC 3
 char *type = (minorPopulations ? "minor" : "major");
 char buf[256];
-safef(buf,sizeof(buf),POP_NAME_QUERY,type);
+sqlSafef(buf,sizeof(buf),POP_NAME_QUERY,type);
 
 if (he->conn == NULL)
     he->conn = hAllocConn(he->db);
@@ -447,7 +447,7 @@ if (popGroups == 0)
     { // Do not expect major vs. minor to change within a single run
     #define POP_QUERY_GROUP_SIZE  "select count(distinct %s) from " POP_TABLE
     char buf[128];
-    safef(buf,sizeof(buf),POP_QUERY_GROUP_SIZE,pop);
+    sqlSafef(buf,sizeof(buf),POP_QUERY_GROUP_SIZE,pop);
     popGroups = sqlQuickNum(he->conn, buf);
     assert(popGroups > 1);
     }
@@ -455,19 +455,19 @@ if (popGroups == 0)
 // NOTE: overkill in memory accounting instead of dyString to:
 //       1) ensure result is in he->lm, 2) use nifty strSwapStrs()
 // Build the query string, converting NA18519-a,NA18519-b... to 'NA18519-a','NA18519-b'...
-int sizeQ = strlen(POP_QUERY_BEG) + strlen(POP_QUERY_END) + strlen(haplo->subjectIds)
-          + (haplo->subjects * 3) + (strlen(pop) * 2);
+int sizeQ = strlen("NOSQLINJ ") + strlen(POP_QUERY_BEG) + strlen(POP_QUERY_END)
+          + strlen(haplo->subjectIds) + (haplo->subjects * 3) + (strlen(pop) * 2);
 
 char *popQuery = lmAlloc(he->lm,sizeQ);
 
 char *p = popQuery;
-safef(p,sizeQ,POP_QUERY_BEG,pop,pop);
+sqlSafef(p,sizeQ,POP_QUERY_BEG,pop,pop);
 p += strlen(p);
 safecpy(p,sizeQ - (p - popQuery),haplo->subjectIds);
 size_t count = strSwapStrs(p,sizeQ - (p - popQuery),",","','");
 assert(count == haplo->subjects - 1);
 p += strlen(p);
-safef(p,sizeQ - (p - popQuery),POP_QUERY_END);//,pop);
+sqlSafefFrag(p,sizeQ - (p - popQuery),POP_QUERY_END);//,pop);
 
 // Do our best to calculate memory size for results string
 int sizeR = (popGroups + 1) * 12;
@@ -921,7 +921,7 @@ char *secondId = NULL;
 if (sameString(he->geneTable,HAPLO_GENES_TABLE))
     {
     char query[256];
-    safef(query, sizeof(query), "select geneSymbol from " HAPLO_GENES_2ND_ID_TABLE
+    sqlSafef(query, sizeof(query), "select geneSymbol from " HAPLO_GENES_2ND_ID_TABLE
                                 " where kgID = '%s'",commonId);
     if (he->conn == NULL)
         he->conn = hAllocConn(he->db);
@@ -1911,12 +1911,12 @@ return title;
 static char *refVariantLink(struct cart *cart, struct haplotypeSet *hapSet,int ix)
 // returns a string URL to get to the hgc for the 1000 genomes varaint
 {
-// hgc?hgsid=4750879&c=chr9&o=136132907&t=136132908&g=tgpPhase1&i=rs8176719
+// hgc?c=chr9&o=136132907&t=136132908&g=tgpPhase1&i=rs8176719
 struct haplotype *refHap = hapSet->refHap;
 static char link[512];
 struct hapVar *refVar = refHap->variants[ix];
-safef(link,PATH_LEN,"%s?%s&c=%s&o=%u&t=%u&g=%s&i=%s",
-      hgcName(),cartSidUrlString(cart),hapSet->chrom,
+  safef(link,PATH_LEN,"%s?c=%s&o=%u&t=%u&g=%s&i=%s",
+        hgcName(),hapSet->chrom,
       refVar->origStart,refVar->origEnd,
       HAPLO_1000_GENOMES_TRACK,refVar->id);
 return link;
@@ -2010,10 +2010,16 @@ return refSeq;
 static void printWithSignificantDigits(double number, int min, int max,int digits)
 // Prints out a frequency as a percent
 {
-if (number >= max)
+if (number > max)
+    hPrintf(">%d",max);
+else if (number == max)
     hPrintf("%d",max);
-else if (number <= min)
+else if (number < min)
+    hPrintf("<%d",min);
+else if (number == min)
     hPrintf("%d",min);
+else if (number > pow(10,digits - 1) - 1) // special case when rounding close to max
+    hPrintf("%.1f", number);
 else
     {
     int places = digits;
@@ -2214,10 +2220,7 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
     // Would be nice to improve score to better highlight surprise
     hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f'>",(showScores ? "" : " hidden"),
             99999 - haplo->haploScore);
-    if (haplo->haploScore >= 1000)
-        hPrintf(">1000");
-    else //if (haplo->haploScore > 0)
-        hPrintf("%.1f",haplo->haploScore);
+    printWithSignificantDigits(haplo->haploScore, -1000, 1000,2);
     hPrintf("</TD>");
 
     if (diploid)
@@ -2235,10 +2238,8 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
                 99999 - haplo->homScore);
         if (haplo->homCount == 0 && haplo->homScore == 0)
             hPrintf("&nbsp;");
-        else if (haplo->homScore >= 1000)
-            hPrintf(">1000");
-        else //if (haplo->homScore > 0)
-            hPrintf("%.1f",haplo->homScore);
+        else
+            printWithSignificantDigits(haplo->homScore, -1000, 1000,2);
         hPrintf("</TD>");
         }
 
@@ -2312,7 +2313,8 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
             }
 
         if (varToUse != refHap->variants[varSlot])
-            hPrintf(" <A HREF='%s'>%s</A></TD>",refVariantLink(cart,hapSet,varSlot),
+            hPrintf(" <A HREF='%s' target='ucscDetail'>%s</A></TD>",
+                    refVariantLink(cart,hapSet,varSlot),
                     clipLongVals(val,5,'-')); // Note: space before should bring var to top of sort
         else
             hPrintf("%s</TD>",clipLongVals(val,5,'-'));
@@ -2983,12 +2985,12 @@ else if (setsFound > 1)
     fprintf(out, "\n");
     fprintf(out, "       Haplotypes: max:%-4d   mean:%-5.2lf  sd:%-5.2lf\n",
                                hapsNrMax, hapsNrMean,   hapsNrSD);
-    fprintf(out, "     Haplo pValue: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
+    fprintf(out, "      Haplo Score: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
                              hapScoreMax, hapScoreMean,hapScoreSD);
-    fprintf(out, "  Homo/Hap pValue: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
+    fprintf(out, "   Homo/Hap Score: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
                              homScoreMax,homScoreMean,homScoreSD);
     if (he->populationsToo)
-        fprintf(out, "    Population SD: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
+        fprintf(out, " Population Score: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
                                  popScoreMax,popScoreMean,popScoreSD);
     fprintf(out, "         Variants: max:%-4d   mean:%-5.2lf  sd:%-5.2lf\n",
                               variantMax,variantMean, variantSD);
@@ -3244,7 +3246,7 @@ else
 // Drop/recreate table if not appending
 if (!he->append)
     {
-    dyStringPrintf(dy, HAPLO_BED, he->outTableOrFile);
+    sqlDyStringPrintf(dy, HAPLO_BED, he->outTableOrFile);
     verbose(2,"%s", dy->string);
     sqlRemakeTable(he->conn, he->outTableOrFile, dy->string);
     }

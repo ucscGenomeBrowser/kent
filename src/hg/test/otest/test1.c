@@ -15,10 +15,10 @@ void dropAll()
 /* Drop all tables. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-sqlGetResult(conn, "drop table word");
-sqlGetResult(conn, "drop table lineWords");
-sqlGetResult(conn, "drop table lineSize");
-sqlGetResult(conn, "drop table commaLine");
+sqlGetResult(conn, "NOSQLINJ drop table word");
+sqlGetResult(conn, "NOSQLINJ drop table lineWords");
+sqlGetResult(conn, "NOSQLINJ drop table lineSize");
+sqlGetResult(conn, "NOSQLINJ drop table commaLine");
 sqlDisconnect(&conn);
 }
 
@@ -27,23 +27,23 @@ void createAll()
 {
 struct sqlConnection *conn = sqlConnect(database);
 sqlGetResult(conn,
-  "CREATE table word ("
+  "NOSQLINJ CREATE table word ("
    "id smallint not null primary key,"
    "word varchar(250) not null"
    ")" );
 sqlGetResult(conn,
-  "CREATE table lineSize ("
+  "NOSQLINJ CREATE table lineSize ("
    "id int(8) not null primary key,"
    "size smallint not null"
    ")" );
 sqlGetResult(conn,
-  "CREATE table lineWords ("
+  "NOSQLINJ CREATE table lineWords ("
    "line int(8) not null,"
    "word smallint not null,"
    "pos smallint not null"
    ")" );
 sqlGetResult(conn,
-  "CREATE table commaLine ("
+  "NOSQLINJ CREATE table commaLine ("
    "id int(8) not null primary key,"
    "size smallint not null,"
    "wordList blob not null"
@@ -139,17 +139,17 @@ while (lineFileNext(lf, &line, &lineSize))
 	    dyStringClear(query);
 	    if (wordBuf[0] == '\'')
 		{
-		dyStringPrintf(query,
+		sqlDyStringPrintf(query,
 		    "INSERT into word values (%d, \"'\")", wordId);
 		}
 	    else if (wordBuf[0] == '\\')
 		{
-		dyStringPrintf(query,
+		sqlDyStringPrintf(query,
 		    "INSERT into word values (%d, '\\\\')", wordId);
 		}
 	    else
 		{
-		dyStringPrintf(query,
+		sqlDyStringPrintf(query,
 		    "INSERT into word values (%d, '%s')", wordId, wordBuf);
 		}
 	    sqlGetResult(conn, query->string);
@@ -167,7 +167,7 @@ while (lineFileNext(lf, &line, &lineSize))
 
     /* Store the words in the database */
     dyStringClear(query);
-    dyStringPrintf(query,
+    sqlDyStringPrintf(query,
 	"INSERT into commaLine values (%d, %d, '", lineCount, wordCount);
     for (i=0; i<wordCount; ++i)
 	dyStringPrintf(query, "%d,", lineBuf[i]);
@@ -175,14 +175,14 @@ while (lineFileNext(lf, &line, &lineSize))
     sqlGetResult(conn, query->string);
 
     dyStringClear(query);
-    dyStringPrintf(query,
+    sqlDyStringPrintf(query,
 	"INSERT into lineSize values (%d,%d)", lineCount, wordCount);
     sqlGetResult(conn, query->string);
 
     for (i=0; i<wordCount; ++i)
 	{
 	dyStringClear(query);
-	dyStringPrintf(query,
+	sqlDyStringPrintf(query,
 	    "INSERT into lineWords values (%d,%d,%d)", lineCount, lineBuf[i], i);
 	sqlGetResult(conn, query->string);
 	}
@@ -209,7 +209,7 @@ char **row;
 wordCount = sqlTableSize(conn, "word");
 uglyf("Got %d words\n", wordCount);
 words = needMem(wordCount * sizeof(words[0]));
-sr = sqlQuery(conn, "select * from word");
+sr = sqlQuery(conn, "NOSQLINJ select * from word");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     words[i] = cloneString(row[1]);
@@ -248,7 +248,7 @@ end = clock1000();
 printf("Time to load words: %4.3f\n", 0.001*(end-start));
 start = clock1000();
 
-sr = sqlQuery(conn, "SELECT * from commaLine");
+sr = sqlQuery(conn, "NOSQLINJ SELECT * from commaLine");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int wordCount = sqlUnsigned(row[1]);
@@ -291,7 +291,7 @@ start = clock1000();
 lineCount = sqlTableSize(conn, "lineSize");
 for (i=0; i<lineCount; ++i)
     {
-    sprintf(query, "select * from lineWords where line = %d", i);
+    sqlSafef(query, sizeof query, "select * from lineWords where line = %d", i);
     sr = sqlQuery(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	fileOutput(f,words[sqlUnsigned(row[1])]);

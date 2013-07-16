@@ -6417,4 +6417,31 @@ pubBlat load
 	 rn4 rn5 > do.log 2>&1
     #	real    62m5.765s
 
+
+############################################################################
+# NUMTS TRACK (DONE 2013-06-16 - Chin)
+
+# copy and unzip
+# http://193.204.182.50/files/tracks.zip and 
+# http://193.204.182.50/files/other%20NumtS%20tracks.zip
+# to /hive/data/outside/NumtS/2012/tracks
+
+    mkdir /hive/data/genomes/rn4/bed/NumtS
+    cd /hive/data/genomes/rn4/bed/NumtS
+    cp /hive/data/outside/NumtS/2012/tracks/Rattus_Norvegicus_4/* .
+    cat Tracks_nucleare_NumtS_RN | grep -v "^track" > rn4NumtS.bed
+    cat Tracks_NumtS_assembled_RN4 | grep -v "^track" > rn4NumtSAssembled.bed
+    cat Tracks_mit_NumtS_RN | grep -v "^track" >  rn4NumtSMitochondrion.bed
+
+    # load the 3 bed files to rn4
+    hgLoadBed rn4  numtSAssembled  rn4NumtSAssembled.bed
+    hgLoadBed rn4 numtS rn4NumtS.bed
+    hgLoadBed rn4 numtSMitochondrion rn4NumtSMitochondrion.bed
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/rn4/NumtS
+    ln -s `pwd`/RatNor_NumtS_seqs.sorted.bam{,.bai} /gbdb/rn4/NumtS/
+    hgBbiDbLink rn4 bamAllNumtSSorted /gbdb/rn4/NumtS/RatNor_NumtS_seqs.sorted.bam
+    # setup trackDb for rn4
+
+
 #############################################################################

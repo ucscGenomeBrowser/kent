@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
     o1 = fopen("j.dat", "w");
 
-    sprintf(query2,"select name, proteinID, alignID from %s.knownGene;", database);
+    sqlSafef(query2, sizeof query2, "select name, proteinID, alignID from %s.knownGene;", database);
     
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
@@ -60,13 +60,13 @@ int main(int argc, char *argv[])
 
 	fprintf(o1, "%s\t%s\t%s\n", kgID, displayID, displayID);
        
-        sprintf(cond_str, "displayID = '%s'", displayID);
+        sqlSafefFrag(cond_str, sizeof cond_str, "displayID = '%s'", displayID);
         proteinAC = sqlGetField(proteinDB, "spXref3", "accession", cond_str);
         if (proteinAC != NULL)
 		{
 		fprintf(o1, "%s\t%s\t%s\n", kgID, displayID, proteinAC);
         
-		sprintf(cond_str, "acc = '%s' and extDb=1", proteinAC);
+		sqlSafefFrag(cond_str, sizeof cond_str, "acc = '%s' and extDb=1", proteinAC);
         	ncbiProtAc = sqlGetField(spDB, "extDbRef", "extAcc2", cond_str);
 		if (ncbiProtAc != NULL)
 		    {
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 		break;
 		}
  
-	sprintf(query,"select accession2 from %s.spSecondaryID where displayID='%s';", 
+	sqlSafef(query, sizeof query,"select accession2 from %s.spSecondaryID where displayID='%s';", 
 		proteinDB, displayID);
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 		}
     	sqlFreeResult(&sr);
 
-        sprintf(query,"select pdb from %s.pdbSP where sp='%s';", proteinDB, displayID);
+        sqlSafef(query, sizeof query,"select pdb from %s.pdbSP where sp='%s';", proteinDB, displayID);
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
     	while (row != NULL)

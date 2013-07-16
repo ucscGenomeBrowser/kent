@@ -95,40 +95,15 @@ void patientSaveToDb(struct sqlConnection *conn, struct patient *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use patientSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
 	tableName,  el->ispyId,  el->DataExtractDt,  el->Inst_ID);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void patientSaveToDbEscaped(struct sqlConnection *conn, struct patient *el, char *tableName, int updateSize)
-/* Save patient as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than patientSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *DataExtractDt, *Inst_ID;
-ispyId = sqlEscapeString(el->ispyId);
-DataExtractDt = sqlEscapeString(el->DataExtractDt);
-Inst_ID = sqlEscapeString(el->Inst_ID);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
-	tableName,  ispyId,  DataExtractDt,  Inst_ID);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&DataExtractDt);
-freez(&Inst_ID);
-}
 
 struct patient *patientCommaIn(char **pS, struct patient *ret)
 /* Create a patient out of a comma separated string. 
@@ -309,46 +284,15 @@ void patientInfoSaveToDb(struct sqlConnection *conn, struct patientInfo *el, cha
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use patientInfoSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s',%g,'%s','%s',%d)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s',%g,'%s','%s',%d)", 
 	tableName,  el->ispyId,  el->DataExtractDt,  el->Inst_ID,  el->AgeCat,  *(el->Age),  el->Race_id,  el->Sstat,  *(el->SurvDtD));
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void patientInfoSaveToDbEscaped(struct sqlConnection *conn, struct patientInfo *el, char *tableName, int updateSize)
-/* Save patientInfo as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than patientInfoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *DataExtractDt, *Inst_ID, *AgeCat, *Race_id, *Sstat;
-ispyId = sqlEscapeString(el->ispyId);
-DataExtractDt = sqlEscapeString(el->DataExtractDt);
-Inst_ID = sqlEscapeString(el->Inst_ID);
-AgeCat = sqlEscapeString(el->AgeCat);
-Race_id = sqlEscapeString(el->Race_id);
-Sstat = sqlEscapeString(el->Sstat);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s',%g,'%s','%s',%d)", 
-	tableName,  ispyId,  DataExtractDt,  Inst_ID,  AgeCat,  *(el->Age),  Race_id,  Sstat,  *(el->SurvDtD));
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&DataExtractDt);
-freez(&Inst_ID);
-freez(&AgeCat);
-freez(&Race_id);
-freez(&Sstat);
-}
 
 struct patientInfo *patientInfoCommaIn(char **pS, struct patientInfo *ret)
 /* Create a patientInfo out of a comma separated string. 
@@ -529,48 +473,15 @@ void chemoSaveToDb(struct sqlConnection *conn, struct chemo *el, char *tableName
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use chemoSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->Chemo,  el->ChemoCat,  el->DoseDenseAnthra,  el->DoseDenseTaxane,  el->Tam,  el->Herceptin);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void chemoSaveToDbEscaped(struct sqlConnection *conn, struct chemo *el, char *tableName, int updateSize)
-/* Save chemo as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than chemoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *Chemo, *ChemoCat, *DoseDenseAnthra, *DoseDenseTaxane, *Tam, *Herceptin;
-ispyId = sqlEscapeString(el->ispyId);
-Chemo = sqlEscapeString(el->Chemo);
-ChemoCat = sqlEscapeString(el->ChemoCat);
-DoseDenseAnthra = sqlEscapeString(el->DoseDenseAnthra);
-DoseDenseTaxane = sqlEscapeString(el->DoseDenseTaxane);
-Tam = sqlEscapeString(el->Tam);
-Herceptin = sqlEscapeString(el->Herceptin);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  ispyId,  Chemo,  ChemoCat,  DoseDenseAnthra,  DoseDenseTaxane,  Tam,  Herceptin);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&Chemo);
-freez(&ChemoCat);
-freez(&DoseDenseAnthra);
-freez(&DoseDenseTaxane);
-freez(&Tam);
-freez(&Herceptin);
-}
 
 struct chemo *chemoCommaIn(char **pS, struct chemo *ret)
 /* Create a chemo out of a comma separated string. 
@@ -793,56 +704,15 @@ void onStudySaveToDb(struct sqlConnection *conn, struct onStudy *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use onStudySaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s',%d,%d,'%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s',%d,%d,'%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->MenoStatus,  el->SentinelNodeSample,  el->SentinelNodeResult,  el->HistTypeInvOS,  el->HistologicGradeOS,  *(el->ER_TS),  *(el->PgR_TS),  el->ERpos,  el->PgRpos,  el->Her2CommunityPos,  el->Her2CommunityMethod,  el->pCR);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void onStudySaveToDbEscaped(struct sqlConnection *conn, struct onStudy *el, char *tableName, int updateSize)
-/* Save onStudy as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than onStudySaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *MenoStatus, *SentinelNodeSample, *SentinelNodeResult, *HistTypeInvOS, *HistologicGradeOS, *ERpos, *PgRpos, *Her2CommunityPos, *Her2CommunityMethod, *pCR;
-ispyId = sqlEscapeString(el->ispyId);
-MenoStatus = sqlEscapeString(el->MenoStatus);
-SentinelNodeSample = sqlEscapeString(el->SentinelNodeSample);
-SentinelNodeResult = sqlEscapeString(el->SentinelNodeResult);
-HistTypeInvOS = sqlEscapeString(el->HistTypeInvOS);
-HistologicGradeOS = sqlEscapeString(el->HistologicGradeOS);
-ERpos = sqlEscapeString(el->ERpos);
-PgRpos = sqlEscapeString(el->PgRpos);
-Her2CommunityPos = sqlEscapeString(el->Her2CommunityPos);
-Her2CommunityMethod = sqlEscapeString(el->Her2CommunityMethod);
-pCR = sqlEscapeString(el->pCR);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s',%d,%d,'%s','%s','%s','%s','%s')", 
-	tableName,  ispyId,  MenoStatus,  SentinelNodeSample,  SentinelNodeResult,  HistTypeInvOS,  HistologicGradeOS,  *(el->ER_TS),  *(el->PgR_TS),  ERpos,  PgRpos,  Her2CommunityPos,  Her2CommunityMethod,  pCR);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&MenoStatus);
-freez(&SentinelNodeSample);
-freez(&SentinelNodeResult);
-freez(&HistTypeInvOS);
-freez(&HistologicGradeOS);
-freez(&ERpos);
-freez(&PgRpos);
-freez(&Her2CommunityPos);
-freez(&Her2CommunityMethod);
-freez(&pCR);
-}
 
 struct onStudy *onStudyCommaIn(char **pS, struct onStudy *ret)
 /* Create a onStudy out of a comma separated string. 
@@ -1105,54 +975,15 @@ void postSurgerySaveToDb(struct sqlConnection *conn, struct postSurgery *el, cha
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use postSurgerySaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s',%g,'%s',%d,%d,'%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s',%g,'%s',%d,%d,'%s','%s','%s')", 
 	tableName,  el->ispyId,  el->SurgeryLumpectomy,  el->SurgeryMastectomy,  el->InitLump_FupMast,  el->Surgery,  el->DCISonly,  *(el->PTumor1Szcm_Micro),  el->HistologicTypePS,  *(el->HistologicGradePS),  *(el->NumPosNodes),  el->NodesExamined,  el->PathologyStage,  el->ReasonNoSurg);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void postSurgerySaveToDbEscaped(struct sqlConnection *conn, struct postSurgery *el, char *tableName, int updateSize)
-/* Save postSurgery as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than postSurgerySaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *SurgeryLumpectomy, *SurgeryMastectomy, *InitLump_FupMast, *Surgery, *DCISonly, *HistologicTypePS, *NodesExamined, *PathologyStage, *ReasonNoSurg;
-ispyId = sqlEscapeString(el->ispyId);
-SurgeryLumpectomy = sqlEscapeString(el->SurgeryLumpectomy);
-SurgeryMastectomy = sqlEscapeString(el->SurgeryMastectomy);
-InitLump_FupMast = sqlEscapeString(el->InitLump_FupMast);
-Surgery = sqlEscapeString(el->Surgery);
-DCISonly = sqlEscapeString(el->DCISonly);
-HistologicTypePS = sqlEscapeString(el->HistologicTypePS);
-NodesExamined = sqlEscapeString(el->NodesExamined);
-PathologyStage = sqlEscapeString(el->PathologyStage);
-ReasonNoSurg = sqlEscapeString(el->ReasonNoSurg);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s',%g,'%s',%d,%d,'%s','%s','%s')", 
-	tableName,  ispyId,  SurgeryLumpectomy,  SurgeryMastectomy,  InitLump_FupMast,  Surgery,  DCISonly,  *(el->PTumor1Szcm_Micro),  HistologicTypePS,  *(el->HistologicGradePS),  *(el->NumPosNodes),  NodesExamined,  PathologyStage,  ReasonNoSurg);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&SurgeryLumpectomy);
-freez(&SurgeryMastectomy);
-freez(&InitLump_FupMast);
-freez(&Surgery);
-freez(&DCISonly);
-freez(&HistologicTypePS);
-freez(&NodesExamined);
-freez(&PathologyStage);
-freez(&ReasonNoSurg);
-}
 
 struct postSurgery *postSurgeryCommaIn(char **pS, struct postSurgery *ret)
 /* Create a postSurgery out of a comma separated string. 
@@ -1365,52 +1196,15 @@ void followUpSaveToDb(struct sqlConnection *conn, struct followUp *el, char *tab
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use followUpSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->RtTherapy,  el->RtBreast,  el->RtBoost,  el->RtAxilla,  el->RtSNode,  el->RtIMamNode,  el->RTChestW,  el->RtOther);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void followUpSaveToDbEscaped(struct sqlConnection *conn, struct followUp *el, char *tableName, int updateSize)
-/* Save followUp as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than followUpSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *RtTherapy, *RtBreast, *RtBoost, *RtAxilla, *RtSNode, *RtIMamNode, *RTChestW, *RtOther;
-ispyId = sqlEscapeString(el->ispyId);
-RtTherapy = sqlEscapeString(el->RtTherapy);
-RtBreast = sqlEscapeString(el->RtBreast);
-RtBoost = sqlEscapeString(el->RtBoost);
-RtAxilla = sqlEscapeString(el->RtAxilla);
-RtSNode = sqlEscapeString(el->RtSNode);
-RtIMamNode = sqlEscapeString(el->RtIMamNode);
-RTChestW = sqlEscapeString(el->RTChestW);
-RtOther = sqlEscapeString(el->RtOther);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  ispyId,  RtTherapy,  RtBreast,  RtBoost,  RtAxilla,  RtSNode,  RtIMamNode,  RTChestW,  RtOther);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&RtTherapy);
-freez(&RtBreast);
-freez(&RtBoost);
-freez(&RtAxilla);
-freez(&RtSNode);
-freez(&RtIMamNode);
-freez(&RTChestW);
-freez(&RtOther);
-}
 
 struct followUp *followUpCommaIn(char **pS, struct followUp *ret)
 /* Create a followUp out of a comma separated string. 
@@ -1623,50 +1417,15 @@ void respEvalSaveToDb(struct sqlConnection *conn, struct respEval *el, char *tab
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use respEvalSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%g,%g,'%s','%s','%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%g,%g,'%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  *(el->TSizeClinical),  *(el->NSizeClinical),  el->StageTe,  el->StageNe,  el->StageMe,  el->ClinicalStage,  el->ClinRespT1_T2,  el->ClinRespT1_T3,  el->ClinRespT1_T4);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void respEvalSaveToDbEscaped(struct sqlConnection *conn, struct respEval *el, char *tableName, int updateSize)
-/* Save respEval as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than respEvalSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *StageTe, *StageNe, *StageMe, *ClinicalStage, *ClinRespT1_T2, *ClinRespT1_T3, *ClinRespT1_T4;
-ispyId = sqlEscapeString(el->ispyId);
-StageTe = sqlEscapeString(el->StageTe);
-StageNe = sqlEscapeString(el->StageNe);
-StageMe = sqlEscapeString(el->StageMe);
-ClinicalStage = sqlEscapeString(el->ClinicalStage);
-ClinRespT1_T2 = sqlEscapeString(el->ClinRespT1_T2);
-ClinRespT1_T3 = sqlEscapeString(el->ClinRespT1_T3);
-ClinRespT1_T4 = sqlEscapeString(el->ClinRespT1_T4);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%g,%g,'%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  ispyId,  *(el->TSizeClinical),  *(el->NSizeClinical),  StageTe,  StageNe,  StageMe,  ClinicalStage,  ClinRespT1_T2,  ClinRespT1_T3,  ClinRespT1_T4);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&StageTe);
-freez(&StageNe);
-freez(&StageMe);
-freez(&ClinicalStage);
-freez(&ClinRespT1_T2);
-freez(&ClinRespT1_T3);
-freez(&ClinRespT1_T4);
-}
 
 struct respEval *respEvalCommaIn(char **pS, struct respEval *ret)
 /* Create a respEval out of a comma separated string. 
@@ -1997,54 +1756,15 @@ void mrSaveToDb(struct sqlConnection *conn, struct mr *el, char *tableName, int 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use mrSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s','%s',%d,%d,%d,%d,%g,%g,%g,%g,%g,%g,'%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s','%s',%d,%d,%d,%d,%g,%g,%g,%g,%g,%g,'%s','%s')", 
 	tableName,  el->ispyId,  el->ChemoCat,  el->DoseDenseAnthra,  el->DoseDenseTaxane,  el->LES_T1,  el->LES_T2,  el->LES_T3,  el->LES_T4,  *(el->LD_T1),  *(el->LD_T2),  *(el->LD_T3),  *(el->LD_T4),  *(el->LD_T1_T2_PERCT),  *(el->LD_T1_T3_PERCT),  *(el->LD_T1_T4_PERCT),  *(el->LD_T2_T3_PERCT),  *(el->LD_T2_T4_PERCT),  *(el->LD_T3_T4_PERCT),  el->Mri_Pattern_Code,  el->Mri_Pattern_Desc);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void mrSaveToDbEscaped(struct sqlConnection *conn, struct mr *el, char *tableName, int updateSize)
-/* Save mr as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than mrSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *ChemoCat, *DoseDenseAnthra, *DoseDenseTaxane, *LES_T1, *LES_T2, *LES_T3, *LES_T4, *Mri_Pattern_Code, *Mri_Pattern_Desc;
-ispyId = sqlEscapeString(el->ispyId);
-ChemoCat = sqlEscapeString(el->ChemoCat);
-DoseDenseAnthra = sqlEscapeString(el->DoseDenseAnthra);
-DoseDenseTaxane = sqlEscapeString(el->DoseDenseTaxane);
-LES_T1 = sqlEscapeString(el->LES_T1);
-LES_T2 = sqlEscapeString(el->LES_T2);
-LES_T3 = sqlEscapeString(el->LES_T3);
-LES_T4 = sqlEscapeString(el->LES_T4);
-Mri_Pattern_Code = sqlEscapeString(el->Mri_Pattern_Code);
-Mri_Pattern_Desc = sqlEscapeString(el->Mri_Pattern_Desc);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s','%s',%d,%d,%d,%d,%g,%g,%g,%g,%g,%g,'%s','%s')", 
-	tableName,  ispyId,  ChemoCat,  DoseDenseAnthra,  DoseDenseTaxane,  LES_T1,  LES_T2,  LES_T3,  LES_T4,  *(el->LD_T1),  *(el->LD_T2),  *(el->LD_T3),  *(el->LD_T4),  *(el->LD_T1_T2_PERCT),  *(el->LD_T1_T3_PERCT),  *(el->LD_T1_T4_PERCT),  *(el->LD_T2_T3_PERCT),  *(el->LD_T2_T4_PERCT),  *(el->LD_T3_T4_PERCT),  Mri_Pattern_Code,  Mri_Pattern_Desc);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&ChemoCat);
-freez(&DoseDenseAnthra);
-freez(&DoseDenseTaxane);
-freez(&LES_T1);
-freez(&LES_T2);
-freez(&LES_T3);
-freez(&LES_T4);
-freez(&Mri_Pattern_Code);
-freez(&Mri_Pattern_Desc);
-}
 
 struct mr *mrCommaIn(char **pS, struct mr *ret)
 /* Create a mr out of a comma separated string. 
@@ -2277,44 +1997,15 @@ void cdnaSaveToDb(struct sqlConnection *conn, struct cdna *el, char *tableName, 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use cdnaSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->Cdna_T1,  el->Cdna_T2,  el->Cdna_T3,  el->Cdna_T4);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void cdnaSaveToDbEscaped(struct sqlConnection *conn, struct cdna *el, char *tableName, int updateSize)
-/* Save cdna as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than cdnaSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *Cdna_T1, *Cdna_T2, *Cdna_T3, *Cdna_T4;
-ispyId = sqlEscapeString(el->ispyId);
-Cdna_T1 = sqlEscapeString(el->Cdna_T1);
-Cdna_T2 = sqlEscapeString(el->Cdna_T2);
-Cdna_T3 = sqlEscapeString(el->Cdna_T3);
-Cdna_T4 = sqlEscapeString(el->Cdna_T4);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
-	tableName,  ispyId,  Cdna_T1,  Cdna_T2,  Cdna_T3,  Cdna_T4);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&Cdna_T1);
-freez(&Cdna_T2);
-freez(&Cdna_T3);
-freez(&Cdna_T4);
-}
 
 struct cdna *cdnaCommaIn(char **pS, struct cdna *ret)
 /* Create a cdna out of a comma separated string. 
@@ -2477,44 +2168,15 @@ void agiSaveToDb(struct sqlConnection *conn, struct agi *el, char *tableName, in
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use agiSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->Agi_T1,  el->Agi_T2,  el->Agi_T3,  el->Agi_T4);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void agiSaveToDbEscaped(struct sqlConnection *conn, struct agi *el, char *tableName, int updateSize)
-/* Save agi as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than agiSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *Agi_T1, *Agi_T2, *Agi_T3, *Agi_T4;
-ispyId = sqlEscapeString(el->ispyId);
-Agi_T1 = sqlEscapeString(el->Agi_T1);
-Agi_T2 = sqlEscapeString(el->Agi_T2);
-Agi_T3 = sqlEscapeString(el->Agi_T3);
-Agi_T4 = sqlEscapeString(el->Agi_T4);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
-	tableName,  ispyId,  Agi_T1,  Agi_T2,  Agi_T3,  Agi_T4);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&Agi_T1);
-freez(&Agi_T2);
-freez(&Agi_T3);
-freez(&Agi_T4);
-}
 
 struct agi *agiCommaIn(char **pS, struct agi *ret)
 /* Create a agi out of a comma separated string. 
@@ -2677,44 +2339,15 @@ void ihcSaveToDb(struct sqlConnection *conn, struct ihc *el, char *tableName, in
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use ihcSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->Ihc_T1,  el->Ihc_T2,  el->Ihc_T3,  el->Ihc_T4);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void ihcSaveToDbEscaped(struct sqlConnection *conn, struct ihc *el, char *tableName, int updateSize)
-/* Save ihc as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than ihcSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *Ihc_T1, *Ihc_T2, *Ihc_T3, *Ihc_T4;
-ispyId = sqlEscapeString(el->ispyId);
-Ihc_T1 = sqlEscapeString(el->Ihc_T1);
-Ihc_T2 = sqlEscapeString(el->Ihc_T2);
-Ihc_T3 = sqlEscapeString(el->Ihc_T3);
-Ihc_T4 = sqlEscapeString(el->Ihc_T4);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
-	tableName,  ispyId,  Ihc_T1,  Ihc_T2,  Ihc_T3,  Ihc_T4);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&Ihc_T1);
-freez(&Ihc_T2);
-freez(&Ihc_T3);
-freez(&Ihc_T4);
-}
 
 struct ihc *ihcCommaIn(char **pS, struct ihc *ret)
 /* Create a ihc out of a comma separated string. 
@@ -2877,44 +2510,15 @@ void fishSaveToDb(struct sqlConnection *conn, struct fish *el, char *tableName, 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use fishSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->Fish_T1,  el->Fish_T2,  el->Fish_T3,  el->Fish_T4);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void fishSaveToDbEscaped(struct sqlConnection *conn, struct fish *el, char *tableName, int updateSize)
-/* Save fish as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than fishSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *Fish_T1, *Fish_T2, *Fish_T3, *Fish_T4;
-ispyId = sqlEscapeString(el->ispyId);
-Fish_T1 = sqlEscapeString(el->Fish_T1);
-Fish_T2 = sqlEscapeString(el->Fish_T2);
-Fish_T3 = sqlEscapeString(el->Fish_T3);
-Fish_T4 = sqlEscapeString(el->Fish_T4);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
-	tableName,  ispyId,  Fish_T1,  Fish_T2,  Fish_T3,  Fish_T4);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&Fish_T1);
-freez(&Fish_T2);
-freez(&Fish_T3);
-freez(&Fish_T4);
-}
 
 struct fish *fishCommaIn(char **pS, struct fish *ret)
 /* Create a fish out of a comma separated string. 
@@ -3077,44 +2681,15 @@ void labTrackSaveToDb(struct sqlConnection *conn, struct labTrack *el, char *tab
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use labTrackSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->trackId,  el->coreType,  el->timePoint,  el->section);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void labTrackSaveToDbEscaped(struct sqlConnection *conn, struct labTrack *el, char *tableName, int updateSize)
-/* Save labTrack as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than labTrackSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *ispyId, *trackId, *coreType, *timePoint, *section;
-ispyId = sqlEscapeString(el->ispyId);
-trackId = sqlEscapeString(el->trackId);
-coreType = sqlEscapeString(el->coreType);
-timePoint = sqlEscapeString(el->timePoint);
-section = sqlEscapeString(el->section);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
-	tableName,  ispyId,  trackId,  coreType,  timePoint,  section);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&ispyId);
-freez(&trackId);
-freez(&coreType);
-freez(&timePoint);
-freez(&section);
-}
 
 struct labTrack *labTrackCommaIn(char **pS, struct labTrack *ret)
 /* Create a labTrack out of a comma separated string. 

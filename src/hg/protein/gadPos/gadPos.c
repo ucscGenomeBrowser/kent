@@ -49,12 +49,12 @@ boolean findInKnownCanonical(struct sqlConnection *conn, char *geneSymbol, FILE 
 {
 boolean found = FALSE;
 char query[1024];
-safef(query, sizeof(query), "select distinct clusterId from kgXref x, knownIsoforms i "
+sqlSafef(query, sizeof(query), "select distinct clusterId from kgXref x, knownIsoforms i "
 		    "where x.geneSymbol='%s' and i.transcript=x.kgId", geneSymbol);
 struct slName *id, *clusterIds = sqlQuickList(conn, query);
 for (id = clusterIds;  id != NULL;  id = id->next)
     {
-    safef(query, sizeof(query), "select k.chrom, min(txStart), max(txEnd) "
+    sqlSafef(query, sizeof(query), "select k.chrom, min(txStart), max(txEnd) "
 	  "from knownGene k, knownIsoforms i, knownCanonical c "
 	  "where i.clusterId=%s and i.transcript=k.name "
 	  "and c.clusterId=i.clusterId and k.chrom=c.chrom",
@@ -70,7 +70,7 @@ boolean findInRefGene(struct sqlConnection *conn, char *geneSymbol, FILE *outF)
  * refGene coords as {chrom,chromStart,chromEnd} and return TRUE. */
 {
 char query[1024];
-safef(query, sizeof(query), "select chrom, txStart, txEnd from refGene rg, refLink rl "
+sqlSafef(query, sizeof(query), "select chrom, txStart, txEnd from refGene rg, refLink rl "
       "where rl.name = '%s' and rl.mrnaAcc = rg.name", geneSymbol);
 return printBed4FromQueryAndName(conn, query, geneSymbol, outF);
 }
@@ -80,7 +80,7 @@ boolean findInKgAlias(struct sqlConnection *conn, char *geneSymbol, FILE *outF)
  * knownGene coords as {chrom,chromStart,chromEnd} and return TRUE. */
 {
 char query[1024];
-safef(query, sizeof(query), "select distinct(chrom), min(txStart), max(txEnd) "
+sqlSafef(query, sizeof(query), "select distinct(chrom), min(txStart), max(txEnd) "
       "from knownGene, kgAlias where alias='%s' and name=kgId "
       "group by chrom", geneSymbol);
 return printBed4FromQueryAndName(conn, query, geneSymbol, outF);
@@ -96,13 +96,13 @@ boolean found = FALSE;
 char query[1024];
 if (sqlTableExists(conn, PSEUDOGENE_TABLE))
     {
-    safef(query, sizeof(query), "select chrom, txStart, txEnd from %s where name2 = '%s'",
+    sqlSafef(query, sizeof(query), "select chrom, txStart, txEnd from %s where name2 = '%s'",
 	  PSEUDOGENE_TABLE, geneSymbol);
     found = printBed4FromQueryAndName(conn, query, geneSymbol, outF);
     }
 if (!found && sqlTableExists(conn, COMP_TABLE))
     {
-    safef(query, sizeof(query), "select chrom, txStart, txEnd from %s where name2 = '%s'",
+    sqlSafef(query, sizeof(query), "select chrom, txStart, txEnd from %s where name2 = '%s'",
 	  COMP_TABLE, geneSymbol);
     found = printBed4FromQueryAndName(conn, query, geneSymbol, outF);
     }
@@ -118,7 +118,7 @@ struct sqlConnection *conn = hAllocConn(db);
 
 /* loop over all gene symbols in GAD */	
 struct slName *geneSymbols = sqlQuickList(conn,
-			       "select distinct geneSymbol from gadAll where association='Y'");
+			       "NOSQLINJ select distinct geneSymbol from gadAll where association='Y'");
 struct slName *symbol;
 int kcCount = 0, rgCount = 0, kaCount = 0, gcCount = 0, missingCount = 0;
 for (symbol = geneSymbols;  symbol != NULL;  symbol = symbol->next)

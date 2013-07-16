@@ -55,7 +55,7 @@ struct dyString *dy = dyStringNew(4*1024);
 struct sqlConnection *conn = sqlConnect(database);
 if (!oldTable)
     {
-    dyStringPrintf(dy, createSql, table);
+    sqlDyStringPrintf(dy, createSql, table);
     sqlRemakeTable(conn, table, dy->string);
     dyStringClear(dy);
     }

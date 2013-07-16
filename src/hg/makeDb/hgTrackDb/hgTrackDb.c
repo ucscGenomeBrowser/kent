@@ -305,7 +305,7 @@ void updateBigTextField(struct sqlConnection *conn, char *table,
  * newlines and stuff. */
 {
 struct dyString *dy = newDyString(4096);
-dyStringPrintf(dy, "update %s set %s=", table, textField);
+sqlDyStringPrintf(dy, "update %s set %s=", table, textField);
 dyStringQuoteString(dy, '"', textVal);
 dyStringPrintf(dy, " where %s = '%s'", whereField, whereVal);
 sqlUpdate(conn, dy->string);
@@ -336,7 +336,7 @@ if(rear == NULL)
 front += 5;
 *front = '\0';
 
-safef(newCreate, length , "%s %s %s", create, tableName, rear);
+sqlSafef(newCreate, length , "%-s %s %-s", create, tableName, rear);
 return cloneString(newCreate);
 }
 
@@ -809,7 +809,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
     sqlRemakeTable(conn, trackDbName, create);
 
     /* Load in regular fields. */
-    safef(query, sizeof(query), "load data local infile '%s' into table %s", tab, trackDbName);
+    sqlSafef(query, sizeof(query), "load data local infile '%s' into table %s", tab, trackDbName);
     verbose(2, "sending mysql \"%s\"\n", query);
     sqlUpdate(conn, query);
     verbose(2, "done tab file load");

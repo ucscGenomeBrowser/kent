@@ -191,6 +191,27 @@ for (my $i = 0; $i < $scafCount; ++$i) {
     #	1138972881 lower) in 3242 sequences in 1 files
     #	%41.61 masked total, %43.74 masked real
 
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/oryCun2/bed/windowMasker
+    cd /hive/data/genomes/oryCun2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev oryCun2 > do.log 2>&1 &
+    # real     227m23.979s
+
+    # Masking statistics
+    faSize.oryCun2.cleanWMSdust.txt
+# 2737490501 bases (133467217 N's 2604023284 real 1556378311
+#    upper 1047644973 lower) in 3242 sequences in 1 files
+# Total size: mean 844383.3 sd 9428352.4 min 3025 (chrUn3219)
+#    max 194850757 (chr1) median 15631
+# %38.27 masked total, %40.23 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps oryCun2 rmsk windowmaskerSdust \
+       > fb.oryCun2.rmsk.windowmaskerSdust.txt 2>&1
+    #   781386731 bases of 2737490501 (28.544%) in intersection
+
 ########################################################################
 # create ooc file and kluster data files (DONE - 2009-08-12 - Hiram)
     # calculate rabbit/human size ratio to determine repMatch count
@@ -795,5 +816,31 @@ liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/oryCun2/bed
     ln -s blastz.mm10.swap lastz.mm10
+
+
+############################################################################
+# NUMTS TRACK (DONE 2013-06-16 - Chin)
+# copy and unzip
+# http://193.204.182.50/files/tracks.zip and 
+# http://193.204.182.50/files/other%20NumtS%20tracks.zip
+# to /hive/data/outside/NumtS/2012/tracks
+
+    mkdir /hive/data/genomes/oryCun2/bed/NumtS
+    cd /hive/data/genomes/oryCun2/bed/NumtS
+    cp /hive/data/outside/NumtS/2012/tracks/Oryctolagus_cuniculus_2/* .
+    cat tracks_numtS_nuclear_OryCun2 | grep -v "^track" > oryCun2NumtS.bed
+    cat tracks_NumtS_assembled_OryCun2 | grep -v "^track" > oryCun2NumtSAssembled.bed
+    cat tracks_mit_NumtS_OryCun2 | grep -v "^track" >  oryCun2NumtSMitochondrion.bed
+
+    # load the 3 bed files to oryCun2 
+    hgLoadBed oryCun2  numtSAssembled  oryCun2NumtSAssembled.bed
+    hgLoadBed oryCun2 numtS oryCun2NumtS.bed
+    hgLoadBed oryCun2 numtSMitochondrion oryCun2NumtSMitochondrion.bed
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/oryCun2/NumtS
+    ln -s `pwd`/Rabbit-2_NumtS_seqs.sorted.bam{,.bai} /gbdb/oryCun2/NumtS/
+    hgBbiDbLink oryCun2 bamAllNumtSSorted /gbdb/oryCun2/NumtS/Rabbit-2_seqs.sorted.bam
+    # setup trackDb for oryCun2
+
 
 ##############################################################################

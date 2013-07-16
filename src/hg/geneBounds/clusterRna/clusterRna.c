@@ -557,7 +557,7 @@ return hash;
 struct hash *hashRefSeq(struct sqlConnection *conn)
 /* Get list of all RefSeq mRNAs */
 {
-return hashRow0(conn, "select mrnaAcc from refLink");
+return hashRow0(conn, "NOSQLINJ select mrnaAcc from refLink");
 }
 
 struct hash *wildHash(struct sqlConnection *conn, char *table, char *pattern)
@@ -565,7 +565,7 @@ struct hash *wildHash(struct sqlConnection *conn, char *table, char *pattern)
  * for all members that match pattern. */
 {
 char query[256];
-sprintf(query, "select id from %s where name like '%s'", table, pattern);
+sqlSafef(query, sizeof query, "select id from %s where name like '%s'", table, pattern);
 return hashRow0(conn, query);
 }
 
@@ -763,7 +763,7 @@ struct binElement *list = binKeeperFindSorted(bins, 0, chromSize);
 
 /* Read mRNA table and split into hashes. */
 verbose(2, "Scanning mrna table\n");
-sr = sqlGetResult(conn, "select acc,type,author from mrna");
+sr = sqlGetResult(conn, "NOSQLINJ select acc,type,author from mrna");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *acc = row[0], *type = row[1], *author = row[2];

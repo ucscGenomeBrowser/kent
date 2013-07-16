@@ -19,7 +19,7 @@ errAbort(
 
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn, *conn2, *conn3, *conn4;
+struct sqlConnection *conn2;
 char condStr[500];
 
 FILE *inf;
@@ -27,20 +27,16 @@ FILE   *outf;
 
 char line[1000];
 
-struct sqlResult *sr, *sr2, *sr3, *sr4;
-char **row, **row2, **row3, **row4;
-    
-char *chrStart, *chrEnd;
+char *chrStart;
 
 char *inFileName, *outFileName;
-char contig[100], start[100], end[100], rest[255];
+char contig[100], start[100], end[100];
 char num[100], code[100], id[100], oStart[100], oEnd[100], strnd[100];
 char *database;
 
 char *oldContig;
 int  oldNum = 0;
 
-int iNum;
 int lastNum = 0;
 int lastEnd = 0;
 
@@ -62,8 +58,8 @@ while (fgets(line, 1000, inf) != NULL)
     {
     sscanf(line, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
     	   contig, start, end, num, code, id, oStart, oEnd, strnd);
-    sprintf(condStr, "ctg_acc='%s'", contig);
-    chrStart =  sqlGetField(conn2, database, "seq_contig", "chr_start", condStr);
+    sqlSafefFrag(condStr, sizeof condStr, "ctg_acc='%s'", contig);
+    chrStart =  sqlGetField(database, "seq_contig", "chr_start", condStr);
     if (!sameWord(oldContig, contig)) 
     	{
     	if (!sameWord(oldContig, ""))

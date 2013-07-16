@@ -31,13 +31,13 @@ database = argv[1];
 conn2= hAllocConn(database);
 conn3= hAllocConn(database);
 
-sprintf(query2,"select * from rgdGeneTemp");
+sqlSafef(query2, sizeof query2, "select * from rgdGeneTemp");
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
     {
     rgdId  	= row2[1];
-    sprintf(query3, "select rgdId, start, end from rgdGeneCds where rgdId='%s'", rgdId);
+    sqlSafef(query3, sizeof query3, "select rgdId, start, end from rgdGeneCds where rgdId='%s'", rgdId);
 
     sr3 = sqlMustGetResult(conn3, query3);
     row3 = sqlNextRow(sr3);

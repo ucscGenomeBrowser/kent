@@ -19,7 +19,7 @@ struct dyString *query = dyStringNew(256);
 char *sep="";
 if (!sameString(columns->name,"subjId"))
     errAbort("subjId must be the first column in columnDb.ra");
-dyStringAppend(query,"select ");
+sqlDyStringAppend(query,"select ");
 for (column=columns;column;column=column->next)
     {
     // skip non-main table columns which have "query" setting

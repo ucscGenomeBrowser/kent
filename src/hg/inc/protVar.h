@@ -55,18 +55,7 @@ void protVarSaveToDb(struct sqlConnection *conn, struct protVar *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use protVarSaveToDbEscaped() */
-
-void protVarSaveToDbEscaped(struct sqlConnection *conn, struct protVar *el, char *tableName, int updateSize);
-/* Save protVar as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than protVarSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct protVar *protVarCommaIn(char **pS, struct protVar *ret);
 /* Create a protVar out of a comma separated string. 
@@ -136,18 +125,7 @@ void protVarPosSaveToDb(struct sqlConnection *conn, struct protVarPos *el, char 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use protVarPosSaveToDbEscaped() */
-
-void protVarPosSaveToDbEscaped(struct sqlConnection *conn, struct protVarPos *el, char *tableName, int updateSize);
-/* Save protVarPos as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than protVarPosSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct protVarPos *protVarPosCommaIn(char **pS, struct protVarPos *ret);
 /* Create a protVarPos out of a comma separated string. 
@@ -213,18 +191,7 @@ void protVarAttrSaveToDb(struct sqlConnection *conn, struct protVarAttr *el, cha
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use protVarAttrSaveToDbEscaped() */
-
-void protVarAttrSaveToDbEscaped(struct sqlConnection *conn, struct protVarAttr *el, char *tableName, int updateSize);
-/* Save protVarAttr as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than protVarAttrSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct protVarAttr *protVarAttrCommaIn(char **pS, struct protVarAttr *ret);
 /* Create a protVarAttr out of a comma separated string. 
@@ -292,18 +259,7 @@ void protVarLinkSaveToDb(struct sqlConnection *conn, struct protVarLink *el, cha
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use protVarLinkSaveToDbEscaped() */
-
-void protVarLinkSaveToDbEscaped(struct sqlConnection *conn, struct protVarLink *el, char *tableName, int updateSize);
-/* Save protVarLink as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than protVarLinkSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct protVarLink *protVarLinkCommaIn(char **pS, struct protVarLink *ret);
 /* Create a protVarLink out of a comma separated string. 

@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<TITLE>UCSC Genome Browser: TwoBit Sequence Archives </TITLE>
+	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
+</HEAD>
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<A NAME="TOP"></A>
+
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
+
+<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../inc/topbar.html"--></TD></TR>
+<!--Content Tables------------------------------------------------------->
+<TR><TD COLSPAN=2 CELLPADDING=10>	
+  	<!--outer table is for border purposes-->
+  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
+    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
+		<FONT SIZE="4"><b>&nbsp; TwoBit Sequence Archives </b></FONT>
+	</TD></TR></TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+		    <P>
+A twoBit file is a highly efficient way to store genomic sequence.
+The format is defined <A href="http://genome.ucsc.edu/FAQ/FAQformat.html#format7">here</A>. To complete the steps below you 
+will need to download the <TT>faToTwoBit</TT>, <TT>twoBitInfo</TT>, and <TT>twoBitToFa</TT> utilities. For more information 
+please see this <A href="http://hgdownload.cse.ucsc.edu/downloads.html#source_downloads">help doc</a>.
+
+<P>
+To create a twoBit file, follow these steps:<BR>
+
+<OL>
+ <LI> Prepare the sequence for your twoBit file in a FASTA formatted file (i.e. genome.fa).
+ <LI> Run the <TT>faToTwoBit</TT> program on your FASTA file.<BR>
+
+<TT>faToTwoBit genome.fa genome.2bit</TT>
+
+<LI>Use <TT>twoBitInfo</TT> to verify the sequences in this assembly and create a chrom.sizes file which is useful in later processing to construct the big* files:
+<BR><TT>twoBitInfo genome.2bit stdout | sort -k2rn > genome.chrom.sizes</TT>
+</OL>
+</P>
+<BR>The twoBit commands can function with the .2bit file at a URL:
+<BR><TT>twoBitInfo -udcDir=. http://your-website.edu/~user/genome.2bit | sort -k2nr > genome.chrom.sizes</TT>
+</P>
+<BR>Sequence can be extracted from the .2bit file with the twoBitToFa command, for example:
+<BR><TT>twoBitToFa -seq=chr1 -udcDir=. http://your-website.edu/~user/genome.2bit stdout > genome.chr1.fa</TT>
+</P>
+
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+	<BR></TD></TR></TABLE>
+	</TD></TR></TABLE>
+</TD></TR></TABLE>
+</BODY></HTML>

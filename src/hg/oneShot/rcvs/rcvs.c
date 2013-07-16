@@ -36,14 +36,14 @@ int codingNonspliced = 0;
 int noncodingNonspliced = 0;
 
 /* Read id's into hash */
-sr = sqlGetResult(conn, "select id1,id2 from rikenIds");
+sr = sqlGetResult(conn, "NOSQLINJ select id1,id2 from rikenIds");
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(idHash, row[0], cloneString(row[1]));
 sqlFreeResult(&sr);
 
 /* Read spliced into hash */
 sr = sqlGetResult(conn,
-	"select name from rikenOrientInfo where intronOrientation != 0");
+	"NOSQLINJ select name from rikenOrientInfo where intronOrientation != 0");
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(splicedHash, row[0], NULL);
 sqlFreeResult(&sr);

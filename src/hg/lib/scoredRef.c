@@ -142,7 +142,7 @@ static char *createString =
 #endif /* OLD */
 ")\n";
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, createString, tableName, indexSize, indexSize, indexSize);
+sqlDyStringPrintf(dy, createString, tableName, indexSize, indexSize, indexSize);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }

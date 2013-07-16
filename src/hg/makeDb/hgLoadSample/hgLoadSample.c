@@ -152,7 +152,7 @@ else if (!oldTable)
     {
     /* Create definition statement. */
     verbose(1, "Creating table definition for \n");
-    dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
+    sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");
     dyStringAppend(dy, "  chrom varchar(255) not null,\n");
@@ -185,7 +185,7 @@ writeBedTab(tab, bedList, bedSize);
 
 verbose(1, "Loading %s\n", database);
 dyStringClear(dy);
-dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
+sqlDyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
 sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
 }

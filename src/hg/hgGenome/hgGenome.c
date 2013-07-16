@@ -30,6 +30,7 @@
 #include "hPrint.h"
 #include "jsHelper.h"
 #include "hgGenome.h"
+#include "trackHub.h"
 
 
 /* ---- Global variables. ---- */
@@ -93,7 +94,7 @@ struct slName *compositeGGList = NULL, *comp;
 
 /* Get initial information from metaChromGraph table */
 if (sqlTableExists(conn, "metaChromGraph"))
-    compositeGGList = sqlQuickList(conn, "select name from metaChromGraph where binaryFile='composite'");
+    compositeGGList = sqlQuickList(conn, "NOSQLINJ select name from metaChromGraph where binaryFile='composite'");
 
 /* Build a hash of genoGraphs out of composite trackDbs and fill in from cart. */
 for (comp = compositeGGList; comp != NULL; comp = comp->next)
@@ -130,7 +131,7 @@ char **row;
 /* Get initial information from metaChromGraph table */
 if (sqlTableExists(conn, "metaChromGraph"))
     {
-    sr = sqlGetResult(conn, "select name,binaryFile from metaChromGraph where binaryFile!='composite'");
+    sr = sqlGetResult(conn, "NOSQLINJ select name,binaryFile from metaChromGraph where binaryFile!='composite'");
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	char *table = row[0], *binaryFile = row[1];
@@ -542,6 +543,8 @@ void dispatchLocation()
 {
 struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &database, &genome, oldVars);
+if (trackHubDatabase(database))
+    errAbort("Assembly Data Hubs not supported in Genome Graphs");
 cartSetString(cart, "db", database); /* Some custom tracks code needs this */
 withLabels = cartUsualBoolean(cart, hggLabels, TRUE);
 conn = hAllocConn(database);

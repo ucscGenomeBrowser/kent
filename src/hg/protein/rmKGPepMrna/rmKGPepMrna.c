@@ -51,14 +51,14 @@ sprintf(spDbName, "sp%s",   argv[2]);
 
 conn= hAllocConn(ro_dbName);
 conn2= hAllocConn(ro_dbName);
-sprintf(query2,"select name from %s.knownGene;", dbName);
+sqlSafef(query2, sizeof query2, "select name from %s.knownGene;", dbName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
     {
     kgID    = row2[0];
     
-    sprintf(cond_str, "name = '%s';", kgID);
+    sqlSafefFrag(cond_str, sizeof cond_str, "name = '%s';", kgID);
     seq = sqlGetField(dbName, "knownGenePep", "seq", cond_str);
     if (seq != NULL)
 	{
@@ -66,11 +66,11 @@ while (row2 != NULL)
 	}
     else
 	{
-        sprintf(cond_str, "name = '%s';", kgID);
+        sqlSafefFrag(cond_str, sizeof cond_str, "name = '%s';", kgID);
         proteinID=sqlGetField(dbName, "knownGene", "proteinID", cond_str);
 	if (proteinID != NULL)
 	    {
-            sprintf(cond_str, "val = '%s';", proteinID);
+            sqlSafefFrag(cond_str, sizeof cond_str, "val = '%s';", proteinID);
             acc = sqlGetField(spDbName, "displayId", "acc", cond_str);
 	    if (acc == NULL)
 		{
@@ -79,7 +79,7 @@ fprintf(stderr, "NO acc.displayId.%s: %s from name.knownGene.%s: %s\n", spDbName
 		}
 	    else
 		{
-		sprintf(cond_str, "acc = '%s';", acc);
+		sqlSafefFrag(cond_str, sizeof cond_str, "acc = '%s';", acc);
 		seq = sqlGetField(spDbName, "protein", "val", cond_str);
 		if (seq == NULL)
 		    {
@@ -97,7 +97,7 @@ fprintf(stderr, "kgID: %s not in knownGenePep or knownGene\n", kgID);
 	    }
 	}
 
-    sprintf(cond_str, "name = '%s';", kgID);
+    sqlSafefFrag(cond_str, sizeof cond_str, "name = '%s';", kgID);
         
     seq = sqlGetField(dbName, "knownGeneMrna", "seq", cond_str);
     if (seq != NULL)

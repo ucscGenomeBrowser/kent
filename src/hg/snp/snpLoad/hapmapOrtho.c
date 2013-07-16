@@ -35,7 +35,7 @@ char **row;
 struct coords *coordItem = NULL;
 
 ret = newHash(16);
-safef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from %s", tableName);
+sqlSafef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -66,7 +66,7 @@ FILE *outputFileHandle = mustOpen("hapmapOrtho.tab", "w");
 FILE *errorFileHandle = mustOpen("hapmapOrtho.err", "w");
 struct coords *coordItem = NULL;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select chrom, chromStart, chromEnd, name, orthoScore, strand, refUCSC, observed, "
     "orthoChrom, orthoStart, orthoEnd, orthoStrand, orthoAllele from %s", 
     snpTableName);

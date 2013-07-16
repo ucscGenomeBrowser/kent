@@ -108,7 +108,7 @@ struct edwValidFile *newReplicatesList(struct edwSubmit *submit, struct sqlConne
 /* Return list of new files in submission that are supposed to be part of replicated set. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select v.* from edwFile f,edwValidFile v"
     "  where f.id = v.fileId and f.submitId=%u and v.replicate != ''",
     submit->id);
@@ -153,7 +153,7 @@ for (v = replicatesList; v != NULL; v = v->next)
         {
 	char query[256];
 	boolean onePairDone = FALSE;
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 	    "select count(*) from edwQaPairCorrelation"
 	    " where elderFileId=%lld and youngerFileId=%lld"
 	    , (long long)ev->fileId, (long long)v->fileId);
@@ -161,7 +161,7 @@ for (v = replicatesList; v != NULL; v = v->next)
 	    onePairDone = TRUE;
 	else
 	    {
-	    safef(query, sizeof(query), 
+	    sqlSafef(query, sizeof(query), 
 		"select count(*) from edwQaPairSampleOverlap"
 		" where elderFileId=%lld and youngerFileId=%lld"
 		, (long long)ev->fileId, (long long)v->fileId);
@@ -182,7 +182,7 @@ void showRecentFiles(struct sqlConnection *conn)
 {
 /* Get id for user. */
 char query[1024];
-safef(query, sizeof(query), "select id from edwUser where email='%s'", userEmail);
+sqlSafef(query, sizeof(query), "select id from edwUser where email='%s'", userEmail);
 int userId = sqlQuickNum(conn, query);
 if (userId == 0)
     {
@@ -191,7 +191,7 @@ if (userId == 0)
     }
 
 /* Select all submissions, most recent first. */
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select * from edwSubmit where userId=%d and (newFiles != 0 or errorMessage is not NULL)"
     " order by id desc", userId);
 struct edwSubmit *submit, *submitList = edwSubmitLoadByQuery(conn, query);
@@ -223,7 +223,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
     /* Get and print file-by-file info. */
     char title[256];
     safef(title, sizeof(title), "Files and enrichments for %d new files", submit->newFiles);
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
         "select v.licensePlate ID, v.itemCount items, v.basesInItems bases,"
 	"v.format format,truncate(v.mapRatio,2) 'map ratio', "
 	       "v.enrichedIn 'enriched in', truncate(e.enrichment,2) X, "
@@ -237,7 +237,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
 	, submit->id);
     queryIntoTable(conn, query, title);
 
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	"select ev.experiment,ev.outputType 'output type',ev.format,\n"
 	"       yv.replicate repA,ev.replicate repB, ev.licensePlate idA, yv.licensePlate idB,\n"
 	"       ev.enrichedIn target,p.sampleSampleEnrichment xEnrichment\n"
@@ -248,7 +248,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
 	, submit->id);
     queryIntoTable(conn, query, "Cross-enrichment between replicates in target areas");
 
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	"select ev.experiment,ev.outputType 'output type',ev.format,\n"
 	"       yv.replicate repA,ev.replicate repB, ev.licensePlate idA, yv.licensePlate idB,\n"
 	"       ev.enrichedIn target,p.pearsonInEnriched 'R in targets'\n"

@@ -99,7 +99,7 @@ int lookupId(struct sqlConnection *conn, char *table, char *term)
 /* Return ID of term in table. */
 {
 char query[512];
-safef(query, sizeof(query), "select id from %s%s where term = '%s'", cvDbPrefix, table, term);
+sqlSafef(query, sizeof(query), "select id from %s%s where term = '%s'", cvDbPrefix, table, term);
 return sqlQuickNum(conn, query);
 }
 
@@ -292,7 +292,7 @@ verbose(1, "read %d mdb objects from %s in %d databases\n", mdbHash->elCount, me
 struct sqlConnection *expDbConn = sqlConnect(expDb);
 struct sqlConnection *cvDbConn = sqlConnect(cvDb);
 char query[256];
-safef(query, sizeof(query), "select * from %s", expTable);
+sqlSafef(query, sizeof(query), "select * from %s", expTable);
 struct sqlResult *sr = sqlGetResult(expDbConn, query);
 FILE *f = mustOpen(outExp, "w");
 char **row;

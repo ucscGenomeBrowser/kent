@@ -25,7 +25,7 @@ struct sqlResult *sr;
 char **row;
 struct chromInfo *el;
 
-safef(query, sizeof(query), "select chrom, size from chromInfo");
+sqlSafef(query, sizeof(query), "select chrom, size from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

@@ -28,7 +28,7 @@ FILE *f;
 char fileName[64];
 
 chromHash = newHash(0);
-safef(query, sizeof(query), "select chrom from chromInfo");
+sqlSafef(query, sizeof(query), "select chrom from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -50,7 +50,7 @@ char **row;
 struct hashCookie cookie;
 struct hashEl *hel = NULL;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select chrom, chromStart, chromEnd, name, strand from %s", 
     tableName);
 sr = sqlGetResult(conn, query);
@@ -86,7 +86,7 @@ char *createString =
 struct dyString *dy = newDyString(1024);
 
 safef(tableName, ArraySize(tableName), "%s_snp125hg17ortho", chromName);
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 hFreeConn(&conn);

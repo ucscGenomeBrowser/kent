@@ -105,48 +105,16 @@ void llaInfoSaveToDb(struct sqlConnection *conn, struct llaInfo *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use llaInfoSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
 char  *corrNamesArray, *corrsArray;
 corrNamesArray = sqlStringArrayToString(el->corrNames, el->numCorrs);
 corrsArray = sqlFloatArrayToString(el->corrs, el->numCorrs);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%f,%f,%f,%f,%f,%f,%f,%f,%u,%u,%f,%f,%f,%s,%s,%u,'%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%f,%f,%f,%f,%f,%f,%f,%f,%u,%u,%f,%f,%f,%s,%s,%u,'%s','%s')", 
 	tableName,  el->name,  el->type,  el->SnTm,  el->SnGc,  el->SnSc,  el->Sn3pSc,  el->AsnTm,  el->AsnGc,  el->AsnSc,  el->Asn3pSc,  el->prodLen,  el->ORFLen,  el->meltTm,  el->frcc,  el->fr3pcc,  el->SnSeq,  el->AsnSeq,  el->numCorrs,  corrNamesArray ,  corrsArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
-freez(&corrNamesArray);
-freez(&corrsArray);
-}
-
-void llaInfoSaveToDbEscaped(struct sqlConnection *conn, struct llaInfo *el, char *tableName, int updateSize)
-/* Save llaInfo as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than llaInfoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *type, *SnSeq, *AsnSeq, *corrNamesArray, *corrsArray;
-name = sqlEscapeString(el->name);
-type = sqlEscapeString(el->type);
-SnSeq = sqlEscapeString(el->SnSeq);
-AsnSeq = sqlEscapeString(el->AsnSeq);
-
-corrNamesArray = sqlStringArrayToString(el->corrNames, el->numCorrs);
-corrsArray = sqlFloatArrayToString(el->corrs, el->numCorrs);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%f,%f,%f,%f,%f,%f,%f,%f,%u,%u,%f,%f,%f,'%s','%s',%u,'%s','%s')", 
-	tableName,  name,  type, el->SnTm , el->SnGc , el->SnSc , el->Sn3pSc , el->AsnTm , el->AsnGc , el->AsnSc , el->Asn3pSc , el->prodLen , el->ORFLen , el->meltTm , el->frcc , el->fr3pcc ,  SnSeq,  AsnSeq, el->numCorrs ,  corrNamesArray ,  corrsArray );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&type);
-freez(&SnSeq);
-freez(&AsnSeq);
 freez(&corrNamesArray);
 freez(&corrsArray);
 }

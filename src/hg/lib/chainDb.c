@@ -144,7 +144,7 @@ char fullName[64];
 safef(fullName, sizeof(fullName), "%s_%s", chain->tName, track);
 if (!sqlTableExists(conn, fullName))
     strcpy(fullName, track);
-dyStringPrintf(query, 
+sqlDyStringPrintf(query, 
 	"select tStart,tEnd,qStart from %sLink where chainId = %d",fullName, chain->id);
 
 sr = sqlGetResult(conn, query->string);

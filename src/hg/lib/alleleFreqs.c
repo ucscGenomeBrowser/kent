@@ -125,54 +125,15 @@ void alleleFreqsSaveToDb(struct sqlConnection *conn, struct alleleFreqs *el, cha
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use alleleFreqsSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%c','%s','%s','%s','%s','%s','%c',%d,%f,'%c',%d,%f,%d)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%c','%s','%s','%s','%s','%s','%c',%d,%f,'%c',%d,%f,%d)", 
 	tableName,  el->rsId,  el->chrom,  el->chromStart,  el->strand,  el->assembly,  el->center,  el->protLSID,  el->assayLSID,  el->panelLSID,  el->majAllele,  el->majCount,  el->majFreq,  el->minAllele,  el->minCount,  el->minFreq,  el->total);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void alleleFreqsSaveToDbEscaped(struct sqlConnection *conn, struct alleleFreqs *el, char *tableName, int updateSize)
-/* Save alleleFreqs as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than alleleFreqsSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *rsId, *chrom, *strand, *assembly, *center, *protLSID, *assayLSID, *panelLSID, *majAllele, *minAllele;
-rsId = sqlEscapeString(el->rsId);
-chrom = sqlEscapeString(el->chrom);
-strand = sqlEscapeString(el->strand);
-assembly = sqlEscapeString(el->assembly);
-center = sqlEscapeString(el->center);
-protLSID = sqlEscapeString(el->protLSID);
-assayLSID = sqlEscapeString(el->assayLSID);
-panelLSID = sqlEscapeString(el->panelLSID);
-majAllele = sqlEscapeString(el->majAllele);
-minAllele = sqlEscapeString(el->minAllele);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%s','%s','%s','%s','%s','%s','%s',%d,%f,'%s',%d,%f,%d)", 
-	tableName,  rsId,  chrom, el->chromStart ,  strand,  assembly,  center,  protLSID,  assayLSID,  panelLSID,  majAllele, el->majCount , el->majFreq ,  minAllele, el->minCount , el->minFreq , el->total );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&rsId);
-freez(&chrom);
-freez(&strand);
-freez(&assembly);
-freez(&center);
-freez(&protLSID);
-freez(&assayLSID);
-freez(&panelLSID);
-freez(&majAllele);
-freez(&minAllele);
-}
 
 struct alleleFreqs *alleleFreqsCommaIn(char **pS, struct alleleFreqs *ret)
 /* Create a alleleFreqs out of a comma separated string. 

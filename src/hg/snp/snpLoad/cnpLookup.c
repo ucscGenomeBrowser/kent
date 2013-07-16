@@ -39,7 +39,7 @@ struct coords *cel = NULL;
 
 verbose(1, "creating BAC hash...\n");
 ret = newHash(0);
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
       "select name, chrom, chromStart, chromEnd from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -76,7 +76,7 @@ char *cnpName = NULL;
 char variantSignal;
 
 verbose(1, "process CNPs...\n");
-safef(query, sizeof(query), "select * from %s", cnpTable);
+sqlSafef(query, sizeof(query), "select * from %s", cnpTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

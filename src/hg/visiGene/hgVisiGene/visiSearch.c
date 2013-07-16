@@ -137,7 +137,7 @@ char **row;
 int passCount = 0;
 
 /* Construct query to fetch all non-private imageId's in matchList. */
-dyStringAppend(query, "select image.id from image,submissionSet "
+sqlDyStringAppend(query, "select image.id from image,submissionSet "
                       "where submissionSet.privateUser = 0 "
 		      "and submissionSet.id = image.submissionSet "
 		      "and image.id in (");
@@ -281,10 +281,8 @@ for (word = wordList, wordIx=0; word != NULL;  ++wordIx)
     if (strlen(word->name) >= 3) /* Logic could be expensive on small words */
 	{
 	dyStringClear(query);
-	dyStringPrintf(query, "select %s from %s where %s like \"", 
-	    field, table, field);
-	dyStringAppend(query, word->name);
-	dyStringAppend(query, "%\"");
+	sqlDyStringPrintf(query, "select %s from %s where %s like '%s'",
+	    field, table, field, word->name);
 	nameList = sqlQuickList(conn, query->string);
 	if (nameList != NULL)
 	    {
@@ -350,7 +348,7 @@ static void addImagesMatchingName(struct visiSearcher *searcher,
  * the query. */
 {
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
    "select image.id from "
    "contributor,submissionContributor,imageFile,image "
    "where contributor.name = \"%s\" "
@@ -389,9 +387,7 @@ for (word = wordList, wordIx=0; word != NULL;  wordIx++)
     struct slName *nameList, *name;
     int maxWordsUsed = 0;
     dyStringClear(query);
-    dyStringPrintf(query, "select name from contributor where name like \"");
-    dyStringAppend(query, word->name);
-    dyStringAppend(query, " %\"");
+    sqlDyStringPrintf(query, "select name from contributor where name like '%s'", word->name);
     nameList = sqlQuickList(conn, query->string);
     if (nameList != NULL)
 	{
@@ -478,7 +474,7 @@ int wordIx;
 for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     {
     char query[512];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
     	"select image.id from image,imageFile "
 	"where imageFile.submitId = \"%s\" "
 	"and imageFile.id = image.imageFile", word->name);
@@ -497,7 +493,7 @@ static void addImagesMatchingBodyPart(struct visiSearcher *searcher,
 struct hash *uniqHash = newHash(0);
 
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
    "select imageProbe.image from "
    "bodyPart,expressionLevel,imageProbe "
    "where bodyPart.name = \"%s\" "
@@ -509,7 +505,7 @@ addImagesMatchingQuery(searcher, conn, dy->string, uniqHash, bodyPart,
 	startWord, wordCount);
 
 dyStringClear(dy);
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
     "select image.id from bodyPart,specimen,image "
     "where bodyPart.name = \"%s\" "
     "and bodyPart.id = specimen.bodyPart "
@@ -543,13 +539,13 @@ int wordIx;
 for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     {
     dyStringClear(query);
-    dyStringAppend(query, "select image.id from sex,specimen,image ");
-    dyStringPrintf(query, "where sex.name = \"%s\" ",  word->name);
+    sqlDyStringAppend(query, "select image.id from sex,specimen,image ");
+    sqlDyStringPrintf(query, "where sex.name = \"%s\" ",  word->name);
     dyStringAppend(query, "and sex.id = specimen.sex ");
     dyStringAppend(query, "and specimen.id = image.specimen");
     addImagesMatchingQuery(searcher, conn, query->string, NULL, NULL,
     	wordIx, 1);
-    }
+    } 
 }
 
 void addImagesMatchingStage(struct visiSearcher *searcher,
@@ -560,20 +556,23 @@ void addImagesMatchingStage(struct visiSearcher *searcher,
 {
 struct dyString *dy = dyStringNew(0);
 char *maxAge;
-
+// note in the code below minAge and maxAge are strings
+//  but they should contain float values.  Putting single-quotes
+//  around them and escaping their contents is something that will 
+//  protect against sql injection.
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
     "select age from lifeStage where lifeStageScheme = %d ", 
     schemeId);
-dyStringPrintf(dy,
-    "and age > %s order by age", minAge);
+sqlDyStringPrintf(dy,
+    "and age > '%s' order by age", minAge);
 maxAge = sqlQuickString(conn, dy->string);
 
 dyStringClear(dy);
-dyStringPrintf(dy, "select image.id from specimen,image ");
-dyStringPrintf(dy, "where specimen.age >= %s ", minAge);
+sqlDyStringPrintf(dy, "select image.id from specimen,image ");
+sqlDyStringPrintf(dy, "where specimen.age >= '%s' ", minAge);
 if (maxAge != NULL)
-    dyStringPrintf(dy, "and specimen.age < %s ", maxAge);
+    sqlDyStringPrintf(dy, "and specimen.age < '%s' ", maxAge);
 dyStringPrintf(dy, "and specimen.taxon = %d ", taxon);
 dyStringPrintf(dy, "and specimen.id = image.specimen");
 addImagesMatchingQuery(searcher, conn, dy->string, NULL, NULL,
@@ -598,9 +597,8 @@ for (word = wordList, wordIx=0; word != NULL && word->next != NULL;
     {
     int schemeId = 0,taxon=0;
     dyStringClear(dy);
-    dyStringPrintf(dy, 
-        "select id,taxon from lifeStageScheme where name = \"%s\"",
-    	word->name);
+    sqlDyStringPrintf(dy, 
+        "select id,taxon from lifeStageScheme where name = '%s'", word->name);
     sr = sqlGetResult(conn, dy->string);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -613,7 +611,7 @@ for (word = wordList, wordIx=0; word != NULL && word->next != NULL;
 	char *specificStage = word->next->name;
 	char *minAge;
 	dyStringClear(dy);
-	dyStringPrintf(dy, "select age from lifeStage where name = \"%s\" ", 
+	sqlDyStringPrintf(dy, "select age from lifeStage where name = \"%s\" ", 
 		specificStage);
 	dyStringPrintf(dy, "and lifeStageScheme = %d\n", schemeId);
 	minAge = sqlQuickString(conn, dy->string);
@@ -631,7 +629,7 @@ static void addImagesMatchingYears(struct visiSearcher *searcher,
 /* Fold in images that are published between given years */
 {
 struct dyString *dy = dyStringNew(0);
-dyStringPrintf(dy,
+sqlDyStringPrintf(dy,
     "select image.id from submissionSet,imageFile,image "
     "where submissionSet.year >= %d and submissionSet.year <= %d "
     "and submissionSet.id = imageFile.submissionSet "
@@ -647,7 +645,7 @@ static void visiGeneMatchYear(struct visiSearcher *searcher,
 /* Fold in matches to a year. */
 {
 struct slName *word;
-char *now = sqlQuickString(conn, "select now()");
+char *now = sqlQuickString(conn, "NOSQLINJ select now()");
 int currentYear = atoi(now);
 int maxYear = currentYear+1;	/* May be slightly ahead of publication */
 int minYear = 1988;	/* Oldest record in Jackson Labs database. */
@@ -679,7 +677,7 @@ for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
 	struct sqlResult *sr;
 	char **row, query[256];
 	int probeId = atoi(name + strlen(pat));
-	safef(query, sizeof(query),
+	sqlSafef(query, sizeof(query),
 	    "select ip.image from imageProbe ip, vgPrbMap m, vgPrb e"
 	    " where ip.probe = m.probe and m.vgPrb = e.id"
 	    " and e.id=%d", probeId);
@@ -697,7 +695,7 @@ static void addImagesMatchingBinomial(struct visiSearcher *searcher,
 /* Add images that match binomial name. */
 {
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
    "select distinct image.id from "
    "image,specimen,uniProt.taxon "
    "where uniProt.taxon.binomial = \"%s\" "
@@ -714,7 +712,7 @@ static void addImagesMatchingCommonName(struct visiSearcher *searcher,
 /* Add images that match common name. */
 {
 dyStringClear(dy);
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
    "select distinct image.id from "
    "image,specimen,uniProt.commonName "
    "where uniProt.commonName.val = \"%s\" "

@@ -160,13 +160,13 @@ else
 
 /*	strictly object methods following 	************************/
 /*	PRIVATE	METHODS	************************************************/
-static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
+static void addConstraint(struct wiggleDataStream *wds, char *left, char *op, char *right)
 {
 struct dyString *constrain = dyStringNew(256);
 if (wds->sqlConstraint)
     dyStringPrintf(constrain, "%s AND ", wds->sqlConstraint);
 
-dyStringPrintf(constrain, "%s \"%s\"", left, right);
+sqlDyStringPrintfFrag(constrain, "%s %-s \"%s\"", left, op, right);
 
 freeMem(wds->sqlConstraint);	/*	potentially previously existing */
 wds->sqlConstraint = cloneString(constrain->string);
@@ -321,7 +321,7 @@ AllocVar(bed);
 bed->chrom = cloneString(chrom);
 bed->chromStart = start;
 bed->chromEnd = end;
-snprintf(name, sizeof(name), "%s.%u",
+safef(name, sizeof(name), "%s.%u",
     chrom, lineCount);
 bed->name = cloneString(name);
 return bed;
@@ -372,22 +372,22 @@ if (wds->isFile)
 else
     {
     struct dyString *query = dyStringNew(256);
-    dyStringPrintf(query, "select * from %s", wds->tblName);
+    sqlDyStringPrintf(query, "select * from %s", wds->tblName);
     if (wds->chrName)
-	addConstraint(wds, "chrom =", wds->chrName);
+	addConstraint(wds, "chrom", "=", wds->chrName);
     if (wds->winEnd)
 	{
 	char limits[256];
 	safef(limits, ArraySize(limits), "%d", wds->winEnd );
-	addConstraint(wds, "chromStart <", limits);
+	addConstraint(wds, "chromStart", "<", limits);
 	safef(limits, ArraySize(limits), "%d", wds->winStart );
-	addConstraint(wds, "chromEnd >", limits);
+	addConstraint(wds, "chromEnd", ">", limits);
 	}
     if (wds->spanLimit)
 	{
 	struct dyString *dyTmp = dyStringNew(256);
 	dyStringPrintf(dyTmp, "%u", wds->spanLimit);
-	addConstraint(wds, "span =", dyTmp->string);
+	addConstraint(wds, "span", "=", dyTmp->string);
 	dyStringFree(&dyTmp);
 	}
     if (wds->sqlConstraint)

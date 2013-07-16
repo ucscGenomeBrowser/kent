@@ -135,7 +135,7 @@ fnXref2 = argv[3];
 o2 = fopen(fnXref1, "w");
 o3 = fopen(fnXref2, "w");
 
-sprintf(query2,"select rgdId from rgdGeneRaw0 where feature='gene'");
+sqlSafef(query2, sizeof query2, "select rgdId from rgdGeneRaw0 where feature='gene'");
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)

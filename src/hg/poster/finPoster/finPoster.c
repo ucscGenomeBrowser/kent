@@ -325,7 +325,7 @@ slSort(&gpList, cmpGenePred);
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
     keepGene = FALSE;
-    sprintf(query, "select * from refLink where mrnaAcc = '%s'", gp->name);
+    sqlSafef(query, sizeof query, "select * from refLink where mrnaAcc = '%s'", gp->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -988,7 +988,7 @@ struct agpGap gap;
 int baseTotal = chromEnd - chromStart;
 int nCount = 0, s, e, size;
 
-sprintf(query, "select * from %s_gap where chromStart < %d and chromEnd > %d",
+sqlSafef(query, sizeof query, "select * from %s_gap where chromStart < %d and chromEnd > %d",
 	chrom, chromEnd, chromStart);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1062,7 +1062,7 @@ void getSynteny(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, F
 struct sqlResult *sr;
 char **row;
 char query[512];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select chromStart,chromEnd,name,strand from %s "
 	"where chrom = '%s' order by chromStart", syntenyTable, chrom);
 sr = sqlGetResult(conn, query);
@@ -1088,7 +1088,7 @@ void getDupliconsJk(struct chromGaps *cg, char *chrom,
 struct sqlResult *sr;
 char **row;
 char query[512];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select chromStart,chromEnd,score from jkDuplicon "
 	"where chrom = '%s' order by chromStart", chrom);
 sr = sqlGetResult(conn, query);
@@ -1197,12 +1197,12 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 #ifdef NEVER
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select genoStart,genoEnd,repFamily from %s_rmsk "
 	"where repFamily = 'centr' or repFamily = 'telo'"
 	, chrom);
 #endif /* NEVER */
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select genoStart,genoEnd,repFamily from %s_rmsk "
 	"where repFamily = 'centr'"
 	, chrom);
@@ -1230,7 +1230,7 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 struct rmskOut rmsk;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select * from %s_rmsk "
 	"where repClass = 'tRNA'"
 	, chrom);
@@ -1318,7 +1318,7 @@ void getGaps(struct chromGaps *cg, char *chrom,
 struct sqlResult *sr;
 char **row;
 char query[512];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select chromStart,chromEnd,type from %s_gap "
 	"order by chromStart", chrom);
 sr = sqlGetResult(conn, query);
@@ -1418,7 +1418,7 @@ Bits *bits = bitAlloc(chromSize);
 char query[256], **row;
 struct sqlResult *sr;
 
-safef(query, sizeof(query), "select chromStart,chromEnd from %s_gap", chrom);
+sqlSafef(query, sizeof(query), "select chromStart,chromEnd from %s_gap", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1448,7 +1448,7 @@ double p,q,val;
 int start,end, size;
 Bits *gaps = gapBits(chrom, chromSize, conn);
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select binStart,binEnd,snpCount,NQSbases from snpHet "
     "where chrom='%s' order by binStart", chrom);
 sr = sqlGetResult(conn, query);
@@ -1599,7 +1599,7 @@ int r,g,b;
 char *stain;
 
 printf("  getting bands\n");
-sprintf(query, "select * from cytoBand where chrom = '%s'", chrom);
+sqlSafef(query, sizeof query, "select * from cytoBand where chrom = '%s'", chrom);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1721,7 +1721,7 @@ struct hash *hash = newHash(16);
 struct sqlResult *sr;
 char **row;
 
-sr = sqlGetResult(conn, "select value from knownToEnsembl");
+sr = sqlGetResult(conn, "NOSQLINJ select value from knownToEnsembl");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hashAdd(hash, row[0], NULL);

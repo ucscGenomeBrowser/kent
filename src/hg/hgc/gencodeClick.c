@@ -35,6 +35,7 @@
  * files for every GENCODE version if a URL was added or changed. */
 //FIXME: clean up RA files when CGIs no longer need them
 static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/gencode_biotypes.html";
+static char *gencodeTagsUrl = "http://www.gencodegenes.org/gencode_tags.html";
 static char *ensemblTranscriptIdUrl = "http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s";
 static char *ensemblGeneIdUrl = "http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s";
 static char *vegaTranscriptIdUrl = "http://vega.sanger.ac.uk/Homo_sapiens/Transcript/Summary?db=core;t=%s";
@@ -83,7 +84,7 @@ static struct genePred *transAnnoLoad(struct sqlConnection *conn, struct trackDb
 {
 // must check chrom due to PAR
 char where[256];
-safef(where, sizeof(where), "(chrom = \"%s\") and (name = \"%s\")", seqName, gencodeId);
+sqlSafefFrag(where, sizeof(where), "(chrom = \"%s\") and (name = \"%s\")", seqName, gencodeId);
 struct genePred *transAnno = genePredReaderLoadQuery(conn, tdb->track, where);
 slSort(&transAnno, transAnnoCmp);
 return transAnno;
@@ -103,7 +104,7 @@ static void getGeneBounds(struct trackDb *tdb, struct sqlConnection *conn, struc
 {
 // must check chrom due to PAR
 char where[256];
-safef(where, sizeof(where), "(chrom = \"%s\") and (name2 = \"%s\")", seqName, transAnno->name2);
+sqlSafefFrag(where, sizeof(where), "(chrom = \"%s\") and (name2 = \"%s\")", seqName, transAnno->name2);
 struct genePred *geneAnnos = genePredReaderLoadQuery(conn, tdb->track, where);
 struct genePred *geneAnno;
 *geneChromStart = transAnno->txStart;
@@ -193,7 +194,7 @@ prExtIdAnchor(id, urlTemplate);
 static void writePosLink(char *chrom, int chromStart, int chromEnd)
 /* write link to a genomic position */
 {
-printf("<a href=\"%s&db=%s&position=%s%%3A%d-%d\" target=_blank>%s:%d-%d</A>",
+printf("<a href=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>",
        hgTracksPathAndSettings(), database,
        chrom, chromStart, chromEnd, chrom, chromStart+1, chromEnd);
 }
@@ -603,7 +604,7 @@ static void writeTagLinkHtml(struct wgEncodeGencodeTag *tags)
 /* write HTML links to Tag */
 {
 printf("<table class=\"hgcCcds\"><thead>\n");
-printf("<tr><th colspan=3>Tags</tr>\n");
+printf("<tr><th colspan=3><a href=\"%s\">Tags</a></tr>\n", gencodeTagsUrl);
 printf("</thead><tbody>\n");
 int i, rowCnt = 0;
 struct wgEncodeGencodeTag *tag = tags;
@@ -725,7 +726,6 @@ else
 
 htmlHorizontalLine();
 printTrackHtml(tdb);
-cartWebEnd();
 
 genePredFreeList(&anno);
 hFreeConn(&conn);

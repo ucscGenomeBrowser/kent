@@ -51,7 +51,7 @@ hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
     {
     char *id = gp->name;
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"select seq from %s where name = '%s'", tableName, id);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -95,7 +95,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
     {
 
     char *id = gp->name;
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"select * from %s where name='%s'"
 	" and chrom='%s' and txStart=%d and txEnd=%d", 
     	table, id, gp->chrom, gp->start, gp->end);
@@ -181,7 +181,7 @@ hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
     {
     char *id = gp->name;
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"select * from %s where name='%s'"
 	" and chrom='%s' and txStart=%d and txEnd=%d", 
     	table, id, gp->chrom, gp->start, gp->end);
@@ -236,7 +236,7 @@ hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
     {
     char *id = gp->name;
-    safef(query, sizeof(query), "select * from %s where name='%s'", 
+    sqlSafef(query, sizeof(query), "select * from %s where name='%s'", 
     	table, id);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)

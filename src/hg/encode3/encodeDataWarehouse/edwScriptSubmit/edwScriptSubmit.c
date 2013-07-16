@@ -29,11 +29,12 @@ struct sqlConnection *conn = edwConnectReadWrite();
 /* Get email associated with script. */
 char query[256];
 safef(query, sizeof(query), "select email from edwUser where id=%d", reg->userId);
+sqlSafef(query, sizeof(query), "select email from edwUser where id=%d", reg->userId);
 char *email = sqlNeedQuickString(conn, query);
 
 /* Add submission URL to the queue. */
 char *url = cgiString("url");
-safef(query, sizeof(query), "update edwScriptRegistry set submitCount = submitCount+1 "
+sqlSafef(query, sizeof(query), "update edwScriptRegistry set submitCount = submitCount+1 "
     "where id=%d", reg->id);
 sqlUpdate(conn, query);
 edwAddSubmitJob(conn, email, url);

@@ -44,7 +44,7 @@ if (getNM && !getNR)
 else if (!getNM && getNR)
     accRestrict = " AND (acc LIKE \"NR%\")";
 char query[128];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "SELECT acc, version FROM gbStatus WHERE (srcDb = \"RefSeq\") AND (orgCat = \"native\")%s", accRestrict);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -105,7 +105,7 @@ int refSeqVerInfoGetVersion(char *acc, struct sqlConnection *conn)
 /* get the version from the database, or zero if accession is not found */
 {
 char query[128];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "SELECT version FROM gbSeq WHERE (acc = \"%s\")", acc);
 return sqlQuickNum(conn, query);
 }

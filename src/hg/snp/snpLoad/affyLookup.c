@@ -41,7 +41,7 @@ int end = 0;
 char *class = NULL;
 char *locType = NULL;
 
-safef(query, sizeof(query), "select name, chromStart, chromEnd, class, locType from %s where chrom='%s' ", snpTable, chrom);
+sqlSafef(query, sizeof(query), "select name, chromStart, chromEnd, class, locType from %s where chrom='%s' ", snpTable, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -77,7 +77,7 @@ int end = 0;
 
 snps = readSnps(chromName);
 
-safef(query, sizeof(query), "select chromStart, chromEnd, name, score, strand, observed from %s where chrom='%s' ", 
+sqlSafef(query, sizeof(query), "select chromStart, chromEnd, name, score, strand, observed from %s where chrom='%s' ", 
       affyTable, chromName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

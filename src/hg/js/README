@@ -7,17 +7,27 @@ CGI or the library that uses them:
    hui.js       included by hui.c library code.
    utils.js     common utilities included by multiple CGIs.
 
-The "make alpha" command should place all *.js files in apache/htdocs/js/",
-while "make" will places js files in apache/htdocs/js/{user}/.
+The "make alpha", "make beta", and "make install" commands will place all files in
+JS_FILES and STATIC_FILES in apache/htdocs/js/.  "make user" will place both sets in
+apache/htdocs-{user}/js if it exists, and otherwise will place both sets in
+apache/htdocs/js/{user}.  Static documents are hardcoded to look in /js, not /js/{user},
+so any changes placed in /js/{user} will be ignored by static documents.  If you want to
+modify those files and see the changes, you need to either have your own htdocs directory
+or test your changes on "make alpha".
 
 In order to avoid caching errors by client browsers, the CGIs reference these files by
-a symlink that contains the timestamp of the file.  The symlink is created by the CGIs if
-not found.
+symlinks that contain the timestamps of the files.  The symlinks are created by this
+makefile, which runs cpAndLinkToResourceFiles.pl on the JS_FILES list.
 
 IMPORTANT:
 In for a user to test changes to javascript files on a named browser a setting must be 
 added to the hg.conf file of that browser.  For example for the browser "hgwdev-larrym",
-the following line must appear in apache/cgi-bin-larrym/hg.conf
+if apache/htdocs-larrym/ exists then the following line should appear in
+apache/cgi-bin-larrym/hg.conf:
+   browser.documentRoot=/usr/local/apache/htdocs-larrym
+
+If that directory does not exist, then the following line must appear in
+apache/cgi-bin-larrym/hg.conf instead:
    browser.javaScriptDir=js/larrym
 
 This will allow the CGIs to find the js files that "make" copies into place.

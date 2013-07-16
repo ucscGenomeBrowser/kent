@@ -102,7 +102,7 @@ char *geneSym = NULL;
 
 for (ci = rsCcds; ci != NULL; ci = ci->next)
     {
-    safef(query, sizeof(query), "select name from refLink where mrnaAcc='%s'",
+    sqlSafef(query, sizeof(query), "select name from refLink where mrnaAcc='%s'",
           genbankDropVer(accBuf, ci->mrnaAcc));
     geneSym = sqlQuickString(conn, query);
     if (geneSym != NULL)
@@ -175,7 +175,7 @@ struct genePredReader *gpr;
 struct genePred *ccdsGene = NULL, *kgGene = NULL;
 
 /* get ccds genePred to get location */
-safef(where, sizeof(where), "chrom = '%s' and name = '%s'", seqName, ccdsId);
+sqlSafefFrag(where, sizeof(where), "chrom = '%s' and name = '%s'", seqName, ccdsId);
 gpr = genePredReaderQuery(conn, "ccdsGene", where);
 ccdsGene = genePredReaderAll(gpr);
 genePredReaderFree(&gpr);
@@ -185,7 +185,7 @@ else if (ccdsGene->next != NULL)
     errAbort("multiple %s rows found in ccdsGene table for chrom %s", ccdsId, seqName);
 
 /* get KG genePred, as need exact location for link */
-safef(where, sizeof(where), "name = '%s' and strand = '%s'", kgId,
+sqlSafefFrag(where, sizeof(where), "name = '%s' and strand = '%s'", kgId,
       ccdsGene->strand);
 gpr = genePredReaderRangeQuery(conn, "knownGene", seqName,
                                ccdsGene->txStart, ccdsGene->txEnd, where);
@@ -424,7 +424,6 @@ writeRefSeqSummaryHtml(conn, ccdsId, rsCcds);
 htmlHorizontalLine();
 
 printTrackHtml(tdb);
-cartWebEnd();
 ccdsInfoFreeList(&rsCcds);
 ccdsInfoFreeList(&vegaCcds);
 ccdsInfoFreeList(&ensCcds);

@@ -63,18 +63,7 @@ void encodeRnaSaveToDb(struct sqlConnection *conn, struct encodeRna *el, char *t
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use encodeRnaSaveToDbEscaped() */
-
-void encodeRnaSaveToDbEscaped(struct sqlConnection *conn, struct encodeRna *el, char *tableName, int updateSize);
-/* Save encodeRna as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than encodeRnaSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 
 struct encodeRna *encodeRnaCommaIn(char **pS, struct encodeRna *ret);
 /* Create a encodeRna out of a comma separated string. 

@@ -47,7 +47,7 @@ conn2= hAllocConn(kgTempDb);
 conn3= hAllocConn(kgTempDb);
 conn4= hAllocConn(kgTempDb);
 
-safef(query2, sizeof(query2), "select * from %s.kgCandidate where alignID='%s'", kgTempDb, alignID);
+sqlSafef(query2, sizeof(query2), "select * from %s.kgCandidate where alignID='%s'", kgTempDb, alignID);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -65,13 +65,13 @@ while (row2 != NULL)
 	protAcc = row2[0];
 	chp ++;
 	mrnaID = chp;
-    	safef(query3, sizeof(query3), 
+    	sqlSafef(query3, sizeof(query3), 
     	      "select protAcc, score from %s.protMrnaScore where mrnaAcc='%s' and protAcc='%s'",
 	      kgTempDb, mrnaID, protAcc);
 	}
     else
     	{
-    	safef(query3, sizeof(query3), 
+    	sqlSafef(query3, sizeof(query3), 
     	      "select protAcc, score from %s.protMrnaScore where mrnaAcc='%s' order by score desc",
 	      kgTempDb, mrnaID);
 	}
@@ -87,7 +87,7 @@ while (row2 != NULL)
 	chp = strstr(protAcc, "-");
 	if (chp == NULL)
 	    {
-            safef(condStr, sizeof(condStr), "acc='%s'", protAcc);
+            sqlSafefFrag(condStr, sizeof(condStr), "acc='%s'", protAcc);
 	    isCurated = sqlGetField(spDb, "info", "isCurated", condStr);
 	    if (sameWord(isCurated, "1"))
 	    	{

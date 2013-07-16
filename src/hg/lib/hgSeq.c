@@ -395,7 +395,7 @@ else
     for (i=0,count=0;  i < rCount;  i++,count++)
 	{
 	int j, jEnd, len, lo, hi;
-	snprintf(rName, sizeof(rName), "%s_%d", name, count);
+	safef(rName, sizeof(rName), "%s_%d", name, count);
 	j = (isRc ? (rCount - i - 1) : i);
 	jEnd = (isRc ? (j - 1) : (j + 1));
 	if (concatAdjacent && exonFlags[j])
@@ -522,7 +522,6 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
     {
     if (bedItem->blockCount == 0) /* An intersection may have made hti unreliable. */
         canDoIntrons = FALSE;
-    rowCount++;
     int chromSize = hgSeqChromSize(db, bedItem->chrom);
     // bed: translate relative starts to absolute starts
     for (i=0;  i < bedItem->blockCount;  i++)
@@ -758,10 +757,14 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 		   bedItem->chromEnd, promoterSize, FALSE, FALSE, chromSize);
 	}
-    snprintf(itemName, sizeof(itemName), "%s_%s", hti->rootName, bedItem->name);
+    if (bedItem->name != NULL)
+	safef(itemName, sizeof(itemName), "%s_%s", hti->rootName, bedItem->name);
+    else
+	safef(itemName, sizeof(itemName), "%s_%d", hti->rootName, rowCount);
     hgSeqRegionsAdjDb(db, bedItem->chrom, chromSize, bedItem->strand[0], itemName,
 		      concatRegions, concatAdjacent,
 		      count, starts, sizes, exonFlags, cdsFlags);
+    rowCount++;
     totalCount += count;
     freeMem(starts);
     freeMem(sizes);

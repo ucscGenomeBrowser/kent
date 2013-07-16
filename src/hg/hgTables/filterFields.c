@@ -1202,14 +1202,14 @@ void doFilterSubmit(struct sqlConnection *conn)
 /* Respond to submit on filters page. */
 {
 cartSetString(cart, hgtaFilterTable, getDbTable(database, curTable));
-doMainPage(conn);
+doMainPage(conn, FALSE);
 }
 
 void doClearFilter(struct sqlConnection *conn)
 /* Respond to click on clear filter. */
 {
 removeFilterVars();
-doMainPage(conn);
+doMainPage(conn, FALSE);
 }
 
 void constrainFreeForm(char *rawQuery, struct dyString *clause)
@@ -1454,7 +1454,7 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[512];
 char *type = NULL;
-safef(query, sizeof(query), "describe %s %s", table, field);
+sqlSafef(query, sizeof(query), "describe %s %s", table, field);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     type = cloneString(row[1]);
@@ -1561,6 +1561,7 @@ for (var = varList; var != NULL; var = var->next)
         internalErr();
     memcpy(field, s, fieldNameSize);
     field[fieldNameSize] = 0;
+    sqlCkId(field);
     type += 1;
     /* rawLogic and rawQuery are handled below;
      * filterMaxOutputVar is not really a filter variable and is handled
@@ -1601,19 +1602,17 @@ for (var = varList; var != NULL; var = var->next)
 		needOr = TRUE;
 		if (isSqlSetType(fieldType))
 		    {
-		    dyStringPrintf(dy, "FIND_IN_SET('%s', %s.%s)>0 ",
+		    sqlDyStringPrintfFrag(dy, "FIND_IN_SET('%s', %s.%s)>0 ",
 				   sqlPat, explicitDbTable , field);
 		    }
 		else
 		    {
-		    dyStringPrintf(dy, "%s.%s ", explicitDbTable, field);
+		    sqlDyStringPrintfFrag(dy, "%s.%s ", explicitDbTable, field);
 		    if (sqlWildcardIn(sqlPat))
 			dyStringAppend(dy, "like ");
 		    else
 			dyStringAppend(dy, "= ");
-		    dyStringAppendC(dy, '\'');
-		    dyStringAppendEscapeQuotes(dy, sqlPat, '\'', '\\');
-		    dyStringAppendC(dy, '\'');
+		    sqlDyStringPrintf(dy, "'%s'", sqlPat);
 		    }
 		freez(&sqlPat);
 		}
@@ -1641,20 +1640,20 @@ for (var = varList; var != NULL; var = var->next)
 		if (strchr(pat, '.')) /* Assume floating point */
 		    {
 		    double a = atof(words[0]), b = atof(words[1]);
-		    dyStringPrintf(dy, "%s.%s >= %f && %s.%s <= %f",
+		    sqlDyStringPrintfFrag(dy, "%s.%s >= %f && %s.%s <= %f",
 		    	explicitDbTable, field, a, explicitDbTable, field, b);
 		    }
 		else
 		    {
 		    int a = atoi(words[0]), b = atoi(words[1]);
-		    dyStringPrintf(dy, "%s.%s >= %d && %s.%s <= %d",
+		    sqlDyStringPrintfFrag(dy, "%s.%s >= %d && %s.%s <= %d",
 		    	explicitDbTable, field, a, explicitDbTable, field, b);
 		    }
 		freez(&dupe);
 		}
 	    else
 	        {
-		dyStringPrintf(dy, "%s.%s %s ", explicitDbTable, field, cmpVal);
+		sqlDyStringPrintfFrag(dy, "%s.%s %s ", explicitDbTable, field, cmpVal);
 		if (strchr(pat, '.'))	/* Assume floating point. */
 		    dyStringPrintf(dy, "%f", atof(pat));
 		else

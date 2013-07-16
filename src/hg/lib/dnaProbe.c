@@ -99,41 +99,13 @@ void dnaProbeSaveToDb(struct sqlConnection *conn, struct dnaProbe *el, char *tab
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use dnaProbeSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%s',%d,%d,'%s',%d,%f,%f,%d,%f,%d,%f)", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%s',%d,%d,'%s',%d,%f,%f,%d,%f,%d,%f)", 
 	tableName,  el->name,  el->dna,  el->size,  el->chrom,  el->start,  el->end,  el->strand,  el->tpDist,  el->tm,  el->pGC,  el->affyHeur,  el->secStruct,  el->blatScore,  el->comparison);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
-}
-
-void dnaProbeSaveToDbEscaped(struct sqlConnection *conn, struct dnaProbe *el, char *tableName, int updateSize)
-/* Save dnaProbe as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than dnaProbeSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *dna, *chrom, *strand;
-name = sqlEscapeString(el->name);
-dna = sqlEscapeString(el->dna);
-chrom = sqlEscapeString(el->chrom);
-strand = sqlEscapeString(el->strand);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%s',%d,%d,'%s',%d,%f,%f,%d,%f,%d,%f)", 
-	tableName,  name,  dna, el->size ,  chrom, el->start , el->end ,  strand, el->tpDist , el->tm , el->pGC , el->affyHeur , el->secStruct , el->blatScore , el->comparison );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&dna);
-freez(&chrom);
-freez(&strand);
 }
 
 struct dnaProbe *dnaProbeCommaIn(char **pS, struct dnaProbe *ret)

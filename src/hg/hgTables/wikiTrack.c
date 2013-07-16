@@ -25,6 +25,7 @@ tdb->html = hFileContentsOrWarning(hHelpFile(tdb->track));
 tdb->type = "none";
 tdb->grp = "map";
 tdb->canPack = FALSE;
+tdb->settingsHash = newHash(5);
 
 slAddHead(list, tdb);
 slSort(list, trackDbCmp);
@@ -81,11 +82,11 @@ char where[512];
 char *filter = filterClause(wikiDbName(), WIKI_TRACK_TABLE, region->chrom, NULL);
 
 if (filter)
-    safef(where, sizeof(where), "db='%s' AND %s", database, filter);
+    sqlSafefFrag(where, sizeof(where), "db='%s' AND %-s", database, filter);
 else
-    safef(where, sizeof(where), "db='%s'", database);
+    sqlSafefFrag(where, sizeof(where), "db='%s'", database);
 
-safef(query, sizeof(query), "select * from %s", WIKI_TRACK_TABLE);
+sqlSafef(query, sizeof(query), "select * from %s", WIKI_TRACK_TABLE);
 sr = hRangeQuery(wikiConn, WIKI_TRACK_TABLE, region->chrom,
     region->start, region->end, where, &rowOffset);
 

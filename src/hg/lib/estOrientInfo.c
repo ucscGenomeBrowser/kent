@@ -110,7 +110,7 @@ struct dyString *query = dyStringNew(256);
 struct sqlResult *sr;
 char **row;
 
-dyStringPrintf(query, "select * from %s", table);
+sqlDyStringPrintf(query, "select * from %s", table);
 if (where != NULL)
     dyStringPrintf(query, " where %s", where);
 sr = sqlGetResult(conn, query->string);
@@ -205,7 +205,7 @@ char *estOrientInfoGetCreateSql(char *table, int chromIdxLen)
 {
 struct dyString *sqlCmd = newDyString(2048);
 char *sqlCmdStr;
-dyStringPrintf(sqlCmd, createString, table, chromIdxLen, chromIdxLen, chromIdxLen);
+sqlDyStringPrintf(sqlCmd, createString, table, chromIdxLen, chromIdxLen, chromIdxLen);
 sqlCmdStr = cloneString(sqlCmd->string);
 dyStringFree(&sqlCmd);
 return sqlCmdStr;

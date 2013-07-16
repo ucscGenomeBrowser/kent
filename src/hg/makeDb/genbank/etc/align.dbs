@@ -1,8 +1,10 @@
-##
+#
 # genome databases to be aligned
 # Please keep in alphabetical for easy comparisons
 ##
+CHM1
 ailMel1
+allMis1
 anoCar1
 anoCar2
 anoGam1
@@ -66,9 +68,11 @@ droVir2
 droYak1
 droYak2
 echTel1
+echTel2
 equCab1
 equCab2
 eriEur1
+eriEur2
 felCat3
 felCat4
 felCat5
@@ -118,6 +122,7 @@ oryLat1
 oryLat2
 otoGar3
 oviAri1
+oviAri3
 panPan1
 panTro1
 panTro2
@@ -142,6 +147,7 @@ sacCer3
 saiBol1
 sarHar1
 sorAra1
+sorAra2
 speTri2
 strPur1
 strPur2
@@ -149,6 +155,7 @@ strPur4
 susScr2
 susScr3
 taeGut1
+taeGut2
 tarSyr1
 tetNig1
 tetNig2
@@ -156,6 +163,8 @@ triMan1
 tupBel1
 turTru2
 vicPac1
+vicPac2
 xenTro1
 xenTro2
 xenTro3
+xenTro7

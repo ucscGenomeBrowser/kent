@@ -433,8 +433,8 @@ for(i=0;i<ArraySize(regExs);i++)
 return str;
 }
 
-void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, char *sectionTitle,
-			       boolean isOpenDefault)
+void jsBeginCollapsibleSectionFontSize(struct cart *cart, char *track, char *section,
+				       char *sectionTitle, boolean isOpenDefault, char *fontSize)
 /* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's
  * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. */
 {
@@ -460,14 +460,45 @@ printf("<IMG height='18' width='18' "
        section, track,
        section, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
 #endif///ndef BUTTONS_BY_CSS
-printf("<B style='font-size:larger;'>&nbsp;%s</B></TD></TR>\n", sectionTitle);
+printf("<B style='font-size:%s;'>&nbsp;%s</B></TD></TR>\n", fontSize, sectionTitle);
 printf("<TR %sid='%s-%d'><TD colspan=2>", isOpen ? "" : "style='display: none' ", section, 1);
+}
+
+void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, char *sectionTitle,
+			       boolean isOpenDefault)
+/* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's
+ * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. */
+{
+jsBeginCollapsibleSectionFontSize(cart, track, section, sectionTitle, isOpenDefault, "larger");
 }
 
 void jsEndCollapsibleSection()
 /* End the collapsible <TR id=...>. */
 {
 puts("</TD></TR>");
+}
+
+void jsReloadOnBackButton(struct cart *cart)
+/* Add some javascript to detect that the back button (or reload) has been pressed,
+ * and to resubmit in that case to redraw the page with the latest cart contents. */
+// __detectback trick from
+// http://siphon9.net/loune/2009/07/detecting-the-back-or-refresh-button-click/
+// Yes, I know this along with every other inline <script> here belongs in a .js module
+{
+printf("<script>\n"
+       "document.write(\"<form style='display: none'><input name='__detectback' id='__detectback' "
+       "value=''></form>\");\n"
+       "function checkPageBackOrRefresh() {\n"
+       "  if (document.getElementById('__detectback').value) {\n"
+       "    return true;\n"
+       "  } else {\n"
+       "    document.getElementById('__detectback').value = 'been here';\n"
+       "    return false;\n"
+       "  }\n"
+       "}\n"
+       "window.onload = function() { "
+       "  if (checkPageBackOrRefresh()) { window.location.replace('%s?%s'); } };\n"
+       "</script>\n", cgiScriptName(), cartSidUrlString(cart));
 }
 
 static struct jsonElement *newJsonElement(jsonElementType type)

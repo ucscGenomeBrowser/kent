@@ -562,9 +562,8 @@ gbLockDb(conn, NULL);
 
 char query[4096];
 int waitTimeout = 24*60*60;  // 24 hours
-safef(query, sizeof query, "set wait_timeout=%d",waitTimeout);
+sqlSafef(query, sizeof query, "set wait_timeout=%d",waitTimeout);
 sqlUpdate(conn, query);
-fprintf(stderr,"%s\n",query);
 
 if (gOptions.flags & DBLOAD_INITIAL)
     checkInitialLoad(conn);
@@ -655,7 +654,7 @@ safef(destDbTable, sizeof(destDbTable), "%s.%s", destDb, destTable);
 
 gbSqlDupTableDef(conn, srcTable, destDbTable);
 
-safef(sqlCmd, sizeof(sqlCmd), "insert into %s select * from %s",
+sqlSafef(sqlCmd, sizeof(sqlCmd), "insert into %s select * from %s",
       destDbTable, srcTable);
 sqlUpdate(conn, sqlCmd);
 }
@@ -714,7 +713,7 @@ copyChromInfo(conn, destDb);
 
 /* using one does rename atomically */
 tables = getTableList(conn);
-dyStringAppend(sqlCmd, "rename table");
+sqlDyStringAppend(sqlCmd, "rename table");
 sep = " "; /* before first table arg */
 for (tbl = tables; tbl != NULL; tbl = tbl->next)
     {

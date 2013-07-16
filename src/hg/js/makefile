@@ -46,3 +46,6 @@ install:
 doInstall:
 	@mkdir -p ${DEST}/
 	../utils/cpAndLinkToResourceFiles.pl -exclude='makefile' -versionFile=../inc/versionInfo.h -destDir=${DEST} ${JS_FILES}
+	for file in ${STATIC_FILES}; do \
+	    cp -p --update $$file ${DEST}; \
+	done

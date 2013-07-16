@@ -11,6 +11,9 @@
 
 struct lineFile;
 
+void setUdcTimeout(struct cart *cart);
+/* set the udc cache timeout */
+
 void setUdcCacheDir();
 /* set the path to the udc cache dir */
 
@@ -1238,7 +1241,6 @@ boolean chainDbNormScoreAvailable(struct trackDb *tdb);
 
 /* trackDb settings: */
 #define SOURCE_TABLE "sourceTable"
-#define SOURCE_TABLE_PACK "sourceTablePack"
 
 void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char *label);
 /* Print out table of abbreviations. */

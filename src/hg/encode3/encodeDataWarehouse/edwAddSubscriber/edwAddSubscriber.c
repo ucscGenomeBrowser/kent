@@ -66,14 +66,10 @@ if (tagPattern != NULL)
 
 struct sqlConnection *conn = sqlConnect(edwDatabase);
 struct dyString *query = dyStringNew(0);
-dyStringAppend(query, 
-    "insert edwSubscriber (name, filePattern, dirPattern, tagPattern, onFileEndUpload) values (");
-dyStringPrintf(query, "'%s',", sqlEscapeString(name));
-dyStringPrintf(query, "'%s',", sqlEscapeString(filePattern));
-dyStringPrintf(query, "'%s',", sqlEscapeString(dirPattern));
-dyStringPrintf(query, "'%s','", sqlEscapeString(tagAsCgi->string));
-dyStringAppend(query, sqlEscapeString(command));
-dyStringAppend(query, "')");
+sqlDyStringPrintf(query, 
+    "insert edwSubscriber (name, filePattern, dirPattern, tagPattern, onFileEndUpload) "
+    "values ('%s','%s','%s','%s','%s')",
+    name, filePattern, dirPattern, tagAsCgi->string, command);
 sqlUpdate(conn, query->string);
 
 sqlDisconnect(&conn);

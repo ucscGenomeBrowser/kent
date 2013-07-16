@@ -64,7 +64,7 @@ outFn   = argv[2];
 outf    = mustOpen(outFn, "w");
 
 /* process omimGeneMap records with *p* or *q* locations */
-sprintf(query2,
+sqlSafef(query2, sizeof query2, 
         "select omimId, location from omimGeneMapNew where location like '\%cp%c' or location like '%cq%c'", 
         '%','%', '%','%');
 sr2 = sqlMustGetResult(conn2, query2);
@@ -150,7 +150,7 @@ while (row2 != NULL)
     
     if (band1HasTer == TRUE)
     	{
-	sprintf(query,
+	sqlSafef(query, sizeof query,
                 "select chromStart, chromEnd from %s where chrom = '%s' and type ='telomere' and chromStart = 0", gapTableName, chrom);
     	}
     else
@@ -159,7 +159,7 @@ while (row2 != NULL)
     	if (pqc == 'c') 
     	    {
 	    band1HasCen  = TRUE;
-	    sprintf(query,
+	    sqlSafef(query, sizeof query,
                     "select chromStart, chromEnd from %s where chrom = '%s' and type ='centromere'", gapTableName, chrom);
 	    }
 	else
@@ -167,7 +167,7 @@ while (row2 != NULL)
 	    /* process p or q */
 	    if ((pqc == 'p') || (pqc == 'q'))
 	    	{
-		sprintf(query,
+		sqlSafef(query, sizeof query,
                         "select chromStart, chromEnd from cytoBand where chrom = '%s' and name = '%s'", 
 		        chrom, band1);
 		}
@@ -190,7 +190,7 @@ while (row2 != NULL)
     else
 	{
     	sqlFreeResult(&sr);
-    	sprintf(query,
+    	sqlSafef(query, sizeof query,
                 "select min(chromStart), max(chromEnd) from cytoBand where chrom = '%s' and name like '%s%c'", chrom, band1, '%');
 	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
@@ -234,7 +234,7 @@ while (row2 != NULL)
 	    {
 	    band2HasTer = TRUE;
 	    *chpTer = '\0';
-    	    sprintf(query,
+    	    sqlSafef(query, sizeof query,
             		"select max(chromEnd), max(chromEnd) from cytoBand where chrom = '%s' and name like '%s%c'", chrom, band2, '%');
 	    }
 	else
@@ -243,12 +243,12 @@ while (row2 != NULL)
 	    if (chpCen != NULL) 
 	    	{
 	    	band2HasCen = TRUE;
-    		sprintf(query,
+    		sqlSafef(query, sizeof query,
             		"select chromStart, chromEnd from %s where chrom = '%s' and type = 'centromere'", gapTableName, chrom);
 	    	}
 	    else
 	    	{
-    		sprintf(query,
+    		sqlSafef(query, sizeof query,
             		"select chromStart, chromEnd from cytoBand where chrom = '%s' and name = '%s'", chrom, band2);
     		}
 	    }
@@ -264,7 +264,7 @@ while (row2 != NULL)
 	else
 	    {
     	    sqlFreeResult(&sr);
-            sprintf(query, 
+            sqlSafef(query, sizeof query, 
 	    	    "select min(chromStart), max(chromEnd) from cytoBand where chrom = '%s' and name like '%s%c'", chrom, band2, '%');
 
 	    sr = sqlMustGetResult(conn, query);

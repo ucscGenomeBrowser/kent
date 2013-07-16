@@ -169,8 +169,10 @@ highlightColor genePred
 html *
 htmlFile customTracks
 htmlUrl customTracks
-idInUrlSql altGraphX genePred
+idInUrlSql altGraphX genePred chain
 idXref genePred
+iframeUrl *
+iframeOptions *
 indelDoubleInsert psl bam
 indelPolyA psl bam
 indelQueryInsert psl bam
@@ -214,7 +216,7 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak narrowPeak
-maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig bedlogR genepred vcfTabix
+maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig bedlogR genepred vcfTabix factorSource
 maxWindowToQuery bigWig bed bedlogR
 metadata *
 mouseOverField bigBed
@@ -255,9 +257,9 @@ patDb expRatio
 patKey expRatio
 patTable expRatio
 pennantIcon *
-pgDbLink bed
-pgPolyphenPredTab bed
-pgSiftPredTab bed
+pgDbLink bed pgSnp
+pgPolyphenPredTab bed pgSnp
+pgSiftPredTab bed pgSnp
 pred psl
 prevExonText *
 priority *
@@ -319,7 +321,6 @@ snpTable bed
 snpVersion bed
 sortOrder *
 sourceTable factorSource
-sourceTablePack factorSource
 spanList *
 speciesCodonDefault wigMafProt wigMaf
 speciesDefaultOff wigMaf

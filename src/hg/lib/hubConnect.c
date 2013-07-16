@@ -170,7 +170,7 @@ struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int i
 {
 struct hubConnectStatus *hub = NULL;
 char query[1024];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select hubUrl,status, errorMessage,lastNotOkTime from %s where id=%d", getHubStatusTableName(), id);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
@@ -428,10 +428,10 @@ char query[512];
 char *statusTable = getHubStatusTableName();
 
 if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
-    safef(query, sizeof(query), "insert into %s (hubUrl,firstAdded) values (\"%s\",now())",
+    sqlSafef(query, sizeof(query), "insert into %s (hubUrl,firstAdded) values (\"%s\",now())",
 	statusTable, url);
 else
-    safef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
+    sqlSafef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
 	statusTable, url);
 sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
@@ -447,7 +447,7 @@ boolean foundOne = FALSE;
 int id = 0;
 
 char *statusTableName = getHubStatusTableName();
-safef(query, sizeof(query), "select id,errorMessage from %s where hubUrl = \"%s\"", statusTableName, url);
+sqlSafef(query, sizeof(query), "select id,errorMessage from %s where hubUrl = \"%s\"", statusTableName, url);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 
@@ -557,14 +557,14 @@ unsigned hubResetError(char *url)
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
 
-safef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", getHubStatusTableName(), url);
+sqlSafef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", getHubStatusTableName(), url);
 unsigned id = sqlQuickNum(conn, query);
 
 if (id == 0)
     errAbort("could not find url %s in status table (%s)\n", 
 	url, getHubStatusTableName());
 
-safef(query, sizeof(query), "update %s set errorMessage=\"\" where hubUrl = \"%s\"", getHubStatusTableName(), url);
+sqlSafef(query, sizeof(query), "update %s set errorMessage=\"\" where hubUrl = \"%s\"", getHubStatusTableName(), url);
 
 sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
@@ -578,14 +578,14 @@ unsigned hubClearStatus(char *url)
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
 
-safef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", getHubStatusTableName(), url);
+sqlSafef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", getHubStatusTableName(), url);
 unsigned id = sqlQuickNum(conn, query);
 
 if (id == 0)
     errAbort("could not find url %s in status table (%s)\n", 
 	url, getHubStatusTableName());
 
-safef(query, sizeof(query), "delete from %s where hubUrl = \"%s\"", getHubStatusTableName(), url);
+sqlSafef(query, sizeof(query), "delete from %s where hubUrl = \"%s\"", getHubStatusTableName(), url);
 
 sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
@@ -622,7 +622,7 @@ if (errorMessage != NULL)
     safecpy(buffer, sizeof buffer, errorMessage);
     while (lastChar(buffer) == '\n')
 	buffer[strlen(buffer) - 1] = '\0';
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d",
 	getHubStatusTableName(), buffer, hub->id);
     sqlUpdate(conn, query);
@@ -631,8 +631,8 @@ else if (tHub != NULL)
     {
     int dbCount = 0;
     char *dbList = getDbList(tHub, &dbCount);
-
-    safef(query, sizeof(query),
+    // users may include quotes in their hub names requiring escaping
+    sqlSafef(query, sizeof(query),
 	"update %s set shortLabel=\"%s\",longLabel=\"%s\",dbCount=\"%d\",dbList=\"%s\",errorMessage=\"\",lastOkTime=now() where id=%d",
 	getHubStatusTableName(), tHub->shortLabel, tHub->longLabel, 
 	dbCount, dbList,
@@ -679,7 +679,7 @@ return grp;
 
 struct trackDb *hubCollectTracks( char *database,  struct grp **pGroupList)
 /* Generate trackDb structures for all the tracks in attached hubs.  
- * Make grp structures for each hub. */
+ * Make grp structures for each hub. Returned group list is reversed. */
 {
 // return the cached copy if it exists
 static struct trackDb *hubTrackDbs;
@@ -721,12 +721,9 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 	    hubUpdateStatus(NULL, hub);
 	    }
 
-	// we're going to free the hubConnectStatus list
-	hub->trackHub = NULL;
         errCatchFree(&errCatch);
 	}
     }
-hubConnectStatusFreeList(&hubList);
 
 hubTrackDbs = tdbList;
 if (pGroupList != NULL)

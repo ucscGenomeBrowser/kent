@@ -95,7 +95,7 @@ struct dnaMotif *loadDnaMotif(char *motifName, char *motifTable)
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct dnaMotif *motif;
-sprintf(query, "name = '%s'", motifName);
+sqlSafefFrag(query, sizeof query, "name = '%s'", motifName);
 motif = dnaMotifLoadWhere(conn, motifTable, query);
 hFreeConn(&conn);
 return motif;
@@ -172,7 +172,7 @@ struct sqlConnection *conn = hAllocConn(database);
 cartWebStart(cart, database, "Regulatory Motif Info");
 genericBedClick(conn, tdb, item, start, 6);
 
-sprintf(query,
+sqlSafef(query, sizeof query,
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -208,10 +208,10 @@ boolean isVersion2 = sameString(tdb->table, "flyreg2");
 
 genericHeader(tdb, item);
 hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
-dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+sqlDyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       fullTable, seqName);
 hAddBinToQuery(start, end, query);
-dyStringPrintf(query, "chromStart = %d and name = '%s'", start, item);
+sqlDyStringPrintf(query, "chromStart = %d and name = '%s'", start, item);
 sr = sqlGetResult(conn, query->string);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -254,7 +254,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 int rowOffset = hOffsetPastBin(database, seqName, "sgdGene");
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select * from %s where name = '%s'", geneTable, name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -290,7 +290,7 @@ static void sacCerHgGeneLinkName(struct sqlConnection *conn, char *name)
 {
 char query[256];
 char *orf;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select name from sgdToName where value = '%s'", name);
 orf = sqlQuickString(conn, query);
 if (orf != NULL)
@@ -315,7 +315,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct transRegCode *trc = NULL;
 
 cartWebStart(cart, database, "Regulatory Code Info");
-sprintf(query,
+sqlSafef(query, sizeof query,
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -492,7 +492,7 @@ for (tf = tfList; tf != NULL; tf = tf->next)
 	 struct sqlResult *sr;
 	 boolean isFirst = TRUE;
 	 boolean gotAny = FALSE;
-	 safef(query, sizeof(query),
+	 sqlSafef(query, sizeof(query),
 	 	"select growthCondition from %s where name='%s'",
 		tfToConditionTable, tf->name);
 	 sr = sqlGetResult(conn, query);
@@ -556,7 +556,7 @@ void growthConditionSection(struct sqlConnection *conn, char *conditionTable)
 struct sqlResult *sr;
 char query[256], **row;
 webNewSection("Description of Growth Conditions");
-safef(query, sizeof(query), "select * from %s order by name", conditionTable);
+sqlSafef(query, sizeof(query), "select * from %s order by name", conditionTable);
 sr = sqlGetResult(conn, query);
 printf("<UL>");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -584,7 +584,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct transRegCodeProbe *probe = NULL;
 
 cartWebStart(cart, database, "ChIP-chip Probe Info");
-safef(query, sizeof(query), "select * from %s where name = '%s'",
+sqlSafef(query, sizeof(query), "select * from %s where name = '%s'",
 	tdb->table, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)

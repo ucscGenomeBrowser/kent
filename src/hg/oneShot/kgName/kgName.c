@@ -27,12 +27,6 @@ char *protDbName = NULL;
 char* lookupName(  struct sqlConnection *conn , char *id)
 {
 char query[256];
-char *newName;
-char *seqType;
-char *refSeqName;
-char *proteinID;
-char *hugoID;
-char cond_str[256];
 char *name = id;
 
 if (hTableExists("kgXref"))
@@ -40,7 +34,7 @@ if (hTableExists("kgXref"))
     struct sqlResult *sr;
     char **row;
 
-    sprintf(query, "select geneSymbol from kgXref where mRNA = '%s'", id);
+    sqlSafef(query, sizeof query, "select geneSymbol from kgXref where mRNA = '%s'", id);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -55,13 +49,13 @@ if (hTableExists("refLink") && hTableExists("knownGeneLink"))
     struct sqlResult *sr;
     char **row;
 
-    sprintf(cond_str, "name='%s' and seqType='g'", id);
+    sqlSafefFrag(cond_str, sizeof cond_str, "name='%s' and seqType='g'", id);
     seqType = sqlGetField(conn, database, "knownGeneLink", "seqType", cond_str);
 
     if (seqType != NULL)
 	{
 	// special processing for RefSeq DNA based genes
-	sprintf(cond_str, "mrnaAcc = '%s'", id);
+	qlSafefFrag(cond_str, sizeof cond_str, "mrnaAcc = '%s'", id);
 	refSeqName = sqlGetField(conn, database, "refLink", "name", cond_str);
 	if (refSeqName != NULL)
 	    {
@@ -70,10 +64,10 @@ if (hTableExists("refLink") && hTableExists("knownGeneLink"))
 	}
     else if (protDbName != NULL)
 	{
-	sprintf(cond_str, "mrnaID='%s'", id);
+	sqlSafefFrag(cond_str, sizeof cond_str, "mrnaID='%s'", id);
 	proteinID = sqlGetField(conn, database, "spMrna", "spID", cond_str);
 
-	sprintf(cond_str, "displayID = '%s'", proteinID);
+	sqlSafefFrag(cond_str, sizeof cond_str, "displayID = '%s'", proteinID);
 	hugoID = sqlGetField(conn, protDbName, "spXref3", "hugoSymbol", cond_str);
 	if (!((hugoID == NULL) || (*hugoID == '\0')) )
 	    {
@@ -81,14 +75,14 @@ if (hTableExists("refLink") && hTableExists("knownGeneLink"))
 	    }
 	else
 	    {
-	    sprintf(query,"select refseq from %s.mrnaRefseq where mrna = '%s';",  
+	    sqlSafef(query, sizeof query,"select refseq from %s.mrnaRefseq where mrna = '%s';",  
 		    database, id);
 
 	    sr = sqlGetResult(conn, query);
 	    row = sqlNextRow(sr);
 	    if (row != NULL)
 		{
-		sprintf(query, "select * from refLink where mrnaAcc = '%s'", row[0]);
+		sqlSafef(query, sizeof query, "select * from refLink where mrnaAcc = '%s'", row[0]);
 		sqlFreeResult(&sr);
 		sr = sqlGetResult(conn, query); 
 		if ((row = sqlNextRow(sr)) != NULL)
@@ -118,7 +112,7 @@ if (hTableExists("kgXref"))
     struct sqlResult *sr;
     char **row;
 
-    sprintf(query, "select spID from kgXref where mRNA = '%s'", id);
+    sqlSafef(query, sizeof query, "select spID from kgXref where mRNA = '%s'", id);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -137,10 +131,7 @@ void kgName(char *database, char *protDb, char *refPsl,  char *outAssoc)
 {
 struct sqlConnection *conn = sqlConnect(database);
 //struct sqlConnection *conn2 = sqlConnect("uniProt");
-char *words[1], **row;
 FILE *f = mustOpen(outAssoc, "w");
-int count = 0, found = 0;
-char query[256];
 struct lineFile *pslLf = pslFileOpen(refPsl);
 struct psl *psl;
 

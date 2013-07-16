@@ -254,7 +254,7 @@ if (sqlTableExists(conn, "tableAccessControl"))
     struct sqlResult *sr = NULL;
     char **row = NULL;
     acHash = newHash(0);
-    sr = sqlGetResult(conn, "select name,host from tableAccessControl");
+    sr = sqlGetResult(conn, "NOSQLINJ select name,host from tableAccessControl");
     while ((row = sqlNextRow(sr)) != NULL)
 	hashAddSlName(acHash, row[0], chopAtFirstDot(row[1]));
     sqlFreeResult(&sr);
@@ -992,10 +992,11 @@ webNewSection("<A NAME=\"Help\"></A>Using the Table Browser\n");
 printMainHelp();
 }
 
-void doMainPage(struct sqlConnection *conn)
+void doMainPage(struct sqlConnection *conn, boolean webStarted)
 /* Put up the first page user sees. */
 {
-htmlOpen("Table Browser");
+if (!webStarted)
+    htmlOpen("Table Browser");
 mainPageAfterOpen(conn);
 htmlClose();
 }

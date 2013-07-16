@@ -215,7 +215,7 @@ tymax	= pbStampPtr->ymax;
 ix	= stampPictPtr->xOrig;
 iy	= stampPictPtr->yOrig;
 
-safef(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
+sqlSafefFrag(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
 answer = sqlGetField(database, "pbAnomLimit", "pctLow", cond_str);
 pctLow    = (double)(atof(answer));
 answer = sqlGetField(database, "pbAnomLimit", "pctHi", cond_str);
@@ -276,7 +276,7 @@ ix	= stampPictPtr->xOrig;
 iy	= stampPictPtr->yOrig;
 
 aaChar = aaAlphabet[iTarget];
-safef(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
+sqlSafefFrag(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
 answer = sqlGetField(database, "pbAnomLimit", "pctLow", cond_str);
 pctLow    = (double)(atof(answer));
 answer = sqlGetField(database, "pbAnomLimit", "pctHi", cond_str);
@@ -405,7 +405,7 @@ struct pbStamp *pbStampPtr;
 int i;
 
 conn2= hAllocConn(database);
-safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", database, stampName);
+sqlSafef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", database, stampName);
 
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -417,7 +417,7 @@ if (row2 == NULL)
     }
 sqlFreeResult(&sr2);
     
-safef(query2, sizeof(query2), "select * from %s.%s;", database, pbStampPtr->stampTable);
+sqlSafef(query2, sizeof(query2), "select * from %s.%s;", database, pbStampPtr->stampTable);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
     	
@@ -705,7 +705,7 @@ boundaryColor = vgFindColorIx(g_vg, 170, 170, 170);
 
 /* draw pI stamp */
 
-safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 answer = sqlGetField(database, "pepPi", "count(*)", cond_str);
 
 /* either 0 or multiple rows are not valid */
@@ -736,7 +736,7 @@ else
 if (!hIsGsidServer())
     {
     /* draw Mol Wt stamp */
-    safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
     answer = sqlGetField(database, "pepMwAa", "MolWeight", cond_str);
     if (answer != NULL)
     	{
@@ -773,11 +773,11 @@ if (!proteinInSupportedGenome)
 /* draw exon count stamp */
 if (kgVersion == KG_III)
     {
-    safef(cond_str, sizeof(cond_str), "qName='%s'", mrnaID);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "qName='%s'", mrnaID);
     }
 else
     {
-    safef(cond_str, sizeof(cond_str), "qName='%s'", proteinID);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "qName='%s'", proteinID);
     }
 answer = sqlGetField(database, kgProtMapTableName, "blockCount", cond_str);
 if (answer != NULL)
@@ -821,7 +821,7 @@ if (!hIsGsidServer())
     {
 
     /* draw family size stamp */
-    safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
     answer = sqlGetField(protDbName, "swInterPro", "count(*)", cond_str);
     if (answer != NULL)
     	{

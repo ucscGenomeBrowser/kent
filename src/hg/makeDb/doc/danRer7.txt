@@ -269,6 +269,34 @@ close (FH);
     #	chr22:42178985-42178985
     hgsql -e 'update gap set bridge="no" where chromStart=42178984 AND chrom="chr22";' danRer7
 
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/danRer7/bed/windowMasker
+    cd /hive/data/genomes/danRer7/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev danRer7 > do.log 2>&1 &
+    # real     94m57.692s
+    # XXX - failed in doLoad due to bugs in safef/hdb.c ...
+
+    cd /hive/data/genomes/danRer7/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -continue=cleanup \
+      -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev danRer7 \
+      > cleanup.log 2>&1 &
+
+
+    # Masking statistics
+    faSize.danRer7.cleanWMSdust.txt
+# 1412464843 bases (2694734 N's 1409770109 real 701628147
+#    upper 708141962 lower) in 1133 sequences in 1 files
+# Total size: mean 1246659.2 sd 8088447.2 min 650 (Zv9_NA997)
+#    max 77276063 (chr7) median 23078
+# %50.14 masked total, %50.23 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps danRer7 rmsk windowmaskerSdust \
+       > fb.danRer7.rmsk.windowmaskerSdust.txt 2>&1
+    #   547071692 bases of 1412464843 (38.732%) in intersection
+
 ###########################################################################
 # MAKE 11.OOC FILES FOR BLAT (DONE - 2010-12-09 - Hiram)
     ssh kolossus

@@ -23,9 +23,9 @@ errAbort(
 int main(int argc, char *argv[])
 {
 struct sqlConnection *conn, *conn2, *conn3;
-char query2[256], query3[256], query4[256];
-struct sqlResult *sr2, *sr3, *sr4;
-char **row2, **row3, **row4;
+char query2[256], query3[256];
+struct sqlResult *sr2, *sr3;
+char **row2, **row3;
 char condStr[255];
 char *answer;
 
@@ -37,8 +37,7 @@ char *chp;
 char *acc2;
 
 char *name, *txStart, *txEnd;
-char *chrStart, *chrEnd;
-char *chrom, *chr;
+char *chrom;
 char *acc, *stat;
 char *frame, *start, *stop;
 char *causes;
@@ -65,7 +64,7 @@ conn2= hAllocConn();
 conn3= hAllocConn();
 
 /* go through each protein */
-safef(query2, sizeof(query2), "select * from %s.%s", kgTempDb, candTable);
+sqlSafef(query2, sizeof(query2), "select * from %s.%s", kgTempDb, candTable);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -76,7 +75,7 @@ while (row2 != NULL)
     txEnd   = row2[4];
     
     /* retrieve gene-check results */
-    safef(query3, sizeof(query3), 
+    sqlSafef(query3, sizeof(query3), 
           "select * from %s.%s where acc='%s' and chrStart=%s and chrEnd = %s",
           kgTempDb, chkTable, name, txStart, txEnd);
     sr3  = sqlMustGetResult(conn3, query3);
@@ -96,8 +95,8 @@ while (row2 != NULL)
 	numCdsIntrons = atoi(row3[18]);
 	causes    = row3[21];
 	
-	safef(condStr, sizeof(condStr), "name='%s'", acc);
-	answer = sqlGetField(conn, genomeDb, "refGene", "name", condStr);
+	sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", acc);
+	answer = sqlGetField(genomeDb, "refGene", "name", condStr);
  	if (answer != NULL) 
 	    {
 	    isRefSeq = TRUE;
@@ -175,7 +174,7 @@ while (row2 != NULL)
 	    safef(condStr, sizeof(condStr), "name='%s'", acc2);
 	    
 	    /* If it is an MGC gene, give it a 0.3 advantable */
-	    answer = sqlGetField(conn, genomeDb, "mgcGenes", "name", condStr);
+	    answer = sqlGetField(genomeDb, "mgcGenes", "name", condStr);
  	    if (answer != NULL) 
 	    	{
 	    	ranking = ranking - 0.3;

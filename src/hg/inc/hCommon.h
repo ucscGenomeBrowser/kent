@@ -25,6 +25,9 @@ char *hgTextName();
 char *hgTablesName();
 /* Relative URL to table browser. */
 
+char *hgVaiName();
+/* Relative URL to variant annotation integrator. */
+
 char *hgCustomName();
 /* Relative URL to custom tracks manager. */
 

@@ -45,7 +45,7 @@ void createTable(struct sqlConnection *conn)
 /* Make table. */
 {
 struct dyString *dy = newDyString(512);
-dyStringPrintf(dy, createSql, tableName, tableIndex);
+sqlDyStringPrintf(dy, createSql, tableName, tableIndex);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
@@ -95,7 +95,7 @@ for (i=0; i<faCount; ++i)
 	}
     strcpy(chromName, chromPrefix);
     strcat(chromName, name);
-    sprintf(query, "INSERT into %s VALUES('%s', %d, '%s')",
+    sqlSafef(query, sizeof query, "INSERT into %s VALUES('%s', %d, '%s')",
         tableName, chromName, size, nibName);
     sqlUpdate(conn,query);
     total += size;

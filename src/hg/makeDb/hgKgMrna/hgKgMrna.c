@@ -31,7 +31,7 @@ errAbort(
 }
 
 char *refLinkTableDef = 
-"CREATE TABLE refLink (\n"
+"NOSQLINJ CREATE TABLE refLink (\n"
 "    name varchar(255) not null,        # Name displayed in UI\n"
 "    product varchar(255) not null, 	# Name of protein product\n"
 "    mrnaAcc varchar(255) not null,	# mRNA accession\n"
@@ -51,7 +51,7 @@ char *refLinkTableDef =
 ")";
 
 char *refGeneTableDef = 
-"CREATE TABLE refGene ( \n"
+"NOSQLINJ CREATE TABLE refGene ( \n"
 "   name varchar(255) not null,	# mrna accession of gene \n"
 "   chrom varchar(255) not null,	# Chromosome name \n"
 "   strand char(1) not null,	# + or - for strand \n"
@@ -69,7 +69,7 @@ char *refGeneTableDef =
 ")";
 
 char *refPepTableDef =
-"CREATE TABLE refPep (\n"
+"NOSQLINJ CREATE TABLE refPep (\n"
 "    name varchar(255) not null,        # Accession of sequence\n"
 "    seq longblob not null,     # Peptide sequence\n"
 "              #Indices\n"
@@ -77,7 +77,7 @@ char *refPepTableDef =
 ")\n";
 
 char *refMrnaTableDef =
-"CREATE TABLE refMrna (\n"
+"NOSQLINJ CREATE TABLE refMrna (\n"
 "    name varchar(255) not null,        # Accession of sequence\n"
 "    seq longblob not null,     	# Nucleotide sequence\n"
 "              #Indices\n"
@@ -93,7 +93,7 @@ struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(hashSize);
 
-sprintf(query, "select id,name from %s", tableName);
+sqlSafef(query, sizeof query, "select id,name from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -349,13 +349,13 @@ char cond_str[200];
 
 /* Make refLink and other tables table if they don't exist already. */
 sqlMaybeMakeTable(conn, "refLink", refLinkTableDef);
-sqlUpdate(conn, "delete from refLink");
+sqlUpdate(conn, "NOSQLINJ delete from refLink");
 sqlMaybeMakeTable(conn, "refGene", refGeneTableDef);
-sqlUpdate(conn, "delete from refGene");
+sqlUpdate(conn, "NOSQLINJ delete from refGene");
 sqlMaybeMakeTable(conn, "refPep", refPepTableDef);
-sqlUpdate(conn, "delete from refPep");
+sqlUpdate(conn, "NOSQLINJ delete from refPep");
 sqlMaybeMakeTable(conn, "refMrna", refMrnaTableDef);
-sqlUpdate(conn, "delete from refMrna");
+sqlUpdate(conn, "NOSQLINJ delete from refMrna");
 
 /* Scan through locus link to omim ID file and put in hash. */
     {
@@ -476,7 +476,7 @@ while ((psl = pslNext(lf)) != NULL)
 	dotOut();
 	}
    
-    sprintf(cond_str, "extAC='%s'", psl->qName);
+    sqlSafefFrag(cond_str, sizeof cond_str, "extAC='%s'", psl->qName);
     answer = sqlGetField(proteinDB, "spXref2", "displayID", cond_str);
 	       
     if (answer == NULL)

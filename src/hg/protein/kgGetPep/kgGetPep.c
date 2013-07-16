@@ -53,7 +53,7 @@ while (fgets(line, 100, inf) != NULL)
     line[strlen(line)-1] = '\0';
     acc = &line[1];
     
-    sprintf(query3, "select * from proteins%s.spXref2 where extAc='%s' and extDB='EMBL';", 
+    sqlSafef(query3, sizeof query3,  "select * from proteins%s.spXref2 where extAc='%s' and extDB='EMBL';", 
 	    proteinDataDate, acc);
 
     sr3 = sqlMustGetResult(conn3, query3);
@@ -69,7 +69,7 @@ while (fgets(line, 100, inf) != NULL)
         bioentryID= row3[5];
 	databaseID= row3[6];
 	
-    	sprintf(query2,"select val from sp%s.protein where acc='%s';", 
+    	sqlSafef(query2, sizeof query2, "select val from sp%s.protein where acc='%s';", 
 		proteinDataDate, accession);
     	
 	sr2 = sqlMustGetResult(conn2, query2);

@@ -139,7 +139,7 @@ else
     char **row;
     /* Construct query.  Set up a little more than window so that
      * we can draw connecting lines. */
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"select chromStart,val from %s "
 	"where chrom='%s' and chromStart>=%d and chromStart<%d",
 	tg->table, chromName,

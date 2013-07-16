@@ -2,7 +2,10 @@
 # test comment
 # 	$Id: makefile,v 1.21 2010/06/04 00:12:42 larrym Exp $
 
-include ../../inc/common.mk
+kentSrc = ../..
+
+include ${kentSrc}/inc/localEnvironment.mk
+include ${kentSrc}/inc/common.mk
 
 # List of directories to build for userApps
 UTILS_APPLIST = \
@@ -43,7 +46,8 @@ DIRS = \
 	wigBedToStep \
 	pslUniq \
 	makeTrackIndex \
-	geoMirrorNode
+	geoMirrorNode \
+	mysqlSecurityCheck
 
 TEST_DIRS = \
 	gff3ToGenePred \

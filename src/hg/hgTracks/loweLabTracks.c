@@ -115,7 +115,7 @@ char **row;
 
 if(hTableExists(database, "COG"))
     {
-    sprintf(query, "select * from COG where name = '%s'", bed->name);
+    sqlSafef(query, sizeof query, "select * from COG where name = '%s'", bed->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
    	    COG = COGLoad(row);
@@ -161,7 +161,7 @@ if (lf->name == NULL)
     return shadesOfGray[9];
 if(hTableExists(database, "COG"))
     {
-    sprintf(query, "select * from COG where name = '%s'", lf->name);
+    sqlSafef(query, sizeof query,"select * from COG where name = '%s'", lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	COG = COGLoad(row);

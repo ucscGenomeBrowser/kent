@@ -36,7 +36,7 @@ int hubPublicCheck(char *table)
 {
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
-safef(query, sizeof(query), "select hubUrl, shortLabel,longLabel from %s", 
+sqlSafef(query, sizeof(query), "select hubUrl, shortLabel,longLabel from %s", 
 	table); 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;

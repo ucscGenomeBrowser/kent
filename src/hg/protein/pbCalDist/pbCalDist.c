@@ -176,7 +176,7 @@ icnt = jExon = pcnt = 0;
 pIcnt = 0;
 molWtCnt = 0;
 
-safef(query2, sizeof(query2), "select acc from %s.accToTaxon where taxon=%s;", proteinDatabaseName, taxon);
+sqlSafef(query2, sizeof(query2), "select acc from %s.accToTaxon where taxon=%s;", proteinDatabaseName, taxon);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 
@@ -184,16 +184,16 @@ while (row2 != NULL)
     {
     accession = row2[0];   
 
-    safef(cond_str, sizeof(cond_str), "acc='%s'", accession);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "acc='%s'", accession);
     protDisplayId = sqlGetField(proteinDatabaseName, "displayId", "val", cond_str);
     
-    safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayId);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayId);
     answer = sqlGetField(database, "knownGene", "name", cond_str);
 
     /* count InterPro domains */
     if (answer != NULL)
 	{
-    	safef(cond_str, sizeof(cond_str), "accession='%s'", accession);
+    	sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", accession);
     	answer2 = sqlGetField(protDbName, "swInterPro", "count(*)", cond_str);
 	if (answer2 != NULL)
 	    {
@@ -208,9 +208,9 @@ while (row2 != NULL)
 	}
     
     /* count exons, using coding exons from kgProtMap2 (KG-III) table */
-    safef(cond_str, sizeof(cond_str), "spID='%s'", accession);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "spID='%s'", accession);
     kgId = sqlGetField(database, "kgXref", "kgID", cond_str);
-    safef(cond_str, sizeof(cond_str), "qName='%s'", kgId);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "qName='%s'", kgId);
     answer2 = sqlGetField(database, "kgProtMap2", "blockCount", cond_str);
 
     if (answer2 != NULL)
@@ -229,7 +229,7 @@ while (row2 != NULL)
 	}
     
     /* process Mol Wt */
-    safef(cond_str, sizeof(cond_str), "accession='%s'", accession);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", accession);
     answer2 = sqlGetField(database, "pepMwAa", "molWeight", cond_str);
     if (answer2 != NULL)
 	{
@@ -238,7 +238,7 @@ while (row2 != NULL)
 	}
     
     /* process pI */
-    safef(cond_str, sizeof(cond_str), "accession='%s'", accession);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", accession);
     answer2 = sqlGetField(database, "pepPi", "pI", cond_str);
     if (answer2 != NULL)
 	{
@@ -246,7 +246,7 @@ while (row2 != NULL)
 	pIcnt++;
 	}
      
-    safef(cond_str, sizeof(cond_str), "acc='%s'", accession);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "acc='%s'", accession);
     aaSeq = sqlGetField(proteinDatabaseName, "protein", "val", cond_str);
     if (aaSeq == NULL)
 	{

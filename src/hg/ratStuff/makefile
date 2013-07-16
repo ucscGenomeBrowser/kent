@@ -1,3 +1,6 @@
+kentSrc = ../..
+
+include ${kentSrc}/inc/localEnvironment.mk
 
 # List of directories to build for userApps
 UTILS_APPLIST = \

@@ -39,7 +39,7 @@ struct dnaSeq *seq;
 int start, end, chromSize;
 boolean isRc;
 
-snprintf(query, sizeof(query), "select * from %s where name = '%s'", table, rangeId);
+sqlSafef(query, sizeof(query), "select * from %s where name = '%s'", table, rangeId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

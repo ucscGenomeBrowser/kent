@@ -1395,15 +1395,15 @@ boolean gvFilterDA(struct gv *el)
 int cnt = 0;
 struct gvAttr *attr = NULL;
 char query[256];
-char *escId = NULL;
+char *id = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 
 if (el->id != NULL)
-    escId = sqlEscapeString(el->id);
+    id = el->id;
 else
-    escId = sqlEscapeString(el->name);
+    id = el->name;
 
-safef(query, sizeof(query), "select * from hgFixed.gvAttr where id = '%s' and attrType = 'disease'", escId);
+sqlSafef(query, sizeof(query), "select * from hgFixed.gvAttr where id = '%s' and attrType = 'disease'", id);
 attr = gvAttrLoadByQuery(conn, query);
 hFreeConn(&conn);
 if (attr == NULL)
@@ -1475,10 +1475,8 @@ for (el = tg->items; el != NULL; el = el->next)
         {
         char query[256];
         char *commonName = NULL;
-        char *escId = sqlEscapeString(el->name);
-        safef(query, sizeof(query), "select attrVal from hgFixed.gvAttr where id = '%s' and attrType = 'commonName'", escId);
+        sqlSafef(query, sizeof(query), "select attrVal from hgFixed.gvAttr where id = '%s' and attrType = 'commonName'", el->name);
         commonName = sqlQuickString(conn, query);
-        freeMem(escId);
         if (labelStarted) dyStringAppendC(name, '/');
         else labelStarted = TRUE;
         if (commonName != NULL)
@@ -1524,16 +1522,15 @@ else if (sameString("Disagree", cartString(cart, "gvDisclaimer")))
     return;
     }
 /* load as linked list once, outside of loop */
-srcList = gvSrcLoadByQuery(conn, "select * from hgFixed.gvSrc");
+srcList = gvSrcLoadByQuery(conn, "NOSQLINJ select * from hgFixed.gvSrc");
 /* load part need from gv table, outside of loop (load in hash?) */
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct gv *details = NULL;
-    char query[256], *escId;
+    char query[256];
     struct gvPos *el = gvPosLoad(row);
-    escId = sqlEscapeString(el->name);
-    safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escId);
+    sqlSafef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", el->name);
     details = gvLoadByQuery(conn2, query);
     /* searched items are always visible */
     if (hgFindMatches != NULL && hashIntValDefault(hgFindMatches, el->name, 0) == 1)
@@ -1604,7 +1601,7 @@ struct oregannoAttr *attr = NULL;
 char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 
-safef(query, sizeof(query), "select * from oregannoAttr where id = '%s' and attribute = 'type'", el->id);
+sqlSafef(query, sizeof(query), "select * from oregannoAttr where id = '%s' and attribute = 'type'", el->id);
 attr = oregannoAttrLoadByQuery(conn, query);
 hFreeConn(&conn);
 if (attr == NULL)
@@ -3667,7 +3664,7 @@ struct linkedFeaturesSeries *lfsFromBed(struct lfs *lfsbed)
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
-char **row, rest[32];
+char **row, rest[64];
 int rowOffset, i;
 struct linkedFeaturesSeries *lfs;
 struct linkedFeatures *lfList = NULL, *lf;
@@ -3682,7 +3679,7 @@ lfs->orientation = orientFromChar(lfsbed->strand[0]);
 for (i = 0; i < lfsbed->lfCount; i++)
     {
     AllocVar(lf);
-    sprintf(rest, "qName = '%s'", lfsbed->lfNames[i]);
+    sqlSafefFrag(rest, sizeof rest, "qName = '%s'", lfsbed->lfNames[i]);
     sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom, lfsbed->lfStarts[i],
                      lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -3791,7 +3788,7 @@ if (differentString(option,ETHNIC_GROUP_DEFAULT))
 
 if (needJoin)
     {
-    dyStringPrintf(query, "select %s.* from %s,polyGenotype where ",
+    sqlDyStringPrintf(query, "select %s.* from %s,polyGenotype where ",
 	tg->table, tg->table);
 
     if (differentString(option,ETHNIC_GROUP_DEFAULT))
@@ -3800,13 +3797,13 @@ if (needJoin)
 	    cartCgiUsualString(cart, ETHNIC_GROUP_EXCINC, ETHNIC_NOT_DEFAULT);
 	if (sameWord(optionNot,"include"))
 	    {
-	    dyStringPrintf(query, "%s.name=polyGenotype.name and "
+	    sqlDyStringPrintf(query, "%s.name=polyGenotype.name and "
 		"polyGenotype.ethnicGroup=\"%s\" and ",
 		    tg->table, option);
 	    }
 	    else
 	    {
-	    dyStringPrintf(query, "%s.name=polyGenotype.name and "
+	    sqlDyStringPrintf(query, "%s.name=polyGenotype.name and "
 		"polyGenotype.ethnicGroup!=\"%s\" and ",
 		    tg->table, option);
 	    }
@@ -3821,18 +3818,18 @@ if (needJoin)
     }
 else
     {
-    dyStringPrintf(query, "select * from %s where ", tg->table);
+    sqlDyStringPrintf(query, "select * from %s where ", tg->table);
     }
 
 hAddBinToQuery(winStart, winEnd, query);
-dyStringPrintf(query,
+sqlDyStringPrintf(query,
     "chrom=\"%s\" AND chromStart<%d AND chromEnd>%d ",
     chromName, winEnd, winStart);
 
 option = cartCgiUsualString(cart, GENO_REGION, GENO_REGION_DEFAULT);
 
 if (differentString(option,GENO_REGION_DEFAULT))
-    dyStringPrintf(query, " and genoRegion=\"%s\"", option);
+    sqlDyStringPrintf(query, " and genoRegion=\"%s\"", option);
 
 option = cartCgiUsualString(cart, POLY_SOURCE, POLY_SOURCE_DEFAULT);
 if (differentString(option,POLY_SOURCE_DEFAULT))
@@ -3844,12 +3841,12 @@ if (differentString(option,POLY_SOURCE_DEFAULT))
 	which = ucsc;
     else
 	which = other;
-    dyStringPrintf(query, " and polySource=\"%s\"", which);
+    sqlDyStringPrintf(query, " and polySource=\"%s\"", which);
     }
 
 option = cartCgiUsualString(cart, POLY_SUBFAMILY, POLY_SUBFAMILY_DEFAULT);
 if (differentString(option,POLY_SUBFAMILY_DEFAULT))
-    dyStringPrintf(query, " and polySubfamily=\"%s\"", option);
+    sqlDyStringPrintf(query, " and polySubfamily=\"%s\"", option);
 
 option = cartCgiUsualString(cart, dbRIP_DISEASE, DISEASE_DEFAULT);
 if (differentString(option,DISEASE_DEFAULT))
@@ -3860,7 +3857,7 @@ if (differentString(option,DISEASE_DEFAULT))
 	dyStringPrintf(query, " and disease!=\"NA\"");
     }
 
-dyStringPrintf(query, " group by %s.name", tg->table);
+sqlDyStringPrintf(query, " group by %s.name", tg->table);
 
 sr = sqlGetResult(conn, dyStringCannibalize(&query));
 rowOffset=1;
@@ -4319,7 +4316,7 @@ if (clause == NULL)
 
 // don't care about a column value here, just if it exists, so get a constant
 char *nameCol = trackDbSettingOrDefault(tg->tdb, GENEPRED_CLASS_NAME_COLUMN, GENEPRED_CLASS_NAME_COLUMN_DEFAULT);
-struct dyString *dyQuery = dyStringCreate("select 1 from %s where %s = \"%s\" and ", classTable, nameCol, lf->name);
+struct dyString *dyQuery = sqlDyStringCreate("select 1 from %s where %s = \"%s\" and ", classTable, nameCol, lf->name);
 dyStringAppend(dyQuery, clause);
 freeMem(clause);
 return dyQuery;
@@ -4351,7 +4348,7 @@ if (ct == acemblyAll)
     return TRUE;
 struct sqlConnection *conn = hAllocConn(database);
 char query[1024];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select 1 from %s where (name = \"%s\") and (class = \"%s\")", classTable, lf->name, classType);
 boolean passesThroughFilter = sqlQuickNum(conn, query);
 hFreeConn(&conn);
@@ -4409,7 +4406,7 @@ if (hTableExists(database, "knownMore"))
 
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
-	sprintf(query, "select * from knownMore where transId = '%s'", lf->name);
+	sqlSafef(query, sizeof query, "select * from knownMore where transId = '%s'", lf->name);
 	sr = sqlGetResult(conn, query);
 	if ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -4427,7 +4424,7 @@ else if (hTableExists(database, "knownInfo"))
     {
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
-	sprintf(query, "select name from knownInfo where transId = '%s'", lf->name);
+	sqlSafef(query, sizeof query, "select name from knownInfo where transId = '%s'", lf->name);
 	sqlQuickQuery(conn, query, lf->name, sizeof(lf->name));
 	}
     }
@@ -4476,7 +4473,7 @@ static char cat[128];
 struct linkedFeatures *lf = item;
 if (lf->extra != NULL)
     {
-    sprintf(cat,"%s",(char *)lf->extra);
+    safef(cat, sizeof cat, "%s",(char *)lf->extra);
     return cat;
     }
 else
@@ -4522,7 +4519,7 @@ if (hTableExists(database, "kgXref"))
         struct dyString *name = dyStringNew(SMALLDYBUF);
         if (useGeneSymbol)
             {
-            sprintf(cond_str, "kgID='%s'", lf->name);
+            sqlSafefFrag(cond_str, sizeof cond_str, "kgID='%s'", lf->name);
             geneSymbol = sqlGetField("hg17", "kgXref", "geneSymbol", cond_str);
             if (geneSymbol != NULL)
                 {
@@ -4537,13 +4534,13 @@ if (hTableExists(database, "kgXref"))
 	    }
         if (useProtDisplayId)
             {
-	    safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+	    sqlSafefFrag(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
             protDisplayId = sqlGetField("hg17", "kgXref", "spDisplayID", cond_str);
             dyStringAppend(name, protDisplayId);
 	    }
         if (useMimId && hTableExists(database, "refLink"))
             {
-            safef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
+            sqlSafef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
             mimId = sqlQuickString(conn, cond_str);
             if (mimId)
                 dyStringAppend(name, mimId);
@@ -4578,17 +4575,17 @@ char *h1n1SeqName(struct track *tg, void *item)
 {
 struct linkedFeatures *lf = item;
 struct sqlConnection *conn = hAllocConn(database);
-char query[256];
+char query[256], temp[256];
 char *strain = NULL;
 char *chp;
 
-safef(query, sizeof(query), "select strain from h1n1SeqXref where seqId = '%s'", lf->name);
+sqlSafef(query, sizeof(query), "select strain from h1n1SeqXref where seqId = '%s'", lf->name);
 strain = sqlQuickString(conn, query);
 chp = strstr(strain, "/2009");
 if (chp != NULL) *chp = '\0';
 hFreeConn(&conn);
-safef(query, sizeof(query), "%s %s", strain+2, lf->name);
-return(strdup(query));
+safef(temp, sizeof(temp), "%s %s", strain+2, lf->name);
+return(strdup(temp));
 }
 
 char *knownGeneName(struct track *tg, void *item)
@@ -4673,7 +4670,7 @@ if (hTableExists(database, "kgXref"))
         labelStarted = FALSE; /* reset between items */
         if (useGeneSymbol)
             {
-            sprintf(cond_str, "kgID='%s'", lf->name);
+            sqlSafefFrag(cond_str, sizeof cond_str,"kgID='%s'", lf->name);
             geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
             if (geneSymbol != NULL)
                 {
@@ -4697,7 +4694,7 @@ if (hTableExists(database, "kgXref"))
                 }
             else
                 {
-	        safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+	        sqlSafefFrag(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
                 protDisplayId = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
                 dyStringAppend(name, protDisplayId);
                 }
@@ -4706,7 +4703,7 @@ if (hTableExists(database, "kgXref"))
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
-            safef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
+            sqlSafef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
             mimId = sqlQuickString(conn, cond_str);
             if (mimId)
                 dyStringAppend(name, mimId);
@@ -4769,7 +4766,7 @@ if (!showSpliceVariants)
 	struct sqlConnection *conn = hAllocConn(database);
         struct hash *hash = hashNew(0);
         char query[512];
-        safef(query, sizeof(query),
+        sqlSafef(query, sizeof(query),
                 "select transcript from %s where chromStart < %d && chromEnd > %d",
                 canonicalTable, winEnd, winStart);
         struct sqlResult *sr = sqlGetResult(conn, query);
@@ -4827,13 +4824,13 @@ lightest.b = (1*normal->b + 2*255) / 3;
 col = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
 
 /* set color first according to RefSeq status (if there is a corresponding RefSeq) */
-sprintf(cond_str, "name='%s' ", lf->name);
+sqlSafefFrag(cond_str, sizeof cond_str, "name='%s' ", lf->name);
 refAcc = sqlGetField(database, "refGene", "name", cond_str);
 if (refAcc != NULL)
     {
     if (hTableExists(database, "refSeqStatus"))
         {
-        sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'", refAcc);
+        sqlSafef(query, sizeof query, "select status from refSeqStatus where mrnaAcc = '%s'", refAcc);
         sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
             {
@@ -4852,11 +4849,11 @@ if (refAcc != NULL)
     }
 
 /* set to dark blue if there is a corresponding Swiss-Prot protein */
-sprintf(cond_str, "name='%s'", (char *)(lf->name));
+sqlSafefFrag(cond_str, sizeof cond_str, "name='%s'", lf->name);
 proteinID= sqlGetField(database, "knownGene", "proteinID", cond_str);
 if (proteinID != NULL && protDbName != NULL)
     {
-    sprintf(cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
+    sqlSafefFrag(cond_str, sizeof cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
     ans= sqlGetField(protDbName, "spXref3", "displayID", cond_str);
     if (ans != NULL)
         {
@@ -4867,7 +4864,7 @@ if (proteinID != NULL && protDbName != NULL)
 /* if a corresponding PDB entry exists, set it to black */
 if (protDbName != NULL)
     {
-    sprintf(cond_str, "sp='%s'", proteinID);
+    sqlSafefFrag(cond_str, sizeof cond_str, "sp='%s'", proteinID);
     pdbID= sqlGetField(protDbName, "pdbSP", "pdb", cond_str);
     }
 
@@ -4891,7 +4888,7 @@ if (hTableExists(database, "kgColor"))
     int colIx = MG_BLUE;
     struct sqlConnection *conn = hAllocConn(database);
     char query[512];
-    safef(query, sizeof(query), "select r,g,b from kgColor where kgID='%s'",
+    sqlSafef(query, sizeof(query), "select r,g,b from kgColor where kgID='%s'",
           lf->name);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row = sqlNextRow(sr);
@@ -4933,7 +4930,7 @@ char conditionStr[256];
 struct bed *sw = item;
 
 // This is necessary because Ensembl kept changing their xref table definition
-sprintf(conditionStr, "transcript_name='%s'", sw->name);
+sqlSafef(conditionStr, sizeof conditionStr, "transcript_name='%s'", sw->name);
 if (hTableExists(database, "ensGeneXref"))
     {
     proteinName = sqlGetField(database, "ensGeneXref", "translation_name", conditionStr);
@@ -4958,7 +4955,7 @@ else
             {
             if (hTableExists(database,  "ensemblXref3"))
                 {
-                sprintf(conditionStr, "transcript='%s'", sw->name);
+                sqlSafef(conditionStr, sizeof conditionStr, "transcript='%s'", sw->name);
                 proteinName = sqlGetField(database, "ensemblXref3", "protein", conditionStr);
                 }
             else
@@ -4981,7 +4978,7 @@ static char *superfamilyNameLong(char *name)
    due to possibility of multiple domains. */
 {
 char query[256];
-safef(query, sizeof(query), "select description from sfDescription where name='%s';", name);
+sqlSafef(query, sizeof(query), "select description from sfDescription where name='%s';", name);
 return collapseRowsFromQuery(query, "; ", 100);
 }
 
@@ -5006,7 +5003,7 @@ static char *gadDiseaseClassList(char *name)
 /* Return list of diseases associated with a GAD entry */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select distinct diseaseClassCode from gadAll "
       "where geneSymbol='%s' and association = 'Y' order by diseaseClassCode",
       name);
@@ -5017,7 +5014,7 @@ static char *gadDiseaseList(char *name)
 /* Return list of diseases associated with a GAD entry */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' "
       "order by broadPhen", name);
 return collapseRowsFromQuery(query, "; ", 20);
@@ -5060,7 +5057,7 @@ static char *decipherPhenotypeList(char *name)
 /* Return list of diseases associated with a DECIPHER entry */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
         "select distinct phenotype from decipherRaw where id='%s' order by phenotype", name);
 return collapseRowsFromQuery(query, "; ", 20);
 }
@@ -5087,13 +5084,13 @@ char *decipherId = NULL;
 	RED:	If the entry is a deletion (mean ratio < 0)
 	BLUE:	If the entry is a duplication (mean ratio > 0)
 */
-safef(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
+sqlSafefFrag(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
 if (decipherId != NULL)
     {
     if (hTableExists(database, "decipherRaw"))
         {
-        safef(query, sizeof(query),
+        sqlSafef(query, sizeof(query),
               "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d",
 	      decipherId, bed->chromStart+1, bed->chromEnd);
 	sr = sqlGetResult(conn, query);
@@ -5112,7 +5109,7 @@ if (decipherId != NULL)
         /* add more logic here to check for mean_ratio = 0
            (which is a problem to be fixed by DECIPHER */
 
-        safef(query, sizeof(query),
+        sqlSafef(query, sizeof(query),
 	       "select mean_ratio = 0 from decipherRaw where id = '%s'", decipherId);
         sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
@@ -5196,7 +5193,7 @@ if (color)
 	char cond_str[256];
 	char linkTable[256];
 	safef(linkTable, sizeof(linkTable), "%sLink", tg->table);
-	safef(cond_str, sizeof(cond_str), "name='%s'", tg->itemName(tg, bed));
+	sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", tg->itemName(tg, bed));
         char *s = sqlGetField(database, linkTable, "description", cond_str);
 	hFreeConn(&conn);
 	if (s == NULL)
@@ -5279,7 +5276,8 @@ struct hashEl *cacheEl = hashLookup(cache, acc);
 if (cacheEl == NULL)
     {
     char query[256];
-    sprintf(query, "select organism.name from gbCdnaInfo,organism where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
+    sqlSafef(query, sizeof query, 
+	"select organism.name from gbCdnaInfo,organism where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
     char *org = sqlQuickString(conn, query);
     if ((org != NULL) && (org[0] == '\0'))
         org = NULL;
@@ -5304,7 +5302,7 @@ static char nameBuf[256];
 char query[256], *name = NULL;
 if (hTableExists(database,  "refLink"))
     {
-    sprintf(query, "select name from refLink where mrnaAcc = '%s'", acc);
+    sqlSafef(query, sizeof query, "select name from refLink where mrnaAcc = '%s'", acc);
     name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf));
     if ((name != NULL) && (name[0] == '\0'))
         name = NULL;
@@ -5320,7 +5318,7 @@ static char symbolBuf[256];
 char query[256], *symbol = NULL;
 if (hTableExists(database,  "rgdGene2ToSymbol"))
     {
-    sprintf(query, "select geneSymbol from rgdGene2ToSymbol where rgdId = '%s'", acc);
+    sqlSafef(query, sizeof query, "select geneSymbol from rgdGene2ToSymbol where rgdId = '%s'", acc);
     symbol = sqlQuickQuery(conn, query, symbolBuf, sizeof(symbolBuf));
     if ((symbol != NULL) && (symbol[0] == '\0'))
         symbol = NULL;
@@ -5505,7 +5503,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         {
         char *mimId;
         char query[256];
-        safef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
+        sqlSafef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
         mimId = sqlQuickString(conn, query);
         if (labelStarted) dyStringAppendC(name, '/');
         else labelStarted = TRUE;
@@ -5565,9 +5563,9 @@ if (blastRef != NULL)
 		if ((char *)NULL != (ptr = strchr(buffer, '.')))
 		    *ptr = 0;
 		if (!startsWith("blastDm", tg->tdb->track))
-		    safef(query, sizeof(query), "select geneId, refPos, extra1 from %s where acc = '%s'", blastRef, buffer);
+		    sqlSafef(query, sizeof(query), "select geneId, refPos, extra1 from %s where acc = '%s'", blastRef, buffer);
 		else
-		    safef(query, sizeof(query), "select geneId, refPos from %s where acc = '%s'", blastRef, buffer);
+		    sqlSafef(query, sizeof(query), "select geneId, refPos from %s where acc = '%s'", blastRef, buffer);
 		sr = sqlGetResult(conn, query);
 		if ((row = sqlNextRow(sr)) != NULL)
 		    {
@@ -5682,7 +5680,7 @@ switch(colorMode)
 
 		    if ((pos = strchr(acc, '.')) != NULL)
 			*pos = 0;
-		    safef(query, sizeof(query), "select refPos from %s where acc = '%s'", blastRef, buffer);
+		    sqlSafef(query, sizeof(query), "select refPos from %s where acc = '%s'", blastRef, buffer);
 		    sr = sqlGetResult(conn, query);
 		    if ((row = sqlNextRow(sr)) != NULL)
 			{
@@ -5733,7 +5731,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
+sqlSafef(query, sizeof query, "select status from refSeqStatus where mrnaAcc = '%s'",
         name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -5809,7 +5807,7 @@ int i = 0;
 struct sqlConnection *conn = hAllocConn(database);
 
 /* Find the biotype for this item */
-sprintf(condStr, "name='%s'", lf->name);
+sqlSafef(condStr, sizeof condStr, "name='%s'", lf->name);
 bioType = sqlGetField(database, "ensGeneNonCoding", "biotype", condStr);
 hFreeConn(&conn);
 
@@ -5857,7 +5855,7 @@ char *name;
 conn = hAllocConn(database);
 hColor = hvGfxFindColorIx(hvg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 name = tg->itemName(tg, item);
-sprintf(condStr, "name='%s'", name);
+sqlSafef(condStr, sizeof condStr, "name='%s'", name);
 bioType = sqlGetField(database, "ensGeneNonCoding", "biotype", condStr);
 
 if (sameWord(bioType, "miRNA"))    color = MG_RED;
@@ -5892,7 +5890,7 @@ int cDnaReadDirectionForMrna(struct sqlConnection *conn, char *acc)
 int direction = -1;
 char query[512];
 char buf[SMALLBUF], *s = NULL;
-sprintf(query, "select direction from gbCdnaInfo where acc='%s'", acc);
+sqlSafef(query, sizeof query, "select direction from gbCdnaInfo where acc='%s'", acc);
 if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
     {
     direction = atoi(s);
@@ -6041,7 +6039,7 @@ if (isNotEmpty(infoTable)  && fieldExists)
     {
     /* use the value for infoCol defined above */
     infoCol = dyStringCannibalize(&dy2);
-    sprintf(query, "select %s from %s where transcriptId = '%s'",
+    sqlSafef(query, sizeof query, "select %s from %s where transcriptId = '%s'",
 	     infoCol, infoTable, lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -6100,7 +6098,7 @@ if (hTableExists(database,  infoTable))
     char buf[SMALLBUF];
     if (ptr != NULL)
 	*ptr = 0;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select symbol from %s where bdgpName = '%s';", infoTable, name);
     symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
     hFreeConn(&conn);
@@ -6135,7 +6133,7 @@ if (isNotEmpty(infoTable) && hTableExists(database,  infoTable))
     char *symbol = NULL;
     char query[256];
     char buf[SMALLBUF];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select symbol from %s where name = '%s';", infoTable, name);
     symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
     hFreeConn(&conn);
@@ -6163,7 +6161,7 @@ char *name = lf->name;
 char *symbol = NULL;
 char query[256];
 char buf[SMALLBUF];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select value from sgdToName where name = '%s'", name);
 symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
 hFreeConn(&conn);
@@ -6459,7 +6457,7 @@ char *isochoreName(struct track *tg, void *item)
 {
 struct isochores *iso = item;
 static char buf[SMALLBUF];
-sprintf(buf, "%3.1f%% GC", 0.1*iso->gcPpt);
+safef(buf, sizeof buf, "%3.1f%% GC", 0.1*iso->gcPpt);
 return buf;
 }
 
@@ -6879,7 +6877,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct dyString *ds = newDyString(256);
 struct linkedFeatures *lf = item;
 
-dyStringPrintf(ds, "select name from rgdGeneLink where refSeq = '%s'", lf->name);
+sqlDyStringPrintf(ds, "select name from rgdGeneLink where refSeq = '%s'", lf->name);
 sqlQuickQuery(conn, ds->string, name, sizeof(name));
 freeDyString(&ds);
 hFreeConn(&conn);
@@ -6901,7 +6899,7 @@ char **row;
 struct gcPercent *itemList = NULL, *item;
 char query[256];
 
-sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u", tg->table,
+sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u", tg->table,
     chromName, winEnd, winStart);
 
 /* Get the frags and load into tg->items. */
@@ -6935,7 +6933,7 @@ char *gcPercentName(struct track *tg, void *item)
 struct gcPercent *gc = item;
 static char buf[32];
 
-sprintf(buf, "%3.1f%% GC", 0.1*gc->gcPpt);
+safef(buf, sizeof buf, "%3.1f%% GC", 0.1*gc->gcPpt);
 return buf;
 }
 
@@ -7037,16 +7035,16 @@ static char buf[32];
 switch (recombRateType)
     {
     case rroeDecodeAvg: case rroeMarshfieldAvg: case rroeGenethonAvg:
-	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->decodeAvg);
+	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->decodeAvg);
         break;
     case rroeDecodeFemale: case rroeMarshfieldFemale: case rroeGenethonFemale:
-	sprintf(buf, "%3.1f cM/Mb (F)", rr->decodeAvg);
+	safef(buf, sizeof buf, "%3.1f cM/Mb (F)", rr->decodeAvg);
         break;
     case rroeDecodeMale: case rroeMarshfieldMale: case rroeGenethonMale:
-	sprintf(buf, "%3.1f cM/Mb (M)", rr->decodeAvg);
+	safef(buf, sizeof buf, "%3.1f cM/Mb (M)", rr->decodeAvg);
         break;
     default:
-	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->decodeAvg);
+	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->decodeAvg);
         break;
     }
 return buf;
@@ -7123,10 +7121,10 @@ static char buf[32];
 switch (recombRateRatType)
     {
     case rrroeShrspAvg: case rrroeFhhAvg:
-	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->shrspAvg);
+	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->shrspAvg);
         break;
     default:
-	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->shrspAvg);
+	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->shrspAvg);
         break;
     }
 return buf;
@@ -7201,10 +7199,10 @@ static char buf[32];
 switch (recombRateMouseType)
     {
     case rrmoeWiAvg: case rrmoeMgdAvg:
-	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->wiAvg);
+	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->wiAvg);
         break;
     default:
-	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->wiAvg);
+	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->wiAvg);
         break;
     }
 return buf;
@@ -7455,7 +7453,7 @@ struct bed *it = item;
 struct sqlConnection *conn;
 
 conn = hAllocConn(database);
-sprintf(condStr, "interProId='%s' limit 1", it->name);
+sqlSafef(condStr, sizeof condStr, "interProId='%s' limit 1", it->name);
 desc = sqlGetField("proteome", "interProXref", "description", condStr);
 hFreeConn(&conn);
 return(desc);
@@ -7766,7 +7764,7 @@ conn = hAllocConn(database);
 hColor = hvGfxFindColorIx(hvg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 
 name = tg->itemName(tg, item);
-sprintf(condStr, "name='%s'", name);
+sqlSafef(condStr, sizeof condStr, "name='%s'", name);
 rnaType = sqlGetField(database, "ncRna", "type", condStr);
 
 if (sameWord(rnaType, "miRNA"))    color = MG_RED;
@@ -7803,7 +7801,7 @@ conn = hAllocConn(database);
 hColor = hvGfxFindColorIx(hvg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 
 name = tg->itemName(tg, item);
-sprintf(condStr, "name='%s'", name);
+sqlSafefFrag(condStr, sizeof condStr, "name='%s'", name);
 rnaType = sqlGetField(database, "wgRna", "type", condStr);
 if (sameWord(rnaType, "miRna"))   color = MG_RED;
 if (sameWord(rnaType, "HAcaBox")) color = hColor;
@@ -8636,7 +8634,7 @@ char *gapName(struct track *tg, void *item)
 {
 static char buf[24];
 struct agpGap *gap = item;
-sprintf(buf, "%s %s", gap->type, gap->bridge);
+safef(buf, sizeof buf, "%s %s", gap->type, gap->bridge);
 return buf;
 }
 
@@ -9657,9 +9655,9 @@ else
     conn = hAllocConn(CUSTOM_TRASH);
     table = ct->dbTableName;
     }
-struct dyString *query = dyStringCreate("select * from %s where ", table);
+struct dyString *query = sqlDyStringCreate("select * from %s where ", table);
 hAddBinToQuery(winStart, winEnd, query);
-dyStringPrintf(query, "chrom = '%s' and chromStart < %d and chromEnd > %d",
+sqlDyStringPrintf(query, "chrom = '%s' and chromStart < %d and chromEnd > %d",
 	       chromName, winEnd, winStart);
 tg->items = pgSnpLoadByQuery(conn, query->string);
 /* base coloring/display decision on count of items */
@@ -10034,7 +10032,7 @@ static struct slName *filterPmIds = NULL;
 struct linkedFeatures *lf = item;
 struct sqlConnection *conn = hAllocConn(database);
 char query[512];
-safef(query, sizeof(query), "select pubmedId from %s where name = '%s'",
+sqlSafef(query, sizeof(query), "select pubmedId from %s where name = '%s'",
       tg->tdb->table, lf->name);
 char buf[32];
 char *pmId = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -10154,7 +10152,7 @@ if (geneClasses)
    }
 if (hTableExists(database, classTable))
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
           "select %s from %s where %s = \"%s\"", classCol, classTable, nameCol, lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -10324,19 +10322,17 @@ Color gvColorByCount(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct gvPos *el = item;
 struct sqlConnection *conn = hAllocConn(database);
-char *escId = NULL;
+char *id = NULL;
 char *multColor = NULL, *singleColor = NULL;
 int num = 0;
 char query[256];
 if (el->id != NULL)
-    escId = sqlEscapeString(el->id);
+    id = el->id;
 else
-    escId = sqlEscapeString(el->name);
-safef(query, sizeof(query), "select count(*) from gvPos where name = '%s'",
-    escId);
+    id = el->name;
+sqlSafef(query, sizeof(query), "select count(*) from gvPos where name = '%s'", id);
 num = sqlQuickNum(conn, query);
 hFreeConn(&conn);
-freeMem(escId);
 singleColor = cartUsualString(cart, "gvColorCountSingle", "blue");
 multColor = cartUsualString(cart, "gvColorCountMult", "green");
 if (num == 1)
@@ -10387,15 +10383,15 @@ Color gvColorByDisease(struct track *tg, void *item, struct hvGfx *hvg)
 struct gvPos *el = item;
 struct gvAttr *attr = NULL;
 struct sqlConnection *conn = hAllocConn(database);
-char *escId = NULL;
+char *id = NULL;
 char *useColor = NULL;
 int index = -1;
 char query[256];
 if (el->id != NULL)
-    escId = sqlEscapeString(el->id);
+    id = el->id;
 else
-    escId = sqlEscapeString(el->name);
-safef(query, sizeof(query), "select * from hgFixed.gvAttr where id = '%s' and attrType = 'disease'", escId);
+    id = el->name;
+sqlSafef(query, sizeof(query), "select * from hgFixed.gvAttr where id = '%s' and attrType = 'disease'", id);
 attr = gvAttrLoadByQuery(conn, query);
 if (attr == NULL)
     {
@@ -10413,7 +10409,6 @@ if (index < 0 || index >= gvColorDASize)
 useColor = cartUsualString(cart, gvColorDAStrings[index], gvColorDADefault[index]);
 gvAttrFreeList(&attr);
 hFreeConn(&conn);
-freeMem(escId);
 if (sameString(useColor, "red"))
     return hvGfxFindColorIx(hvg, 221, 0, 0); /* dark red */
 else if (sameString(useColor, "orange"))
@@ -10440,14 +10435,14 @@ struct gv *details = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 char *typeColor = NULL;
 int index = 5;
-char *escId = NULL;
+char *id = NULL;
 char query[256];
 if (el->id != NULL)
-    escId = sqlEscapeString(el->id);
+    id = el->id;
 else
-    escId = sqlEscapeString(el->name);
+    id = el->name;
 
-safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escId);
+sqlSafef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", id);
 details = gvLoadByQuery(conn, query);
 index = stringArrayIx(details->baseChangeType, gvColorTypeBaseChangeType, gvColorTypeSize);
 if (index < 0 || index >= gvColorTypeSize)
@@ -10458,7 +10453,6 @@ if (index < 0 || index >= gvColorTypeSize)
 typeColor = cartUsualString(cart, gvColorTypeStrings[index], gvColorTypeDefault[index]);
 gvFreeList(&details);
 hFreeConn(&conn);
-freeMem(escId);
 if (sameString(typeColor, "purple"))
     return hvGfxFindColorIx(hvg, 204, 0, 255);
 else if (sameString(typeColor, "green"))
@@ -10498,15 +10492,15 @@ Color oregannoColor(struct track *tg, void *item, struct hvGfx *hvg)
 struct oreganno *el = item;
 struct oregannoAttr *details = NULL;
 struct sqlConnection *conn = hAllocConn(database);
-char *escId = NULL;
+char *id = NULL;
 char query[256];
 Color itemColor = MG_BLACK;
 if (el->id != NULL)
-    escId = sqlEscapeString(el->id);
+    id = el->id;
 else
-    escId = sqlEscapeString(el->name);
+    id = el->name;
 
-safef(query, sizeof(query), "select * from oregannoAttr where attribute = 'type' and id = '%s'", escId);
+sqlSafef(query, sizeof(query), "select * from oregannoAttr where attribute = 'type' and id = '%s'", id);
 details = oregannoAttrLoadByQuery(conn, query);
 /* ORegAnno colors 666600 (Dark Green), CCCC66 (Tan), CC0033 (Red),
                    CCFF99 (Background Green)                        */
@@ -10518,7 +10512,6 @@ else if (sameString(details->attrVal, "REGULATORY REGION"))
     itemColor = hvGfxFindColorIx(hvg, 102, 102, 0);  /* dark green */
 oregannoAttrFreeList(&details);
 hFreeConn(&conn);
-freeMem(escId);
 return itemColor;
 }
 
@@ -10814,14 +10807,14 @@ dyStringClear(dy);
 
 // get gene symbol(s) first
 conn = hAllocConn(database);
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
         "select geneSymbol from omimGeneMap where omimId =%s", name);
 char buf[256];
 char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (isNotEmpty(ret))
     dyStringAppend(dy, ret);
 
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
         "select distinct description from omimPhenotype, omimGene2 where name='%s' and name=cast(omimId as char) order by description", name);
 char *disorders = collapseRowsFromQuery(query, "; ", 20);
 if (isNotEmpty(disorders))
@@ -10850,7 +10843,7 @@ boolean result;
 char answer[255];
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
       "select %s from omimPhenotype where omimId =%s and (%s=1 or %s=2 or %s=3 or %s=4)",
       omimPhenotypeClassColName, omimId, omimPhenotypeClassColName, omimPhenotypeClassColName,
       omimPhenotypeClassColName, omimPhenotypeClassColName);
@@ -10875,7 +10868,7 @@ int result;
 char answer[255];
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
       "select %s from omimPhenotype where omimId =%s and %s=%d", omimPhenotypeClassColName,omimId,omimPhenotypeClassColName,targetClass);
 
 char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
@@ -11034,7 +11027,7 @@ class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
 class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
 classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select omimId, %s from omimPhenotype where omimId=%s order by %s desc",
       omimPhenotypeClassColName, el->name, omimPhenotypeClassColName);
 
@@ -11143,14 +11136,14 @@ if (useGeneSymbol)
         labelStarted = TRUE;
     // get appoved gene symbol from omim2gene table first, if not available then get it from omimGeneMap table.
     char query[256];
-    safef(query, sizeof(query), "select approvedGeneSymbol from omim2gene where omimId = %s", el->name);
+    sqlSafef(query, sizeof(query), "select approvedGeneSymbol from omim2gene where omimId = %s", el->name);
     geneSymbol = sqlQuickString(conn, query);
     if (geneSymbol && differentString(geneSymbol, "-"))
         dyStringAppend(name, geneSymbol);
     else
         {
         char *chp;
-        safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId = %s", el->name);
+        sqlSafef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId = %s", el->name);
         geneSymbol = sqlQuickString(conn, query);
         if (geneSymbol && differentString(geneSymbol, "0"))
             {
@@ -11177,7 +11170,7 @@ if (dy == NULL)
 dyStringClear(dy);
 
 char query[256];
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
         "select concat(gene_name,' ',mut_syntax_aa) from cosmicRaw where cosmic_mutation_id ='%s'", name);
 char buf[256];
 char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -11185,7 +11178,7 @@ char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (isNotEmpty(ret))
     dyStringAppend(dy, ret);
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select sum(mutated_samples) from cosmicRaw where cosmic_mutation_id='%s'",
       name);
 ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -11195,7 +11188,7 @@ if (isNotEmpty(ret))
     dyStringAppend(dy, ret);
     }
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
       name);
 ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -11204,7 +11197,7 @@ ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
     dyStringAppend(dy, ret);
     }
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select sum(mutated_samples)*100/sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
       name);
 ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -11227,7 +11220,7 @@ if (isNotEmpty(ret))
     dyStringAppend(dy, "\%)");
     }
 
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
         "select tumour_site from cosmicRaw where cosmic_mutation_id ='%s' order by tumour_site", name);
 char *disorders = collapseRowsFromQuery(query, ",", 4);
 if (isNotEmpty(disorders))
@@ -11278,7 +11271,7 @@ char **row;
 omimAvSnpBuffer[0] = '\0';
 
 conn = hAllocConn(database);
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
         "select replStr, dbSnpId, description from omimAvRepl where avId='%s'", name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -11319,7 +11312,7 @@ char query[256];
 omimLocationBuffer[0] = '\0';
 
 conn = hAllocConn(database);
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
         "select concat(title1, ' ', title2) from omimGeneMap where omimId=%s", name);
 (void)sqlQuickQuery(conn, query, omimLocationBuffer, sizeof(omimLocationBuffer));
 hFreeConn(&conn);
@@ -11372,7 +11365,7 @@ classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
 
 struct sqlConnection *conn = hAllocConn(database);
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select omimId, %s from omimPhenotype where omimId=%s", omimPhenotypeClassColName, el->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -11466,7 +11459,7 @@ else
     if (sameWord(omimGeneLabel, "UCSC gene symbol"))
         {
         /* get the gene symbol of the exact KG that matches not only ID but also genomic position */
-        safef(query, sizeof(query),
+        sqlSafef(query, sizeof(query),
               "select x.geneSymbol from kgXref x, omimToKnownCanonical c, knownGene k, omimGene o"
               " where c.omimId='%s' and c.kgId=x.kgId and k.name=x.kgId and o.name=c.omimId"
               " and o.chrom=k.chrom and k.txStart=%d and k.txEnd=%d",
@@ -11475,7 +11468,7 @@ else
         }
     else
         {
-        safef(query, sizeof(query),
+        sqlSafef(query, sizeof(query),
 	"select geneSymbol from omimGeneMap where omimId='%s'", el->name);
 	geneLabel = sqlQuickString(conn, query);
 	}
@@ -11498,7 +11491,7 @@ char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 
 /* set the color to red if the entry is listed in morbidmap */
-safef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
+sqlSafef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
 geneSymbols = sqlQuickString(conn, query);
 hFreeConn(&conn);
 if (geneSymbols != NULL)
@@ -11520,7 +11513,7 @@ char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 
 /* set the color to red if the entry is listed in morbidmap */
-safef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
+sqlSafef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
 geneSymbols = sqlQuickString(conn, query);
 hFreeConn(&conn);
 if (geneSymbols != NULL)
@@ -11537,7 +11530,7 @@ static char *omimGeneDiseaseList(char *name)
 /* Return list of diseases associated with a OMIM entry */
 {
 char query[256];
-safef(query,sizeof(query),
+sqlSafef(query,sizeof(query),
       "select distinct description from omimMorbidMap, omimGene "
       "where name='%s' and name=cast(omimId as char) order by description", name);
 return collapseRowsFromQuery(query, "; ", 20);
@@ -11751,7 +11744,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 int scoreMin = 0;
 int scoreMax = 99999;
 
-safef(where, ArraySize(where), "db='%s'", database);
+sqlSafefFrag(where, ArraySize(where), "db='%s'", database);
 
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -11915,7 +11908,7 @@ if (!zoomedToBaseLevel)
 	return;
 
 conn = hAllocConn(database);
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select offset,fileName from %s where chrom = '%s'", tg->table,chromName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)

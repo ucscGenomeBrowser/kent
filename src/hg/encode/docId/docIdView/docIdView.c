@@ -61,7 +61,7 @@ printf("<th>assembly</th>");
 printf("<th>subId</th>");
 printf("<th>val-report</th>");
 printf("</tr>\n");
-safef(query, sizeof query, "select * from %s", docIdTable);
+sqlSafef(query, sizeof query, "select * from %s", docIdTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -139,7 +139,7 @@ char *tempFile = tn.forCgi;
 boolean beenHere = FALSE;
 
 printf("<a href=docIdView?db=%s> Return </a><BR>", database);
-safef(query, sizeof query, "select * from %s where ix=%s", docIdTable,docId);
+sqlSafef(query, sizeof query, "select * from %s where ix=%s", docIdTable,docId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -186,7 +186,7 @@ char **row;
 boolean beenHere = FALSE;
 
 printf("<a href=docIdView?db=%s> Return </a><BR>", database);
-safef(query, sizeof query, "select * from %s where ix=%s", docIdTable,docId);
+sqlSafef(query, sizeof query, "select * from %s where ix=%s", docIdTable,docId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -214,10 +214,10 @@ struct sqlResult *sr;
 char **row;
 
 printf("<a href=docIdView?db=%s> Return </a><BR>", database);
-safef(query, sizeof query, "select user_id from %s where id = %s ", "projects",subId);
+sqlSafef(query, sizeof query, "select user_id from %s where id = %s ", "projects",subId);
 char *userId = sqlQuickString(conn, query);
 
-safef(query, sizeof query, "select name,email,pi from %s where id = '%s' ", "users",userId);
+sqlSafef(query, sizeof query, "select name,email,pi from %s where id = '%s' ", "users",userId);
 sr = sqlGetResult(conn, query);
 printf("<pre>");
 while ((row = sqlNextRow(sr)) != NULL)

@@ -222,7 +222,7 @@ char *chp;
 int homologCount;
 int gotPDBFile = 0;
 
-safef(query2, sizeof(query2),
+sqlSafef(query2, sizeof(query2),
 	"select subjId, dnaSeqId, aaSeqId, gene from gisaidXref where dnaSeqId='%s'", item);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -272,7 +272,7 @@ if (getH1n1Model(gene, modelPdbUrl))
 return;
 
 gotPDBFile = 0;
-safef(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
+sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
 
 printf("<TABLE>\n");
 printf("<TR><TD ALIGN=\"center\">Front</TD>\n");
@@ -304,7 +304,7 @@ return;
 
 if (sqlGetField(database, "protHomolog", "proteinID", cond_str) != NULL)
     {
-    safef(cond_str, sizeof(cond_str), "proteinID='%s'", item);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s'", item);
     predFN = sqlGetField(database, "protPredFile", "predFileName", cond_str);
     if (predFN != NULL)
 	{
@@ -324,7 +324,7 @@ homologCount = 0;
 strcpy(goodSCOPdomain, "dummy");
 
 conn2= hAllocConn(database);
-safef(query2, sizeof(query2),
+sqlSafef(query2, sizeof(query2),
 	"select homologID,eValue,SCOPdomain,chain from sc1.protHomolog where proteinID='%s' and evalue <= 0.01;",
 	item);
 sr2 = sqlMustGetResult(conn2, query2);
@@ -417,7 +417,7 @@ mkChimerax(item, pdbUrl, NULL, &chimerax);
 printf("<A HREF=\"%s\" TARGET=_blank>%s</A>, view with <A HREF=\"%s\">Chimera</A><BR>\n", pdbUrl, item, chimerax.forHtml);
 
 gotPDBFile = 0;
-safef(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
+sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
 
 printf("<TABLE>\n");
 printf("<TR><TD ALIGN=\"center\">Front</TD>\n");
@@ -449,7 +449,7 @@ return;
 
 if (sqlGetField(database, "protHomolog", "proteinID", cond_str) != NULL)
     {
-    safef(cond_str, sizeof(cond_str), "proteinID='%s'", item);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s'", item);
     predFN = sqlGetField(database, "protPredFile", "predFileName", cond_str);
     if (predFN != NULL)
 	{
@@ -469,7 +469,7 @@ homologCount = 0;
 strcpy(goodSCOPdomain, "dummy");
 
 conn2= hAllocConn(database);
-safef(query2, sizeof(query2),
+sqlSafef(query2, sizeof(query2),
 	"select homologID,eValue,SCOPdomain,chain from sc1.protHomolog where proteinID='%s' and evalue <= 0.01;",
 	item);
 sr2 = sqlMustGetResult(conn2, query2);
@@ -533,7 +533,7 @@ char **row;
 char *geneSymbol=NULL;
 genericHeader(tdb, item);
 
-sprintf(query, "select seqId, geneSymbol, strain, islId from h1n1SeqXref where seqId = '%s'", item);
+sqlSafef(query, sizeof query, "select seqId, geneSymbol, strain, islId from h1n1SeqXref where seqId = '%s'", item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -576,7 +576,7 @@ genericHeader(tdb, item);
 
 gene = item;
 printf("<B>Gene: </B> %s\n<BR>", gene);
-sprintf(query, "select chrom, chromStart, chromEnd from h1n1Gene where name='%s';", gene);
+sqlSafef(query, sizeof query, "select chrom, chromStart, chromEnd from h1n1Gene where name='%s';", gene);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)

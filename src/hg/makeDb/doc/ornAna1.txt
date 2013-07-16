@@ -188,6 +188,26 @@ sed -e 's/^.*://' $1 \
     ssh hgwdev
     ln -s /cluster/data/ornAna1/ornAna1.2bit /gbdb/ornAna1/ornAna1.2bit
 
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/ornAna1/bed/windowMasker
+    cd /hive/data/genomes/ornAna1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev ornAna1 > do.log 2>&1 &
+    # real     854m2.558s
+
+    # Masking statistics
+    cat faSize.ornAna1.cleanWMSdust.txt
+# 1996811212 bases (154575690 N's 1842235522 real 985350929
+#    upper 856884593 lower) in 201523 sequences in 1 files
+# Total size: mean 9908.6 sd 331992.5 min 108 (Contig271463)
+#    max 59581953 (chr3) median 1069
+# %42.91 masked total, %46.51 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps ornAna1 rmsk windowmaskerSdust \
+       > fb.ornAna1.rmsk.windowmaskerSdust.txt 2>&1
+    #  715714681 bases of 1996811212 (35.843%) in intersection
 
 #########################################################################
 # MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 12/21/06 angie - REDONE 2/6/07 - REDONE 7/24/07)
@@ -1830,6 +1850,33 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
     cd /cluster/data/ornAna1/bed
     ln -s blastz.bosTau7.swap lastz.bosTau7
+
+
+
+############################################################################
+# NUMTS TRACK (DONE 2013-06-16 - Chin)
+
+# copy and unzip
+# http://193.204.182.50/files/tracks.zip and 
+# http://193.204.182.50/files/other%20NumtS%20tracks.zip
+# to /hive/data/outside/NumtS/2012/tracks
+
+    mkdir /hive/data/genomes/ornAna1/bed/NumtS
+    cd /hive/data/genomes/ornAna1/bed/NumtS
+    cp /hive/data/outside/NumtS/2012/tracks/Ornythoryncus_anatinus_1/* .
+    cat  tracks_nuclear_NumtS_new_ornAna1.txt | grep -v "^track" > ornAna1NumtS.bed
+    cat tracks_NumtS_assembled_new_platypus.txt | grep -v "^track" > ornAna1NumtSAssembled.bed
+    cat tracks_mitochondrion_NumtS_new_ornAna1.txt | grep -v "^track" >  ornAna1NumtSMitochondrion.bed
+
+    # load the 3 bed files to ornAna1 
+    hgLoadBed ornAna1  numtSAssembled  ornAna1NumtSAssembled.bed
+    hgLoadBed ornAna1 numtS ornAna1NumtS.bed
+    hgLoadBed ornAna1 numtSMitochondrion ornAna1NumtSMitochondrion.bed
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/ornAna1/NumtS
+    ln -s `pwd`/OrnAna-1_NumtS_seqs.sorted.bam{,.bai} /gbdb/ornAna1/NumtS/
+    hgBbiDbLink ornAna1 bamAllNumtSSorted /gbdb/ornAna1/NumtS/RatNor_NumtS_seqs.sorted.bam
+    # setup trackDb for ornAna1
 
 
 ############################################################################

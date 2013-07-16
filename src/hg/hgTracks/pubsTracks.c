@@ -10,6 +10,12 @@ static struct rgbColor impact2Color  = {0, 80, 255};
 static struct rgbColor impact3Color  = {0, 100, 0};
 static struct rgbColor impact4Color  = {255, 255, 0};
 
+// the cgi can handle "old" or "new" table formats
+// seqTableFormat can be is either uninitialized, old (bed that needs a join) or new (denormalized bed)
+int seqTableFormat = 0;
+#define SEQTABLE_NEW 1
+#define SEQTABLE_OLD 2
+
 static char *pubsArticleTable(struct track *tg)
 /* return the name of the pubs articleTable, either
  * the value from the trackDb statement 'articleTable'
@@ -71,7 +77,7 @@ if (!sqlTableExists(conn, "hgFixed.pubsClassColors"))
     {
     return;
     }
-char *query = "SELECT class, rgbColor FROM hgFixed.pubsClassColors";
+char *query = "NOSQLINJ SELECT class, rgbColor FROM hgFixed.pubsClassColors";
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -107,6 +113,21 @@ authorYear  = catTwoStrings(author, year);
 return authorYear;
 }
 
+static void setFormatFlag(struct sqlConnection* conn, char* tableName) 
+/* We support two different storage places for article data: either the bed table directly 
+ * includes the title + author of the article or we have to look it up from the articles 
+ * table. Having a copy of the title in the bed table is faster 
+ * This function sets the flag to indicate the version we have in our table.
+ * */
+{
+if (seqTableFormat!=0)
+    return;
+if (sqlColumnExists(conn, tableName, "title")) 
+    seqTableFormat = SEQTABLE_NEW;
+else
+    seqTableFormat = SEQTABLE_OLD;
+}
+
 static struct pubsExtra *pubsMakeExtra(struct track* tg, char *articleTable, 
     struct sqlConnection* conn, struct linkedFeatures* lf)
 /* bad solution: a function that is called before the extra field is 
@@ -118,22 +139,13 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 struct pubsExtra *extra = NULL;
 
-/* support two different storage places for article data: either the bed table directly 
- * includes the title + author of the article or we have to look it up from the articles 
- * table. Having a copy of the title in the bed table is faster */
-bool newFormat = FALSE;
-if (sqlColumnExists(conn, tg->table, "title")) 
-    {
-    safef(query, sizeof(query), "SELECT firstAuthor, year, title, impact, classes FROM %s "
+setFormatFlag(conn, tg->table);
+if (seqTableFormat==SEQTABLE_NEW)
+    sqlSafef(query, sizeof(query), "SELECT firstAuthor, year, title, impact, classes FROM %s "
     "WHERE chrom = '%s' and chromStart = '%d' and name='%s'", tg->table, chromName, lf->start, lf->name);
-    newFormat = TRUE;
-    }
 else 
-    {
-    safef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE articleId = '%s'", 
+    sqlSafef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE articleId = '%s'", 
         articleTable, lf->name);
-    newFormat = FALSE;
-    }
 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -154,7 +166,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     extra->color  = NULL;
     extra->shade  = -1;
 
-    if (newFormat) 
+    if (seqTableFormat==SEQTABLE_NEW) 
         {
         impact  = row[3];
         classes = row[4];
@@ -223,6 +235,12 @@ return extra;
 static void pubsAddExtra(struct track* tg, struct linkedFeatures* lf)
 /* add authorYear and title to linkedFeatures->extra */
 {
+// no extra field if we're in dense mode
+if (tg->limitedVis == tvDense) 
+    {
+    return;
+    }
+
 char *articleTable = trackDbSettingClosestToHome(tg->tdb, "pubsArticleTable");
 if(isEmpty(articleTable))
     return;
@@ -235,14 +253,14 @@ lf->extra = extra;
 hFreeConn(&conn);
 }
 
-static void dyStringPrintfWithSep(struct dyString *ds, char *sep, char *format, ...)
+static void sqlDyStringPrintfWithSep(struct dyString *ds, char* sep, char *format, ...)
 /*  Printf to end of dyString. Prefix with sep if dyString is not empty. */
 {
 if (ds->stringSize!=0)
     dyStringAppend(ds, sep);
 va_list args;
 va_start(args, format);
-dyStringVaPrintf(ds, format, args);
+vaSqlDyStringPrintfFrag(ds, format, args);
 va_end(args);
 }
 
@@ -253,7 +271,7 @@ if (isEmpty(keywords))
     return NULL;
 
 char query[12000];
-safef(query, sizeof(query), "SELECT articleId FROM %s WHERE "
+sqlSafef(query, sizeof(query), "SELECT articleId FROM %s WHERE "
 "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", articleTable, keywords);
 //printf("query %s", query);
 struct slName *artIds = sqlQuickList(conn, query);
@@ -275,6 +293,7 @@ static void pubsLoadKeywordYearItems(struct track *tg)
 {
 pubsParseClassColors();
 struct sqlConnection *conn = hAllocConn(database);
+setFormatFlag(conn, tg->table);
 char *keywords = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterKeywords");
 char *yearFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterYear");
 char *publFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterPublisher");
@@ -286,7 +305,7 @@ if(sameOk(publFilter, "all"))
     publFilter = NULL;
 
 if(isNotEmpty(keywords))
-    keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
+    keywords = makeMysqlMatchStr(keywords);
 
 if (isEmpty(yearFilter) && isEmpty(keywords) && isEmpty(publFilter))
 {
@@ -310,19 +329,19 @@ else
     char *extra = NULL;
     struct dyString *extraDy = dyStringNew(0);
     struct hash *articleIds = searchForKeywords(conn, articleTable, keywords);
-    if (sqlColumnExists(conn, tg->table, "year"))
+    if (seqTableFormat==SEQTABLE_NEW)
         // new table schema: filter fields are on main bed table
         {
         if (isNotEmpty(yearFilter))
-            dyStringPrintfWithSep(extraDy, " AND ", " year >= '%s'", sqlEscapeString(yearFilter));
+            sqlDyStringPrintfWithSep(extraDy, " AND ", " year >= '%s'", yearFilter);
         if (isNotEmpty(publFilter))
-            dyStringPrintfWithSep(extraDy, " AND ", " publisher = '%s'", sqlEscapeString(publFilter));
+            sqlDyStringPrintfWithSep(extraDy, " AND ", " publisher = '%s'", publFilter);
         }
     else
         // old table schema, filter by doing a join on article table
         {
         if(isNotEmpty(yearFilter))
-            dyStringPrintf(extraDy, "name IN (SELECT articleId FROM %s WHERE year>='%s')", articleTable, \
+            sqlDyStringPrintfFrag(extraDy, "name IN (SELECT articleId FROM %s WHERE year>='%s')", articleTable, \
                 yearFilter);
         }
 
@@ -447,18 +466,23 @@ genericMapItem(tg, hvg, item, bed->name, bed->name, start, end, x, y, width, hei
 static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* conn, char *articleId, bool getSnippet)
 /* create a hash with a mapping annotId -> snippet or annotId -> shortSeq for an articleId*/
 {
-    char query[LARGEBUF];
+    struct dyString *dy = dyStringNew(LARGEBUF);
     char *sequenceTable = trackDbRequiredSetting(tg->tdb, "pubsSequenceTable");
-    char *selectValSql = NULL;
-    if (getSnippet)
-        selectValSql = "replace(replace(snippet, \"<B>\", \"\\n>>> \"), \"</B>\", \" <<<\\n\")";
-    else
-        selectValSql = "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))";
 
-    safef(query, sizeof(query), "SELECT annotId, %s  FROM %s WHERE articleId='%s' ", 
-        selectValSql, sequenceTable, articleId);
-    struct hash *seqIdHash = sqlQuickHash(conn, query);
-    //freeMem(sequenceTable); // XX Why does this crash??
+    // work around sql injection fix problem, suggested by galt
+    sqlDyStringPrintf(dy, "SELECT annotId, ");
+
+     if (getSnippet)
+        dyStringAppend(dy, "replace(replace(snippet, \"<B>\", \"\\n>>> \"), \"</B>\", \" <<<\\n\")" );
+    else
+        dyStringAppend(dy, "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))" );
+    sqlDyStringPrintf(dy, " FROM %s WHERE articleId='%s' ", sequenceTable, articleId);
+    // end sql injection fix
+
+    struct hash *seqIdHash = sqlQuickHash(conn, dy->string);
+
+    //freeMem(sequenceTable); // trackDbRequiredSetting returns a value in a hash, so do not free
+    freeDyString(&dy);
     return seqIdHash;
 }
 
@@ -468,7 +492,7 @@ static char *pubsArticleDispId(struct track *tg, struct sqlConnection *conn, cha
 char *dispLabel = NULL;
 char *articleTable = pubsArticleTable(tg);
 char query[LARGEBUF];
-safef(query, sizeof(query), "SELECT firstAuthor, year FROM %s WHERE articleId = '%s'", 
+sqlSafef(query, sizeof(query), "SELECT firstAuthor, year FROM %s WHERE articleId = '%s'", 
     articleTable, articleId);
 struct sqlResult *sr = sqlGetResult(conn, query);
 if (sr!=NULL)

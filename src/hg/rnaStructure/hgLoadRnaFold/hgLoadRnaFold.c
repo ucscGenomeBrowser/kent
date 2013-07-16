@@ -46,7 +46,7 @@ static char *create =
 "    PRIMARY KEY(name(32))\n"
 ")\n";
 char query[512];
-safef(query, sizeof(query), create, table);
+sqlSafef(query, sizeof(query), create, table);
 sqlRemakeTable(conn, table, query);
 }
 

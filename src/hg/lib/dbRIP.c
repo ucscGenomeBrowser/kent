@@ -133,66 +133,15 @@ void dbRIPSaveToDb(struct sqlConnection *conn, struct dbRIP *el, char *tableName
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use dbRIPSaveToDbEscaped() */
+ * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%s,'%s',%s,'%s','%s',%g,%d,%d,'%s','%s')", 
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%s,'%s',%s,'%s','%s',%g,%d,%d,'%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->originalId,  el->forwardPrimer,  el->reversePrimer,  el->polyClass,  el->polyFamily,  el->polySubfamily,  el->polySeq,  el->polySource,  el->reference,  el->ascertainingMethod,  el->remarks,  el->tm,  el->filledSize,  el->emptySize,  el->disease,  el->genoRegion);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void dbRIPSaveToDbEscaped(struct sqlConnection *conn, struct dbRIP *el, char *tableName, int updateSize)
-/* Save dbRIP as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than dbRIPSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *originalId, *forwardPrimer, *reversePrimer, *polyClass, *polyFamily, *polySubfamily, *polySeq, *polySource, *reference, *ascertainingMethod, *remarks, *disease, *genoRegion;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-originalId = sqlEscapeString(el->originalId);
-forwardPrimer = sqlEscapeString(el->forwardPrimer);
-reversePrimer = sqlEscapeString(el->reversePrimer);
-polyClass = sqlEscapeString(el->polyClass);
-polyFamily = sqlEscapeString(el->polyFamily);
-polySubfamily = sqlEscapeString(el->polySubfamily);
-polySeq = sqlEscapeString(el->polySeq);
-polySource = sqlEscapeString(el->polySource);
-reference = sqlEscapeString(el->reference);
-ascertainingMethod = sqlEscapeString(el->ascertainingMethod);
-remarks = sqlEscapeString(el->remarks);
-disease = sqlEscapeString(el->disease);
-genoRegion = sqlEscapeString(el->genoRegion);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',%g,%d,%d,'%s','%s')", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  originalId,  forwardPrimer,  reversePrimer,  polyClass,  polyFamily,  polySubfamily,  polySeq,  polySource,  reference,  ascertainingMethod,  remarks, el->tm , el->filledSize , el->emptySize ,  disease,  genoRegion);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&originalId);
-freez(&forwardPrimer);
-freez(&reversePrimer);
-freez(&polyClass);
-freez(&polyFamily);
-freez(&polySubfamily);
-freez(&polySeq);
-freez(&polySource);
-freez(&reference);
-freez(&ascertainingMethod);
-freez(&remarks);
-freez(&disease);
-freez(&genoRegion);
-}
 
 struct dbRIP *dbRIPCommaIn(char **pS, struct dbRIP *ret)
 /* Create a dbRIP out of a comma separated string. 

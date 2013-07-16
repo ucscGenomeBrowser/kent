@@ -134,7 +134,7 @@ char *accession;
 char *key;
 
 verbose(1, "Restoring experiments from file \'%s\' to table \'%s\'\n", file, table);
-if (sqlRowCount(connExp, table) != 0)
+if (sqlRowCount(connExp, sqlCheckIdentifier(table)) != 0)
     errAbort("ERROR: table for restore must exist and be empty");
 
 while ((ra = raNextRecord(lf)) != NULL)
@@ -218,7 +218,7 @@ void expHistory(int id)
 
 int i;
 char **row;
-struct dyString *dy = dyStringCreate("select * from %sHistory", table);
+struct dyString *dy = sqlDyStringCreate("select * from %sHistory", table);
 if (id != 0)
     dyStringPrintf(dy, " where %s=%d ", ENCODE_EXP_FIELD_IX, id);
 dyStringPrintf(dy, " order by updateTime, %s", ENCODE_EXP_FIELD_IX);

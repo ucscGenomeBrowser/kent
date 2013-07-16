@@ -143,7 +143,7 @@ struct sqlResult *sr;
 char **row;
 char *prevChrom = NULL;
 
-sr = sqlGetResult(conn, "select * from gap order by chrom");
+sr = sqlGetResult(conn, "NOSQLINJ select * from gap order by chrom");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct agpGap gap;
@@ -215,7 +215,7 @@ struct sqlResult *sr;
 char **row;
 char *prevChrom = NULL;
 
-sr = sqlGetResult(conn, "select chrom,chromStart,chromEnd from simpleRepeat"
+sr = sqlGetResult(conn, "NOSQLINJ select chrom,chromStart,chromEnd from simpleRepeat"
 		  " order by chrom,chromStart");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -268,7 +268,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 
-sprintf(query, "select chromStart,chromEnd from simpleRepeat "
+sqlSafef(query, sizeof query, "select chromStart,chromEnd from simpleRepeat "
                "where chrom = '%s'",
 	       chrom);
 sr = sqlGetResult(conn, query);
@@ -328,7 +328,7 @@ char *prevChrom = NULL;
 struct simpleRange *prevRange = NULL, *prevNewRange = NULL;
 
 sr = sqlGetResult(conn,
-    "select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk "
+    "NOSQLINJ select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk "
     "order by genoName,genoStart");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -422,7 +422,7 @@ struct simpleRange *prevRange = NULL, *prevNewRange = NULL;
 char query[256];
 
 
-safef(query, ArraySize(query), "select chrom,chromStart,chromEnd from %s "
+sqlSafef(query, ArraySize(query), "select chrom,chromStart,chromEnd from %s "
     "order by chrom,chromStart", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -497,11 +497,11 @@ if (! sqlTableExists(conn, tableName))
     splitRmsk = FALSE;
     }
 if (splitRmsk)
-    sprintf(query,
+    sqlSafef(query, sizeof query,
 	    "select genoStart,genoEnd,repName,repClass,repFamily from %s",
 	    tableName);
 else
-    sprintf(query,
+    sqlSafef(query, sizeof query,
 	    "select genoStart,genoEnd,repName,repClass,repFamily from %s "
 	    "where genoName = \"%s\"",
 	    tableName, chrom);
@@ -573,7 +573,7 @@ struct rbTree *newTree = rbTreeNew(simpleRangeCmp);
 char query[256];
 struct simpleRange *prevRange = NULL, *prevNewRange = NULL;
 
-safef(query, ArraySize(query), "select chromStart,chromEnd from %s "
+sqlSafef(query, ArraySize(query), "select chromStart,chromEnd from %s "
 	    "where chrom = \"%s\"", table, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -655,7 +655,7 @@ else if (sqlTableExists(qConn, "ancientRepeat"))
 else
     errAbort("Can't find ancientRepeat table in %s or %s",
 	     sqlGetDatabase(tConn), sqlGetDatabase(qConn));
-sr = sqlGetResult(conn, "select name,family,class from ancientRepeat");
+sr = sqlGetResult(conn, "NOSQLINJ select name,family,class from ancientRepeat");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sprintf(key, "%s.%s.%s", row[0], row[1], row[2]);
@@ -674,7 +674,7 @@ char **row;
 struct chrom *chromList = NULL, *chrom;
 struct hash *hash = hashNew(8);
 
-sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(chrom);

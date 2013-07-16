@@ -36,7 +36,7 @@ struct sqlResult *sr;
 char **row;
 char *protAcc;
 
-safef(query, sizeof(query), "select value from rgdGene2ToUniProt where name = '%s'", geneId);
+sqlSafef(query, sizeof(query), "select value from rgdGene2ToUniProt where name = '%s'", geneId);
 sr = sqlGetResult(conn, query);
 
 row = sqlNextRow(sr);
@@ -131,7 +131,7 @@ char *chp;
 int iCol;
 
 chp = strstr(rgdGeneId, ":"); chp++;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "select * from %s where gene_rgd_id='%s'", section->rgdGeneTable, chp);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -268,7 +268,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 /* display IMAGE info */
-safef(query, sizeof(query), "select info from rgdGene2Xref where rgdGeneId='%s' and infoType='IMAGE'", rgdGeneId);
+sqlSafef(query, sizeof(query), "select info from rgdGene2Xref where rgdGeneId='%s' and infoType='IMAGE'", rgdGeneId);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -288,7 +288,7 @@ if (row != NULL)
 sqlFreeResult(&sr);
 
 /* display MGC info */
-safef(query, sizeof(query), "select info from rgdGene2Xref where rgdGeneId='%s' and infoType='MGC'", rgdGeneId);
+sqlSafef(query, sizeof(query), "select info from rgdGene2Xref where rgdGeneId='%s' and infoType='MGC'", rgdGeneId);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)

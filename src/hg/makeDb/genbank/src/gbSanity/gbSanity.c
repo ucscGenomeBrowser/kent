@@ -68,7 +68,7 @@ static void checkGbCdnaInfoStrKeys(struct sqlConnection* conn)
  */
 {
 static char *joinSql =
-    "SELECT count(*) FROM "
+    "NOSQLINJ SELECT count(*) FROM "
     "gbCdnaInfo,author,cds,cell,description,development,geneName,"
     "keyword,library,mrnaClone,organism,productName,sex,"
     "source,tissue "
@@ -80,7 +80,7 @@ static char *joinSql =
     "AND gbCdnaInfo.productName=productName.id AND gbCdnaInfo.sex=sex.id "
     "AND gbCdnaInfo.source=source.id AND gbCdnaInfo.tissue=tissue.id";
 unsigned numJoinRows = sqlQuickNum(conn, joinSql);
-unsigned numTotalRows = sqlQuickNum(conn, "SELECT count(*) FROM gbCdnaInfo");
+unsigned numTotalRows = sqlQuickNum(conn, "NOSQLINJ SELECT count(*) FROM gbCdnaInfo");
 
 if (numJoinRows != numTotalRows)
     gbError("number of rows in gbCdnaInfo join with string tables does (%u) "

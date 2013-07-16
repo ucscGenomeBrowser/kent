@@ -2,6 +2,13 @@
   In order to reference trackDb type and setting descriptions in multiple documents, this library
   file is designed to hold the one definitive copy of the setting or type description.
 
+  *** Go ahead and try your changes by following existing examples.  
+      If you have questions, read the detailed explanation below.
+
+  *** Your changes can be seen in hgwdev or your sandbox when they are in:
+      /usr/local/apache/htdocs-{sandbox}/goldenPath/help/trackDb/
+      A "make" should get them there.
+
   ALWAYS VIEW trackDbTestBlurbs.html AFTER MODIFYING THIS FILE !!!!!!!
 
   How to add/maintain this documentation:
@@ -17,11 +24,11 @@
             <P><B>Example:</B></P>
             <pre>   someSetting 100</pre>
         </DIV>
-  - Each "blurb" DIV should have the class=<setting>.  There MUST be only one uniquely classed
+  - Each "blurb" DIV should have the class={setting}.  There MUST be only one uniquely classed
     DIV for each setting or type.  NOTE: use class NOT id so that anchor links work.
-    - Each "setting blurb" must contain a class="types..." SPAN that lists the track types that
-      this blurb/setting is relevant to.
-    - Each setting blurb MUST contain a class="format" DIV that gives the exact format of the
+    - Each "setting blurb" must contain a <span class="types..."> that lists the track types that
+      this setting is relevant to.
+    - Each setting blurb MUST contain a <div class="format"> that gives the exact format of the
       setting, wrapped in <code> tags.
     - The setting blurb should also contain an <B>Example:</B> followed by a preferably real life
       example wrapped in <PRE> tags.  Remeber multi-line <PRE> text will include the indents
@@ -40,14 +47,14 @@
     be completed by the example that references those settings.
     - These example blurbs should also have a "class=format" DIV but in this case it contains a
       title to the example:  <div class="format"><B>Examples of item base types</B></div>.
-    - Exmples should make use of <PRE> tags and preferrably multiple real live examples.
+    - Exmples should make use of <PRE> tags and preferrably multiple real life examples.
   - Document introductions and section introductions may also be shared by multiple documents
     and therefore may be included here as "intro blurb" DIVs as: <DIV class="bed_intro">.
     - intro DIVs do not contain a class="format" DIV.
   - Use trackDbTestBurbs.html to test blurbs you add or modify.  It runs javascript tests.
-  HINT: It is the class=<setting> that ties things togther.  If there is a need for multiple
+  HINT: It is the class={setting} that ties things togther.  If there is a need for multiple
   descriptions of the same setting, then create multiple blurb DIVs with different classes as:
-    <DIV class="parent"> and and <DIV class="parent_view">.
+    <DIV class="parent"> and <DIV class="parent_view">.
 
   II) Document HTML PAGES should include this trackDbLibrary.html with server side includes
   and wrapped in <DIV ID="library"> tags.
@@ -59,15 +66,15 @@
             <div class="format"><code>someSetting</code></div>
         </TD></TR>
     - Any setting may be referenced multiple times.  To reference a setting blurb, place it in
-      a table cell that contains class=<setting> and an "image toggle details" tag.
+      a table cell that contains class={setting} and a <IMG class='toggle detail'> tag.
       When the user clicks on the [+] button toggle image, the library will be read to render
-      the <DIV class="<setting>">.
+      the <DIV class="{setting}">.
     - The table cell should also contain the "format" DIV, so the user knows what they are
-      requesting.  The format containd in the doc will be replaced by the one in the
+      requesting.  The format contained in the doc will be replaced by the one in the
       library at toggle, so the library has the final word on format.  In the example,
       <code>someSetting</code> is replaced by <code>someSetting &lt;minVal&gt;</code>.
     - The first (or best) reference to your library blurb should contain the one and only
-      "named anchor" for that setting <A name="<setting>">.  This named anchor MUST be at
+      "named anchor" for that setting <A name="{setting}">.  This named anchor MUST be at
       the beginning of the cell, before the toggle image. NOTE: the named anchor for a type is
       often put at the start of the table that describes it.
     - Related settings can be grouped as a set of related rows by adding the "related" class
@@ -90,12 +97,12 @@
   - The document as a whole should contain a "toggle all" image as:
         <IMG class='toggle all' />&nbsp;<I>Open/close all details.</I>
     which will open and close all the table cells.
-  - The document should include a "self-assembling table of contents".  This is table will be
+  - The document should include a "self-assembling table of contents".  This table will be
     built if
     - There is an empty table of ID="toc": <TABLE class="settingsTable" id="toc"></TABLE>
     - The $(document).ready() event calls: tdbDoc.tocAssemble(<delay>,[<exclude>]);
       - delay (ms) greater than zero will delay the start of the assembly for user responsiveness
-      - <exclude> can be a comma separated list of settings (class=<setting>) to exclude
+      - <exclude> can be a comma separated list of settings (class={setting}) to exclude
     - The table will fill in a header and a row per settingsTable td that contains a "format" div.
       The table will include 3 columns: setting, types that call it (from the "types" span) and
       the ID of the table that includes the setting.  Use this ID to be descriptive:
@@ -1297,6 +1304,29 @@
     and items
     with scores greater than or equal to 900 above will display in dark blue.</P>
 </DIV>
+
+<DIV class="searchIndex"><span class="types bed bigBed"></span>
+<div class="format"><code>searchIndex &lt;str&gt;</code></div>
+    <P> Specifies the list of field names on which a index has been made.
+    When a user enters a string in the position search box of the browser,
+    this index will be searched to find that name, and if the string is in 
+    the index, the user will either be navigated to that position in the 
+    browser, or if there are more than one matches of that string, 
+    will be give a list of the positions to choose from. See <A HREF="../bigBed.html#Ex3">HERE</A>
+    for instructions on how to build an index for a bigBed file.
+    <P><B>Example:</B></P>
+    <pre>   searchIndex name</pre>
+</DIV>
+
+<DIV class="searchTrix"><span class="types bed bigBed"></span>
+<div class="format"><code>searchTrix &lt;url/relativePath&gt;</code></div>
+    <P> Specifies the URL to a TRIX file that maps free text to
+    a set of indices that are assumed to have indicies in the associated
+    bigBed file.  See <A HREF="../trix.html">HERE</A> for instructions on how to build a TRIX file.
+    <P><B>Example:</B></P>
+    <pre>   searchTrix url or relative path </pre>
+</DIV>
+
 
 <DIV class="thickDrawItem"><span class="types bed bigBed"></span>
 <div class="format"><code>thickDrawItem &lt;off/on&gt;</code></div>

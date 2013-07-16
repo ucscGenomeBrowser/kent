@@ -161,6 +161,27 @@ taxId 59463
     featureBits -countGaps myoLuc2 gap
     # 68155432 bases of 2034575300 (3.350%) in intersection
 
+##########################################################################
+## WINDOWMASKER (DONE- 2013-06-21 - Hiram)
+    mkdir /hive/data/genomes/myoLuc2/bed/windowMasker
+    cd /hive/data/genomes/myoLuc2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev myoLuc2 > do.log 2>&1 &
+XXX - running - Fri Jun 21 16:03:53 PDT 2013
+    # real     170m17.913s
+
+    # Masking statistics
+    cat faSize.myoLuc2.cleanWMSdust.txt
+# 2034575300 bases (68155432 N's 1966419868 real 1285911982
+#    upper 680507886 lower) in 11654 sequences in 1 files
+# Total size: mean 174581.7 sd 1247597.7 min 3011 (AAPE02072784)
+#    max 64990205 (GL429767) median 9365
+# %33.45 masked total, %34.61 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps myoLuc2 rmsk windowmaskerSdust \
+       > fb.myoLuc2.rmsk.windowmaskerSdust.txt 2>&1
+    #   355414901 bases of 2034575300 (17.469%) in intersection
 
 ########################################################################
 # Create kluster run files (DONE - 2010-11-04 - Chin)

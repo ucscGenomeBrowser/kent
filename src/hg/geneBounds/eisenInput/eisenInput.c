@@ -34,7 +34,7 @@ struct expRecord * loadExpRecord(char *table, char *database)
 struct sqlConnection *conn = sqlConnect(database);
 char query[256];
 struct expRecord *erList = NULL;
-snprintf(query, sizeof(query), "select * from %s", table);
+sqlSafef(query, sizeof(query), "select * from %s", table);
 erList = expRecordLoadByQuery(conn, query);
 sqlDisconnect(&conn);
 return erList;
@@ -94,7 +94,7 @@ struct sqlResult *sr;
 char **row;
 struct refLink *list = NULL, *el;
 
-sr = sqlGetResult(conn, "select * from refLink");
+sr = sqlGetResult(conn, "NOSQLINJ select * from refLink");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = refLinkLoad(row);

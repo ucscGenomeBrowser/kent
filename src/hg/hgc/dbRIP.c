@@ -29,7 +29,7 @@ struct sqlResult *sr;
 char **row;
 struct polyGenotype *pgList = NULL;
 
-sprintf(query, "select * from polyGenotype where name = '%s'", name);
+sqlSafef(query, sizeof query, "select * from polyGenotype where name = '%s'", name);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -165,10 +165,10 @@ int itemCount = 0;
 genericHeader(tdb, item);
 
 hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
-dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+sqlDyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
 hAddBinToQuery(winStart, winEnd, query);
-dyStringPrintf(query, "name = '%s' and chromStart = %d", item, start);
+sqlDyStringPrintf(query, "name = '%s' and chromStart = %d", item, start);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {

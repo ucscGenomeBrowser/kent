@@ -13,7 +13,7 @@ boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 {
 char query[256]; 
 SpAcc temp;
-safef(query, sizeof(query), "select acc from displayId where acc = '%s'",
+sqlSafef(query, sizeof(query), "select acc from displayId where acc = '%s'",
 	acc);
 return sqlQuickQuery(conn, query, temp, sizeof(temp)) != NULL;
 }
@@ -32,7 +32,7 @@ if (acc != NULL)
 else
     {
     char query[256];
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
     	"select acc from otherAcc where val = '%s'", id);
     return sqlQuickString(conn, query);
     }
@@ -43,7 +43,7 @@ char *spAccToId(struct sqlConnection *conn, char *acc)
  * often look something like HXA1_HUMAN. */
 {
 char query[256];
-safef(query, sizeof(query), "select val from displayId where acc = '%s'",
+sqlSafef(query, sizeof(query), "select val from displayId where acc = '%s'",
 	acc);
 return sqlNeedQuickString(conn, query);
 }
@@ -57,7 +57,7 @@ char *spAnyAccToId(struct sqlConnection *conn, char *acc)
  */
 {
 char query[256];
-safef(query, sizeof(query), "select val from displayId where acc = '%s'",
+sqlSafef(query, sizeof(query), "select val from displayId where acc = '%s'",
 	spFindAcc(conn, acc));
 return sqlQuickString(conn, query);
 }
@@ -68,7 +68,7 @@ char *spIdToAcc(struct sqlConnection *conn, char *id)
  * (doesn't abort). */
 {
 char query[256];
-safef(query, sizeof(query), "select acc from displayId where val = '%s'",
+sqlSafef(query, sizeof(query), "select acc from displayId where val = '%s'",
 	id);
 return sqlQuickString(conn, query);
 }
@@ -84,7 +84,7 @@ if (spIsPrimaryAcc(conn, anyAcc))
      return cloneString(anyAcc);
 else
      {
-     safef(query, sizeof(query), 
+     sqlSafef(query, sizeof(query), 
     	"select acc from otherAcc where val = '%s'", anyAcc);
      return sqlNeedQuickString(conn, query);
      }
@@ -94,7 +94,7 @@ char *spDescription(struct sqlConnection *conn, char *acc)
 /* Return protein description.  FreeMem this when done. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select val from description where acc = '%s'", acc);
 return sqlNeedQuickString(conn, query);
 }
@@ -104,7 +104,7 @@ boolean spIsCurated(struct sqlConnection *conn, char *acc)
 /* Return TRUE if it is a curated entry. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select isCurated from info where acc = '%s'", acc);
 return sqlNeedQuickNum(conn, query);
 }
@@ -113,7 +113,7 @@ int spAaSize(struct sqlConnection *conn, char *acc)
 /* Return number of amino acids. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select aaSize from info where acc = '%s'", acc);
 return sqlNeedQuickNum(conn, query);
 }
@@ -122,7 +122,7 @@ int spMolWeight(struct sqlConnection *conn, char *acc)
 /* Return molecular weight in daltons. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select molWeight from info where acc = '%s'", acc);
 return sqlNeedQuickNum(conn, query);
 }
@@ -132,7 +132,7 @@ char *spCreateDate(struct sqlConnection *conn, char *acc)
  * this when done. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select createDate from info where acc = '%s'", acc);
 return sqlNeedQuickString(conn, query);
 }
@@ -142,7 +142,7 @@ char *spSeqDate(struct sqlConnection *conn, char *acc)
  * this when done. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select seqDate from info where acc = '%s'", acc);
 return sqlNeedQuickString(conn, query);
 }
@@ -152,7 +152,7 @@ char *spAnnDate(struct sqlConnection *conn, char *acc)
  * this when done. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select annDate from info where acc = '%s'", acc);
 return sqlNeedQuickString(conn, query);
 }
@@ -162,7 +162,7 @@ char *spOrganelle(struct sqlConnection *conn, char *acc)
  * This may return NULL if it's not an organelle. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select organelle.val from info,organelle "
 	"where info.acc = '%s' and info.organelle = organelle.id"
 	, acc);
@@ -180,12 +180,12 @@ struct slName *spGeneToAccs(struct sqlConnection *conn,
 char query[256];
 if (taxon == 0)
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"select acc from gene where val = '%s'", gene);
     }
 else
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"select gene.acc from gene,accToTaxon "
 	"where gene.val = '%s' "
 	"and gene.acc = accToTaxon.acc "
@@ -199,7 +199,7 @@ struct slName *spProteinEvidence(struct sqlConnection *conn, char *acc)
 /* Get list of evidence that protein exists for accession.  There will be at least one. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select proteinEvidenceType.val from proteinEvidence,proteinEvidenceType "
 	"where proteinEvidence.acc = '%s' "
 	"and proteinEvidence.proteinEvidenceType = proteinEvidenceType.id"
@@ -211,7 +211,7 @@ struct slName *spGenes(struct sqlConnection *conn, char *acc)
 /* Return list of genes associated with accession */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select val from gene where acc = '%s'", acc);
 return sqlQuickList(conn, query);
 }
@@ -220,7 +220,7 @@ struct slName *spTaxons(struct sqlConnection *conn, char *acc)
 /* Return list of taxons associated with accession */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select taxon from accToTaxon where acc = '%s'", acc);
 return sqlQuickList(conn, query);
 }
@@ -230,7 +230,7 @@ struct slName *spBinomialNames(struct sqlConnection *conn, char *acc)
  * associated with accessoin */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
      "select binomial from accToTaxon,taxon "
      "where accToTaxon.acc = '%s' and accToTaxon.taxon = taxon.id"
      , acc);
@@ -241,7 +241,7 @@ int spTaxon(struct sqlConnection *conn, char *acc)
 /* Return taxon of first organism associated with accession. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select taxon from accToTaxon where acc = '%s'", acc);
 return sqlNeedQuickNum(conn, query);
 }
@@ -250,7 +250,7 @@ int spBinomialToTaxon(struct sqlConnection *conn, char *name)
 /* Return taxon associated with binomial (Mus musculus) name. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select id from taxon where binomial = '%s'", name);
 return sqlNeedQuickNum(conn, query);
 }
@@ -261,7 +261,7 @@ int spCommonToTaxon(struct sqlConnection *conn, char *commonName)
 {
 char query[256];
 int taxon;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
    "select taxon from commonName where val = '%s'", commonName);
 taxon = sqlQuickNum(conn, query);
 if (taxon == 0)
@@ -275,7 +275,7 @@ char *spTaxonToBinomial(struct sqlConnection *conn, int taxon)
 char query[256];
 if (taxon <= 0)
     errAbort("Bad taxon id %d\n", taxon);
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select binomial from taxon where id = %d", taxon);
 return sqlNeedQuickString(conn, query);
 }
@@ -288,7 +288,7 @@ char query[256];
 char *ret;
 if (taxon <= 0)
     errAbort("Bad taxon id %d\n", taxon);
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
    "select val from commonName where taxon = %d", taxon);
 ret = sqlQuickString(conn, query);
 if (ret == NULL)
@@ -300,7 +300,7 @@ struct slName *spKeywords(struct sqlConnection *conn, char *acc)
 /* Return list of keywords for accession. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select keyword.val from accToKeyword,keyword "
     "where accToKeyword.acc = '%s' "
     "and accToKeyword.keyword = keyword.id"
@@ -315,7 +315,7 @@ struct slName *spKeywordSearch(struct sqlConnection *conn, char *keyword,
 {
 char query[256];
 int kwId;
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select id from keyword where val = '%s'", keyword);
 kwId = sqlQuickNum(conn, query);
 if (kwId == 0)
@@ -323,12 +323,12 @@ if (kwId == 0)
 
 if (taxon == 0)
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"select acc from accToKeyword where keyword = %d", kwId);
     }
 else
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"select accToKeyword.acc from accToKeyword,accToTaxon "
 	"where accToKeyword.keyword = %d "
 	"and accToKeyword.acc = accToTaxon.acc "
@@ -349,7 +349,7 @@ struct slName *slComments(struct sqlConnection *conn,
 char query[256];
 if (type == NULL)
     {
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"select commentVal.val from comment,commentVal "
 	"where comment.acc = '%s' "
 	"and comment.commentVal = commentVal.id"
@@ -358,10 +358,10 @@ if (type == NULL)
 else
     {
     int typeId;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
         "select id from commentType where val = '%s'", type);
     typeId = sqlNeedQuickNum(conn, query);
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	"select commentVal.val from comment,commentVal "
 	"where comment.acc = '%s' "
 	"and comment.commentType = %d "
@@ -375,7 +375,7 @@ struct slName *slCommentTypes(struct sqlConnection *conn)
 /* Get list of comment types in database. */
 {
 char query[256];
-safef(query, sizeof(query), "select val from commentType");
+sqlSafef(query, sizeof(query), "select val from commentType");
 return sqlQuickList(conn, query);
 }
 
@@ -383,7 +383,7 @@ char *spCommentType(struct sqlConnection *conn, int typeId)
 /* Look up text associated with typeId. freeMem result when done. */
 {
 char query[256];
-safef(query, sizeof(query), "select val from commentType where id=%d", typeId);
+sqlSafef(query, sizeof(query), "select val from commentType where id=%d", typeId);
 return sqlQuickString(conn, query);
 }
 
@@ -391,7 +391,7 @@ char *spCommentVal(struct sqlConnection *conn, int valId)
 /* Look up text associated with valId. freeMem result when done. */
 {
 char query[256];
-safef(query, sizeof(query), "select val from commentVal where id=%d", valId);
+sqlSafef(query, sizeof(query), "select val from commentVal where id=%d", valId);
 return sqlQuickString(conn, query);
 }
 
@@ -404,7 +404,7 @@ struct slName *spExtDbAcc1List(struct sqlConnection *conn, char *acc,
  * 'Interpro'. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select extDbRef.extAcc1 from extDbRef,extDb "
     "where extDbRef.acc = '%s' "
     "and extDbRef.extDb = extDb.id "
@@ -430,9 +430,9 @@ char *spAccFromEmbl(struct sqlConnection *conn, char *acc)
 {
 char query[256];
 int emblId;
-safef(query, sizeof(query), "select id from extDb where val = 'EMBL'");
+sqlSafef(query, sizeof(query), "select id from extDb where val = 'EMBL'");
 emblId = sqlNeedQuickNum(conn, query);
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select acc from extDbRef where extAcc1 = '%s' and extDb = %d"
     , acc, emblId);
 return sqlQuickString(conn, query);
@@ -448,9 +448,9 @@ struct spFeature *list = NULL, *el;
 char **row;
 struct sqlResult *sr;
 
-dyStringAppend(dy, 
+sqlDyStringAppend(dy, 
 	"select start,end,featureClass,featureType,softEndBits from feature ");
-dyStringPrintf(dy, 
+sqlDyStringPrintf(dy, 
         "where acc = '%s'", acc);
 if (classId != 0)
     dyStringPrintf(dy, " and featureClass=%d", classId);
@@ -481,7 +481,7 @@ if (featureType == 0)
 else
     {
     char query[256];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	    "select val from featureType where id=%d", featureType);
     return sqlNeedQuickString(conn, query);
     }
@@ -495,7 +495,7 @@ if (sameString(name, "n/a"))
 else
     {
     char query[256];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	    "select id from featureType where val='%s'", name);
     return sqlNeedQuickNum(conn, query);
     }
@@ -505,7 +505,7 @@ char *spFeatureClassName(struct sqlConnection *conn, int featureClass)
 /* Return name associated with featureClass. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select val from featureClass where id=%d", featureClass);
 return sqlNeedQuickString(conn, query);
 }
@@ -514,7 +514,7 @@ int spFeatureClassId(struct sqlConnection *conn, char *name)
 /* Return feature class id associated with given name. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	"select id from featureClass where val='%s'", name);
 return sqlNeedQuickNum(conn, query);
 }
@@ -526,7 +526,7 @@ struct spCitation *spCitations(struct sqlConnection *conn, char *acc)
 struct sqlResult *sr;
 char query[256], **row;
 struct spCitation *list = NULL, *el;
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select id,acc,reference,rp from citation where acc='%s'", acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -547,7 +547,7 @@ char *spRefTitle(struct sqlConnection *conn, int refId)
 /* Get title of reference. This can be NULL legitimately. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select title from reference where id=%d", refId);
 return sqlQuickString(conn, query);
 }
@@ -556,7 +556,7 @@ struct slName *spRefAuthors(struct sqlConnection *conn, int refId)
 /* Get list of authors associated with reference. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select author.val from referenceAuthors,author "
     "where referenceAuthors.reference = %d "
     "and referenceAuthors.author = author.id"
@@ -568,7 +568,7 @@ char *spRefCite(struct sqlConnection *conn, int refId)
 /* Get journal/page/etc of reference. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select cite from reference where id=%d", refId);
 return sqlNeedQuickString(conn, query);
 }
@@ -577,7 +577,7 @@ char *spRefPubMed(struct sqlConnection *conn, int refId)
 /* Get PubMed id.  May be NULL legitimately. */
 {
 char query[256];
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
 	"select pubMed from reference where id=%d", refId);
 return sqlQuickString(conn, query);
 }
@@ -586,7 +586,7 @@ struct slName *spRefToAccs(struct sqlConnection *conn, int refId)
 /* Get list of accessions associated with reference. */
 {
 char query[256];
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
     "select acc from citation where reference = %d", refId);
 return sqlQuickList(conn, query);
 }
@@ -604,7 +604,7 @@ if (conn==NULL)
     if (conn == NULL) return NULL;
     }
     
-safef(condStr, sizeof(condStr), "oldDisplayId='%s'", oldSpDisplayId);
+sqlSafefFrag(condStr, sizeof(condStr), "oldDisplayId='%s'", oldSpDisplayId);
 newSpDisplayId = sqlGetField(PROTEOME_DB_NAME, "spOldNew", "newDisplayId", condStr);
     
 return(newSpDisplayId);
@@ -623,7 +623,7 @@ if (conn==NULL)
     if (conn == NULL) return NULL;
     }
 
-safef(condStr, sizeof(condStr), "newDisplayId='%s'", newSpDisplayId);
+sqlSafefFrag(condStr, sizeof(condStr), "newDisplayId='%s'", newSpDisplayId);
 oldSpDisplayId = sqlGetField(PROTEOME_DB_NAME, "spOldNew", "oldDisplayId", condStr);
     
 return(oldSpDisplayId);
@@ -644,7 +644,7 @@ if (conn==NULL)
     if (conn == NULL) return NULL;
     }
 
-safef(query, sizeof(query), "select acc from uniProtAlias where alias = '%s'", id);
+sqlSafef(query, sizeof(query), "select acc from uniProtAlias where alias = '%s'", id);
     	
 acc = sqlQuickString(conn, query);
 return(acc);
@@ -667,8 +667,7 @@ if (conn==NULL)
     }
 if (geneTable != NULL && sqlTableExists(conn,geneTable)) 
     {
-//    safef(query, sizeof(query), "select acc from %s where val = '%s'", geneTable, gene);
-    safef(query, sizeof(query), "select g.acc from %s g , accToTaxon a, taxon t where val = '%s' and g.acc = a.acc and id = a.taxon and binomial = '%s' ",geneTable, gene, hGenome(db));
+    sqlSafef(query, sizeof(query), "select g.acc from %s g , accToTaxon a, taxon t where val = '%s' and g.acc = a.acc and id = a.taxon and binomial = '%s' ",geneTable, gene, hGenome(db));
     acc = sqlQuickString(conn, query);
     }
 return(acc);

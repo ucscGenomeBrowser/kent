@@ -114,7 +114,7 @@ if (su->verbose)
 for (cmd = su->updateCmds; cmd != NULL; cmd = cmd->next)
     {
     dyStringClear(query);
-    dyStringPrintf(query, "UPDATE %s SET %s", su->table, cmd->cmd);
+    sqlDyStringPrintf(query, "UPDATE %s SET %-s", su->table, cmd->cmd);
     sqlUpdateRows(conn, query->string, &numMatched);
     if (numMatched != cmd->numRows)
         errAbort("expected %d matching row(s) on update of %s, got %d: %s",

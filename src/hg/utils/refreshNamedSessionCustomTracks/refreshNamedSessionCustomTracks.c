@@ -194,7 +194,7 @@ void scanSettingsForCT(char *userName, char *sessionName,
 
 char query[512];
 
-safef(query, sizeof(query),
+sqlSafef(query, sizeof(query),
 	  "select contents from %s "
 	  "where userName='%s' and sessionName = '%s'", savedSessionTable, userName, sessionName);
 char *contents = sqlQuickString(conn, query);
@@ -281,7 +281,7 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
     if (newContents->stringSize > contentLength)
 	errAbort("ERROR: Uh, why is newContents (%d) longer than original (%d)",
 		 newContents->stringSize, contentLength);
-    dyStringPrintf(update, "UPDATE %s set contents='", savedSessionTable);
+    sqlDyStringPrintf(update, "UPDATE %s set contents='", savedSessionTable);
     dyStringAppendN(update, newContents->string, newContents->stringSize);
     dyStringPrintf(update, "', lastUse=now(), useCount=useCount+1 "
 		   "where userName=\"%s\" and sessionName=\"%s\";",
@@ -340,7 +340,7 @@ if (sqlTableExists(conn, savedSessionTable))
     struct sqlResult *sr = NULL;
     char **row = NULL;
     char query[512];
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select userName,sessionName,UNIX_TIMESTAMP(lastUse) from %s "
 	  "order by userName,sessionName", savedSessionTable);
     sr = sqlGetResult(conn, query);

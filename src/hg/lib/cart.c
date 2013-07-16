@@ -61,10 +61,10 @@ if (conn != NULL)
     {
     /* Since the content string is chopped, query for the actual length. */
     char query[1024];
-    safef(query, sizeof(query), "select length(contents) from userDb "
+    sqlSafef(query, sizeof(query), "select length(contents) from userDb "
 	  "where id = %d", u->id);
     uLen = sqlQuickNum(conn, query);
-    safef(query, sizeof(query), "select length(contents) from sessionDb "
+    sqlSafef(query, sizeof(query), "select length(contents) from sessionDb "
 	  "where id = %d", s->id);
     sLen = sqlQuickNum(conn, query);
     }
@@ -176,7 +176,7 @@ else
    {
    struct cartDb *cdb = NULL;
    char where[64];
-   safef(where, sizeof(where), "id = %u", id);
+   sqlSafefFrag(where, sizeof(where), "id = %u", id);
    cdb = cartDbLoadWhere(conn, table, where);
    if (looksCorrupted(cdb))
        {
@@ -202,7 +202,7 @@ cdb = cartDbLoadFromId(conn, table, id);
 if (!cdb)
     {
     result = FALSE;
-    safef(query, sizeof(query), "INSERT %s VALUES(0,\"\",0,now(),now(),0)",
+    sqlSafef(query, sizeof(query), "INSERT %s VALUES(0,\"\",0,now(),now(),0)",
 	  table);
     sqlUpdate(conn, query);
     id = sqlLastAutoId(conn);
@@ -227,12 +227,12 @@ void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
 {
 struct dyString *dy = dyStringNew(1024);
 int useCount;
-dyStringPrintf(dy, "SELECT useCount FROM %s "
+sqlDyStringPrintf(dy, "SELECT useCount FROM %s "
 	       "WHERE userName = '%s' AND sessionName = '%s';",
 	       namedSessionTable, encUserName, encSessionName);
 useCount = sqlQuickNum(conn, dy->string) + 1;
 dyStringClear(dy);
-dyStringPrintf(dy, "UPDATE %s SET useCount = %d, lastUse=now() "
+sqlDyStringPrintf(dy, "UPDATE %s SET useCount = %d, lastUse=now() "
 	       "WHERE userName = '%s' AND sessionName = '%s';",
 	       namedSessionTable, useCount, encUserName, encSessionName);
 sqlUpdate(conn, dy->string);
@@ -438,7 +438,7 @@ if (isEmpty(sessionOwner))
 if (isEmpty(sessionName))
     errAbort("Please go back and enter a session name to load.");
 
-safef(query, sizeof(query), "SELECT shared, contents FROM %s "
+sqlSafef(query, sizeof(query), "SELECT shared, contents FROM %s "
       "WHERE userName = '%s' AND sessionName = '%s';",
       namedSessionTable, encSessionOwner, encSessionName);
 sr = sqlGetResult(conn, query);
@@ -647,6 +647,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 #endif /* GBROWSE */
 
 /* wire up the assembly hubs so we can operate without sql */
+setUdcTimeout(cart);
 hubConnectLoadHubs(cart);
 
 if (exclude != NULL)
@@ -666,10 +667,10 @@ static void updateOne(struct sqlConnection *conn,
 /* Update cdb in database. */
 {
 struct dyString *dy = newDyString(4096);
-dyStringPrintf(dy, "UPDATE %s SET contents='", table);
-dyStringAppendN(dy, contents, contentSize);
-dyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
-dyStringPrintf(dy, " where id=%u", cdb->id);
+sqlDyStringPrintf(dy, "UPDATE %s SET contents='", table);
+sqlDyAppendEscaped(dy, contents);
+sqlDyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
+sqlDyStringPrintf(dy, " where id=%u", cdb->id);
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
@@ -1342,7 +1343,7 @@ static void clearDbContents(struct sqlConnection *conn, char *table, unsigned id
 char query[256];
 if (id == 0)
    return;
-safef(query, sizeof(query), "update %s set contents='' where id=%u",
+sqlSafef(query, sizeof(query), "update %s set contents='' where id=%u",
       table, id);
 sqlUpdate(conn, query);
 }
@@ -1686,13 +1687,13 @@ outName2 = tn2.forCgi;
 outF = mustOpen(outName,"w");
 outF2= mustOpen(outName2,"w");
 
-safef(query, sizeof(query), "select distinct subjId from hgFixed.gsIdXref order by subjId");
+sqlSafef(query, sizeof(query), "select distinct subjId from hgFixed.gsIdXref order by subjId");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     fprintf(outF, "%s\n", row[0]);
 
-    safef(query2, sizeof(query2),
+    sqlSafef(query2, sizeof(query2),
           "select dnaSeqId from hgFixed.gsIdXref where subjId='%s' order by dnaSeqId", row[0]);
 
     sr2 = sqlGetResult(conn2, query2);
@@ -1796,8 +1797,8 @@ if (hIsGsidServer())
     conn= hAllocConn(genomeDb);
     while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
         {
-        safef(query, sizeof(query),
-	      "select id from %s where id like '%s%s'", msaTable, "%",  words[0]);
+        sqlSafef(query, sizeof(query),
+	      "select id from %s where id like '%%%s'", msaTable, words[0]);
 	sr = sqlGetResult(conn, query);
 	if (sqlNextRow(sr) != NULL)
             {

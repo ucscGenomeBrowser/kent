@@ -33,7 +33,7 @@ char *randomString = NULL;
 char *hapString = NULL;
 
 chromHash = newHash(0);
-safef(query, sizeof(query), "select chrom from chromInfo");
+sqlSafef(query, sizeof(query), "select chrom from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -61,7 +61,7 @@ char *snpId = NULL;
 char *annotation = NULL;
 
 annotationsHash = newHash(0);
-safef(query, sizeof(query), "select name, exception from %s", tableName);
+sqlSafef(query, sizeof(query), "select name, exception from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -96,7 +96,7 @@ struct hashCookie cookie;
 char *randomString = NULL;
 struct hashEl *hel = NULL;
 
-safef(query, sizeof(query), 
+sqlSafef(query, sizeof(query), 
     "select name, chrom, chromStart, chromEnd, strand, refUCSC, observed, class, locType, weight from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -143,7 +143,7 @@ char *createString =
 
 struct dyString *dy = newDyString(1024);
 
-dyStringPrintf(dy, createString, tableName);
+sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 hFreeConn(&conn);

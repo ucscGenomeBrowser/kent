@@ -98,7 +98,7 @@ struct sqlResult *sr;
 char **row;
 char chromName[64];
 
-safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
+sqlSafef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -108,7 +108,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
-safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end = 0", contigGroup);
+sqlSafef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end = 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -134,7 +134,7 @@ char **row;
 char tableName[64];
 
 safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
-safef(query, sizeof(query), "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele, weight from %s ", tableName);
+sqlSafef(query, sizeof(query), "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele, weight from %s ", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -172,7 +172,7 @@ void cleanDatabaseTable(char *chromName)
 struct sqlConnection *conn = hAllocConn();
 char query[256];
 
-safef(query, ArraySize(query), "delete from chr%s_snpTmp", chromName);
+sqlSafef(query, ArraySize(query), "delete from chr%s_snpTmp", chromName);
 sqlUpdate(conn, query);
 hFreeConn(&conn);
 }

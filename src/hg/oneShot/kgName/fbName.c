@@ -38,7 +38,7 @@ if (hTableExists(infoTable))
     char buf[64];
     if (ptr != NULL)
 	*ptr = 0;
-    safef(query, sizeof(query),
+    sqlSafef(query, sizeof(query),
 	  "select symbol from %s where bdgpName = '%s';", infoTable, name);
     symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
     hFreeConn(&conn);
@@ -58,7 +58,7 @@ char *getSwiss( struct sqlConnection *conn , char *id)
 {
 char cond_str[256];
 
-sprintf(cond_str, "mrnaID='%s'", id);
+sqlSafefFrag(cond_str, sizeof cond_str, "mrnaID='%s'", id);
 return sqlGetField(conn, database, "spMrna", "spID", cond_str);
 }
 

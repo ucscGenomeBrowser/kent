@@ -119,7 +119,7 @@ void addProbeSets(struct altGraphX *ag, enum ggEdgeType type, int chromStart, in
 		  struct agProbeSets *agp, int *count, char **probeSets)
 /* Add the relevant probe sets to probeSets for edge in ag. */
 {
-char where[256];
+char where[256], temp[256];
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int *vPos = ag->vPositions;
@@ -136,7 +136,7 @@ struct affyProbe *affyProbe=NULL, *affyProbeList=NULL;
    have to get everything and sort it out afterwards. */
 if(type == ggSJ)
     {
-    safef(where, sizeof(where), " chromStart >= %d and chromEnd <= %d and blockCount = 2 ", 
+    sqlSafefFrag(where, sizeof(where), " chromStart >= %d and chromEnd <= %d and blockCount = 2 ", 
 	  chromStart-25, chromEnd+25);
     table = junctionTable;
     sr = hRangeQuery(conn, table, ag->tName, chromStart, chromEnd,
@@ -154,17 +154,17 @@ if(type == ggSJ)
 	   ((affyProbe->chromStart+affyProbe->chromStarts[0]+affyProbe->blockSizes[0] != chromStart) ||
 	    (affyProbe->chromStart+affyProbe->chromStarts[1] != chromEnd)))
 	    continue;
-	safef(where, sizeof(where), "%s:%s", affyProbe->psName, affyProbe->seq);
+	safef(temp, sizeof(temp), "%s:%s", affyProbe->psName, affyProbe->seq);
 	for(i=0; i<*count; i++)
 	    {
-	    if(sameString(probeSets[i], where))
+	    if(sameString(probeSets[i], temp))
 		unique = FALSE;
 	    }
 	if(unique)
 	    {
 	    if(*count+1 > agp->maxCounts)
 		probeSets = expandAgp(agp, probeSets);
-	    probeSets[*count] = cloneString(where);
+	    probeSets[*count] = cloneString(temp);
 	    (*count)++;
 	    }
 	}
@@ -183,17 +183,17 @@ else
     sqlFreeResult(&sr);
     for(affyProbe=affyProbeList; affyProbe != NULL; affyProbe = affyProbe->next)
 	{
-	safef(where, sizeof(where), "%s:%s", affyProbe->psName, affyProbe->seq);
+	safef(temp, sizeof(temp), "%s:%s", affyProbe->psName, affyProbe->seq);
 	for(i=0; i<*count; i++)
 	    {
-	    if(sameString(probeSets[i], where))
+	    if(sameString(probeSets[i], temp))
 		unique = FALSE;
 	    }
 	if(unique)
 	    {
 	    if(*count+1 > agp->maxCounts)
 		probeSets = expandAgp(agp, probeSets);
-	    probeSets[*count] = cloneString(where);
+	    probeSets[*count] = cloneString(temp);
 	    (*count)++;
 	    }
 	}

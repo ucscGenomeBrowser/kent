@@ -33,7 +33,7 @@ char query[256];
 struct sqlResult *sr;
 int cnt = 0;
 char **row;
-safef(query, sizeof(query), "select alias from kgAlias where kgId = '%s' order by alias", id);
+sqlSafef(query, sizeof(query), "select alias from kgAlias where kgId = '%s' order by alias", id);
 sr = sqlGetResult(conn, query);
 
 row = sqlNextRow(sr);
@@ -64,7 +64,7 @@ if (totalCount > 0)
     {
     struct dyString *aliasReturn = dyStringNew(0);
     dyStringPrintf(aliasReturn, "<B>Alternate Gene Symbols:</B> ");
-    safef(query, sizeof(query), "select alias from kgAlias where kgId = '%s' order by alias", id);
+    sqlSafef(query, sizeof(query), "select alias from kgAlias where kgId = '%s' order by alias", id);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     while (cnt < totalCount)
@@ -105,10 +105,10 @@ struct sqlResult *sr = NULL;
 char **row;
 char *geneSymbol;
 
-if (sqlTablesExist(conn, table))
+if (sqlTableExists(conn, table))
     {
     hPrintf("<B>Entrez Gene Official Symbol:</B> ");
-    safef(query, sizeof(query), "select geneSymbol from %s where %s = '%s'", table, idCol, geneId);
+    sqlSafef(query, sizeof(query), "select geneSymbol from %s where %s = '%s'", table, idCol, geneId);
     sr = sqlGetResult(conn, query);
     if (sr != NULL)
         {
@@ -130,9 +130,9 @@ struct sqlResult *sr = NULL;
 char **row;
 char *refSeqAcc = NULL;
 
-if (sqlTablesExist(conn, table))
+if (sqlTableExists(conn, table))
     {
-    safef(query, sizeof(query), "select refSeq from %s where %s = '%s'", table, idCol, id);
+    sqlSafef(query, sizeof(query), "select refSeq from %s where %s = '%s'", table, idCol, id);
     sr = sqlGetResult(conn, query);
     if (sr != NULL)
         {
@@ -149,7 +149,7 @@ static void printCcds(char *kgId, struct sqlConnection *conn)
 /* Print out CCDS ids most closely matching the kg. */
 {
 struct ccdsGeneMap *ccdsKgs = NULL;
-if (sqlTablesExist(conn, "ccdsKgMap"))
+if (sqlTableExists(conn, "ccdsKgMap"))
     ccdsKgs = ccdsGeneMapSelectByGene(conn, "ccdsKgMap", kgId, 0.0);
 if (ccdsKgs != NULL)
     {
@@ -205,7 +205,7 @@ char query[256], **row;
 struct sqlResult *sr;
 if (rgdGeneId != NULL)
     {
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "select old_symbol, old_name from rgdGene2Raw where gene_rgd_id = '%s'", 
 	    rgdGeneId+4L);
     sr = sqlGetResult(conn, query);
@@ -226,7 +226,7 @@ if (rgdGeneId != NULL)
 	}
     sqlFreeResult(&sr);
 
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "select value from rgdGene2ToRefSeq where name= '%s'", rgdGeneId);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -237,7 +237,7 @@ if (rgdGeneId != NULL)
 	}
     sqlFreeResult(&sr);
     
-    safef(query, sizeof(query), 
+    sqlSafef(query, sizeof(query), 
 	    "select value from rgdGene2ToUniProt where name= '%s'", rgdGeneId);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -295,7 +295,7 @@ if (isRgdGene(conn))
     rgdGene2SynonymPrint(section,conn, id);
     return;
     }
-if (sqlTablesExist(conn, "kgAlias"))
+if (sqlTableExists(conn, "kgAlias"))
     printAlias(id, conn);
 if (sameWord(genome, "Zebrafish"))
     {
@@ -313,13 +313,13 @@ else
     char *toRefTable = genomeOptionalSetting("knownToRef");
     if (toRefTable != NULL && sqlTableExists(conn, toRefTable))
         {
-	safef(query, sizeof(query), "select value from %s where name='%s'", toRefTable,
+	sqlSafef(query, sizeof(query), "select value from %s where name='%s'", toRefTable,
 		id);
 	refSeqAcc = emptyForNull(sqlQuickString(conn, query));
 	}
     if (sqlTableExists(conn, "kgXref"))
 	{
-	safef(query, sizeof(query), "select mRNA from kgXref where kgID='%s'", id);
+	sqlSafef(query, sizeof(query), "select mRNA from kgXref where kgID='%s'", id);
 	mrnaAcc = emptyForNull(sqlQuickString(conn, query));
 	}
     if (sameWord(genome, "C. elegans"))
@@ -336,7 +336,7 @@ if (refSeqAcc[0] != 0)
     }
 else if (mrnaAcc[0] != 0)
     {
-    safef(condStr, sizeof(condStr), "acc = '%s'", mrnaAcc);
+    sqlSafefFrag(condStr, sizeof(condStr), "acc = '%s'", mrnaAcc);
     if (sqlGetField(database, "gbCdnaInfo", "acc", condStr) != NULL)
         {
     	hPrintf("<B>Representative RNA: </B> <A HREF=\"");
@@ -356,7 +356,7 @@ if (protAcc != NULL)
         && (isNotEmpty(curGeneChrom) &&
 	      differentWord(curGeneChrom,"none")))
     	{
-    	safef(condStr, sizeof(condStr), "name = '%s' and chrom = '%s' and txStart=%d and txEnd=%d", 
+    	sqlSafefFrag(condStr, sizeof(condStr), "name = '%s' and chrom = '%s' and txStart=%d and txEnd=%d", 
 	        id, curGeneChrom, curGeneStart, curGeneEnd);
     	kgProteinID = sqlGetField(database, "knownGene", "proteinID", condStr);
     	}
@@ -369,7 +369,7 @@ if (protAcc != NULL)
 	*chp = '\0';
 	
         /* show variant splice protein and the UniProt link here */
-	hPrintf("<A HREF=\"http://www.uniprot.org/uniprot%s\" "
+	hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" "
 	    "TARGET=_blank>%s</A></B>, splice isoform of ",
 	    kgProteinID, kgProteinID);
         hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" "

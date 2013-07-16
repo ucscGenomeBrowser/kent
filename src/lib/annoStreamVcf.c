@@ -1,20 +1,24 @@
 /* annoStreamVcf -- subclass of annoStreamer for VCF files */
 
 #include "annoStreamVcf.h"
+#include "twoBit.h"
 #include "vcf.h"
 
 struct annoStreamVcf
-{
+    {
     struct annoStreamer streamer;	// Parent class members & methods
     // Private members
     struct vcfFile *vcff;		// VCF parsed header and file object
     struct vcfRecord *record;		// Current parsed row of VCF (need this for chromEnd)
     char *asWords[VCF_NUM_COLS];	// Current row of VCF with genotypes squashed for autoSql
     struct dyString *dyGt;		// Scratch space for squashing genotype columns
+    struct hash *chromNameHash;		// Translate "chr"-less seq names if necessary.
     int numCols;			// Number of columns in autoSql def of VCF.
     int numFileCols;			// Number of columns in VCF file.
     boolean isTabix;			// True if we are accessing compressed VCF via tabix index
-};
+    int maxRecords;			// Maximum number of annoRows to return.
+    int recordCount;			// Number of annoRows we have returned so far.
+    };
 
 
 static void asvSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionStart, uint regionEnd)
@@ -90,41 +94,60 @@ if (minChrom != NULL)
 	}
     else
 	{
-	if (differentString(minChrom, regionChrom))
-	    errAbort("annoStreamVcf %s: nextRow minChrom='%s' but region chrom='%s'",
-		     sSelf->name, minChrom, regionChrom);
 	regionStart = max(regionStart, minEnd);
 	}
     }
 char **words = nextRowRaw(self);
-if (minChrom != NULL && words != NULL)
+if (regionChrom != NULL && words != NULL)
     {
-    if (self->isTabix && strcmp(words[0], minChrom) < 0)
-	{
-	uint regionEnd = sSelf->regionEnd;
-	if (sSelf->chrom == NULL)
-	    regionEnd = annoAssemblySeqSize(sSelf->assembly, minChrom);
-	lineFileSetTabixRegion(self->vcff->lf, minChrom, minEnd, regionEnd);
-	}
+    if (self->isTabix && strcmp(words[0], regionChrom) < 0)
+	lineFileSetTabixRegion(self->vcff->lf, regionChrom, regionStart, regionEnd);
     while (words != NULL &&
-	   (strcmp(words[0], minChrom) < 0 ||
-	    (sameString(words[0], minChrom) && self->record->chromEnd < minEnd)))
+	   (strcmp(words[0], regionChrom) < 0 ||
+	    (sameString(words[0], regionChrom) && self->record->chromEnd < regionEnd)))
 	words = nextRowRaw(self);
     }
 return words;
 }
 
-static struct annoRow *asvNextRow(struct annoStreamer *vSelf, char *minChrom, uint minEnd,
+static char *getProperChromName(struct annoStreamVcf *self, char *vcfChrom)
+/* We tolerate chr-less chrom names in VCF and BAM ("1" for "chr1" etc); to avoid
+ * confusing the rest of the system, return the chr-ful version if it exists. */
+{
+char *name = hashFindVal(self->chromNameHash, vcfChrom);
+if (name == NULL)
+    {
+    name = vcfChrom;
+    struct twoBitFile *tbf = self->streamer.assembly->tbf;
+    char buf[256];
+    if (! twoBitIsSequence(tbf, vcfChrom))
+	{
+	safef(buf, sizeof(buf), "chr%s", vcfChrom);
+	if (twoBitIsSequence(tbf, buf))
+	    name = buf;
+	}
+    name = lmCloneString(self->chromNameHash->lm, name);
+    hashAdd(self->chromNameHash, vcfChrom, name);
+    }
+return name;
+}
+
+static struct annoRow *asvNextRow(struct annoStreamer *sSelf, char *minChrom, uint minEnd,
 				  struct lm *callerLm)
 /* Return an annoRow encoding the next VCF record, or NULL if there are no more items. */
 {
-struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
+struct annoStreamVcf *self = (struct annoStreamVcf *)sSelf;
+if (minChrom != NULL && sSelf->chrom != NULL && differentString(minChrom, sSelf->chrom))
+    errAbort("annoStreamVcf %s: nextRow minChrom='%s' but region chrom='%s'",
+	     sSelf->name, minChrom, sSelf->chrom);
+if (self->maxRecords > 0 && self->recordCount >= self->maxRecords)
+    return NULL;
 char **words = nextRowUnfiltered(self, minChrom, minEnd);
 if (words == NULL)
     return NULL;
 // Skip past any left-join failures until we get a right-join failure, a passing row, or EOF.
 boolean rightFail = FALSE;
-while (annoFilterRowFails(vSelf->filters, words, self->numCols, &rightFail))
+while (annoFilterRowFails(sSelf->filters, words, self->numCols, &rightFail))
     {
     if (rightFail)
 	break;
@@ -133,7 +156,9 @@ while (annoFilterRowFails(vSelf->filters, words, self->numCols, &rightFail))
 	return NULL;
     }
 struct vcfRecord *rec = self->record;
-return annoRowFromStringArray(rec->chrom, rec->chromStart, rec->chromEnd,
+char *chrom = getProperChromName(self, rec->chrom);
+self->recordCount++;
+return annoRowFromStringArray(chrom, rec->chromStart, rec->chromEnd,
 			      rightFail, words, self->numCols, callerLm);
 }
 
@@ -157,9 +182,9 @@ struct annoStreamer *annoStreamVcfNew(char *fileOrUrl, boolean isTabix, struct a
 int maxErr = -1; // don't errAbort on VCF format warnings/errs
 struct vcfFile *vcff;
 if (isTabix)
-    vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, maxErr, maxRecords);
+    vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, maxErr, 0);
 else
-    vcff = vcfFileMayOpen(fileOrUrl, maxErr, maxRecords, FALSE);
+    vcff = vcfFileMayOpen(fileOrUrl, maxErr, 0, FALSE);
 if (vcff == NULL)
     errAbort("annoStreamVcfNew: unable to open VCF: '%s'", fileOrUrl);
 struct annoStreamVcf *self;
@@ -174,10 +199,12 @@ streamer->nextRow = asvNextRow;
 streamer->close = asvClose;
 self->vcff = vcff;
 self->dyGt = dyStringNew(1024);
+self->chromNameHash = hashNew(0);
 self->isTabix = isTabix;
 self->numCols = slCount(asObj->columnList);
 self->numFileCols = 8;
 if (vcff->genotypeCount > 0)
     self->numFileCols = 9 + vcff->genotypeCount;
+self->maxRecords = maxRecords;
 return (struct annoStreamer *)self;
 }

@@ -11,6 +11,15 @@ project wgEncode
 subId 2095
 tableName wgEncodeRegTfbsCells
 
+metaObject wgEncodeRegTfbsCellsV3
+objType table
+composite wgEncodeRegTfbsClustered
+dataType Cluster
+fileName wgEncodeRegTfbsCellsV3.tab.gz
+md5sum 5808a267e086bca825c543e49206bb3f
+project wgEncode
+tableName wgEncodeRegTfbsCellsV3
+
 metaObject wgEncodeRegTfbsClustered
 objType table
 composite wgEncodeRegTfbsClustered
@@ -38,6 +47,15 @@ project wgEncode
 subId 2095
 tableName wgEncodeRegTfbsClusteredInputs
 
+metaObject wgEncodeRegTfbsClusteredInputsV3
+objType table
+composite wgEncodeRegTfbsClustered
+dataType Cluster
+fileName wgEncodeRegTfbsClusteredInputsV3.tab.gz
+md5sum d151e39d961c256bda35bfe99439ce81
+project wgEncode
+tableName wgEncodeRegTfbsClusteredInputs
+
 metaObject wgEncodeRegTfbsClusteredV2
 objType table
 composite wgEncodeRegTfbsClustered
@@ -50,4 +68,13 @@ md5sum e0bcc71ab59e21a360d7edda1ac6c082
 project wgEncode
 tableName wgEncodeRegTfbsClusteredV2
 
-# MAGIC: -187554770
+metaObject wgEncodeRegTfbsClusteredV3
+objType table
+composite wgEncodeRegTfbsClustered
+dataType Cluster
+fileName wgEncodeRegTfbsClusteredV3.bed.gz
+md5sum 455daeadc569926daa9d45e292cc288d
+project wgEncode
+tableName wgEncodeRegTfbsClusteredV3
+
+# MAGIC: 1877008467

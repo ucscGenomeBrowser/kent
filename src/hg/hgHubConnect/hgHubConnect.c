@@ -207,7 +207,7 @@ static struct hash *outputPublicTable(struct sqlConnection *conn, char *publicTa
 {
 struct hash *publicHash = NULL;
 char query[512];
-safef(query, sizeof(query), "select hubUrl,shortLabel,longLabel,dbList from %s", 
+sqlSafef(query, sizeof(query), "select hubUrl,shortLabel,longLabel,dbList from %s", 
 	publicTable); 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;

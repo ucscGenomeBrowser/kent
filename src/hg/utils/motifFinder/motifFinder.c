@@ -76,7 +76,7 @@ struct sqlConnection *conn = sqlConnect(database);
 int fileNum;
 char where[256];
 struct chromInfo *ci  = createChromInfoList(NULL, database);
-safef(where, sizeof(where), "name = '%s'", name);
+sqlSafefFrag(where, sizeof(where), "name = '%s'", name);
 struct dnaMotif *motif = dnaMotifLoadWhere(conn, motifTable, where);
 if(markovTable != NULL)
     dnaMotifMakeLog2(motif);

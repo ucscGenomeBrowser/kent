@@ -51,7 +51,7 @@ o2 = mustOpen("jj.dat", "w");
 /* Build up hash for quick access to displayIds. */
 struct hash *displayIdHash = hashNew(20);
 struct sqlConnection *conn = sqlConnect(proteinDB);
-struct sqlResult *sr = sqlGetResult(conn, "select accession,displayID from spXref3");
+struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select accession,displayID from spXref3");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(displayIdHash, row[0], cloneString(row[1]));
@@ -132,7 +132,7 @@ while (!done)
 		else
 		    {
 		    // ACs missing from spXref3 might be found from spSecondardy table
-		    sprintf(cond_str, "accession2 = '%s'", swissAC);
+		    sqlSafefFrag(cond_str, sizeof cond_str, "accession2 = '%s'", swissAC);
     		    answer = sqlGetField(proteinDB, "spSecondaryID", "displayID", cond_str);
 		    if (answer != NULL)
 		    	{

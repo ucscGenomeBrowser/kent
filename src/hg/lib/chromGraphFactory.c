@@ -386,7 +386,7 @@ for (el = lineList; el != NULL; el = el->next)
     for (mtr = mtrList; mtr != NULL; mtr = mtr->next)
         {
 	char query[512];
-	safef(query, sizeof(query), mtr->query, mtr->table, row[0]);
+	sqlSafef(query, sizeof(query), mtr->query, mtr->table, row[0]);
 	if (sqlQuickNum(conn, query) > 0)
 	    mtr->matches += 1;
 	}
@@ -486,7 +486,7 @@ static struct hash *chromInfoHash(struct sqlConnection *conn)
 struct sqlResult *sr;
 char **row;
 struct hash *hash = hashNew(0);
-sr = sqlGetResult(conn, "select * from chromInfo");
+sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct chromInfo *ci = chromInfoLoad(row);
@@ -620,17 +620,17 @@ if (report)
 }
 
 struct hash *tableToChromPosHash(struct sqlConnection *conn, char *table, 
-	char *query)
+	char *sql)
 /* Create hash of chromPos keyed by name field. */ 
 {
-char buf[256];
+char query[256];
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(23);
 struct lm *lm = hash->lm;
 struct chromPos *pos;
-safef(buf, sizeof(buf), query, table);
-sr = sqlGetResult(conn, buf);
+sqlSafef(query, sizeof(query), sql, table);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     lmAllocVar(lm, pos);
@@ -651,7 +651,7 @@ struct sqlResult *sr;
 char **row;
 struct hash *hash = hashNew(19);
 char buf[256];
-safef(buf, sizeof(buf), query, table);
+sqlSafef(buf, sizeof(buf), query, table);
 sr = sqlGetResult(conn, buf);
 while ((row = sqlNextRow(sr)) != NULL)
     {

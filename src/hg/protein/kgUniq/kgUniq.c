@@ -42,7 +42,7 @@ char *chrom, *cdsStart, *cdsEnd;
 char *displayID;
 char *oldDisplayID;
 
-char *chp0, *chp, *chp1;
+char *chp, *chp1;
 int  i;
 
 int  isDuplicate;
@@ -120,14 +120,14 @@ while (fgets(line_in, 500, inf) != NULL)
     if (sameString(oldInfo, newInfo))
 	{
 	isDuplicate = 1;
- 	safef(condStr, sizeof(condStr), "acc='%s'", proteinStr);
-        displayID = sqlGetField(conn, uniProtDb, "displayId", "val", condStr);	
+ 	sqlSafefFrag(condStr, sizeof(condStr), "acc='%s'", proteinStr);
+        displayID = sqlGetField(uniProtDb, "displayId", "val", condStr);	
 	if (displayID == NULL) 
 	    {
 	    printf("!!! %s not found\n", proteinStr);fflush(stdout);
 	    }
- 	safef(condStr, sizeof(condStr), "acc='%s'", oldProteinStr);
-        oldDisplayID = sqlGetField(conn, uniProtDb, "displayId", "val", condStr);	
+ 	sqlSafefFrag(condStr, sizeof(condStr), "acc='%s'", oldProteinStr);
+        oldDisplayID = sqlGetField(uniProtDb, "displayId", "val", condStr);	
 	if (oldDisplayID == NULL) 
 	    {
 	    printf("!!! %s not found\n", oldProteinStr);fflush(stdout);
@@ -146,7 +146,7 @@ while (fgets(line_in, 500, inf) != NULL)
 	strcpy(oldInfo, newInfo);
 	isDuplicate = 0;
 
-	safef(query2, sizeof(query2), 
+	sqlSafef(query2, sizeof(query2), 
 	      "select * from %s.kgCandidate2 where name='%s' and proteinID='%s' and chrom='%s' and cdsStart='%s' and cdsEnd='%s'", 
 	      kgTempDb, mrnaStr, proteinStr, chrom, cdsStart, cdsEnd);
 	sr2 = sqlMustGetResult(conn2, query2);
@@ -159,8 +159,8 @@ while (fgets(line_in, 500, inf) != NULL)
 		printf("\n??? %s\t%s\n", proteinStr, row2[10]);fflush(stdout);
 		}
 		
- 	    safef(condStr, sizeof(condStr), "acc='%s'", proteinStr);
-            displayID = sqlGetField(conn, uniProtDb, "displayId", "val", condStr);	
+ 	    sqlSafefFrag(condStr, sizeof(condStr), "acc='%s'", proteinStr);
+            displayID = sqlGetField(uniProtDb, "displayId", "val", condStr);	
 	    if (displayID == NULL) 
 	    	{
 		printf("!!! %s not found\n", proteinStr);fflush(stdout);

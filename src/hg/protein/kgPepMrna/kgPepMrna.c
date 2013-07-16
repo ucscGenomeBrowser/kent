@@ -56,7 +56,7 @@ sprintf(spDbName,   "sp%s", protDbDate);
 
 conn= hAllocConn(roDbName);
 conn2= hAllocConn(roDbName);
-sprintf(query2,"select name, proteinID from %s.knownGene;", roDbName);
+sqlSafef(query2, sizeof query2, "select name, proteinID from %s.knownGene;", roDbName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -64,16 +64,16 @@ while (row2 != NULL)
     kgID      = row2[0];
     proteinID = row2[1];
     
-    sprintf(cond_str, "val = '%s';", proteinID);
+    sqlSafefFrag(cond_str, sizeof cond_str, "val = '%s';", proteinID);
     protAcc = sqlGetField(spDbName, "displayId", "acc", cond_str);
     if (protAcc != NULL)
     	{
-    	sprintf(cond_str, "acc = '%s';", protAcc);
+    	sqlSafefFrag(cond_str, sizeof cond_str, "acc = '%s';", protAcc);
     	seq = sqlGetField(spDbName, "protein", "val", cond_str);
 	}
     else
     	{
-    	sprintf(cond_str, "acc = '%s';", proteinID);
+    	sqlSafefFrag(cond_str, sizeof cond_str, "acc = '%s';", proteinID);
     	seq = sqlGetField(spDbName, "varProtein", "val", cond_str);
     	if (seq == NULL)
     	    {
@@ -85,7 +85,7 @@ while (row2 != NULL)
         
     fprintf(o1, "%s\t%s\n", kgID, seq);fflush(o1);
 
-    sprintf(cond_str, "name = '%s';", kgID);
+    sqlSafefFrag(cond_str, sizeof cond_str, "name = '%s';", kgID);
         
     seq = sqlGetField(tempKgDb, "mrnaSeq", "seq", cond_str);
     if (seq != NULL)

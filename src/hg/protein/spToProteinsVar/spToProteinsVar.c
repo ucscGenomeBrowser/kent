@@ -49,7 +49,7 @@ conn2 = hAllocConn(hDefaultDb());
 
 bioentryId = 9000000;	/* to differentiate with regular proteins */
 
-sprintf(query2,"select * from %s.varProtTemp;", proteinDatabaseName);
+sqlSafef(query2, sizeof query2, "select * from %s.varProtTemp;", proteinDatabaseName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
@@ -64,7 +64,7 @@ while (row2 != NULL)
     displayId = acc;
     
     /* duplicate the following info from its parent protein */
-    sprintf(cond_str, "accession='%s'", parAcc);
+    sqlSafefFrag(cond_str, sizeof cond_str, "accession='%s'", parAcc);
     division   = sqlGetField(proteinsDB, "spXref3", "division", cond_str);
     hugoSymbol = sqlGetField(proteinsDB, "spXref3", "hugoSymbol", cond_str);
     hugoDesc   = sqlGetField(proteinsDB, "spXref3", "hugoDesc", cond_str);

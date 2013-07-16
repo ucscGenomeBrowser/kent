@@ -1,12 +1,15 @@
 # Build all directories in utils
 
+kentSrc = ..
+include ${kentSrc}/inc/localEnvironment.mk
+
 # 	$Id: makefile,v 1.156 2010/03/03 02:53:30 markd Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert hgHubConnect \
         hgGateway hgGene hgGenome hgLogin hgPcr hgSession hgSuggest \
-        hgTables hgTracks hgTrackUi hgc hgApi cartDump near/hgNear \
-	hgLiftOver visiGene/hgVisiGene \
-	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
+        hgTables hgTracks hgTrackUi hgUserSuggestion hgc hgApi cartDump near/hgNear \
+	hgLiftOver hgVai visiGene/hgVisiGene \
+	encode/hgEncodeDataVersions \
 	encode/hgEncodeVocab encode/hgEncodeApi \
 	phyloGif hgCustom hgPal hgFileUi hgFileSearch\
 	makeDb/hgCgiData js htdocs/style
@@ -92,6 +95,7 @@ UTILS_APPLIST = \
 	pslStats \
 	pslSwap \
 	pslToBed \
+	pslToChain \
 	pslxToFa \
 	qaToQac \
 	qacAgpLift \
@@ -184,7 +188,6 @@ UTIL_DIRS = \
 	pslSimp \
 	pslSortAcc \
 	pslSplitOnTarget \
-	pslToChain \
 	pslUnpile \
 	qa \
 	ratStuff \
