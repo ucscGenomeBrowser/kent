@@ -76,7 +76,7 @@ CREATE TABLE edwFile (
     tags longblob,	# CGI encoded name=val pairs from manifest
     errorMessage longblob,	# If non-empty contains last error message from upload. If empty upload is ok
     deprecated varchar(255) default '',	# If non-empty why you shouldn't use this file any more.
-    replacedBy varchar(255) default '',	# If non-empty license plate of file that replaces this one.
+    replacedBy int unsigned default 0,	# If non-zero id of file that replaces this one.
               #Indices
     PRIMARY KEY(id),
     INDEX(submitId),

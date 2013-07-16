@@ -615,6 +615,22 @@ for (i=0; i<arraySize; ++i)
     }
 }
 
+void shuffleArrayOfInts(int *array, int arraySize)
+/* Shuffle array of ints of given size given number of times. */
+{
+int c;
+int i, randIx;
+
+/* Randomly permute an array using the method from Cormen, et al */
+for (i=0; i<arraySize; ++i)
+    {
+    randIx = i + (rand() % (arraySize - i));
+    c = array[i];
+    array[i] = array[randIx];
+    array[randIx] = c;
+    }
+}
+
 void shuffleArrayOfPointers(void *pointerArray, int arraySize)
 /* Shuffle array of pointers of given size given number of times. */
 {
