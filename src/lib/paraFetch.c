@@ -10,6 +10,7 @@
 #include "https.h"
 #include "sqlNum.h"
 #include "obscure.h"
+#include "portable.h"
 #include "paraFetch.h"
 
 
@@ -47,6 +48,23 @@ rename(outTempX, outTemp);
 
 if (isFinal)  /* We are done and just looking to get rid of the file. */
     unlink(outTemp);
+}
+
+
+time_t paraFetchTempUpdateTime(char *origPath)
+/* Return last mod date of temp file - which is useful to see if process has stalled. */
+{
+char outTemp[1024];
+safef(outTemp, sizeof(outTemp), "%s.paraFetch", origPath);
+if (fileExists(outTemp))
+    return fileModTime(outTemp);
+else if (fileExists(origPath))
+    return fileModTime(origPath);
+else
+    {
+    errAbort("%s doesn't exist", origPath);
+    return 0;
+    }
 }
 
 

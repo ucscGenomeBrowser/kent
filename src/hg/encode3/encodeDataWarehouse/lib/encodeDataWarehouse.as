@@ -63,7 +63,7 @@ table edwFile
     lstring tags;               "CGI encoded name=val pairs from manifest"
     lstring errorMessage; "If non-empty contains last error message from upload. If empty upload is ok"
     string deprecated; "If non-empty why you shouldn't use this file any more."
-    string replacedBy; "If non-empty license plate of file that replaces this one."
+    uint replacedBy;   "If non-zero id of file that replaces this one."
     )
 
 table edwSubmit

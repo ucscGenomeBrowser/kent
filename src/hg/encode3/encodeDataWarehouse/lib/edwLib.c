@@ -5,6 +5,7 @@
 #include "hex.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "errabort.h"
 #include "openssl/sha.h"
 #include "base64.h"
 #include "basicBed.h"
@@ -21,7 +22,7 @@
 /* System globals - just a few ... for now.  Please seriously not too many more. */
 char *edwDatabase = "encodeDataWarehouse";
 char *edwLicensePlatePrefix = "ENCFF";
-int edwSingleFileTimeout = 2*60*60;   // How many seconds we give ourselves to fetch a single file
+int edwSingleFileTimeout = 4*60*60;   // How many seconds we give ourselves to fetch a single file
 
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
 char *edwValDataDir = "/data/encode3/encValData/";
@@ -215,16 +216,26 @@ struct edwUser *user = edwUserLoadByQuery(conn, query);
 return user;
 }
 
+void edwWarnUnregisteredUser(char *email)
+/* Put up warning message about unregistered user and tell them how to register. */
+{
+warn("No user exists with email %s.  If you need an account please contact your "
+	 "ENCODE DCC data wrangler, or someone you know who already does have an "
+	 "ENCODE Data Warehouse account, and have them create an account for you with "
+	 "http://%s/cgi-bin/edwWebCreateUser"
+	 , email, getenv("SERVER_NAME"));
+}
+
+
 struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email)
 /* Return user associated with email or put up error message. */
 {
 struct edwUser *user = edwUserFromEmail(conn, email);
 if (user == NULL)
-    errAbort("No user exists with email %s.  If you need an account please contact your "
-             "ENCODE DCC data wrangler, or someone you know who already does have an "
-	     "ENCODE Data Warehouse account, and have them create an account for you with "
-	     "http://%s/cgi-bin/edwWebCreateUser"
-	     , email, getenv("SERVER_NAME"));
+    {
+    edwWarnUnregisteredUser(email);
+    noWarnAbort();
+    }
 return user;
 }
 
@@ -690,6 +701,31 @@ safef(command, sizeof(command), "edwQaAgent %lld", fileId);
 edwAddJob(conn, command);
 }
 
+int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url)
+/* Return position of our URL in submission queue */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select commandLine from edwSubmitJob where startTime = 0");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+int aheadOfUs = -1;
+int pos = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *line = row[0];
+    char *edwSubmit = nextQuotedWord(&line);
+    char *lineUrl = nextQuotedWord(&line);
+    if (sameOk(edwSubmit, "edwSubmit") && sameOk(url, lineUrl))
+        {
+	aheadOfUs = pos;
+	break;
+	}
+    ++pos;
+    }
+sqlFreeResult(&sr);
+return aheadOfUs;
+}
+
 struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url)
 /* Return most recent submission, possibly in progress, from this url */
 {
@@ -835,5 +871,44 @@ if (days == 0)
 	}
     }
 return dy;
+}
+
+struct edwFile *edwFileInProgress(struct sqlConnection *conn, int submitId)
+/* Return file in submission in process of being uploaded if any. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select fileIdInTransit from edwSubmit where id=%u", submitId);
+long long fileId = sqlQuickLongLong(conn, query);
+if (fileId == 0)
+    return NULL;
+sqlSafef(query, sizeof(query), "select * from edwFile where id=%lld", (long long)fileId);
+return edwFileLoadByQuery(conn, query);
+}
+
+
+static void accessDenied()
+/* Sleep a bit and then deny access. */
+{
+sleep(5);
+errAbort("Access denied!");
+}
+
+struct edwScriptRegistry *edwScriptRegistryFromCgi()
+/* Get script registery from cgi variables.  Does authentication too. */
+{
+struct sqlConnection *conn = edwConnect();
+char *user = sqlEscapeString(cgiString("user"));
+char *password = sqlEscapeString(cgiString("password"));
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwScriptRegistry where name='%s'", user);
+struct edwScriptRegistry *reg = edwScriptRegistryLoadByQuery(conn, query);
+if (reg == NULL)
+    accessDenied();
+char key[EDW_SID_SIZE];
+edwMakeSid(password, key);
+if (!sameString(reg->secretHash, key))
+    accessDenied();
+sqlDisconnect(&conn);
+return reg;
 }
 
