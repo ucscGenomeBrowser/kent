@@ -17,7 +17,7 @@ alpha:
 	${MAKE} doInstall destDir=${DOCUMENTROOT} 
 
 beta:
-	#${GITUP}
+	${GITUP}
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
 
 # Run rsync.  Care is taking to preserve times and mode on files.  rsync is
