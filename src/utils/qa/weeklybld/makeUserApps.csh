@@ -5,15 +5,8 @@ cd $WEEKLYBLD
 # Note - this script assumes you have your ssh key in
 # qateam@hgdownload:.ssh/authorized_keys. Without it,
 #  this script can NOT be launched from beta
-#9403# #  using something like ssh $BOX32 $WEEKLYBLD/buildCgi32.csh
-#9403# #  because when scp needs the password typed in, apparently
-#9403# #  the stdin is not available from the terminal.
-#9403# # Instead, log directly into box32 and execute the script.
-#9403# #  then when prompted for the password, put in the qateam pwd. 
 # ------------------------------------
 
-#9403# if (("$HOST" != "$BOX32") && ("$HOST" != "hgwbeta")) then
-#9403#  echo "error: you must run this script on $BOX32 or on hgwbeta!"
 if ("$HOST" != "hgwbeta") then
  echo "error: you must run this script on hgwbeta!"
 
@@ -81,14 +74,6 @@ if ("$HOST" == "hgwbeta") then
     endsw
   end
 endif
-
-#9403# # copy liftOver if 32 bit
-#9403# if ("$HOST" == "$BOX32") then
-#9403#   ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/liftOver"
-#9403#   scp -p ${DESTDIR}${BINDIR}/liftOver qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/
-#9403#   ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/liftOver"
-#9403#   scp -p ${DESTDIR}${BINDIR}/liftOver qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/
-#9403# endif
 
 echo "userApps $MACHTYPE built on $HOST and scp'd to hgdownload and hgdownload-sd [${0}: START=${ScriptStart} END=`date`]"
 
