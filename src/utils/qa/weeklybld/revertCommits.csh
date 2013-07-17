@@ -77,7 +77,6 @@ if ( $#list == 0 ) then
     exit 1
 endif
 set errpull64 = "0"
-#9403# set errpull32 = "0"
 while ( $#list > 0 )
     set c = $list[1]
     shift list
@@ -132,16 +131,6 @@ while ( $#list > 0 )
     	    popd 
 	endif
 
-#9403# 	# do git pull in 32-bit build repo	
-#9403# 	echo "doing git pull in 32-bit build repo"
-#9403# 	set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/;git pull"
-#9403# 	echo "$cmd32"
-#9403# 	ssh $BOX32 "/bin/tcsh -c '"$cmd32"'"
-#9403# 	if ($status) then
-#9403# 	    echo "failed running: git pull (in 32-bit build repo)"
-#9403# 	    set errpull32 = "1"
-#9403# 	endif
-
 	if (-e pushedToRR.flag ) then
 	    # TODO when all is working smoothly: move the beta branch to this week's branch.
 	    # maybe we can run tagBeta.csh?
@@ -160,11 +149,6 @@ if ( "$errpull64" == "1" ) then
     echo "error updating 64-bit sandbox."
     exit 1
 endif
-
-#9403# if ( "$errpull32" == "1" ) then
-#9403#     echo "error updating 32-bit sandbox."
-#9403#     exit 1
-#9403# endif
 
 # return to master branch
 echo "Returning to master branch"
