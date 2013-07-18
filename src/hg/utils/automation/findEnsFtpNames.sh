@@ -27,13 +27,12 @@ bye" > ftp.rsp
 
 ftp -n -v -i ftp.ensembl.org < ftp.rsp > release.${VERSION}.gtf.ls-lR
 
-awk '
+egrep -v "CHECKSUMS|README" release.${VERSION}.gtf.ls-lR | awk '
 {
 if (match($1,"^./")) {gsub("^./","",$1); gsub(":$","",$1); printf "%s/", $1 }
 if (NF == 9) { if (match($1,"^-rw")) {printf "%s\n", $NF} }
 }
-' release.${VERSION}.gtf.ls-lR \
-    | sed -e "s#^#'x' => '#; s#\$#',#" > release.${VERSION}.gtf.names
+' | sed -e "s#^#'x' => '#; s#\$#',#" > release.${VERSION}.gtf.names
 
 echo "Scanning for MySQL table files"
 
