@@ -76,8 +76,8 @@ static char *encodedHgSessionReturnUrl(int hgsid)
 /* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
 {
 char retBuf[1024];
-safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgSession?hgsid=%d",
-      cgiServerNamePort(), hgsid);
+safef(retBuf, sizeof(retBuf), "http%s://%s/cgi-bin/hgSession?hgsid=%d",
+      cgiAppendSForHttps(), cgiServerNamePort(), hgsid);
 return cgiEncode(retBuf);
 }
 
@@ -92,8 +92,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkUserLoginUrl called when login system is not enabled "
            "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s",
-        wikiLinkHost(), retEnc);
+        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s",
+        cgiAppendSForHttps(), wikiLinkHost(), retEnc);
     } 
 else 
     {
@@ -120,8 +120,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkUserLogoutUrl called when login system is not enabled "
             "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http://%s/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s",
-        wikiLinkHost(), retEnc);
+        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s",
+        cgiAppendSForHttps(), wikiLinkHost(), retEnc);
     } 
 else
     {
@@ -148,8 +148,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkUserSignupUrl called when login system is not enabled "
             "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http://%s/cgi-bin/hgLogin?hgLogin.do.signupPage=1&returnto=%s",
-        wikiLinkHost(), retEnc);
+        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.signupPage=1&returnto=%s",
+        cgiAppendSForHttps(), wikiLinkHost(), retEnc);
     }
 else
     {
@@ -176,8 +176,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkChangePasswordUrl called when login system is not enabled "
             "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http://%s/cgi-bin/hgLogin?hgLogin.do.changePasswordPage=1&returnto=%s",
-        wikiLinkHost(), retEnc);
+        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.changePasswordPage=1&returnto=%s",
+        cgiAppendSForHttps(), wikiLinkHost(), retEnc);
     }
 else
     {
