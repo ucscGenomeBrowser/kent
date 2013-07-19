@@ -238,6 +238,8 @@ static struct sqlProfile* sqlProfileFindByDatabase(char *database)
 /* find a profile using database as profile name, return the default if not
  * found */
 {
+if (!database)
+    return defaultProfile;
 struct sqlProfile *sp = hashFindVal(dbToProfile, database);
 if (sp == NULL)
     sp = defaultProfile;
@@ -258,7 +260,7 @@ static struct sqlProfile* sqlProfileGet(char *profileName, char *database)
  * return NULL if not found.
  */
 {
-assert((profileName != NULL) || (database != NULL));
+//assert((profileName != NULL) || (database != NULL));
 if (profiles == NULL)
     sqlProfileLoad();
 
