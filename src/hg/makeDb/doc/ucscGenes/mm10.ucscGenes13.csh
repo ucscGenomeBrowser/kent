@@ -1212,7 +1212,23 @@ gensub2 in.lst single template jobList
 
 # Do cluster runs for UTRs
 ssh $cpuFarm "cd $dir/rnaStruct/utr3; para make jobList"
+ssh $cpuFarm "cd $dir/rnaStruct/utr3; para time"
+#Completed: 9769 of 9769 jobs
+#CPU time in finished jobs:     460454s    7674.23m   127.90h    5.33d  0.015 y
+#IO & Wait Time:                 54259s     904.32m    15.07h    0.63d  0.002 y
+#Average job time:                  53s       0.88m     0.01h    0.00d
+#Longest finished job:            2204s      36.73m     0.61h    0.03d
+#Submission to last job:          2778s      46.30m     0.77h    0.03d
+
 ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
+ssh $cpuFarm "cd $dir/rnaStruct/utr5; para time "
+# Completed: 9289 of 9289 jobs
+# CPU time in finished jobs:      11749s     195.82m     3.26h    0.14d  0.000 y
+# IO & Wait Time:                 24522s     408.69m     6.81h    0.28d  0.001 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:              90s       1.50m     0.03h    0.00d
+# Submission to last job:           170s       2.83m     0.05h    0.00d
+
 
 
 # Load database
