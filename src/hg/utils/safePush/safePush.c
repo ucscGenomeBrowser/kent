@@ -74,7 +74,7 @@ struct hash *getMysqlVars(char *host)
 /* Return hash full of MYSQL variables. */
 {
 struct hash *hash = hashNew(0);
-struct sqlConnection *conn = sqlConnectRemote(host, user, password, "mysql");
+struct sqlConnection *conn = sqlConnectRemote(host, user, password, NULL);
 struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ show variables");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -282,7 +282,7 @@ forceAllGoodChars(table);
 if (allDatabases)
     {
     struct sqlConnection *conn = 
-    	sqlConnectRemote(sourceHost, user, password, "mysql");
+    	sqlConnectRemote(sourceHost, user, password, NULL);
     struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ show databases");
     char **row;
     while ((row = sqlNextRow(sr)) != NULL)
