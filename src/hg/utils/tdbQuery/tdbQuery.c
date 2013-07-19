@@ -276,7 +276,7 @@ struct fileInfo *org, *orgList = listDirX(root, "*", TRUE);
 struct hash *dbStrictHash = NULL;
 if (clStrict)
     {
-    struct sqlConnection *conn = sqlConnect(NULL);
+    struct sqlConnection *conn = sqlConnect("hgFixed");
     struct slName *db, *dbList = sqlGetAllDatabase(conn);
     dbStrictHash = hashNew(0);
     for (db = dbList; db != NULL; db = db->next)
