@@ -45,12 +45,17 @@ else if (cgiVarExists("newUser"))
 else
     {
     struct sqlConnection *conn = sqlConnect(edwDatabase);
-    edwMustGetUserFromEmail(conn, oldUserEmail);
+    struct edwUser *user = edwUserFromEmail(conn, oldUserEmail);
     edwPrintLogOutButton();
-    printf("%s is authorized to create a new user<BR>\n", oldUserEmail);
-    printf("Email of new user:\n");
-    cgiMakeTextVar("newUser", NULL, 40);
-    cgiMakeSubmitButton();
+    if (user != NULL)
+	{
+	printf("%s is authorized to create a new user<BR>\n", oldUserEmail);
+	printf("Email of new user:\n");
+	cgiMakeTextVar("newUser", NULL, 40);
+	cgiMakeSubmitButton();
+	}
+    else
+        printf("%s is not authorized to create a new user.<BR>\n", oldUserEmail);
     }
 printf("</FORM>\n");
 }

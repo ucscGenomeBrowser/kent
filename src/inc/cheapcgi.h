@@ -89,6 +89,9 @@ char *cgiServerNamePort();
 boolean cgiServerHttpsIsOn();
 /* Return true if HTTPS is on */
 
+char *cgiAppendSForHttps();
+/* if running on https, add the letter s to the url protocol */
+
 char *cgiRemoteAddr();
 /* Return IP address of client (or "unknown"). */
 

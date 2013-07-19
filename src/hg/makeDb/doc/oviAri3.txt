@@ -497,26 +497,25 @@ oviAri3.upstreamGeneTbl = refGene
     # documentation for this step is in oviAri1 - remember to do this
 
 #########################################################################
-# set default position to RHO gene displays  (TBD - 2013-06-28 - Hiram)
+# set default position to RHO gene displays  (DONE - 2013-07-09 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="chr21:52,409,568-52,414,485" where name="oviAri3";' \
+'update dbDb set defaultPos="chr19:50686000-50700183" where name="oviAri3";' \
 	hgcentraltest
 
 ############################################################################
-XXX ready for this 
-# downloads and pushQ entry (TBD - 2013-03-08 - Hiram)
+# downloads and pushQ entry (DONE - 2013-07-09 - Hiram)
     # after adding oviAri3 to the all.joiner file and verifying that
-    #   joinerCheck is clean (i.e. run joinerCheck w -times and -keys flags
+    #   joinerCheck is clean (i.e. run joinerCheck with -times and -keys flags
     #   to make sure there are no errors), can construct the downloads:
     cd /hive/data/genomes/oviAri3
-    /usr/bin/time -p makeDownloads.pl -workhorse=hgwdev oviAri3
-    #   real 1400.59
+    time makeDownloads.pl -workhorse=hgwdev oviAri3
+    #   real    24m11.795s
 
     mkdir /hive/data/genomes/oviAri3/pushQ
     cd /hive/data/genomes/oviAri3/pushQ
     # Mark says don't let the transMap track get there
     time makePushQSql.pl oviAri3 2> stderr.txt > oviAri3.sql
-    #  real	2m55.404s
+    #  real    3m52.875s
 
     # check the stderr.txt for bad stuff, these kinds of warnings are OK:
 # WARNING: hgwdev does not have /gbdb/oviAri3/wib/gc5Base.wib

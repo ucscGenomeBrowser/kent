@@ -56,6 +56,9 @@ melUnd	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 # Puerto Rican parrot - Amazona vittata
 amaVit	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Psittaciformes; Psittacidae; Amazona
 
+# Scarlet Macaw - Ara macao
+araMac	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Psittaciformes; Psittacidae; Ara
+
 # Australian Saltwater crocodile Crocodylus porosus
 croPor	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Crocodylidae; Crocodylinae; Crocodylus
 

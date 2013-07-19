@@ -373,7 +373,7 @@ var hgva = // result of invoking:
 	}
     }
 
-    // Public methods:
+    // Public methods/objects:
     return {
 	changeRegion: function()
 	{
@@ -472,7 +472,79 @@ var hgva = // result of invoking:
 	    }
 	    eventAjax(target, $(section)[0].id + "Contents");
 	    $('#sourceContainer').children().not(':hidden').each(updateOrder);
-	}
+	},
+
+	submitQuery: function()
+	{
+	    loadingImage.run();
+	    var startQueryHiddenInput = '<INPUT TYPE=HIDDEN NAME="hgva_startQuery" VALUE="1">';
+	    $("#mainForm").append(startQueryHiddenInput).submit();
+	},
+
+	userClickedAgree: function()
+	{
+	    // Use async=false here so that setCartVar doesn't get terminated when we submit:
+	    setCartVar("hgva_agreedToDisclaimer", "1", null, false);
+	    hgva.submitQuery();
+	},
+
+	submitQueryIfDisclaimerAgreed: function()
+	{
+	    if (hgva.disclaimer.check()) {
+		hgva.submitQuery();
+	    }
+	},
+
+	disclaimer: (function()  // disclaimer object results from this invocation
+	{
+	    var gotAgreement = false;
+	    var $dialog;
+
+	    return {
+		init: function(agreed, agreeFunction) {
+		// If there is a dialog box for disclaimer notice and user has not already
+		// agreed, initialize it to warn & ask for user's agreement.
+		// When user clicks to agree, close dialog and run agreeFunction.
+		    $dialog = $("#disclaimerDialog");
+		    if (!$dialog) {
+			return;
+		    }
+		    if (agreed) {
+			gotAgreement = true;
+			$dialog.hide();
+		    } else {
+			var closeDialog = function() { $dialog.dialog("close"); };
+			var onClickAgree = function() {
+			    gotAgreement = true;
+			    closeDialog();
+			    if (agreeFunction) {
+				agreeFunction();
+			    }
+			};
+			var dialogOpts = {
+			    autoOpen: false,
+			    buttons:
+			    [ { text: "Cancel", click: closeDialog },
+			      { text: "I understand and agree", click: onClickAgree } ],
+			    dialogClass: "warnDialog",
+			    width: 500
+			};
+			$dialog.dialog(dialogOpts);
+		    }
+		},
+
+		check: function() {
+		// Return true if the user has already agreed to the disclaimer.
+		// If they haven't agreed, show them the disclaimer dialog box and
+		// return false (wait for dialog callback agreeFunction).
+		    if (!$dialog || gotAgreement) {
+			return true;
+		    }
+		    $dialog.dialog("open");
+		    return false;
+		}
+	    };
+	}()) // end & invocation of function that makes hgva.disclaimer
     };
 }()); // end & invocation of function that makes hgva
 

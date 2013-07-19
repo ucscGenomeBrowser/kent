@@ -317,7 +317,7 @@ taxId   59729
 
     egrep -i "versi|relea" do.log
     #    January 10 2013 (open-4-0-0) version of RepeatMasker
-    #  CC   RELEASE 20120418; 
+    #  CC   RELEASE 20120418;
 
     time featureBits -countGaps taeGut2 rmsk
     # 97640353 bases of 1232135591 (7.924%) in intersection
@@ -416,18 +416,28 @@ taxId   59729
     #   16473980 bases of 1222864691 (1.347%) in intersection
 
 #########################################################################
-# genscan - (DONE - 2013-03-05 - Pauline)
+# genscan - (DONE - 2013-06-06 - Hiram)
     mkdir /hive/data/genomes/taeGut2/bed/genscan
     cd /hive/data/genomes/taeGut2/bed/genscan
-    time doGenscan.pl taeGut2 > do.log 2>&1 
-XXX - running -
-Thu Jun  6 08:11:30 PDT 2013
-    #   NomLeu2 run elapsed time: 66m40s (couldn't recover time from this run)
+    time doGenscan.pl taeGut2 > do.log 2>&1
+    #  real    47m7.823s
+    # XXX failed four jobs, running manually on hgwdev: chr9 chr1A chr3 chr2
+    # with -window=2000000 - all bug chr9 finished
+# real    57m16.383s
+# user    133m46.445s
+# sys     2m55.584s
+    # running chr9 with -window=1000000
+# real    10m14.291s
+# user    9m59.182s
+# sys     0m13.720s
+
+    time doGenscan.pl -continue=makeBed taeGut2 > makeBed.log 2>&1
+    # real    30m4.119s
 
     cat fb.taeGut2.genscan.txt
-    #   49283434 bases of 2756609047 (1.788%) in intersection
+    #   52986693 bases of 1222864691 (4.333%) in intersection
     cat fb.taeGut2.genscanSubopt.txt
-    #   50711544 bases of 2756609047 (1.840%) in intersection
+    #   28313661 bases of 1222864691 (2.315%) in intersection
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-06 - Hiram)
@@ -462,7 +472,7 @@ Thu Jun  6 08:11:30 PDT 2013
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-#Nomascus leucogenys     18      1       0
+# Taeniopygia guttata     5086    92144   987
 
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
@@ -471,65 +481,80 @@ Thu Jun  6 08:11:30 PDT 2013
     git pull
     # edit etc/genbank.conf to add taeGut2 just after ce2
 
-# taeGut2 (Gibbon)
+# taeGut2 - Zebra Finch
 taeGut2.serverGenome = /hive/data/genomes/taeGut2/taeGut2.2bit
 taeGut2.clusterGenome = /hive/data/genomes/taeGut2/taeGut2.2bit
-taeGut2.ooc = /hive/data/genomes/taeGut2/taeGut2.11.ooc
+taeGut2.ooc = /hive/data/genomes/taeGut2/jkStuff/taeGut2.11.ooc
+taeGut2.align.unplacedChroms = chrUn_*,chr*_random
 taeGut2.lift = /hive/data/genomes/taeGut2/jkStuff/taeGut2.nonBridged.lift
-taeGut2.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
-taeGut2.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
-taeGut2.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
-taeGut2.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
-taeGut2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
-taeGut2.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
-taeGut2.refseq.mrna.native.load  = no
+taeGut2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+taeGut2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+taeGut2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+taeGut2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+taeGut2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+taeGut2.refseq.mrna.native.load = yes
 taeGut2.refseq.mrna.xeno.load = yes
-taeGut2.genbank.mrna.native.load = no
 taeGut2.genbank.mrna.xeno.load = yes
-taeGut2.genbank.est.native.load = no
 taeGut2.downloadDir = taeGut2
-taeGut2.perChromTables = no
+taeGut2.upstreamGeneTbl = refGene
 
     # end of section added to etc/genbank.conf
-    git commit -m "adding taeGut2 Gibbon refs #9812" etc/genbank.conf
+    git commit -m "adding taeGut2 Zebra finch refs #10190" etc/genbank.conf
     git push
     make etc-update
 
     ssh hgwdev			# used to do this on "genbank" machine
     screen -S taeGut2           # long running job managed in screen
     cd /cluster/data/genbank
-/usr/bin/time -p nice ./bin/gbAlignStep -initial taeGut2 &
-#  logFile: var/build/logs/2013.03.06-11:36:35.taeGut2.initalign.log
-#	 var/build/logs/2012.05.07-10:21:12.taeGut2.initalign.log
-#   real    2135m50.446s
+    time ./bin/gbAlignStep -initial taeGut2 &
+#  logFile: var/build/logs/2013.06.18-11:56:48.taeGut2.initalign.log
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
 
-    /usr/bin/time -p nice ./bin/gbDbLoadStep -drop -initialLoad taeGut2 &
-    #   logFile: var/dbload/hgwdev/logs/2013.03.08-09:52:00.dbload.log
-   #   real 2453.76
+    time ./bin/gbDbLoadStep -drop -initialLoad taeGut2 &
+    #   logFile: var/dbload/hgwdev/logs/2013.06.08-18:59:10.dbload.log
+   #   real    29m9.092s
 
     # enable daily alignment and update of hgwdev (DONE - 2013-03-08 - Pauline)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add taeGut2 to:
     vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added taeGut2. refs #9812" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added taeGut2. refs #10190" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #########################################################################
-# set default position to RHO gene displays  (DONE - 2013-03-08 -Pauline)
+# set default position similar to taeGut1 (DONE - 2013-06-19 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="chr21:52,409,568-52,414,485" where name="taeGut2";' \
-	hgcentraltest
-    # a bit wider for a little more context (2013-03-28 - Hiram)
-    hgsql -e \
-'update dbDb set defaultPos="chr21:52408339-52415715" where name="taeGut2";' \
+'update dbDb set defaultPos="chrZ:56287176-56342404" where name="taeGut2";' \
 	hgcentraltest
 
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2013-06-19 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+ 	VALUES ("taeGut2", "blat4c", "17848", "1", "0"); \
+ 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+ 	VALUES ("taeGut2", "blat4c", "17849", "0", "1");' \
+ 	    hgcentraltest
+     #	test it with some sequence
+
+############################################################################
+# reset dbDb description to be like the previous nomLeu
+#       (DONE - 2013-03-21 - Hiram)
+    hgsql hgcentraltest -e 'update dbDb set description = "Oct. 2012 (GGSC Nleu3.0/taeGut2)"" where name = "taeGut2";' \
+          | hgsql -h genome-testdb hgcentraltest
+
+############################################################################
+# construct liftOver from taeGut1 to taeGut2 (DONE - 2013-06-19 - Hiram)
+    # documentation for this step is in taeGut1 - remember to do this
+
+XXX - ready to do this
 ############################################################################
 # downloads and pushQ entry (DONE - 2013-03-08 - Pauline)
     # after adding taeGut2 to the all.joiner file and verifying that
@@ -556,63 +581,4 @@ taeGut2.perChromTables = no
     scp -p taeGut2.sql hgwbeta:/tmp/
     ssh hgwbeta "hgsql qapushq < /tmp/taeGut2.sql"
 
-
 ############################################################################
-# construct liftOver to taeGut2 (DONE - 2013-03-07 - Pauline)
-    screen -S lift	# manage this longish running job in a screen
-    mkdir /hive/data/genomes/nomLeu2/bed/blat.taeGut2.2013-03-06
-    cd /hive/data/genomes/nomLeu2/bed/blat.taeGut2.2013-03-06
-    # check it with -debug first to see if it is going to work:
-    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
-	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
-	-debug -dbHost=hgwdev -workhorse=hgwdev nomLeu2 taeGut2
-    #   real    0m1.838s
-    # if that is OK, then run it:
-    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
-	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
-	-dbHost=hgwdev -workhorse=hgwdev nomLeu2 taeGut2 >& do.log
-    #	real    277m26.138s
-
-    # verify this file exists:
-    #	/gbdb/nomLeu2/liftOver/nomLeu2.over.chain.gz
-    # and try out the conversion on genome-test from nomLeu2 to taeGut2
-
-############################################################################
- #  BLATSERVERS ENTRY (DONE - 2013-03-12 - Pauline)
- #	After getting a blat server assigned by the Blat Server Gods,
-     ssh hgwdev
-
-     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
- 	VALUES ("taeGut2", "blat4c", "17840", "1", "0"); \
- 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
- 	VALUES ("taeGut2", "blat4c", "17841", "0", "1");' \
- 	    hgcentraltest
-     #	test it with some sequence
-
-############################################################################
-# reset dbDb description to be like the previous nomLeu
-#       (DONE - 2013-03-21 - Hiram)
-    hgsql hgcentraltest -e 'update dbDb set description = "Oct. 2012 (GGSC Nleu3.0/taeGut2)"" where name = "taeGut2";' \
-          | hgsql -h genome-testdb hgcentraltest
-
-############################################################################
-# SWAP hg19/Human chain/net (DONE - 2013-03-26 - Pauline)
-    # original alignment
-    cd /hive/data/genomes/hg19/bed/lastzTaeGut2.2013-03-06
-    cat fb.hg19.chainTaeGut2Link.txt
-    #   2542790081 bases of 2897316137 (87.764%) in intersection
-
-    #   running this swap - DONE - 2013-03-26
-    mkdir /hive/data/genomes/taeGut2/bed/blastz.hg19.swap
-    cd /hive/data/genomes/taeGut2/bed/blastz.hg19.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hg19/bed/lastzTaeGut2.2013-03-06/DEF \
-        -swap -syntenicNet \
-        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        > swap.log 2>&1 &
-    #   real   138m48s
-    cat fb.taeGut2.chainHg19Link.txt
-    #   2479386532 bases of 2756609047 (89.943%) in intersection
-
-##############################################################################

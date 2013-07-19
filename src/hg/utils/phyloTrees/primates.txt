@@ -9,6 +9,7 @@ hg	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Homininae; Homo
 # chimp - pan troglodytes
 panTro	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Homininae; Pan
 
+
 # bonobo - Pan paniscus
 panPan	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Homininae; Pan
 
@@ -21,8 +22,14 @@ ponAbe	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Ponginae; Po
 # gibbon - nomascus leucogenys
 nomLeu	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hylobatidae; Nomascus
 
+# green monkey - Chlorocebus sabaeus
+chlSab	Haplorrhini; Simiiformes; Catarrhini; Cercopithecoidea; Cercopithecidae; Cercopithecinae; Chlorocebus
+
 # rhesus - Macaca mulatta
 rheMac	Haplorrhini; Simiiformes; Catarrhini; Cercopithecoidea; Cercopithecidae; Cercopithecinae; Macaca
+
+# crab-eating macaque - Macaca fascicularis
+macFas	Haplorrhini; Simiiformes; Catarrhini; Cercopithecoidea; Cercopithecidae; Cercopithecinae; Macaca; Macaca fascicularis
 
 # baboon - papio hamadryas
 papHam	Haplorrhini; Simiiformes; Catarrhini; Cercopithecoidea; Cercopithecidae; Cercopithecinae; Papio

@@ -1,4 +1,4 @@
-/* alphaAsm - assemble alpha repeat regions such as centromeres from reads that have
+/* linearSat - assemble repeat regions such as centromeres from reads that have
  * been parsed into various repeat monomer variants.  Cycles of these variants tend to
  * form higher order repeats. */
 
@@ -24,11 +24,11 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "alphaAsm - create a linear projection of alpha satellite arrays using the probablistic model\n"
+  "linearSat - create a linear projection of satellite arrays using the probablistic model\n"
   "of HuRef satellite graphs based on Sanger style reads.\n"
   "usage:\n"
-  "   alphaAsm alphaMonFile.txt monomerOrder.txt output.txt\n"
-  "Where alphaMonFile is a list of reads with alpha chains monomers parsed out, one read per\n"
+  "   linearSat monomerFile.txt monomerOrder.txt output.txt\n"
+  "Where monomerFile is a list of reads with monomers parsed out, one read per\n"
   "line, with the first word in the line being the read id and subsequent words the monomers\n"
   "within the read. The monomerOrder.txt has one line per major monomer type with a word for\n"
   "each variant. The lines are in the same order the monomers appear, with the last line\n"
@@ -68,7 +68,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-/* Some structures to keep track of words (which correspond to alpha satellight monomers)
+/* Some structures to keep track of words (which correspond to satellight monomers)
  * seen in input. */
 
 struct monomer
@@ -1694,8 +1694,8 @@ for (monomer = store->monomerList; monomer != NULL; monomer = monomer->next)
     }
 }
 
-struct dlList *alphaAsmOneSize(struct alphaStore *store, int outSize)
-/* alphaAsm - assemble alpha repeat regions such as centromeres from reads that have
+struct dlList *linearSatOneSize(struct alphaStore *store, int outSize)
+/* linearSat - assemble alpha repeat regions such as centromeres from reads that have
  * been parsed into various repeat monomer variants.  Cycles of these variants tend to
  * form higher order repeats. Returns list of outSize monomers. */
 {
@@ -1747,8 +1747,8 @@ for (monomer = monomerList; monomer != NULL; monomer = monomer->next)
 return missing;
 }
 
-void alphaAsm(char *readsFile, char *monomerOrderFile, char *outFile)
-/* alphaAsm - assemble alpha repeat regions such as centromeres from reads that have
+void linearSat(char *readsFile, char *monomerOrderFile, char *outFile)
+/* linearSat - assemble alpha repeat regions such as centromeres from reads that have
  * been parsed into various repeat monomer variants.  Cycles of these variants tend to
  * form higher order repeats. */
 {
@@ -1784,7 +1784,7 @@ struct dlList *ll;
 int outSize = initialOutSize;
 while (outSize <= maxOutSize)
     {
-    ll = alphaAsmOneSize(store, outSize);
+    ll = linearSatOneSize(store, outSize);
     assert(outSize == dlCount(ll));
     int missing = countMissingMonomers(ll, store->monomerList);
     if (missing <= maxToMiss)
@@ -1827,6 +1827,6 @@ pseudoCount = optionInt("pseudoCount", pseudoCount);
 betweens = optionExists("betweens");
 int seed = optionInt("seed", 0);
 srand(seed);
-alphaAsm(argv[1], argv[2], argv[3]);
+linearSat(argv[1], argv[2], argv[3]);
 return 0;
 }

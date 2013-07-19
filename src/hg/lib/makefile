@@ -79,6 +79,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     rangeTreeFile.o rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
     rgdQtl.o riken.o rhMapZfishInfo.o rikenBest.o rikenCluster.o rmskOut.o \
+    rmskAlign.o rmskJoined.o rmskOut2.o \
     rnaFold.o rnaGene.o rnaGroup.o rnaHybridization.o rnaPLFold.o tRNAs.o gbRNAs.o snoRNAs.o lowelabPfamHit.o lowelabArkinOperonScore.o lowelabTIGROperonScore.o \
     rnaSecStr.o tfbsConsFactors.o \
     roughAli.o transMapStuff.o transMapInfo.o transMapGene.o transMapSrc.o \

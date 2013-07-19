@@ -109,13 +109,9 @@ while ( $i <= $#files )
     if ( -d $dir/$f:h ) then
 	cd $dir/$f:h    # just dir and update one file
     	set cmd = "cvs up -dP $f:t"
-#9403# 	# update 32-bit sandbox too
-#9403# 	set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/$f:h;cvs up $f:t"
     else
 	cd $dir/$f:h:h   # just go to parent and update because dir does not exist yet
 	set cmd = "cvs up -dP $f:h:t"
-#9403# 	# update 32-bit sandbox too
-#9403# 	set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/$f:h:h;cvs up $f:h:t"
     endif
     pwd
     echo $cmd
@@ -125,10 +121,6 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-#9403#     # update 32bit sandbox on $BOX32 too
-#9403#     echo "$cmd32"
-#9403#     #old way: ssh $BOX32 "$cmd32"
-#9403#     ssh $BOX32 "/bin/tcsh -c '"$cmd32"'"
     set msg = "$msg $f $p --> $r\n"
     @ i++
 end
