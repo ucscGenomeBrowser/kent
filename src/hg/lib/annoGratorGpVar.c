@@ -78,7 +78,7 @@ static boolean passesFilter(struct annoGratorGpVar *self, struct gpFx *gpFx)
 {
 struct annoGratorGpVarFuncFilter *filt = self->funcFilter;
 enum soTerm term = gpFx->soNumber;
-if (filt->intron && term == intron_variant)
+if (filt->intron && (term == intron_variant || term == complex_transcript_variant))
     return TRUE;
 if (filt->upDownstream && (term == upstream_gene_variant || term == downstream_gene_variant))
     return TRUE;
@@ -86,7 +86,8 @@ if (filt->utr && (term == _5_prime_UTR_variant || term == _3_prime_UTR_variant))
     return TRUE;
 if (filt->cdsSyn && term == synonymous_variant)
     return TRUE;
-if (filt->cdsNonSyn && term != synonymous_variant && gpFx->detailType == codingChange)
+if (filt->cdsNonSyn && term != synonymous_variant
+    && (gpFx->detailType == codingChange || term == complex_transcript_variant))
     return TRUE;
 if (filt->nonCodingExon && term == non_coding_exon_variant)
     return TRUE;

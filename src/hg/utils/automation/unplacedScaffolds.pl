@@ -108,6 +108,10 @@ if (scalar(@extensions) > 1) {
   die "ERROR: ../${db}.unmasked.2bit already exists ?"
     if ( -s "../${db}.unmasked.2bit" );
   `faToTwoBit ${db}.ucsc.fa.gz ../${db}.unmasked.2bit`;
+  my $twoBitDup=`twoBitDup ../${db}.unmasked.2bit`;
+  chomp $twoBitDup;
+  die "ERROR: ${db}: twoBitDup indicates duplicates:\n$twoBitDup\n"
+    if (length($twoBitDup) > 0);
   `checkAgpAndFa ${db}.ucsc.agp ../${db}.unmasked.2bit 2>&1 | tail -5 > checkAgp.result.txt`;
   `twoBitInfo ../${db}.unmasked.2bit stdout | sort -k2,2nr > ../chrom.sizes`;
 }

@@ -264,6 +264,7 @@ for (;;)
 	struct runner *runner = findFreeRunner();
 	syncWithTimeout(fd, 0);
 	runJob(runner, job);
+	sleep(2);  // Give edwSubmit a chance to work so as to exclude duplicate submission.
 	}
     }
 close(dummyFd);

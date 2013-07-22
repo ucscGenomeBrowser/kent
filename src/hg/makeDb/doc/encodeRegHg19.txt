@@ -1016,7 +1016,12 @@ insert into kateTemp (select * from wgEncodeTfbsClusteredV3)
     clusterShrinkExps.pl clusters.target.sorted.bed > clusters.shrunk.bed
 
     hgLoadBed -sqlTable=~/kent/src/hg/lib/factorSource.sql -renameSqlTable \
-        hg19 wgEncodeRegTfbsClusteredShrunk test.shrink.bed
+        hg19 wgEncodeRegTfbsClusteredShrunkMini test.shrink.bed
+
+    hgLoadBed -sqlTable=~/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+        hg19 wgEncodeRegTfbsClusteredShrunk clusters.shrunk.bed
+
+    # rename Shrunk to V3
 
 #######################################################################
 

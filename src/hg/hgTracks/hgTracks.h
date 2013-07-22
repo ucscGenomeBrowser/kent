@@ -866,6 +866,7 @@ struct repeatItem
     char *class;
     char *className;
     int yOffset;
+    Color color;
     };
 
 void pslMethods(struct track *track, struct trackDb *tdb,
@@ -1350,6 +1351,9 @@ void gvfMethods(struct track *tg);
 void messageLineMethods(struct track *track);
 /* Methods for drawing a single-height message line instead of track items,
  * e.g. if source was compiled without a necessary library. */
+
+void jRepeatMethods(struct track *track);
+/* construct track for detailed repeat visualization */
 
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
