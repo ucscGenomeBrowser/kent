@@ -72,8 +72,8 @@ void tryToDeprecate(struct sqlConnection *conn)
 /* CGI variables are set - if possible deprecate, otherwise put up error message. */
 {
 pushWarnHandler(localWarn);
-fileList = cgiString("fileList");
-reason = cgiString("reason");
+fileList = cloneString(cgiString("fileList"));
+reason = cloneString(trimSpaces(cgiString("reason")));
 if (isEmpty(reason))
    {
    warn("Please enter a reason for deprecation.");
@@ -83,7 +83,7 @@ else
    {
    /* Go through list of accessions and make sure they are all well formed and correspond to files that exist. */
    boolean ok = TRUE;
-   struct slName *accList = slNameListOfUniqueWords(cloneString(fileList), FALSE);
+   struct slName *accList = slNameListOfUniqueWords(fileList, FALSE);
    struct slName *acc;
    struct slInt *idList = NULL, *idEl;
    for (acc = accList; acc != NULL; acc = acc->next)
