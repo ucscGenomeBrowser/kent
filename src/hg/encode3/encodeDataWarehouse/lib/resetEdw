@@ -37,7 +37,8 @@ edwCreateUser kent@soe.ucsc.edu
 edwCreateUser euriehong@stanford.edu
 edwCreateUser cherry@stanford.edu
 edwCreateUser vmalladi@stanford.edu
-edwCreateUser cricket@soe.ucsc.edu
+#edwCreateUser cricket@soe.ucsc.edu
+edwCreateUser cricketsloan@stanford.edu
 edwCreateUser etchan@stanford.edu
 edwCreateUser lrowe@stanford.edu
 edwCreateUser kate@soe.ucsc.edu
