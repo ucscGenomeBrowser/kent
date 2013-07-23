@@ -520,7 +520,8 @@ div.warnDialog { border: 2px solid; }
 div.warnDialog .ui-dialog-titlebar { background-color: #FF8566; }
 div.warnDialog .ui-dialog-title { font-weight: bold; color: #000000; }
 div.warnDialog .ui-dialog-content { background-color: #FFFEE8; font-size: 1em; }
-div.warnDialog .ui-dialog-buttonpane { border-width: 0; }
+div.warnDialog .ui-dialog-buttonpane { border-width: 0; text-align: center; }
+div.warnDialog .ui-dialog-buttonset { width: 100%; display: inline-block; }
 
 .centeredImage
 {

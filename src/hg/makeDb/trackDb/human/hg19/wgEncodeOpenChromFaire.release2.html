@@ -131,8 +131,15 @@ cell lines. These are used directly to create a control/background model used
 for F-Seq when generating signal annotations for these cell lines.
 These models are meant to correct for sequencing biases, alignment artifacts,
 and copy number changes in these cell lines. Input data is not being generated
-directly for other cell lines. Instead, a general background model was derived
-from the available input data sets. This should provide corrections for
+directly for other cell lines. For cell lines for which there is
+no input experiment available, the peaks were generated using the control
+of generic_male or generic_female, as an attempt to create a general
+background based on input data from several cell types. These files
+are in &quot;iff&quot; format, which is used when calling peaks with
+F-seq software, and can be downloaded from the
+<a href="http://fureylab.web.unc.edu/software/fseq/" target="_blank">production lab directly</a>
+from under the section titled &quot;Copy number / karyotype correction.&quot
+Using a general background model derived from the available Input data sets provided corrections for
 sequencing biases and alignment artifacts, but will not correct for cell-type-specific copy number changes.
 <DIV style='position:relative; left:25px;'><DL><DT>The exact command used for this step is:</DT>
 <DD><CODE>&gt; fseq -l 800 -v -b &lt;bff files&gt; -p &lt;iff files&gt; aligments.bed</CODE></DD></DL>
