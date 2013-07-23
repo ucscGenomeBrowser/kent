@@ -188,4 +188,8 @@ struct edwFile *edwFileInProgress(struct sqlConnection *conn, int submitId);
 struct edwScriptRegistry *edwScriptRegistryFromCgi();
 /* Get script registery from cgi variables.  Does authentication too. */
 
+void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags);
+/* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
+
+/* Remove existing QA records and rerun QA agent on given file.   */
 #endif /* EDWLIB_H */

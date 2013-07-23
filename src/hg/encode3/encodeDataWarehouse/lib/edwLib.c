@@ -912,3 +912,34 @@ sqlDisconnect(&conn);
 return reg;
 }
 
+void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags)
+/* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
+/* Remove existing QA records and rerun QA agent on given file.   */
+{
+long long fileId = ef->id;
+/* Update database to let people know format revalidation is in progress. */
+char query[4*1024];
+sqlSafef(query, sizeof(query), "update edwFile set errorMessage = '%s' where id=%lld",
+     "Revalidation in progress.", fileId); 
+sqlUpdate(conn, query);
+
+/* Update tags for file with new format. */
+sqlSafef(query, sizeof(query), "update edwFile set tags='%s' where id=%lld", newTags, fileId);
+sqlUpdate(conn, query);
+    
+/* Get rid of existing qa tables. */
+sqlSafef(query, sizeof(query),
+    "delete from edwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
+    fileId, fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query),
+    "delete from edwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld",
+    fileId, fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+
+/* schedule validator */
+edwAddQaJob(conn, ef->id);
+}
+
