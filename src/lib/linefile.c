@@ -649,9 +649,11 @@ void lineFileClose(struct lineFile **pLf)
 struct lineFile *lf;
 if ((lf = *pLf) != NULL)
     {
-    if (lf->pl != NULL)
+    struct pipeline *pl = lf->pl;
+    if (pl != NULL)
         {
-        pipelineWait(lf->pl);
+	pipelineSetNoAbort(pl);
+        pipelineWait(pl);
         pipelineFree(&lf->pl);
         }
     else if (lf->fd > 0 && lf->fd != fileno(stdin))

@@ -673,6 +673,13 @@ closePipeline(pl);
 return groupLeaderWait(pl);
 }
 
+void pipelineSetNoAbort(struct pipeline *pl)
+/* Make it so pipeline won't abort on error - can be done after the fact.
+ * (This is needed to close a pipelined lineFile early.) */
+{
+pl->options |= pipelineNoAbort;
+}
+
 void pipelineDumpCmds(char ***cmds)
 /* Dump out pipeline-formatted commands to stdout for debugging. */
 {
