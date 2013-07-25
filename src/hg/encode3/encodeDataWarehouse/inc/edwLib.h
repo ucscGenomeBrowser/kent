@@ -188,4 +188,12 @@ struct edwFile *edwFileInProgress(struct sqlConnection *conn, int submitId);
 struct edwScriptRegistry *edwScriptRegistryFromCgi();
 /* Get script registery from cgi variables.  Does authentication too. */
 
+void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags);
+/* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
+
+void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
+    char *fastqPath, struct edwValidFile *vf, FILE *bedF,
+    double *retMapRatio,  double *retDepth,  double *retSampleCoverage);
+/* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
+
 #endif /* EDWLIB_H */

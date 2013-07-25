@@ -1,0 +1,3 @@
+#!/bin/tcsh -efx
+make
+scp /usr/local/apache/cgi-bin-kent/edwWebDeprecate encodedcc.sdsc.edu:/data/www/cgi-bin/

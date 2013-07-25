@@ -228,7 +228,7 @@ printf("<BR>Please use the back button on your web browser, correct the error, a
 }
 
 void doMiddle()
-/* testSimpleCgi - A simple cgi script.. */
+/* doMiddle - put up middle part of web page, not including http and html headers/footers */
 {
 pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
