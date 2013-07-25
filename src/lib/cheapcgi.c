@@ -103,6 +103,15 @@ else
     return FALSE;
 }
 
+char *cgiAppendSForHttps()
+/* if running on https, add the letter s to the url protocol */
+{
+if (cgiServerHttpsIsOn())
+    return "s";
+return "";
+}
+
+
 char *cgiServerNamePort()
 /* Return name of server with port if different than 80 */
 {

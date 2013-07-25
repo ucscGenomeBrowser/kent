@@ -328,7 +328,8 @@ char *hgLoginHost = wikiLinkHost();
 char returnTo[2048];
 if (!returnURL || sameString(returnURL,""))
    safef(returnTo, sizeof(returnTo),
-        "http://%s/cgi-bin/hgSession?hgS_doMainPage=1", hgLoginHost);
+        "http%s://%s/cgi-bin/hgSession?hgS_doMainPage=1", 
+        cgiAppendSForHttps(), hgLoginHost);
 else
    safecpy(returnTo, sizeof(returnTo), returnURL);
 return cloneString(returnTo);
@@ -387,10 +388,10 @@ else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayActMailSuccess=1\""
+        "window.location =\"http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayActMailSuccess=1\""
         "//-->"
         "\n"
-        "</script>", hgLoginHost);
+        "</script>", cgiAppendSForHttps(), hgLoginHost);
     }
 }
 
@@ -456,10 +457,10 @@ else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccess=1\""
+        "window.location =\"http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccess=1\""
         "//-->"
         "\n"
-        "</script>", hgLoginHost);
+        "</script>", cgiAppendSForHttps(), hgLoginHost);
     }
 }
 
@@ -523,10 +524,10 @@ else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
+        "window.location =\"http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
         "//-->"
         "\n"
-        "</script>", hgLoginHost, username);
+        "</script>", cgiAppendSForHttps(), hgLoginHost, username);
     }
 }
 
@@ -659,8 +660,8 @@ char *remoteAddr=getenv("REMOTE_ADDR");
 char *urlEncodedUsername=replaceChars(username," ","%20");
 
 safef(activateURL, sizeof(activateURL),
-    "http://%s/cgi-bin/hgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
-    hgLoginHost,
+    "http%s://%s/cgi-bin/hgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
+    cgiAppendSForHttps(), hgLoginHost,
     cgiEncode(urlEncodedUsername),
     cgiEncode(encToken));
 safef(subject, sizeof(subject),"%s account e-mail address confirmation", brwName);

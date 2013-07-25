@@ -56,7 +56,7 @@ system package management tools.
 
    git archive --format=zip -9 \
       --remote=git://genome-source.cse.ucsc.edu/kent.git \
-      HEAD src/userApps > userApps.zip
+      beta src/userApps > userApps.zip
    unzip -d userApps -j userApps.zip
    cd userApps
    make fetchSource

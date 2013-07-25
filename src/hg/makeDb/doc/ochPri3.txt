@@ -201,24 +201,29 @@ taxId 9978
     mkdir /hive/data/genomes/ochPri3/bed/cpgIslands
     cd /hive/data/genomes/ochPri3/bed/cpgIslands
     time doCpgIslands.pl ochPri3 > do.log 2>&1 &
-XXX - running - Thu Jun 20 15:19:19 PDT 2013
-    #  real    8m6.460s
+    #  Elapsed time: 14m35s
 
     cat fb.ochPri3.cpgIslandExt.txt
-    #   18449467 bases of 2605196361 (0.708%) in intersection
+    #   20228048 bases of 1943987870 (1.041%) in intersection
 
 #########################################################################
 # genscan - (DONE - 2013-06-20 - Hiram)
     mkdir /hive/data/genomes/ochPri3/bed/genscan
     cd /hive/data/genomes/ochPri3/bed/genscan
     time doGenscan.pl ochPri3 > do.log 2>&1  &
-XXX - running - Thu Jun 20 15:19:19 PDT 2013
-    #  real    47m7.823s
+    #  real    85m9.645s
+    # last job finished manually:
+    time ./lastGsBig.csh JH802073 000 gtf/000/JH802073.gtf \
+           pep/000/JH802073.pep subopt/000/JH802073.bed
+    #  real    14m23.140s
+
+    time doGenscan.pl -continue=makeBed ochPri3 > makeBed.log 2>&1  &
+    #  real    4m41.262s
 
     cat fb.ochPri3.genscan.txt
-    #   52986693 bases of 1222864691 (4.333%) in intersection
+    #   58343898 bases of 1943987870 (3.001%) in intersection
     cat fb.ochPri3.genscanSubopt.txt
-    #   28313661 bases of 1222864691 (2.315%) in intersection
+    #   52334278 bases of 1943987870 (2.692%) in intersection
 
 ########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-20 - Hiram)

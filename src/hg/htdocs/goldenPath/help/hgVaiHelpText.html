@@ -1,7 +1,8 @@
 <!-- This file is included in hgVai's "Using the Variant Annotation Integrator" section. -->
 <!-- HREF paths are relative to cgi-bin, not goldenPath/help. -->
 
-<h3>Introduction</h3>
+<a name="intro"></a>
+<h2>Introduction</h2>
 <P>
 The Variant Annotation Integrator (VAI) is a research tool for associating
 annotations from the UCSC database with your uploaded set of variant calls.
@@ -33,8 +34,8 @@ condition to consult with a qualified physician for diagnosis and for
 answers to personal questions.
 </p></div><BR>
 
-<a href="variantCalls"></a>
-<h3>Submitting your variant calls</h3>
+<a name="variantCalls"></a>
+<h2>Submitting your variant calls</h2>
 <P>
 In order to use the VAI, you must provide variant calls in either the
 <A HREF="../FAQ/FAQformat.html#format10" TARGET=_BLANK>Personal Genome SNP (pgSnp)</A> or
@@ -48,8 +49,8 @@ and configured as Custom Tracks, or if you happen to have a
 as hub tracks.
 </P>
 
-<a href="genes"></a>
-<h3>Protein-coding gene transcript effect predictions</h3>
+<a name="genes"></a>
+<h2>Protein-coding gene transcript effect predictions</h2>
 <P>
 Any gene prediction track in the UCSC Genome Browser database or in a track hub
 can be selected as the VAI's source of transcript annotations for prediction
@@ -139,7 +140,12 @@ TARGET=_BLANK>non_coding_exon_variant</A></TD>
 </TABLE>
 </P>
 
-<a href="dbNSFP"></a>
+<a name="moreSources"></a>
+<h2>Optional annotations</h2>
+In addition to protein-coding genes, some genome assemblies offer other sources of
+annotations that can be included in the output for each variant.
+
+<a name="dbNSFP"></a>
 <h3>Database of Non-synonymous Functional Predictions (dbNSFP)</h3>
 (available for hg19/GRCh37 only)
 <A HREF="https://sites.google.com/site/jpopgen/dbNSFP" TARGET=_BLANK>dbNSFP</A>
@@ -252,7 +258,7 @@ TARGET=_BLANK>GERP++</A>
 TARGET=_BLANK>Davydov <em>et al.</em>, 2010</A>).
 </P>
 
-<a href="dbSNP"></a>
+<a name="knownVar"></a>
 <h3>Known variation</h3>
 <P>
 If the selected genome assembly has a SNPs track (derived from
@@ -264,8 +270,8 @@ Currently, the VAI does not compare alleles due to the frequency of strand
 anomalies in dbSNP.
 </P>
 
-<a href="cons"></a>
-<h3>UCSC Conservation</h3>
+<a name="cons"></a>
+<h3>Conservation</h3>
 <P>
 If the selected genome assembly has a Conservation track with phyloP scores
 and/or phastCons scores and conserved elements,
@@ -277,8 +283,109 @@ see the Conservation track description in the Genome Browser
 for more details.
 </P>
 
-<a href="output"></a>
-<h3>Output format</h3>
+
+<a name="filters"></a>
+<h2>Filters</h2>
+<P>
+The volume of unrestricted output can be quite large,
+making it difficult to identify variants of particular interest.
+Several filters can be applied to keep only those variants
+that have specific properties.
+</P>
+
+<a name="filterFuncRole"></a>
+<h3>Functional role</h3>
+<P>
+By default, all variants are included in the output regardless of
+predicted functional effect.  If you would like to keep only variants
+that have a particular type of effect, you can uncheck the checkboxes
+of other effect types.
+The detailed functional effect predictions are categorized as follows:
+<UL>
+<LI><B>intergenic:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001628"
+    TARGET=_BLANK>intergenic_variant</A></LI>
+<LI><B>upstream/downstream of gene:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001631"
+    TARGET=_BLANK>upstream_gene_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001632"
+    TARGET=_BLANK>downstream_gene_variant</A>
+    </LI>
+<LI><B>5' or 3' UTR:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001623"
+    TARGET=_BLANK>5_prime_UTR_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001624"
+    TARGET=_BLANK>3_prime_UTR_variant</A>
+    </LI>
+<LI><B>CDS - synonymous coding change:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001819"
+TARGET=_BLANK>synonymous_variant</A>
+    </LI>
+<LI><B>CDS - non-synonymous (missense, stop gain/loss, frameshift etc):</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001583"
+    TARGET=_BLANK>missense_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001821"
+    TARGET=_BLANK>inframe_insertion</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001822"
+    TARGET=_BLANK>inframe_deletion</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001589"
+    TARGET=_BLANK>frameshift_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001582"
+    TARGET=_BLANK>initiator_codon_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001626"
+    TARGET=_BLANK>incomplete_terminal_codon_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001578"
+    TARGET=_BLANK>stop_lost</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001567"
+    TARGET=_BLANK>stop_retained_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001587"
+    TARGET=_BLANK>stop_gained</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001621"
+    TARGET=_BLANK>NMD_transcript_variant</A>
+    </LI>
+<LI><B>intron:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001627"
+    TARGET=_BLANK>intron_variant</A>
+    </LI>
+<LI><B>splice site or splice region:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001575"
+    TARGET=_BLANK>splice_donor_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001574"
+    TARGET=_BLANK>splice_acceptor_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001630"
+    TARGET=_BLANK>splice_region_variant</A>
+    </LI>
+<LI><B>exon of non-coding gene:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001792"
+    TARGET=_BLANK>non_coding_exon_variant</A>
+    </LI>
+</UL>
+</P>
+
+<a name="filterKnownVar"></a>
+<h3>Known variation</h3>
+<P>
+(applicable only to assemblies that have &quot;Common SNPs&quot; and
+&quot;Mult SNPs&quot; tracks)
+By default, all variants appear in output regardless of overlap with known
+dbSNP variants that map to multiple locations (a possible red flag),
+or that have a global minor allele frequency (MAF) of 1% or higher.
+Those categories of known variants can be used to exclude overlapping variants
+from output by unchecking the corresponding checkbox.
+</P>
+
+<a name="filterCons"></a>
+<h3>Conservation</h3>
+<P>
+(applicable only to assemblies that have &quot;Conservation&quot; tracks)
+If desired, output can be restricted to only those variants that overlap
+conserved elements computed by phastCons.
+</P>
+
+
+
+<a name="output"></a>
+<h2>Output format</h2>
 <P>
 Currently, the VAI produces output comparable to Ensembl's
 <A HREF="http://www.ensembl.org/info/docs/variation/vep/index.html"
@@ -295,12 +402,8 @@ When HTML is selected, output always appears in the browser window and the
 output file name is ignored.
 </P>
 
-<!--
-<h3>Filtering output</h3>
--->
-
-<a href="acknowledgements"></a>
-<h3>Acknowledgements</h3>
+<a name="acknowledgements"></a>
+<h2>Acknowledgements</h2>
 <P>
 Anyone familiar with Ensembl's
 <A HREF="http://www.ensembl.org/info/docs/variation/vep/index.html"
@@ -311,7 +414,7 @@ Any bugs in the VAI, however, are in the VAI only.
 </P>
 
 <!--
-<h3>Future plans</h3>
+<h2>Future plans</h2>
 <P>
 advanced interface in which sources of data and filtering methods
 are completely configurable; VCF output; more input types.

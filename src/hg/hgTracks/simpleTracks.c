@@ -12785,6 +12785,8 @@ registerTrackHandler("ncRna", ncRnaMethods);
 registerTrackHandler("rmskLinSpec", repeatMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("rmskNew", repeatMethods);
+registerTrackHandler("rmskJoinedBaseline", repeatMethods);
+registerTrackHandler("rmskJoinedCurrent", repeatMethods);
 registerTrackHandler("rmskCensor", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("chesSimpleRepeat", simpleRepeatMethods);

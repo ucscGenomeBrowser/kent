@@ -1,7 +1,5 @@
 #!/bin/tcsh
 
-#9403# if (( "$HOST" != "hgwbeta" ) && ( "$HOST" != "$BOX32" )) then
-#9403#  echo "Error: this script must be run from hgwbeta or $BOX32. [${0}: `date`]"
 if ( "$HOST" != "hgwbeta" )  then
  echo "Error: this script must be run from hgwbeta. [${0}: `date`]"
 

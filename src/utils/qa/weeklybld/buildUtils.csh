@@ -5,15 +5,6 @@
 cd $WEEKLYBLD
 
 set MAKEPARAMS=""
-#9403# if ( "$MACHTYPE" == "i386" ) then
-#9403#     if ( "$HOST" != "$BOX32" ) then
-#9403# 	echo "error: you must run this script on $BOX32! [${0}: `date`]"
-#9403# 	exit 1
-#9403#     endif
-#9403#     # hack to force use of gcc34 on titan rather than the newer gcc (4.1) which makes binaries
-#9403#     # that can't run on our x86_4 machines.
-#9403#     set MAKEPARAMS="CC=gcc34"
-#9403# endif
 if ( "$MACHTYPE" == "x86_64" ) then
     if ( "$HOST" != "hgwbeta" ) then
 	echo "error: you must run this script on hgwbeta! [${0}: `date`]"
@@ -58,13 +49,7 @@ echo
 echo "Building src utils. on $HOST [${0}: `date`]"
 cd $base/kent/src
 echo "Before make utils on $HOST [${0}: `date`]"
-#9403# if ( "$HOST" == "$BOX32" ) then
-#9403#     # -j is having a side-effect?
-#9403#     # going to try adding -j back in because it's so slow
-#9403#     make -j 8 $MAKEPARAMS utils >& make.utils.log
-#9403# else
     make -j 16 $MAKEPARAMS utils >& make.utils.log
-#9403# endif
 echo "After make utils on $HOST [${0}: `date`]"
 make $MAKEPARAMS blatSuite >>& make.utils.log
 echo "After make blatSuite on $HOST [${0}: `date`]"

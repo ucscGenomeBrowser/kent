@@ -201,10 +201,10 @@ function setCartVars(names, values, errFunc, async)
            });
 }
 
-function setCartVar(name, value)
+function setCartVar(name, value, errFunc, async)
 {
 // Asynchronously set a cart variable.
-    setCartVars( [ name ], [ value ] );
+    setCartVars( [ name ], [ value ], errFunc, async );
 }
 
 function setVarsFromHash(varHash)
