@@ -16,6 +16,7 @@
 #include "md5.h"
 #include "htmshell.h"
 #include "obscure.h"
+#include "bamFile.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 
@@ -941,5 +942,91 @@ sqlUpdate(conn, query);
 
 /* schedule validator */
 edwAddQaJob(conn, ef->id);
+}
+
+static void scanSam(char *samIn, FILE *f, struct genomeRangeTree *grt, long long *retHit, 
+    long long *retMiss,  long long *retTotalBasesInHits)
+/* Scan through sam file doing several things:counting how many reads hit and how many 
+ * miss target during mapping phase, copying those that hit to a little bed file, and 
+ * also defining regions covered in a genomeRangeTree. */
+{
+samfile_t *sf = samopen(samIn, "r", NULL);
+bam_header_t *bamHeader = sf->header;
+bam1_t one;
+ZeroVar(&one);
+int err;
+long long hit = 0, miss = 0, totalBasesInHits = 0;
+while ((err = samread(sf, &one)) >= 0)
+    {
+    int32_t tid = one.core.tid;
+    if (tid < 0)
+	{
+	++miss;
+        continue;
+	}
+    ++hit;
+    char *chrom = bamHeader->target_name[tid];
+    // Approximate here... can do better if parse cigar.
+    int start = one.core.pos;
+    int size = one.core.l_qseq;
+    int end = start + size;	
+    totalBasesInHits += size;
+    boolean isRc = (one.core.flag & BAM_FREVERSE);
+    char strand = '+';
+    if (isRc)
+	{
+	strand = '-';
+	reverseIntRange(&start, &end, bamHeader->target_len[tid]);
+	}
+    if (start < 0) start=0;
+    fprintf(f, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
+    genomeRangeTreeAdd(grt, chrom, start, end);
+    }
+if (err < 0 && err != -1)
+    errnoAbort("samread err %d", err);
+samclose(sf);
+*retHit = hit;
+*retMiss = miss;
+*retTotalBasesInHits = totalBasesInHits;
+}
+
+void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
+    char *fastqPath, struct edwValidFile *vf, FILE *bedF,
+    double *retMapRatio,  double *retDepth,  double *retSampleCoverage)
+/* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
+{
+/* Hmm, tried doing this with Mark's pipeline code, but somehow it would be flaky the
+ * second time it was run in same app.  Resorting therefore to temp files. */
+char genoFile[PATH_LEN];
+safef(genoFile, sizeof(genoFile), "%s%s/bwaData/%s.fa", 
+    edwValDataDir, vf->ucscDb, vf->ucscDb);
+
+char cmd[3*PATH_LEN];
+char *saiName = cloneString(rTempName(edwTempDir(), "edwSample1", ".sai"));
+safef(cmd, sizeof(cmd), "bwa aln %s %s > %s", genoFile, fastqPath, saiName);
+mustSystem(cmd);
+
+char *samName = cloneString(rTempName(edwTempDir(), "ewdSample1", ".sam"));
+safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, fastqPath, samName);
+mustSystem(cmd);
+remove(saiName);
+
+/* Scan sam file to calculate vf->mapRatio, vf->sampleCoverage and vf->depth. 
+ * and also to produce little bed file for enrichment step. */
+struct genomeRangeTree *grt = genomeRangeTreeNew();
+long long hitCount=0, missCount=0, totalBasesInHits=0;
+scanSam(samName, bedF, grt, &hitCount, &missCount, &totalBasesInHits);
+verbose(1, "hitCount=%lld, missCount=%lld, totalBasesInHits=%lld, grt=%p\n", 
+    hitCount, missCount, totalBasesInHits, grt);
+if (retMapRatio)
+    *retMapRatio = (double)hitCount/(hitCount+missCount);
+if (retDepth)
+    *retDepth = (double)totalBasesInHits/assembly->baseCount 
+	    * (double)vf->itemCount/vf->sampleCount;
+long long basesHitBySample = genomeRangeTreeSumRanges(grt);
+if (retSampleCoverage)
+    *retSampleCoverage = (double)basesHitBySample/assembly->baseCount;
+genomeRangeTreeFree(&grt);
+remove(samName);
 }
 
