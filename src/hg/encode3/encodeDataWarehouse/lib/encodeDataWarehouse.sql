@@ -182,12 +182,32 @@ CREATE TABLE edwQaEnrichTarget (
 CREATE TABLE edwQaEnrich (
     id int unsigned auto_increment,	# ID of this enrichment analysis
     fileId int unsigned default 0,	# File we are looking at skeptically
-    qaEnrichTargetId int unsigned default 0,	# Information about an target for this analysis
+    qaEnrichTargetId int unsigned default 0,	# Information about a target for this analysis
     targetBaseHits bigint default 0,	# Number of hits to bases in target
     targetUniqHits bigint default 0,	# Number of unique bases hit in target
     coverage double default 0,	# Coverage of target - just targetUniqHits/targetSize
     enrichment double default 0,	# Amount we hit target/amount we hit genome
     uniqEnrich double default 0,	# coverage/sampleCoverage
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(fileId)
+);
+
+#A target for our contamination analysis.
+CREATE TABLE edwQaContamTarget (
+    id int unsigned auto_increment,	# ID of this contamination target
+    assemblyId int unsigned default 0,	# Assembly we're aligning against to check  for contamination.
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(assemblyId)
+);
+
+#Results of contamination analysis of one file against one target
+CREATE TABLE edwQaContam (
+    id int unsigned auto_increment,	# ID of this contamination analysis
+    fileId int unsigned default 0,	# File we are looking at skeptically
+    qaContamTargetId int unsigned default 0,	# Information about a target for this analysis
+    mapRatio double default 0,	# Proportion of items that map to target
               #Indices
     PRIMARY KEY(id),
     INDEX(fileId)
