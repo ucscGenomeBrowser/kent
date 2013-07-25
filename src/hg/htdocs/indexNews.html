@@ -26,6 +26,44 @@
 
     <!-- start news -->
         <p>
+        <font face="courier" size="3"><b>22 July 2013
+	- Variant Annotation Integrator</b></font>
+        </p>
+	<p>
+        In order to assist researchers in annotating and prioritizing thousands
+        of variant calls from sequencing projects, we have developed the Variant
+        Annotation Integrator (VAI). Given a set of variants uploaded as a
+        custom track (in either <a href="FAQ/FAQformat.html#format10">pgSnp</a>
+        or <a href="goldenPath/help/vcf.html">VCF</a> format), the VAI will
+        return the predicted functional effect (e.g., synonymous, missense,
+        frameshift, intronic) for each variant. The VAI can optionally add
+        several other types of relevant information, including: the
+        <a href="https://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a>
+        identifier if the variant is found in dbSNP, protein damage scores for
+        missense variants from the <a href="https://sites.google.com/site/jpopgen/dbNSFP"
+        target="_blank">Database of Non-synonymous Functional Predictions (dbNSFP)</a>,
+        and conservation scores computed from multi-species alignments. The VAI
+        also offers filters to help narrow down results to the most interesting
+        variants.
+        </p>
+	<p>
+        Future releases of the VAI will include more input/upload options,
+        output formats, and annotation options, and a way to add information
+        from any track in the Genome Browser, including custom tracks.
+        </p>
+	<p>
+        There are two ways to navigate to the VAI: (1) From the &quot;Tools&quot;
+        menu, follow the &quot;Variant Annotation Integrator&quot; link. (2)
+        After uploading a custom track, hit the &quot;go to variant annotation
+        integrator&quot; button. The user's guide is at the bottom of the page,
+        under &quot;Using the Variant Annotation Integrator.&quot;
+        </p>
+	<p>
+        Thank you to Angie Hinrichs, Bob Kuhn, Brian Raney, Brooke Rhead, and
+        Jonathan Casper for their input and work on this feature.
+        </p>
+
+        <p>
         <font face="courier" size="3"><b>2 July 2013
 	- Assembly Data Hubs</b></font>
         </p>
@@ -59,78 +97,47 @@
 	Many thanks to Hiram Clawson, Brian Raney, and Pauline Fujita for their work on this feature.
 	</p>
 	
-	<p>
-        <font face="courier" size="3"><b>2 July 2013
-	- New Gene Alleles feature on the details pages of UCSC genes</b></font>
-        </p>
-	<p>
-	We are excited to announce the release the new Gene Alleles feature on
-	the details pages of UCSC genes. For each protein-coding gene in the
-	UCSC Genes track, variant data from the 2,184 (per autosome) phased
-	chromosomes from Phase 1 of the 1000 Genomes Project have been
-	distilled into "gene haplotype alleles."  Each haplotype allele is a
-	distinct set of variants found on at least one of the 1000 Genomes
-	subject chromosomes. For each haplotype, we display its frequency in
-	the 1000 Genomes populations and indicate the frequency with which it
-	occurs homozygously in each population. Unexpected frequencies of
-	occurrence may thus be used to identify alleles that merit further
-	study. Predicted protein sequence for common haplotypes can also be
-	displayed, allowing differences among alleles to be used to identify
-	differences at the amino acid level.
-	</p>
-	<p>
-	To see the Gene Alleles feature, go to the details page for any
-	protein-coding gene in the UCSC Genes track and click the "Gene
-	Alleles" link in the top right cell of the "Page Index" matrix. This
-	will take you to the "Common Gene Haplotype Alleles" section. For
-	more information on this feature please see this help doc:
-	</p>
-	<p>
-	<a href="http://genome.ucsc.edu/goldenPath/help/haplotypes.html">
-	http://genome.ucsc.edu/goldenPath/help/haplotypes.html</a>
-	</p>
-	<p>
-	Many thanks to Tim Dreszer, Brooke Rhead and Pauline Fujita for their work on this feature.
-	</p>
-
- 	<p>
- 	<font face="courier" size="3"><b>28 June 2013
-	- New UCSC Genes Track Released for GRCh37/hg19</b></font>
-	</p>
-
-	<p>
-	We're happy to announce the release of an updated UCSC Genes
-	track for the GRCh37/hg19 human Genome Browser. 
-	The new release has 82,960 total transcripts, compared with 
-	80,922 in the previous version. The total number of canonical 
-	genes has increased from 31,227 to 31,848. Comparing the new 
-	gene set with the previous version:
-	<ul>
-	<li>74,657 transcripts did not change between versions.
-	<li>88 transcripts were not carried forward to the new version.
-	<li>5,556 transcripts are "compatible" with those in the previous set, 
-	meaning that the two transcripts show consistent splicing. 
-	In most cases, the old and new transcripts differ in the 
-	lengths of their UTRs.
-	<li>621 transcripts overlap with those in the previous set but 
-	do not show consistent splicing, i.e., they contain overlapping 
-	introns with differing splice sites.
-	</ul>
-	</p>
-	<p>
-	More details about the new UCSC Genes track can be found on
-	the <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=knownGene"
-	>UCSC Genes track description page</a>.
-	</p>
-	<p>
-	Many thanks to Brian Raney, Jim Kent, and Luvina Guruvadoo 
-	for their work on this track!
-	</p> 
- 
-        <p>
 
         <!-- start archives -->
 	<hr>
+        <p>
+
+        <!-- staged for archive use
+        <p>
+        <font face="courier" size="3"><b>22 July 2013
+        - Variant Annotation Integrator:</b></font> In order to assist
+        researchers in annotating and prioritizing thousands of variant
+        calls from sequencing projects, we have developed the Variant
+        Annotation Integrator (VAI).
+        <a href="goldenPath/newsarch.html#072213">Read more</a>.
+        </p>
+
+        <p>
+        <font face="courier" size="3"><b>2 July 2013
+        - Assembly Data Hubs:</b></font> Assembly Data Hubs extend the
+        functionality of Track Data Hubs to assemblies that are not hosted
+        natively on the Browser.
+        <a href="goldenPath/newsarch.html#070213">Read more</a>.
+        </p>
+        -->
+
+        <p>
+        <font face="courier" size="3"><b>2 July 2013
+        - New Gene Alleles feature on the details pages of UCSC genes:</b></font>
+        For each protein-coding gene in the UCSC Genes track, variant data from
+        the 2,184 (per autosome) phased chromosomes from Phase 1 of the 1000
+        Genomes Project have been distilled into &quot;gene haplotype
+        alleles.&quot;
+        <a href="goldenPath/newsarch.html#070213b">Read more</a>.
+        </p>
+
+        <p>
+        <font face="courier" size="3"><b>28 June 2013
+        - New UCSC Genes Track Released for GRCh37/hg19:</b></font> We're happy
+        to announce the release of an updated UCSC Genes track for the
+        GRCh37/hg19 human Genome Browser.
+        <a href="goldenPath/newsarch.html#062813">Read more</a>.
+        </p>
 
         <p>
         <font face="courier" size="3"><b>27 June 2013
@@ -146,26 +153,6 @@
 	Due to popular demand, we have created a suggestion box for track, assembly,
 	tool, and other feature requests.
 	<a href="goldenPath/newsarch.html#062613">Read more</a>.</p>
-
-
-    <!-- staged for archive use
-       <p>
-        <font face="courier" size="3"><b>2 July 2013
-        - Assembly Data Hubs</b></font>
-        </p>
-	<p>
-        <a href="goldenPath/newsarch.html#070213">Read more</a>.
-        </p>
-
-        <p>
-        <font face="courier" size="3"><b>2 July 2013
-        - New Gene Alleles feature on the details pages of UCSC genes</b></font>
-        </p>
-        <a href="goldenPath/newsarch.html#070213b">Read more</a>.
-        </p>
-
-
-    -->
 
             </TD><TD WIDTH=15>
          </TD></TR></TABLE>
