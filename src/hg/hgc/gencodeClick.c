@@ -235,7 +235,7 @@ printf("</tr>\n");
 
 printf("<tr><th>Strand<td>%s<td></tr>\n", transAnno->strand);
 
-printf("<tr><th><a href=\"%s\">Biotype</a><td>%s<td>%s</tr>\n", gencodeBiotypesUrl, transAttrs->transcriptType, transAttrs->geneType);
+printf("<tr><th><a href=\"%s\" target = _blank>Biotype</a><td>%s<td>%s</tr>\n", gencodeBiotypesUrl, transAttrs->transcriptType, transAttrs->geneType);
 
 printf("<tr><th>Status<td>%s<td>%s</tr>\n", transAttrs->transcriptStatus, transAttrs->geneStatus);
 
