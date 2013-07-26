@@ -246,11 +246,18 @@
 			server uses."
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			Use the following settings to replicate 
-			the search results of the UCSC Blat server. Note that
-			you may still observe some slight differences between
-			command line results and web-based results, depending
-			on the search being performed.
+			
+			We almost always expect there to be some small differences
+			between the hgBlat/gfServer and the stand-alone command-line blat. 
+			The best matches can be found using pslReps and
+			pslCDnaFilter utilities. The web-based blat is tuned permissively 
+			with a minimum cut-off score of 20, which will display most of the 
+			alignments. Other than to confirm that your command-line blat is 
+			working, there is little use in perfectly replicating the web-based blat results.
+			We advise deciding which filtering parameters make the most sense for 
+			the experiment or analysis. Often these settings will 
+			be different and more stringent than those of the web-based blat.
+			With that in mind, use the following settings to replicate the search results of the web-based blat:
 			<P>
 			<em>faToTwoBit</em>: 
 			<UL>
@@ -292,10 +299,16 @@
 			<br>To get command-line results that are equivalent to web-based results, repMatch must
 			    be specified when using blat.
 			<P>
+			For more information about how to replicate the score and percent identity matches displayed 
+			by our web-based blat, please see the following <A HREF="../FAQ/FAQblat.html#blat4">
+			blat FAQ</A>.
+			<P>
 			For more information on the parameters available for
 			blat, gfServer, and gfClient, see the 
 			<A HREF="../goldenPath/help/blatSpec.html">blat
 			specifications</A>.
+			<P>
+			
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>

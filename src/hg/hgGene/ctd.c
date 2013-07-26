@@ -15,7 +15,7 @@ static boolean ctdExists(struct section *section,
 	struct sqlConnection *conn, char *geneId)
 /* Return TRUE if CTD database exists and it has an entry with the gene symbol */
 {
-char condStr[255];
+char query[1024];
 char *geneSymbol;
 if (isRgdGene(conn))
     {
@@ -30,15 +30,15 @@ if (sqlTableExists(conn, "hgFixed.ctdSorted") == TRUE)
     {
     if (isRgdGene(conn))
 	{
-    	sqlSafefFrag(condStr, sizeof(condStr), 
-	"x.info=c.GeneSymbol and infoType = 'Name' and rgdGeneId='%s' limit 1", geneId);
-    	geneSymbol = sqlGetField(database, "rgdGene2Xref x, hgFixed.ctdSorted c", 
-			"ChemicalId", condStr);
+	sqlSafef(query, sizeof(query), "select ChemicalId from rgdGene2Xref x, hgFixed.ctdSorted c"
+	" where x.info=c.GeneSymbol and infoType = 'Name' and rgdGeneId='%s' limit 1", geneId);
+	geneSymbol = sqlQuickString(conn, query);
 	}
     else
         {
-    	sqlSafefFrag(condStr, sizeof(condStr), "x.geneSymbol=c.GeneSymbol and kgId='%s' limit 1", geneId);
-        geneSymbol = sqlGetField(database, "kgXref x, hgFixed.ctdSorted c", "ChemicalId", condStr);
+	sqlSafef(query, sizeof(query), "select ChemicalId from kgXref x, hgFixed.ctdSorted c"
+	" where x.geneSymbol=c.GeneSymbol and kgId='%s' limit 1", geneId);
+	geneSymbol = sqlQuickString(conn, query);
 	}
 
     if (geneSymbol != NULL) return(TRUE);

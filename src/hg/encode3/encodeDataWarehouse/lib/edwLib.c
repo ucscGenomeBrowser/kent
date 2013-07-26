@@ -5,6 +5,7 @@
 #include "hex.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "errabort.h"
 #include "openssl/sha.h"
 #include "base64.h"
 #include "basicBed.h"
@@ -15,13 +16,14 @@
 #include "md5.h"
 #include "htmshell.h"
 #include "obscure.h"
+#include "bamFile.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
 char *edwDatabase = "encodeDataWarehouse";
 char *edwLicensePlatePrefix = "ENCFF";
-int edwSingleFileTimeout = 2*60*60;   // How many seconds we give ourselves to fetch a single file
+int edwSingleFileTimeout = 4*60*60;   // How many seconds we give ourselves to fetch a single file
 
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
 char *edwValDataDir = "/data/encode3/encValData/";
@@ -215,16 +217,26 @@ struct edwUser *user = edwUserLoadByQuery(conn, query);
 return user;
 }
 
+void edwWarnUnregisteredUser(char *email)
+/* Put up warning message about unregistered user and tell them how to register. */
+{
+warn("No user exists with email %s.  If you need an account please contact your "
+	 "ENCODE DCC data wrangler, or someone you know who already does have an "
+	 "ENCODE Data Warehouse account, and have them create an account for you with "
+	 "http://%s/cgi-bin/edwWebCreateUser"
+	 , email, getenv("SERVER_NAME"));
+}
+
+
 struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email)
 /* Return user associated with email or put up error message. */
 {
 struct edwUser *user = edwUserFromEmail(conn, email);
 if (user == NULL)
-    errAbort("No user exists with email %s.  If you need an account please contact your "
-             "ENCODE DCC data wrangler, or someone you know who already does have an "
-	     "ENCODE Data Warehouse account, and have them create an account for you with "
-	     "http://%s/cgi-bin/edwWebCreateUser"
-	     , email, getenv("SERVER_NAME"));
+    {
+    edwWarnUnregisteredUser(email);
+    noWarnAbort();
+    }
 return user;
 }
 
@@ -690,6 +702,31 @@ safef(command, sizeof(command), "edwQaAgent %lld", fileId);
 edwAddJob(conn, command);
 }
 
+int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url)
+/* Return position of our URL in submission queue */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select commandLine from edwSubmitJob where startTime = 0");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+int aheadOfUs = -1;
+int pos = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *line = row[0];
+    char *edwSubmit = nextQuotedWord(&line);
+    char *lineUrl = nextQuotedWord(&line);
+    if (sameOk(edwSubmit, "edwSubmit") && sameOk(url, lineUrl))
+        {
+	aheadOfUs = pos;
+	break;
+	}
+    ++pos;
+    }
+sqlFreeResult(&sr);
+return aheadOfUs;
+}
+
 struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url)
 /* Return most recent submission, possibly in progress, from this url */
 {
@@ -835,5 +872,161 @@ if (days == 0)
 	}
     }
 return dy;
+}
+
+struct edwFile *edwFileInProgress(struct sqlConnection *conn, int submitId)
+/* Return file in submission in process of being uploaded if any. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select fileIdInTransit from edwSubmit where id=%u", submitId);
+long long fileId = sqlQuickLongLong(conn, query);
+if (fileId == 0)
+    return NULL;
+sqlSafef(query, sizeof(query), "select * from edwFile where id=%lld", (long long)fileId);
+return edwFileLoadByQuery(conn, query);
+}
+
+
+static void accessDenied()
+/* Sleep a bit and then deny access. */
+{
+sleep(5);
+errAbort("Access denied!");
+}
+
+struct edwScriptRegistry *edwScriptRegistryFromCgi()
+/* Get script registery from cgi variables.  Does authentication too. */
+{
+struct sqlConnection *conn = edwConnect();
+char *user = sqlEscapeString(cgiString("user"));
+char *password = sqlEscapeString(cgiString("password"));
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwScriptRegistry where name='%s'", user);
+struct edwScriptRegistry *reg = edwScriptRegistryLoadByQuery(conn, query);
+if (reg == NULL)
+    accessDenied();
+char key[EDW_SID_SIZE];
+edwMakeSid(password, key);
+if (!sameString(reg->secretHash, key))
+    accessDenied();
+sqlDisconnect(&conn);
+return reg;
+}
+
+void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags)
+/* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
+/* Remove existing QA records and rerun QA agent on given file.   */
+{
+long long fileId = ef->id;
+/* Update database to let people know format revalidation is in progress. */
+char query[4*1024];
+sqlSafef(query, sizeof(query), "update edwFile set errorMessage = '%s' where id=%lld",
+     "Revalidation in progress.", fileId); 
+sqlUpdate(conn, query);
+
+/* Update tags for file with new format. */
+sqlSafef(query, sizeof(query), "update edwFile set tags='%s' where id=%lld", newTags, fileId);
+sqlUpdate(conn, query);
+    
+/* Get rid of existing qa tables. */
+sqlSafef(query, sizeof(query),
+    "delete from edwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
+    fileId, fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query),
+    "delete from edwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld",
+    fileId, fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+
+/* schedule validator */
+edwAddQaJob(conn, ef->id);
+}
+
+static void scanSam(char *samIn, FILE *f, struct genomeRangeTree *grt, long long *retHit, 
+    long long *retMiss,  long long *retTotalBasesInHits)
+/* Scan through sam file doing several things:counting how many reads hit and how many 
+ * miss target during mapping phase, copying those that hit to a little bed file, and 
+ * also defining regions covered in a genomeRangeTree. */
+{
+samfile_t *sf = samopen(samIn, "r", NULL);
+bam_header_t *bamHeader = sf->header;
+bam1_t one;
+ZeroVar(&one);
+int err;
+long long hit = 0, miss = 0, totalBasesInHits = 0;
+while ((err = samread(sf, &one)) >= 0)
+    {
+    int32_t tid = one.core.tid;
+    if (tid < 0)
+	{
+	++miss;
+        continue;
+	}
+    ++hit;
+    char *chrom = bamHeader->target_name[tid];
+    // Approximate here... can do better if parse cigar.
+    int start = one.core.pos;
+    int size = one.core.l_qseq;
+    int end = start + size;	
+    totalBasesInHits += size;
+    boolean isRc = (one.core.flag & BAM_FREVERSE);
+    char strand = '+';
+    if (isRc)
+	{
+	strand = '-';
+	reverseIntRange(&start, &end, bamHeader->target_len[tid]);
+	}
+    if (start < 0) start=0;
+    fprintf(f, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
+    genomeRangeTreeAdd(grt, chrom, start, end);
+    }
+if (err < 0 && err != -1)
+    errnoAbort("samread err %d", err);
+samclose(sf);
+*retHit = hit;
+*retMiss = miss;
+*retTotalBasesInHits = totalBasesInHits;
+}
+
+void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
+    char *fastqPath, struct edwValidFile *vf, FILE *bedF,
+    double *retMapRatio,  double *retDepth,  double *retSampleCoverage)
+/* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
+{
+/* Hmm, tried doing this with Mark's pipeline code, but somehow it would be flaky the
+ * second time it was run in same app.  Resorting therefore to temp files. */
+char genoFile[PATH_LEN];
+safef(genoFile, sizeof(genoFile), "%s%s/bwaData/%s.fa", 
+    edwValDataDir, vf->ucscDb, vf->ucscDb);
+
+char cmd[3*PATH_LEN];
+char *saiName = cloneString(rTempName(edwTempDir(), "edwSample1", ".sai"));
+safef(cmd, sizeof(cmd), "bwa aln %s %s > %s", genoFile, fastqPath, saiName);
+mustSystem(cmd);
+
+char *samName = cloneString(rTempName(edwTempDir(), "ewdSample1", ".sam"));
+safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, fastqPath, samName);
+mustSystem(cmd);
+remove(saiName);
+
+/* Scan sam file to calculate vf->mapRatio, vf->sampleCoverage and vf->depth. 
+ * and also to produce little bed file for enrichment step. */
+struct genomeRangeTree *grt = genomeRangeTreeNew();
+long long hitCount=0, missCount=0, totalBasesInHits=0;
+scanSam(samName, bedF, grt, &hitCount, &missCount, &totalBasesInHits);
+verbose(1, "hitCount=%lld, missCount=%lld, totalBasesInHits=%lld, grt=%p\n", 
+    hitCount, missCount, totalBasesInHits, grt);
+if (retMapRatio)
+    *retMapRatio = (double)hitCount/(hitCount+missCount);
+if (retDepth)
+    *retDepth = (double)totalBasesInHits/assembly->baseCount 
+	    * (double)vf->itemCount/vf->sampleCount;
+long long basesHitBySample = genomeRangeTreeSumRanges(grt);
+if (retSampleCoverage)
+    *retSampleCoverage = (double)basesHitBySample/assembly->baseCount;
+genomeRangeTreeFree(&grt);
+remove(samName);
 }
 

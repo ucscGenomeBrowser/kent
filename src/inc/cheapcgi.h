@@ -89,6 +89,9 @@ char *cgiServerNamePort();
 boolean cgiServerHttpsIsOn();
 /* Return true if HTTPS is on */
 
+char *cgiAppendSForHttps();
+/* if running on https, add the letter s to the url protocol */
+
 char *cgiRemoteAddr();
 /* Return IP address of client (or "unknown"). */
 
@@ -450,6 +453,11 @@ boolean cgiParseInput(char *input, struct hash **retHash,
 void cgiParseInputAbort(char *input, struct hash **retHash,
         struct cgiVar **retList);
 /* Parse cgi-style input into a hash table and list as above but abort if there's an error. */
+
+char *cgiStringNewValForVar(char *cgiIn, char *varName, char *newVal);
+/* Return a cgi-encoded string with newVal in place of what was oldVal.
+ * It is an error for var not to exist.   Do a freeMem of this string
+ * when you are through. */
 
 void cgiSimpleTableStart();
 /* start HTML table  -- no customization. Leaves room

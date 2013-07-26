@@ -328,7 +328,8 @@ char *hgLoginHost = wikiLinkHost();
 char returnTo[2048];
 if (!returnURL || sameString(returnURL,""))
    safef(returnTo, sizeof(returnTo),
-        "http://%s/cgi-bin/hgSession?hgS_doMainPage=1", hgLoginHost);
+        "http%s://%s/cgi-bin/hgSession?hgS_doMainPage=1", 
+        cgiAppendSForHttps(), hgLoginHost);
 else
    safecpy(returnTo, sizeof(returnTo), returnURL);
 return cloneString(returnTo);
@@ -387,10 +388,10 @@ else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayActMailSuccess=1\""
+        "window.location =\"http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayActMailSuccess=1\""
         "//-->"
         "\n"
-        "</script>", hgLoginHost);
+        "</script>", cgiAppendSForHttps(), hgLoginHost);
     }
 }
 
@@ -398,15 +399,14 @@ void  displayMailSuccess()
 /* display mail success confirmation box */
 {
 char *sendMailTo = cartUsualString(cart, "hgLogin_sendMailTo", "");
-char *sendMailContain = cartUsualString(cart, "hgLogin_sendMailContain", "");
 hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
 hPrintf(
-    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">An email has been sent to <B>%s</B> "
-  "containing %s information that you requested.<BR><BR>"
+    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">All usernames on file (if any) for <B>%s</B> "
+  "have been sent to that address.<BR><BR>"
     "  If <B>%s</B> is not your registered email address, you will not receive an email."
-    " If you can't find the message we sent you, please contact %s for help.</p>", sendMailTo, sendMailContain, sendMailTo, returnAddr);
+    " If you can't find the message we sent you, please contact %s for help.</p>", sendMailTo, sendMailTo, returnAddr);
 hPrintf(
     "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>");
 cartRemove(cart, "hgLogin_helpWith");
@@ -457,10 +457,10 @@ else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccess=1\""
+        "window.location =\"http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccess=1\""
         "//-->"
         "\n"
-        "</script>", hgLoginHost);
+        "</script>", cgiAppendSForHttps(), hgLoginHost);
     }
 }
 
@@ -524,10 +524,10 @@ else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
+        "window.location =\"http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
         "//-->"
         "\n"
-        "</script>", hgLoginHost, username);
+        "</script>", cgiAppendSForHttps(), hgLoginHost, username);
     }
 }
 
@@ -660,8 +660,8 @@ char *remoteAddr=getenv("REMOTE_ADDR");
 char *urlEncodedUsername=replaceChars(username," ","%20");
 
 safef(activateURL, sizeof(activateURL),
-    "http://%s/cgi-bin/hgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
-    hgLoginHost,
+    "http%s://%s/cgi-bin/hgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
+    cgiAppendSForHttps(), hgLoginHost,
     cgiEncode(urlEncodedUsername),
     cgiEncode(encToken));
 safef(subject, sizeof(subject),"%s account e-mail address confirmation", brwName);

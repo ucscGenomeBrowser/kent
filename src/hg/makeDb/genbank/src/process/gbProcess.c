@@ -47,6 +47,7 @@
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"type", OPTION_STRING},
+    {"org", OPTION_STRING},
     {"byAccPrefix", OPTION_INT},
     {"gbidx", OPTION_STRING},
     {"pepFa", OPTION_STRING},
@@ -89,7 +90,8 @@ static FILE *gbIdxFile = NULL;
 static struct hash *openedFiles = NULL;
 static struct gbFa *gPepFa = NULL;
 
-static unsigned gbType = 0;     /* GB_MRNA, GB_EST */
+static unsigned gbType = 0;     /* GB_MRNA, GB_EST, GB_DNA */
+static char    *gbOrg  = NULL;      /* filter by organism*/
 static boolean inclXMs = FALSE; /* Should XM_ refseqs be included? */
 
 struct authorExample
@@ -518,23 +520,36 @@ static boolean keepGbEntry(boolean isEst)
 {
 char *acc = gbAccessionField->val->string;
 char *cat = kvtGet(kvt, "cat")->val;
+char *org = kvtGet(kvt, "org")->val;
+
 if (genbankBlackListFail(acc, blackListRanges))
+    return FALSE;
+else if (gbOrg && (differentString(org, gbOrg)))
     return FALSE;
 else if (gbGuessSrcDb(acc) == GB_REFSEQ)
     {
     return (startsWith("NM_", acc) || startsWith("NR_", acc)
             || ((startsWith("XM_", acc) && inclXMs)));
     }
-else if (sameString(cat, "GSS") || sameString(cat, "HTG") || sameString(cat, "STS") || sameString(cat, "CON"))
+else if ((sameString(cat, "GSS") || 
+         sameString(cat, "HTG") || 
+        sameString(cat, "STS") || 
+        sameString(cat, "CON")) && !(gbType & GB_DNA))
     return FALSE;   // division to ignore
 else
     {
-    if (sameString(cat, "EST"))
+    if (sameString(cat, "EST")) {
         return (gbType & GB_EST) != 0;
+        }
     else if (gbType & GB_MRNA)
         {
         // not an EST, keep any type of RNA
         return containsStringNoCase(kvtGet(kvt, "mol")->val, "RNA") != NULL;
+        }
+    else if (gbType & GB_DNA)
+        {
+        // keep any type of DNA if DNA filter set
+        return containsStringNoCase(kvtGet(kvt, "mol")->val, "DNA") != NULL;
         }
     else
         return FALSE;
@@ -764,10 +779,13 @@ static void usage()
 {
 errAbort("gbProcess - Convert GenBank flat format file to an fa file containing\n"
          "the sequence data, and a ra file containing other relevant info.\n"
+         "Skips sections HTG, GSS, STS and CON by default.\n"
          "usage:\n"
          "   gbProcess [options] faFile raFile genBankFile(s)\n"
          "options:\n"
-         "     -type=mrna|est - genbank type (note: mRNA gets other RNAs)\n"
+         "     -type=mrna|est|dna - genbank type (note: mRNA gets other RNAs)\n"
+         "           (\"dna\" deactivates the section filters)\n"
+         "     -org=\"Homo sapiens\" - keep only seqs on this organism\n"
          "     -inclXMs - don't drop XM entries\n"
          "     -byAccPrefix=n - separate into files by the first n,\n"
          "      case-insensitive letters of the accession\n"
@@ -800,6 +818,7 @@ gByAccPrefixSize = optionInt("byAccPrefix", 0);
 gbIdxName = optionVal("gbidx", NULL);
 pepFa = optionVal("pepFa", NULL);
 gbType = gbParseType(optionVal("type", "mrna,est"));
+gbOrg  = optionVal("org", NULL);
 inclXMs = optionExists("inclXMs");
 
 if (gByAccPrefixSize > 4)  /* keep small to avoid tons of open files */

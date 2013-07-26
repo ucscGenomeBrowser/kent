@@ -8,6 +8,20 @@ UCSC genome browser 'kent' bioinformatic utilities
     http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product
 
 ========================================================================
+Pre-compiled binaries available:
+
+These binaries built at UCSC may already work in your linux/Mac
+environment.  Please access via:
+  http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/
+  http://hgdownload.cse.ucsc.edu/admin/exe/macOSX.x86_64/
+  http://hgdownload.cse.ucsc.edu/admin/exe/macOSX.i386/
+
+Or via FTP:
+  ftp://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/
+  ftp://hgdownload.cse.ucsc.edu/admin/exe/macOSX.x86_64/
+  ftp://hgdownload.cse.ucsc.edu/admin/exe/macOSX.i386/
+
+========================================================================
 
 System Requirements:
 
@@ -42,7 +56,7 @@ system package management tools.
 
    git archive --format=zip -9 \
       --remote=git://genome-source.cse.ucsc.edu/kent.git \
-      HEAD src/userApps > userApps.zip
+      beta src/userApps > userApps.zip
    unzip -d userApps -j userApps.zip
    cd userApps
    make fetchSource

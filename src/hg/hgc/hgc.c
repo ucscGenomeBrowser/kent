@@ -239,6 +239,7 @@
 #include "itemDetailsHtml.h"
 #include "trackVersion.h"
 #include "numtsClick.h"
+#include "geneReviewsClick.h"
 
 static char *rootDir = "hgcData";
 
@@ -930,10 +931,10 @@ char *sql = trackDbSetting(tdb, "idInUrlSql");
 char *id = itemName;
 if (sql != NULL)
     {
-    char buf[256];
-    safef(buf, sizeof(buf), sql, itemName);
+    char query[1024];
+    sqlSafef(query, sizeof(query), sql, itemName);
     struct sqlConnection *conn = hAllocConn(database);
-    id = sqlQuickString(conn, buf);
+    id = sqlQuickString(conn, query);
     hFreeConn(&conn);
     }
 return id;
@@ -1009,18 +1010,49 @@ char* eUrl = replaceInUrl(tdb, url, idInUrl, encode);
 return eUrl;
 }
 
+void printIframe(struct trackDb *tdb, char *itemName)
+/* print an iframe with the URL specified in trackDb (iframeUrl), can have 
+ * the standard codes in it (like $$ for itemName, etc)
+ */
+{
+char* eUrl = constructUrl(tdb, "iframeUrl", itemName, FALSE);
+if (eUrl==NULL)
+    return;
+
+char *iframeOptions = trackDbSettingOrDefault(tdb, "iframeOptions", "width='100%%' height='1024'");
+// Resizing requires the hgcDetails pages to include a bit of javascript.
+//
+// Explanation how this works and why the javascript is needed:
+// http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content
+// In short:
+// - iframes have a fixed size in html, resizing can only be done in javascript
+// - the iframed page cannot call the resize() function in the hgc html directly, as they have
+//   been loaded from different webservers
+// - one way around it is that the iframed page includes a helper page on our server and 
+//   send their size to the helper page (pages can call functions of included pages)
+// - the helper page then sends the size back to hgc (pages on the same server can
+//   call each others' functions)
+//   width='%s' height='%s' src='%s' seamless scrolling='%s' frameborder='%s'
+
+printf(" \
+<script> \
+function resizeIframe(height) \
+{ \
+     document.getElementById('hgcIframe').height = parseInt(height)+10; \
+} \
+</script> \
+ \
+<iframe id='hgcIframe' src='%s' %s></iframe> \
+<p>", eUrl, iframeOptions);
+}
+
 void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabel, char *urlSetting, boolean encode)
 /* Print custom URL specified in trackDb settings. */
 {
 char urlLabelSetting[32];
 
-// first try to resolve itemName via an optional sql statement to something else
-char *idInUrl = getIdInUrl(tdb, itemName);
-if (idInUrl == NULL)
-    return;
-
 // replace the $$ and other wildchards with the url given in tdb 
-char* eUrl = constructUrl(tdb, urlSetting, idInUrl, encode);
+char* eUrl = constructUrl(tdb, urlSetting, itemName, encode);
 if (eUrl==NULL)
     return;
 
@@ -1033,11 +1065,11 @@ printf("<A HREF=\"%s\" target=_blank>", eUrl);
 
 if (sameWord(tdb->table, "npredGene"))
     {
-    printf("%s (%s)</A><BR>\n", idInUrl, "NCBI MapView");
+    printf("%s (%s)</A><BR>\n", itemName, "NCBI MapView");
     }
 else
     {
-    char *label = idInUrl;
+    char *label = itemName;
     if (isNotEmpty(itemLabel) && !sameString(itemName, itemLabel))
         label = itemLabel;
     printf("%s</A><BR>\n", label);
@@ -3845,7 +3877,11 @@ if (container == NULL && wordCount > 0)
 
 /* Print header. */
 genericHeader(tdb, headerItem);
+
+itemForUrl = getIdInUrl(tdb, item);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+printIframe(tdb, itemForUrl);
+
 if (plus != NULL)
     {
     fputs(plus, stdout);
@@ -9265,9 +9301,9 @@ chromStart = cartOptionalString(cart, "o");
 chromEnd   = cartOptionalString(cart, "t");
 
 sqlSafef(query, sizeof(query),
-      "select %s,%s from cosmicRaw where cosmic_mutation_id='%s'",
-      "source,cosmic_mutation_id,gene_name,accession_number,mut_description,mut_syntax_cds,mut_syntax_aa",
-      "chromosome,grch37_start,grch37_stop,mut_nt,mut_aa,tumour_site,mutated_samples,examined_samples,mut_freq",
+      "select source,cosmic_mutation_id,gene_name,accession_number,mut_description,mut_syntax_cds,mut_syntax_aa,"
+      "chromosome,grch37_start,grch37_stop,mut_nt,mut_aa,tumour_site,mutated_samples,examined_samples,mut_freq"
+      " from cosmicRaw where cosmic_mutation_id='%s'",
       itemName);
 
 sr = sqlMustGetResult(conn, query);
@@ -9340,8 +9376,8 @@ if (row != NULL)
     sqlFreeResult(&sr2);
 
     sqlSafef(query2, sizeof(query2),
-      "select %s from cosmicRaw where cosmic_mutation_id='%s' order by tumour_site",
-      "tumour_site,mutated_samples,examined_samples,mut_freq ",
+      "select tumour_site,mutated_samples,examined_samples,mut_freq "
+      " from cosmicRaw where cosmic_mutation_id='%s' order by tumour_site",
       itemName);
 
     sr2 = sqlMustGetResult(conn2, query2);
@@ -23910,108 +23946,6 @@ if (tdb == NULL)
     errAbort("no trackDb entry for %s", table);
 return tdb;
 }
-
-void doGeneReviews(struct trackDb *tdb, char *itemName)
-/* generate the detail page for geneReviews */
-{
-struct sqlConnection *conn = hAllocConn(database);
-//char *table = tdb->table;
-int start = cartInt(cart, "o");
-int num = 4;
-
- genericHeader(tdb, itemName);
- genericBedClick(conn, tdb, itemName, start, num);
- prGeneReviews(conn, itemName);
- printf("<BR>");
- printTrackHtml(tdb);
- hFreeConn(&conn);
-}
-
-void prGeneReviews(struct sqlConnection *conn, char *itemName)
-/* print GeneReviews associated to this item
-   Note: this print function has been replaced by addGeneReviewToBed.pl
-         which print the same information to the field 5 of bigBed file
-*/
-{
-struct sqlResult *sr;
-char **row;
-char query[512];
-int i;
-char *clickMsg = "Click link(s) below to search GeneReviews and GeneTests";
-boolean firstTime = TRUE;
-
-if (!sqlTableExists(conn, "geneReviewsRefGene")) return;
-
-sqlSafef(query, sizeof(query), "select  grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-        char *grShort = *row++;
-        char *diseaseID = *row++;
-        char *diseaseName = *row++;
-
-
-        if (firstTime)
-        {
-          printf("<BR><B> GeneReview(s) available for %s:</B> (%s)<BR>",itemName,clickMsg);
-          firstTime = FALSE;
-          printf("<PRE><TT>");
-              // #123456789-123456789-123456789-123456789-123456789-123456789-
-          printf("Short name    Disease ID     GeneTests disease name<BR>");
-          printf("------------------------------------------------------------");
-          printf("--------------------<BR>");
-        }
-        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
-        if (strlen(grShort) <= 15) {
-          for (i = 0; i <  15-strlen(grShort); i ++ )
-             {
-                printf("%s", " " );
-             }
-           }
-         printf("%-10s    ", diseaseID);
-        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param=contains\" TARGET=_blank><B>%s</B></A><BR>", diseaseName, diseaseName);
-
-    }  /* end while */
- printf("</TT></PRE>");
- sqlFreeResult(&sr);
-} /* end of prGeneReviews */
-
-void prGRShortRefGene(char *itemName)
-/* print GeneReviews short label associated to this refGene item */
-{
-struct sqlConnection *conn  = hAllocConn(database);
-struct sqlResult *sr;
-char **row;
-char query[512];
-boolean firstTime = TRUE;
-
-if (!sqlTableExists(conn, "geneReviewsRefGene")) return;
-
-sqlSafef(query, sizeof(query), "select grShort, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-        char *grShort = *row++;
-        char *diseaseName = *row++;
-        if (firstTime)
-        {
-          printf("<B>Related GeneReview(s) and GeneTests disease(s): </B>");
-          firstTime = FALSE;
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
-        printf(" (");
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param=contains\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
-       printf(")");
-        } else {
-          printf(", ");
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
-       printf(" (");
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param=contains\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
-       printf(")");
-        }
-     }
-     printf("<BR>");
-     sqlFreeResult(&sr);
-} /* end of prGRShortRefGene */
 
 void doQPCRPrimers(struct trackDb *tdb, char *itemName)
 /* Put up page for QPCRPrimers. */

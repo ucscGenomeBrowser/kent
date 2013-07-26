@@ -393,24 +393,24 @@ allMis1.perChromTables = no
     make etc-update
 
 #########################################################################
-# set default position to FOXP2 gene displays  (DONE - 2012-08-02 - Hiram)
+# set default position to FOXP2 gene displays  (DONE - 2013-06-28 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="JH739914:135428-435957" where name="allMis1";' \
+'update dbDb set defaultPos="JH731472:504271-884586" where name="allMis1";' \
 	hgcentraltest
 
 ############################################################################
-# downloads and pushQ entry (DONE - 2012-07-27 - Hiram)
+# downloads and pushQ entry (DONE - 2013-06-28 - Hiram)
     # after adding allMis1 to the all.joiner file and verifying that
     #   joinerCheck is clean, can construct the downloads:
     cd /hive/data/genomes/allMis1
-    time makeDownloads.pl -workhorse=hgwdev allMis1
-    #   real    11m40.799s
+    time makeDownloads.pl -workhorse=hgwdev allMis1 > downloads.log 2>&1 &
+    #   real    21m2.394s
 
     mkdir /hive/data/genomes/allMis1/pushQ
     cd /hive/data/genomes/allMis1/pushQ
     # Mark says don't let the transMap track get there
-    time makePushQSql.pl allMis1 2> stderr.txt | grep -v transMap > allMis1.sql
-    #   real    3m52.778s
+    time makePushQSql.pl allMis1 2> stderr.txt > allMis1.sql
+    #   real    3m44.708s
 
     # check the stderr.txt for bad stuff, these kinds of warnings are OK:
 # WARNING: hgwdev does not have /gbdb/allMis1/wib/gc5Base.wib

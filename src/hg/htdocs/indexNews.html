@@ -25,114 +25,126 @@
           TARGET=_blank>genome-announce</A> mailing list.</P>
 
     <!-- start news -->
- 	<p>
- 	<font face="courier" size="3"><b>28 June 2013
-	- New UCSC Genes Track Released for GRCh37/hg19</b></font>
-	</p>
-
-	<p>
-	We're happy to announce the release of an updated UCSC Genes
-	track for the GRCh37/hg19 human Genome Browser. 
-	The new release has 82,960 total transcripts, compared with 
-	80,922 in the previous version. The total number of canonical 
-	genes has increased from 31,227 to 31,848. Comparing the new 
-	gene set with the previous version:
-	<ul>
-	<li>74,657 transcripts did not change between versions.
-	<li>88 transcripts were not carried forward to the new version.
-	<li>5,556 transcripts are "compatible" with those in the previous set, 
-	meaning that the two transcripts show consistent splicing. 
-	In most cases, the old and new transcripts differ in the 
-	lengths of their UTRs.
-	<li>621 transcripts overlap with those in the previous set but 
-	do not show consistent splicing, i.e., they contain overlapping 
-	introns with differing splice sites.
-	</ul>
-	</p>
-	<p>
-	More details about the new UCSC Genes track can be found on
-	the <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=knownGene"
-	>UCSC Genes track description page</a>.
-	</p>
-	<p>
-	Many thanks to Brian Raney, Jim Kent, and Luvina Guruvadoo 
-	for their work on this track!
-	</p> 
- 
         <p>
-        <font face="courier" size="3"><b>27 June 2013
-        - New Official European Mirror Released</b></font>
+        <font face="courier" size="3"><b>22 July 2013
+	- Variant Annotation Integrator</b></font>
+        </p>
+	<p>
+        In order to assist researchers in annotating and prioritizing thousands
+        of variant calls from sequencing projects, we have developed the Variant
+        Annotation Integrator (VAI). Given a set of variants uploaded as a
+        custom track (in either <a href="FAQ/FAQformat.html#format10">pgSnp</a>
+        or <a href="goldenPath/help/vcf.html">VCF</a> format), the VAI will
+        return the predicted functional effect (e.g., synonymous, missense,
+        frameshift, intronic) for each variant. The VAI can optionally add
+        several other types of relevant information, including: the
+        <a href="https://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a>
+        identifier if the variant is found in dbSNP, protein damage scores for
+        missense variants from the <a href="https://sites.google.com/site/jpopgen/dbNSFP"
+        target="_blank">Database of Non-synonymous Functional Predictions (dbNSFP)</a>,
+        and conservation scores computed from multi-species alignments. The VAI
+        also offers filters to help narrow down results to the most interesting
+        variants.
+        </p>
+	<p>
+        Future releases of the VAI will include more input/upload options,
+        output formats, and annotation options, and a way to add information
+        from any track in the Genome Browser, including custom tracks.
+        </p>
+	<p>
+        There are two ways to navigate to the VAI: (1) From the &quot;Tools&quot;
+        menu, follow the &quot;Variant Annotation Integrator&quot; link. (2)
+        After uploading a custom track, hit the &quot;go to variant annotation
+        integrator&quot; button. The user's guide is at the bottom of the page,
+        under &quot;Using the Variant Annotation Integrator.&quot;
+        </p>
+	<p>
+        Thank you to Angie Hinrichs, Bob Kuhn, Brian Raney, Brooke Rhead, and
+        Jonathan Casper for their input and work on this feature.
         </p>
 
         <p>
-        The UCSC Genome Browser is pleased to announce the
-        introduction of a new mirror site to serve our users
-        in Europe.  Genome-euro is an official European mirror
-        site of the UCSC Genome Browser, at
-        <A HREF = "http://genome-euro.ucsc.edu" TARGET = _BLANK>
-        http://genome-euro.ucsc.edu</A>. The server is physically
-        located at the Universit&auml;t Bielefeld Center for
-        Biotechnology in Bielefeld, Germany, and is administered
-        by UCSC. Genome-euro is meant to be an alternate, faster
-        access point for those Browser users who are geographically
-        closer to central Europe than to the western United States.
+        <font face="courier" size="3"><b>2 July 2013
+	- Assembly Data Hubs</b></font>
         </p>
+	<p>
+	We are pleased to announce a new feature in the UCSC Genome Browser:
+	Assembly Data Hubs.
+	</p>
+	<p>
+	Assembly Data Hubs extend the functionality of Track Data Hubs to
+	assemblies that are not hosted natively on the Browser. Assembly Data
+	Hubs were developed to address the increasing need for researchers to
+	annotate sequence for which UCSC does not provide an annotation
+	database. They allow researchers to include the underlying reference
+	sequence, as well as data tracks that annotate that sequence. Sequence
+	is stored in the UCSC twoBit format, and the annotation tracks are
+	stored in the same manner as Track Data Hubs.
+	</p>
         <p>
-        All functionality will be the same as on the US server,
-        although Custom Tracks will not be transfered. Saved Sessions
-        containing Custom Tracks will require some manual <A HREF =
-        "http://genome.ucsc.edu/goldenPath/help/genomeEuro.html#sessions"
-        TARGET = _BLANK>intervention</A>.
-        </p>
-        <p>
-        When European users navigate to the US server home page
-        and click the "Genomes" menu item, they will receive a
-        notification that they have been
-        redirected to the more geographically-appropriate server.
-        They will have the option to remain on the US server, as
-        described in our
-        <A HREF = "http://genome.ucsc.edu/goldenPath/help/genomeEuro.html"
-        TARGET = _BLANK>documentation</A>.
-        </p>
-        <p>
-        The backup mirror in <A HREF = "http://genome-mirror.moma.ki.au.dk/"
-        TARGET = _BLANK>Aarhus, Denmark</A> will continue to serve as an
-        emergency site in the event of the official sites in California
-        and Germany malfunctioning.
-        </p>
-        <p>
-        We wish to express our special thanks to our colleagues at the
-        Universit&auml;t Bielefeld Bioinformatics, especially Jens Stoye,
-        for making this possible.
-        </p>
+	To read more about using Assembly Data Hubs, or about creating your
+	own, please see these guides:
+	</p>
+	<p>
+	<a href="http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html">
+	http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html</a>
+	</p>
+	<p>
+	<a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs">
+	http://genomewiki.ucsc.edu/index.php/Assembly_Hubs</a>
+	</p>
+	<p>
+	Many thanks to Hiram Clawson, Brian Raney, and Pauline Fujita for their work on this feature.
+	</p>
+	
 
-	<p>
-	<font face="courier" size="3"><b>26 June 2013
-	- Suggestion Box Released</b></font>
-	</p>
-	<p>
-	Due to popular demand, we have created a suggestion box for track, assembly,
-	tool, and other requests. All suggestions will be assigned a reference
-	number so that you may follow up on their progress with our staff. Please
-	limit the use of this form to requests for new features; questions and reports
-	of problems about existing features and data should continue to be directed to
-	our mailing lists. You may reach the suggestion box from the
-	<a href="contacts.html">Contact Us</a> page or by
-	<a href="cgi-bin/hgUserSuggestion">clicking here</a>.
-	</p>
-	<p>
- 
         <!-- start archives -->
 	<hr>
+        <p>
 
-    <!-- staged for archive use
+        <!-- staged for archive use
+        <p>
+        <font face="courier" size="3"><b>22 July 2013
+        - Variant Annotation Integrator:</b></font> In order to assist
+        researchers in annotating and prioritizing thousands of variant
+        calls from sequencing projects, we have developed the Variant
+        Annotation Integrator (VAI).
+        <a href="goldenPath/newsarch.html#072213">Read more</a>.
+        </p>
+
+        <p>
+        <font face="courier" size="3"><b>2 July 2013
+        - Assembly Data Hubs:</b></font> Assembly Data Hubs extend the
+        functionality of Track Data Hubs to assemblies that are not hosted
+        natively on the Browser.
+        <a href="goldenPath/newsarch.html#070213">Read more</a>.
+        </p>
+        -->
+
+        <p>
+        <font face="courier" size="3"><b>2 July 2013
+        - New Gene Alleles feature on the details pages of UCSC genes:</b></font>
+        For each protein-coding gene in the UCSC Genes track, variant data from
+        the 2,184 (per autosome) phased chromosomes from Phase 1 of the 1000
+        Genomes Project have been distilled into &quot;gene haplotype
+        alleles.&quot;
+        <a href="goldenPath/newsarch.html#070213b">Read more</a>.
+        </p>
+
+        <p>
+        <font face="courier" size="3"><b>28 June 2013
+        - New UCSC Genes Track Released for GRCh37/hg19:</b></font> We're happy
+        to announce the release of an updated UCSC Genes track for the
+        GRCh37/hg19 human Genome Browser.
+        <a href="goldenPath/newsarch.html#062813">Read more</a>.
+        </p>
 
         <p>
         <font face="courier" size="3"><b>27 June 2013
-        - New Official European Mirror Released</b></font> Announcing
+        - New Official European Mirror Released: </b></font> Announcing
         an official mirror for European users, with automatic
         redirection.
-        <a href="goldenPath/newsarch.html#062713">Read more</a>.</p>
+        <a href="goldenPath/newsarch.html#062713">Read more</a>.
         </p>
 
 	<p>
@@ -141,26 +153,6 @@
 	Due to popular demand, we have created a suggestion box for track, assembly,
 	tool, and other feature requests.
 	<a href="goldenPath/newsarch.html#062613">Read more</a>.</p>
-    -->
-
-        <p>
-        <font face="courier" size="3"><b>12 June 2013
-        - Ferret Genome Browser Released:</b></font>
-        A Genome Browser is now available for the Ferret
-        (<em>Mustela putorius furo</em>) assembly released by the Ferret Genome Sequencing Consortium
-        April  2011 (version MusPutFur1.0, UCSC version musFur1).
-	<a href="goldenPath/newsarch.html#061213">Read more</a>.</p>
-
-
- 	<p>
-        <font face="courier" size="3"><b>22 May 2013
-        - Gibbon Genome Browser Released:</b></font>
-        A Genome Browser is now available for the Gibbon
-        (<em>Nomascus leucogenys</em>) assembly released by the Gibbon Genome Sequencing Consortium
-	October 2012 (version Nleu_3.0, UCSC version nomLeu3).
-        <a href="goldenPath/newsarch.html#052213">Read more</a>.</p>
-
-==> <a href="goldenPath/newsarch.html">News Archives</a>
 
             </TD><TD WIDTH=15>
          </TD></TR></TABLE>

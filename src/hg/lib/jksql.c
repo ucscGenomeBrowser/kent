@@ -238,6 +238,8 @@ static struct sqlProfile* sqlProfileFindByDatabase(char *database)
 /* find a profile using database as profile name, return the default if not
  * found */
 {
+if (!database)
+    return defaultProfile;
 struct sqlProfile *sp = hashFindVal(dbToProfile, database);
 if (sp == NULL)
     sp = defaultProfile;
@@ -258,7 +260,7 @@ static struct sqlProfile* sqlProfileGet(char *profileName, char *database)
  * return NULL if not found.
  */
 {
-assert((profileName != NULL) || (database != NULL));
+//assert((profileName != NULL) || (database != NULL));
 if (profiles == NULL)
     sqlProfileLoad();
 
@@ -1318,7 +1320,7 @@ dyStringFree(&dy);
 int sqlWarnCount(struct sqlConnection *conn)
 /* Return the number of warnings. New feature in mysql5. */
 {
-char query[32];
+char query[64];
 sqlSafef(query, sizeof query, "SHOW COUNT(*) WARNINGS");
 return sqlQuickNum(conn, query);
 }
@@ -2388,7 +2390,7 @@ char *sqlVersion(struct sqlConnection *conn)
 /* Return version of MySQL database.  This will be something
  * of the form 5.0.18-standard. */
 {
-char query[32];
+char query[64];
 char **row;
 sqlSafef(query, sizeof query, "show variables like 'version'");
 struct sqlResult *sr = sqlGetResult(conn, query);

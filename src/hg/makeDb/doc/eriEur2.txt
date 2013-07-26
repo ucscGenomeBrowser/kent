@@ -88,16 +88,23 @@ taxId 9365
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek eriEur2 > do.log 2>&1 &
     # real    770m28.305s
-XXX - failing in nestedRepeats, e.g:
+    # failing in nestedRepeats, e.g:
 # RepeatMasker bug?: Undefined id, line 3839311 of input:
-  551  24.8  2.2  0.0  JH835619  1597561 1597571 (1160377) +  LTR18_EE       LTR/ERV1              1293 1343  (174)
+# 551  24.8  2.2  0.0  JH835619  1597561 1597571 (1160377) +  LTR18_EE       LTR/ERV1              1293 1343  (174)
+    # ran that last job on hgwdev, then removed this single broken line and
+    # finished off this one job, then continuing:
+
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-continue=mask -smallClusterHub=encodek eriEur2 > mask.log 2>&1 &
+    # real    31m37.041s
 
     cat faSize.rmsk.txt
-# 2947024286 bases (341827925 N's 2605196361 real 1869498320 upper
-#       735698041 lower) in 8402 sequences in 1 files
-# Total size: mean 350752.7 sd 4055776.1 min 1000 (AAIY02277568) max
-#       111700974 (JH980293) median 2033
-# %24.96 masked total, %28.24 masked real
+# 2715720925 bases (382647390 N's 2333073535 real 1271539462 upper
+#    1061534073 lower) in 5803 sequences in 1 files
+# Total size: mean 467985.7 sd 1304803.0 min 1001 (AMDU01225431)
+#    max 17429815 (JH835289) median 3704
+# %39.09 masked total, %45.50 masked real
 
     egrep -i "versi|release" do.log
 # RepeatMasker version open-4.0.2
@@ -116,9 +123,7 @@ XXX - failing in nestedRepeats, e.g:
     cat fb.simpleRepeat
     #	62243136 bases of 2333073535 (2.668%) in intersection
 
-XXX stuck on broken RM run - Tue Jun 11 17:02:46 PDT 2013
-    # using RMSK and TRF since RMSK is enough masking even though
-    # WM is pretty good
+    # using RMSK and TRF since RMSK is equivalent to the masking result of WM
     cd /hive/data/genomes/eriEur2
     twoBitMask eriEur2.rmsk.2bit \
 	-add bed/simpleRepeat/trfMask.bed eriEur2.2bit
@@ -126,11 +131,11 @@ XXX stuck on broken RM run - Tue Jun 11 17:02:46 PDT 2013
 
     twoBitToFa eriEur2.2bit stdout | faSize stdin > faSize.eriEur2.2bit.txt
     cat faSize.eriEur2.2bit.txt
-# 2947024286 bases (341827925 N's 2605196361 real 1868909316 upper
-#    736287045 lower) in 8402 sequences in 1 files
-# Total size: mean 350752.7 sd 4055776.1 min 1000 (AAIY02277568)
-#    max 111700974 (JH980293) median 2033
-# %24.98 masked total, %28.26 masked real
+# 2715720925 bases (382647390 N's 2333073535 real 1269258231 upper
+#    1063815304 lower) in 5803 sequences in 1 files
+# Total size: mean 467985.7 sd 1304803.0 min 1001 (AMDU01225431)
+#    max 17429815 (JH835289) median 3704
+# %39.17 masked total, %45.60 masked real
 
     rm /gbdb/eriEur2/eriEur2.2bit
     ln -s `pwd`/eriEur2.2bit /gbdb/eriEur2/eriEur2.2bit
@@ -171,6 +176,12 @@ XXX stuck on broken RM run - Tue Jun 11 17:02:46 PDT 2013
     # awk '{print $3-$2}' test.new.gaps.bed | ave stdin | grep total
     # total 8314.000000
 
+#########################################################################
+# cytoBandIdeo - (DONE - 2013-06-12 - Hiram)
+    mkdir /hive/data/genomes/eriEur2/bed/cytoBand
+    cd /hive/data/genomes/eriEur2/bed/cytoBand
+    makeCytoBandIdeo.csh eriEur2
+
 ##########################################################################
 ## WINDOWMASKER (DONE - 2013-05-30 - Hiram)
     mkdir /hive/data/genomes/eriEur2/bed/windowMasker
@@ -186,34 +197,34 @@ XXX stuck on broken RM run - Tue Jun 11 17:02:46 PDT 2013
 #    max 17429815 (JH835289) median 3704
 # %42.02 masked total, %48.91 masked real
 
-XXX - stuck on RM run - Tue Jun 11 17:09:40 PDT 2013
     #  This is pretty good for WM, but RMSK isn't that bad either,
     #  so, using the RMSK result to mask the genome
 
     featureBits -countGaps eriEur2 rmsk windowmaskerSdust  > fb.eriEur2.rmsk.windowmaskerSdust.txt 2>&1
     cat fb.eriEur2.rmsk.windowmaskerSdust.txt
-#  416158057 bases of 2947024286 (14.121%) in intersection
+#  859433945 bases of 2715720925 (31.647%) in intersection
 
 ########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-06 - Hiram)
-    # Use -repMatch=950, based on size -- for human we use 1024
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-18 - Hiram)
+    # Use -repMatch=850, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 2605196361 / 2897316137 \) \* 1024
-    #	( 2605196361 / 2897316137 ) * 1024 = 920.755951
-    # round up to 950
+    calc \( 2333073535 / 2897316137 \) \* 1024
+    #   ( 2333073535 / 2897316137 ) * 1024 = 824.579434
 
-    # echTel1 was: -repMatch=1024
-    #  Wrote 9721 overused 11-mers to /cluster/bluearc/echTel1/11.ooc
+    # round up to 850
+
+    # eriEur1 was: -repMatch=800
+    #	Wrote 43503 overused 11-mers to eriEur1.11.ooc
 
     cd /hive/data/genomes/eriEur2
     blat eriEur2.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/eriEur2.11.ooc -repMatch=950
-    #	Wrote 21134 overused 11-mers to jkStuff/eriEur2.11.ooc
+      -makeOoc=jkStuff/eriEur2.11.ooc -repMatch=850
+    #	Wrote 37160 overused 11-mers to jkStuff/eriEur2.11.ooc
 
     # there are *only* bridged gaps, no lift file needed for genbank
     hgsql -N -e "select bridge from gap;" eriEur2 | sort | uniq -c
-    #   269444 yes
+    #   219764 yes
 
 #########################################################################
 # AUTO UPDATE GENBANK (WORKING - 2013-06-06 - Hiram)
@@ -221,35 +232,33 @@ XXX - stuck on RM run - Tue Jun 11 17:09:40 PDT 2013
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Echinops telfairi       5       0       0
+# Erinaceus europaeus     10      0       0
     # to decide which "native" mrna or ests you want to specify in genbank.conf
-    # this appears that eriEur2 has plenty of native est's
+    # this appears that species has almost nothing
 
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add eriEur2 before echTel1 and commit to GIT
-# eriEur2 (tenrec)
+# eriEur2 (European Hedgehog)
 eriEur2.serverGenome = /hive/data/genomes/eriEur2/eriEur2.2bit
 eriEur2.clusterGenome = /hive/data/genomes/eriEur2/eriEur2.2bit
 eriEur2.ooc = /hive/data/genomes/eriEur2/jkStuff/eriEur2.11.ooc
 eriEur2.lift = no
-eriEur2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
-eriEur2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
-eriEur2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
-eriEur2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
-eriEur2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+eriEur2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+eriEur2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+eriEur2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+eriEur2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+eriEur2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
 eriEur2.refseq.mrna.native.load = no
 eriEur2.refseq.mrna.xeno.load = yes
 eriEur2.genbank.mrna.xeno.load = no
 eriEur2.genbank.est.native.load = no
-eriEur2.genbank.mrna.native.load = no
-eriEur2.genbank.mrna.native.loadDesc = no
 eriEur2.downloadDir = eriEur2
 eriEur2.perChromTables = no
 
     # end of section added to etc/genbank.conf
-    git commit -m "adding eriEur2 tenrec refs #9693" etc/genbank.conf
+    git commit -m "adding eriEur2 hedgehog refs #9419" etc/genbank.conf
     git push
     make etc-update
 
@@ -261,40 +270,39 @@ eriEur2.perChromTables = no
     screen			# long running job managed in screen
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial eriEur2 &
-    #	var/build/logs/2013.06.06-14:36:22.eriEur2.initalign.log
-    #	real    217m40.528s
+    #	var/build/logs/2013.06.30-22:13:31.eriEur2.initalign.log
+    #	real    192m21.565s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad eriEur2 &
-    #	logFile: var/dbload/hgwdev/logs/2013.06.06-23:23:31.dbload.log
-    #	real    15m12.665s
-
+    #	logFile: var/dbload/hgwdev/logs/2013.07.01-07:56:34.dbload.log
+    #	real    12m38.421s
 
     # enable daily alignment and update of hgwdev (TBD - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add eriEur2 to: etc/align.dbs etc/hgwdev.dbs
     vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added eriEur2 to daily hgwdev build refs #9693" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added eriEur2 to daily hgwdev build refs #9419" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
+XXX - perhaps ready to start on this business
 ###########################################################################
-# construct downloads files (TBD - Hiram)
+# construct downloads files (DONE - 2013-07-03 - Hiram)
+    # after joinerCheck is clean, can start with the downloads
     cd /hive/data/genomes/eriEur2
     makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev eriEur2 \
 	> downloads.log 2>&1
-    # edit the README.txt files to set project URL and check
-    #	the text
+    # verify the README.txt files are OK, they usually are.
 
 ###########################################################################
-###########################################################################
-# ready for first pushQ entry (TBD - Hiram)
+# ready for first pushQ entry (DONE - 2013-07-03 - Hiram)
     mkdir /hive/data/genomes/eriEur2/pushQ
     cd /hive/data/genomes/eriEur2/pushQ
-    makePushQSql.pl eriEur2 > eriEur2.sql 2> stderr.out
+    time makePushQSql.pl eriEur2 > eriEur2.sql 2> stderr.out
     # some errors are legitimate and OK:
      head stderr.out
 # WARNING: hgwdev does not have /gbdb/eriEur2/wib/gc5Base.wib
@@ -374,12 +382,13 @@ CREATE TABLE ucscToEnsembl (
 
 ############################################################################
 #	After getting a blat server assigned by the Blat Server Gods,
+#       (DONE - 2013-06-26 - Hiram)
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("eriEur2", "blat2", "17780", "1", "0"); \
+	VALUES ("eriEur2", "blat4b", "17848", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("eriEur2", "blat2", "17781", "0", "1");' \
+	VALUES ("eriEur2", "blat4b", "17849", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 

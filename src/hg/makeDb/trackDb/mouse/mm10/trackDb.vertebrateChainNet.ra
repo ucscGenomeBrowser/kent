@@ -15,7 +15,7 @@ altColor 255,255,0
 type bed 3
 chainLinearGap medium
 chainMinScore 5000
-dimensions dimensionX=clade dimensionY=species 
+dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on
 html vertebrateChainNet
@@ -187,12 +187,13 @@ html vertebrateChainNet
         type chain oryLat2
         otherDb oryLat2
 
-# changes to perMar[12] here need to also correspond to
-# the same tags in ../../trackDb.chainNet.ra 
-
-# include chain.petMar1.ra beta,public
-
-include chain.petMar2.ra
+        track chainPetMar2
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=tLamprey clade=fPetro
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain petMar2
+        otherDb petMar2
 
     track vertebrateChainNetViewnet
     shortLabel Nets
@@ -201,7 +202,7 @@ include chain.petMar2.ra
     subTrack vertebrateChainNet
 
         track netMacEug2
-        subTrack vertebrateChainNetViewnet on 
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=aWallaby clade=aMamm
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -209,7 +210,7 @@ include chain.petMar2.ra
         otherDb macEug2
 
         track netSarHar1
-        subTrack vertebrateChainNetViewnet on 
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=bTDevil clade=aMamm
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -217,7 +218,7 @@ include chain.petMar2.ra
         otherDb sarHar1
 
         track netMonDom5
-        subTrack vertebrateChainNetViewnet on 
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=cOpossum clade=aMamm
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -225,7 +226,7 @@ include chain.petMar2.ra
         otherDb monDom5
 
         track netOrnAna1
-        subTrack vertebrateChainNetViewnet on 
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=dPlatypus clade=aMamm
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -233,7 +234,7 @@ include chain.petMar2.ra
         otherDb ornAna1
 
         track netGeoFor1
-        subTrack vertebrateChainNetViewnet on 
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=e0GroundFinch clade=bAves
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -241,7 +242,7 @@ include chain.petMar2.ra
         otherDb geoFor1
 
         track netMelUnd1
-        subTrack vertebrateChainNetViewnet on 
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=e1Budgerigar clade=bAves
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -257,7 +258,7 @@ include chain.petMar2.ra
         otherDb galGal4
 
         track netTaeGut1
-        subTrack vertebrateChainNetViewnet on 
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=fZFinch clade=bAves
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -273,7 +274,7 @@ include chain.petMar2.ra
         otherDb melGal1
 
         track netAnoCar2
-        subTrack vertebrateChainNetViewnet on 
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=iLizard clade=cEutel
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -281,7 +282,7 @@ include chain.petMar2.ra
         otherDb anoCar2
 
         track netChrPic1
-        subTrack vertebrateChainNetViewnet on 
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=jTurtle clade=cEutel
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -289,7 +290,7 @@ include chain.petMar2.ra
         otherDb chrPic1
 
         track netXenTro3
-        subTrack vertebrateChainNetViewnet on 
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=kFrog clade=cEutel
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -305,7 +306,7 @@ include chain.petMar2.ra
         otherDb latCha1
 
         track netGadMor1
-        subTrack vertebrateChainNetViewnet on 
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=mACod clade=dTeleostei
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -360,9 +361,10 @@ include chain.petMar2.ra
         type netAlign oryLat2 chainOryLat2
         otherDb oryLat2
 
-# changes to perMar[12] here need to also correspond to
-# the same tags in ../../trackDb.chainNet.ra 
-
-# include net.petMar1.ra beta,public
-
-include net.petMar2.ra
+        track netPetMar2
+        subTrack vertebrateChainNetViewnet on
+        subGroups view=net species=tLamprey clade=fPetro
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign petMar2 chainPetMar2
+        otherDb petMar2

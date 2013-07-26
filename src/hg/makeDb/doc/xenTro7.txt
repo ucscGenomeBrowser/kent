@@ -264,25 +264,13 @@ sys     0m0.067s
     mkdir /hive/data/genomes/xenTro7/bed/genscan
     cd /hive/data/genomes/xenTro7/bed/genscan
     time doGenscan.pl xenTro7 > do.log 2>&1 
-XXX - running - Wed Jun 26 13:09:39 PDT 2013
-    #  real    47m7.823s
-    # XXX failed four jobs, running manually on hgwdev: chr9 chr1A chr3 chr2
-    # with -window=2000000 - all bug chr9 finished
-# real    57m16.383s
-# user    133m46.445s
-# sys     2m55.584s
-    # running chr9 with -window=1000000
-# real    10m14.291s
-# user    9m59.182s
-# sys     0m13.720s
-
-    time doGenscan.pl -continue=makeBed xenTro7 > makeBed.log 2>&1 
-    # real    30m4.119s
+    #  real    105m56.579s
 
     cat fb.xenTro7.genscan.txt
-    #   52986693 bases of 1222864691 (4.333%) in intersection
+    #   49337616 bases of 1365936747 (3.612%) in intersection
+
     cat fb.xenTro7.genscanSubopt.txt
-    #   28313661 bases of 1222864691 (2.315%) in intersection
+    #   37929799 bases of 1365936747 (2.777%) in intersection
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-26 - Hiram)
@@ -357,31 +345,22 @@ xenTro7.mgc = yes
     cd /cluster/data/genbank
     time ./bin/gbAlignStep -initial xenTro7 &
 #  logFile: var/build/logs/2013.06.26-13:54:24.xenTro7.initalign.log
-XXX - running -
-Wed Jun 26 13:54:39 PDT 2013
-XXX - running - Wed Jun 12 13:37:23 PDT 2013
-
-    # real 90291.12
-    # user 19200.27
-    # sys 11190.97
+    # real    140m38.617s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
 
     time ./bin/gbDbLoadStep -drop -initialLoad xenTro7 &
-    #   logFile: var/dbload/hgwdev/logs/2013.06.08-18:59:10.dbload.log
-   #   real    29m9.092s
-XXX failed loading:
-Can't open work/hgwdev/dbload/genbank.195.0/xenTro7/mrna/chrUn_EQ843409_est.tab to write: Too many open files
-command failed: gbLoadRna -workdir=work/hgwdev/dbload -initialLoad xenTro7 at /hive/data/outside/genbank/bin/../lib/gbCommon.pm line 275. at /hive/data/outside/genbank/bin/../lib/gbCommon.pm line 275.
+    #   logFile: var/dbload/hgwdev/logs/2013.06.30-19:30:11.dbload.log
+    #   real    31m43.143s
 
     # enable daily alignment and update of hgwdev (TBD - 2013-03-08 - Pauline)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add xenTro7 to:
     vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added xenTro7. refs #9812" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added xenTro7. refs #9868" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 

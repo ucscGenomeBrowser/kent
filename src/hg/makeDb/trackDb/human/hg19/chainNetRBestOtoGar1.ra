@@ -1,0 +1,16 @@
+        track chainRBestOtoGar1
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=jBushbaby clade=dStrep
+        shortLabel $o_Organism RBest Chain
+        longLabel $o_Organism ($o_date) Reciprocal Best Chained Alignments
+        type chain otoGar1
+        otherDb otoGar1
+
+        track netRBestOtoGar1
+        subTrack primateChainNetViewnet on
+        subGroups view=net species=jBushbaby clade=dStrep
+        shortLabel $o_Organism RBest Net
+        longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
+        type netAlign otoGar1 chainRBestOtoGar1
+        otherDb otoGar1
+

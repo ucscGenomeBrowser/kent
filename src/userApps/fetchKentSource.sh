@@ -3,10 +3,11 @@
 # exit on any error:
 set -beEu -o pipefail
 
-# for version 286 we will use beta branch instead of HEAD
-# export branch="beta"
+# switching to beta for version 286
+export branch="beta"
 
-export branch="HEAD"
+# version 285 needed the HEAD checkout to function OK
+# export branch="HEAD"
 
 # script to fetch extra source to use with the kent build,
 # and then selectively parts of the kent source tree, enough to

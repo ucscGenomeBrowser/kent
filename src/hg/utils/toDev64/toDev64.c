@@ -83,7 +83,7 @@ if (!test)
 boolean is5(char *host)
 /* Return TRUE if we seem to be version 5.0 of mysql or later */
 {
-struct sqlConnection *conn = sqlConnectRemote(host, user, password, "mysql");
+struct sqlConnection *conn = sqlConnectRemote(host, user, password, NULL);
 int version = sqlMajorVersion(conn);
 sqlDisconnect(&conn);
 verbose(2, "%s is version %d\n", host, version);

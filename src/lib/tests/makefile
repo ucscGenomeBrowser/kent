@@ -310,5 +310,10 @@ udcTest: udcTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/udcTest udcTest.o ${MYLIBS} ${L}
 	${BIN_DIR}/udcTest
 
+testOutOfMem: testOutOfMem.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/testOutOfMem testOutOfMem.o ${MYLIBS} ${L}
+	# we expect this to errAbort because we allocate one byte too much beyond limit
+	-${BIN_DIR}/testOutOfMem 100000 1
+
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest

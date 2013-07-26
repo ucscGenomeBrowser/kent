@@ -1,7 +1,7 @@
 #!/bin/bash -e
-usage='buildTrix trixName metaDbName path_to_cv.ra outputPath ${DBS}'
+usage='buildTrix trixName metaDbName path_to_cv.ra outputMachine outputPath ${DBS}'
 
-if [ $# -lt 5 ] ; then
+if [ $# -lt 6 ] ; then
     echo "wrong # args: $usage" >&2
     exit 1
 fi
@@ -9,6 +9,7 @@ fi
 trixName="$1"; shift
 metaDbName="$1" ; shift
 cvRaPath="$1" ; shift
+outMachine="$1" ; shift
 outPath="$1" ; shift
 dbs="$@"
 
@@ -35,11 +36,16 @@ buildDbTrix() {
     local cvRaPath="$4"
     local outPath="$5"
     local tmpFile=`mktemp`;
+    local tmpFile2=`mktemp`;
+    local tmpFile3=`mktemp`;
     makeTrackIndex $db $metaDbName $cvRaPath > $tmpFile;
     if test -s $tmpFile; then
-        ixIxx $tmpFile $outPath/${db}_${trixName}.ix $outPath/${db}_${trixName}.ixx
+        ixIxx $tmpFile $tmpFile2 $tmpFile3
+	chmod 664  $tmpFile2 $tmpFile3
+	rsync -a $tmpFile2 $outMachine:$outPath/${db}_${trixName}.ix
+	rsync -a $tmpFile3 $outMachine:$outPath/${db}_${trixName}.ixx
     fi
-    rm -f $tmpFile 
+    rm -f $tmpFile $tmpFile2 $tmpFile3
 }
 
 for db in $dbs ; do

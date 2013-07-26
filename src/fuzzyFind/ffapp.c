@@ -308,8 +308,6 @@ fprintf(stdout, "</TT>\n");
 
 int main(int argc, char *argv[])
 {
-static char envBuf[256];
-
 dnaUtilOpen();
 if (argc == 2)
     {
@@ -319,6 +317,5 @@ if (argc == 2)
     }
 else
     htmShell("FuzzyFinder Results", doMiddle, NULL); 
-carefulCheckHeap();
 return 0;
 }

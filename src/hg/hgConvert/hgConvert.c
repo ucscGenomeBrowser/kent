@@ -1,4 +1,4 @@
-/* hgConvert - CGI-script to convert browser window coordinates 
+/* hgConvert - CGI-script to convert browser window coordinates
  * using chain files */
 #include "common.h"
 #include "hash.h"
@@ -34,7 +34,7 @@ static char *database = NULL;
 /* Copies selected values to a hidden form */
 char *onChangeToOrg = "onchange=\"document.mainForm.submit();\"";
 
-struct dbDb *matchingDb(struct dbDb *list, char *name)
+static struct dbDb *matchingDb(struct dbDb *list, char *name)
 /* Find database of given name in list or die trying. */
 {
 struct dbDb *db;
@@ -47,7 +47,7 @@ errAbort("Can't find %s in matchingDb", name);
 return NULL;
 }
 
-void askForDestination(struct liftOverChain *liftOver, char *fromPos,
+static void askForDestination(struct liftOverChain *liftOver, char *fromPos,
 	struct dbDb *fromDb, struct dbDb *toDb)
 /* set up page for entering data */
 {
@@ -101,8 +101,7 @@ puts("</FORM>\n");
 cartWebEnd();
 }
 
-
-double scoreLiftOverChain(struct liftOverChain *chain,
+static double scoreLiftOverChain(struct liftOverChain *chain,
     char *fromOrg, char *fromDb, char *toOrg, char *toDb, struct hash *dbRank )
 /* Score the chain in terms of best match for cart settings */
 {
@@ -115,14 +114,14 @@ int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
 int maxRank = hashIntVal(dbRank, "maxRank");
 
 if (sameOk(fromOrg,chainFromOrg) &&
-    sameOk(fromDb,chain->fromDb) && 
+    sameOk(fromDb,chain->fromDb) &&
     sameOk(toOrg,chainToOrg) &&
     sameOk(toDb,chain->toDb))
     score += 10000000;
 
-if (sameOk(fromOrg,chainFromOrg)) 
+if (sameOk(fromOrg,chainFromOrg))
     score += 2000000;
-if (sameOk(fromDb,chain->fromDb)) 
+if (sameOk(fromDb,chain->fromDb))
     score += 1000000;
 
 if (sameOk(toOrg,chainToOrg))
@@ -137,7 +136,7 @@ return score;
 }
 
 
-struct liftOverChain *defaultChoices(struct liftOverChain *chainList, char *fromOrg, char *fromDb)
+static struct liftOverChain *defaultChoices(struct liftOverChain *chainList, char *fromOrg, char *fromDb)
 /* Out of a list of liftOverChains and a cart, choose a
  * list to display. */
 {
@@ -164,19 +163,18 @@ for (this = chainList; this != NULL; this = this->next)
 	choice = this;
 	bestScore = score;
 	}
-    }  
+    }
 
 return choice;
 }
 
-
-char *skipWord(char *s)
+static char *skipWord(char *s)
 /* Skip word, and any leading spaces before next word. */
 {
 return skipLeadingSpaces(skipToSpaces(s));
 }
 
-long chainTotalBlockSize(struct chain *chain)
+static long chainTotalBlockSize(struct chain *chain)
 /* Return sum of sizes of all blocks in chain */
 {
 struct cBlock *block;
@@ -186,7 +184,7 @@ for (block = chain->blockList; block != NULL; block = block->next)
 return total;
 }
 
-struct chain *chainLoadIntersecting(char *fileName, 
+static struct chain *chainLoadIntersecting(char *fileName,
 	char *chrom, int start, int end)
 /* Load the chains that intersect given region. */
 {
@@ -228,7 +226,7 @@ slReverse(&chainList);
 return chainList;
 }
 
-struct chain *chainLoadAndTrimIntersecting(char *fileName,
+static struct chain *chainLoadAndTrimIntersecting(char *fileName,
 	char *chrom, int start, int end)
 /* Load the chains that intersect given region, and trim them
  * to fit region. */
@@ -249,7 +247,7 @@ slSort(&chainList, chainCmpScore);
 return chainList;
 }
 
-void doConvert(char *fromPos)
+static void doConvert(char *fromPos)
 /* Actually do the conversion */
 {
 struct dbDb *fromDb = hDbDb(database), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
@@ -285,31 +283,50 @@ else
 	    qEnd = chain->qEnd;
 	    }
 	blockSize = chainTotalBlockSize(chain);
-        /* Check if the toDb database exists and if the chromosome 
-           sequence file (of the hgConvert result) exists in the location 
+        /* Check if the toDb database exists and if the chromosome
+           sequence file (of the hgConvert result) exists in the location
            specified in chromInfo for the toDb. */
- 
+
         boolean chromSeqExists = (sqlDatabaseExists(toDb->name) &&
 				  chromSeqFileExists(toDb->name, chain->qName));
-        /* Check if the toDb has active set to 1 in dbDb if the toDb 
-           database exists. 
-           If these conditions are met then print position link to 
+        /* Check if the toDb has active set to 1 in dbDb if the toDb
+           database exists.
+           If these conditions are met then print position link to
            browser for toDb, otherwise just print position without link. */
-        if (hDbIsActive(toDb->name) && chromSeqExists) 
+        if (hDbIsActive(toDb->name) && chromSeqExists)
 	    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\">",
 		   hgTracksName(), toDb->name, chain->qName, qStart+1, qEnd);
 	printf("%s:%d-%d",  chain->qName, qStart+1, qEnd);
-        if (hDbIsActive(toDb->name) && chromSeqExists) 
+        if (hDbIsActive(toDb->name) && chromSeqExists)
 	    printf("</A>");
 	printf(" (%3.1f%% of bases, %3.1f%% of span)<BR>\n",
-	    100.0 * blockSize/origSize,  
+	    100.0 * blockSize/origSize,
 	    100.0 * (chain->tEnd - chain->tStart) / origSize);
 	}
     }
 cartWebEnd();
 }
 
-void doMiddle(struct cart *theCart)
+static struct liftOverChain *cleanLiftOverList(struct liftOverChain *list)
+/* eliminate from the list where toDb doesn't exist in dbDb */
+{
+struct liftOverChain *cleanList = NULL;
+struct hash *dbDbHash = hDbDbHash();
+struct liftOverChain *this = NULL;
+struct liftOverChain *next = NULL;
+for (this = list; this != NULL; this = next)
+    {
+    next = this->next;
+    if (hashLookup(dbDbHash, this->toDb))
+        slAddHead(&cleanList, this);
+    else
+        liftOverChainFree(&this);
+    }
+slReverse(&cleanList);
+return cleanList;
+}
+
+static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 char *fromPos = cartString(theCart, "position");
@@ -321,7 +338,8 @@ if (cartVarExists(cart, HGLFT_DO_CONVERT))
     doConvert(fromPos);
 else
     {
-    struct liftOverChain *liftOverList = liftOverChainListForDbFiltered(database);
+    struct liftOverChain *checkLiftOverList = liftOverChainListForDbFiltered(database);
+    struct liftOverChain *liftOverList = cleanLiftOverList(checkLiftOverList);
     struct liftOverChain *choice = defaultChoices(liftOverList, organism, database);
     if (choice == NULL)
 	errAbort("Sorry, no conversions available from this assembly.");

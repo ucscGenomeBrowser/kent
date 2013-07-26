@@ -123,16 +123,41 @@ if (retDirId != NULL)
 return sd;
 }
 
+int edwFileIdForLicensePlate(struct sqlConnection *conn, char *licensePlate)
+/* Return ID in edwFile table corresponding to license plate */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select fileId from edwValidFile where licensePlate='%s'",
+    licensePlate);
+return sqlQuickNum(conn, query);
+}
 
-struct edwFile *edwFileFromFieldedTable(struct fieldedTable *table,
-    int fileIx, int md5Ix, int sizeIx, int modifiedIx)
+char *replacesTag = "replaces";	    /* Tag in manifest for replacement */
+char *replaceReasonTag = "replace_reason";	/* Tag in manifest for replacement reason */
+
+struct submitFileRow
+/* Information about a new file or an updated file. */
+    {
+    struct submitFileRow *next;
+    struct edwFile *file;   /* The file */
+    char *replaces;	    /* License plate of file it replaces or NULL */
+    unsigned replacesFile;       /* File table id of file it replaces or 0 */
+    char *replaceReason;   /* Reason for replacement or 0 */
+    };
+
+struct submitFileRow *submitFileRowFromFieldedTable(
+    struct sqlConnection *conn, struct fieldedTable *table,
+    int fileIx, int md5Ix, int sizeIx, int modifiedIx, int replacesIx, int replaceReasonIx)
 /* Turn parsed out table (still all just strings) into list of edwFiles. */
 {
-struct edwFile *bf, *bfList = NULL;
+struct submitFileRow *sfr, *sfrList = NULL;
+struct edwFile *bf;
 struct fieldedRow *fr;
 struct dyString *tags = dyStringNew(0);
 char *ucscDbTag = "ucsc_db";
 int ucscDbField = stringArrayIx(ucscDbTag, table->fields, table->fieldCount);
+
+
 for (fr = table->rowList; fr != NULL; fr = fr->next)
     {
     char **row = fr->row;
@@ -177,11 +202,29 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 
     /* Fake other fields. */
     bf->edwFileName  = cloneString("");
-    slAddHead(&bfList, bf);
+
+    /* Allocate wrapper structure */
+    AllocVar(sfr);
+    sfr->file = bf;
+
+    /* fill in fields about replacement maybe */
+    if (replacesIx != -1)
+        {
+	char *replacesAcc = row[replacesIx];
+	char *reason = row[replaceReasonIx];
+	int fileId = edwFileIdForLicensePlate(conn, replacesAcc);
+	if (fileId == 0)
+	    errAbort("%s in %s column doesn't exist in warehouse", replacesAcc, replacesTag);
+	sfr->replaces = cloneString(replacesAcc);
+	sfr->replaceReason = cloneString(reason);
+	sfr->replacesFile = fileId;
+	}
+
+    slAddHead(&sfrList, sfr);
     }
-slReverse(&bfList);
+slReverse(&sfrList);
 dyStringFree(&tags);
-return bfList;
+return sfrList;
 }
 
 int makeNewEmptySubmitRecord(struct sqlConnection *conn, char *submitUrl, unsigned userId)
@@ -521,14 +564,24 @@ return TRUE;
          
 char *edwSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf", 
     "bigWig", "bigBed", "bedLogR", "bedRnaElements", "bedRrbs", "broadPeak", 
-    "narrowPeak", "openChromCombinedPeaks", "peptideMapping", "shortFrags", };
+    "narrowPeak", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
+    "rcc", "idat", "fasta"};
 int edwSupportedFormatsCount = ArraySize(edwSupportedFormats);
+
+boolean isEmptyOrNa(char *s)
+/* Return TRUE if string is NULL, "", "n/a", or "N/A" */
+{
+if (isEmpty(s))
+    return TRUE;
+return sameWord(s, "n/a");
+}
 
 char *edwSupportedEnrichedIn[] = {"unknown", "exon", "intron", "promoter", "coding", 
     "utr", "utr3", "utr5", "open"};
 int edwSupportedEnrichedInCount = ArraySize(edwSupportedEnrichedIn);
 
-struct edwFile *edwParseSubmitFile(char *submitLocalPath, char *submitUrl)
+void edwParseSubmitFile(struct sqlConnection *conn, char *submitLocalPath, char *submitUrl, 
+    struct submitFileRow **retSubmitList)
 /* Load and parse up this file as fielded table, make sure all required fields are there,
  * and calculate indexes of required fields.   This produces an edwFile list, but with
  * still quite a few fields missing - just what can be filled in from submit filled in. 
@@ -551,6 +604,15 @@ int md5Ix = stringArrayIx("md5_sum", table->fields, table->fieldCount);
 int sizeIx = stringArrayIx("size", table->fields, table->fieldCount);
 int modifiedIx = stringArrayIx("modified", table->fields, table->fieldCount);
 int validIx = stringArrayIx("valid_key", table->fields, table->fieldCount);
+
+/* See if we're doing replacement and check have all columns needed if so. */
+int replacesIx = stringArrayIx(replacesTag, table->fields, table->fieldCount);
+int replaceReasonIx = stringArrayIx(replaceReasonTag, table->fields, table->fieldCount);
+boolean doReplace = (replacesIx != -1);
+if (doReplace)
+    if (replaceReasonIx == -1)
+        errAbort("Error: got \"%s\" column without \"%s\" column in %s.", 
+	    replacesTag, replaceReasonTag, submitUrl);
 
 /* Loop through and make sure all field values are ok */
 struct fieldedRow *fr;
@@ -587,9 +649,23 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
     if (!sameString(validIn, realValid))
         errAbort("The valid_key %s for %s doesn't fit", validIn, fileName);
     freez(&realValid);
+
+    if (doReplace)
+	{
+	char *replaces = row[replacesIx];
+	char *reason = row[replaceReasonIx];
+	if (!isEmptyOrNa(replaces))
+	    {
+	    if (!startsWith(edwLicensePlatePrefix, replaces))
+		errAbort("%s in replaces column is not an ENCODE file accession", replaces);
+	    if (isEmptyOrNa(reason))
+		errAbort("Replacing %s without a reason\n", replaces);
+	    }
+	}
     }
 
-return edwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
+*retSubmitList = submitFileRowFromFieldedTable(conn, table, 
+    fileIx, md5Ix, sizeIx, modifiedIx, replacesIx, replaceReasonIx);
 }
 
 void notOverlappingSelf(struct sqlConnection *conn, char *url)
@@ -671,11 +747,13 @@ notOverlappingSelf(conn, submitUrl);
 /* Make a submit record. */
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, userId);
 
+/* The next errCatch block will fill these in if all goes well. */
+struct submitFileRow *sfrList = NULL; 
+
 /* Start catching errors from here and writing them in submitId.  If we don't
- * throw we'll end up having a list of all files in the submit in bfList. */
-struct edwFile *bfList = NULL; 
+ * throw we'll end up having a list of all files in the submit in sfrList. */
 struct errCatch *errCatch = errCatchNew();
-char query[256];
+char query[1024];
 if (errCatchStart(errCatch))
     {
     /* Make sure they got a bit of space, enough for a reasonable submit file. 
@@ -736,15 +814,14 @@ if (errCatchStart(errCatch))
 	sqlUpdate(conn, query);
 	}
 
-    /* By now there is a submit file on the local file system.  */
-
-    bfList = edwParseSubmitFile(submitLocalPath, submitUrl);
+    /* By now there is a submit file on the local file system.  We parse it out. */
+    edwParseSubmitFile(conn, submitLocalPath, submitUrl, &sfrList);
 
     /* Save our progress so far to submit table. */
     sqlSafef(query, sizeof(query), 
 	"update edwSubmit"
 	"  set submitFileId=%lld, submitDirId=%lld, fileCount=%d where id=%d",  
-	    (long long)fileId, (long long)submitDirId, slCount(bfList), submitId);
+	    (long long)fileId, (long long)submitDirId, slCount(sfrList), submitId);
     sqlUpdate(conn, query);
     }
 errCatchEnd(errCatch);
@@ -762,21 +839,22 @@ errCatchFree(&errCatch);
 /* Weed out files we already have. */
 int oldCount = 0;
 long long oldBytes = 0, newBytes = 0, byteCount = 0;
-struct edwFile *bf, *oldList = NULL, *newList = NULL, *bfNext;
-for (bf = bfList; bf != NULL; bf = bfNext)
+struct submitFileRow *sfr, *oldList = NULL, *newList = NULL, *sfrNext;
+for (sfr = sfrList; sfr != NULL; sfr = sfrNext)
     {
-    bfNext = bf->next;
+    sfrNext = sfr->next;
+    struct edwFile *bf = sfr->file;
     if (edwGotFile(conn, submitDir, bf->submitFileName, bf->md5) >= 0)
         {
 	++oldCount;
 	oldBytes += bf->size;
-	slAddHead(&oldList, bf);
+	slAddHead(&oldList, sfr);
 	}
     else
-        slAddHead(&newList, bf);
+        slAddHead(&newList, sfr);
     byteCount += bf->size;
     }
-bfList = NULL;
+sfrList = NULL;
 
 /* Update database with oldFile count. */
 sqlSafef(query, sizeof(query), 
@@ -786,8 +864,9 @@ sqlUpdate(conn, query);
 
 
 /* Go through list attempting to load the files if we don't already have them. */
-for (bf = newList; bf != NULL; bf = bf->next)
+for (sfr = newList; sfr != NULL; sfr = sfr->next)
     {
+    struct edwFile *bf = sfr->file;
     int submitUrlSize = strlen(submitDir) + strlen(bf->submitFileName) + 1;
     char submitUrl[submitUrlSize];
     safef(submitUrl, submitUrlSize, "%s%s", submitDir, bf->submitFileName);
@@ -815,6 +894,16 @@ for (bf = newList; bf != NULL; bf = bf->next)
 	verbose(2, "Already got %s\n", bf->submitFileName);
 	sqlSafef(query, sizeof(query), "update edwSubmit set oldFiles=oldFiles+1 where id=%d", 
 	    submitId);
+	sqlUpdate(conn, query);
+	}
+
+    if (sfr->replacesFile != 0)
+        {
+	/* What happens when the replacement doesn't validate? */
+	verbose(2, "Replacing %s with %s\n", sfr->replaces,  bf->submitFileName);
+	sqlSafef(query, sizeof(query), 
+	    "update edwFile set replacedBy=%u, deprecated='%s' where id=%u",
+		  bf->id, sfr->replaceReason,  sfr->replacesFile);
 	sqlUpdate(conn, query);
 	}
     }

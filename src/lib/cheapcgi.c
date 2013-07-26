@@ -103,6 +103,15 @@ else
     return FALSE;
 }
 
+char *cgiAppendSForHttps()
+/* if running on https, add the letter s to the url protocol */
+{
+if (cgiServerHttpsIsOn())
+    return "s";
+return "";
+}
+
+
 char *cgiServerNamePort()
 /* Return name of server with port if different than 80 */
 {
@@ -663,6 +672,32 @@ else    /* They long jumped here because of an error. */
 popAbortHandler();
 return ok;
 }
+
+char *cgiStringNewValForVar(char *cgiIn, char *varName, char *newVal)
+/* Return a cgi-encoded string with newVal in place of what was oldVal.
+ * It is an error for var not to exist.   Do a freeMem of this string
+ * when you are through. */
+{
+struct dyString *dy = dyStringNew(strlen(cgiIn) + strlen(newVal));
+struct cgiParsedVars *cpv = cgiParsedVarsNew(cgiIn);
+struct cgiVar *var;
+boolean doneSub = FALSE;
+for (var = cpv->list; var != NULL; var = var->next)
+    {
+    char *val = var->val;
+    if (sameString(var->name, varName))
+	{
+        val = newVal;
+	doneSub = TRUE;
+	}
+    cgiEncodeIntoDy(var->name, val, dy);
+    }
+if (!doneSub)
+    errAbort("Couldn't find %s in %s", varName, cgiIn);
+cgiParsedVarsFree(&cpv);
+return dyStringCannibalize(&dy);
+}
+
 
 static boolean dumpStackOnSignal = FALSE;  // should a stack dump be generated?
 

@@ -317,6 +317,24 @@ int rangeTreeOverlapTotalSize(struct rbTree *tree)
 return rangeTreeOverlapSize(tree, INT_MIN, INT_MAX);
 }
 
+void rangeTreeSumRangeCallback(void *item, void *context)
+/* This is a callback for rbTreeTraverse with context.  It just adds up
+ * end-start */
+{
+struct range *range = item;
+long long *pSum = context;
+*pSum += range->end - range->start;
+}
+
+long long rangeTreeSumRanges(struct rbTree *tree)
+/* Return sum of end-start of all items. */
+{
+long long sum = 0;
+rbTreeTraverseWithContext(tree, rangeTreeSumRangeCallback, &sum);
+return sum;
+}
+
+
 struct rbTree *rangeTreeNew()
 /* Create a new, empty, rangeTree. */
 {

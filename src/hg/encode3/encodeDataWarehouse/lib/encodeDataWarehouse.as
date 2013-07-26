@@ -63,7 +63,7 @@ table edwFile
     lstring tags;               "CGI encoded name=val pairs from manifest"
     lstring errorMessage; "If non-empty contains last error message from upload. If empty upload is ok"
     string deprecated; "If non-empty why you shouldn't use this file any more."
-    string replacedBy; "If non-empty license plate of file that replaces this one."
+    uint replacedBy;   "If non-zero id of file that replaces this one."
     )
 
 table edwSubmit
@@ -149,12 +149,28 @@ table edwQaEnrich
     (
     uint id primary auto;    "ID of this enrichment analysis"
     uint fileId index;  "File we are looking at skeptically"
-    uint qaEnrichTargetId;  "Information about an target for this analysis"
+    uint qaEnrichTargetId;  "Information about a target for this analysis"
     bigInt targetBaseHits;  "Number of hits to bases in target"
     bigInt targetUniqHits;  "Number of unique bases hit in target"
     double coverage;    "Coverage of target - just targetUniqHits/targetSize"
     double enrichment;  "Amount we hit target/amount we hit genome"
     double uniqEnrich;  "coverage/sampleCoverage"
+    )
+
+table edwQaContamTarget
+"A target for our contamination analysis."
+    (
+    uint id primary auto;   "ID of this contamination target"
+    uint assemblyId unique;  "Assembly we're aligning against to check  for contamination."
+    )
+
+table edwQaContam
+"Results of contamination analysis of one file against one target"
+    (
+    uint id primary auto;   "ID of this contamination analysis"
+    uint fileId index;  "File we are looking at skeptically"
+    uint qaContamTargetId;  "Information about a target for this analysis"
+    double mapRatio;    "Proportion of items that map to target"
     )
 
 table edwQaPairSampleOverlap
