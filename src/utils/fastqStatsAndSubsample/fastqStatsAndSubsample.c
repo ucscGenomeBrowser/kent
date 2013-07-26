@@ -149,10 +149,13 @@ char *line;
 int lineSize;
 
 /* Deal with initial line starting with '@' */
-if (!nextLineMustMatchChar(lf, '@', FALSE))
+if (!lineFileNext(lf, &line, &lineSize))
     return FALSE;
+if (line[0] != '@')
+    errAbort("Expecting line starting with '@' got %s line %d of %s", 
+	line, lf->lineIx, lf->fileName);
 if (copy)
-    fprintf(f, "@\n");
+    mustWrite(f, line, lineSize);
 
 /* Deal with line containing sequence. */
 if (!lineFileNext(lf, &line, &lineSize))
@@ -258,10 +261,14 @@ char *line;
 int lineSize;
 
 /* Deal with initial line starting with '@' */
-if (!nextLineMustMatchChar(lf, '@', FALSE))
+if (!lineFileNext(lf, &line, &lineSize))
     return FALSE;
+if (line[0] != '@')
+    errAbort("Expecting line starting with '@' got %s line %d of %s", 
+	line, lf->lineIx, lf->fileName);
 if (copy)
-    fprintf(f, "@\n");
+    mustWrite(f, line, lineSize);
+
 
 /* Deal with line containing sequence. */
 if (!lineFileNext(lf, &line, &lineSize))
