@@ -167,12 +167,12 @@ proc->state = newState;
 static void plProcSetup(struct plProc* proc, int stdinFd, int stdoutFd, int stderrFd)
 /* setup signal, error handling, and file descriptors after fork */
 {
-/* treat a closed pipe as an EOF rather than getting SIGPIPE */
-struct sigaction sigAct;
-ZeroVar(&sigAct);
-sigAct.sa_handler = SIG_IGN;
-if (sigaction(SIGPIPE, &sigAct, NULL) != 0)
-    errnoAbort("failed to set SIGPIPE to SIG_IGN");
+/* Optionally treat a closed pipe as an EOF rather than getting SIGPIPE */
+if (signal(SIGPIPE, ((proc->pl->options & pipelineSigpipe) ? SIG_DFL : SIG_IGN)) == SIG_ERR)
+    errnoAbort("error ignoring SIGPIPE");
+
+if (setpgid(getpid(), proc->pl->groupLeader) != 0)
+    errnoAbort("error from setpgid(%d, %d)", getpid(), proc->pl->groupLeader);
 
 /* child, first setup stdio files */
 if (stdinFd != STDIN_FILENO)
@@ -221,15 +221,21 @@ else
     }
 }
 
-static void plProcHandleTerminate(struct plProc* proc, int status)
-/* handle one of the processes terminating, save exit status */
+static void plProcHandleSignaled(struct plProc* proc, int status)
+/* handle one of the processes terminating on a signal */
 {
-proc->status = status;
-if (WIFSIGNALED(proc->status))
+assert(WIFSIGNALED(proc->status));
+if (!((WTERMSIG(proc->status) == SIGPIPE) && (proc->pl->options & pipelineSigpipe)))
+    {
     errAbort("process terminated on signal %d: \"%s\" in pipeline \"%s\"",
              WTERMSIG(proc->status), joinCmd(proc->cmd), proc->pl->procName);
-assert(WIFEXITED(proc->status));
+    }
+}
 
+static void plProcHandleExited(struct plProc* proc, int status)
+/* handle one of the processes terminating on an exit */
+{
+assert(WIFEXITED(proc->status));
 if (WEXITSTATUS(proc->status) != 0)
     {
     // only print an error message if aborting
@@ -238,8 +244,19 @@ if (WEXITSTATUS(proc->status) != 0)
                 WEXITSTATUS(proc->status), joinCmd(proc->cmd), proc->pl->procName);
     exit(WEXITSTATUS(proc->status));  // pass back exit code
     }
+}
+
+static void plProcHandleTerminate(struct plProc* proc, int status)
+/* handle one of the processes terminating, save exit status */
+{
 proc->pid = -1;
+proc->status = status;
 plProcStateTrans(proc, procStateDone);
+
+if (WIFSIGNALED(proc->status))
+    plProcHandleSignaled(proc, status);
+else
+    plProcHandleExited(proc, status);
 }
 
 static struct pipeline* pipelineNew(char ***cmds, unsigned options)
@@ -305,11 +322,6 @@ static void execProcChild(struct pipeline* pl, struct plProc *proc,
                           void *otherEndBuf, size_t otherEndBufSize)
 /* handle child process setup after fork.  This does not return */
 {
-if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
-    errnoAbort("error ignoring SIGPIPE");
-if (setpgid(getpid(), pl->groupLeader) != 0)
-    errnoAbort("error from setpgid(%d, %d)", getpid(), pl->groupLeader);
-
 if (otherEndBuf != NULL)
     plProcMemWrite(proc, procStdoutFd, stderrFd, otherEndBuf, otherEndBufSize);
 else
