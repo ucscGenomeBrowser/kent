@@ -11,6 +11,7 @@
 
 int sampleSize = 100000;
 int seed = 0;
+boolean smallOk = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,7 +24,8 @@ errAbort(
   "   fastqStatsAndSubsample in.fastq out.stats out.fastq\n"
   "options:\n"
   "   -sampleSize=N - default %d\n"
-  "   -seed=N - use given seed for random number generator.  Default %d\n"
+  "   -seed=N - use given seed for random number generator.  Default %d.\n"
+  "   -smallOk - Not an error if less than sampleSize reads.  out.fastq will be entire in.fastq\n"
   , sampleSize, seed
   );
 }
@@ -32,6 +34,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"sampleSize", OPTION_INT},
    {"seed", OPTION_INT},
+   {"smallOk", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -201,6 +204,7 @@ for (i=0; i<seqSize; ++i)
 	    tCount[i] += 1;
 	    break;
 	case 'n':
+	case '.':
 	    nCount[i] += 1;
 	    break;
 	default:
@@ -362,18 +366,33 @@ while (!done)
 lineFileClose(&lf);
 carefulClose(&smallF);
 
+boolean justUseSmall = FALSE;
 if (readsCopied <  sampleSize)
     {
-    remove(smallFastqName);
     /* Our sample isn't big enough.  This could have two causes - a bug in
      * our estimation, maybe caused by read sizes growing a bunch in the time
      * since this code was written - or a file that is actually smaller smaller
      * than sampleSize. */
-    if (sampleSize > totalReads)
-        errAbort("SampleSize is set to %d reads, but there are only %d reads in %s",
-		sampleSize, totalReads, inFastq);
+    if (sampleSize <= totalReads)
+	{
+	remove(smallFastqName);
+	errAbort("Internal error: bad estimate %d for downStep on %s", downStep, inFastq);
+	}
     else
-        errAbort("Internal error: bad estimate %d for downStep on %s", downStep, inFastq);
+        {
+	if (smallOk)
+	    {
+	    justUseSmall = TRUE;
+	    warn("%d reads total in %s, so sample is less than %d", 
+		totalReads, inFastq, sampleSize);
+	    }
+	else
+	    {
+	    remove(smallFastqName);
+	    errAbort("SampleSize is set to %d reads, but there are only %d reads in %s",
+		    sampleSize, totalReads, inFastq);
+	    }
+	}
     }
 
 char *qualType = "solexa";
@@ -400,10 +419,15 @@ fprintf(f, "qualType %s\n", qualType);
 fprintf(f, "qualZero %d\n", qualZero);
 carefulClose(&f);
 
-f = mustOpen(outFastq, "w");
-reduceFastqSample(smallFastqName, f, readsCopied, sampleSize);
-carefulClose(&f);
-remove(smallFastqName);
+if (justUseSmall)
+    mustRename(smallFastqName, outFastq);
+else
+    {
+    f = mustOpen(outFastq, "w");
+    reduceFastqSample(smallFastqName, f, readsCopied, sampleSize);
+    carefulClose(&f);
+    remove(smallFastqName);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -414,6 +438,7 @@ if (argc != 4)
     usage();
 sampleSize = optionInt("sampleSize", sampleSize);
 seed = optionInt("seed", seed);
+smallOk = optionExists("smallOk");
 fastqStatsAndSubsample(argv[1], argv[2], argv[3]);
 return 0;
 }
