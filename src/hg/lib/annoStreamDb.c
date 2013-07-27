@@ -257,7 +257,8 @@ if (self->hasBin)
     // accumulating initial coarse-bin items and merge-sorting them with
     // subsequent finest-bin items which will be in chromStart order.
     if (self->doNextChunk && self->mergeBins && !self->gotFinestBin)
-	errAbort("annoStreamDb can't continue merge in chunking query; increase ASD_CHUNK_SIZE");
+	errAbort("annoStreamDb %s: can't continue merge in chunking query; "
+		 "increase ASD_CHUNK_SIZE", sSelf->name);
     self->mergeBins = TRUE;
     if (self->qLm == NULL)
 	self->qLm = lmInit(0);
@@ -362,9 +363,23 @@ if (rowBuf->ix > rowBuf->size)
     errAbort("annoStreamDb %s: rowBuf overflow (%d > %d)", self->streamer.name,
 	     rowBuf->ix, rowBuf->size);
 if (rowBuf->ix == rowBuf->size)
+    {
     // Last row in buffer -- we'll need another query to get subsequent rows (if any).
+    // But first, see if we need to update gotFinestBin, since getFinestBin might be
+    // one of our callers.
+    if (rowBuf->size > 0)
+	{
+	char **lastRow = rowBuf->buf[rowBuf->size-1];
+	int lastBin = atoi(lastRow[0]);
+	if (lastBin >= self->minFinestBin)
+	    self->gotFinestBin = TRUE;
+	}
     asdDoQueryChunking(self, minChrom, minEnd);
-return rowBuf->buf[rowBuf->ix++];
+    }
+if (rowBuf->size == 0)
+    return NULL;
+else
+    return rowBuf->buf[rowBuf->ix++];
 }
 
 static char **nextRowFiltered(struct annoStreamDb *self, boolean *retRightFail,
