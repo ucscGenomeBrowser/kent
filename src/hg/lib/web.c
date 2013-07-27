@@ -1235,7 +1235,7 @@ if (!fileExists(dyStringContents(realFileName)))
 // build and verify link path including timestamp in the form of dir/baseName + timeStamp or CGI Version + ext
 long mtime = fileModTime(dyStringContents(realFileName));
 struct dyString *linkWithTimestamp;
-if(hIsPreviewHost() || hIsPrivateHost())
+if ((cfgOption("versionStamped") == NULL) &&  (hIsPreviewHost() || hIsPrivateHost()))
     linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
 else
     linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);
