@@ -78,47 +78,77 @@ mustSystem(command);
 
 #define FASTQ_SAMPLE_SIZE 100000
 
-void screenFastqForContaminants(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf)
+int edwQaContamMade(struct sqlConnection *conn, long long fileId, int targetId)
+/* Return number of times have fileId paired with targetId in edwQaContam table. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select count(*) from edwQaContam where fileId=%lld and qaContamTargetId=%d",
+    fileId, targetId);
+return sqlQuickNum(conn, query);
+}
+
+struct edwQaContamTarget *getContamTargets(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf)
+/* Get list of contamination targets for file - basically all targets that aren't in same
+ * taxon as self. */
+{
+assert(vf->ucscDb != NULL);
+struct edwAssembly *origAsm = edwAssemblyForUcscDb(conn, vf->ucscDb);
+assert(origAsm != NULL);
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select edwQaContamTarget.* from edwQaContamTarget,edwAssembly "
+    "where edwQaContamTarget.assemblyId = edwAssembly.id "
+         " and edwAssembly.taxon != %d", origAsm->taxon);
+struct edwQaContamTarget *targetList  = edwQaContamTargetLoadByQuery(conn, query);
+edwAssemblyFree(&origAsm);
+return targetList;
+}
+
+void screenFastqForContaminants(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf)
 /* The ef/vf point to same file, which is fastq format.  Set alignments up for a sample against all
  * contamination targets. */
 {
-verbose(1, "screenFastqForContaminants(%s)\n", ef->submitFileName);
-char sourceFastqName[PATH_LEN];
-safef(sourceFastqName, PATH_LEN, "%s%s", edwRootDir, ef->edwFileName);
-struct edwAssembly *origAsm = edwAssemblyForUcscDb(conn, vf->ucscDb);
+/* Get target list and see if we have any work to do. */
 struct edwQaContamTarget *target, *targetList;
-targetList = edwQaContamTargetLoadByQuery(conn, "select * from edwQaContamTarget");
-
-/* Create downsampled fastq in temp directory. */
-char sampleFastqName[PATH_LEN];
-makeTempFastqSample(sourceFastqName, FASTQ_SAMPLE_SIZE, sampleFastqName);
-verbose(1, "downsampled %s into %s\n", vf->licensePlate, sampleFastqName);
-
+targetList = getContamTargets(conn, ef, vf);
+boolean needScreen = FALSE;
 for (target = targetList; target != NULL; target = target->next)
     {
-    /* Get assembly associated with target */
-    int assemblyId = target->assemblyId;
-    char query[256];
-    sqlSafef(query, sizeof(query), "select * from edwAssembly where id=%d", assemblyId);
-    struct edwAssembly *newAsm = edwAssemblyLoadByQuery(conn, query);
-    if (newAsm == NULL)
-        errAbort("warehouse edwQaContamTarget %d not found", assemblyId);
-
-    if (newAsm->taxon != origAsm->taxon)
+    if (edwQaContamMade(conn, ef->id, target->id) <= 0)
         {
-	/* See if we have this target/file combo already */
-	long long fileId = ef->id;
-	int targetId = target->id;
-	sqlSafef(query, sizeof(query), 
-	    "select count(*) from edwQaContam where fileId=%lld and qaContamTargetId=%d",
-	    fileId, targetId);
-	int matchCount = sqlQuickNum(conn, query);
+	needScreen = TRUE;
+	break;
+	}
+    }
+
+if (needScreen)
+    {
+    verbose(1, "screenFastqForContaminants(%u(%s))\n", ef->id, ef->submitFileName);
+    char sourceFastqName[PATH_LEN];
+    safef(sourceFastqName, PATH_LEN, "%s%s", edwRootDir, ef->edwFileName);
+    char query[512];
+
+    /* Create downsampled fastq in temp directory. */
+    char sampleFastqName[PATH_LEN];
+    makeTempFastqSample(sourceFastqName, FASTQ_SAMPLE_SIZE, sampleFastqName);
+    verbose(1, "downsampled %s into %s\n", vf->licensePlate, sampleFastqName);
+
+    for (target = targetList; target != NULL; target = target->next)
+	{
+	/* Get assembly associated with target */
+	int assemblyId = target->assemblyId;
+	sqlSafef(query, sizeof(query), "select * from edwAssembly where id=%d", assemblyId);
+	struct edwAssembly *newAsm = edwAssemblyLoadByQuery(conn, query);
+	if (newAsm == NULL)
+	    errAbort("warehouse edwQaContamTarget %d not found", assemblyId);
 
 	/* If we don't already have a match, do work to create contam record. */
+	int matchCount = edwQaContamMade(conn, ef->id, target->id);
 	if (matchCount <= 0)
 	    {
-	    uglyf("Doing alignment of sample of %s to %s\n", ef->submitFileName, newAsm->name);
-
 	    /* We run the bed-file maker, just for side effect calcs. */
 	    double mapRatio = 0, depth = 0, sampleCoverage = 0;
 	    edwAlignFastqMakeBed(ef, newAsm, sampleFastqName, vf, NULL,
@@ -130,10 +160,11 @@ for (target = targetList; target != NULL; target = target->next)
 		    {.fileId=ef->id, .qaContamTargetId=target->id, .mapRatio = mapRatio};
 	    edwQaContamSaveToDb(conn, &contam, "edwQaContam", 256);
 	    }
+	edwAssemblyFree(&newAsm);
 	}
-    edwAssemblyFree(&newAsm);
+    edwQaContamTargetFreeList(&targetList);
+    remove(sampleFastqName);
     }
-remove(sampleFastqName);
 }
 
 void doContaminationQa(struct sqlConnection *conn, struct edwFile *ef)
