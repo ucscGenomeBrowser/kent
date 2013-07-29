@@ -1,9 +1,5 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
-if ( "$HOST" != "hgwbeta" ) then
- echo "error: doRobots.csh must be executed from hgwbeta!"
- exit 1
-endif
 
 set branch=v${BRANCHNN}_branch
 

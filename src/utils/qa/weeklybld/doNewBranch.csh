@@ -4,10 +4,6 @@
 #  Heather says perhaps running with "nohup" in front of the command might
 #  make it work better.
 #
-if ( "$HOST" != "hgwbeta" ) then
- echo "Error: this script must be run from hgwbeta."
- exit 1
-endif
 
 cd $WEEKLYBLD
 
