@@ -1,9 +1,5 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
-if ( "$HOST" != "hgwbeta" ) then
- echo "error: doHgTablesTestRobot.csh must be executed from hgwbeta!"
- exit 1
-endif
 
 cd $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/hgTablesTest
 make 

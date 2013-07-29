@@ -176,9 +176,13 @@ onbeta:	/cluster/home/${USER}/.hg.conf.beta
 
 beta: onbeta clean 
 	${GIT} pull
+	# first make files for hgwdev-beta (we share the tables with hgwbeta)
+	rsync -a cv/beta/cv.ra ${CGI_BIN}-beta/encode/cv.ra
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb cv/beta/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
+	# now do loads on hgwbeta
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec ${DBS}
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb beta metaDb ${DBS}
-	rsync -a cv/beta/cv.ra ${BETA_MACHINE}:${CGI_BIN}/encode
+	rsync -a cv/beta/cv.ra ${BETA_MACHINE}:${CGI_BIN}/encode/cv.ra
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} ${DBS}
 
 public: onbeta clean
