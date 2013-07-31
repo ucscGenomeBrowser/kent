@@ -156,6 +156,7 @@ if (self->maxOutRows > 0)
 struct sqlResult *sr = sqlGetResult(self->conn, query->string);
 dyStringFree(&query);
 self->sr = sr;
+self->needQuery = FALSE;
 }
 
 static void rowBufInit(struct rowBuf *rowBuf, int size)
