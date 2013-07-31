@@ -583,6 +583,17 @@ sqlFreeResult(&sr);
 return indexName;
 }
 
+static boolean isIncrementallyUpdated(char *table)
+// Tables that have rows added to them after initial creation are not completely sorted
+// because of new rows at end, so we have to 'order by'.
+{
+return (sameString(table, "refGene") || sameString(table, "refFlat") ||
+	sameString(table, "xenoRefGene") || sameString(table, "xenoRefFlat") ||
+	sameString(table, "all_mrna") || sameString(table, "xenoMrna") ||
+	sameString(table, "all_est") || sameString(table, "xenoEst") ||
+	sameString(table, "refSeqAli") || sameString(table, "xenoRefSeqAli"));
+}
+
 struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly *aa,
 				     struct asObject *asObj, int maxOutRows)
 /* Create an annoStreamer (subclass) object from a database table described by asObj. */
@@ -618,6 +629,10 @@ if (!asdInitBed3Fields(self))
 // and that ruins the sorting.  Fortunately most tables don't anymore.
 self->endFieldIndexName = sqlTableIndexOnField(self->conn, self->table, self->endField);
 self->notSorted = FALSE;
+// Special case: genbank-updated tables are not sorted because new mappings are
+// tacked on at the end.
+if (isIncrementallyUpdated(table))
+    self->notSorted = TRUE;
 self->mergeBins = FALSE;
 self->maxOutRows = maxOutRows;
 self->useMaxOutRows = (maxOutRows > 0);
