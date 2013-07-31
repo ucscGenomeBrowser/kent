@@ -89,9 +89,9 @@ rm -f doNewGit.log
 ssh -n hgwdev $WEEKLYBLD/buildGitReports.csh branch real >& doNewGit.log &
 # note - we are now running it in the background on hgwdev
 
-echo
-echo  "SKIP 32-BIT BUILD ON $BOX32 [${0}: `date`]"
-echo
+#echo
+#echo  "SKIP 32-BIT BUILD ON $BOX32 [${0}: `date`]"
+#echo
 
 
 #---------------------

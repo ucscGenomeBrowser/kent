@@ -131,12 +131,12 @@ echo "Using history dir $PWD/$GIT_REPORT_HIST/ and symlink git-reports-latest on
 cd $WEEKLYBLD
 
 if ( "$mode" == "review") then
-    set cmd="git-reports $prevTag $thisTag $TODAY $REVIEWDAY v${NEXTNN} ${BUILDHOME}/build-kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} review"
+    set cmd="git-reports $prevTag $thisTag $TODAY $REVIEWDAY v${NEXTNN} ${BUILDHOME}/kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} review"
 else    
     if ( "$mode" == "review2") then
-        set cmd="git-reports $prevTag $thisTag $REVIEWDAY $REVIEW2DAY v${NEXTNN} ${BUILDHOME}/build-kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} review2"
+        set cmd="git-reports $prevTag $thisTag $REVIEWDAY $REVIEW2DAY v${NEXTNN} ${BUILDHOME}/kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} review2"
     else    
-        set cmd="git-reports $prevTag $thisTag $REVIEW2DAY $TODAY v${BRANCHNN} ${BUILDHOME}/build-kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} branch"
+        set cmd="git-reports $prevTag $thisTag $REVIEW2DAY $TODAY v${BRANCHNN} ${BUILDHOME}/kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} branch"
     endif    
 endif    
 

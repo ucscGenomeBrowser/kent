@@ -713,6 +713,52 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 
+track snp138Flagged
+shortLabel Flagged SNPs(138)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Flagged by dbSNP as Clinically Assoc
+group varRep
+priority 99.0902
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp138Seq
+snpExceptionDesc snp138ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+snpSeqFile /gbdb/hg19/snp/snp138.fa
+chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp138CodingDbSnp,
+# Need to request new tag
+#codingAnnoLabel_snp138CodingDbSnp dbSNP
+
+track snp138Mult override
+snpSeqFile /gbdb/hg19/snp/snp138.fa
+chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+
+track snp138 override
+snpSeqFile /gbdb/hg19/snp/snp138.fa
+chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+
+track snp138Common override
+snpSeqFile /gbdb/hg19/snp/snp138.fa
+chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+
 track snp137Flagged
 shortLabel Flagged SNPs(137)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Flagged by dbSNP as Clinically Assoc
