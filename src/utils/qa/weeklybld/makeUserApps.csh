@@ -4,14 +4,8 @@ cd $WEEKLYBLD
 # ------------------------------------
 # Note - this script assumes you have your ssh key in
 # qateam@hgdownload:.ssh/authorized_keys. Without it,
-#  this script can NOT be launched from beta
+#  this script can NOT be launched from dev
 # ------------------------------------
-
-if ("$HOST" != "hgwbeta") then
- echo "error: you must run this script on hgwbeta!"
-
- exit 1
-endif
 
 set ScriptStart=`date`
 
@@ -51,7 +45,7 @@ make BINDIR=$BINDIR DESTDIR=$DESTDIR userApps > make.log
 cd ../..
 
 # copy everything if 64 bit
-if ("$HOST" == "hgwbeta") then
+if ("$HOST" == "hgwdev") then
   #clear out the old and copy in the new
   foreach f ( ${DESTDIR}${BINDIR}/* )
     echo $f
