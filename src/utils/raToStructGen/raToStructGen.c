@@ -15,6 +15,8 @@ void usage()
 {
 errAbort(
   "raToStructGen - Write C code that will read/write a C structure from a ra file.\n"
+  "In some ways a poor cousin to AutoSql. Only handles numeric and string types, and\n"
+  "arrays of these\n"
   "usage:\n"
   "   raToStructGen guide.as output.c\n"
   "options:\n"
@@ -163,6 +165,7 @@ int colIx = 0;
 for (col = as->columnList; col != NULL; col = col->next)
     {
     fprintf(f, "	    case %d:\n", colIx++);
+    fprintf(f, "	        {\n");
     struct asTypeInfo *lt = col->lowType;
     enum asTypes type = lt->type;
     if (col->isList)
@@ -228,6 +231,7 @@ for (col = as->columnList; col != NULL; col = col->next)
 	    }
 	}
     fprintf(f, "		break;\n");
+    fprintf(f, "	        }\n");
     }
 
 /* Print out end of parsing function. */
