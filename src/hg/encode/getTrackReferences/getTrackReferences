@@ -62,7 +62,7 @@ def parseInit(id):
 def htmlEscape(str):
     return cgi.escape(str).encode('ascii', 'xmlcharrefreplace')
 
-def makeHtml(infoDict, plain):
+def makeHtml(infoDict, plain, verbose):
     authors = list()
     authcount = 0
     etal = 0
@@ -70,7 +70,7 @@ def makeHtml(infoDict, plain):
         authors.append(infoDict['CollectiveName'])
         authcount = 1
     for i in infoDict['Authors']:
-        if authcount == 10:
+        if authcount == 10 and not verbose:
             etal = 1
             break
         authors.append(i)
@@ -153,13 +153,14 @@ def main():
         )
     parser.add_argument('ids', metavar='IDs', type=str, nargs='+', help='The list of PubMed and PubMedCentral Ids')
     parser.add_argument('-p', '--plain', action="store_true", default=0, help="Output the references in plain-text instead of html.")
+    parser.add_argument('-v', '--verbose', action="store_true", default=0, help="Output the full author list instead of truncating after the first 10.")
     args = parser.parse_args()
     ids = args.ids
     references = dict()
 
     for i in ids:
         infoDict = parseInit(i)
-        html, authStr = makeHtml(infoDict, args.plain)
+        html, authStr = makeHtml(infoDict, args.plain, args.verbose)
         references[authStr] = html
     print "\n"
     for i in sorted(references.keys()):
