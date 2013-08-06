@@ -128,6 +128,23 @@ been collected together in one file:
 
 ========================================================================
 
+MySQL database access:
+
+Many of the commands can use the UCSC public MySQL server, or
+your own local MySQL server with UCSC data formats.  Add these three
+lines to a file in your HOME directory called '.hg.conf' and set
+its permissions to: 'chmod 600 .hg.conf'
+
+    db.host=genome-mysql.cse.ucsc.edu
+    db.user=genomep
+    db.password=password
+
+This '.hg.conf' file is used by the kent commands to determine the
+MySQL host and user/password to the database.  For your local MySQL
+installation, use your host name and your read-only user/password names.
+
+========================================================================
+
 Installing required packages:
 
 On a MacOS system, you will need the XCode system installed:
