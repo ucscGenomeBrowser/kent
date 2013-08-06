@@ -461,3 +461,27 @@ query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
 #########################################################################
+# swap human/gator hg19/allMis1 lastz (DONE - 2013-06-30 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzAllMis1.2013-06-28
+    cat fb.hg19.chainAllMis1Link.txt
+    #	205244552 bases of 2897316137 (7.084%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/allMis1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/allMis1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzAllMis1.2013-06-28/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   forgot to get stderr in the swap.log
+    #	real    27m54.364s
+
+    cat  fb.allMis1.chainHg19Link.txt
+    #	172919308 bases of 2129659933 (8.120%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/allMis1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
