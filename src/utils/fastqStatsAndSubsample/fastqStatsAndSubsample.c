@@ -24,7 +24,7 @@ errAbort(
   "   fastqStatsAndSubsample in.fastq out.stats out.fastq\n"
   "options:\n"
   "   -sampleSize=N - default %d\n"
-  "   -seed=N - use given seed for random number generator.  Default %d.\n"
+  "   -seed=N - Use given seed for random number generator.  Default %d.\n"
   "   -smallOk - Not an error if less than sampleSize reads.  out.fastq will be entire in.fastq\n"
   , sampleSize, seed
   );
@@ -41,7 +41,6 @@ static struct optionSpec options[] = {
 /* Estimate base count from file size based on this. */
 #define ZIPPED_BYTES_PER_BASE 0.80
 #define UNZIPPED_BYTES_PER_BASE 2.5
-#define READ_SIZE 100
 
 static boolean nextLineMustMatchChar(struct lineFile *lf, char match, boolean noEof)
 /* Get next line and make sure, other than whitespace, it matches 'match'.
@@ -117,7 +116,8 @@ return round(conservativeReduction);
 /* A bunch of statistics gathering variables set by oneFastqRecord below. */
 #define MAX_READ_SIZE 100000	/* This is fastq, right now only get 160 base reads max. */
 int maxReadBases, minReadBases, readCount;
-double sumReadBases, sumSquaredReadBases;
+long long sumReadBases;
+double sumSquaredReadBases;
 int aCount[MAX_READ_SIZE], cCount[MAX_READ_SIZE], gCount[MAX_READ_SIZE], tCount[MAX_READ_SIZE];
 int nCount[MAX_READ_SIZE];
 double sumQuals[MAX_READ_SIZE], sumSquaredQuals[MAX_READ_SIZE];
@@ -142,6 +142,27 @@ for (i=0; i<arraySize; ++i)
     total += array[i];
 return total;
 }
+
+void printAveDoubleArray(FILE *f, char *label, double *a, int *totalAtPos, int aSize)
+/* Print a[i]/counts[i] for all elements in array */
+{
+fprintf(f, "%s ", label);
+int i;
+for (i=0; i<aSize; ++i)
+    fprintf(f, "%g,", a[i]/totalAtPos[i]);
+fprintf(f, "\n");
+}
+
+void printAveIntArray(FILE *f, char *label, int *a, int *totalAtPos, int aSize)
+/* Print a[i]/totalAtPos[i] for all elements in array */
+{
+fprintf(f, "%s ", label);
+int i;
+for (i=0; i<aSize; ++i)
+    fprintf(f, "%g,", ((double)a[i])/totalAtPos[i]);
+fprintf(f, "\n");
+}
+
 
 boolean oneFastqRecord(struct lineFile *lf, FILE *f, boolean copy, boolean firstTime)
 /* Read next fastq record from LF, and optionally copy it to f.  Return FALSE at end of file 
@@ -214,6 +235,7 @@ for (i=0; i<seqSize; ++i)
 	}
     }
 
+
 if (copy)
     mustWrite(f, line, lineSize);
 
@@ -259,7 +281,8 @@ return TRUE;
 boolean maybeCopyFastqRecord(struct lineFile *lf, FILE *f, boolean copy, int *retSeqSize)
 /* Read next fastq record from LF, and optionally copy it to f.  Return FALSE at end of file 
  * Do a _little_ error checking on record while we're at it.  The format has already been
- * validated on the client side fairly thoroughly. */
+ * validated on the client side fairly thoroughly. Similar to oneFastq record but with
+ * fewer side effects. */
 {
 char *line;
 int lineSize;
@@ -302,9 +325,11 @@ if (seqSize != qualSize)
 return TRUE;
 }
 
-void reduceFastqSample(char *source, FILE *f, int oldSize, int newSize)
+long long reduceFastqSample(char *source, FILE *f, int oldSize, int newSize)
 /* Copy newSize samples from source into open output f.  */
 {
+long long basesInSample = 0;
+
 /* Make up an array that tells us which random parts of the source file to use. */
 assert(oldSize >= newSize);
 char *randomizer = needMem(oldSize);
@@ -319,9 +344,12 @@ for (i=0; i<oldSize; ++i)
     boolean doIt = randomizer[i];
     if (!maybeCopyFastqRecord(lf, f, doIt, &seqSize))
          internalErr();
+    if (doIt)
+	basesInSample += seqSize;
     }
 freez(&randomizer);
 lineFileClose(&lf);
+return basesInSample;
 }
 
 void fastqStatsAndSubsample(char *inFastq, char *outStats, char *outFastq)
@@ -344,6 +372,7 @@ int downStep = calcInitialReduction(inFastq, sampleSize);
 struct lineFile *lf = lineFileOpen(inFastq, FALSE);
 boolean done = FALSE;
 int readsCopied = 0, totalReads = 0;
+long long basesInSample = 0;
 boolean firstTime = TRUE;
 while (!done)
     {
@@ -402,32 +431,77 @@ if (minQual <= 58)
     qualType = "sanger";
     qualZero = 33;
     }
+
+if (justUseSmall)
+    {
+    mustRename(smallFastqName, outFastq);
+    sampleSize = readsCopied;
+    basesInSample= sumReadBases;
+    }
+else
+    {
+    FILE *f = mustOpen(outFastq, "w");
+    basesInSample = reduceFastqSample(smallFastqName, f, readsCopied, sampleSize);
+    carefulClose(&f);
+    remove(smallFastqName);
+    }
+
 FILE *f = mustOpen(outStats, "w");
+int posCount = maxReadBases;
 fprintf(f, "readCount %d\n", totalReads);
-fprintf(f, "baseCount %g\n", sumReadBases);
-fprintf(f, "readSizeMean %g\n", sumReadBases/totalReads);
-fprintf(f, "readSizeStd %g\n", calcStdFromSums(sumReadBases, sumSquaredReadBases, totalReads));
+fprintf(f, "baseCount %lld\n", sumReadBases);
+fprintf(f, "sampleCount %d\n", sampleSize);
+fprintf(f, "basesInSample %lld\n", basesInSample);
+fprintf(f, "readSizeMean %g\n", (double)sumReadBases/totalReads);
+if (minReadBases != maxReadBases)
+    fprintf(f, "readSizeStd %g\n", calcStdFromSums(sumReadBases, sumSquaredReadBases, totalReads));
+else
+    fprintf(f, "readSizeStd 0\n");
 fprintf(f, "readSizeMin %d\n", minReadBases);
 fprintf(f, "readSizeMax %d\n", maxReadBases);
 double qSum = sumDoubleArray(sumQuals, maxReadBases);
 double qSumSquared = sumDoubleArray(sumSquaredQuals, maxReadBases);
 fprintf(f, "qualMean %g\n", qSum/sumReadBases - qualZero);
-fprintf(f, "qualStd %g\n", calcStdFromSums(qSum, qSumSquared, sumReadBases));
+if (minQual != maxQual)
+    fprintf(f, "qualStd %g\n", calcStdFromSums(qSum, qSumSquared, sumReadBases));
+else
+    fprintf(f, "qualStd 0\n");
 fprintf(f, "qualMin %d\n", minQual - qualZero);
 fprintf(f, "qualMax %d\n", maxQual - qualZero);
 fprintf(f, "qualType %s\n", qualType);
 fprintf(f, "qualZero %d\n", qualZero);
-carefulClose(&f);
 
-if (justUseSmall)
-    mustRename(smallFastqName, outFastq);
-else
-    {
-    f = mustOpen(outFastq, "w");
-    reduceFastqSample(smallFastqName, f, readsCopied, sampleSize);
-    carefulClose(&f);
-    remove(smallFastqName);
-    }
+/* Compute overall total nucleotide stats from count arrays. */
+long long aSum = sumIntArray(aCount, maxReadBases);
+long long cSum = sumIntArray(cCount, maxReadBases);
+long long gSum = sumIntArray(gCount, maxReadBases);
+long long tSum = sumIntArray(tCount, maxReadBases);
+long long nSum = sumIntArray(nCount, maxReadBases);
+fprintf(f, "atRatio %g\n", (double)(aSum + tSum)/(aSum + cSum + gSum + tSum));
+fprintf(f, "aRatio %g\n", (double)aSum/sumReadBases);
+fprintf(f, "cRatio %g\n", (double)cSum/sumReadBases);
+fprintf(f, "gRatio %g\n", (double)gSum/sumReadBases);
+fprintf(f, "tRatio %g\n", (double)tSum/sumReadBases);
+fprintf(f, "nRatio %g\n", (double)nSum/sumReadBases);
+
+/* Now deal with array outputs.   First make up count of all bases we've seen. */
+fprintf(f, "posCount %d\n", posCount);
+int totalAtPos[posCount];
+int pos;
+for (pos=0; pos<posCount; ++pos)
+    totalAtPos[pos] = aCount[pos] + cCount[pos] + gCount[pos] + tCount[pos] + nCount[pos];
+
+/* Offset quality by scale */
+for (pos=0; pos<posCount; ++pos)
+    sumQuals[pos] -= totalAtPos[pos] * qualZero;
+
+printAveDoubleArray(f, "qualPos", sumQuals, totalAtPos, posCount);
+printAveIntArray(f, "aAtPos", aCount, totalAtPos, posCount);
+printAveIntArray(f, "cAtPos", cCount, totalAtPos, posCount);
+printAveIntArray(f, "gAtPos", gCount, totalAtPos, posCount);
+printAveIntArray(f, "tAtPos", tCount, totalAtPos, posCount);
+printAveIntArray(f, "nAtPos", nCount, totalAtPos, posCount);
+
 }
 
 int main(int argc, char *argv[])
