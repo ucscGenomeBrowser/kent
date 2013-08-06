@@ -1,8 +1,8 @@
 setenv BRANCHNN 287
 setenv TODAY 2013-07-30             # v287 final
 setenv LASTWEEK  2013-07-09         # v286 final
-setenv REVIEWDAY 2013-07-16         # v287 preview
-setenv LASTREVIEWDAY 2013-06-24     # v286 previeww
+setenv REVIEWDAY 2013-08-07         # v288 preview
+setenv LASTREVIEWDAY 2013-07-16     # v287 preview
 setenv REVIEW2DAY 2013-07-23        # v286 preview2
 setenv LASTREVIEW2DAY 2013-07-02    # v287 preview2
 
