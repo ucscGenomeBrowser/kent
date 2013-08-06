@@ -572,3 +572,28 @@ oviAri3.upstreamGeneTbl = refGene
     ln -s blastz.hg19.swap lastz.hg19
 
 ##############################################################################
+# fixup search rule for assembly track/gold table (DONE - 2013-08-06 - Hiram)
+    hgsql -N -e "select frag from gold;" oviAri3 | sort | head -1
+AMGL01000001.1
+    hgsql -N -e "select frag from gold;" oviAri3 | sort | tail -2
+AMGL01130764.1
+NC_001941
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" oviAri3 | wc -l
+    # 130765
+
+    hgsql -N -e "select frag from gold;" oviAri3 | egrep -e '[AN][CM][G_][L0]0[0-9]+(\.1)?' | wc -l
+    # 130765
+
+    hgsql -N -e "select frag from gold;" oviAri3 | egrep -v -e '[AN][CM][G_][L0]0[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/tenrec/oviAri3/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][CM][G_][L0]0[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################
