@@ -436,3 +436,28 @@ allMis1.perChromTables = no
     #	test it with some sequence
 
 ############################################################################
+# fixup search rule for assembly track/gold table (DONE - 2013-08-06 - Hiram)
+    hgsql -N -e "select frag from gold;" allMis1 | sort | head -1
+AKHW01000001.1
+    hgsql -N -e "select frag from gold;" allMis1 | sort | tail -2
+AKHW01114158.1
+NC_001922
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" allMis1 | wc -l
+    # 114159
+
+    hgsql -N -e "select frag from gold;" allMis1 | egrep -e '[AN][KC][H_][W0]0[0-9]+(\.1)?' | wc -l
+    # 114159
+
+    hgsql -N -e "select frag from gold;" allMis1 | egrep -v -e '[AN][KC][H_][W0]0[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/gator/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][KC][H_][W0]0[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################
