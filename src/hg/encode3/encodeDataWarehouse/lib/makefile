@@ -1,6 +1,6 @@
 include ../../../../inc/common.mk
 
-O = encodeDataWarehouse.o edwLib.o
+O = encodeDataWarehouse.o edwFastqFileFromRa.o edwLib.o
 
 ${MACHTYPE}/edwlib.a: ${O}
 	mkdir -p ${MACHTYPE}
