@@ -43,116 +43,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-boolean maybeCopyFastqRecord(struct lineFile *lf, FILE *f, boolean copy, int *retSeqSize)
-/* Read next fastq record from LF, and optionally copy it to f.  Return FALSE at end of file 
- * Do a _little_ error checking on record while we're at it.  The format has already been
- * validated on the client side fairly thoroughly. */
-{
-char *line;
-int lineSize;
-
-/* Deal with initial line starting with '@' */
-if (!lineFileNext(lf, &line, &lineSize))
-    return FALSE;
-if (line[0] != '@')
-    errAbort("Expecting line starting with '@' got '%c' line %d of %s", line[0],
-	lf->lineIx, lf->fileName);
-if (copy)
-    mustWrite(f, line, lineSize);
-
-/* Deal with line containing sequence. */
-if (!lineFileNext(lf, &line, &lineSize))
-    errAbort("%s truncated in middle of record", lf->fileName);
-if (copy)
-    mustWrite(f, line, lineSize);
-int seqSize = lineSize-1;
-
-/* Deal with line containing just '+' that separates sequence from quality. */
-if (!lineFileNext(lf, &line, &lineSize))
-    errAbort("%s truncated in middle of record", lf->fileName);
-if (line[0] != '+')
-    errAbort("Expecting line starting with '+' got '%c' line %d of %s", line[0],
-	lf->lineIx, lf->fileName);
-if (copy)
-    mustWrite(f, line, lineSize);
-
-/* Deal with quality score line. */
-if (!lineFileNext(lf, &line, &lineSize))
-    errAbort("%s truncated in middle of record", lf->fileName);
-if (copy)
-    mustWrite(f, line, lineSize);
-int qualSize = lineSize-1;
-
-if (seqSize != qualSize)
-    errAbort("Sequence and quality size differ line %d and %d of %s", 
-	lf->lineIx-2, lf->lineIx, lf->fileName);
-
-*retSeqSize = seqSize;
-return TRUE;
-}
-
-void makeSampleOfFastq(char *source, FILE *f, int downStep, struct edwValidFile *vf)
-/* Sample every downStep items in source and write to dest. Count how many fastq
- * records and update vf fields with this. */
-{
-struct lineFile *lf = lineFileOpen(source, FALSE);
-boolean done = FALSE;
-while (!done)
-    {
-    int hotPosInCycle = rand()%downStep;
-    int cycle;
-    for (cycle=0; cycle<downStep; ++cycle)
-        {
-	boolean hotPos = (cycle == hotPosInCycle);
-	int seqSize;
-	if (!maybeCopyFastqRecord(lf, f, hotPos, &seqSize))
-	    {
-	    done = TRUE;
-	    break;
-	    }
-	vf->itemCount += 1;
-	vf->basesInItems += seqSize;
-	if (hotPos)
-	   {
-	   vf->sampleCount += 1;
-	   vf->basesInSample += seqSize;
-	   }
-	}
-    }
-lineFileClose(&lf);
-}
-
-void reduceFastqSample(char *source, FILE *f, int oldSize, int newSize, struct edwValidFile *vf)
-/* Copy newSize samples from source into open output f.  */
-{
-/* Make up an array that tells us which random parts of the source file to use. */
-assert(oldSize > newSize);
-char *randomizer = needMem(oldSize);
-memset(randomizer, TRUE, newSize);
-shuffleArrayOfChars(randomizer, oldSize);
-
-vf->basesInSample = 0;
-vf->sampleCount = 0;
-
-struct lineFile *lf = lineFileOpen(source, FALSE);
-int i;
-for (i=0; i<oldSize; ++i)
-    {
-    int seqSize;
-    boolean doIt = randomizer[i];
-    if (!maybeCopyFastqRecord(lf, f, doIt, &seqSize))
-         internalErr();
-    if (doIt)
-         {
-	 vf->basesInSample += seqSize;
-	 vf->sampleCount += 1;
-	 }
-
-    }
-freez(&randomizer);
-lineFileClose(&lf);
-}
-
 void alignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF)
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. 
@@ -163,48 +53,32 @@ edwAlignFastqMakeBed(ef, assembly, fastqPath, vf, bedF,
 }
 
 
-#define edwSampleReduction 40	    /* Initially sample ever Nth read where this defines N */
-#define edwSampleTargetSize 250000  /* We target this many samples */
-
 void makeValidFastq( struct sqlConnection *conn, char *path, struct edwFile *ef, 
 	struct edwAssembly *assembly, struct edwValidFile *vf)
 /* Fill out fields of vf.  Create sample subset. */
 {
-/* Make initial sample of fastq */
-char smallFastqName[PATH_LEN];
-safef(smallFastqName, PATH_LEN, "%sedwSampleFastqXXXXXX", edwTempDir());
-int smallFd = mkstemp(smallFastqName);
-FILE *smallF = fdopen(smallFd, "w");
-makeSampleOfFastq(path, smallF, edwSampleReduction, vf);
-carefulClose(&smallF);
+/* Make edwFastqFile record. */
+long long fileId = ef->id;
+edwMakeFastqStatsAndSample(conn, fileId);
+struct edwFastqFile *fqf = edwFastqFileFromFileId(conn, fileId);
+verbose(1, "Made sample fastq with %lld reads\n", fqf->sampleCount);
 
-/* We likely need to reduce this even further, down to 250k reads if possible. */
-char sampleFastqName[PATH_LEN];
-if (vf->sampleCount > edwSampleTargetSize)
-    {
-    safef(sampleFastqName, PATH_LEN, "%sedwSampleFastqXXXXXX", edwTempDir());
-    int fd = mkstemp(sampleFastqName);
-    FILE *f = fdopen(fd, "w");
-    reduceFastqSample(smallFastqName, f, vf->sampleCount, edwSampleTargetSize, vf);
-    carefulClose(&f);
-    remove(smallFastqName);
-    }
-else
-    strcpy(sampleFastqName, smallFastqName);
-
-verbose(1, "Made sample fastq with %lld reads\n", vf->sampleCount);
+/* Save some key pieces in vf. */
+vf->itemCount = fqf->readCount;
+vf->basesInItems = fqf->baseCount;
+vf->sampleCount = fqf->sampleCount;
+vf->basesInSample = fqf->basesInSample;
 
 /* Align fastq and turn results into bed. */
 char sampleBedName[PATH_LEN], temp[PATH_LEN];
 safef(sampleBedName, PATH_LEN, "%sedwSampleBedXXXXXX", edwTempDirForToday(temp));
 int bedFd = mkstemp(sampleBedName);
 FILE *bedF = fdopen(bedFd, "w");
-alignFastqMakeBed(ef, assembly, sampleFastqName, vf, bedF);
+alignFastqMakeBed(ef, assembly, fqf->sampleFileName, vf, bedF);
 carefulClose(&bedF);
-
-/* Save result in vf, clean up, go home. */
 vf->sampleBed = cloneString(sampleBedName);
-remove(sampleFastqName);
+
+edwFastqFileFree(&fqf);
 }
 
 #define TYPE_BAM  1
@@ -318,6 +192,8 @@ fprintf(f, "vf->basesInSample = %lld\n", vf->basesInSample);
 fprintf(f, "vf->sampleCoverage = %g\n", vf->sampleCoverage);
 fprintf(f, "vf->sampleCount = %g\n", vf->depth);
 }
+
+#define edwSampleReduction 40	    /* Initially sample ever Nth read where this defines N */
 
 void makeValidBam( struct sqlConnection *conn, char *path, struct edwFile *ef, 
 	struct edwAssembly *assembly, struct edwValidFile *vf)
@@ -495,7 +371,7 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 
     /* Look up assembly. */
     struct edwAssembly *assembly = NULL;
-    if (!isEmpty(vf->ucscDb))
+    if (!isEmpty(vf->ucscDb) && !sameString(vf->ucscDb, "unknown"))
 	{
 	char *ucscDb = vf->ucscDb;
 	char query[256];
@@ -551,6 +427,10 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
     else if (sameString(format, "idat"))
         {
 	makeValidIdat(conn, path, ef, vf);
+	}
+    else if (sameString(format, "unknown"))
+        {
+	/* No specific validation needed for unknown format. */
 	}
     else
         {
