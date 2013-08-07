@@ -189,10 +189,11 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	ucscDbVal[len] = 0;
 
 	/* Do a little check on it */
-	if (!sameString("mm9", ucscDbVal) && !sameString("hg19", ucscDbVal))
+	if (!sameString("mm9", ucscDbVal) && !sameString("mm10", ucscDbVal)
+	    && !sameString("hg19", ucscDbVal))
 	    errAbort("Unrecognized ucsc_db %s - please arrange files so that the top " 
 	             "level directory in the fileName in the manifest is a UCSC database name "
-		     "like 'hg19' or 'mm9.'  Alternatively please include a ucsc_db column.",
+		     "like 'hg19' or 'mm10.'  Alternatively please include a ucsc_db column.",
 		     ucscDbVal);
 
 	/* Add it to tags. */

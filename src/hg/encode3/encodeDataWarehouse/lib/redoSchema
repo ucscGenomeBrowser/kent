@@ -1,9 +1,9 @@
 #!/bin/tcsh -efx
 autoSql encodeDataWarehouse.as encodeDataWarehouse -dbLink -defaultZeros
+mv encodeDataWarehouse.h ../inc
 rm ../*/*.o
 pushd .
 cd ..
 make
 popd
-mv encodeDataWarehouse.h ../inc
 ./resetEdw
