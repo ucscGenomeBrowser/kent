@@ -143,7 +143,7 @@ for (i=0; i<arraySize; ++i)
 return total;
 }
 
-void printAveDoubleArray(FILE *f, char *label, double *a, int *totalAtPos, int aSize)
+void printAveDoubleArray(FILE *f, char *label, double *a, long long *totalAtPos, int aSize)
 /* Print a[i]/counts[i] for all elements in array */
 {
 fprintf(f, "%s ", label);
@@ -153,7 +153,7 @@ for (i=0; i<aSize; ++i)
 fprintf(f, "\n");
 }
 
-void printAveIntArray(FILE *f, char *label, int *a, int *totalAtPos, int aSize)
+void printAveIntArray(FILE *f, char *label, int *a, long long *totalAtPos, int aSize)
 /* Print a[i]/totalAtPos[i] for all elements in array */
 {
 fprintf(f, "%s ", label);
@@ -171,6 +171,10 @@ boolean oneFastqRecord(struct lineFile *lf, FILE *f, boolean copy, boolean first
 {
 char *line;
 int lineSize;
+
+/* Treat NULL file same as non-copy, so only have one condition to check on . */
+if (f == NULL)
+    copy = FALSE;
 
 /* Deal with initial line starting with '@' */
 if (!lineFileNext(lf, &line, &lineSize))
@@ -356,16 +360,28 @@ void fastqStatsAndSubsample(char *inFastq, char *outStats, char *outFastq)
 /* fastqStatsAndSubsample - Go through a fastq file doing sanity checks and collecting 
  * statistics,  and also producing a smaller fastq out of a sample of the data. */
 {
-/* Split up outFastq path, so we can make a temp file in the same dir. */
-char outDir[PATH_LEN];
-splitPath(outFastq, outDir, NULL, NULL);
+/* Temporary file if any */
+FILE *smallF = NULL;
+
+/* Make this work without making input. */
+if (sameString("/dev/null", outFastq))
+    outFastq = NULL;
+
 
 /* Open up temp output file.  This one will be for the initial scaling.  We'll do
  * a second round of scaling as well. */
-char smallFastqName[PATH_LEN];
-safef(smallFastqName, PATH_LEN, "%sfastqSubsampleXXXXXX", outDir);
-int smallFd = mkstemp(smallFastqName);
-FILE *smallF = fdopen(smallFd, "w");
+char smallFastqName[PATH_LEN] = "";
+if (outFastq != NULL)
+    {
+    /* Split up outFastq path, so we can make a temp file in the same dir. */
+    char outDir[PATH_LEN];
+    if (outFastq)
+	splitPath(outFastq, outDir, NULL, NULL);
+
+    safef(smallFastqName, PATH_LEN, "%sfastqSubsampleXXXXXX", outDir);
+    int smallFd = mkstemp(smallFastqName);
+    smallF = fdopen(smallFd, "w");
+    }
 
 /* Scan through input, collecting stats, validating, and creating a subset file. */
 int downStep = calcInitialReduction(inFastq, sampleSize);
@@ -396,7 +412,7 @@ lineFileClose(&lf);
 carefulClose(&smallF);
 
 boolean justUseSmall = FALSE;
-if (readsCopied <  sampleSize)
+if (outFastq != NULL && readsCopied <  sampleSize)
     {
     /* Our sample isn't big enough.  This could have two causes - a bug in
      * our estimation, maybe caused by read sizes growing a bunch in the time
@@ -432,18 +448,21 @@ if (minQual <= 58)
     qualZero = 33;
     }
 
-if (justUseSmall)
+if (outFastq != NULL)
     {
-    mustRename(smallFastqName, outFastq);
-    sampleSize = readsCopied;
-    basesInSample= sumReadBases;
-    }
-else
-    {
-    FILE *f = mustOpen(outFastq, "w");
-    basesInSample = reduceFastqSample(smallFastqName, f, readsCopied, sampleSize);
-    carefulClose(&f);
-    remove(smallFastqName);
+    if (justUseSmall)
+	{
+	mustRename(smallFastqName, outFastq);
+	sampleSize = readsCopied;
+	basesInSample= sumReadBases;
+	}
+    else
+	{
+	FILE *f = mustOpen(outFastq, "w");
+	basesInSample = reduceFastqSample(smallFastqName, f, readsCopied, sampleSize);
+	carefulClose(&f);
+	remove(smallFastqName);
+	}
     }
 
 FILE *f = mustOpen(outStats, "w");
@@ -486,7 +505,7 @@ fprintf(f, "nRatio %g\n", (double)nSum/sumReadBases);
 
 /* Now deal with array outputs.   First make up count of all bases we've seen. */
 fprintf(f, "posCount %d\n", posCount);
-int totalAtPos[posCount];
+long long totalAtPos[posCount];
 int pos;
 for (pos=0; pos<posCount; ++pos)
     totalAtPos[pos] = aCount[pos] + cCount[pos] + gCount[pos] + tCount[pos] + nCount[pos];
@@ -494,6 +513,8 @@ for (pos=0; pos<posCount; ++pos)
 /* Offset quality by scale */
 for (pos=0; pos<posCount; ++pos)
     sumQuals[pos] -= totalAtPos[pos] * qualZero;
+#ifdef SOON
+#endif /* SOON */
 
 printAveDoubleArray(f, "qualPos", sumQuals, totalAtPos, posCount);
 printAveIntArray(f, "aAtPos", aCount, totalAtPos, posCount);
