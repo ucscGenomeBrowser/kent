@@ -3231,13 +3231,6 @@ else if (sameString(type, "bam"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     tg->mapItemName = ctMapItemName;
-    hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE, cloneString("lfExtra"));
-    hashAdd(tdb->settingsHash, BASE_COLOR_DEFAULT, cloneString("diffBases"));
-    hashAdd(tdb->settingsHash, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
-    hashAdd(tdb->settingsHash, INDEL_DOUBLE_INSERT, cloneString("on"));
-    hashAdd(tdb->settingsHash, INDEL_QUERY_INSERT, cloneString("on"));
-    hashAdd(tdb->settingsHash, INDEL_POLY_A, cloneString("on"));
-    hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
     }
 else if (sameString(type, "vcfTabix"))
     {
