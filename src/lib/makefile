@@ -35,7 +35,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     phyloTree.o pipeline.o portimpl.o pngwrite.o psGfx.o psPoly.o pscmGfx.o \
     psl.o pslGenoShow.o pslShow.o pslTbl.o pslTransMap.o pthreadWrap.o \
     qa.o quickHeap.o quotedP.o \
-    ra.o rainbow.o rbTree.o rangeTree.o regexHelper.o repMask.o \
+    ra.o rainbow.o raToStruct.o rbTree.o rangeTree.o regexHelper.o repMask.o \
     rle.o rnautil.o rqlEval.o rqlParse.o rudp.o \
     scoreWindow.o seg.o seqOut.o seqStats.o servBrcMcw.o servCrunx.o \
     servcis.o servcl.o servmsII.o servpws.o shaRes.o slog.o snof.o \

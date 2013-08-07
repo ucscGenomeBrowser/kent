@@ -1,3 +1,11 @@
+/* raToStruct - stuff to help read ra files into C structures.  Works with raToStructGen
+ * which makes parsers based on .as files. */
+
+#include "common.h"
+#include "hash.h"
+#include "linefile.h"
+#include "raToStruct.h"
+#include "obscure.h"
 
 struct raToStructReader *raToStructReaderNew(char *name,  int fieldCount, char **fields,  
     int requiredFieldCount, char **requiredFields)
