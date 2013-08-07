@@ -159,10 +159,46 @@ CREATE TABLE edwValidFile (
     depth double default 0,	# Estimated genome-equivalents covered by possibly overlapping data
               #Indices
     PRIMARY KEY(id),
-    INDEX(licensePlate),
-    INDEX(fileId),
+    UNIQUE(licensePlate),
+    UNIQUE(fileId),
     INDEX(outputType(16)),
     INDEX(experiment(16))
+);
+
+#info on a file in fastq short read format beyond what's in edwValidFile
+CREATE TABLE edwFastqFile (
+    id int unsigned auto_increment,	# ID in this table
+    fileId int unsigned default 0,	# ID in edwFile table
+    sampleCount bigint default 0,	# # of reads in sample.
+    basesInSample bigint default 0,	# # of bases in sample.
+    sampleFileName varchar(255) default '',	# Name of file containing sampleCount randomly selected items from file.
+    readCount bigint default 0,	# # of reads in file
+    baseCount bigint default 0,	# # of bases in all reads added up
+    readSizeMean double default 0,	# Average read size
+    readSizeStd double default 0,	# Standard deviation of read size
+    readSizeMin double default 0,	# Minimum read size
+    readSizeMax double default 0,	# Maximum read size
+    qualMean double default 0,	# Mean quality scored as 10*-log10(errorProbability) or close to it.  >25 is good
+    qualStd double default 0,	# Standard deviation of quality
+    qualMin double default 0,	# Minimum observed quality
+    qualMax double default 0,	# Maximum observed quality
+    qualType varchar(255) default '',	# For fastq files either 'sanger' or 'illumina'
+    qualZero int default 0,	# For fastq files offset to get to zero value in ascii encoding
+    atRatio double default 0,	# Ratio of A+T to total sequence (not including Ns)
+    aRatio double default 0,	# Ratio of A to total sequence (including Ns)
+    cRatio double default 0,	# Ratio of C to total sequence (including Ns)
+    gRatio double default 0,	# Ratio of G to total sequence (including Ns)
+    tRatio double default 0,	# Ratio of T to total sequence (including Ns)
+    nRatio double default 0,	# Ratio of N or . to total sequence
+    qualPos longblob,	# Mean value for each position in a read up to some max.
+    aAtPos longblob,	# % of As at each pos
+    cAtPos longblob,	# % of Cs at each pos
+    gAtPos longblob,	# % of Gs at each pos
+    tAtPos longblob,	# % of Ts at each pos
+    nAtPos longblob,	# % of '.' or 'N' at each pos
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(fileId)
 );
 
 #A target for our enrichment analysis.
@@ -208,6 +244,17 @@ CREATE TABLE edwQaContam (
     fileId int unsigned default 0,	# File we are looking at skeptically
     qaContamTargetId int unsigned default 0,	# Information about a target for this analysis
     mapRatio double default 0,	# Proportion of items that map to target
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(fileId)
+);
+
+#What percentage of data set aligns to various repeat classes.
+CREATE TABLE edwQaRepeat (
+    id int unsigned auto_increment,	# ID of this repeat analysis.
+    fileId int unsigned default 0,	# File we are analysing.
+    repeatClass varchar(255) default '',	# RepeatMasker high end classification,  or 'total' for all repeats.
+    mapRatio double default 0,	# Proportion that map to this repeat.
               #Indices
     PRIMARY KEY(id),
     INDEX(fileId)

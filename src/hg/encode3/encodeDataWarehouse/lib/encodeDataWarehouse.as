@@ -114,8 +114,8 @@ table edwValidFile
 "A file that has been uploaded, the format checked, and for which at least minimal metadata exists"
     (
     uint id primary auto;          "ID of validated file"
-    char[16] licensePlate index;  "A abc123 looking license-platish thing."
-    uint fileId index;      "Pointer to file in main file table"
+    char[16] licensePlate unique;  "A abc123 looking license-platish thing."
+    uint fileId unique;      "Pointer to file in main file table"
     string format;    "What format it's in from manifest"
     string outputType index[16]; "What output_type it is from manifest"
     string experiment index[16]; "What experiment it's in from manifest"
@@ -132,6 +132,40 @@ table edwValidFile
     double mapRatio;    "Proportion of items that map to genome"
     double sampleCoverage; "Proportion of assembly covered by at least one item in sample"
     double depth;   "Estimated genome-equivalents covered by possibly overlapping data"
+    )
+
+table edwFastqFile
+"info on a file in fastq short read format beyond what's in edwValidFile"
+    (
+    uint id primary auto;  "ID in this table"
+    uint fileId unique;	"ID in edwFile table"
+    bigint sampleCount; "# of reads in sample." 
+    bigint basesInSample; "# of bases in sample."
+    string sampleFileName; "Name of file containing sampleCount randomly selected items from file."
+    bigint readCount; "# of reads in file"
+    bigint baseCount; "# of bases in all reads added up"
+    double readSizeMean; "Average read size"
+    double readSizeStd;  "Standard deviation of read size"
+    double readSizeMin;  "Minimum read size"
+    double readSizeMax; "Maximum read size"
+    double qualMean;  "Mean quality scored as 10*-log10(errorProbability) or close to it.  >25 is good"
+    double qualStd;   "Standard deviation of quality"
+    double qualMin;   "Minimum observed quality"
+    double qualMax;   "Maximum observed quality"
+    string qualType;  "For fastq files either 'sanger' or 'illumina'
+    int qualZero;  "For fastq files offset to get to zero value in ascii encoding"
+    double atRatio;  "Ratio of A+T to total sequence (not including Ns)"
+    double aRatio; "Ratio of A to total sequence (including Ns)"
+    double cRatio; "Ratio of C to total sequence (including Ns)"
+    double gRatio; "Ratio of G to total sequence (including Ns)"
+    double tRatio; "Ratio of T to total sequence (including Ns)"
+    double nRatio; "Ratio of N or . to total sequence"
+    double[readSizeMax] qualPos;  "Mean value for each position in a read up to some max."
+    double[readSizeMax] aAtPos;   "% of As at each pos"
+    double[readSizeMax] cAtPos;   "% of Cs at each pos"
+    double[readSizeMax] gAtPos;   "% of Gs at each pos"
+    double[readSizeMax] tAtPos;   "% of Ts at each pos"
+    double[readSizeMax] nAtPos;   "% of '.' or 'N' at each pos"
     )
 
 table edwQaEnrichTarget
@@ -171,6 +205,15 @@ table edwQaContam
     uint fileId index;  "File we are looking at skeptically"
     uint qaContamTargetId;  "Information about a target for this analysis"
     double mapRatio;    "Proportion of items that map to target"
+    )
+
+table edwQaRepeat
+"What percentage of data set aligns to various repeat classes."
+    (
+    uint id primary auto;   "ID of this repeat analysis."
+    uint fileId index;   "File we are analysing."
+    string repeatClass;	"RepeatMasker high end classification,  or 'total' for all repeats."
+    double mapRatio;	"Proportion that map to this repeat."
     )
 
 table edwQaPairSampleOverlap
