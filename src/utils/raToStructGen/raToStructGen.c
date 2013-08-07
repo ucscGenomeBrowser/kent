@@ -16,7 +16,7 @@ void usage()
 errAbort(
   "raToStructGen - Write C code that will read/write a C structure from a ra file.\n"
   "In some ways a poor cousin to AutoSql. Only handles numeric and string types, and\n"
-  "arrays of these\n"
+  "arrays of these.\n"
   "usage:\n"
   "   raToStructGen guide.as output.c\n"
   "options:\n"
@@ -33,7 +33,7 @@ static struct optionSpec options[] = {
 struct raToStructReader
 /* Something to help us parse RAs into C structures. */
     {
-    struct xyzReader *next;
+    struct raToStructReader *next;
     char *name;		      /* Name of structure */
     int fieldCount;	      /* Number of fields. */
     char **fields;	      /* Names of all fields - not allocated here. */
@@ -100,12 +100,11 @@ for (i=0; i<reader->requiredFieldCount; ++i)
     {
     if (!fieldsObserved[requiredFieldIds[i]])
 	{
-	errAbort("Required field %s not found line %d of %s\n", reader->requiredFields[i],
+	errAbort("Required field %s not found line %d of %s", reader->requiredFields[i],
 	    lf->lineIx, lf->fileName);
 	}
     }
 }
-
 
 void raToStructGen(char *guideFile, char *outFileC)
 /* raToStructGen - Write C code that will read/write a C structure from a ra file. */
@@ -126,13 +125,44 @@ if (as == NULL)
 if (as->next != NULL)
     errAbort("Multiple objects in %s, only one allowed", guideFile);
 
-uglyf("%d of %d fields of %s are required\n", requiredCount, slCount(as->columnList), as->name);
 FILE *f = mustOpen(outFileC, "w");
+
+/* Print out start of reader-maker function. */
+fprintf(f, 
+    "struct raToStructReader *%sRaReader()\n"
+    "/* Make a raToStructReader for %s */\n"
+    "{\n"
+    "static char *fields[] = {\n"
+    , as->name, as->name);
+
+/* Print out all field names */
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next)
+    fprintf(f, "    \"%s\",\n", col->name);
+fprintf(f, "    };\n");
+
+char *rfString = "NULL";
+if (requiredCount > 0)
+    {
+    fprintf(f, "static char *requiredFields[] = {\n");
+    int i;
+    for (i=0; i<requiredCount; ++i)
+	fprintf(f, "    \"%s\",\n", requiredFields[i]);
+    fprintf(f, "    };\n");
+    rfString = "requiredFields";
+    }
+
+/* Print out end of reader->maker function. */
+fprintf(f, 
+    "return raToStructReaderNew(\"%s\", %d, fields, %d, %s);\n"
+    "}\n"
+    "\n"
+    , as->name, slCount(as->columnList), requiredCount, rfString);
 
 /* Print out start of parsing function. */
 fprintf(f, 
 "\n"
-"struct %s *%sFromNextRaStanza(struct lineFile *lf, struct raToStructReader *reader)\n"
+"struct %s *%sFromNextRa(struct lineFile *lf, struct raToStructReader *reader)\n"
 "/* Return next stanza put into an %s. */\n"
 "{\n"
 "if (!raSkipLeadingEmptyLines(lf, NULL))\n"
@@ -160,7 +190,6 @@ fprintf(f,
 
 
 /* Now loop through and print out cases for each field. */
-struct asColumn *col;
 int colIx = 0;
 for (col = as->columnList; col != NULL; col = col->next)
     {
@@ -251,6 +280,8 @@ fprintf(f,
 );
 
 carefulClose(&f);
+verbose(1, "Generated parser for %d required fields, %d total fields\n", 
+    requiredCount, slCount(as->columnList));
 }
 
 int main(int argc, char *argv[])
