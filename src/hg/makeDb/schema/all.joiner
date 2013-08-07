@@ -106,11 +106,11 @@ set wgs $ailMel,$allMis,$aplCal,$bosTau,$bruMal,$calJac,$canFam,$cavPor,$choHof,
 set xrg $ailMel,$allMis,$anoCar,$aplCal,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$calJac,$canFam,$cb,$ce,$cerSim,$choHof,$chrPic,$ci,danRer6,danRer7,$dasNov,$dipOrd,$dp,$droMult,$droYak,$echTel,$eriEur,$felCat,$gadMor,$galGal,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$musFur,$myoLuc,$nomLeu,$ochPri,$oreNil,$oryCun,$oryLat,$otoGar,$oviAri,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rn,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$triMan,$tupBel,$turTru,$vicPac
 
 # Ensembl gene track lists constructed from update procedure
-set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,canFam3,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,echTel2,eriEur1,eriEur2,equCab2,felCat3,felCat5,fr2,fr3,galGal3,galGal4,gasAcu1,gorGor3,hg19,latCha1,loxAfr3,macEug1,melGal1,micMur1,mm9,mm10,monDom5,musFur1,myoLuc2,nomLeu1,ochPri2,oreNil1,ornAna1,oryCun2,oryLat2,otoGar3,panTro2,panTro4,petMar2,ponAbe2,proCap1,pteVam1,rheMac2,rn4,rn5,sacCer3,sarHar1,sorAra1,sorAra2,speTri2,susScr1,susScr3,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,vicPac2,xenTro3
+set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,canFam3,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,echTel2,eriEur1,eriEur2,equCab2,felCat3,felCat5,fr2,fr3,gadMor1,galGal3,galGal4,gasAcu1,gorGor3,hg19,latCha1,loxAfr3,macEug1,melGal1,micMur1,mm9,mm10,monDom5,musFur1,myoLuc2,nomLeu1,ochPri2,oreNil1,ornAna1,oryCun2,oryLat2,otoGar3,panTro2,panTro4,petMar2,ponAbe2,proCap1,pteVam1,rheMac2,rn4,rn5,sacCer3,sarHar1,sorAra1,sorAra2,speTri2,susScr1,susScr3,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,vicPac2,xenTro3
 
-set ensGeneWgs choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,felCat3,macEug1,micMur1,myoLuc2,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,sorAra2,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,vicPac2
+set ensGeneWgs choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,felCat3,gadMor1,macEug1,micMur1,myoLuc2,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,sorAra2,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,vicPac2
 
-set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,felCat3,macEug1,micMur1,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,sorAra2,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,vicPac2
+set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,felCat3,gadMor1,macEug1,micMur1,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,sorAra2,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,vicPac2
 
 # Define organism databases for which we host the vegaGenes
 set vegaGeneDbs hg18,hg19,mm9,mm10

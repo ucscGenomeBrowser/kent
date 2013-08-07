@@ -4,10 +4,6 @@
 #  Heather says perhaps running with "nohup" in front of the command might
 #  make it work better.
 #
-if ( "$HOST" != "hgwbeta" ) then
- echo "Error: this script must be run from hgwbeta."
- exit 1
-endif
 
 cd $WEEKLYBLD
 
@@ -93,9 +89,9 @@ rm -f doNewGit.log
 ssh -n hgwdev $WEEKLYBLD/buildGitReports.csh branch real >& doNewGit.log &
 # note - we are now running it in the background on hgwdev
 
-echo
-echo  "SKIP 32-BIT BUILD ON $BOX32 [${0}: `date`]"
-echo
+#echo
+#echo  "SKIP 32-BIT BUILD ON $BOX32 [${0}: `date`]"
+#echo
 
 
 #---------------------

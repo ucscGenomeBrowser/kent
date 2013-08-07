@@ -386,3 +386,28 @@ echTel2.perChromTables = no
     ln -s blastz.mm10.swap lastz.mm10
 
 #########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2013-08-06 - Hiram)
+    hgsql -N -e "select frag from gold;" echTel2 | sort | head -1
+AAIY02000001.1
+    hgsql -N -e "select frag from gold;" echTel2 | sort | tail -2
+AAIY02277845.1
+NC_002631
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" echTel2 | wc -l
+    # 277846
+
+    hgsql -N -e "select frag from gold;" echTel2 | egrep -e '[AN][AC][I_][Y0]0[0-9]+(\.1)?' | wc -l
+    # 277846
+
+    hgsql -N -e "select frag from gold;" echTel2 | egrep -v -e '[AN][AC][I_][Y0]0[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/tenrec/echTel2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][AC][I_][Y0]0[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################

@@ -156,6 +156,7 @@ if (self->maxOutRows > 0)
 struct sqlResult *sr = sqlGetResult(self->conn, query->string);
 dyStringFree(&query);
 self->sr = sr;
+self->needQuery = FALSE;
 }
 
 static void rowBufInit(struct rowBuf *rowBuf, int size)
@@ -257,7 +258,8 @@ if (self->hasBin)
     // accumulating initial coarse-bin items and merge-sorting them with
     // subsequent finest-bin items which will be in chromStart order.
     if (self->doNextChunk && self->mergeBins && !self->gotFinestBin)
-	errAbort("annoStreamDb can't continue merge in chunking query; increase ASD_CHUNK_SIZE");
+	errAbort("annoStreamDb %s: can't continue merge in chunking query; "
+		 "increase ASD_CHUNK_SIZE", sSelf->name);
     self->mergeBins = TRUE;
     if (self->qLm == NULL)
 	self->qLm = lmInit(0);
@@ -362,9 +364,23 @@ if (rowBuf->ix > rowBuf->size)
     errAbort("annoStreamDb %s: rowBuf overflow (%d > %d)", self->streamer.name,
 	     rowBuf->ix, rowBuf->size);
 if (rowBuf->ix == rowBuf->size)
+    {
     // Last row in buffer -- we'll need another query to get subsequent rows (if any).
+    // But first, see if we need to update gotFinestBin, since getFinestBin might be
+    // one of our callers.
+    if (rowBuf->size > 0)
+	{
+	char **lastRow = rowBuf->buf[rowBuf->size-1];
+	int lastBin = atoi(lastRow[0]);
+	if (lastBin >= self->minFinestBin)
+	    self->gotFinestBin = TRUE;
+	}
     asdDoQueryChunking(self, minChrom, minEnd);
-return rowBuf->buf[rowBuf->ix++];
+    }
+if (rowBuf->size == 0)
+    return NULL;
+else
+    return rowBuf->buf[rowBuf->ix++];
 }
 
 static char **nextRowFiltered(struct annoStreamDb *self, boolean *retRightFail,
@@ -567,6 +583,17 @@ sqlFreeResult(&sr);
 return indexName;
 }
 
+static boolean isIncrementallyUpdated(char *table)
+// Tables that have rows added to them after initial creation are not completely sorted
+// because of new rows at end, so we have to 'order by'.
+{
+return (sameString(table, "refGene") || sameString(table, "refFlat") ||
+	sameString(table, "xenoRefGene") || sameString(table, "xenoRefFlat") ||
+	sameString(table, "all_mrna") || sameString(table, "xenoMrna") ||
+	sameString(table, "all_est") || sameString(table, "xenoEst") ||
+	sameString(table, "refSeqAli") || sameString(table, "xenoRefSeqAli"));
+}
+
 struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly *aa,
 				     struct asObject *asObj, int maxOutRows)
 /* Create an annoStreamer (subclass) object from a database table described by asObj. */
@@ -602,6 +629,10 @@ if (!asdInitBed3Fields(self))
 // and that ruins the sorting.  Fortunately most tables don't anymore.
 self->endFieldIndexName = sqlTableIndexOnField(self->conn, self->table, self->endField);
 self->notSorted = FALSE;
+// Special case: genbank-updated tables are not sorted because new mappings are
+// tacked on at the end.
+if (isIncrementallyUpdated(table))
+    self->notSorted = TRUE;
 self->mergeBins = FALSE;
 self->maxOutRows = maxOutRows;
 self->useMaxOutRows = (maxOutRows > 0);
