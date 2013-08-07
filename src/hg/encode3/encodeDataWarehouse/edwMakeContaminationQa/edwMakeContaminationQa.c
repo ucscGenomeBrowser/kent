@@ -14,6 +14,7 @@
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 
+boolean keepTemp = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,11 +24,14 @@ errAbort(
   "usage:\n"
   "   edwMakeContaminationQa startId endId\n"
   "where startId and endId are id's in the edwFile table\n"
+  "options:\n"
+  "   -keepTemp\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"keepTemp", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -71,7 +75,7 @@ close(fd);
 
 char command[3*PATH_LEN];
 safef(command, sizeof(command), 
-    "fastqStatsAndSubsample %s /dev/null %s -sampleSize=%d", source, dest, size);
+    "fastqStatsAndSubsample %s /dev/null %s -smallOk -sampleSize=%d", source, dest, size);
 verbose(2, "command: %s\n", command);
 mustSystem(command);
 }
@@ -127,19 +131,22 @@ for (target = targetList; target != NULL; target = target->next)
 if (needScreen)
     {
     verbose(1, "screenFastqForContaminants(%u(%s))\n", ef->id, ef->submitFileName);
-    char sourceFastqName[PATH_LEN];
-    safef(sourceFastqName, PATH_LEN, "%s%s", edwRootDir, ef->edwFileName);
-    char query[512];
 
-    /* Create downsampled fastq in temp directory. */
+    /* Get fastq record. */
+    struct edwFastqFile *fqf = edwFastqFileFromFileId(conn, ef->id);
+    if (fqf == NULL)
+        errAbort("No edwFastqFile record for file id %lld", (long long)ef->id);
+
+    /* Create downsampled fastq in temp directory - downsampled more than default even. */
     char sampleFastqName[PATH_LEN];
-    makeTempFastqSample(sourceFastqName, FASTQ_SAMPLE_SIZE, sampleFastqName);
+    makeTempFastqSample(fqf->sampleFileName, FASTQ_SAMPLE_SIZE, sampleFastqName);
     verbose(1, "downsampled %s into %s\n", vf->licensePlate, sampleFastqName);
 
     for (target = targetList; target != NULL; target = target->next)
 	{
 	/* Get assembly associated with target */
 	int assemblyId = target->assemblyId;
+	char query[512];
 	sqlSafef(query, sizeof(query), "select * from edwAssembly where id=%d", assemblyId);
 	struct edwAssembly *newAsm = edwAssemblyLoadByQuery(conn, query);
 	if (newAsm == NULL)
@@ -163,7 +170,11 @@ if (needScreen)
 	edwAssemblyFree(&newAsm);
 	}
     edwQaContamTargetFreeList(&targetList);
-    remove(sampleFastqName);
+    if (keepTemp)
+        verbose(1, "%s\n", sampleFastqName);
+    else
+	remove(sampleFastqName);
+    edwFastqFileFree(&fqf);
     }
 }
 
@@ -203,6 +214,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+keepTemp = optionExists("keepTemp");
 edwMakeContaminationQa(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
 return 0;
 }
