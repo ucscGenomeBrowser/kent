@@ -652,7 +652,6 @@ if ((lf = *pLf) != NULL)
     struct pipeline *pl = lf->pl;
     if (pl != NULL)
         {
-	pipelineSetNoAbort(pl);
         pipelineWait(pl);
         pipelineFree(&lf->pl);
         }
