@@ -1,0 +1,6 @@
+#!/bin/tcsh -efx
+#rm -rf testOut
+#mkdir testOut
+autoSql test.as testOut/testStruct
+raToStructGen -testMain test.as testOut/testFoo.c -required=readCount,baseCount,readSizeMean,readSizeStd,readSizeMin,readSizeMax,qualMean,qualStd,qualMin,qualMax,qualType,qualZero,atRatio,aRatio,cRatio,gRatio,tRatio,nRatio,qualPos,aAtPos,cAtPos,gAtPos,tAtPos,nAtPos -computed=id,fileId,sampleCount,sampleFileName
+make testOut/testFoo.o
