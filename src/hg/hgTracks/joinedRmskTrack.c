@@ -22,19 +22,23 @@
  */
 #define MAX_UNALIGNED_LEN 200
 
-/* Hash of the repeatItems ( tg->items ) for this track.  
+/* classHash is the hash of the repeatItems ( tg->items ) for this track.  
  *   This is used to hold display names for the lines of
  *   the track, the line heights, and class colors.
- */
-struct hash *classHash = NULL;
-static struct repeatItem *otherRepeatItem = NULL;
-
-/* Hash of subtracks
+ *
+ * the subTracksHash is a hash of subtracks
  *   The joinedRmskTrack is designed to be used as a composite track.
  *   When jRepeatLoad is called this hash is populated with the 
  *   results of one or more table queries 
  */
-struct hash *subTracksHash = NULL;
+struct itemSpecifics
+/* extra information to go with each track */
+    {
+    struct hash *classHash;
+    struct repeatItem *otherRepeatItem;
+    struct hash *subTracksHash;
+    };
+
 struct subTrack
     {
     /* The number of display levels used in levels[] */
@@ -98,15 +102,19 @@ cmpRepeatVisStart(const void *va, const void *vb)
 }
 
 /* Initialize the track */
-static struct repeatItem *
-makeJRepeatItems()
-{
+static void makeJRepeatItems(struct track *tg)
   /* Initialize the subtracks hash - This will eventually contain
    * all the repeat data for each displayed subtrack 
    */
-  subTracksHash = newHash(10);
+{
+  struct itemSpecifics *extraData;
+  AllocVar(extraData);
 
-  classHash = newHash(6);
+  extraData->classHash = newHash(6);
+  extraData->otherRepeatItem = NULL;
+  extraData->subTracksHash = newHash(10);
+  tg->extraUiData = extraData;
+
   struct repeatItem *ri, *riList = NULL;
   int i;
   int numClasses = ArraySize(rptClasses);
@@ -119,23 +127,22 @@ makeJRepeatItems()
     ri->color = jRepeatClassColors[i];
     slAddHead(&riList, ri);
     // Hash now prebuilt to hold color attributes
-    hashAdd(classHash, ri->class, ri);
+    hashAdd(extraData->classHash, ri->class, ri);
     if (sameString(rptClassNames[i], "Other"))
-      otherRepeatItem = ri;
+      extraData->otherRepeatItem = ri;
   }
   slReverse(&riList);
-  return riList;
+  tg->items = riList;
 }
 
-static void
-jRepeatLoad(struct track *tg)
+static void jRepeatLoad(struct track *tg)
 /* We do the query(ies) here so we can report how deep the track(s)
  * will be when jRepeatTotalHeight() is called later on 
  */ 
 {
-  tg->items = makeJRepeatItems();
+  makeJRepeatItems(tg);
+  struct itemSpecifics *extraData = tg->extraUiData;
 
-  fprintf(stderr, "Called jRepeatLoad: table = %s\n", tg->table );
   int baseWidth = winEnd - winStart;
   if ( tg->visibility == tvFull && baseWidth <= REPEAT_DETAIL_VIEW)
   {
@@ -226,7 +233,7 @@ jRepeatLoad(struct track *tg)
         } // while ( rm )
       } // while ( detailList )
       // Create Hash Entry
-      hashReplace(subTracksHash, tg->table, st);
+      hashReplace(extraData->subTracksHash, tg->table, st);
     } // if ( st )
   } // if ( tg->visibility == tvFull
 }
@@ -266,12 +273,13 @@ jRepeatName(struct track *tg, void *item)
 int
 jRepeatTotalHeight(struct track *tg, enum trackVisibility vis)
 {
+  struct itemSpecifics *extraData = tg->extraUiData;
   // Are we in full view mode and at the scale needed to display
   // the detail view?
   if (tg->limitedVis == tvFull && winBaseCount <= REPEAT_DETAIL_VIEW)
      {
         // Lookup the depth of this subTrack and report it
-        struct subTrack *st = hashFindVal(subTracksHash, tg->table );
+        struct subTrack *st = hashFindVal(extraData->subTracksHash, tg->table );
         if ( st )
           return ( (st->levelCount+1) * 24 );
         else
@@ -575,7 +583,8 @@ drawDirBox(struct hvGfx *hvg, int x1, int y1, int width, int height,
  */
 static void
 drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
-	    int width, int baseWidth, int xOff, struct rmskJoined *rm)
+   int width, int baseWidth, int xOff, struct rmskJoined *rm,
+      struct itemSpecifics *extraData)
 {
   int idx;
   int lx1, lx2;
@@ -619,9 +628,9 @@ drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
     safecpy(class, sizeof(class), "RNA");
 
   // Lookup the class to get the color scheme
-  ri = hashFindVal(classHash, class);
+  ri = hashFindVal(extraData->classHash, class);
   if (ri == NULL)
-    ri = otherRepeatItem;
+    ri = extraData->otherRepeatItem;
 
   // Pick the fill color based on the divergence
   int percId = 10000 - rm->score;
@@ -930,6 +939,7 @@ origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
 	       struct hvGfx *hvg, int xOff, int yOff, int width,
 	       MgFont * font, Color color, enum trackVisibility vis)
 {
+  struct itemSpecifics *extraData = tg->extraUiData;
   int baseWidth = seqEnd - seqStart;
   struct repeatItem *ri;
   int y = yOff;
@@ -986,7 +996,7 @@ origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
 	safecpy(class, sizeof(class), "RNA");
       ri = hashFindVal(hash, class);
       if (ri == NULL)
-	ri = otherRepeatItem;
+	ri = extraData->otherRepeatItem;
       percId = 10000 - ro->score;
       grayLevel = grayInRange(percId, 6000, 10000);
       col = shadesOfGray[grayLevel];
@@ -1084,6 +1094,7 @@ jRepeatDraw(struct track *tg, int seqStart, int seqEnd,
 	    struct hvGfx *hvg, int xOff, int yOff, int width,
 	    MgFont * font, Color color, enum trackVisibility vis)
 {
+  struct itemSpecifics *extraData = tg->extraUiData;
   int baseWidth = seqEnd - seqStart;
   /*
    * Its unclear to me why heightPer is not updated to the
@@ -1102,7 +1113,7 @@ jRepeatDraw(struct track *tg, int seqStart, int seqEnd,
   {
     int level = yOff;
 
-    struct subTrack *st = hashFindVal(subTracksHash, tg->table );
+    struct subTrack *st = hashFindVal(extraData->subTracksHash, tg->table );
     if ( ! st )
       return;
     int lidx = st->levelCount;
@@ -1112,7 +1123,7 @@ jRepeatDraw(struct track *tg, int seqStart, int seqEnd,
       rm = st->levels[currLevel];
       while (rm)
       {
-	drawRMGlyph(hvg, level, heightPer, width, baseWidth, xOff, rm);
+	drawRMGlyph(hvg, level, heightPer, width, baseWidth, xOff, rm, extraData);
 
 	char statusLine[128];
 	int ss1 = roundingScale(rm->alignStart - winStart,
