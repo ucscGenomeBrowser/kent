@@ -115,6 +115,7 @@ falChe1 -> Saker_falcon ;
 falPer1 -> Peregrine_falcon ;
 melUnd1 -> Budgerigar ;
 anaPla1 -> Mallard_duck ;
+strCam1 -> Ostrich ;
 melGal1 -> Turkey ;
 galGal3 -> Chicken ;
 galGal4 -> Chicken ;
