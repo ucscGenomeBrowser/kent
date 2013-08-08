@@ -8,7 +8,9 @@
 #include "ra.h"
 #include "asParse.h"
 
+/* Command line globals. */
 char *requiredAsComma = NULL;
+char *computedAsComma = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -21,12 +23,15 @@ errAbort(
   "   raToStructGen guide.as output.c\n"
   "options:\n"
   "   -required=comma,sep,list - comma separated list of required fields.\n"
+  "   -computed=comma,sep,list - comma separated list of fields that are computed not parsed\n"
+  "                              These fields will be ignored if in input\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"required", OPTION_STRING},
+   {"computed", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -76,6 +81,12 @@ AllocArray(reader->fieldsObserved, fieldCount);
 return reader;
 }
 
+boolean skipColumn(struct asColumn *col, struct hash *ignoreHash)
+/* Return TRUE if we should skip column. */
+{
+return col->isSizeLink || hashLookup(ignoreHash, col->name) != NULL;
+}
+
 void raToStructReaderFree(struct raToStructReader **pReader)
 /* Free up memory associated with reader. */
 {
@@ -109,6 +120,22 @@ for (i=0; i<reader->requiredFieldCount; ++i)
 void raToStructGen(char *guideFile, char *outFileC)
 /* raToStructGen - Write C code that will read/write a C structure from a ra file. */
 {
+struct hash *ignoreHash = hashNew(0);
+
+int computedCount = 0;
+if (computedAsComma != NULL)
+    {
+    if (lastChar(computedAsComma) == ',')
+        trimLastChar(computedAsComma);
+    computedCount = chopByChar(computedAsComma, ',', NULL, 0);
+    char **computedFields = NULL;
+    AllocArray(computedFields, computedCount);
+    chopByChar(computedAsComma, ',', computedFields, computedCount);
+    int i;
+    for (i=0; i<computedCount; ++i)
+        hashAdd(ignoreHash, computedFields[i], NULL);
+    }
+
 int requiredCount = 0;
 char **requiredFields = NULL;
 if (requiredAsComma != NULL)
@@ -138,10 +165,12 @@ fprintf(f,
 /* Print out all field names */
 struct asColumn *col;
 for (col = as->columnList; col != NULL; col = col->next)
-    fprintf(f, "    \"%s\",\n", col->name);
+    if (!skipColumn(col, ignoreHash))
+	fprintf(f, "    \"%s\",\n", col->name);
 fprintf(f, "    };\n");
 
 char *rfString = "NULL";
+char *requiredCountString = "0";
 if (requiredCount > 0)
     {
     fprintf(f, "static char *requiredFields[] = {\n");
@@ -150,14 +179,15 @@ if (requiredCount > 0)
 	fprintf(f, "    \"%s\",\n", requiredFields[i]);
     fprintf(f, "    };\n");
     rfString = "requiredFields";
+    requiredCountString = "ArraySize(requiredFields)";
     }
 
 /* Print out end of reader->maker function. */
 fprintf(f, 
-    "return raToStructReaderNew(\"%s\", %d, fields, %d, %s);\n"
+    "return raToStructReaderNew(\"%s\", ArraySize(fields), fields, %s, %s);\n"
     "}\n"
     "\n"
-    , as->name, slCount(as->columnList), requiredCount, rfString);
+    , as->name, requiredCountString, rfString);
 
 /* Print out start of parsing function. */
 fprintf(f, 
@@ -165,6 +195,19 @@ fprintf(f,
 "struct %s *%sFromNextRa(struct lineFile *lf, struct raToStructReader *reader)\n"
 "/* Return next stanza put into an %s. */\n"
 "{\n"
+, as->name, as->name, as->name);
+
+/* Print out an enum corresponding to struct fields. */
+char *fieldSuffix = "Field";
+fprintf(f, "enum fields\n");
+fprintf(f, "    {\n");
+for (col = as->columnList; col != NULL; col = col->next)
+    if (!skipColumn(col, ignoreHash))
+	fprintf(f, "    %s%s,\n", col->name, fieldSuffix);
+fprintf(f, "    };\n");
+
+/* Print out some more constant parts of parser. */
+fprintf(f, 
 "if (!raSkipLeadingEmptyLines(lf, NULL))\n"
 "    return NULL;\n"
 "\n"
@@ -186,22 +229,24 @@ fprintf(f,
 "	fieldsObserved[id] = TRUE;\n"
 "	switch (id)\n"
 "	    {\n"
-, as->name, as->name, as->name, as->name);
+, as->name);
 
 
 /* Now loop through and print out cases for each field. */
-int colIx = 0;
 for (col = as->columnList; col != NULL; col = col->next)
     {
-    fprintf(f, "	    case %d:\n", colIx++);
+    if (skipColumn(col, ignoreHash))
+        continue;
+    fprintf(f, "	    case %s%s:\n", col->name, fieldSuffix);
     fprintf(f, "	        {\n");
     struct asTypeInfo *lt = col->lowType;
     enum asTypes type = lt->type;
     if (col->isList)
         {
+	/* For all the types we'll handle, isList means an array. */
 	switch (type)
 	    {
-	    /* Handle numerical types */
+	    /* Handle numerical and string types */
 	    case t_float:
 	    case t_double:
 	    case t_int:
@@ -213,17 +258,11 @@ for (col = as->columnList; col != NULL; col = col->next)
 	    case t_lstring:
 		if (col->linkedSizeName)
 		    {
-		    fprintf(f, "                int %sSize;\n", col->name);
-		    fprintf(f, "		sql%sDynamicArray(val, &el->%s, &%sSize);\n", 
-			lt->listyName, col->name, col->name);
-		    fprintf(f, "                if (!fieldsObserved[%d])\n", 
-			asColumnFindIx(as->columnList, col->linkedSizeName));
-		    fprintf(f, "                     errAbort(\"%s must precede %s\");\n",
-			col->linkedSizeName, col->name);
-		    fprintf(f, "                if (%sSize != el->%s)\n",
-		        col->name, col->linkedSizeName);
-		    fprintf(f, "                     errAbort(\"%s has wrong count\");\n",
-			col->name);
+		    fprintf(f, "                int arraySize;\n");
+		    fprintf(f, "		sql%sDynamicArray(val, &el->%s, &arraySize);\n", 
+			lt->listyName, col->name);
+		    fprintf(f, "                raToStructArraySizer(lf, arraySize, &el->%s, \"%s\");\n",
+			col->linkedSize->name, col->name);
 		    }
 		else if (col->fixedSize)
 		    fprintf(f, "		sql%sArray(val, el->%s, %d);\n", 
@@ -238,6 +277,7 @@ for (col = as->columnList; col != NULL; col = col->next)
 	}
     else
 	{
+	/* Case of scalar (not array) variable. */
 	switch (type)
 	    {
 	    /* Handle numerical types */
@@ -250,10 +290,12 @@ for (col = as->columnList; col != NULL; col = col->next)
 	    case t_off:
 		fprintf(f, "	        el->%s = sql%s(val);\n", col->name, lt->nummyName);
 		break;
+	    /* Handle string types */
 	    case t_string:
 	    case t_lstring:
 		fprintf(f, "	        el->%s = cloneString(val);\n", col->name);
 		break;
+	    /* Abort on other types */
 	    default:
 		errAbort("Sorry, %s column is too complex for this program", col->name);
 		break;
@@ -271,17 +313,54 @@ fprintf(f,
 "	    }\n"
 "	}\n"
 "    }\n"
-"\n"
-"if (reader->requiredFieldIds != NULL)\n"
-"    raToStructReaderCheckRequiredFields(reader, lf);\n"
+"\n");
+
+/* Print out required field checker if there are required fields. */
+if (requiredAsComma != NULL)
+    fprintf(f, "raToStructReaderCheckRequiredFields(reader, lf);\n");
+
+fprintf(f, 
 "return el;\n"
 "}\n"
+"\n");
+
+/* Print out function to load all records from file. */
+fprintf(f, 
+"struct %s *%sLoadRa(char *fileName)\n"
+"/* Return list of all %s in ra file. */\n"
+"{\n"
+"struct raToStructReader *reader = %sRaReader();\n"
+"struct lineFile *lf = lineFileOpen(fileName, TRUE);\n"
+"struct %s *el, *list = NULL;\n"
+"while ((el = %sFromNextRa(lf, reader)) != NULL)\n"
+"    slAddHead(&list, el);\n"
+"slReverse(&list);\n"
+"lineFileClose(&lf);\n"
+"raToStructReaderFree(&reader);\n"
+"return list;\n"
+"}\n"
 "\n"
-);
+, as->name, as->name, as->name, as->name, as->name, as->name);
+
+/* Print out single record reader. */
+fprintf(f,
+"struct %s *%sOneFromRa(char *fileName)\n"
+"/* Return %s in file and insist there be exactly one record. */\n"
+"{\n"
+"struct %s *one = %sLoadRa(fileName);\n"
+"if (one == NULL)\n"
+"    errAbort(\"No data in %%s\", fileName);\n"
+"if (one->next != NULL)\n"
+"    errAbort(\"Multiple records in %%s\", fileName);\n"
+"return one;\n"
+"}\n"
+"\n"
+, as->name, as->name, as->name, as->name, as->name);
+
 
 carefulClose(&f);
-verbose(1, "Generated parser for %d required fields, %d total fields\n", 
-    requiredCount, slCount(as->columnList));
+verbose(1, "Generated parser for %d required fields, %d computed fields, %d total fields\n", 
+    requiredCount, computedCount, slCount(as->columnList));
 }
 
 int main(int argc, char *argv[])
@@ -291,6 +370,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 requiredAsComma = optionVal("required", NULL);
+computedAsComma = optionVal("computed", NULL);
 raToStructGen(argv[1], argv[2]);
 return 0;
 }
