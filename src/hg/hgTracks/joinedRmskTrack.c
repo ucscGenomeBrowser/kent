@@ -162,10 +162,7 @@ static void jRepeatLoad(struct track *tg)
       while ((row = sqlNextRow(sr)) != NULL)
       {
         rm = rmskJoinedLoad(row + rowOffset);
-        if (detailList)
-          slAddHead(detailList, rm);
-        else
-          detailList = rm;
+        slAddHead(&detailList, rm);
       }
       slSort(&detailList, cmpRepeatVisStart);
 
