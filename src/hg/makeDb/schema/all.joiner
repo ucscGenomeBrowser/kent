@@ -2007,7 +2007,6 @@ identifier xenoRefSeqId typeOf=xenoMrnaAccession
     $xrg.xenoRefGene.name dupeOk
     $xrg.xenoRefFlat.name full
     $xrg.xenoRefSeqAli.qName full
-    $xrg.xenoRefFlat.name full
 
 identifier knownToRefSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession in knownToRefSeq table"
