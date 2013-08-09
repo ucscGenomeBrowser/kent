@@ -351,6 +351,14 @@ char *hDownloadsServer()
 return cfgOptionDefault("downloads.server", "hgdownload.cse.ucsc.edu");
 }
 
+void setUdcTimeout(struct cart *cart)
+/* set the udc cache timeout */
+{
+int timeout = cartUsualInt(cart, "udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
+}
+
 void setUdcCacheDir()
 /* set the path to the udc cache dir */
 {

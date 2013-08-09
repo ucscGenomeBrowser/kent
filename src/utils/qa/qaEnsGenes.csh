@@ -178,12 +178,13 @@ foreach db ($dbs)
  featureBits $db -countGaps ensGene gap
 
  if ( $db == $ensTrack ) then
+  setenv HGDB_CONF $HOME/.hg.conf.beta
   echo "\nfeatureBits $db ensGene (on hgwbeta):"
-  ssh hgwbeta featureBits $db ensGene
+  featureBits $db ensGene
   echo "featureBits $db -countGaps ensGene (on hgwbeta):"
-  ssh hgwbeta featureBits $db -countGaps ensGene
+  featureBits $db -countGaps ensGene
   echo "featureBits $db -countGaps ensGene gap (on hgwbeta):"
-  ssh hgwbeta featureBits $db -countGaps ensGene gap
+  featureBits $db -countGaps ensGene gap
  endif
  echo
 

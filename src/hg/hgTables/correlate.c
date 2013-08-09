@@ -2570,7 +2570,7 @@ void doClearCorrelate(struct sqlConnection *conn)
 /* Respond to click on clear correlation from main hgTable page. */
 {
 removeCartVars(cart, curVars, ArraySize(curVars));
-doMainPage(conn);
+doMainPage(conn, FALSE);
 }
 
 void doCorrelateSubmit(struct sqlConnection *conn)

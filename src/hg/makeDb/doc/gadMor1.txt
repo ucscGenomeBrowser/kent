@@ -502,3 +502,44 @@ gadMor1.perChromTables = no
     hgsql qapushq < gadMor1.sql
 
 ############################################################################
+# create ucscToEnsembl scaffold name mapping (DONE - 2013-07-02 - Hiram)
+    # this allows the "ensembl" blue bar button to appear
+    mkdir /hive/data/genomes/gadMor1/bed/ucscToEnsembl
+    cd /hive/data/genomes/gadMor1/bed/ucscToEnsembl
+
+    cut -f 1 ../../chrom.sizes | sort > ucsc.names.txt
+    grep -v "^#" ../../genbank/Primary_Assembly/scaffold_localID2acc \
+      | grep -v -w "na" | sed -e 's/.1$//' \
+         | awk '{print $2,$1}' > ensembl.names.txt
+
+    grep -v "^#" ../../genbank/Primary_Assembly/component_localID2acc \
+      | sed -e 's/.1$//' | awk '{print $2,$1}' >> ensembl.names.txt
+
+    sort ensembl.names.txt > ensemblToUcsc.txt
+
+    # eliminate any names that aren't here at UCSC
+    join ucsc.names.txt ensemblToUcsc.txt | tr '[ ]' '[\t]' > ucscToEnsembl.tab
+
+    # determine longest UCSC name:
+    awk '{print length($1)}' ucscToEnsembl.txt | sort | uniq -c
+    # 420960 12
+    # 6467 8
+
+    # use the '12' in the index here:
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(12))
+);
+'_EOF_'
+
+    hgsql gadMor1 < ucscToEnsembl.sql
+    hgsql gadMor1 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+    # verify the blue bar "ensembl" link is now available
+#########################################################################

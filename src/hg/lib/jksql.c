@@ -238,6 +238,8 @@ static struct sqlProfile* sqlProfileFindByDatabase(char *database)
 /* find a profile using database as profile name, return the default if not
  * found */
 {
+if (!database)
+    return defaultProfile;
 struct sqlProfile *sp = hashFindVal(dbToProfile, database);
 if (sp == NULL)
     sp = defaultProfile;
@@ -258,7 +260,7 @@ static struct sqlProfile* sqlProfileGet(char *profileName, char *database)
  * return NULL if not found.
  */
 {
-assert((profileName != NULL) || (database != NULL));
+//assert((profileName != NULL) || (database != NULL));
 if (profiles == NULL)
     sqlProfileLoad();
 
@@ -917,7 +919,7 @@ if (mysql_real_query(conn, query, strlen(query)) != 0)
     if (abort)
         {
         monitorLeave();
-	dumpStack("oops DEBUG"); // DEBUG REMOVE
+	dumpStack("DEBUG Can't start query"); // Extra debugging info. DEBUG REMOVE
 	sqlAbort(sc, "Can't start query:\n%s\n", query);
         }
     }
@@ -1097,23 +1099,26 @@ char query[256];
 struct sqlResult *sr;
 if (sameString(table,""))
     {
-    sqlCheckError("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table);  
+    dumpStack("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table); fflush(stderr); // log only
     return FALSE;
     }
 // TODO If the ability to supply a list of tables is hardly used,
 // then we could switch it to simply %s below supporting a single
 // table at a time more securely.
-// DEBUG informational
 if (strchr(table,','))
     dumpStack("sqlTableExists called on multiple tables with table=[%s]\n", table);
 if (strchr(table,'%'))
     {
-    // verbose is better than warn for early code calls?
-    sqlCheckError("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table);  
+    dumpStack("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table); fflush(stderr); // log only
     return FALSE;
     }
-// DEBUG END
-//verbose(1,"DEBUG sqlTableExists table=[%s]\n", table); // DEBUG REMOVE
+if (strchr(table,'-'))
+    {
+    return FALSE;  // mysql does not allow tables with dash (-) so it will not be found.
+    // hg/lib/hdb.c can generate an invalid table names with dashes while looking for split tables,
+    // if the first chrom name has a dash in it. Examples found were: scaffold_0.1-193456 scaffold_0.1-13376 HERVE_a-int 1-1
+    // Assembly hubs also may have dashes in chrom names.
+    }
 sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(table));  // DEBUG RESTORE
 //safef(query, sizeof(query), "NOSQLINJ SELECT 1 FROM %s LIMIT 0", table);  // DEBUG REMOVE
 if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
@@ -1315,7 +1320,7 @@ dyStringFree(&dy);
 int sqlWarnCount(struct sqlConnection *conn)
 /* Return the number of warnings. New feature in mysql5. */
 {
-char query[32];
+char query[64];
 sqlSafef(query, sizeof query, "SHOW COUNT(*) WARNINGS");
 return sqlQuickNum(conn, query);
 }
@@ -2385,7 +2390,7 @@ char *sqlVersion(struct sqlConnection *conn)
 /* Return version of MySQL database.  This will be something
  * of the form 5.0.18-standard. */
 {
-char query[32];
+char query[64];
 char **row;
 sqlSafef(query, sizeof query, "show variables like 'version'");
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -2781,8 +2786,6 @@ while((c = *s++) != 0)
     {
     if (disAllowed[c])
 	{
-	verbose(1,"character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
-
 	// DEBUG REMOVE Temporary for trying to track down some weird error 
 	//  because the stackdump should appear but does not.
 	//dumpStack("character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
@@ -2790,7 +2793,17 @@ while((c = *s++) != 0)
 	// TODO for some reason the warn stack is messed up sometimes very eary. -- happening in hgTables position search on brca
 	//warn("character %c disallowed in sql string part %s", c, sOriginal);
 
-	return FALSE;  // might want to look at hg.conf settings and if debugging, show details.
+	// DEBUG REMOVE GALT 
+	// just using this as a work-around
+	// until the problem with early errors and warn/abort stacks has been fixed.
+	char *noSqlInjLevel = cfgOption("noSqlInj.level");
+	if (noSqlInjLevel && !sameString(noSqlInjLevel, "ignore"))
+	    {
+    	    fprintf(stderr, "character %c disallowed in sql string part %s\n", c, sOriginal);  
+	    fflush(stderr);
+	    }
+
+	return FALSE;
 	}
     }
 return TRUE;
@@ -3185,31 +3198,24 @@ while (i < formatLen)
     ++i;	    
     }
 
-verbose(2, "format=[%s]\nnewFormat=[%s]\n", format, newFormat); // DEBUG REMOVE
-
 int sz = 0; 
 if (escStringsCount > 0)
     {
-    verbose(2, "newFormatSize=%d escStringsSize=%d \n", newFormatSize, escStringsSize); // DEBUG REMOVE
     int tempSize = bufSize + 2*escStringsCount;  // if it won't fit in this it will never fit.
-    verbose(2, "trying tempSize=%d\n", tempSize); // DEBUG REMOVE
     char *tempBuf = needMem(tempSize);
     sz = vsnprintf(tempBuf, tempSize, newFormat, orig_args);
     /* note that some versions return -1 if too small */
     if (sz != -1 && sz + 1 <= tempSize)
 	{
-	verbose(2, "tempBuf=[%s] tempSize=%d strlen=%d sz=%d\n", tempBuf, tempSize, (int)strlen(tempBuf), sz); // DEBUG REMOVE
 	// unfortunately we have to copy the string 1 more time unless we want
 	// to force the user to allocate extra "safety space" for mysql_escape.
 	int tempSize2 = sz + 1 + escStringsSize;  // handle worst-case
 	char *tempBuf2 = needMem(tempSize2);
 	sz = sqlEscapeAllStrings(tempBuf2, tempBuf, tempSize2, escPunc);
-	verbose(2, "sz after sqlEscapeAllStrings=%d tempSize2=%d final bufSize=%d\n", sz, tempSize2, bufSize); // DEBUG REMOVE
 	if (sz + 1 > tempSize2)
 	    errAbort("unexpected error in vaSqlSafefNoAbort: tempBuf2 overflowed. tempSize2=%d sz=%d", tempSize, sz); 
 	if (sz + 1 <= bufSize) // NO buffer overflow
 	    {
-	    verbose(2, "tempBuf2=[%s]\n", tempBuf2); // DEBUG REMOVE
 	    // copy string to its final destination.
 	    memmove(buffer, tempBuf2, sz+1); // +1 for terminating 0;
 	    }
@@ -3441,6 +3447,8 @@ if (noSqlInjLevel)
     if (sameString(noSqlInjLevel, "logOnly"))
 	{
 	vfprintf(stderr, format, args);
+	fprintf(stderr, "\n");
+	fflush(stderr);
 	}
 
     if (sameString(noSqlInjLevel, "warn"))

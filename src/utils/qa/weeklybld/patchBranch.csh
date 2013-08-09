@@ -128,7 +128,6 @@ while ( $i <= $#files )
 	echo "error in cvs commit of merge $r into $dir/$f"
 	echo "cvs patch commmit failure for $r into $dir/$f " >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
 	echo "YOU NEED TO RESOLVE THIS MANUALLY AND COMMIT IT IN $BUILDDIR/v${BRANCHNN}_branch/"
-#9403# 	echo "YOU MAY THEN NEED TO GO TO 32-BIT SANDBOX AND DO CVS UPDATE"
 	exit 1
     endif
     
@@ -142,12 +141,6 @@ while ( $i <= $#files )
 	exit 1
     endif
 
-#9403#     # update 32-bit sandbox on $BOX32 too
-#9403#     set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/$f:h;cvs up $f:t"
-#9403#     echo "$cmd32"
-#9403#     #old way: ssh $BOX32 "$cmd32"
-#9403#     ssh $BOX32 "/bin/tcsh -c '"$cmd32"'"
-    
     set msg = "$msg $f $p : patched-in $r\n"
     @ i++
 end

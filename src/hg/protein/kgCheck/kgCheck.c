@@ -127,7 +127,7 @@ while (row2 != NULL)
 	    }
 	    
         /* give RefSeq entries 0.5 advantage in its ranking */  
-	safef(condStr, sizeof(condStr), "name='%s'", acc);
+	sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", acc);
 	answer = sqlGetField(genomeDb, "refGene", "name", condStr);
  	if (answer != NULL) 
 	    {
@@ -144,7 +144,7 @@ while (row2 != NULL)
 	        {
 		acc2 = acc;
 		}
-	    safef(condStr, sizeof(condStr), "name='%s'", acc2);
+	    sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", acc2);
 	    
 	    /* If it is an MGC gene, give it a 0.3 advantable */
 	    answer = sqlGetField(genomeDb, "mgcGenes", "name", condStr);

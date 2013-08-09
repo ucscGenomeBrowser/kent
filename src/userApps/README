@@ -8,6 +8,20 @@ UCSC genome browser 'kent' bioinformatic utilities
     http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product
 
 ========================================================================
+Pre-compiled binaries available:
+
+These binaries built at UCSC may already work in your linux/Mac
+environment.  Please access via:
+  http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/
+  http://hgdownload.cse.ucsc.edu/admin/exe/macOSX.x86_64/
+  http://hgdownload.cse.ucsc.edu/admin/exe/macOSX.i386/
+
+Or via FTP:
+  ftp://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/
+  ftp://hgdownload.cse.ucsc.edu/admin/exe/macOSX.x86_64/
+  ftp://hgdownload.cse.ucsc.edu/admin/exe/macOSX.i386/
+
+========================================================================
 
 System Requirements:
 
@@ -42,7 +56,7 @@ system package management tools.
 
    git archive --format=zip -9 \
       --remote=git://genome-source.cse.ucsc.edu/kent.git \
-      HEAD src/userApps > userApps.zip
+      beta src/userApps > userApps.zip
    unzip -d userApps -j userApps.zip
    cd userApps
    make fetchSource
@@ -111,6 +125,23 @@ instructions.
 When the utilities are built here, their usage messages have
 been collected together in one file:
 	kentUtils.Documentation.txt
+
+========================================================================
+
+MySQL database access:
+
+Many of the commands can use the UCSC public MySQL server, or
+your own local MySQL server with UCSC data formats.  Add these three
+lines to a file in your HOME directory called '.hg.conf' and set
+its permissions to: 'chmod 600 .hg.conf'
+
+    db.host=genome-mysql.cse.ucsc.edu
+    db.user=genomep
+    db.password=password
+
+This '.hg.conf' file is used by the kent commands to determine the
+MySQL host and user/password to the database.  For your local MySQL
+installation, use your host name and your read-only user/password names.
 
 ========================================================================
 

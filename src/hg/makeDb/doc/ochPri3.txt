@@ -97,14 +97,13 @@ taxId 9978
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek ochPri3 > do.log 2>&1 &
-XXX - running - Tue Jun 18 15:32:08 PDT 2013
-    #   real    390m14.722s
+    #   real    2327m8.018s
     cat faSize.rmsk.txt
-# 2947024286 bases (341827925 N's 2605196361 real 1869498320 upper
-#       735698041 lower) in 8402 sequences in 1 files
-# Total size: mean 350752.7 sd 4055776.1 min 1000 (AAIY02277568) max
-#       111700974 (JH980293) median 2033
-# %24.96 masked total, %28.24 masked real
+# 2229835716 bases (285847846 N's 1943987870 real 1370818698 upper
+#    573169172 lower) in 10420 sequences in 1 files
+# Total size: mean 213995.8 sd 2558422.6 min 1000 (ALIT01132924)
+#    max 83735184 (JH802061) median 2572
+# %25.70 masked total, %29.48 masked real
 
     egrep -i "versi|releas" do.log
 # RepeatMasker version open-4.0.2
@@ -112,21 +111,18 @@ XXX - running - Tue Jun 18 15:32:08 PDT 2013
 # CC   RELEASE 20130422;                                            *
 
 ##########################################################################
-# running simple repeat (DONE - 2013-05-29 - Hiram)
+# running simple repeat (DONE - 2013-06-18 - Hiram)
     mkdir /hive/data/genomes/ochPri3/bed/simpleRepeat
     cd /hive/data/genomes/ochPri3/bed/simpleRepeat
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	ochPri3 > do.log 2>&1 &
-XXX - running - Tue Jun 18 15:33:46 PDT 2013
-    # real    17m17.690s
+    #   about 24 minutes
 
-    #	real    198m33.953s
     cat fb.simpleRepeat
-    #	25511877 bases of 2605196361 (0.979%) in intersection
+    #	23780445 bases of 1943987870 (1.223%) in intersection
 
-    # using RMSK and TRF since RMSK is enough masking even though
-    # WM is pretty good
+    # using RMSK and TRF since RMSK is about the same as WM
     cd /hive/data/genomes/ochPri3
     twoBitMask ochPri3.rmsk.2bit \
 	-add bed/simpleRepeat/trfMask.bed ochPri3.2bit
@@ -134,18 +130,18 @@ XXX - running - Tue Jun 18 15:33:46 PDT 2013
 
     twoBitToFa ochPri3.2bit stdout | faSize stdin > faSize.ochPri3.2bit.txt
     cat faSize.ochPri3.2bit.txt
-# 2947024286 bases (341827925 N's 2605196361 real 1868909316 upper
-#    736287045 lower) in 8402 sequences in 1 files
-# Total size: mean 350752.7 sd 4055776.1 min 1000 (AAIY02277568)
-#    max 111700974 (JH980293) median 2033
-# %24.98 masked total, %28.26 masked real
+# 2229835716 bases (285847846 N's 1943987870 real 1369994081 upper
+#    573993789 lower) in 10420 sequences in 1 files
+# Total size: mean 213995.8 sd 2558422.6 min 1000 (ALIT01132924)
+#    max 83735184 (JH802061) median 2572
+# %25.74 masked total, %29.53 masked real
 
     rm /gbdb/ochPri3/ochPri3.2bit
     ln -s `pwd`/ochPri3.2bit /gbdb/ochPri3/ochPri3.2bit
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(DONE - 2013-05-29 - Hiram)
+#	(DONE - 2013-06-18 - Hiram)
     mkdir /hive/data/genomes/ochPri3/bed/gap
     cd /hive/data/genomes/ochPri3/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
@@ -179,20 +175,19 @@ XXX - running - Tue Jun 18 15:33:46 PDT 2013
     makeCytoBandIdeo.csh ochPri3
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2013-05-30 - Hiram)
+## WINDOWMASKER (DONE - 2013-06-18 - Hiram)
     mkdir /hive/data/genomes/ochPri3/bed/windowMasker
     cd /hive/data/genomes/ochPri3/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev ochPri3 > do.log 2>&1 &
-XXX - running - Tue Jun 18 15:38:46 PDT 2013
-    #   real    301m9.805s
+    #   about 195 minutes
 
     cat faSize.ochPri3.cleanWMSdust.txt
-# 2947024286 bases (341827925 N's 2605196361 real 1655356294 upper
-#    949840067 lower) in 8402 sequences in 1 files
-# Total size: mean 350752.7 sd 4055776.1 min 1000 (AAIY02277568) max
-#    111700974 (JH980293) median 2033
-# %32.23 masked total, %36.46 masked real
+# 2229835716 bases (285847846 N's 1943987870 real 1348364836
+#    upper 595623034 lower) in 10420 sequences in 1 files
+# Total size: mean 213995.8 sd 2558422.6 min 1000 (ALIT01132924)
+#    max 83735184 (JH802061) median 2572
+# %26.71 masked total, %30.64 masked real
 
     #  This is pretty good for WM, but RMSK isn't that bad either,
     #  so, using the RMSK result to mask the genome
@@ -202,51 +197,58 @@ XXX - running - Tue Jun 18 15:38:46 PDT 2013
 #  416158057 bases of 2947024286 (14.121%) in intersection
 
 ########################################################################
-# cpgIslands - (DONE - 2013-06-12 - Hiram)
+# cpgIslands - (DONE - 2013-06-20 - Hiram)
     mkdir /hive/data/genomes/ochPri3/bed/cpgIslands
     cd /hive/data/genomes/ochPri3/bed/cpgIslands
-    time doCpgIslands.pl ochPri3 > do.log 2>&1
-    #  real    8m6.460s
+    time doCpgIslands.pl ochPri3 > do.log 2>&1 &
+    #  Elapsed time: 14m35s
 
     cat fb.ochPri3.cpgIslandExt.txt
-    #   18449467 bases of 2605196361 (0.708%) in intersection
+    #   20228048 bases of 1943987870 (1.041%) in intersection
 
 #########################################################################
-# genscan - (DONE - 2013-06-12 - Hiram)
+# genscan - (DONE - 2013-06-20 - Hiram)
     mkdir /hive/data/genomes/ochPri3/bed/genscan
     cd /hive/data/genomes/ochPri3/bed/genscan
-    time doGenscan.pl ochPri3 > do.log 2>&1 
-    # real    14m37.851s
-XXX failing - trying last four jobs - Tue Jun 18 09:52:29 PDT 2013
-    #  real    47m7.823s
+    time doGenscan.pl ochPri3 > do.log 2>&1  &
+    #  real    85m9.645s
+    # last job finished manually:
+    time ./lastGsBig.csh JH802073 000 gtf/000/JH802073.gtf \
+           pep/000/JH802073.pep subopt/000/JH802073.bed
+    #  real    14m23.140s
+
+    time doGenscan.pl -continue=makeBed ochPri3 > makeBed.log 2>&1  &
+    #  real    4m41.262s
 
     cat fb.ochPri3.genscan.txt
-    #   52986693 bases of 1222864691 (4.333%) in intersection
+    #   58343898 bases of 1943987870 (3.001%) in intersection
     cat fb.ochPri3.genscanSubopt.txt
-    #   28313661 bases of 1222864691 (2.315%) in intersection
+    #   52334278 bases of 1943987870 (2.692%) in intersection
 
 ########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-06 - Hiram)
-    # Use -repMatch=950, based on size -- for human we use 1024
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-06-20 - Hiram)
+    # Use -repMatch=700, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 2605196361 / 2897316137 \) \* 1024
-    #	( 2605196361 / 2897316137 ) * 1024 = 920.755951
-    # round up to 950
+    calc \( 1943987870 / 2897316137 \) \* 1024
+    #   ( 1943987870 / 2897316137 ) * 1024 = 687.064678
 
-    # echTel1 was: -repMatch=1024
-    #  Wrote 9721 overused 11-mers to /cluster/bluearc/echTel1/11.ooc
+    # round up to 700
+
+    # ochPri2 was: -repMatch=700
+    #   Wrote 19533 overused 11-mers to jkStuff/ochPri2.11.ooc
 
     cd /hive/data/genomes/ochPri3
     blat ochPri3.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/ochPri3.11.ooc -repMatch=950
-    #	Wrote 21134 overused 11-mers to jkStuff/ochPri3.11.ooc
+      -makeOoc=jkStuff/ochPri3.11.ooc -repMatch=700
+    #  Wrote 19859 overused 11-mers to jkStuff/ochPri3.11.ooc
 
     # there are *only* bridged gaps, no lift file needed for genbank
     hgsql -N -e "select bridge from gap;" ochPri3 | sort | uniq -c
-    #   269444 yes
+    #   122542 yes
 
 #########################################################################
+XXX - ready for this
 # AUTO UPDATE GENBANK (DONE - 2013-06-07 - Hiram)
     # examine the file:
     /cluster/data/genbank/data/organism.lst

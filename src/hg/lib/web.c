@@ -41,8 +41,9 @@ static char *orgCgiName = "org";
 static char *cladeCgiName = "clade";
 static char *extraStyle = NULL;
 
-/* global: a cart for use in error handlers. */
+/* globals: a cart and db for use in error handlers. */
 static struct cart *errCart = NULL;
+static char *errDb = NULL;
 
 void textVaWarn(char *format, va_list args)
 {
@@ -66,10 +67,11 @@ pushAbortHandler(softAbort);
 hDumpStackPushAbortHandler();
 }
 
-void webPushErrHandlersCart(struct cart *cart)
-/* Push warn and abort handler for errAbort(); save cart for use in handlers. */
+void webPushErrHandlersCartDb(struct cart *cart, char *db)
+/* Push warn and abort handler for errAbort(); save cart and db for use in handlers. */
 {
 errCart = cart;
+errDb = db;
 webPushErrHandlers();
 }
 
@@ -239,20 +241,8 @@ if (endsWith(scriptName, "hgGateway") && geoMirrorEnabled())
         // We don't bother maintaining stuff in request URI, because it may contain items like hgsid and other host specific values
         int newUriSize = 2048;
 	char *newUri = needMem(newUriSize);
-	// TODO what about https?
-	safef(newUri, newUriSize, "http://%s:%s/cgi-bin/hgGateway?redirect=manual&source=%s", source, port, domain);
-
-	//empty TD disappears
-	/*
-	printf("<TR><TD COLSPAN=3 id='redirectTd' onclick=\"javascript:document.getElementById('redirectTd').innerHTML='';\">"
-	    "<center>"
-	    "You've been redirected to your nearest mirror - %s<br>"
-	    "<a href=\"%s\">Take me back to %s</a>"
-	    "</center>"
-	    "</TD></TR>\n"
-	    , domain, newUri, source );
-	    "<h3 style=\"background-color: #2636d1; text-align: center; color:#E0F0F0; margin-top:0px;\">"
-	*/
+	safef(newUri, newUriSize, "http%s://%s:%s/cgi-bin/hgGateway?redirect=manual&source=%s", 
+	    cgiServerHttpsIsOn() ? "s" : "", source, port, domain);
 
 	printf("<TR><TD COLSPAN=3 id='redirectTd' onclick=\"javascript:document.getElementById('redirectTd').innerHTML='';\">"
 	    "<div style=\"margin: 10px 25%%; border-style:solid; border-width:thin; border-color:#97D897;\">"
@@ -443,12 +433,14 @@ void webVaWarn(char *format, va_list args)
 gotWarnings = TRUE;
 boolean needStart = !webHeadAlreadyOutputed;
 if (needStart)
-    webStart(errCart, NULL, "Error");
+    {
+    // All callers of this (via webPushErrHandlersCartDb) have skipped Content-type
+    // because they want to output text unless we hit this condition:
+    puts("Content-type:text/html\n");
+    cartWebStart(errCart, errDb, "Error");
+    }
 htmlVaWarn(format, args);
-printf("\n<!-- HGERROR -->\n");
-printf("\n\n");
-if (needStart)
-    webEnd();
+printf("\n<!-- HGERROR -->\n\n\n");
 }
 
 
@@ -1243,7 +1235,7 @@ if (!fileExists(dyStringContents(realFileName)))
 // build and verify link path including timestamp in the form of dir/baseName + timeStamp or CGI Version + ext
 long mtime = fileModTime(dyStringContents(realFileName));
 struct dyString *linkWithTimestamp;
-if(hIsPreviewHost() || hIsPrivateHost())
+if ((cfgOption("versionStamped") == NULL) &&  (hIsPreviewHost() || hIsPrivateHost()))
     linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
 else
     linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);

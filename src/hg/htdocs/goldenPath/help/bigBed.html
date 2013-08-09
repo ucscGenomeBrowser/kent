@@ -38,6 +38,9 @@ for the chromosomal position you are currently viewing is locally cached as a
 &quot;sparse file&quot;.</P>
 
 <P>
+Additional indices can be created for the items in a bigBed file.  
+These indices can be used to support item search in track hubs. See <A HREF="#Ex3">Example 3</A> for an example of how to build an additional index.
+<P>
 See 
 <A HREF="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format"
 TARGET=_blank>this page</A> for help in selecting a graphing track data format
@@ -140,6 +143,7 @@ bed file.
   BED file contains data on only chromsome 21.
 </UL>
 
+<A NAME=Ex3></A>
 <H3>Example Three</H3>
 <P>In this example, you will create your own bigBed file from a fully-featured
 existing BED file that contains the standard BED fields up to and including 
@@ -152,6 +156,8 @@ a <TT>.as</TT> (AutoSQL) format file describing the fields.  See
 <A HREF="http://www.linuxjournal.com/article/5949" TARGET=_blank>this paper</A>
 for information on AutoSQL.  There are several sample <TT>.as</TT> files 
 <A HREF="http://genome-test.cse.ucsc.edu/~kent/src/unzipped/hg/lib/">here</A>.
+This example also demonstrates how to create extra indices on the name field,
+and the first of the extra fields to be used for track item search.
 </P>
 
 <UL>
@@ -165,9 +171,9 @@ for information on AutoSQL.  There are several sample <TT>.as</TT> files
   The <TT>.as</TT> file contains a description of the fields in the BED file.  
   This is required when the BED file contains a field for color.
  <LI> Download the <TT>bedToBigBed</TT> utility (see <EM>step 3</EM>).
- <LI> Run the utility to create the bigBed output file
+ <LI> Run the utility to create the bigBed output file with an index on the name field and the first extra field:
   (see <EM>step 5</EM>):<BR>
-  <TT><B>bedToBigBed</B> -as=bedExample2.as -type=bed9+2 bedExample2.bed
+  <TT><B>bedToBigBed</B> -as=bedExample2.as -type=bed9+2 -extraIndex=name,geneSymbol bedExample2.bed
    hg18.chrom.sizes myBigBed2.bb</TT>
  <LI> Place the bigBed file you just created (<TT>myBigBed2.bb</TT>) on a
   web-accessible server (see <EM>step 6</EM>).
@@ -182,6 +188,7 @@ for information on AutoSQL.  There are several sample <TT>.as</TT> files
  <LI> Create the custom track on the human assembly hg18 (Mar. 2006), and
   view it in the genome browser (see <EM>step 8</EM>). Note that the original
   BED file contains data only on chromsome 7.
+ <LI> If you are using the bigBed file in a track hub.  You can use the additional indices for track item search.  See the setting "searchIndex" in the <A href="http://hgwdev.cse.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html">Track Database Definition Document</A> for more information.
 </UL>
 
 <H3>Sharing Your Data with Others</H3>

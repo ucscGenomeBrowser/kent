@@ -1875,7 +1875,7 @@ if (kaList != NULL)
  	    pos->browserName = cloneString(kl->alias); // highlight change
 #endif
 	    pos->browserName = cloneString(kl->kgID);
-	    safef(cond_str, sizeof(cond_str), "kgID = '%s'", kl->kgID);
+	    sqlSafefFrag(cond_str, sizeof(cond_str), "kgID = '%s'", kl->kgID);
 	    answer = sqlGetField(db, "kgXref", "description", cond_str);
 	    if (answer != NULL) 
 		{
@@ -1961,7 +1961,7 @@ if (kpaList != NULL)
 /* 	    pos->browserName = cloneString(kl->alias); highlight change */
 	    pos->browserName = cloneString(kl->kgID);
 
-	    safef(cond_str, sizeof(cond_str), "kgID = '%s'", kl->kgID);
+	    sqlSafefFrag(cond_str, sizeof(cond_str), "kgID = '%s'", kl->kgID);
 	    answer = sqlGetField(db, "kgXref", "description", cond_str);
 	    if (answer != NULL) 
 		{
@@ -2565,7 +2565,7 @@ struct hgPositions *findGenomePosWeb(char *db, char *spec, char **retChromName,
 {
 struct hgPositions *hgp;
 if (useWeb)
-    webPushErrHandlers();
+    webPushErrHandlersCartDb(cart, db);
 hgp = genomePos(db, spec, retChromName, retWinStart, retWinEnd, cart, TRUE,
 		useWeb, hgAppName);
 if (useWeb)
@@ -3203,16 +3203,19 @@ else
 		  trackHubSkipHubName(database),
 		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
-if (htmlPath != NULL && fileExists(htmlPath))
-    readInGulp(htmlPath, &htmlString, &htmlStrLength);
-else if (   startsWith("http://" , htmlPath) ||
-	    startsWith("https://", htmlPath) ||
-	    startsWith("ftp://"  , htmlPath))
+if (htmlPath != NULL) 
     {
-    struct lineFile *lf = udcWrapShortLineFile(htmlPath, NULL, 256*1024);
-    htmlString =  lineFileReadAll(lf);
-    htmlStrLength = strlen(htmlString);
-    lineFileClose(&lf);
+    if (fileExists(htmlPath))
+	readInGulp(htmlPath, &htmlString, &htmlStrLength);
+    else if (   startsWith("http://" , htmlPath) ||
+		startsWith("https://", htmlPath) ||
+		startsWith("ftp://"  , htmlPath))
+	{
+	struct lineFile *lf = udcWrapShortLineFile(htmlPath, NULL, 256*1024);
+	htmlString =  lineFileReadAll(lf);
+	htmlStrLength = strlen(htmlString);
+	lineFileClose(&lf);
+	}
     }
 
 if (htmlStrLength > 0)

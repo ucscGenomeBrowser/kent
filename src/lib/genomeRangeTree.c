@@ -181,3 +181,14 @@ hashElFreeList(&chromList);
 return tmpTreeToString;
 }
 
+long long genomeRangeTreeSumRanges(struct genomeRangeTree *grt)
+/* Sum up all ranges in tree. */
+{
+long long sum = 0;
+struct hashEl *chrom, *chromList = hashElListHash(grt->hash);
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    rbTreeTraverseWithContext(chrom->val, rangeTreeSumRangeCallback, &sum);
+hashElFreeList(&chromList);
+return sum;
+}
+

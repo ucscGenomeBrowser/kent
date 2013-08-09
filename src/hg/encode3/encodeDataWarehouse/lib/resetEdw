@@ -1,7 +1,7 @@
 #!/bin/tcsh -efx
 
 # Destroy current encodeDataWarehouse and make a fresh one
-hgsql mysql -e "drop database encodeDataWarehouse"
+hgsql encodeDataWarehouse -e "drop database encodeDataWarehouse"
 
 # Create fifos for submission daemon.  Write 'hi' to
 # is so that it'll notice that the database is gone and kill itself
@@ -23,13 +23,15 @@ endif
 echo hi > $qaFifo &
 
 # Do the often time consuming removal of all data.
+#rm -rf /hive/groups/encode/encode3/encodeDataWarehouse
 rm -rf /scratch/kent/encodeDataWarehouse
 
 # Make new data directory.
+#mkdir /hive/groups/encode/encode3/encodeDataWarehouse
 mkdir /scratch/kent/encodeDataWarehouse
 
 # Create database and populate it with empty tables.
-hgsql mysql -e "create database encodeDataWarehouse"
+hgsql hgFixed -e "create database encodeDataWarehouse"
 hgsql encodeDataWarehouse < encodeDataWarehouse.sql
 
 # Create users
@@ -37,14 +39,22 @@ edwCreateUser kent@soe.ucsc.edu
 edwCreateUser euriehong@stanford.edu
 edwCreateUser cherry@stanford.edu
 edwCreateUser vmalladi@stanford.edu
-edwCreateUser cricket@soe.ucsc.edu
+#edwCreateUser cricket@soe.ucsc.edu
+edwCreateUser cricketsloan@stanford.edu
 edwCreateUser etchan@stanford.edu
 edwCreateUser lrowe@stanford.edu
 edwCreateUser kate@soe.ucsc.edu
 edwCreateUser brianlee@soe.ucsc.edu
+edwCreateUser katrina@soe.ucsc.edu
+edwCreateUser chinhli@soe.ucsc.edu
 edwAddAssembly 9606 hg19 hg19 /gbdb/hg19/hg19.2bit -symLink=bcdbfbe9da62f19bee88b74dabef8cd3
 edwAddAssembly 10090 mm9 mm9 /gbdb/mm9/mm9.2bit -symLink=e47354d24b9d95e832c337d42b9f8f71
 edwAddAssembly 10090 mm10 mm10 /gbdb/mm10/mm10.2bit -symLink=fcfcc276799031793a513e2e9c07adad
+edwAddAssembly 10116 rn4 rn4 /gbdb/rn4/rn4.2bit -symLink=9f0ed3cd87ab900be5e8157dbeaee12e
+edwAddAssembly 7227 dm3 dm3 /gbdb/dm3/dm3.2bit -symLink=4ec509b470010829be44ed8e7bfd7f57
+edwAddAssembly 559292 sacCer3 sacCer3 /gbdb/sacCer3/sacCer3.2bit -symLink=880201a7d1ec95c0185b0b4783c80411
+edwAddAssembly 6239 ce10 ce10 /gbdb/ce10/ce10.2bit -symLink=3d0bab4bc255fc5b3276a476e13d230c
+edwAddAssembly 562 escCol1 escCol1 /hive/groups/encode/encode3/encValData/escCol1/escCol1.2bit
 edwAddSubscriber wgEncode 'echo good old %u from wgEncode' -tagPattern=wgEncode.ra
 edwAddQaEnrichTarget open hg19 /hive/groups/encode/encode3/encValData/hg19/regions/open.bb
 edwAddQaEnrichTarget exon hg19 /hive/groups/encode/encode3/encValData/hg19/regions/exon.bb
@@ -70,6 +80,13 @@ edwAddQaEnrichTarget intron mm10 /hive/groups/encode/encode3/encValData/mm10/reg
 edwAddQaEnrichTarget utr3 mm10 /hive/groups/encode/encode3/encValData/mm10/regions/utr3.bb
 edwAddQaEnrichTarget utr5 mm10 /hive/groups/encode/encode3/encValData/mm10/regions/utr5.bb
 edwAddQaEnrichTarget utr mm10 /hive/groups/encode/encode3/encValData/mm10/regions/utr.bb
+edwAddQaContamTarget hg19
+edwAddQaContamTarget mm10
+edwAddQaContamTarget ce10
+edwAddQaContamTarget dm3
+edwAddQaContamTarget rn4
+edwAddQaContamTarget sacCer3
+edwAddQaContamTarget escCol1
 hgsql encodeDataWarehouse -e 'create view files as select id,edwFileName,size,left(submitFileName,80) from edwFile where (errorMessage="" or errorMessage is NULL) and deprecated=""'
 hgsql encodeDataWarehouse -e 'create view enrichedFiles as select f.id,v.format,v.enrichedIn,e.enrichment,left(f.submitFileName,70) submitFileName from edwQaEnrich e,edwValidFile v,edwFile f,edwQaEnrichTarget t where e.fileId=f.id and v.fileId=f.id and t.id=e.qaEnrichTargetId and v.enrichedIn=t.name;'
 hgsql encodeDataWarehouse -e 'create view validFiles as select licensePlate as accession,fileId file,format,outputType output,experiment,replicate rep,enrichedIn,ucscDb,itemCount,mapRatio,depth from edwValidFile'

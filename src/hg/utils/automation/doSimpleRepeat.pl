@@ -348,6 +348,7 @@ sub doCleanup {
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 rm -rf TrfPart/*
+rm TrfPart
 if (-d /hive/data/genomes/$db/TrfPart) then
   rmdir /hive/data/genomes/$db/TrfPart
 endif

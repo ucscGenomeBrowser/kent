@@ -91,8 +91,8 @@ while (row2 != NULL)
 	gotAMatch = FALSE;
 	
 	/* get protein sequence */
-	sprintf(condStr, "acc='%s'", accession);
-	aaSeq = sqlGetField(conn4, UNIPROT_DB_NAME, "protein", "val", condStr);
+	sqlSafefFrag(condStr, sizeof condStr, "acc='%s'", accession);
+	aaSeq = sqlGetField(UNIPROT_DB_NAME, "protein", "val", condStr);
 	aaLen = strlen(aaSeq);
 
 	/* check AA (both base and substitition) of the AV entry against 

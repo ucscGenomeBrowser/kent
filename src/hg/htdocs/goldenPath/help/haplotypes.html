@@ -59,7 +59,7 @@ which are always shown as they appear on the positive ('+' or "forward") strand.
 
 <dl>
 <dt><B class='textOpt'>Haplotype Frequency</b></dt>
-<dd>Haplotype frequencies are based upon all releveant chromosomes in the data set.  The total
+<dd>Haplotype frequencies are based upon all relevant chromosomes in the data set.  The total
     number is almost always 2,184 (1,092 for Y and location-dependent for X).  Hover over
     the frequency calculations to show the number of a particular haplotype in the dataset 
     (<em>e.g.</em>, <span title='N=1327 of 2184'>"N=1327 of 2184"</span>).  
@@ -178,56 +178,62 @@ which are always shown as they appear on the positive ('+' or "forward") strand.
 
 <dt><B class='textOpt'>Populations</b></dt>
 <dd>Each haplotype is found in one or more subjects participating in phase 1 of the 
-    1000 Genomes project.  The distribution of the haplotypes across different population 
-    groups can be examined by pressing 
+    1000 Genomes project. The 1000 Genomes populations, <a href='#population'>defined below</a>,
+    are grouped into broad categories (a.k.a.
+    <a href="http://www.1000genomes.org/faq/which-populations-are-part-your-study" target=_blank>super
+    populations</a>). Haplotype distributions are available both for 1000 Genomes populations and
+    for the major groupings. They are hidden by default.
+    <p>
     <input type='button' style='font-size:.9em;' value='Show populations'
-    title='Show/Hide haplotype distribution across population groups' onclick='return false;'>. 
-    Press
+    title='Show/Hide haplotype distribution across population groups' onclick='return false;'>
+    displays the distribution of the haplotypes across the major population groups.</p>
+    <p>
     <input type='button' style='font-size:.9em;' value='1000 Genome groups' 
     title='Show haplotype distribution across 1000 Genome population groups' 
     onclick='return false;'> 
-    to display the distribution across a broader spectrum of groups 
-    (<A HREF='#population'>defined below</A>).  
-    Press 
+    displays the distribution across the more specific 1000 Genomes groups.</p>
+    <p>
     <input type='button' style='font-size:.9em;' value='Major groups' 
     title='Show haplotype distribution across major population groups' 
     onclick='return false;'> 
-    to return to the major grouping and 
+    changes display from the 1000 Genomes grouping to the major grouping.</p>
+    <p>
     <input type='button' style='font-size:.9em;' value='Hide populations' 
     title='Show/Hide haplotype distribution across population groups' onclick='return false;'> 
-    to hide these data again.  
-    <BR><BR>
-    
-    When shown, each population group is a column in the table which contains the percent of 
+    hides the population columns.</p>
+    <p>
+    Each population group is shown as a column in the table, and each row shows the percent of 
     that haplotype that is found in each group.  This is not the same as the percent of each 
     group that has the haplotype.  Hover over the distribution numbers to show the 
-    frequency of occurrence of the haplotype within each group.  <em>For example</em>, 
+    frequency of occurrence of the haplotype within each group.  For example, 
     <span title='N=304 of 1183 (found in 71.0&#37 of all ASN)'>hovering over <B>25.7</B> 
      might show "N=304 of 1183 (found in 71.0&#37 of all ASN)"</span>, 
     meaning that of the 1183 occurrences of the haplotype, 304 or 25.7&#37; are found in the 
     ASN group and that 71.0&#37; of all East Asian copies of this gene (in 1000 Genomes phase 1 
     data) match this haplotype.
     To see the number of 1000 genomes chromosomes covered for each group, hover over the 
-    column header (<em>e.g. </em> <span title='East Asian [N=572]'>ASN will usually show 
-                                              "East Asian [N=572]"</span>).
-    <BR><BR></dd>
+    column header (<em>e.g.</em>, <span title='East Asian [N=572]'>ASN will usually show 
+                                              "East Asian [N=572]"</span>).</p>
+    </dd>
 
 <dt><B class='textOpt'>Scoring</b></dt>
 <dd>By default, scoring is hidden. Three types of scores are provided to help users find 
     haplotype alleles that occur more or less frequently than expected or that have unusual 
-    distributions in populations. 
-    <A HREF='#scoring'>See definitions below</A>.  
-    To see the calculated scores, press
+    distributions in populations. <A HREF='#scoring'>See definitions below</A>.
+    <p>
     <input type='button' style='font-size:.9em;' value='Show scoring' 
-    title='Show/Hide all haploptye scores' onclick='return false;'>.  
-    <BR><BR></dd>
+    title='Show/Hide all haploptye scores' onclick='return false;'> displays all score columns.</p>
+    <p>
+    <input type='button' style='font-size:.9em;' value='Hide scoring' 
+    title='Show/Hide all haploptye scores' onclick='return false;'> hides all score columns.</p>
+    </dd>
 </dl>
 
 <h2 id='population'>Population Group definitions</h2>
 
 <p>The numbers listed here are of individuals, but the numbers used in generating 
 the haplotypes table are frequently the number of relevant chromosomes 
-(<em>e.g.</em> 2184 not 1092).</p>
+(<em>e.g.</em>, 2184 not 1092).</p>
 <h3>Major Groups</h3>
 <div class='textOpt'>Includes only major groups for which there are data in phase 1 of the 
 1000 Genomes project.</div>
@@ -329,7 +335,7 @@ any haplotype.</span>
     If the gene is on the negative ('-' or &quot;reverse&quot;) strand, all variant sites and 
     sequences will be presented with respect to the negative strand. This differs from the way 
     variants are displayed in the 1000 Genomes phase 1 variations track, which are always 
-    shown as they appear on the positive ('+' or "forward") strand. </li>
+    shown as they appear on the positive ('+' or &quot;forward&quot;) strand.</li>
 <!--    ID seems like a bad idea unless it is it's own column 
 <li id='noteHapId'>Hovering within the table column with the header "Reference Variants:" will 
     give an <span title='uc004cda.1:jfa'>ID</span> for each non-reference haplotype.  This 

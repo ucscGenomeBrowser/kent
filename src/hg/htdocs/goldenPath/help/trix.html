@@ -26,19 +26,20 @@
 A Trix index consists of a pair of files that allow for fast lookup of free text associated with a list of identifiers.
 A Trix index is created from a single line oriented text file using the program <TT>ixIxx</TT>.  
 Each line starts with an identifier, with the rest of the line being free text which is associated with the id.
+To complete the steps below you will need to download the <TT>ixIxx</TT> utility. For more information on downloading
+our command line utilities, please see these <A href="http://hgdownload.cse.ucsc.edu/downloads.html#source_downloads">instructions</a>.
 <P>
 To create a Trix index, follow these steps:<BR>
 <OL>
- <LI> prepare a text file that associates your id's with free text:<BR>
+ <LI> Prepare a text file that associates your id's with free text:<BR>
  <TT>id1 this is text for id1</TT><BR>
  <TT>id2 this is text for id2</TT><BR>
  <TT>id3 this is text for id3</TT><BR>
- <LI> run the <TT>ixIxx</TT> program on your text file.<BR>
-<TT>ixIxx input.txt myTrix.ix myTrix.ixx
+ <LI> Run the <TT>ixIxx</TT> program on your text file.<BR>
+<TT>ixIxx input.txt myTrix.ix myTrix.ixx</TT><BR>
 </OL>
-
-
-<H3>Troubleshooting</H3>
+If you want to use your Trix index in a track hub, see the <TT>searchTrix</TT> 
+setting in the <A href="http://hgwdev.cse.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html">Track Database Definition Document</A> for more information.
 </P>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>

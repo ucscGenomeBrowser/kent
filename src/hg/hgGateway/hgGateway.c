@@ -264,7 +264,7 @@ else
     /* tell html routines *not* to escape htmlOut strings*/
     htmlNoEscape();
     buffer[0] = 0;
-    if (*scientificName != 0)
+    if ((scientificName != NULL) && (*scientificName != 0))
 	{
 	if (sameString(clade,"ancestor"))
 	    safef(buffer, sizeof(buffer), "(<I>%s</I> Ancestor) ", scientificName);
@@ -315,8 +315,8 @@ if (thisNodeStr)
             char *sep = strchr(uri, '?') ? "&" : "?";
             int newUriSize = strlen(uri) + 1024;
             char *newUri = needMem(newUriSize);
-            // TODO what about https?
-            safef(newUri, newUriSize, "http://%s:%s%s%sredirect=auto&source=%s", newDomain, port, uri, sep, oldDomain);
+            safef(newUri, newUriSize, "http%s://%s:%s%s%sredirect=auto&source=%s", 
+		cgiServerHttpsIsOn() ? "s" : "", newDomain, port, uri, sep, oldDomain);
             struct dyString *dy = dyStringNew(256);
             dyStringPrintf(dy,
                            "HTTP/1.1 302 found: \n"

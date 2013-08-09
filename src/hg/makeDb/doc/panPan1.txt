@@ -425,7 +425,7 @@ close (FH);
     #   16113070 bases of 2725905606 (0.591%) in intersection
 
 #########################################################################
-# genscan - (working - 2013-03-07 - Chin)
+# genscan - (DONE - 2013-03-07,06-12 - Chin, Hiram)
     mkdir /hive/data/genomes/panPan1/bed/genscan
     cd /hive/data/genomes/panPan1/bed/genscan
     screen -S panPan1-genScan
@@ -443,32 +443,82 @@ close (FH);
     # Submission to last job:        394319s    6571.98m   109.53h    4.56d
 
     # Every contig runs ok except JH650633 which is one with max 101998900 bases
-    # re-run it on hgwdev
-./runGsBig.csh JH650633 002 {check out exists gtf/002/JH650633.gtf} {check out exists pep/002/JH650633.pep} {check out exists subopt/002/JH650633.bed}
+    # Break it up into pieces
+    mkdir /hive/data/genomes/panPan1/bed/genscan/JH650633
+    cd /hive/data/genomes/panPan1/bed/genscan/JH650633
 
-    ssh hgwdev
-    screen -S JH650633-genscan 
-    cd /hive/data/genomes/panPan1/bed/genscan
-XXXX 2013-03-18 12:05 PM change window to 2000000
-    /cluster/bin/x86_64/gsBig hardMaskedFa/002/JH650633.fa \ 
-    gtf/002/JH650633.gtf pep/002/JH650633.pep subopt/002/JH650633.bed \
-    -exe=/scratch/data/genscan/genscan \
-    -par=/scratch/data/genscan/HumanIso.smat \  
-    -tmp=/tmp -window=2000000 \
-    > JH650633.gsBig.log 2>&1
+    # survey the gap sizes:
+    faCount ../hardMaskedFa/002/JH650633.fa
+#          len          A       C      G        T       N       cpg
+# total   101998900  1438365 1099634 1107292 1441748 96911861  53723
+    time findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../hardMaskedFa/002/JH650633.fa > findMotif.txt 2>&1
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    ave -col=5 allGaps.bed
+# Q1 23.000000
+# median 32.000000
+# Q3 68.000000
+# average 1838.167387
+# min 1.000000
+# max 8710995.000000
+# count 52722
+# total 96911861.000000
+# standard deviation 102171.217190
+    # this sequence is almost all gap: 5087039/101998900 == .049873
 
-/cluster/bin/x86_64/gsBig $seqFile $resultGtf -trans=$resultPep -subopt=$resultSubopt -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/tmp -window=2400000
+    faSplit -lift=JH650633.lift gap ../hardMaskedFa/002/JH650633.fa \
+       1000000 split/s.
+    # verify nothing lost, counts are the same as above for the ACGT bases:
+    faCount split/s*.fa
+#          len     A       C      G        T       N     cpg
+total   9750984 1438365 1099634 1107292 1441748 4663945 53723
 
-./runGsBig.csh JH650633 002 {check out exists gtf/002/JH650633.gtf} {check out exists pep/002/JH650633.pep} {check out exists subopt/002/JH650633.bed}
-     
+    echo '#!/bin/sh' > cmdList.sh
+    ls split | while read F
+do
+echo "/cluster/bin/x86_64/gsBig split/${F} gtf/${F}.gtf -trans=pep/${F}.pep -subopt=subopt/${F}.bed -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/tmp -window=2400000 &"
+done >> cmdList.sh
+    echo "wait" >> cmdList.sh
+    chmod +x cmdList.sh
+    mkdir gtf pep subopt
+    time ./cmdList.sh
+    # about 25 seconds
 
 
+    # the sed mangling will provide unique names for them all, but they
+    #	will not be in the strict numerical order that genscan usually produces
+    cat gtf/s*.fa.gtf | liftUp -type=.gtf stdout JH650633.lift error stdin \
+	| sed -e "s/s0\([0-9][0-9]\)/JH650633_\1/g" > JH650633.gtf
+    cat subopt/s*.bed | liftUp -type=.bed stdout JH650633.lift error stdin \
+	| sed -e "s/s0\([0-9][0-9]\)/JH650633_\1/g" > JH650633.subopt.bed
+    cat pep/s*.pep | sed -e "s/s0\([0-9][0-9]\)/JH650633_\1/g" \
+       > JH650633.pep
+    # put those results in place where they would have been:
+    ls -l ../gtf/002/JH650633.gtf ../pep/002/JH650633.pep ../subopt/002/JH650633.bed
+# -rw-rw-r-- 1 chinhli genecats 0 Jun 10 11:07 ../gtf/002/JH650633.gtf
+# -rw-rw-r-- 1 chinhli genecats 0 Jun 10 11:07 ../pep/002/JH650633.pep
+# -rw-rw-r-- 1 chinhli genecats 0 Jun 10 11:07 ../subopt/002/JH650633.bed
 
+    cp -p JH650633.gtf ../gtf/002/JH650633.gtf
+    cp -p JH650633.pep ../pep/002/JH650633.pep
+    cp -p JH650633.subopt.bed ../subopt/002/JH650633.bed
+    ls -l ../gtf/002/JH650633.gtf ../pep/002/JH650633.pep ../subopt/002/JH650633.bed
+# -rw-rw-r-- 1 hiram genecats 114019 Jun 12 09:30 ../gtf/002/JH650633.gtf
+# -rw-rw-r-- 1 hiram genecats  44169 Jun 12 09:41 ../pep/002/JH650633.pep
+# -rw-rw-r-- 1 hiram genecats  81458 Jun 12 09:32 ../subopt/002/JH650633.bed
 
+    # continuing:
+    time doGenscan.pl -continue=makeBed panPan1 > makeBed.log 2>&1
     cat fb.panPan1.genscan.txt
-    #   18118133 bases of 1041286029 (1.740%) in intersection
+    #   38972219 bases of 2725905606 (1.430%) in intersection
     cat fb.panPan1.genscanSubopt.txt
-    #   22582067 bases of 1041286029 (2.169%) in intersection
+    #   49045935 bases of 2725905606 (1.799%) in intersection
+
+#########################################################################
+# cytoBandIdeo - (DONE - 2013-06-12 - Hiram)
+    mkdir /hive/data/genomes/panPan1/bed/cytoBand
+    cd /hive/data/genomes/panPan1/bed/cytoBand
+    makeCytoBandIdeo.csh panPan1
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-03-08 - Chin)

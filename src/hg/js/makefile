@@ -34,7 +34,7 @@ alpha:
 
 beta:
 	${GITUP} 
-	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
+	${MAKE} doInstall DEST=${DOCUMENTROOT}-beta/js extra=-forceVersionNumbers
 
 clean:
 
@@ -45,7 +45,7 @@ install:
 
 doInstall:
 	@mkdir -p ${DEST}/
-	../utils/cpAndLinkToResourceFiles.pl -exclude='makefile' -versionFile=../inc/versionInfo.h -destDir=${DEST} ${JS_FILES}
+	../utils/cpAndLinkToResourceFiles.pl ${extra} -exclude='makefile' -versionFile=../inc/versionInfo.h -destDir=${DEST} ${JS_FILES}
 	for file in ${STATIC_FILES}; do \
 	    cp -p --update $$file ${DEST}; \
 	done

@@ -1,11 +1,6 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
 
-if ( "$HOST" != "hgwbeta" ) then
-    echo "error: you must run this script on hgwbeta! [${0}: `date`]"
-    exit 1
-endif
-
 cd $BUILDDIR
 set dir = "v"$BRANCHNN"_branch"
 cd $dir

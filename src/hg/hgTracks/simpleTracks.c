@@ -3664,7 +3664,7 @@ struct linkedFeaturesSeries *lfsFromBed(struct lfs *lfsbed)
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
-char **row, rest[32];
+char **row, rest[64];
 int rowOffset, i;
 struct linkedFeaturesSeries *lfs;
 struct linkedFeatures *lfList = NULL, *lf;
@@ -3679,7 +3679,7 @@ lfs->orientation = orientFromChar(lfsbed->strand[0]);
 for (i = 0; i < lfsbed->lfCount; i++)
     {
     AllocVar(lf);
-    sqlSafef(rest, sizeof rest, "qName = '%s'", lfsbed->lfNames[i]);
+    sqlSafefFrag(rest, sizeof rest, "qName = '%s'", lfsbed->lfNames[i]);
     sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom, lfsbed->lfStarts[i],
                      lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -7801,7 +7801,7 @@ conn = hAllocConn(database);
 hColor = hvGfxFindColorIx(hvg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 
 name = tg->itemName(tg, item);
-sqlSafef(condStr, sizeof condStr, "name='%s'", name);
+sqlSafefFrag(condStr, sizeof condStr, "name='%s'", name);
 rnaType = sqlGetField(database, "wgRna", "type", condStr);
 if (sameWord(rnaType, "miRna"))   color = MG_RED;
 if (sameWord(rnaType, "HAcaBox")) color = hColor;
@@ -12642,6 +12642,10 @@ registerTrackHandler("snp137", snp125Methods);
 registerTrackHandler("snp137Common", snp125Methods);
 registerTrackHandler("snp137Flagged", snp125Methods);
 registerTrackHandler("snp137Mult", snp125Methods);
+registerTrackHandler("snp138", snp125Methods);
+registerTrackHandler("snp138Common", snp125Methods);
+registerTrackHandler("snp138Flagged", snp125Methods);
+registerTrackHandler("snp138Mult", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);
@@ -12785,6 +12789,8 @@ registerTrackHandler("ncRna", ncRnaMethods);
 registerTrackHandler("rmskLinSpec", repeatMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("rmskNew", repeatMethods);
+registerTrackHandler("rmskJoinedBaseline", repeatMethods);
+registerTrackHandler("rmskJoinedCurrent", repeatMethods);
 registerTrackHandler("rmskCensor", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("chesSimpleRepeat", simpleRepeatMethods);

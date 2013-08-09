@@ -33,11 +33,12 @@ set CREATE_OR_LIST=`echo "${REPLACE_ENTIRELY}" | sed -e "s/ /|/g"`
 set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
      | egrep -v -w "${CREATE_OR_LIST}" | xargs echo \
      | sed -e "s/^/--ignore-table=hgcentral./; s/ / --ignore-table=hgcentral./g"`
+# --order-by-primary ... to make it dump rows in a stable repeatable order if it has an index
 # --skip-extended-insert ... to make it dump rows as separate insert statements
 # --skip-add-drop-table ... to avoid dropping existing tables
 # Note that INSERT is turned into REPLACE making our table contents dominant, 
 #      but users additional rows are preserved
-hgsqldump ${IGNORE_TABLES} --skip-extended-insert -c -h genome-centdb \
+hgsqldump ${IGNORE_TABLES} --skip-extended-insert --order-by-primary -c -h genome-centdb \
         --no-create-db --databases hgcentral  | grep -v "^USE " | sed -e \
         "s/genome-centdb/localhost/" \
     >> /tmp/hgcentraltemp.sql
@@ -48,11 +49,12 @@ set CREATE_OR_LIST=`echo "${CREATE_AND_FILL}" | sed -e "s/ /|/g"`
 set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
      | egrep -v -w "${CREATE_OR_LIST}" | xargs echo \
      | sed -e "s/^/--ignore-table=hgcentral./; s/ / --ignore-table=hgcentral./g"`
+# --order-by-primary ... to make it dump rows in a stable repeatable order if it has an index
 # --skip-extended-insert ... to make it dump rows as separate insert statements
 # --skip-add-drop-table ... to avoid dropping existing tables
 # Note that INSERT is turned into REPLACE making our table contents dominant, 
 #      but users additional rows are preserved
-hgsqldump ${IGNORE_TABLES} --skip-add-drop-table --skip-extended-insert -c -h genome-centdb \
+hgsqldump ${IGNORE_TABLES} --skip-add-drop-table --skip-extended-insert --order-by-primary -c -h genome-centdb \
         --no-create-db --databases hgcentral  | grep -v "^USE " | sed -e \
         "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/; s/INSERT/REPLACE/" \
     >> /tmp/hgcentraltemp.sql

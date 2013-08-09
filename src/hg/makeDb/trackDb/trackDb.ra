@@ -56,7 +56,7 @@ type bed 5 +
 
 track genMapDb
 shortLabel GenMapDB Clones
-longLabel GenMapDB BAC Clones 
+longLabel GenMapDB BAC Clones
 group map
 priority 7
 visibility hide
@@ -81,8 +81,8 @@ color 150,0,0
 type ctgPos
 
 track gold
-shortLabel Assembly 
-longLabel Assembly from Fragments 
+shortLabel Assembly
+longLabel Assembly from Fragments
 group map
 priority 10
 visibility hide
@@ -117,7 +117,7 @@ visibility hide
 type psl .
 
 track missingHg
-shortLabel Missing Human 
+shortLabel Missing Human
 longLabel Unplaced Human RefSeq Genes Blatted against Mouse Translated
 group map
 priority 13
@@ -132,7 +132,7 @@ shortLabel Coverage
 longLabel Clone Coverage/Fragment Position
 group map
 visibility hide
-altColor 180,180,180 
+altColor 180,180,180
 type clonePos
 
 track bacEndPairs
@@ -203,7 +203,7 @@ exonArrows off
 
 track chr18deletions
 shortLabel Chr18 Deletions
-longLabel Chromosome 18 Deletions 
+longLabel Chromosome 18 Deletions
 group map
 priority 21
 visibility hide
@@ -237,7 +237,7 @@ spectrum on
 type bed 4 +
 
 track GCwiggle
-shortLabel GC Samples 
+shortLabel GC Samples
 longLabel GC Percent Sample Track (every 20,000 bases)
 group map
 priority 25
@@ -246,7 +246,7 @@ chromosomes chr22,
 type sample
 
 track pGC
-shortLabel GC Samples 
+shortLabel GC Samples
 longLabel GC Percent Sample Track
 group map
 priority 26
@@ -254,7 +254,7 @@ visibility hide
 type sample
 
 track humanParalog
-shortLabel Human Paralog 
+shortLabel Human Paralog
 longLabel Human Paralogs Using Fgenesh++ Gene Predictions
 group map
 priority 28
@@ -274,7 +274,7 @@ type bed 4 .
 
 track celeraDupPositive
 shortLabel WSSD Duplication
-longLabel Sequence Identified as Duplicate by High-Depth Celera Reads 
+longLabel Sequence Identified as Duplicate by High-Depth Celera Reads
 group map
 priority 30
 visibility hide
@@ -414,7 +414,7 @@ url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
 
 track rgdSslp
 shortLabel RGD SSLP
-longLabel Rat Genome Database Simple Sequence Length Polymorphisms 
+longLabel Rat Genome Database Simple Sequence Length Polymorphisms
 group varRep
 priority 144.5
 visibility hide
@@ -664,7 +664,7 @@ type genePred genieAltPep
 
 track ensGene
 shortLabel Ensembl Genes
-longLabel Ensembl Genes 
+longLabel Ensembl Genes
 group genes
 priority 40
 visibility hide
@@ -683,7 +683,7 @@ url http://www.ensembl.org/perl/geneview?db=estgene&transcript=$$
 
 track sibGene
 shortLabel SIB Genes
-longLabel Swiss Institute of Bioinformatics Gene Predictions from mRNA and ESTs 
+longLabel Swiss Institute of Bioinformatics Gene Predictions from mRNA and ESTs
 group  genes
 priority 41.4
 visibility hide
@@ -725,7 +725,7 @@ group genes
 priority 44
 visibility hide
 color 170,100,0
-type genePred npredPep 
+type genePred npredPep
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=$$
 
 track twinscan
@@ -745,7 +745,7 @@ priority 45
 visibility hide
 color 0,100,100
 altColor 0,50,50
-type genePred 
+type genePred
 
 track contrastGene
 shortLabel CONTRAST
@@ -807,7 +807,7 @@ type genePred genscanPep
 
 track genscanExtra
 shortLabel Genscan Extra
-longLabel Genscan Extra (Suboptimal) Exon Predictions 
+longLabel Genscan Extra (Suboptimal) Exon Predictions
 group genes
 priority 51
 visibility hide
@@ -953,10 +953,10 @@ longLabel UniGene Alignments and SAGE Info
 group rna
 priority 70
 visibility hide
-type psl . 
+type psl .
 
 track rnaCluster
-shortLabel Gene Bounds 
+shortLabel Gene Bounds
 longLabel Gene Boundaries as Defined by RNA and Spliced EST Clusters
 group rna
 priority 71
@@ -965,7 +965,7 @@ color 200,0,50
 type bed 12 .
 
 track genieBounds
-shortLabel Clone Bounds 
+shortLabel Clone Bounds
 longLabel Clone Boundaries from EST Mate Pairs
 group rna
 priority 72
@@ -992,7 +992,7 @@ type psl .
 
 track sibTxGraph
 shortLabel SIB Alt-Splicing
-longLabel Alternative Splicing Graph from Swiss Institute of Bioinformatics 
+longLabel Alternative Splicing Graph from Swiss Institute of Bioinformatics
 group rna
 priority 74.5
 visibility hide
@@ -1026,7 +1026,7 @@ visibility hide
 useScore 1
 color 255,64,64
 type bed 8 .
-url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$ 
+url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 urlLabel miRBase:
 
 track allenBrainAli
@@ -1079,7 +1079,7 @@ altColor 128,228,128
 type bed 4 +
 
 track firstEF
-shortLabel FirstEF 
+shortLabel FirstEF
 longLabel FirstEF: First-Exon and Promoter Prediction
 group regulation
 priority 90.1
@@ -1100,7 +1100,7 @@ color 0,100,0
 type bed 5 +
 
 track transfacHit
-shortLabel Transfac Hits 
+shortLabel Transfac Hits
 longLabel Transfac Transcription Factor Binding Sites Near Transcription Start
 group regulation
 priority 91
@@ -1118,7 +1118,7 @@ color 0,100,100
 type bed 4 +
 
 track triangleSelf
-shortLabel Golden Triangle  
+shortLabel Golden Triangle
 longLabel Golden Triangle Possible Transcription Factor Binding Sites
 group regulation
 priority 92
@@ -1136,7 +1136,7 @@ color 50,0,100
 type psl xeno
 
 track esRegGeneToMotif
-shortLabel Reg. Module 
+shortLabel Reg. Module
 longLabel Eran Segal Regulatory Module
 group regulation
 priority 93
@@ -1174,8 +1174,8 @@ color 12,12,120
 type bed 6 .
 
 track psuReg
-shortLabel Known Regulatory 
-longLabel Functional Regulatory Elements Compiled by Penn State 
+shortLabel Known Regulatory
+longLabel Functional Regulatory Elements Compiled by Penn State
 group regulation
 priority 97
 visibility hide
@@ -1255,7 +1255,7 @@ visibility hide
 color 0,60,120
 altColor 200,220,255
 spectrum on
-type psl xeno 
+type psl xeno
 
 track blatTetra
 shortLabel Tetra Blat
@@ -1309,7 +1309,7 @@ altColor 255,240,200
 type bed 4 +
 
 track ratChain
-shortLabel $o_Organism Chain 
+shortLabel $o_Organism Chain
 longLabel Chained Rat/$Organism Alignments
 group compGeno
 priority 133
@@ -1425,6 +1425,50 @@ exonArrows on
 type bed 6 .
 
 
+track snp138Common
+shortLabel Common SNPs(138)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Found in >= 1% of Samples
+group varRep
+priority 99.0891
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp138Seq
+snpExceptionDesc snp138ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+codingAnnotations snp138CodingDbSnp,
+
+track snp138Mult
+shortLabel Mult. SNPs(138)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 138) That Map to Multiple Genomic Loci
+group varRep
+priority 99.0893
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp138Seq
+snpExceptionDesc snp138ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+codingAnnotations snp138CodingDbSnp,
+
+track snp138
+shortLabel All SNPs(138)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 138)
+group varRep
+priority 99.0894
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+codingAnnotations snp138CodingDbSnp,
+
 track snp137Common
 shortLabel Common SNPs(137)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Found in >= 1% of Samples
@@ -1432,7 +1476,7 @@ group varRep
 priority 99.0901
 visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 snpSeq snp137Seq
 snpExceptionDesc snp137ExceptionDesc
 defaultGeneTracks knownGene
@@ -1449,7 +1493,7 @@ group varRep
 priority 99.0903
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 snpSeq snp137Seq
 snpExceptionDesc snp137ExceptionDesc
 defaultGeneTracks knownGene
@@ -1467,7 +1511,7 @@ group varRep
 priority 99.0904
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1482,7 +1526,7 @@ group varRep
 priority 99.0911
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 snpSeq snp135Seq
 snpExceptionDesc snp135ExceptionDesc
 defaultGeneTracks knownGene
@@ -1496,7 +1540,7 @@ group varRep
 priority 99.0912
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 snpSeq snp135Seq
 snpExceptionDesc snp135ExceptionDesc
 defaultGeneTracks knownGene
@@ -1509,7 +1553,7 @@ group varRep
 priority 99.0913
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 snpSeq snp135Seq
 snpExceptionDesc snp135ExceptionDesc
 defaultGeneTracks knownGene
@@ -1524,7 +1568,7 @@ group varRep
 priority 99.0914
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1537,7 +1581,7 @@ group varRep
 priority 99.0916
 visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 snpSeq snp134Seq
 snpExceptionDesc snp134ExceptionDesc
 defaultGeneTracks knownGene
@@ -1551,7 +1595,7 @@ group varRep
 priority 99.0917
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 snpSeq snp134Seq
 snpExceptionDesc snp134ExceptionDesc
 defaultGeneTracks knownGene
@@ -1564,7 +1608,7 @@ group varRep
 priority 99.0918
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 snpSeq snp134Seq
 snpExceptionDesc snp134ExceptionDesc
 defaultGeneTracks knownGene
@@ -1579,7 +1623,7 @@ group varRep
 priority 99.0919
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1592,7 +1636,7 @@ group varRep
 priority 99.0921
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 snpSeq snp132Seq
 snpExceptionDesc snp132ExceptionDesc
 defaultGeneTracks knownGene
@@ -1606,7 +1650,7 @@ group varRep
 priority 99.0922
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 snpSeq snp132Seq
 snpExceptionDesc snp132ExceptionDesc
 defaultGeneTracks knownGene
@@ -1619,7 +1663,7 @@ group varRep
 priority 99.0923
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 snpSeq snp132Seq
 snpExceptionDesc snp132ExceptionDesc
 defaultGeneTracks knownGene
@@ -1634,7 +1678,7 @@ group varRep
 priority 99.0925
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1644,9 +1688,9 @@ shortLabel SNPs (131)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 131)
 group varRep
 priority 99.093
-visibility hide 
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1656,9 +1700,9 @@ shortLabel SNPs (130)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 130)
 group varRep
 priority 99.094
-visibility dense 
+visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1668,54 +1712,54 @@ shortLabel SNPs (129)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 129)
 group varRep
 priority 99.095
-visibility dense 
+visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 
 track snp128
 shortLabel SNPs (128)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 128) 
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 128)
 group varRep
 priority 99.096
-visibility dense 
+visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 maxWindowToDraw 10000000
 type bed 6 +
 
 track snp127
 shortLabel SNPs (127)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 127) 
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 127)
 group varRep
 priority 99.097
-visibility dense 
+visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 maxWindowToDraw 10000000
 type bed 6 +
 
 track snp126
 shortLabel SNPs (126)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 126) 
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 126)
 group varRep
 priority 99.098
-visibility dense 
+visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 maxWindowToDraw 10000000
 type bed 6 +
 
 track snp125
-shortLabel SNPs 
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 125) 
+shortLabel SNPs
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 125)
 group varRep
 priority 99.099
-visibility dense 
+visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 maxWindowToDraw 10000000
 type bed 6 +
 
@@ -1802,6 +1846,29 @@ visibility hide
 useScore 1
 type bed 12 +
 
+track joinedRmsk
+compositeTrack on
+shortLabel RepeatMasker Visualization
+longLabel Detailed Visualization of RepeatMasker Annotations
+group varRep
+allButtonPair on
+priority 148.2
+visibility dense
+spectrum on
+type bed 3 +
+maxWindowToDraw 10000000
+canPack off
+
+	track rmskJoinedBaseline
+	parent joinedRmsk off
+	longLabel RepeatMasker v3.0.1 db20100302 : Browser Baseline Dataset
+	priority 1
+
+	track  rmskJoinedCurrent
+	parent joinedRmsk on
+	longLabel RepeatMasker v3.3.0 db20120124 : Current Dataset
+	priority 2
+
 track reconRepeat
 shortLabel Recon Repeats
 longLabel Repeats Determined with Recon
@@ -1840,7 +1907,7 @@ longLabel Microsatellites - Di-nucleotide and Tri-nucleotide Repeats
 group varRep
 priority 149.4
 visibility hide
-type bed 4 
+type bed 4
 
 track blastzSelfUnmasked
 shortLabel Self Unmasked
@@ -1853,7 +1920,7 @@ type psl xeno
 
 track olly25
 shortLabel Cross-hyb3 25
-longLabel Cross-hybridization Counts for Off-by-3 25-mers 
+longLabel Cross-hybridization Counts for Off-by-3 25-mers
 group x
 priority 148.5
 visibility hide
@@ -1861,7 +1928,7 @@ type sample 0 5 0.199
 
 track olly2
 shortLabel Cross-hyb2 25
-longLabel Cross-hybridization for Off-by-2 25-mers 
+longLabel Cross-hybridization for Off-by-2 25-mers
 group x
 priority 148.6
 visibility hide
@@ -1939,7 +2006,7 @@ gridDefault OFF
 color 0,128,255
 altColor 255,128,0
 spanList 1,1024
-type wig 0 100 
+type wig 0 100
 
 # when quality is a bigWig file
 track qualityBw
@@ -1955,7 +2022,7 @@ windowingFunction Mean
 gridDefault OFF
 color 0,128,255
 altColor 255,128,0
-type bigWig 0 100 
+type bigWig 0 100
 html quality
 
 track gc5Base
@@ -1973,7 +2040,7 @@ color 0,0,0
 altColor 128,128,128
 viewLimits 30:70
 spanList 5
-type wig 0 100 
+type wig 0 100
 
 # when gc5Base is a bigWig file
 track gc5BaseBw
@@ -1990,7 +2057,7 @@ windowingFunction Mean
 color 0,0,0
 altColor 128,128,128
 viewLimits 30:70
-type bigWig 0 100 
+type bigWig 0 100
 html gc5Base
 
 track ensemblGeneScaffold
@@ -2197,7 +2264,7 @@ track chainCanHg12
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
-priority 200 
+priority 200
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -2209,7 +2276,7 @@ track chainBorEut13
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
-priority 200 
+priority 200
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -2260,7 +2327,7 @@ group compGeno
 priority 209.1
 visibility hide
 spectrum on
-type netAlign ci2 chainCi2 
+type netAlign ci2 chainCi2
 otherDb ci2
 
 track blastSacCer1SG
@@ -2332,7 +2399,7 @@ type psl xeno
 
 track tblastHg16
 shortLabel tblastHg16
-longLabel  tblastHg16 
+longLabel  tblastHg16
 group x
 spectrum on
 priority 128
@@ -3232,7 +3299,7 @@ html numtSeq2012
     priority 1
     type bed 6 .
     html numtSeq2012
-   
+
     track numtSAssembled
     parent numtSeq2012
     shortLabel NumtS assembled

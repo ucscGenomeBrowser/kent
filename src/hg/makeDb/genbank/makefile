@@ -21,10 +21,10 @@ etc-update-server:
 etc-update: etc-update-server # alternative name
 
 install-rr: all ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad ${GB_BINARCH}/mrnaToGene ${GB_BINARCH}/hgLoadGenePred 
-	${MAKE} install PREFIX=/genbank
+	${MAKE} install PREFIX=qateam@hgwbeta.cse.ucsc.edu:/genbank
 
 etc-update-rr:
-	${MAKE} install-etc PREFIX=/genbank
+	${MAKE} install-etc PREFIX=qateam@hgwbeta.cse.ucsc.edu:/genbank
 
 # standard options to use for rsync
 rsyncOpts = --times --recursive --executability --omit-dir-times --relative
@@ -34,14 +34,12 @@ rsyncOpts = --times --recursive --executability --omit-dir-times --relative
 install: install-bin install-etc
 
 install-bin: check-prefix all
-	${MKDIR} ${PREFIX}
 	rsync ${rsyncOpts} bin ${PREFIX}
 	rsync ${rsyncOpts} lib ${PREFIX}
 
 # ensures that gitFiles is in PATH, otherwise a very bogus rsync results
 install-etc: check-prefix
 	@which gitFiles >/dev/null
-	${MKDIR} ${PREFIX}/etc
 	umask 002; rsync ${rsyncOpts} $$(gitFiles etc) ${PREFIX}
 
 check-prefix:

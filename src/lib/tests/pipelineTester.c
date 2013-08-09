@@ -29,7 +29,9 @@ errAbort(
     "   file is written to the pipeline.\n"
     "  -otherEnd=file - file for other end of pipeline\n"
     "  -stderr=file - file for stderr of pipeline\n"
-    "  -fdApi - use the file descriptor API\n",
+    "  -fdApi - use the file descriptor API\n"
+    "  -sigpipe - enable SIGPIPE.\n"
+    "  -maxNumLines - read or write this many lines and close (for testing -sigpipe)\n",
     msg);
 }
 
@@ -42,6 +44,8 @@ static struct optionSpec options[] =
     {"otherEnd", OPTION_STRING},
     {"stderr", OPTION_STRING},
     {"fdApi", OPTION_BOOLEAN},
+    {"sigpipe", OPTION_BOOLEAN},
+    {"maxNumLines", OPTION_INT},
     {NULL, 0},
 };
 
@@ -51,6 +55,8 @@ int expectExitCode = 0;   /* expected exit code */
 boolean fdApi = FALSE; /* use the file descriptor API */
 boolean isWrite = FALSE; /* make a write pipeline */
 boolean memApi = FALSE; /* test memory buffer API */
+boolean sigpipe = FALSE; /* enable sigpipe */
+int maxNumLines = INT_MAX;  /* number of lines to read or write */
 char *pipeDataFile = NULL;   /* use for input or output to the pipeline */
 char *otherEndFile = NULL;   /* file for other end of pipeline */
 char *stderrFile = NULL;   /* file for other stderr of pipeline */
@@ -125,13 +131,15 @@ void readTest(struct pipeline *pl)
 struct lineFile *pipeLf = pipelineLineFile(pl);
 FILE *dataFh = mustOpen(pipeDataFile, "w");
 char *line;
+int numLines = 0;
 
-while (lineFileNext(pipeLf, &line, NULL))
+while (lineFileNext(pipeLf, &line, NULL) && (numLines < maxNumLines))
     {
     fputs(line, dataFh);
     fputc('\n', dataFh);
     if (ferror(dataFh))
         errnoAbort("error writing data from pipeline to: %s", pipeDataFile);
+    numLines++;
     }
 
 carefulClose(&dataFh);
@@ -143,13 +151,15 @@ void writeTest(struct pipeline *pl)
 FILE *pipeFh = pipelineFile(pl);
 struct lineFile *dataLf = lineFileOpen(pipeDataFile, TRUE);
 char *line;
+int numLines = 0;
 
-while (lineFileNext(dataLf, &line, NULL))
+while (lineFileNext(dataLf, &line, NULL) && (numLines < maxNumLines))
     {
     fputs(line, pipeFh);
     fputc('\n', pipeFh);
     if (ferror(pipeFh))
         errnoAbort("error writing data to pipeline: %s", pipelineDesc(pl));
+    numLines++;
     }
 
 lineFileClose(&dataLf);
@@ -229,6 +239,8 @@ void pipelineTester(int nCmdsArgs, char **cmdsArgs)
 unsigned options = (isWrite ? pipelineWrite : pipelineRead);
 if (noAbort)
     options |= pipelineNoAbort;
+if (sigpipe)
+    options |= pipelineSigpipe;
 int startOpenCnt = countOpenFiles();
 char ***cmds = splitCmds(nCmdsArgs, cmdsArgs);
 
@@ -260,6 +272,8 @@ if (optionExists("exitCode"))
 isWrite = optionExists("write");
 memApi = optionExists("memApi");
 fdApi = optionExists("fdApi");
+sigpipe = optionExists("sigpipe");
+maxNumLines = optionInt("maxNumLines", INT_MAX);
 if (fdApi && memApi)
     errAbort("can't specify both -fdApi and -memApi");
 pipeDataFile = optionVal("pipeData", NULL);

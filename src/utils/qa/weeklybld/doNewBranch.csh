@@ -4,10 +4,6 @@
 #  Heather says perhaps running with "nohup" in front of the command might
 #  make it work better.
 #
-if ( "$HOST" != "hgwbeta" ) then
- echo "Error: this script must be run from hgwbeta."
- exit 1
-endif
 
 cd $WEEKLYBLD
 
@@ -63,9 +59,6 @@ echo
 if ( -e GitReports.ok ) then
     rm GitReports.ok
 endif
-#9403# if (-e 32bitUtils.ok) then
-#9403#     rm 32bitUtils.ok
-#9403# endif
 
 #echo debug: disabled cgiVersion
 ./updateCgiVersion.csh real
@@ -96,13 +89,9 @@ rm -f doNewGit.log
 ssh -n hgwdev $WEEKLYBLD/buildGitReports.csh branch real >& doNewGit.log &
 # note - we are now running it in the background on hgwdev
 
-echo
-#9403# echo  "NOW STARTING 32-BIT BUILD ON $BOX32 IN PARALLEL [${0}: `date`]"
-echo  "SKIP 32-BIT BUILD ON $BOX32 [${0}: `date`]"
-echo
-#9403# rm -f doNew32.log
-#echo debug: disabled parallel build 32bit utils on dev
-#9403# ssh -n $BOX32 "$WEEKLYBLD/doNewBranch32.csh opensesame" >& doNew32.log &
+#echo
+#echo  "SKIP 32-BIT BUILD ON $BOX32 [${0}: `date`]"
+#echo
 
 
 #---------------------
@@ -148,7 +137,6 @@ echo "v$BRANCHNN built successfully on beta (day 16)." | mail -s "v$BRANCHNN Bui
 
 echo
 echo "Waiting for the background beta:git-reports to finish [${0}: `date`]"
-#9403# echo "Waiting for the background ${BOX32}:doNewBranch32.csh to finish [${0}: `date`]"
 wait
 echo "Wait complete, checking results. [${0}: `date`]"
 if ( -e GitReports.ok ) then
@@ -171,10 +159,5 @@ else
     echo "Git Reports had some error, no ok file found. [${0}: `date`]"
 endif
 echo
-#9403# if (-e 32bitUtils.ok) then
-#9403#     echo "32-bit utils build finished ok. [${0}: `date`]"
-#9403# else
-#9403#     echo "32-bit utils build had some error, no ok file found. [${0}: `date`]"
-#9403# endif
 
 exit 0

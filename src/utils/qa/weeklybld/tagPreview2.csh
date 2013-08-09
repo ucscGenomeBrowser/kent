@@ -1,8 +1,4 @@
 #!/bin/tcsh
-if ( "$HOST" != "hgwbeta" ) then
- echo "Error: this script must be run from hgwbeta."
- exit 1
-endif
 
 cd $WEEKLYBLD
 

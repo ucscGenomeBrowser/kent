@@ -192,10 +192,7 @@ static struct genePos *genePosFromQuery(struct sqlConnection *conn, char *query,
 struct sqlResult *sr;
 char **row;
 struct genePos *gpList = NULL, *gp;
-char query2[1024];
-sqlSafef(query2, sizeof query2, "%-s", query); // just for side-effect of adding NOSQLINJ prefix
-
-sr = sqlGetResult(conn, query2);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(gp);
@@ -211,10 +208,13 @@ return gpList;
 struct genePos *knownPosAll(struct sqlConnection *conn)
 /* Get all positions in knownGene table. */
 {
+char query[1024];
+// just for side-effect of adding NOSQLINJ prefix
 if (showOnlyCanonical())
-    return genePosFromQuery(conn, genomeSetting("allGeneQuery"), FALSE);
+    sqlSafef(query, sizeof query, "%-s", genomeSetting("allGeneQuery"));       
 else
-    return genePosFromQuery(conn, genomeSetting("allTranscriptQuery"), FALSE);
+    sqlSafef(query, sizeof query, "%-s", genomeSetting("allTranscriptQuery"));
+return genePosFromQuery(conn, query, FALSE);
 }
 
 struct genePos *knownPosOne(struct sqlConnection *conn, char *name)
@@ -228,7 +228,9 @@ return genePosFromQuery(conn, query, FALSE);
 struct genePos *knownPosFirst(struct sqlConnection *conn)
 /* Get first gene in known gene table. */
 {
-char *query = genomeSetting("allGeneQuery");
+char query[1024];
+// just for side-effect of adding NOSQLINJ prefix
+sqlSafef(query, sizeof query, "%-s", genomeSetting("allGeneQuery"));       
 struct genePos *gp = genePosFromQuery(conn, query, TRUE);
 return gp;
 }

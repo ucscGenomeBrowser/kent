@@ -564,7 +564,6 @@ char query[4096];
 int waitTimeout = 24*60*60;  // 24 hours
 sqlSafef(query, sizeof query, "set wait_timeout=%d",waitTimeout);
 sqlUpdate(conn, query);
-fprintf(stderr,"%s\n",query);
 
 if (gOptions.flags & DBLOAD_INITIAL)
     checkInitialLoad(conn);

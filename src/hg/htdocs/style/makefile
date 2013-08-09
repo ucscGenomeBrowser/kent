@@ -18,7 +18,7 @@ alpha:
 
 beta:
 	${GITUP} 
-	${MAKE} doInstall DEST=${DOCUMENTROOT}/style
+	${MAKE} doInstall DEST=${DOCUMENTROOT}-beta/style extra=-forceVersionNumbers
 
 clean:
 
@@ -29,4 +29,4 @@ install:
 
 doInstall:
 	@mkdir -p ${DEST}/
-	../../utils/cpAndLinkToResourceFiles.pl -destDir=${DEST} -versionFile=../../inc/versionInfo.h ${CSS_FILES}
+	../../utils/cpAndLinkToResourceFiles.pl ${extra} -destDir=${DEST} -versionFile=../../inc/versionInfo.h ${CSS_FILES}

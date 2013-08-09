@@ -552,10 +552,10 @@ char cond_str[128];
 char *hggChrom, *hggStart, *hggEnd;
 char *displayId;
 
-safef(cond_str, sizeof(cond_str), "kgId='%s' and spID='%s'", mrnaID, spAcc);
+sqlSafefFrag(cond_str, sizeof(cond_str), "kgId='%s' and spID='%s'", mrnaID, spAcc);
 displayId  = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
 /* Feed hgGene with chrom, txStart, and txEnd data, otherwise it would use whatever are in the cart */
-safef(cond_str, sizeof(cond_str), "name='%s'", mrnaID);
+sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", mrnaID);
 hggChrom = sqlGetField(database, "knownGene", "chrom", cond_str);
 hggStart = sqlGetField(database, "knownGene", "txStart", cond_str);
 hggEnd   = sqlGetField(database, "knownGene", "txEnd", cond_str);
@@ -596,7 +596,7 @@ boolean hasPathway;
 
 if (hTableExists(database, "kgXref"))
     {
-    safef(cond_str, sizeof(cond_str), "kgID='%s'", mrnaName);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "kgID='%s'", mrnaName);
     geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
     if (geneSymbol == NULL)
         {
@@ -615,7 +615,7 @@ cgapID     = NULL;
 /*Process BioCarta Pathway link data */
 if (sqlTableExists(conn, "cgapBiocPathway"))
     {
-    safef(cond_str, sizeof(cond_str), "alias='%s'", geneSymbol);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "alias='%s'", geneSymbol);
     cgapID = sqlGetField(database, "cgapAlias", "cgapID", cond_str);
 
     if (cgapID != NULL)
@@ -635,7 +635,7 @@ if (sqlTableExists(conn, "cgapBiocPathway"))
 	    {
 	    biocMapID = row[0];
 	    hPrintf("<LI>BioCarta - &nbsp");
-	    safef(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', biocMapID, '\'');
+	    sqlSafefFrag(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', biocMapID, '\'');
 	    mapDescription = sqlGetField(database, "cgapBiocDesc", "description",cond_str);
 	    hPrintf("<A HREF = \"");
 	    hPrintf("http://cgap.nci.nih.gov/Pathways/BioCarta/%s", biocMapID);
@@ -665,7 +665,7 @@ if (sqlTableExists(conn, "keggPathway"))
             locusID = row[1];
 	    mapID   = row[2];
 	    hPrintf("<LI>KEGG - &nbsp");
-	    safef(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', mapID, '\'');
+	    sqlSafefFrag(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', mapID, '\'');
 	    mapDescription = sqlGetField(database, "keggMapDesc", "description", cond_str);
 	    hPrintf("<A HREF = \"");
 	    hPrintf("http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s", mapID, locusID);
@@ -694,7 +694,7 @@ if (sqlTableExists(conn, "bioCycPathway"))
             geneID  = row[1];
 	    mapID   = row[2];
 	    hPrintf("<LI>BioCyc - &nbsp");
-	    safef(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', mapID, '\'');
+	    sqlSafefFrag(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', mapID, '\'');
 	    mapDescription = sqlGetField(database, "bioCycMapDesc", "description", cond_str);
 	    hPrintf("<A HREF = \"");
 
@@ -764,8 +764,7 @@ while (row3 != NULL)
     gDatabase = row3[0];
     org       = row3[1];
     conn = sqlConnect(gDatabase);
-    safef(cond_str, sizeof(cond_str),
-    	  "alias='%s'", queryID);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "alias='%s'", queryID);
     answer = sqlGetField(gDatabase, "kgSpAlias", "count(distinct spID)", cond_str);
     sqlDisconnect(&conn);
 
@@ -859,7 +858,7 @@ while (row3 != NULL)
     proteinsConn = sqlConnect(protDbName);
 
     conn = sqlConnect(gDatabase);
-    safef(cond_str, sizeof(cond_str), "alias='%s' and spID != ''", queryID);
+    sqlSafefFrag(cond_str, sizeof(cond_str), "alias='%s' and spID != ''", queryID);
     answer = sqlGetField(gDatabase, "kgSpAlias", "count(distinct spID)", cond_str);
     if ((answer != NULL) && (!sameWord(answer, "0")))
 	{
@@ -881,9 +880,9 @@ while (row3 != NULL)
     	while (row != NULL)
 	    {
    	    spID = row[0];
-    	    safef(cond_str, sizeof(cond_str), "accession='%s'", spID);
+    	    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", spID);
     	    displayID = sqlGetField(protDbName, "spXref3", "displayID", cond_str);
-    	    safef(cond_str, sizeof(cond_str), "accession='%s'", spID);
+    	    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", spID);
     	    desc = sqlGetField(protDbName, "spXref3", "description", cond_str);
 
 	    /* display a protein */
@@ -972,7 +971,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 		}
 	    if (!skipIt)
 	    	{
-    		safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", taxonId);
+    		sqlSafefFrag(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", taxonId);
     		answer = sqlGetField(PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
 		hPrintf("<FONT SIZE=3><B>");
 		hPrintf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>%s</A>",

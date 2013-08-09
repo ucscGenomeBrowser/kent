@@ -375,9 +375,26 @@ canPack On
     html wgEncodeRegTfbsClustered.release2
     dataVersion ENCODE Jan 2011 Freeze
 
-    # This is candidate for release
+    # This was previous candidate for release (V2 format)
+    #track wgEncodeRegTfbsClusteredV3Slow
+    #release alpha
+    #shortLabel Slow Txn Factor ChIP
+    #longLabel Slow Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
+    #type factorSource
+    #superTrack wgEncodeReg dense
+    #sourceTable wgEncodeRegTfbsCellsV3
+    #inputTrackTable wgEncodeRegTfbsClusteredInputsV3
+    #inputTableFieldDisplay cellType factor antibody treatment lab
+    #controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    #visibility dense
+    #useScore 1
+    #priority 1.71
+    #maxWindowToDraw 10000000
+    #dataVersion ENCODE Jul 2012 Freeze
+
+    # This is candidate for release (V3 format)
     track wgEncodeRegTfbsClusteredV3
-    release alpha, beta
+    release alpha
     shortLabel Txn Factor ChIP
     longLabel Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
     type factorSource

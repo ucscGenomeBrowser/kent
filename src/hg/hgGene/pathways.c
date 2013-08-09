@@ -90,6 +90,8 @@ static void bioCycLink(struct pathwayLink *pl, struct sqlConnection *conn,
 char query[512], **row;
 struct sqlResult *sr;
 char *oldMapId = cloneString("");
+char *upperCaseGenome = cloneString(genome);
+toUpperN(upperCaseGenome, strlen(upperCaseGenome));
 
 sqlSafef(query, sizeof(query),
 	"select bioCycPathway.mapId,description"
@@ -104,7 +106,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!sameWord(oldMapId, row[0]))
     	{
 	hPrintf("<A HREF=\"http://biocyc.org/%s/new-image?type=PATHWAY&object=%s&detail-level=2\" TARGET=_blank>",
-    		genome, row[0]);
+    		upperCaseGenome, row[0]);
     	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
 	}
     oldMapId = cloneString(row[0]);	
@@ -155,12 +157,12 @@ else
     }
 if (isRgdGene(conn))
     {
-    safef(condStr, sizeof(condStr), "name='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", geneId);
     spID = sqlGetField(database, "rgdGene2ToUniProt", "value", condStr);
     }
 else
     {
-    safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "kgID='%s'", geneId);
     spID = sqlGetField(database, "kgXref", "spID", condStr);
     }
 
@@ -294,12 +296,12 @@ else
 
 if (isRgdGene(conn))
     {
-    safef(condStr, sizeof(condStr), "name='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", geneId);
     spID = sqlGetField(database, "rgdGene2ToUniProt", "value", condStr);
     }
 else
     {
-    safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
+    sqlSafefFrag(condStr, sizeof(condStr), "kgID='%s'", geneId);
     spID = sqlGetField(database, "kgXref", "spID", condStr);
     }
 

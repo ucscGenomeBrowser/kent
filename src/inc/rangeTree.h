@@ -85,6 +85,13 @@ struct range *rangeTreeMaxOverlapping(struct rbTree *tree, int start, int end);
 /* Return item that overlaps most with start-end. Not thread safe.  Trashes list used
  * by rangeTreeAllOverlapping. */
 
+void rangeTreeSumRangeCallback(void *item, void *context);
+/* This is a callback for rbTreeTraverse with context.  It just adds up
+ * end-start */
+
+long long rangeTreeSumRanges(struct rbTree *tree);
+/* Return sum of end-start of all items. */
+
 struct range *rangeTreeList(struct rbTree *tree);
 /* Return list of all ranges in tree in order.  Not thread safe. 
  * No need to free this when done, memory is local to tree. */

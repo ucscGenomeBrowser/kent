@@ -604,7 +604,7 @@ if (conn==NULL)
     if (conn == NULL) return NULL;
     }
     
-safef(condStr, sizeof(condStr), "oldDisplayId='%s'", oldSpDisplayId);
+sqlSafefFrag(condStr, sizeof(condStr), "oldDisplayId='%s'", oldSpDisplayId);
 newSpDisplayId = sqlGetField(PROTEOME_DB_NAME, "spOldNew", "newDisplayId", condStr);
     
 return(newSpDisplayId);
@@ -623,7 +623,7 @@ if (conn==NULL)
     if (conn == NULL) return NULL;
     }
 
-safef(condStr, sizeof(condStr), "newDisplayId='%s'", newSpDisplayId);
+sqlSafefFrag(condStr, sizeof(condStr), "newDisplayId='%s'", newSpDisplayId);
 oldSpDisplayId = sqlGetField(PROTEOME_DB_NAME, "spOldNew", "oldDisplayId", condStr);
     
 return(oldSpDisplayId);

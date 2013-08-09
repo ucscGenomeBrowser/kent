@@ -328,11 +328,11 @@ if (isFrameshift)
     {
     int len = strlen(aaSeq);
     char lengthNote[512];
-    safef(lengthNote, sizeof(lengthNote), "...(%d bases)", len);
+    safef(lengthNote, sizeof(lengthNote), "...(%d aa)", len);
     if (len > 5 + strlen(lengthNote))
 	safecpy(aaSeq+5, len+1-5, lengthNote);
     len = strlen(codonSeq);
-    safef(lengthNote, sizeof(lengthNote), "...(%d bases)", len);
+    safef(lengthNote, sizeof(lengthNote), "...(%d nt)", len);
     if (len > 12 + strlen(lengthNote))
 	safecpy(codonSeq+12, len+1-12, lengthNote);
     }

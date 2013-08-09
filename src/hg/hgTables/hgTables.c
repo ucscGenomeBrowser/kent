@@ -937,7 +937,8 @@ for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpLis
 
 /* Do some error checking for tracks with group names that are
  * not in database.  Just warn about them. */
-for (track = trackList; track != NULL; track = track->next)
+if (!trackHubDatabase(database))
+    for (track = trackList; track != NULL; track = track->next)
     {
     if (!hashLookup(groupsInDatabase, track->grp))
          warn("Track %s has group %s, which isn't in grp table",
@@ -1570,7 +1571,7 @@ void doLookupPosition(struct sqlConnection *conn)
 /* Handle lookup button press.   The work has actually
  * already been done, so just call main page. */
 {
-doMainPage(conn);
+doMainPage(conn, FALSE);
 }
 
 /* Remove any meta data variables from the cart. (Copied from above!) */
@@ -1781,7 +1782,7 @@ if (hIsCgbServer() || hIsGsidServer())
 else if (cartVarExists(cart, hgtaDoTest))
     doTest();
 else if (cartVarExists(cart, hgtaDoMainPage))
-    doMainPage(conn);
+    doMainPage(conn, FALSE);
 else if (cartVarExists(cart, hgtaDoSchema))
     doSchema(conn);
 else if (cartVarExists(cart, hgtaDoTopSubmit))
@@ -1889,8 +1890,9 @@ else if (cartVarExists(cart, hgtaDoClearUserRegions))
 else if (cartVarExists(cart, hgtaDoMetaData))
     doMetaData(conn);
 else	/* Default - put up initial page. */
-    doMainPage(conn);
+    doMainPage(conn, FALSE);
 cartRemovePrefix(cart, hgtaDo);
+hFreeConn(&conn);
 }
 
 char *excludeVars[] = {"Submit", "submit", NULL};
@@ -1972,15 +1974,22 @@ if (udcCacheTimeout() < timeout)
 knetUdcInstall();
 #endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
+/* Init track and group lists and figure out what page to put up. */
+initGroupsTracksTables();
 if (lookupPosition())
     {
-    /* Init track and group lists and figure out what page to put up. */
-    initGroupsTracksTables();
-
     if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
         doGetGreatOutput(dispatch);
     else
         dispatch();
+    }
+else
+    {
+    struct sqlConnection *conn = NULL;
+    if (!trackHubDatabase(database))
+	conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
+    doMainPage(conn, TRUE);
+    hFreeConn(&conn);
     }
 /* Save variables. */
 cartCheckout(&cart);

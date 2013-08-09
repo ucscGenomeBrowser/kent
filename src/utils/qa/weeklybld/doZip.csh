@@ -1,9 +1,5 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
-if ( "$HOST" != "hgwbeta" ) then
-    echo "error: dozip.csh must be executed from hgwbeta!"
-    exit 1
-endif
 
 echo "Make zip [${0}: `date`]"
 ./makeZip.csh

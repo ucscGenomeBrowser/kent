@@ -285,13 +285,13 @@ void doClearSubtrackMerge(struct sqlConnection *conn)
 {
 cartRemovePrefix(cart, hgtaSubtrackMergePrefix);
 cartRemovePrefix(cart, hgtaNextSubtrackMergePrefix);
-doMainPage(conn);
+doMainPage(conn, FALSE);
 }
 
 void doSubtrackMergeSubmit(struct sqlConnection *conn)
 /* Respond to submit on subtrack merge page. */
 {
 copyCartVars(cart, nextVars, curVars, ArraySize(curVars));
-doMainPage(conn);
+doMainPage(conn, FALSE);
 }
 

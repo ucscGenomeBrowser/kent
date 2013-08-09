@@ -24,17 +24,29 @@
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 		    <P>
 A twoBit file is a highly efficient way to store genomic sequence.
+The format is defined <A href="http://genome.ucsc.edu/FAQ/FAQformat.html#format7">here</A>. To complete the steps below you 
+will need to download the <TT>faToTwoBit</TT>, <TT>twoBitInfo</TT>, and <TT>twoBitToFa</TT> utilities. For more information 
+on downloading our command line utilities, please see these 
+<A href="http://hgdownload.cse.ucsc.edu/downloads.html#source_downloads">instructions</a>.
+
 <P>
 To create a twoBit file, follow these steps:<BR>
 
 <OL>
- <LI> prepare the sequence for your twoBit file in a FASTA formatted file.
- <LI> run the <TT>faToTwoBit</TT> program on your FASTA file.<BR>
+ <LI> Prepare the sequence for your twoBit file in a FASTA formatted file (i.e. genome.fa).
+ <LI> Run the <TT>faToTwoBit</TT> program on your FASTA file.<BR>
 
-<TT>faToTwoBit ricCom1.fa ricCom1.2bit</TT>
+<TT>faToTwoBit genome.fa genome.2bit</TT>
+
+<LI>Use <TT>twoBitInfo</TT> to verify the sequences in this assembly and create a chrom.sizes file which is useful in later processing to construct the big* files:
+<BR><TT>twoBitInfo genome.2bit stdout | sort -k2rn > genome.chrom.sizes</TT>
 </OL>
-
-<H3>Troubleshooting</H3>
+</P>
+<BR>The twoBit commands can function with the .2bit file at a URL:
+<BR><TT>twoBitInfo -udcDir=. http://your-website.edu/~user/genome.2bit | sort -k2nr > genome.chrom.sizes</TT>
+</P>
+<BR>Sequence can be extracted from the .2bit file with the twoBitToFa command, for example:
+<BR><TT>twoBitToFa -seq=chr1 -udcDir=. http://your-website.edu/~user/genome.2bit stdout > genome.chr1.fa</TT>
 </P>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>

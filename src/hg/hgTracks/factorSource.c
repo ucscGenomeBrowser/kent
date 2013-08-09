@@ -11,11 +11,12 @@
 #include "expRecord.h"
 #include "dystring.h"
 #include "txCluster.h"
+#include "factorSource.h"
 
-static struct bed *loadOne(char **row)
+static struct factorSource *loadOne(char **row)
 /* Load up factorSource from array of strings. */
 {
-return bedLoadN(row, 15);
+return factorSourceLoad(row);
 }
 
 static void loadAll(struct track *track)
@@ -27,17 +28,14 @@ bedLoadItem(track, track->table, (ItemLoader)loadOne);
 static int rightPixels(struct track *track, void *item)
 /* Return number of pixels we need to the right. */
 {
-struct bed *bed = item;
+struct factorSource *fs = item;
 struct dyString *dy = dyStringNew(0);
 int i;
-for (i=0; i<track->sourceCount; ++i)
+for (i=0; i<fs->expCount; ++i)
     {
-    char *label = track->sources[i]->name;
-    float score = bed->expScores[i];
-    if (score > 0.0)
-	{
-	dyStringAppend(dy, label);
-	}
+    int expNum = fs->expNums[i];
+    char *label = track->sources[expNum]->name;
+    dyStringAppend(dy, label);
     }
 int result = mgFontStringWidth(tl.font, dy->string);
 dyStringFree(&dy);
@@ -50,9 +48,8 @@ static void factorSourceDrawItemAt(struct track *track, void *item,
 /* Draw factorSource item at a particular position. */
 {
 /* Figure out maximum score and draw box based on it. */
-int i, rowOffset;
-struct bed *bed = item;
-double maxScore = 0.0;
+int rowOffset;
+struct factorSource *fs = item;
 char *motifTable = NULL;
 // TODO: motifTable shouldn't be hard coded.  There may be different versions suitable
 // for different TFBS tracks
@@ -60,19 +57,13 @@ char *motifTable = NULL;
 motifTable = TXCLUSTER_MOTIFS_TABLE;
 //#endif
 
-for (i=0; i<track->sourceCount; ++i)
-    {
-    float score = bed->expScores[i];
-    if (score > maxScore)
-        maxScore = score;
-    }
-int grayIx = grayInRange(bed->score, 0, 1000);
+int grayIx = grayInRange(fs->score, 0, 1000);
 color = shadesOfGray[grayIx];
 
 /* Calculate position, and draw box around where we are. */
 int heightPer = track->heightPer;
-int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
-int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int x1 = round((double)((int)fs->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)fs->chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
 if (w < 1)
     w = 1;
@@ -91,12 +82,12 @@ if (motifTable != NULL)
         char where[256];
         char **row;
 
-        sqlSafefFrag(where, sizeof(where), "name = '%s'", bed->name);
         // TODO: hard-coded tablename to remove
         // QUESTION: Is performance adequate with this design ?  Could query table once and
         // add motif ranges to items.
-        sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", bed->chrom, bed->chromStart,
-                         bed->chromEnd, where, &rowOffset);
+        sqlSafefFrag(where, sizeof(where), "name = '%s'", fs->name);
+        sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", fs->chrom, fs->chromStart,
+                         fs->chromEnd, where, &rowOffset);
         while((row = sqlNextRow(sr)) != NULL)
             {
             // highlight motif regions in green
@@ -120,18 +111,16 @@ if (vis == tvFull || vis == tvPack)
     {
     int x = x2 + tl.mWidth/2;
     int i;
-    for (i=0; i<track->sourceCount; ++i)
+    for (i=0; i<fs->expCount; ++i)
 	{
-	char *label = track->sources[i]->name;
+        int id = fs->expNums[i];
+	char *label = track->sources[id]->name;
 	int w = mgFontStringWidth(font, label);
-	float score = bed->expScores[i];
-	if (score > 0.0)
-	    {
-	    int grayIx = grayInRange(score, 0, 1000);
-	    int color = shadesOfGray[grayIx];
-	    hvGfxTextCentered(hvg, x, y, w, heightPer, color, font, label);
-	    x += w;
-	    }
+	float score = fs->expScores[i];
+        int grayIx = grayInRange(score, 0, 1000);
+        int color = shadesOfGray[grayIx];
+        hvGfxTextCentered(hvg, x, y, w, heightPer, color, font, label);
+        x += w;
 	}
     }
 }
@@ -151,7 +140,7 @@ void factorSourceMethods(struct track *track)
 /* Set up special methods for factorSource type tracks. */
 {
 /* Start out as a bed, and then specialize loader, mark self as packable. */
-track->bedSize = 15;
+track->bedSize = 5;
 bedMethods(track);
 track->drawItemAt = factorSourceDrawItemAt;
 track->drawItems = factorSourceDraw;

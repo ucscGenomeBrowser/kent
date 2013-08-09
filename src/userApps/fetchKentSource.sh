@@ -3,6 +3,12 @@
 # exit on any error:
 set -beEu -o pipefail
 
+# switching to beta for version 286
+export branch="beta"
+
+# version 285 needed the HEAD checkout to function OK
+# export branch="HEAD"
+
 # script to fetch extra source to use with the kent build,
 # and then selectively parts of the kent source tree, enough to
 # build just the user utilities
@@ -23,7 +29,7 @@ export ofN="of 5"
 
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 git archive --format=zip -9 --remote=git://genome-source.cse.ucsc.edu/kent.git \
---prefix=kent/ HEAD \
+--prefix=kent/ ${branch} \
 src/machTest.sh \
 src/ameme \
 src/aladdin \
@@ -88,7 +94,7 @@ unzip -o -q part${partNumber}Src.zip
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
 git archive --format=zip -9 --remote=git://genome-source.cse.ucsc.edu/kent.git \
---prefix=kent/ HEAD \
+--prefix=kent/ ${branch} \
 src/hg/gbToFaRa \
 src/hg/geneBounds \
 src/hg/genePredHisto \
@@ -152,7 +158,7 @@ unzip -o -q part${partNumber}Src.zip
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
 git archive --format=zip -9 --remote=git://genome-source.cse.ucsc.edu/kent.git \
---prefix=kent/ HEAD \
+--prefix=kent/ ${branch} \
 src/hg/pslFilter \
 src/hg/pslFilterPrimers \
 src/hg/pslGlue \
@@ -216,7 +222,7 @@ unzip -o -q part${partNumber}Src.zip
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
 git archive --format=zip -9 --remote=git://genome-source.cse.ucsc.edu/kent.git \
---prefix=kent/ HEAD \
+--prefix=kent/ ${branch} \
 src/hg/makeDb/makefile \
 src/hg/makeDb/hgAar \
 src/hg/makeDb/hgAddLiftOverChain \
@@ -280,7 +286,7 @@ unzip -o -q part${partNumber}Src.zip
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
 git archive --format=zip -9 --remote=git://genome-source.cse.ucsc.edu/kent.git \
---prefix=kent/ HEAD \
+--prefix=kent/ ${branch} \
 src/parasol \
 src/hg/pslToChain \
 src/hg/makeDb/outside \

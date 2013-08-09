@@ -7,6 +7,7 @@
  *                                     with no special type
  *     Transcription Factor Binding Sites (TFBS) - peaks from transcription factor ChIP-seq
  *                   across a number of transcription factors and cell lines. Stored in bed 15
+ *                   (or BED5+ factorSource format)
  *                   plus sourceTable with type factorSource */
  
 #include "common.h"
@@ -24,8 +25,9 @@
 #include "expRecord.h"
 #include "bed6FloatScore.h"
 #include "ra.h"
+#include "factorSource.h"
+// TODO: needed for conditional def/hard-coded table name (remove when this is fixed)
 #include "txCluster.h"
-
 
 static void printClusterTableHeader(struct slName *otherCols, 
 	boolean withAbbreviation, boolean withDescription, boolean withSignal)
@@ -206,7 +208,7 @@ freez(&vocabFile);
 dyStringFree(&query);
 }
 
-static void printFactorSourceTableHits(struct bed *cluster, struct sqlConnection *conn,
+static void printFactorSourceTableHits(struct factorSource *cluster, struct sqlConnection *conn,
 	char *sourceTable, char *inputTrackTable, 
 	struct slName *fieldList, boolean invert, char *vocab)
 /* Put out a lines in an html table that shows assayed sources that have hits in this
@@ -236,8 +238,18 @@ char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int sourceId = sqlUnsigned(row[0]);
-    double signal = cluster->expScores[sourceId];
-    boolean hit = (signal > 0);
+    boolean hit = FALSE;
+    int i;
+    double signal = 0.0;
+    for (i=0; i<cluster->expCount; i++)
+        {
+        if (cluster->expNums[i] == sourceId)
+            {
+            hit = TRUE;
+            signal = cluster->expScores[i];
+            break;
+            }
+        }
     if (hit ^ invert)
         {
 	printf("</TR><TR>\n");
@@ -291,7 +303,7 @@ hFreeConn(&conn);
 }
 
 void doPeakClusters(struct trackDb *tdb, char *item)
-/* Display detailed info about a cluster of peaks from other tracks. */
+/* Display detailed info about a cluster of DNase peaks from other tracks. */
 {
 int start = cartInt(cart, "o");
 char *table = tdb->table;
@@ -309,7 +321,7 @@ sqlSafef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
-    cluster = bedLoadN(row + rowOffset, 5);
+    cluster = bedLoadN(row+rowOffset, 5);
 sqlFreeResult(&sr);
 
 if (cluster != NULL)
@@ -349,7 +361,7 @@ hFreeConn(&conn);
 }
 
 void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start)
-/* Display detailed info about a cluster of peaks from other tracks. */
+/* Display detailed info about a cluster of TFBS peaks from other tracks. */
 {
 int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 char **row;
@@ -366,9 +378,9 @@ sqlSafef(query, sizeof(query),
 	tdb->table, item, seqName, start);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
-struct bed *cluster = NULL;
+struct factorSource *cluster = NULL;
 if (row != NULL)
-    cluster = bedLoadN(row + rowOffset, 15);
+    cluster = factorSourceLoad(row + rowOffset);
 sqlFreeResult(&sr);
 
 if (cluster != NULL)
