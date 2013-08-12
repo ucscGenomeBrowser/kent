@@ -2857,7 +2857,7 @@ noScoreFilter .
 release alpha
 
 track hgmd
-shortLabel HGMD variants
+shortLabel HGMD Variants
 longLabel Human Gene Mutation Database (public) variants
 group phenDis
 priority 30
