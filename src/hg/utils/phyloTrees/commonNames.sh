@@ -74,6 +74,7 @@ canFam2 -> Dog ;
 canFam3 -> Dog ;
 ailMel1 -> Panda ;
 myoDav1 -> David_s_myotis ;
+myoBra1 -> Brand_s_bat ;
 myoLuc1 -> Microbat ;
 myoLuc2 -> Microbat ;
 pteAle1 -> Black_flying_fox ;
@@ -114,6 +115,7 @@ falChe1 -> Saker_falcon ;
 falPer1 -> Peregrine_falcon ;
 melUnd1 -> Budgerigar ;
 anaPla1 -> Mallard_duck ;
+strCam1 -> Ostrich ;
 melGal1 -> Turkey ;
 galGal3 -> Chicken ;
 galGal4 -> Chicken ;
@@ -121,6 +123,7 @@ taeGut1 -> Zebra_finch ;
 taeGut2 -> Zebra_finch ;
 allMis1 -> Alligator ;
 croPor1 -> Crocodile ;
+gavGan1 -> Gharial ;
 latCha1 -> Coelacanth ;
 anoCar2 -> Lizard ;
 cheMyd1 -> Green_sea_turtle ;
@@ -150,4 +153,4 @@ astMex1 -> Mexican_tetra ;
 gadMor1 -> Atlantic_cod ;
 petMar1 -> Lamprey ;
 petMar2 -> Lamprey ;" \
-	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/David_s/David's/; s/Star_nosed/Star-nosed/; s/00*)/)/g; s/00*,/,/g"
+	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/Brand_s/Brand's/; s/David_s/David's/; s/Star_nosed/Star-nosed/; s/00*)/)/g; s/00*,/,/g"

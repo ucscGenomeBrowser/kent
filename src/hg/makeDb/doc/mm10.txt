@@ -9562,8 +9562,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed/lastzVicPac2.2013-06-19
     time doRecipBest.pl mm10 vicPac2 -buildDir=`pwd` -workhorse=hgwdev \
 	> best.log 2>&1 &
-XXX - running - Wed Jun 26 11:06:33 PDT 2013
-    #	real    824m37.107s
+    #	real    33m49.271s
 
     mkdir /hive/data/genomes/vicPac2/bed/blastz.mm10.swap
     cd /hive/data/genomes/vicPac2/bed/blastz.mm10.swap
@@ -9572,11 +9571,13 @@ XXX - running - Wed Jun 26 11:06:33 PDT 2013
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Wed Jun 26 11:06:33 PDT 2013
-    #	real    159m21.952s
+    #   real    85m53.924s
+
     cat fb.vicPac2.chainMm10Link.txt
-    #	610885692 bases of 1922910435 (31.769%) in intersection
+    #	783682127 bases of 2078582856 (37.703%) in intersection
+
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/vicPac2/bed
     ln -s blastz.mm10.swap lastz.mm10
 
+##############################################################################

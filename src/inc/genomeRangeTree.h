@@ -106,6 +106,8 @@ struct dyString *genomeRangeTreeToString(struct genomeRangeTree *tree);
  * Useful for testing.
  * Not thread-safe; uses globals */
 
+long long genomeRangeTreeSumRanges(struct genomeRangeTree *grt);
+/* Sum up all ranges in tree. */
 
 #endif /* GENOMERANGETREE_H */
 

@@ -44,8 +44,8 @@ static char *yalePseudoUrl = "http://tables.pseudogene.org/%s";
 static char *hgncUrl = "http://www.genenames.org/data/hgnc_data.php?match=%s";
 static char *geneCardsUrl = "http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s";
 static char *apprisHomeUrl = "http://appris.bioinfo.cnio.es/";
-static char *apprisGeneUrl = "http://appris.bioinfo.cnio.es/report.html?id=%s&namespace=Ensembl_Gene_Id";
-static char *apprisTranscriptUrl = "http://appris.bioinfo.cnio.es/report.html?id=%s&namespace=Ensembl_Transcript_Id";
+static char *apprisGeneUrl = "http://appris.bioinfo.cnio.es/report.html?id=%s&namespace=Ensembl_Gene_Id&specie=%s";
+static char *apprisTranscriptUrl = "http://appris.bioinfo.cnio.es/report.html?id=%s&namespace=Ensembl_Transcript_Id&specie=%s";
 
 static char *getBaseAcc(char *acc, char *accBuf, int accBufSize)
 /* get the accession with version number dropped. */
@@ -191,6 +191,22 @@ printf("<td>");
 prExtIdAnchor(id, urlTemplate);
 }
 
+static void prApprisTdAnchor(char *id, struct sqlConnection *conn, char *urlTemplate)
+/* print a gene or transcript link to APPRIS */
+{
+// under bar separated, lower case species name.
+char *speciesArg = hScientificName(sqlGetDatabase(conn));
+toLowerN(speciesArg, strlen(speciesArg));
+subChar(speciesArg, ' ', '_');
+
+char accBuf[64];
+printf("<td><a href=\"");
+printf(urlTemplate, getBaseAcc(id, accBuf, sizeof(accBuf)), speciesArg);
+printf("\" target=_blank>%s</a>", id);
+
+freeMem(speciesArg);
+}
+
 static void writePosLink(char *chrom, int chromStart, int chromEnd)
 /* write link to a genomic position */
 {
@@ -199,7 +215,7 @@ printf("<a href=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>",
        chrom, chromStart, chromEnd, chrom, chromStart+1, chromEnd);
 }
 
-static void writeBasicInfoHtml(struct trackDb *tdb, char *gencodeId, struct genePred *transAnno, struct wgEncodeGencodeAttrs *transAttrs,
+static void writeBasicInfoHtml(struct sqlConnection *conn, struct trackDb *tdb, char *gencodeId, struct genePred *transAnno, struct wgEncodeGencodeAttrs *transAttrs,
                                int geneChromStart, int geneChromEnd,
                                struct wgEncodeGencodeGeneSource *geneSource, struct wgEncodeGencodeTranscriptSource *transcriptSource,
                                bool haveTsl, struct wgEncodeGencodeTranscriptionSupportLevel *tsl)
@@ -235,7 +251,7 @@ printf("</tr>\n");
 
 printf("<tr><th>Strand<td>%s<td></tr>\n", transAnno->strand);
 
-printf("<tr><th><a href=\"%s\">Biotype</a><td>%s<td>%s</tr>\n", gencodeBiotypesUrl, transAttrs->transcriptType, transAttrs->geneType);
+printf("<tr><th><a href=\"%s\" target = _blank>Biotype</a><td>%s<td>%s</tr>\n", gencodeBiotypesUrl, transAttrs->transcriptType, transAttrs->geneType);
 
 printf("<tr><th>Status<td>%s<td>%s</tr>\n", transAttrs->transcriptStatus, transAttrs->geneStatus);
 
@@ -266,9 +282,8 @@ prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
 printf("</tr>\n");
 
 printf("<tr><th><a href=\"%s\" target=_blank>APPRIS</a>\n", apprisHomeUrl);
-char accBuf[64];
-prTdExtIdAnchor(getBaseAcc(transAttrs->transcriptId, accBuf, sizeof(accBuf)), apprisTranscriptUrl);
-prTdExtIdAnchor(getBaseAcc(transAttrs->geneId, accBuf, sizeof(accBuf)), apprisGeneUrl);
+prApprisTdAnchor(transAttrs->transcriptId, conn, apprisTranscriptUrl);
+prApprisTdAnchor(transAttrs->geneId, conn, apprisGeneUrl);
 printf("</tr>\n");
 
 // FIXME: add sequence here??
@@ -660,7 +675,7 @@ else
 cartWebStart(cart, database, "%s", header);
 printf("<H2>%s</H2>\n", header);
 
-writeBasicInfoHtml(tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource, haveTsl, tsl);
+writeBasicInfoHtml(conn, tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource, haveTsl, tsl);
 writeTagLinkHtml(tags);
 writeSequenceHtml(tdb, gencodeId, transAnno);
 if (haveRemarks)

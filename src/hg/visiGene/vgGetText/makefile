@@ -19,6 +19,11 @@ alpha:: compile
 	vgGetText ${CGI_BIN}/visiGeneData/visiGene.text ${ALPHA_DBS}
 	ixIxx ${CGI_BIN}/visiGeneData/visiGene.text ${CGI_BIN}/visiGeneData/visiGene.ix ${CGI_BIN}/visiGeneData/visiGene.ixx
 
+beta:: compile
+	${MKDIR} ${CGI_BIN}-beta/visiGeneData
+	vgGetText ${CGI_BIN}-beta/visiGeneData/visiGene.text ${ALPHA_DBS}
+	ixIxx ${CGI_BIN}-beta/visiGeneData/visiGene.text ${CGI_BIN}-beta/visiGeneData/visiGene.ix ${CGI_BIN}-beta/visiGeneData/visiGene.ixx
+
 compile: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/vgGetText $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/vgGetText${EXE}

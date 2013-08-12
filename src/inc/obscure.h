@@ -138,6 +138,9 @@ struct hash *hashTwoColumnFile(char *fileName);
 void shuffleArrayOfChars(char *array, int arraySize);
 /* Shuffle array of characters of given size given number of times. */
 
+void shuffleArrayOfInts(int *array, int arraySize);
+/* Shuffle array of ints of given size given number of times. */
+
 void shuffleArrayOfPointers(void *pointerArray, int arraySize);
 /* Shuffle array of pointers of given size given number of times. */
 

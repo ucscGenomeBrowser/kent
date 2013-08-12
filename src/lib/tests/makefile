@@ -42,7 +42,7 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 
 pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
 		pipelineRead pipelineReadMult pipelineReadFd pipelineReadMem \
-		pipelineExitCode pipelineWriteErr pipelineExecError
+		pipelineExitCode pipelineWriteErr pipelineExecError pipelineSigpipe
 
 pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
@@ -98,6 +98,11 @@ pipelineExecError: ${BIN_DIR}/pipelineTester mkdirs
 	if ${BIN_DIR}/pipelineTester -write -stderr=output/$@.err "./thatDoesNotCompute" 2> output/$@.parent.err ; then false else true ; fi
 	diff -b expected/$@.err output/$@.err
 	diff -b expected/$@.parent.err output/$@.parent.err
+
+# test setting SIGPIPE by generating lots of output and then prematurely closing the
+# pipe
+pipelineSigpipe: ${BIN_DIR}/pipelineTester mkdirs
+	${BIN_DIR}/pipelineTester -sigpipe -maxNumLines=3 -pipeData=/dev/null "awk 'BEGIN {while (1) {print "foo"}}'"
 
 ${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} ${L}
@@ -304,6 +309,11 @@ ${BIN_DIR}/hacTreeTest: hacTreeTest.o ${MYLIBS}
 udcTest: udcTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/udcTest udcTest.o ${MYLIBS} ${L}
 	${BIN_DIR}/udcTest
+
+testOutOfMem: testOutOfMem.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/testOutOfMem testOutOfMem.o ${MYLIBS} ${L}
+	# we expect this to errAbort because we allocate one byte too much beyond limit
+	-${BIN_DIR}/testOutOfMem 100000 1
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest

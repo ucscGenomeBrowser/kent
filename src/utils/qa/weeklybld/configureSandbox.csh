@@ -5,14 +5,6 @@
 # currently $2 must be an absolute path
 # because we change dir to $1.
 
-#9403# if (( "$HOST" != "hgwbeta" ) && ( "$HOST" != "$BOX32" ) && ( "$HOST" != "c6-test" )) then
-#9403#  echo "Error: this script must be run from hgwbeta or $BOX32. [${0}: `date`]"
-if (( "$HOST" != "hgwbeta" )  && ( "$HOST" != "c6-test" )) then
- echo "Error: this script must be run from hgwbeta or c6-test. [${0}: `date`]"
-
- exit 1
-endif
-
 if ("$1" == "") then
   echo "first parameter required, must specify sandbox location"
   exit 1

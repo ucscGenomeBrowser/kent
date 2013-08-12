@@ -76,9 +76,10 @@ enum pipelineOpts
     pipelineNoAbort    = 0x04, /* don't abort if a process exits non-zero,
                                 * wait will return exit code instead.
                                 * Still aborts if process signals. */
+    pipelineMemInput   = 0x08, /* pipeline takes input from memory (internal) */
     pipelineAppend     = 0x10, /* Append to output file (used only with pipelineWrite) */
-    /* these are internal options */
-    pipelineMemInput   = 0x08  /* pipeline takes input from memory */
+    pipelineSigpipe    = 0x20  /* enable sigpipe in the children and don't treat
+                                  as an error in the parent */
     };
 
 struct pipeline *pipelineOpenFd(char ***cmds, unsigned opts,

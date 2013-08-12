@@ -373,23 +373,25 @@ return runCmdLine(cmdLine);
 boolean validateRcc(char *fileName)
 /* Validate RCC file */
 {
-boolean result = (fileSize(fileName) > 0);
-if (result)
-    warn("File %s has type rcc", fileName);
-else
-    warn("Error: rcc file %s has size 0", fileName);
-return result;
+char cmdLine[1024];
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=rcc %s", validateFilesPath, fileName);
+return runCmdLine(cmdLine);
 }
  
 boolean validateIdat(char *fileName)
 /* Validate IDAT file */
 {
-boolean result = (fileSize(fileName) > 0);
-if (result)
-    warn("File %s has type idat", fileName);
-else
-    warn("Error: idat file %s has size 0", fileName);
-return result;
+char cmdLine[1024];
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=idat %s", validateFilesPath, fileName);
+return runCmdLine(cmdLine);
+}
+ 
+boolean validateFasta(char *fileName)
+/* Validate fasta file */
+{
+char cmdLine[1024];
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=fasta %s", validateFilesPath, fileName);
+return runCmdLine(cmdLine);
 }
  
 boolean validateUnknown(char *fileName)
@@ -433,6 +435,8 @@ else if (startsWith(format,"rcc"))
     result = validateRcc(fileName);
 else if (startsWith(format,"idat"))
     result = validateIdat(fileName);
+else if (startsWith(format,"fasta"))
+    result = validateFasta(fileName);
 else if (startsWith(format,"unknown"))
     result = validateUnknown(fileName);
 else

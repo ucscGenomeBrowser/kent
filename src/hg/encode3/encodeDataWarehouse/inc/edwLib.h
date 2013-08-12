@@ -55,6 +55,12 @@ struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email);
 struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email);
 /* Return user associated with email or put up error message. */
 
+struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email);
+/* Return user associated with that email or NULL if not found */
+
+void edwWarnUnregisteredUser(char *email);
+/* Put up warning message about unregistered user and tell them how to register. */
+
 int edwGetHost(struct sqlConnection *conn, char *hostName);
 /* Look up host name in table and return associated ID.  If not found
  * make up new host table entry. */
@@ -141,6 +147,9 @@ int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn)
 void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url);
 /* Add submission job to table and wake up daemon. */
 
+int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url);
+/* Return position of our URL in submission queue */
+
 struct edwValidFile *edwFindElderReplicates(struct sqlConnection *conn, struct edwValidFile *vf);
 /* Find all replicates of same output and format type for experiment that are elder
  * (fileId less than your file Id).  Younger replicates are responsible for taking care 
@@ -172,5 +181,31 @@ void edwPrintLogOutButton();
 
 struct dyString *edwFormatDuration(long long seconds);
 /* Convert seconds to days/hours/minutes. Return result in a dyString you can free */
+
+struct edwFile *edwFileInProgress(struct sqlConnection *conn, int submitId);
+/* Return file in submission in process of being uploaded if any. */
+
+struct edwScriptRegistry *edwScriptRegistryFromCgi();
+/* Get script registery from cgi variables.  Does authentication too. */
+
+void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags);
+/* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
+
+#define edwSampleTargetSize 250000  /* We target this many samples */
+
+void edwReserveTempFile(char *path);
+/* Call mkstemp on path.  This will fill in terminal XXXXXX in path with file name
+ * and create an empty file of that name.  Generally that empty file doesn't stay empty for long. */
+
+void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
+    char *fastqPath, struct edwValidFile *vf, FILE *bedF,
+    double *retMapRatio,  double *retDepth,  double *retSampleCoverage);
+/* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
+
+void edwMakeFastqStatsAndSample(struct sqlConnection *conn, long long fileId);
+/* Run fastqStatsAndSubsample, and put results into edwFastqFile table. */
+
+struct edwFastqFile *edwFastqFileFromFileId(struct sqlConnection *conn, long long fileId);
+/* Get edwFastqFile with given fileId or NULL if none such */
 
 #endif /* EDWLIB_H */

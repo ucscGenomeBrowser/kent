@@ -1,9 +1,4 @@
 #!/bin/tcsh
-if ( "$HOST" != "hgwbeta" ) then
- echo "Error: this script must be run from hgwbeta. [${0}: `date`]"
- exit 1
-endif
-
 cd $WEEKLYBLD
 
 echo "updating CGI version [${0}: `date`]"

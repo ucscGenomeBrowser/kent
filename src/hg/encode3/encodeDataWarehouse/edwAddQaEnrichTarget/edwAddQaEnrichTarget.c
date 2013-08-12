@@ -32,7 +32,7 @@ void edwAddQaEnrichTarget(char *name, char *db, char *path)
 /* edwAddQaEnrichTarget - Add a new enrichment target to warehouse. */
 {
 /* Figure out if we have this genome assembly */
-struct sqlConnection *conn = sqlConnect(edwDatabase);
+struct sqlConnection *conn = edwConnectReadWrite();
 char query[256 + PATH_LEN];
 sqlSafef(query, sizeof(query), "select id from edwAssembly where ucscDb='%s'", db);
 int assemblyId = sqlQuickNum(conn, query);

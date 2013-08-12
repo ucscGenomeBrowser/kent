@@ -39,7 +39,7 @@ static struct pipeline *compressPipeline = (struct pipeline *)NULL;
 
 
 // Null terminated list of CGI Variables we don't want to save permanently:
-char *excludeVars[] = {"Submit", "submit", NULL,};
+char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", NULL,};
 
 #define hgvaRange "position"
 #define hgvaRegionType "hgva_regionType"
@@ -700,7 +700,7 @@ startCollapsibleSection("filtersCons", "Conservation", FALSE);
 // Use a little table to indent radio buttons (if we do those) past checkbox:
 puts("<TABLE><TR><TD>");
 cartMakeCheckBox(cart, "hgva_require_consEl", FALSE);
-printf("</TD><TD>Include only the variants that overlap");
+printf("</TD><TD>Include only the variants that overlap:");
 if (slCount(elTrackRefList) == 1)
     {
     struct trackDb *tdb = elTrackRefList->val;
@@ -768,23 +768,16 @@ puts("<BR>");
 
 void submitAndDisclaimer()
 {
-puts("<BR>");
-puts("<div class='warn-note' style='border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;'>");
-puts("<p><span style='font-weight: bold; color: #c70000;'>NOTE:</span><br>");
-if (hIsPrivateHost())
-    puts("<span style='font-weight: bold; color: #c70000;'>THIS IS UNTESTED SOFTWARE. "
-	 "We are still working out the bugs. Feel free to play with this and tell us "
-	 "about the bugs, but treat results with extra skepticism.</span><br>");
+puts("<div id=disclaimerDialog title='NOTE'>");
 puts("This tool is for research use only. While this tool is open to the "
      "public, users seeking information about a personal medical or genetic "
      "condition are urged to consult with a qualified physician for "
      "diagnosis and for answers to personal questions.");
-puts("</p></div><BR>");
-printf("&nbsp;<img id='loadingImg' src='../images/loading.gif' />\n");
-printf("<span id='loadingMsg'></span>\n");
-cgiMakeButtonWithOnClick("startQuery", "Go!",
-			 "get the results of your query",
-			 "loadingImage.run(); return true;");
+puts("</div><BR>");
+printf("<div><img id='loadingImg' src='../images/loading.gif' />\n");
+printf("<span id='loadingMsg'></span></div>\n");
+cgiMakeOnClickButton("hgva.submitQueryIfDisclaimerAgreed();", "Get results");
+puts("<BR><BR>");
 }
 
 /*
@@ -814,6 +807,10 @@ jsInit();
 jsIncludeFile("jquery-ui.js", NULL);
 webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("hgVarAnnogrator.js", NULL);
+boolean alreadyAgreed = cartUsualBoolean(cart, "hgva_agreedToDisclaimer", FALSE);
+printf("<script>\n"
+       "$(document).ready(function() { hgva.disclaimer.init(%s, hgva.userClickedAgree); });\n"
+       "</script>\n", alreadyAgreed ? "true" : "false");
 addSomeCss();
 printAssemblySection();
 
@@ -1187,7 +1184,7 @@ struct hash *gratorsByName = hashNew(8);
 
 struct annoGrator *snpGrator = NULL;
 char *snpDesc = NULL;
-if (cartBoolean(cart, "hgva_rsId"))
+if (cartUsualBoolean(cart, "hgva_rsId", FALSE))
     snpGrator = gratorForSnpBed4(gratorsByName, "", assembly, chrom, agoNoConstraint, &snpDesc);
 
 // Now construct gratorList in the order in which annoFormatVep wants to see them,
@@ -1248,7 +1245,7 @@ htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
 setUdcCacheDir();
-boolean startQuery = (cgiUsualString("startQuery", NULL) != NULL);
+boolean startQuery = (cgiUsualString("hgva_startQuery", NULL) != NULL);
 if (startQuery)
     cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 else
@@ -1256,6 +1253,8 @@ else
 
 /* Set up global variables. */
 getDbAndGenome(cart, &database, &genome, oldVars);
+if (trackHubDatabase(database))
+    errAbort("Assembly Data Hubs not yet supported by the Variant Annotaion Integrator");
 regionType = cartUsualString(cart, hgvaRegionType, hgvaRegionTypeGenome);
 if (isEmpty(cartOptionalString(cart, hgvaRange)))
     cartSetString(cart, hgvaRange, hDefaultPos(database));

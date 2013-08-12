@@ -27,11 +27,18 @@ my %ends;   # key is chrom, value unimportant, indicates end==chromSize found
 
 open (FH, "<cytoBand.bed") or die "can not open cytoBand.bed";
 
+my $errors = 0;
 while (my $line = <FH>) {
     chomp $line;
     my ($chr, $start, $end, $name, $band) = split('\s+', $line);
-    die "start < 0 at $line" if ($start < 0);
-    die "end > $chromInfo{$chr} at $line" if ($end > $chromInfo{$chr});
+    if ($start < 0) {
+	printf STDERR "start < 0 at %s\n", $line;
+	++$errors;
+    }
+    if ($end > $chromInfo{$chr}) {
+	printf STDERR "end > %d at %s\n", $chromInfo{$chr}, $line;
+	++$errors;
+    }
     $zeros{$chr} = 1 if (0 == $start);
     $ends{$chr} = 1 if ($chromInfo{$chr} == $end);
 }
@@ -42,9 +49,15 @@ foreach my $chr (sort (keys %chromInfo)) {
     next if ($chr =~ m/random/);
     next if ($chr =~ m/chrM/);
     next if ($chr =~ m/chrUn/);
-    die "no zero coordinate on chrom $chr" if (!exists($zeros{$chr}));
-    die "no end coordinate on chrom $chr" if (!exists($ends{$chr}));
+    if (!exists($zeros{$chr})) {
+	printf STDERR "no zero coordinate on chrom %s\n", $chr;
+	++$errors;
+    }
+    if (!exists($ends{$chr})) {
+	printf STDERR "no end coordinate on chrom %s\n", $chr;
+	++$errors;
+    }
     ++$chrCount;
 }
 
-print "everything checks out OK on $chrCount chroms\n";
+print "everything checks out OK on $chrCount chroms\n" if ($errors == 0);

@@ -34,7 +34,7 @@ void edwUserSaveToDb(struct sqlConnection *conn, struct edwUser *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwUser *edwUserLoad(char **row);
 /* Load a edwUser from row fetched with select * from edwUser
@@ -105,7 +105,7 @@ void edwScriptRegistrySaveToDb(struct sqlConnection *conn, struct edwScriptRegis
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwScriptRegistry *edwScriptRegistryLoad(char **row);
 /* Load a edwScriptRegistry from row fetched with select * from edwScriptRegistry
@@ -180,7 +180,7 @@ void edwHostSaveToDb(struct sqlConnection *conn, struct edwHost *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwHost *edwHostLoad(char **row);
 /* Load a edwHost from row fetched with select * from edwHost
@@ -255,7 +255,7 @@ void edwSubmitDirSaveToDb(struct sqlConnection *conn, struct edwSubmitDir *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwSubmitDir *edwSubmitDirLoad(char **row);
 /* Load a edwSubmitDir from row fetched with select * from edwSubmitDir
@@ -315,7 +315,7 @@ struct edwFile
     char *tags;	/* CGI encoded name=val pairs from manifest */
     char *errorMessage;	/* If non-empty contains last error message from upload. If empty upload is ok */
     char *deprecated;	/* If non-empty why you shouldn't use this file any more. */
-    char *replacedBy;	/* If non-empty license plate of file that replaces this one. */
+    unsigned replacedBy;	/* If non-zero id of file that replaces this one. */
     };
 
 void edwFileStaticLoad(char **row, struct edwFile *ret);
@@ -334,7 +334,7 @@ void edwFileSaveToDb(struct sqlConnection *conn, struct edwFile *el, char *table
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwFile *edwFileLoad(char **row);
 /* Load a edwFile from row fetched with select * from edwFile
@@ -414,7 +414,7 @@ void edwSubmitSaveToDb(struct sqlConnection *conn, struct edwSubmit *el, char *t
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwSubmit *edwSubmitLoad(char **row);
 /* Load a edwSubmit from row fetched with select * from edwSubmit
@@ -486,7 +486,7 @@ void edwSubscriberSaveToDb(struct sqlConnection *conn, struct edwSubscriber *el,
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwSubscriber *edwSubscriberLoad(char **row);
 /* Load a edwSubscriber from row fetched with select * from edwSubscriber
@@ -558,7 +558,7 @@ void edwAssemblySaveToDb(struct sqlConnection *conn, struct edwAssembly *el, cha
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwAssembly *edwAssemblyLoad(char **row);
 /* Load a edwAssembly from row fetched with select * from edwAssembly
@@ -641,7 +641,7 @@ void edwValidFileSaveToDb(struct sqlConnection *conn, struct edwValidFile *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwValidFile *edwValidFileLoad(char **row);
 /* Load a edwValidFile from row fetched with select * from edwValidFile
@@ -680,6 +680,96 @@ void edwValidFileOutput(struct edwValidFile *el, FILE *f, char sep, char lastSep
 #define edwValidFileCommaOut(el,f) edwValidFileOutput(el,f,',',',');
 /* Print out edwValidFile as a comma separated list including final comma. */
 
+#define EDWFASTQFILE_NUM_COLS 29
+
+extern char *edwFastqFileCommaSepFieldNames;
+
+struct edwFastqFile
+/* info on a file in fastq short read format beyond what's in edwValidFile */
+    {
+    struct edwFastqFile *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID in this table */
+    unsigned fileId;	/* ID in edwFile table */
+    long long sampleCount;	/* # of reads in sample. */
+    long long basesInSample;	/* # of bases in sample. */
+    char *sampleFileName;	/* Name of file containing sampleCount randomly selected items from file. */
+    long long readCount;	/* # of reads in file */
+    long long baseCount;	/* # of bases in all reads added up */
+    double readSizeMean;	/* Average read size */
+    double readSizeStd;	/* Standard deviation of read size */
+    double readSizeMin;	/* Minimum read size */
+    double readSizeMax;	/* Maximum read size */
+    double qualMean;	/* Mean quality scored as 10*-log10(errorProbability) or close to it.  >25 is good */
+    double qualStd;	/* Standard deviation of quality */
+    double qualMin;	/* Minimum observed quality */
+    double qualMax;	/* Maximum observed quality */
+    char *qualType;	/* For fastq files either 'sanger' or 'illumina' */
+    int qualZero;	/* For fastq files offset to get to zero value in ascii encoding */
+    double atRatio;	/* Ratio of A+T to total sequence (not including Ns) */
+    double aRatio;	/* Ratio of A to total sequence (including Ns) */
+    double cRatio;	/* Ratio of C to total sequence (including Ns) */
+    double gRatio;	/* Ratio of G to total sequence (including Ns) */
+    double tRatio;	/* Ratio of T to total sequence (including Ns) */
+    double nRatio;	/* Ratio of N or . to total sequence */
+    double *qualPos;	/* Mean value for each position in a read up to some max. */
+    double *aAtPos;	/* % of As at each pos */
+    double *cAtPos;	/* % of Cs at each pos */
+    double *gAtPos;	/* % of Gs at each pos */
+    double *tAtPos;	/* % of Ts at each pos */
+    double *nAtPos;	/* % of '.' or 'N' at each pos */
+    };
+
+struct edwFastqFile *edwFastqFileLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwFastqFile from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwFastqFileFreeList(). */
+
+void edwFastqFileSaveToDb(struct sqlConnection *conn, struct edwFastqFile *el, char *tableName, int updateSize);
+/* Save edwFastqFile as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwFastqFile *edwFastqFileLoad(char **row);
+/* Load a edwFastqFile from row fetched with select * from edwFastqFile
+ * from database.  Dispose of this with edwFastqFileFree(). */
+
+struct edwFastqFile *edwFastqFileLoadAll(char *fileName);
+/* Load all edwFastqFile from whitespace-separated file.
+ * Dispose of this with edwFastqFileFreeList(). */
+
+struct edwFastqFile *edwFastqFileLoadAllByChar(char *fileName, char chopper);
+/* Load all edwFastqFile from chopper separated file.
+ * Dispose of this with edwFastqFileFreeList(). */
+
+#define edwFastqFileLoadAllByTab(a) edwFastqFileLoadAllByChar(a, '\t');
+/* Load all edwFastqFile from tab separated file.
+ * Dispose of this with edwFastqFileFreeList(). */
+
+struct edwFastqFile *edwFastqFileCommaIn(char **pS, struct edwFastqFile *ret);
+/* Create a edwFastqFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwFastqFile */
+
+void edwFastqFileFree(struct edwFastqFile **pEl);
+/* Free a single dynamically allocated edwFastqFile such as created
+ * with edwFastqFileLoad(). */
+
+void edwFastqFileFreeList(struct edwFastqFile **pList);
+/* Free a list of dynamically allocated edwFastqFile's */
+
+void edwFastqFileOutput(struct edwFastqFile *el, FILE *f, char sep, char lastSep);
+/* Print out edwFastqFile.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwFastqFileTabOut(el,f) edwFastqFileOutput(el,f,'\t','\n');
+/* Print out edwFastqFile as a line in a tab-separated file. */
+
+#define edwFastqFileCommaOut(el,f) edwFastqFileOutput(el,f,',',',');
+/* Print out edwFastqFile as a comma separated list including final comma. */
+
 #define EDWQAENRICHTARGET_NUM_COLS 5
 
 extern char *edwQaEnrichTargetCommaSepFieldNames;
@@ -711,7 +801,7 @@ void edwQaEnrichTargetSaveToDb(struct sqlConnection *conn, struct edwQaEnrichTar
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwQaEnrichTarget *edwQaEnrichTargetLoad(char **row);
 /* Load a edwQaEnrichTarget from row fetched with select * from edwQaEnrichTarget
@@ -760,7 +850,7 @@ struct edwQaEnrich
     struct edwQaEnrich *next;  /* Next in singly linked list. */
     unsigned id;	/* ID of this enrichment analysis */
     unsigned fileId;	/* File we are looking at skeptically */
-    unsigned qaEnrichTargetId;	/* Information about an target for this analysis */
+    unsigned qaEnrichTargetId;	/* Information about a target for this analysis */
     long long targetBaseHits;	/* Number of hits to bases in target */
     long long targetUniqHits;	/* Number of unique bases hit in target */
     double coverage;	/* Coverage of target - just targetUniqHits/targetSize */
@@ -784,7 +874,7 @@ void edwQaEnrichSaveToDb(struct sqlConnection *conn, struct edwQaEnrich *el, cha
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwQaEnrich *edwQaEnrichLoad(char **row);
 /* Load a edwQaEnrich from row fetched with select * from edwQaEnrich
@@ -823,6 +913,211 @@ void edwQaEnrichOutput(struct edwQaEnrich *el, FILE *f, char sep, char lastSep);
 #define edwQaEnrichCommaOut(el,f) edwQaEnrichOutput(el,f,',',',');
 /* Print out edwQaEnrich as a comma separated list including final comma. */
 
+#define EDWQACONTAMTARGET_NUM_COLS 2
+
+extern char *edwQaContamTargetCommaSepFieldNames;
+
+struct edwQaContamTarget
+/* A target for our contamination analysis. */
+    {
+    struct edwQaContamTarget *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID of this contamination target */
+    unsigned assemblyId;	/* Assembly we're aligning against to check  for contamination. */
+    };
+
+void edwQaContamTargetStaticLoad(char **row, struct edwQaContamTarget *ret);
+/* Load a row from edwQaContamTarget table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwQaContamTarget *edwQaContamTargetLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwQaContamTarget from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaContamTargetFreeList(). */
+
+void edwQaContamTargetSaveToDb(struct sqlConnection *conn, struct edwQaContamTarget *el, char *tableName, int updateSize);
+/* Save edwQaContamTarget as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwQaContamTarget *edwQaContamTargetLoad(char **row);
+/* Load a edwQaContamTarget from row fetched with select * from edwQaContamTarget
+ * from database.  Dispose of this with edwQaContamTargetFree(). */
+
+struct edwQaContamTarget *edwQaContamTargetLoadAll(char *fileName);
+/* Load all edwQaContamTarget from whitespace-separated file.
+ * Dispose of this with edwQaContamTargetFreeList(). */
+
+struct edwQaContamTarget *edwQaContamTargetLoadAllByChar(char *fileName, char chopper);
+/* Load all edwQaContamTarget from chopper separated file.
+ * Dispose of this with edwQaContamTargetFreeList(). */
+
+#define edwQaContamTargetLoadAllByTab(a) edwQaContamTargetLoadAllByChar(a, '\t');
+/* Load all edwQaContamTarget from tab separated file.
+ * Dispose of this with edwQaContamTargetFreeList(). */
+
+struct edwQaContamTarget *edwQaContamTargetCommaIn(char **pS, struct edwQaContamTarget *ret);
+/* Create a edwQaContamTarget out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaContamTarget */
+
+void edwQaContamTargetFree(struct edwQaContamTarget **pEl);
+/* Free a single dynamically allocated edwQaContamTarget such as created
+ * with edwQaContamTargetLoad(). */
+
+void edwQaContamTargetFreeList(struct edwQaContamTarget **pList);
+/* Free a list of dynamically allocated edwQaContamTarget's */
+
+void edwQaContamTargetOutput(struct edwQaContamTarget *el, FILE *f, char sep, char lastSep);
+/* Print out edwQaContamTarget.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwQaContamTargetTabOut(el,f) edwQaContamTargetOutput(el,f,'\t','\n');
+/* Print out edwQaContamTarget as a line in a tab-separated file. */
+
+#define edwQaContamTargetCommaOut(el,f) edwQaContamTargetOutput(el,f,',',',');
+/* Print out edwQaContamTarget as a comma separated list including final comma. */
+
+#define EDWQACONTAM_NUM_COLS 4
+
+extern char *edwQaContamCommaSepFieldNames;
+
+struct edwQaContam
+/* Results of contamination analysis of one file against one target */
+    {
+    struct edwQaContam *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID of this contamination analysis */
+    unsigned fileId;	/* File we are looking at skeptically */
+    unsigned qaContamTargetId;	/* Information about a target for this analysis */
+    double mapRatio;	/* Proportion of items that map to target */
+    };
+
+void edwQaContamStaticLoad(char **row, struct edwQaContam *ret);
+/* Load a row from edwQaContam table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwQaContam *edwQaContamLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwQaContam from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaContamFreeList(). */
+
+void edwQaContamSaveToDb(struct sqlConnection *conn, struct edwQaContam *el, char *tableName, int updateSize);
+/* Save edwQaContam as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwQaContam *edwQaContamLoad(char **row);
+/* Load a edwQaContam from row fetched with select * from edwQaContam
+ * from database.  Dispose of this with edwQaContamFree(). */
+
+struct edwQaContam *edwQaContamLoadAll(char *fileName);
+/* Load all edwQaContam from whitespace-separated file.
+ * Dispose of this with edwQaContamFreeList(). */
+
+struct edwQaContam *edwQaContamLoadAllByChar(char *fileName, char chopper);
+/* Load all edwQaContam from chopper separated file.
+ * Dispose of this with edwQaContamFreeList(). */
+
+#define edwQaContamLoadAllByTab(a) edwQaContamLoadAllByChar(a, '\t');
+/* Load all edwQaContam from tab separated file.
+ * Dispose of this with edwQaContamFreeList(). */
+
+struct edwQaContam *edwQaContamCommaIn(char **pS, struct edwQaContam *ret);
+/* Create a edwQaContam out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaContam */
+
+void edwQaContamFree(struct edwQaContam **pEl);
+/* Free a single dynamically allocated edwQaContam such as created
+ * with edwQaContamLoad(). */
+
+void edwQaContamFreeList(struct edwQaContam **pList);
+/* Free a list of dynamically allocated edwQaContam's */
+
+void edwQaContamOutput(struct edwQaContam *el, FILE *f, char sep, char lastSep);
+/* Print out edwQaContam.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwQaContamTabOut(el,f) edwQaContamOutput(el,f,'\t','\n');
+/* Print out edwQaContam as a line in a tab-separated file. */
+
+#define edwQaContamCommaOut(el,f) edwQaContamOutput(el,f,',',',');
+/* Print out edwQaContam as a comma separated list including final comma. */
+
+#define EDWQAREPEAT_NUM_COLS 4
+
+extern char *edwQaRepeatCommaSepFieldNames;
+
+struct edwQaRepeat
+/* What percentage of data set aligns to various repeat classes. */
+    {
+    struct edwQaRepeat *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID of this repeat analysis. */
+    unsigned fileId;	/* File we are analysing. */
+    char *repeatClass;	/* RepeatMasker high end classification,  or 'total' for all repeats. */
+    double mapRatio;	/* Proportion that map to this repeat. */
+    };
+
+void edwQaRepeatStaticLoad(char **row, struct edwQaRepeat *ret);
+/* Load a row from edwQaRepeat table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwQaRepeat *edwQaRepeatLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwQaRepeat from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaRepeatFreeList(). */
+
+void edwQaRepeatSaveToDb(struct sqlConnection *conn, struct edwQaRepeat *el, char *tableName, int updateSize);
+/* Save edwQaRepeat as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwQaRepeat *edwQaRepeatLoad(char **row);
+/* Load a edwQaRepeat from row fetched with select * from edwQaRepeat
+ * from database.  Dispose of this with edwQaRepeatFree(). */
+
+struct edwQaRepeat *edwQaRepeatLoadAll(char *fileName);
+/* Load all edwQaRepeat from whitespace-separated file.
+ * Dispose of this with edwQaRepeatFreeList(). */
+
+struct edwQaRepeat *edwQaRepeatLoadAllByChar(char *fileName, char chopper);
+/* Load all edwQaRepeat from chopper separated file.
+ * Dispose of this with edwQaRepeatFreeList(). */
+
+#define edwQaRepeatLoadAllByTab(a) edwQaRepeatLoadAllByChar(a, '\t');
+/* Load all edwQaRepeat from tab separated file.
+ * Dispose of this with edwQaRepeatFreeList(). */
+
+struct edwQaRepeat *edwQaRepeatCommaIn(char **pS, struct edwQaRepeat *ret);
+/* Create a edwQaRepeat out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaRepeat */
+
+void edwQaRepeatFree(struct edwQaRepeat **pEl);
+/* Free a single dynamically allocated edwQaRepeat such as created
+ * with edwQaRepeatLoad(). */
+
+void edwQaRepeatFreeList(struct edwQaRepeat **pList);
+/* Free a list of dynamically allocated edwQaRepeat's */
+
+void edwQaRepeatOutput(struct edwQaRepeat *el, FILE *f, char sep, char lastSep);
+/* Print out edwQaRepeat.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwQaRepeatTabOut(el,f) edwQaRepeatOutput(el,f,'\t','\n');
+/* Print out edwQaRepeat as a line in a tab-separated file. */
+
+#define edwQaRepeatCommaOut(el,f) edwQaRepeatOutput(el,f,',',',');
+/* Print out edwQaRepeat as a comma separated list including final comma. */
+
 #define EDWQAPAIRSAMPLEOVERLAP_NUM_COLS 7
 
 extern char *edwQaPairSampleOverlapCommaSepFieldNames;
@@ -856,7 +1151,7 @@ void edwQaPairSampleOverlapSaveToDb(struct sqlConnection *conn, struct edwQaPair
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwQaPairSampleOverlap *edwQaPairSampleOverlapLoad(char **row);
 /* Load a edwQaPairSampleOverlap from row fetched with select * from edwQaPairSampleOverlap
@@ -927,7 +1222,7 @@ void edwQaPairCorrelationSaveToDb(struct sqlConnection *conn, struct edwQaPairCo
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwQaPairCorrelation *edwQaPairCorrelationLoad(char **row);
 /* Load a edwQaPairCorrelation from row fetched with select * from edwQaPairCorrelation
@@ -998,7 +1293,7 @@ void edwJobSaveToDb(struct sqlConnection *conn, struct edwJob *el, char *tableNa
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwJob *edwJobLoad(char **row);
 /* Load a edwJob from row fetched with select * from edwJob
@@ -1069,7 +1364,7 @@ void edwSubmitJobSaveToDb(struct sqlConnection *conn, struct edwSubmitJob *el, c
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct edwSubmitJob *edwSubmitJobLoad(char **row);
 /* Load a edwSubmitJob from row fetched with select * from edwSubmitJob

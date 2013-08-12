@@ -133,7 +133,9 @@ db->organism = cloneString(hubGenome->organism);
 db->name = cloneString(hubGenome->name);
 db->active = TRUE;
 db->description = cloneString(hubGenome->description);
-db->orderKey = sqlUnsigned(hashFindVal(hubGenome->settingsHash, "orderKey"));
+char *orderKey = hashFindVal(hubGenome->settingsHash, "orderKey");
+if (orderKey != NULL)
+    db->orderKey = sqlUnsigned(orderKey);
 
 return db;
 }
@@ -246,6 +248,8 @@ struct trackHubGenome *genome = trackHubGetGenome(database);
 if (genome == NULL)
     return NULL;
 
+if (genome->tbf == NULL)
+    genome->tbf = twoBitOpen(genome->twoBitPath);
 if (!twoBitIsSequence(genome->tbf, chrom))
     return NULL;
 
@@ -277,6 +281,8 @@ struct trackHubGenome *genome = trackHubGetGenome(database);
 if (genome == NULL)
     return NULL;
 
+if (genome->tbf == NULL)
+    genome->tbf = twoBitOpen(genome->twoBitPath);
 struct chromInfo *ci, *ciList = NULL;
 struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
 
@@ -444,12 +450,21 @@ while ((ra = raNextRecord(lf)) != NULL)
 	{
 	//printf("reading genome %s twoBitPath %s\n", genome, el->twoBitPath);
 	el->description  = hashFindVal(ra, "description");
-	el->organism  = addHubName(hashFindVal(ra, "organism"), hub->name);
+	char *organism = hashFindVal(ra, "organism");
+	if (organism == NULL)
+	    errAbort("must have 'organism' set in assembly hub in stanza ending line %d of %s",
+		     lf->lineIx, lf->fileName);
+	el->organism  = addHubName(organism, hub->name);
 	hashReplace(ra, "organism", el->organism);
 	el->defaultPos  = hashFindVal(ra, "defaultPos");
+	if (el->defaultPos == NULL)
+	    errAbort("must have 'defaultPos' set in assembly hub in stanza ending line %d of %s",
+		     lf->lineIx, lf->fileName);
 	el->twoBitPath = trackHubRelativeUrl(url, twoBitPath);
-	el->tbf = twoBitOpen(el->twoBitPath);
-	hashReplace(ra, "htmlPath",trackHubRelativeUrl(url, hashFindVal(ra, "htmlPath")));
+
+	char *htmlPath = hashFindVal(ra, "htmlPath");
+	if (htmlPath != NULL)
+	    hashReplace(ra, "htmlPath",trackHubRelativeUrl(url, htmlPath));
 	if (groups != NULL)
 	    el->groups = trackHubRelativeUrl(url, groups);
 	addAssembly(genome, el, hub);
