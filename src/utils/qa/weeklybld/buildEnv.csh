@@ -14,13 +14,6 @@ setenv REPLYTO ann@soe.ucsc.edu
 
 setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
 
-setenv MYSQLINC /usr/include/mysql
-if ( "$MACHTYPE" == "x86_64" ) then
-    setenv MYSQLLIBS '/usr/lib64/mysql/libmysqlclient.a -lz'
-else  
-    setenv MYSQLLIBS '/usr/lib/mysql/libmysqlclient.a -lz'  
-endif
-
 # see also paths in kent/java/build.xml
 setenv BUILDDIR $BUILDHOME
 setenv JAVABUILD /scratch/javaBuild
