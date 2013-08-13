@@ -58,7 +58,7 @@ if(!defined($host)) {
 if($forceVersionNumbers) {
     $useMtimes = 0;
 } else {
-    $useMtimes = $host eq 'hgwdev' || $host eq 'genome-test' || $host eq 'genome-preview';
+    $useMtimes = $host eq 'hgwdevSD' || $host eq 'hgwdev' || $host eq 'genome-test' || $host eq 'genome-preview';
 }
 
 if(!$useMtimes) {
