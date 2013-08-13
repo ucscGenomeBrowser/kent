@@ -17,8 +17,11 @@
 #include "htmshell.h"
 #include "obscure.h"
 #include "bamFile.h"
+#include "raToStruct.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
+#include "edwFastqFileFromRa.h"
+
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
 char *edwDatabase = "encodeDataWarehouse";
@@ -979,7 +982,8 @@ while ((err = samread(sf, &one)) >= 0)
 	reverseIntRange(&start, &end, bamHeader->target_len[tid]);
 	}
     if (start < 0) start=0;
-    fprintf(f, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
+    if (f != NULL)
+	fprintf(f, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
     genomeRangeTreeAdd(grt, chrom, start, end);
     }
 if (err < 0 && err != -1)
@@ -990,20 +994,32 @@ samclose(sf);
 *retTotalBasesInHits = totalBasesInHits;
 }
 
+void edwReserveTempFile(char *path)
+/* Call mkstemp on path.  This will fill in terminal XXXXXX in path with file name
+ * and create an empty file of that name.  Generally that empty file doesn't stay empty for long. */
+{
+int fd = mkstemp(path);
+if (fd == -1)
+     errnoAbort("Couldn't create temp file %s", path);
+mustCloseFd(&fd);
+}
+
+
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage)
-/* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
+/* Take a sample fastq and run bwa on it, and then convert that file to a bed. 
+ * bedF and all the ret parameters can be NULL. */
 {
 /* Hmm, tried doing this with Mark's pipeline code, but somehow it would be flaky the
  * second time it was run in same app.  Resorting therefore to temp files. */
 char genoFile[PATH_LEN];
 safef(genoFile, sizeof(genoFile), "%s%s/bwaData/%s.fa", 
-    edwValDataDir, vf->ucscDb, vf->ucscDb);
+    edwValDataDir, assembly->ucscDb, assembly->ucscDb);
 
 char cmd[3*PATH_LEN];
 char *saiName = cloneString(rTempName(edwTempDir(), "edwSample1", ".sai"));
-safef(cmd, sizeof(cmd), "bwa aln %s %s > %s", genoFile, fastqPath, saiName);
+safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, fastqPath, saiName);
 mustSystem(cmd);
 
 char *samName = cloneString(rTempName(edwTempDir(), "ewdSample1", ".sam"));
@@ -1029,4 +1045,43 @@ if (retSampleCoverage)
 genomeRangeTreeFree(&grt);
 remove(samName);
 }
+
+struct edwFastqFile *edwFastqFileFromFileId(struct sqlConnection *conn, long long fileId)
+/* Get edwFastqFile with given fileId or NULL if none such */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwFastqFile where fileId=%lld", fileId);
+return edwFastqFileLoadByQuery(conn, query);
+}
+
+void edwMakeFastqStatsAndSample(struct sqlConnection *conn, long long fileId)
+/* Run fastqStatsAndSubsample, and put results into edwFastqFile table. */
+{
+struct edwFastqFile *fqf = edwFastqFileFromFileId(conn, fileId);
+if (fqf == NULL)
+    {
+    char *path = edwPathForFileId(conn, fileId);
+    char statsFile[PATH_LEN], sampleFile[PATH_LEN];
+    safef(statsFile, PATH_LEN, "%sedwFastqStatsXXXXXX", edwTempDir());
+    edwReserveTempFile(statsFile);
+    char dayTempDir[PATH_LEN];
+    safef(sampleFile, PATH_LEN, "%sedwFastqSampleXXXXXX", edwTempDirForToday(dayTempDir));
+    edwReserveTempFile(sampleFile);
+    char command[3*PATH_LEN];
+    safef(command, sizeof(command), "fastqStatsAndSubsample -sampleSize=%d -smallOk %s %s %s",
+	250000, path, statsFile, sampleFile);
+    mustSystem(command);
+    safef(command, sizeof(command), "gzip %s", sampleFile);
+    mustSystem(command);
+    strcat(sampleFile, ".gz");
+    fqf = edwFastqFileOneFromRa(statsFile);
+    fqf->fileId = fileId;
+    fqf->sampleFileName = cloneString(sampleFile);
+    edwFastqFileSaveToDb(conn, fqf, "edwFastqFile", 1024);
+    remove(statsFile);
+    freez(&path);
+    }
+edwFastqFileFree(&fqf);
+}
+
 

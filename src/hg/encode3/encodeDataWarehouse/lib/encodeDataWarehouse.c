@@ -1746,6 +1746,411 @@ fputc(lastSep,f);
 }
 
 
+char *edwFastqFileCommaSepFieldNames = "id,fileId,sampleCount,basesInSample,sampleFileName,readCount,baseCount,readSizeMean,readSizeStd,readSizeMin,readSizeMax,qualMean,qualStd,qualMin,qualMax,qualType,qualZero,atRatio,aRatio,cRatio,gRatio,tRatio,nRatio,qualPos,aAtPos,cAtPos,gAtPos,tAtPos,nAtPos";
+
+struct edwFastqFile *edwFastqFileLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwFastqFile from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwFastqFileFreeList(). */
+{
+struct edwFastqFile *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwFastqFileLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwFastqFileSaveToDb(struct sqlConnection *conn, struct edwFastqFile *el, char *tableName, int updateSize)
+/* Save edwFastqFile as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+char  *qualPosArray, *aAtPosArray, *cAtPosArray, *gAtPosArray, *tAtPosArray, *nAtPosArray;
+qualPosArray = sqlDoubleArrayToString(el->qualPos, el->readSizeMax);
+aAtPosArray = sqlDoubleArrayToString(el->aAtPos, el->readSizeMax);
+cAtPosArray = sqlDoubleArrayToString(el->cAtPos, el->readSizeMax);
+gAtPosArray = sqlDoubleArrayToString(el->gAtPos, el->readSizeMax);
+tAtPosArray = sqlDoubleArrayToString(el->tAtPos, el->readSizeMax);
+nAtPosArray = sqlDoubleArrayToString(el->nAtPos, el->readSizeMax);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%lld,%lld,'%s',%lld,%lld,%g,%g,%g,%g,%g,%g,%g,%g,'%s',%d,%g,%g,%g,%g,%g,%g,'%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->id,  el->fileId,  el->sampleCount,  el->basesInSample,  el->sampleFileName,  el->readCount,  el->baseCount,  el->readSizeMean,  el->readSizeStd,  el->readSizeMin,  el->readSizeMax,  el->qualMean,  el->qualStd,  el->qualMin,  el->qualMax,  el->qualType,  el->qualZero,  el->atRatio,  el->aRatio,  el->cRatio,  el->gRatio,  el->tRatio,  el->nRatio,  qualPosArray ,  aAtPosArray ,  cAtPosArray ,  gAtPosArray ,  tAtPosArray ,  nAtPosArray );
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&qualPosArray);
+freez(&aAtPosArray);
+freez(&cAtPosArray);
+freez(&gAtPosArray);
+freez(&tAtPosArray);
+freez(&nAtPosArray);
+}
+
+struct edwFastqFile *edwFastqFileLoad(char **row)
+/* Load a edwFastqFile from row fetched with select * from edwFastqFile
+ * from database.  Dispose of this with edwFastqFileFree(). */
+{
+struct edwFastqFile *ret;
+
+AllocVar(ret);
+ret->readSizeMax = sqlDouble(row[10]);
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->sampleCount = sqlLongLong(row[2]);
+ret->basesInSample = sqlLongLong(row[3]);
+ret->sampleFileName = cloneString(row[4]);
+ret->readCount = sqlLongLong(row[5]);
+ret->baseCount = sqlLongLong(row[6]);
+ret->readSizeMean = sqlDouble(row[7]);
+ret->readSizeStd = sqlDouble(row[8]);
+ret->readSizeMin = sqlDouble(row[9]);
+ret->qualMean = sqlDouble(row[11]);
+ret->qualStd = sqlDouble(row[12]);
+ret->qualMin = sqlDouble(row[13]);
+ret->qualMax = sqlDouble(row[14]);
+ret->qualType = cloneString(row[15]);
+ret->qualZero = sqlSigned(row[16]);
+ret->atRatio = sqlDouble(row[17]);
+ret->aRatio = sqlDouble(row[18]);
+ret->cRatio = sqlDouble(row[19]);
+ret->gRatio = sqlDouble(row[20]);
+ret->tRatio = sqlDouble(row[21]);
+ret->nRatio = sqlDouble(row[22]);
+{
+int sizeOne;
+sqlDoubleDynamicArray(row[23], &ret->qualPos, &sizeOne);
+assert(sizeOne == ret->readSizeMax);
+}
+{
+int sizeOne;
+sqlDoubleDynamicArray(row[24], &ret->aAtPos, &sizeOne);
+assert(sizeOne == ret->readSizeMax);
+}
+{
+int sizeOne;
+sqlDoubleDynamicArray(row[25], &ret->cAtPos, &sizeOne);
+assert(sizeOne == ret->readSizeMax);
+}
+{
+int sizeOne;
+sqlDoubleDynamicArray(row[26], &ret->gAtPos, &sizeOne);
+assert(sizeOne == ret->readSizeMax);
+}
+{
+int sizeOne;
+sqlDoubleDynamicArray(row[27], &ret->tAtPos, &sizeOne);
+assert(sizeOne == ret->readSizeMax);
+}
+{
+int sizeOne;
+sqlDoubleDynamicArray(row[28], &ret->nAtPos, &sizeOne);
+assert(sizeOne == ret->readSizeMax);
+}
+return ret;
+}
+
+struct edwFastqFile *edwFastqFileLoadAll(char *fileName) 
+/* Load all edwFastqFile from a whitespace-separated file.
+ * Dispose of this with edwFastqFileFreeList(). */
+{
+struct edwFastqFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[29];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwFastqFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwFastqFile *edwFastqFileLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwFastqFile from a chopper separated file.
+ * Dispose of this with edwFastqFileFreeList(). */
+{
+struct edwFastqFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[29];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwFastqFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwFastqFile *edwFastqFileCommaIn(char **pS, struct edwFastqFile *ret)
+/* Create a edwFastqFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwFastqFile */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->fileId = sqlUnsignedComma(&s);
+ret->sampleCount = sqlLongLongComma(&s);
+ret->basesInSample = sqlLongLongComma(&s);
+ret->sampleFileName = sqlStringComma(&s);
+ret->readCount = sqlLongLongComma(&s);
+ret->baseCount = sqlLongLongComma(&s);
+ret->readSizeMean = sqlDoubleComma(&s);
+ret->readSizeStd = sqlDoubleComma(&s);
+ret->readSizeMin = sqlDoubleComma(&s);
+ret->readSizeMax = sqlDoubleComma(&s);
+ret->qualMean = sqlDoubleComma(&s);
+ret->qualStd = sqlDoubleComma(&s);
+ret->qualMin = sqlDoubleComma(&s);
+ret->qualMax = sqlDoubleComma(&s);
+ret->qualType = sqlStringComma(&s);
+ret->qualZero = sqlSignedComma(&s);
+ret->atRatio = sqlDoubleComma(&s);
+ret->aRatio = sqlDoubleComma(&s);
+ret->cRatio = sqlDoubleComma(&s);
+ret->gRatio = sqlDoubleComma(&s);
+ret->tRatio = sqlDoubleComma(&s);
+ret->nRatio = sqlDoubleComma(&s);
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->qualPos, ret->readSizeMax);
+for (i=0; i<ret->readSizeMax; ++i)
+    {
+    ret->qualPos[i] = sqlDoubleComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->aAtPos, ret->readSizeMax);
+for (i=0; i<ret->readSizeMax; ++i)
+    {
+    ret->aAtPos[i] = sqlDoubleComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->cAtPos, ret->readSizeMax);
+for (i=0; i<ret->readSizeMax; ++i)
+    {
+    ret->cAtPos[i] = sqlDoubleComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->gAtPos, ret->readSizeMax);
+for (i=0; i<ret->readSizeMax; ++i)
+    {
+    ret->gAtPos[i] = sqlDoubleComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->tAtPos, ret->readSizeMax);
+for (i=0; i<ret->readSizeMax; ++i)
+    {
+    ret->tAtPos[i] = sqlDoubleComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->nAtPos, ret->readSizeMax);
+for (i=0; i<ret->readSizeMax; ++i)
+    {
+    ret->nAtPos[i] = sqlDoubleComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+*pS = s;
+return ret;
+}
+
+void edwFastqFileFree(struct edwFastqFile **pEl)
+/* Free a single dynamically allocated edwFastqFile such as created
+ * with edwFastqFileLoad(). */
+{
+struct edwFastqFile *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->sampleFileName);
+freeMem(el->qualType);
+freeMem(el->qualPos);
+freeMem(el->aAtPos);
+freeMem(el->cAtPos);
+freeMem(el->gAtPos);
+freeMem(el->tAtPos);
+freeMem(el->nAtPos);
+freez(pEl);
+}
+
+void edwFastqFileFreeList(struct edwFastqFile **pList)
+/* Free a list of dynamically allocated edwFastqFile's */
+{
+struct edwFastqFile *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwFastqFileFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwFastqFileOutput(struct edwFastqFile *el, FILE *f, char sep, char lastSep) 
+/* Print out edwFastqFile.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->fileId);
+fputc(sep,f);
+fprintf(f, "%lld", el->sampleCount);
+fputc(sep,f);
+fprintf(f, "%lld", el->basesInSample);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sampleFileName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%lld", el->readCount);
+fputc(sep,f);
+fprintf(f, "%lld", el->baseCount);
+fputc(sep,f);
+fprintf(f, "%g", el->readSizeMean);
+fputc(sep,f);
+fprintf(f, "%g", el->readSizeStd);
+fputc(sep,f);
+fprintf(f, "%g", el->readSizeMin);
+fputc(sep,f);
+fprintf(f, "%g", el->readSizeMax);
+fputc(sep,f);
+fprintf(f, "%g", el->qualMean);
+fputc(sep,f);
+fprintf(f, "%g", el->qualStd);
+fputc(sep,f);
+fprintf(f, "%g", el->qualMin);
+fputc(sep,f);
+fprintf(f, "%g", el->qualMax);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->qualType);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->qualZero);
+fputc(sep,f);
+fprintf(f, "%g", el->atRatio);
+fputc(sep,f);
+fprintf(f, "%g", el->aRatio);
+fputc(sep,f);
+fprintf(f, "%g", el->cRatio);
+fputc(sep,f);
+fprintf(f, "%g", el->gRatio);
+fputc(sep,f);
+fprintf(f, "%g", el->tRatio);
+fputc(sep,f);
+fprintf(f, "%g", el->nRatio);
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->readSizeMax; ++i)
+    {
+    fprintf(f, "%g", el->qualPos[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->readSizeMax; ++i)
+    {
+    fprintf(f, "%g", el->aAtPos[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->readSizeMax; ++i)
+    {
+    fprintf(f, "%g", el->cAtPos[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->readSizeMax; ++i)
+    {
+    fprintf(f, "%g", el->gAtPos[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->readSizeMax; ++i)
+    {
+    fprintf(f, "%g", el->tAtPos[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->readSizeMax; ++i)
+    {
+    fprintf(f, "%g", el->nAtPos[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(lastSep,f);
+}
+
+
 char *edwQaEnrichTargetCommaSepFieldNames = "id,assemblyId,name,fileId,targetSize";
 
 void edwQaEnrichTargetStaticLoad(char **row, struct edwQaEnrichTarget *ret)
@@ -2370,6 +2775,162 @@ fputc(sep,f);
 fprintf(f, "%u", el->fileId);
 fputc(sep,f);
 fprintf(f, "%u", el->qaContamTargetId);
+fputc(sep,f);
+fprintf(f, "%g", el->mapRatio);
+fputc(lastSep,f);
+}
+
+
+char *edwQaRepeatCommaSepFieldNames = "id,fileId,repeatClass,mapRatio";
+
+void edwQaRepeatStaticLoad(char **row, struct edwQaRepeat *ret)
+/* Load a row from edwQaRepeat table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->repeatClass = row[2];
+ret->mapRatio = sqlDouble(row[3]);
+}
+
+struct edwQaRepeat *edwQaRepeatLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwQaRepeat from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaRepeatFreeList(). */
+{
+struct edwQaRepeat *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwQaRepeatLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwQaRepeatSaveToDb(struct sqlConnection *conn, struct edwQaRepeat *el, char *tableName, int updateSize)
+/* Save edwQaRepeat as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%g)", 
+	tableName,  el->id,  el->fileId,  el->repeatClass,  el->mapRatio);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct edwQaRepeat *edwQaRepeatLoad(char **row)
+/* Load a edwQaRepeat from row fetched with select * from edwQaRepeat
+ * from database.  Dispose of this with edwQaRepeatFree(). */
+{
+struct edwQaRepeat *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->repeatClass = cloneString(row[2]);
+ret->mapRatio = sqlDouble(row[3]);
+return ret;
+}
+
+struct edwQaRepeat *edwQaRepeatLoadAll(char *fileName) 
+/* Load all edwQaRepeat from a whitespace-separated file.
+ * Dispose of this with edwQaRepeatFreeList(). */
+{
+struct edwQaRepeat *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwQaRepeatLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaRepeat *edwQaRepeatLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwQaRepeat from a chopper separated file.
+ * Dispose of this with edwQaRepeatFreeList(). */
+{
+struct edwQaRepeat *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwQaRepeatLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaRepeat *edwQaRepeatCommaIn(char **pS, struct edwQaRepeat *ret)
+/* Create a edwQaRepeat out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaRepeat */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->fileId = sqlUnsignedComma(&s);
+ret->repeatClass = sqlStringComma(&s);
+ret->mapRatio = sqlDoubleComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwQaRepeatFree(struct edwQaRepeat **pEl)
+/* Free a single dynamically allocated edwQaRepeat such as created
+ * with edwQaRepeatLoad(). */
+{
+struct edwQaRepeat *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->repeatClass);
+freez(pEl);
+}
+
+void edwQaRepeatFreeList(struct edwQaRepeat **pList)
+/* Free a list of dynamically allocated edwQaRepeat's */
+{
+struct edwQaRepeat *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwQaRepeatFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwQaRepeatOutput(struct edwQaRepeat *el, FILE *f, char sep, char lastSep) 
+/* Print out edwQaRepeat.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->fileId);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->repeatClass);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%g", el->mapRatio);
 fputc(lastSep,f);

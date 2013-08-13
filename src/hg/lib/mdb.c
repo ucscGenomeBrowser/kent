@@ -3464,7 +3464,7 @@ sqlDyStringPrintf(dyQuery," from %s %c",tableName,letter);
 mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName, letter, hasTableName, hasFileName);
 
 // Need to append 'where' AFTER qualifying joins!
-sqlDyStringPrintf(dyQuery, " where %c.var='%s' order by %c.val", letter,var,letter);
+sqlDyStringPrintf(dyQuery, " where %c.var='%s'", letter,var);
 
 retVal = sqlQuickList(conn, dyStringCannibalize(&dyQuery));
 slNameSortCase(&retVal);
@@ -3480,44 +3480,72 @@ struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limi
 // Further restrict to vars associated with tableName, fileName or both.
 // Return is case insensitive sorted on label (cv label or else val).
 // If requested, return cv tag instead of mdb val.
-{  // TODO: Change this to use normal mdb struct routines?
+{
 
 if (!hasTableName && !hasFileName)
     errAbort("mdbValLabelSearch requests vals associated with neither table nor files.\n");
 
 char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
-
-char letter = 'A';
-struct dyString *dyQuery = dyStringNew(512);
-if (limit > 0)
-    sqlDyStringPrintf(dyQuery,"select distinct LEFT(%c.val,%d)",letter,limit);
-else
-    sqlDyStringPrintf(dyQuery,"select distinct %c.val",letter);
-
-sqlDyStringPrintf(dyQuery," from %s %c",tableName,letter);
-
-mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
-
-// Need to append 'where' AFTER qualifying joins!
-sqlDyStringPrintf(dyQuery, " where %c.var='%s'",letter,var);
-//warn("%s",dyStringContents(dyQuery));
-
 struct hash *varHash = (struct hash *)cvTermHash(var);
+boolean isCvDefined = cvTermIsCvDefined(var);
+
+struct slName *vals = NULL;
+struct dyString *dyQuery = dyStringNew(512);
+
+// If term is cv defined, no need to query for a list
+if (isCvDefined)
+    {
+    assert(varHash != NULL);
+    struct hashCookie varCookie = hashFirst(varHash);
+    char *val;
+    while ((val = hashNextName(&varCookie)) != NULL)
+        slNameAddHead(&vals,val);
+    }
+else
+    {
+    // simple query of vals which doesn't enforce table/file restrictions
+    sqlDyStringPrintf(dyQuery,"select val from %s where var='%s'",tableName,var);
+    vals = sqlQuickList(conn, dyStringContents(dyQuery));
+    }
+slNameSort(&vals);
+
+// Will filter results to enforce table/file restrictions
+// New mysql 5.6 is inefficient if the filtering is applied to the query above
+char letter = 'A';
+dyStringClear(dyQuery);
+sqlDyStringPrintf(dyQuery,"select 1 from %s %c",tableName,letter);
+mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
+sqlDyStringPrintf(dyQuery, " where %c.var='%s' and %c.val = ",letter,var,letter);
+int queryLengthBeforeVal = dyStringLen(dyQuery);
 
 struct slPair *pairs = NULL;
-struct sqlResult *sr = sqlGetResult(conn, dyStringContents(dyQuery));
-dyStringFree(&dyQuery);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
+char *lastVal = "";
+struct slName *oneVal = vals;
+for ( ; oneVal != NULL; oneVal = oneVal->next)
     {
-    char *val = row[0];
+    char *val = oneVal->name;
+    if (limit > 0)
+        {
+        if (sameStringN(val,lastVal,limit))
+            continue;
+        }
+    else if (!isCvDefined && sameString(val,lastVal))// query 'distinct' is slower in mysql 5.6
+        continue;
+    lastVal = val;
+
+    // Filter to enforce file/table restrictions
+    dyStringResize(dyQuery,queryLengthBeforeVal);
+    sqlDyStringPrintf(dyQuery, "'%s' limit 1", val);
+    if (sqlQuickNum(conn, dyStringContents(dyQuery)) != 1)
+        continue;
+
     char *label = NULL;
     if (varHash != NULL)
         {
         struct hash *valHash = hashFindVal(varHash,val);
         if (valHash != NULL)
             {
-            label = cloneString(hashOptionalVal(valHash,CV_LABEL,row[0]));
+            label = cloneString(hashOptionalVal(valHash,CV_LABEL,val));
             if (tags)
                 {
                 char *tag = hashFindVal(valHash,CV_TAG);
@@ -3527,11 +3555,17 @@ while ((row = sqlNextRow(sr)) != NULL)
             }
         }
     if (label == NULL)
-        label = cloneString(row[0]);
+        {
+        if (limit > 0)
+            label = cloneStringZ(val,limit);
+        else
+            label = cloneString(val);
+        }
     label = strSwapChar(label,'_',' ');  // vestigial _ meaning space
     slPairAdd(&pairs,val,label);
     }
-sqlFreeResult(&sr);
+slNameFreeList(&vals);
+dyStringFree(&dyQuery);
 if (slCount(pairs) > 0)
     {
     // should have a list sorted on the label
@@ -3564,36 +3598,26 @@ assert(cvApproved != NULL);
 // Note the second selected column which is only to there to make sqlQuckHash happy
 char letter = 'A';
 struct dyString *dyQuery = dyStringNew(256);
-sqlDyStringPrintf(dyQuery, "select distinct %c.var,'.' from %s %c",letter,tableName,letter);
-
+sqlDyStringPrintf(dyQuery, "select 1 from %s %c",tableName,letter);
 mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName, letter, hasTableName, hasFileName);
 
 // Need to append 'where' AFTER qualifying joins!
-// On the RR it is more efficient when selecting only the whitelisted vars.
-struct slPair *oneVar = cvApproved;
-sqlDyStringPrintf(dyQuery, " where %c.var in (", letter);
-for ( ; oneVar != NULL; oneVar = oneVar->next)
-    sqlDyStringPrintf(dyQuery, "'%s'%c", oneVar->name,(oneVar->next != NULL? ',':')'));
-//sqlDyStringPrintf(dyQuery, " group by %c.var",letter); // redundant, less efficient?
-//warn("%s",dyStringContents(dyQuery));
-
-// Which vars are in the mdb at this time?
-struct hash *inTable = sqlQuickHash(conn,dyStringContents(dyQuery)); // could use sqlQuickList
-dyStringFree(&dyQuery);
-if (inTable == NULL)
-    return NULL;
+sqlDyStringPrintf(dyQuery, " where %c.var = ", letter);
+int queryLengthBeforeVar = dyStringLen(dyQuery);
 
 // Filter cv approved by eliminating those vars not currently in the mdb.
 struct slPair *relevant = NULL;
 while (cvApproved != NULL)
     {
     struct slPair *oneVar = slPopHead(&cvApproved);
-    if (hashFindVal(inTable, oneVar->name) != NULL)
+    dyStringResize(dyQuery,queryLengthBeforeVar);
+    sqlDyStringPrintf(dyQuery, "'%s' limit 1", oneVar->name);
+    if (sqlQuickNum(conn, dyStringContents(dyQuery)) == 1)
         slAddHead(&relevant, oneVar);
     else
         slPairFree(&oneVar);
     }
-hashFree(&inTable);
+dyStringFree(&dyQuery);
 slReverse(&relevant);
 return relevant;
 }

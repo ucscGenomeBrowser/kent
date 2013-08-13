@@ -191,9 +191,21 @@ struct edwScriptRegistry *edwScriptRegistryFromCgi();
 void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags);
 /* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
 
+#define edwSampleTargetSize 250000  /* We target this many samples */
+
+void edwReserveTempFile(char *path);
+/* Call mkstemp on path.  This will fill in terminal XXXXXX in path with file name
+ * and create an empty file of that name.  Generally that empty file doesn't stay empty for long. */
+
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage);
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
+
+void edwMakeFastqStatsAndSample(struct sqlConnection *conn, long long fileId);
+/* Run fastqStatsAndSubsample, and put results into edwFastqFile table. */
+
+struct edwFastqFile *edwFastqFileFromFileId(struct sqlConnection *conn, long long fileId);
+/* Get edwFastqFile with given fileId or NULL if none such */
 
 #endif /* EDWLIB_H */
