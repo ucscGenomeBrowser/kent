@@ -9,7 +9,7 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/pslReaderTester \
 	${BIN_DIR}/annoGratorTester \
 	${BIN_DIR}/binTest \
-	${BIN_DIR}/customTrackTester 
+	${BIN_DIR}/customTrackTester \
 	${BIN_DIR}/sqlCheck 
 
 test: binTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest
