@@ -144,9 +144,9 @@ ARCHIVED_DBS = \
 	mm6 \
 	danRer2
 
-# until the hive is back, no trix for kids:
-BUILD_TRIX = /bin/true
-# BUILD_TRIX = ./buildTrix
+# if trix build breaks, disable by setting to /bin/true instead of ./buildTrix
+# BUILD_TRIX = /bin/true
+BUILD_TRIX = ./buildTrix
 HIVE_TRIX = /hive/data/inside/trix
 DATA_TRIX = /data/trix
 ALPHA_MACHINE = hgwdev.cse.ucsc.edu
