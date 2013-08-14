@@ -171,7 +171,7 @@ alpha: clean
 	${MKDIR} ${CGI_BIN}/encode
 	rm -f ${CGI_BIN}/encode/cv.ra
 	cp -p cv/alpha/cv.ra ${CGI_BIN}/encode
-#	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb.{ixx,ix}}
+	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb.{ixx,ix}}
 	HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb ${CGI_BIN}/encode/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
 	./makeTrixLinks trackDb ${HIVE_TRIX} ${DBS}
 
