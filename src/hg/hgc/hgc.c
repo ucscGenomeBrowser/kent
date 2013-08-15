@@ -23918,13 +23918,18 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     r = bedDetailLoadWithGaps(row, bedPart+2);
-    bedPrintPos((struct bed*)r, bedPart, tdb);
-    if (r->id != NULL)
+    if (isNotEmpty(r->id))
         {
-        if (!sameString("qPcrPrimers", table))
-            printf("<B>ID:</B> %s <BR>\n", r->id);
+        printf("<p>");
         printCustomUrl(tdb, r->id, TRUE);
-        } 
+        printf("</p>");
+        }
+
+    bedPrintPos((struct bed*)r, bedPart, tdb);
+    printf("<br>");
+    if (isNotEmpty(r->id) && !sameString("qPcrPrimers", table))
+        printf("<B>ID:</B> %s <BR>\n", r->id);
+
     if  (isNotEmpty(r->description))
         printf("%s <BR>\n", r->description);
     }
