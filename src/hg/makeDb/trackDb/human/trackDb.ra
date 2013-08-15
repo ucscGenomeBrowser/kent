@@ -2845,7 +2845,7 @@ url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
 
 track lovd
 shortLabel LOVD Variants
-longLabel Leiden Open Variation Database Variants marked as public
+longLabel Leiden Open Variation Database Public Variants
 group phenDis
 priority 29.9
 visibility hide
@@ -2858,7 +2858,7 @@ release alpha
 
 track hgmd
 shortLabel HGMD Variants
-longLabel Human Gene Mutation Database (public) variants
+longLabel Human Gene Mutation Database Public Variants
 group phenDis
 priority 30
 visibility hide
