@@ -21,7 +21,6 @@
 #include "googleAnalytics.h"
 #include "jsHelper.h"
 #endif /* GBROWSE */
-#include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browser
 /* phoneHome business */
 #include <utime.h>
 #include <htmlPage.h>
