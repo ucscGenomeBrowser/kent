@@ -2851,7 +2851,7 @@ priority 29.9
 visibility hide
 type bedDetail 6
 url http://varcache.lovd.nl/redirect/$$
-urlLabel Link to LOVD variant details page
+urlLabel Link to LOVD:
 tableBrowser off lovd
 noScoreFilter on
 release alpha
