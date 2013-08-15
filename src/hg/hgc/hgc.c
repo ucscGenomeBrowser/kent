@@ -23921,6 +23921,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     if (isNotEmpty(r->id))
         {
         printCustomUrl(tdb, r->id, TRUE);
+        printf("<br>\n");
         }
 
     bedPrintPos((struct bed*)r, bedPart, tdb);
