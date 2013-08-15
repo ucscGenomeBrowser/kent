@@ -201,6 +201,7 @@ ifeq (${HG_WARN},)
       HG_WARN_UNINIT=-Wuninitialized
     else
       ifeq (${FULLWARN},hgwdev)
+        MYSQLLIBS += -lstdc++ -lrt
         HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type
         HG_WARN_UNINIT=-Wuninitialized
       else
