@@ -2854,7 +2854,6 @@ url http://varcache.lovd.nl/redirect/$$
 urlLabel Link to LOVD:
 tableBrowser off lovd
 noScoreFilter on
-release alpha
 
 track hgmd
 shortLabel HGMD Variants
@@ -2868,7 +2867,6 @@ urlLabel Link to HGMD:
 mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
-release alpha
 
 track spMut
 shortLabel UniProt Variants
