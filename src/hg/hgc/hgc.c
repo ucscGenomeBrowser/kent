@@ -23920,9 +23920,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     r = bedDetailLoadWithGaps(row, bedPart+2);
     if (isNotEmpty(r->id))
         {
-        printf("<p>");
         printCustomUrl(tdb, r->id, TRUE);
-        printf("</p>");
         }
 
     bedPrintPos((struct bed*)r, bedPart, tdb);
