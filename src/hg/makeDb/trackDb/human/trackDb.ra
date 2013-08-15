@@ -2853,7 +2853,7 @@ type bedDetail 6
 url http://varcache.lovd.nl/redirect/$$
 urlLabel Link to LOVD variant details page
 tableBrowser off lovd
-noScoreFilter .
+noScoreFilter on
 release alpha
 
 track hgmd
@@ -2867,6 +2867,7 @@ url http://www.hgmd.cf.ac.uk/ac/gene.php?gene=$P&accession=$p
 urlLabel Link to HGMD (login req.)
 mouseOverField variantType
 tableBrowser off hgmd
+noScoreFilter on
 release alpha
 
 track spMut
@@ -2879,6 +2880,7 @@ type bigBed 12 +
 itemRgb on
 urls variationId="http://web.expasy.org/variant_pages/$$.html" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
+noScoreFilter on
 release alpha
 
 track spAnnot
