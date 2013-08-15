@@ -684,7 +684,7 @@ printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
 /* printBand(chrom, (start + end)/2, 0, FALSE); */
 printBand(chrom, start, end, FALSE);
 printf("<B>Genomic Size:</B> %d<BR>\n", end - start);
-if (strand != NULL && differentString(strand,"."))
+if (strand != NULL && differentString(strand,".") && isNotEmpty(strand))
     printf("<B>Strand:</B> %s<BR>\n", strand);
 else
     strand = "?";
