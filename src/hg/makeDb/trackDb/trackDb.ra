@@ -3370,3 +3370,12 @@ priority .1
 visibility dense
 type bed 4 +
 
+track ucscToINSDC
+shortLabel INSDC name
+longLabel Sequence name at the INSDC - International Nucleotide Sequence Database Collaboration
+group map
+priority 10.1
+visibility hide
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel INSDC link:
+type bed 4
