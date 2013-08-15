@@ -3,11 +3,11 @@
 #	$Id: kentSrcUpdate.sh,v 1.1 2010/03/18 18:40:12 hiram Exp $
 #
 usage() {
-    echo "usage: kentSrcUpdate.sh <browserEnvironment.txt>"
-    echo "  the browserEnvironment.txt file contains definitions of how"
-    echo "  these scripts behave in your local environment."
-    echo "There should be an example template to start with in the"
-    echo "directory with these scripts."
+    echo "usage: kentSrcUpdate.sh <browserEnvironment.txt>" 1>&2
+    echo "  the browserEnvironment.txt file contains definitions of how" 1>&2
+    echo "  these scripts behave in your local environment." 1>&2
+    echo "There should be an example template to start with in the" 1>&2
+    echo "directory with these scripts." 1>&2
     exit 255
 }
 
@@ -19,7 +19,7 @@ fi
 if [ -f "${includeFile}" ]; then
     . "${includeFile}"
 else
-    echo "ERROR: kentSrcUpdate.sh: can not find ${includeFile}"
+    echo "ERROR: kentSrcUpdate.sh: can not find ${includeFile}" 1>&2
     usage
 fi
 
@@ -51,16 +51,17 @@ cd "${kentSrc}"
 
 testHere=`pwd`
 if [ "X${testHere}Y" != "X${kentSrc}Y" ]; then
-    echo "ERROR: kentSrcUpdate.sh failed to chdir to ${kentSrc}"
+    echo "ERROR: kentSrcUpdate.sh failed to chdir to ${kentSrc}" 1>&2
     exit 255;
 fi
+echo "git update report summary is in email to ${LOGNAME}" 1>&2
 /usr/bin/git pull 2>&1 | mail -s 'GIT update report kent' "${LOGNAME}"
 
 #	And then, let's build it all
 cd "${kentSrc}/src"
 testHere=`pwd`
 if [ "X${testHere}Y" != "X${kentSrc}/srcY" ]; then
-    echo "ERROR: kentSrcUpdate.sh failed to chdir to ${kentSrc}/src"
+    echo "ERROR: kentSrcUpdate.sh failed to chdir to ${kentSrc}/src" 1>&2
     exit 255;
 fi
 MAKE="make -j 4" make -j 4 cgi-alpha > daily.log 2>&1
