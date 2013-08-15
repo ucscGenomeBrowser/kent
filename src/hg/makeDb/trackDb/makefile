@@ -144,9 +144,9 @@ ARCHIVED_DBS = \
 	mm6 \
 	danRer2
 
-# until the hive is back, no trix for kids:
-BUILD_TRIX = /bin/true
-# BUILD_TRIX = ./buildTrix
+# if trix build breaks, disable by setting to /bin/true instead of ./buildTrix
+# BUILD_TRIX = /bin/true
+BUILD_TRIX = ./buildTrix
 HIVE_TRIX = /hive/data/inside/trix
 DATA_TRIX = /data/trix
 ALPHA_MACHINE = hgwdev.cse.ucsc.edu
@@ -171,7 +171,7 @@ alpha: clean
 	${MKDIR} ${CGI_BIN}/encode
 	rm -f ${CGI_BIN}/encode/cv.ra
 	cp -p cv/alpha/cv.ra ${CGI_BIN}/encode
-#	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb.{ixx,ix}}
+	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb.{ixx,ix}}
 	HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb ${CGI_BIN}/encode/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
 	./makeTrixLinks trackDb ${HIVE_TRIX} ${DBS}
 
