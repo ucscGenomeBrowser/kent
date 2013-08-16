@@ -82,6 +82,7 @@ mkdir -p ${FETCHLOG}
 # get rid of the browserEnvironment.txt argument
 shift
 
+echo "NOTE: logfile(s) for rsync result is in: '${FETCHLOG}/*.fetch.$DS'" 1>&2
 for ARG in $*
 do
     if [ -s "${ARG}" ]; then

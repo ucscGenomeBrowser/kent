@@ -2845,29 +2845,28 @@ url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
 
 track lovd
 shortLabel LOVD Variants
-longLabel Leiden Open Variation Database Variants marked as public
+longLabel Leiden Open Variation Database Public Variants
 group phenDis
 priority 29.9
 visibility hide
 type bedDetail 6
 url http://varcache.lovd.nl/redirect/$$
-urlLabel Link to LOVD variant details page
+urlLabel Link to LOVD:
 tableBrowser off lovd
-noScoreFilter .
-release alpha
+noScoreFilter on
 
 track hgmd
 shortLabel HGMD Variants
-longLabel Human Gene Mutation Database (public) variants
+longLabel Human Gene Mutation Database Public Variants
 group phenDis
 priority 30
 visibility hide
 type bigBed 8 .
 url http://www.hgmd.cf.ac.uk/ac/gene.php?gene=$P&accession=$p
-urlLabel Link to HGMD (login req.)
+urlLabel Link to HGMD:
 mouseOverField variantType
 tableBrowser off hgmd
-release alpha
+noScoreFilter on
 
 track spMut
 shortLabel UniProt Variants
@@ -2879,6 +2878,7 @@ type bigBed 12 +
 itemRgb on
 urls variationId="http://web.expasy.org/variant_pages/$$.html" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
+noScoreFilter on
 release alpha
 
 track spAnnot
