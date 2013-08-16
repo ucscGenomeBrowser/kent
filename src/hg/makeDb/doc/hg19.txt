@@ -8327,6 +8327,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     cd /cluster/data/hg19/bed/multiz46way/pal
     for i in `cat ../species.list`; do echo $i; done > order.lst
 
+    # redid the refgene ones  2013-08-15
     mz=multiz46way
     gp=refGene
     db=hg19
@@ -8344,14 +8345,13 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 	    gzip -c > exonAA/$j.exonAA.fa.gz"
     done > $gp.jobs
 
-    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    nice time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
     sleep 1
     tail -f $gp.jobs.log
 
-# real    350m10.116s
-# user    38m38.731s
-# sys     7m22.106s
-
+# 1817.21user 233.92system 4:54:04elapsed 11%CPU (0avgtext+0avgdata
+# 920192maxresident)k
+# 6024inputs+0outputs (7major+1648126minor)pagefaults 0swaps
 
     mz=multiz46way
     gp=refGene
@@ -8367,7 +8367,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     mz=multiz46way
     gp=refGene
     db=hg19
-    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
@@ -23380,6 +23380,67 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
+# killer whale/orcOrc1 Lastz run (
+    screen -S orcOrc1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzOrcOrc1.2013-07-31
+    cd  /hive/data/genomes/hg19/bed/lastzOrcOrc1.2013-07-31
+    cat << '_EOF_' > DEF
+# human vs killer whale
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: killer whale OrcOrc1
+SEQ2_DIR=/hive/data/genomes/orcOrc1/orcOrc1.2bit
+SEQ2_LEN=/hive/data/genomes/orcOrc1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/hg19/bed/lastzOrcOrc1.2013-07-31
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -noDbNameCheck -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > do.log 2>&1
+    # real    471m39.469s
+    # real    136m25.890s
+
+    cat fb.hg19.chainOrcOrc1.txt
+    # cat: fb.hg19.chainOrcOrc1.txt: No such file or directory
+
+    # create symLink to indicate this is the version to use
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzOrcOrc1.2013-07-31 lastzOrcOrc1
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 orcOrc1 > rbest.log 2>&1 &
+    #   real    55m27.877s
+
+    # running the swap
+    mkdir /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzOrcOrc1/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -noDbNameCheck -syntenicNet > swap.log 2>&1
+    #   real    101m51.331s
+
+    cat fb.orcOrc1.chainHg19Link.txt
+    #    1490487100 bases of 2300235512 (64.797%) in intersection
+
+    cd /hive/data/genomes/orcOrc1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
 # pacific walrus/odoRosDiv1 Lastz run (DONE - 2013-07-12 - Hiram)
     screen -S odoRosDiv1    # use screen to manage this long running job
     mkdir /hive/data/genomes/hg19/bed/lastzOdoRosDiv1.2013-07-12
@@ -23438,7 +23499,7 @@ TMPDIR=/scratch/tmp
 
     cd /hive/data/genomes/odoRosDiv1/bed
     ln -s blastz.hg19.swap lastz.hg19
-
+ 
 #########################################################################
 # LASTZ bonobo PanPan1 (DONE - 2013-07-15 - Hiram)
     screen -S panPan1     # use screen to manage this longish running job

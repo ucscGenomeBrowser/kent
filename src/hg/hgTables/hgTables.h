@@ -788,6 +788,15 @@ void showSchemaBigBed(char *table, struct trackDb *tdb);
 struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
 /* Convert asObject to list of sqlFieldTypes */
 
+/* HAL stuff from hal.c */
+
+boolean isHalTable(char *table);
+/* Return TRUE if table corresponds to a HAL file. */
+
+struct slName *halGetFields(char *table);
+/* Get fields of hal as simple name list. */
+
+void halTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
 /* BAM stuff from bam.c */
 
 boolean isBamTable(char *table);

@@ -600,7 +600,6 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		    buffer, buffer, NULL, TRUE, qAddress);
 	}
     hvGfxBox(hvg, sx, y, w, heightPer, color);
-    int ow = w;
 
     // now draw the mismatches if we're at high enough resolution 
     if ((winBaseCount < 50000) && (vis == tvFull))
@@ -669,7 +668,10 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	// if we're zoomed to base level, draw sequence of mismatch
 	if (zoomedToBaseLevel)
 	    {
-	    spreadAlignString(hvg, osx, y, ow, heightPer, MG_WHITE, font, ourDna,
+	    int mysx = round((double)((int)s-winStart)*scale) + xOff;
+	    int myex = round((double)((int)e-winStart)*scale) + xOff;
+	    int myw = myex - mysx;
+	    spreadAlignString(hvg, mysx, y, myw, heightPer, MG_WHITE, font, ourDna,
 		extraSeq->dna, seqLen, TRUE, FALSE);
 	    }
 
@@ -949,6 +951,13 @@ if (errCatchStart(errCatch))
     int handle = halOpenLOD(fileName);
     int needSeq = (winBaseCount < 50000) ? 1 : 0;
     struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, needSeq, 1);
+
+    // did we get any blocks from HAL
+    if (head == NULL)
+	{
+	errCatchEnd(errCatch);
+	return;
+	}
     struct hal_block_t* cur = head->mappedBlocks;
     struct linkedFeatures *lf;
     struct hash *qChromHash = newHash(5);

@@ -44,7 +44,7 @@ backup: clean
 	rm *.zip
 
 push:
-	scp $(APACHE)/cgi-bin/$(A) hgwbeta:$(APACHE)/cgi-bin/
+	scp $(APACHE)/cgi-bin/$(A) qateam@hgwbeta:$(APACHE)/cgi-bin/
 
 clean::
 	rm -f formPushQ.h $(A)
