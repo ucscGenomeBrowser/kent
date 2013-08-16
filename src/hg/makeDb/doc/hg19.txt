@@ -23895,3 +23895,51 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-15 - Hiram)
+    # this allows the "ensembl" blue bar button to appear
+    mkdir /hive/data/genomes/hg19/bed/ucscToINSDC
+    cd /hive/data/genomes/hg19/bed/ucscToINSDC
+
+    cat << '_EOF_' > translateNames.sh
+#!/bin/sh
+
+cat ../../genbank/Primary_Assembly/assembled_chromosomes/chr2acc \
+   | sed -e 's/^/chr/'
+
+cat ../../genbank/ALT_REF*/localID2acc \
+   | sed -e 's/HSCHR6_MHC_APD_CTG1/chr6_apd_hap1/;
+s/HSCHR6_MHC_COX_CTG1/chr6_cox_hap2/;
+s/HSCHR6_MHC_DBB_CTG1/chr6_dbb_hap3/;
+s/HSCHR6_MHC_MANN_CTG1/chr6_mann_hap4/;
+s/HSCHR6_MHC_MCF_CTG1/chr6_mcf_hap5/;
+s/HSCHR6_MHC_QBL_CTG1/chr6_qbl_hap6/;
+s/HSCHR6_MHC_SSTO_CTG1/chr6_ssto_hap7/;
+s/HSCHR4_1_CTG9/chr4_ctg9_hap1/;
+s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;'
+
+zcat ../../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz | grep -v "^#" | cut -f1 \
+   | sed -e 's/^GL\([0-9]*\).1/chrUn_gl\1\tGL\1.1/;'
+
+grep -v "^#" \
+  ../../genbank/Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf \
+    | sed -e 's/^\([0-9]*\)\tGL\([0-9]*\).1/chr\1_gl\2_random\tGL\2.1/;'
+
+echo -e "chrM\tNC_001807.4"
+'_EOF_'
+    # << happy emacs
+
+    chmod +x translateNames.sh
+    ./translateNames.sh | sort > ucscToINSDC.txt
+    join <(sort ../../chrom.sizes) ucscToINSDC.txt \
+        | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' > ucscToINSDC.tab
+
+    # maximum size of UCSC chrom name for SQL index
+    cut -f1 ucscToINSDC.tab | awk '{print length($0)}' | sort -n | tail -1
+    #   21
+
+    hgLoadSqlTab hg19 ucscToINSDC $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       ucscToINSDC.tab
+
+    # verify the track link to INSDC functions
+
+#########################################################################
