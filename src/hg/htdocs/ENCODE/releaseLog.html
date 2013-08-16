@@ -10,8 +10,9 @@
 	<TITLE>Track and Table Releases	</TITLE>
         <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />
 </HEAD>
-<BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF"><script type='text/javascript'>
-document.write("<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'><CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER><UL id='warnList'></UL><CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER></div></center>");
+<BODY CLASS="qaPushQ cgi">
+<script type='text/javascript'>
+document.write("<center><div id='warnBox' style='display:none;'><CENTER><B id='warnHead'></B></CENTER><UL id='warnList'></UL><CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER></div></center>");
 function showWarnBox() {document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';var warnBox=document.getElementById('warnBox');warnBox.style.display=''; warnBox.style.width='65%';document.getElementById('warnHead').innerHTML='Warning/Error(s):';window.scrollTo(0, 0);}
 function hideWarnBox() {var warnBox=document.getElementById('warnBox');warnBox.style.display='none';warnBox.innerHTML='';var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }}
 window.onunload = function(){}; // Trick to avoid FF back button issue.
@@ -27,17 +28,105 @@ window.onunload = function(){}; // Trick to avoid FF back button issue.
 </TH></TR>
 
 
-<!-- +++++++++++++++++++++ HOTLINKS BAR +++++++++++++++++++ -->
-<TR><TD COLSPAN=3 HEIGHT=40>
-<TABLE class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>
-<TD><A HREF='../encode/' class='topbar'>Home</A></TD>
-<TD><A HREF='../cgi-bin/hgTables?hgta_doMainPage=1' class='topbar'>Tables</A></TD>
-<TD><A HREF='../cgi-bin/hgNear' class='topbar'>Gene Sorter</A></TD>
-<TD><A HREF='../cgi-bin/hgPcr' class='topbar'>PCR</A></TD>
-<TD><A HREF='../cgi-bin/hgSession?hgS_doMainPage=1' class='topbar'>Session</A></TD>
-<TD><A HREF='../FAQ/' class='topbar'>FAQ</A></TD><TD><A HREF='../goldenPath/help/hgTracksHelp.html' class='topbar'>Help</A></TD>
-<TD style='width:95%'>&nbsp;</TD></TR></TABLE>
-</TD></TR>
+<noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>
+<script type='text/javascript' SRC='/js/jquery-v287.js'></script>
+<script type='text/javascript' SRC='/js/jquery.plugins-v287.js'></script>
+<LINK rel='STYLESHEET' href='/style/nice_menu-v287.css' TYPE='text/css' />
+<div id="main-menu-whole">
+
+		<div id="main-menu"><div id="block-nice_menus-1" class="clear-block block block-nice_menus">
+
+	<div class="upcorner"></div>
+	<div class="blockbg">
+		<div class="blockcontent">
+						<div class="content">
+
+<ul class="nice-menu nice-menu-down sf-js-enabled" id="nice-menu-1">
+
+<li class="first even" id="home"><a href="/index.html" ><span id="home-link">Home</span></a></li> 
+
+<li id="genomes"><a href="/cgi-bin/hgGateway">Genomes</a></li>
+<li id="genomeBrowser"><a href="/cgi-bin/hgTracks">Genome Browser</a></li>
+
+<li class="menuparent" id="tools"><span>Tools</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../cgi-bin/hgBlat?command=start">Blat</a></li>
+	<li><a href="../cgi-bin/hgTables">Table Browser</a></li>
+	<li><a href="../cgi-bin/hgVai">Variant Annotation Integrator</a></li>
+	<li><a href="../cgi-bin/hgNear">Gene Sorter</a></li>
+	<li><a href="../cgi-bin/hgGenome">Genome Graphs</a></li>
+	<li><a href="../cgi-bin/hgPcr">In-Silico PCR</a></li>
+	<li><a href="../cgi-bin/hgLiftOver">LiftOver</a></li>
+	<li><a href="../cgi-bin/hgVisiGene">VisiGene</a></li>
+	<li class="last"><a href="../util.html">Other Utilities</a></li>
+	</ul>
+</li>
+<li class="menuparent" id="mirrors"><span>Mirrors</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../mirror.html">Third Party Mirrors</a></li>
+	<li><a href="../admin/mirror.html">Mirroring Instructions</a></li>
+	
+	</ul>
+
+</li>
+<li class="menuparent" id="downloads"><span>Downloads</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="http://hgdownload.soe.ucsc.edu/downloads.html">Genome Data</a></li>
+	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
+	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
+	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
+	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
+	</ul>
+</li>
+<li class="menuparent" id="myData"><span>My Data</span>
+	<ul style="display: none; visibility: hidden;">
+	<li><a href="../cgi-bin/hgSession?hgS_doMainPage=1">Sessions</a></li>
+	<li><a href="../cgi-bin/hgHubConnect">Track Hubs</a></li>
+	<li class="last"><a href="../cgi-bin/hgCustom">Custom Tracks</a></li>
+	</ul>
+</li>
+<li class="menuparent" id="aboutUs"><span>About Us</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first odd"><a href="../goldenPath/newsarch.html">News</a></li>
+	<li class="even"><a href="../goldenPath/pubs.html">Publications</a></li>
+	<li class="odd"><a href="../cite.html">Cite Us</a></li>
+	<li class="even"><a href="../goldenPath/credits.html">Credits</a></li>
+	<li class="odd"><a href="../goldenPath/releaseLog.html">Release Log</a></li>
+	<li class="even"><a href="../staff.html">Staff</a></li>
+	<li class="odd"><a href="../contacts.html">Contact Us</a></li>
+	<li class="even"><a href="../conditions.html">Conditions of Use</a></li>
+	<li class="odd"><a href="http://www.cbse.ucsc.edu/jobs" TARGET="_blank">Jobs</a></li>
+	<li class="even last"><a href="../license/">Licenses</a></li>
+</ul>
+</li>
+
+<!-- OPTIONAL_VIEW_MENU -->
+
+<li class="menuparent last" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
+<!-- CONTEXT_SPECIFIC_HELP -->
+<li><a href="../FAQ/">FAQs</a></li>
+<li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
+<li><a href="../training.html">Training</a></li>
+<li><a href="../contacts.html">Mailing Lists</a></li>
+<li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
+</ul>
+</li>
+</ul>
+</div>
+		</div>
+	</div>
+	<div class="downcorner"></div>
+
+</div>
+</div><!-- end main-menu -->
+</div><!-- end main-menu-whole -->
+
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, { "basePath": "/", "nice_menus_options": { "delay": 800, "speed": 1 }, "thickbox": { "close": "Close", "next": "Next \x3e", "prev": "\x3c Prev", "esc_key": "or Esc Key", "next_close": "Next / Close on last", "image_count": "Image !current of !total" }, "custom_search": { "form_target": "_self", "solr": 0 } });
+//--><!]]>
+
+</script>
 
 <!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->
 <TR><TD COLSPAN=3>
@@ -61,7 +150,7 @@ Track and Table Releases     </div></div>
 </ul>
 <p>
  For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>
-<em>Last updated 26 Jul 2013. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
+<em>Last updated 16 Aug 2013. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -87,6 +176,11 @@ Track and Table Releases     </div></div>
 <TD nowrap><B style='color:#006666;'>Assembly</B></TD>
 <TD nowrap><B style='color:#006666;'>Release Date</B></TD>
 </TR>
+<TR valign=top><TD align=left>
+<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeV17" target=_blank>GENCODE Version 17 release</a></td>
+<td>hg19</td>
+<td>05 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgTfbsUniform" target=_blank>Transcription Factor ChIP-seq Uniform Peaks from ENCODE/Analysis</a></td>
 <td>hg19</td>
@@ -132,11 +226,6 @@ Track and Table Releases     </div></div>
 <td>hg19</td>
 <td>10 Sep 2012</td>
 </tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeUwDgf" target=_blank>DNaseI Digital Genomic Footprinting from ENCODE/University of Washington</a></td>
-<td>mm9</td>
-<td>07 Sep 2012</td>
-</tr>
 </table>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
@@ -161,6 +250,10 @@ Track and Table Releases     </div></div>
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeV17" target=_blank>GENCODE Version 17 release</a></td>
+<td>05 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgTfbsUniform" target=_blank>Transcription Factor ChIP-seq Uniform Peaks from ENCODE/Analysis</a></td>
 <td>10 May 2013</td>

@@ -1393,6 +1393,8 @@ void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, 
 {
 if (isBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
+else if (isHalTable(table))
+    halTabOut(db, table, conn, fields, f);
 else if (isBamTable(table))
     bamTabOut(db, table, conn, fields, f);
 else if (isVcfTable(table))
@@ -1418,6 +1420,8 @@ if (isBigBed(database, table, curTrack, ctLookupName))
     fieldList = bigBedGetFields(table, conn);
     hFreeConn(&conn);
     }
+else if (isHalTable(table))
+    fieldList = getBedFields(6);
 else if (isBamTable(table))
     fieldList = bamGetFields(table);
 else if (isVcfTable(table))
