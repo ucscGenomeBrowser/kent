@@ -482,7 +482,7 @@ NC_002504
     hgsql -N -e "select frag from gold;" vicPac2 | egrep -v -e '[AN][BC][R_][R0]0[0-9]+(\.1)?' | wc -l
     # 0
 
-    # hence, add to trackDb/tenrec/vicPac2/trackDb.ra
+    # hence, add to trackDb/alpaca/vicPac2/trackDb.ra
 searchTable gold
 shortCircuit 1
 termRegex [AN][BC][R_][R0]0[0-9]+(\.1)?
