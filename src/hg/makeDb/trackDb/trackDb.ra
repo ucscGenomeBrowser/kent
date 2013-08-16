@@ -3371,11 +3371,17 @@ visibility dense
 type bed 4 +
 
 track ucscToINSDC
-shortLabel INSDC name
-longLabel Sequence name at the INSDC - International Nucleotide Sequence Database Collaboration
+shortLabel INSDC
+longLabel Accession name at the INSDC - International Nucleotide Sequence Database Collaboration
 group map
 priority 10.1
 visibility hide
 url http://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel INSDC link:
 type bed 4
+
+searchTable ucscToINSDC
+shortCircuit 1
+termRegex ^[A-Za-z0-9_]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,name from %s where name like '%s%%'
+searchPriority 10
