@@ -1044,9 +1044,9 @@ if (password && password2 && !sameString(password, password2))
 char encPwd[45] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
 sqlSafef(query,sizeof(query), "INSERT INTO gbMembers SET "
-    "userName='%s',password='%s',email='%s', "
+    "userName='%s',realName='%s',password='%s',email='%s', "
     "lastUse=NOW(),accountActivated='N'",
-    user,encPwd,email);
+    user,user,encPwd,email);
 sqlUpdate(conn, query);
 setupNewAccount(conn, email, user);
 /* send out activate code mail, and display the mail confirmation box */
