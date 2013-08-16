@@ -9580,4 +9580,42 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/vicPac2/bed
     ln -s blastz.mm10.swap lastz.mm10
 
+#########################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-15 - Hiram)
+    # this allows the "ensembl" blue bar button to appear
+    mkdir /hive/data/genomes/mm10/bed/ucscToINSDC
+    cd /hive/data/genomes/mm10/bed/ucscToINSDC
+
+    cat << '_EOF_' > translateNames.sh
+#!/bin/sh
+
+grep -v "^#" ../../genbank/Primary_Assembly/assembled_chromosomes/chr2acc \
+   | sed -e 's/^/chr/'
+
+zcat ../../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz | grep -v "^#" | cut -f1 | sort -u \
+   | sed -e 's/^\([A-Za-z0-9]*\).\([0-9]*\)/chrUn_\1\t\1.\2/;'
+
+grep -v "^#" \
+  ../../genbank/Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf \
+    | sed -e 's/^\([A-Za-z0-9]*\)\t\([A-Za-z0-9]*\).\([0-9]*\)/chr\1_\2_random\t\2.\3/;'
+
+
+echo -e "chrM\tNC_005089.1"
+'_EOF_'
+    # << happy emacs
+
+    chmod +x translateNames.sh
+    ./translateNames.sh | sort > ucscToINSDC.txt
+    join <(sort ../../chrom.sizes) ucscToINSDC.txt \
+        | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' > ucscToINSDC.tab
+
+    # maximum size of UCSC chrom name for SQL index
+    cut -f1 ucscToINSDC.tab | awk '{print length($0)}' | sort -n | tail -1
+    #   20
+
+    sed -e 's/21/20/' $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+      | hgLoadSqlTab mm10 ucscToINSDC stdin ucscToINSDC.tab
+
+    # verify the track link to INSDC functions
+
 ##############################################################################
