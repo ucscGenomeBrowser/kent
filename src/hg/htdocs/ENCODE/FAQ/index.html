@@ -89,7 +89,7 @@
           <li><a href="#release10">What does the name column represent for DNase clustered BED files?</a>
           <li><a href="#release14">Can I convert WIG files into a variableStep format to use with SitePro?</a>
           <li><a href="#release19">How do I learn more about peak calling algorithms used to generate narrowPeak and broadPeak files?</a>
-          <li><a href="#release20"> What program reads &quot;.bb&quot; TFBS files from ENCODE?</a>
+          <li><a href="#release20">What program reads &quot;.bb&quot; TFBS files from ENCODE?</a>
           </li>
         <p>
           OTHER QUESTIONS
@@ -102,6 +102,7 @@
           <li><a href="#release2">Where can I find the ENCODE growth protocol for a specific cell type?</a>
           <li><a href="#release3">Has transcription factor xxx been mapped by ENCODE?</a>
           <li><a href="#release4">How do I find overlaps between my own ChIP-seq regions and available ENCODE transcription factors?</a>
+          <li><a href="#release21">I am making a public hub for my paper, is there an example html file to use for my data description?</a>
         </p>
         <p>
           <a href="/ENCODE/contacts.html" target="_blank">Questions and feedback welcome</a>.
@@ -655,8 +656,46 @@
             <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a>.
          </div><!--end content-->
     </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <a name="release21"></a>
+    <!--outer table is for border purposes-->
+    <div class="wrapper">
+      <td align="right"><a href="#FAQ"><img src="../../images/top.gif" alt="" align="right" border="0"></a>
+        <div class="bar"><h4 class="title">HUB EXAMPLES</h4></div>
+        <div class="content">
+          <p>
+            <b><font color="#006666">Question: </font></b><br>
+            I am making a public hub for my paper, is there an example html file to use for my data description?            
+          <p>
+            <b><font color="#006666">Response:</font></b><br>
+            The browser's <a href="../../cgi-bin/hgHubConnect?" target="_blank">public hubs</a>
+            provide excellent resources to see how others have created hub structures.
+            For an excellent example of hub configuration and documentation, please see the ENCODE Analysis hub:
+            <p>
+            <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt">
+              http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt</a><br>
+            <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/genomes.txt">
+              http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/genomes.txt</a><br>
+            <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/trackDb.txt">
+              http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/trackDb.txt</a><br>
+            <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformTfbs.html">
+              http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformTfbs.html</a></br>
+            <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformRNA.html">
+              http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformRNA.html</a><br>
+            <p>
+              We recommend a minimal number of default visible tracks in your trackDb.txt 
+              to quicken hub loading time and to avoid overwhelming users. Also, we suggest the
+              paper's abstract as a useful start for your track's 'Description' section.  The 'Methods'
+              section should have more detail, and please include a contact for questions. Lastly,
+              it is best to assume a broad audience of students as well as researchers. For example,
+              it is best to spell out common acronyms for those who may be new to genomics. 
+            <p>
+         </div><!--end content-->
+    </div><!--end wrapper-->
+
     
     <!--END FAQ Content Tables------------------------------------------------------->
-    <p class="date">Updated 7 August 2013</p>
+    <p class="date">Updated 15 August 2013</p>
   </body>
 </html>
