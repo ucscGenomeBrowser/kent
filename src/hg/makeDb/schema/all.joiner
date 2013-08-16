@@ -2007,7 +2007,6 @@ identifier xenoRefSeqId typeOf=xenoMrnaAccession
     $xrg.xenoRefGene.name dupeOk
     $xrg.xenoRefFlat.name full
     $xrg.xenoRefSeqAli.qName full
-    $xrg.xenoRefFlat.name full
 
 identifier knownToRefSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession in knownToRefSeq table"
@@ -4496,10 +4495,12 @@ tablesIgnored $hg
     hgdpHzy%
     hgdpIhs%
     hgdpXpehh%
+    hgmd
     hiSeqDepthTop%
     isca%
     laminB1
     laminB1Lads
+    lovd
     mammalPsg
     nimhBipolarUs
     nimhBipolarDe

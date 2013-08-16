@@ -36,6 +36,7 @@ s/ficAlb2/Ficedula_albicollis/;
 s/hapBur1/Haplochromis_burtoni/;
 s/jacJac1/Jaculus_jaculus/;
 s/lepOcu1/Lepisosteus_oculatus/;
+s/strCam1/Struthio_camelus/;
 s/mayZeb1/Maylandia_zebra/;
 s/micOch1/Microtus_ochrogaster/;
 s/myoDav1/Myotis_davidii/;

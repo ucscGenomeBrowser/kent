@@ -144,6 +144,9 @@ ARCHIVED_DBS = \
 	mm6 \
 	danRer2
 
+# if trix build breaks, disable by setting to /bin/true instead of ./buildTrix
+# BUILD_TRIX = /bin/true
+BUILD_TRIX = ./buildTrix
 HIVE_TRIX = /hive/data/inside/trix
 DATA_TRIX = /data/trix
 ALPHA_MACHINE = hgwdev.cse.ucsc.edu
@@ -157,7 +160,7 @@ update: #clean
 	cp -p cv/alpha/cv.ra  ${CGI_BIN}-${USER}/encode
 #  if you want to test track search tool with your own trix file
 #	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb_${USER}.{ixx,ix}}
-#	HGDB_TRACKDB=trackDb_${USER} ./buildTrix trackDb_${USER} metaDb_${USER} ${CGI_BIN}-${USER}/encode/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
+#	HGDB_TRACKDB=trackDb_${USER} ${BUILD_TRIX} trackDb_${USER} metaDb_${USER} ${CGI_BIN}-${USER}/encode/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
 # you'll also need to set browser.trixPath to point to your trix file
 # see kent/src/product/ex.hg/conf for details
 
@@ -169,7 +172,7 @@ alpha: clean
 	rm -f ${CGI_BIN}/encode/cv.ra
 	cp -p cv/alpha/cv.ra ${CGI_BIN}/encode
 	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb.{ixx,ix}}
-	HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb ${CGI_BIN}/encode/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
+	HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb ${CGI_BIN}/encode/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
 	./makeTrixLinks trackDb ${HIVE_TRIX} ${DBS}
 
 onbeta:	/cluster/home/${USER}/.hg.conf.beta
@@ -178,19 +181,19 @@ beta: onbeta clean
 	${GIT} pull
 	# first make files for hgwdev-beta (we share the tables with hgwbeta)
 	rsync -a cv/beta/cv.ra ${CGI_BIN}-beta/encode/cv.ra
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb cv/beta/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
 	# now do loads on hgwbeta
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec ${DBS}
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb beta metaDb ${DBS}
 	rsync -a cv/beta/cv.ra ${BETA_MACHINE}:${CGI_BIN}/encode/cv.ra
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} ${DBS}
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} ${DBS}
 
 public: onbeta clean
 	${GIT} pull
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb public metaDb_public ${DBS}
 	rsync -a cv/public/cv.ra ${BETA_MACHINE}:${CGI_BIN}-public/encode
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ./buildTrix trackDb_public metaDb_public cv/public/cv.ra ${BETA_MACHINE} ${DATA_TRIX} ${DBS}
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ${BUILD_TRIX} trackDb_public metaDb_public cv/public/cv.ra ${BETA_MACHINE} ${DATA_TRIX} ${DBS}
 
 # this will fail if we are not in a beta checkout:
 checkbeta:

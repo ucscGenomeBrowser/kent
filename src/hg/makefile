@@ -281,6 +281,11 @@ clean_utils::
 		(cd $${D} && ${MAKE} clean;) \
 	done
 
+clean::	${TEST_DIRS:%=%.clean}
+
+%.clean:
+	cd $* && ${MAKE} clean
+
 test::	${TEST_DIRS:%=%.test}
 
 %.test: hgLib
