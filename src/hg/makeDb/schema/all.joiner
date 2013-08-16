@@ -4542,6 +4542,7 @@ tablesIgnored $hg
     snp
     snp125ExceptionDesc
     snp126ExceptionDesc
+    spMut
     switchDbTss
     syntenyMouse
     syntenyRat
