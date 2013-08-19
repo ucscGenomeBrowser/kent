@@ -70,7 +70,7 @@ track snp137 override
 snpSeqFile /gbdb/mm10/snp/snp137.fa
 
 track ucscRetroAli2
-shortLabel Retroposed Genes 2.0
+shortLabel Retroposed Genes
 longLabel Retroposed Genes, Including Pseudogenes 2012-11-13 [ucscRetroAli2]
 group genes
 type psl

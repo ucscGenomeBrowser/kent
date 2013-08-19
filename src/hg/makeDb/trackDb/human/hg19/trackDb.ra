@@ -116,7 +116,7 @@ xrefQuery select ucscRetroInfo4.name, geneSymbol from %s where geneSymbol like '
 searchPriority 3.53
 
 track ucscRetroAli5
-shortLabel Retroposed Genes 5.0
+shortLabel Retroposed Genes
 longLabel Retroposed Genes V5, Including Pseudogenes - Feb. 2013
 group genes
 type psl
