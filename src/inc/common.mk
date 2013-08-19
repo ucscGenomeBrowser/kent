@@ -129,6 +129,8 @@ endif
 ifeq (${MYSQLLIBS},)
   MYSQLLIBS="-lmysqlclient"
 endif
+# OK to add this to all MYSQLLIBS just in case it is MySQL version 5.6 libraries
+MYSQLLIBS += -lstdc++ -lrt
 
 L+=${PNGLIB}
 HG_INC+=${PNGINCL}
@@ -211,7 +213,6 @@ ifeq (${HG_WARN},)
       HG_WARN_UNINIT=-Wuninitialized
     else
       ifeq (${FULLWARN},hgwdev)
-        MYSQLLIBS += -lstdc++ -lrt
         HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type
         HG_WARN_UNINIT=-Wuninitialized
       else
