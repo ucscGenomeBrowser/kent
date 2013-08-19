@@ -753,6 +753,8 @@ if(tg->customInt)
             font, color, vis);
 }
 
+#define BAM_DEFAULT_SHOW_DIFF_BASES_MAX_ZOOM "100"
+
 static void addBamBaseAndIndelSettings(struct trackDb *tdb)
 /* Unless already set in trackDb, add settings to enable
  * base-level differences and indel display. */
@@ -761,7 +763,7 @@ struct hash *settings = tdb->settingsHash;
 if (!hashLookup(settings, BASE_COLOR_USE_SEQUENCE))
     hashAdd(settings, BASE_COLOR_USE_SEQUENCE, cloneString("lfExtra"));
 if (!hashLookup(settings, BASE_COLOR_DEFAULT))
-    hashAdd(settings, BASE_COLOR_DEFAULT, cloneString("diffBases"));
+    hashAdd(settings, BASE_COLOR_DEFAULT, cloneString(BASE_COLOR_DRAW_DIFF_BASES));
 if (!hashLookup(settings, SHOW_DIFF_BASES_ALL_SCALES))
     hashAdd(settings, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
 if (!hashLookup(settings, INDEL_DOUBLE_INSERT))
@@ -771,7 +773,7 @@ if (!hashLookup(settings, INDEL_QUERY_INSERT))
 if (!hashLookup(settings, INDEL_POLY_A))
     hashAdd(settings, INDEL_POLY_A, cloneString("on"));
 if (!hashLookup(settings, "showDiffBasesMaxZoom"))
-    hashAdd(settings, "showDiffBasesMaxZoom", cloneString("100"));
+    hashAdd(settings, "showDiffBasesMaxZoom", cloneString(BAM_DEFAULT_SHOW_DIFF_BASES_MAX_ZOOM));
 }
 
 void bamMethods(struct track *track)
