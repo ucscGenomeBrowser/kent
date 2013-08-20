@@ -76,8 +76,10 @@ my $stepper = new HgStepManager(
 			       );
 
 # Option defaults:
-my $bigClusterHub = 'swarm';
-my $smallClusterHub = 'encodek';
+# my $bigClusterHub = 'swarm';
+my $bigClusterHub = 'ku';
+# my $smallClusterHub = 'encodek';
+my $smallClusterHub = 'ku';
 my $dbHost = 'hgwdev';
 my $workhorse = 'hgwdev';
 my $defaultChainLinearGap = "loose";
