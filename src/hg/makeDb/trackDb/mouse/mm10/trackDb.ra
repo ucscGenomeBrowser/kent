@@ -71,7 +71,7 @@ snpSeqFile /gbdb/mm10/snp/snp137.fa
 
 track ucscRetroAli2
 shortLabel Retroposed Genes
-longLabel Retroposed Genes, Including Pseudogenes
+longLabel Retroposed Genes V2, Including Pseudogenes
 group genes
 type psl
 priority 37.14
@@ -91,7 +91,7 @@ dataVersion Apr. 2013
 
 searchName ucscRetroInfoRefSeq2
 searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes
+searchDescription Retroposed Genes V2, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 xrefTable refLink, ucscRetroInfo2
 dontCheckXrefQueryFormat 1
@@ -100,13 +100,13 @@ searchPriority 3.52
 
 searchName ucscRetroInfoMrna2
 searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes
+searchDescription Retroposed Genes V2, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 searchPriority 3.55
 
 searchName ucscRetroUniProt2
 searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes
+searchDescription Retroposed Genes V2, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo2
@@ -115,10 +115,9 @@ searchPriority 3.54
 
 searchName ucscRetroKnownGene2
 searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes
+searchDescription Retroposed Genes V2, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo2
 xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
-
