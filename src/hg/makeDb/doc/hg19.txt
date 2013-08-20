@@ -23946,8 +23946,8 @@ echo -e "chrM\tNC_001807.4"
 # lastz Fugu fr3 (DONE - 2013-08-20 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S fr3
-    mkdir /hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17
-    cd /hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17
+    mkdir /hive/data/genomes/hg19/bed/lastzFr3.2013-08-20
+    cd /hive/data/genomes/hg19/bed/lastzFr3.2013-08-20
 
     cat << '_EOF_' > DEF
 # Human vs. Fugu
@@ -23973,7 +23973,7 @@ SEQ2_CHUNK=20000000
 SEQ2_LIMIT=30
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/hg19/bed/lastzFr3.2013-09-20
+BASE=/hive/data/genomes/hg19/bed/lastzFr3.2013-08-20
 TMPDIR=/dev/shm
 '_EOF_'
     # << happy emacs
@@ -23985,25 +23985,25 @@ TMPDIR=/dev/shm
         `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
-XXX - running - Tue Aug 20 12:26:23 PDT 2013
-    #   real    76m34.446s
+    #   Elapsed time: 77m52s
 
-    cat fb.hg19.chainPetMar2Link.txt
-    #   30305028 bases of 2897316137 (1.046%) in intersection
+    cat fb.hg19.chainFr3Link.txt
+    #   49339815 bases of 2897316137 (1.703%) in intersection
+
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/hg19/bed
-    ln -s lastzPetMar2.2012-10-17 lastz.fr3
+    ln -s lastzFr3.2013-08-20 lastz.fr3
 
     #	and for the swap
     mkdir /hive/data/genomes/fr3/bed/blastz.hg19.swap
     cd /hive/data/genomes/fr3/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17/DEF \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	/hive/data/genomes/hg19/bed/lastzFr3.2013-08-20/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    15m22.099s
+    #   real     8m36.196s
     cat  fb.fr3.chainHg19Link.txt
-    #	21515660 bases of 647368134 (3.324%) in intersection
+    #	43105455 bases of 350961831 (12.282%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/fr3/bed
