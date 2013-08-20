@@ -71,7 +71,7 @@ snpSeqFile /gbdb/mm10/snp/snp137.fa
 
 track ucscRetroAli2
 shortLabel Retroposed Genes
-longLabel Retroposed Genes, Including Pseudogenes
+longLabel Retroposed Genes V2, Including Pseudogenes
 group genes
 type psl
 priority 37.14
