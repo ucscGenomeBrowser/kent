@@ -22,25 +22,46 @@ else
 }
 
 
-int sqlMakePassFile(char* passFileName)
-/* Create a password file in the supplied directory to be passed to
- * mysql with --defaults-extra-file.  Writes a mysql options set using
- * the profile [client] and the password from cfgVal("db.password").
- * passFileName cannot be static, and the last 6 characters should
+int sqlMakeExtraFile(char* extraFileName, char* profile, char* group)
+/* Create a temporary file in the supplied directory to be passed to
+ * mysql with --defaults-extra-file.  Writes a mysql options set for
+ * the mysql group [group] with the profile.host, profile.user, and
+ * profile.password values returned from cfgVal().  If group is not
+ * client or mysql, a --defaults-group-suffix=group must be passed to
+ * mysql to actually invoke the settings.
+ * passFileName cannot be static, and the last 6 characters must
  * be XXXXXX.  Those characters will be modified to form a unique suffix.
- * Returns the file descriptor of the password file */
-/* This should later be modified to accept a profile argument, to select
- * which profile the password (and other options?) comes from */
+ * Returns a file descriptor for the file or dies with an error */
 {
-int passFileNo;
-char passFileData[256];
+int fileNo;
+char paddedGroup [256]; /* string with brackets around the group name */
+char fileData[256];  /* constructed variable=value data for the mysql config file */
+char field[256];  /* constructed profile.field name to pass to cfgVal */
 
-if ((passFileNo=mkstemp(passFileName)) == -1)
-    errAbort("Could not create unique temporary file %s", passFileName);
-safef(passFileData, sizeof(passFileData), "[client]\npassword=%s", cfgVal("db.password"));
-if (write (passFileNo, passFileData, strlen(passFileData)) == -1)
-    errAbort("Writing to temporary file %s failed with errno %d", passFileName, errno);
-return passFileNo;
+if ((fileNo=mkstemp(extraFileName)) == -1)
+    errAbort("sqlMakeExtraFile: Could not create unique temporary file %s", extraFileName);
+
+/* write out the group name, user, host, and password */
+safef(paddedGroup, sizeof(paddedGroup), "[%s]\n", group);
+if (write (fileNo, paddedGroup, strlen(paddedGroup)) == -1)
+    errAbort("sqlMakeExtraFile: Writing group to temporary file %s failed with errno %d", extraFileName, errno);
+
+safef(field, sizeof(field), "%s.host", profile);
+safef(fileData, sizeof(fileData), "host=%s\n", cfgVal(field));
+if (write (fileNo, fileData, strlen(fileData)) == -1)
+    errAbort("sqlMakeExtraFile: Writing host to temporary file %s failed with errno %d", extraFileName, errno);
+
+safef(field, sizeof(field), "%s.user", profile);
+safef(fileData, sizeof(fileData), "user=%s\n", cfgVal(field));
+if (write (fileNo, fileData, strlen(fileData)) == -1)
+    errAbort("sqlMakeExtraFile: Writing user to temporary file %s failed with errno %d", extraFileName, errno);
+
+safef(field, sizeof(field), "%s.password", profile);
+safef(fileData, sizeof(fileData), "password=%s\n", cfgVal(field));
+if (write (fileNo, fileData, strlen(fileData)) == -1)
+    errAbort("sqlMakeExtraFile: Writing password to temporary file %s failed with errno %d", extraFileName, errno);
+
+return fileNo;
 }
 
 
@@ -50,26 +71,21 @@ void sqlExecProg(char *prog, char **progArgs, int userArgc, char *userArgv[])
  * which maybe NULL. userArgv are arguments passed in from the command line.
  * The program is execvp-ed, this function does not return. */
 {
-int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, passFileNo;
+int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, extraFileNo;
 pid_t child_id;
-char **nargv, passArg[256], hostArg[128], *homeDir, passFileName[256];
+char **nargv, extraFileArg[256], *homeDir, extraFileName[256];
 
 /* Assemble defaults file */
 if ((homeDir = getenv("HOME")) == NULL)
-    errAbort("HOME is not defined in environment; cannot create temporary password file");
-safef(passFileName, sizeof(passFileName), "%s/.hgsql.cnfXXXXXX", homeDir);
-passFileNo=sqlMakePassFile(passFileName);
-safef(passArg, sizeof(passArg), "--defaults-extra-file=%s", passFileName);
+    errAbort("sqlExecProg: HOME is not defined in environment; cannot create temporary password file");
+safef(extraFileName, sizeof(extraFileName), "%s/.hgsql.cnfXXXXXX", homeDir);
+extraFileNo=sqlMakeExtraFile(extraFileName, "db", "client");
+safef(extraFileArg, sizeof(extraFileArg), "--defaults-extra-file=%s", extraFileName);
 
-safef(hostArg, sizeof(hostArg), "-h%s", cfgVal("db.host"));
 AllocArray(nargv, nargc);
 
 nargv[j++] = prog;
-/* --defaults-extra-file must come before other options */
-nargv[j++] = passArg;
-nargv[j++] = "-u";
-nargv[j++] = cfgVal("db.user");
-nargv[j++] = hostArg;
+nargv[j++] = extraFileArg;   /* --defaults-extra-file must come before other options */
 if (progArgs != NULL)
     {
     for (i = 0; progArgs[i] != NULL; i++)
@@ -81,16 +97,16 @@ nargv[j++] = NULL;
 
 child_id = fork();
 if (child_id == 0)
-{
+    {
     execvp(nargv[0], nargv);
-    errnoAbort("exec of %s failed with errno %d", nargv[0], errno);
-}
+    _exit(1);
+    }
 else
-{
+    {
     /* Wait until the called process completes, then delete the temp file */
     wait(NULL);
-    unlink (passFileName);
-}
+    unlink (extraFileName);
+    }
 }
 
 
@@ -102,17 +118,21 @@ void sqlExecProgLocal(char *prog, char **progArgs, int userArgc, char *userArgv[
  * The program is execvp-ed, this function does not return. 
  */
 {
-int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6;
-char **nargv, passArg[128], hostArg[128];
-safef(passArg, sizeof(passArg), "-p%s", cfgOption("localDb.password"));
-safef(hostArg, sizeof(hostArg), "-h%s", cfgOption("localDb.host"));
+int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, extraFileNo;
+pid_t child_id;
+char **nargv, extraFileName[256], extraFileArg[256], *homeDir;
+
+/* Assemble defaults file */
+if ((homeDir = getenv("HOME")) == NULL)
+    errAbort("sqlExecProg: HOME is not defined in environment; cannot create temporary password file");
+safef(extraFileName, sizeof(extraFileName), "%s/.hgsql.cnfXXXXXX", homeDir);
+extraFileNo=sqlMakeExtraFile(extraFileName, "localDb", "client");
+safef(extraFileArg, sizeof(extraFileArg), "--defaults-extra-file=%s", extraFileName);
+
 AllocArray(nargv, nargc);
 
 nargv[j++] = prog;
-nargv[j++] = "-u";
-nargv[j++] = cfgOption("localDb.user");
-nargv[j++] = passArg;
-nargv[j++] = hostArg;
+nargv[j++] = extraFileArg;   /* --defaults-extra-file must come before other options */
 if (progArgs != NULL)
     {
     for (i = 0; progArgs[i] != NULL; i++)
@@ -121,8 +141,19 @@ if (progArgs != NULL)
 for (i = 0; i < userArgc; i++)
     nargv[j++] = userArgv[i];
 nargv[j++] = NULL;
-execvp(nargv[0], nargv);
-errnoAbort("exec of %s failed", nargv[0]);
+
+child_id = fork();
+if (child_id == 0)
+    {
+    execvp(nargv[0], nargv);
+    _exit(1);
+    }
+else
+    {
+    /* Wait until the called process completes, then delete the temp file */
+    wait(NULL);
+    unlink (extraFileName);
+    }
 }
 
 void sqlExecProgProfile(char *profile, char *prog, char **progArgs, int userArgc, char *userArgv[])
@@ -133,20 +164,21 @@ void sqlExecProgProfile(char *profile, char *prog, char **progArgs, int userArgc
  * The program is execvp-ed, this function does not return. 
  */
 {
-int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6;
-char **nargv, passArg[128], hostArg[128], optionStr[128];
-safef(optionStr, sizeof(optionStr), "%s.password", profile);
-safef(passArg, sizeof(passArg), "-p%s", cfgOption(optionStr));
-safef(optionStr, sizeof(optionStr), "%s.host", profile);
-safef(hostArg, sizeof(hostArg), "-h%s", cfgOption(optionStr));
+int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, extraFileNo;
+pid_t child_id;
+char **nargv, extraFileName[256], extraFileArg[256], *homeDir;
+
+/* Assemble defaults file */
+if ((homeDir = getenv("HOME")) == NULL)
+    errAbort("sqlExecProg: HOME is not defined in environment; cannot create temporary password file");
+safef(extraFileName, sizeof(extraFileName), "%s/.hgsql.cnfXXXXXX", homeDir);
+extraFileNo=sqlMakeExtraFile(extraFileName, profile, "client");
+safef(extraFileArg, sizeof(extraFileArg), "--defaults-extra-file=%s", extraFileName);
+
 AllocArray(nargv, nargc);
 
 nargv[j++] = prog;
-nargv[j++] = "-u";
-safef(optionStr, sizeof(optionStr), "%s.user", profile);
-nargv[j++] = cfgOption(optionStr);
-nargv[j++] = passArg;
-nargv[j++] = hostArg;
+nargv[j++] = extraFileArg;   /* --defaults-extra-file must come before other options */
 if (progArgs != NULL)
     {
     for (i = 0; progArgs[i] != NULL; i++)
@@ -155,6 +187,17 @@ if (progArgs != NULL)
 for (i = 0; i < userArgc; i++)
     nargv[j++] = userArgv[i];
 nargv[j++] = NULL;
-execvp(nargv[0], nargv);
-errnoAbort("exec of %s failed", nargv[0]);
+
+child_id = fork();
+if (child_id == 0)
+    {
+    execvp(nargv[0], nargv);
+    _exit(1);
+    }
+else
+    {
+    /* Wait until the called process completes, then delete the temp file */
+    wait(NULL);
+    unlink (extraFileName);
+    }
 }
