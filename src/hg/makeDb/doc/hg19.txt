@@ -23943,3 +23943,70 @@ echo -e "chrM\tNC_001807.4"
     # verify the track link to INSDC functions
 
 #########################################################################
+# lastz Fugu fr3 (DONE - 2013-08-20 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S fr3
+    mkdir /hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17
+    cd /hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17
+
+    cat << '_EOF_' > DEF
+# Human vs. Fugu
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Fugu fr3
+SEQ2_DIR=/hive/data/genomes/fr3/fr3.2bit
+SEQ2_LEN=/hive/data/genomes/fr3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzFr3.2013-09-20
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+XXX - running - Tue Aug 20 12:26:23 PDT 2013
+    #   real    76m34.446s
+
+    cat fb.hg19.chainPetMar2Link.txt
+    #   30305028 bases of 2897316137 (1.046%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzPetMar2.2012-10-17 lastz.fr3
+
+    #	and for the swap
+    mkdir /hive/data/genomes/fr3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/fr3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    15m22.099s
+    cat  fb.fr3.chainHg19Link.txt
+    #	21515660 bases of 647368134 (3.324%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/fr3/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
