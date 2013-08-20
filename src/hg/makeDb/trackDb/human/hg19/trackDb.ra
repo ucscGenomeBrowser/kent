@@ -116,8 +116,8 @@ xrefQuery select ucscRetroInfo4.name, geneSymbol from %s where geneSymbol like '
 searchPriority 3.53
 
 track ucscRetroAli5
-shortLabel Retroposed Genes 5.0
-longLabel Retroposed Genes V5, Including Pseudogenes - Feb. 2013
+shortLabel Retroposed Genes
+longLabel Retroposed Genes V5, Including Pseudogenes
 group genes
 type psl
 priority 37.14
@@ -133,11 +133,11 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
-dataVersion Feb. 2013
+dataVersion Mar. 2013
 
 searchName ucscRetroInfoRefSeq5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes - 
+searchDescription Retroposed GenesV5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 xrefTable refLink, ucscRetroInfo5
 dontCheckXrefQueryFormat 1
@@ -146,13 +146,13 @@ searchPriority 3.52
 
 searchName ucscRetroInfoMrna5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes - 
+searchDescription Retroposed GenesV5, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 searchPriority 3.55
 
 searchName ucscRetroUniProt5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes - 
+searchDescription Retroposed GenesV5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo5
@@ -161,7 +161,7 @@ searchPriority 3.54
 
 searchName ucscRetroKnownGene5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes - 
+searchDescription Retroposed GenesV5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo5
