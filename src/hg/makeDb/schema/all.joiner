@@ -641,9 +641,11 @@ identifier ucscRetroInfo[1,2,4,5] dependency
 "Link together Ucsc Retrogenes and ucsc retroGene alignments"
     $ucscRetroDb.ucscRetroInfo[].name unique
     $ucscRetroDb.ucscRetroAli[].qName 
+    $ucscRetroDb.ucscRetroOrtho[].name
+    $ucscRetroDb.ucscRetroExpressed[].name
 
 identifier ucscRetroOrtho[1,2,4,5] dependency
-"Link together Ucsc Retrogenes and ucsc retro orthlogy"
+"Link together Ucsc Retrogenes and ucsc retro orthology"
     $ucscRetroDb.ucscRetroAli[].qName dupeOk
     $ucscRetroDb.ucscRetroOrtho[].name
 
@@ -665,7 +667,7 @@ identifier ucscRetroSeq5
     hg19.ucscRetroCds5.id
     hg19.ucscRetroAli5.qName chopAfter=-
     hg19.ucscRetroInfo5.name chopAfter=-
-
+    
 identifier ucscRetroSeq1
 "Sequences for GenBank sequences used as retrogene parents for version 1"
     mm9.ucscRetroSeq1.acc unique 
