@@ -137,7 +137,7 @@ dataVersion Mar. 2013
 
 searchName ucscRetroInfoRefSeq5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes 
+searchDescription Retroposed Genes V5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 xrefTable refLink, ucscRetroInfo5
 dontCheckXrefQueryFormat 1
@@ -146,13 +146,13 @@ searchPriority 3.52
 
 searchName ucscRetroInfoMrna5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes
+searchDescription Retroposed Genes V5, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 searchPriority 3.55
 
 searchName ucscRetroUniProt5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes 
+searchDescription Retroposed Genes V5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo5
@@ -161,7 +161,7 @@ searchPriority 3.54
 
 searchName ucscRetroKnownGene5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes 
+searchDescription Retroposed Genes V5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo5
@@ -2060,6 +2060,30 @@ type wigMaf 0.0 1.0
 speciesCodonDefault hg19
 #speciesOrder ornAna1 galGal3 taeGut1 anoCar2 pytMol0 chrPic0 pelSin0 cheMyd0 allMis0
 speciesOrder mm9 bosTau4 monDom5 anoCar1 galGal3 xenTro2 danRer6 fr2 gasAcu1 oryLat2 calMil0
+priority 100
+
+track multizMarine
+#subTrack consDinoViewalign on
+shortLabel Marine Align
+longLabel Marine Alignments
+#subGroups view=align clade=vert
+noInherit on
+irows on
+summary multizMarineSummary
+frames multiz46wayFrames
+group x
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+speciesCodonDefault hg19
+#speciesGroups Primate Placental_Mammal Vertebrate
+#sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 papHam1 calJac1 tarSyr1 micMur1 otoGar1
+#sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr3 proCap1 echTel1 dasNov2 choHof1 
+#sGroup_Vertebrate macEug1 monDom5 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig2 fr2 gasAcu1 oryLat2 danRer6 petMar1 
+#speciesDefaultOff panTro2 gorGor1 ponAbe2 papHam1 calJac1 tarSyr1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 macEug1 ornAna1 taeGut1 anoCar1 proCap1 tetNig2 fr2 gasAcu1 oryLat2 petMar1
+speciesOrder rheMac3 papAnu2 calJac3 mm10 rn5 vicPac2 turTru2 orcOrc1 bosTau7 canFam3 odoRosDiv1 loxAfr3 triMan1 monDom5
+#itemFirstCharCase noChange
+#treeImage phylo/hg19_Dino.gif
 priority 100
 
 track multizDino

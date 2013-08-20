@@ -3086,6 +3086,81 @@ TMPDIR=/scratch/tmp
     #   1318212266 bases of 1852394361 (71.163%) in intersection
 
 #########################################################################
+# LASTZ Baboon PapAnu2 (DONE - 2013-08-19 braney)
+    mkdir /hive/data/genomes/hg19/bed/lastzPapAnu2.2013-08-19
+    cd /hive/data/genomes/hg19/bed/lastzPapAnu2.2013-08-19
+
+    cat << '_EOF_' > DEF
+# human vs baboon
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Baboon papAnu2
+SEQ2_DIR=/hive/data/genomes/papAnu2/papAnu2.2bit
+SEQ2_LEN=/hive/data/genomes/papAnu2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPapAnu2.2013-08-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	> do.log 2>&1 &
+
+    # real    162m10.321s
+
+    cat fb.hg19.chainPapAnu2Link.txt
+    # 2467659115 bases of 2897316137 (85.171%) in intersection
+
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzPapAnu2.2013-08-19 lastz.papAnu2
+    cd lastz.papAnu2
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 papAnu2 > rbest.log 2>&1 &
+    #	real    182m0.276s
+
+    #	running the swap - DONE - 2013-07-01
+    mkdir /hive/data/genomes/papAnu2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/papAnu2/bed/blastz.hg19.swap
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/hg19/bed/lastzPapAnu2.2013-08-19 \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #  real    534m25.137s
+
+    cat fb.papAnu2.chainHg19Link.txt
+    #  2353204907 bases of 2741849051 (85.825%) in intersection
+
+    cd /hive/data/genomes/papHam1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
 # LASTZ Baboon PapHam1 (DONE - 2009-05-20,22 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPapHam1.2009-05-20
     cd /hive/data/genomes/hg19/bed/lastzPapHam1.2009-05-20
@@ -23380,7 +23455,67 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
-# killer whale/orcOrc1 Lastz run (
+# LASTZ  dolphin turTru2 Lastz run (DONE - 2013-08-19 braney)
+    screen -S turTru2    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzTurTru2.2013-08-19
+    cd  /hive/data/genomes/hg19/bed/lastzTurTru2.2013-08-19
+    cat << '_EOF_' > DEF
+# human vs dolphin
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: dolphin turTru2
+SEQ2_DIR=/hive/data/genomes/turTru2/turTru2.2bit
+SEQ2_LEN=/hive/data/genomes/turTru2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/hg19/bed/lastzTurTru2.2013-08-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -noDbNameCheck -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > do.log 2>&1
+    # real    718m18.715s
+
+    cat fb.hg19.chainTurTru2Link.txt
+    # 1482195003 bases of 2897316137 (51.158%) in intersection
+
+    # create symLink to indicate this is the version to use
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzTurTru2.2013-08-19 lastzTurTru2
+    cd lastzTurTru2
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 turTru2 > rbest.log 2>&1 &
+    #   real    55m27.877s
+
+    # running the swap
+    mkdir /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzOrcOrc1/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -noDbNameCheck -syntenicNet > swap.log 2>&1
+    #   real    101m51.331s
+
+    cat fb.orcOrc1.chainHg19Link.txt
+    #    1490487100 bases of 2300235512 (64.797%) in intersection
+
+    cd /hive/data/genomes/orcOrc1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+#########################################################################
+# killer whale/orcOrc1 Lastz run  (DONE - 2013-07-31 braney)
     screen -S orcOrc1    # use screen to manage this long running job
     mkdir /hive/data/genomes/hg19/bed/lastzOrcOrc1.2013-07-31
     cd  /hive/data/genomes/hg19/bed/lastzOrcOrc1.2013-07-31
@@ -23941,5 +24076,72 @@ echo -e "chrM\tNC_001807.4"
        ucscToINSDC.tab
 
     # verify the track link to INSDC functions
+
+#########################################################################
+# lastz Fugu fr3 (DONE - 2013-08-20 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S fr3
+    mkdir /hive/data/genomes/hg19/bed/lastzFr3.2013-08-20
+    cd /hive/data/genomes/hg19/bed/lastzFr3.2013-08-20
+
+    cat << '_EOF_' > DEF
+# Human vs. Fugu
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Fugu fr3
+SEQ2_DIR=/hive/data/genomes/fr3/fr3.2bit
+SEQ2_LEN=/hive/data/genomes/fr3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzFr3.2013-08-20
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #   Elapsed time: 77m52s
+
+    cat fb.hg19.chainFr3Link.txt
+    #   49339815 bases of 2897316137 (1.703%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzFr3.2013-08-20 lastz.fr3
+
+    #	and for the swap
+    mkdir /hive/data/genomes/fr3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/fr3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzFr3.2013-08-20/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real     8m36.196s
+    cat  fb.fr3.chainHg19Link.txt
+    #	43105455 bases of 350961831 (12.282%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/fr3/bed
+    ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################

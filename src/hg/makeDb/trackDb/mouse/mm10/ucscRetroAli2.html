@@ -15,12 +15,12 @@ All mRNAs of a species from GenBank were aligned to the genome using
 <a href="http://www.bx.psu.edu/~rsharris/lastz/" target="_blank">lastz</a>
 (Miller lab, Pennsylvania State University). mRNAs that aligned twice in the genome
 (once with introns and once without introns) were initially screened. Next, a series
-of features were scored to determine candidates for retrotranspostion events. These
-features include position and length of the polyA tail, degree of synteny with human,
+of features were scored to determine candidates for retrotransposition events. These
+features included position and length of the polyA tail, degree of synteny with human,
 coverage of repetitive elements, number of exons that can still be aligned to the
-retrogene and degree of divergence from the parent gene. Retrogenes are classified
+retrogene and degree of divergence from the parent gene. Retrogenes were classified
 using a threshold score function that is a linear combination of this set of features.
-Retrogenes in the final set are selected using a score threshold based on a ROC plot
+Retrogenes in the final set were selected using a score threshold based on a ROC plot
 against the <a href="http://vega.sanger.ac.uk" target="_blank">Vega</a> annotated
 pseudogenes.
 </p>
@@ -28,7 +28,7 @@ pseudogenes.
 <h3>Retrogene Statistics table:</h3>
 
 <ul>
-  <li><b>Expression of retrogene</b>: The following values are possible where
+  <li><b>Expression of Retrogene:</b> The following values are possible where
   those that are not expressed are classed as <em>pseudogene</em> or
   <em>mrna</em>:</li>
   <ul>
@@ -44,23 +44,23 @@ pseudogenes.
     <li><em>expressed</em> indicates that there is a medium level of mRNAs/ESTs
     mapping to the retrogene locus, indicating possible transcription.</li>
     <li><em>expressed strong</em> indicates that there is a mRNA overlapping
-    the retrogene, and at least five spliced Ests indicating probable transcription.
+    the retrogene, and at least five spliced ESTs indicating probable transcription.
     <em>noOrf</em> indicates that an ORF was not identified by BESTORF.</li>
     <li><em>expressed shuffle</em> indicates that the retrogene was inserted into
     a pre-existing annotated gene.</li>
   </ul>
-  <li><b>Score</b>: Based on features of the potential retrogene.</li>
-  <li><b>Percent Gene Alignment Coverage (Bases matching Parent)</b>: shows
+  <li><b>Score:</b> Based on features of the potential retrogene.</li>
+  <li><b>Percent Gene Alignment Coverage (Bases Matching Parent):</b> Shows
   the percentage of the parent gene aligning to this region.</li>
-  <li><b>Intron Count</b>: Number of introns is the number of gaps in
+  <li><b>Intron Count:</b> Number of introns is the number of gaps in
   the alignment between the parent mRNA and the genome where gaps are &gt;80 bp and
   the ratio of the mRNA alignment gap to the genome alignment gap is less than
   30% after removing repeats.</li>
-  <li><b>Gap Count</b>: Numer of gaps in the alignment of between the parent
+  <li><b>Gap Count:</b> Numer of gaps in the alignment of between the parent
   mRNA and the genome after removing repeats. Gaps are not counted if the gap on
   the mRNA side of the alignment is a similar size to the gap in the genome
   alignment.</li>
-  <li><b>BESTORF Score</b>:
+  <li><b>BESTORF Score:</b>
   <a href="http://linux1.softberry.com/berry.phtml?topic=bestorf&group=help&subgroup=gfind"
   target="_blank">BESTORF</a> (written by Victor Solovyev) predicts potential open reading
   frames (ORFs) in mRNAs/ESTs with very high accuracy using a Markov chain model of coding
@@ -78,13 +78,13 @@ to the reference genome (mouse mm10) at the retrogene locus as defined by synten
 alignment nets. Breaks in orthology with human and dog tend to be due to genomic
 insertions in the rodent lineage. Relative orthology of human/mouse and dog/mouse
 nets are used to avoid false positives due to deletions in the human genome. Older
-retrogenes will not show a break in orthology so this feature is weighted lower than
+retrogenes will not show a break in orthology, so this feature is weighted lower than
 other features when scoring putative retrogenes.
 </p>
 
 <p>
-These features can be downloaded from the table retroMrnaInfo in many
-formats using the Table Browser option from the Tools menu on the top blue bar.
+These features can be downloaded from the table retroMrnaInfo in many formats using
+the Table Browser option from the Tools menu in the top blue navigation bar.
 </p>
 
 <h2>Credits</h2>
@@ -98,32 +98,50 @@ The RetroFinder program and browser track were developed by
 
 <h2>References</h2>
 
+<p>
+Baertsch R, Diekhans M, Kent WJ, Haussler D, Brosius J.
+<a href="http://www.biomedcentral.com/1471-2164/9/466" target="_blank">
+Retrocopy contributions to the evolution of the human genome</a>.
+<em>BMC Genomics</em>. 2008 Oct 8;9:466.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/18842134" target="_blank">18842134</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2584115" target="_blank">PMC2584115</a>
+</p>
 
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="http://www.pnas.org/content/100/20/11484.abstract" target="_blank">
+Evolution's cauldron: duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784" target="_blank">PMC208784</a>
+</p>
 
+<p>
+Pei B, Sisu C, Frankish A, Howald C, Habegger L, Mu XJ, Harte R, Balasubramanian S, Tanzer A,
+Diekhans M <em>et al</em>.
+<a href="http://genomebiology.com/content/13/9/R51" target="_blank">
+The GENCODE pseudogene resource</a>.
+<em>Genome Biol</em>. 2012 Sep 26;13(9):R51.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22951037" target="_blank">22951037</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3491395" target="_blank">PMC3491395</a>
+</p>
 
-<P>
-Pei B, Sisu C, Frankish A, Howald C, Habegger L, Mu XJ, Harte R, 
-Balasubramanian S, Tanzer A, Diekhans M <I>et al.</I>
-<A HREF="http://genomebiology.com/content/13/9/R51">The GENCODE pseudogene resource.</A>
-<I>Genome Biology</I> 2012 Sep 26;13(9):R51.      
-<P>
-Baertsch R, Diekhans M, Kent J, Haussler D, Brosius J. 
-<a href="http://www.biomedcentral.com/1471-2164/9/466">Retrocopy contributions to the evolution of the human genome.</a>
-<I>BMC Genomics</I> 2008 Oct 8;9:466.
-<P>
-Deyou Zheng, Adam Frankish, Robert Baertsch, Philipp Kapranov, Alexandre Reymond , Siew Woh Choo , Yontao Lu , France Denoeud , Stylianos E Antonarakis , Michael Snyder , Yijun Ruan, Chia-Lin Wei , Thomas R. Gingeras , Roderic Guigo , Jennifer Harrow , and Mark B. Gerstein 
-<a href="http://genome.cshlp.org/cgi/content/full/17/6/839">Pseudogenes in the ENCODE Regions: Consensus Annotation, Analysis of Transcription and Evolution.</a>
-<I>Genome Res.</i> 2007 Jun;17(6):839-51.
-<P>
-Kent, W.J., Baertsch, R., Hinrichs, A., Miller, W., and Haussler, D.
-<A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1" 
-TARGET=_blank>Evolution's cauldron: 
-Duplication, deletion, and rearrangement in the mouse and human genomes</A>. 
-<I>Proc Natl Acad Sci USA</I> <B>100</B>(20), 11484-11489 (2003).
-<P>
-Schwartz, S., Kent, W.J., Smit, A., Zhang, Z., Baertsch, R., Hardison, R., 
-Haussler, D., and Miller, W.
-<A HREF="http://www.genome.org/cgi/content/abstract/13/1/103" TARGET=_blank>Human-Mouse 
-Alignments with BLASTZ</A>. <em>Genome Res.</em> <B>13</B>(1), 103-7 (2003).
-</P>
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC, Haussler D, Miller W.
+<a href="http://genome.cshlp.org/content/13/1/103.abstract" target="_blank">
+Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961" target="_blank">PMC430961</a>
+</p>
 
+<p>
+Zheng D, Frankish A, Baertsch R, Kapranov P, Reymond A, Choo SW, Lu Y, Denoeud F, Antonarakis SE,
+Snyder M <em>et al</em>.
+<a href="http://genome.cshlp.org/content/17/6/839.full" target="_blank">
+Pseudogenes in the ENCODE regions: consensus annotation, analysis of transcription, and
+evolution</a>.
+<em>Genome Res</em>. 2007 Jun;17(6):839-51.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/17568002" target="_blank">17568002</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1891343" target="_blank">PMC1891343</a>
+</p>

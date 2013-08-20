@@ -36,8 +36,10 @@ use vars qw/
     /;
 
 # Option defaults:
-my $clusterHub = 'swarm';
-my $distrHost = 'swarm';
+# my $clusterHub = 'swarm';
+my $clusterHub = 'ku';
+# my $distrHost = 'swarm';
+my $distrHost = 'ku';
 my $dbHost = 'hgwdev';
 my $workhorse = 'least loaded';
 my $blastPath = '/scratch/data/blast';
