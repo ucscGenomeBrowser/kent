@@ -31,7 +31,8 @@ my $stepper = new HgStepManager(
 				);
 
 # Option defaults:
-my $bigClusterHub = 'swarm';
+# my $bigClusterHub = 'swarm';
+my $bigClusterHub = 'ku';
 my $workhorse = 'hgwdev';
 my $dbHost = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';

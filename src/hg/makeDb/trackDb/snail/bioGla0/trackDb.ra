@@ -1,0 +1,41 @@
+
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+
+searchTable gold
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex [AN][KC][Z_][M0]01[0-9]+(\.[0-9])?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+track multiz3way
+#subTrack consDinoViewalign on
+shortLabel Mollusk Align
+longLabel Mollusk Alignments
+#subGroups view=align clade=vert
+noInherit on
+irows on
+summary multiz3waySummary
+#frames multiz46wayFrames
+group x
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+speciesCodonDefault bioGla0
+#speciesGroups Primate Placental_Mammal Vertebrate
+#sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 papHam1 calJac1 tarSyr1 micMur1 otoGar1
+#sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr3 proCap1 echTel1 dasNov2 choHof1 
+#sGroup_Vertebrate macEug1 monDom5 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig2 fr2 gasAcu1 oryLat2 danRer6 petMar1 
+#speciesDefaultOff panTro2 gorGor1 ponAbe2 papHam1 calJac1 tarSyr1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 macEug1 ornAna1 taeGut1 anoCar1 proCap1 tetNig2 fr2 gasAcu1 oryLat2 petMar1
+speciesOrder aplCal0 lotGig0
+#itemFirstCharCase noChange
+#treeImage phylo/hg19_Dino.gif
+priority 100
+

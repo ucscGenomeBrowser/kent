@@ -34,6 +34,9 @@ melGal	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 # Chicken Gallus gallus
 galGal	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Phasianinae; Gallus
 
+# tax ID 8801
+# Ostrich Struthio camelus
+strCam	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Palaeognathae; Struthioniformes; Struthionidae; Struthio
 
 # Collared Flycatcher - Ficedula albicollis
 ficAlb	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Muscicapidae; Ficedula

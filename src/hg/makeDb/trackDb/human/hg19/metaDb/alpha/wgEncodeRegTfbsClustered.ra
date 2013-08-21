@@ -73,8 +73,8 @@ objType table
 composite wgEncodeRegTfbsClustered
 dataType Cluster
 fileName wgEncodeRegTfbsClusteredV3.bed.gz
-md5sum 455daeadc569926daa9d45e292cc288d
+md5sum 015d1813f5b721d428d29d280e3c378b
 project wgEncode
 tableName wgEncodeRegTfbsClusteredV3
 
-# MAGIC: 1877008467
+# MAGIC: -1656025218

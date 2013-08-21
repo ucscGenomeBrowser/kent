@@ -3005,4 +3005,61 @@ wild and destroy stuff.
 --Hiram 
 
 #############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-15 - Hiram)
+    # this allows the "ensembl" blue bar button to appear
+    mkdir /hive/data/genomes/panPan1/bed/ucscToINSDC
+    cd /hive/data/genomes/panPan1/bed/ucscToINSDC
 
+    cat << '_EOF_' > translateNames.sh
+#!/bin/sh
+
+export chrUN="chrUn_"
+
+if [ -s ../../genbank/Primary_Assembly/assembled_chromosomes/chr2acc ]; then
+  grep -v "^#" ../../genbank/Primary_Assembly/assembled_chromosomes/chr2acc \
+     | sed -e 's/^/chr/'
+else
+  chrUN=""
+fi
+
+if [ -s ../../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz ]; then
+  zcat ../../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz | grep -v "^#" | cut -f1 | sort -u \
+     | sed -e "s/^\([A-Za-z0-9]*\).\([0-9]*\)/${chrUN}\1\t\1.\2/;"
+fi
+
+if [ -s ../../genbank/Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf ]; then
+grep -v "^#" \
+  ../../genbank/Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf \
+    | sed -e 's/^\([A-Za-z0-9]*\)\t\([A-Za-z0-9]*\).\([0-9]*\)/chr\1_\2_random\t\2.\3/;'
+
+fi
+
+if [ -s ../../genbank/non-nuclear/assembled_chromosomes/chr2acc ]; then
+   AC=`grep "^MT" ../../genbank/non-nuclear/assembled_chromosomes/chr2acc | cut -f2`
+   echo -e "chrM\t$AC"
+else
+  echo -e "chrM\tfindMTAccession"
+fi
+'_EOF_'
+    # << happy emacs
+
+    chmod +x translateNames.sh
+    ./translateNames.sh | sort > ucscToINSDC.txt
+    # verify all names are covered, "should all be a count of 2 only:
+(cut -f1 ../../chrom.sizes; cut -f1 ucscToINSDC.txt) | sort | uniq -c | sort -rn | head
+(cut -f1 ../../chrom.sizes; cut -f1 ucscToINSDC.txt) | sort | uniq -c | sort -rn | tail
+
+    export DB=panPan1
+    join <(sort ../../chrom.sizes) ucscToINSDC.txt \
+        | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' > ucscToINSDC.tab
+
+    # maximum size of UCSC chrom name for SQL index
+    export SZ=`cut -f1 ucscToINSDC.tab | awk '{print length($0)}' | sort -n | tail -1`
+    # SZ: 12
+
+    sed -e "'s/21/$SZ/'" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab '${DB}' ucscToINSDC stdin ucscToINSDC.tab'
+
+    # verify the track link to INSDC functions
+
+##############################################################################
