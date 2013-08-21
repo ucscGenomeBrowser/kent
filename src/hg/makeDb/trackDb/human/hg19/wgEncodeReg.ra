@@ -407,7 +407,7 @@ canPack On
     useScore 1
     priority 1.71
     maxWindowToDraw 10000000
-    dataVersion ENCODE Jul 2012 Freeze
+    dataVersion ENCODE Mar 2012 Freeze
 
     # This is alternate cluster version -- antibody-based, as done in V2
     track wgEncodeRegTfbsClusteredV4
@@ -423,4 +423,3 @@ canPack On
     visibility hide
     useScore 1
     priority 1.72
-    dataVersion ENCODE Jul 2012 Freeze
