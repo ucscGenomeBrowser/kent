@@ -45,6 +45,10 @@ endif
 
 # libssl: disabled by default
 ifeq (${USE_SSL},1)
+    ifneq (${SSL_DIR}, "/usr/include/openssl")
+        L+=-L${SSL_DIR}/lib
+        HG_INC+=-I${SSL_DIR}/include
+    endif
     L+=-lssl -lcrypto
     HG_DEFS+=-DUSE_SSL
 endif
