@@ -52,18 +52,15 @@ use vars qw( %cluster %clusterFilesystem $defaultDbHost );
     ( 'swarm' => ,
         { 'enabled' => 1, 'gigaHz' => 2.33, 'ram' => 8,
 	  'hostCount' => 1024, },
-#      'pk' =>
-#        { 'enabled' => 1, 'gigaHz' => 2.0, 'ram' => 4,
-#	  'hostCount' => 394, },
+      'ku' =>
+        { 'enabled' => 1, 'gigaHz' => 1.4, 'ram' => 8,
+	  'hostCount' => 512, },
       'memk' =>
         { 'enabled' => 1, 'gigaHz' => 1.0, 'ram' => 32,
 	  'hostCount' => 32, },
       'encodek' =>
         { 'enabled' => 1, 'gigaHz' => 2.0, 'ram' => 16,
 	  'hostCount' => 48, },
-#      'kk9' => # Guessing here since the machines are down:
-#        { 'enabled' => 0, 'gigaHz' => 1.5, 'ram' => 2,
-#	  'hostCount' => 100, },
     );
 
 my @allClusters = (keys %cluster);
@@ -75,17 +72,9 @@ my @allClusters = (keys %cluster);
 	  inputFor => \@allClusters, outputFor => [], },
       'hive' =>
         { root => '/hive/data/genomes', clusterLocality => 0.3,
-	  distrHost => ['swarm'], distrCommand => '',
-	  inputFor => ['memk', 'encodek', 'swarm'],
-	  outputFor => ['memk', 'encodek', 'swarm'], },
-#        { root => '/hive/data/genomes', clusterLocality => 0.3,
-#	  distrHost => ['pk', 'swarm'], distrCommand => '',
-#	  inputFor => ['pk', 'memk', 'encodek', 'swarm'],
-#	  outputFor => ['pk', 'memk', 'encodek', 'swarm'], },
-#      'san' =>
-#        { root => '/san/sanvol1/scratch', clusterLocality => 0.5,
-#	  distrHost => ['pk'], distrCommand => '',
-#	  inputFor => ['pk', 'memk'], outputFor => ['pk', 'memk'], },
+	  distrHost => ['ku'], distrCommand => '',
+	  inputFor => ['ku', 'memk', 'encodek', 'swarm'],
+	  outputFor => ['ku', 'memk', 'encodek', 'swarm'], },
     );
 
 $defaultDbHost = 'hgwdev';
@@ -218,7 +207,7 @@ sub getWorkhorseLoads {
   # swarm and hgwdev are now valid workhorses since they have access to hive.
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
-  foreach my $machLine ('swarm', 'kolossus', 'hgwdev',
+  foreach my $machLine ('ku', 'swarm', 'kolossus', 'hgwdev',
 	`$HgAutomate::runSSH encodek parasol list machines | grep idle`,
 	`$HgAutomate::runSSH memk parasol list machines | grep idle`) {
     my $mach = $machLine;
@@ -597,6 +586,18 @@ sub getSpecies {
   my ($scientificName) = split("\t", $line);
   return ($scientificName);
 } # getSpecies
+
+sub getOrganism {
+  # fetch organism from dbDb
+  my ($dbHost, $db) = @_;
+  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
+  my $query = "select organism from dbDb " .
+              "where name = \"$db\";";
+  my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;
+  chomp $line;
+  my ($organism) = split("\t", $line);
+  return ($organism);
+} # getOrganism
 
 sub machineHasFile {
   # Return a positive integer if $mach appears to have $file or 0 if it
