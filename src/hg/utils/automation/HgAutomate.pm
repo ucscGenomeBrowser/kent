@@ -587,6 +587,18 @@ sub getSpecies {
   return ($scientificName);
 } # getSpecies
 
+sub getOrganism {
+  # fetch organism from dbDb
+  my ($dbHost, $db) = @_;
+  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
+  my $query = "select organism from dbDb " .
+              "where name = \"$db\";";
+  my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;
+  chomp $line;
+  my ($organism) = split("\t", $line);
+  return ($organism);
+} # getOrganism
+
 sub machineHasFile {
   # Return a positive integer if $mach appears to have $file or 0 if it
   # does not.

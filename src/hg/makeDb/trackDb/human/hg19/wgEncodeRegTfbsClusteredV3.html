@@ -43,17 +43,19 @@ peak contributing to the cluster.
 
 <h2>Release Notes</h2>
 <p>
-Release 3 (June 2013) of this track includes more datasets (690 total,
+Release 3 (August 2013) of this track includes more datasets (690 total,
 vs. 486 in the previous release) representing all
-ENCODE transcription factor ChIP-seq passing quality assessment through the ENCODE June 2012 data freeze.
+ENCODE transcription factor ChIP-seq passing quality assessment through the ENCODE March 2012 data freeze.
 The peaks used to generate these clusters were called with less stringent thresholds than 
 used during the January 2011 uniform processing shown in Release 2 of this track.
 The peaks that were used to generate the clusters in this version are displayed as individual
 tracks in the ENCODE Uniform TFBS track, which is  available along with the primary data tracks
 at the <a href="../cgi-bin/hgTrackUi?g=wgEncodeTfBindingSuper" 
 target="_blank">ENC TF Binding Supertrack</a> page.
-The clustering for V3 is based on the transcription factor target, differing from V2 in which clustering was 
-based on antibody used.
+The clustering for V3 is based on the transcription factor target, and so differs from V2 where clustering was based on antibody.
+</p>
+<p>
+For this release, a new track table format, 'factorSource' was used to represent the primary clusters table and downloads file, <em>wgEncodeTfbsClusteredV3</em>.  This format consists of standard BED5 fields (see <a target=_blank href="../FAQ/FAQformat.html#format1">File Formats</a>) followed by two fields containing comma-separated lists.  The first list field contains numeric identifiers for experiments, keyed to the <em>wgEncodeTfbsClusteredInputsV3</em> table.  The second list field contains the scores for the corresponding experiments.
 </p>
 
 <h2>Credits</h2>
