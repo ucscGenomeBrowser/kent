@@ -24,7 +24,7 @@ a signal is detected.  The darkness of the letter is proportional to the signal 
 the cell line. 
 Abbreviations
 starting with capital letters designate 
-<a target=_blank href="http://encodeproject.org/ENCODE/cellTypes.html">ENCODE cell types</a>
+<a target="_blank" href="http://encodeproject.org/ENCODE/cellTypes.html">ENCODE cell types</a>
 identified for intensive study - Tier 1 and Tier 2 - 
 while those starting with lowercase letters designate Tier 3 cell lines.
 Click on an item in the track to see the cell lines spelled out. 
@@ -36,9 +36,17 @@ Click on an item in the track to see the cell lines spelled out.
 Peaks of transcription factor occupancy from uniform processing of ENCODE ChIP-seq data at
 a .9% FDR threshold from datasets provided by the ENCODE Analysis Working Group 
 that passed the integrated quality metric
-(see &quot;Quality Control&quot; section of <a target=_blank href=../cgi-bin/hgTrackUi?g=wgEncodeAwgTfbsUniform>Uniform TFBS</a>) 
+(see &quot;Quality Control&quot; section of <a target="_blank" href=../cgi-bin/hgTrackUi?g=wgEncodeAwgTfbsUniform>Uniform TFBS</a>) 
 were clustered using UCSC hgBedsToBedExps.  The cluster score is the highest score for any
-peak contributing to the cluster.
+peak contributing to the cluster.  The input signal values were multiplied by a normalization
+factor calculated as the ratio of the maximum score value (1000) to the signal value at one
+standard deviation from the mean, with values exceeding 1000 capped at 1000. This has the
+effect of distributing scores up to mean plus one 1 standard deviation across the score range,
+but assigning all above to the maximum score.
+<p>
+For additional documentation on the methods used to generate the data underlying this track
+please review the <a href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgTfbsUniform"
+target="_blank">ENCODE Uniform TFBS</a> track description.
 </p>
 
 <h2>Release Notes</h2>
@@ -55,7 +63,17 @@ target="_blank">ENC TF Binding Supertrack</a> page.
 The clustering for V3 is based on the transcription factor target, and so differs from V2 where clustering was based on antibody.
 </p>
 <p>
-For this release, a new track table format, 'factorSource' was used to represent the primary clusters table and downloads file, <em>wgEncodeTfbsClusteredV3</em>.  This format consists of standard BED5 fields (see <a target=_blank href="../FAQ/FAQformat.html#format1">File Formats</a>) followed by two fields containing comma-separated lists.  The first list field contains numeric identifiers for experiments, keyed to the <em>wgEncodeTfbsClusteredInputsV3</em> table.  The second list field contains the scores for the corresponding experiments.
+For this release, a new track table format, 'factorSource' was used to represent the primary clusters
+table and downloads file, <em>wgEncodeTfbsClusteredV3</em>.  This format consists of standard BED5
+fields (see <a target="_blank" href="../FAQ/FAQformat.html#format1">File Formats</a>) followed by two
+fields containing comma-separated lists.  The first list field contains numeric identifiers for
+experiments, keyed to the <em>wgEncodeTfbsClusteredInputsV3</em> table, which includes such information
+as the experiment's underlying Uniform TFBS table name, factor targeted, antibody used, cell type,
+treatment (if any), and laboratory source.  The second list field contains the scores for the corresponding
+experiments. In the downloads directory there is a BED file
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegTfbsClustered/"
+target="_blank">wgEncodeRegTfbsClusteredWithCellsV3</a> that provides the cluster score followed by a
+comma-separated list of cell types.
 </p>
 
 <h2>Credits</h2>
@@ -76,7 +94,7 @@ at the University of Chicago, and
 at the University of Texas, Austin.
 These data were processed into uniform peak calls by the ENCODE Analysis Working Group pipeline
 developed by
-<a href="https://sites.google.com/site/anshulkundaje" target=_balnk">Anshul Kundaje</a>
+<a href="https://sites.google.com/site/anshulkundaje" target="_blank">Anshul Kundaje</a>
 The clustering of the uniform peaks was performed by UCSC.
 </p>
 
