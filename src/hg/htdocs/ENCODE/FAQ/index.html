@@ -428,7 +428,9 @@
             <a href="http://rgrossman.com/2013/03/20/a-tool-for-keeping-big-data-in-sync/">protocol</a>
             which should help our users get much faster download rates. It is on our list of
             things to do, so we will not be able to give you a time estimate as to when this
-            tool will be available.
+            tool will be available. We highly recommend using rsync. Using rsync, for example
+            "rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile
+            ./", has the advantage of starting up where it left off after a failure, when ran again.
           </p>
         </div><!--end content-->
     </div><!--end wrapper-->
