@@ -486,7 +486,7 @@ $paraRun = ("$para make jobList\n" .
 	    "$para check\n" .
 	    "$para time > run.time\n" .
 	    'cat run.time');
-$centralDbSql = "hgsql -h genome-testdb -A -N hgcentraltest";
+$centralDbSql = "hgsql -h localhost -A -N hgcentraltest";
 $git = "/usr/bin/git";
 
 $clusterData = '/hive/data/genomes';
