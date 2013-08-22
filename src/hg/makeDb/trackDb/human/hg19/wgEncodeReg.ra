@@ -394,7 +394,7 @@ canPack On
 
     # This is candidate for release (V3 format)
     track wgEncodeRegTfbsClusteredV3
-    release alpha, beta
+    release alpha, beta, public
     shortLabel Txn Fac ChIP V3
     longLabel Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
     type factorSource
