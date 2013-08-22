@@ -71,42 +71,7 @@ void sqlExecProg(char *prog, char **progArgs, int userArgc, char *userArgv[])
  * which maybe NULL. userArgv are arguments passed in from the command line.
  * The program is execvp-ed, this function does not return. */
 {
-int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, extraFileNo;
-pid_t child_id;
-char **nargv, extraFileArg[256], *homeDir, extraFileName[256];
-
-/* Assemble defaults file */
-if ((homeDir = getenv("HOME")) == NULL)
-    errAbort("sqlExecProg: HOME is not defined in environment; cannot create temporary password file");
-safef(extraFileName, sizeof(extraFileName), "%s/.hgsql.cnfXXXXXX", homeDir);
-extraFileNo=sqlMakeExtraFile(extraFileName, "db", "client");
-safef(extraFileArg, sizeof(extraFileArg), "--defaults-extra-file=%s", extraFileName);
-
-AllocArray(nargv, nargc);
-
-nargv[j++] = prog;
-nargv[j++] = extraFileArg;   /* --defaults-extra-file must come before other options */
-if (progArgs != NULL)
-    {
-    for (i = 0; progArgs[i] != NULL; i++)
-        nargv[j++] = progArgs[i];
-    }
-for (i = 0; i < userArgc; i++)
-    nargv[j++] = userArgv[i];
-nargv[j++] = NULL;
-
-child_id = fork();
-if (child_id == 0)
-    {
-    execvp(nargv[0], nargv);
-    _exit(1);
-    }
-else
-    {
-    /* Wait until the called process completes, then delete the temp file */
-    wait(NULL);
-    unlink (extraFileName);
-    }
+sqlExecProgProfile("db", prog, progArgs, userArgc, userArgv);
 }
 
 
@@ -118,42 +83,7 @@ void sqlExecProgLocal(char *prog, char **progArgs, int userArgc, char *userArgv[
  * The program is execvp-ed, this function does not return. 
  */
 {
-int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, extraFileNo;
-pid_t child_id;
-char **nargv, extraFileName[256], extraFileArg[256], *homeDir;
-
-/* Assemble defaults file */
-if ((homeDir = getenv("HOME")) == NULL)
-    errAbort("sqlExecProg: HOME is not defined in environment; cannot create temporary password file");
-safef(extraFileName, sizeof(extraFileName), "%s/.hgsql.cnfXXXXXX", homeDir);
-extraFileNo=sqlMakeExtraFile(extraFileName, "localDb", "client");
-safef(extraFileArg, sizeof(extraFileArg), "--defaults-extra-file=%s", extraFileName);
-
-AllocArray(nargv, nargc);
-
-nargv[j++] = prog;
-nargv[j++] = extraFileArg;   /* --defaults-extra-file must come before other options */
-if (progArgs != NULL)
-    {
-    for (i = 0; progArgs[i] != NULL; i++)
-        nargv[j++] = progArgs[i];
-    }
-for (i = 0; i < userArgc; i++)
-    nargv[j++] = userArgv[i];
-nargv[j++] = NULL;
-
-child_id = fork();
-if (child_id == 0)
-    {
-    execvp(nargv[0], nargv);
-    _exit(1);
-    }
-else
-    {
-    /* Wait until the called process completes, then delete the temp file */
-    wait(NULL);
-    unlink (extraFileName);
-    }
+sqlExecProgProfile("localDb", prog, progArgs, userArgc, userArgv);
 }
 
 void sqlExecProgProfile(char *profile, char *prog, char **progArgs, int userArgc, char *userArgv[])
@@ -164,13 +94,13 @@ void sqlExecProgProfile(char *profile, char *prog, char **progArgs, int userArgc
  * The program is execvp-ed, this function does not return. 
  */
 {
-int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, extraFileNo;
+int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, extraFileNo, returnStatus;
 pid_t child_id;
 char **nargv, extraFileName[256], extraFileArg[256], *homeDir;
 
 /* Assemble defaults file */
 if ((homeDir = getenv("HOME")) == NULL)
-    errAbort("sqlExecProg: HOME is not defined in environment; cannot create temporary password file");
+    errAbort("sqlExecProgProfile: HOME is not defined in environment; cannot create temporary password file");
 safef(extraFileName, sizeof(extraFileName), "%s/.hgsql.cnfXXXXXX", homeDir);
 extraFileNo=sqlMakeExtraFile(extraFileName, profile, "client");
 safef(extraFileArg, sizeof(extraFileArg), "--defaults-extra-file=%s", extraFileName);
@@ -192,12 +122,19 @@ child_id = fork();
 if (child_id == 0)
     {
     execvp(nargv[0], nargv);
-    _exit(1);
+    _exit(42);  /* Why 42?  Why not?  Need something user defined that mysql isn't going to return */
     }
 else
     {
-    /* Wait until the called process completes, then delete the temp file */
-    wait(NULL);
+    /* Wait until the child process completes, then delete the temp file */
+    wait(&returnStatus);
     unlink (extraFileName);
+    if (WIFEXITED(returnStatus))
+        {
+        if (WEXITSTATUS(returnStatus) == 42)
+            errAbort("sqlExecProgProfile: exec failed");
+        }
+    else
+        errAbort("sqlExecProgProfile: child process exited with abnormal status %d", returnStatus);
     }
 }
