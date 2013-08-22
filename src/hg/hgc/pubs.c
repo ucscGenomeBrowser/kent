@@ -28,7 +28,8 @@ bool pubsIsElsevier = FALSE;
 
 // the article source is used to modify other parts of the page
 static char *articleSource;
-// we need the external article PMC Id for yif links
+
+// we need the external article PMC Id for YIF links
 static char *extId = NULL;
 
 // section types in mysql table, for all annotations tables
@@ -39,7 +40,7 @@ static char *pubsSecNames[] ={
       "results", "discussion",
       "conclusions", "ack",
       "refs", "unknown" };
-//
+
 // whether a checkbox is checked by default, have to correspond to pubsSecNames
 static int pubsSecChecked[] ={
       1, 1,
@@ -274,23 +275,31 @@ return nameListString;
 
 
 static struct sqlResult *queryMarkerRows(struct sqlConnection *conn, char *markerTable, \
-    char *articleTable, char *item, int itemLimit, char *sectionList)
-/* query marker rows from mysql, based on http parameters  */
+    char *articleTable, char *item, int itemLimit, char *sectionList, char *artExtIdFilter)
+/* query marker rows from mysql, based on http parameters  
+ * optionally filter on sections or just a single article
+ * */
 {
 char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
 sqlUpdate(conn, "NOSQLINJ SET SESSION group_concat_max_len = 100000");
  
+char artFilterSql[4000];
+artFilterSql[0] = 0;
+if (isNotEmpty(artExtIdFilter))
+    safef(artFilterSql, sizeof(artFilterSql), " AND extId='%s' ", artExtIdFilter);
+
 // no need to check for illegal characters in sectionList
 sqlSafef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, "  
     "pmid, extId, "
     "group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s "
     "JOIN %s USING (articleId) "
     "WHERE markerId='%s' AND section in (%-s) "
+    "%-s"
     "GROUP by articleId "
     "ORDER BY year DESC "
     "LIMIT %d",
-    markerTable, markerTable, articleTable, item, sectionList, itemLimit);
+    markerTable, markerTable, articleTable, item, sectionList, artFilterSql, itemLimit);
 
 if (pubsDebug)
     printf("%s", query);
@@ -359,19 +368,50 @@ if (sqlNeedQuickNum(conn, query) > itemLimit)
     }
 }
 
+static void printAddWbr(char *text, int distance) 
+/* a crazy hack for firefox/mozilla that is unable to break long words in tables
+ * We need to add a <wbr> tag every x characters in the text to make text breakable.
+ */
+{
+int i;
+i = 0;
+char *c;
+c = text;
+bool doNotBreak = FALSE;
+while (*c != 0) 
+    {
+    if ((*c=='&') || (*c=='<'))
+       doNotBreak = TRUE;
+    if (*c==';' || (*c =='>'))
+       doNotBreak = FALSE;
+
+    printf("%c", *c);
+    if (i % distance == 0 && ! doNotBreak) 
+        printf("<wbr>");
+    c++;
+    i++;
+    }
+}
+
 static void printMarkerSnippets(struct sqlConnection *conn, char *articleTable, char *markerTable, char *item)
 {
 
 /* do not show more snippets than this limit */
 int itemLimit=100;
 
-printSectionCheckboxes();
+char *artExtIdFilter = cgiOptionalString("pubsFilterExtId");
+
 char *sectionList = makeSqlMarkerList();
-printLimitWarning(conn, markerTable, item, itemLimit, sectionList);
+if (artExtIdFilter==NULL)
+    {
+    printSectionCheckboxes();
+    printLimitWarning(conn, markerTable, item, itemLimit, sectionList);
+    printf("<H3>Snippets from Publications:</H3>");
+    }
 
-printf("<H3>Snippets from Publications:</H3>");
-struct sqlResult *sr = queryMarkerRows(conn, markerTable, articleTable, item, itemLimit, sectionList);
+struct sqlResult *sr = queryMarkerRows(conn, markerTable, articleTable, item, itemLimit, sectionList, artExtIdFilter);
 
+printf("<DIV style=\"width:1024px; font-size:100%%\">\n");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -383,7 +423,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *pmid      = row[5];
     char *snippets  = row[7];
     url = mangleUrl(url);
-    printf("<A HREF=\"%s\">%s</A> ", url, title);
+    printf("<A HREF=\"%s\">%s</A><BR> ", url, title);
     printf("<SMALL>%s</SMALL>; ", authors);
     printf("<SMALL>%s ", citation);
     if (!isEmpty(pmid) && strcmp(pmid, "0")!=0 )
@@ -391,10 +431,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("</SMALL><BR>\n");
     if (pubsDebug)
         printf("articleId=%s", articleId);
-    printf("<I>%s</I><P>", snippets);
+    printf("<I>\n");
+    printAddWbr(snippets, 40);
+    printf("</I><P>");
     printf("<HR>");
     }
 
+printf("</DIV>\n");
 freeMem(sectionList);
 sqlFreeResult(&sr);
 }
@@ -568,31 +611,6 @@ if (!isClickedSection && !pubsDebug)
     web2PrintHeaderCell("Link to matching genomic location", 20);
 web2EndThead();
 web2StartTbodyS("font-family: Arial, Helvetica, sans-serif; line-height: 1.5em; font-size: 0.9em;");
-}
-
-static void printAddWbr(char *text, int distance) 
-/* a crazy hack for firefox/mozilla that is unable to break long words in tables
- * We need to add a <wbr> tag every x characters in the text to make text breakable.
- */
-{
-int i;
-i = 0;
-char *c;
-c = text;
-bool doNotBreak = FALSE;
-while (*c != 0) 
-    {
-    if ((*c=='&') || (*c=='<'))
-       doNotBreak = TRUE;
-    if (*c==';' || (*c =='>'))
-       doNotBreak = FALSE;
-
-    printf("%c", *c);
-    if (i % distance == 0 && ! doNotBreak) 
-        printf("<wbr>");
-    c++;
-    i++;
-    }
 }
 
 void printHgTracksLink(char *db, char *chrom, int start, int end, char *linkText, char *optUrlStr)
