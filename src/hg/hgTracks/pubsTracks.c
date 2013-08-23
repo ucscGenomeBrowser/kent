@@ -459,6 +459,7 @@ static void pubsMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
                               char *itemName, char *mapItemName, int start, int end,
                               int x, int y, int width, int height)
 {
+/* make sure that mapItem is the bed->name field, not the itemName */
 struct bed *bed = item;
 genericMapItem(tg, hvg, item, bed->name, bed->name, start, end, x, y, width, height);
 }
@@ -578,7 +579,7 @@ tg->mapItem   = pubsMapItem;
 void pubsMarkerMethods(struct track *tg)
 /* publication marker tracks are bed5 tracks of genome marker occurences like rsXXXX found in text*/
 {
-tg->mapItem   = pubsMarkerMapItem;
 tg->itemName  = pubsMarkerItemName;
+tg->mapItem   = pubsMarkerMapItem;
 }
 
