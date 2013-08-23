@@ -40,7 +40,15 @@ static char *pubsSecNames[] ={
       "intro", "methods",
       "results", "discussion",
       "conclusions", "ack",
-      "refs", "unknown" };
+      "refs", "supplement", "unknown" };
+
+// labels to show to user, have to correspond to pubsSecNames
+static char *secLabels[] ={
+      "Title", "Abstract",
+      "Introduction", "Methods",
+      "Results", "Discussion",
+      "Conclusions", "Acknowledgements",
+      "References", "Supplement", "Undetermined section (e.g. for a brief communication)" };
 
 // whether a checkbox is checked by default, have to correspond to pubsSecNames
 static int pubsSecChecked[] ={
@@ -328,14 +336,6 @@ return sr;
 static void printSectionCheckboxes()
 /* show a little form with checkboxes where user can select sections they want to show */
 {
-// labels to show to user, have to correspond to pubsSecNames
-char *secLabels[] ={
-      "Title", "Abstract",
-      "Introduction", "Methods",
-      "Results", "Discussion",
-      "Conclusions", "Acknowledgements",
-      "References", "Undetermined section (e.g. for a brief communication)" };
-
 int labelCount = sizeof(secLabels)/sizeof(char *);
 
 int i;
