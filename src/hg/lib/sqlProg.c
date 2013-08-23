@@ -3,6 +3,7 @@
 #include "common.h"
 #include "sqlProg.h"
 #include "hgConfig.h"
+#include "obscure.h"
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -22,9 +23,23 @@ else
 }
 
 
-int sqlMakeExtraFile(char* extraFileName, char* profile, char* group)
+void copyCnfToDefaultsFile(char *path, char *defaultFileName, int fileNo)
+/* write the contents of the path to the fileNo */
+{
+if (fileExists(path))
+    {
+    char *cnf = NULL;
+    size_t cnfSize = 0;
+    readInGulp(path, &cnf, &cnfSize);
+    if (write (fileNo, cnf, cnfSize) == -1)
+	errAbort("Writing %s to file %s failed with errno %d", path, defaultFileName, errno);
+    }
+}
+
+
+int sqlMakeDefaultsFile(char* defaultFileName, char* profile, char* group)
 /* Create a temporary file in the supplied directory to be passed to
- * mysql with --defaults-extra-file.  Writes a mysql options set for
+ * mysql with --defaults-file.  Writes a mysql options set for
  * the mysql group [group] with the profile.host, profile.user, and
  * profile.password values returned from cfgVal().  If group is not
  * client or mysql, a --defaults-group-suffix=group must be passed to
@@ -37,29 +52,50 @@ int fileNo;
 char paddedGroup [256]; /* string with brackets around the group name */
 char fileData[256];  /* constructed variable=value data for the mysql config file */
 char field[256];  /* constructed profile.field name to pass to cfgVal */
+char path[1024];
 
-if ((fileNo=mkstemp(extraFileName)) == -1)
-    errAbort("sqlMakeExtraFile: Could not create unique temporary file %s", extraFileName);
+if ((fileNo=mkstemp(defaultFileName)) == -1)
+    errAbort("Could not create unique temporary file %s", defaultFileName);
+
+/* pick up the global and local defaults
+ *  -- the order matters: later settings over-ride earlier ones. */
+
+safef(path, sizeof path, "/etc/my.cnf");
+copyCnfToDefaultsFile(path, defaultFileName, fileNo);
+
+safef(path, sizeof path, "/etc/mysql/my.cnf");
+copyCnfToDefaultsFile(path, defaultFileName, fileNo);
+
+safef(path, sizeof path, "/var/lib/mysql/my.cnf");
+copyCnfToDefaultsFile(path, defaultFileName, fileNo);
+
+//  SYSCONFDIR/my.cnf should be next, but I do not think it matters. maybe it is just /var/lib/mysql anyways.
+
+safef(path, sizeof path, "%s/my.cnf", getenv("MYSQL_HOME"));
+copyCnfToDefaultsFile(path, defaultFileName, fileNo);
+
+safef(path, sizeof path, "%s/.my.cnf", getenv("HOME"));
+copyCnfToDefaultsFile(path, defaultFileName, fileNo);
 
 /* write out the group name, user, host, and password */
 safef(paddedGroup, sizeof(paddedGroup), "[%s]\n", group);
 if (write (fileNo, paddedGroup, strlen(paddedGroup)) == -1)
-    errAbort("sqlMakeExtraFile: Writing group to temporary file %s failed with errno %d", extraFileName, errno);
+    errAbort("Writing group to temporary file %s failed with errno %d", defaultFileName, errno);
 
 safef(field, sizeof(field), "%s.host", profile);
 safef(fileData, sizeof(fileData), "host=%s\n", cfgVal(field));
 if (write (fileNo, fileData, strlen(fileData)) == -1)
-    errAbort("sqlMakeExtraFile: Writing host to temporary file %s failed with errno %d", extraFileName, errno);
+    errAbort("Writing host to temporary file %s failed with errno %d", defaultFileName, errno);
 
 safef(field, sizeof(field), "%s.user", profile);
 safef(fileData, sizeof(fileData), "user=%s\n", cfgVal(field));
 if (write (fileNo, fileData, strlen(fileData)) == -1)
-    errAbort("sqlMakeExtraFile: Writing user to temporary file %s failed with errno %d", extraFileName, errno);
+    errAbort("Writing user to temporary file %s failed with errno %d", defaultFileName, errno);
 
 safef(field, sizeof(field), "%s.password", profile);
 safef(fileData, sizeof(fileData), "password=%s\n", cfgVal(field));
 if (write (fileNo, fileData, strlen(fileData)) == -1)
-    errAbort("sqlMakeExtraFile: Writing password to temporary file %s failed with errno %d", extraFileName, errno);
+    errAbort("Writing password to temporary file %s failed with errno %d", defaultFileName, errno);
 
 return fileNo;
 }
@@ -94,21 +130,21 @@ void sqlExecProgProfile(char *profile, char *prog, char **progArgs, int userArgc
  * The program is execvp-ed, this function does not return. 
  */
 {
-int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, extraFileNo, returnStatus;
+int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, defaultFileNo, returnStatus;
 pid_t child_id;
-char **nargv, extraFileName[256], extraFileArg[256], *homeDir;
+char **nargv, defaultFileName[256], defaultFileArg[256], *homeDir;
 
 /* Assemble defaults file */
 if ((homeDir = getenv("HOME")) == NULL)
     errAbort("sqlExecProgProfile: HOME is not defined in environment; cannot create temporary password file");
-safef(extraFileName, sizeof(extraFileName), "%s/.hgsql.cnfXXXXXX", homeDir);
-extraFileNo=sqlMakeExtraFile(extraFileName, profile, "client");
-safef(extraFileArg, sizeof(extraFileArg), "--defaults-extra-file=%s", extraFileName);
+safef(defaultFileName, sizeof(defaultFileName), "%s/.hgsql.cnf-XXXXXX", homeDir);
+defaultFileNo=sqlMakeDefaultsFile(defaultFileName, profile, "client");
+safef(defaultFileArg, sizeof(defaultFileArg), "--defaults-file=%s", defaultFileName);
 
 AllocArray(nargv, nargc);
 
 nargv[j++] = prog;
-nargv[j++] = extraFileArg;   /* --defaults-extra-file must come before other options */
+nargv[j++] = defaultFileArg;   /* --defaults-file must come before other options */
 if (progArgs != NULL)
     {
     for (i = 0; progArgs[i] != NULL; i++)
@@ -128,7 +164,7 @@ else
     {
     /* Wait until the child process completes, then delete the temp file */
     wait(&returnStatus);
-    unlink (extraFileName);
+    unlink (defaultFileName);
     if (WIFEXITED(returnStatus))
         {
         if (WEXITSTATUS(returnStatus) == 42)
