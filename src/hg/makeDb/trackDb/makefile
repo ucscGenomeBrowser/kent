@@ -192,7 +192,6 @@ public: onbeta clean
 	${GIT} pull
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb public metaDb_public ${DBS}
-	rsync -a cv/public/cv.ra ${BETA_MACHINE}:${CGI_BIN}-public/encode
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ${BUILD_TRIX} trackDb_public metaDb_public cv/public/cv.ra ${BETA_MACHINE} ${DATA_TRIX} ${DBS}
 
 # this will fail if we are not in a beta checkout:
