@@ -4387,3 +4387,16 @@ see doc/builds.txt for specific details.
     ln -s blastz.mm10.swap lastz.mm10
 
 ##############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-16 - Hiram)
+    mkdir /hive/data/genomes/cavPor3/bed/ucscToINSDC
+    cd /hive/data/genomes/cavPor3/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh
+    ./verifyAll.sh
+    ./join.sh
+
+    # verify the track link to INSDC functions
+
+##############################################################################
