@@ -190,7 +190,11 @@ web2EndDiv("section");
 
 /* ------  */
 
-
+static void printDebug(char *text) 
+{
+if (pubsDebug)
+    printf("%s<BR>", text);
+}
 
 static char *mangleUrl(char *url) 
 /* add publisher specific parameters to url and return new url*/
@@ -302,8 +306,7 @@ sqlSafef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, author
     "LIMIT %d",
     markerTable, markerTable, articleTable, item, sectionList, artFilterSql, itemLimit);
 
-if (pubsDebug)
-    printf("%s", query);
+    printDebug(query);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 
@@ -376,7 +379,7 @@ if (sqlNeedQuickNum(conn, query) > itemLimit)
     {
     printf("<b>This marker is mentioned more than %d times</b><BR>\n", itemLimit);
     printf("The results would take too long to load in your browser and are "
-    "therefore limited to %d articles.<P>\n", itemLimit);
+    "therefore limited to the %d most recent articles.<P>\n", itemLimit);
     }
 }
 
@@ -423,7 +426,7 @@ for (;;)
 *out = 0;
 }
 
-char* printShortArticleInfo(char **row) {
+static char* printShortArticleInfo(char **row) {
 /* print a two-line description of article */
 char *articleId = row[0];
 char *url       = row[1];
@@ -462,7 +465,7 @@ if (pubsDebug)
 return articleId;
 }
 
-void printSnippets(struct sqlResult *srSnip) 
+static void printSnippets(struct sqlResult *srSnip) 
 {
 char **snipRow;
 struct hash *doneSnips = newHash(0); // avoid printing a sentence twice
@@ -558,6 +561,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<HR>");
     }
 printf("</DIV>\n");
+
 freeMem(sectionList);
 sqlFreeResult(&sr);
 }
@@ -686,8 +690,7 @@ if (!seqIdPresent) {
 /* get sequence-Ids for feature that was clicked (item&startPos are unique) and return as hash*/
 sqlSafef(query, sizeof(query), "SELECT seqIds,'' FROM %s WHERE name='%s' "
     "and chrom='%s' and chromStart=%d;", trackTable, item, seqName, start);
-if (pubsDebug)
-    printf("%s<br>", query);
+    printDebug(query);
 
 // split comma-sep list into parts
 char *seqIdCoordString = sqlQuickString(conn, query);
@@ -841,8 +844,7 @@ if (hHasField("hgFixed", pubsSequenceTable, "fileUrl"))
 
 char query[4096];
 sqlSafef(query, sizeof(query), queryTemplate, pubsSequenceTable, articleId);
-if (pubsDebug)
-    puts(query);
+printDebug(query);
 struct sqlResult *sr = sqlGetResult(conn, query);
 
 // construct title for section
