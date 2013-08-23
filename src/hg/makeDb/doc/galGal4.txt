@@ -883,4 +883,31 @@ CREATE TABLE ucscToEnsembl (
    # verify blue navigation bar will now go to Ensembl
 
 ############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/galGal4/bed/ucscToINSDC
+    cd /hive/data/genomes/galGal4/bed/ucscToINSDC
 
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh
+    # this one needed some editing to ucscToINSDC.txt and sorting of that
+    # to truncate some of the names as were done in the original build
+    # since the names went beyond 31 characters
+    ./verifyAll.sh
+    ./join.sh
+
+    # this didn't work for some odd reason.  Did a manual load of the table:
+    # sed -e "s/21/31/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    #   | hgLoadSqlTab galGal4 ucscToINSDC stdin ucscToINSDC.tab
+    sed -e "s/21/31/" $HOME/kent/src/hg/lib/ucscToINSDC.sql > ucscToINSDC.sql
+    hgsql galGal4 < ucscToINSDC.sql
+    hgsql -e \
+'load data local infile "ucscToINSDC.tab" into TABLE ucscToINSDC;' galGal4
+
+    checkTableCoords galGal4 ucscToINSDC
+    featureBits -countGaps galGal4 ucscToINSDC
+    # 1046932099 bases of 1046932099 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################
