@@ -879,8 +879,6 @@ if (track == NULL)
 	for (track = trackList; track != NULL; track = track->next)
 	    if (sameString(track->grp, group->name))
 	         break;
-	if (track == NULL)
-	    internalErr();
 	}
     }
 return track;
@@ -923,6 +921,9 @@ if ((groupList != NULL) && sameString(groupList->name, "user"))
 /* Add in groups from hubs. */
 for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpList))
     {
+    // if the group isn't represented in any track, don't add it to list
+    if (!hashLookup(groupsInTrackList,group->name))
+	continue;
     /* check to see if we're inserting hubs rather than
      * adding them to the front of the list */
     if (addAfter != NULL)
@@ -1937,7 +1938,12 @@ fullTableToTdbHash = hashNew(0);
 rAddTablesToHash(fullTrackList, fullTableToTdbHash);
 curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
 fullGroupList = makeGroupList(fullTrackList, &hubGrpList, allowAllTables());
-curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
+
+// if there isn't a current track, then use the default group
+if (curTrack != NULL)
+    curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
+else
+    curGroup = fullGroupList;
 if (sameString(curGroup->name, "allTables"))
     curTrack = NULL;
 curTable    = findSelectedTable(curTrack, hgtaTable);
