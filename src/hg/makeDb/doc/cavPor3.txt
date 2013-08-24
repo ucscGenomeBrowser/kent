@@ -4391,6 +4391,8 @@ see doc/builds.txt for specific details.
     mkdir /hive/data/genomes/cavPor3/bed/ucscToINSDC
     cd /hive/data/genomes/cavPor3/bed/ucscToINSDC
 
+XXX - this one has problems, needs to be fixed
+
     # copying these scripts from the previous load and improving them
     # with each instance
     ./translateNames.sh

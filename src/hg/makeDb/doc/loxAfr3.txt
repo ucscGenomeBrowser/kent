@@ -380,3 +380,25 @@ see doc/builds.txt for specific details.
     ln -s blastz.monDom5.swap lastz.monDom5
 
 ############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/loxAfr3/bed/ucscToINSDC
+    cd /hive/data/genomes/loxAfr3/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh NC_001913.1
+    # used the join.sh from danRer7, same difficulty here
+    # join.sh much abused here, and result edited for scaffold_750
+    ./join.sh
+    # special verify here:
+    ./verifyAll.sh
+
+    sed -e "s/21/13/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab oryCun2 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords oryCun2 ucscToINSDC
+    featureBits -countGaps oryCun2 ucscToINSDC
+    # 3196760833 bases of 3196760833 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

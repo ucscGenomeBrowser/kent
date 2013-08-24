@@ -630,4 +630,22 @@ db myoLuc2
     # 32782563 bases of 1966419868 (1.667%) in intersection
 
 ############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/myoLuc2/bed/ucscToINSDC
+    cd /hive/data/genomes/myoLuc2/bed/ucscToINSDC
 
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab myoLuc2 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords myoLuc2 ucscToINSDC
+    featureBits -countGaps myoLuc2 ucscToINSDC
+    # 2034575300 bases of 2034575300 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

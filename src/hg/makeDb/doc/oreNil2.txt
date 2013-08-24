@@ -566,3 +566,22 @@ oreNil2.perChromTables = no
     ssh hgwbeta "hgsql qapushq < /tmp/oreNil2.sql"
 
 ############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/oreNil2/bed/ucscToINSDC
+    cd /hive/data/genomes/oreNil2/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh NC_013663.1
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+      | hgLoadSqlTab oreNil2 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords oreNil2 ucscToINSDC
+    featureBits -countGaps oreNil2 ucscToINSDC
+    # 927696114 bases of 927696114 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################
