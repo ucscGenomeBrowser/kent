@@ -20,6 +20,7 @@
 #include "bigWarn.h"
 #include <pthread.h>
 #include "trackHub.h"
+#include "values.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -43,7 +44,7 @@ struct level
 {
 boolean init;		/* has this level been initialized */
 int orientation;	/* strand.. see above */
-int edge;		/* the leading edge of this level */
+unsigned long edge;		/* the leading edge of this level */
 int adjustLevel;	/* used to compress out the unused levels */
 boolean hasBlock;	/* are there any blocks in this level */
 };
@@ -98,7 +99,7 @@ if (Levels[level].init == FALSE)
     Levels[level].init = TRUE;
     Levels[level].orientation = list->orientation;
     if (list->orientation == -1)
-	Levels[level].edge = 1000000000;  // bigger than the biggest chrom
+	Levels[level].edge = MAXLONG;  // bigger than the biggest chrom
     else
 	Levels[level].edge = 0;
     }
