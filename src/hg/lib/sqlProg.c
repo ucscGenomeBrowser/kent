@@ -32,7 +32,11 @@ if (fileExists(path))
     size_t cnfSize = 0;
     readInGulp(path, &cnf, &cnfSize);
     if (write (fileNo, cnf, cnfSize) == -1)
+        {
+        freeMem(cnf);
 	errAbort("Writing %s to file %s failed with errno %d", path, defaultFileName, errno);
+        }
+    freeMem(cnf);
     }
 }
 
