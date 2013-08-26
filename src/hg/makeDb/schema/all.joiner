@@ -2797,6 +2797,11 @@ identifier ensemblGeneScaffold external=Ensembl dependency
     $ensGeneScaffold.chromInfo.chrom
     $ensGeneScaffold.ensemblGeneScaffold.chrom
 
+identifier ucscToINSDC external=INSDC dependency
+"INSDC names to UCSC chrom name translation"
+    $gbd.chromInfo.chrom
+    $gbd.ucscToINSDC.chrom
+
 # to avoid the error on assemblies with Ensembl Gene scaffolds:
 # Error: 7771 duplicates in vicPac1.ensGene.name including 'ENSVPAT00000000004'
 # list on this avoid list:

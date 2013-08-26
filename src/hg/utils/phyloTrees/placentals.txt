@@ -59,6 +59,9 @@ equCab	Eutheria; Laurasiatheria; Perissodactyla; Equidae; Equus
 # White rhino Ceratotherium simum simum
 cerSim	Eutheria; Laurasiatheria; Perissodactyla; Rhinocerotidae; Ceratotherium
 
+# Yangtze River Dolphin Lipotes vexillifer
+lipVex	Eutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Odontoceti; Lipotidae; Lipotes
+
 # Dolphin Tursiops truncatus
 turTru	Eutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Odontoceti; Delphinidae; Tursiops
 
@@ -92,7 +95,10 @@ pteAle	Eutheria; Laurasiatheria; Chiroptera; Megachiroptera; Pteropodidae; Ptero
 # Megabat - Pteropus vampyrus
 pteVam	Eutheria; Laurasiatheria; Chiroptera; Megachiroptera; Pteropodidae; Pteropodinae; Pteropus
 
-# David's Myotis (bat) - Myotis Davidii
+# Brandt's Myotis (bat) - Myotis brandtii
+myoBri	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; Myotis
+
+# David's Myotis (bat) - Myotis davidii
 myoDav	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; Myotis
 
 # Microbat - Myotis lucifugus

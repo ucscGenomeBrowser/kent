@@ -23591,19 +23591,20 @@ TMPDIR=/scratch/tmp
     #   real    55m27.877s
 
     # running the swap
-    mkdir /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
-    cd /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    mkdir /hive/data/genomes/turTru2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/turTru2/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        -swap /hive/data/genomes/hg19/bed/lastzOrcOrc1/DEF \
+        -swap /hive/data/genomes/hg19/bed/lastzTurTru2.2013-08-19/DEF \
         -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -noDbNameCheck -syntenicNet > swap.log 2>&1
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > swap.log 2>&1
+XXX - running - Thu Aug 22 15:47:00 PDT 2013
     #   real    101m51.331s
 
-    cat fb.orcOrc1.chainHg19Link.txt
+    cat fb.turTru2.chainHg19Link.txt
     #    1490487100 bases of 2300235512 (64.797%) in intersection
 
-    cd /hive/data/genomes/orcOrc1/bed
+    cd /hive/data/genomes/turTru2/bed
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################

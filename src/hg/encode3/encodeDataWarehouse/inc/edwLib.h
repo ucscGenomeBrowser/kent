@@ -58,6 +58,12 @@ struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email)
 struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email);
 /* Return user associated with that email or NULL if not found */
 
+struct edwUser *edwUserFromId(struct sqlConnection *conn, int id);
+/* Return user associated with that id or NULL if not found */
+
+int edwUserIdFromFileId(struct sqlConnection *conn, int fId);
+/* Return user id who submit the file originally */
+
 void edwWarnUnregisteredUser(char *email);
 /* Put up warning message about unregistered user and tell them how to register. */
 

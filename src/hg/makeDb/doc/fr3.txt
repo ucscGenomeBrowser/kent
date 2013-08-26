@@ -2309,3 +2309,22 @@ done
     #   25082192 bases of 350961831 (7.147%) in intersection
 
 #########################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/ucscToINSDC
+    cd /hive/data/genomes/fr3/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh NC_004299.1
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/8/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab fr3 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords fr3 ucscToINSDC
+    featureBits -countGaps fr3 ucscToINSDC
+    # 391484715 bases of 391484715 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

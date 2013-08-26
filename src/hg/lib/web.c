@@ -186,10 +186,7 @@ if (withHtmlHeader)
     *ptr1 = 0;
     htmlTextOut(newString);
     printf("	</TITLE>\n    ");
-    if (endsWith(scriptName, "qaPushQ")) // Tired of failed stylesheet versioning that messes up RR releaseLog.html (regular and ENCODE)
-        printf("    <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />\n");
-    else
-        webIncludeResourceFile("HGStyle.css");
+    webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
         puts(extraStyle);
     printf("</HEAD>\n");
@@ -1234,7 +1231,16 @@ if (!fileExists(dyStringContents(realFileName)))
 // build and verify link path including timestamp in the form of dir/baseName + timeStamp or CGI Version + ext
 long mtime = fileModTime(dyStringContents(realFileName));
 struct dyString *linkWithTimestamp;
-if ((cfgOption("versionStamped") == NULL) &&  (hIsPreviewHost() || hIsPrivateHost()))
+
+char *scriptName = cgiScriptName();
+if (scriptName == NULL)
+    scriptName = cloneString("");
+boolean nonVersionedLinks = FALSE;
+if (endsWith(scriptName, "qaPushQ"))
+    nonVersionedLinks = TRUE;
+if (nonVersionedLinks)
+    linkWithTimestamp = dyStringCreate("%s/%s%s", dyStringContents(fullDirName), baseName, extension);
+else if ((cfgOption("versionStamped") == NULL) &&  (hIsPreviewHost() || hIsPrivateHost()))
     linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
 else
     linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);
