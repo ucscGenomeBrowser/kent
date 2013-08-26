@@ -13,6 +13,7 @@
 #include "common.h"
 #include "string.h"
 #include "dystring.h"
+//#include "ctype.h"
 
 // cgi var to activate debug output
 static int pubsDebug = 0;
@@ -28,7 +29,8 @@ bool pubsIsElsevier = FALSE;
 
 // the article source is used to modify other parts of the page
 static char *articleSource;
-// we need the external article PMC Id for yif links
+
+// we need the external article PMC Id for YIF links
 static char *extId = NULL;
 
 // section types in mysql table, for all annotations tables
@@ -38,8 +40,16 @@ static char *pubsSecNames[] ={
       "intro", "methods",
       "results", "discussion",
       "conclusions", "ack",
-      "refs", "unknown" };
-//
+      "refs", "supplement", "unknown" };
+
+// labels to show to user, have to correspond to pubsSecNames
+static char *secLabels[] ={
+      "Title", "Abstract",
+      "Introduction", "Methods",
+      "Results", "Discussion",
+      "Conclusions", "Acknowledgements",
+      "References", "Supplement", "Undetermined section (e.g. for a brief communication)" };
+
 // whether a checkbox is checked by default, have to correspond to pubsSecNames
 static int pubsSecChecked[] ={
       1, 1,
@@ -188,7 +198,11 @@ web2EndDiv("section");
 
 /* ------  */
 
-
+static void printDebug(char *text) 
+{
+if (pubsDebug)
+    printf("%s<BR>", text);
+}
 
 static char *mangleUrl(char *url) 
 /* add publisher specific parameters to url and return new url*/
@@ -274,44 +288,54 @@ return nameListString;
 
 
 static struct sqlResult *queryMarkerRows(struct sqlConnection *conn, char *markerTable, \
-    char *articleTable, char *item, int itemLimit, char *sectionList)
-/* query marker rows from mysql, based on http parameters  */
+    char *articleTable, char *item, int itemLimit, char *sectionList, char *artExtIdFilter)
+/* query marker rows from mysql, based on http parameters  
+ * optionally filter on sections or just a single article
+ * */
 {
 char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
-sqlUpdate(conn, "NOSQLINJ SET SESSION group_concat_max_len = 100000");
+//sqlUpdate(conn, "NOSQLINJ SET SESSION group_concat_max_len = 100000");
  
+char artFilterSql[4000];
+artFilterSql[0] = 0;
+if (isNotEmpty(artExtIdFilter))
+    safef(artFilterSql, sizeof(artFilterSql), " AND extId='%s' ", artExtIdFilter);
+
 // no need to check for illegal characters in sectionList
-sqlSafef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, "  
-    "pmid, extId, "
-    "group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s "
+sqlSafef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, year, "  
+    "pmid FROM %s "
+    //"group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s "
     "JOIN %s USING (articleId) "
     "WHERE markerId='%s' AND section in (%-s) "
-    "GROUP by articleId "
+    "%-s"
+    //"GROUP by articleId "
     "ORDER BY year DESC "
     "LIMIT %d",
-    markerTable, markerTable, articleTable, item, sectionList, itemLimit);
+    markerTable, markerTable, articleTable, item, sectionList, artFilterSql, itemLimit);
 
-if (pubsDebug)
-    printf("%s", query);
+    printDebug(query);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 
 return sr;
 }
 
+static struct sqlResult *querySnippets(struct sqlConnection *conn, char *markerTable, \
+    char *articleId, char *markerId, char *sectionList)
+/* query marker snippet rows from mysql for an article, markerId combination */
+{
+char query[4000];
+sqlSafef(query, sizeof(query), "SELECT section, snippet FROM %s "  
+    "WHERE articleId=%s AND markerId='%s' AND section in (%-s) ", 
+    markerTable, articleId, markerId, sectionList);
+struct sqlResult *sr = sqlGetResult(conn, query);
+return sr;
+}
 
 static void printSectionCheckboxes()
 /* show a little form with checkboxes where user can select sections they want to show */
 {
-// labels to show to user, have to correspond to pubsSecNames
-char *secLabels[] ={
-      "Title", "Abstract",
-      "Introduction", "Methods",
-      "Results", "Discussion",
-      "Conclusions", "Acknowledgements",
-      "References", "Undetermined section (e.g. for a brief communication)" };
-
 int labelCount = sizeof(secLabels)/sizeof(char *);
 
 int i;
@@ -355,45 +379,188 @@ if (sqlNeedQuickNum(conn, query) > itemLimit)
     {
     printf("<b>This marker is mentioned more than %d times</b><BR>\n", itemLimit);
     printf("The results would take too long to load in your browser and are "
-    "therefore limited to %d articles.<P>\n", itemLimit);
+    "therefore limited to the %d most recent articles.<P>\n", itemLimit);
     }
 }
 
-static void printMarkerSnippets(struct sqlConnection *conn, char *articleTable, char *markerTable, char *item)
+static void printAddWbr(char *text, int distance) 
+/* a crazy hack for firefox/mozilla that is unable to break long words in tables
+ * We need to add a <wbr> tag every x characters in the text to make text breakable.
+ */
 {
+int i;
+i = 0;
+char *c;
+c = text;
+bool doNotBreak = FALSE;
+while (*c != 0) 
+    {
+    if ((*c=='&') || (*c=='<'))
+       doNotBreak = TRUE;
+    if (*c==';' || (*c =='>'))
+       doNotBreak = FALSE;
 
+    printf("%c", *c);
+    if (i % distance == 0 && ! doNotBreak) 
+        printf("<wbr>");
+    c++;
+    i++;
+    }
+}
+
+/* keep only uppercase letters in string*/
+void eraseAllButUpper(char *s)
+{
+char *in, *out;
+char c;
+
+in = out = s;
+for (;;)
+    {
+    c = *in++;
+    if (c == 0)
+        break;
+    if (isupper(c))
+        *out++ = c;
+    }
+*out = 0;
+}
+
+static char* printShortArticleInfo(char **row) {
+/* print a two-line description of article */
+char *articleId = row[0];
+char *url       = row[1];
+char *title     = row[2];
+char *authors   = row[3];
+char *citation  = row[4];
+char *year      = row[5];
+char *pmid      = row[6];
+url = mangleUrl(url);
+printf("<A HREF=\"%s\">%s</A><BR> ", url, title);
+// cut author string at 40 chars, like scholar
+printf("<span style=\"color:gray\">");
+if (strlen(authors)>40)
+    {
+    authors[60] = 0;
+    printf("<SMALL>%s...</SMALL> - ", authors);
+    }
+else
+    printf("<SMALL>%s</SMALL> - ", authors);
+
+// first word of citation is journal name
+char *words[10];
+chopCommas(citation, words);
+char *journal = words[0];
+
+printf("<SMALL>%s - %s ", year, journal);
+if (!isEmpty(pmid) && strcmp(pmid, "0")!=0 )
+    printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
+printf("</SMALL>\n");
+
+printf("</span>\n");
+printf("<BR>\n");
+if (pubsDebug)
+    printf("articleId=%s", articleId);
+
+return articleId;
+}
+
+static void printSnippets(struct sqlResult *srSnip) 
+{
+char **snipRow;
+struct hash *doneSnips = newHash(0); // avoid printing a sentence twice
+int snipCount = 0;
+struct slPair *secSnips = NULL;
+
+// add all pairs to the list, remove duplicated snippets (ignore all lowercase chars)
+while ((snipRow = sqlNextRow(srSnip)) != NULL)
+    {
+    char *section  = cloneString(snipRow[0]);
+    char *snippet  = cloneString(snipRow[1]);
+    char *snipHash = cloneString(snippet);
+    eraseAllButUpper(snipHash);
+    if (hashLookup(doneSnips, snipHash)!=NULL)
+        {
+        //printf("<b>already seen</b></br>");
+        continue;
+        }
+    slPairAdd(&secSnips, section, snippet);
+    hashAdd(doneSnips, snipHash, 0);
+    snipCount++;
+    }
+hashFree(&doneSnips);
+
+// now iterate over list and print
+struct slPair *pair;
+printf("<DIV CLASS=\"snips\">\n");
+int i = 0;
+for (pair = secSnips; pair != NULL; pair = pair->next)
+    {
+    char *section = pair->name;
+    char *snippet = pair->val;
+    
+    // print snippet
+    printf("<I>");
+    printAddWbr(snippet, 40);
+    printf("<style=\"color:gray\">...</style>\n");
+    if (differentWord(section, "unknown"))
+        printf(" <SPAN style=\"color:gray\">(%s)</SPAN>", section);
+    printf("</I>");
+    printf("<BR>");
+
+    if (snipCount>2) 
+        {
+        if (i==0)
+            // alternative to "more": <img src=\"../images/add_sm.gif\">
+            printf("<A class=\"showSnips\" href=\"#\" onclick=\"$(this).nextUntil('.shownSnips').slideToggle(); return false;\">more</A><BR><DIV class=\"hiddenSnips\" style=\"display:none\">");
+        if (i==snipCount-2)
+            printf("</DIV><div class=\"shownSnips\"></div>");
+        }
+    i++;
+    }
+slPairFreeList(&secSnips);
+sqlFreeResult(&srSnip); 
+printf("</DIV><P>");
+}
+
+static void printMarkerSnippets(struct sqlConnection *conn, char *articleTable, 
+    char *markerTable, char *item)
+/* print page with article info and snippets from articles */
+{
 /* do not show more snippets than this limit */
 int itemLimit=100;
 
-printSectionCheckboxes();
+char *artExtIdFilter = cgiOptionalString("pubsFilterExtId");
+/* This will have to be activated with the move to new Elsevier identifiers, ~Oct 2013 */
+//if (startsWith(artExtIdFilter))
+    //replaceInStr(artExtIdFilter, "ELS", "PII")
+
 char *sectionList = makeSqlMarkerList();
-printLimitWarning(conn, markerTable, item, itemLimit, sectionList);
+if (artExtIdFilter==NULL)
+    {
+    printSectionCheckboxes();
+    printLimitWarning(conn, markerTable, item, itemLimit, sectionList);
+    printf("<H3>Snippets from Publications:</H3>");
+    }
 
-printf("<H3>Snippets from Publications:</H3>");
-struct sqlResult *sr = queryMarkerRows(conn, markerTable, articleTable, item, itemLimit, sectionList);
+struct sqlResult *sr = queryMarkerRows(conn, markerTable, articleTable, item, \
+    itemLimit, sectionList, artExtIdFilter);
 
+// better readable if not across the whole screen
+printf("<DIV style=\"width:1024px; font-size:100%%\">\n");
 char **row;
+
+// loop over articles and print out snippets for each
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *articleId = row[0];
-    char *url       = row[1];
-    char *title     = row[2];
-    char *authors   = row[3];
-    char *citation  = row[4];
-    char *pmid      = row[5];
-    char *snippets  = row[7];
-    url = mangleUrl(url);
-    printf("<A HREF=\"%s\">%s</A> ", url, title);
-    printf("<SMALL>%s</SMALL>; ", authors);
-    printf("<SMALL>%s ", citation);
-    if (!isEmpty(pmid) && strcmp(pmid, "0")!=0 )
-        printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
-    printf("</SMALL><BR>\n");
-    if (pubsDebug)
-        printf("articleId=%s", articleId);
-    printf("<I>%s</I><P>", snippets);
+    char *articleId = printShortArticleInfo(row);
+    struct sqlConnection *snipConn = hAllocConn(database);
+    struct sqlResult *srSnip = querySnippets(snipConn, markerTable, articleId, item, sectionList);
+    printSnippets(srSnip);
+    hFreeConn(&snipConn);
     printf("<HR>");
     }
+printf("</DIV>\n");
 
 freeMem(sectionList);
 sqlFreeResult(&sr);
@@ -523,8 +690,7 @@ if (!seqIdPresent) {
 /* get sequence-Ids for feature that was clicked (item&startPos are unique) and return as hash*/
 sqlSafef(query, sizeof(query), "SELECT seqIds,'' FROM %s WHERE name='%s' "
     "and chrom='%s' and chromStart=%d;", trackTable, item, seqName, start);
-if (pubsDebug)
-    printf("%s<br>", query);
+    printDebug(query);
 
 // split comma-sep list into parts
 char *seqIdCoordString = sqlQuickString(conn, query);
@@ -568,31 +734,6 @@ if (!isClickedSection && !pubsDebug)
     web2PrintHeaderCell("Link to matching genomic location", 20);
 web2EndThead();
 web2StartTbodyS("font-family: Arial, Helvetica, sans-serif; line-height: 1.5em; font-size: 0.9em;");
-}
-
-static void printAddWbr(char *text, int distance) 
-/* a crazy hack for firefox/mozilla that is unable to break long words in tables
- * We need to add a <wbr> tag every x characters in the text to make text breakable.
- */
-{
-int i;
-i = 0;
-char *c;
-c = text;
-bool doNotBreak = FALSE;
-while (*c != 0) 
-    {
-    if ((*c=='&') || (*c=='<'))
-       doNotBreak = TRUE;
-    if (*c==';' || (*c =='>'))
-       doNotBreak = FALSE;
-
-    printf("%c", *c);
-    if (i % distance == 0 && ! doNotBreak) 
-        printf("<wbr>");
-    c++;
-    i++;
-    }
 }
 
 void printHgTracksLink(char *db, char *chrom, int start, int end, char *linkText, char *optUrlStr)
@@ -703,8 +844,7 @@ if (hHasField("hgFixed", pubsSequenceTable, "fileUrl"))
 
 char query[4096];
 sqlSafef(query, sizeof(query), queryTemplate, pubsSequenceTable, articleId);
-if (pubsDebug)
-    puts(query);
+printDebug(query);
 struct sqlResult *sr = sqlGetResult(conn, query);
 
 // construct title for section

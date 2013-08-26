@@ -45,6 +45,10 @@ endif
 
 # libssl: disabled by default
 ifeq (${USE_SSL},1)
+    ifneq (${SSL_DIR}, "/usr/include/openssl")
+        L+=-L${SSL_DIR}/lib
+        HG_INC+=-I${SSL_DIR}/include
+    endif
     L+=-lssl -lcrypto
     HG_DEFS+=-DUSE_SSL
 endif
@@ -129,6 +133,8 @@ endif
 ifeq (${MYSQLLIBS},)
   MYSQLLIBS="-lmysqlclient"
 endif
+# OK to add this to all MYSQLLIBS just in case it is MySQL version 5.6 libraries
+MYSQLLIBS += -lstdc++ -lrt
 
 L+=${PNGLIB}
 HG_INC+=${PNGINCL}
@@ -211,7 +217,6 @@ ifeq (${HG_WARN},)
       HG_WARN_UNINIT=-Wuninitialized
     else
       ifeq (${FULLWARN},hgwdev)
-        MYSQLLIBS += -lstdc++ -lrt
         HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type
         HG_WARN_UNINIT=-Wuninitialized
       else

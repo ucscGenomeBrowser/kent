@@ -428,7 +428,9 @@
             <a href="http://rgrossman.com/2013/03/20/a-tool-for-keeping-big-data-in-sync/">protocol</a>
             which should help our users get much faster download rates. It is on our list of
             things to do, so we will not be able to give you a time estimate as to when this
-            tool will be available.
+            tool will be available. We highly recommend using rsync. Using rsync, for example
+            "rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile
+            ./", has the advantage of starting up where it left off after a failure, when ran again.
           </p>
         </div><!--end content-->
     </div><!--end wrapper-->
@@ -670,28 +672,43 @@
           <p>
             <b><font color="#006666">Response:</font></b><br>
             The browser's <a href="../../cgi-bin/hgHubConnect?" target="_blank">public hubs</a>
-            provide excellent resources to see how others have created hub structures.
-            For an excellent example of hub configuration and documentation, please see the ENCODE Analysis hub:
+            provide excellent examples of hub documentation. Here are two examples of track 
+            description pages from the ENCODE Analysis hub:
             <p>
-            <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt">
-              http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt</a><br>
-            <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/genomes.txt">
-              http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/genomes.txt</a><br>
-            <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/trackDb.txt">
-              http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/trackDb.txt</a><br>
-            <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformTfbs.html">
+              <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformTfbs.html">
               http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformTfbs.html</a></br>
-            <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformRNA.html">
-              http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformRNA.html</a><br>
+              <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformRNA.html">
+                http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformRNA.html</a><br>
             <p>
-              We recommend a minimal number of default visible tracks in your trackDb.txt 
-              to quicken hub loading time and to avoid overwhelming users. Also, we suggest the
-              paper's abstract as a useful start for your track's 'Description' section.  The 'Methods'
-              section should have more detail, and please include a contact for questions. Lastly,
-              it is best to assume a broad audience of students as well as researchers. For example,
-              it is best to spell out common acronyms for those who may be new to genomics. 
+              <b>Useful tips when writing your track descriptions:</b>
+              <li>It is best to assume a broad audience of students as well as researchers.  Spelling out common acronynms,
+                for example, may be useful for those who are new to genomics.</li>
+              <li>The paper's abstract may be a good start for your track's "Description" section.</li>
+              <li>Provide as much detail as possible in the "Methods" section.</li>
+              <li>A email address must be prominently displayed for questions relating to the track.</li>
+            </p>
+          <p>
+            <b>Other Examples:</b><br>
             <p>
-         </div><!--end content-->
+              Here are a few good examples of hub structure and configuration from the ENCODE Analysis hub:
+            <p>
+              <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt">
+                http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt</a><br>
+              <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/genomes.txt">
+                http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/genomes.txt</a><br>
+              <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/trackDb.txt">
+                http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/trackDb.txt</a><br>
+            <p>
+              Note: We recommend a minimal number of default visible tracks in your trackDb.txt to
+              quicken hub loading time and to avoid overwhelming users. For more suggestions on
+              hub structure, please see our
+              <a href="http://genomewiki.cse.ucsc.edu/index.php/Public_Hub_Guidelines".>Public Hub Guidelines</a>
+              wikipage. Also, for help defining unfamiliar terms, you may want to see the Hub Track
+              Database Definition's <a href="http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html#toc"
+                          target="_blank">table of contents</a>.
+            </p>
+          <p>
+        </div><!--end content-->
     </div><!--end wrapper-->
 
     

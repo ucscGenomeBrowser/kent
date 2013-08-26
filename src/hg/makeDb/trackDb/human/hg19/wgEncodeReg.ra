@@ -394,20 +394,20 @@ canPack On
 
     # This is candidate for release (V3 format)
     track wgEncodeRegTfbsClusteredV3
-    release alpha, beta
-    shortLabel Txn Factor ChIP
+    release alpha, beta, public
+    shortLabel Txn Fac ChIP V3
     longLabel Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
     type factorSource
-    superTrack wgEncodeReg dense
+    superTrack wgEncodeReg hide
     sourceTable wgEncodeRegTfbsCellsV3
     inputTrackTable wgEncodeRegTfbsClusteredInputsV3
     inputTableFieldDisplay cellType factor antibody treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility dense
+    visibility hide
     useScore 1
     priority 1.71
     maxWindowToDraw 10000000
-    dataVersion ENCODE Jul 2012 Freeze
+    dataVersion ENCODE Mar 2012 Freeze
 
     # This is alternate cluster version -- antibody-based, as done in V2
     track wgEncodeRegTfbsClusteredV4
@@ -423,4 +423,3 @@ canPack On
     visibility hide
     useScore 1
     priority 1.72
-    dataVersion ENCODE Jul 2012 Freeze

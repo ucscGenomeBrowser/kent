@@ -3086,6 +3086,81 @@ TMPDIR=/scratch/tmp
     #   1318212266 bases of 1852394361 (71.163%) in intersection
 
 #########################################################################
+# LASTZ Baboon PapAnu2 (DONE - 2013-08-19 braney)
+    mkdir /hive/data/genomes/hg19/bed/lastzPapAnu2.2013-08-19
+    cd /hive/data/genomes/hg19/bed/lastzPapAnu2.2013-08-19
+
+    cat << '_EOF_' > DEF
+# human vs baboon
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Baboon papAnu2
+SEQ2_DIR=/hive/data/genomes/papAnu2/papAnu2.2bit
+SEQ2_LEN=/hive/data/genomes/papAnu2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPapAnu2.2013-08-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	> do.log 2>&1 &
+
+    # real    162m10.321s
+
+    cat fb.hg19.chainPapAnu2Link.txt
+    # 2467659115 bases of 2897316137 (85.171%) in intersection
+
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzPapAnu2.2013-08-19 lastz.papAnu2
+    cd lastz.papAnu2
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 papAnu2 > rbest.log 2>&1 &
+    #	real    182m0.276s
+
+    #	running the swap - DONE - 2013-07-01
+    mkdir /hive/data/genomes/papAnu2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/papAnu2/bed/blastz.hg19.swap
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/hg19/bed/lastzPapAnu2.2013-08-19 \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #  real    534m25.137s
+
+    cat fb.papAnu2.chainHg19Link.txt
+    #  2353204907 bases of 2741849051 (85.825%) in intersection
+
+    cd /hive/data/genomes/papHam1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
 # LASTZ Baboon PapHam1 (DONE - 2009-05-20,22 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPapHam1.2009-05-20
     cd /hive/data/genomes/hg19/bed/lastzPapHam1.2009-05-20
@@ -17645,7 +17720,8 @@ TMPDIR=/scratch/tmp
 
 
 #############################################################################
-# DBSNP B135 / SNP135 (DONE 11/9/11)
+# DBSNP B135 / SNP135 (DONE 8/19/13)
+# originally done 11/9/11; updated 8/19/13 to fix allele frequencies (#11544)
 # Redmine #5170
     mkdir -p /hive/data/outside/dbSNP/135/human
     cd /hive/data/outside/dbSNP/135/human
@@ -17673,9 +17749,48 @@ EOF
     # due to inconsistent locType vs. coords.  2.3M SNPs have new exception SingleAlleleFreq,
     # and 474k SNPs have new exception InconsistentAlleles (allele freqs vs observed).
 
+    # 8/19/13: rebuilding after fix #11544 -- many allele frequencies were combined
+    # incorrectly due to stranded data (but not strand flag) in SNPAlleleFreq and
+    # positive-strand-only data in SNPAlleleFreq_TGP.
+    cd /hive/data/outside/dbSNP/135/human
+    mkdir preAlleleFreqFix
+    mv ucscAlleleFreq.txt.gz snp135*.bed.gz preAlleleFreqFix/
+    # Run with -debug to regenerate addToDbSnp script:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -continue addToDbSnp -stop addToDbSnp -debug
+    # Now re-run the updated snpAddTGPAlleleFreq.pl command:
+    grep snpAdd addToDbSnp.csh
+    ~/kent/src/hg/utils/automation/snpAddTGPAlleleFreq.pl hg19snp135 \
+      -contigLoc=b135_SNPContigLoc_37_3 > ucscAlleleFreq.txt
+    # Reload the ucscAlleleFreq table:
+    hgLoadSqlTab hg19snp135 ucscAlleleFreq{,.sql,.txt} >>& do.log & tail -f do.log
+    # Redo the big join:
+    mkdir -p `cat workingDir`
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue bigJoin -stop bigJoin \
+      >>& do.log & tail -f do.log
+    # Manually re-run snpNcbiToUcsc (the translate step includes fasta file concat
+    # and indexing, which would waste a lot of time):
+    set tmpDir = `cat /hive/data/outside/dbSNP/135/human/workingDir`
+    cd $tmpDir
+    echo 'select * from par' | hgsql hg19 -NB > par.bed
+    snpNcbiToUcsc -snp132Ext -par=par.bed ucscNcbiSnp.bed /hive/data/genomes/hg19/hg19.2bit snp135 \
+      >>& /hive/data/outside/dbSNP/135/human/do.log &
+    tail -f /hive/data/outside/dbSNP/135/human/do.log
+    head snp135Errors.bed >>& /hive/data/outside/dbSNP/135/human/do.log &
+    tail -f /hive/data/outside/dbSNP/135/human/do.log
+    wc -l snp135* >>& /hive/data/outside/dbSNP/135/human/do.log &
+    tail -f /hive/data/outside/dbSNP/135/human/do.log
+    gzip *.txt *.bed *.tab
+    cp -p * /hive/data/outside/dbSNP/135/human/
+    cd /hive/data/outside/dbSNP/135/human
+    rm $tmpDir/*
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue load \
+      >>& do.log & tail -f do.log
+
 
 #############################################################################
-# FILTER SNP135 (DONE 11/14/11 angie)
+# FILTER SNP135 (DONE 8/19/13 angie)
+# originally done 11/14/11; rebuilt 8/19/13 to fix allele frequencies (#11544)
     # Redmine #5170
     # Make several tracks that are filtered subsets of snp135:
     # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp135Mult
@@ -17721,9 +17836,15 @@ EOF
        print "snp135Mult:    $multCount\nsnp135Common:  $comCount\nsnp135Flagged: $flagCount\n" . \
              "leftover:      $miscCount\n";'
 #snp135Mult:    3538479
+#snp135Common:  11504891
+#snp135Flagged: 32187
+#leftover:      39722367
+    # Compare to counts from 11/14/11, before fixing allele freqs:
+#snp135Mult:    3538479
 #snp135Common:  11525489
 #snp135Flagged: 32077
 #leftover:      39116035
+    # So 110 SNPs were initially left out of snp135Flagged
 
     # Load tables
     foreach subset (Mult Common Flagged)
@@ -18683,9 +18804,10 @@ TMPDIR=/scratch/tmp
 
 
 ##############################################################################
-# DBSNP B137 / SNP137 (DONE 11/9/12)
+# DBSNP B137 / SNP137 (DONE 8/19/13)
 # Originally done 7/11/12; updated w/corrections from dbSNP 9/10/12, 10/10, 11/9/12
 # -- see comments below and #8360 note 36, 42, 45
+# Updated 8/19/13 to fix allele frequencies (#11544)
 # Redmine #8360
     mkdir -p /hive/data/outside/dbSNP/137/human
     cd /hive/data/outside/dbSNP/137/human
@@ -18891,10 +19013,48 @@ EOF
     wc -l rsIdsOnPatchesNotPrimary.txt
 #2566 rsIdsOnPatchesNotPrimary.txt
 
+    # 8/19/13: rebuilding after fix #11544 -- many allele frequencies were combined
+    # incorrectly due to stranded data (but not strand flag) in SNPAlleleFreq and
+    # positive-strand-only data in SNPAlleleFreq_TGP.
+    cd /hive/data/outside/dbSNP/137/human
+    mkdir preAlleleFreqFix
+    mv ucscAlleleFreq.txt.gz snp137*.bed.gz preAlleleFreqFix/
+    # Run with -debug to regenerate addToDbSnp script:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -continue addToDbSnp -stop addToDbSnp -debug
+    # Now re-run the updated snpAddTGPAlleleFreq.pl command:
+    grep snpAdd addToDbSnp.csh
+    ~/kent/src/hg/utils/automation/snpAddTGPAlleleFreq.pl hg19snp137 \
+      -contigLoc=b137_SNPContigLoc > ucscAlleleFreq.txt
+    # Reload the ucscAlleleFreq table:
+    hgLoadSqlTab hg19snp137 ucscAlleleFreq{,.sql,.txt} >>& do.log & tail -f do.log
+    # Redo the big join:
+    mkdir -p `cat workingDir`
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue bigJoin -stop bigJoin \
+      >>& do.log & tail -f do.log
+    # Manually re-run snpNcbiToUcsc (the translate step includes fasta file concat
+    # and indexing, which would waste a lot of time):
+    set tmpDir = `cat /hive/data/outside/dbSNP/137/human/workingDir`
+    cd $tmpDir
+    echo 'select * from par' | hgsql hg19 -NB > par.bed
+    snpNcbiToUcsc -snp132Ext -par=par.bed ucscNcbiSnp.bed /hive/data/genomes/hg19/hg19.2bit snp137 \
+      >>& /hive/data/outside/dbSNP/137/human/do.log &
+    tail -f /hive/data/outside/dbSNP/137/human/do.log
+    head snp137Errors.bed >>& /hive/data/outside/dbSNP/137/human/do.log &
+    tail -f /hive/data/outside/dbSNP/137/human/do.log
+    wc -l snp137* >>& /hive/data/outside/dbSNP/137/human/do.log &
+    tail -f /hive/data/outside/dbSNP/137/human/do.log
+    gzip *.txt *.bed *.tab
+    cp -p * /hive/data/outside/dbSNP/137/human/
+    cd /hive/data/outside/dbSNP/137/human
+    rm $tmpDir/*
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue load \
+      >>& do.log & tail -f do.log
+
 
 #############################################################################
-# FILTER SNP137 (DONE 11/10/12 angie)
-# Originally done 7/11/12; updated 9/11/12, 10/15/12, 11/9/12 -- see SNP137 above
+# FILTER SNP137 (DONE 8/19/13 angie)
+# Originally done 7/11/12; updated 9/11/12, 10/15/12, 11/9/12, 8/19/13 -- see SNP137 above
     # Redmine #8360
     # Make several tracks that are filtered subsets of snp137:
     # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp137Mult
@@ -18940,9 +19100,15 @@ EOF
        print "snp137Mult:    $multCount\nsnp137Common:  $comCount\nsnp137Flagged: $flagCount\n" . \
              "leftover:      $miscCount\n";'
 #snp137Mult:    3633662
+#snp137Common:  13873636
+#snp137Flagged: 42824
+#leftover:      38698577
+   # Compare to counts from 11/9/12, before fixing allele freqs:
+#snp137Mult:    3633662
 #snp137Common:  13894623
 #snp137Flagged: 42733
 #leftover:      38677681
+   # So 91 SNPs were left out of snp137Flagged.
 
     # Load tables
     foreach subset (Mult Common Flagged)
@@ -23380,7 +23546,69 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
-# killer whale/orcOrc1 Lastz run (
+# LASTZ  dolphin turTru2 Lastz run (DONE - 2013-08-19 braney)
+    screen -S turTru2    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzTurTru2.2013-08-19
+    cd  /hive/data/genomes/hg19/bed/lastzTurTru2.2013-08-19
+    cat << '_EOF_' > DEF
+# human vs dolphin
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: dolphin turTru2
+SEQ2_DIR=/hive/data/genomes/turTru2/turTru2.2bit
+SEQ2_LEN=/hive/data/genomes/turTru2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/hg19/bed/lastzTurTru2.2013-08-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -noDbNameCheck -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > do.log 2>&1
+    # real    718m18.715s
+
+    cat fb.hg19.chainTurTru2Link.txt
+    # 1482195003 bases of 2897316137 (51.158%) in intersection
+
+    # create symLink to indicate this is the version to use
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzTurTru2.2013-08-19 lastzTurTru2
+    cd lastzTurTru2
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 turTru2 > rbest.log 2>&1 &
+    #   real    55m27.877s
+
+    # running the swap
+    mkdir /hive/data/genomes/turTru2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/turTru2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzTurTru2.2013-08-19/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > swap.log 2>&1
+XXX - running - Thu Aug 22 15:47:00 PDT 2013
+    #   real    101m51.331s
+
+    cat fb.turTru2.chainHg19Link.txt
+    #    1490487100 bases of 2300235512 (64.797%) in intersection
+
+    cd /hive/data/genomes/turTru2/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# killer whale/orcOrc1 Lastz run  (DONE - 2013-07-31 braney)
     screen -S orcOrc1    # use screen to manage this long running job
     mkdir /hive/data/genomes/hg19/bed/lastzOrcOrc1.2013-07-31
     cd  /hive/data/genomes/hg19/bed/lastzOrcOrc1.2013-07-31
@@ -23941,5 +24169,134 @@ echo -e "chrM\tNC_001807.4"
        ucscToINSDC.tab
 
     # verify the track link to INSDC functions
+
+#########################################################################
+# lastz Fugu fr3 (DONE - 2013-08-20 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S fr3
+    mkdir /hive/data/genomes/hg19/bed/lastzFr3.2013-08-20
+    cd /hive/data/genomes/hg19/bed/lastzFr3.2013-08-20
+
+    cat << '_EOF_' > DEF
+# Human vs. Fugu
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Fugu fr3
+SEQ2_DIR=/hive/data/genomes/fr3/fr3.2bit
+SEQ2_LEN=/hive/data/genomes/fr3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzFr3.2013-08-20
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #   Elapsed time: 77m52s
+
+    cat fb.hg19.chainFr3Link.txt
+    #   49339815 bases of 2897316137 (1.703%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzFr3.2013-08-20 lastz.fr3
+
+    #	and for the swap
+    mkdir /hive/data/genomes/fr3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/fr3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzFr3.2013-08-20/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real     8m36.196s
+    cat  fb.fr3.chainHg19Link.txt
+    #	43105455 bases of 350961831 (12.282%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/fr3/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# LASTZ  Yangtze River dolphin lipVex1 Lastz run (DONE - 2013-08-22 - Hiram)
+    screen -S lipVex1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzLipVex1.2013-08-22
+    cd  /hive/data/genomes/hg19/bed/lastzLipVex1.2013-08-22
+    cat << '_EOF_' > DEF
+# human vs Yangtze River dolphin
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Yangtze River dolphin lipVex1
+SEQ2_DIR=/hive/data/genomes/lipVex1/lipVex1.2bit
+SEQ2_LEN=/hive/data/genomes/lipVex1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=200
+
+BASE=/hive/data/genomes/hg19/bed/lastzLipVex1.2013-08-22
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > do.log 2>&1
+XXX - running - Thu Aug 22 09:54:51 PDT 2013
+    # real    718m18.715s
+
+    cat fb.hg19.chainLipVex1Link.txt
+    # 1482195003 bases of 2897316137 (51.158%) in intersection
+
+    # create symLink to indicate this is the version to use
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzLipVex1.2013-08-22 lastzLipVex1
+    cd lastzLipVex1
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 lipVex1 > rbest.log 2>&1 &
+    #   real    55m27.877s
+
+    # running the swap
+    mkdir /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzOrcOrc1/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -noDbNameCheck -syntenicNet > swap.log 2>&1
+    #   real    101m51.331s
+
+    cat fb.orcOrc1.chainHg19Link.txt
+    #    1490487100 bases of 2300235512 (64.797%) in intersection
+
+    cd /hive/data/genomes/orcOrc1/bed
+    ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################

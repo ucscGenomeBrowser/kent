@@ -11,7 +11,7 @@ O = ${A}.o
 include ../../inc/cgi_build_rules.mk
 
 my:: compile
-	if [ -d "${BINDIR}" ]; then \
+	if [ -d "${BINDIR}" ] && [ ! ${CGI_BIN}-${USER}/$A -ef ${DESTDIR}${BINDIR}/$A ] ; then \
 	    cp ${CGI_BIN}-${USER}/$A ${DESTDIR}${BINDIR}/; \
 	fi
 

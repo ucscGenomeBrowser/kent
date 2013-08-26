@@ -844,3 +844,25 @@ liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
 
 
 ##############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/oryCun2/bed/ucscToINSDC
+    cd /hive/data/genomes/oryCun2/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh NC_001913.1
+    # used the join.sh from danRer7, same difficulty here
+    # join.sh much abused here
+    ./join.sh
+    # special verify here:
+    ./verifyAll.sh
+
+    sed -e "s/21/9/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab oryCun2 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords oryCun2 ucscToINSDC
+    featureBits -countGaps oryCun2 ucscToINSDC
+    # 2737490501 bases of 2737490501 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################
