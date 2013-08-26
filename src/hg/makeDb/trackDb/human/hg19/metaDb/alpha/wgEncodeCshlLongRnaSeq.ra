@@ -61477,6 +61477,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000169
+dccInternalNotes Errata: CSHL reports this file is missing one lane of reads
 expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd2Rep1.fastq.gz
 geoSampleAccession GSM765395
