@@ -239,6 +239,16 @@ sqlSafef(query, sizeof(query), "select u.id from edwSubmit s, edwUser u where  u
 return sqlQuickNum(conn, query);
 }
 
+char *edwUserNameFromFileId(struct sqlConnection *conn, int fId)
+/* Return user who submit the file originally */
+{
+int uId = edwUserIdFromFileId(conn, fId);
+struct edwUser *user=edwUserFromId(conn, uId);
+char name[256];
+safecpy(name, sizeof(name), user->email);
+return cloneString(name);
+}
+
 void edwWarnUnregisteredUser(char *email)
 /* Put up warning message about unregistered user and tell them how to register. */
 {
