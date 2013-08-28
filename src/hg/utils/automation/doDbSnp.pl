@@ -1140,6 +1140,7 @@ sub loadTables {
       rm /gbdb/$db/snp/$snpBase.fa
     endif
     ln -s $runDir/$snpBase.fa /gbdb/$db/snp/$snpBase.fa
+#*** We need a way to drop duplicates without halting the script!
     zcat ${snpBase}Seq.tab.gz \\
     | hgLoadSqlTab $db ${snpBase}Seq \$HOME/kent/src/hg/lib/snpSeq.sql stdin
 
