@@ -23582,9 +23582,9 @@ TMPDIR=/scratch/tmp
 
     # create symLink to indicate this is the version to use
     cd /hive/data/genomes/hg19/bed
-    ln -s lastzTurTru2.2013-08-19 lastzTurTru2
-    cd lastzTurTru2
+    ln -s lastzTurTru2.2013-08-19 lastz.turTru2
 
+    cd /hive/data/genomes/hg19/bed/lastzTurTru2.2013-08-19
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 turTru2 > rbest.log 2>&1 &
@@ -23598,11 +23598,10 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet > swap.log 2>&1
-XXX - running - Thu Aug 22 15:47:00 PDT 2013
-    #   real    101m51.331s
+    #   real    262m24.138s
 
     cat fb.turTru2.chainHg19Link.txt
-    #    1490487100 bases of 2300235512 (64.797%) in intersection
+    #    1431257975 bases of 2332402443 (61.364%) in intersection
 
     cd /hive/data/genomes/turTru2/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -23641,12 +23640,13 @@ TMPDIR=/scratch/tmp
     # real    136m25.890s
 
     cat fb.hg19.chainOrcOrc1.txt
-    # cat: fb.hg19.chainOrcOrc1.txt: No such file or directory
+    #  1508701710 bases of 2897316137 (52.072%) in intersection
 
     # create symLink to indicate this is the version to use
     cd /hive/data/genomes/hg19/bed
-    ln -s lastzOrcOrc1.2013-07-31 lastzOrcOrc1
+    ln -s lastzOrcOrc1.2013-07-31 lastz.orcOrc1
 
+    cd /hive/data/genomes/hg19/bed/lastzOrcOrc1.2013-07-31
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 orcOrc1 > rbest.log 2>&1 &
@@ -23656,14 +23656,14 @@ TMPDIR=/scratch/tmp
     mkdir /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
     cd /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        -swap /hive/data/genomes/hg19/bed/lastzOrcOrc1/DEF \
+        -swap /hive/data/genomes/hg19/bed/lastzOrcOrc1.2013-07-31/DEF \
         -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -noDbNameCheck -syntenicNet > swap.log 2>&1
-    #   real    101m51.331s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > swap.log 2>&1
+    #   real     103m7.570s
 
     cat fb.orcOrc1.chainHg19Link.txt
-    #    1490487100 bases of 2300235512 (64.797%) in intersection
+    #    1446385023 bases of 2249582127 (64.296%) in intersection
 
     cd /hive/data/genomes/orcOrc1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -24267,8 +24267,14 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet > do.log 2>&1
-XXX - running - Thu Aug 22 09:54:51 PDT 2013
-    # real    718m18.715s
+    # interrupted due to reconfigurations at SDSC
+    # continuing after finishing the run.blastz:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -continue=cat -syntenicNet > cat.log 2>&1
+XXX - running - Tue Aug 27 10:20:05 PDT 2013
+    # real    205m54.001s
 
     cat fb.hg19.chainLipVex1Link.txt
     # 1482195003 bases of 2897316137 (51.158%) in intersection
@@ -24284,8 +24290,8 @@ XXX - running - Thu Aug 22 09:54:51 PDT 2013
     #   real    55m27.877s
 
     # running the swap
-    mkdir /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
-    cd /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    mkdir /hive/data/genomes/lipVex1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/lipVex1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         -swap /hive/data/genomes/hg19/bed/lastzOrcOrc1/DEF \
         -chainMinScore=3000 -chainLinearGap=medium \
@@ -24293,10 +24299,190 @@ XXX - running - Thu Aug 22 09:54:51 PDT 2013
         -noDbNameCheck -syntenicNet > swap.log 2>&1
     #   real    101m51.331s
 
-    cat fb.orcOrc1.chainHg19Link.txt
+    cat fb.lipVex1.chainHg19Link.txt
     #    1490487100 bases of 2300235512 (64.797%) in intersection
 
-    cd /hive/data/genomes/orcOrc1/bed
+    cd /hive/data/genomes/lipVex1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# LASTZ  spiny softshell turtle apaSpi1 Lastz run (DONE - 2013-08-26 - Hiram)
+    screen -S apaSpi1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzApaSpi1.2013-08-26
+    cd  /hive/data/genomes/hg19/bed/lastzApaSpi1.2013-08-26
+    cat << '_EOF_' > DEF
+# human vs spiny softshell turtle
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: spiny softshell turtle apaSpi1
+SEQ2_DIR=/hive/data/genomes/apaSpi1/apaSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/apaSpi1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=800
+
+BASE=/hive/data/genomes/hg19/bed/lastzApaSpi1.2013-08-26
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    1667m22.615s
+
+    cat fb.hg19.chainApaSpi1Link.txt
+    # 85536067 bases of 2897316137 (2.952%) in intersection
+
+    # create symLink to indicate this is the version to use
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzApaSpi1.2013-08-26 lastz.apaSpi1
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 apaSpi1 > rbest.log 2>&1 &
+XXX - running - Tue Aug 27 14:59:02 PDT 2013
+    #   real    55m27.877s
+
+    # running the swap
+    mkdir /hive/data/genomes/apaSpi1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/apaSpi1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzApaSpi1.2013-08-26/DEF \
+        -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        > swap.log 2>&1
+XXX - running - Tue Aug 27 14:59:02 PDT 2013
+    #   real    101m51.331s
+
+    cat fb.apaSpi1.chainHg19Link.txt
+    #    1490487100 bases of 2300235512 (64.797%) in intersection
+
+    cd /hive/data/genomes/apaSpi1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# LASTZ  green seaturtle cheMyd1 Lastz run (DONE - 2013-08-26 - Hiram)
+    screen -S cheMyd1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzCheMyd1.2013-08-26
+    cd  /hive/data/genomes/hg19/bed/lastzCheMyd1.2013-08-26
+    cat << '_EOF_' > DEF
+# human vs green seaturtle
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: green seaturtle cheMyd1
+SEQ2_DIR=/hive/data/genomes/cheMyd1/cheMyd1.2bit
+SEQ2_LEN=/hive/data/genomes/cheMyd1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=800
+
+BASE=/hive/data/genomes/hg19/bed/lastzCheMyd1.2013-08-26
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    1293m10.598s
+
+    cat fb.hg19.chainCheMyd1Link.txt
+    # 107081916 bases of 2897316137 (3.696%) in intersection
+
+    # create symLink to indicate this is the version to use
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzCheMyd1.2013-08-26 lastz.cheMyd1
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 cheMyd1 > rbest.log 2>&1 &
+    #   real    19m55.555s
+
+    # running the swap
+    mkdir /hive/data/genomes/cheMyd1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/cheMyd1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzCheMyd1.2013-08-26/DEF \
+        -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        > swap.log 2>&1
+    #   real    19m8.605s
+
+    cat fb.cheMyd1.chainHg19Link.txt
+    #    96045284 bases of 2110381997 (4.551%) in intersection
+
+    cd /hive/data/genomes/cheMyd1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# LASTZ  green seaturtle micOch1 Lastz run (DONE - 2013-08-26 - Hiram)
+    screen -S micOch1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzMicOch1.2013-08-26
+    cd  /hive/data/genomes/hg19/bed/lastzMicOch1.2013-08-26
+    cat << '_EOF_' > DEF
+# human vs green seaturtle
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: green seaturtle micOch1
+SEQ2_DIR=/hive/data/genomes/micOch1/micOch1.2bit
+SEQ2_LEN=/hive/data/genomes/micOch1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/hg19/bed/lastzMicOch1.2013-08-26
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    1238m6.278s
+
+    cat fb.hg19.chainMicOch1Link.txt
+    # 935400030 bases of 2897316137 (32.285%) in intersection
+
+    # create symLink to indicate this is the version to use
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzMicOch1.2013-08-26 lastz.micOch1
+    cd lastz.micOch1
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 micOch1 > rbest.log 2>&1 &
+    #   real    62m39.003s
+
+    # running the swap
+    mkdir /hive/data/genomes/micOch1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/micOch1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzMicOch1.2013-08-26/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > swap.log 2>&1
+    #   real    104m38.965s
+
+    cat fb.micOch1.chainHg19Link.txt
+    #    908760510 bases of 2104321675 (43.185%) in intersection
+
+    cd /hive/data/genomes/micOch1/bed
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
