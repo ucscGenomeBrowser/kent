@@ -581,6 +581,9 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	}
     color = (sf->orientation == -1) ? darkRedColor : darkBlueColor;
 
+    // for the moment, always color blue
+    color =  darkBlueColor;
+
     int w = ex - sx;
     if (w == 0) 
 	w = 1;
