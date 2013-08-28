@@ -25,6 +25,7 @@ errAbort(
 }
 
 boolean checkOwnership(struct sqlConnection *conn, int fId, char *userEmail)
+/* Return true if file to be deprecated was submitted by this user. */
 {
 char *email = edwUserNameFromFileId(conn, fId);
 if (sameString(email, userEmail))
@@ -34,6 +35,7 @@ else
 }
 
 boolean okToDeprecateThisFile(struct sqlConnection *conn, int fId, char *userEmail)
+/* Return true if it is OK to deprecate this file */
 {
 if (checkOwnership(conn, fId, userEmail))
    return TRUE;
