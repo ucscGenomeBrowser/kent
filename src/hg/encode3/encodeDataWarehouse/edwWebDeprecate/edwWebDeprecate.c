@@ -24,6 +24,25 @@ errAbort(
   );
 }
 
+boolean checkOwnership(struct sqlConnection *conn, int fId, char *userEmail)
+{
+char *email = edwUserNameFromFileId(conn, fId);
+if (sameString(email, userEmail))
+   return TRUE;
+else
+   return FALSE;
+}
+
+boolean okToDeprecateThisFile(struct sqlConnection *conn, int fId, char *userEmail)
+{
+if (checkOwnership(conn, fId, userEmail))
+   return TRUE;
+else if (cgiVarExists("AllowBox"))
+   return TRUE;
+else
+   return FALSE;
+}
+
 void logIn()
 /* Put up name.  No password for now. */
 {
@@ -41,6 +60,9 @@ cgiMakeTextArea("fileList", fileList, 4, 60);
 printf("<BR>");
 printf("Please enter in reason for deprecating files:<BR>");
 cgiMakeTextArea("reason", reason, 4, 60);
+printf("<BR>");
+printf("Allow me to deprecate files not uploaded by me:  ");
+cgiMakeCheckBox("AllowBox", FALSE);
 printf("<BR>");
 cgiMakeButton("submit", "submit");
 edwPrintLogOutButton();
@@ -61,9 +83,16 @@ struct dyString *dy = dyStringNew(0);
 struct slInt *id;
 for (id = idList; id != NULL; id = id->next)
     {
-    dyStringClear(dy);
-    sqlDyStringPrintf(dy, "update edwFile set deprecated='%s' where id=%d", reason, id->val);
-    sqlUpdate(conn, dy->string);
+    if (okToDeprecateThisFile(conn, id->val, userEmail)) 
+        {
+        dyStringClear(dy);
+        sqlDyStringPrintf(dy, "update edwFile set deprecated='%s' where id=%d", reason, id->val);
+        sqlUpdate(conn, dy->string);
+        } else {
+        warn("Sorry, you can not deprecate file %d which is originally uploaded by %s.", 
+        id->val, edwUserNameFromFileId(conn, id->val)); 
+        getFileListAndReason(conn);
+        }
     }
 dyStringFree(&dy);
 }
