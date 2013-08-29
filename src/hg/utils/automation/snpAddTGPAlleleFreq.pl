@@ -9,6 +9,7 @@ use strict;
 use vars qw/
     $opt_help
     $opt_contigLoc
+    $opt_deDupTGP
     /;
 
 sub usage {
@@ -23,6 +24,9 @@ usage: $base dbSNPdb > ucscAlleleFreq.txt
     our snpNNN table (where NNN >= 132).
 options:
     -contigLoc=t  Use table t as a bNNN_SNPContigLoc table to determine strand
+    -deDupTGP     When SNPAlleleFreq's info is identical to SNPAlleleFreq_TGP,
+                  ignore SNPAlleleFreq_TGP data because it has been copied into
+                  SNPAlleleFreq.  dbSNP started doing this in b138.
     -help         Print this message
 \n";
   exit $status;
@@ -177,40 +181,28 @@ sub revCompSnp($) {
   return \%rcSnp;
 } # revCompSnp
 
-sub combineSnps($$;$) {
-  # Tally up per-allele counts from two sources.  Destroys inputs.  If snp is on - strand,
-  # revComp the alleles from 1000 Genomes which always reports on + strand.
-  my ($aSnp, $bSnp, $strandFh) = @_;
-  die if ($aSnp->{id} ne $bSnp->{id});
+sub sameSnps($$) {
+  # Return true if the two inputs have identical info.
+  my ($aSnp, $bSnp) = @_;
+  return 0 if ($aSnp->{id} != $bSnp->{id});
+  my $aLen = @{$aSnp->{als}};
+  my $bLen = @{$bSnp->{als}};
+  return 0 if ($aLen != $bLen);
+  for (my $i=0;  $i < $aLen;  $i++) {
+    my ($aInfo, $bInfo) = ($aSnp->{als}[$i], $bSnp->{als}[$i]);
+    return 0 if ($aInfo->[0] ne $bInfo->[0]);
+    return 0 if ($aInfo->[1] != $bInfo->[1]);
+    return 0 if ($aInfo->[2] != $bInfo->[2]);
+  }
+  return 1;
+} # sameSnps
+
+sub mergeSnps($$) {
+  # Return a snp with alleles and counts combined from the two input snps.  Destroys inputs.
+  my ($aSnp, $bSnp) = @_;
   my %snp;
   $snp{id} = $aSnp->{id};
   $snp{als} = ();
-  my $strand = &getStrand($bSnp, $strandFh);
-  if ($strand eq '-') {
-    $bSnp = &revCompSnp($bSnp);
-  }
-  # Warn if the different sources give us different sets of alleles:
-  my ($aStr, $bStr) = ("", "");
-  foreach my $alInfo (@{$aSnp->{als}}) {
-    $aStr .= "$alInfo->[0]/";
-  }
-  foreach my $alInfo (@{$bSnp->{als}}) {
-    $bStr .= "$alInfo->[0]/";
-  }
-  if ($aStr && $bStr && $aStr ne $bStr) {
-    $aStr =~ s#N/##;  $aStr =~ s#/$##;
-    $bStr =~ s#N/##;  $bStr =~ s#/$##;
-    if (index($aStr, $bStr) >= 0 || index($bStr, $aStr) >= 0) {
-      # Happens all the time (some of the "observed" alleles weren't actually observed
-      # in any submission that reported allele counts)
-      # print STDERR "id=$snp{id}: allele subset relationship $aStr vs. $bStr\n";
-    } else {
-      # The InconsistentAlleles exception will flag these.
-      #	print STDERR "id=$snp{id}: different allele sets $aStr vs. $bStr\n";
-      }
-  }
-  # This is where we could detect the AlleleFreqSumNot1 exception....
-  # Merge alleles and counts:
   my $totalCount = 0;
   my $aInfo = shift @{$aSnp->{als}};
   my $bInfo = shift @{$bSnp->{als}};
@@ -237,6 +229,44 @@ sub combineSnps($$;$) {
     $info->[2] = $info->[1] / $totalCount;
   }
   return \%snp;
+} # mergeSnps
+
+sub combineSnps($$;$) {
+  # Tally up per-allele counts from two sources.  Destroys inputs.  If snp is on - strand,
+  # revComp the alleles from 1000 Genomes which always reports on + strand.
+  my ($aSnp, $bSnp, $strandFh) = @_;
+  die if ($aSnp->{id} ne $bSnp->{id});
+  my $strand = &getStrand($bSnp, $strandFh);
+  if ($strand eq '-') {
+    $bSnp = &revCompSnp($bSnp);
+  }
+  # Warn if the different sources give us different sets of alleles:
+  my ($aStr, $bStr) = ("", "");
+  foreach my $alInfo (@{$aSnp->{als}}) {
+    $aStr .= "$alInfo->[0]/";
+  }
+  foreach my $alInfo (@{$bSnp->{als}}) {
+    $bStr .= "$alInfo->[0]/";
+  }
+  if ($aStr && $bStr && $aStr ne $bStr) {
+    $aStr =~ s#N/##;  $aStr =~ s#/$##;
+    $bStr =~ s#N/##;  $bStr =~ s#/$##;
+    if (index($aStr, $bStr) >= 0 || index($bStr, $aStr) >= 0) {
+      # Happens all the time (some of the "observed" alleles weren't actually observed
+      # in any submission that reported allele counts)
+      # print STDERR "id=$aSnp->{id}: allele subset relationship $aStr vs. $bStr\n";
+    } else {
+      # The InconsistentAlleles exception will flag these.
+      #	print STDERR "id=$aSnp->{id}: different allele sets $aStr vs. $bStr\n";
+      }
+  }
+  # This is where we could detect the AlleleFreqSumNot1 exception....
+  # Merge alleles and counts:
+  if ($opt_deDupTGP && &sameSnps($aSnp, $bSnp)) {
+    return $aSnp;
+  } else {
+    return &mergeSnps($aSnp, $bSnp);
+  }
 } # combineSnps
 
 
@@ -244,7 +274,7 @@ sub combineSnps($$;$) {
 #
 # -- main --
 
-my $ok = GetOptions("help", "contigLoc=s");
+my $ok = GetOptions("help", "contigLoc=s", "deDupTGP");
 &usage(1) if (!$ok);
 &usage(0) if ($opt_help);
 &usage(1) if (scalar(@ARGV) != 1);

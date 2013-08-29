@@ -291,8 +291,11 @@ if (sSelf->chrom != NULL)
 	}
     if (self->doNextChunk)
 	sqlDyStringPrintf(query, "%s >= %u and ", self->startField, self->nextChunkStart);
-    sqlDyStringPrintf(query, "%s < %u and %s > %u limit %d", self->startField, sSelf->regionEnd,
-		   self->endField, start, queryMaxItems);
+    sqlDyStringPrintf(query, "%s < %u and %s > %u ", self->startField, sSelf->regionEnd,
+		      self->endField, start);
+    if (self->notSorted)
+	sqlDyStringPrintf(query, "order by %s ", self->startField);
+    sqlDyStringPrintf(query, "limit %d", queryMaxItems);
     bufferRowsFromSqlQuery(self, query->string, queryMaxItems);
     }
 else
@@ -345,6 +348,8 @@ else
 	    // region end is chromSize, so no need to constrain startField here:
 	    sqlDyStringPrintf(query, "%s > %u ", self->endField, start);
 	    }
+	if (self->notSorted)
+	    sqlDyStringPrintf(query, "order by %s ", self->startField);
 	dyStringPrintf(query, "limit %d", queryMaxItems);
 	bufferRowsFromSqlQuery(self, query->string, queryMaxItems);
 	// If there happens to be no items on chrom, try again with the next chrom:

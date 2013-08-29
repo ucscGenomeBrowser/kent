@@ -10,7 +10,7 @@ CREATE TABLE hubStatus (
     shortLabel varchar(255) not null,	# Hub short label.
     longLabel varchar(255) not null,	# Hub long label.
     dbCount int unsigned not null,	# Number of databases hub has data for.
-    dbList varchar(255) not null,	# Comma separated list of databases.
+    dbList longblob not null,	# Comma separated list of databases.
     status int unsigned not null,	# 1 if private
     lastOkTime varchar(255) not null,	# Time when hub last was ok
     lastNotOkTime varchar(255) not null,	# Time when hub last was not ok
