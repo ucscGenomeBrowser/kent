@@ -90,7 +90,9 @@ for (id = idList; id != NULL; id = id->next)
         dyStringClear(dy);
         sqlDyStringPrintf(dy, "update edwFile set deprecated='%s' where id=%d", reason, id->val);
         sqlUpdate(conn, dy->string);
-        } else {
+        } 
+    else
+        {
         warn("Sorry, you can not deprecate file %d which is originally uploaded by %s.", 
         id->val, edwUserNameFromFileId(conn, id->val)); 
         getFileListAndReason(conn);
@@ -103,7 +105,7 @@ void tryToDeprecate(struct sqlConnection *conn)
 /* CGI variables are set - if possible deprecate, otherwise put up error message. */
 {
 pushWarnHandler(localWarn);
-fileList = cloneString(cgiString("fileList"));
+fileList = cgiString("fileList");
 reason = cloneString(trimSpaces(cgiString("reason")));
 if (isEmpty(reason))
    {
@@ -114,7 +116,7 @@ else
    {
    /* Go through list of accessions and make sure they are all well formed and correspond to files that exist. */
    boolean ok = TRUE;
-   struct slName *accList = slNameListOfUniqueWords(fileList, FALSE);
+   struct slName *accList = slNameListOfUniqueWords(cloneString(fileList), FALSE);
    struct slName *acc;
    struct slInt *idList = NULL, *idEl;
    for (acc = accList; acc != NULL; acc = acc->next)
