@@ -25031,7 +25031,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 xipMac1 > rbest.log 2>&1 &
-    #   real    62m39.003s
+    #   real    5m49.906s
 
     #	and for the swap
     mkdir /hive/data/genomes/xipMac1/bed/blastz.hg19.swap
@@ -25092,15 +25092,19 @@ TMPDIR=/dev/shm
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -chainMinScore=5000 \
         -chainLinearGap=loose > do.log 2>&1
-XXX - running - Wed Aug 28 10:56:57 PDT 2013
-    #   real    17m14.187s
+    #   real    555m40.795s
 
     cat fb.hg19.chainXenTro7Link.txt
-    #   53354483 bases of 2897316137 (1.842%) in intersection
+    #   91350514 bases of 2897316137 (3.153%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/hg19/bed
     ln -s lastzXenTro7.2013-08-28 lastz.xenTro7
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 xenTro7 > rbest.log 2>&1 &
+XXX - running - Thu Aug 29 09:31:11 PDT 2013
 
     #	and for the swap
     mkdir /hive/data/genomes/xenTro7/bed/blastz.hg19.swap
@@ -25110,6 +25114,7 @@ XXX - running - Wed Aug 28 10:56:57 PDT 2013
         -workhorse=hgwdev -smallClusterHub=ku \
         -bigClusterHub=ku \
         -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+XXX - running - Thu Aug 29 09:31:11 PDT 2013
     #   real     8m36.196s
     cat  fb.xenTro7.chainHg19Link.txt
     #	43105455 bases of 350961831 (12.282%) in intersection
@@ -25148,20 +25153,20 @@ ynteni
     time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
         -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
-XXX - running - Wed Aug 28 11:08:15 PDT 2013
-    # real    1238m6.278s
+    # real    985m36.384s
 
     cat fb.hg19.chainSusScr3Link.txt
-    # 935400030 bases of 2897316137 (32.285%) in intersection
+    # 1332108993 bases of 2897316137 (45.977%) in intersection
 
     # create symLink to indicate this is the version to use
     cd /hive/data/genomes/hg19/bed
     ln -s lastzSusScr3.2013-08-28 lastz.susScr3
-    cd lastz.susScr3
 
+    cd /hive/data/genomes/hg19/bed/lastzSusScr3.2013-08-28
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 susScr3 > rbest.log 2>&1 &
+XXX - running - Thu Aug 29 09:33:48 PDT 2013
     #   real    62m39.003s
 
     # running the swap
@@ -25172,6 +25177,7 @@ XXX - running - Wed Aug 28 11:08:15 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet > swap.log 2>&1
+XXX - running - Thu Aug 29 09:33:48 PDT 2013
     #   real    104m38.965s
 
     cat fb.susScr3.chainHg19Link.txt
@@ -25209,20 +25215,20 @@ TMPDIR=/dev/shm
     time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
         -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
-XXX - running - Wed Aug 28 11:45:18 PDT 2013
-    # real    1238m6.278s
+    # real    830m26.230s
 
     cat fb.hg19.chainSpeTri2Link.txt
-    # 935400030 bases of 2897316137 (32.285%) in intersection
+    # 1440632189 bases of 2897316137 (49.723%) in intersection
 
     # create symLink to indicate this is the version to use
     cd /hive/data/genomes/hg19/bed
     ln -s lastzSpeTri2.2013-08-28 lastz.speTri2
-    cd lastz.speTri2
 
+    cd /hive/data/genomes/hg19/bed/lastzSpeTri2.2013-08-28
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 speTri2 > rbest.log 2>&1 &
+XXX - running - Thu Aug 29 09:29:06 PDT 2013
     #   real    62m39.003s
 
     # running the swap
@@ -25233,6 +25239,7 @@ XXX - running - Wed Aug 28 11:45:18 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet > swap.log 2>&1
+XXX - running - Thu Aug 29 09:29:06 PDT 2013
     #   real    104m38.965s
 
     cat fb.speTri2.chainHg19Link.txt
@@ -25284,15 +25291,20 @@ TMPDIR=/dev/shm
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-qRepeats=windowmaskerSdust -chainMinScore=5000 \
         -chainLinearGap=loose > do.log 2>&1
-XXX - running - Wed Aug 28 13:56:03 PDT 2013
-    #   real    17m14.187s
+    #   real    409m26.473s
 
     cat fb.hg19.chainOreNil2Link.txt
-    #   53354483 bases of 2897316137 (1.842%) in intersection
+    #   53080894 bases of 2897316137 (1.832%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/hg19/bed
     ln -s lastzOreNil2.2013-08-28 lastz.oreNil2
+
+    cd /hive/data/genomes/hg19/bed/lastzOreNil2.2013-08-28
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 oreNil2 > rbest.log 2>&1 &
+XXX - running - Thu Aug 29 09:37:18 PDT 2013
 
     #	and for the swap
     mkdir /hive/data/genomes/oreNil2/bed/blastz.hg19.swap
@@ -25302,6 +25314,7 @@ XXX - running - Wed Aug 28 13:56:03 PDT 2013
         -workhorse=hgwdev -smallClusterHub=ku \
         -bigClusterHub=ku \
         -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+XXX - running - Thu Aug 29 09:37:18 PDT 2013
     #   real     8m36.196s
     cat  fb.oreNil2.chainHg19Link.txt
     #	43105455 bases of 350961831 (12.282%) in intersection
