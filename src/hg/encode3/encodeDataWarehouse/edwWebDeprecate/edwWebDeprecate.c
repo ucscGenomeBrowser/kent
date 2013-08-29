@@ -39,7 +39,7 @@ boolean okToDeprecateThisFile(struct sqlConnection *conn, int fId, char *userEma
 {
 if (checkOwnership(conn, fId, userEmail))
    return TRUE;
-else if (cgiVarExists("AllowBox"))
+else if (cgiVarExists("allowBox"))
    return TRUE;
 else
    return FALSE;
@@ -64,7 +64,7 @@ printf("Please enter in reason for deprecating files:<BR>");
 cgiMakeTextArea("reason", reason, 4, 60);
 printf("<BR>");
 printf("Allow me to deprecate files not uploaded by me:  ");
-cgiMakeCheckBox("AllowBox", FALSE);
+cgiMakeCheckBox("allowBox", FALSE);
 printf("<BR>");
 cgiMakeButton("submit", "submit");
 edwPrintLogOutButton();
@@ -85,18 +85,9 @@ struct dyString *dy = dyStringNew(0);
 struct slInt *id;
 for (id = idList; id != NULL; id = id->next)
     {
-    if (okToDeprecateThisFile(conn, id->val, userEmail)) 
-        {
-        dyStringClear(dy);
-        sqlDyStringPrintf(dy, "update edwFile set deprecated='%s' where id=%d", reason, id->val);
-        sqlUpdate(conn, dy->string);
-        } 
-    else
-        {
-        warn("Sorry, you can not deprecate file %d which is originally uploaded by %s.", 
-        id->val, edwUserNameFromFileId(conn, id->val)); 
-        getFileListAndReason(conn);
-        }
+    dyStringClear(dy);
+    sqlDyStringPrintf(dy, "update edwFile set deprecated='%s' where id=%d", reason, id->val);
+    sqlUpdate(conn, dy->string);
     }
 dyStringFree(&dy);
 }
@@ -137,6 +128,16 @@ else
 	   warn("%s - no such accession. ", licensePlate);
 	   break;
 	   }
+    /* check to see is it ok tor deprecate this file */
+    if (!okToDeprecateThisFile(conn, id, userEmail))
+       {
+       ok = FALSE;
+       warn("You can not deprecate %s which was originally uploaded by %s.\n",
+       licensePlate, edwUserNameFromFileId(conn, id));
+       warn("Please click the check box below to override this rule.");
+       break;
+       }
+
 	idEl = slIntNew(id);
 	slAddTail(&idList, idEl);
 	}
