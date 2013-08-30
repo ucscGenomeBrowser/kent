@@ -639,3 +639,18 @@ chainOne $(path1)
 # blastHg18KG 1.439%, xenoRefGene 2.186%, both 1.137%, cover 79.05%, enrich  36.17x
     rm -rf blastOut
 #end tblastn
+
+##############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-16 - Hiram)
+    mkdir /hive/data/genomes/ponAbe2/bed/ucscToINSDC
+    cd /hive/data/genomes/ponAbe2/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh
+    ./verifyAll.sh
+    ./join.sh
+
+    # verify the track link to INSDC functions
+
+##############################################################################
