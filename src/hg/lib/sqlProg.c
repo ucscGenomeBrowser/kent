@@ -6,6 +6,60 @@
 #include "obscure.h"
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <signal.h>
+
+char *tempFileNameToRemove = NULL;
+int killChildPid = 0;
+
+/* trap signals to remove the temporary file and terminate the child process */
+
+static void sqlProgCatchSignal(int sigNum)
+/* handler for various terminal signals for removing the temp file */
+{
+switch (sigNum)
+    {
+    case SIGTERM:
+    case SIGHUP:
+    case SIGINT:  // ctrl-c
+    case SIGABRT:
+    case SIGSEGV:
+    case SIGFPE:
+    case SIGBUS:
+	if (tempFileNameToRemove)
+	    unlink(tempFileNameToRemove);
+	break;
+    }
+
+if (killChildPid != 0) // the child should be runing
+    {
+    if (sigNum == SIGINT)
+	{
+    	kill(killChildPid, SIGINT);  // sometimes redundant, but not always
+	sleep(5);
+	}
+    kill(killChildPid, SIGTERM);
+    } 
+
+if (sigNum == SIGTERM || sigNum == SIGHUP) 
+    exit(1);   // so that atexit cleanup get called
+
+raise(SIGKILL);
+}
+
+void sqlProgInitSigHandlers()
+/* set handler for various terminal signals for logging purposes.
+ * if dumpStack is TRUE, attempt to dump the stack. */
+{
+// SIGKILL is not trappable or ignorable
+signal(SIGTERM, sqlProgCatchSignal);
+signal(SIGHUP,  sqlProgCatchSignal);
+signal(SIGINT,  sqlProgCatchSignal);
+signal(SIGABRT, sqlProgCatchSignal);
+signal(SIGSEGV, sqlProgCatchSignal);
+signal(SIGFPE,  sqlProgCatchSignal);
+signal(SIGBUS,  sqlProgCatchSignal);
+}
+
 
 static int cntArgv(char **argv)
 /* count number of elements in a null terminated vector of strings. 
@@ -60,6 +114,7 @@ char path[1024];
 
 if ((fileNo=mkstemp(defaultFileName)) == -1)
     errAbort("Could not create unique temporary file %s", defaultFileName);
+tempFileNameToRemove = defaultFileName;
 
 /* pick up the global and local defaults
  *  -- the order matters: later settings over-ride earlier ones. */
@@ -138,6 +193,9 @@ int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, defaultFileNo, returnStatus;
 pid_t child_id;
 char **nargv, defaultFileName[256], defaultFileArg[256], *homeDir;
 
+// install cleanup signal handlers
+sqlProgInitSigHandlers();
+
 /* Assemble defaults file */
 if ((homeDir = getenv("HOME")) == NULL)
     errAbort("sqlExecProgProfile: HOME is not defined in environment; cannot create temporary password file");
@@ -158,7 +216,12 @@ for (i = 0; i < userArgc; i++)
     nargv[j++] = userArgv[i];
 nargv[j++] = NULL;
 
+// flush before forking so we can't accidentally get two copies of the output
+fflush(stdout);
+fflush(stderr);
+
 child_id = fork();
+killChildPid = child_id;
 if (child_id == 0)
     {
     execvp(nargv[0], nargv);
