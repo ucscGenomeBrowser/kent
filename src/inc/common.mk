@@ -133,8 +133,13 @@ endif
 ifeq (${MYSQLLIBS},)
   MYSQLLIBS="-lmysqlclient"
 endif
-# OK to add this to all MYSQLLIBS just in case it is MySQL version 5.6 libraries
-MYSQLLIBS += -lstdc++ -lrt
+# OK to add -lstdc++ to all MYSQLLIBS just in case it is
+#    MySQL version 5.6 libraries, but no 'librt' on Mac OSX
+ifeq ($(UNAME_S),Darwin)
+  MYSQLLIBS += -lstdc++
+else
+  MYSQLLIBS += -lstdc++ -lrt
+endif
 
 L+=${PNGLIB}
 HG_INC+=${PNGINCL}
