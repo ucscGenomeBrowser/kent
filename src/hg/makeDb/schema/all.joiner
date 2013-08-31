@@ -146,7 +146,7 @@ set ucscRetroDb hg19,mm9,mm10
 # will complain about other databases.
 
 databasesChecked $gbd,$otherDb
-databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp090821,sp080707,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash,10Kgenomes,BRfoo,abc,andy,bioCyc070327,bioCyc090623,bioCyc100514,bosTau3Old,ccds,ccds20080404,ccdsNew,ccds_before,ctd,ctd021508,ctdOld,dark,elegansWS176,encpipeline_aamp,encpipeline_beta,encpipeline_galt,encpipeline_kate,encpipeline_prod,encpipeline_test,entrez,euaGli13,eutHer13,fakeDataE0,fanKgTemp,fanKgTemp2,fanTest,fanTest2,gencode,germlineVar_hg18,go040501,go041115,go050521,go050726,go060211,go061219,go080130,goJill,hg15test,hg18kg11,hg18snp130,hg18test,hg19Haps,hg19Patch10,hg19Patch9,hg19Patch5,hg19Patch2,hg19Patch2i,hg19snp131,hg19snp132,hg19snp134,hg19snp135,hg19snp137,hgcentralgsid,hgcentralrhead,hgcentraltest2,hgcentraltestangie,hiv1,hivgne8,homIni13,homIni14,homIni20,homNea0,homPan20,influenza,information_schema,ismb2004,jkFoo,jorgetest,kgHg17FTemp,kgHg18ATemp,kgMm8ATemp,kgRn3DTemp,markd,markdCcds,markdMGC,membership,metaData_vsmalladi,metadata_krish,mikep,mm9Temp,mm10snp137,mmtv,nonAfr13,oldChoHof1,panTro2snp127,pathway,petMar0,pongo,proteins080707,proteins090821,qa,rah,reactome,rn4UCGenes,rn4snp130,snpCompare,snpFixed,sp100331,sp101005,t18,testMePrivl,tmpBioCychg18,tmpFoo12,tmpUcscGeneshg19,treeFam,uf,ug,vega33,vega40,visiGeneOld,visiGeneXml
+databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp090821,sp080707,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash,10Kgenomes,BRfoo,abc,andy,bioCyc070327,bioCyc090623,bioCyc100514,bosTau3Old,ccds,ccds20080404,ccdsNew,ccds_before,ctd,ctd021508,ctdOld,dark,elegansWS176,encpipeline_aamp,encpipeline_beta,encpipeline_galt,encpipeline_kate,encpipeline_prod,encpipeline_test,entrez,euaGli13,eutHer13,fakeDataE0,fanKgTemp,fanKgTemp2,fanTest,fanTest2,gencode,germlineVar_hg18,go040501,go041115,go050521,go050726,go060211,go061219,go080130,goJill,hg15test,hg18kg11,hg18snp130,hg18test,hg19Haps,hg19Patch10,hg19Patch9,hg19Patch5,hg19Patch2,hg19Patch2i,hg19snp131,hg19snp132,hg19snp134,hg19snp135,hg19snp137,hg19snp138,hgcentralgsid,hgcentralrhead,hgcentraltest2,hgcentraltestangie,hiv1,hivgne8,homIni13,homIni14,homIni20,homNea0,homPan20,influenza,information_schema,ismb2004,jkFoo,jorgetest,kgHg17FTemp,kgHg18ATemp,kgMm8ATemp,kgRn3DTemp,markd,markdCcds,markdMGC,membership,metaData_vsmalladi,metadata_krish,mikep,mm9Temp,mm10snp137,mmtv,nonAfr13,oldChoHof1,panTro2snp127,pathway,petMar0,pongo,proteins080707,proteins090821,qa,rah,reactome,rn4UCGenes,rn4snp130,snpCompare,snpFixed,sp100331,sp101005,t18,testMePrivl,tmpBioCychg18,tmpFoo12,tmpUcscGeneshg19,treeFam,uf,ug,vega33,vega40,visiGeneOld,visiGeneXml
 
 # Define various non-self chains
 set chainDest Hg16,Hg17,Hg18,Hg19,Mm5,Mm6,Mm7,Mm8,Mm9,Mm10,Rn3,Rn4,Rn5,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,PanTro3,PanTro4,GalGal2,GalGal3,GalGal4,Fr1,Fr2,Fr3,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,DanRer7,CanFam1,CanFam2,CanFam3,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,ApiMel3,TetNig1,TetNig2,XenTro1,XenTro2,XenTro3,MonDom1,MonDom2,MonDom4,MonDom5,RheMac1,RheMac2,RheMac3,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,FelCat4,FelCat5,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar2,AnoCar1,Ce2,Ce4,Ce6,Ce9,Ce10,OrnAna1,CaeAng1,CaePb1,CaePb2,CaePb3,CaeRem2,CaeRem3,CaeRem4,CaeJap3,CaeJap4,CaeJap1,Cb1,Cb3,Cb4,CaeSp111,PriPac2,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CalJac3,CavPor3,PetMar1,BraFlo1,BraFlo2,TaeGut1,GorGor1,GorGor2,GorGor3,AplCal1,PapHam1,TarSyr1,OtoGar1,OtoGar3,MicMur1,LoxAfr2,LoxAfr3,SusScr1,SusScr2,SusScr3,AilMel1,CanFamPoodle1,ChoHof1,DasNov2,DasNov3,DipOrd1,EchTel1,EriEur1,EriEur2,MacEug1,MyoLuc1,OchPri2,OryCun1,OryCun2,ProCap1,PteVam1,SorAra1,SpeTri1,SpeTri2,TupBel1,TurTru1,TurTru2,VicPac1,VicPac2,BruMal1,HaeCon1,MelHap1,MelInc1,MelUnd1,Hg19Patch10,Hg19Patch9,Hg19Patch5,Hg19Patch2,OviAri1,MelGal1,BosTau6,BosTau7,MyoLuc2,TurTle1,NomLeu1,NomLeu2,NomLeu3,MacEug2,GadMor1,LatCha1,OreNil1,OreNil2,HetGla1,HetGla2,SaiBol1,TriMan1,GeoFor1,Mm10Patch1
@@ -3082,6 +3082,16 @@ identifier snpName137
     # and update trackDb settings if we remap to new dbSNP version:
     hg19.gwasCatalog.name minCheck=0.99
 
+identifier snpName138
+"dbSNP version 138 rs* identifiers"
+    $gbd.snp138.name dupeOk
+    $gbd.snp138Common.name
+    $gbd.snp138Flagged.name
+    $gbd.snp138Mult.name
+    $gbd.snp138Seq.acc minCheck=.98
+    $gbd.snp138CodingDbSnp.name minCheck=.90
+    $hg.snp138OrthoPt4Pa2Rm3.name
+
 # Other NCBI Identifiers
 
 identifier locusLinkId external=LocusLink
@@ -4150,6 +4160,7 @@ tablesIgnored $gbd
     snp132ExceptionDesc
     snp135ExceptionDesc
     snp137ExceptionDesc
+    snp138ExceptionDesc
 
 tablesIgnored $kgDb
     pbAaDist_

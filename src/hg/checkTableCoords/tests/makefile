@@ -15,7 +15,7 @@ test: run
 clean:
 	rm -fr output
 	rm -f *.tab
-	${hgsql} test -e 'drop table chromInfo;' > /dev/null 2>&1; /bin/true
+	${hgsql} test -e 'drop table chromInfo;' > /dev/null 2>&1; true
 
 load: clean
 	${hgsql} test < input/fakeChromInfo.sql
