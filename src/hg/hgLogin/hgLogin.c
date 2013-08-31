@@ -486,7 +486,7 @@ char **row;
 char query[256];
 
 /* find all the user names assocaited with this email address */
-char userList[256]="";
+char userList[512]="";
 sqlSafef(query,sizeof(query),"SELECT * FROM gbMembers WHERE email='%s'", email);
 sr = sqlGetResult(conn, query);
 int numUser = 0;
