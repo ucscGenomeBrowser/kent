@@ -37,7 +37,7 @@ ifeq (${HALDIR},)
 endif
 
 ifeq (${USE_HAL},1)
-    L+=${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halChain.a ${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halLiftover.a ${HALDIR}/hal/lib/halLod.a ${HALDIR}/hal/lib/halLib.a ${HALDIR}/sonLib/lib/sonLib.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_cpp.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_hl.a 
+    HALLIBS=${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halChain.a ${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halLiftover.a ${HALDIR}/hal/lib/halLod.a ${HALDIR}/hal/lib/halLib.a ${HALDIR}/sonLib/lib/sonLib.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_cpp.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_hl.a 
     HG_DEFS+=-DUSE_HAL
     HG_INC+=-I${HALDIR}/hal/chain/inc/
 endif
