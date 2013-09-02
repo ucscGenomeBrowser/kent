@@ -21,6 +21,9 @@
 #include <pthread.h>
 #include "trackHub.h"
 #include "values.h"
+#include "snakeUi.h"
+
+#ifdef USE_HAL
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -446,6 +449,8 @@ static void packSnakeDrawAt(struct track *tg, void *item,
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
+unsigned showSnpWidth = cartOrTdbInt(cart, tg->tdb, 
+    SNAKE_SHOW_SNP_WIDTH, SNAKE_DEFAULT_SHOW_SNP_WIDTH);
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
 calcPackSnake(tg, item);
 
@@ -464,11 +469,11 @@ int sClp = (s < winStart) ? winStart : s;
 int x1 = round((sClp - winStart)*scale) + xOff;
 int textX = x1;
 int yOff = y;
-//boolean withLabels = (withLeftLabels && (vis == tvFull) && !tg->drawName);
+boolean withLabels = (withLeftLabels && (vis == tvFull) && !tg->drawName);
 unsigned   labelColor = MG_BLACK;
 
-// draw the labels (this code needs a clean up )
-if (0)//withLabels)
+// draw the labels
+if (withLabels)
     {
     char *name = tg->itemName(tg, item);
     int nameWidth = mgFontStringWidth(font, name);
@@ -579,10 +584,17 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	darkRedColor = hvGfxFindColorIx(hvg, 232,156,156);
 	darkBlueColor = hvGfxFindColorIx(hvg, 149,204,252);
 	}
-    color = (sf->orientation == -1) ? darkRedColor : darkBlueColor;
+    
+    char *colorBy = cartOrTdbString(cart, tg->tdb, 
+	SNAKE_COLOR_BY, SNAKE_DEFAULT_COLOR_BY);
 
-    // for the moment, always color blue
-    color =  darkBlueColor;
+    extern Color getChromColor(char *name, struct hvGfx *hvg);
+    if (sameString(colorBy, SNAKE_COLOR_BY_STRAND_VALUE))
+	color = (sf->orientation == -1) ? darkRedColor : darkBlueColor;
+    else if (sameString(colorBy, SNAKE_COLOR_BY_CHROM_VALUE))
+	color = getChromColor(lf->name, hvg);
+    else
+	color =  darkBlueColor;
 
     int w = ex - sx;
     if (w == 0) 
@@ -606,7 +618,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     hvGfxBox(hvg, sx, y, w, heightPer, color);
 
     // now draw the mismatches if we're at high enough resolution 
-    if ((winBaseCount < 50000) && (vis == tvFull))
+    if ((winBaseCount < showSnpWidth) && (vis == tvFull))
     {
 	char *twoBitString = trackDbSetting(tg->tdb, "twoBit");
 	static struct twoBitFile *tbf = NULL;
@@ -736,7 +748,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	    color = MG_ORANGE;
 
 	// draw the vertical orange bars if there is an insert in the other sequence
-	if ((winBaseCount < 50000) )
+	if ((winBaseCount < showSnpWidth) )
 	    {
 	    if ((sf->orientation == 1) && (qs != lastQEnd) && (lastE == s))
 		{
@@ -947,13 +959,15 @@ hFreeConn(&conn);
 #ifdef USE_HAL
 void halSnakeLoadItems(struct track *tg)
 {
+unsigned showSnpWidth = cartOrTdbInt(cart, tg->tdb, 
+    SNAKE_SHOW_SNP_WIDTH, SNAKE_DEFAULT_SHOW_SNP_WIDTH);
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
     int handle = halOpenLOD(fileName);
-    int needSeq = (winBaseCount < 50000) ? 1 : 0;
+    int needSeq = (winBaseCount < showSnpWidth) ? 1 : 0;
     struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, needSeq, 1);
 
     // did we get any blocks from HAL
@@ -1170,6 +1184,7 @@ lf=tg->items;
 fixItems(lf);
 }	/*	chainLoadItems()	*/
 
+#ifdef NOTNOW
 static Color chainScoreColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct linkedFeatures *lf = (struct linkedFeatures *)item;
@@ -1194,8 +1209,17 @@ tg->altColor.b = 127;
 tg->ixColor = MG_BLACK;
 tg->ixAltColor = MG_GRAY;
 }
+#endif
 
 #ifdef USE_HAL
+void halSnakeDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+        boolean withCenterLabels, MgFont *font,
+        Color color, enum trackVisibility vis)
+{
+}
+
+
 void halSnakeMethods(struct track *tg, struct trackDb *tdb, 
 	int wordCount, char *words[])
 {
@@ -1209,12 +1233,14 @@ tg->mapItemName = lfMapNameFromExtra;
 tg->subType = lfSubChain;
 //tg->extraUiData = (void *) chainCart;
 tg->totalHeight = snakeHeight; 
+tg->drawLeftLabels = halSnakeDrawLeftLabels;
 
 tg->drawItemAt = snakeDrawAt;
 tg->itemHeight = snakeItemHeight;
 }
 #endif
 
+#ifdef NOTNOW
 void snakeMethods(struct track *tg, struct trackDb *tdb, 
 	int wordCount, char *words[])
 /* Fill in custom parts of alignment chains. */
@@ -1280,3 +1306,5 @@ tg->totalHeight = snakeHeight;
 tg->drawItemAt = snakeDrawAt;
 tg->itemHeight = snakeItemHeight;
 }
+#endif
+#endif
