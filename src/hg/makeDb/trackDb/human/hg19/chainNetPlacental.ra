@@ -221,8 +221,7 @@ include chainNetRn5.ra alpha
         type chain susScr2
         otherDb susScr2
 
-include chainNetOviAri1.ra beta,public
-include chainNetOviAri3.ra alpha
+include chainNetOviAri3.ra beta
 
     track placentalChainNetViewnet
     shortLabel Nets
