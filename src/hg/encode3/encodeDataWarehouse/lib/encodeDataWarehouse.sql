@@ -159,7 +159,7 @@ CREATE TABLE edwValidFile (
     depth double default 0,	# Estimated genome-equivalents covered by possibly overlapping data
               #Indices
     PRIMARY KEY(id),
-    UNIQUE(licensePlate),
+    INDEX(licensePlate),
     UNIQUE(fileId),
     INDEX(outputType(16)),
     INDEX(experiment(16))
@@ -176,8 +176,8 @@ CREATE TABLE edwFastqFile (
     baseCount bigint default 0,	# # of bases in all reads added up
     readSizeMean double default 0,	# Average read size
     readSizeStd double default 0,	# Standard deviation of read size
-    readSizeMin double default 0,	# Minimum read size
-    readSizeMax double default 0,	# Maximum read size
+    readSizeMin int default 0,	# Minimum read size
+    readSizeMax int default 0,	# Maximum read size
     qualMean double default 0,	# Mean quality scored as 10*-log10(errorProbability) or close to it.  >25 is good
     qualStd double default 0,	# Standard deviation of quality
     qualMin double default 0,	# Minimum observed quality

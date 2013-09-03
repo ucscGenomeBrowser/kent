@@ -697,8 +697,8 @@ struct edwFastqFile
     long long baseCount;	/* # of bases in all reads added up */
     double readSizeMean;	/* Average read size */
     double readSizeStd;	/* Standard deviation of read size */
-    double readSizeMin;	/* Minimum read size */
-    double readSizeMax;	/* Maximum read size */
+    int readSizeMin;	/* Minimum read size */
+    int readSizeMax;	/* Maximum read size */
     double qualMean;	/* Mean quality scored as 10*-log10(errorProbability) or close to it.  >25 is good */
     double qualStd;	/* Standard deviation of quality */
     double qualMin;	/* Minimum observed quality */
