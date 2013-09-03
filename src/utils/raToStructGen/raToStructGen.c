@@ -12,6 +12,7 @@
 char *requiredAsComma = NULL;
 char *computedAsComma = NULL;
 boolean testMain = FALSE;
+char *extraH = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +28,7 @@ errAbort(
   "   -computed=comma,sep,list - comma separated list of fields that are computed not parsed\n"
   "                              These fields will be ignored if in input\n"
   "   -testMain - generate a main() routine to help test\n"
+  "   -extraH=someFile.h  - Path to an extra include file\n"
   );
 }
 
@@ -35,6 +37,7 @@ static struct optionSpec options[] = {
    {"required", OPTION_STRING},
    {"computed", OPTION_STRING},
    {"testMain", OPTION_BOOLEAN},
+   {"extraH", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -87,7 +90,7 @@ return reader;
 boolean skipColumn(struct asColumn *col, struct hash *ignoreHash)
 /* Return TRUE if we should skip column. */
 {
-return col->isSizeLink || hashLookup(ignoreHash, col->name) != NULL;
+return hashLookup(ignoreHash, col->name) != NULL;
 }
 
 void raToStructReaderFree(struct raToStructReader **pReader)
@@ -190,6 +193,8 @@ fprintf(f,
 "#include \"ra.h\"\n"
 "#include \"raToStruct.h\"\n"
 , as->name);
+if (extraH)
+   fprintf(f, "#include \"%s\"\n", extraH);
 if (testMain)
    fprintf(f, "#include \"testStruct.h\"\n");
 fprintf(f, "\n");
@@ -298,11 +303,12 @@ for (col = as->columnList; col != NULL; col = col->next)
 	    case t_lstring:
 		if (col->linkedSizeName)
 		    {
+		    struct asColumn *linkedSize = col->linkedSize;
 		    fprintf(f, "                int arraySize;\n");
 		    fprintf(f, "		sql%sDynamicArray(val, &el->%s, &arraySize);\n", 
 			lt->listyName, col->name);
-		    fprintf(f, "                raToStructArraySizer(lf, arraySize, &el->%s, \"%s\");\n",
-			col->linkedSize->name, col->name);
+		    fprintf(f, "                raToStructArray%sSizer(lf, arraySize, &el->%s, \"%s\");\n",
+			linkedSize->lowType->listyName, linkedSize->name, col->name);
 		    }
 		else if (col->fixedSize)
 		    fprintf(f, "		sql%sArray(val, el->%s, %d);\n", 
@@ -328,7 +334,15 @@ for (col = as->columnList; col != NULL; col = col->next)
 	    case t_short:
 	    case t_ushort:
 	    case t_off:
-		fprintf(f, "	        el->%s = sql%s(val);\n", col->name, lt->nummyName);
+		if (col->isSizeLink)
+		    {
+		    fprintf(f, "                %s arraySize = sql%s(val);\n",
+			lt->cName, lt->nummyName);
+		    fprintf(f, "                raToStructArray%sSizer(lf, arraySize, &el->%s, \"%s\");\n",
+			lt->listyName, col->name, col->name);
+		    }
+		else
+		    fprintf(f, "	        el->%s = sql%s(val);\n", col->name, lt->nummyName);
 		break;
 	    /* Handle string types */
 	    case t_string:
@@ -415,6 +429,7 @@ if (argc != 3)
 requiredAsComma = optionVal("required", NULL);
 computedAsComma = optionVal("computed", NULL);
 testMain = optionExists("testMain");
+extraH = optionVal("extraH", extraH);
 raToStructGen(argv[1], argv[2]);
 return 0;
 }

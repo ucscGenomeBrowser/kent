@@ -33,6 +33,7 @@ static char *fields[] = {
     "gRatio",
     "tRatio",
     "nRatio",
+    "posCount",
     "qualPos",
     "aAtPos",
     "cAtPos",
@@ -93,6 +94,7 @@ enum fields
     gRatioField,
     tRatioField,
     nRatioField,
+    posCountField,
     qualPosField,
     aAtPosField,
     cAtPosField,
@@ -211,46 +213,52 @@ while (raNextTagVal(lf, &tag, &val, NULL))
 	        el->nRatio = sqlDouble(val);
 		break;
 	        }
+	    case posCountField:
+	        {
+                int arraySize = sqlSigned(val);
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "posCount");
+		break;
+	        }
 	    case qualPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->qualPos, &arraySize);
-                raToStructArraySizer(lf, arraySize, &el->posCount, "qualPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "qualPos");
 		break;
 	        }
 	    case aAtPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->aAtPos, &arraySize);
-                raToStructArraySizer(lf, arraySize, &el->posCount, "aAtPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "aAtPos");
 		break;
 	        }
 	    case cAtPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->cAtPos, &arraySize);
-                raToStructArraySizer(lf, arraySize, &el->posCount, "cAtPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "cAtPos");
 		break;
 	        }
 	    case gAtPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->gAtPos, &arraySize);
-                raToStructArraySizer(lf, arraySize, &el->posCount, "gAtPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "gAtPos");
 		break;
 	        }
 	    case tAtPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->tAtPos, &arraySize);
-                raToStructArraySizer(lf, arraySize, &el->posCount, "tAtPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "tAtPos");
 		break;
 	        }
 	    case nAtPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->nAtPos, &arraySize);
-                raToStructArraySizer(lf, arraySize, &el->posCount, "nAtPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "nAtPos");
 		break;
 	        }
 	    default:
