@@ -291,7 +291,6 @@ safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", edwTempDir());
 int localFd = mustMkstemp(tempFileName);
 cpFile(remoteFd, localFd);
 mustCloseFd(&localFd);
-
 }
 
 int edwFileFetch(struct sqlConnection *conn, struct edwFile *ef, int fd, 
@@ -333,10 +332,6 @@ if (errCatchStart(errCatch))
     /* Do actual upload tracking how long it takes. */
     ef->startUploadTime = edwNow();
 
-#ifdef OLD
-    cpFile(fd, localFd);
-#endif /* OLD */
-
     mustCloseFd(&localFd);
     if (!parallelFetch(submitFileName, tempName, paraFetchStreams, 3, FALSE, FALSE))
         errAbort("parallel fetch of %s failed", submitFileName);
@@ -346,6 +341,8 @@ if (errCatchStart(errCatch))
     /* Rename file both in file system and (via ef) database. */
     edwMakeFileNameAndPath(ef->id, submitFileName, edwFile, edwPath);
     mustRename(tempName, edwPath);
+    if (endsWith(edwPath, ".gz") && !encode3IsGzipped(edwPath))
+         errAbort("%s has .gz suffix, but is not gzipped", submitFileName);
     ef->edwFileName = cloneString(edwFile);
     }
 errCatchEnd(errCatch);
@@ -856,6 +853,7 @@ for (sfr = sfrList; sfr != NULL; sfr = sfrNext)
     byteCount += bf->size;
     }
 sfrList = NULL;
+slReverse(&newList);
 
 /* Update database with oldFile count. */
 sqlSafef(query, sizeof(query), 

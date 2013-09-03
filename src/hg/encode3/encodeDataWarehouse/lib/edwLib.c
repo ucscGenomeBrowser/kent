@@ -374,9 +374,12 @@ int nameSize = strlen(path);
 char *suffix = lastMatchCharExcept(path, path + nameSize, '.', '/');
 if (suffix != NULL)
     {
-    char *secondSuffix = lastMatchCharExcept(path, suffix, '.', '/');
-    if (secondSuffix != NULL)
-        suffix = secondSuffix;
+    if (sameString(suffix, ".gz") || sameString(suffix, ".bigBed"))
+	{
+	char *secondSuffix = lastMatchCharExcept(path, suffix, '.', '/');
+	if (secondSuffix != NULL)
+	    suffix = secondSuffix;
+	}
     }
 else
     suffix = path + nameSize;
