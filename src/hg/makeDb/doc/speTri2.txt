@@ -406,3 +406,22 @@ speTri2.perChromTables = no
     ssh hgwbeta "hgsql qapushq < /tmp/speTri2.sql"
 
 ############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/speTri2/bed/ucscToINSDC
+    cd /hive/data/genomes/speTri2/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | hgLoadSqlTab speTri2 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords speTri2 ucscToINSDC
+    featureBits -countGaps speTri2 ucscToINSDC
+    #  2478393770 bases of 2478393770 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

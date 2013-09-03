@@ -10,12 +10,15 @@ endif
 
 my:: compile
 	chmod a+rx $A${EXE}
+	rm -f ${CGI_BIN_USER}/$A
 	mv $A${EXE} ${CGI_BIN_USER}/$A
 
 alpha:: strip
+	rm -f ${CGI_BIN}/$A
 	mv $A${EXE} ${CGI_BIN}/$A
 
 beta:: strip
+	rm -f ${CGI_BIN_BETA}/$A
 	mv $A${EXE} ${CGI_BIN_BETA}/$A
 
 # don't actually strip so we can get stack traces
@@ -32,6 +35,7 @@ install::  strip
 
 debug:: $O
 	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L}
+	rm -f $A${EXE}
 	mv ${AOUT} $A${EXE}
 
 lib::

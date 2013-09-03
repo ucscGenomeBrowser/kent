@@ -1439,7 +1439,7 @@ return doGrepQuery(indexFile, table, key, extraOptions);
 }
 
 static struct slName *genbankSqlFuzzyQuery(struct sqlConnection *conn,
-					   char *table, char *key)
+					   char *table, char *key, int limit)
 /* Perform a fuzzy sql search for %key% in table.name; return list of 
  * corresponding table.id's.  */
 {
@@ -1450,7 +1450,7 @@ if (!isTooCommon(table, key))
     char **row;
     char query[256];
     sqlSafef(query, sizeof(query),
-	  "select id,name from %s where name like '%%%s%%'", table, key);  
+	  "select id,name from %s where name like '%%%s%%' limit %d", table, key, limit);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1481,6 +1481,7 @@ static void findHitsToTables(char *db, struct hgFindSpec *hfs,
 			     char *key, char *tables[], int tableCount, 
 			     struct hash **retHash, struct slName **retList)
 /* Return all unique accessions that match any table. */
+// Modified to return only the first 500 hits because of CGI timeouts
 {
 struct slName *list = NULL, *el;
 struct hash *hash = newHash(0);
@@ -1491,7 +1492,8 @@ char query[256];
 char *field;
 int i;
 
-for (i = 0; i<tableCount; ++i)
+int rowCount = 0, limit = 500; // Excessively broad searches were leading to CGI timeouts
+for (i = 0; i<tableCount && rowCount <= limit; ++i)
     {
     struct slName *idList = NULL, *idEl;
     char *grepIndexFile = NULL;
@@ -1505,14 +1507,14 @@ for (i = 0; i<tableCount; ++i)
     if ((grepIndexFile = getGenbankGrepIndex(db, hfs, field, "idName")) != NULL)
 	idList = genbankGrepQuery(grepIndexFile, field, key);
     else
-	idList = genbankSqlFuzzyQuery(conn, field, key);
-    for (idEl = idList; idEl != NULL; idEl = idEl->next)
+	idList = genbankSqlFuzzyQuery(conn, field, key, limit);
+    for (idEl = idList; idEl != NULL && rowCount <= limit; idEl = idEl->next)
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
-	sqlSafef(query, sizeof(query),
-	      "select acc, organism from gbCdnaInfo where %s = %s "
-	      " and type = 'mRNA'",
-	      field, idEl->name);
+        sqlSafef(query, sizeof(query),
+              "select acc, organism from gbCdnaInfo where %s = %s "
+              " and type = 'mRNA' limit %d",
+              field, idEl->name, limit);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -1525,6 +1527,8 @@ for (i = 0; i<tableCount; ++i)
                 slAddHead(&list, el);
                 hashAddInt(hash, acc, organismID);
 		}
+            if (rowCount++ > limit)
+                break;
 	    }
 	sqlFreeResult(&sr);
         }

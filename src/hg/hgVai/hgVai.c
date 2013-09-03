@@ -126,8 +126,6 @@ void printRegionListHtml(char *db)
 {
 printf("<SELECT ID='"hgvaRegionType"' NAME='"hgvaRegionType"' "
        "onchange=\"hgva.changeRegion();\">\n");
-struct sqlConnection *conn = hAllocConn(db);
-hFreeConn(&conn);
 printOption(hgvaRegionTypeGenome, regionType, "genome");
 printOption(hgvaRegionTypeRange, regionType, "position or search term");
 printf("</SELECT>");
@@ -351,29 +349,43 @@ boolean isGeneTrack(struct trackDb *tdb, void *filterData)
 return (startsWith("genePred", tdb->type));
 }
 
-void selectGenes()
-/* Let user select a gene predictions track */
+boolean selectGenes()
+/* Let user select a gene predictions track; return FALSE if there are no genePred tracks. */
 {
 struct slRef *trackRefList = NULL;
 tdbFilterGroupTrack(fullTrackList, fullGroupList, isGeneTrack, NULL, NULL, &trackRefList);
-if (trackRefList == NULL)
-    return;
+boolean gotGP = (trackRefList != NULL);
+if (!gotGP)
+    warn("This assembly (%s) has no gene prediction tracks, "
+	 "so the VAI will not be able to annotate it.", database);
 printf("<div class='sectionLiteHeader'>Select Genes</div>\n");
-printf("The gene predictions selected here will be used to determine the effect of "
-       "each variant on genes, for example intronic, missense, splice site, intergenic etc."
-       "<BR>\n");
+if (gotGP)
+    printf("The gene predictions selected here will be used ");
+else
+    printf("Gene predictions are required in order ");
+printf("to determine the effect of "
+       "each variant on genes, for example intronic, missense, splice site, intergenic etc.");
+if (!gotGP)
+    printf(" Since this assembly has no gene prediction tracks, "
+	   "the VAI can't provide functional annotations. "
+	   "Please select a different genome.<BR>");
+printf("<BR>\n");
 char *selected = cartUsualString(cart, "hgva_geneTrack", ""); //#*** per-db cart vars??
 //#*** should show more info about each track... button to pop up track desc?
 
-printf("<SELECT ID='hgva_geneTrack' NAME='hgva_geneTrack'>\n");
-struct slRef *ref;
-for (ref = trackRefList;  ref != NULL;  ref = ref->next)
+if (gotGP)
     {
-    struct trackDb *tdb = ref->val;
+    printf("<SELECT ID='hgva_geneTrack' NAME='hgva_geneTrack'>\n");
+    struct slRef *ref;
+    for (ref = trackRefList;  ref != NULL;  ref = ref->next)
+	{
+	struct trackDb *tdb = ref->val;
     if (tdb->subtracks == NULL)
 	printOption(tdb->track, selected, tdb->longLabel);
+	}
+    puts("</SELECT><BR>");
     }
-puts("</SELECT><BR>");
+return gotGP;
 }
 
 //#*** We really need a dbNsfp.[ch]:
@@ -437,6 +449,8 @@ return NULL;
 struct slName *findDbNsfpTables()
 /* See if this database contains dbNSFP tables. */
 {
+if (startsWith(hubTrackPrefix, database))
+    return NULL;
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *dbNsfpTables = sqlQuickList(conn, "NOSQLINJ show tables like 'dbNsfp%'");
 hFreeConn(&conn);
@@ -504,6 +518,8 @@ boolean findSnpBed4(char *suffix, char **retFileName, struct trackDb **retTdb)
  * or better yet a bigBed file for it (faster),
  * set the appropriate ret* and return TRUE, otherwise return FALSE. */
 {
+if (startsWith(hubTrackPrefix, database))
+    return FALSE;
 if (suffix == NULL)
     suffix = "";
 char query[64];
@@ -819,7 +835,6 @@ printAssemblySection();
 struct slRef *varTrackList = NULL, *varGroupList = NULL;
 tdbFilterGroupTrack(fullTrackList, fullGroupList, isVariantCustomTrack, NULL,
 		    &varGroupList, &varTrackList);
-
 if (varTrackList == NULL)
     {
     askUserForVariantCustomTrack();
@@ -829,11 +844,14 @@ else
     puts("<BR>");
     // Make wrapper table for collapsible sections:
     selectVariants(varGroupList, varTrackList);
-    selectGenes();
-    selectAnnotations();
-    selectFilters();
-    selectOutput();
-    submitAndDisclaimer();
+    boolean gotGP = selectGenes();
+    if (gotGP)
+	{
+	selectAnnotations();
+	selectFilters();
+	selectOutput();
+	submitAndDisclaimer();
+	}
     }
 printf("</FORM>");
 
@@ -1253,8 +1271,6 @@ else
 
 /* Set up global variables. */
 getDbAndGenome(cart, &database, &genome, oldVars);
-if (trackHubDatabase(database))
-    errAbort("Assembly Data Hubs not yet supported by the Variant Annotaion Integrator");
 regionType = cartUsualString(cart, hgvaRegionType, hgvaRegionTypeGenome);
 if (isEmpty(cartOptionalString(cart, hgvaRange)))
     cartSetString(cart, hgvaRange, hDefaultPos(database));

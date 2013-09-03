@@ -113,6 +113,7 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
+setUdcCacheDir();
 cartHtmlShell("Cart Dump", doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("cartDump", enteredMainTime);
 return 0;

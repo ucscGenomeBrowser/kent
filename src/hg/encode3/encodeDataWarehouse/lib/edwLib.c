@@ -220,6 +220,35 @@ struct edwUser *user = edwUserLoadByQuery(conn, query);
 return user;
 }
 
+struct edwUser *edwUserFromId(struct sqlConnection *conn, int id)
+/* Return user associated with that id or NULL if not found */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwUser where id='%d'", id);
+struct edwUser *user = edwUserLoadByQuery(conn, query);
+return user;
+}
+
+int edwUserIdFromFileId(struct sqlConnection *conn, int fId)
+/* Return user id who submit the file originally */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select s.userId from edwSubmit s, edwFile f where f.submitId=s.id and f.id='%d'", fId);
+int sId = sqlQuickNum(conn, query);
+sqlSafef(query, sizeof(query), "select u.id from edwSubmit s, edwUser u where  u.id=s.id and s.id='%d'", sId);
+return sqlQuickNum(conn, query);
+}
+
+char *edwUserNameFromFileId(struct sqlConnection *conn, int fId)
+/* Return user who submit the file originally */
+{
+int uId = edwUserIdFromFileId(conn, fId);
+struct edwUser *user=edwUserFromId(conn, uId);
+char name[256];
+safecpy(name, sizeof(name), user->email);
+return cloneString(name);
+}
+
 void edwWarnUnregisteredUser(char *email)
 /* Put up warning message about unregistered user and tell them how to register. */
 {

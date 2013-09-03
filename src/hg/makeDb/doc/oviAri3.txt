@@ -589,7 +589,7 @@ NC_001941
     hgsql -N -e "select frag from gold;" oviAri3 | egrep -v -e '[AN][CM][G_][L0]0[0-9]+(\.1)?' | wc -l
     # 0
 
-    # hence, add to trackDb/tenrec/oviAri3/trackDb.ra
+    # hence, add to trackDb/sheep/oviAri3/trackDb.ra
 searchTable gold
 shortCircuit 1
 termRegex [AN][CM][G_][L0]0[0-9]+(\.1)?

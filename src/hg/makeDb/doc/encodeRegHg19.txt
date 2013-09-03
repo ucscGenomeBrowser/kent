@@ -986,6 +986,7 @@ project wgEncode
     # vim README.txt
     cp README.txt md5sum.txt ..
 
+
 #######################################################################
 # performance eval
 
@@ -1021,7 +1022,23 @@ insert into kateTemp (select * from wgEncodeTfbsClusteredV3)
     hgLoadBed -sqlTable=~/kent/src/hg/lib/factorSource.sql -renameSqlTable \
         hg19 wgEncodeRegTfbsClusteredShrunk clusters.shrunk.bed
 
-    # rename Shrunk to V3
+# rename Shrunk to V3
+# copy to downloads
+    cp clusters.shrunk.bed downloads/wgEncodeRegTfbsClusteredV3.bed
+    cd downloads
+    gzip wgEncodeRegTfbsClusteredV3.bed
+
+    cd /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeRegTfbsClustered/releaseLatest
+    md5sum wgEncodeRegTfbsClusteredV3.bed >> md5sum.txt
+    # and remove old entry
+
+    # (see Wrangler HowTo in ENCODE2 wiki for these steps)
+    # replace md5sum in md5sum.txt, metaDb
+
+    # create files.txt
+    encodeMkFilesList hg19
+
+
 
 #######################################################################
 

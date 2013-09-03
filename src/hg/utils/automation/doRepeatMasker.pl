@@ -167,15 +167,18 @@ sub doCluster {
   else {
      $repeatLib = "-species \'$species\'";
   }
+
+  # updated for ku kluster operation -cpu option instead of ram option
   if ( $opt_useRMBlastn ) {
     $RepeatMaskerEngine = "-engine rmblast -pa 1";
-    $parasolRAM = "-ram=2g";
+    $parasolRAM = "-cpu=1";
   }
 
+  # updated for ku kluster operation -cpu option instead of ram option
   if ( $opt_useHMMER ) {
     # NOTE: This is only applicable for 8gb one-job-per-node scheduling
     $RepeatMaskerEngine = "-engine hmmer -pa 4";
-    $parasolRAM = "-ram=8g";
+    $parasolRAM = "-cpu=4";
   }
 
   # Script to do a dummy run of RepeatMasker, to test our invocation and

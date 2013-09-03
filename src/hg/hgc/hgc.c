@@ -684,7 +684,7 @@ printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
 /* printBand(chrom, (start + end)/2, 0, FALSE); */
 printBand(chrom, start, end, FALSE);
 printf("<B>Genomic Size:</B> %d<BR>\n", end - start);
-if (strand != NULL && differentString(strand,"."))
+if (strand != NULL && differentString(strand,".") && isNotEmpty(strand))
     printf("<B>Strand:</B> %s<BR>\n", strand);
 else
     strand = "?";
@@ -23918,13 +23918,17 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     r = bedDetailLoadWithGaps(row, bedPart+2);
-    bedPrintPos((struct bed*)r, bedPart, tdb);
-    if (r->id != NULL)
+    if (isNotEmpty(r->id))
         {
-        if (!sameString("qPcrPrimers", table))
-            printf("<B>ID:</B> %s <BR>\n", r->id);
         printCustomUrl(tdb, r->id, TRUE);
-        } 
+        printf("<br>\n");
+        }
+
+    bedPrintPos((struct bed*)r, bedPart, tdb);
+    printf("<br>");
+    if (isNotEmpty(r->id) && !sameString("qPcrPrimers", table))
+        printf("<B>ID:</B> %s <BR>\n", r->id);
+
     if  (isNotEmpty(r->description))
         printf("%s <BR>\n", r->description);
     }

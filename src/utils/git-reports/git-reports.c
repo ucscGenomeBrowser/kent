@@ -240,7 +240,14 @@ int makeHtml(char *diffPath, char *htmlPath, char *path, char *commitId)
 int linesChanged = 0;
 
 FILE *h = mustOpen(htmlPath, "w");
-struct lineFile *lf = lineFileOpen(diffPath, TRUE);
+verbose(2, "makeHtml: diffPath: '%s'\n", diffPath);
+struct lineFile *lf = lineFileMayOpen(diffPath, TRUE);
+// creating empty file since 'git diff' produced nothing for white spaced only delta
+if (NULL == lf)
+    {
+    FILE *dp = mustOpen(diffPath, "w");
+    fclose(dp);
+    }
 int lineSize;
 char *line;
 char *xline = NULL;
@@ -251,7 +258,7 @@ int blockP = 0, blockN = 0;
 fprintf(h, "<html>\n<head>\n<title>%s %s</title>\n</head>\n</body>\n<pre>\n", path, commitId);
 boolean hasMore = TRUE;
 boolean combinedDiff = FALSE;
-while (hasMore)
+while (lf && hasMore)
     {
     boolean checkEob = FALSE;
     hasMore = lineFileNext(lf, &line, &lineSize);
@@ -316,7 +323,8 @@ while (hasMore)
 
     }
 
-lineFileClose(&lf);
+if (lf)
+    lineFileClose(&lf);
 fprintf(h, "</pre>\n</body>\n</html>\n");
 fclose(h);
 return linesChanged;
@@ -357,6 +365,7 @@ else
 	, c->commitId, tempMakeDiffName);
 	}
     }
+verbose(2, "makeDiffAndSplit: gitCmd: '%s'\n", gitCmd);
 runShell(gitCmd);
 
 

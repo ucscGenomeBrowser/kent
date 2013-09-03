@@ -206,6 +206,15 @@ freez(&vocabFile);
 dyStringFree(&query);
 }
 
+static char *factorSourceVocabLink(char *vocabFile, char *fieldName, char *fieldVal)
+/* Add link to show controlled vocabulary entry for term.
+ * Handles 'target' (factor) which is a special case, derived from Antibody entries */
+{
+char *vocabType = (sameString(fieldName, "target") || sameString(fieldName, "factor")) ?
+                    "target" : "term";
+return controlledVocabLink(vocabFile, vocabType, fieldVal, fieldVal, fieldVal, "");
+}
+
 static void printFactorSourceTableHits(struct factorSource *cluster, struct sqlConnection *conn,
 	char *sourceTable, char *inputTrackTable, 
 	struct slName *fieldList, boolean invert, char *vocab)
@@ -255,14 +264,16 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (!invert)
 	    webPrintDoubleCell(signal);
 	webPrintLinkCell(row[1]);
-	int i;
-	for (i=0; i<fieldCount; ++i)
+	int i = 0;
+        // find position of CV metadata in field list
+        int offset = 3;
+        struct slName *field = fieldList;
+	for (i=0; i<fieldCount && field != NULL; ++i, field = field->next)
 	    {
-	    char *fieldVal = row[i+3];
+	    char *fieldVal = row[i+offset];
 	    if (vocab)
 	        {
-		char *link = controlledVocabLink(vocabFile, "term", 
-			fieldVal, fieldVal, fieldVal, "");
+                char *link = cloneString(factorSourceVocabLink(vocabFile, field->name, fieldVal));
 		webPrintLinkCell(link);
 		}
 	    else

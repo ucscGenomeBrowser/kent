@@ -1,25 +1,19 @@
-setenv BRANCHNN 287
-setenv TODAY 2013-07-30             # v287 final
-setenv LASTWEEK  2013-07-09         # v286 final
-setenv REVIEWDAY 2013-08-07         # v288 preview
-setenv LASTREVIEWDAY 2013-07-16     # v287 preview
-setenv REVIEW2DAY 2013-07-23        # v286 preview2
-setenv LASTREVIEW2DAY 2013-07-02    # v287 preview2
-
-
+# set these three for final build:
+setenv BRANCHNN 288
+setenv TODAY 2013-08-19             # v288 final
+setenv LASTWEEK  2013-07-30         # v287 final
+# set for preview 1:
+setenv REVIEWDAY 2013-08-26         # v289 preview
+setenv LASTREVIEWDAY 2013-08-07     # v288 preview
+# set for preview 2:
+setenv REVIEW2DAY 2013-09-02        # v288 preview2
+setenv LASTREVIEW2DAY 2013-08-13    # v288 preview2
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
 setenv REPLYTO ann@soe.ucsc.edu
 
 setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
-
-setenv MYSQLINC /usr/include/mysql
-if ( "$MACHTYPE" == "x86_64" ) then
-    setenv MYSQLLIBS '/usr/lib64/mysql/libmysqlclient.a -lz'
-else  
-    setenv MYSQLLIBS '/usr/lib/mysql/libmysqlclient.a -lz'  
-endif
 
 # see also paths in kent/java/build.xml
 setenv BUILDDIR $BUILDHOME

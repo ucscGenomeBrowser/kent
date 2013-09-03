@@ -152,7 +152,14 @@ if ( -e GitReports.ok ) then
     foreach victim ( $victims )
 		git log --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base --pretty=oneline > /dev/null
 		if ($? == 0) then
-			./summaryEmail.sh ${victim} | mail -s "Code summaries are due for ${victim}" ${victim} -- -f $REPLYTO
+		       rm -f /dev/shm/build.email.${victim}.txt
+                       echo "To: ${victim}" > /dev/shm/build.email.${victim}.txt
+                       echo "From: zweig@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt
+                       echo "Subject: Code summaries are due for ${victim}" >> /dev/shm/build.email.${victim}.txt
+                       echo "" >> /dev/shm/build.email.${victim}.txt
+		       ./summaryEmail.sh ${victim} >> /dev/shm/build.email.${victim}.txt
+		       cat /dev/shm/build.email.${victim}.txt | /usr/sbin/sendmail -t -oi
+		       rm -f /dev/shm/build.email.${victim}.txt
 		endif
     end
 else

@@ -8,10 +8,11 @@
 	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 	<META HTTP-EQUIV="Expires" CONTENT="-1">
 	<TITLE>Track and Table Releases	</TITLE>
-        <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />
+    <LINK rel='STYLESHEET' href='/style/HGStyle.css' TYPE='text/css' />
 </HEAD>
-<BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF"><script type='text/javascript'>
-document.write("<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'><CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER><UL id='warnList'></UL><CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER></div></center>");
+<BODY CLASS="qaPushQ cgi">
+<script type='text/javascript'>
+document.write("<center><div id='warnBox' style='display:none;'><CENTER><B id='warnHead'></B></CENTER><UL id='warnList'></UL><CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER></div></center>");
 function showWarnBox() {document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';var warnBox=document.getElementById('warnBox');warnBox.style.display=''; warnBox.style.width='65%';document.getElementById('warnHead').innerHTML='Warning/Error(s):';window.scrollTo(0, 0);}
 function hideWarnBox() {var warnBox=document.getElementById('warnBox');warnBox.style.display='none';warnBox.innerHTML='';var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }}
 window.onunload = function(){}; // Trick to avoid FF back button issue.
@@ -26,19 +27,105 @@ window.onunload = function(){}; // Trick to avoid FF back button issue.
 </TH></TR>
 
 
-<!-- +++++++++++++++++++++ HOTLINKS BAR +++++++++++++++++++ -->
-<TR><TD COLSPAN=3 HEIGHT=40>
-<TABLE class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>
-<TD><A HREF='../index.html' class='topbar'>Home</A></TD>
-<TD><A HREF='../cgi-bin/hgGateway' class='topbar'>Genomes</A></TD>
-<TD><A HREF='../cgi-bin/hgBlat?command=start' class='topbar'>Blat</A></TD>
-<TD><A HREF='../cgi-bin/hgTables?hgta_doMainPage=1' class='topbar'>Tables</A></TD>
-<TD><A HREF='../cgi-bin/hgNear' class='topbar'>Gene Sorter</A></TD>
-<TD><A HREF='../cgi-bin/hgPcr' class='topbar'>PCR</A></TD>
-<TD><A HREF='../cgi-bin/hgSession?hgS_doMainPage=1' class='topbar'>Session</A></TD>
-<TD><A HREF='../FAQ/' class='topbar'>FAQ</A></TD><TD><A HREF='../goldenPath/help/hgTracksHelp.html' class='topbar'>Help</A></TD>
-<TD style='width:95%'>&nbsp;</TD></TR></TABLE>
-</TD></TR>
+<noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>
+<script type='text/javascript' SRC='/js/jquery.js'></script>
+<script type='text/javascript' SRC='/js/jquery.plugins.js'></script>
+<LINK rel='STYLESHEET' href='/style/nice_menu.css' TYPE='text/css' />
+<div id="main-menu-whole">
+
+		<div id="main-menu"><div id="block-nice_menus-1" class="clear-block block block-nice_menus">
+
+	<div class="upcorner"></div>
+	<div class="blockbg">
+		<div class="blockcontent">
+						<div class="content">
+
+<ul class="nice-menu nice-menu-down sf-js-enabled" id="nice-menu-1">
+
+<li class="first even" id="home"><a href="/index.html" ><span id="home-link">Home</span></a></li> 
+
+<li id="genomes"><a href="/cgi-bin/hgGateway">Genomes</a></li>
+<li id="genomeBrowser"><a href="/cgi-bin/hgTracks">Genome Browser</a></li>
+
+<li class="menuparent" id="tools"><span>Tools</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../cgi-bin/hgBlat?command=start">Blat</a></li>
+	<li><a href="../cgi-bin/hgTables">Table Browser</a></li>
+	<li><a href="../cgi-bin/hgVai">Variant Annotation Integrator</a></li>
+	<li><a href="../cgi-bin/hgNear">Gene Sorter</a></li>
+	<li><a href="../cgi-bin/hgGenome">Genome Graphs</a></li>
+	<li><a href="../cgi-bin/hgPcr">In-Silico PCR</a></li>
+	<li><a href="../cgi-bin/hgLiftOver">LiftOver</a></li>
+	<li><a href="../cgi-bin/hgVisiGene">VisiGene</a></li>
+	<li class="last"><a href="../util.html">Other Utilities</a></li>
+	</ul>
+</li>
+<li class="menuparent" id="mirrors"><span>Mirrors</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../mirror.html">Third Party Mirrors</a></li>
+	<li><a href="../admin/mirror.html">Mirroring Instructions</a></li>
+	
+	</ul>
+
+</li>
+<li class="menuparent" id="downloads"><span>Downloads</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="http://hgdownload.soe.ucsc.edu/downloads.html">Genome Data</a></li>
+	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
+	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
+	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
+	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
+	</ul>
+</li>
+<li class="menuparent" id="myData"><span>My Data</span>
+	<ul style="display: none; visibility: hidden;">
+	<li><a href="../cgi-bin/hgSession?hgS_doMainPage=1">Sessions</a></li>
+	<li><a href="../cgi-bin/hgHubConnect">Track Hubs</a></li>
+	<li class="last"><a href="../cgi-bin/hgCustom">Custom Tracks</a></li>
+	</ul>
+</li>
+<li class="menuparent" id="aboutUs"><span>About Us</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first odd"><a href="../goldenPath/newsarch.html">News</a></li>
+	<li class="even"><a href="../goldenPath/pubs.html">Publications</a></li>
+	<li class="odd"><a href="../cite.html">Cite Us</a></li>
+	<li class="even"><a href="../goldenPath/credits.html">Credits</a></li>
+	<li class="odd"><a href="../goldenPath/releaseLog.html">Release Log</a></li>
+	<li class="even"><a href="../staff.html">Staff</a></li>
+	<li class="odd"><a href="../contacts.html">Contact Us</a></li>
+	<li class="even"><a href="../conditions.html">Conditions of Use</a></li>
+	<li class="odd"><a href="http://www.cbse.ucsc.edu/jobs" TARGET="_blank">Jobs</a></li>
+	<li class="even last"><a href="../license/">Licenses</a></li>
+</ul>
+</li>
+
+<!-- OPTIONAL_VIEW_MENU -->
+
+<li class="menuparent last" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
+<!-- CONTEXT_SPECIFIC_HELP -->
+<li><a href="../FAQ/">FAQs</a></li>
+<li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
+<li><a href="../training.html">Training</a></li>
+<li><a href="../contacts.html">Mailing Lists</a></li>
+<li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
+</ul>
+</li>
+</ul>
+</div>
+		</div>
+	</div>
+	<div class="downcorner"></div>
+
+</div>
+</div><!-- end main-menu -->
+</div><!-- end main-menu-whole -->
+
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, { "basePath": "/", "nice_menus_options": { "delay": 800, "speed": 1 }, "thickbox": { "close": "Close", "next": "Next \x3e", "prev": "\x3c Prev", "esc_key": "or Esc Key", "next_close": "Next / Close on last", "image_count": "Image !current of !total" }, "custom_search": { "form_target": "_self", "solr": 0 } });
+//--><!]]>
+
+</script>
 
 <!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->
 <TR><TD COLSPAN=3>
@@ -118,6 +205,7 @@ Track and Table Releases     </div></div>
 <li><a CLASS="toc" HREF="#sorAra1">Shrew June 2006 (Broad/sorAra1) (sorAra1)</a></li>
 <li><a CLASS="toc" HREF="#loxAfr3">Elephant Jul. 2009 (Broad/loxAfr3) (loxAfr3)</a></li>
 <li><a CLASS="toc" HREF="#proCap1">Rock hyrax Jul. 2008 (Broad/proCap1) (proCap1)</a></li>
+<li><a CLASS="toc" HREF="#echTel2">Tenrec Nov. 2012 (Broad/echTel2) (echTel2)</a></li>
 <li><a CLASS="toc" HREF="#echTel1">Tenrec July 2005 (Broad/echTel1) (echTel1)</a></li>
 <li><a CLASS="toc" HREF="#triMan1">Manatee Oct. 2011 (Broad v1.0/triMan1) (triMan1)</a></li>
 <li><a CLASS="toc" HREF="#dasNov3">Armadillo Dec. 2011 (Baylor/dasNov3) (dasNov3)</a></li>
@@ -203,7 +291,7 @@ Track and Table Releases     </div></div>
 </ul>
 <p>
  For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>
-<em>Last updated 26 Jul 2013. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
+<em>Last updated 03 Sep 2013. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -230,54 +318,56 @@ Track and Table Releases     </div></div>
 <TD nowrap><B style='color:#006666;'>Release Date</B></TD>
 </TR>
 <TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=pgSnp" target=_blank>Genome Variants: 1000 Genomes tracks updated; several new tracks added</a></td>
+<a href="../../cgi-bin/hgTrackUi?db=mm10&g=placentalChainNet" target=_blank>Tenrec Chain/Net</a></td>
+<td>mm10</td>
+<td>29 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=placentalChainNet" target=_blank>Tenrec Chain/Net</a></td>
 <td>hg19</td>
-<td>01 Jul 2013</td>
+<td>29 Aug 2013</td>
 </tr>
 <TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=primateChainNet" target=_blank>Chimp Chain/Net</a></td>
+Initial echTel2 release (using Broad/EchTel2.0): Assembly, Gap, GC Percent, Other RefSeq, Genscan Genes, CpG Islands, Mouse Chain/Net, Human Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
+<td>echTel2</td>
+<td>29 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+Retroposed Genes for hg19, Build 5.0
+Retroposed Genes for mm10, Build 2.0
+</td>
+<td>hg19 mm10</td>
+<td>22 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href=" ../../cgi-bin/hgTrackUi?db=bosTau6&g=numtSeq2012" target=_blank>NumtS Sequence</a></td>
+<td>bosTau6</td>
+<td>19 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+cytoBandIdeo (for navigation)</td>
+<td>bosTau4, bosTau6</td>
+<td>19 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+Uniprot amino acid variants</td>
 <td>hg19</td>
-<td>21 Jun 2013</td>
+<td>16 Aug 2013</td>
 </tr>
 <TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=panTro4&g=chainNetHg19" target=_blank>Human Chain/Net</a></td>
-<td>panTro4</td>
-<td>21 Jun 2013</td>
-</tr>
-<TR valign=top><TD align=left>
-Initial musFur1 release (using Ferret Genome Sequencing Consortium MusPutFur1.0 (GCA_000215625.1)): Assembly, Gap, GC Percent, Short Match, Restr Enzymes, Other RefSeq, Ensembl Genes, Genscan Genes, Ferret mRNAs, Spliced ESTs, Ferret ESTs, CpG Islands, RepeatMasker, Interrupted Rpts, WM + SDust, Simple Repeats.</td>
-<td>musFur1</td>
-<td>13 Jun 2013</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=galGal4&g=ensGene" target=_blank>Ensembl Genes v71</a></td>
-<td>galGal4</td>
-<td>11 Jun 2013</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=gasAcu1&g=ensGene" target=_blank>Ensembl Genes v71</a></td>
-<td>gasAcu1</td>
-<td>11 Jun 2013</td>
-</tr>
-<TR valign=top><TD align=left>
-Ensembl Genes v71</td>
-<td>anoCar2 danRer7</td>
-<td>11 Jun 2013</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=ensGene" target=_blank>Ensembl Genes v71</a></td>
+hgmd</td>
 <td>hg19</td>
-<td>11 Jun 2013</td>
+<td>15 Aug 2013</td>
 </tr>
 <TR valign=top><TD align=left>
-Wikipedia links on UCSC Genes</td>
-<td>hg19</td>
-<td>05 Jun 2013</td>
+Ensembl Genes v72</td>
+<td>anoCar2 bosTau6 calJac3 galGal4 musFur1 oryCun2 panTro4 xenTro3</td>
+<td>12 Aug 2013</td>
 </tr>
 <TR valign=top><TD align=left>
-Gibbon Chain/Net</td>
-<td>hg19</td>
-<td>29 May 2013</td>
+Ensembl Genes v72</td>
+<td>ailMel1 canFam3 cavPor3 danRer7 dm3 equCab2 felCat5 fr2 gasAcu1 gorGor3 latCha1 loxAfr3 melGal1 monDom5 myoLuc2 nomLeu1 ornAna1 oryLat2 otoGar3 petMar2 ponAbe2 rheMac2 rn5 sacCer3 sarHar1 speTri2 susScr3 taeGut1 tetNig2</td>
+<td>12 Aug 2013</td>
 </tr>
 </table>
 
@@ -303,6 +393,32 @@ Gibbon Chain/Net</td>
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=placentalChainNet" target=_blank>Tenrec Chain/Net</a></td>
+<td>29 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+Retroposed Genes for hg19, Build 5.0
+Retroposed Genes for mm10, Build 2.0
+</td>
+<td>22 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+Uniprot amino acid variants</td>
+<td>16 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+hgmd</td>
+<td>15 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeV17" target=_blank>GENCODE Version 17 release</a></td>
+<td>05 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=pgSnp" target=_blank>Genome Variants: 1000 Genomes tracks updated; several new tracks added</a></td>
 <td>01 Jul 2013</td>
@@ -4526,6 +4642,10 @@ Initial hg16 release (using NCBI Build 34): Chromosome Band, FISH Clones, Assemb
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=panTro4&g=chainNetHg19" target=_blank>Human Chain/Net</a></td>
 <td>21 Jun 2013</td>
 </tr>
@@ -4879,6 +4999,10 @@ Initial panTro1 Release (using the Build 1 Version 1 Arachne assembly dated 13 N
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Rhesus Chain/Net</td>
 <td>03 Dec 2012</td>
 </tr>
@@ -4926,6 +5050,10 @@ Initial gorGor3 release (using Wellcome Trust Sanger Institute May 2011 (NCBI pr
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
@@ -5110,6 +5238,10 @@ Initial nomLeu2 release (using Gibbon Genome Sequencing Consortium Nleu1.1 (NCBI
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
 </tr>
@@ -5169,6 +5301,10 @@ Initial rheMac3 release (using Beijing Genomics Institute, Shenzhen (GCA_0002307
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=rheMac2&g=chainGorGor3" target=_blank>Gorilla Chain/Net</a></td>
 <td>28 Nov 2011</td>
@@ -5389,6 +5525,10 @@ Initial saiBol1 release (using Broad SaiBol1.0 (GCA_000235385.1)): Assembly, Gap
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
 </tr>
@@ -5540,6 +5680,10 @@ Initial calJac1 release (using WUSTL 2.0.2):  Assembly, Gap, GC Percent, Other R
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial tarSyr1 release (using Broad Institute tarSyr1 (NCBI project 20335, ABRT000000000)): Assembly, Gap, GC Percent, Quality Scores, Ensembl Assembly, Other RefSeq, Ensembl Genes, Genscan Genes, Tarsier mRNAs, CpG Islands, Gorilla Chain/Net, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>16 Nov 2012</td>
 </tr>
@@ -5567,6 +5711,10 @@ Initial tarSyr1 release (using Broad Institute tarSyr1 (NCBI project 20335, ABRT
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Initial micMur1 release (using Broad Institute micMur1 (NCBI project 19967, ABDC00000000)): Assembly, Gap, GC Percent, Quality Scores, Ensembl Assembly, Other RefSeq, Ensembl Genes, Genscan Genes, Mouse lemur mRNAs, CpG Islands, Gorilla Chain/Net, Marmoset Chain/Net, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>08 Nov 2012</td>
@@ -5596,6 +5744,10 @@ Initial micMur1 release (using Broad Institute micMur1 (NCBI project 19967, ABDC
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial otoGar3 release (using Broad Institute (GCA_000181295.3)): see separate push queue otoGar3.</td>
 <td>21 Nov 2012</td>
 </tr>
@@ -5623,6 +5775,10 @@ Initial otoGar3 release (using Broad Institute (GCA_000181295.3)): see separate 
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Initial tupBel1 release (using Broad Institute tupBel1 (NCBI project 13971, AAPY01000000)): Assembly, Gap, GC Percent, Quality Scores, Ensembl Assembly, Other RefSeq, Ensembl Genes, Genscan Genes, Tree shrew mRNAs, Spliced ESTs, Tree shrew ESTs, CpG Islands, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>16 Nov 2012</td>
@@ -5655,6 +5811,20 @@ quality score fasta files</td>
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=mm10&g=placentalChainNet" target=_blank>Tenrec Chain/Net</a></td>
+<td>29 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+Retroposed Genes for hg19, Build 5.0
+Retroposed Genes for mm10, Build 2.0
+</td>
+<td>22 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
@@ -6854,6 +7024,14 @@ Initial mm7 Release (using NCBI build 35): Chromosome Band;  STS Markers; Map Co
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=rn5&g=cytoBand" target=_blank>Chromosome Band Track</a></td>
+<td>26 Jul 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
 </tr>
@@ -7377,6 +7555,10 @@ Twinscan (using hg15)</td>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial dipOrd1 release (using Broad Institute dipOrd1 (NCBI project 20385, ABRO01000000)): Assembly, Gap, GC Percent, Quality Scores, Ensembl Assembly, Other RefSeq, Ensembl Genes, Genscan Genes, Kangaroo rat mRNAs, Other mRNAs, CpG Islands, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>08 Nov 2012</td>
 </tr>
@@ -7460,6 +7642,10 @@ Initial hetGla1 release (using HetGla_1.0 (NCBI project 68323, accession GCA_000
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v64</td>
 <td>07 Nov 2011</td>
@@ -7554,6 +7740,10 @@ Initial cavPor3 release (using Broad Institute cavPor3)</td>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Ensembl Genes v65</td>
 <td>22 Dec 2011</td>
 </tr>
@@ -7614,6 +7804,10 @@ Initial oryCun2 release (using Broad Institute oryCun2 (NCBI project 12819, AAGW
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial speTri2 release (using Broad Institute (GCA_000236235.1)): Assembly, Gap, GC Percent, Other RefSeq, Ensembl Genes, Genscan Genes, Squirrel mRNAs, Spliced ESTs, Squirrel ESTs, CpG Islands, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>13 Nov 2012</td>
 </tr>
@@ -7642,6 +7836,10 @@ Initial speTri2 release (using Broad Institute (GCA_000236235.1)): Assembly, Gap
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial ochPri2 release (using Broad Institute ochPri2): Assembly, Gap, GC Percent, Quality Scores, Ensembl Assembly, Other RefSeq, Ensembl Genes, Genscan Genes, Pika mRNAs, CpG Islands, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>21 Nov 2012</td>
 </tr>
@@ -7669,6 +7867,10 @@ Initial ochPri2 release (using Broad Institute ochPri2): Assembly, Gap, GC Perce
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
@@ -7701,6 +7903,10 @@ Initial susScr3 release (using SGSC Sscrofa10.2 (NCBI project 13421, GCA_0000030
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=susScr2&g=numtSeq2012" target=_blank>NumtS Sequence</a></td>
+<td>23 Jul 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=susScr2&g=chainNetBosTau7" target=_blank>Cow Chain/Net</a></td>
 <td>11 Jun 2012</td>
@@ -7763,6 +7969,10 @@ Downloads: bigZips, chromosomes, database, liftOvers, comparatives. </td>
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Initial vicPac1 release (using Broad Institute vicPac1): Assembly, Gap, GC Percent, Quality Scores, Ensembl Assembly, Other RefSeq, Ensembl Genes, Genscan Genes, Spliced ESTs, Alpaca ESTs, CpG Islands, Cow Chain/Net, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>16 Nov 2012</td>
@@ -7887,6 +8097,18 @@ Initial bosTau7 release (using Btau_4.6.1 (NCBI project 12555, accession GCA_000
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href=" ../../cgi-bin/hgTrackUi?db=bosTau6&g=numtSeq2012" target=_blank>NumtS Sequence</a></td>
+<td>19 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+cytoBandIdeo (for navigation)</td>
+<td>19 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Initial bosTau6 release (using UMD_3.1 (NCBI project 10708, accession GCA_000003055.3)): Assembly, Gap, GC Percent, CpG Islands. Repeat Masker, Interrupted Repeats, Simple Repeats, Scaffolds, RefSeq Genes, Other RefSeq, Cow mRNAs, Spliced ESTs, Cow ESTs, Other mRNAs, Ensembl Genes, Pig Chain/Net, Platypus Chain/Net, Opossum Chain/Net, Dog Chain/Net, Mouse Chain/Net, Human Chain/Net, Rat Chain/Net.</td>
 <td>02 Nov 2011</td>
@@ -8130,6 +8352,10 @@ Bos taurus (bosTau2, March 2005) Update Release: Assembly, Gap, Contig Orient, G
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
 </tr>
@@ -8308,6 +8534,10 @@ Initial cerSim1 release (using Broad Institute): Assembly, Gap, GC Percent, Othe
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
 </tr>
@@ -8482,6 +8712,10 @@ Initial felCat3 release (using Broad Release 3): Assembly; Gap; GC Percent; Qual
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial musFur1 release (using Ferret Genome Sequencing Consortium MusPutFur1.0 (GCA_000215625.1)): Assembly, Gap, GC Percent, Short Match, Restr Enzymes, Other RefSeq, Ensembl Genes, Genscan Genes, Ferret mRNAs, Spliced ESTs, Ferret ESTs, CpG Islands, RepeatMasker, Interrupted Rpts, WM + SDust, Simple Repeats.</td>
 <td>13 Jun 2013</td>
 </tr>
@@ -8509,6 +8743,10 @@ Initial musFur1 release (using Ferret Genome Sequencing Consortium MusPutFur1.0 
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=canFam3&g=chainNetHg19" target=_blank>Human Chain/Net</a></td>
 <td>31 Jan 2013</td>
@@ -8795,6 +9033,10 @@ Initial canFam1 release (using Broad Institute WGS v1.0): Assembly, Gap, GC Perc
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 tRNA Genes</td>
 <td>15 Mar 2012</td>
 </tr>
@@ -8853,6 +9095,10 @@ Assembly, Gap, GC Percent, Other RefSeq, Panda mRNAs, Other mRNAs, Panda ESTs, R
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial microbat release (using Broad Institute (NCBI Project ID: 16951, Accession: GCA_000147115.1)): Assembly, Gap, Repeat Masker, Interrupted Repeats, Simple Repeats, CpG Islands, GC Percent, Human Proteins, Other RefSeq, Microbat mRNAs, Other mRNAs.</td>
 <td>02 Nov 2011</td>
 </tr>
@@ -8881,6 +9127,10 @@ Initial microbat release (using Broad Institute (NCBI Project ID: 16951, Accessi
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial pteVam1 release (using Broad Institute pteVam1 (NCBI project 20325, ABRP01000000)): Assembly, Gap, GC Percent, Quality Scores, Ensembl Assembly, Other RefSeq, Ensembl Genes, Genscan Genes, Megabat mRNAs, CpG Islands, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>16 Nov 2012</td>
 </tr>
@@ -8908,6 +9158,10 @@ Initial pteVam1 release (using Broad Institute pteVam1 (NCBI project 20325, ABRP
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Initial eriEur1 release (using Broad Institute eriEur1 (Draft_v1, NCBI project 12575)): Assembly, Gap, GC Percent, Quality Scores, Ensembl Assembly, Other RefSeq, Ensembl Genes, Genscan Genes, Hedgehog mRNAs, CpG Islands, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>08 Nov 2012</td>
@@ -8941,6 +9195,10 @@ quality score fasta files</td>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial sorAra1 release (using Broad Institute sorAra1 (Draft_v2)): Assembly, Gap, GC Percent, Quality Scores, Ensembl Assembly, Other RefSeq, Ensembl Genes, Genscan Genes, Shrew mRNAs, CpG Islands, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>16 Nov 2012</td>
 </tr>
@@ -8972,6 +9230,10 @@ quality score fasta files</td>
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v65</td>
 <td>22 Dec 2011</td>
@@ -9037,8 +9299,40 @@ Initial loxAfr3 release (using Broad Institute loxAfr3 (NCBI project 12569, AAGU
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial proCap1 release (using Broad Institute proCap1 (NCBI project 13972, ABRQ01000000)): Assembly, Gap, GC Percent, Quality Scores, Ensembl Assembly, Other RefSeq, Ensembl Genes, Genscan Genes, CpG Islands, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>16 Nov 2012</td>
+</tr>
+</table>
+
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+	</TD></TR></TABLE>
+	</TD></TR></TABLE>
+	
+</div>
+<div>
+<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
+<BR>
+
+   <!--outer table is for border purposes-->
+   <TABLE WIDTH='100%' BGCOLOR='#888888' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>
+    <TABLE BGCOLOR='#FFFEE8' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>
+     <div class='subheadingBar' class='windowSize'>
+<A NAME=echTel2></A>Tenrec Nov. 2012 (Broad/echTel2) (echTel2, Broad/EchTel2.0)     </div>
+     <TABLE BGCOLOR='#FFFEE8' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+     <TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+
+<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%;'>
+<TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
+    <TD nowrap><B style='color:#006666;'>Release Date</B>
+</TD></TR>
+<TR valign=top><TD align=left>
+Initial echTel2 release (using Broad/EchTel2.0): Assembly, Gap, GC Percent, Other RefSeq, Genscan Genes, CpG Islands, Mouse Chain/Net, Human Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
+<td>29 Aug 2013</td>
 </tr>
 </table>
 
@@ -9064,6 +9358,10 @@ Initial proCap1 release (using Broad Institute proCap1 (NCBI project 13972, ABRQ
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=echTel1&g=chainNetHg19" target=_blank>Human Chain/Net</a></td>
 <td>25 Jul 2012</td>
@@ -9157,6 +9455,10 @@ Initial dasNov3 release (using Baylor College of Medicine Dasnov3.0 (GCA_0002086
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial choHof1 release (using Broad Institute choHof1): Assembly, Gap, GC Percent, Quality Scores, Ensembl Assembly, Other RefSeq, Ensembl Genes, Genscan Genes, Sloth mRNAs, Other mRNAs, CpG Islands, Mouse Chain/Net, RepeatMasker, Interrupted Repeats, WM + SDust, Simple Repeats</td>
 <td>08 Nov 2012</td>
 </tr>
@@ -9184,6 +9486,10 @@ Initial choHof1 release (using Broad Institute choHof1): Assembly, Gap, GC Perce
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
@@ -9465,6 +9771,10 @@ Initial monDom1 release (using Broad Inst. Prelim Oct04): Assembly, Gap, GC Perc
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial sarHar1 release (using Wellcome Trust Sanger Institute Devil_ref v7.0 (GCA_000189315.1)): Assembly, Gap, GC Percent, Short Match, Restr Enzymes, Other RefSeq, Genscan Genese, Tasmanian devil mRNAs, Other mRNAs, 
 CpG Islands, Mouse Chain/Net, Repeat Masker, Interrupted Rpts, WM + SDust, Simple Repeats.</td>
 <td>17 Jul 2012</td>
@@ -9521,6 +9831,10 @@ Initial macEug2 release (using TWGS (NCBI Project ID: 12586, Accession: GCA_0000
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
@@ -9667,6 +9981,10 @@ Initial ornAna1 release (using WUSTL version 5.0): gold, gap, gc5Base, ensGene, 
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=galGal4&g=ensGene" target=_blank>Ensembl Genes v71</a></td>
 <td>11 Jun 2013</td>
@@ -10015,6 +10333,10 @@ Initial galGal2 Release (using the Feb. 2004 assembly): Supercontigs, Assembly, 
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
 </tr>
@@ -10054,6 +10376,10 @@ Initial melGal1 release (using TGC (NCBI Project ID: 10805, Accession: GCA_00014
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Medium ground finch Chain/Net</td>
 <td>17 Aug 2012</td>
@@ -10216,6 +10542,10 @@ Initial melUnd1 release (using WUSTL Melopsittacus undulatus Budgerigar Version 
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Ensembl Genes v71</td>
 <td>11 Jun 2013</td>
 </tr>
@@ -10375,6 +10705,10 @@ Initial chrPic1 release (using International Painted Turtle Genome Sequencing Co
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=xenTro3&g=cons9way" target=_blank>Multiz Alignment & Conservation (9 Species)</a></td>
 <td>09 Dec 2011</td>
@@ -10589,6 +10923,10 @@ Frog Browser Initial Release (using JGI version 3.0): Assembly, Gap, GC Percent,
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
 </tr>
@@ -10620,6 +10958,10 @@ Initial latCha1 release (using Broad LatCha1 (GCA_000225785.1)): Assembly, Gap, 
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=tetNig2&g=chainNetFr3" target=_blank>Fugu Chain/Net</a></td>
 <td>19 Jun 2012</td>
@@ -10832,6 +11174,10 @@ Initial fr3/Fugu release (using Fugu Genome Sequencing Consortium - FUGU5 (NCBI 
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Ensembl Genes v64</td>
 <td>07 Nov 2011</td>
 </tr>
@@ -11018,6 +11364,10 @@ Initial oreNil2 release (using Broad Institute of MIT and Harvard Orenil1.1 (GCA
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=gasAcu1&g=ensGene" target=_blank>Ensembl Genes v71</a></td>
 <td>11 Jun 2013</td>
 </tr>
@@ -11148,6 +11498,10 @@ Initial gasAcu1 release (using Broad Institute gasAcu1 (1.0)):  Assembly, Gap, G
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
 </tr>
@@ -11253,6 +11607,10 @@ Initial oryLat2 release (using NIG and Tokyo Univ MEDAKA1) : Assembly, Scaffolds
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
+<TR valign=top><TD align=left>
 Initial gadMor1 release (using Genofisk GadMor_May2010 (GCA_000231765.1)): Assembly, Gap, GC Percent, Short Match, Restr Enzymes, Other RefSeq, Genscan Genes, Atlantic cod mRNAs, Spliced ESTs, Atlantic cod ESTs, CpG Islands, Fugu Chain/Net, Mouse Chain/Net, RepeatMasker, Interrupted Rpts, WM + SDust, Simple Repeats</td>
 <td>20 Nov 2012</td>
 </tr>
@@ -11280,6 +11638,10 @@ Initial gadMor1 release (using Genofisk GadMor_May2010 (GCA_000231765.1)): Assem
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v71</td>
 <td>11 Jun 2013</td>
@@ -11673,6 +12035,10 @@ Zebrafish (Danio rerio) Initial Release (danRer3, May 2005, Zv5): Scaffolds, Con
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
@@ -12540,6 +12906,10 @@ Initial priPac1 release (using WUSTL Pristionchus pacificus 5.0): Assembly; Cont
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v70</td>
 <td>01 May 2013</td>
@@ -13593,6 +13963,10 @@ Honeybee Browser Initial Release (Baylor HGSC Amel_1.2): Assembly, Gap, GC Perce
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+Ensembl Genes v72</td>
+<td>12 Aug 2013</td>
+</tr>
 <TR valign=top><TD align=left>
 LiftOver from sacCer3 to sacCer2 and sacCer1</td>
 <td>09 Nov 2011</td>

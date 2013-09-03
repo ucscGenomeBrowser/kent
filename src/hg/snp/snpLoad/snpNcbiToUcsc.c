@@ -1120,12 +1120,9 @@ else if (regexec(&eUnit, refNcbiEnc, MAX_MATCHES, matches, 0) == 0)
 	verbose(2, "%d expansions: %s --> %s\n",
 		expansionCount, refNcbiEnc, expanded->string);
     }
-else if (strchr(refNcbiEnc, '('))
-    lineFileAbort(lf, "Can't parse this encoded refNcbi (SNPContigLoc.allele): %s", refNcbiEnc);
 else
+    // I gave up on stricter checks when I ran into "()2499 BP DEL".
     dyStringAppend(expanded, refNcbiEnc);
-//    lineFileAbort(lf, "Unrecognized format for refNCBI/allele: \"%s\"",
-//		  refNcbiEnc);
 return expanded->string;
 }
 
@@ -1211,7 +1208,7 @@ else
     }
 }
 
-#define MAX_SNPSIZE 16 * 1024
+#define MAX_SNPSIZE 32 * 1024
 
 char *processUcscAllele(struct lineFile *lf, char *refNCBI, char strand,
 			struct twoBitFile *twoBit)
@@ -1531,7 +1528,7 @@ else if (sameString(class, "microsatellite"))
 	return FALSE;
 	}
     else if (regexec(&obsMicrosat, observed, 0, NULL, 0) != 0)
-	lineFileAbort(lf, "Encountered something that doesn't fit "
+	warn("Encountered something that doesn't fit "
 		      "observedMicrosatFormat: %s", observed);
     }
 else if (sameString(class, "named"))
@@ -1882,7 +1879,7 @@ lineFileClose(&lf);
 /* SNP134: 62M items, max ID 179363897 */
 /* SNP135: 55M items, max ID 193919341 (wastefulness factor: 193919341 / 55449139 = 3.497247) */
 /* mouse 137: 74M items, max ID 266257353 (266257353 / 74781097 = 3.5605 */
-#define MAX_SNPID 300 * 1024 * 1024
+#define MAX_SNPID 400 * 1024 * 1024
 struct coords
     {
     struct coords *next;

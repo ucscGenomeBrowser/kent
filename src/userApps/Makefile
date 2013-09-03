@@ -46,7 +46,7 @@ fetchSource:
 # recognize the '-e' argument
 
 installEnvironment:
-	@test -s kent/src/inc/localEnvironment.mk || echo "ERROR: source has not been fetched yet, try 'make fetchSource' first."; exit 255
+	@test -d kent/src/inc || (echo "ERROR: source has not been fetched yet, try 'make fetchSource' first."; exit 255)
 	@echo -e "export DESTDIR = ${DESTDIR}\n\
 export BINDIR = ${BINDIR}\n\
 export MACHTYPE = ${MACHTYPE}\n\

@@ -502,3 +502,21 @@ triMan1.perChromTables = no
     ssh hgwbeta "hgsql qapushq < /tmp/triMan1.sql"
 
 ############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/triMan1/bed/ucscToINSDC
+    cd /hive/data/genomes/triMan1/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh NC_010302.1
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | hgLoadSqlTab triMan1 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords triMan1 ucscToINSDC
+    featureBits -countGaps triMan1 ucscToINSDC
+
+    # verify the track link to INSDC functions
+
+##############################################################################

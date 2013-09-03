@@ -1168,3 +1168,22 @@ TMPDIR=/scratch/tmp
     ln -s blastz.rn5.swap lastz.rn5
 
 #########################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/melGal1/bed/ucscToINSDC
+    cd /hive/data/genomes/melGal1/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh NC_010195.2
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab melGal1 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords melGal1 ucscToINSDC
+    featureBits -countGaps melGal1 ucscToINSDC
+    # 1061817101 bases of 1061817101 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

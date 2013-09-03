@@ -184,8 +184,7 @@ include chainNetVicPac2.ra alpha
         type chain eriEur1
         otherDb eriEur1
 
-include chainNetEchTel1.ra beta,public
-include chainNetEchTel2.ra alpha
+include chainNetEchTel2.ra
 
         track chainMm10
         subTrack placentalChainNetViewchain on
@@ -222,8 +221,7 @@ include chainNetRn5.ra alpha
         type chain susScr2
         otherDb susScr2
 
-include chainNetOviAri1.ra beta,public
-include chainNetOviAri3.ra alpha
+include chainNetOviAri3.ra beta
 
     track placentalChainNetViewnet
     shortLabel Nets

@@ -1,4 +1,4 @@
-<H2>Description</H2>
+<h2>Description</h2>
 
 <div class="warn-note" style="border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;">
 <p><span style="font-weight: bold; color: #c70000;">NOTE:</span><br> 
@@ -9,51 +9,67 @@ is open to the public, users seeking information about a personal medical or
 genetic condition are urged to consult with a qualified physician for
 diagnosis and for answers to personal questions.</p></div>
 
-<P>
-This track shows the genomic positions of natural and artifical amino-acid variants
-in the UniProt/SwissProt Database (<A HREF="http://www.uniprot.org/"
-TARGET=_blank>uniprot.org</A>).  The data has been curated from scientific
-publications by the UniProt staff.
-</P>
+<p>
+This track shows the genomic positions of natural and artifical amino acid variants
+in the <a href="http://www.uniprot.org/" target="_blank">UniProt/SwissProt</A> database.
+The data has been curated from scientific publications by the UniProt staff.
+</p>
 
-<H2>Display Conventions and Configuration</H2>
+<h2>Display Conventions and Configuration</h2>
 
-<P>Genomic locations of UniProt/SwissProt variants are labelled with the
-the amino acid change at a given position and, if known, the abbreviated disease name.
-A "?" is used if there is no disease annotated at this location, but the protein is described as being linked to only a single disease in UniProt.</P>
-<P>Mouse over a mutation to see the UniProt comments.</P>
-<P>Artificially introduced
-mutations are colored in green, naturally occuring variants in red.  
-For the full information about a particular variant, click the "UniProt variant" linkout.  
-The "UniProt record" linkout lists all variants of a particular protein sequence and 
-"Publications" links to the articles in Pubmed that originally described the variant(s) and were
-used as evidence by the UniProt curators.
+<p>
+Genomic locations of UniProt/SwissProt variants are labeled with the amino acid
+change at a given position and, if known, the abbreviated disease name. A
+&quot;?&quot; is used if there is no disease annotated at this location, but the
+protein is described as being linked to only a single disease in UniProt.
+</p>
 
-<H2>Methods</H2>
-<P>
+<p>
+Mouse over a mutation to see the UniProt comments.
+</p>
+
+<p>
+Artificially-introduced mutations are colored green and naturally-occuring variants are colored
+red. For full information about a particular variant, click the &quot;UniProt variant&quot; linkout.  
+The &quot;UniProt record&quot; linkout lists all variants of a particular protein sequence.
+The &quot;Source articles&quot; linkout lists the articles in PubMed that originally described
+the variant(s) and were used as evidence by the UniProt curators.
+</p>
+
+<h2>Methods</h2>
+
+<p>
 UniProt sequences were aligned to RefSeq sequences first with BLAT, then lifted
 to genome positions with pslMap.  UniProt variants were parsed from the UniProt
 XML file.  The variants were then mapped to the genome through the alignment
 using the pslMap program.  This mapping approach
 draws heavily on the <A HREF="http://modbase.compbio.ucsf.edu/LS-SNP/"
 TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans. The complete script is
-part of the kent source tree and located in src/hg/utils/uniprotMutations. 
-</P>
+part of the kent source tree and is located in src/hg/utils/uniprotMutations. 
+</p>
 
-<H2>Credits</H2>
-<P>
-Created by Maximilian Haeussler, with advice from Mark Diekhans and Brian Raney.
+<h2>Credits</h2>
 
-<H2>References</H2>
-<P>The UniProt Consortium.
-<A HREF="http://dx.doi.org/doi:10.1093/nar/gkr981" TARGET=_blank>
-Reorganizing the protein space at the Universal Protein Resource (UniProt)
-</A>.  
-<EM>Nucleic Acids Res.</EM> 2012; 40:D71-D75
-</P>
+<p>
+This track was created by Maximilian Haeussler, with advice from Mark Diekhans and Brian Raney.
+</p>
 
-<P>Yip Y.L., Scheib H., Diemand A.V., Gattiker A., Famiglietti L.M., Gasteiger E., Bairoch A.
-<A HREF="http://dx.doi.org/10.1002/humu.20021" TARGET=_blank>
-Swiss-Prot variant page and the ModSNP database: a resource for sequence and structure information on human protein variants</A>
-<EM>Hum. Mut</EM>, 2004: 23(5):464-470
-</P>
+<h2>References</h2>
+
+<p>
+UniProt Consortium.
+<a href="http://nar.oxfordjournals.org/content/40/D1/D71.long" target="_blank">
+Reorganizing the protein space at the Universal Protein Resource (UniProt)</a>.
+<em>Nucleic Acids Res</em>. 2012 Jan;40(Database issue):D71-5.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22102590" target="_blank">22102590</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245120" target="_blank">PMC3245120</a>
+</p>
+
+<p>
+Yip YL, Scheib H, Diemand AV, Gattiker A, Famiglietti LM, Gasteiger E, Bairoch A.
+<a href="http://onlinelibrary.wiley.com/doi/10.1002/humu.20021/abstract" target="_blank">
+The Swiss-Prot variant page and the ModSNP database: a resource for sequence and structure
+information on human protein variants</a>.
+<em>Hum Mutat</em>. 2004 May;23(5):464-70.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/15108278" target="_blank">15108278</a>
+</p>
