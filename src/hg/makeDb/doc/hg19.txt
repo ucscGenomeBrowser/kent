@@ -26373,6 +26373,7 @@ TMPDIR=/dev/shm
         `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+XXX - running - Tue Sep  3 18:03:03 PDT 2013
     #	real  517m26.179s
     # broken chrom.sizes file for allSin1, repeat from chainRun:
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
