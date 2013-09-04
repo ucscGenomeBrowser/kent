@@ -25706,8 +25706,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 criGri1 > rbest.log 2>&1 &
-XXX - running - Tue Sep  3 09:04:01 PDT 2013
-    #   real    62m39.003s
+    #   real    57m9.843s
 
     # running the swap
     mkdir /hive/data/genomes/criGri1/bed/blastz.hg19.swap
@@ -25717,11 +25716,10 @@ XXX - running - Tue Sep  3 09:04:01 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet > swap.log 2>&1
-XXX - running - Tue Sep  3 09:04:01 PDT 2013
-    #   real    104m38.965s
+    #   real    110m44.600s
 
     cat fb.criGri1.chainHg19Link.txt
-    #    908760510 bases of 2104321675 (43.185%) in intersection
+    #  968620399 bases of 2301325917 (42.090%) in intersection
 
     cd /hive/data/genomes/criGri1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -25830,8 +25828,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 pteAle1 > rbest.log 2>&1 &
-XXX - running - Tue Sep  3 08:21:40 PDT 2013
-    #   real    62m39.003s
+    #   real    66m15.979s
 
     # running the swap
     mkdir /hive/data/genomes/pteAle1/bed/blastz.hg19.swap
@@ -25841,11 +25838,10 @@ XXX - running - Tue Sep  3 08:21:40 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet > swap.log 2>&1
-XXX - running - Tue Sep  3 08:21:40 PDT 2013
-    #   real    104m38.965s
+    #   real    113m30.834s
 
     cat fb.pteAle1.chainHg19Link.txt
-    #    908760510 bases of 2104321675 (43.185%) in intersection
+    #  1382430767 bases of 1944625202 (71.090%) in intersection
 
     cd /hive/data/genomes/pteAle1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -26383,6 +26379,8 @@ TMPDIR=/dev/shm
         -continue=chainRun `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -chainMinScore=5000 -chainLinearGap=loose > chainRun.log 2>&1
+    #	real  25m52.687s
+XXX still complaining about missing chrM ?
 XXX - running - Tue Sep  3 09:12:31 PDT 2013
 
     cat fb.hg19.chainAllSin1Link.txt
@@ -26457,8 +26455,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 mayZeb1 > rbest.log 2>&1 &
-XXX - running - Tue Sep  3 09:16:28 PDT 2013
-    #   real    21m11.885s
+    #   real    10m10.495s
 
     # running the swap
     mkdir /hive/data/genomes/mayZeb1/bed/blastz.hg19.swap
@@ -26468,11 +26465,10 @@ XXX - running - Tue Sep  3 09:16:28 PDT 2013
         -qRepeats=windowmaskerSdust -chainMinScore=5000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         > swap.log 2>&1
-XXX - running - Tue Sep  3 09:16:28 PDT 2013
-    #   real    6m37.356s
+    #   real    6m51.755s
 
     cat fb.mayZeb1.chainHg19Link.txt
-    #    33708255 bases of 964264884 (3.496%) in intersection
+    #  33421946 bases of 713527863 (4.684%) in intersection
 
     cd /hive/data/genomes/mayZeb1/bed
     ln -s blastz.hg19.swap lastz.hg19
