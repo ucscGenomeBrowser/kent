@@ -17,7 +17,7 @@
 #include "bigWarn.h"
 #include <pthread.h>
 #include "trackHub.h"
-#include "values.h"
+#include "limits.h"
 #include "snakeUi.h"
 
 #include "halBlockViz.h"
@@ -106,7 +106,7 @@ if (Levels[level].init == FALSE)
     Levels[level].init = TRUE;
     Levels[level].orientation = list->orientation;
     if (list->orientation == -1)
-	Levels[level].edge = MAXLONG;  // bigger than the biggest chrom
+	Levels[level].edge = LONG_MAX; // bigger than the biggest chrom
     else
 	Levels[level].edge = 0;
     }
