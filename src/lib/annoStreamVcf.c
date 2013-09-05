@@ -156,6 +156,7 @@ while (annoFilterRowFails(sSelf->filters, words, self->numCols, &rightFail))
 	return NULL;
     }
 struct vcfRecord *rec = self->record;
+vcfRecordTrimIndelLeftBase(rec);
 char *chrom = getProperChromName(self, rec->chrom);
 self->recordCount++;
 return annoRowFromStringArray(chrom, rec->chromStart, rec->chromEnd,
