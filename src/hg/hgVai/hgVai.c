@@ -18,6 +18,8 @@
 #include "textOut.h"
 #include "trackHub.h"
 #include "hubConnect.h"
+#include "twoBit.h"
+#include "gpFx.h"
 #include "udc.h"
 #include "knetUdc.h"
 #include "annoGratorQuery.h"
@@ -47,7 +49,8 @@ char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", NULL,};
 #define hgvaRegionTypeGenome "genome"
 #define hgvaRegionTypeRange "range"
 #define hgvaPositionContainer "positionContainer"
-
+#define hgvaSampleVariants "hgva_internally_generated_sample_variants"
+#define hgvaSampleVariantsLabel "Artificial Example Variants"
 void addSomeCss()
 /*#*** This should go in a .css file of course. */
 {
@@ -240,26 +243,12 @@ hgGatewayCladeGenomeDb();
 //#*** No longer ending form here...
 }
 
-void askUserForVariantCustomTrack()
-/* Tell the user that we need a custom track of variants to work on. */
-{
-puts("<BR>");
-printf("<div class='sectionLiteHeader'>Upload Variants</div>\n");
-printf("Please provide a set of variant calls to annotate, as either a custom track in "
-       "<A HREF='../FAQ/FAQformat.html#format10' TARGET=_BLANK>pgSnp</A> or "
-       "<A HREF='../goldenPath/help/vcf.html' TARGET=_BLANK>VCF</A> format, "
-       "or a VCF track on your "
-       "<A HREF='../goldenPath/help/hgTrackHubHelp.html' TARGET=_BLANK>track hub</A>:<BR>\n");
-printCtAndHubButtons();
-puts("<BR>");
-}
-
 typedef boolean TdbFilterFunction(struct trackDb *tdb, void *filterData);
 /* Return TRUE if tdb passes filter criteria. */
 
 void rFilterTrackList(struct trackDb *trackList, struct slRef **pPassingRefs,
 		      TdbFilterFunction *filterFunc, void *filterData)
-/* Recursively apply filterFunc and filterData to all tracks in fullTrackList and
+/* Recursively apply filterFunc and filterData to all tracks in trackList and
  * their subtracks. Add an slRef to pPassingRefs for each track/subtrack that passes.
  * Caller should slReverse(pPassingRefs) when recursion is all done. */
 {
@@ -332,6 +321,7 @@ for (ref = varTrackList;  ref != NULL;  ref = ref->next)
     struct trackDb *tdb = ref->val;
     printOption(tdb->track, selected, tdb->longLabel);
     }
+printOption(hgvaSampleVariants, selected, hgvaSampleVariantsLabel);
 printf("</SELECT><BR>\n");
 printf("<B>maximum number of variants to be processed:</B>\n");
 char *curLimit = cartUsualString(cart, "hgva_variantLimit", "10000");
@@ -835,23 +825,16 @@ printAssemblySection();
 struct slRef *varTrackList = NULL, *varGroupList = NULL;
 tdbFilterGroupTrack(fullTrackList, fullGroupList, isVariantCustomTrack, NULL,
 		    &varGroupList, &varTrackList);
-if (varTrackList == NULL)
+puts("<BR>");
+// Make wrapper table for collapsible sections:
+selectVariants(varGroupList, varTrackList);
+boolean gotGP = selectGenes();
+if (gotGP)
     {
-    askUserForVariantCustomTrack();
-    }
-else
-    {
-    puts("<BR>");
-    // Make wrapper table for collapsible sections:
-    selectVariants(varGroupList, varTrackList);
-    boolean gotGP = selectGenes();
-    if (gotGP)
-	{
-	selectAnnotations();
-	selectFilters();
-	selectOutput();
-	submitAndDisclaimer();
-	}
+    selectAnnotations();
+    selectFilters();
+    selectOutput();
+    submitAndDisclaimer();
     }
 printf("</FORM>");
 
@@ -1151,39 +1134,309 @@ if (cartUsualBoolean(cart, "hgva_require_consEl", FALSE))
     }
 }
 
+static void getCartPosOrDie(char **retChrom, uint *retStart, uint *retEnd)
+/* Get chrom:start-end from cart, errAbort if any problems. */
+{
+char *position = cartString(cart, hgvaRange);
+if (! parsePosition(position, retChrom, retStart, retEnd))
+    errAbort("Expected position to be chrom:start-end but got '%s'", position);
+}
+
+static char *sampleVariantsPath(struct annoAssembly *assembly)
+/* Construct a path for a trash file of contrived example variants for this assembly. */
+{
+char *chrom = NULL;
+uint start = 0, end = 0;
+getCartPosOrDie(&chrom, &start, &end);
+char *subDir = "hgv";
+mkdirTrashDirectory(subDir);
+struct dyString *dy = dyStringCreate("%s/%s/%s_%s_%u-%u.vcf", trashDir(), subDir, assembly->name,
+				     chrom, start, end);
+return dyStringCannibalize(&dy);
+}
+
+static void writeMinimalVcfHeader(FILE *f, char *db)
+/* Write header for VCF with no meaningful qual, filter, info or genotype data. */
+{
+fputs("##fileformat=VCFv4.1\n", f);
+fprintf(f, "##reference=%s\n", db);
+fputs("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n", f);
+}
+
+static void mutateBase(char *pBase)
+/* Change *pBase into a different base. */
+{
+static char *bases = "ACGT";
+char c;
+// In real life the probabilities aren't even, but this is easier.
+while ((c = bases[(uint)(floor(drand48() * 4.0))]) == *pBase)
+    ;
+*pBase = c;
+}
+
+static void writeMinimalVcfRowFromBed(FILE *f, struct bed4 *bed, struct dnaSeq *seq, uint seqOffset)
+/* Write a minimalist VCF row with a mutation of the reference sequence at the given
+ * position. */
+{
+uint indelBase = 0, start = bed->chromStart, end = bed->chromEnd;
+if (end != start+1)
+    {
+    // VCF treats indels in a special way: pos is the base to the left of the indel,
+    // and both ref and alt alleles include the base to the left of the indel.
+    indelBase = 1;
+    }
+// Get reference allele sequence:
+uint refAlLen = end - start + indelBase;
+char ref[refAlLen+1];
+uint seqStart = start - indelBase - seqOffset;
+safencpy(ref, sizeof(ref), seq->dna+seqStart, refAlLen);
+touppers(ref);
+// Alternate allele seq needs extra room in case of single-base insertion:
+char alt[refAlLen+2];
+alt[0] = ref[0];
+alt[1] = '\0';
+if (start == end)
+    // insertion: alt gets extra base
+    safecpy(alt+1, sizeof(alt)-1, "A");
+else if (end == start+1)
+    // single nucleotide variant
+    mutateBase(alt);
+// else deletion: leave alt truncated after the shared base to left of indel
+
+// VCF columns: #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+fprintf(f, "%s\t%u\t%s\t%s\t%s\t.\t.\t.\n",
+	bed->chrom, start+1-indelBase, bed->name, ref, alt);
+}
+
+static void writeArbitraryVariants(FILE *f, struct annoAssembly *assembly)
+/* Concoct some variants at an arbitrary position on some assembly sequence.
+ * We shouldn't ever get here unless the selected geneTrack is empty. */
+{
+char *chrom = "NULL";
+uint start = 0, end = 0;
+getCartPosOrDie(&chrom, &start, &end);
+struct bed4 *bed = bed4New(chrom, start, start, "ex_ins");
+struct dnaSeq *seq = twoBitReadSeqFragLower(assembly->tbf, chrom, start-1, start+100);
+writeMinimalVcfRowFromBed(f, bed, seq, start-1);
+dnaSeqFree(&seq);
+}
+
+static void addGpFromRow(struct genePred **pGpList, struct annoRow *row,
+			 boolean *pNeedCoding, boolean *pNeedNonCoding)
+/* If row is coding and we need a coding gp, add it to pGpList and update pNeedCoding;
+ * likewise for noncoding. */
+{
+struct genePred *gp = genePredLoad(row->data);
+if (gp->cdsStart != gp->cdsEnd && *pNeedCoding)
+    {
+    slAddHead(pGpList, gp);
+    *pNeedCoding = FALSE;
+    }
+else if (gp->cdsStart == gp->cdsEnd && *pNeedNonCoding)
+    {
+    slAddHead(pGpList, gp);
+    *pNeedNonCoding = FALSE;
+    }
+}
+
+static void addGpFromPos(struct annoStreamer *geneStream, char *chrom, uint start, uint end,
+			 struct genePred **pGpList, boolean *pNeedCoding, boolean *pNeedNonCoding,
+			 struct lm *lm)
+/* Get up to 10 rows from position; if we find one coding and one non-coding gene,
+ * add them to pGpList and update pNeed* accordingly. */
+{
+geneStream->setRegion(geneStream, chrom, start, end);
+int rowCount = 0;
+struct annoRow *row = NULL;
+while (rowCount < 10 && (*pNeedCoding || *pNeedNonCoding)
+       && (row = geneStream->nextRow(geneStream, NULL, 0, lm)) != NULL)
+    addGpFromRow(pGpList, row, pNeedCoding, pNeedNonCoding);
+}
+
+static struct genePred *genesFromPosition(struct annoStreamer *geneStream,
+					  boolean *retGotCoding, boolean *retGotNonCoding)
+/* Try to get a coding and non-coding gene from geneStream at cart position.
+ * If there are none, try whole chrom; if none there, first in assembly. */
+{
+struct genePred *gpList = NULL;
+struct lm *lm = lmInit(0);
+char *chrom = NULL;
+uint start = 0, end = 0;
+getCartPosOrDie(&chrom, &start, &end);
+boolean needCoding = TRUE, needNonCoding = TRUE;
+// First, look for both coding and noncoding genes at cart position:
+addGpFromPos(geneStream, chrom, start, end, &gpList, &needCoding, &needNonCoding, lm);
+// If that didn't do it, try querying whole chrom
+if (needCoding || needNonCoding)
+    addGpFromPos(geneStream, chrom, 0, 0, &gpList, &needCoding, &needNonCoding, lm);
+// If we still haven't found either coding or non-coding on the cart's current chrom,
+// try whole genome:
+if (needCoding && needNonCoding)
+    addGpFromPos(geneStream, NULL, 0, 0, &gpList, &needCoding, &needNonCoding, lm);
+slSort(&gpList, genePredCmp);
+lmCleanup(&lm);
+if (retGotCoding)
+    *retGotCoding = !needCoding;
+if (retGotNonCoding)
+    *retGotNonCoding = !needNonCoding;
+return gpList;
+}
+
+static void addSnv(struct bed4 **pBedList, char *chrom, uint start, char *name)
+/* Add a single-nucleotide bed4 item. */
+{
+slAddHead(pBedList, bed4New(chrom, start, start+1, name));
+}
+
+// Stuff within this range (see gpFx.h) is considered upstream/downstream of a transcript:
+#define UPSTREAMFUDGE GPRANGE
+
+static struct bed4 *sampleVarBedFromGenePred(struct genePred *gp, struct annoAssembly *assembly,
+					     uint txSeqStart, uint txSeqEnd, boolean exonOnly)
+/* Construct imaginary variants that hit various parts of the transcript
+ * described in gp, using reference base values from assembly. */
+{
+uint basesLeft = gp->txStart - txSeqStart, basesRight = txSeqEnd - gp->txEnd;
+struct bed4 *bedList = NULL;
+if (!exonOnly && basesLeft > UPSTREAMFUDGE)
+    // SNV, intergenic to the left
+    addSnv(&bedList, gp->chrom, txSeqStart, "ex_igLeft");
+if (!exonOnly && basesLeft > 0)
+    // SNV, up/downstream to the left
+    addSnv(&bedList, gp->chrom, gp->txStart - 1, "ex_updownLeft");
+if (!exonOnly && gp->exonCount > 1)
+    {
+    // SNV, intron
+    uint start = (gp->exonEnds[0] + gp->exonStarts[1]) / 2;
+    addSnv(&bedList, gp->chrom, start, "ex_intron");
+    // SNV, splice
+    addSnv(&bedList, gp->chrom, gp->exonStarts[1] - 2, "ex_splice");
+    }
+boolean isCoding = (gp->cdsStart != gp->cdsEnd);
+if (isCoding)
+    {
+    if (gp->txStart < gp->cdsStart)
+	// SNV, UTR to the left
+	addSnv(&bedList, gp->chrom, gp->txStart + 1, "ex_utrLeft");
+    int cdsExon = 0;
+    while (gp->cdsStart > gp->exonEnds[cdsExon] && cdsExon < gp->exonCount)
+	cdsExon++;
+    uint start = gp->cdsStart + 2;
+    // single-base insertion, leftmost codon
+    slAddHead(&bedList, bed4New(gp->chrom, start, start, "ex_codonLeftIns"));
+    // 3-base deletion leftmost codon
+    slAddHead(&bedList, bed4New(gp->chrom, start, start+3, "ex_codonLeftDel"));
+    // SNV, leftmost codon
+    addSnv(&bedList, gp->chrom, start+1, "ex_codonLeft");
+    if (gp->txEnd > gp->cdsEnd)
+	// SNV, UTR to the right
+	addSnv(&bedList, gp->chrom, gp->txEnd - 1, "ex_utrRight");
+    }
+else
+    {
+    // noncoding exon variant
+    uint start = (gp->exonStarts[0] + gp->exonEnds[0]) / 2;
+    addSnv(&bedList, gp->chrom, start, "ex_nce");
+    }
+if (!exonOnly && basesRight > 0)
+    // SNV, up/downstream to the left
+    addSnv(&bedList, gp->chrom, gp->txEnd + 1, "ex_updownRight");
+return bedList;
+}
+
+// margin for intergenic variants around transcript:
+#define IGFUDGE 5
+
+static struct annoStreamer *makeSampleVariantsStreamer(struct annoAssembly *assembly,
+						       struct trackDb *geneTdb, int maxOutRows)
+/* Construct a VCF file of example variants for db (unless it already exists)
+ * and return an annoStreamer for that file.  If possible, make the variants hit a gene. */
+{
+char *sampleFile = sampleVariantsPath(assembly);
+boolean forceRebuild = cartUsualBoolean(cart, "hgva_rebuildSampleVariants", FALSE);
+if (! fileExists(sampleFile) || forceRebuild)
+    {
+    FILE *f = mustOpen(sampleFile, "w");
+    writeMinimalVcfHeader(f, assembly->name);
+    struct annoStreamer *geneStream = streamerFromTrack(assembly, geneTdb->table, geneTdb, NULL,
+							NO_MAXROWS);
+    boolean gotCoding = FALSE, gotNonCoding = FALSE;
+    struct genePred *gpList = genesFromPosition(geneStream, &gotCoding, &gotNonCoding);
+    if (gpList == NULL)
+	{
+	warn("Unable to find any gene transcripts in '%s' (%s)",
+	     geneTdb->shortLabel, geneTdb->track);
+	writeArbitraryVariants(f, assembly);
+	}
+    else
+	{
+	struct bed4 *bedList = NULL;
+	uint chromSize = annoAssemblySeqSize(assembly, gpList->chrom);
+	uint minSeqStart = chromSize, maxSeqEnd = 0;
+	struct genePred *gp;
+	for (gp = gpList;  gp != NULL;  gp = gp->next)
+	    {
+	    int txSeqStart = gp->txStart - (UPSTREAMFUDGE + IGFUDGE);
+	    uint txSeqEnd = gp->txEnd + UPSTREAMFUDGE + IGFUDGE;
+	    if (txSeqStart < 0)
+		txSeqStart = 0;
+	    if (txSeqEnd > chromSize)
+		txSeqEnd = chromSize;
+	    if (txSeqStart < minSeqStart)
+		minSeqStart = txSeqStart;
+	    if (txSeqEnd > maxSeqEnd)
+		maxSeqEnd = txSeqEnd;
+	    // If we got a coding gp, but this gp is non-coding, just do its exon variant:
+	    boolean exonOnly = gotCoding && (gp->cdsStart == gp->cdsEnd);
+	    slCat(&bedList, sampleVarBedFromGenePred(gp, assembly, txSeqStart, txSeqEnd, exonOnly));
+	    }
+	slSort(&bedList, bedCmp);
+	struct dnaSeq *txSeq = twoBitReadSeqFragLower(assembly->tbf, gpList->chrom,
+						      minSeqStart, maxSeqEnd);
+	struct bed4 *bed;
+	for (bed = bedList;  bed != NULL;  bed = bed->next)
+	    {
+	    writeMinimalVcfRowFromBed(f, bed, txSeq, minSeqStart);
+	    }
+	dnaSeqFree(&txSeq);
+	bed4FreeList(&bedList);
+	}
+    geneStream->close(&geneStream);
+    carefulClose(&f);
+    }
+return annoStreamVcfNew(sampleFile, FALSE, assembly, maxOutRows);
+}
+
+static struct trackDb *getVariantTrackDb(char *variantTrack)
+/* Get a tdb for the user's selected variant track, or warn and return NULL
+ * (main page will be displayed) */
+{
+struct trackDb *varTdb = tdbForTrack(database, variantTrack, &fullTrackList);
+if (varTdb == NULL)
+    {
+    if (isHubTrack(variantTrack))
+	warn("Can't find hub track '%s'; try the \"check hub\" button in "
+	     "<A href=\"%s?%s&%s=%s\">Track Data Hubs</A>.",
+	     variantTrack,
+	     hgHubConnectName(), cartSidUrlString(cart), hgHubConnectCgiDestUrl, cgiScriptName());
+    else
+	warn("Can't find tdb for variant track '%s'", variantTrack);
+    }
+else
+    checkVariantTrack(varTdb);
+return varTdb;
+}
+
 void doQuery()
 /* Translate simple form inputs into anno* components and execute query. */
 {
 char *chrom = NULL;
 uint start = 0, end = 0;
 if (sameString(regionType, hgvaRegionTypeRange))
-    {
-    char *position = cartString(cart, hgvaRange);
-    if (! parsePosition(position, &chrom, &start, &end))
-	errAbort("Expected position to be chrom:start-end but got '%s'", position);
-    }
-char *variantTrack = cartString(cart, "hgva_variantTrack");
-char *geneTrack = cartString(cart, "hgva_geneTrack");
-
+    getCartPosOrDie(&chrom, &start, &end);
 struct annoAssembly *assembly = getAnnoAssembly(database);
-struct trackDb *varTdb = tdbForTrack(database, variantTrack, &fullTrackList);
-if (varTdb == NULL)
-    {
-    if (isHubTrack(variantTrack))
-	warn("Can't find hub track %s; try the \"check hub\" button in "
-	     "<A href=\"%s?%s&%s=%s\">Track Data Hubs</A>.",
-	     variantTrack,
-	     hgHubConnectName(), cartSidUrlString(cart), hgHubConnectCgiDestUrl, cgiScriptName());
-    else
-	warn("Can't find tdb for variant track %s", variantTrack);
-    doUi();
-    return;
-    }
-checkVariantTrack(varTdb);
-int maxVarRows = cartUsualInt(cart, "hgva_variantLimit", 10);
-struct annoStreamer *primary = streamerFromTrack(assembly, varTdb->table, varTdb, chrom,
-						 maxVarRows);
 
+char *geneTrack = cartString(cart, "hgva_geneTrack");
 struct trackDb *geneTdb = tdbForTrack(database, geneTrack, &fullTrackList);
 if (geneTdb == NULL)
     {
@@ -1191,6 +1444,28 @@ if (geneTdb == NULL)
     doUi();
     return;
     }
+
+int maxVarRows = cartUsualInt(cart, "hgva_variantLimit", 10);
+struct annoStreamer *primary = NULL;
+char *primaryLongLabel = NULL;
+char *variantTrack = cartString(cart, "hgva_variantTrack");
+if (sameString(variantTrack, hgvaSampleVariants))
+    {
+    primary = makeSampleVariantsStreamer(assembly, geneTdb, maxVarRows);
+    primaryLongLabel = hgvaSampleVariantsLabel;
+    }
+else
+    {
+    struct trackDb *varTdb = getVariantTrackDb(variantTrack);
+    if (varTdb == NULL)
+	{
+	doUi();
+	return;
+	}
+    primary = streamerFromTrack(assembly, varTdb->table, varTdb, chrom, maxVarRows);
+    primaryLongLabel = varTdb->longLabel;
+    }
+
 enum annoGratorOverlap geneOverlapRule = agoMustOverlap;
 struct annoGrator *gpVarGrator = gratorFromTrackDb(assembly, geneTdb->table, geneTdb, chrom,
 						   NO_MAXROWS, primary->asObj, geneOverlapRule);
@@ -1218,7 +1493,7 @@ boolean doHtml = sameString(outFormat, "vepHtml");
 
 // Initialize VEP formatter:
 struct annoFormatter *vepOut = annoFormatVepNew("stdout", doHtml,
-						primary, varTdb->longLabel,
+						primary, primaryLongLabel,
 						(struct annoStreamer *)gpVarGrator,
 						geneTdb->longLabel,
 						(struct annoStreamer *)snpGrator,
