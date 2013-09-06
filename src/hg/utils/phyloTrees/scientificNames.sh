@@ -10,6 +10,7 @@ fi
 
 notYetInDbDb() {
 echo $1 | sed -e '
+s/allSin1/Alligator_sinensis/;
 s/amaVit1/Amazona_vittata/;
 s/araMac1/Ara_macao/;
 s/apiMel4/Apis_mellifera/;
