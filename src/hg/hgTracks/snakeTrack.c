@@ -935,7 +935,7 @@ if (errCatchStart(errCatch))
 	return;
 	}
     struct hal_block_t* cur = head->mappedBlocks;
-    struct linkedFeatures *lf;
+    struct linkedFeatures *lf = NULL;
     struct hash *qChromHash = newHash(5);
     struct linkedFeatures *lfList = NULL;
     char buffer[4096];
