@@ -29,20 +29,20 @@ boolean checkOwnership(struct sqlConnection *conn, int fId, char *userEmail)
 {
 char *email = edwUserNameFromFileId(conn, fId);
 if (sameString(email, userEmail))
-   return TRUE;
+    return TRUE;
 else
-   return FALSE;
+    return FALSE;
 }
 
 boolean okToDeprecateThisFile(struct sqlConnection *conn, int fId, char *userEmail)
 /* Return true if it is OK to deprecate this file */
 {
 if (checkOwnership(conn, fId, userEmail))
-   return TRUE;
+    return TRUE;
 else if (cgiVarExists("allowBox"))
-   return TRUE;
+    return TRUE;
 else
-   return FALSE;
+    return FALSE;
 }
 
 void logIn()
@@ -128,15 +128,15 @@ else
 	   warn("%s - no such accession. ", licensePlate);
 	   break;
 	   }
-    /* check to see is it ok tor deprecate this file */
-    if (!okToDeprecateThisFile(conn, id, userEmail))
-       {
-       ok = FALSE;
-       warn("You can not deprecate %s which was originally uploaded by %s.\n",
-       licensePlate, edwUserNameFromFileId(conn, id));
-       warn("Please click the check box below to override this rule.");
-       break;
-       }
+	/* check to see is it ok tor deprecate this file */
+	if (!okToDeprecateThisFile(conn, id, userEmail))
+	    {
+	    ok = FALSE;
+	    warn("You can not deprecate %s which was originally uploaded by %s.\n",
+	    licensePlate, edwUserNameFromFileId(conn, id));
+	    warn("Please click the check box below to override this rule.");
+	    break;
+	    }
 
 	idEl = slIntNew(id);
 	slAddTail(&idList, idEl);

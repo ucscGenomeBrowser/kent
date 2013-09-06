@@ -143,23 +143,23 @@ choHof	Eutheria; Xenarthra; Megalonychidae; Choloepus
 # Armadillo - Dasypus novemcinctus
 dasNov	Eutheria; Xenarthra; Dasypodidae; Dasypus
 
-# Aardvark - Orycteropus afer
-oryAfe	Eutheria; Afrotheria; Tubulidentata; Orycteropodidae; Orycteropus; Orycteropus afer
-
-# Cape golden mole - Chrysochloris asiatica
-chrAsi	Eutheria; Afrotheria; Chrysochloridae; Chrysochlorinae; Chrysochloris
-
-# Rock Hyrax - Procavia capensis
-proCap	Eutheria; Afrotheria; Hyracoidea; Procaviidae; Procavia
+# Elephant 
+loxAfr	Eutheria; Afrotheria; Proboscidea; Elephantidae; Loxodonta
 
 # Cape elephant shrew - Elephantulus edwardii
 eleEdw	Eutheria; Afrotheria; Macroscelidea; Macroscelididae; Elephantulus
 
-# Tenrec - Echinops telfairi
-echTel	Eutheria; Afrotheria; Tenrecidae; Tenrecinae; Echinops
+# Rock Hyrax - Procavia capensis
+proCap	Eutheria; Afrotheria; Hyracoidea; Procaviidae; Procavia
 
 # Trichechus manatus latirostris (Florida manatee)
 triMan	Eutheria; Afrotheria; Sirenia; Trichechidae; Trichechus; Trichechus manatus
 
-# Elephant 
-loxAfr	Eutheria; Afrotheria; Proboscidea; Elephantidae; Loxodonta
+# Cape golden mole - Chrysochloris asiatica
+chrAsi	Eutheria; Afrotheria; Chrysochloridae; Chrysochlorinae; Chrysochloris
+
+# Tenrec - Echinops telfairi
+echTel	Eutheria; Afrotheria; Tenrecidae; Tenrecinae; Echinops
+
+# Aardvark - Orycteropus afer
+oryAfe	Eutheria; Afrotheria; Tubulidentata; Orycteropodidae; Orycteropus; Orycteropus afer
