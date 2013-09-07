@@ -108,6 +108,8 @@ if (isEmpty(author))
     author = "NoAuthor";
 if (isEmpty(year))
     year = "NoYear";
+else if (sameWord(year, "0"))
+    year = "";
 authorYear  = catTwoStrings(author, year);
 
 return authorYear;
