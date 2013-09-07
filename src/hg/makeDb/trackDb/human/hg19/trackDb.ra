@@ -1893,126 +1893,6 @@ spectrum on
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
-
-track snakeMm9
-release alpha
-table chainMm9
-shortLabel snakeMm9
-longLabel snakeMm9
-group x
-priority 165
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type snake mm9
-otherDb mm9
-
-track snakePanTro3
-release alpha
-table chainPanTro3
-shortLabel snakePanTro3
-longLabel snakePanTro3
-group x
-priority 165
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type snake panTro3
-otherDb panTro3
-
-track snakeRheMac2
-release alpha
-table chainRheMac2
-shortLabel snakeRheMac2
-longLabel snakeRheMac2
-group x
-priority 165
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type snake rheMac2
-otherDb rheMac2
-
-track snake_apd
-table chain_apd_hap1
-release alpha
-shortLabel snake_apd
-longLabel snake_apd
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_cox
-table chain_cox_hap2
-release alpha
-shortLabel snake_cox
-longLabel snake_cox
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_dbb
-table chain_dbb_hap3
-release alpha
-shortLabel snake_dbb
-longLabel snake_dbb
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_mann
-table chain_mann_hap4
-release alpha
-shortLabel snake_mann
-longLabel snake_mann
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_mcf
-table chain_mcf_hap5
-release alpha
-shortLabel snake_mcf
-longLabel snake_mcf
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_qbl
-table chain_qbl_hap6
-release alpha
-shortLabel snake_qbl
-longLabel snake_qbl
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_ssto
-table chain_ssto_hap7
-release alpha
-shortLabel snake_ssto
-longLabel snake_ssto
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
 track bamWigTest
 table wgEncodeYaleRnaSeqGm12878PolyaAln
 release alpha
@@ -2170,6 +2050,18 @@ type bed 6 +
 color 0,0,0
 altColor 90,90,90
 exonArrows off
+
+track mapViewGenes
+shortLabel MapView Genes
+longLabel refSeq genes from map view
+group genes
+priority 34.1
+visibility hide
+color 82,82,160
+type genePred
+hgsid on
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track knownGeneOld6
 shortLabel Old UCSC Genes

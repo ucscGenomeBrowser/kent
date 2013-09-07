@@ -68,6 +68,9 @@ croPor	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 # American Alligator Alligator mississippiensis
 allMis	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Crocodylidae; Alligatorinae; Alligator
 
+# Chinese Alligator - Alligator sinensis
+allSin	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Crocodylia; Alligatoridae; Alligatorinae; Alligator
+
 # Lizard Anolis carolinensis
 anoCar	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Lepidosauria; Squamata; Iguania; Iguanidae; Polychrotinae; Anolis
 

@@ -16,25 +16,15 @@ int killChildPid = 0;
 static void sqlProgCatchSignal(int sigNum)
 /* handler for various terminal signals for removing the temp file */
 {
-switch (sigNum)
-    {
-    case SIGTERM:
-    case SIGHUP:
-    case SIGINT:  // ctrl-c
-    case SIGABRT:
-    case SIGSEGV:
-    case SIGFPE:
-    case SIGBUS:
-	if (tempFileNameToRemove)
-	    unlink(tempFileNameToRemove);
-	break;
-    }
+
+if (tempFileNameToRemove)
+    unlink(tempFileNameToRemove);
 
 if (killChildPid != 0) // the child should be runing
     {
-    if (sigNum == SIGINT)
+    if (sigNum == SIGINT)  // control-C usually
 	{
-    	kill(killChildPid, SIGINT);  // sometimes redundant, but not always
+    	kill(killChildPid, SIGINT);  // sometimes redundant, but not if someone sends SIGINT directly to the parent.
 	sleep(5);
 	}
     kill(killChildPid, SIGTERM);

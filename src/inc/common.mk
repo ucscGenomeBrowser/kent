@@ -37,7 +37,7 @@ ifeq (${HALDIR},)
 endif
 
 ifeq (${USE_HAL},1)
-    L+=${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halChain.a ${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halLiftover.a ${HALDIR}/hal/lib/halLod.a ${HALDIR}/hal/lib/halLib.a ${HALDIR}/sonLib/lib/sonLib.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_cpp.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_hl.a 
+    HALLIBS=${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halChain.a ${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halLiftover.a ${HALDIR}/hal/lib/halLod.a ${HALDIR}/hal/lib/halLib.a ${HALDIR}/sonLib/lib/sonLib.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_cpp.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_hl.a 
     HG_DEFS+=-DUSE_HAL
     HG_INC+=-I${HALDIR}/hal/chain/inc/
 endif
@@ -133,8 +133,13 @@ endif
 ifeq (${MYSQLLIBS},)
   MYSQLLIBS="-lmysqlclient"
 endif
-# OK to add this to all MYSQLLIBS just in case it is MySQL version 5.6 libraries
-MYSQLLIBS += -lstdc++ -lrt
+# OK to add -lstdc++ to all MYSQLLIBS just in case it is
+#    MySQL version 5.6 libraries, but no 'librt' on Mac OSX
+ifeq ($(UNAME_S),Darwin)
+  MYSQLLIBS += -lstdc++
+else
+  MYSQLLIBS += -lstdc++ -lrt
+endif
 
 L+=${PNGLIB}
 HG_INC+=${PNGINCL}
