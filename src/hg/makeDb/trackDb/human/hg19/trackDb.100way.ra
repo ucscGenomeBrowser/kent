@@ -1,6 +1,6 @@
 track cons100way
 compositeTrack on
-shortLabel Conservation
+shortLabel 100-way multiz
 longLabel Vertebrate Multiz Alignment & Conservation (100 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 # subGroup2 clade Clade glires=Glires euarchontoglires=Euarchontoglires placental=Placental all=All_species
