@@ -1,7 +1,7 @@
 # set these three for final build:
-setenv BRANCHNN 288
-setenv TODAY 2013-08-19             # v288 final
-setenv LASTWEEK  2013-07-30         # v287 final
+setenv BRANCHNN 289
+setenv TODAY 2013-09-09             # v289 final
+setenv LASTWEEK  2013-08-19         # v288 final
 # set for preview 1:
 setenv REVIEWDAY 2013-08-26         # v289 preview
 setenv LASTREVIEWDAY 2013-08-07     # v288 preview
