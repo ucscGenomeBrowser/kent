@@ -1675,7 +1675,7 @@ if (track != NULL)
 	cartRemove(cart, "gvDisclaimer");
 	cartRemove(cart, hgtaDoTopSubmit);
 	cartSetString(cart, hgtaDoMainPage, "return to table browser");
-	dispatch(conn);
+	dispatch();
 	return;
 	}
     }

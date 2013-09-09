@@ -33,10 +33,10 @@
     <p>
       To download the entire directory (note the trailing slash) you would use an expression such as:
     <pre class="code">$ rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/ ./</pre>
-    <p>To obtain a file's location (URL) to use with rsync, you can navigate in your browser to our FTP site at
+    <p>To obtain a file's location (URL) to use with rsync (<b><em>rsync://hgdownload.cse.ucsc.edu/...</em></b>), you can navigate in your browser to our FTP site at
       <a href="ftp://hgdownload.cse.ucsc.edu/" target="_blank">ftp://hgdownload.cse.ucsc.edu/</a>, or our downloads page at
       <a href="http://hgdownload.cse.ucsc.edu/" target="_blank">http://hgdownload.cse.ucsc.edu/downloads.html</a>,
-      and look for your file of interest.
+      and look for your file of interest.  To learn more about rsync's options, type "man rsync" on the command line.
     </p>
 
     <h4>Downloading from a Web Browser</h4>
@@ -79,7 +79,7 @@ ftp&gt; mget [filename1] [filename2] ...</pre>
     <pre class="code">
 ftp&gt; mget -a</pre>
     <p>Please note that rsync will be much easier and quicker than using FTP. 
-      Rysnc is a much more efficient and convenient transport mechanism.
+      Rsync is a much more efficient and convenient transport mechanism.
   
     </div><!-- .sectionContent --> 
 </div><!-- .section -->

@@ -170,7 +170,7 @@ hCompositeUi(database, cart, curTrack, curTable, hgtaDoSubtrackMergePage, "mainF
 hPrintf("<H3>Select a merge operation:</H3>\n");
 struct trackDb *primary = subTdbFind(curTrack,curTable);
 if (isWiggle(database, curTable) || isBedGraph(curTable) || isBigWigTable(curTable))
-    showWiggleMergeOptions(primary->longLabel);
+    showWiggleMergeOptions();
 else
     showBedMergeOptions();
 hPrintf("If a filter is specified on the main Table Browser page, it will "
