@@ -26373,19 +26373,17 @@ TMPDIR=/dev/shm
         `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running - Tue Sep  3 18:03:03 PDT 2013
     #	real  517m26.179s
-    # broken chrom.sizes file for allSin1, repeat from chainRun:
+    # forgot to reload the database tables after adding chrM, finish
+    # the load step, then continuing:
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        -continue=chainRun `pwd`/DEF \
+        -continue=download `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-        -chainMinScore=5000 -chainLinearGap=loose > chainRun.log 2>&1
-    #	real  25m52.687s
-XXX still complaining about missing chrM ?
-XXX - running - Tue Sep  3 09:12:31 PDT 2013
+        -chainMinScore=5000 -chainLinearGap=loose > download.log 2>&1
+    #  Elapsed time: 1m36s
 
     cat fb.hg19.chainAllSin1Link.txt
-    #	205244552 bases of 2897316137 (7.084%) in intersection
+    #	198130655 bases of 2897316137 (6.838%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/hg19/bed
@@ -26394,6 +26392,7 @@ XXX - running - Tue Sep  3 09:12:31 PDT 2013
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 allSin1 > rbest.log 2>&1 &
+XXX - running - Fri Sep  6 17:34:54 PDT 2013
     #  real    12m4.813s
 
     #	and for the swap
@@ -26401,8 +26400,9 @@ XXX - running - Tue Sep  3 09:12:31 PDT 2013
     cd /hive/data/genomes/allSin1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/hg19/bed/lastzAllSin1.2013-09-02/DEF \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+XXX - running - Fri Sep  6 17:34:54 PDT 2013
     #   forgot to get stderr in the swap.log
     #	real    27m54.364s
 
