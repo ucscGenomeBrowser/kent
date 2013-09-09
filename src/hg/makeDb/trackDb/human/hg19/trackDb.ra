@@ -2104,3 +2104,4 @@ track qPcrPrimers override
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
+include trackDb.100way.ra
