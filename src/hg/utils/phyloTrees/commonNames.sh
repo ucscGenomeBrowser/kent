@@ -70,6 +70,7 @@ equCab2 -> Horse ;
 cerSim1 -> White_rhinoceros ;
 felCat4 -> Cat ;
 felCat5 -> Cat ;
+panTig1 -> Amur_tiger ;
 canFam2 -> Dog ;
 canFam3 -> Dog ;
 ailMel1 -> Panda ;
