@@ -152,11 +152,12 @@ if (tableInfo == NULL)
 else
     {
     rowOffset = (tableInfo->hasBin) ? 1 : 0;
+    // FIXME: might be better as sqlDyString
     accWhere[0] = '\0';
     if (select->accPrefix != NULL)
-        safef(accWhere, sizeof(accWhere), " WHERE qName LIKE '%s%%'",
+        sqlSafefFrag(accWhere, sizeof(accWhere), " WHERE qName LIKE '%s%%'",
               select->accPrefix);
-    sqlSafef(query, sizeof(query), "SELECT * FROM %s%s", table, accWhere);
+    sqlSafef(query, sizeof(query), "SELECT * FROM %s%-s", table, accWhere);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
