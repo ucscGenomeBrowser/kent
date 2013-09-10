@@ -1442,16 +1442,27 @@ listed on the Genome Browser
 <A HREF="../credits.html" TARGET=_blank>Credits</A> page. Please
 acknowledge the contributor(s) of the data you use. 
 <P><B>Downloading the data</B><BR>
-Genome data can be downloaded in two different ways:
+Genome data can be downloaded in different ways:
 <TABLE>
+        <TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Via                                                                                                                                                  rsync:</B> The UCSC Genome Bioinformatics hgdownload site contains download
+        directories for all genome versions currently accessible in the
+        Genome Browser. The rsync command
+        <tt>rsync -a -P rsync://hgdownload.cse.ucsc.edu/path/file ./</tt>
+        can quickly and efficiently download large files to your current
+        directory (./). To download an entire directory (note the trailing slash),
+        you would use an expression such as:
+        <tt>rsync -a -P rsync://hgdownload.cse.ucsc.edu/directory/ ./</tt>
+        For more information please click <a href= "../help/ftp.html" target="_blank">here</a>.
+
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Via
-	ftp:</B>The UCSC Genome Bioinformatics ftp site contains download
+	ftp:</B> The UCSC Genome Bioinformatics ftp site contains download
 	directories for all genome versions currently accessible in the
 	Genome Browser. The ftp command
 	<tt>ftp://hgdownload.cse.ucsc.edu/goldenPath/</tt> will take you to a
 	directory that contains the genome download directories. This 
-	download method is recommended if you plan to download a large file
-	or multiple files from a single directory. Use the <I>mget</I> command
+	download method is not recommended if you plan to download a large file
+	or multiple files from a single directory compared to rsync (see above).
+        You can, however, use the <I>mget</I> command
 	to download multiple files: mget <I>filename1 filename2</I>, or
 	mget -a (to download all the files in the directory).</TD></TR>
 
