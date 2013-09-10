@@ -66,6 +66,7 @@ s/taeGut2/Taeniopygia_guttata/;
 s/tupChi1/Tupaia_chinensis/;
 s/xenTro7/Xenopus_tropicalis/;
 s/astMex1/Astyanax_mexicanus/;
+s/panTig1/Panthera_tigris_altaica/;
 s/xipMac1/Xiphophorus_maculatus/;'
 }
 
