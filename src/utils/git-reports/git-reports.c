@@ -244,6 +244,7 @@ char pathDir[PATH_LEN];
 splitPath(htmlPath, pathDir, NULL, NULL);
 makeDirsOnPath(pathDir);
 FILE *h = mustOpen(htmlPath, "w");
+fprintf(h, "<html>\n<head>\n<title>%s %s</title>\n</head>\n</body>\n<pre>\n", path, commitId);
 struct lineFile *lf = lineFileMayOpen(diffPath, TRUE);
 // creating empty file since 'git diff' produced nothing for white spaced only delta
 if (NULL == lf)
@@ -251,7 +252,6 @@ if (NULL == lf)
     verbose(2, "makeHtml: empty file for white space diff: '%s'\n", diffPath);
     FILE *dp = mustOpen(diffPath, "w");
     fclose(dp);
-    fprintf(h, "<html>\n<head>\n<title>%s %s</title>\n</head>\n</body>\n<pre>\n", path, commitId);
     fprintf(h, "white space only change</pre>\n</body>\n</html>\n");
     fclose(h);
     }
