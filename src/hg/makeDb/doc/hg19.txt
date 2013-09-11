@@ -26392,8 +26392,7 @@ TMPDIR=/dev/shm
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 allSin1 > rbest.log 2>&1 &
-XXX - running - Fri Sep  6 17:34:54 PDT 2013
-    #  real    12m4.813s
+    #  real    18m19.294s
 
     #	and for the swap
     mkdir /hive/data/genomes/allSin1/bed/blastz.hg19.swap
@@ -26402,12 +26401,10 @@ XXX - running - Fri Sep  6 17:34:54 PDT 2013
 	/hive/data/genomes/hg19/bed/lastzAllSin1.2013-09-02/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
-XXX - running - Fri Sep  6 17:34:54 PDT 2013
-    #   forgot to get stderr in the swap.log
-    #	real    27m54.364s
+    #	real    23m42.533s
 
     cat  fb.allSin1.chainHg19Link.txt
-    #	172919308 bases of 2129659933 (8.120%) in intersection
+    #	170963971 bases of 2198602449 (7.776%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/allSin1/bed
@@ -26504,22 +26501,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet > do.log 2>&1
-XXX - running - Tue Sep 10 07:59:46 PDT 2013
-    #   real    1408m3.295s
-    #   chaining chr19 on hgwdev
-    #   real    184m20.645s
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
-        -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -continue=chainMerge -syntenicNet > chainMerge.log 2>&1
-    #   real    132m29.811s
+    #   real    952m31.453s
 
     cat fb.hg19.chainPanTig1Link.txt
-    #   1518956396 bases of 2897316137 (52.426%) in intersection
+    #   1523174002 bases of 2897316137 (52.572%) in intersection
 
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 panTig1 > rbest.log 2>&1 &
+XXX - running - Wed Sep 11 10:36:47 PDT 2013
     #   real    68m58.182s
 
     # running the swap
@@ -26528,8 +26518,9 @@ XXX - running - Tue Sep 10 07:59:46 PDT 2013
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         -swap /hive/data/genomes/hg19/bed/lastzPanTig1.2013-09-10/DEF \
         -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet > swap.log 2>&1
+XXX - running - Wed Sep 11 10:36:47 PDT 2013
     #  real    106m53.116s
 
     cat fb.panTig1.chainHg19Link.txt
