@@ -595,9 +595,18 @@ if (withLabels)
 // let's draw some blue bars for the duplications
 struct hal_target_dupe_list_t* dupeList = lf->dupeList;
 
-for(; dupeList ; dupeList = dupeList->next)
+extern void makeChromosomeShades(struct hvGfx *hvg);
+if (!chromosomeColorsMade)
+    makeChromosomeShades(hvg);
+
+int count = 7;
+for(; dupeList ; dupeList = dupeList->next, count += 3)
     {
     struct hal_target_range_t *range = dupeList->tRange;
+
+#define NUM_CHROM_COLORS 26
+    extern Color chromColor[NUM_CHROM_COLORS+1];
+    Color color = chromColor[(count % NUM_CHROM_COLORS) + 1];
     for(; range; range = range->next)
 	{
 	int s = range->tStart;
@@ -606,10 +615,10 @@ for(; dupeList ; dupeList = dupeList->next)
 	int eClp = (e > winEnd) ? winEnd : e;
 	int x1 = round((sClp - winStart)*scale) + xOff;
 	int x2 = round((eClp - winStart)*scale) + xOff;
-	hvGfxLine(hvg, x1, y , x2, y , MG_BLUE);
+	hvGfxBox(hvg, x1, y , x2-x1, 3 , color);
 	}
     }
-y+=2;
+y+=4;
 
 // now we're going to draw the boxes
 
