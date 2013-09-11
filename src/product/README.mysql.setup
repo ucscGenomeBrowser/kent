@@ -10,6 +10,20 @@ enabled.  Please see the MySQL page at
 http://dev.mysql.com/doc/refman/5.1/en/load-data-local.html
 for more information regarding this issue.
 
+STORAGE ENGINE
+
+MySQL default storage engine.
+In recent versions of MySQL, the default storage engine has changed from myisam to innodb.
+However the myisam engine should be used with the UCSC Genome Browser.
+You can set it in /etc/my.cnf:
+
+[mysqld]
+default-storage-engine=MYISAM
+
+And then restart your mysql server.
+
+USERS
+
 There are three cases of identity to consider when providing
 access to the MySQL system for the browser CGI binaries
 and browser developers:
