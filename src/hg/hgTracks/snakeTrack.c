@@ -615,10 +615,10 @@ for(; dupeList ; dupeList = dupeList->next, count += 3)
 	int eClp = (e > winEnd) ? winEnd : e;
 	int x1 = round((sClp - winStart)*scale) + xOff;
 	int x2 = round((eClp - winStart)*scale) + xOff;
-	hvGfxLine(hvg, x1, y , x2, y , color);
+	hvGfxBox(hvg, x1, y , x2-x1, 3 , color);
 	}
     }
-y+=2;
+y+=4;
 
 // now we're going to draw the boxes
 

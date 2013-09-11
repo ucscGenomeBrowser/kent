@@ -154,7 +154,7 @@ if ( -e GitReports.ok ) then
 		if ($? == 0) then
 		       rm -f /dev/shm/build.email.${victim}.txt
                        echo "To: ${victim}" > /dev/shm/build.email.${victim}.txt
-                       echo "From: zweig@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt
+                       echo "From: ann@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt
                        echo "Subject: Code summaries are due for ${victim}" >> /dev/shm/build.email.${victim}.txt
                        echo "" >> /dev/shm/build.email.${victim}.txt
 		       ./summaryEmail.sh ${victim} >> /dev/shm/build.email.${victim}.txt
