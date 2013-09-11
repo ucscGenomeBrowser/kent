@@ -107,13 +107,13 @@ html chainNet
         type chain turTru2
         otherDb turTru2
 
-        track chainVicPac1
+        track chainVicPac2
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=mAlpaca clade=cLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain vicPac1
-        otherDb vicPac1
+        type chain vicPac2
+        otherDb vicPac2
 
         track chainSusScr3
         subTrack placentalChainNetViewchain off
