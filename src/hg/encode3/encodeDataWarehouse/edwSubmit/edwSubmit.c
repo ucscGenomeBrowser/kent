@@ -364,7 +364,6 @@ if (errCatchStart(errCatch))
     if (!parallelFetchInterruptable(submitFileName, tempName, paraFetchStreams, 3, FALSE, FALSE,
 	paraFetchInterruptFunction, &interruptContext))
 	{
-	uglyf("THeoretically would be cleaning up now.");
 	if (interruptContext.isInterrupted)
 	    errAbort("Submission stopped by user.");
 	else
@@ -385,7 +384,11 @@ if (errCatch->gotError)
     {
     /* Attempt to remove any partial file. */
     if (tempName[0] != 0)
+	{
+	verbose(1, "Removing partial %s\n", tempName);
+	parallelFetchRemovePartial(tempName);
 	remove(tempName);
+	}
     handleSubmitError(conn, submitId, errCatch->message->string);  // Throws further
     assert(FALSE);  // We never get here
     }
