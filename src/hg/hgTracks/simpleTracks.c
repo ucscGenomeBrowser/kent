@@ -12163,10 +12163,12 @@ else if (sameWord(type, "psl"))
     if (startsWith("pubs", track->track))
         pubsBlatPslMethods(track);
     }
+#ifdef NOTNOW
 else if (sameWord(type, "snake"))
     {
     snakeMethods(track, tdb, wordCount, words);
     }
+#endif
 else if (sameWord(type, "chain"))
     {
     chainMethods(track, tdb, wordCount, words);
@@ -12642,6 +12644,10 @@ registerTrackHandler("snp137", snp125Methods);
 registerTrackHandler("snp137Common", snp125Methods);
 registerTrackHandler("snp137Flagged", snp125Methods);
 registerTrackHandler("snp137Mult", snp125Methods);
+registerTrackHandler("snp138", snp125Methods);
+registerTrackHandler("snp138Common", snp125Methods);
+registerTrackHandler("snp138Flagged", snp125Methods);
+registerTrackHandler("snp138Mult", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);

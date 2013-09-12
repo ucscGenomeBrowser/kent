@@ -1,11 +1,6 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
 
-if ( "$HOST" != "hgwbeta" ) then
- echo "error: you must run this script on hgwbeta! [${0}: `date`]"
- exit 1
-endif
-
 set dir = "v"$BRANCHNN"_branch"
 
 cd $BUILDDIR/$dir
@@ -28,18 +23,18 @@ if ( "$wc" != "0" ) then
  exit 1
 endif
 #
-echo "Make alpha. [${0}: `date`]"
+echo "Make beta. [${0}: `date`]"
 cd hg
-make alpha >& make.alpha.log
+make beta >& make.beta.log
 # These flags and programs will trip the error detection
-sed -i -e "s/-DJK_WARN//g" make.alpha.log
-sed -i -e "s/-Werror//g" make.alpha.log
+sed -i -e "s/-DJK_WARN//g" make.beta.log
+sed -i -e "s/-Werror//g" make.beta.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
-set res = `/bin/egrep -i "error|warn" make.alpha.log | /bin/grep -v gbWarn | grep -v bigWarn`
+set res = `/bin/egrep -i "error|warn" make.beta.log | /bin/grep -v gbWarn | grep -v bigWarn`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
- echo "alpha errs found:"
+ echo "beta errs found:"
  echo "$res"
  exit 1
 endif
@@ -47,15 +42,15 @@ endif
 # RUN vgGetText
 echo "making vgGetText [${0}: `date`]"
 cd $BUILDDIR/$dir/kent/src/hg/visiGene/vgGetText
-make alpha >& make.alpha.log
-sed -i -e "s/-DJK_WARN//g" make.alpha.log
-sed -i -e "s/-Werror//g" make.alpha.log
+make beta >& make.beta.log
+sed -i -e "s/-DJK_WARN//g" make.beta.log
+sed -i -e "s/-Werror//g" make.beta.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
-set res = `/bin/egrep -i "error|warn" make.alpha.log`
+set res = `/bin/egrep -i "error|warn" make.beta.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
- echo "alpha errs found after vGetText:"
+ echo "beta errs found after vGetText:"
  echo "$res"
  exit 1
 endif

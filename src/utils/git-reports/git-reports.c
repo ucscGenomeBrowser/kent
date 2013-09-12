@@ -238,9 +238,23 @@ int makeHtml(char *diffPath, char *htmlPath, char *path, char *commitId)
  * Return the number of lines changed */
 {
 int linesChanged = 0;
+char pathDir[PATH_LEN];
 
+/* just in case this is a white space only diff, make sure directory exists */
+splitPath(htmlPath, pathDir, NULL, NULL);
+makeDirsOnPath(pathDir);
 FILE *h = mustOpen(htmlPath, "w");
-struct lineFile *lf = lineFileOpen(diffPath, TRUE);
+fprintf(h, "<html>\n<head>\n<title>%s %s</title>\n</head>\n</body>\n<pre>\n", path, commitId);
+struct lineFile *lf = lineFileMayOpen(diffPath, TRUE);
+// creating empty file since 'git diff' produced nothing for white spaced only delta
+if (NULL == lf)
+    {
+    verbose(2, "makeHtml: empty file for white space diff: '%s'\n", diffPath);
+    FILE *dp = mustOpen(diffPath, "w");
+    fclose(dp);
+    fprintf(h, "white space only change</pre>\n</body>\n</html>\n");
+    fclose(h);
+    }
 int lineSize;
 char *line;
 char *xline = NULL;
@@ -248,10 +262,9 @@ char fmtString[256];
 boolean inBody = FALSE;
 boolean inBlock = TRUE;
 int blockP = 0, blockN = 0;
-fprintf(h, "<html>\n<head>\n<title>%s %s</title>\n</head>\n</body>\n<pre>\n", path, commitId);
 boolean hasMore = TRUE;
 boolean combinedDiff = FALSE;
-while (hasMore)
+while (lf && hasMore)
     {
     boolean checkEob = FALSE;
     hasMore = lineFileNext(lf, &line, &lineSize);
@@ -316,7 +329,8 @@ while (hasMore)
 
     }
 
-lineFileClose(&lf);
+if (lf)
+    lineFileClose(&lf);
 fprintf(h, "</pre>\n</body>\n</html>\n");
 fclose(h);
 return linesChanged;
@@ -357,6 +371,7 @@ else
 	, c->commitId, tempMakeDiffName);
 	}
     }
+verbose(2, "makeDiffAndSplit: gitCmd: '%s'\n", gitCmd);
 runShell(gitCmd);
 
 
@@ -411,6 +426,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s.%s.diff"
 		, outDir, outPrefix, "user", u, full ? "full" : "context", fpath, c->commitId);
 
+            verbose(2, "makeDiffAndSplit: path: '%s'\n", path);
 	    h = mustOpen(path, "w");
 	    fprintf(h, "%s\n", c->commitId);
 	    if (c->merge)
@@ -451,6 +467,7 @@ void doUserCommits(char *u, struct commit *commits, int *saveUlc, int *saveUfc)
 char userPath[1024];
 safef(userPath, sizeof(userPath), "%s/%s/%s/%s/index.html", outDir, outPrefix, "user", u);
 
+verbose(2, "doUserCommits: writing to: '%s'\n", userPath);
 FILE *h = mustOpen(userPath, "w");
 fprintf(h, "<html>\n<head>\n<title>Commits for %s</title>\n</head>\n</body>\n", u);
 fprintf(h, "<h1>Commits for %s</h1>\n", u);
@@ -493,9 +510,11 @@ for(c = commits; c; c = c->next)
 	    safef(path, sizeof(path), "%s/%s.%s", "context", f->path, c->commitId);
 	    relativePath = cloneString(path);
 
+            verbose(2, "doUserCommits: relativePath: '%s'\n", path);
 	    safef(path, sizeof(path), "%s/%s/%s/%s/%s", outDir, outPrefix, "user", u, relativePath);
 	    commonPath = cloneString(path);
 
+            verbose(2, "doUserCommits: commonPath: '%s'\n", path);
 	    safef(path, sizeof(path), "%s.html", commonPath);
 	    cHtml = cloneString(path);
 
@@ -599,6 +618,7 @@ if (u)
 else
     safef(userPath, sizeof(userPath), "%s/%s/%s/index.html", outDir, outPrefix, "file");
 
+verbose(2, "doUserFiles: writing to: '%s'\n", userPath);
 FILE *h = mustOpen(userPath, "w");
 if (u)
     {

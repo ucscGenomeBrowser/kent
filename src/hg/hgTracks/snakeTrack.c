@@ -1,8 +1,5 @@
+#ifdef USE_HAL
 /* snakeTrack - stuff to load and display snake type tracks in browser.  */
-/*       uses standard chains from the database or HAL files */
-/*       probably the chain and hal support should be in different files
- *       but they share drawing code
- */
 
 #include "common.h"
 #include "hash.h"
@@ -20,39 +17,32 @@
 #include "bigWarn.h"
 #include <pthread.h>
 #include "trackHub.h"
+#include "limits.h"
+#include "snakeUi.h"
 
-#ifdef USE_HAL
 #include "halBlockViz.h"
-#endif
 
 struct snakeFeature
     {
     struct snakeFeature *next;
     int start, end;			/* Start/end in browser coordinates. */
     int qStart, qEnd;			/* query start/end */
-    int level;				/* level in packed snake */
+    int level;				/* level in snake */
     int orientation;			/* strand... -1 is '-', 1 is '+' */
     boolean drawn;			/* did we draw this feature? */
     char *sequence;			/* may have sequence, or NULL */
     char *qName;			/* chrom name on other species */
     };
 
-// static machinery to calculate packed snake
-
-struct level
+static int snakeFeatureCmpTStart(const void *va, const void *vb)
+/* sort by start position on the target sequence */
 {
-boolean init;		/* has this level been initialized */
-int orientation;	/* strand.. see above */
-int edge;		/* the leading edge of this level */
-int adjustLevel;	/* used to compress out the unused levels */
-boolean hasBlock;	/* are there any blocks in this level */
-};
+const struct snakeFeature *a = *((struct snakeFeature **)va);
+const struct snakeFeature *b = *((struct snakeFeature **)vb);
+int diff = a->start - b->start;
 
-static struct level Levels[1000000]; /* for packing the snake, not re-entrant! */
-static int maxLevel = 0;     	     /* deepest level */	
-
-/* blocks that make it through the min size filter */
-static struct snakeFeature *newList = NULL;   
+return diff;
+}
 
 static int snakeFeatureCmpQStart(const void *va, const void *vb)
 /* sort by start position on the query sequence */
@@ -69,8 +59,26 @@ if (diff == 0)
 return diff;
 }
 
+
+// static machinery to calculate full and pack snake
+
+struct level
+{
+boolean init;		/* has this level been initialized */
+int orientation;	/* strand.. see above */
+unsigned long edge;	/* the leading edge of this level */
+int adjustLevel;	/* used to compress out the unused levels */
+boolean hasBlock;	/* are there any blocks in this level */
+};
+
+static struct level Levels[10000]; /* for packing the snake, not re-entrant! */
+static int maxLevel = 0;     	     /* deepest level */	
+
+/* blocks that make it through the min size filter */
+static struct snakeFeature *newList = NULL;   
+
 static void clearLevels()
-/* clear out the data structure that we use to pack the snake */
+/* clear out the data structure that we use to calculate full snakes */
 {
 int ii;
 
@@ -79,8 +87,8 @@ for(ii=0; ii < sizeof(Levels) / sizeof(Levels[0]); ii++)
 maxLevel = 0;
 }
 
-static void calcSnake(struct snakeFeature *list, int level)
-// calculate the packed snake
+static void calcFullSnakeHelper(struct snakeFeature *list, int level)
+// calculate a full snake
 // updates global newList with unsorted blocks that pass the min
 // size filter.
 {
@@ -98,7 +106,7 @@ if (Levels[level].init == FALSE)
     Levels[level].init = TRUE;
     Levels[level].orientation = list->orientation;
     if (list->orientation == -1)
-	Levels[level].edge = 1000000000;  // bigger than the biggest chrom
+	Levels[level].edge = LONG_MAX; // bigger than the biggest chrom
     else
 	Levels[level].edge = 0;
     }
@@ -129,7 +137,7 @@ for(; cb; cb = next)
 	{
 	// we had an insert, go ahead and calculate where that goes
 	slReverse(&insertHead);
-	calcSnake(insertHead, level + 1);
+	calcFullSnakeHelper(insertHead, level + 1);
 	insertHead = NULL;
 	}
 
@@ -151,7 +159,7 @@ if (insertHead)
     {
     slReverse(&insertHead);
     int nextLevel = level + 1;
-    calcSnake(insertHead, nextLevel);
+    calcFullSnakeHelper(insertHead, nextLevel);
     insertHead = NULL;
     }
 
@@ -195,101 +203,12 @@ for(temp=proposedList; temp; temp = next)
     }
 }
 
-struct cartOptions
-    {
-    enum chainColorEnum chainColor; /*  ChromColors, ScoreColors, NoColors */
-    int scoreFilter ; /* filter chains by score if > 0 */
-    };
-
-static int snakeHeight(struct track *tg, enum trackVisibility vis)
-/* calculate height of all the snakes being displayed */
-{
-if (vis == tvDense)
-    return tg->lineHeight;
-
-int height = 0;
-struct slList *item = tg->items;
-
-item = tg->items;
-
-for (item=tg->items;item; item = item->next)
-    {
-    height += tg->itemHeight(tg, item);
-    }
-return height;
-}
-
-// mySQL code to read in chains
-
-static void doQuery(struct sqlConnection *conn, char *fullName, 
-			struct lm *lm, struct hash *hash, 
-			int start, int end,  boolean isSplit, int chainId)
-/* doQuery- check the database for chain elements between
- * 	start and end.  Use the passed hash to resolve chain
- * 	id's and place the elements into the right
- * 	linkedFeatures structure
- */
-{
-struct sqlResult *sr = NULL;
-char **row;
-struct linkedFeatures *lf;
-struct snakeFeature *sf;
-struct dyString *query = newDyString(1024);
-char *force = "";
-
-if (isSplit)
-    force = "force index (bin)";
-
-if (chainId == -1)
-    sqlDyStringPrintf(query, 
-	"select chainId,tStart,tEnd,qStart from %sLink %-s where ",
-	fullName, force);
-else
-    sqlDyStringPrintf(query, 
-	"select chainId, tStart,tEnd,qStart from %sLink where chainId=%d and ",
-	fullName, chainId);
-if (!isSplit)
-    sqlDyStringPrintf(query, "tName='%s' and ", chromName);
-hAddBinToQuery(start, end, query);
-dyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
-sr = sqlGetResult(conn, query->string);
-
-/* Loop through making up simple features and adding them
- * to the corresponding linkedFeature. */
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    lf = hashFindVal(hash, row[0]);
-    if (lf != NULL)
-	{
-	struct chain *pChain = lf->extra;
-	lmAllocVar(lm, sf);
-	sf->start = sqlUnsigned(row[1]);
-	sf->end = sqlUnsigned(row[2]);
-	sf->qStart = sqlUnsigned(row[3]); 
-
-	sf->qEnd = sf->qStart + (sf->end - sf->start);
-	if ((pChain) && pChain->qStrand == '-')
-	    {
-	    int temp;
-
-	    temp = sf->qStart;
-	    sf->qStart = pChain->qSize - sf->qEnd;
-	    sf->qEnd = pChain->qSize - temp;
-	    }
-	sf->orientation = lf->orientation;
-	slAddHead(&lf->components, sf);
-	}
-    }
-sqlFreeResult(&sr);
-dyStringFree(&query);
-}
-
 struct snakeInfo
 {
 int maxLevel;
 } snakeInfo;
 
-static void calcPackSnake(struct track *tg, void *item)
+static void calcFullSnake(struct track *tg, void *item)
 {
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
 if (lf->components == NULL)
@@ -303,7 +222,7 @@ if (lf->codons == NULL)
     struct snakeFeature *sf;
 
     // this will destroy lf->components, and add to newList
-    calcSnake((struct snakeFeature *)lf->components, 0);
+    calcFullSnakeHelper((struct snakeFeature *)lf->components, 0);
     lf->components = (struct simpleFeature *)newList;
     newList = NULL;
     slSort(&lf->components, snakeFeatureCmpQStart);
@@ -370,23 +289,155 @@ if (lf->codons == NULL)
     }
 }
 
-static int packSnakeItemHeight(struct track *tg, void *item)
-// return height of a single packed snake 
+static void calcPackSnakeHelper(struct snakeFeature *list, int level)
+// calculate a packed snake
+// updates global newList with unsorted blocks that pass the min
+// size filter.
 {
-if (item == NULL)
-    return 0;
+struct snakeFeature *cb = list;
+struct snakeFeature *proposedList = NULL;
+
+if (level > maxLevel)
+    maxLevel = level;
+if (level > ArraySize(Levels))
+    errAbort("too many levels");
+
+if (Levels[level].init == FALSE)
+    {
+    // initialize the level if this is the first time we've seen it
+    Levels[level].init = TRUE;
+    Levels[level].edge = 0;
+    }
+
+// now we step through the blocks and assign them to levels
+struct snakeFeature *next;
+struct snakeFeature *insertHead = NULL;
+for(; cb; cb = next)
+    {
+    // we're going to add this block to a different list 
+    // so keep track of the next pointer
+    next = cb->next;
+
+    // if this block can't fit on this level add to the insert
+    // list and move on to the next block
+    if ( Levels[level].edge > cb->start)
+	{
+	// add this to the list of an insert
+	slAddHead(&insertHead, cb);
+	continue;
+	}
+
+    // the current block will fit on this level
+    // go ahead and deal with the blocks that wouldn't 
+    if (insertHead)
+	{
+	// we had an insert, go ahead and calculate where that goes
+	slReverse(&insertHead);
+	calcPackSnakeHelper(insertHead, level + 1);
+	insertHead = NULL;
+	}
+
+    // assign the current block to this level
+    cb->level = level;
+
+    Levels[level].edge = cb->end;
+
+    // add this block to the list of proposed blocks for this level
+    slAddHead(&proposedList, cb);
+    }
+
+// we're at the end of the list.  Deal with any blocks
+// that didn't fit on this level
+if (insertHead)
+    {
+    slReverse(&insertHead);
+    calcPackSnakeHelper(insertHead,  level + 1);
+    insertHead = NULL;
+    }
+
+// do we have any proposed blocks
+if (proposedList == NULL) 
+    return;
+
+// we parsed all the blocks in the list to see if they fit in our level
+// now let's see if the list of blocks for this level is big enough
+// to actually add
+
+struct snakeFeature *temp;
+double scale = scaleForWindow(insideWidth, winStart, winEnd);
+int start, end;
+
+// order the blocks so lowest start position is first
+slReverse(&proposedList);
+
+start=proposedList->start;
+for(temp=proposedList; temp->next; temp = temp->next)
+    ;
+end=temp->end;
+
+// calculate how big the string of blocks is in screen coordinates
+double apparentSize = scale * (end - start);
+
+if (apparentSize < 0)
+    errAbort("size of a list of blocks should not be less than zero");
+
+// check to see if the apparent size is big enough
+if (apparentSize < 1)
+    return;
+
+// transfer proposedList to new block list
+for(temp=proposedList; temp; temp = next)
+    {
+    next = temp->next;
+    temp->next = NULL;
+    slAddHead(&newList, temp);
+    }
+}
+
+static void calcPackSnake(struct track *tg, void *item)
+{
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
 if (lf->components == NULL)
-    return 0;
-calcPackSnake(tg, item);
-struct snakeInfo *si = (struct snakeInfo *)lf->codons;
-int lineHeight = tg->lineHeight ;
-return (si->maxLevel + 1) * (2 * lineHeight);
+    return;
+
+// we use the codons field to keep track of whether we already
+// calculated the height of this snake
+if (lf->codons == NULL)
+    {
+    clearLevels();
+
+    // this will destroy lf->components, and add to newList
+    calcPackSnakeHelper((struct snakeFeature *)lf->components, 0);
+    lf->components = (struct simpleFeature *)newList;
+    newList = NULL;
+    
+    //slSort(&lf->components, snakeFeatureCmpQStart);
+
+    struct snakeInfo *si;
+    AllocVar(si);
+    si->maxLevel = maxLevel;
+    lf->codons = (struct simpleFeature *)si;
+    }
 }
 
 static int snakeItemHeight(struct track *tg, void *item)
+// return height of a single packed snake 
 {
-return packSnakeItemHeight(tg, item);
+if ((item == NULL) || (tg->visibility == tvSquish) || (tg->visibility == tvDense)) 
+    return 0;
+
+struct linkedFeatures  *lf = (struct linkedFeatures *)item;
+if (lf->components == NULL)
+    return 0;
+
+if (tg->visibility == tvFull) 
+    calcFullSnake(tg, item);
+else if (tg->visibility == tvPack) 
+    calcPackSnake(tg, item);
+
+struct snakeInfo *si = (struct snakeInfo *)lf->codons;
+int lineHeight = tg->lineHeight ;
+return (si->maxLevel + 1) * (2 * lineHeight);
 }
 
 static int linkedFeaturesCmpScore(const void *va, const void *vb)
@@ -399,6 +450,27 @@ if (a->score > b->score)
 else if (a->score < b->score)
     return 1;
 return 0;
+}
+
+static int snakeHeight(struct track *tg, enum trackVisibility vis)
+/* calculate height of all the snakes being displayed */
+{
+if (vis == tvDense)
+    return tg->lineHeight;
+
+if (vis == tvSquish)
+    return tg->lineHeight/2;
+
+int height = 0;
+struct slList *item = tg->items;
+
+item = tg->items;
+
+for (item=tg->items;item; item = item->next)
+    {
+    height += tg->itemHeight(tg, item);
+    }
+return height;
 }
 
 static void snakeDraw(struct track *tg, int seqStart, int seqEnd,
@@ -414,20 +486,23 @@ int height = snakeHeight(tg, vis);
 
 hvGfxSetClip(hvg, xOff, yOff, width, height);
 
-// score snakes by how many bases they cover
-for (item = tg->items; item != NULL; item = item->next)
+if ((tg->visibility == tvFull) || (tg->visibility == tvPack))
     {
-    lf = (struct linkedFeatures *)item;
-    struct snakeFeature  *sf;
-
-    lf->score = 0;
-    for (sf =  (struct snakeFeature *)lf->components; sf != NULL;  sf = sf->next)
+    // score snakes by how many bases they cover
+    for (item = tg->items; item != NULL; item = item->next)
 	{
-	lf->score += sf->end - sf->start;
-	}
-    }
+	lf = (struct linkedFeatures *)item;
+	struct snakeFeature  *sf;
 
-slSort(&tg->items, linkedFeaturesCmpScore);
+	lf->score = 0;
+	for (sf =  (struct snakeFeature *)lf->components; sf != NULL;  sf = sf->next)
+	    {
+	    lf->score += sf->end - sf->start;
+	    }
+	}
+
+    slSort(&tg->items, linkedFeaturesCmpScore);
+    }
 
 y = yOff;
 for (item = tg->items; item != NULL; item = item->next)
@@ -440,22 +515,37 @@ for (item = tg->items; item != NULL; item = item->next)
     } 
 }
 
-static void packSnakeDrawAt(struct track *tg, void *item,
+//  this is a 16 color palette with every other color being a lighter version of
+//  the color before it
+//static int snakePalette[] =
+//{
+//0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5, 0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5
+//};
+
+static int snakePalette[] =
+{
+0x1f77b4, 0xff7f0e, 0x2ca02c, 0xd62728, 0x9467bd, 0x8c564b, 0xe377c2, 0x7f7f7f, 0xbcbd22, 0x17becf
+};
+
+static void snakeDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
+unsigned showSnpWidth = cartOrTdbInt(cart, tg->tdb, 
+    SNAKE_SHOW_SNP_WIDTH, SNAKE_DEFAULT_SHOW_SNP_WIDTH);
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
-calcPackSnake(tg, item);
+
+
+if (tg->visibility == tvFull) 
+    calcFullSnake(tg, item);
+else if (tg->visibility == tvPack)
+    calcPackSnake(tg, item);
 
 if (lf->components == NULL)
     return;
 
-#ifdef USE_HAL
 boolean isHalSnake = lf->isHalSnake;
-#else
-boolean isHalSnake = FALSE;
-#endif
 
 struct snakeFeature  *sf = (struct snakeFeature *)lf->components, *prevSf = NULL;
 int s = tg->itemStart(tg, item);
@@ -463,11 +553,11 @@ int sClp = (s < winStart) ? winStart : s;
 int x1 = round((sClp - winStart)*scale) + xOff;
 int textX = x1;
 int yOff = y;
-//boolean withLabels = (withLeftLabels && (vis == tvFull) && !tg->drawName);
+boolean withLabels = (withLeftLabels && (vis == tvFull) && !tg->drawName);
 unsigned   labelColor = MG_BLACK;
 
-// draw the labels (this code needs a clean up )
-if (0)//withLabels)
+// draw the labels
+if (withLabels)
     {
     char *name = tg->itemName(tg, item);
     int nameWidth = mgFontStringWidth(font, name);
@@ -514,13 +604,21 @@ if (0)//withLabels)
         }
     }
 
-#ifdef USE_HAL
 // let's draw some blue bars for the duplications
 struct hal_target_dupe_list_t* dupeList = lf->dupeList;
 
-for(; dupeList ; dupeList = dupeList->next)
+//extern void makeChromosomeShades(struct hvGfx *hvg);
+//if (!chromosomeColorsMade)
+    //makeChromosomeShades(hvg);
+
+int count = 0;
+for(; dupeList ; dupeList = dupeList->next, count++)
     {
     struct hal_target_range_t *range = dupeList->tRange;
+
+    unsigned int colorInt = snakePalette[count % (sizeof(snakePalette)/sizeof(Color))];
+    Color color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
+
     for(; range; range = range->next)
 	{
 	int s = range->tStart;
@@ -529,11 +627,10 @@ for(; dupeList ; dupeList = dupeList->next)
 	int eClp = (e > winEnd) ? winEnd : e;
 	int x1 = round((sClp - winStart)*scale) + xOff;
 	int x2 = round((eClp - winStart)*scale) + xOff;
-	hvGfxLine(hvg, x1, y , x2, y , MG_BLUE);
+	hvGfxBox(hvg, x1, y , x2-x1, 3 , color);
 	}
     }
-y+=2;
-#endif
+y+=4;
 
 // now we're going to draw the boxes
 
@@ -578,7 +675,17 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	darkRedColor = hvGfxFindColorIx(hvg, 232,156,156);
 	darkBlueColor = hvGfxFindColorIx(hvg, 149,204,252);
 	}
-    color = (sf->orientation == -1) ? darkRedColor : darkBlueColor;
+    
+    char *colorBy = cartOrTdbString(cart, tg->tdb, 
+	SNAKE_COLOR_BY, SNAKE_DEFAULT_COLOR_BY);
+
+    extern Color getChromColor(char *name, struct hvGfx *hvg);
+    if (sameString(colorBy, SNAKE_COLOR_BY_STRAND_VALUE))
+	color = (sf->orientation == -1) ? darkRedColor : darkBlueColor;
+    else if (sameString(colorBy, SNAKE_COLOR_BY_CHROM_VALUE))
+	color = getChromColor(lf->name, hvg);
+    else
+	color =  darkBlueColor;
 
     int w = ex - sx;
     if (w == 0) 
@@ -593,17 +700,16 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	w -= olap;
 	}
     char qAddress[4096];
-    if (vis == tvFull)
+    if ((vis == tvFull) || (vis == tvPack) )
 	{
-	safef(qAddress, sizeof qAddress, "qName=%s&qs=%d&qe=%d&qWidth=%d",tg->itemName(tg, item),  qs, qe,  winEnd - winStart);
+	safef(qAddress, sizeof qAddress, "qName=%s&qs=%d&qe=%d&qWidth=%d",sf->qName,  qs, qe,  winEnd - winStart);
 	mapBoxHgcOrHgGene(hvg, s, e, sx+1, y, w-2, heightPer, tg->track,
 		    buffer, buffer, NULL, TRUE, qAddress);
 	}
     hvGfxBox(hvg, sx, y, w, heightPer, color);
-    int ow = w;
 
     // now draw the mismatches if we're at high enough resolution 
-    if ((winBaseCount < 50000) && (vis == tvFull))
+    if ((winBaseCount < showSnpWidth) && ((vis == tvFull) || (vis == tvPack)))
     {
 	char *twoBitString = trackDbSetting(tg->tdb, "twoBit");
 	static struct twoBitFile *tbf = NULL;
@@ -669,7 +775,10 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	// if we're zoomed to base level, draw sequence of mismatch
 	if (zoomedToBaseLevel)
 	    {
-	    spreadAlignString(hvg, osx, y, ow, heightPer, MG_WHITE, font, ourDna,
+	    int mysx = round((double)((int)s-winStart)*scale) + xOff;
+	    int myex = round((double)((int)e-winStart)*scale) + xOff;
+	    int myw = myex - mysx;
+	    spreadAlignString(hvg, mysx, y, myw, heightPer, MG_WHITE, font, ourDna,
 		extraSeq->dna, seqLen, TRUE, FALSE);
 	    }
 
@@ -683,7 +792,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     //lastX = x;
     }
 
-if (vis == tvDense)
+if (vis != tvFull)
     return;
 
 // now we're going to draw the lines between the blocks
@@ -730,7 +839,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	    color = MG_ORANGE;
 
 	// draw the vertical orange bars if there is an insert in the other sequence
-	if ((winBaseCount < 50000) )
+	if ((winBaseCount < showSnpWidth) )
 	    {
 	    if ((sf->orientation == 1) && (qs != lastQEnd) && (lastE == s))
 		{
@@ -822,15 +931,246 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     }
 }
 
-
-static void snakeDrawAt(struct track *tg, void *item,
-	struct hvGfx *hvg, int xOff, int y, double scale, 
-	MgFont *font, Color color, enum trackVisibility vis)
-/* Draw a single simple bed item at position. */
+void halSnakeLoadItems(struct track *tg)
+// load up a snake from a HAL file.   This code is called in threads
+// so *no* use of globals please. All but full snakes are read into a single
+// linked feature.
 {
-if ((tg->visibility == tvFull) || (tg->visibility == tvDense))
-    packSnakeDrawAt(tg, item, hvg, xOff, y, scale, 
-	font, color, vis);
+unsigned showSnpWidth = cartOrTdbInt(cart, tg->tdb, 
+    SNAKE_SHOW_SNP_WIDTH, SNAKE_DEFAULT_SHOW_SNP_WIDTH);
+
+// if we have a network error we want to put out a message about it
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
+    char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
+    int handle = halOpenLOD(fileName);
+    int needSeq = (winBaseCount < showSnpWidth) ? 1 : 0;
+    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, needSeq, 1);
+
+    // did we get any blocks from HAL
+    if (head == NULL)
+	{
+	errCatchEnd(errCatch);
+	return;
+	}
+    struct hal_block_t* cur = head->mappedBlocks;
+    struct linkedFeatures *lf = NULL;
+    struct hash *qChromHash = newHash(5);
+    struct linkedFeatures *lfList = NULL;
+    char buffer[4096];
+
+#ifdef NOTNOW
+    struct hal_target_dupe_list_t* targetDupeBlocks = head->targetDupeBlocks;
+
+    for(;targetDupeBlocks; targetDupeBlocks = targetDupeBlocks->next)
+	{
+	printf("<br>id: %d qChrom %s\n", targetDupeBlocks->id, targetDupeBlocks->qChrom);
+	struct hal_target_range_t *range = targetDupeBlocks->tRange;
+	for(; range; range = range->next)
+	    {
+	    printf("<br>   %ld : %ld\n", range->tStart, range->size);
+	    }
+	}
+#endif
+
+    while (cur)
+    {
+	struct hashEl* hel;
+
+	//safef(buffer, sizeof buffer, "%s.%c", cur->qChrom,cur->strand);
+	if (tg->visibility == tvFull)
+	    safef(buffer, sizeof buffer, "%s", cur->qChrom);
+	else
+	    {
+	    // make sure the block is on the screen 
+	    if (!positiveRangeIntersection(winStart, winEnd, cur->tStart,  cur->tStart + cur->size))
+		{
+		cur = cur->next;
+		continue;
+		}
+	    safef(buffer, sizeof buffer, "allInOne");
+	    }
+
+	if ((hel = hashLookup(qChromHash, buffer)) == NULL)
+	    {
+	    AllocVar(lf);
+	    lf->isHalSnake = TRUE;
+	    slAddHead(&lfList, lf);
+	    lf->start = 0;
+	    lf->end = 1000000000;
+	    lf->grayIx = maxShade;
+	    lf->name = cloneString(buffer);
+	    lf->extra = cloneString(buffer);
+	    lf->orientation = (cur->strand == '+') ? 1 : -1;
+	    hashAdd(qChromHash, lf->name, lf);
+
+	    // now figure out where the blue bars go
+	    struct hal_target_dupe_list_t* targetDupeBlocks = head->targetDupeBlocks;
+
+	    if ((tg->visibility == tvPack) || (tg->visibility == tvFull))
+		for(;targetDupeBlocks; targetDupeBlocks = targetDupeBlocks->next)
+		    {
+		    if ((tg->visibility == tvPack) ||
+			((tg->visibility == tvFull) &&
+			 (sameString(targetDupeBlocks->qChrom, cur->qChrom))))
+			{
+			struct hal_target_dupe_list_t* dupeList;
+			AllocVar(dupeList);
+			*dupeList = *targetDupeBlocks;
+			slAddHead(&lf->dupeList, dupeList);
+			// TODO: should clone the target_range structures
+			// rather than copying them
+			}
+		    }
+	    }
+	else
+	    {
+	    lf = hel->val;
+	    }
+
+	struct snakeFeature  *sf;
+	AllocVar(sf);
+	slAddHead(&lf->components, sf);
+	
+	sf->start = cur->tStart;
+	sf->end = cur->tStart + cur->size;
+	sf->qStart = cur->qStart;
+	sf->qEnd = cur->qStart + cur->size;
+	sf->orientation = (cur->strand == '+') ? 1 : -1;
+	sf->sequence = cloneString(cur->sequence);
+	sf->qName = cur->qChrom;
+
+	cur = cur->next;
+    }
+    if (tg->visibility == tvFull)
+	{
+	for(lf=lfList; lf ; lf = lf->next)
+	    {
+	    slSort(&lf->components, snakeFeatureCmpQStart);
+	    }
+	}
+    else if (tg->visibility == tvPack)
+	{
+	assert(lf->next == NULL);
+	slSort(&lf->components, snakeFeatureCmpTStart);
+	}
+    
+    //halFreeBlocks(head);
+    //halClose(handle, myThread);
+
+    tg->items = lfList;
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    tg->networkErrMsg = cloneString(errCatch->message->string);
+    tg->drawItems = bigDrawWarning;
+    tg->totalHeight = bigWarnTotalHeight;
+    }
+errCatchFree(&errCatch);
+}
+
+void halSnakeDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+        boolean withCenterLabels, MgFont *font,
+        Color color, enum trackVisibility vis)
+{
+}
+
+void halSnakeMethods(struct track *tg, struct trackDb *tdb, 
+	int wordCount, char *words[])
+{
+linkedFeaturesMethods(tg);
+tg->canPack = tdb->canPack = TRUE;
+tg->loadItems = halSnakeLoadItems;
+tg->drawItems = snakeDraw;
+tg->mapItemName = lfMapNameFromExtra;
+tg->subType = lfSubChain;
+//tg->extraUiData = (void *) chainCart;
+tg->totalHeight = snakeHeight; 
+tg->drawLeftLabels = halSnakeDrawLeftLabels;
+
+tg->drawItemAt = snakeDrawAt;
+tg->itemHeight = snakeItemHeight;
+}
+#endif  // USE_HAL
+
+#ifdef NOTNOW
+
+// from here down are routines to support the visualization of chains as snakes
+// this code is currently BROKEN, and may be removed completely in the future
+
+struct cartOptions
+    {
+    enum chainColorEnum chainColor; /*  ChromColors, ScoreColors, NoColors */
+    int scoreFilter ; /* filter chains by score if > 0 */
+    };
+
+// mySQL code to read in chains
+
+static void doQuery(struct sqlConnection *conn, char *fullName, 
+			struct lm *lm, struct hash *hash, 
+			int start, int end,  boolean isSplit, int chainId)
+/* doQuery- check the database for chain elements between
+ * 	start and end.  Use the passed hash to resolve chain
+ * 	id's and place the elements into the right
+ * 	linkedFeatures structure
+ */
+{
+struct sqlResult *sr = NULL;
+char **row;
+struct linkedFeatures *lf;
+struct snakeFeature *sf;
+struct dyString *query = newDyString(1024);
+char *force = "";
+
+if (isSplit)
+    force = "force index (bin)";
+
+if (chainId == -1)
+    sqlDyStringPrintf(query, 
+	"select chainId,tStart,tEnd,qStart from %sLink %-s where ",
+	fullName, force);
+else
+    sqlDyStringPrintf(query, 
+	"select chainId, tStart,tEnd,qStart from %sLink where chainId=%d and ",
+	fullName, chainId);
+if (!isSplit)
+    sqlDyStringPrintf(query, "tName='%s' and ", chromName);
+hAddBinToQuery(start, end, query);
+dyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
+sr = sqlGetResult(conn, query->string);
+
+/* Loop through making up simple features and adding them
+ * to the corresponding linkedFeature. */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    lf = hashFindVal(hash, row[0]);
+    if (lf != NULL)
+	{
+	struct chain *pChain = lf->extra;
+	lmAllocVar(lm, sf);
+	sf->start = sqlUnsigned(row[1]);
+	sf->end = sqlUnsigned(row[2]);
+	sf->qStart = sqlUnsigned(row[3]); 
+
+	sf->qEnd = sf->qStart + (sf->end - sf->start);
+	if ((pChain) && pChain->qStrand == '-')
+	    {
+	    int temp;
+
+	    temp = sf->qStart;
+	    sf->qStart = pChain->qSize - sf->qEnd;
+	    sf->qEnd = pChain->qSize - temp;
+	    }
+	sf->orientation = lf->orientation;
+	slAddHead(&lf->components, sf);
+	}
+    }
+sqlFreeResult(&sr);
+dyStringFree(&query);
 }
 
 static void fixItems(struct linkedFeatures *lf)
@@ -937,111 +1277,6 @@ if (hash->size)
     }
 hFreeConn(&conn);
 }
-
-#ifdef USE_HAL
-void halSnakeLoadItems(struct track *tg)
-{
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
-    char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
-    int handle = halOpenLOD(fileName);
-    int needSeq = (winBaseCount < 50000) ? 1 : 0;
-    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, needSeq, 1);
-    struct hal_block_t* cur = head->mappedBlocks;
-    struct linkedFeatures *lf;
-    struct hash *qChromHash = newHash(5);
-    struct linkedFeatures *lfList = NULL;
-    char buffer[4096];
-
-#ifdef NOTNOW
-    struct hal_target_dupe_list_t* targetDupeBlocks = head->targetDupeBlocks;
-
-    for(;targetDupeBlocks; targetDupeBlocks = targetDupeBlocks->next)
-	{
-	printf("<br>id: %d qChrom %s\n", targetDupeBlocks->id, targetDupeBlocks->qChrom);
-	struct hal_target_range_t *range = targetDupeBlocks->tRange;
-	for(; range; range = range->next)
-	    {
-	    printf("<br>   %ld : %ld\n", range->tStart, range->size);
-	    }
-	}
-#endif
-
-    while (cur)
-    {
-	struct hashEl* hel;
-
-	//safef(buffer, sizeof buffer, "%s.%c", cur->qChrom,cur->strand);
-	safef(buffer, sizeof buffer, "%s", cur->qChrom);
-	if ((hel = hashLookup(qChromHash, buffer)) == NULL)
-	    {
-	    AllocVar(lf);
-	    lf->isHalSnake = TRUE;
-	    slAddHead(&lfList, lf);
-	    lf->start = 0;
-	    lf->end = 1000000000;
-	    lf->grayIx = maxShade;
-	    lf->name = cloneString(buffer);
-	    lf->extra = cloneString(buffer);
-	    lf->orientation = (cur->strand == '+') ? 1 : -1;
-	    hashAdd(qChromHash, lf->name, lf);
-
-	    // now figure out where the blue bars go
-	    struct hal_target_dupe_list_t* targetDupeBlocks = head->targetDupeBlocks;
-
-	    for(;targetDupeBlocks; targetDupeBlocks = targetDupeBlocks->next)
-		{
-		if (sameString(targetDupeBlocks->qChrom, cur->qChrom))
-		    {
-		    struct hal_target_dupe_list_t* dupeList;
-		    AllocVar(dupeList);
-		    *dupeList = *targetDupeBlocks;
-		    slAddHead(&lf->dupeList, dupeList);
-		    // TODO: should clone the target_range structures
-		    }
-		}
-	    }
-	else
-	    {
-	    lf = hel->val;
-	    }
-
-	struct snakeFeature  *sf;
-	AllocVar(sf);
-	slAddHead(&lf->components, sf);
-	
-	sf->start = cur->tStart;
-	sf->end = cur->tStart + cur->size;
-	sf->qStart = cur->qStart;
-	sf->qEnd = cur->qStart + cur->size;
-	sf->orientation = (cur->strand == '+') ? 1 : -1;
-	sf->sequence = cloneString(cur->sequence);
-
-    //  printBlock(stdout, cur);
-      cur = cur->next;
-    }
-    for(lf=lfList; lf ; lf = lf->next)
-	{
-	slSort(&lf->components, snakeFeatureCmpQStart);
-	}
-    //halFreeBlocks(head);
-    //halClose(handle, myThread);
-
-    tg->items = lfList;
-    }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    tg->networkErrMsg = cloneString(errCatch->message->string);
-    tg->drawItems = bigDrawWarning;
-    tg->totalHeight = bigWarnTotalHeight;
-    }
-errCatchFree(&errCatch);
-}
-#endif // USE_HAL
-
 
 void snakeLoadItems(struct track *tg)
 // Load chains from a mySQL database
@@ -1157,51 +1392,6 @@ lf=tg->items;
 fixItems(lf);
 }	/*	chainLoadItems()	*/
 
-static Color chainScoreColor(struct track *tg, void *item, struct hvGfx *hvg)
-{
-struct linkedFeatures *lf = (struct linkedFeatures *)item;
-
-return(tg->colorShades[lf->grayIx]);
-}
-
-static Color chainNoColor(struct track *tg, void *item, struct hvGfx *hvg)
-{
-return(tg->ixColor);
-}
-
-static void setNoColor(struct track *tg)
-{
-tg->itemColor = chainNoColor;
-tg->color.r = 0;
-tg->color.g = 0;
-tg->color.b = 0;
-tg->altColor.r = 127;
-tg->altColor.g = 127;
-tg->altColor.b = 127;
-tg->ixColor = MG_BLACK;
-tg->ixAltColor = MG_GRAY;
-}
-
-#ifdef USE_HAL
-void halSnakeMethods(struct track *tg, struct trackDb *tdb, 
-	int wordCount, char *words[])
-{
-//errAbort("halSnakeMethds\n");
-linkedFeaturesMethods(tg);
-tg->canPack = FALSE;
-tdb->canPack = FALSE;
-tg->loadItems = halSnakeLoadItems;
-tg->drawItems = snakeDraw;
-tg->mapItemName = lfMapNameFromExtra;
-tg->subType = lfSubChain;
-//tg->extraUiData = (void *) chainCart;
-tg->totalHeight = snakeHeight; 
-
-tg->drawItemAt = snakeDrawAt;
-tg->itemHeight = snakeItemHeight;
-}
-#endif
-
 void snakeMethods(struct track *tg, struct trackDb *tdb, 
 	int wordCount, char *words[])
 /* Fill in custom parts of alignment chains. */
@@ -1267,3 +1457,29 @@ tg->totalHeight = snakeHeight;
 tg->drawItemAt = snakeDrawAt;
 tg->itemHeight = snakeItemHeight;
 }
+
+static Color chainScoreColor(struct track *tg, void *item, struct hvGfx *hvg)
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+
+return(tg->colorShades[lf->grayIx]);
+}
+
+static Color chainNoColor(struct track *tg, void *item, struct hvGfx *hvg)
+{
+return(tg->ixColor);
+}
+
+static void setNoColor(struct track *tg)
+{
+tg->itemColor = chainNoColor;
+tg->color.r = 0;
+tg->color.g = 0;
+tg->color.b = 0;
+tg->altColor.r = 127;
+tg->altColor.g = 127;
+tg->altColor.b = 127;
+tg->ixColor = MG_BLACK;
+tg->ixAltColor = MG_GRAY;
+}
+#endif

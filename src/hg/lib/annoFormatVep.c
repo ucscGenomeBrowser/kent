@@ -69,7 +69,6 @@ struct annoFormatVep
     int snpNameIx;			// Index of name column from dbSNP source, or -1
     boolean needHeader;			// TRUE if we should print out the header
     boolean primaryIsVcf;		// TRUE if primary rows are VCF
-    boolean skippedFirstBase;		// 1 if VCF included 1 extra initial identical base (indel)
     boolean doHtml;			// TRUE if we should include html tags & make a <table>.
     };
 
@@ -242,13 +241,10 @@ static void afVepPrintNameAndLoc(struct annoFormatVep *self, struct annoRow *var
 /* Print variant name and position in genome. */
 {
 char **varWords = (char **)(varRow->data);
-int varStart = varRow->start + self->skippedFirstBase;
-uint start1Based = varStart + 1;
-// Whether or not we need the alleles for VCF, parse them out anyway to find out
-// if we need to bump up the start coord (self->skippedFirstBase):
 char *alleles = NULL;
 if (self->primaryIsVcf)
-    alleles = vcfGetSlashSepAllelesFromWords(varWords, self->dyScratch, &(self->skippedFirstBase));
+    alleles = vcfGetSlashSepAllelesFromWords(varWords, self->dyScratch);
+uint start1Based = varRow->start + 1;
 // Use variant name if available, otherwise construct an identifier:
 if (self->varNameIx >= 0 && !sameString(varWords[self->varNameIx], "."))
     fputs(varWords[self->varNameIx], self->f);
@@ -259,8 +255,6 @@ else
     else if (!self->primaryIsVcf)
 	errAbort("annoFormatVep: afVepSetConfig didn't specify how to get alleles");
     compressDashes(alleles);
-    if (self->skippedFirstBase)
-	start1Based++;
     fprintf(self->f, "%s_%u_%s", varRow->chrom, start1Based, alleles);
     }
 afVepNextColumn(self->f, self->doHtml);
@@ -351,8 +345,7 @@ static void afVepPrintPredictions(struct annoFormatVep *self, struct annoRow *va
 				  struct annoRow *gpvRow, struct gpFx *gpFx)
 /* Print VEP columns computed by annoGratorGpVar (or placeholders) */
 {
-int varStart = varRow->start + self->skippedFirstBase;
-boolean isInsertion = (varStart == varRow->end);
+boolean isInsertion = (varRow->start == varRow->end);
 boolean isDeletion = isEmpty(gpFx->allele);
 // variant allele used to calculate the consequence
 // For upstream/downstream variants, gpFx leaves allele empty which I think is appropriate,
@@ -386,7 +379,7 @@ if (gpFx->detailType == codingChange)
 	}
     else if (isDeletion)
 	{
-	uint altLength = varRow->end - varStart;
+	uint altLength = varRow->end - varRow->start;
 	fprintf(self->f, "%u-%u", change->cDnaPosition+1, change->cDnaPosition+altLength);
 	afVepNextColumn(self->f, self->doHtml);
 	fprintf(self->f, "%u-%u", change->cdsPosition+1, change->cdsPosition+altLength);
@@ -402,7 +395,7 @@ if (gpFx->detailType == codingChange)
     afVepNextColumn(self->f, self->doHtml);
     int variantFrame = change->cdsPosition % 3;
     strLower(change->codonOld);
-    toUpperN(change->codonOld+variantFrame, varRow->end - varStart);
+    toUpperN(change->codonOld+variantFrame, varRow->end - varRow->start);
     strLower(change->codonNew);
     int alleleLength = sameString(gpFx->allele, "") ? 0 : strlen(gpFx->allele);
     toUpperN(change->codonNew+variantFrame, alleleLength);
@@ -441,12 +434,11 @@ if (self->snpNameIx >= 0)
     struct annoRow *snpRows = gratorData[1].rowList, *row;
     if (snpRows != NULL)
 	{
-	int varStart = varRow->start + self->skippedFirstBase;
 	int count = 0;
 	for (row = snpRows;  row != NULL;  row = row->next)
 	    {
 	    char **snpWords = (char **)(row->data);
-	    if (row->start == varStart && row->end == varRow->end)
+	    if (row->start == varRow->start && row->end == varRow->end)
 		{
 		if (count > 0)
 		    fputc(',', self->f);
@@ -1018,7 +1010,6 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
 if (gpFx->soNumber == upstream_gene_variant || gpFx->soNumber == downstream_gene_variant)
     {
     afVepNewExtra(self, pGotExtra);
-    int varStart = varRow->start + self->skippedFirstBase;
     // In order to really understand the boundary conditions of Ensembl's DISTANCE function,
     // I'll have to read the code someday.  Upstream deletions on + strand still not handled
     // quite right.
@@ -1026,11 +1017,11 @@ if (gpFx->soNumber == upstream_gene_variant || gpFx->soNumber == downstream_gene
     char strand = ((char **)(gpvRow->data))[5][0];
     if (gpFx->soNumber == upstream_gene_variant && strand == '+')
 	ensemblFudge = 1;
-    int distance = gpvRow->start - varStart + ensemblFudge;
+    int distance = gpvRow->start - varRow->start + ensemblFudge;
     if (distance < 0)
 	{
 	ensemblFudge = 1;
-	distance = varStart - gpvRow->end + ensemblFudge;
+	distance = varRow->start - gpvRow->end + ensemblFudge;
 	}
     fprintf(self->f, "DISTANCE=%d", distance);
     }
@@ -1049,8 +1040,11 @@ if (includeExonNumber)
     if (exonNum >= 0)
 	{
 	afVepNewExtra(self, pGotExtra);
-	char *exonCount = ((char **)(gpvRow->data))[7];
-	fprintf(self->f, "%s=%d/%s", (deType == intron ? "INTRON" : "EXON"), exonNum+1, exonCount);
+	int exonCount = atoi(((char **)(gpvRow->data))[7]);
+	if (deType == intron)
+	    fprintf(self->f, "INTRON=%d/%d", exonNum+1, exonCount-1);
+	else
+	    fprintf(self->f, "EXON=%d/%d", exonNum+1, exonCount);
 	}
     }
 if (!*pGotExtra)

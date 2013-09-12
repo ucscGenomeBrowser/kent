@@ -241,7 +241,8 @@ return hashAdd(hash, name, NULL)->name;
 }
 
 int hashIntVal(struct hash *hash, char *name)
-/* Find size of name in hash or die trying. */
+/* Return integer value associated with name in a simple 
+ * hash of ints. */
 {
 void *val = hashMustFindVal(hash, name);
 return ptToInt(val);

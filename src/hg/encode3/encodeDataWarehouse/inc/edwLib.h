@@ -58,6 +58,15 @@ struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email)
 struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email);
 /* Return user associated with that email or NULL if not found */
 
+struct edwUser *edwUserFromId(struct sqlConnection *conn, int id);
+/* Return user associated with that id or NULL if not found */
+
+int edwUserIdFromFileId(struct sqlConnection *conn, int fId);
+/* Return user id who submit the file originally */
+
+char *edwUserNameFromFileId(struct sqlConnection *conn, int fId);
+/* Return user who submit the file originally */
+
 void edwWarnUnregisteredUser(char *email);
 /* Put up warning message about unregistered user and tell them how to register. */
 
@@ -147,8 +156,9 @@ int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn)
 void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url);
 /* Add submission job to table and wake up daemon. */
 
-int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url);
-/* Return position of our URL in submission queue */
+int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url, unsigned *retJobId);
+/* Return position of our URL in submission queue.  Optionally return id in edwSubmitJob
+ * table of job. */
 
 struct edwValidFile *edwFindElderReplicates(struct sqlConnection *conn, struct edwValidFile *vf);
 /* Find all replicates of same output and format type for experiment that are elder
@@ -191,9 +201,21 @@ struct edwScriptRegistry *edwScriptRegistryFromCgi();
 void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags);
 /* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
 
+#define edwSampleTargetSize 250000  /* We target this many samples */
+
+void edwReserveTempFile(char *path);
+/* Call mkstemp on path.  This will fill in terminal XXXXXX in path with file name
+ * and create an empty file of that name.  Generally that empty file doesn't stay empty for long. */
+
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage);
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
+
+void edwMakeFastqStatsAndSample(struct sqlConnection *conn, long long fileId);
+/* Run fastqStatsAndSubsample, and put results into edwFastqFile table. */
+
+struct edwFastqFile *edwFastqFileFromFileId(struct sqlConnection *conn, long long fileId);
+/* Get edwFastqFile with given fileId or NULL if none such */
 
 #endif /* EDWLIB_H */

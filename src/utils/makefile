@@ -58,6 +58,7 @@ UTILS_APPLIST = \
 	faToTwoBit \
 	faTrans \
 	findMotif \
+	gitTools \
 	headRest \
 	htmlCheck \
 	newProg \
@@ -116,7 +117,6 @@ UCSC_APPS = \
 	gapSplit \
 	gffPeek \
 	git-reports \
-	gitTools \
 	htmlPics \
 	jkUniq \
 	lineCount \

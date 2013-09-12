@@ -753,6 +753,29 @@ if(tg->customInt)
             font, color, vis);
 }
 
+#define BAM_DEFAULT_SHOW_DIFF_BASES_MAX_ZOOM "100"
+
+static void addBamBaseAndIndelSettings(struct trackDb *tdb)
+/* Unless already set in trackDb, add settings to enable
+ * base-level differences and indel display. */
+{
+struct hash *settings = tdb->settingsHash;
+if (!hashLookup(settings, BASE_COLOR_USE_SEQUENCE))
+    hashAdd(settings, BASE_COLOR_USE_SEQUENCE, cloneString("lfExtra"));
+if (!hashLookup(settings, BASE_COLOR_DEFAULT))
+    hashAdd(settings, BASE_COLOR_DEFAULT, cloneString(BASE_COLOR_DRAW_DIFF_BASES));
+if (!hashLookup(settings, SHOW_DIFF_BASES_ALL_SCALES))
+    hashAdd(settings, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
+if (!hashLookup(settings, INDEL_DOUBLE_INSERT))
+    hashAdd(settings, INDEL_DOUBLE_INSERT, cloneString("on"));
+if (!hashLookup(settings, INDEL_QUERY_INSERT))
+    hashAdd(settings, INDEL_QUERY_INSERT, cloneString("on"));
+if (!hashLookup(settings, INDEL_POLY_A))
+    hashAdd(settings, INDEL_POLY_A, cloneString("on"));
+if (!hashLookup(settings, "showDiffBasesMaxZoom"))
+    hashAdd(settings, "showDiffBasesMaxZoom", cloneString(BAM_DEFAULT_SHOW_DIFF_BASES_MAX_ZOOM));
+}
+
 void bamMethods(struct track *track)
 /* Methods for BAM alignment files. */
 {
@@ -778,6 +801,7 @@ if (sameString(colorMode, BAM_COLOR_MODE_TAG) && userTag != NULL)
 	cartRemoveVariableClosestToHome(cart, track->tdb, FALSE, BAM_COLOR_TAG);
 	}
     }
+addBamBaseAndIndelSettings(track->tdb);
 
 if (isPaired)
     {

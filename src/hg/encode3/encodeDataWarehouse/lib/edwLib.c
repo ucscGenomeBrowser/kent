@@ -17,8 +17,11 @@
 #include "htmshell.h"
 #include "obscure.h"
 #include "bamFile.h"
+#include "raToStruct.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
+#include "edwFastqFileFromRa.h"
+
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
 char *edwDatabase = "encodeDataWarehouse";
@@ -217,6 +220,33 @@ struct edwUser *user = edwUserLoadByQuery(conn, query);
 return user;
 }
 
+struct edwUser *edwUserFromId(struct sqlConnection *conn, int id)
+/* Return user associated with that id or NULL if not found */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwUser where id='%d'", id);
+struct edwUser *user = edwUserLoadByQuery(conn, query);
+return user;
+}
+
+int edwUserIdFromFileId(struct sqlConnection *conn, int fId)
+/* Return user id who submit the file originally */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select s.userId from edwSubmit s, edwFile f where f.submitId=s.id and f.id='%d'", fId);
+int sId = sqlQuickNum(conn, query);
+sqlSafef(query, sizeof(query), "select u.id from edwSubmit s, edwUser u where  u.id=s.id and s.id='%d'", sId);
+return sqlQuickNum(conn, query);
+}
+
+char *edwUserNameFromFileId(struct sqlConnection *conn, int fId)
+/* Return user who submit the file originally */
+{
+int uId = edwUserIdFromFileId(conn, fId);
+struct edwUser *user=edwUserFromId(conn, uId);
+return cloneString(user->email);
+}
+
 void edwWarnUnregisteredUser(char *email)
 /* Put up warning message about unregistered user and tell them how to register. */
 {
@@ -371,9 +401,12 @@ int nameSize = strlen(path);
 char *suffix = lastMatchCharExcept(path, path + nameSize, '.', '/');
 if (suffix != NULL)
     {
-    char *secondSuffix = lastMatchCharExcept(path, suffix, '.', '/');
-    if (secondSuffix != NULL)
-        suffix = secondSuffix;
+    if (sameString(suffix, ".gz") || sameString(suffix, ".bigBed"))
+	{
+	char *secondSuffix = lastMatchCharExcept(path, suffix, '.', '/');
+	if (secondSuffix != NULL)
+	    suffix = secondSuffix;
+	}
     }
 else
     suffix = path + nameSize;
@@ -702,18 +735,21 @@ safef(command, sizeof(command), "edwQaAgent %lld", fileId);
 edwAddJob(conn, command);
 }
 
-int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url)
-/* Return position of our URL in submission queue */
+int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url, unsigned *retJobId)
+/* Return position of our URL in submission queue.  Optionally return id in edwSubmitJob
+ * table of job. */
 {
 char query[256];
-sqlSafef(query, sizeof(query), "select commandLine from edwSubmitJob where startTime = 0");
+sqlSafef(query, sizeof(query), "select id,commandLine from edwSubmitJob where startTime = 0");
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 int aheadOfUs = -1;
 int pos = 0;
+unsigned jobId = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *line = row[0];
+    jobId = sqlUnsigned(row[0]);
+    char *line = row[1];
     char *edwSubmit = nextQuotedWord(&line);
     char *lineUrl = nextQuotedWord(&line);
     if (sameOk(edwSubmit, "edwSubmit") && sameOk(url, lineUrl))
@@ -724,6 +760,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     ++pos;
     }
 sqlFreeResult(&sr);
+if (retJobId != NULL)
+    *retJobId = jobId;
 return aheadOfUs;
 }
 
@@ -979,7 +1017,8 @@ while ((err = samread(sf, &one)) >= 0)
 	reverseIntRange(&start, &end, bamHeader->target_len[tid]);
 	}
     if (start < 0) start=0;
-    fprintf(f, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
+    if (f != NULL)
+	fprintf(f, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
     genomeRangeTreeAdd(grt, chrom, start, end);
     }
 if (err < 0 && err != -1)
@@ -990,20 +1029,32 @@ samclose(sf);
 *retTotalBasesInHits = totalBasesInHits;
 }
 
+void edwReserveTempFile(char *path)
+/* Call mkstemp on path.  This will fill in terminal XXXXXX in path with file name
+ * and create an empty file of that name.  Generally that empty file doesn't stay empty for long. */
+{
+int fd = mkstemp(path);
+if (fd == -1)
+     errnoAbort("Couldn't create temp file %s", path);
+mustCloseFd(&fd);
+}
+
+
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage)
-/* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
+/* Take a sample fastq and run bwa on it, and then convert that file to a bed. 
+ * bedF and all the ret parameters can be NULL. */
 {
 /* Hmm, tried doing this with Mark's pipeline code, but somehow it would be flaky the
  * second time it was run in same app.  Resorting therefore to temp files. */
 char genoFile[PATH_LEN];
 safef(genoFile, sizeof(genoFile), "%s%s/bwaData/%s.fa", 
-    edwValDataDir, vf->ucscDb, vf->ucscDb);
+    edwValDataDir, assembly->ucscDb, assembly->ucscDb);
 
 char cmd[3*PATH_LEN];
 char *saiName = cloneString(rTempName(edwTempDir(), "edwSample1", ".sai"));
-safef(cmd, sizeof(cmd), "bwa aln %s %s > %s", genoFile, fastqPath, saiName);
+safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, fastqPath, saiName);
 mustSystem(cmd);
 
 char *samName = cloneString(rTempName(edwTempDir(), "ewdSample1", ".sam"));
@@ -1029,4 +1080,43 @@ if (retSampleCoverage)
 genomeRangeTreeFree(&grt);
 remove(samName);
 }
+
+struct edwFastqFile *edwFastqFileFromFileId(struct sqlConnection *conn, long long fileId)
+/* Get edwFastqFile with given fileId or NULL if none such */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwFastqFile where fileId=%lld", fileId);
+return edwFastqFileLoadByQuery(conn, query);
+}
+
+void edwMakeFastqStatsAndSample(struct sqlConnection *conn, long long fileId)
+/* Run fastqStatsAndSubsample, and put results into edwFastqFile table. */
+{
+struct edwFastqFile *fqf = edwFastqFileFromFileId(conn, fileId);
+if (fqf == NULL)
+    {
+    char *path = edwPathForFileId(conn, fileId);
+    char statsFile[PATH_LEN], sampleFile[PATH_LEN];
+    safef(statsFile, PATH_LEN, "%sedwFastqStatsXXXXXX", edwTempDir());
+    edwReserveTempFile(statsFile);
+    char dayTempDir[PATH_LEN];
+    safef(sampleFile, PATH_LEN, "%sedwFastqSampleXXXXXX", edwTempDirForToday(dayTempDir));
+    edwReserveTempFile(sampleFile);
+    char command[3*PATH_LEN];
+    safef(command, sizeof(command), "fastqStatsAndSubsample -sampleSize=%d -smallOk %s %s %s",
+	250000, path, statsFile, sampleFile);
+    mustSystem(command);
+    safef(command, sizeof(command), "gzip %s", sampleFile);
+    mustSystem(command);
+    strcat(sampleFile, ".gz");
+    fqf = edwFastqFileOneFromRa(statsFile);
+    fqf->fileId = fileId;
+    fqf->sampleFileName = cloneString(sampleFile);
+    edwFastqFileSaveToDb(conn, fqf, "edwFastqFile", 1024);
+    remove(statsFile);
+    freez(&path);
+    }
+edwFastqFileFree(&fqf);
+}
+
 

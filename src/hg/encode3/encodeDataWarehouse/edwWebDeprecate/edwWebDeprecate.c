@@ -24,6 +24,27 @@ errAbort(
   );
 }
 
+boolean checkOwnership(struct sqlConnection *conn, int fId, char *userEmail)
+/* Return true if file to be deprecated was submitted by this user. */
+{
+char *email = edwUserNameFromFileId(conn, fId);
+if (sameString(email, userEmail))
+    return TRUE;
+else
+    return FALSE;
+}
+
+boolean okToDeprecateThisFile(struct sqlConnection *conn, int fId, char *userEmail)
+/* Return true if it is OK to deprecate this file */
+{
+if (checkOwnership(conn, fId, userEmail))
+    return TRUE;
+else if (cgiVarExists("allowBox"))
+    return TRUE;
+else
+    return FALSE;
+}
+
 void logIn()
 /* Put up name.  No password for now. */
 {
@@ -41,6 +62,9 @@ cgiMakeTextArea("fileList", fileList, 4, 60);
 printf("<BR>");
 printf("Please enter in reason for deprecating files:<BR>");
 cgiMakeTextArea("reason", reason, 4, 60);
+printf("<BR>");
+printf("Allow me to deprecate files not uploaded by me:  ");
+cgiMakeCheckBox("allowBox", FALSE);
 printf("<BR>");
 cgiMakeButton("submit", "submit");
 edwPrintLogOutButton();
@@ -72,7 +96,7 @@ void tryToDeprecate(struct sqlConnection *conn)
 /* CGI variables are set - if possible deprecate, otherwise put up error message. */
 {
 pushWarnHandler(localWarn);
-fileList = cloneString(cgiString("fileList"));
+fileList = cgiString("fileList");
 reason = cloneString(trimSpaces(cgiString("reason")));
 if (isEmpty(reason))
    {
@@ -83,7 +107,7 @@ else
    {
    /* Go through list of accessions and make sure they are all well formed and correspond to files that exist. */
    boolean ok = TRUE;
-   struct slName *accList = slNameListOfUniqueWords(fileList, FALSE);
+   struct slName *accList = slNameListOfUniqueWords(cloneString(fileList), FALSE);
    struct slName *acc;
    struct slInt *idList = NULL, *idEl;
    for (acc = accList; acc != NULL; acc = acc->next)
@@ -104,6 +128,16 @@ else
 	   warn("%s - no such accession. ", licensePlate);
 	   break;
 	   }
+	/* check to see is it ok tor deprecate this file */
+	if (!okToDeprecateThisFile(conn, id, userEmail))
+	    {
+	    ok = FALSE;
+	    warn("You can not deprecate %s which was originally uploaded by %s.\n",
+	    licensePlate, edwUserNameFromFileId(conn, id));
+	    warn("Please click the check box below to override this rule.");
+	    break;
+	    }
+
 	idEl = slIntNew(id);
 	slAddTail(&idList, idEl);
 	}

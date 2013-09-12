@@ -1,6 +1,6 @@
-/* joinedRmskTrack - A comprehensive RepeatMasker visualization track 
+/* joinedRmskTrack - A comprehensive RepeatMasker visualization track
  *                   handler. This is an extension of the original
- *                   rmskTrack.c written by UCSC.  
+ *                   rmskTrack.c written by UCSC.
  *
  *  Written by Robert Hubley 10/2012
  */
@@ -17,31 +17,35 @@
  */
 #define REPEAT_DETAIL_VIEW 100000
 
-/* The maximum size of unaligned sequence to draw before 
+/* The maximum size of unaligned sequence to draw before
  * switching to the unscaled view: ie. "----//---"
  */
 #define MAX_UNALIGNED_LEN 200
 
-/* Hash of the repeatItems ( tg->items ) for this track.  
+/* classHash is the hash of the repeatItems ( tg->items ) for this track.
  *   This is used to hold display names for the lines of
  *   the track, the line heights, and class colors.
- */
-struct hash *classHash = NULL;
-static struct repeatItem *otherRepeatItem = NULL;
-
-/* Hash of subtracks
+ *
+ * the subTracksHash is a hash of subtracks
  *   The joinedRmskTrack is designed to be used as a composite track.
- *   When jRepeatLoad is called this hash is populated with the 
- *   results of one or more table queries 
+ *   When jRepeatLoad is called this hash is populated with the
+ *   results of one or more table queries
  */
-struct hash *subTracksHash = NULL;
+struct itemSpecifics
+/* extra information to go with each track */
+    {
+    struct hash *classHash;
+    struct repeatItem *otherRepeatItem;
+    struct hash *subTracksHash;
+    };
+
 struct subTrack
     {
     /* The number of display levels used in levels[] */
     int levelCount;
     /* The rmskJoined records from table query */
     struct rmskJoined *levels[30];
-    };   
+    };
 
 // Display names
 static char *rptClassNames[] = {
@@ -55,15 +59,15 @@ static char *rptClasses[] = {
   "Satellite", "RNA", "Other", "Unknown",
 };
 
-/* Need better class to color mappings.  I took these from a 
- * online color dictionary website: 
+/* Need better class to color mappings.  I took these from a
+ * online color dictionary website:
  *
  *     http://people.csail.mit.edu/jaffer/Color/Dictionaries
- *  
+ *
  *  I used the html4 catalog and tried to the 10 most distinct
- *  colors.  
- *  
- *  NOTE: If these are changed, do not forget to update the 
+ *  colors.
+ *
+ *  NOTE: If these are changed, do not forget to update the
  *        help table in joinedRmskTrack.html
  */
 static Color jRepeatClassColors[] = {
@@ -79,12 +83,11 @@ static Color jRepeatClassColors[] = {
   0xffffff00,			// Unknown - aqua
 };
 
+static int cmpRepeatVisStart(const void *va, const void *vb)
 /* Sort repeats by display start position.  Note: We
  * account for the fact we may not start the visual
  * display at chromStart.  See MAX_UNALIGNED_LEN.
  */
-static int
-cmpRepeatVisStart(const void *va, const void *vb)
 {
   const struct rmskJoined *a = *((struct rmskJoined **) va);
   const struct rmskJoined *b = *((struct rmskJoined **) vb);
@@ -98,15 +101,19 @@ cmpRepeatVisStart(const void *va, const void *vb)
 }
 
 /* Initialize the track */
-static struct repeatItem *
-makeJRepeatItems()
-{
+static void makeJRepeatItems(struct track *tg)
   /* Initialize the subtracks hash - This will eventually contain
-   * all the repeat data for each displayed subtrack 
+   * all the repeat data for each displayed subtrack
    */
-  subTracksHash = newHash(10);
+{
+  struct itemSpecifics *extraData;
+  AllocVar(extraData);
 
-  classHash = newHash(6);
+  extraData->classHash = newHash(6);
+  extraData->otherRepeatItem = NULL;
+  extraData->subTracksHash = newHash(10);
+  tg->extraUiData = extraData;
+
   struct repeatItem *ri, *riList = NULL;
   int i;
   int numClasses = ArraySize(rptClasses);
@@ -119,30 +126,29 @@ makeJRepeatItems()
     ri->color = jRepeatClassColors[i];
     slAddHead(&riList, ri);
     // Hash now prebuilt to hold color attributes
-    hashAdd(classHash, ri->class, ri);
+    hashAdd(extraData->classHash, ri->class, ri);
     if (sameString(rptClassNames[i], "Other"))
-      otherRepeatItem = ri;
+      extraData->otherRepeatItem = ri;
   }
   slReverse(&riList);
-  return riList;
+  tg->items = riList;
 }
 
-static void
-jRepeatLoad(struct track *tg)
+static void jRepeatLoad(struct track *tg)
 /* We do the query(ies) here so we can report how deep the track(s)
- * will be when jRepeatTotalHeight() is called later on 
- */ 
+ * will be when jRepeatTotalHeight() is called later on
+ */
 {
-  tg->items = makeJRepeatItems();
+  makeJRepeatItems(tg);
+  struct itemSpecifics *extraData = tg->extraUiData;
 
-  fprintf(stderr, "Called jRepeatLoad: table = %s\n", tg->table );
   int baseWidth = winEnd - winStart;
   if ( tg->visibility == tvFull && baseWidth <= REPEAT_DETAIL_VIEW)
   {
     struct subTrack *st = NULL;
     AllocVar(st);
     if ( st )
-    { 
+    {
       st->levels[0] = NULL;
       struct rmskJoined *rm = NULL;
       char **row;
@@ -156,10 +162,7 @@ jRepeatLoad(struct track *tg)
       while ((row = sqlNextRow(sr)) != NULL)
       {
         rm = rmskJoinedLoad(row + rowOffset);
-        if (detailList)
-          slAddHead(detailList, rm);
-        else
-          detailList = rm;
+        slAddHead(&detailList, rm);
       }
       slSort(&detailList, cmpRepeatVisStart);
 
@@ -194,7 +197,7 @@ jRepeatLoad(struct track *tg)
           if (rm->blockSizes[rm->blockCount - 1] > MAX_UNALIGNED_LEN)
             rmChromEnd -=
               (rm->blockSizes[rm->blockCount - 1] - MAX_UNALIGNED_LEN);
-  
+
           if (rmChromStart > crChromEnd)
           {
             cr->next = rm;
@@ -226,26 +229,24 @@ jRepeatLoad(struct track *tg)
         } // while ( rm )
       } // while ( detailList )
       // Create Hash Entry
-      hashReplace(subTracksHash, tg->table, st);
+      hashReplace(extraData->subTracksHash, tg->table, st);
     } // if ( st )
   } // if ( tg->visibility == tvFull
 }
 
-static void
-jRepeatFree(struct track *tg)
+static void jRepeatFree(struct track *tg)
 /* Free up jRepeatMasker items. */
 {
   slFreeList(&tg->items);
 }
 
-static char *
-jRepeatName(struct track *tg, void *item)
+static char * jRepeatName(struct track *tg, void *item)
 /* Return name of jRepeat item track. */
 {
   static char empty = '\0';
   struct repeatItem *ri = item;
   /*
-   * In detail view mode the items represent different packing 
+   * In detail view mode the items represent different packing
    * levels.  No need to display a label at each level.  Instead
    * Just return a label for the first level.
    */
@@ -263,15 +264,15 @@ jRepeatName(struct track *tg, void *item)
   return ri->className;
 }
 
-int
-jRepeatTotalHeight(struct track *tg, enum trackVisibility vis)
+static int jRepeatTotalHeight(struct track *tg, enum trackVisibility vis)
 {
+  struct itemSpecifics *extraData = tg->extraUiData;
   // Are we in full view mode and at the scale needed to display
   // the detail view?
   if (tg->limitedVis == tvFull && winBaseCount <= REPEAT_DETAIL_VIEW)
      {
         // Lookup the depth of this subTrack and report it
-        struct subTrack *st = hashFindVal(subTracksHash, tg->table );
+        struct subTrack *st = hashFindVal(extraData->subTracksHash, tg->table );
         if ( st )
           return ( (st->levelCount+1) * 24 );
         else
@@ -282,8 +283,7 @@ jRepeatTotalHeight(struct track *tg, enum trackVisibility vis)
     return tgFixedTotalHeightNoOverflow(tg, vis);
 }
 
-int
-jRepeatItemHeight(struct track *tg, void *item)
+static int jRepeatItemHeight(struct track *tg, void *item)
 {
   // Are we in full view mode and at the scale needed to display
   // the detail view?
@@ -293,10 +293,9 @@ jRepeatItemHeight(struct track *tg, void *item)
     return tgFixedItemHeight(tg, item);
 }
 
-static void
-drawDashedHorizLine(struct hvGfx *hvg, int x1, int x2,
+static void drawDashedHorizLine(struct hvGfx *hvg, int x1, int x2,
 		    int y, int dashLen, int gapLen, Color lineColor)
-// ie.    - - - - - - - - - - - - - - - - 
+// ie.    - - - - - - - - - - - - - - - -
 {
   int cx1 = x1;
   int cx2;
@@ -312,10 +311,9 @@ drawDashedHorizLine(struct hvGfx *hvg, int x1, int x2,
   }
 }
 
-static void
-drawShortDashedHorizLine(struct hvGfx *hvg, int x1, int x2,
+static void drawShortDashedHorizLine(struct hvGfx *hvg, int x1, int x2,
 			 int y, int dashLen, int gapLen, Color lineColor)
-// ie.    - - - - - - -\\- - - - - - - - - 
+// ie.    - - - - - - -\\- - - - - - - - -
 {
   int cx1 = x1;
   int cx2;
@@ -357,8 +355,7 @@ drawShortDashedHorizLine(struct hvGfx *hvg, int x1, int x2,
   }
 }
 
-static void
-drawNormalBox(struct hvGfx *hvg, int x1, int y1,
+static void drawNormalBox(struct hvGfx *hvg, int x1, int y1,
 	      int width, int height, Color fillColor, Color outlineColor)
 {
   struct gfxPoly *poly = gfxPolyNew();
@@ -367,8 +364,8 @@ drawNormalBox(struct hvGfx *hvg, int x1, int y1,
   /*
    *     1,5--------------2
    *       |              |
-   *       |              | 
-   *       |              | 
+   *       |              |
+   *       |              |
    *       4--------------3
    */
   gfxPolyAddPoint(poly, x1, y1);
@@ -381,8 +378,7 @@ drawNormalBox(struct hvGfx *hvg, int x1, int y1,
   gfxPolyFree(&poly);
 }
 
-static void
-drawTailBox(struct hvGfx *hvg, int x1, int y1,
+static void drawTailBox(struct hvGfx *hvg, int x1, int y1,
 	    int width, int height,
 	    Color fillColor, Color outlineColor, char strand)
 {
@@ -395,9 +391,9 @@ drawTailBox(struct hvGfx *hvg, int x1, int y1,
 
     /*
      *      1,6-------------2
-     *        |            / 
-     *        |           3   
-     *        |            \   
+     *        |            /
+     *        |           3
+     *        |            \
      *        5-------------4
      */
     gfxPolyAddPoint(poly, x1, y1);
@@ -412,8 +408,8 @@ drawTailBox(struct hvGfx *hvg, int x1, int y1,
     /*
      *     1,6--------------2
      *       \              |
-     *        5             | 
-     *       /              | 
+     *        5             |
+     *       /              |
      *      4---------------3
      */
     gfxPolyAddPoint(poly, x1, y1);
@@ -428,8 +424,7 @@ drawTailBox(struct hvGfx *hvg, int x1, int y1,
   gfxPolyFree(&poly);
 }
 
-static void
-drawPointBox(struct hvGfx *hvg, int x1, int y1,
+static void drawPointBox(struct hvGfx *hvg, int x1, int y1,
 	     int width, int height,
 	     Color fillColor, Color outlineColor, char strand)
 {
@@ -442,9 +437,9 @@ drawPointBox(struct hvGfx *hvg, int x1, int y1,
 
     /*
      *      1,6-------------2
-     *       /              | 
-     *      5               |   
-     *       \              |   
+     *       /              |
+     *      5               |
+     *       \              |
      *        4-------------3
      */
     gfxPolyAddPoint(poly, x1 + half, y1);
@@ -475,8 +470,7 @@ drawPointBox(struct hvGfx *hvg, int x1, int y1,
   gfxPolyFree(&poly);
 }
 
-static void
-drawDirBox(struct hvGfx *hvg, int x1, int y1, int width, int height,
+static void drawDirBox(struct hvGfx *hvg, int x1, int y1, int width, int height,
 	   Color fillColor, Color outlineColor, char strand)
 {
   struct gfxPoly *poly = gfxPolyNew();
@@ -488,9 +482,9 @@ drawDirBox(struct hvGfx *hvg, int x1, int y1, int width, int height,
 
     /*
      *      1,7-------------2
-     *       /             / 
-     *      6             3   
-     *       \             \   
+     *       /             /
+     *      6             3
+     *       \             \
      *        5-------------4
      */
     gfxPolyAddPoint(poly, x1 + half, y1);
@@ -524,15 +518,15 @@ drawDirBox(struct hvGfx *hvg, int x1, int y1, int width, int height,
 }
 
 /*
- *  Draw a detailed RepeatMasker annotation glyph given 
- *  a single rmskJoined structure.  
+ *  Draw a detailed RepeatMasker annotation glyph given
+ *  a single rmskJoined structure.
  *
  *  A couple of caveats about the use of the rmskJoined
- *  structure to hold a RepeatMasker annotation.  
+ *  structure to hold a RepeatMasker annotation.
  *
  *  chromStart/chromEnd:  These represent genomic coordinates
  *                        that mark the extents of graphics
- *                        annotation on the genome.  I.e 
+ *                        annotation on the genome.  I.e
  *                        aligned blocks + unaligned consensus
  *                        blocks.  The code below may not
  *                        draw to these extents in some cases.
@@ -544,9 +538,9 @@ drawDirBox(struct hvGfx *hvg, int x1, int y1, int width, int height,
  *  blockRelStarts:  Two types of blocks are interwoven in this
  *                format.  Aligned and unaligned blocks.  Aligned
  *                blocks will have a value >= 0 representing the
- *                relative position from chromStart for this 
+ *                relative position from chromStart for this
  *                start of this block.  A value of -1 for chromStart
- *                is indicative of unaligned block and starts from 
+ *                is indicative of unaligned block and starts from
  *                the end of the last aligned block on the chromosome
  *                or from chromStart if it's the first block in the list.
  *
@@ -562,7 +556,7 @@ drawDirBox(struct hvGfx *hvg, int x1, int y1, int width, int height,
  *  blockSizes:   As you would expect.
  *
  *  Here is an example:
- *                ie. 
+ *                ie.
  *                A forward strand RM annotation from chr1:186-196
  *                which is aligned to a 100 bp repeat from 75-84
  *                in the consensus would be represented as:
@@ -573,9 +567,9 @@ drawDirBox(struct hvGfx *hvg, int x1, int y1, int width, int height,
  *                blockSizes: 75, 10, 16
  *
  */
-static void
-drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
-	    int width, int baseWidth, int xOff, struct rmskJoined *rm)
+static void drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
+   int width, int baseWidth, int xOff, struct rmskJoined *rm,
+      struct itemSpecifics *extraData)
 {
   int idx;
   int lx1, lx2;
@@ -583,7 +577,7 @@ drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
   int w;
   struct repeatItem *ri;
   /*
-   * heightPer is the God given height of a single 
+   * heightPer is the God given height of a single
    * track item...respect your overlord.
    */
   int alignedBlockHeight = heightPer * 0.5;
@@ -595,10 +589,10 @@ drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
   Color fillColor = shadesOfGray[5];
   Color outlineColor = jRepeatClassColors[0];
 
-  // Break apart the name and get the class of the 
+  // Break apart the name and get the class of the
   // repeat.
   char class[256];
-  // Simplify repClass for lookup: strip trailing '?', 
+  // Simplify repClass for lookup: strip trailing '?',
   // simplify *RNA to RNA:
   char *poundPtr = index(rm->name, '#');
   if (poundPtr)
@@ -619,9 +613,9 @@ drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
     safecpy(class, sizeof(class), "RNA");
 
   // Lookup the class to get the color scheme
-  ri = hashFindVal(classHash, class);
+  ri = hashFindVal(extraData->classHash, class);
   if (ri == NULL)
-    ri = otherRepeatItem;
+    ri = extraData->otherRepeatItem;
 
   // Pick the fill color based on the divergence
   int percId = 10000 - rm->score;
@@ -710,7 +704,7 @@ drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
     }
     else
     {
-      // Unaligned Block 
+      // Unaligned Block
       int relStart = 0;
       if (idx == 0)
       {
@@ -755,7 +749,7 @@ drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
 	   * Draw as:
 	   *       -------------|   or        ------//------|
 	   *       |                          |
-	   *  >>>>>                    >>>>>>>     
+	   *  >>>>>                    >>>>>>>
 	 */
 	lx1 = roundingScale(rm->chromStart + rm->blockRelStarts[idx - 1] +
 			    rm->blockSizes[idx - 1] - winStart, width,
@@ -923,13 +917,13 @@ drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
 }
 
 /* This is the original repeat drawing routine, modified
- * to handle the new rmskJoined table structure.  
+ * to handle the new rmskJoined table structure.
  */
-static void
-origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
+static void origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
 	       struct hvGfx *hvg, int xOff, int yOff, int width,
 	       MgFont * font, Color color, enum trackVisibility vis)
 {
+  struct itemSpecifics *extraData = tg->extraUiData;
   int baseWidth = seqEnd - seqStart;
   struct repeatItem *ri;
   int y = yOff;
@@ -946,7 +940,7 @@ origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
   if (isFull)
   {
     /*
-       Do gray scale representation spread out among tracks. 
+       Do gray scale representation spread out among tracks.
      */
     struct hash *hash = newHash(6);
     struct rmskJoined *ro;
@@ -965,7 +959,7 @@ origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
     {
       ro = rmskJoinedLoad(row + rowOffset);
       char class[256];
-      // Simplify repClass for lookup: strip trailing '?', 
+      // Simplify repClass for lookup: strip trailing '?',
       // simplify *RNA to RNA:
       char *poundPtr = index(ro->name, '#');
       if (poundPtr)
@@ -986,7 +980,7 @@ origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
 	safecpy(class, sizeof(class), "RNA");
       ri = hashFindVal(hash, class);
       if (ri == NULL)
-	ri = otherRepeatItem;
+	ri = extraData->otherRepeatItem;
       percId = 10000 - ro->score;
       grayLevel = grayInRange(percId, 6000, 10000);
       col = shadesOfGray[grayLevel];
@@ -1019,8 +1013,8 @@ origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
     boolean hasBin;
     struct dyString *query = newDyString(1024);
     /*
-     * Do black and white on single track.  Fetch less than 
-     * we need from database. 
+     * Do black and white on single track.  Fetch less than
+     * we need from database.
      */
     if (hFindSplitTable(database, chromName, tg->table, table, &hasBin))
     {
@@ -1033,7 +1027,7 @@ origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
       dyStringPrintf(query, "chromStart<%u and chromEnd>%u ", winEnd,
 		     winStart);
       /*
-       * if we're using a single rmsk table, add chrom to the where clause 
+       * if we're using a single rmsk table, add chrom to the where clause
        */
       if (startsWith("rmskJoined", table))
 	dyStringPrintf(query, " and chrom = '%s' ", chromName);
@@ -1079,11 +1073,11 @@ origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
 /* Main callback for displaying this track in the viewport
  * of the browser.
  */
-static void
-jRepeatDraw(struct track *tg, int seqStart, int seqEnd,
+static void jRepeatDraw(struct track *tg, int seqStart, int seqEnd,
 	    struct hvGfx *hvg, int xOff, int yOff, int width,
 	    MgFont * font, Color color, enum trackVisibility vis)
 {
+  struct itemSpecifics *extraData = tg->extraUiData;
   int baseWidth = seqEnd - seqStart;
   /*
    * Its unclear to me why heightPer is not updated to the
@@ -1102,7 +1096,7 @@ jRepeatDraw(struct track *tg, int seqStart, int seqEnd,
   {
     int level = yOff;
 
-    struct subTrack *st = hashFindVal(subTracksHash, tg->table );
+    struct subTrack *st = hashFindVal(extraData->subTracksHash, tg->table );
     if ( ! st )
       return;
     int lidx = st->levelCount;
@@ -1112,12 +1106,12 @@ jRepeatDraw(struct track *tg, int seqStart, int seqEnd,
       rm = st->levels[currLevel];
       while (rm)
       {
-	drawRMGlyph(hvg, level, heightPer, width, baseWidth, xOff, rm);
+	drawRMGlyph(hvg, level, heightPer, width, baseWidth, xOff, rm, extraData);
 
 	char statusLine[128];
 	int ss1 = roundingScale(rm->alignStart - winStart,
 				width, baseWidth) + xOff;
-        
+
 	safef(statusLine, sizeof(statusLine), "name: %s", rm->name );
 
 	int x1 =
@@ -1145,18 +1139,17 @@ jRepeatDraw(struct track *tg, int seqStart, int seqEnd,
   }
 }
 
-void
-jRepeatMethods(struct track *tg)
+void jRepeatMethods(struct track *tg)
 {
-  tg->loadItems = jRepeatLoad;
-  tg->freeItems = jRepeatFree;
-  tg->drawItems = jRepeatDraw;
-  tg->colorShades = shadesOfGray;
-  tg->itemName = jRepeatName;
-  tg->mapItemName = jRepeatName;
-  tg->totalHeight = jRepeatTotalHeight;
-  tg->itemHeight = jRepeatItemHeight;
-  tg->itemStart = tgItemNoStart;
-  tg->itemEnd = tgItemNoEnd;
-  tg->mapsSelf = TRUE;
+    tg->loadItems = jRepeatLoad;
+    tg->freeItems = jRepeatFree;
+    tg->drawItems = jRepeatDraw;
+    tg->colorShades = shadesOfGray;
+    tg->itemName = jRepeatName;
+    tg->mapItemName = jRepeatName;
+    tg->totalHeight = jRepeatTotalHeight;
+    tg->itemHeight = jRepeatItemHeight;
+    tg->itemStart = tgItemNoStart;
+    tg->itemEnd = tgItemNoEnd;
+    tg->mapsSelf = TRUE;
 }

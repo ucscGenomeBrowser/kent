@@ -1,38 +1,25 @@
-setenv BRANCHNN 286
-setenv TODAY 2013-07-09             # v286 final
-setenv LASTWEEK 2013-06-18          # v285 final 
-setenv REVIEWDAY 2013-07-16         # v287 preview
-setenv LASTREVIEWDAY 2013-06-24     # v286 previeww
-setenv REVIEW2DAY 2013-07-23        # v286 preview2
-setenv LASTREVIEW2DAY 2013-07-02    # v287 preview2
+# set these three for final build:
+setenv BRANCHNN 289
+setenv TODAY 2013-09-09             # v289 final
+setenv LASTWEEK  2013-08-19         # v288 final
+# set for preview 1:
+setenv REVIEWDAY 2013-08-26         # v289 preview
+setenv LASTREVIEWDAY 2013-08-07     # v288 preview
+# set for preview 2:
+setenv REVIEW2DAY 2013-09-02        # v288 preview2
+setenv LASTREVIEW2DAY 2013-08-13    # v288 preview2
 
-
-
-setenv BUILDHOME /cluster/bin/build
-setenv WEEKLYBLD ${BUILDHOME}/build-kent/src/utils/qa/weeklybld
-setenv BOX32 titan
+setenv BUILDHOME /hive/groups/browser/newBuild
+setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
 setenv REPLYTO ann@soe.ucsc.edu
 
 setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
-setenv CVSROOT /projects/compbio/cvsroot
-setenv CVS_RSH ssh
 
-setenv MYSQLINC /usr/include/mysql
-if ( "$MACHTYPE" == "x86_64" ) then
-    setenv MYSQLLIBS '/usr/lib64/mysql/libmysqlclient.a -lz'
-else  
-    setenv MYSQLLIBS '/usr/lib/mysql/libmysqlclient.a -lz'  
-endif
-
-if ( "$HOST" == "hgwbeta" ) then
-    setenv BUILDDIR /data/releaseBuild
-endif
-if ( "$HOST" == "hgwdev" ) then
-    # see also paths in kent/java/build.xml
-    setenv JAVABUILD /scratch/javaBuild
-    setenv JAVA_HOME /usr/java/default
-    setenv CLASSPATH .:/usr/share/java:/usr/java/default/jre/lib/rt.jar:/usr/java/default/jre/lib:/usr/share/java/httpunit.jar:/cluster/bin/java/jtidy.jar:/usr/share/java/rhino.jar:/cluster/bin/java/mysql-connector-java-3.0.16-ga-bin.jar
-    # java and ant wont run on hgwdev now without setting max memory
-    setenv _JAVA_OPTIONS "-Xmx1024m"
-endif
+# see also paths in kent/java/build.xml
+setenv BUILDDIR $BUILDHOME
+setenv JAVABUILD /scratch/javaBuild
+setenv JAVA_HOME /usr/java/default
+setenv CLASSPATH .:/usr/share/java:/usr/java/default/jre/lib/rt.jar:/usr/java/default/jre/lib:/usr/share/java/httpunit.jar:/cluster/bin/java/jtidy.jar:/usr/share/java/rhino.jar:/cluster/bin/java/mysql-connector-java-3.0.16-ga-bin.jar
+# java and ant wont run on hgwdev now without setting max memory
+setenv _JAVA_OPTIONS "-Xmx1024m"
 

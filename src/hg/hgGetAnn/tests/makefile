@@ -19,8 +19,8 @@ chrRangeTests: chrRangeGenePred chrRangePsl chrRangePslSplit chrRangePslKeepBin 
 
 # range genePred
 chrRangeGenePred: mkdirs
-	${hgGetAnn} ${DB} refGene ${CHR_RANGE} output/$@.gp
-	diff expected/$@.gp output/$@.gp
+	${hgGetAnn} ${DB} refGene ${CHR_RANGE} stdout | sort > output/$@.gp
+	sort expected/$@.gp | diff - output/$@.gp
 
 # range psl single
 chrRangePsl: mkdirs
@@ -39,13 +39,13 @@ chrRangePslKeepBin: mkdirs
 
 # range genePred with headers
 chrRangeGenePredColHeaders: mkdirs
-	${hgGetAnn} -colHeaders ${DB} refGene ${CHR_RANGE} output/$@.gp
-	diff expected/$@.gp output/$@.gp
+	${hgGetAnn} -colHeaders ${DB} refGene ${CHR_RANGE} stdout | sort > output/$@.gp
+	sort expected/$@.gp | diff - output/$@.gp
 
 # range genePred with tsv headers
 chrRangeGenePredTsvHeaders: mkdirs
-	${hgGetAnn} -tsvHeaders ${DB} refGene ${CHR_RANGE} output/$@.gp
-	diff expected/$@.gp output/$@.gp
+	${hgGetAnn} -tsvHeaders ${DB} refGene ${CHR_RANGE} stdout | sort > output/$@.gp
+	sort expected/$@.gp | diff - output/$@.gp
 
 ###
 # acc, name and textual queries

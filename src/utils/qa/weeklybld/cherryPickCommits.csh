@@ -1,10 +1,5 @@
 #!/bin/tcsh
 
-if ( "$HOST" != "hgwbeta" ) then
- echo "error: you must run this script on beta!"
- exit 1
-endif
-
 cd $WEEKLYBLD
 
 set table=CherryPickCommits.conf

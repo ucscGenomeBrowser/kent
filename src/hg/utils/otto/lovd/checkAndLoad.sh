@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 #	Do not modify this script, modify the source tree copy:
-#	src/utils/lovd/check.sh
+#	src/utils/otto/lovd/check.sh
 #	This script is used via a cron job 
 
 umask 002

@@ -1425,6 +1425,50 @@ exonArrows on
 type bed 6 .
 
 
+track snp138Common
+shortLabel Common SNPs(138)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Found in >= 1% of Samples
+group varRep
+priority 99.0891
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp138Seq
+snpExceptionDesc snp138ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+codingAnnotations snp138CodingDbSnp,
+
+track snp138Mult
+shortLabel Mult. SNPs(138)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 138) That Map to Multiple Genomic Loci
+group varRep
+priority 99.0893
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp138Seq
+snpExceptionDesc snp138ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+codingAnnotations snp138CodingDbSnp,
+
+track snp138
+shortLabel All SNPs(138)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 138)
+group varRep
+priority 99.0894
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+codingAnnotations snp138CodingDbSnp,
+
 track snp137Common
 shortLabel Common SNPs(137)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Found in >= 1% of Samples
@@ -3326,3 +3370,18 @@ priority .1
 visibility dense
 type bed 4 +
 
+track ucscToINSDC
+shortLabel INSDC
+longLabel Accession at INSDC - International Nucleotide Sequence Database Collaboration
+group map
+priority 10.1
+visibility hide
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel INSDC link:
+type bed 4
+
+searchTable ucscToINSDC
+shortCircuit 1
+termRegex ^[A-Za-z0-9_]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,name from %s where name like '%s%%'
+searchPriority 10

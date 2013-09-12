@@ -5,12 +5,6 @@
 cd $WEEKLYBLD
 
 set MAKEPARAMS=""
-if ( "$MACHTYPE" == "x86_64" ) then
-    if ( "$HOST" != "hgwbeta" ) then
-	echo "error: you must run this script on hgwbeta! [${0}: `date`]"
-	exit 1
-    endif
-endif
 
 set branch=v${BRANCHNN}_branch
 

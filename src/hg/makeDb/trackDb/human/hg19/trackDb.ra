@@ -116,8 +116,8 @@ xrefQuery select ucscRetroInfo4.name, geneSymbol from %s where geneSymbol like '
 searchPriority 3.53
 
 track ucscRetroAli5
-shortLabel Retroposed Genes 5.0
-longLabel Retroposed Genes V5, Including Pseudogenes - Feb. 2013
+shortLabel Retroposed Genes
+longLabel Retroposed Genes V5, Including Pseudogenes
 group genes
 type psl
 priority 37.14
@@ -133,11 +133,11 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
-dataVersion Feb. 2013
+dataVersion Mar. 2013
 
 searchName ucscRetroInfoRefSeq5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes - 
+searchDescription Retroposed Genes V5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 xrefTable refLink, ucscRetroInfo5
 dontCheckXrefQueryFormat 1
@@ -146,13 +146,13 @@ searchPriority 3.52
 
 searchName ucscRetroInfoMrna5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes - 
+searchDescription Retroposed Genes V5, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 searchPriority 3.55
 
 searchName ucscRetroUniProt5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes - 
+searchDescription Retroposed Genes V5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo5
@@ -161,7 +161,7 @@ searchPriority 3.54
 
 searchName ucscRetroKnownGene5
 searchTable ucscRetroAli5
-searchDescription Retroposed GenesV5, Including Pseudogenes - 
+searchDescription Retroposed Genes V5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo5
@@ -708,6 +708,52 @@ priority 103.29
 track snp137Common override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
 chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+
+track snp138Flagged
+shortLabel Flagged SNPs(138)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Flagged by dbSNP as Clinically Assoc
+group varRep
+priority 99.0902
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp138Seq
+snpExceptionDesc snp138ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+snpSeqFile /gbdb/hg19/snp/snp138.fa
+chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp138CodingDbSnp,
+# Need to request new tag
+#codingAnnoLabel_snp138CodingDbSnp dbSNP
+
+track snp138Mult override
+snpSeqFile /gbdb/hg19/snp/snp138.fa
+chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+
+track snp138 override
+snpSeqFile /gbdb/hg19/snp/snp138.fa
+chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+
+track snp138Common override
+snpSeqFile /gbdb/hg19/snp/snp138.fa
+chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
 chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
@@ -1847,126 +1893,6 @@ spectrum on
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
-
-track snakeMm9
-release alpha
-table chainMm9
-shortLabel snakeMm9
-longLabel snakeMm9
-group x
-priority 165
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type snake mm9
-otherDb mm9
-
-track snakePanTro3
-release alpha
-table chainPanTro3
-shortLabel snakePanTro3
-longLabel snakePanTro3
-group x
-priority 165
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type snake panTro3
-otherDb panTro3
-
-track snakeRheMac2
-release alpha
-table chainRheMac2
-shortLabel snakeRheMac2
-longLabel snakeRheMac2
-group x
-priority 165
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type snake rheMac2
-otherDb rheMac2
-
-track snake_apd
-table chain_apd_hap1
-release alpha
-shortLabel snake_apd
-longLabel snake_apd
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_cox
-table chain_cox_hap2
-release alpha
-shortLabel snake_cox
-longLabel snake_cox
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_dbb
-table chain_dbb_hap3
-release alpha
-shortLabel snake_dbb
-longLabel snake_dbb
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_mann
-table chain_mann_hap4
-release alpha
-shortLabel snake_mann
-longLabel snake_mann
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_mcf
-table chain_mcf_hap5
-release alpha
-shortLabel snake_mcf
-longLabel snake_mcf
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_qbl
-table chain_qbl_hap6
-release alpha
-shortLabel snake_qbl
-longLabel snake_qbl
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
-track snake_ssto
-table chain_ssto_hap7
-release alpha
-shortLabel snake_ssto
-longLabel snake_ssto
-group x
-priority 160
-visibility hide
-type snake hg19
-otherDb hg19
-
 track bamWigTest
 table wgEncodeYaleRnaSeqGm12878PolyaAln
 release alpha
@@ -2014,6 +1940,30 @@ type wigMaf 0.0 1.0
 speciesCodonDefault hg19
 #speciesOrder ornAna1 galGal3 taeGut1 anoCar2 pytMol0 chrPic0 pelSin0 cheMyd0 allMis0
 speciesOrder mm9 bosTau4 monDom5 anoCar1 galGal3 xenTro2 danRer6 fr2 gasAcu1 oryLat2 calMil0
+priority 100
+
+track multizMarine
+#subTrack consDinoViewalign on
+shortLabel Marine Align
+longLabel Marine Alignments
+#subGroups view=align clade=vert
+noInherit on
+irows on
+summary multizMarineSummary
+frames multiz46wayFrames
+group x
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+speciesCodonDefault hg19
+#speciesGroups Primate Placental_Mammal Vertebrate
+#sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 papHam1 calJac1 tarSyr1 micMur1 otoGar1
+#sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr3 proCap1 echTel1 dasNov2 choHof1 
+#sGroup_Vertebrate macEug1 monDom5 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig2 fr2 gasAcu1 oryLat2 danRer6 petMar1 
+#speciesDefaultOff panTro2 gorGor1 ponAbe2 papHam1 calJac1 tarSyr1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 macEug1 ornAna1 taeGut1 anoCar1 proCap1 tetNig2 fr2 gasAcu1 oryLat2 petMar1
+speciesOrder rheMac3 papAnu2 calJac3 mm10 rn5 vicPac2 turTru2 orcOrc1 bosTau7 canFam3 odoRosDiv1 loxAfr3 triMan1 monDom5
+#itemFirstCharCase noChange
+#treeImage phylo/hg19_Dino.gif
 priority 100
 
 track multizDino
@@ -2101,6 +2051,18 @@ color 0,0,0
 altColor 90,90,90
 exonArrows off
 
+track mapViewGenes
+shortLabel MapView Genes
+longLabel refSeq genes from map view
+group genes
+priority 34.1
+visibility hide
+color 82,82,160
+type genePred
+hgsid on
+baseColorUseCds given
+baseColorDefault genomicCodons
+
 track knownGeneOld6
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
@@ -2142,3 +2104,4 @@ track qPcrPrimers override
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
+include trackDb.100way.ra

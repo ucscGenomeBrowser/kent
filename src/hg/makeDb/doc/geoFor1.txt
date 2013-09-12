@@ -2721,3 +2721,22 @@ wait
     ln -s `pwd`/md5sum.txt $pd/
 
 #############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/geoFor1/bed/ucscToINSDC
+    cd /hive/data/genomes/geoFor1/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/8/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+      | hgLoadSqlTab geoFor1 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords geoFor1 ucscToINSDC
+    featureBits -countGaps geoFor1 ucscToINSDC
+    # 1065292181 bases of 1065292181 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

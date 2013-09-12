@@ -562,7 +562,7 @@ if ((count > 500) || (count == 0))
 /* Write some javascript functions */
 jsWriteFunctions();
 saveOnChangeOtherFunction(graphRows, graphCols, cgaOnly);
-char *jsOther = onChangeOther(graphRows, graphCols);
+char *jsOther = onChangeOther();
 
 /* Print clade, genome and assembly line. */
 hPrintf("<TABLE>");

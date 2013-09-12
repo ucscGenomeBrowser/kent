@@ -21,7 +21,6 @@
 #include "googleAnalytics.h"
 #include "jsHelper.h"
 #endif /* GBROWSE */
-#include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browser
 /* phoneHome business */
 #include <utime.h>
 #include <htmlPage.h>
@@ -187,10 +186,7 @@ if (withHtmlHeader)
     *ptr1 = 0;
     htmlTextOut(newString);
     printf("	</TITLE>\n    ");
-    if (endsWith(scriptName, "qaPushQ")) // Tired of failed stylesheet versioning that messes up RR releaseLog.html (regular and ENCODE)
-        printf("    <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />\n");
-    else
-        webIncludeResourceFile("HGStyle.css");
+    webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
         puts(extraStyle);
     printf("</HEAD>\n");
@@ -1235,7 +1231,16 @@ if (!fileExists(dyStringContents(realFileName)))
 // build and verify link path including timestamp in the form of dir/baseName + timeStamp or CGI Version + ext
 long mtime = fileModTime(dyStringContents(realFileName));
 struct dyString *linkWithTimestamp;
-if(hIsPreviewHost() || hIsPrivateHost())
+
+char *scriptName = cgiScriptName();
+if (scriptName == NULL)
+    scriptName = cloneString("");
+boolean nonVersionedLinks = FALSE;
+if (endsWith(scriptName, "qaPushQ"))
+    nonVersionedLinks = TRUE;
+if (nonVersionedLinks)
+    linkWithTimestamp = dyStringCreate("%s/%s%s", dyStringContents(fullDirName), baseName, extension);
+else if ((cfgOption("versionStamped") == NULL) &&  (hIsPreviewHost() || hIsPrivateHost()))
     linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
 else
     linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);
@@ -1335,7 +1340,10 @@ struct stat statBuf;
 regex_t re;
 regmatch_t match[2];
 char *scriptName = cgiScriptName();
-safef(uiVars, sizeof(uiVars), "%s=%u", cartSessionVarName(), cartSessionId(cart));
+if (cart)
+    safef(uiVars, sizeof(uiVars), "%s=%u", cartSessionVarName(), cartSessionId(cart));
+else
+    uiVars[0] = 0;
 
 if(docRoot == NULL)
     // tolerate missing docRoot (i.e. don't bother with menu when running from command line)
@@ -1355,25 +1363,28 @@ mustRead(fd, menuStr, statBuf.st_size);
 menuStr[len] = 0;
 carefulClose(&fd);
 
-// fixup internal CGIs to have hgsid
-safef(buf, sizeof(buf), "/cgi-bin/hg[A-Za-z]+(%c%c?)", '\\', '?');
-err = regcomp(&re, buf, REG_EXTENDED);
-if(err)
-    errAbort("regcomp failed; err: %d", err);
-struct dyString *dy = newDyString(0);
-for(offset = 0; offset < len && !regexec(&re, menuStr + offset, ArraySize(match), match, 0); offset += match[0].rm_eo)
+if (cart)
     {
-    dyStringAppendN(dy, menuStr + offset, match[0].rm_eo);
-    if(match[1].rm_so == match[1].rm_eo)
-        dyStringAppend(dy, "?");
-    dyStringAppend(dy, uiVars);
-    if(match[1].rm_so != match[1].rm_eo)
-        dyStringAppend(dy, "&");
+    // fixup internal CGIs to have hgsid
+    safef(buf, sizeof(buf), "/cgi-bin/hg[A-Za-z]+(%c%c?)", '\\', '?');
+    err = regcomp(&re, buf, REG_EXTENDED);
+    if(err)
+	errAbort("regcomp failed; err: %d", err);
+    struct dyString *dy = newDyString(0);
+    for(offset = 0; offset < len && !regexec(&re, menuStr + offset, ArraySize(match), match, 0); offset += match[0].rm_eo)
+	{
+	dyStringAppendN(dy, menuStr + offset, match[0].rm_eo);
+	if(match[1].rm_so == match[1].rm_eo)
+	    dyStringAppend(dy, "?");
+	dyStringAppend(dy, uiVars);
+	if(match[1].rm_so != match[1].rm_eo)
+	    dyStringAppend(dy, "&");
+	}
+    if(offset < len)
+	dyStringAppend(dy, menuStr + offset);
+    freez(&menuStr);
+    menuStr = dyStringCannibalize(&dy);
     }
-if(offset < len)
-    dyStringAppend(dy, menuStr + offset);
-freez(&menuStr);
-menuStr = dyStringCannibalize(&dy);
 if(!loginSystemEnabled())
     stripRegEx(menuStr, "<\\!-- LOGIN_START -->.*<\\!-- LOGIN_END -->", REG_ICASE);
 

@@ -189,10 +189,11 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	ucscDbVal[len] = 0;
 
 	/* Do a little check on it */
-	if (!sameString("mm9", ucscDbVal) && !sameString("hg19", ucscDbVal))
+	if (!sameString("mm9", ucscDbVal) && !sameString("mm10", ucscDbVal)
+	    && !sameString("hg19", ucscDbVal))
 	    errAbort("Unrecognized ucsc_db %s - please arrange files so that the top " 
 	             "level directory in the fileName in the manifest is a UCSC database name "
-		     "like 'hg19' or 'mm9.'  Alternatively please include a ucsc_db column.",
+		     "like 'hg19' or 'mm10.'  Alternatively please include a ucsc_db column.",
 		     ucscDbVal);
 
 	/* Add it to tags. */
@@ -290,7 +291,33 @@ safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", edwTempDir());
 int localFd = mustMkstemp(tempFileName);
 cpFile(remoteFd, localFd);
 mustCloseFd(&localFd);
+}
 
+boolean edwSubmitShouldStop(struct sqlConnection *conn, unsigned submitId)
+/* Return TRUE if there's an error message on submit, indicating we should stop. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select errorMessage from edwSubmit where id=%u", submitId);
+char *errorMessage = sqlQuickString(conn, query);
+boolean ret = isNotEmpty(errorMessage);
+freez(&errorMessage);
+return ret;
+}
+
+struct paraFetchInterruptContext
+/* Data needed for interrupt checker. */
+    {
+    struct sqlConnection *conn;
+    unsigned submitId;
+    boolean isInterrupted;
+    };
+
+static boolean paraFetchInterruptFunction(void *v)
+/* Return TRUE if we need to interrupt. */
+{
+struct paraFetchInterruptContext *context = v;
+context->isInterrupted = edwSubmitShouldStop(context->conn, context->submitId);
+return context->isInterrupted;
 }
 
 int edwFileFetch(struct sqlConnection *conn, struct edwFile *ef, int fd, 
@@ -308,6 +335,7 @@ sqlUpdate(conn, query);
 
 sqlSafef(query, sizeof(query), "select paraFetchStreams from edwHost where id=%u", hostId);
 int paraFetchStreams = sqlQuickNum(conn, query);
+struct paraFetchInterruptContext interruptContext = {.conn=conn, .submitId=submitId};
 
 /* Wrap getting the file, the actual data transfer, with an error catcher that
  * will remove partly uploaded files.  Perhaps some day we'll attempt to rescue
@@ -332,19 +360,23 @@ if (errCatchStart(errCatch))
     /* Do actual upload tracking how long it takes. */
     ef->startUploadTime = edwNow();
 
-#ifdef OLD
-    cpFile(fd, localFd);
-#endif /* OLD */
-
     mustCloseFd(&localFd);
-    if (!parallelFetch(submitFileName, tempName, paraFetchStreams, 3, FALSE, FALSE))
-        errAbort("parallel fetch of %s failed", submitFileName);
+    if (!parallelFetchInterruptable(submitFileName, tempName, paraFetchStreams, 3, FALSE, FALSE,
+	paraFetchInterruptFunction, &interruptContext))
+	{
+	if (interruptContext.isInterrupted)
+	    errAbort("Submission stopped by user.");
+	else
+	    errAbort("parallel fetch of %s failed", submitFileName);
+	}
 
     ef->endUploadTime = edwNow();
 
     /* Rename file both in file system and (via ef) database. */
     edwMakeFileNameAndPath(ef->id, submitFileName, edwFile, edwPath);
     mustRename(tempName, edwPath);
+    if (endsWith(edwPath, ".gz") && !encode3IsGzipped(edwPath))
+         errAbort("%s has .gz suffix, but is not gzipped", submitFileName);
     ef->edwFileName = cloneString(edwFile);
     }
 errCatchEnd(errCatch);
@@ -352,7 +384,11 @@ if (errCatch->gotError)
     {
     /* Attempt to remove any partial file. */
     if (tempName[0] != 0)
+	{
+	verbose(1, "Removing partial %s\n", tempName);
+	parallelFetchRemovePartial(tempName);
 	remove(tempName);
+	}
     handleSubmitError(conn, submitId, errCatch->message->string);  // Throws further
     assert(FALSE);  // We never get here
     }
@@ -855,6 +891,7 @@ for (sfr = sfrList; sfr != NULL; sfr = sfrNext)
     byteCount += bf->size;
     }
 sfrList = NULL;
+slReverse(&newList);
 
 /* Update database with oldFile count. */
 sqlSafef(query, sizeof(query), 
@@ -866,6 +903,8 @@ sqlUpdate(conn, query);
 /* Go through list attempting to load the files if we don't already have them. */
 for (sfr = newList; sfr != NULL; sfr = sfr->next)
     {
+    if (edwSubmitShouldStop(conn, submitId))
+        break;
     struct edwFile *bf = sfr->file;
     int submitUrlSize = strlen(submitDir) + strlen(bf->submitFileName) + 1;
     char submitUrl[submitUrlSize];

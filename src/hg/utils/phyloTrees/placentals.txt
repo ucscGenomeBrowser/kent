@@ -59,6 +59,9 @@ equCab	Eutheria; Laurasiatheria; Perissodactyla; Equidae; Equus
 # White rhino Ceratotherium simum simum
 cerSim	Eutheria; Laurasiatheria; Perissodactyla; Rhinocerotidae; Ceratotherium
 
+# Yangtze River Dolphin Lipotes vexillifer
+lipVex	Eutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Odontoceti; Lipotidae; Lipotes
+
 # Dolphin Tursiops truncatus
 turTru	Eutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Odontoceti; Delphinidae; Tursiops
 
@@ -92,7 +95,10 @@ pteAle	Eutheria; Laurasiatheria; Chiroptera; Megachiroptera; Pteropodidae; Ptero
 # Megabat - Pteropus vampyrus
 pteVam	Eutheria; Laurasiatheria; Chiroptera; Megachiroptera; Pteropodidae; Pteropodinae; Pteropus
 
-# David's Myotis (bat) - Myotis Davidii
+# Brandt's Myotis (bat) - Myotis brandtii
+myoBri	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; Myotis
+
+# David's Myotis (bat) - Myotis davidii
 myoDav	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; Myotis
 
 # Microbat - Myotis lucifugus
@@ -137,23 +143,23 @@ choHof	Eutheria; Xenarthra; Megalonychidae; Choloepus
 # Armadillo - Dasypus novemcinctus
 dasNov	Eutheria; Xenarthra; Dasypodidae; Dasypus
 
-# Aardvark - Orycteropus afer
-oryAfe	Eutheria; Afrotheria; Tubulidentata; Orycteropodidae; Orycteropus; Orycteropus afer
-
-# Cape golden mole - Chrysochloris asiatica
-chrAsi	Eutheria; Afrotheria; Chrysochloridae; Chrysochlorinae; Chrysochloris
-
-# Rock Hyrax - Procavia capensis
-proCap	Eutheria; Afrotheria; Hyracoidea; Procaviidae; Procavia
+# Elephant 
+loxAfr	Eutheria; Afrotheria; Proboscidea; Elephantidae; Loxodonta
 
 # Cape elephant shrew - Elephantulus edwardii
 eleEdw	Eutheria; Afrotheria; Macroscelidea; Macroscelididae; Elephantulus
 
-# Tenrec - Echinops telfairi
-echTel	Eutheria; Afrotheria; Tenrecidae; Tenrecinae; Echinops
+# Rock Hyrax - Procavia capensis
+proCap	Eutheria; Afrotheria; Hyracoidea; Procaviidae; Procavia
 
 # Trichechus manatus latirostris (Florida manatee)
 triMan	Eutheria; Afrotheria; Sirenia; Trichechidae; Trichechus; Trichechus manatus
 
-# Elephant 
-loxAfr	Eutheria; Afrotheria; Proboscidea; Elephantidae; Loxodonta
+# Cape golden mole - Chrysochloris asiatica
+chrAsi	Eutheria; Afrotheria; Chrysochloridae; Chrysochlorinae; Chrysochloris
+
+# Tenrec - Echinops telfairi
+echTel	Eutheria; Afrotheria; Tenrecidae; Tenrecinae; Echinops
+
+# Aardvark - Orycteropus afer
+oryAfe	Eutheria; Afrotheria; Tubulidentata; Orycteropodidae; Orycteropus; Orycteropus afer

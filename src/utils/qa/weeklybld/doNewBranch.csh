@@ -4,10 +4,6 @@
 #  Heather says perhaps running with "nohup" in front of the command might
 #  make it work better.
 #
-if ( "$HOST" != "hgwbeta" ) then
- echo "Error: this script must be run from hgwbeta."
- exit 1
-endif
 
 cd $WEEKLYBLD
 
@@ -93,9 +89,9 @@ rm -f doNewGit.log
 ssh -n hgwdev $WEEKLYBLD/buildGitReports.csh branch real >& doNewGit.log &
 # note - we are now running it in the background on hgwdev
 
-echo
-echo  "SKIP 32-BIT BUILD ON $BOX32 [${0}: `date`]"
-echo
+#echo
+#echo  "SKIP 32-BIT BUILD ON $BOX32 [${0}: `date`]"
+#echo
 
 
 #---------------------
@@ -156,7 +152,14 @@ if ( -e GitReports.ok ) then
     foreach victim ( $victims )
 		git log --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base --pretty=oneline > /dev/null
 		if ($? == 0) then
-			./summaryEmail.sh ${victim} | mail -s "Code summaries are due for ${victim}" ${victim} -- -f $REPLYTO
+		       rm -f /dev/shm/build.email.${victim}.txt
+                       echo "To: ${victim}" > /dev/shm/build.email.${victim}.txt
+                       echo "From: ann@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt
+                       echo "Subject: Code summaries are due for ${victim}" >> /dev/shm/build.email.${victim}.txt
+                       echo "" >> /dev/shm/build.email.${victim}.txt
+		       ./summaryEmail.sh ${victim} >> /dev/shm/build.email.${victim}.txt
+		       cat /dev/shm/build.email.${victim}.txt | /usr/sbin/sendmail -t -oi
+		       rm -f /dev/shm/build.email.${victim}.txt
 		endif
     end
 else

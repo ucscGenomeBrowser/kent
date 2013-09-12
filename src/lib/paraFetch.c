@@ -67,6 +67,15 @@ else
     }
 }
 
+void parallelFetchRemovePartial(char *destName)
+/* Remove any files associated with partial downloads of file of given name. */
+{
+char paraTmpFile[PATH_LEN];
+safef(paraTmpFile, PATH_LEN, "%s.paraFetch", destName);
+remove(paraTmpFile);
+safef(paraTmpFile, PATH_LEN, "%s.paraFetchStatus", destName);
+remove(paraTmpFile);
+}
 
 boolean paraFetchReadStatus(char *origPath, 
     struct parallelConn **pPcList, char **pUrl, off_t *pFileSize, 
@@ -159,9 +168,13 @@ if (pTotalDownloaded != NULL)
 return TRUE;
 }
 
-
-boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries, boolean newer, boolean progress)
-/* Open multiple parallel connections to URL to speed downloading */
+boolean parallelFetchInterruptable(char *url, char *outPath, int numConnections, int numRetries, 
+    boolean newer, boolean progress,
+    boolean (*interrupt)(void *context),  void *context)
+/* Open multiple parallel connections to URL to speed downloading.  If interrupt function 
+ * is non-NULL,  then it gets called passing the context parameter,  and if it returns
+ * TRUE the fetch is interrupted.   Overall the parallelFetchInterruptable returns TRUE
+ * when the function succeeds without interrupt, FALSE otherwise. */
 {
 char *origPath = outPath;
 char outTemp[1024];
@@ -382,8 +395,12 @@ time_t startTime = time(NULL);
 #define RETRYSLEEPTIME 30    
 while (TRUE)
     {
-
     verbose(2,"Top of big loop\n");
+    if (interrupt != NULL && (*interrupt)(context))
+	{
+	verbose(1, "Interrupted paraFetch.\n");
+	return FALSE;
+	}
 
     if (progress)
 	{
@@ -670,4 +687,11 @@ if (fileSize != -1 && totalDownloaded != fileSize)
 return TRUE;
 }
 
+boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries, 
+    boolean newer, boolean progress)
+/* Open multiple parallel connections to URL to speed downloading */
+{
+return parallelFetchInterruptable(url, outPath, numConnections, numRetries, 
+    newer, progress, NULL, NULL);
+}
 

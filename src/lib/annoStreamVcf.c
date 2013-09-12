@@ -76,6 +76,28 @@ self->record = vcfRecordFromRow(self->vcff, words);
 return self->asWords;
 }
 
+static char *getProperChromName(struct annoStreamVcf *self, char *vcfChrom)
+/* We tolerate chr-less chrom names in VCF and BAM ("1" for "chr1" etc); to avoid
+ * confusing the rest of the system, return the chr-ful version if it exists. */
+{
+char *name = hashFindVal(self->chromNameHash, vcfChrom);
+if (name == NULL)
+    {
+    name = vcfChrom;
+    struct twoBitFile *tbf = self->streamer.assembly->tbf;
+    char buf[256];
+    if (! twoBitIsSequence(tbf, vcfChrom))
+	{
+	safef(buf, sizeof(buf), "chr%s", vcfChrom);
+	if (twoBitIsSequence(tbf, buf))
+	    name = buf;
+	}
+    name = lmCloneString(self->chromNameHash->lm, name);
+    hashAdd(self->chromNameHash, vcfChrom, name);
+    }
+return name;
+}
+
 static char **nextRowUnfiltered(struct annoStreamVcf *self, char *minChrom, uint minEnd)
 /* Get the next VCF record and put the row text into autoSql words.
  * Return pointer to self->asWords if we get a row, otherwise NULL. */
@@ -100,36 +122,14 @@ if (minChrom != NULL)
 char **words = nextRowRaw(self);
 if (regionChrom != NULL && words != NULL)
     {
-    if (self->isTabix && strcmp(words[0], regionChrom) < 0)
+    if (self->isTabix && strcmp(getProperChromName(self, words[0]), regionChrom) < 0)
 	lineFileSetTabixRegion(self->vcff->lf, regionChrom, regionStart, regionEnd);
     while (words != NULL &&
-	   (strcmp(words[0], regionChrom) < 0 ||
+	   (strcmp(getProperChromName(self, words[0]), regionChrom) < 0 ||
 	    (sameString(words[0], regionChrom) && self->record->chromEnd < regionEnd)))
 	words = nextRowRaw(self);
     }
 return words;
-}
-
-static char *getProperChromName(struct annoStreamVcf *self, char *vcfChrom)
-/* We tolerate chr-less chrom names in VCF and BAM ("1" for "chr1" etc); to avoid
- * confusing the rest of the system, return the chr-ful version if it exists. */
-{
-char *name = hashFindVal(self->chromNameHash, vcfChrom);
-if (name == NULL)
-    {
-    name = vcfChrom;
-    struct twoBitFile *tbf = self->streamer.assembly->tbf;
-    char buf[256];
-    if (! twoBitIsSequence(tbf, vcfChrom))
-	{
-	safef(buf, sizeof(buf), "chr%s", vcfChrom);
-	if (twoBitIsSequence(tbf, buf))
-	    name = buf;
-	}
-    name = lmCloneString(self->chromNameHash->lm, name);
-    hashAdd(self->chromNameHash, vcfChrom, name);
-    }
-return name;
 }
 
 static struct annoRow *asvNextRow(struct annoStreamer *sSelf, char *minChrom, uint minEnd,
@@ -156,6 +156,7 @@ while (annoFilterRowFails(sSelf->filters, words, self->numCols, &rightFail))
 	return NULL;
     }
 struct vcfRecord *rec = self->record;
+vcfRecordTrimIndelLeftBase(rec);
 char *chrom = getProperChromName(self, rec->chrom);
 self->recordCount++;
 return annoRowFromStringArray(chrom, rec->chromStart, rec->chromEnd,

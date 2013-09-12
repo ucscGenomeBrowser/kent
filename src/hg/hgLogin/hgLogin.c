@@ -486,7 +486,7 @@ char **row;
 char query[256];
 
 /* find all the user names assocaited with this email address */
-char userList[256]="";
+char userList[512]="";
 sqlSafef(query,sizeof(query),"SELECT * FROM gbMembers WHERE email='%s'", email);
 sr = sqlGetResult(conn, query);
 int numUser = 0;
@@ -657,12 +657,11 @@ char msg[4096];
 char activateURL[256];
 char *hgLoginHost = wikiLinkHost();
 char *remoteAddr=getenv("REMOTE_ADDR");
-char *urlEncodedUsername=replaceChars(username," ","%20");
 
 safef(activateURL, sizeof(activateURL),
     "http%s://%s/cgi-bin/hgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
     cgiAppendSForHttps(), hgLoginHost,
-    cgiEncode(urlEncodedUsername),
+    cgiEncode(username),
     cgiEncode(encToken));
 safef(subject, sizeof(subject),"%s account e-mail address confirmation", brwName);
 safef(msg, sizeof(msg),
@@ -1045,9 +1044,9 @@ if (password && password2 && !sameString(password, password2))
 char encPwd[45] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
 sqlSafef(query,sizeof(query), "INSERT INTO gbMembers SET "
-    "userName='%s',password='%s',email='%s', "
+    "userName='%s',realName='%s',password='%s',email='%s', "
     "lastUse=NOW(),accountActivated='N'",
-    user,encPwd,email);
+    user,user,encPwd,email);
 sqlUpdate(conn, query);
 setupNewAccount(conn, email, user);
 /* send out activate code mail, and display the mail confirmation box */

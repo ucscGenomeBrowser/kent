@@ -26,15 +26,29 @@ ifeq (${USE_SSL},)
 endif
 
 
-# libhal: disabled by default
-ifeq (${USE_HAL},1)
-    L+=/cluster/home/braney/hal/lib/halChain.a /cluster/home/braney/hal/lib/halLod.a /cluster/home/braney/hal/lib/halLib.a /cluster/home/braney/sonLib/lib/sonLib.a /hive/groups/recon/local/lib/libhdf5_cpp.a /hive/groups/recon/local/lib/libhdf5.a /hive/groups/recon/local/lib/libhdf5_hl.a /hive/groups/recon/local/lib/libsz.a -lstdc++
-    HG_DEFS+=-DUSE_HAL
-    HG_INC+=-I/cluster/home/braney/hal/chain/inc/
+# autodetect UCSC installation of hal:
+ifeq (${HALDIR},)
+    HALDIR = /hive/groups/browser/hal
+    ifneq ($(wildcard ${HALDIR}),)
+        ifeq (${USE_HAL},)
+          USE_HAL=1
+        endif
+    endif
 endif
+
+ifeq (${USE_HAL},1)
+    HALLIBS=${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halChain.a ${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halLiftover.a ${HALDIR}/hal/lib/halLod.a ${HALDIR}/hal/lib/halLib.a ${HALDIR}/sonLib/lib/sonLib.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_cpp.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_hl.a 
+    HG_DEFS+=-DUSE_HAL
+    HG_INC+=-I${HALDIR}/hal/chain/inc/
+endif
+
 
 # libssl: disabled by default
 ifeq (${USE_SSL},1)
+    ifneq (${SSL_DIR}, "/usr/include/openssl")
+        L+=-L${SSL_DIR}/lib
+        HG_INC+=-I${SSL_DIR}/include
+    endif
     L+=-lssl -lcrypto
     HG_DEFS+=-DUSE_SSL
 endif
@@ -118,6 +132,13 @@ endif
 # last resort, hoping the compiler can find it in standard locations
 ifeq (${MYSQLLIBS},)
   MYSQLLIBS="-lmysqlclient"
+endif
+# OK to add -lstdc++ to all MYSQLLIBS just in case it is
+#    MySQL version 5.6 libraries, but no 'librt' on Mac OSX
+ifeq ($(UNAME_S),Darwin)
+  MYSQLLIBS += -lstdc++
+else
+  MYSQLLIBS += -lstdc++ -lrt
 endif
 
 L+=${PNGLIB}

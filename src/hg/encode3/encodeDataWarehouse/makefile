@@ -14,6 +14,7 @@ UTIL_DIRS = \
     edwChangeFormat \
     edwCorrectFileTags \
     edwCreateUser \
+    edwMakeContaminationQa \
     edwMakeEnrichments \
     edwMakeReplicateQa \
     edwMakeValidFile \

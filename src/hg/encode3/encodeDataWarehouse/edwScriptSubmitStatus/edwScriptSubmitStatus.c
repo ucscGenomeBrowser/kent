@@ -43,7 +43,7 @@ struct edwSubmit *sub = edwMostRecentSubmission(conn, url);
 char *status = NULL;
 if (sub == NULL)
     {
-    int posInQueue = edwSubmitPositionInQueue(conn, url);
+    int posInQueue = edwSubmitPositionInQueue(conn, url, NULL);
     if (posInQueue == -1)
          errAbort("%s has not been submitted", url);
     else

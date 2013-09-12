@@ -36,6 +36,11 @@
 #include "hubConnect.h"
 
 
+// Exhaustive searches can lead to timeouts on CGIs (#11626).
+// However, hgGetAnn requires exhaustive searches (#11665).
+#define NONEXHAUSTIVE_SEARCH_LIMIT 500
+#define EXHAUSTIVE_SEARCH_REQUIRED  -1
+
 extern struct cart *cart;
 char *hgAppName = "";
 
@@ -584,7 +589,7 @@ struct hgPos *posList = NULL, *pos;
 struct tsrPos *tpList = NULL, *tp;
 struct sqlResult *sr;
 char **row;
-int maxToReturn = 500;
+int maxToReturn = NONEXHAUSTIVE_SEARCH_LIMIT;
 
 if (slCount(tsrList) > maxToReturn)
     {
@@ -1439,7 +1444,7 @@ return doGrepQuery(indexFile, table, key, extraOptions);
 }
 
 static struct slName *genbankSqlFuzzyQuery(struct sqlConnection *conn,
-					   char *table, char *key)
+					   char *table, char *key, int limitResults)
 /* Perform a fuzzy sql search for %key% in table.name; return list of 
  * corresponding table.id's.  */
 {
@@ -1449,8 +1454,12 @@ if (!isTooCommon(table, key))
     struct sqlResult *sr;
     char **row;
     char query[256];
-    sqlSafef(query, sizeof(query),
-	  "select id,name from %s where name like '%%%s%%'", table, key);  
+    if (limitResults == EXHAUSTIVE_SEARCH_REQUIRED)
+        sqlSafef(query, sizeof(query),
+              "select id,name from %s where name like '%%%s%%'", table, key);
+    else // limit results to avoid CGI timeouts (#11626).
+        sqlSafef(query, sizeof(query),
+              "select id,name from %s where name like '%%%s%%' limit %d", table, key, limitResults);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1478,9 +1487,10 @@ return TRUE;;
 }
 
 static void findHitsToTables(char *db, struct hgFindSpec *hfs,
-			     char *key, char *tables[], int tableCount, 
+			     char *key, int limitResults, char *tables[], int tableCount,
 			     struct hash **retHash, struct slName **retList)
 /* Return all unique accessions that match any table. */
+// Modified to return only the first 500 hits because of CGI timeouts
 {
 struct slName *list = NULL, *el;
 struct hash *hash = newHash(0);
@@ -1491,7 +1501,10 @@ char query[256];
 char *field;
 int i;
 
-for (i = 0; i<tableCount; ++i)
+int rowCount = 0; // Excessively broad searches were leading to CGI timeouts (#11626).
+for (i = 0;
+     i<tableCount && (limitResults == EXHAUSTIVE_SEARCH_REQUIRED || rowCount < limitResults);
+     ++i)
     {
     struct slName *idList = NULL, *idEl;
     char *grepIndexFile = NULL;
@@ -1505,14 +1518,20 @@ for (i = 0; i<tableCount; ++i)
     if ((grepIndexFile = getGenbankGrepIndex(db, hfs, field, "idName")) != NULL)
 	idList = genbankGrepQuery(grepIndexFile, field, key);
     else
-	idList = genbankSqlFuzzyQuery(conn, field, key);
-    for (idEl = idList; idEl != NULL; idEl = idEl->next)
+        idList = genbankSqlFuzzyQuery(conn, field, key, limitResults);
+    for (idEl = idList;
+         idEl != NULL && (limitResults == EXHAUSTIVE_SEARCH_REQUIRED || rowCount < limitResults);
+         idEl = idEl->next)
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
-	sqlSafef(query, sizeof(query),
-	      "select acc, organism from gbCdnaInfo where %s = %s "
-	      " and type = 'mRNA'",
-	      field, idEl->name);
+        if (limitResults == EXHAUSTIVE_SEARCH_REQUIRED)
+            sqlSafef(query, sizeof(query),
+                  "select acc, organism from gbCdnaInfo where %s = %s "
+                  " and type = 'mRNA'", field, idEl->name);
+        else // limit results to avoid CGI timeouts (#11626).
+            sqlSafef(query, sizeof(query),
+                  "select acc, organism from gbCdnaInfo where %s = %s "
+                  " and type = 'mRNA' limit %d", field, idEl->name, limitResults);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -1524,6 +1543,9 @@ for (i = 0; i<tableCount; ++i)
 		el = newSlName(acc);
                 slAddHead(&list, el);
                 hashAddInt(hash, acc, organismID);
+                // limit results to avoid CGI timeouts (#11626).
+                if (rowCount++ > limitResults && limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
+                    break;
 		}
 	    }
 	sqlFreeResult(&sr);
@@ -1713,7 +1735,7 @@ return alignCount;
 }
 
 static boolean findMrnaKeys(char *db, struct hgFindSpec *hfs,
-			    char *keys, struct hgPositions *hgp)
+			    char *keys, int limitResults, struct hgPositions *hgp)
 /* Find mRNA that has keyword in one of its fields. */
 {
 int alignCount;
@@ -1730,7 +1752,7 @@ boolean found = FALSE;
  * implement implicit "AND" of multiple keys. */
 if (gotAllGenbankGrepIndexFiles(db, hfs, tables, ArraySize(tables)))
     {
-    findHitsToTables(db, hfs, keys, tables, ArraySize(tables),
+    findHitsToTables(db, hfs, keys, limitResults, tables, ArraySize(tables),
 		     &allKeysHash, &allKeysList);
     }
 else
@@ -1750,7 +1772,7 @@ else
     found = TRUE;
     for (i=0; i<wordCount; ++i)
 	{
-	findHitsToTables(db, hfs, words[i], tables, ArraySize(tables),
+	findHitsToTables(db, hfs, words[i], limitResults, tables, ArraySize(tables),
 			 &oneKeyHash, &oneKeyList);
 	if (allKeysHash == NULL)
 	    {
@@ -2584,7 +2606,7 @@ if (relativeFlag)
 }
 #endif
 
-static boolean searchSpecial(char *db, struct hgFindSpec *hfs, char *term,
+static boolean searchSpecial(char *db, struct hgFindSpec *hfs, char *term, int limitResults,
 			     struct hgPositions *hgp, boolean relativeFlag,
 			     int relStart, int relEnd, boolean *retFound)
 /* Handle searchTypes for which we have special code.  Return true if 
@@ -2643,7 +2665,7 @@ else if (sameString(hfs->searchType, "mrnaAcc"))
     }
 else if (sameString(hfs->searchType, "mrnaKeyword"))
     {
-    found = findMrnaKeys(db, hfs, upcTerm, hgp);
+    found = findMrnaKeys(db, hfs, upcTerm, limitResults, hgp);
     }
 else if (sameString(hfs->searchType, "sgdGene"))
     {
@@ -2822,7 +2844,7 @@ slFreeList(&tableList);
 return(found);
 }
 
-boolean hgFindUsingSpec(char *db, struct hgFindSpec *hfs, char *term,
+boolean hgFindUsingSpec(char *db, struct hgFindSpec *hfs, char *term, int limitResults,
 			struct hgPositions *hgp, boolean relativeFlag,
 			int relStart, int relEnd, boolean multiTerm)
 /* Perform the search described by hfs on term.  If successful, put results
@@ -2845,7 +2867,7 @@ if (isNotEmpty(hfs->termRegex) && ! regexMatchNoCase(term, hfs->termRegex))
 if (! hTableOrSplitExists(db, hfs->searchTable))
     return(FALSE);
 
-if (isNotEmpty(hfs->searchType) && searchSpecial(db, hfs, term, hgp, relativeFlag,
+if (isNotEmpty(hfs->searchType) && searchSpecial(db, hfs, term, limitResults, hgp, relativeFlag,
 						 relStart, relEnd, &found))
     return(found);
 
@@ -2991,7 +3013,8 @@ return NULL;
 }
 
 
-static boolean singleSearch(char *db, char *term, struct cart *cart, struct hgPositions *hgp)
+static boolean singleSearch(char *db, char *term, int limitResults, struct cart *cart,
+                            struct hgPositions *hgp)
 /* If a search type is specified in the CGI line (not cart), perform that search. 
  * If the search is successful, fill in hgp as a single-pos result and return TRUE. */
 {
@@ -3011,7 +3034,7 @@ else
     if (hfs == NULL)
 	hfs = hfsFind(longList, search);
     if (hfs != NULL)
-	foundIt = hgFindUsingSpec(db, hfs, term, hgp, FALSE, 0,0, FALSE);
+	foundIt = hgFindUsingSpec(db, hfs, term, limitResults, hgp, FALSE, 0,0, FALSE);
     else
 	warn("Unrecognized singleSearch=%s in URL", search);
     }
@@ -3039,6 +3062,13 @@ int relStart = 0, relEnd = 0;
 
 hgAppName = hgAppNameIn;
 
+// Exhaustive searches can lead to timeouts on CGIs (#11626).
+// However, hgGetAnn requires exhaustive searches (#11665).
+// So... set a non-exhaustive search limit on all except hgGetAnn.
+// NOTE: currently non-exhaustive search limits are only applied to findMrnaKeys
+int limitResults = NONEXHAUSTIVE_SEARCH_LIMIT;
+if (sameString(hgAppNameIn,"hgGetAnn"))
+    limitResults = EXHAUSTIVE_SEARCH_REQUIRED;
 
 AllocVar(hgp);
 hgp->useAlias = FALSE;
@@ -3052,7 +3082,7 @@ if (extraCgi == NULL)
     extraCgi = "";
 hgp->extraCgi = cloneString(extraCgi);
 
-if (singleSearch(db, term, cart, hgp))
+if (singleSearch(db, term, limitResults, cart, hgp))
     return hgp;
 
 /* Allow any search term to end with a :Start-End range -- also support stuff 
@@ -3137,7 +3167,7 @@ else
 	hgFindSpecGetAllSpecs(db, &shortList, &longList);
     for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
 	{
-	if (hgFindUsingSpec(db, hfs, term, hgp, relativeFlag, relStart, relEnd,
+	if (hgFindUsingSpec(db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
 			    multiTerm))
 	    {
 	    done = TRUE;
@@ -3149,7 +3179,7 @@ else
 	{
 	for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
 	    {
-	    hgFindUsingSpec(db, hfs, term, hgp, relativeFlag, relStart, relEnd,
+	    hgFindUsingSpec(db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
 			    multiTerm);
 	    }
 	/* Lowe lab additions -- would like to replace these with specs, but 

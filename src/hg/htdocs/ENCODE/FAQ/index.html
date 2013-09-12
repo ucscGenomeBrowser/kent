@@ -43,7 +43,7 @@
             <li><a href="http://genome.gov/10005107" target="_blank">ENCODE Project at NHGRI (genome.gov)</a>
             <li><a href="http://www.ncbi.nlm.nih.gov/geo/info/ENCODE.html" target="_blank">ENCODE Data at GEO</a>
             <li><a href="http://www.ensembl.org/encode.html" target="_blank">ENCODE Data at Ensembl</a>
-            <li><a href="../FAQ/" target="_blank">UCSC Genome Browser FAQ Page</a> and
+            <li><a href="../../FAQ/" target="_blank">UCSC Genome Browser FAQ Page</a> and
               <a href="http://groups.google.com/a/soe.ucsc.edu/group/genome?hl=en" target="_blank">Searchable Google Groups Mailing List</A>  
               <p>
         </ul>
@@ -65,15 +65,6 @@
             <input type="hidden" name="filter" value="0">
             <input type="text" name="qq" size="30" maxlength="255" value="">
             <input type="submit" value="Submit">
-          </form>
-        <p>
-          <form name="googleForm2" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+'   site:lists.soe.ucsc.edu/pipermail/genome';">
-            Search the UCSC Genome mailing list archives: &nbsp;        
-            <input type="hidden" name="q" value="">
-            <input type="hidden" name="num" value="10">        
-            <input type="hidden" name="filter" value="0">
-            <input type="text" name="qq" size="30" maxlength="255" value="ENCODE">
-            <input type="submit" value="Submit">        
           </form>
         <p>
       </div><!--end content-->
@@ -98,7 +89,7 @@
           <li><a href="#release10">What does the name column represent for DNase clustered BED files?</a>
           <li><a href="#release14">Can I convert WIG files into a variableStep format to use with SitePro?</a>
           <li><a href="#release19">How do I learn more about peak calling algorithms used to generate narrowPeak and broadPeak files?</a>
-          <li><a href="#release20"> What program reads &quot;.bb&quot; TFBS files from ENCODE?</a>
+          <li><a href="#release20">What program reads &quot;.bb&quot; TFBS files from ENCODE?</a>
           </li>
         <p>
           OTHER QUESTIONS
@@ -111,6 +102,7 @@
           <li><a href="#release2">Where can I find the ENCODE growth protocol for a specific cell type?</a>
           <li><a href="#release3">Has transcription factor xxx been mapped by ENCODE?</a>
           <li><a href="#release4">How do I find overlaps between my own ChIP-seq regions and available ENCODE transcription factors?</a>
+          <li><a href="#release21">I am making a public hub for my paper, is there an example html file to use for my data description?</a>
         </p>
         <p>
           <a href="/ENCODE/contacts.html" target="_blank">Questions and feedback welcome</a>.
@@ -279,10 +271,12 @@
               <br/>By using the <a href="../../cgi-bin/hgTables" target="_blank">Table Browser tool</a>
               and setting &quot;Group&quot; to &quot;All Tables&quot; and selecting the &quot;metaDb&quot; table. Click
               the &quot;describe table schema&quot; button to learn more about the metaDb table.
-              <br/>By using the <a href="../../goldenPath/help/mysql.html" target="_blank">public MySQl database</a>
+              <br/>By using the <a href="../../goldenPath/help/mysql.html" target="_blank">public MySQL database</a>
               to query the metaDb table for each database.
-            </ol>    
-        </div><!--end content-->
+            </ol>  
+            The metadata uses controlled vocabulary (cv.ra), which can be downloaded as a text file
+              <a href="http://hgdownload.cse.ucsc.edu/goldenPath/encodeDCC/cv.ra" target="_blank">here</a>.
+          </div><!--end content-->
     </div><!--end wrapper-->
 
     <!--Content Tables------------------------------------------------------->
@@ -436,7 +430,9 @@
             <a href="http://rgrossman.com/2013/03/20/a-tool-for-keeping-big-data-in-sync/">protocol</a>
             which should help our users get much faster download rates. It is on our list of
             things to do, so we will not be able to give you a time estimate as to when this
-            tool will be available.
+            tool will be available. We highly recommend using rsync. Using rsync, for example
+            "rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile
+            ./", has the advantage of starting up where it left off after a failure, when ran again.
           </p>
         </div><!--end content-->
     </div><!--end wrapper-->
@@ -664,7 +660,61 @@
             <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a>.
          </div><!--end content-->
     </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <a name="release21"></a>
+    <!--outer table is for border purposes-->
+    <div class="wrapper">
+      <td align="right"><a href="#FAQ"><img src="../../images/top.gif" alt="" align="right" border="0"></a>
+        <div class="bar"><h4 class="title">HUB EXAMPLES</h4></div>
+        <div class="content">
+          <p>
+            <b><font color="#006666">Question: </font></b><br>
+            I am making a public hub for my paper, is there an example html file to use for my data description?            
+          <p>
+            <b><font color="#006666">Response:</font></b><br>
+            The browser's <a href="../../cgi-bin/hgHubConnect?" target="_blank">public hubs</a>
+            provide excellent examples of hub documentation. Here are two examples of track 
+            description pages from the ENCODE Analysis hub:
+            <p>
+              <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformTfbs.html">
+              http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformTfbs.html</a></br>
+              <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformRNA.html">
+                http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformRNA.html</a><br>
+            <p>
+              <b>Useful tips when writing your track descriptions:</b>
+              <li>It is best to assume a broad audience of students as well as researchers.  Spelling out common acronynms,
+                for example, may be useful for those who are new to genomics.</li>
+              <li>The paper's abstract may be a good start for your track's "Description" section.</li>
+              <li>Provide as much detail as possible in the "Methods" section.</li>
+              <li>A email address must be prominently displayed for questions relating to the track.</li>
+            </p>
+          <p>
+            <b>Other Examples:</b><br>
+            <p>
+              Here are a few good examples of hub structure and configuration from the ENCODE Analysis hub:
+            <p>
+              <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt">
+                http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt</a><br>
+              <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/genomes.txt">
+                http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/genomes.txt</a><br>
+              <a href="http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/trackDb.txt">
+                http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/trackDb.txt</a><br>
+            <p>
+              Note: We recommend a minimal number of default visible tracks in your trackDb.txt to
+              quicken hub loading time and to avoid overwhelming users. For more suggestions on
+              hub structure, please see our
+              <a href="http://genomewiki.cse.ucsc.edu/index.php/Public_Hub_Guidelines".>Public Hub Guidelines</a>
+              wikipage. Also, for help defining unfamiliar terms, you may want to see the Hub Track
+              Database Definition's <a href="http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html#toc"
+                          target="_blank">table of contents</a>.
+            </p>
+          <p>
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
     
     <!--END FAQ Content Tables------------------------------------------------------->
+    <p class="date">Updated 15 August 2013</p>
   </body>
 </html>

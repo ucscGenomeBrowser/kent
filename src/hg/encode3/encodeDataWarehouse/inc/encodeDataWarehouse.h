@@ -680,6 +680,96 @@ void edwValidFileOutput(struct edwValidFile *el, FILE *f, char sep, char lastSep
 #define edwValidFileCommaOut(el,f) edwValidFileOutput(el,f,',',',');
 /* Print out edwValidFile as a comma separated list including final comma. */
 
+#define EDWFASTQFILE_NUM_COLS 29
+
+extern char *edwFastqFileCommaSepFieldNames;
+
+struct edwFastqFile
+/* info on a file in fastq short read format beyond what's in edwValidFile */
+    {
+    struct edwFastqFile *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID in this table */
+    unsigned fileId;	/* ID in edwFile table */
+    long long sampleCount;	/* # of reads in sample. */
+    long long basesInSample;	/* # of bases in sample. */
+    char *sampleFileName;	/* Name of file containing sampleCount randomly selected items from file. */
+    long long readCount;	/* # of reads in file */
+    long long baseCount;	/* # of bases in all reads added up */
+    double readSizeMean;	/* Average read size */
+    double readSizeStd;	/* Standard deviation of read size */
+    int readSizeMin;	/* Minimum read size */
+    int readSizeMax;	/* Maximum read size */
+    double qualMean;	/* Mean quality scored as 10*-log10(errorProbability) or close to it.  >25 is good */
+    double qualStd;	/* Standard deviation of quality */
+    double qualMin;	/* Minimum observed quality */
+    double qualMax;	/* Maximum observed quality */
+    char *qualType;	/* For fastq files either 'sanger' or 'illumina' */
+    int qualZero;	/* For fastq files offset to get to zero value in ascii encoding */
+    double atRatio;	/* Ratio of A+T to total sequence (not including Ns) */
+    double aRatio;	/* Ratio of A to total sequence (including Ns) */
+    double cRatio;	/* Ratio of C to total sequence (including Ns) */
+    double gRatio;	/* Ratio of G to total sequence (including Ns) */
+    double tRatio;	/* Ratio of T to total sequence (including Ns) */
+    double nRatio;	/* Ratio of N or . to total sequence */
+    double *qualPos;	/* Mean value for each position in a read up to some max. */
+    double *aAtPos;	/* % of As at each pos */
+    double *cAtPos;	/* % of Cs at each pos */
+    double *gAtPos;	/* % of Gs at each pos */
+    double *tAtPos;	/* % of Ts at each pos */
+    double *nAtPos;	/* % of '.' or 'N' at each pos */
+    };
+
+struct edwFastqFile *edwFastqFileLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwFastqFile from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwFastqFileFreeList(). */
+
+void edwFastqFileSaveToDb(struct sqlConnection *conn, struct edwFastqFile *el, char *tableName, int updateSize);
+/* Save edwFastqFile as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwFastqFile *edwFastqFileLoad(char **row);
+/* Load a edwFastqFile from row fetched with select * from edwFastqFile
+ * from database.  Dispose of this with edwFastqFileFree(). */
+
+struct edwFastqFile *edwFastqFileLoadAll(char *fileName);
+/* Load all edwFastqFile from whitespace-separated file.
+ * Dispose of this with edwFastqFileFreeList(). */
+
+struct edwFastqFile *edwFastqFileLoadAllByChar(char *fileName, char chopper);
+/* Load all edwFastqFile from chopper separated file.
+ * Dispose of this with edwFastqFileFreeList(). */
+
+#define edwFastqFileLoadAllByTab(a) edwFastqFileLoadAllByChar(a, '\t');
+/* Load all edwFastqFile from tab separated file.
+ * Dispose of this with edwFastqFileFreeList(). */
+
+struct edwFastqFile *edwFastqFileCommaIn(char **pS, struct edwFastqFile *ret);
+/* Create a edwFastqFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwFastqFile */
+
+void edwFastqFileFree(struct edwFastqFile **pEl);
+/* Free a single dynamically allocated edwFastqFile such as created
+ * with edwFastqFileLoad(). */
+
+void edwFastqFileFreeList(struct edwFastqFile **pList);
+/* Free a list of dynamically allocated edwFastqFile's */
+
+void edwFastqFileOutput(struct edwFastqFile *el, FILE *f, char sep, char lastSep);
+/* Print out edwFastqFile.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwFastqFileTabOut(el,f) edwFastqFileOutput(el,f,'\t','\n');
+/* Print out edwFastqFile as a line in a tab-separated file. */
+
+#define edwFastqFileCommaOut(el,f) edwFastqFileOutput(el,f,',',',');
+/* Print out edwFastqFile as a comma separated list including final comma. */
+
 #define EDWQAENRICHTARGET_NUM_COLS 5
 
 extern char *edwQaEnrichTargetCommaSepFieldNames;
@@ -958,6 +1048,75 @@ void edwQaContamOutput(struct edwQaContam *el, FILE *f, char sep, char lastSep);
 
 #define edwQaContamCommaOut(el,f) edwQaContamOutput(el,f,',',',');
 /* Print out edwQaContam as a comma separated list including final comma. */
+
+#define EDWQAREPEAT_NUM_COLS 4
+
+extern char *edwQaRepeatCommaSepFieldNames;
+
+struct edwQaRepeat
+/* What percentage of data set aligns to various repeat classes. */
+    {
+    struct edwQaRepeat *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID of this repeat analysis. */
+    unsigned fileId;	/* File we are analysing. */
+    char *repeatClass;	/* RepeatMasker high end classification,  or 'total' for all repeats. */
+    double mapRatio;	/* Proportion that map to this repeat. */
+    };
+
+void edwQaRepeatStaticLoad(char **row, struct edwQaRepeat *ret);
+/* Load a row from edwQaRepeat table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwQaRepeat *edwQaRepeatLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwQaRepeat from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaRepeatFreeList(). */
+
+void edwQaRepeatSaveToDb(struct sqlConnection *conn, struct edwQaRepeat *el, char *tableName, int updateSize);
+/* Save edwQaRepeat as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwQaRepeat *edwQaRepeatLoad(char **row);
+/* Load a edwQaRepeat from row fetched with select * from edwQaRepeat
+ * from database.  Dispose of this with edwQaRepeatFree(). */
+
+struct edwQaRepeat *edwQaRepeatLoadAll(char *fileName);
+/* Load all edwQaRepeat from whitespace-separated file.
+ * Dispose of this with edwQaRepeatFreeList(). */
+
+struct edwQaRepeat *edwQaRepeatLoadAllByChar(char *fileName, char chopper);
+/* Load all edwQaRepeat from chopper separated file.
+ * Dispose of this with edwQaRepeatFreeList(). */
+
+#define edwQaRepeatLoadAllByTab(a) edwQaRepeatLoadAllByChar(a, '\t');
+/* Load all edwQaRepeat from tab separated file.
+ * Dispose of this with edwQaRepeatFreeList(). */
+
+struct edwQaRepeat *edwQaRepeatCommaIn(char **pS, struct edwQaRepeat *ret);
+/* Create a edwQaRepeat out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaRepeat */
+
+void edwQaRepeatFree(struct edwQaRepeat **pEl);
+/* Free a single dynamically allocated edwQaRepeat such as created
+ * with edwQaRepeatLoad(). */
+
+void edwQaRepeatFreeList(struct edwQaRepeat **pList);
+/* Free a list of dynamically allocated edwQaRepeat's */
+
+void edwQaRepeatOutput(struct edwQaRepeat *el, FILE *f, char sep, char lastSep);
+/* Print out edwQaRepeat.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwQaRepeatTabOut(el,f) edwQaRepeatOutput(el,f,'\t','\n');
+/* Print out edwQaRepeat as a line in a tab-separated file. */
+
+#define edwQaRepeatCommaOut(el,f) edwQaRepeatOutput(el,f,',',',');
+/* Print out edwQaRepeat as a comma separated list including final comma. */
 
 #define EDWQAPAIRSAMPLEOVERLAP_NUM_COLS 7
 
