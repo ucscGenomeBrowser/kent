@@ -6,6 +6,13 @@
 boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries, boolean newer, boolean progress);
 /* Open multiple parallel connections to URL to speed downloading */
 
+boolean parallelFetchInterruptable(char *url, char *outPath, int numConnections, int numRetries, 
+    boolean newer, boolean progress,
+    boolean (*interrupt)(void *context),  void *context);
+/* Open multiple parallel connections to URL to speed downloading.  If interrupt function 
+ * is non-NULL,  then it gets called passing the context parameter,  and if it returns
+ * TRUE the fetch is interrupted. */
+
 struct parallelConn
 /* struct to information on a parallel connection */
     {
