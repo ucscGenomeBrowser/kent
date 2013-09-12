@@ -67,6 +67,15 @@ else
     }
 }
 
+void parallelFetchRemovePartial(char *destName)
+/* Remove any files associated with partial downloads of file of given name. */
+{
+char paraTmpFile[PATH_LEN];
+safef(paraTmpFile, PATH_LEN, "%s.paraFetch", destName);
+remove(paraTmpFile);
+safef(paraTmpFile, PATH_LEN, "%s.paraFetchStatus", destName);
+remove(paraTmpFile);
+}
 
 boolean paraFetchReadStatus(char *origPath, 
     struct parallelConn **pPcList, char **pUrl, off_t *pFileSize, 

@@ -13,6 +13,11 @@ boolean parallelFetchInterruptable(char *url, char *outPath, int numConnections,
  * is non-NULL,  then it gets called passing the context parameter,  and if it returns
  * TRUE the fetch is interrupted. */
 
+void parallelFetchRemovePartial(char *destName);
+/* Remove any files associated with partial downloads of file of given name. 
+ * This is needed after a FALSE return from parallelFetch or parallelFetchInterruptable
+ * unless you want to leave temp file there to try to restart. */
+
 struct parallelConn
 /* struct to information on a parallel connection */
     {
