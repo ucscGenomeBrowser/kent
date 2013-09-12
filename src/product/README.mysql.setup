@@ -1,26 +1,30 @@
 
-MySQL - database setup
+MySQL DATABASE SETUP
 
-IMPORTANT NOTE!!!  Our code uses "LOAD DATA LOCAL INFILE" extensively.
-Some versions of MySQL have disabled the use of "LOAD DATA LOCAL INFILE"
-by default.  For new installations of MySQL, this option must be enabled in
-order for the Browser to function properly.  For affected versions, existing
-MySQL installations and libraries will need to be reinstalled with this option
-enabled.  Please see the MySQL page at
-http://dev.mysql.com/doc/refman/5.1/en/load-data-local.html
-for more information regarding this issue.
+
+ENABLE "LOAD DATA LOCAL INFILE"
+
+Set these in /etc/my.cnf or /etc/mysql/my.cnf:
+
+[mysqld]
+local-infile=1
+
+[client]
+local-infile=1
+
 
 STORAGE ENGINE
 
 MySQL default storage engine.
 In recent versions of MySQL, the default storage engine has changed from myisam to innodb.
 However the myisam engine should be used with the UCSC Genome Browser.
-You can set it in /etc/my.cnf:
+
+Set it in /etc/my.cnf or /etc/mysql/my.cnf:
 
 [mysqld]
 default-storage-engine=MYISAM
 
-And then restart your mysql server.
+Always restart your mysql server after making changes to these configuration files.
 
 USERS
 
