@@ -745,7 +745,7 @@ struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 int aheadOfUs = -1;
 int pos = 0;
-unsigned jobId;
+unsigned jobId = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     jobId = sqlUnsigned(row[0]);
