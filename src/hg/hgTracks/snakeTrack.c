@@ -515,6 +515,18 @@ for (item = tg->items; item != NULL; item = item->next)
     } 
 }
 
+//  this is a 16 color palette with every other color being a lighter version of
+//  the color before it
+//static int snakePalette[] =
+//{
+//0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5, 0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5
+//};
+
+static int snakePalette[] =
+{
+0x1f77b4, 0xff7f0e, 0x2ca02c, 0xd62728, 0x9467bd, 0x8c564b, 0xe377c2, 0x7f7f7f, 0xbcbd22, 0x17becf
+};
+
 static void snakeDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -595,18 +607,18 @@ if (withLabels)
 // let's draw some blue bars for the duplications
 struct hal_target_dupe_list_t* dupeList = lf->dupeList;
 
-extern void makeChromosomeShades(struct hvGfx *hvg);
-if (!chromosomeColorsMade)
-    makeChromosomeShades(hvg);
+//extern void makeChromosomeShades(struct hvGfx *hvg);
+//if (!chromosomeColorsMade)
+    //makeChromosomeShades(hvg);
 
-int count = 7;
-for(; dupeList ; dupeList = dupeList->next, count += 3)
+int count = 0;
+for(; dupeList ; dupeList = dupeList->next, count++)
     {
     struct hal_target_range_t *range = dupeList->tRange;
 
-#define NUM_CHROM_COLORS 26
-    extern Color chromColor[NUM_CHROM_COLORS+1];
-    Color color = chromColor[(count % NUM_CHROM_COLORS) + 1];
+    unsigned int colorInt = snakePalette[count % (sizeof(snakePalette)/sizeof(Color))];
+    Color color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
+
     for(; range; range = range->next)
 	{
 	int s = range->tStart;

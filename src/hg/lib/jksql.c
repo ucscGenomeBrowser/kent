@@ -736,6 +736,8 @@ if ((sc->conn = conn = mysql_init(NULL)) == NULL)
     monitorLeave();
     errAbort("Couldn't connect to mySQL.");
     }
+// Fix problem where client LOCAL setting is disabled by default for security
+mysql_options(conn, MYSQL_OPT_LOCAL_INFILE, NULL);
 if (mysql_real_connect(
 	conn,
 	host, /* host */
