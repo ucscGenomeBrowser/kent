@@ -54,6 +54,83 @@
            <a name="2013"></a>
 
 <!-- start news item -->
+<a name="091213"></a>
+<p>
+<font size="3"><b>12 Sept 2013 - New UDR ENCODE Download Methold Available
+</b></font>
+<p>
+The UCSC Genome Browser is pleased to offer a new download protocol to use when downloading
+large sets of files from our download servers: UDR (UDT Enabled Rsync). UDR utilizes rsync
+as the transport mechanism but sends the data over the UDT protocol, which is very efficient
+at sending large amounts of data over long distances. This new protocol has been put in place
+to enable huge amounts of data to be downloaded quickly over long distances.</p>
+<p>
+Remember that we now have two identical download servers to better serve your needs. You can use either one:
+<p>
+<a href="http://hgdownload.cse.ucsc.edu" target="_blank">http://hgdownload.cse.ucsc.edu</a>
+<p>
+<a href="http://hgdownload-sd.sdsc.edu" target="_blank">http://hgdownload-sd.sdsc.edu</a>
+<p>
+<h4>The Background:</h4>
+<p>
+Typical TCP-based protocols like http, ftp and rsync have a problem in that the further
+away the download source is from you, the slower the speed becomes. Protocols like UDT/UDR
+allow for many UDP packets to be sent in batch, thus allowing for much higher transmit speeds
+over long distances. UDR will be especially useful for users who are downloading from places
+that are far away from California. The US East Coat and the international community will likely
+see much higher download speeds by using UDR rather than rsync, http or ftp.</p>
+<p>
+<h4>Getting UDR & Setting it up on your System:</h4>
+<p>
+It should be noted that UDR is not written or managed by UCSC, it was written by the
+Laboratory for Advanced Computing at the University of Chicago. It has been tested to work
+under Linux, FreeBSD and Mac OSX, but may work under other UNIX variants. The source code can
+be obtained here, through GitHub:</p>
+<p>
+<a href="https://github.com/LabAdvComp/UDR" target="_blank">https://github.com/LabAdvComp/UDR</a>
+<p>
+If you need help building the UDR binaries or have questions about how UDR functions,
+please read the documentation on the GitHub page, and if necessary, contact the UDR authors
+via the GitHub page. We recommend reading the documentation on the UDR GitHub page to better
+understand how UDR works. UDR is written in C++. UDR is Open Source and is released under the
+Apache 2.0 License. You must first have rsync installed on your system.</p>
+<p>
+For your convenience, we are offering a binary distribution of UDR for Red Hat Enterprise
+Linux 6.x (or variants such as CentOS 6 or Scientific Linux 6). You'll find both a 64-bit
+and 32-bit rpm here:</p>
+<p>
+<a href="http://hgdownload.cse.ucsc.edu/admin/udr" target="_blank">http://hgdownload.cse.ucsc.edu/admin/udr</a>
+<p>
+<h4>Using UDR to Download ENCODE Data from the UCSC Genome Browser Download Server(s):</h4>
+<p>
+Once you have a working UDR binary, either by building from source or by installing the rpm
+(if you are using RHEL 6.x or other variant), you can download files from either of our our
+download servers in a very similar fashion to rsync. For example, using rsync, you may want
+to download all of the ENCODE information for the mm9 database using the following command:</p>
+<p>
+<pre class="code">$ rsync -avP rsync://hgdownload.soe.ucsc.edu/goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
+<p>
+Using UDR is very similar. The UDR syntax for downloading the same data would be:</p>
+<p>
+<pre class="code">$udr rsync -avP hgdownload.cse.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
+<p>
+If you installed the rpm, use the 'man udr' command for more information via the man page;
+if you installed from source please refer to the UDR GitHub page for more details on the
+capabilities of UDR and how to use it.</p>
+<p>
+<h4>Firewall Considerations:</h4>
+<p>
+UDR establishes connections on TCP/9000, then transmits the data stream over UDP/9000-9100.
+Your institution may need to modify its firewall rules to allow inbound and outbound ports
+TCP/9000 and UDP/9000-9100 from either of the two download machines.</p>
+<p>
+If you decide to install and use UDR, we hope that you experience greatly increased download
+speeds. If you have difficulties installing UDR on your system, please contact the Laboratory
+for Advanced Computing through their gitHub page: <a href="https://github.com/LabAdvComp/UDR"
+target="_blank">https://github.com/LabAdvComp/UDR</a>.
+<hr>
+<!-- end news item -->
+
 <a name="072513"></a>
 <p>
 <font size="3"><b>25 July 2013 - BLUEPRINT Epigenome Data Hub and Quick Reference PDF Now Available
