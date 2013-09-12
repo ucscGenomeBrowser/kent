@@ -70,7 +70,7 @@ html hg19mammalChainNet
         otherDb speTri1
 
 include chainNetVicPac1.ra beta,public
-include chainNetVicPac2.ra alpha
+include chainNetVicPac2.ra
 
         track chainChoHof1
         subTrack placentalChainNetViewchain off
@@ -221,7 +221,7 @@ include chainNetRn5.ra alpha
         type chain susScr2
         otherDb susScr2
 
-include chainNetOviAri3.ra beta
+include chainNetOviAri3.ra 
 
     track placentalChainNetViewnet
     shortLabel Nets

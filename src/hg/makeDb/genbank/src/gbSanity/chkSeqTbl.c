@@ -226,13 +226,14 @@ char accWhere[64];
 char query[512];
 char **row;
 struct sqlResult* result;
+// FIXME: this could be re-written to use sqlDyString functions instead.
 gbVerbMsg(2, "load gbSeq cDNA table data");
 accWhere[0] = '\0';
 if (select->accPrefix != NULL)
-    safef(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
+    sqlSafefFrag(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
           select->accPrefix);
 sqlSafef(query, sizeof(query), 
-      "SELECT * FROM gbSeq WHERE (type='%s') AND (srcDb='%s')%s",
+      "SELECT * FROM gbSeq WHERE (type='%s') AND (srcDb='%s')%-s",
       ((select->type == GB_MRNA) ? "mRNA" : "EST"),
       ((select->release->srcDb == GB_GENBANK) ? "GenBank" : "RefSeq"),
       accWhere);

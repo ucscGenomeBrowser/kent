@@ -325,10 +325,9 @@ return variantFromPgSnp(&pgSnp, self->lm);
 static struct variant *variantFromVcfRow(struct annoGratorGpVar *self, struct annoRow *row)
 /* Translate vcf array of words into variant. */
 {
-boolean skippedFirstBase = FALSE;
-char *alStr = vcfGetSlashSepAllelesFromWords(row->data, self->dyScratch, &skippedFirstBase);
+char *alStr = vcfGetSlashSepAllelesFromWords(row->data, self->dyScratch);
 unsigned alCount = chopByChar(alStr, '/', NULL, 0);
-return variantNew(row->chrom, row->start+skippedFirstBase, row->end, alCount, alStr, self->lm);
+return variantNew(row->chrom, row->start, row->end, alCount, alStr, self->lm);
 }
 
 static void setVariantFromRow(struct annoGratorGpVar *self, struct annoStreamRows *primaryData)

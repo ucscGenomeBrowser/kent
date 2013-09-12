@@ -25706,8 +25706,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 criGri1 > rbest.log 2>&1 &
-XXX - running - Tue Sep  3 09:04:01 PDT 2013
-    #   real    62m39.003s
+    #   real    57m9.843s
 
     # running the swap
     mkdir /hive/data/genomes/criGri1/bed/blastz.hg19.swap
@@ -25717,11 +25716,10 @@ XXX - running - Tue Sep  3 09:04:01 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet > swap.log 2>&1
-XXX - running - Tue Sep  3 09:04:01 PDT 2013
-    #   real    104m38.965s
+    #   real    110m44.600s
 
     cat fb.criGri1.chainHg19Link.txt
-    #    908760510 bases of 2104321675 (43.185%) in intersection
+    #  968620399 bases of 2301325917 (42.090%) in intersection
 
     cd /hive/data/genomes/criGri1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -25830,8 +25828,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 pteAle1 > rbest.log 2>&1 &
-XXX - running - Tue Sep  3 08:21:40 PDT 2013
-    #   real    62m39.003s
+    #   real    66m15.979s
 
     # running the swap
     mkdir /hive/data/genomes/pteAle1/bed/blastz.hg19.swap
@@ -25841,11 +25838,10 @@ XXX - running - Tue Sep  3 08:21:40 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet > swap.log 2>&1
-XXX - running - Tue Sep  3 08:21:40 PDT 2013
-    #   real    104m38.965s
+    #   real    113m30.834s
 
     cat fb.pteAle1.chainHg19Link.txt
-    #    908760510 bases of 2104321675 (43.185%) in intersection
+    #  1382430767 bases of 1944625202 (71.090%) in intersection
 
     cd /hive/data/genomes/pteAle1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -26378,15 +26374,16 @@ TMPDIR=/dev/shm
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
     #	real  517m26.179s
-    # broken chrom.sizes file for allSin1, repeat from chainRun:
+    # forgot to reload the database tables after adding chrM, finish
+    # the load step, then continuing:
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        -continue=chainRun `pwd`/DEF \
+        -continue=download `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-        -chainMinScore=5000 -chainLinearGap=loose > chainRun.log 2>&1
-XXX - running - Tue Sep  3 09:12:31 PDT 2013
+        -chainMinScore=5000 -chainLinearGap=loose > download.log 2>&1
+    #  Elapsed time: 1m36s
 
     cat fb.hg19.chainAllSin1Link.txt
-    #	205244552 bases of 2897316137 (7.084%) in intersection
+    #	198130655 bases of 2897316137 (6.838%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/hg19/bed
@@ -26395,20 +26392,19 @@ XXX - running - Tue Sep  3 09:12:31 PDT 2013
     # good to have recip best here
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
           hg19 allSin1 > rbest.log 2>&1 &
-    #  real    12m4.813s
+    #  real    18m19.294s
 
     #	and for the swap
     mkdir /hive/data/genomes/allSin1/bed/blastz.hg19.swap
     cd /hive/data/genomes/allSin1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/hg19/bed/lastzAllSin1.2013-09-02/DEF \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   forgot to get stderr in the swap.log
-    #	real    27m54.364s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #	real    23m42.533s
 
     cat  fb.allSin1.chainHg19Link.txt
-    #	172919308 bases of 2129659933 (8.120%) in intersection
+    #	170963971 bases of 2198602449 (7.776%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/allSin1/bed
@@ -26457,8 +26453,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 mayZeb1 > rbest.log 2>&1 &
-XXX - running - Tue Sep  3 09:16:28 PDT 2013
-    #   real    21m11.885s
+    #   real    10m10.495s
 
     # running the swap
     mkdir /hive/data/genomes/mayZeb1/bed/blastz.hg19.swap
@@ -26468,13 +26463,109 @@ XXX - running - Tue Sep  3 09:16:28 PDT 2013
         -qRepeats=windowmaskerSdust -chainMinScore=5000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         > swap.log 2>&1
-XXX - running - Tue Sep  3 09:16:28 PDT 2013
-    #   real    6m37.356s
+    #   real    6m51.755s
 
     cat fb.mayZeb1.chainHg19Link.txt
-    #    33708255 bases of 964264884 (3.496%) in intersection
+    #  33421946 bases of 713527863 (4.684%) in intersection
 
     cd /hive/data/genomes/mayZeb1/bed
     ln -s blastz.hg19.swap lastz.hg19
 
+#########################################################################
+# Amur tiger panTig1 Lastz run (DONE - 2013-09-10 - Hiram)
+    screen -S panTig1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzPanTig1.2013-09-10
+    cd /hive/data/genomes/hg19/bed/lastzPanTig1.2013-09-10
+    cat << '_EOF_' > DEF
+# human vs Amur tiger 
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Amur tiger  PanTig1
+SEQ2_DIR=/hive/data/genomes/panTig1/panTig1.2bit
+SEQ2_LEN=/hive/data/genomes/panTig1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/hg19/bed/lastzPanTig1.2013-09-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > do.log 2>&1
+    #   real    952m31.453s
+
+    cat fb.hg19.chainPanTig1Link.txt
+    #   1523174002 bases of 2897316137 (52.572%) in intersection
+
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 panTig1 > rbest.log 2>&1 &
+XXX - running - Wed Sep 11 10:36:47 PDT 2013
+    #   real    68m58.182s
+
+    # running the swap
+    mkdir /hive/data/genomes/panTig1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panTig1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzPanTig1.2013-09-10/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > swap.log 2>&1
+XXX - running - Wed Sep 11 10:36:47 PDT 2013
+    #  real    106m53.116s
+
+    cat fb.panTig1.chainHg19Link.txt
+    #  1453539854 bases of 2364296207 (61.479%) in intersection
+
+    cd /hive/data/genomes/panTig1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# NCBI ClinVar (DONE - 2013-09-11 - Max)
+#
+wget ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz -O - | gunzip > variant_summary.txt
+cat << '_EOF_' > clinvar.as
+table clinVarBed
+"Browser extensible data (4 fields) plus information about a ClinVar entry"
+    (
+    string chrom;        "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart;   "Start position in chromosome"
+    uint   chromEnd;     "End position in chromosome"
+    string name;         "Name of item"
+    string rcvAcc;         "ClinVar ID"
+    string type;         "Type of Variant"
+    string geneId;         "NCBI Entrez Gene ID"
+    string geneSym;         "NCBI Entrez Gene Symbol"
+    string clinSign;         "Clinical significance:"
+    string snpId;         "dbSNP ID"
+    string nsvId;         "dbVar ID"
+    string testedInGtr;         "Genetic Testing Registry"
+    lstring phenotype;         "Phenotype identifiers"
+    string origin;         "Data origin"
+    string assembly;         "Genome assembly"
+    string cytogenetic;         "Cytogenetic status"
+    string reviewStatus;         "Review status"
+    string hgvsCod;         "coding HGVS"
+    string hgvsProt;         "protein HGVS"
+    string lastEval;         "last evaluation"
+    string guidelines;         "guidelines"
+    lstring otherIds;         "other identifiers e.g. OMIM IDs, etc."
+    )
+_EOF_
+
+# For hg19 we remove all chrM entries.
+# need to replace ; with , for the "urls" trackDb setting
+# also trying to come up with a good name (field4) that is shorter than their default name
+cat variant_summary.txt  |  tawk '($13=="GRCh37" || $13=="GRCh37.p9") {print "chr"$14,$15,$16,$3,$9,$2,$4,$5,$6,$7,$8,$10,$11,$12,$13,$17,$18,$19,$20,$21$22,$23,$24}'  | sed -e 's/, /,/g' | sed -e 's/;/,/g' | tawk '{split($4, a, " "); $4=a[1]; if ($4=="") {$4=$11}; print}' | grep -v ClinicalSignificance | sort -k1,1 -k2,2n | grep -v chrM > clinvar.bed 
+bedToBigBed clinvar.bed /scratch/data/hg19/chrom.sizes clinvar.bb -type=bed4+18 -tab -as=clinvar.as 
+cp clinvar.bb /hive/data/genomes/hg19/bed/clinvar/
 #########################################################################

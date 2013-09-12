@@ -55,8 +55,8 @@ static int pubsSecChecked[] ={
       1, 1,
       1, 1,
       1, 1,
-      1, 0,
-      0, 1 };
+      1, 1,
+      1, 1, 1 };
 
 static char *pubsSequenceTable;
 
@@ -442,23 +442,40 @@ printf("<span style=\"color:gray\">");
 if (strlen(authors)>40)
     {
     authors[60] = 0;
-    printf("<SMALL>%s...</SMALL> - ", authors);
+    printf("<SMALL>%s...</SMALL> ", authors);
     }
-else
-    printf("<SMALL>%s</SMALL> - ", authors);
+else if (!isEmpty(authors))
+    printf("<SMALL>%s</SMALL> ", authors);
 
 // first word of citation is journal name
 char *words[10];
-chopCommas(citation, words);
-char *journal = words[0];
+int wordCount = chopCommas(citation, words);
+char *journal = NULL;
+if (wordCount!=0)
+    journal = words[0];
 
-printf("<SMALL>%s - %s ", year, journal);
+// optional: print the little gray line with author, journal, year info
+bool didPrint = FALSE;
+printf("<small>");
+if (year!=NULL && differentWord(year, "0"))
+    {
+    printf("%s", year);
+    didPrint = TRUE;
+    }
+if (!isEmpty(journal))
+    {
+    printf(" - %s ", journal);
+    didPrint = TRUE;
+    }
 if (!isEmpty(pmid) && strcmp(pmid, "0")!=0 )
+    {
     printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
-printf("</SMALL>\n");
+    didPrint = TRUE;
+    }
+printf("</small></span>\n");
+if (didPrint)
+    printf("<BR>\n");
 
-printf("</span>\n");
-printf("<BR>\n");
 if (pubsDebug)
     printf("articleId=%s", articleId);
 
@@ -579,6 +596,14 @@ if (hHasField("hgFixed", pubsArticleTable, "publisher"))
     sqlSafef(query, sizeof(query), "SELECT publisher from %s where articleId=%s", 
         pubsArticleTable, articleId);
     pubCode = sqlQuickString(conn, query);
+    // if no publisher is specified, we use the source (e.g. bing, pmc, elsevier, etc)
+    // to find the logo
+    if (isEmpty(pubCode))
+        {
+        sqlSafef(query, sizeof(query), "SELECT source from %s where articleId=%s", 
+            pubsArticleTable, articleId);
+        pubCode = sqlQuickString(conn, query);
+        }
     }
 else 
     {
@@ -658,7 +683,6 @@ printf("<div style=\"width:800px\">");
 printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B></A></div>\n", url, title);
 printf("</DIV>\n");
 printf("</DIV>\n");
-
 
 printf("<P style=\"width:1024px; font-size:80%%\">%s", cit);
 if (strlen(pmid)!=0 && strcmp(pmid, "0"))

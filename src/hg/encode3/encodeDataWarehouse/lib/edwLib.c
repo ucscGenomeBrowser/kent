@@ -244,9 +244,7 @@ char *edwUserNameFromFileId(struct sqlConnection *conn, int fId)
 {
 int uId = edwUserIdFromFileId(conn, fId);
 struct edwUser *user=edwUserFromId(conn, uId);
-char name[256];
-safecpy(name, sizeof(name), user->email);
-return cloneString(name);
+return cloneString(user->email);
 }
 
 void edwWarnUnregisteredUser(char *email)
