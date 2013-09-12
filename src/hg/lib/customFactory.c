@@ -232,7 +232,7 @@ int i;
 dyStringPrintf(errDy, "track load error (track name='%s'):<BR>\n", track->tdb->track);
 lf = lineFileOpen(track->dbStderrFile, TRUE);
 i = 0;
-while( (i < 3) && lineFileNext(lf, &line, NULL))
+while( (i < 10) && lineFileNext(lf, &line, NULL))
     {
     dyStringPrintf(errDy, "%s<BR>\n", line);
     ++i;
