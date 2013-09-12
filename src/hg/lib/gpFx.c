@@ -343,9 +343,14 @@ else
     {
     if (cdsBasesAdded < 0)
 	{
-	// Got a deletion variant -- check frame:
+	// Got a deletion variant -- check frame (and whether we lost a stop codon):
 	if ((cdsBasesAdded % 3) == 0)
-	    effect->soNumber = inframe_deletion;
+	    {
+	    if (strchr(cc->aaOld, 'Z') && !strchr(cc->aaNew, 'Z'))
+		effect->soNumber = stop_lost;
+	    else
+		effect->soNumber = inframe_deletion;
+	    }
 	else
 	    effect->soNumber = frameshift_variant;
 	}
@@ -591,7 +596,7 @@ for (ii=0; ii < pred->exonCount - 1; ii++)
 	    // Within 3 to 8 bases of intron start or end:
 	    soNumber = splice_region_variant;
 	struct gpFx *effects = gpFxNew(altAllele, pred->name, soNumber, intron, lm);
-	effects->details.intron.intronNumber = minusStrand ? (pred->exonCount - ii - 1) : ii;
+	effects->details.intron.intronNumber = minusStrand ? (pred->exonCount - ii - 2) : ii;
 	slAddHead(&effectsList, effects);
 	}
     else if ((variant->chromEnd > intronStart-3 && variant->chromStart < intronStart) ||

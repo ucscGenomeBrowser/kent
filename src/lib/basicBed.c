@@ -1710,3 +1710,40 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 return sum;
 }
 
+struct bed4 *bed4New(char *chrom, int start, int end, char *name)
+/* Make new bed4. */
+{
+struct bed4 *bed;
+AllocVar(bed);
+bed->chrom = cloneString(chrom);
+bed->chromStart = start;
+bed->chromEnd = end;
+bed->name = cloneString(name);
+return bed;
+}
+
+void bed4Free(struct bed4 **pBed)
+/* Free up bed4 */
+{
+struct bed4 *bed = *pBed;
+if (bed != NULL)
+    {
+    freeMem(bed->chrom);
+    freeMem(bed->name);
+    freez(pBed);
+    }
+}
+
+void bed4FreeList(struct bed4 **pList)
+/* Free a list of dynamically allocated bed4's */
+{
+struct bed4 *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    bed4Free(&el);
+    }
+*pList = NULL;
+}
+

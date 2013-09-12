@@ -1040,8 +1040,11 @@ if (includeExonNumber)
     if (exonNum >= 0)
 	{
 	afVepNewExtra(self, pGotExtra);
-	char *exonCount = ((char **)(gpvRow->data))[7];
-	fprintf(self->f, "%s=%d/%s", (deType == intron ? "INTRON" : "EXON"), exonNum+1, exonCount);
+	int exonCount = atoi(((char **)(gpvRow->data))[7]);
+	if (deType == intron)
+	    fprintf(self->f, "INTRON=%d/%d", exonNum+1, exonCount-1);
+	else
+	    fprintf(self->f, "EXON=%d/%d", exonNum+1, exonCount);
 	}
     }
 if (!*pGotExtra)
