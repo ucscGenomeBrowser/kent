@@ -71,7 +71,7 @@ The rsync options used in this command are:
 			    <B>Messages sent to this address will be posted to the 
 			    moderated genome-mirror mailing list, which is 
 			    archived on a public 
-			    <A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome-mirror">Google Groups forum</A>.</B> 
+			    <A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome-mirror" TARGET="_blank">Google Groups forum</A>.</B> 
 			    <P>
 			    <A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome-mirror?hl=en"
 			    TARGET=_blank>Subscribe</A> to the genome-mirror 
@@ -82,8 +82,111 @@ The rsync options used in this command are:
 		<BR>
 	    </TD></TR>
 	</TABLE>
-	
+	<BR>
 
+	<A NAME="UDR"></A>
+    <TR><TD CELLPADDING=10>	
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1>
+	    <TR><TD>
+	    	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+		    <TR><TD>
+			<FONT SIZE="4"><B>&nbsp; Using UDR to Speed Up the Download Process</B></FONT>
+		    </TD></TR>
+		</TABLE>
+		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+		    <TR><TH HEIGHT=10></TH></TR>
+		    <TR><TD WIDTH=10>&nbsp;</TD>
+			<TD>
+			<P><A HREF="https://github.com/LabAdvComp/UDR" TARGET="_blank">UDR</A> 
+			(UDT Enabled Rsync) is a download protocol that is very efficent
+			at sending large amounts of data over long distances. UDR utilizes rsync 
+			as the transport mechanism but sends the data over the UDT protocol.
+			UDR is not written or managed by UCSC. It is an open source tool 
+			created by the
+			<A HREF="http://www.labcomputing.org/" TARGET="_blank">Laboratory for Advanced Computing</A> 
+			at the University of Chicago. It has been
+			tested to work under Linux, FreeBSD and Mac OSX, but may
+			work under other UNIX variants. The source code can be
+			obtained through 
+			<A HREF="https://github.com/LabAdvComp/UDR"
+			TARGET="_blank">GitHub</A>.
+			</P>
+			<P>If you are a casual or occasional manual downloader of data, there 
+			is no need to change your method; continue to visit our download server 
+			to download the files you need. This new protocol has been put in place 
+			to enable huge amounts of data to be downloaded quickly over long distances.
+			</P>
+			<P>Typical TCP-based protocols like http, ftp and rsync
+			have a problem in that the further away the download
+			source is from you, the slower the speed becomes.
+			Protocols like UDT/UDR allow for many UDP packets to be
+			sent in batch, thus allowing for much higher transmit
+			speeds over long distances. UDR will be especially
+			useful for users who are downloading from places that
+			are far away from California. The US East Coat and the
+			international community will likely see much higher
+			download speeds by using UDR rather than rsync, http or
+			ftp.
+			</P>
+			<P>If you need help building the UDR binaries or have
+			questions about how UDR functions, please read the
+			documentation on the GitHub page and if necessary,
+			contact the UDR authors via the GitHub 
+			page. 
+			We recommend reading the documentation on the UDR GitHub
+			page to better understand how UDR works. UDR is written
+			in C++. It is Open Source and is released under the
+			Apache 2.0 License. In order for it to work you must
+			have rsync installed on your system.
+			</P>
+			<P>For your convenience, we are offering a binary distribution 
+			of UDR for Red Hat Enterprise Linux 6.x (or variants such as 
+			CentOS 6 or Scientific Linux 6). You'll find both a 64-bit and 
+			32-bit rpm 
+			<A HREF="http://hgdownload.cse.ucsc.edu/admin/udr">here</A>.
+			</P>
+			<P>Once you have a working UDR binary, either by
+			building from source or by installing the rpm, you can download
+			files from either of our our download servers in a very
+			similar fashion to rsync. For example, using rsync, you
+			may want to download all of the MySQL tables for the
+			hg19 database using the following command:
+<PRE>			
+rsync -avP rsync://hgdownload.cse.ucsc.edu/mysql/hg19/ /my/local/hg19/
+</PRE>
+			Using UDR is very similar. The UDR syntax for downloading the same data would be:
+<PRE>
+udr rsync -avP hgdownload.cse.ucsc.edu::mysql/hg19/ /my/local/hg19/
+</PRE>
+			If you installed the rpm, use the <TT>man udr</TT> command for more 
+			information via the man page; if you installed from source please refer 
+			to the UDR GitHub page for more details on the capabilities of UDR and 
+			how to use it.
+			</P>
+			<P>UDR establishes connections on TCP/9000, then
+			transmits the data stream over UDP/9000-9100. Your
+			institution may need to modify its firewall rules to
+			allow inbound and outbound ports TCP/9000 and
+			UDP/9000-9100 from either of the two download machines.
+			</P>
+			<P>If you have difficulties installing or using UDR on your system,
+			contact the Laboratory for Advanced Computing through their GitHub 
+			<A HREF="https://github.com/LabAdvComp/UDR" TARGET="_blank">page</A>.
+		 	</P>
+			<P> If you have questions about mirroring the UCSC
+			Genome Browser, direct them to the mailing list 
+			<A HREF="mailto:&#103;en&#111;&#109;e&#45;&#109;&#105;&#114;&#114;&#111;&#114;&#64;&#115;&#111;&#101;.u&#99;&#115;c.e&#100;&#117;">&#103;en&#111;&#109;e&#45;&#109;&#105;&#114;&#114;&#111;&#114;&#64;&#115;&#111;&#101;.u&#99;&#115;c.e&#100;&#117;</A>.
+			<!-- above address is genome-mirror at soe.ucsc.edu -->
+			<B>Messages sent to this address will be posted to the 
+			moderated genome-mirror mailing list, which is 
+			archived on a public 
+			<A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome-mirror" TARGET="_blank">Google Groups forum</A>.</B> 
+			</P>
+			</TD><TD WIDTH=15></TD>
+		    </TR>
+		</TABLE>
+		<BR>
+	    </TD></TR>
     </TD></TR>
 </TABLE>
 </BODY></HTML>
