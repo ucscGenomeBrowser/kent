@@ -1170,6 +1170,34 @@ urlLabel DGV Browser and Report:
 url http://dgvbeta.tcag.ca/dgv/app/variant?id=$$&ref=$D
 dataVersion beta (Nov. 23, 2012)
 
+track dgvPlus
+compositeTrack on
+shortLabel DGV Struct Var
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
+group varRep
+priority 144.8
+visibility hide
+itemRgb on
+type bed 9 +
+noScoreFilter .
+exonArrows off
+urlLabel DGV Browser and Report:
+url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
+dataVersion July 23, 2013
+
+    track dgvMerged
+    parent dgvPlus
+    shortLabel DGV Merged Var
+    longLabel Database of Genomic Variants: Merged Structural Variants (CNV, Inversion, In/del)
+    priority 1
+
+    track dgvSupporting
+    parent dgvPlus
+    shortLabel DGV Supp Var
+    longLabel Database of Genomic Variants: Supporting Structural Variants (CNV, Inversion, In/del)
+    priority 2
+
+
 track covMask1kGPilotLowCov
 compositeTrack on
 shortLabel 1000Genomes Cov
@@ -4131,4 +4159,16 @@ searchMethod exact
 searchType bed
 searchPriority 50
 termRegex GM[0-9]+
+
+searchTable dgvMerged
+searchType bed
+semiShortCircuit on
+searchPriority 50
+termRegex ([en]ss?v|dgv[0-9]+[a-z]+)[0-9]+
+
+searchTable dgvSupporting
+searchType bed
+semiShortCircuit on
+searchPriority 50
+termRegex ([en]ss?v|dgv[0-9]+[a-z]+)[0-9]+
 

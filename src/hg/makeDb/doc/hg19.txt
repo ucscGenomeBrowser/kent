@@ -9245,81 +9245,55 @@ TMPDIR=/scratch/tmp
 # Old DGV format is obsolete; see the following section.
 
 #######################################################################
-# DGV BETA (DATABASE OF GENOMIC VARIANTS) (DONE 2/11/13 angie)
-    # DGV has changed their data format, and for the time being the data are
-    # served by a beta web site, http://dgvbeta.tcag.ca/ ; in time that will
-    # replace their current site.
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 9/13/13 angie)
+    # Beta last updated 2/11/13
+    # DGV is back out of beta, and has added some columns again for the 7/2013
+    # public release.  They have also requested that we make a composite track
+    # with subtracks for supporting variants and merged variants.
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg19/bed/dgv/$today
     cd /hive/data/genomes/hg19/bed/dgv/$today
-    wget http://dgvbeta.tcag.ca/dgv/docs/GRCh37_hg19_2012-11-23.txt
+    wget http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_variants_2013-07-23.txt
+    wget http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_supportingvariants_2013-07-23.txt
+    # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 GRCh37_hg19*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergeid mergedorsample  frequency       samplesize      cohortdescription       genes
-    # It's more complicated than Gain/Loss/Complex or Inversion now (+ stray commas):
-    cut -f 5,6 GRCh37_hg19*.txt | sort | uniq -c | head -100
-#  20105 CNV
-#   1297 CNV     ""
-#  26687 CNV     CNV
-#   2980 CNV     Complex
-# 185262 CNV     Deletion
-#  17032 CNV     Duplication
-# 122635 CNV     Gain
-#   4120 CNV     Gain+Loss
-#  27120 CNV     Insertion
-# 447672 CNV     Loss
-#    277 OTHER
-#     31 OTHER   ""
-#     42 OTHER   Complex
-#   2477 OTHER   Inversion
-#    202 OTHER   Tandem duplication
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription       genes   samples
+    # Eyeball the categories of variants:
+    cut -f 5,6 GRCh37_hg19_supportingvariants_2013-07-23.txt  | sort | uniq -c | head -100
+#  24502 CNV     CNV
+#   1092 CNV     Complex
+#1849617 CNV     Deletion
+#  16415 CNV     Duplication
+# 124879 CNV     Gain
+#   2406 CNV     Gain+Loss
+# 111834 CNV     Insertion
+# 253129 CNV     Loss
+#      2 OTHER   Complex
+#   2310 OTHER   Inversion
+#   7531 OTHER   Tandem duplication
 #      1 varianttype     variantsubtype
-    # shuffle fields into bed9+ w/itemRgb
-    set purple = "200,0,200"
-    set red = "200,0,0"
-    set blue = "0,0,200"
-    set brown = "139,69,19"
-    tail -n +2 GRCh37_hg19*.txt \
-    | perl -wpe 'chomp; \
-      s/""//; \
-      ($id, $chr, $start, $end, $varType, $varSubType, $ref, $pmid, $method, $platform, \
-       undef, undef, undef, $sampleSize, $sampleDesc, $genes) = split("\t"); \
-      $start-- unless ($start == 0); \
-      $landmark = $genes; \
-      $landmark =~ s/,/, /g; \
-      $varSubType =~ s/^,//;  $varSubType =~ s/,$//; \
-      $varTypeOut = "$varType ($varSubType)"; \
-      $ref =~ s/_/ /g; \
-      $method =~ s/_/ /g;  $method =~ s/,/, /g; \
-      $sample = $sampleDesc; \
-      $sample .= " (sample size: $sampleSize)" if ($sampleSize); \
-      $method .= " ($platform)" if ($platform && $platform ne "Not Provided"); \
-      $rgb = "0,0,0"; \
-      if ($varType eq "CNV") { \
-        if ($varSubType eq "Gain" || $varSubType eq "Insertion" || $varSubType eq "Duplication") {\
-          $rgb = "'$blue'"; \
-        } elsif ($varSubType eq "Loss" ||$varSubType eq "Deletion") { \
-          $rgb = "'$red'"; \
-        } elsif ($varSubType eq "") { \
-          $varTypeOut = $varType; \
-        } else { \
-          $rgb = "'$brown'"; \
-        } \
-      } elsif ($varType eq "OTHER") { \
-        if ($varSubType eq "Inversion") { \
-          $rgb =  "'$purple'"; \
-        } elsif ($varSubType eq "Tandem Duplication") { \
-          $rgb = "'$blue'"; \
-        } else { \
-          $varTypeOut = $varType; \
-        } \
-      } \
-      $_ = join("\t", "chr$chr", $start, $end, $id, 0, "+", \
-                $start, $start, $rgb, $landmark, $varTypeOut, \
-                $ref, $pmid, $method, $sample) . "\n";' \
-        > dgv.bed
-    hgLoadBed hg19 dgv dgv.bed \
-      -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -renameSqlTable -tab
-#Read 857939 elements of size 15 from dgv.bed
+    cut -f 5,6 GRCh37_hg19_variants_2013-07-23.txt | sort | uniq -c | head -100
+#   2189 CNV     CNV
+#   3382 CNV     Complex
+#  77268 CNV     Deletion
+#    668 CNV     Duplication
+#  24891 CNV     Gain
+#   3850 CNV     Gain+Loss
+#  24140 CNV     Insertion
+#  64185 CNV     Loss
+#    708 OTHER   Complex
+#   1149 OTHER   Inversion
+#      1 varianttype     variantsubtype
+    ~/kent/src/hg/utils/automation/translateDgvPlus.pl \
+      GRCh37_hg19_supportingvariants_2013-07-23.txt > dgvSupporting.bed
+    ~/kent/src/hg/utils/automation/translateDgvPlus.pl \
+      GRCh37_hg19_variants_2013-07-23.txt > dgvMerged.bed
+    hgLoadBed hg19 dgvSupporting dgvSupporting.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
+#Read 2393717 elements of size 22 from dgvSupporting.bed
+    hgLoadBed hg19 dgvMerged dgvMerged.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
+#Read 202430 elements of size 22 from dgvMerged.bed
 
 
 #######################################################################
