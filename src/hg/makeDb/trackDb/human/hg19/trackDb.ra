@@ -2117,6 +2117,8 @@ color 150,0,0
 type bed 4 .
 searchMethod exact
 searchType bed
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track ultraConservedExtended
 shortLabel Extended Ultras
@@ -2129,3 +2131,5 @@ color 100,0,100
 type bed 4 .
 searchMethod exact
 searchType bed
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
