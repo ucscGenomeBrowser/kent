@@ -2105,3 +2105,27 @@ url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_
 urlLabel Click here for primer details:
 
 include trackDb.100way.ra
+
+track ultraConserved
+shortLabel Ultra Conserved
+longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
+group x
+priority 109.31
+visibility hide
+exonArrows off
+color 150,0,0
+type bed 4 .
+searchMethod exact
+searchType bed
+
+track ultraConservedExtended
+shortLabel Extended Ultras
+longLabel Ultras Extended Until 5 Bases Below 85% in Conservation Track
+group x
+priority 109.32
+visibility hide
+exonArrows off
+color 100,0,100
+type bed 4 .
+searchMethod exact
+searchType bed
