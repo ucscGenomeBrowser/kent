@@ -1362,7 +1362,7 @@ boolean doDisableKeys = FALSE;
 
 /* determine if tab file can be accessed directly by the database, or send
  * over the network */
-bool sqlNeverLocal = cfgOptionBooleanDefault("sqlNeverLocal", 0);
+bool sqlNeverLocal = cfgOptionBooleanDefault("db.neverLocal", 0);
 if (((options & SQL_TAB_FILE_ON_SERVER) && !sqlIsRemote(conn)) | sqlNeverLocal)
     {
     /* tab file on server requiries full path */

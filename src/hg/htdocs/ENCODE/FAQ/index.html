@@ -426,13 +426,20 @@
           <p>
             <b><font color="#006666">Response:</font></b><br>
             The total volume of ENCODE data are greater than 31 TB. Unfortunately, it is not
-            possible for you to obtain a disk copy, however we are working on a
-            <a href="http://rgrossman.com/2013/03/20/a-tool-for-keeping-big-data-in-sync/">protocol</a>
-            which should help our users get much faster download rates. It is on our list of
-            things to do, so we will not be able to give you a time estimate as to when this
-            tool will be available. We highly recommend using rsync. Using rsync, for example
-            "rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile
-            ./", has the advantage of starting up where it left off after a failure, when ran again.
+            possible for you to obtain a disk copy, however, there is a new protocol to try
+            call UDR for UDT Enabled Rsync. UDR provides users much faster download rates.</p>
+          <p>
+            Here is an example using UDR, once installed, to download all the mouse mm9 ENCODE
+            infomation</p>
+          <pre class="code">$ udr rsync -avP hgdownload.cse.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
+            Please read more about the new UDR method <a href="../../ENCODE/newsarch.html#091213"
+                                                      target="_blank">here</a>.</p>
+          <p>
+            For those not downloading high amounts of data, we highly recommend using rsync.
+            For example:</p>
+          <pre class="code">$ rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile ./</pre>
+          <p>
+            Using rsync has the advantage of starting up where it left off after a failure, when ran again.
           </p>
         </div><!--end content-->
     </div><!--end wrapper-->

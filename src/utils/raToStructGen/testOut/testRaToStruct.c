@@ -9,14 +9,12 @@
 #include "sqlList.h"
 #include "ra.h"
 #include "raToStruct.h"
-#include "encodeDataWarehouse.h"
+#include "testStruct.h"
 
 struct raToStructReader *edwFastqFileRaReader()
 /* Make a raToStructReader for edwFastqFile */
 {
 static char *fields[] = {
-    "sampleCount",
-    "basesInSample",
     "readCount",
     "baseCount",
     "readSizeMean",
@@ -35,6 +33,7 @@ static char *fields[] = {
     "gRatio",
     "tRatio",
     "nRatio",
+    "posCount",
     "qualPos",
     "aAtPos",
     "cAtPos",
@@ -77,8 +76,6 @@ struct edwFastqFile *edwFastqFileFromNextRa(struct lineFile *lf, struct raToStru
 {
 enum fields
     {
-    sampleCountField,
-    basesInSampleField,
     readCountField,
     baseCountField,
     readSizeMeanField,
@@ -97,6 +94,7 @@ enum fields
     gRatioField,
     tRatioField,
     nRatioField,
+    posCountField,
     qualPosField,
     aAtPosField,
     cAtPosField,
@@ -125,16 +123,6 @@ while (raNextTagVal(lf, &tag, &val, NULL))
 	fieldsObserved[id] = TRUE;
 	switch (id)
 	    {
-	    case sampleCountField:
-	        {
-	        el->sampleCount = sqlLongLong(val);
-		break;
-	        }
-	    case basesInSampleField:
-	        {
-	        el->basesInSample = sqlLongLong(val);
-		break;
-	        }
 	    case readCountField:
 	        {
 	        el->readCount = sqlLongLong(val);
@@ -162,8 +150,7 @@ while (raNextTagVal(lf, &tag, &val, NULL))
 	        }
 	    case readSizeMaxField:
 	        {
-                int arraySize = sqlSigned(val);
-                raToStructArraySignedSizer(lf, arraySize, &el->readSizeMax, "readSizeMax");
+	        el->readSizeMax = sqlSigned(val);
 		break;
 	        }
 	    case qualMeanField:
@@ -226,46 +213,52 @@ while (raNextTagVal(lf, &tag, &val, NULL))
 	        el->nRatio = sqlDouble(val);
 		break;
 	        }
+	    case posCountField:
+	        {
+                int arraySize = sqlSigned(val);
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "posCount");
+		break;
+	        }
 	    case qualPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->qualPos, &arraySize);
-                raToStructArraySignedSizer(lf, arraySize, &el->readSizeMax, "qualPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "qualPos");
 		break;
 	        }
 	    case aAtPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->aAtPos, &arraySize);
-                raToStructArraySignedSizer(lf, arraySize, &el->readSizeMax, "aAtPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "aAtPos");
 		break;
 	        }
 	    case cAtPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->cAtPos, &arraySize);
-                raToStructArraySignedSizer(lf, arraySize, &el->readSizeMax, "cAtPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "cAtPos");
 		break;
 	        }
 	    case gAtPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->gAtPos, &arraySize);
-                raToStructArraySignedSizer(lf, arraySize, &el->readSizeMax, "gAtPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "gAtPos");
 		break;
 	        }
 	    case tAtPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->tAtPos, &arraySize);
-                raToStructArraySignedSizer(lf, arraySize, &el->readSizeMax, "tAtPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "tAtPos");
 		break;
 	        }
 	    case nAtPosField:
 	        {
                 int arraySize;
 		sqlDoubleDynamicArray(val, &el->nAtPos, &arraySize);
-                raToStructArraySignedSizer(lf, arraySize, &el->readSizeMax, "nAtPos");
+                raToStructArraySignedSizer(lf, arraySize, &el->posCount, "nAtPos");
 		break;
 	        }
 	    default:
@@ -302,5 +295,15 @@ if (one == NULL)
 if (one->next != NULL)
     errAbort("Multiple records in %s", fileName);
 return one;
+}
+
+int main(int argc, char *argv[])
+/* Process command line and test. */
+{
+if (argc != 2)
+    errAbort("expecting exactly one command line argument");
+struct edwFastqFile *list = edwFastqFileLoadRa(argv[1]);
+printf("Got %d elements in %s\n", slCount(list), argv[1]);
+return 0;
 }
 

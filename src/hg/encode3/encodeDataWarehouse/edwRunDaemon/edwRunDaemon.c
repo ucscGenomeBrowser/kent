@@ -189,26 +189,36 @@ else
     }
 }
 
-void readToNewLineAndIgnore(int fd)
+void readAndIgnore(int fd, int byteCount)
 /* Read byteCount from fd, and just throw it away.  We are just using named pipe
  * as a synchronization device is why. */
 {
-char c;
-for (;;)
+/* This is implemented perhaps too fancily - so as to efficiently discard datae
+ * if need be by reading into a reasonable fixed sized buffer as opposed to a single
+ * character. */
+int bytesLeft = byteCount;
+char buf[128];
+int bufSize = sizeof(buf);
+while (bytesLeft > 0)
     {
-    int oneRead = read(fd, &c, 1);
-    if (oneRead == -1)
+    int bytesAttempted = (bytesLeft > bufSize ? bufSize : bytesLeft);
+    int bytesRead = read(fd, buf, bytesAttempted);
+    if (bytesRead == -1)
         errnoAbort("Problem reading from named pipe.");
-    if (c == '\n')
-        break;
+    bytesLeft -= bytesRead;
     }
 }
 
 void syncWithTimeout(int fd, long long microsecs)
+/* Wait for either input from file fd, or timeout.  Will
+ * ignore input - just using it as a sign to short-circuit
+ * wait part of a polling loop. */
 {
 int bytesReady = netWaitForData(fd, microsecs);
 if (bytesReady > 0)
-    readToNewLineAndIgnore(fd);
+    {
+    readAndIgnore(fd, bytesReady);
+    }
 }
 
 
@@ -234,8 +244,8 @@ long long lastId = 0;  // Keep track of lastId in run table that has already bee
 
 for (;;)
     {
-    /* Wait for signal to come on named pipe or one minute to pass */
-    syncWithTimeout(fd, 60*1000000);
+    /* Wait for signal to come on named pipe or 30 seconds to pass */
+    syncWithTimeout(fd, 30*1000000);
 
     /* Finish up processing on any children that have finished */
     while (checkOnChildRunner(FALSE) != NULL)	

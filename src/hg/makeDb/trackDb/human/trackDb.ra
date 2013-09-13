@@ -2880,6 +2880,17 @@ urls variationId="http://web.expasy.org/variant_pages/$$.html" uniProtId="http:/
 mouseOverField comments
 noScoreFilter on
 
+track clinvar
+shortLabel ClinVar Variants
+longLabel NCBI ClinVar Genome Variants
+group phenDis
+priority 32
+visibility hide
+type bigBed 4 .
+urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
+mouseOverField variantType
+noScoreFilter on
+
 track spAnnot
 shortLabel UniProt Annotations
 longLabel UniProt/SwissProt Annotations

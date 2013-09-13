@@ -401,9 +401,12 @@ int nameSize = strlen(path);
 char *suffix = lastMatchCharExcept(path, path + nameSize, '.', '/');
 if (suffix != NULL)
     {
-    char *secondSuffix = lastMatchCharExcept(path, suffix, '.', '/');
-    if (secondSuffix != NULL)
-        suffix = secondSuffix;
+    if (sameString(suffix, ".gz") || sameString(suffix, ".bigBed"))
+	{
+	char *secondSuffix = lastMatchCharExcept(path, suffix, '.', '/');
+	if (secondSuffix != NULL)
+	    suffix = secondSuffix;
+	}
     }
 else
     suffix = path + nameSize;
@@ -732,18 +735,21 @@ safef(command, sizeof(command), "edwQaAgent %lld", fileId);
 edwAddJob(conn, command);
 }
 
-int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url)
-/* Return position of our URL in submission queue */
+int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url, unsigned *retJobId)
+/* Return position of our URL in submission queue.  Optionally return id in edwSubmitJob
+ * table of job. */
 {
 char query[256];
-sqlSafef(query, sizeof(query), "select commandLine from edwSubmitJob where startTime = 0");
+sqlSafef(query, sizeof(query), "select id,commandLine from edwSubmitJob where startTime = 0");
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 int aheadOfUs = -1;
 int pos = 0;
+unsigned jobId = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *line = row[0];
+    jobId = sqlUnsigned(row[0]);
+    char *line = row[1];
     char *edwSubmit = nextQuotedWord(&line);
     char *lineUrl = nextQuotedWord(&line);
     if (sameOk(edwSubmit, "edwSubmit") && sameOk(url, lineUrl))
@@ -754,6 +760,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     ++pos;
     }
 sqlFreeResult(&sr);
+if (retJobId != NULL)
+    *retJobId = jobId;
 return aheadOfUs;
 }
 
