@@ -27,7 +27,7 @@ priority 103.29
         noInherit on
         irows on
         summary multiz100waySummary
-#        frames multiz100wayFrames
+        frames multiz100wayFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
