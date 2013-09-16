@@ -173,3 +173,27 @@ else
 endif
 
 echo
+
+# Outputs the date and filesize of all 2bit files if applicable
+if ($md5sumBlatExists != '') then
+  echo "        $blatSpacing date,size: "`ssh qateam@$blat ls /scratch/$db/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
+else
+  echo "          blat date,size: N/A"
+endif
+if ($md5sumDownloadExists != '') then
+  echo "      download date,size: "`ls /usr/local/apache/htdocs-hgdownload/goldenPath/$db/bigZips/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
+else
+  echo "      download date,size: N/A"
+endif
+if ($md5sumGbdbDevExists != '') then
+  echo "   hgwdev gbdb date,size: "`ls /gbdb/$db/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
+else
+  echo "   hgwdev gbdb date,size: N/A"
+endif
+if ($md5sumGbdbDevExists != '') then
+  echo "  hgwbeta gbdb date,size: "`ssh qateam@hgwbeta ls /gbdb/$db/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
+else
+  echo "  hgwbeta gbdb date,size: N/A"
+endif
+
+echo
