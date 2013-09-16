@@ -7,15 +7,15 @@ TARGET=_BLANK>Database of Genomic Variants</A> (DGV), which
 contains genomic variations observed in healthy individuals.
 DGV focuses on structural variation, defined as
 genomic alterations that involve segments of DNA that are larger than
-1000 bp.  Insertions/deletions of 100 bp or larger are also included.
+1000 bp.  Insertions/deletions of 50 bp or larger are also included.
 </P>
 
 <H2>Display Conventions</H2>
 <P>
-This track contains two subtracks: Merged Structural Variants, i.e.
-annotations that have been merged from one or more reported structural
-variants at the same location, and Supporting Structural Variants,
-i.e. the sample-level reported structural variants.
+This track contains two subtracks: Structural Variant Regions, i.e.
+annotations that have been generated from one or more reported
+structural variants at the same location, and Supporting Structural
+Variants, i.e. the sample-level reported structural variants.
 </P>
 <P>
 Color is used to indicate the type of variation.
@@ -110,10 +110,9 @@ For data sets where the variation calls are reported at a
 sample-by-sample level, DGV merges calls with similar boundaries
 across the sample
 set. Only variants of the same type (i.e. CNVs, Indels, inversions)
-are merged, and gains and losses are merged separately.  In addition,
-if several different platforms/approaches are used within the same
-study, these datasets are merged separately. Sample level calls that
-overlap by &ge; 70% are merged in this process.
+are merged, and gains and losses are merged separately.
+Sample level calls that overlap by &ge; 70% are merged in this
+process.
 </P>
 
 <H2>Credits</H2>

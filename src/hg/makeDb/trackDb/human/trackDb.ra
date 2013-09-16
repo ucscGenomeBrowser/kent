@@ -1203,8 +1203,8 @@ dataVersion July 23, 2013
 
     track dgvMerged
     parent dgvPlus
-    shortLabel DGV Merged Var
-    longLabel Database of Genomic Variants: Merged Structural Variants (CNV, Inversion, In/del)
+    shortLabel DGV Struct Var
+    longLabel Database of Genomic Variants: Structural Variant Regions (CNV, Inversion, In/del)
     priority 1
 
     track dgvSupporting
