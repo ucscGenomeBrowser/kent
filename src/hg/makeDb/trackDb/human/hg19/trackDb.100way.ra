@@ -4,7 +4,7 @@ shortLabel 100-way multiz
 longLabel Vertebrate Multiz Alignment & Conservation (100 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 # subGroup2 clade Clade glires=Glires euarchontoglires=Euarchontoglires placental=Placental all=All_species
-subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate
+subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate all=All_species
 dragAndDrop subTracks
 dimensions dimensionX=clade
 visibility full
@@ -124,13 +124,13 @@ priority 103.29
 ##         altColor 140,60,60
 ##         priority 4
 ## 
-##     # phastCons conservation
-##     track cons100wayViewphastcons
-##     shortLabel Element Conservation (phastCons)
-##     view phastcons
-##     visibility hide
-##     subTrack cons100way
-## 
+    # phastCons conservation
+    track cons100wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons100way
+
 ##         track phastCons100wayGlires
 ##         subTrack cons100wayViewphastcons off
 ##         subGroups view=phastcons clade=glires
@@ -178,30 +178,30 @@ priority 103.29
 ##         color 55,115,55
 ##         altColor 115,55,55
 ##         priority 12
-## 
-##         track phastCons100way
-##         subTrack cons100wayViewphastcons off
-##         subGroups view=phastcons clade=all
-##         shortLabel 100 Vert. Cons
-##         longLabel 100 vertebrates conservation by PhastCons
-##         noInherit on
-##         configurable on
-##         type wig 0 1
-##         maxHeightPixels 100:40:11
-##         autoScale off
-##         spanList 1
-##         windowingFunction mean
-##         color 70,130,70
-##         altColor 130,70,70
-##         priority 13
-## 
-##     # Conserved Elements (Most Conserved)
-##     track cons100wayViewelements
-##     shortLabel Conserved Elements
-##     view elements
-##     visibility hide
-##     subTrack cons100way
-## 
+
+        track phastCons100way
+        subTrack cons100wayViewphastcons off
+        subGroups view=phastcons clade=all
+        shortLabel 100 Vert. Cons
+        longLabel 100 vertebrates conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons100wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons100way
+
 ##         track phastConsElements100wayGlires
 ##         subTrack cons100wayViewelements off
 ##         subGroups view=elements clade=glires
@@ -231,14 +231,13 @@ priority 103.29
 ##         type bed 5 .
 ##         color 130,30,60
 ##         priority 22
-## 
-##         track phastConsElements100way
-##         subTrack cons100wayViewelements off
-##         subGroups view=elements clade=all
-##         shortLabel 100 Vert. El
-##         longLabel 100 vertebrates Conserved Elements
-##         noInherit on
-##         color 110,10,40
-##         type bed 5 .
-##         priority 23
-## 
+
+        track phastConsElements100way
+        subTrack cons100wayViewelements off
+        subGroups view=elements clade=all
+        shortLabel 100 Vert. El
+        longLabel 100 vertebrates Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
