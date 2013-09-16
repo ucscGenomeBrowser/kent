@@ -1,0 +1,175 @@
+#!/bin/tcsh
+
+###########################################
+#
+#  09-13-13
+#  Steve Heitner
+# 
+#  Compares the md5sum from all instances
+#  of an assembly's 2bit file
+# 
+###########################################
+
+set bigZipsExists=''
+set blat=''
+set blatExists=''
+set blatSpacing=''
+set db=''
+set dbExists=''
+set downloadExists=''
+set gbdbDevExists=''
+set gbdbBetaExists=''
+set md5sumBlatExists=''
+set md5sumBlat=''
+set md5sumDownloadExists=''
+set md5sumDownload=''
+set md5sumGbdbDevExists=''
+set md5sumGbdbDev=''
+set md5sumGbdbBetaExists=''
+set md5sumGbdbBeta=''
+
+# Gives the usage statement if the program is run
+# without arguments
+if ($#argv != 1 ) then
+  echo
+  echo "  compares the md5sums from all instances"
+  echo "  of an assembly's 2bit file:"
+  echo
+  echo "  - /scratch/db on blat server"
+  echo "  - /usr/local/apache/htdocs-hgdownload/goldenPath/db/bigZips"
+  echo "  - /gbdb/db on hgwdev"
+  echo "  - /gbdb/db on hgwbeta"
+  echo
+  echo "    usage: 2bitCompare db"
+  echo
+  exit 1
+else
+  set db=$argv[1]
+endif
+
+# Checks to make sure the database entered has an entry
+# in hgcentraltest.dbDb.  If it does not, the user is
+# informed that this is not a valid database and the script
+# stops.  If it does, the 2bit files are checked.
+set dbExists=`hgsql -Ne "select name from dbDb where name='$db'" hgcentraltest`
+if ($dbExists == '' ) then
+  echo
+  echo "  There is no entry for $db in hgcentraltest.dbDb"
+  echo
+  exit 2
+endif
+
+echo
+echo "  Checking md5sums.  This could take a few minutes.  Please be patient..."
+echo
+
+# Checks to see which blat server the database resides on.  If a blat
+# server is found, checks for the existence of the $db directory.  If the
+# directory is found, checks for the existence of the 2bit file.  If the
+# 2bit file is found, checks the md5sum.
+set blat=`hgsql -Ne "select host from blatServers where db='$db' limit 1" hgcentraltest`
+if ($blat != '' ) then
+  set blatExists=`ssh qateam@$blat ls /scratch | grep ^$db\$`
+  if ($blatExists != '' ) then
+    set md5sumBlatExists=`ssh qateam@$blat ls /scratch/$db | grep $db.2bit`
+    if ($md5sumBlatExists != '' ) then
+      set md5sumBlat=`ssh qateam@$blat md5sum /scratch/$db/$db.2bit`
+    endif
+  endif
+endif
+
+# Reports the findings of the above section
+if ($blat == '' ) then
+  echo "          blat md5sum: There are no entries for $db in hgcentraltest.blatServers"
+else
+  if ($blat == 'blatx' ) then
+    set blatSpacing=" blatx"
+  else
+    set blatSpacing=$blat
+  endif
+  if ($blatExists == '') then
+    echo "        $blatSpacing md5sum: The $db directory does not exist in /scratch on $blat"
+  else
+    if ($md5sumBlatExists == '' ) then
+      echo "        $blatSpacing md5sum: $db.2bit does not exist in /scratch/$db on $blat"
+    else
+      echo "        $blatSpacing md5sum: $md5sumBlat"
+    endif
+  endif
+endif
+
+# Checks for the existence of the $db directory in the downloads directory.
+# If the $db directory is found, checks for the existence of the bigZips directory.
+# If the bigZips directory is found, checks for the existence of the 2bit file.
+# If the 2bit file is found, checks the md5sum.
+set downloadExists=`ls /usr/local/apache/htdocs-hgdownload/goldenPath | grep ^$db\$`
+if ($downloadExists != '' ) then
+  set bigZipsExists=`ls /usr/local/apache/htdocs-hgdownload/goldenPath/$db | grep bigZips`
+  if ($bigZipsExists != '' ) then
+    set md5sumDownloadExists=`ls /usr/local/apache/htdocs-hgdownload/goldenPath/$db/bigZips | grep $db.2bit`
+    if ($md5sumDownloadExists != '' ) then
+      set md5sumDownload=`md5sum /usr/local/apache/htdocs-hgdownload/goldenPath/$db/bigZips/$db.2bit`
+    endif
+  endif
+endif
+
+# Reports the findings of the above section
+if ($downloadExists == '' ) then
+  echo "      download md5sum: The $db directory does not exist in /usr/local/apache/htdocs-hgdownload/goldenPath"
+else
+  if ($bigZipsExists == '') then
+    echo "      download md5sum: The bigZips directory does not exist in /usr/local/apache/htdocs-hgdownload/goldenPath/$db"
+  else
+    if ($md5sumDownloadExists == '' ) then
+      echo "      download md5sum: $db.2bit does not exist in /usr/local/apache/htdocs-hgdownload/goldenPath/$db/bigZips"
+    else
+      echo "      download md5sum: $md5sumDownload"
+    endif
+  endif
+endif
+
+# Checks for the existence of the $db directory in gbdb on dev.  If the directory is
+# found, checks for the existence of the 2bit file. If the 2bit file is found,
+# checks the md5sum.
+set gbdbDevExists=`ls /gbdb | grep ^$db\$`
+if ($gbdbDevExists != '' ) then
+  set md5sumGbdbDevExists=`ls /gbdb/$db | grep $db.2bit`
+  if ($md5sumGbdbDevExists != '' ) then
+    set md5sumGbdbDev=`md5sum /gbdb/$db/$db.2bit`
+  endif
+endif
+
+# Reports the findings of the above section
+if ($gbdbDevExists == '' ) then
+  echo "   hgwdev gbdb md5sum: The $db directory does not exist in /gbdb on hgwdev"
+else
+  if ($md5sumGbdbDevExists == '' ) then
+    echo "   hgwdev gbdb md5sum: $db.2bit does not exist in /gbdb/$db on hgwdev"
+  else
+    echo "   hgwdev gbdb md5sum: $md5sumGbdbDev"
+  endif
+endif
+
+# Checks for the existence of the $db directory in gbdb on beta.  If the directory is
+# found, checks for the existence of the 2bit file.  If the 2bit file is found,
+# checks the md5sum.
+set gbdbBetaExists=`ssh qateam@hgwbeta ls /gbdb | grep ^$db\$`
+if ($gbdbBetaExists != '' ) then
+  set md5sumGbdbBetaExists=`ssh qateam@hgwbeta ls /gbdb/$db | grep $db.2bit`
+  if ($md5sumGbdbBetaExists != '' ) then
+    set md5sumGbdbBeta=`ssh qateam@hgwbeta md5sum /gbdb/$db/$db.2bit`
+  endif
+endif
+
+# Reports the findings of the above section
+if ($gbdbBetaExists == '' ) then
+  echo "  hgwbeta gbdb md5sum: The $db directory does not exist in /gbdb on hgwbeta"
+else
+  if ($md5sumGbdbBetaExists == '' ) then
+    echo "  hgwbeta gbdb md5sum: $db.2bit does not exist in /gbdb/$db on hgwbeta"
+  else
+    echo "  hgwbeta gbdb md5sum: $md5sumGbdbBeta"
+  endif
+endif
+
+echo
