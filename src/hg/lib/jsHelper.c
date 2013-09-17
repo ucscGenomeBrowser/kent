@@ -497,8 +497,18 @@ printf("<script>\n"
        "  }\n"
        "}\n"
        "window.onload = function() { "
-       "  if (checkPageBackOrRefresh()) { window.location.replace('%s?%s'); } };\n"
-       "</script>\n", cgiScriptName(), cartSidUrlString(cart));
+       "  if (checkPageBackOrRefresh()) { \n"
+       "    if (window.location.search == '?%s') { \n"
+	      // We already have the hgsid-only URL that we want, reload it.
+	      // (necessary for IE because IE doesn't reload on replace,
+	      //  unless window.location and/or window.search changes)
+       "      window.location.reload(true);\n"
+       "    } else { \n"
+       "      window.location.replace('%s?%s');\n"
+       "    } \n"
+       "  } "
+       "};\n"
+       "</script>\n", cartSidUrlString(cart), cgiScriptName(), cartSidUrlString(cart));
 }
 
 static struct jsonElement *newJsonElement(jsonElementType type)
