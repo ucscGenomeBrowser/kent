@@ -414,7 +414,7 @@ while (lineFileNext(lf, &line, &lineSize))
 		runShell(path);
 		*r = '/';
 		}
-	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s.%s.diff"
+	    safef(path, sizeof(path), "%s/%s/%s/%s/%s/%s.%s.diff.txt"
 		, outDir, outPrefix, "user", u, full ? "full" : "context", fpath, c->commitId);
 
 	    h = mustOpen(path, "w");
@@ -505,7 +505,7 @@ for(c = commits; c; c = c->next)
 	    safef(path, sizeof(path), "%s.html", commonPath);
 	    cHtml = cloneString(path);
 
-	    safef(path, sizeof(path), "%s.diff", commonPath);
+	    safef(path, sizeof(path), "%s.diff.txt", commonPath);
 	    cDiff = cloneString(path);
 
 	    // make context html page
@@ -518,7 +518,7 @@ for(c = commits; c; c = c->next)
 	    freeMem(cHtml);
 	    safef(path, sizeof(path), "%s.html", relativePath);
 	    cHtml = cloneString(path);
-	    safef(path, sizeof(path), "%s.diff", relativePath);
+	    safef(path, sizeof(path), "%s.diff.txt", relativePath);
 	    cDiff = cloneString(path);
 
 
@@ -535,7 +535,7 @@ for(c = commits; c; c = c->next)
 	    safef(path, sizeof(path), "%s.html", commonPath);
 	    fHtml = cloneString(path);
 
-	    safef(path, sizeof(path), "%s.diff", commonPath);
+	    safef(path, sizeof(path), "%s.diff.txt", commonPath);
 	    fDiff = cloneString(path);
 
 
@@ -548,7 +548,7 @@ for(c = commits; c; c = c->next)
 	    freeMem(fHtml);
 	    safef(path, sizeof(path), "%s.html", relativePath);
 	    fHtml = cloneString(path);
-	    safef(path, sizeof(path), "%s.diff", relativePath);
+	    safef(path, sizeof(path), "%s.diff.txt", relativePath);
 	    fDiff = cloneString(path);
 
 	    // make file diff links
@@ -679,7 +679,7 @@ for(cf = comFiles; cf; cf = cf->next)
     relativePath = cloneString(path);
     safef(path, sizeof(path), "%s.html", relativePath);
     cHtml = cloneString(path);
-    safef(path, sizeof(path), "%s.diff", relativePath);
+    safef(path, sizeof(path), "%s.diff.txt", relativePath);
     cDiff = cloneString(path);
 
 
@@ -693,7 +693,7 @@ for(cf = comFiles; cf; cf = cf->next)
     relativePath = cloneString(path);
     safef(path, sizeof(path), "%s.html", relativePath);
     fHtml = cloneString(path);
-    safef(path, sizeof(path), "%s.diff", relativePath);
+    safef(path, sizeof(path), "%s.diff.txt", relativePath);
     fDiff = cloneString(path);
 
     // make file view links
