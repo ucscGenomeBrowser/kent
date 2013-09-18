@@ -535,7 +535,6 @@ while (TRUE)
 		    if (fileSize != -1 && pc->received != pc->partSize)	
 			{
 			pc->sd = -2;  /* conn was closed before all data was sent, can retry later */
-			return FALSE;
 			}
 		    --connOpen;
 		    ++reOpen;
