@@ -310,13 +310,19 @@ struct paraFetchInterruptContext
     struct sqlConnection *conn;
     unsigned submitId;
     boolean isInterrupted;
+    long long lastChecked;
     };
 
 static boolean paraFetchInterruptFunction(void *v)
 /* Return TRUE if we need to interrupt. */
 {
 struct paraFetchInterruptContext *context = v;
-context->isInterrupted = edwSubmitShouldStop(context->conn, context->submitId);
+long long now = edwNow();
+if (context->lastChecked != now)  // Only do check every second
+    {
+    context->isInterrupted = edwSubmitShouldStop(context->conn, context->submitId);
+    context->lastChecked = now;
+    }
 return context->isInterrupted;
 }
 
@@ -361,7 +367,7 @@ if (errCatchStart(errCatch))
     ef->startUploadTime = edwNow();
 
     mustCloseFd(&localFd);
-    if (!parallelFetchInterruptable(submitFileName, tempName, paraFetchStreams, 3, FALSE, FALSE,
+    if (!parallelFetchInterruptable(submitFileName, tempName, paraFetchStreams, 4, FALSE, FALSE,
 	paraFetchInterruptFunction, &interruptContext))
 	{
 	if (interruptContext.isInterrupted)
