@@ -272,6 +272,19 @@ Sadly many of the Genome Browser specific modules are currently quite long.
 On the bright side the vast majority of the library modules are reasonably
 sized.
 
+PREVENTING SQL-INJECTION
+
+In order to prevent SQL-Injection (sqli), we use primarily
+a special function called sqlSafef() to construct properly
+escaped SQL strings.  
+
+The main article about preventing sqli is found here on genomewiki:
+
+http://genomewiki.ucsc.edu/index.php/Sql_injection_protection
+
+There are several other related and supporting 
+functions to defeat sqli.  The function reference is found here:
+
+http://genomewiki.ucsc.edu/index.php/Sql-injection_safe_functions
 
 ====================================================================
-This file last updated: $Date: 2010/06/03 16:48:53 $
