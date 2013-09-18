@@ -1,0 +1,115 @@
+# UCSC<tab>common<tab>Scientific<tab>group<tab>clade<tab>orderKey
+# dbase    name       name           menu
+hg19	Human	Homo sapiens	Primates, etc.	primate	140
+panTro4	Chimp	Pan troglodytes	Primates, etc.	primate	229
+panPan1	Bonobo	Pan paniscus	Primates, etc.	primate	245
+gorGor3	Gorilla	Gorilla gorilla gorilla	Primates, etc.	primate	250
+ponAbe2	Orangutan	Pongo pygmaeus abelii	Primates, etc.	primate	310
+nomLeu3	Gibbon	Nomascus leucogenys	Primates, etc.	primate	328
+chlSab1	Green monkey	Chlorocebus sabaeus	Primates, etc.	primate	340
+rheMac3	Rhesus	Macaca mulatta	Primates, etc.	primate	359
+macFas5	Crab-eating macaque	Macaca fascicularis	Primates, etc.	primate	380
+papHam1	Baboon	Papio hamadryas	Primates, etc.	primate	390
+saiBol1	Squirrel monkey	Saimiri boliviensis	Primates, etc.	primate	395
+calJac3	Marmoset	Callithrix jacchus	Primates, etc.	primate	400
+tarSyr1	Tarsier	Tarsius syrichta	Primates, etc.	primate	410
+micMur1	Mouse lemur	Microcebus murinus	Primates, etc.	primate	460
+otoGar3	Bushbaby	Otolemur garnettii	Primates, etc.	primate	464
+tupBel1	Tree shrew	Tupaia belangeri	Primates, etc.	scandentia	500
+tupChi1	Chinese tree shrew	Tupaia chinensis	Primates, etc.	scandentia	510
+mm10	Mouse	Mus musculus	Rodents, etc.	glires	1209
+rn5	Rat	Rattus norvegicus	Rodents, etc.	glires	1559
+octDeg1	Brush-tailed rat	Octodon degus	Rodents, etc.	glires	1575
+dipOrd1	Kangaroo rat	Dipodomys ordii	Rodents, etc.	glires	1580
+jacJac1	Lesser Egyptian jerboa	Jaculus jaculus	Rodents, etc.	glires	1590
+micOch1	Prairie vole	Microtus ochrogaster	Rodents, etc.	glires	1600
+criGri1	Chinese hamster	Cricetulus griseus	Rodents, etc.	glires	1610
+mesAur1	Golden hamster	Mesocricetus auratus	Rodents, etc.	glires	1620
+hetGla2	Naked mole-rat	Heterocephalus glaber	Rodents, etc.	glires	1649
+cavPor3	Guinea pig	Cavia porcellus	Rodents, etc.	glires	1680
+chiLan1	Chinchilla	Chinchilla lanigera	Rodents, etc.	glires	1700
+oryCun2	Rabbit	Oryctolagus cuniculus	Rodents, etc.	glires	1890
+speTri2	Squirrel	Spermophilus tridecemlineatus	Rodents, etc.	glires	1909
+ochPri3	Pika	Ochotona princeps	Rodents, etc.	glires	1929
+susScr3	Pig	Sus scrofa	Mammal	cetartiodactyla	2349
+vicPac2	Alpaca	Vicugna pacos	Mammal	cetartiodactyla	2359
+panHod1	Tibetan antelope	Pantholops hodgsonii	Mammal	cetartiodactyla	2362
+turTru2	Dolphin	Tursiops truncatus	Mammal	cetartiodactyla	2364
+lipVex1	Yangtze river dolphin	Lipotes vexillifer	Mammal	cetartiodactyla	2366
+orcOrc1	Killer whale	Orcinus orca	Mammal	cetartiodactyla	2367
+oviAri3	Sheep	Ovis aries	Mammal	cetartiodactyla	2369
+capHir1	Domestic goat	Capra hircus	Mammal	cetartiodactyla	2375
+bosTau7	Cow	Bos taurus	Mammal	cetartiodactyla	2379
+equCab2	Horse	Equus caballus	Mammal	perissodactyla	2409
+cerSim1	White rhinoceros	Ceratotherium simum	Mammal	perissodactyla	2415
+felCat5	Cat	Felis catus	Mammal	carnivora	2418
+panTig1	Amur tiger	Panthera tigris altaica	Mammal	carnivora	2425
+musFur1	Ferret 	Mustela putorius furo	Mammal	carnivora	2430
+canFam3	Dog	Canis lupus familiaris	Mammal	carnivora	2437
+camFer1	Bactrian camel	Camelus ferus	Mammal	carnivora	2450
+ailMel1	Panda	Ailuropoda melanoleuca	Mammal	carnivora	2460
+odoRosDiv1	Pacific walrus	Odobenus rosmarus divergens	Mammal	carnivora	2470
+lepWed1	Weddell seal	Leptonychotes weddellii	Mammal	carnivora	2480
+myoBra1	Brandt's myotis (bat)	Myotis brandtii	Mammal	chiroptera	2500
+myoDav1	David's myotis (bat)	Myotis davidii	Mammal	chiroptera	2510
+myoLuc2	Microbat	Myotis lucifugus	Mammal	chiroptera	2514
+eptFus1	Big brown bat	Eptesicus fuscus	Mammal	chiroptera	2517
+pteVam1	Megabat	Pteropus vampyrus	Mammal	chiroptera	2520
+pteAle1	Black flying-fox	Pteropus alecto	Mammal	chiroptera	2530
+eriEur2	Hedgehog	Erinaceus europaeus	Mammal	insectivora	2569
+sorAra2	Shrew	Sorex araneus	Mammal	insectivora	2579
+conCri1	Star-nosed mole	Condylura cristata	Mammal	insectivora	2590
+loxAfr3	Elephant	Loxodonta africana	Mammal	afrotheria	3098
+eleEdw1	Cape elephant shrew	Elephantulus edwardii	Mammal	afrotheria	3110
+chrAsi1	Cape golden mole	Chrysochloris asiatica	Mammal	afrotheria	3120
+oryAfe1	Aardvark	Orycteropus afer	Mammal	afrotheria	3130
+proCap1	Rock hyrax	Procavia capensis	Mammal	afrotheria	3350
+echTel2	Tenrec	Echinops telfairi	Mammal	afrotheria	3369
+triMan1	Manatee	Trichechus manatus latirostris	Mammal	afrotheria	3380
+dasNov3	Armadillo	Dasypus novemcinctus	Mammal	xenarthra	3459
+choHof1	Sloth	Choloepus hoffmanni	Mammal	xenarthra	3480
+monDom5	Opossum	Monodelphis domestica	Mammal	mammal	3540
+sarHar1	Tasmanian devil	Sarcophilus harrisii	Mammal	mammal	3590
+macEug2	Wallaby	Macropus eugenii	Mammal	mammal	3610
+ornAna1	Platypus	Ornithorhynchus anatinus	Mammal	mammal	3650
+falChe1	Saker falcon	Falco cherrug	Vertebrate	aves	3660
+falPer1	Peregrine falcon	Falco peregrinus	Vertebrate	aves	3670
+colLiv1	Rock pigeon	Columba livia	Vertebrate	aves	3680
+ficAlb2	Collared flycatcher	Ficedula albicollis	Vertebrate	aves	3689
+ficAlb1	Collared flycatcher	Ficedula albicollis	Vertebrate	aves	3690
+amaVit1	Puerto Rican parrot	Amazona vittata	Vertebrate	aves	4310
+araMac1	Scarlet Macaw	Ara macao	Vertebrate	aves	4320
+galGal4	Chicken	Gallus gallus	Vertebrate	aves	4349
+anaPla1	Mallard duck	Anas platyrhynchos	Vertebrate	aves	4357
+pseHum1	Tibetan ground jay	Pseudopodoces humilis	Vertebrate	aves	4358
+zonAlb1	White-throated sparrow	Zonotrichia albicollis	Vertebrate	aves	4359
+melGal1	Turkey	Meleagris gallopavo	Vertebrate	aves	4360
+taeGut2	Zebra finch	Taeniopygia guttata	Vertebrate	aves	4369
+geoFor1	Medium ground finch	Geospiza fortis	Vertebrate	aves	4373
+melUnd1	Budgerigar	Melopsittacus undulatus	Vertebrate	aves	4375
+allMis1	American alligator	Alligator mississippiensis	Vertebrate	sauria	4380
+allSin1	Chinese alligator	Alligator sinensis	Vertebrate	sauria	4382
+anoCar2	Lizard	Anolis carolinensis	Vertebrate	sauria	4390
+cheMyd1	Green seaturtle	Chelonia mydas	Vertebrate	testudines	4395
+pelSin1	Soft-shell Turtle	Pelodiscus sinensis	Vertebrate	testudines	4400
+apaSpi1	Spiny softshell turtle	Apalone spinifera	Vertebrate	testudines	4403
+chrPic1	Painted turtle	Chrysemys picta bellii	Vertebrate	testudines	4405
+xenTro7	Frog (X. tropicalis)	Xenopus tropicalis	Vertebrate	tetrapoda	4439
+latCha1	Coelacanth	Latimeria chalumnae	Vertebrate	sarcopterygii	4465
+tetNig2	Tetraodon	Tetraodon nigroviridis	Vertebrate	tetraodontidae	4599
+fr3	Fugu	Takifugu rubripes	Vertebrate	tetraodontidae	4628
+takFla1	Tawny puffer fish	Takifugu flavidus	Vertebrate	tetraodontidae	4640
+hapBur1	Burton's mouthbreeder	Haplochromis burtoni	Vertebrate	cichlidae	4650
+mayZeb1	Zebra Mbuna	Maylandia zebra	Vertebrate	cichlidae	4660
+punNye1	Pundamilia nyererei	Pundamilia nyererei	Vertebrate	cichlidae	4665
+oreNil2	Nile tilapia	Oreochromis niloticus	Vertebrate	cichlidae	4669
+neoBri1	Princess of Burundi	Neolamprologus brichardi	Vertebrate	cichlidae	4680
+gasAcu1	Stickleback	Gasterosteus aculeatus	Vertebrate	smegmamorpha	4700
+oryLat2	Medaka	Oryzias latipes	Vertebrate	smegmamorpha	4729
+xipMac1	Southern platyfish	Xiphophorus maculatus	Vertebrate	smegmamorpha	4740
+gadMor1	Atlantic cod	Gadus morhua	Vertebrate	neoteleostei	4750
+danRer7	Zebrafish	Danio rerio	Vertebrate	teleostei	4774
+astMex1	Mexican tetra (cavefish)	Astyanax mexicanus	Vertebrate	teleostei	4790
+lepOcu1	Spotted gar	Lepisosteus oculatus	Vertebrate	neopterygii	4790
+petMar2	Lamprey	Petromyzon marinus	Vertebrate	hyperoartia	4799
+letCam1	Arctic lamprey	Lethenteron camtschaticum	Vertebrate	hyperoartia	4820
