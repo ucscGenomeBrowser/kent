@@ -3,8 +3,8 @@ setenv BRANCHNN 289
 setenv TODAY 2013-09-09             # v289 final
 setenv LASTWEEK  2013-08-19         # v288 final
 # set for preview 1:
-setenv REVIEWDAY 2013-08-26         # v289 preview
-setenv LASTREVIEWDAY 2013-08-07     # v288 preview
+setenv REVIEWDAY 2013-09-16         # v290 preview
+setenv LASTREVIEWDAY 2013-08-26     # v289 preview
 # set for preview 2:
 setenv REVIEW2DAY 2013-09-02        # v288 preview2
 setenv LASTREVIEW2DAY 2013-08-13    # v288 preview2

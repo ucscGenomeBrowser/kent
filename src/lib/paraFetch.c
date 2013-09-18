@@ -187,7 +187,7 @@ ssize_t sinceLastStatus = 0;
 char *dateString = "";
 int star = 1;  
 int starMax = 20;  
-int starStep = 1;
+off_t starStep = 1;
 // TODO handle case-sensitivity of protocols input
 if (startsWith("http://",url) || startsWith("https://",url))
     {
@@ -535,7 +535,6 @@ while (TRUE)
 		    if (fileSize != -1 && pc->received != pc->partSize)	
 			{
 			pc->sd = -2;  /* conn was closed before all data was sent, can retry later */
-			return FALSE;
 			}
 		    --connOpen;
 		    ++reOpen;

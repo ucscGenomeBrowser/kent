@@ -1167,8 +1167,24 @@ type bed 9 +
 noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report:
-url http://dgvbeta.tcag.ca/dgv/app/variant?id=$$&ref=$D
+url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 dataVersion beta (Nov. 23, 2012)
+release beta,public
+
+track dgv
+shortLabel DGV Beta (old)
+longLabel Database of Genomic Variants: obsolete, here for QA comparison
+group varRep
+priority 144.8
+visibility hide
+itemRgb on
+type bed 9 +
+noScoreFilter .
+exonArrows off
+urlLabel DGV Browser and Report:
+url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
+dataVersion beta (Nov. 23, 2012)
+release alpha
 
 track dgvPlus
 compositeTrack on
@@ -1187,8 +1203,8 @@ dataVersion July 23, 2013
 
     track dgvMerged
     parent dgvPlus
-    shortLabel DGV Merged Var
-    longLabel Database of Genomic Variants: Merged Structural Variants (CNV, Inversion, In/del)
+    shortLabel DGV Struct Var
+    longLabel Database of Genomic Variants: Structural Variant Regions (CNV, Inversion, In/del)
     priority 1
 
     track dgvSupporting
