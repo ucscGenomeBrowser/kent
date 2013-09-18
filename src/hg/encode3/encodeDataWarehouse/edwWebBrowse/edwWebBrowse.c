@@ -110,7 +110,8 @@ struct edwValidFile *newReplicatesList(struct edwSubmit *submit, struct sqlConne
 char query[256];
 sqlSafef(query, sizeof(query), 
     "select v.* from edwFile f,edwValidFile v"
-    "  where f.id = v.fileId and f.submitId=%u and v.replicate != ''",
+    "  where f.id = v.fileId and f.submitId=%u and v.replicate != '' and v.replicate != 'n/a' "
+    "  and v.replicate != 'pooled'",
     submit->id);
 return edwValidFileLoadByQuery(conn, query);
 }
