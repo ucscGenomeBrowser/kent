@@ -26580,11 +26580,11 @@ TMPDIR=/scratch/tmp
         `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-XXX - running - Thu Sep 19 10:29:23 PDT 2013
-    #   real    76m34.446s
+    #   real    221m54.751s
 
     cat fb.hg19.chainLetCam1Link.txt
-    #   30305028 bases of 2897316137 (1.046%) in intersection
+    #   37233603 bases of 2897316137 (1.285%) in intersection
+
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/hg19/bed
     ln -s lastzLetCam1.2013-09-19 lastz.letCam1
@@ -26594,8 +26594,9 @@ XXX - running - Thu Sep 19 10:29:23 PDT 2013
     cd /hive/data/genomes/letCam1/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/hg19/bed/lastzLetCam1.2013-09-19/DEF \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+XXX - running - Thu Sep 19 15:58:25 PDT 2013
     #   real    15m22.099s
     cat  fb.letCam1.chainHg19Link.txt
     #	21515660 bases of 647368134 (3.324%) in intersection
@@ -28057,26 +28058,18 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz100way
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz100way/maf
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz100way/alignments
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way
-mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/glire
-mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/primate
-mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/euarchontoglire
-mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/placental
-mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/vertebrate
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/hg19.100way.phastCons
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way
-mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/glire
-mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/primate
-mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/euarchontoglire
-mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/placental
-mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/vertebrate
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/hg19.100way.phyloP100way
+
     mkdir /hive/data/genomes/hg19/bed/multiz100way/downloads
     cd /hive/data/genomes/hg19/bed/multiz100way/downloads
     mkdir multiz100way phastCons100way phyloP100way
     cd multiz100way
     mkdir maf alignments
     cd maf
-    time cp -p ../../../anno/result/chr*.maf .
+    time rsync -a -P ../../../anno/result/ ./
+XXX - working - Thu Sep 19 15:12:47 PDT 2013
     #   real    735m35.723s
     time gzip *.maf
     #   real    700m23.340s
@@ -28095,144 +28088,61 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/hg19.100w
 
     #####################################################################
     cd /hive/data/genomes/hg19/bed/multiz100way/downloads/phastCons100way
-    mkdir glire euarchontoglire primate placental vertebrate hg19.100way.phastCons
-    cd glire
-    ln -s ../../../cons/glire/downloads/chr*.gz .
-    time md5sum *.gz > md5sum.txt &
-    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
-        /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/glire
-    #   real    5m50.001s
-    cd ../euarchontoglire
-    ln -s ../../../cons/euarchontoglires/downloads/chr*.gz .
-    time md5sum *.gz > md5sum.txt &
-    #   real    1m14.103s
-    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/euarchontoglire
-    cd ../primate
-    ln -s ../../../cons/primate/downloads/chr*.gz .
-    time md5sum *.gz > md5sum.txt &
-    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/primate
-    #   real    5m39.288s
-    cd ../placental
-    ln -s ../../../cons/placental/downloads/chr*.gz .
-    time md5sum *.gz > md5sum.txt &
-    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
-  /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/placental
-    #   real    5m9.762s
-    cd ../vertebrate
-    ln -s ../../../cons/vertebrate/downloads/chr*.gz .
-    time md5sum *.gz > md5sum.txt &
-    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
-  /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/vertebrate
-    #   real    0m45.408s
+    mkdir hg19.100way.phastCons
     cd ../hg19.100way.phastCons
     ln -s ../../../cons/all/downloads/chr*.gz .
-    time md5sum *.gz > md5sum.txt &
+    time md5sum *.gz > md5sum.txt
+    # real    2m9.045s
+
     ln -s `pwd`/*.gz `pwd`/md5sum.txt \
   /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way/hg19.100way.phastCons
     #   real    6m11.158s
     cd ..
     ln -s ../../cons/all/all.mod hg19.100way.phastCons.mod
-    ln -s ../../cons/glire/glire.mod hg19.100way.phastCons.glire.mod
-    ln -s ../../cons/primate/primate.mod hg19.100way.phastCons.primate.mod
-    ln -s ../../cons/euarchontoglires/euarchontoglires.mod hg19.100way.phastCons.euarchontoglire.mod
-    ln -s ../../cons/placental/placental.mod hg19.100way.phastCons.placental.mod
-    ln -s ../../cons/vertebrate/vertebrate.mod hg19.100way.phastCons.vertebrate.mod
     ln -s ../../cons/all/phastCons100way.bw hg19.100way.phastCons.bw
-    ln -s ../../cons/glire/phastCons100wayGlire.bw \
-        hg19.100way.phastCons100wayGlire.bw
-    ln -s ../../cons/placental/phastCons100wayPlacental.bw \
-        hg19.100way.phastCons100wayPlacental.bw
-    ln -s ../../cons/euarchontoglires/phastCons100wayEuarchontoGlires.bw \
-        hg19.100way.phastCons100wayEuarchontoGlire.bw
-    ln -s ../../cons/primate/phastCons100wayPrimate.bw \
-        hg19.100way.phastCons100wayPrimate.bw
-    ln -s ../../cons/vertebrate/phastCons100wayVertebrate.bw \
-        hg19.100way.phastCons100wayVertebrate.bw
     time md5sum *.mod *.bw > md5sum.txt
-    #   real    20m11.260s
-    # obtain the README.txt from hg19/phastCons46way and update for this
+    #  real    3m4.462s
+    # obtain the README.txt from mm10/phastCons60way and update for this
     #   situation
+XXX - ready to edit - Thu Sep 19 16:00:32 PDT 2013
+# /hive/data/genomes/mm10/bed/multiz60way/downloads/phastCons60way/README.txt
     ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/README.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way
 
     #####################################################################
     cd /hive/data/genomes/hg19/bed/multiz100way/downloads/phyloP100way
-    mkdir glire euarchontoglire primate placental vertebrate hg19.100way.phyloP100way
-    cd glire
-    ln -s ../../../consPhyloP/glire/downloads/chr*.gz .
-    time md5sum *.gz > md5sum.txt &
-    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
-        /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/glire
-    #   real    6m5.733s
-    cd ../euarchontoglire
-    ln -s ../../../consPhyloP/euarchontoglires/downloads/chr*.gz .
-    time md5sum *.gz > md5sum.txt &
-    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/euarchontoglire
-    #   real    5m40.272s
-    cd ../primate
-    ln -s ../../../consPhyloP/primate/downloads/chr*.gz .
-    time md5sum *.gz > md5sum.txt &
-    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
-        /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/primate
-    #   real    7m22.623s
-    cd ../placental
-    ln -s ../../../consPhyloP/placental/downloads/chr*.gz .
-    time md5sum *.gz > md5sum.txt &
-    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/placental
-    #   real    7m39.269s
-    cd ../vertebrate
-    ln -s ../../../consPhyloP/vertebrate/downloads/chr*.gz .
-    time md5sum *.gz > md5sum.txt &
-    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/vertebrate
-    cd ../hg19.100way.phyloP100way
+    mkdir hg19.100way.phyloP100way
+    cd hg19.100way.phyloP100way
     ln -s ../../../consPhyloP/all/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
+    # real    3m37.813s
+
     ln -s `pwd`/*.gz `pwd`/md5sum.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/hg19.100way.phyloP100way
-    #   real    8m5.777s
 
     cd ..
     ln -s ../../consPhyloP/run.phyloP/all.mod hg19.100way.phyloP100way.mod
-    ln -s ../../consPhyloP/run.phyloP/glire.mod ./hg19.phyloP.glire.mod
-    ln -s ../../consPhyloP/run.phyloP/placental.mod ./hg19.phyloP.placental.mod
-    ln -s ../../consPhyloP/run.phyloP/euarchontoglires.mod ./hg19.phyloP.euarchontoglire.mod
-    ln -s ../../consPhyloP/run.phyloP/primate.mod ./hg19.phyloP.primate.mod
-    ln -s ../../consPhyloP/run.phyloP/vertebrate.mod ./hg19.100way.vertebrate.mod
 
     ln -s ../../consPhyloP/all/phyloP100way.bw hg19.100way.phyloP100way.bw
-    ln -s ../../consPhyloP/glire/phyloP100wayGlire.bw \
-        hg19.100way.phyloP100wayGlire.bw
-    ln -s ../../consPhyloP/vertebrate/phyloP100wayVertebrate.bw \
-        hg19.100way.phyloP100wayVertebrate.bw
-    ln -s ../../consPhyloP/placental/phyloP100wayPlacental.bw \
-        hg19.100way.phyloP100wayPlacental.bw
-    ln -s ../../consPhyloP/euarchontoglires/phyloP100wayEuarchontoGlires.bw \
-        hg19.100way.phyloP100wayEuarchontoglire.bw
-    ln -s ../../consPhyloP/primate/phyloP100wayPrimate.bw \
-        hg19.100way.phyloP100wayPrimate.bw
 
     time md5sum *.mod *.bw > md5sum.txt &
-    #   real    20m17.082s
+    #  real    4m44.724s
 
-    # obtain the README.txt from hg19/phyloP46way and update for this
+    # obtain the README.txt from mm10/phyloP60way and update for this
     #   situation
+XXX - ready to edit - Thu Sep 19 16:00:32 PDT 2013
+# /hive/data/genomes/mm10/bed/multiz60way/downloads/phyloP60way/README.txt
     ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/md5sum.txt `pwd`/README.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way
 
     ###########################################################################
     ## create upstream refGene maf files
-    cd /hive/data/genomes/hg19/bed/multiz100way/downloads/maf
+    cd /hive/data/genomes/hg19/bed/multiz100way/downloads/multiz100way
     # bash script
-#!/bin/sh
-for S in 1000 2000 5000
+time for S in 1000 2000 5000
 do
     echo "making upstream${S}.maf"
-    featureBits hg19 refGene:upstream:${S} -fa=/dev/null -bed=stdout \
+    featureBits hg19 knownGene:upstream:${S} -fa=/dev/null -bed=stdout \
         | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
         | /cluster/bin/$MACHTYPE/mafFrags hg19 multiz100way \
                 stdin stdout \
@@ -28240,6 +28150,7 @@ do
         | gzip -c > upstream${S}.maf.gz
     echo "done upstream${S}.maf.gz"
 done
+XXX - running - Thu Sep 19 16:02:46 PDT 2013
     #   real    199m45.558s
 
     md5sum *.nh *.maf.gz > md5sum.txt
@@ -28261,7 +28172,7 @@ done
     cat ../species.list | tr '[ ]' '[\n]' > order.list
 
     export mz=multiz100way
-    export gp=refGene
+    export gp=knownGene
     export db=hg19
     export I=0
     mkdir exonAA exonNuc
@@ -28280,10 +28191,11 @@ done
     echo "wait" >> $gp.jobs
 
     time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+XXX - running - Thu Sep 19 16:05:01 PDT 2013
     #   real    93m34.376s
 
     mz=multiz100way
-    gp=refGene
+    gp=knownGene
     db=hg19
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
     #   real    1m16.821s
