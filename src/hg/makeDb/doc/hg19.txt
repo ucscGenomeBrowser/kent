@@ -26483,8 +26483,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg19 panTig1 > rbest.log 2>&1 &
-XXX - running - Wed Sep 11 10:36:47 PDT 2013
-    #   real    68m58.182s
+    #  real    541m21.230s
 
     # running the swap
     mkdir /hive/data/genomes/panTig1/bed/blastz.hg19.swap
@@ -26494,11 +26493,10 @@ XXX - running - Wed Sep 11 10:36:47 PDT 2013
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet > swap.log 2>&1
-XXX - running - Wed Sep 11 10:36:47 PDT 2013
-    #  real    106m53.116s
+    #   real    329m54.539s
 
     cat fb.panTig1.chainHg19Link.txt
-    #  1453539854 bases of 2364296207 (61.479%) in intersection
+    #  1458977137 bases of 2332849683 (62.541%) in intersection
 
     cd /hive/data/genomes/panTig1/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -26542,4 +26540,68 @@ _EOF_
 cat variant_summary.txt  |  tawk '($13=="GRCh37" || $13=="GRCh37.p9") {print "chr"$14,$15,$16,$3,$9,$2,$4,$5,$6,$7,$8,$10,$11,$12,$13,$17,$18,$19,$20,$21$22,$23,$24}'  | sed -e 's/, /,/g' | sed -e 's/;/,/g' | tawk '{split($4, a, " "); $4=a[1]; if ($4=="") {$4=$11}; print}' | grep -v ClinicalSignificance | sort -k1,1 -k2,2n | grep -v chrM > clinvar.bed 
 bedToBigBed clinvar.bed /scratch/data/hg19/chrom.sizes clinvar.bb -type=bed4+18 -tab -as=clinvar.as 
 cp clinvar.bb /hive/data/genomes/hg19/bed/clinvar/
+#########################################################################
+# lastz Arctic lamprey letCam1 (DONE - 2013-09-19 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S letCam1
+    mkdir /hive/data/genomes/hg19/bed/lastzLetCam1.2013-09-19
+    cd /hive/data/genomes/hg19/bed/lastzLetCam1.2013-09-19
+
+    cat << '_EOF_' > DEF
+# Human vs. Arctic lamprey
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Arctic lamprey LetCam1
+SEQ2_DIR=/hive/data/genomes/letCam1/letCam1.2bit
+SEQ2_LEN=/hive/data/genomes/letCam1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=200
+
+BASE=/hive/data/genomes/hg19/bed/lastzLetCam1.2013-09-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+XXX - running - Thu Sep 19 10:29:23 PDT 2013
+    #   real    76m34.446s
+
+    cat fb.hg19.chainLetCam1Link.txt
+    #   30305028 bases of 2897316137 (1.046%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzLetCam1.2013-09-19 lastz.letCam1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/letCam1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/letCam1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzLetCam1.2013-09-19/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    15m22.099s
+    cat  fb.letCam1.chainHg19Link.txt
+    #	21515660 bases of 647368134 (3.324%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/letCam1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
 #########################################################################
