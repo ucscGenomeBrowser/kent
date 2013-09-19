@@ -391,8 +391,12 @@ int retryCount = 0;
 
 time_t startTime = time(NULL);
 
-#define SELTIMEOUT 5
-#define RETRYSLEEPTIME 30    
+#define SELTIMEOUT 10
+#define RETRYSLEEPTIME 30
+int scaledRetries = numRetries;
+if (fileSize != -1)
+    scaledRetries = round(numRetries * (1+fileSize/1e10) );
+verbose(2,"scaledRetries=%d\n", scaledRetries);
 while (TRUE)
     {
     verbose(2,"Top of big loop\n");
@@ -585,7 +589,7 @@ while (TRUE)
 	{
 	warn("No data within %d seconds for %s", SELTIMEOUT, url);
 	/* Retry ? */
-	if (retryCount >= numRetries)
+	if (retryCount >= scaledRetries)
 	    {
     	    return FALSE;
 	    }
