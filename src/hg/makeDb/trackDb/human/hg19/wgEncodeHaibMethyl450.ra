@@ -537,3 +537,9 @@ scoreFilterLimits 0:1000
     type bed 9
     # subId=4942 dateSubmitted=2011-10-01
 
+searchTable wgEncodeHaibMethyl450Gm12878SitesRep1
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex cg[0-9]*
+searchPriority 50
