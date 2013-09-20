@@ -50,6 +50,7 @@ static struct optionSpec optionSpecs[] =
     {"minAlnSize", OPTION_INT},
     {"minNonRepSize", OPTION_INT},
     {"maxRepMatch", OPTION_FLOAT},
+    {"repsAsMatch", OPTION_BOOLEAN},
     {"polyASizes", OPTION_STRING},
     {"usePolyTHead", OPTION_BOOLEAN},
     {"hapRegions", OPTION_STRING},
@@ -488,6 +489,8 @@ if (optionExists("ignoreNs"))
     gCDnaOpts |= cDnaIgnoreNs;
 if (optionExists("ignoreIntrons"))
     gCDnaOpts |= cDnaIgnoreIntrons;
+if (optionExists("repsAsMatch"))
+    gCDnaOpts |= cDnaRepsAsMatch;
 gMinId = optionFrac("minId", gMinId);
 gMinCover = optionFrac("minCover", gMinCover);
 gMinSpan = optionFrac("minSpan", gMinSpan);

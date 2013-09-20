@@ -35,6 +35,12 @@ else
                      PSL_NUM_COLS, PSLX_NUM_COLS, nCols);
         }
     }
+
+if ((psl != NULL) && (reader->opts & cDnaRepsAsMatch))
+    {
+    psl->match += psl->repMatch;
+    psl->repMatch = 0;
+    }
 return psl;
 }
 
