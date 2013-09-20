@@ -89,6 +89,7 @@
 #include "delHinds2.h"
 #include "delConrad2.h"
 #include "dgv.h"
+#include "dgvPlus.h"
 #include "tokenizer.h"
 #include "softberryHom.h"
 #include "borkPseudoHom.h"
@@ -16149,6 +16150,119 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
+#define CORIELL_ID_URL_BASE "http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref="
+
+static void maybePrintCoriellLinks(char *commaSepIds)
+/* If id looks like a Coriell ID, print a link to Coriell, otherwise just print id. */
+{
+struct slName *id, *sampleIds = slNameListFromComma(commaSepIds);
+for (id = sampleIds;  id != NULL;  id = id->next)
+    {
+    if (startsWith("NA", id->name) && countLeadingDigits(id->name+2) == strlen(id->name+2))
+	{
+	// I don't know why coriell doesn't have direct links to NA's but oh well,
+	// we can substitute 'GM' for 'NA' to get to the page...
+	char *gmId = cloneString(id->name);
+	gmId[0] = 'G';  gmId[1] = 'M';
+	printf("<A HREF=\""CORIELL_ID_URL_BASE"%s\" TARGET=_BLANK>%s</A>", gmId, id->name);
+	freeMem(gmId);
+	}
+    else
+	printf("%s", id->name);
+    if (id->next != NULL)
+	printf(", ");
+    }
+slNameFreeList(&sampleIds);
+}
+
+static void printBrowserPosLinks(char *commaSepIds)
+/* Print hgTracks links with position=id. */
+{
+struct slName *id, *sampleIds = slNameListFromComma(commaSepIds);
+for (id = sampleIds;  id != NULL;  id = id->next)
+    {
+    char *searchTerm = cgiEncode(trimSpaces(id->name));
+    printf("<A HREF=\"%s&position=%s\">%s</A>", hgTracksPathAndSettings(), searchTerm, id->name);
+    if (id->next != NULL)
+	printf(", ");
+    freeMem(searchTerm);
+    }
+slNameFreeList(&sampleIds);
+}
+
+void doDgvPlus(struct trackDb *tdb, char *id)
+/* Details for Database of Genomic Variants, July 2013 and later. */
+{
+struct dgvPlus dgv;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[512];
+int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+genericHeader(tdb, id);
+printCustomUrl(tdb, id, FALSE);
+
+sqlSafef(query, sizeof(query), "select * from %s where name = '%s' "
+      "and chrom = '%s' and chromStart = %d and chromEnd = %d",
+      tdb->table, id, seqName, start, end);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    dgvPlusStaticLoad(row+rowOffset, &dgv);
+    printf("<B>Position:</B> "
+	   "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A><BR>\n",
+	   hgTracksPathAndSettings(), database,
+	   dgv.chrom, dgv.chromStart+1, dgv.chromEnd,
+	   dgv.chrom, dgv.chromStart+1, dgv.chromEnd);
+    printBand(dgv.chrom, dgv.chromStart, dgv.chromEnd, FALSE);
+    printf("<B>Genomic size:</B> %d<BR>\n", dgv.chromEnd - dgv.chromStart);
+    printf("<B>Variant type:</B> %s<BR>\n", dgv.varType);
+    printf("<B>Reference:</B> <A HREF=\"");
+    printEntrezPubMedUidAbstractUrl(stdout, dgv.pubMedId);
+    printf("\" TARGET=_BLANK>%s</A><BR>\n", dgv.reference);
+    printf("<B>Method:</B> %s<BR>\n", dgv.method);
+    if (isNotEmpty(dgv.platform))
+	printf("<B>Platform:</B> %s<BR>\n", dgv.platform);
+    if (isNotEmpty(dgv.cohortDescription))
+	printf("<B>Sample cohort description:</B> %s<BR>\n", dgv.cohortDescription);
+    if (isNotEmpty(dgv.samples))
+	{
+	printf("<B>Sample IDs:</B> ");
+	maybePrintCoriellLinks(dgv.samples);
+	printf("<BR>\n");
+	}
+    printf("<B>Sample size:</B> %u<BR>\n", dgv.sampleSize);
+    if (dgv.observedGains != 0 || dgv.observedLosses != 0)
+	{
+	printf("<B>Observed gains:</B> %u<BR>\n", dgv.observedGains);
+	printf("<B>Observed losses:</B> %u<BR>\n", dgv.observedLosses);
+	}
+    if (isNotEmpty(dgv.mergedVariants))
+	{
+	printf("<B>Merged variants:</B> ");
+	printBrowserPosLinks(dgv.mergedVariants);
+	printf("<BR>\n");
+	}
+    if (isNotEmpty(dgv.supportingVariants))
+	{
+	printf("<B>Supporting variants:</B> ");
+	printBrowserPosLinks(dgv.supportingVariants);
+	printf("<BR>\n");
+	}
+    if (isNotEmpty(dgv.genes))
+	{
+	printf("<B>Genes:</B> ");
+	printBrowserPosLinks(dgv.genes);
+	printf("<BR>\n");
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
 void doAffy120K(struct trackDb *tdb, char *itemName)
 /* Put up info on an Affymetrix SNP. */
 {
@@ -24653,6 +24767,10 @@ else if (sameWord(table, "delConrad2"))
 else if (sameWord(table, "dgv") || sameWord(table, "dgvBeta"))
     {
     doDgv(tdb, item);
+    }
+else if (sameWord(table, "dgvMerged") || sameWord(table, "dgvSupporting"))
+    {
+    doDgvPlus(tdb, item);
     }
 else if (sameWord(table, "affy120K"))
     {

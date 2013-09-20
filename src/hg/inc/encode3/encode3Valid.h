@@ -13,4 +13,7 @@ void encode3ValidateRcc(char *path);
 void encode3ValidateIdat(char *path);
 /* Validate illumina idat file. */
 
+boolean encode3IsGzipped(char *path);
+/* Return TRUE if file at path starts with GZIP signature */
+
 #endif /* ENCODE3VALID_H */

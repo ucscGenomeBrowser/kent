@@ -1,0 +1,9 @@
+#!/bin/tcsh -efx
+cd testOut
+autoSql test.as testStruct
+raToStructGen -testMain test.as testRaToStruct.c -required=readCount,baseCount,readSizeMean,readSizeStd,readSizeMin,readSizeMax,qualMean,qualStd,qualMin,qualMax,qualType,qualZero,atRatio,aRatio,cRatio,gRatio,tRatio,nRatio,qualPos,aAtPos,cAtPos,gAtPos,tAtPos,nAtPos -computed=id,fileId,sampleCount,sampleFileName
+make
+rehash
+testRaToStruct test.ra > test.out
+diff test.expected test.out
+cd ..

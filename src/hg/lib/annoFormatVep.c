@@ -113,7 +113,7 @@ static void afVepPrintHeaderExtraTags(struct annoFormatVep *self, char *bStart, 
 struct annoFormatVepExtraSource *extras = self->config->extraSources, *extraSrc;
 if (extras == NULL)
     return;
-fprintf(self->f, "%sExtra column keys:%s", bStart, bEnd);
+fprintf(self->f, "%sKeys for Extra column items:%s", bStart, bEnd);
 afVepLineBreak(self->f, self->doHtml);
 for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
     {
@@ -205,9 +205,11 @@ fprintf(f, "%sTranscripts:%s %s (%s)", bStart, bEnd,
 	config->gpVarDescription, config->gpVarSource->name);
 afVepLineBreak(f, doHtml);
 if (config->snpSource != NULL)
+    {
     fprintf(f, "%sdbSNP:%s %s (%s)", bStart, bEnd,
 	    config->snpDescription, config->snpSource->name);
-afVepLineBreak(f, doHtml);
+    afVepLineBreak(f, doHtml);
+    }
 afVepPrintHeaderExtraTags(self, bStart, bEnd);
 afVepPrintColumnLabels(self);
 self->needHeader = FALSE;

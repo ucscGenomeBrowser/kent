@@ -782,7 +782,7 @@ hPrintf(
     cartUsualString(cart, "hgLogin_userName", ""));
 hPrintf("<div class=\"inputGroup\">"
     "\n"
-    "<label for=\"currentPw\">Current Password</label>"
+    "<label for=\"currentPw\">Current or Emailed Password</label>"
     "<input type=\"password\" name=\"hgLogin_password\" value=\"\" size=\"30\" id=\"currentPw\">"
     "</div>"
     "\n"

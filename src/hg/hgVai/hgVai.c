@@ -423,7 +423,8 @@ else if (sameString(tableName, "dbNsfpMutationAssessor"))
 			  "(high or medium: predicted functional; "
 			  "low or neutral: predicted non-functional)", doHtml);
 else if (sameString(tableName, "dbNsfpLrt"))
-	return formatDesc("http://www.mutationtaster.org/", "Likelihood ratio test (LRT)",
+	return formatDesc("http://www.genetics.wustl.edu/jflab/lrt_query.html",
+			  "Likelihood ratio test (LRT)",
 			  "(D = deleterious, N = Neutral, U = unknown)", doHtml);
 else if (sameString(tableName, "dbNsfpGerpNr"))
 	return formatDesc("http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html",

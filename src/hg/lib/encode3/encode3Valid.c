@@ -104,4 +104,14 @@ if (!fileStartsWithOneOfPair(path, "IDAT", "DITA"))
     errAbort("%s is not a valid .idat file, it does not start with IDAT or DITA", fileNameOnly(path));
 }
 
+boolean encode3IsGzipped(char *path)
+/* Return TRUE if file at path starts with GZIP signature */
+{
+FILE *f = mustOpen(path, "r");
+int first = fgetc(f);
+int second = fgetc(f);
+carefulClose(&f);
+return first == 0x1F && second == 0x8B;
+}
+
 

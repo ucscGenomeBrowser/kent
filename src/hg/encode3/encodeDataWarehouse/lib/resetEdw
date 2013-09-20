@@ -23,12 +23,10 @@ endif
 echo hi > $qaFifo &
 
 # Do the often time consuming removal of all data.
-#rm -rf /hive/groups/encode/encode3/encodeDataWarehouse
-rm -rf /scratch/kent/encodeDataWarehouse
+rm -rf /hive/groups/encode/encode3/encodeDataWarehouse
 
 # Make new data directory.
-#mkdir /hive/groups/encode/encode3/encodeDataWarehouse
-mkdir /scratch/kent/encodeDataWarehouse
+mkdir /hive/groups/encode/encode3/encodeDataWarehouse
 
 # Create database and populate it with empty tables.
 hgsql hgFixed -e "create database encodeDataWarehouse"
@@ -47,9 +45,14 @@ edwCreateUser kate@soe.ucsc.edu
 edwCreateUser brianlee@soe.ucsc.edu
 edwCreateUser katrina@soe.ucsc.edu
 edwCreateUser chinhli@soe.ucsc.edu
+edwCreateUser chli@ucsc.edu
 edwAddAssembly 9606 hg19 hg19 /gbdb/hg19/hg19.2bit -symLink=bcdbfbe9da62f19bee88b74dabef8cd3
+edwAddAssembly 9606 male.hg19 male.hg19 /hive/groups/encode/encode3/encValData/hg19/male.hg19.2bit -symLink=d536cde4657b63e92c52719cd1bd71d1
+edwAddAssembly 9606 female.hg19 female.hg19 /hive/groups/encode/encode3/encValData/hg19/female.hg19.2bit -symLink=b7fe3540ba1bf22f8c89a7bbded3f4ee
 edwAddAssembly 10090 mm9 mm9 /gbdb/mm9/mm9.2bit -symLink=e47354d24b9d95e832c337d42b9f8f71
 edwAddAssembly 10090 mm10 mm10 /gbdb/mm10/mm10.2bit -symLink=fcfcc276799031793a513e2e9c07adad
+edwAddAssembly 10090 male.mm9 male.mm9 /hive/groups/encode/encode3/encValData/mm9/male.mm9.2bit -symLink=be61b8e211215b75be377d33db77caa8
+edwAddAssembly 10090 female.mm9 female.mm9 /hive/groups/encode/encode3/encValData/mm9/female.mm9.2bit -symLink=79e6601f7f4bbcfad657c7a9708477b8
 edwAddAssembly 10116 rn4 rn4 /gbdb/rn4/rn4.2bit -symLink=9f0ed3cd87ab900be5e8157dbeaee12e
 edwAddAssembly 7227 dm3 dm3 /gbdb/dm3/dm3.2bit -symLink=4ec509b470010829be44ed8e7bfd7f57
 edwAddAssembly 559292 sacCer3 sacCer3 /gbdb/sacCer3/sacCer3.2bit -symLink=880201a7d1ec95c0185b0b4783c80411

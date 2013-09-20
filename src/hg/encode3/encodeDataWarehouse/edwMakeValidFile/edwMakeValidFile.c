@@ -387,46 +387,63 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 
     /* And dispatch according to format. */
     char *format = vf->format;
+    char *suffix = edwFindDoubleFileSuffix(path);
+    char suffixBuf[128];
     if (sameString(format, "fastq"))
 	{
 	needAssembly(ef, format, assembly);
 	makeValidFastq(conn, path, ef, assembly, vf);
+	suffix = ".fastq.gz";
 	}
     else if (edwIsSupportedBigBedFormat(format))
 	{
 	needAssembly(ef, format, assembly);
 	makeValidBigBed(conn, path, ef, assembly, format, vf);
+	if (sameString(format, "bigBed"))
+	    suffix = ".bigBed";
+	else
+	    {
+	    safef(suffixBuf, sizeof(suffixBuf), ".%s.bigBed", format);
+	    suffix = suffixBuf;
+	    }
 	}
     else if (sameString(format, "bigWig"))
         {
 	needAssembly(ef, format, assembly);
 	makeValidBigWig(conn, path, ef, assembly, vf);
+	suffix = ".bigWig";
 	}
     else if (sameString(format, "bam"))
         {
 	needAssembly(ef, format, assembly);
 	makeValidBam(conn, path, ef, assembly, vf);
+	suffix = ".bam";
 	}
     else if (sameString(format, "2bit"))
         {
 	makeValid2Bit(conn, path, ef, vf);
+	suffix = ".2bit";
 	}
     else if (sameString(format, "fasta"))
         {
 	makeValidFasta(conn, path, ef, vf);
+	suffix = ".fasta.gz";
 	}
     else if (sameString(format, "gtf"))
         {
 	needAssembly(ef, format, assembly);
 	makeValidGtf(conn, path, ef, assembly, vf);
+	suffix = ".gtf.gz";
 	}
     else if (sameString(format, "rcc"))
         {
 	makeValidRcc(conn, path, ef, vf);
+	suffix = ".RCC";
 	}
     else if (sameString(format, "idat"))
         {
 	makeValidIdat(conn, path, ef, vf);
+	suffix = ".idat";
 	}
     else if (sameString(format, "unknown"))
         {
@@ -456,7 +473,9 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 		dirEnd = fileName;
 	    else
 		dirEnd += 1;
+#ifdef OLD
 	    char *suffix = edwFindDoubleFileSuffix(fileName);
+#endif /* OLD */
 	    dyStringAppendN(newName, fileName, dirEnd - fileName);
 	    dyStringAppend(newName, vf->licensePlate);
 	    dyStringAppend(newName, suffix);

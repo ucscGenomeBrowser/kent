@@ -156,8 +156,9 @@ int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn)
 void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url);
 /* Add submission job to table and wake up daemon. */
 
-int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url);
-/* Return position of our URL in submission queue */
+int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url, unsigned *retJobId);
+/* Return position of our URL in submission queue.  Optionally return id in edwSubmitJob
+ * table of job. */
 
 struct edwValidFile *edwFindElderReplicates(struct sqlConnection *conn, struct edwValidFile *vf);
 /* Find all replicates of same output and format type for experiment that are elder
