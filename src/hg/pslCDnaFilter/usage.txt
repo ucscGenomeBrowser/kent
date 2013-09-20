@@ -68,6 +68,10 @@ Options:
     that are repeats.  Must use -repeats on BLAT if doing
     unmasked alignments.
 
+   -maxAlignsDrop=-1 - maximum number of alignments for a given query. If
+    exceeded, then all alignments of this query are dropped.
+    A value of -1 disables (default)
+
    -maxAligns=-1 - maximum number of alignments for a given query. If
     exceeded, then alignments are sorted by score and only this number
     will be saved.  A value of -1 disables (default)
