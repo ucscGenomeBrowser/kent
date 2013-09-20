@@ -28069,24 +28069,35 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/hg19.100w
     mkdir maf alignments
     cd maf
     time rsync -a -P ../../../anno/result/ ./
-XXX - working - Thu Sep 19 15:12:47 PDT 2013
-    #   real    735m35.723s
+    #   real    322m58.633s
     time gzip *.maf
-    #   real    700m23.340s
-    md5sum *.maf.gz > md5sum.txt
+    #   real    515m4.515s
+    time md5sum *.maf.gz > md5sum.txt
+    #   real    10m6.351s
     ln -s `pwd`/*.maf.gz `pwd`/md5sum.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz100way/maf
     cd ..
-    du -hsc maf
-    #   24G     maf
-    du -hsc ../../anno/result/
-    #   244G    ../../anno/result/
-    ln -s ../../hg19.100way.nh .
-    ln -s ../../hg19.100way.commonNames.nh .
-    ln -s `pwd`/*.nh \
+    du -hsc maf ../../anno/result/
+    #    68G     maf
+    #    722G    ../../anno/result/
+    #    789G    total
+
+    grep TREE ../../4d/all.mod | sed -e 's/TREE: //' \
+       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > hg19.100way.nh
+
+   ~/kent/src/hg/utils/phyloTrees/commonNames.sh hg19.100way.nh \
+       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > hg19.100way.commonNames.nh
+   ~/kent/src/hg/utils/phyloTrees/scientificNames.sh hg19.100way.nh \
+       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > hg19.100way.scientificNames.nh
+    md5sum *.gz *.nh > md5sum.txt
+
+    ln -s `pwd`/*.nh `pwd`/*.txt `pwd`/*.maf.gz \
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz100way
 
-    #####################################################################
+#####################################################################
     cd /hive/data/genomes/hg19/bed/multiz100way/downloads/phastCons100way
     mkdir hg19.100way.phastCons
     cd ../hg19.100way.phastCons
@@ -28103,10 +28114,9 @@ XXX - working - Thu Sep 19 15:12:47 PDT 2013
     time md5sum *.mod *.bw > md5sum.txt
     #  real    3m4.462s
     # obtain the README.txt from mm10/phastCons60way and update for this
-    #   situation
-XXX - ready to edit - Thu Sep 19 16:00:32 PDT 2013
+    #   situation, from:
 # /hive/data/genomes/mm10/bed/multiz60way/downloads/phastCons60way/README.txt
-    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/README.txt \
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phastCons100way
 
     #####################################################################
@@ -28129,10 +28139,9 @@ XXX - ready to edit - Thu Sep 19 16:00:32 PDT 2013
     #  real    4m44.724s
 
     # obtain the README.txt from mm10/phyloP60way and update for this
-    #   situation
-XXX - ready to edit - Thu Sep 19 16:00:32 PDT 2013
+    #   situation, from:
 # /hive/data/genomes/mm10/bed/multiz60way/downloads/phyloP60way/README.txt
-    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/md5sum.txt `pwd`/README.txt \
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way
 
     ###########################################################################
@@ -28150,20 +28159,20 @@ do
         | gzip -c > upstream${S}.maf.gz
     echo "done upstream${S}.maf.gz"
 done
-XXX - running - Thu Sep 19 16:02:46 PDT 2013
-    #   real    199m45.558s
+    #   real    603m51.338s
 
     md5sum *.nh *.maf.gz > md5sum.txt
-    #   real    27m59.778s
+    #   real    10m6.351s
 
-    # obtain the README.txt from hg19/multiz46way and update for this
-    #   situation
+    # obtain the README.txt from mm10/multiz60way and update for this
+    #   situation, from:
+# /hive/data/genomes/mm10/bed/multiz60way/downloads/multiz60way/README.txt 
     ln -s `pwd`/*.nh `pwd`/*.maf.gz `pwd`/*.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz100way
 
 #############################################################################
-# hgPal downloads (DONE - 2012-07-05 - 2012-07-09 - Hiram)
-#   FASTA from 60-way for refGene
+# hgPal downloads (DONE - 2013-09-20 - Hiram)
+#   FASTA from 100-way for knownGene
 
     ssh hgwdev
     screen -S hg19HgPal
@@ -28191,23 +28200,29 @@ XXX - running - Thu Sep 19 16:02:46 PDT 2013
     echo "wait" >> $gp.jobs
 
     time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
-XXX - running - Thu Sep 19 16:05:01 PDT 2013
-    #   real    93m34.376s
+    #   real    301m26.885s
 
-    mz=multiz100way
-    gp=knownGene
-    db=hg19
+    export mz=multiz100way
+    export gp=knownGene
+    export db=hg19
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    1m16.821s
-    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real     11m27.994s
+    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    18m41.606s
+    du -hsc exonAA exonNuc *.fa.gz
+    # 1.3G    exonAA
+    # 2.0G    exonNuc
+    # 1.3G    knownGene.multiz100way.exonAA.fa.gz
+    # 2.0G    knownGene.multiz100way.exonNuc.fa.gz
+    # 6.4G    total
 
     rm -rf exonAA exonNuc
 
     # we're only distributing exons at the moment
-    mz=multiz100way
-    gp=refGene
-    db=hg19
-    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    export mz=multiz100way
+    export gp=knownGene
+    export db=hg19
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
     md5sum *.fa.gz > md5sum.txt
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
