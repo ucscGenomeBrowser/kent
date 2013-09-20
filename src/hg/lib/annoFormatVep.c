@@ -205,9 +205,11 @@ fprintf(f, "%sTranscripts:%s %s (%s)", bStart, bEnd,
 	config->gpVarDescription, config->gpVarSource->name);
 afVepLineBreak(f, doHtml);
 if (config->snpSource != NULL)
+    {
     fprintf(f, "%sdbSNP:%s %s (%s)", bStart, bEnd,
 	    config->snpDescription, config->snpSource->name);
-afVepLineBreak(f, doHtml);
+    afVepLineBreak(f, doHtml);
+    }
 afVepPrintHeaderExtraTags(self, bStart, bEnd);
 afVepPrintColumnLabels(self);
 self->needHeader = FALSE;

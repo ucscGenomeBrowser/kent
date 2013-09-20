@@ -1,4 +1,4 @@
-table edwFastqFile
+table edwFastqFileTest
 "info on a file in fastq short read format beyond what's in edwValidFile"
     (
     uint id primary auto;  "ID in this table"

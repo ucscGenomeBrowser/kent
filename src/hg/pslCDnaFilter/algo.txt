@@ -33,7 +33,7 @@ alignments for a given cDNA sequence.
   o Filter by either global or local near best in genome.
     See notes below for handling of haplotype pseudo-chromsomes.
 
-  o Filter by maxAligns
+  o Filter by maxAligns or maxAligsDrop
 
   o Look for weird overlaps that might be left after above filters.  Either
     dropping or keep the weird overlaps as requested.  Weird alignments are

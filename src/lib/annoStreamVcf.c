@@ -126,7 +126,7 @@ if (regionChrom != NULL && words != NULL)
 	lineFileSetTabixRegion(self->vcff->lf, regionChrom, regionStart, regionEnd);
     while (words != NULL &&
 	   (strcmp(getProperChromName(self, words[0]), regionChrom) < 0 ||
-	    (sameString(words[0], regionChrom) && self->record->chromEnd < regionEnd)))
+	    (sameString(words[0], regionChrom) && self->record->chromEnd < regionStart)))
 	words = nextRowRaw(self);
     }
 return words;

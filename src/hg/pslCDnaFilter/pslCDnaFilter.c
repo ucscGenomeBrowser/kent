@@ -47,6 +47,7 @@ static struct optionSpec optionSpecs[] =
     {"minSpan", OPTION_FLOAT},
     {"minQSize", OPTION_INT},
     {"maxAligns", OPTION_INT},
+    {"maxAlignsDrop", OPTION_INT},
     {"minAlnSize", OPTION_INT},
     {"minNonRepSize", OPTION_INT},
     {"maxRepMatch", OPTION_FLOAT},
@@ -79,6 +80,7 @@ static float gMinCover = 0.0;          /* minimum coverage */
 static float gMinSpan = 0.0;           /* minimum target span allowed */
 static int gMinQSize = 0;              /* drop queries shorter than this */
 static int gMaxAligns = -1;            /* only allow this many alignments for a query */
+static int gMaxAlignsDrop = -1;        /* drop all if more than this many aligns*/
 static int gMinAlnSize = 0;            /* minimum bases that must be aligned */
 static int gMinNonRepSize = 0;         /* minimum non-repeat bases that must match */
 static float gMaxRepMatch = 1.0;       /* maximum fraction of repeat matching */
@@ -268,6 +270,36 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     }
 }
 
+static boolean shouldMaxAlignsDrop(struct cDnaQuery *cdna)
+/* should this set of alignments be dropped */
+{
+struct cDnaAlign *aln;
+int cnt;
+for (aln = cdna->alns, cnt = 0; (aln != NULL); aln = aln->next)
+    {
+    if (!aln->drop)
+        cnt++;
+    if (cnt == gMaxAlignsDrop)
+	return TRUE;
+    }
+return FALSE;
+}
+
+static void maxAlignDropFilter(struct cDnaQuery *cdna)
+/* filter by maximum number of alignments, drop all if number is too large */
+{
+struct cDnaAlign *aln;
+cDnaQueryRevScoreSort(cdna);
+if (shouldMaxAlignsDrop(cdna))
+    {
+    for (aln = cdna->alns; aln != NULL; aln = aln->next)
+	{
+	if (!aln->drop)
+	    cDnaAlignDrop(aln, FALSE, &cdna->stats->maxAlignsDropCnts, "max aligns");
+	}
+    }
+}
+
 static struct cDnaAlign *findMaxAlign(struct cDnaQuery *cdna)
 /* find first alignment over max size */
 {
@@ -398,6 +430,8 @@ if (gLocalNearBest >= 0.0)
     localNearBestFilter(cdna, gLocalNearBest, gMinLocalBestCnt);
 if (gGlobalNearBest >= 0.0)
     globalNearBestFilter(cdna, gGlobalNearBest);
+if (gMaxAlignsDrop >= 0)
+    maxAlignDropFilter(cdna);
 if (gMaxAligns >= 0)
     maxAlignFilter(cdna);
 if (gUniqueMapped)
@@ -496,6 +530,9 @@ gMinCover = optionFrac("minCover", gMinCover);
 gMinSpan = optionFrac("minSpan", gMinSpan);
 gMinQSize = optionInt("minQSize", gMinQSize);
 gMaxAligns = optionInt("maxAligns", gMaxAligns);
+gMaxAlignsDrop = optionInt("maxAlignsDrop", gMaxAlignsDrop);
+if ((gMaxAligns >= 0) && (gMaxAlignsDrop >= 0))
+    errAbort("cannot specify both -maxAligns and -maxAlignsDrop");
 gMinAlnSize = optionInt("minAlnSize", gMinAlnSize);
 gMinNonRepSize = optionInt("minNonRepSize", gMinNonRepSize);
 gMaxRepMatch = optionFrac("maxRepMatch", gMaxRepMatch);
