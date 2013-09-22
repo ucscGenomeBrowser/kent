@@ -810,14 +810,15 @@ metaDataProcess(conn, statusTbl, raPath, faFileId, pepFaId);
 
 static void updateGeneEntries(struct sqlConnection *conn,
                               struct gbGeneTblSet *ggts,
-                              struct gbStatus* status)
+                              struct gbStatus* status,
+			      boolean hasVersion)
 /* update gene table entries when annotation have changed */
 {
 if (status->srcDb == GB_REFSEQ)
     {
     struct gbGeneTbl *geneTbl = (status->orgCat == GB_NATIVE)
-        ? gbGeneTblSetRefGeneGet(ggts, conn)
-        : gbGeneTblSetXenoRefGeneGet(ggts, conn);
+        ? gbGeneTblSetRefGeneGet(ggts, hasVersion, conn)
+        : gbGeneTblSetXenoRefGeneGet(ggts, hasVersion, conn);
     gbGeneTblRebuild(geneTbl, status, conn);
     }
 else 
@@ -844,7 +845,7 @@ if (partitionMayHaveGeneTbls(select))
     for (status = statusTbl->metaChgList; status != NULL; status = status->next)
         {
         if (inGeneTbls(status) && !(status->stateChg & GB_SEQ_CHG))
-            updateGeneEntries(conn, ggts, status);  // ext chg or rebuild derived
+            updateGeneEntries(conn, ggts, status, select->hasVersion);  // ext chg or rebuild derived
         }
     gbGeneTblSetCommit(ggts, conn);
     gbGeneTblSetFree(&ggts);
