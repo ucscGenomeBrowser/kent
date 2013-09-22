@@ -92,8 +92,8 @@ if (status->srcDb == GB_REFSEQ)
     {
     /* create refSeq genePred */
     struct gbGeneTbl *ggt = (status->orgCat == GB_NATIVE)
-        ? gbGeneTblSetRefGeneGet(geneTblSet, conn)
-        : gbGeneTblSetXenoRefGeneGet(geneTblSet, conn);
+        ? gbGeneTblSetRefGeneGet(geneTblSet, select->hasVersion, conn)
+        : gbGeneTblSetXenoRefGeneGet(geneTblSet, select->hasVersion, conn);
     gbGeneTblWrite(ggt, status, psl, conn);
     }
 if (status->isMgcFull)

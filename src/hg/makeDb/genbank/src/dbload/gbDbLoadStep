@@ -162,6 +162,10 @@ sub dbLoad($$) {
     if (defined($dbVarReloadFile)) {
         push(@dbArgs, "-reloadList=$dbVarReloadFile");
     }
+    if (defined(getDbConfUndef($db, "refSeqHasVersion"))) {
+        push(@dbArgs, "-addVersion");
+    }
+
     runProg("gbLoadRna " . join(" ", @dbArgs) . " $db");
 
     if (defined($dbVarReloadFile)) {
