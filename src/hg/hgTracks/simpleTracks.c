@@ -5302,7 +5302,12 @@ static char nameBuf[256];
 char query[256], *name = NULL;
 if (hTableExists(database,  "refLink"))
     {
-    sqlSafef(query, sizeof query, "select name from refLink where mrnaAcc = '%s'", acc);
+    /* remove the version number if any */
+    static char accBuf[1024];
+    safecpy(accBuf, sizeof accBuf, acc);
+    chopSuffix(accBuf);
+
+    sqlSafef(query, sizeof query, "select name from refLink where mrnaAcc = '%s'", accBuf);
     name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf));
     if ((name != NULL) && (name[0] == '\0'))
         name = NULL;
@@ -5431,7 +5436,10 @@ char *refGeneMapName(struct track *tg, void *item)
 /* Return un-abbreviated gene name. */
 {
 struct linkedFeatures *lf = item;
-return lf->name;
+char buffer[1024];
+safecpy(buffer, sizeof buffer, lf->name);
+chopSuffix(buffer);
+return cloneString(buffer);
 }
 
 void lookupRefNames(struct track *tg)
