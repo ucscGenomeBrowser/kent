@@ -57,6 +57,7 @@ static struct optionSpec optionSpecs[] = {
     {"rebuildDerived", OPTION_BOOLEAN},
     {"reloadList", OPTION_STRING},
     {"reload", OPTION_BOOLEAN},
+    {"addVersion", OPTION_BOOLEAN},
     {"verbose", OPTION_INT},
     {"conf", OPTION_STRING},
     {NULL, 0}
@@ -69,6 +70,7 @@ static char* gGbdbGenBank = NULL;     /* root file path to put in database */
 static float gMaxShrinkage = 0.1;     /* restriction on number deleted */
 static char* gWorkDir = NULL;         /* tmp directory */
 static boolean gReload = FALSE;       /* reload the select categories */
+static boolean gAddVersion = FALSE;   /* add version number to genepred */
 static boolean gForceIgnoreDelete = FALSE; /* force entries in ignore.idx to
                                             * be dropped even if not in gbStatus */
 static struct dbLoadOptions gOptions; /* options from cmdline and conf */
@@ -553,6 +555,9 @@ struct sqlConnection* conn;
 if ((reloadList != NULL) || gReload)
     gOptions.flags |= DBLOAD_BYPASS_GBLOADED;
 
+if (gAddVersion)
+    gOptions.flags |= DBLOAD_ADD_VERSION;
+
 if (gReload && (gOptions.flags & DBLOAD_DRY_RUN))
     errAbort("can't specify both -reload and -dryRun");
 
@@ -813,6 +818,7 @@ errAbort(
   "      to be examined, which slows things down.\n"
   "\n"
   "     -rebuildDerived - rebuild genePred, and gbMiscDiff tables\n"
+  "     -addVersion - add version number to id's in genePred table\n"
   "\n"
   "SIGUSR1 will cause process to stop after the current partition.  This\n"
   "will leave the database in a clean state, but the update incomplete.\n"
@@ -868,13 +874,13 @@ else
     char *reloadList = optionVal("reloadList", NULL);
     gDatabase = argv[1];
     gOptions = dbLoadOptionsParse(gDatabase);
+    gAddVersion = optionExists("addVersion");
     gForceIgnoreDelete = optionExists("forceIgnoreDelete");
     if (optionExists("rebuildDerived"))
         gOptions.flags |= DBLOAD_BYPASS_GBLOADED|DBLOAD_REBUILD_DERIVED;
 
     gMaxShrinkage = optionFloat("maxShrinkage", 0.1);
 
-    
     gGbdbGenBank = optionVal("gbdbGenBank", NULL);
     if (gGbdbGenBank == NULL)
         gGbdbGenBank = gbConfGet(gOptions.conf, "gbdb.genbank");

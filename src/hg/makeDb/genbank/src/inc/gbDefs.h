@@ -100,6 +100,7 @@ struct gbSelect
     unsigned orgCats;           /* GB_NATIVE, GB_XENO, or both (0 if unused)
                                  */
     char *accPrefix;            /* Accession prefix or null */
+    boolean hasVersion;
 };
 
 unsigned gbTypeIdx(unsigned type);

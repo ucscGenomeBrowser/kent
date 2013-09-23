@@ -19,7 +19,8 @@ enum cDnaOpts
                                   * otherwise just use poly-A tail */
     cDnaIgnoreNs        = 0x02,  /* don't include Ns while calculating the score and coverage.*/
     cDnaRepeatMisMatch  = 0x04,  /* count all repeats as mismatches */
-    cDnaIgnoreIntrons   = 0x08   /* don't favor apparent introns in scoring */
+    cDnaIgnoreIntrons   = 0x08,  /* don't favor apparent introns in scoring */
+    cDnaRepsAsMatch     = 0x10   /* repMatch counts as match */
 };
 
 struct cDnaAlign
