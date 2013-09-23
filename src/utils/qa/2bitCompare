@@ -190,7 +190,7 @@ if ($md5sumGbdbDevExists != '') then
 else
   echo "   hgwdev gbdb date,size: N/A"
 endif
-if ($md5sumGbdbDevExists != '') then
+if ($md5sumGbdbBetaExists != '') then
   echo "  hgwbeta gbdb date,size: "`ssh qateam@hgwbeta ls /gbdb/$db/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
 else
   echo "  hgwbeta gbdb date,size: N/A"
