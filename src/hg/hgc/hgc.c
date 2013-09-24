@@ -20315,7 +20315,6 @@ else
 	char **row;
 	struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 	struct sqlResult *sr = NULL;
-	int rcCount = 0;
 	int start = cartInt(cart, "o");
 	int end = cartInt(cart, "t");
 
@@ -20331,7 +20330,6 @@ else
 	    {
 	    bedFree(&bed);
 	    bed = bedLoadN(row+rowOffset, ct->fieldCount);
-	    ++rcCount;
 	    }
 	sqlFreeResult(&sr);
 	hFreeConn(&conn);
