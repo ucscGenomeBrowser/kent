@@ -162,7 +162,9 @@ sub dbLoad($$) {
     if (defined($dbVarReloadFile)) {
         push(@dbArgs, "-reloadList=$dbVarReloadFile");
     }
-    if (defined(getDbConfUndef($db, "refSeqHasVersion"))) {
+
+    my $addVersionToTables = getDbConfUndef($db, "addVersionToTables");
+    if (defined($addVersionToTables) && ($addVersionToTables eq "yes")) {
         push(@dbArgs, "-addVersion");
     }
 

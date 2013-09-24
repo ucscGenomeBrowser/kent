@@ -283,20 +283,22 @@ return ggts->xenoRefGene;
 }
 
 struct gbGeneTbl *gbGeneTblSetMgcGenesGet(struct gbGeneTblSet *ggts,
-                                          struct sqlConnection* conn)
+				 boolean hasVersion, struct sqlConnection* conn)
 /* get or create gbGeneTbl for mgcGenes */
 {
 if (ggts->mgcGenes == NULL)
     ggts->mgcGenes = gbGeneTblNew(conn, MGC_GENES_TBL, NULL, MGC_FULL_MRNA_TBL, ggts->tmpDir);
+ggts->mgcGenes->hasVersion = hasVersion;
 return ggts->mgcGenes;
 }
 
 struct gbGeneTbl *gbGeneTblSetOrfeomeGenesGet(struct gbGeneTblSet *ggts,
-                                              struct sqlConnection* conn)
+				 boolean hasVersion, struct sqlConnection* conn)
 /* get or create a gbGeneTbl for orfeomeGenes */
 {
 if (ggts->orfeomeGenes == NULL)
     ggts->orfeomeGenes = gbGeneTblNew(conn, ORFEOME_GENES_TBL, NULL, MGC_FULL_MRNA_TBL, ggts->tmpDir);
+ggts->orfeomeGenes->hasVersion = hasVersion;
 return ggts->orfeomeGenes;
 }
 
