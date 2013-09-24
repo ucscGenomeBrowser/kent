@@ -56,3 +56,5 @@ Options:
    name and mapFile query name) before matching them. This
    first drops everything after the last `-', and then drops
    everything after the last remaining `.'.
+  -verbose=n  - verbose output
+     2 - show each overlap and the mapping

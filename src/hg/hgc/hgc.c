@@ -5677,7 +5677,7 @@ char splitTable[64];
 char query[256];
 if (!hFindSplitTable(database, seqName, table, splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
-sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
+sqlSafef(query, sizeof(query), "select * from %s where qName like '%s%%'", splitTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -6966,7 +6966,7 @@ if (sqlTableExists(conn, "gbCdnaInfo"))
 
 /* Look up alignments in database */
 hFindSplitTable(database, seqName, aliTable, table, &hasBin);
-sqlSafef(query, sizeof query, "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
+sqlSafef(query, sizeof query, "select * from %s where qName like '%s%%' and tName=\"%s\" and tStart=%d",
 	table, acc, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)

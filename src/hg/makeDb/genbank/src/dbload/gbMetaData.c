@@ -825,9 +825,9 @@ else
     {
     // can be both MGC and orfeome
     if (status->isMgcFull)
-        gbGeneTblRebuild(gbGeneTblSetMgcGenesGet(ggts, conn), status, conn);
+        gbGeneTblRebuild(gbGeneTblSetMgcGenesGet(ggts, hasVersion, conn), status, conn);
     if (status->isOrfeome)
-        gbGeneTblRebuild(gbGeneTblSetOrfeomeGenesGet(ggts, conn), status, conn);
+        gbGeneTblRebuild(gbGeneTblSetOrfeomeGenesGet(ggts, hasVersion, conn), status, conn);
     }
 }
 
