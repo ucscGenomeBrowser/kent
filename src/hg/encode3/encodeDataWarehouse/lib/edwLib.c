@@ -92,7 +92,7 @@ return dir;
 }
 
 
-long edwGettingFile(struct sqlConnection *conn, char *submitDir, char *submitFileName)
+long long edwGettingFile(struct sqlConnection *conn, char *submitDir, char *submitFileName)
 /* See if we are in process of getting file.  Return file record id if it exists even if
  * it's not complete. Return -1 if record does not exist. */
 {
@@ -111,17 +111,38 @@ sqlSafef(query, sizeof(query),
     "order by submitId desc limit 1"
     , submitFileName, submitDirId
     , (long long)edwNow() - edwSingleFileTimeout);
-long id = sqlQuickLongLong(conn, query);
+long long id = sqlQuickLongLong(conn, query);
 if (id == 0)
     return -1;
 return id;
 }
 
-long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, char *md5)
-/* See if we already got file.  Return fileId if we do,  otherwise -1 */
+long long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, 
+    char *md5, long long size)
+/* See if we already got file.  Return fileId if we do,  otherwise -1.  This returns
+ * TRUE based mostly on the MD5sum.  For short files (less than 100k) then we also require
+ * the submitDir and submitFileName to match.  This is to cover the case where you might
+ * have legitimate empty files duplicated even though they were computed based on different
+ * things. For instance coming up with no peaks is a legitimate result for many chip-seq
+ * experiments. */
 {
-/* First see if we have even got the directory. */
+/* For large files just rely on MD5. */
 char query[PATH_LEN+512];
+if (size > 100000)
+    {
+    sqlSafef(query, sizeof(query),
+        "select id from edwFile where md5='%s' order by submitId desc limit 1" , md5);
+    long long result = sqlQuickLongLong(conn, query);
+    if (result == 0)
+        result = -1;
+    return result;
+    }
+
+/* Rest of the routine deals with smaller files,  which we are less worried about
+ * duplicating,  and indeed expect a little duplication of the empty file if none
+ * other. */
+
+/* First see if we have even got the directory. */
 sqlSafef(query, sizeof(query), "select id from edwSubmitDir where url='%s'", submitDir);
 int submitDirId = sqlQuickNum(conn, query);
 if (submitDirId <= 0)
@@ -962,7 +983,7 @@ sqlSafef(query, sizeof(query), "update edwFile set errorMessage = '%s' where id=
      "Revalidation in progress.", fileId); 
 sqlUpdate(conn, query);
 
-/* Update tags for file with new format. */
+/* Update tags for file in edwFile table. */
 sqlSafef(query, sizeof(query), "update edwFile set tags='%s' where id=%lld", newTags, fileId);
 sqlUpdate(conn, query);
     
