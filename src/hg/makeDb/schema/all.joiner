@@ -2445,7 +2445,7 @@ identifier hugoName external=HUGO fuzzy
 identifier kgGeneSymbol
 "UCSC Genes Gene Symbol"
     $hg.kgXref.geneSymbol dupeOk
-    $hg.omimGeneMap.geneSymbol comma minCheck=0.40
+    $hg.omimGeneMap.geneSymbol comma minCheck=0.39
     $hg.omimMorbidMap.geneSymbols comma minCheck=0.25
 
 identifier mouseGeneName fuzzy
