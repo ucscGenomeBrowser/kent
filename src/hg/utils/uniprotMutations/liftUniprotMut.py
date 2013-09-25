@@ -75,7 +75,7 @@ featTypeColors = {
 
 # ------ MAIN ------
 if __name__ == '__main__':
-    parser = optparse.OptionParser("usage: %prog [options] - lift uniprot variant annotations to genome") 
+    parser = optparse.OptionParser("usage: %prog [options] - lift disease related uniprot variant annotations to genome")
     parser.add_option("", "--annot", dest="annot", action="store_true", help="lift other, non-variant annotations")
     (options, args) = parser.parse_args()
 
@@ -92,9 +92,10 @@ if __name__ == '__main__':
     # create seq sizes for all uniprot sequences of this species
     uniprotFa = join(pubConf.dbRefDir, "uniprot.%s.fa" % taxonId)
     uniprotFaGz = uniprotFa+".gz"
-    if not isfile(uniprotFa):
-        print "uncompressing uniprot gz fa"
-        open(uniprotFa, "w").write(gzip.open(uniprotFaGz).read())
+    #if not isfile(uniprotFa):
+    print "uncompressing uniprot gz fa"
+    open(uniprotFa, "w").write(gzip.open(uniprotFaGz).read())
+
     if not isfile(uniprotFa):
         raise Exception("Not found: %s" % uniprotFa)
 

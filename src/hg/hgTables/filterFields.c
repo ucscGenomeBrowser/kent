@@ -1653,7 +1653,8 @@ for (var = varList; var != NULL; var = var->next)
 		}
 	    else
 	        {
-		sqlDyStringPrintfFrag(dy, "%s.%s %s ", explicitDbTable, field, cmpVal);
+		// cmpVal has been checked already above in cmpReal for legal values.
+		sqlDyStringPrintfFrag(dy, "%s.%s %-s ", explicitDbTable, field, cmpVal);
 		if (strchr(pat, '.'))	/* Assume floating point. */
 		    dyStringPrintf(dy, "%f", atof(pat));
 		else
