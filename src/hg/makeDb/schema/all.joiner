@@ -1998,7 +1998,7 @@ identifier refSeqId typeOf=mrnaAccession
     mm9.dupSpMrna.dupMrnaID minCheck=0.19
     mm8.dupSpMrna.dupMrnaID minCheck=0.19
     hg17.mrnaRefseq.mrna minCheck=0.10
-    hg17.spMrna.mrnaID minCheck=0.49
+    hg17.spMrna.mrnaID minCheck=0.48
     hg17.dupSpMrna.mrnaID minCheck=0.40
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
     hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.37
