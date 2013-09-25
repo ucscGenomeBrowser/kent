@@ -1896,7 +1896,7 @@ identifier estOrMrnaAccession typeOf=genbankAccession
     $gbd.gbCdnaInfo.acc unique
     $gbd.imageClone.acc
     $gbd,!ce2,!hg16,!hg17,!hg18,!mm7.altGraphX.mrnaRefs comma
-    ce2.altGraphX.mrnaRefs comma minCheck=0.97
+    ce2.altGraphX.mrnaRefs comma minCheck=0.96
     hg16.altGraphX.mrnaRefs comma minCheck=0.99
     hg17.altGraphX.mrnaRefs comma minCheck=0.97
     hg18.altGraphX.mrnaRefs comma minCheck=0.98
@@ -1989,8 +1989,8 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refMrna.name
     $gbd.refSeqAli.qName
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
-    dm1.bdgpToRefSeq.value minCheck=0.91
-    $dm,!dm1.flyBaseToRefSeq.value minCheck=0.94
+    dm1.bdgpToRefSeq.value minCheck=0.9
+    $dm,!dm1.flyBaseToRefSeq.value minCheck=0.92
     $mm.mrnaRefseq.mrna minCheck=0.03
     $mm.dupSpMrna.mrnaID minCheck=0.60
     $mm,!mm8,!mm9,!mm10.dupSpMrna.dupMrnaID minCheck=0.20
@@ -2134,7 +2134,7 @@ identifier knownGeneOld6Id dependency
 
 identifier knownGeneOld5Id dependency
 "Previous UCSC Gene build"
-    $kgDb.knownGeneOld5.name
+    $kgDb,!mm10.knownGeneOld5.name
     $kgDb.kg5ToKg6.oldId full
     $kgDb.kgXrefOld5.kgID full
 
