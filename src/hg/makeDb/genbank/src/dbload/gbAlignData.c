@@ -52,7 +52,7 @@ if (alignTblSet == NULL)
     {
     assert(geneTblSet == NULL);
     alignTblSet = gbAlignTblSetNew(((options->flags & DBLOAD_PER_CHROM_ALIGN) != 0),
-                                   tmpDir);
+	((options->flags & DBLOAD_ADD_VERSION) != 0), tmpDir);
     geneTblSet = gbGeneTblSetNew(tmpDir);
     }
 setDerivedTblFlags(conn, options);
@@ -99,7 +99,7 @@ if (status->srcDb == GB_REFSEQ)
 if (status->isMgcFull)
     {
     /* create MGC genePred and psl */
-    struct gbGeneTbl *ggt = gbGeneTblSetMgcGenesGet(geneTblSet, conn);
+    struct gbGeneTbl *ggt = gbGeneTblSetMgcGenesGet(geneTblSet, select->hasVersion, conn);
     gbGeneTblWrite(ggt, status, psl, conn);
     struct gbAlignTbl *mgat = gbAlignTblSetGetMgc(alignTblSet);
     gbAlignTblWrite(mgat, psl, conn);
@@ -107,7 +107,7 @@ if (status->isMgcFull)
 if (status->isOrfeome)
     {
     /* create ORFeome genePred and psl */
-    struct gbGeneTbl *ggt = gbGeneTblSetOrfeomeGenesGet(geneTblSet, conn);
+    struct gbGeneTbl *ggt = gbGeneTblSetOrfeomeGenesGet(geneTblSet, select->hasVersion, conn);
     gbGeneTblWrite(ggt, status, psl, conn);
     struct gbAlignTbl *ogat = gbAlignTblSetOrfeomeGet(alignTblSet);
     gbAlignTblWrite(ogat, psl, conn);

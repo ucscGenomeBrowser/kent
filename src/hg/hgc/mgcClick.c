@@ -61,7 +61,7 @@ mgcDb.title = "Mammalian Gene Collection";
 mgcDb.server = "mgc";
 mgcDb.organism = NULL;
 /* NOTE: mgc server likes first letter of organism capitalized */
-if (startsWith("hg", database))
+if (startsWith("hg", database) || startsWith("braNey", database))
     mgcDb.organism = "Hs";
 else if (startsWith("mm", database))
     mgcDb.organism = "Mm";
@@ -238,7 +238,13 @@ ci->refSeqs = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
 struct geneSim *gs;
 for (gs = ci->refSeqs->genes; gs != NULL; gs = gs->next)
     {
-    char *accv = getAccVersion(conn, gs->gene->name);
+    char *accv ;
+
+    // add version number if it's not already there
+    if (strchr(gs->gene->name, '.'))
+	accv = cloneString(gs->gene->name);
+    else
+	accv = getAccVersion(conn, gs->gene->name);
     freeMem(gs->gene->name);
     gs->gene->name = accv;
     }

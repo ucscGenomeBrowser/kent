@@ -133,6 +133,9 @@ endif
 ifeq (${MYSQLLIBS},)
   MYSQLLIBS="-lmysqlclient"
 endif
+
+UNAME_S := $(shell uname -s)
+
 # OK to add -lstdc++ to all MYSQLLIBS just in case it is
 #    MySQL version 5.6 libraries, but no 'librt' on Mac OSX
 ifeq ($(UNAME_S),Darwin)

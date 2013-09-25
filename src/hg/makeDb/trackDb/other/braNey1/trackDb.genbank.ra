@@ -1,0 +1,115 @@
+
+#
+# Genbank tracks
+# 
+
+
+track mrna
+table all_mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank 
+group rna
+priority 54
+visibility pack
+type psl version
+baseColorUseCds genbank
+baseColorUseSequence genbank
+baseColorDefault diffCodons
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
+
+track intronEst
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility dense
+spectrum on
+intronGap 30
+type psl est
+baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+maxItems 300
+
+track est
+table all_est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+intronGap 30
+type psl est
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
+maxItems 300
+html est.new
+
+track xenoMrna
+shortLabel Other mRNAs
+longLabel Non-$Organism mRNAs from GenBank
+group rna
+priority 63
+visibility hide
+spectrum on
+type psl xeno
+baseColorUseCds genbank
+baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+
+track xenoEst
+shortLabel Other ESTs
+longLabel Non-$Organism ESTs from GenBank 
+group rna
+priority 65
+visibility hide
+spectrum on
+type psl xeno
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
+url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
+
+track mgcFullMrna
+shortLabel MGC Genes
+longLabel Mammalian Gene Collection Full ORF mRNAs
+group genes
+priority 36
+visibility hide
+color 0,100,0
+type psl version
+baseColorDefault diffCodons
+baseColorUseCds genbank
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+track orfeomeMrna
+shortLabel ORFeome Clones
+longLabel ORFeome Collaboration Gene Clones
+group genes
+priority 36.1
+visibility hide
+color 34,139,34
+type psl version
+baseColorDefault diffCodons
+baseColorUseCds genbank
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
