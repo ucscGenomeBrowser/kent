@@ -149,7 +149,7 @@ static void transMapMethods(struct track *tg)
 {
 tg->loadItems = loadTransMap;
 tg->itemName = refGeneName;
-tg->mapItemName = refGeneMapName;
+tg->mapItemName = linkedFeaturesName;
 tg->itemDataName = transMapGetItemDataName;
 }
 
