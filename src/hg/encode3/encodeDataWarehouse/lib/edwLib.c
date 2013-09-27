@@ -819,12 +819,12 @@ sqlSafef(query, sizeof(query),
 return sqlQuickNum(conn, query);
 }
 
-void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url)
+void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url, boolean update)
 /* Add submission job to table and wake up daemon. */
 {
 /* Create command and add it to edwSubmitJob table. */
 char command[strlen(url) + strlen(userEmail) + 256];
-safef(command, sizeof(command), "edwSubmit '%s' %s", url, userEmail);
+safef(command, sizeof(command), "edwSubmit %s'%s' %s", (update ? "-update " : ""), url, userEmail);
 char query[strlen(command)+128];
 sqlSafef(query, sizeof(query), "insert edwSubmitJob (commandLine) values('%s')", command);
 sqlUpdate(conn, query);
