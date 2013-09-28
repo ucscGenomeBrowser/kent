@@ -10,6 +10,7 @@ switch (termNumber)
     {
     case regulatory_region_variant : return "regulatory_region_variant"; break;
     case stop_retained_variant : return "stop_retained_variant"; break;
+    case exon_loss : return "exon_loss"; break;
     case splice_acceptor_variant : return "splice_acceptor_variant"; break;
     case splice_donor_variant : return "splice_donor_variant"; break;
     case complex_transcript_variant : return "complex_transcript_variant"; break;

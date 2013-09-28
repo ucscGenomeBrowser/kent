@@ -10,8 +10,9 @@ struct allele   // a single allele in a variant.
     {
     struct allele *next;
     struct variant *variant;
-    int length;
     char *sequence;
+    int length;
+    boolean isReference;
     };
 
 struct variant   // a single variant
@@ -25,11 +26,11 @@ struct variant   // a single variant
     };
 
 struct variant *variantNew(char *chrom, unsigned start, unsigned end, unsigned numAlleles,
-			   char *slashSepAlleles, struct lm *lm);
+			   char *slashSepAlleles, char *refAllele, struct lm *lm);
 /* Create a variant from basic information that is easy to extract from most other variant
- * formats: coords, allele count, and string of slash-separated alleles. */
+ * formats: coords, allele count, string of slash-separated alleles and reference allele. */
 
-struct variant *variantFromPgSnp(struct pgSnp *pgSnp, struct lm *lm);
+struct variant *variantFromPgSnp(struct pgSnp *pgSnp, char *refAllele, struct lm *lm);
 /* convert pgSnp record to variant record */
 
 struct allele  *alleleClip(struct allele *allele, int sx, int ex, struct lm *lm);
