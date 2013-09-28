@@ -263,7 +263,9 @@ while ((nextRow = nextRowFiltered(self, minChrom, minEnd, callerLm)) != NULL)
 	}
     else // i.e. nextRow is non-indel
 	{
-	// Coords are not apples-to-apples, so having the same start means let indels go first:
+	// Coords are not apples-to-apples: having the same annoRow->start means
+	// that the indel VCF starts are one less than the non-indel VCF starts,
+	// so let indels go first:
 	if (self->indelQ != NULL && self->indelQ->start <= nextRow->start)
 	    {
 	    // nextRow is a non-indel at a subsequent *VCF* base; store in nextPosQ & pop indelQ
@@ -277,6 +279,7 @@ while ((nextRow = nextRowFiltered(self, minChrom, minEnd, callerLm)) != NULL)
 	    return nextRow;
 	}
     }
+nextPosQShouldBeEmpty(self);
 if (nextRow == NULL)
     {
     if (self->indelQ != NULL)
