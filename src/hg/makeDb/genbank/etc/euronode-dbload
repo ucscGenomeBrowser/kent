@@ -9,7 +9,7 @@ opts="$*"
 otherOpts=""
 
 # initialize
-gbBuildServer=hgwdev.cse.ucsc.edu
+gbBuildServer=hgwdev.sdsc.edu
 rsyncPort="ssh"
 gbBuildRoot=/hive/data/outside/genbank
 gbRoot=/data2/genbank

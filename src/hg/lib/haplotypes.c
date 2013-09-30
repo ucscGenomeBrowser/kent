@@ -2109,7 +2109,7 @@ if (fullSeq)
     if (!dnaView && tripletView)
         hPrintf("<TD class='topHat dnaToo'><B><code>%s</code></B></TD>",refHap->ho->dnaSeq);
     else
-        hPrintf("<TD nowrap class='topHat'><B>Prediced full sequence</B></TD>");
+        hPrintf("<TD nowrap class='topHat'><B>Predicted full sequence</B></TD>");
     }
 hPrintf("</TR>\n");
 

@@ -92,7 +92,7 @@ return dir;
 }
 
 
-long edwGettingFile(struct sqlConnection *conn, char *submitDir, char *submitFileName)
+long long edwGettingFile(struct sqlConnection *conn, char *submitDir, char *submitFileName)
 /* See if we are in process of getting file.  Return file record id if it exists even if
  * it's not complete. Return -1 if record does not exist. */
 {
@@ -111,17 +111,38 @@ sqlSafef(query, sizeof(query),
     "order by submitId desc limit 1"
     , submitFileName, submitDirId
     , (long long)edwNow() - edwSingleFileTimeout);
-long id = sqlQuickLongLong(conn, query);
+long long id = sqlQuickLongLong(conn, query);
 if (id == 0)
     return -1;
 return id;
 }
 
-long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, char *md5)
-/* See if we already got file.  Return fileId if we do,  otherwise -1 */
+long long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, 
+    char *md5, long long size)
+/* See if we already got file.  Return fileId if we do,  otherwise -1.  This returns
+ * TRUE based mostly on the MD5sum.  For short files (less than 100k) then we also require
+ * the submitDir and submitFileName to match.  This is to cover the case where you might
+ * have legitimate empty files duplicated even though they were computed based on different
+ * things. For instance coming up with no peaks is a legitimate result for many chip-seq
+ * experiments. */
 {
-/* First see if we have even got the directory. */
+/* For large files just rely on MD5. */
 char query[PATH_LEN+512];
+if (size > 100000)
+    {
+    sqlSafef(query, sizeof(query),
+        "select id from edwFile where md5='%s' order by submitId desc limit 1" , md5);
+    long long result = sqlQuickLongLong(conn, query);
+    if (result == 0)
+        result = -1;
+    return result;
+    }
+
+/* Rest of the routine deals with smaller files,  which we are less worried about
+ * duplicating,  and indeed expect a little duplication of the empty file if none
+ * other. */
+
+/* First see if we have even got the directory. */
 sqlSafef(query, sizeof(query), "select id from edwSubmitDir where url='%s'", submitDir);
 int submitDirId = sqlQuickNum(conn, query);
 if (submitDirId <= 0)
@@ -218,6 +239,33 @@ char query[256];
 sqlSafef(query, sizeof(query), "select * from edwUser where email='%s'", email);
 struct edwUser *user = edwUserLoadByQuery(conn, query);
 return user;
+}
+
+struct edwUser *edwUserFromId(struct sqlConnection *conn, int id)
+/* Return user associated with that id or NULL if not found */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwUser where id='%d'", id);
+struct edwUser *user = edwUserLoadByQuery(conn, query);
+return user;
+}
+
+int edwUserIdFromFileId(struct sqlConnection *conn, int fId)
+/* Return user id who submit the file originally */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select s.userId from edwSubmit s, edwFile f where f.submitId=s.id and f.id='%d'", fId);
+int sId = sqlQuickNum(conn, query);
+sqlSafef(query, sizeof(query), "select u.id from edwSubmit s, edwUser u where  u.id=s.id and s.id='%d'", sId);
+return sqlQuickNum(conn, query);
+}
+
+char *edwUserNameFromFileId(struct sqlConnection *conn, int fId)
+/* Return user who submit the file originally */
+{
+int uId = edwUserIdFromFileId(conn, fId);
+struct edwUser *user=edwUserFromId(conn, uId);
+return cloneString(user->email);
 }
 
 void edwWarnUnregisteredUser(char *email)
@@ -374,9 +422,12 @@ int nameSize = strlen(path);
 char *suffix = lastMatchCharExcept(path, path + nameSize, '.', '/');
 if (suffix != NULL)
     {
-    char *secondSuffix = lastMatchCharExcept(path, suffix, '.', '/');
-    if (secondSuffix != NULL)
-        suffix = secondSuffix;
+    if (sameString(suffix, ".gz") || sameString(suffix, ".bigBed"))
+	{
+	char *secondSuffix = lastMatchCharExcept(path, suffix, '.', '/');
+	if (secondSuffix != NULL)
+	    suffix = secondSuffix;
+	}
     }
 else
     suffix = path + nameSize;
@@ -705,18 +756,21 @@ safef(command, sizeof(command), "edwQaAgent %lld", fileId);
 edwAddJob(conn, command);
 }
 
-int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url)
-/* Return position of our URL in submission queue */
+int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url, unsigned *retJobId)
+/* Return position of our URL in submission queue.  Optionally return id in edwSubmitJob
+ * table of job. */
 {
 char query[256];
-sqlSafef(query, sizeof(query), "select commandLine from edwSubmitJob where startTime = 0");
+sqlSafef(query, sizeof(query), "select id,commandLine from edwSubmitJob where startTime = 0");
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 int aheadOfUs = -1;
 int pos = 0;
+unsigned jobId = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *line = row[0];
+    jobId = sqlUnsigned(row[0]);
+    char *line = row[1];
     char *edwSubmit = nextQuotedWord(&line);
     char *lineUrl = nextQuotedWord(&line);
     if (sameOk(edwSubmit, "edwSubmit") && sameOk(url, lineUrl))
@@ -727,6 +781,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     ++pos;
     }
 sqlFreeResult(&sr);
+if (retJobId != NULL)
+    *retJobId = jobId;
 return aheadOfUs;
 }
 
@@ -927,7 +983,7 @@ sqlSafef(query, sizeof(query), "update edwFile set errorMessage = '%s' where id=
      "Revalidation in progress.", fileId); 
 sqlUpdate(conn, query);
 
-/* Update tags for file with new format. */
+/* Update tags for file in edwFile table. */
 sqlSafef(query, sizeof(query), "update edwFile set tags='%s' where id=%lld", newTags, fileId);
 sqlUpdate(conn, query);
     

@@ -520,3 +520,22 @@ XXX - to be done - Tue Oct 16 15:03:19 PDT 2012
     ln -s blastz.bosTau7.swap lastz.bosTau7
 
 ##############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/cerSim1/bed/ucscToINSDC
+    cd /hive/data/genomes/cerSim1/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh NC_001808.1
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+      | hgLoadSqlTab cerSim1 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords cerSim1 ucscToINSDC
+    featureBits -countGaps cerSim1 ucscToINSDC
+    # 2464367180 bases of 2464367180 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

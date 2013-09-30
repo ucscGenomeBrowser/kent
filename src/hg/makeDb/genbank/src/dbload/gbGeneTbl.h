@@ -34,19 +34,19 @@ void gbGeneTblSetFree(struct gbGeneTblSet **ggtsPtr);
 /* free a gbGeneTblSet object */
 
 struct gbGeneTbl *gbGeneTblSetRefGeneGet(struct gbGeneTblSet *ggts,
-                                         struct sqlConnection* conn);
+			     boolean hasVersion, struct sqlConnection* conn);
 /* get or create gbGeneTbl for refGene */
 
 struct gbGeneTbl *gbGeneTblSetXenoRefGeneGet(struct gbGeneTblSet *ggts,
-                                             struct sqlConnection* conn);
+			     boolean hasVersion, struct sqlConnection* conn);
 /* get or create gbGeneTbl for xenoRefGene */
 
 struct gbGeneTbl *gbGeneTblSetMgcGenesGet(struct gbGeneTblSet *ggts,
-                                          struct sqlConnection* conn);
+			     boolean hasVersion, struct sqlConnection* conn);
 /* get or create gbGeneTbl for mgcGenes */
 
 struct gbGeneTbl *gbGeneTblSetOrfeomeGenesGet(struct gbGeneTblSet *ggts,
-                                              struct sqlConnection* conn);
+			     boolean hasVersion, struct sqlConnection* conn);
 /* get or create a gbGeneTbl for orfeomeGenes */
 
 void gbGeneTblSetCommit(struct gbGeneTblSet *ggts,

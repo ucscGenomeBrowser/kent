@@ -12,6 +12,7 @@ BLASTDIR=/cluster/bin/blast/x86_64/blast-2.2.16/bin
 # this was created by the uniprot parser as part of the publications source code
 UNIPROTFAGZ=/hive/data/inside/pubs/parsedDbs/uniprot.9606.fa.gz
 
+CLUSTER=ku
 # stop on errors
 set -e
 # show commands
@@ -40,7 +41,7 @@ for i in upMap/work/queries/*.fa; do
         echo "../../mapUniprot_doBlast ucscMRna.fa queries/`basename $i` {check out exists aligns/`basename $i .fa`.psl}" >> upMap/work/jobList
 done; 
 set -x
-ssh swarm "cd `pwd`/upMap/work && para make jobList"
+ssh $CLUSTER "cd `pwd`/upMap/work && para make jobList"
 
 # sort, pick the best alignments for each protein and then pslMap through them
 find upMap/work/aligns -name '*.psl' | xargs cat | pslSelect -qtPairs=upMap/work/ucscUniProt.pairs stdin stdout | sort -k 14,14 -k 16,16n -k 17,17n > upMap/work/uniProtVsUcscMRna.psl

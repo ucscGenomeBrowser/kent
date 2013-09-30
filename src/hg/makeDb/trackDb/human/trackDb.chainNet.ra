@@ -210,6 +210,12 @@ priority 560.3
 track chainNetAllMis0 override
 priority 562.3
 
+# track chainNetAllMis1 override
+# priority 563.64
+# matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+# chainMinScore 5000
+# chainLinearGap loose
+
 track chainNetTaeGut1 override
 priority 570.3
 
@@ -303,4 +309,3 @@ chainMinScore 2000
 
 track chainNetStrPur2 override
 priority 670.3
-

@@ -217,7 +217,7 @@ static void retroAliMethods(struct track *tg)
 {
 tg->loadItems = loadRetroAli;
 tg->itemName = refGeneName;
-tg->mapItemName = refGeneMapName;
+tg->mapItemName = linkedFeaturesName;
 tg->itemDataName = transMapGetItemDataName;
 }
 

@@ -128,16 +128,24 @@ struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoStreamRo
 struct annoRow *primaryRow = primaryData->rowList;
 struct annoRow *rowList = NULL;
 agCheckPrimarySorting(self, primaryRow);
-agTrimToStart(self, primaryRow->chrom, primaryRow->start);
-agFetchToEnd(self, primaryRow->chrom, primaryRow->start, primaryRow->end);
+// In order to catch the intersection of two 0-length elements (i.e. two insertions),
+// we have to broaden our search a little:
+int pStart = primaryRow->start, pEnd = primaryRow->end;
+if (pStart == pEnd)
+    {
+    pStart--;
+    pEnd++;
+    }
+char *pChrom = primaryRow->chrom;
+agTrimToStart(self, pChrom, pStart);
+agFetchToEnd(self, pChrom, pStart, pEnd);
 boolean rjFailHard = (retRJFilterFailed != NULL);
 if (rjFailHard)
     *retRJFilterFailed = FALSE;
 struct annoRow *qRow;
 for (qRow = self->qHead;  qRow != NULL;  qRow = qRow->next)
     {
-    if (qRow->start < primaryRow->end && qRow->end > primaryRow->start &&
-	sameString(qRow->chrom, primaryRow->chrom))
+    if (qRow->start < pEnd && qRow->end > pStart && sameString(qRow->chrom, pChrom))
 	{
 	int numCols = self->mySource->numCols;
 	enum annoRowType rowType = self->mySource->rowType;

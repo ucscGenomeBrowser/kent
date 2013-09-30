@@ -85,9 +85,10 @@ struct sqlResult* result;
 char** row;
 
 gbVerbMsg(2, "load gbCdnaInfo table data");
+// FIXME: might be better as sqlDyString
 accWhere[0] = '\0';
 if (select->accPrefix != NULL)
-    safef(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
+    sqlSafefFrag(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
           select->accPrefix);
 sqlSafef(query, sizeof(query), 
       "SELECT acc,id,version,moddate,type,direction,"
@@ -96,7 +97,7 @@ sqlSafef(query, sizeof(query),
       /*    6        7       8         9  10     11          12   13  14 */
       "keyword,description,geneName,productName,author "
       /*    15          16       17          18     19 */
-      "FROM gbCdnaInfo WHERE (type='%s')%s",
+      "FROM gbCdnaInfo WHERE (type='%s')%-s",
       ((select->type == GB_MRNA) ? "mRNA" : "EST"), accWhere);
 /* mrna doesn't have a srcDb, so we guess from acc */
 result = sqlGetResult(conn, query);
@@ -280,13 +281,14 @@ struct sqlResult* result;
 char** row;
 
 gbVerbMsg(2, "load gbStatus table data");
+// FIXME: might be better as sqlDyString
 accWhere[0] = '\0';
 if (select->accPrefix != NULL)
-    safef(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
+    sqlSafefFrag(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
           select->accPrefix);
 sqlSafef(query, sizeof(query), 
       "SELECT acc,version,modDate,type,srcDb,orgCat,gbSeq,numAligns "
-      "FROM gbStatus WHERE (type='%s') AND (srcDb='%s')%s",
+      "FROM gbStatus WHERE (type='%s') AND (srcDb='%s')%-s",
       ((select->type == GB_MRNA) ? "mRNA" : "EST"),
       ((select->release->srcDb == GB_GENBANK) ? "GenBank" : "RefSeq"),
       accWhere);

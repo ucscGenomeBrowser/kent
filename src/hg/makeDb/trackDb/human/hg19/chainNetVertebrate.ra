@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aWallaby=Wallaby bOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken faMedium_Ground_Finch=Medium_Ground_Finch fbBudgerigar=Budgerigar fbZebra_Finch=Zebra_Finch fcAlligator=Alligator gLizard=Lizard hX_Tro=X._tropicalis iTetraodon=Tetraodon jFugu=Fugu kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nLamprey=Lamprey
+subGroup2 species Species aWallaby=Wallaby baTasmanian_Devil=Tasmanian_Devil bbOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken faMedium_Ground_Finch=Medium_Ground_Finch fbBudgerigar=Budgerigar fbZebra_Finch=Zebra_Finch fcAlligator=Alligator gLizard=Lizard hX_Tro=X._tropicalis iTetraodon=Tetraodon jFugu=Fugu kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nLamprey=Lamprey
 subGroup3 clade Clade aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria dAmph=Amphibia eTele=Teleostei fHyper=Hyperoartia
 dragAndDrop subTracks
 visibility hide
@@ -36,9 +36,17 @@ html hg19vertChainNet
         type chain macEug1
         otherDb macEug1
 
+        track chainSarHar1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=baTasmanian_Devil clade=aMammal
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain sarHar1
+        otherDb sarHar1
+
         track chainMonDom5 override
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=bOpossum clade=aMammal
+        subGroups view=chain species=bbOpossum clade=aMammal
         otherDb monDom5
 
         track chainOrnAna1
@@ -173,9 +181,17 @@ include chainNetGalGal4.ra alpha
         type netAlign macEug1 chainMacEug1
         otherDb macEug1
 
+        track netSarHar1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=baTasmanian_Devil clade=aMammal
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign sarHar1 chainSarHar1
+        otherDb sarHar1
+
         track netMonDom5 override
         subTrack vertebrateChainNetViewnet on
-        subGroups view=net species=bOpossum clade=aMammal
+        subGroups view=net species=bbOpossum clade=aMammal
         otherDb monDom5
 
         track netOrnAna1

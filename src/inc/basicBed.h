@@ -77,6 +77,15 @@ struct bed4
     };
 
 
+struct bed4 *bed4New(char *chrom, int start, int end, char *name);
+/* Make new bed4. */
+
+void bed4Free(struct bed4 **pBed);
+/* Free up bed4 */
+
+void bed4FreeList(struct bed4 **pList);
+/* Free a list of dynamically allocated bed4's */
+
 void bedStaticLoad(char **row, struct bed *ret);
 /* Load a row from bed table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

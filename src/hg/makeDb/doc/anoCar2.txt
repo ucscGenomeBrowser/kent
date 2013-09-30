@@ -2088,3 +2088,16 @@ track quality override
 type wig 0 50
 
 ##########################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-16 - Hiram)
+    mkdir /hive/data/genomes/anoCar2/bed/ucscToINSDC
+    cd /hive/data/genomes/anoCar2/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh
+    ./verifyAll.sh
+    ./join.sh
+
+    # verify the track link to INSDC functions
+
+##############################################################################

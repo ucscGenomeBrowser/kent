@@ -3296,7 +3296,7 @@ struct sqlConnection *betaconn = NULL;
 struct dbDb *ki=NULL, *kiList=NULL, *dbDbTemp=NULL;
 struct sqlResult *sr;
 char **row;
-char query[256];
+char query[1024];
 char tempName[256];
 char now[256];
 
@@ -3358,7 +3358,7 @@ for (ki = kiList; ki != NULL; ki = kiNext)
           "dbs like '%s %%' or "
           "dbs like '%% %s' or "
           "dbs like '%% %s %%'"
-          ") %s"
+          ") %-s"
           "order by qadate desc, qid desc",
           ki->name,
           ki->name,
@@ -3408,7 +3408,7 @@ printf("<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%%;'>\n"
     );
 sqlSafef(query,sizeof(query),
     "select releaseLog, dbs, qadate, releaseLogUrl from pushQ "
-    "where priority='L' and releaseLog != '' and dbs != '' %s"
+    "where priority='L' and releaseLog != '' and dbs != '' %-s"
     "order by qadate desc, qid desc ", encodeClause
     );
 sr = sqlGetResult(conn, query);
@@ -3500,7 +3500,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
           "dbs like '%s %%' or "
           "dbs like '%% %s' or "
           "dbs like '%% %s %%'"
-          ") %s"
+          ") %-s"
           "order by qadate desc, qid desc",
           ki->name,
           ki->name,

@@ -3,13 +3,13 @@
 ## Variants: some more variants (input/annoGrator/moreVariants.pgSnp.tab)
 ## Transcripts: UCSC Genes of course (hg19.knownGene)
 ## dbSNP: now snp137. (hg19.snp137)
-## Extra column keys:
+## Keys for Extra column items:
 ## SIFT: SIFT score from dbNSFP
 Uploaded Variation	Location	Allele	Gene	Feature	Feature type	Consequence	Position in cDNA	Position in CDS	Position in protein	Amino acid change	Codon change	Co-located Variation	Extra
 chr19_45405966_C/A	chr19:45405966	A	O96008-2	uc002ozz.3	Transcript	3_prime_UTR_variant	2449	-	-	-	-	-	EXON=9/9
-chr19_45405966_C/A	chr19:45405966	A	O96008	uc002ozx.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=9/10
-chr19_45405966_C/A	chr19:45405966	A	O96008	uc002ozy.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=9/10
-chr19_45405966_C/A	chr19:45405966	A	O96008	uc002paa.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=8/9
+chr19_45405966_C/A	chr19:45405966	A	O96008	uc002ozx.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=9/9
+chr19_45405966_C/A	chr19:45405966	A	O96008	uc002ozy.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=9/9
+chr19_45405966_C/A	chr19:45405966	A	O96008	uc002paa.4	Transcript	intron_variant	-	-	-	-	-	-	INTRON=8/8
 chr19_45405966_C/A	chr19:45405966	A	P02649	uc002pab.3	Transcript	upstream_gene_variant	-	-	-	-	-	-	DISTANCE=3073
 chr19_45406350_C/T	chr19:45406350	C	O96008-2	uc002ozz.3	Transcript	3_prime_UTR_variant	2833	-	-	-	-	-	EXON=9/9
 chr19_45406350_C/T	chr19:45406350	C	O96008	uc002ozx.4	Transcript	missense_variant	1111	1010	337	L/P	cTg/cCg	-	EXON=10/10

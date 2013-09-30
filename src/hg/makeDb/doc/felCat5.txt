@@ -740,4 +740,24 @@ ensName=`echo $L | sed -e 's/^chrM/MT/; s/^chr[0-9A-Za-z]*_//; s/_random//; s/^c
 ensSize=`echo $L | awk '{print $2}'`
 echo -e "0\t$ensName\t$ensSize\t$ucName\t$ucSize"
 done > ensToUcsc.lift
+
 ############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/felCat5/bed/ucscToINSDC
+    cd /hive/data/genomes/felCat5/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh NC_001700.1
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/21/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab felCat5 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords felCat5 ucscToINSDC
+    featureBits -countGaps felCat5 ucscToINSDC
+    # 2455541136 bases of 2455541136 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

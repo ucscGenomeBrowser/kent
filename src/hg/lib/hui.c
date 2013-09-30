@@ -29,6 +29,7 @@
 #include "bigBed.h"
 #include "bigWig.h"
 #include "regexHelper.h"
+#include "snakeUi.h"
 #include "vcfUi.h"
 #include "vcf.h"
 #include "errCatch.h"
@@ -3921,6 +3922,8 @@ switch(cType)
                         break;
 #endif
     case cfgVcf:        vcfCfgUi(cart, tdb, prefix, title, boxed);
+                        break;
+    case cfgSnake:      snakeCfgUi(cart, tdb, prefix, title, boxed);
                         break;
     case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;

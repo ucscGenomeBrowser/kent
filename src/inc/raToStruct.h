@@ -19,13 +19,46 @@ struct raToStructReader
 
 struct raToStructReader *raToStructReaderNew(char *name,  int fieldCount, char **fields,  
     int requiredFieldCount, char **requiredFields);
-/* Create a helper object for parsing an ra file into a C structure.  This structure will
- * contain */
+/* Create a helper object for parsing an ra file into a C structure. */
 
 void raToStructReaderFree(struct raToStructReader **pReader);
 /* Free up memory associated with reader. */
 
 void raToStructReaderCheckRequiredFields(struct raToStructReader *reader, struct lineFile *lf);
 /* Make sure that all required files have been seen in the stanza we just parsed. */
+
+void raToStructArraySignedSizer(struct lineFile *lf, int curSize, int *pSize, char *fieldName);
+/* If *pSize is zero,  set it to curSize,  othersize check that it is the same as curSize.
+ * The lf and fieldName are for error reporting. */
+
+void raToStructArrayUnsignedSizer(struct lineFile *lf, unsigned curSize, 
+    unsigned *pSize, char *fieldName);
+/* If *pSize is zero,  set it to curSize,  othersize check that it is the same as curSize.
+ * The lf and fieldName are for error reporting. */
+
+void raToStructArrayShortSizer(struct lineFile *lf, short curSize, 
+    short *pSize, char *fieldName);
+/* If *pSize is zero,  set it to curSize,  othersize check that it is the same as curSize.
+ * The lf and fieldName are for error reporting. */
+
+void raToStructArrayUshortSizer(struct lineFile *lf, unsigned short curSize, 
+    unsigned short *pSize, char *fieldName);
+/* If *pSize is zero,  set it to curSize,  othersize check that it is the same as curSize.
+ * The lf and fieldName are for error reporting. */
+
+void raToStructArrayByteSizer(struct lineFile *lf, signed char curSize, 
+    signed char *pSize, char *fieldName);
+/* If *pSize is zero,  set it to curSize,  othersize check that it is the same as curSize.
+ * The lf and fieldName are for error reporting. */
+
+void raToStructArrayUbyteSizer(struct lineFile *lf, unsigned char curSize, 
+    unsigned char *pSize, char *fieldName);
+/* If *pSize is zero,  set it to curSize,  othersize check that it is the same as curSize.
+ * The lf and fieldName are for error reporting. */
+
+void raToStructArrayLongLongSizer(struct lineFile *lf, long long curSize, 
+    long long *pSize, char *fieldName);
+/* If *pSize is zero,  set it to curSize,  othersize check that it is the same as curSize.
+ * The lf and fieldName are for error reporting. */
 
 #endif /* RATOSTRUCT_H */

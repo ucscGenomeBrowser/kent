@@ -411,3 +411,22 @@ otoGar3.genbank.est.native.load = no
     ssh hgwbeta "hgsql qapushq < /tmp/otoGar3.sql"
 
 ############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/otoGar3/bed/ucscToINSDC
+    cd /hive/data/genomes/otoGar3/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | hgLoadSqlTab otoGar3 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords otoGar3 ucscToINSDC
+    featureBits -countGaps otoGar3 ucscToINSDC
+    # 2519724550 bases of 2519724550 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

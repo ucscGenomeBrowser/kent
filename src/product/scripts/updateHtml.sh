@@ -3,14 +3,14 @@
 #	$Id: updateHtml.sh,v 1.2 2010/03/31 18:18:32 hiram Exp $
 #
 usage() {
-    echo "usage: updateHtml.sh <browserEnvironment.txt>"
-    echo "The browserEnvironment.txt file contains definitions of how"
-    echo "  these scripts behave in your local environment."
-    echo "  There should be an example template to start with in the"
-    echo "  directory with these scripts."
-    echo "This script will fetch the static HTML hierarchy from UCSC"
-    echo "  into your specified DOCUMENTROOT from the browserEnvironment.txt file."
-    echo "It specifically ignores the trash directory."
+    echo "usage: updateHtml.sh <browserEnvironment.txt>" 1>&2
+    echo "The browserEnvironment.txt file contains definitions of how" 1>&2
+    echo "  these scripts behave in your local environment." 1>&2
+    echo "  There should be an example template to start with in the" 1>&2
+    echo "  directory with these scripts." 1>&2
+    echo "This script will fetch the static HTML hierarchy from UCSC" 1>&2
+    echo "  into your specified DOCUMENTROOT from the browserEnvironment.txt file." 1>&2
+    echo "It specifically ignores the trash directory." 1>&2
     exit 255
 }
 
@@ -51,6 +51,7 @@ fi
 export DS=`date "+%Y-%m-%d"`
 export FETCHLOG="${LOGDIR}/htdocs/update.${DS}"
 mkdir -p "${LOGDIR}/htdocs"
+echo "NOTE: logfile for rsync result is in '${FETCHLOG}'" 1>&2
 
 echo "#    ${RSYNC} --stats --exclude=\"trash\" --exclude=\"lost+found/\" ${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/" > ${FETCHLOG}
 ${RSYNC} --stats --exclude="trash" --exclude="visiGene" \

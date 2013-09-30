@@ -158,14 +158,19 @@ if (strict)
 	    {
 	    // Use sqlTableExists because xrefTable might be $db.$table,
 	    // not supported by hTableExists / hTableOrSplitExists
+	    // NOTE hfs->xrefTable can sometimes contain a comma-separated table list, 
+	    // rather than just a single table. 
 	    struct sqlConnection *conn = hAllocConn(database);
-	    if (!sqlTableExists(conn, hfs->xrefTable))
+	    char *tables = replaceChars(hfs->xrefTable, ",", " ");
+	    boolean exists = sqlTablesExist(conn, tables);
+	    hFreeConn(&conn);
+	    freeMem(tables);
+	    if (! exists)
 		{
 		if (verboseLevel() > 1)
 		    printf("%s (xref) missing\n", hfs->xrefTable);
 		slRemoveEl(&hfsList, hfs);
 		}
-	    hFreeConn(&conn);
 	    }
         }
     }

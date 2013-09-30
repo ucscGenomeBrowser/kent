@@ -3375,8 +3375,10 @@ if (table != NULL)
 	hAddBinToQuery(start, end, query);
 	rowOffset = 1;
 	}
-    sqlDyStringPrintf(query, "%s<%u and %s>%u",
-    	hti->startField, end, hti->endField, start);
+    if (start == end) // e.g. size = 0 SNP insertion site
+    	sqlDyStringPrintf(query, "%s=%u and %s=%u", hti->startField, end, hti->endField, start);
+    else
+    	sqlDyStringPrintf(query, "%s<%u and %s>%u", hti->startField, end, hti->endField, start);
     if (extraWhere)
         {
         /* allow more flexible additions to where clause */

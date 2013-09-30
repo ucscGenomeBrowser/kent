@@ -1816,3 +1816,21 @@ wait
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
 #############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/petMar2/bed/ucscToINSDC
+    cd /hive/data/genomes/petMar2/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh NC_001626.1
+    ./verifyAll.sh
+    ./join.sh
+    sed -e "s/21/8/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab petMar2 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords petMar2 ucscToINSDC
+    featureBits -countGaps petMar2 ucscToINSDC
+    # 885550958 bases of 885550958 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

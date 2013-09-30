@@ -1,5 +1,4 @@
 #!/bin/tcsh
-cd $WEEKLYBLD
 
 cd $BUILDDIR
 set dir = "v"$BRANCHNN"_branch"

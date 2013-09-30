@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>Downloading Data using FTP - UCSC Genome Browser</title>
+	<title>Downloading Data</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="../../style/HGStyle.css">
 </head>
@@ -20,16 +20,42 @@
 
 <div class="section">
 	
-	<h1>Downloading Data using FTP</h1>
+	<h1>Downloading Data: Please Use Rsync</h1>
 	  
     <div class="sectionContent">
+    <h3>Rsync</h3>
+    <p>We recommend that you download data via rsync using the command line, especially for large files.
+    </p>
+    <p>
+      For example, when downloading ENCODE files to your present directory (./), you would use an expression such as:
+    </p>
+    <pre class="code">$ rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile ./</pre>
+    <p>
+      To download the entire directory (note the trailing slash), you would use an expression such as:
+    <pre class="code">$ rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/ ./</pre>
+    <p>To obtain a file's location (URL) to use with rsync (<b><em>rsync://hgdownload.cse.ucsc.edu/...</em></b>), you can navigate in your browser to our FTP site at
+      <a href="ftp://hgdownload.cse.ucsc.edu/" target="_blank">ftp://hgdownload.cse.ucsc.edu/</a>, or our downloads page at
+      <a href="http://hgdownload.cse.ucsc.edu/" target="_blank">http://hgdownload.cse.ucsc.edu/downloads.html</a>,
+      and look for your file of interest.  To learn more about rsync's options, type "man rsync" on the command line.
+    </p>
 
-	<p>We recommend that you download data via our FTP site at <a
-href="ftp://hgdownload.cse.ucsc.edu/">ftp://hgdownload.cse.ucsc.edu/</a>, particularly if you plan
-to download multiple files or files of large size.</p> 
-
-    <h3>FTP from the Command Line</h3>
+    <h4>Downloading from a Web Browser</h4>
+    <p>
+      If you are not comfortable using the command line, you can download your file via
+      FTP in your browser at <a href="ftp://hgdownload.cse.ucsc.edu/goldenPath" target="_blank">ftp://hgdownload.cse.ucsc.edu/goldenPath</a>,
+      or from our downloads page at  <a href="http://hgdownload.cse.ucsc.edu/" target="_blank">http://hgdownload.cse.ucsc.edu/downloads.html</a>.
+    </p>
+    <p>
+      However, downloading via your browser will be very slow or may even time out for
+      large files (i.e., bigBed, bigWig, BAM, VCF, etc.).
+      Also, Safari does not support FTP inside the browser. When you enter a FTP URL in Safari,
+      you may have to select "Guest" and click submit to login before a FTP file system will
+      open in a window on your desktop.
+    </p>
     
+    <h4>FTP from the Command Line</h4>
+
+    We <em><b>do not encourage FTP versus rsync</b></em>, however, here are the command line steps for FTP:
     <pre class="code">
 $ ftp hgdownload.cse.ucsc.edu
 Name: anonymous
@@ -47,27 +73,13 @@ prompted for each file that you download.</p>
 	
     <pre class="code">
 ftp&gt; mget [filename1] [filename2] ...</pre>
-
 <p>Or to download all the files in the directory:</p>
 
     <pre class="code">
 ftp&gt; mget -a</pre>
-
-
-    <h3>FTP from a Web Browser</h3>
-
-    <p>Most modern web browsers have FTP capabilities built-in. In your browser's url field, enter:
-    </p>
-    
-    <pre class="code">
-ftp://hgdownload.cse.ucsc.edu/goldenPath/</pre>
-
-    <h4>A note about Safari</h4>
-    
-    <p>Safari does not support FTP inside the browser. When you enter an FTP URL you will be asked
-to sign in. Select "Guest" and Submit. The FTP file system will open in a window on your
-desktop.</p> 
-      
+    <p>Please note that rsync will be much easier and quicker than using FTP. 
+      Rsync is a much more efficient and convenient transport mechanism.
+  
     </div><!-- .sectionContent --> 
 </div><!-- .section -->
 

@@ -8,17 +8,17 @@
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen md5 size\n");
+         "usage:  freen fileName\n");
 }
 
 static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void freen(char *md5, char *sizeString)
+void freen(char *fileName)
 {
-int size = atoi(sizeString);
-printf("%s\n", encode3CalcValidationKey(md5, size));
+boolean isGzipped = encode3IsGzipped(fileName);
+printf("%s %s gzipped\n", fileName, (isGzipped ? "is" : "is not"));
 }
 
 
@@ -26,8 +26,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 2)
     usage();
-freen(argv[1], argv[2]);
+freen(argv[1]);
 return 0;
 }

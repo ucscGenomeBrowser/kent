@@ -7,7 +7,7 @@ table hubStatus
     string shortLabel;	"Hub short label."
     string longLabel;	"Hub long label."
     uint dbCount;	"Number of databases hub has data for."
-    string dbList; "Comma separated list of databases."
+    lstring dbList; "Comma separated list of databases."
     uint status;        "1 if private"
     string lastOkTime;	"Time when hub last was ok"
     string lastNotOkTime; "Time when hub last was not ok"

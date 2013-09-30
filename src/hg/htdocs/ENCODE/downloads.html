@@ -35,8 +35,10 @@
                     <A HREF="/FAQ/FAQformat.html" TARGET=_blank>File Format FAQ</A>.
                     For bulk download, retrieval by
                     <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/" TARGET=_blank>FTP</A>
-                    is recommended. 
-                    Production data files are covered by the
+                    is recommended along with rsync. Using rsync, for example "rsync -a -P
+                    rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile ./",
+                    has the advantage of starting up where it left off after a failure,
+                    when ran again. Production data files are covered by the
                     <A HREF="/ENCODE/terms.html" TARGET=_BLANK>ENCODE data release policy</A>.  
                     Links in the blue sections below show descriptions of the data as tracks in the UCSC Genome Browser.
                   </P>

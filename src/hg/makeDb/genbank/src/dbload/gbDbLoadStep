@@ -162,6 +162,12 @@ sub dbLoad($$) {
     if (defined($dbVarReloadFile)) {
         push(@dbArgs, "-reloadList=$dbVarReloadFile");
     }
+
+    my $addVersionToTables = getDbConfUndef($db, "addVersionToTables");
+    if (defined($addVersionToTables) && ($addVersionToTables eq "yes")) {
+        push(@dbArgs, "-addVersion");
+    }
+
     runProg("gbLoadRna " . join(" ", @dbArgs) . " $db");
 
     if (defined($dbVarReloadFile)) {

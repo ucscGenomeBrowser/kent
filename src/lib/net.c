@@ -187,6 +187,21 @@ if (setSocketNonBlocking(sd, FALSE) < 0)
     return -1;
     }
 
+//Set read and write timeouts
+struct timeval timeout;      
+timeout.tv_sec = (long) (msTimeout/1000);
+timeout.tv_usec = (long) (((msTimeout/1000)-timeout.tv_sec)*1000000);
+
+if (setsockopt(sd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+    {
+    warn("setsockopt failed setting socket receive timeout\n");
+    }
+
+if (setsockopt(sd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+    {
+    warn("setsockopt failed setting socket send timeout\n");
+    }
+
 return sd;
 
 }

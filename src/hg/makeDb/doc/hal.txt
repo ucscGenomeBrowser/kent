@@ -1,0 +1,26 @@
+# this is documentation on how to build HAL library to support halSnake's in
+# the genome browser
+
+mkdir  /hive/groups/browser/hal
+cd  /hive/groups/browser/hal
+git clone git://github.com/glennhickey/hal.git
+
+wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.11.tar.gz
+tar xzf hdf5-1.8.11.tar.gz
+cd hdf5-1.8.11
+./configure --enable-cxx --prefix `pwd`/hdf5
+make -j 40  && make -j 40  install
+
+export PATH=`pwd`/hdf5/bin:${PATH}
+export h5prefix=-prefix=`pwd`/hdf5
+
+cd  /hive/groups/browser/hal
+git clone git://github.com/benedictpaten/sonLib.git
+pushd sonLib && make && popd
+
+export  ENABLE_UDC=1
+export  KENTSRC=$HOME/kent
+
+cd  /hive/groups/browser/hal/hal
+make
+

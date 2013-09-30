@@ -1,3 +1,8 @@
+PROCESS DESCRIPTION  (8/13 JK) added below
+TROUBLE-SHOOTING TIPS (8/17 JK) added below
+
+--------------------------------------------
+
 Here lies code to implement the ENCODE Big Data Warehouse (EDW).  The EDW is designed to track 
 a moderate number (1,000,000's) of big (>1GB) files.  It consists of three parts:
 1) A Linux file system with a fairly large block size.
@@ -55,3 +60,38 @@ Supporting these tools are the lib and inc dirs.  These just contain two modules
 encodeDataWarehouse which is autoSql generated from lib/encodeDataWarehouse.as,  and edwLib
 containing the hand-coded parts.
 
+
+PROCESS DESCRIPTION  (8/13 JK)
+-------------------------------
+1) User runs validateManifest to create a validated.txt file on their web site.
+2) User navigates to http://encodedcc.sdsc.edu/cgi-bin/edwWebSubmit and logs in.
+3) Log in causes exchange with Persona server that invokes edwWebAuthLogin on our side.
+4) User puts URL for their validated manifest in edwWebSubmit form and submits.
+5) edwWebSubmit writes a row to the edwSubmitJob table and sends a wake up signal to edwDaemon.
+6) edwDaemon starts up edwSubmit, keeping track of how long edwSubmit takes to run, and storing any stderr output in the stderr output of edwSubmitJob.
+7) edwSubmit downloads validated.txt.  It creates a edwSubmit table entry. Then it processes each file in the validated.txt sequentially.  It checks the MD5 sum on each file.   If the MD5 sum matches a file with the same name from the same directory,  that is in the warehouse it skips it, figuring it was already submitted.   Otherwise it makes an entry in the edwFIle table, and downloads the file using parallel connections.  It checks the MD5 sum. If there is a problem it will set an errorMessage in the edwFile table, and also in the edwSubmit table.When file is downloaded and the MD5 sum matches edwSubmit puts a row for 'edwQaAgent' in the edwJob table.  
+8) edwDaemon (another instance) notices edwQaAgent job, and starts it, capturing start/end times and stderr output.  This means the server side validation/automatic QA process typically starts as edwSubmit is working on downloading the next file.
+9) edwQaAgent is just a very small shell script that invokes the next four steps sequentially.
+10) edwMakeValidFile checks the file format really is what it is supposed to be, and for many file formats will gather statistics such as how many items covering how many bases are in the file.  This information goes into the edwValidFile table, along with the ENCODE license plate.  For fastq files additional information gets stored in the edwFastqFile table,  and a sample fastq containing just 250,000 reads is made.   These reads get aligned against the target genome to compute the mapRatio.  For fastq files, and files such as BAM and bigBed, that include genomic coordinates,  a sample of 250,000 items is turned into a simple (non-blocked) bed file for later use.  If there is an error during the edwMakeValidFile phase the edwValidFile table entry will not be made, and there will be a message posted on the edwFile errorMessage column.
+11) edwMakeEnrichment will take the sample bed files produced in step 10, and see where it lands relative to all the regions specified (as .bigBed files) in the edwQaEnrichTarget table for the relevant assembly. It puts the results in the edwQaEnrich table,  which will have one row for each file/target combination.
+12) edwMakeReplicateQa looks for any files that are in the database already with the same experiment and output type, but a different replicate.  For these it  uses the sample bed files from step 10 to make an entry in the edwQaPairSampleOverlap table (aka cross-splatter or cross-enrichment analysis).  For bigWig files instead of the cross-enrichment, it does correlations, putting the results in the edwQaPairCorrelation table.  These correlations are done genome wide, and also restricted to the regions specified as the target in the manifest.
+13) edwMakeContaminationQa runs only on fastq files.  It subsamples the 250,000 read sample down to 100,000 reads,  and aligns these against all organisms specified in the edwQaContamTarget table.  The mapRatio is that results is stored in the edwQaContam table, with one entry for each fastq file/target pair.
+14) edwMakeRepeatQa also runs only on fastq files.  (Potentially this could be extended to other files though.)  It aligns the 250,000 read sample against a RepeatMasker library for the organism,  and stores the results in the edwQaRepeat table.  This will have one entry for each major repeat class (LINE, SINE, tRNA, rRNA, etc) that gets hit by the sample, and includes what proportion of reads align to that major repeat class.
+
+
+TROUBLE_SHOOTING TIPS (8/17 JK)
+--------------------------------
+when troubleshooting the EDW,  the first thing to do is use 'ps' to determine if edwDaemons are running.  There should be at least 2:
+
+        kent      5727     1  0 Aug14 ?        00:00:00 edwRunDaemon encodeDataWarehouse edwSubmitJob 6 /data/www/userdata/edwSubmit.fifo -log=edwSubm
+        kent      5729     1  0 Aug14 ?        00:00:00 edwRunDaemon encodeDataWarehouse edwJob 12 /data/www/userdata/edwQaAgent.fifo -log=edwQaAgent.
+
+If not, go to:
+
+        production: /data/encode3/encodeDataWarehouse/etc
+        test: kent/src/hg/encode3/encodeDataWarehouse/lib
+
+and run
+        ./restartDaemons
+
+At this point they'll be restarted.  If the daemons are working, the next thing to do is look at the recent entries in the edwSubmit, edwSubmitJob and edwJob tables.   Look in the errorMessage and stderr fields.

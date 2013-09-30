@@ -581,3 +581,22 @@ susScr3.genbank.est.native.load = yes
     #   real    78m46.791s
 
 #############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/susScr3/bed/ucscToINSDC
+    cd /hive/data/genomes/susScr3/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh NC_000845.1
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/10/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | hgLoadSqlTab susScr3 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords susScr3 ucscToINSDC
+    featureBits -countGaps susScr3 ucscToINSDC
+    # 2808525991 bases of 2808525991 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

@@ -168,7 +168,8 @@
 <H1>Hub Track Database Definition</H1>
 <H2>How to declare Dataset Display Settings in Genome Browser Hubs</H2>
     <P>This document describes how to declare dataset display characteristics
-    in a Genome Browser Hub through trackDb settings.   Introducing
+    in a Genome Browser Hub through trackDb settings (please note that hosting
+    hub files on HTTP tends to work even better than FTP). Introducing
     datasets for display in the Browser requires declaring the location
     and format of the data and defining initial display characteristics.
     In many cases, you may need to choose how the displayed data (aka

@@ -110,6 +110,7 @@ retry_it:
 		printf("INFORMATION_SCHEMA is NOT allowing access to mysql db\n");
 		}
 	    }
+	/* Disabling this check. It actually shows information about mysql leaking out, but it does not give hackers access to passwords 
 	if (!problemFound)
 	    {
 	    char *result = sqlQuickString(conn, "NOSQLINJ SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_name = 'user'");
@@ -123,6 +124,7 @@ retry_it:
 		printf("INFORMATION_SCHEMA is NOT allowing access to user table\n");
 		}
 	    }
+	*/
 	if (!problemFound)
 	    {
 	    char *query = "NOSQLINJ desc mysql.user";

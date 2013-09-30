@@ -1,3 +1,6 @@
+# chainNet tracks
+include trackDb.chainNet.ra
+
 searchTable gold
 shortCircuit 1
 termRegex [AN][KC][H_][W0]0[0-9]+(\.1)?

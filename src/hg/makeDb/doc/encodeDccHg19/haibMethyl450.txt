@@ -53,5 +53,27 @@ csh reload.csh
 cp fixCoords.pl /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeHaibMethyl450/fixMethyl450.pl
 
 
+# problem with A549 -- redo
+
+
+ dump all tables and grep for probe having bad coord in A549 
+ % grep cg02533120 *.loaded.bed
+
+ # wgEncodeHaibMethyl450A549Etoh02SitesRep1.loaded.bed:chr21       33031836        33031837   
+ # others:  chr21     33031839        33031840        cg02533120   
+ # Only A549 has bad coords!
+
+ # re-fix A549 and reload
+
+    zcat /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeHaibMethyl450/wgEncodeHaibMethyl450A549Etoh02SitesRep1.bed.gz | perl fixCoords.pl > A549.fixed.bed
+
+    % grep cg02533120 A549.fixed.bed
+    #chr21   33031839        33031840        cg02533120      81      +       33031839        33031840        0,0,205
+
+   hgLoadBed hg19 wgEncodeHaibMethyl450A549Etoh02SitesRep1 A549.fixed.bed
+   # Read 482421 elements of size 9 from A549.fixed.bed
+
+
+
 
 

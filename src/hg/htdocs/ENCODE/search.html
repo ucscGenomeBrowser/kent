@@ -22,7 +22,10 @@
                         All tracks and files for ENCODE data are released as part of the ENCODE
                         production phase (September 2007-present).  For bulk download, retrieval by
                         <a href="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/" target="_blank">FTP</a>
-                        is recommended. All ENCODE data are covered by the
+                        is recommended along with rsync. Using rsync, for example "rsync -a -P
+                        rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile ./",
+                        has the advantage of starting up where it left off after a failure,
+                        when ran again. All ENCODE data are covered by the
                         <a href="/ENCODE/terms.html" target="_blank">ENCODE data release policy</a>.</p>
                 </div><!--end content-->
        </div><!--end wrapper-->

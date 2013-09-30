@@ -16,7 +16,7 @@
 #include "paraMessage.h"
 #include "internet.h"
 #include "log.h"
-
+#include <sys/resource.h>
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

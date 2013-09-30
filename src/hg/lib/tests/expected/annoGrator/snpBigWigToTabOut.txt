@@ -6,6 +6,7 @@ chr21	34717025	34717026	rs185479896	0	+	G	G	A/G	genomic	single	by-1000genomes	0	
 chr21	34717070	34717071	rs80084584	0	+	C	C	C/T	genomic	single	unknown	0	0	intron	exact	1	SingleAlleleFreq	1	ENSEMBL,	1	T,	2.000000,	1.000000,		34717070	34717071	20,
 chr21	34717071	34717072	rs67355483	0	+	T	T	-/TTAT	genomic	in-del	unknown	0	0	intron	exact	1	ObservedMismatch	1	DEVINE_LAB,	0					34717071	34717072	20,
 chr21	34717071	34717071	rs11421099	0	+	-	-	-/T/TTAT	genomic	mixed	by-cluster	0.5	0	intron	between	1	InconsistentAlleles	2	DEVINE_LAB,HUMANGENOME_JCVI,	2	-,TTAT,	1.000000,1.000000,	0.500000,0.500000,				
+chr21	34717071	34717071	rs143485157	0	+	CT	CT	-/TTATTTACTTATTTAT	genomic	in-del	by-1000genomes	0	0	intron	between	1	ObservedMismatch	1	1000GENOMES,	0							
 chr21	34717076	34717076	rs71806347	0	+	-	-	-/TTACTTAT	genomic	insertion	unknown	0	0	intron	between	1		1	DEVINE_LAB,	0							
 chr21	34717078	34717079	rs28513622	0	+	T	T	C/T	genomic	single	by-cluster	0.5	0	intron	exact	1		2	COMPLETE_GENOMICS,SSAHASNP,	2	C,T,	1.000000,1.000000,	0.500000,0.500000,		34717078	34717079	0,
 chr21	34717089	34717089	rs71723772	0	+	-	-	-/TATTTATG	genomic	insertion	unknown	0	0	intron	between	1		1	DEVINE_LAB,	0							
@@ -265,6 +266,8 @@ chr21	34731107	34731108	rs35533087	0	+	T	T	C/T	genomic	single	by-frequency,by-10
 chr21	34731163	34731163	rs34774717	0	+	-	-	-/T	genomic	insertion	unknown	0	0	untranslated-3	between	1		1	ABI,	0							
 chr21	34731166	34731166	rs34394035	0	+	-	-	-/A	genomic	insertion	unknown	0	0	untranslated-3	between	1		1	ABI,	0							
 chr21	34731251	34731252	rs73900320	0	+	C	C	C/G	genomic	single	by-cluster,by-1000genomes	0.5	0	untranslated-3	exact	1		2	1000GENOMES,ILLUMINA-UK,	2	C,G,	2182.000000,8.000000,	0.996347,0.003653,		34731251	34731252	40,
+chr21	34731467	34731467	rs146173990	0	+	GT	GT	-/GGTTTTTTTT	genomic	in-del	by-cluster,by-1000genomes	0	0	untranslated-3	between	1	ObservedMismatch	1	1000GENOMES,	0							
+chr21	34731733	34731733	rs150679180	0	+	TG	TG	-/G	genomic	in-del	by-1000genomes	0	0	untranslated-3	between	1	ObservedMismatch	1	1000GENOMES,	0				observed-mismatch			
 chr21	34731825	34731826	rs116519917	0	+	A	A	A/G	genomic	single	by-frequency,by-1000genomes	0.196064	0.244113	untranslated-3	exact	1		1	1000GENOMES,	2	A,G,	2247.000000,59.000000,	0.974415,0.025585,	maf-5-some-pop,maf-5-all-pops	34731825	34731826	60,
 chr21	34731928	34731929	rs2843998	0	+	G	G	A/G	genomic	single	unknown	0	0	untranslated-3	exact	1	SingleAlleleFreq	1	SC_JCM,	1	G,	420.000000,	1.000000,		34731928	34731929	60,
 chr21	34731986	34731987	rs117070822	0	+	G	G	C/G	genomic	single	by-1000genomes	0.016528	0.089391	untranslated-3	exact	1		1	1000GENOMES,	2	C,G,	10.000000,2298.000000,	0.004333,0.995667,		34731986	34731987	40,

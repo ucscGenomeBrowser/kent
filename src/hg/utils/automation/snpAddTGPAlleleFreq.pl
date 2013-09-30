@@ -8,6 +8,8 @@ use strict;
 
 use vars qw/
     $opt_help
+    $opt_contigLoc
+    $opt_deDupTGP
     /;
 
 sub usage {
@@ -21,6 +23,10 @@ usage: $base dbSNPdb > ucscAlleleFreq.txt
     Prints to stdout combined allele frequencies in the format used in
     our snpNNN table (where NNN >= 132).
 options:
+    -contigLoc=t  Use table t as a bNNN_SNPContigLoc table to determine strand
+    -deDupTGP     When SNPAlleleFreq's info is identical to SNPAlleleFreq_TGP,
+                  ignore SNPAlleleFreq_TGP data because it has been copied into
+                  SNPAlleleFreq.  dbSNP started doing this in b138.
     -help         Print this message
 \n";
   exit $status;
@@ -80,19 +86,52 @@ sub getNextSnp($$$) {
   return $newSnp;
 } # getNextSnp
 
-sub printSnp($) {
-  # Glom together per-allele counts and freqs and print one line of our ucscAlleleFreq table.
-  my ($snp) = @_;
-  my ($numAls, $alBlob, $cntBlob, $freqBlob) = (0, "", "", "");
-  foreach my $alInfo (@{$snp->{als}}) {
-    my ($al, $cnt, $freq) = @{$alInfo};
-    $numAls++;
-    $alBlob .= "$al,";
-    $cntBlob .= "$cnt,";
-    $freqBlob .= "$freq,";
+sub checkStrandIds($$$$) {
+  # If $id is the $snpId we're looking for, return its orientation.
+  # If $id precedes $snpId, keep looking.  If $id is after $snpId, stop looking but
+  # complain and reuse the line from $strandFh.
+  my ($snpId, $id, $ori, $strandFh) = @_;
+  my ($keepLooking, $strand);
+  if ($id < $snpId) {
+    $keepLooking = 1;
   }
-  print "$snp->{id}\t$numAls\t$alBlob\t$cntBlob\t$freqBlob\n";
-} # printSnp
+  elsif ($id == $snpId) {
+    # we found it, all done:
+    $keepLooking = 0;
+    $strand = ($ori == 1) ? '-' : '+';
+  } elsif ($id > $snpId) {
+    warn "Missing strand info for $snpId\n";
+    $lineStash{$strandFh} = [$id, $ori];
+    $keepLooking = 0;
+    $strand = '+';
+  }
+  return ($keepLooking, $strand);
+} # checkStrandIds
+
+sub getStrand($;$) {
+  # If strandFh is given, match up snp_id with strand query and return orientation as + or -.
+  # Otherwise just assume strand is +.
+  my ($snp, $strandFh) = @_;
+  if ($strandFh) {
+    my $snpId = $snp->{id};
+    my ($id, $ori);
+    if (exists $lineStash{$strandFh}) {
+      ($id, $ori) = @{$lineStash{$strandFh}};
+      delete $lineStash{$strandFh};
+      my ($keepLooking, $strand) = &checkStrandIds($snpId, $id, $ori, $strandFh);
+      return $strand unless $keepLooking;
+    }
+    while (my $line = <$strandFh>) {
+      $line =~ /^(\d+)\t([01]$)/ || die "weird output from strand query:\n$line\t";
+      ($id, $ori) = ($1, $2);
+      my ($keepLooking, $strand) = &checkStrandIds($snpId, $id, $ori, $strandFh);
+      return $strand unless $keepLooking;
+    }
+    # End of strand file.
+    warn "Missing strand info for $snpId (EOF)\n";
+  }
+  return '+';
+} # getStrand
 
 my %rc = ( 'A' => 'T',
 	   'C' => 'G',
@@ -114,6 +153,24 @@ sub revComp($) {
   return $rcAl;
 } # revComp
 
+sub printSnp($;$) {
+  # Glom together per-allele counts and freqs and print one line of our ucscAlleleFreq table.
+  my ($snp, $strandFh) = @_;
+  my $strand = getStrand($snp, $strandFh);;
+  my ($numAls, $alBlob, $cntBlob, $freqBlob) = (0, "", "", "");
+  foreach my $alInfo (@{$snp->{als}}) {
+    my ($al, $cnt, $freq) = @{$alInfo};
+    if ($strand eq '-') {
+      $al = &revComp($al);
+    }
+    $numAls++;
+    $alBlob .= "$al,";
+    $cntBlob .= "$cnt,";
+    $freqBlob .= "$freq,";
+  }
+  print "$snp->{id}\t$numAls\t$alBlob\t$cntBlob\t$freqBlob\n";
+} # printSnp
+
 sub revCompSnp($) {
   my ($snp) = @_;
   my %rcSnp = ( id => $snp->{id}, als => [] );
@@ -124,40 +181,28 @@ sub revCompSnp($) {
   return \%rcSnp;
 } # revCompSnp
 
-sub combineSnps($$) {
-  # Tally up per-allele counts from two sources.  Destroys inputs.
+sub sameSnps($$) {
+  # Return true if the two inputs have identical info.
   my ($aSnp, $bSnp) = @_;
-  die if ($aSnp->{id} ne $bSnp->{id});
+  return 0 if ($aSnp->{id} != $bSnp->{id});
+  my $aLen = @{$aSnp->{als}};
+  my $bLen = @{$bSnp->{als}};
+  return 0 if ($aLen != $bLen);
+  for (my $i=0;  $i < $aLen;  $i++) {
+    my ($aInfo, $bInfo) = ($aSnp->{als}[$i], $bSnp->{als}[$i]);
+    return 0 if ($aInfo->[0] ne $bInfo->[0]);
+    return 0 if ($aInfo->[1] != $bInfo->[1]);
+    return 0 if ($aInfo->[2] != $bInfo->[2]);
+  }
+  return 1;
+} # sameSnps
+
+sub mergeSnps($$) {
+  # Return a snp with alleles and counts combined from the two input snps.  Destroys inputs.
+  my ($aSnp, $bSnp) = @_;
   my %snp;
   $snp{id} = $aSnp->{id};
   $snp{als} = ();
-  # Warn if the different sources give us different sets of alleles:
-  my ($aStr, $bStr) = ("", "");
-  foreach my $alInfo (@{$aSnp->{als}}) {
-    $aStr .= "$alInfo->[0]/";
-  }
-  foreach my $alInfo (@{$bSnp->{als}}) {
-    $bStr .= "$alInfo->[0]/";
-  }
-  if ($aStr && $bStr && $aStr ne $bStr) {
-    $aStr =~ s#N/##;  $aStr =~ s#/$##;
-    $bStr =~ s#N/##;  $bStr =~ s#/$##;
-    if (index($aStr, $bStr) >= 0 || index($bStr, $aStr) >= 0) {
-#      print STDERR "id=$snp{id}: allele subset relationship $aStr vs. $bStr\n";
-    } else {
-      my $bRcStr = &revComp($bStr);
-      if ($bRcStr eq $aStr) {
-	$bSnp = &revCompSnp($bSnp);
-# 	 print STDERR "id=$snp{id}: revComp(b) matches a ($aStr); rc'ing B's alleles.\n";
-      } else {
-# TODO: it would be awesome to use the alleles in b (1000 Genomes) to fix strand goofs
-# in a -- strand goofs would explain what I see from this:
-#	print STDERR "id=$snp{id}: different allele sets $aStr vs. $bStr\n";
-      }
-    }
-  }
-  # This is where we could detect the AlleleFreqSumNot1 exception....
-  # Merge alleles and counts:
   my $totalCount = 0;
   my $aInfo = shift @{$aSnp->{als}};
   my $bInfo = shift @{$bSnp->{als}};
@@ -184,6 +229,44 @@ sub combineSnps($$) {
     $info->[2] = $info->[1] / $totalCount;
   }
   return \%snp;
+} # mergeSnps
+
+sub combineSnps($$;$) {
+  # Tally up per-allele counts from two sources.  Destroys inputs.  If snp is on - strand,
+  # revComp the alleles from 1000 Genomes which always reports on + strand.
+  my ($aSnp, $bSnp, $strandFh) = @_;
+  die if ($aSnp->{id} ne $bSnp->{id});
+  my $strand = &getStrand($bSnp, $strandFh);
+  if ($strand eq '-') {
+    $bSnp = &revCompSnp($bSnp);
+  }
+  # Warn if the different sources give us different sets of alleles:
+  my ($aStr, $bStr) = ("", "");
+  foreach my $alInfo (@{$aSnp->{als}}) {
+    $aStr .= "$alInfo->[0]/";
+  }
+  foreach my $alInfo (@{$bSnp->{als}}) {
+    $bStr .= "$alInfo->[0]/";
+  }
+  if ($aStr && $bStr && $aStr ne $bStr) {
+    $aStr =~ s#N/##;  $aStr =~ s#/$##;
+    $bStr =~ s#N/##;  $bStr =~ s#/$##;
+    if (index($aStr, $bStr) >= 0 || index($bStr, $aStr) >= 0) {
+      # Happens all the time (some of the "observed" alleles weren't actually observed
+      # in any submission that reported allele counts)
+      # print STDERR "id=$aSnp->{id}: allele subset relationship $aStr vs. $bStr\n";
+    } else {
+      # The InconsistentAlleles exception will flag these.
+      #	print STDERR "id=$aSnp->{id}: different allele sets $aStr vs. $bStr\n";
+      }
+  }
+  # This is where we could detect the AlleleFreqSumNot1 exception....
+  # Merge alleles and counts:
+  if ($opt_deDupTGP && &sameSnps($aSnp, $bSnp)) {
+    return $aSnp;
+  } else {
+    return &mergeSnps($aSnp, $bSnp);
+  }
 } # combineSnps
 
 
@@ -191,7 +274,7 @@ sub combineSnps($$) {
 #
 # -- main --
 
-my $ok = GetOptions("help");
+my $ok = GetOptions("help", "contigLoc=s", "deDupTGP");
 &usage(1) if (!$ok);
 &usage(0) if ($opt_help);
 &usage(1) if (scalar(@ARGV) != 1);
@@ -208,6 +291,13 @@ open(my $tgpAlF,
      "where SNPAlleleFreq_TGP.allele_id = Allele.allele_id " .
      "order by snp_id;' |") || die "$!";
 
+my $strandFh;
+if ($opt_contigLoc) {
+  open($strandFh,
+       "hgsql $dbSNPdb -NBe 'select snp_id, orientation " .
+       "from $opt_contigLoc order by snp_id' |") || die "$!";
+}
+
 my $aSnp = &getOneSnp($oldAlF);
 my $bSnp = &getOneSnp($tgpAlF);
 while (defined $aSnp || defined $bSnp) {
@@ -215,11 +305,11 @@ while (defined $aSnp || defined $bSnp) {
     &printSnp($aSnp);
     $aSnp = &getNextSnp($oldAlF, $aSnp, 'SNPAlleleFreq');
   } elsif (!defined $aSnp || (defined $bSnp && $bSnp->{id} < $aSnp->{id})) {
-    &printSnp($bSnp);
+    &printSnp($bSnp, $strandFh);
     $bSnp = &getNextSnp($tgpAlF, $bSnp, 'SNPAlleleFreq_TGP');
   } else {
     # Same ID -- combine per-allele counts.
-    my $cSnp = &combineSnps($aSnp, $bSnp);
+    my $cSnp = &combineSnps($aSnp, $bSnp, $strandFh);
     &printSnp($cSnp);
     $aSnp = &getNextSnp($oldAlF, $aSnp, 'SNPAlleleFreq');
     $bSnp = &getNextSnp($tgpAlF, $bSnp, 'SNPAlleleFreq_TGP');

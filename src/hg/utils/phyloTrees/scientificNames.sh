@@ -10,6 +10,7 @@ fi
 
 notYetInDbDb() {
 echo $1 | sed -e '
+s/allSin1/Alligator_sinensis/;
 s/amaVit1/Amazona_vittata/;
 s/araMac1/Ara_macao/;
 s/apiMel4/Apis_mellifera/;
@@ -36,6 +37,7 @@ s/ficAlb2/Ficedula_albicollis/;
 s/hapBur1/Haplochromis_burtoni/;
 s/jacJac1/Jaculus_jaculus/;
 s/lepOcu1/Lepisosteus_oculatus/;
+s/strCam1/Struthio_camelus/;
 s/mayZeb1/Maylandia_zebra/;
 s/micOch1/Microtus_ochrogaster/;
 s/myoDav1/Myotis_davidii/;
@@ -64,6 +66,7 @@ s/taeGut2/Taeniopygia_guttata/;
 s/tupChi1/Tupaia_chinensis/;
 s/xenTro7/Xenopus_tropicalis/;
 s/astMex1/Astyanax_mexicanus/;
+s/panTig1/Panthera_tigris_altaica/;
 s/xipMac1/Xiphophorus_maculatus/;'
 }
 

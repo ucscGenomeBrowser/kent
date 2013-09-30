@@ -22,6 +22,7 @@
 #include "edwLib.h"
 
 boolean doNow = FALSE;
+boolean doUpdate= FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -31,12 +32,15 @@ errAbort(
   "usage:\n"
   "   edwSubmit submitUrl email-address\n"
   "options:\n"
-  "   -now  If set, start submission now even though one seems to be in progress for same url.");
+  "   -now  If set, start submission now even though one seems to be in progress for same url.\n"
+  "   -update  If set, will update metadata on file it already has. The default behavior is to\n"
+  "            report an error if metadata doesn't match.\n");
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"now", OPTION_BOOLEAN},
+   {"update", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -72,7 +76,6 @@ sqlSafef(query, sizeof(query),
     (long long)id);
 sqlUpdate(conn, query);
 }
-
 
 int edwOpenAndRecordInDir(struct sqlConnection *conn, 
 	char *submitDir, char *submitFile, char *url,
@@ -143,6 +146,7 @@ struct submitFileRow
     char *replaces;	    /* License plate of file it replaces or NULL */
     unsigned replacesFile;       /* File table id of file it replaces or 0 */
     char *replaceReason;   /* Reason for replacement or 0 */
+    long long md5MatchFileId;   /* If nonzero, then MD5 sum matches on this existing file. */
     };
 
 struct submitFileRow *submitFileRowFromFieldedTable(
@@ -291,7 +295,39 @@ safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", edwTempDir());
 int localFd = mustMkstemp(tempFileName);
 cpFile(remoteFd, localFd);
 mustCloseFd(&localFd);
+}
 
+boolean edwSubmitShouldStop(struct sqlConnection *conn, unsigned submitId)
+/* Return TRUE if there's an error message on submit, indicating we should stop. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select errorMessage from edwSubmit where id=%u", submitId);
+char *errorMessage = sqlQuickString(conn, query);
+boolean ret = isNotEmpty(errorMessage);
+freez(&errorMessage);
+return ret;
+}
+
+struct paraFetchInterruptContext
+/* Data needed for interrupt checker. */
+    {
+    struct sqlConnection *conn;
+    unsigned submitId;
+    boolean isInterrupted;
+    long long lastChecked;
+    };
+
+static boolean paraFetchInterruptFunction(void *v)
+/* Return TRUE if we need to interrupt. */
+{
+struct paraFetchInterruptContext *context = v;
+long long now = edwNow();
+if (context->lastChecked != now)  // Only do check every second
+    {
+    context->isInterrupted = edwSubmitShouldStop(context->conn, context->submitId);
+    context->lastChecked = now;
+    }
+return context->isInterrupted;
 }
 
 int edwFileFetch(struct sqlConnection *conn, struct edwFile *ef, int fd, 
@@ -309,6 +345,7 @@ sqlUpdate(conn, query);
 
 sqlSafef(query, sizeof(query), "select paraFetchStreams from edwHost where id=%u", hostId);
 int paraFetchStreams = sqlQuickNum(conn, query);
+struct paraFetchInterruptContext interruptContext = {.conn=conn, .submitId=submitId};
 
 /* Wrap getting the file, the actual data transfer, with an error catcher that
  * will remove partly uploaded files.  Perhaps some day we'll attempt to rescue
@@ -333,19 +370,23 @@ if (errCatchStart(errCatch))
     /* Do actual upload tracking how long it takes. */
     ef->startUploadTime = edwNow();
 
-#ifdef OLD
-    cpFile(fd, localFd);
-#endif /* OLD */
-
     mustCloseFd(&localFd);
-    if (!parallelFetch(submitFileName, tempName, paraFetchStreams, 3, FALSE, FALSE))
-        errAbort("parallel fetch of %s failed", submitFileName);
+    if (!parallelFetchInterruptable(submitFileName, tempName, paraFetchStreams, 4, FALSE, FALSE,
+	paraFetchInterruptFunction, &interruptContext))
+	{
+	if (interruptContext.isInterrupted)
+	    errAbort("Submission stopped by user.");
+	else
+	    errAbort("parallel fetch of %s failed", submitFileName);
+	}
 
     ef->endUploadTime = edwNow();
 
     /* Rename file both in file system and (via ef) database. */
     edwMakeFileNameAndPath(ef->id, submitFileName, edwFile, edwPath);
     mustRename(tempName, edwPath);
+    if (endsWith(edwPath, ".gz") && !encode3IsGzipped(edwPath))
+         errAbort("%s has .gz suffix, but is not gzipped", submitFileName);
     ef->edwFileName = cloneString(edwFile);
     }
 errCatchEnd(errCatch);
@@ -353,7 +394,11 @@ if (errCatch->gotError)
     {
     /* Attempt to remove any partial file. */
     if (tempName[0] != 0)
+	{
+	verbose(1, "Removing partial %s\n", tempName);
+	parallelFetchRemovePartial(tempName);
 	remove(tempName);
+	}
     handleSubmitError(conn, submitId, errCatch->message->string);  // Throws further
     assert(FALSE);  // We never get here
     }
@@ -723,6 +768,74 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 }
 
+boolean cgiDictionaryVarInListSame(struct cgiDictionary *d, struct cgiVar *list)
+/* Return TRUE if all variables in list are found in dictionary with the same vals. */
+{
+struct cgiVar *var;
+struct hash *hash = d->hash;
+for (var = list; var != NULL; var = var->next)
+    {
+    struct cgiVar *dVar = hashFindVal(hash, var->name);
+    if (dVar == NULL)
+        return FALSE;
+    if (!sameString(dVar->val, var->val))
+        return FALSE;
+    }
+return TRUE;
+}
+
+boolean cgiDictionarySame(struct cgiDictionary *a, struct cgiDictionary *b)
+/* See if dictionaries have same tags with same values. */
+{
+return cgiDictionaryVarInListSame(a, b->list) && cgiDictionaryVarInListSame(b, a->list);
+}
+
+static void updateSubmitName(struct sqlConnection *conn, long long fileId, char *newSubmitName)
+/* Update submit name in database. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), 
+   "update edwFile set submitFileName=\"%s\" where id=%lld", newSubmitName, fileId);
+sqlUpdate(conn, query);
+}
+
+static void handleOldFileTags(struct sqlConnection *conn, struct submitFileRow *sfrList,
+    boolean update)
+/* Check metadata on files mentioned in manifest that by MD5 sum we already have in
+ * warehouse.   We may want to update metadata on these. */
+{
+struct submitFileRow *sfr;
+for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
+    {
+    struct edwFile *newFile = sfr->file;
+    struct edwFile *oldFile = edwFileFromId(conn, sfr->md5MatchFileId);
+    uglyf("looking at old file %s (%s)\n", oldFile->submitFileName, newFile->submitFileName);
+    struct cgiDictionary *newTags = cgiDictionaryFromEncodedString(newFile->tags);
+    struct cgiDictionary *oldTags = cgiDictionaryFromEncodedString(oldFile->tags);
+    boolean updateName = !sameString(oldFile->submitFileName, newFile->submitFileName);
+    boolean updateTags = !cgiDictionarySame(oldTags, newTags);
+    if (updateName)
+	{
+	if (!update)
+	    errAbort("%s already uploaded with name %s.  Please use the 'update' option if you "
+	             "want to give it a new name.",  
+		     newFile->submitFileName, oldFile->submitFileName);
+        updateSubmitName(conn, oldFile->id,  newFile->submitFileName);
+	}
+    if (updateTags)
+	{
+	if (!update)
+	    errAbort("%s is duplicate of %s in warehouse, but not all columns in manifest match.\n"
+	             "Please use the 'update' option if you are meaning to update the information\n"
+		     "associated with this file and try again if this is intentional.",
+		     newFile->submitFileName, oldFile->edwFileName);
+	edwFileResetTags(conn, oldFile, newFile->tags);
+	}
+    cgiDictionaryFree(&oldTags);
+    cgiDictionaryFree(&newTags);
+    }
+}
+
 void edwSubmit(char *submitUrl, char *email)
 /* edwSubmit - Submit URL with validated.txt to warehouse. */
 {
@@ -843,12 +956,15 @@ long long oldBytes = 0, newBytes = 0, byteCount = 0;
 struct submitFileRow *sfr, *oldList = NULL, *newList = NULL, *sfrNext;
 for (sfr = sfrList; sfr != NULL; sfr = sfrNext)
     {
+    uglyf("?%s\n", sfr->file->submitFileName);
     sfrNext = sfr->next;
     struct edwFile *bf = sfr->file;
-    if (edwGotFile(conn, submitDir, bf->submitFileName, bf->md5) >= 0)
+    long long fileId;
+    if ((fileId = edwGotFile(conn, submitDir, bf->submitFileName, bf->md5, bf->size)) >= 0)
         {
 	++oldCount;
 	oldBytes += bf->size;
+	sfr->md5MatchFileId = fileId;
 	slAddHead(&oldList, sfr);
 	}
     else
@@ -856,6 +972,8 @@ for (sfr = sfrList; sfr != NULL; sfr = sfrNext)
     byteCount += bf->size;
     }
 sfrList = NULL;
+slReverse(&newList);
+slReverse(&oldList);
 
 /* Update database with oldFile count. */
 sqlSafef(query, sizeof(query), 
@@ -863,15 +981,20 @@ sqlSafef(query, sizeof(query),
 	oldCount, oldBytes, byteCount, submitId);
 sqlUpdate(conn, query);
 
+/* Deal with old files. This may throw an error.  We do it before downloading new
+ * files since we want to fail fast if we are going to fail. */
+handleOldFileTags(conn, oldList, doUpdate);
 
 /* Go through list attempting to load the files if we don't already have them. */
 for (sfr = newList; sfr != NULL; sfr = sfr->next)
     {
+    if (edwSubmitShouldStop(conn, submitId))
+        break;
     struct edwFile *bf = sfr->file;
     int submitUrlSize = strlen(submitDir) + strlen(bf->submitFileName) + 1;
     char submitUrl[submitUrlSize];
     safef(submitUrl, submitUrlSize, "%s%s", submitDir, bf->submitFileName);
-    if (edwGotFile(conn, submitDir, bf->submitFileName, bf->md5)<0)
+    if (edwGotFile(conn, submitDir, bf->submitFileName, bf->md5, bf->size)<0)
 	{
 	/* We can't get a ID for this file. There's two possible reasons - 
 	 * either somebody is in the middle of fetching it or nobody's started. 
@@ -923,6 +1046,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 doNow = optionExists("now");
+doUpdate = optionExists("update");
 if (argc != 3)
     usage();
 edwSubmit(argv[1], argv[2]);

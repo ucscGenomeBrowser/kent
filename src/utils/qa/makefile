@@ -5,6 +5,7 @@ include ../../inc/common.mk
 
 install:
 	@echo Reminder: is your sandbox up to date?
+	cp -p --remove-destination 2bitCompare             ${SCRIPTS}
 	cp -p --remove-destination activeGenbank.csh       ${SCRIPTS}
 	cp -p --remove-destination alertBqueue.csh         ${SCRIPTS}
 	cp -p --remove-destination allowTraffic.csh        ${SCRIPTS}

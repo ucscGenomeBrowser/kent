@@ -693,6 +693,8 @@ else if (startsWith("psl", type))
     cType = cfgPsl;
 else if (sameWord("vcfTabix",type))
     cType = cfgVcf;
+else if (sameWord("halSnake",type))
+    cType = cfgSnake;
 // TODO: Only these are configurable so far
 
 if (cType == cfgNone && warnIfNecessary)

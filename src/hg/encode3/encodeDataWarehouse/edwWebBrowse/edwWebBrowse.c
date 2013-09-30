@@ -110,7 +110,8 @@ struct edwValidFile *newReplicatesList(struct edwSubmit *submit, struct sqlConne
 char query[256];
 sqlSafef(query, sizeof(query), 
     "select v.* from edwFile f,edwValidFile v"
-    "  where f.id = v.fileId and f.submitId=%u and v.replicate != ''",
+    "  where f.id = v.fileId and f.submitId=%u and v.replicate != '' and v.replicate != 'n/a' "
+    "  and v.replicate != 'pooled'",
     submit->id);
 return edwValidFileLoadByQuery(conn, query);
 }
@@ -226,13 +227,13 @@ for (submit = submitList; submit != NULL; submit = submit->next)
     sqlSafef(query, sizeof(query),
         "select v.licensePlate ID, v.itemCount items, v.basesInItems bases,"
 	"v.format format,truncate(v.mapRatio,2) 'map ratio', "
-	       "v.enrichedIn 'enriched in', truncate(e.enrichment,2) X, "
+	       "t.name 'enriched in', truncate(e.enrichment,2) X, "
 	       "v.experiment experiment, f.submitFileName 'file name' "
 	"from edwFile f left join edwValidFile v on f.id = v.fileId "
 	               "left join edwQaEnrich e on v.fileId = e.fileId "
 		       "left join edwQaEnrichTarget t on e.qaEnrichTargetId = t.id "
 	"where f.submitId = %u and f.tags != ''"
- 	" and (v.enrichedIn = t.name or v.enrichedIn is NULL or t.name is NULL)"
+ 	" and (v.enrichedIn = t.name or v.enrichedIn = 'unknown' or v.enrichedIn is NULL or t.name is NULL)"
 	" order by f.id desc"
 	, submit->id);
     queryIntoTable(conn, query, title);

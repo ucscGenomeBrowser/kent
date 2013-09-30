@@ -1082,8 +1082,7 @@ struct asObject *vcfAsObj()
 return asParseText(vcfDataLineAutoSqlString);
 }
 
-char *vcfGetSlashSepAllelesFromWords(char **words, struct dyString *dy,
-				     boolean *retSkippedFirstBase)
+char *vcfGetSlashSepAllelesFromWords(char **words, struct dyString *dy)
 /* Overwrite dy with a /-separated allele string from VCF words,
  * skipping the extra initial base that VCF requires for indel alleles if necessary.
  * Return dy->string for convenience. */
@@ -1117,7 +1116,7 @@ if (isNotEmpty(altAlleles) && differentString(altAlleles, "."))
 	{
 	dyStringAppendC(dy, '/');
 	int len = p - altAlleles - offset;
-	if (len == 0)
+	if (len == 0 || startsWith("<DEL>", altAlleles+offset))
 	    dyStringAppendC(dy, '-');
 	else
 	    dyStringAppendN(dy, altAlleles+offset, len);
@@ -1125,12 +1124,10 @@ if (isNotEmpty(altAlleles) && differentString(altAlleles, "."))
 	}
     dyStringAppendC(dy, '/');
     int len = strlen(altAlleles) - offset;
-    if (len == 0)
+    if (len == 0 || startsWith("<DEL>", altAlleles+offset))
 	dyStringAppendC(dy, '-');
     else
 	dyStringAppendN(dy, altAlleles+offset, len);
     }
-if (retSkippedFirstBase)
-    *retSkippedFirstBase = offset;
 return dy->string;
 }

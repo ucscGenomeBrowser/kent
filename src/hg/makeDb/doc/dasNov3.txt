@@ -441,3 +441,22 @@ dasNov3.perChromTables = no
     hgsql qapushq < dasNov3.sql
 
 ############################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/dasNov3/bed/ucscToINSDC
+    cd /hive/data/genomes/dasNov3/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    # with each instance
+    ./translateNames.sh NC_001821.1
+    ./verifyAll.sh
+    ./join.sh
+
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+      | hgLoadSqlTab dasNov3 ucscToINSDC stdin ucscToINSDC.tab
+    checkTableCoords dasNov3 ucscToINSDC
+    featureBits -countGaps dasNov3 ucscToINSDC
+    # 3631522711 bases of 3631522711 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################

@@ -856,7 +856,7 @@ _EOF_
 		  );
   if ($needSNPAlleleFreq_TGP) {
     $bossScript->add(<<_EOF_
-    $Bin/snpAddTGPAlleleFreq.pl $tmpDb > ucscAlleleFreq.txt
+    $Bin/snpAddTGPAlleleFreq.pl $tmpDb -contigLoc=$ContigLoc > ucscAlleleFreq.txt
 _EOF_
 		    );
   }
@@ -1140,6 +1140,7 @@ sub loadTables {
       rm /gbdb/$db/snp/$snpBase.fa
     endif
     ln -s $runDir/$snpBase.fa /gbdb/$db/snp/$snpBase.fa
+#*** We need a way to drop duplicates without halting the script!
     zcat ${snpBase}Seq.tab.gz \\
     | hgLoadSqlTab $db ${snpBase}Seq \$HOME/kent/src/hg/lib/snpSeq.sql stdin
 

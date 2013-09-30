@@ -2923,6 +2923,8 @@ if (ct && sameString(tdb->type, "maf"))
 else if (sameString(tdb->track, WIKI_TRACK_TABLE))
     // special case wikiTrack (there's no trackDb entry); fixes redmine 2395
     tdb->canPack = TRUE;
+else if (sameString(tdb->type, "halSnake"))
+    tdb->canPack = TRUE;
 
 // Don't bother with vis controls for downloadsOnly
 if (!tdbIsDownloadsOnly(tdb))

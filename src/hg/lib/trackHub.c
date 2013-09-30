@@ -40,6 +40,7 @@
 #include "hgFind.h"
 #include "hubConnect.h"
 #include "trix.h"
+#include "vcf.h"
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
@@ -829,6 +830,15 @@ if (relativeUrl != NULL)
 	    /* Just open and close to verify file exists and is correct type. */
 	    struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
 	    bbiFileClose(&bbi);
+	    }
+	else if (startsWithWord("vcfTabix", type))
+	    {
+	    /* Just open and close to verify file exists and is correct type. */
+	    struct vcfFile *vcf = vcfFileMayOpen(bigDataUrl, 1, 1, FALSE);
+
+	    if (vcf == NULL)
+	       errAbort("%s is not a VCF file", bigDataUrl);
+	    vcfFileFree(&vcf);
 	    }
 	else if (startsWithWord("bam", type))
 	    {

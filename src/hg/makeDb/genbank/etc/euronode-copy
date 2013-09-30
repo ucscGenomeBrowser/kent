@@ -9,7 +9,7 @@ trap "echo Error: $(hostname) copy failed >&2; exit 1" ERR
 exec </dev/null
 
 # location of the genbank root and files on the remote build server
-gbBuildServer=hgwdev.cse.ucsc.edu
+gbBuildServer=hgwdev.sdsc.edu
 rsyncCommand="udr rsync"
 rsyncPort="ssh"
 rsyncOpts="-ra"
