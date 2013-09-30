@@ -66,30 +66,30 @@ if (txcIn->startInExon)
     {
     txcSwapped.endInExon = TRUE;
     txcSwapped.endExonIx = txcIn->exonCount - 1 - txcIn->startExonIx;
-    if (txcIn->startInCdna >= 0)
-	txcSwapped.endInCdna = txcIn->cdnaSize - txcIn->startInCdna;
-    if (txcIn->startInCds >= 0)
-	txcSwapped.endInCds = txcIn->cdsSize - txcIn->startInCds;
     }
 else
     {
     // Intron number, not exon number, so subtract another 1 here:
     txcSwapped.endExonIx = txcIn->exonCount - 2 - txcIn->startExonIx;
     }
+if (txcIn->startInCdna >= 0)
+    txcSwapped.endInCdna = txcIn->cdnaSize - txcIn->startInCdna;
+if (txcIn->startInCds >= 0)
+    txcSwapped.endInCds = txcIn->cdsSize - txcIn->startInCds;
 if (txcIn->endInExon)
     {
     txcSwapped.startInExon = TRUE;
     txcSwapped.startExonIx = txcIn->exonCount - 1 - txcIn->endExonIx;
-    if (txcIn->endInCdna > 0)
-	txcSwapped.startInCdna = txcIn->cdnaSize - txcIn->endInCdna;
-    if (txcIn->endInCds > 0)
-	txcSwapped.startInCds = txcIn->cdsSize - txcIn->endInCds;
     }
 else
     {
     // Intron number, not exon number, so subtract another 1 here:
     txcSwapped.startExonIx = txcIn->exonCount - 2 - txcIn->endExonIx;
     }
+if (txcIn->endInCdna > 0)
+    txcSwapped.startInCdna = txcIn->cdnaSize - txcIn->endInCdna;
+if (txcIn->endInCds > 0)
+    txcSwapped.startInCds = txcIn->cdsSize - txcIn->endInCds;
 return txcSwapped;
 }
 
@@ -105,7 +105,7 @@ uint varStart = variant->chromStart, varEnd = variant->chromEnd;
 if (varStart < pred->txStart && varEnd > pred->txStart)
     {
     txc.startInCdna = 0;
-    if (varEnd > pred->cdsStart)
+    if (varStart < pred->cdsEnd && varEnd > pred->cdsStart)
 	txc.startInCds = 0;
     }
 int ii;
@@ -121,6 +121,13 @@ for (ii = 0;  ii < pred->exonCount;  ii++)
 	txc.startInCdna = exonOffset + varStart - exonStart;
 	if (varStart >= pred->cdsStart && varStart < pred->cdsEnd)
 	    txc.startInCds = cdsOffset + varStart - exonCdsStart;
+	// If this is an insertion at the beginning of an exon, varEnd is at the end
+	// of the preceding intron and its endInC* have not been set, so copy them over:
+	if (varEnd == varStart)
+	    {
+	    txc.endInCdna = txc.startInCdna;
+	    txc.endInCds = txc.startInCds;
+	    }
 	}
     if (varEnd > exonStart && varEnd <= exonEnd)
 	{
@@ -129,6 +136,13 @@ for (ii = 0;  ii < pred->exonCount;  ii++)
 	txc.endInCdna = exonOffset + varEnd - exonStart;
 	if (varEnd > pred->cdsStart && varEnd <= pred->cdsEnd)
 	    txc.endInCds = cdsOffset + varEnd - exonCdsStart;
+	// If this is an insertion at the end of an exon, varStart is at the beginning
+	// of the following intron and its startInC* have not been set, so copy them over:
+	if (varStart == varEnd)
+	    {
+	    txc.startInCdna = txc.endInCdna;
+	    txc.startInCds = txc.endInCds;
+	    }
 	}
     if (ii < pred->exonCount - 1)
 	{
@@ -142,7 +156,7 @@ for (ii = 0;  ii < pred->exonCount;  ii++)
 		// Variant starts in an intron, but it overlaps the next exon;
 		// note the start in cDNA (and CDS if applicable):
 		txc.startInCdna = exonOffset + exonEnd - exonStart;
-		if (varEnd > pred->cdsStart)
+		if (varStart < pred->cdsEnd && varEnd > pred->cdsStart)
 		    {
 		    uint nextExonEnd = pred->exonEnds[ii+1];
 		    if (nextExonEnd > pred->cdsStart)
@@ -160,7 +174,7 @@ for (ii = 0;  ii < pred->exonCount;  ii++)
 		// Variant ends in an intron, but it also overlaps the previous exon;
 		// note the end in cDNA (and CDS if applicable):
 		txc.endInCdna = exonOffset + exonEnd - exonStart;
-		if (varStart < pred->cdsEnd)
+		if (varEnd > pred->cdsStart && varStart < pred->cdsEnd)
 		    {
 		    if (exonStart < pred->cdsEnd)
 			txc.endInCds = cdsOffset + exonCdsEnd - exonCdsStart;
@@ -180,11 +194,18 @@ txc.cdsSize = cdsOffset;
 if (varEnd > pred->txEnd)
     {
     txc.endInCdna = txc.cdnaSize;
-    if (varStart < pred->cdsEnd)
+    if (varStart < pred->cdsEnd && varEnd > pred->cdsStart)
 	txc.endInCds = txc.cdsSize;
     }
 if (pred->strand[0] == '-')
     txc = txCoordsReverse(&txc);
+if ((txc.startInCdna == -1) != (txc.endInCdna == -1) ||
+    (txc.startInCds >= 0 && txc.endInCds < 0))
+    errAbort("getTxCoords: inconsistent start/ends for variant %s:%d-%d in %s at %s:%d-%d: "
+	     "startInCdna=%d, endInCdna=%d;  startInCds=%d, endInCds=%d",
+	     variant->chrom, varStart+1, varEnd,
+	     pred->name, pred->chrom, pred->txStart, pred->txEnd,
+	     txc.startInCdna, txc.endInCdna, txc.startInCds, txc.endInCds);
 return txc;
 }
 
@@ -390,6 +411,8 @@ if (isRc)
     reverseComplement(newAlleleSeq, newAlLen);
     }
 int variantSizeOnCds = txc->endInCds - txc->startInCds;
+if (variantSizeOnCds < 0)
+    errAbort("gpFx: endInCds (%d) < startInCds (%d)", txc->endInCds, txc->startInCds);
 char *newCodingSeq = mergeAllele(oldCodingSeq, txc->startInCds, variantSizeOnCds,
 				 newAlleleSeq, allele->length, lm);
 // If newCodingSequence has an early stop, truncate there:
@@ -509,7 +532,6 @@ static struct gpFx *gpFxChangedCds(struct allele *allele, struct genePred *pred,
 				   struct dnaSeq *transcriptSequence, struct lm *lm)
 /* calculate effect of allele change on coding transcript */
 {
-struct gpFx *effectsList = NULL;
 // calculate original and variant coding DNA and AA's
 char *oldCodingSequence = getCodingSequence(pred, transcriptSequence->dna, lm);
 int oldCdsLen = strlen(oldCodingSequence);
@@ -529,6 +551,12 @@ cc->cDnaPosition = txc->startInCdna;
 cc->cdsPosition = txc->startInCds;
 cc->exonNumber = exonIx;
 int pepPos = txc->startInCds / 3;
+// At this point we don't use genePredExt's exonFrames field -- we just assume that
+// the CDS starts in frame.  That's not always the case (e.g. ensGene has some CDSs
+// that begin out of frame), so watch out for early truncation of oldCodingSequence
+// due to stop codon in the wrong frame:
+if (pepPos >= strlen(oldaa))
+    return NULL;
 cc->pepPosition = pepPos;
 if (cdsBasesAdded % 3 == 0)
     {
@@ -563,8 +591,7 @@ else
 boolean safeFromNMD = isSafeFromNMD(exonIx, allele->variant, pred);
 setSpecificCodingSoTerm(effect, oldaa, newaa, cdsBasesAdded, safeFromNMD);
 
-slAddHead(&effectsList, effect);
-return effectsList;
+return effect;
 }
 
 
@@ -621,8 +648,7 @@ for ( ; allele ; allele = allele->next)
 	    struct gpFx *effect = gpFxNew(allele->sequence, pred->name, exon_loss,
 					  nonCodingExon, lm);
 	    setNCExonVals(effect, exonIx, txc->startInCdna);
-	    effect->details.intron.intronNumber = exonIx;
-	    slAddTail(effectsList, effect);
+	    slAddTail(&effectsList, effect);
 	    }
 	else
 	    {
@@ -632,10 +658,9 @@ for ( ; allele ; allele = allele->next)
 		(variant->chromEnd > exonStart && variant->chromStart < exonStart+3))
 		{
 		struct gpFx *effect = gpFxNew(allele->sequence, pred->name, splice_region_variant,
-					      intron, lm);
-//#*** Shouldn't we make sure to have the right intron number here?
-		effect->details.intron.intronNumber = exonIx;
-		slAddTail(effectsList, effect);
+					      nonCodingExon, lm);
+		setNCExonVals(effect, exonIx, txc->startInCdna);
+		slAddTail(&effectsList, effect);
 		}
 	    }
 	}
