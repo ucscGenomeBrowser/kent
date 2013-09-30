@@ -110,14 +110,12 @@ static char **nextRowUnfiltered(struct annoStreamVcf *self, char *minChrom, uint
 struct annoStreamer *sSelf = (struct annoStreamer *)self;
 char *regionChrom = sSelf->chrom;
 uint regionStart = sSelf->regionStart;
-uint regionEnd = sSelf->regionEnd;
 if (minChrom != NULL)
     {
     if (regionChrom == NULL)
 	{
 	regionChrom = minChrom;
 	regionStart = minEnd;
-	regionEnd = annoAssemblySeqSize(sSelf->assembly, minChrom);
 	}
     else
 	{
@@ -128,13 +126,27 @@ char **words = nextRowRaw(self);
 if (regionChrom != NULL && words != NULL)
     {
     if (self->isTabix && strcmp(getProperChromName(self, words[0]), regionChrom) < 0)
+	{
+	uint regionEnd = sSelf->regionEnd;
+	if (minChrom != NULL && sSelf->chrom == NULL)
+	    regionEnd = annoAssemblySeqSize(sSelf->assembly, minChrom);
 	lineFileSetTabixRegion(self->vcff->lf, regionChrom, regionStart, regionEnd);
+	}
     while (words != NULL &&
 	   (strcmp(getProperChromName(self, words[0]), regionChrom) < 0 ||
 	    (sameString(words[0], regionChrom) && self->record->chromEnd < regionStart)))
 	words = nextRowRaw(self);
     }
-self->recordCount++;
+// Tabix doesn't give us any rows past end of region, but if not using tabix,
+// detect when we're past end of region:
+if (words != NULL && !self->isTabix && sSelf->chrom != NULL
+    && self->record->chromStart > sSelf->regionEnd)
+    {
+    words = NULL;
+    self->record = NULL;
+    }
+if (words != NULL)
+    self->recordCount++;
 if (words == NULL || (self->maxRecords > 0 && self->recordCount >= self->maxRecords))
     self->eof = TRUE;
 return words;
