@@ -538,6 +538,11 @@ else if (sameString(subType, "xeno"))
                     trackDbSettingOrDefault(tdb, "colorChromDefault", "on"));
 	}
     }
+else if (sameString(subType, "version"))
+    {
+    track->mapItemName = refGeneMapName;
+    track->loadItems = loadPsl;
+    }
 else
     track->loadItems = loadPsl;
 if (sameString(subType, "est"))

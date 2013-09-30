@@ -455,6 +455,14 @@ return 0;
 static int snakeHeight(struct track *tg, enum trackVisibility vis)
 /* calculate height of all the snakes being displayed */
 {
+if (tg->networkErrMsg != NULL)
+    {
+    // we had a parallel load failure
+    tg->drawItems = bigDrawWarning;
+    tg->totalHeight = bigWarnTotalHeight;
+    return bigWarnTotalHeight(tg, vis);
+    }
+
 if (vis == tvDense)
     return tg->lineHeight;
 

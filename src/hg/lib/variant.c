@@ -56,9 +56,9 @@ return TRUE;
 }
 
 struct variant *variantNew(char *chrom, unsigned start, unsigned end, unsigned numAlleles,
-			   char *slashSepAlleles, struct lm *lm)
+			   char *slashSepAlleles, char *refAllele, struct lm *lm)
 /* Create a variant from basic information that is easy to extract from most other variant
- * formats: coords, allele count, and string of slash-separated alleles. */
+ * formats: coords, allele count, string of slash-separated alleles and reference allele. */
 {
 struct variant *variant;
 
@@ -75,7 +75,7 @@ int alleleNumber = 0;
 for( ; alleleNumber < numAlleles; alleleNumber++)
     {
     if (nextAlleleString == NULL)
-	errAbort("number of alleles in pgSnp doesn't match number in name");
+	errAbort("number of alleles in /-separated string doesn't match numAlleles");
     
     char *thisAlleleString = nextAlleleString;
 
@@ -88,6 +88,8 @@ for( ; alleleNumber < numAlleles; alleleNumber++)
 	nextAlleleString++;
 	}
 
+    boolean isRefAllele = (sameWord(thisAlleleString, refAllele) ||
+			   (isEmpty(refAllele) && sameString(thisAlleleString, "-")));
     int alleleStringLength = strlen(thisAlleleString);
     if (isDash(thisAlleleString))
 	{
@@ -103,6 +105,7 @@ for( ; alleleNumber < numAlleles; alleleNumber++)
     allele->length = alleleStringLength; 
     toLowerN(thisAlleleString, alleleStringLength);
     allele->sequence = lmCloneString(lm, thisAlleleString);
+    allele->isReference = isRefAllele;
     }
 
 slReverse(&variant->alleles);
@@ -110,10 +113,10 @@ slReverse(&variant->alleles);
 return variant;
 }
 
-struct variant *variantFromPgSnp(struct pgSnp *pgSnp, struct lm *lm)
+struct variant *variantFromPgSnp(struct pgSnp *pgSnp, char *refAllele, struct lm *lm)
 /* convert pgSnp record to variant record */
 {
 return variantNew(pgSnp->chrom, pgSnp->chromStart, pgSnp->chromEnd, pgSnp->alleleCount,
-		  pgSnp->name, lm);
+		  pgSnp->name, refAllele, lm);
 }
 

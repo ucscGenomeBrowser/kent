@@ -13,6 +13,7 @@ enum soTerm	// the various variant effects
     {
     regulatory_region_variant=1566,
     stop_retained_variant=1567,
+    exon_loss=1572,
     splice_acceptor_variant=1574,
     splice_donor_variant=1575,
     complex_transcript_variant=1577,

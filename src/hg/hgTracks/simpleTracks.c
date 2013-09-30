@@ -2637,6 +2637,12 @@ if ((tallStart == 0 && tallEnd == 0) && !sameWord(tg->table, "jaxQTL3"))
 x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 w = x2-x1;
+if (lf->start==lf->end && w==0) // like a SNP insertion point of size=0
+    {
+    w = 1;
+    hvGfxBox(hvg, x1, y, w, heightPer, color);
+    return;
+    }
 
 // are we highlighting this feature with background highlighting
 if (lf->highlightColor && (lf->highlightMode == highlightBackground))

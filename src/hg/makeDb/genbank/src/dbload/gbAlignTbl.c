@@ -43,6 +43,7 @@ char *MGC_FULL_MRNA_TBL = "mgcFullMrna";
 char *ORFEOME_MRNA_TBL = "orfeomeMrna";
 
 /* forwards */
+static boolean gbAlignTblHasVersion(struct gbAlignTbl *gat);
 static struct sqlUpdater *gbAlignTblSetOiUpdGet(struct gbAlignTblSet *gats,
                                                 unsigned type,
                                                 struct sqlConnection *conn);
@@ -216,7 +217,9 @@ void gbAlignTblWrite(struct gbAlignTbl *gat, struct psl* psl,
                      struct sqlConnection *conn)
 /* write new align to PSL tables */
 {
-char *vdot = gbDropVer(psl->qName);
+char *vdot = NULL;
+if (gbAlignTblHasVersion(gat) == FALSE)
+    vdot = gbDropVer(psl->qName);
 if (gat->tbl != NULL)
     {
     FILE* fh = getPslTabFh(gat, conn);
@@ -227,7 +230,8 @@ if (gat->perChromSuf != NULL)
     FILE* fh = getChromPslTabFh(gat, psl->tName, conn);
     writePsl(fh, psl);
     }
-gbRestoreVer(psl->qName, vdot);
+if (vdot == NULL)
+    gbRestoreVer(psl->qName, vdot);
 }
 
 void gbAlignTblWriteOi(struct gbAlignTbl *gat, struct estOrientInfo* oi,
@@ -283,6 +287,7 @@ struct gbAlignTblSet
 /* set of gbAlignTbl objects for all possible tables, created in
  * a lazy manner. */
 {
+    boolean hasVersion;    // tables have version number in id
     boolean perChrom;      // create per-chrom tables where approriate
     char tmpDir[PATH_LEN];
     
@@ -299,12 +304,18 @@ struct gbAlignTblSet
     struct gbAlignTbl *orfeomeMRna;
 };
 
-struct gbAlignTblSet *gbAlignTblSetNew(boolean perChrom, char *tmpDir)
+static boolean gbAlignTblHasVersion(struct gbAlignTbl *gat)
+{
+return gat->gats->hasVersion;
+}
+
+struct gbAlignTblSet *gbAlignTblSetNew(boolean perChrom, boolean hasVersion, char *tmpDir)
 /* construct a new gbAlignTblSet object */
 {
 struct gbAlignTblSet *gats;
 AllocVar(gats);
 gats->perChrom = perChrom;
+gats->hasVersion = hasVersion;
 safecpy(gats->tmpDir, sizeof(gats->tmpDir), tmpDir);
 return gats;
 }

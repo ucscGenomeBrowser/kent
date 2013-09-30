@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl5
+#!/usr/bin/env perl
 
 # Program : getJoinerKeyErrors.pl
 # Purpose : parses output of joinerCheck and captures Errors and associated lines
