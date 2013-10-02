@@ -63,6 +63,7 @@ configurable *
 configureByPopup *
 container *
 controlledVocabulary *
+coriellUrlBase bed
 dataUrl customTracks
 dataVersion *
 dateSubmitted bedGraph bed

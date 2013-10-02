@@ -36,6 +36,8 @@ else
     self->positionIsGenome = FALSE;
     self->chrom = cloneString(chrom);
     self->regionStart = rStart;
+    if (rEnd == 0)
+	rEnd = annoAssemblySeqSize(self->assembly, chrom);
     self->regionEnd = rEnd;
     }
 }

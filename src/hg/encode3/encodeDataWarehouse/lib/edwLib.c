@@ -264,8 +264,15 @@ char *edwUserNameFromFileId(struct sqlConnection *conn, int fId)
 /* Return user who submit the file originally */
 {
 int uId = edwUserIdFromFileId(conn, fId);
-struct edwUser *user=edwUserFromId(conn, uId);
-return cloneString(user->email);
+if (uId > 0)
+    {
+    struct edwUser *user=edwUserFromId(conn, uId);
+    return cloneString(user->email);
+    }
+else
+    {
+    return ("an unknown user");
+    }
 }
 
 void edwWarnUnregisteredUser(char *email)

@@ -239,8 +239,11 @@ static void asdDoQueryChunking(struct annoStreamDb *self, char *minChrom, uint m
 struct annoStreamer *sSelf = &(self->streamer);
 struct dyString *query = sqlDyStringCreate("select * from %s ", self->table);
 if (sSelf->chrom != NULL && self->rowBuf.size > 0 && !self->doNextChunk)
+    {
     // We're doing a region query, we already got some rows, and don't need another chunk:
+    resetRowBuf(&self->rowBuf);
     self->eof = TRUE;
+    }
 if (self->useMaxOutRows)
     {
     self->maxOutRows -= self->rowBuf.size;

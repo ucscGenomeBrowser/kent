@@ -995,3 +995,65 @@ while ((c = *in++) != 0)
 *out++ = 0;
 return outString;
 }
+
+void jsonFindNameRecurse(struct jsonElement *ele, char *jName, struct slName *sn)
+// Search the JSON tree recursively to find all the values associated to
+// the name. Value found are added to the tail of the  slName list 
+{
+switch (ele->type)
+    {
+    case jsonObject:
+        {
+        if(hashNumEntries(ele->val.jeHash))
+            {
+            struct hashEl *el, *list = hashElListHash(ele->val.jeHash);
+            slSort(&list, hashElCmp);
+            for (el = list; el != NULL; el = el->next)
+                {
+                struct jsonElement *val = el->val;
+                if sameString(el->name, jName)
+                    slNameAddTail(&sn, jsonStringEscape(val->val.jeString));
+                jsonFindNameRecurse(val, jName, sn);
+                }
+            hashElFreeList(&list);
+            }
+        break;
+        }
+    case jsonList:
+        {
+        struct slRef *el;
+        if(ele->val.jeList)
+            {
+            for (el = ele->val.jeList; el != NULL; el = el->next)
+                {
+                struct jsonElement *val = el->val;
+                jsonFindNameRecurse(val, jName, sn);
+                }
+            }
+        break;
+        }
+    case jsonString:
+    case jsonBoolean:
+    case jsonNumber:
+    case jsonDouble:
+        {
+        break;
+        }
+    default:
+        {
+        errAbort("jsonFindNameRecurse; invalid type: %d", ele->type);
+        break;
+        }
+    }
+}
+
+struct slName *jsonFindName(struct jsonElement *json, char *jName)
+// Search the JSON tree to find all the values associated to the name
+// and  put them into a slName list. The first element of the list is the
+// name itself and values are added to the tail of the list.  
+{
+struct slName *sn = slNameNew(jName);
+jsonFindNameRecurse(json, jName, sn);
+return sn;
+}
+
