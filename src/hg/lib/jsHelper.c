@@ -996,9 +996,9 @@ while ((c = *in++) != 0)
 return outString;
 }
 
-void jsonFindNameRecurse(struct jsonElement *ele, char *jName, struct slName *sn)
+void jsonFindNameRecurse(struct jsonElement *ele, char *jName, struct slName **pList)
 // Search the JSON tree recursively to find all the values associated to
-// the name. Value found are added to the tail of the  slName list 
+// the name, and add them to head of the list.  
 {
 switch (ele->type)
     {
@@ -1012,8 +1012,8 @@ switch (ele->type)
                 {
                 struct jsonElement *val = el->val;
                 if sameString(el->name, jName)
-                    slNameAddTail(&sn, jsonStringEscape(val->val.jeString));
-                jsonFindNameRecurse(val, jName, sn);
+                    slNameAddHead(pList, jsonStringEscape(val->val.jeString));
+                jsonFindNameRecurse(val, jName, pList);
                 }
             hashElFreeList(&list);
             }
@@ -1027,7 +1027,7 @@ switch (ele->type)
             for (el = ele->val.jeList; el != NULL; el = el->next)
                 {
                 struct jsonElement *val = el->val;
-                jsonFindNameRecurse(val, jName, sn);
+                jsonFindNameRecurse(val, jName, pList);
                 }
             }
         break;
@@ -1049,11 +1049,22 @@ switch (ele->type)
 
 struct slName *jsonFindName(struct jsonElement *json, char *jName)
 // Search the JSON tree to find all the values associated to the name
-// and  put them into a slName list. The first element of the list is the
-// name itself and values are added to the tail of the list.  
+// and add them to head of the list.  
 {
-struct slName *sn = slNameNew(jName);
-jsonFindNameRecurse(json, jName, sn);
-return sn;
+struct slName *list = NULL;
+jsonFindNameRecurse(json, jName, &list);
+slReverse(&list);
+return list;
+}
+
+struct slName *jsonFindNameUniq(struct jsonElement *json, char *jName)
+// Search the JSON tree to find all the unique values associated to the name
+// and add them to head of the list. 
+{
+struct slName *list = NULL;
+jsonFindNameRecurse(json, jName, &list);
+slUniqify(&list, slNameCmp, slNameFree);
+slReverse(&list);
+return list;
 }
 
