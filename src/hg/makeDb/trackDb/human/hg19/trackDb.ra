@@ -717,7 +717,7 @@ track snp138Flagged
 shortLabel Flagged SNPs(138)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Flagged by dbSNP as Clinically Assoc
 group varRep
-priority 99.0902
+priority 99.0892
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
