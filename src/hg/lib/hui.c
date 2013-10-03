@@ -7280,7 +7280,7 @@ char *words[SMALLBUF];
 char option[SMALLBUF];
 int wordCnt;
 char *name, *value;
-char buttonVar[32];
+char buttonVar[1024];
 char setting[] = "subGroupN";
 char *button;
 struct trackDb *subtrack;
