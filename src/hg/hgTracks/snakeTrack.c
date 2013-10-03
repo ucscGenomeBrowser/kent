@@ -1076,10 +1076,10 @@ if (errCatchStart(errCatch))
 	    slSort(&lf->components, snakeFeatureCmpQStart);
 	    }
 	}
-    else if (tg->visibility == tvPack)
+    else if ((tg->visibility == tvPack) && (lfList != NULL))
 	{
-	assert(lf->next == NULL);
-	slSort(&lf->components, snakeFeatureCmpTStart);
+	assert(lfList->next == NULL);
+	slSort(&lfList->components, snakeFeatureCmpTStart);
 	}
     
     //halFreeBlocks(head);
