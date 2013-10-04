@@ -477,58 +477,55 @@ the point of view of the forward strand, even when the match is on the reverse s
 However, in the <I>qStarts</I> list, the coordinates are reversed.</P>
 <P>
 <B><I>Example:</I></B><BR>
-Here is a 31-mer containing 2 blocks that align on the minus strand and
-2 blocks that align on the plus strand (this sometimes can happen in response to
-assembly errors): 
+Here is a 61-mer containing 2 blocks that align on the minus strand and
+2 blocks that align on the plus strand (this sometimes can happen in response to assembly errors): 
 <BR><BR>
 <PRE>
-0         1         2         3 tens position in query  
-0123456789012345678901234567890 ones position in query   
-            ++++          +++++ plus strand alignment on query   
-    --------    ----------      minus strand alignment on query   
-0987654321098765432109876543210 ones position in query negative strand coordinates
-3         2         1         0 tens position in query negative strand coordinates
+0         1         2         3         4         5         6 tens position in query  
+0123456789012345678901234567890123456789012345678901234567890 ones position in query   
+                      ++++++++++++++                    +++++ plus strand alignment on query   
+    ------------------              --------------------      minus strand alignment on query   
+0987654321098765432109876543210987654321098765432109876543210 ones position in query negative strand coordinates
+6         5         4         3         2         1         0 tens position in query negative strand coordinates
 
 Plus strand:   
-     qStart=12 
-     qEnd=31 
-     blockSizes=4,5 
-     qStarts=12,26 
+     qStart=22
+     qEnd=61 
+     blockSizes=14,5 
+     qStarts=22,56 
                   
 Minus strand:   
      qStart=4 
-     qEnd=26 
-     blockSizes=10,8 
-     qStarts=5,19   
+     qEnd=56 
+     blockSizes=20,18 
+     qStarts=5,39   
 </PRE>
 Essentially, the minus strand <I>blockSizes</I> and <I>qStarts</I> are
 what you would get if you reverse-complemented the query.
 However, the <I>qStart</I> and <I>qEnd</I> are not reversed. To convert one to the other:
 <PRE>
-     Negative-strand-coordinate-qStart = qSize - qEnd   = 31 - 26 =  5
-     Negative-strand-coordinate-qEnd   = qSize - qStart = 31 -  4 = 27
+     Negative-strand-coordinate-qStart = qSize - qEnd   = 61 - 56 =  5
+     Negative-strand-coordinate-qEnd   = qSize - qStart = 61 -  4 = 57
 </PRE>
 <br>
 BLAT this actual sequence against hg19 for a real-world example:<br>
 <br>
-TATC<br>
-GGTAAAATGAGTTTTTTC<br>
-GGCCCCTTTAAAGG<br>
-TCCACTCCCTACCCTCCTAC<br>
-TAAGG<br>
+
+
+CCCC<br>
+GGGTAAAATGAGTTTTTT<br>
+GGTCCAATCTTTTA<br>
+ATCCACTCCCTACCCTCCTA<br>
+GCAAG<br>
+
+
+
 <br>
 Look for the alignment on chr21 negative strand(-).<br>
-Conveniently aligned to the window chr21:10,000,000-10,000,060.<br>
-All the coordinates match the example above, or are off by a multiple of 10.<br>
-<br>
-Here is a real-world example sequence that you can BLAT against hg19.
-The only thing changed is that instead of the aligning query blocks being
-8 and 10 in size, they are 18 and 20 so that they are large enough to be found.
-Similarly the unaligned part in the middle was expanded from 4 bases to 14
-so that the exons would not get merged (for size &lt; 8) turning it into 4 mismatches.
-The whole thing is then 61 bases long instead of 31.<br>
-<br>
-4+(8+10)+(4+10)+(10+10)+5=61 bases<br>
+Conveniently aligned to the window chr21:10,000,001-10,000,061.<br>
+This corresponds to coordinates to a start coordinate of 10,000,000 in the psl.<br>
+Subtracting 10 million from the target psl chromsome position will give the query negative strand coordinate above.<br>
+Note that the browser window coordinates are 1-based [start,end] while psl coordinates are 0-based [start,end).<br>
 <br>
 The 4, 14, and 5 bases at beginning, middle, and end were
 chosen to not match with the genome at the corresponding position.<br>
