@@ -8,7 +8,7 @@ table dgvPlus
     uint   score;       "Score from 0-1000 (placeholder for BED 9+ format)"
     char[1] strand;     "+ or - (placeholder for BED 9+ format)"
     uint thickStart;    "Same as chromStart (placeholder for BED 9+ format)"
-    uint thickEnd;      "Same as chromEnd (placeholder for BED 9+ format)"
+    uint thickEnd;      "Same as chromStart (placeholder for BED 9+ format)"
     uint itemRgb;	"Item R,G,B color."
     string varType;     "Type of variation"
     string reference;   "Literature reference for the study that included this variant"
