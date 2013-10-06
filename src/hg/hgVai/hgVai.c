@@ -1457,6 +1457,11 @@ if (sameString(variantTrack, hgvaSampleVariants))
     {
     primary = makeSampleVariantsStreamer(assembly, geneTdb, maxVarRows);
     primaryLongLabel = hgvaSampleVariantsLabel;
+    // Sample variants can't always be made within the currently selected position range,
+    // so just for these, force search to be genome-wide.
+    chrom = NULL;
+    start = 0;
+    end = 0;
     }
 else
     {
