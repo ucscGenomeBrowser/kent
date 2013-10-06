@@ -4,7 +4,9 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "dystring.h"
+#include "options.h"
 
+bool humanReadable = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -13,8 +15,15 @@ errAbort(
   "calc - Little command line calculator\n"
   "usage:\n"
   "   calc this + that * theOther / (a + b)\n"
+  "Options:\n"
+  "  -h - output as human-readable numbers, with m=millions, g=billions, etc\n"
   );
 }
+
+static struct optionSpec options[] = {
+   {"h", OPTION_BOOLEAN},
+   {NULL, 0},
+};
 
 void calc(int wordCount, char *words[])
 /* calc - Little command line calculator. */
@@ -28,14 +37,44 @@ for (i=0; i<wordCount; ++i)
         dyStringAppend(dy, " ");
     dyStringAppend(dy, words[i]);
     }
-printf("%s = %f\n", dy->string, doubleExp(dy->string));
+
+double result = doubleExp(dy->string);
+
+if (!humanReadable)
+    {
+    printf("%s = %f\n", dy->string, result);
+    return;
+    }
+
+// make human readable 
+char* resQual = "";
+int intRes = 0;
+if (result>1E12)
+    {
+    intRes = round(result/1E12);
+    resQual = "t";
+    }
+else if (result>1E9)
+    {
+    intRes = round(result/1E9);
+    resQual = "g";
+    }
+else if (result>1E6)
+    {
+    intRes = round(result/1E6);
+    resQual = "m";
+    }
+printf("%s = %d%s\n", dy->string, intRes, resQual);
 }
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
+humanReadable = optionExists("h");
 calc(argc-1, argv+1);
 return 0;
 }
