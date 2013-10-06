@@ -87,6 +87,8 @@ elif [ $(hostname) = "rrnfs1" ] ; then
     export HGDB_CONF=$gbRoot/etc/.hg.mysqlrr.conf
     # FIXME: tmp hack during transtion to Arnolds
     opts="$opts -grepIndexRootDir=/gbdb/genbank/grepIndex"
+elif [ $(hostname) = "genome-browser-mirror" ] ; then
+    export HGDB_CONF=$gbRoot/etc/.hg.genome-browser-mirror.conf 
 else
     export HGDB_CONF=$gbRoot/etc/.hg.conf
 fi
