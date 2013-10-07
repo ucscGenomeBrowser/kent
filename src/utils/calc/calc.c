@@ -69,10 +69,12 @@ else if (result>=1E3)
     intRes = round(result/1E3);
     resQual = "k";
     }
-else {
+else 
+    {
     intRes = round(result);
     resQual = "";
-}
+    }
+
 printf("%s = %d%s\n", dy->string, intRes, resQual);
 }
 
