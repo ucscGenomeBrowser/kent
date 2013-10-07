@@ -2672,7 +2672,8 @@ identifier rgdEstId external=RGD
 identifier rgdQtlId external=RGD
 "RGD QTL ID"
     $rn,$hg.rgdQtl.name
-    $rn,$hg.rgdQtlLink.name minCheck=0.88
+    $hg.rgdQtlLink.name minCheck=0.88
+    $rn.rgdQtlLink.name minCheck=0.99
 
 identifier rgdRatQtlId external=RGD
 "RGD Rat QTL ID mapped to other organism"
@@ -2940,23 +2941,34 @@ identifier dbSnpRnId typeOf=dbSnpId
     hgFixed.dbSnpRsRn.rsId
     $rn.snpMap.name
 
-identifier hapmapSnpId
-"HapMap SNPs"
-    $hg.hapmapAllelesSummary.name
-    $hg.hapmapSnpsCEU.name
-    $hg.hapmapSnpsCHB.name
-    $hg.hapmapSnpsJPT.name
-    $hg.hapmapSnpsYRI.name
-    $hg.hapmapAllelesChimp.name
-    $hg.hapmapAllelesMacaque.name
-    $hg,!hg17.hapmapLdCeu.name unique
-    $hg,!hg17.hapmapLdChb.name unique
-    $hg,!hg17.hapmapLdChbJpt.name unique
-    $hg,!hg17.hapmapLdJpt.name unique
-    $hg,!hg17.hapmapLdYri.name unique
-    $hg,!hg17.hapmapLdPhCeu.name unique
-    $hg,!hg17.hapmapLdPhChbJpt.name unique
-    $hg,!hg17.hapmapLdPhYri.name unique
+identifier hapmapSnpIdPhaseII
+"HapMap Phase II SNPs"
+    hg17.hapmapAllelesSummary.name
+    hg17.hapmapSnpsCEU.name
+    hg17.hapmapSnpsCHB.name
+    hg17.hapmapSnpsJPT.name
+    hg17.hapmapSnpsYRI.name
+    hg17.hapmapAllelesChimp.name
+    hg17.hapmapAllelesMacaque.name
+
+identifier hapmapSnpIdPhaseIII
+"HapMap Phase III SNPs"
+    # duplicates due to pseudo-autosomal regions:
+    hg18,hg19.hapmapPhaseIIISummary.name dupeOk
+    hg18,hg19.hapmapSnpsCEU.name
+    hg18,hg19.hapmapSnpsCHB.name
+    hg18,hg19.hapmapSnpsJPT.name
+    hg18,hg19.hapmapSnpsYRI.name
+    hg18,hg19.hapmapAllelesChimp.name
+    hg18,hg19.hapmapAllelesMacaque.name
+    hg18,hg19.hapmapLdCeu.name unique minCheck=0.999
+    hg18,hg19.hapmapLdChb.name unique minCheck=0.999
+    hg18,hg19.hapmapLdChbJpt.name unique minCheck=0.999
+    hg18,hg19.hapmapLdJpt.name unique minCheck=0.999
+    hg18,hg19.hapmapLdYri.name unique minCheck=0.999
+    hg18,hg19.hapmapLdPhCeu.name unique minCheck=0.999
+    hg18,hg19.hapmapLdPhChbJpt.name unique minCheck=0.999
+    hg18,hg19.hapmapLdPhYri.name unique minCheck=0.999
 
 identifier snpAnnotations125
 "SNP annotations"
@@ -3488,9 +3500,9 @@ identifier jaxRepTranscriptName external=MGI
 identifier jaxAlleleName external=MGI
 "Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
     # Using dupeOk here because there are some case-sensitive allele name diffs (ugh)
-    $mm.jaxAllelePheno.allele dupeOk
-    $mm.jaxAlleleInfo.name minCheck=0.89
-    $mm.jaxAllele.name minCheck=0.89
+    $mm.jaxAllele.name dupeOk
+    $mm.jaxAlleleInfo.name
+    $mm.jaxAllelePheno.allele
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
@@ -3710,7 +3722,7 @@ identifier lsSnpPdbProtId
 identifier lsSnpPdbKgId
 "lsSnpPdb table protId field"
     $lsSnpDb.kgXref.spID dupeOk
-    $lsSnpDb.lsSnpPdb.protId
+    $lsSnpDb.lsSnpPdb.protId minCheck=0.99
 
 identifier lsSnpPdbPdbId
 "lsSnpPdb table pdbId field"
@@ -3719,7 +3731,7 @@ identifier lsSnpPdbPdbId
 
 identifier lsSnpPdbSnpHg18
 "lsSnpPdb table snpId field"
-    hg18.snp129.name dupeOk
+    hg18.snp130.name dupeOk
     hg18.lsSnpPdb.snpId
 
 identifier lsSnpPdbSnpHg19

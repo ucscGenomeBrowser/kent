@@ -2,6 +2,30 @@
 # Genbank tracks
 # 
 
+track xmGene
+shortLabel XM Genes
+longLabel XM and XR Genes
+group genes
+priority 35
+visibility dense
+color 12,12,120
+type genePred
+#idXref refLink mrnaAcc name
+baseColorUseCds given
+#html refGene.new
+
+track xenoXmGene
+shortLabel xeno XM Genes
+longLabel xeno XM and XR Genes
+group genes
+priority 35
+visibility dense
+color 12,12,120
+type genePred
+#idXref refLink mrnaAcc name
+baseColorUseCds given
+#html refGene.new
+
 track refGene
 shortLabel RefSeq Genes
 longLabel RefSeq Genes

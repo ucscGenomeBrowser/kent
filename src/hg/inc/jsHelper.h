@@ -211,4 +211,16 @@ char *jsonStringEscape(char *inString);
  * More conservative than javaScriptLiteralEncode because
  * some json parsers complain if you escape & or ' */
 
+void jsonFindNameRecurse(struct jsonElement *ele, char *jName, struct slName **pList);
+// Search the JSON tree recursively to find all the values associated to
+// the name, and add them to head of the list.  
+
+struct slName *jsonFindName(struct jsonElement *json, char *jName);
+// Search the JSON tree to find all the values associated to the name
+// and add them to head of the list. 
+
+struct slName *jsonFindNameUniq(struct jsonElement *json, char *jName);
+// Search the JSON tree to find all the values associated to the name
+// and add them to head of the list. 
+
 #endif /* JSHELPER_H */

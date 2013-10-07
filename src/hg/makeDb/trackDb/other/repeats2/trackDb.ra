@@ -71,6 +71,15 @@ type psl xeno hg19
 otherDb hg19
 priority 52
 
+track repPeps
+shortLabel RepeatMasker Peptides
+longLabel RepeatMasker Peptide Library
+group genes
+visibility dense
+color 30,30,0
+type psl
+priority 52
+
 track getOrf
 shortLabel ORFs
 longLabel Open Reading Frames found by EMBOSS getorf

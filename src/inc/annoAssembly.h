@@ -4,6 +4,7 @@
 #define ANNOASSEMBLY_H
 
 #include "common.h"
+#include "hash.h"
 
 struct annoAssembly
 /* Basic information about a genome assembly. */
@@ -11,6 +12,7 @@ struct annoAssembly
     char *name;			// UCSC symbolic name for assembly, e.g. "hg19"
     struct twoBitFile *tbf;	// Opened twoBit sequence file for assembly
     char *twoBitPath;		// twoBit file name
+    struct hash *seqSizes;	// cache of sequence names to sizes (twoBitSeqSize does a seek&read)
     };
 
 struct annoAssembly *annoAssemblyNew(char *name, char *twoBitPath);
