@@ -114,6 +114,9 @@ for (ii = 0;  ii < pred->exonCount;  ii++)
     uint exonStart = pred->exonStarts[ii], exonEnd = pred->exonEnds[ii];
     uint exonCdsStart = max(pred->cdsStart, exonStart);
     uint exonCdsEnd = min(pred->cdsEnd, exonEnd);
+    uint exonCdsSize = 0;
+    if (exonCdsEnd > exonCdsStart)
+	exonCdsSize = exonCdsEnd - exonCdsStart;
     if (varStart >= exonStart && varStart < exonEnd)
 	{
 	txc.startInExon = TRUE;
@@ -121,6 +124,9 @@ for (ii = 0;  ii < pred->exonCount;  ii++)
 	txc.startInCdna = exonOffset + varStart - exonStart;
 	if (varStart >= pred->cdsStart && varStart < pred->cdsEnd)
 	    txc.startInCds = cdsOffset + varStart - exonCdsStart;
+	else if (varStart < pred->cdsStart && varEnd > pred->cdsStart)
+	    // Variant spans the left UTR/CDS boundary; set cdsStart to 0:
+	    txc.startInCds = 0;
 	// If this is an insertion at the beginning of an exon, varEnd is at the end
 	// of the preceding intron and its endInC* have not been set, so copy them over:
 	if (varEnd == varStart)
@@ -136,6 +142,9 @@ for (ii = 0;  ii < pred->exonCount;  ii++)
 	txc.endInCdna = exonOffset + varEnd - exonStart;
 	if (varEnd > pred->cdsStart && varEnd <= pred->cdsEnd)
 	    txc.endInCds = cdsOffset + varEnd - exonCdsStart;
+	else if (varEnd > pred->cdsEnd && varStart < pred->cdsEnd)
+	    // Variant spans the right CDS/UTR boundary; set cdsEnd to cdsSize:
+	    txc.endInCds = cdsOffset + exonCdsSize;
 	// If this is an insertion at the end of an exon, varStart is at the beginning
 	// of the following intron and its startInC* have not been set, so copy them over:
 	if (varStart == varEnd)
@@ -177,7 +186,7 @@ for (ii = 0;  ii < pred->exonCount;  ii++)
 		if (varEnd > pred->cdsStart && varStart < pred->cdsEnd)
 		    {
 		    if (exonStart < pred->cdsEnd)
-			txc.endInCds = cdsOffset + exonCdsEnd - exonCdsStart;
+			txc.endInCds = cdsOffset + exonCdsSize;
 		    else
 			txc.endInCds = cdsOffset;
 		    }
@@ -185,8 +194,7 @@ for (ii = 0;  ii < pred->exonCount;  ii++)
 	    }
 	}
     exonOffset += exonEnd - exonStart;
-    if (exonStart < pred->cdsEnd && exonEnd > pred->cdsStart)
-	cdsOffset += exonCdsEnd - exonCdsStart;
+    cdsOffset += exonCdsSize;
     }
 txc.cdnaSize = exonOffset;
 txc.cdsSize = cdsOffset;
