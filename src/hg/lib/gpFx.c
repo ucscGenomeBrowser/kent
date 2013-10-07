@@ -511,16 +511,22 @@ static char *gpFxModifyCodingSequence(char *oldCodingSeq, struct genePred *pred,
 boolean isRc = (pred->strand[0] == '-');
 char *newAlleleSeq = allele->sequence;
 int newAlLen = strlen(newAlleleSeq);
-if (isRc)
+if (! isAllNt(newAlleleSeq, newAlLen))
     {
-    newAlleleSeq = lmCloneString(lm, allele->sequence);
+    // symbolic -- may be deletion or insertion, but we can't tell. :(
+    newAlleleSeq = "";
+    newAlLen = 0;
+    }
+if (isRc && newAlLen > 0)
+    {
+    newAlleleSeq = lmCloneString(lm, newAlleleSeq);
     reverseComplement(newAlleleSeq, newAlLen);
     }
 int variantSizeOnCds = endInCds - startInCds;
 if (variantSizeOnCds < 0)
     errAbort("gpFx: endInCds (%d) < startInCds (%d)", endInCds, startInCds);
 char *newCodingSeq = mergeAllele(oldCodingSeq, startInCds, variantSizeOnCds,
-				 newAlleleSeq, allele->length, lm);
+				 newAlleleSeq, newAlLen, lm);
 // If newCodingSequence has an early stop, truncate there:
 truncateAtStopCodon(newCodingSeq);
 int variantSizeOnRef = allele->variant->chromEnd - allele->variant->chromStart;

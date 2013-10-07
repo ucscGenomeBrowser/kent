@@ -386,6 +386,17 @@ var hgva = // result of invoking:
 	    setCartVar("hgva_regionType", newVal);
 	},
 
+	changeVariantSource: function()
+	{
+	    var newVal = $('select[name="hgva_variantTrack"]').val();
+	    if (newVal === 'hgva_useVariantIds') {
+		$('#variantPasteContainer').show().focus();
+	    } else {
+		$('#variantPasteContainer').hide();
+	    }
+	    setCartVar("hgva_variantTrack", newVal);
+	},
+
 	showNextHiddenSource: function()
 	{
 	    var hiddenSources = $("div.hideableSection").filter("[id^=source]").filter(':hidden');

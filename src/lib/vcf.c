@@ -410,7 +410,7 @@ if (wordCount > 8)
     }
 }
 
-static struct vcfFile *vcfFileNew()
+struct vcfFile *vcfFileNew()
 /* Return a new, empty vcfFile object. */
 {
 struct vcfFile *vcff = NULL;
@@ -700,7 +700,9 @@ return vcfRecordFromRow(vcff, words);
 unsigned int vcfRecordTrimIndelLeftBase(struct vcfRecord *rec)
 /* For indels, VCF includes the left neighboring base; for example, if the alleles are
  * AA/- following a G base, then the VCF record will start one base to the left and have
- * "GAA" and "G" as the alleles.  That is not nice for display for two reasons:
+ * "GAA" and "G" as the alleles.  Also, if any alt allele is symbolic (e.g. <DEL>) then
+ * the ref allele must have a padding base.
+ * That is not nice for display for two reasons:
  * 1. Indels appear one base wider than their dbSNP entries.
  * 2. In pgSnp display mode, the two alleles are always the same color.
  * However, for hgTracks' mapBox we need the correct chromStart for identifying the
@@ -710,24 +712,39 @@ unsigned int chromStartOrig = rec->chromStart;
 struct vcfFile *vcff = rec->file;
 if (rec->alleleCount > 1)
     {
-    boolean allSameFirstBase = TRUE;
-    char firstBase = rec->alleles[0][0];
+    boolean needPaddingBase = TRUE;
+    char firstBase = '\0';
+    if (isAllNt(rec->alleles[0], strlen(rec->alleles[0])))
+	firstBase = rec->alleles[0][0];
     int i;
     for (i = 1;  i < rec->alleleCount;  i++)
-	if (rec->alleles[i][0] != firstBase)
+	{
+	if (isAllNt(rec->alleles[i], strlen(rec->alleles[i])))
 	    {
-	    allSameFirstBase = FALSE;
+	    if (firstBase == '\0')
+		firstBase = rec->alleles[i][0];
+	    if (rec->alleles[i][0] != firstBase)
+		// Different first base implies unpadded alleles.
+		needPaddingBase = FALSE;
+	    }
+	else
+	    {
+	    // Symbolic ALT allele: REF must have the padding base.
+	    needPaddingBase = TRUE;
 	    break;
 	    }
-    if (allSameFirstBase)
+	}
+    if (needPaddingBase)
 	{
 	rec->chromStart++;
 	for (i = 0;  i < rec->alleleCount;  i++)
 	    {
 	    if (rec->alleles[i][1] == '\0')
 		rec->alleles[i] = vcfFilePooledStr(vcff, "-");
-	    else
+	    else if (isAllNt(rec->alleles[i], strlen(rec->alleles[i])))
 		rec->alleles[i] = vcfFilePooledStr(vcff, rec->alleles[i]+1);
+	    else // don't trim first character of symbolic allele
+		rec->alleles[i] = vcfFilePooledStr(vcff, rec->alleles[i]);
 	    }
 	}
     }
