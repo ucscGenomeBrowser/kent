@@ -16,7 +16,7 @@ errAbort(
   "usage:\n"
   "   calc this + that * theOther / (a + b)\n"
   "Options:\n"
-  "  -h - output as human-readable numbers, with k=kilos, m=millions, g=billions, etc\n"
+  "  -h - output result as a human-readable integer numbers, with k/m/g/t suffix
   );
 }
 
@@ -69,6 +69,10 @@ else if (result>=1E3)
     intRes = round(result/1E3);
     resQual = "k";
     }
+else {
+    intRes = round(result);
+    resQual = "";
+}
 printf("%s = %d%s\n", dy->string, intRes, resQual);
 }
 
