@@ -16,7 +16,7 @@ errAbort(
   "usage:\n"
   "   calc this + that * theOther / (a + b)\n"
   "Options:\n"
-  "  -h - output result as a human-readable integer numbers, with k/m/g/t suffix
+  "  -h - output result as a human-readable integer numbers, with k/m/g/t suffix\n"
   );
 }
 
