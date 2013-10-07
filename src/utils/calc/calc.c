@@ -16,7 +16,7 @@ errAbort(
   "usage:\n"
   "   calc this + that * theOther / (a + b)\n"
   "Options:\n"
-  "  -h - output as human-readable numbers, with m=millions, g=billions, etc\n"
+  "  -h - output as human-readable numbers, with k=kilos, m=millions, g=billions, etc\n"
   );
 }
 
@@ -49,20 +49,25 @@ if (!humanReadable)
 // make human readable 
 char* resQual = "";
 int intRes = 0;
-if (result>1E12)
+if (result>=1E12)
     {
     intRes = round(result/1E12);
     resQual = "t";
     }
-else if (result>1E9)
+else if (result>=1E9)
     {
     intRes = round(result/1E9);
     resQual = "g";
     }
-else if (result>1E6)
+else if (result>=1E6)
     {
     intRes = round(result/1E6);
     resQual = "m";
+    }
+else if (result>=1E3)
+    {
+    intRes = round(result/1E3);
+    resQual = "k";
     }
 printf("%s = %d%s\n", dy->string, intRes, resQual);
 }
