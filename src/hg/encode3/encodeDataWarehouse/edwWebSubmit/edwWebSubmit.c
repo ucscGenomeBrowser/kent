@@ -45,7 +45,7 @@ cgiMakeTextVar("url", emptyForNull(cgiOptionalString("url")), 80);
 cgiMakeButton("submitUrl", "submit");
 printf("<BR>\n");
 cgiMakeCheckBox("update", FALSE);
-printf(" this submission updates information associated with files");
+printf(" Update information associated with files that have already been uploaded.");
 printf("<BR>Submission by %s", userEmail);
 edwPrintLogOutButton();
 }
