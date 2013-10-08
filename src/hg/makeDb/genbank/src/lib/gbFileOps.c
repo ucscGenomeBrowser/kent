@@ -313,7 +313,7 @@ char* gbFormatDate(time_t date)
 {
 static int iBuf = 0;
 static char bufs[4][256];
-struct tm* tm = gmtime(&date);
+struct tm* tm = localtime(&date);
 if (++iBuf >= 4)
     iBuf = 0;
 strftime(bufs[iBuf], 11, "%Y-%m-%d", tm);

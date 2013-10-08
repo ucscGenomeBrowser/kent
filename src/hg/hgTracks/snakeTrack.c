@@ -437,7 +437,11 @@ else if (tg->visibility == tvPack)
 
 struct snakeInfo *si = (struct snakeInfo *)lf->codons;
 int lineHeight = tg->lineHeight ;
-return (si->maxLevel + 1) * (2 * lineHeight);
+int multiplier = 1;
+
+if (tg->visibility == tvFull)
+    multiplier = 2;
+return (si->maxLevel + 1) * (multiplier * lineHeight);
 }
 
 static int linkedFeaturesCmpScore(const void *va, const void *vb)
@@ -469,7 +473,7 @@ if (vis == tvDense)
 if (vis == tvSquish)
     return tg->lineHeight/2;
 
-int height = 0;
+int height = 5;  // 5 for room for duplication bars
 struct slList *item = tg->items;
 
 item = tg->items;
@@ -525,15 +529,23 @@ for (item = tg->items; item != NULL; item = item->next)
 
 //  this is a 16 color palette with every other color being a lighter version of
 //  the color before it
-//static int snakePalette[] =
-//{
-//0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5, 0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5
-//};
+static int snakePalette2[] =
+{
+0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5, 0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5
+};
 
 static int snakePalette[] =
 {
 0x1f77b4, 0xff7f0e, 0x2ca02c, 0xd62728, 0x9467bd, 0x8c564b, 0xe377c2, 0x7f7f7f, 0xbcbd22, 0x17becf
 };
+
+static Color hashColor(char *name)
+{
+bits32 hashVal = hashString(name);
+unsigned int colorInt = snakePalette2[hashVal % (sizeof(snakePalette2)/sizeof(Color))];
+
+return MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
+}
 
 static void snakeDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y, double scale, 
@@ -661,7 +673,9 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     qe = sf->qEnd;
     if (vis == tvDense)
 	y = offY;
-    else
+    else if ((vis == tvPack) || (vis == tvSquish))
+	y = offY + (sf->level * 1) * lineHeight;
+    else if (vis == tvFull)
 	y = offY + (sf->level * 2) * lineHeight;
     s = sf->start; e = sf->end;
     tEnd = sf->end;
@@ -691,7 +705,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     if (sameString(colorBy, SNAKE_COLOR_BY_STRAND_VALUE))
 	color = (sf->orientation == -1) ? darkRedColor : darkBlueColor;
     else if (sameString(colorBy, SNAKE_COLOR_BY_CHROM_VALUE))
-	color = getChromColor(lf->name, hvg);
+	color = hashColor(sf->qName);
     else
 	color =  darkBlueColor;
 
@@ -700,7 +714,11 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	w = 1;
     assert(w > 0);
     char buffer[1024];
-    safef(buffer, sizeof buffer, "%d %d",sf->qStart,sf->qEnd);
+	
+    if (vis == tvFull)
+	safef(buffer, sizeof buffer, "%d-%d",sf->qStart,sf->qEnd);
+    else
+	safef(buffer, sizeof buffer, "%s:%d-%d",sf->qName,sf->qStart,sf->qEnd);
     if (sx < insideX)
 	{
 	int olap = insideX - sx;
@@ -987,7 +1005,6 @@ if (errCatchStart(errCatch))
     {
 	struct hashEl* hel;
 
-	//safef(buffer, sizeof buffer, "%s.%c", cur->qChrom,cur->strand);
 	if (tg->visibility == tvFull)
 	    safef(buffer, sizeof buffer, "%s", cur->qChrom);
 	else
@@ -1014,7 +1031,7 @@ if (errCatchStart(errCatch))
 	    lf->orientation = (cur->strand == '+') ? 1 : -1;
 	    hashAdd(qChromHash, lf->name, lf);
 
-	    // now figure out where the blue bars go
+	    // now figure out where the duplication bars go
 	    struct hal_target_dupe_list_t* targetDupeBlocks = head->targetDupeBlocks;
 
 	    if ((tg->visibility == tvPack) || (tg->visibility == tvFull))
@@ -1059,10 +1076,10 @@ if (errCatchStart(errCatch))
 	    slSort(&lf->components, snakeFeatureCmpQStart);
 	    }
 	}
-    else if (tg->visibility == tvPack)
+    else if ((tg->visibility == tvPack) && (lfList != NULL))
 	{
-	assert(lf->next == NULL);
-	slSort(&lf->components, snakeFeatureCmpTStart);
+	assert(lfList->next == NULL);
+	slSort(&lfList->components, snakeFeatureCmpTStart);
 	}
     
     //halFreeBlocks(head);

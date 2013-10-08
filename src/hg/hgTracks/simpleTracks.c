@@ -2628,7 +2628,7 @@ if (psl && drawOpt == baseColorDrawCds && !zoomedToCdsColorLevel)
 
 tallStart = lf->tallStart;
 tallEnd = lf->tallEnd;
-if ((tallStart == 0 && tallEnd == 0) && !sameWord(tg->table, "jaxQTL3"))
+if ((tallStart == 0 && tallEnd == 0) && lf->start != 0 && !sameWord(tg->table, "jaxQTL3"))
     {
     // sometimes a bed <8 will get passed off as a bed 8, tsk tsk
     tallStart = lf->start;

@@ -28230,3 +28230,72 @@ done
     ln -s `pwd`/md5sum.txt $pd/
 
 #########################################################################
+# sperm whale/phyCat1 Lastz run  (DONE - 2013-10-05 braney)
+    screen -S phyCat1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzPhyCat1.2013-10-05
+    cd  /hive/data/genomes/hg19/bed/lastzPhyCat1.2013-10-05
+    cat << '_EOF_' > DEF
+# human vs sperm whale
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: sperm whale PhyCat1
+SEQ2_DIR=/hive/data/genomes/phyCat1/phyCat1.2bit
+SEQ2_LEN=/hive/data/genomes/phyCat1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/hg19/bed/lastzPhyCat1.2013-10-05
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > do.log 2>&1
+    # real    779m50.178s
+    # forgot to load up phyCat1 database for net repeat classification
+    # finish load step manually, then:
+
+    cat fb.hg19.chainPhyCat1Link.txt
+    #  1521042352 bases of 2897316137 (52.498%) in intersection
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -continue=download -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > download.log 2>&1
+    # real    32m10.340s
+
+    # create symLink to indicate this is the version to use
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzPhyCat1.2013-10-05 lastz.phyCat1
+
+    cd /hive/data/genomes/hg19/bed/lastzPhyCat1.2013-10-05
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 phyCat1 > rbest.log 2>&1 &
+    #   real    59m7.123s
+
+    # running the swap
+    mkdir /hive/data/genomes/phyCat1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/phyCat1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzPhyCat1.2013-10-05/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > swap.log 2>&1
+    #   real    102m56.234s
+
+    cat fb.phyCat1.chainHg19Link.txt
+    #    1455933862 bases of 2233689186 (65.181%) in intersection
+
+    cd /hive/data/genomes/phyCat1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
