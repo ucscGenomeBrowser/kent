@@ -2,6 +2,12 @@
 # genome databases to update on the rr.  These will also be copied to hgnfs1
 # Please keep in alphabetical for easy comparisons
 ##
+hg19
+hg18
+mm10
+mm9
+rn5
+rn4
 ailMel1
 allMis1
 anoCar1
@@ -85,8 +91,6 @@ hetGla1
 hetGla2
 hg16
 hg17
-hg18
-hg19
 latCha1
 loxAfr3
 macEug2
@@ -95,8 +99,6 @@ melUnd1
 micMur1
 mm7
 mm8
-mm9
-mm10
 monDom1
 monDom4
 monDom5
@@ -128,8 +130,6 @@ pteVam1
 rheMac2
 rheMac3
 rn3
-rn4
-rn5
 sacCer1
 sacCer2
 sacCer3
