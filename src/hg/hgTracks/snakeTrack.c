@@ -473,7 +473,7 @@ if (vis == tvDense)
 if (vis == tvSquish)
     return tg->lineHeight/2;
 
-int height = 0;
+int height = 5;  // 5 for room for duplication bars
 struct slList *item = tg->items;
 
 item = tg->items;
