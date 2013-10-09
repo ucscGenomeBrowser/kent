@@ -159,8 +159,9 @@ long long edwSubmitMaxStartTime(struct edwSubmit *submit, struct sqlConnection *
 int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn);
 /* Count number of new files in submission that have been validated. */
 
-void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url);
-/* Add submission job to table and wake up daemon. */
+void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url, boolean update);
+/* Add submission job to table and wake up daemon.  If update is set allow submission to
+ * include new metadata on old files. */
 
 int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url, unsigned *retJobId);
 /* Return position of our URL in submission queue.  Optionally return id in edwSubmitJob

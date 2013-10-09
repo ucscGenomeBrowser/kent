@@ -7134,7 +7134,16 @@ if (membersForAll->abcCount > 0 && membersForAll->filters == FALSE)
 if (dimensionX == NULL && dimensionY == NULL)
     return FALSE;
 
-printf("<TABLE class='greenBox matrix' cellspacing=0 style='background-color:%s;'>\n",
+// if there is a treeimage, put it beside the matrix in the green box
+char *treeImage =  trackDbSetting(parentTdb, "treeImage");
+if (treeImage != NULL)
+    {
+    printf("<TABLE class='greenBox matrix' ><TD>");
+    printf("<TABLE cellspacing=0 style='background-color:%s;'>\n",
+       COLOR_BG_ALTDEFAULT);
+    }
+else
+    printf("<TABLE class='greenBox matrix' cellspacing=0 style='background-color:%s;'>\n",
        COLOR_BG_ALTDEFAULT);
 
 (void)matrixXheadings(db,parentTdb,membersForAll,TRUE);
@@ -7237,6 +7246,10 @@ if (dimensionY && cntY>MATRIX_BOTTOM_BUTTONS_AFTER)
     matrixXheadings(db,parentTdb,membersForAll,FALSE);
 
 puts("</TD></TR></TABLE>");
+
+// if there is a treeImage, put it beside the matrix
+if (treeImage != NULL)
+    printf("</TD><TD><IMG SRC=\"%s\"></TD></TABLE>", treeImage);
 
 // If any filter additional filter composites, they can be added at the end.
 compositeUiByFilter(db, cart, parentTdb, formName);

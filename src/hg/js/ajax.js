@@ -453,7 +453,10 @@ function retrieveHtmlHandle(response, status)
 function scrapeVariable(html, name)
 {
 // scrape a variable defintion out of html (see jsHelper.c::jsPrintHash)
-    var re = new RegExp("^// START " + name + "\\nvar " + name + " = ([\\S\\s]+);\\n// END " + name + "$", "m");
+    // NOTE: newlines are being removed by some ISPs, so regex must tolerate that:
+    var re = new RegExp("// START " + name + 
+                        "\\n?var " + name + " = ([\\S\\s]+);" + 
+                        "\\n?// END " + name, "m");
     var a = re.exec(html);
     var json;
     if(a && a[1]) {
