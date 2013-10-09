@@ -43,6 +43,9 @@ extern struct customTrack *theCtList;	/* List of custom tracks. */
 extern char *curTable;	/* Current selected table. */
 struct joiner *allJoiner;	/* Info on how to join tables. */
 
+#define GALAXY_URL_BASE "https://usegalaxy.org"
+#define GALAXY_URL_APP GALAXY_URL_BASE "/tool_runner"
+
 /* --------------- HTML Helpers ----------------- */
 
 void hPrintSpaces(int count);

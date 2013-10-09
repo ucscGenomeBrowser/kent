@@ -2926,8 +2926,9 @@ mouseOverField comments
 noScoreFilter on
 
 track clinvar
+compositeTrack on
 shortLabel ClinVar Variants
-longLabel NCBI ClinVar Genome Variants
+longLabel NCBI ClinVar Variants
 group phenDis
 priority 32
 visibility hide
@@ -2935,6 +2936,20 @@ type bigBed 4 .
 urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
 mouseOverField variantType
 noScoreFilter on
+
+    track clinvarMain
+    shortLabel ClinVar Main Variants
+    longLabel NCBI ClinVar Variants without CNVs
+    visibility pack
+    parent clinvar
+    priority 1
+
+    track clinvarCnv
+    shortLabel NCBI ClinVar Copy-Number Variants
+    longLabel NCBI ClinVar Variants, only CNVs
+    visibility pack
+    parent clinvar
+    priority 2
 
 track spAnnot
 shortLabel UniProt Annotations
