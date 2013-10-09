@@ -465,7 +465,7 @@ hPrintf(" Send output to ");
 cgiMakeCheckBoxIdAndJS("sendToGalaxy", doGalaxy(),
     "checkboxGalaxy",
     "onclick=\"document.getElementById('checkboxGreat').checked=false; return true;\"");
-hPrintf("<A HREF=\"http://g2.bx.psu.edu\" target=_BLANK>Galaxy</A>\n");
+hPrintf("<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A>\n");
 nbSpaces(2);
 cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
     "checkboxGreat",
@@ -939,7 +939,7 @@ hPrintf("%s",
   "TARGET=_blank>tutorial</A> for a narrated presentation of the software "
   "features and usage. "
   "For more complex queries, you may want to use "
-  "<A HREF=\"http://main.g2.bx.psu.edu\" target=_BLANK>Galaxy</A> or "
+  "<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A> or "
   "our <A HREF=\"../goldenPath/help/mysql.html\">public "
   "MySQL server</A>. "
   "To examine the biological function of your set through annotation "

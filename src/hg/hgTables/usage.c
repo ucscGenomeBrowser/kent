@@ -119,7 +119,7 @@ hPrintf("%s",
 "        </LI>\n"
 "        \n"
 "        <LI><B>Send output to Galaxy:</B> displays results of query in \n"
-"        <A HREF=\"http://g2.bx.psu.edu\">Galaxy</A>, a framework for \n"
+"        <A HREF=\""GALAXY_URL_BASE"\">Galaxy</A>, a framework for \n"
 "        interactive genome analysis.\n"
 "        <LI><B>Send output to GREAT:</B> displays the functional enrichments of the \n"
 "        query results in <A HREF=\"http://great.stanford.edu\">GREAT</A>, a tool for\n"
