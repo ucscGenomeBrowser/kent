@@ -37,7 +37,7 @@ char *url = cgiString("url");
 sqlSafef(query, sizeof(query), "update edwScriptRegistry set submitCount = submitCount+1 "
     "where id=%d", reg->id);
 sqlUpdate(conn, query);
-edwAddSubmitJob(conn, email, url);
+edwAddSubmitJob(conn, email, url, FALSE);
 printf("%s submitted", url);
 }
 
