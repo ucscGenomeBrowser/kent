@@ -28230,3 +28230,46 @@ done
     ln -s `pwd`/md5sum.txt $pd/
 
 #########################################################################
+# ClinVar Variants track (2013-10-09 - Max)
+wget ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz -O - | gunzip > variant_summary.txt
+echo WARNING: For hg19 we remove all chrM entries.
+# keep only Ch37 variants and shorten the name
+less variant_summary.txt  |  tawk '($13=="GRCh37" || $13=="GRCh37.p9") {print "chr"$14,$15,$16,$3,$9,$2,$4,$5,$6,$7,$8,$10,$11,$12,$13,$17,$18,$19,$20,$21,$23,$24}'  | sed -e 's/, /,/g' | sed -e 's/;/,/g' | tawk '{$3=$3+1; split($4, a, " "); $4=a[1]; if ($4=="") {$4=$11}; print}' | grep -v ClinicalSignificance | sort -k1,1 -k2,2n | grep -v chrM | sed -e 's/,/, /g' > clinvarFull.bed 
+# separate into two subtracks
+cat clinvarFull.bed | egrep 'copy number (loss|gain)' > clinvarCnv.bed
+cat clinvarFull.bed | grep -v nsv > clinvarMain.bed
+# convert to bb
+cat << '_EOF_' > clinvar.as
+table clinVarBed
+"Browser extensible data (4 fields) plus information about a ClinVar entry"
+    (
+    string chrom;        "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart;   "Start position in chromosome"
+    uint   chromEnd;     "End position in chromosome"
+    string name;         "Name of item"
+    string rcvAcc;         "ClinVar ID"
+    string type;         "Type of Variant"
+    string geneId;         "NCBI Entrez Gene ID"
+    string geneSym;         "NCBI Entrez Gene Symbol"
+    string clinSign;         "Clinical significance:"
+    string snpId;         "dbSNP ID"
+    string nsvId;         "dbVar ID"
+    string testedInGtr;         "Genetic Testing Registry"
+    lstring phenotype;         "Phenotype identifiers"
+    string origin;         "Data origin"
+    string assembly;         "Genome assembly"
+    string cytogenetic;         "Cytogenetic status"
+    string reviewStatus;         "Review status"
+    string hgvsCod;         "coding HGVS"
+    string hgvsProt;         "protein HGVS"
+    string lastEval;         "last evaluation"
+    string guidelines;         "guidelines"
+    lstring otherIds;         "other identifiers (OMIM)"
+    )
+'_EOF_'
+
+bedToBigBed clinvarMain.bed /scratch/data/hg19/chrom.sizes clinvarMain.bb -type=bed4+18 -tab -as=clinvar.as 
+bedToBigBed clinvarCnv.bed /scratch/data/hg19/chrom.sizes clinvarCnv.bb -type=bed4+18 -tab -as=clinvar.as 
+cp clinvarMain.bb /hive/data/genomes/hg19/bed/clinvar/
+cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
+#########################################################################
