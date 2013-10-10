@@ -63,6 +63,8 @@ if (string != NULL)
 
     if ( string[len - 1] == ',')
 	string[len - 1]  = 0;
+    else if (len > 2 && endsWith(string,", "))
+        string[len - 2] = 0;
     }
 return string;
 }
@@ -71,11 +73,22 @@ static void printGenomes(struct trackHub *thub)
 /* print supported assembly names from trackHub */
 {
 /* List of associated genomes. */
-struct trackHubGenome *genomes = thub->genomeList;	
+struct trackHubGenome *genomes = thub->genomeList;
 struct dyString *dy = newDyString(100);
 
 for(; genomes; genomes = genomes->next)
-    dyStringPrintf(dy,"%s,", trackHubSkipHubName(genomes->name));
+    dyStringPrintf(dy,"%s, ", trackHubSkipHubName(genomes->name));
+ourPrintCell(removeLastComma( dyStringCannibalize(&dy)));
+}
+
+static void printGenomeList(struct slName *genomes)
+/* print supported assembly names from sl list */
+{
+/* List of associated genomes. */
+struct dyString *dy = newDyString(100);
+
+for(; genomes; genomes = genomes->next)
+    dyStringPrintf(dy,"%s, ", trackHubSkipHubName(genomes->name));
 ourPrintCell(removeLastComma( dyStringCannibalize(&dy)));
 }
 
@@ -276,7 +289,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
 	    errorMessage);
 
-    ourPrintCell(removeLastComma(dbList));
+    printGenomeList(slNameListFromComma(dbList)); // Leaking a bit of memory
     ourPrintCell(url);
 
     hashStore(publicHash, url);
