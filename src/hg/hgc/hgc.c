@@ -1517,7 +1517,9 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
     {
     if (itemId!=slIds)
         printf(", ");
-    char *idUrl = replaceInUrl(tdb, url, itemId->name, TRUE);
+    char* itemName = itemId->name;
+    itemName = trimSpaces(itemName);
+    char *idUrl = replaceInUrl(tdb, url, itemName, TRUE);
     printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemId->name);
     } 
 printf("</td></tr>\n");
