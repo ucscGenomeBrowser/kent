@@ -307,7 +307,10 @@ else
     if (self->queryChrom == NULL)
 	self->queryChrom = self->chromList;
     else if (!self->doNextChunk)
+	{
 	self->queryChrom = self->queryChrom->next;
+	resetMergeState(self);
+	}
     if (minChrom != NULL)
 	{
 	// Skip chroms that precede minChrom
