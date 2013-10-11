@@ -352,9 +352,10 @@ self->lm = lmInit(0);
 // Temporarily tweak primaryRow's start and end to find upstream/downstream overlap:
 struct annoRow *primaryRow = primaryData->rowList;
 int pStart = primaryRow->start, pEnd = primaryRow->end;
-primaryRow->start -= GPRANGE;
-if (primaryRow->start < 0)
+if (primaryRow->start <= GPRANGE)
     primaryRow->start = 0;
+else
+    primaryRow->start -= GPRANGE;
 primaryRow->end += GPRANGE;
 struct annoRow *rows = annoGratorIntegrate(gSelf, primaryData, retRJFilterFailed, self->lm);
 primaryRow->start = pStart;

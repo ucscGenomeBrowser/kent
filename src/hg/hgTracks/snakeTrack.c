@@ -22,6 +22,9 @@
 
 #include "halBlockViz.h"
 
+// this is the number of pixels used by the target self-align bar
+#define DUP_LINE_HEIGHT	4
+
 struct snakeFeature
     {
     struct snakeFeature *next;
@@ -473,7 +476,7 @@ if (vis == tvDense)
 if (vis == tvSquish)
     return tg->lineHeight/2;
 
-int height = 5;  // 5 for room for duplication bars
+int height = DUP_LINE_HEIGHT; 
 struct slList *item = tg->items;
 
 item = tg->items;
@@ -627,30 +630,29 @@ if (withLabels)
 // let's draw some blue bars for the duplications
 struct hal_target_dupe_list_t* dupeList = lf->dupeList;
 
-//extern void makeChromosomeShades(struct hvGfx *hvg);
-//if (!chromosomeColorsMade)
-    //makeChromosomeShades(hvg);
-
 int count = 0;
-for(; dupeList ; dupeList = dupeList->next, count++)
+if ((tg->visibility == tvFull) || (tg->visibility == tvPack)) 
     {
-    struct hal_target_range_t *range = dupeList->tRange;
-
-    unsigned int colorInt = snakePalette[count % (sizeof(snakePalette)/sizeof(Color))];
-    Color color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
-
-    for(; range; range = range->next)
+    for(; dupeList ; dupeList = dupeList->next, count++)
 	{
-	int s = range->tStart;
-	int e = range->tStart + range->size;
-	int sClp = (s < winStart) ? winStart : s;
-	int eClp = (e > winEnd) ? winEnd : e;
-	int x1 = round((sClp - winStart)*scale) + xOff;
-	int x2 = round((eClp - winStart)*scale) + xOff;
-	hvGfxBox(hvg, x1, y , x2-x1, 3 , color);
+	struct hal_target_range_t *range = dupeList->tRange;
+
+	unsigned int colorInt = snakePalette[count % (sizeof(snakePalette)/sizeof(Color))];
+	Color color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
+
+	for(; range; range = range->next)
+	    {
+	    int s = range->tStart;
+	    int e = range->tStart + range->size;
+	    int sClp = (s < winStart) ? winStart : s;
+	    int eClp = (e > winEnd) ? winEnd : e;
+	    int x1 = round((sClp - winStart)*scale) + xOff;
+	    int x2 = round((eClp - winStart)*scale) + xOff;
+	    hvGfxBox(hvg, x1, y , x2-x1, DUP_LINE_HEIGHT - 1 , color);
+	    }
 	}
+    y+=DUP_LINE_HEIGHT;
     }
-y+=4;
 
 // now we're going to draw the boxes
 
@@ -972,8 +974,13 @@ if (errCatchStart(errCatch))
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
     int handle = halOpenLOD(fileName);
-    int needSeq = (winBaseCount < showSnpWidth) ? 1 : 0;
-    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, 0, needSeq, 1,0);
+    boolean isPackOrFull = (tg->visibility == tvFull) || 
+	(tg->visibility == tvPack);
+    hal_dup_type_t dupMode =  (isPackOrFull) ? HAL_QUERY_AND_TARGET_DUPS :
+	HAL_QUERY_DUPS;
+    int needSeq = isPackOrFull && (winBaseCount < showSnpWidth) ? 1 : 0;
+    int mapBackAdjacencies = (tg->visibility == tvFull);
+    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies);
 
     // did we get any blocks from HAL
     if (head == NULL)
