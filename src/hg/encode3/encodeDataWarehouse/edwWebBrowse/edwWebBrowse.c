@@ -319,7 +319,6 @@ for (submit = submitList; submit != NULL; submit = submit->next)
 void doMiddle()
 /* Write what goes between BODY and /BODY */
 {
-printf("<FORM ACTION=\"../cgi-bin/edwWebBrowse\" METHOD=GET>\n");
 printf("<H1>ENCODE Data Warehouse Submission Browser</H1>\n");
 userEmail = edwGetEmailAndVerify();
 printf("<div id=\"userId\">");
@@ -335,6 +334,7 @@ else
     }
 printf("</div>");
 
+printf("<FORM ACTION=\"../cgi-bin/edwWebBrowse\" METHOD=GET>\n");
 if (userEmail != NULL)
     {
     struct sqlConnection *conn = sqlConnect(edwDatabase);

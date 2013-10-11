@@ -260,19 +260,21 @@ sqlSafef(query, sizeof(query), "select u.id from edwSubmit s, edwUser u where  u
 return sqlQuickNum(conn, query);
 }
 
-char *edwUserNameFromFileId(struct sqlConnection *conn, int fId)
+struct edwUser *edwFindUserFromFileId(struct sqlConnection *conn, int fId)
 /* Return user who submit the file originally */
 {
 int uId = edwUserIdFromFileId(conn, fId);
-if (uId > 0)
-    {
-    struct edwUser *user=edwUserFromId(conn, uId);
-    return cloneString(user->email);
-    }
-else
-    {
+struct edwUser *user=edwUserFromId(conn, uId);
+return user; 
+}
+
+char *edwFindOwnerNameFromFileId(struct sqlConnection *conn, int fId)
+/* Return name of submitter. Return "an unknown user" if name is NULL */
+{
+struct edwUser *owner = edwFindUserFromFileId(conn, fId);
+if (owner == NULL)
     return ("an unknown user");
-    }
+return cloneString(owner->email);
 }
 
 void edwWarnUnregisteredUser(char *email)

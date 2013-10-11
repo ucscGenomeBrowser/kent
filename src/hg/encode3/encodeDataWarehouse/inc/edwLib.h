@@ -73,6 +73,12 @@ int edwUserIdFromFileId(struct sqlConnection *conn, int fId);
 char *edwUserNameFromFileId(struct sqlConnection *conn, int fId);
 /* Return user who submit the file originally */
 
+struct edwUser *edwFindUserFromFileId(struct sqlConnection *conn, int fId);
+/* Return user who submit the file originally */
+
+char *edwFindOwnerNameFromFileId(struct sqlConnection *conn, int fId);
+/* Return name of submitter. Return "an unknown user" if name is NULL */
+
 void edwWarnUnregisteredUser(char *email);
 /* Put up warning message about unregistered user and tell them how to register. */
 

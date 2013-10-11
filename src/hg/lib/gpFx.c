@@ -662,8 +662,10 @@ for ( ; allele ; allele = allele->next)
 	    {
 	    // If variant is in exon *but* within 3 bases of splice site,
 	    // it also qualifies as splice_region_variant:
-	    if ((variant->chromEnd > exonEnd-3 && variant->chromStart < exonEnd) ||
-		(variant->chromEnd > exonStart && variant->chromStart < exonStart+3))
+	    if ((variant->chromEnd > exonEnd-3 && variant->chromStart < exonEnd &&
+		 exonIx < pred->exonCount - 1) ||
+		(variant->chromEnd > exonStart && variant->chromStart < exonStart+3 &&
+		 exonIx > 0))
 		{
 		struct gpFx *effect = gpFxNew(allele->sequence, pred->name, splice_region_variant,
 					      nonCodingExon, lm);
