@@ -42,6 +42,7 @@ my $usage =
     . "    check for new updates.  Needed if a full release was missed.\n"
     . "   -grepIndexRootDir=dir - Location to build grepIndex files. overrides genbank.conf\n"
     . "    grepIndex.rootDir variable.\n"
+    . "   -maxHours=hours only load databases for this many hours and stop.\n"
     . "\n"
     . "If a file:\n"
     . "    var/dbload/\$host/reload.acc\n"
@@ -53,6 +54,8 @@ my $usage =
     . "applies only to that database\n";
 
 
+my $startTime = time();
+my $maxHours = undef;
 my $workDir;
 my $verboseArg;
 my @args;
@@ -187,6 +190,13 @@ sub dbLoad($$) {
     }
 }
 
+sub keepGoing() {
+    if (defined($maxHours) && (((time()-$startTime)/(60*60)) >= $maxHours)) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
 
 # Entry
 my $keep = 0;
@@ -235,6 +245,8 @@ while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
         $rebuildDerived = 1;
     } elsif ($opt eq "-byPassGbLoaded") {
         $byPassGbLoaded = 1;
+    } elsif ($opt =~ /^-maxHours(=|$)/) {
+        $maxHours = parseOptEq($opt);
     } elsif ($opt eq "-noGrepIndex") {
         $noGrepIndex = 1;
     } elsif ($opt =~ /^-grepIndexRootDir(=|$)/) {
@@ -302,7 +314,9 @@ setupHgConf();
 
 # load the database
 foreach my $db (@databases) {
-    dbLoad($db, $keep);
+    if (keepGoing()) {
+	dbLoad($db, $keep);
+    }
 }
 
 # rename reload file if it was used
