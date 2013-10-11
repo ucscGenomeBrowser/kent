@@ -10,8 +10,7 @@ source `which qaConfig.csh`
 ################################
 
 set db=""
-set machine="hgnfs1"
-set machine="rrnfs1"
+set machine="rr"
 set table=""
 set field=""
 set dumpfile=""
@@ -86,7 +85,7 @@ set fieldval=`head -1 $dumpfile | sed -e "s/\t/\n/g" | grep -iwn "$field" \
 cat $dumpfile | grep -w "^$table" | sed -e "s/\t/\n/g" | sed -n "${fieldval}p" 
 
 set debug="false"
-# set debug="true"
+#set debug="true"
 if ( $debug == "true" ) then
   echo
   echo "database = $db"
