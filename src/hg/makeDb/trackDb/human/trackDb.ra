@@ -2913,7 +2913,7 @@ noScoreFilter on
 track clinvar
 compositeTrack on
 shortLabel ClinVar Variants
-longLabel NCBI ClinVar Variants
+longLabel ClinVar Variants
 group phenDis
 priority 32
 visibility hide
@@ -2924,14 +2924,14 @@ noScoreFilter on
 
     track clinvarMain
     shortLabel ClinVar Main
-    longLabel NCBI ClinVar Variants, CNVs Excluded
+    longLabel ClinVar Variants, CNVs Excluded
     visibility pack
     parent clinvar
     priority 1
 
     track clinvarCnv
     shortLabel ClinVar CNVs
-    longLabel NCBI ClinVar Variants, CNVs Only
+    longLabel ClinVar Variants, CNVs Only
     visibility pack
     parent clinvar
     priority 2
