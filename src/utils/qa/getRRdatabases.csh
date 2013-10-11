@@ -38,7 +38,7 @@ else
   endif
 endif
 
-if ( `echo $mach1 | egrep "hgw1|hgw2|hgw3|hgw4|hgw5|hgw6|hgw7|hgw8|rr"` == $mach1 ) then
+if ( `echo $mach1 | egrep "hgw1|hgw2|hgw3|hgw4|hgw5|hgw6|rr"` == $mach1 ) then
   set machpath1=$rootpath/hgnfs1
 else
   set machpath1=$rootpath/$mach1
