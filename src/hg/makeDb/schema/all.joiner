@@ -4476,6 +4476,8 @@ tablesIgnored $hg
     cccTrendPvalT1d
     cccTrendPvalT2d
     ceuBcellRNASeqBW
+    clinvarCnv
+    clinvarMain
     cnpFosmid
     cnpIafrate
     cnpIafrate2

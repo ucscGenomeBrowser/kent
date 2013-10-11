@@ -27,7 +27,7 @@ errAbort(
 boolean checkOwnership(struct sqlConnection *conn, int fId, char *userEmail)
 /* Return true if file to be deprecated was submitted by this user. */
 {
-char *email = edwUserNameFromFileId(conn, fId);
+char *email = edwFindOwnerNameFromFileId(conn, fId);
 if (sameString(email, userEmail))
     return TRUE;
 else
@@ -133,7 +133,7 @@ else
 	    {
 	    ok = FALSE;
 	    warn("You can not deprecate %s which was originally uploaded by %s.\n",
-	    licensePlate, edwUserNameFromFileId(conn, id));
+	    licensePlate, edwFindOwnerNameFromFileId(conn, id));
 	    warn("Please click the check box below to override this rule.");
 	    break;
 	    }
