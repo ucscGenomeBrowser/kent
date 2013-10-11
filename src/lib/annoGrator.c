@@ -72,7 +72,8 @@ INLINE void agFetchToEnd(struct annoGrator *self, char *chrom, uint start, uint 
  * i.e. we have an item that starts at/after end or we hit eof. */
 {
 while (!self->eof &&
-       (self->qTail == NULL || strcmp(self->qTail->chrom, chrom) < 0 || self->qTail->start < end))
+       (self->qTail == NULL || strcmp(self->qTail->chrom, chrom) < 0 ||
+	(sameString(self->qTail->chrom, chrom) && self->qTail->start < end)))
     {
     struct annoRow *newRow = self->mySource->nextRow(self->mySource, chrom, start, self->qLm);
     if (newRow == NULL)
