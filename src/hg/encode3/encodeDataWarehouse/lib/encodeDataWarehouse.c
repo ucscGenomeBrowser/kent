@@ -926,7 +926,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwSubmitCommaSepFieldNames = "id,url,startUploadTime,endUploadTime,userId,submitFileId,submitDirId,fileCount,oldFiles,newFiles,byteCount,oldBytes,newBytes,errorMessage,fileIdInTransit";
+char *edwSubmitCommaSepFieldNames = "id,url,startUploadTime,endUploadTime,userId,submitFileId,submitDirId,fileCount,oldFiles,newFiles,byteCount,oldBytes,newBytes,errorMessage,fileIdInTransit,metaChangeCount";
 
 void edwSubmitStaticLoad(char **row, struct edwSubmit *ret)
 /* Load a row from edwSubmit table into ret.  The contents of ret will
@@ -948,6 +948,7 @@ ret->oldBytes = sqlLongLong(row[11]);
 ret->newBytes = sqlLongLong(row[12]);
 ret->errorMessage = row[13];
 ret->fileIdInTransit = sqlUnsigned(row[14]);
+ret->metaChangeCount = sqlUnsigned(row[15]);
 }
 
 struct edwSubmit *edwSubmitLoadByQuery(struct sqlConnection *conn, char *query)
@@ -980,8 +981,8 @@ void edwSubmitSaveToDb(struct sqlConnection *conn, struct edwSubmit *el, char *t
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s',%u)", 
-	tableName,  el->id,  el->url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->submitFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  el->errorMessage,  el->fileIdInTransit);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s',%u,%u)", 
+	tableName,  el->id,  el->url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->submitFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  el->errorMessage,  el->fileIdInTransit,  el->metaChangeCount);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1008,6 +1009,7 @@ ret->oldBytes = sqlLongLong(row[11]);
 ret->newBytes = sqlLongLong(row[12]);
 ret->errorMessage = cloneString(row[13]);
 ret->fileIdInTransit = sqlUnsigned(row[14]);
+ret->metaChangeCount = sqlUnsigned(row[15]);
 return ret;
 }
 
@@ -1017,7 +1019,7 @@ struct edwSubmit *edwSubmitLoadAll(char *fileName)
 {
 struct edwSubmit *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -1035,7 +1037,7 @@ struct edwSubmit *edwSubmitLoadAllByChar(char *fileName, char chopper)
 {
 struct edwSubmit *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1071,6 +1073,7 @@ ret->oldBytes = sqlLongLongComma(&s);
 ret->newBytes = sqlLongLongComma(&s);
 ret->errorMessage = sqlStringComma(&s);
 ret->fileIdInTransit = sqlUnsignedComma(&s);
+ret->metaChangeCount = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -1136,6 +1139,8 @@ fprintf(f, "%s", el->errorMessage);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->fileIdInTransit);
+fputc(sep,f);
+fprintf(f, "%u", el->metaChangeCount);
 fputc(lastSep,f);
 }
 
@@ -1497,7 +1502,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth";
+char *edwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus";
 
 void edwValidFileStaticLoad(char **row, struct edwValidFile *ret)
 /* Load a row from edwValidFile table into ret.  The contents of ret will
@@ -1522,6 +1527,8 @@ ret->sampleBed = row[14];
 ret->mapRatio = sqlDouble(row[15]);
 ret->sampleCoverage = sqlDouble(row[16]);
 ret->depth = sqlDouble(row[17]);
+ret->singleQaStatus = sqlSigned(row[18]);
+ret->replicateQaStatus = sqlSigned(row[19]);
 }
 
 struct edwValidFile *edwValidFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1554,8 +1561,8 @@ void edwValidFileSaveToDb(struct sqlConnection *conn, struct edwValidFile *el, c
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g)", 
-	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g,%d,%d)", 
+	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1585,6 +1592,8 @@ ret->sampleBed = cloneString(row[14]);
 ret->mapRatio = sqlDouble(row[15]);
 ret->sampleCoverage = sqlDouble(row[16]);
 ret->depth = sqlDouble(row[17]);
+ret->singleQaStatus = sqlSigned(row[18]);
+ret->replicateQaStatus = sqlSigned(row[19]);
 return ret;
 }
 
@@ -1594,7 +1603,7 @@ struct edwValidFile *edwValidFileLoadAll(char *fileName)
 {
 struct edwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[20];
 
 while (lineFileRow(lf, row))
     {
@@ -1612,7 +1621,7 @@ struct edwValidFile *edwValidFileLoadAllByChar(char *fileName, char chopper)
 {
 struct edwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[20];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1651,6 +1660,8 @@ ret->sampleBed = sqlStringComma(&s);
 ret->mapRatio = sqlDoubleComma(&s);
 ret->sampleCoverage = sqlDoubleComma(&s);
 ret->depth = sqlDoubleComma(&s);
+ret->singleQaStatus = sqlSignedComma(&s);
+ret->replicateQaStatus = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -1742,6 +1753,10 @@ fputc(sep,f);
 fprintf(f, "%g", el->sampleCoverage);
 fputc(sep,f);
 fprintf(f, "%g", el->depth);
+fputc(sep,f);
+fprintf(f, "%d", el->singleQaStatus);
+fputc(sep,f);
+fprintf(f, "%d", el->replicateQaStatus);
 fputc(lastSep,f);
 }
 

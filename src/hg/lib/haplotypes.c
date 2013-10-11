@@ -2043,9 +2043,8 @@ static void geneAllelesTable(struct cart *cart,
 {
 int haploCount = slCount(hapSet->haplos);
 assert(haploCount >= 1);
-if (haploCount == 1)
+if (haploCount == 1 && haploIsReference(hapSet->haplos))
     {
-    assert(haploIsReference(hapSet->haplos));
     hPrintf("No non-reference alleles found for this gene model.\n");
     return;
     }

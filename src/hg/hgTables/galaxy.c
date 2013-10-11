@@ -23,14 +23,15 @@
 
 
 char *getGalaxyUrl()
-/* returns the url for the galaxy cgi, based on script name */
+/* Returns the url for the galaxy cgi; default can be overriden by cart var GALAXY_URL.
+ * Don't free result. */
 {
 char *url = NULL;
 /* use parameter if available */
 if (cartVarExists(cart, "GALAXY_URL"))
     url = cartString(cart, "GALAXY_URL");
 else
-    url = cloneString("http://main.g2.bx.psu.edu/tool_runner");
+    url = GALAXY_URL_APP;
 return url;
 }
 

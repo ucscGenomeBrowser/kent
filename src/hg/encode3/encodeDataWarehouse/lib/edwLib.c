@@ -260,19 +260,21 @@ sqlSafef(query, sizeof(query), "select u.id from edwSubmit s, edwUser u where  u
 return sqlQuickNum(conn, query);
 }
 
-char *edwUserNameFromFileId(struct sqlConnection *conn, int fId)
+struct edwUser *edwFindUserFromFileId(struct sqlConnection *conn, int fId)
 /* Return user who submit the file originally */
 {
 int uId = edwUserIdFromFileId(conn, fId);
-if (uId > 0)
-    {
-    struct edwUser *user=edwUserFromId(conn, uId);
-    return cloneString(user->email);
-    }
-else
-    {
+struct edwUser *user=edwUserFromId(conn, uId);
+return user; 
+}
+
+char *edwFindOwnerNameFromFileId(struct sqlConnection *conn, int fId)
+/* Return name of submitter. Return "an unknown user" if name is NULL */
+{
+struct edwUser *owner = edwFindUserFromFileId(conn, fId);
+if (owner == NULL)
     return ("an unknown user");
-    }
+return cloneString(owner->email);
 }
 
 void edwWarnUnregisteredUser(char *email)
@@ -826,12 +828,12 @@ sqlSafef(query, sizeof(query),
 return sqlQuickNum(conn, query);
 }
 
-void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url)
+void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url, boolean update)
 /* Add submission job to table and wake up daemon. */
 {
 /* Create command and add it to edwSubmitJob table. */
 char command[strlen(url) + strlen(userEmail) + 256];
-safef(command, sizeof(command), "edwSubmit '%s' %s", url, userEmail);
+safef(command, sizeof(command), "edwSubmit %s'%s' %s", (update ? "-update " : ""), url, userEmail);
 char query[strlen(command)+128];
 sqlSafef(query, sizeof(query), "insert edwSubmitJob (commandLine) values('%s')", command);
 sqlUpdate(conn, query);

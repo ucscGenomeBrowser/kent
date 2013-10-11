@@ -1157,21 +1157,6 @@ color 150,0,150
 type bed 4 +
 
 track dgv
-shortLabel DGV Struct Var
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
-group varRep
-priority 144.8
-visibility hide
-itemRgb on
-type bed 9 +
-noScoreFilter .
-exonArrows off
-urlLabel DGV Browser and Report:
-url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
-dataVersion beta (Nov. 23, 2012)
-release beta,public
-
-track dgv
 shortLabel DGV Beta (old)
 longLabel Database of Genomic Variants: obsolete, here for QA comparison
 group varRep
@@ -2926,8 +2911,9 @@ mouseOverField comments
 noScoreFilter on
 
 track clinvar
+compositeTrack on
 shortLabel ClinVar Variants
-longLabel NCBI ClinVar Genome Variants
+longLabel NCBI ClinVar Variants
 group phenDis
 priority 32
 visibility hide
@@ -2935,6 +2921,20 @@ type bigBed 4 .
 urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
 mouseOverField variantType
 noScoreFilter on
+
+    track clinvarMain
+    shortLabel ClinVar Main Variants
+    longLabel NCBI ClinVar Variants without CNVs
+    visibility pack
+    parent clinvar
+    priority 1
+
+    track clinvarCnv
+    shortLabel NCBI ClinVar Copy-Number Variants
+    longLabel NCBI ClinVar Variants, only CNVs
+    visibility pack
+    parent clinvar
+    priority 2
 
 track spAnnot
 shortLabel UniProt Annotations

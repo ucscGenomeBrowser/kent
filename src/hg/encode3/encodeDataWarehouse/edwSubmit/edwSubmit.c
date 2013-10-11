@@ -799,17 +799,19 @@ sqlSafef(query, sizeof(query),
 sqlUpdate(conn, query);
 }
 
-static void handleOldFileTags(struct sqlConnection *conn, struct submitFileRow *sfrList,
+static int handleOldFileTags(struct sqlConnection *conn, struct submitFileRow *sfrList,
     boolean update)
 /* Check metadata on files mentioned in manifest that by MD5 sum we already have in
- * warehouse.   We may want to update metadata on these. */
+ * warehouse.   We may want to update metadata on these. This returns the number
+ * of files with tags updated. */
 {
 struct submitFileRow *sfr;
+int updateCount = 0;
 for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
     {
     struct edwFile *newFile = sfr->file;
     struct edwFile *oldFile = edwFileFromId(conn, sfr->md5MatchFileId);
-    uglyf("looking at old file %s (%s)\n", oldFile->submitFileName, newFile->submitFileName);
+    verbose(2, "looking at old file %s (%s)\n", oldFile->submitFileName, newFile->submitFileName);
     struct cgiDictionary *newTags = cgiDictionaryFromEncodedString(newFile->tags);
     struct cgiDictionary *oldTags = cgiDictionaryFromEncodedString(oldFile->tags);
     boolean updateName = !sameString(oldFile->submitFileName, newFile->submitFileName);
@@ -831,9 +833,12 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
 		     newFile->submitFileName, oldFile->edwFileName);
 	edwFileResetTags(conn, oldFile, newFile->tags);
 	}
+    if (updateTags || updateName)
+	++updateCount;
     cgiDictionaryFree(&oldTags);
     cgiDictionaryFree(&newTags);
     }
+return updateCount;
 }
 
 void edwSubmit(char *submitUrl, char *email)
@@ -862,7 +867,9 @@ notOverlappingSelf(conn, submitUrl);
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, userId);
 
 /* The next errCatch block will fill these in if all goes well. */
-struct submitFileRow *sfrList = NULL; 
+struct submitFileRow *sfrList = NULL, *oldList = NULL, *newList = NULL; 
+int oldCount = 0;
+long long oldBytes = 0, newBytes = 0, byteCount = 0;
 
 /* Start catching errors from here and writing them in submitId.  If we don't
  * throw we'll end up having a list of all files in the submit in sfrList. */
@@ -937,6 +944,41 @@ if (errCatchStart(errCatch))
 	"  set submitFileId=%lld, submitDirId=%lld, fileCount=%d where id=%d",  
 	    (long long)fileId, (long long)submitDirId, slCount(sfrList), submitId);
     sqlUpdate(conn, query);
+
+    /* Weed out files we already have. */
+    struct submitFileRow *sfr, *sfrNext;
+    for (sfr = sfrList; sfr != NULL; sfr = sfrNext)
+	{
+	sfrNext = sfr->next;
+	struct edwFile *bf = sfr->file;
+	long long fileId;
+	if ((fileId = edwGotFile(conn, submitDir, bf->submitFileName, bf->md5, bf->size)) >= 0)
+	    {
+	    ++oldCount;
+	    oldBytes += bf->size;
+	    sfr->md5MatchFileId = fileId;
+	    slAddHead(&oldList, sfr);
+	    }
+	else
+	    slAddHead(&newList, sfr);
+	byteCount += bf->size;
+	}
+    sfrList = NULL;
+    slReverse(&newList);
+    slReverse(&oldList);
+
+    /* Update database with oldFile count. */
+    sqlSafef(query, sizeof(query), 
+	"update edwSubmit set oldFiles=%d,oldBytes=%lld,byteCount=%lld where id=%u",  
+	    oldCount, oldBytes, byteCount, submitId);
+    sqlUpdate(conn, query);
+
+    /* Deal with old files. This may throw an error.  We do it before downloading new
+     * files since we want to fail fast if we are going to fail. */
+    int updateCount = handleOldFileTags(conn, oldList, doUpdate);
+    sqlSafef(query, sizeof(query), 
+	"update edwSubmit set metaChangeCount=%d where id=%u",  updateCount, submitId);
+    sqlUpdate(conn, query);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -946,46 +988,9 @@ if (errCatch->gotError)
     }
 errCatchFree(&errCatch);
 
-/* If we made it here the validated submit file itself got transfered and parses out
- * correctly.   */
-
-
-/* Weed out files we already have. */
-int oldCount = 0;
-long long oldBytes = 0, newBytes = 0, byteCount = 0;
-struct submitFileRow *sfr, *oldList = NULL, *newList = NULL, *sfrNext;
-for (sfr = sfrList; sfr != NULL; sfr = sfrNext)
-    {
-    uglyf("?%s\n", sfr->file->submitFileName);
-    sfrNext = sfr->next;
-    struct edwFile *bf = sfr->file;
-    long long fileId;
-    if ((fileId = edwGotFile(conn, submitDir, bf->submitFileName, bf->md5, bf->size)) >= 0)
-        {
-	++oldCount;
-	oldBytes += bf->size;
-	sfr->md5MatchFileId = fileId;
-	slAddHead(&oldList, sfr);
-	}
-    else
-        slAddHead(&newList, sfr);
-    byteCount += bf->size;
-    }
-sfrList = NULL;
-slReverse(&newList);
-slReverse(&oldList);
-
-/* Update database with oldFile count. */
-sqlSafef(query, sizeof(query), 
-    "update edwSubmit set oldFiles=%d,oldBytes=%lld,byteCount=%lld where id=%u",  
-	oldCount, oldBytes, byteCount, submitId);
-sqlUpdate(conn, query);
-
-/* Deal with old files. This may throw an error.  We do it before downloading new
- * files since we want to fail fast if we are going to fail. */
-handleOldFileTags(conn, oldList, doUpdate);
 
 /* Go through list attempting to load the files if we don't already have them. */
+struct submitFileRow *sfr;
 for (sfr = newList; sfr != NULL; sfr = sfr->next)
     {
     if (edwSubmitShouldStop(conn, submitId))
