@@ -313,14 +313,19 @@ beginTask("dbload/$gbCommon::hostName", "dbload");
 setupHgConf();
 
 # load the database
+my $earlyExit = 0;
 foreach my $db (@databases) {
     if (keepGoing()) {
 	dbLoad($db, $keep);
+    } else {
+	prMsg("stopping because $maxHours hours have passed");
+	$earlyExit = 1;
+	last;
     }
 }
 
 # rename reload file if it was used
-if (defined($varReloadFile)) {
+if (($earlyExit == 0) && defined($varReloadFile)) {
     renameVarReloadFile($varReloadFile)
 }
 
