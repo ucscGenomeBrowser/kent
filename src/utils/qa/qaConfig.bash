@@ -9,3 +9,4 @@
 sqlbeta=mysqlbeta
 sqlrr=genome-centdb
 GENBANK="/cluster/data/genbank/etc/genbank.tbls" # location of official genbank table list
+tblStatusDumps="rrnfs1" # location of genbank TABLE STATUS RR dump files
