@@ -6,8 +6,8 @@ setenv LASTWEEK 2013-09-09             # v289 final
 setenv REVIEWDAY 2013-10-07             # v291 preview
 setenv LASTREVIEWDAY 2013-09-16         # v290 preview
 # set for preview 2:
-setenv REVIEW2DAY 2013-09-23        # v289 preview2
-setenv LASTREVIEW2DAY 2013-09-02    # v288 preview2
+setenv REVIEW2DAY 2013-10-14        # v291 preview2
+setenv LASTREVIEW2DAY 2013-09-23    # v290 preview2
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
