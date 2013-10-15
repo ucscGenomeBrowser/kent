@@ -43,10 +43,10 @@ if ( $mach1 == hgwdev || $mach1 == hgwbeta ) then
   echo
   exit 1
 else 
-  echo $mach1 | egrep "hgw1|hgw2|hgw3|hgw4|hgw5|hgw6|hgw7|hgw8|rr|mysqlrr" \
+  echo $mach1 | egrep "hgw1|hgw2|hgw3|hgw4|hgw5|hgw6|rr" \
      > /dev/null
   if ( ! $status ) then
-    set machpath1=$rootpath/hgnfs1
+    set machpath1=$rootpath/$tblStatusDumps
   endif 
 endif
 

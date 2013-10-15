@@ -1947,7 +1947,18 @@ canPack off
 dataVersion development test
 type bed 3 +
 
-
+track dgv
+shortLabel DGV Struct Var
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
+group varRep
+priority 144.8
+visibility hide
+itemRgb on
+type bed 9 +
+noScoreFilter .
+exonArrows off
+dataVersion beta (Nov. 23, 2012)
+release beta,public
 
 searchTable bacendsCow
 searchMethod exact

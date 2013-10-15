@@ -103,6 +103,7 @@ BEGIN {
     %gbCommon::hgConfs = (
         "hgwbeta" => "etc/.hg.hgsqlbeta.conf",
         "hgnfs1" => "etc/.hg.hgsqlrr.conf",
+        "genome-browser-mirror" => "etc/.hg.genome-browser-mirror.conf",
     );
 }
 

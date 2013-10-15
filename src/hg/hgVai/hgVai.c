@@ -655,6 +655,8 @@ cartMakeCheckBox(cart, "hgva_include_intergenic", TRUE);
 printf("intergenic<BR>\n");
 cartMakeCheckBox(cart, "hgva_include_upDownstream", TRUE);
 printf("upstream/downstream of gene<BR>\n");
+cartMakeCheckBox(cart, "hgva_include_exonLoss", TRUE);
+printf("exon loss<BR>\n");
 cartMakeCheckBox(cart, "hgva_include_utr", TRUE);
 printf("5' or 3' UTR<BR>\n");
 cartMakeCheckBox(cart, "hgva_include_cdsSyn", TRUE);
@@ -892,6 +894,7 @@ struct annoGratorGpVarFuncFilter aggvFuncFilter;
 ZeroVar(&aggvFuncFilter);
 aggvFuncFilter.intergenic = cartUsualBoolean(cart, "hgva_include_intergenic", FALSE);
 aggvFuncFilter.upDownstream = cartUsualBoolean(cart, "hgva_include_upDownstream", TRUE);
+aggvFuncFilter.exonLoss = cartUsualBoolean(cart, "hgva_include_exonLoss", TRUE);
 aggvFuncFilter.utr = cartUsualBoolean(cart, "hgva_include_utr", TRUE);
 aggvFuncFilter.cdsSyn = cartUsualBoolean(cart, "hgva_include_cdsSyn", TRUE);
 aggvFuncFilter.cdsNonSyn = cartUsualBoolean(cart, "hgva_include_cdsNonSyn", TRUE);
@@ -1454,6 +1457,11 @@ if (sameString(variantTrack, hgvaSampleVariants))
     {
     primary = makeSampleVariantsStreamer(assembly, geneTdb, maxVarRows);
     primaryLongLabel = hgvaSampleVariantsLabel;
+    // Sample variants can't always be made within the currently selected position range,
+    // so just for these, force search to be genome-wide.
+    chrom = NULL;
+    start = 0;
+    end = 0;
     }
 else
     {

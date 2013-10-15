@@ -110,14 +110,12 @@ static char **nextRowUnfiltered(struct annoStreamVcf *self, char *minChrom, uint
 struct annoStreamer *sSelf = (struct annoStreamer *)self;
 char *regionChrom = sSelf->chrom;
 uint regionStart = sSelf->regionStart;
-uint regionEnd = sSelf->regionEnd;
 if (minChrom != NULL)
     {
     if (regionChrom == NULL)
 	{
 	regionChrom = minChrom;
 	regionStart = minEnd;
-	regionEnd = annoAssemblySeqSize(sSelf->assembly, minChrom);
 	}
     else
 	{
@@ -128,13 +126,27 @@ char **words = nextRowRaw(self);
 if (regionChrom != NULL && words != NULL)
     {
     if (self->isTabix && strcmp(getProperChromName(self, words[0]), regionChrom) < 0)
+	{
+	uint regionEnd = sSelf->regionEnd;
+	if (minChrom != NULL && sSelf->chrom == NULL)
+	    regionEnd = annoAssemblySeqSize(sSelf->assembly, minChrom);
 	lineFileSetTabixRegion(self->vcff->lf, regionChrom, regionStart, regionEnd);
+	}
     while (words != NULL &&
 	   (strcmp(getProperChromName(self, words[0]), regionChrom) < 0 ||
 	    (sameString(words[0], regionChrom) && self->record->chromEnd < regionStart)))
 	words = nextRowRaw(self);
     }
-self->recordCount++;
+// Tabix doesn't give us any rows past end of region, but if not using tabix,
+// detect when we're past end of region:
+if (words != NULL && !self->isTabix && sSelf->chrom != NULL
+    && self->record->chromStart > sSelf->regionEnd)
+    {
+    words = NULL;
+    self->record = NULL;
+    }
+if (words != NULL)
+    self->recordCount++;
 if (words == NULL || (self->maxRecords > 0 && self->recordCount >= self->maxRecords))
     self->eof = TRUE;
 return words;
@@ -245,7 +257,8 @@ while ((nextRow = nextRowFiltered(self, minChrom, minEnd, callerLm)) != NULL)
 	if (self->indelQ != NULL)
 	    {
 	    // Coords are apples-to-apples (both indels), look for strict ordering:
-	    if (self->indelQ->start < nextRow->start)
+	    if (self->indelQ->start < nextRow->start
+		|| differentString(self->indelQ->chrom, nextRow->chrom))
 		{
 		// Another indel, but at some subsequent base -- store in nextPosQ & pop indelQ
 		nextPosQShouldBeEmpty(self);
@@ -263,8 +276,12 @@ while ((nextRow = nextRowFiltered(self, minChrom, minEnd, callerLm)) != NULL)
 	}
     else // i.e. nextRow is non-indel
 	{
-	// Coords are not apples-to-apples, so having the same start means let indels go first:
-	if (self->indelQ != NULL && self->indelQ->start <= nextRow->start)
+	// Coords are not apples-to-apples: having the same annoRow->start means
+	// that the indel VCF starts are one less than the non-indel VCF starts,
+	// so let indels go first:
+	if (self->indelQ != NULL
+	    && (self->indelQ->start <= nextRow->start
+		|| differentString(self->indelQ->chrom, nextRow->chrom)))
 	    {
 	    // nextRow is a non-indel at a subsequent *VCF* base; store in nextPosQ & pop indelQ
 	    nextPosQShouldBeEmpty(self);
@@ -277,6 +294,7 @@ while ((nextRow = nextRowFiltered(self, minChrom, minEnd, callerLm)) != NULL)
 	    return nextRow;
 	}
     }
+nextPosQShouldBeEmpty(self);
 if (nextRow == NULL)
     {
     if (self->indelQ != NULL)

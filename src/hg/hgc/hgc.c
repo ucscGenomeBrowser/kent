@@ -1517,7 +1517,9 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
     {
     if (itemId!=slIds)
         printf(", ");
-    char *idUrl = replaceInUrl(tdb, url, itemId->name, TRUE);
+    char* itemName = itemId->name;
+    itemName = trimSpaces(itemName);
+    char *idUrl = replaceInUrl(tdb, url, itemName, TRUE);
     printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemId->name);
     } 
 printf("</td></tr>\n");
@@ -16150,21 +16152,21 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
-#define CORIELL_ID_URL_BASE "http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref="
-
-static void maybePrintCoriellLinks(char *commaSepIds)
-/* If id looks like a Coriell ID, print a link to Coriell, otherwise just print id. */
+static void maybePrintCoriellLinks(struct trackDb *tdb, char *commaSepIds)
+/* If id looks like a Coriell NA ID, print a link to Coriell, otherwise just print id. */
 {
+char *coriellUrlBase = trackDbSetting(tdb, "coriellUrlBase");
 struct slName *id, *sampleIds = slNameListFromComma(commaSepIds);
 for (id = sampleIds;  id != NULL;  id = id->next)
     {
-    if (startsWith("NA", id->name) && countLeadingDigits(id->name+2) == strlen(id->name+2))
+    if (startsWith("NA", id->name) && countLeadingDigits(id->name+2) == strlen(id->name+2)
+	&& isNotEmpty(coriellUrlBase))
 	{
 	// I don't know why coriell doesn't have direct links to NA's but oh well,
 	// we can substitute 'GM' for 'NA' to get to the page...
 	char *gmId = cloneString(id->name);
 	gmId[0] = 'G';  gmId[1] = 'M';
-	printf("<A HREF=\""CORIELL_ID_URL_BASE"%s\" TARGET=_BLANK>%s</A>", gmId, id->name);
+	printf("<A HREF=\"%s%s\" TARGET=_BLANK>%s</A>", coriellUrlBase, gmId, id->name);
 	freeMem(gmId);
 	}
     else
@@ -16230,7 +16232,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (isNotEmpty(dgv.samples))
 	{
 	printf("<B>Sample IDs:</B> ");
-	maybePrintCoriellLinks(dgv.samples);
+	maybePrintCoriellLinks(tdb, dgv.samples);
 	printf("<BR>\n");
 	}
     printf("<B>Sample size:</B> %u<BR>\n", dgv.sampleSize);

@@ -373,7 +373,7 @@ void edwFileOutput(struct edwFile *el, FILE *f, char sep, char lastSep);
 #define edwFileCommaOut(el,f) edwFileOutput(el,f,',',',');
 /* Print out edwFile as a comma separated list including final comma. */
 
-#define EDWSUBMIT_NUM_COLS 15
+#define EDWSUBMIT_NUM_COLS 16
 
 extern char *edwSubmitCommaSepFieldNames;
 
@@ -396,6 +396,7 @@ struct edwSubmit
     long long newBytes;	/* Bytes in new files (so far). */
     char *errorMessage;	/* If non-empty contains last error message. If empty submit is ok */
     unsigned fileIdInTransit;	/* edwFile.id of file currently being transferred or zero */
+    unsigned metaChangeCount;	/* Number of files where metadata changed by submission */
     };
 
 void edwSubmitStaticLoad(char **row, struct edwSubmit *ret);
@@ -597,7 +598,7 @@ void edwAssemblyOutput(struct edwAssembly *el, FILE *f, char sep, char lastSep);
 #define edwAssemblyCommaOut(el,f) edwAssemblyOutput(el,f,',',',');
 /* Print out edwAssembly as a comma separated list including final comma. */
 
-#define EDWVALIDFILE_NUM_COLS 18
+#define EDWVALIDFILE_NUM_COLS 20
 
 extern char *edwValidFileCommaSepFieldNames;
 
@@ -623,6 +624,8 @@ struct edwValidFile
     double mapRatio;	/* Proportion of items that map to genome */
     double sampleCoverage;	/* Proportion of assembly covered by at least one item in sample */
     double depth;	/* Estimated genome-equivalents covered by possibly overlapping data */
+    signed char singleQaStatus;	/* 0 for untested, 1 for pass, -1 for fail */
+    signed char replicateQaStatus;	/* 0 for untested, 1 for pass, -1 for fail */
     };
 
 void edwValidFileStaticLoad(char **row, struct edwValidFile *ret);

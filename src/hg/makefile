@@ -218,7 +218,6 @@ APPS = $(UTIL_DIRS) $(UTILS_APPLIST)
 all::    cgi utils
 
 hgLib:
-	@./sqlEnvTest.sh
 	cd lib && ${MAKE}
 
 userApps: $(UTILS_APPLIST:%=%.userApp)

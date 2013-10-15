@@ -343,7 +343,7 @@ static boolean bptFileFindMaybeMulti(struct bptFile *bpt, void *key, int keySize
  * buffer and zero-extend it. */
 if (keySize > bpt->keySize)
     return FALSE;
-char keyBuf[keySize];
+char keyBuf[bpt->keySize];
 if (keySize != bpt->keySize)
     {
     memcpy(keyBuf, key, keySize);

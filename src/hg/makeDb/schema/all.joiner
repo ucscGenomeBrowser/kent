@@ -106,11 +106,11 @@ set wgs $ailMel,$allMis,$aplCal,$bosTau,$bruMal,$calJac,$canFam,$cavPor,$choHof,
 set xrg $ailMel,$allMis,$anoCar,$aplCal,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$calJac,$canFam,$cb,$ce,$cerSim,$choHof,$chrPic,$ci,danRer6,danRer7,$dasNov,$dipOrd,$dp,$droMult,$droYak,$echTel,$eriEur,$felCat,$gadMor,$galGal,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$musFur,$myoLuc,$nomLeu,$ochPri,$oreNil,$oryCun,$oryLat,$otoGar,$oviAri,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rn,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$triMan,$tupBel,$turTru,$vicPac
 
 # Ensembl gene track lists constructed from update procedure
-set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,canFam3,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,echTel2,eriEur1,eriEur2,equCab2,felCat3,felCat5,fr2,fr3,gadMor1,galGal3,galGal4,gasAcu1,gorGor3,hg16,hg17,hg18,hg19,latCha1,loxAfr3,macEug1,melGal1,micMur1,mm7,mm8,mm9,mm10,monDom5,musFur1,myoLuc2,nomLeu1,ochPri2,oreNil1,ornAna1,oryCun2,oryLat2,otoGar3,panTro2,panTro4,petMar2,ponAbe2,proCap1,pteVam1,rheMac2,rn4,rn5,sacCer3,sarHar1,sorAra1,sorAra2,speTri2,susScr1,susScr3,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,vicPac2,xenTro3
+set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,canFam3,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,echTel2,eriEur1,eriEur2,equCab2,felCat3,felCat5,fr2,fr3,gadMor1,galGal3,galGal4,gasAcu1,gorGor3,hg16,hg17,hg18,hg19,latCha1,loxAfr3,melGal1,micMur1,mm7,mm8,mm9,mm10,monDom5,musFur1,myoLuc2,nomLeu1,ochPri2,oreNil1,ornAna1,oryCun2,oryLat2,otoGar3,panTro2,panTro4,petMar2,ponAbe2,proCap1,pteVam1,rheMac2,rn3,rn4,rn5,sacCer3,sarHar1,sorAra1,sorAra2,speTri2,susScr1,susScr3,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,vicPac2,xenTro3
 
-set ensGeneWgs choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,felCat3,gadMor1,macEug1,micMur1,myoLuc2,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,sorAra2,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,vicPac2
+set ensGeneWgs choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,felCat3,gadMor1,micMur1,myoLuc2,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,sorAra2,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,vicPac2
 
-set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,felCat3,gadMor1,macEug1,micMur1,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,sorAra2,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,vicPac2
+set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,felCat3,gadMor1,micMur1,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,sorAra2,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,vicPac2
 
 # Define organism databases for which we host the vegaGenes
 set vegaGeneDbs hg18,hg19,mm9,mm10
@@ -2509,7 +2509,7 @@ identifier flyBaseAlleleId
     $dm.fbAllele.id
     $dm.fbPhenotype.fbAllele exclude=0
 
-set notFlyBaseGeneId !allMis1,!braFlo2,!ce2,!ce6,!ce9,!ce10,!cerSim1,!danRer3,!echTel2,!eriEur2,!hg17,!hg18,!mm7,!mm8,!mm9,!mm10,!oviAri3,!petMar2,!rn3,!rn4,!sacCer1,!sacCer2,!sacCer3,!sorAra2,!vicPac2
+set notFlyBaseGeneId !allMis1,!braFlo2,!ce2,!ce4,!ce6,!ce9,!ce10,!cerSim1,!danRer3,!echTel2,!eriEur2,!hg17,!hg18,!hg19,!mm7,!mm8,!mm9,!mm10,!oviAri3,!petMar2,!rn3,!rn4,!sacCer1,!sacCer2,!sacCer3,!sorAra2,!vicPac2
 
 identifier flyBaseGeneId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
@@ -2569,6 +2569,8 @@ identifier bdgpNonCodingId external=BDGP
     dm1.bdgpNonCoding.name chopAfter=- dupeOk
     dm1.bdgpNonCodingInfo.bdgpName minCheck=0.89
 
+set flyBase2004IdDmDb ce2,ce4,danRer3,hg17,hg18,hg19,mm7,mm8,mm9,rn3,rn4,sacCer1,sacCer2,sacCer3
+
 identifier flyBase2004IdDm external=FlyBase
 "FlyBase Xref as of 2004 for dm"
     $dm.flyBase2004Xref.name
@@ -2580,7 +2582,7 @@ identifier flyBase2004IdDm external=FlyBase
     $dm,!dm1.ceBlastTab.query
     $dm,!dm1.drBlastTab.query minCheck=0.97
     $dm,!dm1.hgBlastTab.query minCheck=0.96
-    $dm,!dm1.mmBlastTab.query
+    $dm,!dm1.mmBlastTab.query minCheck=0.99
     $dm,!dm1.rnBlastTab.query
     $dm,!dm1.scBlastTab.query
     $dm,!dm1.flyBaseBlastTab.query
@@ -2594,7 +2596,7 @@ identifier flyBase2004IdDm external=FlyBase
     $dm,!dm1.flyBaseToDescription.name
     $dm,!dm1.flyP2P.query minCheck=0.98
     $dm,!dm1.flyP2P.target minCheck=0.98
-    hg17,hg18,danRer3,mm7,mm8,mm9,rn3,rn4,ce2,sacCer1,sacCer2,sacCer3.dmBlastTab.target minCheck=0.90
+    $flyBase2004IdDmDb.dmBlastTab.target minCheck=0.90
 
 identifier flyBase2004IdDp external=FlyBase
 "FlyBase Xref as of 2004 for dp3"
@@ -2670,7 +2672,8 @@ identifier rgdEstId external=RGD
 identifier rgdQtlId external=RGD
 "RGD QTL ID"
     $rn,$hg.rgdQtl.name
-    $rn,$hg.rgdQtlLink.name minCheck=0.88
+    $hg.rgdQtlLink.name minCheck=0.88
+    $rn.rgdQtlLink.name minCheck=0.99
 
 identifier rgdRatQtlId external=RGD
 "RGD Rat QTL ID mapped to other organism"
@@ -2805,7 +2808,7 @@ identifier ucscToINSDC external=INSDC dependency
 # to avoid the error on assemblies with Ensembl Gene scaffolds:
 # Error: 7771 duplicates in vicPac1.ensGene.name including 'ENSVPAT00000000004'
 # list on this avoid list:
-set notEnsemblTranscriptId2 !ce6,!ce9,!ce10,!choHof1,!dipOrd1,!echTel1,!echTel2,!eriEur1,!eriEur2,!felCat3,!gadMor1,!macEug1,!micMur1,!ochPri2,!proCap1,!pteVam1,!sorAra1,!sorAra2,!tarSyr1,!tupBel1,!vicPac1,!vicPac2
+set notEnsemblTranscriptId2 !ce6,!ce9,!ce10,!choHof1,!dipOrd1,!echTel1,!echTel2,!eriEur1,!eriEur2,!felCat3,!gadMor1,!micMur1,!ochPri2,!proCap1,!pteVam1,!sorAra1,!sorAra2,!tarSyr1,!tupBel1,!vicPac1,!vicPac2
 
 #pulled this line into its own rule to reflect lack of dependency
 identifier ensemblTranscriptId2 external=Ensembl
@@ -2938,23 +2941,34 @@ identifier dbSnpRnId typeOf=dbSnpId
     hgFixed.dbSnpRsRn.rsId
     $rn.snpMap.name
 
-identifier hapmapSnpId
-"HapMap SNPs"
-    $hg.hapmapAllelesSummary.name
-    $hg.hapmapSnpsCEU.name
-    $hg.hapmapSnpsCHB.name
-    $hg.hapmapSnpsJPT.name
-    $hg.hapmapSnpsYRI.name
-    $hg.hapmapAllelesChimp.name
-    $hg.hapmapAllelesMacaque.name
-    $hg,!hg17.hapmapLdCeu.name unique
-    $hg,!hg17.hapmapLdChb.name unique
-    $hg,!hg17.hapmapLdChbJpt.name unique
-    $hg,!hg17.hapmapLdJpt.name unique
-    $hg,!hg17.hapmapLdYri.name unique
-    $hg,!hg17.hapmapLdPhCeu.name unique
-    $hg,!hg17.hapmapLdPhChbJpt.name unique
-    $hg,!hg17.hapmapLdPhYri.name unique
+identifier hapmapSnpIdPhaseII
+"HapMap Phase II SNPs"
+    hg17.hapmapAllelesSummary.name
+    hg17.hapmapSnpsCEU.name
+    hg17.hapmapSnpsCHB.name
+    hg17.hapmapSnpsJPT.name
+    hg17.hapmapSnpsYRI.name
+    hg17.hapmapAllelesChimp.name
+    hg17.hapmapAllelesMacaque.name
+
+identifier hapmapSnpIdPhaseIII
+"HapMap Phase III SNPs"
+    # duplicates due to pseudo-autosomal regions:
+    hg18,hg19.hapmapPhaseIIISummary.name dupeOk
+    hg18,hg19.hapmapSnpsCEU.name
+    hg18,hg19.hapmapSnpsCHB.name
+    hg18,hg19.hapmapSnpsJPT.name
+    hg18,hg19.hapmapSnpsYRI.name
+    hg18,hg19.hapmapAllelesChimp.name
+    hg18,hg19.hapmapAllelesMacaque.name
+    hg18,hg19.hapmapLdCeu.name unique minCheck=0.999
+    hg18,hg19.hapmapLdChb.name unique minCheck=0.999
+    hg18,hg19.hapmapLdChbJpt.name unique minCheck=0.999
+    hg18,hg19.hapmapLdJpt.name unique minCheck=0.999
+    hg18,hg19.hapmapLdYri.name unique minCheck=0.999
+    hg18,hg19.hapmapLdPhCeu.name unique minCheck=0.999
+    hg18,hg19.hapmapLdPhChbJpt.name unique minCheck=0.999
+    hg18,hg19.hapmapLdPhYri.name unique minCheck=0.999
 
 identifier snpAnnotations125
 "SNP annotations"
@@ -3486,9 +3500,9 @@ identifier jaxRepTranscriptName external=MGI
 identifier jaxAlleleName external=MGI
 "Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
     # Using dupeOk here because there are some case-sensitive allele name diffs (ugh)
-    $mm.jaxAllelePheno.allele dupeOk
-    $mm.jaxAlleleInfo.name minCheck=0.89
-    $mm.jaxAllele.name minCheck=0.89
+    $mm.jaxAllele.name dupeOk
+    $mm.jaxAlleleInfo.name
+    $mm.jaxAllelePheno.allele
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
@@ -3708,7 +3722,7 @@ identifier lsSnpPdbProtId
 identifier lsSnpPdbKgId
 "lsSnpPdb table protId field"
     $lsSnpDb.kgXref.spID dupeOk
-    $lsSnpDb.lsSnpPdb.protId
+    $lsSnpDb.lsSnpPdb.protId minCheck=0.99
 
 identifier lsSnpPdbPdbId
 "lsSnpPdb table pdbId field"
@@ -3717,7 +3731,7 @@ identifier lsSnpPdbPdbId
 
 identifier lsSnpPdbSnpHg18
 "lsSnpPdb table snpId field"
-    hg18.snp129.name dupeOk
+    hg18.snp130.name dupeOk
     hg18.lsSnpPdb.snpId
 
 identifier lsSnpPdbSnpHg19
@@ -4462,6 +4476,8 @@ tablesIgnored $hg
     cccTrendPvalT1d
     cccTrendPvalT2d
     ceuBcellRNASeqBW
+    clinvarCnv
+    clinvarMain
     cnpFosmid
     cnpIafrate
     cnpIafrate2

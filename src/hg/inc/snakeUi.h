@@ -19,7 +19,7 @@
 #define   SNAKE_COLOR_BY_NONE_VALUE       "none"
 
 #define SNAKE_COLOR_BY "colorBy"
-#define SNAKE_DEFAULT_COLOR_BY SNAKE_COLOR_BY_STRAND_VALUE
+#define SNAKE_DEFAULT_COLOR_BY SNAKE_COLOR_BY_NONE_VALUE
 
 void snakeCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Complete track controls for snakes. */

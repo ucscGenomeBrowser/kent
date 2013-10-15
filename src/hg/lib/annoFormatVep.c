@@ -306,11 +306,33 @@ else
     afVepPrintPlaceholder(self->f, self->doHtml);
 }
 
-static void tweakStopCodonAndLimitLength(char *aaSeq, char *codonSeq, boolean isFrameshift)
+static void limitLength(char *seq, int baseCount, char *unit)
+/* If seq is longer than an abbreviated version of itself, change it to the abbreviated version. */
+{
+if (isEmpty(seq))
+    return;
+int len = strlen(seq);
+const int elipsLen = 3;
+char lengthNote[512];
+safef(lengthNote, sizeof(lengthNote), "(%d %s)", len, unit);
+if (len > 2*baseCount + elipsLen + strlen(lengthNote))
+    {
+    // First baseCount bases, then "...":
+    int offset = baseCount;
+    safecpy(seq+offset, len+1-offset, "...");
+    offset += elipsLen;
+    // then last baseCount bases:
+    safecpy(seq+offset, len+1-offset, seq+len-baseCount);
+    offset += baseCount;
+    // then lengthNote:
+    safecpy(seq+offset, len+1-offset, lengthNote);
+    }
+}
+
+static void tweakStopCodonAndLimitLength(char *aaSeq, char *codonSeq)
 /* If aa from gpFx has a stop 'Z', replace it with '*' and truncate 
  * codons following the stop if necessary just in case they run on.
- * Then if isFrameshift and the strings are very long, truncate with
- * a note about how long they are. */
+ * If the strings are very long, truncate with a note about how long they are. */
 {
 char *earlyStop = strchr(aaSeq, 'Z');
 if (earlyStop)
@@ -320,18 +342,8 @@ if (earlyStop)
     int earlyStopIx = (earlyStop - aaSeq + 1) * 3;
     codonSeq[earlyStopIx] = '\0';
     }
-if (isFrameshift)
-    {
-    int len = strlen(aaSeq);
-    char lengthNote[512];
-    safef(lengthNote, sizeof(lengthNote), "...(%d aa)", len);
-    if (len > 5 + strlen(lengthNote))
-	safecpy(aaSeq+5, len+1-5, lengthNote);
-    len = strlen(codonSeq);
-    safef(lengthNote, sizeof(lengthNote), "...(%d nt)", len);
-    if (len > 12 + strlen(lengthNote))
-	safecpy(codonSeq+12, len+1-12, lengthNote);
-    }
+limitLength(aaSeq, 5, "aa");
+limitLength(codonSeq, 12, "nt");
 }
 
 INLINE char *dashForEmpty(char *s)
@@ -349,10 +361,10 @@ static void afVepPrintPredictions(struct annoFormatVep *self, struct annoRow *va
 {
 boolean isInsertion = (varRow->start == varRow->end);
 boolean isDeletion = isEmpty(gpFx->allele);
-// variant allele used to calculate the consequence
-// For upstream/downstream variants, gpFx leaves allele empty which I think is appropriate,
-// but VEP uses non-reference allele... #*** can we determine that here?
-fputs(placeholderForEmpty(gpFx->allele), self->f);
+// variant allele used to calculate the consequence (or first alternate allele)
+char *abbrevAllele = cloneString(gpFx->allele);
+limitLength(abbrevAllele, 12, "nt");
+fputs(placeholderForEmpty(abbrevAllele), self->f);
 afVepNextColumn(self->f, self->doHtml);
 // ID of affected gene
 afVepPrintGene(self, gpvRow);
@@ -397,13 +409,13 @@ if (gpFx->detailType == codingChange)
     afVepNextColumn(self->f, self->doHtml);
     int variantFrame = change->cdsPosition % 3;
     strLower(change->codonOld);
-    toUpperN(change->codonOld+variantFrame, varRow->end - varRow->start);
+    int upLen = min(strlen(change->codonOld+variantFrame), varRow->end - varRow->start);
+    toUpperN(change->codonOld+variantFrame, upLen);
     strLower(change->codonNew);
     int alleleLength = sameString(gpFx->allele, "") ? 0 : strlen(gpFx->allele);
     toUpperN(change->codonNew+variantFrame, alleleLength);
-    boolean isFrameshift = (gpFx->soNumber == frameshift_variant);
-    tweakStopCodonAndLimitLength(change->aaOld, change->codonOld, isFrameshift);
-    tweakStopCodonAndLimitLength(change->aaNew, change->codonNew, isFrameshift);
+    tweakStopCodonAndLimitLength(change->aaOld, change->codonOld);
+    tweakStopCodonAndLimitLength(change->aaNew, change->codonNew);
     fprintf(self->f, "%s/%s", dashForEmpty(change->aaOld), dashForEmpty(change->aaNew));
     afVepNextColumn(self->f, self->doHtml);
     fprintf(self->f, "%s/%s", dashForEmpty(change->codonOld), dashForEmpty(change->codonNew));

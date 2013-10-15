@@ -55,8 +55,9 @@ struct annoStreamDb
 	int ix;				// offset in buffer, [0..size]
         } rowBuf;
 
-    char **(*nextRowRaw)(struct annoStreamDb *self, char *minChrom, uint minEnd);
+    char **(*nextRowRaw)(struct annoStreamDb *self);
     // Depending on query style, use either sqlNextRow or temporary row storage to get next row.
+    // This may return NULL but set self->needQuery; asdNextRow watches for that.
 
     void (*doQuery)(struct annoStreamDb *self, char *minChrom, uint minEnd);
     // Depending on query style, perform either a single query or (series of) chunked query
@@ -105,7 +106,7 @@ resetMergeState(self);
 resetChunkState(self);
 }
 
-static char **nextRowFromSqlResult(struct annoStreamDb *self, char *minChrom, uint minEnd)
+static char **nextRowFromSqlResult(struct annoStreamDb *self)
 /* Stream rows directly from self->sr. */
 {
 return sqlNextRow(self->sr);
@@ -239,8 +240,11 @@ static void asdDoQueryChunking(struct annoStreamDb *self, char *minChrom, uint m
 struct annoStreamer *sSelf = &(self->streamer);
 struct dyString *query = sqlDyStringCreate("select * from %s ", self->table);
 if (sSelf->chrom != NULL && self->rowBuf.size > 0 && !self->doNextChunk)
+    {
     // We're doing a region query, we already got some rows, and don't need another chunk:
+    resetRowBuf(&self->rowBuf);
     self->eof = TRUE;
+    }
 if (self->useMaxOutRows)
     {
     self->maxOutRows -= self->rowBuf.size;
@@ -304,7 +308,10 @@ else
     if (self->queryChrom == NULL)
 	self->queryChrom = self->chromList;
     else if (!self->doNextChunk)
+	{
 	self->queryChrom = self->queryChrom->next;
+	resetMergeState(self);
+	}
     if (minChrom != NULL)
 	{
 	// Skip chroms that precede minChrom
@@ -360,7 +367,7 @@ else
 dyStringFree(&query);
 }
 
-static char **nextRowFromBuffer(struct annoStreamDb *self, char *minChrom, uint minEnd)
+static char **nextRowFromBuffer(struct annoStreamDb *self)
 /* Instead of streaming directly from self->sr, we have buffered up the results
  * of a chunked query; return the head of that queue. */
 {
@@ -380,7 +387,9 @@ if (rowBuf->ix == rowBuf->size)
 	if (lastBin >= self->minFinestBin)
 	    self->gotFinestBin = TRUE;
 	}
-    asdDoQueryChunking(self, minChrom, minEnd);
+    self->needQuery = TRUE;
+    // Bounce back out -- asdNextRow will need to do another query.
+    return NULL;
     }
 if (rowBuf->size == 0)
     return NULL;
@@ -394,7 +403,7 @@ static char **nextRowFiltered(struct annoStreamDb *self, boolean *retRightFail,
  * or end of data.  Return row or NULL, and return right-join fail status via retRightFail. */
 {
 int numCols = self->streamer.numCols;
-char **row = self->nextRowRaw(self, minChrom, minEnd);
+char **row = self->nextRowRaw(self);
 if (minChrom != NULL && row != NULL)
     {
     // Ignore rows that fall completely before (minChrom, minEnd) - save annoGrator's time
@@ -404,7 +413,7 @@ if (minChrom != NULL && row != NULL)
     while (row &&
 	   ((chromCmp = strcmp(row[chromIx], minChrom)) < 0 || // this chrom precedes minChrom
 	    (chromCmp == 0 && atoll(row[endIx]) < minEnd)))    // on minChrom, but before minEnd
-	row = self->nextRowRaw(self, minChrom, minEnd);
+	row = self->nextRowRaw(self);
     }
 boolean rightFail = FALSE;
 struct annoFilter *filterList = self->streamer.filters;
@@ -412,7 +421,7 @@ while (row && annoFilterRowFails(filterList, row+self->omitBin, numCols, &rightF
     {
     if (rightFail)
 	break;
-    row = self->nextRowRaw(self, minChrom, minEnd);
+    row = self->nextRowRaw(self);
     }
 *retRightFail = rightFail;
 return row;
@@ -539,11 +548,24 @@ struct annoStreamDb *self = (struct annoStreamDb *)vSelf;
 if (self->needQuery)
     self->doQuery(self, minChrom, minEnd);
 if (self->mergeBins)
-    return nextRowMergeBins(self, minChrom, minEnd, callerLm);
+    {
+    struct annoRow *aRow = nextRowMergeBins(self, minChrom, minEnd, callerLm);
+    if (aRow == NULL && self->needQuery && !self->eof)
+	// Recurse: query, then get next merged/filtered row:
+	return asdNextRow(vSelf, minChrom, minEnd, callerLm);
+    else
+	return aRow;
+    }
 boolean rightFail = FALSE;
 char **row = nextRowFiltered(self, &rightFail, minChrom, minEnd);
 if (row == NULL)
-    return NULL;
+    {
+    if (self->needQuery && !self->eof)
+	// Recurse: query, then get next merged/filtered row:
+	return asdNextRow(vSelf, minChrom, minEnd, callerLm);
+    else
+	return NULL;
+    }
 return rowToAnnoRow(self, row, rightFail, callerLm);
 }
 
