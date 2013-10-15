@@ -584,6 +584,14 @@ sub getSpecies {
   my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;
   chomp $line;
   my ($scientificName) = split("\t", $line);
+  if (length($scientificName) < 1) {
+     if ( -s "$HgAutomate::clusterData/$db/species.name.txt" ) {
+        $scientificName = `cat $HgAutomate::clusterData/$db/species.name.txt`;
+        chomp $scientificName;
+     } else {
+        $scientificName = "species name not found";
+     }
+  }
   return ($scientificName);
 } # getSpecies
 

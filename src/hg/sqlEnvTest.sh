@@ -11,6 +11,10 @@ if test "$UNAME" = "hgwdev" ; then
   exit 0
 fi
 
+if test -f `which mysql_config` ; then
+  exit 0
+fi
+
 if test "$MYSQLLIBS x" = " x" -o "$MYSQLINC x" = " x" ; then
     echo "ERROR: missing MYSQLLIBS or MYSQLINC definitions in environment"
     echo "these are typically,"

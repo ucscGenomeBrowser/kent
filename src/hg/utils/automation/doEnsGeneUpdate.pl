@@ -195,9 +195,9 @@ sub doLoad {
   my $prevGenePred = "$previousBuildDir" . "/process/$db.allGenes.gp.gz";
   my $identicalToPrevious = 0;
   if ( -f $prevGenePred ) {
-      my $thisGenePredSum = `zcat $thisGenePred | sum`;
+      my $thisGenePredSum = `zcat $thisGenePred | sort | sum`;
       chomp $thisGenePredSum;
-      my $prevGenePredSum = `zcat $prevGenePred | sum`;
+      my $prevGenePredSum = `zcat $prevGenePred | sort | sum`;
       chomp $prevGenePredSum;
       print STDERR "prev: $prevGenePredSum, this: $thisGenePredSum\n";
       if ($prevGenePredSum eq $thisGenePredSum) {
@@ -555,6 +555,14 @@ sub doMakeDoc {
   $updateTime =~ s/ .*//;	#	removes time
   my $organism = `hgsql -N -e 'select organism from dbDb where name = "$db";' hgcentraltest`;
   chomp $organism;
+  if (length($organism) < 1) {
+     if ( -s "$HgAutomate::clusterData/$db/species.name.txt" ) {
+        $organism = `cat $HgAutomate::clusterData/$db/species.name.txt`;
+        chomp $organism;
+     } else {
+        $organism = "species name not found";
+     }
+  }
 
   my $vegaOpt = "";
   my $trackName = "Ensembl";
