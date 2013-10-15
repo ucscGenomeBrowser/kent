@@ -1957,8 +1957,6 @@ itemRgb on
 type bed 9 +
 noScoreFilter .
 exonArrows off
-urlLabel DGV Browser and Report:
-url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 dataVersion beta (Nov. 23, 2012)
 release beta,public
 
