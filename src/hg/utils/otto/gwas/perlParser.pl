@@ -18,10 +18,9 @@
                 foreach $i (0 .. $#w) { 
                   $w[$i] =~ s/^\s*//;  $w[$i] =~ s/\s*$//; 
                   # ugh, clean out non-utf8 stuff before decoding utf8 into unicode: 
-                  $w[$i] =~ s/\226/-/g; $w[$i] =~ s/\327/x/g; $w[$i] =~ s/\317\?/&tau;/g; 
-                  $w[$i] =~ s/\342\?\?/<sub>1<\/sub>/g; $w[$i] =~ s/\347/c/g; 
-                  $w[$i] =~ s/\351/e/g; $w[$i] =~ s/\353/e/g; 
-                  $w[$i] =~ s/\265/e/g;
+                  $w[$i] =~ s/\222/'/g;
+                  $w[$i] =~ s/\226/-/g;
+                  $w[$i] =~ s/\265/u/g;
                   $w[$i] = decode_utf8($w[$i], Encode::FB_CROAK); 
                   @chars = split(//, $w[$i]); 
                   $w[$i] = ""; 
