@@ -79,68 +79,71 @@ ifeq (${PNGINCL},)
 endif
 
 # autodetect where mysql includes and libraries are installed
-ifeq (${MYSQLINC},)
-  MYSQLINC := $(shell mysql_config --include | sed -e 's/-I//' || true)
-#  $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
-endif
-ifeq (${MYSQLLIBS},)
-  MYSQLLIBS := $(shell mysql_config --libs || true)
-#  $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
-endif
-
-ifeq (${MYSQLINC},)
-  ifneq ($(wildcard /usr/local/mysql/include/mysql.h),)
-      MYSQLINC=/usr/local/mysql/include
-  endif
-endif
-ifeq (${MYSQLINC},)
-  ifneq ($(wildcard /usr/include/mysql/mysql.h),)
-      MYSQLINC=/usr/include/mysql
-  endif
-endif
-ifeq (${MYSQLINC},)
-  ifneq ($(wildcard /opt/local/include/mysql55/mysql/mysql.h),)
-      MYSQLINC=/opt/local/include/mysql55/mysql
-  endif
-endif
-ifeq (${MYSQLLIBS},)
-  ifneq ($(wildcard /usr/lib64/mysql/libmysqlclient.a),)
-      MYSQLLIBS=/usr/lib64/mysql/libmysqlclient.a
-  endif
-endif
-ifeq (${MYSQLLIBS},)
-  ifneq ($(wildcard /usr/local/mysql/lib/libmysqlclient.a),)
-      MYSQLLIBS=/usr/local/mysql/lib/libmysqlclient.a
-  endif
-endif
-ifeq (${MYSQLLIBS},)
-  ifneq ($(wildcard /usr/local/mysql/lib/libmysqlclient.a),)
-      MYSQLLIBS=/usr/local/mysql/lib/libmysqlclient.a
-  endif
-endif
-ifeq (${MYSQLLIBS},)
-  ifneq ($(wildcard /usr/lib64/mysql/libmysqlclient.so),)
-      MYSQLLIBS=/usr/lib64/mysql/libmysqlclient.so
-  endif
-endif
-ifeq (${MYSQLLIBS},)
-  ifneq ($(wildcard /usr/lib/libmysqlclient.a),)
-      MYSQLLIBS=/usr/lib/libmysqlclient.a
-  endif
-endif
-ifeq (${MYSQLLIBS},)
-  ifneq ($(wildcard /opt/local/lib/mysql55/mysql/libmysqlclient.a),)
-      MYSQLLIBS=/opt/local/lib/mysql55/mysql/libmysqlclient.a
-  endif
-endif
-ifeq ($(findstring src/hg/,${CURDIR}),src/hg/)
+# do not need to do this during 'clean' target (this is very slow for 'clean')
+ifneq ($(MAKECMDGOALS),clean)
   ifeq (${MYSQLINC},)
-    $(error can not find installed mysql development system)
+      MYSQLINC := $(shell mysql_config --include | sed -e 's/-I//' || true)
+    #  $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
   endif
-endif
-# last resort, hoping the compiler can find it in standard locations
-ifeq (${MYSQLLIBS},)
-  MYSQLLIBS="-lmysqlclient"
+  ifeq (${MYSQLLIBS},)
+      MYSQLLIBS := $(shell mysql_config --libs || true)
+    #  $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
+  endif
+
+  ifeq (${MYSQLINC},)
+    ifneq ($(wildcard /usr/local/mysql/include/mysql.h),)
+	  MYSQLINC=/usr/local/mysql/include
+    endif
+  endif
+  ifeq (${MYSQLINC},)
+    ifneq ($(wildcard /usr/include/mysql/mysql.h),)
+	  MYSQLINC=/usr/include/mysql
+    endif
+  endif
+  ifeq (${MYSQLINC},)
+    ifneq ($(wildcard /opt/local/include/mysql55/mysql/mysql.h),)
+	  MYSQLINC=/opt/local/include/mysql55/mysql
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /usr/lib64/mysql/libmysqlclient.a),)
+	  MYSQLLIBS=/usr/lib64/mysql/libmysqlclient.a
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /usr/local/mysql/lib/libmysqlclient.a),)
+	  MYSQLLIBS=/usr/local/mysql/lib/libmysqlclient.a
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /usr/local/mysql/lib/libmysqlclient.a),)
+	  MYSQLLIBS=/usr/local/mysql/lib/libmysqlclient.a
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /usr/lib64/mysql/libmysqlclient.so),)
+	  MYSQLLIBS=/usr/lib64/mysql/libmysqlclient.so
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /usr/lib/libmysqlclient.a),)
+	  MYSQLLIBS=/usr/lib/libmysqlclient.a
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /opt/local/lib/mysql55/mysql/libmysqlclient.a),)
+	  MYSQLLIBS=/opt/local/lib/mysql55/mysql/libmysqlclient.a
+    endif
+  endif
+  ifeq ($(findstring src/hg/,${CURDIR}),src/hg/)
+      ifeq (${MYSQLINC},)
+	$(error can not find installed mysql development system)
+    endif
+  endif
+    # last resort, hoping the compiler can find it in standard locations
+  ifeq (${MYSQLLIBS},)
+      MYSQLLIBS="-lmysqlclient"
+  endif
 endif
 
 # $(info have MYSQLINC: ${MYSQLINC})
