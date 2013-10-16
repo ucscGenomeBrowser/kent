@@ -19,6 +19,7 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 #include "axt.h"
+#include "lrg.h"
 
 /*
  * WARNING: this code is incomprehensible:
@@ -347,14 +348,13 @@ static void maskDiffString( char *retStr, char *s1, char *s2, char mask )
 /*copies s1, masking off similar characters, and returns result into retStr.
  *if strings are of different size it stops after s1 is done.*/
 {
+int s1Len = strlen(s1);
+memset(retStr, mask, s1Len);
 int i;
-for (i=0; i<strlen(s1); i++)
+for (i=0; i < s1Len; i++)
     {
-    if (s1[i] == s2[i])
-	retStr[i] = mask;
-    else 
+    if (s1[i] != s2[i])
 	retStr[i] = s1[i];
-
     }
 retStr[i] = '\0';
 }
@@ -905,6 +905,17 @@ else if (sameString("lfExtra", seqSource))
     mrnaSeq = newDnaSeq(cloneString(lf->extra), strlen(lf->extra), lf->extra);
     if (lf->orientation == -1)
 	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
+    }
+else if (sameString("lrg", seqSource))
+    {
+    struct lrg *lrg = lf->original;
+    mrnaSeq = lrgReconstructSequence(lrg, database);
+    }
+else if (startsWith("table ", seqSource))
+    {
+    char *table = seqSource;
+    nextWord(&table);
+    mrnaSeq = hGenBankGetMrna(database, name, table);
     }
 else
     mrnaSeq = hGenBankGetMrna(database, name, NULL);
@@ -1751,7 +1762,7 @@ if (indelShowQInsert)
 void baseColorInitTrack(struct hvGfx *hvg, struct track *tg)
 /* Set up base coloring state (e.g. cache genomic sequence) for tg.
  * This must be called by tg->drawItems if baseColorDrawSetup is used 
- * in tg->drawItemAt.  Uses tg->drawItems method to determine whether
+ * in tg->drawItemAt.  Peeks at tg->drawItems method to determine whether
  * tg is linkedFeatures or linkedFeaturesSeries (currently the only
  * two supported track types -- bed, psl etc. are subclasses of these). */
 {
@@ -1819,10 +1830,14 @@ if (drawOpt <= baseColorDrawOff && !(indelShowQueryInsert || indelShowPolyA))
 checkTrackInited(tg, "calling baseColorDrawSetup");
 
 /* If we are using item sequence, fetch alignment and sequence: */
-if ((drawOpt > baseColorDrawOff && startsWith("psl", tg->tdb->type)) ||
-    indelShowQueryInsert || indelShowPolyA)
+if ((drawOpt > baseColorDrawOff && (startsWith("psl", tg->tdb->type) ||
+				    sameString("lrg", tg->tdb->track)))
+    || indelShowQueryInsert || indelShowPolyA)
     {
-    *retPsl = (struct psl *)(lf->original);
+    if (sameString("lrg", tg->tdb->track))
+	*retPsl = lrgToPsl(lf->original, hChromSize(database, chromName));
+    else
+	*retPsl = (struct psl *)(lf->original);
     if (*retPsl == NULL)
 	return baseColorDrawOff;
     }

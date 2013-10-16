@@ -145,6 +145,9 @@ void printPosOnChrom(char *chrom, int start, int end, char *strand,
 void printTrackHtml(struct trackDb *tdb);
 /* If there's some html associated with track print it out. */
 
+char *replaceInUrl(struct trackDb *tdb, char *url, char *idInUrl, boolean encode);
+/* replace $$ in url with idInUrl. Supports many other wildchards */
+
 void abbr(char *s, char *fluff);
 /* Cut out fluff from s. */
 
@@ -440,6 +443,15 @@ void prGeneReviews(struct sqlConnection *conn, char *itemName);
 
 void prGRShortRefGene(char *itemName);
 /* print GeneReviews short label associated to this refGene item */
+
+void doLrg(struct trackDb *tdb, char *item);
+/* Locus Reference Genomic (LRG) info. */
+
+void doLrgTranscriptPsl(struct trackDb *tdb, char *item);
+/* Locus Reference Genomic (LRG) transcript mapping and sequences. */
+
+void htcLrgCdna(char *item);
+/* Serve up LRG transcript cdna seq */
 
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount);
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.

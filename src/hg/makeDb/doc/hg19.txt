@@ -6994,6 +6994,7 @@ TMPDIR=/scratch/tmp
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
+Or on the new hgwdev, /hive/users/markd/projs/transMap/
 
 see doc/builds.txt for specific details.
 
@@ -7596,6 +7597,7 @@ CREATE TABLE chainHg19Link (
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+Or on the new hgwdev, /hive/users/markd/projs/transMap/
 
 see doc/builds.txt for specific details.
 ############################################################################
@@ -28461,6 +28463,8 @@ TMPDIR=/dev/shm
 
     cd /hive/data/genomes/phyCat1/bed
     ln -s blastz.hg19.swap lastz.hg19
+
+
 #########################################################################
 # ClinVar Variants track (2013-10-09 - Max)
 wget ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz -O - | gunzip > variant_summary.txt
@@ -28504,6 +28508,72 @@ bedToBigBed clinvarMain.bed /scratch/data/hg19/chrom.sizes clinvarMain.bb -type=
 bedToBigBed clinvarCnv.bed /scratch/data/hg19/chrom.sizes clinvarCnv.bb -type=bed4+18 -tab -as=clinvar.as
 cp clinvarMain.bb /hive/data/genomes/hg19/bed/clinvar/
 cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
+
+
+#########################################################################
+# LOCUS REFERENCE GENOME (LRG) REGIONS AND TRANSCRIPTS (DONE 11/11/13 angie)
+    screen -S lrg -t lrg
+    set today = `date +%Y_%m_%d`
+    mkdir -p /hive/data/genomes/hg19/bed/lrg/$today
+    cd /hive/data/genomes/hg19/bed/lrg/$today
+    wget --timestamping ftp://ftp.ebi.ac.uk/pub/databases/lrgex/\*
+    # The .atree file is useful for getting a handle on the hierarchy and types of nodes:
+    autoDtd LRG_1.xml lrg.dtd lrg.stats -atree=lrg.atree
+
+    # Run script to convert LRG*.xml files to BED+ for regions and genePredExt+fa for transcripts:
+    ~/kent/src/hg/utils/automation/parseLrgXml.pl
+    genePredCheck lrgTranscriptsUnmapped.gp
+    # If there are complaints e.g. about exonFrame, look for inconsistencies in the
+    # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
+    # Contact Variation team leader Fiona Cunningham @EBI to resolve in the background
+    # (missing exonFrame info doesn't affect our track representation because we end up using
+    # psl).
+
+    # Load LRG regions:
+    bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
+      -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+    ln -s `pwd`/lrg.bb /gbdb/hg19/bbi/lrg.bb
+    hgBbiDbLink hg19 lrg /gbdb/hg19/bbi/lrg.bb
+
+    # Map LRG fixed_annotation transcripts from LRG coords to hg19 coords (HT MarkD):
+    lrgToPsl lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.psl
+    pslCheck lrg.psl
+    awk '{print $10 "\t" $11;}' lrg.psl > lrg.sizes
+    genePredToFakePsl -chromSize=lrg.sizes placeholder \
+      lrgTranscriptsUnmapped.gp lrgTranscriptsFakePsl.psl lrgTranscripts.cds
+    pslMap lrgTranscriptsFakePsl.psl lrg.psl lrgTranscriptsHg19.psl
+    mrnaToGene -genePredExt -cdsFile=lrgTranscripts.cds -keepInvalid \
+      lrgTranscriptsHg19.psl lrgTranscriptsHg19NoName2.gp
+    # It's OK if mrnaToGene complains about "no CDS" for a non-coding tx e.g. LRG_163t1.
+    # The resulting genePredExt from that process is missing the name2 column from
+    # the original; add it back:
+    cut -f 1,12 lrgTranscriptsUnmapped.gp > txName2
+    join -j 1 -a 1 -t'	' \
+      -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2,1.13,1.14,1.15 \
+      lrgTranscriptsHg19NoName2.gp txName2 > lrgTranscriptsHg19.gp
+
+    # Load PSL, CDS and sequences.
+    hgLoadPsl hg19 -table=lrgTranscriptAli lrgTranscriptsHg19.psl
+    hgLoadSqlTab hg19 lrgCds ~/kent/src/hg/lib/cdsSpec.sql lrgTranscripts.cds
+    hgPepPred hg19 tab lrgCdna lrgCdna.tab
+    hgPepPred hg19 tab lrgPep lrgPep.tab
+
+    # For a rough comparison of mapping methods, and to get some extra error-checking on the PSL
+    # from the chain code, try this too:
+    pslToChain lrg.psl lrg.chain
+    chainSwap lrg.chain lrgMap.chain
+    liftOver -genePred lrgTranscriptsUnmapped.gp lrgMap.chain lrgTLiftOver.gp noMap
+    # The noMap file has a few "Boundary problem" errors because liftOver doesn't have
+    # sophisticated handling of exonFrames and indels.  Also, liftOver carries over exonFrames
+    # as-is without regard to strand, so they end up being reversed for LRG's on the - strand.  
+    # That's why we're using MarkD's method above!
+    # Ignore exonFrames and compare:
+    cut -f 1-14 lrgTranscriptsHg19.gp > t1
+    cut -f 1-14 lrgTLiftOver.gp > t2
+    diff t1 t2 | less
+    # Hopefully there won't be differences aside from the ones liftOver couldn't map.
+    
+
 #########################################################################
 # phastBias gBGC track (2013-10-29 - Galt)
 #   RM #11697 data received from Katie Pollard and Adam Siepel

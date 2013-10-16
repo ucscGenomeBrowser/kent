@@ -35,9 +35,11 @@ blastRef psl
 boxedCfg *
 browserLines customTracks
 canPack *
+cdnaTable psl
 cdsDrawDefault psl bed genePred
 cdsDrawOptions psl
 cdsEvidence genePred
+cdsTable psl
 cell bed bedGraph
 centerLabelsDense *
 chainColor chain
@@ -174,9 +176,9 @@ idInUrlSql altGraphX genePred chain
 idXref genePred
 iframeUrl *
 iframeOptions *
-indelDoubleInsert psl bam
+indelDoubleInsert psl bam bigBed
 indelPolyA psl bam
-indelQueryInsert psl bam
+indelQueryInsert psl bam bigBed
 informant genePred
 initialPos customTracks
 inputType customTracks
@@ -260,6 +262,7 @@ patDb expRatio
 patKey expRatio
 patTable expRatio
 pennantIcon *
+pepTable psl
 pgDbLink bed pgSnp
 pgPolyphenPredTab bed pgSnp
 pgSiftPredTab bed pgSnp
