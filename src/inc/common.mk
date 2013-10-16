@@ -9,6 +9,9 @@ endif
 HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MACHTYPE}
 HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
 
+# to check for Mac OSX Darwin specifics:
+UNAME_S := $(shell uname -s)
+
 #global external libraries 
 L=
 
@@ -81,13 +84,16 @@ endif
 # autodetect where mysql includes and libraries are installed
 # do not need to do this during 'clean' target (this is very slow for 'clean')
 ifneq ($(MAKECMDGOALS),clean)
-  ifeq (${MYSQLINC},)
+  # this does *not* work on Mac OSX with the dynamic libraries
+  ifneq ($(UNAME_S),Darwin)
+    ifeq (${MYSQLINC},)
       MYSQLINC := $(shell mysql_config --include | sed -e 's/-I//' || true)
-    #  $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
-  endif
-  ifeq (${MYSQLLIBS},)
+      #  $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
+    endif
+    ifeq (${MYSQLLIBS},)
       MYSQLLIBS := $(shell mysql_config --libs || true)
-    #  $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
+      #  $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
+    endif
   endif
 
   ifeq (${MYSQLINC},)
@@ -148,8 +154,6 @@ endif
 
 # $(info have MYSQLINC: ${MYSQLINC})
 # $(info have MYSQLLIBS: ${MYSQLLIBS})
-
-UNAME_S := $(shell uname -s)
 
 # OK to add -lstdc++ to all MYSQLLIBS just in case it is
 #    MySQL version 5.6 libraries, but no 'librt' on Mac OSX
