@@ -855,8 +855,9 @@ EOF
 _EOF_
 		  );
   if ($needSNPAlleleFreq_TGP) {
+    my $deDup = ($build >= 138) ? "-deDupTGP" : "";
     $bossScript->add(<<_EOF_
-    $Bin/snpAddTGPAlleleFreq.pl $tmpDb -contigLoc=$ContigLoc > ucscAlleleFreq.txt
+    $Bin/snpAddTGPAlleleFreq.pl $tmpDb -contigLoc=$ContigLoc $deDup > ucscAlleleFreq.txt
 _EOF_
 		    );
   }

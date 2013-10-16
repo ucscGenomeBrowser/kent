@@ -78,7 +78,16 @@ ifeq (${PNGINCL},)
   endif
 endif
 
-# autodetect where libmysql is installed
+# autodetect where mysql includes and libraries are installed
+ifeq (${MYSQLINC},)
+  MYSQLINC := $(shell mysql_config --include | sed -e 's/-I//' || true)
+#  $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
+endif
+ifeq (${MYSQLLIBS},)
+  MYSQLLIBS := $(shell mysql_config --libs || true)
+#  $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
+endif
+
 ifeq (${MYSQLINC},)
   ifneq ($(wildcard /usr/local/mysql/include/mysql.h),)
       MYSQLINC=/usr/local/mysql/include
@@ -133,6 +142,9 @@ endif
 ifeq (${MYSQLLIBS},)
   MYSQLLIBS="-lmysqlclient"
 endif
+
+# $(info have MYSQLINC: ${MYSQLINC})
+# $(info have MYSQLLIBS: ${MYSQLLIBS})
 
 UNAME_S := $(shell uname -s)
 
