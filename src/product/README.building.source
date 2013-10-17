@@ -61,6 +61,20 @@ Following the instructions in scripts/README
         You are done and can stop here.
 
 3.  Create the following shell environment variables:
+
+    NOTE: As of mid-October 2013 the makefile build system in the source
+          tree will attempt to configure MYSQLINC and MYSQLLIBS with
+          the mysql_config command.  To use that automatic configuration,
+          eliminate any MYSQLINC and MYSQLLIBS definitions from your shell
+          environment and make sure mysql_config can be found in your PATH.
+          This option is not perfect and may not function correctly.
+          It usually will not use a static linked library which can lead
+          to a known issue on the Mac OSX.  See 'Known Problems' item 10 below.
+
+        In the case the automatic configuration does not function, you
+        can set these variables in your shell environment to override
+        the automatic configuration:
+
 	MYSQLINC=/usr/include/mysql
 	MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -lz"
 	export MYSQLINC MYSQLLIBS
@@ -254,6 +268,18 @@ make: *** [aliType.o] Error 1
 
   To add the library that includes these functions, add '-ldl' to the
   MYSQLLIBS string: MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -ldl -lz"
+
+10. Mac OSX dynamic link with the MySQL libraries results in the following
+    run-time error for CGI binaries or command line programs:
+
+    dyld: Library not loaded: libmysqlclient.18.dylib
+
+    This is a known problem with the dynamic library for MySQL,
+    with potential work-arounds offered:
+        http://bugs.mysql.com/bug.php?id=61243
+
+    Or, you can set the MYSQLINC and MYSQLLIBS shell environment variables
+    to the static MySQL library as mentioned in Step 3 above.
 
 ====================================================================
 For more details see:

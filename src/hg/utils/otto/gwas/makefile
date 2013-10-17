@@ -5,7 +5,6 @@ all: ${SUBDIRS:%=%.suball}
 %.suball:
 	${MAKE} -C $* all
 
-# any changes must be committed (and this is checked).
 install: check-prefix installSub
 	cut -f 1-4 /cluster/data/hg18/bed/snp130/snp130.bed | sort -k4,4 > ${PREFIX}/snp130Coords.bed
 	zcat /cluster/data/hg19/bed/snp137/snp137.bed.gz | cut -f 1-4,6,8,18,21-24   | sort -k4,4  > ${PREFIX}/snp137Coords.bed 
