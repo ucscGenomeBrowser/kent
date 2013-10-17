@@ -130,7 +130,7 @@ chr22   20100400 20100500	third</TT></PRE>
 Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example2.txt" 
 TARGET=_blank>here</a> to view this track in the Genome Browser.
 
-<P><B><I>Example 3:</I></B><BR>
+<P><B><I>Example 3A:</I></B><BR>
 This example shows an annotation file containing one data set in BED
 format. The track displays features with multiple blocks, a thick end and thin
 end, and hatch marks indicating the direction of transcription. The track
@@ -152,6 +152,22 @@ chr22 2000 7000 itemB 200 - 2200 6950 0 4 433,100,550,1500 0,500,2000,3500
 Click 
 <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example3.txt" 
 TARGET=_blank>here</a> to view this track in the Genome Browser.
+
+<P><B><I>Example 3B:</I></B><BR>
+This exanple shows a simple annotation file containing one data set in the bigBed format. 
+This track displays random sized blocks across chr21 in the human genome. The big data 
+formats, such as the bigBed format, must be uploaded using a bigDataUrl that is 
+specified in the track line. For more information on these track line parameters, refer 
+to the <A HREF="#TRACK">Track Lines</A>. 
+
+You may paste these two lines directly into the "Add Custom Tracks" page to view this
+example in the browser: 
+<P>
+<tt>browser position chr21:33,031,597-33,041,570</tt>
+<P>
+<tt>track type=bigBed name="bigBed Example One" description="A bigBed file" bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</tt>
+</P>
+
 
 <P><B>Step 4. Display your annotation track in the Genome Browser</B><BR>
 To view your annotation data in the Genome Browser, open the 
@@ -705,14 +721,20 @@ Genome Browser:</P>
         here</a>.
         <LI><B>bigDataUrl=<<I>external_url</I>></B> - Defines a URL to the
         data file for
-        <A HREF="/FAQ/FAQformat.html#format5.1" TARGET="_blank">BAM</A>,
-        <A HREF="/FAQ/FAQformat.html#format1.5" TARGET="_blank">bigBed</A>,
-        <A HREF="/FAQ/FAQformat.html#format6.1" TARGET="_blank">bigWig</A> or
-        <A HREF="/FAQ/FAQformat.html#format10.1" TARGET="_blank">VCF</A>
+        <A HREF="../help/bam.html" TARGET="_blank">BAM</A>,
+        <A HREF="../help/bigBed.html" TARGET="_blank">bigBed</A>,
+        <A HREF="../help/bigWig.html" TARGET="_blank">bigWig</A> or
+        <A HREF="../help/vcf.html" TARGET="_blank">VCF</A>
         tracks. This is a required attribute for those track types. There is no
         default for this attribute.
 
 </UL>
+Here is an example of a properly formatted track line using the bigBed format, with accompanying browser line:
+<P>
+<tt>browser position chr21:33,031,597-33,041,570</tt>
+<P>
+<tt>track type=bigBed name="bigBed Example One" description="A bigBed file" bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</tt>
+</P>
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -821,6 +843,16 @@ http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg18&position=chr21:33038447-33041505
 =track%20type=bigBed%20name=myBigBedTrack%20description=%22a%20bigBed%20track%22%20visibility=<br>
 full%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb
 </tt></a></font><BR><BR>
+
+<P>
+Custom Tracks can be incorporated into and shared with others through named sessions. First,
+upload your tracks as discussed in the <A HREF="#ADD_CT">Loading a Custom Track into the Genome Browser</A>
+section. Then create a named seesion that includes your custom tracks by navigating to the "Sessions" 
+page through the "My Data" section in the menu bar. Once there, follow the instructions in the 
+<A HREF=../help/hgSessionHelp.html#Create>Creating a Session</A> section of the Sessions help page.
+Once you have saved your custom track into a named session you can share that session with others by 
+sharing the URL from "Browser" link or emailing it to them directly by clicking the "Email" link. 
+
 
 <P><B>Tip:</B> Multiple tracks can be placed into one custom track submission. To do so, create
 a new file that contains the <A HREF="/goldenPath/help/customTrack.html#TRACK">track lines</A>
