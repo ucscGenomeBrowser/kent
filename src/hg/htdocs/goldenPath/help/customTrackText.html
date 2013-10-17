@@ -923,10 +923,46 @@ track from my Genome Browser display?<BR>
 <B><I>Solution:</I></B> Reset the Genome Browser by clicking the 
 <em>Click here to reset</em> link on the Gateway page. This should reset 
 your Genome Browser display to its default settings and remove all your
-custom tracks.  To remove only one track of several, click the <EM>Manage
-Custom Tracks</EM> button and delete the track using the checkbox and Delete
-button.
+custom tracks.  To remove only one track of several, click the
+<EM>Manage Custom Tracks</EM> button and delete the track using the
+checkbox and Delete button.
 
+<P><B><I>Problem:</I></B> I put my custom track files on Google Drive
+and they won't display in the browser, why?<BR>
+<B><I>Solution:</I></B> Data servers like Google Drive should work for
+hosting simple text based custom tracks. However, most data providing
+sites do not accept byte-range requests. Therefore, the browser can not
+download just the window of data desired from the custom track when it
+involves an indexed binary format, such as with bigBed and bigWig files.
+Compared with BED files, bigBed and bigWig files are much faster because
+only portions of the files needed to display in a particular viewed region
+are transferred to UCSC. In order for the browser to serve up just
+the the portion that is needed requires the data server to have byte-ranges enabled.
+You can test on the command line if your server has byte-range requests
+running with: <PRE><TT>&gt; curl -I &lt;URL to your file&gt;</TT></PRE>
+To know if your server can host bigBed and bigWig files (or Hubs), look for
+the following: <PRE><TT>&gt; Accept-Ranges: bytes</TT></PRE>
+Otherwise, see the below "Byte-Range Request Errors" section for more help.
+Also, please note that the UCSC Genome Browser is not endorsing the use of
+Google Drive for hosting your data.
+
+<P><B><I>Problem:</I></B> I see that Dropbox accepts byte-range requests,
+but I can't get my data to display, why?<BR>
+<B><I>Solution:</I></B> Be sure you enable the &quot;Public Folder&quot;
+function on Dropbox, rather than using the &quot;Share Link&quot; function.
+For custom tracks that require an associated index file, the Public Folder
+approach will allow the browser to know where to go, whereas the Share Link
+feature creates a unique unassociated link for each file. To enable your
+Dropbox public folder navigate to the following site:
+<a href="https://www.dropbox.com/enable_public_folder"
+target="_blank"> https://www.dropbox.com/enable_public_folder</a>.
+Please note that if you are using a free Dropbox account, Dropbox may
+throttle access to your data to prevent their servers from being overloaded,
+blocking the browser's access and ability to display your tracks. This may
+not be the case with paid Dropbox accounts.  Also, please keep in mind that
+files in your Public Folder are public, and may be indexed by Google.
+Also, please note that the UCSC Genome Browser is not endorsing the use of
+Dropbox for hosting your data.
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
