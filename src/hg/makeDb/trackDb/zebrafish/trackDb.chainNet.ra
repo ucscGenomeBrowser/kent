@@ -9,8 +9,12 @@ priority 210.3
 chainMinScore 5000
 chainLinearGap loose
 
+track chainNetFr3 override
+priority 230.3
+
 track chainNetFr2 override
 priority 230.3
+shortLabel $o_db Chain/Net
 
 track chainNetFr1 override
 priority 230.3
@@ -66,6 +70,12 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
 track chainNetRn3 override
 priority 520.3
+
+track chainNetMm10 override
+priority 530.3
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
 track chainNetMm9 override
 priority 530.3
