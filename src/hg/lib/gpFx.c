@@ -613,7 +613,7 @@ while (alleles != NULL && alleles->isReference)
 return (alleles != NULL);
 }
 
-static char *firstAltAllele(struct allele *alleles)
+char *firstAltAllele(struct allele *alleles)
 /* Ensembl always reports an alternate allele, even if that allele is not being used
  * to calculate any consequence.  When allele doesn't really matter, just use the
  * first alternate allele that is given. */
