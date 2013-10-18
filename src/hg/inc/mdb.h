@@ -322,6 +322,18 @@ int mdbByVarCount(struct mdbByVar *mdbByVars,boolean vars, boolean vals);
 // returns the count of objs belonging to this set of vars;
 
 // ----------------- Utilities -----------------
+struct hash *mdbObjsHash(struct mdbObj *mdbObjs);
+// Returns a hash object for this set of mdbObjs, keyed on the obj.
+// WARNING: any changes to the members of the mdbObjs list may lead to invalid pointers in the hash
+
+struct mdbObj *mdbObjLookUp(struct hash *mdbObjsHash, char *obj);
+// Returns an mdbObj from the objsHash
+// WARNING: any changes to the members of the mdbObjs list used to make the mdbObjsHash
+// may lead to invalid pointers in the hash
+
+void mdbObjsHashFree(struct hash **pMdbObjsHash);
+// Frees an mdbObjs hash.
+
 struct mdbVar *mdbObjFind(struct mdbObj *mdbObj, char *var);
 // Finds the val associated with the var or retruns NULL
 
