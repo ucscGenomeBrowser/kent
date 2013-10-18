@@ -22,7 +22,7 @@ cd $gbRoot
 # update the etc, bin, and lib directories
 gbRRServer=rrnfs1.cse.ucsc.edu
 gbRRRoot=/genbank
-rsync -v $rsyncOpts $gbRRServer:$gbRRRoot/etc $gbRRServer:$gbRRRoot/bin $gbRRServer:$gbRRRoot/lib .
+rsync $rsyncOpts $gbRRServer:$gbRRRoot/etc $gbRRServer:$gbRRRoot/bin $gbRRServer:$gbRRRoot/lib .
 
 . $gbRoot/lib/gbCommon.sh
 databases=$(gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs)
