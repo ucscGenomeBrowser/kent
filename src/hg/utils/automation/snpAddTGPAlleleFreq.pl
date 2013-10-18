@@ -178,6 +178,7 @@ sub revCompSnp($) {
     $alInfo->[0] = &revComp($alInfo->[0]);
     unshift @{$rcSnp{als}}, $alInfo;
   }
+  @{$rcSnp{als}} = sort {$a->[0] cmp $b->[0]} @{$rcSnp{als}};
   return \%rcSnp;
 } # revCompSnp
 
