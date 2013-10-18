@@ -1394,8 +1394,6 @@ void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, 
 {
 if (isBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
-else if (isHalTable(table))
-    halTabOut(db, table, conn, fields, f);
 else if (isBamTable(table))
     bamTabOut(db, table, conn, fields, f);
 else if (isVcfTable(table))
@@ -1734,6 +1732,8 @@ else if (sameString(output, outMaf))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
         sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
+    else if (isHalTable(table))
+        doHalMaf(track, table, conn);
     else
         doOutMaf(track, table, conn);
     }
