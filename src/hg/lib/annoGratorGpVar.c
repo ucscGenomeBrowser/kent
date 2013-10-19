@@ -278,7 +278,7 @@ slReverse(&rows);
 return rows;
 }
 
-struct annoRow *aggvIntergenicRow(struct annoGratorGpVar *self, struct annoStreamRows *primaryData,
+struct annoRow *aggvIntergenicRow(struct annoGratorGpVar *self, struct variant *variant,
 				  boolean *retRJFilterFailed, struct lm *callerLm)
 /* If intergenic variants (no overlapping or nearby genes) are to be included in output,
  * make an output row with empty genePred and a gpFx that is empty except for soNumber. */
@@ -294,13 +294,13 @@ for (i = 0;  i < gpColCount;  i++)
     wordsOut[i] = "";
 struct gpFx *intergenicGpFx;
 lmAllocVar(self->lm, intergenicGpFx);
-intergenicGpFx->allele = "";
+intergenicGpFx->allele = firstAltAllele(variant->alleles);
+touppers(intergenicGpFx->allele);
 intergenicGpFx->soNumber = intergenic_variant;
 intergenicGpFx->detailType = none;
 aggvStringifyGpFx(&wordsOut[gpColCount], intergenicGpFx, self->lm);
-struct annoRow *varRow = primaryData->rowList;
 boolean rjFail = (retRJFilterFailed && *retRJFilterFailed);
-return annoRowFromStringArray(varRow->chrom, varRow->start, varRow->end, rjFail,
+return annoRowFromStringArray(variant->chrom, variant->chromStart, variant->chromEnd, rjFail,
 			      wordsOut, sSelf->numCols, callerLm);
 }
 
@@ -361,22 +361,8 @@ struct annoRow *rows = annoGratorIntegrate(gSelf, primaryData, retRJFilterFailed
 primaryRow->start = pStart;
 primaryRow->end = pEnd;
 
-if (rows == NULL)
-    {
-    // No genePreds means that the primary variant is intergenic.  By default we don't
-    // include those, but if funcFilter->intergenic has been set then we do.
-    if (self->funcFilter != NULL && self->funcFilter->intergenic)
-	return aggvIntergenicRow(self, primaryData, retRJFilterFailed, callerLm);
-    else if (retRJFilterFailed && self->gpVarOverlapRule == agoMustOverlap)
-	*retRJFilterFailed = TRUE;
-    return NULL;
-    }
-if (retRJFilterFailed && *retRJFilterFailed)
-    return NULL;
-
 if (self->variantFromRow == NULL)
     setVariantFromRow(self, primaryData);
-
 if (self->curChromSeq == NULL || differentString(self->curChromSeq->name, primaryRow->chrom))
     {
     dnaSeqFree(&self->curChromSeq);
@@ -390,10 +376,22 @@ if (self->curChromSeq == NULL || differentString(self->curChromSeq->name, primar
 // the list is no longer in the list of rows from the internal annoGratorIntegrate call,
 // drop it.
 // BETTER YET: make a callback for gpFx to get CDS sequence only when it needs it.
-
 char *refAllele = getGenomicSequence(self->curChromSeq->dna, primaryRow->start, primaryRow->end,
 				     self->lm);
 struct variant *variant = self->variantFromRow(self, primaryRow, refAllele);
+
+if (rows == NULL)
+    {
+    // No genePreds means that the primary variant is intergenic.
+    if (self->funcFilter != NULL && self->funcFilter->intergenic)
+	return aggvIntergenicRow(self, variant, retRJFilterFailed, callerLm);
+    else if (retRJFilterFailed && self->gpVarOverlapRule == agoMustOverlap)
+	*retRJFilterFailed = TRUE;
+    return NULL;
+    }
+if (retRJFilterFailed && *retRJFilterFailed)
+    return NULL;
+
 struct annoRow *outRows = NULL;
 
 for(; rows; rows = rows->next)

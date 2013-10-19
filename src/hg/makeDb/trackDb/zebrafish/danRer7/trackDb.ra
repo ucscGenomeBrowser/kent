@@ -1,3 +1,5 @@
+include trackDb.chainNet.ra
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
@@ -224,13 +226,13 @@ html danRer7multipleChainNet
         type chain tetNig2
         otherDb tetNig2
 
-        track chainFr2
+        track chainFr3
         subTrack fishChainNetViewchain off
         subGroups view=chain species=Fugu
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain fr2
-        otherDb fr2
+        type chain fr3
+        otherDb fr3
 
     track fishChainNetViewnet
     shortLabel Nets
@@ -262,13 +264,13 @@ html danRer7multipleChainNet
         type netAlign tetNig2 chainTetNig2
         otherDb tetNig2
 
-        track netFr2
+        track netFr3
         subTrack fishChainNetViewnet on 
         subGroups view=net species=Fugu
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign fr2 chainFr2
-        otherDb fr2
+        type netAlign fr3 chainFr3
+        otherDb fr3
 
 track vertebrateChainNet
 compositeTrack on
@@ -300,21 +302,21 @@ html danRer7multipleChainNet
     subTrack vertebrateChainNet
     spectrum on
 
-        track chainXenTro2
+        track chainXenTro3
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=X_Tro
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain xenTro2
-        otherDb xenTro2
+        type chain xenTro3
+        otherDb xenTro3
 
-        track chainMm9
+        track chainMm10
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=Mouse
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain mm9
-        otherDb mm9
+        type chain mm10
+        otherDb mm10
 
         track chainHg19
         subTrack vertebrateChainNetViewchain off
@@ -330,21 +332,21 @@ html danRer7multipleChainNet
     visibility dense
     subTrack vertebrateChainNet
 
-        track netXenTro2
+        track netXenTro3
         subTrack vertebrateChainNetViewnet on 
         subGroups view=net species=X_Tro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign xenTro2 chainXenTro2
-        otherDb xenTro2
+        type netAlign xenTro3 chainXenTro3
+        otherDb xenTro3
 
-        track netMm9
+        track netMm10
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=Mouse
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign mm9 chainMm9
-        otherDb mm9
+        type netAlign mm10 chainMm10
+        otherDb mm10
 
         track netHg19
         subTrack vertebrateChainNetViewnet off
