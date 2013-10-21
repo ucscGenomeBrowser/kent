@@ -6,8 +6,12 @@ priority 200.3
 track chainNetRn4 override
 priority 350.3
 
+track chainNetMm10 override
+priority 360.3
+
 track chainNetMm9 override
 priority 360.3
+shortLabel $o_db Chain/Net
 
 track chainNetHg19 override
 priority 470.3

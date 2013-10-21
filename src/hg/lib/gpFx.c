@@ -279,10 +279,12 @@ static struct gpFx *gpFxCheckUtr( struct allele *allele, struct genePred *pred,
 struct gpFx *gpFx = NULL;
 enum soTerm term = 0;
 struct variant *variant = allele->variant;
-if (variant->chromStart < pred->cdsStart && variant->chromEnd > pred->txStart)
+if ((variant->chromStart < pred->cdsStart && variant->chromEnd > pred->txStart) ||
+    (variant->chromStart == pred->cdsStart && variant->chromEnd == pred->cdsStart)) // insertion
     // we're in left UTR
     term = (*pred->strand == '-') ? _3_prime_UTR_variant : _5_prime_UTR_variant;
-else if (variant->chromStart < pred->txEnd && variant->chromEnd > pred->cdsEnd)
+else if ((variant->chromStart < pred->txEnd && variant->chromEnd > pred->cdsEnd) ||
+	 (variant->chromStart == pred->cdsEnd && variant->chromEnd == pred->cdsEnd)) //insertion
     // we're in right UTR
     term = (*pred->strand == '-') ? _5_prime_UTR_variant : _3_prime_UTR_variant;
 if (term != 0)
@@ -611,7 +613,7 @@ while (alleles != NULL && alleles->isReference)
 return (alleles != NULL);
 }
 
-static char *firstAltAllele(struct allele *alleles)
+char *firstAltAllele(struct allele *alleles)
 /* Ensembl always reports an alternate allele, even if that allele is not being used
  * to calculate any consequence.  When allele doesn't really matter, just use the
  * first alternate allele that is given. */

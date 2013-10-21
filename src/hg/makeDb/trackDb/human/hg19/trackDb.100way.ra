@@ -47,15 +47,15 @@ priority 103.29
         treeImage phylo/hg19_100way.png
         priority 100
 
-##     # PhyloP conservation
-##     track cons100wayViewphyloP
-##     shortLabel Basewise Conservation (phyloP)
-##     view phyloP
-##     visibility full
-##     subTrack cons100way
-##     viewLimits -20.0:7.532
-##     viewLimitsMax -20:7.532
-## 
+    # PhyloP conservation
+    track cons100wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons100way
+    viewLimits -20.0:9.869
+    viewLimitsMax -20:0.869
+
 ##         track phyloP100wayGlires
 ##         subTrack cons100wayViewphyloP off
 ##         subGroups view=phyloP clade=glires
@@ -106,24 +106,24 @@ priority 103.29
 ##         color 40,40,120
 ##         altColor 120,40,40
 ##         priority 3
-## 
-##         track phyloP100wayAll
-##         subTrack cons100wayViewphyloP off
-##         subGroups view=phyloP clade=all
-##         shortLabel 100 Vert. Cons
-##         longLabel 100 vertebrates Basewise Conservation by PhyloP
-##         noInherit on
-##         configurable on
-##         type wig -20 7.532
-##         maxHeightPixels 100:50:11
-##         viewLimits -4.5:4.88
-##         autoScale off
-##         spanList 1
-##         windowingFunction mean
-##         color 60,60,140
-##         altColor 140,60,60
-##         priority 4
-## 
+
+        track phyloP100wayAll
+        subTrack cons100wayViewphyloP on
+        subGroups view=phyloP clade=all
+        shortLabel 100 Vert. Cons
+        longLabel 100 vertebrates Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -20 7.532
+        maxHeightPixels 100:50:11
+        viewLimits -4.5:4.88
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
     # phastCons conservation
     track cons100wayViewphastcons
     shortLabel Element Conservation (phastCons)

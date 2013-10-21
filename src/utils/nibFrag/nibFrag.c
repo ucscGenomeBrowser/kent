@@ -24,11 +24,11 @@ errAbort(
   "   nibFrag [options] file.nib start end strand out.fa\n"
   "where strand is + (plus) or m (minus)\n"
   "options:\n"
-  "   -masked - use lower case characters for bases meant to be masked out\n"
-  "   -hardMasked - use upper case for not masked-out and 'N' characters for masked-out bases\n"
-  "   -upper - use upper case characters for all bases\n"
-  "   -name=name Use given name after '>' in output sequence\n"
-  "   -dbHeader=db Add full database info to the header, with or without -name option\n"
+  "   -masked       Use lower-case characters for bases meant to be masked out\n"
+  "   -hardMasked   Use upper-case for not masked-out, and 'N' characters for masked-out bases\n"
+  "   -upper        Use upper-case characters for all bases\n"
+  "   -name=name    Use given name after '>' in output sequence\n"
+  "   -dbHeader=db  Add full database info to the header, with or without -name option\n"
   "   -tbaHeader=db Format header for compatibility with tba, takes database name as argument\n"
   );
 }
