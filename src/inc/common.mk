@@ -81,9 +81,16 @@ ifeq (${PNGINCL},)
   endif
 endif
 
+FULLWARN = $(shell uname -n)
+
 # autodetect where mysql includes and libraries are installed
 # do not need to do this during 'clean' target (this is very slow for 'clean')
 ifneq ($(MAKECMDGOALS),clean)
+  # on hgwdev, use the static library.
+  ifeq (${FULLWARN},hgwdev)
+    MYSQLINC=/usr/include/mysql
+    MYSQLLIBS=/usr/lib64/mysql/libmysqlclient.a
+  endif
   # this does *not* work on Mac OSX with the dynamic libraries
   ifneq ($(UNAME_S),Darwin)
     ifeq (${MYSQLINC},)
@@ -232,7 +239,6 @@ else
 endif
 
 SYS = $(shell uname -s)
-FULLWARN = $(shell uname -n)
 
 ifeq (${HG_WARN},)
   ifeq (${SYS},Darwin)

@@ -665,6 +665,9 @@ boolean isMafTable(char *database, struct trackDb *track, char *table);
 void doOutMaf(struct trackDb *track, char *table, struct sqlConnection *conn);
 /* Output regions as MAF. */
 
+void doHalMaf(struct trackDb *track, char *table, struct sqlConnection *conn);
+/* Output HAL regions as MAF. */
+
 /* ----------- Wiggle business in wiggle.c -------------------- */
 
 #define	MAX_REGION_DISPLAY	1000

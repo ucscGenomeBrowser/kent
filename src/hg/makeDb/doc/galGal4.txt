@@ -911,3 +911,129 @@ CREATE TABLE ucscToEnsembl (
     # verify the track link to INSDC functions
 
 ##############################################################################
+#  BLASTZ/CHAIN/NET Turkey vs Chicken (DONE - 2013-10-18 - Hiram)
+#   use a screen to manage this multi-day job
+    screen -S melGal1
+
+    mkdir /hive/data/genomes/galGal4/bed/lastzMelGal1.2013-10-18
+    cd /hive/data/genomes/galGal4/bed/lastzMelGal1.2013-10-18
+
+    cat << '_EOF_' > DEF
+# Chicken vs. Turkey
+BLASTZ_M=50
+
+# TARGET: Chicken GalGal4
+SEQ1_DIR=/hive/data/genomes/galGal4/galGal4.2bit
+SEQ1_LEN=/hive/data/genomes/galGal4/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: Turkey MelGal1
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal4/bed/lastzMelGal1.2013-10-18
+TMPDIR=/dev/shm
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+XXX - running - Fri Oct 18 14:24:15 PDT 2013
+
+    # real    120m58.775s
+    #  *** All done !  Elapsed time: 120m59s
+    #  *** Make sure that goldenPath/galGal4/vsMelGal1/README.txt is accurate.
+    #  *** Add {chain,net}MelGal1 tracks to trackDb.ra if necessary.
+    cd /hive/data/genomes/galGal4/bed
+    ln -s lastzMelGal1.2013-10-18 lastz.melGal3
+
+    cat fb.galGal4.chainMelGal1Link.txt
+    # 924755061 bases of 1042591351 (88.698%) in intersection
+    cd /hive/data/genomes/galGal4/bed
+    ln -s lastzMelGal1.2013-10-18 lastz.melGal3
+
+    #   and then swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.galGal4.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.galGal4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/galGal4/bed/lastzMelGal1.2013-10-18/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    38m4.406s
+    cat fb.melGal1.chainGalGal4Link.txt
+    # 874579772 bases of 935922386 (93.446%) in intersection
+    cd /hive/data/genomes/melGal1/bed
+
+############################################################################
+#  BLASTZ/CHAIN/NET Zebra finch vs Chicken (DONE - 2013-10-18 - Hiram)
+#   use a screen to manage this multi-day job
+    screen -S taeGut2
+
+    mkdir /hive/data/genomes/galGal4/bed/lastzTaeGut2.2013-10-18
+    cd /hive/data/genomes/galGal4/bed/lastzTaeGut2.2013-10-18
+
+    cat << '_EOF_' > DEF
+# Chicken vs. Zebra finch
+BLASTZ_M=50
+
+# TARGET: Chicken GalGal4
+SEQ1_DIR=/hive/data/genomes/galGal4/galGal4.2bit
+SEQ1_LEN=/hive/data/genomes/galGal4/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: Zebra finch TaeGut2
+SEQ2_DIR=/hive/data/genomes/taeGut2/taeGut2.2bit
+SEQ2_LEN=/hive/data/genomes/taeGut2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal4/bed/lastzTaeGut2.2013-10-18
+TMPDIR=/dev/shm
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+XXX - running - Fri Oct 18 14:24:15 PDT 2013
+
+    # real    120m58.775s
+    #  *** All done !  Elapsed time: 120m59s
+    #  *** Make sure that goldenPath/galGal4/vsTaeGut2/README.txt is accurate.
+    #  *** Add {chain,net}TaeGut2 tracks to trackDb.ra if necessary.
+    cd /hive/data/genomes/galGal4/bed
+    ln -s lastzTaeGut2.2013-10-18 lastz.melGal3
+
+    cat fb.galGal4.chainTaeGut2Link.txt
+    # 924755061 bases of 1042591351 (88.698%) in intersection
+    cd /hive/data/genomes/galGal4/bed
+    ln -s lastzTaeGut2.2013-10-18 lastz.melGal3
+
+    #   and then swap
+    mkdir /hive/data/genomes/taeGut2/bed/blastz.galGal4.swap
+    cd /hive/data/genomes/taeGut2/bed/blastz.galGal4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/galGal4/bed/lastzTaeGut2.2013-10-18/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    38m4.406s
+    cat fb.taeGut2.chainGalGal4Link.txt
+    # 874579772 bases of 935922386 (93.446%) in intersection
+    cd /hive/data/genomes/taeGut2/bed
+
+############################################################################
