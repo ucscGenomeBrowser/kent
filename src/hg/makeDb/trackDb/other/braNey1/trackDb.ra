@@ -1,4 +1,5 @@
 include trackDb.genbank.ra
+include ../../human/hg19/wgEncodeGencodeV17.ra
 
 track ensemblRna
 table ensemblRna
@@ -8,3 +9,4 @@ group rna
 priority 57.5
 visibility hide
 type psl .
+
