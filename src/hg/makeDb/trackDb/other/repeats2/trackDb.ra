@@ -262,4 +262,41 @@ type bigWig 0 100
 priority 90
 allButtonPair on
 
+# greenberg tracks
+track greenberg
+shortLabel Dave annotations
+longLabel Dave annotations
+group x
+visibility hide
+color 30,30,100
+type psl .
+priority 30
+
+track vntr15
+shortLabel VNTR15 matches
+longLabel VNTR15 matches
+group x
+visibility hide
+color 30,30,100
+type psl .
+priority 30
+
+track chainedHits3290
+shortLabel Chained Matches 3/2/90
+longLabel Chained Matches, min 3 fingers, maximum inserts 2, min avg score 90%
+group x
+visibility hide
+color 30,30,100
+type bed 12
+priority 30
+
+track chainedHits3280
+shortLabel Chained Matches 3/2/80
+longLabel Chained Matches, min 3 fingers, maximum inserts 2, min avg score 80%
+group x
+visibility hide
+color 30,30,100
+type bed 12
+priority 30
+
 include trackDb.tf.ra
