@@ -24124,7 +24124,7 @@ TMPDIR=/scratch/tmp
 
 
 ##############################################################################
-# DBSNP B138 / SNP138 (DONE 10/14/13)
+# DBSNP B138 / SNP138 (DONE 10/21/13)
 # Redmine #11438
     mkdir -p /hive/data/outside/dbSNP/138/human
     cd /hive/data/outside/dbSNP/138/human
@@ -24202,6 +24202,8 @@ EOF
     # positive-strand-only data in SNPAlleleFreq_TGP.
     # 10/11/13: I forgot to add the -deDupTGP argument to snpAddTGPAlleleFreq.pl !
     # Re-running steps from snpAddTGPAlleleFreq.pl on, this time with -deDupTGP.
+    # 10/21/13: Jonathan noticed a SNP for which "-" appeared twice in alleles.
+    # Fixed, re-running again.
     cd /hive/data/outside/dbSNP/138/human
     mkdir preAlleleFreqFix
     mv ucscAlleleFreq.txt.gz snp138*.bed.gz preAlleleFreqFix/
@@ -24235,11 +24237,11 @@ EOF
    cd /hive/data/outside/dbSNP/138/human
    rm $tmpDir/*
    # Edit load.csh to skip snp138Seq -- it's huge and nothing changed there.
-   ./load.csh >>& do.log & tail -f do.log
+   csh -efx ./load.csh >>& do.log & tail -f do.log
 
 
 #############################################################################
-# FILTER SNP138 (DONE 10/14/13 angie)
+# FILTER SNP138 (DONE 10/22/13 angie)
    # Redmine #11438
    # Make several tracks that are filtered subsets of snp138:
    # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp138Mult
@@ -24250,18 +24252,23 @@ EOF
    zcat snp138.bed.gz \
    | ~/kent/src/hg/utils/automation/categorizeSnps.pl
 #Mult:     3616194
-#Common:   14056627
+#Common:   14056510
 #Flagged:  90349
-#leftover: 46502044
+#leftover: 46502161
    foreach f ({Mult,Common,Flagged}.bed.gz)
      mv $f snp138$f
    end
+   # Compare to counts from before fixing #11954 ('-' appearing twice in alleles):
+#Mult:     3616194
+#Common:   14056627
+#Flagged:  90349
+#leftover: 46502044
    # Compare to counts from before counting 100% non-reference as common:
 #snp138Mult:    3616194
 #snp138Common:  14038502
 #snp138Flagged: 90351
 #leftover:      46520167
-   # Compare to counts from before fixing allele freqs:
+   # Compare to counts from before fixing allele freq strand bug:
 #snp138Mult:    3616194
 #snp138Common:  14057590
 #snp138Flagged: 90189

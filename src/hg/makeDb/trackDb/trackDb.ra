@@ -1474,7 +1474,7 @@ shortLabel Common SNPs(137)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Found in >= 1% of Samples
 group varRep
 priority 99.0901
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp137Seq

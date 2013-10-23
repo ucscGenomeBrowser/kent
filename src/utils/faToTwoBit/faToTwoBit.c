@@ -17,10 +17,10 @@ errAbort(
   "usage:\n"
   "   faToTwoBit in.fa [in2.fa in3.fa ...] out.2bit\n"
   "options:\n"
-  "   -noMask       Ignore lower-case masking in fa file.\n"
-  "   -stripVersion Strip off version number after '.' for GenBank accessions.\n"
-  "   -ignoreDups   Convert first sequence only if there are duplicate sequence\n"
-  "                 names.  Use 'twoBitDup' to find duplicate sequences."
+  "   -noMask        Ignore lower-case masking in fa file.\n"
+  "   -stripVersion  Strip off version number after '.' for GenBank accessions.\n"
+  "   -ignoreDups    Convert first sequence only if there are duplicate sequence\n"
+  "                  names.  Use 'twoBitDup' to find duplicate sequences."
   );
 }
 
