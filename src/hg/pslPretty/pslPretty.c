@@ -27,7 +27,7 @@ errAbort(
   "   -long            Don't abbreviate long inserts.\n"
   "   -check=fileName  Output alignment checks to filename.\n" 
   "It's recommended that the psl file be sorted by target if it contains\n"
-  "multiple targets; otherwise this will be extremely slow. The target and query\n"
+  "multiple targets; otherwise, this will be extremely slow. The target and query\n"
   "lists can be fasta, 2bit or nib files, or a list of these files, one per line.\n");
 }
 

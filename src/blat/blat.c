@@ -97,7 +97,7 @@ printf(
   "                  Default is 11 for DNA and 5 for protein.\n"
   "   -stepSize=N    Spacing between tiles. Default is tileSize.\n"
   "   -oneOff=N      If set to 1, this allows one mismatch in tile and still\n"
-  "                  triggers an alignments.  Default is 0.\n"
+  "                  triggers an alignment.  Default is 0.\n"
   "   -minMatch=N    Sets the number of tile matches.  Usually set from 2 to 4.\n"
   "                  Default is 2 for nucleotide, 1 for protein.\n"
   "   -minScore=N    Sets minimum score.  This is the matches minus the \n"
@@ -122,7 +122,7 @@ printf(
   "                    upper - mask out upper-cased sequence\n"
   "                    out   - mask according to database.out RepeatMasker .out file\n"
   "                    file.out - mask database according to RepeatMasker file.out\n"
-  "   -qMask=type    Mask out repeats in query sequence.  Similar to -mask above but\n"
+  "   -qMask=type    Mask out repeats in query sequence.  Similar to -mask above, but\n"
   "                  for query rather than target sequence.\n"
   "   -repeats=type  Type is same as mask types above.  Repeat bases will not be\n"
   "                  masked in any way, but matches in repeat areas will be reported\n"
@@ -150,7 +150,7 @@ printf(
   "   -fine          For high-quality mRNAs, look harder for small initial and\n"
   "                  terminal exons.  Not recommended for ESTs.\n"
   "   -maxIntron=N  Sets maximum intron size. Default is %d.\n"
-  "   -extendThroughN Allows extension of alignment through large blocks of Ns.\n"
+  "   -extendThroughN  Allows extension of alignment through large blocks of Ns.\n"
   , gfVersion, MAXSINGLEPIECESIZE, ffIntronMaxDefault
   );
 exit(-1);

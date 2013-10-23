@@ -32,8 +32,8 @@ errAbort(
    "   the first or second pass respectively of the sort.\n"
    "\n"
    "options:\n"
-   "   -nohead    Do not write psl header.\n"
-   "   -verbose=N Set verbosity level, higher for more output. Default is 1.\n"
+   "   -nohead      Do not write psl header.\n"
+   "   -verbose=N   Set verbosity level, higher for more output. Default is 1.\n"
    );
 }
 

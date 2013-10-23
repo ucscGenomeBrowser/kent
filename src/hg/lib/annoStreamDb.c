@@ -301,6 +301,8 @@ if (sSelf->chrom != NULL)
 	sqlDyStringPrintf(query, "order by %s ", self->startField);
     sqlDyStringPrintf(query, "limit %d", queryMaxItems);
     bufferRowsFromSqlQuery(self, query->string, queryMaxItems);
+    if (self->rowBuf.size == 0)
+	self->eof = TRUE;
     }
 else
     {
