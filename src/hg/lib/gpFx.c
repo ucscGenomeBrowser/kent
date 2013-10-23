@@ -343,10 +343,10 @@ offset += exonOffset;
 return offset;
 }
 
-static char *getCodingSequence(struct genePred *pred, char *transcriptSequence, struct lm *lm)
-/* Extract the CDS from a transcript. Temporarily force transcriptSequence to + strand
- * so we can work in + strand coords, then restore transcriptSequence and put result
- * on correct strand. */
+static char *getCodingSequenceSimple(struct genePred *pred, char *transcriptSequence, struct lm *lm)
+/* Extract the CDS from a transcript, assuming frame is 0 for all coding exons.
+ * Temporarily force transcriptSequence to + strand so we can work in + strand coords,
+ * then restore transcriptSequence and put result on correct strand. */
 {
 if (*pred->strand == '-')
     reverseComplement(transcriptSequence, strlen(transcriptSequence));
@@ -366,6 +366,102 @@ if (*pred->strand == '-')
     }
 
 return newString;
+}
+
+INLINE int calcMissingBases(struct genePred *pred, int exonIx, int cdsOffset)
+/* If pred's exonFrame differs from the frame that we expect based on number
+ * of CDS bases collected so far, return the number of 'N's we need to add
+ * in order to restore the reading frame. */
+{
+int missingBases = 0;
+int exonFrame = pred->exonFrames[exonIx];
+if (exonFrame >= 0)
+    {
+    int startingFrame = cdsOffset % 3;
+    missingBases = exonFrame - startingFrame;
+    if (missingBases < 0)
+	missingBases += 3;
+    }
+return missingBases;
+}
+
+static char *getCodingSequence(struct genePred *pred, char *transcriptSequence,
+			       boolean *retAddedBases, struct lm *lm)
+/* Extract the CDS sequence from a transcript.  If pred has exonFrames, add 'N' where
+ * needed (for example, if the coding region begins out-of-frame, add one or two 'N's
+ * at the beginning of the cds sequence) and set retAddedBases if we do add 'N'.
+ * If pred doesn't have exonFrames, use the simple method above. */
+{
+if (retAddedBases)
+    *retAddedBases = FALSE;
+if (pred->optFields & genePredExonFramesFld)
+    {
+    boolean isRc = (pred->strand[0] == '-');
+    int i, iStart = 0, iIncr = 1;
+    if (isRc)
+	{
+	iStart = pred->exonCount-1;
+	iIncr = -1;
+	}
+    char *cdsSeq = lmAlloc(lm, genePredCdsSize(pred) + 3 * pred->exonCount);
+    int txOffset = getCodingOffsetInTx(pred, pred->strand[0]), cdsOffset = 0;
+    for (i = iStart;  i >= 0 && i < pred->exonCount;  i += iIncr)
+	{
+	int start, end;
+	if (genePredCdsExon(pred, i, &start, &end))
+	    {
+	    int exonCdsSize = end - start;
+	    int missingBases = calcMissingBases(pred, i, cdsOffset);
+	    if (missingBases > 0)
+		{
+		if (retAddedBases)
+		    *retAddedBases = TRUE;
+		while (missingBases > 0)
+		    {
+		    cdsSeq[cdsOffset++] = 'N';
+		    missingBases--;
+		    }
+		}
+	    memcpy(&cdsSeq[cdsOffset], &transcriptSequence[txOffset], exonCdsSize);
+	    cdsOffset += exonCdsSize;
+	    txOffset += exonCdsSize;
+	    }
+	}
+    return cdsSeq;
+    }
+else
+    return getCodingSequenceSimple(pred, transcriptSequence, lm);
+}
+
+static int getCorrectedCdsOffset(struct genePred *pred, int cdsOffsetIn)
+/* Increment cdsOffset for each 'N' that getCodingSequence added prior to it. */
+{
+int totalMissingBases = 0;
+int cdsOffsetSoFar = 0;
+if (pred->optFields & genePredExonFramesFld)
+    {
+    boolean isRc = (pred->strand[0] == '-');
+    int i, iStart = 0, iIncr = 1;
+    if (isRc)
+	{
+	iStart = pred->exonCount-1;
+	iIncr = -1;
+	}
+    for (i = iStart;  i >= 0 && i < pred->exonCount;  i += iIncr)
+	{
+	int start, end;
+	if (genePredCdsExon(pred, i, &start, &end))
+	    {
+	    // Don't count missing bases after cdsOffsetIn:
+	    if (cdsOffsetSoFar > cdsOffsetIn)
+		break;
+	    int exonCdsSize = end - start;
+	    totalMissingBases += calcMissingBases(pred, i, cdsOffsetSoFar + totalMissingBases);
+	    cdsOffsetSoFar += exonCdsSize;
+	    }
+	}
+    }
+return cdsOffsetIn + totalMissingBases;
 }
 
 static char *lmSimpleTranslate(struct lm *lm, char *dna, int size)
@@ -408,7 +504,7 @@ while (p[0] != '\0' && p[1] != '\0' && p[2] != '\0')
 }
 
 static char *gpFxModifyCodingSequence(char *oldCodingSeq, struct genePred *pred,
-				      struct txCoords *txc, struct allele *allele,
+				      int startInCds, int endInCds, struct allele *allele,
 				      int *retCdsBasesAdded, struct lm *lm)
 /* Return a new coding sequence that is oldCodingSeq with allele applied. */
 {
@@ -420,10 +516,10 @@ if (isRc)
     newAlleleSeq = lmCloneString(lm, allele->sequence);
     reverseComplement(newAlleleSeq, newAlLen);
     }
-int variantSizeOnCds = txc->endInCds - txc->startInCds;
+int variantSizeOnCds = endInCds - startInCds;
 if (variantSizeOnCds < 0)
-    errAbort("gpFx: endInCds (%d) < startInCds (%d)", txc->endInCds, txc->startInCds);
-char *newCodingSeq = mergeAllele(oldCodingSeq, txc->startInCds, variantSizeOnCds,
+    errAbort("gpFx: endInCds (%d) < startInCds (%d)", endInCds, startInCds);
+char *newCodingSeq = mergeAllele(oldCodingSeq, startInCds, variantSizeOnCds,
 				 newAlleleSeq, allele->length, lm);
 // If newCodingSequence has an early stop, truncate there:
 truncateAtStopCodon(newCodingSeq);
@@ -543,12 +639,21 @@ static struct gpFx *gpFxChangedCds(struct allele *allele, struct genePred *pred,
 /* calculate effect of allele change on coding transcript */
 {
 // calculate original and variant coding DNA and AA's
-char *oldCodingSequence = getCodingSequence(pred, transcriptSequence->dna, lm);
+boolean addedBasesForFrame = FALSE;
+char *oldCodingSequence = getCodingSequence(pred, transcriptSequence->dna, &addedBasesForFrame, lm);
+int startInCds = txc->startInCds, endInCds = txc->endInCds;
+if (addedBasesForFrame)
+    {
+    // The annotated CDS exons were not all in frame, so getCodingSequence added 'N's
+    // and now we can't simply use txc->startInCds.
+    startInCds = getCorrectedCdsOffset(pred, txc->startInCds);
+    endInCds = getCorrectedCdsOffset(pred, txc->endInCds);
+    }
 int oldCdsLen = strlen(oldCodingSequence);
 char *oldaa = lmSimpleTranslate(lm, oldCodingSequence, oldCdsLen);
 int cdsBasesAdded = 0;
-char *newCodingSequence = gpFxModifyCodingSequence(oldCodingSequence, pred, txc, allele,
-						   &cdsBasesAdded, lm);
+char *newCodingSequence = gpFxModifyCodingSequence(oldCodingSequence, pred, startInCds, endInCds,
+						   allele, &cdsBasesAdded, lm);
 int newCdsLen = strlen(newCodingSequence);
 char *newaa = lmSimpleTranslate(lm, newCodingSequence, newCdsLen);
 
@@ -558,15 +663,15 @@ struct gpFx *effect = gpFxNew(allele->sequence, pred->name, coding_sequence_vari
 			      lm);
 struct codingChange *cc = &effect->details.codingChange;
 cc->cDnaPosition = txc->startInCdna;
-cc->cdsPosition = txc->startInCds;
+cc->cdsPosition = startInCds;
 cc->exonNumber = exonIx;
-int pepPos = txc->startInCds / 3;
+int pepPos = startInCds / 3;
 // At this point we don't use genePredExt's exonFrames field -- we just assume that
 // the CDS starts in frame.  That's not always the case (e.g. ensGene has some CDSs
 // that begin out of frame), so watch out for early truncation of oldCodingSequence
 // due to stop codon in the wrong frame:
 if (pepPos >= strlen(oldaa))
-    return NULL;
+    return effect;
 cc->pepPosition = pepPos;
 if (cdsBasesAdded % 3 == 0)
     {
