@@ -394,6 +394,8 @@ if (retRJFilterFailed && *retRJFilterFailed)
 
 struct annoRow *outRows = NULL;
 
+int hasFrames = (asColumnFindIx(gSelf->mySource->asObj->columnList, "exonFrames") >= 0);
+
 for(; rows; rows = rows->next)
     {
     char **inWords = rows->data;
@@ -401,7 +403,8 @@ for(; rows; rows = rows->next)
     // work around genePredLoad's trashing its input
     char *saveExonStarts = lmCloneString(self->lm, inWords[8]);
     char *saveExonEnds = lmCloneString(self->lm, inWords[9]);
-    struct genePred *gp = genePredLoad(inWords);
+    struct genePred *gp = hasFrames ? genePredExtLoad(inWords, GENEPREDX_NUM_COLS) :
+				      genePredLoad(inWords);
     inWords[8] = saveExonStarts;
     inWords[9] = saveExonEnds;
 
