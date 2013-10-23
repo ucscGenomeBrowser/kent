@@ -622,9 +622,6 @@ if (isEmpty(s))
 return sameWord(s, "n/a");
 }
 
-char *edwSupportedEnrichedIn[] = {"unknown", "exon", "intron", "promoter", "coding", 
-    "utr", "utr3", "utr5", "open"};
-int edwSupportedEnrichedInCount = ArraySize(edwSupportedEnrichedIn);
 
 void edwParseSubmitFile(struct sqlConnection *conn, char *submitLocalPath, char *submitUrl, 
     struct submitFileRow **retSubmitList)
@@ -679,7 +676,7 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	if (!isAllNum(replicate))
 	    errAbort("%s is not a good value for the replicate column", replicate);
     char *enriched = row[enrichedIx];
-    if (stringArrayIx(enriched, edwSupportedEnrichedIn, edwSupportedEnrichedInCount) < 0)
+    if (!encode3CheckEnrichedIn(enriched))
         errAbort("Enriched_in %s is not supported", enriched);
     char *md5 = row[md5Ix];
     if (strlen(md5) != 32 || !isAllHexLower(md5))

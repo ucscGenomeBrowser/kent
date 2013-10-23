@@ -114,4 +114,12 @@ carefulClose(&f);
 return first == 0x1F && second == 0x8B;
 }
 
+static char *edwSupportedEnrichedIn[] = {"unknown", "exon", "intron", "promoter", "coding",
+    "utr", "utr3", "utr5", "open"};
+static int edwSupportedEnrichedInCount = ArraySize(edwSupportedEnrichedIn);
 
+boolean encode3CheckEnrichedIn(char *enriched)
+/* return TRUE if value is allowed */
+{
+return (stringArrayIx(enriched, edwSupportedEnrichedIn, edwSupportedEnrichedInCount) >= 0);
+}
