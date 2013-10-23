@@ -61,6 +61,7 @@ url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_
 urlLabel Click here for primer details:
 
 track snp137Common override
+visibilty dense
 snpSeqFile /gbdb/mm10/snp/snp137.fa
 
 track snp137Mult override
