@@ -130,7 +130,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Patch10
 	sacCer1 sacCer2 sacCer3 \
 	sc1 \
 	h1n1 \
-	centromers1 \
+	centromeres1 \
 	repeats2
 
 
