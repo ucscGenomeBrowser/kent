@@ -1850,6 +1850,39 @@ return count;
 
 // ----------------- Utilities -----------------
 
+struct hash *mdbObjsHash(struct mdbObj *mdbObjs)
+// Returns a hash object for this set of mdbObjs, keyed on the obj.
+// WARNING: any changes to the members of the mdbObjs list may lead to invalid pointers in the hash
+{
+if (mdbObjs == NULL)
+    return NULL;
+
+struct hash *objsHash = hashNew(8);
+struct mdbObj *mdbObj = mdbObjs;
+for (;mdbObj!=NULL;mdbObj=mdbObj->next)
+    {
+    hashAdd(objsHash, mdbObj->obj, mdbObj);
+    }
+return objsHash;
+}
+
+struct mdbObj *mdbObjLookUp(struct hash *mdbObjsHash, char *obj)
+// Returns an mdbObj from the objsHash
+// WARNING: any changes to the members of the mdbObjs list used to make the mdbObjsHash
+// may lead to invalid pointers in the hash
+{
+if (mdbObjsHash == NULL || obj == NULL)
+    return NULL;
+
+return hashFindVal(mdbObjsHash,obj);
+}
+
+void mdbObjsHashFree(struct hash **pMdbObjsHash)
+// Frees an mdbObjs hash.
+{
+hashFree(pMdbObjsHash);
+}
+
 struct mdbVar *mdbObjFind(struct mdbObj *mdbObj, char *var)
 // Finds the mdbVar associated with the var or returns NULL
 {

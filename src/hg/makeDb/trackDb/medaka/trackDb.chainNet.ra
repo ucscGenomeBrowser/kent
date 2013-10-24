@@ -3,10 +3,14 @@
 track chainNetGasAcu1 override
 priority 210.3
 
+track chainNetFr3 override
+priority 220.3
+
 track chainNetFr2 override
 priority 220.3
 chainMinScore 3000
 chainLinearGap medium
+shortLabel $o_db Chain/Net
 
 track chainNetTetNig2 override
 priority 230.3
@@ -28,10 +32,11 @@ track chainNetDanRer6 override
 priority 240.3
 chainMinScore 3000
 chainLinearGap medium
+shortLabel $o_db Chain/Net
 
 track chainNetDanRer5 override
 priority 240.3
-shortLabel $o_db chainNet
+shortLabel $o_db Chain/Net
 chainMinScore 3000
 chainLinearGap medium
 
@@ -50,11 +55,18 @@ shortLabel $o_db Chain/Net
         track netDanRer4 override
         shortLabel $o_db Chain
 
+track chainNetMm10 override
+priority 530.3
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
 track chainNetMm9 override
 priority 530.3
 chainMinScore 5000
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+shortLabel $o_db Chain/Net
 
 track chainNetHg19 override
 priority 640.3
@@ -82,3 +94,4 @@ track chainNetPetMar1 override
 priority 650.3
 chainMinScore 3000
 chainLinearGap medium
+shortLabel $o_db Chain/Net

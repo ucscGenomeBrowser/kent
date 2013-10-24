@@ -478,7 +478,7 @@ However, in the <I>qStarts</I> list, the coordinates are reversed.</P>
 <P>
 <B><I>Example:</I></B><BR>
 Here is a 61-mer containing 2 blocks that align on the minus strand and
-2 blocks that align on the plus strand (this sometimes can happen in response to assembly errors): 
+2 blocks that align on the plus strand (this sometimes happens due to assembly errors): 
 <BR><BR>
 <PRE>
 0         1         2         3         4         5         6 tens position in query  
@@ -502,7 +502,7 @@ Minus strand:
 </PRE>
 Essentially, the minus strand <I>blockSizes</I> and <I>qStarts</I> are
 what you would get if you reverse-complemented the query.
-However, the <I>qStart</I> and <I>qEnd</I> are not reversed. To convert one to the other:
+However, the <I>qStart</I> and <I>qEnd</I> are not reversed. Use the following formulas to convert one to the other:
 <PRE>
      Negative-strand-coordinate-qStart = qSize - qEnd   = 61 - 56 =  5
      Negative-strand-coordinate-qEnd   = qSize - qStart = 61 -  4 = 57
@@ -521,11 +521,14 @@ GCAAG<br>
 
 
 <br>
-Look for the alignment on chr21 negative strand(-).<br>
-Conveniently aligned to the window chr21:10,000,001-10,000,061.<br>
-This corresponds to coordinates to a start coordinate of 10,000,000 in the psl.<br>
-Subtracting 10 million from the target psl chromsome position will give the query negative strand coordinate above.<br>
-Note that the browser window coordinates are 1-based [start,end] while psl coordinates are 0-based [start,end).<br>
+Look for the alignment on the negative strand (-) of chr21, which
+conveniently aligns to the window chr21:10,000,001-10,000,061.<br>
+
+<br>
+Browser window coordinates are 1-based [start,end] while psl coordinates are 0-based [start,end), so a start of 10,000,001
+in the browser corresponds to a start of 10,000,000 in the psl. Subtracting 10,000,000 from the target (chromosome) position
+in psl gives the query negative strand coordinate above.<br>
+
 <br>
 The 4, 14, and 5 bases at beginning, middle, and end were
 chosen to not match with the genome at the corresponding position.<br>

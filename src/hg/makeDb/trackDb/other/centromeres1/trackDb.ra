@@ -7,7 +7,7 @@ track monomers
 shortLabel Monomers
 longLabel Higher Order Repeat
 group genes
-visibility dense
+visibility pack
 color 255,140,0
 type bed 4
 

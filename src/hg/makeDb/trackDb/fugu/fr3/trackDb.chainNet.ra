@@ -1,3 +1,6 @@
+track chainNetMm9 override
+shortLabel $o_db Chain/Net
+
 track chainNetOryLat2 override
 priority 220.3
 chainMinScore 2000

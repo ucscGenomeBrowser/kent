@@ -16,4 +16,7 @@ void encode3ValidateIdat(char *path);
 boolean encode3IsGzipped(char *path);
 /* Return TRUE if file at path starts with GZIP signature */
 
+boolean encode3CheckEnrichedIn(char *enriched);
+/* return TRUE if value is allowed */
+
 #endif /* ENCODE3VALID_H */

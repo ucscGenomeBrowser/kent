@@ -493,7 +493,7 @@ struct outputType otMicroarrayGroupings = { NULL, outMicroarrayGroupings, "micro
 
 static void showOutputTypeRow(boolean isWig, boolean isBedGr,
     boolean isPositional, boolean isMaf, boolean isChromGraphCt,
-    boolean isPal, boolean isMicroarray)
+    boolean isPal, boolean isMicroarray, boolean isHalSnake)
 /* Print output line. */
 {
 struct outputType *otList = NULL, *otDefault = NULL;
@@ -517,6 +517,10 @@ else if (isWig)
     slAddTail(&otList, &otWigData);
     slAddTail(&otList, &otWigBed);
     slAddTail(&otList, &otCustomTrack);
+    }
+else if (isHalSnake)
+    {
+    slAddTail(&otList, &otMaf);
     }
 else if (isMaf)
     {
@@ -572,7 +576,7 @@ void showMainControlTable(struct sqlConnection *conn)
 {
 struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
-        isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE, isVcf = FALSE;
+        isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE, isVcf = FALSE, isHalSnake = FALSE;
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
@@ -643,6 +647,7 @@ hPrintf("<TABLE BORDER=0>\n");
         isPositional = TRUE;
         isWig = TRUE;
         }
+    isHalSnake = isHalTable( curTable);
     isMaf = isMafTable(database, curTrack, curTable);
     isBedGr = isBedGraph(curTable);
     isArray = isMicroarray(curTrack, curTable);
@@ -843,7 +848,7 @@ if (correlateTrackTableOK(tdb, curTable))
     }
 
 /* Print output type line. */
-showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, isArray);
+showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, isArray, isHalSnake);
 
 /* Print output destination line. */
     {
