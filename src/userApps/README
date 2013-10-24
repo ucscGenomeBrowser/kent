@@ -159,8 +159,8 @@ the additional packages required (and helpful):
 On a typical Linux system, for example Ubuntu, use the apt-get command
 to install additional packages:
 
-   sudo apt-get install git libssl-dev openssl mysql-client-5.1 \
-      mysql-client-core-5.1
+   sudo apt-get install git libssl-dev openssl mysql-client-5.5 \
+      mysql-client-core-5.5
 
 Depending upon the version of your Linux/Ubuntu/CentOS operating system,
 the specific version of packages you need may be different than this example.
