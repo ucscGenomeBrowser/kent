@@ -39,7 +39,7 @@ FILE *f = mustOpen(output, "w");
 int sampleSize = sqlUnsigned(sampleSizeString);
 int totalSize = sqlUnsigned(totalSizeString);
 if (sampleSize > totalSize)
-    errAbort("Sample size greater thatn totalSize");
+    errAbort("Sample size greater than totalSize");
 
 /* Make up an array of values 0-totalSize-1, and shuffle it randomly. */
 int *array;
@@ -56,22 +56,25 @@ intSort(sampleSize, array);
  * guided by sorted array. */
 samfile_t *sf = samopen(inputBam, "rb", NULL);
 bam_header_t *bamHeader = sf->header;
-bam1_t one;
-ZeroVar(&one);	// This seems to be necessary!
+bam1_t one, tryOne;
+ZeroVar(&one);	  // This seems to be necessary!
+ZeroVar(&tryOne); // This seems to be necessary!
 int curPos = 0;
 for (i=0; i<sampleSize; ++i)
     {
     int nextPos = array[i];
     while (++curPos <= nextPos)
         {
-	int err = bam_read1(sf->x.bam, &one);
+	int err = bam_read1(sf->x.bam, &tryOne);
 	if (err < 0)
 	    errAbort("Couldn't get sample %d from %s", nextPos, inputBam);
+	if (tryOne.core.tid >= 0)
+	    one = tryOne;
 	}
 
     int32_t tid = one.core.tid;
     int l_qseq = one.core.l_qseq;
-    if (tid > 0)
+    if (tid >= 0)
        {
        char *chrom = bamHeader->target_name[tid];
        int start = one.core.pos;

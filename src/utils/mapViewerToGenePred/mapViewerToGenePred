@@ -12,7 +12,7 @@ An example for Homo sapiens is seq_gene.md.gz
 """)
 
 parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
-parser.add_option("-a", "--assembly", dest="assembly", action="store", help="The assemly to use, default %default", default="Primary_Assembly") 
+parser.add_option("-a", "--assembly", dest="assembly", action="store", help="The assembly to use, default %default", default="Primary_Assembly") 
 #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
 (options, args) = parser.parse_args()
 

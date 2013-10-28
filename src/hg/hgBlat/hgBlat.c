@@ -524,7 +524,7 @@ if(feelingLucky && seqList != NULL)
     }
 
 /* Figure out size allowed. */
-maxSingleSize = (isTx ? 10000 : 25000);
+maxSingleSize = (isTx ? 10000 : 75000);
 maxTotalSize = maxSingleSize * 2.5;
 #ifdef LOWELAB
 maxSeqCount = 200;

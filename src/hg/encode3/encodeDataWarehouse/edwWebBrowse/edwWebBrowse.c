@@ -112,7 +112,9 @@ char query[256];
 sqlSafef(query, sizeof(query), 
     "select v.* from edwFile f,edwValidFile v"
     "  where f.id = v.fileId and f.submitId=%u and v.replicate != '' and v.replicate != 'n/a' "
-    "  and v.replicate != 'pooled' and v.replicate != 'both'",
+    "  and v.replicate != 'pooled'",
+    // If expanding this list of special replicate case, remember to expand bits in 
+    // edwMakeReplicateQa as well
     submit->id);
 return edwValidFileLoadByQuery(conn, query);
 }
