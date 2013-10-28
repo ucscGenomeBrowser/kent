@@ -10,3 +10,7 @@ validateManifest (vm) Versions Log
     For fastq: only allow .gz
     Add single quotes around the fileName output so trailing spaces are visible in the error message.
     Add checks for blank strings for ucsc_db and output_type.
+    Add --help option to show usage.
+    Restrict replicate small number to 1 to 10 only (for now).
+    Add a new optional column technical_replicate that has the same behavior as replicate.
+    Add a new optional column paired_end that accepts 1(forward) 2(reverse) or "n/a".
