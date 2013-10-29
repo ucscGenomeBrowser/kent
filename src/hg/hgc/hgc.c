@@ -1575,16 +1575,8 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("<br><table>");
     count++;
     printf("<tr><td><B>%s:</B></td>", col->comment);
-    if (col->isList || col->isArray || col->lowType->stringy)
+    if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
-    else if (asTypesIsInt(col->lowType->type))
-        {
-        long valInt = strtol(fields[ix],NULL,10);
-        if (errno == 0 && valInt != 0)
-            printf("<td>%ld</td></tr>\n", valInt);
-        else
-            printf("<td>%s</td></tr>\n", fields[ix]); // decided not to print error
-        }
     else if (asTypesIsFloating(col->lowType->type))
         {
         double valDouble = strtod(fields[ix],NULL);
