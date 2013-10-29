@@ -58,7 +58,7 @@ ifeq (${USE_SSL},1)
     ifeq (${FULLWARN},hgwdev)
        L+=/cluster/home/hiram/kent/src/lib/x86_64/libssl.a /cluster/home/hiram/kent/src/lib/x86_64/libcrypto.a -lkrb5
     else
-       L+=-lsslx -lcryptox
+       L+=-lssl -lcrypto
     endif
     HG_DEFS+=-DUSE_SSL
 endif
