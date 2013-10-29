@@ -141,15 +141,15 @@ if ((keepNumbers) && (arg[0] == '-'))
     int num_dec = 0;
     int num_dig = 0;
     int num_other = 0;
-    while (i < strlen(arg)
+    while (i < strlen(arg))
 	{
-	    if (isdigit(arg[i]))
-		num_dig++;
-	    else if (arg[i] == '.')
-		num_dec++;
-	    else
-		num_other++;
-	    i++;
+	if (isdigit(arg[i]))
+	    num_dig++;
+	else if (arg[i] == '.')
+	    num_dec++;
+	else
+	    num_other++;
+	i++;
 	}
 	if ((num_dig > 0) && (num_dec < 2) && (num_other == 0))
 	    return FALSE;
@@ -255,7 +255,7 @@ struct hash *optionParseIntoHash(int *pArgc, char *argv[], boolean justFirst)
 return parseOptions(pArgc, argv, justFirst, NULL, FALSE);
 }
 
-struct hash *optionParseIntoHashExceptNumbers(int *pArgc, char *argv[], boolean justFirst);
+struct hash *optionParseIntoHashExceptNumbers(int *pArgc, char *argv[], boolean justFirst)
 /* Read options in argc/argv into a hash (except negative numbers) of your own choosing. */
 {
 return parseOptions(pArgc, argv, justFirst, NULL, TRUE);
