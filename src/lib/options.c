@@ -117,10 +117,11 @@ switch (spec->flags & OPTION_TYPE_MASK)
     }
 }
 
-static boolean parseAnOption(struct hash *hash, char *arg, struct optionSpec *optionSpecs)
+static boolean parseAnOption(struct hash *hash, char *arg, struct optionSpec *optionSpecs, boolean keepNumbers)
 /* Parse a single option argument and add to the hash, validating if
  * optionSpecs is not NULL.  Return TRUE if it's arg is an option argument
- * FALSE if it's not.
+ * FALSE if it's not.  If boolean keepNumbers is set, then return FALSE 
+ * when encountering negative ints or floats.
  */
 {
 char *name, *val;
@@ -133,6 +134,26 @@ if (!((eqPtr != NULL) || (arg[0] == '-')))
  * negative strand for some of the DNA oriented utilities. */
 if (arg[0] == '-' && (arg[1] == 0 || isspace(arg[1])))
     return FALSE;
+
+if ((keepNumbers) && (arg[0] == '-'))
+    {
+    int i = 1;
+    int num_dec = 0;
+    int num_dig = 0;
+    int num_other = 0;
+    while (i < strlen(arg)
+	{
+	    if (isdigit(arg[i]))
+		num_dig++;
+	    else if (arg[i] == '.')
+		num_dec++;
+	    else
+		num_other++;
+	    i++;
+	}
+	if ((num_dig > 0) && (num_dec < 2) && (num_other == 0))
+	    return FALSE;
+    }
 
 /* We treat this=that as an option only if the '=' happens before any non-alphanumeric
  * characters.  This lets us have URLs and SQL statements in the command line even though
@@ -181,7 +202,7 @@ return TRUE;
 
 
 static struct hash *parseOptions(int *pArgc, char *argv[], boolean justFirst,
-                                 struct optionSpec *optionSpecs)
+                                 struct optionSpec *optionSpecs, boolean keepNumbers)
 /* Parse and optionally validate options */
 {
 int i, origArgc, newArgc = 1;
@@ -199,7 +220,7 @@ for (i=1; i<origArgc; ++i)
         i++;
         break;
         }
-    if (!parseAnOption(hash, *rdPt, optionSpecs))
+    if (!parseAnOption(hash, *rdPt, optionSpecs, keepNumbers))
         {
         /* not an option */
         if (justFirst)
@@ -231,7 +252,13 @@ struct hash *optionParseIntoHash(int *pArgc, char *argv[], boolean justFirst)
  * The resulting hash will be keyed by the option name with the val
  * string for value.  For '-option' types the value is 'on'. */
 {
-return parseOptions(pArgc, argv, justFirst, NULL);
+return parseOptions(pArgc, argv, justFirst, NULL, FALSE);
+}
+
+struct hash *optionParseIntoHashExceptNumbers(int *pArgc, char *argv[], boolean justFirst);
+/* Read options in argc/argv into a hash (except negative numbers) of your own choosing. */
+{
+return parseOptions(pArgc, argv, justFirst, NULL, TRUE);
 }
 
 static struct hash *options = NULL;
@@ -252,7 +279,7 @@ void optionHashSome(int *pArgc, char *argv[], boolean justFirst)
 {
 if (options == NULL)
     {
-    struct hash *hash = parseOptions(pArgc, argv, justFirst, NULL);
+    struct hash *hash = parseOptions(pArgc, argv, justFirst, NULL, FALSE);
     setOptions(hash);
     }
 }
@@ -295,7 +322,7 @@ void optionInit(int *pArgc, char *argv[], struct optionSpec *optionSpecs)
 {
 if (options == NULL)
     {
-    struct hash *hash = parseOptions(pArgc, argv, FALSE, optionSpecs);
+    struct hash *hash = parseOptions(pArgc, argv, FALSE, optionSpecs, FALSE);
     setOptions(hash);
     optionSpecification = optionSpecs;
     }
