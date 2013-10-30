@@ -69,7 +69,7 @@ errAbort(
   "gfServer v %s - Make a server to quickly find where DNA occurs in genome\n"
   "   To set up a server:\n"
   "      gfServer start host port file(s)\n"
-  "      where the files are .nib or .2bit format files specified relative to the current directory.\n"
+  "      where the files are .nib or .2bit format files specified relative to the current directory\n"
   "   To remove a server:\n"
   "      gfServer stop host port\n"
   "   To query a server with DNA sequence:\n"
@@ -102,9 +102,9 @@ errAbort(
   "   -seqLog         Include sequences in log file (not logged with -syslog).\n"
   "   -ipLog          Include user's IP in log file (not logged with -syslog).\n"
   "   -syslog         Log to syslog.\n"
-  "   -logFacility=facility Log to the specified syslog facility - default local0.\n"
+  "   -logFacility=facility  Log to the specified syslog facility - default local0.\n"
   "   -mask           Use masking from nib file.\n"
-  "   -repMatch=N     Number of occurrences of a tile (nmer) that triggers repeat masking the\n"
+  "   -repMatch=N     Number of occurrences of a tile (n-mer) that triggers repeat masking the\n"
   "                   tile. Default is %d.\n"
   "   -maxDnaHits=N   Maximum number of hits for a DNA query that are sent from the server.\n"
   "                   Default is %d.\n"
@@ -114,7 +114,7 @@ errAbort(
   "                   Default is %d.\n"
   "   -maxAaSize=N    Maximum size of protein or translated DNA queries.\n"
   "                   Default is %d.\n"
-  "   -canStop        If set then a quit message will actually take down the server.\n"
+  "   -canStop        If set, a quit message will actually take down the server.\n"
   ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize
   );
 

@@ -4,7 +4,7 @@ track chainNetFr2 override
 chainMinScore 2000
 
 track chainNetFr1 override
-shortLabel $o_db Chain
+shortLabel $o_db Chain/Net
 
 	track chainFr1 override
 	shortLabel $o_db Chain

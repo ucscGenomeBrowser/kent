@@ -239,6 +239,8 @@ for (chain = chainsHit; chain != NULL; chain = next)
         errAbort("Chain mapping error: %s:%d-%d\n", chain->qName, start, end);
     if (chain->qStrand == '-')
 	strand = otherStrand(qStrand);
+    else
+       	strand = qStrand;
     if (useThick)
 	{
 	struct chain *subChain2 = NULL;

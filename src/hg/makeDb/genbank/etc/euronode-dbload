@@ -16,7 +16,7 @@ gbRoot=/data2/genbank
 cd $gbRoot
 
 # update the etc, bin, and lib directories
-gbRRServer=rrnfs1.cse.ucsc.edu
+gbRRServer=hgnfs1.cse.ucsc.edu
 gbRRRoot=/genbank
 rsync -ra $rsyncOpts $gbRRServer:$gbRRRoot/etc $gbRRServer:$gbRRRoot/bin $gbRRServer:$gbRRRoot/lib .
 
