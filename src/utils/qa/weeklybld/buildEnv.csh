@@ -1,13 +1,13 @@
-# set these three for final build:
-setenv BRANCHNN 289
-setenv TODAY 2013-09-09             # v289 final
-setenv LASTWEEK  2013-08-19         # v288 final
 # set for preview 1:
-setenv REVIEWDAY 2013-09-16         # v290 preview
-setenv LASTREVIEWDAY 2013-08-26     # v289 preview
+setenv REVIEWDAY 2013-10-28             # v292 preview
+setenv LASTREVIEWDAY 2013-10-07         # v291 preview
 # set for preview 2:
-setenv REVIEW2DAY 2013-09-23        # v289 preview2
-setenv LASTREVIEW2DAY 2013-09-02    # v288 preview2
+setenv REVIEW2DAY 2013-10-14        # v291 preview2
+setenv LASTREVIEW2DAY 2013-09-23    # v290 preview2
+# set these three for final build:
+setenv BRANCHNN 291
+setenv TODAY 2013-10-21                # v291 final
+setenv LASTWEEK 2013-09-30             # v290 final
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
@@ -17,6 +17,9 @@ setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
 
 # see also paths in kent/java/build.xml
 setenv BUILDDIR $BUILDHOME
+# must get static MYSQL libraries, not the dynamic ones from the auto configuration
+setenv MYSQLINC /usr/include/mysql
+setenv MYSQLLIBS /usr/lib64/mysql/libmysqlclient.a
 setenv JAVABUILD /scratch/javaBuild
 setenv JAVA_HOME /usr/java/default
 setenv CLASSPATH .:/usr/share/java:/usr/java/default/jre/lib/rt.jar:/usr/java/default/jre/lib:/usr/share/java/httpunit.jar:/cluster/bin/java/jtidy.jar:/usr/share/java/rhino.jar:/cluster/bin/java/mysql-connector-java-3.0.16-ga-bin.jar

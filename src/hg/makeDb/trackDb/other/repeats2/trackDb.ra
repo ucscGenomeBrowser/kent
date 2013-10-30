@@ -71,6 +71,15 @@ type psl xeno hg19
 otherDb hg19
 priority 52
 
+track repPeps
+shortLabel RepeatMasker Peptides
+longLabel RepeatMasker Peptide Library
+group genes
+visibility dense
+color 30,30,0
+type psl
+priority 52
+
 track getOrf
 shortLabel ORFs
 longLabel Open Reading Frames found by EMBOSS getorf
@@ -122,7 +131,7 @@ itemDetailsHtmlTable myKnownGeneHtml
 
 track pwmEnsRel85
 shortLabel Persikov min 85%
-longLabel Persikov PWM matches, min rel energy 85%
+longLabel Persikov full-length matches, min rel energy 85%
 group regulation
 visibility hide
 color 30,90,30
@@ -134,7 +143,7 @@ url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
 
 track pwmEnsRel80
 shortLabel Persikov min 80%
-longLabel Persikov PWM matches, min rel energy 80%
+longLabel Persikov full-length matches, min rel energy 80%
 group regulation
 visibility hide
 color 30,90,30
@@ -252,5 +261,105 @@ color 0,0,100
 type bigWig 0 100
 priority 90
 allButtonPair on
+
+# greenberg tracks
+track greenberg
+shortLabel Dave annotations
+longLabel Dave annotations
+group x
+visibility hide
+color 30,30,100
+type psl .
+priority 30
+
+track vntr15
+shortLabel VNTR15 matches
+longLabel VNTR15 matches
+group x
+visibility hide
+color 30,30,100
+type psl .
+priority 30
+
+track hits7580
+shortLabel ZNF91 hits, 80%
+longLabel Persikov ZNF91, individual fingers matches: min information 0.75 bp, minimum relative score 80%
+group x
+visibility hide
+color 30,30,100
+type bed 5
+priority 29
+
+track hit75808To14
+shortLabel ZNF91 hits, 80%, ZF8-14
+longLabel Persikov ZNF91, finger 8-14 matches: min information 0.75 bp, minimum relative score 80%
+group x
+visibility hide
+color 30,30,100
+type bed 5
+priority 29
+
+track hit758019To25
+shortLabel ZNF91 hits, 80%, ZF19-25
+longLabel Persikov ZNF91, finger 19-25 matches: min information 0.75 bp, minimum relative score 80%
+group x
+visibility hide
+color 30,30,100
+type bed 5
+priority 29
+
+track hits7590
+shortLabel ZNF91 hits, 90%
+longLabel Persikov ZNF91, individual fingers matches: min information 0.75 bp, minimum relative score 90%
+group x
+visibility hide
+color 30,30,100
+type bed 5
+priority 29
+
+track hit75908To14
+shortLabel ZNF91 hits, 90%, ZF8-14
+longLabel Persikov ZNF91, finger 8-14 matches: min information 0.75 bp, minimum relative score 90%
+group x
+visibility hide
+color 30,30,100
+type bed 5
+priority 29
+
+track hit759019To25
+shortLabel ZNF91 hits, 90%, ZF19-24
+longLabel Persikov ZNF91, finger 19-25 matches: min information 0.75 bp, minimum relative score 90%
+group x
+visibility hide
+color 30,30,100
+type bed 5
+priority 29
+
+track chainedHits3290
+shortLabel Chained Matches 3/2/90
+longLabel Chained Matches, min 3 fingers, maximum inserts 2, min avg score 90%
+group x
+visibility hide
+color 30,30,100
+type bed 12
+priority 31
+
+track chainedHits3280
+shortLabel Chained Matches 3/2/80
+longLabel Chained Matches, min 3 fingers, maximum inserts 2, min avg score 80%
+group x
+visibility hide
+color 30,30,100
+type bed 12
+priority 31
+
+track chainedHits3090s0
+shortLabel Chained Matches 3/0/90
+longLabel Chained Matches, min 3 fingers, maximum inserts 0, min avg score 90%
+group x
+visibility hide
+color 30,30,100
+type bed 12
+priority 31
 
 include trackDb.tf.ra

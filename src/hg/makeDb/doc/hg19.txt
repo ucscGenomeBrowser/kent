@@ -24124,7 +24124,7 @@ TMPDIR=/scratch/tmp
 
 
 ##############################################################################
-# DBSNP B138 / SNP138 (DONE 8/19/13)
+# DBSNP B138 / SNP138 (DONE 10/21/13)
 # Redmine #11438
     mkdir -p /hive/data/outside/dbSNP/138/human
     cd /hive/data/outside/dbSNP/138/human
@@ -24200,6 +24200,10 @@ EOF
     # 8/19/13: rebuilding after fix #11544 -- many allele frequencies were combined
     # incorrectly due to stranded data (but not strand flag) in SNPAlleleFreq and
     # positive-strand-only data in SNPAlleleFreq_TGP.
+    # 10/11/13: I forgot to add the -deDupTGP argument to snpAddTGPAlleleFreq.pl !
+    # Re-running steps from snpAddTGPAlleleFreq.pl on, this time with -deDupTGP.
+    # 10/21/13: Jonathan noticed a SNP for which "-" appeared twice in alleles.
+    # Fixed, re-running again.
     cd /hive/data/outside/dbSNP/138/human
     mkdir preAlleleFreqFix
     mv ucscAlleleFreq.txt.gz snp138*.bed.gz preAlleleFreqFix/
@@ -24209,16 +24213,16 @@ EOF
     # Now re-run the updated snpAddTGPAlleleFreq.pl command:
     grep snpAdd addToDbSnp.csh
     ~/kent/src/hg/utils/automation/snpAddTGPAlleleFreq.pl hg19snp138 \
-      -contigLoc=b138_SNPContigLoc > ucscAlleleFreq.txt
+      -contigLoc=b138_SNPContigLoc -deDupTGP > ucscAlleleFreq.txt
     # Reload the ucscAlleleFreq table:
     hgLoadSqlTab hg19snp138 ucscAlleleFreq{,.sql,.txt} >>& do.log & tail -f do.log
     # Redo the big join:
-    mkdir -p `cat workingDir`
+    set tmpDir = `cat /hive/data/outside/dbSNP/138/human/workingDir`
+    mkdir -p $tmpDir
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue bigJoin -stop bigJoin \
       >>& do.log & tail -f do.log
    # Manually re-run snpNcbiToUcsc (the translate step includes fasta file concat
    # and indexing, which would waste a lot of time):
-   set tmpDir = `cat /hive/data/outside/dbSNP/138/human/workingDir`
    cd $tmpDir
    echo 'select * from par' | hgsql hg19 -NB > par.bed
    snpNcbiToUcsc -snp132Ext -par=par.bed ucscNcbiSnp.bed /hive/data/genomes/hg19/hg19.2bit snp138 \
@@ -24232,12 +24236,12 @@ EOF
    cp -p * /hive/data/outside/dbSNP/138/human/
    cd /hive/data/outside/dbSNP/138/human
    rm $tmpDir/*
-   ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue load \
-     >>& do.log & tail -f do.log
+   # Edit load.csh to skip snp138Seq -- it's huge and nothing changed there.
+   csh -efx ./load.csh >>& do.log & tail -f do.log
 
 
 #############################################################################
-# FILTER SNP138 (DONE 8/19/13 angie)
+# FILTER SNP138 (DONE 10/22/13 angie)
    # Redmine #11438
    # Make several tracks that are filtered subsets of snp138:
    # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp138Mult
@@ -24246,47 +24250,25 @@ EOF
    # w/dbSNP's "clinically-assoc" flag -> snp138Flagged
    cd /hive/data/outside/dbSNP/138/human
    zcat snp138.bed.gz \
-   | perl -we \
-     '$minTotal2N = 10; \
-      ($multCount, $comCount, $flagCount, $miscCount) = (0,0,0,0); \
-      open($mult, "| gzip -c > snp138Mult.bed.gz") || die; \
-      open($common,    "| gzip -c > snp138Common.bed.gz") || die; \
-      open($flagged,   "| gzip -c > snp138Flagged.bed.gz") || die; \
-      open($misc,      "| gzip -c > snp138Misc.bed.gz") || die; \
-      while (<>) { \
-        @w = split("\t"); \
-        if ($w[16] > 1 || $w[17] =~ /MultipleAlignments/) { \
-          print $mult $_; \
-          $multCount++; \
-        } else { \
-          my ($alleleFreqCount, $nStr, $freqStr) = ($w[20], $w[22], $w[23]); \
-          my @alNs = split(",", $nStr);      die unless scalar(@alNs) == $alleleFreqCount; \
-          my @freqs = split(",", $freqStr);  die unless scalar(@freqs) == $alleleFreqCount; \
-          my ($total2N, $maxAlleleFreq) = (0, 0); \
-          for (my $i = 0;  $i < $alleleFreqCount;  $i++) { \
-            $total2N += $alNs[$i]; \
-            $maxAlleleFreq = $freqs[$i] if ($freqs[$i] > $maxAlleleFreq); \
-          } \
-          if ($alleleFreqCount >= 2 && $total2N >= $minTotal2N && $maxAlleleFreq <= 0.99) { \
-            print $common $_; \
-            $comCount++; \
-          } elsif($w[24] =~ /clinically-assoc/)  { \
-            print $flagged $_; \
-            $flagCount++; \
-          } else { \
-            print $misc $_; \
-            $miscCount++; \
-          } \
-        } \
-      } \
-      close($mult);  close($common); close($flagged);  close($misc); \
-      print "snp138Mult:    $multCount\nsnp138Common:  $comCount\nsnp138Flagged: $flagCount\n" . \
-            "leftover:      $miscCount\n";'
+   | ~/kent/src/hg/utils/automation/categorizeSnps.pl
+#Mult:     3616194
+#Common:   14056510
+#Flagged:  90349
+#leftover: 46502161
+   foreach f ({Mult,Common,Flagged}.bed.gz)
+     mv $f snp138$f
+   end
+   # Compare to counts from before fixing #11954 ('-' appearing twice in alleles):
+#Mult:     3616194
+#Common:   14056627
+#Flagged:  90349
+#leftover: 46502044
+   # Compare to counts from before counting 100% non-reference as common:
 #snp138Mult:    3616194
 #snp138Common:  14038502
 #snp138Flagged: 90351
 #leftover:      46520167
-   # Compare to counts from before fixing allele freqs:
+   # Compare to counts from before fixing allele freq strand bug:
 #snp138Mult:    3616194
 #snp138Common:  14057590
 #snp138Flagged: 90189
@@ -28229,4 +28211,115 @@ done
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
 
+#########################################################################
+# sperm whale/phyCat1 Lastz run  (DONE - 2013-10-05 braney)
+    screen -S phyCat1    # use screen to manage this long running job
+    mkdir /hive/data/genomes/hg19/bed/lastzPhyCat1.2013-10-05
+    cd  /hive/data/genomes/hg19/bed/lastzPhyCat1.2013-10-05
+    cat << '_EOF_' > DEF
+# human vs sperm whale
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: sperm whale PhyCat1
+SEQ2_DIR=/hive/data/genomes/phyCat1/phyCat1.2bit
+SEQ2_LEN=/hive/data/genomes/phyCat1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/hg19/bed/lastzPhyCat1.2013-10-05
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > do.log 2>&1
+    # real    779m50.178s
+    # forgot to load up phyCat1 database for net repeat classification
+    # finish load step manually, then:
+
+    cat fb.hg19.chainPhyCat1Link.txt
+    #  1521042352 bases of 2897316137 (52.498%) in intersection
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -continue=download -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > download.log 2>&1
+    # real    32m10.340s
+
+    # create symLink to indicate this is the version to use
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzPhyCat1.2013-10-05 lastz.phyCat1
+
+    cd /hive/data/genomes/hg19/bed/lastzPhyCat1.2013-10-05
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 phyCat1 > rbest.log 2>&1 &
+    #   real    59m7.123s
+
+    # running the swap
+    mkdir /hive/data/genomes/phyCat1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/phyCat1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzPhyCat1.2013-10-05/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > swap.log 2>&1
+    #   real    102m56.234s
+
+    cat fb.phyCat1.chainHg19Link.txt
+    #    1455933862 bases of 2233689186 (65.181%) in intersection
+
+    cd /hive/data/genomes/phyCat1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+#########################################################################
+# ClinVar Variants track (2013-10-09 - Max)
+wget ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz -O - | gunzip > variant_summary.txt
+echo WARNING: For hg19 we remove all chrM entries.
+# keep only Ch37 variants and shorten the name
+less variant_summary.txt  |  tawk '($13=="GRCh37" || $13=="GRCh37.p9") {print "chr"$14,$15,$16,$3,$9,$2,$4,$5,$6,$7,$8,$10,$11,$12,$13,$17,$18,$19,$20,$21,$23,$24}'  | sed -e 's/, /,/g' | sed -e 's/;/,/g' | tawk '{$3=$3+1; split($4, a, " "); $4=a[1]; if ($4=="") {$4=$11}; print}' | grep -v ClinicalSignificance | sort -k1,1 -k2,2n | grep -v chrM | sed -e 's/,/, /g' > clinvarFull.bed 
+# separate into two subtracks
+cat clinvarFull.bed | egrep 'copy number (loss|gain)' > clinvarCnv.bed
+cat clinvarFull.bed | grep -v nsv > clinvarMain.bed
+# convert to bb
+cat << '_EOF_' > clinvar.as
+table clinVarBed
+"Browser extensible data (4 fields) plus information about a ClinVar entry"
+    (
+    string chrom;        "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart;   "Start position in chromosome"
+    uint   chromEnd;     "End position in chromosome"
+    string name;         "Name of item"
+    string rcvAcc;         "ClinVar ID"
+    string type;         "Type of Variant"
+    string geneId;         "NCBI Entrez Gene ID"
+    string geneSym;         "NCBI Entrez Gene Symbol"
+    string clinSign;         "Clinical significance:"
+    string snpId;         "dbSNP ID"
+    string nsvId;         "dbVar ID"
+    string testedInGtr;         "Genetic Testing Registry"
+    lstring phenotype;         "Phenotype identifiers"
+    string origin;         "Data origin"
+    string assembly;         "Genome assembly"
+    string cytogenetic;         "Cytogenetic status"
+    string reviewStatus;         "Review status"
+    string hgvsCod;         "coding HGVS"
+    string hgvsProt;         "protein HGVS"
+    string lastEval;         "last evaluation"
+    string guidelines;         "guidelines"
+    lstring otherIds;         "other identifiers (OMIM)"
+    )
+'_EOF_'
+
+bedToBigBed clinvarMain.bed /scratch/data/hg19/chrom.sizes clinvarMain.bb -type=bed4+18 -tab -as=clinvar.as 
+bedToBigBed clinvarCnv.bed /scratch/data/hg19/chrom.sizes clinvarCnv.bb -type=bed4+18 -tab -as=clinvar.as 
+cp clinvarMain.bb /hive/data/genomes/hg19/bed/clinvar/
+cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 #########################################################################

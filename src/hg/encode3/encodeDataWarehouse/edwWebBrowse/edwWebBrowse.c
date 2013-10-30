@@ -89,7 +89,8 @@ else   /* Upload not complete. */
     long long duration = now - lastAlive;
 
 
-    int oneHourInSeconds = 60*60;
+    long long oneHourInSeconds = 60*60;
+    // uglyf("now %lld, lastAlive %lld,  duration %lld,  oneHourInSeconds %lld<BR>\n", now, lastAlive, duration, oneHourInSeconds);
     if (duration < oneHourInSeconds)  
         {
 	struct dyString *time = edwFormatDuration(now - submit->startUploadTime);
@@ -112,6 +113,8 @@ sqlSafef(query, sizeof(query),
     "select v.* from edwFile f,edwValidFile v"
     "  where f.id = v.fileId and f.submitId=%u and v.replicate != '' and v.replicate != 'n/a' "
     "  and v.replicate != 'pooled'",
+    // If expanding this list of special replicate case, remember to expand bits in 
+    // edwMakeReplicateQa as well
     submit->id);
 return edwValidFileLoadByQuery(conn, query);
 }
@@ -178,23 +181,67 @@ for (v = replicatesList; v != NULL; v = v->next)
 *retUnpaired = unpaired, *retPairCount = pairCount, *retPairsDone = pairsDone;
 }
 
+void slNameToCharArray(struct slName *list, int *retCount,  char ***retArray)
+/* Return an array filled with the strings in list. */
+{
+int count = slCount(list);
+char **array = NULL;
+if (count != 0)
+    {
+    AllocArray(array, count);
+    int i;
+    struct slName *el;
+    for (i=0, el=list;  el != NULL; el = el->next, ++i)
+        array[i] = el->name;
+    }
+*retCount = count;
+*retArray = array;
+}
+
+char *printUserControl(struct sqlConnection *conn, char *cgiVarName, char *defaultUser)
+/* Print out control and return currently selected user. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select distinct email from edwUser,edwSubmit where edwUser.id = edwSubmit.userId order by email"
+    );
+struct slName *userList = sqlQuickList(conn, query);
+int userCount = 0;
+char **userArray;
+slNameToCharArray(userList, &userCount, &userArray);
+char *curUser = cgiUsualString(cgiVarName, defaultUser);
+cgiMakeDropList(cgiVarName, userArray, userCount, curUser);
+freez(&userArray);
+return curUser;
+}
+
 void showRecentFiles(struct sqlConnection *conn)
 /* Show users files grouped by submission sorted with most recent first. */
 {
+printf("Select whose files to browse: ");
+char *user = printUserControl(conn, "selectUser", userEmail);
+printf(" Maximum number of submissions to view: ");
+int maxSubCount = cgiOptionalInt("maxSubCount", 3);
+if (maxSubCount == 0)
+     maxSubCount = 2;
+cgiMakeIntVar("maxSubCount", maxSubCount, 3);
+cgiMakeButton("Submit", "update view");
+
 /* Get id for user. */
 char query[1024];
-sqlSafef(query, sizeof(query), "select id from edwUser where email='%s'", userEmail);
+sqlSafef(query, sizeof(query), "select id from edwUser where email='%s'", user);
 int userId = sqlQuickNum(conn, query);
 if (userId == 0)
     {
-    printf("No user with email %s.  Contact your wrangler to make an account", userEmail);
+    printf("No user with email %s.  Contact your wrangler to make an account", user);
     return;
     }
 
 /* Select all submissions, most recent first. */
 sqlSafef(query, sizeof(query), 
-    "select * from edwSubmit where userId=%d and (newFiles != 0 or errorMessage is not NULL)"
-    " order by id desc", userId);
+    "select * from edwSubmit where userId=%d "
+    "and (newFiles != 0 or metaChangeCount != 0 or errorMessage is not NULL)"
+    " order by id desc limit %d", userId, maxSubCount);
 struct edwSubmit *submit, *submitList = edwSubmitLoadByQuery(conn, query);
 
 for (submit = submitList; submit != NULL; submit = submit->next)
@@ -210,16 +257,25 @@ for (submit = submitList; submit != NULL; submit = submit->next)
         printf("<B>%s</B><BR>\n", submit->errorMessage);
     printf("%d files in validated.txt including %d already in warehouse<BR>\n", 
 	submit->fileCount, submit->oldFiles);
-    printf("%d of %d new files are uploaded<BR>\n", submit->newFiles, 
-	submit->fileCount-submit->oldFiles);
+    if (submit->newFiles > 0)
+	printf("%d of %d new files are uploaded<BR>\n", submit->newFiles, 
+	    submit->fileCount-submit->oldFiles);
+    if (submit->metaChangeCount != 0)
+        printf("%d of %d old files have updated tags<BR>\n",  
+	    submit->metaChangeCount, submit->oldFiles);
     int newValid = edwSubmitCountNewValid(submit, conn);
-    printf("%d of %d uploaded files are validated<BR>\n", newValid, submit->newFiles);
+    if (submit->newFiles > 0)
+	printf("%d of %d uploaded files are validated<BR>\n", newValid, submit->newFiles);
     struct edwValidFile *replicatesList = newReplicatesList(submit, conn);
-    int oldPairs = 0, innerPairs = 0, unpaired = 0, pairsToCompute = 0, pairsDone = 0;
-    countPairings(conn, replicatesList, &oldPairs, &innerPairs, &unpaired, &pairsToCompute,
-	&pairsDone);
-    printf("%d of %d replicate comparisons have been computed<BR>\n", pairsDone, pairsToCompute);
-    printf("%d replicates still are unpaired<BR>\n", unpaired);
+    if (replicatesList != NULL)
+	{
+	int oldPairs = 0, innerPairs = 0, unpaired = 0, pairsToCompute = 0, pairsDone = 0;
+	countPairings(conn, replicatesList, &oldPairs, &innerPairs, &unpaired, &pairsToCompute,
+	    &pairsDone);
+	printf("%d of %d replicate comparisons have been computed<BR>\n", 
+	    pairsDone, pairsToCompute);
+	printf("%d replicates still are unpaired<BR>\n", unpaired);
+	}
 
     /* Get and print file-by-file info. */
     char title[256];
@@ -280,12 +336,14 @@ else
     }
 printf("</div>");
 
+printf("<FORM ACTION=\"../cgi-bin/edwWebBrowse\" METHOD=GET>\n");
 if (userEmail != NULL)
     {
     struct sqlConnection *conn = sqlConnect(edwDatabase);
     showRecentFiles(conn);
     sqlDisconnect(&conn);
     }
+printf("</FORM>\n");
 }
 
 int main(int argc, char *argv[])

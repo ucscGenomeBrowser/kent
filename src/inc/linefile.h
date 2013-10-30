@@ -115,6 +115,10 @@ boolean lineFileNextReal(struct lineFile *lf, char **retStart);
 /* Fetch next line from file that is not blank and
  * does not start with a '#'. */
 
+boolean lineFileNextRealWithSize(struct lineFile *lf, char **retStart, int *retSize);
+/* Fetch next line from file that is not blank and
+ * does not start with a '#'. Return size of line. */
+
 boolean lineFileNextFullReal(struct lineFile *lf, char **retStart);
 // Fetch next line from file that is not blank and does not start with a '#'.
 // Continuation lines (ending in '\') are joined into a single line.

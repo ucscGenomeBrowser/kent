@@ -421,7 +421,8 @@ if (vf == NULL)
     return;
 
 char *replicate = vf->replicate;
-if (!isEmpty(replicate) && !sameString(replicate, "both"))
+if (!isEmpty(replicate) && "both") && !sameString(replicate, "n/a") 
+    && !sameString(replicate, "pooled")) // If expanding this, to expand bits in edwWebBrowse as well
     {
     /* Try to find other replicates of same experiment, format, and output type. */
     struct edwValidFile *elder, *elderList = edwFindElderReplicates(conn, vf);

@@ -103,6 +103,7 @@ CREATE TABLE edwSubmit (
     newBytes bigint default 0,	# Bytes in new files (so far).
     errorMessage longblob,	# If non-empty contains last error message. If empty submit is ok
     fileIdInTransit int unsigned default 0,	# edwFile.id of file currently being transferred or zero
+    metaChangeCount int unsigned default 0,	# Number of files where metadata changed by submission
               #Indices
     PRIMARY KEY(id),
     INDEX(url(32)),
@@ -157,6 +158,8 @@ CREATE TABLE edwValidFile (
     mapRatio double default 0,	# Proportion of items that map to genome
     sampleCoverage double default 0,	# Proportion of assembly covered by at least one item in sample
     depth double default 0,	# Estimated genome-equivalents covered by possibly overlapping data
+    singleQaStatus tinyint default 0,	# 0 for untested, 1 for pass, -1 for fail
+    replicateQaStatus tinyint default 0,	# 0 for untested, 1 for pass, -1 for fail
               #Indices
     PRIMARY KEY(id),
     INDEX(licensePlate),

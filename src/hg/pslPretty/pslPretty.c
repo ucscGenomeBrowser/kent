@@ -16,21 +16,19 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "pslPretty - Convert PSL to human readable output\n"
+  "pslPretty - Convert PSL to human-readable output\n"
   "usage:\n"
   "   pslPretty in.psl target.lst query.lst pretty.out\n"
   "options:\n"
-  "   -axt - save in something like Scott Schwartz's axt format\n"
-  "          Note gaps in both sequences are still allowed in the\n"
-  "          output which not all axt readers will expect\n"
-  "   -dot=N Put out a dot every N records\n"
-  "   -long - Don't abbreviate long inserts\n"
-  "   -check=fileName - Output alignment checks to filename\n" 
-  "It's a really good idea if the psl file is sorted by target\n"
-  "if it contains multiple targets.  Otherwise this will be\n"
-  "very very slow.   The target and query lists can either be\n"
-  "fasta, 2bit or nib files, or a list of fasta, 2bit and/or nib files\n"
-  "one per line\n");
+  "   -axt             Save in format like Scott Schwartz's axt format.\n"
+  "                    Note gaps in both sequences are still allowed in the\n"
+  "                    output, which not all axt readers will expect.\n"
+  "   -dot=N           Output a dot every N records.\n"
+  "   -long            Don't abbreviate long inserts.\n"
+  "   -check=fileName  Output alignment checks to filename.\n" 
+  "It's recommended that the psl file be sorted by target if it contains\n"
+  "multiple targets; otherwise, this will be extremely slow. The target and query\n"
+  "lists can be fasta, 2bit or nib files, or a list of these files, one per line.\n");
 }
 
 int dot = 0;

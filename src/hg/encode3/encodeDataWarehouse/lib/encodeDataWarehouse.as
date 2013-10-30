@@ -84,6 +84,7 @@ table edwSubmit
     bigInt newBytes;         "Bytes in new files (so far)."
     lstring errorMessage; "If non-empty contains last error message. If empty submit is ok"
     uint fileIdInTransit; "edwFile.id of file currently being transferred or zero"
+    uint metaChangeCount; "Number of files where metadata changed by submission"
     )
 
 table edwSubscriber
@@ -132,6 +133,8 @@ table edwValidFile
     double mapRatio;    "Proportion of items that map to genome"
     double sampleCoverage; "Proportion of assembly covered by at least one item in sample"
     double depth;   "Estimated genome-equivalents covered by possibly overlapping data"
+    byte singleQaStatus;  "0 for untested, 1 for pass, -1 for fail"
+    byte replicateQaStatus;  "0 for untested, 1 for pass, -1 for fail"
     )
 
 table edwFastqFile

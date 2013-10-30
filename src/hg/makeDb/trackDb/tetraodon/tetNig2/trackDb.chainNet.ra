@@ -1,8 +1,12 @@
 #	"$Id: trackDb.chainNet.ra,v 1.5 2010/04/01 00:49:06 antonio Exp $";
 
+track chainNetMm9 override
+shortLabel $o_db Chain/Net
+
 track chainNetFr2 override
 chainLinearGap medium
 visibility dense
+shortLabel $o_db Chain/Net
 
 track chainNetGasAcu1 override
 visibility dense

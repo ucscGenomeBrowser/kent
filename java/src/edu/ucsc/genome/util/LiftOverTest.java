@@ -103,7 +103,7 @@ class LiftOverTest {
     String error = "failure.out";
     String chain = "";
     // add to LiftOverTestTarget
-    String path = "/cluster/bin/i386";
+    String path = "/cluster/bin/x86_64";
 
 
     try {

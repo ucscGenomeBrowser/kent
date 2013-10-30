@@ -11,7 +11,7 @@ source `which qaConfig.csh`
 
 set database=""
 set rootpath="/cluster/data/genbank/var/tblstats"  # mark's TABLE STATUS dump
-set machine="hgnfs1"
+set machine="rr"
 set dirname=""
 set machpath=""
 set dumpfile=""
@@ -22,7 +22,7 @@ if ( $#argv < 1 || $#argv > 2 ) then
   echo "  using mark's genbank dumps."
   echo "    warning:  not in real time.  uses overnight dump."
   echo
-  echo "    usage: database [hgwdev | hgwbeta | rr | hgnfs1]"
+  echo "    usage: database [hgwdev | hgwbeta | rr ]"
   echo
   echo "      defaults to rr.  optionally gives results for dev or beta"
   echo
@@ -33,7 +33,7 @@ endif
 
 if ( $#argv == 2 ) then
   set machine=$argv[2]
-  echo $machine | egrep -q "hgwdev|hgwbeta|rr|hgnfs1|rrnfs1" 
+  echo $machine | egrep -qw "hgwdev|hgwbeta|rr" 
   if ( $status ) then
     echo
     echo "  $machine not a valid machine" 
@@ -43,7 +43,7 @@ if ( $#argv == 2 ) then
 endif
 
 if ( "rr" == $machine ) then
-  set machine="hgnfs1"
+  set machine=$tblStatusDumps
 endif
 
 # set path to directory of dated dumps for the proper machine

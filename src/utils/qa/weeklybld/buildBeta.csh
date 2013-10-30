@@ -10,7 +10,7 @@ pwd
 #
 echo "Make libs. [${0}: `date`]"
 cd src
-make libs >& make.log
+make -j 32 libs >& make.log
 sed -i -e "s/-DJK_WARN//g" make.log
 sed -i -e "s/-Werror//g" make.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)

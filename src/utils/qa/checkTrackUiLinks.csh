@@ -15,13 +15,15 @@ onintr cleanup
 set tableinput=""
 set tables=""
 set machine="hgwbeta"
+set host=""
 set rr="false"
 set baseUrl=""
 set target=""
+set cgi=""
 set hgsid=""
 set db=""
-set errorCount=0
-set totalCount=0
+set pgsWErrors=0
+set pgsChkd=0
 
 if ( $#argv < 2 || $#argv > 3 ) then
   echo
@@ -44,7 +46,7 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-# check for valid db 
+# check for valid db
 set url1="http://"
 set url2=".cse.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doMetaData=1"
 set url3="&hgta_metaDatabases=1"
@@ -79,70 +81,62 @@ set baseUrl="http://$machine.cse.ucsc.edu"
 set hgsid=`htmlCheck  getVars $baseUrl/cgi-bin/hgGateway | grep hgsid \
   | head -1 | awk '{print $4}'`
 
-echo "hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 " | grep $machine
-if ( $status ) then 
+echo "hgw1 hgw2 hgw3 hgw4 hgw5 hgw6" | grep $machine
+if ( $status ) then
   set rr="true"
 endif
 
-# process "all" choice
-if ("all" == $tableinput) then
-  set tables=`getField.csh $db trackDb tableName $machine \
-     | grep -v tableName`
-  set target="$baseUrl/cgi-bin/hgGateway?hgsid=$hgsid&db=$db"
-  # check description page if doing all of an assembly
-  htmlCheck checkLinks "$target" >& error$$
-  if ( `wc -w error$$ | awk '{print $1}'` != 0 ) then
-    echo
-    echo "description.html page:"
-    echo "======================"
-    cat error$$
-    @ errorCount = $errorCount + 1
+# process descriptions page for "all" choice
+if ( "all" == $tableinput ) then
+  if ( "hgwdev" != "$machine" ) then
+    set host="-h $sqlbeta"
   endif
-  @ totalCount = $totalCount + 1
-  rm -f error$$
+  set tables=`hgsql $host -Ne "SELECT tableName FROM trackDb WHERE html != ''" $db`
+  set tables="description.html $tables"
 endif
 
-foreach table ($tables)
-  # check to see if the table exists on the machine
-  getField.csh $db trackDb tableName $machine | grep -w $table > /dev/null
-  if ( $status ) then
-    echo "no such track"
-    continue
+# check links on all table.html pages
+foreach table ( $tables )
+  rm -f errorsOnPg$$
+  if ( $table == "description.html" ) then
+    set cgi="hgGateway?hgsid=$hgsid&db=$db"
+  else
+    set cgi="hgTrackUi?hgsid=$hgsid&db=$db&g=$table"
   endif
-  set target="$baseUrl/cgi-bin/hgTrackUi?hgsid=$hgsid&db=$db&g=$table"
-  htmlCheck checkLinks "$target" >& error$$
-  # trap internal same-page anchors and discard
-  cat error$$ | egrep -v "doesn't exist" > error2$$
-  mv error2$$ error$$
-  # slow it down if hitting the RR
-  if ( "true" == $rr ) then
-    sleep 2
-  endif
-  if ( `wc -w error$$ | awk '{print $1}'` != 0 ) then
-    if ( `cat error$$` != "403 from http://hgwbeta.cse.ucsc.edu/cgi-bin/" ) then
-      echo
+  set target="$baseUrl/cgi-bin/$cgi"
+  htmlCheck getLinks "$target" | egrep "ftp:|http:" | grep -v ucsc > $db.$table.outsideLinks$$
+
+  if ( ! -z  $db.$table.outsideLinks$$ ) then
+    foreach link ( `cat $db.$table.outsideLinks$$` )
+      echo "$link" >>& errorsOnPg$$
+      htmlCheck ok "$link" >>& errorsOnPg$$
+    end
+    egrep -B1 -v "ftp:|http:" errorsOnPg$$ > /dev/null
+    if ( ! $status ) then
       echo $table
-      echo "============="
-      cat error$$
-      @ errorCount = $errorCount + 1
+      echo "=============="
+      grep -B1 -v http errorsOnPg$$
+      echo
+      @ pgsWErrors= $pgsWErrors + 1
     endif
   endif
-  @ totalCount = $totalCount + 1
-  rm -f error$$
+  @ pgsChkd= $pgsChkd + 1
+  rm -f errorsOnPg$$
+  rm -f $db.$table.outsideLinks$$
 end
-echo
+
 echo "Summary"
-echo "======="
-if ( $totalCount == 1 ) then
-  echo $totalCount "page checked"
+echo "======= ======="
+if ( $pgsChkd == 1 ) then
+  echo $pgsChkd "page checked"
 else
-  echo $totalCount "pages checked"
+  echo $pgsChkd "pages checked"
 endif
-if ( $errorCount > 0) then
-  if ( $errorCount == 1) then
-    echo $errorCount "page with error(s) found"
+if ( $pgsWErrors > 0 ) then
+  if ( $pgsWErrors == 1 ) then
+    echo $pgsWErrors "page with error(s) found"
   else
-    echo $errorCount "pages with errors found"
+    echo $pgsWErrors "pages with errors found"
   endif
 else
   echo "No errors found!"
@@ -151,4 +145,4 @@ echo
 
 cleanup:
 rm -f error$$
-rm -f error2$$
+rm -f $db.$table.outsideLinks$$

@@ -524,7 +524,7 @@ if(feelingLucky && seqList != NULL)
     }
 
 /* Figure out size allowed. */
-maxSingleSize = (isTx ? 10000 : 25000);
+maxSingleSize = (isTx ? 10000 : 75000);
 maxTotalSize = maxSingleSize * 2.5;
 #ifdef LOWELAB
 maxSeqCount = 200;
@@ -562,6 +562,16 @@ else
     }
 pslxWriteHead(f, qType, tType);
 
+if (qType == gftProt)
+    {
+    minSingleSize = 14;
+    }
+else if (qType == gftDnaX)
+    {
+    minSingleSize = 36;
+    }
+
+
 /* Loop through each sequence. */
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
@@ -583,8 +593,13 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	}
     if (oneSize < minSingleSize)
         {
-	warn("Sequence %s is %d letters long (min is %d), skipping", 
+	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum)", 
 		seq->name, seq->size, minSingleSize);
+	// we could use "continue;" here to actually enforce skipping, 
+	// but let's give the short sequence a chance, it might work.
+	// minimum possible length = tileSize+stepSize, so mpl=16 for dna stepSize=5, mpl=10 for protein.
+	if (qIsProt && oneSize < 1) // protein does not tolerate oneSize==0
+	    continue;
 	}
     totalSize += oneSize;
     if (totalSize > maxTotalSize)

@@ -1,5 +1,4 @@
-import sys, string
-import re
+import sys, string, os, re
 from ucscGb.gbData.ordereddict import OrderedDict
 from ucscGb.gbData.ra.raStanza import RaStanza
 from ucscGb.gbData import ucscUtils
@@ -81,8 +80,10 @@ class RaFile(OrderedDict):
     
     def __init__(self, filePath=None, key=None):
         OrderedDict.__init__(self)
-        if filePath != None:
+        if filePath != None and os.path.isfile(filePath):
             self.read(filePath, key)
+        else:
+            self._filename = filePath
 
     def read(self, filePath, key=None):
         '''
@@ -91,6 +92,7 @@ class RaFile(OrderedDict):
         '''
         self._filename = filePath
         file = open(filePath, 'r')
+        scopes = list()
 
         #entry = None
         stanza = list()
@@ -99,16 +101,17 @@ class RaFile(OrderedDict):
         reading = 1
         
         while reading:
-            line = file.readline()
+            line = file.readline() # get the line
             if line == '':
                 reading = 0
         
-            line = line.strip()
-            if len(stanza) == 0 and (line.startswith('#') or (line == '' and reading)):
+            # if its a comment or whitespace we append it to the list representation and ignore in dict
+            #line = line.strip()
+            if len(stanza) == 0 and (line.strip().startswith('#') or (line.strip() == '' and reading)):
                 OrderedDict.append(self, line)
                 continue
 
-            if line != '':
+            if line.strip() != '':
                 stanza.append(line)
             elif len(stanza) > 0:
                 if keyValue == '':
@@ -121,15 +124,18 @@ class RaFile(OrderedDict):
                 if entry != None:
                     if name != None or key == None:
                         if name in self:
-                            raise KeyError('Duplicate Key ' + name)
+                            print KeyError('Duplicate Key ' + name)
                         self[name] = entry
 
                 stanza = list()
 
         file.close()
 
+    def createStanza(self, key, value):
+        self[value] = RaStanza(key, value)
 
-    def readStanza(self, stanza, key=None):
+    
+    def readStanza(self, stanza, key=None, scopes=None):
         '''
         Override this to create custom stanza behavior in derived types.
         
@@ -143,14 +149,16 @@ class RaFile(OrderedDict):
         entry: the stanza itself
         '''
         entry = RaStanza()
-        if entry.readStanza(stanza, key) == None:
+        if entry.readStanza(stanza, key, scopes) == None:
             return None, None, None
         entry = RaStanza()
-        val1, val2 = entry.readStanza(stanza, key)
+        val1, val2 = entry.readStanza(stanza, key, scopes)
         return val1, val2, entry
 
 
-    def write(self, filename):
+    def write(self, filename=None):
+        if filename == None:
+            filename = self.filename
         file = open(filename, 'w')
         file.write(str(self))
         

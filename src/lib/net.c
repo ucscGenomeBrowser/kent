@@ -36,8 +36,7 @@ return sd;
 static int setSocketNonBlocking(int sd, boolean set)
 /* Use socket control flags to set O_NONBLOCK if set==TRUE,
  * or clear it if set==FALSE.
- * Return -1 if there are any errors, 0 if successful. i
- * Also closes sd if error. */
+ * Return -1 if there are any errors, 0 if successful. */
 {
 long fcntlFlags;
 // Set or clear non-blocking
@@ -58,6 +57,29 @@ if (fcntl(sd, F_SETFL, fcntlFlags) < 0)
 return 0;
 }
 
+int setReadWriteTimeouts(int sd, int seconds)
+/* Set read and write timeouts on socket sd 
+ * Return -1 if there are any errors, 0 if successful. */
+{
+struct timeval timeout;      
+timeout.tv_sec = seconds;
+timeout.tv_usec = 0;
+
+if (setsockopt(sd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+    {
+    warn("setsockopt failed setting socket receive timeout\n");
+    return -1;
+    }
+
+if (setsockopt(sd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+    {
+    warn("setsockopt failed setting socket send timeout\n");
+    return -1;
+    }
+return 0;
+}
+
+
 static struct timeval tvMinus(struct timeval a, struct timeval b)
 /* Return the result of a - b; this handles wrapping of milliseconds. 
  * result.tv_usec will always be positive. 
@@ -77,7 +99,8 @@ return a;
 static int netConnectWithTimeout(char *hostName, int port, long msTimeout)
 /* In order to avoid a very long default timeout (several minutes) for hosts that will
  * not answer the port, we are forced to connect non-blocking.
- * After the connection has been established, we return to blocking mode. */
+ * After the connection has been established, we return to blocking mode.
+ * Also closes sd if error. */
 {
 int sd;
 struct sockaddr_in sai;		/* Some system socket info. */
@@ -187,19 +210,10 @@ if (setSocketNonBlocking(sd, FALSE) < 0)
     return -1;
     }
 
-//Set read and write timeouts
-struct timeval timeout;      
-timeout.tv_sec = (long) (msTimeout/1000);
-timeout.tv_usec = (long) (((msTimeout/1000)-timeout.tv_sec)*1000000);
-
-if (setsockopt(sd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+if (setReadWriteTimeouts(sd, DEFAULTREADWRITETTIMEOUTSEC) < 0)
     {
-    warn("setsockopt failed setting socket receive timeout\n");
-    }
-
-if (setsockopt(sd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
-    {
-    warn("setsockopt failed setting socket send timeout\n");
+    close(sd);
+    return -1;
     }
 
 return sd;

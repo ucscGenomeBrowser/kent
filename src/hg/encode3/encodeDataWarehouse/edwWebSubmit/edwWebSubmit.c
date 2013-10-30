@@ -43,6 +43,9 @@ printf("Please enter a URL for a validated manifest file:<BR>");
 printf("URL ");
 cgiMakeTextVar("url", emptyForNull(cgiOptionalString("url")), 80);
 cgiMakeButton("submitUrl", "submit");
+printf("<BR>\n");
+cgiMakeCheckBox("update", FALSE);
+printf(" Update information associated with files that have already been uploaded.");
 printf("<BR>Submission by %s", userEmail);
 edwPrintLogOutButton();
 }
@@ -117,6 +120,8 @@ else
     printf("<B>files count:</B> %d<BR>\n", sub->fileCount);
     if (sub->oldFiles > 0)
 	printf("<B>files already in warehouse:</B> %u<BR>\n", sub->oldFiles);
+    if (sub->metaChangeCount > 0)
+        printf("<B>old files with new tags in this submission</B> %d<BR>", sub->metaChangeCount);
     if (sub->oldFiles != sub->fileCount)
 	{
 	printf("<B>files transferred:</B> %u<BR>\n", sub->newFiles);
@@ -216,7 +221,7 @@ edwMustGetUserFromEmail(conn, userEmail);
 int sd = netUrlMustOpenPastHeader(url);
 close(sd);
 
-edwAddSubmitJob(conn, userEmail, url);
+edwAddSubmitJob(conn, userEmail, url, cgiBoolean("update"));
 
 /* Give the system a half second to react and then put up status info about submission */
 sleep1000(1000);

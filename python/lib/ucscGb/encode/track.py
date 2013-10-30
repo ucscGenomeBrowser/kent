@@ -21,7 +21,7 @@ class TrackFile(object):
         '''The file's full name including path'''
         return self._path + self._name
         
-    @property 
+    @property
     def path(self):
         '''The file's path'''
         return self._path

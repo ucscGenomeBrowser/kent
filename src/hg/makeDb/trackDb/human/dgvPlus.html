@@ -12,15 +12,19 @@ genomic alterations that involve segments of DNA that are larger than
 
 <H2>Display Conventions</H2>
 <P>
-This track contains two subtracks: Structural Variant Regions, i.e.
-annotations that have been generated from one or more reported
-structural variants at the same location, and Supporting Structural
-Variants, i.e. the sample-level reported structural variants.
-</P>
+This track contains two subtracks:
+<p>
+<ul>
+<li>Structural Variant Regions: annotations that have been generated from one or more reported
+structural variants at the same location.
+</li>
+<li>Supporting Structural Variants: the sample-level reported structural variants.
+</li>
+</ul>
 <P>
-Color is used to indicate the type of variation.
+Color is used in both subtracks to indicate the type of variation:
 <UL>
- <LI><B><span style="color:#C000C0;">inversions</span></B> and
+ <LI><B><span style="color:#C000C0;">Inversions</span></B> and
      <B><span style="color:#C000C0;">inversion breakpoints</span></B> are purple.
  </LI>
 
@@ -41,17 +45,17 @@ Color is used to indicate the type of variation.
 <P>
 Clicking on a variant leads to a page with detailed information about the variant, 
 such as the study reference and PubMed abstract link, the study's method and any
-genes overlapping the variant.  If available, the sequencing or array platform
+genes overlapping the variant. Also listed, if available, are the sequencing or array platform
 used for the study, a sample cohort description, sample size, sample ID(s) in which
-this variant was observed, observed gains and observed losses are listed.
-If this variant is a merged variant, its supporting variants are listed with links
-to genome browser views of those variants.
-If this variant is a supporting variant, its merged variant is displayed with a
-link to the genome browser view of the merged variant.
-A link to DGV's Variant Details page for this variant is also provided.
+the variant was observed, observed gains and observed losses.
+If the particular variant is a merged variant, links to genome browser views of 
+the supporting variants are listed. If the particular variant is a supporting variant,
+a link to the genome browser view of its merged variant is displayed.
+A link to DGV's Variant Details page for each variant is also provided.
 </P>
 <P>
-For most variants, DGV uses accessions from peer archives of structural variation
+For most variants, DGV uses <a href="http://dgv.tcag.ca/dgv/data-model/entd.html#Variant"
+target="_blank">accessions</a> from peer archives of structural variation
 (<A HREF="http://www.ncbi.nlm.nih.gov/dbvar/" TARGET=_BLANK>dbVar</A>
 at NCBI or <A HREF="http://www.ebi.ac.uk/dgva/" TARGET=_BLANK>DGVa</A> at EBI).
 These accessions begin with either &quot;essv&quot;,
@@ -64,17 +68,17 @@ Accessions with ssv are for variant calls on a particular sample, and if they
 are copy number variants, they generally indicate whether the change is a gain
 or loss. 
 In a few studies the ssv represents the variant called by a single
-algorithm. If multiple algorithms were used, overlapping ssvs from
+algorithm. If multiple algorithms were used, overlapping ssv's from
 the same individual would be combined to generate a sample level
 sv. 
 </P>
 <P>
-If there are many samples analyzed in a study and if there are many
+If there are many samples analyzed in a study, and if there are many
 samples which have the same variant, there will be multiple ssv's with
 the same start and end coordinates.
 These sample level variants are then merged and combined to form a
 representative variant that highlights the common variant found in
-that study. This is called a structural variant (sv) record.
+that study. The result is called a structural variant (sv) record.
 Accessions with sv are for regions asserted by submitters to contain
 structural variants, and often span ssv elements for both losses and
 gains.  dbVar and DGVa do not record numbers of losses and gains
@@ -85,7 +89,7 @@ DGV merges clusters of variants that share at least 70% reciprocal
 overlap in size/location, and assigns an accession beginning with
 &quot;dgv&quot;, followed by an internal variant serial number,
 followed by an abbreviated study id.  For example,
-the first merged variant from the Shaikh et al 2009 study (study
+the first merged variant from the Shaikh et al. 2009 study (study
 accession=nstd21) would be dgv1n21. The second merged variant would be
 dgv2n21 and so forth.
 Since in this case there is an additional level of clustering,
@@ -102,8 +106,9 @@ page. Since each ssv variant is for one sample, its total is 1.
 <P>
 Published structural variants are imported from peer archives
 <A HREF="http://www.ncbi.nlm.nih.gov/dbvar/" TARGET=_BLANK>dbVar</A> and
-<A HREF="http://www.ebi.ac.uk/dgva/" TARGET=_BLANK>DGVa</A>;
-DGV applies quality filters and merges overlapping variants.
+<A HREF="http://www.ebi.ac.uk/dgva/" TARGET=_BLANK>DGVa</A>.
+DGV then applies <a href="http://dgv.tcag.ca/dgv/app/faq#q4"
+target="_blank">quality filters</a> and merges overlapping variants.
 </P>
 <P>
 For data sets where the variation calls are reported at a
