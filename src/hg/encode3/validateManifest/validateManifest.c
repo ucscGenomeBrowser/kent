@@ -513,7 +513,7 @@ if (fileExists("validated.txt"))  // read in the old validated.txt file to save 
     uglyf("reading validated.txt\n\n");
     vFieldCount = readManifest("validated.txt", &vFields, &vRecs);
     if (vFieldCount != mFieldCount + 4) // TODO this might be allowed someday if good case exists for it.
-	errAbort("Error: the number of fields in validated.txt %d does not match the number of fields %d in manifest.txt", vFieldCount, mFieldCount);
+	errAbort("ERROR: the number of fields in validated.txt %d does not match the number of fields %d in manifest.txt", vFieldCount, mFieldCount);
     haveVal = TRUE;
     }
 
@@ -667,7 +667,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
     if (fileIsValid && mUcscDbIdx != -1 && ucscDb[0] == 0)
 	{
 	fileIsValid = FALSE;
-	printf("Error: ucsc_db must not be blank.\n");
+	printf("ERROR: ucsc_db must not be blank.\n");
 	}		    
 
     // check that the file exists
@@ -692,7 +692,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
     if (fileIsValid && mOutputType[0] == 0)
 	{
 	fileIsValid = FALSE;
-	printf("Error: output_type must not be blank.\n");
+	printf("ERROR: output_type must not be blank.\n");
 	}		    
     if (fileIsValid)
 	{
@@ -703,7 +703,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	    if (!sameString(mFormat, existingFormat))
 		{
 		fileIsValid = FALSE;
-		printf("Error: Each output_type can only be used with one format.  output_type %s is being used with both format %s and %s.\n",
+		printf("ERROR: Each output_type can only be used with one format.  output_type %s is being used with both format %s and %s.\n",
 		    mOutputType, mFormat, existingFormat);
 		}		    
 	    }
