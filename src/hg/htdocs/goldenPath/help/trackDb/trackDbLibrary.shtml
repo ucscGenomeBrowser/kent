@@ -3887,7 +3887,10 @@ for each cell associated with the particular TF binding location.</P>
     of a supertrack are of differing types.  If all the children are
     of the same type, it is often better to use the "compositeTrack" grouping
     described below.  If all of the children are wig or bigWig tracks, it may
-    be best to use a "container multiWig" grouping. </P> 
+    be of interest to use a signal overlay "container multiWig" grouping. Signal
+    overlay tracks display the signal data from several subtracks as colored
+    transparencies, making it possible to see the data of several tracks together
+    in a condensed view. See the <A HREF="#aggregate">multiWig</A> section for more information.</P> 
     <P>Supertracks can contain
     composite tracks and container multiWigs, but not vice versa. With supertracks,
     composite tracks, and container multiWigs, children will inherit the settings
@@ -4037,7 +4040,8 @@ for each cell associated with the particular TF binding location.</P>
     if enabled with this setting. The changed order will also be seen in the track 
     image.  However, the order of tracks can always be rearranged through 
     drag and drop, directly in the image.  Reordering subtracks in the image 
-    will not be reflected in the configuration page.</P>
+    will not be reflected in the configuration page. Note: This setting will not
+    work correctly if 'container multiWig' is specified.</P>
 </DIV>
 
 
@@ -4068,7 +4072,8 @@ for each cell associated with the particular TF binding location.</P>
     (<code>allButtonPair</code> setting) that allow the user to
     select all subtracks, or deselect all of them and then check only those of 
     interest.  The user may reorder the subtracks by dragging them on the composite
-    configuration page (<code>dragAndDrop</code> setting).</P>
+    configuration page (<code>dragAndDrop</code> setting). Note: The dragAndDrop setting 
+    will not work correctly if 'container multiWig' is specified.</P>
 </DIV>
 
 
