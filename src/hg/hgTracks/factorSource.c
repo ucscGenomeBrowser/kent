@@ -19,10 +19,20 @@ static struct factorSource *loadOne(char **row)
 return factorSourceLoad(row);
 }
 
-static void loadAll(struct track *track)
-/* Go load all items in window. */
+static void factorSourceLoadItems(struct track *track)
+/* Load all items (and motifs if table is present) in window */
 {
 bedLoadItem(track, track->table, (ItemLoader)loadOne);
+if (track->visibility == tvDense)
+    return;
+
+char *motifTable = trackDbSetting(track->tdb, "motifTable");
+if (motifTable == NULL)
+    return;
+struct sqlConnection *conn = hAllocConn(database);
+if (sqlTableExists(conn, motifTable))
+        track->customPt = cloneString(motifTable);
+hFreeConn(&conn);
 }
 
 static int rightPixels(struct track *track, void *item)
@@ -50,13 +60,6 @@ static void factorSourceDrawItemAt(struct track *track, void *item,
 /* Figure out maximum score and draw box based on it. */
 int rowOffset;
 struct factorSource *fs = item;
-char *motifTable = NULL;
-// TODO: motifTable shouldn't be hard coded.  There may be different versions suitable
-// for different TFBS tracks
-//#ifdef TXCLUSTER_MOTIFS_TABLE
-motifTable = TXCLUSTER_MOTIFS_TABLE;
-//#endif
-
 int grayIx = grayInRange(fs->score, 0, 1000);
 color = shadesOfGray[grayIx];
 
@@ -69,6 +72,7 @@ if (w < 1)
     w = 1;
 hvGfxBox(hvg, x1, y, w, heightPer, color);
 
+char *motifTable = (char *)track->customPt;
 if (motifTable != NULL)
     {
     // Draw region with highest motif score
@@ -76,22 +80,22 @@ if (motifTable != NULL)
     // NOTE: but just motif for the factor, so hides co-binding potential
     // NOTE: current table has single motif per factor
     struct sqlConnection *conn = hAllocConn(database);
-    if(sqlTableExists(conn, motifTable))
+    if (sqlTableExists(conn, motifTable))
         {
         struct sqlResult *sr;
         char where[256];
         char **row;
 
-        // TODO: hard-coded tablename to remove
         // QUESTION: Is performance adequate with this design ?  Could query table once and
         // add motif ranges to items.
         sqlSafefFrag(where, sizeof(where), "name = '%s'", fs->name);
-        sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", fs->chrom, fs->chromStart,
+        sr = hRangeQuery(conn, motifTable, fs->chrom, fs->chromStart,
                          fs->chromEnd, where, &rowOffset);
         while((row = sqlNextRow(sr)) != NULL)
             {
             // highlight motif regions in green
-            Color color = hvGfxFindColorIx(hvg, 28, 226, 40);
+            Color color = hvGfxFindColorIx(hvg, 22, 182, 33);
+            //Color color = hvGfxFindColorIx(hvg, 25, 204, 37);
             int start = sqlUnsigned(row[rowOffset+1]);
             int end = sqlUnsigned(row[rowOffset+2]);
             int x1 = round((double)((int)start-winStart)*scale) + xOff;
@@ -100,6 +104,15 @@ if (motifTable != NULL)
             if (w < 1)
                 w = 1;
             hvGfxBox(hvg, x1, y, w, heightPer, color);
+            if (w > 2)
+                {
+                // TODO: add chevrons more selectively (only if motif determines direction)
+                Color textColor = hvGfxContrastingColor(hvg, color);
+                int midY = y + (heightPer>>1);
+                int dir = (row[rowOffset+5][0] == '+' ? 1 : -1);
+                clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+                               dir, textColor, TRUE);
+                }
             }
         sqlFreeResult(&sr);
         }
@@ -144,7 +157,7 @@ track->bedSize = 5;
 bedMethods(track);
 track->drawItemAt = factorSourceDrawItemAt;
 track->drawItems = factorSourceDraw;
-track->loadItems = loadAll;
+track->loadItems = factorSourceLoadItems;
 track->itemRightPixels = rightPixels;
 
 /* Get the associated data describing the various sources. */
