@@ -767,9 +767,8 @@ cat  << 'EOF' > link.csh
 # Filename is in Supplementary data PDF, p. 49, 
 #       Supplementary Methods section 1.2, "DHS Master List and its annotation"
 
-    cd /hive/data/genomes/hg19/bed
+    cd /hive/data/genomes/hg19/bed/wgEncodeAwg/dnase/master
     set track = wgEncodeAwgDnaseMaster
-    cd $track
 
     mkdir ebi; cd ebi
 
@@ -794,6 +793,40 @@ cat  << 'EOF' > link.csh
     # Name field has count of cell types having DHS overlapping the master site
     hgLoadBed -noNameIx -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg19 $track $file
     Read 2890742 elements of size 10 from wgEncodeAwgDnaseMaster.narrowPeak
+
+###############################################
+# DNAseI Fingerprinting  (in progress Kate)
+
+#From SeqAnswers!
+
+    cd /hive/data/genomes/hg19/bed/wgEncodeAwg/dnase/footprints
+    set track = wgEncodeAwgDnaseFootprint
+
+    ftp://ftp.ebi.ac.uk/pub/databases/ensembl/encode/supplementary/integration_data_jan2011/byDataType/footprints/jan2011/
+
+    mkdir ebi; cd ebi
+    set dir = ftp.ebi.ac.uk/pub/databases/ensembl/encode/supplementary/integration_data_jan2011/byDataType/footprints/jan2011/
+
+    wget ftp://$dir/README
+    wget ftp://$dir/combined.fps.gz
+    wget ftp://$dir/all.footprints.gz
+
+    gunzip combined.fps.gz
+
+    wc -l ebi/combined.fps
+    #  8374968 ebi/combined.fps
+    # big file -> use bigBed
+
+    mkdir /gbdb/hg19/$track
+    set table = wgEncodeAwgDnaseCombinedFootprint
+    bedToBigBed combined.fps /cluster/data/hg19/chrom.sizes $table.bb
+    ln  -s `pwd`/$table.bb /gbdb/hg19/$track/$table.bb
+    hgBbiDbLink hg19 $table /gbdb/hg19/$track/$table.bb
+
+    
+
+
+
 
 
 
