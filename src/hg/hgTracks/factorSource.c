@@ -76,8 +76,7 @@ char *motifTable = (char *)track->customPt;
 if (motifTable != NULL)
     {
     // Draw region with highest motif score
-    // QUESTION: appears to draw all, not just highest scoring ?
-    // NOTE: but just motif for the factor, so hides co-binding potential
+    // NOTE: includes just motif for the factor, so hides co-binding potential
     // NOTE: current table has single motif per factor
     struct sqlConnection *conn = hAllocConn(database);
     if (sqlTableExists(conn, motifTable))
@@ -88,10 +87,19 @@ if (motifTable != NULL)
 
         // QUESTION: Is performance adequate with this design ?  Could query table once and
         // add motif ranges to items.
+        //#define HIGHEST_SCORING
+        #ifdef HIGHEST_SCORING
+        sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", fs->name);
+        #else
         sqlSafefFrag(where, sizeof(where), "name = '%s'", fs->name);
+        #endif
         sr = hRangeQuery(conn, motifTable, fs->chrom, fs->chromStart,
                          fs->chromEnd, where, &rowOffset);
-        while((row = sqlNextRow(sr)) != NULL)
+        #ifdef HIGHEST_SCORING
+        if ((row = sqlNextRow(sr)) != NULL)
+        #else
+        while ((row = sqlNextRow(sr)) != NULL)
+        #endif
             {
             // highlight motif regions in green
             Color color = hvGfxFindColorIx(hvg, 22, 182, 33);
@@ -106,12 +114,15 @@ if (motifTable != NULL)
             hvGfxBox(hvg, x1, y, w, heightPer, color);
             if (w > 2)
                 {
+                #define MOTIF_CHEVRONS
+                #ifdef MOTIF_CHEVRONS
                 // TODO: add chevrons more selectively (only if motif determines direction)
                 Color textColor = hvGfxContrastingColor(hvg, color);
                 int midY = y + (heightPer>>1);
                 int dir = (row[rowOffset+5][0] == '+' ? 1 : -1);
                 clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
                                dir, textColor, TRUE);
+                #endif
                 }
             }
         sqlFreeResult(&sr);
