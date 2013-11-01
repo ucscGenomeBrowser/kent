@@ -87,7 +87,7 @@ if (motifTable != NULL)
 
         // QUESTION: Is performance adequate with this design ?  Could query table once and
         // add motif ranges to items.
-        //#define HIGHEST_SCORING
+        #define HIGHEST_SCORING
         #ifdef HIGHEST_SCORING
         sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", fs->name);
         #else
