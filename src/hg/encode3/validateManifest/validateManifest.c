@@ -754,11 +754,11 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	}
     
     // check technical_replicate field
-    if (mTechnicalReplicateIdx != -1)  // The technical_replicate field is optional
+    if (fileIsValid)
 	{
-	char *mTechnicalReplicate = rec->words[mTechnicalReplicateIdx];
-	if (fileIsValid)
+	if (mTechnicalReplicateIdx != -1)  // The technical_replicate field is optional
 	    {
+	    char *mTechnicalReplicate = rec->words[mTechnicalReplicateIdx];
 	    boolean smallNumber = FALSE;
 	    int sl = strlen(mTechnicalReplicate);
 	    int sn = 0;
@@ -776,11 +776,11 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	}
     
     // check paired_end field
-    if (mPairedEndIdx != -1)  // The check paired_end field is optional
+    if (fileIsValid)
 	{
-	char *mPairedEnd = rec->words[mPairedEndIdx];
-	if (fileIsValid)
+	if (mPairedEndIdx != -1)  // The check paired_end field is optional
 	    {
+	    char *mPairedEnd = rec->words[mPairedEndIdx];
 	    boolean smallNumber = FALSE;
 	    int sl = strlen(mPairedEnd);
 	    int sn = 0;
@@ -793,6 +793,14 @@ for(rec = manifestRecs; rec; rec = rec->next)
 		{
 		fileIsValid = FALSE;
 		printf("ERROR: %s is not a valid value for the paired_end field.  Must be 1 (forward), 2 (reverse) or \"n/a\".\n", mPairedEnd);
+		}
+	    }
+	else
+	    {
+	    if (sameString(mFormat, "fastq"))  // The check paired_end field is required for fastq
+		{
+		fileIsValid = FALSE;
+		printf("ERROR: For format fastq the paired_end field is required.  Must be 1 (forward), 2 (reverse) or \"n/a\".\n");
 		}
 	    }
 	}
