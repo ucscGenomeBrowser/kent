@@ -485,9 +485,17 @@ if (motif != NULL && hits != NULL)
                     cluster->chrom, hit->chromStart+1, hit->chromEnd);
         printf("<b>Motif Score");
         if (hitCount > 1)
+            {
             printf("#%d", i + 1);
-        printf(":</b>  %.2f (%s max: %.2f) at %s <b>%c</b><br>", 
+            printf(":</b>  %.2f (%s max: %.2f) at %s on <b>%c</font></b> strand<br>", 
                 hit->score, cluster->name, maxScore, posLink, (int)hit->strand[0]);
+            }
+        else
+            {
+            printf(":</b>  %.2f (%s max: %.2f)<br>\n", hit->score, cluster->name, maxScore);
+            printf("<b>Motif Position:</b> %s<br>\n", posLink);
+            printf("<b>Motif Strand:</b> %c<br>\n", (int)hit->strand[0]);
+            }
         }
     }
 
