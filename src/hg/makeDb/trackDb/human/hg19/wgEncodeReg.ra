@@ -402,7 +402,7 @@ canPack On
     sourceTable wgEncodeRegTfbsCellsV3
     inputTrackTable wgEncodeRegTfbsClusteredInputsV3
     inputTableFieldDisplay cellType factor antibody treatment lab
-    motifTable wgEncodeRegTfbsClusteredMotifs
+    motifTable wgEncodeAwgTfbsMotifs
     motifPwmTable transRegCodeMotif
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     visibility hide
