@@ -105,7 +105,15 @@ return motif;
 void motifMultipleHitsSection(struct dnaSeq **seqs, int count, struct dnaMotif *motif)
 /* Print out section about motif, possibly with mutliple occurrences. */
 {
-
+// Detect inconsistent motif/pwm tables and suppress confusing display
+if (motif != NULL)
+    {
+    if (motif->columnCount != seqs[0]->size)
+        {
+        warn("Motif seq length doesn't match PWM\n");
+        return;
+        }
+    }
 webNewSection("Motif:");
 printf("<PRE>\n");
 printf("<table>\n");
@@ -128,7 +136,7 @@ if (count > 0)
         printf("<tr><td></td>");
         touppers(seq->dna);
         printDnaCells(seq->dna, seq->size);
-        if(count == 1)
+        if (count == 1)
             printf("<td>this occurrence</td></tr>\n");
         else
             // is there a library routine to get 1st, 2nd ...?
