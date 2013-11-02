@@ -3923,6 +3923,9 @@ type bed 3
 	longLabel ISCA CNVs: Benign
         subGroups view=cnv phen=ben level=det
 
+
+include phastBias.ra
+
 searchName decipherId
 searchTable decipher
 termRegex [0-9]+
