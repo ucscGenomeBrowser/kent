@@ -26,8 +26,6 @@
 #include "bed6FloatScore.h"
 #include "ra.h"
 #include "factorSource.h"
-// TODO: needed for conditional def/hard-coded table name (remove when this is fixed)
-#include "txCluster.h"
 
 static void printClusterTableHeader(struct slName *otherCols, 
 	boolean withAbbreviation, boolean withDescription, boolean withSignal)
