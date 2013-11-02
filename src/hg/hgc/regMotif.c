@@ -114,6 +114,8 @@ if (motif != NULL)
         return;
         }
     }
+
+#define MOTIF_HELP_PAGE "../goldenPath/help/hgRegMotifHelp.html"
 webNewSection("Motif:");
 printf("<PRE>\n");
 printf("<table>\n");
@@ -123,6 +125,8 @@ if (motif != NULL)
     dnaMotifMakeProbabalistic(motif);
     makeTempName(&pngTn, "logo", ".png");
     dnaMotifToLogoPng(motif, 47, 140, NULL, "../trash", pngTn.forCgi);
+    printf("<tr><td></td><td colspan='%d'align=right><a href=\"%s\" target=_blank>Motif display help</a></td></tr>", 
+        motif->columnCount, MOTIF_HELP_PAGE);
     printf("<tr><td></td><td colspan='%d'>", motif->columnCount);
     printf("<IMG SRC=\"%s\" BORDER=1>", pngTn.forHtml);
     printf("</td><td></td></tr>\n");
