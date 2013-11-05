@@ -220,6 +220,7 @@ dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo6
 xrefQuery select ucscRetroInfo6.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
+
 track illuminaProbes override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
