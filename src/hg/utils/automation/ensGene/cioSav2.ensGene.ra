@@ -3,6 +3,7 @@ db cioSav2
 # optional nameTranslation, the sed command that will transform
 #	Ensemble names to UCSC names.  With quotes just to make sure.
 # nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+nameTranslation "/NC_004570/d"
 # optional haplotype lift-down from Ensembl full chrom coordinates
 #	to UCSC simple haplotype coordinates
 # haplotypeLift /cluster/data/hg18/jkStuff/ensGene.haplotype.lift

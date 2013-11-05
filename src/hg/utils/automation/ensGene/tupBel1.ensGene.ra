@@ -2,5 +2,7 @@
 db tupBel1
 # do we need to translate geneScaffold coordinates
 geneScaffolds yes
+# eliminate the Ensembl chrMT since UCSC does not have this:
+nameTranslation "/^MT/d"
 # after geneScaffold conversions, change Ensembl chrom names to UCSC names
 liftUp /cluster/data/tupBel1/jkStuff/ensGene.lft
