@@ -1356,7 +1356,7 @@ return pat != NULL && pat[0] != 0 && !sameString(pat, "*");
 static boolean cmpReal(char *pat, char *cmpOp)
 /* Return TRUE if we have a real cmpOp. */
 {
-return isNotEmpty(pat) && stringArrayIx(pat, cmpOpMenu, cmpOpMenuSize) > 0;
+return isNotEmpty(pat) && stringArrayIx(cmpOp, cmpOpMenu, cmpOpMenuSize) > 0;
 }
 
 static boolean filteredOrLinked(char *db, char *table)

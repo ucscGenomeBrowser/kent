@@ -201,3 +201,5 @@ include wgEncodeMapability.ra
 # AWG DNase & TFBS (wrangler: kate)
 include wgEncodeAwgDnaseUniform.ra
 include wgEncodeAwgTfbsUniform.ra
+
+include wgEncodeAwg.ra

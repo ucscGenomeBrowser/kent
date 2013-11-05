@@ -1003,7 +1003,12 @@ return stringIn(needle, haystack);
 }
 
 void oligoMatchLoad(struct track *tg)
-/* Create track of perfect matches to oligo on either strand. */
+/* Create track of perfect matches to oligo on either strand. 
+ *
+ * Note that if you are extending this code, there is also a parallel copy 
+ * in src/hg/utils/oligoMatch/ that should be kept up to date! 
+ *
+ */
 {
 char *dna = dnaInWindow();
 char *fOligo = oligoMatchSeq();

@@ -48,6 +48,7 @@ static struct optionSpec options[] = {
     {"dir", OPTION_STRING},
     {"encValData", OPTION_STRING},
     {"quickMd5sum", OPTION_BOOLEAN},     // Testing option, user should not use
+    {"-help", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -512,7 +513,7 @@ if (fileExists("validated.txt"))  // read in the old validated.txt file to save 
     uglyf("reading validated.txt\n\n");
     vFieldCount = readManifest("validated.txt", &vFields, &vRecs);
     if (vFieldCount != mFieldCount + 4) // TODO this might be allowed someday if good case exists for it.
-	errAbort("Error: the number of fields in validated.txt %d does not match the number of fields %d in manifest.txt", vFieldCount, mFieldCount);
+	errAbort("ERROR: the number of fields in validated.txt %d does not match the number of fields %d in manifest.txt", vFieldCount, mFieldCount);
     haveVal = TRUE;
     }
 
@@ -524,7 +525,9 @@ int mFormatIdx = -1;
 int mOutputTypeIdx = -1;
 int mExperimentIdx = -1;
 int mReplicateIdx = -1;
+int mTechnicalReplicateIdx = -1;
 int mEnrichedInIdx = -1;
+int mPairedEndIdx = -1;
 int i = 0;
 // find field numbers needed for required fields.
 for (i=0; i<mFieldCount; ++i)
@@ -541,8 +544,12 @@ for (i=0; i<mFieldCount; ++i)
 	mExperimentIdx = i;
     if (sameString(manifestFields->words[i], "replicate"))
 	mReplicateIdx = i;
+    if (sameString(manifestFields->words[i], "technical_replicate"))
+	mTechnicalReplicateIdx = i;
     if (sameString(manifestFields->words[i], "enriched_in"))
 	mEnrichedInIdx = i;
+    if (sameString(manifestFields->words[i], "paired_end"))
+	mPairedEndIdx = i;
     }
 if (mFileNameIdx == -1)
     errAbort("field file_name not found in manifest.txt");
@@ -554,8 +561,14 @@ if (mExperimentIdx == -1)
     errAbort("field experiment not found in manifest.txt");
 if (mReplicateIdx == -1)
     errAbort("field replicate not found in manifest.txt");
+// technical_replicate is probably optional
+//if (mTechnicalReplicateIdx == -1)
+//    errAbort("field technical_replicate not found in manifest.txt");
 if (mEnrichedInIdx == -1)
     errAbort("field enriched_in not found in manifest.txt");
+// paired_end is probably optional
+//if (mPairedEndIdx == -1)
+//    errAbort("field paired_end not found in manifest.txt");
 
 // check if the fieldnames in old validated appear in the same order in manifest.txt
 //  although this is currently a minor limitation, it could be removed 
@@ -654,7 +667,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
     if (fileIsValid && mUcscDbIdx != -1 && ucscDb[0] == 0)
 	{
 	fileIsValid = FALSE;
-	printf("Error: ucsc_db must not be blank.\n");
+	printf("ERROR: ucsc_db must not be blank.\n");
 	}		    
 
     // check that the file exists
@@ -679,7 +692,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
     if (fileIsValid && mOutputType[0] == 0)
 	{
 	fileIsValid = FALSE;
-	printf("Error: output_type must not be blank.\n");
+	printf("ERROR: output_type must not be blank.\n");
 	}		    
     if (fileIsValid)
 	{
@@ -690,7 +703,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	    if (!sameString(mFormat, existingFormat))
 		{
 		fileIsValid = FALSE;
-		printf("Error: Each output_type can only be used with one format.  output_type %s is being used with both format %s and %s.\n",
+		printf("ERROR: Each output_type can only be used with one format.  output_type %s is being used with both format %s and %s.\n",
 		    mOutputType, mFormat, existingFormat);
 		}		    
 	    }
@@ -727,12 +740,68 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	{
 	boolean smallNumber = FALSE;
 	int sl = strlen(mReplicate);
-	if (countLeadingDigits(mReplicate) == sl && sl < 3 && sl > 0)
+	int sn = 0;
+	if (countLeadingDigits(mReplicate) == sl && sl < 2 && sl > 0)
+	    {
 	    smallNumber = TRUE;
-       	if (!(startsWith("pooled", mReplicate) || startsWith("n/a", mReplicate) || smallNumber))
+	    sn = atoi(mReplicate);
+	    }
+       	if (!(startsWith("pooled", mReplicate) || startsWith("n/a", mReplicate) || (smallNumber && sn >=1 && sn <=10)))
 	    {
 	    fileIsValid = FALSE;
-    	    printf("ERROR: %s is not a valid value for the replicate field.  Must be pooled or n/a or a small unsigned number.\n", mReplicate);
+    	    printf("ERROR: %s is not a valid value for the replicate field.  Must be pooled or n/a or a small unsigned number 1 <= N <=10.\n", mReplicate);
+	    }
+	}
+    
+    // check technical_replicate field
+    if (fileIsValid)
+	{
+	if (mTechnicalReplicateIdx != -1)  // The technical_replicate field is optional
+	    {
+	    char *mTechnicalReplicate = rec->words[mTechnicalReplicateIdx];
+	    boolean smallNumber = FALSE;
+	    int sl = strlen(mTechnicalReplicate);
+	    int sn = 0;
+	    if (countLeadingDigits(mTechnicalReplicate) == sl && sl < 2 && sl > 0)
+		{
+		smallNumber = TRUE;
+		sn = atoi(mTechnicalReplicate);
+		}
+	    if (!(startsWith("pooled", mTechnicalReplicate) || startsWith("n/a", mTechnicalReplicate) || (smallNumber && sn >=1 && sn <=10)))
+		{
+		fileIsValid = FALSE;
+		printf("ERROR: %s is not a valid value for the technical_replicate field.  Must be pooled or n/a or a small unsigned number 1 <= N <=10.\n", mTechnicalReplicate);
+		}
+	    }
+	}
+    
+    // check paired_end field
+    if (fileIsValid)
+	{
+	if (mPairedEndIdx != -1)  // The check paired_end field is optional
+	    {
+	    char *mPairedEnd = rec->words[mPairedEndIdx];
+	    boolean smallNumber = FALSE;
+	    int sl = strlen(mPairedEnd);
+	    int sn = 0;
+	    if (countLeadingDigits(mPairedEnd) == sl && sl < 2 && sl > 0)
+		{
+		smallNumber = TRUE;
+		sn = atoi(mPairedEnd);
+		}
+	    if (!(startsWith("pooled", mPairedEnd) || startsWith("n/a", mPairedEnd) || (smallNumber && (sn==1 || sn ==2))))
+		{
+		fileIsValid = FALSE;
+		printf("ERROR: %s is not a valid value for the paired_end field.  Must be 1 (forward), 2 (reverse) or \"n/a\".\n", mPairedEnd);
+		}
+	    }
+	else
+	    {
+	    if (sameString(mFormat, "fastq"))  // The check paired_end field is required for fastq
+		{
+		fileIsValid = FALSE;
+		printf("ERROR: For format fastq the paired_end field is required.  Must be 1 (forward), 2 (reverse) or \"n/a\".\n");
+		}
 	    }
 	}
     
@@ -865,7 +934,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 
-if (argc!=1)
+if (argc!=1 || optionExists("-help"))
     usage();
 
 workingDir = optionVal("dir", workingDir);

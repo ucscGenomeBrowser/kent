@@ -1,0 +1,26 @@
+# Integrated track of DNase sites across 125 cell types from ENCODE/Analysis
+# The 'master list' described in Thurman et al., Chromatin Landscape (Nature Sep 2012)
+
+track wgEncodeAwgDnaseMaster
+superTrack wgEncodeDNAseSuper dense
+release alpha
+shortLabel DHS Master 
+longLabel Digital DNaseI Hypersensitivity Sites Master List from ENCODE/Analysis
+type narrowPeak
+visibility dense
+group regulation
+priority 3.6
+minGrayLevel 4
+wgEncode 1
+
+
+### DNaseI footprints
+track wgEncodeAwgDnaseCombinedFootprint
+superTrack wgEncodeDNAseSuper dense
+release alpha
+shortLabel DnaseI Footprnt
+longLabel DNaseI Hypersensitivity Combined Footprints from ENCODE/Analysis
+type bigBed 3
+color 150,150,50
+priority 3.7
+wgEncode 1

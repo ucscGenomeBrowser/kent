@@ -28323,3 +28323,35 @@ bedToBigBed clinvarCnv.bed /scratch/data/hg19/chrom.sizes clinvarCnv.bb -type=be
 cp clinvarMain.bb /hive/data/genomes/hg19/bed/clinvar/
 cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 #########################################################################
+# phastBias gBGC track (2013-10-29 - Galt)
+#   RM #11697 data received from Katie Pollard and Adam Siepel
+#   GC-Biased Gene Conversion in the Human and Chimpanzee Genomes 
+#   Data consists of tracts of gBGC regions identified in a BED and bigWig on
+#   hg19.  This data was recreated on hg19, it is not lifted from hg18.
+#   Paper: http://www.plosgenetics.org/article/info%3Adoi%2F10.1371%2Fjournal.pgen.1003684
+#   Data:  http://compgen.bscb.cornell.edu/~mt269/gBGC_tracks/
+#
+cd /hive/data/genomes/hg19/bed
+mkdir phastBias
+cd phastBias
+
+wget -O phastBiasTracts3.bed 'http://compgen.bscb.cornell.edu/~mt269/gBGC_tracks/phastBias_hg19_tracts.bed'
+
+# the bigWig file is 17GB and using wget would take 2.5 hours.
+# since the file is coming from New York, we can use paraFetch to reduce the
+# download time significantly:
+paraFetch -progress 10 3 'http://compgen.bscb.cornell.edu/~mt269/gBGC_tracks/phastBias_hg19_posterior.bw' phastBiasPosteriors3.bw
+# it took 1.4 hours and ran at 3MB/sec. It still saved over an hour, but I was
+# hoping for even better results.  Maybe 10 is too many connections for their
+# server.
+
+hgLoadBed hg19 phastBiasTracts3 phastBiasTracts3.bed
+
+ln -s /hive/data/genomes/hg19/bed/phastBias/phastBiasPosteriors3.bw /gbdb/hg19/bbi/
+
+hgBbiDbLink hg19 phastBiasPosteriors3 /gbdb/hg19/bbi/phastBiasPosteriors3.bw
+
+# see hg18.txt makedoc for details on how the .ra and .html files were
+# downloaded and installed at the human level.
+
+#########################################################################

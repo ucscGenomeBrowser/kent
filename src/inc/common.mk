@@ -11,6 +11,8 @@ HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../in
 
 # to check for Mac OSX Darwin specifics:
 UNAME_S := $(shell uname -s)
+# to check for builds on hgwdev
+FULLWARN = $(shell uname -n)
 
 #global external libraries 
 L=
@@ -52,7 +54,12 @@ ifeq (${USE_SSL},1)
         L+=-L${SSL_DIR}/lib
         HG_INC+=-I${SSL_DIR}/include
     endif
-    L+=-lssl -lcrypto
+    # on hgwdev, already using the static library with mysqllient.
+    ifeq (${FULLWARN},hgwdev)
+       L+=/cluster/home/hiram/kent/src/lib/x86_64/libssl.a /cluster/home/hiram/kent/src/lib/x86_64/libcrypto.a -lkrb5
+    else
+       L+=-lssl -lcrypto
+    endif
     HG_DEFS+=-DUSE_SSL
 endif
 
@@ -80,8 +87,6 @@ ifeq (${PNGINCL},)
       PNGINCL=-I/opt/local/include
   endif
 endif
-
-FULLWARN = $(shell uname -n)
 
 # autodetect where mysql includes and libraries are installed
 # do not need to do this during 'clean' target (this is very slow for 'clean')

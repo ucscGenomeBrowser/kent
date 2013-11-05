@@ -582,3 +582,159 @@ XXX - ready to do this
     ssh hgwbeta "hgsql qapushq < /tmp/taeGut2.sql"
 
 ############################################################################
+#  BLASTZ/CHAIN/NET Zebra finch vs Turkey (DONE - 2013-10-18,25 - Hiram)
+#   use a screen to manage this multi-day job
+    screen -S melGal1
+
+    mkdir /hive/data/genomes/taeGut2/bed/lastzMelGal1.2013-10-18
+    cd /hive/data/genomes/taeGut2/bed/lastzMelGal1.2013-10-18
+
+    cat << '_EOF_' > DEF
+# Zebra finch vs. Turkey
+BLASTZ_M=50
+
+# TARGET: Zebra finch TaeGut2
+SEQ1_DIR=/hive/data/genomes/taeGut2/taeGut2.2bit
+SEQ1_LEN=/hive/data/genomes/taeGut2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Turkey MelGal1
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/taeGut2/bed/lastzMelGal1.2013-10-18
+TMPDIR=/dev/shm
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+    # real    4063m8.278s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -continue=cat -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > cat.log 2>&1
+    # real    66m17.485s
+
+    cat fb.taeGut2.chainMelGal1Link.txt
+    # 781765606 bases of 1222864691 (63.929%) in intersection
+
+    cd /hive/data/genomes/taeGut2/bed
+    ln -s lastzMelGal1.2013-10-18 lastz.melGal1
+
+    #   and then swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.taeGut2.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.taeGut2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/taeGut2/bed/lastzMelGal1.2013-10-18/DEF \
+        -swap -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    # real    43m24.666s
+    cat fb.melGal1.chainTaeGut2Link.txt
+    #   661376423 bases of 935922386 (70.666%) in intersection
+
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.taeGut2.swap lastz.taeGut2
+
+############################################################################
+# lifting ensGene from taeGut1 (DONE - 2011-03-23 - Hiram)
+    mkdir /hive/data/genomes/taeGut2/bed/ensGene.73
+    cd /hive/data/genomes/taeGut2/bed/ensGene.73
+
+    # start with taeGut1 ensGene
+    hgsql -N -e "select * from ensGene;" taeGut1 | cut -f2- > taeGut1.ensGene.gp
+    # lift over to taeGut2
+    liftOver -genePred  taeGut1.ensGene.gp \
+      /hive/data/genomes/taeGut1/bed/liftOver/taeGut1ToTaeGut2.over.chain.gz \
+         taeGut2.ensGene.gp unMapped.txt
+    # check to see which genes have gone bad
+    genePredCheck -db=taeGut2 taeGut2.ensGene.gp > badOnes.txt 2>&1
+    #	checked: 19226 failed: 2
+    awk '{print $3}' badOnes.txt | sort -u | grep -v failed > toRemove.txt
+    # remove the bad ones
+    cp -p taeGut2.ensGene.gp taeGut2.unfiltered.ensGene.gp
+for N in `cat toRemove.txt`
+do
+    rm -f t.gp
+    grep -v "${N}" taeGut2.ensGene.gp > t.gp
+    rm -f taeGut2.ensGene.gp
+    mv t.gp taeGut2.ensGene.gp
+done
+    genePredCheck -db=taeGut2 taeGut2.ensGene.gp
+    #	checked: 19225 failed: 0
+    # OK to load this since all are OK now
+    hgLoadGenePred  -genePredExt taeGut2 ensGene taeGut2.ensGene.gp
+    genePredCheck -db=taeGut2 ensGene
+    #	checked: 19225 failed: 0
+    # use the ensPep and ensGtp from taeGut1, but remove the bad ones
+    zcat /hive/data/genomes/taeGut1/bed/ensGene.73/download/Taeniopygia_guttata.taeGut3.2.4.73.pep.all.fa.gz \
+        | sed -e 's/^>.* transcript:/>/; s/ CCDS.*$//; s/ gene_biotype.*$//;' | gzip > ensPep.txt.gz
+    zcat ensPep.txt.gz \
+    | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+         | sed -e '/^$/d; s/*$//' | sort > ensPep.taeGut1.fa.tab
+
+    cp -p ensPep.taeGut1.fa.tab ensPep.taeGut2.fa.tab
+    for N in `cat toRemove.txt`
+do
+    rm -f t.fa.tab
+    grep -v "${N}" ensPep.taeGut2.fa.tab > t.fa.tab
+    rm -f ensPep.taeGut2.fa.tab
+    mv t.fa.tab ensPep.taeGut2.fa.tab
+    echo "'${N}'"
+done
+
+    wc -l ensPep.taeGut1.fa.tab ensPep.taeGut2.fa.tab
+    # 18204 ensPep.taeGut1.fa.tab
+    # 18203 ensPep.taeGut2.fa.tab
+
+    awk '{print $1}' taeGut1.ensGene.gp | sort -u > taeGut1.name.list
+    awk '{print $1}' taeGut2.ensGene.gp | sort -u > taeGut2.name.list
+    cp -p /hive/data/genomes/taeGut1/bed/ensGene.73/process/ensGtp.tab \
+        ./taeGut1.ensGtp.tab
+
+    cp -p taeGut1.ensGtp.tab taeGut2.ensGtp.tab
+    comm -23 taeGut1.name.list taeGut2.name.list | while read N
+do
+    rm -f t.gtp.tab
+    grep -v "${N}" taeGut2.ensGtp.tab > t.gtp.tab
+    rm -f taeGut2.ensGtp.tab
+    mv t.gtp.tab taeGut2.ensGtp.tab
+    echo "${N}"
+done
+    wc -l *ensGtp*
+    # 19334 taeGut1.ensGtp.tab
+    # 19225 taeGut2.ensGtp.tab
+
+    comm -23 taeGut1.name.list taeGut2.name.list | while read N
+do
+    rm -f t.fa.tab
+    grep -v "${N}" ensPep.taeGut2.fa.tab > t.fa.tab
+    rm -f ensPep.taeGut2.fa.tab
+    mv t.fa.tab ensPep.taeGut2.fa.tab
+    echo "'${N}'"
+done
+    wc -l ensPep.taeGut1.fa.tab ensPep.taeGut2.fa.tab
+    # 18204 ensPep.taeGut1.fa.tab
+    # 18097 ensPep.taeGut2.fa.tab
+
+    # now that those are clean, load them up
+    hgPepPred taeGut2 tab ensPep ensPep.taeGut2.fa.tab
+    hgLoadSqlTab taeGut2 ensGtp ~/kent/src/hg/lib/ensGtp.sql taeGut2.ensGtp.tab
+    # and record version in trackVersion
+hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) \
+    VALUES("taeGut2", "ensGene", "hiram", "73", now(), \
+        "peptides lifted from taeGut1", \
+        "genes lifted from taeGut1 ensGene v73", "current" );' hgFixed
+
+#########################################################################

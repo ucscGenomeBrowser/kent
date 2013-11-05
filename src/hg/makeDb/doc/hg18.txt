@@ -32198,4 +32198,57 @@ TMPDIR=/scratch/tmp
     cat fb.panTro4.chainHg18Link.txt
 # 2771644923 bases of 2902338967 (95.497%) in intersection
 
+#########################################################################
+# phastBias gBGC track (2013-10-29 - Galt)
+#   RM #11697 data received from Katie Pollard and Adam Siepel
+#   GC-Biased Gene Conversion in the Human and Chimpanzee Genomes 
+#   Data consists of tracts of gBGC regions identified in a BED and bigWig on
+#   hg19.  This data was created on hg18.
+#   Paper: http://www.plosgenetics.org/article/info%3Adoi%2F10.1371%2Fjournal.pgen.1003684
+#   Data:  http://compgen.bscb.cornell.edu/~mt269/gBGC_tracks/
+#
+cd /hive/data/genomes/hg18/bed
+mkdir phastBias
+cd phastBias
+
+wget -O phastBiasTracts3.bed 'http://compgen.bscb.cornell.edu/~mt269/gBGC_tracks/phastBias_hg18_tracts.bed'
+
+# the bigWig file is 17GB and using wget would take 2.5 hours.
+# since the file is coming from New York, we can use paraFetch to reduce the
+# download time significantly:
+paraFetch -progress 5 3 'http://compgen.bscb.cornell.edu/~mt269/gBGC_tracks/phastBias_hg18_posterior.bw' phastBiasPosteriors3.bw
+
+#downloading  17 GB ******************** 3382 seconds 5.0 MB/sec
+#[hgwdev:phastBias> calc '3382/3600'
+#3382/3600 = 0.939444 so less than 1 hour.  
+# so 5 connections seemed to work better than 10 at least for this server.
+#
+
+wget -O phastBiasChimpTracts3.bed 'http://compgen.bscb.cornell.edu/~mt269/gBGC_tracks/phastBias_panTro2_tracts.bed'
+
+paraFetch -progress 5 3 'http://compgen.bscb.cornell.edu/~mt269/gBGC_tracks/phastBias_panTro2_posterior.bw' phastBiasChimpPosteriors3.bw
+
+#downloading  17 GB ******************** 3266 seconds 5.0 MB/sec
+#same happy rate
+
+hgLoadBed hg18 phastBiasTracts3 phastBiasTracts3.bed
+hgLoadBed hg18 phastBiasChimpTracts3 phastBiasChimpTracts3.bed
+
+ln -s /hive/data/genomes/hg18/bed/phastBias/phastBiasPosteriors3.bw /gbdb/hg18/bbi/
+ln -s /hive/data/genomes/hg18/bed/phastBias/phastBiasChimpPosteriors3.bw /gbdb/hg18/bbi/
+
+hgBbiDbLink hg18 phastBiasPosteriors3 /gbdb/hg18/bbi/phastBiasPosteriors3.bw
+hgBbiDbLink hg18 phastBiasChimpPosteriors3 /gbdb/hg18/bbi/phastBiasChimpPosteriors3.bw
+
+cd kent/src/ hg/makeDb/trackDb/human
+wget 'http://compgen.bscb.cornell.edu/~mt269/gBGC_tracks/trackDb/human/phastBias.html'
+wget -O phastBias.ra 'http://compgen.bscb.cornell.edu/~mt269/gBGC_tracks/trackDb/human/phastBias_tracks.ra'
+# edit trackDb.ra to include phastBias.ra
+# edit phastBias.ra to change default visibility at highest level from full to hidden
+# edit phastBias.html to add a couple of sentences in the methods section about hg19.
+# FYI the method was re-run, not liftOver. The chimp track was not re-done due
+# to expected lower interest.
+cd ..
+make DBS="hg18 hg19"
+
 #############################################################################

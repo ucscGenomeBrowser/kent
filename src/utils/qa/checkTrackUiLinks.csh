@@ -23,7 +23,7 @@ set cgi=""
 set hgsid=""
 set db=""
 set pgsWErrors=0
-set totalPgs=0
+set pgsChkd=0
 
 if ( $#argv < 2 || $#argv > 3 ) then
   echo
@@ -46,7 +46,7 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-# check for valid db 
+# check for valid db
 set url1="http://"
 set url2=".cse.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doMetaData=1"
 set url3="&hgta_metaDatabases=1"
@@ -82,22 +82,20 @@ set hgsid=`htmlCheck  getVars $baseUrl/cgi-bin/hgGateway | grep hgsid \
   | head -1 | awk '{print $4}'`
 
 echo "hgw1 hgw2 hgw3 hgw4 hgw5 hgw6" | grep $machine
-if ( $status ) then 
+if ( $status ) then
   set rr="true"
 endif
 
 # process descriptions page for "all" choice
 if ( "all" == $tableinput ) then
-  if ( "hgwdev" == $machine ) then
-    set tables=`hgsql -Ne "SELECT tableName FROM trackDb WHERE html != ''" $db`
-  else
-    set tables=`hgsql -h $sqlbeta -Ne "SELECT tableName FROM trackDb WHERE html != ''" $db`
+  if ( "hgwdev" != "$machine" ) then
     set host="-h $sqlbeta"
   endif
+  set tables=`hgsql $host -Ne "SELECT tableName FROM trackDb WHERE html != ''" $db`
   set tables="description.html $tables"
 endif
 
-# check links on all table.html pages 
+# check links on all table.html pages
 foreach table ( $tables )
   rm -f errorsOnPg$$
   if ( $table == "description.html" ) then
@@ -107,12 +105,13 @@ foreach table ( $tables )
   endif
   set target="$baseUrl/cgi-bin/$cgi"
   htmlCheck getLinks "$target" | egrep "ftp:|http:" | grep -v ucsc > $db.$table.outsideLinks$$
+
   if ( ! -z  $db.$table.outsideLinks$$ ) then
     foreach link ( `cat $db.$table.outsideLinks$$` )
-      echo $link >>& errorsOnPg$$
+      echo "$link" >>& errorsOnPg$$
       htmlCheck ok "$link" >>& errorsOnPg$$
     end
-    grep -B1 -v http errorsOnPg$$ > /dev/null
+    egrep -B1 -v "ftp:|http:" errorsOnPg$$ > /dev/null
     if ( ! $status ) then
       echo $table
       echo "=============="
@@ -121,17 +120,17 @@ foreach table ( $tables )
       @ pgsWErrors= $pgsWErrors + 1
     endif
   endif
-  @ totalPgs = $totalPgs + 1
+  @ pgsChkd= $pgsChkd + 1
   rm -f errorsOnPg$$
   rm -f $db.$table.outsideLinks$$
 end
 
 echo "Summary"
 echo "======= ======="
-if ( $totalPgs == 1 ) then
-  echo $totalPgs "page checked"
+if ( $pgsChkd == 1 ) then
+  echo $pgsChkd "page checked"
 else
-  echo $totalPgs "pages checked"
+  echo $pgsChkd "pages checked"
 endif
 if ( $pgsWErrors > 0 ) then
   if ( $pgsWErrors == 1 ) then

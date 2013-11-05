@@ -376,10 +376,8 @@ int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 char **row;
 struct sqlResult *sr;
 char query[256];
-char *motifTable = NULL;
-#ifdef TXCLUSTER_MOTIFS_TABLE
-motifTable = TXCLUSTER_MOTIFS_TABLE;
-#endif
+char *motifTable = trackDbSetting(tdb, "motifTable");         // localizations
+char *motifPwmTable = trackDbSetting(tdb, "motifPwmTable");   // PWM used to draw sequence logo
 
 sqlSafef(query, sizeof(query),
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
@@ -391,122 +389,157 @@ if (row != NULL)
     cluster = factorSourceLoad(row + rowOffset);
 sqlFreeResult(&sr);
 
-if (cluster != NULL)
+if (cluster == NULL)
+    errAbort("Error loading cluster from track %s", tdb->track);
+
+char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
+struct dnaMotif *motif = NULL;
+struct dnaSeq **seqs = NULL;
+struct bed6FloatScore *hits = NULL;
+
+if (motifTable != NULL && sqlTableExists(conn, motifTable))
     {
-    char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
-    struct dnaMotif *motif = NULL;
-    struct dnaSeq **seqs = NULL;
-    struct bed6FloatScore *hits = NULL;
+    struct sqlResult *sr;
+    int rowOffset;
+    char where[256];
 
-    if(motifTable != NULL && sqlTableExists(conn, motifTable))
-        {
-        struct sqlResult *sr;
-        int rowOffset;
-        char where[256];
+    if (motifPwmTable != NULL && sqlTableExists(conn, motifPwmTable))
+        motif = loadDnaMotif(item, motifPwmTable);
 
-        motif = loadDnaMotif(item, "transRegCodeMotif");
-        sqlSafefFrag(where, sizeof(where), "name = '%s'", item);
-        sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", cluster->chrom, cluster->chromStart,
-                         cluster->chromEnd, where, &rowOffset);
-        while ((row = sqlNextRow(sr)) != NULL)
-            {
-            struct bed6FloatScore *hit = NULL;
-            AllocVar(hit);
-            hit->chromStart = sqlUnsigned(row[rowOffset + 1]);
-            hit->chromEnd = sqlUnsigned(row[rowOffset + 2]);
-            hit->score = sqlFloat(row[rowOffset + 4]);
-            hit->strand[0] = row[rowOffset + 5][0];
-            slAddHead(&hits, hit);
-            }
-        sqlFreeResult(&sr);
-        }
-    
-    char *factorLink = cluster->name;
-    char *vocab = trackDbSetting(tdb, "controlledVocabulary");
-    if (vocab != NULL)
-	{
-	char *file = cloneFirstWord(vocab);
-	factorLink = controlledVocabLink(file, "term", factorLink, factorLink, factorLink, "");
-	}
-    printf("<B>Factor:</B> %s<BR>\n", factorLink);
-    printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
-    if(motif != NULL && hits != NULL)
+    #define HIGHEST_SCORING
+    #ifdef HIGHEST_SCORING
+    sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", item);
+    #else
+    sqlSafefFrag(where, sizeof(where), "name = '%s'", item);
+    #endif
+    sr = hRangeQuery(conn, motifTable, cluster->chrom, cluster->chromStart,
+                     cluster->chromEnd, where, &rowOffset);
+    #ifdef HIGHEST_SCORING
+    if ((row = sqlNextRow(sr)) != NULL)
+    #else
+    while ((row = sqlNextRow(sr)) != NULL)
+    #endif
         {
         struct bed6FloatScore *hit = NULL;
-        int i;
-        seqs = needMem(sizeof(struct dnaSeq *) * slCount(hits));
-        for (hit = hits, i = 0; hit != NULL; hit = hit->next, i++)
+        AllocVar(hit);
+        hit->chromStart = sqlUnsigned(row[rowOffset + 1]);
+        hit->chromEnd = sqlUnsigned(row[rowOffset + 2]);
+        hit->score = sqlFloat(row[rowOffset + 4]);
+        hit->strand[0] = row[rowOffset + 5][0];
+        slAddHead(&hits, hit);
+        }
+    sqlFreeResult(&sr);
+    }
+
+char *factorLink = cluster->name;
+char *vocab = trackDbSetting(tdb, "controlledVocabulary");
+if (vocab != NULL)
+    {
+    char *file = cloneFirstWord(vocab);
+    factorLink = controlledVocabLink(file, "term", factorLink, factorLink, factorLink, "");
+    }
+printf("<B>Factor:</B> %s<BR>\n", factorLink);
+printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
+printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
+
+int hitCount = 0;
+if (hits != NULL)
+    hitCount = slCount(hits);
+
+if (motif != NULL && hits != NULL)
+    {
+    struct bed6FloatScore *hit = NULL;
+    int i;
+    seqs = needMem(sizeof(struct dnaSeq *) * slCount(hits));
+    char posLink[1024];
+    char query[256];
+    float maxScore = -1;
+    sqlSafef(query, sizeof(query), 
+        "select max(score) from %s where name = '%s'", motifTable, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        if(!isEmpty(row[0]))
             {
-            char query[256];
-            float maxScore = -1;
-
-            sqlSafef(query, sizeof(query), 
-	    	"select max(score) from %s where name = '%s'", 
-		"wgEncodeRegTfbsClusteredMotifs", item);
-            sr = sqlGetResult(conn, query);
-            if ((row = sqlNextRow(sr)) != NULL)
-                {
-                if(!isEmpty(row[0]))
-                    {
-                    maxScore = sqlFloat(row[0]);
-                    }
-                }
-            sqlFreeResult(&sr);
-
-            struct dnaSeq *seq = hDnaFromSeq(database, 
-	    	seqName, hit->chromStart, hit->chromEnd, dnaLower);
-            if(hit->strand[0] == '-')
-                reverseComplement(seq->dna, seq->size);
-            seqs[i] = seq;
-            printf("<B>Motif Score #%d:</B>  %.2f (max: %.2f)<BR>\n", i + 1, hit->score, maxScore);
+            maxScore = sqlFloat(row[0]);
             }
         }
-    printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
+    sqlFreeResult(&sr);
 
-    if(seqs != NULL)
+    puts("<p></p>");
+    for (hit = hits, i = 0; hit != NULL; hit = hit->next, i++)
         {
-        motifMultipleHitsSection(seqs, slCount(hits), motif);
+
+        struct dnaSeq *seq = hDnaFromSeq(database, 
+            seqName, hit->chromStart, hit->chromEnd, dnaLower);
+        if(hit->strand[0] == '-')
+            reverseComplement(seq->dna, seq->size);
+        seqs[i] = seq;
+
+        // TODO: move to hgc.c (with other pos printers)
+        safef(posLink, sizeof(posLink),"<a href=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a>",
+                hgTracksPathAndSettings(), database, 
+                    cluster->chrom, hit->chromStart+1, hit->chromEnd,
+                    cluster->chrom, hit->chromStart+1, hit->chromEnd);
+        printf("<b>Motif Score");
+        if (hitCount > 1)
+            {
+            printf("#%d", i + 1);
+            printf(":</b>  %.2f (%s max: %.2f) at %s on <b>%c</font></b> strand<br>", 
+                hit->score, cluster->name, maxScore, posLink, (int)hit->strand[0]);
+            }
+        else
+            {
+            printf(":</b>  %.2f (%s max: %.2f)<br>\n", hit->score, cluster->name, maxScore);
+            printf("<b>Motif Position:</b> %s<br>\n", posLink);
+            printf("<b>Motif Strand:</b> %c<br>\n", (int)hit->strand[0]);
+            }
         }
-
-    /* Get list of tracks we'll look through for input. */
-    char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
-    sqlSafef(query, sizeof(query), 
-    	"select tableName from %s where factor='%s' order by source", inputTrackTable, 
-	cluster->name);
-
-    /* Next do the lists of hits and misses.  We have the hits from the non-zero signals in
-     * cluster->expScores.  We need to figure out the sources actually assayed though
-     * some other way.  We'll do this by one of two techniques. */
-    char *inputTableFieldDisplay = trackDbSetting(tdb, "inputTableFieldDisplay");
-    if (inputTableFieldDisplay != NULL)
-        {
-	struct slName *fieldList = stringToSlNames(inputTableFieldDisplay);
-	char *vocab = trackDbSetting(tdb, "controlledVocabulary");
-
-	/* In a new section put up list of hits. */
-	webNewSection("List of %s Items in Cluster", cluster->name);
-	webPrintLinkTableStart();
-	printClusterTableHeader(fieldList, TRUE, FALSE, TRUE);
-	printFactorSourceTableHits(cluster, conn, sourceTable, 
-		inputTrackTable, fieldList, FALSE, vocab);
-	webPrintLinkTableEnd();
-
-	webNewSection("List of cells assayed for %s but without hits in cluster", cluster->name);
-	webPrintLinkTableStart();
-	printClusterTableHeader(fieldList, TRUE, FALSE, FALSE);
-	printFactorSourceTableHits(cluster, conn, sourceTable, 
-		inputTrackTable, fieldList, TRUE, vocab);
-	webPrintLinkTableEnd();
-	}
-    else
-        {
-	errAbort("Missing required trackDb setting %s for track %s",
-	    "inputTableFieldDisplay", tdb->track);
-	}
-
-    webNewSection("Table of abbreviations for cells");
-    hPrintFactorSourceAbbrevTable(conn, tdb);
-    webNewSection("Track Description");
     }
+
+if (seqs != NULL)
+    {
+    motifMultipleHitsSection(seqs, hitCount, motif);
+    }
+
+/* Get list of tracks we'll look through for input. */
+char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
+sqlSafef(query, sizeof(query), 
+    "select tableName from %s where factor='%s' order by source", inputTrackTable, 
+    cluster->name);
+
+/* Next do the lists of hits and misses.  We have the hits from the non-zero signals in
+ * cluster->expScores.  We need to figure out the sources actually assayed though
+ * some other way.  We'll do this by one of two techniques. */
+char *inputTableFieldDisplay = trackDbSetting(tdb, "inputTableFieldDisplay");
+if (inputTableFieldDisplay != NULL)
+    {
+    struct slName *fieldList = stringToSlNames(inputTableFieldDisplay);
+    char *vocab = trackDbSetting(tdb, "controlledVocabulary");
+
+    /* In a new section put up list of hits. */
+    webNewSection("List of %s Items in Cluster", cluster->name);
+    webPrintLinkTableStart();
+    printClusterTableHeader(fieldList, TRUE, FALSE, TRUE);
+    printFactorSourceTableHits(cluster, conn, sourceTable, 
+            inputTrackTable, fieldList, FALSE, vocab);
+    webPrintLinkTableEnd();
+
+    webNewSection("List of cells assayed for %s but without hits in cluster", cluster->name);
+    webPrintLinkTableStart();
+    printClusterTableHeader(fieldList, TRUE, FALSE, FALSE);
+    printFactorSourceTableHits(cluster, conn, sourceTable, 
+            inputTrackTable, fieldList, TRUE, vocab);
+    webPrintLinkTableEnd();
+    }
+else
+    {
+    errAbort("Missing required trackDb setting %s for track %s",
+        "inputTableFieldDisplay", tdb->track);
+    }
+
+webNewSection("Table of abbreviations for cells");
+hPrintFactorSourceAbbrevTable(conn, tdb);
+webNewSection("Track Description");
 }
 

@@ -210,11 +210,23 @@ utilities.<BR>
       to <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format6">wig</a> format.
  <LI><TT>bigWigSummary</TT> &mdash; this program extracts summary information
       from a bigWig file.
+ <LI><TT>bigWigAverageOverBed</TT> &mdash; this program computes the average score
+      of a bigWig over each bed, which may have introns.
  <LI><TT>bigWigInfo</TT> &mdash; this program prints out information about a 
       bigWig file.
 </UL>
 As with all UCSC Genome Browser programs, simply type the program name
 at the command line with no parameters to see the usage statement.
+</P>
+
+</P>
+In some cases, bigWigSummary and bigWigAverageOverBed will produce very similar
+results, but in other cases, the results may differ. This is the result of
+differences in which both utilities handle data.  Summary levels are used with
+bigWigSummary, so some rounding errors and border conditions when extracting
+data over relatively small regions are encountered. The actual data is used
+with bigWigAverageOverBed, so this utility should ensure the highest level
+of accuracy.
 </P>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
