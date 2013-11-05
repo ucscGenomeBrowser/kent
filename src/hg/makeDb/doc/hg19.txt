@@ -28211,6 +28211,112 @@ done
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
 
+    XXX ### need other gene track alignments also
+    # running up refGene
+    # screen control for long running job business
+    screen -S alignments100
+    cd /hive/data/genomes/hg19/bed/multiz100way/pal
+    export mz=multiz100way
+    export gp=refGene
+    export db=hg19
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1
+XXX - running - Tue Nov  5 15:54:19 PST 2013
+    #   real    301m26.885s
+
+    export mz=multiz100way
+    export gp=refGene
+    export db=hg19
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real     11m27.994s
+    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    18m41.606s
+    du -hsc exonAA exonNuc *.fa.gz
+    # 1.3G    exonAA
+    # 2.0G    exonNuc
+    # 1.3G    refGene.multiz100way.exonAA.fa.gz
+    # 2.0G    refGene.multiz100way.exonNuc.fa.gz
+    # 6.4G    total
+
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    export mz=multiz100way
+    export gp=refGene
+    export db=hg19
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    ### And knownCanonical
+    cd /hive/data/genomes/hg19/bed/multiz100way/pal
+    export mz=multiz100way
+    export gp=knownCanonical
+    export db=hg19
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1
+    #   real    301m26.885s
+
+    export mz=multiz100way
+    export gp=knownCanonical
+    export db=hg19
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real     11m27.994s
+    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    18m41.606s
+    du -hsc exonAA exonNuc *.fa.gz
+    # 1.3G    exonAA
+    # 2.0G    exonNuc
+    # 1.3G    knownCanonical.multiz100way.exonAA.fa.gz
+    # 2.0G    knownCanonical.multiz100way.exonNuc.fa.gz
+    # 6.4G    total
+
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    export mz=multiz100way
+    export gp=knownCanonical
+    export db=hg19
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
 #########################################################################
 # sperm whale/phyCat1 Lastz run  (DONE - 2013-10-05 braney)
     screen -S phyCat1    # use screen to manage this long running job
