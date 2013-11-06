@@ -33,7 +33,8 @@ struct snakeFeature
     int level;				/* level in snake */
     int orientation;			/* strand... -1 is '-', 1 is '+' */
     boolean drawn;			/* did we draw this feature? */
-    char *sequence;			/* may have sequence, or NULL */
+    char *qSequence;			/* may have sequence, or NULL */
+    char *tSequence;			/* may have sequence, or NULL */
     char *qName;			/* chrom name on other species */
     };
 
@@ -771,7 +772,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 
 	char *ourDna;
 	if (isHalSnake)
-	    ourDna = sf->sequence;
+	    ourDna = sf->qSequence;
 	else
 	    ourDna = &seq->dna[sf->qStart];
 
@@ -781,9 +782,18 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	    reverseComplement(ourDna,seqLen);
 
 	// get the reference sequence
-	struct dnaSeq *extraSeq = hDnaFromSeq(database, chromName, sf->start, sf->end, dnaUpper);
+	char *refDna;
+	if (isHalSnake)
+	    {
+	    refDna = sf->tSequence;
+	    }
+	else
+	    {
+	    struct dnaSeq *extraSeq = hDnaFromSeq(database, chromName, sf->start, sf->end, dnaUpper);
+	    refDna = extraSeq->dna;
+	    }
 	int si = s;
-	char *ptr1 = extraSeq->dna;
+	char *ptr1 = refDna;
 	char *ptr2 = ourDna;
 	for(; si < e; si++,ptr1++,ptr2++)
 	    {
@@ -807,7 +817,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	    int myex = round((double)((int)e-winStart)*scale) + xOff;
 	    int myw = myex - mysx;
 	    spreadAlignString(hvg, mysx, y, myw, heightPer, MG_WHITE, font, ourDna,
-		extraSeq->dna, seqLen, TRUE, FALSE);
+		refDna, seqLen, TRUE, FALSE);
 	    }
 
     }
@@ -1071,7 +1081,10 @@ if (errCatchStart(errCatch))
 	sf->qStart = cur->qStart;
 	sf->qEnd = cur->qStart + cur->size;
 	sf->orientation = (cur->strand == '+') ? 1 : -1;
-	sf->sequence = cloneString(cur->sequence);
+	sf->tSequence = cloneString(cur->tSequence);
+	sf->qSequence = cloneString(cur->qSequence);
+	toUpperN(sf->tSequence, strlen(sf->tSequence));
+	toUpperN(sf->qSequence, strlen(sf->qSequence));
 	sf->qName = cur->qChrom;
 
 	cur = cur->next;
