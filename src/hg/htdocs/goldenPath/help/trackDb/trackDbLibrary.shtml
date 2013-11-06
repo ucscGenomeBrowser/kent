@@ -4705,7 +4705,7 @@ for each cell associated with the particular TF binding location.</P>
         track myFirstOverlaySig
         parent myMultiWig
         color 255,128,128
-        bigWig 0 1139
+        type bigWig 0 1139
           ...
 
         track myFirstBigWig

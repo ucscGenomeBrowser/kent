@@ -2,3 +2,7 @@
 db proCap1
 # do we need to translate geneScaffold coordinates
 geneScaffolds yes
+
+# eliminate the Ensembl chrMT since UCSC does not have this:
+nameTranslation "/^MT/d"
+
