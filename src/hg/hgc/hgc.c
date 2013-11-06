@@ -1517,7 +1517,9 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
     {
     if (itemId!=slIds)
         printf(", ");
-    char *idUrl = replaceInUrl(tdb, url, itemId->name, TRUE);
+    char* itemName = itemId->name;
+    itemName = trimSpaces(itemName);
+    char *idUrl = replaceInUrl(tdb, url, itemName, TRUE);
     printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemId->name);
     } 
 printf("</td></tr>\n");
@@ -1573,16 +1575,8 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("<br><table>");
     count++;
     printf("<tr><td><B>%s:</B></td>", col->comment);
-    if (col->isList || col->isArray || col->lowType->stringy)
+    if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
-    else if (asTypesIsInt(col->lowType->type))
-        {
-        long valInt = strtol(fields[ix],NULL,10);
-        if (errno == 0 && valInt != 0)
-            printf("<td>%ld</td></tr>\n", valInt);
-        else
-            printf("<td>%s</td></tr>\n", fields[ix]); // decided not to print error
-        }
     else if (asTypesIsFloating(col->lowType->type))
         {
         double valDouble = strtod(fields[ix],NULL);
@@ -5677,7 +5671,7 @@ char splitTable[64];
 char query[256];
 if (!hFindSplitTable(database, seqName, table, splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
-sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
+sqlSafef(query, sizeof(query), "select * from %s where qName like '%s%%'", splitTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -6966,7 +6960,7 @@ if (sqlTableExists(conn, "gbCdnaInfo"))
 
 /* Look up alignments in database */
 hFindSplitTable(database, seqName, aliTable, table, &hasBin);
-sqlSafef(query, sizeof query, "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
+sqlSafef(query, sizeof query, "select * from %s where qName like '%s%%' and tName=\"%s\" and tStart=%d",
 	table, acc, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
@@ -16150,21 +16144,21 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
-#define CORIELL_ID_URL_BASE "http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref="
-
-static void maybePrintCoriellLinks(char *commaSepIds)
-/* If id looks like a Coriell ID, print a link to Coriell, otherwise just print id. */
+static void maybePrintCoriellLinks(struct trackDb *tdb, char *commaSepIds)
+/* If id looks like a Coriell NA ID, print a link to Coriell, otherwise just print id. */
 {
+char *coriellUrlBase = trackDbSetting(tdb, "coriellUrlBase");
 struct slName *id, *sampleIds = slNameListFromComma(commaSepIds);
 for (id = sampleIds;  id != NULL;  id = id->next)
     {
-    if (startsWith("NA", id->name) && countLeadingDigits(id->name+2) == strlen(id->name+2))
+    if (startsWith("NA", id->name) && countLeadingDigits(id->name+2) == strlen(id->name+2)
+	&& isNotEmpty(coriellUrlBase))
 	{
 	// I don't know why coriell doesn't have direct links to NA's but oh well,
 	// we can substitute 'GM' for 'NA' to get to the page...
 	char *gmId = cloneString(id->name);
 	gmId[0] = 'G';  gmId[1] = 'M';
-	printf("<A HREF=\""CORIELL_ID_URL_BASE"%s\" TARGET=_BLANK>%s</A>", gmId, id->name);
+	printf("<A HREF=\"%s%s\" TARGET=_BLANK>%s</A>", coriellUrlBase, gmId, id->name);
 	freeMem(gmId);
 	}
     else
@@ -16230,7 +16224,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (isNotEmpty(dgv.samples))
 	{
 	printf("<B>Sample IDs:</B> ");
-	maybePrintCoriellLinks(dgv.samples);
+	maybePrintCoriellLinks(tdb, dgv.samples);
 	printf("<BR>\n");
 	}
     printf("<B>Sample size:</B> %u<BR>\n", dgv.sampleSize);
@@ -20315,7 +20309,6 @@ else
 	char **row;
 	struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 	struct sqlResult *sr = NULL;
-	int rcCount = 0;
 	int start = cartInt(cart, "o");
 	int end = cartInt(cart, "t");
 
@@ -20331,7 +20324,6 @@ else
 	    {
 	    bedFree(&bed);
 	    bed = bedLoadN(row+rowOffset, ct->fieldCount);
-	    ++rcCount;
 	    }
 	sqlFreeResult(&sr);
 	hFreeConn(&conn);
@@ -24938,6 +24930,10 @@ else if (sameWord(table, "triangle") || sameWord(table, "triangleSelf") || sameW
 else if (sameWord(table, "esRegGeneToMotif"))
     {
     doTriangle(tdb, item, "esRegMotif");
+    }
+else if (sameWord(table, "wgEncodeRegTfbsClusteredMotifs"))
+    {
+    doTriangle(tdb, item, "transRegCodeMotif");
     }
 else if (sameWord(table, "transRegCode"))
     {

@@ -1,0 +1,16 @@
+seq1	0	5	oligo1+1	0	+
+seq1	1	6	oligo1+2	0	+
+seq1	2	7	oligo1+3	0	+
+seq1	3	8	oligo1+4	0	+
+seq1	0	5	oligo2+1	0	+
+seq1	1	6	oligo2+2	0	+
+seq1	2	7	oligo2+3	0	+
+seq1	3	8	oligo2+4	0	+
+seq1	0	5	oligo3-1	0	-
+seq1	1	6	oligo3-2	0	-
+seq1	2	7	oligo3-3	0	-
+seq1	3	8	oligo3-4	0	-
+seq2	0	5	oligo2+1	0	+
+seq2	1	6	oligo2+2	0	+
+seq2	2	7	oligo2+3	0	+
+seq2	3	8	oligo2+4	0	+

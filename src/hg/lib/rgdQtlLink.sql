@@ -5,5 +5,5 @@ CREATE TABLE rgdQtlLink (
   description varchar(255),		# description
   PRIMARY KEY  (id),
   KEY (name)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

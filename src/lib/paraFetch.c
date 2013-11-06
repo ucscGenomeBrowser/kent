@@ -187,7 +187,7 @@ ssize_t sinceLastStatus = 0;
 char *dateString = "";
 int star = 1;  
 int starMax = 20;  
-int starStep = 1;
+off_t starStep = 1;
 // TODO handle case-sensitivity of protocols input
 if (startsWith("http://",url) || startsWith("https://",url))
     {
@@ -391,8 +391,12 @@ int retryCount = 0;
 
 time_t startTime = time(NULL);
 
-#define SELTIMEOUT 5
-#define RETRYSLEEPTIME 30    
+#define SELTIMEOUT 10
+#define RETRYSLEEPTIME 30
+int scaledRetries = numRetries;
+if (fileSize != -1)
+    scaledRetries = round(numRetries * (1+fileSize/1e10) );
+verbose(2,"scaledRetries=%d\n", scaledRetries);
 while (TRUE)
     {
     verbose(2,"Top of big loop\n");
@@ -535,7 +539,6 @@ while (TRUE)
 		    if (fileSize != -1 && pc->received != pc->partSize)	
 			{
 			pc->sd = -2;  /* conn was closed before all data was sent, can retry later */
-			return FALSE;
 			}
 		    --connOpen;
 		    ++reOpen;
@@ -586,7 +589,7 @@ while (TRUE)
 	{
 	warn("No data within %d seconds for %s", SELTIMEOUT, url);
 	/* Retry ? */
-	if (retryCount >= numRetries)
+	if (retryCount >= scaledRetries)
 	    {
     	    return FALSE;
 	    }

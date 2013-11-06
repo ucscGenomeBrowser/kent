@@ -599,6 +599,30 @@ if (inputString == NULL)
     }
 }
 
+struct cgiDictionary *cgiDictionaryFromEncodedString(char *encodedString)
+/* Giving a this=that&this=that string,  return cgiDictionary parsed out from it. 
+ * This does *not* destroy input like the lower level cgiParse functions do. */
+{
+struct cgiDictionary *d;
+AllocVar(d);
+d->stringData = cloneString(encodedString);
+cgiParseInputAbort(d->stringData, &d->hash, &d->list);
+return d;
+}
+
+void cgiDictionaryFree(struct cgiDictionary **pD)
+/* Free up resources associated with dictionary. */
+{
+struct cgiDictionary *d = *pD;
+if (d != NULL)
+    {
+    slFreeList(&d->list);
+    hashFree(&d->hash);
+    freez(&d->stringData);
+    freez(pD);
+    }
+}
+
 void cgiParseInputAbort(char *input, struct hash **retHash,
         struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter

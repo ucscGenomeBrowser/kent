@@ -130,7 +130,7 @@ chr22   20100400 20100500	third</TT></PRE>
 Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example2.txt" 
 TARGET=_blank>here</a> to view this track in the Genome Browser.
 
-<P><B><I>Example 3:</I></B><BR>
+<P><B><I>Example 3A:</I></B><BR>
 This example shows an annotation file containing one data set in BED
 format. The track displays features with multiple blocks, a thick end and thin
 end, and hatch marks indicating the direction of transcription. The track
@@ -152,6 +152,22 @@ chr22 2000 7000 itemB 200 - 2200 6950 0 4 433,100,550,1500 0,500,2000,3500
 Click 
 <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example3.txt" 
 TARGET=_blank>here</a> to view this track in the Genome Browser.
+
+<P><B><I>Example 3B:</I></B><BR>
+This example shows a simple annotation file containing one data set in the bigBed format. 
+This track displays random sized blocks across chr21 in the human genome. The big data 
+formats, such as the bigBed format, must be uploaded using a bigDataUrl that is 
+specified in the track line. For more information on these track line parameters, refer 
+to the <A HREF="#TRACK">Track Lines</A> section. 
+<P>
+You may paste these two lines directly into the "Add Custom Tracks" page to view this
+example in the browser: 
+<P>
+<tt>browser position chr21:33,031,597-33,041,570</tt>
+<P>
+<tt>track type=bigBed name="bigBed Example One" description="A bigBed file" bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</tt>
+</P>
+
 
 <P><B>Step 4. Display your annotation track in the Genome Browser</B><BR>
 To view your annotation data in the Genome Browser, open the 
@@ -705,14 +721,20 @@ Genome Browser:</P>
         here</a>.
         <LI><B>bigDataUrl=<<I>external_url</I>></B> - Defines a URL to the
         data file for
-        <A HREF="/FAQ/FAQformat.html#format5.1" TARGET="_blank">BAM</A>,
-        <A HREF="/FAQ/FAQformat.html#format1.5" TARGET="_blank">bigBed</A>,
-        <A HREF="/FAQ/FAQformat.html#format6.1" TARGET="_blank">bigWig</A> or
-        <A HREF="/FAQ/FAQformat.html#format10.1" TARGET="_blank">VCF</A>
+        <A HREF="../help/bam.html" TARGET="_blank">BAM</A>,
+        <A HREF="../help/bigBed.html" TARGET="_blank">bigBed</A>,
+        <A HREF="../help/bigWig.html" TARGET="_blank">bigWig</A> or
+        <A HREF="../help/vcf.html" TARGET="_blank">VCF</A>
         tracks. This is a required attribute for those track types. There is no
         default for this attribute.
 
 </UL>
+Here is an example of a properly formatted track line using the bigBed format, with accompanying browser line:
+<P>
+<tt>browser position chr21:33,031,597-33,041,570</tt>
+<P>
+<tt>track type=bigBed name="bigBed Example One" description="A bigBed file" bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</tt>
+</P>
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -822,6 +844,16 @@ http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg18&position=chr21:33038447-33041505
 full%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb
 </tt></a></font><BR><BR>
 
+<P>
+Custom Tracks can also be shared with others through named sessions. First,
+upload your tracks as discussed in the <A HREF="#ADD_CT">Loading a Custom Track into the Genome Browser</A>
+section. Then create a named seesion that includes your custom tracks by navigating to the "Sessions" 
+page through the "My Data" section in the menu bar. Once there, follow the instructions in the 
+<A HREF=../help/hgSessionHelp.html#Create>Creating a Session</A> section of the Sessions help page.
+Once you have saved your custom track into a named session, you can share that session with others by 
+sharing the URL from the "Browser" link or emailing it to them directly by clicking the "Email" link. 
+
+
 <P><B>Tip:</B> Multiple tracks can be placed into one custom track submission. To do so, create
 a new file that contains the <A HREF="/goldenPath/help/customTrack.html#TRACK">track lines</A>
 to each file that will be included. To submit this custom set of tracks, merely use the URL to
@@ -851,9 +883,9 @@ data, please contact
 <A HREF="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;">&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;</A> 
         <!-- above address is genome at soe.ucsc.edu -->
 for further assistance. 
-<B>Messages sent to this address will be posted to the moderated genome mailing 
-list, which is archived on a public <A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">
-Google Groups forum</A>.</B></P>
+<b><font color="red">Messages sent to this address will be posted to the moderated genome mailing 
+list, which is archived on a SEARCHABLE PUBLIC <a HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">
+Google Groups forum</a></font></b>.</p>
 
 <P><B><I>Problem: </I></B>When I try one of your examples by cutting and pasting
 it into the Genome Browser, I get an error message.<BR>
@@ -923,10 +955,46 @@ track from my Genome Browser display?<BR>
 <B><I>Solution:</I></B> Reset the Genome Browser by clicking the 
 <em>Click here to reset</em> link on the Gateway page. This should reset 
 your Genome Browser display to its default settings and remove all your
-custom tracks.  To remove only one track of several, click the <EM>Manage
-Custom Tracks</EM> button and delete the track using the checkbox and Delete
-button.
+custom tracks.  To remove only one track of several, click the
+<EM>Manage Custom Tracks</EM> button and delete the track using the
+checkbox and Delete button.
 
+<P><B><I>Problem:</I></B> I put my custom track files on Google Drive
+and they won't display in the browser, why?<BR>
+<B><I>Solution:</I></B> Data servers like Google Drive should work for
+hosting simple text based custom tracks. However, most data providing
+sites do not accept byte-range requests. Therefore, the browser can not
+download just the window of data desired from the custom track when it
+involves an indexed binary format, such as with bigBed and bigWig files.
+Compared with BED files, bigBed and bigWig files are much faster because
+only portions of the files needed to display in a particular viewed region
+are transferred to UCSC. In order for the browser to serve up just
+the the portion that is needed requires the data server to have byte-ranges enabled.
+You can test on the command line if your server has byte-range requests
+running with: <PRE><TT>&gt; curl -I &lt;URL to your file&gt;</TT></PRE>
+To know if your server can host bigBed and bigWig files (or Hubs), look for
+the following: <PRE><TT>&gt; Accept-Ranges: bytes</TT></PRE>
+Otherwise, see the below "Byte-Range Request Errors" section for more help.
+Also, please note that the UCSC Genome Browser is not endorsing the use of
+Google Drive for hosting your data.
+
+<P><B><I>Problem:</I></B> I see that Dropbox accepts byte-range requests,
+but I can't get my data to display, why?<BR>
+<B><I>Solution:</I></B> Be sure you enable the &quot;Public Folder&quot;
+function on Dropbox, rather than using the &quot;Share Link&quot; function.
+For custom tracks that require an associated index file, the Public Folder
+approach will allow the browser to know where to go, whereas the Share Link
+feature creates a unique unassociated link for each file. To enable your
+Dropbox public folder navigate to the following site:
+<a href="https://www.dropbox.com/enable_public_folder"
+target="_blank"> https://www.dropbox.com/enable_public_folder</a>.
+Please note that if you are using a free Dropbox account, Dropbox may
+throttle access to your data to prevent their servers from being overloaded,
+blocking the browser's access and ability to display your tracks. This may
+not be the case with paid Dropbox accounts.  Also, please keep in mind that
+files in your Public Folder are public, and may be indexed by Google.
+Also, please note that the UCSC Genome Browser is not endorsing the use of
+Dropbox for hosting your data.
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>

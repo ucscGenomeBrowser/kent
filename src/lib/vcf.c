@@ -1116,7 +1116,7 @@ if (isNotEmpty(altAlleles) && differentString(altAlleles, "."))
 	{
 	dyStringAppendC(dy, '/');
 	int len = p - altAlleles - offset;
-	if (len == 0)
+	if (len == 0 || startsWith("<DEL>", altAlleles+offset))
 	    dyStringAppendC(dy, '-');
 	else
 	    dyStringAppendN(dy, altAlleles+offset, len);
@@ -1124,7 +1124,7 @@ if (isNotEmpty(altAlleles) && differentString(altAlleles, "."))
 	}
     dyStringAppendC(dy, '/');
     int len = strlen(altAlleles) - offset;
-    if (len == 0)
+    if (len == 0 || startsWith("<DEL>", altAlleles+offset))
 	dyStringAppendC(dy, '-');
     else
 	dyStringAppendN(dy, altAlleles+offset, len);

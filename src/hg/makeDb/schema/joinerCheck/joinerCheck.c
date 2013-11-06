@@ -448,16 +448,19 @@ for (khi = khiList; khi != NULL; khi = khi->next)
 	}
     }
 if (jf->full && missCount != 0)
-    warn("Error: %d of %d elements of key %s.%s are not in 'full' %s.%s.%s line %d of %s\n"
+    warn("Error: %d of %d elements (%2.3f%%) of key %s.%s are not in 'full' %s.%s.%s "
+	 "line %d of %s\n"
 	 "    Example miss: %s"
 	, missCount, keyCount
+	, (100.0 * missCount) / keyCount
 	, keyField->table, keyField->field
 	, db, jf->table, jf->field
 	, jf->lineIx, joiner->fileName, missExample);
 if (jf->unique && doubleCount != 0)
-    warn("Error: %d of %d elements of %s.%s.%s are not unique line %d of %s\n"
+    warn("Error: %d of %d elements (%2.3f%%) of %s.%s.%s are not unique line %d of %s\n"
 	 "    Example: %s"
 	, doubleCount, keyCount
+	, (100.0 * doubleCount) / keyCount
 	, db, jf->table, jf->field
 	, jf->lineIx, joiner->fileName, doubleExample);
 }
@@ -522,13 +525,15 @@ if (conn != NULL)
 	else
 	    hitsNeeded = total;
 	if (jf->minCheck < 1.0 && hits >= hitsNeeded) okFlag = TRUE;
-	verbose(1, " %s.%s.%s - hits %d of %d%s\n", db, jf->table, jf->field, hits, total,
+	verbose(1, " %s.%s.%s - hits %d of %d (%2.3f%%)%s\n", db, jf->table, jf->field, hits, total,
+		(100.0 * hits) / total,
 		okFlag ? " ok" : js->isFuzzy ? " fuzzy" : "");
 	if (hits < hitsNeeded && !js->isFuzzy)
 	    {
-	    warn("Error: %d of %d elements of %s.%s.%s are not in key %s.%s line %d of %s\n"
+	    warn("Error: %d of %d elements (%2.3f%%) of %s.%s.%s are not in key %s.%s "
+		 "line %d of %s\n"
 		 "Example miss: %s"
-		, total - hits, total, db, jf->table, jf->field
+		, total - hits, total, (100.0 * (total-hits))/total, db, jf->table, jf->field
 		, keyField->table, keyField->field
 		, jf->lineIx, joiner->fileName, miss);
 	    }

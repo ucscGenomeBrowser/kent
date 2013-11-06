@@ -1,0 +1,16 @@
+validateManifest (vm) Versions Log
+
+1.7 (RELEASED)
+    Better checks for idat and rcc formats by refactoring the checking code from edwSubmit into hg/lib/encode3/encode3Valid.c.
+    New vf version is now 4.7 and tolerates leading blank lines in fastq which covers also the case of trailing blank lines. 
+    Checks for enriched_in allowed values by refactoring the checking code from edwSubmit into hg/lib/encode3/encode3Valid.c.
+    Fixed error message that reported "experiment" when it was really "replicate".
+    Dis-allow these extensions generally: .tgz .tar .tar.gz .zip .bz2
+    For .gz only allow format fastq
+    For fastq: only allow .gz
+    Add single quotes around the fileName output so trailing spaces are visible in the error message.
+    Add checks for blank strings for ucsc_db and output_type.
+    Add --help option to show usage.
+    Restrict replicate small number to 1 to 10 only (for now).
+    Add a new optional column technical_replicate that has the same behavior as replicate.
+    Add a new optional column paired_end that accepts 1(forward) 2(reverse) or "n/a".

@@ -392,9 +392,28 @@ canPack On
     #maxWindowToDraw 10000000
     #dataVersion ENCODE Jul 2012 Freeze
 
-    # This is candidate for release (V3 format)
+    # This is released track with TF Motif setting (under development)
     track wgEncodeRegTfbsClusteredV3
-    release alpha, beta, public
+    release alpha
+    shortLabel Txn Fac ChIP V3
+    longLabel Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
+    type factorSource
+    superTrack wgEncodeReg hide
+    sourceTable wgEncodeRegTfbsCellsV3
+    inputTrackTable wgEncodeRegTfbsClusteredInputsV3
+    inputTableFieldDisplay cellType factor antibody treatment lab
+    motifTable wgEncodeAwgTfbsMotifs
+    motifPwmTable transRegCodeMotif
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility hide
+    useScore 1
+    priority 1.71
+    maxWindowToDraw 10000000
+    dataVersion ENCODE Mar 2012 Freeze
+
+    # This is latest released
+    track wgEncodeRegTfbsClusteredV3
+    release beta, public
     shortLabel Txn Fac ChIP V3
     longLabel Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
     type factorSource
@@ -423,3 +442,27 @@ canPack On
     visibility hide
     useScore 1
     priority 1.72
+    dataVersion ENCODE Jul 2012 Freeze
+
+###
+
+    track wgEncodeRegTfbsClusteredMotifs
+    release alpha
+    shortLabel Txn Fac Motifs
+    longLabel Transcription Factor Motifs identified in ENCODE ChIP-seq (FactorBook)
+    type bed 4 +
+    superTrack wgEncodeReg dense
+    #color 0,128,0
+    color 22, 182,33
+    priority 1.8
+
+    track wgEncodeRegTfbsClusteredMotifs_larry
+    release alpha
+    shortLabel Txn Fac Motifs LM
+    longLabel Transcription Factor Motifs (LarryM)
+    type bed 6
+    # color 0,250,50
+    color 25, 204, 37
+    superTrack wgEncodeReg dense
+    priority 1.8
+

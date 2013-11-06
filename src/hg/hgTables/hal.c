@@ -4,7 +4,12 @@
 #include "grp.h"
 #include "hubConnect.h"
 #include "hdb.h"
+#include "maf.h"
 #include "hgTables.h"
+#include "trackHub.h"
+#ifdef USE_HAL
+#include "halBlockViz.h"
+#endif // USE_HAL
 
 extern struct trackDb *curTrack;	/* Currently selected track. */
 extern char *database;
@@ -16,46 +21,64 @@ boolean isHalTable(char *table)
 if (isHubTrack(table))
     {
     struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
-    printf("HERE tdb type is %s\n", tdb->type);
     return startsWithWord("halSnake", tdb->type);
     }
 else
     return trackIsType(database, table, curTrack, "halSnake", ctLookupName);
 }
 
-static char *samAlignmentAutoSqlString =
-"table samAlignment\n"
-"\"The fields of a SAM short read alignment, the text version of BAM.\"\n"
-    "(\n"
-    "string qName;	\"Query template name - name of a read\"\n"
-    "ushort flag;	\"Flags.  0x10 set for reverse complement.  See SAM docs for others.\"\n"
-    "string rName;	\"Reference sequence name (often a chromosome)\"\n"
-    "uint pos;		\"1 based position\"\n"
-    "ubyte mapQ;		\"Mapping quality 0-255, 255 is best\"\n"
-    "string cigar;	\"CIGAR encoded alignment string.\"\n"
-    "string rNext;	\"Ref sequence for next (mate) read. '=' if same as rName, '*' if no mate\"\n"
-    "int pNext;		\"Position (1-based) of next (mate) sequence. May be -1 or 0 if no mate\"\n"
-    "int tLen;	        \"Size of DNA template for mated pairs.  -size for one of mate pairs\"\n"
-    "string seq;		\"Query template sequence\"\n"
-    "string qual;	\"ASCII of Phred-scaled base QUALity+33.  Just '*' if no quality scores\"\n"
-    "string tagTypeVals; \"Tab-delimited list of tag:type:value optional extra fields\"\n"
-    ")\n";
-
-struct asObject *halAsObj()
-// Return asObject describing fields of SAM/BAM
+struct trackDb *findTrackDb(struct trackDb *trackDb, char *table)
+// find a child of a composite that corresponds to this table
 {
-return asParseText(samAlignmentAutoSqlString);
+if (sameString(trackDb->table, table))
+    return trackDb;
+
+struct trackDb *subTrack = trackDb->subtracks;
+struct trackDb *childTrackDb;
+for(; subTrack; subTrack = subTrack->next)
+    {
+    if ((childTrackDb = findTrackDb(subTrack, table)) != NULL)
+	return childTrackDb;
+    }
+return NULL;
 }
 
-
-struct slName *halGetFields(char *table)
-/* Get fields of bam as simple name list. */
+void doHalMaf(struct trackDb *parentTrack, char *table, struct sqlConnection *conn)
+/* Output regions as MAF.  maf tables look bed-like enough for
+ * cookedBedsOnRegions to handle intersections. */
 {
-struct asObject *as = halAsObj();
-return asColNames(as);
-}
+#ifdef USE_HAL
+struct region *region = NULL, *regionList = getRegions();
+struct trackDb *tdb;
 
-void halTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f)
-/* Print out selected fields from HAL.  If fields is NULL, then print out all fields. */
-{
+if ((tdb = findTrackDb(parentTrack, table)) == NULL)
+    errAbort("cannot find track named %s under %s\n", table, parentTrack->table);
+char *fileName = trackDbSetting(tdb, "bigDataUrl");
+char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
+int handle = halOpenLOD(fileName);
+
+struct hal_species_t *speciesList = halGetSpecies(handle);
+
+for(; speciesList; speciesList = speciesList->next)
+    {
+    if  (sameString(speciesList->name, otherSpecies))
+	break;
+    }
+if (speciesList == NULL)
+    errAbort("cannot find species %s in hal file %s\n",
+	otherSpecies, fileName);
+
+speciesList->next = NULL;
+
+textOpen();
+
+for (region = regionList; region != NULL; region = region->next)
+    {
+    halGetMAF(stdout, handle, speciesList,
+		trackHubSkipHubName(database), region->chrom,
+		region->start, region->end, FALSE);
+    }
+#else // USE_HAL
+errAbort("hgTables not compiled with HAL support.");
+#endif // USE_HAL
 }

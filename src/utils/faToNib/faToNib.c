@@ -13,8 +13,8 @@ errAbort(
   "usage:\n"
   "   faToNib [options] in.fa out.nib\n"
   "options:\n"
-  "   -softMask - create nib that soft-masks lower case sequence\n"
-  "   -hardMask - create nib that hard-masks lower case sequence\n");
+  "   -softMask  Create nib that soft-masks lower-case sequence.\n"
+  "   -hardMask  Create nib that hard-masks lower-case sequence.\n");
 }
 
 void maskLower(struct dnaSeq *seq)

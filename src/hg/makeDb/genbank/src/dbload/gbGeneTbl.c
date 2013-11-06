@@ -41,6 +41,7 @@ struct gbGeneTbl
     char *tbl;                  // table name
     char *flatTbl;              // flat table name, or NULL if no flat table
     char *alnTbl;               // alignment table for rebuilding
+    boolean hasVersion;         // table has version in name
     boolean hasBin;             // table has or will have bin column
     boolean hasExtCols;         // table has or will have exonFrames, etc columns
     struct sqlUpdater* upd;     // updater for table
@@ -188,11 +189,14 @@ void gbGeneTblWrite(struct gbGeneTbl *ggt, struct gbStatus* status,
                     struct psl* psl, struct sqlConnection *conn)
 /* write new gene to a genePred table */
 {
-char *vdot = gbDropVer(psl->qName);
+char *vdot = NULL;
+if (ggt->hasVersion == FALSE)
+    vdot = gbDropVer(psl->qName);
 gbGeneTblWriteGene(ggt, status, psl, conn);
 if (ggt->flatTbl != NULL)
     gbGeneTblWriteGeneFlat(ggt, status, psl, conn);
-gbRestoreVer(psl->qName, vdot);
+if (vdot != NULL)
+    gbRestoreVer(psl->qName, vdot);
 }
 
 void gbGeneTblRebuild(struct gbGeneTbl *ggt, struct gbStatus* status,
@@ -259,38 +263,42 @@ if (ggts != NULL)
 }
 
 struct gbGeneTbl *gbGeneTblSetRefGeneGet(struct gbGeneTblSet *ggts,
-                                         struct sqlConnection* conn)
+				 boolean hasVersion, struct sqlConnection* conn)
 /* get or create gbGeneTbl for refGene */
 {
 if (ggts->refGene == NULL)
     ggts->refGene = gbGeneTblNew(conn, REF_GENE_TBL, REF_FLAT_TBL, REFSEQ_ALI_TBL, ggts->tmpDir);
+ggts->refGene->hasVersion = hasVersion;
 return ggts->refGene;
 }
 
 struct gbGeneTbl *gbGeneTblSetXenoRefGeneGet(struct gbGeneTblSet *ggts,
-                                             struct sqlConnection* conn)
+				 boolean hasVersion, struct sqlConnection* conn)
 /* get or create gbGeneTbl for xenoRefGene */
 {
 if (ggts->xenoRefGene == NULL)
     ggts->xenoRefGene = gbGeneTblNew(conn, XENO_REF_GENE_TBL, XENO_REF_FLAT_TBL, XENO_REFSEQ_ALI_TBL, ggts->tmpDir);
+ggts->xenoRefGene->hasVersion = hasVersion;
 return ggts->xenoRefGene;
 }
 
 struct gbGeneTbl *gbGeneTblSetMgcGenesGet(struct gbGeneTblSet *ggts,
-                                          struct sqlConnection* conn)
+				 boolean hasVersion, struct sqlConnection* conn)
 /* get or create gbGeneTbl for mgcGenes */
 {
 if (ggts->mgcGenes == NULL)
     ggts->mgcGenes = gbGeneTblNew(conn, MGC_GENES_TBL, NULL, MGC_FULL_MRNA_TBL, ggts->tmpDir);
+ggts->mgcGenes->hasVersion = hasVersion;
 return ggts->mgcGenes;
 }
 
 struct gbGeneTbl *gbGeneTblSetOrfeomeGenesGet(struct gbGeneTblSet *ggts,
-                                              struct sqlConnection* conn)
+				 boolean hasVersion, struct sqlConnection* conn)
 /* get or create a gbGeneTbl for orfeomeGenes */
 {
 if (ggts->orfeomeGenes == NULL)
     ggts->orfeomeGenes = gbGeneTblNew(conn, ORFEOME_GENES_TBL, NULL, MGC_FULL_MRNA_TBL, ggts->tmpDir);
+ggts->orfeomeGenes->hasVersion = hasVersion;
 return ggts->orfeomeGenes;
 }
 

@@ -15,7 +15,7 @@ cd $gbRoot
 databases=$(gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs)
 
 # local location of /gbdb
-gbdb=/export/gbdb
+gbdb=/export2/gbdb
 
 # location of the genbank root and files on the remote build server
 gbBuildServer=hgwdev

@@ -17,7 +17,7 @@
 #include "bigBed.h"
 #include "encode3/encode3Valid.h"
 
-char *version = "4.6";
+char *version = "4.7";
 
 #define PEAK_WORDS 16
 #define TAG_WORDS 9
@@ -1164,6 +1164,8 @@ while ( lineFileNext(lf, &seqName, NULL))
 	    startOfFile = FALSE;
 	}
     int len = 0;
+    if (seqName[0] == 0) // tolerate and skip blank leading lines
+	continue;
     if (!(checkSeqName(lf, seqName, '@', "sequence name")
 	&& (wantNewLine(lf, &seq, "fastq sequence line"))
 	&& (len = checkSeq(lf, seq, seq, "sequence"))

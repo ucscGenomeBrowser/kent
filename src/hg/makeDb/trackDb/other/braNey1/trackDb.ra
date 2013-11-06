@@ -1,0 +1,12 @@
+include trackDb.genbank.ra
+include ../../human/hg19/wgEncodeGencodeV17.ra
+
+track ensemblRna
+table ensemblRna
+shortLabel Ensembl mRNAs
+longLabel Ensembl GenBank mRNAs
+group rna
+priority 57.5
+visibility hide
+type psl .
+

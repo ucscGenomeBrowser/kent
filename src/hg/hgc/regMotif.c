@@ -105,7 +105,17 @@ return motif;
 void motifMultipleHitsSection(struct dnaSeq **seqs, int count, struct dnaMotif *motif)
 /* Print out section about motif, possibly with mutliple occurrences. */
 {
+// Detect inconsistent motif/pwm tables and suppress confusing display
+if (motif != NULL)
+    {
+    if (motif->columnCount != seqs[0]->size)
+        {
+        warn("Motif seq length doesn't match PWM\n");
+        return;
+        }
+    }
 
+#define MOTIF_HELP_PAGE "../goldenPath/help/hgRegMotifHelp.html"
 webNewSection("Motif:");
 printf("<PRE>\n");
 printf("<table>\n");
@@ -115,6 +125,8 @@ if (motif != NULL)
     dnaMotifMakeProbabalistic(motif);
     makeTempName(&pngTn, "logo", ".png");
     dnaMotifToLogoPng(motif, 47, 140, NULL, "../trash", pngTn.forCgi);
+    printf("<tr><td></td><td colspan='%d'align=right><a href=\"%s\" target=_blank>Motif display help</a></td></tr>", 
+        motif->columnCount, MOTIF_HELP_PAGE);
     printf("<tr><td></td><td colspan='%d'>", motif->columnCount);
     printf("<IMG SRC=\"%s\" BORDER=1>", pngTn.forHtml);
     printf("</td><td></td></tr>\n");
@@ -128,7 +140,7 @@ if (count > 0)
         printf("<tr><td></td>");
         touppers(seq->dna);
         printDnaCells(seq->dna, seq->size);
-        if(count == 1)
+        if (count == 1)
             printf("<td>this occurrence</td></tr>\n");
         else
             // is there a library routine to get 1st, 2nd ...?

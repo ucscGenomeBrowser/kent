@@ -497,8 +497,18 @@ printf("<script>\n"
        "  }\n"
        "}\n"
        "window.onload = function() { "
-       "  if (checkPageBackOrRefresh()) { window.location.replace('%s?%s'); } };\n"
-       "</script>\n", cgiScriptName(), cartSidUrlString(cart));
+       "  if (checkPageBackOrRefresh()) { \n"
+       "    if (window.location.search == '?%s') { \n"
+	      // We already have the hgsid-only URL that we want, reload it.
+	      // (necessary for IE because IE doesn't reload on replace,
+	      //  unless window.location and/or window.search changes)
+       "      window.location.reload(true);\n"
+       "    } else { \n"
+       "      window.location.replace('%s?%s');\n"
+       "    } \n"
+       "  } "
+       "};\n"
+       "</script>\n", cartSidUrlString(cart), cgiScriptName(), cartSidUrlString(cart));
 }
 
 static struct jsonElement *newJsonElement(jsonElementType type)
@@ -985,3 +995,76 @@ while ((c = *in++) != 0)
 *out++ = 0;
 return outString;
 }
+
+void jsonFindNameRecurse(struct jsonElement *ele, char *jName, struct slName **pList)
+// Search the JSON tree recursively to find all the values associated to
+// the name, and add them to head of the list.  
+{
+switch (ele->type)
+    {
+    case jsonObject:
+        {
+        if(hashNumEntries(ele->val.jeHash))
+            {
+            struct hashEl *el, *list = hashElListHash(ele->val.jeHash);
+            slSort(&list, hashElCmp);
+            for (el = list; el != NULL; el = el->next)
+                {
+                struct jsonElement *val = el->val;
+                if sameString(el->name, jName)
+                    slNameAddHead(pList, jsonStringEscape(val->val.jeString));
+                jsonFindNameRecurse(val, jName, pList);
+                }
+            hashElFreeList(&list);
+            }
+        break;
+        }
+    case jsonList:
+        {
+        struct slRef *el;
+        if(ele->val.jeList)
+            {
+            for (el = ele->val.jeList; el != NULL; el = el->next)
+                {
+                struct jsonElement *val = el->val;
+                jsonFindNameRecurse(val, jName, pList);
+                }
+            }
+        break;
+        }
+    case jsonString:
+    case jsonBoolean:
+    case jsonNumber:
+    case jsonDouble:
+        {
+        break;
+        }
+    default:
+        {
+        errAbort("jsonFindNameRecurse; invalid type: %d", ele->type);
+        break;
+        }
+    }
+}
+
+struct slName *jsonFindName(struct jsonElement *json, char *jName)
+// Search the JSON tree to find all the values associated to the name
+// and add them to head of the list.  
+{
+struct slName *list = NULL;
+jsonFindNameRecurse(json, jName, &list);
+slReverse(&list);
+return list;
+}
+
+struct slName *jsonFindNameUniq(struct jsonElement *json, char *jName)
+// Search the JSON tree to find all the unique values associated to the name
+// and add them to head of the list. 
+{
+struct slName *list = NULL;
+jsonFindNameRecurse(json, jName, &list);
+slUniqify(&list, slNameCmp, slNameFree);
+slReverse(&list);
+return list;
+}
+

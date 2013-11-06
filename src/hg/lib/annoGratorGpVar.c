@@ -18,7 +18,8 @@ struct annoGratorGpVar
     struct annoGratorGpVarFuncFilter *funcFilter; // Which categories of effect should we output?
     enum annoGratorOverlap gpVarOverlapRule;	  // Should we set RJFail if no overlap?
 
-    struct variant *(*variantFromRow)(struct annoGratorGpVar *self, struct annoRow *row);
+	struct variant *(*variantFromRow)(struct annoGratorGpVar *self, struct annoRow *row,
+					  char *refAllele);
     // Translate row from whatever format it is (pgSnp or VCF) into generic variant.
     };
 
@@ -81,6 +82,8 @@ enum soTerm term = gpFx->soNumber;
 if (filt->intron && (term == intron_variant || term == complex_transcript_variant))
     return TRUE;
 if (filt->upDownstream && (term == upstream_gene_variant || term == downstream_gene_variant))
+    return TRUE;
+if (filt->exonLoss && (term == exon_loss))
     return TRUE;
 if (filt->utr && (term == _5_prime_UTR_variant || term == _3_prime_UTR_variant))
     return TRUE;
@@ -244,10 +247,10 @@ txSeq->size = txLen;
 return txSeq;
 }
 
-char *variantToGenomicSequence(struct variant *variant, char *chromSeq, struct lm *lm)
-/* Return variant's reference allele. */
+char *getGenomicSequence(char *chromSeq, uint start, uint end, struct lm *lm)
+/* Return genomic sequence from start to end. */
 {
-return lmCloneStringZ(lm, chromSeq+variant->chromStart, (variant->chromEnd - variant->chromStart));
+return lmCloneStringZ(lm, chromSeq+start, (end - start));
 }
 
 static struct annoRow *aggvGenRows( struct annoGratorGpVar *self, struct variant *variant,
@@ -255,22 +258,9 @@ static struct annoRow *aggvGenRows( struct annoGratorGpVar *self, struct variant
 				    struct lm *callerLm)
 // put out annoRows for all the gpFx that arise from variant and pred
 {
-if (self->curChromSeq == NULL || differentString(self->curChromSeq->name, pred->chrom))
-    {
-    dnaSeqFree(&self->curChromSeq);
-    struct twoBitFile *tbf = self->grator.streamer.assembly->tbf;
-    self->curChromSeq = twoBitReadSeqFragLower(tbf, pred->chrom, 0, 0);
-    }
-// TODO Performance improvement: instead of creating the transcript sequence for each
-// variant that intersects the transcript, cache transcript sequence; possibly
-// an slPair with a concatenation of {chrom, txStart, txEnd, cdsStart, cdsEnd,
-// exonStarts, exonEnds} as the name, and sequence as the val.  When something in
-// the list is no longer in the list of rows from the internal annoGratorIntegrate call,
-// drop it.
 struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, self->curChromSeq->dna,
 							      self->lm);
-char *refAllele = variantToGenomicSequence(variant, self->curChromSeq->dna, self->lm);
-struct gpFx *effects = gpFxPredEffect(variant, pred, refAllele, transcriptSequence, self->lm);
+struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence, self->lm);
 struct annoRow *rows = NULL;
 
 for(; effects; effects = effects->next)
@@ -288,7 +278,7 @@ slReverse(&rows);
 return rows;
 }
 
-struct annoRow *aggvIntergenicRow(struct annoGratorGpVar *self, struct annoStreamRows *primaryData,
+struct annoRow *aggvIntergenicRow(struct annoGratorGpVar *self, struct variant *variant,
 				  boolean *retRJFilterFailed, struct lm *callerLm)
 /* If intergenic variants (no overlapping or nearby genes) are to be included in output,
  * make an output row with empty genePred and a gpFx that is empty except for soNumber. */
@@ -304,30 +294,40 @@ for (i = 0;  i < gpColCount;  i++)
     wordsOut[i] = "";
 struct gpFx *intergenicGpFx;
 lmAllocVar(self->lm, intergenicGpFx);
-intergenicGpFx->allele = "";
+intergenicGpFx->allele = firstAltAllele(variant->alleles);
+touppers(intergenicGpFx->allele);
 intergenicGpFx->soNumber = intergenic_variant;
 intergenicGpFx->detailType = none;
 aggvStringifyGpFx(&wordsOut[gpColCount], intergenicGpFx, self->lm);
-struct annoRow *varRow = primaryData->rowList;
 boolean rjFail = (retRJFilterFailed && *retRJFilterFailed);
-return annoRowFromStringArray(varRow->chrom, varRow->start, varRow->end, rjFail,
+return annoRowFromStringArray(variant->chrom, variant->chromStart, variant->chromEnd, rjFail,
 			      wordsOut, sSelf->numCols, callerLm);
 }
 
-static struct variant *variantFromPgSnpRow(struct annoGratorGpVar *self, struct annoRow *row)
+static struct variant *variantFromPgSnpRow(struct annoGratorGpVar *self, struct annoRow *row,
+					   char *refAllele)
 /* Translate pgSnp array of words into variant. */
 {
 struct pgSnp pgSnp;
 pgSnpStaticLoad(row->data, &pgSnp);
-return variantFromPgSnp(&pgSnp, self->lm);
+struct variant *var = variantFromPgSnp(&pgSnp, refAllele, self->lm);
+return var;
 }
 
-static struct variant *variantFromVcfRow(struct annoGratorGpVar *self, struct annoRow *row)
+static struct variant *variantFromVcfRow(struct annoGratorGpVar *self, struct annoRow *row,
+					 char *refAllele)
 /* Translate vcf array of words into variant. */
 {
-char *alStr = vcfGetSlashSepAllelesFromWords(row->data, self->dyScratch);
+char **words = row->data;
+// VCF may use abbreviated refAllele, so use VCF's refAllele to detect allele->isReference
+// instead of the actual refAllele that's passed in.  But skip the initial extra base if
+// necessary, i.e. if 1-based vcfStart is the same as row->start.
+uint vcfStart = atoll(words[1]);
+int offset = (vcfStart == row->start) ? 1 : 0;
+char *vcfRefAllele = words[3] + offset;
+char *alStr = vcfGetSlashSepAllelesFromWords(words, self->dyScratch);
 unsigned alCount = chopByChar(alStr, '/', NULL, 0);
-return variantNew(row->chrom, row->start, row->end, alCount, alStr, self->lm);
+return variantNew(row->chrom, row->start, row->end, alCount, alStr, vcfRefAllele, self->lm);
 }
 
 static void setVariantFromRow(struct annoGratorGpVar *self, struct annoStreamRows *primaryData)
@@ -352,20 +352,39 @@ self->lm = lmInit(0);
 // Temporarily tweak primaryRow's start and end to find upstream/downstream overlap:
 struct annoRow *primaryRow = primaryData->rowList;
 int pStart = primaryRow->start, pEnd = primaryRow->end;
-primaryRow->start -= GPRANGE;
-if (primaryRow->start < 0)
+if (primaryRow->start <= GPRANGE)
     primaryRow->start = 0;
+else
+    primaryRow->start -= GPRANGE;
 primaryRow->end += GPRANGE;
 struct annoRow *rows = annoGratorIntegrate(gSelf, primaryData, retRJFilterFailed, self->lm);
 primaryRow->start = pStart;
 primaryRow->end = pEnd;
 
+if (self->variantFromRow == NULL)
+    setVariantFromRow(self, primaryData);
+if (self->curChromSeq == NULL || differentString(self->curChromSeq->name, primaryRow->chrom))
+    {
+    dnaSeqFree(&self->curChromSeq);
+    struct twoBitFile *tbf = self->grator.streamer.assembly->tbf;
+    self->curChromSeq = twoBitReadSeqFragLower(tbf, primaryRow->chrom, 0, 0);
+    }
+// TODO Performance improvement: instead of creating the transcript sequence for each
+// variant that intersects the transcript, cache transcript sequence; possibly
+// an slPair with a concatenation of {chrom, txStart, txEnd, cdsStart, cdsEnd,
+// exonStarts, exonEnds} as the name, and sequence as the val.  When something in
+// the list is no longer in the list of rows from the internal annoGratorIntegrate call,
+// drop it.
+// BETTER YET: make a callback for gpFx to get CDS sequence only when it needs it.
+char *refAllele = getGenomicSequence(self->curChromSeq->dna, primaryRow->start, primaryRow->end,
+				     self->lm);
+struct variant *variant = self->variantFromRow(self, primaryRow, refAllele);
+
 if (rows == NULL)
     {
-    // No genePreds means that the primary variant is intergenic.  By default we don't
-    // include those, but if funcFilter->intergenic has been set then we do.
+    // No genePreds means that the primary variant is intergenic.
     if (self->funcFilter != NULL && self->funcFilter->intergenic)
-	return aggvIntergenicRow(self, primaryData, retRJFilterFailed, callerLm);
+	return aggvIntergenicRow(self, variant, retRJFilterFailed, callerLm);
     else if (retRJFilterFailed && self->gpVarOverlapRule == agoMustOverlap)
 	*retRJFilterFailed = TRUE;
     return NULL;
@@ -373,10 +392,9 @@ if (rows == NULL)
 if (retRJFilterFailed && *retRJFilterFailed)
     return NULL;
 
-if (self->variantFromRow == NULL)
-    setVariantFromRow(self, primaryData);
-struct variant *variant = self->variantFromRow(self, primaryRow);
 struct annoRow *outRows = NULL;
+
+int hasFrames = (asColumnFindIx(gSelf->mySource->asObj->columnList, "exonFrames") >= 0);
 
 for(; rows; rows = rows->next)
     {
@@ -385,7 +403,8 @@ for(; rows; rows = rows->next)
     // work around genePredLoad's trashing its input
     char *saveExonStarts = lmCloneString(self->lm, inWords[8]);
     char *saveExonEnds = lmCloneString(self->lm, inWords[9]);
-    struct genePred *gp = genePredLoad(inWords);
+    struct genePred *gp = hasFrames ? genePredExtLoad(inWords, GENEPREDX_NUM_COLS) :
+				      genePredLoad(inWords);
     inWords[8] = saveExonStarts;
     inWords[9] = saveExonEnds;
 

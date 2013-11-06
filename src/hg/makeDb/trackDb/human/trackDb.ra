@@ -1157,8 +1157,8 @@ color 150,0,150
 type bed 4 +
 
 track dgv
-shortLabel DGV Struct Var
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
+shortLabel DGV Beta (old)
+longLabel Database of Genomic Variants: obsolete, here for QA comparison
 group varRep
 priority 144.8
 visibility hide
@@ -1167,8 +1167,9 @@ type bed 9 +
 noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report:
-url http://dgvbeta.tcag.ca/dgv/app/variant?id=$$&ref=$D
+url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 dataVersion beta (Nov. 23, 2012)
+release alpha
 
 track dgvPlus
 compositeTrack on
@@ -1183,12 +1184,13 @@ noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
+coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
 dataVersion July 23, 2013
 
     track dgvMerged
     parent dgvPlus
-    shortLabel DGV Merged Var
-    longLabel Database of Genomic Variants: Merged Structural Variants (CNV, Inversion, In/del)
+    shortLabel DGV Struct Var
+    longLabel Database of Genomic Variants: Structural Variant Regions (CNV, Inversion, In/del)
     priority 1
 
     track dgvSupporting
@@ -2909,8 +2911,9 @@ mouseOverField comments
 noScoreFilter on
 
 track clinvar
+compositeTrack on
 shortLabel ClinVar Variants
-longLabel NCBI ClinVar Genome Variants
+longLabel ClinVar Variants
 group phenDis
 priority 32
 visibility hide
@@ -2918,6 +2921,20 @@ type bigBed 4 .
 urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
 mouseOverField variantType
 noScoreFilter on
+
+    track clinvarMain
+    shortLabel ClinVar Main
+    longLabel ClinVar Variants, CNVs Excluded
+    visibility pack
+    parent clinvar
+    priority 1
+
+    track clinvarCnv
+    shortLabel ClinVar CNVs
+    longLabel ClinVar Variants, CNVs Only
+    visibility pack
+    parent clinvar
+    priority 2
 
 track spAnnot
 shortLabel UniProt Annotations
@@ -3905,6 +3922,9 @@ type bed 3
 	shortLabel ISCA Benign
 	longLabel ISCA CNVs: Benign
         subGroups view=cnv phen=ben level=det
+
+
+include phastBias.ra
 
 searchName decipherId
 searchTable decipher

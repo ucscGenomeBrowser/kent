@@ -46,11 +46,16 @@ struct gpFx
 	} details;
     };
 
-struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred, char *refAllele,
+struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
 			    struct dnaSeq *transcriptSequence, struct lm *lm);
 // return the predicted effect(s) of a variation list on a genePred
 
 // number of bases up or downstream that we flag
 #define GPRANGE 5000
+
+char *firstAltAllele(struct allele *alleles);
+/* Ensembl always reports an alternate allele, even if that allele is not being used
+ * to calculate any consequence.  When allele doesn't really matter, just use the
+ * first alternate allele that is given. */
 
 #endif /* GPFX_H */

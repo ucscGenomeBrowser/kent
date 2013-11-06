@@ -2043,9 +2043,8 @@ static void geneAllelesTable(struct cart *cart,
 {
 int haploCount = slCount(hapSet->haplos);
 assert(haploCount >= 1);
-if (haploCount == 1)
+if (haploCount == 1 && haploIsReference(hapSet->haplos))
     {
-    assert(haploIsReference(hapSet->haplos));
     hPrintf("No non-reference alleles found for this gene model.\n");
     return;
     }
@@ -2109,7 +2108,7 @@ if (fullSeq)
     if (!dnaView && tripletView)
         hPrintf("<TD class='topHat dnaToo'><B><code>%s</code></B></TD>",refHap->ho->dnaSeq);
     else
-        hPrintf("<TD nowrap class='topHat'><B>Prediced full sequence</B></TD>");
+        hPrintf("<TD nowrap class='topHat'><B>Predicted full sequence</B></TD>");
     }
 hPrintf("</TR>\n");
 

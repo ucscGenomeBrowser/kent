@@ -2628,7 +2628,7 @@ if (psl && drawOpt == baseColorDrawCds && !zoomedToCdsColorLevel)
 
 tallStart = lf->tallStart;
 tallEnd = lf->tallEnd;
-if ((tallStart == 0 && tallEnd == 0) && !sameWord(tg->table, "jaxQTL3"))
+if ((tallStart == 0 && tallEnd == 0) && lf->start != 0 && !sameWord(tg->table, "jaxQTL3"))
     {
     // sometimes a bed <8 will get passed off as a bed 8, tsk tsk
     tallStart = lf->start;
@@ -2637,6 +2637,12 @@ if ((tallStart == 0 && tallEnd == 0) && !sameWord(tg->table, "jaxQTL3"))
 x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 w = x2-x1;
+if (lf->start==lf->end && w==0) // like a SNP insertion point of size=0
+    {
+    w = 1;
+    hvGfxBox(hvg, x1, y, w, heightPer, color);
+    return;
+    }
 
 // are we highlighting this feature with background highlighting
 if (lf->highlightColor && (lf->highlightMode == highlightBackground))
@@ -5302,7 +5308,12 @@ static char nameBuf[256];
 char query[256], *name = NULL;
 if (hTableExists(database,  "refLink"))
     {
-    sqlSafef(query, sizeof query, "select name from refLink where mrnaAcc = '%s'", acc);
+    /* remove the version number if any */
+    static char accBuf[1024];
+    safecpy(accBuf, sizeof accBuf, acc);
+    chopSuffix(accBuf);
+
+    sqlSafef(query, sizeof query, "select name from refLink where mrnaAcc = '%s'", accBuf);
     name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf));
     if ((name != NULL) && (name[0] == '\0'))
         name = NULL;
@@ -5431,7 +5442,10 @@ char *refGeneMapName(struct track *tg, void *item)
 /* Return un-abbreviated gene name. */
 {
 struct linkedFeatures *lf = item;
-return lf->name;
+char buffer[1024];
+safecpy(buffer, sizeof buffer, lf->name);
+chopSuffix(buffer);
+return cloneString(buffer);
 }
 
 void lookupRefNames(struct track *tg)

@@ -465,7 +465,7 @@ hPrintf(" Send output to ");
 cgiMakeCheckBoxIdAndJS("sendToGalaxy", doGalaxy(),
     "checkboxGalaxy",
     "onclick=\"document.getElementById('checkboxGreat').checked=false; return true;\"");
-hPrintf("<A HREF=\"http://g2.bx.psu.edu\" target=_BLANK>Galaxy</A>\n");
+hPrintf("<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A>\n");
 nbSpaces(2);
 cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
     "checkboxGreat",
@@ -493,7 +493,7 @@ struct outputType otMicroarrayGroupings = { NULL, outMicroarrayGroupings, "micro
 
 static void showOutputTypeRow(boolean isWig, boolean isBedGr,
     boolean isPositional, boolean isMaf, boolean isChromGraphCt,
-    boolean isPal, boolean isMicroarray)
+    boolean isPal, boolean isMicroarray, boolean isHalSnake)
 /* Print output line. */
 {
 struct outputType *otList = NULL, *otDefault = NULL;
@@ -517,6 +517,10 @@ else if (isWig)
     slAddTail(&otList, &otWigData);
     slAddTail(&otList, &otWigBed);
     slAddTail(&otList, &otCustomTrack);
+    }
+else if (isHalSnake)
+    {
+    slAddTail(&otList, &otMaf);
     }
 else if (isMaf)
     {
@@ -572,7 +576,7 @@ void showMainControlTable(struct sqlConnection *conn)
 {
 struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
-        isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE, isVcf = FALSE;
+        isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE, isVcf = FALSE, isHalSnake = FALSE;
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
@@ -643,6 +647,7 @@ hPrintf("<TABLE BORDER=0>\n");
         isPositional = TRUE;
         isWig = TRUE;
         }
+    isHalSnake = isHalTable( curTable);
     isMaf = isMafTable(database, curTrack, curTable);
     isBedGr = isBedGraph(curTable);
     isArray = isMicroarray(curTrack, curTable);
@@ -843,7 +848,7 @@ if (correlateTrackTableOK(tdb, curTable))
     }
 
 /* Print output type line. */
-showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, isArray);
+showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, isArray, isHalSnake);
 
 /* Print output destination line. */
     {
@@ -939,7 +944,7 @@ hPrintf("%s",
   "TARGET=_blank>tutorial</A> for a narrated presentation of the software "
   "features and usage. "
   "For more complex queries, you may want to use "
-  "<A HREF=\"http://main.g2.bx.psu.edu\" target=_BLANK>Galaxy</A> or "
+  "<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A> or "
   "our <A HREF=\"../goldenPath/help/mysql.html\">public "
   "MySQL server</A>. "
   "To examine the biological function of your set through annotation "

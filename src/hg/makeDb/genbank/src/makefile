@@ -10,7 +10,7 @@ all: ${SUBDIRS:%=%.suball}
 	${MAKE} -C $* all
 
 clean: ${SUBDIRS:%=%.subclean}
-	rm -rf ${BINDIR}
+	rm -rf ${GB_BINDIR}
 
 %.subclean:
 	${MAKE} -C $* clean

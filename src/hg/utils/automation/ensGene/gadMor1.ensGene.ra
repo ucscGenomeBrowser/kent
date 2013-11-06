@@ -4,6 +4,8 @@ db gadMor1
 geneScaffolds yes
 # ignore genes that do not properly convert to a gene pred, and contig
 #	names that are not in the UCSC assembly
-skipInvalid yes
+# skipInvalid yes
 # ignore the single gene that has invalid structures from Ensembl:
 # 47425: ENSETET00000018714 no exonFrame on CDS exon 1
+
+liftUp /hive/data/genomes/gadMor1/bed/ucscToEnsembl/ensemblToUcsc.lift

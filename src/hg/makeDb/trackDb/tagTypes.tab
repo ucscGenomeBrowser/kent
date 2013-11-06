@@ -63,6 +63,7 @@ configurable *
 configureByPopup *
 container *
 controlledVocabulary *
+coriellUrlBase bed
 dataUrl customTracks
 dataVersion *
 dateSubmitted bedGraph bed
@@ -226,6 +227,8 @@ minGrayLevel bed broadPeak narrowPeak bedLogR
 minLimit *
 minMax chromGraph
 minScore bed broadPeak narrowPeak
+motifTable factorSource
+motifPwmTable factorSource
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
 nextExonText *
@@ -280,6 +283,11 @@ sGroup_Placental_Mammal wigMaf
 sGroup_Placental wigMaf
 sGroup_Primate wigMaf
 sGroup_Primates wigMaf
+sGroup_Laurasiatheria wigMaf
+sGroup_Afrotheria wigMaf
+sGroup_Mammal wigMaf
+sGroup_Aves wigMaf
+sGroup_Sarcopterygii wigMaf
 sGroup_Vertebrate wigMaf
 sGroup_bird wigMaf
 sGroup_fish wigMaf

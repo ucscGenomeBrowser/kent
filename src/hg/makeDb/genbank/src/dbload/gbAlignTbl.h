@@ -37,7 +37,7 @@ void gbAlignTblWriteOi(struct gbAlignTbl *gat, struct estOrientInfo* oi,
                        struct sqlConnection *conn);
 /* write new align orientInfo */
 
-struct gbAlignTblSet *gbAlignTblSetNew(boolean perChrom, char *tmpDir);
+struct gbAlignTblSet *gbAlignTblSetNew(boolean perChrom, boolean hasVersion, char *tmpDir);
 /* construct a new gbAlignTblSet object */
 
 void gbAlignTblSetFree(struct gbAlignTblSet **gatsPtr);

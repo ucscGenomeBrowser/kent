@@ -17,6 +17,7 @@ struct gbIndex;
                                          * added */
 #define DBLOAD_REBUILD_DERIVED   0x80   /* rebuild genePred table and gbMiscDiff'
                                          * implies DBLOAD_BYPASS_GBLOADED. */
+#define DBLOAD_ADD_VERSION       0x100  /* add version number to genepred */
 
 struct dbLoadAttr
 /* attributes associated with a srcDb+type+orgCat */

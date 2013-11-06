@@ -11,7 +11,7 @@
 #include "encode3/encode3Valid.h"
 #include "gff.h"
 
-char *version = "1.6";
+char *version = "1.7";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
@@ -48,6 +48,7 @@ static struct optionSpec options[] = {
     {"dir", OPTION_STRING},
     {"encValData", OPTION_STRING},
     {"quickMd5sum", OPTION_BOOLEAN},     // Testing option, user should not use
+    {"-help", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -330,6 +331,12 @@ return runCmdLine(cmdLine);
 boolean validateFastq(char *fileName)
 /* Validate fastq file */
 {
+// check if fastq fileName ends in .gz extension
+if (!endsWith(fileName, ".gz"))
+    {
+    warn("FILENAME %s must be compressed only with gzip and have the extension .gz", fileName);
+    return FALSE;
+    }
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=fastq %s", validateFilesPath, fileName);
 return runCmdLine(cmdLine);
@@ -448,8 +455,26 @@ return result;
 }
 
 
+boolean disallowedCompressionExtension(char *fileName, char *format)
+/* return TRUE if fileName ends in a disallowed extension */
+{
+if (endsWith(fileName, ".tgz"))
+    return TRUE;
+if (endsWith(fileName, ".tar.gz"))
+    return TRUE;
+if (endsWith(fileName, ".tar"))
+    return TRUE;
+if (endsWith(fileName, ".zip"))
+    return TRUE;
+if (endsWith(fileName, ".bz2"))
+    return TRUE;
+if (endsWith(fileName, ".gz") && !sameString(format,"fastq"))
+    return TRUE;
+return FALSE;
+}
 
-void validateManifest(char *workingDir)
+
+int validateManifest(char *workingDir)
 /* Validate the manifest.txt input file creating validated.txt output */
 {
 
@@ -488,7 +513,7 @@ if (fileExists("validated.txt"))  // read in the old validated.txt file to save 
     uglyf("reading validated.txt\n\n");
     vFieldCount = readManifest("validated.txt", &vFields, &vRecs);
     if (vFieldCount != mFieldCount + 4) // TODO this might be allowed someday if good case exists for it.
-	errAbort("Error: the number of fields in validated.txt %d does not match the number of fields %d in manifest.txt", vFieldCount, mFieldCount);
+	errAbort("ERROR: the number of fields in validated.txt %d does not match the number of fields %d in manifest.txt", vFieldCount, mFieldCount);
     haveVal = TRUE;
     }
 
@@ -500,7 +525,9 @@ int mFormatIdx = -1;
 int mOutputTypeIdx = -1;
 int mExperimentIdx = -1;
 int mReplicateIdx = -1;
+int mTechnicalReplicateIdx = -1;
 int mEnrichedInIdx = -1;
+int mPairedEndIdx = -1;
 int i = 0;
 // find field numbers needed for required fields.
 for (i=0; i<mFieldCount; ++i)
@@ -517,8 +544,12 @@ for (i=0; i<mFieldCount; ++i)
 	mExperimentIdx = i;
     if (sameString(manifestFields->words[i], "replicate"))
 	mReplicateIdx = i;
+    if (sameString(manifestFields->words[i], "technical_replicate"))
+	mTechnicalReplicateIdx = i;
     if (sameString(manifestFields->words[i], "enriched_in"))
 	mEnrichedInIdx = i;
+    if (sameString(manifestFields->words[i], "paired_end"))
+	mPairedEndIdx = i;
     }
 if (mFileNameIdx == -1)
     errAbort("field file_name not found in manifest.txt");
@@ -530,8 +561,14 @@ if (mExperimentIdx == -1)
     errAbort("field experiment not found in manifest.txt");
 if (mReplicateIdx == -1)
     errAbort("field replicate not found in manifest.txt");
+// technical_replicate is probably optional
+//if (mTechnicalReplicateIdx == -1)
+//    errAbort("field technical_replicate not found in manifest.txt");
 if (mEnrichedInIdx == -1)
     errAbort("field enriched_in not found in manifest.txt");
+// paired_end is probably optional
+//if (mPairedEndIdx == -1)
+//    errAbort("field paired_end not found in manifest.txt");
 
 // check if the fieldnames in old validated appear in the same order in manifest.txt
 //  although this is currently a minor limitation, it could be removed 
@@ -599,6 +636,7 @@ fprintf(f,"##validateManifest version %s\n", version);  // write vm version as a
 struct hash *outputTypeHash = newHash(12);
 
 // loop through manifest recs
+boolean errsFound = FALSE;
 struct slRecord *rec = NULL;
 int recNo = 1;
 for(rec = manifestRecs; rec; rec = rec->next)
@@ -625,28 +663,53 @@ for(rec = manifestRecs; rec; rec = rec->next)
     char *mMd5Hex = "0";
     char *mValidKey = "ERROR";
 
+    // check that ucsc db, if used, is not blank
+    if (fileIsValid && mUcscDbIdx != -1 && ucscDb[0] == 0)
+	{
+	fileIsValid = FALSE;
+	printf("ERROR: ucsc_db must not be blank.\n");
+	}		    
+
+    // check that the file exists
     if (fileIsValid && !fileExists(mFileName))
 	{
 	fileIsValid = FALSE;
-	printf("ERROR: %s FILE NOT FOUND !!!\n", mFileName);
+	printf("ERROR: '%s' FILE NOT FOUND !!!\n", mFileName);
 	}
 
     char *mFormat = rec->words[mFormatIdx];
 
-    // check that each output_type is only used with one format
-    char *mOutputType = rec->words[mOutputTypeIdx];
-    struct hashEl *el = hashLookup(outputTypeHash, mOutputType);
-    if (el)
+    // check that the file extension is not disallowed
+    if (fileIsValid && disallowedCompressionExtension(mFileName, mFormat))
 	{
-	char *existingFormat = (char *) el->val;
-	if (!sameString(mFormat, existingFormat))
-	    {
-	    errAbort("Error: Each output_type can only be used with one format.  output_type %s is being used with both format %s and %s.",
-		mOutputType, mFormat, existingFormat);
-	    }		    
+	fileIsValid = FALSE;
+	printf("ERROR: %s FILE COMPRESSION TYPE NOT ALLOWED !!!\n", mFileName);
 	}
-    else
-	hashAdd(outputTypeHash, mOutputType, cloneString(mFormat));
+
+
+    // check that each output_type is not blank and only used with one format
+    char *mOutputType = rec->words[mOutputTypeIdx];
+    if (fileIsValid && mOutputType[0] == 0)
+	{
+	fileIsValid = FALSE;
+	printf("ERROR: output_type must not be blank.\n");
+	}		    
+    if (fileIsValid)
+	{
+	struct hashEl *el = hashLookup(outputTypeHash, mOutputType);
+	if (el)
+	    {
+	    char *existingFormat = (char *) el->val;
+	    if (!sameString(mFormat, existingFormat))
+		{
+		fileIsValid = FALSE;
+		printf("ERROR: Each output_type can only be used with one format.  output_type %s is being used with both format %s and %s.\n",
+		    mOutputType, mFormat, existingFormat);
+		}		    
+	    }
+	else
+	    hashAdd(outputTypeHash, mOutputType, cloneString(mFormat));
+	}
 
     // check experiment field
     char *mExperiment = rec->words[mExperimentIdx];
@@ -658,6 +721,18 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	    printf("ERROR: %s is not a valid value for the experiment field.  Must start with ENCSR.\n", mExperiment);
 	    }
 	}
+
+    // check enriched_in field
+    char *mEnrichedIn = rec->words[mEnrichedInIdx];
+    if (fileIsValid)
+	{
+	if (!encode3CheckEnrichedIn(mEnrichedIn))
+	    {
+	    fileIsValid = FALSE;
+	    printf("ERROR: %s is not a valid value for the enriched_in field.\n", mEnrichedIn);
+	    }
+	}
+
     
     // check replicate field
     char *mReplicate = rec->words[mReplicateIdx];
@@ -665,12 +740,68 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	{
 	boolean smallNumber = FALSE;
 	int sl = strlen(mReplicate);
-	if (countLeadingDigits(mReplicate) == sl && sl < 3 && sl > 0)
+	int sn = 0;
+	if (countLeadingDigits(mReplicate) == sl && sl < 2 && sl > 0)
+	    {
 	    smallNumber = TRUE;
-       	if (!(startsWith("pooled", mReplicate) || startsWith("n/a", mReplicate) || smallNumber))
+	    sn = atoi(mReplicate);
+	    }
+       	if (!(startsWith("pooled", mReplicate) || startsWith("n/a", mReplicate) || (smallNumber && sn >=1 && sn <=10)))
 	    {
 	    fileIsValid = FALSE;
-    	    printf("ERROR: %s is not a valid value for the experiment field.  Must be pooled or n/a or a small unsigned number.\n", mReplicate);
+    	    printf("ERROR: %s is not a valid value for the replicate field.  Must be pooled or n/a or a small unsigned number 1 <= N <=10.\n", mReplicate);
+	    }
+	}
+    
+    // check technical_replicate field
+    if (fileIsValid)
+	{
+	if (mTechnicalReplicateIdx != -1)  // The technical_replicate field is optional
+	    {
+	    char *mTechnicalReplicate = rec->words[mTechnicalReplicateIdx];
+	    boolean smallNumber = FALSE;
+	    int sl = strlen(mTechnicalReplicate);
+	    int sn = 0;
+	    if (countLeadingDigits(mTechnicalReplicate) == sl && sl < 2 && sl > 0)
+		{
+		smallNumber = TRUE;
+		sn = atoi(mTechnicalReplicate);
+		}
+	    if (!(startsWith("pooled", mTechnicalReplicate) || startsWith("n/a", mTechnicalReplicate) || (smallNumber && sn >=1 && sn <=10)))
+		{
+		fileIsValid = FALSE;
+		printf("ERROR: %s is not a valid value for the technical_replicate field.  Must be pooled or n/a or a small unsigned number 1 <= N <=10.\n", mTechnicalReplicate);
+		}
+	    }
+	}
+    
+    // check paired_end field
+    if (fileIsValid)
+	{
+	if (mPairedEndIdx != -1)  // The check paired_end field is optional
+	    {
+	    char *mPairedEnd = rec->words[mPairedEndIdx];
+	    boolean smallNumber = FALSE;
+	    int sl = strlen(mPairedEnd);
+	    int sn = 0;
+	    if (countLeadingDigits(mPairedEnd) == sl && sl < 2 && sl > 0)
+		{
+		smallNumber = TRUE;
+		sn = atoi(mPairedEnd);
+		}
+	    if (!(startsWith("pooled", mPairedEnd) || startsWith("n/a", mPairedEnd) || (smallNumber && (sn==1 || sn ==2))))
+		{
+		fileIsValid = FALSE;
+		printf("ERROR: %s is not a valid value for the paired_end field.  Must be 1 (forward), 2 (reverse) or \"n/a\".\n", mPairedEnd);
+		}
+	    }
+	else
+	    {
+	    if (sameString(mFormat, "fastq"))  // The check paired_end field is required for fastq
+		{
+		fileIsValid = FALSE;
+		printf("ERROR: For format fastq the paired_end field is required.  Must be 1 (forward), 2 (reverse) or \"n/a\".\n");
+		}
 	    }
 	}
     
@@ -777,6 +908,9 @@ for(rec = manifestRecs; rec; rec = rec->next)
     fprintf(f,"\n");
     fflush(f);
 
+    if (sameString(mValidKey,"ERROR"))
+	errsFound = TRUE;
+
     ++recNo;
     }
 
@@ -784,9 +918,14 @@ for(rec = manifestRecs; rec; rec = rec->next)
 carefulClose(&f);
 rename("validated.tmp", "validated.txt"); // replace the old validated file with the new one
 
+if (errsFound)
+    return 1;
+
 // #file_name      format  experiment      replicate       output_type     biosample       target  localization    update
 // ucsc_db   (this is optional but overrides attempts to get db from file_name path)
 // md5_sum size modified valid_key
+
+return 0;
 
 }
 
@@ -795,14 +934,13 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 
-if (argc!=1)
+if (argc!=1 || optionExists("-help"))
     usage();
 
 workingDir = optionVal("dir", workingDir);
 encValData = optionVal("encValData", encValData);
 quickMd5sum = optionExists("quickMd5sum");
 
-validateManifest(workingDir);
+return validateManifest(workingDir);
 
-return 0;
 }

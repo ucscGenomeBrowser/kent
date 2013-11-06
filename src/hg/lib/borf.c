@@ -12,8 +12,8 @@
 #include "fa.h"
 #include "portable.h"
 
-static char *_bestOrfExe = "/projects/compbio/bin/bestorf.linux/bestorf";
-static char *_bestOrfParam = "/projects/compbio/bin/bestorf.linux/hume.dat";
+static char *_bestOrfExe = "/hive/data/outside/bestorf.linux/bestorf";
+static char *_bestOrfParam = "/hive/data/outside/bestorf.linux/hume.dat";
 
 void borfStaticLoad(char **row, struct borf *ret)
 /* Load a row from borf table into ret.  The contents of ret will

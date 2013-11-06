@@ -1,0 +1,24 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+visibility hide
+html gold
+
+track monomers
+shortLabel Monomers
+longLabel Higher Order Repeat
+group genes
+visibility pack
+color 255,140,0
+type bed 4
+
+track encode
+shortLabel Encode
+longLabel Mapped Encode Data
+group regulation
+visibility dense
+priority 10
+type bed
+color 20,50,90
+compositeTrack on
+
+include trackDb.encode.ra

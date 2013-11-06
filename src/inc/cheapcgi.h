@@ -55,6 +55,22 @@ struct cgiVar
 struct cgiVar* cgiVarList();
 /* return the list of cgiVar's */
 
+struct cgiDictionary
+/* Stuff to encapsulate parsed out CGI vars. */
+    {
+    struct cgiDictionary *next;	    /* Next in list if we have multiple */
+    char *stringData;		    /* Where values if cgi-vars live. */
+    struct hash *hash;		    /* Keyed by cgi-var name, value is cgiVar */
+    struct cgiVar *list;	    /* List of all vars. */
+    };
+
+void cgiDictionaryFree(struct cgiDictionary **pD);
+/* Free up resources associated with dictionary. */
+
+struct cgiDictionary *cgiDictionaryFromEncodedString(char *encodedString);
+/* Giving a this=that&this=that string,  return cgiDictionary parsed out from it. 
+ * This does *not* destroy input like the lower level cgiParse functions do. */
+
 char *findCookieData(char *varName);
 /* Get the string associated with varName from the cookie string. */
 

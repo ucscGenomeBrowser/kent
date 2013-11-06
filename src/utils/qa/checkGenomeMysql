@@ -43,12 +43,15 @@ tableList=$(mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -Ne "show ta
 # if you do a select statement with a limit 1. Thus, we do a limit 5.
 # Throw away result of select statement and allow MySQL errors to be reported.
 # Also, genome-mysql is actually two hosts.  Check both.
-for table in $tableList
+for ip in $(host genome-mysql.soe.ucsc.edu | awk '/has address/ {print $4}')
 do
-  mysql --user=genome --host=public-mysql1.cse.ucsc.edu -A -Ne "select * from $table limit 5" \
-      $db > /dev/null
+  for table in $tableList
+  do
+    mysql --user=genome --host=$ip -A -Ne "select * from $table limit 5" \
+        $db > /dev/null
 
 #PUT THIS BACK IF SD MACHINES COME BACK  mysql --user=genome --host=hgfs-sd.cse.ucsc.edu -A -Ne "select * from $table limit 5" \
 #      $db > /dev/null
+  done
 done
 exit 0

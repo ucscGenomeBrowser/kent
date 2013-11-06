@@ -26,6 +26,8 @@ if (orgCats)
         = gbIndexGetPartitions(index, GB_ALIGNED, srcDb,
                                options->relRestrict, type, orgCats,
                                options->accPrefixRestrict);
+    if ((select != NULL) && (options->flags & DBLOAD_ADD_VERSION))
+	select->hasVersion = TRUE;
     *selectList = slCat(*selectList, select);
     }
 }

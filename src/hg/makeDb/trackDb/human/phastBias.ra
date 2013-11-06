@@ -1,0 +1,56 @@
+track phastBias
+shortLabel phastBias gBGC
+longLabel phastBias gBGC predictions
+compositeTrack on
+priority 1010
+group compGeno
+visibility hide
+type bed 3 .
+subGroup1 view Views TRACTS=tracts POST=posteriors
+#dragAndDrop subTracks
+allButtonPair on
+
+  track phastBiasTracts
+  parent phastBias
+  shortLabel Tracts
+  view TRACTS
+  visibility dense
+  
+    track phastBiasTracts3
+    parent phastBiasTracts
+    shortLabel human tracts
+    longLabel phastBias gBGC human tracts
+    priority 1
+    subGroups view=TRACTS
+    visibility dense
+
+    track phastBiasChimpTracts3
+    parent phastBiasTracts off
+    shortLabel chimp tracts
+    longLabel phastBias gBGC chimp tracts
+    priority 7 
+    visibility hide
+    subGroups view=TRACTS
+
+  track phastBiasPosteriors
+  parent phastBias
+  shortLabel Posteriors
+  view POST
+  type bigWig 0 1
+  visibility hide
+  maxHeightPixels 100:32:8
+
+    track phastBiasPosteriors3
+    parent phastBiasPosteriors
+    shortLabel human posterior
+    longLabel phastBias gBGC posterior probability on human branch
+    priority 2
+    subGroups view=POST
+
+    track phastBiasChimpPosteriors3
+    parent phastBiasPosteriors
+    shortLabel chimp posterior
+    longLabel phastBias gBGC posterior probability on chimp branch
+    priority 8
+    subGroups view=POST
+

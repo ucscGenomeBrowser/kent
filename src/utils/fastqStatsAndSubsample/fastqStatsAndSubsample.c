@@ -47,7 +47,7 @@ static boolean nextLineMustMatchChar(struct lineFile *lf, char match, boolean no
  * Return FALSE on EOF, unless noEof is set, in which case abort */
 {
 char *line;
-if (!lineFileNext(lf, &line, NULL))
+if (!lineFileNextReal(lf, &line))
     {
     if (noEof)
         errAbort("Expecting %c got end of file in %s", match, lf->fileName);
@@ -177,7 +177,7 @@ if (f == NULL)
     copy = FALSE;
 
 /* Deal with initial line starting with '@' */
-if (!lineFileNext(lf, &line, &lineSize))
+if (!lineFileNextRealWithSize(lf, &line, &lineSize))
     return FALSE;
 if (line[0] != '@')
     errAbort("Expecting line starting with '@' got %s line %d of %s", 
@@ -292,7 +292,7 @@ char *line;
 int lineSize;
 
 /* Deal with initial line starting with '@' */
-if (!lineFileNext(lf, &line, &lineSize))
+if (!lineFileNextRealWithSize(lf, &line, &lineSize))
     return FALSE;
 if (line[0] != '@')
     errAbort("Expecting line starting with '@' got %s line %d of %s", 

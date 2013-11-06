@@ -9,6 +9,7 @@
 #include "psl.h"
 #include "dnautil.h"
 #include "chain.h"
+#include "verbose.h"
 
 
 /* command line option specifications */
@@ -56,9 +57,24 @@ static char *usageMsg =
 errAbort("%s\n%s", msg, usageMsg);
 }
 
+static void verbosePslNl(int verbosity, char *msg, struct psl *psl)
+/* Verbose logging of  msg, if not null, followed by a psl if not null, followed by a new line */
+{
+if (verboseLevel() >= verbosity)
+    {
+    if (msg != NULL)
+        verbose(verbosity, "%s ", msg);
+    if (psl != NULL)
+        pslTabOut(psl, verboseLogFile());
+    else
+        verbose(verbosity, "NULL\n");
+    }
+}
+
 struct mapAln
 /* Mapping alignment, psl plus additional information. */
 {
+    struct mapAln *next; /* list mapping to the genomeRangeTree node */
     struct psl *psl;  /* psl, maybe created from a chain */
     int id;           /* chain id, or psl file row  */
 };
@@ -221,6 +237,19 @@ psl->qName = newQName;
 freeMem(oldQName);
 }
 
+static void mappedPslOutput(struct psl *inPsl, struct mapAln *mapAln, struct psl* mappedPsl,
+                            FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh)
+/* output one mapped psl */
+{
+if (suffix != NULL)
+    addQNameSuffix(mappedPsl);
+pslTabOut(mappedPsl, outPslFh);
+if (mapInfoFh != NULL)
+    writeMapInfo(mapInfoFh, inPsl, mapAln, mappedPsl);
+if (mappingPslFh != NULL)
+    pslTabOut(mapAln->psl, mappingPslFh);
+}
+
 static boolean mapPslPair(struct psl *inPsl, struct mapAln *mapAln,
                           FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh)
 /* map one pair of query and target PSL */
@@ -229,21 +258,17 @@ struct psl* mappedPsl;
 if (inPsl->tSize != mapAln->psl->qSize)
     errAbort("Error: inPsl %s tSize (%d) != mapping alignment %s qSize (%d) (perhaps you need to specify -swapMap?)\n",
              inPsl->tName, inPsl->tSize, mapAln->psl->qName, mapAln->psl->qSize);
+verbosePslNl(2, "inAln", inPsl);
+verbosePslNl(2, "mapAln", mapAln->psl);
 
 mappedPsl = pslTransMap(mapOpts, inPsl, mapAln->psl);
+
+verbosePslNl(2, "mappedAln", mappedPsl);
 
 /* only output if blocks were actually mapped */
 boolean wasMapped = mappedPsl != NULL;
 if (wasMapped)
-    {
-    if (suffix != NULL)
-        addQNameSuffix(mappedPsl);
-    pslTabOut(mappedPsl, outPslFh);
-    if (mapInfoFh != NULL)
-        writeMapInfo(mapInfoFh, inPsl, mapAln, mappedPsl);
-    if (mappingPslFh != NULL)
-        pslTabOut(mapAln->psl, mappingPslFh);
-    }
+    mappedPslOutput(inPsl, mapAln, mappedPsl, outPslFh, mapInfoFh, mappingPslFh);
 pslFree(&mappedPsl);
 return wasMapped;
 }
@@ -253,13 +278,17 @@ static void mapQueryPsl(struct psl* inPsl, struct genomeRangeTree *mapAlns,
 /* map a query psl to all targets  */
 {
 static struct dyString *idBuf = NULL;
-struct range *overMapAlns = genomeRangeTreeAllOverlapping(mapAlns, getMappingId(inPsl->tName, &idBuf), inPsl->tStart, inPsl->tEnd);
-struct range *overMapAln;
+struct range *overMapAlnNodes = genomeRangeTreeAllOverlapping(mapAlns, getMappingId(inPsl->tName, &idBuf), inPsl->tStart, inPsl->tEnd);
+struct range *overMapAlnNode;
+struct mapAln *overMapAln;
 boolean wasMapped = FALSE;
-for (overMapAln = overMapAlns; overMapAln != NULL; overMapAln = overMapAln->next)
+for (overMapAlnNode = overMapAlnNodes; overMapAlnNode != NULL; overMapAlnNode = overMapAlnNode->next)
     {
-    if (mapPslPair(inPsl, (struct mapAln *)overMapAln->val, outPslFh, mapInfoFh, mappingPslFh))
-        wasMapped = TRUE;
+    for (overMapAln = overMapAlnNode->val; overMapAln != NULL; overMapAln = overMapAln->next)
+        {
+        if (mapPslPair(inPsl, overMapAln, outPslFh, mapInfoFh, mappingPslFh))
+            wasMapped = TRUE;
+        }
     }
 if ((mapInfoFh != NULL) && !wasMapped)
     writeMapInfo(mapInfoFh, inPsl, NULL, NULL);

@@ -1356,7 +1356,7 @@ return pat != NULL && pat[0] != 0 && !sameString(pat, "*");
 static boolean cmpReal(char *pat, char *cmpOp)
 /* Return TRUE if we have a real cmpOp. */
 {
-return pat != NULL && pat[0] != 0 && !sameString(cmpOp, cmpOpMenu[0]);
+return isNotEmpty(pat) && stringArrayIx(cmpOp, cmpOpMenu, cmpOpMenuSize) > 0;
 }
 
 static boolean filteredOrLinked(char *db, char *table)
@@ -1653,7 +1653,8 @@ for (var = varList; var != NULL; var = var->next)
 		}
 	    else
 	        {
-		sqlDyStringPrintfFrag(dy, "%s.%s %s ", explicitDbTable, field, cmpVal);
+		// cmpVal has been checked already above in cmpReal for legal values.
+		sqlDyStringPrintfFrag(dy, "%s.%s %-s ", explicitDbTable, field, cmpVal);
 		if (strchr(pat, '.'))	/* Assume floating point. */
 		    dyStringPrintf(dy, "%f", atof(pat));
 		else

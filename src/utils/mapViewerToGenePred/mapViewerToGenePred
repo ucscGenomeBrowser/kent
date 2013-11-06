@@ -1,0 +1,115 @@
+#!/usr/bin/env python
+# written by Max Haeussler, Aug 2013
+# converts ncbi mapviewer .md files to gene pred
+import sys, gzip, operator, logging, optparse
+from collections import defaultdict
+
+# === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
+parser = optparse.OptionParser("""usage: %prog [options] inFileGzOK outFileStdOutOk - converts NCBI mapviewer files to UCSC genePred format
+
+NCBI provides mapviewer files at ftp://ftp.ncbi.nih.gov/genomes/MapView/
+An example for Homo sapiens is seq_gene.md.gz
+""")
+
+parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
+parser.add_option("-a", "--assembly", dest="assembly", action="store", help="The assembly to use, default %default", default="Primary_Assembly") 
+#parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+(options, args) = parser.parse_args()
+
+if options.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
+
+if args==[]:
+    parser.print_help()
+    exit(1)
+
+# ============== FUNCTIONS =================
+def main(args, options):
+    inFname, outFname = args
+    if inFname.endswith(".gz"):
+        ofunc = gzip.open
+    else:
+        ofunc = open
+    ifh = ofunc(inFname)
+
+    logging.info("Parsing %s..." % inFname)
+    exonSpans = parseMapViewer(ifh, options.assembly)
+    writeData(exonSpans, outFname)
+
+def parseMapViewer(ifh, filterAssembly):
+    exonSpans = defaultdict(list)
+    for line in ifh:
+        if line.startswith("#"):
+            continue
+        l = line.rstrip("\n")
+        fields = l.split("\t")
+        taxId, chrom, chromStart, chromEnd, strand, contig, \
+            ctgStart, ctgStop, ctgStrand, featureName, geneId, \
+            typeGroup, assembly, transcript, evidence_code = fields
+        chromStart = int(chromStart)-1
+        chromEnd = int(chromEnd)
+        # skip over alternative assemblies
+        if assembly != filterAssembly:
+            continue
+
+        #if typeGroup == "GENE":
+            #geneToSym[geneId] = featureName
+        if typeGroup in ["CDS", "UTR"]:
+            if transcript=="-":
+                continue
+            exon = [chrom, chromStart, chromEnd, strand, typeGroup]
+            # need to keep contig here, for duplicated refseqs
+            exonSpans[(contig, transcript)].append( exon )
+    return exonSpans
+
+def writeData(exonSpans, outFname):
+    # for each transcript, 
+    if outFname=="stdout":
+        ofh = sys.stdout
+    else:
+        ofh = open(outFname, "w")
+
+    for ctgTrans, exonList in exonSpans.iteritems():
+        contig, transId = ctgTrans
+        # sort on start pos
+        exonList.sort(key=operator.itemgetter(1))
+        # find cdsStart, cdsEnd
+        cdsExons = [e for e in exonList if e[4] == "CDS"]
+        if len(cdsExons)==0:
+            cdsStart, cdsEnd = exonList[0][1], exonList[0][1]
+        else:
+            cdsStart = cdsExons[0][1]
+            cdsEnd = cdsExons[-1][2]
+
+        # convert to (start, end) tuples
+        spans = []
+        for chrom, chromStart, chromEnd, strand, typeGroup in exonList:
+            # if directly adjacent, fuse
+            if len(spans)!=0 and chromStart==spans[-1][1]:
+                spans[-1][1] = chromEnd
+            # otherwise append
+            else:
+                spans.append( [chromStart, chromEnd] )
+
+        exonStarts = [str(s[0]) for s in spans]
+        exonEnds = [str(s[1]) for s in spans]
+
+        txStart = exonStarts[0]
+        txEnd = exonEnds[-1]
+
+        row = [ \
+            transId, "chr"+chrom, strand, \
+            txStart, txEnd, \
+            cdsStart, cdsEnd, \
+            len(exonStarts), \
+            ",".join(exonStarts), \
+            ",".join(exonEnds) 
+            ]
+        row = [str(s) for s in row]
+        ofh.write( "\t".join(row))
+        ofh.write("\n")
+    ofh.close()
+
+main(args, options)

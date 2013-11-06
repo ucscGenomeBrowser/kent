@@ -30,10 +30,16 @@ struct sqlConnection *edwConnect();
 struct sqlConnection *edwConnectReadWrite();
 /* Returns read/write connection to database. */
 
-long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, char *md5);
-/* See if we already got file.  Return fileId if we do,  otherwise -1 */
+long long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, 
+    char *md5, long long size);
+/* See if we already got file.  Return fileId if we do,  otherwise 0.  This returns
+ * TRUE based mostly on the MD5sum.  For short files (less than 100k) then we also require
+ * the submitDir and submitFileName to match.  This is to cover the case where you might
+ * have legitimate empty files duplicated even though they were computed based on different
+ * things. For instance coming up with no peaks is a legitimate result for many chip-seq
+ * experiments. */
 
-long edwGettingFile(struct sqlConnection *conn, char *submitDir, char *submitFileName);
+long long edwGettingFile(struct sqlConnection *conn, char *submitDir, char *submitFileName);
 /* See if we are in process of getting file.  Return file record id if it exists even if
  * it's not complete so long as it's not too old. Return -1 if record does not exist. */
 
@@ -66,6 +72,12 @@ int edwUserIdFromFileId(struct sqlConnection *conn, int fId);
 
 char *edwUserNameFromFileId(struct sqlConnection *conn, int fId);
 /* Return user who submit the file originally */
+
+struct edwUser *edwFindUserFromFileId(struct sqlConnection *conn, int fId);
+/* Return user who submit the file originally */
+
+char *edwFindOwnerNameFromFileId(struct sqlConnection *conn, int fId);
+/* Return name of submitter. Return "an unknown user" if name is NULL */
 
 void edwWarnUnregisteredUser(char *email);
 /* Put up warning message about unregistered user and tell them how to register. */
@@ -153,8 +165,9 @@ long long edwSubmitMaxStartTime(struct edwSubmit *submit, struct sqlConnection *
 int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn);
 /* Count number of new files in submission that have been validated. */
 
-void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url);
-/* Add submission job to table and wake up daemon. */
+void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url, boolean update);
+/* Add submission job to table and wake up daemon.  If update is set allow submission to
+ * include new metadata on old files. */
 
 int edwSubmitPositionInQueue(struct sqlConnection *conn, char *url, unsigned *retJobId);
 /* Return position of our URL in submission queue.  Optionally return id in edwSubmitJob

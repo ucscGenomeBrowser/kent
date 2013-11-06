@@ -43,7 +43,7 @@ echo
 echo "Building src utils. on $HOST [${0}: `date`]"
 cd $base/kent/src
 echo "Before make utils on $HOST [${0}: `date`]"
-    make -j 16 $MAKEPARAMS utils >& make.utils.log
+    make -j 32 $MAKEPARAMS utils >& make.utils.log
 echo "After make utils on $HOST [${0}: `date`]"
 make $MAKEPARAMS blatSuite >>& make.utils.log
 echo "After make blatSuite on $HOST [${0}: `date`]"

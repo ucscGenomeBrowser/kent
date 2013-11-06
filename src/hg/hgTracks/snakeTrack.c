@@ -22,6 +22,9 @@
 
 #include "halBlockViz.h"
 
+// this is the number of pixels used by the target self-align bar
+#define DUP_LINE_HEIGHT	4
+
 struct snakeFeature
     {
     struct snakeFeature *next;
@@ -437,7 +440,11 @@ else if (tg->visibility == tvPack)
 
 struct snakeInfo *si = (struct snakeInfo *)lf->codons;
 int lineHeight = tg->lineHeight ;
-return (si->maxLevel + 1) * (2 * lineHeight);
+int multiplier = 1;
+
+if (tg->visibility == tvFull)
+    multiplier = 2;
+return (si->maxLevel + 1) * (multiplier * lineHeight);
 }
 
 static int linkedFeaturesCmpScore(const void *va, const void *vb)
@@ -455,13 +462,21 @@ return 0;
 static int snakeHeight(struct track *tg, enum trackVisibility vis)
 /* calculate height of all the snakes being displayed */
 {
+if (tg->networkErrMsg != NULL)
+    {
+    // we had a parallel load failure
+    tg->drawItems = bigDrawWarning;
+    tg->totalHeight = bigWarnTotalHeight;
+    return bigWarnTotalHeight(tg, vis);
+    }
+
 if (vis == tvDense)
     return tg->lineHeight;
 
 if (vis == tvSquish)
     return tg->lineHeight/2;
 
-int height = 0;
+int height = DUP_LINE_HEIGHT; 
 struct slList *item = tg->items;
 
 item = tg->items;
@@ -517,15 +532,23 @@ for (item = tg->items; item != NULL; item = item->next)
 
 //  this is a 16 color palette with every other color being a lighter version of
 //  the color before it
-//static int snakePalette[] =
-//{
-//0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5, 0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5
-//};
+static int snakePalette2[] =
+{
+0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5, 0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5
+};
 
 static int snakePalette[] =
 {
 0x1f77b4, 0xff7f0e, 0x2ca02c, 0xd62728, 0x9467bd, 0x8c564b, 0xe377c2, 0x7f7f7f, 0xbcbd22, 0x17becf
 };
+
+static Color hashColor(char *name)
+{
+bits32 hashVal = hashString(name);
+unsigned int colorInt = snakePalette2[hashVal % (sizeof(snakePalette2)/sizeof(Color))];
+
+return MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
+}
 
 static void snakeDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y, double scale, 
@@ -607,30 +630,29 @@ if (withLabels)
 // let's draw some blue bars for the duplications
 struct hal_target_dupe_list_t* dupeList = lf->dupeList;
 
-//extern void makeChromosomeShades(struct hvGfx *hvg);
-//if (!chromosomeColorsMade)
-    //makeChromosomeShades(hvg);
-
 int count = 0;
-for(; dupeList ; dupeList = dupeList->next, count++)
+if ((tg->visibility == tvFull) || (tg->visibility == tvPack)) 
     {
-    struct hal_target_range_t *range = dupeList->tRange;
-
-    unsigned int colorInt = snakePalette[count % (sizeof(snakePalette)/sizeof(Color))];
-    Color color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
-
-    for(; range; range = range->next)
+    for(; dupeList ; dupeList = dupeList->next, count++)
 	{
-	int s = range->tStart;
-	int e = range->tStart + range->size;
-	int sClp = (s < winStart) ? winStart : s;
-	int eClp = (e > winEnd) ? winEnd : e;
-	int x1 = round((sClp - winStart)*scale) + xOff;
-	int x2 = round((eClp - winStart)*scale) + xOff;
-	hvGfxBox(hvg, x1, y , x2-x1, 3 , color);
+	struct hal_target_range_t *range = dupeList->tRange;
+
+	unsigned int colorInt = snakePalette[count % (sizeof(snakePalette)/sizeof(Color))];
+	Color color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
+
+	for(; range; range = range->next)
+	    {
+	    int s = range->tStart;
+	    int e = range->tStart + range->size;
+	    int sClp = (s < winStart) ? winStart : s;
+	    int eClp = (e > winEnd) ? winEnd : e;
+	    int x1 = round((sClp - winStart)*scale) + xOff;
+	    int x2 = round((eClp - winStart)*scale) + xOff;
+	    hvGfxBox(hvg, x1, y , x2-x1, DUP_LINE_HEIGHT - 1 , color);
+	    }
 	}
+    y+=DUP_LINE_HEIGHT;
     }
-y+=4;
 
 // now we're going to draw the boxes
 
@@ -653,7 +675,9 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     qe = sf->qEnd;
     if (vis == tvDense)
 	y = offY;
-    else
+    else if ((vis == tvPack) || (vis == tvSquish))
+	y = offY + (sf->level * 1) * lineHeight;
+    else if (vis == tvFull)
 	y = offY + (sf->level * 2) * lineHeight;
     s = sf->start; e = sf->end;
     tEnd = sf->end;
@@ -683,7 +707,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     if (sameString(colorBy, SNAKE_COLOR_BY_STRAND_VALUE))
 	color = (sf->orientation == -1) ? darkRedColor : darkBlueColor;
     else if (sameString(colorBy, SNAKE_COLOR_BY_CHROM_VALUE))
-	color = getChromColor(lf->name, hvg);
+	color = hashColor(sf->qName);
     else
 	color =  darkBlueColor;
 
@@ -692,7 +716,11 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	w = 1;
     assert(w > 0);
     char buffer[1024];
-    safef(buffer, sizeof buffer, "%d %d",sf->qStart,sf->qEnd);
+	
+    if (vis == tvFull)
+	safef(buffer, sizeof buffer, "%d-%d",sf->qStart,sf->qEnd);
+    else
+	safef(buffer, sizeof buffer, "%s:%d-%d",sf->qName,sf->qStart,sf->qEnd);
     if (sx < insideX)
 	{
 	int olap = insideX - sx;
@@ -946,8 +974,13 @@ if (errCatchStart(errCatch))
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
     int handle = halOpenLOD(fileName);
-    int needSeq = (winBaseCount < showSnpWidth) ? 1 : 0;
-    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, needSeq, 1);
+    boolean isPackOrFull = (tg->visibility == tvFull) || 
+	(tg->visibility == tvPack);
+    hal_dup_type_t dupMode =  (isPackOrFull) ? HAL_QUERY_AND_TARGET_DUPS :
+	HAL_QUERY_DUPS;
+    int needSeq = isPackOrFull && (winBaseCount < showSnpWidth) ? 1 : 0;
+    int mapBackAdjacencies = (tg->visibility == tvFull);
+    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies);
 
     // did we get any blocks from HAL
     if (head == NULL)
@@ -979,7 +1012,6 @@ if (errCatchStart(errCatch))
     {
 	struct hashEl* hel;
 
-	//safef(buffer, sizeof buffer, "%s.%c", cur->qChrom,cur->strand);
 	if (tg->visibility == tvFull)
 	    safef(buffer, sizeof buffer, "%s", cur->qChrom);
 	else
@@ -1006,7 +1038,7 @@ if (errCatchStart(errCatch))
 	    lf->orientation = (cur->strand == '+') ? 1 : -1;
 	    hashAdd(qChromHash, lf->name, lf);
 
-	    // now figure out where the blue bars go
+	    // now figure out where the duplication bars go
 	    struct hal_target_dupe_list_t* targetDupeBlocks = head->targetDupeBlocks;
 
 	    if ((tg->visibility == tvPack) || (tg->visibility == tvFull))
@@ -1051,10 +1083,10 @@ if (errCatchStart(errCatch))
 	    slSort(&lf->components, snakeFeatureCmpQStart);
 	    }
 	}
-    else if (tg->visibility == tvPack)
+    else if ((tg->visibility == tvPack) && (lfList != NULL))
 	{
-	assert(lf->next == NULL);
-	slSort(&lf->components, snakeFeatureCmpTStart);
+	assert(lfList->next == NULL);
+	slSort(&lfList->components, snakeFeatureCmpTStart);
 	}
     
     //halFreeBlocks(head);

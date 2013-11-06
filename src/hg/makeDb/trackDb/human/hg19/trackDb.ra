@@ -168,6 +168,59 @@ xrefTable kgXref, ucscRetroInfo5
 xrefQuery select ucscRetroInfo5.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
+track ucscRetroAli6
+shortLabel Retroposed Genes
+longLabel Retroposed Genes V6, Including Pseudogenes
+group genes
+type psl
+priority 37.15
+color 20,0,250
+visibility pack
+ucscRetroInfo ucscRetroInfo6
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds6
+baseColorUseSequence extFile ucscRetroSeq6 ucscRetroExtFile6
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+dataVersion Oct. 2013
+
+searchName ucscRetroInfoRefSeq6
+searchTable ucscRetroAli6
+searchDescription Retroposed Genes V6, Including Pseudogenes 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo6
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo6.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna6
+searchTable ucscRetroAli6
+searchDescription Retroposed Genes V6, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt6
+searchTable ucscRetroAli6
+searchDescription Retroposed Genes V6, Including Pseudogenes 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo6
+xrefQuery select ucscRetroInfo6.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene6
+searchTable ucscRetroAli6
+searchDescription Retroposed Genes V6, Including Pseudogenes 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo6
+xrefQuery select ucscRetroInfo6.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
 track illuminaProbes override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
@@ -512,7 +565,7 @@ type bed 4 +
 
 track cons46way
 compositeTrack on
-shortLabel Conservation
+shortLabel 46-Way Cons
 longLabel Vertebrate Multiz Alignment & Conservation (46 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate
@@ -717,7 +770,7 @@ track snp138Flagged
 shortLabel Flagged SNPs(138)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Flagged by dbSNP as Clinically Assoc
 group varRep
-priority 99.0902
+priority 99.0892
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -726,7 +779,7 @@ snpExceptionDesc snp138ExceptionDesc
 defaultGeneTracks knownGene
 type bed 6 +
 snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
+chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
@@ -737,7 +790,7 @@ codingAnnotations snp138CodingDbSnp,
 
 track snp138Mult override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
+chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
@@ -745,7 +798,7 @@ hapmapPhase III
 
 track snp138 override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
+chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
@@ -753,7 +806,7 @@ hapmapPhase III
 
 track snp138Common override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
-chimpOrangMacOrthoTable snp138OrthoPt3Pa2Rm2
+chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2

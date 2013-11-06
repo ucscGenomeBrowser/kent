@@ -10,7 +10,7 @@ chainSwap = ${DESTBINDIR}/chainSwap
 all:
 
 test:	gapBoth mrnaMrnaMap mrnaMrnaXMap mrnaMapOver mrnaMapOverSwap \
-	mrnaMapOverChain mrnaMapOverChainSwap
+	mrnaMapOverChain mrnaMapOverChainSwap  mrnaChainMapBug
 
 # things with large files that we want to remove their big history from cvs
 # but soon will replace with short versions and no big history.
@@ -89,6 +89,13 @@ negQChain: mkdirs
 # retro/parent alignment through mRNA, with -simplifyMappingIds
 retroParent: mkdirs
 	${pslMap} -simplifyMappingIds -swapIn -mapInfo=output/$@.mapinfo input/retro.psl input/parent.psl output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.mapinfo output/$@.mapinfo
+
+# bug were having two chains in file cause mapping failure on hg19 refseq to rheMac3
+mrnaChainMapBug: mkdirs
+	${pslMap} -chainMapFile -swapMap -mapInfo=output/$@.mapinfo input/mrnaChainMapRefSeq.psl input/mrnaChainMapRefSeq.chain output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.mapinfo output/$@.mapinfo
