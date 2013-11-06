@@ -56,7 +56,7 @@ ifeq (${USE_SSL},1)
     endif
     # on hgwdev, already using the static library with mysqllient.
     ifeq (${FULLWARN},hgwdev)
-       L+=/cluster/home/hiram/kent/src/lib/x86_64/libssl.a /cluster/home/hiram/kent/src/lib/x86_64/libcrypto.a -lkrb5
+       L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5
     else
        L+=-lssl -lcrypto
     endif
