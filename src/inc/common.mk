@@ -55,7 +55,9 @@ ifeq (${USE_SSL},1)
         HG_INC+=-I${SSL_DIR}/include
     endif
     # on hgwdev, already using the static library with mysqllient.
-    ifneq (${FULLWARN},hgwdev)
+    ifeq (${FULLWARN},hgwdev)
+       L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5
+    else
        L+=-lssl -lcrypto
     endif
     HG_DEFS+=-DUSE_SSL
