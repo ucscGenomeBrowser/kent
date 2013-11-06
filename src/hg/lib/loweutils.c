@@ -77,13 +77,13 @@ void getGenomeClade(struct sqlConnection *conn, char *dbName, char *genome, char
     char **rowDb;
     struct sqlConnection *connCentral = hConnectCentral();
 
-    sqlSafef(query, sizeof query, "select count(*) from genomeClade a, dbDb b, clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
+    sqlSafef(query, sizeof query, "select count(*) from all_central.genomeClade a, all_central.dbDb b, all_central.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
             dbName);
     srDb = sqlGetResult(connCentral, query);
     if ((rowDb = sqlNextRow(srDb)) != NULL)
     {
         sqlFreeResult(&srDb);
-        sqlSafef(query, sizeof query, "select a.genome, c.label from genomeClade a, dbDb b, clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
+        sqlSafef(query, sizeof query, "select a.genome, c.label from all_central.genomeClade a, all_central.dbDb b, all_central.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
                 dbName);
         srDb = sqlGetResult(connCentral, query);
         if ((rowDb = sqlNextRow(srDb)) != NULL)

@@ -20,13 +20,14 @@ errAbort(
 
 char *userEmail = NULL; /* User's email handle. */
 
-boolean queryIntoTable(struct sqlConnection *conn, char *query, char *title)
+boolean queryIntoTable(struct sqlConnection *conn, char *query, char *title, struct hash *wraps)
 /* Make query and show result in a html table.  Return FALSE (and make no output)
  * if there is no result to query. */
 {
 boolean didHeader = FALSE;
 struct sqlResult *sr = sqlGetResult(conn, query);
 int colCount = sqlCountColumns(sr);
+char *fields[colCount];
 if (colCount > 0)
     {
     char **row;
@@ -38,15 +39,35 @@ if (colCount > 0)
 	    printf("<TABLE>\n");
 	    printf("<TR>");
 	    char *field;
+	    int fieldIx = 0;
 	    while ((field = sqlFieldName(sr)) != NULL)
+		{
+		fields[fieldIx++] = cloneString(field);
 		printf("<TH>%s</TH>", field);
+		}
 	    printf("</TR>\n");
 	    didHeader = TRUE;
 	    }
 	printf("<TR>");
 	int i;
 	for (i=0; i<colCount; ++i)
-	    printf("<TD>%s</TD>", naForNull(row[i]));
+	    {
+	    printf("<TD>");
+	    boolean done = FALSE;
+	    if (wraps != NULL)
+	        {
+		char *format = hashFindVal(wraps, fields[i]);
+		char *val = row[i];
+		if (format != NULL && val != NULL)
+		    {
+		    printf(format, val, val);
+		    done = TRUE;
+		    }
+		} 
+	    if (!done)
+		printf("%s", naForNull(row[i]));
+	    printf("</TD>");
+	    }
 	printf("</TR>\n");
 	}
     printf("</TABLE>\n");
@@ -277,6 +298,10 @@ for (submit = submitList; submit != NULL; submit = submit->next)
 	printf("%d replicates still are unpaired<BR>\n", unpaired);
 	}
 
+    /* Make wrapper for experiments. */
+    struct hash *experimentWrap = hashNew(0);
+    hashAdd(experimentWrap, "experiment", 
+	"<A HREF=\"http://submit.encodedcc.org/experiments/%s/\">%s</A>");
     /* Get and print file-by-file info. */
     char title[256];
     safef(title, sizeof(title), "Files and enrichments for %d new files", submit->newFiles);
@@ -292,7 +317,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
  	" and (v.enrichedIn = t.name or v.enrichedIn = 'unknown' or v.enrichedIn is NULL or t.name is NULL)"
 	" order by f.id desc"
 	, submit->id);
-    queryIntoTable(conn, query, title);
+    queryIntoTable(conn, query, title, experimentWrap);
 
     sqlSafef(query, sizeof(query), 
 	"select ev.experiment,ev.outputType 'output type',ev.format,\n"
@@ -303,7 +328,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
         "      and y.submitId = %u \n"
         "      order by ev.experiment,'output type',format,repA,repB\n"
 	, submit->id);
-    queryIntoTable(conn, query, "Cross-enrichment between replicates in target areas");
+    queryIntoTable(conn, query, "Cross-enrichment between replicates in target areas", experimentWrap);
 
     sqlSafef(query, sizeof(query), 
 	"select ev.experiment,ev.outputType 'output type',ev.format,\n"
@@ -314,7 +339,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
         "      and y.submitId = %u \n"
         "      order by ev.experiment,'output type',format,repA,repB\n"
 	, submit->id);
-    queryIntoTable(conn, query, "Correlation between replicates in target areas");
+    queryIntoTable(conn, query, "Correlation between replicates in target areas", experimentWrap);
     }
 }
 

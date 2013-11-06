@@ -3850,7 +3850,11 @@ void doCRISPRs(struct trackDb *tdb, char *crisprName)
 bool loweLabClick(char *track, char *item, struct trackDb *tdb)
 /* check if we have one of the lowelab tracks */
 {
-if (sameWord(track, "gbProtCode"))
+if (endsWith(track, "PgSnp"))
+    {
+    doPgSnp(tdb, item, NULL);
+    }
+else if (sameWord(track, "gbProtCode"))
     {
     llDoCodingGenes(tdb, item,"gbProtCodePep","gbProtCodeXra");
     }

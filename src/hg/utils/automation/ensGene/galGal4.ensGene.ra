@@ -1,0 +1,7 @@
+# required db variable
+db galGal4
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+# nameTranslation "s/^\([0-9EWXYZ][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+# Ensembl has different names for everything from UCSC, translate the names
+liftUp /hive/data/genomes/galGal4/jkStuff/ens.71.lft

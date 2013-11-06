@@ -1,0 +1,6 @@
+# required db variable
+db xipMac1
+
+# remove the first .1 from the contig names in the Ensembl GTF file
+nameTranslation "s/\.1//; s/NC_011379/chrM/;"
+
