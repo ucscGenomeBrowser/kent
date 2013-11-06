@@ -23,13 +23,14 @@
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 		    <P>
-The wiggle (WIG) format is for display of dense, continuous data such as GC
-percent, probability scores, and transcriptome data. Wiggle data elements must
-be equally sized. If you need to display continuous data that is 
-<A HREF="#sparse">sparse</A> or contains elements of varying size, use the
-<A HREF="bedgraph.html" TARGET=_blank>BedGraph</A> format instead.
-If you have a very large data set and you would like to keep it on your 
-own server, you should use the <A HREF="bigWig.html">bigWig</A> data format.
+The <a href="bigWig.html">bigWig</a> format is the recommended format for almost
+all graphing track needs (for more information, see the following
+<A HREF="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format"
+TARGET="_blank">wiki page</A>). The wiggle (WIG) format is an older format for
+display of dense, continuous data such as GC percent, probability scores, and
+transcriptome data. Wiggle data elements must be equally sized. The 
+<a href="bedgraph.html">bedGraph</a> format is also an older format used to display
+<a href="#sparse">sparse</a> data or data that contains elements of varying size.
 <P>
 For speed and efficiency, wiggle data is compressed and stored internally in
 128 unique bins. This compression means that there is a minor loss of precision
@@ -37,10 +38,6 @@ when data is exported from a wiggle track (<em>i.e.</em>, with output format
 &quot;data points&quot; or &quot;bed format&quot; within the table browser).
 The <a href='bedgraph.html'>bedGraph</a> format should be used if it
 is important to retain exact data when exporting.
-<P>
-See also:
-<A HREF="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format"
-TARGET=_blank>Selecting a graphing track data format</A>
 
 <P><B>General Structure</B></P> Wiggle format is line-oriented. For wiggle custom
 tracks, the first line must be a <A HREF="customTrack.html#TRACK"
@@ -152,6 +149,7 @@ order.
 </I></PRE>
 The track type with version is REQUIRED, and it currently must be <I>wiggle_0</I>:
 <FONT color="#0000FF"><PRE>  <B>type wiggle_0</B></PRE></FONT>
+<P>
 The remaining values are OPTIONAL:
 <FONT color="#0000FF"><PRE>
   <B>name              </B><I>&lt;trackLabel&gt;                        </I> # default is "User Track"
@@ -159,22 +157,10 @@ The remaining values are OPTIONAL:
   <B>visibility        </B><I>&lt;full|dense|hide&gt;                   </I> # default is hide
   <B>color             </B><I>&lt;RRR,GGG,BBB&gt;                       </I> # default is 255,255,255
   <B>altColor          </B><I>&lt;RRR,GGG,BBB&gt;                       </I> # default is 128,128,128
-  <B>priority          </B><I>&lt;N&gt;                                 </I> # default is 100
-  <B>autoScale         </B><I>&lt;on|off&gt;                            </I> # default is on
-  <B>alwaysZero        </B><I>&lt;on|off&gt;                            </I> # default is off
-  <B>gridDefault       </B><I>&lt;on|off&gt;                            </I> # default is off
-  <B>maxHeightPixels   </B><I>&lt;max:default:min&gt;                   </I> # default is 128:128:11
-  <B>graphType         </B><I>&lt;bar|points&gt;                        </I> # default is bar
-  <B>viewLimits        </B><I>&lt;lower:upper&gt;                       </I> # default is range found in data
-  <B>viewLimitsMax     </B><I>&lt;lower:upper&gt;                       </I> # suggested bounds of viewLimits, but not enforced
-  <B>yLineMark         </B><I>&lt;real-value&gt;                        </I> # default is 0.0
-  <B>yLineOnOff        </B><I>&lt;on|off&gt;                            </I> # default is off
-  <B>windowingFunction </B><I>&lt;mean+whiskers|maximum|mean|minimum&gt;</I> # default is maximum
-  <B>smoothingWindow   </B><I>&lt;off|[2-16]&gt;                        </I> # default is off
-  <B>transformFunc     </B><I>&lt;NONE|LOG&gt;                          </I> # default is NONE</PRE></FONT>
+  <B>priority          </B><I>&lt;N&gt;                                 </I> # default is 100</PRE></FONT>
 
-A functional description of these options can be seen in the <A target=_blank
-HREF="hgWiggleTrackHelp.html">Wiggle track configuration</A> description.
+<P>
+For a list of additional options, see the <A HREF="bigWig.html#optional">bigWig format</A> page.
 
 <P><B>Examples</B></P>
 This example specifies 19 separate data points in two tracks in the region

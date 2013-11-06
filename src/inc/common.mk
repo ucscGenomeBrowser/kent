@@ -56,7 +56,7 @@ ifeq (${USE_SSL},1)
     endif
     # on hgwdev, already using the static library with mysqllient.
     ifeq (${FULLWARN},hgwdev)
-       L+=/cluster/home/hiram/kent/src/lib/x86_64/libssl.a /cluster/home/hiram/kent/src/lib/x86_64/libcrypto.a -lkrb5
+       L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5
     else
        L+=-lssl -lcrypto
     endif
@@ -94,7 +94,7 @@ ifneq ($(MAKECMDGOALS),clean)
   # on hgwdev, use the static library.
   ifeq (${FULLWARN},hgwdev)
     MYSQLINC=/usr/include/mysql
-    MYSQLLIBS=/usr/lib64/mysql/libmysqlclient.a
+    MYSQLLIBS=/usr/lib64/libssl.a /usr/lib64/libcrypto.a /usr/lib64/mysql/libmysqlclient.a -lkrb5
   endif
   # this does *not* work on Mac OSX with the dynamic libraries
   ifneq ($(UNAME_S),Darwin)
@@ -169,10 +169,14 @@ endif
 
 # OK to add -lstdc++ to all MYSQLLIBS just in case it is
 #    MySQL version 5.6 libraries, but no 'librt' on Mac OSX
-ifeq ($(UNAME_S),Darwin)
-  MYSQLLIBS += -lstdc++
+ifeq (${FULLWARN},hgwdev)
+  MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.4.4/libstdc++.a /usr/lib/debug/usr/lib64/librt.a
 else
-  MYSQLLIBS += -lstdc++ -lrt
+  ifeq ($(UNAME_S),Darwin)
+    MYSQLLIBS += -lstdc++
+  else
+    MYSQLLIBS += -lstdc++ -lrt
+  endif
 endif
 
 L+=${PNGLIB}
