@@ -51,7 +51,9 @@ endif
 # libssl: disabled by default
 ifeq (${USE_SSL},1)
     ifneq (${SSL_DIR}, "/usr/include/openssl")
+      ifneq ($(UNAME_S),Darwin)
         L+=-L${SSL_DIR}/lib
+      endif
         HG_INC+=-I${SSL_DIR}/include
     endif
     # on hgwdev, already using the static library with mysqllient.
