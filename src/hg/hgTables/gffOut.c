@@ -45,9 +45,18 @@ gffTabOut(&gff, stdout);
 }
 
 
-static char *computeFrames(struct bed *bed, int *retStartIndx, int *retStopIndx)
-/* Compute frames, in order dictated by strand.  bed must be BED12.  */
+static char *computeFrames(struct bed *bed, char *exonFrames, int *retStartIndx, int *retStopIndx)
+/* Compute frames, in order dictated by strand.  bed must be BED12. 
+ * Convert exonFrames to gtf frame if available. */
 {
+int *ef;
+if (exonFrames)
+    {
+    int efSize = 0;
+    sqlSignedStaticArray(exonFrames, &ef, &efSize); // not thread safe.
+    if (efSize != bed->blockCount)
+	errAbort("Unexpected error, name=%s blockCount=%d but exonFrames size = %d", bed->name, bed->blockCount, efSize);
+    }
 char *frames = needMem(bed->blockCount);
 boolean gotFirstCds = FALSE;
 int nextPhase = 0, startIndx = 0, stopIndx = 0;
@@ -70,8 +79,23 @@ for (i=0;  i < bed->blockCount;  i++)
 	    gotFirstCds = TRUE;
 	    startIndx = j;
 	    }
-	frames[j] = '0' + nextPhase;
-	nextPhase = (3 + ((nextPhase - cdsSize) % 3)) % 3;
+	if (exonFrames)
+	    {
+	    int n = ef[j];
+	    char c = '.';     // -1 exonFrame becomes '.' in gtf 
+	    if (n == 0)
+		c = '0';
+	    else if (n == 1)  // gtf frames are really "phases", so 1 and 2 swap.
+		c = '2';
+	    else if (n == 2)
+		c = '1';
+	    frames[j] = c;
+	    }
+	else
+	    {
+	    frames[j] = '0' + nextPhase;
+	    nextPhase = (3 + ((nextPhase - cdsSize) % 3)) % 3;
+	    }
 	stopIndx = j;
 	}
     else
@@ -85,6 +109,7 @@ if (retStopIndx)
     *retStopIndx = stopIndx;
 return frames;
 }
+
 
 static void addStartStopCodon(struct bed *bed, int exonIndx, int anchor, int offset, char *codon,
 			      char *source, char *txName)
@@ -202,7 +227,7 @@ if ((exonIndx == cdsStartIndx) && isRc)
 }
 
 
-static int bedToGffLines(struct bed *bedList, struct hTableInfo *hti,
+static int bedToGffLines(struct bed *bedList, struct slName *exonFramesList, struct hTableInfo *hti,
 			 int fieldCount, char *source, boolean gtf2StopCodons)
 /* Translate a (list of) bed into gff and print out.
  * Note that field count (perhaps reduced by bitwise intersection)
@@ -210,6 +235,7 @@ static int bedToGffLines(struct bed *bedList, struct hTableInfo *hti,
 {
 struct hash *nameHash = newHash(20);
 struct bed *bed;
+struct slName *exonFrames = exonFramesList;
 int i, exonStart, exonEnd;
 char txName[256];
 int itemCount = 0;
@@ -239,7 +265,11 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	{
 	/* first pass: compute frames, in order dictated by strand. */
 	int startIndx = 0, stopIndx = 0;
-	char *frames = computeFrames(bed, &startIndx, &stopIndx);
+	char *frames = NULL;
+	char *ef = NULL;
+	if (exonFramesList)
+    	    ef = exonFrames->name;
+	frames = computeFrames(bed, ef, &startIndx, &stopIndx);
 
 	/* second pass: one exon (possibly CDS, start/stop_codon) per block. */
 	for (i=0;  i < bed->blockCount;  i++)
@@ -286,9 +316,41 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	addGffLineFromBed(bed, source, "exon", bed->chromStart, bed->chromEnd, '.', txName);
 	}
     itemCount++;
+    if (exonFrames)
+    	exonFrames = exonFrames->next;
     }
 hashFree(&nameHash);
 return itemCount;
+}
+
+static struct slName* getExonFrames(char *table, struct sqlConnection *conn, struct bed *bedList)
+/* get real exonFrames if they are available */
+{
+struct slName* list = NULL;
+struct bed *bed;
+for (bed = bedList;  bed != NULL;  bed = bed->next)
+    {
+    char sql[1024];
+    sqlSafef(sql, sizeof sql, "select exonFrames "
+	"from %s where " 
+	"name = '%s' and "  // be specific, the same name may align to multiple locations
+	"chrom = '%s' and "
+	"strand = '%c' and "
+	"txStart = %d and "
+	"txEnd = %d"
+	, 
+	table, 
+	bed->name,
+	bed->chrom,
+	bed->strand[0],
+	bed->chromStart,
+	bed->chromEnd
+	);
+    char *exonFrames = sqlQuickString(conn, sql);
+    slNameAddHead(&list, exonFrames);
+    }
+slReverse(&list);
+return list;
 }
 
 void doOutGff(char *table, struct sqlConnection *conn, boolean outputGtf)
@@ -296,11 +358,14 @@ void doOutGff(char *table, struct sqlConnection *conn, boolean outputGtf)
 {
 struct hTableInfo *hti = getHti(database, table, conn);
 struct bed *bedList;
+struct slName *exonFramesList = NULL;
 char source[HDB_MAX_TABLE_STRING];
 int itemCount;
 struct region *region, *regionList = getRegions();
 
 textOpen();
+
+int efIdx = sqlFieldIndex(conn, table, "exonFrames");
 
 safef(source, sizeof(source), "%s_%s", database, table);
 itemCount = 0;
@@ -309,7 +374,9 @@ for (region = regionList; region != NULL; region = region->next)
     struct lm *lm = lmInit(64*1024);
     int fieldCount;
     bedList = cookedBedList(conn, table, region, lm, &fieldCount);
-    itemCount += bedToGffLines(bedList, hti, fieldCount, source, outputGtf);
+    if (efIdx != -1)
+	exonFramesList = getExonFrames(table, conn, bedList);
+    itemCount += bedToGffLines(bedList, exonFramesList, hti, fieldCount, source, outputGtf);
     lmCleanup(&lm);
     }
 if (itemCount == 0)
