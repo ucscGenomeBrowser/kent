@@ -14688,6 +14688,77 @@ wc -l *.bed3p
 #  23118 hg19.oreganno.bed3p
 ## 99.9% lifted.
 
+#	2013-11-07 eliminate some names from Attr that are not in primary table
+#	as identified by joinerCheck:
+
+joinerCheck  -database=hg19 -identifier=oregId -keys all.joiner
+Checking keys on database hg19
+ hg19.oregannoAttr.id - hits 93587 of 93635 (99.949%)
+Error: 48 of 93635 elements (0.051%) of hg19.oregannoAttr.id are not in key oreganno.id line 3550 of all.joiner
+Example miss: OREG0009903
+ hg19.oregannoLink.id - hits 70670 of 70706 (99.949%)
+Error: 36 of 70706 elements (0.051%) of hg19.oregannoLink.id are not in key oreganno.id line 3551 of all.joiner
+Example miss: OREG0009903
+
+# Example miss: OREG0029365
+ sacCer3.oregannoLink.id - hits 21886 of 21895
+# Error: 9 of 21895 elements of sacCer3.oregannoLink.id are not in key oreganno.id line 2872 of all.joiner
+# Example miss: OREG0029365
+
+    cd /hive/data/genomes/hg19/bed/hg18MassiveLift/oreganno
+
+    hgsql -N -e "select id from oregannoAttr;" hg19 \
+	| sort -u > oregannoAttr.id.txt
+    hgsql -N -e "select id from oreganno;" hg19 \
+	| sort -u > oreganno.id.txt
+    comm -13 oreganno.id.txt oregannoAttr.id.txt
+# OREG0009903
+# OREG0009904
+# OREG0009905
+# OREG0018375
+# OREG0018376
+# OREG0018390
+# OREG0018391
+# OREG0018392
+# OREG0018393
+# OREG0018394
+# OREG0024661
+# OREG0026761
+
+    comm -13 oreganno.id.txt oregannoAttr.id.txt | while read id
+do
+    echo $id
+    hgsql -e "delete from oregannoAttr where id=\"${id}\";" hg19
+done
+
+    hgsql -N -e "select id from oregannoLink;" hg19 \
+	| sort -u > oregannoLink.id.txt
+    comm -13 oreganno.id.txt oregannoLink.id.txt
+# OREG0009903
+# OREG0009904
+# OREG0009905
+# OREG0018375
+# OREG0018376
+# OREG0018390
+# OREG0018391
+# OREG0018392
+# OREG0018393
+# OREG0018394
+# OREG0024661
+# OREG0026761
+
+    comm -13 oreganno.id.txt oregannoLink.id.txt | while read id
+do
+    echo $id
+    hgsql -e "delete from oregannoLink where id=\"${id}\";" hg19
+done
+
+   # joinerCheck is now clean:
+joinerCheck  -database=hg19 -identifier=oregId -keys all.joiner
+Checking keys on database hg19
+ hg19.oregannoAttr.id - hits 93587 of 93587 (100.000%) ok
+ hg19.oregannoLink.id - hits 70670 of 70670 (100.000%) ok
+
 #############################################################################
 # NK NUC LAMINA LIFT TO HG19 (DONE 2010-12-31, Andy)
 
@@ -23727,7 +23798,7 @@ TMPDIR=/scratch/tmp
 
     cd /hive/data/genomes/odoRosDiv1/bed
     ln -s blastz.hg19.swap lastz.hg19
- 
+
 #########################################################################
 # LASTZ bonobo PanPan1 (DONE - 2013-07-15 - Hiram)
     screen -S panPan1     # use screen to manage this longish running job
@@ -26433,7 +26504,7 @@ TMPDIR=/dev/shm
     mkdir /hive/data/genomes/hg19/bed/lastzPanTig1.2013-09-10
     cd /hive/data/genomes/hg19/bed/lastzPanTig1.2013-09-10
     cat << '_EOF_' > DEF
-# human vs Amur tiger 
+# human vs Amur tiger
 
 # TARGET: Human Hg19
 SEQ1_DIR=/scratch/data/hg19/hg19.2bit
@@ -26519,8 +26590,8 @@ _EOF_
 # For hg19 we remove all chrM entries.
 # need to replace ; with , for the "urls" trackDb setting
 # also trying to come up with a good name (field4) that is shorter than their default name
-cat variant_summary.txt  |  tawk '($13=="GRCh37" || $13=="GRCh37.p9") {print "chr"$14,$15,$16,$3,$9,$2,$4,$5,$6,$7,$8,$10,$11,$12,$13,$17,$18,$19,$20,$21$22,$23,$24}'  | sed -e 's/, /,/g' | sed -e 's/;/,/g' | tawk '{split($4, a, " "); $4=a[1]; if ($4=="") {$4=$11}; print}' | grep -v ClinicalSignificance | sort -k1,1 -k2,2n | grep -v chrM > clinvar.bed 
-bedToBigBed clinvar.bed /scratch/data/hg19/chrom.sizes clinvar.bb -type=bed4+18 -tab -as=clinvar.as 
+cat variant_summary.txt  |  tawk '($13=="GRCh37" || $13=="GRCh37.p9") {print "chr"$14,$15,$16,$3,$9,$2,$4,$5,$6,$7,$8,$10,$11,$12,$13,$17,$18,$19,$20,$21$22,$23,$24}'  | sed -e 's/, /,/g' | sed -e 's/;/,/g' | tawk '{split($4, a, " "); $4=a[1]; if ($4=="") {$4=$11}; print}' | grep -v ClinicalSignificance | sort -k1,1 -k2,2n | grep -v chrM > clinvar.bed
+bedToBigBed clinvar.bed /scratch/data/hg19/chrom.sizes clinvar.bb -type=bed4+18 -tab -as=clinvar.as
 cp clinvar.bb /hive/data/genomes/hg19/bed/clinvar/
 #########################################################################
 # lastz Arctic lamprey letCam1 (DONE - 2013-09-19 - Hiram)
@@ -28148,7 +28219,7 @@ done
 
     # obtain the README.txt from mm10/multiz60way and update for this
     #   situation, from:
-# /hive/data/genomes/mm10/bed/multiz60way/downloads/multiz60way/README.txt 
+# /hive/data/genomes/mm10/bed/multiz60way/downloads/multiz60way/README.txt
     ln -s `pwd`/*.nh `pwd`/*.maf.gz `pwd`/*.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz100way
 
@@ -28211,7 +28282,7 @@ done
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
 
-    XXX ### need other gene track alignments also
+    ### need other gene track alignments also
     # running up refGene
     # screen control for long running job business
     screen -S alignments100
@@ -28236,8 +28307,7 @@ done
     echo "wait" >> $gp.jobs
 
     time sh -x $gp.jobs > $gp.jobs.log 2>&1
-XXX - running - Tue Nov  5 15:54:19 PST 2013
-    #   real    301m26.885s
+    #   real    127m41.018s
 
     export mz=multiz100way
     export gp=refGene
@@ -28246,12 +28316,13 @@ XXX - running - Tue Nov  5 15:54:19 PST 2013
     #   real     11m27.994s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
     #   real    18m41.606s
-    du -hsc exonAA exonNuc *.fa.gz
-    # 1.3G    exonAA
-    # 2.0G    exonNuc
-    # 1.3G    refGene.multiz100way.exonAA.fa.gz
-    # 2.0G    refGene.multiz100way.exonNuc.fa.gz
-    # 6.4G    total
+    du -hsc exonAA exonNuc refGene*.fa.gz
+    # 804M    exonAA
+    # 1.3G    exonNuc
+    # 804M    refGene.multiz100way.exonAA.fa.gz
+    # 1.3G    refGene.multiz100way.exonNuc.fa.gz
+    # 4.2G    total
+
 
     rm -rf exonAA exonNuc
 
@@ -28271,13 +28342,40 @@ XXX - running - Tue Nov  5 15:54:19 PST 2013
     export mz=multiz100way
     export gp=knownCanonical
     export db=hg19
-    export I=0
-    mkdir exonAA exonNuc
+    mkdir exonAA exonNuc ppredAA ppredNuc knownCanonical
+
+    cut -f1 ../../../chrom.sizes | while read C
+    do
+        echo $C
+	hgsql hg19 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
+    done
+
+    ls knownCanonical/*.known.bed | while read F
+    do
+      if [ -s $F ]; then
+         echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
+      fi
+    done | while read C
+    do
+	echo "date"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed  $db $mz knownGene order.list stdout | \
+	    gzip -c > ppredAA/$C.ppredAA.fa.gz"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout | \
+	    gzip -c > ppredNuc/$C.ppredNuc.fa.gz"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGene order.list stdout | \
+	    gzip -c > exonNuc/$C.exonNuc.fa.gz"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGene order.list stdout | \
+	    gzip -c > exonAA/$C.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
+XXX - running - Wed Nov  6 16:15:27 PST 2013
+
     for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
     do
         I=`echo $I | awk '{print $1+1}'`
-	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
-	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc.$gp/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA.$gp/$C.exonAA.fa.gz &"
         if [ $I -gt 6 ]; then
             echo "date"
             echo "wait"
@@ -28293,9 +28391,9 @@ XXX - running - Tue Nov  5 15:54:19 PST 2013
     export mz=multiz100way
     export gp=knownCanonical
     export db=hg19
-    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    time zcat exonAA.$gp/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
     #   real     11m27.994s
-    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    time zcat exonNuc.$gp/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
     #   real    18m41.606s
     du -hsc exonAA exonNuc *.fa.gz
     # 1.3G    exonAA
@@ -28390,7 +28488,7 @@ TMPDIR=/dev/shm
 wget ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz -O - | gunzip > variant_summary.txt
 echo WARNING: For hg19 we remove all chrM entries.
 # keep only Ch37 variants and shorten the name
-less variant_summary.txt  |  tawk '($13=="GRCh37" || $13=="GRCh37.p9") {print "chr"$14,$15,$16,$3,$9,$2,$4,$5,$6,$7,$8,$10,$11,$12,$13,$17,$18,$19,$20,$21,$23,$24}'  | sed -e 's/, /,/g' | sed -e 's/;/,/g' | tawk '{$3=$3+1; split($4, a, " "); $4=a[1]; if ($4=="") {$4=$11}; print}' | grep -v ClinicalSignificance | sort -k1,1 -k2,2n | grep -v chrM | sed -e 's/,/, /g' > clinvarFull.bed 
+less variant_summary.txt  |  tawk '($13=="GRCh37" || $13=="GRCh37.p9") {print "chr"$14,$15,$16,$3,$9,$2,$4,$5,$6,$7,$8,$10,$11,$12,$13,$17,$18,$19,$20,$21,$23,$24}'  | sed -e 's/, /,/g' | sed -e 's/;/,/g' | tawk '{$3=$3+1; split($4, a, " "); $4=a[1]; if ($4=="") {$4=$11}; print}' | grep -v ClinicalSignificance | sort -k1,1 -k2,2n | grep -v chrM | sed -e 's/,/, /g' > clinvarFull.bed
 # separate into two subtracks
 cat clinvarFull.bed | egrep 'copy number (loss|gain)' > clinvarCnv.bed
 cat clinvarFull.bed | grep -v nsv > clinvarMain.bed
@@ -28424,14 +28522,14 @@ table clinVarBed
     )
 '_EOF_'
 
-bedToBigBed clinvarMain.bed /scratch/data/hg19/chrom.sizes clinvarMain.bb -type=bed4+18 -tab -as=clinvar.as 
-bedToBigBed clinvarCnv.bed /scratch/data/hg19/chrom.sizes clinvarCnv.bb -type=bed4+18 -tab -as=clinvar.as 
+bedToBigBed clinvarMain.bed /scratch/data/hg19/chrom.sizes clinvarMain.bb -type=bed4+18 -tab -as=clinvar.as
+bedToBigBed clinvarCnv.bed /scratch/data/hg19/chrom.sizes clinvarCnv.bb -type=bed4+18 -tab -as=clinvar.as
 cp clinvarMain.bb /hive/data/genomes/hg19/bed/clinvar/
 cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 #########################################################################
 # phastBias gBGC track (2013-10-29 - Galt)
 #   RM #11697 data received from Katie Pollard and Adam Siepel
-#   GC-Biased Gene Conversion in the Human and Chimpanzee Genomes 
+#   GC-Biased Gene Conversion in the Human and Chimpanzee Genomes
 #   Data consists of tracts of gBGC regions identified in a BED and bigWig on
 #   hg19.  This data was recreated on hg19, it is not lifted from hg18.
 #   Paper: http://www.plosgenetics.org/article/info%3Adoi%2F10.1371%2Fjournal.pgen.1003684
