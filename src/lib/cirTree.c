@@ -451,7 +451,7 @@ if (crt != NULL)
     }
 }
 
-inline int cmpTwoBits32(bits32 aHi, bits32 aLo, bits32 bHi, bits32 bLo)
+static inline int cmpTwoBits32(bits32 aHi, bits32 aLo, bits32 bHi, bits32 bLo)
 /* Return - if b is less than a , 0 if equal, else +*/
 {
 if (aHi < bHi)

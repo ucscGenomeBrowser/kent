@@ -412,7 +412,7 @@ switch(mg->writeMode)
 }
 
 
-inline void mixDot(struct memGfx *img, int x, int y,  float frac, Color col)
+static inline void mixDot(struct memGfx *img, int x, int y,  float frac, Color col)
 /* Puts a single dot on the image, mixing it with what is already there
  * based on the frac argument. */
 {
