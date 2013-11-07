@@ -10,7 +10,7 @@
 #include "bigWig.h"
 #include "genomeRangeTree.h"
 
-char *restrict = NULL;
+char *restrictFile = NULL;
 double threshold = FLT_MAX;
 
 void usage()
@@ -104,8 +104,8 @@ void bigWigCorrelate(char *aFileName, char *bFileName)
 /* bigWigCorrelate - Correlate bigWig files, optionally only on target regions.. */
 {
 struct genomeRangeTree *targetGrt = NULL;
-if (restrict)
-    targetGrt = grtFromBigBed(restrict);
+if (restrictFile)
+    targetGrt = grtFromBigBed(restrictFile);
 struct bbiFile *aBbi = bigWigFileOpen(aFileName);
 struct bbiFile *bBbi = bigWigFileOpen(bFileName);
 struct correlate *c = correlateNew();
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-restrict = optionVal("restrict", restrict);
+restrictFile = optionVal("restrict", restrictFile);
 threshold = optionDouble("threshold", threshold);
 bigWigCorrelate(argv[1], argv[2]);
 return 0;
