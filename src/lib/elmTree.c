@@ -33,7 +33,7 @@ return node;
 // NOTE the root of the tree always has NULL content.
 #define treePlant(lm,tree) treeNewNode(lm,tree,NULL)
 
-inline void treeSprout(struct elmNode *parent,struct elmNode *node)
+static inline void treeSprout(struct elmNode *parent,struct elmNode *node)
 // Adds a leaf or branch node to an existing tree node.
 {
 node->parent = parent;
@@ -71,7 +71,7 @@ return parent;
 }
 
 
-inline void treeBranchBefore(struct elmNode *branch,struct elmNode *node)
+static inline void treeBranchBefore(struct elmNode *branch,struct elmNode *node)
 // Adds a new 'branch' node just before the current 'node'
 {
 struct elmNode *parent = treeClip(node);

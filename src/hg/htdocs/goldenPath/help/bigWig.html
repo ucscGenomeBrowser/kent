@@ -88,13 +88,32 @@ To create a bigWig track from a wiggle file, follow these steps:<BR>
  <LI> Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A>
   using a single 
   <A HREF="hgTracksHelp.html#TRACK">track line</A>.                            
-  Note that any of the track attributes listed on 
-  the <A HREF="wiggle.html">wiggle track format</A> page are applicable to
-  tracks of type bigWig. 
   The most basic version of the &quot;track&quot; line will look something 
   like this:<BR>
   <TT>track type=bigWig name="My Big Wig" description="A Graph of 
   Data from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigWig.bw</TT>
+  <p>
+  <a name="optional"></a>
+  Optional values can include:
+  <PRE>
+  <B>autoScale         </B><I>&lt;on|off&gt;                            </I> # default is on
+  <B>alwaysZero        </B><I>&lt;on|off&gt;                            </I> # default is off
+  <B>gridDefault       </B><I>&lt;on|off&gt;                            </I> # default is off
+  <B>maxHeightPixels   </B><I>&lt;max:default:min&gt;                   </I> # default is 128:128:11
+  <B>graphType         </B><I>&lt;bar|points&gt;                        </I> # default is bar
+  <B>viewLimits        </B><I>&lt;lower:upper&gt;                       </I> # default is range found in data
+  <B>viewLimitsMax     </B><I>&lt;lower:upper&gt;                       </I> # suggested bounds of viewLimits, but not enforced
+  <B>yLineMark         </B><I>&lt;real-value&gt;                        </I> # default is 0.0
+  <B>yLineOnOff        </B><I>&lt;on|off&gt;                            </I> # default is off
+  <B>windowingFunction </B><I>&lt;mean+whiskers|maximum|mean|minimum&gt;</I> # default is maximum, mean+whiskers is recommended
+  <B>smoothingWindow   </B><I>&lt;off|[2-16]&gt;                        </I> # default is off
+  <B>transformFunc     </B><I>&lt;NONE|LOG&gt;                          </I> # default is NONE</PRE>
+
+  <P>
+  For further information on custom bigWig track settings, see the
+  <a href="./trackDb/trackDbDoc.html#wig_-_Signal_Graphing_Track_Settings">Track Database Definition Document</a>.
+  For further information on how bigWig settings are used in native Browser tracks, see the
+  <a href="hgWiggleTrackHelp.html">Configuring graph-based tracks</a> page.
  <LI> Paste this custom track line into the text box in the 
   <A HREF="../../cgi-bin/hgCustom">custom track</A> management page.
 </OL>
@@ -177,14 +196,6 @@ To create a bigWig track from a bedGraph file, follow these steps:<BR>
  <LI> Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A>
   using a single
   <A HREF="hgTracksHelp.html#TRACK">track line</A>.
-  Note that any of the track attributes listed on
-  the <A HREF="wiggle.html">wiggle track format</A> page are applicable to
-  tracks of type bigWig.
-  The most basic version of the &quot;track&quot; line will look something
-  like this:<BR>
-  <TT>track type=bigWig name="My Big Wig (from bedGraph)" 
-  description="A Graph of bedGraph Data from My Lab" 
-  bigDataUrl=http://myorg.edu/mylab/myBigWig.bw</TT>
  <LI> Paste this custom track line into the text box in the
   <A HREF="../../cgi-bin/hgCustom">custom track</A> management page.
 </OL>
