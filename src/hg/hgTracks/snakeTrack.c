@@ -1083,8 +1083,10 @@ if (errCatchStart(errCatch))
 	sf->orientation = (cur->strand == '+') ? 1 : -1;
 	sf->tSequence = cloneString(cur->tSequence);
 	sf->qSequence = cloneString(cur->qSequence);
-	toUpperN(sf->tSequence, strlen(sf->tSequence));
-	toUpperN(sf->qSequence, strlen(sf->qSequence));
+	if (sf->tSequence != NULL)
+	    toUpperN(sf->tSequence, strlen(sf->tSequence));
+	if (sf->qSequence != NULL)
+	    toUpperN(sf->qSequence, strlen(sf->qSequence));
 	sf->qName = cur->qChrom;
 
 	cur = cur->next;
