@@ -650,7 +650,7 @@ if ((conn == NULL) || !cartTablesOk(conn))
     sqlConnCacheDealloc(centralCc, &conn);
     sqlConnCacheFree(&centralCc);
     centralProfile = "backupcentral";
-    centralDb = cfgOption2(centralProfile, "database");
+    centralDb = cfgOption2(centralProfile, "db");
     centralCc = sqlConnCacheNewProfile(centralProfile);
     conn = sqlConnCacheAlloc(centralCc, centralDb);
     if (!cartTablesOk(conn))
