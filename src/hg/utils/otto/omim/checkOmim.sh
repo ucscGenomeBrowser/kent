@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh -ex
 
 #	Do not modify this script, modify the source tree copy:
 #	src/hg/utils/omim/checkOmim.sh
@@ -44,7 +44,7 @@ cp -p release.list prev.release.list
 rm -f release.list
 
 #	connect and list a directory, result to file: ls.check
-ftp -n -v -i grcf.jhmi.edu  < ftp.omim.rsp > ls.check
+ftp -n -v -i ftp.omim.org  < ftp.omim.rsp > ls.check
 
 #	fetch the release directory names from the ls.check result file
 grep "genemap" ls.check |grep -v key|sort > release.list
@@ -65,7 +65,7 @@ diff prev.release.list release.list  >release.diff || true
 WC=`cat release.diff | wc -l`
 if [ "${WC}" -gt 1 ]; then
     echo -e "New OMIM update noted at:\n" \
-"ftp://grcf.jhmi.edu/\n"`comm -13 prev.release.list release.list`"/" 
+"ftp://ftp.omim.org/\n"`comm -13 prev.release.list release.list`"/" 
 #    | mail -s "OMIM update watch" ${EMAIL}
 
 FN=`cat release.diff |grep omim-|sed -e 's/omim-/\tomim-/'|cut -f 2`
@@ -86,7 +86,7 @@ get geneMap2.txt
 bye" > ftp2.omim.rsp
 
 # download the new mimAv.txt data file
-ftp -n -v -i grcf.jhmi.edu  < ftp2.omim.rsp > ftp2.log
+ftp -n -v -i ftp.omim.org  < ftp2.omim.rsp > ftp2.log
 
 # prepare ftp download response file
 echo doing ftp ...
@@ -101,7 +101,7 @@ get morbidmap
 bye" > ftp.omim.rsp
 
 # download the new data file
-ftp -n -v -i grcf.jhmi.edu  < ftp.omim.rsp > ftp.log
+ftp -n -v -i ftp.omim.org  < ftp.omim.rsp > ftp.log
 
 # build the new OMIM track tables for hg18
 rm -rf hg18
@@ -113,7 +113,7 @@ ln -s ../mimAV.txt ./mimAV.txt
 ln -s ../mim2gene.txt ./mim2gene.txt
 ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
 
-../../buildOmimTracks.csh hg18
+csh -x ../../buildOmimTracks.csh hg18
 ../../validateOmim.sh hg18
 cd ..
 
@@ -127,7 +127,7 @@ ln -s ../mimAV.txt ./mimAV.txt
 ln -s ../mim2gene.txt ./mim2gene.txt
 ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
 
-../../buildOmimTracks.csh hg19
+csh -x ../../buildOmimTracks.csh hg19
 ../../validateOmim.sh hg19
 cd ..
 
