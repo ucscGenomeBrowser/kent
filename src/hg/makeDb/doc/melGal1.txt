@@ -1248,6 +1248,9 @@ TMPDIR=/dev/shm
     cd /hive/data/genomes/strCam0/bed
     ln -s blastz.melGal1.swap lastz.melGal1
 
+    time doRecipBest.pl -buildDir=`pwd` strCam0 melGal1 > rbest.log 2>&1
+    # real    22m19.866s
+
 ############################################################################
 #  BLASTZ/CHAIN/NET Falco peregrinus vs Turkey (DONE - 2013-11-06,08 - Hiram)
 #   use a screen to manage this multi-day job
@@ -1310,5 +1313,9 @@ TMPDIR=/dev/shm
 
     cd /hive/data/genomes/falPer1/bed
     ln -s blastz.melGal1.swap lastz.melGal1
+
+    cd /hive/data/genomes/falPer1/bed/blastz.melGal1.swap
+    time doRecipBest.pl -buildDir=`pwd` falPer1 melGal1 > rbest.log 2>&1
+    # real    24m20.342s
 
 ############################################################################
