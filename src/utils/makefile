@@ -182,7 +182,7 @@ alpha: scripts all
 testAll: $(ALL_APPS:%=%.testAll)
 
 %.testAll:
-	@test -s $*/tests/makefile && (echo OK $*; cd $* && $(MAKE) test) || true
+	@test -s $*/tests/makefile && (echo $*; cd $* && $(MAKE) test) || true
 
 test: testAll
 	cd faToTwoBit && ${MAKE} test
