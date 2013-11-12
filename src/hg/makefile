@@ -285,7 +285,12 @@ clean::	${TEST_DIRS:%=%.clean}
 %.clean:
 	cd $* && ${MAKE} clean
 
-test::	${TEST_DIRS:%=%.test}
+testAll: $(APPS:%=%.testAll)
+
+%.testAll:
+	@test -s $*/tests/makefile && (echo $*; cd $* && $(MAKE) test) || true
+
+test::	${TEST_DIRS:%=%.test} testAll
 
 %.test: hgLib
 	cd $* && ${MAKE} test

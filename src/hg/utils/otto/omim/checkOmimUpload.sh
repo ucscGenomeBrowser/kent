@@ -63,7 +63,7 @@ echo "ls
 bye" >> ftp.omim.rsp
 
 #	connect and put files
-ftp -n -v -i grcf.jhmi.edu  < ftp.omim.rsp > upload.check
+ftp -n -v -i ftp.omim.org  < ftp.omim.rsp > upload.check
 
 grep "^221" upload.check
 

@@ -4332,6 +4332,8 @@ tablesIgnored hg19
     dhcVcfHGDP01029
     dhcVcfHGDP01284
     dhcVcfHGDP01307
+    phastBiasTracts3
+    phastBiasPosteriors3
 
 
 tablesIgnored mm9
@@ -4535,6 +4537,7 @@ tablesIgnored $hg
     laminB1
     laminB1Lads
     lovd
+    lrg%
     mammalPsg
     nimhBipolarUs
     nimhBipolarDe
@@ -4745,3 +4748,10 @@ tablesIgnored vicPac1
 
 tablesIgnored vicPac2
     tableList
+
+tablesIgnored hg18
+    phastBiasTracts3
+    phastBiasPosteriors3
+    phastBiasChimpTracts3
+    phastBiasChimpPosteriors3
+

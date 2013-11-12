@@ -1103,6 +1103,13 @@ void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title,
 void bamCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* BAM: short-read-oriented alignment file format. */
 
+void lrgCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+/* LRG: Locus Reference Genomic sequences mapped to assembly. */
+
+void lrgTranscriptAliCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title,
+			   boolean boxed);
+/* LRG Transcripts: Locus Reference Genomic transcript sequences mapped to assembly. */
+
 boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
 // Updates the tdb->priority from cart then sorts the list anew.
 // Returns TRUE if priorities obtained from cart

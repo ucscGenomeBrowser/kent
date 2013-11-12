@@ -1755,7 +1755,7 @@ int newWinStart, newWinEnd;
 int numExons = 0;
 int exonIx = 0;
 struct slRef *exonList = NULL, *ref;
-if (startsWith("chain", tg->tdb->type))
+if (startsWith("chain", tg->tdb->type) || startsWith("lrg", tg->tdb->track))
     {
     nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Block");
     prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Block");
@@ -12931,6 +12931,7 @@ registerTrackHandler("omimLocation", omimLocationMethods);
 registerTrackHandler("omimComposite", omimGene2Methods);
 registerTrackHandler("cosmic", cosmicMethods);
 registerTrackHandler("rest", restMethods);
+registerTrackHandler("lrg", lrgMethods);
 #endif /* GBROWSE */
 }
 

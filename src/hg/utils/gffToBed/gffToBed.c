@@ -49,6 +49,78 @@ else
     }
 }
 
+boolean allSameSeq(struct gffGroup *group)
+/* Return TRUE if all members of group are on same chromosome. */
+{
+struct gffLine *gl;
+char *seq = group->lineList->seq;
+for (gl = group->lineList->next; gl != NULL; gl = gl->next)
+    {
+    if (!sameString(gl->seq, seq))
+        return FALSE;
+    }
+return TRUE;
+}
+
+struct gffGroup *splitGroupByChrom(struct gffFile *gff, struct gffGroup *oldGroup)
+/* Split up a group into multiple groups,  each one chromosome specific. */
+{
+struct gffGroup *groupList = NULL, *group;
+struct hash *seqHash = hashNew(0);
+
+verbose(2, "Regrouping %s with %d elements\n", oldGroup->name, slCount(oldGroup->lineList));
+struct gffLine *gl, *nextGl;
+for (gl = oldGroup->lineList; gl != NULL; gl = nextGl)
+    {
+    nextGl = gl->next;
+    group = hashFindVal(seqHash, gl->seq);
+    if (group == NULL)
+        {
+	AllocVar(group);
+	group->name = oldGroup->name;
+	group->seq = gl->seq;
+	group->source = oldGroup->source;
+	group->start = gl->start;
+	group->end = gl->end;
+	group->strand = gl->strand;
+	slAddHead(&groupList, group);
+	hashAdd(seqHash, group->seq, group);
+	}
+    else
+        {
+	group->start = min(gl->start, group->start);
+	group->end = max(gl->end, group->end);
+	}
+    slAddHead(&group->lineList, gl);
+    }
+hashFree(&seqHash);
+for (group = groupList; group != NULL; group = group->next)
+    slReverse(&group->lineList);
+return groupList;
+}
+
+void separateGroupsByChromosome(struct gffFile *gff)
+/* The genePredFromGroupedGtf has trouble with groups that span chromosomes.
+ * So here we go through and split up groups by chromosome. */
+{
+struct gffGroup *newList = NULL, *nextGroup, *group, *splitGroup;
+for (group = gff->groupList; group != NULL; group = nextGroup)
+    {
+    nextGroup = group->next;
+    if (allSameSeq(group))
+        {
+	slAddHead(&newList, group);
+	}
+    else
+        {
+	splitGroup = splitGroupByChrom(gff, group);
+	newList = slCat(splitGroup, newList);
+	}
+    }
+slReverse(&newList);
+gff->groupList = newList;
+}
+
 void gffToBed(char *inGff, char *outBed)
 /* gffToBed - Convert a gff file (gff1 or gff2) to bed.  Not tested with gff3 */
 {
@@ -56,6 +128,7 @@ struct gffFile *gff = gffRead(inGff);
 FILE *f = mustOpen(outBed, "w");
 char *exonFeature = bestExonFeature(gff);
 gffGroupLines(gff);
+separateGroupsByChromosome(gff);
 struct gffGroup *group;
 for (group = gff->groupList; group != NULL; group = group->next)
     {

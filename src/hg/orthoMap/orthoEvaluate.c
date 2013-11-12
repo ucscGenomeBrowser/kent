@@ -23,7 +23,7 @@
 #include "genePred.h"
 
 static struct rbTree *gpTree = NULL;
-static struct optionSpec optionSpecs[] = 
+static struct optionSpec optionSpecs[] =
 /* Our acceptable options to be called with. */
 {
     {"help", OPTION_BOOLEAN},
@@ -39,7 +39,7 @@ static struct optionSpec optionSpecs[] =
     {NULL, 0}
 };
 
-static char *optionDescripts[] = 
+static char *optionDescripts[] =
 /* Description of our options for usage summary. */
 {
     "Display this message.",
@@ -87,7 +87,7 @@ struct bed *loadNativeAgxBedsForBed(char *db, struct bed *orthoBed, char *table)
 {
 struct sqlConnection *conn = hAllocConn(db);
 int rowOffset;
-struct sqlResult *sr = hRangeQuery(conn, table, orthoBed->chrom, 
+struct sqlResult *sr = hRangeQuery(conn, table, orthoBed->chrom,
 	orthoBed->chromStart, orthoBed->chromEnd, NULL, &rowOffset);
 char **row;
 struct bed *bed = NULL, *bedList = NULL;
@@ -186,7 +186,7 @@ struct altGraphX *loadNativeAgxForBed(char *db, struct bed *orthoBed, char *tabl
 {
 struct sqlConnection *conn = hAllocConn(db);
 int rowOffset;
-struct sqlResult *sr = hRangeQuery(conn, table, orthoBed->chrom, 
+struct sqlResult *sr = hRangeQuery(conn, table, orthoBed->chrom,
 	orthoBed->chromStart, orthoBed->chromEnd, NULL, &rowOffset);
 char **row;
 struct altGraphX *agx = NULL, *agxList = NULL;
@@ -236,9 +236,9 @@ int agxSupportForSplice(struct altGraphX *agx, struct bed *bed, int intron)
 bool **em = NULL;            /* Edge matrix for splicing graph. */
 int support = 0;             /* Number of mRNAs/ESTs supporting intron. */
 int e1Start=0, e1End=0,      /* Coordinates of exons. */
-    e2Start=0, e2End=0; 
+    e2Start=0, e2End=0;
 int e1VS=-1, e1VE=-1,        /* Vertex numbers in agx graph. */
-    e2VS=-1, e2VE=-1;     
+    e2VS=-1, e2VE=-1;
 
 /* --- Convenient shorthand for bits of agx --- */
 int vC = 0;            /* Number of vertices. */
@@ -291,7 +291,7 @@ altGraphXFreeEdgeMatrix(&em, vC);
 return support;
 }
 
-int agxSupportForEdge(struct altGraphX *agxList, struct bed *bed, int intron, 
+void agxSupportForEdge(struct altGraphX *agxList, struct bed *bed, int intron,
 		      int *support, char **agxNames)
 /* Scroll through native splicing graphs looking for native support of
    intron in bed if support is found fill in the support array and
@@ -347,7 +347,7 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 /*     } */
 /* return 0; */
 /* } */
-    
+
 
 void evaluateAnIntron(char *db, struct orthoEval *ev,
 		      struct bed *orthoBed, int intron, struct altGraphX *agxList, struct dnaSeq *genoSeq,
@@ -593,7 +593,7 @@ float codingBasesForBed(char *db, struct bed *bed)
 /* Calculate how many bases of the bed are overlapped by gene predictions. */
 {
 struct slRef *refList = NULL, *ref = NULL;
-static struct bed searchLo, searchHi; 
+static struct bed searchLo, searchHi;
 struct bed *b = NULL;
 int i,intersect=0;
 int baseCount = 0;
@@ -615,7 +615,7 @@ for(ref = refList; ref != NULL; ref = ref->next)
     b = ref->val;
     for(i=0; i<bed->blockCount; i++)
 	{
-	intersect = rangeIntersection(bed->chromStarts[i] + bed->chromStart, 
+	intersect = rangeIntersection(bed->chromStarts[i] + bed->chromStart,
 				    bed->chromStarts[i] + bed->chromStart + bed->blockSizes[i],
 				    b->chromStart,
 				    b->chromEnd);
@@ -633,7 +633,7 @@ ave = ave/bed->blockCount;
 
 return ave;
 }
-    
+
 struct orthoEval *scoreOrthoBeds(char *bedFile, char *genePredFile, char *db, FILE *out)
 /* Score each bed in the orhtoBed file. */
 {
