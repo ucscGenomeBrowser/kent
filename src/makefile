@@ -91,7 +91,7 @@ clean:
 	- find . -name \*.o -print | xargs rm
 	rm -f tags TAGS
 
-testDirs = lib blat gfServer hg
+testDirs = lib utils blat gfServer hg
 test:: $(testDirs:%=%.test)
 %.test:
 	cd $* && ${MAKE} test
