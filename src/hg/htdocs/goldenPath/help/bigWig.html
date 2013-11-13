@@ -88,7 +88,7 @@ To create a bigWig track from a wiggle file, follow these steps:<BR>
  <LI> Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A>
   using a single 
   <A HREF="hgTracksHelp.html#TRACK">track line</A>.                            
-  The most basic version of the &quot;track&quot; line will look something 
+  The most basic version of the track line will look something 
   like this:<BR>
   <TT>track type=bigWig name="My Big Wig" description="A Graph of 
   Data from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigWig.bw</TT>
@@ -232,12 +232,11 @@ at the command line with no parameters to see the usage statement.
 
 </P>
 In some cases, bigWigSummary and bigWigAverageOverBed will produce very similar
-results, but in other cases, the results may differ. This is the result of
-differences in which both utilities handle data.  Summary levels are used with
-bigWigSummary, so some rounding errors and border conditions when extracting
-data over relatively small regions are encountered. The actual data is used
-with bigWigAverageOverBed, so this utility should ensure the highest level
-of accuracy.
+results, but in other cases, the results may differ. This is due to differences
+in how the utilities handle data.  Summary levels are used with
+bigWigSummary, so some rounding errors and border conditions are encountered
+when extracting data over relatively small regions. The bigWigAverageOverBed
+utility uses the actual data which ensures the highest level of accuracy.
 </P>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>

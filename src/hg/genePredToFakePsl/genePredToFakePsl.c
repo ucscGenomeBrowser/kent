@@ -2,14 +2,19 @@
 #include "common.h"
 #include "options.h"
 #include "portable.h"
+#include "hash.h"
 #include "hdb.h"
 #include "genePred.h"
 #include "genePredReader.h"
 #include "psl.h"
 
 
+/* Command line switches. */
+char *chromSizes = NULL;  /* read chrom sizes from file instead of database . */
+
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
+    {"chromSize", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -19,7 +24,7 @@ void usage()
 errAbort(
   "genePredToFakePsl - Create a psl of fake-mRNA aligned to gene-preds from a file or table.\n"
   "usage:\n"
-  "   genePredToFakePsl db fileTbl pslOut cdsOut\n"
+  "   genePredToFakePsl [options] db fileTbl pslOut cdsOut\n"
   "\n"
   "If fileTbl is an existing file, then it is used.\n"
   "Otherwise, the table by this name is used.\n"
@@ -29,6 +34,10 @@ errAbort(
   "cdsOut specifies the output cds tab-separated file which contains\n"
   "genbank-style CDS records showing cdsStart..cdsEnd\n"  
   "e.g. NM_123456 34..305\n"
+  "options:\n"
+  "   -chromSize=sizefile\tRead chrom sizes from file instead of database\n"
+  "             sizefile contains two white space separated fields per line:\n"
+  "		chrom name and size\n"
   "\n");
 }
 
@@ -54,10 +63,12 @@ if (gp->strand[0] == '-')
 fprintf(cdsFh,"%s\t%d..%d\n", gp->name, qCdsStart+1, qCdsEnd); /* genbank cds is closed 1-based */
 }
 
-static void cnvGenePred(char *db, struct genePred *gp, FILE *pslFh, FILE *cdsFh)
+static void cnvGenePred(struct hash *chromHash, struct genePred *gp, FILE *pslFh, FILE *cdsFh)
 /* convert a genePred to a psl and CDS */
 {
-int chromSize = hChromSize(db, gp->chrom);
+int chromSize = hashIntValDefault(chromHash, gp->chrom, 0);
+if (chromSize == 0)
+    errAbort("Couldn't find chromosome/scaffold '%s' in chromInfo", gp->chrom);
 int e = 0, qSize=0;
 
 for (e = 0; e < gp->exonCount; ++e)
@@ -81,16 +92,26 @@ if (gp->cdsStart < gp->cdsEnd)
     cnvGenePredCds(gp, qSize, cdsFh);
 }
 
+static struct hash *getChromHash(char *db)
+/* Return a hash of chrom names and sizes, from either -chromSize=file or db */
+{
+struct hash *chromHash = NULL;
+if (chromSizes != NULL)
+    chromHash = hChromSizeHashFromFile(chromSizes);
+else
+    chromHash = hChromSizeHash(db);
+return chromHash;
+}
+
 static void fakePslFromGenePred(char *db, char *fileTbl, char *pslOut, char *cdsOut)
 /* check a genePred */
 {
-struct sqlConnection *conn = NULL;
 struct genePredReader *gpr;
 struct genePred *gp;
 FILE *pslFh = mustOpen(pslOut, "w");
 FILE *cdsFh = mustOpen(cdsOut, "w");
 
-conn = hAllocConn(db);
+struct hash *chromHash = getChromHash(db);
 
 if (fileExists(fileTbl))
     {
@@ -98,15 +119,16 @@ if (fileExists(fileTbl))
     }
 else
     {
+    struct sqlConnection *conn = hAllocConn(db);
     gpr = genePredReaderQuery(conn, fileTbl, NULL);
+    hFreeConn(&conn);
     }
 
 while ((gp = genePredReaderNext(gpr)) != NULL)
     {
-    cnvGenePred(db, gp, pslFh, cdsFh);
+    cnvGenePred(chromHash, gp, pslFh, cdsFh);
     }
 genePredReaderFree(&gpr);
-hFreeConn(&conn);
 carefulClose(&pslFh);
 carefulClose(&cdsFh);
 }
@@ -115,6 +137,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
+chromSizes = optionVal("chromSize", NULL);
 if (argc != 5)
     usage();
 fakePslFromGenePred(argv[1],argv[2],argv[3],argv[4]);

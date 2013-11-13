@@ -403,7 +403,6 @@ macEug2.genbank.est.native.loadDesc = yes
 # genscan - (working - 2013-03-06 - Chin)
     mkdir /hive/data/genomes/macEug2/bed/genscan
     cd /hive/data/genomes/macEug2/bed/genscan
-XXXX 2013-03-06 2:35 PM
     screen -S macEug2-genscan
     time -p doGenscan.pl macEug2  > do.log 2>&1
 real 322126.50
@@ -439,6 +438,17 @@ XXXX 2013-03-11 9:55 wait for panPan1 to pass first!
     cat fb.macEug2.genscanSubopt.txt
     #   50711544 bases of 2756609047 (1.840%) in intersection
 
+    # 2013-09-12 - Hiram - one small contig was holding up
+    # the show: ABQO011198437
+    # it is too small and causes genscan to run forever, finish off
+    # the procedure manually
+    cd /hive/data/genomes/macEug2/bed/genscan
+    time -p doGenscan.pl -continue=makeBed macEug2 > makeBed.log 2>&1
+
+    cat fb.macEug2.genscan.txt
+    # 38107713 bases of 2536076957 (1.503%) in intersection
+    cat fb.macEug2.genscanSubopt.txt
+    # 34146452 bases of 2536076957 (1.346%) in intersection
 
 #########################################################################
 # create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)

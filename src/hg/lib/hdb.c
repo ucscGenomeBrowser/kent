@@ -4715,6 +4715,18 @@ sqlDisconnect(&conn);
 return hash;
 }
 
+struct hash *hChromSizeHashFromFile(char *fileName)
+/* Get hash of chromosome sizes from 2- or 3-column chrom.sizes file. hashFree when done. */
+{
+struct hash *chromHash = hashNew(0);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+while (lineFileRow(lf, row))
+    hashAddInt(chromHash, row[0], sqlUnsigned(row[1]));
+lineFileClose(&lf);
+return chromHash;
+}
+
 struct slName *hChromList(char *db)
 /* Get the list of chrom names from the database's chromInfo table. */
 {

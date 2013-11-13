@@ -39,12 +39,12 @@ static inline void udcFileCloseWrap(void *pFile)
 udcFileClose((struct udcFile **)pFile);
 }
 
-inline bits32 udcReadBits32Wrap(void *f, boolean isSwapped)
+static inline bits32 udcReadBits32Wrap(void *f, boolean isSwapped)
 {
 return udcReadBits32((struct udcFile *)f, isSwapped);
 }
 
-inline boolean udcFastReadStringWrap(void *f, char buf[256])
+static inline boolean udcFastReadStringWrap(void *f, char buf[256])
 {
 return udcFastReadString((struct udcFile *)f, buf);
 }
@@ -65,17 +65,17 @@ static void mustReadWrap(void *file, void *buf, size_t size)
 mustRead((FILE *)file, buf, size);
 }
 
-inline void fileCloseWrap(void *pFile)
+static inline void fileCloseWrap(void *pFile)
 {
 carefulClose((FILE **)pFile);
 }
 
-inline bits32 readBits32Wrap(void *f, boolean isSwapped)
+static inline bits32 readBits32Wrap(void *f, boolean isSwapped)
 {
 return readBits32((FILE *)f, isSwapped);
 }
 
-inline boolean fastReadStringWrap(void *f, char buf[256])
+static inline boolean fastReadStringWrap(void *f, char buf[256])
 {
 return fastReadString((FILE *)f, buf);
 }

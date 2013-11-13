@@ -783,6 +783,9 @@ char *sqlGetField(char *db, char *tblName, char *fldName,
 struct hash *hChromSizeHash(char *db);
 /* Get hash of chromosome sizes for database.  Just hashFree it when done. */
 
+struct hash *hChromSizeHashFromFile(char *fileName);
+/* Get hash of chromosome sizes from 2- or 3-column chrom.sizes file. hashFree when done. */
+
 struct slName *hChromList(char *db);
 /* Get the list of chrom names from the database's chromInfo table. */
 

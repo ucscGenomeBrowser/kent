@@ -1475,24 +1475,6 @@ if (mf != NULL)
     }
 }
 
-struct hash* hashFromString(char* string) 
-/* parse a whitespace-separated string with tuples in the format name=val or
- * name="val" to a hash name->val */
-{
-if (string==NULL)
-    return NULL;
-
-struct slPair *keyVals = slPairListFromString(string, TRUE);
-if (keyVals==NULL)
-    return NULL;
-
-struct hash *nameToVal = newHash(0);
-struct slPair *kv;
-for (kv = keyVals; kv != NULL; kv = kv->next)
-    hashAdd(nameToVal, kv->name, kv->val);
-return nameToVal;
-}
-
 void printIdOrLinks(struct asColumn *col, struct hash *fieldToUrl, struct trackDb *tdb, char *idList)
 /* if trackDb does not contain a "urls" entry for current column name, just print idList as it is.
  * Otherwise treat idList as a comma-sep list of IDs and print one row per id, with a link to url,
@@ -2670,6 +2652,7 @@ char *geneTable = tdb->table;
 boolean foundPep = FALSE;
 
 showGenePos(geneName, tdb);
+
 if (startsWith("ENCODE Gencode",tdb->longLabel))
     {
     char *yaleTable = trackDbSetting(tdb, "yalePseudoAssoc");
@@ -6913,6 +6896,37 @@ puts("</HTML>\n");
 exit(0);	/* Avoid cartHtmlEnd. */
 }
 
+static void getCdsStartAndStop(struct sqlConnection *conn, char *acc, char *trackTable,
+			       uint *retCdsStart, uint *retCdsEnd)
+/* Get cds start and stop, if available */
+{
+char query[256];
+if (sqlTableExists(conn, "gbCdnaInfo"))
+    {
+    sqlSafef(query, sizeof query, "select cds from gbCdnaInfo where acc = '%s'", acc);
+    char *cdsId = sqlQuickString(conn, query);
+    if (isNotEmpty(cdsId))
+	{
+        sqlSafef(query, sizeof query, "select name from cds where id = '%s'", cdsId);
+	char *cdsString = sqlQuickString(conn, query);
+	if (isNotEmpty(cdsString))
+	    genbankParseCds(cdsString, retCdsStart, retCdsEnd);
+	}
+    }
+else
+    {
+    struct trackDb *tdb = hashMustFindVal(trackHash, trackTable);
+    char *cdsTable = trackDbSetting(tdb, "cdsTable");
+    if (isNotEmpty(cdsTable) && hTableExists(database, cdsTable))
+	{
+	sqlSafef(query, sizeof(query), "select cds from %s where id = '%s'", cdsTable, acc);
+	char *cdsString = sqlQuickString(conn, query);
+	if (isNotEmpty(cdsString))
+	    genbankParseCds(cdsString, retCdsStart, retCdsEnd);
+	}
+    }
+}
+
 void htcCdnaAli(char *acc)
 /* Show alignment for accession. */
 {
@@ -6941,22 +6955,8 @@ printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", accChopped, ali
 /* Get some environment vars. */
 start = cartInt(cart, "o");
 
-/* Get cds start and stop, if available */
 conn = hAllocConn(database);
-if (sqlTableExists(conn, "gbCdnaInfo"))
-    {
-    sqlSafef(query, sizeof query, "select cds from gbCdnaInfo where acc = '%s'", accChopped);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-	{
-        sqlSafef(query, sizeof query, "select name from cds where id = '%d'", atoi(row[0]));
-	sqlFreeResult(&sr);
-	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) != NULL)
-	    genbankParseCds(row[0], &cdsStart, &cdsEnd);
-	}
-    sqlFreeResult(&sr);
-    }
+getCdsStartAndStop(conn, accChopped, aliTable, &cdsStart, &cdsEnd);
 
 /* Look up alignments in database */
 hFindSplitTable(database, seqName, aliTable, table, &hasBin);
@@ -6985,7 +6985,14 @@ else if (sameString("HInvGeneMrna", aliTable))
     rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
     }
 else
-    rnaSeq = hRnaSeq(database, acc);
+    {
+    struct trackDb *tdb = hashMustFindVal(trackHash, aliTable);
+    char *cdnaTable = trackDbSetting(tdb, "cdnaTable");
+    if (isNotEmpty(cdnaTable) && hTableExists(database, cdnaTable))
+	rnaSeq = hGenBankGetMrna(database, acc, cdnaTable);
+    else
+	rnaSeq = hRnaSeq(database, acc);
+    }
 
 if (startsWith("xeno", aliTable))
     showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
@@ -7022,24 +7029,8 @@ puts("<HTML>");
 printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n",
        accChopped, aliTable);
 
-/* Get cds start and stop, if available */
 conn = hAllocConn(database);
-if (sqlTableExists(conn, "gbCdnaInfo"))
-    {
-    sqlSafef(query, sizeof(query), "select cds from gbCdnaInfo where acc = '%s'",
-	  accChopped);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-	{
-        sqlSafef(query, sizeof(query), "select name from cds where id = '%d'",
-	      atoi(row[0]));
-	sqlFreeResult(&sr);
-	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) != NULL)
-	    genbankParseCds(row[0], &cdsStart, &cdsEnd);
-	}
-    sqlFreeResult(&sr);
-    }
+getCdsStartAndStop(conn, accChopped, aliTable, &cdsStart, &cdsEnd);
 
 if (startsWith("user", aliTable))
     {
@@ -7125,7 +7116,14 @@ else
 	rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
 	}
     else
-	rnaSeq = hRnaSeq(database, acc);
+	{
+	struct trackDb *tdb = hashMustFindVal(trackHash, aliTable);
+	char *cdnaTable = trackDbSetting(tdb, "cdnaTable");
+	if (isNotEmpty(cdnaTable) && hTableExists(database, cdnaTable))
+	    rnaSeq = hGenBankGetMrna(database, acc, cdnaTable);
+	else
+	    rnaSeq = hRnaSeq(database, acc);
+	}
     }
 /* Get partial psl for part of alignment in browser window: */
 if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
@@ -25316,6 +25314,18 @@ else if (sameString("geneReviews", table))
 else if (startsWith("qPcrPrimers", table))
     {
     doQPCRPrimers(tdb, item);
+    }
+else if (sameString("lrg", table))
+    {
+    doLrg(tdb, item);
+    }
+else if (sameString("lrgTranscriptAli", table))
+    {
+    doLrgTranscriptPsl(tdb, item);
+    }
+else if (sameWord(table, "htcLrgCdna"))
+    {
+    htcLrgCdna(item);
     }
 else if (isHubTrack(table) && startsWith("snake", trackHubSkipHubName(table)))
     {

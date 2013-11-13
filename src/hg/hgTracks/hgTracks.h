@@ -1355,6 +1355,9 @@ void messageLineMethods(struct track *track);
 void jRepeatMethods(struct track *track);
 /* construct track for detailed repeat visualization */
 
+void lrgMethods(struct track *tg);
+/* Locus Reference Genomic (bigBed 12 +) handlers. */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */

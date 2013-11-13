@@ -275,5 +275,9 @@ char *hashToRaString(struct hash *hash);
 int hashNumEntries(struct hash *hash);
 /* count the number of entries in a hash */
 
+struct hash *hashFromString(char *string);
+/* parse a whitespace-separated string with tuples in the format name=val or
+ * name="val" to a hash name->val */
+
 #endif /* HASH_H */
 

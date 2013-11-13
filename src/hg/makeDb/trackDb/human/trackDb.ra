@@ -70,6 +70,23 @@ type bed 3
     longLabel Top 0.10 of Read Depth Distribution
     priority 5
 
+track lrg
+shortLabel LRG Regions
+longLabel Locus Reference Genomic (LRG) Sequences Mapped to $date Assembly
+group map
+priority 100
+visibility hide
+type bigBed 12 +
+noScoreFilter .
+urlLabel Link to LRG report: 
+url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml
+urls hgncId="http://www.genenames.org/data/hgnc_data.php?hgnc_id=$$" ncbiAcc="http://www.ncbi.nlm.nih.gov/nuccore/$$"
+baseColorDefault diffBases
+baseColorUseSequence lrg
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+
 track gad
 shortLabel GAD View
 longLabel Genetic Association Studies of Complex Diseases and Disorders
@@ -2292,6 +2309,28 @@ url2Label miRBase:
 url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
+track lrgTranscriptAli
+shortLabel LRG Transcripts
+longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
+group genes
+priority 41
+visibility hide
+type psl .
+cdsTable lrgCds
+cdnaTable lrgCdna
+pepTable lrgPep
+baseColorDefault diffCodons
+baseColorUseCds table lrgCds
+baseColorUseSequence table lrgCdna
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+urlLabel Link to LRG transcript:
+url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+
 track affyHuEx1
 shortLabel Affy HuEx 1.0
 longLabel Affymetrix Human Exon 1.0 Probe Sets
@@ -3211,6 +3250,13 @@ searchTable HInvGeneMrna
 searchMethod exact
 searchType psl
 termRegex HIT[0-9]{9,9}
+searchPriority 50
+
+searchTable lrgTranscriptAli
+searchMethod exact
+searchType psl
+termRegex LRG_[0-9]+t[0-9]+
+semiShortCircuit 1
 searchPriority 50
 
 searchTable acescan
