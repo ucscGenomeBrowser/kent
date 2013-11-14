@@ -679,6 +679,13 @@ for(rec = manifestRecs; rec; rec = rec->next)
 
     char *mFormat = rec->words[mFormatIdx];
 
+    // check that the format is not blank
+    if (fileIsValid && sameString(mFormat,""))
+	{
+	fileIsValid = FALSE;
+	printf("ERROR: format must not be blank.\n");
+	}
+
     // check that the file extension is not disallowed
     if (fileIsValid && disallowedCompressionExtension(mFileName, mFormat))
 	{
