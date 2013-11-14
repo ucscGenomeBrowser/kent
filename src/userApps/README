@@ -138,6 +138,7 @@ its permissions to: 'chmod 600 .hg.conf'
     db.host=genome-mysql.cse.ucsc.edu
     db.user=genomep
     db.password=password
+    central.db=hgcentral
 
 This '.hg.conf' file is used by the kent commands to determine the
 MySQL host and user/password to the database.  For your local MySQL
