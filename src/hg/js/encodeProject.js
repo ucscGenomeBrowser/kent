@@ -11,8 +11,7 @@ var encodeProject = (function () {
 
     // Configurable variables - change with setup function below
 
-    var server = "genome.ucsc.edu",
-        assembly = "hg19",
+    var assembly = "hg19",
         cgi = "/cgi-bin/hgEncodeApi?";
 
     var accessionPrefix = 'wgEncodeE?';
@@ -39,9 +38,6 @@ var encodeProject = (function () {
 
         setup: function (settings) {
             // Change defaults
-            if (settings.server) {
-                server = settings.server;
-            }
             if (settings.assembly) {
                 assembly = settings.assembly;
             }
@@ -50,11 +46,6 @@ var encodeProject = (function () {
         getAssembly: function () {
             // Get currently set assembly
             return assembly;
-        },
-
-        getServer: function () {
-            // Get currently set server 
-            return server;
         },
 
         // Server interaction
@@ -72,7 +63,7 @@ var encodeProject = (function () {
             var serverData = [],
                 count = requests.length;
             $.each(requests, function (i, request) {
-                $.getJSON("http://" + server + cgi + request + "&" + "db=" + assembly, 
+                $.getJSON(cgi + request + "&" + "db=" + assembly, 
                     function (data) {
                         serverData[i] = data;
                         if (--count === 0) {
