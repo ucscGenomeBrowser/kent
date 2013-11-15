@@ -1,6 +1,6 @@
 validateManifest (vm) Versions Log
 
-1.7 (RELEASED)
+1.7 (TESTING)
     Better checks for idat and rcc formats by refactoring the checking code from edwSubmit into hg/lib/encode3/encode3Valid.c.
     New vf version is now 4.7 and tolerates leading blank lines in fastq which covers also the case of trailing blank lines. 
     Checks for enriched_in allowed values by refactoring the checking code from edwSubmit into hg/lib/encode3/encode3Valid.c.
@@ -14,3 +14,4 @@ validateManifest (vm) Versions Log
     Restrict replicate small number to 1 to 10 only (for now).
     Add a new optional column technical_replicate that has the same behavior as replicate.
     Add a new optional column paired_end that accepts 1(forward) 2(reverse) or "n/a".
+    Add check that format is not blank.
