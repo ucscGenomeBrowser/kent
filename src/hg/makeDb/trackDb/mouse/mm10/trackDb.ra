@@ -122,3 +122,16 @@ dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo2
 xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
+
+track jaxQTLLift
+shortLabel MGI QTL LiftO
+longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 37 (mm9)***
+group map
+priority 21.11
+visibility hide
+color 200,100,0
+type bed 6 +
+noScoreFilter .
+url http://www.informatics.jax.org/marker/$$
+urlLabel MGI QTL Detail:
+release alpha
