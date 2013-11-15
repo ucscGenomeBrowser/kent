@@ -690,7 +690,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
     if (fileIsValid && disallowedCompressionExtension(mFileName, mFormat))
 	{
 	fileIsValid = FALSE;
-	printf("ERROR: %s FILE COMPRESSION TYPE NOT ALLOWED !!!\n", mFileName);
+	printf("ERROR: %s FILE COMPRESSION TYPE NOT ALLOWED with format %s !!!\n", mFileName, mFormat);
 	}
 
 
