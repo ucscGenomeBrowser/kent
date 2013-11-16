@@ -27,6 +27,9 @@ struct annoFormatter
 		       struct annoStreamer *integrators);
     /* Initialize output (print header if applicable, etc). */
 
+    void (*comment)(struct annoFormatter *self, char *content);
+    /* Print a comment in whatever form is appropriate.  Content must not contain '\n'. */
+
     void (*formatOne)(struct annoFormatter *self, struct annoStreamRows *primaryData,
 		      struct annoStreamRows gratorData[], int gratorCount);
     /* Aggregate all sources' data for a single primary-source item into output. */

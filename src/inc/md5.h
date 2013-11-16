@@ -27,6 +27,9 @@ char *md5ToHex(unsigned char md5[16]);
 char *md5HexForFile(char * fileName);
 /* read f in buffer pieces and return hex string for md5sum */
 
+char *md5HexForString(char *string);
+/* Return hex string for md5sum of string. */
+
 struct hash *md5FileHash(char *fileName);
 /* Read md5sum file and return a hash keyed by file names with md5sum values. */
 
