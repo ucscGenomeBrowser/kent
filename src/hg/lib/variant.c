@@ -103,7 +103,6 @@ for( ; alleleNumber < numAlleles; alleleNumber++)
     slAddHead(&variant->alleles, allele);
     allele->variant = variant;
     allele->length = alleleStringLength; 
-    toLowerN(thisAlleleString, alleleStringLength);
     allele->sequence = lmCloneString(lm, thisAlleleString);
     allele->isReference = isRefAllele;
     }
