@@ -1473,26 +1473,20 @@ while ((hel = hashNext(&cookie)) != NULL)
 return list;
 }
 
-static char *encloseInAngleBrackets(char *stringIn)
-/* If stringIn begins and ends with ()'s, replace them with <> and return stringIn.
- * Otherwise, alloc a new string and surround stringIn with <>. */
+static char *encloseInAngleBracketsDbSnp(char *stringIn)
+/* Return a string that has <dbSNP: stringIn>, with spaces replaced by '_'s. */
 {
-char *stringOut = stringIn;
 int stringInLen = strlen(stringIn);
-if (stringIn[0] == '(' && stringIn[stringInLen-1] == ')')
-    {
-    stringIn[0] = '<';
-    stringIn[stringInLen-1] = '>';
-    }
-else
-    {
-    int stringOutLen = stringInLen + 2 + 1;
-    stringOut = needMem(stringOutLen);
-    safef(stringOut, stringOutLen, "<%s>", stringIn);
-    }
+int stringOutLen = stringInLen + strlen("<dbSNP:>") + 1;
+char *stringOut = needMem(stringOutLen);
+safef(stringOut, stringOutLen, "<dbSNP:%s>", stringIn);
+subChar(stringOut, ' ', '_');
 return stringOut;
 }
 
+// dbSNP named alleles have many ways to describe a deletion from the reference,
+// for example "LARGEDELETION", "LARGE DELETION", "... DELETED", "... DEL":
+static const char *dbSnpDelRegex = "^\\(.*(DELET.*| DEL)\\)$";
 
 static char **parseDbSnpAltAlleles(char *refAl, char *obsAls, boolean minusStrand,
 				   int *retAltAlCount, boolean *retNeedLeftBase)
@@ -1507,13 +1501,24 @@ static char **parseDbSnpAltAlleles(char *refAl, char *obsAls, boolean minusStran
 int obsCount = countChars(obsAls, '/') + 1;
 char *obsWords[obsCount];
 chopByChar(obsAls, '/', obsWords, obsCount);
+boolean obsHasDeletion = FALSE;
+int i;
+for (i = 0;  i < obsCount;  i++)
+    if (sameString(obsWords[i], "-"))
+	{
+	obsHasDeletion = TRUE;
+	break;
+	}
 char **altAls;
 AllocArray(altAls, obsCount);
-int altCount = 0, i;
+int altCount = 0;
 boolean needLeftBase = isEmpty(refAl) || sameString(refAl, "-");
 for (i = 0;  i < obsCount;  i++)
     {
     char *altAl = obsWords[i];
+    int altAlLen = strlen(altAl);
+    if (minusStrand && isAllNt(altAl, altAlLen))
+	reverseComplement(altAl, altAlLen);
     if (differentString(altAl, refAl))
 	{
 	if (sameString(altAl, "-"))
@@ -1529,14 +1534,17 @@ for (i = 0;  i < obsCount;  i++)
 	    // sequence. (76,130 of those in snp138)
 	    // Hmmm, I guess we could at least stick in the right number of N's if we can
 	    // parse "(245 BP INSERTION)".  (2403 rows rlike "[0-9]+ BP ?INSERTION" in snp138)
-	    if (!isAllNt(altAl, strlen(altAl)))
+	    if (!isAllNt(altAl, altAlLen))
 		{
-		// Symbolic allele: left base required, and enclose it in <>'s.
+		// Symbolic allele: left base required, and enclose it in <dbSNP:>'s.
+		// But if it's one of dbSNP's LARGEDELETION kind of alleles, that is redundant
+		// with the reference allele, so if we know there is already a "-" allele,
+		// skip it.
+		if (obsHasDeletion && regexMatch(altAl, dbSnpDelRegex))
+		    continue;
 		needLeftBase = TRUE;
-		altAl = encloseInAngleBrackets(altAl);
+		altAl = encloseInAngleBracketsDbSnp(altAl);
 		}
-	    else if (minusStrand)
-		reverseComplement(altAl, strlen(altAl));
 	    altAls[altCount] = altAl;
 	    }
 	altCount++;
