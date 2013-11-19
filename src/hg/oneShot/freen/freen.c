@@ -3,7 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "encode3/encode3Valid.h"
+#include "htmlPage.h"
 
 void usage()
 {
@@ -15,10 +15,21 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void freen(char *fileName)
+struct htmlTag *findNextMatching(struct htmlTag *list, char *name)
+/* Return first tag in list that is of type name or NULL if not found*/
 {
-boolean isGzipped = encode3IsGzipped(fileName);
-printf("%s %s gzipped\n", fileName, (isGzipped ? "is" : "is not"));
+struct htmlTag *tag;
+for (tag = list; tag != NULL; tag = tag->next)
+   if (sameWord(name, tag->name))
+       return tag;
+return NULL;
+}
+
+void freen(char *url)
+{
+struct htmlPage *page = htmlPageGet(url);
+printf("%s\n", page->htmlText);
+htmlPageFree(&page);
 }
 
 
