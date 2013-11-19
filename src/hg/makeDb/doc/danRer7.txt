@@ -196,7 +196,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
 	-smallClusterHub=swarm -bigClusterHub=swarm -dbHost=hgwdev \
 	-workhorse=hgwdev danRer7 > filter.log 2>&1
     #	real    0m32.422s
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
 # 101845718 bases of 1409772743 (7.224%) in intersection
 
     cd /hive/data/genomes/danRer7
@@ -300,7 +300,7 @@ close (FH);
 ###########################################################################
 # MAKE 11.OOC FILES FOR BLAT (DONE - 2010-12-09 - Hiram)
     ssh kolossus
-    # numerator is danRer7 gapless bases "real" as reported by faSize 
+    # numerator is danRer7 gapless bases "real" as reported by faSize
     # denominator is hg19 gapless bases as reported by featureBits,
     # 1024 is threshold used for human -repMatch:
     calc \( 1409770109 / 2897316137 \) \* 1024
@@ -324,7 +324,7 @@ close (FH);
 ###########################################################################
 # AUTO UPDATE GENBANK MRNA AND EST AND ZGC GENES RUN
 # (DONE - 2010-12-09 - Hiram)
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add danRer7 and commit to GIT
@@ -448,7 +448,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
 
-    cat fb.danRer7.chainXenTro2Link.txt 
+    cat fb.danRer7.chainXenTro2Link.txt
     #	90625809 bases of 1409770109 (6.428%) in intersection
 
     mkdir /hive/data/genomes/xenTro2/bed/blastz.danRer7.swap
@@ -459,7 +459,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    32m57.901s
-    cat fb.xenTro2.chainDanRer7Link.txt 
+    cat fb.xenTro2.chainDanRer7Link.txt
     #	89862892 bases of 1359412157 (6.610%) in intersection
 
 #########################################################################
@@ -507,7 +507,7 @@ TMPDIR=/scratch/tmp
 	> do.log 2>&1 &
     #	 Elapsed time: 144m12s
 
-    cat fb.danRer7.chainTetNig2Link.txt 
+    cat fb.danRer7.chainTetNig2Link.txt
     #	88435047 bases of 1409770109 (6.273%) in intersection
 
     mkdir /hive/data/genomes/tetNig2/bed/blastz.danRer7.swap
@@ -520,7 +520,7 @@ TMPDIR=/scratch/tmp
 	-swap > swap.log 2>&1 &
     #	real    8m43.275s
 
-    cat fb.tetNig2.chainDanRer7Link.txt 
+    cat fb.tetNig2.chainDanRer7Link.txt
     #	71259923 bases of 302314788 (23.571%) in intersection
 
 ##############################################################################
@@ -569,7 +569,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    247m45.584s
-    cat fb.danRer7.chainGasAcu1Link.txt 
+    cat fb.danRer7.chainGasAcu1Link.txt
     #	144782335 bases of 1409770109 (10.270%) in intersection
 
     mkdir /hive/data/genomes/gasAcu1/bed/blastz.danRer7.swap
@@ -580,7 +580,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    25m35.024s
-    cat fb.gasAcu1.chainDanRer7Link.txt 
+    cat fb.gasAcu1.chainDanRer7Link.txt
     #	122918766 bases of 446627861 (27.522%) in intersection
 
 #########################################################################
@@ -635,14 +635,14 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -qRepeats=windowmaskerSdust \
 	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
     #	real    20m56.926s
-    cat fb.oryLat2.chainDanRer7Link.txt 
+    cat fb.oryLat2.chainDanRer7Link.txt
     #	124527579 bases of 700386597 (17.780%) in intersection
 
 ############################################################################
 # lastz swap mm9 (DONE - 2010-12-17 - Hiram
     #	original alignment
     cd /hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17
-    cat fb.danRer7.chainMm9Link.txt 
+    cat fb.danRer7.chainMm9Link.txt
     #	68190354 bases of 2620346127 (2.602%) in intersection
 
     #	and the swap
@@ -655,14 +655,14 @@ TMPDIR=/scratch/tmp
 	-swap > swap.log 2>&1 &
     #	real    16m8.672s
 
-    cat fb.danRer7.chainMm9Link.txt 
+    cat fb.danRer7.chainMm9Link.txt
     #	71960602 bases of 1409770109 (5.104%) in intersection
 
 #########################################################################
 # lastz swap from hg19 (DONE - 2010-12-20 - Hiram)
     #	original alignment
     cd /hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
-    cat fb.hg19.chainDanRer7Link.txt 
+    cat fb.hg19.chainDanRer7Link.txt
     #	80849592 bases of 2897316137 (2.790%) in intersection
 
     #	running the swap
@@ -674,7 +674,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    42m52.920s
-    cat fb.danRer7.chainHg19Link.txt 
+    cat fb.danRer7.chainHg19Link.txt
     #	86716552 bases of 1409770109 (6.151%) in intersection
 
 #########################################################################
@@ -724,7 +724,7 @@ TMPDIR=/scratch/tmp
 	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
     #	real    144m0.459s
 
-    cat fb.danRer7.chainFr2Link.txt 
+    cat fb.danRer7.chainFr2Link.txt
     #	103798841 bases of 1409770109 (7.363%) in intersection
 
     mkdir /hive/data/genomes/fr2/bed/blastz.danRer7.swap
@@ -735,7 +735,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -qRepeats=windowmaskerSdust \
 	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
     #	real    10m26.244s
-    cat fb.fr2.chainDanRer7Link.txt 
+    cat fb.fr2.chainDanRer7Link.txt
     #	80078057 bases of 393312790 (20.360%) in intersection
 
 ############################################################################
@@ -752,7 +752,7 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
 # Tetraodon)),
 # (X_tropicalis,
 # (Mouse,
-# Human))) 
+# Human)))
 
 
     #	All distances remain as specified in the 46way.nh
@@ -833,7 +833,7 @@ zFishOnTop.nh
     sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
 
     # location for cluster run
-    #/hive/data/genomes/danRer7/bed/multiz8way/mafLinks/ 
+    #/hive/data/genomes/danRer7/bed/multiz8way/mafLinks/
 
     mkdir penn
     cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
@@ -1099,13 +1099,13 @@ done
     mkdir /hive/data/genomes/danRer7/bed/multiz8way/4d
     cd /hive/data/genomes/danRer7/bed/multiz8way/4d
 
-    # danRer7 cannot be too picky, dropping this clause: 
-    #   refSeqStatus.status='Reviewed' 
+    # danRer7 cannot be too picky, dropping this clause:
+    #   refSeqStatus.status='Reviewed'
     hgsql danRer7 -Ne \
     "select * from refGene,refSeqStatus where refGene.name=refSeqStatus.mrnaAcc and mol='mRNA'" \
 	| cut -f 2-20 | egrep -E -v "chrM" \
 	> refSeqReviewed.gp
-    wc -l refSeqReviewed.gp 
+    wc -l refSeqReviewed.gp
     #	14431 refSeqReviewed.gp
 
     genePredSingleCover refSeqReviewed.gp stdout | sort > refSeqReviewedNR.gp
@@ -1128,7 +1128,7 @@ set infile = $r/mafSplit/$2
 set outfile = $3
 cd /scratch/tmp
 # 'clean' maf
-perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
 awk -v C=$c '$2 == C {print}' $r/4d/refSeqReviewedNR.gp | sed -e "s/\t$c\t/\tdanRer7.$c\t/" > $c.gp
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 if ("$NL" != "0") then
@@ -1264,7 +1264,7 @@ done
 #########################################################################
 # phastCons 6-way (DONE - 2011-01-19 - Hiram)
 
-    # split 8way mafs into 10M chunks and generate sufficient statistics 
+    # split 8way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh swarm
     mkdir -p /hive/data/genomes/danRer7/bed/multiz8way/cons/SS
@@ -1334,7 +1334,7 @@ mkSS.csh $(root1) {check out line+ $(root1).done}
     #	there are going to be only one phastCons run using
     #	this same script.  It triggers off of the current working directory
     #	$cwd:t which is the "grp" in this script.  It is:
-    #	all 
+    #	all
 
     cat << '_EOF_' > doPhast.csh
 #!/bin/csh -fe
@@ -1416,7 +1416,7 @@ rm -fr $tmp
     #	real    0m7.114s
 
     # not sure what the targets should be for Zebrafish, on human we often
-    # try for 5% overall cov, and 70% CDS cov 
+    # try for 5% overall cov, and 70% CDS cov
     featureBits danRer7 -enrichment refGene:cds phastConsElements8way
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
 # refGene:cds 1.320%, phastConsElements8way 13.722%, both 1.101%
@@ -1543,7 +1543,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	real    0m5.941s
 
     # not sure what the targets should be for Zebrafish, on human we often
-    # try for 5% overall cov, and 70% CDS cov 
+    # try for 5% overall cov, and 70% CDS cov
     featureBits danRer7 -enrichment refGene:cds phastConsElements8wayFish
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
 # refGene:cds 1.320%, phastConsElements8wayFish 10.576%, both 1.093%
@@ -1641,7 +1641,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
 #############################################################################
 # phyloP for 8-way (DONE - 2011-01-19 - Hiram)
-    # run phyloP with score=LRT 
+    # run phyloP with score=LRT
     ssh swarm
     mkdir /cluster/data/danRer7/bed/multiz8way/consPhyloP
     cd /cluster/data/danRer7/bed/multiz8way/consPhyloP
@@ -1729,7 +1729,7 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
     # check integrity of data with wigToBigWig
     zcat downloads/phyloP8way.wigFix.gz \
 	| wigToBigWig stdin /hive/data/genomes/danRer7/chrom.sizes phyloP8way.bw
-    bigWigInfo phyloP8way.bw 
+    bigWigInfo phyloP8way.bw
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
@@ -1832,7 +1832,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     zcat downloads/phyloP8wayFish.wigFix.gz \
 	| wigToBigWig stdin /hive/data/genomes/danRer7/chrom.sizes \
 	    phyloP8wayFish.bw
-    bigWigInfo phyloP8wayFish.bw 
+    bigWigInfo phyloP8wayFish.bw
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
@@ -1981,7 +1981,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
     twoBitToFa -seqList=less1meg.lst  danRer7.2bit temp.fa
-    faSplit about temp.fa 1000000 blastDb/y 
+    faSplit about temp.fa 1000000 blastDb/y
     rm temp.fa less1meg.lst
 
     cd blastDb
@@ -2007,9 +2007,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
    mkdir -p kgfa
    split -l 209 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
    done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -2047,20 +2047,20 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/danRer7/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
-    exit 
-    
+    exit
+
     ssh swarm
     cd /cluster/data/danRer7/bed/tblastn.hg18KG
     gensub2 query.lst kg.lst blastGsub blastSpec
@@ -2117,13 +2117,13 @@ chainOne $(path1)
     pslCheck blastHg18KG.psl
 # checked: 45598 failed: 0 errors: 0
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/danRer7/bed/tblastn.hg18KG
     hgLoadPsl danRer7 blastHg18KG.psl
 
     # check coverage
-    featureBits danRer7 blastHg18KG 
+    featureBits danRer7 blastHg18KG
 # 21889813 bases of 1409770109 (1.553%) in intersection
 
     featureBits danRer7 blastHg18KG refGene  -enrichment
@@ -2187,13 +2187,13 @@ TMPDIR=/scratch/tmp
         -noLoadChainSplit \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
-    # real    179m52.632s 
+    # real    179m52.632s
     cat fb.danRer7.chainMelGal1Link.txt
     #   35772051 bases of 1409770109 (2.537%) in intersection
     cd /hive/data/genomes/danRer7/bed
     ln -s lastzMelGal1.2011-04-01 lastz.melGal1
 
-    #   running the swap 
+    #   running the swap
     mkdir /hive/data/genomes/melGal1/bed/blastz.danRer7.swap
     cd /hive/data/genomes/melGal1/bed/blastz.danRer7.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -2442,7 +2442,7 @@ TMPDIR=/scratch/tmp
 	> do.log 2>&1 &
     #	real    1021m38.611s
 
-    cat fb.danRer7.chainXenTro3Link.txt 
+    cat fb.danRer7.chainXenTro3Link.txt
     #	91771881 bases of 1409770109 (6.510%) in intersection
     cd /hive/data/genomes/danRer7/bed
     ln -s lastzXenTro3.2011-09-20 lastz.xenTro3
@@ -2455,7 +2455,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    67m46.506s
-    cat fb.xenTro3.chainDanRer7Link.txt 
+    cat fb.xenTro3.chainDanRer7Link.txt
     #	96539932 bases of 1358334882 (7.107%) in intersection
 
 ########################################################################
@@ -2503,3 +2503,23 @@ TMPDIR=/scratch/tmp
     # verify the track link to INSDC functions
 
 ##############################################################################
+# genscan - (DONE - 2013-11-12 - Hiram)
+    mkdir /hive/data/genomes/danRer7/bed/genscan
+    cd /hive/data/genomes/danRer7/bed/genscan
+    time doGenscan.pl danRer7 > do.log 2>&1
+    #  real    31m10.607s
+    # two broken jobs:
+./lastRunGsBig.csh chr1 000 gtf/000/chr1.gtf pep/000/chr1.pep subopt/000/chr1.bed &
+./lastRunGsBig.csh chr4 000 gtf/000/chr4.gtf pep/000/chr4.pep subopt/000/chr4.bed
+    #  real    26m20.610s
+    # run 'para time > run.time' on ku, then continuing:
+    time doGenscan.pl -continue=makeBed danRer7 > makeBed.log 2>&1
+    # real    3m9.048s
+
+    cat fb.danRer7.genscan.txt
+    #   54953492 bases of 1409770109 (3.898%) in intersection
+
+    cat fb.danRer7.genscanSubopt.txt
+    #   35758035 bases of 1409770109 (2.536%) in intersection
+
+#########################################################################

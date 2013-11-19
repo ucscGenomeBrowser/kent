@@ -21,8 +21,8 @@ NUMBER OF ASSEMBLY-UNITS:	1
 Assembly Accession:	GCA_000004035.1
 
 
-#  Macropus eugenii 
-#   (NCBI Project ID: 12586, Accession: GCA_000004035.1) 
+#  Macropus eugenii
+#   (NCBI Project ID: 12586, Accession: GCA_000004035.1)
 #   by Tammar Wallaby Genome Sequencing Consortium
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Macropus_eugenii/Meug_1.1/
 
@@ -37,21 +37,21 @@ Assembly Accession:	GCA_000004035.1
 "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Macropus_eugenii/Meug_1.1/*"
     # FINISHED --2010-10-22 08:54:16--
     # Downloaded: 12 files, 1.0G in 13m 49s (1.28 MB/s)
-    # Read ASSEMBLY_INFO 
- 
+    # Read ASSEMBLY_INFO
+
     # stay at genbank directory
-    # Process the unplaced scaffolds, filter out the  
+    # Process the unplaced scaffolds, filter out the
     #   The ".1" at the end (i.e. ABQO010000034.1) of contig name, since
-    #   MySQL does not allow "." as part of the table name and 
+    #   MySQL does not allow "." as part of the table name and
     #   will casue problems in genbank task step later
 
     export S=Primary_Assembly/unplaced_scaffolds
-    zcat ${S}/AGP/unplaced.scaf.agp.gz | grep "^#" > macEug2.agp 
+    zcat ${S}/AGP/unplaced.scaf.agp.gz | grep "^#" > macEug2.agp
     # append the gap records
     zcat ${S}/AGP/unplaced.scaf.agp.gz | grep -v "^#" \
     	    | sed  -e "s/\.1//"  >> macEug2.agp
     gzip macEug2.agp &
-    
+
     zcat ${S}/FASTA/unplaced.scaf.fa.gz \
     	    | sed -e "s#^>.*|gb|#>#; s#|.*##"  -e "s/\.1//"  \
     	    | gzip > macEug2.fa.gz
@@ -85,10 +85,10 @@ Assembly Accession:	GCA_000004035.1
 db macEug2
 clade mammal
 genomeCladePriority 67
-scientificName Macropus eugenii 
+scientificName Macropus eugenii
 commonName Wallaby
 assemblyDate Sep. 2009
-assemblyLabel TWGS (NCBI Project ID: 12586, Accession: GCA_000004035.1) 
+assemblyLabel TWGS (NCBI Project ID: 12586, Accession: GCA_000004035.1)
 assemblyShortLabel TWGS Meug_1.1
 orderKey 278
 mitoAcc none
@@ -109,7 +109,7 @@ taxId 9315
     #  Per instructions in makeGenomeDb.log:
     mkdir -p  ~/kent/src/hg/makeDb/trackDb/wallaby/macEug2
     cd /cluster/data/macEug2/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/wallaby/macEug2
-    cp *.*  ~/kent/src/hg/makeDb/trackDb/wallaby/macEug2 
+    cp *.*  ~/kent/src/hg/makeDb/trackDb/wallaby/macEug2
     cd ~/kent/src/hg/makeDb/trackDb
     #  edit makefile to add macEug2 to DBS.
     # git add wallaby/macEug2/*.{ra,html}
@@ -129,7 +129,7 @@ taxId 9315
 	-workhorse=hgwdev -bigClusterHub=swarm -noSplit macEug2 > do.log 2>&1 &
     #   real     294m1.203s
     cat faSize.rmsk.txt
-    # 3075184024 bases (539107070 N's 2536076954 real 1334921991 upper 
+    # 3075184024 bases (539107070 N's 2536076954 real 1334921991 upper
     # 1201154963 lower) in 277711 sequences in 1 files
     # %39.06 masked total, %47.36 masked real
 
@@ -140,8 +140,8 @@ taxId 9315
 
     time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-bigClusterHub=pk -smallClusterHub=pk macEug2 > do.log 2>&1 &
-    #   real     175m13.951s     
-    cat fb.simpleRepeat 
+    #   real     175m13.951s
+    cat fb.simpleRepeat
     # 38604856 bases of 2536076957 (1.522%) in intersection
 
     #	add to the repeatMasker
@@ -150,14 +150,14 @@ taxId 9315
     #	safe to ignore warnings about >=13 fields
     twoBitToFa macEug2.2bit stdout | faSize stdin > macEug2.2bit.faSize.txt
     cat macEug2.2bit.faSize.txt
-    # 3075184024 bases (539107070 N's 2536076954 real 1334271294 upper 
+    # 3075184024 bases (539107070 N's 2536076954 real 1334271294 upper
     # 1201805660 lower) in 277711 sequences in 1 files
     # %39.08 masked total, %47.39 masked real
 
     # double check with featureBits
     featureBits -countGaps macEug2 gap
     # 539107067 bases of 3075184024 (17.531%) in intersection
-    
+
     rm /gbdb/macEug2/macEug2.2bit
     ln -s `pwd`/macEug2.2bit /gbdb/macEug2/macEug2.2bit
 
@@ -181,7 +181,7 @@ taxId 9315
 
 ########################################################################
 # Create kluster run files (DONE 2010-11-04  - Chin)
-    # numerator is macEug2 gapless bases "real" as reported by: 
+    # numerator is macEug2 gapless bases "real" as reported by:
     featureBits -noRandom -noHap macEug2 gap
     #     1600136831 bases of 1184628269 (135.075%) in intersection
 
@@ -282,7 +282,7 @@ macEug2.genbank.est.native.loadDesc = yes
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad macEug2 &
-    #   logFile: var/dbload/hgwdev/logs/2011.10.27-08:35:00.dbload.log 
+    #   logFile: var/dbload/hgwdev/logs/2011.10.27-08:35:00.dbload.log
     #   real    66m57.028s
 
 
@@ -311,7 +311,7 @@ macEug2.genbank.est.native.loadDesc = yes
 
     # Masking statistics
     twoBitToFa macEug2.wmsk.2bit stdout | faSize stdin
-    # 3075184024 bases (539107070 N's 2536076954 real 1634442088 upper 
+    # 3075184024 bases (539107070 N's 2536076954 real 1634442088 upper
     # 901634866 lower) in 277711 sequences in 1 files
     # %29.32 masked total, %35.55 masked real
     hgLoadBed macEug2 windowmaskerSdust windowmasker.sdust.bed.gz
@@ -341,7 +341,7 @@ macEug2.genbank.est.native.loadDesc = yes
     twoBitToFa macEug2.cleanWMSdust.2bit stdout | faSize stdin \
         > macEug2.cleanWMSdust.faSize.txt
     cat macEug2.cleanWMSdust.faSize.txt
-    #   3075184024 bases (539107070 N's 2536076954 real 1617929026 upper 
+    #   3075184024 bases (539107070 N's 2536076954 real 1617929026 upper
     #   918147928 lower) in 277711 sequences in 1 files
     #   %29.86 masked total, %36.20 masked real
 
@@ -377,7 +377,7 @@ macEug2.genbank.est.native.loadDesc = yes
     mkdir /hive/data/genomes/macEug2/goldenPath
     cd /hive/data/genomes/macEug2/goldenPath
     makeDownloads.pl macEug2 > do.log 2>&1
-    # edit all htmls and READMEs per do.log instruction 
+    # edit all htmls and READMEs per do.log instruction
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/macEug2/pushQ

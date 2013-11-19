@@ -4,7 +4,7 @@
 #	It had been put together incorrectly here.
 #	This oryLat2 build is for the same sequence as was in oryLat1
 #	but re-worked to fix our chrUn so we can make it correspond
-#	to the Ensembl sequence.  
+#	to the Ensembl sequence.
 
 #	http://www.ncbi.nlm.nih.gov/nuccore/144600648
 
@@ -31,38 +31,38 @@
 #    The medaka assembly that we've used consists of:
 #    - contigs as the basic unit of assembly
 #    - scaffolds that are made up of contigs
-#    - ultracontigs that are made up of scaffolds but can't be placed on a 
+#    - ultracontigs that are made up of scaffolds but can't be placed on a
 #    chromosome
 #    - chromsomes that are made up of scaffolds
-#    
-#    I have attached 4 gzipped AGP files and they correspond to the above 
-#    four levels of assembly. The first three files were given to us by 
-#    University of Tokyo. The assembly shown in these files, called 
-#    HdrR_200510, was not submitted to a public repository. The next 
-#    assembly, version 1.0, is the one with modified gap sizes. Version 1.0 
+#
+#    I have attached 4 gzipped AGP files and they correspond to the above
+#    four levels of assembly. The first three files were given to us by
+#    University of Tokyo. The assembly shown in these files, called
+#    HdrR_200510, was not submitted to a public repository. The next
+#    assembly, version 1.0, is the one with modified gap sizes. Version 1.0
 #    is the assembly used by UCSC and it has been submitted to Genbank/DDBJ/EMBL
-#    
-#    
+#
+#
 #    The files are:
 #    (i) 200510.chr.agp.txt.gz
-#    This file specifies where scaffolds are found on a chromosome and how 
+#    This file specifies where scaffolds are found on a chromosome and how
 #    big the gap is between each scaffold
-#    
+#
 #    (ii) 200510.ultracontig.agp.txt.gz
-#    This file specifies where scaffolds are found on an ultracontig and how 
+#    This file specifies where scaffolds are found on an ultracontig and how
 #    big the gap is between each scaffold
-#    
+#
 #    (iii) 200510.scaffold.agp.txt.gz
-#    This file specifies where contigs are found on a scaffold and how big 
+#    This file specifies where contigs are found on a scaffold and how big
 #    the gap is between each contig
-#    
+#
 #    (iv) contig_fake_scaffolds.agp.txt.gz
-#    There were 92 contigs that did not occur in any of the above agp files. 
-#    We made our own agp file for them, to put them onto their own scaffolds. 
-#    This was done because Ensembl defines 'toplevel' sequence from which we 
-#    do our analyses. (In the toplevel sequence for a genome, every contig 
+#    There were 92 contigs that did not occur in any of the above agp files.
+#    We made our own agp file for them, to put them onto their own scaffolds.
+#    This was done because Ensembl defines 'toplevel' sequence from which we
+#    do our analyses. (In the toplevel sequence for a genome, every contig
 #    must occur exactly once.)
-#    
+#
 #    Hope that helps,
 #    Bronwen
 #
@@ -287,8 +287,8 @@ standard deviation 26497.729501
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT (DONE - 2007-01-18 - Hiram)
-    # Use -repMatch=200 (based on size -- for human we use 1024, and 
-    # medaka size is ~20% of human judging by gapless oryLat2 vs. hg18 
+    # Use -repMatch=200 (based on size -- for human we use 1024, and
+    # medaka size is ~20% of human judging by gapless oryLat2 vs. hg18
     # genome sizes from featureBits.
     ssh kolossus
     cd /cluster/data/oryLat2
@@ -364,7 +364,7 @@ oryLat2.downloadDir = oryLat2
     cd /cluster/data/hg18/bed/blastzOryLat2.2008-08-19
     cat fb.hg18.chainOryLat2Link.txt
     #	52713428 bases of 2881515245 (1.829%) in intersection
-    
+
     #	That is OK, now for the swap:
     mkdir /cluster/data/oryLat2/bed/blastz.hg18.swap
     cd /cluster/data/oryLat2/bed/blastz.hg18.swap
@@ -654,7 +654,7 @@ SEQ1_CHUNK=40000000
 SEQ1_LIMIT=200
 SEQ1_LAP=10000
 
-# Query - zebrafish (danRer5) 
+# Query - zebrafish (danRer5)
 SEQ2_DIR=/scratch/data/danRer5/danRer5.2bit
 SEQ2_LEN=/scratch/data/danRer5/chrom.sizes
 SEQ2_CHUNK=10000000
@@ -675,7 +675,7 @@ TMPDIR=/scratch/tmp
 	-continue=cat -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > cat.log 2>&1 &
     #	real    744m38.748s
-    cat fb.oryLat2.chainDanRer5Link.txt 
+    cat fb.oryLat2.chainDanRer5Link.txt
     #	138070427 bases of 700386597 (19.713%) in intersection
 
     #	and for the swap
@@ -781,7 +781,7 @@ do
 done | sort -u | sed -e "s#./##" > ../5-way.split.list
     wc -l ../5-way.split.list
     #	792 ../5-way.split.list
-    
+
     # the autoMultiz cluster run
     ssh swarm
     cd /cluster/data/oryLat2/bed/multiz5way/
@@ -1146,7 +1146,7 @@ done
 #############################################################################
 # phastCons 5-way (DONE - 2008-09-03,08 - Hiram)
 
-    # split 5way mafs into 10M chunks and generate sufficient statistics 
+    # split 5way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh memk
     mkdir /cluster/data/oryLat2/bed/multiz5way/msa.split
@@ -1221,7 +1221,7 @@ doSplit.csh $(dir1) $(root1) {check out line+ $(dir1)/$(root1).out}
     cd /cluster/data/oryLat2/bed/multiz5way/cons/treeRun1
     mkdir tree log
 
-    #	Tuning this loop should come back to here to recalculate 
+    #	Tuning this loop should come back to here to recalculate
     # Create little script that calls phastCons with right arguments
     #	--target-coverage of 0.20 is about right for mouse, will be
     #	tuned exactly below
@@ -1404,7 +1404,7 @@ rm -fr $tmp
     #	Loaded 1047037 elements of size 5
     #	real    0m33.582s
 
-    # Try for 5% overall cov, and 70% CDS cov 
+    # Try for 5% overall cov, and 70% CDS cov
     #	We don't have any gene tracks to compare CDS coverage
     #	--rho .31 --expected-length 45 --target-coverage .3
     featureBits oryLat2 phastConsElements5way
@@ -1520,7 +1520,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
      ssh hgwdev
      mkdir /cluster/data/oryLat2/bed/microsat
      cd /cluster/data/oryLat2/bed/microsat
-     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed oryLat2 microsat microsat.bed
 
 #############################################################################
@@ -1587,7 +1587,7 @@ oryLat2.upstreamMaf = multiz5way /hive/data/genomes/oryLat2/bed/multiz5way/speci
     mkdir /cluster/data/oryLat2/bed/multiz5way/mafDownloads
     cd /cluster/data/oryLat2/bed/multiz5way
 
-    # upstream mafs 
+    # upstream mafs
     #	There isn't any refGene table, using ensGene instead
 for S in 1000 2000 5000
 do
@@ -1716,7 +1716,7 @@ sourceName="NIG and Tokyo Univ MEDAKA1 (NCBI project 16702, BAAF04000000)" where
 
     awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
     twoBitToFa -seqList=less1meg.lst  oryLat2.2bit temp.fa
-    faSplit about temp.fa 1000000 blastDb/y 
+    faSplit about temp.fa 1000000 blastDb/y
     rm temp.fa less1meg.lst
 
     cd blastDb
@@ -1726,13 +1726,13 @@ sourceName="NIG and Tokyo Univ MEDAKA1 (NCBI project 16702, BAAF04000000)" where
     done
     rm *.fa
     ls *.nsq | wc -l
-# 884 
+# 884
 
     mkdir -p /cluster/data/oryLat2/bed/tblastn.hg18KG
     cd /cluster/data/oryLat2/bed/tblastn.hg18KG
     echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
     wc -l query.lst
-# 884 
+# 884
 
    # we want around 50000 jobs
    calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(50000/`wc query.lst | awk '{print $1}'`\)
@@ -1742,9 +1742,9 @@ sourceName="NIG and Tokyo Univ MEDAKA1 (NCBI project 16702, BAAF04000000)" where
    mkdir -p kgfa
    split -l 649 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
    done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -1779,21 +1779,21 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/oryLat2/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
     gensub2 query.lst kg.lst blastGsub blastSpec
-    exit 
-    
+    exit
+
     ssh swarm
     cd /cluster/data/oryLat2/bed/tblastn.hg18KG
     para create blastSpec
@@ -1850,16 +1850,16 @@ chainOne $(path1)
     pslCheck blastHg18KG.psl
 # checked: 40021 failed: 0 errors: 0
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/oryLat2/bed/tblastn.hg18KG
     hgLoadPsl oryLat2 blastHg18KG.psl
 
     # check coverage
-    featureBits oryLat2 blastHg18KG 
+    featureBits oryLat2 blastHg18KG
 # 19888142 bases of 700386597 (2.840%) in intersection
 
-    featureBits oryLat1 blastHg18KG 
+    featureBits oryLat1 blastHg18KG
 # 18960975 bases of 700386597 (2.707%) in intersection
 
     featureBits oryLat2 all_mrna blastHg18KG  -enrichment
@@ -1939,7 +1939,7 @@ TMPDIR=/scratch/tmp
 	-smallClusterHub=encodek -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    53m31.962s
-    cat fb.danRer6.chainOryLat2Link.txt 
+    cat fb.danRer6.chainOryLat2Link.txt
     #	147597031 bases of 1506896106 (9.795%) in intersection
 
 ############################################################################
@@ -2004,7 +2004,7 @@ TMPDIR=/scratch/tmp
 	-swap -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > swap.log 2>&1 &
     #	about 2h18m
-    cat fb.tetNig2.chainOryLat2Link.txt 
+    cat fb.tetNig2.chainOryLat2Link.txt
     #	136115939 bases of 302314788 (45.025%) in intersection
 
 ############################################################################
@@ -2032,7 +2032,7 @@ see doc/builds.txt for specific details.
 	-noLoadChainSplit -qRepeats=windowmaskerSdust \
 	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
     #	real    20m56.926s
-    cat fb.oryLat2.chainDanRer7Link.txt 
+    cat fb.oryLat2.chainDanRer7Link.txt
     #	124527579 bases of 700386597 (17.780%) in intersection
 
 ############################################################################
@@ -2052,7 +2052,7 @@ export PATH=/cluster/home/max/bin/x86_64:/cluster/bin/x86_64:/cluster/home/max/s
 # pmc
 cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
 pubBlat init /hive/data/inside/literature/blat/pmc/ /hive/data/inside/literature/text/pmc
-ssh swarm 
+ssh swarm
 cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
 pubBlat steps:annot-tables
 exit
@@ -2061,7 +2061,7 @@ pubBlat load
 # elsevier
 cd /hive/data/inside/literature/pubtools/runs/elsBlat/
 pubBlat init /hive/data/inside/literature/blat/elsevier/ /hive/data/inside/literature/text/elsevier
-ssh swarm 
+ssh swarm
 cd /hive/data/inside/literature/pubtools/runs/elsBlat/
 pubBlat steps:annot-tables
 exit
@@ -2130,5 +2130,47 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/petMar2/bed
     ln -s blastz.oryLat2.swap lastz.oryLat2
+
+#########################################################################
+# genscan - (DONE - 2013-11-12 - Hiram)
+    mkdir /hive/data/genomes/oryLat2/bed/genscan
+    cd /hive/data/genomes/oryLat2/bed/genscan
+    time doGenscan.pl oryLat2 > do.log 2>&1
+    #  real    25m6.013s
+four broken jobs:
+./lastRunGsBig.csh chr13 001 gtf/001/chr13.gtf pep/001/chr13.pep subopt/001/chr13.bed &
+./lastRunGsBig.csh chr8 001 gtf/001/chr8.gtf pep/001/chr8.pep subopt/001/chr8.bed &
+./lastRunGsBig.csh chr14 001 gtf/001/chr14.gtf pep/001/chr14.pep subopt/001/chr14.bed &
+./lastRunGsBig.csh chr2 001 gtf/001/chr2.gtf pep/001/chr2.pep subopt/001/chr2.bed
+XXX - running - Wed Nov 13 15:59:10 PST 2013
+    # real    396m44.926s
+XXX two still broken, running with 1800000 window size
+    #  real    504m10.380s
+XXX two still broken, running with 1600000 window size Fri Nov 15 08:10:22 PST 2013
+real    404m29.012s
+XXX two still broken, split and run
+
+    export TOP="/hive/data/genomes/oryLat2/bed/genscan/splitRun"
+    cd ${TOP}
+
+for C in chr2 chr14
+do
+    mkdir ${C}
+    cp -p ../hardMaskedFa/*/${C}.fa ${C}/${C}.fa
+    cd ${C}
+    mkdir split
+    faSplit -lift=${C}.lift -minGapSize=100 gap ${C}.fa 500000 split/${C}_
+    cd ${TOP}
+done
+
+    # run 'para time > run.time' on ku, then continuing:
+    time doGenscan.pl -continue=makeBed oryLat2 > makeBed.log 2>&1
+    #  real    4m12.345s
+
+    cat fb.oryLat2.genscan.txt
+    #   35480473 bases of 700386597 (5.066%) in intersection
+
+    cat fb.oryLat2.genscanSubopt.txt
+    #   26442347 bases of 700386597 (3.775%) in intersection
 
 #########################################################################

@@ -9636,14 +9636,15 @@ echo -e "chrM\tNC_005089.1"
 
     # Load lifted track tables and original auxiliary tables:
     ssh hgwdev
-    cd /cluster/data/mm10/bed/jaxLiftOver
-    
+    cd /cluster/data/mm9/bed/jaxLiftOver
+
     # jaxQTLLift
 #didn't run this sed command (prob already been done to this file?)
     sed -e 's/jaxQTL/jaxQTLLift/g'\
       ~/kent/src/hg/lib/jaxQTL.sql  > jaxQTLLift.sql
+
 #ran this (used this instead of hgLoadBed at Hiram's suggestion):
-hgLoadSqlTab  mm10 JaxQTLLift $HOME/kent/src/hg/lib/jaxQtl.sql \
+hgLoadSqlTab  mm10 JaxQtl $HOME/kent/src/hg/lib/jaxQtl.sql \
 /cluster/data/mm10/bed/jaxLiftOver/jaxQtlLift.bed
 
 checkTableCoords mm10 JaxQTLLift
