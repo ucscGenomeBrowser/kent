@@ -9637,7 +9637,7 @@ echo -e "chrM\tNC_005089.1"
     # Load lifted track tables and original auxiliary tables:
     ssh hgwdev
     cd /cluster/data/mm9/bed/jaxLiftOver
-    
+
     # jaxQTLLift
 #didn't run this sed command (prob already been done to this file?)
     sed -e 's/jaxQTL/jaxQTLLift/g'\
@@ -9646,11 +9646,11 @@ echo -e "chrM\tNC_005089.1"
     hgLoadBed -tab -notItemRgb -noBin \
       -sqlTable=jaxQTLLift.sql \
       mm10 jaxQTLLift jaxQtlLift.bed
-      
+
 #and got this output:
 #Reading jaxQtlLift.bed
 #Read 1539 elements of size 10 from jaxQtlLift.bed
-#Sorted 
+#Sorted
 #Creating table definition for jaxQTLLift
 #Saving bed.tab
 #Loading mm10

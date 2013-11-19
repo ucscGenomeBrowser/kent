@@ -94,7 +94,7 @@ taxId 9646
     time doSimpleRepeat.pl -buildDir=`pwd` -smallClusterHub=swarm \
 	-workhorse=hgwdev ailMel1 > do.log 2>&1 &
 #	real    103m30.880s
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
 #	25064758 bases of 2245312831 (1.116%) in intersection
 
     cd /hive/data/genomes/ailMel1
@@ -147,7 +147,7 @@ taxId 9646
 #########################################################################
 # MAKE 11.OOC FILES FOR BLAT (DONE - 2010-02-03 - Hiram)
     ssh kolossus
-    # numerator is ailMel1 gapless bases as reported by faSize 
+    # numerator is ailMel1 gapless bases as reported by faSize
     # denominator is hg17 gapless bases as reported by featureBits,
     # 1024 is threshold used for human -repMatch:
     calc \( 2245312831 / 2897310462 \) \* 1024
@@ -229,7 +229,7 @@ ailMel1.perChromTables = no
 # LASTZ Opossum monDom5 (DONE - 2010-02-05 - Hiram)
     #	original alignment
     cd /hive/data/genomes/monDom5/bed/lastzAilMel1.2010-02-04
-    cat fb.monDom5.chainAilMel1Link.txt 
+    cat fb.monDom5.chainAilMel1Link.txt
     #	223510659 bases of 3501660299 (6.383%) in intersection
 
     #	and for the swap
@@ -241,14 +241,14 @@ ailMel1.perChromTables = no
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	real    69m35.464s
-    cat fb.ailMel1.chainMonDom5Link.txt 
+    cat fb.ailMel1.chainMonDom5Link.txt
     #	211209682 bases of 2245312831 (9.407%) in intersection
 
 #########################################################################
 # LASTZ Mouse Mm9 (DONE - 2010-02-05 - Hiram)
     #	original alignment
     cd /hive/data/genomes/mm9/bed/lastzAilMel1.2010-02-04
-    cat fb.mm9.chainAilMel1Link.txt 
+    cat fb.mm9.chainAilMel1Link.txt
     #	749595031 bases of 2620346127 (28.607%) in intersection
 
     #	and for the swap
@@ -260,7 +260,7 @@ ailMel1.perChromTables = no
 	-workhorse=hgwdev \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    54m57.140s
-    cat fb.ailMel1.chainMm9Link.txt 
+    cat fb.ailMel1.chainMm9Link.txt
     #	739076250 bases of 2245312831 (32.916%) in intersection
 
 #######################################################################
@@ -312,7 +312,7 @@ TMPDIR=/scratch/tmp
     # *** All done !  Elapsed time: 2909m58s
     # *** Make sure that goldenPath/felCat4/vsAilMel1/README.txt is accurate.
     # *** Add {chain,net}AilMel1 tracks to trackDb.ra if necessary.
-    
+
     cat fb.felCat4.chainAilMel1Link.txt
     # 1503647735 bases of 1990635005 (75.536%) in intersection
 
@@ -321,7 +321,7 @@ TMPDIR=/scratch/tmp
         felCat4 ailMel1 > rbest.log 2>&1 &
     #   real    463m40.359s
 
-    #swap (Copied from felCat4.txt) 
+    #swap (Copied from felCat4.txt)
     mkdir /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap
     cd /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap
 
@@ -335,7 +335,7 @@ TMPDIR=/scratch/tmp
     # the swap run failed due to
     # mod of
     # /usr/local/apache/htdocs-hgdownload/goldenPath/ailMel1/liftOver/md5sum.txt
-    # was set to 
+    # was set to
     #   -r--r--r-- 1 382 Apr 26 17:17 md5sum.txt
     # correct this to 664 by cluster-admin
     # and continue from  download step
@@ -359,14 +359,14 @@ TMPDIR=/scratch/tmp
     # need to copy the dDirectory from ailMel1 to felCatv17e
     #  without this, 6way step will have problem
     #  cd /hive/data/genomes/ailMel1/bed/blastz.felCat4.swap]
-    #  cp -pr * /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap/ 
+    #  cp -pr * /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap/
     #  cd /hive/data/genomes/felCat4/bed
     #  ln -s lastzAilMel1.2010-06-07 lastz.ailMel1
 
 
     # mkdir /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-07
     # cd /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07
-    # cp -rp * /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-07/ 
+    # cp -rp * /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-07/
     # cd /hive/data/genomes/felCat4/bed
     # ln -s /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-07
     # lastz.ailMel1
@@ -424,7 +424,7 @@ TMPDIR=/scratch/tmp
 # lastz Human hg19 swap (DONE - 2010-02-05 - Hiram)
     # original alignment
     cd /hive/data/genomes/hg19/bed/lastzAilMel1.2010-02-04
-    cat fb.hg19.chainAilMel1Link.txt 
+    cat fb.hg19.chainAilMel1Link.txt
     #	1453400264 bases of 2897316137 (50.164%) in intersection
 
     #	and the swap
@@ -436,14 +436,14 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     real    124m14.393s
-    cat fb.ailMel1.chainHg19Link.txt 
+    cat fb.ailMel1.chainHg19Link.txt
     #	1411953704 bases of 2245312831 (62.884%) in intersection
 
 #########################################################################
 # lastz Dog canFam2 swap (DONE - 2010-02-05 - Hiram)
     # original alignment
     cd /hive/data/genomes/canFam2/bed/lastzAilMel1.2010-02-04
-    cat fb.canFam2.chainAilMel1Link.txt 
+    cat fb.canFam2.chainAilMel1Link.txt
     #	1791212709 bases of 2384996543 (75.103%) in intersection
 
     #	and the swap
@@ -455,14 +455,14 @@ TMPDIR=/scratch/tmp
 	-smallClusterHub=memk -chainMinScore=3000 -chainLinearGap=medium \
 	> swap.log 2>&1 &
     #	real    128m41.005s
-     cat fb.ailMel1.chainCanFam2Link.txt 
+     cat fb.ailMel1.chainCanFam2Link.txt
     #	1788107935 bases of 2245312831 (79.637%) in intersection
 
 #########################################################################
 # lastz Rat rn4 swap (DONE - 2010-02-18 - Hiram)
     # original alignment
     cd /hive/data/genomes/rn4/bed/lastzAilMel1.2010-02-04
-    cat fb.rn4.chainAilMel1Link.txt 
+    cat fb.rn4.chainAilMel1Link.txt
     #	708197812 bases of 2571531505 (27.540%) in intersection
 
     #	and the swap
@@ -474,7 +474,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    73m37.751s
-    cat fb.ailMel1.chainRn4Link.txt 
+    cat fb.ailMel1.chainRn4Link.txt
     #	695366144 bases of 2245312831 (30.970%) in intersection
 
 #########################################################################
@@ -491,7 +491,7 @@ TMPDIR=/scratch/tmp
 
     awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
     twoBitToFa -seqList=less1meg.lst  ailMel1.2bit temp.fa
-    faSplit about temp.fa 1000000 blastDb/y 
+    faSplit about temp.fa 1000000 blastDb/y
     rm temp.fa less1meg.lst
 
     cd blastDb
@@ -517,9 +517,9 @@ TMPDIR=/scratch/tmp
    mkdir -p kgfa
    split -l 289 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
    done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -557,20 +557,20 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/ailMel1/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
-    exit 
-    
+    exit
+
     ssh swarm
     cd /cluster/data/ailMel1/bed/tblastn.hg18KG
     gensub2 query.lst kg.lst blastGsub blastSpec
@@ -626,13 +626,13 @@ chainOne $(path1)
     pslCheck blastHg18KG.psl
 # checked: 64037 failed: 0 errors: 0
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/ailMel1/bed/tblastn.hg18KG
     hgLoadPsl ailMel1 blastHg18KG.psl
 
     # check coverage
-    featureBits ailMel1 blastHg18KG 
+    featureBits ailMel1 blastHg18KG
 # 32308509 bases of 2245312831 (1.439%) in intersection
 
     featureBits ailMel1 blastHg18KG xenoRefGene  -enrichment
@@ -654,3 +654,27 @@ chainOne $(path1)
     # verify the track link to INSDC functions
 
 ##############################################################################
+# genscan - (DONE - 2013-11-12 - Hiram)
+    mkdir /hive/data/genomes/ailMel1/bed/genscan
+    cd /hive/data/genomes/ailMel1/bed/genscan
+    time doGenscan.pl ailMel1 > do.log 2>&1
+    #  real   50m38.723s
+    # two broken jobs:
+./lastRunGsBig.csh GL193041.1 000 gtf/000/GL193041.1.gtf pep/000/GL193041.1.pep subopt/000/GL193041.1.bed &
+./lastRunGsBig.csh GL192552.1 000 gtf/000/GL192552.1.gtf pep/000/GL192552.1.pep subopt/000/GL192552.1.bed
+    # real    0m45.737s
+    # one still broken, trying 600000 size:
+./lastRunGsBig.csh GL193041.1 000 gtf/000/GL193041.1.gtf pep/000/GL193041.1.pep subopt/000/GL193041.1.bed
+    # real    0m30.688s
+
+    # run 'para time > run.time' on ku, then continuing:
+    time doGenscan.pl -continue=makeBed ailMel1 > makeBed.log 2>&1
+    #  real    8m58.429s
+
+    cat fb.ailMel1.genscan.txt
+    #   56820106 bases of 2245312831 (2.531%) in intersection
+
+    cat fb.ailMel1.genscanSubopt.txt
+    #   60958483 bases of 2245312831 (2.715%) in intersection
+
+#########################################################################
