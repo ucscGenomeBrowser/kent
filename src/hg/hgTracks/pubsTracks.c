@@ -107,7 +107,7 @@ char *authorYear = NULL;
 if (isEmpty(author))
     author = "NoAuthor";
 if (isEmpty(year))
-    year = "NoYear";
+    year = "";
 else if (sameWord(year, "0"))
     year = "";
 authorYear  = catTwoStrings(author, year);
@@ -125,7 +125,9 @@ static void setFormatFlag(struct sqlConnection* conn, char* tableName)
 if (seqTableFormat!=0)
     return;
 if (sqlColumnExists(conn, tableName, "title")) 
+    {
     seqTableFormat = SEQTABLE_NEW;
+    }
 else
     seqTableFormat = SEQTABLE_OLD;
 }

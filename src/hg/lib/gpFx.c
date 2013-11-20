@@ -223,7 +223,9 @@ struct gpFx *gpFxNew(char *allele, char *transcript, enum soTerm soNumber,
 {
 struct gpFx *effect;
 lmAllocVar(lm, effect);
-effect->allele = collapseDashes(strUpper(lmCloneString(lm, allele)));
+effect->allele = collapseDashes(lmCloneString(lm, allele));
+if (isAllNt(effect->allele, strlen(effect->allele)))
+    touppers(effect->allele);
 effect->transcript = lmCloneString(lm, transcript);
 effect->soNumber = soNumber;
 effect->detailType = detailType;

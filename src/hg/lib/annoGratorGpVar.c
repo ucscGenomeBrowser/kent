@@ -295,7 +295,8 @@ for (i = 0;  i < gpColCount;  i++)
 struct gpFx *intergenicGpFx;
 lmAllocVar(self->lm, intergenicGpFx);
 intergenicGpFx->allele = firstAltAllele(variant->alleles);
-touppers(intergenicGpFx->allele);
+if (isAllNt(intergenicGpFx->allele, strlen(intergenicGpFx->allele)))
+    touppers(intergenicGpFx->allele);
 intergenicGpFx->soNumber = intergenic_variant;
 intergenicGpFx->detailType = none;
 aggvStringifyGpFx(&wordsOut[gpColCount], intergenicGpFx, self->lm);

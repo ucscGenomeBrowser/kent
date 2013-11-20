@@ -71,7 +71,7 @@ taxId 9986
     doSimpleRepeat.pl -workhorse=hgwdev -continue=filter \
 	-buildDir=`pwd` oryCun2 > filter.log 2>&1 &
     #	about 13 minutes
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #	11549259 bases of 332311746 (3.475%) in intersection
 
 ########################################################################
@@ -162,7 +162,7 @@ for (my $i = 0; $i < $scafCount; ++$i) {
     # << happy emacs
     chmod +x mkCtgPos2.pl
     ./mkCtgPos2.pl > ctgPos2.tab
-    
+
     hgLoadSqlTab oryCun2 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
 
 ########################################################################
@@ -247,19 +247,19 @@ for (my $i = 0; $i < $scafCount; ++$i) {
 # lastz swap from Human Hg19 (DONE - 2009-08-27 - Hiram)
     # original alignment
     cd /hive/data/genomes/hg19/bed/lastzOryCun2.2009-08-12
-    cat fb.hg19.chainOryCun2Link.txt 
+    cat fb.hg19.chainOryCun2Link.txt
     #	1283994337 bases of 2897316137 (44.317%) in intersection
 
     mkdir /hive/data/genomes/oryCun2/bed/blastz.hg19.swap
     cd /hive/data/genomes/oryCun2/bed/blastz.hg19.swap
-    
+
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/hg19/bed/lastzOryCun2.2009-08-12/DEF \
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-swap -syntenicNet > swap.log 2>&1 &
     #	real    176m35.932s
-    cat fb.oryCun2.chainHg19Link.txt 
+    cat fb.oryCun2.chainHg19Link.txt
     #	1260477501 bases of 2604023284 (48.405%) in intersection
 
 ##############################################################################
@@ -372,7 +372,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
     #	real    1132m45.207s
-    cat fb.oryCun2.chainCavPor3Link.txt 
+    cat fb.oryCun2.chainCavPor3Link.txt
     #	964546600 bases of 2604023284 (37.041%) in intersection
 
     mkdir /hive/data/genomes/cavPor3/bed/blastz.oryCun2.swap
@@ -382,7 +382,7 @@ TMPDIR=/scratch/tmp
 	-swap -noLoadChainSplit -workhorse=hgwdev -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    186m1.649s
-    cat fb.cavPor3.chainOryCun2Link.txt 
+    cat fb.cavPor3.chainOryCun2Link.txt
     #	1003499831 bases of 2663369733 (37.678%) in intersection
 
 ############################################################################
@@ -417,7 +417,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
     #	real    1791m17.275s
-    cat fb.oryCun2.chainMonDom5Link.txt 
+    cat fb.oryCun2.chainMonDom5Link.txt
     #	176460344 bases of 2604023284 (6.776%) in intersection
 
     mkdir /hive/data/genomes/monDom5/bed/blastz.oryCun2.swap
@@ -428,7 +428,7 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	real    74m20.206s
-    cat fb.monDom5.chainOryCun2Link.txt 
+    cat fb.monDom5.chainOryCun2Link.txt
     #	178331930 bases of 3501660299 (5.093%) in intersection
 
 ############################################################################
@@ -498,7 +498,7 @@ close (FH);
 	-swap -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    84m6.571s
-    cat fb.oryCun2.chainMm9Link.txt 
+    cat fb.oryCun2.chainMm9Link.txt
     #	669602734 bases of 2604023284 (25.714%) in intersection
 
 ############################################################################
@@ -515,7 +515,7 @@ close (FH);
 
     awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
     twoBitToFa -seqList=less1meg.lst  oryCun2.2bit temp.fa
-    faSplit about temp.fa 1000000 blastDb/y 
+    faSplit about temp.fa 1000000 blastDb/y
     rm temp.fa less1meg.lst
 
     cd blastDb
@@ -543,9 +543,9 @@ close (FH);
    mkdir -p kgfa
    split -l 349 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
    done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -583,20 +583,20 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/oryCun2/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
-    exit 
-    
+    exit
+
     ssh swarm
     cd /cluster/data/oryCun2/bed/tblastn.hg18KG
     gensub2 query.lst kg.lst blastGsub blastSpec
@@ -652,20 +652,20 @@ chainOne $(path1)
     pslCheck blastHg18KG.psl
 # checked: 97569 failed: 0 errors: 0
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/oryCun2/bed/tblastn.hg18KG
     hgLoadPsl oryCun2 blastHg18KG.psl
 
     # check coverage
-    featureBits oryCun2 blastHg18KG 
+    featureBits oryCun2 blastHg18KG
 # 42826260 bases of 2604023284 (1.645%) in intersection
 
     featureBits oryCun2 blastHg18KG refGene  -enrichment
 # blastHg18KG 1.645%, refGene 0.076%, both 0.048%, cover 2.95%, enrich 38.75x
 
     featureBits oryCun2 blastHg18KG xenoRefGene  -enrichment
-# blastHg18KG 1.645%, xenoRefGene 1.837%, both 0.978%, cover 59.48%, enrich 32.37x 
+# blastHg18KG 1.645%, xenoRefGene 1.837%, both 0.978%, cover 59.48%, enrich 32.37x
 
     rm -rf blastOut
 #end tblastn
@@ -799,7 +799,7 @@ liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
 ############################################################################
 # SWAP lastz mm10 (DONE - 2012-03-19 - Hiram)
     # original alignment to mm10
-    cat /hive/data/genomes/mm10/bed/lastzOryCun2.2012-03-16/fb.mm10.chainOryCun2Link.txt 
+    cat /hive/data/genomes/mm10/bed/lastzOryCun2.2012-03-16/fb.mm10.chainOryCun2Link.txt
     #	669778489 bases of 2652783500 (25.248%) in intersection
 
     # and this swap
@@ -811,7 +811,7 @@ liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    64m40.959s
-    cat fb.oryCun2.chainMm10Link.txt 
+    cat fb.oryCun2.chainMm10Link.txt
     #	668643668 bases of 2604023284 (25.677%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/oryCun2/bed
@@ -821,7 +821,7 @@ liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
 ############################################################################
 # NUMTS TRACK (DONE 2013-06-16 - Chin)
 # copy and unzip
-# http://193.204.182.50/files/tracks.zip and 
+# http://193.204.182.50/files/tracks.zip and
 # http://193.204.182.50/files/other%20NumtS%20tracks.zip
 # to /hive/data/outside/NumtS/2012/tracks
 
@@ -832,7 +832,7 @@ liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
     cat tracks_NumtS_assembled_OryCun2 | grep -v "^track" > oryCun2NumtSAssembled.bed
     cat tracks_mit_NumtS_OryCun2 | grep -v "^track" >  oryCun2NumtSMitochondrion.bed
 
-    # load the 3 bed files to oryCun2 
+    # load the 3 bed files to oryCun2
     hgLoadBed oryCun2  numtSAssembled  oryCun2NumtSAssembled.bed
     hgLoadBed oryCun2 numtS oryCun2NumtS.bed
     hgLoadBed oryCun2 numtSMitochondrion oryCun2NumtSMitochondrion.bed
@@ -866,3 +866,82 @@ liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
     # verify the track link to INSDC functions
 
 ##############################################################################
+# genscan - (DONE - 2013-11-12 - Hiram)
+    mkdir /hive/data/genomes/oryCun2/bed/genscan
+    cd /hive/data/genomes/oryCun2/bed/genscan
+    time doGenscan.pl oryCun2 > do.log 2>&1
+XXX - running - Tue Nov 12 14:05:25 PST 2013
+    #  real    12m28.640s
+7 broken jobs:
+./lastRunGsBig.csh chr12 000 gtf/000/chr12.gtf pep/000/chr12.pep subopt/000/chr12.bed &
+./lastRunGsBig.csh chr13 000 gtf/000/chr13.gtf pep/000/chr13.pep subopt/000/chr13.bed &
+./lastRunGsBig.csh chrUn0046 000 gtf/000/chrUn0046.gtf pep/000/chrUn0046.pep subopt/000/chrUn0046.bed &
+wait
+./lastRunGsBig.csh chr5 000 gtf/000/chr5.gtf pep/000/chr5.pep subopt/000/chr5.bed &
+./lastRunGsBig.csh chr3 000 gtf/000/chr3.gtf pep/000/chr3.pep subopt/000/chr3.bed &
+./lastRunGsBig.csh chr16 000 gtf/000/chr16.gtf pep/000/chr16.pep subopt/000/chr16.bed &
+./lastRunGsBig.csh chr1 000 gtf/000/chr1.gtf pep/000/chr1.pep subopt/000/chr1.bed &
+wait
+XXX - running - Wed Nov 13 15:49:50 PST 2013
+    #  real    713m7.112s
+XXX some still broken, running with 1800000
+    real    191m54.615s
+XXX some still broken, running with 1600000 Fri Nov 15 08:07:34 PST 2013
+real    110m12.295s
+XXX still broken, running with 1000000 Fri Nov 15 13:49:11 PST 2013
+real    85m13.525s
+XXX still broken, time to split and run
+
+    export TOP="/hive/data/genomes/oryCun2/bed/genscan/splitRun"
+    cd ${TOP}
+    gapToLift oryCun2 oryCun2.nonBridged.lift -bedFile=oryCun2.nonBridged.bed
+
+for C in 1 12 13 16
+do
+    cd ${TOP}
+    grep -w "chr${C}" oryCun2.nonBridged.lift |  sed -e "s/chr${C}./chr${C}_/" > chr${C}.nonBridged.lift
+    mkdir chr${C}
+    faToTwoBit ../hardMaskedFa/*/chr${C}.fa chr${C}/chr${C}.2bit
+    ~/kent/src/hg/utils/lft2BitToFa.pl chr${C}/chr${C}.2bit \
+       chr${C}.nonBridged.lift > chr${C}/chr${C}.nonBridged.fa
+    cd chr${C}
+    mkdir split
+    faSplit sequence chr${C}.nonBridged.fa 100 split/chr${C}_
+done
+
+export TOP="/hive/data/genomes/oryCun2/bed/genscan/splitRun"
+cd $TOP
+
+for C in 1 12 13 16
+do
+  cd chr${C}
+  /usr/bin/time -p ./cmdList.sh > cmdList.log 2>&1
+  cd $TOP
+done
+
+export TOP="/hive/data/genomes/oryCun2/bed/genscan/splitRun"
+cd $TOP
+
+for C in chr1 chr12 chr13 chr16
+do
+  cd ${C}
+  cat gtf/${C}_*.gtf | liftUp -type=.gtf ${C}.lifted.gtf \
+      ../${C}.nonBridged.lift error stdin
+  cat subopt/${C}_*.bed | liftUp -type=.bed ${C}.lifted.subopt.bed \
+      ../${C}.nonBridged.lift error stdin
+  cat pep/${C}_*.pep > ${C}.needNameFix.pep
+  ../fixIds.pl ${C}
+  cd $TOP
+done
+
+    # run 'para time > run.time' on ku, then continuing:
+    time doGenscan.pl -continue=makeBed oryCun2 > makeBed.log 2>&1
+    #  real    4m24.839s
+
+    cat fb.oryCun2.genscan.txt
+    #   67825143 bases of 2604023284 (2.605%) in intersection
+
+    cat fb.oryCun2.genscanSubopt.txt
+    #   69954121 bases of 2604023284 (2.686%) in intersection
+
+#########################################################################
