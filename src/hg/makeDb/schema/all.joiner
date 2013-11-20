@@ -3786,6 +3786,13 @@ identifier mouseStrains
     mm10.chromInfo.chrom
     mm10.altSeqLiftOverPslStrains1.tName
 
+identifier lrgTranscriptId
+"ID of Locus Reference Genomic (LRG) transcript"
+    $hg.lrgTranscriptAli.qName
+    $hg.lrgCdna.name
+    $hg.lrgPep.name
+    $hg.lrgCds.id
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
@@ -4537,7 +4544,7 @@ tablesIgnored $hg
     laminB1
     laminB1Lads
     lovd
-    lrg%
+    lrg
     mammalPsg
     nimhBipolarUs
     nimhBipolarDe
