@@ -505,6 +505,22 @@ noInherit on
     visibility hide
     type bed 5
 
+track pubsBingBlat
+shortLabel Web Sequences
+longLabel Sequences in web pages indexed by Bing.com / Microsoft Research
+group pub
+type bed 12 .
+visibility hide
+priority 13
+configurable off
+configureByPopup off
+nextExonText Next Match
+prevExonText Prev Match
+pubsArticleTable hgFixed.pubsBingArticle
+pubsSequenceTable hgFixed.pubsBingSequenceAnnot
+pubsPslTrack pubsBingBlatPsl
+pubsMarkerTable hgFixed.pubsBingMarkerAnnot
+
 track transMap
 superTrack on
 shortLabel TransMap

@@ -190,19 +190,19 @@ static void *vcfFileAlloc(struct vcfFile *vcff, size_t size)
 return lmAlloc( vcfFileLm(vcff), size);
 }
 
-static inline char *vcfFileCloneStrZ(struct vcfFile *vcff, char *str, size_t size)
+INLINE char *vcfFileCloneStrZ(struct vcfFile *vcff, char *str, size_t size)
 /* Use vcff's local mem to allocate memory for a string and copy it. */
 {
 return lmCloneStringZ( vcfFileLm(vcff), str, size);
 }
 
-static inline char *vcfFileCloneStr(struct vcfFile *vcff, char *str)
+INLINE char *vcfFileCloneStr(struct vcfFile *vcff, char *str)
 /* Use vcff's local mem to allocate memory for a string and copy it. */
 {
 return vcfFileCloneStrZ(vcff, str, strlen(str));
 }
 
-static inline char *vcfFileCloneSubstr(struct vcfFile *vcff, char *line, regmatch_t substr)
+INLINE char *vcfFileCloneSubstr(struct vcfFile *vcff, char *line, regmatch_t substr)
 /* Allocate memory for and copy a substring of line. */
 {
 return vcfFileCloneStrZ(vcff, line+substr.rm_so, (substr.rm_eo - substr.rm_so));
@@ -634,8 +634,11 @@ for (i = 0;  i < record->infoCount;  i++)
 	enum vcfInfoType type = typeForInfoKey(vcff, el->key);
 	if (type != vcfInfoFlag)
 	    {
-	    vcfFileErr(vcff, "Missing = after key in INFO element: \"%s\" (type=%d)",
-		       elStr, type);
+	    struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
+	    // Complain only if we are expecting a particular number of values for this keyword:
+	    if (def != NULL && def->fieldCount >= 0)
+		vcfFileErr(vcff, "Missing = after key in INFO element: \"%s\" (type=%d)",
+			   elStr, type);
 	    if (type == vcfInfoString)
 		{
 		el->values = vcfFileAlloc(vcff, sizeof(union vcfDatum));
