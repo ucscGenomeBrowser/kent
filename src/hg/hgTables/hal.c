@@ -7,10 +7,9 @@
 #include "maf.h"
 #include "hgTables.h"
 #include "trackHub.h"
-// temp disable this to verify #12119
-// #ifdef USE_HAL
+#ifdef USE_HAL
 #include "halBlockViz.h"
-// #endif // USE_HAL
+#endif // USE_HAL
 
 extern struct trackDb *curTrack;	/* Currently selected track. */
 extern char *database;
@@ -48,7 +47,7 @@ void doHalMaf(struct trackDb *parentTrack, char *table, struct sqlConnection *co
 /* Output regions as MAF.  maf tables look bed-like enough for
  * cookedBedsOnRegions to handle intersections. */
 {
-// #ifdef USE_HAL
+#ifdef USE_HAL
 struct region *region = NULL, *regionList = getRegions();
 struct trackDb *tdb;
 
@@ -79,7 +78,7 @@ for (region = regionList; region != NULL; region = region->next)
 		trackHubSkipHubName(database), region->chrom,
 		region->start, region->end, FALSE);
     }
-// #else // USE_HAL
-// errAbort("hgTables not compiled with HAL support.");
-// #endif // USE_HAL
+#else // USE_HAL
+errAbort("hgTables not compiled with HAL support.");
+#endif // USE_HAL
 }
