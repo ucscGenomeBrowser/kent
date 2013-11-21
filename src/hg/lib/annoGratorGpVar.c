@@ -79,6 +79,9 @@ static boolean passesFilter(struct annoGratorGpVar *self, struct gpFx *gpFx)
 {
 struct annoGratorGpVarFuncFilter *filt = self->funcFilter;
 enum soTerm term = gpFx->soNumber;
+if (term == NMD_transcript_variant)
+    // This one gets special treatment because gpFx->detailType might still be codingChange:
+    return filt->nmdTranscript;
 if (filt->intron && (term == intron_variant || term == complex_transcript_variant))
     return TRUE;
 if (filt->upDownstream && (term == upstream_gene_variant || term == downstream_gene_variant))
