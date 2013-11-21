@@ -1979,7 +1979,7 @@ for (;;)
     if (outArray != NULL)
         {
         outArray[recordCount] = in;
-        if ((*in == '"'))
+        if (*in == '"')
             quoteBegins = (in+1);
         else
             quoteBegins = NULL;
