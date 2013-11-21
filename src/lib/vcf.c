@@ -634,8 +634,11 @@ for (i = 0;  i < record->infoCount;  i++)
 	enum vcfInfoType type = typeForInfoKey(vcff, el->key);
 	if (type != vcfInfoFlag)
 	    {
-	    vcfFileErr(vcff, "Missing = after key in INFO element: \"%s\" (type=%d)",
-		       elStr, type);
+	    struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
+	    // Complain only if we are expecting a particular number of values for this keyword:
+	    if (def != NULL && def->fieldCount >= 0)
+		vcfFileErr(vcff, "Missing = after key in INFO element: \"%s\" (type=%d)",
+			   elStr, type);
 	    if (type == vcfInfoString)
 		{
 		el->values = vcfFileAlloc(vcff, sizeof(union vcfDatum));

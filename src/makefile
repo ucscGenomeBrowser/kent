@@ -3,7 +3,8 @@ include inc/common.mk
 
 all: utils cgi blatSuite
 
-alpha: clean utils-alpha cgi-alpha blatSuite
+alpha: clean
+	${MAKE} utils-alpha cgi-alpha blatSuite
 
 beta: check-beta clean cgi-beta
 
@@ -131,6 +132,8 @@ utils: libs destBin
 	cd hg && ${MAKE} utils
 
 utils-alpha: libs
+	${MKDIR} ${SCRIPTS}
+	cd parasol && ${MAKE}
 	@for D in ${DIRS} x; do \
             if test "$$D" != "x" ; then \
                 ( cd $$D && echo $$D && ${MAKE} ) ;\
