@@ -1,13 +1,13 @@
 # set for preview 1:
-setenv REVIEWDAY 2013-10-28             # v292 preview
-setenv LASTREVIEWDAY 2013-10-07         # v291 preview
+setenv REVIEWDAY 2013-11-18             # v293 preview
+setenv LASTREVIEWDAY 2013-10-28         # v292 preview
 # set for preview 2:
 setenv REVIEW2DAY 2013-11-04        # v292 preview2
 setenv LASTREVIEW2DAY 2013-10-14    # v291 preview2
 # set these three for final build:
-setenv BRANCHNN 291
-setenv TODAY 2013-10-21                # v291 final
-setenv LASTWEEK 2013-09-30             # v290 final
+setenv BRANCHNN 292
+setenv TODAY 2013-11-11                # v292 final
+setenv LASTWEEK 2013-10-21             # v291 final
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld

@@ -9619,3 +9619,33 @@ echo -e "chrM\tNC_005089.1"
     # verify the track link to INSDC functions
 
 ##############################################################################
+# MGI LIFTOVER FROM mm9 ( 2013-11-14 Pauline)
+    ssh kolossus
+    mkdir /cluster/data/mm10/bed/jaxLiftOver
+    cd /cluster/data/mm10/bed/jaxLiftOver
+
+    liftOver -minBlocks=0.5 /cluster/data/mm9/bed/jax/2011_06/jaxQtl.bed \
+      /cluster/data/mm9/bed/liftOver/mm9ToMm10.over.chain.gz \
+      -bedPlus=6 -tab jaxQtlLift.{bed,unmapped}
+    wc -l jaxQtlLift.{bed,unmapped}
+#Old  1539 jaxQtlLift.bed
+#Old    12 jaxQtlLift.unmapped
+#     1883 jaxQtlLift.bed
+#       14 jaxQtlLift.unmapped
+# Numbers are of same order of magnitude (yay?) proceeding...
+
+    # Load lifted track tables and original auxiliary tables:
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/jaxLiftOver
+
+    # jaxQTLLift
+#didn't run this sed command (prob already been done to this file?)
+    sed -e 's/jaxQTL/jaxQTLLift/g'\
+      ~/kent/src/hg/lib/jaxQTL.sql  > jaxQTLLift.sql
+
+#ran this (used this instead of hgLoadBed at Hiram's suggestion):
+hgLoadSqlTab  mm10 JaxQtl $HOME/kent/src/hg/lib/jaxQtl.sql \
+/cluster/data/mm10/bed/jaxLiftOver/jaxQtlLift.bed
+
+checkTableCoords mm10 JaxQTLLift
+#got no output (yay!)

@@ -1286,7 +1286,8 @@ int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched)
 /* Execute an update query, returning the number of rows change.  If matched
  * is not NULL, it gets the total number matching the query. */
 {
-int numChanged, numMatched;
+int numChanged = 0;
+int numMatched = 0;
 const char *info;
 int numScan = 0;
 struct sqlResult *sr = sqlGetResult(conn,query);

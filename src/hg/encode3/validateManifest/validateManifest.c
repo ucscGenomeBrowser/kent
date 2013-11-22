@@ -679,11 +679,18 @@ for(rec = manifestRecs; rec; rec = rec->next)
 
     char *mFormat = rec->words[mFormatIdx];
 
+    // check that the format is not blank
+    if (fileIsValid && sameString(mFormat,""))
+	{
+	fileIsValid = FALSE;
+	printf("ERROR: format must not be blank.\n");
+	}
+
     // check that the file extension is not disallowed
     if (fileIsValid && disallowedCompressionExtension(mFileName, mFormat))
 	{
 	fileIsValid = FALSE;
-	printf("ERROR: %s FILE COMPRESSION TYPE NOT ALLOWED !!!\n", mFileName);
+	printf("ERROR: %s FILE COMPRESSION TYPE NOT ALLOWED with format %s !!!\n", mFileName, mFormat);
 	}
 
 
@@ -741,7 +748,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	boolean smallNumber = FALSE;
 	int sl = strlen(mReplicate);
 	int sn = 0;
-	if (countLeadingDigits(mReplicate) == sl && sl < 2 && sl > 0)
+	if (countLeadingDigits(mReplicate) == sl && sl <= 2 && sl > 0)
 	    {
 	    smallNumber = TRUE;
 	    sn = atoi(mReplicate);
@@ -749,7 +756,8 @@ for(rec = manifestRecs; rec; rec = rec->next)
        	if (!(startsWith("pooled", mReplicate) || startsWith("n/a", mReplicate) || (smallNumber && sn >=1 && sn <=10)))
 	    {
 	    fileIsValid = FALSE;
-    	    printf("ERROR: %s is not a valid value for the replicate field.  Must be pooled or n/a or a small unsigned number 1 <= N <=10.\n", mReplicate);
+    	    printf("ERROR: %s is not a valid value for the replicate field.  "
+		"Must be pooled or n/a or a small unsigned number 1 <= N <=10.\n", mReplicate);
 	    }
 	}
     
@@ -762,7 +770,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	    boolean smallNumber = FALSE;
 	    int sl = strlen(mTechnicalReplicate);
 	    int sn = 0;
-	    if (countLeadingDigits(mTechnicalReplicate) == sl && sl < 2 && sl > 0)
+	    if (countLeadingDigits(mTechnicalReplicate) == sl && sl <= 2 && sl > 0)
 		{
 		smallNumber = TRUE;
 		sn = atoi(mTechnicalReplicate);
@@ -770,7 +778,8 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	    if (!(startsWith("pooled", mTechnicalReplicate) || startsWith("n/a", mTechnicalReplicate) || (smallNumber && sn >=1 && sn <=10)))
 		{
 		fileIsValid = FALSE;
-		printf("ERROR: %s is not a valid value for the technical_replicate field.  Must be pooled or n/a or a small unsigned number 1 <= N <=10.\n", mTechnicalReplicate);
+		printf("ERROR: %s is not a valid value for the technical_replicate field.  "
+		    "Must be pooled or n/a or a small unsigned number 1 <= N <=10.\n", mTechnicalReplicate);
 		}
 	    }
 	}

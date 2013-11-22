@@ -1,0 +1,70 @@
+############################################################################
+#  BLASTZ/CHAIN/NET Zebra finch vs Chicken (DONE - 2013-11-06,25 - Hiram)
+#   use a screen to manage this multi-day job
+    screen -S strCam0
+
+    mkdir /hive/data/genomes/strCam0/bed/lastzFalPer1.2013-11-06
+    cd /hive/data/genomes/strCam0/bed/lastzFalPer1.2013-11-06
+
+    cat << '_EOF_' > DEF
+# Struthio camelus/Ostrich vs. Falco peregrinus
+BLASTZ_M=50
+
+# TARGET: Struthio camelus/Ostrich StrCam0
+SEQ1_DIR=/hive/data/genomes/strCam0/strCam0.2bit
+SEQ1_LEN=/hive/data/genomes/strCam0/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# QUERY: Falco peregrinus FalPer1
+SEQ2_DIR=/hive/data/genomes/falPer1/falPer1.2bit
+SEQ2_LEN=/hive/data/genomes/falPer1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/strCam0/bed/lastzFalPer1.2013-11-06
+TMPDIR=/dev/shm
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+    # real    4618m50.082s
+
+    cat fb.strCam0.chainFalPer1Link.txt
+    # 975896802 bases of 1187883366 (82.154%) in intersection
+
+    cd /hive/data/genomes/strCam0/bed
+    ln -s lastzFalPer1.2013-11-06 lastz.falPer1
+
+    cd /hive/data/genomes/strCam0/bed/lastzFalPer1.2013-11-06
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        strCam0 falPer1 > rbest.log 2>&1 &
+    # about 33 minutes
+
+    #   and then swap
+    mkdir /hive/data/genomes/falPer1/bed/blastz.strCam0.swap
+    cd /hive/data/genomes/falPer1/bed/blastz.strCam0.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/strCam0/bed/lastzFalPer1.2013-11-06/DEF \
+        -swap \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+
+    # real    51m54.249s
+    cat fb.falPer1.chainStrCam0Link.txt
+    # 973284248 bases of 1153404357 (84.384%) in intersection
+
+    cd /hive/data/genomes/falPer1/bed
+    ln -s blastz.strCam0.swap lastz.strCam0
+
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        falPer1 strCam0 > rbest.log 2>&1
+    #  real    34m45.214s
+
+############################################################################

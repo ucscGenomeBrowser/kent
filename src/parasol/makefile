@@ -1,3 +1,4 @@
+include ../inc/localEnvironment.mk
 
 USE_DIRS = \
 	gensub2 \

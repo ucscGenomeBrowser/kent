@@ -405,7 +405,7 @@ fieldCt = chopLine(cloneString(setting), fields);
 for (i = 0; i < fieldCt; i += 3)
     {
     wigTable = fields[i];
-    if (hTableExists(db, wigTable));
+    if (hTableExists(db, wigTable))
         {
         AllocVar(wig);
         wig->table = cloneString(wigTable);

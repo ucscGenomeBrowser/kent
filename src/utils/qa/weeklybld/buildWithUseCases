@@ -1,0 +1,109 @@
+#!/bin/csh
+
+# Run from cron as:
+#   $HOME/bin/scripts/buildWithUseCases $HOME/kent/src alpha >& $HOME/kent/buildWithUse.log
+# or from bash command line:
+#   $HOME/bin/scripts/buildWithUseCases $HOME/kent/src > $HOME/kent/buildWithUse.log 2>&1
+
+echo
+echo '***' Starting ${0} script on `date`
+echo
+echo '***' uptime
+uptime
+echo
+echo '***' ps -afe
+ps -afe
+echo
+echo '***' df
+df
+echo
+
+set path = ($HOME/bin/$MACHTYPE $path)
+
+unsetenv MAKE
+
+echo '***' Finished environment setting on `date`
+echo
+echo '***' printenv
+printenv
+echo
+echo '***' Path is set to $path
+echo
+
+set targetDir = $HOME/kent/src
+if ("$1" != "") then
+  set targetDir = ${1}
+  shift argv
+endif
+cd ${targetDir}
+
+echo '***' Current directory is `pwd`
+echo '***' Argv = $argv
+
+set kentRoot = `pwd | perl -wpe 'chomp; s@/$@@; while ($_ ne "" && $_ !~ m@/kent\w*$@) {s@/\w+$@@;}'`
+if ("X$kentRoot" != "X") then
+  echo '***' Checking for DOS EOL in $kentRoot on `date`
+  $kentRoot/build/dosEolnCheck $kentRoot
+  echo '***' Done checking for DOS EOL on `date`
+else
+  echo `pwd` does not look like a kent tree dir
+endif
+
+echo
+echo '***' Making with USE option combinations:
+echo
+echo
+
+# Each case will be tried and may fail.
+# An early failure must not interfere with the rest of the trial
+# argument order:                            USE_BAM
+#                                              USE_SSL
+#                                                USE_TABIX
+#                                                  KNETFILE_HOOKS
+#                                                    USE_HAL
+rm -f $targetDir/buildWithUse.log >& /dev/null
+
+## these tests are useless since the output is never examined
+
+## $HOME/bin/scripts/buildOneUseCase $targetDir 0 0 0 0 $argv >>& $targetDir/buildWithUse.log
+## $HOME/bin/scripts/buildOneUseCase $targetDir 1 0 0 0 $argv >>& $targetDir/buildWithUse.log 
+## $HOME/bin/scripts/buildOneUseCase $targetDir 0 1 0 0 $argv >>& $targetDir/buildWithUse.log 
+## $HOME/bin/scripts/buildOneUseCase $targetDir 0 0 1 1 $argv >>& $targetDir/buildWithUse.log 
+## $HOME/bin/scripts/buildOneUseCase $targetDir 1 1 0 0 $argv >>& $targetDir/buildWithUse.log 
+## $HOME/bin/scripts/buildOneUseCase $targetDir 1 0 1 1 $argv >>& $targetDir/buildWithUse.log 
+## $HOME/bin/scripts/buildOneUseCase $targetDir 0 1 1 1 $argv >>& $targetDir/buildWithUse.log
+
+$HOME/bin/scripts/buildOneUseCase $targetDir 1 1 1 1 0 $argv >> $targetDir/buildWithUse.log
+
+# The last case is the desired outcome.  Errors stop the build and are emailed by cron. 
+$HOME/bin/scripts/buildOneUseCase $targetDir 1 1 1 1 1 $argv >> $targetDir/buildWithUse.log
+set ret = $status
+echo "========================== cat buildWithUse.log ======================="
+echo "targetDir: $targetDir"
+# Make sure the build with use case logs are seen.
+cat $targetDir/buildWithUse.log
+echo "============= end of buildWithUse.log ret code: $ret =================="
+# If the target build failed then be vocal (!0 return triggers mail from cron)
+if ($ret) exit $ret
+
+echo
+echo '***' Entering make tags on `date`
+make tags
+echo '***' Done with make tags
+
+echo
+echo '***' Entering make test on `date`
+make -k test
+echo '***' Done with make test
+if ($status) exit $status
+
+# It would be good to look for errors in the use cases.
+echo
+set wc = `grep "*\*\* ERROR stopped" $targetDir/buildWithUse.log | wc -w`
+if ( "$wc" != "0" ) then
+    echo "*** Nightly build completed with ERRORs in at least one USE case." > /dev/stderr
+    echo "Details found in: $targetDir/buildWithUse.log" > /dev/stderr
+    exit -1
+endif
+echo "*** Nightly build completed successfully."
+exit 0

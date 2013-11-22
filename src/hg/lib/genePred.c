@@ -1602,7 +1602,7 @@ int gpSize = 0;
 int i = 0;
 int startDist = 0, endDist = 0;
 int blockSize = 0;
-if(gp->exonCount < 2)
+if(gp->exonCount < 2 || gp->cdsStart == gp->cdsEnd)
     return FALSE;
 for(i = 0; i < gp->exonCount; i++)
     {
@@ -1628,7 +1628,7 @@ if(sameString(gp->strand, "+"))
 else if(sameString(gp->strand, "-"))
     {
     blockSize = gp->exonEnds[0] - gp->exonStarts[0];
-    return startDist > (gp->exonEnds[1] + 50);
+    return startDist > (blockSize + 50);
     }
 else 
     errAbort("genePredNmdsTarget() - Don't recognize strand: %s\n", gp->strand);

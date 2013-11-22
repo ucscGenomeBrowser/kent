@@ -1036,7 +1036,7 @@ if (isNotEmpty(setting))
 	gotIt = TRUE;
     else if (! sameString(setting, "none"))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
-		 "must be one of {none,all,given,genbank,table}.",
+		 "must be one of {none, all, given, genbank, table}.",
 		 tdb->track, BASE_COLOR_USE_CDS, setting);
     }
 else if (startsWith("genePred", tdb->type))
@@ -1054,12 +1054,13 @@ if (isNotEmpty(setting))
     if (sameString(setting, "genbank") || sameString(setting, "seq") ||
 	sameString(setting, "ss") || startsWith("extFile", setting) ||
 	sameString(setting, "hgPcrResult") || sameString(setting, "nameIsSequence") ||
-	sameString(setting, "seq1Seq2") || sameString(setting, "lfExtra"))
+	sameString(setting, "seq1Seq2") || sameString(setting, "lfExtra") ||
+	sameString(setting, "lrg") || startsWith("table ", setting))
 	gotIt = TRUE;
     else if (differentString(setting, "none"))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
-		 "must be one of {none,genbank,seq,ss,extFile,nameIsSequence,seq1Seq2,"
-		 "hgPcrResult,lfExtra}.",
+		 "must be one of {none, genbank, seq, ss, extFile, nameIsSequence, seq1Seq2,"
+		 "hgPcrResult, lfExtra, lrg, table <em>table</em>}.",
 		 tdb->track, BASE_COLOR_USE_SEQUENCE, setting);
     }
 return gotIt;
@@ -1153,7 +1154,8 @@ return alreadySet;
 static boolean indelAppropriate(struct trackDb *tdb)
 /* Return true if it makes sense to offer indel display options for tdb. */
 {
-return (tdb && (startsWith("psl", tdb->type) || sameString("bam", tdb->type)) &&
+return (tdb && (startsWith("psl", tdb->type) || sameString("bam", tdb->type) ||
+		sameString("lrg", tdb->track)) &&
         (cfgOptionDefault("browser.indelOptions", NULL) != NULL));
 }
 
@@ -1197,7 +1199,9 @@ void indelEnabled(struct cart *cart, struct trackDb *tdb, float basesPerPixel,
 indelEnabledByName(cart,tdb,tdb->track,basesPerPixel,retDoubleInsert,retQueryInsert,retPolyA);
 }
 
-static void indelShowOptionsWithName(struct cart *cart, struct trackDb *tdb,char *name)
+static void indelShowOptionsWithNameExt(struct cart *cart, struct trackDb *tdb, char *name,
+					char *queryTerm,
+					boolean includeDoubleInsert, boolean includePolyA)
 /* Make HTML inputs for indel display options if any are applicable. */
 {
 if (indelAppropriate(tdb))
@@ -1208,27 +1212,38 @@ if (indelAppropriate(tdb))
     printf("<TABLE><TR><TD colspan=2><B>Alignment Gap/Insertion Display Options</B>");
     printf("&nbsp;<A HREF=\"%s\">Help on display options</A>\n<TR valign='top'><TD>",
            INDEL_HELP_PAGE);
-    safef(var, sizeof(var), "%s.%s", name, INDEL_DOUBLE_INSERT);
-    cgiMakeCheckBox(var, showDoubleInsert);
-    printf("</TD><TD>Draw double horizontal lines when both genome and query have "
-           "an insertion</TD></TR>\n<TR valign='top'><TD>");
+    if (includeDoubleInsert)
+	{
+	safef(var, sizeof(var), "%s.%s", name, INDEL_DOUBLE_INSERT);
+	cgiMakeCheckBox(var, showDoubleInsert);
+	printf("</TD><TD>Draw double horizontal lines when both genome and %s have "
+	       "an insertion</TD></TR>\n<TR valign='top'><TD>", queryTerm);
+	}
     safef(var, sizeof(var), "%s.%s", name, INDEL_QUERY_INSERT);
     cgiMakeCheckBox(var, showQueryInsert);
     printf("</TD><TD>Draw a vertical purple line for an insertion at the beginning or "
-           "end of the <BR>query, orange for insertion in the middle of the query</TD></TR>\n"
-           "<TR valign='top'><TD>");
-    safef(var, sizeof(var), "%s.%s", name, INDEL_POLY_A);
-    /* We can highlight valid polyA's only if we have query sequence --
-     * so indelPolyA code piggiebacks on baseColor code: */
-    if (baseColorGotSequence(tdb))
-        {
-        cgiMakeCheckBox(var, showPolyA);
-        printf("</TD><TD>Draw a vertical green line where query has a polyA tail "
-               "insertion</TD></TR>\n");
-        }
-
+	   "end of the <BR>%s, orange for insertion in the middle of the %s</TD></TR>\n"
+	   "<TR valign='top'><TD>", queryTerm, queryTerm);
+    if (includePolyA)
+	{
+	safef(var, sizeof(var), "%s.%s", name, INDEL_POLY_A);
+	/* We can highlight valid polyA's only if we have query sequence --
+	 * so indelPolyA code piggiebacks on baseColor code: */
+	if (baseColorGotSequence(tdb))
+	    {
+	    cgiMakeCheckBox(var, showPolyA);
+	    printf("</TD><TD>Draw a vertical green line where %s has a polyA tail "
+		   "insertion</TD></TR>\n", queryTerm);
+	    }
+	}
     printf("</TABLE>\n");
     }
+}
+
+static void indelShowOptionsWithName(struct cart *cart, struct trackDb *tdb, char *name)
+/* Make HTML inputs for indel display options if any are applicable. */
+{
+indelShowOptionsWithNameExt(cart, tdb, name, "query", TRUE, TRUE);
 }
 
 void indelShowOptions(struct cart *cart, struct trackDb *tdb)
@@ -6360,6 +6375,28 @@ if (!boxed && fileExists(hHelpFile("hgBamTrackHelp")))
 cfgEndBox(boxed);
 }
 #endif//def USE_BAM
+
+void lrgCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
+/* LRG: Locus Reference Genomic sequences mapped to assembly. */
+{
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
+baseColorDrawOptDropDown(cart, tdb);
+indelShowOptionsWithNameExt(cart, tdb, name, "LRG sequence", FALSE, FALSE);
+cfgEndBox(boxed);
+}
+
+void lrgTranscriptAliCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title,
+			   boolean boxed)
+/* LRG Transcripts: Locus Reference Genomic transcript sequences mapped to assembly. */
+{
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
+baseColorDrawOptDropDown(cart, tdb);
+indelShowOptionsWithNameExt(cart, tdb, name, "LRG transcript sequence", FALSE, FALSE);
+cfgEndBox(boxed);
+}
+
 
 struct trackDb *rFindView(struct trackDb *forest, char *view)
 // Return the trackDb on the list that matches the view tag. Prefers ancestors before decendents

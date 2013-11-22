@@ -1003,7 +1003,7 @@ return findHeadPolyTMaybeMask(dna, size, TRUE, FALSE);
 }
 
 boolean isDna(char *poly, int size)
-/* Return TRUE if letters in poly are at least 90% ACGTU */
+/* Return TRUE if letters in poly are at least 90% ACGTNU- */
 {
 int i;
 int dnaCount = 0;
@@ -1011,26 +1011,31 @@ int dnaCount = 0;
 dnaUtilOpen();
 for (i=0; i<size; ++i)
     {
-    if (ntChars[(int)poly[i]]) 
+    if (ntChars[(int)poly[i]])
 	dnaCount += 1;
     }
 return (dnaCount >= round(0.9 * size));
 }
 
-boolean isAllDna(char *poly, int size)
-/* Return TRUE if letters in poly are 100% ACGTU */
+boolean isAllNt(char *seq, int size)
+/* Return TRUE if all letters in seq are ACGTNU-. */
 {
 int i;
-
-if (size <= 1)
-    return FALSE;
 dnaUtilOpen();
 for (i=0; i<size-1; ++i)
     {
-    if (ntChars[(int)poly[i]] == 0) 
+    if (ntChars[(int)seq[i]] == 0)
 	return FALSE;
     }
 return TRUE;
+}
+
+boolean isAllDna(char *poly, int size)
+/* Return TRUE if size is great than 1 and letters in poly are 100% ACGTNU- */
+{
+if (size <= 1)
+    return FALSE;
+return isAllNt(poly, size);
 }
 
 

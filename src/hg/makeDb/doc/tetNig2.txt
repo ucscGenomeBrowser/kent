@@ -28,7 +28,7 @@ do
 done
 
 for F in Tetraodon_mRNAs_v8.2.fa Tetraodon_peptide_v8.2.fa \
-	Tetraodon_peptide_v8.2.fa.compo annotation_tetraodon_v8.2.gff         
+	Tetraodon_peptide_v8.2.fa.compo annotation_tetraodon_v8.2.gff
 do
     wget --timestamping "${D}/annotation_v8.2/${F}"
 done
@@ -97,7 +97,7 @@ taxId 99883
     touch /hive/data/genomes/tetNig2/TrfPart/009/009.lst.bed
     doSimpleRepeat.pl -workhorse=hgwdev -continue=filter \
 	-buildDir=`pwd` tetNig2 > filter.log 2>&1 &
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #	11549259 bases of 332311746 (3.475%) in intersection
 
 ########################################################################
@@ -209,7 +209,7 @@ close (FH);
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2009-08-06 - Hiram)
-    # Use -repMatch=130 (based on size -- for human we use 1024, and 
+    # Use -repMatch=130 (based on size -- for human we use 1024, and
     # Tetraodon size is ~12.7% of human judging by gapless tetNig2 vs.
     #	hg18 genome size from featureBits.
     # genome.  Bump that up a bit to be more conservative.
@@ -285,7 +285,7 @@ Thu Aug  6 15:58:09 PDT 2009
 
     awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
     twoBitToFa -seqList=less1meg.lst  tetNig2.2bit temp.fa
-    faSplit about temp.fa 1000000 blastDb/y 
+    faSplit about temp.fa 1000000 blastDb/y
     rm temp.fa less1meg.lst
 
     cd blastDb
@@ -312,9 +312,9 @@ Thu Aug  6 15:58:09 PDT 2009
    mkdir -p kgfa
    split -l 145 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
    done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -352,20 +352,20 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/tetNig2/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
-    exit 
-    
+    exit
+
     ssh swarm
     cd /cluster/data/tetNig2/bed/tblastn.hg18KG
     gensub2 query.lst kg.lst blastGsub blastSpec
@@ -421,13 +421,13 @@ chainOne $(path1)
     pslCheck blastHg18KG.psl
 # checked: 38517 failed: 0 errors: 0
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/tetNig2/bed/tblastn.hg18KG
     hgLoadPsl tetNig2 blastHg18KG.psl
 
     # check coverage
-    featureBits tetNig2 blastHg18KG 
+    featureBits tetNig2 blastHg18KG
 # 18646943 bases of 332311746 (5.611%) in intersection
 
     featureBits tetNig2 blastHg18KG ensGene  -enrichment
@@ -493,7 +493,7 @@ tetNig2.ooc = /scratch/data/tetNig2/tetNig2.11.ooc
 tetNig2.lift = /scratch/data/tetNig2/tetNig2.contigs.lift
 tetNig2.align.unplacedChroms = chr*_random
 tetNig2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
-tetNig2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}  
+tetNig2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
 tetNig2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
 tetNig2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
 tetNig2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
@@ -533,7 +533,7 @@ tetNig2.refseq.mrna.native.load = no
 # lastz swap Human hg19 (DONE - 2009-08-11 - Hiram)
     #	result of human alignment  (date stamp on directory is incorrect)
     cd /hive/data/genomes/hg19/bed/lastzTetNig2.2009-10-10
-    cat fb.hg19.chainTetNig2Link.txt 
+    cat fb.hg19.chainTetNig2Link.txt
     #	49611132 bases of 2897316137 (1.712%) in intersection
 
     #	running the swap
@@ -554,7 +554,7 @@ tetNig2.refseq.mrna.native.load = no
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > load.log 2>&1 &
     #	real    4m7.559s
-    cat fb.tetNig2.chainHg19Link.txt 
+    cat fb.tetNig2.chainHg19Link.txt
     #	42910930 bases of 302314788 (14.194%) in intersection
 
 ##############################################################################
@@ -593,7 +593,7 @@ tetNig2.refseq.mrna.native.load = no
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    33m6.310s
-    cat fb.tetNig2.chainGasAcu1Link.txt 
+    cat fb.tetNig2.chainGasAcu1Link.txt
     #	123285586 bases of 302314788 (40.781%) in intersection
 
 #########################################################################
@@ -643,7 +643,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    754m56.563s
-    cat fb.tetNig2.chainDanRer6Link.txt 
+    cat fb.tetNig2.chainDanRer6Link.txt
     #	70626082 bases of 302314788 (23.362%) in intersection
 
     #	and the swap to danRer6:
@@ -656,7 +656,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    26m40.310s
-    cat fb.danRer6.chainTetNig2Link.txt 
+    cat fb.danRer6.chainTetNig2Link.txt
     #	93349443 bases of 1506896106 (6.195%) in intersection
 
 #########################################################################
@@ -716,7 +716,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> cat.log 2>&1 &
     #	real    63m23.911s
-    cat fb.tetNig2.chainFr2Link.txt 
+    cat fb.tetNig2.chainFr2Link.txt
     #	243965150 bases of 302314788 (80.699%) in intersection
 
     #	and the swap to fr2:
@@ -729,14 +729,14 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> swap.log 2>&1 &
     #	real    21m56.576s
-    cat fb.fr2.chainTetNig2Link.txt 
+    cat fb.fr2.chainTetNig2Link.txt
     #	248984008 bases of 393312790 (63.304%) in intersection
 
 #########################################################################
 # BLASTZ/CHAIN/NET mm9/Mouse swap (DONE - 2009-09-15 - Hiram)
     #	the original alignment to the mouse sequence
     cd /hive/data/genomes/mm9/bed/lastzTetNig2.2009-09-15
-    cat fb.mm9.chainTetNig2Link.txt 
+    cat fb.mm9.chainTetNig2Link.txt
     #	45642112 bases of 2620346127 (1.742%) in intersection
 
     #	running the swap to here, tetNig2:
@@ -749,7 +749,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    10m34.797s
-    cat fb.tetNig2.chainMm9Link.txt 
+    cat fb.tetNig2.chainMm9Link.txt
     #	41176381 bases of 302314788 (13.620%) in intersection
 
 #########################################################################
@@ -811,3 +811,25 @@ Read 90337 transcripts in 284179 lines in 1 files
     #	22165067 bases of 302314788 (7.332%) in intersection
 
 ############################################################################
+# genscan - (DONE - 2013-11-12 - Hiram)
+    mkdir /hive/data/genomes/tetNig2/bed/genscan
+    cd /hive/data/genomes/tetNig2/bed/genscan
+    time doGenscan.pl tetNig2 > do.log 2>&1
+    #  real    143m25.970s
+    # one broken job:
+./lastRunGsBig.csh chrUn_random 000 gtf/000/chrUn_random.gtf pep/000/chrUn_random.pep subopt/000/chrUn_random.bed
+    # real    4m52.715s
+    # still broken, trying 18000000 which worked:
+    #  real    49m9.011s
+
+    # run 'para time > run.time' on ku, then continuing:
+    time doGenscan.pl -continue=makeBed tetNig2 > makeBed.log 2>&1
+    # real    2m36.107s
+
+    cat fb.tetNig2.genscan.txt
+    #   22034849 bases of 302314788 (7.289%) in intersection
+
+    cat fb.tetNig2.genscanSubopt.txt
+    #   4350944 bases of 302314788 (1.439%) in intersection
+
+#########################################################################

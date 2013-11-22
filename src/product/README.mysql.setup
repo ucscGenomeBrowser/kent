@@ -158,6 +158,7 @@ db.user=browser
 db.password=genome
 central.user=browser
 central.password=genome
+central.db=hgcentral
 
 To test this access with your ~/.hg.conf file in place:
 

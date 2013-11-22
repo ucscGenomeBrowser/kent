@@ -263,6 +263,23 @@ md5ForFile(fileName,md5);
 return md5ToHex(md5);
 }
 
+void md5ForString(char *string, unsigned char md5[16])
+/* Compute md5 sum on string. */
+{
+struct md5_context ctx;
+md5_starts(&ctx);
+md5_update(&ctx, (uint8 *)string, strlen(string));
+md5_finish(&ctx, md5);
+}
+
+char *md5HexForString(char *string)
+/* Return hex string for md5sum of string. */
+{
+unsigned char md5[16];
+md5ForString(string, md5);
+return md5ToHex(md5);
+}
+
 struct hash *md5FileHash(char *fileName)
 /* Read md5sum file and return a hash keyed by file names with md5sum values. */
 {

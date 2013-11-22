@@ -11,8 +11,8 @@
 # file template copied from susScr2.txt
 
 
-#  Myotis lucifugus 
-# (NCBI Project ID: 16951, Accession: GCA_000005525.1) 
+#  Myotis lucifugus
+# (NCBI Project ID: 16951, Accession: GCA_000005525.1)
 #   by Broad Institute of MIT and Harvard
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Myotis_lucifugus/Myoluc2.0/
 
@@ -27,12 +27,12 @@
 "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Myotis_lucifugus/Myoluc2.0/*"
     # FINISHED --2010-10-22 09:11:24--
     # Downloaded: 12 files, 802M in 18m 12s (752 KB/s)
-    # Read ASSEMBLY_INFO 
+    # Read ASSEMBLY_INFO
 
     # stay at genbank directory
-    # Process the unplaced scaffolds, filter out the  
+    # Process the unplaced scaffolds, filter out the
     #   The ".1" at the end (i.e. ABQO010000034.1) of contig name, since
-    #   MySQL does not allow "." as part of the table name and 
+    #   MySQL does not allow "." as part of the table name and
     #   will casue problems in genbank task step later
 
     export S=Primary_Assembly/unplaced_scaffolds
@@ -89,7 +89,7 @@ taxId 59463
     time makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev myoLuc2.config.ra \
 	> makeGenomeDb.log 2>&1 &
     # real    15m33.626s
-    
+
     # add the trackDb entries to the source tree, and the 2bit link:
     ln -s `pwd`/myoLuc2.unmasked.2bit /gbdb/myoLuc2/myoLuc2.2bit
     #  Per instructions in makeGenomeDb.log:
@@ -111,7 +111,7 @@ taxId 59463
 	-workhorse=hgwdev -bigClusterHub=swarm -noSplit myoLuc2 > do.log 2>&1 &
     #   real    253m45.336s
     cat faSize.rmsk.txt
-    # 2034575300 bases (68155432 N's 1966419868 real 1304219212 upper 
+    # 2034575300 bases (68155432 N's 1966419868 real 1304219212 upper
     # 662200656 lower) in 11654 sequences in 1 files
     # %32.55 masked total, %33.68 masked real
 
@@ -122,7 +122,7 @@ taxId 59463
 
     time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-bigClusterHub=swarm -smallClusterHub=swarm myoLuc2 > do.log 2>&1 &
-    # real    9m30.973s    
+    # real    9m30.973s
     cat fb.simpleRepeat
     # 43294476 bases of 1966419868 (2.202%) in intersection
     #	add to the repeatMasker
@@ -131,7 +131,7 @@ taxId 59463
     #	safe to ignore warnings about >=13 fields
     twoBitToFa myoLuc2.2bit stdout | faSize stdin > myoLuc2.2bit.faSize.txt
     cat myoLuc2.2bit.faSize.txt
-    # 2034575300 bases (68155432 N's 1966419868 real 1303520693 upper 
+    # 2034575300 bases (68155432 N's 1966419868 real 1303520693 upper
     # 662899175 lower) in 11654 sequences in 1 files
     # %32.58 masked total, %33.71 masked real
 
@@ -153,7 +153,7 @@ taxId 59463
     # 1966419868 bases of 1966419868 (100.000%) in intersection
     featureBits myoLuc2 allGaps.bed notGap.bed -bed=new.gaps.bed
     #   0 bases of 1966419868 (0.000%) in intersection
-    #   they are all in the AGP file 
+    #   they are all in the AGP file
     #	what is the highest index in the existing gap table:
     hgsql -N -e "select ix from gap;" myoLuc2 | sort -n | tail -1
     #	2378
@@ -185,7 +185,7 @@ XXX - running - Fri Jun 21 16:03:53 PDT 2013
 
 ########################################################################
 # Create kluster run files (DONE - 2010-11-04 - Chin)
-    # numerator is myoLuc2 gapless bases "real" as reported by: 
+    # numerator is myoLuc2 gapless bases "real" as reported by:
     featureBits -noRandom -noHap myoLuc2 gap
     # 68155432 bases of 1966419868 (3.466%) in intersection
 
@@ -215,7 +215,7 @@ XXX - running - Fri Jun 21 16:03:53 PDT 2013
     #  bridge
     #  yes
     # all gap are bridged, done
-    
+
     # ask cluster-admin to copy (evry time if any file chsnged)
     #    /hive/data/staging/data/myoLuc2 directory to cluster nodes
     #    /scratch/data/myoLuc2
@@ -276,7 +276,7 @@ myoLuc2.genbank.est.native.loadDesc = no
 
     cd /cluster/data/genbank
      time nice -n +19 ./bin/gbAlignStep -initial myoLuc2 &
-    #   logFile: var/build/logs/2010.11.04-14:14:12.myoLuc2.initalign.log 
+    #   logFile: var/build/logs/2010.11.04-14:14:12.myoLuc2.initalign.log
     #   real    185m34.759s
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/data/aligned/genbank.176.0/myoLuc2
@@ -310,7 +310,7 @@ myoLuc2.genbank.est.native.loadDesc = no
 #  Institute. .
 #  The sequence downloaded from ncbi is Myoluc2.0 dated 2010-07-21 by Broad
 #  Institute.
-#  We need to wait for the newer release of Ensemble Genes.   
+#  We need to wait for the newer release of Ensemble Genes.
 #########################################################################
 # reset default position to RHO location as result from RHO gene search
 #	(DONE 2011-02-15 - Chin)
@@ -339,7 +339,7 @@ myoLuc2.genbank.est.native.loadDesc = no
     ln -s hg3rdParty/cpgIslands/cpglh.exe
     mkdir -p hardMaskedFa
     cut -f1 ../../chrom.sizes | while read C
-do  
+do
     echo ${C}
     twoBitToFa ../../myoLuc2.2bit:$C stdout \
         | maskOutFa stdin hard hardMaskedFa/${C}.fa
@@ -349,13 +349,13 @@ done
     cd /hive/data/genomes/myoLuc2/bed/cpgIsland
     mkdir results
     cut -f1 ../../chrom.sizes > chr.list
-    cat << '_EOF_' > template 
+    cat << '_EOF_' > template
 #LOOP
 ./runOne $(root1) {check out exists results/$(root1).cpg}
-#ENDLOOP 
+#ENDLOOP
 '_EOF_'
     # << happy emacs
-    
+
     #   the faCount business is to make sure there is enough sequence to
     #   work with in the fasta.  cpglh.exe does not like files with too
     #   many
@@ -435,7 +435,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # WARNING: myoLuc2 does not have seq
     # WARNING: myoLuc2 does not have extFile
     # WARNING: myoLuc2 does not have estOrientInfo
-    # 
+    #
     # WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
     # supporting and genbank tables) which tracks to assign these tables to:
     #   tableList
@@ -463,7 +463,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
     awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
     twoBitToFa -seqList=less1meg.lst  myoLuc2.2bit temp.fa
-    faSplit about temp.fa 1000000 blastDb/y 
+    faSplit about temp.fa 1000000 blastDb/y
     rm temp.fa less1meg.lst
 
     cd blastDb
@@ -488,9 +488,9 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
    mkdir -p kgfa
    split -l 371 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
    done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -528,20 +528,20 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/myoLuc2/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
-    exit 
-    
+    exit
+
     ssh swarm
     cd /cluster/data/myoLuc2/bed/tblastn.hg18KG
     gensub2 query.lst kg.lst blastGsub blastSpec
@@ -598,13 +598,13 @@ chainOne $(path1)
     pslCheck blastHg18KG.psl
 # checked: 70178 failed: 0 errors: 0
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/myoLuc2/bed/tblastn.hg18KG
     hgLoadPsl myoLuc2 blastHg18KG.psl
 
     # check coverage
-    featureBits myoLuc2 blastHg18KG 
+    featureBits myoLuc2 blastHg18KG
 # 32772100 bases of 1966419868 (1.667%) in intersection
 
     featureBits myoLuc2 blastHg18KG xenoRefGene  -enrichment
@@ -649,3 +649,29 @@ db myoLuc2
     # verify the track link to INSDC functions
 
 ##############################################################################
+# genscan - (DONE - 2013-11-12 - Hiram)
+    mkdir /hive/data/genomes/myoLuc2/bed/genscan
+    cd /hive/data/genomes/myoLuc2/bed/genscan
+    time doGenscan.pl myoLuc2 > do.log 2>&1
+    #  real    22m32.089s
+    # 7 jobs broken, trying 2000000 window size
+./lastRunGsBig.csh GL429777 000 gtf/000/GL429777.gtf pep/000/GL429777.pep subopt/000/GL429777.bed
+./lastRunGsBig.csh GL429831 000 gtf/000/GL429831.gtf pep/000/GL429831.pep subopt/000/GL429831.bed
+./lastRunGsBig.csh GL429775 000 gtf/000/GL429775.gtf pep/000/GL429775.pep subopt/000/GL429775.bed
+./lastRunGsBig.csh GL429786 000 gtf/000/GL429786.gtf pep/000/GL429786.pep subopt/000/GL429786.bed
+./lastRunGsBig.csh GL429768 000 gtf/000/GL429768.gtf pep/000/GL429768.pep subopt/000/GL429768.bed
+./lastRunGsBig.csh GL429905 000 gtf/000/GL429905.gtf pep/000/GL429905.pep subopt/000/GL429905.bed
+./lastRunGsBig.csh GL429863 000 gtf/000/GL429863.gtf pep/000/GL429863.pep subopt/000/GL429863.bed
+    # real    16m15.818s
+
+    # run 'para time > run.time' on ku, then continuing:
+    time doGenscan.pl -continue=makeBed myoLuc2 > makeBed.log 2>&1
+    #  real    6m23.659s
+
+    cat fb.myoLuc2.genscan.txt
+    #   65374897 bases of 1966419868 (3.325%) in intersection
+
+    cat fb.myoLuc2.genscanSubopt.txt
+    #   62128533 bases of 1966419868 (3.159%) in intersection
+
+#########################################################################

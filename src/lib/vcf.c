@@ -190,19 +190,19 @@ static void *vcfFileAlloc(struct vcfFile *vcff, size_t size)
 return lmAlloc( vcfFileLm(vcff), size);
 }
 
-static inline char *vcfFileCloneStrZ(struct vcfFile *vcff, char *str, size_t size)
+INLINE char *vcfFileCloneStrZ(struct vcfFile *vcff, char *str, size_t size)
 /* Use vcff's local mem to allocate memory for a string and copy it. */
 {
 return lmCloneStringZ( vcfFileLm(vcff), str, size);
 }
 
-static inline char *vcfFileCloneStr(struct vcfFile *vcff, char *str)
+INLINE char *vcfFileCloneStr(struct vcfFile *vcff, char *str)
 /* Use vcff's local mem to allocate memory for a string and copy it. */
 {
 return vcfFileCloneStrZ(vcff, str, strlen(str));
 }
 
-static inline char *vcfFileCloneSubstr(struct vcfFile *vcff, char *line, regmatch_t substr)
+INLINE char *vcfFileCloneSubstr(struct vcfFile *vcff, char *line, regmatch_t substr)
 /* Allocate memory for and copy a substring of line. */
 {
 return vcfFileCloneStrZ(vcff, line+substr.rm_so, (substr.rm_eo - substr.rm_so));
@@ -410,7 +410,7 @@ if (wordCount > 8)
     }
 }
 
-static struct vcfFile *vcfFileNew()
+struct vcfFile *vcfFileNew()
 /* Return a new, empty vcfFile object. */
 {
 struct vcfFile *vcff = NULL;
@@ -634,8 +634,11 @@ for (i = 0;  i < record->infoCount;  i++)
 	enum vcfInfoType type = typeForInfoKey(vcff, el->key);
 	if (type != vcfInfoFlag)
 	    {
-	    vcfFileErr(vcff, "Missing = after key in INFO element: \"%s\" (type=%d)",
-		       elStr, type);
+	    struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
+	    // Complain only if we are expecting a particular number of values for this keyword:
+	    if (def != NULL && def->fieldCount >= 0)
+		vcfFileErr(vcff, "Missing = after key in INFO element: \"%s\" (type=%d)",
+			   elStr, type);
 	    if (type == vcfInfoString)
 		{
 		el->values = vcfFileAlloc(vcff, sizeof(union vcfDatum));
@@ -697,10 +700,43 @@ lineFileExpectWords(vcff->lf, expected, wordCount);
 return vcfRecordFromRow(vcff, words);
 }
 
+static boolean allelesHavePaddingBase(char **alleles, int alleleCount)
+/* Examine alleles to see if they either a) all start with the same base or
+ * b) include a symbolic or 0-length allele.  In either of those cases, there
+ * must be an initial padding base that we'll need to trim from non-symbolic
+ * alleles. */
+{
+boolean hasPaddingBase = TRUE;
+char firstBase = '\0';
+if (isAllNt(alleles[0], strlen(alleles[0])))
+    firstBase = alleles[0][0];
+int i;
+for (i = 1;  i < alleleCount;  i++)
+    {
+    if (isAllNt(alleles[i], strlen(alleles[i])))
+	{
+	if (firstBase == '\0')
+	    firstBase = alleles[i][0];
+	if (alleles[i][0] != firstBase)
+	    // Different first base implies unpadded alleles.
+	    hasPaddingBase = FALSE;
+	}
+    else
+	{
+	// Symbolic ALT allele: REF must have the padding base.
+	hasPaddingBase = TRUE;
+	break;
+	}
+    }
+return hasPaddingBase;
+}
+
 unsigned int vcfRecordTrimIndelLeftBase(struct vcfRecord *rec)
 /* For indels, VCF includes the left neighboring base; for example, if the alleles are
  * AA/- following a G base, then the VCF record will start one base to the left and have
- * "GAA" and "G" as the alleles.  That is not nice for display for two reasons:
+ * "GAA" and "G" as the alleles.  Also, if any alt allele is symbolic (e.g. <DEL>) then
+ * the ref allele must have a padding base.
+ * That is not nice for display for two reasons:
  * 1. Indels appear one base wider than their dbSNP entries.
  * 2. In pgSnp display mode, the two alleles are always the same color.
  * However, for hgTracks' mapBox we need the correct chromStart for identifying the
@@ -710,24 +746,19 @@ unsigned int chromStartOrig = rec->chromStart;
 struct vcfFile *vcff = rec->file;
 if (rec->alleleCount > 1)
     {
-    boolean allSameFirstBase = TRUE;
-    char firstBase = rec->alleles[0][0];
-    int i;
-    for (i = 1;  i < rec->alleleCount;  i++)
-	if (rec->alleles[i][0] != firstBase)
-	    {
-	    allSameFirstBase = FALSE;
-	    break;
-	    }
-    if (allSameFirstBase)
+    boolean hasPaddingBase = allelesHavePaddingBase(rec->alleles, rec->alleleCount);
+    if (hasPaddingBase)
 	{
 	rec->chromStart++;
+	int i;
 	for (i = 0;  i < rec->alleleCount;  i++)
 	    {
 	    if (rec->alleles[i][1] == '\0')
 		rec->alleles[i] = vcfFilePooledStr(vcff, "-");
-	    else
+	    else if (isAllNt(rec->alleles[i], strlen(rec->alleles[i])))
 		rec->alleles[i] = vcfFilePooledStr(vcff, rec->alleles[i]+1);
+	    else // don't trim first character of symbolic allele
+		rec->alleles[i] = vcfFilePooledStr(vcff, rec->alleles[i]);
 	    }
 	}
     }
@@ -1091,43 +1122,45 @@ dyStringClear(dy);
 // VCF reference allele gets its own column:
 char *refAllele = words[3];
 char *altAlleles = words[4];
-// First determine whether there is an extra initial base that we need to skip:
-boolean allStartSame = TRUE;
-char *p;
-while ((p = strchr(altAlleles, ',')) != NULL)
-    {
-    if (altAlleles[0] != refAllele[0])
-	allStartSame = FALSE;
-    altAlleles = p+1;
-    }
-if (altAlleles[0] != refAllele[0])
-    allStartSame = FALSE;
-int offset = allStartSame ? 1 : 0;
+// Make a vcfRecord-like allele array (ref in [0], alts after) so we can check for padding base:
+int alCount = 1 + countChars(altAlleles, ',') + 1;
+char *alleles[alCount];
+alleles[0] = refAllele;
+dyStringAppend(dy, altAlleles);
+chopByChar(dy->string, ',', &(alleles[1]), alCount-1);
+boolean hasPaddingBase = allelesHavePaddingBase(alleles, alCount);
+int offset = hasPaddingBase ? 1 : 0;
+// Build a /-separated allele string, trimming first base if offset is 1:
+dyStringClear(dy);
 if (refAllele[offset] == '\0')
     dyStringAppendC(dy, '-');
 else
     dyStringAppend(dy, refAllele+offset);
-// VCF alternate alleles are comma-separated, make them /-separated:
-altAlleles = words[4];
 if (isNotEmpty(altAlleles) && differentString(altAlleles, "."))
     {
-    // Now construct the string:
+    // Read alleles from altAlleles because the contents of alleles[] are trashed
+    // by our reuse of dy.
+    char *p;
     while ((p = strchr(altAlleles, ',')) != NULL)
 	{
 	dyStringAppendC(dy, '/');
-	int len = p - altAlleles - offset;
-	if (len == 0 || startsWith("<DEL>", altAlleles+offset))
+	int len = p - altAlleles;
+	if (len-offset == 0)
 	    dyStringAppendC(dy, '-');
+	else if (isAllNt(altAlleles, len))
+	    dyStringAppendN(dy, altAlleles+offset, len-offset);
 	else
-	    dyStringAppendN(dy, altAlleles+offset, len);
+	    dyStringAppendN(dy, altAlleles, len);  // symbolic
 	altAlleles = p+1;
 	}
     dyStringAppendC(dy, '/');
-    int len = strlen(altAlleles) - offset;
-    if (len == 0 || startsWith("<DEL>", altAlleles+offset))
+    int len = strlen(altAlleles);
+    if (len-offset == 0)
 	dyStringAppendC(dy, '-');
+    else if (isAllNt(altAlleles, len))
+	dyStringAppendN(dy, altAlleles+offset, len-offset);
     else
-	dyStringAppendN(dy, altAlleles+offset, len);
+	dyStringAppendN(dy, altAlleles, len);  // symbolic
     }
 return dy->string;
 }

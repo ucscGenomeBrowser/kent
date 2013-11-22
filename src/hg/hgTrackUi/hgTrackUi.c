@@ -1997,6 +1997,10 @@ puts("&nbsp;<B>position</B>");
 void pubsUi(struct trackDb *tdb)
 /* UI for pubs match track */
 {
+// bing tracks need no config
+if (endsWith(tdb->track, "BingBlat"))
+    return;
+
 #define NUM_YEARS 15  // similar to google scholar, which goes back to 20 years
 
 #define PUBS_KEYWORDS_TAG "pubsFilterKeywords"
@@ -2746,6 +2750,10 @@ else if (sameString(track, "all_mrna")
      ||  sameString(track, "xenoMrna")
      ||  sameString(track, "xenoEst"))
     mrnaCfgUi(cart, tdb, tdb->track, NULL, boxed);
+else if (sameString(track, "lrg"))
+    lrgCfgUi(cart, tdb, tdb->track, NULL, boxed);
+else if (sameString(track, "lrgTranscriptAli"))
+    lrgTranscriptAliCfgUi(cart, tdb, tdb->track, NULL, boxed);
 else if (tdb->type != NULL)
     {   // NOTE for developers: please avoid special cases and use cfgTypeFromTdb//cfgByCfgType()
         //  When you do, then multi-view cfg and subtrack cfg will work.
