@@ -14,7 +14,7 @@ struct imageClone *imageCloneLoad(char **row)
  * from database.  Dispose of this with imageCloneFree(). */
 {
 struct imageClone *ret;
-int sizeOne;
+int sizeOne = 0;
 
 AllocVar(ret);
 ret->numGenbank = sqlSigned(row[7]);

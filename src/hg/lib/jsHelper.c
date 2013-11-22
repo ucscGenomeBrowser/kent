@@ -866,7 +866,7 @@ static struct jsonElement *jsonParseBoolean(char *str, int *posPtr)
 {
 struct jsonElement *ele = NULL;
 int i;
-for(i = 0; str[*posPtr + i] && isalpha(str[*posPtr + i]); i++);
+for(i = 0; str[*posPtr + i] && isalpha(str[*posPtr + i]); i++)
     ;
 char *val = cloneStringZ(str + *posPtr, i);
 if(sameString(val, "true"))

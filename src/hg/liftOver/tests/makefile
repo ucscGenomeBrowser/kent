@@ -13,7 +13,7 @@ bed12:	mkdirs
             /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain \
                 output/bed12.good.bed output/bed12.bad.bed 2> /dev/null
 	cat output/bed12.{good,bad}.bed | \
-                diff - expected/bed12.bed
+                diff - expected/bed12.bed 1>&2
 
 bed8:	mkdirs
 	${liftOver} \
@@ -21,7 +21,7 @@ bed8:	mkdirs
             /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain.gz \
                 output/bed8.good.bed output/bed8.bad.bed 2> /dev/null
 	cat output/bed8.{good,bad}.bed | \
-                diff - expected/bed8.bed
+                diff - expected/bed8.bed 1>&2
 
 bin:    mkdirs
 	${liftOver} -hasBin -bedPlus=6\
@@ -29,7 +29,7 @@ bin:    mkdirs
             /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
                 output/bin.good.bed output/bin.bad.bed 2> /dev/null
 	cat output/bin.{good,bad}.bed | \
-                diff - expected/bin.bed
+                diff - expected/bin.bed 1>&2
 
 bedPlus3:	mkdirs
 	${liftOver} -bedPlus=3 \
@@ -37,7 +37,7 @@ bedPlus3:	mkdirs
             /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
                 output/bedPlus3.good.bed output/bedPlus3.bad.bed 2> /dev/null
 	cat output/bedPlus3.{good,bad}.bed | \
-                diff - expected/bedPlus3.bed
+                diff - expected/bedPlus3.bed 1>&2
 
 simpleTest:     mkdirs
 	${liftOver} \
@@ -46,7 +46,7 @@ simpleTest:     mkdirs
                     output/mouseRegions.good.bed \
                     output/mouseRegions.bad.bed 2> /dev/null
 	cat output/mouseRegions.{good,bad}.bed | \
-                diff - expected/mouseRegions.bed
+                diff - expected/mouseRegions.bed 1>&2
 
 minus:	mkdirs
 	${liftOver} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
@@ -55,7 +55,7 @@ minus:	mkdirs
                     output/enr223.S.good.bed \
                     output/enr223.S.bad.bed 2> /dev/null
 	cat output/enr223.S.{good,bad}.bed | \
-                diff - expected/enr223.S.bed
+                diff - expected/enr223.S.bed 1>&2
 
 # test w/o multiple
 enm001:	mkdirs
@@ -64,7 +64,7 @@ enm001:	mkdirs
             /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr7.chain \
                 output/enm001.good.bed output/enm001.bad.bed 2> /dev/null
 	cat output/enm001.{good,bad}.bed | \
-                diff - expected/enm001.bed
+                diff - expected/enm001.bed 1>&2
 
 chuckTest:	mkdirs
 	${liftOver} \
@@ -72,7 +72,7 @@ chuckTest:	mkdirs
             /cluster/data/mm2/bed/liftOver/mm2.mm5.liftOver/over/chr19.chain \
                 output/chuckTest.good.bed output/chuckTest.bad.bed 2> /dev/null
 	cat output/chuckTest.{good,bad}.bed | \
-                diff - expected/chuckTest.bed
+                diff - expected/chuckTest.bed 1>&2
 
 chuckBigTest:	mkdirs
 	${liftOver} \
@@ -80,7 +80,7 @@ chuckBigTest:	mkdirs
             /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
                 output/chuckBigTest.good.bed output/chuckBigTest.bad.bed 2> /dev/null
 	cat output/chuckBigTest.{good,bad}.bed | \
-                diff - expected/chuckBigTest.bed
+                diff - expected/chuckBigTest.bed 1>&2
 
 # missing expected file
 m7rat:	mkdirs
@@ -91,7 +91,7 @@ m7rat:	mkdirs
 	${liftOverMerge} ${VERBOSE} -mergeGap=2000 \
                 output/m7rat.good.bed output/m7rat.merged.bed
 	cat output/m7rat.merged.bed | \
-                diff - expected/m7rat.bed
+                diff - expected/m7rat.bed 1>&2
 
 # problem with config setting needed to access chain table
 m4mouse:	mkdirs
@@ -100,7 +100,7 @@ m4mouse:	mkdirs
             /cluster/data/hg16/bed/blastz.mm5/axtChain/subset/chr22.chain \
                 output/m4mouse.good.bed output/m4mouse.bad.bed 2> /dev/null
 	cat output/m4mouse.{good,bad}.bed | \
-                diff - expected/m4mouse.bed
+                diff - expected/m4mouse.bed 1>&2
 
 # differs from expected -- it doesn't merge (this function done by
 # liftOverMerge now ?
@@ -111,7 +111,7 @@ enm006:	mkdirs
             /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chrX.chain \
                 output/enm006.good.bed output/enm006.bad.bed 2> /dev/null
 	cat output/enm006.{good,bad}.bed | \
-                diff - expected/enm006.bed
+                diff - expected/enm006.bed 1>&2
 
 # missing expected file
 enr112:	mkdirs
@@ -121,7 +121,7 @@ enr112:	mkdirs
                     output/enr112.good.bed \
                     output/enr112.bad.bed 2> /dev/null
 	cat output/enr112.{good,bad}.bed | \
-                diff - expected/enr112.bed
+                diff - expected/enr112.bed 1>&2
 
 orderTest: enr223
 enr223:	mkdirs
@@ -131,7 +131,7 @@ enr223:	mkdirs
                     output/enr223.good.bed \
                     output/enr223.bad.bed 2> /dev/null
 	cat output/enr223.{good,bad}.bed | \
-                diff - expected/enr223.bed
+                diff - expected/enr223.bed 1>&2
 
 # too slow -- don't use in default test suite
 mm3:	mkdirs
@@ -141,7 +141,7 @@ mm3:	mkdirs
                     output/mm3.all.good.bed \
                     output/mm3.all.bad.bed
 	cat output/mm3.all.{good,bad}.bed | \
-                diff - expected/mm3.all.bed
+                diff - expected/mm3.all.bed 1>&2
 
 # too slow -- don't use in default test suite
 multiple:	mkdirs
@@ -151,7 +151,7 @@ multiple:	mkdirs
                     output/mm3.multiple.good.bed \
                     output/mm3.multiple.bad.bed
 	cat output/mm3.multiple.{good,bad}.bed | \
-                diff - expected/mm3.multiple.bed
+                diff - expected/mm3.multiple.bed 1>&2
 
 mkdirs:
 	mkdir -p output

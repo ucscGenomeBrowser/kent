@@ -367,7 +367,7 @@ while (lineFileNextReal(lf, &line))
     slAddHead(pList, bed);
     }
 
-if (asObj);
+if (asObj)
     asObjectFreeList(&asObj);
 freez(&validateBed);
 }
