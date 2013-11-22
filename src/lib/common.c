@@ -2843,7 +2843,7 @@ return ret;
 bits64 byteSwap64(bits64 a)
 /* Return byte-swapped version of a */
 {
-union {bits64 whole; UBYTE bytes[4];} u,v;
+union {bits64 whole; UBYTE bytes[8];} u,v;
 u.whole = a;
 v.bytes[0] = u.bytes[7];
 v.bytes[1] = u.bytes[6];
@@ -2977,7 +2977,7 @@ return val;
 double byteSwapDouble(double a)
 /* Return byte-swapped version of a */
 {
-union {double whole; UBYTE bytes[4];} u,v;
+union {double whole; UBYTE bytes[8];} u,v;
 u.whole = a;
 v.bytes[0] = u.bytes[7];
 v.bytes[1] = u.bytes[6];
