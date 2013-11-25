@@ -451,7 +451,7 @@ if (crt != NULL)
     }
 }
 
-static inline int cmpTwoBits32(bits32 aHi, bits32 aLo, bits32 bHi, bits32 bLo)
+INLINE int cmpTwoBits32(bits32 aHi, bits32 aLo, bits32 bHi, bits32 bLo)
 /* Return - if b is less than a , 0 if equal, else +*/
 {
 if (aHi < bHi)
@@ -469,7 +469,7 @@ else
     }
 }
 
-static inline boolean cirTreeOverlaps(int qChrom, int qStart, int qEnd, 
+INLINE boolean cirTreeOverlaps(int qChrom, int qStart, int qEnd, 
 	int rStartChrom, int rStartBase, int rEndChrom, int rEndBase)
 {
 return cmpTwoBits32(qChrom, qStart, rEndChrom, rEndBase) > 0 &&

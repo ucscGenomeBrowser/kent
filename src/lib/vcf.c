@@ -190,19 +190,19 @@ static void *vcfFileAlloc(struct vcfFile *vcff, size_t size)
 return lmAlloc( vcfFileLm(vcff), size);
 }
 
-static inline char *vcfFileCloneStrZ(struct vcfFile *vcff, char *str, size_t size)
+INLINE char *vcfFileCloneStrZ(struct vcfFile *vcff, char *str, size_t size)
 /* Use vcff's local mem to allocate memory for a string and copy it. */
 {
 return lmCloneStringZ( vcfFileLm(vcff), str, size);
 }
 
-static inline char *vcfFileCloneStr(struct vcfFile *vcff, char *str)
+INLINE char *vcfFileCloneStr(struct vcfFile *vcff, char *str)
 /* Use vcff's local mem to allocate memory for a string and copy it. */
 {
 return vcfFileCloneStrZ(vcff, str, strlen(str));
 }
 
-static inline char *vcfFileCloneSubstr(struct vcfFile *vcff, char *line, regmatch_t substr)
+INLINE char *vcfFileCloneSubstr(struct vcfFile *vcff, char *line, regmatch_t substr)
 /* Allocate memory for and copy a substring of line. */
 {
 return vcfFileCloneStrZ(vcff, line+substr.rm_so, (substr.rm_eo - substr.rm_so));

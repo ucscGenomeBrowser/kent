@@ -123,15 +123,9 @@ xrefTable kgXref, ucscRetroInfo2
 xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
-track jaxQTLLift
-shortLabel MGI QTL LiftO
+track jaxQtl override
+shortLabel MGI QTL 
 longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 37 (mm9)***
-group map
-priority 21.11
-visibility hide
-color 200,100,0
-type bed 6 +
-noScoreFilter .
-url http://www.informatics.jax.org/marker/$$
-urlLabel MGI QTL Detail:
+origAssembly mm9 
+pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted via liftOver from the July 2007 (NCBI37/mm9) version of the track"
 release alpha

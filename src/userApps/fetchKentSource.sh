@@ -6,7 +6,12 @@ set -beEu -o pipefail
 # switching to beta for version 286
 export branch="beta"
 
-# version 285 needed the HEAD checkout to function OK
+# to use the top of the source tree, uncomment this branch=HEAD statment
+# and comment out the one above.  This is sometimes useful when there
+# are new fixes in the source tree in between beta releases.
+# Note, the top of the source tree could be broken at any time, it is on
+# a 10-minute update cycle with live work taking place.
+
 # export branch="HEAD"
 
 # script to fetch extra source to use with the kent build,

@@ -11,7 +11,7 @@ for (afo = list;  afo != NULL;  afo = afo->next)
     struct annoOption *newAfo = CloneVar(afo);
     newAfo->spec.name = cloneString(afo->spec.name);
     newAfo->value = NULL;
-    unsigned opFlags = opFlags;
+    unsigned opFlags = afo->spec.flags;
     if (opFlags & OPTION_MULTI)
 	{
 	switch (opFlags & OPTION_TYPE_MASK)
@@ -59,7 +59,7 @@ for (afo = *pList;  afo != NULL;  afo = nextAfo)
     {
     nextAfo = afo->next;
     freeMem(afo->spec.name);
-    unsigned opFlags = opFlags;
+    unsigned opFlags = afo->spec.flags;
     if (opFlags & OPTION_MULTI)
 	{
 	switch (opFlags & OPTION_TYPE_MASK)

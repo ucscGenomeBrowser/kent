@@ -95,6 +95,12 @@ pteAle	Eutheria; Laurasiatheria; Chiroptera; Megachiroptera; Pteropodidae; Ptero
 # Megabat - Pteropus vampyrus
 pteVam	Eutheria; Laurasiatheria; Chiroptera; Megachiroptera; Pteropodidae; Pteropodinae; Pteropus
 
+# Indian false vampire - Megaderma lyra
+megLyr	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Megadermatidae; Megaderma
+
+# Parnell's mustached bat - Pteronotus parnellii
+ptePar	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Mormoopidae; Pteronotus
+
 # Brandt's Myotis (bat) - Myotis brandtii
 myoBri	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; Myotis
 
@@ -109,6 +115,9 @@ eptFus	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; 
 
 # Cat - Felis catus
 felCat	Eutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Felinae; Felis
+
+# Amur tiger - Panthera tigris altaica
+panTig1	Eutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Pantherinae; Panthera; Panthera tigris
 
 # European polecat - Mustela putorius
 musPut	Eutheria; Laurasiatheria; Carnivora; Caniformia; Mustelidae; Mustelinae; Mustela

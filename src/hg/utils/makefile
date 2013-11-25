@@ -51,7 +51,6 @@ DIRS = ${buildRefresh} \
 	safePush \
 	toDev64 \
 	automation \
-	refreshNamedSessionCustomTracks \
 	refSeqGet \
 	wigBedToStep \
 	pslUniq \
