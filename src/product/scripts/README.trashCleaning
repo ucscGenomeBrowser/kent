@@ -63,3 +63,9 @@ that removes those /userdata/ files.  UCSC removes those /userdata/
 files periodically on a manual basis if they are no longer referenced
 by any sessions.  The session data is expired on a third time-to-live
 basis, currently advertised as four months since last use.
+
+A side effect of the current trash cleaning system is the measurement
+of statistics of trash file usage.  The UCSC system is currently running
+on a four hour cycle of trash cleaning.  In between the four hours, the
+trash size monitor script is run several times to help accumulate
+finer grained measurements.
