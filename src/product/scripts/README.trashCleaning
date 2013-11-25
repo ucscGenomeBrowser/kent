@@ -3,6 +3,7 @@
 # http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/product/scripts/README.trashCleaning;hb=HEAD
 #
 
+===============================================================================
 A brief overview of the history of trash cleaning operations.
 
 In the very beginning there was a simple trash directory
@@ -23,7 +24,9 @@ of time and created an excessive load on the file system servers.
 A script system was put into place at that time to avoid the
 complication of the excessive numbers of files in the trash
 directories.  The scripts could also measure statistics of
-the files to monitor size usage and traffic volume.
+the files to monitor size usage and traffic volume.  Plus, custom
+tracks had moved into a database in place of pure trash files, so
+that database needed an expiration procedure.
 
 The scripts needed to be as much fail safe as possible since
 an unnoticed failure in the trash cleaning system could rapidly
@@ -69,3 +72,56 @@ of statistics of trash file usage.  The UCSC system is currently running
 on a four hour cycle of trash cleaning.  In between the four hours, the
 trash size monitor script is run several times to help accumulate
 finer grained measurements.
+
+===============================================================================
+
+Procedure outline:
+
+1. trashCleanMonitor.sh - script called from cron to run the cleaning system
+   a. verifies 'lock' file is *not* in place
+   b. creates 'lock' file
+   c. runs trashCleaner.bash which does the trash cleaning
+   d. expects 0 return code
+   e. and verifies LOG file ends with a "SUCCESS " line.
+   f. any failure of the above causes email to a specified list of
+      recipients.  The 'lock' file remains in place upon failure to
+      prevent this script from running again.
+2. trashCleaner.bash - called from trashCleanMonitor.sh
+   a. expects the 'lock' file to exist as created by trashCleanMonitor.sh
+   b. runs the refreshNamedSessionCustomTracks command to scan the session
+      database.  This operation creates a list of files in trash that are
+      referenced from session data.  Plus, it causes an access to the
+      corresponding customTrash database tables for the custom tracks
+      to refresh their time to live status.
+   c. Files in trash used by sessions that are not yet in '/userdata/' are
+      moved out of trash into '/userdata/' leaving a symlink in '/trash/'
+   d. 'dbTrash' command is run which scans the 'customTrash' database to
+      expire tables past their time to live last access time.
+   e. trashSizeMonitor.sh script is used to efficiently scan the trash
+      filesystem.  It creates a file listing with last access time for
+      each file, plus accumulating statistics into the log files.
+   f. The last access time file listing is used to remove files past
+      their time to live limit.  Two different time periods are used,
+      fully volatile files removed after an hour since last use,
+      Custom track data not in sessions removed after 72 hours
+      since last access.
+
+===============================================================================
+
+Implementation:
+
+These scripts are running as a 'root' user cron job since they need
+to manipulate Apache owned files.  They attempt to keep themselves
+safe from errors that would lead to destruction of the system by requiring
+trash file names to be explicitly: /some/path/trash/...
+with the '/trash/' part of the path required.  This helps prevent
+them from running wild and removing anything they encounter.
+
+Since these are critical scripts, to use them in your own installation,
+you should read them over to see if there are details that may not
+function in your specific environment.  You should be aware of what
+they are doing so you can debug problems.  They aren't guaranteed to work
+under any condition.  Let us know if you have problems or can suggest
+improvements.
+
+===============================================================================
