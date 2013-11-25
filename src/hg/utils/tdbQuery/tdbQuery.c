@@ -871,6 +871,7 @@ static void rqlStatementOutput(struct rqlStatement *rql, struct tdbRecord *tdb,
  * field with this name at end of output. */
 {
 struct slName *fieldList = rql->fieldList, *field;
+boolean emptyOutput=TRUE;
 for (field = fieldList; field != NULL; field = field->next)
     {
     struct tdbField *r;
@@ -883,10 +884,13 @@ for (field = fieldList; field != NULL; field = field->next)
         else
             match = (strcmp(field->name, r->name) == 0);
         if (match)
+            {
             fprintf(out, "%s %s%c", r->name, r->val,(clOneLine?'|':'\n' ));
+            emptyOutput=FALSE;
+            }
         }
     }
-if (!clNoBlank || clOneLine)
+if (!emptyOutput && (!clNoBlank || clOneLine))
     fprintf(out, "\n");
 }
 

@@ -114,7 +114,7 @@ def makeHtml(infoDict, plain, verbose):
     origComment = ""
     fetch = urllib2.urlopen(infoDict['url'])
     doc = fetch.read()
-    m = re.search('<div class="icons"><div><a href="(\S+)"', doc)
+    m = re.search('<div class="icons"><a href="(\S+)"', doc)
     if m:
         if m.group(1):
             infoDict['url'] = m.group(1).replace("&amp;", "&")

@@ -55,11 +55,11 @@ int netWaitForData(int sd, int microseconds);
 void netBlockBrokenPipes();
 /* Make it so a broken pipe doesn't kill us. */
 
-size_t netReadAll(int sd, void *vBuf, size_t size);
+ssize_t netReadAll(int sd, void *vBuf, ssize_t size);
 /* Read given number of bytes into buffer.
  * Don't give up on first read! */
 
-int netMustReadAll(int sd, void *vBuf, size_t size);
+ssize_t netMustReadAll(int sd, void *vBuf, ssize_t size);
 /* Read given number of bytes into buffer or die.
  * Don't give up if first read is short! */
 

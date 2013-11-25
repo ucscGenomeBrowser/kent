@@ -1,5 +1,5 @@
 table bed
-"Browser extensible data"
+"Browser extensible data bigBed test"
     (
     string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"

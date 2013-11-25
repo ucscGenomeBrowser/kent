@@ -2,7 +2,7 @@
 
 # Gasterosteus aculeatus - Broad Institute 1.0
 
-# Jeff McKinnon gave permission for photo 8/16/06 and asked for notification 
+# Jeff McKinnon gave permission for photo 8/16/06 and asked for notification
 # when the browser is public --
 # e-mail: mckinnoj@uww.edu   http://facstaff.uww.edu/mckinnoj/mckinnon.html
 
@@ -24,21 +24,21 @@
       wget --timestamping \
         ftp://ftp.broad.mit.edu/pub/assemblies/fish/stickleback/gasAcu1/$f
     end
-    faSize Stickleback1.0.agp.chromosome.fasta.gz 
+    faSize Stickleback1.0.agp.chromosome.fasta.gz
 #463338706 bases (16726587 N's 446612119 real 446612119 upper 0 lower) in 105 sequences in 1 files
 #Total size: mean 4412749.6 sd 1314228.9 min 83130 (XIII.20000001-20083130) max 5000000 (I.1-5000000) median 5000000
 #N count: mean 159300.8 sd 213368.9
 #U count: mean 4253448.8 sd 1311287.4
 #L count: mean 0.0 sd 0.0
-    # Doh!  Their chromosome fasta is chunked into 5M pieces.  Not so 
+    # Doh!  Their chromosome fasta is chunked into 5M pieces.  Not so
     # useful for us.
     # AGP and FA use different names, too.  AGP has "groupI" and FA has "I".
     # A lot of our software really wants to see "chr" at the beginning.
-    # So make AGP with substituted names and use that to construct the 
+    # So make AGP with substituted names and use that to construct the
     # chrom FA.
     sed -e 's/^group/chr/' Stickleback1.0.agp > UCSC.gasAcu1.agp
     # Their chromosome qual is chunked into 5M pieces too.  (There is also
-    # an assembly.agp.qual.gz that has *scaffolds* chunked.)  Unchunk, 
+    # an assembly.agp.qual.gz that has *scaffolds* chunked.)  Unchunk,
     # relying on the fact that chunks are in order in the file:
     zcat Stickleback1.0.agp.chromosome.qual.gz \
     | perl -wpe 's/^>(\S+)\.1-\d+.*/>chr$1/;  s/^>\S+\.\d+-\d+.*\n$//;' \
@@ -90,7 +90,7 @@ EOF
 ##    March 20 2006 (open-3-1-5) version of RepeatMasker
 #grep RELEASE /cluster/bluearc/RepeatMasker/Libraries/RepeatMaskerLib.embl
 #CC   RELEASE 20060315;                                            *
-    # The cluster job crashed because no repeats were found on chrM 
+    # The cluster job crashed because no repeats were found on chrM
     # so check out line+ failed.  NBD.  Manually made run.cluster/run.time
     # and continued:
     ~/kent/src/utils/doRepeatMasker.pl gasAcu1 -verbose 3 -continue cat \
@@ -411,8 +411,8 @@ TMPDIR=/scratch/tmp
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT (DONE 11/14/06 angie)
-    # Use -repMatch=200 (based on size -- for human we use 1024, and 
-    # stickleback size is ~15% of human judging by gapless gasAcu1 vs. hg18 
+    # Use -repMatch=200 (based on size -- for human we use 1024, and
+    # stickleback size is ~15% of human judging by gapless gasAcu1 vs. hg18
     # genome sizes from featureBits.  Bump it up a bit to be conservative.
     ssh kolossus
     blat /cluster/data/gasAcu1/gasAcu1.2bit /dev/null /dev/null -tileSize=11 \
@@ -476,7 +476,7 @@ gasAcu1.downloadDir = gasAcu1
 
 #########################################################################
 # EXTRACT CHROM TO SCAFFOLD LIFTUP (DONE 3/6/07 angie)
-# Ensembl genes use scaffold_* instead of chrUn.  Broad doesn't seem to 
+# Ensembl genes use scaffold_* instead of chrUn.  Broad doesn't seem to
 # provide a scaffold->chrom mapping in their download files, but here's
 # a way to extract one from ctg->chrom and ctg->scaffold agp...
     cd /cluster/data/gasAcu1/downloads
@@ -488,7 +488,7 @@ gasAcu1.downloadDir = gasAcu1
     awk '$5 != "N" {print $6 ":" $7 ":" $8 "\t" $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" $9;}' \
       assembly.agp \
     | sort > scaf.tmp
-    # Join the maps into what is AGP except it has a bunch of lines for 
+    # Join the maps into what is AGP except it has a bunch of lines for
     # each scaffold that must be collapsed into one line per scaffold:
     join -t "	" -o '1.2 1.3 1.4 1.5 1.6 2.2 2.3 2.4 1.7' chrom.tmp scaf.tmp \
     | sort -k 1,1 -k 2n,2n \
@@ -499,7 +499,7 @@ gasAcu1.downloadDir = gasAcu1
 #  16967 scaf.tmp
 #  16967 tmp.agp
     # Now collapse the many per-contig lines for each scaffold into a single
-    # line per scaffold.  This produces gapless AGP with sequence numbers 
+    # line per scaffold.  This produces gapless AGP with sequence numbers
     # that aren't consecutive (but still monotonically increasing):
     perl -we 'while (<>) { \
                 chomp; @w = split; \
@@ -538,16 +538,16 @@ gasAcu1.downloadDir = gasAcu1
     ssh hgwdev
     mkdir /cluster/data/gasAcu1/bed/ensembl
     cd /cluster/data/gasAcu1/bed/ensembl
-    # Go to www.ensembl.org and click around their evolving interface 
+    # Go to www.ensembl.org and click around their evolving interface
     # to get the following types of data:
     # 1. a tab-separated file that relates Ensembl gene, transcript and
-    #    protein IDs.  Save as ensGtp.txt.gz  
+    #    protein IDs.  Save as ensGtp.txt.gz
     # 2. peptide fasta with transcript IDs in header -> ensemblPep.fa.gz
 
     # They have started dumping GTF files so we can download that directly:
     wget 'ftp://ftp.ensembl.org/pub/current_gasterosteus_aculeatus/data/gtf/*'
 
-    # Add "chr" to front of each line in the gene data gtf file to make 
+    # Add "chr" to front of each line in the gene data gtf file to make
     # it compatible with our software.
     # Also need to lift scaffold coords up to chrUn:
     gunzip -c Gasterosteus_aculeatus.BROADS1.43.gtf.gz \
@@ -565,12 +565,12 @@ gasAcu1.downloadDir = gasAcu1
     gunzip -c ensemblPep.fa.gz \
     | perl -wpe 's/\|.*//' \
     > ensPep.fa
-    # ONE TIME ONLY... seven protein sequences were chopped up in the file 
-    # from BioMart and the fragments appeared as competing duplicate 
-    # sequences.  Ensembl helpdesk is still looking at it but sent the 
-    # correct whole sequences for the seven, so I'm manually editing those 
-    # in.  The ID's are ENSGACT00000000021, ENSGACT00000000176, 
-    # ENSGACT00000017572, ENSGACT00000011000, ENSGACT00000000042, 
+    # ONE TIME ONLY... seven protein sequences were chopped up in the file
+    # from BioMart and the fragments appeared as competing duplicate
+    # sequences.  Ensembl helpdesk is still looking at it but sent the
+    # correct whole sequences for the seven, so I'm manually editing those
+    # in.  The ID's are ENSGACT00000000021, ENSGACT00000000176,
+    # ENSGACT00000017572, ENSGACT00000011000, ENSGACT00000000042,
     # ENSGACT00000000087, ENSGACT00000022185.
     hgPepPred gasAcu1 generic ensPep ensPep.fa
 
@@ -721,7 +721,7 @@ BLASTZ_L=6000
 BLASTZ_K=2200
 BLASTZ_M=50
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-    
+
 # TARGET: Stickleback gasAcu1 chrUn only
 #	chrUn in contigs for this alignment run
 #	The largest is 418,000 bases and there are 5,000 of them.
@@ -786,7 +786,7 @@ BLASTZ_L=6000
 BLASTZ_K=2200
 BLASTZ_M=50
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-    
+
 # TARGET: Stickleback gasAcu1 no chrUn sequence, only chroms
 #       The largest is 32 million bases, there are 22 of them
 SEQ1_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.noUn.sdTrf.2bit
@@ -835,7 +835,7 @@ BLASTZ_L=6000
 BLASTZ_K=2200
 BLASTZ_M=50
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-    
+
 # TARGET: Stickleback gasAcu1 no chrUn sequence, only chroms
 #       The largest is 32 million bases, there are 22 of them
 SEQ1_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.noUn.sdTrf.2bit
@@ -1099,7 +1099,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz7way/maf/$(
      echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $F \
       /cluster/data/gasAcu1/gasAcu1.sdTrf.2bit ../maf/`basename $F` >> jobs.csh
      echo "echo $F" >> jobs.csh
-    done 
+    done
     echo date >> jobs.csh
     chmod +x jobs.csh
     time ./jobs.csh > jobs.log 2>&1 &
@@ -1122,7 +1122,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz7way/maf/$(
     #	user    0m35.608s
     #	sys     0m3.762s
 
-    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse
     # machine and then load on hgwdev:
     ssh kolossus
     cd /cluster/data/gasAcu1/bed/multiz7way/anno/maf
@@ -1147,7 +1147,7 @@ BLASTZ_L=6000
 BLASTZ_K=2200
 BLASTZ_M=50
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-    
+
 # TARGET: Stickleback gasAcu1 no chrUn sequence, only chroms
 #	The largest is 32 million bases, there are 22 of them
 SEQ1_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.noUn.sdTrf.2bit
@@ -1215,7 +1215,7 @@ TMPDIR=/scratch/tmp
         -continue=net -swap -bigClusterHub=pk > net_swap.log 2>&1 &
     #	real    7m11.286s
 
-    featureBits gasAcu1 chainGalGal3Link > fb.gasAcu1.chainGalGal2Link.txt 
+    featureBits gasAcu1 chainGalGal3Link > fb.gasAcu1.chainGalGal2Link.txt
     #	37154459 bases of 446627861 (8.319%) in intersection
     featureBits galGal3 chainGasAcu1Link > fb.galGal3.chainGasAcu1Link.txt
     #	32781658 bases of 1042591351 (3.144%) in intersection
@@ -1466,7 +1466,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
      echo mafAddIRows -nBeds=nBeds -sizes=sizes $F \
       /cluster/data/gasAcu1/gasAcu1.sdTrf.2bit ../maf/`basename $F` >> jobs.csh
      echo "echo $F" >> jobs.csh
-    done 
+    done
     echo date >> jobs.csh
     chmod +x jobs.csh
     time nice -n +19 ./jobs.csh > jobs.log 2>&1 &
@@ -1485,7 +1485,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     #	Loaded 2395584 mafs in 23 files from /gbdb/gasAcu1/multiz8way/anno/maf
     #	real    2m16.918s
 
-    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse
     # machine and then load on hgwdev:
     ssh kolossus
     cd /cluster/data/gasAcu1/bed/multiz8way/anno/maf
@@ -1520,7 +1520,7 @@ gasAcu1.upstreamMaf = multiz8way /hive/data/genomes/gasAcu1/bed/multiz8way/speci
     mkdir /cluster/data/gasAcu1/bed/multiz8way/mafDownloads
     cd /cluster/data/gasAcu1/bed/multiz8way
 
-    # upstream mafs 
+    # upstream mafs
     #	rebuilt 2007-12-21 to fix difficulty in mafFrags when species.lst
     #	did not have mm8 as the first one
     #	There isn't any refGene table, using ensGene instead
@@ -1604,7 +1604,7 @@ done
     done
 
     ###
-    
+
     ssh kkstore05
     cd /cluster/data/gasAcu1/bed/multiz8way/frames
     time cat ../maf/*.maf | nice -n +19 genePredToMafFrames gasAcu1 stdin stdout gasAcu1 genes/gasAcu1.gp.gz oryLat1 genes/oryLat1.gp.gz fr2 genes/fr2.gp.gz tetNig1 genes/tetNig1.gp.gz danRer4 genes/danRer4.gp.gz galGal3 genes/galGal3.gp.gz mm8 genes/mm8.gp.gz hg18 genes/hg18.gp.gz | gzip > multiz8way.mafFrames.gz
@@ -1686,7 +1686,7 @@ done
     cd /san/sanvol1/scratch/gasAcu1/cons/treeRun6
     mkdir tree log
 
-    #	Tuning this loop should come back to here to recalculate 
+    #	Tuning this loop should come back to here to recalculate
     # Create little script that calls phastCons with right arguments
     #	--target-coverage of 0.20 is about right for mouse, will be
     #	tuned exactly below
@@ -1753,7 +1753,7 @@ Expected max. length: L_max=4.721873 sites
 Phylogenetic information threshold: PIT=L_min*H=9.236837 bits
 Recommended expected length: omega=12.456325 sites (for L_min*H=9.783400)
 
-## 0.20 10 
+## 0.20 10
 ( Solving for new omega: 10.000000 12.922391 12.450309 12.439360 )
 
 Transition parameters: gamma=0.200000, omega=10.000000, mu=0.100000, nu=0.025000
@@ -2199,7 +2199,7 @@ TMPDIR=/scratch/tmp
     #	sys     0m0.163s
     # Error because of inconsistent chrom sizes. We had attempted to modify
     # our lift file to remove a gap inserted at the end of the entire
-    # sequence, which we should not have done. 
+    # sequence, which we should not have done.
     time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
         -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
         -verbose=2 -continue=chainRun -bigClusterHub=pk \
@@ -2341,8 +2341,8 @@ TMPDIR=/scratch/tmp
 
     mkdir -p /san/sanvol1/scratch/gasAcu1/blastDb
     cd /cluster/data/gasAcu1/blastDb
-    for i in nhr nin nsq; 
-    do 
+    for i in nhr nin nsq;
+    do
 	echo $i
 	cp *.$i /san/sanvol1/scratch/gasAcu1/blastDb
     done
@@ -2362,9 +2362,9 @@ TMPDIR=/scratch/tmp
    split -l 112 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/gasAcu1/bed/tblastn.hg18KG/kgfa/kg
    ln -s /cluster/bluearc/gasAcu1/bed/tblastn.hg18KG/kgfa kgfa
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
      done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -2400,14 +2400,14 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/gasAcu1/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
 
-        if pslCheck -prot $3.tmp                                                  
-        then                                                                      
-            mv $3.tmp $3                                                          
+        if pslCheck -prot $3.tmp
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0                                                                    
-    fi                                                                            
-fi                                                                                
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
@@ -2415,7 +2415,7 @@ exit 1
     chmod +x blastSome
     gensub2 query.lst kg.lst blastGsub blastSpec
     exit # back to bash
-    
+
     ssh pk
     cd /cluster/data/gasAcu1/bed/tblastn.hg18KG
     para create blastSpec
@@ -2478,13 +2478,13 @@ chainOne $(path1)
     pslCheck unliftBlastHg18KG.psl
     liftUp blastHg18KG.psl ../../Un/chrUn.lft carry unliftBlastHg18KG.psl
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/gasAcu1/bed/tblastn.hg18KG
     hgLoadPsl gasAcu1 blastHg18KG.psl
 
     # check coverage
-    featureBits gasAcu1 blastHg18KG 
+    featureBits gasAcu1 blastHg18KG
 # 20127551 bases of 446627861 (4.507%) in intersection
 
     featureBits gasAcu1 ensGene:cds blastHg18KG  -enrichment
@@ -2554,7 +2554,7 @@ TMPDIR=/scratch/tmp
 	-swap > swap.log 2>&1 &
 
     time nice -n +19 featureBits anoCar1 chainGasAcu1Link \
-	> fb.anoCar1.chainGasAcu1Link.txt 2>&1  
+	> fb.anoCar1.chainGasAcu1Link.txt 2>&1
     #	real    1m14.245s
     #	54464074 bases of 1741478929 (3.127%) in intersection
 
@@ -2595,12 +2595,12 @@ TMPDIR=/scratch/tmp
       -blastzOutRoot=/cluster/bluearc/gasAcu1Self >& do.log &
     tail -f do.log
     # hgwdev can't see /iscratch, so the loadUp.csh script failed looking
-    # for SEQ1_LEN.  So I edited DEF to use /cluster/data location and 
+    # for SEQ1_LEN.  So I edited DEF to use /cluster/data location and
     # continued -load.
 
 ##########################################################################
 # NSCAN track - (2007-06-05 markd)
-# uses danRer4 as informant, no pseudogene masking 
+# uses danRer4 as informant, no pseudogene masking
 #
     cd /cluster/data/gasAcu1/bed/nscan/
 
@@ -2620,7 +2620,7 @@ TMPDIR=/scratch/tmp
     rm -f *.tab
 
     # update trackDb; need a gasAcu1-specific page to describe informants
-    stickleback/gasAcu1/nscanGene.html    
+    stickleback/gasAcu1/nscanGene.html
     stickleback/gasAcu1/trackDb.ra
 
 #########################################################################
@@ -2818,7 +2818,7 @@ see doc/builds.txt for specific details.
 # lastz swap danRer7 (DONE - 2010-12-17 - Hiram
     #	original alignment to danRer7
     cd /hive/data/genomes/danRer7/bed/lastzGasAcu1.2010-12-17
-    cat fb.danRer7.chainGasAcu1Link.txt 
+    cat fb.danRer7.chainGasAcu1Link.txt
     #	144782335 bases of 1409770109 (10.270%) in intersection
 
     #	running the swap
@@ -2830,14 +2830,14 @@ see doc/builds.txt for specific details.
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
     #	real    25m35.024s
-    cat fb.gasAcu1.chainDanRer7Link.txt 
+    cat fb.gasAcu1.chainDanRer7Link.txt
     #	122918766 bases of 446627861 (27.522%) in intersection
 
 #########################################################################
 # lastz swap lizard anoCar2 (DONE - 2011-04-27 - Hiram)
     # the original alignment
     cd /cluster/data/anoCar2/bed/lastzGasAcu1.2011-04-26
-    cat fb.anoCar2.chainGasAcu1Link.txt 
+    cat fb.anoCar2.chainGasAcu1Link.txt
     #	53478872 bases of 1701353770 (3.143%) in intersection
 
     ## and running the swap
@@ -2850,7 +2850,7 @@ see doc/builds.txt for specific details.
 	-bigClusterHub=swarm -tRepeats=windowmaskerSdust \
 	-swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    15m28.724s
-    cat fb.gasAcu1.chainAnoCar2Link.txt 
+    cat fb.gasAcu1.chainAnoCar2Link.txt
     #	55990919 bases of 446627861 (12.536%) in intersection
 
 #######################################################################
@@ -2912,3 +2912,16 @@ see doc/builds.txt for specific details.
     #	%21.10 masked total, %21.89 masked real
 
 ##########################################################################
+# genscan - (DONE - 2013-11-12 - Hiram)
+    mkdir /hive/data/genomes/gasAcu1/bed/genscan
+    cd /hive/data/genomes/gasAcu1/bed/genscan
+    time doGenscan.pl gasAcu1 > do.log 2>&1
+    #  real    41m51.762s
+
+    cat fb.gasAcu1.genscan.txt
+    #   54644889 bases of 446627861 (12.235%) in intersection
+
+    cat fb.gasAcu1.genscanSubopt.txt
+    #   684075 bases of 446627861 (0.153%) in intersection
+
+#########################################################################

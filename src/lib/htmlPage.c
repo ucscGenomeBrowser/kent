@@ -264,6 +264,18 @@ for (s = start; s <= pos; ++s)
 return line;
 }
 
+struct htmlTag *findNextMatchingTag(struct htmlTag *list, char *name)
+/* Return first tag in list that is of type name or NULL if not found*/
+{
+struct htmlTag *tag;
+for (tag = list; tag != NULL; tag = tag->next)
+    {
+    if (sameWord(name, tag->name))
+	return tag;
+    }
+return NULL;
+}
+
 static void tagVaWarn(struct htmlPage *page, struct htmlTag *tag, char *format, 
 	va_list args)
 /* Print warning message and some context of tag. */

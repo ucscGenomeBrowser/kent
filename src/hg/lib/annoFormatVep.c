@@ -224,6 +224,18 @@ if (self->needHeader)
     afVepPrintHeader(self, primarySource->assembly->name);
 }
 
+static void afVepComment(struct annoFormatter *fSelf, char *content)
+/* Print out a comment, either starting with "# " or as a warnBox depending on doHtml. */
+{
+if (strchr(content, '\n'))
+    errAbort("afVepComment: no multi-line input");
+struct annoFormatVep *self = (struct annoFormatVep *)fSelf;
+if (self->doHtml)
+    warn("%s", content);
+else
+    fprintf(self->f, "# %s\n", content);
+}
+
 static void compressDashes(char *string)
 /* If string has a run of '-' characters, turn it into single '-'. */
 {
@@ -1200,6 +1212,7 @@ struct annoFormatter *fSelf = &(self->formatter);
 fSelf->getOptions = annoFormatterGetOptions;
 fSelf->setOptions = annoFormatterSetOptions;
 fSelf->initialize = afVepInitialize;
+fSelf->comment = afVepComment;
 fSelf->formatOne = afVepFormatOne;
 fSelf->close = afVepClose;
 self->fileName = cloneString(fileName);

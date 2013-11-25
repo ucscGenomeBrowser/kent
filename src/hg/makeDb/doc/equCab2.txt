@@ -2600,3 +2600,24 @@ XXX - running - Mon Nov  5 10:39:45 PST 2012
     # setup trackDb for equCab2
 
 ##############################################################################
+# genscan - (DONE - 2013-11-12 - Hiram)
+    mkdir /hive/data/genomes/equCab2/bed/genscan
+    cd /hive/data/genomes/equCab2/bed/genscan
+    time doGenscan.pl equCab2 > do.log 2>&1
+    #  real    23m40.732s
+    #  two broken jobs:
+./lastRunGsBig.csh chr6 000 gtf/000/chr6.gtf pep/000/chr6.pep subopt/000/chr6.bed
+./lastRunGsBig.csh chr4 000 gtf/000/chr4.gtf pep/000/chr4.pep subopt/000/chr4.bed
+    # real    67m31.677s
+
+    # run 'para time > run.time' on ku, then continuing:
+    time doGenscan.pl -continue=makeBed equCab2 > makeBed.log 2>&1
+    # real    2m57.818s
+
+    cat fb.equCab2.genscan.txt
+    #   59014410 bases of 2428790173 (2.430%) in intersection
+
+    cat fb.equCab2.genscanSubopt.txt
+    #   57367480 bases of 2428790173 (2.362%) in intersection
+
+#########################################################################

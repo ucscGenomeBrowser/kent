@@ -28,8 +28,14 @@ fi
 
 cd "${DESTDIR}"
 
-echo "================================================================" \
-	> "${RESULT}"
+echo "================================================================
+to download all of the files from one of these admin/exe/ directories,
+  for example: admin/exe/linux.x86_64/
+    using the rsync command to your current directory:
+
+  rsync -aP rsync://hgdownload.cse.ucsc.edu/genome/admin/exe/linux.x86_64/ ./
+
+================================================================" > "${RESULT}"
 
 find . -mindepth 1 -type f | grep -v -w hgsql | sed -e "s/^.\///; /mkREADME.sh/d" | sort | \
 while read F

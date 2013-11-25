@@ -7,7 +7,7 @@ JQUERY_FILES=jquery.js jquery.tablednd.js \
     ui.dropdownchecklist.js \
     jquery.cookie.js jquery.watermarkinput.js \
     jquery.floatheader.js jquery.rotateTableCellContent.js jquery.plugins.js \
-    jquery.validate.min.js
+    jquery.validate.min.js jquery.history.js
     
 JS_FILES=ajax.js alleles.js autocomplete.js edwPersona.js \
     hgCustom.js hgGateway.js hgHubConnect.js hgTracks.js \

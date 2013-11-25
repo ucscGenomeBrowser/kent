@@ -36,7 +36,7 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
     # real    4618m50.082s
 
-    cat fb.strCam0.chainFalPer1Link.txt 
+    cat fb.strCam0.chainFalPer1Link.txt
     # 975896802 bases of 1187883366 (82.154%) in intersection
 
     cd /hive/data/genomes/strCam0/bed
@@ -57,7 +57,7 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
 
     # real    51m54.249s
-    cat fb.falPer1.chainStrCam0Link.txt 
+    cat fb.falPer1.chainStrCam0Link.txt
     # 973284248 bases of 1153404357 (84.384%) in intersection
 
     cd /hive/data/genomes/falPer1/bed

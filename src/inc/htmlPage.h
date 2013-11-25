@@ -235,5 +235,9 @@ struct htmlPage *htmlPageForwarded(char *url, struct htmlCookie *cookies);
 
 struct htmlPage *htmlPageForwardedNoAbort(char *url, struct htmlCookie *cookies);
 /* Try and get an HTML page.  Print warning and return NULL if there's a problem. */
+
+struct htmlTag *findNextMatchingTag(struct htmlTag *list, char *name);
+/* Return first tag in list that is of type name or NULL if not found. */
+
 #endif /* HTMLPAGE_H */
 

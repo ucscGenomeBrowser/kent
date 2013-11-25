@@ -159,6 +159,15 @@ if (freeWhenDone)
     }
 }
 
+static void aftComment(struct annoFormatter *fSelf, char *content)
+/* Print out a comment line. */
+{
+if (strchr(content, '\n'))
+    errAbort("aftComment: no multi-line input");
+struct annoFormatTab *self = (struct annoFormatTab *)fSelf;
+fprintf(self->f, "# %s\n", content);
+}
+
 static void aftFormatOne(struct annoFormatter *vSelf, struct annoStreamRows *primaryData,
 			 struct annoStreamRows *gratorData, int gratorCount)
 /* Print out tab-separated columns that we have gathered in prior calls to aftCollect,
@@ -208,6 +217,7 @@ struct annoFormatter *formatter = &(aft->formatter);
 formatter->getOptions = annoFormatterGetOptions;
 formatter->setOptions = annoFormatterSetOptions;
 formatter->initialize = aftInitialize;
+formatter->comment = aftComment;
 formatter->formatOne = aftFormatOne;
 formatter->close = aftClose;
 aft->fileName = cloneString(fileName);

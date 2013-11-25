@@ -180,7 +180,7 @@ loxAfr3.perChromTables = no
 
     awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
     twoBitToFa -seqList=less1meg.lst  loxAfr3.2bit temp.fa
-    faSplit about temp.fa 1000000 blastDb/y 
+    faSplit about temp.fa 1000000 blastDb/y
     rm temp.fa less1meg.lst
 
     cd blastDb
@@ -206,9 +206,9 @@ loxAfr3.perChromTables = no
    mkdir -p kgfa
    split -l 578 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
    done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -246,20 +246,20 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/loxAfr3/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
-    exit 
-    
+    exit
+
     ssh swarm
     cd /cluster/data/loxAfr3/bed/tblastn.hg18KG
     gensub2 query.lst kg.lst blastGsub blastSpec
@@ -315,13 +315,13 @@ chainOne $(path1)
     pslCheck blastHg18KG.psl
 # checked: 43305 failed: 0 errors: 0
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/loxAfr3/bed/tblastn.hg18KG
     hgLoadPsl loxAfr3 blastHg18KG.psl
 
     # check coverage
-    featureBits loxAfr3 blastHg18KG 
+    featureBits loxAfr3 blastHg18KG
 # 42480830 bases of 3118565340 (1.362%) in intersection
 
     featureBits loxAfr3 blastHg18KG xenoRefGene  -enrichment
@@ -344,7 +344,7 @@ chainOne $(path1)
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-syntenicNet > swap.log 2>&1 &
     #	real    123m9.342s
-    cat fb.loxAfr3.chainMm9Link.txt 
+    cat fb.loxAfr3.chainMm9Link.txt
     #	673856452 bases of 3118565340 (21.608%) in intersection
 
 #########################################################################
@@ -402,3 +402,16 @@ see doc/builds.txt for specific details.
     # verify the track link to INSDC functions
 
 ##############################################################################
+# genscan - (DONE - 2013-11-12 - Hiram)
+    mkdir /hive/data/genomes/loxAfr3/bed/genscan
+    cd /hive/data/genomes/loxAfr3/bed/genscan
+    time doGenscan.pl loxAfr3 > do.log 2>&1
+    #  real    68m7.619s
+
+    cat fb.loxAfr3.genscan.txt
+    #   61173957 bases of 3118565340 (1.962%) in intersection
+
+    cat fb.loxAfr3.genscanSubopt.txt
+    #   72799698 bases of 3118565340 (2.334%) in intersection
+
+#########################################################################

@@ -22,6 +22,8 @@
 #include "gpFx.h"
 #include "udc.h"
 #include "knetUdc.h"
+#include "md5.h"
+#include "regexHelper.h"
 #include "annoGratorQuery.h"
 #include "annoGratorGpVar.h"
 #include "annoFormatVep.h"
@@ -51,6 +53,11 @@ char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", NULL,};
 #define hgvaPositionContainer "positionContainer"
 #define hgvaSampleVariants "hgva_internally_generated_sample_variants"
 #define hgvaSampleVariantsLabel "Artificial Example Variants"
+#define hgvaUseVariantIds "hgva_useVariantIds"
+#define hgvaVariantIdsLabel "Variant Identifiers"
+#define hgvaVariantIds "hgva_variantIds"
+#define hgvaVariantPasteContainer "variantPasteContainer"
+
 void addSomeCss()
 /*#*** This should go in a .css file of course. */
 {
@@ -305,7 +312,7 @@ return ((sameString(tdb->grp, "user") || isHubTrack(tdb->track)) &&
 }
 
 void selectVariants(struct slRef *varGroupList, struct slRef *varTrackList)
-/* Offer selection of user's variant custom tracks. */
+/* Offer selection of user's variant custom tracks, example variants, pasted input etc. */
 {
 printf("<div class='sectionLiteHeader'>Select Variants</div>\n");
 printf("If you have more than one custom track or hub track in "
@@ -313,7 +320,8 @@ printf("If you have more than one custom track or hub track in "
        "<A HREF='../goldenPath/help/vcf.html' TARGET=_BLANK>VCF</A> format, "
        "please select the one you wish to annotate:<BR>\n");
 printf("<B>variants: </B>");
-printf("<SELECT ID='hgva_variantTrack' NAME='hgva_variantTrack'>\n");
+printf("<SELECT ID='hgva_variantTrack' NAME='hgva_variantTrack' "
+       "onchange=\"hgva.changeVariantSource();\">\n");
 char *selected = cartUsualString(cart, "hgva_variantTrack", "");
 struct slRef *ref;
 for (ref = varTrackList;  ref != NULL;  ref = ref->next)
@@ -322,7 +330,15 @@ for (ref = varTrackList;  ref != NULL;  ref = ref->next)
     printOption(tdb->track, selected, tdb->longLabel);
     }
 printOption(hgvaSampleVariants, selected, hgvaSampleVariantsLabel);
+printOption(hgvaUseVariantIds, selected, hgvaVariantIdsLabel);
 printf("</SELECT><BR>\n");
+
+printf("<div id='"hgvaVariantPasteContainer"'%s>\n",
+       differentString(selected, hgvaUseVariantIds) ? " style='display: none;'" : "");
+char *oldPasted = cartUsualString(cart, hgvaVariantIds, "");
+cgiMakeTextArea(hgvaVariantIds, oldPasted, 10, 70);
+puts("</div>");
+
 printf("<B>maximum number of variants to be processed:</B>\n");
 char *curLimit = cartUsualString(cart, "hgva_variantLimit", "10000");
 char *limitLabels[] = { "10", "100", "1,000", "10,000", "100,000" };
@@ -504,13 +520,11 @@ puts("<BR>");
 endCollapsibleSection();
 }
 
-boolean findSnpBed4(char *suffix, char **retFileName, struct trackDb **retTdb)
-/* If we can find the latest snpNNNsuffix track using 'show tables rlike "regex"',
- * or better yet a bigBed file for it (faster),
- * set the appropriate ret* and return TRUE, otherwise return FALSE. */
+char *findLatestSnpTable(char *suffix)
+/* Return the name of the 'snp1__<suffix>' table with the highest build number, if any. */
 {
 if (startsWith(hubTrackPrefix, database))
-    return FALSE;
+    return NULL;
 if (suffix == NULL)
     suffix = "";
 char query[64];
@@ -518,16 +532,28 @@ sqlSafef(query, sizeof(query), "show tables like 'snp1__%s'", suffix);
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *snpNNNTables = sqlQuickList(conn, query);
 hFreeConn(&conn);
-if (snpNNNTables == NULL)
-    return FALSE;
-boolean foundIt = FALSE;
 // Skip to last in list -- highest number (show tables can't use rlike or 'order by'):
 struct slName *table = snpNNNTables;
 while (table->next != NULL && isdigit(table->next->name[4]) && isdigit(table->next->name[5]))
     table = table->next;
+char *tableName = NULL;
+if (table != NULL)
+    tableName = cloneString(table->name);
+slNameFreeList(&snpNNNTables);
+return tableName;
+}
+
+boolean findSnpBed4(char *suffix, char **retFileName, struct trackDb **retTdb)
+/* If we can find the latest snpNNNsuffix table, or better yet a bigBed file for it (faster),
+ * set the appropriate ret* and return TRUE, otherwise return FALSE. */
+{
+char *table = findLatestSnpTable(suffix);
+if (table == NULL)
+    return FALSE;
+boolean foundIt = FALSE;
 // Do we happen to have a bigBed version?  Better yet, bed4 only for current uses:
 char fileName[HDB_MAX_PATH_STRING];
-safef(fileName, sizeof(fileName), "/gbdb/%s/vai/%s.bed4.bb", database, table->name);
+safef(fileName, sizeof(fileName), "/gbdb/%s/vai/%s.bed4.bb", database, table);
 if (fileExists(fileName))
     {
     if (retFileName != NULL)
@@ -537,7 +563,7 @@ if (fileExists(fileName))
 else
     {
     // Not bed4; try just .bb:
-    safef(fileName, sizeof(fileName), "/gbdb/%s/vai/%s.bb", database, table->name);
+    safef(fileName, sizeof(fileName), "/gbdb/%s/vai/%s.bb", database, table);
     if (fileExists(fileName))
 	{
 	if (retFileName != NULL)
@@ -547,7 +573,7 @@ else
     }
 if (foundIt && retTdb == NULL)
     return TRUE;
-struct trackDb *tdb = tdbForTrack(database, table->name, &fullTrackList);
+struct trackDb *tdb = tdbForTrack(database, table, &fullTrackList);
 if (tdb != NULL)
     {
     if (retTdb != NULL)
@@ -655,8 +681,10 @@ cartMakeCheckBox(cart, "hgva_include_intergenic", TRUE);
 printf("intergenic<BR>\n");
 cartMakeCheckBox(cart, "hgva_include_upDownstream", TRUE);
 printf("upstream/downstream of gene<BR>\n");
+cartMakeCheckBox(cart, "hgva_include_nmdTranscript", TRUE);
+printf("in transcript already subject to nonsense-mediated decay (NMD)<BR>\n");
 cartMakeCheckBox(cart, "hgva_include_exonLoss", TRUE);
-printf("exon loss<BR>\n");
+printf("exon loss caused by deletion<BR>\n");
 cartMakeCheckBox(cart, "hgva_include_utr", TRUE);
 printf("5' or 3' UTR<BR>\n");
 cartMakeCheckBox(cart, "hgva_include_cdsSyn", TRUE);
@@ -894,6 +922,7 @@ struct annoGratorGpVarFuncFilter aggvFuncFilter;
 ZeroVar(&aggvFuncFilter);
 aggvFuncFilter.intergenic = cartUsualBoolean(cart, "hgva_include_intergenic", FALSE);
 aggvFuncFilter.upDownstream = cartUsualBoolean(cart, "hgva_include_upDownstream", TRUE);
+aggvFuncFilter.nmdTranscript = cartUsualBoolean(cart, "hgva_include_nmdTranscript", TRUE);
 aggvFuncFilter.exonLoss = cartUsualBoolean(cart, "hgva_include_exonLoss", TRUE);
 aggvFuncFilter.utr = cartUsualBoolean(cart, "hgva_include_utr", TRUE);
 aggvFuncFilter.cdsSyn = cartUsualBoolean(cart, "hgva_include_cdsSyn", TRUE);
@@ -1146,15 +1175,17 @@ if (! parsePosition(position, retChrom, retStart, retEnd))
     errAbort("Expected position to be chrom:start-end but got '%s'", position);
 }
 
-static char *sampleVariantsPath(struct annoAssembly *assembly)
-/* Construct a path for a trash file of contrived example variants for this assembly. */
+static char *sampleVariantsPath(struct annoAssembly *assembly, char *geneTrack)
+/* Construct a path for a trash file of contrived example variants for this assembly
+ * and gene track. */
 {
 char *chrom = NULL;
 uint start = 0, end = 0;
 getCartPosOrDie(&chrom, &start, &end);
 char *subDir = "hgv";
 mkdirTrashDirectory(subDir);
-struct dyString *dy = dyStringCreate("%s/%s/%s_%s_%u-%u.vcf", trashDir(), subDir, assembly->name,
+struct dyString *dy = dyStringCreate("%s/%s/%s_%s_%s_%u-%u.vcf",
+				     trashDir(), subDir, assembly->name, geneTrack,
 				     chrom, start, end);
 return dyStringCannibalize(&dy);
 }
@@ -1176,6 +1207,20 @@ char c;
 while ((c = bases[(uint)(floor(drand48() * 4.0))]) == *pBase)
     ;
 *pBase = c;
+}
+
+static void writeMinimalVcfRow(FILE *f, struct vcfRecord *rec)
+/* Write a minimalist VCF row (coords, name, alleles and placeholders). */
+{
+// VCF columns: #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+fprintf(f, "%s\t%u\t%s\t%s\t",
+	rec->chrom, rec->chromStart+1, rec->name, rec->alleles[0]);
+// Comma-separated alt alleles:
+int i;
+for (i = 1;  i < rec->alleleCount;  i++)
+    fprintf(f, "%s%s",  (i > 1 ? "," : ""), rec->alleles[i]);
+// Placeholder qual, filter, info.
+fprintf(f, "\t.\t.\t.\n");
 }
 
 static void writeMinimalVcfRowFromBed(FILE *f, struct bed4 *bed, struct dnaSeq *seq, uint seqOffset)
@@ -1356,16 +1401,16 @@ static struct annoStreamer *makeSampleVariantsStreamer(struct annoAssembly *asse
 /* Construct a VCF file of example variants for db (unless it already exists)
  * and return an annoStreamer for that file.  If possible, make the variants hit a gene. */
 {
-char *sampleFile = sampleVariantsPath(assembly);
+char *sampleFile = sampleVariantsPath(assembly, geneTdb->track);
 boolean forceRebuild = cartUsualBoolean(cart, "hgva_rebuildSampleVariants", FALSE);
 if (! fileExists(sampleFile) || forceRebuild)
     {
-    FILE *f = mustOpen(sampleFile, "w");
-    writeMinimalVcfHeader(f, assembly->name);
     struct annoStreamer *geneStream = streamerFromTrack(assembly, geneTdb->table, geneTdb, NULL,
 							NO_MAXROWS);
     boolean gotCoding = FALSE, gotNonCoding = FALSE;
     struct genePred *gpList = genesFromPosition(geneStream, &gotCoding, &gotNonCoding);
+    FILE *f = mustOpen(sampleFile, "w");
+    writeMinimalVcfHeader(f, assembly->name);
     if (gpList == NULL)
 	{
 	warn("Unable to find any gene transcripts in '%s' (%s)",
@@ -1411,6 +1456,336 @@ if (! fileExists(sampleFile) || forceRebuild)
 return annoStreamVcfNew(sampleFile, FALSE, assembly, maxOutRows);
 }
 
+static char *variantIdPath(struct annoAssembly *assembly, char *variantIds)
+/* Use the md5sum of the user's pasted/uploaded variants to make a hopefully
+ * unique trash filename. */
+{
+char *md5sum = md5HexForString(variantIds);
+char *subDir = "hgv";
+mkdirTrashDirectory(subDir);
+struct dyString *dy = dyStringCreate("%s/%s/%s_%s.vcf", trashDir(), subDir, assembly->name, md5sum);
+return dyStringCannibalize(&dy);
+}
+
+static struct slName *hashListNames(struct hash *hash)
+/* Return a list of all element names in the hash (if any). */
+{
+struct slName *list = NULL;
+struct hashCookie cookie = hashFirst(hash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    slAddHead(&list, slNameNew(hel->name));
+return list;
+}
+
+static char *encloseInAngleBracketsDbSnp(char *stringIn)
+/* Return a string that has <dbSNP: stringIn>, with spaces replaced by '_'s. */
+{
+int stringInLen = strlen(stringIn);
+int stringOutLen = stringInLen + strlen("<dbSNP:>") + 1;
+char *stringOut = needMem(stringOutLen);
+safef(stringOut, stringOutLen, "<dbSNP:%s>", stringIn);
+subChar(stringOut, ' ', '_');
+return stringOut;
+}
+
+// dbSNP named alleles have many ways to describe a deletion from the reference,
+// for example "LARGEDELETION", "LARGE DELETION", "... DELETED", "... DEL":
+static const char *dbSnpDelRegex = "^\\(.*(DELET.*| DEL)\\)$";
+
+static char **parseDbSnpAltAlleles(char *refAl, char *obsAls, boolean minusStrand,
+				   int *retAltAlCount, boolean *retNeedLeftBase)
+/* Given a non-symbolic reference allele and slash-sep observed alleles from dbSNP,
+ * return an array of +-strand alleles that are not the same as the reference.
+ * If any allele is "-" (deleted, zero-length), then set retNeedLeftBase to TRUE
+ * because in this case VCF requires that the reference base to the left of the indel
+ * must be added to all alleles, and the start coord also moves one base to the left.
+ * Also, if any alt allele is symbolic, padding is required.
+ * Note: this trashes obsAls.  Resulting array can be freed but not its contents. */
+{
+int obsCount = countChars(obsAls, '/') + 1;
+char *obsWords[obsCount];
+chopByChar(obsAls, '/', obsWords, obsCount);
+boolean obsHasDeletion = FALSE;
+int i;
+for (i = 0;  i < obsCount;  i++)
+    if (sameString(obsWords[i], "-"))
+	{
+	obsHasDeletion = TRUE;
+	break;
+	}
+char **altAls;
+AllocArray(altAls, obsCount);
+int altCount = 0;
+boolean needLeftBase = isEmpty(refAl) || sameString(refAl, "-");
+for (i = 0;  i < obsCount;  i++)
+    {
+    char *altAl = obsWords[i];
+    int altAlLen = strlen(altAl);
+    if (minusStrand && isAllNt(altAl, altAlLen))
+	reverseComplement(altAl, altAlLen);
+    if (differentString(altAl, refAl))
+	{
+	if (sameString(altAl, "-"))
+	    {
+	    altAls[altCount] = "";
+	    needLeftBase = TRUE;
+	    }
+	else
+	    {
+	    // It would be nice to expand the "(CA)11/12/14/15/16/17/18/19/20" syntax of
+	    // some dbSNP observed's.  What are these?: "(D1S243)", "(D1S2870)"
+	    // Unfortunately for observed="lengthTooLong" we just can't get the correct allele
+	    // sequence. (76,130 of those in snp138)
+	    // Hmmm, I guess we could at least stick in the right number of N's if we can
+	    // parse "(245 BP INSERTION)".  (2403 rows rlike "[0-9]+ BP ?INSERTION" in snp138)
+	    if (!isAllNt(altAl, altAlLen))
+		{
+		// Symbolic allele: left base required, and enclose it in <dbSNP:>'s.
+		// But if it's one of dbSNP's LARGEDELETION kind of alleles, that is redundant
+		// with the reference allele, so if we know there is already a "-" allele,
+		// skip it.
+		if (obsHasDeletion && regexMatch(altAl, dbSnpDelRegex))
+		    continue;
+		needLeftBase = TRUE;
+		altAl = encloseInAngleBracketsDbSnp(altAl);
+		}
+	    altAls[altCount] = altAl;
+	    }
+	altCount++;
+	}
+    }
+*retAltAlCount = altCount;
+*retNeedLeftBase = needLeftBase;
+return altAls;
+}
+
+char *firstNCommaSep(struct slName *nameList, int n)
+/* Return a comma-separated string with the first n names in nameList. */
+{
+struct dyString *dy = dyStringNew(0);
+int i;
+struct slName *el;
+for (i=0, el=nameList;  i < 5 && el != NULL;  i++, el = el->next)
+    {
+    if (i > 0)
+	dyStringAppend(dy, ", ");
+    dyStringPrintf(dy, "'%s'", el->name);
+    }
+return dyStringCannibalize(&dy);
+}
+
+//#*** Variant ID-matching should be metadata-driven too.  termRegex -> data source.
+static const char *rsIdRegex = "^rs[0-9]+$";
+
+static void rsIdsToVcfRecords(struct annoAssembly *assembly, struct slName *rsIds,
+			      struct vcfFile *vcff, struct vcfRecord **pRecList,
+			      struct slName **pCommentList)
+/* If possible, look up coordinates and alleles of dbSNP rs IDs. */
+{
+if (rsIds == NULL)
+    return;
+char *table = findLatestSnpTable(NULL);
+struct sqlConnection *conn = hAllocConn(assembly->name);
+// Build a 'name in (...)' query, and build a hash of IDs so we can test whether all were found
+struct dyString *dq = sqlDyStringCreate("select chrom, chromStart, chromEnd, name, strand, "
+					"refUCSC, observed from %s where name in (",
+					table);
+struct hash *idHash = hashNew(0);
+struct slName *id;
+for (id = rsIds;  id != NULL;  id = id->next)
+    {
+    tolowers(id->name);
+    dyStringPrintf(dq, "%s'%s'", (id != rsIds ? "," : ""), id->name);
+    hashStoreName(idHash, id->name);
+    }
+dyStringAppend(dq, ");");
+struct sqlResult *sr = sqlGetResult(conn, dq->string);
+// Construct a minimal VCF row to make a vcfRecord for each variant.
+char *vcfRow[9];
+vcfRow[5] = vcfRow[6] = vcfRow[7] = "."; // placeholder for qual, filter, info
+// It would be cool to someday add snpNNN's exceptions column to the filter or info.
+struct dyString *dyAltAlStr = dyStringNew(0);
+int i;
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *chrom = row[0];
+    uint chromStart = atoll(row[1]);
+    uint chromEnd = atoll(row[2]);
+    char *name = row[3];
+    char *strand = row[4];
+    char refAl[max(strlen(row[5]), chromEnd-chromStart) + 2];
+    safecpy(refAl, sizeof(refAl), row[5]);
+    if (sameString(refAl, "-"))
+	refAl[0] = '\0';
+    else if (! isAllNt(refAl, strlen(refAl)))
+	{
+	// refUCSC is symbolic like "( 2548bp insertion )" -- just use the actual reference
+	// sequence for now, to keep things simple downstream.
+	//#*** Need something more efficient, like a sequence cache inside assembly!
+	struct dnaSeq *seq = twoBitReadSeqFragLower(assembly->tbf, chrom, chromStart, chromEnd);
+	safecpy(refAl, sizeof(refAl), seq->dna);
+	toUpperN(refAl, seq->size);
+	dnaSeqFree(&seq);
+	}
+    char *obsAls = row[6];
+    int altAlCount = 0;
+    boolean needLeftBase = FALSE;
+    char **altAls = parseDbSnpAltAlleles(refAl, obsAls, sameString(strand, "-"),
+					 &altAlCount, &needLeftBase);
+    needLeftBase |= (chromStart == chromEnd);  // should be redundant, but just in case.
+    hashRemove(idHash, name);
+    uint vcfStart = chromStart + 1;
+    dyStringClear(dyAltAlStr);
+    // If this is a non-symbolic indel, we'll have to move start one base to the left
+    // and add the reference base to the left of the actual alleles
+    if (needLeftBase)
+	{
+	vcfStart--;
+	//#*** Need something more efficient, like a sequence cache inside assembly!
+	struct dnaSeq *seq = twoBitReadSeqFragLower(assembly->tbf, chrom,
+						    chromStart-1, chromStart);
+	toUpperN(seq->dna, 1);
+	char leftBase = seq->dna[0];
+	dnaSeqFree(&seq);
+	char refAlPlus[strlen(refAl)+2];
+	safef(refAlPlus, sizeof(refAlPlus), "%c%s", leftBase, refAl);
+	safecpy(refAl, sizeof(refAl), refAlPlus);
+	for (i = 0;  i < altAlCount;  i++)
+	    {
+	    if (i > 0)
+		dyStringAppendC(dyAltAlStr, ',');
+	    if (isAllNt(altAls[i], strlen(altAls[i])))
+		dyStringPrintf(dyAltAlStr, "%c%s", leftBase, altAls[i]);
+	    else
+		dyStringAppend(dyAltAlStr, altAls[i]);
+	    }
+	}
+    else
+	{
+	// Not an indel, just make comma-sep string of alt alleles.
+	for (i = 0;  i < altAlCount;  i++)
+	    {
+	    if (i > 0)
+		dyStringAppendC(dyAltAlStr, ',');
+	    dyStringAppend(dyAltAlStr, altAls[i]);
+	    }
+	}
+    char vcfStartStr[64];
+    safef(vcfStartStr, sizeof(vcfStartStr), "%d", vcfStart);
+    vcfRow[0] = chrom;
+    vcfRow[1] = vcfStartStr;
+    vcfRow[2] = name;
+    vcfRow[3] = refAl;
+    vcfRow[4] = dyAltAlStr->string;
+    struct vcfRecord *rec = vcfRecordFromRow(vcff, vcfRow);
+    slAddHead(pRecList, rec);
+    }
+dyStringFree(&dyAltAlStr);
+// Check for IDs not found
+struct slName *notFoundIds = hashListNames(idHash);
+if (notFoundIds != NULL)
+    {
+    char *namesNotFound = firstNCommaSep(notFoundIds, 5);
+    struct dyString *dy = dyStringCreate("%d rs# IDs not found, e.g. %s",
+					 slCount(notFoundIds), namesNotFound);
+    slAddTail(pCommentList, slNameNew(dy->string));
+    freeMem(namesNotFound);
+    dyStringFree(&dy);
+    }
+slNameFreeList(&notFoundIds);
+}
+
+static struct vcfRecord *parseVariantIds(struct annoAssembly *assembly, char *variantIdText,
+					 struct slName **pCommentList)
+/* Return a sorted list of minimal vcfRecords (coords, name, ref and alt alleles)
+ * corresponding to each pasted variant. */
+{
+struct vcfRecord *recList = NULL;
+char *p = cloneString(variantIdText), *id;
+struct slName *rsIds = NULL, *unknownIds = NULL;
+subChar(p, ',', ' ');
+while ((id = nextWord(&p)) != NULL)
+    {
+    if (regexMatchNoCase(id, rsIdRegex))
+	slNameAddHead(&rsIds, id);
+    else
+	slNameAddHead(&unknownIds, id);
+    }
+if (unknownIds != NULL)
+    {
+    slReverse(&unknownIds);
+    char *firstUnknownIds = firstNCommaSep(unknownIds, 5);
+    struct dyString *dy = dyStringCreate("%d variant identifiers are unrecognized, e.g. %s",
+					 slCount(unknownIds), firstUnknownIds);
+    slAddTail(pCommentList, slNameNew(dy->string));
+    freeMem(firstUnknownIds);
+    dyStringFree(&dy);
+    }
+struct vcfFile *vcff = vcfFileNew();
+rsIdsToVcfRecords(assembly, rsIds, vcff, &recList, pCommentList);
+slSort(&recList, vcfRecordCmp);
+slNameFreeList(&rsIds);
+slNameFreeList(&unknownIds);
+return recList;
+}
+
+static void adjustRangeForVariants(struct vcfRecord *recList, char **pChrom,
+				   uint *pStart, uint *pEnd)
+/* Given a *sorted* list of VCF records, look at the first and last records and if
+ * they fall outside of the range, expand the range to include them. */
+{
+if (pChrom != NULL && *pChrom != NULL && recList != NULL)
+    {
+    // We have a non-empty sorted list of records, and search is not genome-wide;
+    // look at first and last variants to see if they're not already included in search range.
+    struct vcfRecord *first = recList, *last = recList;
+    while (last->next)
+	last = last->next;
+    if (differentString(*pChrom, first->chrom) || differentString(*pChrom, last->chrom))
+	{
+	// Variants span multiple chroms; force genome-wide search.
+	*pChrom = NULL;
+	*pStart = *pEnd = 0;
+	}
+    else
+	{
+	// Variant(s) are on the same chrom as search range; check starts and ends.
+	if (*pStart > first->chromEnd)
+	    *pStart = first->chromEnd;
+	if (*pEnd < last->chromStart)
+	    *pEnd = last->chromStart;
+	}
+    }
+}
+
+static struct annoStreamer *makeVariantIdStreamer(struct annoAssembly *assembly, int maxOutRows,
+						  char **pChrom, uint *pStart, uint *pEnd,
+						  struct slName **pCommentList)
+/* Translate user's pasted/uploaded variant IDs into minimal VCF if possible.
+ * Return a VCF streamer for those, and if the current search position is too narrow
+ * to include all of the variants, widen it as necessary. */
+{
+// Hash variant text to get trash filename.  Use if exists, otherwise build it.
+char *variantIds = cartString(cart, hgvaVariantIds);
+char *varFile = variantIdPath(assembly, variantIds);
+boolean forceRebuild = cartUsualBoolean(cart, "hgva_rebuildVariantIds", FALSE);
+if (! fileExists(varFile) || forceRebuild)
+    {
+    struct vcfRecord *varList = parseVariantIds(assembly, variantIds, pCommentList);
+//#*** If no variants were recognized, we should probably show main page with a warning.
+    adjustRangeForVariants(varList, pChrom, pStart, pEnd);
+    FILE *f = mustOpen(varFile, "w");
+    writeMinimalVcfHeader(f, assembly->name);
+    struct vcfRecord *var;
+    for (var = varList;  var != NULL;  var = var->next)
+	writeMinimalVcfRow(f, var);
+    carefulClose(&f);
+    }
+return annoStreamVcfNew(varFile, FALSE, assembly, maxOutRows);
+}
+
 static struct trackDb *getVariantTrackDb(char *variantTrack)
 /* Get a tdb for the user's selected variant track, or warn and return NULL
  * (main page will be displayed) */
@@ -1453,6 +1828,7 @@ int maxVarRows = cartUsualInt(cart, "hgva_variantLimit", 10);
 struct annoStreamer *primary = NULL;
 char *primaryLongLabel = NULL;
 char *variantTrack = cartString(cart, "hgva_variantTrack");
+struct slName *commentList = NULL;
 if (sameString(variantTrack, hgvaSampleVariants))
     {
     primary = makeSampleVariantsStreamer(assembly, geneTdb, maxVarRows);
@@ -1462,6 +1838,12 @@ if (sameString(variantTrack, hgvaSampleVariants))
     chrom = NULL;
     start = 0;
     end = 0;
+    }
+else if (sameString(variantTrack, hgvaUseVariantIds))
+    {
+    // Override search position if cart position doesn't include all variants:
+    primary = makeVariantIdStreamer(assembly, maxVarRows, &chrom, &start, &end, &commentList);
+    primaryLongLabel = hgvaVariantIdsLabel;
     }
 else
     {
@@ -1525,6 +1907,9 @@ else
     webStartText();
     }
 struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
+struct slName *comment;
+for (comment = commentList;  comment != NULL;  comment = comment->next)
+    vepOut->comment(vepOut, comment->name);
 if (chrom != NULL)
     annoGratorQuerySetRegion(query, chrom, start, end);
 annoGratorQueryExecute(query);

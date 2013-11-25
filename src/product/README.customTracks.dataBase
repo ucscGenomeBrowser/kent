@@ -113,6 +113,7 @@ specified:
 db.host=ctdbhost
 db.user=ctdbuser
 db.password=ctdbpasswd
+central.db=hgcentral
 
 Remember to set the priviledges on this hg.conf file at 600:
 

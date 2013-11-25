@@ -394,7 +394,7 @@ canPack On
 
     # This is released track with TF Motif setting (under development)
     track wgEncodeRegTfbsClusteredV3
-    release alpha
+    release alpha, beta
     shortLabel Txn Fac ChIP V3
     longLabel Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
     type factorSource
@@ -413,7 +413,7 @@ canPack On
 
     # This is latest released
     track wgEncodeRegTfbsClusteredV3
-    release beta, public
+    release public
     shortLabel Txn Fac ChIP V3
     longLabel Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
     type factorSource

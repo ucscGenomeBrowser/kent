@@ -186,6 +186,9 @@ switch (type)
 
 #define VCF_IGNORE_ERRS (INT_MAX - 1)
 
+struct vcfFile *vcfFileNew();
+/* Return a new, empty vcfFile object. */
+
 struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords, boolean parseAll);
 /* Open fileOrUrl and parse VCF header; return NULL if unable.
  * If parseAll, then read in all lines, parse and store in
@@ -238,6 +241,9 @@ unsigned int vcfRecordTrimIndelLeftBase(struct vcfRecord *rec);
  * 2. In pgSnp display mode, the two alleles are always the same color.
  * However, for hgTracks' mapBox we need the correct chromStart for identifying the
  * record in hgc -- so return the original chromStart. */
+
+int vcfRecordCmp(const void *va, const void *vb);
+/* Compare to sort based on position. */
 
 void vcfFileFree(struct vcfFile **vcffPtr);
 /* Free a vcfFile object. */
