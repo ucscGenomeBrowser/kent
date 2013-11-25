@@ -24,6 +24,7 @@ db=""
 tableName=""
 currDir=""
 error="no"
+releases="alpha beta public"
 
 # get arguments or print usage
 if [ $# -ne 2 ] 
@@ -54,61 +55,135 @@ then
   exit 1
 fi
 
-echo
+###########################################
+# Function definitions
 
 ###########################################
-# find the level of the associated .html file
-# start at the assembly level
-cd ~/kent/src/hg/makeDb/trackDb/*/$db
-currDir=""
+# htmlPrint
+# Usage: htmlPrint database html_filename
+# Prints the path to the html file for the specified database and
+# filename.  Prints an error if the file is not found.  Note that the
+# .html suffix should be omitted from the second argument.
+# Side-effects: $currDir is smashed, and the current directory may be changed
+function htmlPrint ()
+{
+  # find the level of the associated .html file(s)
+  # start at the assembly level
+  cd ~/kent/src/hg/makeDb/trackDb/*/$1
+  currDir=""
 
-if [ -e $tableName.html ]
-then # the .html file is found at the assembly level
-  currDir=`pwd -P`
-else
-  cd ..
-  if [ -e $tableName.html ]
-  then # the .html file is found at the organism level
+  if [ -e $2.html ]
+  then # the .html file is found at the assembly level
     currDir=`pwd -P`
   else
     cd ..
-    if [ -e $tableName.html ]
-    then # the .html file is found at the top level
+    if [ -e $2.html ]
+    then # the .html file is found at the organism level
       currDir=`pwd -P`
+    else
+      cd ..
+      if [ -e $2.html ]
+      then # the .html file is found at the top level
+        currDir=`pwd -P`
+      fi
     fi
   fi
+
+  if [ "$currDir" == "" ]
+  then
+    echo -e "the $2.html file does not exist at any level"
+  else
+    echo -e "$currDir/$2.html"
+  fi
+}
+
+# End of function definitions
+###########################################
+
+
+# Pull the track data for each release.
+# Done with tdbQuery (default release is alpha, but we override that
+# with the release list defined at the top of this file).
+# Releases are grouped together if they have the same data.
+releaseGroups=( )
+releaseData=( )
+for release in $releases
+do
+  # note: built in assumption here that we'll only get one record back.
+  thisRecord=`tdbQuery -release=$release "select track,table,release,html, \
+          filePos from $db where track = '$tableName' or table = \
+          '$tableName'" 2> /dev/null || error=yes`
+  if [ "$thisRecord" == "" ]
+  then  # the release does not include this track - skip it
+    continue
+  fi
+
+  # check if it's identical to the track data for another release we've seen
+  recordIsNew=1
+  limit=${#releaseGroups[*]}
+  for ((i=0; i < ${limit}; i++))
+  do
+    if [ "${releaseData[$i]}" == "$thisRecord" ]
+    then   # record matches an existing record - join them
+      recordIsNew=0
+      releaseGroups[$i]="${releaseGroups[$i]},$release"
+    fi
+  done
+  if [ "$recordIsNew" -eq 1 ]
+  then  # record did not match an existing record
+    releaseData[$i]="$thisRecord"
+    releaseGroups[$i]="$release"
+  fi
+done
+
+if [ "${#releaseGroups[*]}" -eq 0 ]
+then
+  echo -e "\nERROR: No tracks exist in $db with track or table name ${tableName}.\n"
+  exit 1;
 fi
 
-if [ "$currDir" == "" ]
-then
-  echo -e " * the $tableName.html file does not exist at any level\n"
-else
-  echo -e " * html file: $currDir/$tableName.html\n"
-fi
+# Now to parse the data we've pulled (for now, just pull out the html files)
+# Keeping this separate from the printing for now, as more parsing may
+# be added later for composite tracks, etc.
+limit=${#releaseGroups[*]}
+htmlFileList=( )
+for ((i=0; i < ${limit}; i++))
+do
+  htmlFile=`echo -e "${releaseData[$i]}" | awk '$1 ~ /^html/ {print $2}'`
+  # if the entry is blank, just use the track name to find the html file
+  if [ "$htmlFile" == "" ]
+  then
+    htmlFile=`echo -e "${releaseData[$i]}" | awk '$1 ~ /^track/ {print $2}'`
+  fi
+  htmlFileList[$i]="$htmlFile"
+done
+
+# for each set of matching releases, print the corresponding html file location
+echo
+echo " * html files:"
+limit=${#releaseGroups[*]}
+for ((i=0; i < ${limit}; i++))
+do
+  # if there's only one entry, then all releases match.  Skip printing their names
+  if [ "$limit" -ne 1 ]
+  then
+    echo -n "${releaseGroups[$i]}: "
+  fi
+  htmlPrint $db ${htmlFileList[$i]}
+done
+
 
 ###########################################
-# find the trackDb.ra entry (using tdbQuery)
-# the tdbQuery default is -release=alpha
+# print the trackDb.ra entries minus the html field
+echo
 echo " * trackDb:"
-alpha=`tdbQuery "select track,release,priority,visibility,filePos from \
-     $db where track='$tableName'" 2> /dev/null` || error=yes
 
-beta=`tdbQuery -release=beta "select track,release,priority,visibility,filePos from \
-        $db where track='$tableName'" 2> /dev/null` || error=yes
+limit=${#releaseGroups[*]}
+for ((i=0; i < ${limit}; i++))
+do
+  echo -e "${releaseData[$i]}\n" | awk '$1 !~ /^html/ {print}'
+done
 
-public=`tdbQuery -release=public "select track,release,priority,visibility,filePos from \
-       $db where track='$tableName'" 2> /dev/null` || error=yes
-
-# always print "alpha"; only print beta or public if they differ from alpha
-echo -e "$alpha\n"
-if [ "$alpha" != "$beta" ]
-then
-  echo -e "$beta\n"
-fi
-if [ "$alpha" != "$public" ] && [ "$beta" != "$public" ] 
-then
-  echo -e "$public\n"
-fi
 
 # if tdbQuery is only giving errors, variables will be empty and nothing printed
 if [ "$error" = "yes" ]

@@ -294,6 +294,7 @@ sGroup_Sarcopterygii wigMaf
 sGroup_Vertebrate wigMaf
 sGroup_bird wigMaf
 sGroup_fish wigMaf
+sGroup_Fish wigMaf
 sGroup_hiv wigMafProt wigMaf
 sGroup_mammal wigMaf
 sGroup_placental wigMaf

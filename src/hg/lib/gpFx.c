@@ -223,7 +223,9 @@ struct gpFx *gpFxNew(char *allele, char *transcript, enum soTerm soNumber,
 {
 struct gpFx *effect;
 lmAllocVar(lm, effect);
-effect->allele = collapseDashes(strUpper(lmCloneString(lm, allele)));
+effect->allele = collapseDashes(lmCloneString(lm, allele));
+if (isAllNt(effect->allele, strlen(effect->allele)))
+    touppers(effect->allele);
 effect->transcript = lmCloneString(lm, transcript);
 effect->soNumber = soNumber;
 effect->detailType = detailType;
@@ -272,7 +274,8 @@ gpFx->details.nonCodingExon.cDnaPosition = cdnaPos;
 }
 
 static struct gpFx *gpFxCheckUtr( struct allele *allele, struct genePred *pred,
-				  struct txCoords *txc, int exonIx, struct lm *lm)
+				  struct txCoords *txc, int exonIx, boolean predIsNmd,
+				  struct lm *lm)
 /* check for effects in UTR of coding gene -- caller ensures it's in exon, pred is coding
  * and exonIx has been strand-adjusted */
 {
@@ -289,6 +292,10 @@ else if ((variant->chromStart < pred->txEnd && variant->chromEnd > pred->cdsEnd)
     term = (*pred->strand == '-') ? _5_prime_UTR_variant : _3_prime_UTR_variant;
 if (term != 0)
     {
+    if (predIsNmd)
+	// This transcript is already subject to nonsense-mediated decay, so the effect
+	// is probably not a big deal:
+	term = NMD_transcript_variant;
     gpFx = gpFxNew(allele->sequence, pred->name, term, nonCodingExon, lm);
     setNCExonVals(gpFx, exonIx, txc->startInCdna);
     }
@@ -511,16 +518,22 @@ static char *gpFxModifyCodingSequence(char *oldCodingSeq, struct genePred *pred,
 boolean isRc = (pred->strand[0] == '-');
 char *newAlleleSeq = allele->sequence;
 int newAlLen = strlen(newAlleleSeq);
-if (isRc)
+if (! isAllNt(newAlleleSeq, newAlLen))
     {
-    newAlleleSeq = lmCloneString(lm, allele->sequence);
+    // symbolic -- may be deletion or insertion, but we can't tell. :(
+    newAlleleSeq = "";
+    newAlLen = 0;
+    }
+if (isRc && newAlLen > 0)
+    {
+    newAlleleSeq = lmCloneString(lm, newAlleleSeq);
     reverseComplement(newAlleleSeq, newAlLen);
     }
 int variantSizeOnCds = endInCds - startInCds;
 if (variantSizeOnCds < 0)
     errAbort("gpFx: endInCds (%d) < startInCds (%d)", endInCds, startInCds);
 char *newCodingSeq = mergeAllele(oldCodingSeq, startInCds, variantSizeOnCds,
-				 newAlleleSeq, allele->length, lm);
+				 newAlleleSeq, newAlLen, lm);
 // If newCodingSequence has an early stop, truncate there:
 truncateAtStopCodon(newCodingSeq);
 int variantSizeOnRef = allele->variant->chromEnd - allele->variant->chromStart;
@@ -529,32 +542,8 @@ if (retCdsBasesAdded)
 return newCodingSeq;
 }
 
-static boolean isSafeFromNMD(int exonNum, struct variant *variant, struct genePred *pred)
-/* Return TRUE if variant in strand-corrected exonNum is in the region
- * of pred that would make it safe from Nonsense-Mediated Decay (NMD).
- * NMD is triggered by the presence of a stop codon that appears
- * before ~50bp before the end of the last exon.  In other words, if
- * there's a stop codon with a detectable downstream splice junction,
- * translation is prevented -- see
- * http://en.wikipedia.org/wiki/MRNA_surveillance#Mechanism_in_mammals */
-{
-boolean lastExonNum = pred->exonCount - 1;
-if (exonNum == lastExonNum)
-    return TRUE;
-int nextToLastExonNum = pred->exonCount - 2;
-if (exonNum == nextToLastExonNum)
-    {
-    // Is it within 50bp of 3' end of exon?
-    if (pred->strand[0] == '-')
-	return (variant->chromEnd < pred->exonStarts[1] + 50);
-    else
-	return (variant->chromStart > pred->exonEnds[nextToLastExonNum] - 50);
-    }
-return FALSE;
-}
-
 static void setSpecificCodingSoTerm(struct gpFx *effect, char *oldAa, char *newAa,
-				    int cdsBasesAdded, boolean safeFromNMD)
+				    int cdsBasesAdded)
 /* Assuming that deletions are marked with dashes in newCodingSequence, 
  * and that effect fields aside from soNumber are already populated, use the
  * pep seqs and number of dashes to determine the appropriate SO term.
@@ -599,10 +588,8 @@ else
 			     "is '%c' not 'Z'", newAa[newAaSize-1]);
 		effect->soNumber = frameshift_variant;
 		}
-	    else if (safeFromNMD)
-		effect->soNumber = stop_gained;
 	    else
-		effect->soNumber = NMD_transcript_variant;
+		effect->soNumber = stop_gained;
 	    }
 	else if (newAaSize > oldAaSize)
 	    {
@@ -634,7 +621,7 @@ else
 }
 
 static struct gpFx *gpFxChangedCds(struct allele *allele, struct genePred *pred,
-				   struct txCoords *txc, int exonIx,
+				   struct txCoords *txc, int exonIx, boolean predIsNmd,
 				   struct dnaSeq *transcriptSequence, struct lm *lm)
 /* calculate effect of allele change on coding transcript */
 {
@@ -703,8 +690,12 @@ else
     cc->aaNew = lmCloneString(lm, newaa + pepPos);
     }
 
-boolean safeFromNMD = isSafeFromNMD(exonIx, allele->variant, pred);
-setSpecificCodingSoTerm(effect, oldaa, newaa, cdsBasesAdded, safeFromNMD);
+if (predIsNmd)
+    // This transcript is already subject to nonsense-mediated decay, so the effect
+    // is probably not a big deal:
+    effect->soNumber = NMD_transcript_variant;
+else
+    setSpecificCodingSoTerm(effect, oldaa, newaa, cdsBasesAdded);
 
 return effect;
 }
@@ -731,7 +722,8 @@ return alleles->sequence;
 }
 
 static struct gpFx *gpFxInExon(struct variant *variant, struct txCoords *txc, int exonIx,
-			       struct genePred *pred, struct dnaSeq *transcriptSeq, struct lm *lm)
+			       struct genePred *pred, boolean predIsNmd,
+			       struct dnaSeq *transcriptSeq, struct lm *lm)
 /* Given a variant that overlaps an exon of pred, figure out what each allele does. */
 {
 struct gpFx *effectsList = NULL;
@@ -744,40 +736,44 @@ for ( ; allele ; allele = allele->next)
 	    {
 	    // first find effects of allele in UTR, if any
 	    effectsList = slCat(effectsList,
-				gpFxCheckUtr(allele, pred, txc, exonIx, lm));
+				gpFxCheckUtr(allele, pred, txc, exonIx, predIsNmd, lm));
 	    if (txc->startInCds >= 0)
 		effectsList = slCat(effectsList,
-				    gpFxChangedCds(allele, pred, txc, exonIx, transcriptSeq, lm));
+				    gpFxChangedCds(allele, pred, txc, exonIx, predIsNmd,
+						   transcriptSeq, lm));
 	    }
 	else
 	    effectsList = slCat(effectsList,
 				gpFxChangedNoncodingExon(allele, pred, txc, exonIx, lm));
 
-	// Was entire exon deleted?
-	int exonNumPos = exonIx;
-	if (pred->strand[0] == '-')
-	    exonNumPos = pred->exonCount - 1 - exonIx;
-	uint exonStart = pred->exonStarts[exonNumPos], exonEnd = pred->exonEnds[exonNumPos];
-	if (variant->chromStart <= exonStart && variant->chromEnd >= exonEnd)
+	if (!predIsNmd)
 	    {
-	    struct gpFx *effect = gpFxNew(allele->sequence, pred->name, exon_loss,
-					  nonCodingExon, lm);
-	    setNCExonVals(effect, exonIx, txc->startInCdna);
-	    slAddTail(&effectsList, effect);
-	    }
-	else
-	    {
-	    // If variant is in exon *but* within 3 bases of splice site,
-	    // it also qualifies as splice_region_variant:
-	    if ((variant->chromEnd > exonEnd-3 && variant->chromStart < exonEnd &&
-		 exonIx < pred->exonCount - 1) ||
-		(variant->chromEnd > exonStart && variant->chromStart < exonStart+3 &&
-		 exonIx > 0))
+	    // Was entire exon deleted?
+	    int exonNumPos = exonIx;
+	    if (pred->strand[0] == '-')
+		exonNumPos = pred->exonCount - 1 - exonIx;
+	    uint exonStart = pred->exonStarts[exonNumPos], exonEnd = pred->exonEnds[exonNumPos];
+	    if (variant->chromStart <= exonStart && variant->chromEnd >= exonEnd)
 		{
-		struct gpFx *effect = gpFxNew(allele->sequence, pred->name, splice_region_variant,
+		struct gpFx *effect = gpFxNew(allele->sequence, pred->name, exon_loss,
 					      nonCodingExon, lm);
 		setNCExonVals(effect, exonIx, txc->startInCdna);
 		slAddTail(&effectsList, effect);
+		}
+	    else
+		{
+		// If variant is in exon *but* within 3 bases of splice site,
+		// it also qualifies as splice_region_variant:
+		if ((variant->chromEnd > exonEnd-3 && variant->chromStart < exonEnd &&
+		     exonIx < pred->exonCount - 1) ||
+		    (variant->chromEnd > exonStart && variant->chromStart < exonStart+3 &&
+		     exonIx > 0))
+		    {
+		    struct gpFx *effect = gpFxNew(allele->sequence, pred->name,
+						  splice_region_variant, nonCodingExon, lm);
+		    setNCExonVals(effect, exonIx, txc->startInCdna);
+		    slAddTail(&effectsList, effect);
+		    }
 		}
 	    }
 	}
@@ -786,7 +782,8 @@ return effectsList;
 }
 
 static struct gpFx *gpFxInIntron(struct variant *variant, struct txCoords *txc, int intronIx,
-				 struct genePred *pred, char *altAllele, struct lm *lm)
+				 struct genePred *pred, boolean predIsNmd, char *altAllele,
+				 struct lm *lm)
 // Annotate a variant that overlaps an intron (and possibly splice region)
 //#*** TODO: watch out for "introns" that are actually indels between tx seq and ref genome!
 {
@@ -809,6 +806,10 @@ if (variant->chromEnd > intronStart && variant->chromStart < intronEnd)
 	     (variant->chromEnd > intronEnd-8 && variant->chromStart < intronEnd+3))
 	// Within 3 to 8 bases of intron start or end:
 	soNumber = splice_region_variant;
+    if (predIsNmd)
+	// This transcript is already subject to nonsense-mediated decay, so the effect
+	// is probably not a big deal:
+	soNumber = NMD_transcript_variant;
     struct gpFx *effects = gpFxNew(altAllele, pred->name, soNumber, intron, lm);
     effects->details.intron.intronNumber = intronIx;
     slAddTail(&effectsList, effects);
@@ -824,6 +825,7 @@ struct gpFx *effectsList = NULL;
 uint varStart = variant->chromStart, varEnd = variant->chromEnd;
 if (varStart < pred->txEnd && varEnd > pred->txStart)
     {
+    boolean predIsNmd = genePredNmdTarget(pred);
     char *defaultAltAllele = firstAltAllele(variant->alleles);
     struct txCoords txc = getTxCoords(variant, pred);
     // Simplest case first: variant starts and ends in a single exon or single intron
@@ -834,23 +836,27 @@ if (varStart < pred->txEnd && varEnd > pred->txStart)
 	    {
 	    // Exonic variant; figure out what kind:
 	    effectsList = slCat(effectsList,
-				gpFxInExon(variant, &txc, ix, pred, transcriptSeq, lm));
+				gpFxInExon(variant, &txc, ix, pred, predIsNmd, transcriptSeq, lm));
 	    }
 	else
 	    {
 	    // Intronic (and/or splice) variant:
 	    effectsList = slCat(effectsList,
-				gpFxInIntron(variant, &txc, ix, pred, defaultAltAllele, lm));
+				gpFxInIntron(variant, &txc, ix, pred, predIsNmd, defaultAltAllele,
+					     lm));
 	    }
 	}
     else
 	{
-	// Let the user beware -- this variant is just complex (it overlaps at least one
-	// exon/intron boundary).  It could be an insertion, an MNV (multi-nt var) or
-	// a deletion.
-	struct gpFx *effect = gpFxNew(defaultAltAllele, pred->name, complex_transcript_variant,
-				      none, lm);
-	effectsList = slCat(effectsList, effect);
+	if (!predIsNmd)
+	    {
+	    // Let the user beware -- this variant is just complex (it overlaps at least one
+	    // exon/intron boundary).  It could be an insertion, an MNV (multi-nt var) or
+	    // a deletion.
+	    struct gpFx *effect = gpFxNew(defaultAltAllele, pred->name, complex_transcript_variant,
+					  none, lm);
+	    effectsList = slCat(effectsList, effect);
+	    }
 	// But we can at least say which introns and/or exons are affected.
 	// Transform exon and intron numbers into ordered integers, -1 (upstream) through
 	// 2*lastExonIx+1 (downstream), with even numbers being exonNum*2 and odd numbers
@@ -872,23 +878,23 @@ if (varStart < pred->txEnd && varEnd > pred->txStart)
 		// Intronic end precedes exonic start. Watch out for upstream as "intron[-1]":
 		if (txc.endExonIx >= 0)
 		    effectsList = slCat(effectsList,
-					gpFxInIntron(variant, &txc, txc.endExonIx, pred,
+					gpFxInIntron(variant, &txc, txc.endExonIx, pred, predIsNmd,
 						     defaultAltAllele, lm));
 		effectsList = slCat(effectsList,
-				    gpFxInExon(variant, &txc, txc.startExonIx, pred,
+				    gpFxInExon(variant, &txc, txc.startExonIx, pred, predIsNmd,
 					       transcriptSeq, lm));
 		}
 	    else
 		{
 		// Exonic end precedes intronic start.
 		effectsList = slCat(effectsList,
-				    gpFxInExon(variant, &txc, txc.endExonIx, pred,
+				    gpFxInExon(variant, &txc, txc.endExonIx, pred, predIsNmd,
 					       transcriptSeq, lm));
 		// Watch out for downstream as "intron[lastExonIx]"
 		if (txc.startExonIx < txc.exonCount - 1)
 		    effectsList = slCat(effectsList,
 					gpFxInIntron(variant, &txc, txc.startExonIx, pred,
-						     defaultAltAllele, lm));
+						     predIsNmd, defaultAltAllele, lm));
 		}
 	    } // end if variant is insertion
 	else
@@ -902,10 +908,11 @@ if (varStart < pred->txEnd && varEnd > pred->txStart)
 		int ix = ie / 2;
 		if (isExon)
 		    effectsList = slCat(effectsList,
-					gpFxInExon(variant, &txc, ix, pred, transcriptSeq, lm));
+					gpFxInExon(variant, &txc, ix, pred, predIsNmd,
+						   transcriptSeq, lm));
 		else
 		    effectsList = slCat(effectsList,
-					gpFxInIntron(variant, &txc, ix, pred,
+					gpFxInIntron(variant, &txc, ix, pred, predIsNmd,
 						     defaultAltAllele, lm));
 		} // end for each (partial) exon/intron overlapping variant
 	    } // end if variant is MNV or deletion

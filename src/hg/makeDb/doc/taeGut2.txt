@@ -552,9 +552,8 @@ taeGut2.upstreamGeneTbl = refGene
 
 ############################################################################
 # construct liftOver from taeGut1 to taeGut2 (DONE - 2013-06-19 - Hiram)
-    # documentation for this step is in taeGut1 - remember to do this
+    # documentation for this step is in taeGut1 -  been done
 
-XXX - ready to do this
 ############################################################################
 # downloads and pushQ entry (DONE - 2013-03-08 - Pauline)
     # after adding taeGut2 to the all.joiner file and verifying that
@@ -736,5 +735,26 @@ hgsql -e 'INSERT INTO trackVersion \
     VALUES("taeGut2", "ensGene", "hiram", "73", now(), \
         "peptides lifted from taeGut1", \
         "genes lifted from taeGut1 ensGene v73", "current" );' hgFixed
+
+    /cluster/bin/scripts/ensemblInfo.pl /hive/data/genomes/taeGut1/bed/ensGene.73/process/infoOut.txt | sort > ensemblToGeneName.taeGut1.tab
+    /cluster/bin/scripts/ensemblInfo.pl -field2=source /hive/data/genomes/taeGut1/bed/ensGene.73/process/infoOut.txt | sort > ensemblSource.taeGut1.tab
+
+    # default join output separates fields by space
+    # we need tab separated files for hgLoadSqlTab
+    # if it was join -t'\t' - it doesn't recognize \t as a tab
+    # if it was the hidden tab character join -t'^I' it wouldn't cut and paste
+    # so use the sed to change space into tab since we know our names do
+    # not have space
+    join taeGut2.name.list ensemblToGeneName.taeGut1.tab \
+          | sed -e 's/ /\t/g' > ensemblToGeneName.tab
+    join taeGut2.name.list ensemblSource.taeGut1.tab \
+          | sed -e 's/ /\t/g' > ensemblSource.tab
+
+    hgLoadSqlTab taeGut2 ensemblToGeneName \
+      /hive/data/genomes/taeGut1/bed/ensGene.73/process/ensemblToGeneName.sql \
+           ensemblToGeneName.tab
+    hgLoadSqlTab taeGut2 ensemblSource \
+       /hive/data/genomes/taeGut1/bed/ensGene.73/process/ensemblSource.sql \
+           ensemblSource.tab
 
 #########################################################################

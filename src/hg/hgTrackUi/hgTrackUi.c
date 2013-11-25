@@ -1997,6 +1997,10 @@ puts("&nbsp;<B>position</B>");
 void pubsUi(struct trackDb *tdb)
 /* UI for pubs match track */
 {
+// bing tracks need no config
+if (endsWith(tdb->track, "BingBlat"))
+    return;
+
 #define NUM_YEARS 15  // similar to google scholar, which goes back to 20 years
 
 #define PUBS_KEYWORDS_TAG "pubsFilterKeywords"

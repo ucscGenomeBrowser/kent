@@ -1319,3 +1319,24 @@ TMPDIR=/dev/shm
     # real    24m20.342s
 
 ############################################################################
+# genscan - (DONE - 2013-11-12 - Hiram)
+    mkdir /hive/data/genomes/melGal1/bed/genscan
+    cd /hive/data/genomes/melGal1/bed/genscan
+    time doGenscan.pl melGal1 > do.log 2>&1
+    #  real    35m2.071s
+    # two broken jobs:
+./lastRunGsBig.csh chr7 000 gtf/000/chr7.gtf pep/000/chr7.pep subopt/000/chr7.bed &
+./lastRunGsBig.csh chr2 000 gtf/000/chr2.gtf pep/000/chr2.pep subopt/000/chr2.bed
+    #  real    47m51.581s
+
+    # run 'para time > run.time' on ku, then continuing:
+    time doGenscan.pl -continue=makeBed melGal1 > makeBed.log 2>&1
+    #  real    3m24.351s
+
+    cat fb.melGal1.genscan.txt
+    #   41900448 bases of 935922386 (4.477%) in intersection
+
+    cat fb.melGal1.genscanSubopt.txt
+    #   19360493 bases of 935922386 (2.069%) in intersection
+
+#########################################################################

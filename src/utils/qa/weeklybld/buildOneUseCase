@@ -1,0 +1,31 @@
+#!/bin/csh
+
+# Run from the 'buildWithUseCases' nightly cron job:
+#   buildOneUseCase <targetDir> <USE_BAM> <USE_SSL> <USE_TABIX> <KNETFILE_HOOKS> <USE_HAL> <args>
+
+set targetDir = ${1}
+shift argv
+setenv USE_BAM ${1}
+shift argv
+setenv USE_SSL ${1}
+shift argv
+setenv USE_TABIX ${1}
+shift argv
+setenv KNETFILE_HOOKS ${1}
+shift argv
+setenv USE_HAL ${1}
+shift argv
+
+echo
+echo '***' Starting make argv=$argv USE_BAM=${USE_BAM} USE_SSL=${USE_SSL} USE_TABIX=${USE_TABIX} KNETFILE_HOOKS=${KNETFILE_HOOKS} USE_HAL=${USE_HAL} on `date`
+cd ${targetDir}
+if ("$1" == "alpha") then
+  git pull >& /dev/null
+endif
+make -j 24 $argv
+set ret = $status
+if ($ret) then
+    echo '***' ERROR stopped make ret code=$ret USE_BAM=${USE_BAM} USE_SSL=${USE_SSL} USE_TABIX=${USE_TABIX} KNETFILE_HOOKS=${KNETFILE_HOOKS} USE_HAL=${USE_HAL}
+    exit $ret
+endif
+echo '***' Finished make USE_BAM=${USE_BAM} USE_SSL=${USE_SSL} USE_TABIX=${USE_TABIX} KNETFILE_HOOKS=${KNETFILE_HOOKS} USE_HAL=${USE_HAL}

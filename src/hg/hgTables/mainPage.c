@@ -511,12 +511,14 @@ if (isBedGr)
     slAddTail(&otList, &otWigData);
     slAddTail(&otList, &otWigBed);
     slAddTail(&otList, &otCustomTrack);
+    slAddTail(&otList, &otHyperlinks);
     }
 else if (isWig)
     {
     slAddTail(&otList, &otWigData);
     slAddTail(&otList, &otWigBed);
     slAddTail(&otList, &otCustomTrack);
+    // hyperlinks output works for db-wiggle but not for bigWig
     }
 else if (isHalSnake)
     {
@@ -537,6 +539,7 @@ else if (isMicroarray)
     slAddTail(&otList, &otMicroarrayNames);
     slAddTail(&otList, &otAllFields);
     slAddTail(&otList, &otSelected);
+    slAddTail(&otList, &otHyperlinks);
     }
 else if (isPositional)
     {

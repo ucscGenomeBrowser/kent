@@ -2101,3 +2101,116 @@ type wig 0 50
     # verify the track link to INSDC functions
 
 ##############################################################################
+# genscan - (DONE - 2013-11-12,18 - Hiram)
+    mkdir /hive/data/genomes/anoCar2/bed/genscan
+    cd /hive/data/genomes/anoCar2/bed/genscan
+    time doGenscan.pl anoCar2 > do.log 2>&1
+XXX - running - Tue Nov 12 13:56:51 PST 2013
+    #  real    545m33.535s
+    XXX one broken job
+./lastRunGsBig.csh chr4 000 gtf/000/chr4.gtf pep/000/chr4.pep subopt/000/chr4.bed
+XXX - running - Wed Nov 13 15:39:27 PST 2013
+real    128m26.001s
+XXX - still broken trying 1800000 - Wed Nov 13 15:39:27 PST 2013
+real    193m15.688s
+XXX - still broken trying 1600000 - Wed Nov 13 15:39:27 PST 2013
+real    129m46.536s
+XXX - still broken trying 1400000 - Fri Nov 15 08:04:58 PST 2013
+real    86m1.435s
+XXX - still broken, time to break it up
+    mkdir /hive/data/genomes/anoCar2/bed/genscan/splitRun]
+    gapToLift anoCar2 anoCar2.nonBridged.lift -bedFile=anoCar2.nonBridged.bed
+    grep -w "chr4" anoCar2.nonBridged.lift |  sed -e "s/chr4./chr4_/" > chr4.nonBridged.lift
+    mkdir chr4
+    faToTwoBit ../hardMaskedFa/000/chr4.fa chr4/chr4.2bit
+    ~/kent/src/hg/utils/lft2BitToFa.pl chr4/chr4.2bit \
+        chr4.nonBridged.lift > chr4/chr4.nonBridged.fa
+    cd chr4
+    mkdir split4
+    faSplit sequence chr4.nonBridged.fa 100 split4/chr4_
+    export C=4
+    echo chr${C}
+    cd /hive/data/genomes/anoCar2/bed/genscan/splitRun/chr${C}
+    echo '#!/bin/sh' > cmdList.sh
+    export NL=-1
+    ls split${C} | while read F
+do
+  NL=`echo $NL | awk '{print $1+1}'`
+  if [ "${NL}" -gt 7 ]; then
+    NL=0
+    echo "echo waiting before $F" >> cmdList.sh
+    echo wait >> cmdList.sh
+  fi
+  echo "/cluster/bin/x86_64/gsBig split${C}/${F} gtf/${F}.gtf -trans=pep/${F}.pep -subopt=subopt/${F}.bed -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/dev/shm -window=2400000 &"
+done >> cmdList.sh
+    echo "echo waiting at end" >> cmdList.sh
+    echo "wait" >> cmdList.sh
+    chmod +x cmdList.sh
+    rm -fr gtf pep subopt
+    mkdir gtf pep subopt
+    cd /hive/data/genomes/anoCar2/bed/genscan/splitRun/chr4
+    ./cmdList.sh > cmdList.log 2>&1
+
+    cat gtf/chr4_*.gtf | liftUp -type=.gtf chr4.lifted.gtf \
+        ../chr4.nonBridged.lift error stdin
+    cat subopt/chr4_*.bed | liftUp -type=.bed chr4.lifted.subopt.bed \
+        ../chr4.nonBridged.lift error stdin
+    cat pep/chr4_*.pep > chr4.temp.pep
+    # don't care about fixing the names in the subopt.bed - they are not
+    # important
+    cat << '_EOF_' > fixIds.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $id = 0;
+my $prevId = "";
+open (FH, "cat chr4.lifted.gtf|" ) or die "can not read chr4.lifted.gtf";
+open (GT, ">chr4.gtf") or die "can not write to chr4.gtf";
+while (my $line=<FH>) {
+   chomp $line;
+   my $geneId = $line;
+   $geneId =~ s/^chr4.*gene_id "chr4_//;
+   $geneId =~ s/";.*//;
+   $id += 1 if ( $prevId ne $geneId);
+   $line =~ s/chr4_[0-9]+.[0-9]+/chr4.$id/g;
+   printf GT "%s\n", $line;
+   $prevId = $geneId;
+}
+close (FH);
+close (GT);
+
+$id = 1;
+
+open (FA, ">chr4.pep") or die "can not write to chr4.pep";
+open (FH, "<chr4.temp.pep") or die "can not read chr4.temp.pep";
+while ( my $line = <FH>) {
+  if ($line =~ m/^>/) {
+    printf FA ">chr4.%d\n", $id++;
+  } else {
+    print FA $line;
+  }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+
+    chmod +x fixIds.pl
+    ./fixIds.pl
+
+    cp -p chr4.gtf ../../gtf/000/chr4.gtf
+    cp -p chr4.lifted.subopt.bed ../../subopt/000/chr4.bed
+    cp -p chr4.pep ../../pep/000/chr4.pep
+
+    # run 'para time > run.time' on ku, then continuing:
+    time doGenscan.pl -continue=makeBed anoCar2 > makeBed.log 2>&1
+    # real    4m23.389s
+
+    cat fb.anoCar2.genscan.txt
+    #   30980337 bases of 1701353770 (1.821%) in intersection
+
+    cat fb.anoCar2.genscanSubopt.txt
+    #   31690023 bases of 1701353770 (1.863%) in intersection
+
+#########################################################################

@@ -184,7 +184,8 @@ var genomePos = {
                 }
             }
         }
-        imageV2.markAsDirtyPage();
+        if (!imageV2.backSupport)
+            imageV2.markAsDirtyPage();
     },
 
     check: function (img, selection)
@@ -507,6 +508,34 @@ var vis = {
             vis.toggleForGroup(this,this.id.substring(0,this.id.length - 7),newState); // clip '_button' suffix
         });
         return false;
+    },
+    
+    initForAjax: function()
+    {   // To better support the back-button, it is good to eliminate extraneous form puts
+        // Towards that end, we support visBoxes making ajax calls to update cart.
+        var sels = $('select.normalText,select.hiddenText');
+        $(sels).change(function() {
+            var track = $(this).attr('name');
+            if ($(this).val() == 'hide') {
+                var rec = hgTracks.trackDb[track];
+                if(rec)
+                    rec.visibility = 0;
+                // else Would be nice to hide subtracks as well but that may be overkill
+                $(document.getElementById('tr_' + track)).remove();
+                $(this).attr('class', 'hiddenText');
+            } else
+                $(this).attr('class', 'normalText');
+            
+            setCartVar(track,$(this).val());
+            return false;
+        });
+        // Now we can rid the submt of the burden of all those vis boxes
+        var form = $('form#TrackForm');
+        $(form).submit(function () {
+            $('select.normalText,select.hiddenText').attr('disabled',true);
+        });
+        $(form).attr('method','get');
+
     }
 
 }
@@ -632,7 +661,7 @@ this.each(function(){
     var chrImg = $(this);
     var mouseIsDown   = false;
     var mouseHasMoved = false;
-    var hilite = jQuery('<div></div>');
+    var hilite = null;
 
     initialize();
 
@@ -645,6 +674,7 @@ this.each(function(){
         else {
             hiliteSetup();
 
+            $('area.cytoBand').unbind('mousedown');  // Make sure this is only bound once
             $('area.cytoBand').mousedown( function(e)
             {   // mousedown on chrom portion of image only (map items)
                 updateImgOffsets();
@@ -747,7 +777,12 @@ this.each(function(){
                                "-"+commify(selRange.end)+" size:"+commify(selRange.width)) ) {
                         genomePos.setByCoordinates(chr.name, selRange.beg, selRange.end)
                         $('area.cytoBand').mousedown( function(e) { return false; }); // Stop the presses :0)
-                        document.TrackHeaderForm.submit();
+                        if (imageV2.backSupport) {
+                            imageV2.navigateInPlace("position=" +  
+                                    encodeURIComponent(genomePos.get().replace(/,/g,'')), null, true);
+                            hiliteCancel();
+                        } else
+                            document.TrackHeaderForm.submit();
                         return true; // Make sure the setTimeout below is not called.
                     }
                 }
@@ -910,10 +945,13 @@ this.each(function(){
 
     function hiliteSetup()
     {   // Called on init: setup of drag region hilite (but don't show yet)
-        $(hilite).css({ backgroundColor: 'green', opacity: 0.4, borderStyle: 'solid',
-                        borderWidth: '1px', bordercolor: '#0000FF' });
-        $(hilite).css({ display: 'none', position: 'absolute', overflow: 'hidden', zIndex: 1 });
-        jQuery($(chrImg).parents('body')).append($(hilite));
+        if (hilite == null) {  // setup only once
+            hilite = jQuery("<div id='chrHi'></div>");
+            $(hilite).css({ backgroundColor: 'green', opacity: 0.4, borderStyle: 'solid',
+                            borderWidth: '1px', bordercolor: '#0000FF' });
+            $(hilite).css({ display: 'none', position: 'absolute', overflow: 'hidden', zIndex: 1 });
+            jQuery($(chrImg).parents('body')).append($(hilite));
+        }
         return hilite;
     }
 
@@ -957,6 +995,40 @@ var dragReorder = {
             setCartVars(names,values);
             imageV2.markAsDirtyPage();
         }
+    },
+
+    sort: function (table)
+    {   // Sets the table row order to match the order of the abbr attribute.
+        // This is needed for back-button, and for visBox changes combined with refresh.
+        var tbody = $(table).find('tbody')[0];
+        if(tbody == undefined)
+            tbody = table;
+        
+        // Do we need to sort?
+        var trs = tbody.rows;
+        var needToSort = false;
+        $(trs).each(function(ix) {
+            if ($(this).attr('abbr') != $(this).attr('rowIndex').toString()) {
+                needToSort = true;
+                return false;  // break for each() loops
+            }
+        });
+        if (!needToSort)
+            return false;
+            
+        // Create array of tr holders to sort
+        var ary = new Array();
+        $(trs).each(function(ix) {  // using sortTable found in utils.js
+            ary.push(new sortTable.field($(this).attr('abbr'),false,this));
+        });
+
+        // Sort the array
+        ary.sort(sortTable.fieldCmp);
+
+        // most efficient reload of sorted rows I have found
+        var sortedRows = jQuery.map(ary, function(ary, i) { return ary.row; });
+        $(tbody).append( sortedRows ); // removes tr from current position and adds to end.
+        return true;
     },
 
     showCenterLabel: function (tr, show)
@@ -2520,10 +2592,17 @@ var imageV2 = {
     lastTrack:      null,     // formerly (lastMapItem) this is used to try to keep what the last track the cursor passed.
 
     markAsDirtyPage: function ()
-    {   // Page is marked as dirty so that the backbutton can be overridden
+    {   // Page is marked as dirty so that the back-button knows page doesn't match cart
         var dirty = $('#dirty');
         if (dirty != undefined && dirty.length != 0)
             $(dirty).val('true');
+    },
+
+    markAsCleanPage: function ()
+    {   // Clears signal that history may be out of sync with cart.
+        var dirty = $('#dirty');
+        if (dirty != undefined && dirty.length != 0)
+            $(dirty).val('false');
     },
 
     isDirtyPage: function ()
@@ -2579,7 +2658,7 @@ var imageV2 = {
         }
     },
     
-    afterReload: function ()
+    afterReload: function (id)
     {   // Reload various UI widgets after updating imgTbl map.
         dragReorder.init();
         dragSelect.load(false);
@@ -2592,13 +2671,25 @@ var imageV2 = {
         if(hgTracks.imgBoxPortal) {
             $("div.scroller").panImages();
         }
+        if (imageV2.backSupport) {
+            if (id) { // The remainder is only needed for full reload
+                imageV2.markAsDirtyPage(); // vis of cfg change
+                return;
+            }
+        }
+        
         imageV2.loadRemoteTracks();
         makeItemsByDrag.load();
-        imageV2.markAsDirtyPage();
         imageV2.loadSuggestBox();
+
+        if (imageV2.backSupport) {
+            imageV2.setInHistory(false);    // Set this new position into History stack
+        } else {
+            imageV2.markAsDirtyPage();
+        }
     },
 
-    updateImgForId: function (html, id)
+    updateImgForId: function (html, id, fullImageReload, newJsonRec)
     {   // update row in imgTbl for given id.
         // return true if we successfully pull slice for id and update it in imgTrack.
         var str = "<TR id='tr_" + id + "'[^>]*>([\\s\\S]+?)</TR>";
@@ -2630,12 +2721,89 @@ var imageV2 = {
                                 {'backgroundPosition': hgTracks.imgBoxPortalLeft});
                     }
                 }
+
+                // Need to update vis box (in case this is reached via back-button)
+                if (imageV2.backSupport && fullImageReload) {
+                    // Update abbr so that rows can be resorted properly
+                    str = "<TR id='tr_" + id + "[^>]* abbr='(.*)' class";
+                    reg = new RegExp(str);
+                    var abbr = reg.exec(html);
+                    if(abbr && abbr[1] && abbr[1].length > 0) {
+                        $(tr).attr('abbr',abbr[1]);
+                    }
+
+                    if (newJsonRec)
+                        vis.update(id, vis.enumOrder[newJsonRec.visibility]);
+                }
+
                 return true;
             }
         }
         return false;
     },
 
+    updateImgForAllIds: function (response, oldJson, newJson)
+    {   // update all rows in imgTbl based upon navigateInPlace response.
+        var imgTbl = $('#imgTbl');
+
+        // We update rows one at a time 
+        // (b/c updating the whole imgTbl at one time doesn't work in IE).
+        for (var id in newJson.trackDb) {
+            var newJsonRec = newJson.trackDb[id];
+            var oldJsonRec = oldJson.trackDb[id];
+            
+            if (newJsonRec.type == "remote")
+                continue;
+            if (oldJsonRec != undefined &&  oldJsonRec.visibility != 0) {
+                // New track replacing old:
+                if (!imageV2.updateImgForId(response, id, true, newJsonRec))
+                    warn("Couldn't parse out new image for id: " + id);
+            } else { //if (oldJsonRec == undefined || oldJsonRec.visibility == 0)
+                // New track seen for the first time
+                if (imageV2.backSupport) {
+                    $(imgTbl).append("<tr id='tr_" + id + "' abbr='0'" + // abbr gets filled in
+                                        " class='imgOrd trDraggable'></tr>");
+                    if (!imageV2.updateImgForId(response, id, true, newJsonRec))
+                        warn("Couldn't insert new image for id: " + id);
+                }
+            }
+        }
+        if (imageV2.backSupport) {
+            // Removes OLD: those in oldJson but not in newJson
+            for (var id in oldJson.trackDb) {
+                if(newJson.trackDb[id] == undefined)
+                    $(document.getElementById('tr_' + id)).remove();
+            }
+            
+            // Need to reorder the rows based upon abbr
+            dragReorder.sort($(imgTbl));
+        }
+    },
+    
+    updateChromImg: function (response)
+    {   // Parse out new chrom 'ideoGram' (if available)
+        // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif"
+        //                BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
+        // Larry's regex voodoo:
+        var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
+        if (a && a[1]) {
+            var b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
+            if (b && b[1]) {
+                $('#chrom').attr('src', b[1]);
+                // ideoMap?  Not needed if the chrom has not changed.
+                //a = /<MAP Name=ideoMap>([\s\S]+)<\/MAP>/.exec(response);
+                //if (a && a[1])
+                //    $("map[name='idelMap']").html('src', a[1]);
+                if (imageV2.backSupport) {
+                    // Reinit chrom dragging.
+                    if ($('area.cytoBand').length >= 1) {
+                        $('img#chrom').chromDrag();
+                    }
+                }
+            }
+        }
+    },
+        
     requestImgUpdate: function (trackName,extraData,loadingId,newVisibility)
     {
         // extraData, loadingId and newVisibility are optional
@@ -2679,27 +2847,27 @@ var imageV2 = {
         // this.id == appropriate track if we are retrieving just a single track.
 
         // update local hgTracks.trackDb to reflect possible side-effects of ajax request.
-        var json = scrapeVariable(response, "hgTracks");
-        var oldTrackDb = hgTracks.trackDb;
+        var newJson = scrapeVariable(response, "hgTracks");
+        var oldJson = hgTracks;
         var valid = false;
-        if(json == undefined) {
+        if (newJson == undefined) {
             var stripped = new Object();
             stripJsEmbedded(response, true, stripped);
             if(stripped.warnMsg == null)
                 warn("hgTracks object is missing from the response");
         } else {
             if(this.id != null) {
-                if(json.trackDb[this.id]) {
-                    var visibility = vis.enumOrder[json.trackDb[this.id].visibility];
+                if (newJson.trackDb[this.id]) {
+                    var visibility = vis.enumOrder[newJson.trackDb[this.id].visibility];
                     var limitedVis;
-                    if(json.trackDb[this.id].limitedVis)
-                        limitedVis = vis.enumOrder[json.trackDb[this.id].limitedVis];
+                    if (newJson.trackDb[this.id].limitedVis)
+                        limitedVis = vis.enumOrder[newJson.trackDb[this.id].limitedVis];
                     if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
                         // see redmine 1333#note-9
                         alert("There are too many items to display the track in " +
                                 this.newVisibility + " mode.");
-                    var rec = hgTracks.trackDb[this.id];
-                    rec.limitedVis = json.trackDb[this.id].limitedVis;
+                    var rec = oldJson.trackDb[this.id];
+                    rec.limitedVis = newJson.trackDb[this.id].limitedVis;
                     vis.update(this.id, visibility);
                     valid = true;
                 } else {
@@ -2707,7 +2875,6 @@ var imageV2 = {
                 }
             } else {
                 valid = true;
-                hgTracks.trackDb = json.trackDb;
             }
         }
         if(valid) {
@@ -2719,8 +2886,8 @@ var imageV2 = {
                 // Extract <TR id='tr_ID'>...</TR> and update appropriate row in imgTbl;
                 // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
                 var id = this.id;
-                if(imageV2.updateImgForId(response, id)) {
-                    imageV2.afterReload();
+                if (imageV2.updateImgForId(response, id, false)) {
+                    imageV2.afterReload(id);
                 } else {
                     warn("Couldn't parse out new image for id: " + id);
                     //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
@@ -2728,55 +2895,28 @@ var imageV2 = {
             } else {
                 if(imageV2.enabled) {
                     // Implement in-place updating of hgTracks image
-                    genomePos.setByCoordinates(json.chromName, json.winStart + 1, json.winEnd);
-                    $("input[name='c']").val(json.chromName);
-                    $("input[name='l']").val(json.winStart);
-                    $("input[name='r']").val(json.winEnd);
-                    if(json.cgiVersion != hgTracks.cgiVersion) {
-                        // Must reload whole page because of a new version on the server; this should happen very rarely.
-                        // Note that we have already updated position based on the user's action.
+                    genomePos.setByCoordinates(newJson.chromName, newJson.
+                                               winStart + 1, newJson.winEnd);
+                    $("input[name='c']").val(newJson.chromName);
+                    $("input[name='l']").val(newJson.winStart);
+                    $("input[name='r']").val(newJson.winEnd);
+
+                    if (newJson.cgiVersion != oldJson.cgiVersion) {
+                        // Must reload whole page because of a new version on the server;
+                        // this should happen very rarely. Note that we have already updated 
+                        // position based on the user's action.
                         imageV2.fullReload();
                     } else {
-                        // We update rows one at a time (b/c updating the whole imgTable at one time doesn't work in IE).
-                        for (var id in hgTracks.trackDb) {
-                        // handle case where invisible items may be in the trackDb list (see redmine #5670).
-                            if(hgTracks.trackDb[id].type != "remote"
-                            && hgTracks.trackDb[id].visibility > 0 // && $('#tr_' + id).length > 0
-                            && !imageV2.updateImgForId(response, id)) {
-                                warn("Couldn't parse out new image for id: " + id);
-                            }
-                        }
-                    /* This (disabled) code handles dynamic addition of tracks:
-                        for (var id in hgTracks.trackDb) {
-                            if(oldTrackDb[id] == undefined) {
-                                // XXXX Tim, what s/d abbr attribute be?
-                                $('#imgTbl').append("<tr id='tr_" + id + "' class='imgOrd trDraggable'></tr>");
-                                imageV2.updateImgForId(response, id);
-                                vis.update(id, vis.enumOrder[hgTracks.trackDb[id].visibility]);
-                            }
-                        }
-                    */
-                        hgTracks = json;
+                        // Will rebuild image adding new, removing old and resorting tracks
+                        imageV2.updateImgForAllIds(response,oldJson,newJson);
+                        imageV2.updateChromImg(response);
+                        hgTracks = newJson;
                         genomePos.original = undefined;
                         initVars();
                         imageV2.afterReload();
                     }
                 } else {
                     warn("ASSERT: Attempt to update track without advanced javascript features.");
-                }
-                // now pull out and parse the map.
-                //a = /<MAP id='map' Name=map>([\s\S]+)<\/MAP>/.exec(response);
-                //if(!a[1])
-                //    warn("Couldn't parse out map");
-            }
-            // Parse out new ideoGram url (if available)
-            // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
-            // We do this last b/c it's least important.
-            var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
-            if(a && a[1]) {
-                var b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
-                if(b && b[1]) {
-                    $('#chrom').attr('src', b[1]);
                 }
             }
             if(hgTracks.measureTiming) {
@@ -2937,6 +3077,125 @@ var imageV2 = {
                 currentIdYOffset: currentIdYOffset,
                 cache: false
             });
+    },
+    
+    backSupport: (window.History.enabled != undefined), // support of r back button via: 
+    history: null,                                     //  jquery.history.js and HTML5 history API
+    
+    setupHistory: function ()
+    {   // Support for back-button using jquery.history.js.
+        // Sets up the history and initializes a state.
+    
+        // Since ajax updates leave the browser cached pages different from the server state, 
+        // simple back-button fails.  Using a 'dirty flag' we had forced an update from server,
+        // whenever the back button was hit, meaning there was no going back from server-state!
+        // NOW using the hitsory API, the back-button triggers a 'statechange' event which can 
+        // contain data.  We save the position in the data and ajax update the image when the
+        // back-button is pressed.  This works great for going back through ajax-updated position
+        // changes, but is a bit messier when going back past a full-page retrieved state (as
+        // described below).
+    
+        // NOTE: many things besides position could be ajax updated (e.g. track visibility). We are
+        // using the back-button to keep track of position only.  Since the image should be updated
+        // every-time the back button is pressed, all track settings should persist (not go back).
+        // What will occasionally fail is vis box state and group expansion state. This is because
+        // the back-button goes to a browser cached page and then the image alone is updated.
+    
+        imageV2.history = window.History;
+        
+        // The 'statechange' function triggerd by the back-button.
+        // Whenever the position changes, then use ajax-update to refetch the position
+        imageV2.history.Adapter.bind(window,'statechange',function(){
+            var prevPos = imageV2.history.getState().data.position;
+            var curPos = encodeURIComponent(genomePos.get().replace(/,/g,''));
+            if (prevPos != undefined && prevPos != curPos) {
+                // NOTE: this function is NOT called when backing passed a full retrieval boundary
+                genomePos.set(decodeURIComponent(prevPos));
+                imageV2.navigateInPlace("position=" + prevPos, null, false);
+            }
+        });
+        
+        // TODO: move elsewhere?
+        // With history support it is best that most position changes will ajax-update the image
+        // This ensures that the 'go' and 'refresh' button will do so unless the chrom changes.
+        $("input[value='go'],input[value='refresh']").click(function () {
+            var newPos = genomePos.get().replace(/,/g,'');
+            var newChrom = newPos.split(':')[0];
+            var oldChrom  = genomePos.getOriginalPos().split(':')[0];
+            if (newChrom == oldChrom) {
+                imageV2.navigateInPlace("position="+encodeURIComponent(newPos), null, false);
+                return false;
+            }
+            return true;
+        });
+        // Have vis box changes update cart through ajax.  This helps keep page/cart in sync.
+        vis.initForAjax();
+
+        // We reach here from these possible paths:
+        // A) Forward: Full page retrieval: hgTracks is first navigated to (or chrom change)
+        // B) Back-button past a full retrieval (B in: ->A,->b,->c(full page),->d,<-c,<-B(again))
+        //    B1) Dirty page: at least one non-position change (e.g. 1 track vis changed in b)
+        //    B2) Clean page: only position changes from A->b->| 
+        var curPos = encodeURIComponent(genomePos.get().replace(/,/g,''));
+        var cachedPos = imageV2.history.getState().data.position;
+        // A) Forward: Full page retrieval: hgTracks is first navigated to (or chrom change)
+        if (cachedPos == undefined) { // Not a back-button operation
+            // set the current position into history outright (will replace). No img update needed
+            imageV2.setInHistory(true);
+        } else { // B) Back-button past a full retrieval
+            genomePos.set(decodeURIComponent(cachedPos));
+            // B1) Dirty page: at least one non-position change 
+            if (imageV2.isDirtyPage()) {
+                imageV2.markAsCleanPage();
+                // Only forcing a full page refresh if chrom changes
+                var cachedChrom = decodeURIComponent(cachedPos).split(':')[0];
+                var curChrom    = decodeURIComponent(   curPos).split(':')[0];
+                if (cachedChrom == curChrom) {
+                    imageV2.navigateInPlace("position=" + cachedPos, null, false);
+                } else {
+                    imageV2.fullReload();
+                }
+            } else {
+                // B2) Clean page: only position changes from a->b 
+                if (cachedPos != curPos) {
+                    imageV2.navigateInPlace("position=" + cachedPos, null, false);
+                }
+            }
+        }
+    },
+    
+    setInHistory: function (fullPageLoad)
+    {   // Keep a position history and allow the back-button to work (sort of)
+        // replaceState on initial page load, pushState on each advance
+        // When call triggered by back button, the lastPos==newPos, so no action.
+        var lastPos = imageV2.history.getState().data.position;
+        var newPos  = encodeURIComponent(genomePos.get().replace(/,/g,''));  // no commas
+        
+        // A full page load could be triggered by back-button, but then there will be a lastPos
+        // if this is the case then don't set the position in history again!
+        if (fullPageLoad && lastPos != undefined)
+            return;
+
+        if (lastPos == undefined || lastPos == null || lastPos != newPos) {
+            // Swap the position into the title
+            var title = $('TITLE')[0].text;
+            var ttlWords = title.split(' ');
+            if (ttlWords.length >= 2) {
+                ttlWords[1] = genomePos.get();
+                title = ttlWords.join(' ')
+            } else
+                title = genomePos.get()
+
+            if (fullPageLoad) { 
+                // Should only be on initial set-up: first navigation to page
+                imageV2.history.replaceState({position: newPos, hgsid: + getHgsid()},title,
+                                          "hgTracks?db=" + getDb() + "&position=" + newPos);
+            } else {  
+                // Should be when advancing (not-back-button)
+                imageV2.history.pushState({position: newPos, hgsid: + getHgsid()},title,
+                                          "hgTracks?db=" + getDb() + "&position=" + newPos);
+            }
+        }
     }
 
 }
@@ -2994,12 +3253,14 @@ $(document).ready(function()
     // If so, then this code should detect if the image has been changed via js/ajax
     // and will reload the image if necessary.
     // NOTE: this is needed for IE but other browsers can detect the dirty page much earlier
-    if (imageV2.isDirtyPage()) {
-        // mark as non dirty to avoid infinite loop in chrome.
-        $('#dirty').val('false');
-        jQuery('body').css('cursor', 'wait');
-            window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
-            return false;
+    if (!imageV2.backSupport) {
+        if (imageV2.isDirtyPage()) {
+            // mark as non dirty to avoid infinite loop in chrome.
+            imageV2.markAsCleanPage();
+            jQuery('body').css('cursor', 'wait');
+                window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
+                return false;
+        }
     }
     initVars();
     imageV2.loadSuggestBox();
@@ -3103,5 +3364,10 @@ $(document).ready(function()
         if (jQuery.fn.contextMenu) {
             rightClick.load(imageV2.imgTbl);
         }
+    }
+
+    // Experimentally trying jquery.history.js
+    if (imageV2.enabled && imageV2.backSupport) {
+        imageV2.setupHistory();
     }
 });

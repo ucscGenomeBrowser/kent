@@ -9,6 +9,7 @@ struct annoGratorGpVarFuncFilter
     {
     boolean intergenic;		// Include variants not close to any gene
     boolean upDownstream;	// Include variants upstream or downstream of gene
+    boolean nmdTranscript;	// Include variants in transcripts already subject to NMD
     boolean exonLoss;		// Include variants that cause exon loss
     boolean utr;		// Include variants in 5' or 3' UTR
     boolean cdsSyn;		// Include synonymous variants in CDS
