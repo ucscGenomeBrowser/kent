@@ -33,24 +33,54 @@
 
 set ECHO = "/bin/echo -e"
 
-# set hardLinkOK = 1 if the userData save area is on the same filesystem
-# as the trashCt.  If this is not true, set hardLinkOK = 0 to avoid hard links.
-set hardLinkOK = 1
-set refreshCommand = "/cluster/bin/x86_64/refreshNamedSessionCustomTracks"
-set dbTrash = "/cluster/bin/x86_64/dbTrash"
-set dbTrashTime = "72"				# time in hours
-set centralDb = "hgcentraltest"
+# where possible, inheriting variables from trashCleanMonitor.sh:
+if ( ! $?KENTHOME ) then
+  set refreshCommand = "/cluster/bin/x86_64/refreshNamedSessionCustomTracks"
+  set dbTrash = "/cluster/bin/x86_64/dbTrash"
+else
+  set refreshCommand = "${KENTHOME}/bin/`uname -m`/refreshNamedSessionCustomTracks"
+  set dbTrash = "${KENTHOME}/bin/`uname -m`/dbTrash"
+endif
 
-set trashDir = "/data/apache/trash"
+if ( ! $?TMPDIR ) then
+  set TMPDIR = /data/tmp/ct
+endif
+
+set dbTrashTime = "72"				# time in hours
+# todo: should get this from hg.conf#centraldb
+set centralDb = "hgcentral"
+
+# where possible, inheriting variables from trashCleanMonitor.sh:
+if ( ! $?trashDir ) then
+  set trashDir = "/data/apache/trash"
+endif
+# location of custom track files in trash
 set trashCt = "${trashDir}/ct"
-set userData = "/data/apache/userdata"
+# where possible, inheriting variables from trashCleanMonitor.sh:
+if ( ! $?userData ) then
+  set userData = "/data/apache/userdata"
+endif
 set userCt = "${userData}/ct"
+# relative path from actual trash directory to userdata save area
+# for the symlink creation
+set relativeUserCt = "../../userdata/ct"
 set userLog = "${userData}/log"
+# lockFile should be defined in the caller: trashCleanMonitor.sh
+if ( ! $?lockFile ) then
+  set lockFile = "${userData}/cleaner.pid"
+endif
+set rmLogDir = "${userLog}/removed/${YYYY}/${MM}"
 set considerRemoval = "${userLog}/considerRemoval.txt"
 # dateStamp with hour so this could make a new log file each hour
-set dateStamp = `date "+%Y-%m-%dT%H"`
-set YYYY = `date "+%Y"`
-set MM = `date "+%m"`
+if ( ! $?dateStamp ) then
+  set dateStamp = `date "+%Y-%m-%dT%H"`
+endif
+if ( ! $?YYYY ) then
+  set YYYY = `date "+%Y"`
+endif
+if ( ! $?MM ) then
+  set MM = `date "+%m"`
+endif
 set logDir = "${userLog}/${YYYY}/${MM}"
 set dbTrashLog = "${logDir}/dbTrash.${dateStamp}.txt"
 set trashLog = "${logDir}/trash.${YYYY}-${MM}.txt"
@@ -59,7 +89,17 @@ set eightHours = "+480"
 set seventyTwoHours = "+4320"
 # we do not want to do everything at once.  Limit the number of
 # files to process at once:
-set maxFiles = 2
+set maxFiles = 10
+
+# set hardLinkOK = 1 if the userData save area is on the same filesystem
+# as the trashCt.  If this is not true, set hardLinkOK = 0 to avoid hard links.
+# using the 'stat' command to determine if userData and trashCt are
+# on the same filesystem
+if ( `stat -c "%d" ${userData}` == `stat -c "%d" ${trashCt}` ) then
+   set hardLinkOK = 1
+else
+   set hardLinkOK = 0
+endif
 
 if ( $1 != "searchAndDestroy" ) then
     ${ECHO} "usage:  trashCleaner.csh searchAndDestroy"
@@ -76,13 +116,13 @@ endif
 #	and it needs read-write access to hgcustom customTrash db
 setenv HGDB_CONF "/data/apache/userdata/.hg.localhost.conf"
 
-set alreadySaved = `mktemp /data/tmp/ct/alreadySaved.XXXXXX`
+set alreadySaved = `mktemp ${TMPDIR}/alreadySaved.XXXXXX`
 chmod 666 "${alreadySaved}"
-set sessionFiles = `mktemp /data/tmp/ct/sessionFiles.XXXXXX`
+set sessionFiles = `mktemp ${TMPDIR}/sessionFiles.XXXXXX`
 chmod 666 "${sessionFiles}"
-set saveList = `mktemp /data/tmp/ct/saveList.XXXXXX`
+set saveList = `mktemp ${TMPDIR}/saveList.XXXXXX`
 chmod 666 "${saveList}"
-# set refreshList = `mktemp /data/tmp/ct/refreshList.XXXXXX`
+# set refreshList = `mktemp ${TMPDIR}/refreshList.XXXXXX`
 # chmod 666 "${refreshList}"
 
 # get directories started and read permissions if first time use
@@ -96,11 +136,18 @@ if ( ! -d "${logDir}" ) then
     chmod 755 "${userLog}/${YYYY}"
     chmod 755 "${logDir}"
 endif
+if ( ! -d ${rmLogDir} ) then
+    mkdir -p "${rmLogDir}"
+    chmod 755 "${userLog}/removed"
+    chmod 755 "${userLog}/removed/${YYYY}"
+    chmod 755 "${rmLogDir}"
+endif
+
 
 # if this is first reference to trashLog, start it with header lines
 if ( ! -s "${trashLog}" ) then
-    ${ECHO} "# date\t\t8-hour\t\t72-hour" > "${trashLog}"
-    ${ECHO} "#\t\tKbytes\t\tKbytes" >> "${trashLog}"
+    ${ECHO} "# date\t\t8-hour\t\t72-hour\t8-hour\t\t72-hour" > "${trashLog}"
+    ${ECHO} "#\t\tKbytes\t\tKbytes\t\tfileCount\t\tfileCount" >> "${trashLog}"
     chmod 666 "${trashLog}"
 endif
 
@@ -115,11 +162,14 @@ endif
 #	matches nothing, hence the match to "^Got " will always work so it
 #	won't fail
 
-${refreshCommand} ${centralDb} -verbose=4 |& \
-egrep "^Got |^Found live custom track: |^setting .*File: |^setting bigDataUrl:" |& \
+#  capture entire refreshCommand output for perusal and scanning
+${refreshCommand} ${centralDb} -verbose=4 >& "${refreshList}"
+${ECHO} "after refreshCommand ${machName} cleaner "`$dateCmd`
+
+egrep "^Got |^Found live custom track: |^setting .*File: |^setting bigDataUrl:" "${refreshList}" |& \
     egrep "^Got |trash/ct/" \
-	| sed -e "s#.*trash/ct/##; s# connection to hgcentral.*##" \
-	| sort -u > "${sessionFiles}"
+        | sed -e "s#.*trash/ct/##; s# connection to hgcentral.*##" \
+        | sort -u > "${sessionFiles}"
 
 # construct a list of already moved files
 # XXX what if this finds nothing ?  Is it a failure ?
@@ -145,18 +195,21 @@ foreach F (`cat "${saveList}"`)
 	continue
     endif
     set trashFile = "${trashCt}/${F}"
-    set saveFile = "${userCt}/${F}"
+    set absSaveFile = "${userCt}/${F}"
+    set relSaveFile = "${relativeUserCt}/${F}"
     if ( -l "${trashFile}" ) then
-        ${ECHO} "already symlink: ${trashFile}"
+#        ${ECHO} "already symlink: ${trashFile}"
 	@ filesDone--
     else if ( -s "${trashFile}" ) then
-        ${ECHO} "${trashFile} -> ${saveFile}"
+#        ${ECHO} "${trashFile} -> ${absSaveFile}"
 	if ( $hardLinkOK == 1 ) then
-	    ln ${trashFile} ${saveFile}
-	    ln -f -s ${saveFile} ${trashFile}
+	    ln ${trashFile} ${absSaveFile}
+	    ln -f -s ${absSaveFile} ${trashFile}
 	else
-	    cp -p ${trashFile} ${saveFile}
-	    ln -f -s ${saveFile} ${trashFile}
+            # the /bin/csh trick avoids an error exit
+            csh -c "cp -p ${trashFile} ${absSaveFile} || true"
+	    ln -f -s ${relSaveFile} ${trashFile}
+            chown www:www ${absSaveFile}
 	endif
     else
         ${ECHO} "not file or symlink: ${trashFile}"
@@ -169,16 +222,27 @@ if ( $filesToDo > 0 ) then
     endif
 endif
 
+${ECHO} "after symLinks done ${machName} cleaner "`$dateCmd`
+
 #############################################################################
 # can now clean customTrash tables that are aged out
-${dbTrash} -extFile -extDel -drop -age=${dbTrashTime} \
+${dbTrash} -extFile -drop -age=${dbTrashTime} \
 	-verbose=2 >>& ${dbTrashLog}
+chmod 666 "${dbTrashLog}"
+${ECHO} "after dbTrash ${machName} cleaner "`$dateCmd`
+gzip "${dbTrashLog}"
 
 #############################################################################
 # find and remove commands here to remove trash files
 #  measure trash size before removal
+# this df is vastly more efficient then using du
 set kbBefore = \
-`du --apparent-size -ksc "${trashDir}" | grep "${trashDir}" | awk '{print $1}'`
+  `df -k "${trashDir}" | grep "${trashDir}" | grep -v ":" | awk '{print $2}'`
+# the grep for the df depends upon the types of mounts and filesystems
+# this one is set for an output like this:
+# Filesystem           1K-blocks      Used Available Use% Mounted on
+# 10.1.166.1:/export/trash
+#                      5045326848 394305536 4651021312   8% /export/trash
 
 #  This is the 8-hour remove command, note the find works directly on
 #  the specified full path trashDir.  This 8-hour since last access
