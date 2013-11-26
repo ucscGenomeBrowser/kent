@@ -48,6 +48,9 @@ struct fileOffsetSize *cirTreeFindOverlappingBlocks(struct cirTreeFile *crf,
  * start/end on chromIx.  Also there will be likely some non-overlapping items
  * in these blocks too. When done, use slListFree to dispose of the result. */
 
+struct fileOffsetSize *cirTreeEnumerateBlocks(struct cirTreeFile *crf);
+/* Return list of file blocks. When done, use slListFree to dispose of the result. */
+
 struct cirTreeRange
 /* A chromosome id and an interval inside it. */
     {

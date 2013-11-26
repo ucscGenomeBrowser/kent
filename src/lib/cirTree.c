@@ -556,3 +556,72 @@ slReverse(&blockList);
 return blockList;
 }
 
+static void rEnumerateBlocks(struct cirTreeFile *crt, int level, bits64 indexFileOffset,
+	struct fileOffsetSize **retList)
+/* Recursively find blocks with data. */
+{
+struct udcFile *udc = crt->udc;
+
+/* Seek to start of block. */
+udcSeek(udc, indexFileOffset);
+
+/* Read block header. */
+UBYTE isLeaf;
+UBYTE reserved;
+bits16 i, childCount;
+udcMustReadOne(udc, isLeaf);
+udcMustReadOne(udc, reserved);
+boolean isSwapped = crt->isSwapped;
+childCount = udcReadBits16(udc, isSwapped);
+
+verbose(3, "rEnumerateBlocks %llu childCount %d. isLeaf %d\n", indexFileOffset, (int)childCount, (int)isLeaf);
+
+if (isLeaf)
+    {
+    /* Loop through node adding overlapping leaves to block list. */
+    for (i=0; i<childCount; ++i)
+        {
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	bits64 offset = udcReadBits64(udc, isSwapped);
+	bits64 size = udcReadBits64(udc, isSwapped);
+        struct fileOffsetSize *block;
+        AllocVar(block);
+        block->offset = offset;
+        block->size = size;
+        slAddHead(retList, block);
+	}
+    }
+else
+    {
+    /* Read node into arrays. */
+    bits64 offset[childCount];
+    for (i=0; i<childCount; ++i)
+        { 
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	offset[i] = udcReadBits64(udc, isSwapped);
+	}
+
+    /* Recurse into child nodes that we overlap. */
+    for (i=0; i<childCount; ++i)
+	{
+	rEnumerateBlocks(crt, level+1, offset[i], retList);
+	}
+    }
+}
+
+struct fileOffsetSize *cirTreeEnumerateBlocks(struct cirTreeFile *crt)
+/* Return list of file blocks that between them contain all items that overlap
+ * start/end on chromIx.  Also there will be likely some non-overlapping items
+ * in these blocks too. When done, use slListFree to dispose of the result. */
+{
+struct fileOffsetSize *blockList = NULL;
+rEnumerateBlocks(crt, 0, crt->rootOffset, &blockList);
+slReverse(&blockList);
+return blockList;
+}
