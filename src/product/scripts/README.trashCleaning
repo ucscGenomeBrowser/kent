@@ -136,7 +136,7 @@ Implementation:
 These scripts are running as a 'root' user cron job since they need
 to manipulate Apache owned files.  They attempt to keep themselves
 safe from errors that would lead to destruction of the system by requiring
-trash file names to be explicitly: /some/path/trash/...
+trash file names to be explicitly: /full/path/trash/...
 with the '/trash/' part of the path required.  This helps prevent
 them from running wild and removing anything they encounter.
 
