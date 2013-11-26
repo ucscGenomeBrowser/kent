@@ -108,6 +108,28 @@ Procedure outline:
 
 ===============================================================================
 
+customTrash database:
+
+The 'dbTrash' command mentioned above only works on tables that have
+been recorded in the 'customTrash.metaInfo' table.  There are a number
+of 'customTrash' tables that fail to be recorded in the 'metaInfo' table
+due to failed custom tracks loading.  These tables must be identified and
+removed by a separate cron job.
+
+Please note the script: 'cleanLostTables.sh' which uses
+the perl script: 'lostTables.pl' to identify tables not recorded
+in the 'metaInfo' table and have aged enough to confirm they are
+not in any custom track.
+
+The tables are identified by scanning the last access time of the
+files in the MySQL 'customTrash' database directory.  It is done with this
+method instead of using mysql 'show status' commands to avoid MySQL performance
+issues with the 'show status' command when the database has hundreds
+of thousands of tables.  Files can be scanned quickly, table status can
+not be obtained quickly for so many tables.
+
+===============================================================================
+
 Implementation:
 
 These scripts are running as a 'root' user cron job since they need
