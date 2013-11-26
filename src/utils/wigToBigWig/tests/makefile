@@ -84,7 +84,7 @@ test2: outputDir
 	bigWigSummary tmp/testBedGraph.bigWig chr5 131308806 132230652 10000 > output/tbg10000.sum
 
 	# Do the diff - only output of script should be about the expected/CVS dir
-	diff output expected
+	diff output expected_2
 
 	# clean up temporary directories (not executed since fails on diff because of CVS)
 	rm -r output tmp
