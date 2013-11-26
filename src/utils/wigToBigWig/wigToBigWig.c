@@ -68,7 +68,7 @@ itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 clipDontDie = optionExists("clip");
 doCompress = !optionExists("unc");
 keepAllChromosomes = optionExists("keepAllChromosomes");
-fixedSummaries = optionExists("fixedSumamries");
+fixedSummaries = optionExists("fixedSummaries");
 if (argc != 4)
     usage();
 wigToBigWig(argv[1], argv[2], argv[3]);

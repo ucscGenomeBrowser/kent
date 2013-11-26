@@ -935,19 +935,20 @@ static void bwgComputeFixedSummaries(struct bwgSection * sectionList, struct bbi
 // Hack: pre-defining summary levels, set off Ensembl default zoom levels
 // The last two values of this array were extrapolated following Jim's formula
 int i;
-bits32 presetReductions[10] = {30, 65, 130, 260, 450, 648, 950, 1296, 4800, 19200}; 
+#define REDUCTION_COUNT 10
+bits32 presetReductions[REDUCTION_COUNT] = {30, 65, 130, 260, 450, 648, 950, 1296, 4800, 19200}; 
 
 bits64 reduction = reductionAmounts[0] = presetReductions[0];
 reduceSummaries[0] = bwgReduceSectionList(sectionList, chromInfoArray, presetReductions[0]);
 
-for (i=1; i<ArraySize(reduceSummaries)-1; i++)
+for (i=1; i<REDUCTION_COUNT; i++)
     {
     reduction = reductionAmounts[i] = presetReductions[i];
     reduceSummaries[i] = bbiReduceSummaryList(reduceSummaries[i-1], chromInfoArray, 
     	reduction);
     }
 
-*summaryCount = ArraySize(reduceSummaries);
+*summaryCount = REDUCTION_COUNT;
 }
 
 void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash, 
