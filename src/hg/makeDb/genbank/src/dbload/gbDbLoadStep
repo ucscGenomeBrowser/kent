@@ -127,11 +127,11 @@ sub dropTables($) {
 
 # load ccds and related tables for a db
 sub ccdsLoad($$) {
-    my($db, $ccdsNcbiBuild) = @_;
+    my($db, $ccdsBuildId) = @_;
     # use profile ccds:ccds except for hgwdev.  This allows any user
     # to load hgwdev without requiring update of .hg.conf files
     my $ccdsDb = ($gbCommon::hostName eq "hgwdev") ? "ccds" : "ccds:ccds";
-    runProg("ccdsMkTables -loadDb $ccdsDb $db $ccdsNcbiBuild ccdsInfo ccdsNotes ccdsGene");
+    runProg("ccdsMkTables -loadDb $ccdsDb $db $ccdsBuildId ccdsInfo ccdsNotes ccdsGene");
     if (haveMysqlTbl($db, "knownGene")) {
         runProg("mkCcdsGeneMap -db=$db -loadDb ccdsGene knownGene ccdsKgMap");
     }
@@ -139,13 +139,13 @@ sub ccdsLoad($$) {
 
 # build ccds tables for a db
 sub ccdsUpdate($$) {
-    my($db, $ccdsNcbiBuild) = @_;
+    my($db, $ccdsBuildId) = @_;
     # note: these are zero if file doesn't exist
     my $ccdsImportTime = loadTimeFile("var/ccdsimport/ccdsimport.time");
     my $ccdsLoadTimeFile = "var/dbload/$gbCommon::hostName/ccdsload.$db.time";
     my $ccdsLoadTime = loadTimeFile($ccdsLoadTimeFile);
     if ($ccdsImportTime > $ccdsLoadTime) {
-        ccdsLoad($db, $ccdsNcbiBuild);
+        ccdsLoad($db, $ccdsBuildId);
         makeTimeFile($ccdsLoadTimeFile);
     }
 }
@@ -178,9 +178,9 @@ sub dbLoad($$) {
     }
     setupGrepIndex($db);
 
-    my $ccdsNcbiBuild = getDbConfUndef($db, "ccds.ncbiBuild");
-    if (defined($ccdsNcbiBuild)) {
-        ccdsUpdate($db, $ccdsNcbiBuild);
+    my $ccdsBuildId = getDbConfUndef($db, "ccds.buildId");
+    if (defined($ccdsBuildId)) {
+        ccdsUpdate($db, $ccdsBuildId);
     }
     dumpExtFileTbl($db);
 
