@@ -168,16 +168,9 @@ struct rTree *el, *list=NULL, *tree = NULL;
 /* Make first level above leaf. */
 bits64 i;
 bits64 nextOffset = (*fetchOffset)(items, context);
-for (i=0; i<itemCount; i += itemsPerSlot)
+int oneSize = 0;
+for (i=0; i<itemCount; i += oneSize)
     {
-    /* Figure out if we are on final iteration through loop, and the
-     * count of items in this iteration. */
-    boolean finalIteration = FALSE;
-    int oneSize = itemCount-i;
-    if (oneSize > itemsPerSlot)
-        oneSize = itemsPerSlot;
-    else
-        finalIteration = TRUE;
 
     /* Allocate element and put on list. */
     lmAllocVar(lm, el);
@@ -191,19 +184,25 @@ for (i=0; i<itemCount; i += itemsPerSlot)
     el->endBase = key.end;
     el->startFileOffset = nextOffset;
 
-    /* Figure out end of element from offset of next element (or file size
-     * for final element.) */
-    if (finalIteration)
+    oneSize = 1;
+
+    char *endItem = startItem;
+    int j;
+    for (j=i+1; j<itemCount; ++j) {
+	endItem += itemSize;
+	nextOffset = (*fetchOffset)(endItem, context);
+	if (nextOffset != el->startFileOffset)
+		break;
+	else 
+		oneSize++;
+    }
+    if (j == itemCount) {
 	nextOffset = endFileOffset;
-    else
-        {
-	char *endItem = startItem + itemSize*oneSize;
-        nextOffset = (*fetchOffset)(endItem, context);
-	}
+    }
+
     el->endFileOffset = nextOffset;
 
     /* Expand area spanned to include all items in block. */
-    int j;
     for (j=1; j<oneSize; ++j)
         {
 	void *item = items + itemSize*(i+j);

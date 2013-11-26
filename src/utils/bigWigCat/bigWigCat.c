@@ -99,10 +99,11 @@ if (bbi->isSwapped)
     }
 }
 
-static void bbiWriteFileSummary(bits32 chromId, bits32 end, bits32 reductionLevel, struct bbiFile * input, FILE *f, struct bwmSection * summary)
+static void bbiWriteFileSummary(bits32 reductionLevel, struct bbiFile * input, FILE *f, struct bwmSection ** summary)
 /* Write out summary and index to summary uncompressed, returning start position of
  * summary index. */
 {
+
     struct udcFile *udc = input->udc;
     struct bbiZoomLevel *zoom;
     for (zoom = input->levelList; zoom; zoom = zoom->next) 
@@ -110,7 +111,7 @@ static void bbiWriteFileSummary(bits32 chromId, bits32 end, bits32 reductionLeve
 		    break;
     udcSeek(udc, zoom->indexOffset);
     struct cirTreeFile *ctf = cirTreeFileAttach(input->fileName, udc);
-    struct fileOffsetSize *blockList = cirTreeFindOverlappingBlocks(ctf, chromId, 0, end);
+    struct fileOffsetSize *blockList = cirTreeEnumerateBlocks(ctf);
     struct fileOffsetSize *block, *beforeGap, *afterGap;
 
     char *uncompressBuf = NULL;
@@ -134,7 +135,7 @@ static void bbiWriteFileSummary(bits32 chromId, bits32 end, bits32 reductionLeve
        for (;block != afterGap; block = block->next)
            {
            // Copy paste
-    	   summary->fileOffset = ftell(f);
+	   bits64 filePos = ftell(f);
            mustWrite(f, blockBuf, block->size);
 
 	   /* Uncompress if necessary. */
@@ -164,10 +165,11 @@ static void bbiWriteFileSummary(bits32 chromId, bits32 end, bits32 reductionLeve
 	        {
 	        dSum = (void *)blockPt;
 	        bbiSummaryHandleSwapped(input, dSum);
-		summary->chromId = dSum->chromId;
-		summary->start = dSum->start;
-		summary->end = dSum->end;
-	        summary++;
+		(*summary)->chromId = dSum->chromId;
+		(*summary)->start = dSum->start;
+		(*summary)->end = dSum->end;
+		(*summary)->fileOffset = filePos;
+	        (*summary)++;
 	        blockPt += sizeof(*dSum);
 	    }
 
@@ -180,14 +182,6 @@ static void bbiWriteFileSummary(bits32 chromId, bits32 end, bits32 reductionLeve
     slFreeList(&blockList);
     cirTreeFileDetach(&ctf);
 }
-
-void bbiWriteChromSummary(struct bbiChromInfo * chromInfo, bits32 reductionLevel, struct bbiFile ** inputFiles, int inputFilesCount, FILE *f, struct bwmSection * summary) {
-    int i;
-
-    for (i = 0; i < inputFilesCount; i++) 
-	bbiWriteFileSummary(chromInfo->id, chromInfo->size, reductionLevel, inputFiles[i], f, summary);
-}
-
 static bits32 countSummaryElementsInFile(bits32 reductionLevel, struct bbiFile * inputFile) {
     struct udcFile *udc = inputFile->udc;
     struct bbiZoomLevel *zoom;
@@ -205,34 +199,39 @@ static bits32 countSummaryElements(bits32 reductionLevel, struct bbiFile ** inpu
     int i;
     bits32 res = 0;
 
-    for (i = 0; i < inputFilesCount; i++) 
+    for (i = 0; i < inputFilesCount; i++)
 	res += countSummaryElementsInFile(reductionLevel, inputFiles[i]);
 
     return res;
 }
 
+void bbiWriteSummary(bits32 reductionLevel, struct bbiFile ** inputFiles, int inputFilesCount, FILE *f, struct bwmSection ** summary) {
+    int i;
+
+    for (i = 0; i < inputFilesCount; i++) {
+	bbiWriteFileSummary(reductionLevel, inputFiles[i], f, summary);
+    }
+}
+
+
 bits64 bwmWriteSummaryAndIndex(bits32 reductionLevel, struct bbiFile ** inputFiles, int inputFilesCount, int blockSize, int itemsPerSlot, FILE *f)
 /* Write out summary and index to summary, returning start position of
  * summary index. */
 {
-    struct bbiChromInfo *chromInfo, *chromInfoList = bbiChromList(inputFiles[0]);
-    struct bwmSection * summaryPtr, * summaryArray;
     bits32 count = countSummaryElements(reductionLevel, inputFiles, inputFilesCount);
-    bits64 indexOffset;
+    struct bwmSection * summaryPtr, * summaryArray;
     AllocArray(summaryArray, count);
     summaryPtr = summaryArray;
 
-    for (chromInfo = chromInfoList; chromInfo; chromInfo = chromInfo->next)
-	bbiWriteChromSummary(chromInfo, reductionLevel, inputFiles, inputFilesCount, f, summaryPtr);
+    bbiWriteSummary(reductionLevel, inputFiles, inputFilesCount, f, &summaryPtr);
 
-    slFreeList(chromInfoList);
-
-    indexOffset = ftell(f);
+    bits64 indexOffset = ftell(f);
 
     cirTreeFileBulkIndexToOpenFile(summaryArray, sizeof(summaryArray[0]), count,
         blockSize, itemsPerSlot, NULL, bwmSectionFetchKey, bwmSectionFetchOffset, 
         indexOffset, f);
 
+    freez(&summaryArray);
     return indexOffset;
 }
 
