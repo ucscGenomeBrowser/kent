@@ -532,6 +532,8 @@ sqlSafef(query, sizeof(query), "show tables like 'snp1__%s'", suffix);
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *snpNNNTables = sqlQuickList(conn, query);
 hFreeConn(&conn);
+if (snpNNNTables == NULL)
+    return NULL;
 // Skip to last in list -- highest number (show tables can't use rlike or 'order by'):
 struct slName *table = snpNNNTables;
 while (table->next != NULL && isdigit(table->next->name[4]) && isdigit(table->next->name[5]))
