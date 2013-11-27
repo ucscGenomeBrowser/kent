@@ -1,4 +1,4 @@
-table bed
+table bigBedTest
 "Browser extensible data bigBed test"
     (
     string chrom;      "Reference sequence chromosome or scaffold"
