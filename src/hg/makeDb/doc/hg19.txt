@@ -28606,4 +28606,36 @@ hgBbiDbLink hg19 phastBiasPosteriors3 /gbdb/hg19/bbi/phastBiasPosteriors3.bw
 # see hg18.txt makedoc for details on how the .ra and .html files were
 # downloaded and installed at the human level.
 
+########################################################################
+# UCSF BRAIN METHYLATION (DONE 2013-11-26 Pauline)
+
+    mkdir /hive/data/genomes/hg19/bed/ucsfBrainMethyl
+    cd /hive/data/genomes/hg19/bed/ucsfBrainMethyl
+    wget --timestamping 'ftp://wangftp.wustl.edu/ucsfBrainMethyl/bigWig/ucsfChipSeqH3K4me3BrainCoverage.bigWig'
+    wget --timestamping 'ftp://wangftp.wustl.edu/ucsfBrainMethyl/bigWig/ucsfMedipSeqBrainCoverage.bigWig'
+    wget --timestamping 'ftp://wangftp.wustl.edu/ucsfBrainMethyl/bigWig/ucsfMedipSeqBrainCpG.bigWig'
+    wget --timestamping 'ftp://wangftp.wustl.edu/ucsfBrainMethyl/bigWig/ucsfMreSeqBrainCpG.bigWig'
+    wget --timestamping 'ftp://wangftp.wustl.edu/ucsfBrainMethyl/bigWig/ucsfRnaSeqBrainAllCoverage.bigWig'
+    wget --timestamping 'ftp://wangftp.wustl.edu/ucsfBrainMethyl/bigWig/ucsfRnaSeqBrainSmartCoverage.bigWig'
+
+    mkdir /gbdb/hg19/bbi/ucsfBrainMethyl/
+
+    ln -s `pwd`/ucsfChipSeqH3K4me3BrainCoverage.bigWig /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfChipSeqH3K4me3BrainCoverage.bigWig
+    ln -s `pwd`/ucsfMedipSeqBrainCoverage.bigWig  /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfMedipSeqBrainCoverage.bigWig
+    ln -s `pwd`/ucsfMedipSeqBrainCpG.bigWig  /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfMedipSeqBrainCpG.bigWig
+    ln -s `pwd`/ucsfMreSeqBrainCpG.bigWig  /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfMreSeqBrainCpG.bigWig
+    ln -s `pwd`/ucsfRnaSeqBrainAllCoverage.bigWig  /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfRnaSeqBrainAllCoverage.bigWig
+    ln -s `pwd`/ucsfRnaSeqBrainSmartCoverage.bigWig  /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfRnaSeqBrainSmartCoverage.bigWig
+
+    hgBbiDbLink hg19 ucsfChipSeqH3K4me3BrainCoverage /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfChipSeqH3K4me3BrainCoverage.bigWig
+    hgBbiDbLink hg19 ucsfMedipSeqBrainCoverage /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfMedipSeqBrainCoverage.bigWig
+    hgBbiDbLink hg19 ucsfMedipSeqBrainCpG /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfMedipSeqBrainCpG.bigWig
+    hgBbiDbLink hg19 ucsfMreSeqBrainCpG /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfMreSeqBrainCpG.bigWig
+    hgBbiDbLink hg19 ucsfRnaSeqBrainAllCoverage /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfRnaSeqBrainAllCoverage.bigWig
+    hgBbiDbLink hg19 ucsfRnaSeqBrainSmartCoverage /gbdb/hg19/bbi/ucsfBrainMethyl/ucsfRnaSeqBrainSmartCoverage.bigWig
+
+#used existing trackDb entry for lifted track, and was able to override track
+#type bedgraph -> bigWig.
+
 #########################################################################
+#

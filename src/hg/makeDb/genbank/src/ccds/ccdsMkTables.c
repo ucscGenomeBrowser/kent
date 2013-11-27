@@ -43,13 +43,13 @@ errAbort(
   "ccdsMkTables - create tables for hg db from imported CCDS database\n"
   "\n"
   "Usage:\n"
-  "   ccdsMkTables [options] ccdsDb hgDb ncbiBuild ccdsInfoOut ccdsNotesOut ccdsGeneOut\n"
+  "   ccdsMkTables [options] ccdsDb hgDb ccdsBuildId ccdsInfoOut ccdsNotesOut ccdsGeneOut\n"
   "\n"
   "ccdsDb is the database created by ccdsImport. If the name is in the form\n"
   "'profile:ccdsDb', then hg.conf variables starting with 'profile.' are\n"
   "used to open the database. hgDb is the targeted genome database, required\n"
   "even if tables are not being loaded.\n"
-  "ncbiBuild is the NCBI build number, such as 32.2.\n"
+  "ccdsBuildId is the CCDS build_uid\n"
   "If -loadDb is specified, ccdsInfoOut and ccdsGeneOut are tables to load\n"
   "with the cddsInfo and genePred data.  If -loadDb is not specified, they\n"
   "are files for the data.\n"
@@ -72,12 +72,11 @@ errAbort(
 }
 
 struct genomeInfo
-/* infomation about the specific genome needed for selects */
+/* information about the specific genome and CCDS release needed for selects */
 {
     char *db;
     int taxonId;
-    int ncbiBuild;
-    int ncbiBuildVersion;
+    int ccdsBuildId;
 };
 
 static char *ccdsMkId(int ccdsId, int ccdsVersion)
@@ -100,28 +99,14 @@ else
 return 0;
 };
 
-static int parseNcbiBuild(char *ncbiBuild, int *verRet)
-/* parse an NCBI build number */
-{
-char *dotPtr = skipNumeric(ncbiBuild);
-char *endPtr = skipNumeric(dotPtr+1);
-if (!(isdigit(ncbiBuild[0]) && (*dotPtr == '.') && (*endPtr == '\0')))
-    errAbort("invalid NCBI build number: %s", ncbiBuild);
-*dotPtr = '\0';
-int bld = sqlUnsigned(ncbiBuild);
-*dotPtr = '.';
-*verRet = sqlUnsigned(dotPtr+1);
-return bld;
-}
-
-static struct genomeInfo *getGenomeInfo(char *hgDb, char *ncbiBuild)
-/* translated the target databases to ncbi build and taxon */
+static struct genomeInfo *getGenomeInfo(char *hgDb, int ccdsBuildId)
+/* translated the target databases to taxon and collect other information. */
 {
 struct genomeInfo *gi;
 AllocVar(gi);
 gi->db = cloneString(hgDb);
 gi->taxonId = getTaxon(hgDb);
-gi->ncbiBuild = parseNcbiBuild(ncbiBuild, &gi->ncbiBuildVersion);
+gi->ccdsBuildId = ccdsBuildId;
 return gi;
 }
 
@@ -266,13 +251,10 @@ static char *mkCommonWhere(struct genomeInfo *genome, struct sqlConnection *conn
 static char clause[1025];
 safef(clause, sizeof(clause),
       "((Groups.tax_id = %d) "
-      "AND (GroupVersions.ncbi_build_number = %d) "
-      "AND (GroupVersions.first_ncbi_build_version <= %d) "
-      "AND (%d <= GroupVersions.last_ncbi_build_version) "
       "AND (GroupVersions.group_uid = Groups.group_uid) "
+      "AND (GroupVersions.build_uid = %d) "
       "AND (CcdsUids.group_uid = Groups.group_uid) ",
-      genome->taxonId, genome->ncbiBuild,
-      genome->ncbiBuildVersion, genome->ncbiBuildVersion);
+      genome->taxonId, genome->ccdsBuildId);
 
 if (inclStatus)
     {
@@ -878,13 +860,13 @@ else
 return sqlConnectProfile(profile, db);
 }
 
-static void ccdsMkTables(char *ccdsDb, char *hgDb, char *ncbiBuild, char *ccdsInfoOut, char *ccdsNotesOut, char *ccdsGeneOut)
+static void ccdsMkTables(char *ccdsDb, char *hgDb, int ccdsBuildId, char *ccdsInfoOut, char *ccdsNotesOut, char *ccdsGeneOut)
 /* create tables for hg db from imported CCDS database */
 {
 if (verboseLevel() >= 2)
     sqlMonitorEnable(JKSQL_TRACE);
 struct sqlConnection *ccdsConn = ccdsSqlConn(ccdsDb);
-struct genomeInfo *genome = getGenomeInfo(hgDb, ncbiBuild);
+struct genomeInfo *genome = getGenomeInfo(hgDb, ccdsBuildId);
 struct hash *infoCcds = hashNew(20);
 struct hash *geneCcds = hashNew(20);
 struct hash* ignoreTbl = buildIgnoreTbl(ccdsConn, genome);
@@ -925,7 +907,7 @@ if (statVals == NULL)
     for (i = 0; statValDefaults[i] != NULL; i++)
         slSafeAddHead(&statVals, slNameNew(statValDefaults[i]));
     }
-ccdsMkTables(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
+ccdsMkTables(argv[1], argv[2], sqlSigned(argv[3]), argv[4], argv[5], argv[6]);
 return 0;
 }
 /*

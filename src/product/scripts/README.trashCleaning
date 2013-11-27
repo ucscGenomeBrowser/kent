@@ -31,7 +31,7 @@ that database needed an expiration procedure.
 The scripts needed to be as much fail safe as possible since
 an unnoticed failure in the trash cleaning system could rapidly
 lead to file system server collapse.  Thus, the paired script
-system is used, where a monitor script is called from the cron
+system is used, where a monitor script is called from the 'root' user cron
 system, which then calls the trash cleaning script and verifies
 that it is actually successful.  Any failure in the system should
 trigger email at the time of failure so it can be repaired.
@@ -77,15 +77,16 @@ finer grained measurements.
 
 Procedure outline:
 
-1. trashCleanMonitor.sh - script called from cron to run the cleaning system
+1. trashCleanMonitor.sh - script called from 'root' user cron to run the cleaning system
    a. verifies 'lock' file is *not* in place
    b. creates 'lock' file
    c. runs trashCleaner.bash which does the trash cleaning
    d. expects 0 return code
    e. and verifies LOG file ends with a "SUCCESS " line.
    f. any failure of the above causes email to a specified list of
-      recipients.  The 'lock' file remains in place upon failure to
-      prevent this script from running again.
+      recipients.  In case of failure, the 'lock' file remains in place to
+      prevent this script from running again until the system is repaired.
+
 2. trashCleaner.bash - called from trashCleanMonitor.sh
    a. expects the 'lock' file to exist as created by trashCleanMonitor.sh
    b. runs the refreshNamedSessionCustomTracks command to scan the session
@@ -108,12 +109,34 @@ Procedure outline:
 
 ===============================================================================
 
+customTrash database:
+
+The 'dbTrash' command mentioned above only works on tables that have
+been recorded in the 'customTrash.metaInfo' table.  There are a number
+of 'customTrash' tables that fail to be recorded in the 'metaInfo' table
+due to failed custom tracks loading.  These tables must be identified and
+removed by a separate cron job.
+
+Please note the script: 'cleanLostTables.sh' which uses
+the perl script: 'lostTables.pl' to identify tables not recorded
+in the 'metaInfo' table and have aged enough to confirm they are
+not in any custom track.
+
+The tables are identified by scanning the last access time of the
+files in the MySQL 'customTrash' database directory.  It is done with this
+method instead of using mysql 'show status' commands to avoid MySQL performance
+issues with the 'show status' command when the database has hundreds
+of thousands of tables.  Files can be scanned quickly, table status can
+not be obtained quickly for so many tables.
+
+===============================================================================
+
 Implementation:
 
 These scripts are running as a 'root' user cron job since they need
 to manipulate Apache owned files.  They attempt to keep themselves
 safe from errors that would lead to destruction of the system by requiring
-trash file names to be explicitly: /some/path/trash/...
+trash file names to be explicitly: /full/path/trash/...
 with the '/trash/' part of the path required.  This helps prevent
 them from running wild and removing anything they encounter.
 
