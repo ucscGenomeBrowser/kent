@@ -15,7 +15,7 @@
 export MACHTYPE=`uname -m`
 #	KENTHOME - directory where you want the kent source tree and built
 #	binaries to exist.  This is typically your $HOME/ directory
-export KENTHOME="/scratch/tmp"
+export KENTHOME="$HOME"
 # Set KENTBIN to a directory where you want the results of the kent
 #	source tree build.  *NOTE* This will also require a symlink
 #	in your HOME directory: $HOME/bin/$MACHTYPE -> $KENTBIN/$MACHTYPE
@@ -26,16 +26,16 @@ export KENTBIN="${KENTHOME}/bin"
 export BINDIR="${KENTBIN}/$MACHTYPE"
 # This SCRIPTS is a directory where scripts from the kent source tree build
 #	will be placed
-export SCRIPTS="${KENTBIN}/scripts"
+export SCRIPTS="${KENTHOME}/browserLogs/scripts"
 #	kentSrc - location where you want your master kent source tree to live
 export kentSrc="${KENTHOME}/kent"
 #	LOGDIR - location to keep log files of script activities:
 export LOGDIR="${KENTHOME}/browserLogs"
 # GBDB - You will need a symlink /gbdb -> to this directory with gbdb downloads
-export GBDB="/scratch/tmp/gbdb"
+export GBDB="/gbdb"
 # BROWSERHOME - directory where cgi-bin/ trash/ and htdocs/ should exist
 #   This is typically something like /var/www or /usr/local/apache
-export BROWSERHOME="/scratch/tmp"
+export BROWSERHOME="/usr/local/apache"
 # DOCUMENTROOT - location of top level htdocs for downloading UCSC static html
 #	file hierarchy
 export DOCUMENTROOT="${BROWSERHOME}/htdocs"
@@ -46,6 +46,10 @@ export GOLD="${DOCUMENTROOT}/goldenPath"
 #	script to remove files in this directory.  It needs to be correct.
 #	It must be an absolute path starting with / and it must end in /trash
 export TRASHDIR="${BROWSERHOME}/trash"
+#       USERDATA - location where the trash cleaner scripts move files to
+#         from TRASHDIR/ct/ to save custom track data associated with
+#         saved sessions
+export USERDATA="${BROWSERHOME}/userdata"
 # cgi-bin/ must be in the same directory as htdocs/ and trash/
 export CGI_BIN="${BROWSERHOME}/cgi-bin"
 # Adding these to your path will enable finding all the kent commands

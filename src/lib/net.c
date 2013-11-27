@@ -344,12 +344,12 @@ if (!plumberInstalled)
     }
 }
 
-size_t netReadAll(int sd, void *vBuf, size_t size)
+ssize_t netReadAll(int sd, void *vBuf, ssize_t size)
 /* Read given number of bytes into buffer.
  * Don't give up on first read! */
 {
 char *buf = vBuf;
-size_t totalRead = 0;
+ssize_t totalRead = 0;
 int oneRead;
 
 if (!plumberInstalled)
@@ -366,11 +366,11 @@ while (totalRead < size)
 return totalRead;
 }
 
-int netMustReadAll(int sd, void *vBuf, size_t size)
+ssize_t netMustReadAll(int sd, void *vBuf, ssize_t size)
 /* Read given number of bytes into buffer or die.
  * Don't give up if first read is short! */
 {
-int ret = netReadAll(sd, vBuf, size);
+ssize_t ret = netReadAll(sd, vBuf, size);
 if (ret < 0)
     errnoAbort("Couldn't finish netReadAll");
 return ret;

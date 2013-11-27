@@ -124,7 +124,7 @@ bits64 remaining = size, total = 0;
 while (remaining > 0)
     {
     bits64 chunkSize = min(remaining, udcBlockSize);
-    bits64 rd = read(sd, buf, chunkSize);
+    ssize_t rd = read(sd, buf, chunkSize);
     if (rd < 0)
 	errnoAbort("readAndIgnore: error reading socket after %lld bytes", total);
     remaining -= rd;
@@ -364,12 +364,13 @@ char *sizeString = hashFindValUpperCase(hash, "Content-Length:");
 if (sizeString == NULL)
     {
     /* try to get remote file size by an alternate method */
-    retInfo->size = netUrlSizeByRangeResponse(url);
-    if (retInfo->size < 0)
+    long long retSize = netUrlSizeByRangeResponse(url);
+    if (retSize < 0)
 	{
     	hashFree(&hash);
 	errAbort("No Content-Length: returned in header for %s, can't proceed, sorry", url);
 	}
+    retInfo->size = retSize;
     }
 else
     {
