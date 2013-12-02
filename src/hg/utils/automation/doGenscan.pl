@@ -253,13 +253,18 @@ sub doMakeBed {
   }
 
   my $whatItDoes = "Makes gtf/pep/bed files from gsBig output.";
-  my $bossScript = new HgRemoteScript("$runDir/doMakeBed.csh", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/doMakeBed.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
+export db=$db
 catDir -r gtf > genscan.gtf
 catDir -r pep > genscan.pep
-catDir -r subopt > genscanSubopt.bed
+catDir -r subopt | sort -k1,1 -k2,2n > genscanSubopt.bed
+gtfToGenePred genscan.gtf \$db.genscan.gp
+genePredToBed \$db.genscan.gp stdout | sort -k1,1 -k2,2n > \$db.genscan.bed
+bedToBigBed \$db.genscan.bed ../../chrom.sizes \$db.genscan.bb
+bedToBigBed genscanSubopt.bed ../../chrom.sizes \$db.genscanSubopt.bb
 _EOF_
   );
   $bossScript->execute();
@@ -314,7 +319,7 @@ sub doCleanup {
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 rm -rf hardMaskedFa/ err/ run.hardMask/err/
-rm -f batch.bak bed.tab run.hardMask/batch.bak
+rm -f batch.bak bed.tab run.hardMask/batch.bak $db.genscan.gp $db.genscan.bed
 gzip genscanSubopt.bed genscan.gtf genscan.gp genscan.pep
 _EOF_
   );
