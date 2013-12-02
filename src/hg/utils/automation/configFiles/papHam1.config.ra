@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db papHam1
+clade mammal
+genomeCladePriority 16
+scientificName Papio hamadryas
+commonName Baboon
+assemblyDate Nov. 2008
+assemblyLabel Baylor BCM HGSC
+assemblyShortLabel Pham_1.0
+orderKey 390
+# chrMt: bioproject 11851
+mitoAcc NC_001992
+fastaFiles /hive/data/genomes/papHam1/download/Pham.20081120.contigs.fa.gz
+agpFiles /hive/data/genomes/papHam1/download/ucsc.agp
+qualFiles /hive/data/genomes/papHam1/download/linear.qual.qac
+dbDbSpeciesDir baboon
+photoCreditURL http://www.oumedicine.com/pathology/general-program-info/faculty-staff/roman-f-wolf-dvm
+photoCreditName Roman Wolf, University of Oklahoma Health Sciences Center
+ncbiGenomeId 778
+ncbiAssemblyId N/A
+ncbiAssemblyName N/A
+ncbiBioProject 20425
+genBankAccessionID N/A
+taxId	9562
