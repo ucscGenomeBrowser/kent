@@ -128,4 +128,4 @@ shortLabel MGI QTL
 longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 37 (mm9)***
 origAssembly mm9 
 pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted via liftOver from the July 2007 (NCBI37/mm9) version of the track"
-release alpha
+release beta,public

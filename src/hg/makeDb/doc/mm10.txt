@@ -9636,7 +9636,7 @@ echo -e "chrM\tNC_005089.1"
 
     # Load lifted track tables and original auxiliary tables:
     ssh hgwdev
-    cd /cluster/data/mm9/bed/jaxLiftOver
+    cd /cluster/data/mm10/bed/jaxLiftOver
 
     # jaxQTLLift
 #didn't run this sed command (prob already been done to this file?)
@@ -9644,8 +9644,16 @@ echo -e "chrM\tNC_005089.1"
       ~/kent/src/hg/lib/jaxQTL.sql  > jaxQTLLift.sql
 
 #ran this (used this instead of hgLoadBed at Hiram's suggestion):
-hgLoadSqlTab  mm10 JaxQtl $HOME/kent/src/hg/lib/jaxQtl.sql \
+    hgLoadSqlTab  mm10 JaxQtl $HOME/kent/src/hg/lib/jaxQtl.sql \
 /cluster/data/mm10/bed/jaxLiftOver/jaxQtlLift.bed
 
-checkTableCoords mm10 JaxQTLLift
+    checkTableCoords mm10 JaxQTLLift
 #got no output (yay!)
+
+#found out hgLoadSqlTab doesn't load a positionally sorted table, sorting bed
+#file and reloading:
+
+    sort -k1,1 -k2,2n jaxQtlLift.bed > jaxQtlLiftSorted.bed
+
+    hgLoadSqlTab  mm10 jaxQtl $HOME/kent/src/hg/lib/jaxQtl.sql \
+/cluster/data/mm10/bed/jaxLiftOver/jaxQtlLiftSorted.bed

@@ -27,3 +27,23 @@ We currently use the following hardware to support our website:
 The UCSC Genome Browser website experiences over one million hits per 
 day. Your hardware requirements may be much less demanding and will 
 depend upon how much traffic you expect for your mirror.
+
+You can use following command to get the size of the files for all of 
+the assemblies, but can be modified to give the size for a particular assembly:
+
+  rsync -hna --stats rsync://hgdownload.cse.ucsc.edu/gbdb/ | egrep "Number of files:|total size is" 
+
+For example to get the size of all of the files for hg, you would 
+use the following command:
+
+  rsync -hna --stats rsync://hgdownload.cse.ucsc.edu/gbdb/hg19/ | egrep "Number of files:|total size is"
+
+After runnning that command, you should see output like this:
+
+  Number of files: 54886
+  total size is 6515.70G  speedup is 5181080.38 (DRY RUN)
+
+The next command will give you size of the entire mySQL database, but 
+can be changed to get the size for a particular assembly:
+  
+  rsync -hna --stats rsync://hgdownload.cse.ucsc.edu/mysql/ | egrep "Number of files:|total size is" 

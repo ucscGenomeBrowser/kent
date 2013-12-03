@@ -674,7 +674,7 @@ termPrefix rikenTC:
 searchTable jaxQtl
 searchType bed
 searchMethod fuzzy
-termRegex [a-z0-9-]+
+termRegex [a-z0-9-]+(.[123])?
 searchPriority 50
 
 searchTable jaxQTL3

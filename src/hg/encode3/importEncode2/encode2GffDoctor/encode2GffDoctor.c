@@ -282,6 +282,34 @@ slFreeList(&wordList);
 return bestVal;
 }
 
+boolean tagIn(char *input, char *tag)
+/* Return TRUE if tag is in input.  Input is formatted 
+ *    tag "value string"; */
+{
+char *s = input;
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    if (s == NULL || s[0] == 0)
+        return FALSE;
+    if (startsWithWord(tag, s))
+        return TRUE;
+    s = strchr(s, ';');
+    if (s != NULL)
+       ++s;
+    }
+}
+
+char *addTag(char *oldString, char *tag, char *val)
+/* Return oldString with 
+ *     tag "val";
+ * added to end of it. */
+{
+int len = strlen(oldString) + strlen(tag) + strlen(val) + 6;
+char *newString = needMem(len);
+safef(newString, len, "%s %s \"%s\";", oldString, tag, val);
+return newString;
+}
 
 void encode2GffDoctor(char *inFile, char *outFile)
 /* encode2GffDoctor - Fix up gff/gtf files from encode phase 2 a bit.. */
@@ -291,10 +319,20 @@ struct gffRow *el, *list=readGff(inFile);
 char *transcriptTag = "transcript_id";
 if (!groupTagExists(list, transcriptTag))
     {
-   if (!replaceGroupTag(list, "transcript_ids", transcriptTag))
+    if (!replaceGroupTag(list, "transcript_ids", transcriptTag))
        if (!replaceGroupTag(list, "gene_ids", transcriptTag))
            if (!replaceGroupTag(list, "gene_id", transcriptTag))
 	       errAbort("Can't find any %s or reasonable substitutes in %s", transcriptTag, inFile);
+    }
+
+int addGeneIdCount = 0;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (!tagIn(el->row[8], "gene_id"))
+	{
+        el->row[8] = addTag(el->row[8], "gene_id", "dummy");
+	++addGeneIdCount;
+	}
     }
 
 /* See if it has any exons or CDS.  Otherwise turn most popular tag into exon. */
@@ -303,8 +341,6 @@ if (!gotStringInField(list, 2, "exon") && !gotStringInField(list, 2, "cds"))
     char *common = mostPopularValInField(list, 2);
     verbose(1, "Doctor can't find 'exon', turning '%s' into 'exon'\n", common);
     subIntoField(list, 2, common, "exon");
-#ifdef SOON
-#endif /* SOON */
     }
 
 FILE *f = mustOpen(outFile, "w");
@@ -361,8 +397,8 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "\n");
     }
 if (shortenCount != 0 || subbedTagCount != 0)
-    verbose(1, "Doctor shortened %d tags, substituted %d, resourced %d exons in %s\n", 
-	shortenCount, subbedTagCount, fieldSubCount, inFile );
+    verbose(1, "Doctor shortened %d tags, substituted %d, added gene_id %d, resourced %d exons in %s\n", 
+	shortenCount, subbedTagCount, addGeneIdCount, fieldSubCount, inFile );
 }
 
 int main(int argc, char *argv[])

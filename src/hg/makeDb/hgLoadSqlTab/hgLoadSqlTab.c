@@ -24,6 +24,10 @@ errAbort(
 "  -warn - warn instead of abort on mysql errors or warnings\n"
 "  -notOnServer - file is *not* in a directory that the mysql server can see\n"
 "  -oldTable|-append - add to existing table\n"
+"\n"
+"To load bed 3+ sorted tab files as hgLoadBed would do automatically\n"
+"sort the input file:\n"
+"  sort -k1,1 -k2,2n file(s).tab | hgLoadSqlTab database table file.sql stdin\n"
   );
 }
 

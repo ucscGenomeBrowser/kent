@@ -375,7 +375,7 @@ boolean isInsertion = (varRow->start == varRow->end);
 boolean isDeletion = isEmpty(gpFx->allele);
 // variant allele used to calculate the consequence (or first alternate allele)
 char *abbrevAllele = cloneString(gpFx->allele);
-limitLength(abbrevAllele, 12, "nt");
+limitLength(abbrevAllele, 24, "nt");
 fputs(placeholderForEmpty(abbrevAllele), self->f);
 afVepNextColumn(self->f, self->doHtml);
 // ID of affected gene

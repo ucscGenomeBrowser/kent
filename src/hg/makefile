@@ -121,6 +121,7 @@ UTIL_DIRS = \
 	ctgFaToFa \
 	ctgToChromFa \
 	embossToPsl \
+	encode3 \
 	fakeFinContigs \
 	fakeOut \
 	ffaToFa \
