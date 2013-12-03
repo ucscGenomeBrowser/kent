@@ -146,7 +146,7 @@ CREATE TABLE edwValidFile (
     format varchar(255) default '',	# What format it's in from manifest
     outputType varchar(255) default '',	# What output_type it is from manifest
     experiment varchar(255) default '',	# What experiment it's in from manifest
-    replicate varchar(255) default '',	# What replicate it is from manifest
+    replicate varchar(255) default '',	# What replicate it is from manifest.  Values 1,2,3... pooled, or ''
     validKey varchar(255) default '',	# The valid_key tag from manifest
     enrichedIn varchar(255) default '',	# The enriched_in tag from manifest
     ucscDb varchar(255) default '',	# Something like hg19 or mm9
@@ -160,6 +160,8 @@ CREATE TABLE edwValidFile (
     depth double default 0,	# Estimated genome-equivalents covered by possibly overlapping data
     singleQaStatus tinyint default 0,	# 0 for untested, 1 for pass, -1 for fail
     replicateQaStatus tinyint default 0,	# 0 for untested, 1 for pass, -1 for fail
+    technicalReplicate varchar(255) default '',	# Manifest's technical_replicate tag. Values 1,2,3... pooled or ''
+    pairedEnd varchar(255) default '',	# The paired_end tag from the manifest.  Values 1,2 or ''
               #Indices
     PRIMARY KEY(id),
     INDEX(licensePlate),
