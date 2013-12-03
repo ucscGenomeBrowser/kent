@@ -492,8 +492,8 @@ if (dbNsfpTables == NULL)
 startCollapsibleSection("dbNsfp", "Database of Non-synonymous Functional Predictions (dbNSFP)",
 			TRUE);
 printf("<A HREF='https://sites.google.com/site/jpopgen/dbNSFP' TARGET=_BLANK>dbNSFP</A> "
-       "(<A HREF='http://onlinelibrary.wiley.com/doi/10.1002/humu.21517/abstract' "
-       "TARGET=_BLANK>Liu <em>et al.</em> 2011</A>) "
+       "(<A HREF='http://onlinelibrary.wiley.com/doi/10.1002/humu.22376/abstract' "
+       "TARGET=_BLANK>Liu <em>et al.</em> 2013</A>) "
        "release 2.0 "
        "provides pre-computed scores and predictions of functional significance "
        "from a variety of tools.  Every possible coding change to transcripts in "
