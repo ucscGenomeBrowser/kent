@@ -42,7 +42,7 @@ edwLib:
 	(cd lib && ${MAKE})
 
 
-utils: edwLib $(USE_DIRS:%=%.utils)
+utils: edwLib $(UTIL_DIRS:%=%.utils)
 %.utils:
 	(cd $* && $(MAKE))
 
