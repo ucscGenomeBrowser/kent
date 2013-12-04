@@ -409,7 +409,7 @@ ul.nice-menu ul li span {
 }
 ul.nice-menu ul li a:hover, ul.nice-menu ul li a.active {
 	color:#fff !important;
-	background:none;
+	background-color: #327de4 !important;
 }
 ul.nice-menu li.menuparent li a {
 	padding:8px;
