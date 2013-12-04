@@ -28606,6 +28606,149 @@ hgBbiDbLink hg19 phastBiasPosteriors3 /gbdb/hg19/bbi/phastBiasPosteriors3.bw
 # see hg18.txt makedoc for details on how the .ra and .html files were
 # downloaded and installed at the human level.
 
+#############################################################################
+# EVS Exome Variants from ESP 6500 Exome  (Redmine 9329) 2013-11-08
+# Max previously downloaded all files from http://evs.gs.washington.edu/EVS/ {download tab}
+# to /hive/data/outside/evs
+cd /hive/data/outside/evs
+ll
+-rw-rw-r-- 1 max      protein  132832601 Oct  7 11:12 ESP6500SI-V2-SSA137.dbSNP138-rsIDs.snps_indels.txt.tar.gz
+-rw-rw-r-- 1 max      protein  124718926 Oct  7 11:12 ESP6500SI-V2-SSA137.dbSNP138-rsIDs.snps_indels.vcf.tar.gz
+-rw-rw-r-- 1 max      protein  416261389 Oct  7 11:12 ESP6500SI-V2.coverage.all_sites.txt.tar.gz
+-rw-rw-r-- 1 max      protein   13192522 Oct  7 11:12 ESP6500SI-V2.coverage.seq_blocks.txt.tar.gz
+-rw-rw-r-- 1 max      protein    6065184 Oct  7 11:12 agilent_nimblegen_exome_targets_esp_project.tar.gz
+tar -xzf tar -xzf ESP6500SI-V2-SSA137.dbSNP138-rsIDs.snps_indels.vcf.tar.gz
+ll
+total 3205904
+-rw-rw-r-- 1 max      protein  132832601 Oct  7 11:12 ESP6500SI-V2-SSA137.dbSNP138-rsIDs.snps_indels.txt.tar.gz
+-rw-rw-r-- 1 max      protein  124718926 Oct  7 11:12 ESP6500SI-V2-SSA137.dbSNP138-rsIDs.snps_indels.vcf.tar.gz
+-rw-r--r-- 1 tdreszer genecats  93987403 Aug 26 14:29 ESP6500SI-V2-SSA137.updatedRsIds.chr1.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  38335017 Aug 26 14:32 ESP6500SI-V2-SSA137.updatedRsIds.chr10.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  56868902 Aug 26 14:32 ESP6500SI-V2-SSA137.updatedRsIds.chr11.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  49327149 Aug 26 14:32 ESP6500SI-V2-SSA137.updatedRsIds.chr12.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  15843136 Aug 26 14:33 ESP6500SI-V2-SSA137.updatedRsIds.chr13.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  30776581 Aug 26 14:33 ESP6500SI-V2-SSA137.updatedRsIds.chr14.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  31170853 Aug 26 14:33 ESP6500SI-V2-SSA137.updatedRsIds.chr15.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  44270933 Aug 26 14:33 ESP6500SI-V2-SSA137.updatedRsIds.chr16.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  57017413 Aug 26 14:33 ESP6500SI-V2-SSA137.updatedRsIds.chr17.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  14075907 Aug 26 14:33 ESP6500SI-V2-SSA137.updatedRsIds.chr18.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  65266127 Aug 26 14:33 ESP6500SI-V2-SSA137.updatedRsIds.chr19.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  68850292 Aug 26 14:29 ESP6500SI-V2-SSA137.updatedRsIds.chr2.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  25274367 Aug 26 14:33 ESP6500SI-V2-SSA137.updatedRsIds.chr20.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  12146901 Aug 26 14:33 ESP6500SI-V2-SSA137.updatedRsIds.chr21.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  22731631 Aug 26 14:14 ESP6500SI-V2-SSA137.updatedRsIds.chr22.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  54016924 Aug 26 14:29 ESP6500SI-V2-SSA137.updatedRsIds.chr3.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  35294834 Aug 26 14:29 ESP6500SI-V2-SSA137.updatedRsIds.chr4.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  43985991 Aug 26 14:30 ESP6500SI-V2-SSA137.updatedRsIds.chr5.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  45749508 Aug 26 14:30 ESP6500SI-V2-SSA137.updatedRsIds.chr6.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  44366987 Aug 26 14:31 ESP6500SI-V2-SSA137.updatedRsIds.chr7.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  33404379 Aug 26 14:32 ESP6500SI-V2-SSA137.updatedRsIds.chr8.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  40067697 Aug 26 14:32 ESP6500SI-V2-SSA137.updatedRsIds.chr9.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  25130750 Aug 26 14:34 ESP6500SI-V2-SSA137.updatedRsIds.chrX.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats    269593 Aug 26 14:34 ESP6500SI-V2-SSA137.updatedRsIds.chrY.snps_indels.vcf
+-rw-rw-r-- 1 max      protein  416261389 Oct  7 11:12 ESP6500SI-V2.coverage.all_sites.txt.tar.gz
+-rw-rw-r-- 1 max      protein   13192522 Oct  7 11:12 ESP6500SI-V2.coverage.seq_blocks.txt.tar.gz
+-rw-rw-r-- 1 max      protein    6065184 Oct  7 11:12 agilent_nimblegen_exome_targets_esp_project.tar.gz
+# get tabix (samtools)
+cd /cluster/bin
+mkdir samtools
+cd samtools
+# download from http://sourceforge.net/projects/samtools/files/tabix/
+-rw-rw-r-- 1 tdreszer genecats 514507 Nov  8 11:14 samtools-0.1.19.tar.bz2.tar.bz2.tar.bz2
+tar -xjf samtools-0.1.19.tar.bz2.tar.bz2.tar.bz2
+mv samtools-0.1.19 ..
+mv samtools-0.1.19.tar.bz2.tar.bz2.tar.bz2 ../samtools-0.1.19/
+cd ../samtools-0.1.19/
+rm -rf ../samtools/
+make
+cd ..
+mkdir tabix
+cd tabix
+# download from http://sourceforge.net/projects/samtools/files/tabix/
+-rw-rw-r-- 1 tdreszer genecats 54403 Nov  8 11:25 tabix-0.2.6.tar.bz2.tar.bz2.tar.bz2
+tar -xjf tabix-0.2.6.tar.bz2.tar.bz2.tar.bz2
+mv tabix-0.2.6 ..
+mv tabix-0.2.6.tar.bz2.tar.bz2.tar.bz2 ../tabix-0.2.6/
+cd ../tabix-0.2.6/
+rm -rf ../tabix/
+make
+
+# bgzip then tabixify files
+cd /hive/data/outside/evs
+for chr in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y; do
+    /cluster/bin/tabix-0.2.6/bgzip ESP6500SI-V2-SSA137.updatedRsIds.chr${chr}.snps_indels.vcf
+done
+for chr in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y; do
+    /cluster/bin/tabix-0.2.6/tabix ESP6500SI-V2-SSA137.updatedRsIds.chr${chr}.snps_indels.vcf.gz
+done
+ll
+total 1617920
+-rw-rw-r-- 1 max      protein  132832601 Oct  7 11:12 ESP6500SI-V2-SSA137.dbSNP138-rsIDs.snps_indels.txt.tar.gz
+-rw-rw-r-- 1 max      protein  124718926 Oct  7 11:12 ESP6500SI-V2-SSA137.dbSNP138-rsIDs.snps_indels.vcf.tar.gz
+-rw-rw-r-- 1 tdreszer genecats  13257881 Nov  8 11:34 ESP6500SI-V2-SSA137.updatedRsIds.chr1.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     57058 Nov  8 11:36 ESP6500SI-V2-SSA137.updatedRsIds.chr1.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   5324208 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr10.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     26309 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr10.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   8057109 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr11.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     30394 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr11.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   6951392 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr12.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     31477 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr12.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   2282788 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr13.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     13677 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr13.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   4413259 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr14.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     19363 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr14.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   4451460 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr15.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     20180 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr15.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   6266776 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr16.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     19272 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr16.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   8005893 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr17.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     26404 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr17.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   2011581 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr18.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     11785 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr18.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   9460006 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr19.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     22808 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr19.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   9746625 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr2.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     49239 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr2.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   3560189 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr20.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     14079 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr20.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   1710920 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr21.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats      5965 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr21.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   3211868 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr22.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     10849 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr22.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   7609656 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr3.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     38679 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr3.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   5116880 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr4.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     28097 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr4.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   6118636 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr5.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     29706 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr5.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   6561993 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr6.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     32437 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr6.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   6395663 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr7.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     32184 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr7.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   4816680 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr8.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     24710 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr8.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   5656614 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chr9.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     25772 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chr9.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   3528099 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chrX.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     23453 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chrX.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats     32962 Nov  8 11:35 ESP6500SI-V2-SSA137.updatedRsIds.chrY.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats       811 Nov  8 11:37 ESP6500SI-V2-SSA137.updatedRsIds.chrY.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 max      protein  416261389 Oct  7 11:12 ESP6500SI-V2.coverage.all_sites.txt.tar.gz
+-rw-rw-r-- 1 max      protein   13192522 Oct  7 11:12 ESP6500SI-V2.coverage.seq_blocks.txt.tar.gz
+-rw-rw-r-- 1 max      protein    6065184 Oct  7 11:12 agilent_nimblegen_exome_targets_esp_project.tar.gz
+
+# make symlinks in gbdb:
+mkdir /gbdb/hg19/evs
+ln -s `pwd`/*.vcf.gz* /gbdb/hg19/evs/
+cp /dev/null evsEsp6500.txt
+for chr in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y; do
+    echo "/gbdb/hg19/evs/ESP6500SI-V2-SSA137.updatedRsIds.chr${chr}.snps_indels.vcf.gz\tchr${chr}" >> evsEsp6500.txt
+done
+# manually swapped in tabs for \t's, then load
+hgLoadSqlTab hg19 evsEsp6500 ~/kent/src/hg/lib/bbiChroms.sql evsEsp6500.txt
+
+# Add evsEsp6500 track to hg19/trackDb.ra
+
 ########################################################################
 # UCSF BRAIN METHYLATION (DONE 2013-11-26 Pauline)
 
