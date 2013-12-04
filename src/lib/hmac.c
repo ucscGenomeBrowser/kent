@@ -19,7 +19,7 @@ char hmacStr[40];
 int i;
 for(i = 0; i < 20; i++)
     sprintf(&hmacStr[i*2], "%02x", (unsigned int)digest[i]);
-return cloneString(hmacStr);
+return cloneStringZ(hmacStr, sizeof(hmacStr));
 }
 
 char *hmacMd5(char *key, char *data)
@@ -32,7 +32,7 @@ char hmacStr[32];
 int i;
 for(i = 0; i < 16; i++)
     sprintf(&hmacStr[i*2], "%02x", (unsigned int)digest[i]);
-return cloneString(hmacStr);
+return cloneStringZ(hmacStr, sizeof(hmacStr));
 }
 
 #else // --------- no USE_SSL ==> errAbort with message that openssl is required --------------

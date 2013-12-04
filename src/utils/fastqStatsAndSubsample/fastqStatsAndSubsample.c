@@ -163,6 +163,33 @@ for (i=0; i<aSize; ++i)
 fprintf(f, "\n");
 }
 
+static boolean isAllSpace(char *s, int size)
+/* Return TRUE if all characters in s are whitespace */
+{
+while (--size >= 0)
+    {
+    char c = *s++;
+    if (!isspace(c))
+        return FALSE;
+    }
+return TRUE;
+}
+
+boolean lineFileNextRealWithSize(struct lineFile *lf, char **retStart, int *retSize)
+/* Fetch next line from file that is not blank and
+ * does not start with a '#'. Return size of line. 
+ * Not putting this into library because it's hard to get right for both retSize NULL
+ * and non-NULL.  This case only works with retSize non-NULL. */
+{
+while (lineFileNext(lf, retStart, retSize))
+    {
+    if (isAllSpace(*retStart, *retSize))
+        continue;
+    return TRUE;
+    }
+return FALSE;
+}
+
 
 boolean oneFastqRecord(struct lineFile *lf, FILE *f, boolean copy, boolean firstTime)
 /* Read next fastq record from LF, and optionally copy it to f.  Return FALSE at end of file 
@@ -180,8 +207,10 @@ if (f == NULL)
 if (!lineFileNextRealWithSize(lf, &line, &lineSize))
     return FALSE;
 if (line[0] != '@')
-    errAbort("Expecting line starting with '@' got %s line %d of %s", 
+    {
+    errAbort("Expecting line starting with '@' got %s line %d of %s (ugh!)", 
 	line, lf->lineIx, lf->fileName);
+    }
 if (copy)
     mustWrite(f, line, lineSize);
 
@@ -533,6 +562,7 @@ if (argc != 4)
     usage();
 sampleSize = optionInt("sampleSize", sampleSize);
 seed = optionInt("seed", seed);
+srand(seed);
 smallOk = optionExists("smallOk");
 fastqStatsAndSubsample(argv[1], argv[2], argv[3]);
 return 0;

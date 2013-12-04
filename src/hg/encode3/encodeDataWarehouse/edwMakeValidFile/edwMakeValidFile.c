@@ -360,6 +360,8 @@ vf->replicate = findTagOrEmpty(tags, "replicate");
 vf->validKey = hashFindVal(tags->hash, "valid_key");
 vf->enrichedIn = findTagOrEmpty(tags, "enriched_in");
 vf->ucscDb = findTagOrEmpty(tags, "ucsc_db");
+vf->technicalReplicate = findTagOrEmpty(tags, "technical_replicate");
+vf->pairedEnd = findTagOrEmpty(tags, "paired_end");
 vf->sampleBed = "";
 
 if (vf->format && vf->validKey)	// We only can validate if we have something for format 

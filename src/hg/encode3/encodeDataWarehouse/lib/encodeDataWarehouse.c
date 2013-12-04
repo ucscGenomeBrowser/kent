@@ -1502,7 +1502,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus";
+char *edwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd";
 
 void edwValidFileStaticLoad(char **row, struct edwValidFile *ret)
 /* Load a row from edwValidFile table into ret.  The contents of ret will
@@ -1529,6 +1529,8 @@ ret->sampleCoverage = sqlDouble(row[16]);
 ret->depth = sqlDouble(row[17]);
 ret->singleQaStatus = sqlSigned(row[18]);
 ret->replicateQaStatus = sqlSigned(row[19]);
+ret->technicalReplicate = row[20];
+ret->pairedEnd = row[21];
 }
 
 struct edwValidFile *edwValidFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1561,8 +1563,8 @@ void edwValidFileSaveToDb(struct sqlConnection *conn, struct edwValidFile *el, c
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g,%d,%d)", 
-	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g,%d,%d,'%s','%s')", 
+	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus,  el->technicalReplicate,  el->pairedEnd);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1594,6 +1596,8 @@ ret->sampleCoverage = sqlDouble(row[16]);
 ret->depth = sqlDouble(row[17]);
 ret->singleQaStatus = sqlSigned(row[18]);
 ret->replicateQaStatus = sqlSigned(row[19]);
+ret->technicalReplicate = cloneString(row[20]);
+ret->pairedEnd = cloneString(row[21]);
 return ret;
 }
 
@@ -1603,7 +1607,7 @@ struct edwValidFile *edwValidFileLoadAll(char *fileName)
 {
 struct edwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[20];
+char *row[22];
 
 while (lineFileRow(lf, row))
     {
@@ -1621,7 +1625,7 @@ struct edwValidFile *edwValidFileLoadAllByChar(char *fileName, char chopper)
 {
 struct edwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[20];
+char *row[22];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1662,6 +1666,8 @@ ret->sampleCoverage = sqlDoubleComma(&s);
 ret->depth = sqlDoubleComma(&s);
 ret->singleQaStatus = sqlSignedComma(&s);
 ret->replicateQaStatus = sqlSignedComma(&s);
+ret->technicalReplicate = sqlStringComma(&s);
+ret->pairedEnd = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -1681,6 +1687,8 @@ freeMem(el->validKey);
 freeMem(el->enrichedIn);
 freeMem(el->ucscDb);
 freeMem(el->sampleBed);
+freeMem(el->technicalReplicate);
+freeMem(el->pairedEnd);
 freez(pEl);
 }
 
@@ -1757,6 +1765,14 @@ fputc(sep,f);
 fprintf(f, "%d", el->singleQaStatus);
 fputc(sep,f);
 fprintf(f, "%d", el->replicateQaStatus);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->technicalReplicate);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->pairedEnd);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 

@@ -29,22 +29,11 @@ void edwFixGbb2(char *dupeFile, char *outFile)
 {
 char *row[2];
 struct lineFile *lf = lineFileOpen(dupeFile, FALSE);
-struct sqlConnection *conn = edwConnect();
-char query[512];
 FILE *f = mustOpen(outFile, "w");
 while (lineFileRow(lf, row))
     {
     char *md5 = row[1];
-    sqlSafef(query, sizeof(query), "select * from edwFile where md5 = '%s' and errorMessage = ''", md5);
-    struct edwFile *ef, *efList = edwFileLoadByQuery(conn, query);
-    for (ef = efList; ef != NULL; ef = ef->next)
-	{
-	if (endsWith(ef->edwFileName, ".gtf.bigBed"))
-	    {
-	    long long fileId = ef->id;
-	    fprintf(f, "update edwFile set deprecated='Uninformative and duplicated because bigBed recapitulates entire input gene set.' where id=%lld;\n", fileId);
-	    }
-	}
+    fprintf(f, "update edwFile set deprecated='Uninformative and duplicated because bigBed recapitulates entire input gene set.' where md5='%s' and edwFileName like '%%.gtf.bigBed';\n", md5);
     }
 carefulClose(&f);
 }

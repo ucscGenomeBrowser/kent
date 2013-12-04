@@ -917,154 +917,121 @@ char *sqlDoubleArrayToString( double *array, int arraySize)
 {
 int i;
 struct dyString *string = newDyString(256);
-char *toRet = NULL;
 for( i = 0 ; i < arraySize; i++ )
     {
     dyStringPrintf(string, "%f,", array[i]);
     }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
+return dyStringCannibalize(&string);
 }
 
 char *sqlFloatArrayToString( float *array, int arraySize)
 {
 int i;
 struct dyString *string = newDyString(256);
-char *toRet = NULL;
 for( i = 0 ; i < arraySize; i++ )
     {
     dyStringPrintf(string, "%f,", array[i]);
     }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
+return dyStringCannibalize(&string);
 }
 
 char *sqlUnsignedArrayToString( unsigned *array, int arraySize)
 {
 int i;
 struct dyString *string = newDyString(256);
-char *toRet = NULL;
 for( i = 0 ; i < arraySize; i++ )
     {
     dyStringPrintf(string, "%u,", array[i]);
     }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
+return dyStringCannibalize(&string);
 }
 
 char *sqlSignedArrayToString( int *array, int arraySize)
 {
 int i;
 struct dyString *string = newDyString(256);
-char *toRet = NULL;
 for( i = 0 ; i < arraySize; i++ )
     {
     dyStringPrintf(string, "%d,", array[i]);
     }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
+return dyStringCannibalize(&string);
 }
 
 char *sqlShortArrayToString( short *array, int arraySize)
 {
 int i;
 struct dyString *string = newDyString(256);
-char *toRet = NULL;
 for( i = 0 ; i < arraySize; i++ )
     {
     dyStringPrintf(string, "%d,", array[i]);
     }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
+return dyStringCannibalize(&string);
 }
 
 char *sqlUshortArrayToString( unsigned short *array, int arraySize)
 {
 int i;
 struct dyString *string = newDyString(256);
-char *toRet = NULL;
 for( i = 0 ; i < arraySize; i++ )
     {
     dyStringPrintf(string, "%u,", array[i]);
     }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
+return dyStringCannibalize(&string);
 }
 
 char *sqlByteArrayToString( signed char *array, int arraySize)
 {
 int i;
 struct dyString *string = newDyString(256);
-char *toRet = NULL;
 for( i = 0 ; i < arraySize; i++ )
     {
     dyStringPrintf(string, "%d,", array[i]);
     }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
+return dyStringCannibalize(&string);
 }
 
 char *sqlUbyteArrayToString( unsigned char *array, int arraySize)
 {
 int i;
 struct dyString *string = newDyString(256);
-char *toRet = NULL;
 for( i = 0 ; i < arraySize; i++ )
     {
     dyStringPrintf(string, "%u,", array[i]);
     }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
+return dyStringCannibalize(&string);
 }
 
 char *sqlCharArrayToString( char *array, int arraySize)
 {
 int i;
 struct dyString *string = newDyString(256);
-char *toRet = NULL;
 for( i = 0 ; i < arraySize; i++ )
     {
     dyStringPrintf(string, "%c,", array[i]);
     }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
+return dyStringCannibalize(&string);
 }
 
 char *sqlLongLongArrayToString( long long *array, int arraySize)
 {
 int i;
 struct dyString *string = newDyString(256);
-char *toRet = NULL;
 for( i = 0 ; i < arraySize; i++ )
     {
     dyStringPrintf(string, "%lld,", array[i]);
     }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
+return dyStringCannibalize(&string);
 }
 
 char *sqlStringArrayToString( char **array, int arraySize)
 {
 int i;
 struct dyString *string = newDyString(256);
-char *toRet = NULL;
 for( i = 0 ; i < arraySize; i++ )
     {
     dyStringPrintf(string, "%s,", array[i]);
     }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
+return dyStringCannibalize(&string);
 }
 
 

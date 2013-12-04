@@ -120,7 +120,7 @@ table edwValidFile
     string format;    "What format it's in from manifest"
     string outputType index[16]; "What output_type it is from manifest"
     string experiment index[16]; "What experiment it's in from manifest"
-    string replicate;  "What replicate it is from manifest"
+    string replicate;  "What replicate it is from manifest.  Values 1,2,3... pooled, or ''"
     string validKey;  "The valid_key tag from manifest"
     string enrichedIn; "The enriched_in tag from manifest"
     string ucscDb;    "Something like hg19 or mm9"
@@ -135,6 +135,9 @@ table edwValidFile
     double depth;   "Estimated genome-equivalents covered by possibly overlapping data"
     byte singleQaStatus;  "0 for untested, 1 for pass, -1 for fail"
     byte replicateQaStatus;  "0 for untested, 1 for pass, -1 for fail"
+
+    string technicalReplicate; "Manifest's technical_replicate tag. Values 1,2,3... pooled or ''"
+    string pairedEnd; "The paired_end tag from the manifest.  Values 1,2 or ''"
     )
 
 table edwFastqFile
