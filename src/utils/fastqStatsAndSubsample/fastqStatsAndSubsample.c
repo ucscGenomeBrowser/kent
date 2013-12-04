@@ -562,6 +562,7 @@ if (argc != 4)
     usage();
 sampleSize = optionInt("sampleSize", sampleSize);
 seed = optionInt("seed", seed);
+srand(seed);
 smallOk = optionExists("smallOk");
 fastqStatsAndSubsample(argv[1], argv[2], argv[3]);
 return 0;
