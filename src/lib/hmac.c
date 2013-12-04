@@ -15,7 +15,7 @@ char *hmacSha1(char *key, char *data)
 {
 unsigned char* digest;
 digest=HMAC(EVP_sha1(), key, strlen(key), (unsigned char*)data, strlen(data), NULL, NULL);
-char hmacStr[40];
+char hmacStr[41]="";
 int i;
 for(i = 0; i < 20; i++)
     sprintf(&hmacStr[i*2], "%02x", (unsigned int)digest[i]);
@@ -28,7 +28,7 @@ char *hmacMd5(char *key, char *data)
 unsigned char* digest;
 digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, strlen(data), NULL, NULL);
 //printf("Raw mdr digest: %s\n", digest);
-char hmacStr[32];
+char hmacStr[33]="";
 int i;
 for(i = 0; i < 16; i++)
     sprintf(&hmacStr[i*2], "%02x", (unsigned int)digest[i]);

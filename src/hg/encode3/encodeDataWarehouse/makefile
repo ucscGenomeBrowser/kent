@@ -36,13 +36,13 @@ CGI_DIRS = \
 TEST_DIRS = \
 	encode2BedDoctor 
 
-all:: edwLib utils
+all:: utils
 
 edwLib:
-	(cd lib && make)
+	(cd lib && ${MAKE})
 
 
-utils: $(USE_DIRS:%=%.utils)
+utils: edwLib $(USE_DIRS:%=%.utils)
 %.utils:
 	(cd $* && $(MAKE))
 

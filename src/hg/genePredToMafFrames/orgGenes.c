@@ -165,7 +165,7 @@ struct binElement *orgGenesFind(struct orgGenes *genes, struct mafComp *comp,
 {
 char *chrom = skipSrcDb(comp->src);
 int start = comp->start;
-int end = (comp->start + comp->size)-1;
+int end = (comp->start + comp->size);
 struct binElement *exons;
 
 /* get positive strand coordinate to match exon */
