@@ -334,7 +334,6 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
     //  or even the same location with alternate splicing or exon structure.
     
     // convert bed block coordinates to exonStarts, exonEnds
-    // TODO: do I have to do anything special for the negative strand?
     int i;
     struct dyString *exonStarts = newDyString(256);
     struct dyString *exonEnds = newDyString(256);
