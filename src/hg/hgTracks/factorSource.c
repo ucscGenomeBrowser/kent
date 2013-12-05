@@ -23,8 +23,10 @@ static void factorSourceLoadItems(struct track *track)
 /* Load all items (and motifs if table is present) in window */
 {
 bedLoadItem(track, track->table, (ItemLoader)loadOne);
-if (track->visibility == tvDense)
+/* Larry suppressed motif marks in dense mode.  Doesn't seem right (ask Jim if there's a reason)*/
+/*if (track->visibility == tvDense)
     return;
+*/
 
 char *motifTable = trackDbSetting(track->tdb, "motifTable");
 if (motifTable == NULL)
