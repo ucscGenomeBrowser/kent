@@ -42,7 +42,7 @@ edwLib:
 	(cd lib && ${MAKE})
 
 
-utils: edwLib $(USE_DIRS:%=%.utils)
+utils: edwLib $(UTIL_DIRS:%=%.utils)
 %.utils:
 	(cd $* && $(MAKE))
 
@@ -55,7 +55,10 @@ clean:: $(USE_DIRS:%=%.clean)
 %.clean:
 	(cd $* && ${MAKE} clean)
 
+cgi:: $(CGI_DIRS:%=%.cgi)
+%.cgi:
+	(cd $* && ${MAKE})
+
 alpha:: $(CGI_DIRS:%=%.alpha)
 %.alpha:
 	(cd $* && ${MAKE} alpha)
-
