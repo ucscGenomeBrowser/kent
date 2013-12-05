@@ -1,0 +1,3 @@
+#!/bin/tcsh -efx
+make
+scp ~/bin/x86_64/edwChangeFormat edw@encodedcc.sdsc.edu:bin/x86_64/edwChangeFormat
