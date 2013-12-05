@@ -5,6 +5,7 @@
 #include "hash.h"
 #include "options.h"
 #include "jksql.h"
+#include "portable.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 
@@ -38,6 +39,36 @@ else
     errAbort("Expecting 1 or 2, got %s in oppositeEnd", end);
     return NULL;
     }
+}
+
+#define FASTQ_SAMPLE_SIZE 10000
+
+void makeTmpSai(struct sqlConnection *conn, struct edwValidFile *vf, char *genoFile, 
+    char **retSampleFile, char **retSaiFile)
+/* Given a fastq file, make a subsample of it 100k reads long and align it with
+ * bwa producing a sai file of given name. */
+{
+/* Get fastq record */
+long long fileId = vf->fileId;
+struct edwFastqFile *fqf = edwFastqFileFromFileId(conn, fileId);
+if (fqf == NULL)
+    errAbort("No edwFastqFile record for file id %lld", fileId);
+
+/* Create downsampled fastq in temp directory - downsampled more than default even. */
+char sampleFastqName[PATH_LEN];
+edwMakeTempFastqSample(fqf->sampleFileName, FASTQ_SAMPLE_SIZE, sampleFastqName);
+verbose(1, "downsampled %s into %s\n", vf->licensePlate, sampleFastqName);
+
+/* Do alignment */
+char cmd[3*PATH_LEN];
+char *saiName = cloneString(rTempName(edwTempDir(), "edwPairSample", ".sai"));
+safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, sampleFastqName, saiName);
+mustSystem(cmd);
+
+/* Save return variables, clean up,  and go home. */
+*retSampleFile = cloneString(sampleFastqName);
+*retSaiFile = saiName;
+edwFastqFileFree(&fqf);
 }
 
 void pairedEndQa(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf)
@@ -75,20 +106,55 @@ sqlSafef(query, sizeof(query),
     "select * from edwQaPairedEndFastq where fileId1=%u and fileId2=%u",
     vf1->fileId, vf2->fileId);
 struct edwQaPairedEndFastq *pair = edwQaPairedEndFastqLoadByQuery(conn, query);
-if (pair == NULL)
+if (pair != NULL)
     {
-    sqlSafef(query, sizeof(query),
-        "insert into edwQaPairedEndFastq (fileId1,fileId2) values (%u,%u)"
-	, vf1->fileId, vf2->fileId);
-    sqlUpdate(conn, query);
-    unsigned id = sqlLastAutoId(conn);
-    uglyf("Making new dummy record %u for %u %u\n", id, vf1->fileId, vf2->fileId);
-    }
-else
     uglyf("Skipping existing record for %u %u\n", vf1->fileId, vf2->fileId);
+    return;
+    }
+
+/* Make placeholder record to help avoid race condition with other member of pair. */
+sqlSafef(query, sizeof(query),
+    "insert into edwQaPairedEndFastq (fileId1,fileId2) values (%u,%u)"
+    , vf1->fileId, vf2->fileId);
+sqlUpdate(conn, query);
+unsigned id = sqlLastAutoId(conn);
+uglyf("Making new dummy record %u for %u %u\n", id, vf1->fileId, vf2->fileId);
+
+/* Get target assembly and figure out path for BWA index. */
+struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+assert(assembly != NULL);
+char genoFile[PATH_LEN];
+safef(genoFile, sizeof(genoFile), "%s%s/bwaData/%s.fa", 
+    edwValDataDir, assembly->ucscDb, assembly->ucscDb);
+
+/* Make alignments of subsamples. */
+char *sample1 = NULL, *sample2 = NULL, *sai1 = NULL, *sai2 = NULL;
+makeTmpSai(conn, vf1, genoFile, &sample1, &sai1);
+makeTmpSai(conn, vf2, genoFile, &sample2, &sai2);
+
+/* Make paired end alignment */
+char *tmpSam = cloneString(rTempName(edwTempDir(), "edwPairSample", ".sam"));
+char command[6*PATH_LEN];
+safef(command, sizeof(command),
+   "bwa sampe -n 1 -N 1 -f %s %s %s %s %s %s"
+   , tmpSam, genoFile, sai1, sai2, sample1, sample2);
+uglyf("mustSystem(%s)\n", command);
+mustSystem(command);
 
 /* Clean up and go home. */
+#ifdef SOON
 edwValidFileFree(&otherVf);
+remove(sample1);
+remove(sample2);
+remove(sai1);
+remove(sai2);
+remove(tmpSam);
+freez(&tmpSam);
+freez(&sample1);
+freez(&sample2);
+freez(&sai1);
+freez(&sai2);
+#endif /* SOON */
 }
 
 void edwMakePairedEndQa(unsigned startId, unsigned endId)
