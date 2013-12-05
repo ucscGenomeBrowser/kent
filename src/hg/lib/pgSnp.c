@@ -748,6 +748,43 @@ for (i = 0;  i < rec->infoCount;  i++)
 	    }
 	break;
 	}
+if (!gotTotalCount)
+    {
+    for (i = 0;  i < rec->infoCount;  i++)
+        {
+        // Added specifically for UWash ExomVariants, redmine #9329
+        if (sameString(rec->infoElements[i].key, "TAC"))
+            {
+            struct vcfInfoElement *tacEl = &rec->infoElements[i];
+            int refIx = tacEl->count - 1;  // Ref allele count is last in TAC
+            int alleleCount = -1;
+            if (!tacEl->missingData[refIx])  // Not in datInt, but don't assume int in datString
+                alleleCount = atoi(tacEl->values[refIx].datString); // sqlSigned will errAbort!
+            if (alleleCount > 0)
+                {
+                dyStringPrintf(dy, "%d", alleleCount);
+                gotTotalCount = TRUE;
+                }
+            else
+                dyStringAppend(dy, "-1");
+            int tacIx = 0;  // Now continue with alt alleles.
+            for ( ;  tacIx < refIx;  tacIx++)
+                {
+                alleleCount = -1;
+                if (!tacEl->missingData[tacIx])
+                    alleleCount = atoi(tacEl->values[tacIx].datString);
+                if (alleleCount > 0)
+                    {
+                    dyStringPrintf(dy, ",%d", alleleCount);
+                    gotAltCounts = TRUE;
+                    }
+                else
+                    dyStringAppend(dy, "-1");
+                }
+            break;
+            }
+        }
+    }
 if (gotTotalCount && !gotAltCounts)
     {
     dyStringPrintf(dy, "%d", alCounts[0]);
