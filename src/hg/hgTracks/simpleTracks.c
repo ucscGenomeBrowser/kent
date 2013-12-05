@@ -751,7 +751,7 @@ if (x < xEnd)
             }
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
-        // Add map item to currnent map (TODO: pass in map)
+        // Add map item to current map (TODO: pass in map)
         #ifdef IMAGEv2_SHORT_MAPITEMS
         if (!revCmplDisp && x < insideX && xEnd > insideX)
             x = insideX;
@@ -1787,7 +1787,7 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
     if ((exon->end - exon->start) > (newWinSize - (2 * bufferToEdge)))
 	bigExon = TRUE;
     if (next && (exon->end > winEnd))
-	/* right overhang (but left side of screen in reserve-strand-display) */
+	/* right overhang (but left side of screen in reverse-strand-display) */
 	{
 	if (exon->start < winEnd)
 	    {
@@ -3350,7 +3350,7 @@ static void countLinkedFeaturesBaseUse(struct linkedFeatures *lf, int width, int
 {
 /* Performence-sensitive code.  Most of the overhead is in the mapping of base
  * to pixel.  This was change from using roundingScale() to doing it all in
- * floating point, with the divide take out of the loop. To avoid adding more
+ * floating point, with the divide taken out of the loop. To avoid adding more
  * overhead when rendering gaps, the translation to pixel coordinates is done
  * here, and then we save the previous block coordinates for use in marking
  * the gap. */
