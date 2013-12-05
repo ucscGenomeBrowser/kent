@@ -255,6 +255,8 @@ sub doMakeBed {
 catDir -r results \\
      | awk \'\{\$2 = \$2 - 1; width = \$3 - \$2;  printf\(\"\%s\\t\%d\\t\%s\\t\%s \%s\\t\%s\\t\%s\\t\%0.0f\\t\%0.1f\\t\%s\\t\%s\\n\", \$1, \$2, \$3, \$5, \$6, width, \$6, width\*\$7\*0.01, 100.0\*2\*\$6\/width, \$7, \$9\);}\' \\
      | sort -k1,1 -k2,2n > cpgIsland.bed
+bedToBigBed -tab -type=bed4+6 -as=\$HOME/kent/src/hg/lib/cpgIslandExt.as \\
+  cpgIsland.bed ../../chrom.sizes $db.cpgIslandExt.bb
 _EOF_
   );
   $bossScript->execute();

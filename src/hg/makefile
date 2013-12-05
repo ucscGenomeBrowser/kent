@@ -21,7 +21,7 @@ endif
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf
 
 ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
-    ENCODE_FILES =
+    ENCODE_FILES = encode3/encodeDataWarehouse
 endif
 
 
@@ -121,6 +121,7 @@ UTIL_DIRS = \
 	ctgFaToFa \
 	ctgToChromFa \
 	embossToPsl \
+	encode3 \
 	fakeFinContigs \
 	fakeOut \
 	ffaToFa \

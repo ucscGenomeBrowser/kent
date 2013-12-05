@@ -598,7 +598,7 @@ void edwAssemblyOutput(struct edwAssembly *el, FILE *f, char sep, char lastSep);
 #define edwAssemblyCommaOut(el,f) edwAssemblyOutput(el,f,',',',');
 /* Print out edwAssembly as a comma separated list including final comma. */
 
-#define EDWVALIDFILE_NUM_COLS 20
+#define EDWVALIDFILE_NUM_COLS 22
 
 extern char *edwValidFileCommaSepFieldNames;
 
@@ -612,7 +612,7 @@ struct edwValidFile
     char *format;	/* What format it's in from manifest */
     char *outputType;	/* What output_type it is from manifest */
     char *experiment;	/* What experiment it's in from manifest */
-    char *replicate;	/* What replicate it is from manifest */
+    char *replicate;	/* What replicate it is from manifest.  Values 1,2,3... pooled, or '' */
     char *validKey;	/* The valid_key tag from manifest */
     char *enrichedIn;	/* The enriched_in tag from manifest */
     char *ucscDb;	/* Something like hg19 or mm9 */
@@ -626,6 +626,8 @@ struct edwValidFile
     double depth;	/* Estimated genome-equivalents covered by possibly overlapping data */
     signed char singleQaStatus;	/* 0 for untested, 1 for pass, -1 for fail */
     signed char replicateQaStatus;	/* 0 for untested, 1 for pass, -1 for fail */
+    char *technicalReplicate;	/* Manifest's technical_replicate tag. Values 1,2,3... pooled or '' */
+    char *pairedEnd;	/* The paired_end tag from the manifest.  Values 1,2 or '' */
     };
 
 void edwValidFileStaticLoad(char **row, struct edwValidFile *ret);

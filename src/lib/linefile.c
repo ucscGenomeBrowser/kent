@@ -824,12 +824,12 @@ while (lineFileNext(lf, &line, NULL))
 return FALSE;
 }
 
-boolean lineFileNextRealWithSize(struct lineFile *lf, char **retStart, int *retSize)
+boolean lineFileNextReal(struct lineFile *lf, char **retStart)
 /* Fetch next line from file that is not blank and
- * does not start with a '#'. Return size of line. */
+ *  * does not start with a '#'. */
 {
 char *s, c;
-while (lineFileNext(lf, retStart, retSize))
+while (lineFileNext(lf, retStart, NULL))
     {
     s = skipLeadingSpaces(*retStart);
     c = s[0];
@@ -837,13 +837,6 @@ while (lineFileNext(lf, retStart, retSize))
         return TRUE;
     }
 return FALSE;
-}
-
-boolean lineFileNextReal(struct lineFile *lf, char **retStart)
-/* Fetch next line from file that is not blank and
- * does not start with a '#'. */
-{
-return lineFileNextRealWithSize(lf, retStart, NULL);
 }
 
 boolean lineFileNextFullReal(struct lineFile *lf, char **retStart)

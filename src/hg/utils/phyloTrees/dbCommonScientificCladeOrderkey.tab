@@ -37,6 +37,7 @@ panHod1	Tibetan antelope	Pantholops hodgsonii	mammal	cetartiodactyla	2362
 turTru2	Dolphin	Tursiops truncatus	mammal	cetartiodactyla	2364
 lipVex1	Yangtze river dolphin	Lipotes vexillifer	mammal	cetartiodactyla	2366
 orcOrc1	Killer whale	Orcinus orca	mammal	cetartiodactyla	2367
+phyCat1	Sperm whale	Physeter catodon	mammal	cetartiodactyla	2368
 oviAri3	Sheep	Ovis aries	mammal	cetartiodactyla	2369
 capHir1	Domestic goat	Capra hircus	mammal	cetartiodactyla	2375
 bosTau7	Cow	Bos taurus	mammal	cetartiodactyla	2379
@@ -54,8 +55,11 @@ myoBra1	Brandt's myotis (bat)	Myotis brandtii	mammal	chiroptera	2500
 myoDav1	David's myotis (bat)	Myotis davidii	mammal	chiroptera	2510
 myoLuc2	Microbat	Myotis lucifugus	mammal	chiroptera	2514
 eptFus1	Big brown bat	Eptesicus fuscus	mammal	chiroptera	2517
+eidHel1	Straw colored fruit bat	Eidolon helvum	mammal	chiroptera	2518
 pteVam1	Megabat	Pteropus vampyrus	mammal	chiroptera	2520
 pteAle1	Black flying-fox	Pteropus alecto	mammal	chiroptera	2530
+megLyr1	Indian false vampire	Megaderma lyra	mammal	chiroptera	2540
+ptePar1	Parnell's mustached bat	Pteronotus parnellii	mammal	chiroptera	2550
 eriEur2	Hedgehog	Erinaceus europaeus	mammal	insectivora	2569
 sorAra2	Shrew	Sorex araneus	mammal	insectivora	2579
 conCri1	Star-nosed mole	Condylura cristata	mammal	insectivora	2590
@@ -93,6 +97,7 @@ allSin1	Chinese alligator	Alligator sinensis	vertebrate	sauria	4382
 croPor1	Crocodile	Crocodylus porosus	vertebrate	sauria	4385
 gavGan1	Gharial	Gavialis gangeticus	vertebrate	sauria	4387
 anoCar2	Lizard	Anolis carolinensis	vertebrate	sauria	4390
+pytMolBiv1	Burmese python	Python molurus bivittatus	vertebrate	sauria	4392
 cheMyd1	Green seaturtle	Chelonia mydas	vertebrate	testudines	4395
 pelSin1	Chinese softshell turtle	Pelodiscus sinensis	vertebrate	testudines	4400
 apaSpi1	Spiny softshell turtle	Apalone spinifera	vertebrate	testudines	4403
@@ -116,3 +121,4 @@ astMex1	Mexican tetra (cavefish)	Astyanax mexicanus	vertebrate	teleostei	4790
 lepOcu1	Spotted gar	Lepisosteus oculatus	vertebrate	neopterygii	4790
 petMar2	Lamprey	Petromyzon marinus	vertebrate	hyperoartia	4799
 letCam1	Arctic lamprey	Lethenteron camtschaticum	vertebrate	hyperoartia	4820
+apiMel4	Honey bee	Apis mellifera	insect	hymenoptera	9658

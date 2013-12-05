@@ -387,7 +387,7 @@ group->end = end;
 }
 
 void gffGroupLines(struct gffFile *gff)
-/* Group lines of gff file together, in process mofing
+/* Group lines of gff file together, in process moving
  * gff->lineList to gffGroup->lineList. */
 {
 struct gffLine *line, *nextLine;

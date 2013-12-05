@@ -1,0 +1,150 @@
+#
+# This file can be viewed at the following URL:
+# http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/product/scripts/README.trashCleaning;hb=HEAD
+#
+
+===============================================================================
+A brief overview of the history of trash cleaning operations.
+
+In the very beginning there was a simple trash directory
+that contained only volatile files which could be removed with
+a single 'find' command with a last access time limit of an hour.
+
+As custom track data began to be more popular, it was decided to
+allow custom track data to live longer than the default hour.
+The single 'find' command turned into two 'find' commands, with
+an exception or inclusion list to avoid or include the trash/ct/
+directory contents for the two different last access time limits.
+
+As the traffic volume increased at the UCSC genome browser, the
+numbers of files encountered in the trash directories caused
+the complicated 'find' commands to take an extraordinary amount
+of time and created an excessive load on the file system servers.
+
+A script system was put into place at that time to avoid the
+complication of the excessive numbers of files in the trash
+directories.  The scripts could also measure statistics of
+the files to monitor size usage and traffic volume.  Plus, custom
+tracks had moved into a database in place of pure trash files, so
+that database needed an expiration procedure.
+
+The scripts needed to be as much fail safe as possible since
+an unnoticed failure in the trash cleaning system could rapidly
+lead to file system server collapse.  Thus, the paired script
+system is used, where a monitor script is called from the 'root' user cron
+system, which then calls the trash cleaning script and verifies
+that it is actually successful.  Any failure in the system should
+trigger email at the time of failure so it can be repaired.
+Or at the next cron job instantiation, the remaining 'lock' file 
+left over from the previous failure will trigger email.
+The system of 'lock' files prevents the system from functioning
+if it appears to be running.  If the trash cleaner slows down
+enough such that subsequent cron job instantiations begin
+to overlap each other, instead of running two at a time, email
+will be sent.
+
+Then along came session management.  This allowed custom track
+data related to a session to take on a new time-to-live aspect.
+At the beginning of this era, UCSC added an external script
+that scanned the session database table to identify custom track
+files and 'touch' them to help them escape the custom track
+trash cleaner expiration time.  This was a tricky situation, since
+if that 'touch' script failed, the session files would time-out
+and be removed.
+
+Thus, the session management operation was folded into the
+existing paired script system so that it would be a single sequence
+for all operations.  A failure in any of the procedure steps would halt
+the system so it could be repaired.  Session related trash files are
+now moved out of the /trash/ directory into a corresponding parallel
+/userdata/ directory hierarchy, with symlinks left in place in the
+/trash/ directory to maintain the files in place.  Since the
+session related files are now outside of trash, they will not be removed
+by any of the trash cleaning procedures even in case of error conditions.
+In fact, there is no script or procedure mentioned here
+that removes those /userdata/ files.  UCSC removes those /userdata/
+files periodically on a manual basis if they are no longer referenced
+by any sessions.  The session data is expired on a third time-to-live
+basis, currently advertised as four months since last use.
+
+A side effect of the current trash cleaning system is the measurement
+of statistics of trash file usage.  The UCSC system is currently running
+on a four hour cycle of trash cleaning.  In between the four hours, the
+trash size monitor script is run several times to help accumulate
+finer grained measurements.
+
+===============================================================================
+
+Procedure outline:
+
+1. trashCleanMonitor.sh - script called from 'root' user cron to run the cleaning system
+   a. verifies 'lock' file is *not* in place
+   b. creates 'lock' file
+   c. runs trashCleaner.bash which does the trash cleaning
+   d. expects 0 return code
+   e. and verifies LOG file ends with a "SUCCESS " line.
+   f. any failure of the above causes email to a specified list of
+      recipients.  In case of failure, the 'lock' file remains in place to
+      prevent this script from running again until the system is repaired.
+
+2. trashCleaner.bash - called from trashCleanMonitor.sh
+   a. expects the 'lock' file to exist as created by trashCleanMonitor.sh
+   b. runs the refreshNamedSessionCustomTracks command to scan the session
+      database.  This operation creates a list of files in trash that are
+      referenced from session data.  Plus, it causes an access to the
+      corresponding customTrash database tables for the custom tracks
+      to refresh their time to live status.
+   c. Files in trash used by sessions that are not yet in '/userdata/' are
+      moved out of trash into '/userdata/' leaving a symlink in '/trash/'
+   d. 'dbTrash' command is run which scans the 'customTrash' database to
+      expire tables past their time to live last access time.
+   e. trashSizeMonitor.sh script is used to efficiently scan the trash
+      filesystem.  It creates a file listing with last access time for
+      each file, plus accumulating statistics into the log files.
+   f. The last access time file listing is used to remove files past
+      their time to live limit.  Two different time periods are used,
+      fully volatile files removed after an hour since last use,
+      Custom track data not in sessions removed after 72 hours
+      since last access.
+
+===============================================================================
+
+customTrash database:
+
+The 'dbTrash' command mentioned above only works on tables that have
+been recorded in the 'customTrash.metaInfo' table.  There are a number
+of 'customTrash' tables that fail to be recorded in the 'metaInfo' table
+due to failed custom tracks loading.  These tables must be identified and
+removed by a separate cron job.
+
+Please note the script: 'cleanLostTables.sh' which uses
+the perl script: 'lostTables.pl' to identify tables not recorded
+in the 'metaInfo' table and have aged enough to confirm they are
+not in any custom track.
+
+The tables are identified by scanning the last access time of the
+files in the MySQL 'customTrash' database directory.  It is done with this
+method instead of using mysql 'show status' commands to avoid MySQL performance
+issues with the 'show status' command when the database has hundreds
+of thousands of tables.  Files can be scanned quickly, table status can
+not be obtained quickly for so many tables.
+
+===============================================================================
+
+Implementation:
+
+These scripts are running as a 'root' user cron job since they need
+to manipulate Apache owned files.  They attempt to keep themselves
+safe from errors that would lead to destruction of the system by requiring
+trash file names to be explicitly: /full/path/trash/...
+with the '/trash/' part of the path required.  This helps prevent
+them from running wild and removing anything they encounter.
+
+Since these are critical scripts, to use them in your own installation,
+you should read them over to see if there are details that may not
+function in your specific environment.  You should be aware of what
+they are doing so you can debug problems.  They aren't guaranteed to work
+under any condition.  Let us know if you have problems or can suggest
+improvements.
+
+===============================================================================
