@@ -15,11 +15,11 @@ char *hmacSha1(char *key, char *data)
 {
 unsigned char* digest;
 digest=HMAC(EVP_sha1(), key, strlen(key), (unsigned char*)data, strlen(data), NULL, NULL);
-char hmacStr[41]="";
+char hmacStr[40];
 int i;
 for(i = 0; i < 20; i++)
     sprintf(&hmacStr[i*2], "%02x", (unsigned int)digest[i]);
-return cloneString(hmacStr);
+return cloneStringZ(hmacStr, sizeof(hmacStr));
 }
 
 char *hmacMd5(char *key, char *data)
@@ -28,11 +28,11 @@ char *hmacMd5(char *key, char *data)
 unsigned char* digest;
 digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, strlen(data), NULL, NULL);
 //printf("Raw mdr digest: %s\n", digest);
-char hmacStr[33]="";
+char hmacStr[32];
 int i;
 for(i = 0; i < 16; i++)
     sprintf(&hmacStr[i*2], "%02x", (unsigned int)digest[i]);
-return cloneString(hmacStr);
+return cloneStringZ(hmacStr, sizeof(hmacStr));
 }
 
 #else // --------- no USE_SSL ==> errAbort with message that openssl is required --------------
