@@ -1,0 +1,3 @@
+This directory contains utilities that are not quite general purpose enough to go into the main 
+UCSC utilities build, but that do not rely on the database, so could be concievably of use to 
+people outside of ENCODE DCC group at UCSC.
