@@ -9,6 +9,22 @@
 #include "obscure.h"
 #include "hmmstats.h"
 
+/* A note on randomness: This program is used on paired end data.  This data is represented
+ * as two separate fastq files where the forward reads are in one file and the reverse in
+ * the other.  The files are in the same order, which is how we know which forward read goes
+ * with which reverse read.   As a result it is very important that this program sample
+ * the same records from files that have the same number of records. 
+ *
+ * This is implemented in two passes - the first pass calculates the statistics and
+ * produces a file with 1/10 the number of reads in it.  The second pass produces the
+ * final output by downsampling the 1/10 size file if it is big enough, or the original
+ * file if not. 
+ *
+ * Earlier versions of this program estimated the amount to reduce in the first pass
+ * and were more efficient, but the estimates were based on the file sizes, and thus
+ * sometimes varied when dealing with compressed input files, and this would break the
+ * correspondence between read pairs, so now the estimate is always 1/10. */
+
 int sampleSize = 100000;
 int seed = 0;
 boolean smallOk = FALSE;
@@ -38,10 +54,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-/* Estimate base count from file size based on this. */
-#define ZIPPED_BYTES_PER_BASE 0.80
-#define UNZIPPED_BYTES_PER_BASE 2.5
-
 static boolean nextLineMustMatchChar(struct lineFile *lf, char match, boolean noEof)
 /* Get next line and make sure, other than whitespace, it matches 'match'.
  * Return FALSE on EOF, unless noEof is set, in which case abort */
@@ -58,60 +70,6 @@ if (line[0] != match)
     errAbort("Expecting %c got %s line %d of %s", match, line, lf->lineIx, lf->fileName);
 return TRUE;
 }
-
-static int averageReadSize(char *fileName, int maxReads)
-/* Read up to maxReads from fastq file and return average # of reads. */
-{
-struct lineFile *lf = lineFileOpen(fileName, FALSE);
-int i;
-long total = 0;
-int count = 0;
-
-for (i=0; i<maxReads; ++i)
-    {
-    /* Deal with initial line starting with '@' */
-    if (!nextLineMustMatchChar(lf, '@', FALSE))
-	break;
-
-    /* Deal with line containing sequence. */
-    char *line;
-    int lineSize = 0;
-    if (!lineFileNext(lf, &line, &lineSize))
-	errAbort("%s truncated in middle of record", lf->fileName);
-
-    /* Get size and add it to stats */
-    int seqSize = lineSize-1;
-    total += seqSize;
-    count += 1;
-
-    /* Deal with next two lines '+' and quality lines. */
-    nextLineMustMatchChar(lf, '+', TRUE);
-    lineFileNeedNext(lf, &line, &lineSize);
-    }
-lineFileClose(&lf);
-if (count < 1)
-    errAbort("No data in %s", fileName);
-return (total + (count>>1))/count;
-}
-
-int calcInitialReduction(char *fileName, int desiredReadCount)
-/* Using file name and size figure out how much to reduce it to get ~2x the subsample we want. */
-{
-size_t initialSize = fileSize(fileName);
-int readSize = averageReadSize(fileName, 100);
-long long estimatedBases;
-if (endsWith(fileName, ".gz") || endsWith(fileName, ".bz2"))
-    estimatedBases = initialSize/ZIPPED_BYTES_PER_BASE;
-else
-    estimatedBases = initialSize/UNZIPPED_BYTES_PER_BASE;
-long long estimatedReads = estimatedBases/readSize;
-double estimatedReduction = (double)estimatedReads/desiredReadCount;
-double conservativeReduction = estimatedReduction * 0.3;
-if (conservativeReduction < 1)
-    conservativeReduction = 1;
-return round(conservativeReduction);
-}
-
 
 /* A bunch of statistics gathering variables set by oneFastqRecord below. */
 #define MAX_READ_SIZE 100000	/* This is fastq, right now only get 160 base reads max. */
@@ -400,6 +358,7 @@ if (sameString("/dev/null", outFastq))
 /* Open up temp output file.  This one will be for the initial scaling.  We'll do
  * a second round of scaling as well. */
 char smallFastqName[PATH_LEN] = "";
+char *smallishName = smallFastqName;
 if (outFastq != NULL)
     {
     /* Split up outFastq path, so we can make a temp file in the same dir. */
@@ -413,7 +372,7 @@ if (outFastq != NULL)
     }
 
 /* Scan through input, collecting stats, validating, and creating a subset file. */
-int downStep = calcInitialReduction(inFastq, sampleSize);
+int downStep = 10;
 struct lineFile *lf = lineFileOpen(inFastq, FALSE);
 boolean done = FALSE;
 int readsCopied = 0, totalReads = 0;
@@ -421,7 +380,7 @@ long long basesInSample = 0;
 boolean firstTime = TRUE;
 while (!done)
     {
-    int hotPosInCycle = rand()%downStep;
+    int hotPosInCycle = rand()%downStep; 
     int cycle;
     for (cycle=0; cycle<downStep; ++cycle)
         {
@@ -432,7 +391,9 @@ while (!done)
 	    break;
 	    }
 	if (hotPos)
+	    {
 	    ++readsCopied;
+	    }
 	firstTime = FALSE;
 	++totalReads;
 	}
@@ -440,23 +401,16 @@ while (!done)
 lineFileClose(&lf);
 carefulClose(&smallF);
 
-boolean justUseSmall = FALSE;
 if (outFastq != NULL && readsCopied <  sampleSize)
     {
-    /* Our sample isn't big enough.  This could have two causes - a bug in
-     * our estimation, maybe caused by read sizes growing a bunch in the time
-     * since this code was written - or a file that is actually smaller smaller
-     * than sampleSize. */
-    if (sampleSize <= totalReads)
+    /* Our sample isn't big enough.  We'll have to reread the main file.  Good
+     * news at least is that it isn't too big. */
+    smallishName = inFastq;
+    readsCopied = totalReads;
+    if (sampleSize > totalReads)
 	{
-	remove(smallFastqName);
-	errAbort("Internal error: bad estimate %d for downStep on %s", downStep, inFastq);
-	}
-    else
-        {
 	if (smallOk)
 	    {
-	    justUseSmall = TRUE;
 	    warn("%d reads total in %s, so sample is less than %d", 
 		totalReads, inFastq, sampleSize);
 	    }
@@ -466,6 +420,7 @@ if (outFastq != NULL && readsCopied <  sampleSize)
 	    errAbort("SampleSize is set to %d reads, but there are only %d reads in %s",
 		    sampleSize, totalReads, inFastq);
 	    }
+	sampleSize = totalReads;
 	}
     }
 
@@ -479,19 +434,10 @@ if (minQual <= 58)
 
 if (outFastq != NULL)
     {
-    if (justUseSmall)
-	{
-	mustRename(smallFastqName, outFastq);
-	sampleSize = readsCopied;
-	basesInSample= sumReadBases;
-	}
-    else
-	{
-	FILE *f = mustOpen(outFastq, "w");
-	basesInSample = reduceFastqSample(smallFastqName, f, readsCopied, sampleSize);
-	carefulClose(&f);
-	remove(smallFastqName);
-	}
+    FILE *f = mustOpen(outFastq, "w");
+    basesInSample = reduceFastqSample(smallishName, f, readsCopied, sampleSize);
+    carefulClose(&f);
+    remove(smallFastqName);
     }
 
 FILE *f = mustOpen(outStats, "w");
@@ -542,8 +488,6 @@ for (pos=0; pos<posCount; ++pos)
 /* Offset quality by scale */
 for (pos=0; pos<posCount; ++pos)
     sumQuals[pos] -= totalAtPos[pos] * qualZero;
-#ifdef SOON
-#endif /* SOON */
 
 printAveDoubleArray(f, "qualPos", sumQuals, totalAtPos, posCount);
 printAveIntArray(f, "aAtPos", aCount, totalAtPos, posCount);
