@@ -1813,7 +1813,7 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	{
 	if (exon->end > winStart)
 	    {
-	    /* not an inron hanging over the edge. */
+	    /* not an intron hanging over the edge. */
 	    if ((lf->tallStart < winStart) && (lf->tallStart > exon->start) && (lf->tallStart < exon->end))
 		linkedFeaturesMoveWinStart(lf->tallStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	    else
