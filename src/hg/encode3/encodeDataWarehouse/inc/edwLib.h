@@ -225,6 +225,9 @@ void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage);
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
 
+void edwMakeTempFastqSample(char *source, int size, char dest[PATH_LEN]);
+/* Copy size records from source into a new temporary dest.  Fills in dest */
+
 void edwMakeFastqStatsAndSample(struct sqlConnection *conn, long long fileId);
 /* Run fastqStatsAndSubsample, and put results into edwFastqFile table. */
 
