@@ -3299,6 +3299,184 @@ fputc(lastSep,f);
 }
 
 
+char *edwQaPairedEndFastqCommaSepFieldNames = "id,fileId1,fileId2,concordance,distanceMean,distanceStd,distanceMin,distanceMax,recordComplete";
+
+void edwQaPairedEndFastqStaticLoad(char **row, struct edwQaPairedEndFastq *ret)
+/* Load a row from edwQaPairedEndFastq table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->fileId1 = sqlUnsigned(row[1]);
+ret->fileId2 = sqlUnsigned(row[2]);
+ret->concordance = sqlDouble(row[3]);
+ret->distanceMean = sqlDouble(row[4]);
+ret->distanceStd = sqlDouble(row[5]);
+ret->distanceMin = sqlDouble(row[6]);
+ret->distanceMax = sqlDouble(row[7]);
+ret->recordComplete = sqlSigned(row[8]);
+}
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwQaPairedEndFastq from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaPairedEndFastqFreeList(). */
+{
+struct edwQaPairedEndFastq *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwQaPairedEndFastqLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwQaPairedEndFastqSaveToDb(struct sqlConnection *conn, struct edwQaPairedEndFastq *el, char *tableName, int updateSize)
+/* Save edwQaPairedEndFastq as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%g,%g,%g,%d)", 
+	tableName,  el->id,  el->fileId1,  el->fileId2,  el->concordance,  el->distanceMean,  el->distanceStd,  el->distanceMin,  el->distanceMax,  el->recordComplete);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqLoad(char **row)
+/* Load a edwQaPairedEndFastq from row fetched with select * from edwQaPairedEndFastq
+ * from database.  Dispose of this with edwQaPairedEndFastqFree(). */
+{
+struct edwQaPairedEndFastq *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->fileId1 = sqlUnsigned(row[1]);
+ret->fileId2 = sqlUnsigned(row[2]);
+ret->concordance = sqlDouble(row[3]);
+ret->distanceMean = sqlDouble(row[4]);
+ret->distanceStd = sqlDouble(row[5]);
+ret->distanceMin = sqlDouble(row[6]);
+ret->distanceMax = sqlDouble(row[7]);
+ret->recordComplete = sqlSigned(row[8]);
+return ret;
+}
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqLoadAll(char *fileName) 
+/* Load all edwQaPairedEndFastq from a whitespace-separated file.
+ * Dispose of this with edwQaPairedEndFastqFreeList(). */
+{
+struct edwQaPairedEndFastq *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwQaPairedEndFastqLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwQaPairedEndFastq from a chopper separated file.
+ * Dispose of this with edwQaPairedEndFastqFreeList(). */
+{
+struct edwQaPairedEndFastq *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwQaPairedEndFastqLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqCommaIn(char **pS, struct edwQaPairedEndFastq *ret)
+/* Create a edwQaPairedEndFastq out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaPairedEndFastq */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->fileId1 = sqlUnsignedComma(&s);
+ret->fileId2 = sqlUnsignedComma(&s);
+ret->concordance = sqlDoubleComma(&s);
+ret->distanceMean = sqlDoubleComma(&s);
+ret->distanceStd = sqlDoubleComma(&s);
+ret->distanceMin = sqlDoubleComma(&s);
+ret->distanceMax = sqlDoubleComma(&s);
+ret->recordComplete = sqlSignedComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwQaPairedEndFastqFree(struct edwQaPairedEndFastq **pEl)
+/* Free a single dynamically allocated edwQaPairedEndFastq such as created
+ * with edwQaPairedEndFastqLoad(). */
+{
+struct edwQaPairedEndFastq *el;
+
+if ((el = *pEl) == NULL) return;
+freez(pEl);
+}
+
+void edwQaPairedEndFastqFreeList(struct edwQaPairedEndFastq **pList)
+/* Free a list of dynamically allocated edwQaPairedEndFastq's */
+{
+struct edwQaPairedEndFastq *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwQaPairedEndFastqFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwQaPairedEndFastqOutput(struct edwQaPairedEndFastq *el, FILE *f, char sep, char lastSep) 
+/* Print out edwQaPairedEndFastq.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->fileId1);
+fputc(sep,f);
+fprintf(f, "%u", el->fileId2);
+fputc(sep,f);
+fprintf(f, "%g", el->concordance);
+fputc(sep,f);
+fprintf(f, "%g", el->distanceMean);
+fputc(sep,f);
+fprintf(f, "%g", el->distanceStd);
+fputc(sep,f);
+fprintf(f, "%g", el->distanceMin);
+fputc(sep,f);
+fprintf(f, "%g", el->distanceMax);
+fputc(sep,f);
+fprintf(f, "%d", el->recordComplete);
+fputc(lastSep,f);
+}
+
+
 char *edwJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode";
 
 void edwJobStaticLoad(char **row, struct edwJob *ret)
