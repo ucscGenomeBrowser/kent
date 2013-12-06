@@ -1,0 +1,63 @@
+<H2>Description</H2>
+<P>This track is powered by Bing! and Microsoft Research. UCSC collaborators at
+Microsoft Research (Bob Davidson, David Heckerman) implemented a DNA sequence
+detector and scanned thirty days of web crawler updates, which covers
+roughly 40 billion webpages.</P>
+
+<H2>Display Convention and Configuration</H2>
+<P>The track indicates the location of sequences on web pages
+mapped to the genome, labelled with the web page URL. If the web page includes
+invisible meta data, then the first author and a year of publication 
+is shown instead of the URL.  All
+matches of one web page are grouped ("chained") together.<br>
+Web page titles are shown when you move the mouse cursor over the features.
+Thicker parts of the features (exons) represent matching sequences,
+connected by thin lines to matches from the same web page within 30 kbp.</P>
+
+<P>The subtrack "individual sequence matches" activates automatically when
+the user clicks a sequence match and follows the link "Show sequence matches individually" 
+from the details page.  Mouse-overs show flanking text around the sequence, and clicking
+features links to BLAT alignments.
+</P>
+
+<H2>Methods</H2>
+All file types (PDFs and various Microsoft Office formats) were converted to
+text. The results were processed to find groups of words that look like DNA/RNA
+sequences. These were then mapped with BLAT to the human genome using the same
+software as used in the <a href="hgTrackUi?g=pubs">Publication track</a>
+
+<P>
+
+<H2>Credits</H2>
+<P>DNA sequence detection by Bob Davidson at Microsoft Research. 
+HTML parsing and sequence mapping by Maximilian Haeussler at UCSC.
+
+<H2>Feedback</H2>
+Please send ideas, comments or feedback on this track to
+<A HREF="mailto:&#109;a&#120;&#64;&#115;&#111;&#101;.uc&#115;&#99;.e&#100;&#117;">
+&#109;a&#120;&#64;&#115;&#111;&#101;.uc&#115;&#99;.e&#100;&#117;</A>.
+<!-- above address is max at soe.ucsc.edu -->
+</P>
+
+<H2>References</H2>
+
+<p>
+Aerts S, Haeussler M, van Vooren S, Griffith OL, Hulpiau P, Jones SJ, Montgomery SB, Bergman CM, Open Regulatory Annotation Consortium.
+<a href="http://genomebiology.com/content/9/2/R31" target="_blank">
+Text-mining assisted regulatory annotation</a>.
+<em>Genome Biol</em>. 2008;9(2):R31.
+</p>
+
+<p>
+Haeussler M, Gerner M, Bergman CM.
+<a href="http://bioinformatics.oxfordjournals.org/content/27/7/980.long" target="_blank">
+Annotating genes and genomes with DNA sequences extracted from biomedical articles</a>.
+<em>Bioinformatics</em>. 2011 Apr 1;27(7):980-6.
+</p>
+
+<p>
+Van Noorden R.
+<a href="http://www.nature.com/news/trouble-at-the-text-mine-1.10184" target="_blank">
+Trouble at the text mine</a>.
+<em>Nature</em>. 2012 Mar 7;483(7388):134-5.
+</p>
