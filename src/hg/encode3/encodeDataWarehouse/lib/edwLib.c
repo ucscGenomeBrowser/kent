@@ -648,7 +648,7 @@ struct edwFile *edwFileAllIntactBetween(struct sqlConnection *conn, int startId,
 char query[128];
 sqlSafef(query, sizeof(query), 
     "select * from edwFile where id>=%d and id<=%d and endUploadTime != 0 "
-    "and updateTime != 0 and deprecated = ''", 
+    "and updateTime != 0 and errorMessage = '' and deprecated = ''", 
     startId, endId);
 return edwFileLoadByQuery(conn, query);
 }
@@ -996,7 +996,9 @@ sqlUpdate(conn, query);
 sqlSafef(query, sizeof(query), "update edwFile set tags='%s' where id=%lld", newTags, fileId);
 sqlUpdate(conn, query);
     
-/* Get rid of existing qa tables. */
+/* Get rid of records referring to file in other validation and qa tables. */
+sqlSafef(query, sizeof(query), "delete from edwFastqFile where fileId=%lld", fileId);
+sqlUpdate(conn, query);
 sqlSafef(query, sizeof(query),
     "delete from edwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
     fileId, fileId);
@@ -1006,6 +1008,14 @@ sqlSafef(query, sizeof(query),
     fileId, fileId);
 sqlUpdate(conn, query);
 sqlSafef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from edwQaContam where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from edwQaRepeat where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), 
+    "delete from edwQaPairedEndFastq where fileId1=%lld or fileId2=%lld",
+    fileId, fileId);
 sqlUpdate(conn, query);
 
 /* schedule validator */
@@ -1117,6 +1127,31 @@ struct edwFastqFile *edwFastqFileFromFileId(struct sqlConnection *conn, long lon
 char query[256];
 sqlSafef(query, sizeof(query), "select * from edwFastqFile where fileId=%lld", fileId);
 return edwFastqFileLoadByQuery(conn, query);
+}
+
+static int mustMkstemp(char *template)
+/* Call mkstemp to make a temp file with name based on template (which is altered)
+ * by the call to be the file name.   Return unix file descriptor. */
+{
+int fd = mkstemp(template);
+if (fd == -1)
+    errnoAbort("Couldn't make temp file based on %s", template);
+return fd;
+}
+
+void edwMakeTempFastqSample(char *source, int size, char dest[PATH_LEN])
+/* Copy size records from source into a new temporary dest.  Fills in dest */
+{
+/* Make temporary file to save us a unique place in file system. */
+safef(dest, PATH_LEN, "%sedwSampleFastqXXXXXX", edwTempDir());
+int fd = mustMkstemp(dest);
+close(fd);
+
+char command[3*PATH_LEN];
+safef(command, sizeof(command), 
+    "fastqStatsAndSubsample %s /dev/null %s -smallOk -sampleSize=%d", source, dest, size);
+verbose(2, "command: %s\n", command);
+mustSystem(command);
 }
 
 void edwMakeFastqStatsAndSample(struct sqlConnection *conn, long long fileId)
