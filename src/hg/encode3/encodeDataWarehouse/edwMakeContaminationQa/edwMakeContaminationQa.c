@@ -55,31 +55,6 @@ edwAlignFastqMakeBed(ef, assembly, fastqPath, vf, bedF,
     &vf->mapRatio, &vf->depth, &vf->sampleCoverage);
 }
 
-int mustMkstemp(char *template)
-/* Call mkstemp to make a temp file with name based on template (which is altered)
- * by the call to be the file name.   Return unix file descriptor. */
-{
-int fd = mkstemp(template);
-if (fd == -1)
-    errnoAbort("Couldn't make temp file based on %s", template);
-return fd;
-}
-
-void makeTempFastqSample(char *source, int size, char dest[PATH_LEN])
-/* Copy size records from source into a new temporary dest.  Fills in dest */
-{
-/* Make temporary file to save us a unique place in file system. */
-safef(dest, PATH_LEN, "%sedwSampleFastqXXXXXX", edwTempDir());
-int fd = mustMkstemp(dest);
-close(fd);
-
-char command[3*PATH_LEN];
-safef(command, sizeof(command), 
-    "fastqStatsAndSubsample %s /dev/null %s -smallOk -sampleSize=%d", source, dest, size);
-verbose(2, "command: %s\n", command);
-mustSystem(command);
-}
-
 #define FASTQ_SAMPLE_SIZE 100000
 
 int edwQaContamMade(struct sqlConnection *conn, long long fileId, int targetId)
@@ -139,7 +114,7 @@ if (needScreen)
 
     /* Create downsampled fastq in temp directory - downsampled more than default even. */
     char sampleFastqName[PATH_LEN];
-    makeTempFastqSample(fqf->sampleFileName, FASTQ_SAMPLE_SIZE, sampleFastqName);
+    edwMakeTempFastqSample(fqf->sampleFileName, FASTQ_SAMPLE_SIZE, sampleFastqName);
     verbose(1, "downsampled %s into %s\n", vf->licensePlate, sampleFastqName);
 
     for (target = targetList; target != NULL; target = target->next)
