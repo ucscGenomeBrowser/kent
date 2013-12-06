@@ -1266,6 +1266,80 @@ void edwQaPairCorrelationOutput(struct edwQaPairCorrelation *el, FILE *f, char s
 #define edwQaPairCorrelationCommaOut(el,f) edwQaPairCorrelationOutput(el,f,',',',');
 /* Print out edwQaPairCorrelation as a comma separated list including final comma. */
 
+#define EDWQAPAIREDENDFASTQ_NUM_COLS 9
+
+extern char *edwQaPairedEndFastqCommaSepFieldNames;
+
+struct edwQaPairedEndFastq
+/* Information about two paired-end fastqs */
+    {
+    struct edwQaPairedEndFastq *next;  /* Next in singly linked list. */
+    unsigned id;	/* Id of this set of paired end files */
+    unsigned fileId1;	/* Id of first in pair */
+    unsigned fileId2;	/* Id of second in pair */
+    double concordance;	/* % of uniquely aligning reads where pairs nearby and point right way */
+    double distanceMean;	/* Average distance between reads */
+    double distanceStd;	/* Standard deviation of distance */
+    double distanceMin;	/* Minimum distance */
+    double distanceMax;	/* Maximum distatnce */
+    signed char recordComplete;	/* Flag to avoid a race condition. Ignore record if this is 0 */
+    };
+
+void edwQaPairedEndFastqStaticLoad(char **row, struct edwQaPairedEndFastq *ret);
+/* Load a row from edwQaPairedEndFastq table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwQaPairedEndFastq from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaPairedEndFastqFreeList(). */
+
+void edwQaPairedEndFastqSaveToDb(struct sqlConnection *conn, struct edwQaPairedEndFastq *el, char *tableName, int updateSize);
+/* Save edwQaPairedEndFastq as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqLoad(char **row);
+/* Load a edwQaPairedEndFastq from row fetched with select * from edwQaPairedEndFastq
+ * from database.  Dispose of this with edwQaPairedEndFastqFree(). */
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqLoadAll(char *fileName);
+/* Load all edwQaPairedEndFastq from whitespace-separated file.
+ * Dispose of this with edwQaPairedEndFastqFreeList(). */
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqLoadAllByChar(char *fileName, char chopper);
+/* Load all edwQaPairedEndFastq from chopper separated file.
+ * Dispose of this with edwQaPairedEndFastqFreeList(). */
+
+#define edwQaPairedEndFastqLoadAllByTab(a) edwQaPairedEndFastqLoadAllByChar(a, '\t');
+/* Load all edwQaPairedEndFastq from tab separated file.
+ * Dispose of this with edwQaPairedEndFastqFreeList(). */
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqCommaIn(char **pS, struct edwQaPairedEndFastq *ret);
+/* Create a edwQaPairedEndFastq out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaPairedEndFastq */
+
+void edwQaPairedEndFastqFree(struct edwQaPairedEndFastq **pEl);
+/* Free a single dynamically allocated edwQaPairedEndFastq such as created
+ * with edwQaPairedEndFastqLoad(). */
+
+void edwQaPairedEndFastqFreeList(struct edwQaPairedEndFastq **pList);
+/* Free a list of dynamically allocated edwQaPairedEndFastq's */
+
+void edwQaPairedEndFastqOutput(struct edwQaPairedEndFastq *el, FILE *f, char sep, char lastSep);
+/* Print out edwQaPairedEndFastq.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwQaPairedEndFastqTabOut(el,f) edwQaPairedEndFastqOutput(el,f,'\t','\n');
+/* Print out edwQaPairedEndFastq as a line in a tab-separated file. */
+
+#define edwQaPairedEndFastqCommaOut(el,f) edwQaPairedEndFastqOutput(el,f,',',',');
+/* Print out edwQaPairedEndFastq as a comma separated list including final comma. */
+
 #define EDWJOB_NUM_COLS 6
 
 extern char *edwJobCommaSepFieldNames;

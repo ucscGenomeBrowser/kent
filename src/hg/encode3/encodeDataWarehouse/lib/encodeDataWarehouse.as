@@ -245,6 +245,21 @@ table edwQaPairCorrelation
     double pearsonClipped; "Pearson's R clipped at two standard deviations up from the mean" 
     )
 
+table edwQaPairedEndFastq
+"Information about two paired-end fastqs"
+    (
+    uint id primary auto; "Id of this set of paired end files"
+    uint fileId1 unique; "Id of first in pair"
+    uint fileId2 unique; "Id of second in pair"
+    double concordance;  "% of uniquely aligning reads where pairs nearby and point right way"
+    double distanceMean; "Average distance between reads"
+    double distanceStd;  "Standard deviation of distance"
+    double distanceMin;	 "Minimum distance"
+    double distanceMax;  "Maximum distatnce"
+    byte recordComplete; "Flag to avoid a race condition. Ignore record if this is 0"
+    )
+
+
 table edwJob
 "A job to be run asynchronously and not too many all at once."
     (
