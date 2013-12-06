@@ -1,5 +1,5 @@
-/* wigToBigWig - Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
- * to binary big wig format.. */
+/* bigWigCat - Merge a collection of non-overlapping bigWig files 
+ * directly into binary big wig format.. */
 #include "common.h"
 #include "obscure.h"
 #include "linefile.h"
@@ -561,11 +561,11 @@ void checkFileSettings(char ** inNames, struct bbiFile ** inFiles, int inNamesCo
 	checkReductions(inNames, inFiles, inNamesCount);
 }
 
-void MergedBigWigFileCreate(
+void bigWigCat(
 	char **inNames, 	/* Input files in big wig format. */
 	int inNamesCount,	/* Number of input files */
 	char *outName)
-/* Merge multiple non-overlapping wig files
+/* Merge multiple non-overlapping bigwig files
  * into a single big wig file. */
 {
 /* This code needs to agree with code in two other places currently - bigBedFileCreate,
@@ -594,15 +594,17 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "wigToBigWig v %d - Convert ascii format wig file (in fixedStep, variableStep\n"
-  "or bedGraph format) to binary big wig format.\n"
+  "bigWigCat v %d - merge non-overlapping bigWig files\n" 
+  "directly into bigWig format\n"
   "usage:\n"
   "   mergeBigWigs out.bw in1.bw in2.bw ...\n"
   "Where in*.bw is in big wig format\n"
   "and out.bw is the output indexed big wig file.\n"
-  "Use the script: fetchChromSizes to obtain the actual chrom.sizes information\n"
-  "from UCSC, please do not make up a chrom sizes from your own information.\n"
-  , bbiCurrentVersion
+  "options:\n"
+  "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
+  "   -clip - If set just issue warning messages rather than dying if wig\n"
+  "                  file contains items off end of chromosome.\n"
+  , bbiCurrentVersion, itemsPerSlot
   );
 }
 
@@ -620,7 +622,7 @@ char * outName = argv[1];
 char ** inNames = argv + 2;
 int inNamesCount = argc - 2;
 
-MergedBigWigFileCreate(inNames, inNamesCount, outName);
+bigWigCat(inNames, inNamesCount, outName);
 
 if (verboseLevel() > 1)
     printVmPeak();

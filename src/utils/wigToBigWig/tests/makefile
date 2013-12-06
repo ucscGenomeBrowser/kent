@@ -39,10 +39,10 @@ test1: outputDir
 	bigWigSummary tmp/testBedGraph.bigWig chr5 131308806 132230652 1000 > output/tbg1000.sum
 	bigWigSummary tmp/testBedGraph.bigWig chr5 131308806 132230652 10000 > output/tbg10000.sum
 
-	# Do the diff - only output of script should be about the expected/CVS dir
+	# Do the diff
 	diff output expected
 
-	# clean up temporary directories (not executed since fails on diff because of CVS)
+	# clean up temporary directories
 	rm -r output tmp
 
 test2: outputDir
@@ -83,10 +83,10 @@ test2: outputDir
 	bigWigSummary tmp/testBedGraph.bigWig chr5 131308806 132230652 1000 > output/tbg1000.sum
 	bigWigSummary tmp/testBedGraph.bigWig chr5 131308806 132230652 10000 > output/tbg10000.sum
 
-	# Do the diff - only output of script should be about the expected/CVS dir
+	# Do the diff
 	diff output expected_2
 
-	# clean up temporary directories (not executed since fails on diff because of CVS)
+	# clean up temporary directories
 	rm -r output tmp
 
 clean::
