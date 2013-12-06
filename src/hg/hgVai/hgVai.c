@@ -652,7 +652,9 @@ if (trackRefList != NULL)
 	char cartVar[512];
 	safef(cartVar, sizeof(cartVar), "hgva_track_%s_%s", database, tdb->track);
 	cartMakeCheckBox(cart, cartVar, FALSE);
-	printf("%s<BR>\n", tdb->longLabel);
+	struct trackDb *topTdb = trackDbTopLevelSelfOrParent(tdb);
+	printf("<A HREF=\"%s?%s&g=%s\">%s</A><BR>\n", hgTrackUiName(), cartSidUrlString(cart),
+	       topTdb->track, tdb->longLabel);
 	}
     puts("<BR>");
     endCollapsibleSection();
