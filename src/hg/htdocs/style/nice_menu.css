@@ -409,7 +409,7 @@ ul.nice-menu ul li span {
 }
 ul.nice-menu ul li a:hover, ul.nice-menu ul li a.active {
 	color:#fff !important;
-	background:none;
+	background-color: #327de4 !important;
 }
 ul.nice-menu li.menuparent li a {
 	padding:8px;
@@ -462,6 +462,11 @@ ul.nice-menu-down li ul li ul {
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
 }
+
+th.blueToggleBar b { /* Win8/IE10 was not inheriting text color redmin 11745 */
+    color: #FFFFFF;
+}
+
 a:link {color: #121E9A;}
 
 

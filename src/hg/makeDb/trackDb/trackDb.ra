@@ -507,7 +507,7 @@ noInherit on
 
 track pubsBingBlat
 shortLabel Web Sequences
-longLabel Sequences in web pages indexed by Bing.com / Microsoft Research
+longLabel DNA Sequences in web pages indexed by Bing.com / Microsoft Research
 group pub
 type bed 12 .
 visibility hide

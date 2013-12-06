@@ -1,6 +1,7 @@
 /* annoGratorQuery -- framework for integrating genomic annotations from many sources */
 
 #include "annoGratorQuery.h"
+#include "dystring.h"
 #include "errabort.h"
 #include "obscure.h"
 
@@ -74,12 +75,21 @@ if (gratorCount > 0)
     struct annoStreamer *gratorStreamList = (struct annoStreamer *)query->integrators;
     gratorData = annoStreamRowsNew(gratorStreamList);
     }
+char *regionChrom = primarySrc->chrom;
 struct annoRow *primaryRow = NULL;
 struct lm *lm = lmInit(0);
+boolean gotPrimaryData = FALSE;
 while ((primaryRow = primarySrc->nextRow(primarySrc, NULL, 0, lm)) != NULL)
     {
+    if (regionChrom != NULL && strcmp(primaryRow->chrom, regionChrom) > 0)
+	{
+	// primarySrc's first row is on some chromosome past regionChrom, i.e. it has no
+	// items on regionChrom.
+	break;
+	}
     if (primaryRow->rightJoinFail)
 	continue;
+    gotPrimaryData = TRUE;
     primaryData->rowList = primaryRow;
     boolean rjFilterFailed = FALSE;
     int i;
@@ -97,6 +107,17 @@ while ((primaryRow = primarySrc->nextRow(primarySrc, NULL, 0, lm)) != NULL)
 	    formatter->formatOne(formatter, primaryData, gratorData, gratorCount);
     lmCleanup(&lm);
     lm = lmInit(0);
+    }
+if (!gotPrimaryData)
+    {
+    struct dyString *dy = dyStringCreate("No data from %s", primarySrc->name);
+    if (regionChrom != NULL)
+	dyStringPrintf(dy, " in range %s:%d-%d; try changing 'region to annotate' to 'genome'",
+		       regionChrom, primarySrc->regionStart, primarySrc->regionEnd);
+    struct annoFormatter *formatter = NULL;
+    for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
+	formatter->comment(formatter, dy->string);
+    dyStringFree(&dy);
     }
 freez(&primaryData);
 freez(&gratorData);

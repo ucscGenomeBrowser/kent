@@ -1,0 +1,289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>Specifications of Common File Formats Used by the ENCODE Consortium</title>
+    <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
+    <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
+  </head>
+
+  <body>
+    <!--#include virtual="/inc/encodeProjectSoftware.topbar.html"-->
+
+    <div class="encodeHeader">
+      <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
+      <span class="txt">Specifications of Common File Formats Used by the ENCODE Consortium</span>
+    </div>
+    
+    <div class="wrapper">
+      <div class="bar"><h4 class="title">September 2013</h4></div>
+      <div class="content">
+        <p>
+          The ENCODE consortium uses several file formats to store, display, and disseminate data:
+          <ul>
+            <li><a href="#FASTQ">FASTQ</a></li>
+            <li><a href="#BAM">BAM</a></li>
+            <li><a href="#bigWig">bigWig</a></li>
+            <li><a href="#bigBed">bigBed</a></li>
+          </ul>
+        <p>
+          FASTQ<a href="#reference1"><sup>[1]</sup></a> is a text-based format for storing nucleotide
+          sequences (reads) and their quality scores. The Sequence Alignment/Mapping
+          (SAM)<a href="#reference2"><sup>[2]</sup></a> format is a text-based format for storing read
+          alignments against reference sequences and it is interconvertible with the binary BAM
+          format. The bigWig format is an indexed binary format for rapid display of continuous
+          and dense data in the UCSC Genome Browser. And the bigBed format is also an indexed
+          binary format for rapid display of annotation items such as a linked collection of
+          exons or the binding peaks of a transcription factor.
+        </p>
+        <p>
+          These file formats were originally designed to be generic and flexible. As the
+          ENCODE consortium is a collaborative effort, the consortium has made several specifications
+          on the file formats to facilitate data archival, presentation, and distribution, as
+          well as integrative analysis on the data. The consortium considers FASTQ as the basic file
+          format for archival purpose and thus the FASTQ format's specifications aim to preserve the raw
+          sequence data. In comparison, the other file formats are geared towards data
+          visualization and dissemination, thus their specifications aim to facilitate
+          user-friendliness.
+        </p>
+        <a href="../../FAQ/FAQformat.html#ENCODE">UCSC Genome Browser ENCODE-specific File Formats</a><br>
+        <a href="#references">References</a>
+        <p class="date">Updated 4 Dec 2013
+        </p>
+
+      </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <div class="wrapper">
+      <div class="bar"><h4 class="title">
+          <a name="FASTQ">FASTQ: Original Text-based Reads and Quality Scores for Archival Purpose</a></h4></div>
+      <div class="content">
+        <h4>FASTQ file content</h4>
+        
+        <ul>
+          <p>
+            FASTQ files are submitted as they come off the sequencing instrument to allow
+            for maximal decision making of downstream users. The files are accompanied by
+            documentation detailing how the sequencing libraries were constructed to inform
+            the end-user about how they might want to process the data, the strengths and
+            limitations of the various options of data processing, and how these may apply
+            according to the user's biological questions of interest. 
+          </p>
+          <p>
+            ENCODE produces replicate data for most experiments to quantify reliability.
+            Biological replicates involve different biological samples, e.g., different tissue
+            preparations for cell growth and expansion when cell lines are used. Biological replicates are
+            contrasted with technical replicates, for which different sequencing libraries are prepared from
+            the same sample, or different sequencing lanes for the same library. Reads from different
+            replicates are stored in separate files and should include flow cell and lane ID. If
+            multiple lanes are used for the same biological or technical replicate, they are stored
+            in the same file (after a QC check to eliminate failed lanes), with information on flow cell and
+            lane ID included. For experiments that produce paired-end reads, the two reads in each
+            pair are stored in two separate files, with the reads in the same order in the two files.
+          </p>
+          <p>
+            The reads in FASTQ files are unfiltered, i.e., barcodes, adapter sequences, and
+            spike-ins remain in the files. For Illumina sequencing, the barcodes that are in the
+            so-called third read position should not be present in the sequence. Spike-in reads
+            are kept. For bisulfite sequencing experiments, the raw FASTQ files are presented,
+            wherein most unmethylated cytosines are converted to thymines.
+          </p>
+          <p>
+            Reads are not "clipped" (no bases are removed). For example, in the case of small RNAs that are
+            shorter than the read-length, there may be adapters flanking these reads&mdash;these adapter
+            sequences remain in the FASTQ file. Some libraries are constructed in a way such that the
+            barcode is read out in the sequence (CSHL small RNAs were made this way during phase II of ENCODE)
+            and will appear in the FASTQ. Even though these barcodes would need to be trimmed off prior to
+            mapping, they are still included in the FASTQ file because different users may choose
+            different trimming algorithms.   
+          </p>
+          <p>
+        </ul>
+        
+        <h4>FASTQ Sequencing quality</h4>
+        <ul>
+          <p>
+            FASTQ uses four lines for each sequence with the fourth line denoting the sequencing
+            quality in each position. The consortium reports the Phred quality score from 0 to 93 using ASCII
+            33 to 126, i.e., Phred score plus 33. This is used by the newest versions of the
+            Illumina pipeline, Sanger and SRA. The Phred score of a
+            base<a href="#reference3"><sup>[3]</sup></a><a href="#reference4"><sup>[4]</sup></a> is defined as -l0
+            log<sub>10</sub> (<em>e</em>) where <em>e</em> is the estimated probability for a base to be erroneous.
+          </p>
+          <p>
+            <li><a class="thick" href="http://en.wikipedia.org/wiki/FASTQ_format"
+                   target="_blank">Introductory information on the FASTQ format</a><br></li>
+        </ul>
+      </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <div class="wrapper">
+      <div class="bar"><h4 class="title"><a name="BAM">BAM: Binary Format of Sequence Alignment/Mapping (SAM)</a></h4></div>
+      <div class="content">
+        <h4>BAM file content</h4>
+        
+        <ul>
+          <p>
+            When sequence reads are mapped to reference sequences, the resulting alignments are
+            stored in BAM files (SAMtools are used to convert between SAM and BAM files). Mapping
+            algorithms (e.g., Bowtie, BWA, STAR etc.) use many parameters, such as the version of
+            a reference genome, the total number of mismatches allowed during mapping, the maximal
+            number of times a read is allowed to map to the reference etc. Furthermore, SAMtools
+            may change the content while converting a SAM file to a BAM file. For example, the user
+            may allow both unique-mapping and multiple-mapping reads during the mapping and then
+            decide to retain only unique-mapping reads in the BAM file. Therefore the consortium documents
+            the parameters used by the mapping algorithm and SAMtools in the header of the BAM files. 
+          </p>
+          <p>
+            For experiments that generate paired-end reads, the paired reads are stored in the
+            same BAM file. The consortium also retains unmapped reads and spike-ins (whenever appropriate).
+            Because spike-in reads are "non-chromosomal", they need to be filtered out before downstream
+            processing. The quality scores for unmapped reads are stored in the same format as in FASTQ files,
+            i.e., Phred+33. Biological replicates are stored in separate BAM files. Multiple lanes
+            of the same library are pooled into a single BAM, with read names containing lane
+            information so that it is possible to decompose the pooled BAM file into individual
+            BAM files by lane.
+          </p>
+          <p>
+            At the present time, the consortium only releases one BAM file for each FASTQ file (or for each
+            pair of FASTQ files in the case of paired-end datasets). However in the future the consortium
+            may allow multiple BAM files for the same FASTQ file, potentially for different mapping
+            algorithms (e.g., Bowtie and STAR for RNA-seq data) or for mapping to different
+            reference genomes (e.g., personalized genomes). In that case, the consortium will provide clear
+            guidelines for usage. 
+          </p>
+        </ul>
+        
+        <h4>BAM mapping parameters</h4>
+        
+        <ul>
+          <p>
+            Due to the diverse data types used in ENCODE, the choice of mapping algorithms and
+            the parameters used are data type dependent. These parameters include how many
+            mismatches are allowed, whether seed matching is used (only the prefix of each read
+            is used for mapping while the low-quality suffix is discarded), whether reads that
+            map to many locations in the reference are allowed, etc. The consortium aims to specify the
+            settings of these parameters for each individual data type, and these specifications will
+            be released in the future versions of this document. Nonetheless, the settings of
+            all tunable parameters are specified in the header of each BAM file.
+          </p>
+          <li><a class="thick" href="http://en.wikipedia.org/wiki/BAM_format"
+                 target="_blank">Introductory information on the SAM/BAM format</a><br></li>
+        </ul>
+      </div><!--end content-->
+    </div><!--end wrapper-->
+    
+    <div class="wrapper">
+      <div class="bar"><h4 class="title"><a name="bigWig">bigWig: Genome Browser Signal (Wiggle) Files in Indexed Binary Format</a></h4></div>
+      <div class="content">
+        
+        <h4>bigWig file content</h4>
+        <ul>
+          <p>
+            In order to visualize the number of reads that are mapped to a reference genome
+            as a continuous signal in the UCSC genome browser, a user can convert a BAM file
+            to a bigWig file (via the intermediate bedGraph format, using computer programs
+            provided by the UCSC Genome Browser). 
+          <p>
+            Stranded data are stored in two bigWig files, one file for the plus genomic strand
+            and the other file for the minus strand. The data on the two strands are displayed
+            as two separate UCSC tracks by default and can also be displayed in different
+            colors as a single overlayed track (without changing the two bigWig files).  For
+            unstranded data, signals on the plus and minus strands are summed and only one
+            bigWig file is needed. 
+          </p>
+          <p>
+            Data from biological replicates are stored in individual bigWig files and can
+            be viewed as separate UCSC tracks; however, this may cease to be necessary after
+            the user has concluded that the replicates are highly reproducible. Thus the consortium also
+            provides one bigWig file for each experiment with the reads in all biological
+            replicates pooled and use this file to define the default track for the experiment.
+          </p>
+        </ul>
+        
+        <h4>Generation of bigWig files</h4>
+        <ul>
+          <p>
+            To facilitate the comparison across datasets, ENCODE bigWig files are automatically
+            generated by ENCODE uniform processing pipelines which contain appropriate parameters
+            for data normalization and filtering. The version and key parameters of the pipeline
+            that have been used to generate a bigWig file are provided.
+          </p>
+          <p>
+            <li><a class="thick" href="../goldenPath/help/bigWig.html"
+                   target="_blank">Introductory information on the bigWig format</a><br></li>
+      </div><!--end content-->
+    </div><!--end wrapper-->
+    
+    <div class="wrapper">
+      <div class="bar"><h4 class="title"><a name="bigBed">bigBed: Genome Browser Bed Files in Indexed Binary Format</a></h4></div>
+      <div class="content">
+        
+        <h4>bigBed file content</h4>
+        <ul>
+          <p>
+            Analyses of ENCODE data produce annotation files, e.g., genomic regions that are
+            enriched in ChIP-seq signal of transcription factors (ChIP-seq peaks), splice
+            junctions detected using RNA-seq data, or differentially methylated regions detected
+            using bisulfite sequencing data. Such annotation files can be visualized in the UCSC
+            genome browser using the bigBed format. Related to and interconvertible with the
+            text-based Bed format, bigBed is an indexed binary format designed for rapid
+            visualization. For each element in an ENCODE bigBed file, the consortium specifies its chromosome,
+            start, end, genomic strand when applicable, and a color score that denotes average
+            signal enrichment for the region.
+          </p>
+          <p>
+            <li><a class="thick" href="../goldenPath/help/bigBed.html"
+                   target="_blank">Introductory information on the bigBed format</a><br></li>
+        </ul>
+      </div><!--end content-->
+    </div><!--end wrapper-->
+    
+    <div class="wrapper">
+      <div class="bar"><h4 class="title"><a name="references">References for Common File Formats Used by the ENCODE Consortium</a></h4></div>
+      <div class="content">
+        
+        <h4>References</h4>
+        <ul>
+          
+          <p><a name="reference1">[1]</a>
+            Cock PJ, Fields CJ, Goto N, Heuer ML, Rice PM.
+            <a href="http://nar.oxfordjournals.org/cgi/pmidlookup?view=long&amp;pmid=20015970" target="_blank">
+              The Sanger FASTQ file format for sequences with quality scores, and the Solexa/Illumina FASTQ
+              variants</a>.
+            <em>Nucleic Acids Res</em>. 2010 Apr;38(6):1767-71.
+            PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/20015970" target="_blank">20015970</a>; PMC:
+            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2847217" target="_blank">PMC2847217</a>
+          </p>
+          
+          <p><a name="reference2">[2]</a>
+            Li H, Handsaker B, Wysoker A, Fennell T, Ruan J, Homer N, Marth G, Abecasis G, Durbin R, 1000 Genome
+            Project Data Processing Subgroup.
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/19505943" target="_blank">
+              The Sequence Alignment/Map format and SAMtools</a>.
+            <em>Bioinformatics</em>. 2009 Aug 15;25(16):2078-9.
+            PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/19505943" target="_blank">19505943</a>; PMC:
+            <a  href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2723002" target="_blank">PMC2723002</a>
+          </p>
+
+          <p><a name="reference3">[3]</a>
+            Ewing B, Hillier L, Wendl MC, Green P.
+            <a href="http://genome.cshlp.org/cgi/pmidlookup?view=long&amp;pmid=9521921" target="_blank">
+              Base-calling of automated sequencer traces using phred. I. Accuracy assessment</a>.
+            <em>Genome Res</em>. 1998 Mar;8(3):175-85.
+            PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/9521921" target="_blank">9521921</a>
+          </p>
+          
+          <p><a name="reference4">[4]</a>
+            Ewing B, Green P.
+            <a href="http://genome.cshlp.org/cgi/pmidlookup?view=long&amp;pmid=9521922" target="_blank">
+              Base-calling of automated sequencer traces using phred. II. Error probabilities</a>.
+            <em>Genome Res</em>. 1998 Mar;8(3):186-94.
+            PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/9521922" target="_blank">9521922</a>
+          </p>
+          
+        </ul>
+      </div><!--end content-->
+    </div><!--end wrapper-->
+  </body>
+</html>
