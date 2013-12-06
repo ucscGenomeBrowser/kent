@@ -523,6 +523,10 @@ hub->genomesFile = trackHubRequiredSetting(hub, "genomesFile");
 lineFileClose(&lf);
 char *genomesUrl = trackHubRelativeUrl(hub->url, hub->genomesFile);
 
+if (genomesUrl == NULL)
+    errAbort("badly formatted genomesFile setting (%s) in hub %s\n", 
+	    hub->genomesFile, hub->url);
+
 hub->genomeHash = hashNew(8);
 hub->genomeList = trackHubGenomeReadRa(genomesUrl, hub);
 freez(&genomesUrl);
