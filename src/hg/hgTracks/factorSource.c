@@ -10,8 +10,8 @@
 #include "hgTracks.h"
 #include "expRecord.h"
 #include "dystring.h"
-#include "txCluster.h"
 #include "factorSource.h"
+
 
 static struct factorSource *loadOne(char **row)
 /* Load up factorSource from array of strings. */
@@ -19,21 +19,57 @@ static struct factorSource *loadOne(char **row)
 return factorSourceLoad(row);
 }
 
+/* Save info about motifs */
+struct motifInfo {
+    char *motifTable;
+    struct hash *motifTargets;
+};
+
 static void factorSourceLoadItems(struct track *track)
 /* Load all items (and motifs if table is present) in window */
 {
 bedLoadItem(track, track->table, (ItemLoader)loadOne);
-/* Larry suppressed motif marks in dense mode.  Doesn't seem right (ask Jim if there's a reason)*/
+
+/* NOTE: Larry suppressed motif marks in dense mode.  
+Doesn't seem right (ask Jim if there's a reason)*/
 /*if (track->visibility == tvDense)
     return;
 */
 
+// NOTE: this motif init code may be better at draw time
 char *motifTable = trackDbSetting(track->tdb, "motifTable");
 if (motifTable == NULL)
     return;
+
 struct sqlConnection *conn = hAllocConn(database);
 if (sqlTableExists(conn, motifTable))
-        track->customPt = cloneString(motifTable);
+    {
+    struct motifInfo *motifInfo = NULL;
+    AllocVar(motifInfo);
+    track->extraUiData = motifInfo;
+    motifInfo->motifTable = cloneString(motifTable);
+
+    char *motifMapTable = trackDbSetting(track->tdb, "motifMapTable");
+    if (sqlTableExists(conn, motifMapTable))
+        {
+        /* load into hash */
+        char query[256];
+        struct sqlResult *sr = NULL;
+        char **row = NULL;
+        sqlSafef(query, sizeof(query), "select target, motif from %s", motifMapTable);
+        sr = sqlGetResult(conn, query);
+        struct hash *targetHash = newHash(0);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            char *target = row[0];
+            char *motif = row[1];
+            if (target[0] != 0);
+                hashAdd(targetHash, cloneString(target), cloneString(motif));
+            }
+        sqlFreeResult(&sr);
+        motifInfo->motifTargets = targetHash;
+        }
+    }
 hFreeConn(&conn);
 }
 
@@ -74,61 +110,67 @@ if (w < 1)
     w = 1;
 hvGfxBox(hvg, x1, y, w, heightPer, color);
 
-char *motifTable = (char *)track->customPt;
-if (motifTable != NULL)
+struct motifInfo *motifInfo = (struct motifInfo *)track->extraUiData;
+if (motifInfo != NULL)
     {
     // Draw region with highest motif score
     // NOTE: includes just motif for the factor, so hides co-binding potential
     // NOTE: current table has single motif per factor
     struct sqlConnection *conn = hAllocConn(database);
-    if (sqlTableExists(conn, motifTable))
-        {
-        struct sqlResult *sr;
-        char where[256];
-        char **row;
 
-        // QUESTION: Is performance adequate with this design ?  Could query table once and
-        // add motif ranges to items.
-        #define HIGHEST_SCORING
-        #ifdef HIGHEST_SCORING
-        sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", fs->name);
-        #else
-        sqlSafefFrag(where, sizeof(where), "name = '%s'", fs->name);
-        #endif
-        sr = hRangeQuery(conn, motifTable, fs->chrom, fs->chromStart,
-                         fs->chromEnd, where, &rowOffset);
-        #ifdef HIGHEST_SCORING
-        if ((row = sqlNextRow(sr)) != NULL)
-        #else
-        while ((row = sqlNextRow(sr)) != NULL)
-        #endif
-            {
-            // highlight motif regions in green
-            Color color = hvGfxFindColorIx(hvg, 22, 182, 33);
-            //Color color = hvGfxFindColorIx(hvg, 25, 204, 37);
-            int start = sqlUnsigned(row[rowOffset+1]);
-            int end = sqlUnsigned(row[rowOffset+2]);
-            int x1 = round((double)((int)start-winStart)*scale) + xOff;
-            int x2 = round((double)((int)end-winStart)*scale) + xOff;
-            int w = x2-x1;
-            if (w < 1)
-                w = 1;
-            hvGfxBox(hvg, x1, y, w, heightPer, color);
-            if (w > 2)
-                {
-                #define MOTIF_CHEVRONS
-                #ifdef MOTIF_CHEVRONS
-                // TODO: add chevrons more selectively (only if motif determines direction)
-                Color textColor = hvGfxContrastingColor(hvg, color);
-                int midY = y + (heightPer>>1);
-                int dir = (row[rowOffset+5][0] == '+' ? 1 : -1);
-                clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
-                               dir, textColor, TRUE);
-                #endif
-                }
-            }
-        sqlFreeResult(&sr);
+    struct sqlResult *sr;
+    char where[256];
+    char **row;
+
+    // QUESTION: Is performance adequate with this design ?  Could query table once and
+    // add motif ranges to items.
+
+    //sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", fs->name);
+    char *target = fs->name;
+    struct hash *targetHash = (struct hash *)motifInfo->motifTargets;
+    if (targetHash != NULL)
+        {
+        target = hashFindVal(targetHash, fs->name);
+        if (target == NULL)
+            target = fs->name;
         }
+    sqlSafefFrag(where, sizeof(where), "name = '%s' order by score asc", target);
+    // TODO: revert to desc order when score is replaced -- currently it holds qvalue,
+    // where lower values indicate higher significance
+    sr = hRangeQuery(conn, motifInfo->motifTable, fs->chrom, fs->chromStart,
+                     fs->chromEnd, where, &rowOffset);
+    #define HIGHEST_SCORING
+    #ifdef HIGHEST_SCORING
+    if ((row = sqlNextRow(sr)) != NULL)
+    #else
+    while ((row = sqlNextRow(sr)) != NULL)
+    #endif
+        {
+        // highlight motif regions in green
+        Color color = hvGfxFindColorIx(hvg, 22, 182, 33);
+        //Color color = hvGfxFindColorIx(hvg, 25, 204, 37);
+        int start = sqlUnsigned(row[rowOffset+1]);
+        int end = sqlUnsigned(row[rowOffset+2]);
+        int x1 = round((double)((int)start-winStart)*scale) + xOff;
+        int x2 = round((double)((int)end-winStart)*scale) + xOff;
+        int w = x2-x1;
+        if (w < 1)
+            w = 1;
+        hvGfxBox(hvg, x1, y, w, heightPer, color);
+        if (w > 2)
+            {
+            #define MOTIF_CHEVRONS
+            #ifdef MOTIF_CHEVRONS
+            // TODO: add chevrons more selectively (only if motif determines direction)
+            Color textColor = hvGfxContrastingColor(hvg, color);
+            int midY = y + (heightPer>>1);
+            int dir = (row[rowOffset+5][0] == '+' ? 1 : -1);
+            clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+                           dir, textColor, TRUE);
+            #endif
+            }
+        }
+    sqlFreeResult(&sr);
     hFreeConn(&conn);
     }
 

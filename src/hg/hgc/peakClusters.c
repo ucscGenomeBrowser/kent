@@ -375,12 +375,13 @@ void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item,
 int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 char **row;
 struct sqlResult *sr;
-char query[256];
+char query[256], buf[256];
 char *motifTable = trackDbSetting(tdb, "motifTable");         // localizations
 char *motifPwmTable = trackDbSetting(tdb, "motifPwmTable");   // PWM used to draw sequence logo
+char *motifMapTable = trackDbSetting(tdb, "motifMapTable");   // map target to motif
 
 sqlSafef(query, sizeof(query),
-	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
+	"select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	tdb->table, item, seqName, start);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -396,6 +397,7 @@ char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
 struct dnaMotif *motif = NULL;
 struct dnaSeq **seqs = NULL;
 struct bed6FloatScore *hits = NULL;
+char *target = item;
 
 if (motifTable != NULL && sqlTableExists(conn, motifTable))
     {
@@ -403,12 +405,18 @@ if (motifTable != NULL && sqlTableExists(conn, motifTable))
     int rowOffset;
     char where[256];
 
-    if (motifPwmTable != NULL && sqlTableExists(conn, motifPwmTable))
-        motif = loadDnaMotif(item, motifPwmTable);
+    if (motifMapTable != NULL && sqlTableExists(conn, motifMapTable))
+        {
+        sqlSafef(query, sizeof(query),
+                "select motif from %s where target = '%s'", motifMapTable, item);
+        // TODO: perhaps sqlQuickString ?
+        target = sqlQuickQuery(conn, query, buf, sizeof(buf));
+        }
 
     #define HIGHEST_SCORING
     #ifdef HIGHEST_SCORING
-    sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", item);
+    //sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", item);
+    sqlSafefFrag(where, sizeof(where), "name = '%s' order by score asc", target);
     #else
     sqlSafefFrag(where, sizeof(where), "name = '%s'", item);
     #endif
@@ -444,7 +452,13 @@ printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NUL
 
 int hitCount = 0;
 if (hits != NULL)
+    {
     hitCount = slCount(hits);
+    if (motifPwmTable != NULL && sqlTableExists(conn, motifPwmTable))
+        {
+        motif = loadDnaMotif(target, motifPwmTable);
+        }
+    }
 
 if (motif != NULL && hits != NULL)
     {
@@ -454,6 +468,8 @@ if (motif != NULL && hits != NULL)
     char posLink[1024];
     char query[256];
     float maxScore = -1;
+
+
     sqlSafef(query, sizeof(query), 
         "select max(score) from %s where name = '%s'", motifTable, item);
     sr = sqlGetResult(conn, query);
