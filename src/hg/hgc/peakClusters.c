@@ -415,8 +415,7 @@ if (motifTable != NULL && sqlTableExists(conn, motifTable))
 
     #define HIGHEST_SCORING
     #ifdef HIGHEST_SCORING
-    //sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", item);
-    sqlSafefFrag(where, sizeof(where), "name = '%s' order by score asc", target);
+    sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", target);
     #else
     sqlSafefFrag(where, sizeof(where), "name = '%s'", item);
     #endif

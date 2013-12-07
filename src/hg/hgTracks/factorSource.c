@@ -125,7 +125,6 @@ if (motifInfo != NULL)
     // QUESTION: Is performance adequate with this design ?  Could query table once and
     // add motif ranges to items.
 
-    //sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", fs->name);
     char *target = fs->name;
     struct hash *targetHash = (struct hash *)motifInfo->motifTargets;
     if (targetHash != NULL)
@@ -134,9 +133,7 @@ if (motifInfo != NULL)
         if (target == NULL)
             target = fs->name;
         }
-    sqlSafefFrag(where, sizeof(where), "name = '%s' order by score asc", target);
-    // TODO: revert to desc order when score is replaced -- currently it holds qvalue,
-    // where lower values indicate higher significance
+    sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", target);
     sr = hRangeQuery(conn, motifInfo->motifTable, fs->chrom, fs->chromStart,
                      fs->chromEnd, where, &rowOffset);
     #define HIGHEST_SCORING
