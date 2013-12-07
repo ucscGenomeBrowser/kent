@@ -3750,7 +3750,6 @@ identifier pubsArticleId external=pubTools
 "internal ID of article, this is different from pubmed, doi or piis, generated during download "
     $gbd.pubsBlat.name dupeOk
     $gbd.pubsBlatPsl.articleId
-    hgFixed.pubsArticle.articleId
     hgFixed.pubsSequenceAnnot.articleId
     hgFixed.pubsArticle.articleId
 
@@ -3766,6 +3765,20 @@ identifier pubsMarkerId
     $gbd.pubsMarkerBand.name 
     $gbd.pubsMarkerSnp.name 
     $gbd.pubsMarkerGene.name 
+
+# web sequences track
+identifier pubsBingArticleId external=pubTools
+" internal ID of webpage, identifies a URL "
+    $gbd.pubsBingBlat.name dupeOk
+    $gbd.pubsBingBlatPsl.articleId
+    hgFixed.pubsBingArticle.articleId
+    hgFixed.pubsBingSequenceAnnot.articleId
+
+identifier pubsBingSequenceId external=pubTools
+"ID of sequence found in webpage "
+    hgFixed.pubsBingSequence.annotId dupeOk
+    $gbd.pubsBingBlat.seqIds comma
+    $gbd.pubsBingBlatPsl.qName
 
 identifier ceuBcellRNASeqId
 "ID of ceuBcellRNASeq"

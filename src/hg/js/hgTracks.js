@@ -3123,6 +3123,7 @@ var imageV2 = {
             var newChrom = newPos.split(':')[0];
             var oldChrom  = genomePos.getOriginalPos().split(':')[0];
             if (newChrom == oldChrom) {
+                imageV2.markAsDirtyPage();
                 imageV2.navigateInPlace("position="+encodeURIComponent(newPos), null, false);
                 return false;
             }

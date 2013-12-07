@@ -28780,5 +28780,19 @@ hgLoadSqlTab hg19 evsEsp6500 ~/kent/src/hg/lib/bbiChroms.sql evsEsp6500.txt
 #used existing trackDb entry for lifted track, and was able to override track
 #type bedgraph -> bigWig.
 
-#########################################################################
-#
+########################################################################
+# Bing BLAT track (DONE 2013-12-06 Max)
+# requires the pubs tools in ~max/projects/pubs and also on github as "pubMunch"
+lftp ftp://ftp.research.microsoft.com/pub/BobD/ -e 'mget *'
+# indexing
+pubConvBing -i /hive/data/outside/pubs/bing/
+# conversion on ku
+pubConvBing /hive/data/outside/pubs/bing/ /hive/data/inside/pubs/text/bing/
+# mapping,chaining,table-creation to hg19 on ku
+pubMap bing annots-tables --onlyDb=hg19
+# load into mysql
+pubMap bing load
+
+########################################################################
+
+

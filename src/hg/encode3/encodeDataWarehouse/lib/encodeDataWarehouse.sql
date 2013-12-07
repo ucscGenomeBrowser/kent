@@ -294,6 +294,23 @@ CREATE TABLE edwQaPairCorrelation (
     INDEX(youngerFileId)
 );
 
+#Information about two paired-end fastqs
+CREATE TABLE edwQaPairedEndFastq (
+    id int unsigned auto_increment,	# Id of this set of paired end files
+    fileId1 int unsigned default 0,	# Id of first in pair
+    fileId2 int unsigned default 0,	# Id of second in pair
+    concordance double default 0,	# % of uniquely aligning reads where pairs nearby and point right way
+    distanceMean double default 0,	# Average distance between reads
+    distanceStd double default 0,	# Standard deviation of distance
+    distanceMin double default 0,	# Minimum distance
+    distanceMax double default 0,	# Maximum distatnce
+    recordComplete tinyint default 0,	# Flag to avoid a race condition. Ignore record if this is 0
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(fileId1),
+    UNIQUE(fileId2)
+);
+
 #A job to be run asynchronously and not too many all at once.
 CREATE TABLE edwJob (
     id int unsigned auto_increment,	# Job id
