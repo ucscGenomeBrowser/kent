@@ -138,6 +138,17 @@ CREATE TABLE edwAssembly (
     PRIMARY KEY(id)
 );
 
+#An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford.
+CREATE TABLE edwExperiment (
+    accession char(16) default 0,	# Something like ENCSR000CFA.
+    dataType varchar(255) default '',	# Something liek RNA-seq, DNase-seq, ChIP-seq
+    lab varchar(255) default '',	# Lab PI name and institution
+    biosample varchar(255) default '',	# Cell line name, tissue source, etc.
+    rfa varchar(255) default '',	# Something like 'ENCODE2' or 'ENCODE3'
+              #Indices
+    UNIQUE(accession)
+);
+
 #A file that has been uploaded, the format checked, and for which at least minimal metadata exists
 CREATE TABLE edwValidFile (
     id int unsigned auto_increment,	# ID of validated file

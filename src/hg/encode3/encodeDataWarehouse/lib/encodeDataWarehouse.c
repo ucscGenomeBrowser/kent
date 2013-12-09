@@ -1502,6 +1502,178 @@ fputc(lastSep,f);
 }
 
 
+char *edwExperimentCommaSepFieldNames = "accession,dataType,lab,biosample,rfa";
+
+void edwExperimentStaticLoad(char **row, struct edwExperiment *ret)
+/* Load a row from edwExperiment table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+safecpy(ret->accession, sizeof(ret->accession), row[0]);
+ret->dataType = row[1];
+ret->lab = row[2];
+ret->biosample = row[3];
+ret->rfa = row[4];
+}
+
+struct edwExperiment *edwExperimentLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwExperiment from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwExperimentFreeList(). */
+{
+struct edwExperiment *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwExperimentLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwExperimentSaveToDb(struct sqlConnection *conn, struct edwExperiment *el, char *tableName, int updateSize)
+/* Save edwExperiment as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
+	tableName,  el->accession,  el->dataType,  el->lab,  el->biosample,  el->rfa);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct edwExperiment *edwExperimentLoad(char **row)
+/* Load a edwExperiment from row fetched with select * from edwExperiment
+ * from database.  Dispose of this with edwExperimentFree(). */
+{
+struct edwExperiment *ret;
+
+AllocVar(ret);
+safecpy(ret->accession, sizeof(ret->accession), row[0]);
+ret->dataType = cloneString(row[1]);
+ret->lab = cloneString(row[2]);
+ret->biosample = cloneString(row[3]);
+ret->rfa = cloneString(row[4]);
+return ret;
+}
+
+struct edwExperiment *edwExperimentLoadAll(char *fileName) 
+/* Load all edwExperiment from a whitespace-separated file.
+ * Dispose of this with edwExperimentFreeList(). */
+{
+struct edwExperiment *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[5];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwExperimentLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwExperiment *edwExperimentLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwExperiment from a chopper separated file.
+ * Dispose of this with edwExperimentFreeList(). */
+{
+struct edwExperiment *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[5];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwExperimentLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwExperiment *edwExperimentCommaIn(char **pS, struct edwExperiment *ret)
+/* Create a edwExperiment out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwExperiment */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+sqlFixedStringComma(&s, ret->accession, sizeof(ret->accession));
+ret->dataType = sqlStringComma(&s);
+ret->lab = sqlStringComma(&s);
+ret->biosample = sqlStringComma(&s);
+ret->rfa = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwExperimentFree(struct edwExperiment **pEl)
+/* Free a single dynamically allocated edwExperiment such as created
+ * with edwExperimentLoad(). */
+{
+struct edwExperiment *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->dataType);
+freeMem(el->lab);
+freeMem(el->biosample);
+freeMem(el->rfa);
+freez(pEl);
+}
+
+void edwExperimentFreeList(struct edwExperiment **pList)
+/* Free a list of dynamically allocated edwExperiment's */
+{
+struct edwExperiment *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwExperimentFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwExperimentOutput(struct edwExperiment *el, FILE *f, char sep, char lastSep) 
+/* Print out edwExperiment.  Separate fields with sep. Follow last field with lastSep. */
+{
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->accession);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->dataType);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->lab);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->biosample);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->rfa);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+
 char *edwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd";
 
 void edwValidFileStaticLoad(char **row, struct edwValidFile *ret)

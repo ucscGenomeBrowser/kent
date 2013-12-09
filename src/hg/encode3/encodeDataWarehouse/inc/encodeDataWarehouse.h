@@ -598,6 +598,76 @@ void edwAssemblyOutput(struct edwAssembly *el, FILE *f, char sep, char lastSep);
 #define edwAssemblyCommaOut(el,f) edwAssemblyOutput(el,f,',',',');
 /* Print out edwAssembly as a comma separated list including final comma. */
 
+#define EDWEXPERIMENT_NUM_COLS 5
+
+extern char *edwExperimentCommaSepFieldNames;
+
+struct edwExperiment
+/* An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford. */
+    {
+    struct edwExperiment *next;  /* Next in singly linked list. */
+    char accession[17];	/* Something like ENCSR000CFA. */
+    char *dataType;	/* Something liek RNA-seq, DNase-seq, ChIP-seq */
+    char *lab;	/* Lab PI name and institution */
+    char *biosample;	/* Cell line name, tissue source, etc. */
+    char *rfa;	/* Something like 'ENCODE2' or 'ENCODE3' */
+    };
+
+void edwExperimentStaticLoad(char **row, struct edwExperiment *ret);
+/* Load a row from edwExperiment table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwExperiment *edwExperimentLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwExperiment from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwExperimentFreeList(). */
+
+void edwExperimentSaveToDb(struct sqlConnection *conn, struct edwExperiment *el, char *tableName, int updateSize);
+/* Save edwExperiment as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwExperiment *edwExperimentLoad(char **row);
+/* Load a edwExperiment from row fetched with select * from edwExperiment
+ * from database.  Dispose of this with edwExperimentFree(). */
+
+struct edwExperiment *edwExperimentLoadAll(char *fileName);
+/* Load all edwExperiment from whitespace-separated file.
+ * Dispose of this with edwExperimentFreeList(). */
+
+struct edwExperiment *edwExperimentLoadAllByChar(char *fileName, char chopper);
+/* Load all edwExperiment from chopper separated file.
+ * Dispose of this with edwExperimentFreeList(). */
+
+#define edwExperimentLoadAllByTab(a) edwExperimentLoadAllByChar(a, '\t');
+/* Load all edwExperiment from tab separated file.
+ * Dispose of this with edwExperimentFreeList(). */
+
+struct edwExperiment *edwExperimentCommaIn(char **pS, struct edwExperiment *ret);
+/* Create a edwExperiment out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwExperiment */
+
+void edwExperimentFree(struct edwExperiment **pEl);
+/* Free a single dynamically allocated edwExperiment such as created
+ * with edwExperimentLoad(). */
+
+void edwExperimentFreeList(struct edwExperiment **pList);
+/* Free a list of dynamically allocated edwExperiment's */
+
+void edwExperimentOutput(struct edwExperiment *el, FILE *f, char sep, char lastSep);
+/* Print out edwExperiment.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwExperimentTabOut(el,f) edwExperimentOutput(el,f,'\t','\n');
+/* Print out edwExperiment as a line in a tab-separated file. */
+
+#define edwExperimentCommaOut(el,f) edwExperimentOutput(el,f,',',',');
+/* Print out edwExperiment as a comma separated list including final comma. */
+
 #define EDWVALIDFILE_NUM_COLS 22
 
 extern char *edwValidFileCommaSepFieldNames;

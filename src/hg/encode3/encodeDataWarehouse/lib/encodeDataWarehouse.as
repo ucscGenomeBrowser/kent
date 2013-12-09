@@ -111,6 +111,16 @@ table edwAssembly
     bigInt realBaseCount;   "Count of non-N bases in assembly"
     )
 
+table edwExperiment
+"An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford."
+    (
+    char[16] accession unique; "Something like ENCSR000CFA."
+    string dataType; "Something liek RNA-seq, DNase-seq, ChIP-seq"
+    string lab; "Lab PI name and institution"
+    string biosample;  "Cell line name, tissue source, etc."
+    string rfa;  "Something like 'ENCODE2' or 'ENCODE3'"
+    )
+
 table edwValidFile
 "A file that has been uploaded, the format checked, and for which at least minimal metadata exists"
     (
