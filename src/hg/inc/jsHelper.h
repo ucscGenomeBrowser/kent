@@ -149,12 +149,6 @@ void jsonPrint(struct jsonElement *json, char *name, int indentLevel);
 // print out a jsonElement and children using hPrintf, and for indentLevel >=0
 // bracketing with comments.  See also jsonPrintToFile.
 
-extern struct jsonElement *jsonGlobalsHash; // The "all" globals json hash
-
-void jsonPrintGlobals(boolean wrapWithScriptTags);
-// prints out the "common" globals json hash
-// This hash is the one utils.js and therefore all CGIs know about
-
 void jsonErrPrintf(struct dyString *ds, char *format, ...);
 //  Printf a json error to a dyString for communicating with ajax code; format is:
 //  {"error": error message here}

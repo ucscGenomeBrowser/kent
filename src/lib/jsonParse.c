@@ -7,9 +7,6 @@
 #include "sqlNum.h"
 #include "jsonParse.h"
 
-// Global json hash - I'm wanting to move this to jsHelper, but one step at a time....
-struct jsonElement *jsonGlobalsHash = NULL; 
-
 static struct jsonElement *newJsonElement(jsonElementType type)
 // generic constructor for a jsonElement; callers fill in the appropriate value
 {
@@ -63,14 +60,7 @@ return ele;
 
 void jsonObjectAdd(struct jsonElement *h, char *name, struct jsonElement *ele)
 // Add a new element to a jsonObject; existing values are replaced.
-// NOTE: Adding to a NULL hash will add to the global "common" hash printed with jsonPrintGlobals();
 {
-if (h == NULL)  // If hash isn't provided, assume global
-    {
-    if (jsonGlobalsHash == NULL)
-        jsonGlobalsHash = newJsonObject(newHash(5));
-    h = jsonGlobalsHash;
-    }
 if(h->type != jsonObject)
     errAbort("jsonObjectAdd called on element with incorrect type (%d)", h->type);
 hashReplace(h->val.jeHash, name, ele);

@@ -47,7 +47,6 @@ struct jsonElement *newJsonList(struct slRef *list);
 
 void jsonObjectAdd(struct jsonElement *h, char *name, struct jsonElement *ele);
 // Add a new element to a jsonObject; existing values are replaced.
-// NOTE: Adding to a NULL hash will add to the global "common" hash printed with jsonPrintGlobals();
 
 void jsonListAdd(struct jsonElement *list, struct jsonElement *ele);
 // Add a new element to a jsonList

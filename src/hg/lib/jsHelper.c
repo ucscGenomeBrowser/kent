@@ -626,20 +626,6 @@ if (indentLevel >= 0)
     freez(&indentBuf);
 }
 
-void jsonPrintGlobals(boolean wrapWithScriptTags)
-// prints out the "common" globals json hash
-// This hash is the one utils.js and therefore all CGIs know about
-{
-if (jsonGlobalsHash != NULL)
-    {
-    if (wrapWithScriptTags)
-        printf("<script type='text/javascript'>\n");
-    jsonPrint(jsonGlobalsHash, "common", 0);
-    if (wrapWithScriptTags)
-        printf("</script>\n");
-    }
-}
-
 void jsonErrPrintf(struct dyString *ds, char *format, ...)
 //  Printf a json error to a dyString for communicating with ajax code; format is:
 //  {"error": error message here}
