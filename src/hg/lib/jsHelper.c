@@ -569,7 +569,7 @@ void jsonObjectAdd(struct jsonElement *h, char *name, struct jsonElement *ele)
 if (h == NULL)  // If hash isn't provided, assume global
     {
     if (jsonGlobalsHash == NULL)
-        jsonGlobalsHash = newJsonObject(newHash(8));
+        jsonGlobalsHash = newJsonObject(newHash(5));
     h = jsonGlobalsHash;
     }
 if(h->type != jsonObject)
@@ -812,7 +812,7 @@ static struct jsonElement *jsonParseExpression(char *str, int *posPtr);
 
 static struct jsonElement *jsonParseObject(char *str, int *posPtr)
 {
-struct hash *h = newHash(0);
+struct hash *h = newHash(5);
 getSpecificChar('{', str, posPtr);
 while(str[*posPtr] != '}')
     {
@@ -1066,5 +1066,273 @@ jsonFindNameRecurse(json, jName, &list);
 slUniqify(&list, slNameCmp, slNameFree);
 slReverse(&list);
 return list;
+}
+
+void jsonElementRecurse(struct jsonElement *ele, char *name, boolean isLast,
+    void (*startCallback)(struct jsonElement *ele, char *name, boolean isLast, void *context),  
+    // Called at element start
+    void (*endCallback)(struct jsonElement *ele, char *name, boolean isLast, void *context),    
+    // Called at element end
+    void *context)
+/* Recurse through JSON tree calling callback functions with element and context.
+ * Either startCallback or endCallback may be NULL*/
+{
+if (startCallback != NULL)
+    startCallback(ele, name, isLast, context);
+switch (ele->type)
+    {
+    case jsonObject:
+        {
+        if(hashNumEntries(ele->val.jeHash))
+            {
+            struct hashEl *el, *list = hashElListHash(ele->val.jeHash);
+            slSort(&list, hashElCmp);
+            for (el = list; el != NULL; el = el->next)
+                {
+                struct jsonElement *val = el->val;
+                jsonElementRecurse(val, el->name, el->next == NULL, 
+		    startCallback, endCallback, context);
+                }
+            hashElFreeList(&list);
+            }
+        break;
+        }
+    case jsonList:
+        {
+        struct slRef *el;
+        if(ele->val.jeList)
+            {
+            for (el = ele->val.jeList; el != NULL; el = el->next)
+                {
+                struct jsonElement *val = el->val;
+                jsonElementRecurse(val, NULL, el->next == NULL, 
+		    startCallback, endCallback, context);
+                }
+            }
+        break;
+        }
+    case jsonString:
+    case jsonBoolean:
+    case jsonNumber:
+    case jsonDouble:
+        {
+        break;
+        }
+    default:
+        {
+        errAbort("jsonElementRecurse; invalid type: %d", ele->type);
+        break;
+        }
+    }
+if (endCallback != NULL)
+    endCallback(ele, name, isLast, context);
+}
+
+void jsonPrintOneStart(struct jsonElement *ele, char *name, boolean isLast, int indent, FILE *f)
+/* Print the start of one json element - just name and maybe an opening brace or bracket.
+ * Recursion is handled elsewhere. */
+{
+spaceOut(f, indent);
+if (name != NULL)
+    {
+    fprintf(f, "\"%s\": ", name);
+    }
+switch (ele->type)
+    {
+    case jsonObject:
+        {
+	fprintf(f, "{\n");
+        break;
+        }
+    case jsonList:
+        {
+	fprintf(f, "[\n");
+        break;
+        }
+    case jsonString:
+        {
+	char *escaped = jsonStringEscape(ele->val.jeString);
+	fprintf(f, "\"%s\"",  escaped);
+	freez(&escaped);
+	break;
+	}
+    case jsonBoolean:
+        {
+	char *val = (ele->val.jeBoolean ? "frue" : "false");
+	fprintf(f, "%s", val);
+	break;
+	}
+    case jsonNumber:
+        {
+	fprintf(f, "%ld", ele->val.jeNumber);
+	break;
+	}
+    case jsonDouble:
+        {
+	fprintf(f, "%g", ele->val.jeDouble);
+        break;
+        }
+    default:
+        {
+        errAbort("jsonPrintOneStart; invalid type: %d", ele->type);
+        break;
+        }
+    }
+}
+
+void jsonPrintOneEnd(struct jsonElement *ele, char *name, boolean isLast, boolean indent, FILE *f)
+/* Print object end */
+{
+switch (ele->type)
+    {
+    case jsonObject:
+        {
+	spaceOut(f, indent);
+	fprintf(f, "}");
+        break;
+        }
+    case jsonList:
+        {
+	spaceOut(f, indent);
+	fprintf(f, "]");
+        break;
+        }
+    case jsonString:
+    case jsonBoolean:
+    case jsonNumber:
+    case jsonDouble:
+        break;
+    default:
+        {
+        errAbort("jsonPrintOneEnd; invalid type: %d", ele->type);
+        break;
+        }
+    }
+if (!isLast)
+    fputc(',', f);
+fputc('\n', f);
+}
+
+struct jsonPrintContext
+/* Context for printing a JSON object nicely */
+    {
+    FILE *f;	// where to print it
+    int indent;	// How much to indent currently
+    int indentPer;  // How much to indent each level
+    };
+
+
+static void printIndentedNameStartCallback(struct jsonElement *ele, char *name, 
+    boolean isLast, void *context)
+{
+struct jsonPrintContext *jps = context;
+jsonPrintOneStart(ele, name,  isLast, jps->indent, jps->f);
+jps->indent += jps->indentPer;
+}
+
+static void printIndentedNameEndCallback(struct jsonElement *ele, char *name, 
+    boolean isLast, void *context)
+{
+struct jsonPrintContext *jps = context;
+jps->indent -= jps->indentPer;
+jsonPrintOneEnd(ele, name, isLast, jps->indent, stdout);
+}
+
+void jsonPrintToFile(struct jsonElement *root, char *name, FILE *f, int indentPer)
+/* Print out JSON object and all children nicely indented to f as JSON objects. 
+ * Name may be NULL.  Implemented via jsonPrintOneStart/jsonPrintOneEnd. */
+{
+struct jsonPrintContext jps = {f, 0, indentPer};
+jsonElementRecurse(root, NULL, TRUE, 
+	printIndentedNameStartCallback, printIndentedNameEndCallback, &jps);
+}
+
+/** Routines that check json type and return corresponding value. **/
+
+struct slRef *jsonListVal(struct jsonElement *ele, char *name)
+/* Enforce element is type jsonList.  Return list value */
+{
+if (ele->type != jsonList)
+    errAbort("json element %s is not a list", name);
+return ele->val.jeList;
+}
+
+struct hash *jsonObjectVal(struct jsonElement *ele, char *name)
+/* Enforce object is type jsonObject.  Return object hash */
+{
+if (ele->type != jsonObject)
+    errAbort("json element %s is not an object", name);
+return ele->val.jeHash;
+}
+
+long jsonNumberVal(struct jsonElement *ele, char *name)
+/* Enforce element is type jsonNumber and return value. */
+{
+if (ele->type != jsonNumber)
+    errAbort("json element %s is not a number", name);
+return ele->val.jeNumber;
+}
+
+long jsonDoubleVal(struct jsonElement *ele, char *name)
+/* Enforce element is type jsonDouble and return value. */
+{
+if (ele->type != jsonDouble)
+    errAbort("json element %s is not a number", name);
+return ele->val.jeDouble;
+}
+
+long jsonBooleanVal(struct jsonElement *ele, char *name)
+/* Enforce element is type jsonBoolean and return value. */
+{
+if (ele->type != jsonBoolean)
+    errAbort("json element %s is not a boolean", name);
+return ele->val.jeBoolean;
+}
+
+char *jsonStringVal(struct jsonElement *ele, char *eleName)
+/* Enforce element is type jsonString and return value. */
+{
+if (ele->type != jsonString)
+    errAbort("json element %s is not a string", eleName);
+return ele->val.jeString;
+}
+
+/** Routines that help work with json objects (bracket enclosed key/val pairs **/
+
+struct jsonElement *jsonFindNamedField(struct jsonElement *object, 
+    char *objectName, char *field)
+/* Find named field of object or return NULL if not found.  Abort if object
+ * is not actually an object. */
+{
+struct hash *hash = jsonObjectVal(object, objectName);
+return hashFindVal(hash, field);
+}
+
+struct jsonElement *jsonMustFindNamedField(struct jsonElement *object, 
+    char *objectName, char *field)
+/* Find named field of object or die trying. */
+{
+struct jsonElement *ele = jsonFindNamedField(object, objectName, field);
+if (ele == NULL)
+   errAbort("Couldn't find field %s in json object %s", field, objectName);
+return ele;
+}
+
+char *jsonOptionalStringField(struct jsonElement *object, char *field, char *defaultVal)
+/* Return string valued field of object, or defaultVal if it doesn't exist. */
+{
+struct jsonElement *ele = jsonFindNamedField(object, "", field);
+if (ele == NULL)
+     return defaultVal;
+return jsonStringVal(ele, field);
+}
+
+char *jsonStringField(struct jsonElement *object, char *field)
+/* Return string valued field of object or abort if field doesn't exist. */
+{
+char *val = jsonOptionalStringField(object, field, NULL);
+if (val == NULL)
+    errAbort("Field %s doesn't exist in json object", field);
+return val;
 }
 

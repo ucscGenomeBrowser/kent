@@ -191,7 +191,8 @@ void jsonListAdd(struct jsonElement *list, struct jsonElement *ele);
 // Add a new element to a jsonList
 
 void jsonPrint(struct jsonElement *json, char *name, int indentLevel);
-// print out a jsonElement
+// print out a jsonElement and children using hPrintf, and for indentLevel >=0
+// bracketing with comments.  See also jsonPrintToFile.
 
 extern struct jsonElement *jsonGlobalsHash; // The "all" globals json hash
 
@@ -222,5 +223,62 @@ struct slName *jsonFindName(struct jsonElement *json, char *jName);
 struct slName *jsonFindNameUniq(struct jsonElement *json, char *jName);
 // Search the JSON tree to find all the values associated to the name
 // and add them to head of the list. 
+
+void jsonElementRecurse(struct jsonElement *ele, char *name, boolean isLast,
+    void (*startCallback)(struct jsonElement *ele, char *name, boolean isLast, void *context),  
+    // Called at element start
+    void (*endCallback)(struct jsonElement *ele, char *name, boolean isLast, void *context),    
+    // Called at element end
+    void *context);
+/* Recurse through JSON tree calling callback functions with element and context.
+ * Either startCallback or endCallback may be NULL, as can be name. */
+
+void jsonPrintOneStart(struct jsonElement *ele, char *name, boolean isLast, int indent, FILE *f);
+/* Print the start of one json element - just name and maybe an opening brace or bracket.
+ * Recursion is handled elsewhere. */
+
+void jsonPrintOneEnd(struct jsonElement *ele, char *name, boolean isLast, boolean indent, FILE *f);
+/* Print object end */
+
+void jsonPrintToFile(struct jsonElement *root, char *name, FILE *f, int indentPer);
+/* Print out JSON object and all children nicely indented to f as JSON objects. 
+ * Name may be NULL.  Implemented via jsonPrintOneStart/jsonPrintOneEnd. */
+
+/** Routines that check json type and return corresponding value. **/
+
+struct slRef *jsonListVal(struct jsonElement *ele, char *name);
+/* Enforce element is type jsonList.  Return list value */
+
+struct hash *jsonObjectVal(struct jsonElement *ele, char *name);
+/* Enforce object is type jsonObject.  Return object hash */
+
+long jsonNumberVal(struct jsonElement *ele, char *name);
+/* Enforce element is type jsonNumber and return value. */
+
+long jsonDoubleVal(struct jsonElement *ele, char *name);
+/* Enforce element is type jsonDouble and return value. */
+
+long jsonBooleanVal(struct jsonElement *ele, char *name);
+/* Enforce element is type jsonBoolean and return value. */
+
+char *jsonStringVal(struct jsonElement *ele, char *eleName);
+/* Enforce element is type jsonString and return value. */
+
+/** Routines that help work with json objects (bracket enclosed key/val pairs **/
+
+struct jsonElement *jsonFindNamedField(struct jsonElement *object, 
+    char *objectName, char *field);
+/* Find named field of object or return NULL if not found.  Abort if object
+ * is not actually an object. */
+
+struct jsonElement *jsonMustFindNamedField(struct jsonElement *object, 
+    char *objectName, char *field);
+/* Find named field of object or die trying. */
+
+char *jsonOptionalStringField(struct jsonElement *object, char *field, char *defaultVal);
+/* Return string valued field of object, or defaultVal if it doesn't exist. */
+
+char *jsonStringField(struct jsonElement *object, char *field);
+/* Return string valued field of object or abort if field doesn't exist. */
 
 #endif /* JSHELPER_H */
