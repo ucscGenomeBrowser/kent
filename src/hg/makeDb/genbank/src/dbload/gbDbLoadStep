@@ -309,7 +309,15 @@ if ($reload) {
     push(@args, "-reload");
 }
              
-beginTask("dbload/$gbCommon::hostName", "dbload");
+if ($initialLoad) {
+    if ($#databases != 0) {
+        gbError("only one database maybe specified with -initialLoad");
+    }
+    beginTaskNoLock("dbload/$gbCommon::hostName", "$databases[0].dbload");
+} else {
+    beginTask("dbload/$gbCommon::hostName", "dbload");
+}
+
 setupHgConf();
 
 # load the database
