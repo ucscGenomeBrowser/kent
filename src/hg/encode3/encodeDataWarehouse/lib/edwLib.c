@@ -645,7 +645,7 @@ struct edwFile *edwFileAllIntactBetween(struct sqlConnection *conn, int startId,
 /* Return list of all files that are intact (finished uploading and MD5 checked) 
  * with file IDs between startId and endId - including endId */
 {
-char query[128];
+char query[256];
 sqlSafef(query, sizeof(query), 
     "select * from edwFile where id>=%d and id<=%d and endUploadTime != 0 "
     "and updateTime != 0 and errorMessage = '' and deprecated = ''", 
