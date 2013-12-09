@@ -598,23 +598,6 @@ puts("<BR>");
 endCollapsibleSection();
 }
 
-boolean isRegulatoryTrack(struct trackDb *tdb, void *filterData)
-/* For now, just look for a couple specific tracks by tableName. */
-{
-//#*** NEED METADATA
-return (sameString("wgEncodeRegDnaseClusteredV2", tdb->table) ||
-	sameString("wgEncodeRegTfbsClusteredV3", tdb->table));
-}
-
-struct slRef *findRegulatoryTracks()
-/* Look for the very limited set of Regulation tracks that hgVai offers. */
-{
-struct slRef *regTrackRefList = NULL;
-tdbFilterGroupTrack(fullTrackList, fullGroupList, isRegulatoryTrack,
-		    NULL, NULL, &regTrackRefList);
-return regTrackRefList;
-}
-
 boolean isConsElTrack(struct trackDb *tdb, void *filterData)
 /* This is a TdbFilterFunction to get "phastConsNwayElements" tracks. */
 {
@@ -638,23 +621,38 @@ tdbFilterGroupTrack(fullTrackList, fullGroupList, isConsScoreTrack,
 		    NULL, NULL, retScoreTrackRefList);
 }
 
-void trackCheckBoxSection(char *sectionSuffix, char *title, struct slRef *trackRefList)
-/* If trackRefList is non-NULL, make a collapsible section with a checkbox for each track,
- * labelled with longLabel. */
+void trackRefListToCheckboxes(struct slRef *trackRefList)
 {
-if (trackRefList != NULL)
+struct slRef *ref;
+for (ref = trackRefList;  ref != NULL;  ref = ref->next)
     {
-    startCollapsibleSection(sectionSuffix, title, FALSE);
-    struct slRef *ref;
-    for (ref = trackRefList;  ref != NULL;  ref = ref->next)
-	{
-	struct trackDb *tdb = ref->val;
-	char cartVar[512];
-	safef(cartVar, sizeof(cartVar), "hgva_track_%s_%s", database, tdb->track);
-	cartMakeCheckBox(cart, cartVar, FALSE);
-	printf("%s<BR>\n", tdb->longLabel);
-	}
+    struct trackDb *tdb = ref->val;
+    char cartVar[512];
+    safef(cartVar, sizeof(cartVar), "hgva_track_%s_%s", database, tdb->track);
+    cartMakeCheckBox(cart, cartVar, FALSE);
+    struct trackDb *topTdb = trackDbTopLevelSelfOrParent(tdb);
+    printf("<A HREF=\"%s?%s&g=%s\">%s</A><BR>\n", hgTrackUiName(), cartSidUrlString(cart),
+	   topTdb->track, tdb->longLabel);
+    }
+}
+
+void selectCons(struct slRef *elTrackRefList, struct slRef *scoreTrackRefList)
+/* Offer checkboxes for optional Conservation scores. */
+{
+if (elTrackRefList == NULL && scoreTrackRefList == NULL)
+    return;
+if (elTrackRefList != NULL)
+    {
+    startCollapsibleSection("ConsEl", "Conserved elements", FALSE);
+    trackRefListToCheckboxes(elTrackRefList);
     puts("<BR>");
+    endCollapsibleSection();
+    }
+if (scoreTrackRefList != NULL)
+    {
+    startCollapsibleSection("ConsScore", "Conservation scores",
+			    FALSE);
+    trackRefListToCheckboxes(scoreTrackRefList);
     endCollapsibleSection();
     }
 }
@@ -664,11 +662,9 @@ void selectAnnotations()
 {
 struct slName *dbNsfpTables = findDbNsfpTables();
 boolean gotSnp = findSnpBed4("", NULL, NULL);
-struct slRef *regTrackRefList = findRegulatoryTracks();
 struct slRef *elTrackRefList = NULL, *scoreTrackRefList = NULL;
 findCons(&elTrackRefList, &scoreTrackRefList);
-if (dbNsfpTables == NULL && !gotSnp && elTrackRefList == NULL && scoreTrackRefList == NULL
-    && regTrackRefList == NULL)
+if (dbNsfpTables == NULL && !gotSnp && elTrackRefList == NULL && scoreTrackRefList == NULL)
     return;
 puts("<BR>");
 printf("<div class='sectionLiteHeader'>Select More Annotations (optional)</div>\n");
@@ -676,9 +672,7 @@ printf("<div class='sectionLiteHeader'>Select More Annotations (optional)</div>\
 puts("<TABLE border=0 cellspacing=5 cellpadding=0 style='padding-left: 10px;'>");
 selectDbNsfp(dbNsfpTables);
 selectDbSnp(gotSnp);
-trackCheckBoxSection("Regulation", "Regulatory Regions", regTrackRefList);
-trackCheckBoxSection("ConsEl", "Conserved elements", elTrackRefList);
-trackCheckBoxSection("ConsScore", "Conservation scores", scoreTrackRefList);
+selectCons(elTrackRefList, scoreTrackRefList);
 puts("</TABLE>");
 }
 

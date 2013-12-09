@@ -55,7 +55,7 @@ clean:: $(USE_DIRS:%=%.clean)
 %.clean:
 	(cd $* && ${MAKE} clean)
 
-cgi:: $(CGI_DIRS:%=%.cgi)
+cgi:: edwLib $(CGI_DIRS:%=%.cgi)
 %.cgi:
 	(cd $* && ${MAKE})
 

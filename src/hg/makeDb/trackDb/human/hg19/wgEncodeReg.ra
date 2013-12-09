@@ -404,6 +404,7 @@ canPack On
     inputTableFieldDisplay cellType factor antibody treatment lab
     motifTable wgEncodeAwgTfbsMotifs
     motifPwmTable transRegCodeMotif
+    motifMapTable factorbookTargetToMotif
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     visibility hide
     useScore 1
