@@ -569,6 +569,74 @@ type bigBed 4 .
 noScoreFilter on
 release alpha
 
+track pubsDev
+shortLabel Publications Beta
+longLabel Publications: Textmining of Publications, Beta version
+group pub
+priority 12
+visibility hide
+color 0,0,0
+type bed 4
+compositeTrack on
+release alpha
+nextExonText Next Match
+prevExonText Prev Match
+pubsPslTrack pubsDevBlatPsl
+pubsArticleTable hgFixed.pubsDevArticle
+pubsSequenceTable hgFixed.pubsDevSequenceAnnot
+pubsMarkerTable hgFixed.pubsDevMarkerAnnot
+noInherit on
+
+    track pubsDevBlat
+    shortLabel Sequences
+    longLabel DNA/Prot Sequences in Publications Beta
+    parent pubsDev on
+    type bed 12 .
+    visibility pack
+    priority 2
+    release alpha
+    configurable off
+    configureByPopup off
+
+    track pubsDevBlatPsl
+    shortLabel Individual Seq. Matches
+    longLabel Individual sequence matches of one selected article from sequences track
+    parent pubsDev off
+    type psl
+    visibility hide
+    priority 1
+    release alpha
+    configurable off
+    configureByPopup off
+    color 0,115,70
+
+    #track pubsDevMarkerBand
+    #shortLabel (Dev) Bands
+    #longLabel (Dev) Cytogenetic bands in Publications
+    #parent pubsDev on
+    #visibility hide
+    #priority 3
+    #type bed 5
+    #release alpha
+
+    #track pubsDevMarkerSnp
+    #shortLabel (Dev) SNPs
+    #longLabel (Dev) SNPs in Publications
+    #parent pubsDev on
+    #visibility hide
+    #priority 3
+    #type bed 5
+    #release alpha
+
+    #track pubsDevMarkerGene
+    #shortLabel (Dev) Genes
+    #longLabel (Dev) Gene symbols in Publications
+    #parent pubsDev on
+    #priority 3
+    #visibility hide
+    #type bed 5
+    #release alpha
+
 track cons46way
 compositeTrack on
 shortLabel 46-Way Cons
