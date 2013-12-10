@@ -156,6 +156,7 @@ if ( -e GitReports.ok ) then
                        echo "To: ${victim}" > /dev/shm/build.email.${victim}.txt
                        echo "From: ann@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt
                        echo "Subject: Code summaries are due for ${victim}" >> /dev/shm/build.email.${victim}.txt
+                       echo "Cc: ann@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt
                        echo "" >> /dev/shm/build.email.${victim}.txt
 		       ./summaryEmail.sh ${victim} >> /dev/shm/build.email.${victim}.txt
 		       cat /dev/shm/build.email.${victim}.txt | /usr/sbin/sendmail -t -oi
