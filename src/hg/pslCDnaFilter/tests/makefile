@@ -11,7 +11,7 @@ test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	weirdOverlappedFilterTest weirdOverlapMultAlnTest weirdOverlapMultAlnMinCoverTest \
 	noIgnoreIntronsTest ignoreIntronsTest \
 	uniqueMappedTest uniqueMappedHapTest blackListTest \
-	decayMinCoverTest inconsistentQSizeTest
+	decayMinCoverTest inconsistentQSizeTest repsAsMatchTest
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -27,6 +27,9 @@ maxAlignTest:
 
 minQSizeTest:
 	${MAKE} doFilter name=$@ inPsl=misc.psl filtArgs='-minQSize=30'
+
+repsAsMatchTest:
+	${MAKE} doFilter name=$@ inPsl=repMatch.psl filtArgs='-repsAsMatch'
 
 repMatchTest:
 	${MAKE} doFilter name=$@ inPsl=repMatch.psl filtArgs='-maxRepMatch=0.2'

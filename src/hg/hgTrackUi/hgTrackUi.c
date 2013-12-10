@@ -2803,6 +2803,29 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 }
 #endif /* UNUSED */
 
+struct jsonElement *jsonGlobalsHash = NULL; 
+
+void jsonPrintGlobals(boolean wrapWithScriptTags)
+// prints out the "common" globals json hash
+// This hash is the one utils.js and therefore all CGIs know about
+{
+if (jsonGlobalsHash != NULL)
+    {
+    if (wrapWithScriptTags)
+        printf("<script type='text/javascript'>\n");
+    jsonPrint(jsonGlobalsHash, "common", 0);
+    if (wrapWithScriptTags)
+        printf("</script>\n");
+    }
+}
+
+void jsonObjectAddGlobal(char *name, struct jsonElement *ele)
+/* Add json object to global hash */
+{
+if (jsonGlobalsHash == NULL)
+    jsonGlobalsHash = newJsonObject(newHash(5));
+jsonObjectAdd(jsonGlobalsHash, name, ele);
+}
 
 void trackUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Put up track-specific user interface. */
@@ -2813,8 +2836,8 @@ if (!ajax)
     webIncludeResourceFile("jquery-ui.css");
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js",NULL);
-    jsonObjectAdd(NULL, "track", newJsonString(tdb->track));
-    jsonObjectAdd(NULL, "db", newJsonString(database));
+    jsonObjectAddGlobal("track", newJsonString(tdb->track));
+    jsonObjectAddGlobal("db", newJsonString(database));
     }
 #define RESET_TO_DEFAULTS "defaults"
 char setting[128];

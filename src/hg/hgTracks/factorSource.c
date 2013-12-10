@@ -30,11 +30,12 @@ static void factorSourceLoadItems(struct track *track)
 {
 bedLoadItem(track, track->table, (ItemLoader)loadOne);
 
-/* NOTE: Larry suppressed motif marks in dense mode.  
-Doesn't seem right (ask Jim if there's a reason)*/
-/*if (track->visibility == tvDense)
+/* NOTE: Initial implementation (LarryM) suppressed motif marks in dense mode.  
+*  Reviewers requested the feature.  Just enabling here isn't enough to work
+*  reliably (would need to redo draw to assure highlighting isn't overwritten by
+*  density drawing of later-drawn items */
+if (track->visibility == tvDense)
     return;
-*/
 
 // NOTE: this motif init code may be better at draw time
 char *motifTable = trackDbSetting(track->tdb, "motifTable");
