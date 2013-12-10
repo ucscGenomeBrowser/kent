@@ -116,7 +116,7 @@ if (motif != NULL)
     }
 
 #define MOTIF_HELP_PAGE "../goldenPath/help/hgRegMotifHelp.html"
-webNewSection("Motif:");
+webNewSection("Motif Sequence from Matching Strand");
 printf("<PRE>\n");
 printf("<table>\n");
 if (motif != NULL)

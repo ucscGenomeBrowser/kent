@@ -4608,6 +4608,12 @@ tablesIgnored $hg
     tgpPhase1
     tgpPhase1AccessibilityPilotCriteria
     tgpPhase1AccessibilityStrictCriteria
+    ucsfChipSeqH3K4me3BrainCoverage
+    ucsfMedipSeqBrainCoverage
+    ucsfMedipSeqBrainCpG
+    ucsfMreSeqBrainCpG
+    ucsfRnaSeqBrainAllCoverage
+    ucsfRnaSeqBrainSmartCoverage
     vistaEnhancers
     wgRna
     zoom1_affyTranscriptome

@@ -476,6 +476,13 @@ _EOF_
       }
       $bossScript->add(<<_EOF_
 genePredCheck -db=$db $db.allGenes.gp.gz
+# construct bigBed and index for assembly hub
+mkdir -p bbi
+genePredToBed $db.allGenes.gp.gz stdout | sort -k1,1 -k2,2n > $db.ensGene.bed
+bedToBigBed -extraIndex=name $db.ensGene.bed ../../../chrom.sizes bbi/$db.ensGene.bb
+grep -v "^#" infoOut.txt | awk '{printf "%s\\t%s,%s,%s,%s,%s\\n", \$1,\$2,\$3,\$8,\$9,\$10}' > $db.ensGene.nameIndex.txt
+ixIxx $db.ensGene.nameIndex.txt $db.ensGene.name.ix $db.ensGene.name.ixx
+
 _EOF_
 	  );
   }

@@ -1525,10 +1525,6 @@ track cgapSage override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
-track snpArray override
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
-
 
 track consIndelsHgMmCanFam
 shortLabel Cons Indels MmCf

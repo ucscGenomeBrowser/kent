@@ -394,7 +394,24 @@ canPack On
 
     # This is released track with TF Motif setting (under development)
     track wgEncodeRegTfbsClusteredV3
-    release alpha, beta
+    release beta
+    shortLabel Txn Fac ChIP V3
+    longLabel Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
+    type factorSource
+    superTrack wgEncodeReg hide
+    sourceTable wgEncodeRegTfbsCellsV3
+    inputTrackTable wgEncodeRegTfbsClusteredInputsV3
+    inputTableFieldDisplay cellType factor antibody treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility hide
+    useScore 1
+    priority 1.71
+    maxWindowToDraw 10000000
+    dataVersion ENCODE Mar 2012 Freeze
+
+    # This is released track with TF Motif setting (under development)
+    track wgEncodeRegTfbsClusteredV3
+    release alpha
     shortLabel Txn Fac ChIP V3
     longLabel Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
     type factorSource
@@ -404,6 +421,7 @@ canPack On
     inputTableFieldDisplay cellType factor antibody treatment lab
     motifTable wgEncodeAwgTfbsMotifs
     motifPwmTable transRegCodeMotif
+    motifMapTable factorbookTargetToMotif
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     visibility hide
     useScore 1

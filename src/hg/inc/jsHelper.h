@@ -5,6 +5,7 @@
 
 #include "cart.h"
 #include <regex.h>
+#include "jsonParse.h"
 
 #define JS_CLEAR_ALL_BUTTON_LABEL    "Clear all"
 #define JS_SET_ALL_BUTTON_LABEL  "Set all"
@@ -142,85 +143,15 @@ void jsReloadOnBackButton(struct cart *cart);
 /* Add some javascript to detect that the back button (or reload) has been pressed,
  * and to resubmit in that case to redraw the page with the latest cart contents. */
 
-/* JSON Element code let's you build up a DOM like data structure in memory and then serialize it into
-   html for communication with client side code.
- */
-
-// supported types
-
-typedef enum _jsonElementType
-{
-    jsonList     = 0,
-    jsonObject   = 1,
-    jsonNumber   = 2,
-    jsonDouble   = 3,
-    jsonBoolean  = 4,
-    jsonString   = 5
-} jsonElementType;
-
-union jsonElementVal
-{
-    struct slRef *jeList;
-    struct hash *jeHash;
-    long jeNumber;
-    double jeDouble;
-    boolean jeBoolean;
-    char *jeString;
-};
-
-struct jsonElement
-{
-    jsonElementType type;
-    union jsonElementVal val;
-};
-
-// constructors for each jsonElementType
-
-struct jsonElement *newJsonString(char *str);
-struct jsonElement *newJsonBoolean(boolean val);
-struct jsonElement *newJsonNumber(long val);
-struct jsonElement *newJsonDouble(double val);
-struct jsonElement *newJsonObject(struct hash *h);
-struct jsonElement *newJsonList(struct slRef *list);
-
-void jsonObjectAdd(struct jsonElement *h, char *name, struct jsonElement *ele);
-// Add a new element to a jsonObject; existing values are replaced.
-// NOTE: Adding to a NULL hash will add to the global "common" hash printed with jsonPrintGlobals();
-
-void jsonListAdd(struct jsonElement *list, struct jsonElement *ele);
-// Add a new element to a jsonList
+// --- Genome browser specific json stuff - see also inc/json.h for more generic stuff 
 
 void jsonPrint(struct jsonElement *json, char *name, int indentLevel);
-// print out a jsonElement
-
-extern struct jsonElement *jsonGlobalsHash; // The "all" globals json hash
-
-void jsonPrintGlobals(boolean wrapWithScriptTags);
-// prints out the "common" globals json hash
-// This hash is the one utils.js and therefore all CGIs know about
+// print out a jsonElement and children using hPrintf, and for indentLevel >=0
+// bracketing with comments.  See also jsonPrintToFile.
 
 void jsonErrPrintf(struct dyString *ds, char *format, ...);
 //  Printf a json error to a dyString for communicating with ajax code; format is:
 //  {"error": error message here}
 
-struct jsonElement *jsonParse(char *str);
-// parse string into an in-memory json representation
-
-char *jsonStringEscape(char *inString);
-/* backslash escape a string for use in a double quoted json string.
- * More conservative than javaScriptLiteralEncode because
- * some json parsers complain if you escape & or ' */
-
-void jsonFindNameRecurse(struct jsonElement *ele, char *jName, struct slName **pList);
-// Search the JSON tree recursively to find all the values associated to
-// the name, and add them to head of the list.  
-
-struct slName *jsonFindName(struct jsonElement *json, char *jName);
-// Search the JSON tree to find all the values associated to the name
-// and add them to head of the list. 
-
-struct slName *jsonFindNameUniq(struct jsonElement *json, char *jName);
-// Search the JSON tree to find all the values associated to the name
-// and add them to head of the list. 
 
 #endif /* JSHELPER_H */

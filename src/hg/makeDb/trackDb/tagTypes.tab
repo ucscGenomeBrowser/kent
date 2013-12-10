@@ -231,6 +231,7 @@ minMax chromGraph
 minScore bed broadPeak narrowPeak
 motifTable factorSource
 motifPwmTable factorSource
+motifMapTable factorSource
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
 nextExonText *
