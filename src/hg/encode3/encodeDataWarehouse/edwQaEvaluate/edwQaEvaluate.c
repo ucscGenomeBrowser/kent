@@ -10,7 +10,19 @@
 #include "edwLib.h"
 
 /* Globals */
-int version = 1;
+int version = 2;
+
+/* Version history 
+ *  1 - initial release
+ *  2 - Relaxed most thresholds on RAMPAGE data type, which is not expected to map well now.
+ *      Relaxed enrichment threshold in ChIP-seq and DNase-seq down to 2 since 'open is not 
+ *      very specific.
+ *      Split RNA-seq into:
+ *      'Long RNA-seq' - reads 200 bases or longer or polyadenylated mRNA
+ *      'RNA-seq' - unspecified, treated same as RNA-seq
+ *      'Short RNA-seq' - reads 200 bases or shorter
+ *      'miRNA-seq' - micro RNA sequencing
+ */
 
 void usage()
 /* Explain usage and exit. */
@@ -63,13 +75,45 @@ struct qaThresholds dnaseThresholds =
     .pearsonClipped = 0.10,
     };
 
-struct qaThresholds rnaSeqThresholds = 
+struct qaThresholds longRnaSeqThresholds = 
 /* Thresholds for RNA-seq - lower from introns and other issues. */
     {
     .fastqMapRatio = 0.20,
     .bamMapRatio = 0.50,
     .fastqQual = 20,
     .fastqPairConcordance = 0.6,  // introns
+    .repeatContent = 0.5,
+    .ribosomeContent = 0.15,
+    .closeContamination = 0.5,
+    .farContamination = 0.03,
+    .enrichment = 8,
+    .crossEnrichment = 5,
+    .pearsonClipped = 0.05,
+    };
+
+struct qaThresholds shortRnaSeqThresholds = 
+/* Thresholds for RNA-seq - lower from introns and other issues. */
+    {
+    .fastqMapRatio = 0.20,
+    .bamMapRatio = 0.50,
+    .fastqQual = 20,
+    .fastqPairConcordance = 0.7,
+    .repeatContent = 0.5,
+    .ribosomeContent = 0.15,
+    .closeContamination = 0.5,
+    .farContamination = 0.03,
+    .enrichment = 1.5,
+    .crossEnrichment = 5,
+    .pearsonClipped = 0.05,
+    };
+
+struct qaThresholds miRnaSeqThresholds = 
+/* Thresholds for miRNA-seq - lower from introns and other issues. */
+    {
+    .fastqMapRatio = 0.0005,	// Low expectations for this to align with BWA - 22bp reads
+    .bamMapRatio = 0.05,
+    .fastqQual = 20,
+    .fastqPairConcordance = 0.7,
     .repeatContent = 0.5,
     .ribosomeContent = 0.15,
     .closeContamination = 0.5,
@@ -112,17 +156,19 @@ struct qaThresholds shotgunBisulfiteSeqThresholds =
     };
 
 struct qaThresholds rampageThresholds = 
+/* Rampage is a way of sequencing selectively near the transcription start site.
+ * It requires a special aligner, so don't expect too much from generic BWA here. */
     {
-    .fastqMapRatio = 0.04,  // WTF - honestly I don't know what RAMPAGE is
-    .bamMapRatio = 0.3,
+    .fastqMapRatio = 0.001,
+    .bamMapRatio = 0.10,
     .fastqQual = 20,
-    .fastqPairConcordance = 0.7,
+    .fastqPairConcordance = 0.3,
     .repeatContent = 0.1,
     .ribosomeContent = 0.05,
     .closeContamination = 0.06,
     .farContamination = 0.02,
-    .enrichment = 2.5,
-    .crossEnrichment = 5,
+    .enrichment = 2.0,
+    .crossEnrichment = 3,
     .pearsonClipped = 0.05,
     };
 
@@ -444,11 +490,15 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	    {
 	    char *dataType = exp->dataType;
 	    struct qaThresholds *thresholds = NULL;
-	    if (sameWord("dnase-seq", dataType))
+	    if (sameWord("DNase-seq", dataType))
 		thresholds = &dnaseThresholds;
-	    else if (sameWord("rna-seq", dataType))
-	        thresholds = &rnaSeqThresholds;   // Might divide this into short and long
-	    else if (sameWord("chip-seq", dataType))
+	    else if (sameWord("RNA-seq", dataType) || sameWord("Long RNA-seq", dataType))
+	        thresholds = &longRnaSeqThresholds;   
+	    else if (sameWord("short RNA-seq", dataType))
+	        thresholds = &shortRnaSeqThresholds;   
+	    else if (sameWord("miRNA-seq", dataType))
+	        thresholds = &miRnaSeqThresholds;   
+	    else if (sameWord("ChIP-seq", dataType))
 	        thresholds = &chipSeqThresholds;
 	    else if (sameWord("Shotgun Bisulfite-seq", dataType))
 	        thresholds = &shotgunBisulfiteSeqThresholds;
@@ -457,7 +507,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	    else if (sameWord("", dataType))
 	        ;
 	    else
-	        warn("No thresholds for data type %s", dataType);
+	        verbose(2, "No thresholds for data type %s", dataType);
 	    if (thresholds != NULL)
 		checkThresholds(conn, ef, vf, exp, thresholds);
 	    }
