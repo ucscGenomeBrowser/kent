@@ -2270,25 +2270,25 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 #these 6 overrides go with ucsfBrainMethyl parent track
 track ucsfChipSeqH3K4me3BrainCoverage override
-release alpha,beta 
+release alpha,beta,public
 type bigWig 1 180
 
 track ucsfMedipSeqBrainCoverage override
-release alpha,beta
+release alpha,beta,public
 type bigWig  1 300
 
 track ucsfMedipSeqBrainCpG override
-release alpha,beta
+release alpha,beta,public
 type bigWig  1 298
 
 track ucsfMreSeqBrainCpG override
-release alpha,beta
+release alpha,beta,public
 type bigWig 0.09 878.8
 
 track ucsfRnaSeqBrainAllCoverage override
-release alpha,beta
+release alpha,beta,public
 type bigWig 1 24184
 
 track ucsfRnaSeqBrainSmartCoverage override
-release alpha,beta
+release alpha,beta,public
 type bigWig 1 141
