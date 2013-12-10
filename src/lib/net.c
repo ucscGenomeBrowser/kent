@@ -481,13 +481,28 @@ if (u == NULL)
     strcpy(parsed->file, "/");
 else
     {
+
     parseByteRange(u, &parsed->byteRangeStart, &parsed->byteRangeEnd, TRUE);
 
-    /* need to encode spaces, but not ! other characters */
-    char *t=replaceChars(u," ","%20");
-    safecpy(parsed->file, sizeof(parsed->file), t);
-    freeMem(t);
-    *u = 0;
+    if (sameWord(parsed->protocol,"http") ||
+        sameWord(parsed->protocol,"https"))
+	{
+	// http servers expect the URL request to be URL-encoded already.
+	/* need to encode spaces, but not ! other characters */
+	char *t=replaceChars(u," ","%20");
+	safecpy(parsed->file, sizeof(parsed->file), t);
+	freeMem(t);
+	}
+
+    *u = 0; // terminate the host:port string
+
+    if (sameWord(parsed->protocol,"ftp"))
+	{
+	++u; // that first slash is not considered part of the ftp path 
+	// decode now because the FTP server does NOT expect URL-encoding.
+	cgiDecode(u,parsed->file,strlen(u));
+	}
+
     }
 
 /* Split off user part */
