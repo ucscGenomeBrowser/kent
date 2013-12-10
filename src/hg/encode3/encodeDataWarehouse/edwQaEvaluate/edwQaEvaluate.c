@@ -1,0 +1,415 @@
+/* edwQaEvaluate - Consider available evidence and set edwValidFile.*QaStatus. */
+#include "common.h"
+#include "linefile.h"
+#include "hash.h"
+#include "options.h"
+#include "dystring.h"
+#include "errabort.h"
+#include "encodeDataWarehouse.h"
+#include "edwLib.h"
+
+/* Globals */
+int version = 1;
+
+void usage()
+/* Explain usage and exit. */
+{
+errAbort(
+  "edwQaEvaluate - Consider available evidence and set edwValidFile.*QaStatus\n"
+  "version: %d\n"
+  "usage:\n"
+  "   edwQaEvaluate startId endId\n"
+  "options:\n"
+  "   -xxx=XXX\n"
+  , version
+  );
+}
+
+/* Command line validation table. */
+static struct optionSpec options[] = {
+   {NULL, 0},
+};
+
+struct qaThresholds
+/* Qa thresholds for a data type */
+    {
+    double fastqMapRatio;	// Minimum mapping ratio for fastq
+    double bamMapRatio;		// Minimum mapping ratio for bam
+    double fastqQual;	        // Minimum average quality for fastq
+    double fastqPairConcordance;  // Minimum concordance between read pairs
+    double repeatContent;       // Maximum total repeat content
+    double ribosomeContent;	// Maximum ribosomal RNA content
+    double closeContamination;	// Maximum contamination from close species (mammal vs mammal)
+    double farContamination;	// Maximum contamintation from distant species
+    double enrichment;		// Minimum enrichment
+    double crossEnrichment;     // Minimum cross-enrichment
+    double pearsonClipped;	// Minimum pearson clipped correlation
+    };
+
+struct qaThresholds dnaseThresholds = 
+/* Thresholds for DNAse - pretty high since no introns and */
+    {
+    .fastqMapRatio = 0.50,
+    .bamMapRatio = 0.50,
+    .fastqQual = 20,
+    .fastqPairConcordance = 0.8,
+    .repeatContent = 0.1,
+    .ribosomeContent = 0.05,
+    .closeContamination = 0.06,
+    .farContamination = 0.02,
+    .enrichment = 5,
+    .crossEnrichment = 15,
+    .pearsonClipped = 0.10,
+    };
+
+struct qaThresholds rnaSeqThresholds = 
+/* Thresholds for RNA-seq - lower from introns and other issues. */
+    {
+    .fastqMapRatio = 0.20,
+    .bamMapRatio = 0.50,
+    .fastqQual = 20,
+    .fastqPairConcordance = 0.6,  // introns
+    .repeatContent = 0.5,
+    .ribosomeContent = 0.15,
+    .closeContamination = 0.5,
+    .farContamination = 0.03,
+    .enrichment = 5,
+    .crossEnrichment = 5,
+    .pearsonClipped = 0.05,
+    };
+
+struct qaThresholds chipSeqThresholds = 
+/* Chip-seq thresholds - pretty high since is all straight DNA */
+    {
+    .fastqMapRatio = 0.80,
+    .bamMapRatio = 0.80,
+    .fastqQual = 20,
+    .fastqPairConcordance = 0.8,
+    .repeatContent = 0.1,
+    .ribosomeContent = 0.05,
+    .closeContamination = 0.06,
+    .farContamination = 0.02,
+    .enrichment = 2.5,
+    .crossEnrichment = 5,
+    .pearsonClipped = 0.05,
+    };
+
+struct qaThresholds shotgunBisulfiteSeqThresholds = 
+/* Chip-seq thresholds - pretty high since is all straight DNA */
+    {
+    .fastqMapRatio = 0.04,  // Don't expect much mapping with BWA
+    .bamMapRatio = 0.3,
+    .fastqQual = 20,
+    .fastqPairConcordance = 0.7,
+    .repeatContent = 0.1,
+    .ribosomeContent = 0.05,
+    .closeContamination = 0.06,
+    .farContamination = 0.02,
+    .enrichment = 2.5,
+    .crossEnrichment = 5,
+    .pearsonClipped = 0.05,
+    };
+
+struct qaThresholds rampageThresholds = 
+    {
+    .fastqMapRatio = 0.04,  // WTF - honestly I don't know what RAMPAGE is
+    .bamMapRatio = 0.3,
+    .fastqQual = 20,
+    .fastqPairConcordance = 0.7,
+    .repeatContent = 0.1,
+    .ribosomeContent = 0.05,
+    .closeContamination = 0.06,
+    .farContamination = 0.02,
+    .enrichment = 2.5,
+    .crossEnrichment = 5,
+    .pearsonClipped = 0.05,
+    };
+
+int failQa(struct sqlConnection *conn, struct edwFile *ef, char *whyFormat, ...)
+#ifdef __GNUC__
+__attribute__((format(printf, 3, 4)))
+#endif
+   ;
+   /* Explain why this failed QA */
+
+int failQa(struct sqlConnection *conn, struct edwFile *ef, char *whyFormat, ...)
+/* Explain why this failed QA  - always returns -1*/
+{
+/* First just do the warn */
+va_list args;
+va_start(args, whyFormat);
+warn("Failing QA on fileId %u", ef->id);
+vaWarn(whyFormat, args);
+return -1;
+}
+
+struct edwQaRepeat *edwQaRepeatMatching(struct sqlConnection *conn, 
+	long long fileId, char *repClass)
+/* Return record associated with repeat of given class and fileId */
+{
+char query[256];
+sqlSafef(query, sizeof(query),
+    "select * from edwQaRepeat where fileId=%lld and repeatClass='%s'"
+    , fileId, repClass);
+return edwQaRepeatLoadByQuery(conn, query);
+}
+
+boolean isInArray(int *array, int size, int x)
+/* Return TRUE if x is in array of given size. */
+{
+int i;
+for (i=0; i<size; ++i)
+    if (array[i] == x)
+        return TRUE;
+return FALSE;
+}
+
+int mammalianTaxons[] = {9606, 10090, 10116};
+
+double maxContam(struct sqlConnection *conn, struct edwValidFile *vf, boolean isClose)
+/* Get list of contamination targets that are close or far */
+{
+char query[512];
+sqlSafef(query, sizeof(query), "select taxon from edwAssembly where ucscDb='%s'", vf->ucscDb);
+int taxon = sqlQuickNum(conn, query);
+assert(taxon != 0);
+
+boolean isMammal = isInArray(mammalianTaxons, ArraySize(mammalianTaxons), taxon);
+if (!isMammal)
+    {
+    /* Non-mammalian case is relatively easy - there are no close species, everything is distant */
+    if (isClose)
+        return 0.0;
+    else
+        {
+	sqlSafef(query, sizeof(query), "select max(mapRatio) from edwQaContam where fileId=%u",
+	    vf->fileId);
+	}
+    }
+else
+    {
+    /* For mammalian case we depend on mammals being the first three we loaded. */
+    /* This is a bit brittle, but alternative is a lot of code. */
+    if (isClose)
+        sqlSafef(query, sizeof(query), 
+	    "select max(mapRatio) from edwQaContam where fileId=%u and qaContamTargetId <= 3", 
+	    vf->fileId);
+    else
+        sqlSafef(query, sizeof(query), 
+	    "select max(mapRatio) from edwQaContam where fileId=%u and qaContamTargetId > 3", 
+	    vf->fileId);
+    }
+return sqlQuickDouble(conn, query);
+}
+
+boolean passContamination(struct sqlConnection *conn,
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp,
+    struct qaThresholds *threshold)
+/* Return TRUE if pass QA threshold. */
+{
+double closeContamination = maxContam(conn, vf, TRUE);
+double farContamination = maxContam(conn, vf, FALSE);
+if (closeContamination > threshold->closeContamination)
+    {
+    failQa(conn, ef, "closeContamination = %g, threshold for %s is %g",
+	closeContamination, exp->dataType, threshold->closeContamination);
+    return FALSE;
+    }
+else if (farContamination > threshold->farContamination)
+    {
+    failQa(conn, ef, "farContamination = %g, threshold for %s is %g", 
+	farContamination, exp->dataType, threshold->farContamination);
+    return FALSE;
+    }
+return TRUE;
+}
+
+boolean edwBestCrossEnrichment(struct sqlConnection *conn, long long fileId, double *retBest)
+/* If there are biological replicates for same experiment and output type,  return
+ * TRUE and calculate the best cross enrichment. */
+{
+char query[1024];  /* This will be a monster query! */
+
+sqlSafef(query, sizeof(query),
+    "select max(sampleSampleEnrichment) from edwQaPairSampleOverlap "
+    "where (elderFileId = %lld or youngerFileId = %lld) "
+    , fileId, fileId);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+boolean gotResult = row[0] != NULL;
+if (gotResult)
+    *retBest = sqlDouble(row[0]);
+sqlFreeResult(&sr);
+return gotResult;
+}
+
+void checkThresholds(struct sqlConnection *conn,
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp, 
+    struct qaThresholds *threshold)
+/* Check that files meet thresholds if possible. */
+{
+char *dataType = exp->dataType;
+/* First check individual file thresholds. */
+int passStat = 1;
+if (sameString(vf->format, "fastq"))
+    {
+    /* Check a bunch of things either in edwValidFile record or edwFastqFile record. */
+    struct edwFastqFile *fq = edwFastqFileFromFileId(conn, ef->id);
+    if (fq == NULL)
+       errAbort("No edwFastqFile for file ID %u", ef->id);
+    if (vf->mapRatio < threshold->fastqMapRatio)
+        {
+	passStat = failQa(conn, ef, "Map ratio is %g, threshold for %s is %g", 
+	    vf->mapRatio, dataType, threshold->fastqMapRatio);
+	}
+    else if (!sameWord(fq->qualType, "sanger"))
+        {
+	passStat = failQa(conn, ef, "Quality scores type %s not sanger", fq->qualType);
+	}
+    else if (fq->qualMean < threshold->fastqQual)
+        {
+	passStat = failQa(conn, ef, "Mean quality score is %g, threshold for %s is %g",
+	    fq->qualMean, dataType, threshold->fastqQual);
+	}
+    else if (!isEmpty(vf->pairedEnd))
+        {
+	struct edwValidFile *otherVf = edwOppositePairedEnd(conn, vf);
+	if (otherVf == NULL)
+	    passStat = 0;   // Need to wait for other end.
+	else
+	    {
+	    struct edwQaPairedEndFastq *pair = edwQaPairedEndFastqFromVfs(conn, vf, otherVf,
+			    NULL, NULL);
+	    if (pair == NULL)
+		errAbort("edwQaPairedEndFastq not found for %u %u", vf->fileId, otherVf->fileId);
+	    if (pair->concordance < threshold->fastqPairConcordance)
+	       failQa(conn, ef, "Pair concordance is %g, threshold for %s is %g",
+			pair->concordance, dataType, threshold->fastqPairConcordance);
+	    edwQaPairedEndFastqFree(&pair);
+	    }
+	}
+
+    /* If still passing check repeatContent */
+    if (passStat == 1)
+        {
+	struct edwQaRepeat *rep = edwQaRepeatMatching(conn, ef->id, "total");
+	if (rep == NULL)
+	    errAbort("No total repeat record for file id %u", ef->id);
+	if (rep->mapRatio > threshold->repeatContent)
+	    passStat = failQa(conn, ef, "Repeat content is %g, threshold for %s is %g",
+		rep->mapRatio, dataType, threshold->repeatContent);
+	edwQaRepeatFree(&rep);
+	}
+
+    /* If still passing check ribosomeContent */
+    if (passStat == 1)
+        {
+	struct edwQaRepeat *rep = edwQaRepeatMatching(conn, ef->id, "rRNA");
+	if (rep != NULL && rep->mapRatio > threshold->ribosomeContent)
+	    {
+	    passStat = failQa(conn, ef, "Ribosomal content is %g, threshold for %s is %g",
+	       rep->mapRatio, dataType, threshold->ribosomeContent);
+	    }
+	edwQaRepeatFree(&rep);
+	}
+
+    /* If still passing check for contamination with other organisms. */
+    if (passStat == 1)
+	if (!passContamination(conn, ef, vf, exp, threshold))
+	    passStat = -1;
+
+    /* If still passing check for enrichment */
+    char *enrichedIn = vf->enrichedIn;
+    if (passStat == 1 && !isEmpty(enrichedIn) && !sameWord(enrichedIn, "unknown"))
+        {
+	char query[512];
+	sqlSafef(query, sizeof(query),
+	   "select e.enrichment from edwQaEnrich e,edwQaEnrichTarget t "
+	   "where e.qaEnrichTargetId = t.id "
+	   "and e.fileId = %u "
+	   "and t.name = '%s' "
+	   , ef->id, enrichedIn);
+	double enrichment = sqlQuickDouble(conn, query);
+	if (enrichment < threshold->enrichment)
+	    {
+	    passStat = failQa(conn, ef, "Enrichment in %s is %g, threshold for %s is %g",
+		enrichedIn, enrichment, dataType, threshold->enrichment);
+	    }
+	}
+
+    /* Finally check cross enrichment */
+    int pairPassStat = 0;
+    if (passStat == 1)
+        {
+	double crossEnrichment = 0;
+	if (edwBestCrossEnrichment(conn, ef->id, &crossEnrichment))
+	    {
+	    uglyf("best Enrichment for %u is %g\n", ef->id, crossEnrichment);
+	    if (crossEnrichment < threshold->crossEnrichment)
+	        pairPassStat = failQa(conn, ef, "CrossEnrichment is %g, threshold for %s is %g",
+		    crossEnrichment, dataType, threshold->crossEnrichment);
+	    else
+	        pairPassStat = 1;
+	    }
+	}
+
+
+    edwFastqFileFree(&fq);
+    }
+else if (sameString(vf->format, "bam"))
+    {
+    }
+else
+    passStat = 0;
+}
+
+void edwQaEvaluate(int startFileId, int endFileId)
+/* edwQaEvaluate - Consider available evidence and set edwValidFile.*QaStatus. */
+{
+uglyf("edwQaEvaluate %d %d\n", startFileId, endFileId);
+struct sqlConnection *conn = edwConnectReadWrite();
+struct edwFile *ef, *efList = edwFileAllIntactBetween(conn, startFileId, endFileId);
+for (ef = efList; ef != NULL; ef = ef->next)
+    {
+    uglyf("ef->id = %u\n", ef->id);
+    struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
+    if (vf != NULL)
+	{
+	uglyf("vf->licensePlate=%s, experiment=%s\n", vf->licensePlate, vf->experiment);
+	struct edwExperiment *exp = edwExperimentFromAccession(conn, vf->experiment);
+	if (exp != NULL)
+	    {
+	    uglyf("Evaluating QA status for %s %s\n", vf->licensePlate, exp->accession);
+	    char *dataType = exp->dataType;
+	    struct qaThresholds *thresholds = NULL;
+	    if (sameWord("dnase-seq", dataType))
+		thresholds = &dnaseThresholds;
+	    else if (sameWord("rna-seq", dataType))
+	        thresholds = &rnaSeqThresholds;   // Might divide this into short and long
+	    else if (sameWord("chip-seq", dataType))
+	        thresholds = &chipSeqThresholds;
+	    else if (sameWord("Shotgun Bisulfite-seq", dataType))
+	        thresholds = &shotgunBisulfiteSeqThresholds;
+	    else if (sameWord("RAMPAGE", dataType))
+	        thresholds = &rampageThresholds;
+	    else
+	        warn("No thresholds for data type %s\n", dataType);
+	    if (thresholds != NULL)
+		checkThresholds(conn, ef, vf, exp, thresholds);
+	    }
+	else
+	    warn("Can't find experiment for '%s'", vf->experiment);
+	}
+    }
+sqlDisconnect(&conn);
+}
+
+int main(int argc, char *argv[])
+/* Process command line. */
+{
+optionInit(&argc, argv, options);
+if (argc != 3)
+    usage();
+edwQaEvaluate(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
+return 0;
+}
