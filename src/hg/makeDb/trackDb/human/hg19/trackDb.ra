@@ -565,7 +565,7 @@ longLabel Microsoft Research Gene Interactions
 group pub
 priority 30
 visibility hide
-type bigBed 12 .
+type bigBed 4 .
 noScoreFilter on
 release alpha
 
