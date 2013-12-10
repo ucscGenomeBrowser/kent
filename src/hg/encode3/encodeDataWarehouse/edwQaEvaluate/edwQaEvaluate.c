@@ -1,4 +1,5 @@
 /* edwQaEvaluate - Consider available evidence and set edwValidFile.*QaStatus. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -57,7 +58,7 @@ struct qaThresholds dnaseThresholds =
     .ribosomeContent = 0.05,
     .closeContamination = 0.06,
     .farContamination = 0.02,
-    .enrichment = 5,
+    .enrichment = 2,
     .crossEnrichment = 15,
     .pearsonClipped = 0.10,
     };
@@ -73,7 +74,7 @@ struct qaThresholds rnaSeqThresholds =
     .ribosomeContent = 0.15,
     .closeContamination = 0.5,
     .farContamination = 0.03,
-    .enrichment = 5,
+    .enrichment = 4,
     .crossEnrichment = 5,
     .pearsonClipped = 0.05,
     };
@@ -89,7 +90,7 @@ struct qaThresholds chipSeqThresholds =
     .ribosomeContent = 0.05,
     .closeContamination = 0.06,
     .farContamination = 0.02,
-    .enrichment = 2.5,
+    .enrichment = 2,
     .crossEnrichment = 5,
     .pearsonClipped = 0.05,
     };
@@ -138,8 +139,23 @@ int failQa(struct sqlConnection *conn, struct edwFile *ef, char *whyFormat, ...)
 /* First just do the warn */
 va_list args;
 va_start(args, whyFormat);
+char reason[512];
+vasafef(reason, sizeof(reason), whyFormat, args);
 warn("Failing QA on fileId %u", ef->id);
-vaWarn(whyFormat, args);
+warn("%s", reason);
+
+/* See if already have a failure with this file and version. */
+char query[512];
+sqlSafef(query, sizeof(query), 
+    "select count(*) from edwQaFail where fileId=%u and qaVersion=%d", ef->id, version);
+int prevFailCount = sqlQuickNum(conn, query);
+
+/* If we are the first need to save it to database. */
+if (prevFailCount == 0)
+    {
+    struct edwQaFail fail = {.id=0, .fileId=ef->id, .qaVersion=version, .reason=reason};
+    edwQaFailSaveToDb(conn, &fail, "edwQaFail", 0);
+    }
 return -1;
 }
 
@@ -165,6 +181,7 @@ return FALSE;
 }
 
 int mammalianTaxons[] = {9606, 10090, 10116};
+char *mammalianTaxonsString = "9606,10090,10116";
 
 double maxContam(struct sqlConnection *conn, struct edwValidFile *vf, boolean isClose)
 /* Get list of contamination targets that are close or far */
@@ -188,16 +205,11 @@ if (!isMammal)
     }
 else
     {
-    /* For mammalian case we depend on mammals being the first three we loaded. */
-    /* This is a bit brittle, but alternative is a lot of code. */
-    if (isClose)
-        sqlSafef(query, sizeof(query), 
-	    "select max(mapRatio) from edwQaContam where fileId=%u and qaContamTargetId <= 3", 
-	    vf->fileId);
-    else
-        sqlSafef(query, sizeof(query), 
-	    "select max(mapRatio) from edwQaContam where fileId=%u and qaContamTargetId > 3", 
-	    vf->fileId);
+    sqlSafef(query, sizeof(query), 
+	"select max(mapRatio) from edwQaContam c,edwQaContamTarget t, edwAssembly a "
+	"where c.fileId=%u and c.qaContamTargetId=t.id and t.assemblyId = a.id "
+	"and a.taxon %s in (%s)", 
+	vf->fileId, (isClose ? "" : "not"), mammalianTaxonsString);
     }
 return sqlQuickDouble(conn, query);
 }
@@ -260,11 +272,20 @@ sqlSafef(query, sizeof(query),
 return edwBestPairedSomething(conn, query, retBest);
 }
 
+int respectManualOverride(int newVal, int oldVal)
+/* If oldVal shows manual override, return it, else newVal. */
+{
+if (oldVal > 1 || oldVal < -1)
+    return oldVal;
+return newVal;
+}
+
 void checkThresholds(struct sqlConnection *conn,
     struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp, 
     struct qaThresholds *threshold)
 /* Check that files meet thresholds if possible. */
 {
+char query[512];
 char *dataType = exp->dataType;
 /* First check individual file thresholds. */
 int passStat = 1;
@@ -346,16 +367,15 @@ else if (sameString(vf->format, "bam"))
 	    vf->mapRatio, dataType, threshold->fastqMapRatio);
 	}
     }
-if (passStat == 1 && (sameString(vf->format, "bam") || sameString(vf->format, "fastq") 
+if (sameString(vf->format, "bam") || sameString(vf->format, "fastq") 
    || sameString(vf->format, "bigBed") || sameString(vf->format, "broadPeak")
    || sameString(vf->format, "narrowPeak") || sameString(vf->format, "gtf")
-   || sameString(vf->format, "bigWig")))
-   {
+   || sameString(vf->format, "bigWig"))
+    {
     /* If still passing check for enrichment */
     char *enrichedIn = vf->enrichedIn;
     if (passStat == 1 && !isEmpty(enrichedIn) && !sameWord(enrichedIn, "unknown"))
-        {
-	char query[512];
+	{
 	sqlSafef(query, sizeof(query),
 	   "select e.enrichment from edwQaEnrich e,edwQaEnrichTarget t "
 	   "where e.qaEnrichTargetId = t.id "
@@ -372,13 +392,12 @@ if (passStat == 1 && (sameString(vf->format, "bam") || sameString(vf->format, "f
 
     /* Finally check cross enrichment */
     if (passStat == 1)
-        {
+	{
 	if (sameString(vf->format, "bigWig"))
 	    {
 	    double r = 0;
 	    if (edwBestPearsonClipped(conn, ef->id, &r))
 		{
-		uglyf("best r for %u is %g\n", ef->id, r);
 		if (r < threshold->pearsonClipped)
 		    pairPassStat = failQa(conn, ef, "ClippedR is %g, threshold for %s is %g",
 			r, dataType, threshold->pearsonClipped);
@@ -391,7 +410,6 @@ if (passStat == 1 && (sameString(vf->format, "bam") || sameString(vf->format, "f
 	    double crossEnrichment = 0;
 	    if (edwBestCrossEnrichment(conn, ef->id, &crossEnrichment))
 		{
-		uglyf("best Enrichment for %u is %g\n", ef->id, crossEnrichment);
 		if (crossEnrichment < threshold->crossEnrichment)
 		    pairPassStat = failQa(conn, ef, "CrossEnrichment is %g, threshold for %s is %g",
 			crossEnrichment, dataType, threshold->crossEnrichment);
@@ -400,29 +418,30 @@ if (passStat == 1 && (sameString(vf->format, "bam") || sameString(vf->format, "f
 		}
 	    }
 	}
-   }
+    }
 else
     passStat = 0;
-uglyf("fileId %u, passStat %d, pairPassStat=%d\n", ef->id, passStat, pairPassStat);
+passStat = respectManualOverride(passStat, vf->singleQaStatus);
+pairPassStat = respectManualOverride(pairPassStat, vf->replicateQaStatus);
+sqlSafef(query, sizeof(query),
+    "update edwValidFile set singleQaStatus=%d, replicateQaStatus=%d, qaVersion=%d "
+    "where id=%u",  passStat, pairPassStat, version, vf->id);
+sqlUpdate(conn, query);
 }
 
 void edwQaEvaluate(int startFileId, int endFileId)
 /* edwQaEvaluate - Consider available evidence and set edwValidFile.*QaStatus. */
 {
-uglyf("edwQaEvaluate %d %d\n", startFileId, endFileId);
 struct sqlConnection *conn = edwConnectReadWrite();
 struct edwFile *ef, *efList = edwFileAllIntactBetween(conn, startFileId, endFileId);
 for (ef = efList; ef != NULL; ef = ef->next)
     {
-    uglyf("ef->id = %u\n", ef->id);
     struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
     if (vf != NULL)
 	{
-	uglyf("vf->licensePlate=%s, experiment=%s\n", vf->licensePlate, vf->experiment);
 	struct edwExperiment *exp = edwExperimentFromAccession(conn, vf->experiment);
 	if (exp != NULL)
 	    {
-	    uglyf("Evaluating QA status for %s %s\n", vf->licensePlate, exp->accession);
 	    char *dataType = exp->dataType;
 	    struct qaThresholds *thresholds = NULL;
 	    if (sameWord("dnase-seq", dataType))
@@ -435,8 +454,10 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	        thresholds = &shotgunBisulfiteSeqThresholds;
 	    else if (sameWord("RAMPAGE", dataType))
 	        thresholds = &rampageThresholds;
+	    else if (sameWord("", dataType))
+	        ;
 	    else
-	        warn("No thresholds for data type %s\n", dataType);
+	        warn("No thresholds for data type %s", dataType);
 	    if (thresholds != NULL)
 		checkThresholds(conn, ef, vf, exp, thresholds);
 	    }
