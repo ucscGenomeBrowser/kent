@@ -224,16 +224,9 @@ else if (farContamination > threshold->farContamination)
 return TRUE;
 }
 
-boolean edwBestCrossEnrichment(struct sqlConnection *conn, long long fileId, double *retBest)
-/* If there are biological replicates for same experiment and output type,  return
- * TRUE and calculate the best cross enrichment. */
+boolean edwBestPairedSomething(struct sqlConnection *conn, char *query, double *retBest)
+/* Finish up some sort of max query */
 {
-char query[1024];  /* This will be a monster query! */
-
-sqlSafef(query, sizeof(query),
-    "select max(sampleSampleEnrichment) from edwQaPairSampleOverlap "
-    "where (elderFileId = %lld or youngerFileId = %lld) "
-    , fileId, fileId);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 boolean gotResult = row[0] != NULL;
@@ -241,6 +234,30 @@ if (gotResult)
     *retBest = sqlDouble(row[0]);
 sqlFreeResult(&sr);
 return gotResult;
+}
+
+boolean edwBestCrossEnrichment(struct sqlConnection *conn, long long fileId, double *retBest)
+/* If there are biological replicates for same experiment and output type,  return
+ * TRUE and calculate the best cross enrichment. */
+{
+char query[256];
+sqlSafef(query, sizeof(query),
+    "select max(sampleSampleEnrichment) from edwQaPairSampleOverlap "
+    "where (elderFileId = %lld or youngerFileId = %lld) "
+    , fileId, fileId);
+return edwBestPairedSomething(conn, query, retBest);
+}
+
+boolean edwBestPearsonClipped(struct sqlConnection *conn, long long fileId, double *retBest)
+/* If there are biological replicates for same experiment and output type,  return
+ * TRUE and calculate the best cross enrichment. */
+{
+char query[256];
+sqlSafef(query, sizeof(query),
+    "select max(pearsonClipped) from edwQaPairCorrelation "
+    "where (elderFileId = %lld or youngerFileId = %lld) "
+    , fileId, fileId);
+return edwBestPairedSomething(conn, query, retBest);
 }
 
 void checkThresholds(struct sqlConnection *conn,
@@ -251,6 +268,7 @@ void checkThresholds(struct sqlConnection *conn,
 char *dataType = exp->dataType;
 /* First check individual file thresholds. */
 int passStat = 1;
+int pairPassStat = 0;
 if (sameString(vf->format, "fastq"))
     {
     /* Check a bunch of things either in edwValidFile record or edwFastqFile record. */
@@ -318,6 +336,21 @@ if (sameString(vf->format, "fastq"))
 	if (!passContamination(conn, ef, vf, exp, threshold))
 	    passStat = -1;
 
+    edwFastqFileFree(&fq);
+    }
+else if (sameString(vf->format, "bam"))
+    {
+    if (vf->mapRatio < threshold->bamMapRatio)
+        {
+	passStat = failQa(conn, ef, "Map ratio is %g, threshold for %s is %g", 
+	    vf->mapRatio, dataType, threshold->fastqMapRatio);
+	}
+    }
+if (passStat == 1 && (sameString(vf->format, "bam") || sameString(vf->format, "fastq") 
+   || sameString(vf->format, "bigBed") || sameString(vf->format, "broadPeak")
+   || sameString(vf->format, "narrowPeak") || sameString(vf->format, "gtf")
+   || sameString(vf->format, "bigWig")))
+   {
     /* If still passing check for enrichment */
     char *enrichedIn = vf->enrichedIn;
     if (passStat == 1 && !isEmpty(enrichedIn) && !sameWord(enrichedIn, "unknown"))
@@ -338,29 +371,39 @@ if (sameString(vf->format, "fastq"))
 	}
 
     /* Finally check cross enrichment */
-    int pairPassStat = 0;
     if (passStat == 1)
         {
-	double crossEnrichment = 0;
-	if (edwBestCrossEnrichment(conn, ef->id, &crossEnrichment))
+	if (sameString(vf->format, "bigWig"))
 	    {
-	    uglyf("best Enrichment for %u is %g\n", ef->id, crossEnrichment);
-	    if (crossEnrichment < threshold->crossEnrichment)
-	        pairPassStat = failQa(conn, ef, "CrossEnrichment is %g, threshold for %s is %g",
-		    crossEnrichment, dataType, threshold->crossEnrichment);
-	    else
-	        pairPassStat = 1;
+	    double r = 0;
+	    if (edwBestPearsonClipped(conn, ef->id, &r))
+		{
+		uglyf("best r for %u is %g\n", ef->id, r);
+		if (r < threshold->pearsonClipped)
+		    pairPassStat = failQa(conn, ef, "ClippedR is %g, threshold for %s is %g",
+			r, dataType, threshold->pearsonClipped);
+		else
+		    pairPassStat = 1;
+		}
+	    }
+	else
+	    {
+	    double crossEnrichment = 0;
+	    if (edwBestCrossEnrichment(conn, ef->id, &crossEnrichment))
+		{
+		uglyf("best Enrichment for %u is %g\n", ef->id, crossEnrichment);
+		if (crossEnrichment < threshold->crossEnrichment)
+		    pairPassStat = failQa(conn, ef, "CrossEnrichment is %g, threshold for %s is %g",
+			crossEnrichment, dataType, threshold->crossEnrichment);
+		else
+		    pairPassStat = 1;
+		}
 	    }
 	}
-
-
-    edwFastqFileFree(&fq);
-    }
-else if (sameString(vf->format, "bam"))
-    {
-    }
+   }
 else
     passStat = 0;
+uglyf("fileId %u, passStat %d, pairPassStat=%d\n", ef->id, passStat, pairPassStat);
 }
 
 void edwQaEvaluate(int startFileId, int endFileId)
