@@ -143,11 +143,20 @@ table edwValidFile
     double mapRatio;    "Proportion of items that map to genome"
     double sampleCoverage; "Proportion of assembly covered by at least one item in sample"
     double depth;   "Estimated genome-equivalents covered by possibly overlapping data"
-    byte singleQaStatus;  "0 for untested, 1 for pass, -1 for fail"
-    byte replicateQaStatus;  "0 for untested, 1 for pass, -1 for fail"
-
+    byte singleQaStatus;  "0 = untested, 1 =  pass, -1 = fail, 2 = forced pass, -2 = forced fail"
+    byte replicateQaStatus;  "0 = untested, 1 = pass, -1 = fail, 2 = forced pass, -2 = forced fail"
     string technicalReplicate; "Manifest's technical_replicate tag. Values 1,2,3... pooled or ''"
     string pairedEnd; "The paired_end tag from the manifest.  Values 1,2 or ''"
+    byte qaVersion; "Version of QA pipeline making status decisions"
+    )
+
+table edwQaFail
+"Record of a QA failure."
+    (
+    uint id primary auto;   "ID of failure"
+    uint fileId index;	"File that failed"
+    uint qaVersion; "QA pipeline version"
+    lstring reason; "reason for failure"
     )
 
 table edwFastqFile
@@ -277,7 +286,7 @@ table edwJob
     lstring commandLine; "Command line of job"
     bigInt startTime; "Start time in seconds since 1970"
     bigInt endTime; "End time in seconds since 1970"
-    lstring stderr; "The output to stderr of the run - may be nonembty even with success"
+    lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
     )
 
@@ -288,6 +297,34 @@ table edwSubmitJob
     lstring commandLine; "Command line of job"
     bigInt startTime; "Start time in seconds since 1970"
     bigInt endTime; "End time in seconds since 1970"
-    lstring stderr; "The output to stderr of the run - may be nonembty even with success"
+    lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
     )
+
+table edwAnalysisJob
+"An analysis pipeline job to be run asynchronously and not too many all at once."
+    (
+    uint id primary auto;    "Job id"
+    lstring commandLine; "Command line of job"
+    bigInt startTime; "Start time in seconds since 1970"
+    bigInt endTime; "End time in seconds since 1970"
+    lstring stderr; "The output to stderr of the run - may be nonempty even with success"
+    int returnCode; "The return code from system command - 0 for success"
+    )
+
+table edwAnalysisRun
+"Information on an analysis job that we're planning on running"
+    (
+    uint id primary auto; "Analysis run ID"
+    uint jobId;  "ID in edwAnalysisJob table"
+    char[16] experiment index; "Something like ENCSR000CFA."
+    string scriptName; "Name of glue script"
+    lstring tempDir; "Where analysis is to be computed"
+    uint firstInputId;	"ID in edwFile of first input"
+    uint inputFileCount; "Total number of input files"
+    uint[inputFileCount] inputFiles; "list of all input files"
+    uint assemblyId; "Id of assembly we are working with"
+    uint outputFileCount; "Total number of output files"
+    uint[outputFileCount] outputFiles; "list of all output files"
+    )
+

@@ -169,16 +169,28 @@ CREATE TABLE edwValidFile (
     mapRatio double default 0,	# Proportion of items that map to genome
     sampleCoverage double default 0,	# Proportion of assembly covered by at least one item in sample
     depth double default 0,	# Estimated genome-equivalents covered by possibly overlapping data
-    singleQaStatus tinyint default 0,	# 0 for untested, 1 for pass, -1 for fail
-    replicateQaStatus tinyint default 0,	# 0 for untested, 1 for pass, -1 for fail
+    singleQaStatus tinyint default 0,	# 0 = untested, 1 =  pass, -1 = fail, 2 = forced pass, -2 = forced fail
+    replicateQaStatus tinyint default 0,	# 0 = untested, 1 = pass, -1 = fail, 2 = forced pass, -2 = forced fail
     technicalReplicate varchar(255) default '',	# Manifest's technical_replicate tag. Values 1,2,3... pooled or ''
     pairedEnd varchar(255) default '',	# The paired_end tag from the manifest.  Values 1,2 or ''
+    qaVersion tinyint default 0,	# Version of QA pipeline making status decisions
               #Indices
     PRIMARY KEY(id),
     INDEX(licensePlate),
     UNIQUE(fileId),
     INDEX(outputType(16)),
     INDEX(experiment(16))
+);
+
+#Record of a QA failure.
+CREATE TABLE edwQaFail (
+    id int unsigned auto_increment,	# ID of failure
+    fileId int unsigned default 0,	# File that failed
+    qaVersion int unsigned default 0,	# QA pipeline version
+    reason longblob,	# reason for failure
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(fileId)
 );
 
 #info on a file in fastq short read format beyond what's in edwValidFile
@@ -328,7 +340,7 @@ CREATE TABLE edwJob (
     commandLine longblob,	# Command line of job
     startTime bigint default 0,	# Start time in seconds since 1970
     endTime bigint default 0,	# End time in seconds since 1970
-    stderr longblob,	# The output to stderr of the run - may be nonembty even with success
+    stderr longblob,	# The output to stderr of the run - may be nonempty even with success
     returnCode int default 0,	# The return code from system command - 0 for success
               #Indices
     PRIMARY KEY(id)
@@ -340,8 +352,38 @@ CREATE TABLE edwSubmitJob (
     commandLine longblob,	# Command line of job
     startTime bigint default 0,	# Start time in seconds since 1970
     endTime bigint default 0,	# End time in seconds since 1970
-    stderr longblob,	# The output to stderr of the run - may be nonembty even with success
+    stderr longblob,	# The output to stderr of the run - may be nonempty even with success
     returnCode int default 0,	# The return code from system command - 0 for success
               #Indices
     PRIMARY KEY(id)
+);
+
+#An analysis pipeline job to be run asynchronously and not too many all at once.
+CREATE TABLE edwAnalysisJob (
+    id int unsigned auto_increment,	# Job id
+    commandLine longblob,	# Command line of job
+    startTime bigint default 0,	# Start time in seconds since 1970
+    endTime bigint default 0,	# End time in seconds since 1970
+    stderr longblob,	# The output to stderr of the run - may be nonempty even with success
+    returnCode int default 0,	# The return code from system command - 0 for success
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#Information on an analysis job that we're planning on running
+CREATE TABLE edwAnalysisRun (
+    id int unsigned auto_increment,	# Analysis run ID
+    jobId int unsigned default 0,	# ID in edwAnalysisJob table
+    experiment char(16) default 0,	# Something like ENCSR000CFA.
+    scriptName varchar(255) default '',	# Name of glue script
+    tempDir longblob,	# Where analysis is to be computed
+    firstInputId int unsigned default 0,	# ID in edwFile of first input
+    inputFileCount int unsigned default 0,	# Total number of input files
+    inputFiles longblob,	# list of all input files
+    assemblyId int unsigned default 0,	# Id of assembly we are working with
+    outputFileCount int unsigned default 0,	# Total number of output files
+    outputFiles longblob,	# list of all output files
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(experiment)
 );
