@@ -94,12 +94,13 @@ return val;
 }
 
 char *fakeTags(struct sqlConnection *conn, struct edwAnalysisRun *run, 
-    struct edwFile *inputFileList, int fileIx, char *validKey)
+    struct edwFile *inputFileList, int fileIx, char *validKey, char *ucscDb)
 /* Return tags for out output */
 {
 /* Fill in tags we actually know will be there */
 struct dyString *dy = dyStringNew(0);
 cgiEncodeIntoDy("format", run->outputFormats[fileIx], dy);
+cgiEncodeIntoDy("ucsc_db", ucscDb, dy);
 cgiEncodeIntoDy("valid_key", validKey, dy);
 char outputType[FILENAME_LEN];
 splitPath(run->outputFiles[fileIx], NULL, outputType, NULL);
@@ -190,6 +191,14 @@ dyStringAppendC(dy, '}');
 dyJsonEndLine(dy, isMiddle);
 }
 
+struct edwAnalysisStep *edwAnalysisStepFromName(struct sqlConnection *conn, char *name)
+/* Return named analysis step */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwAnalysisStep where name='%s'", name);
+return edwAnalysisStepLoadByQuery(conn, query);
+}
+
 char *jsonForRun(struct sqlConnection *conn, struct edwAnalysisRun *run, 
     struct edwFile *inputFileList, struct edwFile *outputFileList, struct edwAnalysisJob *job)
 /* Generate json for run given input and output file lists. */
@@ -200,11 +209,31 @@ dyStringAppend(dy, "{\n");
 dyJsonString(dy, "uuid", run->uuid, TRUE);
 dyJsonNumber(dy, "start_time", job->startTime, TRUE);
 dyJsonNumber(dy, "end_time", job->endTime, TRUE);
-dyJsonString(dy, "analysis", run->scriptName, TRUE);
+dyJsonString(dy, "analysis", run->analysisStep, TRUE);
+dyJsonString(dy, "configuration", run->configuration, TRUE);
 
-/* Print input vector */
-dyJsonListStart(dy, "inputs");
+/* Print sw_version list */
+struct edwAnalysisStep *step = edwAnalysisStepFromName(conn, run->analysisStep);
+if (step == NULL)
+    errAbort("edwAnalysisStep named %s not found", run->analysisStep);
+dyJsonListStart(dy, "sw_version");
 int i;
+for (i=0; i<step->softwareCount; ++i)
+    {
+    char query[256];
+    sqlSafef(query, sizeof(query), 
+	"select * from edwAnalysisSoftware where name = '%s'", step->software[i]);
+    struct edwAnalysisSoftware *software = edwAnalysisSoftwareLoadByQuery(conn, query);
+    dyJsonObjectStart(dy);
+    dyJsonString(dy, "software", software->name, TRUE);
+    dyJsonString(dy, "version", software->version, FALSE);
+    dyJsonObjectEnd(dy, i != step->softwareCount-1);
+    edwAnalysisSoftwareFree(&software);
+    }
+dyJsonListEnd(dy, TRUE);
+
+/* Print input list */
+dyJsonListStart(dy, "inputs");
 struct edwFile *ef;
 for (i=0, ef = inputFileList; ef != NULL; ef = ef->next, ++i)
     {
@@ -221,7 +250,7 @@ for (i=0, ef = inputFileList; ef != NULL; ef = ef->next, ++i)
     }
 dyJsonListEnd(dy, TRUE);
 
-/* Print output vector */
+/* Print output list */
 dyJsonListStart(dy, "outputs");
 for (i=0, ef = outputFileList; ef != NULL; ef = ef->next, ++i)
     {
@@ -247,13 +276,15 @@ void finishGoodRun(struct sqlConnection *conn, struct edwAnalysisRun *run,
 /* Looks like the job for the run completed successfully, so let's grab results
  * and store them permanently */
 {
-uglyf("finishing good run in %s\n", run->tempDir);
+/* Look up UCSC db. */
+char query[16*1000];  // Needs to be big, may have json
+sqlSafef(query, sizeof(query), "select ucscDb from edwAssembly where id=%u", run->assemblyId);
+char *ucscDb = sqlQuickString(conn, query);
 
 /* Generate 16 bytes of random sequence with uuid generator */
 unsigned char uu[16];
 uuid_generate(uu);
 uuid_unparse(uu, run->uuid);
-uglyf("uuid %s\n", run->uuid);
 
 /* Get list of input files */
 struct edwFile *inputFile, *inputFileList = NULL;
@@ -270,52 +301,50 @@ for (i=0; i<run->outputFileCount; ++i)
     {
     char path[PATH_LEN];
     safef(path, sizeof(path), "%s/%s", run->tempDir, run->outputFiles[i]);
-    uglyf("processing %s\n", path);
+    verbose(1, "processing %s\n", path);
 
     /* Make most of edwFile record */
     AllocVar(outputFile);
     outputFile->submitFileName = cloneString(path);
     outputFile->size = fileSize(path);
-#ifdef SOON
+    outputFile->updateTime = fileModTime(path);
     edwMd5File(path, outputFile->md5);
     char *validKey = encode3CalcValidationKey(outputFile->md5, outputFile->size);
-    outputFile->tags = fakeTags(conn, run, inputFileList, i, validKey);
+    outputFile->tags = fakeTags(conn, run, inputFileList, i, validKey, ucscDb);
     outputFile->startUploadTime = edwNow();
     outputFile->edwFileName = outputFile->errorMessage = outputFile->deprecated = "";
 
     /* Save to database so get file ID */
     edwFileSaveToDb(conn, outputFile, "edwFile", 0);
     outputFile->id = sqlLastAutoId(conn);
-#else /* SOON */
-    outputFile->id = 1000000;
-#endif /* SOON */
 
     /* Build up file name based on ID and rename Record time to rename as upload time. */
     char babyName[PATH_LEN], edwFileName[PATH_LEN];
     edwMakeFileNameAndPath(outputFile->id, outputFile->submitFileName, babyName, edwFileName);
-    outputFile->edwFileName = cloneString(edwFileName);
-#ifdef SOON
+    outputFile->edwFileName = cloneString(babyName);
     mustRename(path, edwFileName);
-#endif /* SOON */
     outputFile->endUploadTime = edwNow();
 
     /* Update last few fields in database. */
-#ifdef SOON
-    char query[PATH_LEN*2];
     sqlSafef(query, sizeof(query),
 	"update edwFile set endUploadTime=%lld, edwFileName='%s' where id=%u",
 	outputFile->endUploadTime, outputFile->edwFileName, outputFile->id);
-    uglyf("%s\n", query);
     sqlUpdate(conn, query);
+
+    edwAddQaJob(conn, outputFile->id);
+#ifdef SOON
 #endif /* SOON */
 
     slAddTail(&outputFileList, outputFile);
     }
 
 run->jsonResult = jsonForRun(conn, run, inputFileList, outputFileList, job);
-uglyf("%s\n", run->jsonResult);
-struct jsonElement *jsonRoot = jsonParse(run->jsonResult);
-jsonPrintToFile(jsonRoot, "ugly.json", stdout, 3);
+jsonParse(run->jsonResult);  // Just for validation
+
+sqlSafef(query, sizeof(query), 
+   "update edwAnalysisRun set complete=1, uuid='%s', jsonResult='%s' where id=%u",
+   run->uuid, run->jsonResult, run->id);
+sqlUpdate(conn, query);
 }
 
 void edwFinishAnalysis(char *how)
@@ -327,6 +356,7 @@ char query[512];
 sqlSafef(query, sizeof(query), "select * from edwAnalysisRun where complete = 0");
 struct edwAnalysisRun *run, *runList = edwAnalysisRunLoadByQuery(conn, query);
 verbose(1, "Got %d unfinished analysis\n", slCount(runList));
+
 
 for (run = runList; run != NULL; run = run->next)
     {
@@ -352,7 +382,6 @@ for (run = runList; run != NULL; run = run->next)
         {
 	verbose(2, "running %s\n", command);
 	}
-    uglyAbort("All for now");
     };
 }
 
