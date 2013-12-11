@@ -7,6 +7,7 @@
 #include "options.h"
 #include "portable.h"
 #include "cheapcgi.h"
+#include "jsonParse.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "encode3/encode3Valid.h"
@@ -92,7 +93,8 @@ for (dict = dictList; dict != NULL; dict = dict->next)
 return val;
 }
 
-char *fakeTags(struct sqlConnection *conn, struct edwAnalysisRun *run, int fileIx, char *validKey)
+char *fakeTags(struct sqlConnection *conn, struct edwAnalysisRun *run, 
+    struct edwFile *inputFileList, int fileIx, char *validKey)
 /* Return tags for out output */
 {
 /* Fill in tags we actually know will be there */
@@ -105,18 +107,10 @@ cgiEncodeIntoDy("output_type", outputType, dy);
 
 /* Next set up stuff to handle variable parts we only put in if all inputs agree. */
 
-/* Get list of input files */
-struct edwFile *ef, *efList = NULL;
-int i;
-for (i=0; i<run->inputFileCount; ++i)
-    {
-    ef = edwFileFromId(conn, run->inputFiles[i]);
-    slAddTail(&efList, ef);
-    }
-
 /* Make list of dictionaries corresponding to list of files. */
 struct cgiDictionary *dict, *dictList = NULL;
-for (ef = efList; ef != NULL; ef = ef->next)
+struct edwFile *ef;
+for (ef = inputFileList; ef != NULL; ef = ef->next)
     {
     dict = cgiDictionaryFromEncodedString(ef->tags);
     slAddTail(&dictList, dict);
@@ -125,6 +119,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
 /* Loop through fields that might be shared putting them into tags if they are. */
 static char *fakeIfShared[] = {"experiment", "replicate", "enriched_in", 
     "technical_replicate", "paired_end", };
+int i;
 for (i=0; i<ArraySize(fakeIfShared); ++i)
     {
     char *var = fakeIfShared[i];
@@ -134,16 +129,125 @@ for (i=0; i<ArraySize(fakeIfShared); ++i)
     }
 
 /* Clean up and go home */
-edwFileFreeList(&efList);
 cgiDictionaryFreeList(&dictList);
 return dyStringCannibalize(&dy);
 }
 
-void finishGoodRun(struct sqlConnection *conn, struct edwAnalysisRun *run)
+void dyJsonTag(struct dyString *dy, char *var)
+/* Print out quoted tag followed by colon */
+{
+dyStringPrintf(dy, "\"%s\": ", var);
+}
+
+void dyJsonEndLine(struct dyString *dy, boolean isMiddle)
+/* Write comma if in middle, and then newline regardless. */
+{
+if (isMiddle)
+   dyStringAppendC(dy, ',');
+dyStringAppendC(dy, '\n');
+}
+
+void dyJsonString(struct dyString *dy, char *var, char *string, boolean isMiddle)
+/* Print out "var": "val" */
+{
+dyJsonTag(dy, var);
+dyStringPrintf(dy, "\"%s\"", string);
+dyJsonEndLine(dy, isMiddle);
+}
+
+void dyJsonNumber(struct dyString *dy, char *var, long long val, boolean isMiddle)
+/* print out "var": val as number */
+{
+dyJsonTag(dy, var);
+dyStringPrintf(dy, "%lld", val);
+dyJsonEndLine(dy, isMiddle);
+}
+
+void dyJsonListStart(struct dyString *dy, char *var)
+/* Start an array in JSON */
+{
+dyJsonTag(dy, var);
+dyStringAppend(dy, "[\n");
+}
+
+void dyJsonListEnd(struct dyString *dy, boolean isMiddle)
+/* End an array in JSON */
+{
+dyStringAppendC(dy, ']');
+dyJsonEndLine(dy, isMiddle);
+}
+
+void dyJsonObjectStart(struct dyString *dy)
+/* Print start of object */
+{
+dyStringAppend(dy, "{\n");
+}
+
+void dyJsonObjectEnd(struct dyString *dy, boolean isMiddle)
+/* End object in JSON */
+{
+dyStringAppendC(dy, '}');
+dyJsonEndLine(dy, isMiddle);
+}
+
+char *jsonForRun(struct sqlConnection *conn, struct edwAnalysisRun *run, 
+    struct edwFile *inputFileList, struct edwFile *outputFileList, struct edwAnalysisJob *job)
+/* Generate json for run given input and output file lists. */
+{
+struct dyString *dy = dyStringNew(0);
+
+dyStringAppend(dy, "{\n");
+dyJsonString(dy, "uuid", run->uuid, TRUE);
+dyJsonNumber(dy, "start_time", job->startTime, TRUE);
+dyJsonNumber(dy, "end_time", job->endTime, TRUE);
+dyJsonString(dy, "analysis", run->scriptName, TRUE);
+
+/* Print input vector */
+dyJsonListStart(dy, "inputs");
+int i;
+struct edwFile *ef;
+for (i=0, ef = inputFileList; ef != NULL; ef = ef->next, ++i)
+    {
+    struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
+    assert(vf != NULL);
+    dyJsonObjectStart(dy);
+    dyJsonString(dy, "type", vf->outputType, TRUE);
+    dyJsonListStart(dy, "value");
+    // When have multiple inputs - what to do?!?
+    dyStringPrintf(dy, "\"%s\"\n", vf->licensePlate);
+    edwValidFileFree(&vf);
+    dyJsonListEnd(dy, FALSE);
+    dyJsonObjectEnd(dy, ef->next != NULL);
+    }
+dyJsonListEnd(dy, TRUE);
+
+/* Print output vector */
+dyJsonListStart(dy, "outputs");
+for (i=0, ef = outputFileList; ef != NULL; ef = ef->next, ++i)
+    {
+    dyJsonObjectStart(dy);
+    char outputType[FILENAME_LEN];
+    splitPath(run->outputFiles[i], NULL, outputType, NULL);
+    dyJsonString(dy, "type", outputType, TRUE);
+    char licensePlate[32];
+    edwMakeLicensePlate("ENCFF", ef->id, licensePlate, sizeof(licensePlate));
+    dyJsonString(dy, "value", licensePlate, FALSE);
+    dyJsonObjectEnd(dy, ef->next != NULL);
+    }
+dyJsonListEnd(dy, TRUE);
+
+/* Print last field and finish up */
+dyJsonString(dy, "command_line", job->commandLine, FALSE);
+dyStringAppend(dy, "}\n");
+return dyStringCannibalize(&dy);
+}
+
+void finishGoodRun(struct sqlConnection *conn, struct edwAnalysisRun *run, 
+    struct edwAnalysisJob *job)
 /* Looks like the job for the run completed successfully, so let's grab results
  * and store them permanently */
 {
-uglyf("Theoretically finishing good run in %s\n", run->tempDir);
+uglyf("finishing good run in %s\n", run->tempDir);
 
 /* Generate 16 bytes of random sequence with uuid generator */
 unsigned char uu[16];
@@ -151,9 +255,17 @@ uuid_generate(uu);
 uuid_unparse(uu, run->uuid);
 uglyf("uuid %s\n", run->uuid);
 
-/* Generate initial edwRun records for each of the file outputs. */
-struct edwFile *ef, *efList = NULL;
+/* Get list of input files */
+struct edwFile *inputFile, *inputFileList = NULL;
 int i;
+for (i=0; i<run->inputFileCount; ++i)
+    {
+    inputFile = edwFileFromId(conn, run->inputFiles[i]);
+    slAddTail(&inputFileList, inputFile);
+    }
+
+/* Generate initial edwRun records for each of the file outputs. */
+struct edwFile *outputFile, *outputFileList = NULL;
 for (i=0; i<run->outputFileCount; ++i)
     {
     char path[PATH_LEN];
@@ -161,36 +273,49 @@ for (i=0; i<run->outputFileCount; ++i)
     uglyf("processing %s\n", path);
 
     /* Make most of edwFile record */
-    AllocVar(ef);
-    ef->submitFileName = cloneString(path);
-    ef->size = fileSize(path);
-    edwMd5File(path, ef->md5);
-    char *validKey = encode3CalcValidationKey(ef->md5, ef->size);
-    ef->tags = fakeTags(conn, run, i, validKey);
-    ef->startUploadTime = edwNow();
-    ef->edwFileName = ef->errorMessage = ef->deprecated = "";
+    AllocVar(outputFile);
+    outputFile->submitFileName = cloneString(path);
+    outputFile->size = fileSize(path);
+#ifdef SOON
+    edwMd5File(path, outputFile->md5);
+    char *validKey = encode3CalcValidationKey(outputFile->md5, outputFile->size);
+    outputFile->tags = fakeTags(conn, run, inputFileList, i, validKey);
+    outputFile->startUploadTime = edwNow();
+    outputFile->edwFileName = outputFile->errorMessage = outputFile->deprecated = "";
 
     /* Save to database so get file ID */
-    edwFileSaveToDb(conn, ef, "edwFile", 0);
-    ef->id = sqlLastAutoId(conn);
+    edwFileSaveToDb(conn, outputFile, "edwFile", 0);
+    outputFile->id = sqlLastAutoId(conn);
+#else /* SOON */
+    outputFile->id = 1000000;
+#endif /* SOON */
 
     /* Build up file name based on ID and rename Record time to rename as upload time. */
     char babyName[PATH_LEN], edwFileName[PATH_LEN];
-    edwMakeFileNameAndPath(ef->id, ef->submitFileName, babyName, edwFileName);
-    ef->edwFileName = cloneString(edwFileName);
+    edwMakeFileNameAndPath(outputFile->id, outputFile->submitFileName, babyName, edwFileName);
+    outputFile->edwFileName = cloneString(edwFileName);
+#ifdef SOON
     mustRename(path, edwFileName);
-    ef->endUploadTime = edwNow();
+#endif /* SOON */
+    outputFile->endUploadTime = edwNow();
 
     /* Update last few fields in database. */
+#ifdef SOON
     char query[PATH_LEN*2];
     sqlSafef(query, sizeof(query),
 	"update edwFile set endUploadTime=%lld, edwFileName='%s' where id=%u",
-	ef->endUploadTime, ef->edwFileName, ef->id);
+	outputFile->endUploadTime, outputFile->edwFileName, outputFile->id);
     uglyf("%s\n", query);
     sqlUpdate(conn, query);
+#endif /* SOON */
 
-    slAddTail(&efList, ef);
+    slAddTail(&outputFileList, outputFile);
     }
+
+run->jsonResult = jsonForRun(conn, run, inputFileList, outputFileList, job);
+uglyf("%s\n", run->jsonResult);
+struct jsonElement *jsonRoot = jsonParse(run->jsonResult);
+jsonPrintToFile(jsonRoot, "ugly.json", stdout, 3);
 }
 
 void edwFinishAnalysis(char *how)
@@ -213,7 +338,7 @@ for (run = runList; run != NULL; run = run->next)
 	if (job->returnCode == 0)
 	    {
 	    verbose(2, "succeeded %s\n", command);
-	    finishGoodRun(conn, run);
+	    finishGoodRun(conn, run, job);
 	    }
 	else
 	    {
