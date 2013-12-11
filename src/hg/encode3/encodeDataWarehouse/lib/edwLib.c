@@ -29,6 +29,8 @@ char *edwLicensePlatePrefix = "ENCFF";
 int edwSingleFileTimeout = 4*60*60;   // How many seconds we give ourselves to fetch a single file
 
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
+char *eapRootDir = "/data/encode3/encodeAnalysisPipeline/";
+char *eapTempDir = "/data/encode3/encodeAnalysisPipeline/tmp/";
 char *edwValDataDir = "/data/encode3/encValData/";
 
 struct sqlConnection *edwConnect()
@@ -678,6 +680,14 @@ sqlSafef(query, sizeof(query), "select * from edwValidFile where fileId=%lld", f
 return edwValidFileLoadByQuery(conn, query);
 }
 
+struct edwExperiment *edwExperimentFromAccession(struct sqlConnection *conn, char *acc)
+/* Given something like 'ENCSR123ABC' return associated experiment. */
+{
+char query[128];
+sqlSafef(query, sizeof(query), "select * from edwExperiment where accession='%s'", acc);
+return edwExperimentLoadByQuery(conn, query);
+}
+
 struct genomeRangeTree *edwMakeGrtFromBed3List(struct bed3 *bedList)
 /* Make up a genomeRangeTree around bed file. */
 {
@@ -1079,6 +1089,12 @@ if (fd == -1)
 mustCloseFd(&fd);
 }
 
+void edwBwaIndexPath(struct edwAssembly *assembly, char indexPath[PATH_LEN])
+/* Fill in path to BWA index. */
+{
+safef(indexPath, PATH_LEN, "%s%s/bwaData/%s.fa", 
+    edwValDataDir, assembly->ucscDb, assembly->ucscDb);
+}
 
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF,
@@ -1089,8 +1105,7 @@ void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
 /* Hmm, tried doing this with Mark's pipeline code, but somehow it would be flaky the
  * second time it was run in same app.  Resorting therefore to temp files. */
 char genoFile[PATH_LEN];
-safef(genoFile, sizeof(genoFile), "%s%s/bwaData/%s.fa", 
-    edwValDataDir, assembly->ucscDb, assembly->ucscDb);
+edwBwaIndexPath(assembly, genoFile);
 
 char cmd[3*PATH_LEN];
 char *saiName = cloneString(rTempName(edwTempDir(), "edwSample1", ".sai"));
@@ -1185,3 +1200,64 @@ edwFastqFileFree(&fqf);
 }
 
 
+char *edwOppositePairedEndString(char *end)
+/* Return "1" for "2" and vice versa */
+{
+if (sameString(end, "1"))
+    return "2";
+else if (sameString(end, "2"))
+    return "1";
+else
+    {
+    errAbort("Expecting 1 or 2, got %s in oppositeEnd", end);
+    return NULL;
+    }
+}
+
+struct edwValidFile *edwOppositePairedEnd(struct sqlConnection *conn, struct edwValidFile *vf)
+/* Given one file of a paired end set of fastqs, find the file with opposite ends. */
+{
+char *otherEnd = edwOppositePairedEndString(vf->pairedEnd);
+char query[1024];
+sqlSafef(query, sizeof(query), 
+    "select * from edwValidFile where experiment='%s' and outputType='%s' and replicate='%s' "
+    "and technicalReplicate='%s' and pairedEnd='%s'"
+    , vf->experiment, vf->outputType, vf->replicate, vf->technicalReplicate, otherEnd);
+struct edwValidFile *otherVf = edwValidFileLoadByQuery(conn, query);
+if (otherVf == NULL)
+    return NULL;
+if (otherVf->next != NULL)
+    errAbort("Multiple results from pairedEnd query %s", query);
+return otherVf;
+}
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqFromVfs(struct sqlConnection *conn,
+    struct edwValidFile *vfA, struct edwValidFile *vfB,
+    struct edwValidFile **retVf1,  struct edwValidFile **retVf2)
+/* Return pair record if any for the two fastq files. */
+{
+/* Sort the two ends. */
+struct edwValidFile *vf1 = NULL, *vf2 = NULL;
+if (sameString(vfA->pairedEnd, "1"))
+    {
+    vf1 = vfA;
+    vf2 = vfB;
+    }
+else
+    {
+    vf1 = vfB;
+    vf2 = vfA;
+    }
+if (retVf1 != NULL)
+   *retVf1 = vf1;
+if (retVf2 != NULL)
+   *retVf2 = vf2;
+
+/* See if we already have a record for these two. */
+/* Return record for these two. */
+char query[1024];
+sqlSafef(query, sizeof(query), 
+    "select * from edwQaPairedEndFastq where fileId1=%u and fileId2=%u",
+    vf1->fileId, vf2->fileId);
+return edwQaPairedEndFastqLoadByQuery(conn, query);
+}

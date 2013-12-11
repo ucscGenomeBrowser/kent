@@ -20,6 +20,8 @@
 
 extern char *edwDatabase;   /* Name of database we connect to. */
 extern char *edwRootDir;    /* Name of root directory for our files, including trailing '/' */
+extern char *eapRootDir;    /* Name of root directory for analysis pipeline */
+extern char *eapTempDir;    /* Name of temp dir for analysis pipeline */
 extern char *edwLicensePlatePrefix; /* License plates start with this - thanks Mike Cherry. */
 extern char *edwValDataDir; /* Data files we need for validation go here. */
 extern int edwSingleFileTimeout;   // How many seconds we give ourselves to fetch a single file
@@ -125,6 +127,9 @@ struct edwFile *edwFileAllIntactBetween(struct sqlConnection *conn, int startId,
 struct edwValidFile *edwValidFileFromFileId(struct sqlConnection *conn, long long fileId);
 /* Return edwValidFile give fileId - returns NULL if not validated. */
 
+struct edwExperiment *edwExperimentFromAccession(struct sqlConnection *conn, char *acc); 
+/* Given something like 'ENCSR123ABC' return associated experiment. */
+
 struct edwFile *edwFileFromId(struct sqlConnection *conn, long long fileId);
 /* Return edwFile given fileId - return NULL if not found. */
 
@@ -220,6 +225,9 @@ void edwReserveTempFile(char *path);
 /* Call mkstemp on path.  This will fill in terminal XXXXXX in path with file name
  * and create an empty file of that name.  Generally that empty file doesn't stay empty for long. */
 
+void edwBwaIndexPath(struct edwAssembly *assembly, char indexPath[PATH_LEN]);
+/* Fill in path to BWA index. */
+
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage);
@@ -233,5 +241,16 @@ void edwMakeFastqStatsAndSample(struct sqlConnection *conn, long long fileId);
 
 struct edwFastqFile *edwFastqFileFromFileId(struct sqlConnection *conn, long long fileId);
 /* Get edwFastqFile with given fileId or NULL if none such */
+
+char *edwOppositePairedEndString(char *end);
+/* Return "1" for "2" and vice versa */
+
+struct edwValidFile *edwOppositePairedEnd(struct sqlConnection *conn, struct edwValidFile *vf);
+/* Given one file of a paired end set of fastqs, find the file with opposite ends. */
+
+struct edwQaPairedEndFastq *edwQaPairedEndFastqFromVfs(struct sqlConnection *conn,
+    struct edwValidFile *vfA, struct edwValidFile *vfB,
+    struct edwValidFile **retVf1,  struct edwValidFile **retVf2);
+/* Return pair record if any for the two fastq files. */
 
 #endif /* EDWLIB_H */
