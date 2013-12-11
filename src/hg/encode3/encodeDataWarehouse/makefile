@@ -18,6 +18,7 @@ UTIL_DIRS = \
     edwMakeEnrichments \
     edwMakeReplicateQa \
     edwMakeValidFile \
+    edwQaEvaluate \
     edwReallyRemoveFiles \
     edwRunDaemon \
     edwSubmit
