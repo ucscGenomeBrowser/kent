@@ -28794,5 +28794,17 @@ pubMap bing annots-tables --onlyDb=hg19
 pubMap bing load
 
 ########################################################################
+# Cooper Developmental Delay track (2013-12-09 Pauline)
 
+    mkdir /hive/data/genomes/hg19/bed/cooperDevDelay
+    cd /hive/data/genomes/hg19/bed/cooperDevDelay
+
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd14_Cooper_et_al_2008/gvf/nstd14_Cooper_et_al_2008.GRCh37.p9.remap.all.germline.ucsc.gvf.gz'
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd14_Cooper_et_al_2008/gvf/nstd14_Cooper_et_al_2008.GRCh37.p9.remap.var.germline.ucsc.gvf.gz'
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd14_Cooper_et_al_2008/gvf/nstd14_Cooper_et_al_2008.GRCh37.remap.all.germline.ucsc.gvf.gz'
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd14_Cooper_et_al_2008/gvf/nstd14_Cooper_et_al_2008.GRCh37.remap.var.germline.ucsc.gvf.gz'
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd14_Cooper_et_al_2008/gvf/nstd14_Cooper_et_al_2008.NCBI35.submitted.all.germline.ucsc.gvf.gz'
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd14_Cooper_et_al_2008/gvf/nstd14_Cooper_et_al_2008.NCBI35.submitted.var.germline.ucsc.gvf.gz'
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd14_Cooper_et_al_2008/gvf/nstd14_Cooper_et_al_2008.NCBI36.remap.all.germline.ucsc.gvf.gz'
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd14_Cooper_et_al_2008/gvf/nstd14_Cooper_et_al_2008.NCBI36.remap.var.germline.ucsc.gvf.gz'
 

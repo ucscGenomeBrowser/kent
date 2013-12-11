@@ -124,10 +124,8 @@ static void setFormatFlag(struct sqlConnection* conn, char* tableName)
 {
 if (seqTableFormat!=0)
     return;
-if (sqlColumnExists(conn, tableName, "title")) 
-    {
+if (hHasField(sqlGetDatabase(conn), tableName, "title")) 
     seqTableFormat = SEQTABLE_NEW;
-    }
 else
     seqTableFormat = SEQTABLE_OLD;
 }
@@ -295,6 +293,7 @@ return hashA;
 static void pubsLoadKeywordYearItems(struct track *tg)
 /* load items that fulfill keyword and year filter */
 {
+seqTableFormat = 0;
 pubsParseClassColors();
 struct sqlConnection *conn = hAllocConn(database);
 setFormatFlag(conn, tg->table);

@@ -1829,6 +1829,19 @@ iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
 iframeOptions height='600' width='1024'
 idInUrlSql SELECT qName from gbDnaBigChain where id=%-s
 
+track gbSmall
+shortLabel Genbank small
+longLabel Genbank short DNA sequences <5kbp
+group x
+priority 400
+visibility hide
+color 100,50,0
+altColor 255,240,200
+type psl
+iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+iframeOptions height='600' width='1024'
+#idInUrlSql SELECT qName from gbDnaBigChain where id=%-s
+
 track affyTranscription
 shortLabel Transcription
 longLabel Affy. SK-N-AS Transcript Abundance
