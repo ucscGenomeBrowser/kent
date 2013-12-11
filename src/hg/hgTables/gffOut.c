@@ -380,6 +380,16 @@ slReverse(&list);
 return list;
 }
 
+static struct hash *makeChromHashForTable(struct sqlConnection *conn, char *table)
+/* Get a hash of all the chroms that are actually being used for the table.
+ * This is helpful for assemblies with huge numbers of chroms. */
+{
+char query[1024];
+sqlSafef(query, sizeof query, "select distinct chrom, 'dummyvalue' from %s", table);
+struct hash *hash = sqlQuickHash(conn, query);
+return hash;
+}
+
 void doOutGff(char *table, struct sqlConnection *conn, boolean outputGtf)
 /* Save as GFF/GTF. */
 {
@@ -396,8 +406,17 @@ int efIdx = sqlFieldIndex(conn, table, "exonFrames");
 
 safef(source, sizeof(source), "%s_%s", database, table);
 itemCount = 0;
+// regionList can have many thousands of items e.g. rheMac3 has 34000 chroms!
+struct hash *chromHash = NULL;
+int regionCount = slCount(regionList);
+if (regionCount > 400)
+    {
+    chromHash = makeChromHashForTable(conn, table);
+    };
 for (region = regionList; region != NULL; region = region->next)
     {
+    if (chromHash && (!hashFindVal(chromHash, region->chrom)))
+	    continue;
     struct lm *lm = lmInit(64*1024);
     int fieldCount;
     bedList = cookedBedList(conn, table, region, lm, &fieldCount);
