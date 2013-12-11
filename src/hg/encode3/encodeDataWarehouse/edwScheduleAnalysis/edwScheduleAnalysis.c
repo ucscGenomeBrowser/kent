@@ -24,18 +24,34 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+static int countAlreadyScheduled(struct sqlConnection *conn, char *scriptName, long long firstInput)
+/* Return how many of the existing job are already scheduled */
+{
+char query[512];
+sqlSafef(query, sizeof(query),
+    "select count(*) from edwAnalysisRun where firstInputId=%lld and scriptName='%s'",
+    firstInput, scriptName);
+return sqlQuickNum(conn, query);
+}
+
+static int addAnalysisJob(struct sqlConnection *conn, char *commandLine)
+/* Add job to edwAnalyisJob table and return job ID. */
+{
+struct edwAnalysisJob job =
+   {
+   .commandLine = commandLine,
+   };
+edwAnalysisJobSaveToDb(conn, &job, "edwAnalysisJob", 0);
+return sqlLastAutoId(conn);
+}
+
 void schedulePairedBwa(struct sqlConnection *conn, 
     struct edwValidFile *vf1, struct edwValidFile *vf2, struct edwExperiment *exp)
 /* If it hasn't already been done schedule bwa analysis of the two files. */
 {
 /* Make sure that we don't schedule it again and again */
 char *scriptName = "eap_run_bwa_pe.bash";
-char query[512];
-sqlSafef(query, sizeof(query),
-    "select count(*) from edwAnalysisRun where firstInputId=%u and scriptName='%s'",
-    vf1->fileId, scriptName);
-int oldCount = sqlQuickNum(conn, query);
-if (oldCount > 0)
+if (countAlreadyScheduled(conn, scriptName, vf1->fileId))
     return;
 
 /* Get ef records */
@@ -55,27 +71,27 @@ makeDir(tempDir);
 
 /* Make up job and command line */
 char commandLine[4*PATH_LEN];
-safef(commandLine, sizeof(commandLine), "nice %s %s %s %s%s %s%s %s",
-    scriptName, tempDir, indexPath, edwRootDir, ef1->edwFileName, edwRootDir, ef2->edwFileName, "output.bam");
-struct edwAnalysisJob job =
-   {
-   .commandLine = commandLine,
-   };
-edwAnalysisJobSaveToDb(conn, &job, "edwAnalysisJob", 0);
-job.id = sqlLastAutoId(conn);
+safef(commandLine, sizeof(commandLine), "cd %s; nice %s %s %s%s %s%s %s",
+    tempDir, scriptName, indexPath, edwRootDir, ef1->edwFileName, edwRootDir, 
+    ef2->edwFileName, "output.bam");
+int jobId = addAnalysisJob(conn, commandLine);
 
 /* Make up edwAnalysisRun record */
 unsigned inputFiles[2] = {ef1->id, ef2->id};
+char *outputFiles[1] = {"output.bam"};
 struct edwAnalysisRun *run;
 AllocVar(run);
-run->jobId = job.id;
+run->jobId = jobId;
 safef(run->experiment, sizeof(run->experiment), "%s",  exp->accession);
 run->scriptName = scriptName;
 run->tempDir = tempDir;
 run->firstInputId = ef1->id;
 run->inputFileCount = 2;
 run->inputFiles = inputFiles;
+run->outputFileCount = 1;
+run->outputFiles = outputFiles;
 run->assemblyId = assembly->id;
+run->jsonResult = "";
 edwAnalysisRunSaveToDb(conn, run, "edwAnalysisRun", 0);
 freez(&run);
 
@@ -84,6 +100,51 @@ edwFileFree(&ef1);
 edwFileFree(&ef2);
 }
 
+void scheduleSingleBwa(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
+/* If it hasn't already been done schedule bwa analysis of the two files. */
+{
+/* Make sure that we don't schedule it again and again */
+char *scriptName = "eap_run_bwa_se.bash";
+if (countAlreadyScheduled(conn, scriptName, ef->id))
+    return;
+
+/* Get target assembly (will redo this more precisely at some point) */
+struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+
+/* Figure out path to BWA index */
+char indexPath[PATH_LEN];
+edwBwaIndexPath(assembly, indexPath);
+
+/* Figure out temp dir and create it */
+char *tempDir = rTempName(eapTempDir, vf->licensePlate, "");
+makeDir(tempDir);
+
+/* Make up job and command line */
+char commandLine[4*PATH_LEN];
+safef(commandLine, sizeof(commandLine), "cd %s; nice %s %s %s%s %s",
+    tempDir, scriptName, indexPath, edwRootDir, ef->edwFileName, "output.bam");
+int jobId = addAnalysisJob(conn, commandLine);
+
+/* Make up edwAnalysisRun record */
+unsigned inputFiles[1] = {ef->id};
+char *outputFiles[1] = {"output.bam"};
+struct edwAnalysisRun *run;
+AllocVar(run);
+run->jobId = jobId;
+safef(run->experiment, sizeof(run->experiment), "%s",  exp->accession);
+run->scriptName = scriptName;
+run->tempDir = tempDir;
+run->firstInputId = ef->id;
+run->inputFileCount = 1;
+run->inputFiles = inputFiles;
+run->outputFileCount = 1;
+run->outputFiles = outputFiles;
+run->assemblyId = assembly->id;
+run->jsonResult = "";
+edwAnalysisRunSaveToDb(conn, run, "edwAnalysisRun", 0);
+freez(&run);
+}
     
 void runFastqAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
     struct edwExperiment *exp)
@@ -107,6 +168,10 @@ if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq"))
 		}
 	    edwValidFileFree(&vfB);
 	    }
+	}
+    else
+        {
+	scheduleSingleBwa(conn, ef, vf, exp);
 	}
     }
 }
