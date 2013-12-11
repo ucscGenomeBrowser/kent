@@ -6986,8 +6986,10 @@ else if (sameString("HInvGeneMrna", aliTable))
     }
 else
     {
-    struct trackDb *tdb = hashMustFindVal(trackHash, aliTable);
-    char *cdnaTable = trackDbSetting(tdb, "cdnaTable");
+    char *cdnaTable = NULL;
+    struct trackDb *tdb = hashFindVal(trackHash, aliTable);
+    if (tdb != NULL)
+	cdnaTable = trackDbSetting(tdb, "cdnaTable");
     if (isNotEmpty(cdnaTable) && hTableExists(database, cdnaTable))
 	rnaSeq = hGenBankGetMrna(database, acc, cdnaTable);
     else
@@ -7117,8 +7119,10 @@ else
 	}
     else
 	{
-	struct trackDb *tdb = hashMustFindVal(trackHash, aliTable);
-	char *cdnaTable = trackDbSetting(tdb, "cdnaTable");
+	char *cdnaTable = NULL;
+	struct trackDb *tdb = hashFindVal(trackHash, aliTable);
+	if (tdb != NULL)
+	    cdnaTable = trackDbSetting(tdb, "cdnaTable");
 	if (isNotEmpty(cdnaTable) && hTableExists(database, cdnaTable))
 	    rnaSeq = hGenBankGetMrna(database, acc, cdnaTable);
 	else
