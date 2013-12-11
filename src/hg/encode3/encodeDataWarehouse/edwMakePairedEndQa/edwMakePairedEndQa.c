@@ -160,20 +160,6 @@ return one;
 
 /**** - End raToStructGen generated code - ****/
 
-char *oppositeEnd(char *end)
-/* Return "1" for "2" and vice versa */
-{
-if (sameString(end, "1"))
-    return "2";
-else if (sameString(end, "2"))
-    return "1";
-else
-    {
-    errAbort("Expecting 1 or 2, got %s in oppositeEnd", end);
-    return NULL;
-    }
-}
-
 #define FASTQ_SAMPLE_SIZE 10000
 
 void makeTmpSai(struct sqlConnection *conn, struct edwValidFile *vf, char *genoFile, 
@@ -208,36 +194,12 @@ void pairedEndQa(struct sqlConnection *conn, struct edwFile *ef, struct edwValid
 /* Look for other end,  do a pairwise alignment, and save results in database. */
 {
 /* Get other end, return if not found. */
-char *otherEnd = oppositeEnd(vf->pairedEnd);
-char query[1024];
-sqlSafef(query, sizeof(query), 
-    "select * from edwValidFile where experiment='%s' and outputType='%s' and replicate='%s' "
-    "and technicalReplicate='%s' and pairedEnd='%s'"
-    , vf->experiment, vf->outputType, vf->replicate, vf->technicalReplicate, otherEnd);
-struct edwValidFile *otherVf = edwValidFileLoadByQuery(conn, query);
+struct edwValidFile *otherVf = edwOppositePairedEnd(conn, vf);
 if (otherVf == NULL)
     return;
-if (otherVf->next != NULL)
-    errAbort("Multiple results from pairedEnd query %s", query);
 
-/* Sort the two ends. */
 struct edwValidFile *vf1, *vf2;
-if (sameString(vf->pairedEnd, "1"))
-    {
-    vf1 = vf;
-    vf2 = otherVf;
-    }
-else
-    {
-    vf1 = otherVf;
-    vf2 = vf;
-    }
-
-/* See if we already have a record for these two. */
-sqlSafef(query, sizeof(query), 
-    "select * from edwQaPairedEndFastq where fileId1=%u and fileId2=%u",
-    vf1->fileId, vf2->fileId);
-struct edwQaPairedEndFastq *pair = edwQaPairedEndFastqLoadByQuery(conn, query);
+struct edwQaPairedEndFastq *pair = edwQaPairedEndFastqFromVfs(conn, vf, otherVf, &vf1, &vf2);
 if (pair != NULL)
     {
     edwValidFileFree(&otherVf);
@@ -245,6 +207,7 @@ if (pair != NULL)
     }
 
 /* Make placeholder record to help avoid race condition with other member of pair. */
+char query[256];
 sqlSafef(query, sizeof(query),
     "insert into edwQaPairedEndFastq (fileId1,fileId2) values (%u,%u)"
     , vf1->fileId, vf2->fileId);
