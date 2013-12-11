@@ -86,7 +86,7 @@ struct qaThresholds longRnaSeqThresholds =
     .ribosomeContent = 0.15,
     .closeContamination = 0.5,
     .farContamination = 0.03,
-    .enrichment = 8,
+    .enrichment = 4,
     .crossEnrichment = 5,
     .pearsonClipped = 0.05,
     };
