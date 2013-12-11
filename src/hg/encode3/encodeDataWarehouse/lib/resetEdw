@@ -22,6 +22,16 @@ if (! -e $qaFifo) then
 endif
 echo hi > $qaFifo &
 
+# And for analysis daemon.
+set analysisFifo = /usr/local/apache/userdata/edwAnalysis.fifo
+if (! -e $analysisFifo) then
+    mkfifo $analysisFifo
+    chmod a+x $analysisFifo
+    echo hi > $analysisFifo &
+endif
+echo hi > $analysisFifo &
+
+
 # Do the often time consuming removal of all data.
 rm -rf /hive/groups/encode/encode3/encodeDataWarehouse
 
@@ -103,4 +113,6 @@ edwRunDaemon encodeDataWarehouse edwSubmitJob 8 $subFifo -log=edwSubmit.log
 echo hi > $subFifo
 edwRunDaemon encodeDataWarehouse edwJob 10 $qaFifo -log=edwQaAgent.log
 echo hi > $qaFifo
+edwRunDaemon encodeDataWarehouse edwAnalysisJob 4 $analysisFifo -log=edwAnalysis.log
+echo hi > $analysisFifo
 
