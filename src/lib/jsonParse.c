@@ -128,10 +128,12 @@ for(i = 0;; i++)
                 c = '\t';
                 break;
             case 'u':
-                errAbort("Unicode in JSON is unsupported");
+		// Pass through Unicode
+		dyStringAppendC(ds, '\\');
                 break;
             default:
                 // we don't need to convert \,/ or "
+		dyStringAppendC(ds, c);
                 break;
             }
         dyStringAppendC(ds, c);
