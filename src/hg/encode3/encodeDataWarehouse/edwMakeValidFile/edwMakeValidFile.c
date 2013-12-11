@@ -337,7 +337,11 @@ dyStringPrintf(dy, " basesInSample=%lld,", (long long)el->basesInSample);
 dyStringPrintf(dy, " sampleBed='%s',", el->sampleBed);
 dyStringPrintf(dy, " mapRatio=%g,", el->mapRatio);
 dyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
-dyStringPrintf(dy, " depth=%g", el->depth);
+dyStringPrintf(dy, " depth=%g,", el->depth);
+dyStringPrintf(dy, " technicalReplicate='%s',", el->technicalReplicate);
+dyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
+dyStringPrintf(dy, " singleQaStatus=0,");
+dyStringPrintf(dy, " replicateQaStatus=0");
 dyStringPrintf(dy, " where id=%lld\n", (long long)id);
 sqlUpdate(conn, dy->string);
 freeDyString(&dy);
@@ -475,9 +479,6 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 		dirEnd = fileName;
 	    else
 		dirEnd += 1;
-#ifdef OLD
-	    char *suffix = edwFindDoubleFileSuffix(fileName);
-#endif /* OLD */
 	    dyStringAppendN(newName, fileName, dirEnd - fileName);
 	    dyStringAppend(newName, vf->licensePlate);
 	    dyStringAppend(newName, suffix);
@@ -554,9 +555,15 @@ sqlUpdate(conn, query);
 void edwMakeValidFile(int startId, int endId)
 /* edwMakeValidFile - Add range of ids to valid file table.. */
 {
-/* Make list with all files in ID range */
+/* Make list with all files in ID range  - don't want to use edwFileAllIntactInRange because
+ * we may be revalidating files that do have errors. */
 struct sqlConnection *conn = sqlConnect(edwDatabase);
-struct edwFile *ef, *efList = edwFileAllIntactBetween(conn, startId, endId);
+char query[512];
+sqlSafef(query, sizeof(query),
+    "select * from edwFile where id>=%d and id<=%d and endUploadTime != 0 "
+    "and updateTime != 0", 
+    startId, endId);
+struct edwFile *ef, *efList = edwFileLoadByQuery(conn, query);
 
 for (ef = efList; ef != NULL; ef = ef->next)
     {
