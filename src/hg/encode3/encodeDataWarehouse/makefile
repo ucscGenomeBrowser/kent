@@ -14,6 +14,7 @@ UTIL_DIRS = \
     edwChangeFormat \
     edwCorrectFileTags \
     edwCreateUser \
+    edwFinishAnalysis \
     edwMakeContaminationQa \
     edwMakeEnrichments \
     edwMakeReplicateQa \
@@ -21,6 +22,7 @@ UTIL_DIRS = \
     edwQaEvaluate \
     edwReallyRemoveFiles \
     edwRunDaemon \
+    edwScheduleAnalysis \
     edwSubmit
 
 CGI_DIRS = \
