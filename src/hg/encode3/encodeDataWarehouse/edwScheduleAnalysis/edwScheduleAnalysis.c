@@ -40,17 +40,6 @@ sqlSafef(query, sizeof(query),
 return sqlQuickNum(conn, query);
 }
 
-static int addAnalysisJob(struct sqlConnection *conn, char *commandLine)
-/* Add job to edwAnalyisJob table and return job ID. */
-{
-struct edwAnalysisJob job =
-   {
-   .commandLine = commandLine,
-   };
-edwAnalysisJobSaveToDb(conn, &job, "edwAnalysisJob", 0);
-return sqlLastAutoId(conn);
-}
-
 
 void schedulePairedBwa(struct sqlConnection *conn, 
     struct edwValidFile *vf1, struct edwValidFile *vf2, struct edwExperiment *exp)
@@ -61,6 +50,7 @@ char *analysisStep = "bwa_paired_end";
 char *scriptName = "eap_run_bwa_pe";
 if (countAlreadyScheduled(conn, analysisStep, vf1->fileId))
     return;
+verbose(1, "scheduling paired end bwa analysis on %u and %u\n", vf1->fileId, vf2->fileId);
 
 /* Get ef records */
 struct edwFile *ef1 = edwFileFromIdOrDie(conn, vf1->fileId);
@@ -81,14 +71,15 @@ makeDir(tempDir);
 
 /* Make up job and command line */
 char commandLine[4*PATH_LEN];
-safef(commandLine, sizeof(commandLine), "cd %s; nice %s %s %s%s %s%s %s",
+safef(commandLine, sizeof(commandLine), 
+    "bash -ec 'cd %s; nice %s %s %s%s %s%s %s; edwFinishAnalysis now'",
     tempDir, scriptName, indexPath, edwRootDir, ef1->edwFileName, edwRootDir, 
-    ef2->edwFileName, "aligments.bam");
-int jobId = addAnalysisJob(conn, commandLine);
+    ef2->edwFileName, "alignments.bam");
+int jobId = edwAnalysisJobAdd(conn, commandLine);
 
 /* Make up edwAnalysisRun record */
 unsigned inputFiles[2] = {ef1->id, ef2->id};
-char *outputFiles[1] = {"aligments.bam"};
+char *outputFiles[1] = {"alignments.bam"};
 char *outputFormats[1] = {"bam"};
 struct edwAnalysisRun *run;
 AllocVar(run);
@@ -128,7 +119,7 @@ if (countAlreadyScheduled(conn, analysisStep, ef->id))
     return;
 
 /* Get target assembly (will redo this more precisely at some point) */
-uglyf("scheduling single end bwa analysis on %u\n", ef->id);
+verbose(1, "scheduling single end bwa analysis on %u\n", ef->id);
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
 char configuration[128];
 safef(configuration, sizeof(configuration), "bwa_%s_generic", assembly->ucscDb);
@@ -143,13 +134,13 @@ makeDir(tempDir);
 
 /* Make up job and command line */
 char commandLine[4*PATH_LEN];
-safef(commandLine, sizeof(commandLine), "cd %s; nice %s %s %s%s %s",
-    tempDir, scriptName, indexPath, edwRootDir, ef->edwFileName, "aligments.bam");
-int jobId = addAnalysisJob(conn, commandLine);
+safef(commandLine, sizeof(commandLine), "bash -ec 'cd %s; nice %s %s %s%s %s; edwFinishAnalysis now'",
+    tempDir, scriptName, indexPath, edwRootDir, ef->edwFileName, "alignments.bam");
+int jobId = edwAnalysisJobAdd(conn, commandLine);
 
 /* Make up edwAnalysisRun record */
 unsigned inputFiles[1] = {ef->id};
-char *outputFiles[1] = {"aligments.bam"};
+char *outputFiles[1] = {"alignments.bam"};
 char *outputFormats[1] = {"bam"};
 struct edwAnalysisRun *run;
 AllocVar(run);
