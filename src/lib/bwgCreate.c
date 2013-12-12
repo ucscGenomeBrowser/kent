@@ -910,7 +910,7 @@ reductionAmounts[0] = initialReduction;
 
 /* Now calculate up to 10 levels of further summary. */
 bits64 reduction = initialReduction;
-for (i=0; i<ArraySize(reduceSummaries)-1; i++)
+for (i=0; i<9; i++)
     {
     reduction *= 4;
     if (reduction > 1000000000)
