@@ -106,6 +106,8 @@ while (my $file = <FH>) {
     # expecting the trash directory path to include explicitly "/trash/"
     $dirName =~ s#/.*/trash/##;
     if ($dirName =~ m#/#) {
+        # process someDir directory under /trash/someDir/...
+        # remove the trailing '/.*' string leaving only 'someDir'
 	$dirName =~ s#/.*##;
 	if (! exists($dirFileList{$dirName})) {
 	    my @oneFileList;
@@ -117,6 +119,7 @@ while (my $file = <FH>) {
 	    push (@$ref, $file);
 	}
     } else {
+        # processing files directly in /trash/
 	if (! exists($dirFileList{'root'})) {
 	    my @oneFileList;
 	    push (@oneFileList, $file);
