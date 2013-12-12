@@ -1693,7 +1693,141 @@ void edwAnalysisJobOutput(struct edwAnalysisJob *el, FILE *f, char sep, char las
 #define edwAnalysisJobCommaOut(el,f) edwAnalysisJobOutput(el,f,',',',');
 /* Print out edwAnalysisJob as a comma separated list including final comma. */
 
-#define EDWANALYSISRUN_NUM_COLS 11
+#define EDWANALYSISSOFTWARE_NUM_COLS 4
+
+extern char *edwAnalysisSoftwareCommaSepFieldNames;
+
+struct edwAnalysisSoftware
+/* Software that is tracked by the analysis pipeline. */
+    {
+    struct edwAnalysisSoftware *next;  /* Next in singly linked list. */
+    unsigned id;	/* Software id */
+    char *name;	/* Command line name */
+    char *version;	/* Current version */
+    char md5[33];	/* md5 sum of executable file */
+    };
+
+void edwAnalysisSoftwareStaticLoad(char **row, struct edwAnalysisSoftware *ret);
+/* Load a row from edwAnalysisSoftware table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwAnalysisSoftware from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwAnalysisSoftwareFreeList(). */
+
+void edwAnalysisSoftwareSaveToDb(struct sqlConnection *conn, struct edwAnalysisSoftware *el, char *tableName, int updateSize);
+/* Save edwAnalysisSoftware as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareLoad(char **row);
+/* Load a edwAnalysisSoftware from row fetched with select * from edwAnalysisSoftware
+ * from database.  Dispose of this with edwAnalysisSoftwareFree(). */
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareLoadAll(char *fileName);
+/* Load all edwAnalysisSoftware from whitespace-separated file.
+ * Dispose of this with edwAnalysisSoftwareFreeList(). */
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareLoadAllByChar(char *fileName, char chopper);
+/* Load all edwAnalysisSoftware from chopper separated file.
+ * Dispose of this with edwAnalysisSoftwareFreeList(). */
+
+#define edwAnalysisSoftwareLoadAllByTab(a) edwAnalysisSoftwareLoadAllByChar(a, '\t');
+/* Load all edwAnalysisSoftware from tab separated file.
+ * Dispose of this with edwAnalysisSoftwareFreeList(). */
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareCommaIn(char **pS, struct edwAnalysisSoftware *ret);
+/* Create a edwAnalysisSoftware out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwAnalysisSoftware */
+
+void edwAnalysisSoftwareFree(struct edwAnalysisSoftware **pEl);
+/* Free a single dynamically allocated edwAnalysisSoftware such as created
+ * with edwAnalysisSoftwareLoad(). */
+
+void edwAnalysisSoftwareFreeList(struct edwAnalysisSoftware **pList);
+/* Free a list of dynamically allocated edwAnalysisSoftware's */
+
+void edwAnalysisSoftwareOutput(struct edwAnalysisSoftware *el, FILE *f, char sep, char lastSep);
+/* Print out edwAnalysisSoftware.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwAnalysisSoftwareTabOut(el,f) edwAnalysisSoftwareOutput(el,f,'\t','\n');
+/* Print out edwAnalysisSoftware as a line in a tab-separated file. */
+
+#define edwAnalysisSoftwareCommaOut(el,f) edwAnalysisSoftwareOutput(el,f,',',',');
+/* Print out edwAnalysisSoftware as a comma separated list including final comma. */
+
+#define EDWANALYSISSTEP_NUM_COLS 4
+
+extern char *edwAnalysisStepCommaSepFieldNames;
+
+struct edwAnalysisStep
+/* A step in an analysis pipeline - something that takes one file to another */
+    {
+    struct edwAnalysisStep *next;  /* Next in singly linked list. */
+    unsigned id;	/* Step id */
+    char *name;	/* Name of this analysis step */
+    int softwareCount;	/* Number of pieces of software used in step */
+    char **software;	/* Names of software used. First is the glue script */
+    };
+
+struct edwAnalysisStep *edwAnalysisStepLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwAnalysisStep from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwAnalysisStepFreeList(). */
+
+void edwAnalysisStepSaveToDb(struct sqlConnection *conn, struct edwAnalysisStep *el, char *tableName, int updateSize);
+/* Save edwAnalysisStep as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwAnalysisStep *edwAnalysisStepLoad(char **row);
+/* Load a edwAnalysisStep from row fetched with select * from edwAnalysisStep
+ * from database.  Dispose of this with edwAnalysisStepFree(). */
+
+struct edwAnalysisStep *edwAnalysisStepLoadAll(char *fileName);
+/* Load all edwAnalysisStep from whitespace-separated file.
+ * Dispose of this with edwAnalysisStepFreeList(). */
+
+struct edwAnalysisStep *edwAnalysisStepLoadAllByChar(char *fileName, char chopper);
+/* Load all edwAnalysisStep from chopper separated file.
+ * Dispose of this with edwAnalysisStepFreeList(). */
+
+#define edwAnalysisStepLoadAllByTab(a) edwAnalysisStepLoadAllByChar(a, '\t');
+/* Load all edwAnalysisStep from tab separated file.
+ * Dispose of this with edwAnalysisStepFreeList(). */
+
+struct edwAnalysisStep *edwAnalysisStepCommaIn(char **pS, struct edwAnalysisStep *ret);
+/* Create a edwAnalysisStep out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwAnalysisStep */
+
+void edwAnalysisStepFree(struct edwAnalysisStep **pEl);
+/* Free a single dynamically allocated edwAnalysisStep such as created
+ * with edwAnalysisStepLoad(). */
+
+void edwAnalysisStepFreeList(struct edwAnalysisStep **pList);
+/* Free a list of dynamically allocated edwAnalysisStep's */
+
+void edwAnalysisStepOutput(struct edwAnalysisStep *el, FILE *f, char sep, char lastSep);
+/* Print out edwAnalysisStep.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwAnalysisStepTabOut(el,f) edwAnalysisStepOutput(el,f,'\t','\n');
+/* Print out edwAnalysisStep as a line in a tab-separated file. */
+
+#define edwAnalysisStepCommaOut(el,f) edwAnalysisStepOutput(el,f,',',',');
+/* Print out edwAnalysisStep as a comma separated list including final comma. */
+
+#define EDWANALYSISRUN_NUM_COLS 16
 
 extern char *edwAnalysisRunCommaSepFieldNames;
 
@@ -1704,14 +1838,19 @@ struct edwAnalysisRun
     unsigned id;	/* Analysis run ID */
     unsigned jobId;	/* ID in edwAnalysisJob table */
     char experiment[17];	/* Something like ENCSR000CFA. */
-    char *scriptName;	/* Name of glue script */
+    char *analysisStep;	/* Name of analysis step */
+    char *configuration;	/* Configuration for analysis step */
     char *tempDir;	/* Where analysis is to be computed */
     unsigned firstInputId;	/* ID in edwFile of first input */
     unsigned inputFileCount;	/* Total number of input files */
-    unsigned *inputFiles;	/* list of all input files */
+    unsigned *inputFiles;	/* list of all input files as fileIds */
     unsigned assemblyId;	/* Id of assembly we are working with */
     unsigned outputFileCount;	/* Total number of output files */
-    unsigned *outputFiles;	/* list of all output files */
+    char **outputFiles;	/* list of all output files as file names in output dir */
+    char **outputFormats;	/* list of formats of output files */
+    char *jsonResult;	/* JSON formatted object with result for Stanford metaDatabase */
+    char uuid[38];	/* Help to synchronize us with Stanford. */
+    signed char complete;	/* 1 if run was successful and record is complete */
     };
 
 struct edwAnalysisRun *edwAnalysisRunLoadByQuery(struct sqlConnection *conn, char *query);

@@ -370,20 +370,46 @@ CREATE TABLE edwAnalysisJob (
     PRIMARY KEY(id)
 );
 
+#Software that is tracked by the analysis pipeline.
+CREATE TABLE edwAnalysisSoftware (
+    id int unsigned auto_increment,	# Software id
+    name longblob,	# Command line name
+    version longblob,	# Current version
+    md5 char(32) default 0,	# md5 sum of executable file
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#A step in an analysis pipeline - something that takes one file to another
+CREATE TABLE edwAnalysisStep (
+    id int unsigned auto_increment,	# Step id
+    name longblob,	# Name of this analysis step
+    softwareCount int default 0,	# Number of pieces of software used in step
+    software longblob,	# Names of software used. First is the glue script
+              #Indices
+    PRIMARY KEY(id)
+);
+
 #Information on an analysis job that we're planning on running
 CREATE TABLE edwAnalysisRun (
     id int unsigned auto_increment,	# Analysis run ID
     jobId int unsigned default 0,	# ID in edwAnalysisJob table
     experiment char(16) default 0,	# Something like ENCSR000CFA.
-    scriptName varchar(255) default '',	# Name of glue script
+    analysisStep varchar(255) default '',	# Name of analysis step
+    configuration varchar(255) default '',	# Configuration for analysis step
     tempDir longblob,	# Where analysis is to be computed
     firstInputId int unsigned default 0,	# ID in edwFile of first input
     inputFileCount int unsigned default 0,	# Total number of input files
-    inputFiles longblob,	# list of all input files
+    inputFiles longblob,	# list of all input files as fileIds
     assemblyId int unsigned default 0,	# Id of assembly we are working with
     outputFileCount int unsigned default 0,	# Total number of output files
-    outputFiles longblob,	# list of all output files
+    outputFiles longblob,	# list of all output files as file names in output dir
+    outputFormats longblob,	# list of formats of output files
+    jsonResult longblob,	# JSON formatted object with result for Stanford metaDatabase
+    uuid char(37) default 0,	# Help to synchronize us with Stanford.
+    complete tinyint default 0,	# 1 if run was successful and record is complete
               #Indices
     PRIMARY KEY(id),
-    INDEX(experiment)
+    INDEX(experiment),
+    UNIQUE(uuid)
 );

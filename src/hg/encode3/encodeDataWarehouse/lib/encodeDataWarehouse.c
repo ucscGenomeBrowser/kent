@@ -4317,7 +4317,345 @@ fputc(lastSep,f);
 }
 
 
-char *edwAnalysisRunCommaSepFieldNames = "id,jobId,experiment,scriptName,tempDir,firstInputId,inputFileCount,inputFiles,assemblyId,outputFileCount,outputFiles";
+char *edwAnalysisSoftwareCommaSepFieldNames = "id,name,version,md5";
+
+void edwAnalysisSoftwareStaticLoad(char **row, struct edwAnalysisSoftware *ret)
+/* Load a row from edwAnalysisSoftware table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->name = row[1];
+ret->version = row[2];
+safecpy(ret->md5, sizeof(ret->md5), row[3]);
+}
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwAnalysisSoftware from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwAnalysisSoftwareFreeList(). */
+{
+struct edwAnalysisSoftware *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwAnalysisSoftwareLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwAnalysisSoftwareSaveToDb(struct sqlConnection *conn, struct edwAnalysisSoftware *el, char *tableName, int updateSize)
+/* Save edwAnalysisSoftware as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s')", 
+	tableName,  el->id,  el->name,  el->version,  el->md5);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareLoad(char **row)
+/* Load a edwAnalysisSoftware from row fetched with select * from edwAnalysisSoftware
+ * from database.  Dispose of this with edwAnalysisSoftwareFree(). */
+{
+struct edwAnalysisSoftware *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->name = cloneString(row[1]);
+ret->version = cloneString(row[2]);
+safecpy(ret->md5, sizeof(ret->md5), row[3]);
+return ret;
+}
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareLoadAll(char *fileName) 
+/* Load all edwAnalysisSoftware from a whitespace-separated file.
+ * Dispose of this with edwAnalysisSoftwareFreeList(). */
+{
+struct edwAnalysisSoftware *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwAnalysisSoftwareLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwAnalysisSoftware from a chopper separated file.
+ * Dispose of this with edwAnalysisSoftwareFreeList(). */
+{
+struct edwAnalysisSoftware *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwAnalysisSoftwareLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareCommaIn(char **pS, struct edwAnalysisSoftware *ret)
+/* Create a edwAnalysisSoftware out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwAnalysisSoftware */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
+ret->version = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->md5, sizeof(ret->md5));
+*pS = s;
+return ret;
+}
+
+void edwAnalysisSoftwareFree(struct edwAnalysisSoftware **pEl)
+/* Free a single dynamically allocated edwAnalysisSoftware such as created
+ * with edwAnalysisSoftwareLoad(). */
+{
+struct edwAnalysisSoftware *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->name);
+freeMem(el->version);
+freez(pEl);
+}
+
+void edwAnalysisSoftwareFreeList(struct edwAnalysisSoftware **pList)
+/* Free a list of dynamically allocated edwAnalysisSoftware's */
+{
+struct edwAnalysisSoftware *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwAnalysisSoftwareFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwAnalysisSoftwareOutput(struct edwAnalysisSoftware *el, FILE *f, char sep, char lastSep) 
+/* Print out edwAnalysisSoftware.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->version);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->md5);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+
+char *edwAnalysisStepCommaSepFieldNames = "id,name,softwareCount,software";
+
+struct edwAnalysisStep *edwAnalysisStepLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwAnalysisStep from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwAnalysisStepFreeList(). */
+{
+struct edwAnalysisStep *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwAnalysisStepLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwAnalysisStepSaveToDb(struct sqlConnection *conn, struct edwAnalysisStep *el, char *tableName, int updateSize)
+/* Save edwAnalysisStep as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+char  *softwareArray;
+softwareArray = sqlStringArrayToString(el->software, el->softwareCount);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%d,'%s')", 
+	tableName,  el->id,  el->name,  el->softwareCount,  softwareArray );
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&softwareArray);
+}
+
+struct edwAnalysisStep *edwAnalysisStepLoad(char **row)
+/* Load a edwAnalysisStep from row fetched with select * from edwAnalysisStep
+ * from database.  Dispose of this with edwAnalysisStepFree(). */
+{
+struct edwAnalysisStep *ret;
+
+AllocVar(ret);
+ret->softwareCount = sqlSigned(row[2]);
+ret->id = sqlUnsigned(row[0]);
+ret->name = cloneString(row[1]);
+{
+int sizeOne;
+sqlStringDynamicArray(row[3], &ret->software, &sizeOne);
+assert(sizeOne == ret->softwareCount);
+}
+return ret;
+}
+
+struct edwAnalysisStep *edwAnalysisStepLoadAll(char *fileName) 
+/* Load all edwAnalysisStep from a whitespace-separated file.
+ * Dispose of this with edwAnalysisStepFreeList(). */
+{
+struct edwAnalysisStep *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwAnalysisStepLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwAnalysisStep *edwAnalysisStepLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwAnalysisStep from a chopper separated file.
+ * Dispose of this with edwAnalysisStepFreeList(). */
+{
+struct edwAnalysisStep *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwAnalysisStepLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwAnalysisStep *edwAnalysisStepCommaIn(char **pS, struct edwAnalysisStep *ret)
+/* Create a edwAnalysisStep out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwAnalysisStep */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
+ret->softwareCount = sqlSignedComma(&s);
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->software, ret->softwareCount);
+for (i=0; i<ret->softwareCount; ++i)
+    {
+    ret->software[i] = sqlStringComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+*pS = s;
+return ret;
+}
+
+void edwAnalysisStepFree(struct edwAnalysisStep **pEl)
+/* Free a single dynamically allocated edwAnalysisStep such as created
+ * with edwAnalysisStepLoad(). */
+{
+struct edwAnalysisStep *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->name);
+/* All strings in software are allocated at once, so only need to free first. */
+if (el->software != NULL)
+    freeMem(el->software[0]);
+freeMem(el->software);
+freez(pEl);
+}
+
+void edwAnalysisStepFreeList(struct edwAnalysisStep **pList)
+/* Free a list of dynamically allocated edwAnalysisStep's */
+{
+struct edwAnalysisStep *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwAnalysisStepFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwAnalysisStepOutput(struct edwAnalysisStep *el, FILE *f, char sep, char lastSep) 
+/* Print out edwAnalysisStep.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->softwareCount);
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->softwareCount; ++i)
+    {
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->software[i]);
+    if (sep == ',') fputc('"',f);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(lastSep,f);
+}
+
+
+char *edwAnalysisRunCommaSepFieldNames = "id,jobId,experiment,analysisStep,configuration,tempDir,firstInputId,inputFileCount,inputFiles,assemblyId,outputFileCount,outputFiles,outputFormats,jsonResult,uuid,complete";
 
 struct edwAnalysisRun *edwAnalysisRunLoadByQuery(struct sqlConnection *conn, char *query)
 /* Load all edwAnalysisRun from table that satisfy the query given.  
@@ -4349,15 +4687,17 @@ void edwAnalysisRunSaveToDb(struct sqlConnection *conn, struct edwAnalysisRun *e
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-char  *inputFilesArray, *outputFilesArray;
+char  *inputFilesArray, *outputFilesArray, *outputFormatsArray;
 inputFilesArray = sqlUnsignedArrayToString(el->inputFiles, el->inputFileCount);
-outputFilesArray = sqlUnsignedArrayToString(el->outputFiles, el->outputFileCount);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s',%u,%u,'%s',%u,%u,'%s')", 
-	tableName,  el->id,  el->jobId,  el->experiment,  el->scriptName,  el->tempDir,  el->firstInputId,  el->inputFileCount,  inputFilesArray ,  el->assemblyId,  el->outputFileCount,  outputFilesArray );
+outputFilesArray = sqlStringArrayToString(el->outputFiles, el->outputFileCount);
+outputFormatsArray = sqlStringArrayToString(el->outputFormats, el->outputFileCount);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s','%s',%u,%u,'%s',%u,%u,'%s','%s','%s','%s',%d)", 
+	tableName,  el->id,  el->jobId,  el->experiment,  el->analysisStep,  el->configuration,  el->tempDir,  el->firstInputId,  el->inputFileCount,  inputFilesArray ,  el->assemblyId,  el->outputFileCount,  outputFilesArray ,  outputFormatsArray ,  el->jsonResult,  el->uuid,  el->complete);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&inputFilesArray);
 freez(&outputFilesArray);
+freez(&outputFormatsArray);
 }
 
 struct edwAnalysisRun *edwAnalysisRunLoad(char **row)
@@ -4367,25 +4707,34 @@ struct edwAnalysisRun *edwAnalysisRunLoad(char **row)
 struct edwAnalysisRun *ret;
 
 AllocVar(ret);
-ret->inputFileCount = sqlUnsigned(row[6]);
-ret->outputFileCount = sqlUnsigned(row[9]);
+ret->inputFileCount = sqlUnsigned(row[7]);
+ret->outputFileCount = sqlUnsigned(row[10]);
 ret->id = sqlUnsigned(row[0]);
 ret->jobId = sqlUnsigned(row[1]);
 safecpy(ret->experiment, sizeof(ret->experiment), row[2]);
-ret->scriptName = cloneString(row[3]);
-ret->tempDir = cloneString(row[4]);
-ret->firstInputId = sqlUnsigned(row[5]);
+ret->analysisStep = cloneString(row[3]);
+ret->configuration = cloneString(row[4]);
+ret->tempDir = cloneString(row[5]);
+ret->firstInputId = sqlUnsigned(row[6]);
 {
 int sizeOne;
-sqlUnsignedDynamicArray(row[7], &ret->inputFiles, &sizeOne);
+sqlUnsignedDynamicArray(row[8], &ret->inputFiles, &sizeOne);
 assert(sizeOne == ret->inputFileCount);
 }
-ret->assemblyId = sqlUnsigned(row[8]);
+ret->assemblyId = sqlUnsigned(row[9]);
 {
 int sizeOne;
-sqlUnsignedDynamicArray(row[10], &ret->outputFiles, &sizeOne);
+sqlStringDynamicArray(row[11], &ret->outputFiles, &sizeOne);
 assert(sizeOne == ret->outputFileCount);
 }
+{
+int sizeOne;
+sqlStringDynamicArray(row[12], &ret->outputFormats, &sizeOne);
+assert(sizeOne == ret->outputFileCount);
+}
+ret->jsonResult = cloneString(row[13]);
+safecpy(ret->uuid, sizeof(ret->uuid), row[14]);
+ret->complete = sqlSigned(row[15]);
 return ret;
 }
 
@@ -4395,7 +4744,7 @@ struct edwAnalysisRun *edwAnalysisRunLoadAll(char *fileName)
 {
 struct edwAnalysisRun *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -4413,7 +4762,7 @@ struct edwAnalysisRun *edwAnalysisRunLoadAllByChar(char *fileName, char chopper)
 {
 struct edwAnalysisRun *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -4437,7 +4786,8 @@ if (ret == NULL)
 ret->id = sqlUnsignedComma(&s);
 ret->jobId = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->experiment, sizeof(ret->experiment));
-ret->scriptName = sqlStringComma(&s);
+ret->analysisStep = sqlStringComma(&s);
+ret->configuration = sqlStringComma(&s);
 ret->tempDir = sqlStringComma(&s);
 ret->firstInputId = sqlUnsignedComma(&s);
 ret->inputFileCount = sqlUnsignedComma(&s);
@@ -4460,11 +4810,25 @@ s = sqlEatChar(s, '{');
 AllocArray(ret->outputFiles, ret->outputFileCount);
 for (i=0; i<ret->outputFileCount; ++i)
     {
-    ret->outputFiles[i] = sqlUnsignedComma(&s);
+    ret->outputFiles[i] = sqlStringComma(&s);
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->outputFormats, ret->outputFileCount);
+for (i=0; i<ret->outputFileCount; ++i)
+    {
+    ret->outputFormats[i] = sqlStringComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+ret->jsonResult = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->uuid, sizeof(ret->uuid));
+ret->complete = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -4476,10 +4840,19 @@ void edwAnalysisRunFree(struct edwAnalysisRun **pEl)
 struct edwAnalysisRun *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->scriptName);
+freeMem(el->analysisStep);
+freeMem(el->configuration);
 freeMem(el->tempDir);
 freeMem(el->inputFiles);
+/* All strings in outputFiles are allocated at once, so only need to free first. */
+if (el->outputFiles != NULL)
+    freeMem(el->outputFiles[0]);
 freeMem(el->outputFiles);
+/* All strings in outputFormats are allocated at once, so only need to free first. */
+if (el->outputFormats != NULL)
+    freeMem(el->outputFormats[0]);
+freeMem(el->outputFormats);
+freeMem(el->jsonResult);
 freez(pEl);
 }
 
@@ -4508,7 +4881,11 @@ fprintf(f, "%s", el->experiment);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->scriptName);
+fprintf(f, "%s", el->analysisStep);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->configuration);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -4539,11 +4916,36 @@ int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->outputFileCount; ++i)
     {
-    fprintf(f, "%u", el->outputFiles[i]);
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->outputFiles[i]);
+    if (sep == ',') fputc('"',f);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
 }
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->outputFileCount; ++i)
+    {
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->outputFormats[i]);
+    if (sep == ',') fputc('"',f);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->jsonResult);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->uuid);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->complete);
 fputc(lastSep,f);
 }
 

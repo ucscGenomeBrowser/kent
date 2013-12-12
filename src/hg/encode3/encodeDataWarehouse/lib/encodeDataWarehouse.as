@@ -312,19 +312,42 @@ table edwAnalysisJob
     int returnCode; "The return code from system command - 0 for success"
     )
 
+table edwAnalysisSoftware
+"Software that is tracked by the analysis pipeline."
+    (
+    uint id primary auto;  "Software id"
+    lstring "name"; "Command line name"
+    lstring "version"; "Current version"
+    char[32] md5; "md5 sum of executable file"
+    )
+
+table edwAnalysisStep
+"A step in an analysis pipeline - something that takes one file to another"
+    (
+    uint id primary auto; "Step id"
+    lstring "name";  "Name of this analysis step"
+    int softwareCount;  "Number of pieces of software used in step"
+    string[softwareCount] software; "Names of software used. First is the glue script"
+    )
+
 table edwAnalysisRun
 "Information on an analysis job that we're planning on running"
     (
     uint id primary auto; "Analysis run ID"
     uint jobId;  "ID in edwAnalysisJob table"
     char[16] experiment index; "Something like ENCSR000CFA."
-    string scriptName; "Name of glue script"
+    string analysisStep; "Name of analysis step"
+    string configuration; "Configuration for analysis step"
     lstring tempDir; "Where analysis is to be computed"
     uint firstInputId;	"ID in edwFile of first input"
     uint inputFileCount; "Total number of input files"
-    uint[inputFileCount] inputFiles; "list of all input files"
+    uint[inputFileCount] inputFiles; "list of all input files as fileIds"
     uint assemblyId; "Id of assembly we are working with"
     uint outputFileCount; "Total number of output files"
-    uint[outputFileCount] outputFiles; "list of all output files"
+    string[outputFileCount] outputFiles; "list of all output files as file names in output dir"
+    string[outputFileCount] outputFormats; "list of formats of output files"
+    lstring jsonResult; "JSON formatted object with result for Stanford metaDatabase"
+    char[37] uuid unique; "Help to synchronize us with Stanford."
+    byte complete;  "1 if run was successful and record is complete"
     )
 
