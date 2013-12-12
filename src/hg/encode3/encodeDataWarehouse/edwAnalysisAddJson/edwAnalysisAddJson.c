@@ -175,7 +175,7 @@ struct edwFile *inputFile, *inputFileList = NULL;
 int i;
 for (i=0; i<run->inputFileCount; ++i)
     {
-    inputFile = edwFileFromId(conn, run->inputFilesIds[i]);
+    inputFile = edwFileFromId(conn, run->inputFileIds[i]);
     slAddTail(&inputFileList, inputFile);
     }
 
