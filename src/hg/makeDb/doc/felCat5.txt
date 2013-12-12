@@ -771,7 +771,7 @@ done > ensToUcsc.lift
     # Real run:
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
         -ooc /hive/data/genomes/felCat5/jkStuff/felCat5.11.ooc \
-        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          felCat5 felCat4 > do.log 2>&1
     #  old time real    58m58.107s
 
