@@ -224,6 +224,9 @@ for (i=0; i<step->softwareCount; ++i)
     sqlSafef(query, sizeof(query), 
 	"select * from edwAnalysisSoftware where name = '%s'", step->software[i]);
     struct edwAnalysisSoftware *software = edwAnalysisSoftwareLoadByQuery(conn, query);
+    if (software == NULL)
+         errAbort("%s not found in edwAnalysisSoftware table", step->software[i]);
+    
     dyJsonObjectStart(dy);
     dyJsonString(dy, "software", software->name, TRUE);
     dyJsonString(dy, "version", software->version, FALSE);
@@ -237,15 +240,12 @@ dyJsonListStart(dy, "inputs");
 struct edwFile *ef;
 for (i=0, ef = inputFileList; ef != NULL; ef = ef->next, ++i)
     {
+    dyJsonObjectStart(dy);
     struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
     assert(vf != NULL);
-    dyJsonObjectStart(dy);
     dyJsonString(dy, "type", vf->outputType, TRUE);
-    dyJsonListStart(dy, "value");
-    // When have multiple inputs - what to do?!?
-    dyStringPrintf(dy, "\"%s\"\n", vf->licensePlate);
+    dyJsonString(dy, "value", vf->licensePlate, FALSE);
     edwValidFileFree(&vf);
-    dyJsonListEnd(dy, FALSE);
     dyJsonObjectEnd(dy, ef->next != NULL);
     }
 dyJsonListEnd(dy, TRUE);
