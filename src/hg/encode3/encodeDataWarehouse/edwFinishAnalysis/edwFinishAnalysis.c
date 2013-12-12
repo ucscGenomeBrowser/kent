@@ -7,7 +7,6 @@
 #include "options.h"
 #include "portable.h"
 #include "cheapcgi.h"
-#include "jsonParse.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "encode3/encode3Valid.h"
@@ -134,141 +133,13 @@ cgiDictionaryFreeList(&dictList);
 return dyStringCannibalize(&dy);
 }
 
-void dyJsonTag(struct dyString *dy, char *var)
-/* Print out quoted tag followed by colon */
+void markRunAsFailed(struct sqlConnection *conn, struct edwAnalysisRun *run)
+/* Mark that the run failed,  prevent reanalysis */
 {
-dyStringPrintf(dy, "\"%s\": ", var);
-}
-
-void dyJsonEndLine(struct dyString *dy, boolean isMiddle)
-/* Write comma if in middle, and then newline regardless. */
-{
-if (isMiddle)
-   dyStringAppendC(dy, ',');
-dyStringAppendC(dy, '\n');
-}
-
-void dyJsonString(struct dyString *dy, char *var, char *string, boolean isMiddle)
-/* Print out "var": "val" */
-{
-dyJsonTag(dy, var);
-dyStringPrintf(dy, "\"%s\"", string);
-dyJsonEndLine(dy, isMiddle);
-}
-
-void dyJsonNumber(struct dyString *dy, char *var, long long val, boolean isMiddle)
-/* print out "var": val as number */
-{
-dyJsonTag(dy, var);
-dyStringPrintf(dy, "%lld", val);
-dyJsonEndLine(dy, isMiddle);
-}
-
-void dyJsonListStart(struct dyString *dy, char *var)
-/* Start an array in JSON */
-{
-dyJsonTag(dy, var);
-dyStringAppend(dy, "[\n");
-}
-
-void dyJsonListEnd(struct dyString *dy, boolean isMiddle)
-/* End an array in JSON */
-{
-dyStringAppendC(dy, ']');
-dyJsonEndLine(dy, isMiddle);
-}
-
-void dyJsonObjectStart(struct dyString *dy)
-/* Print start of object */
-{
-dyStringAppend(dy, "{\n");
-}
-
-void dyJsonObjectEnd(struct dyString *dy, boolean isMiddle)
-/* End object in JSON */
-{
-dyStringAppendC(dy, '}');
-dyJsonEndLine(dy, isMiddle);
-}
-
-struct edwAnalysisStep *edwAnalysisStepFromName(struct sqlConnection *conn, char *name)
-/* Return named analysis step */
-{
-char query[256];
-sqlSafef(query, sizeof(query), "select * from edwAnalysisStep where name='%s'", name);
-return edwAnalysisStepLoadByQuery(conn, query);
-}
-
-char *jsonForRun(struct sqlConnection *conn, struct edwAnalysisRun *run, 
-    struct edwFile *inputFileList, struct edwFile *outputFileList, struct edwAnalysisJob *job)
-/* Generate json for run given input and output file lists. */
-{
-struct dyString *dy = dyStringNew(0);
-
-dyStringAppend(dy, "{\n");
-dyJsonString(dy, "uuid", run->uuid, TRUE);
-dyJsonNumber(dy, "start_time", job->startTime, TRUE);
-dyJsonNumber(dy, "end_time", job->endTime, TRUE);
-dyJsonString(dy, "analysis", run->analysisStep, TRUE);
-dyJsonString(dy, "configuration", run->configuration, TRUE);
-
-/* Print sw_version list */
-struct edwAnalysisStep *step = edwAnalysisStepFromName(conn, run->analysisStep);
-if (step == NULL)
-    errAbort("edwAnalysisStep named %s not found", run->analysisStep);
-dyJsonListStart(dy, "sw_version");
-int i;
-for (i=0; i<step->softwareCount; ++i)
-    {
-    char query[256];
-    sqlSafef(query, sizeof(query), 
-	"select * from edwAnalysisSoftware where name = '%s'", step->software[i]);
-    struct edwAnalysisSoftware *software = edwAnalysisSoftwareLoadByQuery(conn, query);
-    if (software == NULL)
-         errAbort("%s not found in edwAnalysisSoftware table", step->software[i]);
-    
-    dyJsonObjectStart(dy);
-    dyJsonString(dy, "software", software->name, TRUE);
-    dyJsonString(dy, "version", software->version, FALSE);
-    dyJsonObjectEnd(dy, i != step->softwareCount-1);
-    edwAnalysisSoftwareFree(&software);
-    }
-dyJsonListEnd(dy, TRUE);
-
-/* Print input list */
-dyJsonListStart(dy, "inputs");
-struct edwFile *ef;
-for (i=0, ef = inputFileList; ef != NULL; ef = ef->next, ++i)
-    {
-    dyJsonObjectStart(dy);
-    struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
-    assert(vf != NULL);
-    dyJsonString(dy, "type", vf->outputType, TRUE);
-    dyJsonString(dy, "value", vf->licensePlate, FALSE);
-    edwValidFileFree(&vf);
-    dyJsonObjectEnd(dy, ef->next != NULL);
-    }
-dyJsonListEnd(dy, TRUE);
-
-/* Print output list */
-dyJsonListStart(dy, "outputs");
-for (i=0, ef = outputFileList; ef != NULL; ef = ef->next, ++i)
-    {
-    dyJsonObjectStart(dy);
-    char outputType[FILENAME_LEN];
-    splitPath(run->outputFiles[i], NULL, outputType, NULL);
-    dyJsonString(dy, "type", outputType, TRUE);
-    char licensePlate[32];
-    edwMakeLicensePlate("ENCFF", ef->id, licensePlate, sizeof(licensePlate));
-    dyJsonString(dy, "value", licensePlate, FALSE);
-    dyJsonObjectEnd(dy, ef->next != NULL);
-    }
-dyJsonListEnd(dy, TRUE);
-
-/* Print last field and finish up */
-dyJsonString(dy, "command_line", job->commandLine, FALSE);
-dyStringAppend(dy, "}\n");
-return dyStringCannibalize(&dy);
+char query[128];
+sqlSafef(query, sizeof(query), 
+    "update edwAnalysisRun set createStatus = -1 where id=%u", run->id);
+sqlUpdate(conn, query);
 }
 
 void finishGoodRun(struct sqlConnection *conn, struct edwAnalysisRun *run, 
@@ -277,7 +148,7 @@ void finishGoodRun(struct sqlConnection *conn, struct edwAnalysisRun *run,
  * and store them permanently */
 {
 /* Look up UCSC db. */
-char query[16*1000];  // Needs to be big, may have json
+char query[1024];
 sqlSafef(query, sizeof(query), "select ucscDb from edwAssembly where id=%u", run->assemblyId);
 char *ucscDb = sqlQuickString(conn, query);
 
@@ -297,11 +168,18 @@ for (i=0; i<run->inputFileCount; ++i)
 
 /* Generate initial edwRun records for each of the file outputs. */
 struct edwFile *outputFile, *outputFileList = NULL;
+struct dyString *outputFileIds = dyStringNew(0);
 for (i=0; i<run->outputFileCount; ++i)
     {
     char path[PATH_LEN];
     safef(path, sizeof(path), "%s/%s", run->tempDir, run->outputFiles[i]);
     verbose(1, "processing %s\n", path);
+
+    if (!fileExists(path))
+        {
+	markRunAsFailed(conn, run);
+	errAbort("Expected output %s not present", path);
+	}
 
     /* Make most of edwFile record */
     AllocVar(outputFile);
@@ -331,29 +209,32 @@ for (i=0; i<run->outputFileCount; ++i)
 	outputFile->endUploadTime, outputFile->edwFileName, outputFile->id);
     sqlUpdate(conn, query);
 
-    edwAddQaJob(conn, outputFile->id);
-#ifdef SOON
-#endif /* SOON */
+    /* Schedule validation and finishing */
+    char command[256];
+    safef(command, sizeof(command), "bash -ec 'edwQaAgent %u;edwAnalysisAddJson %u'",
+	   outputFile->id, run->id);
+    edwAnalysisJobAdd(conn, command);
 
+    dyStringPrintf(outputFileIds, "%u,", outputFile->id);
     slAddTail(&outputFileList, outputFile);
     }
 
-run->jsonResult = jsonForRun(conn, run, inputFileList, outputFileList, job);
-jsonParse(run->jsonResult);  // Just for validation
-
 sqlSafef(query, sizeof(query), 
-   "update edwAnalysisRun set complete=1, uuid='%s', jsonResult='%s' where id=%u",
-   run->uuid, run->jsonResult, run->id);
+   "update edwAnalysisRun set uuid='%s', createStatus=1, createCount=%d, createFileIds='%s'"
+   "where id=%u",
+   run->uuid, slCount(outputFileList), outputFileIds->string, run->id);
 sqlUpdate(conn, query);
+
+dyStringFree(&outputFileIds);
 }
 
 void edwFinishAnalysis(char *how)
-/* edwFinishAnalysis - Look for analysis jobs that have completed and integrate results into 
+/* edwFinishAnalysis - Look for analysis jobs that have createStatus and integrate results into 
  * database. */
 {
 struct sqlConnection *conn = edwConnectReadWrite();
 char query[512];
-sqlSafef(query, sizeof(query), "select * from edwAnalysisRun where complete = 0");
+sqlSafef(query, sizeof(query), "select * from edwAnalysisRun where createStatus = 0");
 struct edwAnalysisRun *run, *runList = edwAnalysisRunLoadByQuery(conn, query);
 verbose(1, "Got %d unfinished analysis\n", slCount(runList));
 
@@ -373,9 +254,7 @@ for (run = runList; run != NULL; run = run->next)
 	else
 	    {
 	    verbose(1, "failed %s\n", command);
-	    sqlSafef(query, sizeof(query), 
-		"update edwAnalysisRun set complete = -1 where id=%u", run->id);
-	    sqlUpdate(conn, query);
+	    markRunAsFailed(conn, run);
 	    }
 	}
     else
