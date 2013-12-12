@@ -78,9 +78,11 @@ safef(commandLine, sizeof(commandLine),
 int jobId = edwAnalysisJobAdd(conn, commandLine);
 
 /* Make up edwAnalysisRun record */
-unsigned inputFiles[2] = {ef1->id, ef2->id};
-char *outputFiles[1] = {"alignments.bam"};
+unsigned inputFilesIds[2] = {ef1->id, ef2->id};
+char *inputTypes[2] = {"read1", "read2"};
+char *outputNamesInTempDir[1] = {"alignments.bam"};
 char *outputFormats[1] = {"bam"};
+char *outputTypes[1] = {"alignments"};
 struct edwAnalysisRun *run;
 AllocVar(run);
 run->jobId = jobId;
@@ -90,10 +92,12 @@ run->configuration = configuration;
 run->tempDir = tempDir;
 run->firstInputId = ef1->id;
 run->inputFileCount = 2;
-run->inputFiles = inputFiles;
+run->inputFilesIds = inputFilesIds;
+run->inputTypes = inputTypes;
 run->outputFileCount = 1;
-run->outputFiles = outputFiles;
+run->outputNamesInTempDir = outputNamesInTempDir;
 run->outputFormats = outputFormats;
+run->outputTypes = outputTypes;
 run->assemblyId = assembly->id;
 run->jsonResult = "";
 edwAnalysisRunSaveToDb(conn, run, "edwAnalysisRun", 0);
@@ -139,9 +143,11 @@ safef(commandLine, sizeof(commandLine), "bash -ec 'cd %s; nice %s %s %s%s %s; ed
 int jobId = edwAnalysisJobAdd(conn, commandLine);
 
 /* Make up edwAnalysisRun record */
-unsigned inputFiles[1] = {ef->id};
-char *outputFiles[1] = {"alignments.bam"};
+unsigned inputFilesIds[1] = {ef->id};
+char *inputTypes[1] = {"reads"};
+char *outputNamesInTempDir[1] = {"alignments.bam"};
 char *outputFormats[1] = {"bam"};
+char *outputTypes[1] = {"alignments"};
 struct edwAnalysisRun *run;
 AllocVar(run);
 run->jobId = jobId;
@@ -151,10 +157,12 @@ run->configuration = configuration;
 run->tempDir = tempDir;
 run->firstInputId = ef->id;
 run->inputFileCount = 1;
-run->inputFiles = inputFiles;
+run->inputFilesIds = inputFilesIds;
+run->inputTypes = inputTypes;
 run->outputFileCount = 1;
-run->outputFiles = outputFiles;
+run->outputNamesInTempDir = outputNamesInTempDir;
 run->outputFormats = outputFormats;
+run->outputTypes = outputTypes;
 run->assemblyId = assembly->id;
 run->jsonResult = "";
 edwAnalysisRunSaveToDb(conn, run, "edwAnalysisRun", 0);

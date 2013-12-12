@@ -101,9 +101,7 @@ struct dyString *dy = dyStringNew(0);
 cgiEncodeIntoDy("format", run->outputFormats[fileIx], dy);
 cgiEncodeIntoDy("ucsc_db", ucscDb, dy);
 cgiEncodeIntoDy("valid_key", validKey, dy);
-char outputType[FILENAME_LEN];
-splitPath(run->outputFiles[fileIx], NULL, outputType, NULL);
-cgiEncodeIntoDy("output_type", outputType, dy);
+cgiEncodeIntoDy("output_type", run->outputTypes[fileIx], dy);
 
 /* Next set up stuff to handle variable parts we only put in if all inputs agree. */
 
@@ -162,7 +160,7 @@ struct edwFile *inputFile, *inputFileList = NULL;
 int i;
 for (i=0; i<run->inputFileCount; ++i)
     {
-    inputFile = edwFileFromId(conn, run->inputFiles[i]);
+    inputFile = edwFileFromId(conn, run->inputFilesIds[i]);
     slAddTail(&inputFileList, inputFile);
     }
 
@@ -172,7 +170,7 @@ struct dyString *outputFileIds = dyStringNew(0);
 for (i=0; i<run->outputFileCount; ++i)
     {
     char path[PATH_LEN];
-    safef(path, sizeof(path), "%s/%s", run->tempDir, run->outputFiles[i]);
+    safef(path, sizeof(path), "%s/%s", run->tempDir, run->outputNamesInTempDir[i]);
     verbose(1, "processing %s\n", path);
 
     if (!fileExists(path))

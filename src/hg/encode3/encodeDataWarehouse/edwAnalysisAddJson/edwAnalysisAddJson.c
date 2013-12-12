@@ -134,7 +134,7 @@ for (i=0, ef = inputFileList; ef != NULL; ef = ef->next, ++i)
     dyJsonObjectStart(dy);
     struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
     assert(vf != NULL);
-    dyJsonString(dy, "type", vf->outputType, TRUE);
+    dyJsonString(dy, "type", run->inputTypes[i], TRUE);
     dyJsonString(dy, "value", vf->licensePlate, FALSE);
     edwValidFileFree(&vf);
     dyJsonObjectEnd(dy, ef->next != NULL);
@@ -146,9 +146,7 @@ dyJsonListStart(dy, "outputs");
 for (i=0, ef = outputFileList; ef != NULL; ef = ef->next, ++i)
     {
     dyJsonObjectStart(dy);
-    char outputType[FILENAME_LEN];
-    splitPath(run->outputFiles[i], NULL, outputType, NULL);
-    dyJsonString(dy, "type", outputType, TRUE);
+    dyJsonString(dy, "type", run->outputTypes[i], TRUE);
     struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
     dyJsonString(dy, "value", vf->licensePlate, FALSE);
     dyJsonObjectEnd(dy, ef->next != NULL);
@@ -177,7 +175,7 @@ struct edwFile *inputFile, *inputFileList = NULL;
 int i;
 for (i=0; i<run->inputFileCount; ++i)
     {
-    inputFile = edwFileFromId(conn, run->inputFiles[i]);
+    inputFile = edwFileFromId(conn, run->inputFilesIds[i]);
     slAddTail(&inputFileList, inputFile);
     }
 
