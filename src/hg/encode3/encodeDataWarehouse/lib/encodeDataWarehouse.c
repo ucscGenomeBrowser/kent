@@ -4655,7 +4655,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwAnalysisRunCommaSepFieldNames = "id,jobId,experiment,analysisStep,configuration,tempDir,firstInputId,inputFileCount,inputFiles,assemblyId,outputFileCount,outputFiles,outputFormats,jsonResult,uuid,createStatus,createCount,createFileIds";
+char *edwAnalysisRunCommaSepFieldNames = "id,jobId,experiment,analysisStep,configuration,tempDir,firstInputId,inputFileCount,inputFilesIds,inputTypes,assemblyId,outputFileCount,outputNamesInTempDir,outputFormats,outputTypes,jsonResult,uuid,createStatus,createCount,createFileIds";
 
 struct edwAnalysisRun *edwAnalysisRunLoadByQuery(struct sqlConnection *conn, char *query)
 /* Load all edwAnalysisRun from table that satisfy the query given.  
@@ -4687,18 +4687,22 @@ void edwAnalysisRunSaveToDb(struct sqlConnection *conn, struct edwAnalysisRun *e
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-char  *inputFilesArray, *outputFilesArray, *outputFormatsArray, *createFileIdsArray;
-inputFilesArray = sqlUnsignedArrayToString(el->inputFiles, el->inputFileCount);
-outputFilesArray = sqlStringArrayToString(el->outputFiles, el->outputFileCount);
+char  *inputFilesIdsArray, *inputTypesArray, *outputNamesInTempDirArray, *outputFormatsArray, *outputTypesArray, *createFileIdsArray;
+inputFilesIdsArray = sqlUnsignedArrayToString(el->inputFilesIds, el->inputFileCount);
+inputTypesArray = sqlStringArrayToString(el->inputTypes, el->inputFileCount);
+outputNamesInTempDirArray = sqlStringArrayToString(el->outputNamesInTempDir, el->outputFileCount);
 outputFormatsArray = sqlStringArrayToString(el->outputFormats, el->outputFileCount);
+outputTypesArray = sqlStringArrayToString(el->outputTypes, el->outputFileCount);
 createFileIdsArray = sqlUnsignedArrayToString(el->createFileIds, el->createCount);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s','%s',%u,%u,'%s',%u,%u,'%s','%s','%s','%s',%d,%u,'%s')", 
-	tableName,  el->id,  el->jobId,  el->experiment,  el->analysisStep,  el->configuration,  el->tempDir,  el->firstInputId,  el->inputFileCount,  inputFilesArray ,  el->assemblyId,  el->outputFileCount,  outputFilesArray ,  outputFormatsArray ,  el->jsonResult,  el->uuid,  el->createStatus,  el->createCount,  createFileIdsArray );
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s','%s',%u,%u,'%s','%s',%u,%u,'%s','%s','%s','%s','%s',%d,%u,'%s')", 
+	tableName,  el->id,  el->jobId,  el->experiment,  el->analysisStep,  el->configuration,  el->tempDir,  el->firstInputId,  el->inputFileCount,  inputFilesIdsArray ,  inputTypesArray ,  el->assemblyId,  el->outputFileCount,  outputNamesInTempDirArray ,  outputFormatsArray ,  outputTypesArray ,  el->jsonResult,  el->uuid,  el->createStatus,  el->createCount,  createFileIdsArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
-freez(&inputFilesArray);
-freez(&outputFilesArray);
+freez(&inputFilesIdsArray);
+freez(&inputTypesArray);
+freez(&outputNamesInTempDirArray);
 freez(&outputFormatsArray);
+freez(&outputTypesArray);
 freez(&createFileIdsArray);
 }
 
@@ -4710,8 +4714,8 @@ struct edwAnalysisRun *ret;
 
 AllocVar(ret);
 ret->inputFileCount = sqlUnsigned(row[7]);
-ret->outputFileCount = sqlUnsigned(row[10]);
-ret->createCount = sqlUnsigned(row[16]);
+ret->outputFileCount = sqlUnsigned(row[11]);
+ret->createCount = sqlUnsigned(row[18]);
 ret->id = sqlUnsigned(row[0]);
 ret->jobId = sqlUnsigned(row[1]);
 safecpy(ret->experiment, sizeof(ret->experiment), row[2]);
@@ -4721,26 +4725,36 @@ ret->tempDir = cloneString(row[5]);
 ret->firstInputId = sqlUnsigned(row[6]);
 {
 int sizeOne;
-sqlUnsignedDynamicArray(row[8], &ret->inputFiles, &sizeOne);
+sqlUnsignedDynamicArray(row[8], &ret->inputFilesIds, &sizeOne);
 assert(sizeOne == ret->inputFileCount);
 }
-ret->assemblyId = sqlUnsigned(row[9]);
 {
 int sizeOne;
-sqlStringDynamicArray(row[11], &ret->outputFiles, &sizeOne);
+sqlStringDynamicArray(row[9], &ret->inputTypes, &sizeOne);
+assert(sizeOne == ret->inputFileCount);
+}
+ret->assemblyId = sqlUnsigned(row[10]);
+{
+int sizeOne;
+sqlStringDynamicArray(row[12], &ret->outputNamesInTempDir, &sizeOne);
 assert(sizeOne == ret->outputFileCount);
 }
 {
 int sizeOne;
-sqlStringDynamicArray(row[12], &ret->outputFormats, &sizeOne);
+sqlStringDynamicArray(row[13], &ret->outputFormats, &sizeOne);
 assert(sizeOne == ret->outputFileCount);
 }
-ret->jsonResult = cloneString(row[13]);
-safecpy(ret->uuid, sizeof(ret->uuid), row[14]);
-ret->createStatus = sqlSigned(row[15]);
 {
 int sizeOne;
-sqlUnsignedDynamicArray(row[17], &ret->createFileIds, &sizeOne);
+sqlStringDynamicArray(row[14], &ret->outputTypes, &sizeOne);
+assert(sizeOne == ret->outputFileCount);
+}
+ret->jsonResult = cloneString(row[15]);
+safecpy(ret->uuid, sizeof(ret->uuid), row[16]);
+ret->createStatus = sqlSigned(row[17]);
+{
+int sizeOne;
+sqlUnsignedDynamicArray(row[19], &ret->createFileIds, &sizeOne);
 assert(sizeOne == ret->createCount);
 }
 return ret;
@@ -4752,7 +4766,7 @@ struct edwAnalysisRun *edwAnalysisRunLoadAll(char *fileName)
 {
 struct edwAnalysisRun *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[20];
 
 while (lineFileRow(lf, row))
     {
@@ -4770,7 +4784,7 @@ struct edwAnalysisRun *edwAnalysisRunLoadAllByChar(char *fileName, char chopper)
 {
 struct edwAnalysisRun *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[20];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -4802,10 +4816,21 @@ ret->inputFileCount = sqlUnsignedComma(&s);
 {
 int i;
 s = sqlEatChar(s, '{');
-AllocArray(ret->inputFiles, ret->inputFileCount);
+AllocArray(ret->inputFilesIds, ret->inputFileCount);
 for (i=0; i<ret->inputFileCount; ++i)
     {
-    ret->inputFiles[i] = sqlUnsignedComma(&s);
+    ret->inputFilesIds[i] = sqlUnsignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->inputTypes, ret->inputFileCount);
+for (i=0; i<ret->inputFileCount; ++i)
+    {
+    ret->inputTypes[i] = sqlStringComma(&s);
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
@@ -4815,10 +4840,10 @@ ret->outputFileCount = sqlUnsignedComma(&s);
 {
 int i;
 s = sqlEatChar(s, '{');
-AllocArray(ret->outputFiles, ret->outputFileCount);
+AllocArray(ret->outputNamesInTempDir, ret->outputFileCount);
 for (i=0; i<ret->outputFileCount; ++i)
     {
-    ret->outputFiles[i] = sqlStringComma(&s);
+    ret->outputNamesInTempDir[i] = sqlStringComma(&s);
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
@@ -4830,6 +4855,17 @@ AllocArray(ret->outputFormats, ret->outputFileCount);
 for (i=0; i<ret->outputFileCount; ++i)
     {
     ret->outputFormats[i] = sqlStringComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->outputTypes, ret->outputFileCount);
+for (i=0; i<ret->outputFileCount; ++i)
+    {
+    ret->outputTypes[i] = sqlStringComma(&s);
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
@@ -4863,15 +4899,23 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->analysisStep);
 freeMem(el->configuration);
 freeMem(el->tempDir);
-freeMem(el->inputFiles);
-/* All strings in outputFiles are allocated at once, so only need to free first. */
-if (el->outputFiles != NULL)
-    freeMem(el->outputFiles[0]);
-freeMem(el->outputFiles);
+freeMem(el->inputFilesIds);
+/* All strings in inputTypes are allocated at once, so only need to free first. */
+if (el->inputTypes != NULL)
+    freeMem(el->inputTypes[0]);
+freeMem(el->inputTypes);
+/* All strings in outputNamesInTempDir are allocated at once, so only need to free first. */
+if (el->outputNamesInTempDir != NULL)
+    freeMem(el->outputNamesInTempDir[0]);
+freeMem(el->outputNamesInTempDir);
 /* All strings in outputFormats are allocated at once, so only need to free first. */
 if (el->outputFormats != NULL)
     freeMem(el->outputFormats[0]);
 freeMem(el->outputFormats);
+/* All strings in outputTypes are allocated at once, so only need to free first. */
+if (el->outputTypes != NULL)
+    freeMem(el->outputTypes[0]);
+freeMem(el->outputTypes);
 freeMem(el->jsonResult);
 freeMem(el->createFileIds);
 freez(pEl);
@@ -4922,7 +4966,20 @@ int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->inputFileCount; ++i)
     {
-    fprintf(f, "%u", el->inputFiles[i]);
+    fprintf(f, "%u", el->inputFilesIds[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->inputFileCount; ++i)
+    {
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->inputTypes[i]);
+    if (sep == ',') fputc('"',f);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
@@ -4938,7 +4995,7 @@ if (sep == ',') fputc('{',f);
 for (i=0; i<el->outputFileCount; ++i)
     {
     if (sep == ',') fputc('"',f);
-    fprintf(f, "%s", el->outputFiles[i]);
+    fprintf(f, "%s", el->outputNamesInTempDir[i]);
     if (sep == ',') fputc('"',f);
     fputc(',', f);
     }
@@ -4952,6 +5009,19 @@ for (i=0; i<el->outputFileCount; ++i)
     {
     if (sep == ',') fputc('"',f);
     fprintf(f, "%s", el->outputFormats[i]);
+    if (sep == ',') fputc('"',f);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->outputFileCount; ++i)
+    {
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->outputTypes[i]);
     if (sep == ',') fputc('"',f);
     fputc(',', f);
     }

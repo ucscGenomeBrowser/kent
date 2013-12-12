@@ -400,11 +400,13 @@ CREATE TABLE edwAnalysisRun (
     tempDir longblob,	# Where analysis is to be computed
     firstInputId int unsigned default 0,	# ID in edwFile of first input
     inputFileCount int unsigned default 0,	# Total number of input files
-    inputFiles longblob,	# list of all input files as fileIds
+    inputFilesIds longblob,	# list of all input files as fileIds
+    inputTypes longblob,	# List of types to go with input files in json output
     assemblyId int unsigned default 0,	# Id of assembly we are working with
     outputFileCount int unsigned default 0,	# Total number of output files
-    outputFiles longblob,	# list of all output files as file names in output dir
+    outputNamesInTempDir longblob,	# list of all output file names in output dir
     outputFormats longblob,	# list of formats of output files
+    outputTypes longblob,	# list of formats of output files
     jsonResult longblob,	# JSON formatted object with result for Stanford metaDatabase
     uuid char(37) default 0,	# Help to synchronize us with Stanford.
     createStatus tinyint default 0,	# 1 if output files made 0 if not made, -1 if make tried and failed
@@ -413,5 +415,5 @@ CREATE TABLE edwAnalysisRun (
               #Indices
     PRIMARY KEY(id),
     INDEX(experiment),
-    UNIQUE(uuid)
+    INDEX(uuid)
 );
