@@ -1261,3 +1261,15 @@ sqlSafef(query, sizeof(query),
     vf1->fileId, vf2->fileId);
 return edwQaPairedEndFastqLoadByQuery(conn, query);
 }
+
+int edwAnalysisJobAdd(struct sqlConnection *conn, char *commandLine)
+/* Add job to edwAnalyisJob table and return job ID. */
+{
+struct edwAnalysisJob job =
+   {
+   .commandLine = commandLine,
+   };
+edwAnalysisJobSaveToDb(conn, &job, "edwAnalysisJob", 0);
+return sqlLastAutoId(conn);
+}
+

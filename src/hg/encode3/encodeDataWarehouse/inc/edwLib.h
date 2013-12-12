@@ -253,4 +253,7 @@ struct edwQaPairedEndFastq *edwQaPairedEndFastqFromVfs(struct sqlConnection *con
     struct edwValidFile **retVf1,  struct edwValidFile **retVf2);
 /* Return pair record if any for the two fastq files. */
 
+int edwAnalysisJobAdd(struct sqlConnection *conn, char *commandLine);
+/* Add job to edwAnalyisJob table and return job ID. */
+
 #endif /* EDWLIB_H */
