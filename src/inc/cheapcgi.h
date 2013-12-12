@@ -67,6 +67,9 @@ struct cgiDictionary
 void cgiDictionaryFree(struct cgiDictionary **pD);
 /* Free up resources associated with dictionary. */
 
+void cgiDictionaryFreeList(struct cgiDictionary **pList);
+/* Free up a whole list of cgiDictionaries */
+
 struct cgiDictionary *cgiDictionaryFromEncodedString(char *encodedString);
 /* Giving a this=that&this=that string,  return cgiDictionary parsed out from it. 
  * This does *not* destroy input like the lower level cgiParse functions do. */

@@ -623,6 +623,20 @@ if (d != NULL)
     }
 }
 
+void cgiDictionaryFreeList(struct cgiDictionary **pList)
+/* Free up a whole list of cgiDictionaries */
+{
+struct cgiDictionary *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cgiDictionaryFree(&el);
+    }
+*pList = NULL;
+}
+
+
 void cgiParseInputAbort(char *input, struct hash **retHash,
         struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter
