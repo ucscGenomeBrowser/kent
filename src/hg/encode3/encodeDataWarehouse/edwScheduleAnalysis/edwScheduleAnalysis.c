@@ -7,6 +7,8 @@
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 
+boolean again = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -15,22 +17,26 @@ errAbort(
   "usage:\n"
   "   edwScheduleAnalysis startFileId endFileId\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -again - if set schedule it even if it's been run once\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"again", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-static int countAlreadyScheduled(struct sqlConnection *conn, char *scriptName, long long firstInput)
+static int countAlreadyScheduled(struct sqlConnection *conn, char *analysisStep, 
+    long long firstInput)
 /* Return how many of the existing job are already scheduled */
 {
+if (again)
+    return 0;
 char query[512];
 sqlSafef(query, sizeof(query),
-    "select count(*) from edwAnalysisRun where firstInputId=%lld and scriptName='%s'",
-    firstInput, scriptName);
+    "select count(*) from edwAnalysisRun where firstInputId=%lld and analysisStep='%s'",
+    firstInput, analysisStep);
 return sqlQuickNum(conn, query);
 }
 
@@ -45,13 +51,15 @@ edwAnalysisJobSaveToDb(conn, &job, "edwAnalysisJob", 0);
 return sqlLastAutoId(conn);
 }
 
+
 void schedulePairedBwa(struct sqlConnection *conn, 
     struct edwValidFile *vf1, struct edwValidFile *vf2, struct edwExperiment *exp)
 /* If it hasn't already been done schedule bwa analysis of the two files. */
 {
 /* Make sure that we don't schedule it again and again */
-char *scriptName = "eap_run_bwa_pe.bash";
-if (countAlreadyScheduled(conn, scriptName, vf1->fileId))
+char *analysisStep = "bwa_paired_end";
+char *scriptName = "eap_run_bwa_pe";
+if (countAlreadyScheduled(conn, analysisStep, vf1->fileId))
     return;
 
 /* Get ef records */
@@ -60,6 +68,8 @@ struct edwFile *ef2 = edwFileFromIdOrDie(conn, vf2->fileId);
 
 /* Get target assembly (will redo this more precisely at some point) */
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf1->ucscDb);
+char configuration[128];
+safef(configuration, sizeof(configuration), "bwa_%s_generic", assembly->ucscDb);
 
 /* Figure out path to BWA index */
 char indexPath[PATH_LEN];
@@ -73,23 +83,26 @@ makeDir(tempDir);
 char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "cd %s; nice %s %s %s%s %s%s %s",
     tempDir, scriptName, indexPath, edwRootDir, ef1->edwFileName, edwRootDir, 
-    ef2->edwFileName, "output.bam");
+    ef2->edwFileName, "aligments.bam");
 int jobId = addAnalysisJob(conn, commandLine);
 
 /* Make up edwAnalysisRun record */
 unsigned inputFiles[2] = {ef1->id, ef2->id};
-char *outputFiles[1] = {"output.bam"};
+char *outputFiles[1] = {"aligments.bam"};
+char *outputFormats[1] = {"bam"};
 struct edwAnalysisRun *run;
 AllocVar(run);
 run->jobId = jobId;
 safef(run->experiment, sizeof(run->experiment), "%s",  exp->accession);
-run->scriptName = scriptName;
+run->analysisStep = analysisStep;
+run->configuration = configuration;
 run->tempDir = tempDir;
 run->firstInputId = ef1->id;
 run->inputFileCount = 2;
 run->inputFiles = inputFiles;
 run->outputFileCount = 1;
 run->outputFiles = outputFiles;
+run->outputFormats = outputFormats;
 run->assemblyId = assembly->id;
 run->jsonResult = "";
 edwAnalysisRunSaveToDb(conn, run, "edwAnalysisRun", 0);
@@ -104,13 +117,21 @@ void scheduleSingleBwa(struct sqlConnection *conn,
     struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
 /* If it hasn't already been done schedule bwa analysis of the two files. */
 {
+/* Ugh - lots of duplication with schedulePairedBwa.  Maybe should have done it as
+ * a single routine with lots of ifs, though that would be messy too.  Remember
+ * to update both routines though! */
+
 /* Make sure that we don't schedule it again and again */
-char *scriptName = "eap_run_bwa_se.bash";
-if (countAlreadyScheduled(conn, scriptName, ef->id))
+char *analysisStep = "bwa_single_end";
+char *scriptName = "eap_run_bwa_se";
+if (countAlreadyScheduled(conn, analysisStep, ef->id))
     return;
 
 /* Get target assembly (will redo this more precisely at some point) */
+uglyf("scheduling single end bwa analysis on %u\n", ef->id);
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+char configuration[128];
+safef(configuration, sizeof(configuration), "bwa_%s_generic", assembly->ucscDb);
 
 /* Figure out path to BWA index */
 char indexPath[PATH_LEN];
@@ -123,23 +144,26 @@ makeDir(tempDir);
 /* Make up job and command line */
 char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "cd %s; nice %s %s %s%s %s",
-    tempDir, scriptName, indexPath, edwRootDir, ef->edwFileName, "output.bam");
+    tempDir, scriptName, indexPath, edwRootDir, ef->edwFileName, "aligments.bam");
 int jobId = addAnalysisJob(conn, commandLine);
 
 /* Make up edwAnalysisRun record */
 unsigned inputFiles[1] = {ef->id};
-char *outputFiles[1] = {"output.bam"};
+char *outputFiles[1] = {"aligments.bam"};
+char *outputFormats[1] = {"bam"};
 struct edwAnalysisRun *run;
 AllocVar(run);
 run->jobId = jobId;
 safef(run->experiment, sizeof(run->experiment), "%s",  exp->accession);
-run->scriptName = scriptName;
+run->analysisStep = analysisStep;
+run->configuration = configuration;
 run->tempDir = tempDir;
 run->firstInputId = ef->id;
 run->inputFileCount = 1;
 run->inputFiles = inputFiles;
 run->outputFileCount = 1;
 run->outputFiles = outputFiles;
+run->outputFormats = outputFormats;
 run->assemblyId = assembly->id;
 run->jsonResult = "";
 edwAnalysisRunSaveToDb(conn, run, "edwAnalysisRun", 0);
@@ -179,7 +203,6 @@ if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq"))
 void runSingleAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
     struct edwExperiment *exp)
 {
-uglyf("Theoretically running single analysis on %u\n", ef->id);
 if (sameWord("fastq", vf->format))
     runFastqAnalysis(conn, ef, vf, exp);
 }
@@ -219,6 +242,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+again = optionExists("again");
 edwScheduleAnalysis(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
 return 0;
 }
