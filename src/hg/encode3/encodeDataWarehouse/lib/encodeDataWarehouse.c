@@ -4655,7 +4655,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwAnalysisRunCommaSepFieldNames = "id,jobId,experiment,analysisStep,configuration,tempDir,firstInputId,inputFileCount,inputFiles,assemblyId,outputFileCount,outputFiles,outputFormats,jsonResult,uuid,complete";
+char *edwAnalysisRunCommaSepFieldNames = "id,jobId,experiment,analysisStep,configuration,tempDir,firstInputId,inputFileCount,inputFiles,assemblyId,outputFileCount,outputFiles,outputFormats,jsonResult,uuid,createStatus,createCount,createFileIds";
 
 struct edwAnalysisRun *edwAnalysisRunLoadByQuery(struct sqlConnection *conn, char *query)
 /* Load all edwAnalysisRun from table that satisfy the query given.  
@@ -4687,17 +4687,19 @@ void edwAnalysisRunSaveToDb(struct sqlConnection *conn, struct edwAnalysisRun *e
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-char  *inputFilesArray, *outputFilesArray, *outputFormatsArray;
+char  *inputFilesArray, *outputFilesArray, *outputFormatsArray, *createFileIdsArray;
 inputFilesArray = sqlUnsignedArrayToString(el->inputFiles, el->inputFileCount);
 outputFilesArray = sqlStringArrayToString(el->outputFiles, el->outputFileCount);
 outputFormatsArray = sqlStringArrayToString(el->outputFormats, el->outputFileCount);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s','%s',%u,%u,'%s',%u,%u,'%s','%s','%s','%s',%d)", 
-	tableName,  el->id,  el->jobId,  el->experiment,  el->analysisStep,  el->configuration,  el->tempDir,  el->firstInputId,  el->inputFileCount,  inputFilesArray ,  el->assemblyId,  el->outputFileCount,  outputFilesArray ,  outputFormatsArray ,  el->jsonResult,  el->uuid,  el->complete);
+createFileIdsArray = sqlUnsignedArrayToString(el->createFileIds, el->createCount);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s','%s',%u,%u,'%s',%u,%u,'%s','%s','%s','%s',%d,%u,'%s')", 
+	tableName,  el->id,  el->jobId,  el->experiment,  el->analysisStep,  el->configuration,  el->tempDir,  el->firstInputId,  el->inputFileCount,  inputFilesArray ,  el->assemblyId,  el->outputFileCount,  outputFilesArray ,  outputFormatsArray ,  el->jsonResult,  el->uuid,  el->createStatus,  el->createCount,  createFileIdsArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&inputFilesArray);
 freez(&outputFilesArray);
 freez(&outputFormatsArray);
+freez(&createFileIdsArray);
 }
 
 struct edwAnalysisRun *edwAnalysisRunLoad(char **row)
@@ -4709,6 +4711,7 @@ struct edwAnalysisRun *ret;
 AllocVar(ret);
 ret->inputFileCount = sqlUnsigned(row[7]);
 ret->outputFileCount = sqlUnsigned(row[10]);
+ret->createCount = sqlUnsigned(row[16]);
 ret->id = sqlUnsigned(row[0]);
 ret->jobId = sqlUnsigned(row[1]);
 safecpy(ret->experiment, sizeof(ret->experiment), row[2]);
@@ -4734,7 +4737,12 @@ assert(sizeOne == ret->outputFileCount);
 }
 ret->jsonResult = cloneString(row[13]);
 safecpy(ret->uuid, sizeof(ret->uuid), row[14]);
-ret->complete = sqlSigned(row[15]);
+ret->createStatus = sqlSigned(row[15]);
+{
+int sizeOne;
+sqlUnsignedDynamicArray(row[17], &ret->createFileIds, &sizeOne);
+assert(sizeOne == ret->createCount);
+}
 return ret;
 }
 
@@ -4744,7 +4752,7 @@ struct edwAnalysisRun *edwAnalysisRunLoadAll(char *fileName)
 {
 struct edwAnalysisRun *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[18];
 
 while (lineFileRow(lf, row))
     {
@@ -4762,7 +4770,7 @@ struct edwAnalysisRun *edwAnalysisRunLoadAllByChar(char *fileName, char chopper)
 {
 struct edwAnalysisRun *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[18];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -4828,7 +4836,19 @@ s = sqlEatChar(s, ',');
 }
 ret->jsonResult = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->uuid, sizeof(ret->uuid));
-ret->complete = sqlSignedComma(&s);
+ret->createStatus = sqlSignedComma(&s);
+ret->createCount = sqlUnsignedComma(&s);
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->createFileIds, ret->createCount);
+for (i=0; i<ret->createCount; ++i)
+    {
+    ret->createFileIds[i] = sqlUnsignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -4853,6 +4873,7 @@ if (el->outputFormats != NULL)
     freeMem(el->outputFormats[0]);
 freeMem(el->outputFormats);
 freeMem(el->jsonResult);
+freeMem(el->createFileIds);
 freez(pEl);
 }
 
@@ -4945,7 +4966,20 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->uuid);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->complete);
+fprintf(f, "%d", el->createStatus);
+fputc(sep,f);
+fprintf(f, "%u", el->createCount);
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->createCount; ++i)
+    {
+    fprintf(f, "%u", el->createFileIds[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
 fputc(lastSep,f);
 }
 

@@ -407,7 +407,9 @@ CREATE TABLE edwAnalysisRun (
     outputFormats longblob,	# list of formats of output files
     jsonResult longblob,	# JSON formatted object with result for Stanford metaDatabase
     uuid char(37) default 0,	# Help to synchronize us with Stanford.
-    complete tinyint default 0,	# 1 if run was successful and record is complete
+    createStatus tinyint default 0,	# 1 if output files made 0 if not made, -1 if make tried and failed
+    createCount int unsigned default 0,	# Count of files made
+    createFileIds longblob,	# list of ids of output files in warehouse
               #Indices
     PRIMARY KEY(id),
     INDEX(experiment),

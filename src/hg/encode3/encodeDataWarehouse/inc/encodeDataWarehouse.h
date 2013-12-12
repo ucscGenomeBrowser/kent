@@ -1827,7 +1827,7 @@ void edwAnalysisStepOutput(struct edwAnalysisStep *el, FILE *f, char sep, char l
 #define edwAnalysisStepCommaOut(el,f) edwAnalysisStepOutput(el,f,',',',');
 /* Print out edwAnalysisStep as a comma separated list including final comma. */
 
-#define EDWANALYSISRUN_NUM_COLS 16
+#define EDWANALYSISRUN_NUM_COLS 18
 
 extern char *edwAnalysisRunCommaSepFieldNames;
 
@@ -1850,7 +1850,9 @@ struct edwAnalysisRun
     char **outputFormats;	/* list of formats of output files */
     char *jsonResult;	/* JSON formatted object with result for Stanford metaDatabase */
     char uuid[38];	/* Help to synchronize us with Stanford. */
-    signed char complete;	/* 1 if run was successful and record is complete */
+    signed char createStatus;	/* 1 if output files made 0 if not made, -1 if make tried and failed */
+    unsigned createCount;	/* Count of files made */
+    unsigned *createFileIds;	/* list of ids of output files in warehouse */
     };
 
 struct edwAnalysisRun *edwAnalysisRunLoadByQuery(struct sqlConnection *conn, char *query);

@@ -348,6 +348,8 @@ table edwAnalysisRun
     string[outputFileCount] outputFormats; "list of formats of output files"
     lstring jsonResult; "JSON formatted object with result for Stanford metaDatabase"
     char[37] uuid unique; "Help to synchronize us with Stanford."
-    byte complete;  "1 if run was successful and record is complete"
+    byte createStatus;  "1 if output files made 0 if not made, -1 if make tried and failed"
+    uint createCount;	"Count of files made"
+    uint[createCount] createFileIds; "list of ids of output files in warehouse"
     )
 
