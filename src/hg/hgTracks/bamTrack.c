@@ -826,7 +826,7 @@ if (!showNames)
 track->nextItemButtonable = track->nextExonButtonable = FALSE;
 track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;
-if (differentString(colorMode, BAM_COLOR_MODE_OFF))
+if (sameString(colorMode, BAM_COLOR_MODE_GRAY))
     track->colorShades = shadesOfGray;
 }
 
