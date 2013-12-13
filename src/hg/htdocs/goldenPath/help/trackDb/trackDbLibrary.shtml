@@ -3735,6 +3735,29 @@
     with this associated setting.</P>
 </DIV>
 
+<DIV class="motifTable"><span class="types factorSource"></span>
+<div class="format"><code>motifTable &lt;table&gt;</code></div>
+    <P>
+    A <code>bed 6</code> table that holds motif regions
+    to highlight within factorSource items.</P>
+</DIV>
+
+<DIV class="motifMapTable"><span class="types factorSource"></span>
+<div class="format"><code>motifMapTable &lt;table&gt;</code></div>
+    <P> If motif names differ from or are not unique for factorSource item names
+    in the <code>motifTable</code>, this table can used to remap the names.
+    This table has a simple 2 column format: char(255) factor, char(255) motif.</P>
+</DIV>
+
+<DIV class="motifPwmTable"><span class="types factorSource"></span>
+<div class="format"><code>motifPwmTable &lt;table&gt;</code></div>
+    <P>When viewing the details of a factorSource track item containing
+    a binding motif in the <code>motifTable</code>, the 
+    consensus motif sequence and sequence logo image can be displayed. 
+    This setting names the table holding the position weight matrices 
+    that provide this information.</P>
+</DIV>
+
 <DIV class="factorSource_example"><span class="types factorSource"></span>
 <div class="format"><B>Example of a factorSource track</B></div>
 <pre>

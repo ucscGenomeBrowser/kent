@@ -3152,14 +3152,14 @@ var imageV2 = {
                 var cachedChrom = decodeURIComponent(cachedPos).split(':')[0];
                 var curChrom    = decodeURIComponent(   curPos).split(':')[0];
                 if (cachedChrom == curChrom) {
-                    imageV2.navigateInPlace("position=" + cachedPos, null, false);
+                    imageV2.navigateInPlace("db="+getDb()+"&position=" + cachedPos, null, false);
                 } else {
                     imageV2.fullReload();
                 }
             } else {
                 // B2) Clean page: only position changes from a->b 
                 if (cachedPos != curPos) {
-                    imageV2.navigateInPlace("position=" + cachedPos, null, false);
+                    imageV2.navigateInPlace("db="+getDb()+"&position=" + cachedPos, null, false);
                 }
             }
         }

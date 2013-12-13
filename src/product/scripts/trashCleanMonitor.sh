@@ -11,11 +11,12 @@ export ECHO="/bin/echo -e"
 # address list, comma separated addresses, to send notifications
 export failMail="alert@some.where,extraAlert@other.where"
 
-# a simple command line mail program to use the failMail address
-# list to email messages from this cron job
+# a simple command line mail program to use the failMail address list
+# to email messages from this cron job.  (TODO: this should instead be sendmail
+# with appropriate changes below to use sendmail properly)
 export mailCmd="/bin/mail"
-# when there is no mail system
-export mailCmd="/bin/echo"
+# when there is no mail system, set this to echo:
+# export mailCmd="/bin/echo"
 
 usage() {
     ${ECHO} "usage:  trashCleanMonitor.csh <browserEnvironment.txt> searchAndDestroy" 1>&2

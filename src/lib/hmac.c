@@ -46,6 +46,7 @@ char *hmacSha1(char *key, char *data)
  * implementation is above! */
 {
 errAbort(NEED_OPENSSL);
+return NULL;
 }
 
 char *hmacMd5(char *key, char *data)
@@ -53,6 +54,7 @@ char *hmacMd5(char *key, char *data)
  * implementation is above! */
 {
 errAbort(NEED_OPENSSL);
+return NULL;
 }
 
 #endif

@@ -761,3 +761,19 @@ done > ensToUcsc.lift
     # verify the track link to INSDC functions
 
 ##############################################################################
+# LIFTOVER TO FelCat4 (Started - 2013-12-11 - Pauline)
+
+    mkdir /hive/data/genomes/felCat5/bed/blat.felCat4.2013-12-11
+    cd /hive/data/genomes/felCat5/bed/blat.felCat4.2013-12-11
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug \
+        -ooc /hive/data/genomes/felCat5/jkStuff/felCat5.11.ooc felCat5 felCat4
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc /hive/data/genomes/felCat5/jkStuff/felCat5.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         felCat5 felCat4 > do.log 2>&1
+    #  old time real    58m58.107s
+
+#############################################################################
+ 

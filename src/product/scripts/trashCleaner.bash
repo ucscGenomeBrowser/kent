@@ -1,5 +1,8 @@
 #!/bin/bash
 #
+# NOTE: this script is to be used by the trashCleanMonitor.sh script
+#       this is NOT for individual use by itself.
+#
 # exit on any error at any time
 set -beEu -o pipefail
 
@@ -126,6 +129,8 @@ export maxFiles=1000
 
 usage() {
     ${ECHO} "usage:  trashCleaner.bash searchAndDestroy" 1>&2
+    ${ECHO} "NOTE: to be used only by trachCleanMonitor.sh - this is not a" 1>&2
+    ${ECHO} "script to be used by itself." 1>&2
     ${ECHO} "This script will run when given the argument searchAndDestroy" 1>&2
     ${ECHO} "which is exactly what it will do to the trash files for the" 1>&2
     ${ECHO} "genome browser.  There is no turning back after it gets going." 1>&2
