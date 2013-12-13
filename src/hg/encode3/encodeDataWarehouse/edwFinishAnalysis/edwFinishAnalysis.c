@@ -140,6 +140,73 @@ sqlSafef(query, sizeof(query),
 sqlUpdate(conn, query);
 }
 
+boolean efWithSubmitNameExists(struct sqlConnection *conn, char *submitName)
+/* Return TRUE if have file with this submit name in warehouse already */
+{
+char query[PATH_LEN*2];
+sqlSafef(query, sizeof(query), 
+    "select count(*) from edwFile where submitFileName='%s'", submitName);
+return  (sqlQuickNum(conn, query) > 0);
+}
+
+struct edwUser *edwUserForPipeline(struct sqlConnection *conn)
+/* Get user associated with automatic processes. */
+{
+return edwUserFromEmail(conn, "edw@encodedcc.sdsc.edu");
+}
+
+unsigned eapNewSubmit(struct sqlConnection *conn)
+/* Create new submission record for eap */
+{
+struct edwUser *eapUser = edwUserForPipeline(conn);
+char query[512];
+sqlSafef(query, sizeof(query), 
+    "insert edwSubmit (userId,url,startUploadTime) values (%u,'%s',%lld)"
+    , eapUser->id, "EAP", edwNow());
+sqlUpdate(conn, query);
+unsigned submitId = sqlLastAutoId(conn);
+edwUserFree(&eapUser);
+return submitId;
+}
+
+struct edwSubmit *eapCurrentSubmit(struct sqlConnection *conn)
+/* Get submit record for pipeline. */
+{
+char query[256];
+struct edwUser *eapUser = edwUserForPipeline(conn);
+sqlSafef(query, sizeof(query),
+    "select max(id) from edwSubmit where userId=%u", eapUser->id);
+unsigned submitId = sqlQuickNum(conn, query);
+edwUserFree(&eapUser);
+if (submitId == 0)
+    {
+    verbose(1, "No submit id for pipeline, creating new one\n");
+    submitId = eapNewSubmit(conn);
+    }
+sqlSafef(query, sizeof(query), "select * from edwSubmit where id=%u", submitId);
+return edwSubmitLoadByQuery(conn, query);
+}
+
+
+void updateSubmissionRecord(struct sqlConnection *conn, struct edwFile *ef)
+/* Add some information about file to submission record. */
+{
+/* Get submit record and adjust fields. */
+struct edwSubmit *submit = eapCurrentSubmit(conn);
+submit->fileCount += 1;
+submit->newFiles += 1;
+submit->byteCount += ef->size;
+submit->newBytes += ef->size;
+
+/* Update database with new fields. */
+char query[512];
+sqlSafef(query, sizeof(query),
+    "update edwSubmit set fileCount=%u, newFiles=%u, byteCount=%lld, newBytes=%lld where id=%u"
+    , submit->fileCount, submit->newFiles, submit->byteCount, submit->newBytes, submit->id);
+sqlUpdate(conn, query);
+edwSubmitFree(&submit);
+}
+
 void finishGoodRun(struct sqlConnection *conn, struct edwAnalysisRun *run, 
     struct edwAnalysisJob *job)
 /* Looks like the job for the run completed successfully, so let's grab results
@@ -171,8 +238,16 @@ for (i=0; i<run->outputFileCount; ++i)
     {
     char path[PATH_LEN];
     safef(path, sizeof(path), "%s/%s", run->tempDir, run->outputNamesInTempDir[i]);
-    verbose(1, "processing %s\n", path);
 
+    // Check for edwFile already made - possible race condition (should consider
+    // only running this program serially to be honest)
+    if (efWithSubmitNameExists(conn, path))
+        {
+	verbose(1, "Skipping %s, already in progress\n", path);
+	continue;
+	}
+
+    verbose(1, "processing %s\n", path);
     if (!fileExists(path))
         {
 	markRunAsFailed(conn, run);
@@ -189,6 +264,14 @@ for (i=0; i<run->outputFileCount; ++i)
     outputFile->tags = fakeTags(conn, run, inputFileList, i, validKey, ucscDb);
     outputFile->startUploadTime = edwNow();
     outputFile->edwFileName = outputFile->errorMessage = outputFile->deprecated = "";
+
+    // Check for edwFile already made - possible race condition (should consider
+    // only running this program serially to be honest)
+    if (efWithSubmitNameExists(conn, path))
+        {
+	verbose(1, "Skipping %s, already in progress\n", path);
+	continue;
+	}
 
     /* Save to database so get file ID */
     edwFileSaveToDb(conn, outputFile, "edwFile", 0);
@@ -207,9 +290,11 @@ for (i=0; i<run->outputFileCount; ++i)
 	outputFile->endUploadTime, outputFile->edwFileName, outputFile->id);
     sqlUpdate(conn, query);
 
+    updateSubmissionRecord(conn, outputFile);
+
     /* Schedule validation and finishing */
     char command[256];
-    safef(command, sizeof(command), "bash -ec 'edwQaAgent %u;edwAnalysisAddJson %u'",
+    safef(command, sizeof(command), "bash -exc 'edwQaAgent %u;edwAnalysisAddJson %u'",
 	   outputFile->id, run->id);
     edwAnalysisJobAdd(conn, command);
 
