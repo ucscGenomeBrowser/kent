@@ -10,7 +10,7 @@
 #include "edwLib.h"
 
 /* Globals */
-int version = 2;
+int version = 3;
 
 /* Version history 
  *  1 - initial release
@@ -22,6 +22,7 @@ int version = 2;
  *      'RNA-seq' - unspecified, treated same as RNA-seq
  *      'Short RNA-seq' - reads 200 bases or shorter
  *      'miRNA-seq' - micro RNA sequencing
+ *  3 - Relaxed DNAse threshold for enrichment in 'open chromatin' to 1.6.
  */
 
 void usage()
@@ -70,7 +71,7 @@ struct qaThresholds dnaseThresholds =
     .ribosomeContent = 0.05,
     .closeContamination = 0.06,
     .farContamination = 0.02,
-    .enrichment = 2,
+    .enrichment = 1.6,
     .crossEnrichment = 15,
     .pearsonClipped = 0.10,
     };
