@@ -400,7 +400,7 @@ CREATE TABLE edwAnalysisRun (
     tempDir longblob,	# Where analysis is to be computed
     firstInputId int unsigned default 0,	# ID in edwFile of first input
     inputFileCount int unsigned default 0,	# Total number of input files
-    inputFilesIds longblob,	# list of all input files as fileIds
+    inputFileIds longblob,	# list of all input files as fileIds
     inputTypes longblob,	# List of types to go with input files in json output
     assemblyId int unsigned default 0,	# Id of assembly we are working with
     outputFileCount int unsigned default 0,	# Total number of output files

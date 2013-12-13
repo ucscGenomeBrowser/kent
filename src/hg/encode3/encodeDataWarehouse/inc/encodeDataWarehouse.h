@@ -1843,7 +1843,7 @@ struct edwAnalysisRun
     char *tempDir;	/* Where analysis is to be computed */
     unsigned firstInputId;	/* ID in edwFile of first input */
     unsigned inputFileCount;	/* Total number of input files */
-    unsigned *inputFilesIds;	/* list of all input files as fileIds */
+    unsigned *inputFileIds;	/* list of all input files as fileIds */
     char **inputTypes;	/* List of types to go with input files in json output */
     unsigned assemblyId;	/* Id of assembly we are working with */
     unsigned outputFileCount;	/* Total number of output files */
