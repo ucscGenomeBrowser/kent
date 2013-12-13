@@ -45,9 +45,9 @@ hgsql encodeDataWarehouse < encodeDataWarehouse.sql
 # Create users
 edwCreateUser kent@soe.ucsc.edu
 edwCreateUser euriehong@stanford.edu
+edwCreateUser edw@encodedcc.sdsc.edu
 edwCreateUser cherry@stanford.edu
 edwCreateUser vmalladi@stanford.edu
-#edwCreateUser cricket@soe.ucsc.edu
 edwCreateUser cricketsloan@stanford.edu
 edwCreateUser etchan@stanford.edu
 edwCreateUser lrowe@stanford.edu
