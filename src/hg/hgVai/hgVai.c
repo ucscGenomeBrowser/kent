@@ -335,6 +335,7 @@ printf("</SELECT><BR>\n");
 
 printf("<div id='"hgvaVariantPasteContainer"'%s>\n",
        differentString(selected, hgvaUseVariantIds) ? " style='display: none;'" : "");
+printf("Enter dbSNP rs# identifiers separated by whitespace or commas:<BR>\n");
 char *oldPasted = cartUsualString(cart, hgvaVariantIds, "");
 cgiMakeTextArea(hgvaVariantIds, oldPasted, 10, 70);
 puts("</div>");
