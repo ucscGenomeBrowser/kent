@@ -895,7 +895,7 @@ data, please contact
         <!-- above address is genome at soe.ucsc.edu -->
 for further assistance. 
 <b><font color="red">Messages sent to this address will be posted to the moderated genome mailing 
-list, which is archived on a SEARCHABLE PUBLIC <a HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">
+list, which is archived on a SEARCHABLE, PUBLIC <a HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">
 Google Groups forum</a></font></b>.</p>
 
 <P><B><I>Problem: </I></B>When I try one of your examples by cutting and pasting
@@ -947,15 +947,14 @@ need to clear the cookies in your Internet browser as well
 (refer to your Internet browser's documentation for further information).
 
 <P><B><I>Problem:</I></B> I am trying to upload some custom tracks (.gz files)
-to the genome browser using a URL from a GEO query. However it is not
-uploading and I receive the errror &quot;line 1 of somefile.gz: thickStart after thickEnd&quot;.<BR>
+to the Genome Browser using a URL from a GEO query. However, the upload is failing with the
+error &quot;line 1 of <filename>.gz: thickStart after thickEnd&quot;.<BR>
 <B><I>Solution:</I></B> The custom track mechanism supports plain BED files
 (not bigBed) that are of the type <A HREF="../../FAQ/FAQformat.html#format13">broadPeak</A> or
-<A HREF="../../FAQ/FAQformat.html#format12">narrowPeak</A>. If you supply
-the track <A HREF="#TRACK">type=<<I>track_type</I>></A> attribute 
-then the loader will understand the special columns at the end of
-each line. Your entry should be two lines, the first to define the track type
-and the second for the URL. For example:<BR>
+<A HREF="../../FAQ/FAQformat.html#format12">narrowPeak</A>. Set the track attribute
+<A HREF="#TRACK">type=<<I>track_type</I>></A> to enable the loader to correctly process the 
+special columns at the end of each line. Your track type entry should consist of two lines: the 
+first to define the track type and the second to specify the URL. For example:<BR>
 <BR>
 <tt>track type=<font color="000099">broadPeak</font><BR>
 http://www.ncbi.nlm.nih.gov/geosuppl/...<BR></tt>
@@ -963,91 +962,65 @@ http://www.ncbi.nlm.nih.gov/geosuppl/...<BR></tt>
 <P><B><I>Problem:</I></B> I've gotten my annotation track to display, 
 but now I can't make it go away! How do I remove an annotation
 track from my Genome Browser display?<BR>
-<B><I>Solution:</I></B> Reset the Genome Browser by clicking the 
-<em>Click here to reset</em> link on the Gateway page. This should reset 
-your Genome Browser display to its default settings and remove all your
-custom tracks.  To remove only one track of several, click the
-<EM>Manage Custom Tracks</EM> button and delete the track using the
-checkbox and Delete button.
+<B><I>Solution:</I></B> To remove only one track, click the
+<EM>Manage Custom Tracks</EM> button and delete the desired track using the
+checkbox and Delete button. To quickly remove all of your custom tracks, 
+reset the Genome Browser to its default settings by clicking the <em>Click here to reset</em> 
+link on the Gateway page. Note that this reset will also remove any other customizations 
+you have made to your Genome Browser display. 
 
 <P><B><I>Problem:</I></B> I put my custom track files on Google Drive
-and they won't display in the browser, why?<BR>
-<B><I>Solution:</I></B> Data servers like Google Drive should work for
-hosting simple text based custom tracks. However, most data providing
-sites do not accept byte-range requests. Therefore, the browser can not
-download just the window of data desired from the custom track when it
-involves an indexed binary format, such as with bigBed and bigWig files.
-Compared with BED files, bigBed and bigWig files are much faster because
-only portions of the files needed to display in a particular viewed region
-are transferred to UCSC. In order for the browser to serve up just
-the the portion that is needed requires the data server to have byte-ranges enabled.
-You can test on the command line if your server has byte-range requests
-running with: <PRE><TT>&gt; curl -I &lt;URL to your file&gt;</TT></PRE>
-To know if your server can host bigBed and bigWig files (or Hubs), look for
-the following: <PRE><TT>&gt; Accept-Ranges: bytes</TT></PRE>
-Otherwise, see the below "Byte-Range Request Errors" section for more help.
-Also, please note that the UCSC Genome Browser is not endorsing the use of
-Google Drive for hosting your data.
+and they won't display in the browser. Why? <BR>
+<em>OR</em><BR>
+<B><I>Problem:</I></B> When I try to visualize my custom tracks in the Browser, I receive 
+the error message &quot;Byte-range request was ignored by server&quot;.<BR>
+<B><I>Solution:</I></B> Data servers (such as Google Drive) should work for
+hosting simple text-based custom tracks. However, for large custom track data sets, the use
+of indexed binary formats such as bigBed and bigWig is preferable. These formats provide much 
+faster display performance because only the portion of the file needed to display the currently 
+viewed region must be transferred to the Genome Browser server. To allow this type of display, 
+byte-range support must be enabled on the data server. To check if your server has byte-range 
+requests enabled, issue the following command:
+
+<PRE><TT>&gt; curl -I &lt;URL of your file&gt;</TT></PRE>
+
+<P>In order for your server to host bigBed and bigWig files (or track hubs) for Genome
+Browser display, the command output must contain: 
+
+<PRE><TT>&gt; Accept-Ranges: bytes</TT></PRE>
+
+<P>If you do not receive this output, you may be able to resolve the problem through one of
+the following actions:
+<UL>
+<LI>Check with the systems administrators about the configuration of the server. This will
+often solve the problem.
+<LI>Find another site with a server that supports byte-ranges.
+<LI>Install an Apache alternative http server such as Cherokee.
+</UL>
+<P>
+Please note that this does not constitute an endorsement by UCSC for using Google Drive to host 
+your data.
+</P>
 
 <P><B><I>Problem:</I></B> I see that Dropbox accepts byte-range requests,
-but I can't get my data to display, why?<BR>
+but I can't get my data to display. Why?<BR>
 <B><I>Solution:</I></B> Be sure you enable the &quot;Public Folder&quot;
 function on Dropbox, rather than using the &quot;Share Link&quot; function.
 For custom tracks that require an associated index file, the Public Folder
-approach will allow the browser to know where to go, whereas the Share Link
-feature creates a unique unassociated link for each file. To enable your
-Dropbox public folder navigate to the following site:
+approach will allow the Browser to locate the file, whereas the Share Link
+feature creates a unique, unassociated link for each file. To enable your
+Dropbox public folder, navigate to the following site:
 <a href="https://www.dropbox.com/enable_public_folder"
 target="_blank"> https://www.dropbox.com/enable_public_folder</a>.
-Please note that if you are using a free Dropbox account, Dropbox may
-throttle access to your data to prevent their servers from being overloaded,
-blocking the browser's access and ability to display your tracks. This may
-not be the case with paid Dropbox accounts.  Also, please keep in mind that
-files in your Public Folder are public, and may be indexed by Google.
-Also, please note that the UCSC Genome Browser is not endorsing the use of
-Dropbox for hosting your data.
+If you are using a free Dropbox account, note that Dropbox may
+throttle access to your data to prevent their servers from becoming overloaded; this may in turn 
+block the Genome Browser's access to the data, preventing the display of your tracks.
+Paid Dropbox accounts may not experience this problem. Also, keep in mind that
+files in your Dropbox Public Folder are public, and therefore may be indexed by Google.
+Please note that this does not constitute an endorsement by UCSC for using Dropbox to host your 
+data.
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 	</TD></TR></TABLE>
 
-	<BR>
-
- </TD><TD WIDTH=15></TD></TR></TABLE>
-        <br></TD></TR></TABLE>
-        </TD></TR></TABLE>
-
-        <BR>
-
-        <!--outer table is for border purposes-->
-        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
-        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
-        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
-        <FONT SIZE="4"><a name="BYTERANGE"></a><b>&nbsp; Byte-Range Request Errors</b></FONT>
-        </TD></TR></TABLE>
-        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-        <TR><TD WIDTH=10>&nbsp;</TD><TD>
-
-<P>Occasionally when trying to visualize custom tracks in the Browser, users have
-received the error message &quot;Byte-range request was ignored by server.&quot;
-
-<P>If this occurs, verify that the web server supports byte-range requests by issuing
-the following command:
-
-<PRE><TT>&gt; curl -I &lt;URL&gt;</TT></PRE>
-
-<P>The output should contain the following:
-
-<PRE><TT>&gt; Accept-Ranges: bytes</TT></PRE>
-
-<P>If you do not receive that output, you should take the following steps:
-<UL>
-<LI>Check with the administrators about the configuration of the server.  This will
-often solve the problem.
-<LI>Find another site with a server that supports byte-ranges.
-<LI>Install an Apache alternative http server such as Cherokee.
-
-
-        </TD><TD WIDTH=15></TD></TR></TABLE>
-        <br></TD></TR></TABLE>
-        </TD></TR></TABLE>
