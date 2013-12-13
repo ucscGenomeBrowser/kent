@@ -178,6 +178,11 @@ void htmlPageFree(struct htmlPage **pPage);
 void htmlPageFreeList(struct htmlPage **pList);
 /* Free a list of dynamically allocated htmlPage's */
 
+char *expandUrlOnBase(char *base, char *url);
+/* Figure out first character past host name. Load up
+ * return string with protocol (if any) and host name. 
+ * It is assumed that url is relative to base and does not contain a protocol.*/
+
 char *htmlExpandUrl(char *base, char *url);
 /* Expand URL that is relative to base to stand on it's own. 
  * Return NULL if it's not http or https. */

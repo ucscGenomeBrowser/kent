@@ -58,7 +58,7 @@ if (hasProtocol(path))
 
 /* If it's a remote hub, let html path expander handle it. */
 if (hasProtocol(hubUrl))
-    return htmlExpandUrl(hubUrl, path);
+    return expandUrlOnBase(hubUrl, path);
 
 /* If we got to here hub is local, and so is path.  Do standard
  * path parsing. */
@@ -522,10 +522,6 @@ hub->genomesFile = trackHubRequiredSetting(hub, "genomesFile");
 
 lineFileClose(&lf);
 char *genomesUrl = trackHubRelativeUrl(hub->url, hub->genomesFile);
-
-if (genomesUrl == NULL)
-    errAbort("badly formatted genomesFile setting (%s) in hub %s\n", 
-	    hub->genomesFile, hub->url);
 
 hub->genomeHash = hashNew(8);
 hub->genomeList = trackHubGenomeReadRa(genomesUrl, hub);
