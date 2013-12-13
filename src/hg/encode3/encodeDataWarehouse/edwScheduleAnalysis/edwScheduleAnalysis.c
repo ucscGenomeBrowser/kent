@@ -72,7 +72,7 @@ makeDir(tempDir);
 /* Make up job and command line */
 char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), 
-    "bash -ec 'cd %s; nice %s %s %s%s %s%s %s; edwFinishAnalysis now'",
+    "bash -exc 'cd %s; nice %s %s %s%s %s%s %s'",
     tempDir, scriptName, indexPath, edwRootDir, ef1->edwFileName, edwRootDir, 
     ef2->edwFileName, "alignments.bam");
 int jobId = edwAnalysisJobAdd(conn, commandLine);
@@ -138,7 +138,7 @@ makeDir(tempDir);
 
 /* Make up job and command line */
 char commandLine[4*PATH_LEN];
-safef(commandLine, sizeof(commandLine), "bash -ec 'cd %s; nice %s %s %s%s %s; edwFinishAnalysis now'",
+safef(commandLine, sizeof(commandLine), "bash -exc 'cd %s; nice %s %s %s%s %s'",
     tempDir, scriptName, indexPath, edwRootDir, ef->edwFileName, "alignments.bam");
 int jobId = edwAnalysisJobAdd(conn, commandLine);
 
