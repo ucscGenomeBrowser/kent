@@ -34,6 +34,8 @@ void bigWigFileCreate(
 	int itemsPerSlot,	/* Number of items in lowest level of tree.  512 is good. */
 	boolean clipDontDie,	/* If TRUE then clip items off end of chrom rather than dying. */
 	boolean compress,	/* If TRUE then compress data. */
+	boolean keepAllChromosomes,	/* If TRUE then store all chromosomes in chromosomal b-tree. */
+	boolean fixedSummaries,	/* If TRUE then impose fixed summary levels. */
 	char *outName);
 /* Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format. */

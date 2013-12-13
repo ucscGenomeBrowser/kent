@@ -168,16 +168,9 @@ struct rTree *el, *list=NULL, *tree = NULL;
 /* Make first level above leaf. */
 bits64 i;
 bits64 nextOffset = (*fetchOffset)(items, context);
-for (i=0; i<itemCount; i += itemsPerSlot)
+int oneSize = 0;
+for (i=0; i<itemCount; i += oneSize)
     {
-    /* Figure out if we are on final iteration through loop, and the
-     * count of items in this iteration. */
-    boolean finalIteration = FALSE;
-    int oneSize = itemCount-i;
-    if (oneSize > itemsPerSlot)
-        oneSize = itemsPerSlot;
-    else
-        finalIteration = TRUE;
 
     /* Allocate element and put on list. */
     lmAllocVar(lm, el);
@@ -191,19 +184,25 @@ for (i=0; i<itemCount; i += itemsPerSlot)
     el->endBase = key.end;
     el->startFileOffset = nextOffset;
 
-    /* Figure out end of element from offset of next element (or file size
-     * for final element.) */
-    if (finalIteration)
+    oneSize = 1;
+
+    char *endItem = startItem;
+    int j;
+    for (j=i+1; j<itemCount; ++j) {
+	endItem += itemSize;
+	nextOffset = (*fetchOffset)(endItem, context);
+	if (nextOffset != el->startFileOffset)
+		break;
+	else 
+		oneSize++;
+    }
+    if (j == itemCount) {
 	nextOffset = endFileOffset;
-    else
-        {
-	char *endItem = startItem + itemSize*oneSize;
-        nextOffset = (*fetchOffset)(endItem, context);
-	}
+    }
+
     el->endFileOffset = nextOffset;
 
     /* Expand area spanned to include all items in block. */
-    int j;
     for (j=1; j<oneSize; ++j)
         {
 	void *item = items + itemSize*(i+j);
@@ -556,3 +555,72 @@ slReverse(&blockList);
 return blockList;
 }
 
+static void rEnumerateBlocks(struct cirTreeFile *crt, int level, bits64 indexFileOffset,
+	struct fileOffsetSize **retList)
+/* Recursively find blocks with data. */
+{
+struct udcFile *udc = crt->udc;
+
+/* Seek to start of block. */
+udcSeek(udc, indexFileOffset);
+
+/* Read block header. */
+UBYTE isLeaf;
+UBYTE reserved;
+bits16 i, childCount;
+udcMustReadOne(udc, isLeaf);
+udcMustReadOne(udc, reserved);
+boolean isSwapped = crt->isSwapped;
+childCount = udcReadBits16(udc, isSwapped);
+
+verbose(3, "rEnumerateBlocks %llu childCount %d. isLeaf %d\n", indexFileOffset, (int)childCount, (int)isLeaf);
+
+if (isLeaf)
+    {
+    /* Loop through node adding overlapping leaves to block list. */
+    for (i=0; i<childCount; ++i)
+        {
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	bits64 offset = udcReadBits64(udc, isSwapped);
+	bits64 size = udcReadBits64(udc, isSwapped);
+        struct fileOffsetSize *block;
+        AllocVar(block);
+        block->offset = offset;
+        block->size = size;
+        slAddHead(retList, block);
+	}
+    }
+else
+    {
+    /* Read node into arrays. */
+    bits64 offset[childCount];
+    for (i=0; i<childCount; ++i)
+        { 
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	udcReadBits32(udc, isSwapped);
+	offset[i] = udcReadBits64(udc, isSwapped);
+	}
+
+    /* Recurse into child nodes that we overlap. */
+    for (i=0; i<childCount; ++i)
+	{
+	rEnumerateBlocks(crt, level+1, offset[i], retList);
+	}
+    }
+}
+
+struct fileOffsetSize *cirTreeEnumerateBlocks(struct cirTreeFile *crt)
+/* Return list of file blocks that between them contain all items that overlap
+ * start/end on chromIx.  Also there will be likely some non-overlapping items
+ * in these blocks too. When done, use slListFree to dispose of the result. */
+{
+struct fileOffsetSize *blockList = NULL;
+rEnumerateBlocks(crt, 0, crt->rootOffset, &blockList);
+slReverse(&blockList);
+return blockList;
+}
