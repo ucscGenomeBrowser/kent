@@ -17,7 +17,6 @@ if [ "x${VERSION}y" = "xy" ]; then
     exit 255
 fi
 
-if [ 0 = 1 ]; then
 echo "Scanning for GTF file names"
 
 echo "user anonymous hiram@soe
@@ -33,8 +32,6 @@ if (match($1,"^[a-z_]*:$")) {gsub(":$","",$1); printf "%s/", $1 }
 if (NF == 9) { if (match($1,"^-rw")) {printf "%s\n", $NF} }
 }
 ' | sed -e "s#^#'x' => '#; s#\$#',#" > release.${VERSION}.gtf.names
-
-exit $?
 
 echo "Scanning for MySQL table files"
 
@@ -62,8 +59,6 @@ BEGIN{ D="notYet" }
 }
 ' release.${VERSION}.MySQL.ls-lR \
 	| sed -e "s#^#'x' => '#; s#\$#',#" > release.${VERSION}.MySQL.names
-
-fi
 
 fi
 
