@@ -1,7 +1,7 @@
 # Genome-wide ENCODE tracks
 include wgEncodeSuper.release2.ra 
 
-# GENCODE genes on alpha only (wrangler: braney,cricket)
+# GENCODE genes on alpha only (wrangler: markd)
 include wgEncodeGencodeV3.ra alpha
 include wgEncodeGencodeV4.ra alpha
 include wgEncodeGencodeV9.ra alpha
@@ -11,6 +11,7 @@ include wgEncodeGencodeV12.ra alpha
 include wgEncodeGencodeV13.ra alpha
 include wgEncodeGencodeV15.ra alpha
 include wgEncodeGencodeV16.ra alpha
+include wgEncodeGencodeV18.ra alpha
 
 # GENCODE public tracks
 include wgEncodeGencodeV7.ra
