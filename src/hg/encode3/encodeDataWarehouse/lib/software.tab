@@ -1,0 +1,14 @@
+1	bwa	0.7.0-r313	93d9ce7a5be775954f1359c7e6ffc512
+2	samtools	0.1.18 (r982:295) 	f5a0f999888d0eb8dfee66a52eb93f50
+3	eap_run_bwa_pe	1	009ccf57ef76139a7f94edf986eec2a5
+4	eap_run_bwa_se	1	fe43b991bc845fae877fe349b5d0b4fb
+5	macs2	2.0.10.20120913	c589df9474a4e39d0481ea74cfea64d8
+6	bedToBigBed	2.5	26ddfd9e50f4db498e7165ff251777ee
+7	wigToBigWig	4	c148725175c3dbfc7c44a34a28abbe44
+8	bedGraphToBigWig	4	d009acb00aa699d1bcc626dfb6383e0f
+9	eap_bam_sort	1	0ded4fa1e6dda7e181612a046d696b6c
+10	eap_run_bwa_pe	2	e7a810c1e7a91491af9f4e808899f724
+11	eap_run_bwa_se	2	5c77d282c14216fd4baf2728ca391b34
+12	eap_macs2_xls_to_narrowPeak	1	ebba7d239184d101c6c5cad9df862549
+13	eap_run_macs2_dnase_pe	1	a9bcb3b91e53e351be619bc605334629
+14	eap_run_macs2_dnase_se	1	ab602c07451a4edd508f6b8f04aeed47
