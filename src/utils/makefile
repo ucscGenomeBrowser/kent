@@ -27,6 +27,7 @@ UTILS_APPLIST = \
 	bedRemoveOverlap \
 	bedRestrictToPositions \
 	bigWigAverageOverBed  \
+	bigWigCat \
 	bigWigCorrelate \
 	bigWigInfo \
 	bigWigMerge \

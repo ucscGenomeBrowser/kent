@@ -14,6 +14,8 @@ static int blockSize = 256;
 static int itemsPerSlot = 1024;
 static boolean clipDontDie = FALSE;
 static boolean doCompress = FALSE;
+static boolean fixedSummaries = FALSE;
+static boolean keepAllChromosomes = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -33,7 +35,9 @@ errAbort(
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
   "   -clip - If set just issue warning messages rather than dying if wig\n"
   "                  file contains items off end of chromosome.\n"
-  "   -unc - If set, do not use compression."
+  "   -unc - If set, do not use compression.\n"
+  "   -fixedSummaries - If set, use a predefined sequence of summary levels.\n"
+  "   -keepAllChromosomes - If set, store all chromosomes in b-tree."
   , bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -43,6 +47,8 @@ static struct optionSpec options[] = {
    {"itemsPerSlot", OPTION_INT},
    {"clip", OPTION_BOOLEAN},
    {"unc", OPTION_BOOLEAN},
+   {"fixedSummaries", OPTION_BOOLEAN},
+   {"keepAllChromosomes", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -50,7 +56,7 @@ void wigToBigWig(char *inName, char *chromSizes, char *outName)
 /* wigToBigWig - Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format.. */
 {
-bigWigFileCreate(inName, chromSizes, blockSize, itemsPerSlot, clipDontDie, doCompress, outName);
+bigWigFileCreate(inName, chromSizes, blockSize, itemsPerSlot, clipDontDie, doCompress, keepAllChromosomes, fixedSummaries, outName);
 }
 
 int main(int argc, char *argv[])
@@ -61,6 +67,8 @@ blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 clipDontDie = optionExists("clip");
 doCompress = !optionExists("unc");
+keepAllChromosomes = optionExists("keepAllChromosomes");
+fixedSummaries = optionExists("fixedSummaries");
 if (argc != 4)
     usage();
 wigToBigWig(argv[1], argv[2], argv[3]);
