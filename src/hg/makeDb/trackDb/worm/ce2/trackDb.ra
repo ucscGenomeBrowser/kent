@@ -73,7 +73,7 @@ type psl xeno
 otherDb fr1
 
 track blastzCb1
-shortLabel Briggsae Blastz
+shortLabel Briggase Blastz
 longLabel $o_Organism ($o_date) Blastz 
 group compGeno
 priority 124
@@ -188,7 +188,7 @@ track twinscan override
 longLabel Twinscan Gene Predictions Using briggsae/elegans Homology
 
 track axtNetCb1
-shortLabel Briggase Aligns
+shortLabel Briggsae Aligns
 longLabel $o_Organism ($o_date) Blastz Alignments from Net
 group compGeno
 priority 127
