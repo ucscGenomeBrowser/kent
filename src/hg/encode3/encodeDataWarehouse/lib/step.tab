@@ -1,0 +1,2 @@
+1	bwa_single_end	3	eap_run_bwa_se,bwa,samtools
+2	bwa_paired_end	3	eap_run_bwa_pe,bwa,samtools
