@@ -100,13 +100,17 @@ edwAddQaContamTarget dm3
 edwAddQaContamTarget rn4
 edwAddQaContamTarget sacCer3
 edwAddQaContamTarget escCol1
-hgsql encodeDataWarehouse -e 'create view files as select id,edwFileName,size,left(submitFileName,80) from edwFile where (errorMessage="" or errorMessage is NULL) and deprecated=""'
 hgsql encodeDataWarehouse -e 'create view enrichedFiles as select f.id,v.format,v.enrichedIn,e.enrichment,left(f.submitFileName,70) submitFileName from edwQaEnrich e,edwValidFile v,edwFile f,edwQaEnrichTarget t where e.fileId=f.id and v.fileId=f.id and t.id=e.qaEnrichTargetId and v.enrichedIn=t.name;'
-hgsql encodeDataWarehouse -e 'create view validFiles as select licensePlate as accession,fileId file,format,outputType output,experiment,replicate rep,enrichedIn,ucscDb,itemCount,mapRatio,depth from edwValidFile'
-hgsql encodeDataWarehouse -e 'create view enrichments as select e.id id, e.fileId fileId,t.name target,v.enrichedIn, targetBaseHits,targetUniqHits,coverage,enrichment,uniqEnrich from edwQaEnrich e,edwQaEnrichTarget t,edwValidFile v where e.qaEnrichTargetId = t.id and e.fileId=v.fileId'
 hgsql encodeDataWarehouse -e 'create view crossEnrichments as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,ev.enrichedIn enrich,sampleSampleEnrichment xEnrichment from edwFile e,edwQaPairSampleOverlap p, edwFile y,edwValidFile ev where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId = e.id'
 hgsql encodeDataWarehouse -e 'create view correlations as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,pearsonInEnriched from edwFile e,edwQaPairCorrelation p, edwFile y where  e.id=p.elderFileId and y.id=p.youngerFileId'
-hgsql encodeDataWarehouse -e 'create view vf as select edwFile.id fileId,submitId,submitFileName,edwFileName,FROM_UNIXTIME(endUploadTime) endUploadTime,FROM_UNIXTIME(updateTime) updateTime,size,md5,tags,errorMessage,deprecated,replacedBy,licensePlate,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,mapRatio,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd from edwFile, edwValidFile where edwFile.id = edwValidFile.fileId'
+hgsql encodeDataWarehouse -e 'create view vf as select edwFile.id fileId,submitId,submitFileName,edwFileName,FROM_UNIXTIME(endUploadTime) endUploadTime,FROM_UNIXTIME(updateTime) updateTime,size,md5,tags,errorMessage,deprecated,replacedBy,licensePlate,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,mapRatio,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd,qaVersion from edwFile, edwValidFile where edwFile.id = edwValidFile.fileId'
+
+#Add experiment table,  just a local one rather than from stanford
+hgsql encodeDataWarehouse -e 'load data local infile "../oneShot/rsyncEdwExpDataType/dec14.tab" into table edwExperiment'
+
+#Load up analysis software and steps tables
+hgsql encodeDataWarehouse -e 'load data local infile "software.tab" into table edwAnalysisSoftware'
+hgsql encodeDataWarehouse -e 'load data local infile "steps.tab" into table edwAnalysisStep'
 
 # Relaunch edwRunDaemons.  Send them initial wake up message
 edwRunDaemon encodeDataWarehouse edwSubmitJob 8 $subFifo -log=edwSubmit.log
