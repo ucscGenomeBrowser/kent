@@ -316,7 +316,7 @@ table edwAnalysisSoftware
 "Software that is tracked by the analysis pipeline."
     (
     uint id primary auto;  "Software id"
-    lstring "name"; "Command line name"
+    string "name" unique; "Command line name"
     lstring "version"; "Current version"
     char[32] md5; "md5 sum of executable file"
     )
@@ -325,7 +325,7 @@ table edwAnalysisStep
 "A step in an analysis pipeline - something that takes one file to another"
     (
     uint id primary auto; "Step id"
-    lstring "name";  "Name of this analysis step"
+    string "name" unique;  "Name of this analysis step"
     int softwareCount;  "Number of pieces of software used in step"
     string[softwareCount] software; "Names of software used. First is the glue script"
     )
