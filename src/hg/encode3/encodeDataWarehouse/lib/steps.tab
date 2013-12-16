@@ -1,2 +1,4 @@
 1	bwa_single_end	3	eap_run_bwa_se,bwa,samtools
 2	bwa_paired_end	3	eap_run_bwa_pe,bwa,samtools
+3	macs2_dnase_se	4	eap_run_macs2_dnase_se,macs2,bedToBigBed,bedGraphToBigWig
+4	macs2_dnase_pe	4	eap_run_macs2_dnase_pe,macs2,bedToBigBed,bedGraphToBigWig
