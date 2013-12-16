@@ -1852,8 +1852,8 @@ struct edwAnalysisRun
     char **outputTypes;	/* list of formats of output files */
     char *jsonResult;	/* JSON formatted object with result for Stanford metaDatabase */
     char uuid[38];	/* Help to synchronize us with Stanford. */
-    signed char createStatus;	/* 1 if output files made 0 if not made, -1 if make tried and failed */
-    unsigned createCount;	/* Count of files made */
+    signed char createStatus;	/* 1 if output files made 0 if not made, -1 if tried and failed */
+    unsigned createCount;	/* Count of files made. Eventually should match outputFileCount */
     unsigned *createFileIds;	/* list of ids of output files in warehouse */
     };
 
