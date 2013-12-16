@@ -256,4 +256,23 @@ struct edwQaPairedEndFastq *edwQaPairedEndFastqFromVfs(struct sqlConnection *con
 int edwAnalysisJobAdd(struct sqlConnection *conn, char *commandLine);
 /* Add job to edwAnalyisJob table and return job ID. */
 
+void edwMd5File(char *fileName, char md5Hex[33]);
+/* call md5sum utility to calculate md5 for file and put result in hex format md5Hex 
+ * This ends up being about 30% faster than library routine md5HexForFile,
+ * however since there's popen() weird interactions with  stdin involved
+ * it's not suitable for a general purpose library.  Environment inside edw
+ * is controlled enough it should be ok. */
+
+void edwPathForCommand(char *command, char path[PATH_LEN]);
+/* Figure out path associated with command */
+
+struct edwAnalysisStep *edwAnalysisStepFromName(struct sqlConnection *conn, char *name);
+/* Get edwAnalysisStep record from database based on name. */
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareFromName(struct sqlConnection *conn, char *name);
+/* Get edwAnalysisSoftware record by name */
+
+void edwAnalysisCheckVersions(struct sqlConnection *conn, char *analysisStep);
+/* Check that we are running tracked versions of everything. */
+
 #endif /* EDWLIB_H */

@@ -1273,3 +1273,104 @@ edwAnalysisJobSaveToDb(conn, &job, "edwAnalysisJob", 0);
 return sqlLastAutoId(conn);
 }
 
+static FILE *edwPopen(char *command, char *mode)
+/* do popen or die trying */
+{
+/* Because of bugs with popen(...,"r") and programs that use stdin otherwise
+ * it's probably better to use Mark's pipeline library,  but it is ever so
+ * much harder to use... */
+FILE *f = popen(command,  mode);
+if (f == NULL)
+    errnoAbort("Can't popen(%s, %s)", command, mode);
+return f;
+}
+
+static void edwPclose(FILE **pF)
+/* Close pipe file or die trying */
+{
+FILE *f = *pF;
+if (f != NULL)
+    {
+    int err = pclose(f);
+    if (err != 0)
+        errnoAbort("Can't pclose(%p)", f);
+    *pF = NULL;
+    }
+}
+
+static void edwOneLineSystemResult(char *command, char *line, int maxLineSize)
+/* Execute system command and return one line result from it in line */
+{
+FILE *f = edwPopen(command, "r");
+if (fgets(line, maxLineSize, f) == NULL)
+    errAbort("Can't get line from %s", command);
+edwPclose(&f);
+}
+
+void edwMd5File(char *fileName, char md5Hex[33])
+/* call md5sum utility to calculate md5 for file and put result in hex format md5Hex 
+ * This ends up being about 30% faster than library routine md5HexForFile,
+ * however since there's popen() weird interactions with  stdin involved
+ * it's not suitable for a general purpose library.  Environment inside edw
+ * is controlled enough it should be ok. */
+{
+char command[PATH_LEN + 16];
+safef(command, sizeof(command), "md5sum %s", fileName);
+char line[2*PATH_LEN];
+edwOneLineSystemResult(command, line, sizeof(line));
+memcpy(md5Hex, line, 32);
+md5Hex[32] = 0;
+}
+
+void edwPathForCommand(char *command, char path[PATH_LEN])
+/* Figure out path associated with command */
+{
+char sysCommand[PATH_LEN*2];
+safef(sysCommand, sizeof(sysCommand), "bash -c 'which %s'", command);
+edwOneLineSystemResult(sysCommand, path, PATH_LEN);
+eraseTrailingSpaces(path);
+}
+
+struct edwAnalysisStep *edwAnalysisStepFromName(struct sqlConnection *conn, char *name)
+/* Get edwAnalysisStep record from database based on name. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwAnalysisStep where name = '%s'", name);
+return edwAnalysisStepLoadByQuery(conn, query);
+}
+
+struct edwAnalysisSoftware *edwAnalysisSoftwareFromName(struct sqlConnection *conn, char *name)
+/* Get edwAnalysisSoftware record by name */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwAnalysisSoftware where name = '%s'", name);
+return edwAnalysisSoftwareLoadByQuery(conn, query);
+}
+
+static void checkVersion(char *usedIn, struct edwAnalysisSoftware *software)
+/* Basically do a 'which' to find path, and then calc md5sum */
+{
+char path[PATH_LEN];
+edwPathForCommand(software->name, path);
+char md5[33];
+edwMd5File(path, md5);
+if (!sameString(md5, software->md5))
+    errAbort("Need to update edwAnalysisSoftware %s used in %s\nOld md5 %s, new md5 %s",
+	software->name, usedIn, software->md5, md5);
+}
+
+void edwAnalysisCheckVersions(struct sqlConnection *conn, char *analysisStep)
+/* Check that we are running tracked versions of everything. */
+{
+struct edwAnalysisStep *step = edwAnalysisStepFromName(conn, analysisStep);
+
+int i;
+for (i=0; i<step->softwareCount; ++i)
+    {
+    struct edwAnalysisSoftware *software = edwAnalysisSoftwareFromName(conn, step->software[i]);
+    checkVersion(analysisStep, software);
+    edwAnalysisSoftwareFree(&software);
+    }
+edwAnalysisStepFree(&step);
+}
+
