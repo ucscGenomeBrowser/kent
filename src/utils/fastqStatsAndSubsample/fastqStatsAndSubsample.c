@@ -33,7 +33,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "fastqStatsAndSubsample - Go through a fastq file doing sanity checks and collecting statistics\n"
+  "fastqStatsAndSubsample v2 - Go through a fastq file doing sanity checks and collecting stats\n"
   "and also producing a smaller fastq out of a sample of the data.  The fastq input may be\n"
   "compressed with gzip or bzip2.  Unfortunately the fastq input can't be in a pipe\n"
   "usage:\n"
