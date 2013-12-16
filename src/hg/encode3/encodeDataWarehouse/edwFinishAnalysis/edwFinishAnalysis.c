@@ -30,49 +30,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-FILE *edwPopen(char *command, char *mode)
-/* do popen or die trying */
-{
-/* Because of bugs with popen(...,"r") and programs that use stdin otherwise
- * it's probably better to use Mark's pipeline library,  but it is ever so
- * much harder to use... */
-FILE *f = popen(command,  mode);
-if (f == NULL)
-    errnoAbort("Can't popen(%s, %s)", command, mode);
-return f;
-}
-
-void edwPclose(FILE **pF)
-/* Close pipe file or die trying */
-{
-FILE *f = *pF;
-if (f != NULL)
-    {
-    int err = pclose(f);
-    if (err != 0)
-        errnoAbort("Can't pclose(%p)", f);
-    *pF = NULL;
-    }
-}
-
-void edwMd5File(char *fileName, char md5Hex[33])
-/* call md5sum utility to calculate md5 for file and put result in hex format md5Hex 
- * This ends up being about 30% faster than library routine md5HexForFile,
- * however since there's popen() weird interactions with  stdin involved
- * it's not suitable for a general purpose library.  Environment inside edw
- * is controlled enough it should be ok. */
-{
-char command[PATH_LEN + 16];
-safef(command, sizeof(command), "md5sum %s", fileName);
-FILE *f = edwPopen(command, "r");
-char line[2*PATH_LEN];
-if (fgets(line, sizeof(line), f) == NULL)
-    errAbort("Can't get line from %s", command);
-memcpy(md5Hex, line, 32);
-md5Hex[32] = 0;
-edwPclose(&f);
-}
-
 static char *sharedVal(struct cgiDictionary *dictList, char *var)
 /* Return value if var is present and identical in all members of dictList */
 {
@@ -212,6 +169,9 @@ void finishGoodRun(struct sqlConnection *conn, struct edwAnalysisRun *run,
 /* Looks like the job for the run completed successfully, so let's grab results
  * and store them permanently */
 {
+/* Do a version check before committing to database. */
+edwAnalysisCheckVersions(conn, run->analysisStep);
+
 /* Look up UCSC db. */
 char query[1024];
 sqlSafef(query, sizeof(query), "select ucscDb from edwAssembly where id=%u", run->assemblyId);
@@ -230,6 +190,8 @@ for (i=0; i<run->inputFileCount; ++i)
     inputFile = edwFileFromId(conn, run->inputFileIds[i]);
     slAddTail(&inputFileList, inputFile);
     }
+
+struct edwSubmit *submit = eapCurrentSubmit(conn);
 
 /* Generate initial edwRun records for each of the file outputs. */
 struct edwFile *outputFile, *outputFileList = NULL;
@@ -256,6 +218,7 @@ for (i=0; i<run->outputFileCount; ++i)
 
     /* Make most of edwFile record */
     AllocVar(outputFile);
+    outputFile->submitId = submit->id;
     outputFile->submitFileName = cloneString(path);
     outputFile->size = fileSize(path);
     outputFile->updateTime = fileModTime(path);
