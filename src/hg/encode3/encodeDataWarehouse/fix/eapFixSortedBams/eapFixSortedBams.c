@@ -109,8 +109,12 @@ sqlSafef(query, sizeof(query),
     "order by id desc"
     , oldRun->firstInputId, oldRun->analysisStep, oldRun->id);
 struct edwAnalysisRun *newRun = edwAnalysisRunLoadByQuery(conn, query);
+if (newRun == NULL)
+    errAbort("NULL result from %s\n", query);
 if (newRun->createStatus <= 0)
      return 0;
+if (isEmpty(newRun->createFileIds))
+    errAbort("Strange no createFileIds result from %s", query);
 return newRun->createFileIds[0];
 }
 
