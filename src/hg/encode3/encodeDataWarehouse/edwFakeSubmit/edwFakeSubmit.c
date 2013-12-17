@@ -1,4 +1,4 @@
-/* edwFakeSubmit - Create a fake submission based on a real one that is in the warehouse. */
+/* edwFakeManifestFromSubmit - Create a fake submission based on a real one that is in the warehouse. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -11,9 +11,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwFakeSubmit - Create a fake submission based on a real one that is in the warehouse\n"
+  "edwFakeManifestFromSubmit - Create a fake submission based on a real one that is in the warehouse\n"
   "usage:\n"
-  "   edwFakeSubmit submitId outDir\n"
+  "   edwFakeManifestFromSubmit submitId outDir\n"
   "This will create an out directory populated with manifest.txt and validated.txt\n"
   "and with symbolic links back to encodeDataWarehouse files.\n"
   "options:\n"
@@ -52,8 +52,8 @@ void printSharedHeader(FILE *f)
 fprintf(f, "#file_name\tformat\toutput_type\texperiment\tenriched_in\tucsc_db\treplicate\ttechnical_replicate\tpaired_end");
 }
 
-void edwFakeSubmit(char *submitIdString, char *outDir)
-/* edwFakeSubmit - Create a fake submission based on a real one that is in the warehouse. */
+void edwFakeManifestFromSubmit(char *submitIdString, char *outDir)
+/* edwFakeManifestFromSubmit - Create a fake submission based on a real one that is in the warehouse. */
 {
 struct sqlConnection *conn = edwConnect();
 char query[512];
@@ -122,6 +122,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-edwFakeSubmit(argv[1], argv[2]);
+edwFakeManifestFromSubmit(argv[1], argv[2]);
 return 0;
 }
