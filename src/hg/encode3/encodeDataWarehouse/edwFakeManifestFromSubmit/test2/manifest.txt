@@ -1,0 +1,4 @@
+#file_name	format	output_type	experiment	enriched_in	ucsc_db	replicate	technical_replicate	paired_end
+##validateManifest version 1.7
+ENCFF000ABL.fastq.gz	fastq	reads	ENCSR000FFJ	open	hg19	1	n/a	n/a
+ENCFF000ABK.fastq.gz	fastq	reads	ENCSR000FFJ	open	hg19	1	n/a	n/a
