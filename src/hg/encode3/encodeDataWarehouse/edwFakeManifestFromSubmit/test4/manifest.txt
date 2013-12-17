@@ -1,3 +1,0 @@
-#file_name	format	output_type	experiment	enriched_in	ucsc_db	replicate	technical_replicate	paired_end
-##validateManifest version 1.7
-ENCFF000ABO.fastq.gz	fastq	reads	ENCSR000ENI	promoter	hg19	1	n/a	n/a

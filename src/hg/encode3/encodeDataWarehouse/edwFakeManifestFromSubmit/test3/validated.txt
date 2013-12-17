@@ -1,4 +1,0 @@
-#file_name	format	output_type	experiment	enriched_in	ucsc_db	replicate	technical_replicate	paired_end	md5_sum	size	modified	valid_key
-##validateManifest version 1.7
-ENCFF000ABM.fastq.gz	fastq	reads	ENCSR000ENI	promoter	hg19	1	n/a	1	8c4564fe1358ca88892d8cfdd4019545	3511172	1386805537	V3186
-ENCFF000ABN.fastq.gz	fastq	reads	ENCSR000ENI	promoter	hg19	1	n/a	2	21b2c092e7e78436ef4445f16d508571	3507281	1386805533	V9530

@@ -1,4 +1,0 @@
-#file_name	format	output_type	experiment	enriched_in	ucsc_db	replicate	technical_replicate	paired_end	md5_sum	size	modified	valid_key
-##validateManifest version 1.7
-ENCFF000ABL.fastq.gz	fastq	reads	ENCSR000FFJ	open	hg19	1	n/a	n/a	e004db547f28896757981f2a91e115ff	3676727	1386825024	V8623
-ENCFF000ABK.fastq.gz	fastq	reads	ENCSR000FFJ	open	hg19	1	n/a	n/a	fe761969d8255099eaf9b1dfb1e7ebc5	2660823	1386825024	V3534
