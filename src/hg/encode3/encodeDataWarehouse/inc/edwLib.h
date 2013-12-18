@@ -275,4 +275,7 @@ struct edwAnalysisSoftware *edwAnalysisSoftwareFromName(struct sqlConnection *co
 void edwAnalysisCheckVersions(struct sqlConnection *conn, char *analysisStep);
 /* Check that we are running tracked versions of everything. */
 
+void edwPokeFifo(char *fifoName);
+/* Send '\n' to fifo to wake up associated daemon */
+
 #endif /* EDWLIB_H */

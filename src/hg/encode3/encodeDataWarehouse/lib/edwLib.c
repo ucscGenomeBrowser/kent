@@ -1363,14 +1363,38 @@ void edwAnalysisCheckVersions(struct sqlConnection *conn, char *analysisStep)
 /* Check that we are running tracked versions of everything. */
 {
 struct edwAnalysisStep *step = edwAnalysisStepFromName(conn, analysisStep);
+if (step == NULL)
+    errAbort("Can't find %s in edwAnalysisStep table", analysisStep);
+
 
 int i;
 for (i=0; i<step->softwareCount; ++i)
     {
     struct edwAnalysisSoftware *software = edwAnalysisSoftwareFromName(conn, step->software[i]);
+    if (software == NULL)
+        errAbort("Can't find %s in edwAnalysisSoftware", step->software[i]);
     checkVersion(analysisStep, software);
     edwAnalysisSoftwareFree(&software);
     }
 edwAnalysisStepFree(&step);
+}
+
+void edwPokeFifo(char *fifoName)
+/* Send '\n' to fifo to wake up associated daemon */
+{
+/* Sadly we loop through places it might be since it varies. It has to live somewhere
+ * that web CGIs can poke is the problem. */
+char *places[] = {"/data/www/userdata/", "/usr/local/apache/userdata/"};
+int i;
+for (i=0; i<ArraySize(places); ++i)
+    {
+    char path[PATH_LEN];
+    safef(path, sizeof(path), "%s%s", places[i], fifoName);
+    if (fileExists(path))
+        {
+	char *message = "\n";
+	writeGulp(path, message, strlen(message));
+	}
+    }
 }
 
