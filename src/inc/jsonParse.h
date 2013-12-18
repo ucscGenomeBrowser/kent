@@ -102,10 +102,10 @@ struct hash *jsonObjectVal(struct jsonElement *ele, char *name);
 long jsonNumberVal(struct jsonElement *ele, char *name);
 /* Enforce element is type jsonNumber and return value. */
 
-long jsonDoubleVal(struct jsonElement *ele, char *name);
+double jsonDoubleVal(struct jsonElement *ele, char *name);
 /* Enforce element is type jsonDouble and return value. */
 
-long jsonBooleanVal(struct jsonElement *ele, char *name);
+boolean jsonBooleanVal(struct jsonElement *ele, char *name);
 /* Enforce element is type jsonBoolean and return value. */
 
 char *jsonStringVal(struct jsonElement *ele, char *eleName);

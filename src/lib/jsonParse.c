@@ -619,7 +619,7 @@ if (ele->type != jsonNumber)
 return ele->val.jeNumber;
 }
 
-long jsonDoubleVal(struct jsonElement *ele, char *name)
+double jsonDoubleVal(struct jsonElement *ele, char *name)
 /* Enforce element is type jsonDouble and return value. */
 {
 if (ele->type != jsonDouble)
@@ -627,7 +627,7 @@ if (ele->type != jsonDouble)
 return ele->val.jeDouble;
 }
 
-long jsonBooleanVal(struct jsonElement *ele, char *name)
+boolean jsonBooleanVal(struct jsonElement *ele, char *name)
 /* Enforce element is type jsonBoolean and return value. */
 {
 if (ele->type != jsonBoolean)
