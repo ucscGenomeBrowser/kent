@@ -59,8 +59,10 @@ struct sqlConnection *conn = edwConnect();
 char query[512];
 sqlSafef(query, sizeof(query), "select * from edwSubmit where id=%s", submitIdString);
 struct edwSubmit *submit = edwSubmitLoadByQuery(conn, query);
-uglyf("%d files in query\n", submit->newFiles);
+if (submit == NULL)
+    errAbort("Can't find submission %s", submitIdString);
 
+uglyf("%d files in query\n", submit->newFiles);
 sqlSafef(query, sizeof(query), "select * from edwFile where submitId=%s", submitIdString);
 struct edwFile *ef, *efList = edwFileLoadByQuery(conn, query);
 
