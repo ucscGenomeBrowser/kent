@@ -191,7 +191,7 @@ return isPaired;
 
 void scheduleMacsDnase(struct sqlConnection *conn, 
     struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
-/* If it hasn't already been done schedule macs analysis of the two files. */
+/* If it hasn't already been done schedule macs analysis of the file. */
 {
 // Figure out input bam name
 char bamName[PATH_LEN];
@@ -224,10 +224,38 @@ safef(commandLine, sizeof(commandLine), "%s %s %s %s %s",
 
 /* Declare step input and output arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
-char *inTypes[] = {"reads"};
+char *inTypes[] = {"alignments"};
 char *outFormats[] = {"narrowPeak", "bigWig"};
 char *outNames[] = {"out.narrowPeak.bigBed", "out.bigWig"};
-char *outTypes[] = {"macs_dnase_peaks", "macs_dnase_signal"};
+char *outTypes[] = {"macs2_dnase_peaks", "macs2_dnase_signal"};
+scheduleStep(conn, analysisStep, commandLine, exp->accession, assembly,
+    ArraySize(inFileIds), inFileIds, inTypes,
+    ArraySize(outNames), outNames, outTypes, outFormats);
+}
+
+void scheduleHotspot(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
+/* If it hasn't already been done schedule hotspot analysis of the file. */
+{
+/* Make sure that we don't schedule it again and again */
+char *analysisStep = "hotspot";
+if (countAlreadyScheduled(conn, analysisStep, ef->id))
+    return;
+
+verbose(2, "schedulingHotspot on %s step %s, script %s\n", bamName, analysisStep, scriptName);
+/* Make command line */
+struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+int readLength = 36;	// uglyf - get from fastq record for input
+char commandLine[4*PATH_LEN];
+safef(commandLine, sizeof(commandLine), "eap_run_hotspot %s%s %s %s %d %s",
+    edwRootDir, ef->edwFileName, assembly->ucscDb, "DNase-seq", readLength, "out");
+
+/* Declare step input and output arrays and schedule it. */
+unsigned inFileIds[] = {ef->id};
+char *inTypes[] = {"alignments"};
+char *outFormats[] = {"broadPeak", "narrowPeak", "bigWig"};
+char *outNames[] = {"out/broadPeaks.bigBed", "out/narrowPeaks.bigBed", "out/density.bigWig"};
+char *outTypes[] = {"hotspot_broad_peaks", "hotspot_narrow_peaks", "hotspot_signal"};
 scheduleStep(conn, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(inFileIds), inFileIds, inTypes,
     ArraySize(outNames), outNames, outTypes, outFormats);
@@ -266,10 +294,13 @@ void runFastqAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edw
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
 char *dataType = exp->dataType;
+uglyf("runFastqAnalysis %u %s\n", ef->id, dataType);
 if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq"))
     {
+    uglyf("runFastqAnalysis still going\n");
     if (!isEmpty(vf->pairedEnd))
         {
+	uglyf("isPaird\n");
 	struct edwValidFile *vfB = edwOppositePairedEnd(conn, vf);
 	if (vfB != NULL)
 	    {
@@ -286,6 +317,7 @@ if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq"))
 	}
     else
         {
+	uglyf("notPaired\n");
 	scheduleBwaSingle(conn, ef, vf, exp);
 	}
     }
@@ -295,10 +327,11 @@ void runBamAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwVa
     struct edwExperiment *exp)
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
+uglyf("runBamAnalysis %u %s\n", ef->id, exp->dataType);
 if (sameString(exp->dataType, "DNase-seq"))
     {
-    /* Figure out temp dir and create it */
     scheduleMacsDnase(conn, ef, vf, exp);
+    scheduleHotspot(conn, ef, vf, exp);
     }
 #ifdef SOON 
 #endif /* SOON */
@@ -345,6 +378,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	    }
 	}
     }
+edwPokeFifo("edwAnalysis.fifo");
 sqlDisconnect(&conn);
 }
 
