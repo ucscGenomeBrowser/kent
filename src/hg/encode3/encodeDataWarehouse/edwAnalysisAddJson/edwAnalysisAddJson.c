@@ -82,14 +82,6 @@ dyStringAppendC(dy, '}');
 dyJsonEndLine(dy, isMiddle);
 }
 
-struct edwAnalysisStep *edwAnalysisStepFromName(struct sqlConnection *conn, char *name)
-/* Return named analysis step */
-{
-char query[256];
-sqlSafef(query, sizeof(query), "select * from edwAnalysisStep where name='%s'", name);
-return edwAnalysisStepLoadByQuery(conn, query);
-}
-
 char *jsonForRun(struct sqlConnection *conn, struct edwAnalysisRun *run, 
     struct edwFile *inputFileList, struct edwFile *outputFileList, struct edwAnalysisJob *job)
 /* Generate json for run given input and output file lists. */
@@ -120,7 +112,8 @@ for (i=0; i<step->softwareCount; ++i)
     
     dyJsonObjectStart(dy);
     dyJsonString(dy, "software", software->name, TRUE);
-    dyJsonString(dy, "version", software->version, FALSE);
+    dyJsonString(dy, "version", software->version, TRUE);
+    dyJsonString(dy, "md5", software->md5, FALSE);
     dyJsonObjectEnd(dy, i != step->softwareCount-1);
     edwAnalysisSoftwareFree(&software);
     }
