@@ -56,7 +56,7 @@ return text;
 }
 
 char *fromAgreeingObjectFields(char *expName, struct slRef *replicaList, char *object, char *field)
-/* Return given string valued field from replica.library assuming all replicas agree. */
+/* Return given string valued field from replica.object.field assuming all replicas agree. */
 {
 char *val = NULL;
 struct slRef *repRef;
@@ -87,30 +87,12 @@ char *fromAgreeingLibs(char *expName, struct slRef *replicaList, char *field)
 return fromAgreeingObjectFields(expName, replicaList, "library", field);
 }
 
-void getExpSubdir(char *higherPath, char expSubdir[PATH_LEN])
-/* Fill in expSubdir */
-{
-char fileDir[PATH_LEN],fileName[FILENAME_LEN],fileExt[FILEEXT_LEN];
-splitPath(higherPath, fileDir, fileName, fileExt);
-safef(expSubdir, PATH_LEN, "%s%s", fileDir,fileName);
-}
-
-void makeCacheSubdir(char *higherPath)
-/* Figure out dir/fileName */
-{
-char outDir[PATH_LEN];
-getExpSubdir(higherPath, outDir);
-makeDirsOnPath(outDir);
-}
-
 char *findCacheFileName(char *table, char *accession, char fileName[PATH_LEN])
 /* Fill in fileName and return it if cacingis turned on. */
 {
 if (cacheName)
     {
-    char cacheDir[PATH_LEN];
-    getExpSubdir(cacheName, cacheDir);
-    safef(fileName, PATH_LEN, "%s/%s.json", cacheDir, accession);
+    safef(fileName, PATH_LEN, "%s/%s.json", cacheName, accession);
     return fileName;
     }
 return NULL;
@@ -121,7 +103,7 @@ char *getStanfordJson(char *table, char *accession, char *userId, char *password
 {
 char url[512];
 safef(url, sizeof(url), "submit.encodedcc.org/%s%s/?format=json", table, accession);
-uglyf("Fetching from %s\n", url);
+verbose(1, "Fetching from %s\n", url);
 return getTextViaHttps(url, userId, password);
 }
 
@@ -171,27 +153,14 @@ return el;
 char *chipTarget(char *expAccession, char *userId, char *password)
 /* Load JSON and find somewhere inside of it target if possible */
 {
+char *result = NULL;
 struct jsonElement *exp = getParsedJsonForId("experiments/", expAccession, userId, password);
-struct jsonElement *replicatesArray = jsonFindNamedField(exp, NULL, "replicates");
-if (replicatesArray == NULL)
-     return NULL;
-struct slRef *refList = jsonListVal(replicatesArray, "replicates");
-if (refList == NULL)
-     return NULL;
-char *abUuid = fromAgreeingObjectFields(expAccession, refList, "antibody", "uuid");
-uglyf("abUuid=%s\n", abUuid);
-
-struct jsonElement *ab = mightGetParsedJsonForId("antibodies/", abUuid, userId, password);
-// struct jsonElement *ab = mightGetParsedJsonForId("antibodies/", "2d3cb7c5-e4c9-4163-a29e-ae05da5b8eb1", userId, password);
-if (ab != NULL)
+if (exp)
     {
-    struct jsonElement *target = jsonMustFindNamedField(ab, "antibodies", "target");
-    char *targetName = jsonStringField(target, "name");
-    uglyf("WHOOT - got ab %p against %s\n", ab, targetName);
+    struct jsonElement *targ = jsonFindNamedField(exp, expAccession, "target");
+    result = jsonOptionalStringField(targ, "name", NULL);
     }
-if (ab == NULL)
-    warn("exp %s, ab %s not found\n", expAccession, abUuid);
-return NULL;  //ugly
+return result;
 }
 
 char *rnaSubtype(char *expAccession, char *userId, char *password)
@@ -247,7 +216,7 @@ void rsyncEdwExpDataType(char *url, char *userId, char *password, char *outTab)
 {
 struct hash *oldHash = (fresh ? hashNew(0) : hashExpTable(edwConnect()));
 if (cacheName)
-    makeCacheSubdir(cacheName);
+    makeDirsOnPath(cacheName);
 struct jsonElement *jsonRoot = getParsedJsonForId("", "experiments", userId, password);
 char *expListName = "@graph";
 struct jsonElement *jsonExpList = jsonMustFindNamedField(jsonRoot, "", expListName);
@@ -275,14 +244,11 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	    {
 	    struct edwExperiment *oldExp = hashFindVal(oldHash, acc);
 	    char *ipTarget = "";
-#ifdef SOON
-/* Looks like Stanford antibody info not yet reliable so for now just a wast of time. Put this in later. */
 	    if (sameString(dataType, "ChIP-seq") && sameString(rfa, "ENCODE3"))
 	        {
-		ipTarget = chipTarget(acc, userId, password);
+		ipTarget = emptyForNull(chipTarget(acc, userId, password));
 		verbose(1, "ipTarget %s\n", ipTarget);
 		}
-#endif /* SOON */
 	    if (oldExp != NULL)
 		{
 		if (!sameString(oldExp->dataType, dataType))
