@@ -52,6 +52,14 @@ edwAlignFastqMakeBed(ef, assembly, fastqPath, vf, bedF,
     &vf->mapRatio, &vf->depth, &vf->sampleCoverage);
 }
 
+int makeReadableTemp(char *fileName)
+/* Make temp file that other people can read. */
+{
+int fd = mkstemp(fileName);
+if (fchmod(fd, 0664) == -1)
+    errnoAbort("Couldn't change permissions on temp file %s", fileName);
+return fd;
+}
 
 void makeValidFastq( struct sqlConnection *conn, char *path, struct edwFile *ef, 
 	struct edwAssembly *assembly, struct edwValidFile *vf)
@@ -72,7 +80,7 @@ vf->basesInSample = fqf->basesInSample;
 /* Align fastq and turn results into bed. */
 char sampleBedName[PATH_LEN], temp[PATH_LEN];
 safef(sampleBedName, PATH_LEN, "%sedwSampleBedXXXXXX", edwTempDirForToday(temp));
-int bedFd = mkstemp(sampleBedName);
+int bedFd = makeReadableTemp(sampleBedName);
 FILE *bedF = fdopen(bedFd, "w");
 alignFastqMakeBed(ef, assembly, fqf->sampleFileName, vf, bedF);
 carefulClose(&bedF);
@@ -201,7 +209,7 @@ void makeValidBam( struct sqlConnection *conn, char *path, struct edwFile *ef,
 {
 char sampleFileName[PATH_LEN], temp[PATH_LEN];
 safef(sampleFileName, PATH_LEN, "%sedwBamSampleToBedXXXXXX", edwTempDirForToday(temp));
-int sampleFd = mkstemp(sampleFileName);
+int sampleFd = makeReadableTemp(sampleFileName);
 FILE *f = fdopen(sampleFd, "w");
 struct genomeRangeTree *grt = genomeRangeTreeNew();
 edwMakeSampleOfBam(path, f, edwSampleReduction, assembly, grt, vf);
@@ -254,7 +262,7 @@ if (!gff->isGtf)
 /* Convert it to a somewhat smaller less informative bed file for sampling purposes. */
 char sampleFileName[PATH_LEN], temp[PATH_LEN];
 safef(sampleFileName, PATH_LEN, "%sedwGffBedXXXXXX", edwTempDirForToday(temp));
-int sampleFd = mkstemp(sampleFileName);
+int sampleFd = makeReadableTemp(sampleFileName);
 FILE *f = fdopen(sampleFd, "w");
 struct genomeRangeTree *grt = genomeRangeTreeNew();
 
