@@ -44,17 +44,25 @@ hgsql encodeDataWarehouse < encodeDataWarehouse.sql
 
 # Create users
 edwCreateUser kent@soe.ucsc.edu
+update edwUser set isAdmin=1 where email='kent@soe.ucsc.edu';
 edwCreateUser euriehong@stanford.edu
+update edwUser set isAdmin=1 where email='euriehong@stanford.edu';
 edwCreateUser edw@encodedcc.sdsc.edu
 edwCreateUser cherry@stanford.edu
 edwCreateUser vmalladi@stanford.edu
+update edwUser set isAdmin=1 where email='vmalladi@stanford.edu';
 edwCreateUser cricketsloan@stanford.edu
+update edwUser set isAdmin=1 where email='cricketsloan@stanford.edu';
 edwCreateUser etchan@stanford.edu
+update edwUser set isAdmin=1 where email='etchan@stanford.edu';
+edwCreateUser jseth@stanford.edu 
+update edwUser set isAdmin=1 where email='jseth@stanford.edu';
 edwCreateUser lrowe@stanford.edu
 edwCreateUser kate@soe.ucsc.edu
 edwCreateUser brianlee@soe.ucsc.edu
 edwCreateUser katrina@soe.ucsc.edu
 edwCreateUser chinhli@soe.ucsc.edu
+update edwUser set isAdmin=1 where email='chinhli@soe.ucsc.edu';
 edwCreateUser chli@ucsc.edu
 edwAddAssembly 9606 hg19 hg19 /gbdb/hg19/hg19.2bit -symLink=bcdbfbe9da62f19bee88b74dabef8cd3
 edwAddAssembly 9606 male.hg19 male.hg19 /hive/groups/encode/encode3/encValData/hg19/male.hg19.2bit -symLink=d536cde4657b63e92c52719cd1bd71d1
