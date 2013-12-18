@@ -71,31 +71,42 @@
                                                 This sequence is the only line referring to the underlying assembly.
                                                 The sequence logo, motif consensus, and numerical table
                                                 are instead all generated from the underlying PWM.
+                                              </p>
 				  	    <LI><b>&quot;Motif Consensus&quot; Line</b>
                                               <p>
                                                <p>
                                                  The <em>motif consensus</em> line uses the following scheme to indicate
                                                  strength of the highest-probability base for each column in the motif:
                                                  <table>
-                                                   <tr><td>Weight</td><td>Display Convention</td><td>&nbsp;&nbsp;&#09;&#09;&#09;&#09;Example</td></tr>
-                                                   <tr><td>.90 - 1.0</td><td>&nbsp;&nbsp;upper-case bold</td><td><b>&nbsp;&nbsp;ACGT</b></td></tr>
-                                                   <tr><td>.75 - .89</td><td>&nbsp;&nbsp;upper-case normal</td><td>&nbsp;&nbsp;ACGT</td></tr>
-                                                   <tr><td>.50 - .74</td><td>&nbsp;&nbsp;lower-case normal</td><td>&nbsp;&nbsp;acgt</td></tr>
-                                                   <tr><td>.40 - .49</td><td>&nbsp;&nbsp;lower-case grayed</td><td>&nbsp;&nbsp;acgt</td></tr>
-                                                   <tr><td>.00 - .39</td><td>&nbsp;&nbsp;lower-case grayed</td><td>&nbsp;&nbsp;.</td></tr>
+                                                   <tr><td>Weight</td><td>Display Convention</td>
+                                                     <td>&nbsp;&nbsp;&#09;&#09;&#09;&#09;Example</td></tr>
+                                                   <tr><td>.90 - 1.0</td><td>&nbsp;&nbsp;upper-case bold</td>
+                                                     <td><b>&nbsp;&nbsp;ACGT</b></td></tr>
+                                                   <tr><td>.75 - .89</td><td>&nbsp;&nbsp;upper-case normal</td>
+                                                     <td>&nbsp;&nbsp;ACGT</td></tr>
+                                                   <tr><td>.50 - .74</td><td>&nbsp;&nbsp;lower-case normal</td>
+                                                     <td>&nbsp;&nbsp;acgt</td></tr>
+                                                   <tr><td>.40 - .49</td><td>&nbsp;&nbsp;lower-case grayed</td>
+                                                     <td>&nbsp;&nbsp;acgt</td></tr>
+                                                   <tr><td>.00 - .39</td><td>&nbsp;&nbsp;lower-case grayed</td>
+                                                     <td>&nbsp;&nbsp;.</td></tr>
                                                  </table>
                                                </p>
 				  	    <LI><b>Position Weight Matrix (PWM)</b>
                                               <p>
                                                 Each row of the PWM represents a base, and each column represents
                                                 the relative frequency of the base occurring for that position.
-				  	        <LI><b><a href="http://compbio.umbc.edu/Documents/Sequence_logo.pdf"
-                                                          target="_blank">Sequence Logo<a/></b>
+                                              </p>
+                                              
+				  	    <LI><b>Sequence Logo</b>
                                               <p>
-                                                A sequence logo is a stack of letters at each position, where the relative
-                                                sizes of the letters to each other represents their frequency in the sequence.
-                                                The total height of the stack of letters reflects the
-                                                mutual information content at the position, in bits.
+                                                A <a href="http://compbio.umbc.edu/Documents/Sequence_logo.pdf"
+                                                     target="_blank">sequence logo<a/>
+                                                  is a stack of letters at each position, where the relative
+                                                  sizes of the letters to each other represents their frequency in the sequence.
+                                                  The total height of the stack of letters reflects the
+                                                  mutual information content at the position, in bits.
+                                              </p>
 				      </UL></TD>
 				    </TR>
 				</TABLE>
