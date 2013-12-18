@@ -259,7 +259,7 @@ for (i=0; i<run->outputFileCount; ++i)
     char command[256];
     safef(command, sizeof(command), "bash -exc 'edwQaAgent %u;edwAnalysisAddJson %u'",
 	   outputFile->id, run->id);
-    edwAnalysisJobAdd(conn, command);
+    edwAddJob(conn, command);
 
     dyStringPrintf(outputFileIds, "%u,", outputFile->id);
     slAddTail(&outputFileList, outputFile);
