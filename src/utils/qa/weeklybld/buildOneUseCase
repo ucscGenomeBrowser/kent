@@ -21,6 +21,9 @@ echo '***' Starting make argv=$argv USE_BAM=${USE_BAM} USE_SSL=${USE_SSL} USE_TA
 cd ${targetDir}
 if ("$1" == "alpha") then
   git pull >& /dev/null
+else
+  make -j 24 clean
+  setenv CGI_BIN "/dev/shm/cgi-bin"
 endif
 make -j 24 $argv
 set ret = $status

@@ -1,24 +1,24 @@
 <H2>Description</H2>
 <P>
-This track shows <em>$o_Organism</em>/<em>$Organism</em> genomic alignments 
+This track shows <em>$o_organism</em>/<em>$organism</em> genomic alignments 
 using a gap scoring system that allows longer gaps than traditional
 affine gap scoring systems. It can also tolerate gaps in both 
-<em>$o_Organism</em> 
-and <em>$Organism</em> simultaneously. These &quot;double-sided&quot;
+<em>$o_organism</em> 
+and <em>$organism</em> simultaneously. These &quot;double-sided&quot;
 gaps can be caused by local inversions and overlapping deletions
-in both species. The <em>$o_Organism</em> sequence is from the $o_date ($o_db)
+in both species. The <em>$o_organism</em> sequence is from the $o_date ($o_db)
 assembly.</P>
 <P>
 The chain track displays boxes joined together by either single or 
 double lines. The boxes represent aligning regions. 
 Single lines indicate gaps that are largely due to a deletion in the 
-<em>$o_Organism</em> assembly or an insertion in the <em>$Organism</em> 
+<em>$o_organism</em> assembly or an insertion in the <em>$organism</em> 
 assembly.
 Double lines represent more complex gaps that involve substantial
 sequence in both species. This may result from inversions, overlapping
 deletions, an abundance of local mutation, or an unsequenced gap in one 
 species.  In cases where there are multiple 
-chains over a particular portion of the <em>$Organism</em> genome, chains with
+chains over a particular portion of the <em>$organism</em> genome, chains with
 single-lined gaps are often due to processed pseudogenes, while chains 
 with double-lined gaps are more often due to paralogs and unprocessed 
 pseudogenes. In the "pack" and "full" display
@@ -39,13 +39,13 @@ Filter by chromosome.</P>
 <H2>Methods</H2>
 <P>
 Transposons that have been inserted since the 
-<em>$o_Organism</em>/<em>$Organism</em>
+<em>$o_organism</em>/<em>$organism</em>
 split were removed, and the resulting abbreviated genomes were
 aligned with blastz.  The transposons were then put back into the
 alignments.  The resulting alignments were converted into axt format
 and the resulting axts fed into axtChain.  AxtChain organizes all the 
-alignments between a single <em>$o_Organism</em> and a single 
-<em>$Organism</em> chromosome
+alignments between a single <em>$o_organism</em> and a single 
+<em>$organism</em> chromosome
 into a group  and makes a kd-tree out of all the gapless subsections
 (blocks) of the alignments.  Next, maximally scoring chains of these
 blocks were found by running a dynamic program over the kd-tree.  Chains
@@ -72,19 +72,29 @@ by Robert Baertsch and Jim Kent.</P>
 
 <H2>References</H2>
 <P>
-Chiaromonte, F., Yap, V.B., Miller, W. 
-<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/11928468"
+Chiaromonte F, Yap VB, Miller W. 
+<A HREF="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
 TARGET=_blank>Scoring pairwise genomic sequence alignments</A>. 
-<em>Pac Symp Biocomput 2002</em>, 115-26 (2002).</P>
+<em>Pac Symp Biocomput</em>. 2002:115-26.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+</p>
+
 <P>
-Kent, W.J., Baertsch, R., Hinrichs, A., Miller, W., and Haussler, D.
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
 <A HREF="http://www.pnas.org/content/100/20/11484.abstract"
 TARGET=_blank>Evolution's cauldron: Duplication, deletion, and rearrangement
 in the mouse and human genomes</A>.
-<em>Proc Natl Acad Sci USA</em> <B>100</B>(20), 11484-11489 (2003).</P>
+<em>Proc Natl Acad Sci USA</em> <B>100</B>(20), 11484-11489 (2003).</PNatl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784" target="_blank">PMC208784</a>
+</p>
+
 <P>
-Schwartz, S., Kent, W.J., Smit, A., Zhang, Z., Baertsch, R., Hardison, R., 
-Haussler, D., and Miller, W.
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison R, 
+Haussler D, Miller W.
 <A HREF="http://genome.cshlp.org/content/13/1/103.abstract"
 TARGET=_blank>Human-Mouse Alignments with BLASTZ</A>. 
-<em>Genome Res.</em> <B>13</B>(1), 103-7 (2003).</P>
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961" target="_blank">PMC430961</a>
+</p>

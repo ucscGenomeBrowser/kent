@@ -63,19 +63,17 @@ echo
 #                                                    USE_HAL
 rm -f $targetDir/buildWithUse.log >& /dev/null
 
-## these tests are useless since the output is never examined
+$HOME/bin/scripts/buildOneUseCase $targetDir 0 0 0 0 0 $argv >>& $targetDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 1 0 0 0 0 $argv >>& $targetDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 0 1 0 0 0 $argv >>& $targetDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 0 0 1 1 0 $argv >>& $targetDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 1 1 0 0 0 $argv >>& $targetDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 1 0 1 1 0 $argv >>& $targetDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 0 1 1 1 0 $argv >>& $targetDir/buildWithUse.log
 
-## $HOME/bin/scripts/buildOneUseCase $targetDir 0 0 0 0 $argv >>& $targetDir/buildWithUse.log
-## $HOME/bin/scripts/buildOneUseCase $targetDir 1 0 0 0 $argv >>& $targetDir/buildWithUse.log 
-## $HOME/bin/scripts/buildOneUseCase $targetDir 0 1 0 0 $argv >>& $targetDir/buildWithUse.log 
-## $HOME/bin/scripts/buildOneUseCase $targetDir 0 0 1 1 $argv >>& $targetDir/buildWithUse.log 
-## $HOME/bin/scripts/buildOneUseCase $targetDir 1 1 0 0 $argv >>& $targetDir/buildWithUse.log 
-## $HOME/bin/scripts/buildOneUseCase $targetDir 1 0 1 1 $argv >>& $targetDir/buildWithUse.log 
-## $HOME/bin/scripts/buildOneUseCase $targetDir 0 1 1 1 $argv >>& $targetDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 1 1 1 1 0 $argv >>& $targetDir/buildWithUse.log
 
-$HOME/bin/scripts/buildOneUseCase $targetDir 1 1 1 1 0 $argv >> $targetDir/buildWithUse.log
-
-# The last case is the desired outcome.  Errors stop the build and are emailed by cron. 
+# The last case is the desired outcome.  Errors stop the build and are emailed by cron.
 $HOME/bin/scripts/buildOneUseCase $targetDir 1 1 1 1 1 $argv >> $targetDir/buildWithUse.log
 set ret = $status
 echo "========================== cat buildWithUse.log ======================="

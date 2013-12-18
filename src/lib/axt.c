@@ -693,13 +693,43 @@ struct axtScoreScheme *axtScoreSchemeReadLf(struct lineFile *lf )
 /* Read in scoring scheme from file. Looks like
     A    C    G    T
     91 -114  -31 -123
-    -114  100 -125  -31
-    -31 -125  100 -114
-    -123  -31 -114   91
-    O = 400, E = 30
+  -114  100 -125  -31
+   -31 -125  100 -114
+  -123  -31 -114   91
+  O = 400, E = 30
+
+2013-12-13 - upgrading to allow reading of newer format settings file
+from lastz tuning output.  This file has the matrix at the end of
+the file, and other settings before that.  Will include the other settings
+in the 'ss->extra' field *WITHOUT* the O= and E= which should always
+be O=400 and E=30 despite what the tuning settings file says.
+Example settings file:
+#############################################################################
+# (a LASTZ scoring set, created by "LASTZ --infer")
+
+bad_score          = X:-1736 # used for sub[X][*] and sub[*][X]
+fill_score         = -174    # used when sub[*][*] not otherwise defined
+
+# (score parameters added by expand_scores_file)
+
+T=2
+O=565
+E=43
+X=790
+Y=4865
+K=3000
+L=3000
+
+      A     C     G     T
+A    79   -84   -55  -128
+C   -84   100  -174   -55
+G   -55  -174   100   -84
+T  -128   -55   -84    79
+#############################################################################
+
 */
 {
-char *line, *row[4], *parts[32];
+char *line, *row[6], *parts[32];
 int i,j, partCount;
 struct axtScoreScheme *ss;
 boolean gotO = FALSE, gotE = FALSE;
@@ -707,45 +737,83 @@ static int trans[4] = {'a', 'c', 'g', 't'};
 
 AllocVar(ss);
 ss->extra = NULL;
-if (!lineFileRow(lf, row))
-    shortScoreScheme(lf);
-if (row[0][0] != 'A' || row[1][0] != 'C' || row[2][0] != 'G' 
-	|| row[3][0] != 'T')
-    errAbort("%s doesn't seem to be a score matrix file", lf->fileName);
-for (i=0; i<4; ++i)
+struct dyString *dyExtra = newDyString(128);
+
+int wordCount = lineFileChopNext(lf, row, ArraySize(row));
+if (!wordCount)
+    shortScoreScheme(lf);   // empty file
+boolean done = FALSE;
+while (! done)
     {
-    if (!lineFileRow(lf, row))
-	shortScoreScheme(lf);
-    for (j=0; j<4; ++j)
-	ss->matrix[trans[i]][trans[j]] = lineFileNeedNum(lf, row, j);
+    // a setting will have an '=' in either first or second word
+    if (stringIn("=",row[0]) || (wordCount > 1 && stringIn("=", row[1])))
+         {
+         // collapse words to eliminate white space confusion
+         struct dyString *dy = newDyString(128);
+         for (i = 0; i < wordCount; ++i)
+             {
+             dyStringPrintf(dy, "%s", row[i]);
+             }
+         char *line=dyStringCannibalize(&dy);
+         // eliminate trailing comments
+         chopSuffixAt(line, '#');
+         // only tag=value is left, extract those two:
+         chopString(line, "=", parts, ArraySize(parts));
+         if (!(sameString(parts[0],"O") || sameString(parts[0],"E")))
+             dyStringPrintf(dyExtra, "%s=%s,", parts[0], parts[1]);
+         freeMem(line);
+         wordCount = lineFileChopNext(lf, row, ArraySize(row));
+         }
+    // not a setting, expecting a matrix definition
+    else if (row[0][0] != 'A' || row[1][0] != 'C' || row[2][0] != 'G' 
+            || row[3][0] != 'T')
+        errAbort("%s doesn't seem to be a score matrix file", lf->fileName);
+    else  // have reached the matrix definition at end of the file
+        {
+        for (i=0; i<4; ++i)
+            {
+            wordCount = lineFileChopNext(lf, row, ArraySize(row));
+            if (!wordCount)
+               shortScoreScheme(lf);   // did not find four lines
+            int startColumn = 0;
+            if (5 == wordCount)  // skip first column when there are 5
+                startColumn = 1;
+            for (j=startColumn; j<(startColumn+4); ++j)
+                ss->matrix[trans[i]][trans[j-startColumn]] = lineFileNeedNum(lf, row, j);
+            }
+        if (lineFileNext(lf, &line, NULL))
+            {
+            dyStringPrintf(dyExtra, "%s,", line);
+            partCount = chopString(line, " =,\t", parts, ArraySize(parts));
+            for (i=0; i<partCount-1; i += 2)
+                {
+                if (sameString(parts[i], "O"))
+                    {
+                    gotO = TRUE;
+                    ss->gapOpen = atoi(parts[i+1]);
+                    }
+                if (sameString(parts[i], "E"))
+                    {
+                    gotE = TRUE;
+                    ss->gapExtend = atoi(parts[i+1]);
+                    }
+                }
+            if (!gotO || !gotE)
+                errAbort("Expecting O = and E = in last line of %s", lf->fileName);
+            if (ss->gapOpen <= 0 || ss->gapExtend <= 0)
+                errAbort("Must have positive gap scores");
+            }
+        else
+            {
+            ss->gapOpen = 400;
+            ss->gapExtend = 30;
+            }
+        done = TRUE;
+        }
     }
-if (lineFileNext(lf, &line, NULL))
-    {
-    ss->extra = cloneString(line);
-    partCount = chopString(line, " =,\t", parts, ArraySize(parts));
-    for (i=0; i<partCount-1; i += 2)
-	{
-	if (sameString(parts[i], "O"))
-	    {
-	    gotO = TRUE;
-	    ss->gapOpen = atoi(parts[i+1]);
-	    }
-	if (sameString(parts[i], "E"))
-	    {
-	    gotE = TRUE;
-	    ss->gapExtend = atoi(parts[i+1]);
-	    }
-	}
-    if (!gotO || !gotE)
-	errAbort("Expecting O = and E = in last line of %s", lf->fileName);
-    if (ss->gapOpen <= 0 || ss->gapExtend <= 0)
-	errAbort("Must have positive gap scores");
-    }
-else
-    {
-    ss->gapOpen = 400;
-    ss->gapExtend = 30;
-    }
+ss->extra = dyStringCannibalize(&dyExtra);
+if (',' == lastChar(ss->extra))
+   trimLastChar(ss->extra);
 propagateCase(ss);
 return ss;
 }

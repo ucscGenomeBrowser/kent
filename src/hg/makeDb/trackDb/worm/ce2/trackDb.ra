@@ -188,7 +188,7 @@ track twinscan override
 longLabel Twinscan Gene Predictions Using briggsae/elegans Homology
 
 track axtNetCb1
-shortLabel Briggase Aligns
+shortLabel Briggsae Aligns
 longLabel $o_Organism ($o_date) Blastz Alignments from Net
 group compGeno
 priority 127

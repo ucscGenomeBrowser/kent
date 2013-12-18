@@ -8,4 +8,4 @@ ${MACHTYPE}/edwlib.a: ${O}
 	ranlib ${MACHTYPE}/edwlib.a
 
 clean::
-	rm -f ${O}
+	rm -f ${O} ${MACHTYPE}/edwlib.a

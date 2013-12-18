@@ -10,12 +10,6 @@ static struct rgbColor impact2Color  = {0, 80, 255};
 static struct rgbColor impact3Color  = {0, 100, 0};
 static struct rgbColor impact4Color  = {255, 255, 0};
 
-// the cgi can handle "old" or "new" table formats
-// seqTableFormat can be is either uninitialized, old (bed that needs a join) or new (denormalized bed)
-int seqTableFormat = 0;
-#define SEQTABLE_NEW 1
-#define SEQTABLE_OLD 2
-
 static char *pubsArticleTable(struct track *tg)
 /* return the name of the pubs articleTable, either
  * the value from the trackDb statement 'articleTable'
@@ -115,23 +109,6 @@ authorYear  = catTwoStrings(author, year);
 return authorYear;
 }
 
-static void setFormatFlag(struct sqlConnection* conn, char* tableName) 
-/* We support two different storage places for article data: either the bed table directly 
- * includes the title + author of the article or we have to look it up from the articles 
- * table. Having a copy of the title in the bed table is faster 
- * This function sets the flag to indicate the version we have in our table.
- * */
-{
-if (seqTableFormat!=0)
-    return;
-if (sqlColumnExists(conn, tableName, "title")) 
-    {
-    seqTableFormat = SEQTABLE_NEW;
-    }
-else
-    seqTableFormat = SEQTABLE_OLD;
-}
-
 static struct pubsExtra *pubsMakeExtra(struct track* tg, char *articleTable, 
     struct sqlConnection* conn, struct linkedFeatures* lf)
 /* bad solution: a function that is called before the extra field is 
@@ -143,13 +120,14 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 struct pubsExtra *extra = NULL;
 
-setFormatFlag(conn, tg->table);
-if (seqTableFormat==SEQTABLE_NEW)
-    sqlSafef(query, sizeof(query), "SELECT firstAuthor, year, title, impact, classes FROM %s "
-    "WHERE chrom = '%s' and chromStart = '%d' and name='%s'", tg->table, chromName, lf->start, lf->name);
-else 
+if (sameWord(tg->table, "pubsBlat"))
+    // legacy table format where bed-like table does not includ title but has to pull it out from 2nd table
     sqlSafef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE articleId = '%s'", 
         articleTable, lf->name);
+else 
+    // new table format
+    sqlSafef(query, sizeof(query), "SELECT firstAuthor, year, title, impact, classes FROM %s "
+    "WHERE chrom = '%s' and chromStart = '%d' and name='%s'", tg->table, chromName, lf->start, lf->name);
 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -170,7 +148,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     extra->color  = NULL;
     extra->shade  = -1;
 
-    if (seqTableFormat==SEQTABLE_NEW) 
+    if (!sameWord(tg->table, "pubsBlat"))
         {
         impact  = row[3];
         classes = row[4];
@@ -297,7 +275,6 @@ static void pubsLoadKeywordYearItems(struct track *tg)
 {
 pubsParseClassColors();
 struct sqlConnection *conn = hAllocConn(database);
-setFormatFlag(conn, tg->table);
 char *keywords = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterKeywords");
 char *yearFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterYear");
 char *publFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterPublisher");
@@ -333,7 +310,7 @@ else
     char *extra = NULL;
     struct dyString *extraDy = dyStringNew(0);
     struct hash *articleIds = searchForKeywords(conn, articleTable, keywords);
-    if (seqTableFormat==SEQTABLE_NEW)
+    if (!sameWord(tg->table, "pubsBlat"))
         // new table schema: filter fields are on main bed table
         {
         if (isNotEmpty(yearFilter))

@@ -28794,5 +28794,26 @@ pubMap bing annots-tables --onlyDb=hg19
 pubMap bing load
 
 ########################################################################
+# Cooper Developmental Delay track (2013-12-09 Pauline)
 
+    mkdir /hive/data/genomes/hg19/bed/cooperDevDelay
+    cd /hive/data/genomes/hg19/bed/cooperDevDelay
 
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd14_Cooper_et_al_2008/gvf/nstd14_Cooper_et_al_2008.GRCh37.remap.all.germline.ucsc.gvf.gz'
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd14_Cooper_et_al_2008/gvf/nstd14_Cooper_et_al_2008.GRCh37.remap.var.germline.ucsc.gvf.gz'
+
+cp /kent/src/hg/utils/automation/gvfToBed8Attrs.pl .
+mv gvfToBed8Attrs.pl gvfToBed8AttrsTEST.pl
+
+#made local copy of Angie's gvf conversion script - to remove line that
+#filters out supporting structural variants (ssv's)  
+
+zcat nstd14_Cooper_et_al_2008.GRCh37.remap.var.germline.ucsc.gvf.gz | gvfToBed8AttrsTEST.pl > cooperDevDelayVar.bed
+
+hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg19 cooperDevDelay cooperDevDelayVar.bed
+
+    checkTableCoords hg19 cooperDevDelay
+
+#this actually works - had to get hgLoadBed flags right, and didn't need to do
+#sort - sort was messing up the file I think?
