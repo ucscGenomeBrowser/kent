@@ -6,7 +6,7 @@
 #define ENCODEDATAWAREHOUSE_H
 
 #include "jksql.h"
-#define EDWUSER_NUM_COLS 2
+#define EDWUSER_NUM_COLS 4
 
 extern char *edwUserCommaSepFieldNames;
 
@@ -16,6 +16,8 @@ struct edwUser
     struct edwUser *next;  /* Next in singly linked list. */
     unsigned id;	/* Autoincremented user ID */
     char *email;	/* Email address - required */
+    char uuid[38];	/* Help to synchronize us with Stanford. */
+    signed char isAdmin;	/* If true the use can modify other people's files too. */
     };
 
 void edwUserStaticLoad(char **row, struct edwUser *ret);
@@ -598,7 +600,7 @@ void edwAssemblyOutput(struct edwAssembly *el, FILE *f, char sep, char lastSep);
 #define edwAssemblyCommaOut(el,f) edwAssemblyOutput(el,f,',',',');
 /* Print out edwAssembly as a comma separated list including final comma. */
 
-#define EDWEXPERIMENT_NUM_COLS 5
+#define EDWEXPERIMENT_NUM_COLS 7
 
 extern char *edwExperimentCommaSepFieldNames;
 
@@ -606,11 +608,13 @@ struct edwExperiment
 /* An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford. */
     {
     struct edwExperiment *next;  /* Next in singly linked list. */
-    char accession[17];	/* Something like ENCSR000CFA. */
-    char *dataType;	/* Something liek RNA-seq, DNase-seq, ChIP-seq */
-    char *lab;	/* Lab PI name and institution */
-    char *biosample;	/* Cell line name, tissue source, etc. */
-    char *rfa;	/* Something like 'ENCODE2' or 'ENCODE3' */
+    char accession[17];	/* Something like ENCSR000CFA. ID shared with Stanford. */
+    char *dataType;	/* Something liek RNA-seq, DNase-seq, ChIP-seq. Computed at UCSC. */
+    char *lab;	/* Lab PI name and institution. Is lab.title at Stanford. */
+    char *biosample;	/* Cell line name, tissue source, etc. Is biosample_term_name at Stanford. */
+    char *rfa;	/* Something like 'ENCODE2' or 'ENCODE3'.  Is award.rfa at Stanford. */
+    char *assayType;	/* Similar to dataType. Is assay_term_name at Stanford. */
+    char *ipTarget;	/* The target for the immunoprecipitation in ChIP & RIP. */
     };
 
 void edwExperimentStaticLoad(char **row, struct edwExperiment *ret);
@@ -1852,8 +1856,8 @@ struct edwAnalysisRun
     char **outputTypes;	/* list of formats of output files */
     char *jsonResult;	/* JSON formatted object with result for Stanford metaDatabase */
     char uuid[38];	/* Help to synchronize us with Stanford. */
-    signed char createStatus;	/* 1 if output files made 0 if not made, -1 if tried and failed */
-    unsigned createCount;	/* Count of files made. Eventually should match outputFileCount */
+    signed char createStatus;	/* 1 if output files made 0 if not made, -1 if make tried and failed */
+    unsigned createCount;	/* Count of files made */
     unsigned *createFileIds;	/* list of ids of output files in warehouse */
     };
 

@@ -7,9 +7,12 @@
 CREATE TABLE edwUser (
     id int unsigned auto_increment,	# Autoincremented user ID
     email varchar(255) default '',	# Email address - required
+    uuid char(37) default 0,	# Help to synchronize us with Stanford.
+    isAdmin tinyint default 0,	# If true the use can modify other people's files too.
               #Indices
     PRIMARY KEY(id),
-    UNIQUE(email)
+    UNIQUE(email),
+    INDEX(uuid)
 );
 
 #A script that is authorized to submit on behalf of a user
@@ -81,8 +84,8 @@ CREATE TABLE edwFile (
     PRIMARY KEY(id),
     INDEX(submitId),
     INDEX(submitDirId),
-    INDEX(submitFileName(32)),
-    UNIQUE(edwFileName(32)),
+    INDEX(submitFileName(64)),
+    INDEX(edwFileName(32)),
     INDEX(md5)
 );
 
@@ -140,11 +143,13 @@ CREATE TABLE edwAssembly (
 
 #An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford.
 CREATE TABLE edwExperiment (
-    accession char(16) default 0,	# Something like ENCSR000CFA.
-    dataType varchar(255) default '',	# Something liek RNA-seq, DNase-seq, ChIP-seq
-    lab varchar(255) default '',	# Lab PI name and institution
-    biosample varchar(255) default '',	# Cell line name, tissue source, etc.
-    rfa varchar(255) default '',	# Something like 'ENCODE2' or 'ENCODE3'
+    accession char(16) default 0,	# Something like ENCSR000CFA. ID shared with Stanford.
+    dataType varchar(255) default '',	# Something liek RNA-seq, DNase-seq, ChIP-seq. Computed at UCSC.
+    lab varchar(255) default '',	# Lab PI name and institution. Is lab.title at Stanford.
+    biosample varchar(255) default '',	# Cell line name, tissue source, etc. Is biosample_term_name at Stanford.
+    rfa varchar(255) default '',	# Something like 'ENCODE2' or 'ENCODE3'.  Is award.rfa at Stanford.
+    assayType varchar(255) default '',	# Similar to dataType. Is assay_term_name at Stanford.
+    ipTarget varchar(255) default '',	# The target for the immunoprecipitation in ChIP & RIP.
               #Indices
     UNIQUE(accession)
 );
@@ -373,21 +378,23 @@ CREATE TABLE edwAnalysisJob (
 #Software that is tracked by the analysis pipeline.
 CREATE TABLE edwAnalysisSoftware (
     id int unsigned auto_increment,	# Software id
-    name longblob,	# Command line name
+    name varchar(255) default '',	# Command line name
     version longblob,	# Current version
     md5 char(32) default 0,	# md5 sum of executable file
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    UNIQUE(name)
 );
 
 #A step in an analysis pipeline - something that takes one file to another
 CREATE TABLE edwAnalysisStep (
     id int unsigned auto_increment,	# Step id
-    name longblob,	# Name of this analysis step
+    name varchar(255) default '',	# Name of this analysis step
     softwareCount int default 0,	# Number of pieces of software used in step
     software longblob,	# Names of software used. First is the glue script
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    UNIQUE(name)
 );
 
 #Information on an analysis job that we're planning on running

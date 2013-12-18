@@ -4,6 +4,8 @@ table edwUser
     (
     uint id primary auto;      "Autoincremented user ID"
     string email unique;   "Email address - required"
+    char[37] uuid index; "Help to synchronize us with Stanford."
+    byte isAdmin;	"If true the use can modify other people's files too."
     )
 
 table edwScriptRegistry
@@ -114,11 +116,13 @@ table edwAssembly
 table edwExperiment
 "An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford."
     (
-    char[16] accession unique; "Something like ENCSR000CFA."
-    string dataType; "Something liek RNA-seq, DNase-seq, ChIP-seq"
-    string lab; "Lab PI name and institution"
-    string biosample;  "Cell line name, tissue source, etc."
-    string rfa;  "Something like 'ENCODE2' or 'ENCODE3'"
+    char[16] accession unique; "Something like ENCSR000CFA. ID shared with Stanford."
+    string dataType; "Something liek RNA-seq, DNase-seq, ChIP-seq. Computed at UCSC."
+    string lab; "Lab PI name and institution. Is lab.title at Stanford."
+    string biosample;  "Cell line name, tissue source, etc. Is biosample_term_name at Stanford."
+    string rfa;  "Something like 'ENCODE2' or 'ENCODE3'.  Is award.rfa at Stanford."
+    string assayType; "Similar to dataType. Is assay_term_name at Stanford."
+    string ipTarget; "The target for the immunoprecipitation in ChIP & RIP." 
     )
 
 table edwValidFile

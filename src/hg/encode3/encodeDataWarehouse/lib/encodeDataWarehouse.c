@@ -10,7 +10,7 @@
 
 
 
-char *edwUserCommaSepFieldNames = "id,email";
+char *edwUserCommaSepFieldNames = "id,email,uuid,isAdmin";
 
 void edwUserStaticLoad(char **row, struct edwUser *ret)
 /* Load a row from edwUser table into ret.  The contents of ret will
@@ -19,6 +19,8 @@ void edwUserStaticLoad(char **row, struct edwUser *ret)
 
 ret->id = sqlUnsigned(row[0]);
 ret->email = row[1];
+safecpy(ret->uuid, sizeof(ret->uuid), row[2]);
+ret->isAdmin = sqlSigned(row[3]);
 }
 
 struct edwUser *edwUserLoadByQuery(struct sqlConnection *conn, char *query)
@@ -51,8 +53,8 @@ void edwUserSaveToDb(struct sqlConnection *conn, struct edwUser *el, char *table
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s')", 
-	tableName,  el->id,  el->email);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s',%d)", 
+	tableName,  el->id,  el->email,  el->uuid,  el->isAdmin);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -66,6 +68,8 @@ struct edwUser *ret;
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
 ret->email = cloneString(row[1]);
+safecpy(ret->uuid, sizeof(ret->uuid), row[2]);
+ret->isAdmin = sqlSigned(row[3]);
 return ret;
 }
 
@@ -75,7 +79,7 @@ struct edwUser *edwUserLoadAll(char *fileName)
 {
 struct edwUser *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[4];
 
 while (lineFileRow(lf, row))
     {
@@ -93,7 +97,7 @@ struct edwUser *edwUserLoadAllByChar(char *fileName, char chopper)
 {
 struct edwUser *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[4];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -116,6 +120,8 @@ if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
 ret->email = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->uuid, sizeof(ret->uuid));
+ret->isAdmin = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -152,6 +158,12 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->email);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->uuid);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->isAdmin);
 fputc(lastSep,f);
 }
 
@@ -1502,7 +1514,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwExperimentCommaSepFieldNames = "accession,dataType,lab,biosample,rfa";
+char *edwExperimentCommaSepFieldNames = "accession,dataType,lab,biosample,rfa,assayType,ipTarget";
 
 void edwExperimentStaticLoad(char **row, struct edwExperiment *ret)
 /* Load a row from edwExperiment table into ret.  The contents of ret will
@@ -1514,6 +1526,8 @@ ret->dataType = row[1];
 ret->lab = row[2];
 ret->biosample = row[3];
 ret->rfa = row[4];
+ret->assayType = row[5];
+ret->ipTarget = row[6];
 }
 
 struct edwExperiment *edwExperimentLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1546,8 +1560,8 @@ void edwExperimentSaveToDb(struct sqlConnection *conn, struct edwExperiment *el,
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
-	tableName,  el->accession,  el->dataType,  el->lab,  el->biosample,  el->rfa);
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->accession,  el->dataType,  el->lab,  el->biosample,  el->rfa,  el->assayType,  el->ipTarget);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1564,6 +1578,8 @@ ret->dataType = cloneString(row[1]);
 ret->lab = cloneString(row[2]);
 ret->biosample = cloneString(row[3]);
 ret->rfa = cloneString(row[4]);
+ret->assayType = cloneString(row[5]);
+ret->ipTarget = cloneString(row[6]);
 return ret;
 }
 
@@ -1573,7 +1589,7 @@ struct edwExperiment *edwExperimentLoadAll(char *fileName)
 {
 struct edwExperiment *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -1591,7 +1607,7 @@ struct edwExperiment *edwExperimentLoadAllByChar(char *fileName, char chopper)
 {
 struct edwExperiment *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1617,6 +1633,8 @@ ret->dataType = sqlStringComma(&s);
 ret->lab = sqlStringComma(&s);
 ret->biosample = sqlStringComma(&s);
 ret->rfa = sqlStringComma(&s);
+ret->assayType = sqlStringComma(&s);
+ret->ipTarget = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -1632,6 +1650,8 @@ freeMem(el->dataType);
 freeMem(el->lab);
 freeMem(el->biosample);
 freeMem(el->rfa);
+freeMem(el->assayType);
+freeMem(el->ipTarget);
 freez(pEl);
 }
 
@@ -1669,6 +1689,14 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->rfa);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->assayType);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->ipTarget);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
