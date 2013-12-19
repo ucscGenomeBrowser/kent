@@ -842,8 +842,7 @@ if (relativeUrl != NULL)
 	    }
 	else if (startsWithWord("bam", type))
 	    {
-	    /* For bam files, the following call checks both main file and index. */
-	    bamFileExists(bigDataUrl);
+	    bamFileAndIndexMustExist(bigDataUrl);
 	    }
 	else
 	    errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);

@@ -40,6 +40,10 @@ struct bamChromInfo
 boolean bamFileExists(char *bamFileName);
 /* Return TRUE if we can successfully open the bam file and its index file. */
 
+void bamFileAndIndexMustExist(char *fileOrUrl);
+/* Open both a bam file and its accompanying index or errAbort; this is what it
+ * takes for diagnostic info to propagate up through errCatches in calling code. */
+
 samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName);
 /* Return an open bam file as well as the filename of the bam. */
 

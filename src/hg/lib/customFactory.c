@@ -2094,12 +2094,7 @@ if (doExtraChecking)
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	{
-        if (!bamFileExists(bigDataUrl))
-	    {
-            dyStringPrintf(dyErr,
-		       "Can't access %s's bigDataUrl %s and/or the associated index file %s.bai",
-			   track->tdb->shortLabel, bigDataUrl, bigDataUrl);
-	    }
+	bamFileAndIndexMustExist(bigDataUrl);
 	}
     errCatchEnd(errCatch);
     if (isNotEmpty(errCatch->message->string))
