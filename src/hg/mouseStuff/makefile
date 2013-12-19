@@ -91,3 +91,10 @@ userApps: $(UTILS_APPLIST:%=%.userApp)
 
 clean::
 	cd simpleChain && ${MAKE} clean
+
+testAll: $(USE_DIRS:%=%.testAll)
+
+%.testAll:
+	@test -s $*/tests/makefile && (echo $*; cd $* && $(MAKE) test) || true
+
+test:: testAll
