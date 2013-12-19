@@ -967,45 +967,6 @@ codingAnnotations snp135CodingDbSnp,
 # Need to request new tag
 #codingAnnoLabel_snp135CodingDbSnp dbSNP
 
-track snp134Common override
-snpSeqFile /gbdb/hg19/snp/snp134.fa
-chimpOrangMacOrthoTable snp134OrthoPt3Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp134CodingDbSnp,
-codingAnnoLabel_snp134CodingDbSnp dbSNP
-
-track snp134Flagged override
-snpSeqFile /gbdb/hg19/snp/snp134.fa
-chimpOrangMacOrthoTable snp134OrthoPt3Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp134CodingDbSnp,
-codingAnnoLabel_snp134CodingDbSnp dbSNP
-
-track snp134Mult override
-snpSeqFile /gbdb/hg19/snp/snp134.fa
-chimpOrangMacOrthoTable snp134OrthoPt3Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp134CodingDbSnp,
-codingAnnoLabel_snp134CodingDbSnp dbSNP
-
-track snp134 override
-chimpOrangMacOrthoTable snp134OrthoPt3Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp134CodingDbSnp,
-codingAnnoLabel_snp134CodingDbSnp dbSNP
-
 track snp132Common override
 snpSeqFile /gbdb/hg19/snp/snp132.fa
 chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
