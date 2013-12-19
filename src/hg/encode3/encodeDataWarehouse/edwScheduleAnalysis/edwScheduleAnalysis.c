@@ -242,7 +242,7 @@ char *analysisStep = "hotspot";
 if (countAlreadyScheduled(conn, analysisStep, ef->id))
     return;
 
-verbose(2, "schedulingHotspot on %s step %s, script %s\n", bamName, analysisStep, scriptName);
+verbose(2, "schedulingHotspot on %s step %s\n", ef->edwFileName, analysisStep);
 /* Make command line */
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
 int readLength = 36;	// uglyf - get from fastq record for input
