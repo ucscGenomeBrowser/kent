@@ -11,102 +11,14 @@
 
 import sys
 import time
+import argparse
 import os.path
 import subprocess
 import pipes
 import re
 
 
-def parseCommandLine(args):
-    """This function parses the command line to ensure that there are either
-       3 or 5 arguments.  Test mode requires only 3 arguments, but will still
-       run with 5 arguments (it just ignores the last 2).  Execute mode
-       requires 5 arguments.  Any number of arguments other than 3 or 5 will
-       invoke the usage statement.  A return code of 0 will prevent the
-       script from going any further."""
-    if len(args) not in [4, 6]:
-        print "\n  copies entries from hgcentraltest -> hgcentralbeta\n" \
-              "              or from hgcentralbeta -> hgcentral\n" \
-              "\n  usage: copyHgcentral mode assembly table [origin] [destination]\n" \
-              "\n  - valid entries for mode are:\n" \
-              "    - test\n" \
-              "    - execute\n" \
-              "\n    - test mode will display the current status of hgcentraltest,\n" \
-              "      hgcentralbeta and hgcentral and will alert the user if any\n" \
-              "      differences exist\n" \
-              "\n    - when running in test mode, it is not necessary to specify\n" \
-              "      an origin or destination\n" \
-              "\n    - execute mode will copy entries from the origin to the destination\n" \
-              "      for the assembly and table specified\n" \
-              "\n    - test mode MUST be run before running in execute mode;\n" \
-              "      if the specified table has changed since test mode was\n" \
-              "      run, test mode must be run again\n" \
-              "\n  - assembly is the assembly whose entries you want to copy\n" \
-              "    (e.g., hg19, mm10, etc.)\n" \
-              "\n  - valid entries for table are:\n" \
-              "    - blatServers\n" \
-              "    - dbDb\n" \
-              "    - defaultDb\n" \
-              "    - genomeClade\n" \
-              "    - all (copies entries from all of the above tables)\n" \
-              "\n  - valid entries for origin/destination are:\n" \
-              "    - dev\n" \
-              "    - beta\n" \
-              "    - rr\n"
-        return 0
-    else:
-        return 1
-
-
-def errorChecker(args):
-    """This function parses the command line to find any invalid entries and
-       if it finds them, outputs the appropriate error message.  A return
-       code of 0 will prevent the script from going any further."""
-    if args[1] not in ["test", "execute"]:
-        print "\n *** Mode must be 'test' or 'execute' ***\n"
-        return 0
-    elif args[3] not in ["blatServers", "dbDb", "defaultDb", "genomeClade", "all"]:
-        print "\n *** Valid values for table are: blatServers, dbDb, defaultDb, genomeClade, " \
-              "all ***\n"
-        return 0
-    elif args[1] == "execute":
-        if len(args) != 6:
-            print "\n *** An origin and destination must be specified in execute mode ***\n"
-            return 0
-        elif args[4] not in ["dev", "beta"]:
-            print "\n *** The origin must be 'dev' or 'beta' ***\n"
-            return 0
-        elif args[4] == "dev":
-            if args[5] != "beta":
-                print "\n *** When the origin is 'dev', the destination must be 'beta' ***\n"
-                return 0
-            else:
-                return 1
-        elif args[4] == "beta":
-            if args[5] != "rr":
-                print "\n *** When the origin is 'beta', the destination must be 'rr' ***\n"
-                return 0
-            else:
-                return 1
-        else:
-            return 1
-    else:
-        return 1
-
-
-def callHgsql(database, command):
-    """ Run hgsql command using subprocess, return stdout data if no error."""
-    cmd = ["hgsql", database, "-Ne", command]
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    cmdout, cmderr = p.communicate()
-    if p.returncode != 0:
-        # keep command arguments nicely quoted
-        cmdstr = " ".join([pipes.quote(arg) for arg in cmd])
-        raise Exception("Error from: " + cmdstr + ": " + cmderr)
-    return cmdout
-
-
-def callHgsql2(database, command, server):
+def callHgsql(database, command, server):
     """ Run hgsql command using subprocess, return stdout data if no error."""
     cmd = ["hgsql", database, "-Ne", command, "-h", server]
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -118,63 +30,80 @@ def callHgsql2(database, command, server):
     return cmdout
 
 
-def printOutput(tableName, dbName, queryResult, count):
-    if count == 1:
-        print "--------------------------------------------------\n" \
-              "--------------------------------------------------\n" \
-              "<<<", tableName, ">>>\n"
-    print dbName + "\n-------------\n" + queryResult + "\n"
+def printHeader(headerTable):
+    print "--------------------------------------------------"
+    print "--------------------------------------------------"
+    print "<<<", headerTable, ">>>\n"
 
 
-def createFile(fileName, queryResult):
+def printOutput(tableName, devOutput, betaOutput, rrOutput):
+    printHeader(tableName)
+    print "hgcentraltest" + "\n-------------\n" + devOutput + "\n"
+    print "hgcentralbeta" + "\n-------------\n" + betaOutput + "\n"
+    print "hgcentral" + "\n-------------\n" + rrOutput + "\n"
+
+
+def chopper(data, toDo, splitter):
+    """For variables that are MySQL calls, this function serves to remove the trailing
+       line break character (when toDo = "strip") and also to break the MySQL results
+       into a tab-separated list (when toDo = "split")"""
+    data = data.rstrip()
+    if toDo == "split":
+        data = data.split(splitter)
+    return data
+
+
+def createFile(fileName, sqlDatabase, sqlCommand, sqlServer):
+    query = chopper(callHgsql(sqlDatabase, sqlCommand, sqlServer), "strip", "")
     f = open(fileName, 'w')
-    f.write(queryResult)
-    f.close
+    f.write(query)
+    f.close()
+    return query
 
 
-def parseDbDb(dbDbOrigin, dbDbDestination, dbDbAssembly):
+def openFile(openFileName):
+    f = open(openFileName, 'r')
+    fileContents = f.read()
+    f.close()
+    return fileContents
+
+
+def getFilename(getTable, getAssembly):
+    devFilename = getTable + "." + getAssembly + ".hgcentraltest"
+    betaFilename = getTable + "." + getAssembly + ".hgcentralbeta"
+    rrFilename = getTable + "." + getAssembly + ".hgcentral"
+    return devFilename, betaFilename, rrFilename
+
+
+def parseDbDb(dbDbOrig, dbDbDest, dbDbAssembly):
     """This function parses dbDb data specifically.  It loads the contents
-       of dbDb into an array and compares the contents of the origin and
-       destination arrays.  When it finds differences, it saves the index
-       numbers where differences exist into a diff array.  When it is
-       finished comparing, it outputs the contents of the diff array."""
-    dbDbDev = callHgsql("hgcentraltest", "select * from dbDb where name='" + dbDbAssembly + "'")
-    dbDbDev = dbDbDev.rstrip()
-    dbDbDev = dbDbDev.split("\t")
-    dbDbBeta = callHgsql2("hgcentralbeta", "select * from dbDb where name='" + dbDbAssembly + "'",
-                          "mysqlbeta")
-    dbDbBeta = dbDbBeta.rstrip()
-    dbDbBeta = dbDbBeta.split("\t")
-    dbDbRr = callHgsql2("hgcentral", "select * from dbDb where name='" + dbDbAssembly + "'",
-                        "genome-centdb")
-    dbDbRr = dbDbRr.rstrip()
-    dbDbRr = dbDbRr.split("\t")
-    dbDbArray = ["name", "description", "nibPath", "organism", "defaultPos", "active", "orderKey",
-                 "genome", "scientificName", "htmlPath", "hgNearOk", "hgPbOk", "sourceName",
-                 "taxId"]
-    diffs = 0
-    diffArray = []
-    if dbDbOrigin == "dev":
-        dbDb1 = dbDbDev
-        dbDb2 = dbDbBeta
+       of dbDb into a list and compares the contents of the origin and
+       destination lists.  When it finds differences, it saves the index
+       numbers where differences exist into a diff list.  When it is
+       finished comparing, it outputs the contents of the diff list."""
+    dbDbList = ["name", "description", "nibPath", "organism", "defaultPos", "active", "orderKey",
+                "genome", "scientificName", "htmlPath", "hgNearOk", "hgPbOk", "sourceName",
+                "taxId"]
+    diffList = []
+    if dbDbOrig == "dev":
+        dbDb1 = chopper(openFile("dbDb." + dbDbAssembly + ".hgcentraltest"), "split", "\t")
+        dbDb2 = chopper(openFile("dbDb." + dbDbAssembly + ".hgcentralbeta"), "split", "\t")
     else:
-        dbDb1 = dbDbBeta
-        dbDb2 = dbDbRr
-    for i in range(0,13):
+        dbDb1 = chopper(openFile("dbDb." + dbDbAssembly + ".hgcentralbeta"), "split", "\t")
+        dbDb2 = chopper(openFile("dbDb." + dbDbAssembly + ".hgcentral"), "split", "\t")
+    for i in range(0,len(dbDbList)):
         if dbDb1[i] != dbDb2[i]:
-            diffArray.append(i)
-            diffs += 1
-    print dbDbOrigin + ":"
-    for i in range(0,diffs):
-        print dbDbArray[diffArray[i]], "=", dbDb1[diffArray[i]]
-    print "\n" + dbDbDestination + ":"
-    for i in range(0,diffs):
-        print dbDbArray[diffArray[i]], "=", dbDb2[diffArray[i]]
+            diffList.append(i)
+    print dbDbOrig + ":"
+    for i in range(0,len(diffList)):
+        print dbDbList[diffList[i]], "=", dbDb1[diffList[i]]
+    print "\n" + dbDbDest + ":"
+    for i in range(0,len(diffList)):
+        print dbDbList[diffList[i]], "=", dbDb2[diffList[i]]
     print
 
 
-def runQuery(queryMode, queryTable, queryField, queryAssembly, queryOrder, assembly2, queryOrigin,
-             queryDestination):
+def runTest(testOptions, testTable, testField1, testField2, testOrder):
     """This is the main function.  In test mode, it queries all three servers
        and tests for special cases.  It outputs the state of all three servers
        and any relevant error messages.  In execute mode, it checks to make
@@ -186,216 +115,162 @@ def runQuery(queryMode, queryTable, queryField, queryAssembly, queryOrder, assem
        it informs the user and makes the user respond before copying.  If the
        destination server is blank, it copies the data from the origin to the
        destination."""
-    fileDev = queryTable + "." + assembly2 + ".hgcentraltest"
-    fileBeta = queryTable + "." + assembly2 + ".hgcentralbeta"
-    fileRr = queryTable + "." + assembly2 + ".hgcentral"
-    if queryMode == "test":
-        queryDev = callHgsql("hgcentraltest", "select * from " + queryTable + " where " +
-                             queryField + "='" + queryAssembly + "' order by " + queryOrder)
-        queryDev = queryDev.rstrip()
-        createFile(fileDev, queryDev)
-        queryBeta = callHgsql2("hgcentralbeta", "select * from " + queryTable + " where " +
-                               queryField + "='" + queryAssembly + "' order by " +
-                               queryOrder, "mysqlbeta")
-        queryBeta = queryBeta.rstrip()
-        createFile(fileBeta, queryBeta)
-        queryRr = callHgsql2("hgcentral", "select * from " + queryTable + " where " + queryField +
-                             "='" + queryAssembly + "' order by " + queryOrder, "genome-centdb")
-        queryRr = queryRr.rstrip()
-        createFile(fileRr, queryRr)
-        if queryDev == "" and queryBeta == "" and queryRr == "":
-            print "--------------------------------------------------\n" \
-                  "--------------------------------------------------\n" \
-                  "<<<", queryTable, ">>>\n\n" \
-                  "*** There is no", queryTable, "data for", assembly2 + ".  Check to make sure " \
-                  "you typed the\nassembly name properly. ***\n\n"
+    fileDev, fileBeta, fileRr = getFilename(testTable, testOptions.assembly)
+    testQuery = "select * from " + testTable + " where " + testField1 + "='" + \
+                 testField2 + "' order by " + testOrder
+    queryDev = createFile(fileDev, "hgcentraltest", testQuery, "hgwdev")
+    queryBeta = createFile(fileBeta, "hgcentralbeta", testQuery, "mysqlbeta")
+    queryRr = createFile(fileRr, "hgcentral", testQuery, "genome-centdb")
+    if queryDev == "" and queryBeta == "" and queryRr == "":
+        printHeader(testTable)
+        print "*** There is no", testTable, "data for", testOptions.assembly + ".  Check to make " \
+              "sure you typed the\nassembly name properly. ***\n\n"
+        return
+    printOutput(testTable, queryDev, queryBeta, queryRr)
+    if queryDev != queryBeta:
+        print "*** There are", testTable, "differences between dev and beta ***"
+        if testTable == "dbDb" and queryDev != "" and queryBeta != "":
+            parseDbDb("dev", "beta", testOptions.assembly)
         else:
-            printOutput(queryTable, "hgcentraltest", queryDev, 1)
-            printOutput(queryTable, "hgcentralbeta", queryBeta, 2)
-            printOutput(queryTable, "hgcentral", queryRr, 3)
-            if queryDev != queryBeta:
-                print "*** There are", queryTable, "differences between dev and beta ***"
-                if queryTable == "dbDb" and queryDev != "" and queryBeta != "":
-                    parseDbDb("dev", "beta", assembly2)
-                else:
-                    print
-            else:
-                print "*** The", queryTable, "data on dev and beta is identical ***\n"
-            if queryBeta != queryRr:
-                print "*** There are", queryTable, "differences between beta and rr ***"
-                if queryTable == "dbDb" and queryBeta != "" and queryRr != "":
-                    parseDbDb("beta", "rr", assembly2)
-                else:
-                    print
-            else:
-                print "*** The", queryTable, "data on beta and rr is identical ***\n"
             print
-    if queryMode == "execute":
-        if not os.path.isfile(fileDev) or not os.path.isfile(fileBeta) or not \
-                os.path.isfile(fileRr):
-            print "--------------------------------------------------\n" \
-                  "--------------------------------------------------\n" \
-                  "<<<", queryTable, ">>>\n\n" \
-                  "*** Test mode must be run before execute mode.  If test mode was already " \
-                  "run, it is\npossible that one of the output files was deleted.  Please " \
-                  "re-run test mode. ***\n\n"
+    else:
+        print "*** The", testTable, "data on dev and beta is identical ***\n"
+    if queryBeta != queryRr:
+        print "*** There are", testTable, "differences between beta and rr ***"
+        if testTable == "dbDb" and queryBeta != "" and queryRr != "":
+            parseDbDb("beta", "rr", testOptions.assembly)
         else:
-            f = open(fileDev, 'r')
-            queryTestDev = f.read()
-            queryExecuteDev = callHgsql("hgcentraltest", "select * from " + queryTable +
-                                        " where " + queryField + "='" + queryAssembly +
-                                        "' order by " + queryOrder)
-            queryExecuteDev = queryExecuteDev.rstrip()
-            f = open(fileBeta, 'r')
-            queryTestBeta = f.read()
-            queryExecuteBeta = callHgsql2("hgcentralbeta", "select * from " + queryTable +
-                                          " where " + queryField + "='" + queryAssembly +
-                                          "' order by " + queryOrder, "mysqlbeta")
-            queryExecuteBeta = queryExecuteBeta.rstrip()
-            f = open(fileRr, 'r')
-            queryTestRr = f.read()
-            queryExecuteRr = callHgsql2("hgcentral", "select * from " + queryTable + " where " +
-                                        queryField + "='" + queryAssembly + "' order by " +
-                                        queryOrder, "genome-centdb")
-            queryExecuteRr = queryExecuteRr.rstrip()
-            f.close()
-            if queryTestDev != queryExecuteDev or queryTestBeta != queryExecuteBeta or \
-                    queryTestRr != queryExecuteRr:
-                print "--------------------------------------------------\n" \
-                      "--------------------------------------------------\n" \
-                      "<<<", queryTable, ">>>\n\n" \
-                      "*** The", queryTable, "data has changed since test mode was run.  " \
-                      "Please re-run test mode. ***\n"
-            else:
-                if queryOrigin == "dev":
-                    queryExecuteOrigin = queryExecuteDev
-                    queryExecuteDestination = queryExecuteBeta
-                else:
-                    queryExecuteOrigin = queryExecuteBeta
-                    queryExecuteDestination = queryExecuteRr
-                if queryExecuteOrigin == "":
-                    printOutput(queryTable, "hgcentraltest", queryExecuteDev, 1)
-                    printOutput(queryTable, "hgcentralbeta", queryExecuteBeta, 2)
-                    printOutput(queryTable, "hgcentral", queryExecuteRr, 3)
-                    print "\n*** There is no", queryTable, "data on", queryOrigin, \
-                          "to be copied ***\n\n"
-                elif queryExecuteOrigin == queryExecuteDestination:
-                    printOutput(queryTable, "hgcentraltest", queryExecuteDev, 1)
-                    printOutput(queryTable, "hgcentralbeta", queryExecuteBeta, 2)
-                    printOutput(queryTable, "hgcentral", queryExecuteRr, 3)
-                    print "\n*** The", queryTable, "data on", queryOrigin, "and", queryDestination, \
-                          "is identical.  Nothing was copied. ***\n"
-                else:
-                    proceed = 1
-                    eraseFirst = 0
-                    clade = ""
-                    cladeListBeta = ""
-                    if queryTable == "genomeClade":
-                        clade = callHgsql("hgcentraltest", "select clade from genomeClade where "
-                                          "genome='" + genomeClade + "' limit 1")
-                        clade = clade.rstrip()
-                        cladeListBeta = callHgsql2("hgcentralbeta", "select distinct(clade) from"
-                                       " genomeClade order by clade", "mysqlbeta")
-                        cladeListBeta = cladeListBeta.rstrip()
-                        cladeListBeta = cladeListBeta.split()
-                    if queryOrigin == "dev" and queryTable == "genomeClade" and \
-                            queryExecuteBeta == "" and clade not in cladeListBeta:
-                        proceed = 0
-                        printOutput(queryTable, "hgcentraltest", queryExecuteDev, 1)
-                        printOutput(queryTable, "hgcentralbeta", queryExecuteBeta, 2)
-                        printOutput(queryTable, "hgcentral", queryExecuteRr, 3)
-                        print "*** Copying aborted.  The", clade, "clade exists only on " \
-                              "dev.  Please consult with the\nappropriate engineer to find " \
-                              "the correct clade and priority value for", assembly2, "and\n" \
-                              "manually add this entry to the proper clade on beta. ***\n"
+            print
+    else:
+        print "*** The", testTable, "data on beta and rr is identical ***\n"
+    print
+
+
+def runExecute(execOptions, execTable, execField1, execField2, execOrder):
+    fileTestDev, fileTestBeta, fileTestRr = getFilename(execTable, execOptions.assembly)
+    execQuery = "select * from " + execTable + " where " + execField1 + "='" + \
+                 execField2 + "' order by " + execOrder
+    cladeQuery =  "select clade from genomeClade where genome='" + execField2 + "' limit 1"
+    cladeBetaQuery = "select distinct(clade) from genomeClade order by clade"
+    deleteQuery = "delete from " + execTable + " where " + execField1 + "='" + execField2 + "'"
+    loadQueryBeta = "load data local infile '" + fileTestDev + "' into table " + execTable
+    loadQueryRr = "load data local infile '" + fileTestBeta + "' into table " + execTable
+    activeZeroQuery = "update dbDb set active=0 where name='" + execField2 + "'"
+    if not os.path.isfile(fileTestDev) or not os.path.isfile(fileTestBeta) or not \
+            os.path.isfile(fileTestRr):
+        printHeader(execTable)
+        print "*** Test mode must be run before execute mode.  If test mode was already " \
+              "run, it is\npossible that one of the output files was deleted.  Please " \
+              "re-run test mode. ***\n\n"
+        return
+    queryTestDev = openFile(fileTestDev)
+    queryExecuteDev = chopper(callHgsql("hgcentraltest", execQuery, "hgwdev"), "strip", "")
+    queryTestBeta = openFile(fileTestBeta)
+    queryExecuteBeta = chopper(callHgsql("hgcentralbeta", execQuery, "mysqlbeta"), "strip", "")
+    queryTestRr = openFile(fileTestRr)
+    queryExecuteRr = chopper(callHgsql("hgcentral", execQuery, "genome-centdb"), "strip", "")
+    if queryTestDev != queryExecuteDev or queryTestBeta != queryExecuteBeta or \
+            queryTestRr != queryExecuteRr:
+        printHeader(execTable)
+        print "*** The", execTable, "data has changed since test mode was run.  " \
+              "Please re-run test mode. ***\n\n"
+        return
+    if execOptions.orig == "dev":
+        queryExecuteOrig = queryExecuteDev
+        queryExecuteDest = queryExecuteBeta
+    else:
+        queryExecuteOrig = queryExecuteBeta
+        queryExecuteDest = queryExecuteRr
+    if queryExecuteOrig == "":
+        printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
+        print "\n*** There is no", execTable, "data on", execOptions.orig, \
+              "to be copied ***\n\n"
+        return
+    if queryExecuteOrig == queryExecuteDest:
+        printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
+        print "\n*** The", execTable, "data on", execOptions.orig, "and", \
+              execOptions.dest, "is identical.  Nothing was copied. ***\n\n"
+        return
+    eraseFirst = 0
+    clade = ""
+    cladesBeta = ""
+    if execTable == "genomeClade":
+        clade = chopper(callHgsql("hgcentraltest", cladeQuery, "hgwdev"), "strip", "")
+        cladesBeta = chopper(callHgsql("hgcentralbeta", cladeBetaQuery, "mysqlbeta"), "split", "\n")
+    if execOptions.orig == "dev" and execTable == "genomeClade" and \
+            queryExecuteBeta == "" and clade not in cladesBeta:
+        printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
+        print "*** Copying aborted.  The", clade, "clade exists only on " \
+              "dev.  Please consult with the\nappropriate engineer to find " \
+              "the correct clade and priority value for", execOptions.assembly, \
+              "and\nmanually add this entry to the proper clade on beta. ***\n\n"
+        return
 # Uncomment the following line and delete the line below that once copying from beta -> rr is active
-#                    if queryExecuteDestination != "":
-                    if queryOrigin == "dev" and queryExecuteDestination != "":
-                        input = ""
-                        while input not in ["yes", "no"]:
-                            input = raw_input("The existing " + queryTable + " data on " +
-                                              queryDestination + " differs from the " +
-                                              queryTable + " data on " + queryOrigin +
-                                              ".  If you proceed,\nthis data will be overwritten.  "
-                                              "Are you sure you wish to proceed? (yes/no): ");
-                            if input not in ["yes", "no"]:
-                                print "\n*** Please respond with 'yes' or 'no' ***\n"
-                        if input == "yes":
-                            eraseFirst = 1
-                            print
-                        else:
-                            proceed = 0
-                            print
-                            printOutput(queryTable, "hgcentraltest", queryExecuteDev, 1)
-                            printOutput(queryTable, "hgcentralbeta", queryExecuteBeta, 2)
-                            printOutput(queryTable, "hgcentral", queryExecuteRr, 3)
-                            print "*** Copying aborted for", queryTable, "***\n"
-                    if proceed == 1:
-                        if queryDestination == "beta":
-                            if eraseFirst == 1:
-                                callHgsql2("hgcentralbeta", "delete from " + queryTable +
-                                           " where " + queryField + "='" + queryAssembly +
-                                           "'", "mysqlbeta")
-                            callHgsql2("hgcentralbeta", "load data local infile '" + fileDev +
-                                       "' into table " + queryTable, "mysqlbeta")
-                            queryExecuteBeta = callHgsql2("hgcentralbeta", "select * from " +
-                                                          queryTable + " where " + queryField +
-                                                          "='" + queryAssembly + "' order by " +
-                                                          queryOrder, "mysqlbeta")
-                            queryExecuteBeta = queryExecuteBeta.rstrip()
-# Delete the following 5 lines when copying from beta -> rr is active
-                            printOutput(queryTable, "hgcentraltest", queryExecuteDev, 1)
-                            printOutput(queryTable, "hgcentralbeta", queryExecuteBeta, 2)
-                            printOutput(queryTable, "hgcentral", queryExecuteRr, 3)
-                            print "***", queryTable, "successfully copied from", queryOrigin, "to", \
-                                  queryDestination, "***\n"
-                        else:
-# Delete the following 21 lines and uncomment the rest when copying from beta -> rr is active
-                            print "--------------------------------------------------\n" \
-                                  "--------------------------------------------------\n" \
-                                  "<<<", queryTable, ">>>\n\n" \
-                                  "\n *** Automatic copying to hgcentral is currently disabled " \
-                                  "***\n\n *** If you would like to manually copy", queryTable, \
-                                  "entries from beta to rr," \
-                                  "\n     run the following command: ***\n\n\n" \
-                                  "  hgsql -e \"load data local infile '" + fileBeta + "' into " \
-                                  "table", queryTable + "\" hgcentral -h genome-centdb\n\n"
-                            if queryExecuteRr != "":
-                                print " *** WARNING:", queryTable, "on hgcentral already " \
-                                      "contains data for", assembly2 + ".\n     If you run " \
-                                      "the above command without first deleting the existing " \
-                                      "\n     data from hgcentral, it will create duplicate " \
-                                      "entries. ***\n\n"
-                            if queryTable == "dbDb":
-                                print " *** If you manually copy dbDb from beta to rr, be sure to " \
-                                      "also set\n     active=0 with the following " \
-                                      "command: ***\n\n\n" \
-                                      "  hgsql -e \"update dbDb set active=0 where name='" + \
-                                      assembly2 + "'\" hgcentral -h " \
-                                      "genome-centdb\n\n\n"
-                            print " *** If you manually copy", queryTable, "from beta to rr, be " \
-                                  "sure to run test mode\n     again to verify your changes ***\n"
-#                            if eraseFirst == 1:
-#                                callHgsql2("hgcentral", "delete from " + queryTable + " where " +
-#                                           queryField + "='" + queryAssembly + "'", "genome-centdb")
-#                            callHgsql2("hgcentral", "load data local infile '" + fileBeta +
-#                                       "' into table " + queryTable, "genome-centdb")
-#                            if queryTable == "dbDb":
-#                                callHgsql2("hgcentral", "update dbDb set active=0 where name='" +
-#                                           queryAssembly + "'", "genome-centdb")
-#                            queryExecuteRr = callHgsql2("hgcentral", "select * from " +
-#                                                        queryTable + " where " + queryField +
-#                                                        "='" + queryAssembly + "' order by " +
-#                                                        queryOrder, "genome-centdb")
-#                            queryExecuteRr = queryExecuteRr.rstrip()
-#                        printOutput(queryTable, "hgcentraltest", queryExecuteDev, 1)
-#                        printOutput(queryTable, "hgcentralbeta", queryExecuteBeta, 2)
-#                        printOutput(queryTable, "hgcentral", queryExecuteRr, 3)
-#                        print "***", queryTable, "successfully copied from", queryOrigin, "to", \
-#                              queryDestination, "***\n"
-#                        if queryDestination == "rr" and queryTable == "dbDb":
-#                            print "*** active set to 0 on rr ***\n"
+#    if queryExecuteDest != "":
+    if execOptions.orig == "dev" and queryExecuteDest != "":
+        input = ""
+        print
+        while input not in ["yes", "no"]:
+            input = raw_input("The existing " + execTable + " data on " +
+                              execOptions.dest + " differs from the " +
+                              execTable + " data on " + execOptions.orig +
+                              ".  If you proceed,\nthis data will be overwritten.  "
+                              "Are you sure you wish to proceed? (yes/no): ");
+            if input not in ["yes", "no"]:
+                print "\n*** Please respond with 'yes' or 'no' ***\n"
+        if input == "yes":
+            eraseFirst = 1
             print
+        else:
+            print
+            printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
+            print "*** Copying aborted for", execTable, "***\n\n"
+            return
+    if execOptions.dest == "beta":
+        if eraseFirst == 1:
+            callHgsql("hgcentralbeta", deleteQuery, "mysqlbeta")
+        callHgsql("hgcentralbeta", loadQueryBeta, "mysqlbeta")
+        queryExecuteBeta = chopper(callHgsql("hgcentralbeta", execQuery, "mysqlbeta"), "strip", "")
+# Delete the following 3 lines when copying from beta -> rr is active
+        printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
+        print "***", execTable, "successfully copied from", execOptions.orig, \
+              "to", execOptions.dest, "***\n"
+    else:
+# Delete the following 22 lines and uncomment the rest when copying from beta -> rr is active
+        printHeader(execTable)
+        print "\n *** Automatic copying to hgcentral is currently disabled " \
+              "***\n\n *** If you would like to manually copy", execTable, \
+              "entries from beta to rr," \
+              "\n     run the following command: ***\n\n\n" \
+              "  hgsql -e \"load data local infile '" + fileTestBeta + "' into " \
+              "table", execTable + "\" hgcentral -h genome-centdb\n\n"
+        if queryExecuteRr != "":
+            print " *** WARNING:", execTable, "on hgcentral already " \
+                  "contains data for", execOptions.assembly + ".\n     If you " \
+                  "run the above command without first deleting the existing " \
+                  "\n     data from hgcentral, it will create duplicate " \
+                  "entries. ***\n\n"
+        if execTable == "dbDb":
+            print " *** If you manually copy dbDb from beta to rr, be sure to " \
+                  "also set\n     active=0 with the following " \
+                  "command: ***\n\n\n" \
+                  "  hgsql -e \"update dbDb set active=0 where name='" + \
+                  execOptions.assembly + "'\" hgcentral -h " \
+                  "genome-centdb\n\n\n"
+        print " *** If you manually copy", execTable, "from beta to rr, be " \
+              "sure to run test mode\n     again to verify your changes ***\n"
+#        if eraseFirst == 1:
+#            callHgsql("hgcentral", deleteQuery, "genome-centdb")
+#        callHgsql("hgcentral", loadQueryRr, "genome-centdb")
+#        if execTable == "dbDb":
+#            callHgsql("hgcentral", activeZeroQuery, "genome-centdb")
+#        queryExecuteRr = chopper(callHgsql("hgcentral", execQuery, "genome-centdb"), "strip", "")
+#    printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
+#    print "***", execTable, "successfully copied from", execOptions.orig, "to", \
+#          execOptions.dest, "***\n"
+#    if execOptions.dest == "rr" and execTable == "dbDb":
+#        print "*** active set to 0 on rr ***\n"
+    print
 
 
 def sqlRetrieve(retrieveAssembly, retrieveTable, retrieveField):
@@ -404,37 +279,64 @@ def sqlRetrieve(retrieveAssembly, retrieveTable, retrieveField):
        appropriate values to plug into the runQuery function."""
     assemblyChop = re.sub(r'\d', '', retrieveAssembly)
     queryRetrieve = callHgsql("hgcentraltest", "select genome from " + retrieveTable + " where " +
-                              retrieveField + " like '" + assemblyChop + "%' limit 1")
+                              retrieveField + " like '" + assemblyChop + "%' limit 1", "hgwdev")
     return queryRetrieve
 
 
-"""This is the beginning of the script main body"""
-valid = parseCommandLine(sys.argv)
-if valid == 1:
-    valid = errorChecker(sys.argv)
-    if valid == 1:
-        mode = sys.argv[1]
-        assembly = sys.argv[2]
-        table = sys.argv[3]
-        origin = ""
-        destination = ""
-        if len(sys.argv) == 6:
-            origin = sys.argv[4]
-            destination = sys.argv[5]
+def main():
+    parser = argparse.ArgumentParser(prog='copyHgcentral',
+                                     description='Copies items from hgcentraltest -> hgcentralbeta \
+                                                  and from hgcentralbeta -> hgcentral',
+                                     usage="%(prog)s mode assembly table origin destination \
+                                            \n\nType '%(prog)s -h' for more details")
+
+    parser.add_argument('mode', action='store', choices=['test','execute'], metavar='mode',
+                        help="Must be 'test' or 'execute' (test mode must be run first)")
+    parser.add_argument('assembly', action='store',
+                        help='The assembly whose data you would like to copy \
+                        (e.g., hg19, mm10, etc.)')
+    parser.add_argument('table', action='store', metavar='table',
+                        choices=['blatServers','dbDb','defaultDb','genomeClade','all'],
+                        help="The table whose data you would like to copy (must be 'blatServers', \
+                              'dbDb', 'defaultDb', 'genomeClade', or 'all')")
+    parser.add_argument('orig', action='store', metavar='origin',
+                        choices=['dev','beta'],
+                        help="The server to copy from (must be 'dev' or 'beta')")
+    parser.add_argument('dest', action='store', metavar='destination',
+                        choices=['beta','rr'],
+                        help="The server to copy to (must be 'beta' or 'rr')")
+    optionList = parser.parse_args()
+    if optionList.orig == "dev" and optionList.dest != "beta":
+        print "\n *** If the origin is dev, the destination must be beta ***\n\n"
+        sys.exit()
+    if optionList.orig == "beta" and optionList.dest != "rr":
+        print "\n *** If the origin is beta, the destination must be rr ***\n\n"
+        sys.exit()
+    if optionList.mode == "test":
         print
-        if table in ["blatServers", "all"]:
-            runQuery(mode, "blatServers", "db", assembly, "port", assembly, origin,
-                     destination)
-        if table in ["dbDb", "all"]:
-            runQuery(mode, "dbDb", "name", assembly, "name", assembly, origin,
-                     destination)
-        if table in ["defaultDb", "all"]:
-            genome = sqlRetrieve(assembly, "defaultDb", "name")
-            genome = genome.rstrip()
-            runQuery(mode, "defaultDb", "genome", genome, "genome", assembly, origin,
-                     destination)
-        if table in ["genomeClade", "all"]:
-            genomeClade = sqlRetrieve(assembly, "defaultDb", "name")
-            genomeClade = genomeClade.rstrip()
-            runQuery(mode, "genomeClade", "genome", genomeClade, "genome", assembly, origin,
-                     destination)
+        if optionList.table in ["blatServers", "all"]:
+            runTest(optionList, "blatServers", "db", optionList.assembly, "port")
+        if optionList.table in ["dbDb", "all"]:
+            runTest(optionList, "dbDb", "name", optionList.assembly, "name")
+        if optionList.table in ["defaultDb", "all"]:
+            genome = chopper(sqlRetrieve(optionList.assembly, "defaultDb", "name"), "strip", "")
+            runTest(optionList, "defaultDb", "genome", genome, "genome")
+        if optionList.table in ["genomeClade", "all"]:
+            genomeClade = chopper(sqlRetrieve(optionList.assembly, "defaultDb", "name"), "strip", "")
+            runTest(optionList, "genomeClade", "genome", genomeClade, "genome")
+    else:
+        print
+        if optionList.table in ["blatServers", "all"]:
+            runExecute(optionList, "blatServers", "db", optionList.assembly, "port")
+        if optionList.table in ["dbDb", "all"]:
+            runExecute(optionList, "dbDb", "name", optionList.assembly, "name")
+        if optionList.table in ["defaultDb", "all"]:
+            genome = chopper(sqlRetrieve(optionList.assembly, "defaultDb", "name"), "strip", "")
+            runExecute(optionList, "defaultDb", "genome", genome, "genome")
+        if optionList.table in ["genomeClade", "all"]:
+            genomeClade = chopper(sqlRetrieve(optionList.assembly, "defaultDb", "name"), "strip", "")
+            runExecute(optionList, "genomeClade", "genome", genomeClade, "genome")
+
+
+if __name__ == '__main__':
+    main()
