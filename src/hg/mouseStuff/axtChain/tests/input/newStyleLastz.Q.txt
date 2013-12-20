@@ -1,0 +1,20 @@
+# (a LASTZ scoring set, created by "LASTZ --infer")
+
+bad_score          = X:-1736 # used for sub[X][*] and sub[*][X]
+fill_score         = -174    # used when sub[*][*] not otherwise defined
+
+# (score parameters added by expand_scores_file)
+
+T=2
+O=565
+E=43
+X=790
+Y=4865
+K=3000
+L=3000
+
+      A     C     G     T
+A    79   -84   -55  -128
+C   -84   100  -174   -55
+G   -55  -174   100   -84
+T  -128   -55   -84    79
