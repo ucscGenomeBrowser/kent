@@ -4,6 +4,8 @@
 #include "hash.h"
 #include "options.h"
 #include "axt.h"
+#include "psl.h"
+#include "bed.h"
 
 
 /* strand to us for target */
@@ -44,7 +46,7 @@ int qNumInsert = 0, qBaseInsert = 0, tNumInsert = 0, tBaseInsert = 0;
 int matchOne, match = 0, mismatch = 0, bases;
 double scale;
 struct block *lastBlock = NULL;
-int score, blockCount = 0;
+int blockCount = 0;
 int qTotalStart = BIGNUM, qTotalEnd = 0, tTotalStart = BIGNUM, tTotalEnd = 0;
 struct block *block;
 
@@ -85,8 +87,41 @@ for (block = blockList; block != NULL; block = block->next)
     lastBlock = block;
     }
 
+int i;
+struct psl *pslRecord;
+AllocVar(pslRecord);
+pslRecord->match = match;
+pslRecord->misMatch = mismatch;
+pslRecord->repMatch = 0;
+pslRecord->nCount = 0;
+pslRecord->qNumInsert = qNumInsert;
+pslRecord->qBaseInsert = qBaseInsert;
+pslRecord->tNumInsert = tNumInsert;
+pslRecord->tBaseInsert = tBaseInsert;
+strcpy(pslRecord->strand, isRc ? "-" : "+");
+pslRecord->qName = qName;
+pslRecord->qSize = qSize;
+pslRecord->qStart = isRc ? (qSize - qTotalEnd) : qTotalStart;
+pslRecord->qEnd = isRc ? (qSize - qTotalStart) : qTotalEnd;
+pslRecord->tName = tName;
+pslRecord->tSize = tSize;
+pslRecord->tStart = tTotalStart;
+pslRecord->tEnd = tTotalEnd;
+pslRecord->blockCount = blockCount;
+AllocArray(pslRecord->blockSizes, blockCount);
+AllocArray(pslRecord->qStarts, blockCount);
+AllocArray(pslRecord->tStarts, blockCount);
+for (block = blockList, i = 0; block != NULL; i++, block = block->next)
+    pslRecord->blockSizes[i] = block->tEnd - block->tStart;
+for (block = blockList, i = 0; block != NULL; i++, block = block->next)
+    pslRecord->qStarts[i] = block->qStart;
+for (block = blockList, i = 0; block != NULL; i++, block = block->next)
+    pslRecord->tStarts[i] = block->tStart;
+
 if (psl)
     {
+    pslTabOut(pslRecord, f);
+if ( 0 == 1) {
     fprintf(f, "%d\t%d\t0\t0\t", match, mismatch);
     fprintf(f, "%d\t%d\t%d\t%d\t", qNumInsert, qBaseInsert, tNumInsert, tBaseInsert);
     fprintf(f, "%c%s\t", (isRc ? '-' : '+'), targetStrand);
@@ -107,20 +142,12 @@ if (psl)
     for (block = blockList; block != NULL; block = block->next)
 	fprintf(f, "%d,", block->tStart);
     fprintf(f, "\n");
+}
     }
 else  /* Output bed line. */
     {
-    score = block->score;
-    fprintf(f, "%s\t%d\t%d\t%s\t%d\t", tName, tTotalStart, tTotalEnd,
-	qName, score);
-    fprintf(f, "%c\t", (isRc ? '-' : '+'));
-    fprintf(f, "%d\t%d\t0\t%d\t", tTotalStart, tTotalEnd, blockCount);
-    for (block = blockList; block != NULL; block = block->next)
-	fprintf(f, "%d,", block->tEnd - block->tStart);
-    fprintf(f, "\t");
-    for (block = blockList; block != NULL; block = block->next)
-	fprintf(f, "%d,", block->tStart);
-    fprintf(f, "\n");
+    struct bed *bed = bedFromPsl(pslRecord);
+    bedTabOutN(bed, 12, f);
     }
 }
 
@@ -176,7 +203,7 @@ if (stringIn("lastz",line))
         fprintf(f, " %s ",words[i]);
     fprintf(f,"\n");
     ss = axtScoreSchemeReadLf(lf);
-    axtScoreSchemeDnaWrite(ss, f, "blastz");
+    axtScoreSchemeDnaWrite(ss, f, words[0]);
     }
 seekEndOfStanza(lf);
 }
