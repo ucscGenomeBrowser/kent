@@ -18,7 +18,7 @@ newStyleLastz:	mkdirs
 		input/hg19.chrM.2bit -scoreScheme=input/$@.Q.txt \
 		input/susScr3.chrM.2bit output/$@.chain > /dev/null 2>&1
 	@diff -u expected/$@.chain output/$@.chain
-	@${axtChain} -faQ -faT input/$@.axt \
+	@${axtChain} -faQ -faT input/$@.axt.gz \
 		-minScore=3000 -linearGap=loose \
 		output/hg19.chrM.fa -scoreScheme=input/$@.Q.txt \
 		output/susScr3.chrM.fa output/$@.chain > /dev/null 2>&1
@@ -46,7 +46,7 @@ oldStyleBlastz:	mkdirs
 		input/hg19.chrM.2bit -scoreScheme=input/$@.Q.txt \
 		input/susScr3.chrM.2bit output/$@.chain > /dev/null 2>&1
 	@diff -u expected/$@.chain output/$@.chain
-	@${axtChain} -faQ -faT input/$@.axt \
+	@${axtChain} -faQ -faT input/$@.axt.gz \
 		-minScore=3000 -linearGap=loose \
 		output/hg19.chrM.fa -scoreScheme=input/$@.Q.txt \
 		output/susScr3.chrM.fa output/$@.chain > /dev/null 2>&1
