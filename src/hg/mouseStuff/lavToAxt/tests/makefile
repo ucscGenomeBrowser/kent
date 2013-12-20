@@ -43,8 +43,8 @@ mkdirs:
 	@twoBitToFa input/mCreaGeno.2bit output/mCreaGeno.fa
 	@twoBitToFa input/hCreaGeno.2bit output/hCreaGeno.fa
 	@faToTwoBit output/hCreaGeno.fa output/mCreaGeno.fa output/crea.2bit
-	@faToNib -softMask input/mCreaGeno.fa output/mCreaGeno.nib > /dev/null
-	@faToNib -softMask input/hCreaGeno.fa output/hCreaGeno.nib > /dev/null
+	@faToNib -softMask output/mCreaGeno.fa output/mCreaGeno.nib > /dev/null
+	@faToNib -softMask output/hCreaGeno.fa output/hCreaGeno.nib > /dev/null
 	@faToNib -softMask output/hg19.chrM.fa output/nibTarget/hg19_chrM.nib > /dev/null
 	@faToNib -softMask output/susScr3.chrM.fa output/nibQuery/susScr3_chrM.nib > /dev/null
 
