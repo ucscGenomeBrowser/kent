@@ -104,17 +104,9 @@ def parseDbDb(dbDbOrig, dbDbDest, dbDbAssembly):
 
 
 def runTest(testOptions, testTable, testField1, testField2, testOrder):
-    """This is the main function.  In test mode, it queries all three servers
-       and tests for special cases.  It outputs the state of all three servers
-       and any relevant error messages.  In execute mode, it checks to make
-       sure test mode has been run first.  If test mode has not been run, it
-       forces the user to run test mode.  If the data has changed on any server
-       since test mode was run, it forces the user to run test mode again.  If
-       the data is identical between the origin and destination, it doesn't copy
-       anything.  If the data is different between the origin and destination,
-       it informs the user and makes the user respond before copying.  If the
-       destination server is blank, it copies the data from the origin to the
-       destination."""
+    """This function handles the running of test mode.  In test mode, all three
+       servers are queried and tested for special cases.  The state of all three
+       servers and any relevant error messages are output."""
     fileDev, fileBeta, fileRr = getFilename(testTable, testOptions.assembly)
     testQuery = "select * from " + testTable + " where " + testField1 + "='" + \
                  testField2 + "' order by " + testOrder
@@ -147,6 +139,14 @@ def runTest(testOptions, testTable, testField1, testField2, testOrder):
 
 
 def runExecute(execOptions, execTable, execField1, execField2, execOrder):
+    """This function handles the running of execute mode.  If test mode has not
+       been run first, the user is forced to run test mode.  If the data has
+       changed on any server since test mode was run, the user is forced to run
+       test mode again.  If the data is identical between the origin and destination,
+       no data is copied.  If there are data differences between the origin and destination,
+       the user is informed and forced to respond before anything is copied.  If the
+       destination server is blank, the data is copied from the origin to the
+       destination."""
     fileTestDev, fileTestBeta, fileTestRr = getFilename(execTable, execOptions.assembly)
     execQuery = "select * from " + execTable + " where " + execField1 + "='" + \
                  execField2 + "' order by " + execOrder
