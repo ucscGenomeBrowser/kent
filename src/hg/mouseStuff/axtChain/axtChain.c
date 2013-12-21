@@ -37,6 +37,7 @@ errAbort(
   "   -psl Use psl instead of axt format for input\n"
   "   -faQ qNibDir is a fasta file with multiple sequences for query\n"
   "   -faT tNibDir is a fasta file with multiple sequences for target\n"
+  "                NOTE: will not work with gzipped fasta files\n"
   "   -minScore=N  Minimum score for chain, default %d\n"
   "   -details=fileName Output some additional chain details\n"
   "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file\n"

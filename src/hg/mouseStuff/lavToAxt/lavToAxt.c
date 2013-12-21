@@ -390,7 +390,7 @@ freez(matrix);
 freez(command);
 if (!lineFileNext(lf, &line, &size))
    unexpectedEof(lf);
-if (stringIn("blastz",line))
+if (stringIn("lastz",line))
     {
     stripChar(line,'"');
     wordCount = chopLine(line, words);
@@ -399,7 +399,7 @@ if (stringIn("blastz",line))
         fprintf(f, " %s ",words[i]);
     fprintf(f,"\n");
     ss = axtScoreSchemeReadLf(lf);
-    axtScoreSchemeDnaWrite(ss, f, "blastz");
+    axtScoreSchemeDnaWrite(ss, f, words[0]);
     }
 seekEndOfStanza(lf);
 }
