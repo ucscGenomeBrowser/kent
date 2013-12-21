@@ -23,6 +23,7 @@ UTILS_APPLIST = \
 	bigBedToBed \
 	bedCommonRegions \
 	bedGeneParts \
+	bedGraphPack \
 	bedPileUps \
 	bedRemoveOverlap \
 	bedRestrictToPositions \
