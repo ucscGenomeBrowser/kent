@@ -8,7 +8,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bedGraphPack - Pack together adjacent records representing same value.\n"
+  "bedGraphPack v1 - Pack together adjacent records representing same value.\n"
   "usage:\n"
   "   bedGraphPack in.bedGraph out.bedGraph\n"
   "The input needs to be sorted by chrom and this is checked.  To put in a pipe\n"
