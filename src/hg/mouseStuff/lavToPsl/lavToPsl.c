@@ -121,34 +121,14 @@ for (block = blockList, i = 0; block != NULL; i++, block = block->next)
 if (psl)
     {
     pslTabOut(pslRecord, f);
-if ( 0 == 1) {
-    fprintf(f, "%d\t%d\t0\t0\t", match, mismatch);
-    fprintf(f, "%d\t%d\t%d\t%d\t", qNumInsert, qBaseInsert, tNumInsert, tBaseInsert);
-    fprintf(f, "%c%s\t", (isRc ? '-' : '+'), targetStrand);
-    /* if query is - strand, convert start/end to genomic */
-    if (isRc)
-        fprintf(f, "%s\t%d\t%d\t%d\t", qName, qSize,
-                (qSize - qTotalEnd), (qSize - qTotalStart));
-    else
-        fprintf(f, "%s\t%d\t%d\t%d\t", qName, qSize, qTotalStart, qTotalEnd);
-    fprintf(f, "%s\t%d\t%d\t%d\t", tName, tSize, tTotalStart, tTotalEnd);
-    fprintf(f, "%d\t", blockCount);
-    for (block = blockList; block != NULL; block = block->next)
-        fprintf(f, "%d,", block->tEnd - block->tStart);
-    fprintf(f, "\t");
-    for (block = blockList; block != NULL; block = block->next)
-        fprintf(f, "%d,", block->qStart);
-    fprintf(f, "\t");
-    for (block = blockList; block != NULL; block = block->next)
-	fprintf(f, "%d,", block->tStart);
-    fprintf(f, "\n");
-}
     }
 else  /* Output bed line. */
     {
     struct bed *bed = bedFromPsl(pslRecord);
     bedTabOutN(bed, 12, f);
+    bedFree(&bed);
     }
+pslFree(&pslRecord);
 }
 
 void unexpectedEof(struct lineFile *lf)
