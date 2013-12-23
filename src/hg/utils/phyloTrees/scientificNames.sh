@@ -32,6 +32,7 @@ s/eptFus1/Eptesicus_fuscus/;
 s/eriEur2/Erinaceus_europaeus/;
 s/falChe1/Falco_cherrug/;
 s/falPer1/Falco_peregrinus/;
+s/cotJap1/Coturnix_japonica/;
 s/ficAlb1/Ficedula_albicollis/;
 s/ficAlb2/Ficedula_albicollis/;
 s/hapBur1/Haplochromis_burtoni/;
@@ -48,6 +49,7 @@ s/octDeg1/Octodon_degus/;
 s/odoRosDiv1/Odobenus_rosmarus_divergens/;
 s/lepWed1/Leptonychotes_weddellii/;
 s/orcOrc1/Orcinus_orca/;
+s/balAcu1/Balaenoptera acutorostrata scammoni/;
 s/oryAfe1/Orycteropus_afer/;
 s/oviAri3/Ovis_aries/;
 s/panPan1/Pan_paniscus/;
@@ -66,7 +68,12 @@ s/taeGut2/Taeniopygia_guttata/;
 s/tupChi1/Tupaia_chinensis/;
 s/xenTro7/Xenopus_tropicalis/;
 s/astMex1/Astyanax_mexicanus/;
+s/calMil1/Callorhinchus_milii/;
+s/perBai1/Peromyscus_maniculatus_bairdii/;
 s/panTig1/Panthera_tigris_altaica/;
+s/bubBub1/Bubalus_bubalis/;
+s/lipVex1/Lipotes_vexillifer/;
+s/bosTau7/Bos_taurus/;
 s/xipMac1/Xiphophorus_maculatus/;'
 }
 
@@ -76,8 +83,10 @@ sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d; s/(//g; s/)//g; s
     | xargs echo | tr '[ ]' '[\n]' | sort | while read DB
 do
     sciName=`hgsql -N -e "select scientificName from dbDb where name=\"${DB}\";" hgcentraltest 2> /dev/null | sed -e 's/ /_/g;'`
+    echo "$DB -> $sciName from hgcentraltest" 1>&2
     if [ "X${sciName}Y" = "XY" ]; then
        sciName=`notYetInDbDb $DB`
+       echo "$DB -> $sciName from sed statement" 1>&2
     fi
     treeDocString="${treeDocString} $DB -> $sciName ;"
     echo "$treeDocString"
