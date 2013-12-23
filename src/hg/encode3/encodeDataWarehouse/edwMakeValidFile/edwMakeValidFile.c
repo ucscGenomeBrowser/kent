@@ -49,7 +49,7 @@ void alignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
  * Update vf->mapRatio and related fields. */
 {
 edwAlignFastqMakeBed(ef, assembly, fastqPath, vf, bedF, 
-    &vf->mapRatio, &vf->depth, &vf->sampleCoverage);
+    &vf->mapRatio, &vf->depth, &vf->sampleCoverage, &vf->uniqueMapRatio);
 }
 
 int makeReadableTemp(char *fileName)
@@ -102,7 +102,7 @@ bam_header_t *bamHeader = sf->header;
 bam1_t one;
 ZeroVar(&one);	// This seems to be necessary!
 
-long long mappedCount = 0;
+long long mappedCount = 0, uniqueMappedCount = 0;
 boolean done = FALSE;
 while (!done)
     {
@@ -120,7 +120,11 @@ while (!done)
 	int32_t tid = one.core.tid;
 	int l_qseq = one.core.l_qseq;
 	if (tid > 0)
+	    {
 	    ++mappedCount;
+	    if (one.core.qual > edwMinMapQual)
+		++uniqueMappedCount;
+	    }
 	vf->itemCount += 1;
 	vf->basesInItems += l_qseq;
 	if (hotPos)
@@ -138,7 +142,6 @@ while (!done)
 	       if (isRc)
 	           {
 		   strand = '-';
-		   reverseIntRange(&start, &end, bamHeader->target_len[tid]);
 		   }
 	       if (start < 0) start=0;
 	       fprintf(outBed, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
@@ -148,6 +151,7 @@ while (!done)
 	}
     }
 vf->mapRatio = (double)mappedCount/vf->itemCount;
+vf->uniqueMapRatio = (double)uniqueMappedCount/vf->itemCount;
 vf->depth = vf->basesInItems*vf->mapRatio/assembly->baseCount;
 samclose(sf);
 }
@@ -346,10 +350,12 @@ dyStringPrintf(dy, " sampleBed='%s',", el->sampleBed);
 dyStringPrintf(dy, " mapRatio=%g,", el->mapRatio);
 dyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
 dyStringPrintf(dy, " depth=%g,", el->depth);
+dyStringPrintf(dy, " singleQaStatus=0,");
+dyStringPrintf(dy, " replicateQaStatus=0,");
 dyStringPrintf(dy, " technicalReplicate='%s',", el->technicalReplicate);
 dyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
-dyStringPrintf(dy, " singleQaStatus=0,");
-dyStringPrintf(dy, " replicateQaStatus=0");
+dyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
+dyStringPrintf(dy, " uniqueMapRatio=%g", el->uniqueMapRatio);
 dyStringPrintf(dy, " where id=%lld\n", (long long)id);
 sqlUpdate(conn, dy->string);
 freeDyString(&dy);
