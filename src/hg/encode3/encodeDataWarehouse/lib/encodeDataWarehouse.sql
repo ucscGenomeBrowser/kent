@@ -179,6 +179,7 @@ CREATE TABLE edwValidFile (
     technicalReplicate varchar(255) default '',	# Manifest's technical_replicate tag. Values 1,2,3... pooled or ''
     pairedEnd varchar(255) default '',	# The paired_end tag from the manifest.  Values 1,2 or ''
     qaVersion tinyint default 0,	# Version of QA pipeline making status decisions
+    uniqueMapRatio double default 0,	# Fraction of reads that map uniquely to genome for bams and fastqs
               #Indices
     PRIMARY KEY(id),
     INDEX(licensePlate),
@@ -229,6 +230,28 @@ CREATE TABLE edwFastqFile (
     gAtPos longblob,	# % of Gs at each pos
     tAtPos longblob,	# % of Ts at each pos
     nAtPos longblob,	# % of '.' or 'N' at each pos
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(fileId)
+);
+
+#Info on what is in a bam file beyond whet's in edwValidFile
+CREATE TABLE edwBamFile (
+    id int unsigned auto_increment,	# ID in this table
+    fileId int unsigned default 0,	# ID in edwFile table.
+    isPaired tinyint default 0,	# Set to 1 if paired reads, 0 if single
+    isSortedByTarget tinyint default 0,	# Set to 1 if sorted by target,pos
+    readCount bigint default 0,	# # of reads in file
+    readBaseCount bigint default 0,	# # of bases in all reads added up
+    mappedCount bigint default 0,	# # of reads that map
+    uniqueMappedCount bigint default 0,	# # of reads that map to a unique position
+    readSizeMean double default 0,	# Average read size
+    readSizeStd double default 0,	# Standard deviation of read size
+    readSizeMin int default 0,	# Minimum read size
+    readSizeMax int default 0,	# Maximum read size
+    u4mReadCount int default 0,	# Uniquely-mapped 4 million read actual read # (usually 4M)
+    u4mUniquePos int default 0,	# Unique positions in target of the 4M reads that map to single pos
+    u4mUniqueRatio double default 0,	# u4mUniqPos/u4mReadCount - measures library diversity
               #Indices
     PRIMARY KEY(id),
     UNIQUE(fileId)

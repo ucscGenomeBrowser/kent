@@ -152,6 +152,7 @@ table edwValidFile
     string technicalReplicate; "Manifest's technical_replicate tag. Values 1,2,3... pooled or ''"
     string pairedEnd; "The paired_end tag from the manifest.  Values 1,2 or ''"
     byte qaVersion; "Version of QA pipeline making status decisions"
+    double uniqueMapRatio; "Fraction of reads that map uniquely to genome for bams and fastqs"
     )
 
 table edwQaFail
@@ -195,6 +196,26 @@ table edwFastqFile
     double[readSizeMax] gAtPos;   "% of Gs at each pos"
     double[readSizeMax] tAtPos;   "% of Ts at each pos"
     double[readSizeMax] nAtPos;   "% of '.' or 'N' at each pos"
+    )
+
+table edwBamFile
+"Info on what is in a bam file beyond whet's in edwValidFile"
+    (
+    uint id primary auto;	"ID in this table"
+    uint fileId unique; "ID in edwFile table."
+    byte isPaired;	"Set to 1 if paired reads, 0 if single"
+    byte isSortedByTarget; "Set to 1 if sorted by target,pos"
+    bigint readCount; "# of reads in file"
+    bigint readBaseCount; "# of bases in all reads added up"
+    bigint mappedCount; "# of reads that map"
+    bigint uniqueMappedCount; "# of reads that map to a unique position"
+    double readSizeMean; "Average read size"
+    double readSizeStd;  "Standard deviation of read size"
+    int readSizeMin;  "Minimum read size"
+    int readSizeMax; "Maximum read size"
+    int u4mReadCount; "Uniquely-mapped 4 million read actual read # (usually 4M)"
+    int u4mUniquePos;  "Unique positions in target of the 4M reads that map to single pos"
+    double u4mUniqueRatio; "u4mUniqPos/u4mReadCount - measures library diversity"
     )
 
 table edwQaEnrichTarget

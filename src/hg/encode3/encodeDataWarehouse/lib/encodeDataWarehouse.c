@@ -1702,7 +1702,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd,qaVersion";
+char *edwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd,qaVersion,uniqueMapRatio";
 
 void edwValidFileStaticLoad(char **row, struct edwValidFile *ret)
 /* Load a row from edwValidFile table into ret.  The contents of ret will
@@ -1732,6 +1732,7 @@ ret->replicateQaStatus = sqlSigned(row[19]);
 ret->technicalReplicate = row[20];
 ret->pairedEnd = row[21];
 ret->qaVersion = sqlSigned(row[22]);
+ret->uniqueMapRatio = sqlDouble(row[23]);
 }
 
 struct edwValidFile *edwValidFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1764,8 +1765,8 @@ void edwValidFileSaveToDb(struct sqlConnection *conn, struct edwValidFile *el, c
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g,%d,%d,'%s','%s',%d)", 
-	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus,  el->technicalReplicate,  el->pairedEnd,  el->qaVersion);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g,%d,%d,'%s','%s',%d,%g)", 
+	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus,  el->technicalReplicate,  el->pairedEnd,  el->qaVersion,  el->uniqueMapRatio);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1800,6 +1801,7 @@ ret->replicateQaStatus = sqlSigned(row[19]);
 ret->technicalReplicate = cloneString(row[20]);
 ret->pairedEnd = cloneString(row[21]);
 ret->qaVersion = sqlSigned(row[22]);
+ret->uniqueMapRatio = sqlDouble(row[23]);
 return ret;
 }
 
@@ -1809,7 +1811,7 @@ struct edwValidFile *edwValidFileLoadAll(char *fileName)
 {
 struct edwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[23];
+char *row[24];
 
 while (lineFileRow(lf, row))
     {
@@ -1827,7 +1829,7 @@ struct edwValidFile *edwValidFileLoadAllByChar(char *fileName, char chopper)
 {
 struct edwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[23];
+char *row[24];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1871,6 +1873,7 @@ ret->replicateQaStatus = sqlSignedComma(&s);
 ret->technicalReplicate = sqlStringComma(&s);
 ret->pairedEnd = sqlStringComma(&s);
 ret->qaVersion = sqlSignedComma(&s);
+ret->uniqueMapRatio = sqlDoubleComma(&s);
 *pS = s;
 return ret;
 }
@@ -1978,6 +1981,8 @@ fprintf(f, "%s", el->pairedEnd);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->qaVersion);
+fputc(sep,f);
+fprintf(f, "%g", el->uniqueMapRatio);
 fputc(lastSep,f);
 }
 
@@ -2539,6 +2544,214 @@ for (i=0; i<el->readSizeMax; ++i)
     }
 if (sep == ',') fputc('}',f);
 }
+fputc(lastSep,f);
+}
+
+
+char *edwBamFileCommaSepFieldNames = "id,fileId,isPaired,isSortedByTarget,readCount,readBaseCount,mappedCount,uniqueMappedCount,readSizeMean,readSizeStd,readSizeMin,readSizeMax,u4mReadCount,u4mUniquePos,u4mUniqueRatio";
+
+void edwBamFileStaticLoad(char **row, struct edwBamFile *ret)
+/* Load a row from edwBamFile table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->isPaired = sqlSigned(row[2]);
+ret->isSortedByTarget = sqlSigned(row[3]);
+ret->readCount = sqlLongLong(row[4]);
+ret->readBaseCount = sqlLongLong(row[5]);
+ret->mappedCount = sqlLongLong(row[6]);
+ret->uniqueMappedCount = sqlLongLong(row[7]);
+ret->readSizeMean = sqlDouble(row[8]);
+ret->readSizeStd = sqlDouble(row[9]);
+ret->readSizeMin = sqlSigned(row[10]);
+ret->readSizeMax = sqlSigned(row[11]);
+ret->u4mReadCount = sqlSigned(row[12]);
+ret->u4mUniquePos = sqlSigned(row[13]);
+ret->u4mUniqueRatio = sqlDouble(row[14]);
+}
+
+struct edwBamFile *edwBamFileLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwBamFile from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwBamFileFreeList(). */
+{
+struct edwBamFile *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwBamFileLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwBamFileSaveToDb(struct sqlConnection *conn, struct edwBamFile *el, char *tableName, int updateSize)
+/* Save edwBamFile as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%d,%d,%lld,%lld,%lld,%lld,%g,%g,%d,%d,%d,%d,%g)", 
+	tableName,  el->id,  el->fileId,  el->isPaired,  el->isSortedByTarget,  el->readCount,  el->readBaseCount,  el->mappedCount,  el->uniqueMappedCount,  el->readSizeMean,  el->readSizeStd,  el->readSizeMin,  el->readSizeMax,  el->u4mReadCount,  el->u4mUniquePos,  el->u4mUniqueRatio);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct edwBamFile *edwBamFileLoad(char **row)
+/* Load a edwBamFile from row fetched with select * from edwBamFile
+ * from database.  Dispose of this with edwBamFileFree(). */
+{
+struct edwBamFile *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->isPaired = sqlSigned(row[2]);
+ret->isSortedByTarget = sqlSigned(row[3]);
+ret->readCount = sqlLongLong(row[4]);
+ret->readBaseCount = sqlLongLong(row[5]);
+ret->mappedCount = sqlLongLong(row[6]);
+ret->uniqueMappedCount = sqlLongLong(row[7]);
+ret->readSizeMean = sqlDouble(row[8]);
+ret->readSizeStd = sqlDouble(row[9]);
+ret->readSizeMin = sqlSigned(row[10]);
+ret->readSizeMax = sqlSigned(row[11]);
+ret->u4mReadCount = sqlSigned(row[12]);
+ret->u4mUniquePos = sqlSigned(row[13]);
+ret->u4mUniqueRatio = sqlDouble(row[14]);
+return ret;
+}
+
+struct edwBamFile *edwBamFileLoadAll(char *fileName) 
+/* Load all edwBamFile from a whitespace-separated file.
+ * Dispose of this with edwBamFileFreeList(). */
+{
+struct edwBamFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[15];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwBamFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwBamFile *edwBamFileLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwBamFile from a chopper separated file.
+ * Dispose of this with edwBamFileFreeList(). */
+{
+struct edwBamFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[15];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwBamFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwBamFile *edwBamFileCommaIn(char **pS, struct edwBamFile *ret)
+/* Create a edwBamFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwBamFile */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->fileId = sqlUnsignedComma(&s);
+ret->isPaired = sqlSignedComma(&s);
+ret->isSortedByTarget = sqlSignedComma(&s);
+ret->readCount = sqlLongLongComma(&s);
+ret->readBaseCount = sqlLongLongComma(&s);
+ret->mappedCount = sqlLongLongComma(&s);
+ret->uniqueMappedCount = sqlLongLongComma(&s);
+ret->readSizeMean = sqlDoubleComma(&s);
+ret->readSizeStd = sqlDoubleComma(&s);
+ret->readSizeMin = sqlSignedComma(&s);
+ret->readSizeMax = sqlSignedComma(&s);
+ret->u4mReadCount = sqlSignedComma(&s);
+ret->u4mUniquePos = sqlSignedComma(&s);
+ret->u4mUniqueRatio = sqlDoubleComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwBamFileFree(struct edwBamFile **pEl)
+/* Free a single dynamically allocated edwBamFile such as created
+ * with edwBamFileLoad(). */
+{
+struct edwBamFile *el;
+
+if ((el = *pEl) == NULL) return;
+freez(pEl);
+}
+
+void edwBamFileFreeList(struct edwBamFile **pList)
+/* Free a list of dynamically allocated edwBamFile's */
+{
+struct edwBamFile *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwBamFileFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwBamFileOutput(struct edwBamFile *el, FILE *f, char sep, char lastSep) 
+/* Print out edwBamFile.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->fileId);
+fputc(sep,f);
+fprintf(f, "%d", el->isPaired);
+fputc(sep,f);
+fprintf(f, "%d", el->isSortedByTarget);
+fputc(sep,f);
+fprintf(f, "%lld", el->readCount);
+fputc(sep,f);
+fprintf(f, "%lld", el->readBaseCount);
+fputc(sep,f);
+fprintf(f, "%lld", el->mappedCount);
+fputc(sep,f);
+fprintf(f, "%lld", el->uniqueMappedCount);
+fputc(sep,f);
+fprintf(f, "%g", el->readSizeMean);
+fputc(sep,f);
+fprintf(f, "%g", el->readSizeStd);
+fputc(sep,f);
+fprintf(f, "%d", el->readSizeMin);
+fputc(sep,f);
+fprintf(f, "%d", el->readSizeMax);
+fputc(sep,f);
+fprintf(f, "%d", el->u4mReadCount);
+fputc(sep,f);
+fprintf(f, "%d", el->u4mUniquePos);
+fputc(sep,f);
+fprintf(f, "%g", el->u4mUniqueRatio);
 fputc(lastSep,f);
 }
 

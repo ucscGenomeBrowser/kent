@@ -672,7 +672,7 @@ void edwExperimentOutput(struct edwExperiment *el, FILE *f, char sep, char lastS
 #define edwExperimentCommaOut(el,f) edwExperimentOutput(el,f,',',',');
 /* Print out edwExperiment as a comma separated list including final comma. */
 
-#define EDWVALIDFILE_NUM_COLS 23
+#define EDWVALIDFILE_NUM_COLS 24
 
 extern char *edwValidFileCommaSepFieldNames;
 
@@ -703,6 +703,7 @@ struct edwValidFile
     char *technicalReplicate;	/* Manifest's technical_replicate tag. Values 1,2,3... pooled or '' */
     char *pairedEnd;	/* The paired_end tag from the manifest.  Values 1,2 or '' */
     signed char qaVersion;	/* Version of QA pipeline making status decisions */
+    double uniqueMapRatio;	/* Fraction of reads that map uniquely to genome for bams and fastqs */
     };
 
 void edwValidFileStaticLoad(char **row, struct edwValidFile *ret);
@@ -918,6 +919,86 @@ void edwFastqFileOutput(struct edwFastqFile *el, FILE *f, char sep, char lastSep
 
 #define edwFastqFileCommaOut(el,f) edwFastqFileOutput(el,f,',',',');
 /* Print out edwFastqFile as a comma separated list including final comma. */
+
+#define EDWBAMFILE_NUM_COLS 15
+
+extern char *edwBamFileCommaSepFieldNames;
+
+struct edwBamFile
+/* Info on what is in a bam file beyond whet's in edwValidFile */
+    {
+    struct edwBamFile *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID in this table */
+    unsigned fileId;	/* ID in edwFile table. */
+    signed char isPaired;	/* Set to 1 if paired reads, 0 if single */
+    signed char isSortedByTarget;	/* Set to 1 if sorted by target,pos */
+    long long readCount;	/* # of reads in file */
+    long long readBaseCount;	/* # of bases in all reads added up */
+    long long mappedCount;	/* # of reads that map */
+    long long uniqueMappedCount;	/* # of reads that map to a unique position */
+    double readSizeMean;	/* Average read size */
+    double readSizeStd;	/* Standard deviation of read size */
+    int readSizeMin;	/* Minimum read size */
+    int readSizeMax;	/* Maximum read size */
+    int u4mReadCount;	/* Uniquely-mapped 4 million read actual read # (usually 4M) */
+    int u4mUniquePos;	/* Unique positions in target of the 4M reads that map to single pos */
+    double u4mUniqueRatio;	/* u4mUniqPos/u4mReadCount - measures library diversity */
+    };
+
+void edwBamFileStaticLoad(char **row, struct edwBamFile *ret);
+/* Load a row from edwBamFile table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwBamFile *edwBamFileLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwBamFile from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwBamFileFreeList(). */
+
+void edwBamFileSaveToDb(struct sqlConnection *conn, struct edwBamFile *el, char *tableName, int updateSize);
+/* Save edwBamFile as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwBamFile *edwBamFileLoad(char **row);
+/* Load a edwBamFile from row fetched with select * from edwBamFile
+ * from database.  Dispose of this with edwBamFileFree(). */
+
+struct edwBamFile *edwBamFileLoadAll(char *fileName);
+/* Load all edwBamFile from whitespace-separated file.
+ * Dispose of this with edwBamFileFreeList(). */
+
+struct edwBamFile *edwBamFileLoadAllByChar(char *fileName, char chopper);
+/* Load all edwBamFile from chopper separated file.
+ * Dispose of this with edwBamFileFreeList(). */
+
+#define edwBamFileLoadAllByTab(a) edwBamFileLoadAllByChar(a, '\t');
+/* Load all edwBamFile from tab separated file.
+ * Dispose of this with edwBamFileFreeList(). */
+
+struct edwBamFile *edwBamFileCommaIn(char **pS, struct edwBamFile *ret);
+/* Create a edwBamFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwBamFile */
+
+void edwBamFileFree(struct edwBamFile **pEl);
+/* Free a single dynamically allocated edwBamFile such as created
+ * with edwBamFileLoad(). */
+
+void edwBamFileFreeList(struct edwBamFile **pList);
+/* Free a list of dynamically allocated edwBamFile's */
+
+void edwBamFileOutput(struct edwBamFile *el, FILE *f, char sep, char lastSep);
+/* Print out edwBamFile.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwBamFileTabOut(el,f) edwBamFileOutput(el,f,'\t','\n');
+/* Print out edwBamFile as a line in a tab-separated file. */
+
+#define edwBamFileCommaOut(el,f) edwBamFileOutput(el,f,',',',');
+/* Print out edwBamFile as a comma separated list including final comma. */
 
 #define EDWQAENRICHTARGET_NUM_COLS 5
 
