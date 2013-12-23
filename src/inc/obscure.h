@@ -150,6 +150,12 @@ void shuffleList(void *pList);
  * where list is a pointer to a structure that
  * begins with a next field. */
 
+void *slListRandomReduce(void *list, double reduceRatio);
+/* Reduce list to approximately reduceRatio times original size. Destroys original list. */
+
+void *slListRandomSample(void *list, int maxCount);
+/* Return a sublist of list with at most maxCount. Destroy list in process */
+
 char *stripCommas(char *position);
 /* make a new string with commas stripped out */
 

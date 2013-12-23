@@ -679,6 +679,48 @@ if (count > 1)
     }
 }
 
+void *slListRandomReduce(void *list, double reduceRatio)
+/* Reduce list to approximately reduceRatio times original size. Destroys original list. */
+{
+if (reduceRatio >= 1.0)
+    return list;
+int threshold = RAND_MAX * reduceRatio;
+struct slList *newList = NULL, *next, *el;
+for (el = list; el != NULL; el = next)
+    {
+    next = el->next;
+    if (rand() <= threshold)
+        {
+	slAddHead(&newList, el);
+	}
+    }
+return newList;
+}
+
+void *slListRandomSample(void *list, int maxCount)
+/* Return a sublist of list with at most maxCount. Destroy list in process */
+{
+if (list == NULL)
+    return list;
+int initialCount = slCount(list);
+if (initialCount <= maxCount)
+    return list;
+double reduceRatio = (double)maxCount/initialCount;
+if (reduceRatio < 0.9)
+    {
+    double conservativeReduceRatio = reduceRatio * 1.05;
+    list = slListRandomReduce(list, conservativeReduceRatio);
+    }
+int midCount = slCount(list);
+if (midCount <= maxCount)
+    return list;
+shuffleList(list);
+struct slList *lastEl = slElementFromIx(list, maxCount-1);
+lastEl->next = NULL;
+return list;
+}
+
+
 char *stripCommas(char *position)
 /* make a new string with commas stripped out */
 {
