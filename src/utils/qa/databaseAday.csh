@@ -67,7 +67,7 @@ if ( $choice == "today" ) then
   if ( $todaysDb == "DO-OVER" ) then
     $0 init $outPath
     set todaysDb=`$0 today $outPath`
-    echo "starting new db list" > /dev/stderr
+    bash -c 'echo "starting new db list" >&2'
   endif
   # all is good!
   echo $todaysDb
