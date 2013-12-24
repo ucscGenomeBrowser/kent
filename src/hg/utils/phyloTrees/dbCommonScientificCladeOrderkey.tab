@@ -22,6 +22,7 @@ rn5	Rat	Rattus norvegicus	rodent	glires	1559
 octDeg1	Brush-tailed rat	Octodon degus	rodent	glires	1575
 dipOrd1	Kangaroo rat	Dipodomys ordii	rodent	glires	1580
 jacJac1	Lesser Egyptian jerboa	Jaculus jaculus	rodent	glires	1590
+perBai1	Prairie deer mouse	Peromyscus maniculatus bairdii	rodent	glires	1595
 micOch1	Prairie vole	Microtus ochrogaster	rodent	glires	1600
 criGri1	Chinese hamster	Cricetulus griseus	rodent	glires	1610
 mesAur1	Golden hamster	Mesocricetus auratus	rodent	glires	1620
@@ -38,9 +39,11 @@ turTru2	Dolphin	Tursiops truncatus	mammal	cetartiodactyla	2364
 lipVex1	Yangtze river dolphin	Lipotes vexillifer	mammal	cetartiodactyla	2366
 orcOrc1	Killer whale	Orcinus orca	mammal	cetartiodactyla	2367
 phyCat1	Sperm whale	Physeter catodon	mammal	cetartiodactyla	2368
+balAcu1	Minke whale	Balaenoptera acutorostrata scammoni	mammal	cetartiodactyla	2369
 oviAri3	Sheep	Ovis aries	mammal	cetartiodactyla	2369
 capHir1	Domestic goat	Capra hircus	mammal	cetartiodactyla	2375
 bosTau7	Cow	Bos taurus	mammal	cetartiodactyla	2379
+bubBub1	Water buffalo	Bubalus bubalis	mammal	cetartiodactyla	2383
 equCab2	Horse	Equus caballus	mammal	perissodactyla	2409
 cerSim1	White rhinoceros	Ceratotherium simum	mammal	perissodactyla	2415
 felCat5	Cat	Felis catus	mammal	carnivora	2418
@@ -84,6 +87,7 @@ ficAlb1	Collared flycatcher	Ficedula albicollis	vertebrate	aves	3690
 amaVit1	Puerto Rican parrot	Amazona vittata	vertebrate	aves	4310
 araMac1	Scarlet macaw	Ara macao	vertebrate	aves	4320
 galGal4	Chicken	Gallus gallus	vertebrate	aves	4349
+cotJap1	Japanese quail	Japanese quail	vertebrate	aves	4353
 anaPla1	Mallard duck	Anas platyrhynchos	vertebrate	aves	4357
 pseHum1	Tibetan ground jay	Pseudopodoces humilis	vertebrate	aves	4358
 zonAlb1	White-throated sparrow	Zonotrichia albicollis	vertebrate	aves	4359
@@ -118,7 +122,8 @@ xipMac1	Southern platyfish	Xiphophorus maculatus	vertebrate	smegmamorpha	4740
 gadMor1	Atlantic cod	Gadus morhua	vertebrate	neoteleostei	4750
 danRer7	Zebrafish	Danio rerio	vertebrate	teleostei	4774
 astMex1	Mexican tetra (cavefish)	Astyanax mexicanus	vertebrate	teleostei	4790
-lepOcu1	Spotted gar	Lepisosteus oculatus	vertebrate	neopterygii	4790
+lepOcu1	Spotted gar	Lepisosteus oculatus	vertebrate	neopterygii	4793
+calMil1	Elephant shark	Callorhinchus milii	vertebrate	chondrichthyes	4796
 petMar2	Lamprey	Petromyzon marinus	vertebrate	hyperoartia	4799
 letCam1	Arctic lamprey	Lethenteron camtschaticum	vertebrate	hyperoartia	4820
 apiMel4	Honey bee	Apis mellifera	insect	hymenoptera	9658
