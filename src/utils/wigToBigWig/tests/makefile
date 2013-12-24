@@ -1,4 +1,4 @@
-A = wigToBigWig 
+A = ${DESTBINDIR}/wigToBigWig
 include ../../../inc/common.mk
 
 test: test1 test2

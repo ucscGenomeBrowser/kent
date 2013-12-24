@@ -244,14 +244,17 @@ static void printFilterLink(char *pslTrack, char *articleId, char *articleTable)
     sqlSafef(qBuf, sizeof(qBuf), "SELECT CONCAT(firstAuthor, year) FROM %s WHERE articleId='%s';", articleTable, articleId);
     char *dispId = sqlQuickString(conn, qBuf);
 
-    printf(
-        "      <div class=\"subsection\">");
-    printf(
-        "      <P><A HREF=\"%s&amp;db=%s&amp;position=%s%%3A%d-%d&amp;pubsFilterArticleId=%s&amp;%s=pack&amp;hgFind.matches=%s\">",
-        hgTracksPathAndSettings(), database, seqName, start+1, end, articleId, pslTrack, dispId);
+    printf("      <div class=\"subsection\">");
 
-    printf("Show these sequence matches individually on genome browser</A> (activates track \""
-        "Individual matches for article\")</P>");
+    if (!containsStringNoCase(pslTrack, "Bing"))
+        {
+        printf(
+        "      <P><A HREF=\"%s&amp;db=%s&amp;position=%s%%3A%d-%d&amp;pubsFilterArticleId=%s&amp;%s=pack&amp;hgFind.matches=%s\">",
+            hgTracksPathAndSettings(), database, seqName, start+1, end, articleId, pslTrack, dispId);
+
+        printf("Show these sequence matches individually on genome browser</A> (activates track \""
+            "Individual matches for article\")</P>");
+        }
 
     printPositionAndSize(start, end, 1);
     printf(

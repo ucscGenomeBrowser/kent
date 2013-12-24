@@ -1,18 +1,18 @@
-A = bigWigCat 
+A = ${DESTBINDIR}/bigWigCat 
 include ../../../inc/common.mk
 
 test: outputDir
 	# generate big wigs
-	wigToBigWig -fixedSummaries -keepAllChromosomes input/testFixed_A.wig input/test.sizes tmp/testFixed_A.bigWig
-	wigToBigWig -fixedSummaries -keepAllChromosomes input/testFixed_B.wig input/test.sizes tmp/testFixed_B.bigWig
+	${DESTBINDIR}/wigToBigWig -fixedSummaries -keepAllChromosomes input/testFixed_A.wig input/test.sizes tmp/testFixed_A.bigWig
+	${DESTBINDIR}/wigToBigWig -fixedSummaries -keepAllChromosomes input/testFixed_B.wig input/test.sizes tmp/testFixed_B.bigWig
 	${A} tmp/testFixed.bigWig tmp/testFixed_*.bigWig
 
-	wigToBigWig -fixedSummaries -keepAllChromosomes input/testVar_A.wig input/test.sizes tmp/testVar_A.bigWig
-	wigToBigWig -fixedSummaries -keepAllChromosomes input/testVar_B.wig input/test.sizes tmp/testVar_B.bigWig
+	${DESTBINDIR}/wigToBigWig -fixedSummaries -keepAllChromosomes input/testVar_A.wig input/test.sizes tmp/testVar_A.bigWig
+	${DESTBINDIR}/wigToBigWig -fixedSummaries -keepAllChromosomes input/testVar_B.wig input/test.sizes tmp/testVar_B.bigWig
 	${A} tmp/testVar.bigWig tmp/testVar_[AB].bigWig
 
-	wigToBigWig -fixedSummaries -keepAllChromosomes input/testBedGraph_A.wig input/test.sizes tmp/testBedGraph_A.bigWig
-	wigToBigWig -fixedSummaries -keepAllChromosomes input/testBedGraph_B.wig input/test.sizes tmp/testBedGraph_B.bigWig
+	${DESTBINDIR}/wigToBigWig -fixedSummaries -keepAllChromosomes input/testBedGraph_A.wig input/test.sizes tmp/testBedGraph_A.bigWig
+	${DESTBINDIR}/wigToBigWig -fixedSummaries -keepAllChromosomes input/testBedGraph_B.wig input/test.sizes tmp/testBedGraph_B.bigWig
 	${A} tmp/testBedGraph.bigWig tmp/testBedGraph_[AB].bigWig
 
 	# get unscaled data back out

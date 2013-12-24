@@ -1426,7 +1426,7 @@ type bed 12 +
 
 track rmskCensor
 shortLabel CENSOR Repeats
-longLabel Repeating Elements by CENSOR and RepBase 11.6 (Giri Ihstitute)
+longLabel Repeating Elements by CENSOR and Repbase 11.6 (Giri Institute)
 group varRep
 priority 149.2
 visibility hide

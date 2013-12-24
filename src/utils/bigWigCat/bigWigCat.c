@@ -19,19 +19,19 @@
 
 static int blockSize = 256;
 static int itemsPerSlot = 1024;
-static boolean clipDontDie = FALSE;
 static boolean doCompress = FALSE;
 
-static struct optionSpec options[] = {
-   {"itemsPerSlot", OPTION_INT},
-   {"clip", OPTION_BOOLEAN},
-   {NULL, 0},
+static struct optionSpec options[] = 
+{
+{"itemsPerSlot", OPTION_INT},
+{NULL, 0},
 };
 
-struct bwmSection {
-    bits32 chromId;			/* Chromosome name. */
-    bits32 start,end;			/* Range of chromosome covered. */
-    bits64 fileOffset;			/* Offset of section in file. */
+struct bwmSection 
+{
+bits32 chromId;			/* Chromosome name. */
+bits32 start,end;			/* Range of chromosome covered. */
+bits64 fileOffset;			/* Offset of section in file. */
 };
 
 static struct cirTreeRange bwmSectionFetchKey(const void *va, void *context)
@@ -64,7 +64,7 @@ int chromCount = 0;
 int i;
 struct bbiChromInfo *chromInfo, *chromArray;
 for (i = 0, chromInfo = bbiChromList(inBbiFiles[0]); chromInfo; ++i, chromInfo = chromInfo->next)
-	chromCount++;
+    chromCount++;
 
 /* Allocate and fill in results array. */
 AllocArray(chromArray, chromCount);
@@ -74,7 +74,7 @@ for (i = 0, chromInfo = bbiChromList(inBbiFiles[0]); chromInfo; ++i, chromInfo =
     chromArray[i].id = i;
     chromArray[i].size = chromInfo->size;
     if (strlen(chromInfo->name) > maxChromNameSize)
-	    maxChromNameSize = strlen(chromInfo->name);
+	maxChromNameSize = strlen(chromInfo->name);
     }
 
 /* Clean up, set return values and go home. */
@@ -103,114 +103,116 @@ static void bbiWriteFileSummary(bits32 reductionLevel, struct bbiFile * input, F
 /* Write out summary and index to summary uncompressed, returning start position of
  * summary index. */
 {
+struct udcFile *udc = input->udc;
+struct bbiZoomLevel *zoom;
+for (zoom = input->levelList; zoom; zoom = zoom->next) 
+    if (zoom->reductionLevel == reductionLevel)
+	break;
+udcSeek(udc, zoom->indexOffset);
+struct cirTreeFile *ctf = cirTreeFileAttach(input->fileName, udc);
+struct fileOffsetSize *blockList = cirTreeEnumerateBlocks(ctf);
+struct fileOffsetSize *block, *beforeGap, *afterGap;
 
-    struct udcFile *udc = input->udc;
-    struct bbiZoomLevel *zoom;
-    for (zoom = input->levelList; zoom; zoom = zoom->next) 
-	    if (zoom->reductionLevel == reductionLevel)
-		    break;
-    udcSeek(udc, zoom->indexOffset);
-    struct cirTreeFile *ctf = cirTreeFileAttach(input->fileName, udc);
-    struct fileOffsetSize *blockList = cirTreeEnumerateBlocks(ctf);
-    struct fileOffsetSize *block, *beforeGap, *afterGap;
+char *uncompressBuf = NULL;
+if (input->uncompressBufSize > 0)
+    uncompressBuf = needLargeMem(input->uncompressBufSize);
 
-    char *uncompressBuf = NULL;
-    if (input->uncompressBufSize > 0)
-        uncompressBuf = needLargeMem(input->uncompressBufSize);
+/* This loop is a little complicated because we merge the read requests for efficiency, but we 
+* have to then go back through the data one unmerged block at a time. */
+for (block = blockList; block != NULL; )
+   {
+   /* Find contigious blocks and read them into mergedBuf. */
+   fileOffsetSizeFindGap(block, &beforeGap, &afterGap);
+   bits64 mergedOffset = block->offset;
+   bits64 mergedSize = beforeGap->offset + beforeGap->size - mergedOffset;
+   udcSeek(udc, mergedOffset);
+   char *mergedBuf = needLargeMem(mergedSize);
+   udcMustRead(udc, mergedBuf, mergedSize);
+   char *blockBuf = mergedBuf;
 
-    /* This loop is a little complicated because we merge the read requests for efficiency, but we 
-    * have to then go back through the data one unmerged block at a time. */
-    for (block = blockList; block != NULL; )
+   /* Loop through individual blocks within merged section. */
+   for (;block != afterGap; block = block->next)
        {
-       /* Find contigious blocks and read them into mergedBuf. */
-       fileOffsetSizeFindGap(block, &beforeGap, &afterGap);
-       bits64 mergedOffset = block->offset;
-       bits64 mergedSize = beforeGap->offset + beforeGap->size - mergedOffset;
-       udcSeek(udc, mergedOffset);
-       char *mergedBuf = needLargeMem(mergedSize);
-       udcMustRead(udc, mergedBuf, mergedSize);
-       char *blockBuf = mergedBuf;
+       // Copy paste
+       bits64 filePos = ftell(f);
+       mustWrite(f, blockBuf, block->size);
 
-       /* Loop through individual blocks within merged section. */
-       for (;block != afterGap; block = block->next)
-           {
-           // Copy paste
-	   bits64 filePos = ftell(f);
-           mustWrite(f, blockBuf, block->size);
-
-	   /* Uncompress if necessary. */
-	   char *blockPt, *blockEnd;
-	   if (uncompressBuf)
-	        {
-	        blockPt = uncompressBuf;
-	        int uncSize = zUncompress(blockBuf, block->size, uncompressBuf, input->uncompressBufSize);
-	        blockEnd = blockPt + uncSize;
-	        }
-	    else
-	        {
-	        blockPt = blockBuf;
-	        blockEnd = blockPt + block->size;
-	        }
-
-	    /* Figure out bounds and number of items in block. */
-	    int blockSize = blockEnd - blockPt;
-	    struct bbiSummaryOnDisk *dSum;
-	    int itemSize = sizeof(*dSum);
-	    assert(blockSize % itemSize == 0);
-	    int itemCount = blockSize / itemSize;
-
-	    /* Read in items and store coords. */
-	    int i;
-	    for (i=0; i<itemCount; ++i)
-	        {
-	        dSum = (void *)blockPt;
-	        bbiSummaryHandleSwapped(input, dSum);
-		(*summary)->chromId = dSum->chromId;
-		(*summary)->start = dSum->start;
-		(*summary)->end = dSum->end;
-		(*summary)->fileOffset = filePos;
-	        (*summary)++;
-	        blockPt += sizeof(*dSum);
+       /* Uncompress if necessary. */
+       char *blockPt, *blockEnd;
+       if (uncompressBuf)
+	    {
+	    blockPt = uncompressBuf;
+	    int uncSize = zUncompress(blockBuf, block->size, uncompressBuf, input->uncompressBufSize);
+	    blockEnd = blockPt + uncSize;
+	    }
+	else
+	    {
+	    blockPt = blockBuf;
+	    blockEnd = blockPt + block->size;
 	    }
 
-	    assert(blockPt == blockEnd);
-	    blockBuf += block->size;
-            }
-        freeMem(mergedBuf);
-        }
-    freeMem(uncompressBuf);
-    slFreeList(&blockList);
-    cirTreeFileDetach(&ctf);
-}
-static bits32 countSummaryElementsInFile(bits32 reductionLevel, struct bbiFile * inputFile) {
-    struct udcFile *udc = inputFile->udc;
-    struct bbiZoomLevel *zoom;
-    for (zoom = inputFile->levelList; zoom; zoom = zoom->next) 
-	    if (zoom->reductionLevel == reductionLevel)
-		    break;
-    udcSeek(udc, zoom->indexOffset);
-    struct cirTreeFile *ctf = cirTreeFileAttach(inputFile->fileName, udc);
-    bits32 res = ctf->itemCount;
-    cirTreeFileDetach(&ctf);
-    return res;
-}
+	/* Figure out bounds and number of items in block. */
+	int blockSize = blockEnd - blockPt;
+	struct bbiSummaryOnDisk *dSum;
+	int itemSize = sizeof(*dSum);
+	assert(blockSize % itemSize == 0);
+	int itemCount = blockSize / itemSize;
 
-static bits32 countSummaryElements(bits32 reductionLevel, struct bbiFile ** inputFiles, int inputFilesCount) {
-    int i;
-    bits32 res = 0;
+	/* Read in items and store coords. */
+	int i;
+	for (i=0; i<itemCount; ++i)
+	    {
+	    dSum = (void *)blockPt;
+	    bbiSummaryHandleSwapped(input, dSum);
+	    (*summary)->chromId = dSum->chromId;
+	    (*summary)->start = dSum->start;
+	    (*summary)->end = dSum->end;
+	    (*summary)->fileOffset = filePos;
+	    (*summary)++;
+	    blockPt += sizeof(*dSum);
+	    }
 
-    for (i = 0; i < inputFilesCount; i++)
-	res += countSummaryElementsInFile(reductionLevel, inputFiles[i]);
-
-    return res;
-}
-
-void bbiWriteSummary(bits32 reductionLevel, struct bbiFile ** inputFiles, int inputFilesCount, FILE *f, struct bwmSection ** summary) {
-    int i;
-
-    for (i = 0; i < inputFilesCount; i++) {
-	bbiWriteFileSummary(reductionLevel, inputFiles[i], f, summary);
+	assert(blockPt == blockEnd);
+	blockBuf += block->size;
+	}
+    freeMem(mergedBuf);
     }
+freeMem(uncompressBuf);
+slFreeList(&blockList);
+cirTreeFileDetach(&ctf);
+}
+
+static bits32 countSummaryElementsInFile(bits32 reductionLevel, struct bbiFile * inputFile) 
+{
+struct udcFile *udc = inputFile->udc;
+struct bbiZoomLevel *zoom;
+for (zoom = inputFile->levelList; zoom; zoom = zoom->next) 
+    if (zoom->reductionLevel == reductionLevel)
+	break;
+udcSeek(udc, zoom->indexOffset);
+struct cirTreeFile *ctf = cirTreeFileAttach(inputFile->fileName, udc);
+bits32 res = ctf->itemCount;
+cirTreeFileDetach(&ctf);
+return res;
+}
+
+static bits32 countSummaryElements(bits32 reductionLevel, struct bbiFile ** inputFiles, int inputFilesCount) 
+{
+int i;
+bits32 res = 0;
+
+for (i = 0; i < inputFilesCount; i++)
+    res += countSummaryElementsInFile(reductionLevel, inputFiles[i]);
+
+return res;
+}
+
+void bbiWriteSummary(bits32 reductionLevel, struct bbiFile ** inputFiles, int inputFilesCount, FILE *f, struct bwmSection ** summary) 
+{
+int i;
+
+for (i = 0; i < inputFilesCount; i++) 
+    bbiWriteFileSummary(reductionLevel, inputFiles[i], f, summary);
 }
 
 
@@ -218,21 +220,21 @@ bits64 bwmWriteSummaryAndIndex(bits32 reductionLevel, struct bbiFile ** inputFil
 /* Write out summary and index to summary, returning start position of
  * summary index. */
 {
-    bits32 count = countSummaryElements(reductionLevel, inputFiles, inputFilesCount);
-    struct bwmSection * summaryPtr, * summaryArray;
-    AllocArray(summaryArray, count);
-    summaryPtr = summaryArray;
+bits32 count = countSummaryElements(reductionLevel, inputFiles, inputFilesCount);
+struct bwmSection * summaryPtr, * summaryArray;
+AllocArray(summaryArray, count);
+summaryPtr = summaryArray;
 
-    bbiWriteSummary(reductionLevel, inputFiles, inputFilesCount, f, &summaryPtr);
+bbiWriteSummary(reductionLevel, inputFiles, inputFilesCount, f, &summaryPtr);
 
-    bits64 indexOffset = ftell(f);
+bits64 indexOffset = ftell(f);
 
-    cirTreeFileBulkIndexToOpenFile(summaryArray, sizeof(summaryArray[0]), count,
-        blockSize, itemsPerSlot, NULL, bwmSectionFetchKey, bwmSectionFetchOffset, 
-        indexOffset, f);
+cirTreeFileBulkIndexToOpenFile(summaryArray, sizeof(summaryArray[0]), count,
+    blockSize, itemsPerSlot, NULL, bwmSectionFetchKey, bwmSectionFetchOffset, 
+    indexOffset, f);
 
-    freez(&summaryArray);
-    return indexOffset;
+freez(&summaryArray);
+return indexOffset;
 }
 
 void MergedBwgCreate(struct bbiFile ** inBbiFiles, int inBbiFilesCount, 
@@ -244,7 +246,7 @@ bits16 version = bbiCurrentVersion;
 bits16 summaryCount = 0;
 struct bbiZoomLevel *zoom;
 for (zoom = inBbiFiles[0]->levelList; zoom; zoom = zoom->next)
-	summaryCount++;
+    summaryCount++;
 bits16 reserved16 = 0;
 bits32 reserved32 = 0;
 bits64 reserved64 = 0;
@@ -314,7 +316,7 @@ dataOffset = ftell(f);
 bits64 sectionCount = 0;
 int index;
 for (index = 0; index < inBbiFilesCount; index++)
-	sectionCount += inBbiFiles[index]->unzoomedCir->itemCount;
+    sectionCount += inBbiFiles[index]->unzoomedCir->itemCount;
 writeOne(f, sectionCount);
 struct bwmSection *section, *sectionArray;
 AllocArray(sectionArray, sectionCount);
@@ -340,7 +342,8 @@ for (index = 0; index < inBbiFilesCount; index++)
         {
         struct fileOffsetSize *block, *blockList = bbiOverlappingBlocks(bwf, bwf->unzoomedCir, 
 	        chrom->name, 0, chrom->size, NULL);
-        for (block = blockList; block != NULL; ) {
+        for (block = blockList; block != NULL; ) 
+	    {
             struct fileOffsetSize *beforeGap, *afterGap;
             fileOffsetSizeFindGap(block, &beforeGap, &afterGap);
             bits64 mergedOffset = block->offset;
@@ -350,32 +353,33 @@ for (index = 0; index < inBbiFilesCount; index++)
             udcMustRead(udc, mergedBuf, mergedSize);
 	    char *blockBuf = mergedBuf;
 
-	    for (;block != afterGap; block = block->next) {
-		    struct bwgSectionHead head;
-		    char * blockPt = blockBuf;
-		    if (uncompressBuf)
-	    		{
-	    		blockPt = uncompressBuf;
-	    		zUncompress(blockBuf, block->size, uncompressBuf, bwf->uncompressBufSize);
-	    		}
-		     else
-	    		{
-	    		blockPt = blockBuf;
-	    	        }	
-		    bwgSectionHeadFromMem(&blockPt, &head, bwf->isSwapped);
-		    section->chromId = chrom->id;
-		    section->start = head.start;
-		    section->end = head.end;
-		    section->fileOffset = ftell(f);
-		    section++;
+	    for (;block != afterGap; block = block->next) 
+		{
+		struct bwgSectionHead head;
+		char * blockPt = blockBuf;
+		if (uncompressBuf)
+		    {
+		    blockPt = uncompressBuf;
+		    zUncompress(blockBuf, block->size, uncompressBuf, bwf->uncompressBufSize);
+		    }
+		 else
+		    {
+		    blockPt = blockBuf;
+		    }	
+		bwgSectionHeadFromMem(&blockPt, &head, bwf->isSwapped);
+		section->chromId = chrom->id;
+		section->start = head.start;
+		section->end = head.end;
+		section->fileOffset = ftell(f);
+		section++;
 
-		    mustWrite(f, blockBuf, block->size);
-		    blockBuf += block->size;
-	    }
+		mustWrite(f, blockBuf, block->size);
+		blockBuf += block->size;
+		}
             freeMem(mergedBuf);
             }
 	if (blockList)
-		slFreeList(blockList);
+	    slFreeList(blockList);
 	}
     freeMem(uncompressBuf);
     slFreeList(chromList);
@@ -391,7 +395,8 @@ freez(&sectionArray);
 /* Write out summary sections. */
 verbose(2, "bwgCreate writing %d summaries\n", summaryCount);
 i = 0;
-for (zoom = inBbiFiles[0]->levelList; zoom; zoom = zoom->next) {
+for (zoom = inBbiFiles[0]->levelList; zoom; zoom = zoom->next) 
+    {
     reductionDataOffsets[i] = ftell(f);
     reductionIndexOffsets[i++] = bwmWriteSummaryAndIndex(zoom->reductionLevel, inBbiFiles, inBbiFilesCount, blockSize, itemsPerSlot, f);
     }
@@ -403,16 +408,17 @@ totalSum.minVal = sum.minVal;
 totalSum.maxVal = sum.maxVal;
 totalSum.sumData = sum.sumData;
 totalSum.sumSquares = sum.sumSquares;
-for (index = 1; index < inBbiFilesCount; index++) {
+for (index = 1; index < inBbiFilesCount; index++) 
+    {
     sum = bbiTotalSummary(inBbiFiles[index]);
     totalSum.validCount += sum.validCount;
     if (totalSum.minVal > sum.minVal)
-	    totalSum.minVal = sum.minVal;
+	totalSum.minVal = sum.minVal;
     if (totalSum.maxVal > sum.maxVal)
-	    totalSum.maxVal = sum.maxVal;
+	totalSum.maxVal = sum.maxVal;
     totalSum.sumData += sum.sumData;
     totalSum.sumSquares += sum.sumSquares;
-}
+    }
 /* Write real summary */
 fseek(f, totalSummaryOffset, SEEK_SET);
 bbiSummaryElementWrite(f, &totalSum);
@@ -453,112 +459,127 @@ freez(&chromInfoArray);
 carefulClose(&f);
 }
 
-void checkCompression(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) {
-	int index;
-	doCompress = inFiles[0]->uncompressBufSize > 0;
-	for (index = 1; index < inNamesCount; index++) 
-		if ((inFiles[index]->uncompressBufSize > 0) != doCompress)
-			errAbort("Some of the files are compressed, some are not.\n");
+void checkCompression(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) 
+{
+int index;
+doCompress = inFiles[0]->uncompressBufSize > 0;
+for (index = 1; index < inNamesCount; index++) 
+    if ((inFiles[index]->uncompressBufSize > 0) != doCompress)
+	errAbort("Some of the files are compressed, some are not.\n");
 }
 
-void checkBlockSize(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) {
-	int index;
-	blockSize = inFiles[0]->unzoomedCir->blockSize;
-	for (index = 1; index < inNamesCount; index++) 
-		if (inFiles[index]->unzoomedCir->blockSize != blockSize)
-			errAbort("Not all files have the same block size.\n");
+void checkBlockSize(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) 
+{
+int index;
+blockSize = inFiles[0]->unzoomedCir->blockSize;
+for (index = 1; index < inNamesCount; index++) 
+    if (inFiles[index]->unzoomedCir->blockSize != blockSize)
+	errAbort("Not all files have the same block size.\n");
 }
 
-void checkChromosomes(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) {
-	int index;
-	struct bbiChromInfo *chromList0 = bbiChromList(inFiles[0]);
-	for (index = 1; index < inNamesCount; index++) {
-		struct bbiChromInfo *chrom0, *chrom, *chromList = bbiChromList(inFiles[index]);
-		for (chrom = chromList, chrom0 = chromList0; chrom && chrom0; chrom = chrom->next, chrom0 = chrom0->next) 
-			if (chrom0->size != chrom->size || strcmp(chrom0->name, chrom->name)) 
-				errAbort("The bigwig files do not have the same chromosome details.\n");
-		if (chrom || chrom0) 
-			errAbort("The bigwigs files do not have the same number of chromosomes.\n");
-		slFreeList(chromList);
+void checkChromosomes(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) 
+{
+int index;
+struct bbiChromInfo *chromList0 = bbiChromList(inFiles[0]);
+for (index = 1; index < inNamesCount; index++) 
+    {
+    struct bbiChromInfo *chrom0, *chrom, *chromList = bbiChromList(inFiles[index]);
+    for (chrom = chromList, chrom0 = chromList0; chrom && chrom0; chrom = chrom->next, chrom0 = chrom0->next) 
+	if (chrom0->size != chrom->size || strcmp(chrom0->name, chrom->name)) 
+	    errAbort("The bigwig files do not have the same chromosome details.\n");
+    if (chrom || chrom0) 
+	errAbort("The bigwigs files do not have the same number of chromosomes.\n");
+    slFreeList(chromList);
+    }
+slFreeList(chromList0);
+}
+
+void checkReductions(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) 
+{
+int index;
+for (index = 1; index < inNamesCount; index++) 
+    {
+    struct bbiZoomLevel *zoom, *zoom0;
+    for (zoom = inFiles[index]->levelList, zoom0 = inFiles[0]->levelList; zoom && zoom0; zoom = zoom->next, zoom0 = zoom0->next) 
+	{
+	if (zoom->reductionLevel != zoom0->reductionLevel)
+	    errAbort("The bigwig files do not have the same reduction levels\n");
 	}
-	slFreeList(chromList0);
+    if (zoom || zoom0)
+	errAbort("The bigwig files do not all have the same number of reduction levels.\n");
+    }
 }
 
-void checkReductions(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) {
-	int index;
-	for (index = 1; index < inNamesCount; index++) {
-    	    struct bbiZoomLevel *zoom, *zoom0;
-    	    for (zoom = inFiles[index]->levelList, zoom0 = inFiles[0]->levelList; zoom && zoom0; zoom = zoom->next, zoom0 = zoom0->next) {
-		    if (zoom->reductionLevel != zoom0->reductionLevel)
-			    errAbort("The bigwig files do not have the same reduction levels\n");
-	    }
-	    if (zoom || zoom0)
-		    errAbort("The bigwig files do not all have the same number of reduction levels.\n");
-	}
-}
-
-struct fileNamePair {
-	char * name;
-	struct bbiFile * file;
+struct fileNamePair 
+{
+char * name;
+struct bbiFile * file;
 };
 
-int comparePairs(const void * a, const void * b) {
-	struct fileNamePair * A , * B;
-	A = (struct fileNamePair *) a;
-	B = (struct fileNamePair *) b;
-	if (A->file->unzoomedCir->startChromIx > B->file->unzoomedCir->startChromIx)
-		return 1;
-	else if (B->file->unzoomedCir->startChromIx > A->file->unzoomedCir->startChromIx)
-		return -1;
-	else
-		return (int) (A->file->unzoomedCir->startBase - B->file->unzoomedCir->startBase);
+int comparePairs(const void * a, const void * b) 
+{
+struct fileNamePair * A , * B;
+A = (struct fileNamePair *) a;
+B = (struct fileNamePair *) b;
+if (A->file->unzoomedCir->startChromIx > B->file->unzoomedCir->startChromIx)
+    return 1;
+else if (B->file->unzoomedCir->startChromIx > A->file->unzoomedCir->startChromIx)
+    return -1;
+else
+    return (int) (A->file->unzoomedCir->startBase - B->file->unzoomedCir->startBase);
 }
 
-void sortFilesByCoords(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) {
-	struct fileNamePair * pairs;
-	AllocArray(pairs, inNamesCount);
-	int index; 
+void sortFilesByCoords(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) 
+{
+struct fileNamePair * pairs;
+AllocArray(pairs, inNamesCount);
+int index; 
 
-	for (index = 0; index < inNamesCount; index++) {
-		pairs[index].name = inNames[index];
-		pairs[index].file = inFiles[index];
-	}
+for (index = 0; index < inNamesCount; index++) 
+    {
+    pairs[index].name = inNames[index];
+    pairs[index].file = inFiles[index];
+    }
 
-	qsort(pairs, inNamesCount, sizeof(struct fileNamePair), comparePairs);
+qsort(pairs, inNamesCount, sizeof(struct fileNamePair), comparePairs);
 
-	for (index = 0; index < inNamesCount; index++) {
-		inNames[index] = pairs[index].name;
-		inFiles[index] = pairs[index].file;
-	}
+for (index = 0; index < inNamesCount; index++) 
+    {
+    inNames[index] = pairs[index].name;
+    inFiles[index] = pairs[index].file;
+    }
 
-	// Clean up
-	freez(&pairs);
+// Clean up
+freez(&pairs);
 }
 
-char filesOverlap(struct bbiFile * A, struct bbiFile * B) {
-	if (A->unzoomedCir->endChromIx < B->unzoomedCir->startChromIx)
-		return 0;
-	else if (A->unzoomedCir->endChromIx > B->unzoomedCir->startChromIx)
-		return 1;
-	else
-		return A->unzoomedCir->endBase >= B->unzoomedCir->startBase;
+char filesOverlap(struct bbiFile * A, struct bbiFile * B) 
+{
+if (A->unzoomedCir->endChromIx < B->unzoomedCir->startChromIx)
+    return 0;
+else if (A->unzoomedCir->endChromIx > B->unzoomedCir->startChromIx)
+    return 1;
+else
+    return A->unzoomedCir->endBase >= B->unzoomedCir->startBase;
 }
 
-void checkOverlaps(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) {
-	int index;
+void checkOverlaps(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) 
+{
+int index;
 
-	for (index = 1; index < inNamesCount; index++)
-		if (filesOverlap(inFiles[index-1], inFiles[index]))
-			errAbort("Files %s and %s overlap, cannot continue!\n", inNames[index-1], inNames[index]);
+for (index = 1; index < inNamesCount; index++)
+    if (filesOverlap(inFiles[index-1], inFiles[index]))
+	errAbort("Files %s and %s overlap, cannot continue!\n", inNames[index-1], inNames[index]);
 }
 
-void checkFileSettings(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) {
-	checkCompression(inNames, inFiles, inNamesCount);
-	checkBlockSize(inNames, inFiles, inNamesCount);
-	checkChromosomes(inNames, inFiles, inNamesCount);
-	sortFilesByCoords(inNames, inFiles, inNamesCount);
-	checkOverlaps(inNames, inFiles, inNamesCount);
-	checkReductions(inNames, inFiles, inNamesCount);
+void checkFileSettings(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) 
+{
+checkCompression(inNames, inFiles, inNamesCount);
+checkBlockSize(inNames, inFiles, inNamesCount);
+checkChromosomes(inNames, inFiles, inNamesCount);
+sortFilesByCoords(inNames, inFiles, inNamesCount);
+checkOverlaps(inNames, inFiles, inNamesCount);
+checkReductions(inNames, inFiles, inNamesCount);
 }
 
 void bigWigCat(
@@ -579,10 +600,11 @@ struct lm *lm = lmInit(0);
 struct bbiFile ** inBbiFiles;
 AllocArray(inBbiFiles, inNamesCount);
 int i;
-for (i = 0; i < inNamesCount; i++) {
-	inBbiFiles[i] = bigWigFileOpen(inNames[i]);
-	bbiAttachUnzoomedCir(inBbiFiles[i]);
-}
+for (i = 0; i < inNamesCount; i++) 
+    {
+    inBbiFiles[i] = bigWigFileOpen(inNames[i]);
+    bbiAttachUnzoomedCir(inBbiFiles[i]);
+    }
 
 checkFileSettings(inNames, inBbiFiles, inNamesCount);
 MergedBwgCreate(inBbiFiles, inNamesCount, blockSize, itemsPerSlot, doCompress, outName);
@@ -602,8 +624,6 @@ errAbort(
   "and out.bw is the output indexed big wig file.\n"
   "options:\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
-  "   -clip - If set just issue warning messages rather than dying if wig\n"
-  "                  file contains items off end of chromosome.\n"
   , bbiCurrentVersion, itemsPerSlot
   );
 }
@@ -615,7 +635,6 @@ optionInit(&argc, argv, options);
 /* Process command line. */
 optionInit(&argc, argv, options);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
-clipDontDie = optionExists("clip");
 if (argc < 4)
     usage();
 char * outName = argv[1];

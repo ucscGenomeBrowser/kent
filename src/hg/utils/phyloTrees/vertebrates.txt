@@ -1,8 +1,9 @@
-
 #	$Id: vertebrates.txt,v 1.1 2010/04/05 19:09:43 hiram Exp $
 
 #  Common to all:	Eukaryota; Metazoa; Chordata; Craniata; Vertebrata;
 #  Common to all:	Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Coelomata; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi;
+
+Eutheria; Boreoeutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Mysticeti; Balaenopteridae; Balaenoptera; Balaenoptera acutorostrata
 
 # Tasmanian devil Sarcophilus harrisii
 sarHar	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Metatheria; Dasyuromorphia; Dasyuridae; Sarcophilus
@@ -33,6 +34,10 @@ melGal	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 
 # Chicken Gallus gallus
 galGal	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Phasianinae; Gallus
+
+# Taxonomy ID: 93934
+# Coturnix japonica - Japanese quail
+cotJap	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Perdicinae; Coturnix
 
 # tax ID 8801
 # Ostrich Struthio camelus
@@ -140,6 +145,16 @@ danRer	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopoc
 
 # Mexican tetra (cavefish) - Astyanax mexicanus
 astMex  Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Clupeocephala; Otocephala; Ostariophysi; Otophysi; Characiphysi; Characiformes; Characidae; Characidae incertae sedis; Astyanax clade; Astyanax
+
+# This Elephant shark is *not* a Teleostomi,
+# it is a cartilaginous fish: Chondrichthyes
+# Taxonomy ID: 7868
+# Elephant shark - Callorhinchus milii
+calMil	Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Chondrichthyes; Holocephali; Chimaeriformes; Callorhinchidae; Callorhinchus
+
+# Taxonomy ID: 980415
+# Arctic lamprey - Lethenteron camtschaticum
+letCam	Vertebrata; Hyperoartia; Petromyzontiformes; Petromyzontidae; Lethenteron
 
 # sea lamprey Petromyzon marinus
 #	several levels up different from all above
