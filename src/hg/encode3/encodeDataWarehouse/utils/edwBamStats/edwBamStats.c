@@ -60,6 +60,18 @@ if (dif == 0)
 return dif;
 }
 
+int targetPosCmpNoStrand(const void *va, const void *vb)
+/* Compare to sort based on query start ignoring strand. */
+{
+const struct targetPos *a = *((struct targetPos **)va);
+const struct targetPos *b = *((struct targetPos **)vb);
+int dif;
+dif = a->targetId - b->targetId;
+if (dif == 0)
+    dif = a->pos - b->pos;
+return dif;
+}
+
 int countUniqueFromSorted(struct targetPos *tpList)
 /* Count the unique number of positions in a sorted list. */
 {
@@ -174,7 +186,7 @@ for (;;)
 	    tp->pos = one.core.pos;
 	    tp->size = one.core.l_qseq;
 	    tp->strand = ((one.core.flag & BAM_FREVERSE) ? '-' : '+');
-	    if (tpList != NULL && targetPosCmp(&tpList, &tp) > 0)
+	    if (tpList != NULL && targetPosCmpNoStrand(&tpList, &tp) > 0)
 	        sortedByChrom = FALSE; 
 	    slAddHead(&tpList, tp);
 	    }
