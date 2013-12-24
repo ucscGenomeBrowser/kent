@@ -9,6 +9,8 @@
 #include "edwLib.h"
 
 boolean again = FALSE;
+boolean updateSoftwareMd5 = FALSE;
+boolean noJob = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -19,12 +21,16 @@ errAbort(
   "   edwScheduleAnalysis startFileId endFileId\n"
   "options:\n"
   "   -again - if set schedule it even if it's been run once\n"
+  "   -up - update on software MD5s rather than aborting on them\n"
+  "   -noJob - if set then don't put job on edwAnalysisJob table\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"again", OPTION_BOOLEAN},
+   {"up", OPTION_BOOLEAN},
+   {"noJob", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -55,6 +61,8 @@ char *scheduleStep(struct sqlConnection *conn,
     int outCount, char *outputNames[], char *outputTypes[], char *outputFormats[])
 /* Schedule a step.  Returns temp dir it is to be run in. */
 {
+if (updateSoftwareMd5)
+    edwAnalysisSoftwareUpdateMd5ForStep(conn, analysisStep);
 edwAnalysisCheckVersions(conn, analysisStep);
 
 /* Grab temp dir */
@@ -69,7 +77,8 @@ safef(fullCommandLine, sizeof(fullCommandLine),
 /* Make up edwAnalysisRun record */
 struct edwAnalysisRun *run;
 AllocVar(run);
-run->jobId = edwAnalysisJobAdd(conn, fullCommandLine);
+if (!noJob)
+    run->jobId = edwAnalysisJobAdd(conn, fullCommandLine);
 safef(run->experiment, sizeof(run->experiment), "%s",  experiment);
 run->analysisStep = analysisStep;
 run->configuration = "";
@@ -176,14 +185,14 @@ ZeroVar(&one);	// This seems to be necessary!
 int i;
 for (i=0; i<maxCount; ++i)
     {
+    int err = bam_read1(sf->x.bam, &one);
+    if (err < 0)
+	break;
     if (one.core.flag&BAM_FPAIRED)
        {
        isPaired = TRUE;
        break;
        }
-    int err = bam_read1(sf->x.bam, &one);
-    if (err < 0)
-	break;
     }
 samclose(sf);
 return isPaired;
@@ -233,6 +242,88 @@ scheduleStep(conn, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(outNames), outNames, outTypes, outFormats);
 }
 
+int mustGetReadLengthForFastq(struct sqlConnection *conn, unsigned fileId)
+/* Verify that associated file is in edwFastqFile table and return average read length */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select readSizeMean from edwFastqFile where fileId=%u", fileId);
+double result = sqlQuickDouble(conn, query);
+if (result < 1)
+    errAbort("No edwFastqFile record for %u", fileId);
+return round(result);
+}
+
+boolean edwAnalysisRunHasOutput(struct edwAnalysisRun *run, unsigned outId)
+/* Return TRUE if any of the outputs of run match outId */
+{
+int i;
+for (i=0; i<run->createCount; ++i)
+    if (run->createFileIds[i] == outId)
+        return TRUE;
+return FALSE;
+}
+
+
+unsigned getFastqForBam(struct sqlConnection *conn, unsigned bamFileId)
+/* Return fastq id associated with bam file or die trying. */
+{
+unsigned fastqId = 0;   
+
+/* Silly this - we have to scan all analysisRun records. */
+char query[512];
+sqlSafef(query, sizeof(query), 
+    "select * from edwAnalysisRun where createStatus > 0  and createCount > 0");
+struct edwAnalysisRun *run, *runList = edwAnalysisRunLoadByQuery(conn, query);
+
+for (run = runList; run != NULL; run = run->next)
+    {
+    if (edwAnalysisRunHasOutput(run, bamFileId))
+       {
+       struct edwValidFile *vf = edwValidFileFromFileId(conn, run->firstInputId);
+       if (sameString(vf->format, "fastq"))
+	   {
+	   fastqId = vf->fileId;
+	   break;
+	   }
+       else
+           {
+	   fastqId = getFastqForBam(conn, vf->fileId);
+	   if (fastqId != 0)
+	       break;
+	   }
+       edwValidFileFree(&vf);
+       }
+    }
+
+edwAnalysisRunFreeList(&runList);
+return fastqId;
+}
+
+int bamReadLength(char *fileName, int maxCount)
+/* Open up bam, read up to maxCount reads, and return size of read, enforcing
+ * all are same size. */
+{
+int readLength = 0;
+samfile_t *sf = samopen(fileName, "rb", NULL);
+bam1_t one;
+ZeroVar(&one);	// This seems to be necessary!
+int i;
+for (i=0; i<maxCount; ++i)
+    {
+    int err = bam_read1(sf->x.bam, &one);
+    if (err < 0)
+	break;
+    int length = one.core.l_qseq;
+    if (readLength == 0)
+        readLength = length;
+    else if (readLength != length)
+        errAbort("Varying size reads in %s, %d and %d", fileName, readLength, length);
+    }
+samclose(sf);
+assert(readLength != 0);
+return readLength;
+}
+
 void scheduleHotspot(struct sqlConnection *conn, 
     struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
 /* If it hasn't already been done schedule hotspot analysis of the file. */
@@ -245,16 +336,22 @@ if (countAlreadyScheduled(conn, analysisStep, ef->id))
 verbose(2, "schedulingHotspot on %s step %s\n", ef->edwFileName, analysisStep);
 /* Make command line */
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
-int readLength = 36;	// uglyf - get from fastq record for input
+int fastqId = getFastqForBam(conn, ef->id);
+int readLength = 0;
+if (fastqId == 0)
+    readLength = bamReadLength(edwPathForFileId(conn, ef->id), 1000);
+else
+    readLength = mustGetReadLengthForFastq(conn, fastqId);
 char commandLine[4*PATH_LEN];
-safef(commandLine, sizeof(commandLine), "eap_run_hotspot %s%s %s %s %d %s",
-    edwRootDir, ef->edwFileName, assembly->ucscDb, "DNase-seq", readLength, "out");
+safef(commandLine, sizeof(commandLine), "eap_run_hotspot %s %s%s %d %s %s %s",
+    assembly->ucscDb, edwRootDir, ef->edwFileName,
+    readLength, "out.narrowPeak.bigBed", "out.broadPeak.bigBed", "out.bigWig");
 
 /* Declare step input and output arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
 char *inTypes[] = {"alignments"};
 char *outFormats[] = {"broadPeak", "narrowPeak", "bigWig"};
-char *outNames[] = {"out/broadPeaks.bigBed", "out/narrowPeaks.bigBed", "out/density.bigWig"};
+char *outNames[] = {"out.broadPeak.bigBed", "out.narrowPeak.bigBed", "out.bigWig"};
 char *outTypes[] = {"hotspot_broad_peaks", "hotspot_narrow_peaks", "hotspot_signal"};
 scheduleStep(conn, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(inFileIds), inFileIds, inTypes,
@@ -389,6 +486,8 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 again = optionExists("again");
+updateSoftwareMd5 = optionExists("up");
+noJob = optionExists("noJob");
 edwScheduleAnalysis(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
 return 0;
 }
