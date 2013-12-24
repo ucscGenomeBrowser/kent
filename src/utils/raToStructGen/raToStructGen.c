@@ -298,6 +298,8 @@ for (col = as->columnList; col != NULL; col = col->next)
 	    case t_uint:
 	    case t_short:
 	    case t_ushort:
+	    case t_byte:
+	    case t_ubyte:
 	    case t_off:
 	    case t_string:
 	    case t_lstring:
@@ -333,6 +335,8 @@ for (col = as->columnList; col != NULL; col = col->next)
 	    case t_uint:
 	    case t_short:
 	    case t_ushort:
+	    case t_byte:
+	    case t_ubyte:
 	    case t_off:
 		if (col->isSizeLink)
 		    {
