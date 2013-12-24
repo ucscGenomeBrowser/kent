@@ -21,6 +21,7 @@
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "edwFastqFileFromRa.h"
+#include "edwBamFileFromRa.h"
 
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
@@ -765,6 +766,7 @@ void edwAddJob(struct sqlConnection *conn, char *command)
 char query[256+strlen(command)];
 sqlSafef(query, sizeof(query), "insert into edwJob (commandLine) values('%s')", command);
 sqlUpdate(conn, query);
+edwPokeFifo("edwQaAgent.fifo");
 }
 
 void edwAddQaJob(struct sqlConnection *conn, long long fileId)
@@ -1033,7 +1035,7 @@ edwAddQaJob(conn, ef->id);
 }
 
 static void scanSam(char *samIn, FILE *f, struct genomeRangeTree *grt, long long *retHit, 
-    long long *retMiss,  long long *retTotalBasesInHits)
+    long long *retMiss,  long long *retTotalBasesInHits, long long *retUniqueHitCount)
 /* Scan through sam file doing several things:counting how many reads hit and how many 
  * miss target during mapping phase, copying those that hit to a little bed file, and 
  * also defining regions covered in a genomeRangeTree. */
@@ -1043,7 +1045,7 @@ bam_header_t *bamHeader = sf->header;
 bam1_t one;
 ZeroVar(&one);
 int err;
-long long hit = 0, miss = 0, totalBasesInHits = 0;
+long long hit = 0, miss = 0, unique = 0, totalBasesInHits = 0;
 while ((err = samread(sf, &one)) >= 0)
     {
     int32_t tid = one.core.tid;
@@ -1053,6 +1055,8 @@ while ((err = samread(sf, &one)) >= 0)
         continue;
 	}
     ++hit;
+    if (one.core.qual > edwMinMapQual)
+        ++unique;
     char *chrom = bamHeader->target_name[tid];
     // Approximate here... can do better if parse cigar.
     int start = one.core.pos;
@@ -1060,12 +1064,7 @@ while ((err = samread(sf, &one)) >= 0)
     int end = start + size;	
     totalBasesInHits += size;
     boolean isRc = (one.core.flag & BAM_FREVERSE);
-    char strand = '+';
-    if (isRc)
-	{
-	strand = '-';
-	reverseIntRange(&start, &end, bamHeader->target_len[tid]);
-	}
+    char strand = (isRc ? '-' : '+');
     if (start < 0) start=0;
     if (f != NULL)
 	fprintf(f, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
@@ -1077,6 +1076,7 @@ samclose(sf);
 *retHit = hit;
 *retMiss = miss;
 *retTotalBasesInHits = totalBasesInHits;
+*retUniqueHitCount = unique;
 }
 
 void edwReserveTempFile(char *path)
@@ -1098,7 +1098,8 @@ safef(indexPath, PATH_LEN, "%s%s/bwaData/%s.fa",
 
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF,
-    double *retMapRatio,  double *retDepth,  double *retSampleCoverage)
+    double *retMapRatio,  double *retDepth,  double *retSampleCoverage, 
+    double *retUniqueMapRatio)
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. 
  * bedF and all the ret parameters can be NULL. */
 {
@@ -1120,8 +1121,8 @@ remove(saiName);
 /* Scan sam file to calculate vf->mapRatio, vf->sampleCoverage and vf->depth. 
  * and also to produce little bed file for enrichment step. */
 struct genomeRangeTree *grt = genomeRangeTreeNew();
-long long hitCount=0, missCount=0, totalBasesInHits=0;
-scanSam(samName, bedF, grt, &hitCount, &missCount, &totalBasesInHits);
+long long hitCount=0, missCount=0, uniqueHitCount, totalBasesInHits=0;
+scanSam(samName, bedF, grt, &hitCount, &missCount, &totalBasesInHits, &uniqueHitCount);
 verbose(1, "hitCount=%lld, missCount=%lld, totalBasesInHits=%lld, grt=%p\n", 
     hitCount, missCount, totalBasesInHits, grt);
 if (retMapRatio)
@@ -1132,6 +1133,8 @@ if (retDepth)
 long long basesHitBySample = genomeRangeTreeSumRanges(grt);
 if (retSampleCoverage)
     *retSampleCoverage = (double)basesHitBySample/assembly->baseCount;
+if (retUniqueMapRatio)
+    *retUniqueMapRatio = (double)uniqueHitCount/(hitCount+missCount);
 genomeRangeTreeFree(&grt);
 remove(samName);
 }
@@ -1184,7 +1187,7 @@ if (fqf == NULL)
     edwReserveTempFile(sampleFile);
     char command[3*PATH_LEN];
     safef(command, sizeof(command), "fastqStatsAndSubsample -sampleSize=%d -smallOk %s %s %s",
-	250000, path, statsFile, sampleFile);
+	edwSampleTargetSize, path, statsFile, sampleFile);
     mustSystem(command);
     safef(command, sizeof(command), "gzip %s", sampleFile);
     mustSystem(command);
@@ -1197,6 +1200,53 @@ if (fqf == NULL)
     freez(&path);
     }
 edwFastqFileFree(&fqf);
+}
+
+struct edwBamFile *edwBamFileFromFileId(struct sqlConnection *conn, long long fileId)
+/* Get edwBamFile with given fileId or NULL if none such */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwBamFile where fileId=%lld", fileId);
+return edwBamFileLoadByQuery(conn, query);
+}
+
+struct edwBamFile * edwMakeBamStatsAndSample(struct sqlConnection *conn, long long fileId, 
+    char sampleBed[PATH_LEN])
+/* Run edwBamStats and put results into edwBamFile table, and also a sample bed.
+ * The sampleBed will be filled in by this routine. */
+{
+/* Remove any old record for file. */
+char query[256];
+sqlSafef(query, sizeof(query), "delete from edwBamFile where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+
+/* Figure out file names */
+char *path = edwPathForFileId(conn, fileId);
+char statsFile[PATH_LEN];
+safef(statsFile, PATH_LEN, "%sedwBamStatsXXXXXX", edwTempDir());
+edwReserveTempFile(statsFile);
+char dayTempDir[PATH_LEN];
+safef(sampleBed, PATH_LEN, "%sedwBamSampleXXXXXX", edwTempDirForToday(dayTempDir));
+edwReserveTempFile(sampleBed);
+
+/* Make system call to make ra and bed, and then another system call to zip bed.*/
+char command[3*PATH_LEN];
+safef(command, sizeof(command), "edwBamStats -sampleBed=%s -sampleBedSize=%d %s %s",
+    sampleBed, edwSampleTargetSize, path, statsFile);
+mustSystem(command);
+safef(command, sizeof(command), "gzip %s", sampleBed);
+mustSystem(command);
+strcat(sampleBed, ".gz");
+
+/* Parse out ra file,  save it to database, and remove ra file. */
+struct edwBamFile *ebf = edwBamFileOneFromRa(statsFile);
+ebf->fileId = fileId;
+edwBamFileSaveToDb(conn, ebf, "edwBamFile", 1024);
+remove(statsFile);
+
+/* Clean up and go home. */
+freez(&path);
+return ebf;
 }
 
 
@@ -1347,7 +1397,8 @@ sqlSafef(query, sizeof(query), "select * from edwAnalysisSoftware where name = '
 return edwAnalysisSoftwareLoadByQuery(conn, query);
 }
 
-static void checkVersion(char *usedIn, struct edwAnalysisSoftware *software)
+static void checkOrUpdate(struct sqlConnection *conn,
+    char *usedIn, struct edwAnalysisSoftware *software, boolean update)
 /* Basically do a 'which' to find path, and then calc md5sum */
 {
 char path[PATH_LEN];
@@ -1355,29 +1406,51 @@ edwPathForCommand(software->name, path);
 char md5[33];
 edwMd5File(path, md5);
 if (!sameString(md5, software->md5))
-    errAbort("Need to update edwAnalysisSoftware %s used in %s\nOld md5 %s, new md5 %s",
-	software->name, usedIn, software->md5, md5);
+    {
+    if (update)
+        {
+	char query[256];
+	sqlSafef(query, sizeof(query), "update edwAnalysisSoftware set md5='%s' where id=%u",
+	    md5, software->id);
+	sqlUpdate(conn, query);
+	}
+    else
+	errAbort("Need to update edwAnalysisSoftware %s used in %s\nOld md5 %s, new md5 %s",
+	    software->name, usedIn, software->md5, md5);
+    }
 }
 
-void edwAnalysisCheckVersions(struct sqlConnection *conn, char *analysisStep)
+void edwAnalysisCheckOrUpdateSoftwareForStep(struct sqlConnection *conn, char *analysisStep,
+    boolean doUpdate)
 /* Check that we are running tracked versions of everything. */
 {
 struct edwAnalysisStep *step = edwAnalysisStepFromName(conn, analysisStep);
 if (step == NULL)
     errAbort("Can't find %s in edwAnalysisStep table", analysisStep);
-
-
 int i;
 for (i=0; i<step->softwareCount; ++i)
     {
     struct edwAnalysisSoftware *software = edwAnalysisSoftwareFromName(conn, step->software[i]);
     if (software == NULL)
         errAbort("Can't find %s in edwAnalysisSoftware", step->software[i]);
-    checkVersion(analysisStep, software);
+    checkOrUpdate(conn, analysisStep, software, doUpdate);
     edwAnalysisSoftwareFree(&software);
     }
 edwAnalysisStepFree(&step);
 }
+
+void edwAnalysisCheckVersions(struct sqlConnection *conn, char *analysisStep)
+/* Check that we are running tracked versions of everything. */
+{
+edwAnalysisCheckOrUpdateSoftwareForStep(conn, analysisStep, FALSE);
+}
+
+void edwAnalysisSoftwareUpdateMd5ForStep(struct sqlConnection *conn, char *analysisStep)
+/* Update MD5s on all software used by step. */
+{
+edwAnalysisCheckOrUpdateSoftwareForStep(conn, analysisStep, TRUE);
+}
+
 
 void edwPokeFifo(char *fifoName)
 /* Send '\n' to fifo to wake up associated daemon */
@@ -1394,6 +1467,7 @@ for (i=0; i<ArraySize(places); ++i)
         {
 	char *message = "\n";
 	writeGulp(path, message, strlen(message));
+	break;
 	}
     }
 }

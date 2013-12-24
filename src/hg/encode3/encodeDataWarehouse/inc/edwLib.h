@@ -26,6 +26,8 @@ extern char *edwLicensePlatePrefix; /* License plates start with this - thanks M
 extern char *edwValDataDir; /* Data files we need for validation go here. */
 extern int edwSingleFileTimeout;   // How many seconds we give ourselves to fetch a single file
 
+#define edwMinMapQual 3	//Above this -10log10 theshold we have >50% chance of being right
+
 struct sqlConnection *edwConnect();
 /* Returns a read only connection to database. */
 
@@ -230,7 +232,8 @@ void edwBwaIndexPath(struct edwAssembly *assembly, char indexPath[PATH_LEN]);
 
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF,
-    double *retMapRatio,  double *retDepth,  double *retSampleCoverage);
+    double *retMapRatio,  double *retDepth,  double *retSampleCoverage,
+    double *retUniqueMapRatio);
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
 
 void edwMakeTempFastqSample(char *source, int size, char dest[PATH_LEN]);
@@ -241,6 +244,14 @@ void edwMakeFastqStatsAndSample(struct sqlConnection *conn, long long fileId);
 
 struct edwFastqFile *edwFastqFileFromFileId(struct sqlConnection *conn, long long fileId);
 /* Get edwFastqFile with given fileId or NULL if none such */
+
+struct edwBamFile * edwMakeBamStatsAndSample(struct sqlConnection *conn, long long fileId, 
+    char sampleBed[PATH_LEN]);
+/* Run edwBamStats and put results into edwBamFile table, and also a sample bed.
+ * The sampleBed will be filled in by this routine. */
+
+struct edwBamFile *edwBamFileFromFileId(struct sqlConnection *conn, long long fileId);
+/* Get edwBamFile with given fileId or NULL if none such */
 
 char *edwOppositePairedEndString(char *end);
 /* Return "1" for "2" and vice versa */
@@ -274,6 +285,9 @@ struct edwAnalysisSoftware *edwAnalysisSoftwareFromName(struct sqlConnection *co
 
 void edwAnalysisCheckVersions(struct sqlConnection *conn, char *analysisStep);
 /* Check that we are running tracked versions of everything. */
+
+void edwAnalysisSoftwareUpdateMd5ForStep(struct sqlConnection *conn, char *analysisStep);
+/* Update MD5s on all software used by step. */
 
 void edwPokeFifo(char *fifoName);
 /* Send '\n' to fifo to wake up associated daemon */
