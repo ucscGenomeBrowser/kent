@@ -6,3 +6,57 @@ html gold
 track gap override
 html gap
 
+
+track rmskCM
+shortLabel RM crossMatch
+longLabel Repeating Elements by RepeatMasker - cross-match alignment engine
+group varRep
+priority 2149.1
+visibility dense
+spectrum on
+type rmsk
+maxWindowToDraw 10000000
+canPack off
+
+track rmskBlastn
+shortLabel RM rmblastn
+longLabel Repeating Elements by RepeatMasker - rmblastn alignment engine
+group varRep
+priority 3149.1
+visibility dense
+spectrum on
+type rmsk
+maxWindowToDraw 10000000
+canPack off
+
+track rmskHmmer
+shortLabel RM HMMER
+longLabel Repeating Elements by RepeatMasker - HMMER alignment engine
+group varRep
+priority 4149.1
+visibility dense
+spectrum on
+type rmsk
+maxWindowToDraw 10000000
+canPack off
+
+track rmskGenbank
+shortLabel RM genbank
+longLabel Repeating Elements by RepeatMasker - masking files from GRCh38 release
+group varRep
+priority 5149.1
+visibility dense
+spectrum on
+type rmsk
+maxWindowToDraw 10000000
+canPack off
+
+track ctgPos2
+shortLabel GRC Contigs
+longLabel Genome Reference Consortium Contigs
+group map
+priority 10
+visibility hide
+type ctgPos
+url http://www.ncbi.nlm.nih.gov/nuccore/$?
+chromosomes chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chrX,chrY
