@@ -75,3 +75,19 @@ shortCircuit 1
 termRegex [GK][LI][028][0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s%%'
 searchPriority 5
+
+track scaffolds
+shortLabel Scaffolds
+longLabel GRCh38 defined Scaffold identifiers
+group map
+priority 26
+visibility hide
+color 0,0,0
+type bed 4 .
+
+searchTable scaffolds
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex [1-9HMXY][0-9A-Z_]*
+searchPriority 18
