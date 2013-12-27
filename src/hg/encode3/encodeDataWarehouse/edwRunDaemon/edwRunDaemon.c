@@ -244,8 +244,8 @@ long long lastId = 0;  // Keep track of lastId in run table that has already bee
 
 for (;;)
     {
-    /* Wait for signal to come on named pipe or 30 seconds to pass */
-    syncWithTimeout(fd, 30*1000000);
+    /* Wait for signal to come on named pipe or 10 seconds to pass */
+    syncWithTimeout(fd, 10*1000000);
 
     /* Finish up processing on any children that have finished */
     while (checkOnChildRunner(FALSE) != NULL)	

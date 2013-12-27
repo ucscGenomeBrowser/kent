@@ -12,6 +12,7 @@
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 
+int u4mSize = 4000000;	
 int sampleBedSize = 250000;
 char *sampleBed = NULL;
 
@@ -25,7 +26,8 @@ errAbort(
   "options:\n"
   "   -sampleBed=file.bed\n"
   "   -sampleBedSize=N Max # of items sampleBed, default %d\n"
-  , sampleBedSize
+  "   -u4mSize=N # of uniquely mapped items used in library complexity calculation, default %d\n"
+  , sampleBedSize, u4mSize
   );
 }
 
@@ -33,6 +35,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"sampleBed", OPTION_STRING},
    {"sampleBedSize", OPTION_INT},
+   {"u4mSize", OPTION_INT},
    {NULL, 0},
 };
 
@@ -113,6 +116,29 @@ const CharPt *pb = vb;
 return strcmp(*pa, *pb);
 }
 
+void splitList(struct targetPos *oldList, struct targetPos **pA, struct targetPos **pB)
+/* Split old list evenly between a and b. */
+{
+struct targetPos *aList = NULL, *bList = NULL, *next, *tp;
+boolean pingPong = FALSE;
+for (tp = oldList; tp != NULL; tp = next)
+    {
+    next = tp->next;
+    if (pingPong)
+        {
+	slAddHead(&aList, tp);
+	pingPong = FALSE;
+	}
+    else
+        {
+	slAddHead(&bList, tp);
+	pingPong = TRUE;
+	}
+    }
+*pA = aList;
+*pB = bList;
+}
+
 void edwBamStats(char *inBam, char *outRa)
 /* edwBamStats - Collect some info on a BAM file. */
 {
@@ -126,6 +152,13 @@ boolean sortedByChrom = TRUE, isPaired = FALSE;
 /* List of positions. */
 struct lm *lm = lmInit(0);
 struct targetPos *tp, *tpList = NULL;
+
+/* Some stuff to keep memory use down for very big BAM files,  lets us downsample. */
+int skipRatio = 1;
+struct targetPos *freeList = NULL;
+int skipPos = 1;
+int doubleSize = 2*u4mSize;
+int listSize = 0;
 
 /* Open file and get header for it. */
 samfile_t *sf = samopen(inBam, "rb", NULL);
@@ -181,14 +214,30 @@ for (;;)
 	if (one.core.qual > edwMinMapQual)
 	    {
 	    ++uniqueMappedCount;
-	    lmAllocVar(lm, tp);
-	    tp->targetId = one.core.tid;
-	    tp->pos = one.core.pos;
-	    tp->size = one.core.l_qseq;
-	    tp->strand = ((one.core.flag & BAM_FREVERSE) ? '-' : '+');
-	    if (tpList != NULL && targetPosCmpNoStrand(&tpList, &tp) > 0)
-	        sortedByChrom = FALSE; 
-	    slAddHead(&tpList, tp);
+	    if (--skipPos == 0)
+		{
+		skipPos = skipRatio;
+		if (freeList != NULL)
+		    tp = slPopHead(&freeList);
+		else
+		    lmAllocVar(lm, tp);
+		tp->targetId = one.core.tid;
+		tp->pos = one.core.pos;
+		tp->size = one.core.l_qseq;
+		tp->strand = ((one.core.flag & BAM_FREVERSE) ? '-' : '+');
+		if (tpList != NULL && targetPosCmpNoStrand(&tpList, &tp) > 0)
+		    sortedByChrom = FALSE; 
+		slAddHead(&tpList, tp);
+		++listSize;
+		if (listSize >= doubleSize)
+		    {
+		    splitList(tpList, &tpList, &freeList);
+		    listSize /= 2;
+		    skipRatio *= 2;
+		    verbose(2, "tpList %d, freeList %d, listSize %d, skipRatio %d, readCount %lld\n", 
+			slCount(tpList), slCount(freeList), listSize, skipRatio, readCount);
+		    }
+		}
 	    }
 	}
     if (one.core.flag & BAM_FPAIRED)
@@ -211,7 +260,7 @@ else
     fprintf(f, "readSizeStd 0\n");
 fprintf(f, "readSizeMin %lld\n", minReadBases);
 fprintf(f, "readSizeMax %lld\n", maxReadBases);
-tpList = slListRandomSample(tpList, 4000000);
+tpList = slListRandomSample(tpList, u4mSize);
 slSort(&tpList, targetPosCmp);
 int m4ReadCount = slCount(tpList);
 fprintf(f, "u4mReadCount %d\n", m4ReadCount);
@@ -223,7 +272,6 @@ verbose(1, "u4mUniqueRatio %g\n", m4UniqueRatio);
 
 fprintf(f, "targetCount %d\n", (int) head->n_targets);
 fprintf(f, "targetBaseCount %lld\n", targetBaseCount);
-
 
 /* Deal with bed output if any */
 if (sampleBed != NULL)
@@ -241,7 +289,6 @@ if (sampleBed != NULL)
     carefulClose(&bf);
     }
 
-
 /* Clean up */
 samclose(sf);
 carefulClose(&f);
@@ -255,6 +302,7 @@ if (argc != 3)
     usage();
 sampleBed = optionVal("sampleBed", sampleBed);
 sampleBedSize = optionInt("sampleBedSize", sampleBedSize);
+u4mSize = optionInt("u4mSize", u4mSize);
 edwBamStats(argv[1], argv[2]);
 return 0;
 }
