@@ -22,6 +22,7 @@ UTIL_DIRS = \
     edwMakeValidFile \
     edwQaEvaluate \
     edwReallyRemoveFiles \
+    edwRetryJob \
     edwRunDaemon \
     edwScheduleAnalysis \
     edwSubmit
