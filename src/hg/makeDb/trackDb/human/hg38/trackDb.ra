@@ -66,7 +66,7 @@ group map
 priority 10
 visibility hide
 type ctgPos
-url http://www.ncbi.nlm.nih.gov/nuccore/$?
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
 chromosomes chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chrX,chrY
 
 searchTable ctgPos2
