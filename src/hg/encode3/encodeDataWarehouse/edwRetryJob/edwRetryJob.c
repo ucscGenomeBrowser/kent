@@ -52,14 +52,17 @@ struct edwJob *job, *jobList = edwJobLoadByQuery(conn, query);
 struct hash *goodHash = hashNew(0);
 for (job = jobList; job != NULL; job = job->next)
     {
-    if ((job->endTime > 0 && job->returnCode == 0) || job->startTime == 0)
+    if ((job->endTime > 0 && job->returnCode == 0) || job->startTime == 0 
+	|| (job->startTime > 0 && job->startTime < maxTimeThreshold))
         hashAdd(goodHash, job->commandLine, job);
     }
 
 /* Loop through candidates for restart. */
+struct hash *badHash = hashNew(0);
 for (job = jobList; job != NULL; job = job->next)
     {
-    if (job->id >= minId && hashLookup(goodHash, job->commandLine) == NULL)
+    if (job->id >= minId && hashLookup(goodHash, job->commandLine) == NULL
+	&& hashLookup(badHash, job->commandLine) == NULL)
 	{
 	if (job->returnCode != 0 || (job->startTime < maxTimeThreshold && job->endTime == 0))
 	    {
@@ -71,6 +74,7 @@ for (job = jobList; job != NULL; job = job->next)
 		    "insert into %s (commandLine) values ('%s')",  jobTable, job->commandLine);
 		sqlUpdate(conn, query);
 		}
+	    hashAdd(badHash, job->commandLine, job);
 	    }
 	}
     }
