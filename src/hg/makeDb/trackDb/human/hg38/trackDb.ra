@@ -91,3 +91,12 @@ searchType bed
 shortCircuit 1
 termRegex [1-9HMXY][0-9A-Z_]*
 searchPriority 18
+
+track analysisGap
+shortLabel Analysis Gap
+longLabel Extra Gap Locations in Analysis set sequence on chr5, 14, 19, 21, 22, Y
+priority 12
+group map
+visibility dense
+type bed 4 .
+chromosomes chr14,chr19,chr21,chr22,chr5,chrY
