@@ -4,7 +4,7 @@ L += -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkweb.a
 
-O = para.o jobDb.o jobResult.o
+O = para.o jobDb.o
 
 ../bin/para: $O $(MYLIBS)
 	@${MKDIR} ../bin
