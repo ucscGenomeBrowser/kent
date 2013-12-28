@@ -1557,6 +1557,18 @@ for (rq = resultQueues; rq != NULL; rq = rq->next)
     }
 }
 
+void changeFileOwner(char *fileName, char *newOwner)
+/* Attempt to change ownership of file. */
+{
+struct passwd *pwd = getpwnam(newOwner);
+if (pwd == NULL)
+    {
+    perror("getpwnam");
+    return;
+    }
+if (chown(fileName, pwd->pw_uid, -1) == -1)
+    perror("chown");
+}
 
 void writeResults(char *fileName, char *userName, char *machineName,
 	int jobId, char *exe, time_t submitTime, time_t startTime,
@@ -1579,6 +1591,7 @@ if (rq == NULL)
     if (rq->f == NULL)
         warn("hub: couldn't open results file %s", rq->name);
     rq->lastUsed = now;
+    changeFileOwner(fileName, userName);
     }
 if (rq->f != NULL)
     {
