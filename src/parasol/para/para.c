@@ -1602,37 +1602,6 @@ for (job = db->jobList; job != NULL; job = job->next)
     paraJobStatus(job, now);
 }
 
-void fetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName)
-/* Read everything you can from socket and output to file. */
-{
-struct paraMultiMessage pmm;
-FILE *f = mustOpen(fileName, "w");
-/* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
-pmmInit(&pmm, pm, pm->ipAddress.sin_addr);
-while (pmmReceive(&pmm, ru))
-    {
-    if (pm->size == 0)
-	break;
-    mustWrite(f, pm->data, pm->size);
-    }
-carefulClose(&f);
-}
-
-void fetchFile(char *host, char *sourceName, char *destName)
-/* Fetch small file. */
-{
-struct rudp *ru = rudpOpen();
-struct paraMessage pm;
-if (ru != NULL)
-    {
-    pmInitFromName(&pm, host, paraNodePort);
-    pmPrintf(&pm, "fetch %s %s", getUser(), sourceName);
-    if (pmSend(&pm, ru))
-	fetchOpenFile(&pm, ru, destName);
-    rudpClose(&ru);
-    }
-}
-
 void printErrFile(struct submission *sub)
 /* Print error file if it exists. */
 {
@@ -1640,7 +1609,7 @@ char localName[PATH_LEN];
 safef(localName, sizeof(localName), "%s/%s", errDir, sub->id);
 if (!fileExists(localName))
     {
-    fetchFile(sub->host, sub->errFile, localName);
+    pmFetchFile(sub->host, sub->errFile, localName);
     }
 if (fileExists(localName))
     {

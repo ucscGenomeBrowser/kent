@@ -88,4 +88,10 @@ boolean pmmReceive(struct paraMultiMessage *pmm, struct rudp *ru);
 /* Receive multi message.  Print warning message and return FALSE if
  * there is a problem. */
 
+void pmFetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName);
+/* Read everything you can from socket and output to file. */
+
+void pmFetchFile(char *host, char *sourceName, char *destName);
+/* Fetch small file. */
+
 #endif /* PARAMESSAGE_H */

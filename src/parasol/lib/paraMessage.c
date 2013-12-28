@@ -217,3 +217,34 @@ return val;
 }
 #endif
 
+void pmFetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName)
+/* Read everything you can from socket and output to file. */
+{
+struct paraMultiMessage pmm;
+FILE *f = mustOpen(fileName, "w");
+/* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
+pmmInit(&pmm, pm, pm->ipAddress.sin_addr);
+while (pmmReceive(&pmm, ru))
+    {
+    if (pm->size == 0)
+	break;
+    mustWrite(f, pm->data, pm->size);
+    }
+carefulClose(&f);
+}
+
+void pmFetchFile(char *host, char *sourceName, char *destName)
+/* Fetch small file. */
+{
+struct rudp *ru = rudpOpen();
+struct paraMessage pm;
+if (ru != NULL)
+    {
+    pmInitFromName(&pm, host, paraNodePort);
+    pmPrintf(&pm, "fetch %s %s", getUser(), sourceName);
+    if (pmSend(&pm, ru))
+	pmFetchOpenFile(&pm, ru, destName);
+    rudpClose(&ru);
+    }
+}
+

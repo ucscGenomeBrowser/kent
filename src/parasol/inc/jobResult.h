@@ -5,6 +5,8 @@
 #ifndef JOBRESULT_H
 #define JOBRESULT_H
 
+#define JOBRESULT_NUM_COLS 11
+
 struct jobResult
 /* Info about the result of one job from parasol */
     {
