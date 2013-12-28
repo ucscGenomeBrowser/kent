@@ -351,11 +351,234 @@ taxId   9606
     cd /hive/data/genomes/hg38/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
 	-strand=+ ../../hg38.unmasked.2bit > findMotif.txt 2>&1
-    #	real    1m12.153s
+    #	real    0m28.634s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     featureBits hg38 -not gap -bed=notGap.bed
-    #	1409772743 bases of 1409772743 (100.000%) in intersection
-    featureBits hg38 allGaps.bed notGap.bed -bed=new.gaps.bed
-    #	2634 bases of 1409772743 (0.000%) in intersection
+    #	3049335806 bases of 3049335806 (100.000%) in intersection
+    time featureBits hg38 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   20023 bases of 3049335806 (0.001%) in intersection
+    # real    0m20.427s
 
 #########################################################################
+# cytoBandIdeo - (DONE - 2013-12-26 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/cytoBand
+    cd /hive/data/genomes/hg38/bed/cytoBand
+    makeCytoBandIdeo.csh hg38
+
+##########################################################################
+# hg19 <-> hg38 difference tracks (WORKING - 2013-12-28 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/liftOverHg38
+    cd /hive/data/genomes/hg19/bed/liftOverHg38
+
+    #	not needed, but interesting, collect all the fragment
+    #	definitions from the gold tables:
+    hgsql -N -e "select frag,fragStart,fragEnd,strand from gold;" hg19 \
+        | sort > hg19.gold.frags.tab
+
+    hgsql -N -e "select frag,fragStart,fragEnd,strand from gold;" hg38 \
+        | sort > hg38.gold.frags.tab
+
+    # construct common and difference listings
+    comm -12 hg19.gold.frags.tab hg38.gold.frags.tab \
+	> identical.hg19.hg38.frags.tab
+    comm -23 hg19.gold.frags.tab hg38.gold.frags.tab \
+	> unique.hg19Only.frags.tab
+    comm -13 hg19.gold.frags.tab hg38.gold.frags.tab \
+	> unique.hg38Only.frags.tab
+
+    # better yet, get full information about each fragment
+    hgsql -N -e "select chrom,chromStart,chromEnd,ix,type,frag,fragStart,fragEnd,strand from gold;" hg19 \
+        | sort -k6 > hg19.gold.tab
+
+    hgsql -N -e "select chrom,chromStart,chromEnd,ix,type,frag,fragStart,fragEnd,strand from gold;" hg38 \
+        | sort -k6 > hg38.gold.tab
+
+    # construct a single key for each fragment for joining.
+    # the key is frag,fragStart,fragEnd,strand
+    awk '{printf "%s,%d,%d,%s\t%s\t%s\t%s\t%d\t%d\t%d\t%s\n",
+	$6,$7,$8,$9,$6,$9,$1,$2,$3,$4,$5}' hg19.gold.tab | sort \
+	> hg19.fragKey.tab
+    awk '{printf "%s,%d,%d,%s\t%s\t%s\t%s\t%d\t%d\t%d\t%s\n",
+	$6,$7,$8,$9,$6,$9,$1,$2,$3,$4,$5}' hg38.gold.tab | sort \
+	> hg38.fragKey.tab
+
+    # now, by joining those keys, we can get exact identicals, and
+    # the only-in listings as bed files to load as tracks:
+    join hg19.fragKey.tab hg38.fragKey.tab \
+	| awk '{printf "%s\t%d\t%d\t%s\t1000\t%s\t%d\t%d\t0,0,128\n", $4,$5,$6,$2,$3,$5,$6}' \
+        | sort -k1,1 -k2,2n > hg19.hg38.identical.bed
+
+    join hg19.fragKey.tab hg38.fragKey.tab \
+	| awk '{printf "%s\t%d\t%d\t%s\t1000\t%s\t%d\t%d\t0,0,128\n", $11,$12,$13,$9,$10,$12,$13}' \
+        | sort -k1,1 -k2,2n > hg38.hg19.identical.bed
+
+    join -v 1 hg19.fragKey.tab hg38.fragKey.tab \
+	| awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $4,$5,$6,$2,$3}' \
+        | sort -k1,1 -k2,2n > hg19.only.bed
+
+    join -v 2 hg19.fragKey.tab hg38.fragKey.tab \
+	| awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $4,$5,$6,$2,$3}' \
+        | sort -k1,1 -k2,2n > hg38.only.bed
+
+    hgLoadBed hg19 hg38ContigDiff hg19.only.bed
+    hgLoadBed hg38 hg19ContigDiff hg38.only.bed
+
+    wc -l hg??.only.bed
+    #  6097 hg19.only.bed
+    #  23632 hg38.only.bed
+
+    # this leaves the outstanding question of "why" they might be in
+    #	the only-in listings.  Some contigs may be different versions,
+    #   sometimes different sections of the same contig are used,
+    #	and contigs are dropped from hg19 to hg38, or new contigs added
+    #	to hg38 to fill in gaps from hg19
+    # Let's see if we can measure some of this:
+    awk '{print $4}' hg19.only.bed | sort -u > hg19.only.ids.list
+    awk '{print $4}' hg38.only.bed | sort -u > hg38.only.ids.list
+
+    # Looks like 5405 idential contigs with different parts used:
+    comm -12 hg19.only.ids.list hg38.only.ids.list > differentPortions.list
+    wc -l differentPortions.list
+    # 5405
+
+    # and perhaps 63 = 5468-5405 of different versions of same contig:
+    sed -e "s/\.[0-9]*$//" hg19.only.ids.list | sort -u \
+	> hg19.noVersions.ids.list
+    sed -e "s/\.[0-9]*$//" hg38.only.ids.list | sort -u \
+	> hg38.noVersions.ids.list
+    comm -12 hg19.noVersions.ids.list hg38.noVersions.ids.list | wc -l
+    #	5468
+    sed -e "s/\.[0-9]*$//" differentPortions.list | sort -u \
+	> differentPortions.noVersions.list
+    comm -12 hg19.noVersions.ids.list hg38.noVersions.ids.list | sort -u \
+	> noVersions.common.list
+    # indeed, 63 contigs of different versions:
+    comm -23 noVersions.common.list differentPortions.noVersions.list \
+	| sort -u > differentVersions.list
+    wc -l differentVersions.list
+    #	63
+
+    # dividing up these items:
+    cat << '_EOF_' > identifyPortions.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %differentVersions;
+my %differentPortions;
+
+open (FH, "<differentVersions.list" ) or
+	die "can not read differentVersions.list";
+while (my $line = <FH>) {
+    chomp $line;
+    $differentVersions{$line} = 1;
+}
+close (FH);
+
+open (FH, "differentPortions.list" ) or
+	die "can not read differentPortions.list";
+while (my $line = <FH>) {
+    chomp $line;
+    $differentPortions{$line} = 1;
+}
+close (FH);
+
+my %hg19Done;
+open (DP, ">hg19.differentPortions.bed") or die "can not write to hg19.differentPortions.bed";
+open (DV, ">hg19.differentVersions.bed") or die "can not write to hg19.differentVersions.bed";
+open (FH, "<hg19.only.bed" ) or die "can not read hg19.only.bed";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $acc, $score, $strand) = split('\s+', $line);
+    # assume done while $acc is still complete
+    $hg19Done{$acc} = 1;
+    if (exists($differentPortions{$acc})) {
+	printf DP "%s\n", $line;
+    } else {
+	my $trimAcc = $acc;
+	$trimAcc =~ s/\.[0-9]+$//;
+	if (exists($differentVersions{$trimAcc})) {
+	    printf DV "%s\n", $line;
+	} else {
+            # this one does not match
+	    $hg19Done{$acc} = 0;
+	}
+    }
+}
+close (FH);
+close (DV);
+close (DP);
+open (DR, ">hg19.dropped.bed") or die "can not write to hg19.dropped.bed";
+open (FH, "<hg19.only.bed" ) or die "can not read hg19.only.bed";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $acc, $score, $strand) = split('\s+', $line);
+    if (0 == $hg19Done{$acc}) {
+	printf DR "%s\n", $line;
+    }
+}
+close (FH);
+close (DR);
+
+my %hg38Done;
+open (DP, ">hg38.differentPortions.bed") or die "can not write to hg38.differentPortions.bed";
+open (DV, ">hg38.differentVersions.bed") or die "can not write to hg38.differentVersions.bed";
+open (FH, "<hg38.only.bed" ) or die "can not read hg38.only.bed";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $acc, $score, $strand) = split('\s+', $line);
+    # assume done while $acc is still complete
+    $hg38Done{$acc} = 1;
+    if (exists($differentPortions{$acc})) {
+	printf DP "%s\n", $line;
+    } else {
+	my $trimAcc = $acc;
+	$trimAcc =~ s/\.[0-9]+$//;
+	if (exists($differentVersions{$trimAcc})) {
+	    printf DV "%s\n", $line;
+	} else {
+            # this one does not match
+	    $hg38Done{$acc} = 0;
+	}
+    }
+}
+close (FH);
+close (DV);
+close (DP);
+open (DR, ">hg38.newTo19.bed") or die "can not write to hg38.newTo19.bed";
+open (FH, "<hg38.only.bed" ) or die "can not read hg38.only.bed";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $acc, $score, $strand) = split('\s+', $line);
+    if (0 == $hg38Done{$acc}) {
+	printf DR "%s\n", $line;
+    }
+}
+close (FH);
+close (DR);
+'_EOF_'
+    # << happy emacs
+    chmod +x identifyPortions.pl
+    ./identifyPortions.pl
+    # make sure nothing was lost
+    sort hg19.differentVersions.bed hg19.differentPortions.bed \
+	hg19.dropped.bed  | sum
+    #	43711   233
+    sort hg19.only.bed | sum
+    #	43711   233
+    sort hg38.differentVersions.bed hg38.differentPortions.bed \
+	hg38.newTo19.bed | sum
+    #	00502   911
+    sort hg38.only.bed | sum
+    #	00502   911
+
+    sort -k1,1 -k2,2n hg38.differentVersions.bed hg38.differentPortions.bed \
+	hg38.newTo19.bed > hg38.itemRgb.bed
+    sort -k1,1 -k2,2n hg19.differentVersions.bed hg19.differentPortions.bed \
+	hg19.dropped.bed > hg19.itemRgb.bed
+
+    hgLoadBed hg19 hg19ContigDiff hg19.itemRgb.bed
+    hgLoadBed hg38 hg38ContigDiff hg38.itemRgb.bed
+
+##############################################################################
