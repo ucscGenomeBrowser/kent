@@ -214,7 +214,7 @@ int pollTime = 5;   // Poll every 5 seconds for file to open.
 char *row[JOBRESULT_NUM_COLS];
 for (;;)
     {
-    verbose(1, "waiting for %d\n", pollTime);
+    verbose(2, "waiting for %d\n", pollTime);
     sleep(pollTime);
     if (!fileExists(resultsFile))
         continue;
