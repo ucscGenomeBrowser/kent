@@ -8,6 +8,7 @@
 #include "options.h"
 #include "paraLib.h"
 #include "paraMessage.h"
+#include "jobResult.h"
 
 
 char *version = PARA_VERSION;   /* Version number. */
@@ -44,7 +45,9 @@ errAbort(
   "   parasol add spoke  - Add a new spoke daemon.\n"
   "   parasol [options] add job command-line   - Add job to list.\n"
   "         options:\n"
-  "            -out=out -in=in -dir=dir -verbose\n"
+  "            -wait - If set wait for job to finish to return and return with job status code\n"
+  "            -err=path -out=out -in=in - Where to put stderr, stdin, stdout output\n"
+  "            -verbose=N - set verbosity level, default level is 1\n"
   "            -results=resultFile fully qualified path to the results file, \n"
   "             or `results' in the current directory if not specified.\n"
   "            -cpu=N  Number of CPUs used by the jobs, default 1.\n"
@@ -201,12 +204,45 @@ else /* argc == 7 */
 commandHub(buf);
 }
 
+void waitAndExit(char *resultsFile, char *jobIdString, char *err)
+/* Read results file until jobId appears in it, and then if necessary
+ * copy over stderr to err, and finally exit with the same result
+ * as command did. */
+{
+off_t resultsPos = 0;
+int pollTime = 5;   // Poll every 5 seconds for file to open.
+char *row[JOBRESULT_NUM_COLS];
+for (;;)
+    {
+    verbose(1, "waiting for %d\n", pollTime);
+    sleep(pollTime);
+    if (!fileExists(resultsFile))
+        continue;
+    struct lineFile *lf = lineFileOpen(resultsFile, TRUE);
+    lineFileSeek(lf, resultsPos, SEEK_SET);
+    while (lineFileRow(lf, row))
+        {
+	resultsPos = lineFileTell(lf);
+	struct jobResult jr;
+	jobResultStaticLoad(row, &jr);
+	if (sameString(jr.jobId, jobIdString))
+	    {
+	    if (err != NULL)
+		pmFetchFile(jr.host, jr.errFile, err);
+	    exit(jr.status);
+	    }
+	}
+    lineFileClose(&lf);
+    }
+}
+
 void addJob(int argc, char *argv[], boolean printId)
 /* Tell hub about a new job. */
 {
 struct dyString *dy = newDyString(1024);
 char *in = optionVal("in", "/dev/null"); 
 char *out = optionVal("out", "/dev/null"); 
+char *err = optionVal("err", NULL);
 char *jobIdString;
 int i;
 char curDir[PATH_LEN];
@@ -235,6 +271,11 @@ if (printId)
     for (i=1; i<argc; ++i)
 	 printf(" %s", argv[i]);
     printf("\") has been submitted\n");
+    }
+
+if (optionExists("wait"))
+    {
+    waitAndExit(results, jobIdString, err);
     }
 freez(&jobIdString);
 }
