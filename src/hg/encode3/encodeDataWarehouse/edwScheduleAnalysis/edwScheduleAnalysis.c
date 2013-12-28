@@ -391,13 +391,10 @@ void runFastqAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edw
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
 char *dataType = exp->dataType;
-uglyf("runFastqAnalysis %u %s\n", ef->id, dataType);
 if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq"))
     {
-    uglyf("runFastqAnalysis still going\n");
     if (!isEmpty(vf->pairedEnd))
         {
-	uglyf("isPaird\n");
 	struct edwValidFile *vfB = edwOppositePairedEnd(conn, vf);
 	if (vfB != NULL)
 	    {
@@ -414,7 +411,6 @@ if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq"))
 	}
     else
         {
-	uglyf("notPaired\n");
 	scheduleBwaSingle(conn, ef, vf, exp);
 	}
     }
@@ -448,6 +444,15 @@ void runReplicateAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct
     struct edwExperiment *exp)
 {
 verbose(2, "run replicate analysis format %s, dataType %s\n", vf->format, exp->dataType);
+#ifdef SOON
+if (!inReplicatedTable(ef,vf,exp))
+    {
+    if (isReplicated(ef, vf, exp))
+	{
+	addReplicateResults(ef, vf, exp);
+	}
+    }
+#endif
 }
 
 void edwScheduleAnalysis(int startFileId, int endFileId)
