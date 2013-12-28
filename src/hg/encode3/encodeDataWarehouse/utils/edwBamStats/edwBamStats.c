@@ -208,7 +208,7 @@ for (;;)
     ++readCount;
 
     /* Gather position for uniquely mapped reads. */
-    if ((one.core.flag & BAM_FUNMAP) == 0)
+    if ((one.core.flag & BAM_FUNMAP) == 0 && one.core.tid >= 0)
         {
 	++mappedCount;
 	if (one.core.qual > edwMinMapQual)
