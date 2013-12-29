@@ -10,7 +10,7 @@
 #include "edwLib.h"
 
 /* Globals */
-int version = 3;
+int version = 4;
 
 /* Version history 
  *  1 - initial release
@@ -23,6 +23,11 @@ int version = 3;
  *      'Short RNA-seq' - reads 200 bases or shorter
  *      'miRNA-seq' - micro RNA sequencing
  *  3 - Relaxed DNAse threshold for enrichment in 'open chromatin' to 1.6.
+ *  4 - Fixed bug that was putting reverse strand reads in BAM and FASTQ files in the wrong
+ *      place.  Did not change thresholds, but getting much better (almost 2x better) 
+ *      enrichments and maybe 50% better cross-enrichments as a result.  Also made it so
+ *      that files had to be from two different replicates (not technical replicates) to
+ *      get credit for a good replicateQa.
  */
 
 void usage()
@@ -184,11 +189,11 @@ int failQa(struct sqlConnection *conn, struct edwFile *ef, char *whyFormat, ...)
 /* Explain why this failed QA  - always returns -1*/
 {
 /* First just do the warn */
+warn("Failing QA on fileId %u", ef->id);
 va_list args;
 va_start(args, whyFormat);
 char reason[512];
 vasafef(reason, sizeof(reason), whyFormat, args);
-warn("Failing QA on fileId %u", ef->id);
 warn("%s", reason);
 
 /* See if already have a failure with this file and version. */
@@ -301,8 +306,9 @@ boolean edwBestCrossEnrichment(struct sqlConnection *conn, long long fileId, dou
 {
 char query[256];
 sqlSafef(query, sizeof(query),
-    "select max(sampleSampleEnrichment) from edwQaPairSampleOverlap "
-    "where (elderFileId = %lld or youngerFileId = %lld) "
+    "select max(sampleSampleEnrichment) from edwQaPairSampleOverlap p,edwValidFile e,edwValidFile y "
+    "where elderFileId=e.fileId and youngerFileId=y.fileId and e.replicate != y.replicate "
+    "and (elderFileId = %lld or youngerFileId = %lld) "
     , fileId, fileId);
 return edwBestPairedSomething(conn, query, retBest);
 }
@@ -313,8 +319,9 @@ boolean edwBestPearsonClipped(struct sqlConnection *conn, long long fileId, doub
 {
 char query[256];
 sqlSafef(query, sizeof(query),
-    "select max(pearsonClipped) from edwQaPairCorrelation "
-    "where (elderFileId = %lld or youngerFileId = %lld) "
+    "select max(pearsonClipped) from edwQaPairCorrelation p,edwValidFile e,edwValidFile y "
+    "where elderFileId=e.fileId and youngerFileId=y.fileId and e.replicate != y.replicate "
+    "and (elderFileId = %lld or youngerFileId = %lld) "
     , fileId, fileId);
 return edwBestPairedSomething(conn, query, retBest);
 }
