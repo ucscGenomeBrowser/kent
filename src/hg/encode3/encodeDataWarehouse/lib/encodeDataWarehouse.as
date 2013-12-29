@@ -313,6 +313,7 @@ table edwJob
     bigInt endTime; "End time in seconds since 1970"
     lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
+    int pid;	"Process ID for running processes"
     )
 
 table edwSubmitJob
@@ -324,6 +325,7 @@ table edwSubmitJob
     bigInt endTime; "End time in seconds since 1970"
     lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
+    int pid;	"Process ID for running processes"
     )
 
 table edwAnalysisJob
@@ -335,6 +337,7 @@ table edwAnalysisJob
     bigInt endTime; "End time in seconds since 1970"
     lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
+    int pid;	"Process ID for running processes"
     )
 
 table edwAnalysisSoftware

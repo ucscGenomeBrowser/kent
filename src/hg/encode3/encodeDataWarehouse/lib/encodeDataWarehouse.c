@@ -4051,7 +4051,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode";
+char *edwJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode,pid";
 
 void edwJobStaticLoad(char **row, struct edwJob *ret)
 /* Load a row from edwJob table into ret.  The contents of ret will
@@ -4064,6 +4064,7 @@ ret->startTime = sqlLongLong(row[2]);
 ret->endTime = sqlLongLong(row[3]);
 ret->stderr = row[4];
 ret->returnCode = sqlSigned(row[5]);
+ret->pid = sqlSigned(row[6]);
 }
 
 struct edwJob *edwJobLoadByQuery(struct sqlConnection *conn, char *query)
@@ -4096,8 +4097,8 @@ void edwJobSaveToDb(struct sqlConnection *conn, struct edwJob *el, char *tableNa
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
-	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d)", 
+	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->pid);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -4115,6 +4116,7 @@ ret->startTime = sqlLongLong(row[2]);
 ret->endTime = sqlLongLong(row[3]);
 ret->stderr = cloneString(row[4]);
 ret->returnCode = sqlSigned(row[5]);
+ret->pid = sqlSigned(row[6]);
 return ret;
 }
 
@@ -4124,7 +4126,7 @@ struct edwJob *edwJobLoadAll(char *fileName)
 {
 struct edwJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -4142,7 +4144,7 @@ struct edwJob *edwJobLoadAllByChar(char *fileName, char chopper)
 {
 struct edwJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -4169,6 +4171,7 @@ ret->startTime = sqlLongLongComma(&s);
 ret->endTime = sqlLongLongComma(&s);
 ret->stderr = sqlStringComma(&s);
 ret->returnCode = sqlSignedComma(&s);
+ret->pid = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -4216,11 +4219,13 @@ fprintf(f, "%s", el->stderr);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->returnCode);
+fputc(sep,f);
+fprintf(f, "%d", el->pid);
 fputc(lastSep,f);
 }
 
 
-char *edwSubmitJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode";
+char *edwSubmitJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode,pid";
 
 void edwSubmitJobStaticLoad(char **row, struct edwSubmitJob *ret)
 /* Load a row from edwSubmitJob table into ret.  The contents of ret will
@@ -4233,6 +4238,7 @@ ret->startTime = sqlLongLong(row[2]);
 ret->endTime = sqlLongLong(row[3]);
 ret->stderr = row[4];
 ret->returnCode = sqlSigned(row[5]);
+ret->pid = sqlSigned(row[6]);
 }
 
 struct edwSubmitJob *edwSubmitJobLoadByQuery(struct sqlConnection *conn, char *query)
@@ -4265,8 +4271,8 @@ void edwSubmitJobSaveToDb(struct sqlConnection *conn, struct edwSubmitJob *el, c
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
-	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d)", 
+	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->pid);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -4284,6 +4290,7 @@ ret->startTime = sqlLongLong(row[2]);
 ret->endTime = sqlLongLong(row[3]);
 ret->stderr = cloneString(row[4]);
 ret->returnCode = sqlSigned(row[5]);
+ret->pid = sqlSigned(row[6]);
 return ret;
 }
 
@@ -4293,7 +4300,7 @@ struct edwSubmitJob *edwSubmitJobLoadAll(char *fileName)
 {
 struct edwSubmitJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -4311,7 +4318,7 @@ struct edwSubmitJob *edwSubmitJobLoadAllByChar(char *fileName, char chopper)
 {
 struct edwSubmitJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -4338,6 +4345,7 @@ ret->startTime = sqlLongLongComma(&s);
 ret->endTime = sqlLongLongComma(&s);
 ret->stderr = sqlStringComma(&s);
 ret->returnCode = sqlSignedComma(&s);
+ret->pid = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -4385,11 +4393,13 @@ fprintf(f, "%s", el->stderr);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->returnCode);
+fputc(sep,f);
+fprintf(f, "%d", el->pid);
 fputc(lastSep,f);
 }
 
 
-char *edwAnalysisJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode";
+char *edwAnalysisJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode,pid";
 
 void edwAnalysisJobStaticLoad(char **row, struct edwAnalysisJob *ret)
 /* Load a row from edwAnalysisJob table into ret.  The contents of ret will
@@ -4402,6 +4412,7 @@ ret->startTime = sqlLongLong(row[2]);
 ret->endTime = sqlLongLong(row[3]);
 ret->stderr = row[4];
 ret->returnCode = sqlSigned(row[5]);
+ret->pid = sqlSigned(row[6]);
 }
 
 struct edwAnalysisJob *edwAnalysisJobLoadByQuery(struct sqlConnection *conn, char *query)
@@ -4434,8 +4445,8 @@ void edwAnalysisJobSaveToDb(struct sqlConnection *conn, struct edwAnalysisJob *e
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
-	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d)", 
+	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->pid);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -4453,6 +4464,7 @@ ret->startTime = sqlLongLong(row[2]);
 ret->endTime = sqlLongLong(row[3]);
 ret->stderr = cloneString(row[4]);
 ret->returnCode = sqlSigned(row[5]);
+ret->pid = sqlSigned(row[6]);
 return ret;
 }
 
@@ -4462,7 +4474,7 @@ struct edwAnalysisJob *edwAnalysisJobLoadAll(char *fileName)
 {
 struct edwAnalysisJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -4480,7 +4492,7 @@ struct edwAnalysisJob *edwAnalysisJobLoadAllByChar(char *fileName, char chopper)
 {
 struct edwAnalysisJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -4507,6 +4519,7 @@ ret->startTime = sqlLongLongComma(&s);
 ret->endTime = sqlLongLongComma(&s);
 ret->stderr = sqlStringComma(&s);
 ret->returnCode = sqlSignedComma(&s);
+ret->pid = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -4554,6 +4567,8 @@ fprintf(f, "%s", el->stderr);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->returnCode);
+fputc(sep,f);
+fprintf(f, "%d", el->pid);
 fputc(lastSep,f);
 }
 

@@ -1565,7 +1565,7 @@ void edwQaPairedEndFastqOutput(struct edwQaPairedEndFastq *el, FILE *f, char sep
 #define edwQaPairedEndFastqCommaOut(el,f) edwQaPairedEndFastqOutput(el,f,',',',');
 /* Print out edwQaPairedEndFastq as a comma separated list including final comma. */
 
-#define EDWJOB_NUM_COLS 6
+#define EDWJOB_NUM_COLS 7
 
 extern char *edwJobCommaSepFieldNames;
 
@@ -1579,6 +1579,7 @@ struct edwJob
     long long endTime;	/* End time in seconds since 1970 */
     char *stderr;	/* The output to stderr of the run - may be nonempty even with success */
     int returnCode;	/* The return code from system command - 0 for success */
+    int pid;	/* Process ID for running processes */
     };
 
 void edwJobStaticLoad(char **row, struct edwJob *ret);
@@ -1636,7 +1637,7 @@ void edwJobOutput(struct edwJob *el, FILE *f, char sep, char lastSep);
 #define edwJobCommaOut(el,f) edwJobOutput(el,f,',',',');
 /* Print out edwJob as a comma separated list including final comma. */
 
-#define EDWSUBMITJOB_NUM_COLS 6
+#define EDWSUBMITJOB_NUM_COLS 7
 
 extern char *edwSubmitJobCommaSepFieldNames;
 
@@ -1650,6 +1651,7 @@ struct edwSubmitJob
     long long endTime;	/* End time in seconds since 1970 */
     char *stderr;	/* The output to stderr of the run - may be nonempty even with success */
     int returnCode;	/* The return code from system command - 0 for success */
+    int pid;	/* Process ID for running processes */
     };
 
 void edwSubmitJobStaticLoad(char **row, struct edwSubmitJob *ret);
@@ -1707,7 +1709,7 @@ void edwSubmitJobOutput(struct edwSubmitJob *el, FILE *f, char sep, char lastSep
 #define edwSubmitJobCommaOut(el,f) edwSubmitJobOutput(el,f,',',',');
 /* Print out edwSubmitJob as a comma separated list including final comma. */
 
-#define EDWANALYSISJOB_NUM_COLS 6
+#define EDWANALYSISJOB_NUM_COLS 7
 
 extern char *edwAnalysisJobCommaSepFieldNames;
 
@@ -1721,6 +1723,7 @@ struct edwAnalysisJob
     long long endTime;	/* End time in seconds since 1970 */
     char *stderr;	/* The output to stderr of the run - may be nonempty even with success */
     int returnCode;	/* The return code from system command - 0 for success */
+    int pid;	/* Process ID for running processes */
     };
 
 void edwAnalysisJobStaticLoad(char **row, struct edwAnalysisJob *ret);

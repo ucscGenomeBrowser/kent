@@ -370,6 +370,7 @@ CREATE TABLE edwJob (
     endTime bigint default 0,	# End time in seconds since 1970
     stderr longblob,	# The output to stderr of the run - may be nonempty even with success
     returnCode int default 0,	# The return code from system command - 0 for success
+    pid int default 0,	# Process ID for running processes
               #Indices
     PRIMARY KEY(id)
 );
@@ -382,6 +383,7 @@ CREATE TABLE edwSubmitJob (
     endTime bigint default 0,	# End time in seconds since 1970
     stderr longblob,	# The output to stderr of the run - may be nonempty even with success
     returnCode int default 0,	# The return code from system command - 0 for success
+    pid int default 0,	# Process ID for running processes
               #Indices
     PRIMARY KEY(id)
 );
@@ -394,6 +396,7 @@ CREATE TABLE edwAnalysisJob (
     endTime bigint default 0,	# End time in seconds since 1970
     stderr longblob,	# The output to stderr of the run - may be nonempty even with success
     returnCode int default 0,	# The return code from system command - 0 for success
+    pid int default 0,	# Process ID for running processes
               #Indices
     PRIMARY KEY(id)
 );
