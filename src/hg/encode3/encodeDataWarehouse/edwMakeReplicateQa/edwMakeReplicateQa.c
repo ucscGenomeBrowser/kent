@@ -59,11 +59,13 @@ void setSampleSampleEnrichment(struct edwQaPairSampleOverlap *sam, char *format,
 double overlap = sam->sampleOverlapBases;
 double covElder = overlap/sam->elderSampleBases;
 double covYounger = overlap/sam->youngerSampleBases;
-if (sameString(format, "fastq") || sameString(format, "bam"))
+if (sameString(format, "fastq"))
     {
     /* Adjust for not all bases in fastq sample mapping. */
-    covElder /= elderVf->mapRatio;
-    covYounger /= youngerVf->mapRatio;
+    if (elderVf->mapRatio != 0)
+	covElder /= elderVf->mapRatio;
+    if (youngerVf->mapRatio != 0)
+	covYounger /= youngerVf->mapRatio;
     }
 double enrichment1 = covElder/((double)sam->youngerSampleBases/assembly->realBaseCount);
 double enrichment2 = covYounger/((double)sam->elderSampleBases/assembly->realBaseCount);
@@ -402,6 +404,10 @@ else if (edwIsSupportedBigBedFormat(format))
 else if (sameString(format, "bigWig"))
     {
     doBigWigReplicate(conn, assembly, elderEf, elderVf, youngerEf, youngerVf);
+    }
+else if (sameString(format, "rcc") || sameString(format, "idat"))
+    {
+    warn("Don't know how to compare %s files", format);
     }
 else if (sameString(format, "unknown"))
     {
