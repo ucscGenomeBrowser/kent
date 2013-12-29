@@ -1,0 +1,584 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how we made the browser database on
+# NCBI build 38 (December 2013 freeze) aka:
+#	GRCh38 - Genome Reference Consortium Human Reference 38
+#	Assembly Accession: GCA_000001405.2
+
+#############################################################################
+## Download sequence - DONE - 2013-12-24
+    mkdir /hive/data/genomes/hg38
+    mkdir /hive/data/genomes/hg38/genbank
+    cd /hive/data/genomes/hg38/genbank
+    time rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/ ./
+# sent 19643 bytes  received 4914689807 bytes  4490369.53 bytes/sec
+# total size is 4914019581  speedup is 1.00
+
+# real    18m14.497s
+
+#############################################################################
+## convert to UCSC names - DONE - 2013-12-24
+#  with this release, NCBI has adopted a naming convention that is similar
+#  to UCSC.  The delivered sequence with these names can be found in:
+#  /hive/data/genomes/hg38/genbank/seqs_for_alignment_pipelines/
+#
+#  The following scripts reproduce this naming scheme from the separate
+#  files in the release
+#
+    mkdir /hive/data/genomes/hg38/ucsc
+    cat << '_EOF_' > ucscCompositeAgp.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+open (FH, "<../genbank/Primary_Assembly/assembled_chromosomes/chr2acc") or
+        die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+}
+close (FH);
+
+foreach my $acc (keys %accToChr) {
+    my $chrN =  $accToChr{$acc};
+    print "$acc $accToChr{$acc}\n";
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.comp.agp.gz|") or die "can not read chr${chrN}.comp.agp.gz";
+    open (UC, ">chr${chrN}.agp") or die "can not write to chr${chrN}.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            $line =~ s/^$acc/chr${chrN}/;
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/FASTA/chr${chrN}.fa.gz|") or die "can not read chr${chrN}.fa.gz";
+    open (UC, ">chr${chrN}.fa") or die "can not write to chr${chrN}.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            printf UC ">chr${chrN}\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x ucscCompositeAgp.pl
+
+    cat << '_EOF_' > unlocalized.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+my %chrNames;
+
+open (FH, "<../genbank/Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf") or
+        die "can not read Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $acc =~ s/\./v/;
+    $accToChr{$acc} = $chrN;
+    $chrNames{$chrN} += 1;
+}
+close (FH);
+
+foreach my $chrN (keys %chrNames) {
+    my $agpFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/AGP/chr$chrN.unlocalized.scaf.agp.gz";
+    my $fastaFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/FASTA/chr$chrN.unlocalized.scaf.fa.gz";
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    open (UC, ">chr${chrN}_random.agp") or die "can not write to chr${chrN}_random.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            chomp $line;
+            my (@a) = split('\t', $line);
+            my $acc = $a[0];
+            $acc =~ s/\./v/;
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${acc}_random";
+            printf UC "%s", $ucscName;
+            for (my $i = 1; $i < scalar(@a); ++$i) {
+                printf UC "\t%s", $a[$i];
+            }
+            printf UC "\n";
+        }
+    }
+    close (FH);
+    close (UC);
+    printf "chr%s\n", $chrN;
+    open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+    open (UC, ">chr${chrN}_random.fa") or die "can not write to chr${chrN}_random.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            chomp $line;
+            my $acc = $line;
+            $acc =~ s/.*gb\|//;
+            $acc =~ s/. Homo.*//;
+            $acc =~ s/\./v/;
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${acc}_random";
+            printf UC ">$ucscName\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x unlocalized.pl
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, ">chrUn.agp") or die "can not write to chrUn.agp";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\./v/;
+        printf UC "chrUn_%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, ">chrUn.fa") or die "can not write to chrUn.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/. Homo.*//;
+        $line =~ s/\./v/;
+        printf UC ">chrUn_$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+
+    cat << '_EOF_' > altSequence.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use File::Basename;
+
+open (AG, ">chrAlt.agp") or die "can not write to chrAlt.agp";
+open (FA, ">chrAlt.fa") or die "can not write to chrAlt.fa";
+open (FH, "find ../genbank/ALT* -type f | grep alt_scaffold_placement.txt|") or die "can not find alt_scaffold_placement.txt files";
+while (my $file = <FH>) {
+  chomp $file;
+  my $dirName = dirname($file);
+  my $agpFile = "$dirName/AGP/alt.scaf.agp.gz";
+  my $fastaFile = "$dirName/FASTA/alt.scaf.fa.gz";
+  # key is genbank acc name, value is UCSC chr name
+  my %nameDelta;
+#  printf STDERR "# %s\n", $file;
+  open (AL, "<$file") or die "can not read $file";
+  while (my $line = <AL>) {
+     next if ($line =~ m/^#/);
+     chomp $line;
+     my ($alt_asm_name, $prim_asm_name, $alt_scaf_name, $alt_scaf_acc,
+          $parent_type, $parent_name, $parent_acc, $region_name, $ori,
+           $alt_scaf_start, $alt_scaf_stop, $parent_start, $parent_stop,
+            $alt_start_tail, $alt_stop_tail) = split('\t', $line);
+     my $ucscAcc = $alt_scaf_acc;
+     $ucscAcc =~ s/\./v/;
+     my $ucscName = sprintf("chr%s_%s_alt", $parent_name, $ucscAcc);
+     printf "%s %s\n", $alt_scaf_acc, $ucscName;
+     if (exists ($nameDelta{$alt_scaf_acc})) {
+         die "duplicate name incorrect ? $alt_scaf_acc $nameDelta{$alt_scaf_acc} ne $ucscName" if ($nameDelta{$alt_scaf_acc} ne $ucscName);
+     } else {
+         $nameDelta{$alt_scaf_acc} = $ucscName;
+     }
+  }
+  close (AL);
+  open (AL, "zcat $agpFile|") or die "can not read $agpFile";
+  while (my $line = <AL>) {
+     if ($line =~ m/^#/) {
+       print AG "$line";
+     } else {
+       my ($acc, $rest) = split('\t', $line, 2);
+       die "can not find ucsc name for $acc" if (!exists($nameDelta{$acc}));
+       printf AG "%s\t%s", $nameDelta{$acc}, $rest;
+     }
+  }
+  close (AL);
+  open (AL, "zcat $fastaFile|") or die "can not read $fastaFile";
+  while (my $line = <AL>) {
+     chomp $line;
+     if ($line =~ m/^>/) {
+       $line =~ s/.*gb.//;
+       $line =~ s/. Homo.*//;
+       die "can not find ucsc name for $line" if (!exists($nameDelta{$line}));
+       printf FA ">%s\n", $nameDelta{$line};
+     } else {
+       printf FA "%s\n", $line;
+     }
+  }
+  close (AL);
+}
+close (FH);
+close (AG);
+close (FA);
+'_EOF_'
+    # << happy emacs
+    chmod +x altSequence.pl
+
+    ./ucscCompositeAgp.pl
+    ./unlocalized.pl
+    ./unplaced.pl
+    ./altSequence.pl
+
+    # temporarily verify the fasta and AGP are complete and compatible
+    faToTwoBit chr*.fa hg38.test.2bit
+    cat chr*.agp > hg38.agp
+    checkAgpAndFa hg38.agp hg38.test.2bit 2>&1 | tail -1
+# All AGP and FASTA entries agree - both files are valid
+
+    rm -f hg38.agp hg38.test.2bit
+
+    # comparing faCounts of this 2bit file and the sequences delivered
+    # in genbank/seqs_for_alignment_pipelines/
+    # result in the exact same sequence
+
+#############################################################################
+## initial db build - DONE - 2013-12-24 - Hiram
+
+    cd /hive/data/genomes/hg38
+    cat << '_EOF_' > hg38.config.ra
+# Config parameters for makeGenomeDb.pl:
+db hg38
+scientificName Homo sapiens
+commonName Human
+assemblyDate Dec. 2013
+assemblyLabel GRCh38 Genome Reference Consortium Human Reference 38 (GCA_000001405.2)
+assemblyShortLabel GRCh38
+orderKey 13
+mitoAcc none
+fastaFiles /hive/data/genomes/hg38/ucsc/chr*.fa
+agpFiles /hive/data/genomes/hg38/ucsc/chr*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir human
+photoCreditURL http://www.cbse.ucsc.edu/
+photoCreditName Graphic courtesy of CBSE
+ncbiGenomeId 51
+ncbiAssemblyId 883148
+ncbiAssemblyName GRCh38
+ncbiBioProject 31257
+genBankAccessionID GCA_000001305.2
+taxId   9606
+'_EOF_'
+    # << happy emacs
+
+    # step wise to first verify AGP and Fasta files
+    time makeGenomeDb.pl -stop=agp hg38.config.ra > agp.log 2>&1
+
+    # looking good, continue:
+    time makeGenomeDb.pl -continue=db hg38.config.ra > db.log 2>&1
+
+    # add the files produced by the trackDb build to the source tree
+
+#############################################################################
+## RepeatMasker with CrossMatch - WORKING - 2013-12-24 - Hiram
+    mkdir /hive/data/genomes/hg38/bed/repeatMaskerCM
+    cd /hive/data/genomes/hg38/bed/repeatMaskerCM
+    time doRepeatMasker.pl -stop=mask -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38 > mask.log 2>&1
+
+#############################################################################
+## RepeatMasker with RM Blastn - WORKING - 2013-12-24 - Hiram
+    mkdir /hive/data/genomes/hg38/bed/repeatMaskerCM
+    cd /hive/data/genomes/hg38/bed/repeatMaskerCM
+    time doRepeatMasker.pl -stop=mask -useRMBlastn -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38 > mask.log 2>&1
+
+#############################################################################
+## RepeatMasker with HMMER - WORKING - 2013-12-24 - Hiram
+    mkdir /hive/data/genomes/hg38/bed/repeatMaskerCM
+    cd /hive/data/genomes/hg38/bed/repeatMaskerCM
+    time doRepeatMasker.pl -stop=mask -useHMMER -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38 > mask.log 2>&1
+
+#############################################################################
+## running TRF simple repeats - DONE - 2013-12-24 - Hiram
+    screen # use screen to manage this day-long job
+    mkdir /hive/data/genomes/hg38/bed/simpleRepeat
+    cd /hive/data/genomes/hg38/bed/simpleRepeat
+    time doSimpleRepeat.pl -bigClusterHub=ku -workhorse=hgwdev \
+	-smallClusterHub=ku -buildDir=`pwd` hg38 > do.log 2>&1
+
+############################################################################
+## WINDOWMASKER - DONE - 2013-12-24 - Hiram
+    mkdir /hive/data/genomes/hg38/bed/windowMasker
+    cd /hive/data/genomes/hg38/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev hg38 > do.log 2>&1 &
+
+############################################################################
+# Verify all gaps are marked - DONE - 2013-12-24 - Hiram
+    mkdir /hive/data/genomes/hg38/bed/gap
+    cd /hive/data/genomes/hg38/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../hg38.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m28.634s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits hg38 -not gap -bed=notGap.bed
+    #	3049335806 bases of 3049335806 (100.000%) in intersection
+    time featureBits hg38 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   20023 bases of 3049335806 (0.001%) in intersection
+    # real    0m20.427s
+
+#########################################################################
+# cytoBandIdeo - (DONE - 2013-12-26 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/cytoBand
+    cd /hive/data/genomes/hg38/bed/cytoBand
+    makeCytoBandIdeo.csh hg38
+
+##########################################################################
+# hg19 <-> hg38 difference tracks (WORKING - 2013-12-28 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/liftOverHg38
+    cd /hive/data/genomes/hg19/bed/liftOverHg38
+
+    #	not needed, but interesting, collect all the fragment
+    #	definitions from the gold tables:
+    hgsql -N -e "select frag,fragStart,fragEnd,strand from gold;" hg19 \
+        | sort > hg19.gold.frags.tab
+
+    hgsql -N -e "select frag,fragStart,fragEnd,strand from gold;" hg38 \
+        | sort > hg38.gold.frags.tab
+
+    # construct common and difference listings
+    comm -12 hg19.gold.frags.tab hg38.gold.frags.tab \
+	> identical.hg19.hg38.frags.tab
+    comm -23 hg19.gold.frags.tab hg38.gold.frags.tab \
+	> unique.hg19Only.frags.tab
+    comm -13 hg19.gold.frags.tab hg38.gold.frags.tab \
+	> unique.hg38Only.frags.tab
+
+    # better yet, get full information about each fragment
+    hgsql -N -e "select chrom,chromStart,chromEnd,ix,type,frag,fragStart,fragEnd,strand from gold;" hg19 \
+        | sort -k6 > hg19.gold.tab
+
+    hgsql -N -e "select chrom,chromStart,chromEnd,ix,type,frag,fragStart,fragEnd,strand from gold;" hg38 \
+        | sort -k6 > hg38.gold.tab
+
+    # construct a single key for each fragment for joining.
+    # the key is frag,fragStart,fragEnd,strand
+    awk '{printf "%s,%d,%d,%s\t%s\t%s\t%s\t%d\t%d\t%d\t%s\n",
+	$6,$7,$8,$9,$6,$9,$1,$2,$3,$4,$5}' hg19.gold.tab | sort \
+	> hg19.fragKey.tab
+    awk '{printf "%s,%d,%d,%s\t%s\t%s\t%s\t%d\t%d\t%d\t%s\n",
+	$6,$7,$8,$9,$6,$9,$1,$2,$3,$4,$5}' hg38.gold.tab | sort \
+	> hg38.fragKey.tab
+
+    # now, by joining those keys, we can get exact identicals, and
+    # the only-in listings as bed files to load as tracks:
+    join hg19.fragKey.tab hg38.fragKey.tab \
+	| awk '{printf "%s\t%d\t%d\t%s\t1000\t%s\t%d\t%d\t0,0,128\n", $4,$5,$6,$2,$3,$5,$6}' \
+        | sort -k1,1 -k2,2n > hg19.hg38.identical.bed
+
+    join hg19.fragKey.tab hg38.fragKey.tab \
+	| awk '{printf "%s\t%d\t%d\t%s\t1000\t%s\t%d\t%d\t0,0,128\n", $11,$12,$13,$9,$10,$12,$13}' \
+        | sort -k1,1 -k2,2n > hg38.hg19.identical.bed
+
+    join -v 1 hg19.fragKey.tab hg38.fragKey.tab \
+	| awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $4,$5,$6,$2,$3}' \
+        | sort -k1,1 -k2,2n > hg19.only.bed
+
+    join -v 2 hg19.fragKey.tab hg38.fragKey.tab \
+	| awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $4,$5,$6,$2,$3}' \
+        | sort -k1,1 -k2,2n > hg38.only.bed
+
+    hgLoadBed hg19 hg38ContigDiff hg19.only.bed
+    hgLoadBed hg38 hg19ContigDiff hg38.only.bed
+
+    wc -l hg??.only.bed
+    #  6097 hg19.only.bed
+    #  23632 hg38.only.bed
+
+    # this leaves the outstanding question of "why" they might be in
+    #	the only-in listings.  Some contigs may be different versions,
+    #   sometimes different sections of the same contig are used,
+    #	and contigs are dropped from hg19 to hg38, or new contigs added
+    #	to hg38 to fill in gaps from hg19
+    # Let's see if we can measure some of this:
+    awk '{print $4}' hg19.only.bed | sort -u > hg19.only.ids.list
+    awk '{print $4}' hg38.only.bed | sort -u > hg38.only.ids.list
+
+    # Looks like 5405 idential contigs with different parts used:
+    comm -12 hg19.only.ids.list hg38.only.ids.list > differentPortions.list
+    wc -l differentPortions.list
+    # 5405
+
+    # and perhaps 63 = 5468-5405 of different versions of same contig:
+    sed -e "s/\.[0-9]*$//" hg19.only.ids.list | sort -u \
+	> hg19.noVersions.ids.list
+    sed -e "s/\.[0-9]*$//" hg38.only.ids.list | sort -u \
+	> hg38.noVersions.ids.list
+    comm -12 hg19.noVersions.ids.list hg38.noVersions.ids.list | wc -l
+    #	5468
+    sed -e "s/\.[0-9]*$//" differentPortions.list | sort -u \
+	> differentPortions.noVersions.list
+    comm -12 hg19.noVersions.ids.list hg38.noVersions.ids.list | sort -u \
+	> noVersions.common.list
+    # indeed, 63 contigs of different versions:
+    comm -23 noVersions.common.list differentPortions.noVersions.list \
+	| sort -u > differentVersions.list
+    wc -l differentVersions.list
+    #	63
+
+    # dividing up these items:
+    cat << '_EOF_' > identifyPortions.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %differentVersions;
+my %differentPortions;
+
+open (FH, "<differentVersions.list" ) or
+	die "can not read differentVersions.list";
+while (my $line = <FH>) {
+    chomp $line;
+    $differentVersions{$line} = 1;
+}
+close (FH);
+
+open (FH, "differentPortions.list" ) or
+	die "can not read differentPortions.list";
+while (my $line = <FH>) {
+    chomp $line;
+    $differentPortions{$line} = 1;
+}
+close (FH);
+
+my %hg19Done;
+open (DP, ">hg19.differentPortions.bed") or die "can not write to hg19.differentPortions.bed";
+open (DV, ">hg19.differentVersions.bed") or die "can not write to hg19.differentVersions.bed";
+open (FH, "<hg19.only.bed" ) or die "can not read hg19.only.bed";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $acc, $score, $strand) = split('\s+', $line);
+    # assume done while $acc is still complete
+    $hg19Done{$acc} = 1;
+    if (exists($differentPortions{$acc})) {
+	printf DP "%s\n", $line;
+    } else {
+	my $trimAcc = $acc;
+	$trimAcc =~ s/\.[0-9]+$//;
+	if (exists($differentVersions{$trimAcc})) {
+	    printf DV "%s\n", $line;
+	} else {
+            # this one does not match
+	    $hg19Done{$acc} = 0;
+	}
+    }
+}
+close (FH);
+close (DV);
+close (DP);
+open (DR, ">hg19.dropped.bed") or die "can not write to hg19.dropped.bed";
+open (FH, "<hg19.only.bed" ) or die "can not read hg19.only.bed";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $acc, $score, $strand) = split('\s+', $line);
+    if (0 == $hg19Done{$acc}) {
+	printf DR "%s\n", $line;
+    }
+}
+close (FH);
+close (DR);
+
+my %hg38Done;
+open (DP, ">hg38.differentPortions.bed") or die "can not write to hg38.differentPortions.bed";
+open (DV, ">hg38.differentVersions.bed") or die "can not write to hg38.differentVersions.bed";
+open (FH, "<hg38.only.bed" ) or die "can not read hg38.only.bed";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $acc, $score, $strand) = split('\s+', $line);
+    # assume done while $acc is still complete
+    $hg38Done{$acc} = 1;
+    if (exists($differentPortions{$acc})) {
+	printf DP "%s\n", $line;
+    } else {
+	my $trimAcc = $acc;
+	$trimAcc =~ s/\.[0-9]+$//;
+	if (exists($differentVersions{$trimAcc})) {
+	    printf DV "%s\n", $line;
+	} else {
+            # this one does not match
+	    $hg38Done{$acc} = 0;
+	}
+    }
+}
+close (FH);
+close (DV);
+close (DP);
+open (DR, ">hg38.newTo19.bed") or die "can not write to hg38.newTo19.bed";
+open (FH, "<hg38.only.bed" ) or die "can not read hg38.only.bed";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $acc, $score, $strand) = split('\s+', $line);
+    if (0 == $hg38Done{$acc}) {
+	printf DR "%s\n", $line;
+    }
+}
+close (FH);
+close (DR);
+'_EOF_'
+    # << happy emacs
+    chmod +x identifyPortions.pl
+    ./identifyPortions.pl
+    # make sure nothing was lost
+    sort hg19.differentVersions.bed hg19.differentPortions.bed \
+	hg19.dropped.bed  | sum
+    #	43711   233
+    sort hg19.only.bed | sum
+    #	43711   233
+    sort hg38.differentVersions.bed hg38.differentPortions.bed \
+	hg38.newTo19.bed | sum
+    #	00502   911
+    sort hg38.only.bed | sum
+    #	00502   911
+
+    sort -k1,1 -k2,2n hg38.differentVersions.bed hg38.differentPortions.bed \
+	hg38.newTo19.bed > hg38.itemRgb.bed
+    sort -k1,1 -k2,2n hg19.differentVersions.bed hg19.differentPortions.bed \
+	hg19.dropped.bed > hg19.itemRgb.bed
+
+    hgLoadBed hg19 hg19ContigDiff hg19.itemRgb.bed
+    hgLoadBed hg38 hg38ContigDiff hg38.itemRgb.bed
+
+##############################################################################

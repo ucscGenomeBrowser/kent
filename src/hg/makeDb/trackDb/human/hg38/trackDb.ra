@@ -1,0 +1,113 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+searchName assemblyAcc
+searchTable gold
+searchMethod prefix
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 5
+shortCircuit 1
+termRegex [A-Z][A-Z0-9]+(\.[0-9]+)?
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+
+
+track rmskCM
+shortLabel RM crossMatch
+longLabel Repeating Elements by RepeatMasker - cross-match alignment engine
+group varRep
+priority 2149.1
+visibility dense
+spectrum on
+type rmsk
+maxWindowToDraw 10000000
+canPack off
+
+track rmskBlastn
+shortLabel RM rmblastn
+longLabel Repeating Elements by RepeatMasker - rmblastn alignment engine
+group varRep
+priority 3149.1
+visibility dense
+spectrum on
+type rmsk
+maxWindowToDraw 10000000
+canPack off
+
+track rmskHmmer
+shortLabel RM HMMER
+longLabel Repeating Elements by RepeatMasker - HMMER alignment engine
+group varRep
+priority 4149.1
+visibility dense
+spectrum on
+type rmsk
+maxWindowToDraw 10000000
+canPack off
+
+track rmskGenbank
+shortLabel RM genbank
+longLabel Repeating Elements by RepeatMasker - masking files from GRCh38 release
+group varRep
+priority 5149.1
+visibility dense
+spectrum on
+type rmsk
+maxWindowToDraw 10000000
+canPack off
+
+track ctgPos2
+shortLabel GRC Contigs
+longLabel Genome Reference Consortium Contigs
+group map
+priority 10
+visibility hide
+type ctgPos
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
+chromosomes chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chrX,chrY
+
+searchTable ctgPos2
+searchMethod prefix
+shortCircuit 1
+termRegex [GK][LI][028][0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s%%'
+searchPriority 5
+
+track scaffolds
+shortLabel Scaffolds
+longLabel GRCh38 defined Scaffold identifiers
+group map
+priority 26
+visibility hide
+color 0,0,0
+type bed 4 .
+
+searchTable scaffolds
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex [1-9HMXY][0-9A-Z_]*
+searchPriority 18
+
+track analysisGap
+shortLabel Analysis Gap
+longLabel Extra Gap Locations in Analysis set sequence on chr5, 14, 19, 21, 22, Y
+priority 12
+group map
+visibility dense
+type bed 4 .
+chromosomes chr14,chr19,chr21,chr22,chr5,chrY
+
+track hg38ContigDiff
+shortLabel Hg38 Diff
+longLabel Contigs new to GRCh38/(hg38), not carried forward from GRCh37/(hg19)
+visibility hide
+group map
+type bed 9 .
+scoreFilterByRange on
+itemRgb on
+color 0,0,0
+priority 26
