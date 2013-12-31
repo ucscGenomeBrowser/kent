@@ -12,10 +12,12 @@ UTIL_DIRS = \
     edwAddQaEnrichTarget \
     edwAddSubscriber \
     edwAnalysisAddJson \
+    edwAnalysisDaemon \
     edwChangeFormat \
     edwCorrectFileTags \
     edwCreateUser \
     edwFinishAnalysis \
+    edwJob \
     edwMakeContaminationQa \
     edwMakeEnrichments \
     edwMakeReplicateQa \
