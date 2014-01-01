@@ -1040,6 +1040,7 @@ static void scanSam(char *samIn, FILE *f, struct genomeRangeTree *grt, long long
  * miss target during mapping phase, copying those that hit to a little bed file, and 
  * also defining regions covered in a genomeRangeTree. */
 {
+#ifdef USE_BAM
 samfile_t *sf = samopen(samIn, "r", NULL);
 bam_header_t *bamHeader = sf->header;
 bam1_t one;
@@ -1077,6 +1078,9 @@ samclose(sf);
 *retMiss = miss;
 *retTotalBasesInHits = totalBasesInHits;
 *retUniqueHitCount = unique;
+#else // no USE_BAM
+warn(COMPILE_WITH_SAMTOOLS, "scanSam");
+#endif//ndef USE_BAM
 }
 
 void edwReserveTempFile(char *path)

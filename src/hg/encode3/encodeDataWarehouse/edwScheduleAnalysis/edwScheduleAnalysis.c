@@ -178,6 +178,7 @@ scheduleStep(conn, analysisStep, commandLine, exp->accession, assembly,
 boolean bamIsPaired(char *fileName, int maxCount)
 /* Read up to maxCount records, figure out if BAM is from a paired run */
 {
+#ifdef USE_BAM
 boolean isPaired = FALSE;
 samfile_t *sf = samopen(fileName, "rb", NULL);
 bam1_t one;
@@ -196,6 +197,10 @@ for (i=0; i<maxCount; ++i)
     }
 samclose(sf);
 return isPaired;
+#else // no USE_BAM
+warn(COMPILE_WITH_SAMTOOLS, "bamIsPaired");
+return FALSE;
+#endif//ndef USE_BAM
 }
 
 void scheduleMacsDnase(struct sqlConnection *conn, 
@@ -303,6 +308,7 @@ int bamReadLength(char *fileName, int maxCount)
 /* Open up bam, read up to maxCount reads, and return size of read, enforcing
  * all are same size. */
 {
+#ifdef USE_BAM
 int readLength = 0;
 samfile_t *sf = samopen(fileName, "rb", NULL);
 bam1_t one;
@@ -322,6 +328,10 @@ for (i=0; i<maxCount; ++i)
 samclose(sf);
 assert(readLength != 0);
 return readLength;
+#else // no USE_BAM
+warn(COMPILE_WITH_SAMTOOLS, "bamReadLength");
+return 0;
+#endif//ndef USE_BAM
 }
 
 void scheduleHotspot(struct sqlConnection *conn, 
