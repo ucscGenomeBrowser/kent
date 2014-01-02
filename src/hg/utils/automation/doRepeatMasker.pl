@@ -432,7 +432,7 @@ sub doInstall {
 export db=$db
 
 hgLoadOut -table=rmsk $split \$db \$db.sorted.fa.out
-hgLoadOut -tabFile=\$db.rmsk.tab -table=rmsk -nosplit \$db \$db.sorted.fa.out
+hgLoadOut -verbose=2 -tabFile=\$db.rmsk.tab -table=rmsk -nosplit \$db \$db.sorted.fa.out 2> \$db.bad.records
 # construct bbi files for assembly hub
 rm -fr classBed classBbi rmskClass
 mkdir classBed classBbi rmskClass

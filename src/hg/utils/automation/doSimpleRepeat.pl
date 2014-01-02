@@ -180,8 +180,13 @@ split -a 3 -d -l 500 \$inLft SplitLft.
 foreach splitLft (SplitLft.*)
   set bedFiles = `awk '{print \$2 ".bed"};' \$splitLft`
   endsInLf -zeroOk \$bedFiles
-  cat \$bedFiles \\
-  | liftUp -type=.bed tmpOut.\$splitLft \$splitLft error stdin
+  set lineCount=`cat \$bedFiles | wc -l`
+  if (\$lineCount > 0) then
+    cat \$bedFiles \\
+      | liftUp -type=.bed tmpOut.\$splitLft \$splitLft error stdin
+  else
+    touch tmpOut.\$splitLft
+  endif
 end
 cat tmpOut.* > tmpOut__bed
 
