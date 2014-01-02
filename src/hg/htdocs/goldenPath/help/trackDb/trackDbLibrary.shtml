@@ -3923,8 +3923,12 @@ for each cell associated with the particular TF binding location.</P>
 <DIV class="superTrack"><span class="types superTrack"></span>
 <div class="format"><code>superTrack on</code></div>
     <P>To declare a supertrack, simply add this
-    setting to a track definition that will hold the few standard
-    settings.
+    setting to a track definition that will hold a few standard
+    settings. To set a supertrack to display as default add the word show,
+    <code>superTrack on show</code>, to the end of the statement.
+    When attempting to debug visibility settings, it may be 
+    helpful to read the <A href='#inheritance'>note about
+    inheritance</A> found below.</P> 
     </P>
 </DIV>
 
