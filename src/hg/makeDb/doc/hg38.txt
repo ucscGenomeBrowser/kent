@@ -358,6 +358,24 @@ taxId   9606
     time featureBits hg38 allGaps.bed notGap.bed -bed=new.gaps.bed
     #   20023 bases of 3049335806 (0.001%) in intersection
     # real    0m20.427s
+    # this indicates that 20,023 bases are not marked as N's
+    # with this element size profile:
+    awk '{print $3-$2}' new.gaps.bed | ave stdin
+# Q1 1.000000
+# median 1.000000
+# Q3 100.000000
+# average 44.894619
+# min 1.000000
+# max 1000.000000
+# count 446
+# total 20023.000000
+# standard deviation 81.743447
+
+    # the four largest ones:
+# chr2         32916625        32917625        chr2.7
+# chr2         32867130        32868130        chr2.6
+# chr20        36314371        36314719        chr20.36
+# chr12       123443533       123443733        chr12.10
 
 #########################################################################
 # cytoBandIdeo - (DONE - 2013-12-26 - Hiram)
@@ -579,6 +597,147 @@ close (DR);
 	hg19.dropped.bed > hg19.itemRgb.bed
 
     hgLoadBed hg19 hg19ContigDiff hg19.itemRgb.bed
+    # if you wanted to load the identicals in this track too:
+    sort -k1,1 -k2,2n hg38.hg19.identical.bed hg38.itemRgb.bed \
+       | hgLoadBed hg38 hg38ContigDiff stdin
+    # but we don't, we deliver only the differences
     hgLoadBed hg38 hg38ContigDiff hg38.itemRgb.bed
 
+#########################################################################
+# construct ooc file to be used in blat operations
+#                      DONE - 2012-12-30 - Hiram
+# can be done on unmasked sequence the same result as masked:
+    cd /hive/data/genomes/hg38
+    time blat hg38.unmasked.2bit /dev/null /dev/null \
+       -tileSize=11 -makeOoc=jkStuff/hg38.11.ooc -repMatch=1024
+
+    # just to see what is going on, since all gaps here are almost all
+    #	exactly 100 bases, they aren't really "non-bridged", not really.
+    gapToLift -minGap=100 -bedFile=jkStuff/nonBridgedGaps.bed hg38 \
+	jkStuff/hg38.nonBridged.lft
+
 ##############################################################################
+# cpgIslands - (DONE - 2013-12-31 - Hiram)
+    # run on the Hmmer + trfMask sequence
+    mkdir /hive/data/genomes/hg38/bed/cpgIslands
+    cd /hive/data/genomes/hg38/bed/cpgIslands
+    time doCpgIslands.pl hg38 > do.log 2>&1 &
+    # real    5m22.460s
+
+    cat fb.hg38.cpgIslandExt.txt
+    #   23635946 bases of 3049335806 (0.775%) in intersection
+
+#########################################################################
+# construct liftOver to hg19 (DONE - 2013-12-31 - Hiram)
+    # it turns out it doesn't matter if the query or target 2bit files
+    # are masked.  This procedure can be done on completely unmasked sequences
+    # for both, same result masked or not masked
+    screen -S hg38	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/hg38/bed/blat.hg19.2013-12-31
+    cd /hive/data/genomes/hg38/bed/blat.hg19.2013-06-10
+    # this was run in manual steps as experiments were done about the masking
+    # check it with -debug first to see if it is going to work:
+    doSameSpeciesLiftOver.pl -stop=net -buildDir=`pwd` -bigClusterHub=ku \
+      -dbHost=hgwdev -workhorse=hgwdev -debug \
+        -ooc=/hive/data/genomes/hg38/jkStuff/hg38.11.ooc hg38 hg19
+    # the debug step doesn't actually construct enough files to run the
+    # steps manually.  The chaining has an extra procedure that is performed
+    # while not in 'debug' mode
+    # the run.blat was operated manually, then chaining:
+    time doSameSpeciesLiftOver.pl -continue=chain -stop=net -buildDir=`pwd` \
+      -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev \
+           -ooc=/hive/data/genomes/hg38/jkStuff/hg38.11.ooc \
+             hg38 hg19 > chain.log 2>&1
+    # real    22m31.635s
+    # loading is only a few seconds:
+    doSameSpeciesLiftOver.pl -continue=load -buildDir=`pwd` \
+     -bigClusterHub=ku \
+       -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/hg38/jkStuff/hg38.11.ooc \
+             hg38 hg19 > load.log 2>&1
+
+    # verify this file exists:
+    #	/gbdb/hg38/liftOver/hg38ToHg19.over.chain.gz
+    # and try out the conversion on genome-test from hg38 to hg19
+    # same file should exist for downloads:
+    #  /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/liftOver/hg38ToHg19.over.chain.gz
+
+############################################################################
+# marking the PAR regions:
+    # hg19 had:
++-------+------------+-----------+------+
+| chrom | chromStart | chromEnd  | name |
++-------+------------+-----------+------+
+| chrX  |      60000 |   2699520 | PAR1 |
+| chrX  |  154931043 | 155260560 | PAR2 |
+| chrY  |      10000 |   2649520 | PAR1 |
+| chrY  |   59034049 |  59363566 | PAR2 |
++-------+------------+-----------+------+
+
+    # examining the files in
+# /hive/data/genomes/hg38/genbank/Primary_Assembly/pseudoautosomal_region
+    # perhaps like this on chrY chrX;
+chrY  10000   2781479  length: 2771479 this one appears to be broken by gaps
+
+# PAR2 section:
+chrY  56887902 57217415 length: 329513
+CM000686.2  56887903 57217415  24 F GL000190.2 1 329513  +
+CM000686.2  56887903 56906486 356 O AJ271735.1 69145   87728   +
+
+chrX  155701382       156030895  length: 329513
+    # in the chrX AGP file, part of this contig:
+CM000685.2  144475607  156030895 18 F GL000172.2  1 11555289   +
+
+    # as seen in the chrY AGP file these two contigs:
+CM000686.2    10001  1949345 2       F       GL000176.2      1       1939345 +
+CM000686.2   1949346 2132994 3       N       183649  contig  no      na
+CM000686.2   2132995 2781479 4       F       GL000180.2      1       648485  +
+
+zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrY.comp.agp.gz\
+  | grep -v "^#" | awk '$5 != "N"' \
+    | awk '{printf "%s_%d_%d\t%s\t%d\t%d\n", $6,$7,$8,$1,$2,$3}' \
+    | sort > chrY.comp.agp.txt
+zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrX.comp.agp.gz\
+  | grep -v "^#" | awk '$5 != "N"' \
+    | awk '{printf "%s_%d_%d\t%s\t%d\t%d\n", $6,$7,$8,$1,$2,$3}' \
+    | sort > chrX.comp.agp.txt
+   join -t'^I' chrY.comp.agp.txt chrX.comp.agp.txt | head
+
+CM000685.2  10001   44821   CM000686.2      10001   44821
+...
+CM000685.2  2677320 2677868 CM000686.2      2677320 2677868
+
+CM000685.2 155719967  155720351       CM000686.2      56906487        56906871
+...
+CM000685.2 155964490  156030895       CM000686.2      57151010        57217415
+
+############################################################################
+## altLocations track (DONE - 2014-01-02 - Hiram)
+    # indicate corresponding locations between haplotypes and reference
+    mkdir /hive/data/genomes/hg38/bed/altLocations
+    cd /hive/data/genomes/hg38/bed/altLocations
+
+    find ../../genbank/ALT_* -type f | grep alt_scaffold_placement.txt \
+  | while read F
+do
+  grep -v "^#" ${F} | sed -e 's/\./v/;' | awk -F'\t' '{printf "chr%s\t%d\t%d\tchr%s_%s_alt\n", $6,$12-1,$13,$6, $4}'
+done | sort -k1,1 -k2,2n > chrToAlt.bed
+
+    # note silent hidden <tab> character in the join -t argument
+    # explicit as written here
+
+find ../../genbank/ALT_* -type f | grep alt_scaffold_placement.txt \
+  | while read F
+do
+  grep -v "^#" ${F} | sed -e 's/\./v/;' | awk -F'\t' '{printf "chr%s_%s_alt\tchr%s:%d-%d\n", $6,$4,$6,$12,$13}'
+done | sort > altToChr.tab
+sort ../../chrom.sizes | join -t'^I' - altToChr.tab \
+   | awk '{printf "%s\t0\t%d\t%s\n", $1,$2,$3}' > altToChr.bed
+
+
+   hgLoadBed hg38 altLocations chrToAlt.bed altToChr.bed
+   featureBits -countGaps hg38 altLocations
+   # 170113652 bases of 3209286105 (5.301%) in intersection
+
+############################################################################
