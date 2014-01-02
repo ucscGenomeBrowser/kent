@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
+# DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
 # $Id: doBlastzChainNet.pl,v 1.33 2010/04/12 16:33:12 hiram Exp $
@@ -26,6 +26,7 @@ use lib "$Bin";
 use HgAutomate;
 use HgRemoteScript;
 use HgStepManager;
+use File::Basename;
 
 # Hardcoded paths/command sequences:
 my $getFileServer = '/cluster/bin/scripts/fileServer';
@@ -145,9 +146,9 @@ Automates UCSC's blastz/chain/net pipeline:
     9. Setup of download directory on hgwdev.
     10.Optional (-syntenicNet flag): Generation of syntenic mafNet files.
 DEF is a Scott Schwartz-style bash script containing blastz parameters.
-This script makes a lot of assumptions about conventional placements of 
-certain files, and what will be in the DEF vars.  Stick to the conventions 
-described in the -help output, pray to the cluster gods, and all will go 
+This script makes a lot of assumptions about conventional placements of
+certain files, and what will be in the DEF vars.  Stick to the conventions
+described in the -help output, pray to the cluster gods, and all will go
 well.  :)
 
 ";
@@ -155,10 +156,10 @@ well.  :)
   print STDERR "
 Assumptions:
 1. $HgAutomate::clusterData/\$db/ is the main directory for database/assembly \$db.
-   $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/blastz.\$qDb.\$date/ will be the directory 
-   created for this run, where \$tDb is the target/reference db and 
-   \$qDb is the query.  (Can be overridden, see #10 below.)  
-   $dbHost:$HgAutomate::goldenPath/\$tDb/vs\$QDb/ (or vsSelf) 
+   $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/blastz.\$qDb.\$date/ will be the directory
+   created for this run, where \$tDb is the target/reference db and
+   \$qDb is the query.  (Can be overridden, see #10 below.)
+   $dbHost:$HgAutomate::goldenPath/\$tDb/vs\$QDb/ (or vsSelf)
    is the directory where downloadable files need to go.
    LiftOver chains (not applicable for self-alignments) go in this file:
    $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/liftOver/\$tDbTo\$QDb.over.chain.gz
@@ -169,53 +170,53 @@ Assumptions:
    $dbHost:$HgAutomate::gbdb/\$tDb/liftOver/\$tDbTo\$QDb.over.chain.gz
 2. DEF's SEQ1* variables describe the target/reference assembly.
    DEF's SEQ2* variables describe the query assembly.
-   If those are the same assembly, then we're doing self-alignments and 
+   If those are the same assembly, then we're doing self-alignments and
    will drop aligned blocks that cross the diagonal.
-3. DEF's SEQ1_DIR is either a directory containing one nib file per 
-   target sequence (usually chromosome), OR a complete path to a 
-   single .2bit file containing all target sequences.  This directory 
+3. DEF's SEQ1_DIR is either a directory containing one nib file per
+   target sequence (usually chromosome), OR a complete path to a
+   single .2bit file containing all target sequences.  This directory
    should be in $clusterLocal or $clusterSortaLocal .
    SEQ2_DIR: ditto for query.
-4. DEF's SEQ1_LEN is a tab-separated dump of the target database table 
-   chromInfo -- or at least a file that contains all sequence names 
+4. DEF's SEQ1_LEN is a tab-separated dump of the target database table
+   chromInfo -- or at least a file that contains all sequence names
    in the first column, and corresponding sizes in the second column.
-   Normally this will be $HgAutomate::clusterData/\$tDb/chrom.sizes, but for a 
-   scaffold-based assembly, it is a good idea to put it in $clusterSortaLocal 
+   Normally this will be $HgAutomate::clusterData/\$tDb/chrom.sizes, but for a
+   scaffold-based assembly, it is a good idea to put it in $clusterSortaLocal
    or $clusterNAS
-   because it will be a large file and it is read by blastz-run-ucsc 
+   because it will be a large file and it is read by blastz-run-ucsc
    (big cluster script).
    SEQ2_LEN: ditto for query.
-5. DEF's SEQ1_CHUNK and SEQ1_LAP determine the step size and overlap size 
-   of chunks into which large target sequences are to be split before 
+5. DEF's SEQ1_CHUNK and SEQ1_LAP determine the step size and overlap size
+   of chunks into which large target sequences are to be split before
    alignment.  SEQ2_CHUNK and SEQ2_LAP: ditto for query.
-6. DEF's SEQ1_LIMIT and SEQ2_LIMIT decide what the maximum number of 
+6. DEF's SEQ1_LIMIT and SEQ2_LIMIT decide what the maximum number of
    sequences should be for any partitioned file (the files created in the
    tParts and qParts directories).  This limit only effects SEQ1 or SEQ2
    when they are 2bit files.  Some 2bit files have too many contigs.  This
-   reduces the number of blastz hippos (jobs taking forever compared to 
+   reduces the number of blastz hippos (jobs taking forever compared to
    the other jobs).  SEQ1_LIMIT defaults to $defaultSeq1Limit and SEQ2_LIMIT defaults to $defaultSeq2Limit.
-7. DEF's BLASTZ_ABRIDGE_REPEATS should be set to something nonzero if 
-   abridging of lineage-specific repeats is to be performed.  If so, the 
+7. DEF's BLASTZ_ABRIDGE_REPEATS should be set to something nonzero if
+   abridging of lineage-specific repeats is to be performed.  If so, the
    following additional constraints apply:
-   a. Both target and query assemblies must be structured as one nib file 
-      per sequence in SEQ*_DIR (sorry, this rules out scaffold-based 
+   a. Both target and query assemblies must be structured as one nib file
+      per sequence in SEQ*_DIR (sorry, this rules out scaffold-based
       assemblies).
-   b. SEQ1_SMSK must be set to a directory containing one file per target 
-      sequence, with the name pattern \$seq.out.spec.  This file must be 
-      a RepeatMasker .out file (usually filtered by DateRepeats).  The 
+   b. SEQ1_SMSK must be set to a directory containing one file per target
+      sequence, with the name pattern \$seq.out.spec.  This file must be
+      a RepeatMasker .out file (usually filtered by DateRepeats).  The
       directory should be under $clusterLocal or $clusterSortaLocal .
       SEQ2_SMSK: ditto for query.
-8. DEF's BLASTZ_[A-Z] variables will be translated into blastz command line 
-   options (e.g. BLASTZ_H=foo --> H=foo, BLASTZ_Q=foo --> Q=foo).  
-   For human-mouse evolutionary distance/sensitivity, none of these are 
-   necessary (blastz-run-ucsc defaults will be used).  Here's what we have 
+8. DEF's BLASTZ_[A-Z] variables will be translated into blastz command line
+   options (e.g. BLASTZ_H=foo --> H=foo, BLASTZ_Q=foo --> Q=foo).
+   For human-mouse evolutionary distance/sensitivity, none of these are
+   necessary (blastz-run-ucsc defaults will be used).  Here's what we have
    used for human-fugu and other very-distant pairs:
 BLASTZ_H=2000
 BLASTZ_Y=3400
 BLASTZ_L=6000
 BLASTZ_K=2200
 BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
-   Blastz parameter tuning is somewhat of an art and is beyond the scope 
+   Blastz parameter tuning is somewhat of an art and is beyond the scope
    here.  Webb Miller and Jim can provide guidance on how to set these for
    a new pair of organisms.
 9. DEF's PATH variable, if set, must specify a path that contains programs
@@ -223,7 +224,7 @@ BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
    then also fasta-subseq, strip_rpts, restore_rpts, and revcomp.
    If DEF does not contain a PATH, blastz-run-ucsc will use its own default.
 10. DEF's BLASTZ variable can specify an alternate path for blastz.
-11. DEF's BASE variable can specify the blastz/chain/net build directory 
+11. DEF's BASE variable can specify the blastz/chain/net build directory
     (defaults to $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/blastz.\$qDb.\$date/).
 12. SEQ?_CTGDIR specifies sequence source with the contents of full chrom
     sequences and the contig randoms and chrUn.  This keeps the contigs
@@ -259,7 +260,7 @@ sub isInDirList {
 }
 
 sub enforceClusterNoNo {
-  # Die right away if user is trying to put cluster output somewhere 
+  # Die right away if user is trying to put cluster output somewhere
   # off-limits.
   my ($dir, $desc) = @_;
   if (&isInDirList($dir, @clusterNoNo)) {
@@ -301,7 +302,7 @@ sub checkOptions {
   if ($opt_swap) {
     if ($opt_continue) {
       if ($stepper->stepPrecedes($opt_continue, 'net')) {
-	warn "\nIf -swap is specified, then -continue must specify a step ". 
+	warn "\nIf -swap is specified, then -continue must specify a step ".
 	  "of \"net\" or later.\n";
 	&usage(1);
       }
@@ -314,7 +315,7 @@ sub checkOptions {
     }
     if ($opt_stop) {
       if ($stepper->stepPrecedes($opt_stop, 'chainMerge')) {
-	warn "\nIf -swap is specified, then -stop must specify a step ". 
+	warn "\nIf -swap is specified, then -stop must specify a step ".
 	"of \"chainMerge\" or later.\n";
 	&usage(1);
       }
@@ -339,11 +340,11 @@ sub checkOptions {
 
 #########################################################################
 # The following routines were taken almost verbatim from blastz-run-ucsc,
-# so may be good candidates for libification!  unless that would slow down 
+# so may be good candidates for libification!  unless that would slow down
 # blastz-run-ucsc...
-# nfsNoodge() was removed from loadDef() and loadSeqSizes() -- since this 
-# script will not be run on the cluster, we should fully expect files to 
-# be immediately visible.  
+# nfsNoodge() was removed from loadDef() and loadSeqSizes() -- since this
+# script will not be run on the cluster, we should fully expect files to
+# be immediately visible.
 
 sub loadDef {
   # Read parameters from a bash script with Scott's param variable names:
@@ -414,7 +415,7 @@ sub requireNum {
 my $oldDbFormat = '[a-z][a-z](\d+)?';
 my $newDbFormat = '[a-z][a-z][a-z][A-Z][a-z][a-z0-9](\d+)?';
 sub getDbFromPath {
-  # Require that $val is a full path that contains a recognizable db as 
+  # Require that $val is a full path that contains a recognizable db as
   # one of its elements (possibly the last one).
   my ($var) = @_;
   my $val = $defVars{$var};
@@ -443,8 +444,8 @@ return $db;
 }
 
 sub checkDef {
-  # Make sure %defVars contains what we need and looks consistent with 
-  # our assumptions.  
+  # Make sure %defVars contains what we need and looks consistent with
+  # our assumptions.
   foreach my $s ('SEQ1_', 'SEQ2_') {
     foreach my $req ('DIR', 'LEN', 'CHUNK', 'LAP') {
       &requireVar("$s$req");
@@ -502,12 +503,17 @@ sub doPartition {
     $defaultSeq1Limit;
   my $seq2Limit = (defined $defVars{'SEQ2_LIMIT'}) ? $defVars{'SEQ2_LIMIT'} :
     $defaultSeq2Limit;
+  my $seq2MaxLength = `awk '{print \$2}' $seq2Len | sort -rn | head -1`;
+  chomp $seq2MaxLength;
+  my $bundleParts = 0;
+  # OK to bundle parts list bits into 2bit files when not abridging
+  $bundleParts = 1 if ( ! $defVars{'BLASTZ_ABRIDGE_REPEATS'} );
 
-  my $partitionTargetCmd = 
+  my $partitionTargetCmd =
     ("$partition $defVars{SEQ1_CHUNK} $defVars{SEQ1_LAP} " .
      "$seq1Dir $seq1Len -xdir xdir.sh -rawDir $outRoot $seq1Limit " .
      "$tPartDir > $targetList");
-  my $partitionQueryCmd = 
+  my $partitionQueryCmd =
     (($isSelf && (! $selfSplit)) ?
      '# Self-alignment ==> use target partition for both.' :
      "$partition $defVars{SEQ2_CHUNK} $defVars{SEQ2_LAP} " .
@@ -518,17 +524,40 @@ sub doPartition {
 "It computes partitions of target and query sequences into chunks of the
 specified size for the blastz cluster run.  The actual splitting of
 sequence is not performed here, but later on by blastz cluster jobs.";
-  my $bossScript = new HgRemoteScript("$runDir/doPartition.csh", $paraHub,
+  my $bossScript = newBash HgRemoteScript("$runDir/doPartition.bash", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
 $partitionTargetCmd
-set L1 = `wc -l < $targetList`
+export L1=`wc -l < $targetList`
 $partitionQueryCmd
-set L2 = `wc -l < $queryList`
-set L = `echo \$L1 \$L2 | awk '{print \$1*\$2}'`
+export L2=`wc -l < $queryList`
+export L=`echo \$L1 \$L2 | awk '{print \$1*\$2}'`
 echo "cluster batch jobList size: \$L = \$L1 * \$L2"
 _EOF_
     );
+  if ($bundleParts) {
+  $bossScript->add(<<_EOF_
+# if [ -d tParts ]; then
+#   echo 'constructing tParts/*.2bit files'
+#   ls tParts/*.lst | sed -e 's#tParts/##; s#.lst##;' | while read tPart
+#   do
+#     sed -e 's#.*.2bit:##;' tParts/\$tPart.lst \\
+#       | twoBitToFa -seqList=stdin $seq1Dir stdout \\
+#         | faToTwoBit stdin tParts/\$tPart.2bit
+#   done
+# fi
+if [ -d qParts ]; then
+  echo 'constructing qParts/*.2bit files'
+  ls qParts/*.lst | sed -e 's#qParts/##; s#.lst##;' | while read qPart
+  do
+    sed -e 's#.*.2bit:##;' qParts/\$qPart.lst \\
+      | twoBitToFa -seqList=stdin $seq2Dir stdout \\
+        | faToTwoBit stdin qParts/\$qPart.2bit
+  done
+fi
+_EOF_
+    );
+  }
   $bossScript->execute();
   my $mkOutRootHost = $opt_blastzOutRoot ? $paraHub : $fileServer;
   my $mkOutRoot =     $opt_blastzOutRoot ? "mkdir -p $opt_blastzOutRoot;" : "";
@@ -584,10 +613,10 @@ _EOF_
 }	#	sub doBlastzClusterRun {}
 
 sub doCatRun {
-  # Do a small cluster run to concatenate the lowest level of chunk result 
-  # files from the big cluster blastz run.  This brings results up to the 
-  # next level: per-target-chunk results, which may still need to be 
-  # concatenated into per-target-sequence in the next step after this one -- 
+  # Do a small cluster run to concatenate the lowest level of chunk result
+  # files from the big cluster blastz run.  This brings results up to the
+  # next level: per-target-chunk results, which may still need to be
+  # concatenated into per-target-sequence in the next step after this one --
   # chaining.
   my $paraHub = $smallClusterHub;
   my $runDir = "$buildDir/run.cat";
@@ -886,7 +915,7 @@ sub netChains {
   if (-d "$buildDir/mafNet") {
     die "netChains: looks like this was run successfully already " .
       "(mafNet exists).  Either run with -continue load or some later " .
-	"stage, or move aside/remove $buildDir/mafNet " . 
+	"stage, or move aside/remove $buildDir/mafNet " .
 	  "and $runDir/noClass.net and run again.\n";
   } elsif (-e "$runDir/noClass.net") {
     die "netChains: looks like we are not starting with a " .
@@ -1077,28 +1106,48 @@ _EOF_
   $bossScript->execute();
 }
 
-
 sub getBlastzParams {
+  my %vars;
   # Return parameters in BLASTZ_Q file, or defaults, for README.txt.
-  my $matrix = 
+  my $matrix =
 "           A    C    G    T
       A   91 -114  -31 -123
       C -114  100 -125  -31
       G  -31 -125  100 -114
       T -123  -31 -114   91";
   if ($defVars{'BLASTZ_Q'}) {
+    my $readLineLimit = 100;  # safety valve to get out if reading nonsense
+    my $linesRead = 0;
     my $fh = &HgAutomate::mustOpen($defVars{'BLASTZ_Q'});
-    my $line = <$fh>;
-    if ($line !~ /^\s*A\s+C\s+G\s+T\s*$/) {
-      die "Can't parse first line of $defVars{BLASTZ_Q}";
+    my $line;
+    my $matrixFound = 0;
+    while (!$matrixFound && ($linesRead < $readLineLimit) && ($line = <$fh>)) {
+      ++$linesRead;
+      next if (($line =~ m/^#/) || ($line =~ m/^$/));
+      if ($line =~ m/^\s*A\s+C\s+G\s+T\s*$/) {
+        $matrixFound = 1;
+      } else {
+         chomp $line;
+         $line =~ s/\s+//g;
+         $line =~ s/#.*//;
+         die "can not find tag=value in $defVars{BLASTZ_Q}" if ($line !~ /=/);
+         my ($tag, $value) = split('=',$line);
+         # ignore O E gap_open_penalty gap_extend_penalty
+         next if ($tag eq "O" || $tag eq "E"
+               || $tag eq "gap_open_penalty" || $tag eq "gap_extend_penalty");
+         $vars{$tag} = $value;
+      }
     }
+    die "can not find score matrix in $defVars{BLASTZ_Q}" if (!$matrixFound);
+    $line =~ s/^   // if (length($line) > 22);
     $matrix = '        ' . $line;
     foreach my $base ('A', 'C', 'G', 'T') {
       $line = <$fh>;
       die "Too few lines of $defVars{BLASTZ_Q}" if (! $line);
-      if ($line !~ /^\s*-?\d+\s+-?\d+\s+-?\d+\s+-?\d+\s*$/) {
+      if ($line !~ /^[ACGT]?\s*-?\d+\s+-?\d+\s+-?\d+\s+-?\d+\s*$/) {
 	die "Can't parse this line of $defVars{BLASTZ_Q}:\n$line";
       }
+      $line =~ s/^[ACGT] //;
       $matrix .= "      $base " . $line;
     }
     chomp $matrix;
@@ -1130,7 +1179,6 @@ parameters specifically set for this species pair:';
   }
   return ($matrix, $o, $e, $k, $l, $h, $blastzOther);
 }
-
 
 sub commafy {
   # Assuming $num is a number, add commas where appropriate.
@@ -1195,7 +1243,7 @@ alignment coordinates were adjusted) using the restore_rpts program from
 Penn State.";
     }
   }
-  my $desc = $isSelf ? 
+  my $desc = $isSelf ?
 "This directory contains alignments of
     $tGenome ($tDb, $tDate,
     $tSource) to itself." :
@@ -1221,7 +1269,7 @@ Files included in this directory:
 ";
   if (! $isSelf) {
     print $fh
-"  - $tDb.$qDb.net.gz: \"net\" file that describes rearrangements between 
+"  - $tDb.$qDb.net.gz: \"net\" file that describes rearrangements between
     the species and the best $qGenome match to any part of the
     $tGenome genome.  The net format is described in
     http://genome.ucsc.edu/goldenPath/help/net.html .
@@ -1269,7 +1317,7 @@ Chain minimum score: $chainMinScore, and linearGap matrix of ";
     if ($chainLinearGap =~ m/loose/) {
 	print $fh "(loose):
 tablesize   11
-smallSize   111   
+smallSize   111
 position  1   2   3   11  111 2111  12111 32111 72111 152111  252111
 qGap    325 360 400  450  600 1100   3600  7600 15600  31600   56600
 tGap    325 360 400  450  600 1100   3600  7600 15600  31600   56600
@@ -1412,6 +1460,10 @@ sub cleanup {
   my $rootCanal = ($opt_blastzOutRoot ?
 		   "rmdir --ignore-fail-on-non-empty $opt_blastzOutRoot" :
 		   '');
+  my $doSymLink = 0;
+  my $baseName = basename($buildDir);
+  my $dirName = dirname($buildDir);
+  $doSymLink = 1 if ($dirName =~ m#.*/$tDb/bed$#);
   my $whatItDoes =
 "It cleans up files after a successful blastz/chain/net/install series.
 It uses rm -f so failures should be ignored (e.g. if a partial cleanup has
@@ -1424,6 +1476,9 @@ $rootCanal
 rm -fr $buildDir/axtChain/run/chain/
 rm -fr $buildDir/axtChain/run/err/
 rm -fr $buildDir/run.blastz/err/
+# avoid no-match error exit when *.2bit does not exist
+/bin/csh -c "rm -fr $buildDir/run.blastz/tParts/*.2bit || true"
+/bin/csh -c "rm -fr $buildDir/run.blastz/qParts/*.2bit || true"
 rm -fr $buildDir/run.cat/err/
 rm -f  $buildDir/axtChain/noClass.net
 rm -f  $buildDir/run.blastz/batch.bak
@@ -1438,13 +1493,20 @@ rm -fr $buildDir/axtChain/chain/
 _EOF_
       );
   }
+  if ($doSymLink) {
+    $bossScript->add(<<_EOF_
+cd $dirName
+ln -s $baseName lastz.$qDb
+_EOF_
+      );
+  }
   $bossScript->execute();
 }
 
 sub doSyntenicNet {
-  # Create syntenic net mafs for multiz 
+  # Create syntenic net mafs for multiz
   my $whatItDoes =
-"It filters the net for synteny and creates syntenic net MAF files for 
+"It filters the net for synteny and creates syntenic net MAF files for
 multiz. Use this option when the query genome is high-coverage and not
 too distant from the reference.  Suppressed unless -syntenicNet is included.";
   if (not $opt_syntenicNet) {
