@@ -111,3 +111,31 @@ scoreFilterByRange on
 itemRgb on
 color 0,0,0
 priority 26
+
+track hmmerUnique
+shortLabel HMMER Unique
+longLabel repeat elements identified uniquely by the HMMER engine compared to the cross-match engine
+group varRep
+priority 4149.2
+visibility hide
+color 0,0,0
+type bed 4 .
+
+track crossMatchUnique
+shortLabel CrossMatch Unique
+longLabel repeat elements identified uniquely by the cross-match engine compared to the HMMER engine
+group varRep
+priority 2149.2
+visibility hide
+color 0,0,0
+type bed 4 .
+
+track altLocations
+shortLabel Alt Map
+longLabel Mappings to the alternate sequences/haplotypes
+group map
+priority 30
+visibility hide
+type bed 4 .
+url /cgi-bin/hgTracks?db=hg38&position=$$
+urlLabel Corresponding position:
