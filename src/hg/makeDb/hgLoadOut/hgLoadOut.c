@@ -99,7 +99,7 @@ boolean checkRepeat(struct rmskOut *r, struct lineFile *lf)
 /* check for bogus repeat */
 {
 /* this is bogus on both strands */
-if (r->repStart > r->repEnd)
+if (r->repEnd < 0 || r->repStart > r->repEnd)
     {
     badRepCnt++;
     if (verboseLevel() > 1)
@@ -361,7 +361,7 @@ if (tabFileName == NULL)
 hFreeConn(&conn);
 if (badRepCnt > 0)
     {
-    warn("note: %d records dropped due to repStart > repEnd\n", badRepCnt);
+    warn("note: %d records dropped due to repEnd < 0 or repStart > repEnd\n", badRepCnt);
     if (verboseLevel() < 2)
         warn("      run with -verbose=2 for details\n");
     }
