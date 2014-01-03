@@ -146,25 +146,28 @@ char *paraHost = "encode-02";
 char command[2048];
 char *escaped = makeEscapedString(job->commandLine, '\'');
 safef(command, sizeof(command),
-    "ssh %s 'parasol -results=/data/encode3/encodeAnalysisPipeline/para.results -err=%s -wait "
-    "add job %s'"
+    "ssh %s 'parasol -results=/data/encode3/encodeAnalysisPipeline/para.results"
+    " -err=%s -wait cpu=2 ram=5500m"
+    " add job %s'"
     , paraHost, errFileName, escaped);
 warn("attempting %s", command);
 int status = system(command);
+warn("status %d", status);
 freez(&escaped);
 return status;
 }
+
+char *eapParaTempDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/paraTmp/";
 
 void runJob(struct runner *runner, struct edwJob *job)
 /* Fork off and run job. */
 {
 /* Create stderr file for child  as a temp file */
-char *paraTempDir = "/hive/groups/encode/encode3/encodeDataWarehouse/tmp/";
-char tempFileName[PATH_LEN];
-safef(tempFileName, PATH_LEN, "%sedwAnalysisDaemonXXXXXX", paraTempDir);
-int errFd = mkstemp(tempFileName);
+char stderrTempFileName[PATH_LEN];
+safef(stderrTempFileName, PATH_LEN, "%sedwAnalysisDaemonXXXXXX", eapParaTempDir);
+int errFd = mkstemp(stderrTempFileName);
 if (errFd < 0)
-    errnoAbort("Couldn't open temp file %s", tempFileName);
+    errnoAbort("Couldn't open temp file %s", stderrTempFileName);
 
 ++curThreads;
 job->startTime = edwNow();
@@ -173,7 +176,7 @@ runner->job = job;
 int childId;
 if ((childId = mustFork()) == 0)
     {
-    int status = launchJob(job, tempFileName);
+    int status = launchJob(job, stderrTempFileName);
     if (status != 0)
         exit(-1);
     else
@@ -192,7 +195,7 @@ else
     /* We be parent - just fill in job info */
     close(errFd);
     runner->pid = childId;
-    runner->errFileName = cloneString(tempFileName);
+    runner->errFileName = cloneString(stderrTempFileName);
     }
 }
 
@@ -233,6 +236,9 @@ void edwAnalysisDaemon(char *database, char *table, char *countString, char *nam
 {
 clDatabase = database;
 clTable = table;
+
+warn("Starting edwAnalysisDaemon on %s %s", database, table);
+warn("Ugly times here 1");
 
 /* Set up array with a slot for each simultaneous job. */
 maxThreadCount = sqlUnsigned(countString);
