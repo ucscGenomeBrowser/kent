@@ -402,7 +402,7 @@
     <BR>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBed bigWig bam vcfTabIx"></span>
+<DIV class="bigDataUrl"><span class="types bigBed bigWig bam vcfTabix"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P>Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -413,7 +413,7 @@
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
     the supported remote data file formats: bam, bigBed, bigWig or
-    vcfTabIx.  Note that bam and vcfTabIx types require a separate
+    vcfTabix.  Note that bam and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively).</P>
     <P><B>Example:</B></P>
@@ -903,7 +903,7 @@
     <P><em>An example can be found below.</em></P>
 </DIV>
 
-<DIV class="bigDataUrl2"><span class="types bigBed bigWig bam vcfTabIx"></span>
+<DIV class="bigDataUrl2"><span class="types bigBed bigWig bam vcfTabix"></span>
 <div class="format">
     <code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P>This setting is for remote data file type
@@ -3350,7 +3350,7 @@
 </DIV>
 
 <DIV class="vcfTabix"><span class="types vcfTabix"></span>
-<div class="format"><code>type vcfTabIx</code></div>
+<div class="format"><code>type vcfTabix</code></div>
     <P>If the <code>bigDataUrl</code> setting is included, the data at the location
     specified by that URL will be
     displayed. Otherwise, a database table with a single column <code>fileName</code>
@@ -3364,7 +3364,7 @@
 <div class="format"><B>Example of a VCF track</B></div>
     <pre>
     track myVcf
-    type vcfTabIx
+    type vcfTabix
     bigDataUrl http://myorg.edu/mylab/myVcf.gz
     maxWindowToDraw 3000000
       ...    </pre>
