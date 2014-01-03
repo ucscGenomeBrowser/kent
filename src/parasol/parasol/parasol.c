@@ -204,6 +204,12 @@ else /* argc == 7 */
 commandHub(buf);
 }
 
+static boolean isStatusOk(int status)
+/* Convert wait() return status to return value. */
+{
+return WIFEXITED(status) && (WEXITSTATUS(status) == 0);
+}
+
 void waitAndExit(char *resultsFile, char *jobIdString, char *err)
 /* Read results file until jobId appears in it, and then if necessary
  * copy over stderr to err, and finally exit with the same result
@@ -229,7 +235,15 @@ for (;;)
 	    {
 	    if (err != NULL)
 		pmFetchFile(jr.host, jr.errFile, err);
-	    exit(jr.status);
+	    if (isStatusOk(jr.status))
+	        exit(0);
+	    else
+		{
+		if (WIFEXITED(jr.status))
+		    exit(WEXITSTATUS(jr.status));
+		else
+		    exit(-1);	// Generic badness
+		}
 	    }
 	}
     lineFileClose(&lf);
