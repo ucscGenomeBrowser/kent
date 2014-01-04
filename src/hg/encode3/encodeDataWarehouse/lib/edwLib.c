@@ -31,7 +31,6 @@ int edwSingleFileTimeout = 4*60*60;   // How many seconds we give ourselves to f
 
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
 char *eapRootDir = "/data/encode3/encodeAnalysisPipeline/";
-char *eapTempDir = "/data/encode3/encodeAnalysisPipeline/tmp/";
 char *edwValDataDir = "/data/encode3/encValData/";
 
 struct sqlConnection *edwConnect()
@@ -709,6 +708,7 @@ if (assembly == NULL)
     errAbort("Can't find assembly for %s", ucscDb);
 return assembly;
 }
+
 
 struct genomeRangeTree *edwGrtFromBigBed(char *fileName)
 /* Return genome range tree for simple (unblocked) bed */

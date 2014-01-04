@@ -21,7 +21,6 @@
 extern char *edwDatabase;   /* Name of database we connect to. */
 extern char *edwRootDir;    /* Name of root directory for our files, including trailing '/' */
 extern char *eapRootDir;    /* Name of root directory for analysis pipeline */
-extern char *eapTempDir;    /* Name of temp dir for analysis pipeline */
 extern char *edwLicensePlatePrefix; /* License plates start with this - thanks Mike Cherry. */
 extern char *edwValDataDir; /* Data files we need for validation go here. */
 extern int edwSingleFileTimeout;   // How many seconds we give ourselves to fetch a single file
