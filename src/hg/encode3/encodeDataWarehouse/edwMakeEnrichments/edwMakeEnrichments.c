@@ -70,14 +70,21 @@ enrich->qaEnrichTargetId = target->target->id;
 enrich->targetBaseHits = overlapBases;
 enrich->targetUniqHits = uniqOverlapBases;
 enrich->coverage = (double)uniqOverlapBases/targetSize;
-double sampleSizeFactor = (double)vf->itemCount /vf->sampleCount;
-double sampleTargetDepth = (double)overlapBases/targetSize;
-enrich->enrichment = sampleSizeFactor * sampleTargetDepth / vf->depth;
-enrich->uniqEnrich = enrich->coverage / vf->sampleCoverage;
-verbose(2, "%s size %lld (%0.3f%%), %s (%0.3f%%), overlap %lld (%0.3f%%)\n", 
-    target->target->name, targetSize, 100.0*targetSize/assembly->baseCount, 
-    ef->edwFileName, 100.0*vf->sampleCoverage, 
-    uniqOverlapBases, 100.0*uniqOverlapBases/assembly->baseCount);
+if (vf->sampleCount > 0)
+    {
+    double sampleSizeFactor = (double)vf->itemCount /vf->sampleCount;
+    double sampleTargetDepth = (double)overlapBases/targetSize;
+    if (vf->depth > 0)
+	{
+	enrich->enrichment = sampleSizeFactor * sampleTargetDepth / vf->depth;
+	if (vf->sampleCoverage > 0)
+	    enrich->uniqEnrich = enrich->coverage / vf->sampleCoverage;
+	}
+    verbose(2, "%s size %lld (%0.3f%%), %s (%0.3f%%), overlap %lld (%0.3f%%)\n", 
+	target->target->name, targetSize, 100.0*targetSize/assembly->baseCount, 
+	ef->edwFileName, 100.0*vf->sampleCoverage, 
+	uniqOverlapBases, 100.0*uniqOverlapBases/assembly->baseCount);
+    }
 return enrich;
 }
 
@@ -411,7 +418,7 @@ struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
 if (vf == NULL)
     return;	/* We can only work if have validFile table entry */
 
-if (!isEmpty(vf->enrichedIn))
+if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown"))
     {
     /* Get our assembly */
     char *format = vf->format;
@@ -453,6 +460,10 @@ if (!isEmpty(vf->enrichedIn))
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 	else if (sameString(format, "bam"))
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+	else if (sameString(format, "idat"))
+	    verbose(2, "Ignoring idat %s, in doEnrichments.", ef->edwFileName);
+	else if (sameString(format, "rcc"))
+	    verbose(2, "Ignoring rcc %s, in doEnrichments.", ef->edwFileName);
 	else if (sameString(format, "unknown"))
 	    verbose(2, "Unknown format in doEnrichments(%s), that's chill.", ef->edwFileName);
 	else
