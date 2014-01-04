@@ -224,7 +224,7 @@ struct dyString *outputFileIds = dyStringNew(0);
 for (i=0; i<run->outputFileCount; ++i)
     {
     char path[PATH_LEN];
-    safef(path, sizeof(path), "%s/%s", run->tempDir, run->outputNamesInTempDir[i]);
+    safef(path, sizeof(path), "%s%s", run->tempDir, run->outputNamesInTempDir[i]);
 
     verbose(1, "processing %s\n", path);
     if (!fileExists(path))
