@@ -1,4 +1,6 @@
-/* rsyncEdwExpDataType - Get experiment and data types from ENCODED via json.. */
+/* rsyncEdwExpDataType - Get experiment and data types from ENCODED via json, and from 
+ * encode2 database via sql. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -9,17 +11,21 @@
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "obscure.h"
+#include "encode/encodeExp.h"
 
 
 /* Variables settable from command line */
 char *cacheName = NULL;
 boolean fresh = FALSE;
+boolean noStanford = FALSE;
+boolean noUcsc = FALSE;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "rsyncEdwExpDataType - Get experiment and data types from ENCODED via json.\n"
+  "rsyncEdwExpDataType - Get experiment and data types from ENCODED via json, and from\n"
+  "encode2 database via sql\n"
   "usage:\n"
   "   rsyncEdwExpDataType url userId password out.tab\n"
   "where URL is 'submit.encodedcc.org/experiments/?format=json' with quotes most likely\n"
@@ -28,6 +34,8 @@ errAbort(
   "Options:\n"
   "   -cache=cacheName - get JSON list from cache rather than from database where possible\n"
   "   -fresh - ignore existing edwExperiment table\n"
+  "   -noStanford - ignore Stanford/JSON bits\n"
+  "   -noUcsc - ignor UCSC old Encode2 bits\n"
   );
 }
 
@@ -35,6 +43,8 @@ errAbort(
 static struct optionSpec options[] = {
    {"cache", OPTION_STRING},
    {"fresh", OPTION_BOOLEAN},
+   {"noStanford", OPTION_BOOLEAN},
+   {"noUcsc", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -211,8 +221,8 @@ for (exp = expList; exp != NULL; exp = exp->next)
 return hash;
 }
 
-void rsyncEdwExpDataType(char *url, char *userId, char *password, char *outTab)
-/* rsyncEdwExpDataType - Get experiment and data types from ENCODED via json.. */
+void rsyncStanfordExp(char *url, char *userId, char *password, FILE *f)
+/* Get data from Stanford ENCODED via JSON */
 {
 struct hash *oldHash = (fresh ? hashNew(0) : hashExpTable(edwConnect()));
 if (cacheName)
@@ -223,7 +233,6 @@ struct jsonElement *jsonExpList = jsonMustFindNamedField(jsonRoot, "", expListNa
 verbose(1, "Got @graph %p\n", jsonExpList);
 struct slRef *ref, *refList = jsonListVal(jsonExpList, expListName);
 verbose(1, "Got %d experiments\n", slCount(refList));
-FILE *f = mustOpen(outTab, "w");
 int realExpCount = 0;
 for (ref = refList; ref != NULL; ref = ref->next)
     {
@@ -264,6 +273,61 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	}
     }
 verbose(1, "Got %d experiments with dataType\n", realExpCount);
+}
+
+char *fromUcscDataType(struct encodeExp *exp, struct slPair *varList)
+/* Translate ChipSeq to ChIP-seq and the like. */
+/* Pretty soon may be able to translate from UCSC to Stanford experiment instead. */
+{
+char *oldType = exp->dataType;
+if (sameString(oldType, "ChipSeq")) return "ChIP-seq";
+else if (sameString(oldType, "RnaSeq")) 
+    {
+    char *newType = "RNA-seq";	// Generic by default
+    char *rnaExtract = slPairFindVal(varList, "rnaExtract");
+    if (rnaExtract != NULL)
+         {
+	 if (startsWith("long", rnaExtract))
+	     newType = "Long RNA-seq";
+	 else if (startsWith("short", rnaExtract))
+	     newType = "Short RNA-seq";
+	 }
+    return newType;
+    }
+else if (sameString(oldType, "DnaseSeq")) return "DNase-seq";
+else return oldType;
+}
+
+void rsyncUcscExp(FILE *f)
+/* Grab encodeExp table from hgFixed and save it to tab separated file in edwExperiment format. */
+{
+struct sqlConnection *conn = sqlConnectRemote("genome-mysql.cse.ucsc.edu", 
+		"genome", NULL, "hgFixed");
+struct encodeExp *exp, *expList = encodeExpLoadByQuery(conn, "select * from encodeExp");
+for (exp = expList; exp != NULL; exp = exp->next)
+    {
+    if (isEmpty(exp->accession))
+        continue;
+    struct slPair *varList = slPairListFromString(exp->expVars,FALSE);
+    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", exp->accession, fromUcscDataType(exp, varList),
+	exp->lab, exp->cellType, "ENCODE2", exp->dataType, 
+	emptyForNull(slPairFindVal(varList, "antibody")));
+    slPairFreeValsAndList(&varList);
+    }
+}
+
+void rsyncEdwExpDataType(char *url, char *userId, char *password, char *outTab)
+/* rsyncEdwExpDataType - Get experiment and data types from ENCODED via json.. */
+{
+FILE *f = mustOpen(outTab, "w");
+if (!noStanford)
+    {
+    rsyncStanfordExp(url, userId, password, f);
+    }
+if (!noUcsc)
+    {
+    rsyncUcscExp(f);
+    }
 carefulClose(&f);
 }
 
@@ -275,6 +339,8 @@ optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
 cacheName = optionVal("cache", cacheName);
+noStanford = optionExists("noStanford");
+noUcsc = optionExists("noUcsc");
 rsyncEdwExpDataType(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
