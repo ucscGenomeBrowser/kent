@@ -23,6 +23,7 @@
 #include "edwLib.h"
 
 char *clDatabase, *clTable;
+int clDelay;
 
 void usage()
 /* Explain usage and exit. */
@@ -45,6 +46,8 @@ errAbort(
   "        There are not many of these.  Error mesages from jobs daemon runs end up\n"
   "        in errorMessage fields of database.\n"
   "   -logFacility - sends error messages and such to system log facility instead.\n"
+  "   -delay=N - delay this many seconds before starting a job, default %d\n"
+  , clDelay
   );
 }
 
@@ -53,6 +56,7 @@ static struct optionSpec options[] = {
    {"log", OPTION_STRING},
    {"logFacility", OPTION_STRING},
    {"debug", OPTION_BOOLEAN},
+   {"delay", OPTION_INT},
    {NULL, 0},
 };
 
@@ -293,7 +297,7 @@ for (;;)
 	lastId = job->id;
 	struct runner *runner = findFreeRunner();
 	runJob(runner, job);
-	sleep(1); // Avoid network storm
+	sleep(clDelay); // Avoid network storm
 	}
     else
         {
@@ -308,6 +312,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+clDelay = optionInt("delay", clDelay);
 if (argc != 5)
     usage();
 logDaemonize(argv[0]);
