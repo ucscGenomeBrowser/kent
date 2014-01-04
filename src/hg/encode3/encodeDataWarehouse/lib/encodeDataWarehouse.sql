@@ -3,6 +3,17 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
+#Settings used to configure warehouse
+CREATE TABLE edwSettings (
+    id int unsigned auto_increment,	# Settings ID
+    name varchar(255) default '',	# Settings name, can't be reused
+    val varchar(255) default '',	# Settings value, some undefined but not huge thing
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(name),
+    INDEX(val)
+);
+
 #Someone who submits files to or otherwise interacts with big data warehouse
 CREATE TABLE edwUser (
     id int unsigned auto_increment,	# Autoincremented user ID
@@ -139,6 +150,17 @@ CREATE TABLE edwAssembly (
     realBaseCount bigint default 0,	# Count of non-N bases in assembly
               #Indices
     PRIMARY KEY(id)
+);
+
+#A biosample - not much info here, just enough to drive analysis pipeline
+CREATE TABLE edwBiosample (
+    id int unsigned auto_increment,	# Biosample id
+    term varchar(255) default '',	# Human readable.  Shared with ENCODE2.
+    taxon int unsigned default 0,	# NCBI taxon number - 9606 for human.
+    sex varchar(255) default '',	# One letter code: M male, F female, B both, U unknown
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(term)
 );
 
 #An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford.

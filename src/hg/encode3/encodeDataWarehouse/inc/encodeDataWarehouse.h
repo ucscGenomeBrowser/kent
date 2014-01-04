@@ -6,6 +6,74 @@
 #define ENCODEDATAWAREHOUSE_H
 
 #include "jksql.h"
+#define EDWSETTINGS_NUM_COLS 3
+
+extern char *edwSettingsCommaSepFieldNames;
+
+struct edwSettings
+/* Settings used to configure warehouse */
+    {
+    struct edwSettings *next;  /* Next in singly linked list. */
+    unsigned id;	/* Settings ID */
+    char *name;	/* Settings name, can't be reused */
+    char *val;	/* Settings value, some undefined but not huge thing */
+    };
+
+void edwSettingsStaticLoad(char **row, struct edwSettings *ret);
+/* Load a row from edwSettings table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwSettings *edwSettingsLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwSettings from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwSettingsFreeList(). */
+
+void edwSettingsSaveToDb(struct sqlConnection *conn, struct edwSettings *el, char *tableName, int updateSize);
+/* Save edwSettings as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwSettings *edwSettingsLoad(char **row);
+/* Load a edwSettings from row fetched with select * from edwSettings
+ * from database.  Dispose of this with edwSettingsFree(). */
+
+struct edwSettings *edwSettingsLoadAll(char *fileName);
+/* Load all edwSettings from whitespace-separated file.
+ * Dispose of this with edwSettingsFreeList(). */
+
+struct edwSettings *edwSettingsLoadAllByChar(char *fileName, char chopper);
+/* Load all edwSettings from chopper separated file.
+ * Dispose of this with edwSettingsFreeList(). */
+
+#define edwSettingsLoadAllByTab(a) edwSettingsLoadAllByChar(a, '\t');
+/* Load all edwSettings from tab separated file.
+ * Dispose of this with edwSettingsFreeList(). */
+
+struct edwSettings *edwSettingsCommaIn(char **pS, struct edwSettings *ret);
+/* Create a edwSettings out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwSettings */
+
+void edwSettingsFree(struct edwSettings **pEl);
+/* Free a single dynamically allocated edwSettings such as created
+ * with edwSettingsLoad(). */
+
+void edwSettingsFreeList(struct edwSettings **pList);
+/* Free a list of dynamically allocated edwSettings's */
+
+void edwSettingsOutput(struct edwSettings *el, FILE *f, char sep, char lastSep);
+/* Print out edwSettings.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwSettingsTabOut(el,f) edwSettingsOutput(el,f,'\t','\n');
+/* Print out edwSettings as a line in a tab-separated file. */
+
+#define edwSettingsCommaOut(el,f) edwSettingsOutput(el,f,',',',');
+/* Print out edwSettings as a comma separated list including final comma. */
+
 #define EDWUSER_NUM_COLS 4
 
 extern char *edwUserCommaSepFieldNames;
@@ -599,6 +667,75 @@ void edwAssemblyOutput(struct edwAssembly *el, FILE *f, char sep, char lastSep);
 
 #define edwAssemblyCommaOut(el,f) edwAssemblyOutput(el,f,',',',');
 /* Print out edwAssembly as a comma separated list including final comma. */
+
+#define EDWBIOSAMPLE_NUM_COLS 4
+
+extern char *edwBiosampleCommaSepFieldNames;
+
+struct edwBiosample
+/* A biosample - not much info here, just enough to drive analysis pipeline */
+    {
+    struct edwBiosample *next;  /* Next in singly linked list. */
+    unsigned id;	/* Biosample id */
+    char *term;	/* Human readable.  Shared with ENCODE2. */
+    unsigned taxon;	/* NCBI taxon number - 9606 for human. */
+    char *sex;	/* One letter code: M male, F female, B both, U unknown */
+    };
+
+void edwBiosampleStaticLoad(char **row, struct edwBiosample *ret);
+/* Load a row from edwBiosample table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwBiosample *edwBiosampleLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwBiosample from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwBiosampleFreeList(). */
+
+void edwBiosampleSaveToDb(struct sqlConnection *conn, struct edwBiosample *el, char *tableName, int updateSize);
+/* Save edwBiosample as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwBiosample *edwBiosampleLoad(char **row);
+/* Load a edwBiosample from row fetched with select * from edwBiosample
+ * from database.  Dispose of this with edwBiosampleFree(). */
+
+struct edwBiosample *edwBiosampleLoadAll(char *fileName);
+/* Load all edwBiosample from whitespace-separated file.
+ * Dispose of this with edwBiosampleFreeList(). */
+
+struct edwBiosample *edwBiosampleLoadAllByChar(char *fileName, char chopper);
+/* Load all edwBiosample from chopper separated file.
+ * Dispose of this with edwBiosampleFreeList(). */
+
+#define edwBiosampleLoadAllByTab(a) edwBiosampleLoadAllByChar(a, '\t');
+/* Load all edwBiosample from tab separated file.
+ * Dispose of this with edwBiosampleFreeList(). */
+
+struct edwBiosample *edwBiosampleCommaIn(char **pS, struct edwBiosample *ret);
+/* Create a edwBiosample out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwBiosample */
+
+void edwBiosampleFree(struct edwBiosample **pEl);
+/* Free a single dynamically allocated edwBiosample such as created
+ * with edwBiosampleLoad(). */
+
+void edwBiosampleFreeList(struct edwBiosample **pList);
+/* Free a list of dynamically allocated edwBiosample's */
+
+void edwBiosampleOutput(struct edwBiosample *el, FILE *f, char sep, char lastSep);
+/* Print out edwBiosample.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwBiosampleTabOut(el,f) edwBiosampleOutput(el,f,'\t','\n');
+/* Print out edwBiosample as a line in a tab-separated file. */
+
+#define edwBiosampleCommaOut(el,f) edwBiosampleOutput(el,f,',',',');
+/* Print out edwBiosample as a comma separated list including final comma. */
 
 #define EDWEXPERIMENT_NUM_COLS 7
 

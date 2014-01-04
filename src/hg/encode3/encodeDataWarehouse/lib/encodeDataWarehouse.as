@@ -1,3 +1,10 @@
+table edwSettings
+"Settings used to configure warehouse"
+    (
+    uint id primary auto;  "Settings ID"
+    string name unique;	"Settings name, can't be reused"
+    string val index; "Settings value, some undefined but not huge thing"
+    )
 
 table edwUser
 "Someone who submits files to or otherwise interacts with big data warehouse"
@@ -111,6 +118,15 @@ table edwAssembly
     uint twoBitId;  "File ID of associated twoBit file"
     bigInt baseCount;  "Count of bases including N's"
     bigInt realBaseCount;   "Count of non-N bases in assembly"
+    )
+
+table edwBiosample
+"A biosample - not much info here, just enough to drive analysis pipeline"
+    (
+    uint id primary auto;  "Biosample id"
+    string term index;	   "Human readable.  Shared with ENCODE2."
+    uint taxon;	    "NCBI taxon number - 9606 for human."
+    string sex;	"One letter code: M male, F female, B both, U unknown"
     )
 
 table edwExperiment
