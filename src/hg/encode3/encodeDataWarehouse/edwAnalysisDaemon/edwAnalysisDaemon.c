@@ -11,8 +11,11 @@
 #include "sqlNum.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
+#include "../../../../parasol/inc/jobResult.h"
+#include "../../../../parasol/inc/paraMessage.h"
 
-char *clDatabase, *clTable;
+pid_t childPid;
+char *clDatabase = "encodeDataWarehouse", *clTable;
 char *paraHost = "ku";
 
 void usage()
@@ -21,24 +24,25 @@ void usage()
 errAbort(
   "edwAnalysisDaemon - Run jobs remotely via parasol based on jobs in table.\n"
   "usage:\n"
-  "   edwAnalysisDaemon database table count fifo\n"
+  "   edwAnalysisDaemon table count\n"
   "where:\n"
-  "   database - mySQL database where edwRun table lives\n"
   "   table - table with same six fields as edwRun table\n"
   "   count - number of simultanious jobs to run\n"
-  "   fifo - named pipe used to notify daemon of new data\n"
   "options:\n"
+  "   -database=%s - mySQL database where edwRun table lives\n"
   "   -debug - don't fork, close stdout, and daemonize self\n"
   "   -log=logFile - send error messages and warnings of daemon itself to logFile\n"
   "        There are not many of these.  Error mesages from jobs daemon runs end up\n"
   "        in errorMessage fields of database.\n"
   "   -logFacility - sends error messages and such to system log facility instead.\n"
   "   -paraHost - machine running parasol (paraHub in particular)\n"
+  , clDatabase
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"database", OPTION_STRING},
    {"log", OPTION_STRING},
    {"logFacility", OPTION_STRING},
    {"debug", OPTION_BOOLEAN},
@@ -64,6 +68,7 @@ void finishRun(struct runner *run, int status)
 struct edwJob *job = run->job;
 job->endTime = edwNow();
 job->returnCode = status;
+warn("ugly: Master - finish run status %d on %s", status, job->commandLine);
 
 /* Read in stderr */
 size_t errorMessageSize;
@@ -142,20 +147,77 @@ internalErr();  // Should not get here
 return NULL;
 }
 
+int waitOnResults(char *resultsFile, char *jobIdString, char *err)
+/* Read results file until jobId appears in it, and then if necessary
+ * copy over stderr to err, and finally exit with the same result
+ * as command did. */
+{
+off_t resultsPos = 0;
+int pollTime = 5;   // Poll every 5 seconds for file to open.
+verbose(2, "waitOnResults(%s, %s, %s)\n", resultsFile, jobIdString, err);
+warn("ugly: Child %d waitOnResults(%s, %s, %s)", childPid, resultsFile, jobIdString, err);
+char *row[JOBRESULT_NUM_COLS];
+sleep(1);
+for (;;)
+    {
+    struct lineFile *lf = lineFileOpen(resultsFile, TRUE);
+    lineFileSeek(lf, resultsPos, SEEK_SET);
+    warn("ugly: Child %d. resultsPos=%lld", childPid, (long long)resultsPos);
+    while (lineFileRow(lf, row))
+        {
+	resultsPos = lineFileTell(lf);
+	struct jobResult jr;
+	jobResultStaticLoad(row, &jr);
+	warn("ugly: Child %d. jobIdString %s vs. %s", childPid, jr.jobId, jobIdString);
+	if (sameString(jr.jobId, jobIdString))
+	    {
+	    warn("ugly: Child %d. got match on %s err=%p, WIFEXITED(%d)=%d", childPid, jobIdString, err, jr.status, WIFEXITED(jr.status));
+	    if (err != NULL)
+	        warn("ugly: Child theoretically fetches from %s file %s to %s", jr.host, jr.errFile, err);
+#ifdef SOON
+		pmFetchFile(jr.host, jr.errFile, err);
+#endif /* SOON */
+	    warn("ugly: Child %d. Should be returning", childPid);
+	    if (WIFEXITED(jr.status))
+		return WEXITSTATUS(jr.status);
+	    else
+		return -1;	// Generic badness
+	    }
+	}
+    lineFileClose(&lf);
+    verbose(2, "waiting for %d\n", pollTime);
+    sleep(pollTime);
+    }
+}
+
 int launchJob(struct edwJob *job, char *errFileName)
 /* Pass job's command line to parasol. */
 {
+/* Make sure results file exists. */
+char *results = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/3/results";
+if (!fileExists(results))
+     {
+     FILE *f = mustOpen(results, "a");
+     carefulClose(&f);
+     }
+
 char command[2048];
 char *escaped = makeEscapedString(job->commandLine, '\'');
+warn("ugly: Child %d escaped command line %s", childPid, escaped);
 safef(command, sizeof(command),
-    "ssh %s 'parasol -results=/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/3/results"
-    " -err=%s -wait cpu=3 ram=5500m"
+    "ssh %s 'parasol -results=%s -printId"
+    " -err=%s cpu=3 ram=5500m"
     " add job %s'"
-    , paraHost, errFileName, escaped);
-warn("attempting %s", command);
-int status = system(command);
-warn("status %d for %s", status, command);
+    , paraHost, results, errFileName, escaped);
+warn("ugly: Child %d - attempting %s", childPid, command);
 freez(&escaped);
+
+char jobIdLine[64];
+edwOneLineSystemResult(command, jobIdLine, sizeof(jobIdLine));
+char *jobIdString = trimSpaces(jobIdLine);
+warn("ugly: Child %d jobIdString %s for %s", childPid, jobIdString, command);
+int status = waitOnResults(results, jobIdString, errFileName);
+warn("ugly: Child %d waitOnResults status %d for %s", childPid, status, jobIdString);
 return status;
 }
 
@@ -170,6 +232,7 @@ safef(stderrTempFileName, PATH_LEN, "%sedwAnalysisDaemonXXXXXX", eapParaTempDir)
 int errFd = mkstemp(stderrTempFileName);
 if (errFd < 0)
     errnoAbort("Couldn't open temp file %s", stderrTempFileName);
+warn("ugly: Master - made temp file %s for stderr", stderrTempFileName);
 
 ++curThreads;
 job->startTime = edwNow();
@@ -178,7 +241,10 @@ runner->job = job;
 int childId;
 if ((childId = mustFork()) == 0)
     {
+    childPid = getpid();
+    warn("ugly: Child %d - forked ok", childPid);
     int status = launchJob(job, stderrTempFileName);
+    warn("ugly: Child %d - launchJob %s returned with status %d", childPid, job->commandLine, status);
     if (status != 0)
         exit(-1);
     else
@@ -193,6 +259,7 @@ else
 	clTable, job->startTime, childId, (long long)job->id);
     sqlUpdate(conn, query);
     sqlDisconnect(&conn);
+    warn("ugly: Master - updating sql database with start time and pid");
 
     /* We be parent - just fill in job info */
     close(errFd);
@@ -201,56 +268,20 @@ else
     }
 }
 
-void readAndIgnore(int fd, int byteCount)
-/* Read byteCount from fd, and just throw it away.  We are just using named pipe
- * as a synchronization device is why. */
-{
-/* This is implemented perhaps too fancily - so as to efficiently discard datae
- * if need be by reading into a reasonable fixed sized buffer as opposed to a single
- * character. */
-int bytesLeft = byteCount;
-char buf[128];
-int bufSize = sizeof(buf);
-while (bytesLeft > 0)
-    {
-    int bytesAttempted = (bytesLeft > bufSize ? bufSize : bytesLeft);
-    int bytesRead = read(fd, buf, bytesAttempted);
-    if (bytesRead == -1)
-        errnoAbort("Problem reading from named pipe.");
-    bytesLeft -= bytesRead;
-    }
-}
 
-void syncWithTimeout(int fd, long long microsecs)
-/* Wait for either input from file fd, or timeout.  Will
- * ignore input - just using it as a sign to short-circuit
- * wait part of a polling loop. */
-{
-int bytesReady = netWaitForData(fd, microsecs);
-if (bytesReady > 0)
-    {
-    readAndIgnore(fd, bytesReady);
-    }
-}
-
-void edwAnalysisDaemon(char *database, char *table, char *countString, char *namedPipe)
+void edwAnalysisDaemon(char *table, char *countString)
 /* edwAnalysisDaemon - Run jobs remotely via parasol based on jobs in table.. */
 {
-clDatabase = database;
 clTable = table;
 
-warn("Starting edwAnalysisDaemon on %s %s", database, table);
+warn("Starting edwAnalysisDaemon on %s %s", clDatabase, table);
 
 /* Set up array with a slot for each simultaneous job. */
 maxThreadCount = sqlUnsigned(countString);
 if (maxThreadCount > 500)
     errAbort("%s jobs at once? Really, that seems excessive", countString);
 AllocArray(runners, maxThreadCount);
-warn("Ugly but good times for %d theads", maxThreadCount);
-
-/* Open our file, which really should be a named pipe. */
-int fd = mustOpenFd(namedPipe, O_RDONLY);      // Program waits here until something written to pipe
-int dummyFd = mustOpenFd(namedPipe, O_WRONLY); // Keeps pipe from generating EOF when empty
+warn("Ugly and intense times for %d theads", maxThreadCount);
 
 long long lastId = 0;  // Keep track of lastId in run table that has already been handled.
 
@@ -261,7 +292,7 @@ for (;;)
         ;
 
     /* Get next bits of work from database. */
-    struct sqlConnection *conn = sqlConnect(database);
+    struct sqlConnection *conn = sqlConnect(clDatabase);
     char query[256];
     sqlSafef(query, sizeof(query), 
 	"select * from %s where startTime = 0 and id > %lld order by id limit 1", table, lastId);
@@ -269,6 +300,7 @@ for (;;)
     sqlDisconnect(&conn);
     if (job != NULL)
         {
+	warn("ugly: Master Got job %s", job->commandLine);
 	lastId = job->id;
 	struct runner *runner = findFreeRunner();
 	runJob(runner, job);
@@ -277,20 +309,21 @@ for (;;)
     else
         {
 	/* Wait for signal to come on named pipe or 10 seconds to pass */
-	syncWithTimeout(fd, 10*1000000);
+	warn("ugly: Master going to wait");
+	sleep(10);
 	}
     }
-close(dummyFd);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 3)
     usage();
 paraHost = optionVal("paraHost", paraHost);
+clDatabase = optionVal("database", clDatabase);
 logDaemonize(argv[0]);
-edwAnalysisDaemon(argv[1], argv[2], argv[3], argv[4]);
+edwAnalysisDaemon(argv[1], argv[2]);
 return 0;
 }
