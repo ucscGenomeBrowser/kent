@@ -13,6 +13,7 @@
 #include "edwLib.h"
 
 char *clDatabase, *clTable;
+char *paraHost = "ku";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,6 +33,7 @@ errAbort(
   "        There are not many of these.  Error mesages from jobs daemon runs end up\n"
   "        in errorMessage fields of database.\n"
   "   -logFacility - sends error messages and such to system log facility instead.\n"
+  "   -paraHost - machine running parasol (paraHub in particular)\n"
   );
 }
 
@@ -40,6 +42,7 @@ static struct optionSpec options[] = {
    {"log", OPTION_STRING},
    {"logFacility", OPTION_STRING},
    {"debug", OPTION_BOOLEAN},
+   {"paraHost", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -142,17 +145,16 @@ return NULL;
 int launchJob(struct edwJob *job, char *errFileName)
 /* Pass job's command line to parasol. */
 {
-char *paraHost = "encode-02";
 char command[2048];
 char *escaped = makeEscapedString(job->commandLine, '\'');
 safef(command, sizeof(command),
-    "ssh %s 'parasol -results=/data/encode3/encodeAnalysisPipeline/para.results"
-    " -err=%s -wait cpu=2 ram=5500m"
+    "ssh %s 'parasol -results=/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/3/results"
+    " -err=%s -wait cpu=3 ram=5500m"
     " add job %s'"
     , paraHost, errFileName, escaped);
 warn("attempting %s", command);
 int status = system(command);
-warn("status %d", status);
+warn("status %d for %s", status, command);
 freez(&escaped);
 return status;
 }
@@ -238,14 +240,13 @@ clDatabase = database;
 clTable = table;
 
 warn("Starting edwAnalysisDaemon on %s %s", database, table);
-warn("Ugly times here 1");
 
 /* Set up array with a slot for each simultaneous job. */
 maxThreadCount = sqlUnsigned(countString);
 if (maxThreadCount > 500)
     errAbort("%s jobs at once? Really, that seems excessive", countString);
 AllocArray(runners, maxThreadCount);
-
+warn("Ugly but good times for %d theads", maxThreadCount);
 
 /* Open our file, which really should be a named pipe. */
 int fd = mustOpenFd(namedPipe, O_RDONLY);      // Program waits here until something written to pipe
@@ -271,6 +272,7 @@ for (;;)
 	lastId = job->id;
 	struct runner *runner = findFreeRunner();
 	runJob(runner, job);
+	sleep(1);
 	}
     else
         {
@@ -287,6 +289,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
+paraHost = optionVal("paraHost", paraHost);
 logDaemonize(argv[0]);
 edwAnalysisDaemon(argv[1], argv[2], argv[3], argv[4]);
 return 0;
