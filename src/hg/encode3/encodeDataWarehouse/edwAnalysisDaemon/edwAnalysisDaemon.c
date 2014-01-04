@@ -157,7 +157,6 @@ int pollTime = 5;   // Poll every 5 seconds for file to open.
 verbose(2, "waitOnResults(%s, %s, %s)\n", resultsFile, jobIdString, err);
 warn("ugly: Child %d waitOnResults(%s, %s, %s)", childPid, resultsFile, jobIdString, err);
 char *row[JOBRESULT_NUM_COLS];
-sleep(1);
 for (;;)
     {
     struct lineFile *lf = lineFileOpen(resultsFile, TRUE);
@@ -190,14 +189,15 @@ for (;;)
     }
 }
 
-int launchJob(struct edwJob *job, char *errFileName)
-/* Pass job's command line to parasol. */
+char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/3/results";
+
+char *startParaJob(struct edwJob *job, char *errFileName)
+/* Tell parasol about a job and return parasol job ID.  Free jobId when done.  */
 {
 /* Make sure results file exists. */
-char *results = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/3/results";
-if (!fileExists(results))
+if (!fileExists(resultsQueue))
      {
-     FILE *f = mustOpen(results, "a");
+     FILE *f = mustOpen(resultsQueue, "a");
      carefulClose(&f);
      }
 
@@ -208,18 +208,34 @@ safef(command, sizeof(command),
     "ssh %s 'parasol -results=%s -printId"
     " -err=%s cpu=3 ram=5500m"
     " add job %s'"
-    , paraHost, results, errFileName, escaped);
+    , paraHost, resultsQueue, errFileName, escaped);
 warn("ugly: Child %d - attempting %s", childPid, command);
 freez(&escaped);
 
 char jobIdLine[64];
 edwOneLineSystemResult(command, jobIdLine, sizeof(jobIdLine));
-char *jobIdString = trimSpaces(jobIdLine);
-warn("ugly: Child %d jobIdString %s for %s", childPid, jobIdString, command);
-int status = waitOnResults(results, jobIdString, errFileName);
+char *jobIdString = cloneString(trimSpaces(jobIdLine));
+return jobIdString;
+}
+
+int paraWaitJob(char *jobIdString, char *errFileName)
+/* Wait for job to finish and return error code. */
+{
+int status = waitOnResults(resultsQueue, jobIdString, errFileName);
 warn("ugly: Child %d waitOnResults status %d for %s", childPid, status, jobIdString);
 return status;
 }
+
+
+#ifdef OLD
+int launchJob(struct edwJob *job, char *errFileName)
+/* Pass job's command line to parasol. */
+{
+char *jobIdString = startParaJob(job, errFileName);
+int status = paraWaitJob(jobIdString, errFileName);
+return status;
+}
+#endif /* OLD */
 
 char *eapParaTempDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/paraTmp/";
 
@@ -238,12 +254,13 @@ warn("ugly: Master - made temp file %s for stderr", stderrTempFileName);
 job->startTime = edwNow();
 runner->job = job;
 
+char *jobIdString = startParaJob(job, stderrTempFileName);
 int childId;
 if ((childId = mustFork()) == 0)
     {
     childPid = getpid();
     warn("ugly: Child %d - forked ok", childPid);
-    int status = launchJob(job, stderrTempFileName);
+    int status = paraWaitJob(jobIdString, stderrTempFileName);
     warn("ugly: Child %d - launchJob %s returned with status %d", childPid, job->commandLine, status);
     if (status != 0)
         exit(-1);
@@ -265,6 +282,8 @@ else
     close(errFd);
     runner->pid = childId;
     runner->errFileName = cloneString(stderrTempFileName);
+
+    freez(&jobIdString);
     }
 }
 
@@ -304,7 +323,6 @@ for (;;)
 	lastId = job->id;
 	struct runner *runner = findFreeRunner();
 	runJob(runner, job);
-	sleep(1);
 	}
     else
         {
