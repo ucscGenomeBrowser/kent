@@ -409,6 +409,23 @@ sqlUpdate(conn, dy->string);
 freeDyString(&dy);
 }
 
+char *edwSetting(struct sqlConnection *conn, char *name)
+/* Return named settings value,  or NULL if setting doesn't exist. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select val from edwSettings where name='%s'", name);
+return sqlQuickString(conn, query);
+}
+
+char *edwRequiredSetting(struct sqlConnection *conn, char *name)
+/* Returns setting, abort if it isn't found. */
+{
+char *val = edwSetting(conn, name);
+if (val == NULL)
+    errAbort("Required %s setting is not defined in edwSettings table", name);
+return val;
+}
+
 void mustMakeValidFile(struct sqlConnection *conn, struct edwFile *ef, struct cgiParsedVars *tags,
     long long oldValidId)
 /* If possible make a edwValidFile record for this.  Makes sure all the right tags are there,
@@ -531,7 +548,8 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	/* Create license plate around our ID.  File in warehouse to use license plate
 	 * instead of baby-babble IDs. */
 	    {
-	    edwMakeLicensePlate(edwLicensePlatePrefix, vf->id, vf->licensePlate, edwMaxPlateSize);
+	    edwMakeLicensePlate( edwRequiredSetting(conn, "prefix"), 
+		vf->id, vf->licensePlate, edwMaxPlateSize);
 
 	    /* Create swapped out version of edwFileName in newName. */
 	    struct dyString *newName = dyStringNew(0);
