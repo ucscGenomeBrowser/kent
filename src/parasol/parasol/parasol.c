@@ -66,7 +66,8 @@ errAbort(
   "   parasol list machines  - List machines in pool.\n"
   "   parasol [-extended] list jobs  - List jobs one per line.\n"
   "   parasol list users  - List users one per line.\n"
-  "   parasol list batches  - List batches one per line.\n"
+  "   parasol [options] list batches  - List batches one per line.\n"
+  "         option - 'all' if set include inactive\n"
   "   parasol list sick  - List nodes considered sick by all running batches, one per line.\n"
   "   parasol status  - Summarize status of machines, jobs, and spoke daemons.\n"
   "   parasol [options] pstat2  - Get status of jobs queued and running.\n"
@@ -614,7 +615,10 @@ else if (sameString(command, "list"))
     else if (sameString(subType, "user") || sameString(subType, "users"))
         hubCommandAndPrint("listUsers");
     else if (sameString(subType, "batch") || sameString(subType, "batches"))
-        hubCommandAndPrint("listBatches");
+	{
+	char *command = (optionExists("all") ? "listAllBatches" : "listBatches");
+        hubCommandAndPrint(command);
+	}
     else if (sameString(subType, "sick"))
         hubCommandAndPrint("listSick");
     else
