@@ -5,12 +5,15 @@
 #include "options.h"
 #include "portable.h"
 #include "bamFile.h"
+#include "obscure.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
+#include "eapLib.h"
 
 boolean again = FALSE;
 boolean updateSoftwareMd5 = FALSE;
 boolean noJob = FALSE;
+boolean justLink = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +26,7 @@ errAbort(
   "   -again - if set schedule it even if it's been run once\n"
   "   -up - update on software MD5s rather than aborting on them\n"
   "   -noJob - if set then don't put job on edwAnalysisJob table\n"
+  "   -justLink - just symbolically link rather than copy EDW files to cache\n"
   );
 }
 
@@ -31,8 +35,65 @@ static struct optionSpec options[] = {
    {"again", OPTION_BOOLEAN},
    {"up", OPTION_BOOLEAN},
    {"noJob", OPTION_BOOLEAN},
+   {"justLink", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+struct edwAssembly *targetAssemblyForDbAndSex(struct sqlConnection *conn, char *ucscDb, char *sex)
+/* Figure out best target assembly for something that is associated with a given ucscDB.  
+ * In general this will be the most recent for the organism. */
+{
+char *newDb = ucscDb;
+if (sameString("hg19", ucscDb))
+    newDb = "hg38";
+char sexedName[128];
+safef(sexedName, sizeof(sexedName), "%s.%s", sex, newDb);
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwAssembly where name='%s'", sexedName);
+uglyf("%s\n", query);
+return edwAssemblyLoadByQuery(conn, query);
+}
+
+struct edwBiosample *edwBiosampleFromTerm(struct sqlConnection *conn, char *term)
+/* Return biosamples associated with term. */
+{
+char query[512];
+sqlSafef(query, sizeof(query), "select * from edwBiosample where term = '%s'", term);
+return edwBiosampleLoadByQuery(conn, query);
+}
+
+char *sexFromExp(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf)
+/* Return "male" or "female" */
+{
+char *sex = NULL;
+uglyf("sexFromExp(fileId %u, experiment %s)\n", ef->id, vf->experiment);
+
+struct edwExperiment *exp = edwExperimentFromAccession(conn, vf->experiment);
+if (exp != NULL)
+    {
+    uglyf("exp->biosample=%s\n", exp->biosample);
+    struct edwBiosample *bio = edwBiosampleFromTerm(conn, exp->biosample);
+    if (bio != NULL)
+        {
+	uglyf("bio->sex = %s\n", bio->sex);
+	if (sameWord(bio->sex, "F"))
+	    sex = "female";
+	else
+	    sex = "male";
+	}
+    }
+if (sex == NULL)
+    errAbort("Can't find sex for fileId %u", ef->id);
+return sex;
+}
+
+struct edwAssembly *chooseTarget(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf)
+/* Pick mapping target - according to taxon and sex. */
+{
+char *sex = sexFromExp(conn, ef, vf);
+uglyf("Sex of %s is %s\n", vf->experiment, sex);
+return targetAssemblyForDbAndSex(conn, vf->ucscDb, sex);
+}
 
 static int countAlreadyScheduled(struct sqlConnection *conn, char *analysisStep, 
     long long firstInput)
@@ -50,12 +111,15 @@ return sqlQuickNum(conn, query);
 static char *newTempDir(char *name)
 /* Return a freshly created temp dir where name occurs somewhere in it's name. */
 {
-char *tempDir = cloneString(rTempName(eapTempDir, name, ""));
+char *tempDir = rTempName(eapTempDir, name, "");
 makeDir(tempDir);
-return tempDir;
+int withLastSize = strlen(tempDir) + 2;
+char withLast[withLastSize];
+safef(withLast, sizeof(withLast), "%s/", tempDir);
+return cloneString(withLast);
 }
 
-char *scheduleStep(struct sqlConnection *conn, 
+char *scheduleStep(struct sqlConnection *conn, char *tempDir,
     char *analysisStep, char *commandLine, char *experiment, struct edwAssembly *assembly,
     int inCount, unsigned inputIds[], char *inputTypes[],
     int outCount, char *outputNames[], char *outputTypes[], char *outputFormats[])
@@ -65,14 +129,12 @@ if (updateSoftwareMd5)
     edwAnalysisSoftwareUpdateMd5ForStep(conn, analysisStep);
 edwAnalysisCheckVersions(conn, analysisStep);
 
-/* Grab temp dir */
-char *tempDir = newTempDir(analysisStep);
 verbose(1, "scheduling %s on %u in %s\n", analysisStep, inputIds[0], tempDir);
 
 /* Wrap command line in cd to temp dir */
 char fullCommandLine[strlen(commandLine)+128];
 safef(fullCommandLine, sizeof(fullCommandLine), 
-    "bash -exc 'cd %s; nice %s'", tempDir, commandLine);
+    "edwCdJob %s", commandLine);
 
 /* Make up edwAnalysisRun record */
 struct edwAnalysisRun *run;
@@ -99,12 +161,118 @@ freez(&run);
 return tempDir;
 }
 
-struct edwAssembly *getBwaIndex(struct sqlConnection *conn, char *target, char indexPath[PATH_LEN])
+static void makeBwaIndexPath(struct edwAssembly *assembly, char indexPath[PATH_LEN])
+/* Fill in path to BWA index. */
+{
+safef(indexPath, PATH_LEN, "%s%s/bwaData/%s.fa", 
+    "/scratch/data/encValDir/", assembly->name, assembly->name);
+}
+
+struct edwAssembly *getBwaIndex(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf, 
+    char indexPath[PATH_LEN])
 /* Target for now is same as UCSC DB.  Returns assembly ID */
 {
-struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, target);
-edwBwaIndexPath(assembly, indexPath);
+struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
+makeBwaIndexPath(assembly, indexPath);
 return assembly;
+}
+
+struct cache
+/* Keep track of files to keep local copies of. */
+    {
+    struct slRef *list;  // Keyed by licensePlate, value is file name w/in cache
+    };
+
+void eapCacheName(struct edwFile *ef, char fileName[PATH_LEN])
+/* Fill in fileName with name of ef when cached locally */
+{
+/* Figure out file name within cache. */
+char *noDir = strrchr(ef->edwFileName, '/');
+assert(noDir != NULL);
+noDir += 1;
+safef(fileName, PATH_LEN, "%s%s", eapEdwCacheDir, noDir);
+}
+
+char *cacheMore(struct cache *cache, struct edwFile *ef, struct edwValidFile *vf)
+/* Add file to hash and return translated name. */
+{
+refAdd(&cache->list, ef);
+char fileName[PATH_LEN];
+eapCacheName(ef, fileName);
+return cloneString(fileName);
+}
+
+struct cache *cacheNew()
+/* Return new empty cache */
+{
+struct cache *cache;
+return AllocVar(cache);
+}
+
+void preloadCache(struct sqlConnection *conn, struct cache *cache)
+/* If there's anything that needs precashing, return a command line
+ * with a semicolon at the end to precache.  Otherwise return blank. */
+{
+struct slRef *el;
+for (el = cache->list; el != NULL; el = el->next)
+    {
+    /* Figure out file name within cache. */
+    struct edwFile *ef = el->val;
+    char fileName[PATH_LEN];
+    eapCacheName(ef, fileName);
+
+    /* Copy file into cache if it's not already there */
+    if (!fileExists(fileName))
+	{
+	char *source = edwPathForFileId(conn, ef->id);
+	if (justLink)
+	    {
+	    verbose(1, "Symbolic link of %s to %s (%6.1g gig)\n", 
+		source, fileName, fileSize(source)/1e9);
+	    if (symlink(source, fileName) < 0)
+	        errnoAbort("Couldn't symlink %s to %s", source, fileName);
+	    }
+	else
+	    {
+	    verbose(1, "Copy %s to %s (%6.1g gig)\n", source, fileName, fileSize(source)/1e9);
+	    copyFile(source, fileName);
+	    }
+	}
+    }
+}
+
+char *pickPairedBwaCommand(struct sqlConnection *conn, struct edwValidFile *vf1, struct edwValidFile *vf2)
+/* Pick either regular of solexa-converting bwa step. */
+{
+char *result = NULL;
+struct edwFastqFile *fq1 = edwFastqFileFromFileId(conn, vf1->fileId);
+struct edwFastqFile *fq2 = edwFastqFileFromFileId(conn, vf2->fileId);
+if (!sameString(fq1->qualType, fq2->qualType))
+    errAbort("Mixed quality types in %u and %u", vf1->fileId, vf2->fileId);
+if (sameWord(fq1->qualType, "solexa"))
+    result = "eap_run_slx_bwa_pe";
+else if (sameWord(fq1->qualType, "sanger"))
+    result = "eap_run_bwa_pe";
+else
+    internalErr();
+edwFastqFileFree(&fq1);
+edwFastqFileFree(&fq2);
+return result;
+}
+
+char *pickSingleBwaCommand(struct sqlConnection *conn, struct edwValidFile *vf)
+/* Pick either regular of solexa-converting bwa step. */
+{
+struct edwFastqFile *fq = edwFastqFileFromFileId(conn, vf->fileId);
+char *result = NULL;
+if (sameWord(fq->qualType, "solexa"))
+    result = "eap_run_slx_bwa_se";
+else if (sameWord(fq->qualType, "sanger"))
+    result = "eap_run_bwa_se";
+else
+    internalErr();
+edwFastqFileFree(&fq);
+return result;
 }
 
 void scheduleBwaPaired(struct sqlConnection *conn,  
@@ -122,22 +290,30 @@ struct edwFile *ef2 = edwFileFromIdOrDie(conn, vf2->fileId);
 
 /* Figure out path to BWA index */
 char indexPath[PATH_LEN];
-struct edwAssembly *assembly = getBwaIndex(conn, vf1->ucscDb, indexPath);
+struct edwAssembly *assembly = getBwaIndex(conn, ef1, vf1, indexPath);
 
-/* Make up job and command line */
+/* Grab temp dir */
+char *tempDir = newTempDir(analysisStep);
+char *outBamName = "out.bam";
+
+/* Stage inputs and make command line. */
+struct cache *cache = cacheNew();
+char *ef1Name = cacheMore(cache, ef1, vf1);
+char *ef2Name = cacheMore(cache, ef2, vf2);
+char *command = pickPairedBwaCommand(conn, vf1, vf2);
+preloadCache(conn, cache);
 char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), 
-    "%s %s %s%s %s%s %s",
-    "eap_run_bwa_pe", indexPath, edwRootDir, ef1->edwFileName, edwRootDir, 
-    ef2->edwFileName, "out.bam");
+    "%s %s %s %s %s%s", 
+    command, indexPath, ef1Name, ef2Name, tempDir, outBamName);
 
 /* Make up edwAnalysisRun record and schedule it*/
 unsigned inFileIds[2] = {ef1->id, ef2->id};
 char *inTypes[2] = {"read1", "read2"};
-char *outNames[1] = {"out.bam"};
+char *outNames[1] = {outBamName};
 char *outTypes[1] = {"alignments"};
 char *outFormats[1] = {"bam"};
-scheduleStep(conn, analysisStep, commandLine, exp->accession, assembly,
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(inFileIds), inFileIds, inTypes,
     ArraySize(outNames), outNames, outTypes, outFormats);
 
@@ -157,12 +333,20 @@ if (countAlreadyScheduled(conn, analysisStep, ef->id))
 
 /* Figure out path to BWA index */
 char indexPath[PATH_LEN];
-struct edwAssembly *assembly = getBwaIndex(conn, vf->ucscDb, indexPath);
+struct edwAssembly *assembly = getBwaIndex(conn, ef, vf, indexPath);
 
-/* Make up job and command line */
+/* Grab temp dir */
+char *tempDir = newTempDir(analysisStep);
+char *outBamName = "out.bam";
+
+/* Stage inputs and make command line. */
+struct cache *cache = cacheNew();
+char *efName = cacheMore(cache, ef, vf);
+char *command = pickSingleBwaCommand(conn, vf);
+preloadCache(conn, cache);
 char commandLine[4*PATH_LEN];
-safef(commandLine, sizeof(commandLine), "%s %s %s%s %s",
-    "eap_run_bwa_se", indexPath, edwRootDir, ef->edwFileName, "out.bam");
+safef(commandLine, sizeof(commandLine), "%s %s %s %s%s", 
+    command, indexPath, efName, tempDir, outBamName);
 
 /* Make up edwAnalysisRun record and schedule it*/
 unsigned inFileIds[1] = {ef->id};
@@ -170,7 +354,7 @@ char *inTypes[1] = {"reads"};
 char *outNames[1] = {"out.bam"};
 char *outTypes[1] = {"alignments"};
 char *outFormats[1] = {"bam"};
-scheduleStep(conn, analysisStep, commandLine, exp->accession, assembly,
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(inFileIds), inFileIds, inTypes,
     ArraySize(outNames), outNames, outTypes, outFormats);
 }
@@ -220,16 +404,23 @@ else
     scriptName = "eap_run_macs2_dnase_se";
     }
 
-verbose(2, "schedulingMacsDnase on %s step %s, script %s\n", bamName, analysisStep, scriptName);
+verbose(2, "schedulingMacsDnase on %s step %s, script %s\n", ef->edwFileName, 
+    analysisStep, scriptName);
 /* Make sure that we don't schedule it again and again */
 if (countAlreadyScheduled(conn, analysisStep, ef->id))
     return;
 
-/* Make command line */
-struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
+char *tempDir = newTempDir(analysisStep);
+
+/* Stage inputs and make command line. */
+struct cache *cache = cacheNew();
+char *efName = cacheMore(cache, ef, vf);
+preloadCache(conn, cache);
 char commandLine[4*PATH_LEN];
-safef(commandLine, sizeof(commandLine), "%s %s %s %s %s",
-    scriptName, assembly->ucscDb, bamName, "out.narrowPeak.bigBed", "out.bigWig");
+safef(commandLine, sizeof(commandLine), "%s %s %s %s%s %s%s", 
+    scriptName, assembly->ucscDb, efName, 
+    tempDir, "out.narrowPeak.bigBed", tempDir, "out.bigWig");
 
 /* Declare step input and output arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
@@ -237,7 +428,7 @@ char *inTypes[] = {"alignments"};
 char *outFormats[] = {"narrowPeak", "bigWig"};
 char *outNames[] = {"out.narrowPeak.bigBed", "out.bigWig"};
 char *outTypes[] = {"macs2_dnase_peaks", "macs2_dnase_signal"};
-scheduleStep(conn, analysisStep, commandLine, exp->accession, assembly,
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(inFileIds), inFileIds, inTypes,
     ArraySize(outNames), outNames, outTypes, outFormats);
 }
@@ -335,17 +526,25 @@ if (countAlreadyScheduled(conn, analysisStep, ef->id))
 
 verbose(2, "schedulingHotspot on %s step %s\n", ef->edwFileName, analysisStep);
 /* Make command line */
-struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
 int fastqId = getFastqForBam(conn, ef->id);
 int readLength = 0;
 if (fastqId == 0)
     readLength = bamReadLength(edwPathForFileId(conn, ef->id), 1000);
 else
     readLength = mustGetReadLengthForFastq(conn, fastqId);
+
+char *tempDir = newTempDir(analysisStep);
+
+/* Stage inputs and make command line. */
+struct cache *cache = cacheNew();
+char *efName = cacheMore(cache, ef, vf);
+preloadCache(conn, cache);
 char commandLine[4*PATH_LEN];
-safef(commandLine, sizeof(commandLine), "eap_run_hotspot %s %s%s %d %s %s %s",
-    assembly->ucscDb, edwRootDir, ef->edwFileName,
-    readLength, "out.narrowPeak.bigBed", "out.broadPeak.bigBed", "out.bigWig");
+safef(commandLine, sizeof(commandLine), "eap_run_hotspot %s %s %d %s%s %s%s %s%s",
+    assembly->ucscDb, efName,
+    readLength, tempDir, "out.narrowPeak.bigBed", 
+    tempDir, "out.broadPeak.bigBed", tempDir, "out.bigWig");
 
 /* Declare step input and output arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
@@ -353,7 +552,7 @@ char *inTypes[] = {"alignments"};
 char *outFormats[] = {"broadPeak", "narrowPeak", "bigWig"};
 char *outNames[] = {"out.broadPeak.bigBed", "out.narrowPeak.bigBed", "out.bigWig"};
 char *outTypes[] = {"hotspot_broad_peaks", "hotspot_narrow_peaks", "hotspot_signal"};
-scheduleStep(conn, analysisStep, commandLine, exp->accession, assembly,
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(inFileIds), inFileIds, inTypes,
     ArraySize(outNames), outNames, outTypes, outFormats);
 }
@@ -367,12 +566,17 @@ char *analysisStep = "bam_sort";
 if (countAlreadyScheduled(conn, analysisStep, ef->id))
     return;
 
-/* Figure out command line */
-char commandLine[3*PATH_LEN];
-safef(commandLine, sizeof(commandLine), "eap_bam_sort %s%s %s",
-    edwRootDir, ef->edwFileName, "out.bam");
+char *tempDir = newTempDir(analysisStep);
 
-struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+/* Figure out command line */
+struct cache *cache = cacheNew();
+char *efName = cacheMore(cache, ef, vf);
+preloadCache(conn, cache);
+char commandLine[3*PATH_LEN];
+safef(commandLine, sizeof(commandLine), "eap_bam_sort %s %s%s", 
+    efName, tempDir, "out.bam");
+
+struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
 
 /* Declare step input and output arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
@@ -380,7 +584,7 @@ char *inTypes[] = {"unsorted"};
 char *outFormats[] = {"bam", };
 char *outNames[] = {"out.bam"};
 char *outTypes[] = {"alignments",};
-scheduleStep(conn, analysisStep, commandLine, exp->accession, assembly,
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(inFileIds), inFileIds, inTypes,
     ArraySize(outNames), outNames, outTypes, outFormats);
 }
@@ -390,6 +594,10 @@ void runFastqAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edw
     struct edwExperiment *exp)
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
+struct edwAssembly *targetAsm = chooseTarget(conn, ef, vf);
+if (targetAsm == NULL || targetAsm->taxon != 9606)  // Humans only!
+    return;	    // FOr the moment we're being speciest.
+
 char *dataType = exp->dataType;
 if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq"))
     {
@@ -420,14 +628,13 @@ void runBamAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwVa
     struct edwExperiment *exp)
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
-uglyf("runBamAnalysis %u %s\n", ef->id, exp->dataType);
 if (sameString(exp->dataType, "DNase-seq"))
     {
     scheduleMacsDnase(conn, ef, vf, exp);
+#ifdef SOON
     scheduleHotspot(conn, ef, vf, exp);
-    }
-#ifdef SOON 
 #endif /* SOON */
+    }
 }
 
 void runSingleAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
@@ -436,8 +643,10 @@ void runSingleAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct ed
 verbose(2, "run single analysis format %s, dataType %s\n", vf->format, exp->dataType);
 if (sameWord("fastq", vf->format))
     runFastqAnalysis(conn, ef, vf, exp);
+#ifdef SOON
 else if (sameWord("bam", vf->format))
     runBamAnalysis(conn, ef, vf, exp);
+#endif /* SOON */
 }
 
 void runReplicateAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
@@ -480,7 +689,6 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	    }
 	}
     }
-edwPokeFifo("edwAnalysis.fifo");
 sqlDisconnect(&conn);
 }
 
@@ -493,6 +701,7 @@ if (argc != 3)
 again = optionExists("again");
 updateSoftwareMd5 = optionExists("up");
 noJob = optionExists("noJob");
+justLink = optionExists("justLink");
 edwScheduleAnalysis(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
 return 0;
 }
