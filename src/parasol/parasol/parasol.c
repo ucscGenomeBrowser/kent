@@ -45,9 +45,11 @@ errAbort(
   "   parasol add spoke  - Add a new spoke daemon.\n"
   "   parasol [options] add job command-line   - Add job to list.\n"
   "         options:\n"
+  "            -in=in - Where to put stderr, stdin, stdout output\n"
   "            -wait - If set wait for job to finish to return and return with job status code\n"
-  "            -err=path -out=out -in=in - Where to put stderr, stdin, stdout output\n"
+  "            -err=outFile - set stderr to out file - only works with wait flag\n"
   "            -verbose=N - set verbosity level, default level is 1\n"
+  "            -printId - prints jobId to stdout\n"
   "            -results=resultFile fully qualified path to the results file, \n"
   "             or `results' in the current directory if not specified.\n"
   "            -cpu=N  Number of CPUs used by the jobs, default 1.\n"
@@ -251,7 +253,7 @@ for (;;)
     }
 }
 
-void addJob(int argc, char *argv[], boolean printId)
+void addJob(int argc, char *argv[], boolean printId, boolean verbose)
 /* Tell hub about a new job. */
 {
 struct dyString *dy = newDyString(1024);
@@ -281,6 +283,8 @@ dyStringFree(&dy);
 if (sameString(jobIdString, "0"))
     errAbort("sick batch?: hub returned jobId==%s", jobIdString);
 if (printId)
+    printf("%s\n", jobIdString);
+if (verbose)
     {
     printf("your job %s (\"%s", jobIdString, argv[0]);
     for (i=1; i<argc; ++i)
@@ -553,7 +557,7 @@ if (sameString(command, "add"))
 	{
 	if (argc < 2)
 	    usage();
-        addJob(argc-1, argv+1, optionExists("verbose"));
+        addJob(argc-1, argv+1, optionExists("printId"), optionExists("verbose"));
 	}
     else if (sameString(subType, "spoke"))
         addSpoke();
