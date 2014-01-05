@@ -1,6 +1,14 @@
-# This table is used to create a "show tables" cache
+# This table is used to create a cache for the "show tables" and "describe table" commands.
+# The table structure is the table name plus all fields that are returned by the describe
+# table command. As the field names are as similar as possbible to MySQL, they do not follow kent src style.
 
 CREATE TABLE tableList (
-        name varchar(255) not null,
-        PRIMARY KEY(name)
+    tableName varchar(255) not null,  # table name
+    Field varchar(255),  # field name
+    Type varchar(255),   # type of field, as in 'describe table' command
+    NullAllowed varchar(255),   # null allowed field of describe table command
+    isKey varchar(255),  # is key field of describe table command 
+    hasDefault varchar(255) NULL,  # has default field of describe table command
+    Extra varchar(255), # extra field of describe table command
+    INDEX tableIdx(tableName) # need an index, as this table can get quite big for human
 )
