@@ -291,4 +291,12 @@ void edwAnalysisSoftwareUpdateMd5ForStep(struct sqlConnection *conn, char *analy
 void edwPokeFifo(char *fifoName);
 /* Send '\n' to fifo to wake up associated daemon */
 
+FILE *edwPopen(char *command, char *mode);
+/* do popen or die trying */
+
+void edwPclose(FILE **pF);
+/* Close pipe file or die trying */
+
+void edwOneLineSystemResult(char *command, char *line, int maxLineSize);
+/* Execute system command and return one line result from it in line */
 #endif /* EDWLIB_H */

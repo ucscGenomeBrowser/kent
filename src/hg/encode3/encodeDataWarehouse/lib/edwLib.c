@@ -1323,7 +1323,7 @@ edwAnalysisJobSaveToDb(conn, &job, "edwAnalysisJob", 0);
 return sqlLastAutoId(conn);
 }
 
-static FILE *edwPopen(char *command, char *mode)
+FILE *edwPopen(char *command, char *mode)
 /* do popen or die trying */
 {
 /* Because of bugs with popen(...,"r") and programs that use stdin otherwise
@@ -1335,7 +1335,7 @@ if (f == NULL)
 return f;
 }
 
-static void edwPclose(FILE **pF)
+void edwPclose(FILE **pF)
 /* Close pipe file or die trying */
 {
 FILE *f = *pF;
@@ -1348,7 +1348,7 @@ if (f != NULL)
     }
 }
 
-static void edwOneLineSystemResult(char *command, char *line, int maxLineSize)
+void edwOneLineSystemResult(char *command, char *line, int maxLineSize)
 /* Execute system command and return one line result from it in line */
 {
 FILE *f = edwPopen(command, "r");
