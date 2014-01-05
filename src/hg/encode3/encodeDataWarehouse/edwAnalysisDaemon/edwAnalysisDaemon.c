@@ -68,7 +68,6 @@ void finishRun(struct runner *run, int status)
 struct edwJob *job = run->job;
 job->endTime = edwNow();
 job->returnCode = status;
-warn("ugly: Master - finish run status %d on %s", status, job->commandLine);
 
 /* Read in stderr */
 size_t errorMessageSize;
@@ -153,30 +152,27 @@ int waitOnResults(char *resultsFile, char *jobIdString, char *err)
  * as command did. */
 {
 off_t resultsPos = 0;
-int pollTime = 5;   // Poll every 5 seconds for file to open.
+int pollTime = 3;   // Poll every 3 seconds for file to open.
 verbose(2, "waitOnResults(%s, %s, %s)\n", resultsFile, jobIdString, err);
-warn("ugly: Child %d waitOnResults(%s, %s, %s)", childPid, resultsFile, jobIdString, err);
 char *row[JOBRESULT_NUM_COLS];
 for (;;)
     {
     struct lineFile *lf = lineFileOpen(resultsFile, TRUE);
     lineFileSeek(lf, resultsPos, SEEK_SET);
-    warn("ugly: Child %d. resultsPos=%lld", childPid, (long long)resultsPos);
     while (lineFileRow(lf, row))
         {
 	resultsPos = lineFileTell(lf);
 	struct jobResult jr;
 	jobResultStaticLoad(row, &jr);
-	warn("ugly: Child %d. jobIdString %s vs. %s", childPid, jr.jobId, jobIdString);
 	if (sameString(jr.jobId, jobIdString))
 	    {
-	    warn("ugly: Child %d. got match on %s err=%p, WIFEXITED(%d)=%d", childPid, jobIdString, err, jr.status, WIFEXITED(jr.status));
 	    if (err != NULL)
-	        warn("ugly: Child theoretically fetches from %s file %s to %s", jr.host, jr.errFile, err);
-#ifdef SOON
-		pmFetchFile(jr.host, jr.errFile, err);
-#endif /* SOON */
-	    warn("ugly: Child %d. Should be returning", childPid);
+		{
+		char command[3*PATH_LEN];
+		safef(command, sizeof(command), "ssh %s 'scp %s:%s %s'", 
+		    paraHost, jr.host, jr.errFile, err);
+		mustSystem(command);
+		}
 	    if (WIFEXITED(jr.status))
 		return WEXITSTATUS(jr.status);
 	    else
@@ -203,13 +199,11 @@ if (!fileExists(resultsQueue))
 
 char command[2048];
 char *escaped = makeEscapedString(job->commandLine, '\'');
-warn("ugly: Child %d escaped command line %s", childPid, escaped);
 safef(command, sizeof(command),
     "ssh %s 'parasol -results=%s -printId"
     " -err=%s cpu=3 ram=5500m"
     " add job %s'"
     , paraHost, resultsQueue, errFileName, escaped);
-warn("ugly: Child %d - attempting %s", childPid, command);
 freez(&escaped);
 
 char jobIdLine[64];
@@ -217,25 +211,6 @@ edwOneLineSystemResult(command, jobIdLine, sizeof(jobIdLine));
 char *jobIdString = cloneString(trimSpaces(jobIdLine));
 return jobIdString;
 }
-
-int paraWaitJob(char *jobIdString, char *errFileName)
-/* Wait for job to finish and return error code. */
-{
-int status = waitOnResults(resultsQueue, jobIdString, errFileName);
-warn("ugly: Child %d waitOnResults status %d for %s", childPid, status, jobIdString);
-return status;
-}
-
-
-#ifdef OLD
-int launchJob(struct edwJob *job, char *errFileName)
-/* Pass job's command line to parasol. */
-{
-char *jobIdString = startParaJob(job, errFileName);
-int status = paraWaitJob(jobIdString, errFileName);
-return status;
-}
-#endif /* OLD */
 
 char *eapParaTempDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/paraTmp/";
 
@@ -248,7 +223,6 @@ safef(stderrTempFileName, PATH_LEN, "%sedwAnalysisDaemonXXXXXX", eapParaTempDir)
 int errFd = mkstemp(stderrTempFileName);
 if (errFd < 0)
     errnoAbort("Couldn't open temp file %s", stderrTempFileName);
-warn("ugly: Master - made temp file %s for stderr", stderrTempFileName);
 
 ++curThreads;
 job->startTime = edwNow();
@@ -259,9 +233,7 @@ int childId;
 if ((childId = mustFork()) == 0)
     {
     childPid = getpid();
-    warn("ugly: Child %d - forked ok", childPid);
-    int status = paraWaitJob(jobIdString, stderrTempFileName);
-    warn("ugly: Child %d - launchJob %s returned with status %d", childPid, job->commandLine, status);
+    int status = waitOnResults(resultsQueue, jobIdString, stderrTempFileName);
     if (status != 0)
         exit(-1);
     else
@@ -276,7 +248,6 @@ else
 	clTable, job->startTime, childId, (long long)job->id);
     sqlUpdate(conn, query);
     sqlDisconnect(&conn);
-    warn("ugly: Master - updating sql database with start time and pid");
 
     /* We be parent - just fill in job info */
     close(errFd);
@@ -319,7 +290,6 @@ for (;;)
     sqlDisconnect(&conn);
     if (job != NULL)
         {
-	warn("ugly: Master Got job %s", job->commandLine);
 	lastId = job->id;
 	struct runner *runner = findFreeRunner();
 	runJob(runner, job);
@@ -327,7 +297,6 @@ for (;;)
     else
         {
 	/* Wait for signal to come on named pipe or 10 seconds to pass */
-	warn("ugly: Master going to wait");
 	sleep(10);
 	}
     }
