@@ -50,7 +50,6 @@ char sexedName[128];
 safef(sexedName, sizeof(sexedName), "%s.%s", sex, newDb);
 char query[256];
 sqlSafef(query, sizeof(query), "select * from edwAssembly where name='%s'", sexedName);
-uglyf("%s\n", query);
 return edwAssemblyLoadByQuery(conn, query);
 }
 
@@ -66,16 +65,13 @@ char *sexFromExp(struct sqlConnection *conn, struct edwFile *ef, struct edwValid
 /* Return "male" or "female" */
 {
 char *sex = NULL;
-uglyf("sexFromExp(fileId %u, experiment %s)\n", ef->id, vf->experiment);
 
 struct edwExperiment *exp = edwExperimentFromAccession(conn, vf->experiment);
 if (exp != NULL)
     {
-    uglyf("exp->biosample=%s\n", exp->biosample);
     struct edwBiosample *bio = edwBiosampleFromTerm(conn, exp->biosample);
     if (bio != NULL)
         {
-	uglyf("bio->sex = %s\n", bio->sex);
 	if (sameWord(bio->sex, "F"))
 	    sex = "female";
 	else
@@ -91,7 +87,6 @@ struct edwAssembly *chooseTarget(struct sqlConnection *conn, struct edwFile *ef,
 /* Pick mapping target - according to taxon and sex. */
 {
 char *sex = sexFromExp(conn, ef, vf);
-uglyf("Sex of %s is %s\n", vf->experiment, sex);
 return targetAssemblyForDbAndSex(conn, vf->ucscDb, sex);
 }
 
@@ -603,6 +598,7 @@ if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq"))
     {
     if (!isEmpty(vf->pairedEnd))
         {
+#ifdef SOON
 	struct edwValidFile *vfB = edwOppositePairedEnd(conn, vf);
 	if (vfB != NULL)
 	    {
@@ -616,6 +612,7 @@ if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq"))
 		}
 	    edwValidFileFree(&vfB);
 	    }
+#endif /* SOON */
 	}
     else
         {
@@ -628,13 +625,13 @@ void runBamAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwVa
     struct edwExperiment *exp)
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
+#ifdef SOON
 if (sameString(exp->dataType, "DNase-seq"))
     {
     scheduleMacsDnase(conn, ef, vf, exp);
-#ifdef SOON
     scheduleHotspot(conn, ef, vf, exp);
-#endif /* SOON */
     }
+#endif /* SOON */
 }
 
 void runSingleAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
