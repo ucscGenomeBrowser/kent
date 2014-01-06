@@ -36,6 +36,7 @@ CGI_DIRS = \
     edwWebCreateUser \
     edwWebDeprecate \
     edwWebRegisterScript \
+    edwWebXSendFile \
     edwWebSubmit
 
 TEST_DIRS = \
