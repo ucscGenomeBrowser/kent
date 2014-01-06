@@ -332,14 +332,212 @@ taxId   9606
 
 #############################################################################
 ## running TRF simple repeats - DONE - 2013-12-24 - Hiram
+    # this procedure ran into much trouble on this release.  The new
+    # repeat sequences in the centromeres caused trf to run indefinitely.
+    # I tried different sizes of chunks, working down to 20 Mbase chunks.
+    # Even still, some jobs would not complete.  Those broke down even
+    # more, eventually to the smallest bit of 30 Kbase that needed to
+    # run all the way down to 3,000 based chunks with 1,000 base overlaps.
+
+    # this did not work:
     screen # use screen to manage this day-long job
     mkdir /hive/data/genomes/hg38/bed/simpleRepeat
     cd /hive/data/genomes/hg38/bed/simpleRepeat
     time doSimpleRepeat.pl -bigClusterHub=ku -workhorse=hgwdev \
 	-smallClusterHub=ku -buildDir=`pwd` hg38 > do.log 2>&1
 
+    # Instead, something like this:
+    mkdir /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/splitGap
+    cd /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/splitGap
+    mkdir -p noGap
+
+    twoBitToFa ../../../hg38.unmasked.2bit stdout \
+       | faSplit -lift=noGap.lift gap stdin 5000000 noGap/hg38_
+    # make sure nothing has gone missing:
+    faCount noGap/*.fa > faCount.txt
+    tail -1 faCount.txt
+# total 3068387174 898285419 623727342 626335137 900967885  19071391 30979734
+    # compared to the full sequence, same numbers for ACGT:
+    twoBitToFa ../../../hg38.unmasked.2bit stdout | faCount stdin
+# total 3209286105 898285419 623727342 626335137 900967885 159970322 30979743
+    faToTwoBit noGap/*.fa hg38.nogap.2bit
+    twoBitInfo hg38.nogap.2bit stdout | sort -k2,2nr > hg38.nogap.sizes
+
+
+    mkdir /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/run20M
+    cd /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/run20M
+    rm -rf /hive/data/genomes/hg38/TrfPart20M
+    /cluster/bin/scripts/simplePartition.pl \
+/hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/splitGap/hg38.nogap.2bit \
+   20000000 /hive/data/genomes/hg38/TrfPart20M
+   rm -f /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/TrfPart20M
+   ln -s /hive/data/genomes/hg38/TrfPart20M \
+      /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/TrfPart20M
+   ssh ku
+   cd /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/run20M
+   gensub2 /hive/data/genomes/hg38/TrfPart20M/partitions.lst single gsub jobList
+   para create jobList
+   para push
+   # 20 jobs would not complete:
+# Completed: 143 of 163 jobs
+# Jobs currently running: 20
+# CPU time in finished jobs:      76994s    1283.24m    21.39h    0.89d  0.002 y
+# IO & Wait Time:                  1095s      18.24m     0.30h    0.01d  0.000 y
+# Time in running jobs:         1807279s   30121.32m   502.02h   20.92d  0.057 y
+# Average job time:                 546s       9.10m     0.15h    0.01d
+# Longest running job:            90422s    1507.03m    25.12h    1.05d
+# Longest finished job:           43348s     722.47m    12.04h    0.50d
+# Submission to last job:         43363s     722.72m    12.05h    0.50d
+   # determine which are the last jobs as individual bits:
+   para status | grep -v done | awk '{print $(NF-1),$NF}' | grep TrfRun \
+     > not.done.list
+   awk '{print $NF}' not.done.list | sed -e 's/.bed//' | while read F
+do
+   cat $F
+done > seq.specs.not.done
+
+   mkdir /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/run20M/lastJobs
+   cd /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/run20M/lastJobs
+   mkdir fasta
+   for seqSpec in `cat ../seq.specs.not.done`
+do
+  fName=`echo $seqSpec | sed -e 's/.*://'`
+  echo $fName
+  twoBitToFa $seqSpec fasta/$fName.fa
+done
+  ls -1S `pwd`/fasta > part.list
+  cat << '_EOF_' > template
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line bed/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+  # << happy emacs
+
+  cat << '_EOF_' > runTrf
+#!/bin/bash
+set -beEu -o pipefail
+export path1=$1
+export inputFN=`basename $1`
+export outpath=$2
+export outputFN=`basename $2`
+mkdir -p /dev/shm/$outputFN
+cp -p $path1 /dev/shm/$outputFN
+cd /dev/shm/$outputFN
+/cluster/bin/x86_64/trfBig -trf=/cluster/bin/x86_64/trf \
+      $inputFN /dev/null -bedAt=$outputFN -tempDir=/dev/shm
+cd /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/run20M/lastJobs
+rm -f $outpath
+cp -p /dev/shm/$outputFN/$outputFN $outpath
+rm -fr /dev/shm/$outputFN/*
+rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
+'_EOF_'
+  # << happy emacs
+  chmod +x runTrf
+
+  gensub2 part.list single template jobList
+  para create jobList
+  para push
+  # not all of these jobs will finish either:
+# Completed: 85 of 106 jobs
+# Jobs currently running: 21
+# CPU time in finished jobs:      58076s     967.93m    16.13h    0.67d  0.002 y
+# IO & Wait Time:                   828s      13.81m     0.23h    0.01d  0.000 y
+# Time in running jobs:         1988997s   33149.95m   552.50h   23.02d  0.063 y
+# Average job time:                 693s      11.55m     0.19h    0.01d
+# Longest running job:            94730s    1578.83m    26.31h    1.10d
+# Longest finished job:           34216s     570.27m     9.50h    0.40d
+# Submission to last job:         34342s     572.37m     9.54h    0.40d
+
+  # can use what we have here:
+  liftUp result.bed ../../splitGap/noGap.lift error bed/*.bed
+  # find jobs not done
+  para status | grep -v done | awk '{print $(NF-1),$NF}' | grep TrfRun \
+     > not.done.list
+  # splitting up those last jobs:
+  mkdir /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/run20M/splitBits
+  cd /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/run20M/splitBits
+  mkdir noGap
+  awk '{print $2}' ../lastJobs/not.done.list | while read F
+do
+  cp -p $F ./noGap/
+done
+
+  # split into 1,000,000 chunks with 10,000 overlap:
+  mkdir -p 1M_10K
+
+for F in noGap/*.fa
+do
+  B=`basename $F | sed -e 's/.fa//'`
+  echo "faSplit -lift=$B.lift -extra=10000 size $F 1000000 1M_10K/$B_"
+  faSplit -lift=$B.lift -extra=10000 size $F 1000000 1M_10K/${B}_
+done
+
+  ls -1S `pwd`/1M_10K/*.fa > part.list
+  cat << '_EOF_' > runTrf
+#!/bin/bash
+set -beEu -o pipefail
+export path1=$1
+export inputFN=`basename $1`
+export outpath=$2
+export outputFN=`basename $2`
+mkdir -p /dev/shm/$outputFN
+cp -p $path1 /dev/shm/$outputFN
+cd /dev/shm/$outputFN
+/cluster/bin/x86_64/trfBig -trf=/cluster/bin/x86_64/trf \
+      $inputFN /dev/null -bedAt=$outputFN -tempDir=/dev/shm
+cd /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/run20M/splitBits
+rm -f $outpath
+cp -p /dev/shm/$outputFN/$outputFN $outpath
+rm -fr /dev/shm/$outputFN/*
+rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
+'_EOF_'
+  # << happy emacs
+
+  cat << '_EOF_' > template
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line bed/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+  # << happy emacs
+
+  gensub2 part.list single template jobList
+  para create jobList
+  para push
+  # not all of these jobs will complete either:
+# Completed: 53 of 96 jobs
+# CPU time in finished jobs:     212403s    3540.05m    59.00h    2.46d  0.007 y
+# IO & Wait Time:                  1851s      30.85m     0.51h    0.02d  0.000 y
+# Average job time:                4043s      67.38m     1.12h    0.05d
+# Longest finished job:           68726s    1145.43m    19.09h    0.80d
+# Submission to last job:         68890s    1148.17m    19.14h    0.80d
+  # use what results we have here:
+  cat *.lift  | liftUp parts.bed stdin error bed/*.bed
+  liftUp -type=.bed stdout ../../splitGap/noGap.lift error parts.bed \
+    | sort -u | sort -k1,1 -k2,2n > hg38.result.bed
+
+  para status | grep -v -w done | awk '{print $(NF-1)}' > will.not.finish.txt
+
+  # split those last bits:
+  mkdir /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/run20M/splitSplitBits
+  cd /hive/data/genomes/hg38/bed/simpleRepeat.2013-12-27/run20M/splitSplitBits
+  mkdir splitBits
+  cat ../splitBits/will.not.finish.txt | while read F
+do
+  cp -p $F splitBits
+done
+
+  #  100K chunks with 10K overlap
+  mkdir -p 100K_10K
+
+for F in splitBits/*.fa
+do
+  B=`basename $F | sed -e 's/.fa//'`
+  echo "faSplit -lift=$B.lift -extra=10000 size $F 1000000 1M_10K/$B_"
+  faSplit -lift=$B.lift -extra=10000 size $F 100000 100K_10K/${B}_
+done
+
 ############################################################################
-## WINDOWMASKER - DONE - 2013-12-24 - Hiram
+ # WINDOWMASKER - DONE - 2013-12-24 - Hiram
     mkdir /hive/data/genomes/hg38/bed/windowMasker
     cd /hive/data/genomes/hg38/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
