@@ -282,7 +282,8 @@ ptr += 2;
 char *firstEq = strchr(ptr, '=');
 if (firstEq == NULL)
     {
-    vcfFileErr(vcff, "Metadata line lacks '=': \"%s\"", line);
+    if (vcff->majorVersion >= 4)
+	vcfFileErr(vcff, "Metadata line lacks '=': \"%s\"", line);
     return;
     }
 regmatch_t substrs[8];
