@@ -2267,3 +2267,17 @@ noScoreFilter .
 #viewLimits 0:100
 #alwaysZero on
 
+track rmsk override
+group rep
+
+track nestedRepeats override
+group rep
+
+track windowmaskerSdust override
+group rep 
+
+track simpleRepeat override
+group rep 
+
+track microsat override
+group rep 
