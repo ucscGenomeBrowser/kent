@@ -54,12 +54,13 @@ struct runner
 /* Keeps track of running process. */
     {
     int pid;	/* Process ID or 0 if none */
-    char *errFileName;   /* Standard error file for this process */
     struct edwJob *job;	 /* The job we are running */
     };
 
 int curThreads = 0, maxThreadCount;
 struct runner *runners;
+
+char *eapParaTempDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/paraTmp/";
 
 void finishRun(struct runner *run, int status)
 /* Finish up job. Copy results into database */
@@ -69,22 +70,49 @@ struct edwJob *job = run->job;
 job->endTime = edwNow();
 job->returnCode = status;
 
+/* Create stderr file for child  as a temp file */
+char stderrTempFileName[PATH_LEN];
+safef(stderrTempFileName, PATH_LEN, "%sedwAnalysisDaemonXXXXXX", eapParaTempDir);
+int errFd = mkstemp(stderrTempFileName);
+if (errFd < 0)
+    errnoAbort("Couldn't open temp file %s", stderrTempFileName);
+close(errFd);
+
+/* Load in existing stderr contents which should be host:filename. 
+ * Copy them from parasol node to stderrTempFileName. */
+struct sqlConnection *conn = sqlConnect(clDatabase);
+char query[512];
+sqlSafef(query, sizeof(query), "select stderr from %s where id = %u", clTable, job->id);
+char tmpHostFile[PATH_LEN*2];
+if (sqlQuickQuery(conn, query, tmpHostFile, sizeof(tmpHostFile)))
+    {
+    char *colon =strchr(tmpHostFile, ':');
+    int maxHostName=50;
+    if (colon  != NULL && colon - tmpHostFile <= maxHostName)
+        {
+	char command[3*PATH_LEN];
+	safef(command, sizeof(command), "ssh %s 'rcp %s %s'", 
+	    paraHost, tmpHostFile, stderrTempFileName);
+	mustSystem(command);
+	}
+    }
+sqlDisconnect(&conn);
+
+
 /* Read in stderr */
 size_t errorMessageSize;
-readInGulp(run->errFileName, &job->stderr, &errorMessageSize);
-remove(run->errFileName);
+readInGulp(stderrTempFileName, &job->stderr, &errorMessageSize);
+remove(stderrTempFileName);
 
 /* Update database with job results */
 struct dyString *dy = dyStringNew(0);
-sqlDyStringPrintf(dy, "update %s set endTime=%lld, stderr='%s', returnCode=%d where id=%u",
-    clTable, job->endTime, trimSpaces(job->stderr), job->returnCode, job->id);
-struct sqlConnection *conn = sqlConnect(clDatabase);
+sqlDyStringPrintf(dy, "update %s set stderr='%s' where id=%u", clTable, trimSpaces(job->stderr), job->id);
+conn = sqlConnect(clDatabase);
 sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
 dyStringFree(&dy);
 
 /* Free up runner resources. */
-freez(&run->errFileName);
 edwJobFree(&job);
 run->pid = 0;
 --curThreads;
@@ -146,14 +174,14 @@ internalErr();  // Should not get here
 return NULL;
 }
 
-int waitOnResults(char *resultsFile, char *jobIdString, char *err)
+struct jobResult *waitOnResults(char *resultsFile, char *jobIdString)
 /* Read results file until jobId appears in it, and then if necessary
  * copy over stderr to err, and finally exit with the same result
  * as command did. */
 {
 off_t resultsPos = 0;
 int pollTime = 3;   // Poll every 3 seconds for file to open.
-verbose(2, "waitOnResults(%s, %s, %s)\n", resultsFile, jobIdString, err);
+verbose(2, "waitOnResults(%s, %s)\n", resultsFile, jobIdString);
 char *row[JOBRESULT_NUM_COLS];
 for (;;)
     {
@@ -162,22 +190,13 @@ for (;;)
     while (lineFileRow(lf, row))
         {
 	resultsPos = lineFileTell(lf);
-	struct jobResult jr;
-	jobResultStaticLoad(row, &jr);
-	if (sameString(jr.jobId, jobIdString))
+	struct jobResult *jr;
+	jr = jobResultLoad(row);
+	if (sameString(jr->jobId, jobIdString))
 	    {
-	    if (err != NULL)
-		{
-		char command[3*PATH_LEN];
-		safef(command, sizeof(command), "ssh %s 'scp %s:%s %s'", 
-		    paraHost, jr.host, jr.errFile, err);
-		mustSystem(command);
-		}
-	    if (WIFEXITED(jr.status))
-		return WEXITSTATUS(jr.status);
-	    else
-		return -1;	// Generic badness
+	    return jr;
 	    }
+	jobResultFree(&jr);
 	}
     lineFileClose(&lf);
     verbose(2, "waiting for %d\n", pollTime);
@@ -185,9 +204,9 @@ for (;;)
     }
 }
 
-char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/3/results";
+char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/2/results";
 
-char *startParaJob(struct edwJob *job, char *errFileName)
+char *startParaJob(struct edwJob *job)
 /* Tell parasol about a job and return parasol job ID.  Free jobId when done.  */
 {
 /* Make sure results file exists. */
@@ -200,10 +219,8 @@ if (!fileExists(resultsQueue))
 char command[2048];
 char *escaped = makeEscapedString(job->commandLine, '\'');
 safef(command, sizeof(command),
-    "ssh %s 'parasol -results=%s -printId"
-    " -err=%s cpu=3 ram=5500m"
-    " add job %s'"
-    , paraHost, resultsQueue, errFileName, escaped);
+    "ssh %s 'parasol -results=%s -printId cpu=2 ram=5500m add job %s'"
+    , paraHost, resultsQueue, escaped);
 freez(&escaped);
 
 char jobIdLine[64];
@@ -212,32 +229,35 @@ char *jobIdString = cloneString(trimSpaces(jobIdLine));
 return jobIdString;
 }
 
-char *eapParaTempDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/paraTmp/";
-
 void runJob(struct runner *runner, struct edwJob *job)
 /* Fork off and run job. */
 {
-/* Create stderr file for child  as a temp file */
-char stderrTempFileName[PATH_LEN];
-safef(stderrTempFileName, PATH_LEN, "%sedwAnalysisDaemonXXXXXX", eapParaTempDir);
-int errFd = mkstemp(stderrTempFileName);
-if (errFd < 0)
-    errnoAbort("Couldn't open temp file %s", stderrTempFileName);
-
 ++curThreads;
 job->startTime = edwNow();
 runner->job = job;
 
-char *jobIdString = startParaJob(job, stderrTempFileName);
+char *jobIdString = startParaJob(job);
 int childId;
 if ((childId = mustFork()) == 0)
     {
     childPid = getpid();
-    int status = waitOnResults(resultsQueue, jobIdString, stderrTempFileName);
-    if (status != 0)
-        exit(-1);
-    else
-	exit(0);
+    struct jobResult *jr = waitOnResults(resultsQueue, jobIdString);
+    int status = -1;
+    if (WIFEXITED(jr->status))
+        {
+	status = WEXITSTATUS(jr->status);
+	}
+
+    /* Save end time and process status and errFile to database. */
+    struct sqlConnection *conn = sqlConnect(clDatabase);
+    char query[3*PATH_LEN];
+    sqlSafef(query, sizeof(query), 
+	"update %s set endTime=%lld, returnCode=%d, stderr='%s:%s' where id=%u",
+	clTable, edwNow(), status, jr->host, jr->errFile, job->id);
+
+    sqlUpdate(conn, query);
+    sqlDisconnect(&conn);
+    exit(status);
     }
 else
     {
@@ -250,9 +270,7 @@ else
     sqlDisconnect(&conn);
 
     /* We be parent - just fill in job info */
-    close(errFd);
     runner->pid = childId;
-    runner->errFileName = cloneString(stderrTempFileName);
 
     freez(&jobIdString);
     }
@@ -268,10 +286,10 @@ warn("Starting edwAnalysisDaemon on %s %s", clDatabase, table);
 
 /* Set up array with a slot for each simultaneous job. */
 maxThreadCount = sqlUnsigned(countString);
-if (maxThreadCount > 500)
+if (maxThreadCount > 512)
     errAbort("%s jobs at once? Really, that seems excessive", countString);
 AllocArray(runners, maxThreadCount);
-warn("Ugly and intense times for %d theads", maxThreadCount);
+warn("Ugly and fast times for %d theads", maxThreadCount);
 
 long long lastId = 0;  // Keep track of lastId in run table that has already been handled.
 
