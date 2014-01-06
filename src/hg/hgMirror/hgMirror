@@ -64,7 +64,7 @@ FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5"]
 
 # always copy these (small) tables for the current db, if they exist
 FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
-    'knownGene', 'kgXref', 'ensemblLift', 'ucscToEnsembl']
+    'knownGene', 'kgXref', 'ensemblLift', 'ucscToEnsembl','wgEncodeRegTfbsCells']
 
 # always copy these hgFixed tables
 FORCEFIXED = ['trackVersion']
