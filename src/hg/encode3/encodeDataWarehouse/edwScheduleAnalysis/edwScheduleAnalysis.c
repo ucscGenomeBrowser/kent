@@ -14,6 +14,7 @@ boolean again = FALSE;
 boolean updateSoftwareMd5 = FALSE;
 boolean noJob = FALSE;
 boolean justLink = FALSE;
+boolean dry = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +28,7 @@ errAbort(
   "   -up - update on software MD5s rather than aborting on them\n"
   "   -noJob - if set then don't put job on edwAnalysisJob table\n"
   "   -justLink - just symbolically link rather than copy EDW files to cache\n"
+  "   -dry - just print out the commands that would result\n"
   );
 }
 
@@ -36,6 +38,7 @@ static struct optionSpec options[] = {
    {"up", OPTION_BOOLEAN},
    {"noJob", OPTION_BOOLEAN},
    {"justLink", OPTION_BOOLEAN},
+   {"dry", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -124,35 +127,39 @@ if (updateSoftwareMd5)
     edwAnalysisSoftwareUpdateMd5ForStep(conn, analysisStep);
 edwAnalysisCheckVersions(conn, analysisStep);
 
-verbose(1, "scheduling %s on %u in %s\n", analysisStep, inputIds[0], tempDir);
+if (dry)
+    printf("%s\n", commandLine);
+else
+    {
+    verbose(1, "scheduling %s on %u in %s\n", analysisStep, inputIds[0], tempDir);
 
-/* Wrap command line in cd to temp dir */
-char fullCommandLine[strlen(commandLine)+128];
-safef(fullCommandLine, sizeof(fullCommandLine), 
-    "edwCdJob %s", commandLine);
+    /* Wrap command line in cd to temp dir */
+    char fullCommandLine[strlen(commandLine)+128];
+    safef(fullCommandLine, sizeof(fullCommandLine), 
+	"edwCdJob %s", commandLine);
 
-/* Make up edwAnalysisRun record */
-struct edwAnalysisRun *run;
-AllocVar(run);
-if (!noJob)
-    run->jobId = edwAnalysisJobAdd(conn, fullCommandLine);
-safef(run->experiment, sizeof(run->experiment), "%s",  experiment);
-run->analysisStep = analysisStep;
-run->configuration = "";
-run->tempDir = tempDir;
-run->firstInputId = inputIds[0];
-run->inputFileCount = inCount;
-run->inputFileIds = inputIds;
-run->inputTypes = inputTypes;
-run->outputFileCount = outCount;
-run->outputNamesInTempDir = outputNames;
-run->outputFormats = outputFormats;
-run->outputTypes = outputTypes;
-if (assembly != NULL) run->assemblyId = assembly->id;
-run->jsonResult = "";
-edwAnalysisRunSaveToDb(conn, run, "edwAnalysisRun", 0);
-freez(&run);
-
+    /* Make up edwAnalysisRun record */
+    struct edwAnalysisRun *run;
+    AllocVar(run);
+    if (!noJob)
+	run->jobId = edwAnalysisJobAdd(conn, fullCommandLine);
+    safef(run->experiment, sizeof(run->experiment), "%s",  experiment);
+    run->analysisStep = analysisStep;
+    run->configuration = "";
+    run->tempDir = tempDir;
+    run->firstInputId = inputIds[0];
+    run->inputFileCount = inCount;
+    run->inputFileIds = inputIds;
+    run->inputTypes = inputTypes;
+    run->outputFileCount = outCount;
+    run->outputNamesInTempDir = outputNames;
+    run->outputFormats = outputFormats;
+    run->outputTypes = outputTypes;
+    if (assembly != NULL) run->assemblyId = assembly->id;
+    run->jsonResult = "";
+    edwAnalysisRunSaveToDb(conn, run, "edwAnalysisRun", 0);
+    freez(&run);
+    }
 return tempDir;
 }
 
@@ -208,6 +215,8 @@ void preloadCache(struct sqlConnection *conn, struct cache *cache)
 /* If there's anything that needs precashing, return a command line
  * with a semicolon at the end to precache.  Otherwise return blank. */
 {
+if (dry)
+   return;
 struct slRef *el;
 for (el = cache->list; el != NULL; el = el->next)
     {
@@ -699,6 +708,7 @@ again = optionExists("again");
 updateSoftwareMd5 = optionExists("up");
 noJob = optionExists("noJob");
 justLink = optionExists("justLink");
+dry = optionExists("dry");
 edwScheduleAnalysis(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
 return 0;
 }
