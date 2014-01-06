@@ -341,7 +341,7 @@ track pubs
 shortLabel Publications
 longLabel Publications: Sequences in scientific articles
 group phenDis 
-priority 12
+priority 0.9 
 visibility dense
 color 0,0,0
 type bed 4

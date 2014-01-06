@@ -44,14 +44,17 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track rgdQtl override
 shortLabel RGD Human QTL
+priority 1
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track rgdRatQtl override
+priority 1
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track jaxQtlMapped override
+priority 1
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -2258,7 +2261,7 @@ track cooperDevDelay
 shortLabel Cooper Dev. Delay
 longLabel Copy Number Variation morbidity map of developmental delay, Cooper et al. 2011
 group phenDis
-priority 112
+priority 1
 visibility hide
 #color 0,0,200
 type gvf 
