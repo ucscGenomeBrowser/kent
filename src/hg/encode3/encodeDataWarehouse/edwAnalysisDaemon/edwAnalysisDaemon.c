@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "errabort.h"
 #include "portable.h"
 #include "obscure.h"
 #include "net.h"
@@ -62,6 +63,24 @@ struct runner *runners;
 
 char *eapParaTempDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/paraTmp/";
 
+void maySystem(char *cmd)
+/* Execute cmd using "sh -c" and complain if there are problems. */
+{
+int status = system(cmd);
+if (status == -1)
+    errnoWarn("error starting command: %s", cmd);
+else if (WIFSIGNALED(status))
+    warn("command terminated by signal %d: %s", WTERMSIG(status), cmd);
+else if (WIFEXITED(status))
+    {
+    if (WEXITSTATUS(status) != 0)
+        warn("command exited with %d: %s", WEXITSTATUS(status), cmd);
+    }
+else
+    warn("bug: invalid exit status for command: %s", cmd);
+}
+
+
 void finishRun(struct runner *run, int status)
 /* Finish up job. Copy results into database */
 {
@@ -93,11 +112,10 @@ if (sqlQuickQuery(conn, query, tmpHostFile, sizeof(tmpHostFile)))
 	char command[3*PATH_LEN];
 	safef(command, sizeof(command), "ssh %s 'rcp %s %s'", 
 	    paraHost, tmpHostFile, stderrTempFileName);
-	mustSystem(command);
+	maySystem(command);
 	}
     }
 sqlDisconnect(&conn);
-
 
 /* Read in stderr */
 size_t errorMessageSize;
@@ -282,7 +300,7 @@ void edwAnalysisDaemon(char *table, char *countString)
 {
 clTable = table;
 
-warn("Starting edwAnalysisDaemon on %s %s", clDatabase, table);
+warn("Starting edwAnalysisDaemon v2 on %s %s", clDatabase, table);
 
 /* Set up array with a slot for each simultaneous job. */
 maxThreadCount = sqlUnsigned(countString);
