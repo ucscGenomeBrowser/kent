@@ -66,12 +66,12 @@ if (pubsClassColors!=NULL)
     return;
 
 pubsClassColors = hashNew(0);
-struct sqlConnection *conn = hAllocConn(database);
-if (!sqlTableExists(conn, "hgFixed.pubsClassColors")) 
+struct sqlConnection *conn = hAllocConn("hgFixed");
+if (!sqlTableExists(conn, "pubsClassColors")) 
     {
     return;
     }
-char *query = "NOSQLINJ SELECT class, rgbColor FROM hgFixed.pubsClassColors";
+char *query = "NOSQLINJ SELECT class, rgbColor FROM pubsClassColors";
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
