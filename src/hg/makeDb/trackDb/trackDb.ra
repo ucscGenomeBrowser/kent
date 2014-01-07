@@ -2765,3 +2765,13 @@ shortCircuit 1
 termRegex ^[A-Za-z0-9_]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,name from %s where name like '%s%%'
 searchPriority 10
+
+track animalQtl
+shortLabel $Organism QTL
+longLabel $Organism QT from animalQTLdb
+group map 
+priority 11 
+visibility hide
+itemRgb on
+type bed 9 
+
