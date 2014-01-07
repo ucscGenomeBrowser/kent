@@ -282,7 +282,8 @@ ptr += 2;
 char *firstEq = strchr(ptr, '=');
 if (firstEq == NULL)
     {
-    if (vcff->majorVersion >= 4)
+    if (vcff->majorVersion > 4 ||
+	(vcff->majorVersion == 4 && vcff->minorVersion > 0))
 	vcfFileErr(vcff, "Metadata line lacks '=': \"%s\"", line);
     return;
     }
