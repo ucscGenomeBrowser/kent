@@ -600,3 +600,14 @@ susScr3.genbank.est.native.load = yes
     # verify the track link to INSDC functions
 
 ##############################################################################
+# (IN PROGRESS - 2014-01-06 - Pauline)
+    mkdir /hive/data/genomes/susScr3/bed/animalQtl
+    cd /hive/data/genomes/susScr3/bed/animalQtl
+
+    wget http://www.animalgenome.org/hu/43874/QTL_SS_10.2.ubed.txt
+
+    zcat QTL_SS_10.2.ubed.txt >> susScr3.animalQtl.bed
+
+    hgLoadBed susScr3 animalQtl susScr3.animalQtl.bed
+
+##Problem with file some chromStart>chromEnd

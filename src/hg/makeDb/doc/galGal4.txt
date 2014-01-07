@@ -1180,3 +1180,14 @@ TMPDIR=/dev/shm
     #  real    45m55.767s
 
 ############################################################################
+# (IN PROGRESS - 2014-01-07 - Pauline)
+    mkdir /hive/data/genomes/galGal4/bed/animalQtl
+    cd /hive/data/genomes/galGal4/bed/animalQtl
+
+    wget http://www.animalgenome.org/QTLdb/tmp/QTL_GG_4.0.ubed.txt.gz 
+
+    zcat QTL_GG_4.0.ubed.txt.gz >> galGal4.animalQtl.bed
+
+    hgLoadBed galGal4 animalQtl galGal4.animalQtl.bed
+
+
