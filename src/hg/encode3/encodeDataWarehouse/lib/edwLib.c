@@ -1348,13 +1348,20 @@ if (f != NULL)
     }
 }
 
-void edwOneLineSystemResult(char *command, char *line, int maxLineSize)
+boolean edwOneLineSystemAttempt(char *command, char *line, int maxLineSize)
 /* Execute system command and return one line result from it in line */
 {
 FILE *f = edwPopen(command, "r");
-if (fgets(line, maxLineSize, f) == NULL)
-    errAbort("Can't get line from %s", command);
+char *result  = fgets(line, maxLineSize, f);
 edwPclose(&f);
+return result != NULL;
+}
+
+void edwOneLineSystemResult(char *command, char *line, int maxLineSize)
+/* Execute system command and return one line result from it in line */
+{
+if (!edwOneLineSystemAttempt(command, line, maxLineSize) )
+    errAbort("Can't get line from %s", command);
 }
 
 void edwMd5File(char *fileName, char md5Hex[33])

@@ -299,4 +299,8 @@ void edwPclose(FILE **pF);
 
 void edwOneLineSystemResult(char *command, char *line, int maxLineSize);
 /* Execute system command and return one line result from it in line */
+
+boolean edwOneLineSystemAttempt(char *command, char *line, int maxLineSize);
+/* Execute system command and return one line result from it in line */
+
 #endif /* EDWLIB_H */
