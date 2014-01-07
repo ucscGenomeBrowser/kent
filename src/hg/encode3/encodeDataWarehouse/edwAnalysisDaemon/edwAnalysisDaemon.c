@@ -222,7 +222,7 @@ for (;;)
     }
 }
 
-char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/2/results";
+char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/1/results";
 
 char *startParaJob(struct edwJob *job)
 /* Tell parasol about a job and return parasol job ID.  Free jobId when done.  */
@@ -237,14 +237,26 @@ if (!fileExists(resultsQueue))
 char command[2048];
 char *escaped = makeEscapedString(job->commandLine, '\'');
 safef(command, sizeof(command),
-    "ssh %s 'parasol -results=%s -printId cpu=2 ram=5500m add job %s'"
+    "ssh %s 'parasol -results=%s -printId cpu=1 ram=5500m add job %s'"
     , paraHost, resultsQueue, escaped);
 freez(&escaped);
 
-char jobIdLine[64];
-edwOneLineSystemResult(command, jobIdLine, sizeof(jobIdLine));
-char *jobIdString = cloneString(trimSpaces(jobIdLine));
-return jobIdString;
+int maxRetries = 6;
+int retry;
+for (retry = 0; retry < maxRetries; ++retry)
+    {
+    char jobIdLine[64];
+    if (edwOneLineSystemAttempt(command, jobIdLine, sizeof(jobIdLine)))
+        {
+	char *jobIdString = cloneString(trimSpaces(jobIdLine));
+	return jobIdString;
+	}
+    warn("Failed oneLiner: %s", command);
+    warn("Taking a nap");
+    sleep(10);
+    }
+errAbort("Couldn't execute %s after %d retries", command, maxRetries);
+return NULL;
 }
 
 void runJob(struct runner *runner, struct edwJob *job)
@@ -300,7 +312,7 @@ void edwAnalysisDaemon(char *table, char *countString)
 {
 clTable = table;
 
-warn("Starting edwAnalysisDaemon v2 on %s %s", clDatabase, table);
+warn("Starting edwAnalysisDaemon v4 on %s %s", clDatabase, table);
 
 /* Set up array with a slot for each simultaneous job. */
 maxThreadCount = sqlUnsigned(countString);
