@@ -2773,5 +2773,7 @@ group map
 priority 11 
 visibility hide
 itemRgb on
-type bed 9 
-
+type bed 4 .
+url http://www.animalgenome.org/cgi-bin/QTLdb/GG/qdetails?QTL_ID=$p
+urlLabel Animal Genome QTL db:
+# iframeUrl http://www.animalgenome.org/cgi-bin/QTLdb/GG/qdetails?QTL_ID=$p
