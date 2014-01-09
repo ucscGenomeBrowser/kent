@@ -193,9 +193,13 @@ edwFastqFileFree(&fqf);
 void pairedEndQa(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf)
 /* Look for other end,  do a pairwise alignment, and save results in database. */
 {
+verbose(1, "pairedEndQa on %u %s %s\n", ef->id, ef->edwFileName, ef->submitFileName);
 /* Get other end, return if not found. */
 struct edwValidFile *otherVf = edwOppositePairedEnd(conn, vf);
 if (otherVf == NULL)
+    return;
+
+if (otherVf->fileId > vf->fileId)
     return;
 
 struct edwValidFile *vf1, *vf2;
@@ -205,14 +209,6 @@ if (pair != NULL)
     edwValidFileFree(&otherVf);
     return;
     }
-
-/* Make placeholder record to help avoid race condition with other member of pair. */
-char query[256];
-sqlSafef(query, sizeof(query),
-    "insert into edwQaPairedEndFastq (fileId1,fileId2) values (%u,%u)"
-    , vf1->fileId, vf2->fileId);
-sqlUpdate(conn, query);
-unsigned id = sqlLastAutoId(conn);
 
 /* Get target assembly and figure out path for BWA index. */
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
@@ -243,15 +239,16 @@ mustSystem(command);
 /* Read RA file into variables. */
 struct edwQaPairedEndFastq *pe = edwQaPairedEndFastqOneFromRa(tmpRa);
 
-/* Update database to complete record. */
-/* The alignment may have taken a while so let's get a new connection. */
+/* Update database with record. */
 struct sqlConnection *freshConn = edwConnectReadWrite();
+char query[256];
 sqlSafef(query, sizeof(query),
-    "update edwQaPairedEndFastq set "
-    " concordance=%g, distanceMean=%g, distanceStd=%g, distanceMin=%g, distanceMax=%g, "
-    " recordComplete=1 where id=%u"
-    , pe->concordance, pe->distanceMean, pe->distanceStd, pe->distanceMin, pe->distanceMax, id);
-sqlUpdate(freshConn, query);
+    "insert into edwQaPairedEndFastq "
+    "(fileId1,fileId2,concordance,distanceMean,distanceStd,distanceMin,distanceMax,recordComplete) "
+    " values (%u,%u,%g,%g,%g,%g,%g,1)"
+    , vf1->fileId, vf2->fileId, pe->concordance, pe->distanceMean
+    , pe->distanceStd, pe->distanceMin, pe->distanceMax);
+sqlUpdate(conn, query);
 sqlDisconnect(&freshConn);
 
 /* Clean up and go home. */
