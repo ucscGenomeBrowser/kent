@@ -28817,3 +28817,29 @@ hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
 
 #this actually works - had to get hgLoadBed flags right, and didn't need to do
 #sort - sort was messing up the file I think?
+
+#############################################################################
+# LIFTOVER TO Hg38 (DONE - 2013-12-31 - Hiram )
+    mkdir /hive/data/genomes/hg19/bed/blat.hg38noMask.2013-12-31
+    cd /hive/data/genomes/hg19/bed/blat.hg38noMask.2013-12-31
+    # experiments were done with this process to determine if the
+    # target/query sequences need to be masked or not.  They do not
+    # need to be masked, the same result is obtained on masked or
+    # unmasked sequence.
+    # -debug run to create run dir and scripts, the partition script
+    # was modified to use the unmasked hg19/hg38 sequences
+    doSameSpeciesLiftOver.pl -debug -stop=net -buildDir=`pwd` \
+      -bigClusterHub=ku \
+       -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/hg19/11.ooc hg19 hg38
+    # Turns out the chain step procedure will not construct the proper
+    # set of files in debug mode (pslParts.lst) because it can not.
+    # the chain step has to be run for real:
+    doSameSpeciesLiftOver.pl -continue=chain -buildDir=`pwd` \
+      -bigClusterHub=ku \
+       -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/hg19/11.ooc hg19 hg38 > chain.log 2>&1
+
+    # verify the convert link on the browser is now active from hg19 to hg38
+
+#############################################################################
