@@ -347,9 +347,44 @@ taxId   9606
 #       558 rmskClass/SINE?.tab
 #   5657343 total
 
-    # masked with trfMask:
+    # using this RM result with trfMask for the final masked sequence
+    cd /hive/data/genomes/hg38
+    twoBitMask hg38.rmsk.2bit -add bed/simpleRepeat/trfMask.bed hg38.2bit
+    twoBitToFa hg38.2bit stdout | faSize stdin > faSize.hg38.2bit.txt
 # 3209286105 bases (159970322 N's 3049315783 real 1377295959 upper 1672019824 lower) in 455 sequences in 1 files
 # %52.10 masked total, %54.83 masked real
+
+#############################################################################
+## repeating RepeatMasker Blastn run (DONE - 2014-01-07 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/rmskBlastn
+    cd /hive/data/genomes/hg38/bed/rmskBlastn
+
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -useRMBlastn -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev \
+        -stop=mask -buildDir=`pwd` hg38 > mask.log
+    # real    203m33.670s
+
+# 3209286105 bases (159970322 N's 3049315783 real 1491207906 upper 1558107877 lower) in 455 sequences in 1 files
+# %48.55 masked total, %51.10 masked real
+
+#############################################################################
+## repeating RepeatMasker cross-match run (DONE - 2014-01-07 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/rmskCM
+    cd /hive/data/genomes/hg38/bed/rmskCM
+
+    # missed recording stderr ....  forgot the 2>&1
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev \
+        -stop=mask -buildDir=`pwd` hg38 > mask.log
+    # real    1897m33.517s
+    # running from Tue Jan  7 16:10:33 PST 2014 thru 08 Jan 23:48
+#  *** All done!  (through the 'mask' step) - Elapsed time: 1897m34s
+#  *** Steps were performed in /hive/data/genomes/hg38/bed/rmskCM
+    # running install manually to allow edit of the script to load
+    # a specific rmskCm table
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev \
+        -continue=install -stop=install -buildDir=`pwd` hg38 -debug
 
 #############################################################################
 ## RepeatMasker with RM Blastn - DONE - 2013-12-24,25 - Hiram
@@ -390,7 +425,17 @@ taxId   9606
 #   5464329 total
 
 #############################################################################
-## RepeatMasker with HMMER - WORKING - 2013-12-24 - Hiram
+## repeating RepeatMasker run with HMMER - WORKING - 2014-01-08 - Hiram
+    mkdir /hive/data/genomes/hg38/bed/rmskHmmer
+    cd /hive/data/genomes/hg38/bed/rmskHmmer
+
+    # trying cpu=4 and ram=32g
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -stop=mask -useHMMER -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38 > mask.log 2>&1
+
+#############################################################################
+## RepeatMasker with HMMER - DONE - 2013-12-24,26 - Hiram
     mkdir /hive/data/genomes/hg38/bed/repeatMaskerHMMER
     cd /hive/data/genomes/hg38/bed/repeatMaskerHMMER
 
@@ -424,11 +469,6 @@ taxId   9606
 #       722 rmskClass/rRNA.tab
 #       468 rmskClass/tRNA.tab
 #   5705457 total
-
-    # using this RM result with trfMask for the final masked sequence
-    cd /hive/data/genomes/hg38
-    twoBitMask hg38.rmsk.2bit -add bed/simpleRepeat/trfMask.bed hg38.2bit
-    twoBitToFa hg38.2bit stdout | faSize stdin > faSize.hg38.2bit.txt
 
 #############################################################################
 # rmsk from genbank release (DONE - 2014-12-25 - Hiram)
@@ -911,10 +951,10 @@ rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
 # standard deviation 81.743447
 
     # the four largest ones:
-# chr2         32916625        32917625        chr2.7
-# chr2         32867130        32868130        chr2.6
-# chr20        36314371        36314719        chr20.36
-# chr12       123443533       123443733        chr12.10
+# 1000 chr2         32916625        32917625        chr2.7
+# 1000 chr2         32867130        32868130        chr2.6
+#  348 chr20        36314371        36314719        chr20.36
+#  200 chr12       123443533       123443733        chr12.10
 
 #########################################################################
 # cytoBandIdeo - (DONE - 2013-12-26 - Hiram)
@@ -1165,15 +1205,29 @@ close (DR);
 	jkStuff/hg38.nonBridged.lft
 
 ##############################################################################
-# cpgIslands - (DONE - 2013-12-31 - Hiram)
+# cpgIslands - (DONE - 2014-01-07 - Hiram)
     # run on the Hmmer + trfMask sequence
     mkdir /hive/data/genomes/hg38/bed/cpgIslands
     cd /hive/data/genomes/hg38/bed/cpgIslands
-    time doCpgIslands.pl hg38 > do.log 2>&1 &
-    # real    5m22.460s
-
+    time $HOME/kent/src/hg/utils/automation/doCpgIslands.pl \
+      -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+        -workhorse=hgwdev -smallClusterHub=ku hg38 > do.log 2>&1
+    # real    3m31.684s
+    # wc -l cpgIsland.bed -> 30456 cpgIsland.bed
     cat fb.hg38.cpgIslandExt.txt
+    #  23654068 bases of 3049335806 (0.776%) in intersection
+
+    # Previously in hg19:
+    featureBits -countGaps hg19 cpgIslandExt
+    # 21842742 bases of 3137161264 (0.696%) in intersection
+
+    # when run on Hmmer and Trf masked sequence:
+    # wc -l cpgIsland.bed -> 30416 cpgIsland.bed
     #   23635946 bases of 3049335806 (0.775%) in intersection
+
+    # when run on unmasked sequence:
+    # wc -l cpgIsland.bed -> 55149 cpgIsland.bed
+    # 33637531 bases of 3049335806 (1.103%) in intersection
 
 #########################################################################
 # construct liftOver to hg19 (DONE - 2013-12-31 - Hiram)
@@ -1289,16 +1343,17 @@ sort ../../chrom.sizes | join -t'^I' - altToChr.tab \
    # 170113652 bases of 3209286105 (5.301%) in intersection
 
 ############################################################################
-## genscan (DONE - 2014-01-03 - Hiram)
-   # this was tried, but had trouble:
+## genscan (DONE - 2014-01-07 - Hiram)
    mkdir /hive/data/genomes/hg38/bed/genscan
    cd /hive/data/genomes/hg38/bed/genscan
 
-   doGenscan.pl hg38 -buildDir=`pwd` \
- -maskedSeq=/hive/data/genomes/hg38/bed/repeatMaskerHMMER/hg38.rmskHmmer.trf.2bit \
-   -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev -stop=makeBed \
-      > makeBed.log 2>&1
+   time $HOME/kent/src/hg/utils/automation/doGenscan.pl hg38 -buildDir=`pwd` \
+     -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        > do.log 2>&1
+XXX - running Tue Jan  7 11:25:43 PST 2014
 
+############################################################################
+## genscan on unmasked sequence experiment (DONE - 2013-12-03 - Hiram)
    ## instead, working on unmasked sequence:
    mkdir /hive/data/genomes/hg38/bed/genscan/unmaskedRun
    cd /hive/data/genomes/hg38/bed/genscan/unmaskedRun
@@ -1626,6 +1681,5 @@ do
   echo $C
   ./pepNameFix.pl $C > nameFixed/pep/$C.pep
 done
-
 
 #############################################################################
