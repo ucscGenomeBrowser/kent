@@ -468,38 +468,6 @@ safef(edwFile, PATH_LEN, "%s%s%s", edwDir, baseName, suffix);
 safef(serverPath, PATH_LEN, "%s%s", edwRootDir, edwFile);
 }
 
-#ifdef OLD
-void edwMakePlateFileNameAndPath(int edwFileId, char *submitFileName,
-    char licensePlate[edwMaxPlateSize], char edwFile[PATH_LEN], char serverPath[PATH_LEN])
-/* Convert file id to local file name, and full file path. Make any directories needed
- * along serverPath. */
-{
-/* Preserve suffix.  Give ourselves up to two suffixes. */
-int nameSize = strlen(submitFileName);
-char *suffix = lastMatchCharExcept(submitFileName, submitFileName + nameSize, '.', '/');
-if (suffix != NULL)
-    {
-    char *secondSuffix = lastMatchCharExcept(submitFileName, suffix, '.', '/');
-    if (secondSuffix != NULL)
-        suffix = secondSuffix;
-    }
-suffix = emptyForNull(suffix);
-
-/* Figure out edw file name, starting with license plate. */
-edwMakeLicensePlate(edwLicensePlatePrefix, edwFileId, licensePlate, edwMaxPlateSize);
-
-/* Figure out directory and make any components not already there. */
-char edwDir[PATH_LEN];
-edwDirForTime(edwNow(), edwDir);
-char uploadDir[PATH_LEN];
-safef(uploadDir, sizeof(uploadDir), "%s%s", edwRootDir, edwDir);
-makeDirsOnPath(uploadDir);
-
-/* Figure out full file names */
-safef(edwFile, PATH_LEN, "%s%s%s", edwDir, licensePlate, suffix);
-safef(serverPath, PATH_LEN, "%s%s", edwRootDir, edwFile);
-}
-#endif /* OLD */
 
 static char *localHostName = "localhost";
 static char *localHostDir = "";  
@@ -1270,9 +1238,12 @@ struct edwValidFile *edwOppositePairedEnd(struct sqlConnection *conn, struct edw
 char *otherEnd = edwOppositePairedEndString(vf->pairedEnd);
 char query[1024];
 sqlSafef(query, sizeof(query), 
-    "select * from edwValidFile where experiment='%s' and outputType='%s' and replicate='%s' "
-    "and technicalReplicate='%s' and pairedEnd='%s'"
-    , vf->experiment, vf->outputType, vf->replicate, vf->technicalReplicate, otherEnd);
+    "select edwValidFile.* from edwValidFile join edwFile on edwValidFile.fileId=edwFile.id"
+    " where experiment='%s' and outputType='%s' and replicate='%s' "
+    " and technicalReplicate='%s' and pairedEnd='%s' and itemCount=%lld and deprecated=''"
+    , vf->experiment, vf->outputType, vf->replicate, vf->technicalReplicate, otherEnd
+    , vf->itemCount);
+uglyf("%s\n", query);
 struct edwValidFile *otherVf = edwValidFileLoadByQuery(conn, query);
 if (otherVf == NULL)
     return NULL;
@@ -1312,12 +1283,13 @@ sqlSafef(query, sizeof(query),
 return edwQaPairedEndFastqLoadByQuery(conn, query);
 }
 
-int edwAnalysisJobAdd(struct sqlConnection *conn, char *commandLine)
+int edwAnalysisJobAdd(struct sqlConnection *conn, char *commandLine, int cpusRequested)
 /* Add job to edwAnalyisJob table and return job ID. */
 {
 struct edwAnalysisJob job =
    {
    .commandLine = commandLine,
+   .cpusRequested = cpusRequested
    };
 edwAnalysisJobSaveToDb(conn, &job, "edwAnalysisJob", 0);
 return sqlLastAutoId(conn);
@@ -1335,26 +1307,23 @@ if (f == NULL)
 return f;
 }
 
-void edwPclose(FILE **pF)
-/* Close pipe file or die trying */
-{
-FILE *f = *pF;
-if (f != NULL)
-    {
-    int err = pclose(f);
-    if (err != 0)
-        errnoAbort("Can't pclose(%p)", f);
-    *pF = NULL;
-    }
-}
-
 boolean edwOneLineSystemAttempt(char *command, char *line, int maxLineSize)
 /* Execute system command and return one line result from it in line */
 {
-FILE *f = edwPopen(command, "r");
-char *result  = fgets(line, maxLineSize, f);
-edwPclose(&f);
-return result != NULL;
+FILE *f = popen(command, "r");
+boolean ok = FALSE;
+if (f != NULL)
+    {
+    char *result  = fgets(line, maxLineSize, f);
+    if (result != NULL)
+	ok = TRUE;
+    pclose(f);
+    }
+else
+    {
+    errnoWarn("failed popen %s", command);
+    }
+return ok;
 }
 
 void edwOneLineSystemResult(char *command, char *line, int maxLineSize)
@@ -1386,6 +1355,15 @@ char sysCommand[PATH_LEN*2];
 safef(sysCommand, sizeof(sysCommand), "bash -c 'which %s'", command);
 edwOneLineSystemResult(sysCommand, path, PATH_LEN);
 eraseTrailingSpaces(path);
+}
+
+struct edwAnalysisStep *edwAnalysisStepFromNameOrDie(struct sqlConnection *conn, char *analysisStep)
+/* Get analysis step of given name, or complain and die. */
+{
+struct edwAnalysisStep *step = edwAnalysisStepFromName(conn, analysisStep);
+if (step == NULL)
+    errAbort("Can't find %s in edwAnalysisStep table", analysisStep);
+return step;
 }
 
 struct edwAnalysisStep *edwAnalysisStepFromName(struct sqlConnection *conn, char *name)
@@ -1431,15 +1409,13 @@ void edwAnalysisCheckOrUpdateSoftwareForStep(struct sqlConnection *conn, char *a
     boolean doUpdate)
 /* Check that we are running tracked versions of everything. */
 {
-struct edwAnalysisStep *step = edwAnalysisStepFromName(conn, analysisStep);
-if (step == NULL)
-    errAbort("Can't find %s in edwAnalysisStep table", analysisStep);
+struct edwAnalysisStep *step = edwAnalysisStepFromNameOrDie(conn, analysisStep);
 int i;
 for (i=0; i<step->softwareCount; ++i)
     {
     struct edwAnalysisSoftware *software = edwAnalysisSoftwareFromName(conn, step->software[i]);
     if (software == NULL)
-        errAbort("Can't find %s in edwAnalysisSoftware", step->software[i]);
+        errAbort("Can't find %s in edwAnalysisSoftware table", step->software[i]);
     checkOrUpdate(conn, analysisStep, software, doUpdate);
     edwAnalysisSoftwareFree(&software);
     }
