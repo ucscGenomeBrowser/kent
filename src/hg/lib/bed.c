@@ -56,8 +56,7 @@ struct bed *bed;
 int i, blockCount, *chromStarts, *blockSizes, chromStart;
 
 /* A tiny bit of error checking on the genePred. */
-if (genePred->txStart >= genePred->txEnd || genePred->cdsStart > genePred->cdsEnd
-    || genePred->exonCount < 0 )
+if (genePred->txStart >= genePred->txEnd || genePred->cdsStart > genePred->cdsEnd)
     {
     errAbort("mangled genePred format for %s", genePred->name);
     }
