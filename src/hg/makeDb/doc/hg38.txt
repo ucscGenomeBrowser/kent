@@ -323,36 +323,36 @@ taxId   9606
     time doRepeatMasker.pl -continue=install -stop=install -debug \
        -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38
     cat fb.hg38.rmskCM.txt
-    # 1669596200 bases of 3209286105 (52.024%) in intersection
+    # 1586326530 bases of 3209286105 (49.429%) in intersection
+
     # profile of repeat elements:
-#   1872398 rmskClass/SINE.tab
-#   1649477 rmskClass/LINE.tab
-#    782159 rmskClass/LTR.tab
-#    666064 rmskClass/Simple_repeat.tab
-#    538199 rmskClass/DNA.tab
-#     98841 rmskClass/Low_complexity.tab
-#      9923 rmskClass/Satellite.tab
-#      9413 rmskClass/Retroposon.tab
-#      7673 rmskClass/LTR?.tab
-#      4821 rmskClass/scRNA.tab
-#      4620 rmskClass/Unknown.tab
-#      4011 rmskClass/DNA?.tab
-#      1947 rmskClass/RC.tab
-#      1891 rmskClass/snRNA.tab
-#      1567 rmskClass/srpRNA.tab
-#      1122 rmskClass/RNA.tab
-#      1015 rmskClass/tRNA.tab
-#      1011 rmskClass/rRNA.tab
-#       633 rmskClass/RC?.tab
-#       558 rmskClass/SINE?.tab
-#   5657343 total
+#  1852545 rmskClass/SINE.tab
+#  1570523 rmskClass/LINE.tab
+#   748597 rmskClass/LTR.tab
+#   703682 rmskClass/Simple_repeat.tab
+#   499108 rmskClass/DNA.tab
+#   102856 rmskClass/Low_complexity.tab
+#     7962 rmskClass/Satellite.tab
+#     5750 rmskClass/Retroposon.tab
+#     5667 rmskClass/LTR?.tab
+#     5622 rmskClass/Unknown.tab
+#     4516 rmskClass/snRNA.tab
+#     3294 rmskClass/DNA?.tab
+#     2026 rmskClass/tRNA.tab
+#     1840 rmskClass/rRNA.tab
+#     1784 rmskClass/RC.tab
+#     1672 rmskClass/srpRNA.tab
+#     1420 rmskClass/scRNA.tab
+#      704 rmskClass/RNA.tab
+#      411 rmskClass/RC?.tab
+#       38 rmskClass/SINE?.tab
 
     # using this RM result with trfMask for the final masked sequence
     cd /hive/data/genomes/hg38
-    twoBitMask hg38.rmsk.2bit -add bed/simpleRepeat/trfMask.bed hg38.2bit
+    twoBitMask hg38.rmskCM.2bit -add bed/simpleRepeat/trfMask.bed hg38.2bit
     twoBitToFa hg38.2bit stdout | faSize stdin > faSize.hg38.2bit.txt
-# 3209286105 bases (159970322 N's 3049315783 real 1377295959 upper 1672019824 lower) in 455 sequences in 1 files
-# %52.10 masked total, %54.83 masked real
+# 3209286105 bases (159970322 N's 3049315783 real 1460684798 upper 1588630985 lower) in 455 sequences in 1 files
+# %49.50 masked total, %52.10 masked real
 
 #############################################################################
 ## repeating RepeatMasker Blastn run (DONE - 2014-01-07 - Hiram)
@@ -366,6 +366,13 @@ taxId   9606
 
 # 3209286105 bases (159970322 N's 3049315783 real 1491207906 upper 1558107877 lower) in 455 sequences in 1 files
 # %48.55 masked total, %51.10 masked real
+
+    # install step with debug so the script can be altered to load into
+    # a specific rmskBlastn table:
+
+    $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -useRMBlastn -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev \
+        -continue=install -debug -buildDir=`pwd` hg38
 
 #############################################################################
 ## repeating RepeatMasker cross-match run (DONE - 2014-01-07 - Hiram)
@@ -1716,5 +1723,131 @@ done
 
     hgLoadBed hg38 centromeres hg38.centContigs.bed4
     checkTableCoords hg38 centromeres
+
+#############################################################################
+## alternate sequence/haplotype alignments (WORKING - 2014-01-09 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzAltSequences
+    cd /hive/data/genomes/hg38/bed/lastzAltSequences
+
+rm -fr hg38.haplotypes.lift temp.lift targetFa queryFa
+mkdir targetFa
+mkdir queryFa
+touch temp.lift
+
+cat ../altLocations/chrToAlt.bed | while read L
+do
+  chrName=`echo $L | awk '{print $1}'`
+  chromSize=`egrep "^$chrName   " ../../chrom.sizes | cut -f2`
+  chrStart=`echo $L | awk '{if (($2-10000)>=0) {printf "%d", $2-10000} else {printf "0"}}'`
+  chrEnd=`echo $L | awk -v chromSize=$chromSize '{if (($3+10000)<=chromSize) {printf "%d", $3+10000} else {printf "%d", chromSize}}'`
+  chrSize=`echo $chrEnd $chrStart | awk '{print $1-$3}'`
+  queryName=`echo $L | awk '{print $4}'`
+  partName="${chrName}_${chrStart}_${chrEnd}"
+  echo $chrName $chrStart $chrEnd $queryName $partName $chromSize
+  echo -e "$chrStart\t${partName}\t$chrSize\t$chrName\t$chromSize" >> temp.lift
+  twoBitToFa ../../hg38.unmasked.2bit:$chrName:$chrStart-$chrEnd stdout | sed -e "s/^>.*/>$partName/;" > targetFa/$queryName.fa
+  twoBitToFa ../../hg38.unmasked.2bit:$queryName queryFa/$queryName.fa
+done
+
+sort -u temp.lift | sort -k4,4 -k1,1n > hg38.haplotypes.lift
+
+    # these were run serially on hgwdev, they could be a cluster run:
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/lastzAltSequences/run.blastz
+    cd /hive/data/genomes/hg38/bed/lastzAltSequences/run.blastz
+    mkdir ../lav ../psl
+
+    # construct the jobList
+    ls ../targetFa | sed -e 's/.fa//;' | while read partName
+do
+   echo "./runJob.sh ${partName}"
+done > jobList
+
+    cat << '_EOF_' > runJob
+#!/bin/sh
+
+export partName=$1
+export target="../targetFa/$partName.fa"
+export query="../queryFa/$partName.fa"
+export lav="../lav/$partName.lav"
+export psl="../psl/$partName.psl"
+
+/cluster/bin/penn/lastz-distrib-1.03.46/bin/lastz \
+  $target $query \
+  Y=15000 T=2 M=254 O=600 H=2000 O=600 E=150 K=10000 L=10000 \
+  Q=/scratch/data/blastz/human_chimp.v2.q > $lav
+lavToPsl $lav stdout | liftUp $psl ../hg38.haplotypes.lift error stdin
+'_EOF_'
+    # << happy emacs
+
+    # these were run serially on hgwdev, they could be a cluster run:
+    time ./jobList > do.log
+    # real    61m35.898s
+
+    # chaining lastz results:
+    mkdir -p /hive/data/genomes/hg38/bed/lastzAltSequences/axtChain/run/chain
+    cd /hive/data/genomes/hg38/bed/lastzAltSequences/axtChain/run
+
+    ls ../../psl/*.psl | while read P
+do
+  B=`basename $P | sed -e 's/.psl//'`
+  echo $B $P
+  ls -og $P ../../targetFa/${B}.fa ../../queryFa/${B}.fa
+  /cluster/home/hiram/kent/src/hg/mouseStuff/axtChain/axtChain \
+    -psl -scoreScheme=/scratch/data/blastz/human_chimp.v2.q \
+    -minScore=1000 -linearGap=medium $P \
+    ../../../../hg38.unmasked.2bit \
+    ../../../../hg38.unmasked.2bit stdout \
+  | chainAntiRepeat ../../../../hg38.unmasked.2bit \
+    ../../../../hg38.unmasked.2bit stdin chain/${B}.chain
+done
+
+   # real    7m54.677s
+
+   cd /hive/data/genomes/hg38/bed/lastzAltSequences/axtChain
+   find ./run/chain -name "*.chain" | chainMergeSort -inputList=stdin \
+       | nice gzip -c > hg38.haplotypes.all.chain.gz
+   chainPreNet  hg38.haplotypes.all.chain.gz ../../../chrom.sizes \
+     /hive/data/genomes/hg38/chrom.sizes stdout \
+       | chainNet  stdin -minSpace=1 ../../../chrom.sizes \
+          ../../../chrom.sizes stdout /dev/null \
+             | netSyntenic stdin noClass.net
+
+    # Make liftOver chains from chroms to alternates:
+    netChainSubset -verbose=0 noClass.net hg38.haplotypes.all.chain.gz stdout \
+      | chainStitchId stdin stdout | gzip -c > hg38.haplotypes.over.chain.gz
+    # swap the alignments to get the alternates to chrom mappings:
+    chainSwap hg38.haplotypes.over.chain.gz stdout \
+       | gzip -c > hg38.reference.over.chain.gz
+    # and put them all together so mappings go both directions
+    chainMergeSort hg38.haplotypes.over.chain.gz hg38.reference.over.chain.gz \
+        | gzip -c > hg38.haploReference.over.chain.gz
+
+    hgLoadChain -tIndex hg38 chainAltSequence hg38.haploReference.over.chain.gz
+    netClass -verbose=0 -noAr noClass.net hg38 hg38 hg38.hg38AltSequence.net
+    netFilter -minGap=10 hg38.hg38AltSequence.net \
+      | hgLoadNet -verbose=0 hg38 netAltSequence stdin
+
+    chainToPsl hg38.haploReference.over.chain.gz ../../../chrom.sizes \
+      ../../../chrom.sizes \
+        /hive/data/genomes/hg38/hg38.unmasked.2bit  \
+          /hive/data/genomes/hg38/hg38.unmasked.2bit  \
+             hg38.beforeRecalc.haploReference.over.psl
+
+    pslCheck -targetSizes=../../../chrom.sizes \
+        -querySizes=../../../chrom.sizes \
+    hg38.beforeRecalc.haploReference.over.psl 2>&1 | tail -1
+    # checked: 3092 failed: 57 errors: 57
+
+    pslRecalcMatch hg38.beforeRecalc.haploReference.over.psl \
+    ../../../hg38.unmasked.2bit ../../../hg38.unmasked.2bit  \
+        hg38.haploReference.over.psl
+
+    pslCheck -targetSizes=../../../chrom.sizes \
+      -querySizes=../../../chrom.sizes \
+         hg38.haploReference.over.psl 2>&1 | tail -1
+    # checked: 3092 failed: 0 errors: 0
+
+    hgLoadPsl hg38 -table=altSequenceLiftOver hg38.haploReference.over.psl
 
 #############################################################################
