@@ -1266,7 +1266,28 @@ close (DR);
     #  /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/liftOver/hg38ToHg19.over.chain.gz
 
 ############################################################################
-# marking the PAR regions:
+# marking the PAR regions: (DONE - 2014-01-09 - Hiram)
+    # after much experimentation with the AGP files and the given NCBI
+    # files in hg38/genbank/Primary_Assembly/pseudoautosomal_region
+    # the PAR region definitions can be seen in the par_align.gff file:
+# CM000685.2  10001  2781479  ->  CM000686.2 10001 2781479
+# CM000685.2  155701383  156030895 -> CM000686.2 56887903 57217415
+    # equivalent to:
+# chrX  10001  2781479  ->  chrY 10001 2781479
+# chrX  155701383  156030895 -> chrY 56887903 57217415
+
+    # subtract one for the chromStart position:
+    cat << '_EOF_' > hg38Par.bed4
+chrX 10000      2781479   PAR1
+chrX 155701382  156030895 PAR2
+chrY 10000      2781479   PAR1
+chrY 56887902   57217415  PAR2
+'_EOF_'
+    # << happy emacs
+
+    hgLoadBed hg38 par hg38Par.bed4
+    checkTableCoords  hg38
+
     # hg19 had:
 +-------+------------+-----------+------+
 | chrom | chromStart | chromEnd  | name |
@@ -1277,25 +1298,27 @@ close (DR);
 | chrY  |   59034049 |  59363566 | PAR2 |
 +-------+------------+-----------+------+
 
-    # examining the files in
-# /hive/data/genomes/hg38/genbank/Primary_Assembly/pseudoautosomal_region
-    # perhaps like this on chrY chrX;
-chrY  10000   2781479  length: 2771479 this one appears to be broken by gaps
+    # The AGP files come close to definining the location, but not
+    # precisely.  The first region uses different bits of AC006209.25:
+zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrX.comp.agp.gz\
+  | grep AC006209.25
+CM000685.2      2665048 2677319 56      F       AC006209.25     127483  139754 -
+CM000685.2      2677869 2804801 58      F       AC006209.25     1       126933 -
+zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrY.comp.agp.gz\
+  | grep AC006209.25
+CM000686.2      2665048 2677319 56      F       AC006209.25     127483  139754 -
+CM000686.2      2677869 2781479 58      F       AC006209.25     23323   126933 -
 
-# PAR2 section:
-chrY  56887902 57217415 length: 329513
-CM000686.2  56887903 57217415  24 F GL000190.2 1 329513  +
-CM000686.2  56887903 56906486 356 O AJ271735.1 69145   87728   +
+    # and the second region uses different bits of AJ271735.1:
+zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrX.comp.agp.gz\
+  | grep AJ271735.1 | head -1
+CM000685.2 155676925 155719966 3096  O AJ271735.1     44687    87728   +
+zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrY.comp.agp.gz\
+  | grep AJ271735.1 | head -1
+CM000686.2  56887903  56906486  356  O AJ271735.1     69145    87728   +
 
-chrX  155701382       156030895  length: 329513
-    # in the chrX AGP file, part of this contig:
-CM000685.2  144475607  156030895 18 F GL000172.2  1 11555289   +
-
-    # as seen in the chrY AGP file these two contigs:
-CM000686.2    10001  1949345 2       F       GL000176.2      1       1939345 +
-CM000686.2   1949346 2132994 3       N       183649  contig  no      na
-CM000686.2   2132995 2781479 4       F       GL000180.2      1       648485  +
-
+    # combining all the contig definitions from each will find all the
+    # exact identical contig bits:
 zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrY.comp.agp.gz\
   | grep -v "^#" | awk '$5 != "N"' \
     | awk '{printf "%s_%d_%d\t%s\t%d\t%d\n", $6,$7,$8,$1,$2,$3}' \
@@ -1681,5 +1704,17 @@ do
   echo $C
   ./pepNameFix.pl $C > nameFixed/pep/$C.pep
 done
+
+#############################################################################
+# Mark the new centromere regions (DONE - 2014-01-09 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/centromere
+    cd /hive/data/genomes/hg38/bed/centromere
+    grep GJ ../../hg38.agp > hg38.centContigs.agp
+
+    awk '{printf "%s\t%d\t%d\t%s\n", $1, $2-1, $3, $6}' hg38.centContigs.agp \
+      > hg38.centContigs.bed4
+
+    hgLoadBed hg38 centromeres hg38.centContigs.bed4
+    checkTableCoords hg38 centromeres
 
 #############################################################################
