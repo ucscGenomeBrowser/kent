@@ -53,8 +53,8 @@ struct edwAssembly *targetAssemblyForDbAndSex(struct sqlConnection *conn, char *
  * In general this will be the most recent for the organism. */
 {
 char *newDb = ucscDb;
-if (sameString("hg19", ucscDb))
-    newDb = "hg38";
+if (sameString("hg38", ucscDb))
+    newDb = "hg19";
 char sexedName[128];
 safef(sexedName, sizeof(sexedName), "%s.%s", sex, newDb);
 char query[256];
@@ -101,7 +101,8 @@ char *sex = sexFromExp(conn, ef, vf);
 return targetAssemblyForDbAndSex(conn, vf->ucscDb, sex);
 }
 
-static int countAlreadyScheduled(struct sqlConnection *conn, char *analysisStep, 
+static int countAlreadyScheduled(struct sqlConnection *conn, 
+    struct edwAssembly *assembly, char *analysisStep, 
     long long firstInput)
 /* Return how many of the existing job are already scheduled */
 {
@@ -111,12 +112,14 @@ char query[512];
 if (retry)
     sqlSafef(query, sizeof(query),
 	"select count(*) from edwAnalysisRun"
-	" where firstInputId=%lld and analysisStep='%s' and createStatus >= 0",
-	firstInput, analysisStep);
+	" where firstInputId=%lld and analysisStep='%s' and createStatus >= 0"
+	" and assemblyId = %u",
+	firstInput, analysisStep, assembly->id);
 else
     sqlSafef(query, sizeof(query),
-	"select count(*) from edwAnalysisRun where firstInputId=%lld and analysisStep='%s'",
-	firstInput, analysisStep);
+	"select count(*) from edwAnalysisRun where firstInputId=%lld and analysisStep='%s'"
+	" and assemblyId = %u",
+	firstInput, analysisStep, assembly->id);
 return sqlQuickNum(conn, query);
 }
 
@@ -300,11 +303,6 @@ void scheduleBwaPaired(struct sqlConnection *conn,
     struct edwValidFile *vf1, struct edwValidFile *vf2, struct edwExperiment *exp)
 /* If it hasn't already been done schedule bwa analysis of the two files. */
 {
-/* Make sure that we don't schedule it again and again */
-char *analysisStep = "bwa_paired_end";
-if (countAlreadyScheduled(conn, analysisStep, vf1->fileId))
-    return;
-
 /* Get ef records */
 struct edwFile *ef1 = edwFileFromIdOrDie(conn, vf1->fileId);
 struct edwFile *ef2 = edwFileFromIdOrDie(conn, vf2->fileId);
@@ -313,31 +311,36 @@ struct edwFile *ef2 = edwFileFromIdOrDie(conn, vf2->fileId);
 char indexPath[PATH_LEN];
 struct edwAssembly *assembly = getBwaIndex(conn, ef1, vf1, indexPath);
 
-/* Grab temp dir */
-char *tempDir = newTempDir(analysisStep);
-char *outBamName = "out.bam";
+/* Make sure that we don't schedule it again and again */
+char *analysisStep = "bwa_paired_end";
+if (!countAlreadyScheduled(conn, assembly, analysisStep, vf1->fileId))
+    {
+    /* Grab temp dir */
+    char *tempDir = newTempDir(analysisStep);
+    char *outBamName = "out.bam";
 
-/* Stage inputs and make command line. */
-struct cache *cache = cacheNew();
-char *ef1Name = cacheMore(cache, ef1, vf1);
-char *ef2Name = cacheMore(cache, ef2, vf2);
-char *command = pickPairedBwaCommand(conn, vf1, vf2);
-preloadCache(conn, cache);
-char commandLine[4*PATH_LEN];
-safef(commandLine, sizeof(commandLine), 
-    "%s %s %s %s %s%s", 
-    command, indexPath, ef1Name, ef2Name, tempDir, outBamName);
+    /* Stage inputs and make command line. */
+    struct cache *cache = cacheNew();
+    char *ef1Name = cacheMore(cache, ef1, vf1);
+    char *ef2Name = cacheMore(cache, ef2, vf2);
+    char *command = pickPairedBwaCommand(conn, vf1, vf2);
+    preloadCache(conn, cache);
+    char commandLine[4*PATH_LEN];
+    safef(commandLine, sizeof(commandLine), 
+	"%s %s %s %s %s%s", 
+	command, indexPath, ef1Name, ef2Name, tempDir, outBamName);
 
-/* Make up edwAnalysisRun record and schedule it*/
-unsigned inFileIds[2] = {ef1->id, ef2->id};
-char *inTypes[2] = {"read1", "read2"};
-char *outNames[1] = {outBamName};
-char *outTypes[1] = {"alignments"};
-char *outFormats[1] = {"bam"};
-scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
-    ArraySize(inFileIds), inFileIds, inTypes,
-    ArraySize(outNames), outNames, outTypes, outFormats);
+    /* Make up edwAnalysisRun record and schedule it*/
+    unsigned inFileIds[2] = {ef1->id, ef2->id};
+    char *inTypes[2] = {"read1", "read2"};
+    char *outNames[1] = {outBamName};
+    char *outTypes[1] = {"alignments"};
+    char *outFormats[1] = {"bam"};
+    scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
+	ArraySize(inFileIds), inFileIds, inTypes,
+	ArraySize(outNames), outNames, outTypes, outFormats);
 
+    }
 /* Clean up */
 edwFileFree(&ef1);
 edwFileFree(&ef2);
@@ -347,14 +350,14 @@ void scheduleBwaSingle(struct sqlConnection *conn,
     struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
 /* If it hasn't already been done schedule bwa analysis of the two files. */
 {
-/* Make sure that we don't schedule it again and again */
-char *analysisStep = "bwa_single_end";
-if (countAlreadyScheduled(conn, analysisStep, ef->id))
-    return;
-
 /* Figure out path to BWA index */
 char indexPath[PATH_LEN];
 struct edwAssembly *assembly = getBwaIndex(conn, ef, vf, indexPath);
+
+/* Make sure that we don't schedule it again and again */
+char *analysisStep = "bwa_single_end";
+if (countAlreadyScheduled(conn, assembly, analysisStep, ef->id))
+    return;
 
 /* Grab temp dir */
 char *tempDir = newTempDir(analysisStep);
@@ -432,11 +435,12 @@ else
 
 verbose(2, "schedulingMacsDnase on %s step %s, script %s\n", ef->edwFileName, 
     analysisStep, scriptName);
+
 /* Make sure that we don't schedule it again and again */
-if (countAlreadyScheduled(conn, analysisStep, ef->id))
+struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
+if (countAlreadyScheduled(conn, assembly, analysisStep, ef->id))
     return;
 
-struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
 char *tempDir = newTempDir(analysisStep);
 
 /* Stage inputs and make command line. */
@@ -552,12 +556,12 @@ void scheduleHotspot(struct sqlConnection *conn,
 {
 /* Make sure that we don't schedule it again and again */
 char *analysisStep = "hotspot";
-if (countAlreadyScheduled(conn, analysisStep, ef->id))
+struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
+if (countAlreadyScheduled(conn, assembly, analysisStep, ef->id))
     return;
 
 verbose(2, "schedulingHotspot on %s step %s\n", ef->edwFileName, analysisStep);
 /* Make command line */
-struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
 int fastqId = getFastqForBam(conn, ef->id);
 int readLength = 0;
 if (fastqId == 0)
@@ -594,7 +598,8 @@ void scheduleBamSort(struct sqlConnection *conn,
 {
 /* Make sure that we don't schedule it again and again */
 char *analysisStep = "bam_sort";
-if (countAlreadyScheduled(conn, analysisStep, ef->id))
+struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
+if (countAlreadyScheduled(conn, assembly, analysisStep, ef->id))
     return;
 
 char *tempDir = newTempDir(analysisStep);
@@ -606,8 +611,6 @@ preloadCache(conn, cache);
 char commandLine[3*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "eap_bam_sort %s %s%s", 
     efName, tempDir, "out.bam");
-
-struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
 
 /* Declare step input and output arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
@@ -644,14 +647,14 @@ if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq") ||
 		}
 	    edwValidFileFree(&vfB);
 	    }
-#ifdef SOON
-#endif /* SOON */
 	}
     else
         {
 	scheduleBwaSingle(conn, ef, vf, exp);
 	}
     }
+#ifdef SOON
+#endif /* SOON */
 }
 
 void runBamAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
