@@ -2768,7 +2768,7 @@ searchPriority 10
 
 track animalQtl
 shortLabel $Organism QTL
-longLabel $Organism QT from animalQTLdb
+longLabel $Organism QTL from animalQTLdb
 group map 
 priority 11 
 visibility hide
