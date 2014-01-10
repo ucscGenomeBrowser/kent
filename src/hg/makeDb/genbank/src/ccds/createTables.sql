@@ -294,7 +294,7 @@ CREATE TABLE SwissProtMatches (
         swiss_prot_length int NOT NULL ,
         identity_pct float NOT NULL ,
         mismatch_count int NOT NULL ,
-        gap_count int NOT NULL ,
+        gap_count int NOT NULL 
 ) 
 ;
 
