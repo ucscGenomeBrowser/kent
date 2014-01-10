@@ -624,6 +624,8 @@ errAbort(
   "and out.bw is the output indexed big wig file.\n"
   "options:\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
+  "\n"
+  "Note: must use wigToBigWig -fixedSummaries -keepAllChromosomes (perhaps in parallel cluster jobs) to create the input files.\n"
   , bbiCurrentVersion, itemsPerSlot
   );
 }
