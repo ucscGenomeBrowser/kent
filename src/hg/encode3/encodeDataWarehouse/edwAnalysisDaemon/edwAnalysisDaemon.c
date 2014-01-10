@@ -6,17 +6,19 @@
 #include "options.h"
 #include "errabort.h"
 #include "portable.h"
+#include "rbTree.h"
 #include "obscure.h"
 #include "net.h"
 #include "log.h"
 #include "sqlNum.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
+#include "verbose.h"
 #include "../../../../parasol/inc/jobResult.h"
 #include "../../../../parasol/inc/paraMessage.h"
 
 pid_t childPid;
-char *clDatabase = "encodeDataWarehouse", *clTable;
+char *clDatabase = "encodeDataWarehouse", *clTable = "edwAnalysisJob";
 char *paraHost = "ku";
 
 void usage()
@@ -25,25 +27,26 @@ void usage()
 errAbort(
   "edwAnalysisDaemon - Run jobs remotely via parasol based on jobs in table.\n"
   "usage:\n"
-  "   edwAnalysisDaemon table count\n"
+  "   edwAnalysisDaemon count\n"
   "where:\n"
-  "   table - table with same six fields as edwRun table\n"
   "   count - number of simultanious jobs to run\n"
   "options:\n"
-  "   -database=%s - mySQL database where edwRun table lives\n"
+  "   -database=%s - mySQL database where edwAnalysisJob table lives\n"
+  "   -table=%s - table in edwAnalysisJob format to use\n"
   "   -debug - don't fork, close stdout, and daemonize self\n"
   "   -log=logFile - send error messages and warnings of daemon itself to logFile\n"
   "        There are not many of these.  Error mesages from jobs daemon runs end up\n"
   "        in errorMessage fields of database.\n"
   "   -logFacility - sends error messages and such to system log facility instead.\n"
   "   -paraHost - machine running parasol (paraHub in particular)\n"
-  , clDatabase
+  , clDatabase, clTable
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"database", OPTION_STRING},
+   {"table", OPTION_STRING},
    {"log", OPTION_STRING},
    {"logFacility", OPTION_STRING},
    {"debug", OPTION_BOOLEAN},
@@ -51,300 +54,177 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct runner
-/* Keeps track of running process. */
+char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/b/results";
+
+
+int cmpByParasolId(void *a, void *b)
+/* Set up rbTree so as to work on strings. */
+{
+struct edwAnalysisJob *aJob = a, *bJob = b;
+return strcmp(aJob->parasolId, bJob->parasolId);
+}
+
+struct resultsQueue
+/* A file with job results in it */
     {
-    int pid;	/* Process ID or 0 if none */
-    struct edwJob *job;	 /* The job we are running */
+    struct resultsQueue *next;
+    char *fileName;	/* Results file shared with parasol. */
+    long long pos;	/* Current position in file. */
+    boolean believePos; /* Set to true if you actually trust position */
     };
 
-int curThreads = 0, maxThreadCount;
-struct runner *runners;
-
-char *eapParaTempDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/paraTmp/";
-
-void maySystem(char *cmd)
-/* Execute cmd using "sh -c" and complain if there are problems. */
+struct resultsQueue *resultsQueueNew(char *name)
+/* Return a new results queue */
 {
-int status = system(cmd);
-if (status == -1)
-    errnoWarn("error starting command: %s", cmd);
-else if (WIFSIGNALED(status))
-    warn("command terminated by signal %d: %s", WTERMSIG(status), cmd);
-else if (WIFEXITED(status))
-    {
-    if (WEXITSTATUS(status) != 0)
-        warn("command exited with %d: %s", WEXITSTATUS(status), cmd);
-    }
+struct resultsQueue *queue;
+AllocVar(queue);
+queue->fileName = cloneString(name);
+if (fileExists(queue->fileName))
+    queue->pos = fileSize(queue->fileName);
 else
-    warn("bug: invalid exit status for command: %s", cmd);
+    {
+    FILE *f = mustOpen(resultsQueue, "a");
+    carefulClose(&f);
+    }
+return queue;
 }
 
-
-void finishRun(struct runner *run, int status)
-/* Finish up job. Copy results into database */
+void sendToParasol(struct edwAnalysisJob *job, struct resultsQueue *queue)
+/* Add job to current parasol queue. Sets job->parasolId and saves it
+ * to database. */
 {
-/* Get job and fill in two easy fields. */
-struct edwJob *job = run->job;
-job->endTime = edwNow();
-job->returnCode = status;
+/* Prepare parasol add job command and send it to hub. */
+int cpu = (job->cpusRequested ? 1 : job->cpusRequested);
+long long ram = 8LL * 1024 * 1024 * 1024;
+struct dyString *cmd = dyStringNew(1024);
+dyStringPrintf(cmd, "addJob2 %s %s /dev/null /dev/null %s %f %lld %s",
+    getUser(), getCurrentDir(), queue->fileName, (double)cpu, ram, job->commandLine);
+char *jobIdString = pmHubSingleLineQuery(cmd->string, paraHost);
 
-/* Create stderr file for child  as a temp file */
-char stderrTempFileName[PATH_LEN];
-safef(stderrTempFileName, PATH_LEN, "%sedwAnalysisDaemonXXXXXX", eapParaTempDir);
-int errFd = mkstemp(stderrTempFileName);
-if (errFd < 0)
-    errnoAbort("Couldn't open temp file %s", stderrTempFileName);
-close(errFd);
+/* Check for sick batch result */
+if (sameString(jobIdString, "0"))
+    {
+    warn("command: %s", cmd->string);
+    errAbort("Looks like paraHub has decided we're sick.  It's usually right.");
+    }
 
-/* Load in existing stderr contents which should be host:filename. 
- * Copy them from parasol node to stderrTempFileName. */
+/* Save to data structure in memory and to database. */
+job->parasolId = cloneString(jobIdString);
 struct sqlConnection *conn = sqlConnect(clDatabase);
 char query[512];
-sqlSafef(query, sizeof(query), "select stderr from %s where id = %u", clTable, job->id);
-char tmpHostFile[PATH_LEN*2];
-if (sqlQuickQuery(conn, query, tmpHostFile, sizeof(tmpHostFile)))
-    {
-    char *colon =strchr(tmpHostFile, ':');
-    int maxHostName=50;
-    if (colon  != NULL && colon - tmpHostFile <= maxHostName)
-        {
-	char command[3*PATH_LEN];
-	safef(command, sizeof(command), "ssh %s 'rcp %s %s'", 
-	    paraHost, tmpHostFile, stderrTempFileName);
-	maySystem(command);
-	}
-    }
+sqlSafef(query, sizeof(query), 
+    "update %s set startTime=%lld, parasolId='%s' where id=%u", 
+    clTable, edwNow(), jobIdString, job->id);
+sqlUpdate(conn, query);
 sqlDisconnect(&conn);
 
-/* Read in stderr */
-size_t errorMessageSize;
-readInGulp(stderrTempFileName, &job->stderr, &errorMessageSize);
-remove(stderrTempFileName);
+dyStringFree(&cmd);
+}
 
-/* Update database with job results */
-struct dyString *dy = dyStringNew(0);
-sqlDyStringPrintf(dy, "update %s set stderr='%s' where id=%u", clTable, trimSpaces(job->stderr), job->id);
-conn = sqlConnect(clDatabase);
-sqlUpdate(conn, dy->string);
+void finishJob(struct edwAnalysisJob *job, struct jobResult *jr) 
+/* Move parasol job result into edwAnalysisJob table */
+{
+int status = -1;
+if (WIFEXITED(jr->status))
+    status = WEXITSTATUS(jr->status);
+
+/* Save end time and process status and errFile to database. */
+struct sqlConnection *conn = sqlConnect(clDatabase);
+char query[512];
+sqlSafef(query, sizeof(query), 
+    "update %s set endTime=%lld, returnCode=%d, stderr='%s:%s' where id=%u",
+    clTable, edwNow(), status, jr->host, jr->errFile, job->id);
+sqlUpdate(conn, query);
 sqlDisconnect(&conn);
-dyStringFree(&dy);
-
-/* Free up runner resources. */
-edwJobFree(&job);
-run->pid = 0;
---curThreads;
 }
 
-struct runner *checkOnChildRunner(boolean doWait)
-/* See if a child has finished and optionally wait for it.  Return
- * a pointer to slot child has freed if it has finished. */
+int checkFreeThreads(struct rbTree *running, struct resultsQueue *queue, boolean mustWait)
+/* Wait on the queue for one of our jobs to come in. */
 {
-if (curThreads > 0)
-    {
-    int status = 0;
-    int waitFlags = (doWait ? 0 : WNOHANG);
-    int child = waitpid(-1, &status, waitFlags);
-    if (child < 0)
-	errnoAbort("Couldn't wait");
-    if (child != 0)
-	{
-	int i;
-	for (i=0; i<maxThreadCount; ++i)
-	    {
-	    struct runner *run = &runners[i];
-	    if (run->pid == child)
-		{
-		finishRun(run, status);
-		return run;
-		}
-	    }
-	internalErr();
-	}
-    }
-return NULL;
-}
-
-struct runner *waitOnChildRunner()
-/* Wait for child to finish. */
-{
-return checkOnChildRunner(TRUE);
-}
-
-struct runner *findFreeRunner()
-/* Return free runner if there is one,  otherwise wait until there is. */
-{
-int i;
-if (curThreads >= maxThreadCount)
-    {
-    return waitOnChildRunner();
-    }
-else
-    {
-    for (i=0; i<maxThreadCount; ++i)
-        {
-	struct runner *run = &runners[i];
-	if (run->pid == 0)
-	    return run;
-	}
-    }
-internalErr();  // Should not get here
-return NULL;
-}
-
-struct jobResult *waitOnResults(char *resultsFile, char *jobIdString)
-/* Read results file until jobId appears in it, and then if necessary
- * copy over stderr to err, and finally exit with the same result
- * as command did. */
-{
-off_t resultsPos = 0;
+int freeCount = 0;
 int pollTime = 3;   // Poll every 3 seconds for file to open.
-verbose(2, "waitOnResults(%s, %s)\n", resultsFile, jobIdString);
-char *row[JOBRESULT_NUM_COLS];
-for (;;)
+while (freeCount == 0)
     {
-    struct lineFile *lf = lineFileOpen(resultsFile, TRUE);
-    lineFileSeek(lf, resultsPos, SEEK_SET);
-    while (lineFileRow(lf, row))
+    struct lineFile *lf = lineFileOpen(queue->fileName, TRUE);
+    lineFileSeek(lf, queue->pos, SEEK_SET);
+    for (;;)
         {
-	resultsPos = lineFileTell(lf);
+	char *line;
+	if (!lineFileNextReal(lf, &line))
+	    break;
+	char *row[JOBRESULT_NUM_COLS];
+	int wordsRead = chopByWhite(line, row, ArraySize(row));
+	if (wordsRead < ArraySize(row))
+	    {
+	    if (queue->believePos)
+	        errAbort("%s seems screwed up, expecting %d words in line got %d", 
+		    lf->fileName, (int)ArraySize(row), wordsRead);
+	    else
+		{
+	        continue;   // Forgive bad first line in case initial position, based on file size
+			    // is not at an even line boundary.
+	        }
+	    }
+	queue->believePos = TRUE;
 	struct jobResult *jr;
 	jr = jobResultLoad(row);
-	if (sameString(jr->jobId, jobIdString))
+	struct edwAnalysisJob jobKey = {.parasolId = jr->jobId,};
+	struct edwAnalysisJob *job = rbTreeFind(running, &jobKey);
+	if (job != NULL)
 	    {
-	    return jr;
+	    finishJob(job, jr);
+	    rbTreeRemove(running, job);
+	    edwAnalysisJobFree(&job);
+	    freeCount += 1;
 	    }
 	jobResultFree(&jr);
 	}
+    queue->pos = lineFileTell(lf);
     lineFileClose(&lf);
     verbose(2, "waiting for %d\n", pollTime);
-    sleep(pollTime);
+    if (!mustWait)
+        break;
+    if (freeCount == 0)
+	sleep(pollTime);
     }
+return freeCount;
 }
 
-char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/1/results";
-
-char *startParaJob(struct edwJob *job)
-/* Tell parasol about a job and return parasol job ID.  Free jobId when done.  */
-{
-/* Make sure results file exists. */
-if (!fileExists(resultsQueue))
-     {
-     FILE *f = mustOpen(resultsQueue, "a");
-     carefulClose(&f);
-     }
-
-char command[2048];
-char *escaped = makeEscapedString(job->commandLine, '\'');
-safef(command, sizeof(command),
-    "ssh %s 'parasol -results=%s -printId cpu=1 ram=5500m add job %s'"
-    , paraHost, resultsQueue, escaped);
-freez(&escaped);
-
-int maxRetries = 6;
-int retry;
-for (retry = 0; retry < maxRetries; ++retry)
-    {
-    char jobIdLine[64];
-    if (edwOneLineSystemAttempt(command, jobIdLine, sizeof(jobIdLine)))
-        {
-	char *jobIdString = cloneString(trimSpaces(jobIdLine));
-	return jobIdString;
-	}
-    warn("Failed oneLiner: %s", command);
-    warn("Taking a nap");
-    sleep(10);
-    }
-errAbort("Couldn't execute %s after %d retries", command, maxRetries);
-return NULL;
-}
-
-void runJob(struct runner *runner, struct edwJob *job)
-/* Fork off and run job. */
-{
-++curThreads;
-job->startTime = edwNow();
-runner->job = job;
-
-char *jobIdString = startParaJob(job);
-int childId;
-if ((childId = mustFork()) == 0)
-    {
-    childPid = getpid();
-    struct jobResult *jr = waitOnResults(resultsQueue, jobIdString);
-    int status = -1;
-    if (WIFEXITED(jr->status))
-        {
-	status = WEXITSTATUS(jr->status);
-	}
-
-    /* Save end time and process status and errFile to database. */
-    struct sqlConnection *conn = sqlConnect(clDatabase);
-    char query[3*PATH_LEN];
-    sqlSafef(query, sizeof(query), 
-	"update %s set endTime=%lld, returnCode=%d, stderr='%s:%s' where id=%u",
-	clTable, edwNow(), status, jr->host, jr->errFile, job->id);
-
-    sqlUpdate(conn, query);
-    sqlDisconnect(&conn);
-    exit(status);
-    }
-else
-    {
-    /* Save start time and process ID to database. */
-    struct sqlConnection *conn = sqlConnect(clDatabase);
-    char query[256];
-    sqlSafef(query, sizeof(query), "update %s set startTime=%lld, pid=%d where id=%lld", 
-	clTable, job->startTime, childId, (long long)job->id);
-    sqlUpdate(conn, query);
-    sqlDisconnect(&conn);
-
-    /* We be parent - just fill in job info */
-    runner->pid = childId;
-
-    freez(&jobIdString);
-    }
-}
-
-
-void edwAnalysisDaemon(char *table, char *countString)
+void edwAnalysisDaemon(char *countString)
 /* edwAnalysisDaemon - Run jobs remotely via parasol based on jobs in table.. */
 {
-clTable = table;
+warn("Starting edwAnalysisDaemon v9 on %s %s with %s threads", clDatabase, clTable, countString);
+int maxThreads = sqlUnsigned(countString);
+int threadCount = 0;
 
-warn("Starting edwAnalysisDaemon v4 on %s %s", clDatabase, table);
-
-/* Set up array with a slot for each simultaneous job. */
-maxThreadCount = sqlUnsigned(countString);
-if (maxThreadCount > 512)
-    errAbort("%s jobs at once? Really, that seems excessive", countString);
-AllocArray(runners, maxThreadCount);
-warn("Ugly and fast times for %d theads", maxThreadCount);
+/* Set up rbTree as a convenient quick access container for jobs */
+struct rbTree *running = rbTreeNew(cmpByParasolId);
 
 long long lastId = 0;  // Keep track of lastId in run table that has already been handled.
+struct resultsQueue *queue = resultsQueueNew(resultsQueue);
 
 for (;;)
     {
-    /* Finish up processing on any children that have finished */
-    while (checkOnChildRunner(FALSE) != NULL)	
-        ;
+    boolean tooManyThreads = (threadCount >= maxThreads);
+    int freeThreads = checkFreeThreads(running, queue, tooManyThreads);
+    threadCount -= freeThreads;
 
     /* Get next bits of work from database. */
     struct sqlConnection *conn = sqlConnect(clDatabase);
     char query[256];
     sqlSafef(query, sizeof(query), 
-	"select * from %s where startTime = 0 and id > %lld order by id limit 1", table, lastId);
-    struct edwJob *job = edwJobLoadByQuery(conn, query);
+	"select * from %s where startTime = 0 and id > %lld order by id limit 1", clTable, lastId);
+    struct edwAnalysisJob *job = edwAnalysisJobLoadByQuery(conn, query);
     sqlDisconnect(&conn);
     if (job != NULL)
         {
-	lastId = job->id;
-	struct runner *runner = findFreeRunner();
-	runJob(runner, job);
+	sendToParasol(job, queue);
+	rbTreeAdd(running, job);
+	threadCount += 1;
 	}
     else
         {
-	/* Wait for signal to come on named pipe or 10 seconds to pass */
+	/* No new jobs, maybe we'll nap for 10 seconds */
 	sleep(10);
 	}
     }
@@ -354,11 +234,14 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 2)
     usage();
 paraHost = optionVal("paraHost", paraHost);
 clDatabase = optionVal("database", clDatabase);
+clTable = optionVal("table", clTable);
 logDaemonize(argv[0]);
-edwAnalysisDaemon(argv[1], argv[2]);
+if (optionExists("log"))
+    verboseSetLogFile(optionVal("log", NULL));
+edwAnalysisDaemon(argv[1]);
 return 0;
 }
