@@ -2772,8 +2772,6 @@ longLabel $Organism QT from animalQTLdb
 group map 
 priority 11 
 visibility hide
-itemRgb on
 type bed 4 .
-#url http://www.animalgenome.org/cgi-bin/QTLdb/GG/qdetails?QTL_ID=$$
-#urlLabel Animal Genome QTL db:
+color 255,123,89
 # iframeUrl http://www.animalgenome.org/cgi-bin/QTLdb/GG/qdetails?QTL_ID=$p

@@ -194,6 +194,16 @@ ALTER TABLE [dbo].[ProspectiveStatusVals] ADD
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 go
 
+ALTER TABLE [dbo].[SwissProtMatches] ADD 
+	CONSTRAINT [PK_SwissProtMatches] PRIMARY KEY  CLUSTERED 
+	(
+		[prot_acc],
+		[prot_version],
+		[swiss_prot_acc],
+		[swiss_prot_acc_iso]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+go
+
 ---------------------- Foreign keys ------------------------
 
 ALTER TABLE [dbo].[Accessions] ADD 
