@@ -263,7 +263,7 @@ struct edwQaPairedEndFastq *edwQaPairedEndFastqFromVfs(struct sqlConnection *con
     struct edwValidFile **retVf1,  struct edwValidFile **retVf2);
 /* Return pair record if any for the two fastq files. */
 
-int edwAnalysisJobAdd(struct sqlConnection *conn, char *commandLine);
+int edwAnalysisJobAdd(struct sqlConnection *conn, char *commandLine, int cpusRequested);
 /* Add job to edwAnalyisJob table and return job ID. */
 
 void edwMd5File(char *fileName, char md5Hex[33]);
@@ -279,6 +279,10 @@ void edwPathForCommand(char *command, char path[PATH_LEN]);
 struct edwAnalysisStep *edwAnalysisStepFromName(struct sqlConnection *conn, char *name);
 /* Get edwAnalysisStep record from database based on name. */
 
+struct edwAnalysisStep *edwAnalysisStepFromNameOrDie(struct sqlConnection *conn, 
+    char *analysisStep);
+/* Get analysis step of given name, or complain and die. */
+
 struct edwAnalysisSoftware *edwAnalysisSoftwareFromName(struct sqlConnection *conn, char *name);
 /* Get edwAnalysisSoftware record by name */
 
@@ -293,9 +297,6 @@ void edwPokeFifo(char *fifoName);
 
 FILE *edwPopen(char *command, char *mode);
 /* do popen or die trying */
-
-void edwPclose(FILE **pF);
-/* Close pipe file or die trying */
 
 void edwOneLineSystemResult(char *command, char *line, int maxLineSize);
 /* Execute system command and return one line result from it in line */
