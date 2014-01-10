@@ -3048,17 +3048,23 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
     else
 	{
 	if (chrom != NULL)
-	    {
-	    safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
-	    if (sqlTableExists(conn, fullName))
-		isSplit = TRUE;
-	    }
-	if (!isSplit)
-	    {
-	    safecpy(fullName, sizeof(fullName), rootName);
-	    if (!sqlTableExists(conn, fullName))
-		return NULL;
-	    }
+            {
+            // first try the non-split table name then the split table name. 
+            // This avoids many useless chrX_table lookups
+            // (today, very few assemblies have split tables)
+            isSplit = TRUE;
+            safef(fullName, sizeof(fullName), "%s", rootName);
+            if (sqlTableExists(conn, fullName))
+                isSplit = FALSE;
+            else
+                {
+                safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
+                if (sqlTableExists(conn, fullName))
+                    isSplit = TRUE;
+                else
+                    return NULL;
+                }
+            }
 	}
     AllocVar(hti);
     hashAddSaveName(hash, rootName, hti, &hti->rootName);

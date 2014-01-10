@@ -589,6 +589,13 @@ warn(COMPILE_WITH_SAMTOOLS, "bamFileExists");
 return FALSE;
 }
 
+void bamFileAndIndexMustExist(char *fileOrUrl)
+/* Open both a bam file and its accompanying index or errAbort; this is what it
+ * takes for diagnostic info to propagate up through errCatches in calling code. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamFileAndIndexMustExist");
+}
+
 samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName)
 /* Return an open bam file */
 {

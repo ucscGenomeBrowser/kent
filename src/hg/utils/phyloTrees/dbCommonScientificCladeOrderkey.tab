@@ -10,6 +10,7 @@ chlSab1	Green monkey	Chlorocebus sabaeus	primate	primate	340
 rheMac3	Rhesus	Macaca mulatta	primate	primate	359
 macFas5	Crab-eating macaque	Macaca fascicularis	primate	primate	380
 papHam1	Baboon	Papio hamadryas	primate	primate	390
+papAnu2	Baboon	Papio anubis	primate	primate	390
 saiBol1	Squirrel monkey	Saimiri boliviensis	primate	primate	395
 calJac3	Marmoset	Callithrix jacchus	primate	primate	400
 tarSyr1	Tarsier	Tarsius syrichta	primate	primate	410
@@ -32,6 +33,7 @@ chiLan1	Chinchilla	Chinchilla lanigera	rodent	glires	1700
 oryCun2	Rabbit	Oryctolagus cuniculus	rodent	glires	1890
 speTri2	Squirrel	Spermophilus tridecemlineatus	rodent	glires	1909
 ochPri3	Pika	Ochotona princeps	rodent	glires	1929
+ochPri2	Pika	Ochotona princeps	rodent	glires	1930
 susScr3	Pig	Sus scrofa	mammal	cetartiodactyla	2349
 vicPac2	Alpaca	Vicugna pacos	mammal	cetartiodactyla	2359
 panHod1	Tibetan antelope	Pantholops hodgsonii	mammal	cetartiodactyla	2362
@@ -64,7 +66,9 @@ pteAle1	Black flying-fox	Pteropus alecto	mammal	chiroptera	2530
 megLyr1	Indian false vampire	Megaderma lyra	mammal	chiroptera	2540
 ptePar1	Parnell's mustached bat	Pteronotus parnellii	mammal	chiroptera	2550
 eriEur2	Hedgehog	Erinaceus europaeus	mammal	insectivora	2569
+eriEur1	Hedgehog	Erinaceus europaeus	mammal	insectivora	2570
 sorAra2	Shrew	Sorex araneus	mammal	insectivora	2579
+sorAra1	Shrew	Sorex araneus	mammal	insectivora	2580
 conCri1	Star-nosed mole	Condylura cristata	mammal	insectivora	2590
 loxAfr3	Elephant	Loxodonta africana	mammal	afrotheria	3098
 eleEdw1	Cape elephant shrew	Elephantulus edwardii	mammal	afrotheria	3110
@@ -94,6 +98,7 @@ zonAlb1	White-throated sparrow	Zonotrichia albicollis	vertebrate	aves	4359
 melGal1	Turkey	Meleagris gallopavo	vertebrate	aves	4360
 strCam1	Ostrich	Struthio camelus	vertebrate	aves	4363
 taeGut2	Zebra finch	Taeniopygia guttata	vertebrate	aves	4369
+taeGut1	Zebra finch	Taeniopygia guttata	vertebrate	aves	4370
 geoFor1	Medium ground finch	Geospiza fortis	vertebrate	aves	4373
 melUnd1	Budgerigar	Melopsittacus undulatus	vertebrate	aves	4375
 allMis1	American alligator	Alligator mississippiensis	vertebrate	sauria	4380
@@ -107,6 +112,7 @@ pelSin1	Chinese softshell turtle	Pelodiscus sinensis	vertebrate	testudines	4400
 apaSpi1	Spiny softshell turtle	Apalone spinifera	vertebrate	testudines	4403
 chrPic1	Painted turtle	Chrysemys picta bellii	vertebrate	testudines	4405
 xenTro7	Frog (X. tropicalis)	Xenopus tropicalis	vertebrate	tetrapoda	4439
+xenTro3	Frog (X. tropicalis)	Xenopus tropicalis	vertebrate	tetrapoda	4440
 latCha1	Coelacanth	Latimeria chalumnae	vertebrate	sarcopterygii	4465
 tetNig2	Tetraodon	Tetraodon nigroviridis	vertebrate	tetraodontidae	4599
 fr3	Fugu	Takifugu rubripes	vertebrate	tetraodontidae	4628
@@ -126,4 +132,11 @@ lepOcu1	Spotted gar	Lepisosteus oculatus	vertebrate	neopterygii	4793
 calMil1	Elephant shark	Callorhinchus milii	vertebrate	chondrichthyes	4796
 petMar2	Lamprey	Petromyzon marinus	vertebrate	hyperoartia	4799
 letCam1	Arctic lamprey	Lethenteron camtschaticum	vertebrate	hyperoartia	4820
-apiMel4	Honey bee	Apis mellifera	insect	hymenoptera	9658
+aplCal1	Sea hare	Aplysia californica	gastropod	gastropod	7820
+braFlo2	Lanclet	Branchiostoma floridae	deuterostomia	chordata	7989
+braFlo1	Lanclet	Branchiostoma floridae	deuterostomia	chordata	7990
+anoGam1	A. gambiae	Anopheles gambiae	insect	diptera	9640
+apiMel4	Honey bee	Apis mellifera	insect	hymenoptera	9654
+apiMel3	Honey bee	Apis mellifera	insect	hymenoptera	9655
+apiMel2	Honey bee	Apis mellifera	insect	hymenoptera	9656
+apiMel1	Honey bee	Apis mellifera	insect	hymenoptera	9657

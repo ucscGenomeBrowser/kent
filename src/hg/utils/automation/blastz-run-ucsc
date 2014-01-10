@@ -1,10 +1,10 @@
 #!/bin/env perl
 
-# DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
+# DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/blastz-run-ucsc instead.
 
 # Based on Scott Schwartz's bash script blastz-run;
-# rewritten in perl and extended to handle .2bit inputs and 
+# rewritten in perl and extended to handle .2bit inputs and
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
 # $Id: blastz-run-ucsc,v 1.11 2009/08/13 23:15:57 hiram Exp $
@@ -29,19 +29,19 @@ usage: $base target query DEF out
 options:
     -outFormat (psl|axt)  Convert blastz output from lav to psl or axt.
     -gz                   Compress output with gzip.
-    -dropSelf             When converting to psl or axt, drop alignment 
+    -dropSelf             When converting to psl or axt, drop alignment
                           blocks that cross the diagonal (trivial self-
-                          alignments).  
-    Unpacks sequence (if necessary), runs blastz and lifts/\"normalizes\" 
-    output (if necessary).  
-    Target and query can be list files containing one sequence specifier 
-    per line, or sequence specifiers.  A sequence specifier is a .2bit, 
-    .nib or .fa(.gz) files, possibly with a sequence and range specifier 
-    appended.  
-    DEF is a Scott Schwartz-style bash script containing blastz parameters.  
-    out is the (lifted/\"normalized\") output of blastz (optionally converted 
-    to axt or psl, and/or gzipped).  This script does not pay attention to 
-    out's file suffixes -- it is up to you to make sure that they are 
+                          alignments).
+    Unpacks sequence (if necessary), runs blastz and lifts/\"normalizes\"
+    output (if necessary).
+    Target and query can be list files containing one sequence specifier
+    per line, or sequence specifiers.  A sequence specifier is a .2bit,
+    .nib or .fa(.gz) files, possibly with a sequence and range specifier
+    appended.
+    DEF is a Scott Schwartz-style bash script containing blastz parameters.
+    out is the (lifted/\"normalized\") output of blastz (optionally converted
+    to axt or psl, and/or gzipped).  This script does not pay attention to
+    out's file suffixes -- it is up to you to make sure that they are
     consistent with output format and compression options.
 \n";
   exit $status;
@@ -106,9 +106,9 @@ sub run {
 }
 
 sub nfsNoodge {
-  # Try to access the given file/dir; if it fails, don't die, just 
-  # wait a second, try again.  
-  # Scott's blastz-run included a similar trick.  
+  # Try to access the given file/dir; if it fails, don't die, just
+  # wait a second, try again.
+  # Scott's blastz-run included a similar trick.
   my ($file) = @_;
   my $ret = system("/bin/sh", "-c", "/bin/ls -d $file > /dev/null");
   if ($ret != 0) {
@@ -159,7 +159,7 @@ sub fileBase {
 }
 
 sub parseFileSpec {
-  # Take a file spec with possible seq name, start and end specifiers and 
+  # Take a file spec with possible seq name, start and end specifiers and
   # split into components.
   my ($info, $dir) = @_;
   my ($fName, $seq, $start, $end);
@@ -175,8 +175,8 @@ sub parseFileSpec {
 }
 
 sub enumerateFileSpecs {
-  # Given a sequence file name, sequence file name + offset spec, or 
-  # a name of a file containing a list of such file specs, return a 
+  # Given a sequence file name, sequence file name + offset spec, or
+  # a name of a file containing a list of such file specs, return a
   # list of file specs.
   my ($listOrSpec, $seqDir) = @_;
   my @specs = ();
@@ -200,8 +200,8 @@ sub enumerateFileSpecs {
 }
 
 sub collapseFileSpecs {
-  # If we get a big old list of query sequences that are not subranged, 
-  # then cat them all into one big .fa file so we can invoke blastz 
+  # If we get a big old list of query sequences that are not subranged,
+  # then cat them all into one big .fa file so we can invoke blastz
   # only once, and don't have to lift afterwards.
   my @fileSpecs = @_;
   my $collapsed = 0;
@@ -217,7 +217,7 @@ sub collapseFileSpecs {
       return ($collapsed, @fileSpecs);
     }
   }
-  # OK, we're in the clear to concatenate all of these complete sequences 
+  # OK, we're in the clear to concatenate all of these complete sequences
   # onto one local file.
   my $big = "$TMP/bigCollapse.fa";
   # avoiding exec of shell here instead of going through &run
@@ -243,8 +243,8 @@ sub collapseFileSpecs {
 }
 
 sub getBlastzParams {
-  # Look for BLASTZ_? param specs in %defVars; turn into blastz command line 
-  # option string.  (blastz command line option names are all 1-character, 
+  # Look for BLASTZ_? param specs in %defVars; turn into blastz command line
+  # option string.  (blastz command line option names are all 1-character,
   # and all 1-char BLASTZ_? DEF params are blastz command line options.)
   my $params = " ";
   foreach my $p (keys %defVars) {
@@ -267,15 +267,15 @@ sub blastzRangeSpec {
 }
 
 sub unpackForBlastz {
-  # If the sequence file is .fa.gz or .2bit, uncompress/extract fa into 
-  # a local file;  if it's something that blastz already supports like 
+  # If the sequence file is .fa.gz or .2bit, uncompress/extract fa into
+  # a local file;  if it's something that blastz already supports like
   # .fa or .nib, translate the offset spec (if any) into blastz's format.
   my ($spec, $seqDir, $prefix) = @_;
   my ($fname, $seq, $start, $end) = &parseFileSpec($spec, $seqDir);
   my $local = "$TMP/$prefix.$seq.$start.$end.fa";
   if ($fname =~ /\.2bit$/) {
-    # Don't use twoBitToFa's range extraction capabilities -- that 
-    # confuses blastz/normalizeLav.  Just extract the whole thing as 
+    # Don't use twoBitToFa's range extraction capabilities -- that
+    # confuses blastz/normalizeLav.  Just extract the whole thing as
     # fa and tell blastz what range we're using:
     &run("/cluster/bin/$machtype/twoBitToFa $fname:$seq $local");
     $local .= &blastzRangeSpec($start, $end);
@@ -366,17 +366,19 @@ sub plainBlastz {
   #  these variables will be 1 if there is zero usable sequence
   #  this could be a more extensive check than just for zero.
   my $targetNoSequence = 0;
-  if ($target =~ m/\[/) {
-    $targetNoSequence = &checkSubRange($target);
-  } else {
-    $targetNoSequence =
+  if ($target !~ m/.2bit$/) {
+    if ($target =~ m/\[/) {
+      $targetNoSequence = &checkSubRange($target);
+    } else {
+      $targetNoSequence =
 	`cat $target | faSize stdin | grep " 0 upper " | wc -l`;
+    }
   }
   chomp $targetNoSequence;
   my $queryNoSequence = 0;
   if ($query =~ m/\[/) {
     $queryNoSequence = &checkSubRange($query);
-  } else {
+  } elsif ($query !~ m/.2bit/) {
     $queryNoSequence =
 	`cat $query | faSize stdin | grep " 0 upper " | wc -l`;
   }
@@ -385,20 +387,24 @@ sub plainBlastz {
     &emptyLav($raw);
     $answer = 0;  # not really running blastz
   } else {
+    if ($target =~ m/.2bit$/) {
+      $target .= "[multiple]";
+      $options .= " --format=axt+";
+    }
     &run("$blastz $target $query $options > $raw");
   }
   return($answer);
 }
 
 sub selectRpts {
-  # This used to be an awk, piped to select_rpts, piped to sort -n.  
-  # select_rpts is a little perl script, and getting the DEF PATH into the 
-  # pipe command seems more trouble than it's worth -- so inline not only 
+  # This used to be an awk, piped to select_rpts, piped to sort -n.
+  # select_rpts is a little perl script, and getting the DEF PATH into the
+  # pipe command seems more trouble than it's worth -- so inline not only
   # the awk but also the select_rpts here.  Still pipe to sort -n just in case.
   my ($allRepFile, $start, $end, $selRepFile) = @_;
   &nfsNoodge($allRepFile);
   open(ALL, "<$allRepFile") || &cleanDie("Can't open $allRepFile: $!\n");
-  open(SEL, "| sort -n > $selRepFile") 
+  open(SEL, "| sort -n > $selRepFile")
     || &cleanDie("Can't open pipe to sort -n > $selRepFile: $!\n");
   print SEL "\%:repeats\n";
   while (<ALL>) {
@@ -421,9 +427,9 @@ sub selectRpts {
 }
 
 sub abridgeLinSpecReps {
-  # Before running blastz, snip out lineage-specific repeats from each 
-  # sequence.  Then run blastz only on that strand.  After running blastz, 
-  # fix up the alignment coords to reflect the original sequence including 
+  # Before running blastz, snip out lineage-specific repeats from each
+  # sequence.  Then run blastz only on that strand.  After running blastz,
+  # fix up the alignment coords to reflect the original sequence including
   # the lineage-specific repeats.
   # Currently this only works on per-chromosome sequence and repeat files.
   my ($tSpec, $qSpec, $blastzOptions, $raw) = @_;
@@ -506,12 +512,13 @@ sub convertOutput {
     my $dropSelf = ($opt_dropSelf ? "-dropSelf " : "");
     &run("lavToAxt $dropSelf $lav $tSeq $qSeq $out");
   } elsif ($opt_dropSelf) {
-    # lavToPsl doesn't have lavToAxt's -dropSelf functionality, so pipe 
+    # lavToPsl doesn't have lavToAxt's -dropSelf functionality, so pipe
     # lavToAxt -dropSelf to axtToPsl.
     &run("lavToAxt -dropSelf $lav $tSeq $qSeq stdout " .
 	 "| axtToPsl stdin $tSizes $qSizes $out");
   } else {
     &run("lavToPsl $lav $out");
+    &run("pslCheck $out");
   }
 }
 
@@ -547,7 +554,7 @@ if (exists($defVars{'TMPDIR'})) {
 chomp $TMP;
 print STDERR "temp files in $TMP -- will attempt cleanup before die-ing.\n";
 
-# Some internal defaults for blastz params, carried over from 
+# Some internal defaults for blastz params, carried over from
 # Scott's blastz-run:
 $defVars{'BLASTZ_H'} = 2000 if (! defined $defVars{'BLASTZ_H'});
 
@@ -559,8 +566,30 @@ if ($defVars{'BLASTZ_ABRIDGE_REPEATS'} && scalar(@qFileSpecs) > 1) {
   &cleanDie("Sorry, DEF can't have BLASTZ_ABRIDGE_REPEATS set if a list of " .
 	    "query sequences is passed in -- not supported.\n");
 }
-my $collapsed;
-($collapsed, @qFileSpecs) = &collapseFileSpecs(@qFileSpecs);
+my $collapsed = 0;
+my $query2bit = $query;
+$query2bit =~ s/.lst$/.2bit/;
+# if partition step constructed the 2bit file for this query, use it:
+if ( -s $query2bit ) {
+  &run("/bin/cp -p $query2bit $TMP");  # it is used repeatedly for each tSpec
+  $query2bit =~ s#qParts/##;
+  @qFileSpecs = undef;
+  $qFileSpecs[0] = "$TMP/$query2bit";
+  $collapsed = 1;
+} else {
+  ($collapsed, @qFileSpecs) = &collapseFileSpecs(@qFileSpecs);
+}
+# if partition step constructed the 2bit file for this target bit, use it
+# using a target 2bit can only result in axt or psl output, lav not possible
+# so don't do this if lav required output
+if ($opt_outFormat) {
+  my $target2bit = $target;
+  $target2bit =~ s/.lst$/.2bit/;
+  if (-s $target2bit ) {
+    @tFileSpecs = undef;
+    $tFileSpecs[0] = "$target2bit";  # used only once for all qSpec
+  }
+}
 
 # Local file to hold concatenated results of all {target, query} runs:
 my $localOut = "$TMP/local.lav";
@@ -572,27 +601,57 @@ my $littleConv = "$TMP/little.conv";
 
 # Run blastz on each {target, query} pair;  lift and collect results.
 foreach my $tSpec (@tFileSpecs) {
-  my ($tSeq, $tLocal) = &unpackForBlastz($tSpec, $seq1Dir, 't');
+  my ($tSeq, $tLocal) = ("", "");
+  my $axtResult = 0;
+  if ($tSpec =~ m/.2bit$/) {
+     $tLocal = $tSpec;   # use .2bit file when it exists
+     $axtResult = 1;     # lastz can only output axt when using 2bit[multiple]
+  } else {
+     ($tSeq, $tLocal) = &unpackForBlastz($tSpec, $seq1Dir, 't');
+  }
   foreach my $qSpec (@qFileSpecs) {
-    my ($qSeq, $qLocal) = &unpackForBlastz($qSpec, $seq2Dir, 'q');
+    my ($qSeq, $qLocal) = ("", "");
+    if ($qSpec =~ m/.2bit$/) {
+      $qLocal = $qSpec;
+    } else {
+      ($qSeq, $qLocal) = &unpackForBlastz($qSpec, $seq2Dir, 'q');
+    }
     if ($defVars{'BLASTZ_ABRIDGE_REPEATS'}) {
       &abridgeLinSpecReps($tLocal, $qLocal, $blastzOptions, $littleRaw);
     } else {
       &plainBlastz($tLocal, $qLocal, $blastzOptions, $littleRaw);
     }
-    if ($collapsed) {
-      # Lift target side only:
-      &liftLav($littleRaw, $littleOut, $tSeq, undef);
+    # there may be no lifting involved when axtResult TBD XXX
+    if ($axtResult) {
+      &run("/bin/cp -p $littleRaw $littleOut");
     } else {
-      &liftLav($littleRaw, $littleOut, $tSeq, $qSeq);
-      if ($qLocal =~ /^$TMP/) {
-	  $qLocal =~ s/\[.*\]$//;
-	  &run("/bin/rm $qLocal");
+      if ($collapsed) {
+        # Lift target side only:
+        &liftLav($littleRaw, $littleOut, $tSeq, undef);
+      } else {
+        &liftLav($littleRaw, $littleOut, $tSeq, $qSeq);
+        if ($qLocal =~ /^$TMP/) {
+            $qLocal =~ s/\[.*\]$//;
+            &run("/bin/rm $qLocal");
+        }
       }
     }
     if ($opt_outFormat) {
-      &convertOutput($littleOut, $littleConv);
-      &run("/bin/cat $littleConv >> $localOut");
+      if ($axtResult) {
+        if ($opt_outFormat eq 'axt') {
+          &run("/bin/cat $littleOut >> $localOut");
+        } else {
+          my $tSizes = $defVars{'SEQ1_CTGLEN'} || $defVars{'SEQ1_LEN'};
+          my $qSizes = $defVars{'SEQ2_CTGLEN'} || $defVars{'SEQ2_LEN'};
+          # carry through comments
+          &run("grep '^#' $littleOut | egrep -v 'identity|coverage|num_masked' > $littleConv");
+          &run("axtToPsl $littleOut $tSizes $qSizes stdout >> $littleConv");
+          &run("/bin/cat $littleConv >> $localOut");
+        }
+      } else {
+        &convertOutput($littleOut, $littleConv);
+        &run("/bin/cat $littleConv >> $localOut");
+      }
     } else {
       &run("/bin/cat $littleOut >> $localOut");
     }
@@ -611,4 +670,3 @@ if ($opt_gz) {
 
 # Clean up temporary directory:
 &run("/bin/rm -rf $TMP");
-

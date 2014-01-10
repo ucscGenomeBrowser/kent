@@ -55,13 +55,12 @@ errAbort(
   "hgLoadOut - load RepeatMasker .out files into database\n"
   "usage:\n"
   "   hgLoadOut database file(s).out\n"
-  "For each table chrN.out this will create the table\n"
-  "chrN_rmsk in the database\n"
+  "For multiple files chrN.out this will create the single table 'rmsk'\n"
+  "in the database, use the -split argument to obtain separate chrN_rmsk tables.\n"
   "options:\n"
   "   -tabFile=text.tab - don't actually load database, just create tab file\n"
-  "   -nosplit - assume single rmsk table rather than chrN_rmsks\n"
-  "   -split - load chrN_rmsk tables even if a single file is given\n"
-  "   -table=name - use a different suffix other than the default (rmsk)\n");
+  "   -split - load chrN_rmsk separate tables even if a single file is given\n"
+  "   -table=name - use a different suffix other than the default (rmsk)");
 }
 
 void badFormat(struct lineFile *lf, int id)
@@ -99,7 +98,7 @@ boolean checkRepeat(struct rmskOut *r, struct lineFile *lf)
 /* check for bogus repeat */
 {
 /* this is bogus on both strands */
-if (r->repStart > r->repEnd)
+if (r->repEnd < 0 || r->repStart > r->repEnd)
     {
     badRepCnt++;
     if (verboseLevel() > 1)
@@ -361,7 +360,7 @@ if (tabFileName == NULL)
 hFreeConn(&conn);
 if (badRepCnt > 0)
     {
-    warn("note: %d records dropped due to repStart > repEnd\n", badRepCnt);
+    warn("note: %d records dropped due to repEnd < 0 or repStart > repEnd\n", badRepCnt);
     if (verboseLevel() < 2)
         warn("      run with -verbose=2 for details\n");
     }
@@ -373,8 +372,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
-noSplit = (optionExists("noSplit") || optionExists("nosplit"));
+// default changed to noSplit Jan 2014 , ignore noSplit arguments
 split = optionExists("split");
+noSplit = ! split;
 suffix = optionVal("table", "rmsk");
 tabFileName = optionVal("tabFile", tabFileName);
 if (tabFileName == NULL)

@@ -252,7 +252,7 @@ vf->depth = vf->basesInItems*vf->mapRatio/assembly->baseCount;
 
 /* Scan through the bed file to make up information about the sample bits */
 struct genomeRangeTree *grt = genomeRangeTreeNew();
-struct lineFile *lf = lineFileOpen(sampleFileName, "TRUE");
+struct lineFile *lf = lineFileOpen(sampleFileName, TRUE);
 char *row[3];
 while (lineFileRow(lf, row))
     {

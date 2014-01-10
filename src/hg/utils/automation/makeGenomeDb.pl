@@ -555,9 +555,9 @@ awk '{print \$1 "\t" \$2 "\t$HgAutomate::gbdb/$db/$db.2bit";}' chrom.sizes \\
 _EOF_
     );
   if ($gotAgp) {
+    my $splitThreshold = $HgAutomate::splitThreshold;
     $bossScript->add(<<_EOF_
-
-if (`wc -l < chrom.sizes` < 1000) then
+if (`wc -l < chrom.sizes` < $splitThreshold) then
   # Install per-chrom .agp files for download.
   $acat $agpFiles | grep -v '^#' \\
   | splitFileByColumn -col=1 -ending=.agp stdin $topDir -chromDirs
@@ -766,7 +766,8 @@ _EOF_
   my $allAgp = "$topDir/$db.agp";
   $allAgp = "$bedDir/hgFakeAgp/$db.agp" if (! $gotAgp);
   if ($chromBased) {
-    $bossScript->add(<<_EOF_
+    if ($opt_splitGoldGap) {
+      $bossScript->add(<<_EOF_
 # Split AGP into per-chrom files/dirs so we can load split gold and gap tables.
 cp /dev/null chrom.lst.tmp
 foreach chr (`awk '{print \$1;}' chrom.sizes`)
@@ -778,8 +779,7 @@ end
 sort -u chrom.lst.tmp > chrom.lst
 rm chrom.lst.tmp
 _EOF_
-    );
-    if ($opt_splitGoldGap) {
+      );
       $bossScript->add("hgGoldGapGl -noGl -chromLst=chrom.lst $db $topDir .\n");
     } else {
       $bossScript->add("hgGoldGapGl -noGl $db $allAgp\n");
@@ -1076,6 +1076,7 @@ my %goldTypes = (
 'D' => 'draft sequence',
 'F' => 'finished sequence',
 'O' => 'other sequence',
+'P' => 'pre draft',
 'W' => 'whole genome shotgun'
 );
 # definition of gap types in the AGP file

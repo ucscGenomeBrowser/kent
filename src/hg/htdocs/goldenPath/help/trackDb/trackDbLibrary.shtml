@@ -402,7 +402,7 @@
     <BR>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBed bigWig bam vcfTabIx"></span>
+<DIV class="bigDataUrl"><span class="types bigBed bigWig bam vcfTabix"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P>Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -413,7 +413,7 @@
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
     the supported remote data file formats: bam, bigBed, bigWig or
-    vcfTabIx.  Note that bam and vcfTabIx types require a separate
+    vcfTabix.  Note that bam and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively).</P>
     <P><B>Example:</B></P>
@@ -551,6 +551,72 @@
     hgsid on    </pre>
     <P>In this example the URL specified by <code>directUrl</code> will have the user's
     Browser ID appended so that cart settings will be available.</P>
+</DIV>
+
+<DIV class="iframeUrl"><span class="types all"></span>
+<div class="format"><code>iframeUrl &lt;url&gt;</code></div>
+    <P>This setting allows to integrate an external html page into the default details page, as an iframe. The usual replacement variables can be used within this URL:</P>
+    <UL>
+    <LI>$$ - ID, will be replaced by the <code>name</code>
+    of an item or other string id depending upon the fields in the
+    given track's type.</LI>
+    <LI>$T - database table name</LI>
+    <LI>$S - chromomosome name (scaffold name on
+    scaffold assemblies)</LI>
+    <LI>$[ - chromStart location (relative to zero)</LI>
+    <LI>$] - chromEnd location (relative to one)</LI>
+    <LI>$s - chromosome name without <i>chr</i> prefix (or without <i>scaffold_</i> or 
+    <i>Scaffold_</i> prefix on scaffold assemblies)</LI>
+    <LI>  $D - database name (e.g. "hg19")</LI>
+    <LI>  $P - item name portion before first : in name</LI>
+    <LI>  $p - item name portion after first : in name
+    up to next colon</LI>
+    </UL>
+
+    <P>The URL can either be a full external URL or local to the web site.</P>
+
+    <P>In HTML, iframes cannot be resized easily, so the default static size is 1024 pixels. This can be
+    changed with <A onclick="jumpTo(this)" HREF="#">iframeOptions</A></P>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+    iframeOptions height='600' width='1024'</pre>
+</DIV>
+
+<DIV class="iframeOptions"><span class="types all"></span>
+<div class="format"><code>iframeOptions &lt;string&gt;</code></div>
+    <P>When <A onclick="jumpTo(this)" HREF="#">iframeUrl</A> is used, this
+    statement specifies a string that is inserted literally into the
+    HTML &lt;iframe&gt; tag. It can include options needed for iframe formatting,
+    like width, height, scrolling, etc.
+    </P>
+
+    <P>If the statement is not present, the default is <code>width='100%' height='1024'</code>.</P>
+
+    <P>Note: dynamic resizing of iframes is not trivial, as they have to
+    resized with javascript, across domains. We recommend keeping
+    the size static and to use scrollbars. If dynamic resizing is required, the
+    iframed page has to include a few lines of special HTML and javascript
+    code and one has to modify its body-tag, like this (see 
+    <a href="http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content">stackoverflow</a>):
+    <pre>
+    ... html header ...
+    &lt;body onload="iframeResizePipe()"&gt;
+    &lt;iframe id="helpframe" src='' height='0' width='0' frameborder='0'&gt;&lt;/iframe&gt;
+    &lt;script type="text/javascript"&gt;
+      function iframeResizePipe() {
+       var height = document.body.scrollHeight;
+       var pipe = document.getElementById('helpframe');
+       pipe.src = 'http://genome.ucsc.edu/inc/iframeHelper.html?height='+height+'&amp;cacheb='+Math.random();
+      }
+    &lt;/script&gt;
+    ... rest of webpage ...
+    </pre>
+
+    <P><B>Example:</B></P>
+    <pre>   iframeOptions width='800' height='800' scrolling='yes'</pre>
+    <P>This example fixes the size to 800x800 pixels and activates scrollbars.</P>
 </DIV>
 
 <DIV class="directUrl_for_hubs"><span class="types all"></span>
@@ -903,7 +969,7 @@
     <P><em>An example can be found below.</em></P>
 </DIV>
 
-<DIV class="bigDataUrl2"><span class="types bigBed bigWig bam vcfTabIx"></span>
+<DIV class="bigDataUrl2"><span class="types bigBed bigWig bam vcfTabix"></span>
 <div class="format">
     <code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P>This setting is for remote data file type
@@ -3350,7 +3416,7 @@
 </DIV>
 
 <DIV class="vcfTabix"><span class="types vcfTabix"></span>
-<div class="format"><code>type vcfTabIx</code></div>
+<div class="format"><code>type vcfTabix</code></div>
     <P>If the <code>bigDataUrl</code> setting is included, the data at the location
     specified by that URL will be
     displayed. Otherwise, a database table with a single column <code>fileName</code>
@@ -3364,7 +3430,7 @@
 <div class="format"><B>Example of a VCF track</B></div>
     <pre>
     track myVcf
-    type vcfTabIx
+    type vcfTabix
     bigDataUrl http://myorg.edu/mylab/myVcf.gz
     maxWindowToDraw 3000000
       ...    </pre>
@@ -3923,8 +3989,12 @@ for each cell associated with the particular TF binding location.</P>
 <DIV class="superTrack"><span class="types superTrack"></span>
 <div class="format"><code>superTrack on</code></div>
     <P>To declare a supertrack, simply add this
-    setting to a track definition that will hold the few standard
-    settings.
+    setting to a track definition that will hold a few standard
+    settings. To set a supertrack to display as default add the word show,
+    <code>superTrack on show</code>, to the end of the statement.
+    When attempting to debug visibility settings, it may be 
+    helpful to read the <A href='#inheritance'>note about
+    inheritance</A> found below.</P> 
     </P>
 </DIV>
 

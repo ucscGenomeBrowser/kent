@@ -48,13 +48,16 @@ use File::Basename;
 
 use vars qw( %cluster %clusterFilesystem $defaultDbHost );
 
-%cluster = 
+%cluster =
+    ( 'ku' =>
+        { 'enabled' => 1, 'gigaHz' => 1.4, 'ram' => 8,
+	  'hostCount' => 512, },
+    );
+
+my %obsoleteCluster =
     ( 'swarm' => ,
         { 'enabled' => 1, 'gigaHz' => 2.33, 'ram' => 8,
 	  'hostCount' => 1024, },
-      'ku' =>
-        { 'enabled' => 1, 'gigaHz' => 1.4, 'ram' => 8,
-	  'hostCount' => 512, },
       'memk' =>
         { 'enabled' => 1, 'gigaHz' => 1.0, 'ram' => 32,
 	  'hostCount' => 32, },
@@ -73,8 +76,20 @@ my @allClusters = (keys %cluster);
       'hive' =>
         { root => '/hive/data/genomes', clusterLocality => 0.3,
 	  distrHost => ['ku'], distrCommand => '',
-	  inputFor => ['ku', 'memk', 'encodek', 'swarm'],
-	  outputFor => ['ku', 'memk', 'encodek', 'swarm'], },
+	  inputFor => ['ku'],
+	  outputFor => ['ku'], },
+    );
+
+my %obsoleteClusterFilesystem =
+    ( 'scratch' =>
+        { root => '/scratch/data', clusterLocality => 1.0,
+	  distrHost => [], distrCommand => '',
+	  inputFor => \@allClusters, outputFor => [], },
+      'hive' =>
+        { root => '/hive/data/genomes', clusterLocality => 0.3,
+	  distrHost => ['ku'], distrCommand => '',
+	  inputFor => ['memk', 'encodek', 'swarm'],
+	  outputFor => ['memk', 'encodek', 'swarm'], },
     );
 
 $defaultDbHost = 'hgwdev';
@@ -204,12 +219,10 @@ sub getWorkhorseLoads {
   #*** Would be nice to parameterize instead of hardcoding hostnames...
   # Return a hash of workhorses (kolossus and all idle small cluster machines),
   # associated with their load factors.
-  # swarm and hgwdev are now valid workhorses since they have access to hive.
+  # a valid workhorse needs to have access to hive.
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
-  foreach my $machLine ('ku', 'swarm', 'kolossus', 'hgwdev',
-	`$HgAutomate::runSSH encodek parasol list machines | grep idle`,
-	`$HgAutomate::runSSH memk parasol list machines | grep idle`) {
+  foreach my $machLine ('ku', 'kolossus', 'hgwdev') {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
     chomp $mach;
@@ -635,7 +648,7 @@ _EOF_
 }
 
 sub mustMkdir {
-  # mkdir || die.  Immune to -debug -- we need to create the dir structure 
+  # mkdir || die.  Immune to -debug -- we need to create the dir structure
   # and dump out the scripts even if we don't actually execute the scripts.
   my ($dir) = @_;
   confess "Must have exactly 1 argument" if (scalar(@_) != 1);

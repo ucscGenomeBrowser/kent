@@ -50,6 +50,7 @@ errAbort(
   "            -err=outFile - set stderr to out file - only works with wait flag\n"
   "            -verbose=N - set verbosity level, default level is 1\n"
   "            -printId - prints jobId to stdout\n"
+  "            -dir=dir - set output results dir, default is current dir\n"
   "            -results=resultFile fully qualified path to the results file, \n"
   "             or `results' in the current directory if not specified.\n"
   "            -cpu=N  Number of CPUs used by the jobs, default 1.\n"
