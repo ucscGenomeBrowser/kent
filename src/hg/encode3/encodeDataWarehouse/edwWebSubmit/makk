@@ -1,3 +1,4 @@
 #!/bin/tcsh -efx
 make
 scp /usr/local/apache/cgi-bin-kent/edwWebSubmit encodedcc.sdsc.edu:/data/www/cgi-bin/
+#scp /usr/local/apache/cgi-bin-kent/edwWebSubmit encode-02.sdsc.edu:/data/www/cgi-bin/
