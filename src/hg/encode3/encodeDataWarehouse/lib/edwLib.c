@@ -1243,7 +1243,6 @@ sqlSafef(query, sizeof(query),
     " and technicalReplicate='%s' and pairedEnd='%s' and itemCount=%lld and deprecated=''"
     , vf->experiment, vf->outputType, vf->replicate, vf->technicalReplicate, otherEnd
     , vf->itemCount);
-uglyf("%s\n", query);
 struct edwValidFile *otherVf = edwValidFileLoadByQuery(conn, query);
 if (otherVf == NULL)
     return NULL;

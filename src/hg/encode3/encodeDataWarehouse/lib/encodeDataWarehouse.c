@@ -4712,7 +4712,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwAnalysisJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode,pid";
+char *edwAnalysisJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode,pid,cpusRequested,parasolId";
 
 void edwAnalysisJobStaticLoad(char **row, struct edwAnalysisJob *ret)
 /* Load a row from edwAnalysisJob table into ret.  The contents of ret will
@@ -4726,6 +4726,8 @@ ret->endTime = sqlLongLong(row[3]);
 ret->stderr = row[4];
 ret->returnCode = sqlSigned(row[5]);
 ret->pid = sqlSigned(row[6]);
+ret->cpusRequested = sqlSigned(row[7]);
+ret->parasolId = row[8];
 }
 
 struct edwAnalysisJob *edwAnalysisJobLoadByQuery(struct sqlConnection *conn, char *query)
@@ -4758,8 +4760,8 @@ void edwAnalysisJobSaveToDb(struct sqlConnection *conn, struct edwAnalysisJob *e
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d)", 
-	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->pid);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d,%d,'%s')", 
+	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->pid,  el->cpusRequested,  el->parasolId);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -4778,6 +4780,8 @@ ret->endTime = sqlLongLong(row[3]);
 ret->stderr = cloneString(row[4]);
 ret->returnCode = sqlSigned(row[5]);
 ret->pid = sqlSigned(row[6]);
+ret->cpusRequested = sqlSigned(row[7]);
+ret->parasolId = cloneString(row[8]);
 return ret;
 }
 
@@ -4787,7 +4791,7 @@ struct edwAnalysisJob *edwAnalysisJobLoadAll(char *fileName)
 {
 struct edwAnalysisJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -4805,7 +4809,7 @@ struct edwAnalysisJob *edwAnalysisJobLoadAllByChar(char *fileName, char chopper)
 {
 struct edwAnalysisJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -4833,6 +4837,8 @@ ret->endTime = sqlLongLongComma(&s);
 ret->stderr = sqlStringComma(&s);
 ret->returnCode = sqlSignedComma(&s);
 ret->pid = sqlSignedComma(&s);
+ret->cpusRequested = sqlSignedComma(&s);
+ret->parasolId = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -4846,6 +4852,7 @@ struct edwAnalysisJob *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->commandLine);
 freeMem(el->stderr);
+freeMem(el->parasolId);
 freez(pEl);
 }
 
@@ -4882,6 +4889,12 @@ fputc(sep,f);
 fprintf(f, "%d", el->returnCode);
 fputc(sep,f);
 fprintf(f, "%d", el->pid);
+fputc(sep,f);
+fprintf(f, "%d", el->cpusRequested);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->parasolId);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -5047,7 +5060,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwAnalysisStepCommaSepFieldNames = "id,name,softwareCount,software";
+char *edwAnalysisStepCommaSepFieldNames = "id,name,softwareCount,software,cpusRequested";
 
 struct edwAnalysisStep *edwAnalysisStepLoadByQuery(struct sqlConnection *conn, char *query)
 /* Load all edwAnalysisStep from table that satisfy the query given.  
@@ -5081,8 +5094,8 @@ void edwAnalysisStepSaveToDb(struct sqlConnection *conn, struct edwAnalysisStep 
 struct dyString *update = newDyString(updateSize);
 char  *softwareArray;
 softwareArray = sqlStringArrayToString(el->software, el->softwareCount);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%d,'%s')", 
-	tableName,  el->id,  el->name,  el->softwareCount,  softwareArray );
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%d,'%s',%d)", 
+	tableName,  el->id,  el->name,  el->softwareCount,  softwareArray ,  el->cpusRequested);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&softwareArray);
@@ -5103,6 +5116,7 @@ int sizeOne;
 sqlStringDynamicArray(row[3], &ret->software, &sizeOne);
 assert(sizeOne == ret->softwareCount);
 }
+ret->cpusRequested = sqlSigned(row[4]);
 return ret;
 }
 
@@ -5112,7 +5126,7 @@ struct edwAnalysisStep *edwAnalysisStepLoadAll(char *fileName)
 {
 struct edwAnalysisStep *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -5130,7 +5144,7 @@ struct edwAnalysisStep *edwAnalysisStepLoadAllByChar(char *fileName, char choppe
 {
 struct edwAnalysisStep *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -5165,6 +5179,7 @@ for (i=0; i<ret->softwareCount; ++i)
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
+ret->cpusRequested = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -5220,6 +5235,8 @@ for (i=0; i<el->softwareCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 }
+fputc(sep,f);
+fprintf(f, "%d", el->cpusRequested);
 fputc(lastSep,f);
 }
 
