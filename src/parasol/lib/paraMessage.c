@@ -6,6 +6,7 @@
 #include "internet.h"
 #include "rudp.h"
 #include "paraMessage.h"
+#include "errabort.h"
 #include "log.h"
 
 void pmInit(struct paraMessage *pm, rudpHost ipAddress, bits16 port)
@@ -246,5 +247,45 @@ if (ru != NULL)
 	pmFetchOpenFile(&pm, ru, destName);
     rudpClose(&ru);
     }
+}
+
+boolean pmSendStringWithRetries(struct paraMessage *pm, struct rudp *ru, char *string)
+/* Send out given message strng.  Print warning message and return FALSE if
+ * there is a problem. Try up to 5 times sleeping for 60 seconds in between.
+ * This is an attempt to help automated processes. */
+{
+int tries = 0;
+#define PMSENDSLEEP 60
+#define PMSENDMAXTRIES 5
+boolean result = FALSE;
+while (TRUE)
+    {
+    result = pmSendString(pm, ru, string);
+    if (result)
+	break;
+    warn("pmSendString timed out!");
+    ++tries;
+    if (tries >= PMSENDMAXTRIES)
+	break;
+    warn("pmSendString: will sleep %d seconds and retry", PMSENDSLEEP);
+    sleep(PMSENDSLEEP);
+    }
+return result;
+}
+
+char *pmHubSingleLineQuery(char *query, char *host)
+/* Send message to hub and get single line response.
+ * This should be freeMem'd when done. */
+{
+struct rudp *ru = rudpMustOpen();
+struct paraMessage pm;
+
+pmInitFromName(&pm, host, paraHubPort);
+if (!pmSendStringWithRetries(&pm, ru, query))
+    noWarnAbort();
+if (!pmReceive(&pm, ru))
+    noWarnAbort();
+rudpClose(&ru);
+return cloneString(pm.data);
 }
 

@@ -94,4 +94,13 @@ void pmFetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName);
 void pmFetchFile(char *host, char *sourceName, char *destName);
 /* Fetch small file. */
 
+boolean pmSendStringWithRetries(struct paraMessage *pm, struct rudp *ru, char *string);
+/* Send out given message strng.  Print warning message and return FALSE if
+ * there is a problem. Try up to 5 times sleeping for 60 seconds in between.
+ * This is an attempt to help automated processes. */
+
+char *pmHubSingleLineQuery(char *query, char *host);
+/* Send message to hub and get single line response.
+ * This should be freeMem'd when done. */
+
 #endif /* PARAMESSAGE_H */
