@@ -11,8 +11,10 @@
 #include "eapLib.h"
 
 boolean again = FALSE;
+boolean retry = FALSE;
 boolean updateSoftwareMd5 = FALSE;
 boolean noJob = FALSE;
+boolean ignoreQa = FALSE;
 boolean justLink = FALSE;
 boolean dry = FALSE;
 
@@ -24,9 +26,11 @@ errAbort(
   "usage:\n"
   "   edwScheduleAnalysis startFileId endFileId\n"
   "options:\n"
+  "   -retry - if job has run and failed retry it\n"
   "   -again - if set schedule it even if it's been run once\n"
   "   -up - update on software MD5s rather than aborting on them\n"
   "   -noJob - if set then don't put job on edwAnalysisJob table\n"
+  "   -ignoreQa - if set then ignore QA results when scheduling\n"
   "   -justLink - just symbolically link rather than copy EDW files to cache\n"
   "   -dry - just print out the commands that would result\n"
   );
@@ -34,9 +38,11 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"retry", OPTION_BOOLEAN},
    {"again", OPTION_BOOLEAN},
    {"up", OPTION_BOOLEAN},
    {"noJob", OPTION_BOOLEAN},
+   {"ignoreQa", OPTION_BOOLEAN},
    {"justLink", OPTION_BOOLEAN},
    {"dry", OPTION_BOOLEAN},
    {NULL, 0},
@@ -67,7 +73,7 @@ return edwBiosampleLoadByQuery(conn, query);
 char *sexFromExp(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf)
 /* Return "male" or "female" */
 {
-char *sex = NULL;
+char *sex = "male";
 
 struct edwExperiment *exp = edwExperimentFromAccession(conn, vf->experiment);
 if (exp != NULL)
@@ -77,12 +83,14 @@ if (exp != NULL)
         {
 	if (sameWord(bio->sex, "F"))
 	    sex = "female";
-	else
-	    sex = "male";
 	}
     }
 if (sex == NULL)
-    errAbort("Can't find sex for fileId %u", ef->id);
+    {
+    // Warn not fatal since mapping to male genome not a big deal, and also there
+    // are a few cases without biosample
+    warn("Can't find sex for fileId %u", ef->id);
+    }
 return sex;
 }
 
@@ -100,9 +108,15 @@ static int countAlreadyScheduled(struct sqlConnection *conn, char *analysisStep,
 if (again)
     return 0;
 char query[512];
-sqlSafef(query, sizeof(query),
-    "select count(*) from edwAnalysisRun where firstInputId=%lld and analysisStep='%s'",
-    firstInput, analysisStep);
+if (retry)
+    sqlSafef(query, sizeof(query),
+	"select count(*) from edwAnalysisRun"
+	" where firstInputId=%lld and analysisStep='%s' and createStatus >= 0",
+	firstInput, analysisStep);
+else
+    sqlSafef(query, sizeof(query),
+	"select count(*) from edwAnalysisRun where firstInputId=%lld and analysisStep='%s'",
+	firstInput, analysisStep);
 return sqlQuickNum(conn, query);
 }
 
@@ -117,12 +131,15 @@ safef(withLast, sizeof(withLast), "%s/", tempDir);
 return cloneString(withLast);
 }
 
+
 char *scheduleStep(struct sqlConnection *conn, char *tempDir,
     char *analysisStep, char *commandLine, char *experiment, struct edwAssembly *assembly,
     int inCount, unsigned inputIds[], char *inputTypes[],
     int outCount, char *outputNames[], char *outputTypes[], char *outputFormats[])
 /* Schedule a step.  Returns temp dir it is to be run in. */
 {
+struct edwAnalysisStep *step = edwAnalysisStepFromNameOrDie(conn, analysisStep);
+
 if (updateSoftwareMd5)
     edwAnalysisSoftwareUpdateMd5ForStep(conn, analysisStep);
 edwAnalysisCheckVersions(conn, analysisStep);
@@ -142,7 +159,7 @@ else
     struct edwAnalysisRun *run;
     AllocVar(run);
     if (!noJob)
-	run->jobId = edwAnalysisJobAdd(conn, fullCommandLine);
+	run->jobId = edwAnalysisJobAdd(conn, fullCommandLine, step->cpusRequested);
     safef(run->experiment, sizeof(run->experiment), "%s",  experiment);
     run->analysisStep = analysisStep;
     run->configuration = "";
@@ -598,16 +615,12 @@ void runFastqAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edw
     struct edwExperiment *exp)
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
-struct edwAssembly *targetAsm = chooseTarget(conn, ef, vf);
-if (targetAsm == NULL || targetAsm->taxon != 9606)  // Humans only!
-    return;	    // FOr the moment we're being speciest.
-
 char *dataType = exp->dataType;
-if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq"))
+if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq") || 
+    sameString(dataType, "ChiaPet") || sameString(dataType, "DnaPet") )
     {
     if (!isEmpty(vf->pairedEnd))
         {
-#ifdef SOON
 	struct edwValidFile *vfB = edwOppositePairedEnd(conn, vf);
 	if (vfB != NULL)
 	    {
@@ -621,6 +634,7 @@ if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq"))
 		}
 	    edwValidFileFree(&vfB);
 	    }
+#ifdef SOON
 #endif /* SOON */
 	}
     else
@@ -634,23 +648,27 @@ void runBamAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwVa
     struct edwExperiment *exp)
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
-#ifdef SOON
 if (sameString(exp->dataType, "DNase-seq"))
     {
     scheduleMacsDnase(conn, ef, vf, exp);
+#ifdef SOON
     scheduleHotspot(conn, ef, vf, exp);
-    }
 #endif /* SOON */
+    }
 }
 
 void runSingleAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
     struct edwExperiment *exp)
 {
 verbose(2, "run single analysis format %s, dataType %s\n", vf->format, exp->dataType);
+struct edwAssembly *targetAsm = chooseTarget(conn, ef, vf);
+if (targetAsm == NULL || targetAsm->taxon != 9606)  // Humans only!
+    return;	    // FOr the moment we're being speciest.
+
 if (sameWord("fastq", vf->format))
     runFastqAnalysis(conn, ef, vf, exp);
 #ifdef SOON
-else if (sameWord("bam", vf->format))
+if (sameWord("bam", vf->format))
     runBamAnalysis(conn, ef, vf, exp);
 #endif /* SOON */
 }
@@ -688,9 +706,9 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	    {
 	    verbose(2, "experiment %s, singleQaStatus %d, replicateQaStatus %d\n", 
 		exp->accession, vf->singleQaStatus, vf->replicateQaStatus);
-	    if (vf->singleQaStatus > 0)
+	    if (vf->singleQaStatus > 0 || ignoreQa)
 		runSingleAnalysis(conn, ef, vf, exp);
-	    if (vf->replicateQaStatus > 0)
+	    if (vf->replicateQaStatus > 0 || ignoreQa)
 		runReplicateAnalysis(conn, ef, vf, exp);
 	    }
 	}
@@ -704,9 +722,11 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+retry = optionExists("retry");
 again = optionExists("again");
 updateSoftwareMd5 = optionExists("up");
 noJob = optionExists("noJob");
+ignoreQa = optionExists("ignoreQa");
 justLink = optionExists("justLink");
 dry = optionExists("dry");
 edwScheduleAnalysis(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
