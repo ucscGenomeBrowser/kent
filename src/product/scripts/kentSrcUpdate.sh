@@ -23,6 +23,21 @@ else
     usage
 fi
 
+export errCount=0
+if [ ! -d "${BROWSERHOME}" ]; then
+    echo "ERROR: BROWSERHOME directory does not exist: ${BROWSERHOME}" 1>&2
+    errCount=`echo $errCount | awk '{print $1+1}'`
+fi
+if [ ! -d "${CGI_BIN}" ]; then
+    echo "ERROR: CGI_BIN directory does not exist: ${CGI_BIN}" 1>&2
+    errCount=`echo $errCount | awk '{print $1+1}'`
+fi
+
+if [ $errCount -gt 0 ]; then
+    echo "ERROR: check on the existence of the mentioned directories" 1>&2
+    exit 255
+fi
+
 # this umask will allow all group members to write on files of other
 # group members
 umask 002
