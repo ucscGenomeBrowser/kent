@@ -419,6 +419,8 @@ CREATE TABLE edwAnalysisJob (
     stderr longblob,	# The output to stderr of the run - may be nonempty even with success
     returnCode int default 0,	# The return code from system command - 0 for success
     pid int default 0,	# Process ID for running processes
+    cpusRequested int default 0,	# Number of CPUs to request from job control system
+    parasolId varchar(255) default '',	# Parasol job id for process.
               #Indices
     PRIMARY KEY(id)
 );
@@ -440,6 +442,7 @@ CREATE TABLE edwAnalysisStep (
     name varchar(255) default '',	# Name of this analysis step
     softwareCount int default 0,	# Number of pieces of software used in step
     software longblob,	# Names of software used. First is the glue script
+    cpusRequested int default 0,	# Number of CPUs to request from job control system
               #Indices
     PRIMARY KEY(id),
     UNIQUE(name)

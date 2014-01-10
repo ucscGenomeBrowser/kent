@@ -1846,7 +1846,7 @@ void edwSubmitJobOutput(struct edwSubmitJob *el, FILE *f, char sep, char lastSep
 #define edwSubmitJobCommaOut(el,f) edwSubmitJobOutput(el,f,',',',');
 /* Print out edwSubmitJob as a comma separated list including final comma. */
 
-#define EDWANALYSISJOB_NUM_COLS 7
+#define EDWANALYSISJOB_NUM_COLS 9
 
 extern char *edwAnalysisJobCommaSepFieldNames;
 
@@ -1861,6 +1861,8 @@ struct edwAnalysisJob
     char *stderr;	/* The output to stderr of the run - may be nonempty even with success */
     int returnCode;	/* The return code from system command - 0 for success */
     int pid;	/* Process ID for running processes */
+    int cpusRequested;	/* Number of CPUs to request from job control system */
+    char *parasolId;	/* Parasol job id for process. */
     };
 
 void edwAnalysisJobStaticLoad(char **row, struct edwAnalysisJob *ret);
@@ -1987,7 +1989,7 @@ void edwAnalysisSoftwareOutput(struct edwAnalysisSoftware *el, FILE *f, char sep
 #define edwAnalysisSoftwareCommaOut(el,f) edwAnalysisSoftwareOutput(el,f,',',',');
 /* Print out edwAnalysisSoftware as a comma separated list including final comma. */
 
-#define EDWANALYSISSTEP_NUM_COLS 4
+#define EDWANALYSISSTEP_NUM_COLS 5
 
 extern char *edwAnalysisStepCommaSepFieldNames;
 
@@ -1999,6 +2001,7 @@ struct edwAnalysisStep
     char *name;	/* Name of this analysis step */
     int softwareCount;	/* Number of pieces of software used in step */
     char **software;	/* Names of software used. First is the glue script */
+    int cpusRequested;	/* Number of CPUs to request from job control system */
     };
 
 struct edwAnalysisStep *edwAnalysisStepLoadByQuery(struct sqlConnection *conn, char *query);

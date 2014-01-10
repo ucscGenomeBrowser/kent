@@ -309,8 +309,8 @@ table edwQaPairedEndFastq
 "Information about two paired-end fastqs"
     (
     uint id primary auto; "Id of this set of paired end files"
-    uint fileId1 unique; "Id of first in pair"
-    uint fileId2 unique; "Id of second in pair"
+    uint fileId1 index; "Id of first in pair"
+    uint fileId2 index; "Id of second in pair"
     double concordance;  "% of uniquely aligning reads where pairs nearby and point right way"
     double distanceMean; "Average distance between reads"
     double distanceStd;  "Standard deviation of distance"
@@ -354,6 +354,8 @@ table edwAnalysisJob
     lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
     int pid;	"Process ID for running processes"
+    int cpusRequested; "Number of CPUs to request from job control system"
+    string parasolId;	"Parasol job id for process." 
     )
 
 table edwAnalysisSoftware
@@ -372,6 +374,7 @@ table edwAnalysisStep
     string "name" unique;  "Name of this analysis step"
     int softwareCount;  "Number of pieces of software used in step"
     string[softwareCount] software; "Names of software used. First is the glue script"
+    int cpusRequested; "Number of CPUs to request from job control system"
     )
 
 table edwAnalysisRun
