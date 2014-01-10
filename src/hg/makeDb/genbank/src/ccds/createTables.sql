@@ -284,3 +284,17 @@ CREATE TABLE ProspectiveStatusVals (
 ) 
 ;
 
+DROP TABLE IF EXISTS SwissProtMatches;
+CREATE TABLE SwissProtMatches (
+        prot_acc varchar (64) NOT NULL ,
+        prot_version int NOT NULL ,
+        swiss_prot_acc varchar (64) NOT NULL ,
+        swiss_prot_acc_iso varchar (64) NOT NULL ,
+        prot_length int NOT NULL ,
+        swiss_prot_length int NOT NULL ,
+        identity_pct float NOT NULL ,
+        mismatch_count int NOT NULL ,
+        gap_count int NOT NULL ,
+) 
+;
+
