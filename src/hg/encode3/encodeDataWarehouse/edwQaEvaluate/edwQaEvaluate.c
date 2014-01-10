@@ -184,6 +184,22 @@ struct qaThresholds rampageThresholds =
     .pearsonClipped = 0.05,
     };
 
+struct qaThresholds chiaPetThresholds = 
+/* Chia pet links together DNA brought together from a long distance using an antibody. */
+    {
+    .fastqMapRatio = 0.001,
+    .bamMapRatio = 0.40,
+    .fastqQual = 25,
+    .fastqPairConcordance = 0.001,
+    .repeatContent = 0.1,
+    .ribosomeContent = 0.05,
+    .closeContamination = 0.06,
+    .farContamination = 0.02,
+    .enrichment = 1.5,
+    .crossEnrichment = 1.1,
+    .pearsonClipped = 0.0001,
+    };
+
 int failQa(struct sqlConnection *conn, struct edwFile *ef, char *whyFormat, ...)
 #ifdef __GNUC__
 __attribute__((format(printf, 3, 4)))
@@ -543,6 +559,8 @@ for (ef = efList; ef != NULL; ef = ef->next)
 		    thresholds = &shotgunBisulfiteSeqThresholds;
 		else if (sameWord("RAMPAGE", dataType))
 		    thresholds = &rampageThresholds;
+		else if (sameWord("ChiaPet", dataType))
+		    thresholds = &chiaPetThresholds;
 		else if (sameWord("", dataType))
 		    ;
 		else
