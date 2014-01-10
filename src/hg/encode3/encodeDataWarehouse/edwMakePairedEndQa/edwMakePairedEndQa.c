@@ -193,7 +193,7 @@ edwFastqFileFree(&fqf);
 void pairedEndQa(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf)
 /* Look for other end,  do a pairwise alignment, and save results in database. */
 {
-verbose(1, "pairedEndQa on %u %s %s\n", ef->id, ef->edwFileName, ef->submitFileName);
+verbose(2, "pairedEndQa on %u %s %s\n", ef->id, ef->edwFileName, ef->submitFileName);
 /* Get other end, return if not found. */
 struct edwValidFile *otherVf = edwOppositePairedEnd(conn, vf);
 if (otherVf == NULL)
@@ -216,6 +216,8 @@ assert(assembly != NULL);
 char genoFile[PATH_LEN];
 safef(genoFile, sizeof(genoFile), "%s%s/bwaData/%s.fa", 
     edwValDataDir, assembly->ucscDb, assembly->ucscDb);
+
+verbose(1, "aligning subsamples on %u vs. %u paired reads\n", vf1->fileId, vf2->fileId);
 
 /* Make alignments of subsamples. */
 char *sample1 = NULL, *sample2 = NULL, *sai1 = NULL, *sai2 = NULL;
