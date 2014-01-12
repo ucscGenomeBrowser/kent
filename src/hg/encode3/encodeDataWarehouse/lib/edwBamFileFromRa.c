@@ -28,6 +28,8 @@ static char *fields[] = {
     "u4mReadCount",
     "u4mUniquePos",
     "u4mUniqueRatio",
+    "targetBaseCount",
+    "targetSeqCount",
     };
 static char *requiredFields[] = {
     "isPaired",
@@ -43,6 +45,8 @@ static char *requiredFields[] = {
     "u4mReadCount",
     "u4mUniquePos",
     "u4mUniqueRatio",
+    "targetBaseCount",
+    "targetSeqCount",
     };
 return raToStructReaderNew("edwBamFile", ArraySize(fields), fields, ArraySize(requiredFields), requiredFields);
 }
@@ -66,6 +70,8 @@ enum fields
     u4mReadCountField,
     u4mUniquePosField,
     u4mUniqueRatioField,
+    targetBaseCountField,
+    targetSeqCountField,
     };
 if (!raSkipLeadingEmptyLines(lf, NULL))
     return NULL;
@@ -151,6 +157,16 @@ while (raNextTagVal(lf, &tag, &val, NULL))
 	    case u4mUniqueRatioField:
 	        {
 	        el->u4mUniqueRatio = sqlDouble(val);
+		break;
+	        }
+	    case targetBaseCountField:
+	        {
+	        el->targetBaseCount = sqlLongLong(val);
+		break;
+	        }
+	    case targetSeqCountField:
+	        {
+	        el->targetSeqCount = sqlUnsigned(val);
 		break;
 	        }
 	    default:
