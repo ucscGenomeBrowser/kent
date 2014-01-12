@@ -148,6 +148,7 @@ CREATE TABLE edwAssembly (
     twoBitId int unsigned default 0,	# File ID of associated twoBit file
     baseCount bigint default 0,	# Count of bases including N's
     realBaseCount bigint default 0,	# Count of non-N bases in assembly
+    seqCount int unsigned default 0,	# Number of chromosomes or other distinct sequences in assembly
               #Indices
     PRIMARY KEY(id)
 );
@@ -274,6 +275,8 @@ CREATE TABLE edwBamFile (
     u4mReadCount int default 0,	# Uniquely-mapped 4 million read actual read # (usually 4M)
     u4mUniquePos int default 0,	# Unique positions in target of the 4M reads that map to single pos
     u4mUniqueRatio double default 0,	# u4mUniqPos/u4mReadCount - measures library diversity
+    targetBaseCount bigint default 0,	# Count of bases in mapping target
+    targetSeqCount int unsigned default 0,	# Number of chromosomes or other distinct sequences in mapping target
               #Indices
     PRIMARY KEY(id),
     UNIQUE(fileId)
@@ -380,8 +383,8 @@ CREATE TABLE edwQaPairedEndFastq (
     recordComplete tinyint default 0,	# Flag to avoid a race condition. Ignore record if this is 0
               #Indices
     PRIMARY KEY(id),
-    UNIQUE(fileId1),
-    UNIQUE(fileId2)
+    INDEX(fileId1),
+    INDEX(fileId2)
 );
 
 #A job to be run asynchronously and not too many all at once.

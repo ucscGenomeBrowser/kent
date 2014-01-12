@@ -1494,7 +1494,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwAssemblyCommaSepFieldNames = "id,taxon,name,ucscDb,twoBitId,baseCount,realBaseCount";
+char *edwAssemblyCommaSepFieldNames = "id,taxon,name,ucscDb,twoBitId,baseCount,realBaseCount,seqCount";
 
 void edwAssemblyStaticLoad(char **row, struct edwAssembly *ret)
 /* Load a row from edwAssembly table into ret.  The contents of ret will
@@ -1508,6 +1508,7 @@ ret->ucscDb = row[3];
 ret->twoBitId = sqlUnsigned(row[4]);
 ret->baseCount = sqlLongLong(row[5]);
 ret->realBaseCount = sqlLongLong(row[6]);
+ret->seqCount = sqlUnsigned(row[7]);
 }
 
 struct edwAssembly *edwAssemblyLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1540,8 +1541,8 @@ void edwAssemblySaveToDb(struct sqlConnection *conn, struct edwAssembly *el, cha
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,%lld,%lld)", 
-	tableName,  el->id,  el->taxon,  el->name,  el->ucscDb,  el->twoBitId,  el->baseCount,  el->realBaseCount);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,%lld,%lld,%u)", 
+	tableName,  el->id,  el->taxon,  el->name,  el->ucscDb,  el->twoBitId,  el->baseCount,  el->realBaseCount,  el->seqCount);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1560,6 +1561,7 @@ ret->ucscDb = cloneString(row[3]);
 ret->twoBitId = sqlUnsigned(row[4]);
 ret->baseCount = sqlLongLong(row[5]);
 ret->realBaseCount = sqlLongLong(row[6]);
+ret->seqCount = sqlUnsigned(row[7]);
 return ret;
 }
 
@@ -1569,7 +1571,7 @@ struct edwAssembly *edwAssemblyLoadAll(char *fileName)
 {
 struct edwAssembly *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -1587,7 +1589,7 @@ struct edwAssembly *edwAssemblyLoadAllByChar(char *fileName, char chopper)
 {
 struct edwAssembly *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1615,6 +1617,7 @@ ret->ucscDb = sqlStringComma(&s);
 ret->twoBitId = sqlUnsignedComma(&s);
 ret->baseCount = sqlLongLongComma(&s);
 ret->realBaseCount = sqlLongLongComma(&s);
+ret->seqCount = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -1664,6 +1667,8 @@ fputc(sep,f);
 fprintf(f, "%lld", el->baseCount);
 fputc(sep,f);
 fprintf(f, "%lld", el->realBaseCount);
+fputc(sep,f);
+fprintf(f, "%u", el->seqCount);
 fputc(lastSep,f);
 }
 
@@ -2861,7 +2866,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwBamFileCommaSepFieldNames = "id,fileId,isPaired,isSortedByTarget,readCount,readBaseCount,mappedCount,uniqueMappedCount,readSizeMean,readSizeStd,readSizeMin,readSizeMax,u4mReadCount,u4mUniquePos,u4mUniqueRatio";
+char *edwBamFileCommaSepFieldNames = "id,fileId,isPaired,isSortedByTarget,readCount,readBaseCount,mappedCount,uniqueMappedCount,readSizeMean,readSizeStd,readSizeMin,readSizeMax,u4mReadCount,u4mUniquePos,u4mUniqueRatio,targetBaseCount,targetSeqCount";
 
 void edwBamFileStaticLoad(char **row, struct edwBamFile *ret)
 /* Load a row from edwBamFile table into ret.  The contents of ret will
@@ -2883,6 +2888,8 @@ ret->readSizeMax = sqlSigned(row[11]);
 ret->u4mReadCount = sqlSigned(row[12]);
 ret->u4mUniquePos = sqlSigned(row[13]);
 ret->u4mUniqueRatio = sqlDouble(row[14]);
+ret->targetBaseCount = sqlLongLong(row[15]);
+ret->targetSeqCount = sqlUnsigned(row[16]);
 }
 
 struct edwBamFile *edwBamFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -2915,8 +2922,8 @@ void edwBamFileSaveToDb(struct sqlConnection *conn, struct edwBamFile *el, char 
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%d,%d,%lld,%lld,%lld,%lld,%g,%g,%d,%d,%d,%d,%g)", 
-	tableName,  el->id,  el->fileId,  el->isPaired,  el->isSortedByTarget,  el->readCount,  el->readBaseCount,  el->mappedCount,  el->uniqueMappedCount,  el->readSizeMean,  el->readSizeStd,  el->readSizeMin,  el->readSizeMax,  el->u4mReadCount,  el->u4mUniquePos,  el->u4mUniqueRatio);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%d,%d,%lld,%lld,%lld,%lld,%g,%g,%d,%d,%d,%d,%g,%lld,%u)", 
+	tableName,  el->id,  el->fileId,  el->isPaired,  el->isSortedByTarget,  el->readCount,  el->readBaseCount,  el->mappedCount,  el->uniqueMappedCount,  el->readSizeMean,  el->readSizeStd,  el->readSizeMin,  el->readSizeMax,  el->u4mReadCount,  el->u4mUniquePos,  el->u4mUniqueRatio,  el->targetBaseCount,  el->targetSeqCount);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -2943,6 +2950,8 @@ ret->readSizeMax = sqlSigned(row[11]);
 ret->u4mReadCount = sqlSigned(row[12]);
 ret->u4mUniquePos = sqlSigned(row[13]);
 ret->u4mUniqueRatio = sqlDouble(row[14]);
+ret->targetBaseCount = sqlLongLong(row[15]);
+ret->targetSeqCount = sqlUnsigned(row[16]);
 return ret;
 }
 
@@ -2952,7 +2961,7 @@ struct edwBamFile *edwBamFileLoadAll(char *fileName)
 {
 struct edwBamFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[17];
 
 while (lineFileRow(lf, row))
     {
@@ -2970,7 +2979,7 @@ struct edwBamFile *edwBamFileLoadAllByChar(char *fileName, char chopper)
 {
 struct edwBamFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[17];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -3006,6 +3015,8 @@ ret->readSizeMax = sqlSignedComma(&s);
 ret->u4mReadCount = sqlSignedComma(&s);
 ret->u4mUniquePos = sqlSignedComma(&s);
 ret->u4mUniqueRatio = sqlDoubleComma(&s);
+ret->targetBaseCount = sqlLongLongComma(&s);
+ret->targetSeqCount = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -3065,6 +3076,10 @@ fputc(sep,f);
 fprintf(f, "%d", el->u4mUniquePos);
 fputc(sep,f);
 fprintf(f, "%g", el->u4mUniqueRatio);
+fputc(sep,f);
+fprintf(f, "%lld", el->targetBaseCount);
+fputc(sep,f);
+fprintf(f, "%u", el->targetSeqCount);
 fputc(lastSep,f);
 }
 

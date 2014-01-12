@@ -118,6 +118,7 @@ table edwAssembly
     uint twoBitId;  "File ID of associated twoBit file"
     bigInt baseCount;  "Count of bases including N's"
     bigInt realBaseCount;   "Count of non-N bases in assembly"
+    uint seqCount; "Number of chromosomes or other distinct sequences in assembly"
     )
 
 table edwBiosample
@@ -232,6 +233,8 @@ table edwBamFile
     int u4mReadCount; "Uniquely-mapped 4 million read actual read # (usually 4M)"
     int u4mUniquePos;  "Unique positions in target of the 4M reads that map to single pos"
     double u4mUniqueRatio; "u4mUniqPos/u4mReadCount - measures library diversity"
+    bigInt targetBaseCount;  "Count of bases in mapping target"
+    uint targetSeqCount; "Number of chromosomes or other distinct sequences in mapping target"
     )
 
 table edwQaEnrichTarget

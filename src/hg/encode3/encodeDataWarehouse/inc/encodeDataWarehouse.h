@@ -596,7 +596,7 @@ void edwSubscriberOutput(struct edwSubscriber *el, FILE *f, char sep, char lastS
 #define edwSubscriberCommaOut(el,f) edwSubscriberOutput(el,f,',',',');
 /* Print out edwSubscriber as a comma separated list including final comma. */
 
-#define EDWASSEMBLY_NUM_COLS 7
+#define EDWASSEMBLY_NUM_COLS 8
 
 extern char *edwAssemblyCommaSepFieldNames;
 
@@ -611,6 +611,7 @@ struct edwAssembly
     unsigned twoBitId;	/* File ID of associated twoBit file */
     long long baseCount;	/* Count of bases including N's */
     long long realBaseCount;	/* Count of non-N bases in assembly */
+    unsigned seqCount;	/* Number of chromosomes or other distinct sequences in assembly */
     };
 
 void edwAssemblyStaticLoad(char **row, struct edwAssembly *ret);
@@ -1057,7 +1058,7 @@ void edwFastqFileOutput(struct edwFastqFile *el, FILE *f, char sep, char lastSep
 #define edwFastqFileCommaOut(el,f) edwFastqFileOutput(el,f,',',',');
 /* Print out edwFastqFile as a comma separated list including final comma. */
 
-#define EDWBAMFILE_NUM_COLS 15
+#define EDWBAMFILE_NUM_COLS 17
 
 extern char *edwBamFileCommaSepFieldNames;
 
@@ -1080,6 +1081,8 @@ struct edwBamFile
     int u4mReadCount;	/* Uniquely-mapped 4 million read actual read # (usually 4M) */
     int u4mUniquePos;	/* Unique positions in target of the 4M reads that map to single pos */
     double u4mUniqueRatio;	/* u4mUniqPos/u4mReadCount - measures library diversity */
+    long long targetBaseCount;	/* Count of bases in mapping target */
+    unsigned targetSeqCount;	/* Number of chromosomes or other distinct sequences in mapping target */
     };
 
 void edwBamFileStaticLoad(char **row, struct edwBamFile *ret);
