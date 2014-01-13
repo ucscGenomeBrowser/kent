@@ -130,12 +130,26 @@ visibility hide
 color 0,0,0
 type bed 4 .
 
-track altLocations
-shortLabel Alt Map
-longLabel Mappings to the alternate sequences/haplotypes
-group map
+# track altLocations
+# shortLabel Alt Map
+# longLabel Mappings to the alternate sequences/haplotypes
+# group map
+# priority 30
+# visibility hide
+# type bed 4 .
+# url /cgi-bin/hgTracks?db=hg38&position=$$
+# urlLabel Corresponding position:
+
+track centromeres
+shortLabel Centromere locations
+longLabel Centromere locations
+group x
 priority 30
 visibility hide
 type bed 4 .
-url /cgi-bin/hgTracks?db=hg38&position=$$
-urlLabel Corresponding position:
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
+color 255,0,0
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel NCBI accession record:
+
+include altSequences.ra
