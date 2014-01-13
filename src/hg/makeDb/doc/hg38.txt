@@ -309,6 +309,28 @@ taxId   9606
 
     # add the files produced by the trackDb build to the source tree
 
+    # this path is fixed in the makeGenomeDb.pl for next time
+    # honor new convention for bbi location files:
+    cd /gbdb/hg38/bbi
+    mkdir gc5BaseBw
+    mv gc5Base.bw gc5BaseBw
+    cd gc5BaseBw
+    # before
+    hgsql -e 'select * from gc5BaseBw;' hg38
+# +---------------------------+
+# | fileName                  |
+# +---------------------------+
+# | /gbdb/hg38/bbi/gc5Base.bw |
+# +---------------------------+
+    # and fixed
+    hgBbiDbLink hg38 gc5BaseBw `pwd`/gc5Base.bw
+    hgsql -e 'select * from gc5BaseBw;' hg38
+# +-------------------------------------+
+# | fileName                            |
+# +-------------------------------------+
+# | /gbdb/hg38/bbi/gc5BaseBw/gc5Base.bw |
+# +-------------------------------------+
+
 #############################################################################
 ## RepeatMasker with CrossMatch - DONE - 2013-12-24,27 - Hiram
     mkdir /hive/data/genomes/hg38/bed/repeatMaskerCM
@@ -1280,6 +1302,82 @@ close (DR);
     # when run on unmasked sequence:
     # wc -l cpgIsland.bed -> 55149 cpgIsland.bed
     # 33637531 bases of 3049335806 (1.103%) in intersection
+##############################################################################
+# rerun cpgIslands on contig sequence (DONE - 2014-01-07 - Hiram)
+    # this is a test of the contig sequence file,
+    # should get a very similar answer to the above
+    mkdir /hive/data/genomes/hg38/bed/cpgIslandsContigs
+    cd /hive/data/genomes/hg38/bed/cpgIslandsContigs
+
+    # run stepwise so the lift can be done on the result before loading
+    time $HOME/kent/src/hg/utils/automation/doCpgIslands.pl \
+      -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -stop=makeBed -maskedSeq=/hive/data/genomes/hg38/hg38.contigs.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku hg38 > makeBed.log 2>&1
+    # real    9m31.502s
+    # fails on the bedToBigBed creation since this isn't the actual
+    # hg38 sequence.
+    mv cpgIsland.bed cpgIsland.beforeLift.bed
+    liftUp -type=.bed stdout ../../jkStuff/hg38.contigs.lift carry \
+      cpgIsland.beforeLift.bed | sort -k1,1 -k2,2n > cpgIsland.bed
+    bedToBigBed -tab -type=bed4+6 -as=$HOME/kent/src/hg/lib/cpgIslandExt.as \
+       cpgIsland.bed ../../chrom.sizes hg38.cpgIslandExt.bb
+    zcat ../cpgIslands/cpgIsland.bed.gz | sort -k1,1 -k2,2n > t.bed
+    # Surprisingly, a few more are detected:
+    wc -l cpgIsland.bed t.bed
+#   30477 cpgIsland.bed
+#   30456 t.bed
+    # 2,835 different items between the two:
+    sort t.bed cpgIsland.bed | uniq -c | awk '$1 < 2' | wc -l
+    # 2835
+    # 29.049 identical items
+    sort t.bed cpgIsland.bed | uniq -c | awk '$1 == 2' | wc -l
+    # 29049
+    cut -f1-3 cpgIsland.bed | sort > contigs.bed
+    cut -f1-3 t.bed | sort > fullSequence.bed
+    # 29,339 identical locations:
+    comm -12 contigs.bed fullSequence.bed | wc -l
+    # 29339
+
+##############################################################################
+# rerun cpgIslands on contig UNMASKED sequence (DONE - 2014-01-07 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/cpgIslandsContigsUnmasked
+    cd /hive/data/genomes/hg38/bed/cpgIslandsContigsUnmasked
+
+    twoBitToFa -noMask ../../hg38.contigs.2bit stdout \
+      | faToTwoBit stdin hg38.contigsUnmasked.2bit
+
+    # verify sequence is OK:
+    twoBitToFa hg38.contigsUnmasked.2bit stdout | faSize stdin
+# 3061688741 bases (12372958 N's 3049315783 real 3049315783 upper 0 lower)
+#    in 733 sequences in 1 files
+# %0.00 masked total, %0.00 masked real
+    twoBitToFa hg38.contigsUnmasked.2bit stdout | faCount stdin | tail -1
+# total 3061688741 898285419 623727342 626335137 900967885  12372958 30979743
+    # ACGT CpG same as original hg38.2bit except for the missing N's:
+# total 3209286105 898285419 623727342 626335137 900967885 159970322 30979743
+
+    # run stepwise so the lift can be done on the result before loading
+    time $HOME/kent/src/hg/utils/automation/doCpgIslands.pl \
+      -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -stop=makeBed -maskedSeq=`pwd`/hg38.contigsUnmasked.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku hg38 > makeBed.log 2>&1
+    # real    11m0.690s
+    # as above, failed on the bedToBigBed step since this isn't the full hg38
+    # sequence
+    mv cpgIsland.bed cpgIsland.beforeLift.bed
+    liftUp -type=.bed stdout ../../jkStuff/hg38.contigs.lift carry \
+      cpgIsland.beforeLift.bed | sort -k1,1 -k2,2n > cpgIsland.bed
+    bedToBigBed -tab -type=bed4+6 -as=$HOME/kent/src/hg/lib/cpgIslandExt.as \
+       cpgIsland.bed ../../chrom.sizes hg38.cpgIslandExt.bb
+    # a lot more here that for masked sequence:
+    wc -l cpgIsland.bed ../cpgIslandsContigs/cpgIsland.bed
+    # 55149 cpgIsland.bed
+    # 30477 ../cpgIslandsContigs/cpgIsland.bed
+    featureBits -countGaps hg38 cpgIsland.bed
+    # 33637531 bases of 3209286105 (1.048%) in intersection
+    featureBits -countGaps hg38 ../cpgIslandsContigs/cpgIsland.bed
+    # 23610399 bases of 3209286105 (0.736%) in intersection
 
 #########################################################################
 # construct liftOver to hg19 (DONE - 2013-12-31 - Hiram)
