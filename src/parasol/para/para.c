@@ -700,39 +700,6 @@ verbose(2, "readBatch time: %.2f seconds\n", (clock1000() - time) / 1000.0);
 return db;
 }
 
-struct slRef *hubMultilineQuery(char *query)
-/* Send a command with a multiline response to hub,
- * and return response as a list of strings. */
-{
-struct slRef *list = NULL;
-struct rudp *ru = rudpMustOpen();
-struct paraMessage pm;
-struct paraMultiMessage pmm;
-char *row[256];
-int count = 0;
-pmInitFromName(&pm, "localhost", paraHubPort);
-/* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
-pmmInit(&pmm, &pm, pm.ipAddress.sin_addr);
-if (!pmSendStringWithRetries(&pm, ru, query))
-    noWarnAbort();
-for (;;)
-    {
-    if (!pmmReceive(&pmm, ru))
-	break;
-    if (pm.size == 0)
-	break;
-    count = chopByChar(pm.data, '\n', row, sizeof(row));
-    if (count > 1) --count;  /* for multiline, count is inflated by one */
-
-    int i;
-    for(i=0;i<count;++i)
-        refAdd(&list, cloneString(row[i]));
-    }
-rudpClose(&ru);
-slReverse(&list);
-return list;
-}
-
 boolean batchRunning(char *batchName)
 /* Return TRUE if a batch is running. */
 {
@@ -793,6 +760,13 @@ char *hubSingleLineQuery(char *query)
  * This should be freeMem'd when done. */
 {
 return pmHubSingleLineQuery(query, "localhost");
+}
+
+struct slRef *hubMultilineQuery(char *query)
+/* Send a command with a multiline response to hub,
+ * and return response as a list of strings. */
+{
+return pmHubMultilineQuery(query, "localhost");
 }
 
 void sendSetPriorityMessage(int priority)

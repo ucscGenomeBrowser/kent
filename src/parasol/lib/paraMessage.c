@@ -273,6 +273,18 @@ while (TRUE)
 return result;
 }
 
+char *pmHubSendSimple(char *message, char *host)
+/* Send message to host, no response. */
+{
+struct rudp *ru = rudpMustOpen();
+struct paraMessage pm;
+pmInitFromName(&pm, host, paraHubPort);
+if (!pmSendStringWithRetries(&pm, ru, message))
+    noWarnAbort();
+rudpClose(&ru);
+return cloneString(pm.data);
+}
+
 char *pmHubSingleLineQuery(char *query, char *host)
 /* Send message to hub and get single line response.
  * This should be freeMem'd when done. */
@@ -288,4 +300,38 @@ if (!pmReceive(&pm, ru))
 rudpClose(&ru);
 return cloneString(pm.data);
 }
+
+struct slRef *pmHubMultilineQuery(char *query, char *host)
+/* Send a command with a multiline response to hub,
+ * and return response as a list of strings. */
+{
+struct slRef *list = NULL;
+struct rudp *ru = rudpMustOpen();
+struct paraMessage pm;
+struct paraMultiMessage pmm;
+char *row[256];
+int count = 0;
+pmInitFromName(&pm, host, paraHubPort);
+/* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
+pmmInit(&pmm, &pm, pm.ipAddress.sin_addr);
+if (!pmSendStringWithRetries(&pm, ru, query))
+    noWarnAbort();
+for (;;)
+    {
+    if (!pmmReceive(&pmm, ru))
+	break;
+    if (pm.size == 0)
+	break;
+    count = chopByChar(pm.data, '\n', row, sizeof(row));
+    if (count > 1) --count;  /* for multiline, count is inflated by one */
+
+    int i;
+    for(i=0;i<count;++i)
+        refAdd(&list, cloneString(row[i]));
+    }
+rudpClose(&ru);
+slReverse(&list);
+return list;
+}
+
 

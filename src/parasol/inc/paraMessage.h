@@ -99,8 +99,15 @@ boolean pmSendStringWithRetries(struct paraMessage *pm, struct rudp *ru, char *s
  * there is a problem. Try up to 5 times sleeping for 60 seconds in between.
  * This is an attempt to help automated processes. */
 
+char *pmHubSendSimple(char *message, char *host);
+/* Send message to host, no response. */
+
 char *pmHubSingleLineQuery(char *query, char *host);
 /* Send message to hub and get single line response.
  * This should be freeMem'd when done. */
+
+struct slRef *pmHubMultilineQuery(char *query, char *host);
+/* Send a command with a multiline response to hub,
+ * and return response as a list of strings. */
 
 #endif /* PARAMESSAGE_H */
