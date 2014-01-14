@@ -619,7 +619,7 @@ static void writeTagLinkHtml(struct wgEncodeGencodeTag *tags)
 /* write HTML links to Tag */
 {
 printf("<table class=\"hgcCcds\"><thead>\n");
-printf("<tr><th colspan=3><a href=\"%s\">Tags</a></tr>\n", gencodeTagsUrl);
+printf("<tr><th colspan=3><a href=\"%s\" target=_blank>Tags</a></tr>\n", gencodeTagsUrl);
 printf("</thead><tbody>\n");
 int i, rowCnt = 0;
 struct wgEncodeGencodeTag *tag = tags;
