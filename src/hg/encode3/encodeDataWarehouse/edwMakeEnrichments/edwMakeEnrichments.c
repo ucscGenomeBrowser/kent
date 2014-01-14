@@ -36,6 +36,22 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+char *enrichmentAssembly(char *assembly)
+/* Given name of assembly return name where we want to do enrichment calcs. */
+{
+/* If it ends with one of our common assembly suffix, then do enrichment calcs
+ * in that space, rather than some subspace such as male, female, etc. */
+static char *specialAsm[] = {".hg19",".hg38",".mm9",".mm10"};
+int i;
+for (i=0; i<ArraySize(specialAsm); ++i)
+    {
+    char *special = specialAsm[i];
+    if (endsWith(assembly, special))
+        return special+1;
+    }
+return assembly;
+}
+
 struct target
 /* Information about a target */
     {
@@ -423,7 +439,8 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown"))
     /* Get our assembly */
     char *format = vf->format;
     char *ucscDb = vf->ucscDb;
-    struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, ucscDb);
+    char *targetName = enrichmentAssembly(ucscDb);
+    struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, targetName);
 
     struct target *targetList = hashFindVal(assemblyToTarget, assembly->name);
     if (targetList == NULL)
