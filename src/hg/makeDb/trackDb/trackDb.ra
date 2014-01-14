@@ -340,8 +340,8 @@ url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
 track pubs
 shortLabel Publications
 longLabel Publications: Sequences in scientific articles
-group pub
-priority 12
+group pub 
+priority 12 
 visibility dense
 color 0,0,0
 type bed 4
@@ -2765,3 +2765,13 @@ shortCircuit 1
 termRegex ^[A-Za-z0-9_]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,name from %s where name like '%s%%'
 searchPriority 10
+
+track animalQtl
+shortLabel $Organism QTL
+longLabel $Organism Quantitative Trait Loci from animalQTLdb
+group map
+priority 11 
+visibility hide
+type bed 4 .
+color 255,123,89
+# iframeUrl http://www.animalgenome.org/cgi-bin/QTLdb/GG/qdetails?QTL_ID=$p

@@ -1432,7 +1432,7 @@ var sortTable = {
 
     field: function (value,reverse,row)
     {
-        if (sortTable.caseSensitive) 
+        if (sortTable.caseSensitive || typeof(value) != 'string') 
             this.value   = value;
         else
             this.value   = value.toLowerCase(); // case insensitive sorts

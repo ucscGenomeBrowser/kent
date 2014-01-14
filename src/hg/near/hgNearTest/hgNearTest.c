@@ -159,11 +159,11 @@ struct htmlPage *quickSubmit(struct htmlPage *basePage,
 	char *testName, char *button, char *buttonVal)
 /* Submit page and record info.  Return NULL if a problem. */
 {
-struct nearTest *test;
-struct qaStatus *qs;
-struct htmlPage *page;
+struct htmlPage *page = NULL;
 if (basePage != NULL)
     {
+    struct nearTest *test;
+    struct qaStatus *qs;
     if (db != NULL)
 	htmlPageSetVar(basePage, NULL, "db", db);
     if (org != NULL)

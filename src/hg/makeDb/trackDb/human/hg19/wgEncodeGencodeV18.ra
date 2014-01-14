@@ -11,7 +11,7 @@ shortLabel GENCODE Genes V18
 longLabel Gene Annotations from ENCODE/GENCODE Version 18
 group genes
 dragAndDrop subTracks
-priority 34.188
+priority 34.187
 visibility hide
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
@@ -132,13 +132,13 @@ searchTable wgEncodeGencodeBasicV18
 searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
-searchPriority 2.28001
+searchPriority 2.27901
 
 searchName wgEncodeGencodeBasicGeneSymV18
 searchTable wgEncodeGencodeBasicV18
 searchMethod exact
 searchType genePred
-searchPriority 2.28002
+searchPriority 2.27902
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodeBasicGeneV18
@@ -146,7 +146,7 @@ searchTable wgEncodeGencodeBasicV18
 searchMethod prefix
 searchType genePred
 termRegex ENSG[0-9.]+
-searchPriority 2.28003
+searchPriority 2.27903
 xrefTable wgEncodeGencodeAttrsV18
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
@@ -155,7 +155,7 @@ searchTable wgEncodeGencodeBasicV18
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMT[0-9.]+
-searchPriority 2.28004
+searchPriority 2.27904
 xrefTable wgEncodeGencodeAttrsV18
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
@@ -164,7 +164,7 @@ searchTable wgEncodeGencodeBasicV18
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMG[0-9.]+
-searchPriority 2.28005
+searchPriority 2.27905
 xrefTable wgEncodeGencodeAttrsV18
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
@@ -174,13 +174,13 @@ searchTable wgEncodeGencodeCompV18
 searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
-searchPriority 2.28006
+searchPriority 2.27906
 
 searchName wgEncodeGencodeCompGeneSymV18
 searchTable wgEncodeGencodeCompV18
 searchMethod exact
 searchType genePred
-searchPriority 2.28007
+searchPriority 2.27907
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodeCompGeneV18
@@ -188,7 +188,7 @@ searchTable wgEncodeGencodeCompV18
 searchMethod prefix
 searchType genePred
 termRegex ENSG[0-9.]+
-searchPriority 2.28008
+searchPriority 2.27908
 xrefTable wgEncodeGencodeAttrsV18
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
@@ -197,7 +197,7 @@ searchTable wgEncodeGencodeCompV18
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMT[0-9.]+
-searchPriority 2.28009
+searchPriority 2.27909
 xrefTable wgEncodeGencodeAttrsV18
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
@@ -206,7 +206,7 @@ searchTable wgEncodeGencodeCompV18
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMG[0-9.]+
-searchPriority 2.28010
+searchPriority 2.27910
 xrefTable wgEncodeGencodeAttrsV18
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
@@ -216,13 +216,13 @@ searchTable wgEncodeGencodePseudoGeneV18
 searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
-searchPriority 2.28011
+searchPriority 2.27911
 
 searchName wgEncodeGencodePseudoGeneGeneSymV18
 searchTable wgEncodeGencodePseudoGeneV18
 searchMethod exact
 searchType genePred
-searchPriority 2.28012
+searchPriority 2.27912
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodePseudoGeneGeneV18
@@ -230,7 +230,7 @@ searchTable wgEncodeGencodePseudoGeneV18
 searchMethod prefix
 searchType genePred
 termRegex ENSG[0-9.]+
-searchPriority 2.28013
+searchPriority 2.27913
 xrefTable wgEncodeGencodeAttrsV18
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
@@ -239,7 +239,7 @@ searchTable wgEncodeGencodePseudoGeneV18
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMT[0-9.]+
-searchPriority 2.28014
+searchPriority 2.27914
 xrefTable wgEncodeGencodeAttrsV18
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
@@ -248,7 +248,7 @@ searchTable wgEncodeGencodePseudoGeneV18
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMG[0-9.]+
-searchPriority 2.28015
+searchPriority 2.27915
 xrefTable wgEncodeGencodeAttrsV18
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
@@ -258,6 +258,6 @@ searchTable wgEncodeGencode2wayConsPseudoV18
 searchMethod exact
 searchType genePred
 termRegex PGOHUM[0-9.]+
-searchPriority 2.28016
+searchPriority 2.27916
 
 

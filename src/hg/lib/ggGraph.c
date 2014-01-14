@@ -491,7 +491,6 @@ for(ev1 = edge1; ev1 != NULL; ev1 = ev1->next)
     {
     safef(buff, sizeof(buff), "%s", gg->mrnaRefs[ev1->id]);
     ai1 = hashMustFindVal(aliHash, buff);
-    ai1 = ai1;
     for(ev2 = edge2; ev2 != NULL; ev2 = ev2->next)
 	{
 	safef(buff, sizeof(buff), "%s", gg->mrnaRefs[ev2->id]);

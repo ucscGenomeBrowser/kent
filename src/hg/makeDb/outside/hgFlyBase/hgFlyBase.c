@@ -152,7 +152,7 @@ while ((c = *s++) != 0)
 	if (e != NULL)
 	    {
 	    int size = e - s;
-	    if (size < 8);
+	    if (size < 8)
 	        {
 		int i;
 		char tag[8];

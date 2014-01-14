@@ -55,13 +55,12 @@ errAbort(
   "hgLoadOut - load RepeatMasker .out files into database\n"
   "usage:\n"
   "   hgLoadOut database file(s).out\n"
-  "For each table chrN.out this will create the table\n"
-  "chrN_rmsk in the database\n"
+  "For multiple files chrN.out this will create the single table 'rmsk'\n"
+  "in the database, use the -split argument to obtain separate chrN_rmsk tables.\n"
   "options:\n"
   "   -tabFile=text.tab - don't actually load database, just create tab file\n"
-  "   -nosplit - assume single rmsk table rather than chrN_rmsks\n"
-  "   -split - load chrN_rmsk tables even if a single file is given\n"
-  "   -table=name - use a different suffix other than the default (rmsk)\n");
+  "   -split - load chrN_rmsk separate tables even if a single file is given\n"
+  "   -table=name - use a different suffix other than the default (rmsk)");
 }
 
 void badFormat(struct lineFile *lf, int id)
@@ -373,8 +372,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
-noSplit = (optionExists("noSplit") || optionExists("nosplit"));
+// default changed to noSplit Jan 2014 , ignore noSplit arguments
 split = optionExists("split");
+noSplit = ! split;
 suffix = optionVal("table", "rmsk");
 tabFileName = optionVal("tabFile", tabFileName);
 if (tabFileName == NULL)

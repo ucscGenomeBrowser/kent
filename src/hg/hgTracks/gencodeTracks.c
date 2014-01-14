@@ -26,7 +26,7 @@ struct gencodeQuery
     boolean joinAttrs;                      // join the wgEncodeGencodeAttrs table
     boolean joinTransSrc;                   // join the wgEncodeGencodeTranscriptSource table
     boolean joinSupportLevel;               // join the wgEncodeGencodeTranscriptionSupportLevel table
-    boolean joinTranscriptSource;            // join the wgEncodeGencodeTranscriptSource table
+    boolean joinTranscriptSource;           // join the wgEncodeGencodeTranscriptSource table
 };
 
 static struct gencodeQuery *gencodeQueryNew(void)

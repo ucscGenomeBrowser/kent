@@ -15,7 +15,6 @@ UTIL_DIRS = \
     edwChangeFormat \
     edwCorrectFileTags \
     edwCreateUser \
-    edwFinishAnalysis \
     edwMakeContaminationQa \
     edwMakeEnrichments \
     edwMakeReplicateQa \
@@ -27,6 +26,12 @@ UTIL_DIRS = \
     edwScheduleAnalysis \
     edwSubmit
 
+# edwFinishAnalysis depends on -luuid, which is not available on Macs without special port install.
+# For now, skip it if we're on Mac.
+ifneq ($(UNAME_S),Darwin)
+    UTIL_DIRS += edwFinishAnalysis
+endif
+
 CGI_DIRS = \
     edwScriptSubmit \
     edwScriptSubmitStatus \
@@ -36,6 +41,7 @@ CGI_DIRS = \
     edwWebCreateUser \
     edwWebDeprecate \
     edwWebRegisterScript \
+    edwWebXSendFile \
     edwWebSubmit
 
 TEST_DIRS = \

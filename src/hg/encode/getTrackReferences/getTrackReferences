@@ -111,15 +111,28 @@ def makeHtml(infoDict, plain, verbose):
         idStr = idStr + "; PMC: <a href=\"http://www.ncbi.nlm.nih.gov/pmc/articles/%s\" target=\"_blank\">%s</a>" % (infoDict['pmc'], infoDict['pmc'])
 
     # now that the pubmed link has been constructed, we can overwrite the url in infoDict with the original article URL
-    origComment = ""
-    fetch = urllib2.urlopen(infoDict['url'])
-    doc = fetch.read()
-    m = re.search('<div class="icons"><a href="(\S+)"', doc)
-    if m:
-        if m.group(1):
-            infoDict['url'] = m.group(1).replace("&amp;", "&")
+
+    # make sure the portlet that generates outlinks for PubMed didn't fail.  If it did, try again until
+    # it works or we give up.
+    for try_count in range(10):
+        origComment = ""
+        fetch = urllib2.urlopen(infoDict['url'])
+        doc = fetch.read()
+        m = re.search('<div class="icons"><a href="(\S+)"', doc)
+        if m:
+            if m.group(1):
+                # Rhetorical: how can m match without m.group(1) being defined for this regex? Anyway ....
+                infoDict['url'] = m.group(1).replace("&amp;", "&")
+            break
+        else:
+            origComment = "<!-- Can't find original article link for %s -->" % infoDict['url']
+            #n = re.search('<div class="icons"></div>', doc) # another possible detection of failed portlet
+            p = re.search('Default output of portlet NCBIPageSection', doc)
+            if p is None:
+                break
     else:
-        origComment = "<!-- Can't find original article link for %s -->" % infoDict['url']
+        print "Failed to fetch complete links from NCBI after 10 tries.  Try again later or just use the PubMed paper link."
+
     htmlLines = list()
     htmlLines.append("<p>")
     htmlLines.append("%s" % authStr)

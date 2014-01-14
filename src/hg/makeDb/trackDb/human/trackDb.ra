@@ -91,7 +91,7 @@ track gad
 shortLabel GAD View
 longLabel Genetic Association Studies of Complex Diseases and Disorders
 group phenDis
-priority 29.5
+priority 1 
 visibility hide
 color 200,0,0
 type bed 4
@@ -101,7 +101,7 @@ track decipher
 shortLabel DECIPHER
 longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans
 group phenDis
-priority 29.6
+priority 1 
 visibility hide
 color 0,0,0
 type bed 4
@@ -194,7 +194,7 @@ url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 group phenDis
 visibility hide
-priority 51
+priority 1 
 type bed 4 +
 snpTable snp130
 snpVersion 130
@@ -2882,7 +2882,7 @@ track omimLocation
 shortLabel OMIM Pheno Loci
 longLabel OMIM Phenotypes - Gene Unknown
 group phenDis
-priority 29.75
+priority 1 
 visibility hide
 color 0, 80, 0
 type bed 4
@@ -2894,7 +2894,7 @@ track omimGene2
 shortLabel OMIM Genes
 longLabel OMIM Genes - Dark Green Are Disease-causing
 group phenDis
-priority 29.73
+priority 1 
 visibility hide
 color 0, 80, 0
 type bed 4
@@ -2906,7 +2906,7 @@ track omimAvSnp
 shortLabel OMIM AV SNPs
 longLabel OMIM Allelic Variant SNPs
 group phenDis
-priority 29.71
+priority 1 
 visibility hide
 color 0, 80, 0
 type bed 4
@@ -2918,7 +2918,7 @@ track cosmic
 shortLabel COSMIC
 longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
 group phenDis
-priority 29.80
+priority 1 
 visibility hide
 color 200, 0, 0
 type bed 4
@@ -2929,7 +2929,7 @@ track lovd
 shortLabel LOVD Variants
 longLabel Leiden Open Variation Database Public Variants
 group phenDis
-priority 29.9
+priority 1 
 visibility hide
 type bedDetail 6
 url http://varcache.lovd.nl/redirect/$$
@@ -2941,7 +2941,7 @@ track hgmd
 shortLabel HGMD Variants
 longLabel Human Gene Mutation Database Public Variants
 group phenDis
-priority 30
+priority 1 
 visibility hide
 type bigBed 8 .
 url http://www.hgmd.cf.ac.uk/ac/gene.php?gene=$P&accession=$p
@@ -2954,7 +2954,7 @@ track spMut
 shortLabel UniProt Variants
 longLabel UniProt/SwissProt Amino Acid Substitutions
 group phenDis
-priority 31
+priority 1 
 visibility hide
 type bigBed 12 +
 itemRgb on
@@ -2967,7 +2967,7 @@ compositeTrack on
 shortLabel ClinVar Variants
 longLabel ClinVar Variants
 group phenDis
-priority 32
+priority 1 
 visibility hide
 type bigBed 4 .
 urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
@@ -3871,7 +3871,7 @@ track coriellDelDup
 shortLabel Coriell CNVs
 longLabel Coriell Cell Line Copy Number Variants
 group phenDis
-priority 111
+priority 1
 visibility hide
 type bed 9 +
 itemRgb on
@@ -3896,7 +3896,7 @@ compositeTrack on
 shortLabel ISCA
 longLabel International Standards for Cytogenomic Arrays Consortium
 group phenDis
-priority 110
+priority 1
 visibility hide
 subGroup1 view Views atot=Total cnv=CNVs
 subGroup2 phen Phenotype ben=Benign path=Pathogenic unk=Unknown
@@ -4214,7 +4214,7 @@ track geneReviews
 shortLabel GeneReviews
 longLabel GeneReviews
 group  phenDis
-priority 155
+priority 1 
 visibility hide
 color 0, 80, 0
 type bed 4

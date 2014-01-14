@@ -237,7 +237,7 @@ freez(&summaryArray);
 return indexOffset;
 }
 
-void MergedBwgCreate(struct bbiFile ** inBbiFiles, int inBbiFilesCount, 
+void mergedBwgCreate(struct bbiFile ** inBbiFiles, int inBbiFilesCount, 
 	int blockSize, int itemsPerSlot, boolean doCompress, char *fileName)
 {
 FILE *f = mustOpen(fileName, "wb");
@@ -607,7 +607,7 @@ for (i = 0; i < inNamesCount; i++)
     }
 
 checkFileSettings(inNames, inBbiFiles, inNamesCount);
-MergedBwgCreate(inBbiFiles, inNamesCount, blockSize, itemsPerSlot, doCompress, outName);
+mergedBwgCreate(inBbiFiles, inNamesCount, blockSize, itemsPerSlot, doCompress, outName);
 
 lmCleanup(&lm);
 }
@@ -619,11 +619,13 @@ errAbort(
   "bigWigCat v %d - merge non-overlapping bigWig files\n" 
   "directly into bigWig format\n"
   "usage:\n"
-  "   mergeBigWigs out.bw in1.bw in2.bw ...\n"
+  "   bigWigCat out.bw in1.bw in2.bw ...\n"
   "Where in*.bw is in big wig format\n"
   "and out.bw is the output indexed big wig file.\n"
   "options:\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
+  "\n"
+  "Note: must use wigToBigWig -fixedSummaries -keepAllChromosomes (perhaps in parallel cluster jobs) to create the input files.\n"
   , bbiCurrentVersion, itemsPerSlot
   );
 }
