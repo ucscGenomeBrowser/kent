@@ -10,6 +10,7 @@
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 
+boolean noRevalidate = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -24,11 +25,13 @@ errAbort(
   "of the file.  The other columns will substitute for the corresponding manifest file columns\n"
   "in the original upload.  Optionally you can also add new columns.  Do *not* include md5_sum,\n"
   "size, valid_key, or file_name columns.\n"
+  "   -noRevalidate - if set don't run revalidator\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"noRevalidate", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -115,7 +118,7 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	}
 
     /* Reset new tags and schedule revalidation */
-    edwFileResetTags(conn, ef, tags->string);
+    edwFileResetTags(conn, ef, tags->string, !noRevalidate);
 
     /* Clean up temps. */
     dyStringFree(&tags);
@@ -131,6 +134,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
+noRevalidate = optionExists("noRevalidate");
 edwCorrectFileTags(argv[1]);
 return 0;
 }
