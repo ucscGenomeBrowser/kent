@@ -33,7 +33,7 @@ void usage()
 {
 errAbort(
  "liftUp - change coordinates of .psl, .agp, .gap, .gl, .out, .align, .gff, .gtf\n"
- ".bscore .tab .gdup .axt .chain .net, genePred, .wab, .bed, or .bed8 files to\n"
+ ".bscore .tab .gdup .axt .chain .net, .gp, .genepred, .wab, .bed, or .bed8 files to\n"
  "parent coordinate system.\n"
  "\n"
  "usage:\n"
