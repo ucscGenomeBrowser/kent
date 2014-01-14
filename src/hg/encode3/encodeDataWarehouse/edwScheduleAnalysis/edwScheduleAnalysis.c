@@ -24,7 +24,7 @@ void usage()
 errAbort(
   "edwScheduleAnalysis - Schedule analysis runs.\n"
   "usage:\n"
-  "   edwScheduleAnalysis startFileId endFileId\n"
+  "   edwScheduleAnalysis startFileId endFileId output\n"
   "options:\n"
   "   -retry - if job has run and failed retry it\n"
   "   -again - if set schedule it even if it's been run once\n"
@@ -73,8 +73,7 @@ return edwBiosampleLoadByQuery(conn, query);
 char *sexFromExp(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf)
 /* Return "male" or "female" */
 {
-char *sex = "male";
-
+char *sex = "male";  // Consequences of Y as a mapping target not too bad, so default is male.
 struct edwExperiment *exp = edwExperimentFromAccession(conn, vf->experiment);
 if (exp != NULL)
     {
@@ -83,13 +82,8 @@ if (exp != NULL)
         {
 	if (sameWord(bio->sex, "F"))
 	    sex = "female";
+	// Other things, unknown, pooled, etc. get to try to map to Y at least.
 	}
-    }
-if (sex == NULL)
-    {
-    // Warn not fatal since mapping to male genome not a big deal, and also there
-    // are a few cases without biosample
-    warn("Can't find sex for fileId %u", ef->id);
     }
 return sex;
 }
@@ -101,13 +95,13 @@ char *sex = sexFromExp(conn, ef, vf);
 return targetAssemblyForDbAndSex(conn, vf->ucscDb, sex);
 }
 
-static int countAlreadyScheduled(struct sqlConnection *conn, 
+static boolean alreadyTakenCareOf(struct sqlConnection *conn, 
     struct edwAssembly *assembly, char *analysisStep, 
     long long firstInput)
 /* Return how many of the existing job are already scheduled */
 {
 if (again)
-    return 0;
+    return FALSE;
 char query[512];
 if (retry)
     sqlSafef(query, sizeof(query),
@@ -120,7 +114,8 @@ else
 	"select count(*) from edwAnalysisRun where firstInputId=%lld and analysisStep='%s'"
 	" and assemblyId = %u",
 	firstInput, analysisStep, assembly->id);
-return sqlQuickNum(conn, query);
+int count = sqlQuickNum(conn, query);
+return count > 0;
 }
 
 static char *newTempDir(char *name)
@@ -183,11 +178,11 @@ else
 return tempDir;
 }
 
-static void makeBwaIndexPath(struct edwAssembly *assembly, char indexPath[PATH_LEN])
+static void makeBwaIndexPath(char *target, char indexPath[PATH_LEN])
 /* Fill in path to BWA index. */
 {
 safef(indexPath, PATH_LEN, "%s%s/bwaData/%s.fa", 
-    "/scratch/data/encValDir/", assembly->name, assembly->name);
+    "/scratch/data/encValDir/", target, target);
 }
 
 struct edwAssembly *getBwaIndex(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf, 
@@ -195,7 +190,8 @@ struct edwAssembly *getBwaIndex(struct sqlConnection *conn, struct edwFile *ef, 
 /* Target for now is same as UCSC DB.  Returns assembly ID */
 {
 struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
-makeBwaIndexPath(assembly, indexPath);
+// assembly = targetAssemblyForDbAndSex(conn, "hg19", "centro");	
+makeBwaIndexPath(assembly->name, indexPath);
 return assembly;
 }
 
@@ -313,7 +309,7 @@ struct edwAssembly *assembly = getBwaIndex(conn, ef1, vf1, indexPath);
 
 /* Make sure that we don't schedule it again and again */
 char *analysisStep = "bwa_paired_end";
-if (!countAlreadyScheduled(conn, assembly, analysisStep, vf1->fileId))
+if (!alreadyTakenCareOf(conn, assembly, analysisStep, vf1->fileId))
     {
     /* Grab temp dir */
     char *tempDir = newTempDir(analysisStep);
@@ -356,7 +352,7 @@ struct edwAssembly *assembly = getBwaIndex(conn, ef, vf, indexPath);
 
 /* Make sure that we don't schedule it again and again */
 char *analysisStep = "bwa_single_end";
-if (countAlreadyScheduled(conn, assembly, analysisStep, ef->id))
+if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
     return;
 
 /* Grab temp dir */
@@ -437,8 +433,10 @@ verbose(2, "schedulingMacsDnase on %s step %s, script %s\n", ef->edwFileName,
     analysisStep, scriptName);
 
 /* Make sure that we don't schedule it again and again */
-struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
-if (countAlreadyScheduled(conn, assembly, analysisStep, ef->id))
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwAssembly where name='%s'", vf->ucscDb);
+struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
+if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
     return;
 
 char *tempDir = newTempDir(analysisStep);
@@ -449,7 +447,7 @@ char *efName = cacheMore(cache, ef, vf);
 preloadCache(conn, cache);
 char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "%s %s %s %s%s %s%s", 
-    scriptName, assembly->ucscDb, efName, 
+    scriptName, assembly->name, efName, 
     tempDir, "out.narrowPeak.bigBed", tempDir, "out.bigWig");
 
 /* Declare step input and output arrays and schedule it. */
@@ -556,8 +554,10 @@ void scheduleHotspot(struct sqlConnection *conn,
 {
 /* Make sure that we don't schedule it again and again */
 char *analysisStep = "hotspot";
-struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
-if (countAlreadyScheduled(conn, assembly, analysisStep, ef->id))
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwAssembly where name='%s'", vf->ucscDb);
+struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
+if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
     return;
 
 verbose(2, "schedulingHotspot on %s step %s\n", ef->edwFileName, analysisStep);
@@ -599,7 +599,7 @@ void scheduleBamSort(struct sqlConnection *conn,
 /* Make sure that we don't schedule it again and again */
 char *analysisStep = "bam_sort";
 struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
-if (countAlreadyScheduled(conn, assembly, analysisStep, ef->id))
+if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
     return;
 
 char *tempDir = newTempDir(analysisStep);
@@ -651,10 +651,10 @@ if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq") ||
     else
         {
 	scheduleBwaSingle(conn, ef, vf, exp);
-	}
-    }
 #ifdef SOON
 #endif /* SOON */
+	}
+    }
 }
 
 void runBamAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
@@ -675,14 +675,14 @@ void runSingleAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct ed
 {
 verbose(2, "run single analysis format %s, dataType %s\n", vf->format, exp->dataType);
 struct edwAssembly *targetAsm = chooseTarget(conn, ef, vf);
+// targetAsm = targetAssemblyForDbAndSex(conn, "hg19", "centro");	// ugly
 if (targetAsm == NULL || targetAsm->taxon != 9606)  // Humans only!
     return;	    // FOr the moment we're being speciest.
-
 if (sameWord("fastq", vf->format))
     runFastqAnalysis(conn, ef, vf, exp);
-#ifdef SOON
 if (sameWord("bam", vf->format))
     runBamAnalysis(conn, ef, vf, exp);
+#ifdef SOON
 #endif /* SOON */
 }
 
