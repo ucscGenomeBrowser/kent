@@ -128,6 +128,13 @@ struct edwFile *edwFileAllIntactBetween(struct sqlConnection *conn, int startId,
 struct edwValidFile *edwValidFileFromFileId(struct sqlConnection *conn, long long fileId);
 /* Return edwValidFile give fileId - returns NULL if not validated. */
 
+void edwValidFileUpdateDb(struct sqlConnection *conn, struct edwValidFile *el, long long id);
+/* Save edwValidFile as a row to the table specified by tableName, replacing existing record at 
+ * id. */
+
+void edwValidFileFieldsFromTags(struct edwValidFile *vf, struct cgiParsedVars *tags);
+/* Fill in many of vf's fields from tags. */
+
 struct edwExperiment *edwExperimentFromAccession(struct sqlConnection *conn, char *acc); 
 /* Given something like 'ENCSR123ABC' return associated experiment. */
 
@@ -217,8 +224,10 @@ struct edwFile *edwFileInProgress(struct sqlConnection *conn, int submitId);
 struct edwScriptRegistry *edwScriptRegistryFromCgi();
 /* Get script registery from cgi variables.  Does authentication too. */
 
-void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags);
-/* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
+void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags,
+    boolean revalidate);
+/* Reset tags on file, strip out old validation and QA,  optionally schedule new validation 
+ * and QA. */
 
 #define edwSampleTargetSize 250000  /* We target this many samples */
 

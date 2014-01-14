@@ -961,45 +961,126 @@ sqlDisconnect(&conn);
 return reg;
 }
 
-void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags)
+void edwValidFileUpdateDb(struct sqlConnection *conn, struct edwValidFile *el, long long id)
+/* Save edwValidFile as a row to the table specified by tableName, replacing existing record at 
+ * id. */
+{
+struct dyString *dy = newDyString(512);
+sqlDyStringAppend(dy, "update edwValidFile set ");
+// omit id and licensePlate fields - one autoupdates and the other depends on this
+// also omit fileId which also really can't change.
+dyStringPrintf(dy, " format='%s',", el->format);
+dyStringPrintf(dy, " outputType='%s',", el->outputType);
+dyStringPrintf(dy, " experiment='%s',", el->experiment);
+dyStringPrintf(dy, " replicate='%s',", el->replicate);
+dyStringPrintf(dy, " validKey='%s',", el->validKey);
+dyStringPrintf(dy, " enrichedIn='%s',", el->enrichedIn);
+dyStringPrintf(dy, " ucscDb='%s',", el->ucscDb);
+dyStringPrintf(dy, " itemCount=%lld,", (long long)el->itemCount);
+dyStringPrintf(dy, " basesInItems=%lld,", (long long)el->basesInItems);
+dyStringPrintf(dy, " sampleCount=%lld,", (long long)el->sampleCount);
+dyStringPrintf(dy, " basesInSample=%lld,", (long long)el->basesInSample);
+dyStringPrintf(dy, " sampleBed='%s',", el->sampleBed);
+dyStringPrintf(dy, " mapRatio=%g,", el->mapRatio);
+dyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
+dyStringPrintf(dy, " depth=%g,", el->depth);
+dyStringPrintf(dy, " singleQaStatus=0,");
+dyStringPrintf(dy, " replicateQaStatus=0,");
+dyStringPrintf(dy, " technicalReplicate='%s',", el->technicalReplicate);
+dyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
+dyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
+dyStringPrintf(dy, " uniqueMapRatio=%g", el->uniqueMapRatio);
+#if (EDWVALIDFILE_NUM_COLS != 24)
+   #error "Please update this routine with new column"
+#endif
+dyStringPrintf(dy, " where id=%lld\n", (long long)id);
+sqlUpdate(conn, dy->string);
+freeDyString(&dy);
+}
+
+static char *findTagOrEmpty(struct cgiParsedVars *tags, char *key)
+/* Find key in tags.  If it is not there, or empty, or 'n/a' valued return empty string
+ * otherwise return val */
+{
+char *val = hashFindVal(tags->hash, key);
+if (val == NULL || sameString(val, "n/a"))
+   return "";
+else
+   return val;
+}
+
+void edwValidFileFieldsFromTags(struct edwValidFile *vf, struct cgiParsedVars *tags)
+/* Fill in many of vf's fields from tags. */
+{
+vf->format = cloneString(hashFindVal(tags->hash, "format"));
+vf->outputType = cloneString(findTagOrEmpty(tags, "output_type"));
+vf->experiment = cloneString(findTagOrEmpty(tags, "experiment"));
+vf->replicate = cloneString(findTagOrEmpty(tags, "replicate"));
+vf->validKey = cloneString(hashFindVal(tags->hash, "valid_key"));
+vf->enrichedIn = cloneString(findTagOrEmpty(tags, "enriched_in"));
+vf->ucscDb = cloneString(findTagOrEmpty(tags, "ucsc_db"));
+vf->technicalReplicate = cloneString(findTagOrEmpty(tags, "technical_replicate"));
+vf->pairedEnd = cloneString(findTagOrEmpty(tags, "paired_end"));
+#if (EDWVALIDFILE_NUM_COLS != 24)
+   #error "Please update this routine with new column"
+#endif
+}
+
+void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags, 
+    boolean revalidate)
 /* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
 /* Remove existing QA records and rerun QA agent on given file.   */
 {
 long long fileId = ef->id;
 /* Update database to let people know format revalidation is in progress. */
 char query[4*1024];
-sqlSafef(query, sizeof(query), "update edwFile set errorMessage = '%s' where id=%lld",
-     "Revalidation in progress.", fileId); 
-sqlUpdate(conn, query);
 
 /* Update tags for file in edwFile table. */
 sqlSafef(query, sizeof(query), "update edwFile set tags='%s' where id=%lld", newTags, fileId);
 sqlUpdate(conn, query);
     
-/* Get rid of records referring to file in other validation and qa tables. */
-sqlSafef(query, sizeof(query), "delete from edwFastqFile where fileId=%lld", fileId);
-sqlUpdate(conn, query);
-sqlSafef(query, sizeof(query),
-    "delete from edwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
-    fileId, fileId);
-sqlUpdate(conn, query);
-sqlSafef(query, sizeof(query),
-    "delete from edwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld",
-    fileId, fileId);
-sqlUpdate(conn, query);
-sqlSafef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
-sqlUpdate(conn, query);
-sqlSafef(query, sizeof(query), "delete from edwQaContam where fileId=%lld", fileId);
-sqlUpdate(conn, query);
-sqlSafef(query, sizeof(query), "delete from edwQaRepeat where fileId=%lld", fileId);
-sqlUpdate(conn, query);
-sqlSafef(query, sizeof(query), 
-    "delete from edwQaPairedEndFastq where fileId1=%lld or fileId2=%lld",
-    fileId, fileId);
-sqlUpdate(conn, query);
+if (revalidate)
+    {
+    sqlSafef(query, sizeof(query), "update edwFile set errorMessage = '%s' where id=%lld",
+	 "Revalidation in progress.", fileId); 
+    sqlUpdate(conn, query);
 
-/* schedule validator */
-edwAddQaJob(conn, ef->id);
+    /* Get rid of records referring to file in other validation and qa tables. */
+    sqlSafef(query, sizeof(query), "delete from edwFastqFile where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query),
+	"delete from edwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
+	fileId, fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query),
+	"delete from edwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld",
+	fileId, fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), "delete from edwQaContam where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), "delete from edwQaRepeat where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), 
+	"delete from edwQaPairedEndFastq where fileId1=%lld or fileId2=%lld",
+	fileId, fileId);
+    sqlUpdate(conn, query);
+
+    /* schedule validator */
+    edwAddQaJob(conn, ef->id);
+    }
+else
+    {
+    /* The revalidation case relies on edwMakeValidFile to update the edwValidFile table.
+     * Here we must do it ourselves. */
+    struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
+    struct cgiParsedVars *tags = cgiParsedVarsNew(newTags);
+    edwValidFileFieldsFromTags(vf, tags);
+    edwValidFileUpdateDb(conn, vf, vf->id);
+    cgiParsedVarsFree(&tags);
+    edwValidFileFree(&vf);
+    }
 }
 
 static void scanSam(char *samIn, FILE *f, struct genomeRangeTree *grt, long long *retHit, 
