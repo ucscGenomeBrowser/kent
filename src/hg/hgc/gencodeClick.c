@@ -78,6 +78,12 @@ else
     return strcmp(a->name, b->name);
 }
 
+static bool isProteinCodingTrans(struct wgEncodeGencodeAttrs *transAttrs)
+/* is a transcript protein coding? */
+{
+return sameString(transAttrs->transcriptClass, "coding");
+}
+
 static struct genePred *transAnnoLoad(struct sqlConnection *conn, struct trackDb *tdb, char *gencodeId)
 /* load the gencode annotations and sort the one corresponding to the one that was clicked on is
  * first.  Should only have one or two. */
@@ -281,10 +287,13 @@ printf("<tr><th>GeneCards<td colspan=2>");
 prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
 printf("</tr>\n");
 
-printf("<tr><th><a href=\"%s\" target=_blank>APPRIS</a>\n", apprisHomeUrl);
-prApprisTdAnchor(transAttrs->transcriptId, conn, apprisTranscriptUrl);
-prApprisTdAnchor(transAttrs->geneId, conn, apprisGeneUrl);
-printf("</tr>\n");
+if (isProteinCodingTrans(transAttrs))
+    {
+    printf("<tr><th><a href=\"%s\" target=_blank>APPRIS</a>\n", apprisHomeUrl);
+    prApprisTdAnchor(transAttrs->transcriptId, conn, apprisTranscriptUrl);
+    prApprisTdAnchor(transAttrs->geneId, conn, apprisGeneUrl);
+    printf("</tr>\n");
+    }
 
 // FIXME: add sequence here??
 printf("</tbody></table>\n");
@@ -680,11 +689,14 @@ writeTagLinkHtml(tags);
 writeSequenceHtml(tdb, gencodeId, transAnno);
 if (haveRemarks)
     writeAnnotationRemarkHtml(remarks);
-writePdbLinkHtml(pdbs);
+if (isProteinCodingTrans(transAttrs))
+    writePdbLinkHtml(pdbs);
 writePubMedLinkHtml(pubMeds);
 writeRefSeqLinkHtml(refSeqs);
-writeUniProtLinkHtml(uniProts);
+if (isProteinCodingTrans(transAttrs))
+    writeUniProtLinkHtml(uniProts);
 writeSupportingEvidenceLinkHtml(gencodeId, transcriptSupports, exonSupports);
+
 wgEncodeGencodeAttrsFree(&transAttrs);
 wgEncodeGencodeAnnotationRemarkFreeList(&remarks);
 wgEncodeGencodeGeneSourceFreeList(&geneSource);
