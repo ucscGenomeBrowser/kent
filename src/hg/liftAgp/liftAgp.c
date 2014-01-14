@@ -30,9 +30,9 @@ struct commonBlock
     unsigned chromEndB;            /* End of block on version B of .agp */
 };
 
-enum testResult 
+enum testResult
 /* Enumerate test categories. */
-{ 
+{
     trNA,
     trPassed,
     trFailed,
@@ -60,7 +60,7 @@ int cannotConvert = 0;    /* Keep track of how many get dropped. */
 int canConvert = 0;       /* Keep track of how many we successfully convert. */
 boolean testMode = FALSE; /* Are we in self-test mode or not? */
 
-void usage() 
+void usage()
 {
 errAbort("liftAgp -  Program to lift tracks that have nearly the same .agp file,\n"
          "but slightly different. Initially designed for chr21 and chr22 which\n"
@@ -151,7 +151,7 @@ if (wordCount == 0)
     errAbort("%s appears to be empty", fileName);
 lineFileClose(&lf);
 return wordCount;
-}	 
+}
 
 void loadOneBed(char *fileName, int bedSize, struct bedStub **pList)
 /* Load one bed file.  Make sure all lines have bedSize fields.
@@ -243,8 +243,8 @@ if(differentString(a->strand, b->strand))
 return TRUE;
 }
 
-boolean findOverlap(struct agpFrag *a, struct agpFrag *b, 
-		    int *commonStart, int *commonEnd)
+static boolean findOverlap(struct agpFrag *a, struct agpFrag *b,
+		    unsigned int *commonStart, unsigned int *commonEnd)
 /* Find where the agpFrags overlap */
 {
 unsigned int start=0, end=0;
@@ -296,7 +296,7 @@ b->fragStart = commonStart;
 b->fragEnd = commonEnd;
 }
 
-boolean isSubSeq(struct agpFrag *a, struct agpFrag *b) 
+boolean isSubSeq(struct agpFrag *a, struct agpFrag *b)
 /* Is there a common sub-sequence between a and b? */
 {
 boolean answer;
@@ -320,7 +320,7 @@ if(b->chromStart == a->chromEnd) // || b->chromStart == a->chromEnd -1 ) // Stra
 return FALSE;
 }
 
-void extendCommonBlock( struct agpFrag **oldFrag, struct agpFrag **newFrag, 
+void extendCommonBlock( struct agpFrag **oldFrag, struct agpFrag **newFrag,
 			struct commonBlock *cb)
 /* Extend the common block as long as new and old agps are the same. */
 {
@@ -380,7 +380,7 @@ while(newIt != NULL && oldIt != NULL)
 	    }
 	}
     /* if we have a match extend it. */
-    if(sameSequence(newIt, oldIt)) 
+    if(sameSequence(newIt, oldIt))
 	{
 	AllocVar(cb);
 	cb->chrom = cloneString(oldIt->chrom);
@@ -388,7 +388,7 @@ while(newIt != NULL && oldIt != NULL)
 	cb->chromStartB = newIt->chromStart;
 	extendCommonBlock(&oldIt, &newIt, cb);
 	slAddHead(&cbList, cb);
-	}    
+	}
 
     if(!blockSearch && newIt != NULL && oldIt != NULL)
 	{
@@ -423,7 +423,7 @@ return size;
 }
 
 struct commonBlock *findCommonBlockForBed(struct bedStub *bs, struct commonBlock *cbList)
-/* just a linear search for a block which contains the bedStub, return NULL if not 
+/* just a linear search for a block which contains the bedStub, return NULL if not
    found. */
 {
 struct commonBlock *cb = NULL;
@@ -438,7 +438,7 @@ for(cb = cbList; cb != NULL; cb = cb->next)
     }
 return NULL;
 }
-    
+
 boolean convertBedStub(void *p, struct commonBlock *cbList)
 /* Convert a bedStub to clone coordinates via the old agp and then
    from clone coordinates in the newAgp to new chrom coordinates */
@@ -451,7 +451,7 @@ if(cb == NULL)
     if(diagnostics != NULL)
 	fprintf(diagnostics, "Can't convert %s:%u-%u\n", bs->chrom, bs->chromStart, bs->chromEnd);
     cannotConvert++;
-    if(testMode) 
+    if(testMode)
 	{
 	struct testPoint *tp = p;
 	testPointFree(&tp);
@@ -557,7 +557,7 @@ dnaSize = calcAgpSize(newFrag);
 warn("Creating conversion table.\n");
 cbList = createCommonBlocks(oldFrag, newFrag);
 dnaLifted = calcCbSize(cbList);
-warn("lifted %u of %u bases from old agp (%4.2f%%) in %d blocks.", dnaLifted, dnaSize, (100*(double)dnaLifted/dnaSize), slCount(cbList)); 
+warn("lifted %u of %u bases from old agp (%4.2f%%) in %d blocks.", dnaLifted, dnaSize, (100*(double)dnaLifted/dnaSize), slCount(cbList));
 if(diagnostics != NULL)
     commonBlockTabOut(diagnostics, cbList);
 
@@ -580,7 +580,7 @@ for(i=0; i<numFiles; i++)
 
     /* Write out the converted beds. */
     writeBedTab(bedFile->string, convertedList, bedSize);
-    bedStubFreeList(&convertedList);    
+    bedStubFreeList(&convertedList);
     bsList = NULL;
     }
 /* Cleanup. */
@@ -645,7 +645,7 @@ for(agp = agpList; agp != NULL; agp = agp->next)
 return tpList;
 }
 
-void checkConversion(struct testPoint *tpList, struct hash *oldAgpHash, struct hash *newAgpHash, 
+void checkConversion(struct testPoint *tpList, struct hash *oldAgpHash, struct hash *newAgpHash,
 		     int *correct, int *wrong, struct commonBlock *cbList)
 /* Loop through our converted coordinates and see which are correct and which are wrong. */
 {
@@ -671,7 +671,7 @@ for(tp = tpList; tp != NULL; tp = tp->next)
 	    (*wrong)++;
 	    }
 	}
-    else 
+    else
 	{
 	errAbort("Can't find %s", tp->clone);
 	}
@@ -709,7 +709,7 @@ warn("Creating conversion table.\n");
 dnaSize = calcAgpSize(newFrag);
 cbList = createCommonBlocks(oldFrag, newFrag);
 dnaLifted = calcCbSize(cbList);
-warn("lifted %u of %u bases from old agp (%4.2f%%) in %d blocks.", dnaLifted, dnaSize, (100*(double)dnaLifted/dnaSize), slCount(cbList)); 
+warn("lifted %u of %u bases from old agp (%4.2f%%) in %d blocks.", dnaLifted, dnaSize, (100*(double)dnaLifted/dnaSize), slCount(cbList));
 
 /* Generate some random data points. */
 tpList = generateRandomTestPoints(oldFrag, numTpPerClone);
