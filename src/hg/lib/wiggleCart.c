@@ -430,7 +430,7 @@ if (transformFunc)
     ret = wiggleTransformFuncToEnum(transformFunc);
     freeMem(transformFunc);
     }
-return(ret);
+return((enum wiggleGridOptEnum)ret);
 }
 
 enum wiggleGridOptEnum wigFetchAlwaysZeroWithCart(struct cart *theCart,
@@ -455,7 +455,7 @@ if (alwaysZero)
     ret = wiggleAlwaysZeroToEnum(alwaysZero);
     freeMem(alwaysZero);
     }
-return(ret);
+return((enum wiggleGridOptEnum)ret);
 }
 
 enum wiggleGridOptEnum wigFetchHorizontalGridWithCart(struct cart *theCart, struct trackDb *tdb, 
