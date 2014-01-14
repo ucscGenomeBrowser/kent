@@ -54,7 +54,8 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/d/mid/results";
+// char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/d/mid/results";
+char *resultsRootDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues";
 
 
 int cmpByParasolId(void *a, void *b)
@@ -83,21 +84,38 @@ if (fileExists(queue->fileName))
     queue->pos = fileSize(queue->fileName);
 else
     {
-    char dir[PATH_LEN],name[FILENAME_LEN],ext[FILEEXT_LEN];
-    splitPath(resultsQueue, dir, name, ext);
+    char dir[PATH_LEN],root[FILENAME_LEN],ext[FILEEXT_LEN];
+    splitPath(name, dir, root, ext);
     makeDirsOnPath(dir);
-    FILE *f = mustOpen(resultsQueue, "a");
+    FILE *f = mustOpen(name, "a");
     carefulClose(&f);
     }
 return queue;
 }
+
+struct resultsQueue *allQueues = NULL;
+
+struct resultsQueue *findOrCreateQueue(char *name)
+/* Find name in existing list of results queue or if it's not there make it. */
+{
+struct resultsQueue *queue;
+for (queue = allQueues; queue != NULL; queue = queue->next)
+    {
+    if (sameString(queue->fileName, name))
+         return queue;
+    }
+queue = resultsQueueNew(name);
+slAddHead(&allQueues, queue);
+return queue;
+}
+
 
 void sendToParasol(struct edwAnalysisJob *job, struct resultsQueue *queue)
 /* Add job to current parasol queue. Sets job->parasolId and saves it
  * to database. */
 {
 /* Prepare parasol add job command and send it to hub. */
-int cpu = (job->cpusRequested ? 1 : job->cpusRequested);
+int cpu = (job->cpusRequested ?  job->cpusRequested : 1);
 long long ram = 8LL * 1024 * 1024 * 1024;
 struct dyString *cmd = dyStringNew(1024);
 dyStringPrintf(cmd, "addJob2 %s %s /dev/null /dev/null %s %f %lld %s",
@@ -125,6 +143,27 @@ sqlDisconnect(&conn);
 dyStringFree(&cmd);
 }
 
+void getCommandName(struct edwAnalysisJob *job, char *name, int size)
+/* Fill in name with second word in command line */
+{
+/* Parse out first two words of job command line. */
+int commandSize = strlen(job->commandLine);
+char dupeCommand[commandSize+1];
+strcpy(dupeCommand, job->commandLine);
+char *line = dupeCommand;
+char *word1 = nextWord(&line);
+char *word2 = nextWord(&line);
+
+/* Figure out real command in there */
+char *command = word2;
+if (word2 == NULL || !sameString(word1, "edwCdJob"))// We want to be alerted if command line changes
+    {
+    warn("Oh no, edwScheduleJob changed on us?");
+    command = word1;
+    }
+safef(name, size, "%s", command);
+}
+
 void finishJob(struct edwAnalysisJob *job, struct jobResult *jr) 
 /* Move parasol job result into edwAnalysisJob table */
 {
@@ -142,52 +181,56 @@ sqlUpdate(conn, query);
 sqlDisconnect(&conn);
 }
 
-int checkFreeThreads(struct rbTree *running, struct resultsQueue *queue, boolean mustWait)
+int checkFreeThreads(struct rbTree *running, struct resultsQueue *queueList, boolean mustWait)
 /* Wait on the queue for one of our jobs to come in. */
 {
 int freeCount = 0;
 int pollTime = 3;   // Poll every 3 seconds for file to open.
 while (freeCount == 0)
     {
-    struct lineFile *lf = lineFileOpen(queue->fileName, TRUE);
-    lineFileSeek(lf, queue->pos, SEEK_SET);
-    for (;;)
-        {
-	char *line;
-	if (!lineFileNextReal(lf, &line))
-	    break;
-	char *row[JOBRESULT_NUM_COLS];
-	int wordsRead = chopByWhite(line, row, ArraySize(row));
-	if (wordsRead < ArraySize(row))
+    struct resultsQueue *queue;
+    for (queue = queueList; queue != NULL; queue = queue->next)
+	{
+	struct lineFile *lf = lineFileOpen(queue->fileName, TRUE);
+	lineFileSeek(lf, queue->pos, SEEK_SET);
+	for (;;)
 	    {
-	    if (queue->believePos)
-	        errAbort("%s seems screwed up, expecting %d words in line got %d", 
-		    lf->fileName, (int)ArraySize(row), wordsRead);
-	    else
+	    char *line;
+	    if (!lineFileNextReal(lf, &line))
+		break;
+	    char *row[JOBRESULT_NUM_COLS];
+	    int wordsRead = chopByWhite(line, row, ArraySize(row));
+	    if (wordsRead < ArraySize(row))
 		{
-	        continue;   // Forgive bad first line in case initial position, based on file size
-			    // is not at an even line boundary.
-	        }
+		if (queue->believePos)
+		    errAbort("%s seems screwed up, expecting %d words in line got %d", 
+			lf->fileName, (int)ArraySize(row), wordsRead);
+		else
+		    {
+		    continue;   // Forgive bad first line in case initial position, based on file size
+				// is not at an even line boundary.
+		    }
+		}
+	    queue->believePos = TRUE;
+	    struct jobResult *jr;
+	    jr = jobResultLoad(row);
+	    struct edwAnalysisJob jobKey = {.parasolId = jr->jobId,};
+	    struct edwAnalysisJob *job = rbTreeFind(running, &jobKey);
+	    if (job != NULL)
+		{
+		finishJob(job, jr);
+		rbTreeRemove(running, job);
+		edwAnalysisJobFree(&job);
+		freeCount += 1;
+		}
+	    jobResultFree(&jr);
 	    }
-	queue->believePos = TRUE;
-	struct jobResult *jr;
-	jr = jobResultLoad(row);
-	struct edwAnalysisJob jobKey = {.parasolId = jr->jobId,};
-	struct edwAnalysisJob *job = rbTreeFind(running, &jobKey);
-	if (job != NULL)
-	    {
-	    finishJob(job, jr);
-	    rbTreeRemove(running, job);
-	    edwAnalysisJobFree(&job);
-	    freeCount += 1;
-	    }
-	jobResultFree(&jr);
+	queue->pos = lineFileTell(lf);
+	lineFileClose(&lf);
 	}
-    queue->pos = lineFileTell(lf);
-    lineFileClose(&lf);
     verbose(2, "waiting for %d\n", pollTime);
     if (!mustWait)
-        break;
+	break;
     if (freeCount == 0)
 	sleep(pollTime);
     }
@@ -197,7 +240,7 @@ return freeCount;
 void edwAnalysisDaemon(char *countString)
 /* edwAnalysisDaemon - Run jobs remotely via parasol based on jobs in table.. */
 {
-warn("Starting edwAnalysisDaemon v11 on %s %s with %s threads", clDatabase, clTable, countString);
+warn("Starting edwAnalysisDaemon v12 on %s %s with %s threads", clDatabase, clTable, countString);
 int maxThreads = sqlUnsigned(countString);
 int threadCount = 0;
 
@@ -205,12 +248,10 @@ int threadCount = 0;
 struct rbTree *running = rbTreeNew(cmpByParasolId);
 
 long long lastId = 0;  // Keep track of lastId in run table that has already been handled.
-struct resultsQueue *queue = resultsQueueNew(resultsQueue);
-
 for (;;)
     {
     boolean tooManyThreads = (threadCount >= maxThreads);
-    int freeThreads = checkFreeThreads(running, queue, tooManyThreads);
+    int freeThreads = checkFreeThreads(running, allQueues, tooManyThreads);
     threadCount -= freeThreads;
 
     /* Get next bits of work from database. */
@@ -222,6 +263,11 @@ for (;;)
     sqlDisconnect(&conn);
     if (job != NULL)
         {
+	char commandName[PATH_LEN];
+	getCommandName(job, commandName, sizeof(commandName));
+	char queueName[PATH_LEN];
+	safef(queueName, sizeof(queueName), "%s/%s/results", resultsRootDir, commandName);
+	struct resultsQueue *queue = findOrCreateQueue(queueName);
 	sendToParasol(job, queue);
 	rbTreeAdd(running, job);
 	threadCount += 1;
