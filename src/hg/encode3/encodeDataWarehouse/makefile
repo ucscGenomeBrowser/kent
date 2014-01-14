@@ -16,16 +16,20 @@ UTIL_DIRS = \
     edwChangeFormat \
     edwCorrectFileTags \
     edwCreateUser \
+    edwFakeManifestFromSubmit \
     edwFinishAnalysis \
     edwJob \
     edwMakeContaminationQa \
     edwMakeEnrichments \
+    edwMakePairedEndQa \
+    edwMakeRepeatQa \
     edwMakeReplicateQa \
     edwMakeValidFile \
     edwQaEvaluate \
     edwReallyRemoveFiles \
     edwRetryJob \
     edwRunDaemon \
+    edwRunOnIds \
     edwScheduleAnalysis \
     edwSubmit
 
@@ -44,8 +48,8 @@ CGI_DIRS = \
     edwWebCreateUser \
     edwWebDeprecate \
     edwWebRegisterScript \
-    edwWebXSendFile \
-    edwWebSubmit
+    edwWebSubmit \
+    edwWebXSendFile
 
 TEST_DIRS = \
 	encode2BedDoctor 
