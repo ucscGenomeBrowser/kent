@@ -54,7 +54,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/c/results";
+char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/d/mid/results";
 
 
 int cmpByParasolId(void *a, void *b)
@@ -83,6 +83,9 @@ if (fileExists(queue->fileName))
     queue->pos = fileSize(queue->fileName);
 else
     {
+    char dir[PATH_LEN],name[FILENAME_LEN],ext[FILEEXT_LEN];
+    splitPath(resultsQueue, dir, name, ext);
+    makeDirsOnPath(dir);
     FILE *f = mustOpen(resultsQueue, "a");
     carefulClose(&f);
     }
@@ -194,7 +197,7 @@ return freeCount;
 void edwAnalysisDaemon(char *countString)
 /* edwAnalysisDaemon - Run jobs remotely via parasol based on jobs in table.. */
 {
-warn("Starting edwAnalysisDaemon v10 on %s %s with %s threads", clDatabase, clTable, countString);
+warn("Starting edwAnalysisDaemon v11 on %s %s with %s threads", clDatabase, clTable, countString);
 int maxThreads = sqlUnsigned(countString);
 int threadCount = 0;
 
