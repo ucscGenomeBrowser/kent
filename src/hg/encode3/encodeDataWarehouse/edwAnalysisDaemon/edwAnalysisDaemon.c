@@ -54,7 +54,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/b/results";
+char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/c/results";
 
 
 int cmpByParasolId(void *a, void *b)
@@ -100,6 +100,7 @@ struct dyString *cmd = dyStringNew(1024);
 dyStringPrintf(cmd, "addJob2 %s %s /dev/null /dev/null %s %f %lld %s",
     getUser(), getCurrentDir(), queue->fileName, (double)cpu, ram, job->commandLine);
 char *jobIdString = pmHubSingleLineQuery(cmd->string, paraHost);
+verbose(1, "%s: %s\n", jobIdString, cmd->string);
 
 /* Check for sick batch result */
 if (sameString(jobIdString, "0"))
@@ -193,7 +194,7 @@ return freeCount;
 void edwAnalysisDaemon(char *countString)
 /* edwAnalysisDaemon - Run jobs remotely via parasol based on jobs in table.. */
 {
-warn("Starting edwAnalysisDaemon v9 on %s %s with %s threads", clDatabase, clTable, countString);
+warn("Starting edwAnalysisDaemon v10 on %s %s with %s threads", clDatabase, clTable, countString);
 int maxThreads = sqlUnsigned(countString);
 int threadCount = 0;
 
