@@ -72,7 +72,8 @@ struct qaThresholds
     };
 
 struct qaThresholds dnaseThresholds = 
-/* Thresholds for DNAse - pretty high since no introns and */
+/* Thresholds for DNAse - pretty high since no introns like RNA-seq or base-changing
+ * as in methy-seq. */
     {
     .fastqMapRatio = 0.50,
     .bamMapRatio = 0.50,
