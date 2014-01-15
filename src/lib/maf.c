@@ -20,7 +20,7 @@ struct lineFile *lf;
 char *line, *word;
 char *sig = "##maf";
 
-if ((lf = lineFileMayOpen(fileName, TRUE)) == NULL)
+if ((lf = lineFileUdcMayOpen(fileName, TRUE)) == NULL)
     return NULL;
 AllocVar(mf);
 mf->lf = lf;

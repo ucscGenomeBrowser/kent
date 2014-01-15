@@ -547,18 +547,34 @@ slAddHead(&hgp->tableList, table);
 return table;
 }
 
+char *makeIndexPath(char *db)
+{
+/* create the pathname with the knowngene index for a db, result needs to be freed */
+char *path = needMem(PATH_LEN);
+char *gbdbLoc = cfgOptionDefault("gbdb.loc", "/gbdb/");
+safef(path, PATH_LEN, "%s%s/knownGene.ix", gbdbLoc, db);
+return path;
+}
+
 static boolean gotFullText(char *db)
 /* Return TRUE if we have full text index. */
 {
-char path[PATH_LEN];
-safef(path, sizeof(path), "/gbdb/%s/knownGene.ix", db);
-if (fileExists(path))
-    return TRUE;
+char *indexPath = makeIndexPath(db);
+boolean result = FALSE;
+
+if (udcIsLocal(indexPath))
+    if (fileExists(indexPath))
+        result = TRUE;
+    else
+        {
+        warn("%s doesn't exist", indexPath);
+        result = FALSE;
+        }
 else
-    {
-    warn("%s doesn't exist", path);
-    return FALSE;
-    }
+    result = TRUE;
+
+freez(&indexPath);
+return result;
 }
 
 struct tsrPos
@@ -679,7 +695,6 @@ dyStringFree(&dy);
 boolean findKnownGeneFullText(char *db, char *term,struct hgPositions *hgp)
 /* Look for position in full text. */
 {
-char path[PATH_LEN];
 boolean gotIt = FALSE;
 struct trix *trix;
 struct trixSearchResult *tsrList;
@@ -687,7 +702,7 @@ char *lowered = cloneString(term);
 char *keyWords[HGFIND_MAX_KEYWORDS];
 int keyCount;
 
-safef(path, sizeof(path), "/gbdb/%s/knownGene.ix", db);
+char *path = makeIndexPath(db);
 trix = trixOpen(path);
 tolowers(lowered);
 keyCount = chopLine(lowered, keyWords);

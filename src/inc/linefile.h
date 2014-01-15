@@ -8,6 +8,7 @@
 #define LINEFILE_H
 
 #include "dystring.h"
+#include "udc.h"
 
 #ifdef USE_TABIX
 #include "tabix.h"
@@ -54,6 +55,7 @@ struct lineFile
     tabix_t *tabix;		/* A tabix-compressed file and its binary index file (.tbi) */
     ti_iter_t tabixIter;	/* An iterator to get decompressed indexed lines of text */
 #endif
+    struct udcFile *udcFile;    /* udc file if using caching */
     struct dyString *fullLine;  // Filled with full line when a lineFileNextFull is called
     struct dyString *rawLines;  // Filled with raw lines used to create the full line
     boolean fullLineReuse;      // If TRUE, next call to lineFileNextFull will get
@@ -77,6 +79,9 @@ struct lineFile *lineFileDecompressMem(bool zTerm, char *mem, long size);
 struct lineFile *lineFileMayOpen(char *fileName, bool zTerm);
 /* Try and open up a lineFile. If fileName ends in .gz, .Z, or .bz2,
  * it will be read from a decompress pipeline. */
+
+struct lineFile *lineFileUdcMayOpen(char *fileName, bool zTerm);
+/* Open a lineFile through the UDC */
 
 struct lineFile *lineFileOpen(char *fileName, bool zTerm);
 /* Open up a lineFile or die trying If fileName ends in .gz, .Z, or .bz2,
