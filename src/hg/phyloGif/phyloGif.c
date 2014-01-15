@@ -63,10 +63,12 @@
 #include "htmshell.h"
 #include "web.h"
 
-
 #include "errabort.h"
 #include "errCatch.h"
 
+// external declaration
+boolean mgSaveToGif(FILE *gif_file, struct memGfx *screen, boolean useTransparency);
+short gif_compress_data(int min_code_size, unsigned char *pt, long size, FILE *out);
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -729,13 +731,13 @@ if (phyloTree)
 
 if (onWeb)
     {
-    printf("Content-type: image/png\r\n");
+    printf("Content-type: image/gif\r\n");
     printf("\r\n");
     }
 
-if (!mgSaveToPng(stdout, mg, FALSE))
+if (!mgSaveToGif(stdout, mg, FALSE))
     {
-    errAbort("Couldn't save png to stdout");
+    errAbort("Couldn't save gif to stdout");
     }
 
 if (cgiOptionalString("phyloGif_submit"))
