@@ -423,7 +423,7 @@ struct wiggleDataStream
     unsigned int currentSpan;	/*	for use during reading	*/
     char *currentChrom;		/*	for use during reading	*/
     char *wibFile;		/*	for use during reading	*/
-    int wibFH;			/*	wibFile handle	*/
+    struct udcFile *wibFH;	/*	wibFile handle	*/
     struct sqlConnection *conn;	/*	SQL connection when talking to db */
     struct sqlResult *sr;	/*	SQL result when talking to db	*/
     char *chrName;		/*	for chrom==chrName on file reads */

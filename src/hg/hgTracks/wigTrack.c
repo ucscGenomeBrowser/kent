@@ -18,6 +18,7 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 #include "memgfx.h"
+#include "udc.h"
 
 
 struct wigItem
@@ -285,9 +286,6 @@ wi->end = wiggle->chromEnd;
 if ((previousFileName == (char *)NULL) ||
 	differentString(previousFileName,wiggle->file))
     {
-    if (! fileExists(wiggle->file))
-	errAbort("wigSetItemData: can't open file '%s' (%s)",
-                         wiggle->file, strerror(errno));
     freez(&previousFileName);
     previousFileName = cloneString(wiggle->file);
     }
@@ -1287,8 +1285,8 @@ struct wigItem *wi;
 double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
 int itemCount = 0;
-char currentFile[PATH_LEN];
-int wibFH = 0;		/*	file handle to binary file */
+char *currentFile = NULL;
+struct udcFile *wibFH = NULL;	/*	file handle to binary file */
 int i;				/* an integer loop counter	*/
 int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
@@ -1296,8 +1294,6 @@ int usingDataSpan = 1;		/* will become larger if possible */
 
 if (tg->items == NULL)
     return NULL;
-
-currentFile[0] = '\0';
 
 if (pixelsPerBase > 0.0)
     basesPerPixel = 1.0 / pixelsPerBase;
@@ -1331,29 +1327,27 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     if (usingDataSpan == wi->span)
 	{
 	/*	Check our data file, see if we need to open a new one */
-	if (differentString(currentFile,""))
+	if (differentStringNullOk(currentFile,""))
 	    {
-	    if (differentString(currentFile,wi->file))
+	    if (differentStringNullOk(currentFile,wi->file))
 		{
 		if (wibFH > 0)
 		    {
-		    close(wibFH);
+		    udcFileClose(&wibFH);
 		    freeMem(currentFile);
 		    }
-		strncpy(currentFile, wi->file, PATH_LEN);
-		currentFile[PATH_LEN-1] = '\0';
-		wibFH = open(currentFile, O_RDONLY);
-		if (-1 == wibFH)
-		    errAbort("openWibFile: failed to open %s", currentFile);
+                currentFile = hCloneRewriteFileName(wi->file);
+		wibFH = udcFileMayOpen(currentFile, NULL);
+		if ((struct udcFile*)-1 == wibFH)
+		    errAbort("hgTracks/wigLoadPreDraw: failed to open wiggle %s", currentFile);
 		}
 	    }
 	else
 	    {
-	    strncpy(currentFile, wi->file, PATH_LEN-1);
-	    currentFile[PATH_LEN-1] = '\0';
-	    wibFH = open(currentFile, O_RDONLY);
-	    if (-1 == wibFH)
-		errAbort("openWibFile: failed to open %s", currentFile);
+            currentFile = hCloneRewriteFileName(wi->file);
+            wibFH = udcFileMayOpen(currentFile, NULL);
+	    if ((struct udcFile*)-1 == wibFH)
+		errAbort("hgTracks/wigLoadPreDraw: failed to open wiggle %s", currentFile);
 	    }
 /*	Ready to draw, what do we know:
  *	the feature being processed:
@@ -1389,9 +1383,9 @@ double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixels
 	if ((x2d - x1d) > 0.5)
 	    {
 	    unsigned char *readData;	/* the bytes read in from the file */
-	    lseek(wibFH, wi->offset, SEEK_SET);
+	    udcSeek(wibFH, wi->offset);
 	    readData = (unsigned char *) needMem((size_t) (wi->count + 1));
-	    bytesRead = read(wibFH, readData,
+	    bytesRead = udcRead(wibFH, readData,
 		(size_t) wi->count * (size_t) sizeof(unsigned char));
 	    /*	walk through all the data in this block	*/
 	    for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)
@@ -1447,8 +1441,9 @@ double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixels
     }	/*	for (wi = tg->items; wi != NULL; wi = wi->next)	*/
 if (wibFH > 0)
     {
-    close(wibFH);
+    udcFileClose(&wibFH);
     wibFH = 0;
+    freeMem(currentFile);
     }
 return pre;
 }

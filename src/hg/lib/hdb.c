@@ -38,6 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 #include "trackHub.h"
+#include "udc.h"
 
 
 #ifdef LOWELAB
@@ -783,7 +784,7 @@ static void tableListHashAdd(struct hash *dbTblHash, char *profile, char *db)
 struct sqlConnection *conn = hAllocConnProfile(profile, db);
 struct slName *allTables =  sqlListTables(conn);
 
-if (!sameString(CUSTOM_TRASH,db) && hCanHaveSplitTables(db))
+if (!sameString(CUSTOM_TRASH,db) && !sameString("hgFixed",db) && hCanHaveSplitTables(db))
     {
     /* Consolidate split tables into one list per track: */
     struct slName *tbl = NULL, *nextTbl = NULL;
@@ -1021,23 +1022,32 @@ return seq;
 struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end)
 /* Fetch mixed case sequence. */
 {
-if (twoBitIsFile(fileName))
-    return fetchTwoBitSeq(fileName, seqName, start, end);
+struct dnaSeq *seq = NULL;
+char *newFileName = NULL;
+newFileName = hCloneRewriteFileName(fileName);
+if (twoBitIsFile(newFileName))
+    seq = fetchTwoBitSeq(newFileName, seqName, start, end);
 else
-    return nibLoadPartMasked(NIB_MASK_MIXED, fileName, start, end-start);
+    seq = nibLoadPartMasked(NIB_MASK_MIXED, newFileName, start, end-start);
+freez(&newFileName);
+return seq;
 }
 
 struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end)
 /* Fetch sequence from file.  If it is a .2bit file then fetch the named sequence.
    If it is .nib then just ignore seqName. */
 {
+fileName = hCloneRewriteFileName(fileName);
+struct dnaSeq *seq  = NULL;
 if (twoBitIsFile(fileName))
     {
-    struct dnaSeq *seq = fetchTwoBitSeq(fileName, seqName, start, end);
+    seq = fetchTwoBitSeq(fileName, seqName, start, end);
     tolowers(seq->dna);
-    return seq;
     }
-return nibLoadPart(fileName, start, end-start);
+else
+    seq = nibLoadPart(fileName, start, end-start);
+freez(&fileName);
+return seq;
 }
 
 struct dnaSeq *hChromSeqMixed(char *db, char *chrom, int start, int end)
@@ -1255,6 +1265,39 @@ hFreeConn(&conn);
 return list;
 }
 
+char *hCloneRewriteFileName(char* fileName)
+ /* Clones and returns a gbdb filename, potentially rewriting it according to hg.conf
+  * If the settings gbdbLoc1 and gbdbLoc2 are found, try them in order, by 
+  * replacing /gbdb/ with the new locations.
+  * We assume /gbdb/ does not appear somewhere inside a fileName.
+  * This function does not guarantee that the filename exists.
+ * */
+{
+if (fileName==NULL)
+    return fileName;
+
+char* newGbdbLoc = cfgOption("gbdbLoc1");
+char* path;
+
+// if no config option set or not a /gbdb filename, then just return
+// otherwise replace /gbdb/ with the new prefix and return if exists.
+if (newGbdbLoc==NULL || !startsWith("/gbdb/", fileName))
+   return cloneString(fileName);
+
+path = replaceChars(fileName, "/gbdb/", newGbdbLoc);
+if (fileExists(path))
+    return path;
+
+// if the file did not exist, replace with gbdbLoc2
+newGbdbLoc = cfgOption("gbdbLoc2");
+if (newGbdbLoc==NULL)
+    return path;
+
+freeMem(path);
+path = replaceChars(fileName, "/gbdb/", newGbdbLoc);
+return path;
+}
+
 char *hTryExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId, boolean abortOnError)
 /* Get external file name from table and ID.  Typically
  * extFile table will be 'extFile' or 'gbExtFile'
@@ -1285,20 +1328,26 @@ if ((row = sqlNextRow(sr)) == NULL)
 	}
     }
 
-path = cloneString(row[0]);
+path = hCloneRewriteFileName(row[0]);
+
 dbSize = sqlLongLong(row[1]);
-diskSize = fileSize(path);
 sqlFreeResult(&sr);
 
-if (dbSize != diskSize)
+// for speed, only do dbSize check if file is local
+if (udcIsLocal(path))
     {
-    if (abortOnError)
-	errAbort("External file %s cannot be opened or has wrong size.  "
-		 "Old size %lld, new size %lld, error %s",
-		 path, dbSize, diskSize, strerror(errno));
-    else 
-	freez(&path);
+    diskSize = fileSize(path);
+    if (dbSize != diskSize)
+        {
+        if (abortOnError)
+            errAbort("External file %s cannot be opened or has wrong size.  "
+                     "Old size %lld, new size %lld, error %s",
+                     path, dbSize, diskSize, strerror(errno));
+        else 
+            freez(&path);
+        }
     }
+
 return path;
 }
 
@@ -1343,7 +1392,7 @@ struct largeSeqFile
     char *extTable;             /* external file table */
     char *db;                   /* database this is associated with */
     HGID id;                    /* Id in extFile table. */
-    int fd;                     /* File handle. */
+    struct udcFile *fd;         /* File handle. */
     };
 
 static struct largeSeqFile *largeFileList;  /* List of open large files. */
@@ -1375,23 +1424,23 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     lsf->extTable = cloneString(extTable);
     lsf->db = cloneString(db);
     lsf->id = extId;
-    if ((lsf->fd = open(lsf->path, O_RDONLY)) < 0)
-        errAbort("Couldn't open external file %s", lsf->path);
+    lsf->fd = udcFileMayOpen(lsf->path, NULL);
+    if (lsf->fd == NULL)
+        errAbort("hdb/largeFileHandle: Couldn't open external file %s", lsf->path);
     slAddHead(&largeFileList, lsf);
     return lsf;
     }
 }
 
-static void *readOpenFileSection(int fd, off_t offset, size_t size, char *fileName, char *acc)
+static void *readOpenFileSection(struct udcFile* fd, off_t offset, size_t size, char *fileName, char *acc)
 /* Allocate a buffer big enough to hold a section of a file,
  * and read that section into it. */
 {
 void *buf;
 buf = needMem(size+1);
-if (lseek(fd, offset, SEEK_SET) < 0)
-    errnoAbort("Couldn't read %s: error seeking to %lld in %s", acc, (long long)offset, fileName);
-if (read(fd, buf, size) < size)
-    errnoAbort("Couldn't read %s: error reading %lld bytes at %lld in %s", acc, (long long)size, (long long)offset, fileName);
+// no need to check success, udc will errAbort if offset is invalid
+udcSeek(fd, offset);
+udcRead(fd, buf, size);
 return buf;
 }
 
@@ -2318,9 +2367,12 @@ return genome;
 }
 
 char *hDbDbNibPath(char *database)
-/* return nibPath from dbDb for database */
+/* return nibPath from dbDb for database, has to be freed */
 {
-return hDbDbOptionalField(database, "nibPath");
+char *rawNibPath = hDbDbOptionalField(database, "nibPath");
+char *nibPath = hCloneRewriteFileName(rawNibPath);
+freez(&rawNibPath);
+return nibPath;
 }
 
 char *hGenome(char *database)
@@ -2343,7 +2395,10 @@ char *hHtmlPath(char *database)
 /* Return NULL if unknown database */
 /* NOTE: must free returned string after use */
 {
-return hDbDbOptionalField(database, "htmlPath");
+char *htmlPath = hDbDbOptionalField(database, "htmlPath");
+char *newPath = hCloneRewriteFileName(htmlPath);
+freez(&htmlPath);
+return newPath;
 }
 
 char *hFreezeDate(char *database)
@@ -2663,28 +2718,6 @@ if (!fitField(hash, end, retEnd))
 return TRUE;
 }
 
-boolean hIsBinned(char *db, char *table)
-/* Return TRUE if a table is binned. */
-{
-char query[256];
-struct sqlConnection *conn = hAllocConn(db);
-struct sqlResult *sr;
-char **row;
-boolean binned = FALSE;
-
-/* Read table description into hash. */
-sqlSafef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (sameString(row[0], "bin"))
-        binned = TRUE;
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return binned;
-}
-
 int hFieldIndex(char *db, char *table, char *field)
 /* Return index of field in table or -1 if it doesn't exist. */
 {
@@ -2698,6 +2731,12 @@ boolean hHasField(char *db, char *table, char *field)
 /* Return TRUE if table has field */
 {
 return hFieldIndex(db, table, field) >= 0;
+}
+
+boolean hIsBinned(char *db, char *table)
+/* Return TRUE if a table is binned. */
+{
+return hHasField(db, table, "bin");
 }
 
 boolean hFieldHasIndex(char *db, char *table, char *field)
@@ -2741,15 +2780,6 @@ static boolean hFindBed12FieldsAndBinWithConn(struct sqlConnection *conn, char *
  * fields, if they exist.  Fields that don't exist in the given table
  * will be set to "". */
 {
-char query[256];
-struct sqlResult *sr;
-char **row;
-struct hash *hash = newHash(5);
-boolean gotIt = TRUE, binned = FALSE;
-char *db;
-
-db = sqlGetDatabase(conn);
-
 /* Set field names to empty strings */
 retChrom[0] = 0;
 retStart[0] = 0;
@@ -2764,16 +2794,14 @@ retStarts[0] = 0;
 retEndsSizes[0] = 0;
 retSpan[0] = 0;
 
+char *db;
+db = sqlGetDatabase(conn);
+
 /* Read table description into hash. */
-sqlSafef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (sameString(row[0], "bin"))
-        binned = TRUE;
-    hashAdd(hash, row[0], NULL);
-    }
-sqlFreeResult(&sr);
+boolean gotIt = TRUE, binned = FALSE;
+binned = hIsBinned(db, table);
+// XX Do I need to free the slList implicitly created here?
+struct hash *hash = hashFromSlNameList(sqlListFields(conn, table));
 
 /* Look for bed-style or linkedFeatures names. */
 if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEnd))
@@ -3048,23 +3076,23 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
     else
 	{
 	if (chrom != NULL)
-            {
+	    {
             // first try the non-split table name then the split table name. 
-            // This avoids many useless chrX_table lookups
-            // (today, very few assemblies have split tables)
+            // In 2013, very few assemblies have split tables
+            // This avoids dozens of mostly useless chrX_table lookups
             isSplit = TRUE;
             safef(fullName, sizeof(fullName), "%s", rootName);
-            if (sqlTableExists(conn, fullName))
-                isSplit = FALSE;
-            else
+	    if (sqlTableExists(conn, fullName))
+		isSplit = FALSE;
+            else 
                 {
                 safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
                 if (sqlTableExists(conn, fullName))
-                    isSplit = TRUE;
+                    isSplit = TRUE; 
                 else
                     return NULL;
                 }
-            }
+	    }
 	}
     AllocVar(hti);
     hashAddSaveName(hash, rootName, hti, &hti->rootName);
@@ -3808,6 +3836,7 @@ struct trackDb *hTrackDb(char *db)
 struct trackDb *tdbList = NULL;
 //if (differentStringNullOk(existingDb, db))
 //    {
+
     tdbList = loadTrackDb(db, NULL);
     tdbList = trackDbLinkUpGenerations(tdbList);
     tdbList = trackDbPolishAfterLinkup(tdbList, db);
@@ -5207,7 +5236,10 @@ if (fileName == NULL)
     else
 	errAbort("Missing fileName in %s table", table);
     }
-return fileName;
+
+char *rewrittenFname = hCloneRewriteFileName(fileName);
+freez(&fileName);
+return rewrittenFname;
 }
 
 char *bbiNameFromSettingOrTableChrom(struct trackDb *tdb, struct sqlConnection *conn, char *table,
@@ -5215,7 +5247,7 @@ char *bbiNameFromSettingOrTableChrom(struct trackDb *tdb, struct sqlConnection *
 /* Return file name from bigDataUrl or little table that might have a seqName column.
  * If table does have a seqName column, return NULL if there is no file for seqName. */
 {
-char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+char *fileName = hCloneRewriteFileName(trackDbSetting(tdb, "bigDataUrl"));
 if (fileName == NULL)
     fileName = bbiNameFromTableChrom(conn, table, seqName);
 return fileName;
