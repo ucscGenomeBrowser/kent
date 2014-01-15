@@ -41,13 +41,15 @@ verbose(1, "Found %d files matching *.dir/* criteria\n", slCount(efList));
 
 /* Open output and write header */
 FILE *f = mustOpen(output, "w");
-fprintf(f, "#accession\ttechnical_replicate\n");
+fprintf(f, "#accession\ttechnical_replicate\toutput_type\n");
 
 struct edwFile *prevEf = NULL;
 char dir[PATH_LEN], prevDir[PATH_LEN] = "";
 int techRep = 0;
 for (ef = efList; ef != NULL; ef = ef->next)
     {
+    struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
+
     /* Figure out if onto a new tarball/directory */
     splitPath(ef->submitFileName, dir, NULL, NULL);
     if (!sameString(dir, prevDir))
@@ -55,6 +57,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
 
     /* Deal with rejects just by merging them with previous tech rep.  Do a lot of checking
      * to make sure this really works. */
+    char *outputType = vf->outputType;
     if (endsWith(ef->submitFileName, "_reject.fastq.gz"))
         {
 	assert(prevEf != NULL);
@@ -63,13 +66,13 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	int prefixSize = strlen(ef->submitFileName) - strlen("_reject.fastq.gz");
 	if (memcmp(ef->submitFileName, prevEf->submitFileName, prefixSize) != 0)
 	    errAbort("Really not understanding order.");
+	outputType = "rejected_reads";
 	}
     else
         ++techRep;
 
     /* Write out license plate and replicate. */
-    struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
-    fprintf(f, "%s\t%d\n", vf->licensePlate, techRep);
+    fprintf(f, "%s\t%d\t%s\n", vf->licensePlate, techRep, outputType);
     edwValidFileFree(&vf);
 
     /* Save current variables for next time round loop. */
