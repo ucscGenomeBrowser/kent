@@ -555,7 +555,7 @@
 
 <DIV class="iframeUrl"><span class="types all"></span>
 <div class="format"><code>iframeUrl &lt;url&gt;</code></div>
-    <P>This setting allows to integrate an external html page into the default details page, as an iframe. The usual replacement variables can be used within this URL:</P>
+    <P>This setting allows integrating an external html page into the default details page, as an iframe. The usual replacement variables can be used within this URL:</P>
     <UL>
     <LI>$$ - ID, will be replaced by the <code>name</code>
     of an item or other string id depending upon the fields in the
@@ -595,11 +595,11 @@
     <P>If the statement is not present, the default is <code>width='100%' height='1024'</code>.</P>
 
     <P>Note: dynamic resizing of iframes is not trivial, as they have to
-    resized with javascript, across domains. We recommend keeping
+    be resized with javascript, across domains. We recommend keeping
     the size static and to use scrollbars. If dynamic resizing is required, the
     iframed page has to include a few lines of special HTML and javascript
     code and one has to modify its body-tag, like this (see 
-    <a href="http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content">stackoverflow</a>):
+    <a target="_BLANK" href="http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content">stackoverflow</a>):
     <pre>
     ... html header ...
     &lt;body onload="iframeResizePipe()"&gt;
@@ -3967,10 +3967,12 @@ for each cell associated with the particular TF binding location.</P>
 
 
 <!-- - - - - - - - SUPERTRACK settings - - - - - - - -->
+<DIV class="container_intro">
+
 <DIV class="superTrack_intro">
-<H3>Supertrack (Folders or Containers) settings</H3>
-    <P>The next level of
-    hierarchical groupings is called the supertrack, which may be thought of as 
+<H3>Supertrack settings</H3>
+    <P>The first 
+    hierarchical container is called the supertrack, which may be thought of as 
     a folder that holds other tracks. The Browser currently supports only one
     level of supertrack folders.  Generally the subtracks
     of a supertrack are of differing types.  If all the children are
@@ -4098,7 +4100,7 @@ for each cell associated with the particular TF binding location.</P>
     subtrack child, not the composite itself, through this setting. Any number of subtracks may
     belong to one composite, but display performance degrades significantly beyond a
     few hundred.  Set the <code>parent</code> setting to "on" to 
-    indicate whether a subtrack should be "checked" (selected) by default.  
+    indicate whether a subtrack should be visible (checked, selected) by default.  
 </DIV>
 
 <DIV class="allButtonPair"><span class="types compositeTrack"></span>

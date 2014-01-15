@@ -1,6 +1,6 @@
 track altSequence
 compositeTrack on
-shortLabel Alt Mao
+shortLabel Alt Map
 longLabel Mappings to the alternate sequences/haplotypes
 subGroup1 view Views location=Haplotype psl=Alignment chain=Chain net=Net
 dragAndDrop subTracks
@@ -9,7 +9,7 @@ visibility hide
 type bed 4
 noInherit on
 group map
-priority 25
+priority 105
 otherDb hg38
 chainMinScore 1000
 chainLinearGap medium

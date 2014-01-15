@@ -71,7 +71,7 @@ static void checkGenePred(char *fileTbl)
 /* check a genePred file or table */
 {
 struct sqlConnection *conn = NULL;
-struct genePredReader *gpr;
+struct genePredReader *gpr = NULL;
 struct genePred *gp;
 int iRec = 0;
 

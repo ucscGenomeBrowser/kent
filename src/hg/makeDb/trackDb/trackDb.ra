@@ -2768,8 +2768,8 @@ searchPriority 10
 
 track animalQtl
 shortLabel $Organism QTL
-longLabel $Organism QTL from animalQTLdb
-group map 
+longLabel $Organism Quantitative Trait Loci from animalQTLdb
+group map
 priority 11 
 visibility hide
 type bed 4 .

@@ -4,7 +4,7 @@
 
 CREATE TABLE tableList (
     tableName varchar(255) not null,  # table name, as in 'show tables' command
-    fieldName varchar(255),  # field name, as in 'describe table' command
+    field varchar(255),  # field name, as in 'describe table' command
     type varchar(255),   # type of field, as in 'describe table' command
     nullAllowed varchar(255),   # null allowed field of describe table command
     isKey varchar(255),  # is key field of describe table command 

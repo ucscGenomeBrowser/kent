@@ -123,7 +123,7 @@ if (targetConn!=NULL)
 safef(tmpTable, sizeof(tmpTable), "tableList%ld", (long) getpid());
 sqlDropTable(conn, tmpTable);
 // Field    | Type             | Null | Key | Default | Extra
-sqlSafef(buf, sizeof(buf), "CREATE TABLE %s (tableName varchar(255) not null, fieldName varchar(255), "
+sqlSafef(buf, sizeof(buf), "CREATE TABLE %s (tableName varchar(255) not null, field varchar(255), "
     "type varchar(255), nullAllowed varchar(255), isKey varchar(255), hasDefault varchar(255) NULL, extra varchar(255),"
     "index tableIdx(tableName))", tmpTable);
 sqlUpdate(conn, buf);

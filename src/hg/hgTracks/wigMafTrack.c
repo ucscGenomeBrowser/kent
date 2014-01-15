@@ -985,7 +985,7 @@ for (ms = summaryList; ms != NULL; ms = ms->next)
 	    w = x2 - x1;
 	    if (w == 1 && x1 == lastX)
 		continue;
-	    if (w > 0);
+	    if (w > 0)
 		drawMafChain(hvg, x1, yOff, w, height, isDouble);
 	    }
 	else if (ms->rightStatus[0] == MAF_MISSING_STATUS )
