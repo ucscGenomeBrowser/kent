@@ -3967,10 +3967,12 @@ for each cell associated with the particular TF binding location.</P>
 
 
 <!-- - - - - - - - SUPERTRACK settings - - - - - - - -->
+<DIV class="container_intro">
+
 <DIV class="superTrack_intro">
-<H3>Supertrack (Folders or Containers) settings</H3>
-    <P>The next level of
-    hierarchical groupings is called the supertrack, which may be thought of as 
+<H3>Supertrack settings</H3>
+    <P>The first 
+    hierarchical container is called the supertrack, which may be thought of as 
     a folder that holds other tracks. The Browser currently supports only one
     level of supertrack folders.  Generally the subtracks
     of a supertrack are of differing types.  If all the children are

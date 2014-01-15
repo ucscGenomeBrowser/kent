@@ -88,9 +88,6 @@ struct agpGap *gap;
 for (gap = gapList; gap; gap = gap->next)
     {
     int chrSize = hashIntVal(cInfoHash, gap->chrom);
-    if (gap->chromStart < 0)
-	verbose(1, "WARNING: gap chromStart < 0 at %s:%d-%d\n",
-		gap->chrom, gap->chromStart, gap->chromEnd);
     if (gap->chromEnd > chrSize)
 	verbose(1, "WARNING: gap chromEnd > chromSize(%d) "
 	    "at %s:%d-%d\n", chrSize, gap->chrom,

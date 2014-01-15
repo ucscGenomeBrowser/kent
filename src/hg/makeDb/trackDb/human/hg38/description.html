@@ -121,3 +121,24 @@ There are a total of 127 unlocalized contigs.
 See the <a href="../cgi-bin/hgTracks?chromInfoPage=">sequences</a> page for a complete
 list of hg38 chromosome names.
 </p>
+<P>
+Potential sections to include on this page:
+<UL>
+<LI>Description of new features such as centromeres</LI>
+<LI>Mention of IUPAC characters and how UCSC does not use nor pass them
+through to download files.  Perhaps mention where they can be found since
+it is only a few locations.</LI>
+<LI>Mention where the PAR regions are<BR>
+<pre>
++-------+------------+-----------+------+
+| chrom | chromStart | chromEnd  | name |
++-------+------------+-----------+------+
+| chrX  |      10000 |   2781479 | PAR1 |
+| chrX  |  155701382 | 156030895 | PAR2 |
+| chrY  |      10000 |   2781479 | PAR1 |
+| chrY  |   56887902 |  57217415 | PAR2 |
++-------+------------+-----------+------+
+</pre></LI>
+<LI>chrM fiasco AKA chrMt now == J01415.2, was: NC_001807/AF347015.1</LI>
+</UL>
+</P>

@@ -379,6 +379,11 @@ taxId   9606
 # 3209286105 bases (159970322 N's 3049315783 real 1460684798 upper 1588630985 lower) in 455 sequences in 1 files
 # %49.50 masked total, %52.10 masked real
 
+    featureBits -countGaps hg38 rmskCM '!rmskHmmer' -bed=crossMatchUnique.bed
+    # 24868153 bases of 3209286105 (0.775%) in intersection
+    hgLoadBed hg38 crossMatchUnique crossMatchUnique.bed
+    # Read 2352219 elements of size 4 from crossMatchUnique.bed
+
 #############################################################################
 ## repeating RepeatMasker Blastn run (DONE - 2014-01-07 - Hiram)
     mkdir /hive/data/genomes/hg38/bed/rmskBlastn
@@ -508,6 +513,11 @@ taxId   9606
 #      806 RC?
 #      464 rRNA
 #  5744165 total
+
+    featureBits -countGaps hg38 rmskHmmer '!rmskCM' -bed=hmmerUnique.bed
+    # 172940594 bases of 3209286105 (5.389%) in intersection
+    hgLoadBed hg38 hmmerUnique hmmerUnique.bed
+    # Read 3099505 elements of size 4 from hmmerUnique.bed
 
 #############################################################################
 ## RepeatMasker with HMMER - DONE - 2013-12-24,26 - Hiram
@@ -1323,7 +1333,9 @@ close (DR);
     bedToBigBed -tab -type=bed4+6 -as=$HOME/kent/src/hg/lib/cpgIslandExt.as \
        cpgIsland.bed ../../chrom.sizes hg38.cpgIslandExt.bb
     zcat ../cpgIslands/cpgIsland.bed.gz | sort -k1,1 -k2,2n > t.bed
-    # Surprisingly, a few more are detected:
+    # Surprisingly, a few more are detected, perhaps due to the different
+    # masking since this contig run is on the final corrected cross-match rmsk
+    # plus TRF, the above was on the corrupted HMMER+TRF mask:
     wc -l cpgIsland.bed t.bed
 #   30477 cpgIsland.bed
 #   30456 t.bed
@@ -1338,6 +1350,15 @@ close (DR);
     # 29,339 identical locations:
     comm -12 contigs.bed fullSequence.bed | wc -l
     # 29339
+
+    time $HOME/kent/src/hg/utils/automation/doCpgIslands.pl \
+      -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -continue=load -maskedSeq=/hive/data/genomes/hg38/hg38.contigs.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku hg38 > load.log 2>&1
+    # real    0m12.056s
+
+    cat fb.hg38.cpgIslandExt.txt
+    # 23610399 bases of 3049335806 (0.774%) in intersection
 
 ##############################################################################
 # rerun cpgIslands on contig UNMASKED sequence (DONE - 2014-01-07 - Hiram)
@@ -1378,6 +1399,16 @@ close (DR);
     # 33637531 bases of 3209286105 (1.048%) in intersection
     featureBits -countGaps hg38 ../cpgIslandsContigs/cpgIsland.bed
     # 23610399 bases of 3209286105 (0.736%) in intersection
+
+    # debug load step so it can be loaded into a separate table:
+    $HOME/kent/src/hg/utils/automation/doCpgIslands.pl \
+      -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -debug -continue=load -maskedSeq=`pwd`/hg38.contigsUnmasked.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku hg38
+
+    time ./doLoadCpg.csh > load.log 2>&1
+    # real    0m2.179s
+    # 33637531 bases of 3049335806 (1.103%) in intersection
 
 #########################################################################
 # construct liftOver to hg19 (DONE - 2013-12-31 - Hiram)
@@ -1520,10 +1551,13 @@ sort ../../chrom.sizes | join -t'^I' - altToChr.tab \
    mkdir /hive/data/genomes/hg38/bed/genscan
    cd /hive/data/genomes/hg38/bed/genscan
 
+   # using the contig sequence
+   # running stepwise to allow the lifting of the final result
    time $HOME/kent/src/hg/utils/automation/doGenscan.pl hg38 -buildDir=`pwd` \
-     -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+     -maskedSeq=/hive/data/genomes/hg38/hg38.contigs.2bit \
+       -stop=makeBed -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         > do.log 2>&1
-XXX - running Tue Jan  7 11:25:43 PST 2014
+XXX - running Mon Jan 13 13:33:20 PST 2014
 
 ############################################################################
 ## genscan on unmasked sequence experiment (DONE - 2013-12-03 - Hiram)
@@ -2092,3 +2126,21 @@ RC?                 445     411     374     806
 total           5567850 5520017 5459735 5744165
 
 #############################################################################
+## blat server turned on (DONE - 2014-01-13 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hg38", "blat4c", "17780", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hg38", "blat4c", "17781", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to ABO gene (DONE - 2014-01-13 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr9:133247948-133269889"
+	where name="hg38";' hgcentraltest
+
+############################################################################
