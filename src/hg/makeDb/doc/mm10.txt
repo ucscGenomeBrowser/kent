@@ -9657,3 +9657,247 @@ echo -e "chrM\tNC_005089.1"
 
     hgLoadSqlTab  mm10 jaxQtl $HOME/kent/src/hg/lib/jaxQtl.sql \
 /cluster/data/mm10/bed/jaxLiftOver/jaxQtlLiftSorted.bed
+
+
+##############################################################################
+# DBSNP B138 / SNP138 (DONE 1/17/14 angie)
+    # RedMine #12490
+    screen
+    mkdir -p /hive/data/outside/dbSNP/138/mouse
+    cd /hive/data/outside/dbSNP/138/mouse
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (mouse_10090 in this case).
+    # Then click into that directory and look for file names like
+    #    b(1[0-9][0-9])_
+    # -- use the first num for build setting in config.ra
+    # The buildAssembly setting in config.ra is empty because dbSNP stopped including
+    # that in file names.
+    cat > config.ra <<EOF
+db mm10
+orgDir mouse_10090
+build 138
+buildAssembly 
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
+    # Some trial and error was required to get the config.ra just right.
+    # First stop: need a refAssemblyLabel:
+# *** This release contains more than one assembly label.
+# *** Please examine this list in case we need to exclude any of these:
+#
+#GRCm38.p1
+#Mm_Celera
+# *** Add refAssemblyLabel to config.ra.  If keeping all labels, it will
+# *** look like this:
+#
+#refAssemblyLabel GRCm38.p1,Mm_Celera
+#
+# *** Edit out any of those that are not included in mm10 (e.g. Celera).
+# *** Then restart this script with -continue=loadDbSnp .
+    cat >> config.ra <<EOF
+refAssemblyLabel GRCm38.p1
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+    # Second stop: need to grab the NCBI Assembly Reports file for GRCm38; the
+    # script will do its best to deduce the needed liftUp entries and contigs
+    # to ignore (because they are for alternate mouse strains, or patch contigs etc).
+#*** b138_ContigInfo has coords for 119 sequences; these have been written to
+#*** /hive/data/outside/dbSNP/138/mouse/suggested.lft .
+#*** 152 lines of b138_ContigInfo.bcp.gz either had no lift-coords
+#*** or had unrecognized chrom names; see
+#*** /hive/data/outside/dbSNP/138/mouse/cantLiftUpSeqNames.txt .
+#
+#*** You must account for those in config.ra, in the liftUp file
+#*** and/or ignoreDbSnpContigsFile or the ignoreDbSnpContigs regex.
+#*** Then run again with -continue=loadDbSnp .
+#
+#*** NOTE: If you add the ncbiAssemblyReportFile setting to config.ra and
+#***       run again with -continue=loadDbSnp, this script may be able to
+#***       construct those files for you.
+    # Look at the doDbSnp.pl -help message for instructions about how to find the
+    # Assembly Reports file for GRCm38 on the NCBI web site.
+    wget ftp://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/All/GCF_000001635.22.assembly.txt
+    cat >> config.ra <<EOF
+ncbiAssemblyReportFile GCF_000001635.22.assembly.txt
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+    # Third stop: review the list of dbSNP contigs that we can't map, and if they're
+    # all contigs not in our assembly, tell config.ra to ignore them.
+#*** b138_ContigInfo has coords for 119 sequences; these have been written to
+#*** /hive/data/outside/dbSNP/138/mouse/suggested.lft .
+#
+#*** GCF_000001635.22.assembly.txt has mappings for 44 sequences;
+#*** these have been written to
+#*** /hive/data/outside/dbSNP/138/mouse/suggested.lft .
+#
+#*** 108 lines of b138_ContigInfo.bcp.gz contained contig names that
+#*** could not be mapped to chrom.size via their GenBank contig mappings; see
+#*** /hive/data/outside/dbSNP/138/mouse/cantLiftUpSeqNames.txt .
+#
+#*** You must account for all 271 contig_acc values in config.ra,
+#*** in the liftUp file and/or ignoreDbSnpContigsFile.
+#*** Then run again with -continue=loadDbSnp .
+    cut -f 2 cantLiftUpSeqNames.txt > contigsNotInUCSC.txt
+    cat >> config.ra <<EOF
+liftUp suggested.lft
+ignoreDbSnpContigsFile contigsNotInUCSC.txt
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+
+    # The script died with an error implying that a perl command in a pipe got
+    # empty input from sort which was getting input from an hgsql query to join
+    # Batch submitter handles with rs# snp_id's.  Looks like the mysql connection
+    # was lost or something.  Anyway, re-running that part of addToDbSnp.csh
+    # in 2 parts and continuing manually through the end of addToDbSnp.csh:
+    pushd `cat workingDir `
+    hgsql mm10snp138 -NBe 'select SNPSubSNPLink.snp_id, handle from SubSNP, SNPSubSNPLink, Batch \
+                       where SubSNP.subsnp_id = SNPSubSNPLink.subsnp_id and \
+                             SubSNP.batch_id = Batch.batch_id' \
+    | sort -k1n,1n -k2,2 -u \
+      > tmp.txt
+    perl -we 'while (<>) { \
+              chomp; my ($id, $handle) = split("\t"); \
+              if (defined $prevId && $prevId != $id) { \
+                print "$prevId\t$handleCount\t$handleBlob\n"; \
+                $handleCount = 0;  $handleBlob = ""; \
+              } \
+              $handleCount++; \
+              $handleBlob .= "$handle,"; \
+              $prevId = $id; \
+            } \
+            print "$prevId\t$handleCount\t$handleBlob\n";' \
+      tmp.txt > ucscHandles.txt
+
+    cat > ucscHandles.sql <<EOF
+CREATE TABLE ucscHandles (
+        snp_id int NOT NULL,
+        handleCount int unsigned NOT NULL,
+        handles longblob NOT NULL,
+        INDEX snp_id (snp_id)
+);
+EOF
+    hgLoadSqlTab mm10snp138 ucscHandles{,.sql,.txt}
+
+    # I added 'if (0) then' around the parts of addToDbSnp.csh that completed successfully;
+    # complete the step by running the modified script:
+    # Pop back out of workingDir
+    popd
+    addToDbSnp.csh >>& do.log &
+    tail -f do.log
+
+    # Now continue with the next step:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=bigJoin >>& do.log &
+    tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# FILTER SNP138 (DONE 1/17/14 angie)
+   cd /hive/data/outside/dbSNP/138/mouse
+   zcat snp138.bed.gz \
+   | ~/kent/src/hg/utils/automation/categorizeSnps.pl
+#Mult:     3066546
+#Common:   8082414
+#Flagged:  0
+#leftover: 60824824
+   foreach f ({Mult,Common}.bed.gz)
+     mv $f snp138$f
+   end
+   # Load tables
+   foreach subset (Mult Common)
+     hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \
+       mm10 snp138$subset -sqlTable=snp138.sql snp138$subset.bed.gz
+   end
+
+
+##############################################################################
+# DBSNP CODING ANNOTATIONS (138) (DONE 1/17/14 angie)
+   cd /hive/data/outside/dbSNP/138/mouse
+   # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
+   # For anything except an insertion (0 bases between flanks),
+   # we need to add 1 to the end coord.  For an insertion, we need
+   # to add 1 to the start coord.  Make a hash of the insertion IDs,
+   # then look up each ID in ncbiFuncAnnotations.txt to tell which
+   # transform to apply.
+   # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
+   zcat ncbiFuncAnnotations.txt.gz \
+   | perl -we 'open($IDS, "zcat ncbiFuncInsertions.ctg.bed.gz |") || die "ids: $!"; \
+             while (<$IDS>) { chomp; $ids{$_} = 1; } \
+             close($IDS); \
+             %coding = (2=>1, 3=>1, 4=>1, 8=>1, 9=>1, 41=>1, 42=>1, 43=>1, 44=>1, 45=>1); \
+             while (<>) { \
+               chomp;  @w = split("\t"); # id, ctg, start, end, ... \
+               next unless $coding{$w[5]}; \
+               $bed4 = join("\t", $w[1], $w[2], $w[3], $w[0]); \
+               if (exists $ids{$bed4} && $w[3] == $w[2]+1) { \
+                 $w[2]++; # 2-base insertions: increment start coord \
+               } else { \
+                 $w[3]++; # increment end coord to get half-open \
+               } \
+               print join("\t", @w) . "\n"; \
+             }' \
+   | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
+   | uniq \
+     > ncbiCodingAnnotations.txt
+   wc -l ncbiCodingAnnotations.txt
+#1584257 ncbiCodingAnnotations.txt
+   # How many & what kinds of function types?
+   cut -f 6 ncbiCodingAnnotations.txt \
+   | sort -n | uniq -c
+# 372821 3   (coding-synon)
+# 552828 8   (cds-reference -- ignored)
+#    376 41  (nonsense)
+# 181984 42  (missense)
+#     49 43  (stop-loss)
+#   3382 44  (frameshift)
+# 472817 45  (cds-indel)
+
+   # In b138, the functional annotations include non-coding (frame = NULL),
+   # which we'll exclude here because this is supposed to be just coding stuff...
+   # probably need to update how we show dbSNP's func annos anyway, e.g.
+   # it is a shame that we toss out codon number and transcript offset.
+   # Gather up multiple annotation lines into one line per {snp, gene, frame}:
+   perl -e  'while (<>) { chomp; \
+               my ($rsId, $ctg, $s, $e, $txId, $fxn, $frm, $nt, $aa, $codon) = split("\t"); \
+               next if ($fxn == 8 && ($frm eq "NULL" && $aa eq "NULL" && $codon eq "NULL")); \
+               if (defined $lastRs && \
+                   ($lastRs != $rsId || $lastCtg ne $ctg || $lastS != $s || \
+                    $lastTx ne $txId || $lastFrm ne $frm)) { \
+                 if (defined $refRow) { \
+                   $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
+                   $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
+                 } \
+                 $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                       "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
+                 $lineOut =~ s@NULL@n/a@g; \
+                 print $lineOut; \
+                 $refRow = undef;  @rows = ();  ($count, $fxns, $nts, $codons, $aas) = (); \
+               } \
+               ($lastRs, $lastCtg, $lastS, $lastE, $lastTx, $lastFrm) = \
+                   ($rsId, $ctg, $s, $e, $txId, $frm); \
+               $count++; \
+               if ($fxn == 8) { \
+                 $refRow = [$fxn, $nt, $aa, $codon]; \
+               } else { \
+                $fxns .= "$fxn,";  $nts .= "$nt,";  $aas .= "$aa,";  $codons .= "$codon,"; \
+               } \
+             } \
+             if (defined $refRow) { \
+               $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
+               $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
+             } \
+             $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                   "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
+             $lineOut =~ s@NULL@n/a@g; \
+             print $lineOut;' \
+     ncbiCodingAnnotations.txt \
+   | liftUp snp138CodingDbSnp.bed suggested.lft warn stdin
+   hgLoadBed mm10 snp138CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
+     -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
+     snp138CodingDbSnp.bed
+#Read 1025678 elements of size 11 from snp138CodingDbSnp.bed
+
+
+##############################################################################

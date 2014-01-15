@@ -106,6 +106,8 @@ buildAssembly NN_N
     ftp://ftp.ncbi.nih.gov/snp/database/organism_data/ , click into orgDir
     and look for file names like b(1[0-9][0-9])_*_([0-9]_[0-9]).bcp.gz .
     The first number is build; the second number_number is buildAssembly.
+    In dbSNP build 137 and later, they stopped including the buildAssembly
+    in filenames so you should include this keyword but leave it blank.
 
 -----------------------------------------------------------------------------
 Conditionally required config.ra settings:
@@ -132,10 +134,12 @@ refAssemblyLabel XXXXX
 
 
 2. Required when we need to liftUp NCBI's contigs to chroms:
+   NOTE: This script may be able to construct these files for you, see
+   ncbiAssemblyReportFile below.
 
 liftUp FFFFF
-  - Absolute path to the liftUp file that maps NCBI's contig names to
-    UCSC chroms.
+  - Absolute path to the liftUp file that maps NCBI's RefSeq assembly contig
+    IDs to UCSC chroms.
 
 3. Required when ContigInfo (after filtering by refAssemblyLabel if specified)
    contains sequences that are not in UCSC's assembly (liftUp if specified,
@@ -163,6 +167,23 @@ ignoreDbSnpContigs REGEX
     *** distinct enough to never match other columns' values.
     *** If this is not the case, use ignoreDbSnpContigsFile
 
+3. Required when UCSC doesn't have the mapping of RefSeq assembly contigs to
+   GenBank assembly contigs:
+
+ncbiAssemblyReportFile GCF_000*.assembly.txt
+  - The NCBI Assembly file that contains mappings of GenBank assembly contigs
+    (that we use) to RefSeq assembly contigs (that dbSNP uses).  Usually the
+    sequences are identical, so the mapping is very straightforward.  However,
+    if the RefSeq folks alter a chromosome or contig, the mapping will have to
+    be deduced by you from NCBI Nucleotide sequence descriptions.
+    HOW TO find this file for your assembly:
+    1. Search in Entrez Assembly (http://www.ncbi.nlm.nih.gov/assembly/)
+       for the refAssemblyLabel value (see above)
+    2. Select the most recent matching assembly
+    3. Find the link labeled 'Download the full sequence report' and copy
+       its link address (URL)
+    4. Download that file and use its local path.
+
 " if ($detailed);
   print STDERR "\n";
   exit $status;
@@ -181,7 +202,8 @@ use vars qw/
 # Required config parameters:
 my ($db, $build, $buildAssembly, $orgDir);
 # Conditionally required config parameters:
-my ($refAssemblyLabel, $liftUp, $ignoreDbSnpContigsFile, $ignoreDbSnpContigs);
+my ($refAssemblyLabel, $liftUp, $ignoreDbSnpContigsFile, $ignoreDbSnpContigs,
+    $ncbiAssemblyReportFile);
 # Optional config param:
 my ($snpBase);
 # Other globals:
@@ -280,6 +302,7 @@ sub checkConfig {
   $liftUp = &optionalVar('liftUp', $config);
   $ignoreDbSnpContigsFile = &optionalVar('ignoreDbSnpContigsFile', $config);
   $ignoreDbSnpContigs = &optionalVar('ignoreDbSnpContigs', $config);
+  $ncbiAssemblyReportFile = &optionalVar('ncbiAssemblyReportFile', $config);
   if ($ignoreDbSnpContigs && $ignoreDbSnpContigsFile) {
     die "Error: Only one of {ignoreDbSnpContigs, ignoreDbSnpContigsFile} can be " .
         "passed in. Put all contig names to be ignored in ignoreDbSnpsContigsFile.";
@@ -396,7 +419,6 @@ sub translateSql {
     next unless /^\n*CREATE TABLE \[($tables)\]/;
     s/[\[\]]//g;  s/\nGO\n/;/;  s/smalldatetime/datetime/g;
     s/ON PRIMARY//g;  s/COLLATE//g;  s/Latin1_General_BIN//g;
-    s/IDENTITY (1, 1) NOT NULL /NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)/g;
     s/nvarchar/varchar/g;  s/set quoted/--set quoted/g;
     s/(image|varchar\s+\(\d+\))/BLOB/g;  s/tinyint/tinyint unsigned/g;
     s/ bit / tinyint unsigned /g;
@@ -411,7 +433,7 @@ sub translateSql {
 				   "sed -re 's/\r//g;' |");
   while (<$SQLIN>) {
     next unless /^CREATE TABLE \[$tables\]/;
-    s/[\[\]]//g;  s/\nGO\n/;\n/;  s/smalldatetime/datetime/g;
+    s/[\[\]]//g;  s/\nGO\n/;\n/;  s/smalldatetime/datetime/g; s/IDENTITY\(1,1\) //g;
     print $SQLOUT $_;
     $tableCount++;
   }
@@ -496,9 +518,108 @@ sub checkAssemblySpec {
 } # checkAssemblySpec
 
 
+sub tryToMakeLiftUpFromContigInfo {
+  # Create $liftUpFile and add an entry whenever a line of $ContigInfo (possibly grepping
+  # out lines we know we want to ignore) has sufficient info.  Make a list of lists to
+  # describe lines of ContigInfo for which there was not enough info.
+  # Return the count of entries written to $liftUpFile and the missing info list.
+  my ($liftUpFile, $runDir, $chromSizes, $grepOutLabels, $grepOutContigs) = @_;
+  my $ciPipe = "zcat $runDir/data/$ContigInfo.bcp.gz $grepOutLabels $grepOutContigs |";
+  my $CI = &HgAutomate::mustOpen($ciPipe);
+  my $LU = &HgAutomate::mustOpen(">$liftUpFile");
+  my @missingInfo = ();
+  my ($missingCount, $liftUpCount) = (0, 0);
+  while (<$CI>) {
+    my (undef, undef, $contig, undef, undef, $chr, $chromStart, $chromEnd) = split("\t");
+    if ($chromStart ne "") {
+      $chr = "chrM" if ($chr eq "MT");
+      if (! exists $chromSizes->{$chr}) {
+	if (exists $chromSizes->{"chr$chr"}) {
+	  $chr = "chr$chr";
+	} else {
+	  $chr = "no chr" if (! $chr);
+	  push @missingInfo, [ 'unrecognized newName', $contig, $chr ];
+	  $missingCount++;
+	  next;
+	}
+      }
+      my $oldSize = $chromEnd+1 - $chromStart;
+      my $newSize = $chromSizes->{$chr};
+      print $LU join("\t", $chromStart, $contig, $oldSize, $chr, $newSize) . "\n";
+      $liftUpCount++;
+    } else {
+      $chr = "no chr" if (! $chr);
+      push @missingInfo, [ 'no coords', $contig, $chr ];
+      $missingCount++;
+    }
+  }
+  close($CI);
+  close($LU);
+  return $liftUpCount, \@missingInfo;
+} # tryToMakeLiftUpFromContigInfo
+
+sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
+  # For missing contigs described in list-of-lists $missingInfo, try to find a mapping in
+  # $ncbiAssemblyReports from RefSeq assembly contig to GenBank assembly contig, and check
+  # $chromSizes to see if the GenBank assembly contig seems to be included.  For each
+  # mapping that we find, append it to $liftUpFile.
+  # Return count of new $liftUpFile entries and updated missing info list-of-lists.
+  my ($liftUpFile, $chromSizes, $missingInfoIn) = @_;
+  # Note we are appending to $liftUpFile, not overwriting:
+  my $LU = &HgAutomate::mustOpen(">>$liftUpFile");
+  my $liftUpCount = 0;
+  # Make a hash of missingInfoIn's contigs to entries:
+  my %missingContigs = ();
+  foreach my $i (@{$missingInfoIn}) {
+    my ($reason, $contig, $chr) = @{$i};
+    $missingContigs{$contig} = $i;
+  }
+  my @missingInfo = ();
+  my $NARF = &HgAutomate::mustOpen("$ncbiAssemblyReportFile");
+  while (<$NARF>) {
+    next if (/^#/);
+    my (undef, $seqRole, $chr, undef, $gbAcc, $hopefullyEqual, $refSeqAcc) = split("\t");
+    (my $rsaTrimmed = $refSeqAcc) =~ s/\.\d+$//;
+    (my $gbaTrimmed = $gbAcc) =~ s/\.\d+$//;
+    if (exists $missingContigs{$rsaTrimmed}) {
+      my $ucscName;
+      if ($chr eq "na") {
+	$ucscName = "chrUn_$gbaTrimmed";
+      } else {
+	$chr = "M" if ($chr eq "MT");
+	$chr = "chr$chr" unless ($chr =~ /^chr/);
+	$ucscName = join('_', $chr, $gbaTrimmed, 'random');
+      }
+      if (exists $chromSizes->{$ucscName}) {
+	if ($hopefullyEqual ne '=') {
+	  # Aw crud.  The RefSeq folks saw fit to tweak the GenBank assembly sequence.
+	  # Good luck, developer.
+	  warn("
+*** REFSEQ ASSEMBLY contig $refSeqAcc is not the same as GenBank assembly
+*** contig $gbAcc.  Look at the Entrez Assembly description of the assembly
+*** to see if it's possible to manually construct a liftUp entry.
+");
+	push @missingInfo, [ "REFSEQ TWEAKED ASSEMBLY", $rsaTrimmed, $chr ];
+	} else {
+	  # Yay!  We found a mapping.  Let this be the common case.
+	  my $size = $chromSizes->{$ucscName};
+	  print $LU join("\t", 0, $rsaTrimmed, $size, $ucscName, $size) . "\n";
+	  $liftUpCount++;
+	}
+      } else {
+	push @missingInfo, [ "$seqRole (no $ucscName in chrom.sizes)", $rsaTrimmed, $chr ];
+      }
+    } # else this contig is not in our missing list; ignore it.
+  }
+  close($LU);
+  close($NARF);
+  return $liftUpCount, \@missingInfo;
+} # tryToMakeLiftUpFromNcbiAssemblyReportFile
+
 sub tryToMakeLiftUp {
   # If it looks like we need a liftUp file, see if ContigInfo has enough info
-  # to make at least a partial one.
+  # to make at least a partial one.  Also, if config.ra includes ncbiAssemblyReportFile,
+  # then look in there for anything we can't find in ContigInfo.
   my ($runDir, $chromSizesFile, $grepOutLabels, $grepOutContigs) = @_;
   my $CS = &HgAutomate::mustOpen($chromSizesFile);
   my %chromSizes;
@@ -507,47 +628,42 @@ sub tryToMakeLiftUp {
     $chromSizes{$chr} = $size;
   }
   close($CS);
-  my $ciPipe = "zcat $runDir/data/$ContigInfo.bcp.gz $grepOutLabels $grepOutContigs |";
-  my $CI = &HgAutomate::mustOpen($ciPipe);
   my $liftUpFile = "$buildDir/$commonName/suggested.lft";
-  my $LU = &HgAutomate::mustOpen(">$liftUpFile");
-  my $noInfoSeqFile = "$buildDir/$commonName/cantLiftUpSeqNames.txt";
-  my $NI = &HgAutomate::mustOpen(">$noInfoSeqFile");
-  my ($noInfo, $gotInfo) = (0, 0);
-  while (<$CI>) {
-    my (undef, undef, $contig, undef, undef, $chr, $chromStart, $chromEnd) = split("\t");
-    if ($chromStart ne "") {
-      $chr = "chrM" if ($chr eq "MT");
-      if (! exists $chromSizes{$chr}) {
-	if (exists $chromSizes{"chr$chr"}) {
-	  $chr = "chr$chr";
-	} else {
-	  $chr = "no chr" if (! $chr);
-	  print $NI "unrecognized newName\t$contig\n$chr\n";
-	  $noInfo++;
-	  next;
-	}
-      }
-      my $oldSize = $chromEnd+1 - $chromStart;
-      my $newSize = $chromSizes{$chr};
-      print $LU join("\t", $chromStart, $contig, $oldSize, $chr, $newSize) . "\n";
-      $gotInfo++;
-    } else {
-      $chr = "no chr" if (! $chr);
-      print $NI "no coords\t$contig\t$chr\n";
-      $noInfo++;
-    }
-  }
-  close($CI);
-  close($LU);
-  close($NI);
+  # First see what we have in ContigInfo:
+  my ($liftUpCount, $missingInfo) =
+    &tryToMakeLiftUpFromContigInfo($liftUpFile, $runDir, \%chromSizes,
+				   $grepOutLabels, $grepOutContigs);
   my $message = "";
-  if ($gotInfo > 0) {
-    $message = "\n*** $ContigInfo has coords for $gotInfo sequences; these have been written to
+  if ($liftUpCount > 0) {
+    $message = "\n*** $ContigInfo has coords for $liftUpCount sequences; these have been written to
 *** $liftUpFile .\n";
-    if ($noInfo > 0) {
-      $message .= "*** $noInfo lines of $ContigInfo.bcp.gz either had no lift-coords
-*** or had unrecognized chrom names; see
+  }
+  my $missingCount = scalar(@{$missingInfo});
+  if ($missingCount > 0) {
+    # If we didn't find liftUp info for some contigs in ContigInfo, look in ncbiAssemblyReportFile
+    # if given:
+    if ($ncbiAssemblyReportFile) {
+      (my $thisLiftUpCount, $missingInfo) =
+	&tryToMakeLiftUpFromNcbiAssemblyReportFile($liftUpFile, \%chromSizes, $missingInfo);
+      if ($thisLiftUpCount > 0) {
+	$message .= "
+*** $ncbiAssemblyReportFile has mappings for $thisLiftUpCount sequences;
+*** these have been written to
+*** $liftUpFile .\n";
+      }
+    }
+    $missingCount = scalar(@{$missingInfo});
+    if ($missingCount > 0) {
+      # Write missing info to file.
+      my $noInfoSeqFile = "$buildDir/$commonName/cantLiftUpSeqNames.txt";
+      my $NI = &HgAutomate::mustOpen(">$noInfoSeqFile");
+      foreach my $i (@{$missingInfo}) {
+	print $NI join("\t", @{$i}) . "\n";
+      }
+      close($NI);
+      $message .= "
+*** $missingCount lines of $ContigInfo.bcp.gz contained contig names that
+*** could not be mapped to chrom.size via their GenBank contig mappings; see
 *** $noInfoSeqFile .\n";
     }
   }
@@ -588,15 +704,23 @@ sub checkSequenceNames {
     my $grepDesc = $refAssemblyLabel ? " (limited to $refAssemblyLabel)" : "";
     my $ucscSource = $liftUp ? $liftUp : $chromSizes;
     my $ContigInfoLiftUp = &tryToMakeLiftUp($runDir, $chromSizes, $grepOutLabels, $grepOutContigs);
-    die "
+    my $msg = "
 *** $ContigInfo$grepDesc has $badContigCount contig_acc values
 *** that are not in $ucscSource .
 *** They are listed in $runDir/dbSnpContigsNotInUcsc.txt
 $ContigInfoLiftUp
-*** You must account for those in $CONFIG, in the liftUp file
-*** and/or ignoreDbSnpContigsFile or the ignoreDbSnpContigs regex.
+*** You must account for all $badContigCount contig_acc values in $CONFIG,
+*** in the liftUp file and/or ignoreDbSnpContigsFile.
 *** Then run again with -continue=loadDbSnp .
 ";
+    if (! $ncbiAssemblyReportFile) {
+      $msg .= "
+*** NOTE: If you add the ncbiAssemblyReportFile setting to $CONFIG and
+***       run again with -continue=loadDbSnp, this script may be able to
+***       construct those files for you.
+";
+    }
+    die $msg;
   }
 } # checkSequenceNames
 
@@ -607,6 +731,11 @@ sub loadDbSnp {
   &translateSql();
   # Check for multiple reference assembly labels -- developer may need to exclude some.
   my @rejectLabels = &checkAssemblySpec();
+  my $runDir = "$buildDir/$commonName";
+  # If liftUp is a relative path, prepend $runDir/
+  $liftUp = "$runDir/$liftUp" if ($liftUp !~ /^\//);
+  # Likewise for $ignoreDbSnpContigsFile:
+  $ignoreDbSnpContigsFile = "$runDir/$ignoreDbSnpContigsFile" if ($ignoreDbSnpContigsFile !~ /^\//);
   # Prepare grep -v statements to exclude assembly labels or contigs if specified:
   my $grepOutLabels = @rejectLabels ? "| egrep -vw '(" . join('|', @rejectLabels) . ")' " : "";
   my $grepOutContigs = "";
@@ -615,7 +744,6 @@ sub loadDbSnp {
   } elsif ($ignoreDbSnpContigs) {
     $grepOutContigs = "| egrep -vw '$ignoreDbSnpContigs'";
   }
-  my $runDir = "$buildDir/$commonName";
 
   &checkSequenceNames($runDir, $grepOutLabels, $grepOutContigs);
 
@@ -987,6 +1115,8 @@ in $snpBase.";
 _EOF_
 		  );
   if ($liftUp) {
+    # If liftUp is a relative path, prepend $runDir/
+    $liftUp = "$runDir/$liftUp" if ($liftUp !~ /^\//);
     $bossScript->add(<<_EOF_
     | liftUp ucscNcbiSnp.bed \\
         $liftUp warn stdin
