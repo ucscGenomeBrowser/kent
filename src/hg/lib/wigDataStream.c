@@ -333,7 +333,7 @@ static void closeWibFile(struct wiggleDataStream *wds)
 {
 if (wds->wibFH > 0)
     udcFileClose(&wds->wibFH);
-wds->wibFH = -1;
+wds->wibFH = (struct udcFile*)-1;
 if (wds->wibFile)
     freez(&wds->wibFile);
 }
@@ -2259,7 +2259,7 @@ AllocVar(wdstream);
  */
 wdstream->isFile = FALSE;
 wdstream->useDataConstraint = FALSE;
-wdstream->wibFH = -1;
+wdstream->wibFH = (struct udcFile*)-1;
 wdstream->limit_0 = -1 * INFINITY;
 wdstream->limit_1 = INFINITY;
 wdstream->wigCmpSwitch = wigNoOp_e;
