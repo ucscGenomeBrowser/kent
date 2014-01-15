@@ -157,7 +157,7 @@ enum browserType cgiClientBrowser(char **browserQualifier, enum osType *clientOs
 // WARNING: The specifics of the HTTP_USER_AGENT vary widely.
 //          This has only been tested on a few cases.
 static enum browserType clientBrowser = btUnknown;
-static enum browserType clientOsType  = osUnknown;
+static enum browserType clientOsType  = (enum browserType)osUnknown;
 static char *clientBrowserExtra       = NULL;
 static char *clientOsExtra            = NULL;
 
@@ -206,25 +206,25 @@ if (clientBrowser == btUnknown)
         // Determine the OS
         if ((ptr = stringIn("Windows",userAgent)) != NULL)
             {
-            clientOsType = osWindows;
+            clientOsType = (enum browserType)osWindows;
             ptr += strlen("Windows ");
             clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
         else if ((ptr = stringIn("Linux",userAgent)) != NULL)
             {
-            clientOsType = osLinux;
+            clientOsType = (enum browserType)osLinux;
             ptr += strlen("Linux ");
             clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
         else if ((ptr = stringIn("Mac ",userAgent)) != NULL)
             {
-            clientOsType = osMac;
+            clientOsType = (enum browserType)osMac;
             ptr += strlen("Mac ");
             clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
         else
             {
-            clientOsType = osOther;
+            clientOsType = (enum browserType)osOther;
             }
         }
     }
@@ -236,7 +236,7 @@ if (browserQualifier != NULL)
         *browserQualifier = NULL;
     }
 if (clientOs != NULL)
-    *clientOs = clientOsType;
+    *clientOs = (enum osType)clientOsType;
 if (clientOsQualifier != NULL)
     {
     if (clientOsExtra != NULL)

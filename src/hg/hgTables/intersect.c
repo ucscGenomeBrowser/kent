@@ -366,7 +366,7 @@ static int countBasesOverlap(struct bed *bedItem, Bits *bits, boolean hasBlocks,
 int count = 0;
 int i;
 
-if (bedItem->chromStart < 0 || bedItem->chromEnd > chromSize)
+if (bedItem->chromEnd > chromSize)
     errAbort("Item out of range [0,%d): %s %s:%d-%d",
 	     chromSize, (bedItem->name ? bedItem->name : ""),
 	     bedItem->chrom, bedItem->chromStart, bedItem->chromEnd);

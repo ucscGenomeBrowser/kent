@@ -309,6 +309,28 @@ taxId   9606
 
     # add the files produced by the trackDb build to the source tree
 
+    # this path is fixed in the makeGenomeDb.pl for next time
+    # honor new convention for bbi location files:
+    cd /gbdb/hg38/bbi
+    mkdir gc5BaseBw
+    mv gc5Base.bw gc5BaseBw
+    cd gc5BaseBw
+    # before
+    hgsql -e 'select * from gc5BaseBw;' hg38
+# +---------------------------+
+# | fileName                  |
+# +---------------------------+
+# | /gbdb/hg38/bbi/gc5Base.bw |
+# +---------------------------+
+    # and fixed
+    hgBbiDbLink hg38 gc5BaseBw `pwd`/gc5Base.bw
+    hgsql -e 'select * from gc5BaseBw;' hg38
+# +-------------------------------------+
+# | fileName                            |
+# +-------------------------------------+
+# | /gbdb/hg38/bbi/gc5BaseBw/gc5Base.bw |
+# +-------------------------------------+
+
 #############################################################################
 ## RepeatMasker with CrossMatch - DONE - 2013-12-24,27 - Hiram
     mkdir /hive/data/genomes/hg38/bed/repeatMaskerCM
@@ -317,39 +339,89 @@ taxId   9606
     time doRepeatMasker.pl -stop=mask -bigClusterHub=ku \
        -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38 > mask.log 2>&1
     # real    3443m13.026s
+# RepeatMasker version June 20 2013 open-4.0.3
+# Search Engine: cross-match version 1.090518
+# RepeatMasker Database: 20130422
 
     # take the install script from this -debug run and alter it to load
     # the table into rmskCM
     time doRepeatMasker.pl -continue=install -stop=install -debug \
        -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38
     cat fb.hg38.rmskCM.txt
-    # 1669596200 bases of 3209286105 (52.024%) in intersection
-    # profile of repeat elements:
-#   1872398 rmskClass/SINE.tab
-#   1649477 rmskClass/LINE.tab
-#    782159 rmskClass/LTR.tab
-#    666064 rmskClass/Simple_repeat.tab
-#    538199 rmskClass/DNA.tab
-#     98841 rmskClass/Low_complexity.tab
-#      9923 rmskClass/Satellite.tab
-#      9413 rmskClass/Retroposon.tab
-#      7673 rmskClass/LTR?.tab
-#      4821 rmskClass/scRNA.tab
-#      4620 rmskClass/Unknown.tab
-#      4011 rmskClass/DNA?.tab
-#      1947 rmskClass/RC.tab
-#      1891 rmskClass/snRNA.tab
-#      1567 rmskClass/srpRNA.tab
-#      1122 rmskClass/RNA.tab
-#      1015 rmskClass/tRNA.tab
-#      1011 rmskClass/rRNA.tab
-#       633 rmskClass/RC?.tab
-#       558 rmskClass/SINE?.tab
-#   5657343 total
+    # 1586326530 bases of 3209286105 (49.429%) in intersection
 
-    # masked with trfMask:
-# 3209286105 bases (159970322 N's 3049315783 real 1377295959 upper 1672019824 lower) in 455 sequences in 1 files
-# %52.10 masked total, %54.83 masked real
+    # profile of repeat elements:
+#  1852545 rmskClass/SINE.tab
+#  1570523 rmskClass/LINE.tab
+#   748597 rmskClass/LTR.tab
+#   703682 rmskClass/Simple_repeat.tab
+#   499108 rmskClass/DNA.tab
+#   102856 rmskClass/Low_complexity.tab
+#     7962 rmskClass/Satellite.tab
+#     5750 rmskClass/Retroposon.tab
+#     5667 rmskClass/LTR?.tab
+#     5622 rmskClass/Unknown.tab
+#     4516 rmskClass/snRNA.tab
+#     3294 rmskClass/DNA?.tab
+#     2026 rmskClass/tRNA.tab
+#     1840 rmskClass/rRNA.tab
+#     1784 rmskClass/RC.tab
+#     1672 rmskClass/srpRNA.tab
+#     1420 rmskClass/scRNA.tab
+#      704 rmskClass/RNA.tab
+#      411 rmskClass/RC?.tab
+#       38 rmskClass/SINE?.tab
+
+    # using this RM result with trfMask for the final masked sequence
+    cd /hive/data/genomes/hg38
+    twoBitMask hg38.rmskCM.2bit -add bed/simpleRepeat/trfMask.bed hg38.2bit
+    twoBitToFa hg38.2bit stdout | faSize stdin > faSize.hg38.2bit.txt
+# 3209286105 bases (159970322 N's 3049315783 real 1460684798 upper 1588630985 lower) in 455 sequences in 1 files
+# %49.50 masked total, %52.10 masked real
+
+    featureBits -countGaps hg38 rmskCM '!rmskHmmer' -bed=crossMatchUnique.bed
+    # 24868153 bases of 3209286105 (0.775%) in intersection
+    hgLoadBed hg38 crossMatchUnique crossMatchUnique.bed
+    # Read 2352219 elements of size 4 from crossMatchUnique.bed
+
+#############################################################################
+## repeating RepeatMasker Blastn run (DONE - 2014-01-07 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/rmskBlastn
+    cd /hive/data/genomes/hg38/bed/rmskBlastn
+
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -useRMBlastn -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev \
+        -stop=mask -buildDir=`pwd` hg38 > mask.log
+    # real    203m33.670s
+
+# 3209286105 bases (159970322 N's 3049315783 real 1491207906 upper 1558107877 lower) in 455 sequences in 1 files
+# %48.55 masked total, %51.10 masked real
+
+    # install step with debug so the script can be altered to load into
+    # a specific rmskBlastn table:
+
+    $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -useRMBlastn -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev \
+        -continue=install -debug -buildDir=`pwd` hg38
+
+#############################################################################
+## repeating RepeatMasker cross-match run (DONE - 2014-01-07 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/rmskCM
+    cd /hive/data/genomes/hg38/bed/rmskCM
+
+    # missed recording stderr ....  forgot the 2>&1
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev \
+        -stop=mask -buildDir=`pwd` hg38 > mask.log
+    # real    1897m33.517s
+    # running from Tue Jan  7 16:10:33 PST 2014 thru 08 Jan 23:48
+#  *** All done!  (through the 'mask' step) - Elapsed time: 1897m34s
+#  *** Steps were performed in /hive/data/genomes/hg38/bed/rmskCM
+    # running install manually to allow edit of the script to load
+    # a specific rmskCm table
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev \
+        -continue=install -stop=install -buildDir=`pwd` hg38 -debug
 
 #############################################################################
 ## RepeatMasker with RM Blastn - DONE - 2013-12-24,25 - Hiram
@@ -390,7 +462,65 @@ taxId   9606
 #   5464329 total
 
 #############################################################################
-## RepeatMasker with HMMER - WORKING - 2013-12-24 - Hiram
+## repeating RepeatMasker run with HMMER - WORKING - 2014-01-08 - Hiram
+    mkdir /hive/data/genomes/hg38/bed/rmskHmmer
+    cd /hive/data/genomes/hg38/bed/rmskHmmer
+
+    # trying cpu=4 and ram=32g
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -stop=mask -useHMMER -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38 > mask.log 2>&1
+    # 6 jobs required more than 32 Gb of memory to complete, ran them on
+    # hgwdev to complete, then continuing:
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -continue=cat -stop=mask -useHMMER -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38 > cat.log 2>&1
+    #  real    24m5.274s
+# 3209286105 bases (159970322 N's 3049315783 real 1314916231 upper 1734399552 lower) in 455 sequences in 1 files
+# %54.04 masked total, %56.88 masked real
+
+    # running install manually to allow edit of the script to load
+    # a specific rmskHmmer table
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+      -continue=install -debug -useHMMER -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38
+
+    time ./doLoad_rmskHmmer.bash > load.log 2>&1
+    # real    4m47.432s
+
+    featureBits -countGaps hg38 rmskHmmer > fb.hg38.rmskHmmer.txt 2>&1
+    # 1734398971 bases of 3209286105 (54.043%) in intersection
+
+    grep rmskClass hg38.class.profile.txt \
+        | sed -e 's#rmskClass/##; s/.tab//;' | sort -rn
+    # profile of repeat elements:
+#  1884179 SINE
+#  1702529 LINE
+#   805427 LTR
+#   636906 Simple_repeat
+#   565171 DNA
+#    95480 Low_complexity
+#    11861 Retroposon
+#    10852 Satellite
+#     9181 LTR?
+#     6783 scRNA
+#     4582 DNA?
+#     3914 Unknown
+#     2059 RC
+#     1517 srpRNA
+#     1484 RNA
+#      970 SINE?
+#      806 RC?
+#      464 rRNA
+#  5744165 total
+
+    featureBits -countGaps hg38 rmskHmmer '!rmskCM' -bed=hmmerUnique.bed
+    # 172940594 bases of 3209286105 (5.389%) in intersection
+    hgLoadBed hg38 hmmerUnique hmmerUnique.bed
+    # Read 3099505 elements of size 4 from hmmerUnique.bed
+
+#############################################################################
+## RepeatMasker with HMMER - DONE - 2013-12-24,26 - Hiram
     mkdir /hive/data/genomes/hg38/bed/repeatMaskerHMMER
     cd /hive/data/genomes/hg38/bed/repeatMaskerHMMER
 
@@ -424,11 +554,6 @@ taxId   9606
 #       722 rmskClass/rRNA.tab
 #       468 rmskClass/tRNA.tab
 #   5705457 total
-
-    # using this RM result with trfMask for the final masked sequence
-    cd /hive/data/genomes/hg38
-    twoBitMask hg38.rmsk.2bit -add bed/simpleRepeat/trfMask.bed hg38.2bit
-    twoBitToFa hg38.2bit stdout | faSize stdin > faSize.hg38.2bit.txt
 
 #############################################################################
 # rmsk from genbank release (DONE - 2014-12-25 - Hiram)
@@ -911,10 +1036,10 @@ rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
 # standard deviation 81.743447
 
     # the four largest ones:
-# chr2         32916625        32917625        chr2.7
-# chr2         32867130        32868130        chr2.6
-# chr20        36314371        36314719        chr20.36
-# chr12       123443533       123443733        chr12.10
+# 1000 chr2         32916625        32917625        chr2.7
+# 1000 chr2         32867130        32868130        chr2.6
+#  348 chr20        36314371        36314719        chr20.36
+#  200 chr12       123443533       123443733        chr12.10
 
 #########################################################################
 # cytoBandIdeo - (DONE - 2013-12-26 - Hiram)
@@ -1159,21 +1284,131 @@ close (DR);
     time blat hg38.unmasked.2bit /dev/null /dev/null \
        -tileSize=11 -makeOoc=jkStuff/hg38.11.ooc -repMatch=1024
 
-    # just to see what is going on, since all gaps here are almost all
-    #	exactly 100 bases, they aren't really "non-bridged", not really.
+    # been confirmed, the 100-base non-bridged gaps are really non-bridged
     gapToLift -minGap=100 -bedFile=jkStuff/nonBridgedGaps.bed hg38 \
 	jkStuff/hg38.nonBridged.lft
 
 ##############################################################################
-# cpgIslands - (DONE - 2013-12-31 - Hiram)
+# cpgIslands - (DONE - 2014-01-07 - Hiram)
     # run on the Hmmer + trfMask sequence
     mkdir /hive/data/genomes/hg38/bed/cpgIslands
     cd /hive/data/genomes/hg38/bed/cpgIslands
-    time doCpgIslands.pl hg38 > do.log 2>&1 &
-    # real    5m22.460s
+    time $HOME/kent/src/hg/utils/automation/doCpgIslands.pl \
+      -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+        -workhorse=hgwdev -smallClusterHub=ku hg38 > do.log 2>&1
+    # real    3m31.684s
+    # wc -l cpgIsland.bed -> 30456 cpgIsland.bed
+    cat fb.hg38.cpgIslandExt.txt
+    #  23654068 bases of 3049335806 (0.776%) in intersection
+
+    # Previously in hg19:
+    featureBits -countGaps hg19 cpgIslandExt
+    # 21842742 bases of 3137161264 (0.696%) in intersection
+
+    # when run on Hmmer and Trf masked sequence:
+    # wc -l cpgIsland.bed -> 30416 cpgIsland.bed
+    #   23635946 bases of 3049335806 (0.775%) in intersection
+
+    # when run on unmasked sequence:
+    # wc -l cpgIsland.bed -> 55149 cpgIsland.bed
+    # 33637531 bases of 3049335806 (1.103%) in intersection
+##############################################################################
+# rerun cpgIslands on contig sequence (DONE - 2014-01-07 - Hiram)
+    # this is a test of the contig sequence file,
+    # should get a very similar answer to the above
+    mkdir /hive/data/genomes/hg38/bed/cpgIslandsContigs
+    cd /hive/data/genomes/hg38/bed/cpgIslandsContigs
+
+    # run stepwise so the lift can be done on the result before loading
+    time $HOME/kent/src/hg/utils/automation/doCpgIslands.pl \
+      -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -stop=makeBed -maskedSeq=/hive/data/genomes/hg38/hg38.contigs.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku hg38 > makeBed.log 2>&1
+    # real    9m31.502s
+    # fails on the bedToBigBed creation since this isn't the actual
+    # hg38 sequence.
+    mv cpgIsland.bed cpgIsland.beforeLift.bed
+    liftUp -type=.bed stdout ../../jkStuff/hg38.contigs.lift carry \
+      cpgIsland.beforeLift.bed | sort -k1,1 -k2,2n > cpgIsland.bed
+    bedToBigBed -tab -type=bed4+6 -as=$HOME/kent/src/hg/lib/cpgIslandExt.as \
+       cpgIsland.bed ../../chrom.sizes hg38.cpgIslandExt.bb
+    zcat ../cpgIslands/cpgIsland.bed.gz | sort -k1,1 -k2,2n > t.bed
+    # Surprisingly, a few more are detected, perhaps due to the different
+    # masking since this contig run is on the final corrected cross-match rmsk
+    # plus TRF, the above was on the corrupted HMMER+TRF mask:
+    wc -l cpgIsland.bed t.bed
+#   30477 cpgIsland.bed
+#   30456 t.bed
+    # 2,835 different items between the two:
+    sort t.bed cpgIsland.bed | uniq -c | awk '$1 < 2' | wc -l
+    # 2835
+    # 29.049 identical items
+    sort t.bed cpgIsland.bed | uniq -c | awk '$1 == 2' | wc -l
+    # 29049
+    cut -f1-3 cpgIsland.bed | sort > contigs.bed
+    cut -f1-3 t.bed | sort > fullSequence.bed
+    # 29,339 identical locations:
+    comm -12 contigs.bed fullSequence.bed | wc -l
+    # 29339
+
+    time $HOME/kent/src/hg/utils/automation/doCpgIslands.pl \
+      -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -continue=load -maskedSeq=/hive/data/genomes/hg38/hg38.contigs.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku hg38 > load.log 2>&1
+    # real    0m12.056s
 
     cat fb.hg38.cpgIslandExt.txt
-    #   23635946 bases of 3049335806 (0.775%) in intersection
+    # 23610399 bases of 3049335806 (0.774%) in intersection
+
+##############################################################################
+# rerun cpgIslands on contig UNMASKED sequence (DONE - 2014-01-07 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/cpgIslandsContigsUnmasked
+    cd /hive/data/genomes/hg38/bed/cpgIslandsContigsUnmasked
+
+    twoBitToFa -noMask ../../hg38.contigs.2bit stdout \
+      | faToTwoBit stdin hg38.contigsUnmasked.2bit
+
+    # verify sequence is OK:
+    twoBitToFa hg38.contigsUnmasked.2bit stdout | faSize stdin
+# 3061688741 bases (12372958 N's 3049315783 real 3049315783 upper 0 lower)
+#    in 733 sequences in 1 files
+# %0.00 masked total, %0.00 masked real
+    twoBitToFa hg38.contigsUnmasked.2bit stdout | faCount stdin | tail -1
+# total 3061688741 898285419 623727342 626335137 900967885  12372958 30979743
+    # ACGT CpG same as original hg38.2bit except for the missing N's:
+# total 3209286105 898285419 623727342 626335137 900967885 159970322 30979743
+
+    # run stepwise so the lift can be done on the result before loading
+    time $HOME/kent/src/hg/utils/automation/doCpgIslands.pl \
+      -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -stop=makeBed -maskedSeq=`pwd`/hg38.contigsUnmasked.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku hg38 > makeBed.log 2>&1
+    # real    11m0.690s
+    # as above, failed on the bedToBigBed step since this isn't the full hg38
+    # sequence
+    mv cpgIsland.bed cpgIsland.beforeLift.bed
+    liftUp -type=.bed stdout ../../jkStuff/hg38.contigs.lift carry \
+      cpgIsland.beforeLift.bed | sort -k1,1 -k2,2n > cpgIsland.bed
+    bedToBigBed -tab -type=bed4+6 -as=$HOME/kent/src/hg/lib/cpgIslandExt.as \
+       cpgIsland.bed ../../chrom.sizes hg38.cpgIslandExt.bb
+    # a lot more here that for masked sequence:
+    wc -l cpgIsland.bed ../cpgIslandsContigs/cpgIsland.bed
+    # 55149 cpgIsland.bed
+    # 30477 ../cpgIslandsContigs/cpgIsland.bed
+    featureBits -countGaps hg38 cpgIsland.bed
+    # 33637531 bases of 3209286105 (1.048%) in intersection
+    featureBits -countGaps hg38 ../cpgIslandsContigs/cpgIsland.bed
+    # 23610399 bases of 3209286105 (0.736%) in intersection
+
+    # debug load step so it can be loaded into a separate table:
+    $HOME/kent/src/hg/utils/automation/doCpgIslands.pl \
+      -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -debug -continue=load -maskedSeq=`pwd`/hg38.contigsUnmasked.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku hg38
+
+    time ./doLoadCpg.csh > load.log 2>&1
+    # real    0m2.179s
+    # 33637531 bases of 3049335806 (1.103%) in intersection
 
 #########################################################################
 # construct liftOver to hg19 (DONE - 2013-12-31 - Hiram)
@@ -1212,7 +1447,28 @@ close (DR);
     #  /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/liftOver/hg38ToHg19.over.chain.gz
 
 ############################################################################
-# marking the PAR regions:
+# marking the PAR regions: (DONE - 2014-01-09 - Hiram)
+    # after much experimentation with the AGP files and the given NCBI
+    # files in hg38/genbank/Primary_Assembly/pseudoautosomal_region
+    # the PAR region definitions can be seen in the par_align.gff file:
+# CM000685.2  10001  2781479  ->  CM000686.2 10001 2781479
+# CM000685.2  155701383  156030895 -> CM000686.2 56887903 57217415
+    # equivalent to:
+# chrX  10001  2781479  ->  chrY 10001 2781479
+# chrX  155701383  156030895 -> chrY 56887903 57217415
+
+    # subtract one for the chromStart position:
+    cat << '_EOF_' > hg38Par.bed4
+chrX 10000      2781479   PAR1
+chrX 155701382  156030895 PAR2
+chrY 10000      2781479   PAR1
+chrY 56887902   57217415  PAR2
+'_EOF_'
+    # << happy emacs
+
+    hgLoadBed hg38 par hg38Par.bed4
+    checkTableCoords  hg38
+
     # hg19 had:
 +-------+------------+-----------+------+
 | chrom | chromStart | chromEnd  | name |
@@ -1223,25 +1479,27 @@ close (DR);
 | chrY  |   59034049 |  59363566 | PAR2 |
 +-------+------------+-----------+------+
 
-    # examining the files in
-# /hive/data/genomes/hg38/genbank/Primary_Assembly/pseudoautosomal_region
-    # perhaps like this on chrY chrX;
-chrY  10000   2781479  length: 2771479 this one appears to be broken by gaps
+    # The AGP files come close to definining the location, but not
+    # precisely.  The first region uses different bits of AC006209.25:
+zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrX.comp.agp.gz\
+  | grep AC006209.25
+CM000685.2      2665048 2677319 56      F       AC006209.25     127483  139754 -
+CM000685.2      2677869 2804801 58      F       AC006209.25     1       126933 -
+zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrY.comp.agp.gz\
+  | grep AC006209.25
+CM000686.2      2665048 2677319 56      F       AC006209.25     127483  139754 -
+CM000686.2      2677869 2781479 58      F       AC006209.25     23323   126933 -
 
-# PAR2 section:
-chrY  56887902 57217415 length: 329513
-CM000686.2  56887903 57217415  24 F GL000190.2 1 329513  +
-CM000686.2  56887903 56906486 356 O AJ271735.1 69145   87728   +
+    # and the second region uses different bits of AJ271735.1:
+zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrX.comp.agp.gz\
+  | grep AJ271735.1 | head -1
+CM000685.2 155676925 155719966 3096  O AJ271735.1     44687    87728   +
+zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrY.comp.agp.gz\
+  | grep AJ271735.1 | head -1
+CM000686.2  56887903  56906486  356  O AJ271735.1     69145    87728   +
 
-chrX  155701382       156030895  length: 329513
-    # in the chrX AGP file, part of this contig:
-CM000685.2  144475607  156030895 18 F GL000172.2  1 11555289   +
-
-    # as seen in the chrY AGP file these two contigs:
-CM000686.2    10001  1949345 2       F       GL000176.2      1       1939345 +
-CM000686.2   1949346 2132994 3       N       183649  contig  no      na
-CM000686.2   2132995 2781479 4       F       GL000180.2      1       648485  +
-
+    # combining all the contig definitions from each will find all the
+    # exact identical contig bits:
 zcat ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/chrY.comp.agp.gz\
   | grep -v "^#" | awk '$5 != "N"' \
     | awk '{printf "%s_%d_%d\t%s\t%d\t%d\n", $6,$7,$8,$1,$2,$3}' \
@@ -1289,16 +1547,20 @@ sort ../../chrom.sizes | join -t'^I' - altToChr.tab \
    # 170113652 bases of 3209286105 (5.301%) in intersection
 
 ############################################################################
-## genscan (DONE - 2014-01-03 - Hiram)
-   # this was tried, but had trouble:
+## genscan (DONE - 2014-01-07 - Hiram)
    mkdir /hive/data/genomes/hg38/bed/genscan
    cd /hive/data/genomes/hg38/bed/genscan
 
-   doGenscan.pl hg38 -buildDir=`pwd` \
- -maskedSeq=/hive/data/genomes/hg38/bed/repeatMaskerHMMER/hg38.rmskHmmer.trf.2bit \
-   -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev -stop=makeBed \
-      > makeBed.log 2>&1
+   # using the contig sequence
+   # running stepwise to allow the lifting of the final result
+   time $HOME/kent/src/hg/utils/automation/doGenscan.pl hg38 -buildDir=`pwd` \
+     -maskedSeq=/hive/data/genomes/hg38/hg38.contigs.2bit \
+       -stop=makeBed -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        > do.log 2>&1
+XXX - running Mon Jan 13 13:33:20 PST 2014
 
+############################################################################
+## genscan on unmasked sequence experiment (DONE - 2013-12-03 - Hiram)
    ## instead, working on unmasked sequence:
    mkdir /hive/data/genomes/hg38/bed/genscan/unmaskedRun
    cd /hive/data/genomes/hg38/bed/genscan/unmaskedRun
@@ -1627,5 +1889,258 @@ do
   ./pepNameFix.pl $C > nameFixed/pep/$C.pep
 done
 
+#############################################################################
+# Mark the new centromere regions (DONE - 2014-01-09 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/centromere
+    cd /hive/data/genomes/hg38/bed/centromere
+    grep GJ ../../hg38.agp > hg38.centContigs.agp
+
+    awk '{printf "%s\t%d\t%d\t%s\n", $1, $2-1, $3, $6}' hg38.centContigs.agp \
+      > hg38.centContigs.bed4
+
+    hgLoadBed hg38 centromeres hg38.centContigs.bed4
+    checkTableCoords hg38 centromeres
 
 #############################################################################
+## alternate sequence/haplotype alignments (WORKING - 2014-01-09 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzAltSequences
+    cd /hive/data/genomes/hg38/bed/lastzAltSequences
+
+rm -fr hg38.haplotypes.lift temp.lift targetFa queryFa
+mkdir targetFa
+mkdir queryFa
+touch temp.lift
+
+cat ../altLocations/chrToAlt.bed | while read L
+do
+  chrName=`echo $L | awk '{print $1}'`
+  chromSize=`egrep "^$chrName   " ../../chrom.sizes | cut -f2`
+  chrStart=`echo $L | awk '{if (($2-10000)>=0) {printf "%d", $2-10000} else {printf "0"}}'`
+  chrEnd=`echo $L | awk -v chromSize=$chromSize '{if (($3+10000)<=chromSize) {printf "%d", $3+10000} else {printf "%d", chromSize}}'`
+  chrSize=`echo $chrEnd $chrStart | awk '{print $1-$3}'`
+  queryName=`echo $L | awk '{print $4}'`
+  partName="${chrName}_${chrStart}_${chrEnd}"
+  echo $chrName $chrStart $chrEnd $queryName $partName $chromSize
+  echo -e "$chrStart\t${partName}\t$chrSize\t$chrName\t$chromSize" >> temp.lift
+  twoBitToFa ../../hg38.unmasked.2bit:$chrName:$chrStart-$chrEnd stdout | sed -e "s/^>.*/>$partName/;" > targetFa/$queryName.fa
+  twoBitToFa ../../hg38.unmasked.2bit:$queryName queryFa/$queryName.fa
+done
+
+sort -u temp.lift | sort -k4,4 -k1,1n > hg38.haplotypes.lift
+
+    # these were run serially on hgwdev, they could be a cluster run:
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/lastzAltSequences/run.blastz
+    cd /hive/data/genomes/hg38/bed/lastzAltSequences/run.blastz
+    mkdir ../lav ../psl
+
+    # construct the jobList
+    ls ../targetFa | sed -e 's/.fa//;' | while read partName
+do
+   echo "./runJob.sh ${partName}"
+done > jobList
+
+    cat << '_EOF_' > runJob
+#!/bin/sh
+
+export partName=$1
+export target="../targetFa/$partName.fa"
+export query="../queryFa/$partName.fa"
+export lav="../lav/$partName.lav"
+export psl="../psl/$partName.psl"
+
+/cluster/bin/penn/lastz-distrib-1.03.46/bin/lastz \
+  $target $query \
+  Y=15000 T=2 M=254 O=600 H=2000 O=600 E=150 K=10000 L=10000 \
+  Q=/scratch/data/blastz/human_chimp.v2.q > $lav
+lavToPsl $lav stdout | liftUp $psl ../hg38.haplotypes.lift error stdin
+'_EOF_'
+    # << happy emacs
+
+    # these were run serially on hgwdev, they could be a cluster run:
+    time ./jobList > do.log
+    # real    61m35.898s
+
+    # chaining lastz results:
+    mkdir -p /hive/data/genomes/hg38/bed/lastzAltSequences/axtChain/run/chain
+    cd /hive/data/genomes/hg38/bed/lastzAltSequences/axtChain/run
+
+    ls ../../psl/*.psl | while read P
+do
+  B=`basename $P | sed -e 's/.psl//'`
+  echo $B $P
+  ls -og $P ../../targetFa/${B}.fa ../../queryFa/${B}.fa
+  /cluster/home/hiram/kent/src/hg/mouseStuff/axtChain/axtChain \
+    -psl -scoreScheme=/scratch/data/blastz/human_chimp.v2.q \
+    -minScore=1000 -linearGap=medium $P \
+    ../../../../hg38.unmasked.2bit \
+    ../../../../hg38.unmasked.2bit stdout \
+  | chainAntiRepeat ../../../../hg38.unmasked.2bit \
+    ../../../../hg38.unmasked.2bit stdin chain/${B}.chain
+done
+
+   # real    7m54.677s
+
+   cd /hive/data/genomes/hg38/bed/lastzAltSequences/axtChain
+   find ./run/chain -name "*.chain" | chainMergeSort -inputList=stdin \
+       | nice gzip -c > hg38.haplotypes.all.chain.gz
+   chainPreNet  hg38.haplotypes.all.chain.gz ../../../chrom.sizes \
+     /hive/data/genomes/hg38/chrom.sizes stdout \
+       | chainNet  stdin -minSpace=1 ../../../chrom.sizes \
+          ../../../chrom.sizes stdout /dev/null \
+             | netSyntenic stdin noClass.net
+
+    # Make liftOver chains from chroms to alternates:
+    netChainSubset -verbose=0 noClass.net hg38.haplotypes.all.chain.gz stdout \
+      | chainStitchId stdin stdout | gzip -c > hg38.haplotypes.over.chain.gz
+    # swap the alignments to get the alternates to chrom mappings:
+    chainSwap hg38.haplotypes.over.chain.gz stdout \
+       | gzip -c > hg38.reference.over.chain.gz
+    # and put them all together so mappings go both directions
+    chainMergeSort hg38.haplotypes.over.chain.gz hg38.reference.over.chain.gz \
+        | gzip -c > hg38.haploReference.over.chain.gz
+
+    hgLoadChain -tIndex hg38 chainAltSequence hg38.haploReference.over.chain.gz
+    netClass -verbose=0 -noAr noClass.net hg38 hg38 hg38.hg38AltSequence.net
+    netFilter -minGap=10 hg38.hg38AltSequence.net \
+      | hgLoadNet -verbose=0 hg38 netAltSequence stdin
+
+    chainToPsl hg38.haploReference.over.chain.gz ../../../chrom.sizes \
+      ../../../chrom.sizes \
+        /hive/data/genomes/hg38/hg38.unmasked.2bit  \
+          /hive/data/genomes/hg38/hg38.unmasked.2bit  \
+             hg38.beforeRecalc.haploReference.over.psl
+
+    pslCheck -targetSizes=../../../chrom.sizes \
+        -querySizes=../../../chrom.sizes \
+    hg38.beforeRecalc.haploReference.over.psl 2>&1 | tail -1
+    # checked: 3092 failed: 57 errors: 57
+
+    pslRecalcMatch hg38.beforeRecalc.haploReference.over.psl \
+    ../../../hg38.unmasked.2bit ../../../hg38.unmasked.2bit  \
+        hg38.haploReference.over.psl
+
+    pslCheck -targetSizes=../../../chrom.sizes \
+      -querySizes=../../../chrom.sizes \
+         hg38.haploReference.over.psl 2>&1 | tail -1
+    # checked: 3092 failed: 0 errors: 0
+
+    hgLoadPsl hg38 -table=altSequenceLiftOver hg38.haploReference.over.psl
+
+#############################################################################
+## construct non-bridged contig sequence (DONE - 2014-01-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/nonBridgedContigs
+    cd /hive/data/genomes/hg38/bed/nonBridgedContigs
+
+    # only need the actual split chroms in this lift, and the
+    # _nn name is a bit more convenient than the .nn:
+    gapToLift -minGap=100 hg38 stdout | sed -e 's/\./_/;' \
+        | awk '$1 != 0' > hg38.contigs.lift
+    # the warnings gapToLift issues are about gaps defined in the table
+    # that are abutting to each other.  teleomere gaps are next to contig gaps
+    # those lifts in the format of a bed file:
+    awk '{printf "%s\t%d\t%d\t%s\n", $4, $1, $1+$3, $2}' hg38.contigs.lift \
+        > hg38.contigs.bed
+    # the negation of that is the gaps between the contigs
+    #  fixup the .N to _nn with the awk:
+    featureBits -not -countGaps hg38 hg38.contigs.bed -bed=stdout \
+| awk '{split($4,a,"."); printf "%s\t%d\t%d\t%s_%02d\n", $1,$2,$3,a[1],a[2]}' \
+             > hg38.gaps.bed
+    # 268613637 bases of 3209286105 (8.370%) in intersection
+
+    # together, those two should be %100 of the genome exactly:
+    featureBits -countGaps -or hg38 hg38.contigs.bed hg38.gaps.bed
+    #  3209286105 bases of 3209286105 (100.000%) in intersection
+
+    # the list of all those other bits not in the split chroms:
+    egrep "_alt|chrUn|chrM|_random" hg38.gaps.bed | cut -f1 \
+       | sort > other.bits.list
+
+    # extract those chrom pieces and the other bits from the masked sequence:
+    (twoBitToFa -bed=hg38.contigs.bed ../../hg38.2bit stdout; \
+      twoBitToFa -seqList=other.bits.list ../../hg38.2bit stdout) \
+        | faToTwoBit stdin hg38.contigs.2bit
+    twoBitInfo hg38.contigs.2bit stdout | sort -k2nr > hg38.contigs.chrom.sizes
+    # verify nothing has been lost:
+    twoBitToFa ../../hg38.2bit stdout | faCount stdin | tail -1
+# total 3209286105 898285419 623727342 626335137 900967885 159970322 30979743
+    twoBitToFa hg38.contigs.2bit stdout | faCount stdin | tail -1
+# total 3061688741 898285419 623727342 626335137 900967885  12372958 30979743
+    # the ACGT and CPG counts remain the same, only N's have been lost
+
+    # make a copy of this at the top:
+    cp -p hg38.contigs.2bit ../..
+    cp -p hg38.contigs.lift ../../jkStuff
+
+#############################################################################
+## analysis of repeat elements from each RM run
+## (DONE - 2014-01-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/repeatElementCount
+    cd /hive/data/genomes/hg38/bed/repeatElementCount
+    for F in ../rmsk*/hg38.class.profile.txt \
+          ../repeatMaskerGenbank/hg38.class.profile.txt
+do
+   D=`dirname $F`
+   B=`basename $D | sed -e 's/repeatMaskerGenbank/NCBI/; s/rmsk//;'`
+   echo "==== $B ===="
+   grep rmskClass $F | sed -e 's#rmskClass/##; s/.tab//;' \
+     | awk '{printf "%s\t%d\n", $2, $1}' | sort > ${B}.tab
+done
+
+   # Hmmer does not have snRNA and tRNA ?
+   echo -e "snRNA\t0" >> Hmmer.tab
+   echo -e "tRNA\t0" >> Hmmer.tab
+   sort Hmmer.tab > t.tab
+   mv t.tab Hmmer.tab
+
+   echo "#  Repeat Masker item counts" > table.result.txt
+   echo "#  class         NCBI cross-match rmblastn HMMER" >> table.result.txt
+   join NCBI.tab CM.tab  | join - Blastn.tab  | join - Hmmer.tab \
+     | awk '{printf "%-15s\t%7d\t%7d\t%7d\t%7d\n", $1,$2,$3,$4,$5}' \
+       | sort -k2,2nr >> table.result.txt
+
+   cat table.result.txt
+#  Repeat Masker item counts
+#  class         NCBI cross-match rmblastn HMMER
+SINE            1849444 1852545 1822406 1884179
+LINE            1586141 1570523 1551012 1702529
+LTR              759248  748597  737799  805427
+DNA              502186  499108  485558  565171
+Simple_repeat    433789  703682  716968  636906
+Low_complexity   396378  102856  105181   95480
+Satellite         10198    7962    7703   10852
+LTR?               5884    5667    5068    9181
+snRNA              4595    4516    4548       0
+Retroposon         4163    5750    5630   11861
+Unknown            2802    5622    5263    3914
+DNA?               2157    3294    3018    4582
+tRNA               2154    2026    1983       0
+rRNA               1915    1840    1810     464
+RC                 1860    1784    1706    2059
+srpRNA             1784    1672    1633    1517
+scRNA              1397    1420    1426    6783
+RNA                 822     704     611    1484
+SINE?               488      38      38     970
+RC?                 445     411     374     806
+
+total           5567850 5520017 5459735 5744165
+
+#############################################################################
+## blat server turned on (DONE - 2014-01-13 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hg38", "blat4c", "17780", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hg38", "blat4c", "17781", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to ABO gene (DONE - 2014-01-13 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr9:133247948-133269889"
+	where name="hg38";' hgcentraltest
+
+############################################################################

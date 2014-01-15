@@ -1417,7 +1417,7 @@ if(chain != NULL)
     if(subChain != NULL)
 	{
 	qChainRangePlusStrand(subChain, &qs, &qe);
-	if ((subChain->qStrand == '-'))
+	if (subChain->qStrand == '-')
 	    reverse = TRUE;
 	if(reverse)
 	    { 

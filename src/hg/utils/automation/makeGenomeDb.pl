@@ -846,23 +846,24 @@ _EOF_
   $bossScript->add(<<_EOF_
 
 # Load gc5base
-mkdir -p $HgAutomate::gbdb/$db/bbi
-rm -f $HgAutomate::gbdb/$db/bbi/gc5Base.bw
-ln -s $bedDir/gc5Base/$db.gc5Base.bw $HgAutomate::gbdb/$db/bbi/gc5Base.bw
+mkdir -p $HgAutomate::gbdb/$db/bbi/gc5BaseBw
+rm -f $HgAutomate::gbdb/$db/bbi/gc5BaseBw/gc5Base.bw
+ln -s $bedDir/gc5Base/$db.gc5Base.bw $HgAutomate::gbdb/$db/bbi/gc5BaseBw/gc5Base.bw
 hgsql $db -e 'drop table if exists gc5BaseBw; \\
             create table gc5BaseBw (fileName varchar(255) not null); \\
-            insert into gc5BaseBw values ("$HgAutomate::gbdb/$db/bbi/gc5Base.bw");'
+            insert into gc5BaseBw values ("$HgAutomate::gbdb/$db/bbi/gc5BaseBw/gc5Base.bw");'
 _EOF_
   );
   if (defined $qualFiles) {
     $bossScript->add(<<_EOF_
 
 # Load qual
-rm -f $HgAutomate::gbdb/$db/bbi/quality.bw
-ln -s $bedDir/qual/$db.quality.bw $HgAutomate::gbdb/$db/bbi/quality.bw
+mkdir -p $HgAutomate::gbdb/$db/bbi/qualityBw
+rm -f $HgAutomate::gbdb/$db/bbi/qualityBw/quality.bw
+ln -s $bedDir/qual/$db.quality.bw $HgAutomate::gbdb/$db/bbi/qualityBw/quality.bw
 hgsql $db -e 'drop table if exists qualityBw; \\
             create table qualityBw (fileName varchar(255) not null); \\
-            insert into qualityBw values ("$HgAutomate::gbdb/$db/bbi/quality.bw");'
+            insert into qualityBw values ("$HgAutomate::gbdb/$db/bbi/qualityBw/quality.bw");'
 _EOF_
     );
   }

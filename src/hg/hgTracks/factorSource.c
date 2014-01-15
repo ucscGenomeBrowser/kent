@@ -64,7 +64,7 @@ if (sqlTableExists(conn, motifTable))
             {
             char *target = row[0];
             char *motif = row[1];
-            if (target[0] != 0);
+            if (target[0] != 0)
                 hashAdd(targetHash, cloneString(target), cloneString(motif));
             }
         sqlFreeResult(&sr);

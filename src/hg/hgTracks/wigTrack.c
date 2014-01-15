@@ -1244,7 +1244,7 @@ overallRange = overallUpperLimit - overallLowerLimit;
  * in the given range are the same.  We create a bottom of the scale  
  * by subtracting one from the only value.
  * This results in drawing a box that fills the range. */
-if ((graphUpperLimit == graphLowerLimit))
+if (graphUpperLimit == graphLowerLimit)
     {
     graphRange = 1.0;
     graphLowerLimit = graphUpperLimit - 1;
@@ -1261,7 +1261,7 @@ drawZeroLine(vis, wigCart->horizontalGrid,
     graphUpperLimit, graphLowerLimit,
     hvg, xOff, yOff, width, tg->lineHeight);
 
-drawArbitraryYLine(vis, wigCart->yLineOnOff,
+drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
     graphUpperLimit, graphLowerLimit,
     hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
     wigCart->yLineOnOff);
@@ -1635,8 +1635,8 @@ wigFetchMinMaxPixelsWithCart(cart,tdb,tdb->track, &minHeight, &maxHeight, &defau
 wigFetchYLineMarkValueWithCart(cart,tdb,tdb->track, &yLineMark);
 wigCart->yLineMark = yLineMark;
 wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,tdb->track, (char **) NULL);
-wigCart->alwaysZero = wigFetchAlwaysZeroWithCart(cart,tdb,tdb->track, (char **) NULL);
-wigCart->transformFunc = wigFetchTransformFuncWithCart(cart,tdb,tdb->track, (char **) NULL);
+wigCart->alwaysZero = (enum wiggleAlwaysZeroEnum)wigFetchAlwaysZeroWithCart(cart,tdb,tdb->track, (char **) NULL);
+wigCart->transformFunc = (enum wiggleTransformFuncEnum)wigFetchTransformFuncWithCart(cart,tdb,tdb->track, (char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;

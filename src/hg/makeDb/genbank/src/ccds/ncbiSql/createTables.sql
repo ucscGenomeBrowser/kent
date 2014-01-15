@@ -260,3 +260,16 @@ CREATE TABLE [dbo].[ProspectiveStatusVals] (
 ) ON [PRIMARY]
 go
 
+CREATE TABLE [dbo].[SwissProtMatches] (
+        [prot_acc] [varchar] (64) COLLATE Latin1_General_BIN NOT NULL ,
+        [prot_version] [int] NOT NULL ,
+        [swiss_prot_acc] [varchar] (64) COLLATE Latin1_General_BIN NOT NULL ,
+        [swiss_prot_acc_iso] [varchar] (64) COLLATE Latin1_General_BIN NOT NULL ,
+        [prot_length] [int] NOT NULL ,
+        [swiss_prot_length] [int] NOT NULL ,
+        [identity_pct] [float] NOT NULL ,
+        [mismatch_count] [int] NOT NULL ,
+        [gap_count] [int] NOT NULL ,
+) ON [PRIMARY]
+go
+

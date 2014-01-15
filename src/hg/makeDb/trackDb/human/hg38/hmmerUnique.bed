@@ -1,0 +1,12 @@
+<H2>Description</H2>
+<P>
+Elements in the HMMER Repeat Masker track that are not
+in the cross-match Repeat Masker track.  Created from:
+<pre>
+featureBits -countGaps hg38 rmskHmmer '!rmskCM' -bed=hmmerUnique.bed
+  # 172940594 bases of 3209286105 (5.389%) in intersection
+hgLoadBed hg38 hmmerUnique hmmerUnique.bed
+  # Read 3099505 elements of size 4 from hmmerUnique.bed
+</pre>
+</P>
+
