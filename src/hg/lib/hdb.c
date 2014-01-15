@@ -3039,6 +3039,7 @@ if (hash == NULL)
     }
 if ((hti = hashFindVal(hash, rootName)) == NULL)
     {
+    safecpy(fullName, sizeof(fullName), rootName);
     if ((sameString(rootName, "mrna") && sqlTableExists(conn, "all_mrna")) ||
 	(sameString(rootName, "est") && sqlTableExists(conn, "all_est")))
 	{
@@ -3053,7 +3054,6 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
             // This avoids many useless chrX_table lookups
             // (today, very few assemblies have split tables)
             isSplit = TRUE;
-            safef(fullName, sizeof(fullName), "%s", rootName);
             if (sqlTableExists(conn, fullName))
                 isSplit = FALSE;
             else
