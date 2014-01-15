@@ -129,7 +129,6 @@ tg->heightPer -= 11;
 tg->lineHeight -= 11;
 lineHeight = tg->lineHeight;
 heightPer = tg->heightPer;
-yOff = yOff;
 
 /* Time to draw the bands. */
 hvGfxSetClip(hvg, xOff, yOff, width, tg->height);

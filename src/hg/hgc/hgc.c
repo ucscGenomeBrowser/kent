@@ -3439,9 +3439,9 @@ if (net->tNewR >= 0)
     printLabeledPercent(org, "new repeat bases", net->tOldR, tSize);
 if (net->qNewR >= 0)
     printLabeledPercent(otherOrg, "new repeat bases", net->qOldR, qSize);
-if (net->tEnd >= 0)
+if (net->tEnd >= net->tStart)
     printLabeledNumber(org, "size", net->tEnd - net->tStart);
-if (net->qEnd >= 0)
+if (net->qEnd >= net->qStart)
     printLabeledNumber(otherOrg, "size", net->qEnd - net->qStart);
 printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 netAlignFree(&net);

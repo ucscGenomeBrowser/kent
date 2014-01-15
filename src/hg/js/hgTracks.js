@@ -1019,7 +1019,7 @@ var dragReorder = {
         // Create array of tr holders to sort
         var ary = new Array();
         $(trs).each(function(ix) {  // using sortTable found in utils.js
-            ary.push(new sortTable.field($(this).attr('abbr'),false,this));
+            ary.push(new sortTable.field(parseInt($(this).attr('abbr')),false,this));
         });
 
         // Sort the array

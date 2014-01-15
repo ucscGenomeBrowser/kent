@@ -92,7 +92,7 @@ used as a ready reference.</P>
         &ndash; with examples
     <UL>
         <LI><A HREF="#group">Predefined major track groupings</A></LI>
-        <LI><A HREF="#superTrack">Supertracks (Folders or Containers)</A></LI>
+        <LI><A HREF="#superTrack">Supertracks (Folders)</A></LI>
         <LI><A HREF="#compositeTrack">Composite Tracks</A>
         <UL>
             <LI><A HREF="#subGroups">Subgroups</A></LI>
@@ -1181,11 +1181,22 @@ into sets and hierarchies</div>
 </div>
 <div class="borderGuard">
 
-<P>All tracks are
-organized into one of the major groupings.  However there are several
-more advanced hierarchical organizing options.  There is even an
-option to combine the data of multiple tables of remote data files
-into a single image.</P>
+<P>All tracks have to be assigned to one predefined track group ("Mapping and sequencing",
+"Genes", etc).<br>
+In addition, they can be organized into one of three 
+hierarchical containers, depending on how closely they are related:
+
+<ul>
+        <li>If the tracks share no specific configuration and you mostly want
+        to show them together (e.g. a mix of bam, bigWig and bigBed), use the
+        "superTrack" container.</li>
+
+        <li>If the tracks are expected to be configured together (e.g. they are all bigBeds with the same score Filter option), use the "composite" container</li>
+
+        <li>If the tracks are all in signal (wiggle or bigWig) format and it makes sense to
+        overlay them, use the "multiWig" container</li>
+</ul>
+
 
 <A name="group"></A>
 <TABLE class="settingsTable" id="Predefined_Group_Setting">
@@ -1206,7 +1217,7 @@ into a single image.</P>
 <TABLE class="settingsTable" id="superTrack_-_Folder_Track_Settings">
 <THEAD><TR><TD><DIV ID="superTrack_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
-        &nbsp;Supertrack (Folders or Containers) track settings
+        &nbsp;Supertrack (Folders) track settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="superTrack"><IMG class='toggle detail'>
         <div class="format"><code>superTrack on</code></div>

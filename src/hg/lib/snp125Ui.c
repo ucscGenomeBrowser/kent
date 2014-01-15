@@ -716,7 +716,7 @@ if (version >= 132)
     }
 else
     {
-    if (cs < 0 || cs >= snp125ColorSourceArraySize)
+    if (cs >= snp125ColorSourceArraySize)
 	errAbort("Bad color source for build 131 or earlier (%d)", cs);
     return snp125ColorSourceLabels[cs];
     }

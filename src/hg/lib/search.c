@@ -16,6 +16,10 @@ void getSearchTrixFile(char *database, char *buf, int len)
 char *trixPath = cfgOptionDefault("browser.trixPath", "/gbdb/$db/trackDb.ix");
 struct subText *subList = subTextNew("$db", database);
 subTextStatic(subList, trixPath, buf, len);
+// rewrite the /gbdb-prefix
+char *subBuf = hCloneRewriteFileName(buf);
+memcpy(buf, subBuf, min(len, strlen(subBuf))+1);
+freez(&subBuf);
 }
 
 boolean isSearchTracksSupported(char *database, struct cart *cart)
@@ -23,7 +27,11 @@ boolean isSearchTracksSupported(char *database, struct cart *cart)
 {
 char trixFile[HDB_MAX_PATH_STRING];
 getSearchTrixFile(database, trixFile, sizeof(trixFile));
-return fileExists(trixFile);
+// always return true if trix file is remote
+if (udcIsLocal(trixFile))
+    return fileExists(trixFile);
+else
+    return TRUE;
 }
 
 struct slPair *fileFormatSearchWhiteList()

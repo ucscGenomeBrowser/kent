@@ -104,6 +104,9 @@ struct slName *sqlListTables(struct sqlConnection *conn);
 struct slName *sqlListFields(struct sqlConnection *conn, char *table);
 /* Return list of fields in table. */
 
+struct sqlResult *sqlDescribe(struct sqlConnection *conn, char *table);
+/* Run the sql DESCRIBE command or get a cached table description and return the sql result */
+
 void sqlAddDatabaseFields(char *database, struct hash *hash);
 /* Add fields from the one database to hash. */
 

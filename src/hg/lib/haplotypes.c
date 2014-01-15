@@ -89,6 +89,7 @@ lmCleanup(&lm);
 
 char *haplotypesDiscoverVcfFile(struct haploExtras *he, char *chrom)
 // Discovers, if necessary and returns the VCF File to use
+// This function changes the he->inFile attribute and returns it, too
 {
 if (he->conn == NULL)
     he->conn = hAllocConn(he->db);
@@ -98,7 +99,10 @@ if (he->vcfTrack != NULL)
     {
     struct trackDb *tdb = hTrackDbForTrackAndAncestors(he->db, he->vcfTrack);
     if (tdb != NULL)
-        he->inFile = bbiNameFromSettingOrTableChrom(tdb, he->conn, tdb->table, chrom);
+        {
+        char *vcfFileName = bbiNameFromSettingOrTableChrom(tdb, he->conn, tdb->table, chrom);
+        he->inFile = hCloneRewriteFileName(vcfFileName); // XX very small memory leak?
+        }
     }
 
 return he->inFile;

@@ -132,6 +132,17 @@ if ( $status ) then
     wait
     exit 1
 endif
+
+## copy binaries to beta machine:
+rsync -a -P --exclude=hg.conf --exclude=hg.conf.private \
+  /usr/local/apache/cgi-bin-beta/ qateam@hgwbeta:/data/apache/cgi-bin/
+rsync -a -P --exclude=hg.conf --exclude=hg.conf.private \
+  /usr/local/apache/htdocs-beta/ qateam@hgwbeta:/data/apache/htdocs/
+rsync -a -P --exclude=hg.conf --exclude=hg.conf.private --delete \
+  /usr/local/apache/htdocs-beta/js/ qateam@hgwbeta:/data/apache/htdocs/js/
+rsync -a -P --exclude=hg.conf --exclude=hg.conf.private --delete \
+  /usr/local/apache/htdocs-beta/style/ qateam@hgwbeta:/data/apache/htdocs/style/
+
 echo "build on beta done for v$BRANCHNN [${0}: `date`]"
 echo "v$BRANCHNN built successfully on beta (day 16)." | mail -s "v$BRANCHNN Build complete on beta (day 16)." $USER ${BUILDMEISTER} galt kent browser-qa
 

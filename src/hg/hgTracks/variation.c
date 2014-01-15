@@ -798,8 +798,8 @@ for (snp = tg->items;  snp != NULL;  snp = snp->next)
 	    for (i = 0;  i < wordCount;  i++)
 		{
 		enum snp125Color wordColor = hashIntVal(snp125FuncCartColorHash, words[i]);
-		if (snp125ColorCmpRaw(snp125ColorToMg(wordColor), "wordColor",
-				      snp125ColorToMg(color), "color") > 0)
+		if (snp125ColorCmpRaw(snp125ColorToMg((enum snpColorEnum)wordColor), "wordColor",
+				      snp125ColorToMg((enum snpColorEnum)color), "color") > 0)
 		    color = wordColor;
 		}
 	    }
@@ -822,8 +822,8 @@ for (snp = tg->items;  snp != NULL;  snp = snp->next)
 		    {
 		    valIx = stringArrayIx(words[i], snp132ExceptionVarName, snp132ExceptionArraySize);
 		    enum snp125Color wordColor = snp132ExceptionsCart[valIx];
-		    if (snp125ColorCmpRaw(snp125ColorToMg(wordColor), "wordColor",
-					  snp125ColorToMg(color), "color") > 0)
+		    if (snp125ColorCmpRaw(snp125ColorToMg((enum snpColorEnum)wordColor), "wordColor",
+					  snp125ColorToMg((enum snpColorEnum)color), "color") > 0)
 			color = wordColor;
 		    }
 		}
@@ -841,8 +841,8 @@ for (snp = tg->items;  snp != NULL;  snp = snp->next)
 		    {
 		    valIx = stringArrayIx(words[i], snp132BitfieldDataName, snp132BitfieldArraySize);
 		    enum snp125Color wordColor = snp132BitfieldsCart[valIx];
-		    if (snp125ColorCmpRaw(snp125ColorToMg(wordColor), "wordColor",
-					  snp125ColorToMg(color), "color") > 0)
+		    if (snp125ColorCmpRaw(snp125ColorToMg((enum snpColorEnum)wordColor), "wordColor",
+					  snp125ColorToMg((enum snpColorEnum)color), "color") > 0)
 			color = wordColor;
 		    }
 		}
@@ -853,7 +853,7 @@ for (snp = tg->items;  snp != NULL;  snp = snp->next)
 	    color = snp125ColorBlack;
 	    break;
 	}
-    snp->weight = snp125ColorToMg(color);
+    snp->weight = snp125ColorToMg((enum snpColorEnum)color);
     }
 }
 
