@@ -1,4 +1,4 @@
-table pubsBlatPsl
+table pubsBingBlatPsl
 "publications track sequence matches as PSL plus two additional fields"
     (
     int matches;          "Number of bases that match that aren't repeats"

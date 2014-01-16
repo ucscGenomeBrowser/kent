@@ -1,4 +1,4 @@
-table pubsSequenceAnnot
+table pubsBingSequenceAnnot
 "publications track sequence data table"
     (
     bigint articleId;     "identifier of the article where the sequence was found"

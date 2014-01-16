@@ -1,4 +1,4 @@
-table pubsBlat
+table pubsBingBlat
 "publications blat feature table, in bed12+ format, additional field seqIds and seqRanges"
     (
     string chrom;         "chromosome"
@@ -13,7 +13,7 @@ table pubsBlat
     int blockCount;       "number of blocks"
     lstring blockSizes;   "size of blocks"
     lstring chromStarts;  "A comma-separated list of block starts"
-    string tSeqTypes;     "comma-separated list of matching sequence db (g=genome, p=protein, c=cDNA)"
+    string tSeqTypes;     "comma-seq list of matching sequence db (g=genome, p=protein, c=cDNA)"
     lstring seqIds;       "comma-separated list of matching seqIds"
     lstring seqRanges;    "ranges start-end on sequence that matched, one for each seqId"
     string publisher;     "publisher of article, for hgTracks feature filter"
@@ -23,7 +23,7 @@ table pubsBlat
     string journal;       "name of journal"
     string title;         "title of article, for genome browser mouseover"
     string firstAuthor;   "first author family name of article, for genome browser"
-    string year;          "issn of journal for article, for genome browser"
+    string year;          "year of article, for genome browser"
     string impact;        "impact factor of journal, for genome browser coloring, derived from official impact factors: max impact is 25, value is scaled to 0-255"
     string classes;       "classes assigned to journal article, for genome browser coloring"
     string locus;         "closest gene symbols, one or two, comma-separated"
