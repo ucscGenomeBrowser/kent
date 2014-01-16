@@ -1,4 +1,4 @@
 kentSrc = ../../../..
-A = edwFinishAnalysis
-preMyLibs += ../lib/$(MACHTYPE)/edwlib.a -luuid
+A = eapFinish
+preMyLibs += ../../encodeDataWarehouse/lib/$(MACHTYPE)/edwlib.a -luuid
 include $(kentSrc)/inc/userApp.mk
