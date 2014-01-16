@@ -133,7 +133,10 @@ db->genome = cloneString(hubGenome->organism);
 db->organism = cloneString(hubGenome->organism);
 db->name = cloneString(hubGenome->name);
 db->active = TRUE;
-db->description = cloneString(hubGenome->description);
+if (hubGenome->description != NULL)
+    db->description = cloneString(hubGenome->description);
+else
+    db->description = cloneString("");
 char *orderKey = hashFindVal(hubGenome->settingsHash, "orderKey");
 if (orderKey != NULL)
     db->orderKey = sqlUnsigned(orderKey);
