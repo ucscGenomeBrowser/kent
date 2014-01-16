@@ -11,15 +11,23 @@
 #include "net.h"
 #include "log.h"
 #include "sqlNum.h"
-#include "encodeDataWarehouse.h"
-#include "edwLib.h"
+#include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
+#include "../../encodeDataWarehouse/inc/edwLib.h"
 #include "verbose.h"
 #include "../../../../parasol/inc/jobResult.h"
 #include "../../../../parasol/inc/paraMessage.h"
 
-pid_t childPid;
-char *clDatabase = "encodeDataWarehouse", *clTable = "edwAnalysisJob";
-char *paraHost = "ku";
+/* System variables - should be moved to shared library. */
+char *eapJobTable = "edwAnalysisJob";
+char *eapParaHost = "ku";
+char *eapParaQueues = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues";
+
+
+/* Variables set from command line */
+char *clDatabase = NULL;
+char *clTable = NULL;
+char *clParaHost = NULL;
+
 
 void usage()
 /* Explain usage and exit. */
@@ -39,7 +47,7 @@ errAbort(
   "        in errorMessage fields of database.\n"
   "   -logFacility - sends error messages and such to system log facility instead.\n"
   "   -paraHost - machine running parasol (paraHub in particular)\n"
-  , clDatabase, clTable
+  , edwDatabase, eapJobTable
   );
 }
 
@@ -53,9 +61,6 @@ static struct optionSpec options[] = {
    {"paraHost", OPTION_STRING},
    {NULL, 0},
 };
-
-// char *resultsQueue = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues/d/mid/results";
-char *resultsRootDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues";
 
 
 int cmpByParasolId(void *a, void *b)
@@ -123,7 +128,7 @@ long long ram = 8LL * 1024 * 1024 * 1024;
 struct dyString *cmd = dyStringNew(1024);
 dyStringPrintf(cmd, "addJob2 %s %s /dev/null /dev/null %s %f %lld %s",
     getUser(), getCurrentDir(), queue->fileName, (double)cpu, ram, job->commandLine);
-char *jobIdString = pmHubSingleLineQuery(cmd->string, paraHost);
+char *jobIdString = pmHubSingleLineQuery(cmd->string, clParaHost);
 verbose(1, "%s: %s\n", jobIdString, cmd->string);
 
 /* Check for sick batch result */
@@ -256,7 +261,7 @@ struct hash *parasolRunningHash()
 struct hash *runningHash = hashNew(0);
 char cmd[512];
 safef(cmd, sizeof(cmd), "pstat2 %s", getUser());
-struct slName *lineEl, *lineList = pmHubMultilineQuery(cmd, paraHost);
+struct slName *lineEl, *lineList = pmHubMultilineQuery(cmd, clParaHost);
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
     char *line = lineEl->name;
@@ -296,7 +301,7 @@ for (oldJob = oldJobList; oldJob != NULL; oldJob = oldJob->next)
     char commandName[PATH_LEN];
     getCommandName(oldJob, commandName, sizeof(commandName));
     char queueName[PATH_LEN];
-    safef(queueName, sizeof(queueName), "%s/%s/results", resultsRootDir, commandName);
+    safef(queueName, sizeof(queueName), "%s/%s/results", eapParaQueues, commandName);
     findOrCreateQueue(queueName, FALSE);
     rbTreeAdd(running, oldJob);
     }
@@ -344,7 +349,7 @@ for (;;)
 	char commandName[PATH_LEN];
 	getCommandName(job, commandName, sizeof(commandName));
 	char queueName[PATH_LEN];
-	safef(queueName, sizeof(queueName), "%s/%s/results", resultsRootDir, commandName);
+	safef(queueName, sizeof(queueName), "%s/%s/results", eapParaQueues, commandName);
 	struct resultsQueue *queue = findOrCreateQueue(queueName, TRUE);
 	sendToParasol(job, queue);
 	rbTreeAdd(running, job);
@@ -364,9 +369,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-paraHost = optionVal("paraHost", paraHost);
-clDatabase = optionVal("database", clDatabase);
-clTable = optionVal("table", clTable);
+clParaHost = optionVal("paraHost", eapParaHost);
+clDatabase = optionVal("database", edwDatabase);
+clTable = optionVal("table", eapJobTable);
 logDaemonize(argv[0]);
 if (optionExists("log"))
     verboseSetLogFile(optionVal("log", NULL));
