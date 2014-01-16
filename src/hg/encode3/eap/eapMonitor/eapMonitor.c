@@ -28,7 +28,8 @@ errAbort(
   "   info - information about configuration\n"
   "   chill - remove jobs that haven't started from job table, but keep running ones going\n"
   "   cull N - remove jobs that have been running more than N days\n"
-  "   err [id] print info about either most recent error or error of given id#\n"
+  "   err [parasolId] print info about either most recent error or error of given id#\n"
+  "   errFile [parasolId] print stderr from most recent error or error of given id#\n"
   "options:\n"
   "   -database=<mysql database> - default %s\n"
   "   -table=<msqyl table> - default %s\n"
@@ -51,6 +52,7 @@ struct results
     struct results *next;
     char *pathName; /* may include a few slashes with the file name */
     struct slName *lineList;	/* List of contents line by line. */
+    struct jobResult *jobList;	/* Beware not always set. */
     };
 
 void searchForResults(char *dir, struct results **retResults)
@@ -109,7 +111,7 @@ int printDaysOldJobs(struct sqlConnection *conn, int days)
 {
 int jobCount = countOldJobs(conn, days);
 if (jobCount > 0)
-    printf("Jobs %d day old:    %-4d\n", days, countOldJobs(conn, days));
+    printf("Jobs >%d day old:      %-4d\n", days, countOldJobs(conn, days));
 return jobCount;
 }
 
@@ -125,20 +127,12 @@ for (q = qList; q != NULL; q = q->next)
     ++qCount;
     finishedJobs += slCount(q->lineList);
     }
-printf("Jobs finished: %ld\n", finishedJobs);
-printf("Total batches: %d\n", qCount);
+// printf("Jobs finished: %ld\n", finishedJobs);
+printf("Analysis types:   %5d\n", qCount);
 
 struct sqlConnection *conn = edwConnect();
 char query[512];
-sqlSafef(query, sizeof(query), "select count(*) from %s", clTable);
-int tableCount = sqlQuickNum(conn, query);
-printf("DB Job count:      %d\n", tableCount);
-
-sqlSafef(query, sizeof(query), "select count(*) from %s where startTime>0", clTable);
-int dbJobsStarted = sqlQuickNum(conn, query);
-printf("DB Jobs started:   %d\n", dbJobsStarted);
-
-printf("Jobs 12 hours old: %-4d\n", countOldJobs(conn, 0.5));
+printf("Jobs >12 hours old: %3d\n", countOldJobs(conn, 0.5));
 printDaysOldJobs(conn, 1);
 printDaysOldJobs(conn, 2);
 printDaysOldJobs(conn, 3);
@@ -152,11 +146,11 @@ if (runningCount > 0)
     sqlSafef(query, sizeof(query), "select min(startTime) from %s where startTime>0 and endTime=0",
 	clTable);
     double oldestSeconds = edwNow() - sqlQuickNum(conn, query);
-    printf("Oldest job:        %-5.2f hours\n", oldestSeconds/(3600));
+    printf("Oldest job:       %5.2f hours\n", oldestSeconds/(3600));
     sqlSafef(query, sizeof(query), "select max(startTime) from %s where startTime>0 and endTime=0",
 	clTable);
     double youngestSeconds = edwNow() - sqlQuickNum(conn, query);
-    printf("Youngest job:      %-5.2f hours\n", youngestSeconds/(3600));
+    printf("Youngest job:     %5.2f hours\n", youngestSeconds/(3600));
     }
 
 sqlSafef(query, sizeof(query), "select count(*) from %s where startTime>0 and endTime=0", clTable);
@@ -171,9 +165,9 @@ sqlSafef(query, sizeof(query), "select count(*) from %s where returnCode != 0", 
 int dbJobsCrashed = sqlQuickNum(conn, query);
 printf("Jobs crashed:   %7d\n", dbJobsCrashed);
 
-sqlSafef(query, sizeof(query), "select max(startTime) from %s where returnCode != 0", clTable);
+sqlSafef(query, sizeof(query), "select max(endTime) from %s where returnCode != 0", clTable);
 long long lastCrashTime = sqlQuickLongLong(conn, query);
-printf("Last crash:     %5.2g hours ago\n", (double)(edwNow() - lastCrashTime)/3600);
+printf("Last crash:      %6.2g hours ago\n", (double)(edwNow() - lastCrashTime)/3600);
 
 sqlSafef(query, sizeof(query), "select count(*) from %s where endTime > 0", clTable);
 int dbJobsFinished = sqlQuickNum(conn, query);
@@ -223,6 +217,176 @@ printf("Jobs table:    %s\n", clTable);
 printf("Parasol host:  %s\n", clParaHost);
 }
 
+struct jobResult *linesToJobResults(struct slName *lineList)
+/* Convert from lines to jobResults without destroying lines. */
+{
+struct slName *line;
+struct jobResult *jobList = NULL, *job;
+for (line = lineList; line != NULL; line = line->next)
+    {
+    int bufLen = strlen(line->name)+1;
+    char buf[bufLen];
+    char *row[JOBRESULT_NUM_COLS];
+    memcpy(buf, line->name, bufLen);
+    int wordCount = chopLine(buf, row);
+    if  (wordCount != JOBRESULT_NUM_COLS)
+	internalErr();
+    job = jobResultLoad(row);
+    slAddHead(&jobList, job);
+    }
+slReverse(&jobList);
+return jobList;
+}
+
+struct jobResult *getRecentCrashed(struct jobResult *jobList, struct jobResult *bestSoFar)
+/* Return most recently crashed from list that is more recent than bestSoFar (which may be NULL) */
+{
+struct jobResult *job;
+for (job = jobList; job != NULL; job = job->next)
+    {
+    if (!WIFEXITED(job->status) || WEXITSTATUS(job->status) != 0)
+        {
+	if (bestSoFar == NULL)
+	    bestSoFar = job;
+	else
+	    {
+	    if (job->endTime > bestSoFar->endTime)
+	         bestSoFar = job;
+	    }
+	}
+    }
+return bestSoFar;
+}
+
+char *copyRemoteToTemp(char *host, char *file)
+/* Copy named file to our temp dir and return path to it.  Lazy routine
+ * does nothing to make sure you don't overwrite things in temp dir. */
+{
+char dir[PATH_LEN], root[PATH_LEN], ext[PATH_LEN];
+splitPath(file, dir, root, ext);
+char tempPath[PATH_LEN];
+safef(tempPath, sizeof(tempPath), "%s%s%s", eapTempDir, root, ext);
+char command[3*PATH_LEN];
+safef(command, sizeof(command), "scp %s:%s %s", host, file, tempPath);
+mustSystem(command);
+return cloneString(tempPath);
+}
+
+void printRemoteHeadTail(char *host, char *file, int headSize, int tailSize)
+/* Fetch remote file, print head and tail, and then remove it. */
+{
+char *tempFile = copyRemoteToTemp(host, file);
+struct slName *line, *lineList = readAllLines(tempFile);
+int lineCount = slCount(lineList);
+if (headSize + tailSize >= lineCount)
+    {
+    for (line = lineList; line != NULL; line = line->next)
+        puts(line->name);
+    }
+else
+    {
+    int lineIx = 0;
+    for (lineIx=0, line=lineList; lineIx < headSize;  ++lineIx, line = line->next)
+        {
+	puts(line->name);
+	}
+    int tailStart = lineCount - tailSize;
+    printf("  ..........................................................................\n");
+    for (;line != NULL; ++lineIx, line = line->next)
+        {
+	if (lineIx >= tailStart)
+	    puts(line->name);
+	}
+    }
+mustRemove(tempFile);
+}
+
+struct edwAnalysisJob *edwAnalysisJobFromParasolId(struct sqlConnection *conn, char *parasolId)
+/* Return job matching parasol ID if any. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from %s where parasolId='%s'",
+	clTable, parasolId);
+return edwAnalysisJobLoadByQuery(conn, query);
+}
+
+struct jobResult *findJobOnList(struct jobResult *list, char *parasolId)
+/* Return element on list matching parasolId, or NULL if none match. */
+{
+struct jobResult *job;
+for (job = list; job != NULL; job = job->next)
+    if (sameString(job->jobId, parasolId))
+        return job;
+return NULL;
+}
+
+struct jobResult *findCrashed(char *parasolId)
+/* Find job with given parasol ID or if parasolID is null, most recently crashed job */
+{
+struct results *q, *qList = NULL;
+struct jobResult *crashed = NULL;
+searchForResults(eapParaQueues, &qList);
+for (q = qList; q != NULL; q = q->next)
+    {
+    struct jobResult *jrList = q->jobList = linesToJobResults(q->lineList);
+    if (parasolId)
+        {
+	crashed = findJobOnList(jrList, parasolId);
+	if (crashed != NULL)
+	    break;
+	}
+    else
+	crashed = getRecentCrashed(jrList, crashed);
+    }
+return crashed;
+}
+
+void doErr(int argc, char **argv)
+/* Print error stats, and specific info on a recent error */
+{
+char *parasolId = NULL;
+if (argc > 1)
+    parasolId = argv[1];
+struct jobResult *crashed = findCrashed(parasolId);
+if (crashed != NULL)
+    {
+    struct sqlConnection *conn = sqlConnect(clDatabase);
+    struct edwAnalysisJob *job = edwAnalysisJobFromParasolId(conn, crashed->jobId);
+    if (job != NULL)
+	{
+	printf("Command line: %s\n", job->commandLine);
+	double timeAgo = edwNow() - crashed->endTime;
+	printf("Crash time: %6.2g hours ago\n", timeAgo/3600);
+	}
+    else
+        {
+	printf("Warning:  parasol job id %s not found in %s\n", crashed->jobId, clTable);
+	}
+    printf("Parasol ID:   %s\n", crashed->jobId);
+    printf("User ticks:   %d\n", crashed->usrTicks);
+    printf("System ticks: %d\n", crashed->sysTicks);
+    printf("Clock seconds: %d\n", crashed->endTime - crashed->startTime);
+    printf("Host:         %s\n", crashed->host);
+    printf("Status:       %5d\n", crashed->status);
+    printf("Stderr file:  %s\n", crashed->errFile);
+    printRemoteHeadTail(crashed->host, crashed->errFile, 5, 5);
+    }
+}
+
+void doErrFile(int argc, char **argv)
+/* Print out stderr file entirely */
+{
+char *parasolId = NULL;
+if (argc > 1)
+    parasolId = argv[1];
+struct jobResult *crashed = findCrashed(parasolId);
+if (crashed == NULL)
+    errAbort("No most recent error");
+char command[2*PATH_LEN];
+safef(command, sizeof(command), "scp %s:%s /dev/stdout", crashed->host, crashed->errFile);
+mustSystem(command);
+}
+
 
 void eapMonitor(char *command, int argc, char **argv)
 /* eapMonitor - Monitor jobs running through the pipeline.. */
@@ -248,7 +412,11 @@ else if (sameString(command, "info"))
     }
 else if (sameString(command, "err"))
     {
-    uglyAbort("Can't handle errors.");
+    doErr(argc, argv);
+    }
+else if (sameString(command, "errFile"))
+    {
+    doErrFile(argc, argv);
     }
 else
     {
