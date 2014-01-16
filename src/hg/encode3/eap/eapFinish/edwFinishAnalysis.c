@@ -7,8 +7,8 @@
 #include "options.h"
 #include "portable.h"
 #include "cheapcgi.h"
-#include "encodeDataWarehouse.h"
-#include "edwLib.h"
+#include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
+#include "../../encodeDataWarehouse/inc/edwLib.h"
 #include "encode3/encode3Valid.h"
 
 boolean noClean = FALSE;
