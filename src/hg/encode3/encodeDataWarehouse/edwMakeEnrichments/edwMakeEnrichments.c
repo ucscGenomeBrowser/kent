@@ -36,22 +36,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *enrichmentAssembly(char *assembly)
-/* Given name of assembly return name where we want to do enrichment calcs. */
-{
-/* If it ends with one of our common assembly suffix, then do enrichment calcs
- * in that space, rather than some subspace such as male, female, etc. */
-static char *specialAsm[] = {".hg19",".hg38",".mm9",".mm10"};
-int i;
-for (i=0; i<ArraySize(specialAsm); ++i)
-    {
-    char *special = specialAsm[i];
-    if (endsWith(assembly, special))
-        return special+1;
-    }
-return assembly;
-}
-
 struct target
 /* Information about a target */
     {
@@ -434,12 +418,13 @@ struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
 if (vf == NULL)
     return;	/* We can only work if have validFile table entry */
 
-if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown"))
+if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown") 
+    && !sameWord(vf->format, "unknown"))
     {
     /* Get our assembly */
     char *format = vf->format;
     char *ucscDb = vf->ucscDb;
-    char *targetName = enrichmentAssembly(ucscDb);
+    char *targetName = edwSimpleAssemblyName(ucscDb);
     struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, targetName);
 
     struct target *targetList = hashFindVal(assemblyToTarget, assembly->name);
@@ -479,6 +464,8 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown"))
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 	else if (sameString(format, "idat"))
 	    verbose(2, "Ignoring idat %s, in doEnrichments.", ef->edwFileName);
+	else if (sameString(format, "looseBed"))
+	    verbose(2, "Ignoring looseBed %s, in doEnrichments.", ef->edwFileName);
 	else if (sameString(format, "rcc"))
 	    verbose(2, "Ignoring rcc %s, in doEnrichments.", ef->edwFileName);
 	else if (sameString(format, "unknown"))
