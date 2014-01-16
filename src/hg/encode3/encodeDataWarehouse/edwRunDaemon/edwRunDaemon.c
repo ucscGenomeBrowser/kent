@@ -74,6 +74,12 @@ struct runner *runners;
 void finishRun(struct runner *run, int status)
 /* Finish up job. Copy results into database */
 {
+/* Clean up wait status so will show 0 for nice successful jobs */
+if (!WIFEXITED(status))
+    status = -1;
+else
+    status = WEXITSTATUS(status);
+
 /* Get job and fill in two easy fields. */
 struct edwJob *job = run->job;
 job->endTime = edwNow();
@@ -236,6 +242,8 @@ if (bytesReady > 0)
 void edwRunDaemon(char *database, char *table, char *countString, char *namedPipe)
 /* edwRunDaemon - Run jobs on multiple processers in background. . */
 {
+warn("Starting edwRunDaemon v2 on %s.%s with %s jobs synced on %s", 
+    database, table, countString,namedPipe);
 clDatabase = database;
 clTable = table;
 
