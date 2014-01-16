@@ -74,14 +74,17 @@ struct resultsQueue
     boolean believePos; /* Set to true if you actually trust position */
     };
 
-struct resultsQueue *resultsQueueNew(char *name)
+struct resultsQueue *resultsQueueNew(char *name, boolean seekToEnd)
 /* Return a new results queue */
 {
 struct resultsQueue *queue;
 AllocVar(queue);
 queue->fileName = cloneString(name);
 if (fileExists(queue->fileName))
-    queue->pos = fileSize(queue->fileName);
+    {
+    if (seekToEnd)
+	queue->pos = fileSize(queue->fileName);
+    }
 else
     {
     char dir[PATH_LEN],root[FILENAME_LEN],ext[FILEEXT_LEN];
@@ -95,7 +98,7 @@ return queue;
 
 struct resultsQueue *allQueues = NULL;
 
-struct resultsQueue *findOrCreateQueue(char *name)
+struct resultsQueue *findOrCreateQueue(char *name, boolean seekToEndOnNew)
 /* Find name in existing list of results queue or if it's not there make it. */
 {
 struct resultsQueue *queue;
@@ -104,7 +107,7 @@ for (queue = allQueues; queue != NULL; queue = queue->next)
     if (sameString(queue->fileName, name))
          return queue;
     }
-queue = resultsQueueNew(name);
+queue = resultsQueueNew(name, seekToEndOnNew);
 slAddHead(&allQueues, queue);
 return queue;
 }
@@ -181,6 +184,55 @@ sqlUpdate(conn, query);
 sqlDisconnect(&conn);
 }
 
+int finishJobsWithResults(struct rbTree *running, struct resultsQueue *queueList)
+/* Go through all results queues and look for jobs that are in our running container
+ * that have finished.  For these jobs transport results to database and remove them
+ * from container. Returns the number of finished jobs. */
+{
+int finishedCount = 0;
+struct resultsQueue *queue;
+for (queue = queueList; queue != NULL; queue = queue->next)
+    {
+    struct lineFile *lf = lineFileOpen(queue->fileName, TRUE);
+    lineFileSeek(lf, queue->pos, SEEK_SET);
+    for (;;)
+	{
+	char *line;
+	if (!lineFileNextReal(lf, &line))
+	    break;
+	char *row[JOBRESULT_NUM_COLS];
+	int wordsRead = chopByWhite(line, row, ArraySize(row));
+	if (wordsRead < ArraySize(row))
+	    {
+	    if (queue->believePos)
+		errAbort("%s seems screwed up, expecting %d words in line got %d", 
+		    lf->fileName, (int)ArraySize(row), wordsRead);
+	    else
+		{
+		continue;   // Forgive bad first line in case initial position, based on file size
+			    // is not at an even line boundary.
+		}
+	    }
+	queue->believePos = TRUE;
+	struct jobResult *jr;
+	jr = jobResultLoad(row);
+	struct edwAnalysisJob jobKey = {.parasolId = jr->jobId,};
+	struct edwAnalysisJob *job = rbTreeFind(running, &jobKey);
+	if (job != NULL)
+	    {
+	    finishJob(job, jr);
+	    rbTreeRemove(running, job);
+	    edwAnalysisJobFree(&job);
+	    finishedCount += 1;
+	    }
+	jobResultFree(&jr);
+	}
+    queue->pos = lineFileTell(lf);
+    lineFileClose(&lf);
+    }
+return finishedCount;
+}
+
 int checkFreeThreads(struct rbTree *running, struct resultsQueue *queueList, boolean mustWait)
 /* Wait on the queue for one of our jobs to come in. */
 {
@@ -188,46 +240,7 @@ int freeCount = 0;
 int pollTime = 3;   // Poll every 3 seconds for file to open.
 while (freeCount == 0)
     {
-    struct resultsQueue *queue;
-    for (queue = queueList; queue != NULL; queue = queue->next)
-	{
-	struct lineFile *lf = lineFileOpen(queue->fileName, TRUE);
-	lineFileSeek(lf, queue->pos, SEEK_SET);
-	for (;;)
-	    {
-	    char *line;
-	    if (!lineFileNextReal(lf, &line))
-		break;
-	    char *row[JOBRESULT_NUM_COLS];
-	    int wordsRead = chopByWhite(line, row, ArraySize(row));
-	    if (wordsRead < ArraySize(row))
-		{
-		if (queue->believePos)
-		    errAbort("%s seems screwed up, expecting %d words in line got %d", 
-			lf->fileName, (int)ArraySize(row), wordsRead);
-		else
-		    {
-		    continue;   // Forgive bad first line in case initial position, based on file size
-				// is not at an even line boundary.
-		    }
-		}
-	    queue->believePos = TRUE;
-	    struct jobResult *jr;
-	    jr = jobResultLoad(row);
-	    struct edwAnalysisJob jobKey = {.parasolId = jr->jobId,};
-	    struct edwAnalysisJob *job = rbTreeFind(running, &jobKey);
-	    if (job != NULL)
-		{
-		finishJob(job, jr);
-		rbTreeRemove(running, job);
-		edwAnalysisJobFree(&job);
-		freeCount += 1;
-		}
-	    jobResultFree(&jr);
-	    }
-	queue->pos = lineFileTell(lf);
-	lineFileClose(&lf);
-	}
+    freeCount = finishJobsWithResults(running, queueList);
     verbose(2, "waiting for %d\n", pollTime);
     if (!mustWait)
 	break;
@@ -237,37 +250,97 @@ while (freeCount == 0)
 return freeCount;
 }
 
+struct hash *parasolRunningHash()
+/* Return hash of parasol IDs with jobs running. Hash has no values */
+{
+struct hash *runningHash = hashNew(0);
+char cmd[512];
+safef(cmd, sizeof(cmd), "pstat2 %s", getUser());
+struct slName *lineEl, *lineList = pmHubMultilineQuery(cmd, paraHost);
+for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
+    {
+    char *line = lineEl->name;
+    char *type = nextWord(&line);
+    char *parasolId = nextWord(&line);
+    if (parasolId != NULL && sameString(type, "r"))
+	hashAdd(runningHash, parasolId, NULL);
+    }
+slFreeList(&lineList);
+return runningHash;
+}
+
 void edwAnalysisDaemon(char *countString)
 /* edwAnalysisDaemon - Run jobs remotely via parasol based on jobs in table.. */
 {
-warn("Starting edwAnalysisDaemon v12 on %s %s with %s threads", clDatabase, clTable, countString);
+verbose(1, "Starting edwAnalysisDaemon v16 on %s %s with %s threads.\n", 
+    clDatabase, clTable, countString);
 int maxThreads = sqlUnsigned(countString);
-int threadCount = 0;
+
+/* Look for any jobs mentioned in table as started but not finished */
+char query[256];
+struct sqlConnection *conn = sqlConnect(clDatabase);
+sqlSafef(query, sizeof(query), 
+    "select * from %s where startTime > 0 and endTime = 0 order by id", clTable);
+struct edwAnalysisJob *oldJob, *oldJobList = edwAnalysisJobLoadByQuery(conn, query);
+verbose(1, "Got %d old jobs in %s to reconnect to\n", slCount(oldJobList), clTable);
 
 /* Set up rbTree as a convenient quick access container for jobs */
 struct rbTree *running = rbTreeNew(cmpByParasolId);
 
+/* Add old jobs to container and get associated queues */
+for (oldJob = oldJobList; oldJob != NULL; oldJob = oldJob->next)
+    {
+    char commandName[PATH_LEN];
+    getCommandName(oldJob, commandName, sizeof(commandName));
+    char queueName[PATH_LEN];
+    safef(queueName, sizeof(queueName), "%s/%s/results", resultsRootDir, commandName);
+    findOrCreateQueue(queueName, FALSE);
+    rbTreeAdd(running, oldJob);
+    }
+oldJobList = NULL;	// We've transfered ownership of jobs in list to container
+int oldFinishedCount = finishJobsWithResults(running, allQueues);  // This updates database
+
+/* Figure out jobs that are *still* running in one of our batches.  These
+ * we'll add to our count of running threads. */
+oldJobList = edwAnalysisJobLoadByQuery(conn, query);  // Reload hopefully diminished old job list
+struct hash *currentlyRunningHash = parasolRunningHash();
+int oldRunningCount = 0;
+for (oldJob = oldJobList; oldJob != NULL; oldJob = oldJob->next)
+    {
+    if (hashLookup(currentlyRunningHash, oldJob->parasolId) != NULL)
+	oldRunningCount += 1;
+    }
+hashFree(&currentlyRunningHash);
+edwAnalysisJobFree(&oldJobList);
+sqlDisconnect(&conn);
+
+verbose(1, "Reconnected to %d finished and %d running old jobs\n", 
+    oldFinishedCount, oldRunningCount);
+
+/* The main loop where we poll parasol for finished jobs and database for new jobs. */
 long long lastId = 0;  // Keep track of lastId in run table that has already been handled.
+int threadCount = oldRunningCount;
 for (;;)
     {
+    /* Process finished jobs, if need be waiting for some to finish. */
     boolean tooManyThreads = (threadCount >= maxThreads);
     int freeThreads = checkFreeThreads(running, allQueues, tooManyThreads);
     threadCount -= freeThreads;
 
     /* Get next bits of work from database. */
-    struct sqlConnection *conn = sqlConnect(clDatabase);
-    char query[256];
+    conn = sqlConnect(clDatabase);
     sqlSafef(query, sizeof(query), 
 	"select * from %s where startTime = 0 and id > %lld order by id limit 1", clTable, lastId);
     struct edwAnalysisJob *job = edwAnalysisJobLoadByQuery(conn, query);
     sqlDisconnect(&conn);
     if (job != NULL)
         {
+	/* Cool, got a job, send it to parasol and track it in running container */
 	char commandName[PATH_LEN];
 	getCommandName(job, commandName, sizeof(commandName));
 	char queueName[PATH_LEN];
 	safef(queueName, sizeof(queueName), "%s/%s/results", resultsRootDir, commandName);
-	struct resultsQueue *queue = findOrCreateQueue(queueName);
+	struct resultsQueue *queue = findOrCreateQueue(queueName, TRUE);
 	sendToParasol(job, queue);
 	rbTreeAdd(running, job);
 	threadCount += 1;
