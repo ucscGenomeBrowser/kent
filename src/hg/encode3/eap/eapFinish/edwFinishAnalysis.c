@@ -1,4 +1,4 @@
-/* edwFinishAnalysis - Look for analysis jobs that have completed and integrate results into 
+/* eapFinish - Look for analysis jobs that have completed and integrate results into 
  * database. */
 #include <uuid/uuid.h>
 #include "common.h"
@@ -17,10 +17,10 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwFinishAnalysis - Look for analysis jobs that have completed and integrate results into\n"
+  "eapFinish - Look for analysis jobs that have completed and integrate results into\n"
   "database.\n"
   "usage:\n"
-  "   edwFinishAnalysis now\n"
+  "   eapFinish now\n"
   "Where 'now' is just a parameter that is ignored for now.\n"
   "options:\n"
   "   -noClean if set then don't clean up temp dirs."
@@ -286,8 +286,8 @@ if (!noClean)
 dyStringFree(&outputFileIds);
 }
 
-void edwFinishAnalysis(char *how)
-/* edwFinishAnalysis - Look for analysis jobs that have createStatus and integrate results into 
+void eapFinish(char *how)
+/* eapFinish - Look for analysis jobs that have createStatus and integrate results into 
  * database. */
 {
 struct sqlConnection *conn = edwConnectReadWrite();
@@ -337,6 +337,6 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 noClean = optionExists("noClean");
-edwFinishAnalysis(argv[1]);
+eapFinish(argv[1]);
 return 0;
 }
