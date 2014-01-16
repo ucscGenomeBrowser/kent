@@ -2545,7 +2545,7 @@ identifier wormBaseIsoformCluster
     $ce.sangerCanonical.clusterId
     $ce.sangerIsoforms.clusterId full
 
-set notWormBaseId !ailMel1,!allMis1,!braFlo2,!calJac3,!cerSim1,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg19,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!otoGar3,!oviAri3,!petMar2,!rn3,!rn5,!sorAra2,!speTri2,!susScr3,!vicPac2
+set notWormBaseId !ailMel1,!allMis1,!braFlo2,!calJac3,!cerSim1,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg38,!hg19,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!otoGar3,!oviAri3,!petMar2,!rn3,!rn5,!sorAra2,!speTri2,!susScr3,!vicPac2
 
 identifier wormBaseId external=WormBase dependency
 "WormBase (C. elegans) ORF ID"
@@ -2589,7 +2589,7 @@ identifier flyBaseAlleleId
     $dm.fbAllele.id
     $dm.fbPhenotype.fbAllele exclude=0
 
-set notFlyBaseGeneId !ailMel1,!allMis1,!braFlo2,!calJac3,!ce2,!ce4,!ce6,!ce9,!ce10,!cerSim1,!danRer3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg17,!hg18,!hg19,!loxAfr3,!mm7,!mm8,!mm9,!mm10,!myoLuc2,!nomLeu1,!otoGar3,!oviAri3,!petMar2,!rn3,!rn4,!rn5,!sacCer1,!sacCer2,!sacCer3,!sorAra2,!speTri2,!susScr3,!vicPac2
+set notFlyBaseGeneId !ailMel1,!allMis1,!braFlo2,!calJac3,!ce2,!ce4,!ce6,!ce9,!ce10,!cerSim1,!danRer3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg17,!hg18,!hg38,!hg19,!loxAfr3,!mm7,!mm8,!mm9,!mm10,!myoLuc2,!nomLeu1,!otoGar3,!oviAri3,!petMar2,!rn3,!rn4,!rn5,!sacCer1,!sacCer2,!sacCer3,!sorAra2,!speTri2,!susScr3,!vicPac2
 
 identifier flyBaseGeneId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
@@ -2702,7 +2702,7 @@ identifier sgdProtHomologId
 identifier sgdId external=SGD
 "Sacchromyces Genome Database ID - Coding or other"
 
-set notSgdCodingId !ailMel1,!allMis1,!braFlo2,!calJac3,!cerSim1,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg19,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!otoGar3,!oviAri3,!petMar2,!rn5,!sorAra2,!speTri2,!susScr3,!vicPac2
+set notSgdCodingId !ailMel1,!allMis1,!braFlo2,!calJac3,!cerSim1,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg38,!hg19,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!otoGar3,!oviAri3,!petMar2,!rn5,!sorAra2,!speTri2,!susScr3,!vicPac2
 
 identifier sgdCodingId typeOf=sgdId dependency
 "Sacchromyces Genome Database ID"
