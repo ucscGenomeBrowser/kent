@@ -13,7 +13,7 @@ table pubsBlat
     int blockCount;       "number of blocks"
     lstring blockSizes;   "size of blocks"
     lstring chromStarts;  "A comma-separated list of block starts"
-    string tSeqTypes;     "comma-seq list of matching sequence db (g=genome, p=protein, c=cDNA)"
+    string tSeqTypes;     "comma-separated list of matching sequence db (g=genome, p=protein, c=cDNA)"
     lstring seqIds;       "comma-separated list of matching seqIds"
     lstring seqRanges;    "ranges start-end on sequence that matched, one for each seqId"
     string publisher;     "publisher of article, for hgTracks feature filter"
