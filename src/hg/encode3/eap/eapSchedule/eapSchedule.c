@@ -6,8 +6,8 @@
 #include "portable.h"
 #include "bamFile.h"
 #include "obscure.h"
-#include "encodeDataWarehouse.h"
-#include "edwLib.h"
+#include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
+#include "../../encodeDataWarehouse/inc/edwLib.h"
 #include "eapLib.h"
 
 boolean again = FALSE;
@@ -577,7 +577,7 @@ char *efName = cacheMore(cache, ef, vf);
 preloadCache(conn, cache);
 char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "eap_run_hotspot %s %s %d %s%s %s%s %s%s",
-    assembly->ucscDb, efName,
+    edwSimpleAssemblyName(assembly->ucscDb), efName,
     readLength, tempDir, "out.narrowPeak.bigBed", 
     tempDir, "out.broadPeak.bigBed", tempDir, "out.bigWig");
 
@@ -674,16 +674,12 @@ void runSingleAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct ed
     struct edwExperiment *exp)
 {
 verbose(2, "run single analysis format %s, dataType %s\n", vf->format, exp->dataType);
-struct edwAssembly *targetAsm = chooseTarget(conn, ef, vf);
-// targetAsm = targetAssemblyForDbAndSex(conn, "hg19", "centro");	// ugly
-if (targetAsm == NULL || targetAsm->taxon != 9606)  // Humans only!
-    return;	    // FOr the moment we're being speciest.
+#ifdef SOON
+#endif /* SOON */
 if (sameWord("fastq", vf->format))
     runFastqAnalysis(conn, ef, vf, exp);
 if (sameWord("bam", vf->format))
     runBamAnalysis(conn, ef, vf, exp);
-#ifdef SOON
-#endif /* SOON */
 }
 
 void runReplicateAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,

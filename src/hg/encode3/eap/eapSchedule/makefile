@@ -1,4 +1,4 @@
 kentSrc = ../../../..
-A = edwScheduleAnalysis
-preMyLibs += ../lib/$(MACHTYPE)/edwlib.a
+A = eapSchedule
+preMyLibs += ../../encodeDataWarehouse/lib/$(MACHTYPE)/edwlib.a
 include $(kentSrc)/inc/userApp.mk
