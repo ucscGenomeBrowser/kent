@@ -1,4 +1,4 @@
-/* edwAnalysisDaemon - Run jobs remotely via parasol based on jobs in table.. */
+/* eapDaemon - Run jobs remotely via parasol based on jobs in table.. */
 #include <sys/wait.h>
 #include "common.h"
 #include "linefile.h"
@@ -25,9 +25,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwAnalysisDaemon - Run jobs remotely via parasol based on jobs in table.\n"
+  "eapDaemon - Run jobs remotely via parasol based on jobs in table.\n"
   "usage:\n"
-  "   edwAnalysisDaemon count\n"
+  "   eapDaemon count\n"
   "where:\n"
   "   count - number of simultanious jobs to run\n"
   "options:\n"
@@ -269,10 +269,10 @@ slFreeList(&lineList);
 return runningHash;
 }
 
-void edwAnalysisDaemon(char *countString)
-/* edwAnalysisDaemon - Run jobs remotely via parasol based on jobs in table.. */
+void eapDaemon(char *countString)
+/* eapDaemon - Run jobs remotely via parasol based on jobs in table.. */
 {
-verbose(1, "Starting edwAnalysisDaemon v16 on %s %s with %s threads.\n", 
+verbose(1, "Starting eapDaemon v16 on %s %s with %s threads.\n", 
     clDatabase, clTable, countString);
 int maxThreads = sqlUnsigned(countString);
 
@@ -370,6 +370,6 @@ clTable = optionVal("table", clTable);
 logDaemonize(argv[0]);
 if (optionExists("log"))
     verboseSetLogFile(optionVal("log", NULL));
-edwAnalysisDaemon(argv[1]);
+eapDaemon(argv[1]);
 return 0;
 }
