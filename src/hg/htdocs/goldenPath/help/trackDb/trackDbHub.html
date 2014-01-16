@@ -467,17 +467,27 @@ into sets and hierarchies</div>
 </div>
 <div class="borderGuard">
 
-<P>All tracks for a hub are treated as a single group within the Browser.  
-However, they can be organized into one of three hierarchical containers, depending on how closely they are related:</P>
+Depending on how closely related they are, tracks can be organized into one of three 
+hierarchical containers:
 <ul>
-        <li>If the tracks share no specific configuration and you mostly want
-        to show them together (e.g. a mix of bam, bigWig and bigBed), use the
-        "superTrack" container.</li>
+        <li>"<A href="#multiWig">multiWig</A>" container: when the tracks are
+        all in signal (wiggle or bigWig) format and it makes sense to overlay
+        them.<br>
 
-        <li>If the tracks are expected to be configured together (e.g. they are all bigBeds with the same score Filter option), use the "composite" container</li>
+        Example: a set of bigWig tracks with H3K27ac signal, all on the same
+        scale</li>
 
-        <li>If the tracks are all in signal (wiggle or bigWig) format and it makes sense to
-        overlay them, use the "multiWig" container</li>
+        <li>"<A href="#compositeTrack">composite</A>" container: when the
+        tracks are expected to be configured together or have an internal
+        subgrouping, like cell type or cell treatment.<br>
+
+        Example: a set of ChIP-bigBeds in three different cell types</li>
+
+        <li>"<A href="#superTrack">superTrack</A>" container: when the tracks
+        share no specific configuration and you mostly want to show them
+        together.<br>
+        Example: a set of composite tracks or a mix of bigBed,
+        bigWig and bam</li>
 </ul>
 
 <A name="group"></A>
