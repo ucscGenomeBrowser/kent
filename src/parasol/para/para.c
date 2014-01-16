@@ -700,16 +700,30 @@ verbose(2, "readBatch time: %.2f seconds\n", (clock1000() - time) / 1000.0);
 return db;
 }
 
+char *hubSingleLineQuery(char *query)
+/* Send message to hub and get single line response.
+ * This should be freeMem'd when done. */
+{
+return pmHubSingleLineQuery(query, "localhost");
+}
+
+struct slName *hubMultilineQuery(char *query)
+/* Send a command with a multiline response to hub,
+ * and return response as a list of strings. */
+{
+return pmHubMultilineQuery(query, "localhost");
+}
+
 boolean batchRunning(char *batchName)
 /* Return TRUE if a batch is running. */
 {
 #define NUMLISTBATCHCOLUMNS 12
-struct slRef *lineList = hubMultilineQuery("listBatches"), *lineEl;
+struct slName *lineList = hubMultilineQuery("listBatches"), *lineEl;
 boolean ret = FALSE;
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
     int wordCount;
-    char *line = lineEl->val;
+    char *line = lineEl->name;
     char *row[NUMLISTBATCHCOLUMNS];
     if (line[0] != '#')
 	{
@@ -721,7 +735,6 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 	if (sameString(b, batchName))
 	    ret = TRUE;
 	}
-    freez(&lineEl->val);
     }
 slFreeList(&lineList);
 return ret;
@@ -753,20 +766,6 @@ while (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 slReverse(&db->jobList);
 return db;
-}
-
-char *hubSingleLineQuery(char *query)
-/* Send message to hub and get single line response.
- * This should be freeMem'd when done. */
-{
-return pmHubSingleLineQuery(query, "localhost");
-}
-
-struct slRef *hubMultilineQuery(char *query)
-/* Send a command with a multiline response to hub,
- * and return response as a list of strings. */
-{
-return pmHubMultilineQuery(query, "localhost");
 }
 
 void sendSetPriorityMessage(int priority)
@@ -968,7 +967,7 @@ long queryTime = clock1000();
 /* Get job list from paraHub. */
 struct dyString *dy = newDyString(1024);
 dyStringPrintf(dy, "pstat2 %s %s", getUser(), resultsName);
-struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
+struct slName *lineList = hubMultilineQuery(dy->string), *lineEl;
 dyStringFree(&dy);
 now = time(NULL);  /* need to refresh this after we get the info */
 
@@ -997,28 +996,25 @@ long pstatListTime = clock1000();
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
     int wordCount;
-    char *line = lineEl->val;
+    char *line = lineEl->name;
     char *row[6];
     if (startsWith("Total Jobs:", line))
 	{
         wordCount = chopLine(line, row);
 	queueSize = sqlSigned(row[2]);
 	verbose(1, "%d jobs (including everybody's) in Parasol queue or running.\n", queueSize);
-	freez(&lineEl->val);
 	continue;
 	}
     if (startsWith("Sick Batch:", line))
 	{
 	sickBatch = TRUE;
 	warn("%s", line);
-	freez(&lineEl->val);
 	continue;
 	}
     if (startsWith("Results Size:", line))
 	{
         wordCount = chopLine(line, row);
 	resultsSize = sqlLongLong(row[2]);
-	freez(&lineEl->val);
 	continue;
 	}
     wordCount = chopLine(line, row);
@@ -1069,7 +1065,6 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 		}
 	    }
 	}
-    freez(&lineEl->val);
     }
 verbose(2, "pstat list time: %.2f seconds\n", (clock1000() - pstatListTime) / 1000.0);
 
@@ -1142,17 +1137,16 @@ void showSickNodes(boolean showSummary)
 int count = 0;
 struct dyString *dy = newDyString(1024);
 dyStringPrintf(dy, "showSickNodes %s %s", getUser(), resultsName);
-struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
+struct slName *lineList = hubMultilineQuery(dy->string), *lineEl;
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
     ++count;
-    char *line = lineEl->val;
+    char *line = lineEl->name;
     /* In show summary mode, only print the last line, 
      * which contains the totals.  Only print this one
      * if there's more than one line (the total is greater than zero). */
     if (!showSummary || !(lineEl->next || count == 1))
 	printf("%s\n", line);
-    freez(&lineEl->val);
     }
 slFreeList(&lineList);
 dyStringFree(&dy);

@@ -106,7 +106,7 @@ char *pmHubSingleLineQuery(char *query, char *host);
 /* Send message to hub and get single line response.
  * This should be freeMem'd when done. */
 
-struct slRef *pmHubMultilineQuery(char *query, char *host);
+struct slName *pmHubMultilineQuery(char *query, char *host);
 /* Send a command with a multiline response to hub,
  * and return response as a list of strings. */
 

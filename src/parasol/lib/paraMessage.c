@@ -301,11 +301,11 @@ rudpClose(&ru);
 return cloneString(pm.data);
 }
 
-struct slRef *pmHubMultilineQuery(char *query, char *host)
+struct slName *pmHubMultilineQuery(char *query, char *host)
 /* Send a command with a multiline response to hub,
  * and return response as a list of strings. */
 {
-struct slRef *list = NULL;
+struct slName *list = NULL;
 struct rudp *ru = rudpMustOpen();
 struct paraMessage pm;
 struct paraMultiMessage pmm;
@@ -327,7 +327,9 @@ for (;;)
 
     int i;
     for(i=0;i<count;++i)
-        refAdd(&list, cloneString(row[i]));
+	{
+	slNameAddHead(&list, row[i]);
+	}
     }
 rudpClose(&ru);
 slReverse(&list);
