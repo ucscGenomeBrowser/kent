@@ -117,7 +117,7 @@ struct ldStats
     struct ldStats *next;
     unsigned        chromStart;
     unsigned        n;         /* count of snps with valid LD values */
-    unsigned        sumValues; /* sum of valid LD values */
+    int        sumValues; /* sum of valid LD values */
 };
 
 void ldLoadItems(struct track *tg);
