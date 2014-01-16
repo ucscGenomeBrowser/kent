@@ -276,6 +276,9 @@ verbose(1, "Starting edwAnalysisDaemon v16 on %s %s with %s threads.\n",
     clDatabase, clTable, countString);
 int maxThreads = sqlUnsigned(countString);
 
+/* On start up we first try to connect to any jobs that were started but not finished
+ * at time daemon died last time around. */
+
 /* Look for any jobs mentioned in table as started but not finished */
 char query[256];
 struct sqlConnection *conn = sqlConnect(clDatabase);
@@ -317,7 +320,8 @@ sqlDisconnect(&conn);
 verbose(1, "Reconnected to %d finished and %d running old jobs\n", 
     oldFinishedCount, oldRunningCount);
 
-/* The main loop where we poll parasol for finished jobs and database for new jobs. */
+/* Ok, we are done with all the old business.  Now onto the main loop where
+ * where we poll parasol for finished jobs and database for new jobs. */
 long long lastId = 0;  // Keep track of lastId in run table that has already been handled.
 int threadCount = oldRunningCount;
 for (;;)
@@ -327,12 +331,13 @@ for (;;)
     int freeThreads = checkFreeThreads(running, allQueues, tooManyThreads);
     threadCount -= freeThreads;
 
-    /* Get next bits of work from database. */
-    conn = sqlConnect(clDatabase);
+    /* Get next job from database. */
+    conn = sqlConnect(clDatabase);  // It may have been a while so open fresh connection
     sqlSafef(query, sizeof(query), 
 	"select * from %s where startTime = 0 and id > %lld order by id limit 1", clTable, lastId);
     struct edwAnalysisJob *job = edwAnalysisJobLoadByQuery(conn, query);
     sqlDisconnect(&conn);
+
     if (job != NULL)
         {
 	/* Cool, got a job, send it to parasol and track it in running container */
