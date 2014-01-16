@@ -806,7 +806,10 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		    w1 = 1;
 
 		// mismatch!
-		hvGfxBox(hvg, misX1, y, w1, heightPer, MG_RED);
+		Color boxColor = MG_RED;
+		if ((*ptr2 == 'N') || (*ptr2 == 'n'))
+		    boxColor = hvGfxFindRgb(hvg, &undefinedYellowColor);
+		hvGfxBox(hvg, misX1, y, w1, heightPer, boxColor);
 		}
 	    }
 
