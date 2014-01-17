@@ -35,7 +35,7 @@ errAbort(
   "   -cache=cacheName - get JSON list from cache rather than from database where possible\n"
   "   -fresh - ignore existing edwExperiment table\n"
   "   -noStanford - ignore Stanford/JSON bits\n"
-  "   -noUcsc - ignor UCSC old Encode2 bits\n"
+  "   -noUcsc - ignore UCSC old Encode2 bits\n"
   );
 }
 
@@ -109,7 +109,7 @@ return NULL;
 }
 
 char *getStanfordJson(char *table, char *accession, char *userId, char *password)
-/* Get json text associated with an experiment */
+/* Get json text associated with an object */
 {
 char url[512];
 safef(url, sizeof(url), "submit.encodedcc.org/%s%s/?format=json", table, accession);
@@ -169,6 +169,29 @@ if (exp)
     {
     struct jsonElement *targ = jsonFindNamedField(exp, expAccession, "target");
     result = jsonOptionalStringField(targ, "name", NULL);
+    }
+return result;
+}
+
+char *findControl(char *expAccession, char *userId, char *password)
+/* Load up JSON and find somewhere inside of it control if possible. */
+{
+char *result = NULL;
+struct jsonElement *exp = getParsedJsonForId("experiments/", expAccession, userId, password);
+if (exp)
+    {
+    struct jsonElement *possibles = jsonFindNamedField(exp, expAccession, "possible_controls");
+    struct slRef *ref, *refList = jsonListVal(possibles, "possible_controls");
+    for (ref = refList; ref != NULL; ref = ref->next)
+        {
+	struct jsonElement *controls = ref->val;
+	char *controlExperiment = jsonOptionalStringField(controls, "accession", NULL);
+	if (controlExperiment != NULL)
+	    {
+	    result = cloneString(controlExperiment);
+	    break;
+	    }
+	}
     }
 return result;
 }
@@ -252,11 +275,12 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	if (dataType != NULL)
 	    {
 	    struct edwExperiment *oldExp = hashFindVal(oldHash, acc);
-	    char *ipTarget = "";
+	    char *ipTarget = "", *control = "";
 	    if (sameString(dataType, "ChIP-seq") && sameString(rfa, "ENCODE3"))
 	        {
 		ipTarget = emptyForNull(chipTarget(acc, userId, password));
 		verbose(1, "ipTarget %s\n", ipTarget);
+		control = findControl(acc, userId, password);
 		}
 	    if (oldExp != NULL)
 		{
@@ -264,10 +288,10 @@ for (ref = refList; ref != NULL; ref = ref->next)
 		    errAbort("Change in data type for %s %s vs %s\n", 
 			    acc, oldExp->dataType, dataType);
 		}
-	    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", acc, dataType,
+	    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", acc, dataType,
 		jsonOptionalStringField(el, "lab.title", ""),
 		jsonOptionalStringField(el, "biosample_term_name", ""),
-		rfa, assayType, ipTarget);
+		rfa, assayType, ipTarget, emptyForNull(control));
 	    ++realExpCount;
 	    }
 	}
@@ -298,6 +322,12 @@ else if (sameString(oldType, "DnaseSeq")) return "DNase-seq";
 else return oldType;
 }
 
+char *findUcscControl(struct sqlConnection *conn, struct encodeExp *exp)
+/* Try and find best control for experiment, returning it's accession, or NULL if can't find. */
+{
+return NULL;    // Going to figure out how to do it from Stanford first....
+}
+
 void rsyncUcscExp(FILE *f)
 /* Grab encodeExp table from hgFixed and save it to tab separated file in edwExperiment format. */
 {
@@ -309,9 +339,9 @@ for (exp = expList; exp != NULL; exp = exp->next)
     if (isEmpty(exp->accession))
         continue;
     struct slPair *varList = slPairListFromString(exp->expVars,FALSE);
-    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", exp->accession, fromUcscDataType(exp, varList),
+    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", exp->accession, fromUcscDataType(exp, varList),
 	exp->lab, exp->cellType, "ENCODE2", exp->dataType, 
-	emptyForNull(slPairFindVal(varList, "antibody")));
+	emptyForNull(slPairFindVal(varList, "antibody")), emptyForNull(findUcscControl(conn,exp)));
     slPairFreeValsAndList(&varList);
     }
 }
