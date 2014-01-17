@@ -461,6 +461,122 @@ scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(outNames), outNames, outTypes, outFormats);
 }
 
+struct edwExperiment *findChipControlExp(struct sqlConnection *conn, char *accession)
+/* Given experiment accession try to find control. */
+{
+char query[512];
+sqlSafef(query, sizeof(query), "select control from edwExperiment where accession='%s'", accession);
+char *controlName = sqlQuickString(conn, query);
+if (isEmpty(controlName))
+    return NULL;
+sqlSafef(query, sizeof(query), "select * from edwExperiment where accession='%s'", controlName);
+freez(&controlName);
+return edwExperimentLoadByQuery(conn, query);
+}
+
+void scheduleMacsChip(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
+/* If it hasn't already been done schedule macs analysis of the chip-seq bam file. */
+{
+uglyf("scheduleMacsChip %u\n", ef->id);
+
+// Try and find control 
+struct edwExperiment *controlExp = findChipControlExp(conn, exp->accession);
+uglyf("got controlExp %p\n", controlExp);
+if (controlExp == NULL)
+    return;
+
+// Got control experiment,  now let's go for a matching bam file. 
+char query[PATH_LEN*3];
+sqlSafef(query, sizeof(query), 
+    "select * from edwValidFile where experiment='%s' and format='%s' and  ucscDb='%s'" ,
+    controlExp->accession, vf->format, vf->ucscDb);
+struct edwValidFile *controlVf, *controlVfList = edwValidFileLoadByQuery(conn, query);
+int controlCount = slCount(controlVfList);
+if (controlCount <= 0)
+    return;
+
+// Go through list and try to pick one
+int bestScore = 0;
+struct edwValidFile *bestControl = NULL;
+for (controlVf = controlVfList; controlVf != NULL; controlVf = controlVf->next)
+    {
+    int score = 0;
+    if (sameString(controlVf->outputType, vf->outputType))
+        score += 100000000;
+    if (sameString(controlVf->replicate, vf->replicate))
+        score += 50000000;
+    if (sameString(controlVf->technicalReplicate, vf->technicalReplicate))
+        score += 25000000;
+    long long sizeDiff = controlVf->itemCount - vf->itemCount;
+    if (sizeDiff < 0) sizeDiff = -sizeDiff;
+    if (sizeDiff > 25000000)
+        sizeDiff = 25000000;
+    score += 25000000 - sizeDiff;
+    if (score > bestScore)
+        {
+	bestScore = score;
+	bestControl = controlVf;
+	}
+    }
+if (bestControl == NULL)
+    return;
+
+// Figure out input bam name
+char bamName[PATH_LEN];
+safef(bamName, sizeof(bamName), "%s%s", edwRootDir, ef->edwFileName);
+
+// Figure out control bam name
+struct edwFile *controlEf = edwFileFromId(conn, bestControl->fileId);
+char controlBamName[PATH_LEN];
+safef(controlBamName, sizeof(controlBamName), "%s%s", edwRootDir, controlEf->edwFileName);
+
+// Figure out analysis step and script based on paired end status of input bam
+boolean isPaired = bamIsPaired(bamName, 1000);
+char *analysisStep, *scriptName;
+if (isPaired)
+    {
+    analysisStep = "macs2_chip_pe";
+    scriptName = "eap_run_macs2_chip_pe";
+    }
+else
+    {
+    analysisStep = "macs2_chip_se";
+    scriptName = "eap_run_macs2_chip_se";
+    }
+
+verbose(2, "schedulingMacsChip on %s step %s, script %s\n", ef->edwFileName, 
+    analysisStep, scriptName);
+
+/* Make sure that we don't schedule it again and again */
+sqlSafef(query, sizeof(query), "select * from edwAssembly where name='%s'", vf->ucscDb);
+struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
+if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
+    return;
+
+char *tempDir = newTempDir(analysisStep);
+
+/* Stage inputs and make command line. */
+struct cache *cache = cacheNew();
+char *efName = cacheMore(cache, ef, vf);
+char *controlEfName = cacheMore(cache, controlEf, bestControl);
+preloadCache(conn, cache);
+char commandLine[4*PATH_LEN];
+safef(commandLine, sizeof(commandLine), "%s %s %s %s %s%s %s%s", 
+    scriptName, assembly->name, efName, controlEfName,
+    tempDir, "out.narrowPeak.bigBed", tempDir, "out.bigWig");
+
+/* Declare step input and output arrays and schedule it. */
+unsigned inFileIds[] = {ef->id};
+char *inTypes[] = {"chipBam", "controlBam"};
+char *outFormats[] = {"narrowPeak", "bigWig"};
+char *outNames[] = {"out.narrowPeak.bigBed", "out.bigWig"};
+char *outTypes[] = {"macs2_chip_peaks", "macs2_chip_signal"};
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
+    ArraySize(inFileIds), inFileIds, inTypes,
+    ArraySize(outNames), outNames, outTypes, outFormats);
+}
+
 int mustGetReadLengthForFastq(struct sqlConnection *conn, unsigned fileId)
 /* Verify that associated file is in edwFastqFile table and return average read length */
 {
@@ -667,6 +783,10 @@ if (sameString(exp->dataType, "DNase-seq"))
 #ifdef SOON
     scheduleHotspot(conn, ef, vf, exp);
 #endif /* SOON */
+    }
+else if (sameString(exp->dataType, "ChIP-seq"))
+    {
+    scheduleMacsChip(conn, ef, vf, exp);
     }
 }
 
