@@ -355,6 +355,45 @@ void makeValidIdat(struct sqlConnection *conn, char *path, struct edwFile *ef, s
 encode3ValidateIdat(path);
 }
 
+void makeValidCustomTrack(struct sqlConnection *conn, char *path, 
+    struct edwFile *ef, struct edwValidFile *vf)
+/* Fill in some info about a BED file of no particular sub-format. This is allowed to have
+ * browser and track lines in it, which are ignored. */
+{
+struct lineFile *lf = lineFileOpen(path, TRUE);
+char *line;
+char *row[256];
+int bedSize = 0;
+while (lineFileNextReal(lf, &line))
+    {
+    if (startsWithWord("browser", line) || startsWithWord("track", line))
+        continue;
+    int wordCount = chopLine(line, row);
+    if (bedSize == 0)
+	{
+        bedSize = wordCount;
+	if (bedSize < 3)
+	    {
+	    lineFileExpectAtLeast(lf, 3, bedSize);
+	    }
+	}
+    else
+	{
+        if (bedSize != wordCount)
+	    {
+	    errAbort("Some lines of %s have %d words, but line %d of has %d words",
+		    lf->fileName, bedSize, lf->lineIx, wordCount);
+	    }
+	}
+    int start = lineFileNeedNum(lf, row, 1);
+    int end = lineFileNeedNum(lf, row, 2);
+    if (end < start)
+         errAbort("end before start line %d of %s", lf->lineIx, lf->fileName);
+    ++vf->itemCount;
+    vf->basesInItems += (end - start);
+    }
+lineFileClose(&lf);
+}
 
 static void needAssembly(struct edwFile *ef, char *format, struct edwAssembly *assembly)
 /* Require assembly tag be present. */
@@ -476,6 +515,12 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
         {
 	makeValidIdat(conn, path, ef, vf);
 	suffix = ".idat";
+	}
+    else if (sameString(format, "customTrack"))
+        {
+	makeValidCustomTrack(conn, path, ef, vf);
+	assert(endsWith(ef->submitFileName, ".gz"));
+	suffix = edwFindDoubleFileSuffix(ef->submitFileName);
 	}
     else if (sameString(format, "unknown"))
         {
