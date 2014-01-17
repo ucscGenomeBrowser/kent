@@ -834,7 +834,7 @@ if (sqlOpenConnections == NULL)
 
 static struct sqlConnection *sqlConnRemoteFillIn(struct sqlConnection *sc, char *host, unsigned int port, char *socket,
 					   char *user, char *password,
-                                           char *database, boolean abort)
+                                           char *database, boolean abort, boolean addAsOpen)
 /* Fill the sqlConnection object: Connect to database somewhere as somebody.
  * Database maybe NULL to just connect to the server.  If abort is set display
  * error message and abort on error. This is the core function that connects to
@@ -846,7 +846,9 @@ long deltaTime;
 sqlInitTracking();
 
 sc->resultList = newDlList();
-sc->node = dlAddValTail(sqlOpenConnections, sc);
+
+if (addAsOpen)
+    sc->node = dlAddValTail(sqlOpenConnections, sc);
 
 long oldTime = monitorEnterTime;
 monitorEnterTime = 0;
@@ -913,7 +915,7 @@ static struct sqlConnection *sqlConnRemote(char *host, unsigned int port, char *
 {
 struct sqlConnection *sc;
 AllocVar(sc);
-return sqlConnRemoteFillIn(sc, host, port, socket, user, password, database, abort);
+return sqlConnRemoteFillIn(sc, host, port, socket, user, password, database, abort, TRUE);
 }
 
 struct sqlConnection *sqlConnectRemote(char *host, char *user, char *password,
@@ -940,9 +942,12 @@ struct sqlConnection *sc;
 
 // connect with the default profile
 sc = sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, abort);
-sc->profile = sp; // remember the profile
+if (sc!=NULL)
+    sc->profile = sp; // remember the profile
 
 // optionally prepare the slower failover connection
+if (sp->name==NULL)
+    return sc;
 char *slowProfName = catTwoStrings("slow-", sp->name);
 struct sqlProfile *slow = sqlProfileGet(slowProfName, database);
 freez(&slowProfName);
@@ -970,12 +975,13 @@ return sqlConnProfile(sqlProfileMustGet(NULL, database), database, FALSE);
 }
 
 static struct sqlConnection *sqlConnectIfUnconnected(struct sqlConnection *sc)
-/* Take a yet unconnected sqlConnection object and connect it to the sql server */
+/* Take a yet unconnected failover sqlConnection object and connect it to the sql server.
+ * Don't add it to the list of open connections, as it is freed by it's non-failover parent */
 {
 if (sc->conn!=NULL)
     return sc;
 struct sqlProfile *sp = sqlProfileMustGet(sc->profile->name, sc->db);
-sqlConnRemoteFillIn(sc, sp->host, sp->port, sp->socket, sp->user, sp->password, sc->db, TRUE);
+sqlConnRemoteFillIn(sc, sp->host, sp->port, sp->socket, sp->user, sp->password, sc->db, TRUE, FALSE);
 return sc;
 }
 
@@ -1089,7 +1095,7 @@ int mysqlError = mysql_real_query(sc->conn, query, strlen(query));
 if (mysqlError != 0 && sc->slowConn)
     {
     if (monitorFlags & JKSQL_TRACE)
-        monitorPrint(sc, "SQL_FAILOVER %s to %s\n", sc->profile->name, sc->slowConn->profile->name);
+        monitorPrint(sc, "SQL_FAILOVER", "%s -> %s", sc->profile->name, sc->slowConn->profile->name);
 
     sc = sc->slowConn;
     sc = sqlConnectIfUnconnected(sc);
