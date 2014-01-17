@@ -20,16 +20,19 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "eapMonitor - Monitor jobs running through the pipeline.\n"
+  "eapMonitor v1 - Monitor jobs running through the pipeline.\n"
   "usage:\n"
   "   eapMonitor command\n"
   "commands:\n"
   "   status - print overall pipeline activity\n"
+  "   steps - print out information on each step\n"
   "   info - information about configuration\n"
   "   chill - remove jobs that haven't started from job table, but keep running ones going\n"
   "   cull N - remove jobs that have been running more than N days\n"
+  "   scrounge [parasolId] jobs that DB shows as running but parasol doesn't get poked\n"
   "   err [parasolId] print info about either most recent error or error of given id#\n"
   "   errFile [parasolId] print stderr from most recent error or error of given id#\n"
+  "   errList - print list of parasol IDs, and command lines of all error jobs\n"
   "options:\n"
   "   -database=<mysql database> - default %s\n"
   "   -table=<msqyl table> - default %s\n"
@@ -128,7 +131,7 @@ for (q = qList; q != NULL; q = q->next)
     finishedJobs += slCount(q->lineList);
     }
 // printf("Jobs finished: %ld\n", finishedJobs);
-printf("Analysis types:   %5d\n", qCount);
+printf("Analysis steps:   %5d\n", qCount);
 
 struct sqlConnection *conn = edwConnect();
 char query[512];
@@ -345,8 +348,8 @@ void doErr(int argc, char **argv)
 /* Print error stats, and specific info on a recent error */
 {
 char *parasolId = NULL;
-if (argc > 1)
-    parasolId = argv[1];
+if (argc > 0)
+    parasolId = argv[0];
 struct jobResult *crashed = findCrashed(parasolId);
 if (crashed != NULL)
     {
@@ -369,7 +372,7 @@ if (crashed != NULL)
     printf("Host:         %s\n", crashed->host);
     printf("Status:       %5d\n", crashed->status);
     printf("Stderr file:  %s\n", crashed->errFile);
-    printRemoteHeadTail(crashed->host, crashed->errFile, 5, 5);
+    printRemoteHeadTail(crashed->host, crashed->errFile, 8, 4);
     }
 }
 
@@ -377,14 +380,168 @@ void doErrFile(int argc, char **argv)
 /* Print out stderr file entirely */
 {
 char *parasolId = NULL;
-if (argc > 1)
-    parasolId = argv[1];
+if (argc > 0)
+    parasolId = argv[0];
 struct jobResult *crashed = findCrashed(parasolId);
 if (crashed == NULL)
     errAbort("No most recent error");
 char command[2*PATH_LEN];
 safef(command, sizeof(command), "scp %s:%s /dev/stdout", crashed->host, crashed->errFile);
 mustSystem(command);
+}
+
+void doErrList(int argc, char **argv)
+/* Print list of parasol IDs, and command lines of all error jobs. */
+{
+struct sqlConnection *conn = edwConnect();
+char query[512];
+sqlSafef(query, sizeof(query), "select * from edwAnalysisJob where returnCode != 0");
+struct edwAnalysisJob *job, *jobList = edwAnalysisJobLoadByQuery(conn, query);
+for (job = jobList; job != NULL; job = job->next)
+    printf("%s\t%s\n", naForEmpty(job->parasolId), job->commandLine);
+}
+
+boolean isSick(struct results *q)
+/* Return TRUE if batch has been deemed sick */
+{
+char message[512];
+safef(message, sizeof(message), "pstat2 %s %s", getUser(), q->pathName);
+struct slName *line, *lineList = pmHubMultilineQuery(message, clParaHost);
+boolean gotSick = FALSE;
+for (line = lineList; line != NULL; line = line->next)
+    {
+    if (startsWith("Sick Batch:", line->name))
+        {
+	gotSick = TRUE;
+	break;
+	}
+    }
+slFreeList(&lineList);
+return gotSick;
+}
+
+char *glueFromPath(char *path)
+/* Given path to parasol queue, return corresponding glue script name.
+ * FreeMem the results of this when done. */
+{
+if (!startsWith( eapParaQueues, path))
+    errAbort("%s does not start with %s", path, eapParaQueues);
+char *local = path + strlen(eapParaQueues) + 1;
+char dir[PATH_LEN];
+splitPath(local, dir, NULL, NULL);
+int dirLen = strlen(dir);
+assert(dirLen > 0);
+dir[dirLen-1] = 0;  // Strip trailing '/'
+return cloneString(dir);
+}
+
+char *glueFromCommandLine(char *commandLine)
+/* Parse out the glue part of the command line. */
+{
+int bufSize = strlen(commandLine)+1;
+char buf[bufSize];
+strcpy(buf, commandLine);
+char *line = buf;
+char *edwCdJob = nextWord(&line);
+char *glue = nextWord(&line);
+if (glue == NULL || !sameString(edwCdJob, "edwCdJob"))
+    errAbort("Oops, command line changed away from edwCdJob");
+return cloneString(glue);
+}
+
+int countRunning(struct sqlConnection *conn, struct results *q, struct hash *pjobHash)
+/* Count up the number of jobs in pjobList that are associated with q */
+{
+char *glue = glueFromPath(q->pathName);
+char query[PATH_LEN*2];
+sqlSafef(query, sizeof(query), "select * from %s where startTime > 0 and endTime = 0", clTable);
+struct edwAnalysisJob *job, *jobList = edwAnalysisJobLoadByQuery(conn, query);
+int runningCount = 0;
+for (job = jobList; job != NULL; job = job->next)
+    {
+    struct paraPstat2Job *pjob = hashFindVal(pjobHash, job->parasolId);
+    if (pjob != NULL)
+         {
+	 char *commandGlue = glueFromCommandLine(job->commandLine);
+	 if (sameString(commandGlue, glue))
+	     {
+	     ++runningCount;
+	     }
+	 freez(&commandGlue);
+	 }
+    }
+freez(&glue);
+return runningCount;
+}
+
+void doSteps(int argc, char **argv)
+/* Show activity of various analysis steps */
+{
+struct results *q, *qList = NULL;
+struct sqlConnection *conn = sqlConnect(clDatabase);
+searchForResults(eapParaQueues, &qList);
+struct paraPstat2Job *pjobList = NULL;
+struct hash *pjobHash = eapParasolRunningHash(clParaHost, &pjobList);
+
+printf("#stat finish run results\n");
+for (q = qList; q != NULL; q = q->next)
+    {
+    char *code = (isSick(q) ? "sick" : "good");
+    int runCount = countRunning(conn, q, pjobHash);
+    printf("%s %6d %3d %s\n", code, slCount(q->lineList), runCount, q->pathName);
+    }
+}
+
+void doScrounge(int argc, char **argv)
+/* scrounge [parasolId] - jobs that DB shows as running but parasol doesn't get poked */
+{
+/* Process rest of command line */
+char *parasolId = NULL;
+if (argc > 0)
+    parasolId = argv[0];
+
+/* Make a list and hash of outstanding job from db point of view */
+struct sqlConnection *conn = sqlConnect(clDatabase);
+char query[512];
+sqlSafef(query, sizeof(query), "select * from %s where startTime > 0 and endTime = 0", clTable);
+struct edwAnalysisJob *job, *jobList = edwAnalysisJobLoadByQuery(conn, query);
+struct hash *jobHash = hashNew(0);
+for (job = jobList; job != NULL; job = job->next)
+    hashAdd(jobHash, job->parasolId, job);
+verbose(1, "Have %d pending jobs with parasol\n", slCount(jobList));
+
+/* Make a list/hash of jobs currently running */
+struct paraPstat2Job *pJob, *pJobList = NULL;
+struct hash *pJobHash = eapParasolRunningHash(clParaHost, &pJobList);
+for (pJob = pJobList; pJob != NULL; pJob = pJob->next)
+    {
+    hashAdd(pJobHash, pJob->parasolId, pJob);
+    }
+
+/* Loop through database job list.  If it isn't on the running list then assume it's a lost
+ * sole and mark it as succeeded at current time.... */
+int scroungeCount = 0;
+if (parasolId)
+    {
+    sqlSafef(query, sizeof(query), "update %s set endTime=%lld where parasolId='%s'",
+	clTable, edwNow(), parasolId);
+    sqlUpdate(conn, query);
+    scroungeCount = 1;
+    }
+else
+    {
+    for (job = jobList; job != NULL; job = job->next)
+	{
+	if (!hashLookup(pJobHash, job->parasolId))
+	    {
+	    sqlSafef(query, sizeof(query), "update %s set endTime=%lld where id=%u",
+		clTable, edwNow(), job->id);
+	    sqlUpdate(conn, query);
+	    ++scroungeCount;
+	    }
+	}
+    }
+printf("Scrounged %d - use eapFinish and it will find them or doom them\n", scroungeCount);
 }
 
 
@@ -417,6 +574,18 @@ else if (sameString(command, "err"))
 else if (sameString(command, "errFile"))
     {
     doErrFile(argc, argv);
+    }
+else if (sameString(command, "errList"))
+    {
+    doErrList(argc, argv);
+    }
+else if (sameString(command, "steps"))
+    {
+    doSteps(argc, argv);
+    }
+else if (sameString(command, "scrounge"))
+    {
+    doScrounge(argc, argv);
     }
 else
     {
