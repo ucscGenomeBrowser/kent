@@ -942,9 +942,12 @@ struct sqlConnection *sc;
 
 // connect with the default profile
 sc = sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, abort);
-sc->profile = sp; // remember the profile
+if (sc!=NULL)
+    sc->profile = sp; // remember the profile
 
 // optionally prepare the slower failover connection
+if (sp->name==NULL)
+    return sc;
 char *slowProfName = catTwoStrings("slow-", sp->name);
 struct sqlProfile *slow = sqlProfileGet(slowProfName, database);
 freez(&slowProfName);
