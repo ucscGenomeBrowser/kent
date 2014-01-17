@@ -1,5 +1,5 @@
 #publications track sequence matches as PSL plus two additional fields
-CREATE TABLE `pubsBingBlatPsl` (
+CREATE TABLE `pubsBlatPsl` (
     matches int unsigned not null,	# Number of bases that match that aren't repeats
     misMatches int unsigned not null,	# Number of bases that don't match
     repMatches int unsigned not null,	# Number of bases that match but are part of repeats

@@ -574,14 +574,15 @@ if (sc != NULL)
 	dlRemove(node);
 	freeMem(node);
 	}
-    sqlNumOpenConnections--;
-    }
-    
+   
     // also close local cache connection
     if (sc->slowConn != NULL)
         sqlDisconnect(&sc->slowConn);
 
     freez(pSc);
+    sqlNumOpenConnections--;
+    }
+    
         
 }
 
