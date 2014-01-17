@@ -1,4 +1,4 @@
-#Text to Genome project marker bed: bed4 plus one additional field for count
+#publications track markers (=snp/genes/etc): bed4 plus one additional field for count
 CREATE TABLE `pubsMarkerBand` (
   `chrom` varchar(255) NOT NULL, # chromosome
   `chromStart` int(10) unsigned NOT NULL, # start position on chromosome

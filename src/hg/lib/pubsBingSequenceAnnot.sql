@@ -1,5 +1,5 @@
 #publications track sequence data table
-CREATE TABLE pubsSequenceAnnot (
+CREATE TABLE pubsBingSequenceAnnot (
     articleId bigint not null,	# identifier of the article where the sequence was found
     fileId int not null,        # identifier of the file where the sequence was found
     seqId bigint not null,	# unique identifier of this sequence within a file

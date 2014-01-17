@@ -114,7 +114,7 @@
 #define signed32 int	      /* Wants to be signed 32 bits. */
 #define bits8 unsigned char   /* Wants to be unsigned 8 bits. */
 
-#define BIGNUM 0x7fffffff	/* A really big number */
+#define BIGNUM 0x3fffffff	/* A really big number */
 #define BIGDOUBLE 1.7E+308	/* Close to biggest double-precision number */
 
 #define LIMIT_2or8GB (2147483647 * ((sizeof(size_t)/4)*(sizeof(size_t)/4)))

@@ -1393,7 +1393,7 @@ return val;
 }
 
 char *udcReadLine(struct udcFile *file)
-/* Fetch next line from udc cache. */
+/* Fetch next line from udc cache or NULL. */
 {
 char shortBuf[2], *longBuf = NULL, *buf = shortBuf;
 int i, bufSize = sizeof(shortBuf);
