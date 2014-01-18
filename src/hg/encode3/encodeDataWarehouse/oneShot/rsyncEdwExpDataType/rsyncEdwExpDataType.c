@@ -345,7 +345,7 @@ char *antibody = slPairFindVal(varList, "antibody");
 if (antibody == NULL)
     return NULL;
 char *control = slPairFindVal(varList, "control");
-uglyf("ucscControl %s\t%s\t%s\t%s\t%s\t%s\n", dataType, exp->accession, exp->lab, exp->cellType, antibody, naForNull(control));
+verbose(2, "ucscControl %s\t%s\t%s\t%s\t%s\t%s\n", dataType, exp->accession, exp->lab, exp->cellType, antibody, naForNull(control));
 
 if (!sameWord("ChIP-seq", dataType))
     return NULL;
@@ -356,7 +356,6 @@ sqlSafef(query, sizeof(query),
     " and expVars like '%%antibody=Input%%'"
     , exp->organism, exp->dataType, exp->cellType);
 struct encodeExp *possibleControls = encodeExpLoadByQuery(conn, query);
-uglyf("Got %d possible controls\n", slCount(possibleControls));
 
 struct encodeExp *bestControl = NULL, *con;
 int bestScore = 0;
