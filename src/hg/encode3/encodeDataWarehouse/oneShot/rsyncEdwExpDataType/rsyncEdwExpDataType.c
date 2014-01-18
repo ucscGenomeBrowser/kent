@@ -322,10 +322,59 @@ else if (sameString(oldType, "DnaseSeq")) return "DNase-seq";
 else return oldType;
 }
 
-char *findUcscControl(struct sqlConnection *conn, struct encodeExp *exp)
+static int scoreUcscControl(struct encodeExp *con, char *controlName, char *lab)
+/* Score how well con looks like it will serve as an control */
+{
+int score = 1;
+struct slPair *varList = slPairListFromString(con->expVars,FALSE);
+if (sameOk(controlName,  slPairFindVal(varList, "control")))
+   score += 100;
+if (sameOk(lab, slPairFindVal(varList, "lab")))
+   score += 50;
+slPairFreeValsAndList(&varList);
+return score;
+}
+
+struct encodeExp *findUcscControl(struct sqlConnection *conn, char *dataType,
+    struct encodeExp *exp, struct slPair *varList)
 /* Try and find best control for experiment, returning it's accession, or NULL if can't find. */
 {
-return NULL;    // Going to figure out how to do it from Stanford first....
+if (exp->expVars == NULL)
+    return NULL;
+char *antibody = slPairFindVal(varList, "antibody");
+if (antibody == NULL)
+    return NULL;
+char *control = slPairFindVal(varList, "control");
+uglyf("ucscControl %s\t%s\t%s\t%s\t%s\t%s\n", dataType, exp->accession, exp->lab, exp->cellType, antibody, naForNull(control));
+
+if (!sameWord("ChIP-seq", dataType))
+    return NULL;
+
+char query[1024];
+sqlSafef(query, sizeof(query), 
+    "select * from encodeExp where organism='%s' and dataType='%s' and cellType='%s' "
+    " and expVars like '%%antibody=Input%%'"
+    , exp->organism, exp->dataType, exp->cellType);
+struct encodeExp *possibleControls = encodeExpLoadByQuery(conn, query);
+uglyf("Got %d possible controls\n", slCount(possibleControls));
+
+struct encodeExp *bestControl = NULL, *con;
+int bestScore = 0;
+for (con = possibleControls; con != NULL; con = con->next)
+    {
+    int score = scoreUcscControl(con, control, exp->lab);
+    if (score > bestScore)
+        {
+	bestControl = con;
+	bestScore = score;
+	}
+    }
+if (bestControl != NULL)
+    {
+    slRemoveEl(&possibleControls, bestControl);
+    }
+encodeExpFreeList(&possibleControls);
+return bestControl;
 }
 
 void rsyncUcscExp(FILE *f)
@@ -339,10 +388,16 @@ for (exp = expList; exp != NULL; exp = exp->next)
     if (isEmpty(exp->accession))
         continue;
     struct slPair *varList = slPairListFromString(exp->expVars,FALSE);
-    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", exp->accession, fromUcscDataType(exp, varList),
+    char *dataType = fromUcscDataType(exp, varList);
+    char *control = "";
+    struct encodeExp *controlExp = findUcscControl(conn, dataType, exp, varList);
+    if (controlExp != NULL)
+        control = controlExp->accession;
+    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", exp->accession, dataType,
 	exp->lab, exp->cellType, "ENCODE2", exp->dataType, 
-	emptyForNull(slPairFindVal(varList, "antibody")), emptyForNull(findUcscControl(conn,exp)));
+	emptyForNull(slPairFindVal(varList, "antibody")), control);
     slPairFreeValsAndList(&varList);
+    encodeExpFree(&controlExp);
     }
 }
 
