@@ -25,6 +25,7 @@
 #include "expRecord.h"
 #include "bed6FloatScore.h"
 #include "ra.h"
+#include "jsHelper.h"
 #include "factorSource.h"
 
 static void printClusterTableHeader(struct slName *otherCols, 
@@ -398,6 +399,8 @@ if (motifTable != NULL && sqlTableExists(conn, motifTable))
                 "select motif from %s where target = '%s'", motifMapTable, cluster->name);
         // TODO: perhaps sqlQuickString ?
         motifName = sqlQuickQuery(conn, query, buf, sizeof(buf));
+        if (motifName == NULL)
+            return;
         }
     #define HIGHEST_SCORING
     #ifdef HIGHEST_SCORING
@@ -569,9 +572,13 @@ else
     errAbort("Missing required trackDb setting %s for track %s",
         "inputTableFieldDisplay", tdb->track);
     }
-
-webNewSection("Table of abbreviations for cells");
+webNewSectionHeaderStart();
+jsBeginCollapsibleSectionOldStyle(cart, tdb->track, "cellSources", "Table of cell abbreviations", 
+                                  TRUE);
+webNewSectionHeaderEnd();
 hPrintFactorSourceAbbrevTable(conn, tdb);
-webNewSection("Track Description");
+jsEndCollapsibleSection();
+
+webNewSection("");
 }
 
