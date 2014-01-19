@@ -32,7 +32,7 @@ errAbort(
   "   scrounge [parasolId] jobs that DB shows as running but parasol doesn't get poked\n"
   "   err [parasolId] print info about either most recent error or error of given id#\n"
   "   errFile [parasolId] print stderr from most recent error or error of given id#\n"
-  "   errList - print list of parasol IDs, and command lines of all error jobs\n"
+  "   errList [days] [step] - print list of parasol IDs, and command lines of all error jobs\n"
   "options:\n"
   "   -database=<mysql database> - default %s\n"
   "   -table=<msqyl table> - default %s\n"
@@ -53,10 +53,45 @@ struct results
 /* Information about a parasol results file */
     {
     struct results *next;
+    char *name;	    /* Symbolic name */
     char *pathName; /* may include a few slashes with the file name */
     struct slName *lineList;	/* List of contents line by line. */
+    /* -- beware under here vars not always set - check pointers for null. */
     struct jobResult *jobList;	/* Beware not always set. */
+    int jobCount;
+    int runningCount;
     };
+
+char *pathToResultsName(char *path)
+/* Return just name from a path of form /long/dir/to/name/results . */
+{
+char *endPat = "/results";
+if (!endsWith(path, endPat))
+    errAbort("Expecting this to end with .results: %s", path);
+
+/*  Turn /this/that/results in path to /this/that in beforeResults. */
+int endLen = strlen(endPat);
+int pathLen = strlen(path);
+int headLen = pathLen - endLen;
+char beforeResults[headLen+1];
+memcpy(beforeResults, path, headLen);
+beforeResults[headLen] = 0;
+
+char step[PATH_LEN];
+splitPath(beforeResults, NULL, step, NULL);
+return cloneString(step);
+}
+
+struct results *resultsNew(char *resultsPath)
+/* Wrap a results structure around file located at path */
+{
+struct results *results;
+AllocVar(results);
+results->name = pathToResultsName(resultsPath);
+results->pathName = cloneString(resultsPath);
+results->lineList = readAllLines(resultsPath);
+return results;
+}
 
 void searchForResults(char *dir, struct results **retResults)
 /* Look in current dir and all subdirs for results files. */
@@ -65,10 +100,7 @@ char resultsPath[PATH_LEN];
 safef(resultsPath, sizeof(resultsPath), "%s/results", dir);
 if (fileExists(resultsPath))
      {
-     struct results *results;
-     AllocVar(results);
-     results->pathName = cloneString(resultsPath);
-     results->lineList = readAllLines(resultsPath);
+     struct results *results = resultsNew(resultsPath);
      slAddHead(retResults, results);
      }
 struct fileInfo *fi, *fiList = listDirX(dir, "*", TRUE);
@@ -80,7 +112,8 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 }
 
 
-int countParaRunning(struct sqlConnection *conn, struct hash *parasolRunningHash)
+int countParaRunning(struct sqlConnection *conn, struct hash *parasolRunningHash, 
+    struct hash *qHash)
 /* Count up number of jobs in are table that Parasol thinks are currently running */
 {
 int count = 0;
@@ -89,6 +122,13 @@ sqlSafef(query, sizeof(query), "select * from %s where startTime > 0 and endTime
 struct edwAnalysisJob *job, *jobList = edwAnalysisJobLoadByQuery(conn, query);
 for (job = jobList; job != NULL; job = job->next)
     {
+    char *step = eapStepFromCommandLine(job->commandLine);
+    struct results *q = hashFindVal(qHash, step);
+    if (q != NULL)
+        q->runningCount += 1;
+    else
+        warn("%s not in qHash", step);
+        
     if (hashLookup(parasolRunningHash, job->parasolId))
         {
 	++count;
@@ -118,22 +158,74 @@ if (jobCount > 0)
 return jobCount;
 }
 
+int resultsScore(const struct results *q)
+{
+return 100000 * q->runningCount + q->jobCount;
+}
+
+int resultsCmpScore(const void *va, const void *vb)
+/* Compare to sort based on scoring function start. */
+{
+const struct results *a = *((struct results **)va);
+const struct results *b = *((struct results **)vb);
+return resultsScore(b) - resultsScore(a);
+}
+
+struct jobResult *linesToJobResults(struct slName *lineList)
+/* Convert from lines to jobResults without destroying lines. */
+{
+struct slName *line;
+struct jobResult *jobList = NULL, *job;
+for (line = lineList; line != NULL; line = line->next)
+    {
+    int bufLen = strlen(line->name)+1;
+    char buf[bufLen];
+    char *row[JOBRESULT_NUM_COLS];
+    memcpy(buf, line->name, bufLen);
+    int wordCount = chopLine(buf, row);
+    if  (wordCount != JOBRESULT_NUM_COLS)
+	internalErr();
+    job = jobResultLoad(row);
+    slAddHead(&jobList, job);
+    }
+slReverse(&jobList);
+return jobList;
+}
+
+
 void doStatus()
 /* Print out overall status */
 {
 struct results *q, *qList = NULL;
+struct hash *qHash = hashNew(0);
 searchForResults(eapParaQueues, &qList);
 int qCount = 0;
 long finishedJobs = 0;
 for (q = qList; q != NULL; q = q->next)
     {
     ++qCount;
-    finishedJobs += slCount(q->lineList);
+    hashAdd(qHash, q->name, q);
+    q->jobList = linesToJobResults(q->lineList);
+    q->jobCount = slCount(q->lineList);
+    finishedJobs += q->jobCount;
     }
-// printf("Jobs finished: %ld\n", finishedJobs);
-printf("Analysis steps:   %5d\n", qCount);
 
+struct hash *runningHash = eapParasolRunningHash(clParaHost, NULL);
 struct sqlConnection *conn = edwConnect();
+int runningCount = countParaRunning(conn, runningHash, qHash);
+
+// printf("Jobs finished: %ld\n", finishedJobs);
+printf("Analysis steps:   %5d", qCount);
+slSort(&qList, resultsCmpScore);
+int i;
+q = qList;
+for (i=0; i<3 && i<qCount; ++i)
+    {
+    printf(", %s %d", q->name, q->runningCount);
+    q = q->next;
+    }
+printf("\n");
+
 char query[512];
 printf("Jobs >12 hours old: %3d\n", countOldJobs(conn, 0.5));
 printDaysOldJobs(conn, 1);
@@ -142,8 +234,6 @@ printDaysOldJobs(conn, 3);
 printDaysOldJobs(conn, 5);
 printDaysOldJobs(conn, 10);
 
-struct hash *runningHash = eapParasolRunningHash(clParaHost, NULL);
-int runningCount = countParaRunning(conn, runningHash);
 if (runningCount > 0)
     {
     sqlSafef(query, sizeof(query), "select min(startTime) from %s where startTime>0 and endTime=0",
@@ -164,17 +254,22 @@ sqlSafef(query, sizeof(query), "select count(*) from %s where startTime=0", clTa
 int dbJobsQueued = sqlQuickNum(conn, query);
 printf("Jobs queued:    %7d\n", dbJobsQueued);
 
+sqlSafef(query, sizeof(query), "select max(endTime) from %s where returnCode = 0", clTable);
+long long lastGoodTime = sqlQuickLongLong(conn, query);
+printf("Last return ok:  %6.2f hours ago\n", (double)(edwNow() - lastGoodTime)/3600);
+
+sqlSafef(query, sizeof(query), "select max(endTime) from %s where returnCode != 0", clTable);
+long long lastCrashTime = sqlQuickLongLong(conn, query);
+printf("Last crash:      %6.2f hours ago\n", (double)(edwNow() - lastCrashTime)/3600);
+
 sqlSafef(query, sizeof(query), "select count(*) from %s where returnCode != 0", clTable);
 int dbJobsCrashed = sqlQuickNum(conn, query);
 printf("Jobs crashed:   %7d\n", dbJobsCrashed);
 
-sqlSafef(query, sizeof(query), "select max(endTime) from %s where returnCode != 0", clTable);
-long long lastCrashTime = sqlQuickLongLong(conn, query);
-printf("Last crash:      %6.2g hours ago\n", (double)(edwNow() - lastCrashTime)/3600);
-
-sqlSafef(query, sizeof(query), "select count(*) from %s where endTime > 0", clTable);
-int dbJobsFinished = sqlQuickNum(conn, query);
-printf("Jobs finished:  %7d\n", dbJobsFinished);
+sqlSafef(query, sizeof(query), "select count(*) from %s where endTime > 0 and returnCode=0", 
+    clTable);
+int dbJobsGood = sqlQuickNum(conn, query);
+printf("Jobs return ok: %7d\n", dbJobsGood);
 
 }
 
@@ -218,27 +313,6 @@ printf("Queue dir:     %s\n", eapParaQueues);
 printf("Database:      %s\n", clDatabase);
 printf("Jobs table:    %s\n", clTable);
 printf("Parasol host:  %s\n", clParaHost);
-}
-
-struct jobResult *linesToJobResults(struct slName *lineList)
-/* Convert from lines to jobResults without destroying lines. */
-{
-struct slName *line;
-struct jobResult *jobList = NULL, *job;
-for (line = lineList; line != NULL; line = line->next)
-    {
-    int bufLen = strlen(line->name)+1;
-    char buf[bufLen];
-    char *row[JOBRESULT_NUM_COLS];
-    memcpy(buf, line->name, bufLen);
-    int wordCount = chopLine(buf, row);
-    if  (wordCount != JOBRESULT_NUM_COLS)
-	internalErr();
-    job = jobResultLoad(row);
-    slAddHead(&jobList, job);
-    }
-slReverse(&jobList);
-return jobList;
 }
 
 struct jobResult *getRecentCrashed(struct jobResult *jobList, struct jobResult *bestSoFar)
@@ -393,12 +467,25 @@ mustSystem(command);
 void doErrList(int argc, char **argv)
 /* Print list of parasol IDs, and command lines of all error jobs. */
 {
+double days = BIGNUM;
+if (argc > 0)
+    days = sqlDouble(argv[0]);
+char *step = NULL;
+if (argc > 1)
+    step = argv[1];
+
 struct sqlConnection *conn = edwConnect();
 char query[512];
-sqlSafef(query, sizeof(query), "select * from edwAnalysisJob where returnCode != 0");
+sqlSafef(query, sizeof(query), 
+    "select * from edwAnalysisJob where returnCode != 0 and endTime > %lld",
+    edwNow() - (long long)(days * 3600 * 24));
 struct edwAnalysisJob *job, *jobList = edwAnalysisJobLoadByQuery(conn, query);
 for (job = jobList; job != NULL; job = job->next)
+    {
+    if (step != NULL && !sameOk(eapStepFromCommandLine(job->commandLine), step))
+        continue;
     printf("%s\t%s\n", naForEmpty(job->parasolId), job->commandLine);
+    }
 }
 
 boolean isSick(struct results *q)
