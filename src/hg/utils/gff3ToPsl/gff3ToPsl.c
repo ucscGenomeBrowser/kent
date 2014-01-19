@@ -97,7 +97,7 @@ static struct nameAndSize *getNameAndSize(struct hash *hash, char *name)
 {
 struct hashEl *hel = hashLookup(hash, name);
 if (hel == NULL)
-    errAbort("couldn't find %s in locus file", name);
+    errAbort("couldn't find %s in chrom.sizes file", name);
 return hel->val;
 }
 
