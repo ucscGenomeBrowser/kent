@@ -382,7 +382,7 @@ slUniqify(pList,compare,free);
 }
 
 boolean slRemoveEl(void *vpList, void *vToRemove)
-/* Remove element from doubly linked list.  Usage:
+/* Remove element from singly linked list.  Usage:
  *    slRemove(&list, el);
  * Returns TRUE if element in list.  */
 {

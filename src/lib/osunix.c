@@ -369,6 +369,14 @@ if (err < 0)
     errnoAbort("Couldn't rename %s to %s", oldName, newName);
 }
 
+void mustRemove(char *path)
+/* Remove file or die trying */
+{
+int err = remove(path);
+if (err < 0)
+    errnoAbort("Couldn't remove %s", path);
+}
+
 static void eatSlashSlashInPath(char *path)
 /* Convert multiple // to single // */
 {

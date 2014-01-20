@@ -42,42 +42,45 @@ void edwRetryJob(char *database, char *jobTable)
 long long now = edwNow();
 long long maxTimeThreshold = now - 24*3600 * maxTime;
 
-/* Get list of all jobs ordered by ID. */
+/* Get list of all jobs ordered by ID with most recent job first. */
 struct sqlConnection *conn = sqlConnect(database);
 char query[512];
-sqlSafef(query, sizeof(query), "select * from %s order by id", jobTable);
+sqlSafef(query, sizeof(query), "select * from %s order by id desc", jobTable);
 struct edwJob *job, *jobList = edwJobLoadByQuery(conn, query);
 
-/* Make hash of command lines that completed ok or haven't started. */
-struct hash *goodHash = hashNew(0);
+/* Loop through job list looking for commandLines that failed or timed out  in their
+ * most recent attempt. */
+struct hash *jobHash = hashNew(0);
+struct slRef *failRef, *failRefList = NULL;
 for (job = jobList; job != NULL; job = job->next)
     {
-    if ((job->endTime > 0 && job->returnCode == 0) || job->startTime == 0 
-	|| (job->startTime > 0 && job->startTime < maxTimeThreshold))
-        hashAdd(goodHash, job->commandLine, job);
-    }
-
-/* Loop through candidates for restart. */
-struct hash *badHash = hashNew(0);
-for (job = jobList; job != NULL; job = job->next)
-    {
-    if (job->id >= minId && hashLookup(goodHash, job->commandLine) == NULL
-	&& hashLookup(badHash, job->commandLine) == NULL)
-	{
-	if (job->returnCode != 0 || (job->startTime < maxTimeThreshold && job->endTime == 0))
+    if (hashLookup(jobHash, job->commandLine) == NULL)
+        {
+	hashAdd(jobHash, job->commandLine, job);
+	if (job->id >= minId && job->startTime != 0)
 	    {
-	    if (dry)
-		printf("%s\n", job->commandLine);
-	    else
-		{
-		sqlSafef(query, sizeof(query), 
-		    "insert into %s (commandLine) values ('%s')",  jobTable, job->commandLine);
-		sqlUpdate(conn, query);
+	    boolean timedOut = (job->startTime < maxTimeThreshold && job->endTime == 0);
+	    if (job->returnCode != 0 || timedOut)
+	        {
+		refAdd(&failRefList, job);
 		}
-	    hashAdd(badHash, job->commandLine, job);
 	    }
 	}
     }
+
+/* Loop through failed list printing or retrying */
+for (failRef = failRefList; failRef != NULL; failRef = failRef->next)
+    {
+    job = failRef->val;
+    if (dry)
+	printf("%s\n", job->commandLine);
+    else
+	{
+	sqlSafef(query, sizeof(query), 
+	    "insert into %s (commandLine) values ('%s')",  jobTable, job->commandLine);
+	sqlUpdate(conn, query);
+	}
+    } 
 }
 
 int main(int argc, char *argv[])

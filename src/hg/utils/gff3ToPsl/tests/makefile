@@ -13,7 +13,8 @@ all::
 test:: patch1test 
 
 patch1test: mkout
-	${gff3ToPsl} input/locusNameAndSize.txt input/GL339450_CM000671.gff output/$@.psl
+	${gff3ToPsl} input/chrom.sizes input/GL339450_CM000671.gff stdout | sed -f input/locusToChrom.sed > output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
 	diff expected/$@.psl output/$@.psl
 	${pslRecalcMatch} output/$@.psl /cluster/data/hg19/hg19.2bit input/GL339449.2bit output/$@.2.psl
 	${pslCheck} -verbose=0 output/$@.2.psl

@@ -1,4 +1,4 @@
-/* edwFinishAnalysis - Look for analysis jobs that have completed and integrate results into 
+/* eapFinish - Look for analysis jobs that have completed and integrate results into 
  * database. */
 #include <uuid/uuid.h>
 #include "common.h"
@@ -7,26 +7,32 @@
 #include "options.h"
 #include "portable.h"
 #include "cheapcgi.h"
-#include "encodeDataWarehouse.h"
-#include "edwLib.h"
+#include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
+#include "../../encodeDataWarehouse/inc/edwLib.h"
 #include "encode3/encode3Valid.h"
+
+boolean noClean = FALSE;
+boolean keepFailing = FALSE;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwFinishAnalysis - Look for analysis jobs that have completed and integrate results into\n"
+  "eapFinish - Look for analysis jobs that have completed and integrate results into\n"
   "database.\n"
   "usage:\n"
-  "   edwFinishAnalysis now\n"
+  "   eapFinish now\n"
   "Where 'now' is just a parameter that is ignored for now.\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -noClean if set then don't clean up temp dirs."
+  "   -keepFailing - if set then don't always abort at first error\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"noClean", OPTION_BOOLEAN},
+   {"keepFailing", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -164,6 +170,28 @@ sqlUpdate(conn, query);
 edwSubmitFree(&submit);
 }
 
+void removeTempDir(char *dir)
+/* Remove a temporary directory.  Out of paranoia make sure it is fully qualified. */
+{
+if (dir[0] != '/')
+    errAbort("removeTempDir(%s) - dir must be absolute not relative", dir);
+verbose(2, "cleaning up %s\n", dir);
+char command[2*PATH_LEN];
+safef(command, sizeof(command), "rm -r %s", dir);
+mustSystem(command);
+}
+
+void mustMv(char *oldName, char *newName)
+/* Make a system command to move oldName to newName.  Unlike mustRename
+ * which relies on the rename() unix function, where both old and new have
+ * to be on the same device, this one can cross devices. */
+{
+char command[3*PATH_LEN];
+safef(command, sizeof(command), "mv %s %s", oldName, newName);
+verbose(1, "%s\n", command);
+mustSystem(command);
+}
+
 void finishGoodRun(struct sqlConnection *conn, struct edwAnalysisRun *run, 
     struct edwAnalysisJob *job)
 /* Looks like the job for the run completed successfully, so let's grab results
@@ -199,21 +227,18 @@ struct dyString *outputFileIds = dyStringNew(0);
 for (i=0; i<run->outputFileCount; ++i)
     {
     char path[PATH_LEN];
-    safef(path, sizeof(path), "%s/%s", run->tempDir, run->outputNamesInTempDir[i]);
-
-    // Check for edwFile already made - possible race condition (should consider
-    // only running this program serially to be honest)
-    if (efWithSubmitNameExists(conn, path))
-        {
-	verbose(1, "Skipping %s, already in progress\n", path);
-	continue;
-	}
+    safef(path, sizeof(path), "%s%s", run->tempDir, run->outputNamesInTempDir[i]);
 
     verbose(1, "processing %s\n", path);
     if (!fileExists(path))
         {
 	markRunAsFailed(conn, run);
-	errAbort("Expected output %s not present", path);
+	warn("Expected output %s not present", path);
+	if (!keepFailing)
+	    {
+	    errAbort("Aborting - use -keepFailing flag to burn through more than one such error");
+	    }
+	break;
 	}
 
     /* Make most of edwFile record */
@@ -228,14 +253,6 @@ for (i=0; i<run->outputFileCount; ++i)
     outputFile->startUploadTime = edwNow();
     outputFile->edwFileName = outputFile->errorMessage = outputFile->deprecated = "";
 
-    // Check for edwFile already made - possible race condition (should consider
-    // only running this program serially to be honest)
-    if (efWithSubmitNameExists(conn, path))
-        {
-	verbose(1, "Skipping %s, already in progress\n", path);
-	continue;
-	}
-
     /* Save to database so get file ID */
     edwFileSaveToDb(conn, outputFile, "edwFile", 0);
     outputFile->id = sqlLastAutoId(conn);
@@ -244,7 +261,7 @@ for (i=0; i<run->outputFileCount; ++i)
     char babyName[PATH_LEN], edwFileName[PATH_LEN];
     edwMakeFileNameAndPath(outputFile->id, outputFile->submitFileName, babyName, edwFileName);
     outputFile->edwFileName = cloneString(babyName);
-    mustRename(path, edwFileName);
+    mustMv(path, edwFileName);
     outputFile->endUploadTime = edwNow();
 
     /* Update last few fields in database. */
@@ -264,18 +281,21 @@ for (i=0; i<run->outputFileCount; ++i)
     dyStringPrintf(outputFileIds, "%u,", outputFile->id);
     slAddTail(&outputFileList, outputFile);
     }
-
 sqlSafef(query, sizeof(query), 
    "update edwAnalysisRun set uuid='%s', createStatus=1, createCount=%d, createFileIds='%s'"
    "where id=%u",
    run->uuid, slCount(outputFileList), outputFileIds->string, run->id);
 sqlUpdate(conn, query);
 
+if (!noClean)
+    {
+    removeTempDir(run->tempDir);
+    }
 dyStringFree(&outputFileIds);
 }
 
-void edwFinishAnalysis(char *how)
-/* edwFinishAnalysis - Look for analysis jobs that have createStatus and integrate results into 
+void eapFinish(char *how)
+/* eapFinish - Look for analysis jobs that have createStatus and integrate results into 
  * database. */
 {
 struct sqlConnection *conn = edwConnectReadWrite();
@@ -289,23 +309,31 @@ for (run = runList; run != NULL; run = run->next)
     {
     sqlSafef(query, sizeof(query), "select * from edwAnalysisJob where id=%u", run->jobId);
     struct edwAnalysisJob *job = edwAnalysisJobLoadByQuery(conn, query);
-    char *command = job->commandLine;
-    if (job->endTime > 0)
-        {
-	if (job->returnCode == 0)
+    if (job == NULL)
+	{
+        warn("No job for run %u, jobId %u doesn't exist", run->id, run->jobId);
+	markRunAsFailed(conn, run);
+	}
+    else
+	{
+	char *command = job->commandLine;
+	if (job->endTime > 0)
 	    {
-	    verbose(2, "succeeded %s\n", command);
-	    finishGoodRun(conn, run, job);
+	    if (job->returnCode == 0)
+		{
+		verbose(2, "succeeded %s\n", command);
+		finishGoodRun(conn, run, job);
+		}
+	    else
+		{
+		verbose(1, "failed %s\n", command);
+		markRunAsFailed(conn, run);
+		}
 	    }
 	else
 	    {
-	    verbose(1, "failed %s\n", command);
-	    markRunAsFailed(conn, run);
+	    verbose(2, "running %s\n", command);
 	    }
-	}
-    else
-        {
-	verbose(2, "running %s\n", command);
 	}
     };
 }
@@ -316,6 +344,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-edwFinishAnalysis(argv[1]);
+noClean = optionExists("noClean");
+keepFailing = optionExists("keepFailing");
+eapFinish(argv[1]);
 return 0;
 }

@@ -1,3 +1,10 @@
+table edwSettings
+"Settings used to configure warehouse"
+    (
+    uint id primary auto;  "Settings ID"
+    string name unique;	"Settings name, can't be reused"
+    string val index; "Settings value, some undefined but not huge thing"
+    )
 
 table edwUser
 "Someone who submits files to or otherwise interacts with big data warehouse"
@@ -111,6 +118,16 @@ table edwAssembly
     uint twoBitId;  "File ID of associated twoBit file"
     bigInt baseCount;  "Count of bases including N's"
     bigInt realBaseCount;   "Count of non-N bases in assembly"
+    uint seqCount; "Number of chromosomes or other distinct sequences in assembly"
+    )
+
+table edwBiosample
+"A biosample - not much info here, just enough to drive analysis pipeline"
+    (
+    uint id primary auto;  "Biosample id"
+    string term index;	   "Human readable.  Shared with ENCODE2."
+    uint taxon;	    "NCBI taxon number - 9606 for human."
+    string sex;	"One letter code: M male, F female, B both, U unknown"
     )
 
 table edwExperiment
@@ -123,6 +140,7 @@ table edwExperiment
     string rfa;  "Something like 'ENCODE2' or 'ENCODE3'.  Is award.rfa at Stanford."
     string assayType; "Similar to dataType. Is assay_term_name at Stanford."
     string ipTarget; "The target for the immunoprecipitation in ChIP & RIP." 
+    string control; "Primary control for experiment.  Usually another experiment accession."
     )
 
 table edwValidFile
@@ -131,7 +149,7 @@ table edwValidFile
     uint id primary auto;          "ID of validated file"
     char[16] licensePlate index;  "A abc123 looking license-platish thing."
     uint fileId unique;      "Pointer to file in main file table"
-    string format;    "What format it's in from manifest"
+    string format index[12];    "What format it's in from manifest"
     string outputType index[16]; "What output_type it is from manifest"
     string experiment index[16]; "What experiment it's in from manifest"
     string replicate;  "What replicate it is from manifest.  Values 1,2,3... pooled, or ''"
@@ -216,6 +234,8 @@ table edwBamFile
     int u4mReadCount; "Uniquely-mapped 4 million read actual read # (usually 4M)"
     int u4mUniquePos;  "Unique positions in target of the 4M reads that map to single pos"
     double u4mUniqueRatio; "u4mUniqPos/u4mReadCount - measures library diversity"
+    bigInt targetBaseCount;  "Count of bases in mapping target"
+    uint targetSeqCount; "Number of chromosomes or other distinct sequences in mapping target"
     )
 
 table edwQaEnrichTarget
@@ -293,8 +313,8 @@ table edwQaPairedEndFastq
 "Information about two paired-end fastqs"
     (
     uint id primary auto; "Id of this set of paired end files"
-    uint fileId1 unique; "Id of first in pair"
-    uint fileId2 unique; "Id of second in pair"
+    uint fileId1 index; "Id of first in pair"
+    uint fileId2 index; "Id of second in pair"
     double concordance;  "% of uniquely aligning reads where pairs nearby and point right way"
     double distanceMean; "Average distance between reads"
     double distanceStd;  "Standard deviation of distance"
@@ -333,11 +353,13 @@ table edwAnalysisJob
     (
     uint id primary auto;    "Job id"
     lstring commandLine; "Command line of job"
-    bigInt startTime; "Start time in seconds since 1970"
-    bigInt endTime; "End time in seconds since 1970"
+    bigInt startTime index; "Start time in seconds since 1970"
+    bigInt endTime index; "End time in seconds since 1970"
     lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
     int pid;	"Process ID for running processes"
+    int cpusRequested; "Number of CPUs to request from job control system"
+    string parasolId index[12];	"Parasol job id for process." 
     )
 
 table edwAnalysisSoftware
@@ -356,6 +378,7 @@ table edwAnalysisStep
     string "name" unique;  "Name of this analysis step"
     int softwareCount;  "Number of pieces of software used in step"
     string[softwareCount] software; "Names of software used. First is the glue script"
+    int cpusRequested; "Number of CPUs to request from job control system"
     )
 
 table edwAnalysisRun

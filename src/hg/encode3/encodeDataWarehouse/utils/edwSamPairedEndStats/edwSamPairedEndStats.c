@@ -103,13 +103,15 @@ while (lineFileNext(lf, &line, NULL))
     }
 lineFileClose(&lf);
 
-if (pairedCount == 0)
-   errAbort("Can't compute because no paired reads aligning in file\n");
+double distanceMean = 0, distanceStd=0, concordance=0;
 
-/* Calculate statistics. */
-double distanceMean = sum/pairedCount;
-double distanceStd = calcStdFromSums(sum, sumSquares, pairedCount);
-double concordance = (double)pairedCount/(double)alignedCount;
+if (pairedCount != 0)
+    {
+    /* Calculate statistics. */
+    distanceMean = sum/pairedCount;
+    distanceStd = calcStdFromSums(sum, sumSquares, pairedCount);
+    concordance = (double)pairedCount/(double)alignedCount;
+    }
 
 
 /* Write out results */

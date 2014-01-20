@@ -174,13 +174,11 @@ qsort(sortedSizes, head->n_targets, sizeof(sortedSizes[0]), uint32_tCmp);
 char **sortedNames = CloneArray(head->target_name, head->n_targets);
 qsort(sortedNames, head->n_targets, sizeof(sortedNames[0]), charPtCmp);
 
-/* Sum up some target into in 2 hex md5s by first building up string of info */
+/* Sum up some target sizes. */
 long long targetBaseCount = 0;   /* Total size of all bases in target seq */
 int i;
 for (i=0; i<head->n_targets; ++i)
-    {
     targetBaseCount  += head->target_len[i];
-    }
 
 bam1_t one;
 ZeroVar(&one);	// This seems to be necessary!
@@ -270,7 +268,7 @@ double m4UniqueRatio = (double)m4UniquePos/m4ReadCount;
 fprintf(f, "u4mUniqueRatio %g\n", m4UniqueRatio);
 verbose(1, "u4mUniqueRatio %g\n", m4UniqueRatio);
 
-fprintf(f, "targetCount %d\n", (int) head->n_targets);
+fprintf(f, "targetSeqCount %d\n", (int) head->n_targets);
 fprintf(f, "targetBaseCount %lld\n", targetBaseCount);
 
 /* Deal with bed output if any */
