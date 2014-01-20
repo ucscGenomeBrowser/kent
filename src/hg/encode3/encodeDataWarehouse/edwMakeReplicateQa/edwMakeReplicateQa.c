@@ -405,7 +405,8 @@ else if (sameString(format, "bigWig"))
     {
     doBigWigReplicate(conn, assembly, elderEf, elderVf, youngerEf, youngerVf);
     }
-else if (sameString(format, "rcc") || sameString(format, "idat") || sameString(format, "looseBed"))
+else if (sameString(format, "rcc") || sameString(format, "idat") 
+    || sameString(format, "customTrack"))
     {
     warn("Don't know how to compare %s files", format);
     }
