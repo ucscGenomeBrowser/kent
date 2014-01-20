@@ -611,7 +611,7 @@ return TRUE;
 char *edwSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf", 
     "bigWig", "bigBed", "bedLogR", "bedRnaElements", "bedRrbs", "broadPeak", 
     "narrowPeak", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
-    "rcc", "idat", "fasta", "looseBed"};
+    "rcc", "idat", "fasta", "customTrack"};
 int edwSupportedFormatsCount = ArraySize(edwSupportedFormats);
 
 boolean isEmptyOrNa(char *s)
