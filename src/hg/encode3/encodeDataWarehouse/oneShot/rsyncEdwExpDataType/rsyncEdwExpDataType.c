@@ -342,7 +342,7 @@ struct encodeExp *findUcscControl(struct sqlConnection *conn, char *dataType,
 if (exp->expVars == NULL)
     return NULL;
 char *antibody = slPairFindVal(varList, "antibody");
-if (antibody == NULL)
+if (antibody == NULL || sameWord(antibody, "Input"))
     return NULL;
 char *control = slPairFindVal(varList, "control");
 verbose(2, "ucscControl %s\t%s\t%s\t%s\t%s\t%s\n", dataType, exp->accession, exp->lab, exp->cellType, antibody, naForNull(control));
