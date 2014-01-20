@@ -677,6 +677,23 @@ if (assembly == NULL)
 return assembly;
 }
 
+char *edwSimpleAssemblyName(char *assembly)
+/* Given compound name like male.hg19 return just hg19 */
+/* Given name of assembly return name where we want to do enrichment calcs. */
+{
+/* If it ends with one of our common assembly suffix, then do enrichment calcs
+ * in that space, rather than some subspace such as male, female, etc. */
+static char *specialAsm[] = {".hg19",".hg38",".mm9",".mm10"};
+int i;
+for (i=0; i<ArraySize(specialAsm); ++i)
+    {
+    char *special = specialAsm[i];
+    if (endsWith(assembly, special))
+        return special+1;
+    }
+return assembly;
+}
+
 
 struct genomeRangeTree *edwGrtFromBigBed(char *fileName)
 /* Return genome range tree for simple (unblocked) bed */

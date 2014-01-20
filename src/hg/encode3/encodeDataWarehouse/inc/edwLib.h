@@ -132,6 +132,7 @@ void edwValidFileUpdateDb(struct sqlConnection *conn, struct edwValidFile *el, l
 /* Save edwValidFile as a row to the table specified by tableName, replacing existing record at 
  * id. */
 
+struct cgiParsedVars;   // Forward declare this so don't have to include cheapcgi
 void edwValidFileFieldsFromTags(struct edwValidFile *vf, struct cgiParsedVars *tags);
 /* Fill in many of vf's fields from tags. */
 
@@ -149,6 +150,9 @@ struct genomeRangeTree *edwMakeGrtFromBed3List(struct bed3 *bedList);
 
 struct edwAssembly *edwAssemblyForUcscDb(struct sqlConnection *conn, char *ucscDb);
 /* Get assembly for given UCSC ID or die trying */
+
+char *edwSimpleAssemblyName(char *assembly);
+/* Given compound name like male.hg19 return just hg19 */
 
 struct genomeRangeTree *edwGrtFromBigBed(char *fileName);
 /* Return genome range tree for simple (unblocked) bed */
