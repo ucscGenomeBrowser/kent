@@ -283,6 +283,17 @@ else
     return sqlProfileFindByDatabase(database);
 }
 
+static struct sqlProfile* sqlProfileGetFailover(struct sqlProfile* sp, char *database)
+/* try to find a failover slow-x profile for a profile x */
+{
+if (sp==NULL || sp->name==NULL)
+    return NULL;
+char *slowProfName = catTwoStrings("slow-", sp->name);
+struct sqlProfile *slow = sqlProfileGet(slowProfName, database);
+freez(&slowProfName);
+return slow;
+}
+
 static struct sqlProfile* sqlProfileMustGet(char *profileName, char *database)
 /* lookup a profile using the profile resolution algorithm or die trying */
 {
@@ -938,22 +949,34 @@ static struct sqlConnection *sqlConnProfile(struct sqlProfile* sp, char *databas
 /* Connect to database using the profile.  Database maybe NULL to connect to
  * the server. Optionally abort on failure. */
 {
+bool mainAbort = abort;
 struct sqlConnection *sc;
 
+// get the slow-db profile for the profile, if it exists
+struct sqlProfile *slow = sqlProfileGetFailover(sp, database);
+// if we have a failover profile, don't abort right away
+if (slow!=NULL)
+    mainAbort = FALSE;
+
 // connect with the default profile
-sc = sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, abort);
-if (sc!=NULL)
-    sc->profile = sp; // remember the profile
-
-// optionally prepare the slower failover connection
-if (sp->name==NULL)
-    return sc;
-char *slowProfName = catTwoStrings("slow-", sp->name);
-struct sqlProfile *slow = sqlProfileGet(slowProfName, database);
-freez(&slowProfName);
-
+sc = sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, mainAbort);
 if (slow==NULL)
+    // the default case: just return sc, can be NULL
     return sc;
+
+// we still have a failover profile to setup
+if (sc==NULL)
+    {
+    // We have a failover connection configured, but no main connection.
+    // This can happen if the requested database exists only on the failover connection
+    // We only create a failover connection in this case and return it as the main one
+    sc = sqlConnRemote(slow->host, slow->port, slow->socket, slow->user, slow->password, database, abort);
+    if (monitorFlags & JKSQL_TRACE)
+        fprintf(stderr, "SQL_FAILOVER_AT_CONNECT");
+    return sc;
+    }
+
+sc->profile = sp; // remember the profile
 
 // don't connect the slow connection yet: lazily connect later when needed; saves 0.5
 // seconds per connection on transatlantic links
