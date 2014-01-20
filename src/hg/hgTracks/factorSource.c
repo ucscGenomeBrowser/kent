@@ -34,6 +34,11 @@ char *motifTable = trackDbSetting(track->tdb, "motifTable");
 if (motifTable == NULL)
     return;
 
+char *motifMaxWindow = trackDbSetting(track->tdb, "motifMaxWindow");
+if (motifMaxWindow != NULL)
+    if (winEnd - winStart > sqlUnsigned(motifMaxWindow))
+        return;
+
 struct sqlConnection *conn = hAllocConn(database);
 if (sqlTableExists(conn, motifTable))
     {
