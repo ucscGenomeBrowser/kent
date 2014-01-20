@@ -16,12 +16,7 @@
 #include "verbose.h"
 #include "../../../../parasol/inc/jobResult.h"
 #include "../../../../parasol/inc/paraMessage.h"
-
-/* System variables - should be moved to shared library. */
-char *eapJobTable = "edwAnalysisJob";
-char *eapParaHost = "ku";
-char *eapParaQueues = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues";
-
+#include "eapLib.h"
 
 /* Variables set from command line */
 char *clDatabase = NULL;
@@ -151,27 +146,6 @@ sqlDisconnect(&conn);
 dyStringFree(&cmd);
 }
 
-void getCommandName(struct edwAnalysisJob *job, char *name, int size)
-/* Fill in name with second word in command line */
-{
-/* Parse out first two words of job command line. */
-int commandSize = strlen(job->commandLine);
-char dupeCommand[commandSize+1];
-strcpy(dupeCommand, job->commandLine);
-char *line = dupeCommand;
-char *word1 = nextWord(&line);
-char *word2 = nextWord(&line);
-
-/* Figure out real command in there */
-char *command = word2;
-if (word2 == NULL || !sameString(word1, "edwCdJob"))// We want to be alerted if command line changes
-    {
-    warn("Oh no, edwScheduleJob changed on us?");
-    command = word1;
-    }
-safef(name, size, "%s", command);
-}
-
 void finishJob(struct edwAnalysisJob *job, struct jobResult *jr) 
 /* Move parasol job result into edwAnalysisJob table */
 {
@@ -255,25 +229,6 @@ while (freeCount == 0)
 return freeCount;
 }
 
-struct hash *parasolRunningHash()
-/* Return hash of parasol IDs with jobs running. Hash has no values */
-{
-struct hash *runningHash = hashNew(0);
-char cmd[512];
-safef(cmd, sizeof(cmd), "pstat2 %s", getUser());
-struct slName *lineEl, *lineList = pmHubMultilineQuery(cmd, clParaHost);
-for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
-    {
-    char *line = lineEl->name;
-    char *type = nextWord(&line);
-    char *parasolId = nextWord(&line);
-    if (parasolId != NULL && sameString(type, "r"))
-	hashAdd(runningHash, parasolId, NULL);
-    }
-slFreeList(&lineList);
-return runningHash;
-}
-
 void eapDaemon(char *countString)
 /* eapDaemon - Run jobs remotely via parasol based on jobs in table.. */
 {
@@ -298,12 +253,12 @@ struct rbTree *running = rbTreeNew(cmpByParasolId);
 /* Add old jobs to container and get associated queues */
 for (oldJob = oldJobList; oldJob != NULL; oldJob = oldJob->next)
     {
-    char commandName[PATH_LEN];
-    getCommandName(oldJob, commandName, sizeof(commandName));
+    char *commandName = eapStepFromCommandLine(oldJob->commandLine);
     char queueName[PATH_LEN];
     safef(queueName, sizeof(queueName), "%s/%s/results", eapParaQueues, commandName);
     findOrCreateQueue(queueName, FALSE);
     rbTreeAdd(running, oldJob);
+    freez(&commandName);
     }
 oldJobList = NULL;	// We've transfered ownership of jobs in list to container
 int oldFinishedCount = finishJobsWithResults(running, allQueues);  // This updates database
@@ -311,7 +266,7 @@ int oldFinishedCount = finishJobsWithResults(running, allQueues);  // This updat
 /* Figure out jobs that are *still* running in one of our batches.  These
  * we'll add to our count of running threads. */
 oldJobList = edwAnalysisJobLoadByQuery(conn, query);  // Reload hopefully diminished old job list
-struct hash *currentlyRunningHash = parasolRunningHash();
+struct hash *currentlyRunningHash = eapParasolRunningHash(clParaHost, NULL);
 int oldRunningCount = 0;
 for (oldJob = oldJobList; oldJob != NULL; oldJob = oldJob->next)
     {
@@ -327,7 +282,6 @@ verbose(1, "Reconnected to %d finished and %d running old jobs\n",
 
 /* Ok, we are done with all the old business.  Now onto the main loop where
  * where we poll parasol for finished jobs and database for new jobs. */
-long long lastId = 0;  // Keep track of lastId in run table that has already been handled.
 int threadCount = oldRunningCount;
 for (;;)
     {
@@ -339,21 +293,21 @@ for (;;)
     /* Get next job from database. */
     conn = sqlConnect(clDatabase);  // It may have been a while so open fresh connection
     sqlSafef(query, sizeof(query), 
-	"select * from %s where startTime = 0 and id > %lld order by id limit 1", clTable, lastId);
+	"select * from %s where startTime = 0 order by id limit 1", clTable);
     struct edwAnalysisJob *job = edwAnalysisJobLoadByQuery(conn, query);
     sqlDisconnect(&conn);
 
     if (job != NULL)
         {
 	/* Cool, got a job, send it to parasol and track it in running container */
-	char commandName[PATH_LEN];
-	getCommandName(job, commandName, sizeof(commandName));
+	char *commandName = eapStepFromCommandLine(job->commandLine);
 	char queueName[PATH_LEN];
 	safef(queueName, sizeof(queueName), "%s/%s/results", eapParaQueues, commandName);
 	struct resultsQueue *queue = findOrCreateQueue(queueName, TRUE);
 	sendToParasol(job, queue);
 	rbTreeAdd(running, job);
 	threadCount += 1;
+	freez(&commandName);
 	}
     else
         {
