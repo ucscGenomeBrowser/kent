@@ -12,6 +12,7 @@
 #include "encode3/encode3Valid.h"
 
 boolean noClean = FALSE;
+boolean keepFailing = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -24,12 +25,14 @@ errAbort(
   "Where 'now' is just a parameter that is ignored for now.\n"
   "options:\n"
   "   -noClean if set then don't clean up temp dirs."
+  "   -keepFailing - if set then don't always abort at first error\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"noClean", OPTION_BOOLEAN},
+   {"keepFailing", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -230,7 +233,12 @@ for (i=0; i<run->outputFileCount; ++i)
     if (!fileExists(path))
         {
 	markRunAsFailed(conn, run);
-	errAbort("Expected output %s not present", path);
+	warn("Expected output %s not present", path);
+	if (!keepFailing)
+	    {
+	    errAbort("Aborting - use -keepFailing flag to burn through more than one such error");
+	    }
+	break;
 	}
 
     /* Make most of edwFile record */
@@ -337,6 +345,7 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 noClean = optionExists("noClean");
+keepFailing = optionExists("keepFailing");
 eapFinish(argv[1]);
 return 0;
 }
