@@ -30,14 +30,6 @@ static void factorSourceLoadItems(struct track *track)
 {
 bedLoadItem(track, track->table, (ItemLoader)loadOne);
 
-/* NOTE: Initial implementation (LarryM) suppressed motif marks in dense mode.  
-*  Reviewers requested the feature.  Just enabling here isn't enough to work
-*  reliably (would need to redo draw to assure highlighting isn't overwritten by
-*  density drawing of later-drawn items */
-//if (track->visibility == tvDense)
-    //return;
-
-// NOTE: this motif init code may be better at draw time
 char *motifTable = trackDbSetting(track->tdb, "motifTable");
 if (motifTable == NULL)
     return;
@@ -53,7 +45,7 @@ if (sqlTableExists(conn, motifTable))
     char *motifMapTable = trackDbSetting(track->tdb, "motifMapTable");
     if (sqlTableExists(conn, motifMapTable))
         {
-        /* load into hash */
+        /* load (small) map table into hash */
         char query[256];
         struct sqlResult *sr = NULL;
         char **row = NULL;
@@ -207,8 +199,13 @@ genericDrawItems(track, seqStart, seqEnd, hvg, xOff, yOff, width,
 color = hvGfxFindColorIx(hvg, 22, 182, 33);
 //Color color = hvGfxFindColorIx(hvg, 25, 204, 37);
 track->drawItemAt = factorSourceDrawMotifForItemAt;
+
+// suppress re-draw of item labels in motif color
+extern boolean withLeftLabels;
+withLeftLabels = FALSE;
 genericDrawItems(track, seqStart, seqEnd, hvg, xOff, yOff, width,
 	font, color, vis);
+withLeftLabels = TRUE;
 }
 
 void factorSourceMethods(struct track *track)
