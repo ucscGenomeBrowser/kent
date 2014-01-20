@@ -2607,7 +2607,12 @@ struct sqlResult *sr;
 int updateIx;
 char *ret;
 sqlSafef(query, sizeof(query), "show table status like '%s'", table);
-sr = sqlGetResult(conn, query);
+if (conn->slowConn)
+    // the failover strategy does not work for this command, 
+    // as it never returns an error. So default to slowConn instead.
+    sr = sqlGetResult(conn->slowConn, query);
+else
+    sr = sqlGetResult(conn, query);
 updateIx = getUpdateFieldIndex(sr);
 row = sqlNextRow(sr);
 if (row == NULL)
