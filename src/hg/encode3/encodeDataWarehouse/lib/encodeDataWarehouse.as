@@ -140,6 +140,7 @@ table edwExperiment
     string rfa;  "Something like 'ENCODE2' or 'ENCODE3'.  Is award.rfa at Stanford."
     string assayType; "Similar to dataType. Is assay_term_name at Stanford."
     string ipTarget; "The target for the immunoprecipitation in ChIP & RIP." 
+    string control; "Primary control for experiment.  Usually another experiment accession."
     )
 
 table edwValidFile
@@ -148,7 +149,7 @@ table edwValidFile
     uint id primary auto;          "ID of validated file"
     char[16] licensePlate index;  "A abc123 looking license-platish thing."
     uint fileId unique;      "Pointer to file in main file table"
-    string format;    "What format it's in from manifest"
+    string format index[12];    "What format it's in from manifest"
     string outputType index[16]; "What output_type it is from manifest"
     string experiment index[16]; "What experiment it's in from manifest"
     string replicate;  "What replicate it is from manifest.  Values 1,2,3... pooled, or ''"
@@ -352,13 +353,13 @@ table edwAnalysisJob
     (
     uint id primary auto;    "Job id"
     lstring commandLine; "Command line of job"
-    bigInt startTime; "Start time in seconds since 1970"
-    bigInt endTime; "End time in seconds since 1970"
+    bigInt startTime index; "Start time in seconds since 1970"
+    bigInt endTime index; "End time in seconds since 1970"
     lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
     int pid;	"Process ID for running processes"
     int cpusRequested; "Number of CPUs to request from job control system"
-    string parasolId;	"Parasol job id for process." 
+    string parasolId index[12];	"Parasol job id for process." 
     )
 
 table edwAnalysisSoftware

@@ -173,6 +173,7 @@ CREATE TABLE edwExperiment (
     rfa varchar(255) default '',	# Something like 'ENCODE2' or 'ENCODE3'.  Is award.rfa at Stanford.
     assayType varchar(255) default '',	# Similar to dataType. Is assay_term_name at Stanford.
     ipTarget varchar(255) default '',	# The target for the immunoprecipitation in ChIP & RIP.
+    control varchar(255) default '',	# Primary control for experiment.  Usually another experiment accession.
               #Indices
     UNIQUE(accession)
 );

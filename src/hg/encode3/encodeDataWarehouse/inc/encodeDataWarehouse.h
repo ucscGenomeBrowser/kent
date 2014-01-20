@@ -738,7 +738,7 @@ void edwBiosampleOutput(struct edwBiosample *el, FILE *f, char sep, char lastSep
 #define edwBiosampleCommaOut(el,f) edwBiosampleOutput(el,f,',',',');
 /* Print out edwBiosample as a comma separated list including final comma. */
 
-#define EDWEXPERIMENT_NUM_COLS 7
+#define EDWEXPERIMENT_NUM_COLS 8
 
 extern char *edwExperimentCommaSepFieldNames;
 
@@ -753,6 +753,7 @@ struct edwExperiment
     char *rfa;	/* Something like 'ENCODE2' or 'ENCODE3'.  Is award.rfa at Stanford. */
     char *assayType;	/* Similar to dataType. Is assay_term_name at Stanford. */
     char *ipTarget;	/* The target for the immunoprecipitation in ChIP & RIP. */
+    char *control;	/* Primary control for experiment.  Usually another experiment accession. */
     };
 
 void edwExperimentStaticLoad(char **row, struct edwExperiment *ret);

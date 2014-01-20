@@ -1832,7 +1832,7 @@ fputc(lastSep,f);
 }
 
 
-char *edwExperimentCommaSepFieldNames = "accession,dataType,lab,biosample,rfa,assayType,ipTarget";
+char *edwExperimentCommaSepFieldNames = "accession,dataType,lab,biosample,rfa,assayType,ipTarget,control";
 
 void edwExperimentStaticLoad(char **row, struct edwExperiment *ret)
 /* Load a row from edwExperiment table into ret.  The contents of ret will
@@ -1846,6 +1846,7 @@ ret->biosample = row[3];
 ret->rfa = row[4];
 ret->assayType = row[5];
 ret->ipTarget = row[6];
+ret->control = row[7];
 }
 
 struct edwExperiment *edwExperimentLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1878,8 +1879,8 @@ void edwExperimentSaveToDb(struct sqlConnection *conn, struct edwExperiment *el,
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->accession,  el->dataType,  el->lab,  el->biosample,  el->rfa,  el->assayType,  el->ipTarget);
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->accession,  el->dataType,  el->lab,  el->biosample,  el->rfa,  el->assayType,  el->ipTarget,  el->control);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1898,6 +1899,7 @@ ret->biosample = cloneString(row[3]);
 ret->rfa = cloneString(row[4]);
 ret->assayType = cloneString(row[5]);
 ret->ipTarget = cloneString(row[6]);
+ret->control = cloneString(row[7]);
 return ret;
 }
 
@@ -1907,7 +1909,7 @@ struct edwExperiment *edwExperimentLoadAll(char *fileName)
 {
 struct edwExperiment *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -1925,7 +1927,7 @@ struct edwExperiment *edwExperimentLoadAllByChar(char *fileName, char chopper)
 {
 struct edwExperiment *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1953,6 +1955,7 @@ ret->biosample = sqlStringComma(&s);
 ret->rfa = sqlStringComma(&s);
 ret->assayType = sqlStringComma(&s);
 ret->ipTarget = sqlStringComma(&s);
+ret->control = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -1970,6 +1973,7 @@ freeMem(el->biosample);
 freeMem(el->rfa);
 freeMem(el->assayType);
 freeMem(el->ipTarget);
+freeMem(el->control);
 freez(pEl);
 }
 
@@ -2015,6 +2019,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->ipTarget);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->control);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
