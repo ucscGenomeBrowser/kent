@@ -235,7 +235,7 @@ carefulClose(&f);
 }
 
 void pmFetchFile(char *host, char *sourceName, char *destName)
-/* Fetch small file. */
+/* Fetch small file. Only works if you are on hub if they've set up any security. */
 {
 struct rudp *ru = rudpOpen();
 struct paraMessage pm;
@@ -336,4 +336,16 @@ slReverse(&list);
 return list;
 }
 
+struct paraPstat2Job *paraPstat2JobLoad(char **row)
+/* Turn an array of 5 strings into a paraPstat2Job. */
+{
+struct paraPstat2Job *job;
+AllocVar(job);
+job->status = cloneString(row[0]);
+job->parasolId = cloneString(row[1]);
+job->user = cloneString(row[2]);
+job->program = cloneString(row[3]);
+job->host = cloneString(row[4]);
+return job;
+}
 
