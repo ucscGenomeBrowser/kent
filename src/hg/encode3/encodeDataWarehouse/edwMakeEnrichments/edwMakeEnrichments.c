@@ -464,8 +464,8 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown")
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 	else if (sameString(format, "idat"))
 	    verbose(2, "Ignoring idat %s, in doEnrichments.", ef->edwFileName);
-	else if (sameString(format, "looseBed"))
-	    verbose(2, "Ignoring looseBed %s, in doEnrichments.", ef->edwFileName);
+	else if (sameString(format, "customTrack"))
+	    verbose(2, "Ignoring customTrack %s, in doEnrichments.", ef->edwFileName);
 	else if (sameString(format, "rcc"))
 	    verbose(2, "Ignoring rcc %s, in doEnrichments.", ef->edwFileName);
 	else if (sameString(format, "unknown"))
