@@ -56,9 +56,9 @@ struct results
     char *name;	    /* Symbolic name */
     char *pathName; /* may include a few slashes with the file name */
     struct slName *lineList;	/* List of contents line by line. */
-    /* -- beware under here vars not always set - check pointers for null. */
     struct jobResult *jobList;	/* Beware not always set. */
     int jobCount;
+    /* -- beware under here vars not always set - check pointers for null. */
     int runningCount;
     };
 
@@ -82,6 +82,27 @@ splitPath(beforeResults, NULL, step, NULL);
 return cloneString(step);
 }
 
+struct jobResult *linesToJobResults(struct slName *lineList)
+/* Convert from lines to jobResults without destroying lines. */
+{
+struct slName *line;
+struct jobResult *jobList = NULL, *job;
+for (line = lineList; line != NULL; line = line->next)
+    {
+    int bufLen = strlen(line->name)+1;
+    char buf[bufLen];
+    char *row[JOBRESULT_NUM_COLS];
+    memcpy(buf, line->name, bufLen);
+    int wordCount = chopLine(buf, row);
+    if  (wordCount != JOBRESULT_NUM_COLS)
+	internalErr();
+    job = jobResultLoad(row);
+    slAddHead(&jobList, job);
+    }
+slReverse(&jobList);
+return jobList;
+}
+
 struct results *resultsNew(char *resultsPath)
 /* Wrap a results structure around file located at path */
 {
@@ -90,6 +111,7 @@ AllocVar(results);
 results->name = pathToResultsName(resultsPath);
 results->pathName = cloneString(resultsPath);
 results->lineList = readAllLines(resultsPath);
+results->jobList = linesToJobResults(results->lineList);
 return results;
 }
 
@@ -171,27 +193,6 @@ const struct results *b = *((struct results **)vb);
 return resultsScore(b) - resultsScore(a);
 }
 
-struct jobResult *linesToJobResults(struct slName *lineList)
-/* Convert from lines to jobResults without destroying lines. */
-{
-struct slName *line;
-struct jobResult *jobList = NULL, *job;
-for (line = lineList; line != NULL; line = line->next)
-    {
-    int bufLen = strlen(line->name)+1;
-    char buf[bufLen];
-    char *row[JOBRESULT_NUM_COLS];
-    memcpy(buf, line->name, bufLen);
-    int wordCount = chopLine(buf, row);
-    if  (wordCount != JOBRESULT_NUM_COLS)
-	internalErr();
-    job = jobResultLoad(row);
-    slAddHead(&jobList, job);
-    }
-slReverse(&jobList);
-return jobList;
-}
-
 
 void doStatus()
 /* Print out overall status */
@@ -205,7 +206,6 @@ for (q = qList; q != NULL; q = q->next)
     {
     ++qCount;
     hashAdd(qHash, q->name, q);
-    q->jobList = linesToJobResults(q->lineList);
     q->jobCount = slCount(q->lineList);
     finishedJobs += q->jobCount;
     }
@@ -215,13 +215,15 @@ struct sqlConnection *conn = edwConnect();
 int runningCount = countParaRunning(conn, runningHash, qHash);
 
 // printf("Jobs finished: %ld\n", finishedJobs);
-printf("Analysis steps:   %5d", qCount);
+printf("Analysis steps:   %5d:", qCount);
 slSort(&qList, resultsCmpScore);
 int i;
 q = qList;
 for (i=0; i<3 && i<qCount; ++i)
     {
-    printf(", %s %d", q->name, q->runningCount);
+    if (i>0)
+        printf(",");
+    printf(" %s %d", q->name, q->runningCount);
     q = q->next;
     }
 printf("\n");
@@ -240,11 +242,9 @@ if (runningCount > 0)
 	clTable);
     double oldestSeconds = edwNow() - sqlQuickNum(conn, query);
     printf("Oldest job:       %5.2f hours\n", oldestSeconds/(3600));
-    sqlSafef(query, sizeof(query), "select max(startTime) from %s where startTime>0 and endTime=0",
-	clTable);
-    double youngestSeconds = edwNow() - sqlQuickNum(conn, query);
-    printf("Youngest job:     %5.2f hours\n", youngestSeconds/(3600));
     }
+
+printf("Jobs running:   %7d\n", runningCount);
 
 sqlSafef(query, sizeof(query), "select count(*) from %s where startTime>0 and endTime=0", clTable);
 int dbJobsPending = sqlQuickNum(conn, query);
@@ -397,6 +397,19 @@ for (job = list; job != NULL; job = job->next)
 return NULL;
 }
 
+struct jobResult *findJobInResults(struct results *resultsList, char *parasolId)
+/* Return jobResult of given parasolId if it exists in resultsList */
+{
+struct results *q;
+for (q = resultsList; q != NULL; q = q->next)
+    {
+    struct jobResult *jr = findJobOnList(q->jobList, parasolId);
+    if (jr != NULL)
+        return jr;
+    }
+return NULL;
+}
+
 struct jobResult *findCrashed(char *parasolId)
 /* Find job with given parasol ID or if parasolID is null, most recently crashed job */
 {
@@ -405,7 +418,7 @@ struct jobResult *crashed = NULL;
 searchForResults(eapParaQueues, &qList);
 for (q = qList; q != NULL; q = q->next)
     {
-    struct jobResult *jrList = q->jobList = linesToJobResults(q->lineList);
+    struct jobResult *jrList = q->jobList;
     if (parasolId)
         {
 	crashed = findJobOnList(jrList, parasolId);
@@ -467,12 +480,17 @@ mustSystem(command);
 void doErrList(int argc, char **argv)
 /* Print list of parasol IDs, and command lines of all error jobs. */
 {
+/* Process command line */
 double days = BIGNUM;
 if (argc > 0)
     days = sqlDouble(argv[0]);
 char *step = NULL;
 if (argc > 1)
     step = argv[1];
+
+/* Get finished job lists. */
+struct results *qList = NULL;
+searchForResults(eapParaQueues, &qList);
 
 struct sqlConnection *conn = edwConnect();
 char query[512];
@@ -482,9 +500,13 @@ sqlSafef(query, sizeof(query),
 struct edwAnalysisJob *job, *jobList = edwAnalysisJobLoadByQuery(conn, query);
 for (job = jobList; job != NULL; job = job->next)
     {
+    char *node = "n/a";
+    struct jobResult *jr = findJobInResults(qList, job->parasolId);
+    if (jr != NULL)
+        node = jr->host;
     if (step != NULL && !sameOk(eapStepFromCommandLine(job->commandLine), step))
         continue;
-    printf("%s\t%s\n", naForEmpty(job->parasolId), job->commandLine);
+    printf("%s\t%s\t%s\n", naForEmpty(job->parasolId), node, job->commandLine);
     }
 }
 
