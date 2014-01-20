@@ -613,16 +613,20 @@ int resTryCount = bbiCalcResScalesAndSizes(aveSize, resScales, resSizes);
 
 /* Write out primary full resolution data in sections, collect stats to use for reductions. */
 bits64 dataOffset = ftell(f);
-writeOne(f, bedCount);
-bits32 blockCount = bbiCountSectionsNeeded(usageList, itemsPerSlot);
-struct bbiBoundsArray *boundsArray;
-AllocArray(boundsArray, blockCount);
-lineFileRewind(lf);
+bits32 blockCount = 0;
 bits32 maxBlockSize = 0;
-if (eim)
-    bbExIndexMakerAllocChunkArrays(eim, bedCount);
-writeBlocks(usageList, lf, as, itemsPerSlot, boundsArray, blockCount, doCompress,
-	f, resTryCount, resScales, resSizes, eim, bedCount, fieldCount, &maxBlockSize);
+struct bbiBoundsArray *boundsArray = NULL;
+writeOne(f, bedCount);
+if (bedCount > 0)
+    {
+    blockCount = bbiCountSectionsNeeded(usageList, itemsPerSlot);
+    AllocArray(boundsArray, blockCount);
+    lineFileRewind(lf);
+    if (eim)
+	bbExIndexMakerAllocChunkArrays(eim, bedCount);
+    writeBlocks(usageList, lf, as, itemsPerSlot, boundsArray, blockCount, doCompress,
+	    f, resTryCount, resScales, resSizes, eim, bedCount, fieldCount, &maxBlockSize);
+    }
 verboseTime(1, "pass2 - checking and writing primary data (%lld records, %d fields)", 
 	(long long)bedCount, fieldCount);
 
@@ -640,11 +644,15 @@ bits64 zoomDataOffsets[bbiMaxZoomLevels];
 bits64 zoomIndexOffsets[bbiMaxZoomLevels];
 
 /* Call monster zoom maker library function that bedGraphToBigWig also uses. */
-int zoomLevels = bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
-    bedWriteReducedOnceReturnReducedTwice, fieldCount,
-    doCompress, indexOffset - dataOffset, 
-    usageList, resTryCount, resScales, resSizes, 
-    zoomAmounts, zoomDataOffsets, zoomIndexOffsets, &totalSum);
+int zoomLevels = 0;
+if (bedCount > 0)
+    {
+    bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
+	bedWriteReducedOnceReturnReducedTwice, fieldCount,
+	doCompress, indexOffset - dataOffset, 
+	usageList, resTryCount, resScales, resSizes, 
+	zoomAmounts, zoomDataOffsets, zoomIndexOffsets, &totalSum);
+    }
 
 /* Write out extra indexes if need be. */
 if (eim)
