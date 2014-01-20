@@ -478,11 +478,8 @@ void scheduleMacsChip(struct sqlConnection *conn,
     struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
 /* If it hasn't already been done schedule macs analysis of the chip-seq bam file. */
 {
-uglyf("scheduleMacsChip %u\n", ef->id);
-
 // Try and find control 
 struct edwExperiment *controlExp = findChipControlExp(conn, exp->accession);
-uglyf("got controlExp %p\n", controlExp);
 if (controlExp == NULL)
     return;
 
@@ -567,7 +564,7 @@ safef(commandLine, sizeof(commandLine), "%s %s %s %s %s%s %s%s",
     tempDir, "out.narrowPeak.bigBed", tempDir, "out.bigWig");
 
 /* Declare step input and output arrays and schedule it. */
-unsigned inFileIds[] = {ef->id};
+unsigned inFileIds[] = {ef->id, controlEf->id};
 char *inTypes[] = {"chipBam", "controlBam"};
 char *outFormats[] = {"narrowPeak", "bigWig"};
 char *outNames[] = {"out.narrowPeak.bigBed", "out.bigWig"};
