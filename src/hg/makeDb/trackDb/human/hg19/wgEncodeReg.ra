@@ -405,10 +405,12 @@ canPack On
     motifTable factorbookMotifPos
     motifPwmTable factorbookMotifPwm
     motifMapTable factorbookMotifTarget
+    motifMaxWindow 30000
+    motifDrawDefault on
     urlLabel Factorbook Link:
     url http://www.factorbook.org/mediawiki/index.php/$$
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility hide
+    visibility dense
     useScore 1
     priority 1.71
     maxWindowToDraw 10000000

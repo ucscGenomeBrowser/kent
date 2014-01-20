@@ -3758,6 +3758,20 @@
     that provide this information.</P>
 </DIV>
 
+<DIV class="motifMaxWindow"><span class="types factorSource"></span>
+<div class="format"><code>motifMaxWindow &lt;integer&gt;</code></div>
+    <P>Display of highlighted motifs in a factorSource track can be limited using
+    this setting.  In large genomic regions motifs are not well distinguished in
+    the display, and performance is improved by suppressing the feature.</P>
+</DIV>
+
+<DIV class="motifDrawDefault"><span class="types factorSource"></span>
+<div class="format"><code>motifDrawDefault &lt;on/off&gt;</code></div>
+    <P>Whether motifs are drawn by default on a factorSource track having a motifTable is
+    controlled by this setting. It is also configurable by the user.</P>
+</DIV>
+
+
 <DIV class="factorSource_example"><span class="types factorSource"></span>
 <div class="format"><B>Example of a factorSource track</B></div>
 <pre>
@@ -3766,6 +3780,11 @@ type factorSource
 sourceTable myCellLines
 inputTrackTable myCellLineAssociations
 inputTableFieldDisplay cellType treatment lab
+motifTable transfacMotif
+motifPwmTable transfacMotifPwm
+motifMapTable transfacMotifTarget
+motifMaxWindow 30000
+motifDefaultOn 1
     ...</pre>
 <P>This track will show transcription factor (TF)
 binding evidence found in multiple cell lines.  Each item represents

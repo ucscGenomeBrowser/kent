@@ -34,6 +34,11 @@ char *motifTable = trackDbSetting(track->tdb, "motifTable");
 if (motifTable == NULL)
     return;
 
+char varName[64];
+safef(varName, sizeof(varName), "%s.highlightMotifs", track->track);
+if (!cartUsualBoolean(cart, varName, trackDbSettingClosestToHomeOn(track->tdb, "motifDrawDefault")))
+    return;
+
 char *motifMaxWindow = trackDbSetting(track->tdb, "motifMaxWindow");
 if (motifMaxWindow != NULL)
     if (winEnd - winStart > sqlUnsigned(motifMaxWindow))
