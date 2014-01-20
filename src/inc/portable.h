@@ -99,6 +99,9 @@ void makeTempName(struct tempName *tn, char *base, char *suffix);
 void mustRename(char *oldName, char *newName);
 /* Rename file or die trying. */
 
+void mustRemove(char *path);
+/* Remove file or die trying */
+
 char *semiUniqName(char *base);
 /* Figure out a name likely to be unique.
  * Name will have no periods.  Returns a static
