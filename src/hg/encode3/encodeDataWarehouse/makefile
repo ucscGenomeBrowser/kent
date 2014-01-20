@@ -12,12 +12,10 @@ UTIL_DIRS = \
     edwAddQaEnrichTarget \
     edwAddSubscriber \
     edwAnalysisAddJson \
-    edwAnalysisDaemon \
     edwChangeFormat \
     edwCorrectFileTags \
     edwCreateUser \
     edwFakeManifestFromSubmit \
-    edwFinishAnalysis \
     edwJob \
     edwMakeContaminationQa \
     edwMakeEnrichments \
@@ -30,7 +28,6 @@ UTIL_DIRS = \
     edwRetryJob \
     edwRunDaemon \
     edwRunOnIds \
-    edwScheduleAnalysis \
     edwSubmit
 
 # edwFinishAnalysis depends on -luuid, which is not available on Macs without special port install.
