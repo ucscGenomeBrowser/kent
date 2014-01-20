@@ -110,4 +110,20 @@ struct slName *pmHubMultilineQuery(char *query, char *host);
 /* Send a command with a multiline response to hub,
  * and return response as a list of strings. */
 
+struct paraPstat2Job
+/* The job information returned by a pstat2 message by parasol,
+ * parsed out. */
+    {
+    struct paraPstat2Job *next;
+    char *status;   // 'r' mostly
+    char *parasolId; // Parasol ID as a string
+    char *user;	    // Name of user
+    char *program;  // Name of program being run
+    char *host;	    // Host name of node running job.
+    };
+#define PARAPSTAT2JOB_NUM_COLS  5
+
+struct paraPstat2Job *paraPstat2JobLoad(char **row);
+/* Turn an array of 5 strings into a paraPstat2Job. */
+
 #endif /* PARAMESSAGE_H */
