@@ -1,0 +1,98 @@
+#!/usr/bin/env python
+import logging, optparse, sys
+
+# do not modify this file, modify the original in kent/src/oneShot/sqlToAs
+# and commit the changes
+
+# === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
+parser = optparse.OptionParser("usage: %prog [options] <filename> - convert mysql .sql CREATE TABLE file to autoSql format") 
+parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
+(options, args) = parser.parse_args()
+
+if options.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
+    
+# ----------- MAIN --------------
+if args==[]:
+    parser.print_help()
+    sys.exit(1)
+
+filename = args[0]
+
+# sql type -> autoSql type
+# from src/lib/asParse.c
+sqlToAs = \
+{
+"double": "double",
+"float":  "float",
+"char":   "char",
+"int":    "int",
+"int unsigned":   "int",
+"smallint":  "short",
+"smallint unsigned": "ushort",
+"tinyint":   "byte",
+"tinyint unsigned":  "ubyte",
+"bigint": "bigint",
+"varchar": "string",
+"longblob":"lstring",
+"blob" : "lstring",
+"enum":   "enum",
+"set":    "set"
+}
+
+fieldLines = []
+
+tableCommentDone = False
+
+for line in open(filename).read().splitlines():
+    line = line.strip()
+    lowLine = line.lower()
+    logging.debug(line)
+    if len(line)<=3:
+        continue
+    if line.startswith("#"):
+        if tableCommentDone: 
+            continue
+        tableComment = '"%s"' % line.strip().strip("#")
+        tableCommentDone = True
+    elif line.startswith("CREATE TABLE"):
+        name = line.split()[2].strip("`")
+        tableLine = "table %s" % name
+        continue
+    elif lowLine.startswith("key") or lowLine.startswith("primary") or lowLine.startswith("fulltext"):
+        continue
+
+    # `chrom` varchar(255) NOT NULL, # chromosome
+    # `start` int unsigned NOT NULL, # start
+    else:
+        parts = line.split()
+        fieldName, sqlType = parts[:2]
+        # special case for integers
+        if len(parts)>2 and "signed" in parts[2]:
+            sqlType=sqlType+" "+parts[2]
+
+        fieldName = fieldName.strip("`")
+
+        if sqlType.startswith("char"):
+            asType = sqlType.replace("(","[").replace(")","]")
+        else:
+            sqlType = sqlType.split("(")[0]
+            asType = sqlToAs[sqlType]
+
+        if "#" in line:
+            comment = line.split("#")[1].strip()
+        else:
+            comment = ""
+
+        spaces = "".join((20-len(fieldName)-len(asType))*[" "])
+        asLine = '%s %s;%s"%s"' % (asType, fieldName, spaces, comment)
+        fieldLines.append(asLine)
+
+print tableLine
+print tableComment
+print "    ("
+for asLine in fieldLines:
+    print "    "+asLine
+print "    )"

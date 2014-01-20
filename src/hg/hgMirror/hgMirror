@@ -72,8 +72,8 @@ FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5"]
 
 # always copy these (small) tables for the current db, if they exist
 FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
-    'knownGene', 'kgXref', 'ensemblLift', 'ucscToEnsembl','wgEncodeRegTfbsCells', 'tableList', "refSeqStatus", 
-    "wgEncodeRegTfbsCellsV3", "extFile"]
+    'knownGene', 'kgXref', 'ensemblLift', 'ucscToEnsembl','wgEncodeRegTfbsCells', \
+    'tableList', "refSeqStatus", "wgEncodeRegTfbsCellsV3", "extFile", "trackDb"]
 
 # always copy these hgFixed tables
 FORCEFIXED = ['trackVersion', 'tableList']
@@ -868,13 +868,16 @@ def printLog(jobId):
         print '<i>Downloading files... Page will reload every 5 seconds until download is complete.</i>'
         refreshPage("jobId=%d" % jobId, delay=5000, addNote=False)
 
-def hideSomeTracks():
+def hideSomeTracks(localTables):
     """
     hide some notoriously slow tracks by default
     """
     if not mysqlDbLoaded:
         print "warning: cannot hide some tracks, module mysqldb not installed"
         return
+
+    if "trackDb" not in localTables:
+	return
 
     conn = sqlConnect("hg19", "local")
     cur = conn.cursor()
@@ -1104,7 +1107,7 @@ def htmlMiddle(args):
         htmlTrackTable(trackLabels, trackTables, trackParents, trackChildren, groupList, groupToTopTracks, \
             tableSizes, localSizes, gbdbSizes, tableToGbdbFiles, showSubtracks)
 
-        hideSomeTracks()
+        hideSomeTracks(localSizes)
 
 def main():
     print "Content-type: text/html"

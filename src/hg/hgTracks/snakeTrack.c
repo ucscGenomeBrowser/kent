@@ -797,7 +797,8 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	char *ptr2 = ourDna;
 	for(; si < e; si++,ptr1++,ptr2++)
 	    {
-	    if (*ptr1 != *ptr2)
+	    // if mismatch!  If reference is N ignore, if query is N, paint yellow
+	    if ( (*ptr1 != *ptr2) && !((*ptr1 == 'N') || (*ptr1 == 'n')))
 		{
 		int misX1 = round((double)((int)si-winStart)*scale) + xOff;
 		int misX2 = round((double)((int)(si+1)-winStart)*scale) + xOff;
@@ -805,8 +806,10 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		if (w1 < 1)
 		    w1 = 1;
 
-		// mismatch!
-		hvGfxBox(hvg, misX1, y, w1, heightPer, MG_RED);
+		Color boxColor = MG_RED;
+		if ((*ptr2 == 'N') || (*ptr2 == 'n'))
+		    boxColor = hvGfxFindRgb(hvg, &undefinedYellowColor);
+		hvGfxBox(hvg, misX1, y, w1, heightPer, boxColor);
 		}
 	    }
 

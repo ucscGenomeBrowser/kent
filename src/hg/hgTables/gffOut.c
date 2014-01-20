@@ -402,14 +402,16 @@ struct region *region, *regionList = getRegions();
 
 textOpen();
 
-int efIdx = sqlFieldIndex(conn, table, "exonFrames");
+int efIdx = -1;
+if (!hti->isSplit)
+    efIdx = sqlFieldIndex(conn, table, "exonFrames");
 
 safef(source, sizeof(source), "%s_%s", database, table);
 itemCount = 0;
 // regionList can have many thousands of items e.g. rheMac3 has 34000 chroms!
 struct hash *chromHash = NULL;
 int regionCount = slCount(regionList);
-if (regionCount > 400)
+if (!hti->isSplit && (regionCount > 400))
     {
     chromHash = makeChromHashForTable(conn, table);
     };

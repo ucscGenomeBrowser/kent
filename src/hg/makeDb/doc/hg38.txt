@@ -462,7 +462,7 @@ taxId   9606
 #   5464329 total
 
 #############################################################################
-## repeating RepeatMasker run with HMMER - WORKING - 2014-01-08 - Hiram
+## repeating RepeatMasker run with HMMER - DONE - 2014-01-08 - Hiram
     mkdir /hive/data/genomes/hg38/bed/rmskHmmer
     cd /hive/data/genomes/hg38/bed/rmskHmmer
 
@@ -1057,7 +1057,7 @@ liftOver -minBlocks=0.5 /hive/data/genomes/hg19/bed/ncbiCytoBand/cytobands.bed \
       cytobands.0.5.bed unMapped0.5
 
 ##########################################################################
-# hg19 <-> hg38 difference tracks (WORKING - 2013-12-28 - Hiram)
+# hg19 <-> hg38 difference tracks (DONE - 2013-12-28 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/liftOverHg38
     cd /hive/data/genomes/hg19/bed/liftOverHg38
 
@@ -1557,7 +1557,74 @@ sort ../../chrom.sizes | join -t'^I' - altToChr.tab \
      -maskedSeq=/hive/data/genomes/hg38/hg38.contigs.2bit \
        -stop=makeBed -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         > do.log 2>&1
-XXX - running Mon Jan 13 13:33:20 PST 2014
+   # three jobs did not finish due to almost all N's in the sequence,
+   # just a couple of bases in each piece.  Their empty result is good enough.
+   time $HOME/kent/src/hg/utils/automation/doGenscan.pl hg38 -buildDir=`pwd` \
+     -maskedSeq=/hive/data/genomes/hg38/hg38.contigs.2bit \
+       -continue=makeBed -stop=makeBed -bigClusterHub=ku -dbHost=hgwdev \
+         -workhorse=hgwdev > makeBed.log 2>&1
+   # real    0m48.161s
+
+   cd lifted
+   mkdir -p gtf subopt nameFixed/gtf nameFixed/pep newNames pep
+   for F in ../gtf/000/*.gtf
+do
+   B=`basename $F`
+   liftUp gtf/${B} ../../../jkStuff/hg38.contigs.lift carry $F
+   echo $B
+done
+   for F in ../subopt/000/*.bed
+do
+   B=`basename $F`
+   liftUp subopt/${B} ../../../jkStuff/hg38.contigs.lift carry $F
+   echo $B
+done
+
+   ls gtf/chr*_[0-9][0-9].gtf \
+     | sed -e 's/_[0-9][0-9]//; s#gtf/##; s/.gtf//;' | sort -u | while read C
+do
+   cat ../pep/000/${C}_[0-9][0-9].pep > pep/${C}.pep
+   cat gtf/${C}_[0-9][0-9].gtf | ./gtfFixId.pl ${C} > nameFixed/gtf/${C}.gtf
+   ./pepNameFix.pl ${C} > nameFixed/pep/${C}.pep
+done
+
+   cat nameFixed/gtf/*.gtf > ../hg38.genscan.gtf
+   ls gtf | egrep -v '^chr[0-9XY][0-9]*_[0-9][0-9].gtf' | while read C
+do
+   cat gtf/${C}
+done >> ../hg38.genscan.gtf
+
+   cat nameFixed/pep/*.pep > ../hg38.genscan.pep
+   ls gtf | egrep -v '^chr[0-9XY][0-9]*_[0-9][0-9].gtf' \
+     | sed -e 's/.gtf/.pep/' | while read C
+do
+   cat ../pep/000/${C}
+done >> ../hg38.genscan.pep
+
+   cd /hive/data/genomes/hg38/bed/genscan
+   cat lifted/subopt/*.bed | sort -k1,1 -k2,2n > hg38.genscanSubopt.bed
+
+   gtfToGenePred hg38.genscan.gtf hg38.genscan.gp
+   genePredCheck -db=hg38 hg38.genscan.gp
+   # checked: 44149 failed: 0
+   genePredToBed hg38.genscan.gp hg38.genscan.bed
+   bedToBigBed hg38.genscan.bed ../../chrom.sizes hg38.genscan.bb
+   bedToBigBed hg38.genscanSubopt.bed ../../chrom.sizes hg38.genscanSubopt.bb
+   ldHgGene -gtf hg38 genscan hg38.genscan.gtf
+# Read 44149 transcripts in 339212 lines in 1 files
+#  44149 groups 345 seqs 1 sources 1 feature types
+
+    cat fb.hg38.genscan.txt
+    # 58278346 bases of 3049335806 (1.911%) in intersection
+    cat fb.hg38.genscanSubopt.txt
+    # 55020514 bases of 3049335806 (1.804%) in intersection
+
+    # oddly, we are getting half of what hg19 had ?
+    featureBits hg19 genscan
+    # 106433874 bases of 2897316137 (3.674%) in intersection
+
+    # This is because hg19 was run on soft-masked sequence and not
+    # on hard masked sequence
 
 ############################################################################
 ## genscan on unmasked sequence experiment (DONE - 2013-12-03 - Hiram)

@@ -1818,14 +1818,15 @@ char *str = *ptr;
 if ((str == NULL) || (*str == 0))
     return FALSE;
 
-char *end = strchr(str, '+');
-if (end)
+// between each cigar op there could be nothing, or a space, or a plus
+char *end = str + 1;
+for(;*end ; end++)
     {
-    *end = 0;
-    *ptr = end + 1;
+    if (! (isdigit(*end)  || (*end == ' ') || (*end == '+')))
+	break;
     }
-else 
-    *ptr = NULL;
+
+*ptr = end;
 
 *op = *str++;
 *size = atoi(str);
@@ -1848,6 +1849,8 @@ char *cigarNext = cigarSpec;
 char op;
 int size;
 int qNext = qStart, qBlkEnd = qEnd;
+int totalSize = 0;
+
 if (strand[0] == '-')
     reverseIntRange(&qNext, &qBlkEnd, qSize);
 int tNext = tStart, tBlkEnd = tEnd;
@@ -1862,6 +1865,7 @@ while(getNextCigarOp(&cigarNext, &op, &size))
             if (psl->blockCount == blocksAlloced)
                 pslGrow(psl, &blocksAlloced);
 
+	    totalSize += size;
             psl->blockSizes[psl->blockCount] = size;
             psl->qStarts[psl->blockCount] = qNext;
             psl->tStarts[psl->blockCount] = tNext;
@@ -1882,6 +1886,7 @@ while(getNextCigarOp(&cigarNext, &op, &size))
     }
 assert(qNext == qBlkEnd);
 assert(tNext == tBlkEnd);
+psl->match = totalSize;
 return psl;
 }
 

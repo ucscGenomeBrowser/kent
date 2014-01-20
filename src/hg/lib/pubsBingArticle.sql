@@ -1,4 +1,5 @@
-CREATE TABLE pubsArticle (
+# information about a website, some fields are always empty (like pmid) to stay compatible with pubsArticle, fields like authors and title are extracted from meta tags of the html (Dublin core, etc)
+CREATE TABLE pubsBingArticle (
     articleId bigint not null,	# internal article ID, created during download
     extId varchar(255) not null,	# publisher ID e.g. PMCxxxx or doi or sciencedirect ID
     pmid bigint not null,               # PubmedID if available
@@ -15,5 +16,8 @@ CREATE TABLE pubsArticle (
               #Indices
     PRIMARY KEY(articleId),
     KEY extIdx(extId),
+    KEY urlIdx(url),
+    KEY pmidIdx(pmid),
+    KEY doiIdx(doi),
     FULLTEXT INDEX (citation, title, authors, abstract)
 );
