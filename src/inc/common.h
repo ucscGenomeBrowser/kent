@@ -438,7 +438,7 @@ void slSortMergeUniq(void *pA, void *b, CmpFunction *compare, void (*free)());
 // returning 0. If free is provided, items dropped from list can disposed of.
 
 boolean slRemoveEl(void *vpList, void *vToRemove);
-/* Remove element from doubly linked list.  Usage:
+/* Remove element from singly linked list.  Usage:
  *    slRemove(&list, el);
  * Returns TRUE if element in list.  */
 
