@@ -14,7 +14,10 @@
 #include "bPlusTree.h"
 #include "bigBed.h"
 
-char *version = "2.5";
+char *version = "2.6";
+/* Version history from 2.6 on at least -
+ *   2.6 - Made it not crash on empty input.  
+ *   */
 
 /* Things set directly or indirectly by command lne in main() routine. */
 int blockSize = 256;
