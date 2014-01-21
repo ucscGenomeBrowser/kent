@@ -80,6 +80,7 @@ export MM=`date "+%m"`
 export logDir="${userLog}/${YYYY}/${MM}"
 export cleanerLog="${logDir}/cleanerLog.${dateStamp}.txt"
 export trashCleaner="$KENTHOME/src/product/scripts/trashCleaner.bash"
+export scriptsDir="$SCRIPTS"
 export failMessage="ALERT: from trashCleanMonitor.sh - the trash cleaner is failing, check the most recent file(s) in /var/tmp/ for clues, or perhaps in the ${cleanerLog}"
 
 
