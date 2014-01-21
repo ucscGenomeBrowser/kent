@@ -65,6 +65,26 @@ restrictions</A>
 <h3>Assembly Details</h3>
 
 <p>
+With the release of GRCh38, in order to synchronize with the GRC assembly version numbering
+scheme, UCSC made the decision to name this assembly hg38 instead of hg20.
+</p>
+
+<p>
+<b>Centromeres</b><br>
+Insert stuff here...
+</p>
+
+<p>
+<b>IUPAC characters</b><br>
+Insert more stuff here...
+</p>
+
+<p>
+<b>Note on chrM</b><br>
+Insert even more stuff here...
+</p>
+
+<p>
 <b>Chromosome naming scheme</b><br>
 With the release of hg38, there has been a slight change to the UCSC chromosome naming scheme:
 <ul>
@@ -75,7 +95,8 @@ With the release of hg38, there has been a slight change to the UCSC chromosome 
       number, followed by &quot;alt&quot;</li>
   <li>Unplaced contig names consist of the chromosome number, followed by the NCBI accession
       number, followed by &quot;random&quot;</li>
-  <li>Unlocalized contig names consist of &quot;chrUn&quot; followed by the NCBI accession number</li>
+  <li>Unlocalized contig names (contigs whose associated chromosome is not known) consist of
+      &quot;chrUn&quot; followed by the NCBI accession number</li>
 </ul>
 </p>
 
@@ -83,44 +104,87 @@ With the release of hg38, there has been a slight change to the UCSC chromosome 
 Some assembly statistics:
 </p>
 
-<TABLE BORDER=1 CELLPADDING = 3><TR><TH>number</TH><TH>haplotypes</TH><TH>unplaced contigs</TH></TR>
-<TR><TD ALIGN="CENTER">chr1</TD><TD ALIGN="CENTER">12</TD><TD ALIGN="CENTER">9</TD></TR>
-<TR><TD ALIGN="CENTER">chr2</TD><TD ALIGN="CENTER">15</TD><TD ALIGN="CENTER">2</TD></TR>
-<TR><TD ALIGN="CENTER">chr3</TD><TD ALIGN="CENTER">16</TD><TD ALIGN="CENTER">1</TD></TR>
-<TR><TD ALIGN="CENTER">chr4</TD><TD ALIGN="CENTER">11</TD><TD ALIGN="CENTER">1</TD></TR>
-<TR><TD ALIGN="CENTER">chr5</TD><TD ALIGN="CENTER">13</TD><TD ALIGN="CENTER">1</TD></TR>
-<TR><TD ALIGN="CENTER">chr6</TD><TD ALIGN="CENTER">16</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER">chr7</TD><TD ALIGN="CENTER">9</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER">chr8</TD><TD ALIGN="CENTER">16</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER">chr9</TD><TD ALIGN="CENTER">5</TD><TD ALIGN="CENTER">4</TD></TR>
-<TR><TD ALIGN="CENTER">chr10</TD><TD ALIGN="CENTER">4</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER">chr11</TD><TD ALIGN="CENTER">12</TD><TD ALIGN="CENTER">1</TD></TR>
-<TR><TD ALIGN="CENTER">chr12</TD><TD ALIGN="CENTER">13</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER">chr13</TD><TD ALIGN="CENTER">6</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER">chr14</TD><TD ALIGN="CENTER">4</TD><TD ALIGN="CENTER">8</TD></TR>
-<TR><TD ALIGN="CENTER">chr15</TD><TD ALIGN="CENTER">9</TD><TD ALIGN="CENTER">1</TD></TR>
-<TR><TD ALIGN="CENTER">chr16</TD><TD ALIGN="CENTER">6</TD><TD ALIGN="CENTER">1</TD></TR>
-<TR><TD ALIGN="CENTER">chr17</TD><TD ALIGN="CENTER">18</TD><TD ALIGN="CENTER">3</TD></TR>
-<TR><TD ALIGN="CENTER">chr18</TD><TD ALIGN="CENTER">10</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER">chr19</TD><TD ALIGN="CENTER">43</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER">chr20</TD><TD ALIGN="CENTER">4</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER">chr21</TD><TD ALIGN="CENTER">7</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER">chr22</TD><TD ALIGN="CENTER">9</TD><TD ALIGN="CENTER">9</TD></TR>
-<TR><TD ALIGN="CENTER">chrX</TD><TD ALIGN="CENTER">3</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER">chrY</TD><TD ALIGN="CENTER">0</TD><TD ALIGN="CENTER">1</TD></TR>
-<TR><TD ALIGN="CENTER">chrM</TD><TD ALIGN="CENTER">0</TD><TD ALIGN="CENTER">0</TD></TR>
-<TR><TD ALIGN="CENTER"></TD><TD ALIGN="CENTER"></TD><TD ALIGN="CENTER"></TD></TR>
-<TR><TD ALIGN="CENTER">Total</TD><TD ALIGN="CENTER">261</TD><TD ALIGN="CENTER">42</TD></TR>
+<p>
+<TABLE BORDER=1 CELLPADDING=3>
+<TR>
+    <TH>number</TH><TH>haplotypes</TH><TH WIDTH=85>unplaced contigs</TH><TH WIDTH=30></TH>
+    <TH>number</TH><TH>haplotypes</TH><TH WIDTH=85>unplaced contigs</TH><TH WIDTH=30></TH>
+    <TH>number</TH><TH>haplotypes</TH><TH WIDTH=85>unplaced contigs</TH>
+</TR>
+<TR>
+    <TD ALIGN="CENTER">chr1</TD><TD ALIGN="CENTER">12</TD><TD ALIGN="CENTER">9</TD><TD></TD>
+    <TD ALIGN="CENTER">chr10</TD><TD ALIGN="CENTER">4</TD><TD ALIGN="CENTER">0</TD><TD></TD>
+    <TD ALIGN="CENTER">chr18</TD><TD ALIGN="CENTER">10</TD><TD ALIGN="CENTER">0</TD>
+</TR>
+<TR>
+    <TD ALIGN="CENTER">chr2</TD><TD ALIGN="CENTER">15</TD><TD ALIGN="CENTER">2</TD><TD></TD>
+    <TD ALIGN="CENTER">chr11</TD><TD ALIGN="CENTER">12</TD><TD ALIGN="CENTER">1</TD><TD></TD>
+    <TD ALIGN="CENTER">chr19</TD><TD ALIGN="CENTER">43</TD><TD ALIGN="CENTER">0</TD>
+</TR>
+<TR>
+    <TD ALIGN="CENTER">chr3</TD><TD ALIGN="CENTER">16</TD><TD ALIGN="CENTER">1</TD><TD></TD>
+    <TD ALIGN="CENTER">chr12</TD><TD ALIGN="CENTER">13</TD><TD ALIGN="CENTER">0</TD><TD></TD>
+    <TD ALIGN="CENTER">chr20</TD><TD ALIGN="CENTER">4</TD><TD ALIGN="CENTER">0</TD>
+</TR>
+<TR>
+    <TD ALIGN="CENTER">chr4</TD><TD ALIGN="CENTER">11</TD><TD ALIGN="CENTER">1</TD><TD></TD>
+    <TD ALIGN="CENTER">chr13</TD><TD ALIGN="CENTER">6</TD><TD ALIGN="CENTER">0</TD><TD></TD>
+    <TD ALIGN="CENTER">chr21</TD><TD ALIGN="CENTER">7</TD><TD ALIGN="CENTER">0</TD>
+</TR>
+<TR>
+    <TD ALIGN="CENTER">chr5</TD><TD ALIGN="CENTER">13</TD><TD ALIGN="CENTER">1</TD><TD></TD>
+    <TD ALIGN="CENTER">chr14</TD><TD ALIGN="CENTER">4</TD><TD ALIGN="CENTER">8</TD><TD></TD>
+    <TD ALIGN="CENTER">chr22</TD><TD ALIGN="CENTER">9</TD><TD ALIGN="CENTER">9</TD>
+</TR>
+<TR>
+    <TD ALIGN="CENTER">chr6</TD><TD ALIGN="CENTER">16</TD><TD ALIGN="CENTER">0</TD><TD></TD>
+    <TD ALIGN="CENTER">chr15</TD><TD ALIGN="CENTER">9</TD><TD ALIGN="CENTER">1</TD><TD></TD>
+    <TD ALIGN="CENTER">chrX</TD><TD ALIGN="CENTER">3</TD><TD ALIGN="CENTER">0</TD>
+</TR>
+<TR>
+    <TD ALIGN="CENTER">chr7</TD><TD ALIGN="CENTER">9</TD><TD ALIGN="CENTER">0</TD><TD></TD>
+    <TD ALIGN="CENTER">chr16</TD><TD ALIGN="CENTER">6</TD><TD ALIGN="CENTER">1</TD><TD></TD>
+    <TD ALIGN="CENTER">chrY</TD><TD ALIGN="CENTER">0</TD><TD ALIGN="CENTER">1</TD>
+</TR>
+<TR>
+    <TD ALIGN="CENTER">chr8</TD><TD ALIGN="CENTER">16</TD><TD ALIGN="CENTER">0</TD><TD></TD>
+    <TD ALIGN="CENTER">chr17</TD><TD ALIGN="CENTER">18</TD><TD ALIGN="CENTER">3</TD><TD></TD>
+    <TD ALIGN="CENTER">chrM</TD><TD ALIGN="CENTER">0</TD><TD ALIGN="CENTER">0</TD>
+</TR>
+<TR>
+    <TD ALIGN="CENTER">chr9</TD><TD ALIGN="CENTER">5</TD><TD ALIGN="CENTER">4</TD></TR>
 </TABLE>
+</p>
 
 <p>
-There are a total of 127 unlocalized contigs.
+<TABLE BORDER=1 CELLPADDING=3>
+    <TH ALIGN="LEFT">Type</TH><TH WIDTH=50>Total</TH>
+    <TR><TD>chromosomes</TD><TD ALIGN="CENTER">25</TD></TR>
+    <TR><TD>haplotypes</TD><TD ALIGN="CENTER">261</TD></TR>
+    <TR><TD>unplaced contigs</TD><TD ALIGN="CENTER">42</TD></TR>
+    <TR><TD>unlocalized contigs</TD><TD ALIGN="CENTER">127</TD></TR>
+    <TR><TD></TD><TD></TD></TR>
+    <TR><TD><B>Total</B></TD><TD ALIGN="CENTER">455</TD></TR>
+</TABLE>
 </p>
 
 <p>
 See the <a href="../cgi-bin/hgTracks?chromInfoPage=">sequences</a> page for a complete
 list of hg38 chromosome names.
 </p>
+
+<p>
+The Y chromosome in this assembly contains two pseudoautosomal regions (PARs)
+that were taken from the corresponding regions in the X chromosome and are
+exact duplicates:
+<blockquote>
+chrY:10,000-2,781,479 and chrY:56,887,902-57,217,415
+<br>chrX:10,000-2,781,479 and chrX:155,701,382-156,030,895
+</blockquote>
+</p>
+
+<hr>
+
 <P>
 Potential sections to include on this page:
 <UL>
