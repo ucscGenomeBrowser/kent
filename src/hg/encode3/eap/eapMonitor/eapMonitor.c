@@ -248,7 +248,7 @@ printf("Jobs running:   %7d\n", runningCount);
 
 sqlSafef(query, sizeof(query), "select count(*) from %s where startTime>0 and endTime=0", clTable);
 int dbJobsPending = sqlQuickNum(conn, query);
-printf("Jobs scheduled: %7d\n", dbJobsPending);
+printf("Jobs scheduled: %7d\n", dbJobsPending - runningCount);
 
 sqlSafef(query, sizeof(query), "select count(*) from %s where startTime=0", clTable);
 int dbJobsQueued = sqlQuickNum(conn, query);
@@ -583,6 +583,20 @@ freez(&glue);
 return runningCount;
 }
 
+int countWaiting(struct edwAnalysisJob *waitList, char *step)
+/* Return number of jobs on waitList belonging to step. */
+{
+struct edwAnalysisJob *job;
+int count = 0;
+for (job = waitList; job != NULL; job = job->next)
+    {
+    char *glue = glueFromCommandLine(job->commandLine);
+    if (sameString(step, glue))
+        ++count;
+    }
+return count;
+}
+
 void doSteps(int argc, char **argv)
 /* Show activity of various analysis steps */
 {
@@ -591,13 +605,17 @@ struct sqlConnection *conn = sqlConnect(clDatabase);
 searchForResults(eapParaQueues, &qList);
 struct paraPstat2Job *pjobList = NULL;
 struct hash *pjobHash = eapParasolRunningHash(clParaHost, &pjobList);
+char query[512];
+sqlSafef(query, sizeof(query), "select * from %s where startTime = 0", clTable);
+struct edwAnalysisJob *waitList = edwAnalysisJobLoadByQuery(conn, query);
 
-printf("#stat finish run results\n");
+printf("#stat finish run  wait results\n");
 for (q = qList; q != NULL; q = q->next)
     {
     char *code = (isSick(q) ? "sick" : "good");
     int runCount = countRunning(conn, q, pjobHash);
-    printf("%s %6d %3d %s\n", code, slCount(q->lineList), runCount, q->pathName);
+    int waitCount = countWaiting(waitList, q->name);
+    printf("%s %6d %3d %5d %s\n", code, slCount(q->lineList), runCount, waitCount, q->pathName);
     }
 }
 
