@@ -87,7 +87,9 @@ else
 }
 
 char *mailReturnAddr()
-/* Return the return addr. to be used by outbound mail or NULL. Allocd here. */
+/* Return the return addr. to be used by outbound mail or NULL. Allocd here. 
+ * If set to "NOEMAIL" then no email will be sent and the account is activated right away.
+ * */
 {
 if isEmpty(cfgOption(CFG_LOGIN_MAIL_RETURN_ADDR))
     return cloneString("NULL_mailReturnAddr");
@@ -350,6 +352,18 @@ hPrintf(
     "</script>", delay, returnURL);
 }
 
+static void redirectToLoginPage(char *paramStr)
+/* redirect to hgLogin page with given parameter string */
+{
+char *hgLoginHost = wikiLinkHost();
+hPrintf("<script  language=\"JavaScript\">\n"
+    "<!-- \n"
+    "window.location =\"http%s://%s/cgi-bin/hgLogin?%s\""
+    "//-->"
+    "\n"
+    "</script>", cgiAppendSForHttps(), hgLoginHost, paramStr);
+}
+    
 void  displayActMailSuccess()
 /* display Activate mail success box */
 {
@@ -370,7 +384,6 @@ cartRemove(cart, "hgLogin_userName");
 void sendActMailOut(char *email, char *subject, char *msg)
 /* send mail to email address */
 {
-char *hgLoginHost = wikiLinkHost();
 int result;
 result = mailViaPipe(email, subject, msg, returnAddr);
 
@@ -385,14 +398,7 @@ if (result == -1)
         "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>", email );
     }
 else
-    {
-    hPrintf("<script  language=\"JavaScript\">\n"
-        "<!-- \n"
-        "window.location =\"http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayActMailSuccess=1\""
-        "//-->"
-        "\n"
-        "</script>", cgiAppendSForHttps(), hgLoginHost);
-    }
+    redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
 }
 
 void  displayMailSuccess()
@@ -1043,11 +1049,23 @@ if (password && password2 && !sameString(password, password2))
 /* pass all the checks, OK to create the account now */
 char encPwd[45] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
+char *accActStatus = "N";
+
+if (sameWord(returnAddr, "NOEMAIL"))
+    accActStatus = "Y";
+
 sqlSafef(query,sizeof(query), "INSERT INTO gbMembers SET "
     "userName='%s',realName='%s',password='%s',email='%s', "
-    "lastUse=NOW(),accountActivated='N'",
-    user,user,encPwd,email);
+    "lastUse=NOW(),accountActivated='%s'",
+    user,user,encPwd,email,accActStatus);
 sqlUpdate(conn, query);
+
+if (sameWord(returnAddr, "NOEMAIL"))
+    {
+    redirectToLoginPage("hgLogin.do.displayLoginPage=1");
+    return;
+    }
+
 setupNewAccount(conn, email, user);
 /* send out activate code mail, and display the mail confirmation box */
 hPrintf("<h2>%s</h2>", brwName);
