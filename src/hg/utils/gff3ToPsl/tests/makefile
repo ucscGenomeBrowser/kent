@@ -13,12 +13,12 @@ all::
 test:: patch1test 
 
 patch1test: mkout
-	${gff3ToPsl} input/chrom.sizes input/GL339450_CM000671.gff stdout | sed -f input/locusToChrom.sed > output/$@.psl
+	${gff3ToPsl} /cluster/data/hg38/chrom.sizes input/haploMaps.gff stdout | sort -k 10 >  output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff expected/$@.psl output/$@.psl
-	${pslRecalcMatch} output/$@.psl /cluster/data/hg19/hg19.2bit input/GL339449.2bit output/$@.2.psl
+	${pslRecalcMatch} output/$@.psl /cluster/data/hg38/hg38.2bit /cluster/data/hg38/hg38.2bit output/$@.2.psl
 	${pslCheck} -verbose=0 output/$@.2.psl
-	${pslPretty} output/$@.2.psl /cluster/data/hg19/hg19.2bit input/GL339449.2bit output/$@.2.axt
+	${pslPretty} output/$@.2.psl /cluster/data/hg38/hg38.2bit /cluster/data/hg38/hg38.2bit output/$@.2.axt
 	diff expected/$@.2.axt output/$@.2.axt
 
 mkout:
