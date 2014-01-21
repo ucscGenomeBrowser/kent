@@ -10,7 +10,7 @@
 #include "edwLib.h"
 
 /* Globals */
-int version = 4;
+int version = 5;
 
 /* Version history 
  *  1 - initial release
@@ -28,7 +28,12 @@ int version = 4;
  *      enrichments and maybe 50% better cross-enrichments as a result.  Also made it so
  *      that files had to be from two different replicates (not technical replicates) to
  *      get credit for a good replicateQa.
+ *  5 - Relaxing thresholds for ENCODE2 experiments to be half of those for ENCODE3. 
+ *      Relaxing threshold for ChIP-seq to cross-enrichment of 3 (for broad peaks)
+ *      Relaxing threshold for ChIP-seq mapping from 80% to 65%
  */
+
+boolean solexaFastqOk = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -39,13 +44,14 @@ errAbort(
   "usage:\n"
   "   edwQaEvaluate startId endId\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -solexaFastqOk - if set will pass in spite of fastq being in solexa format\n"
   , version
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"solexaFastqOk", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -66,7 +72,8 @@ struct qaThresholds
     };
 
 struct qaThresholds dnaseThresholds = 
-/* Thresholds for DNAse - pretty high since no introns and */
+/* Thresholds for DNAse - pretty high since no introns like RNA-seq or base-changing
+ * as in methy-seq. */
     {
     .fastqMapRatio = 0.50,
     .bamMapRatio = 0.50,
@@ -132,8 +139,8 @@ struct qaThresholds miRnaSeqThresholds =
 struct qaThresholds chipSeqThresholds = 
 /* Chip-seq thresholds - pretty high since is all straight DNA */
     {
-    .fastqMapRatio = 0.80,
-    .bamMapRatio = 0.80,
+    .fastqMapRatio = 0.65,
+    .bamMapRatio = 0.65,
     .fastqQual = 20,
     .fastqPairConcordance = 0.8,
     .repeatContent = 0.1,
@@ -141,8 +148,8 @@ struct qaThresholds chipSeqThresholds =
     .closeContamination = 0.06,
     .farContamination = 0.02,
     .enrichment = 2,
-    .crossEnrichment = 5,
-    .pearsonClipped = 0.05,
+    .crossEnrichment = 3,
+    .pearsonClipped = 0.03,
     };
 
 struct qaThresholds shotgunBisulfiteSeqThresholds = 
@@ -176,6 +183,22 @@ struct qaThresholds rampageThresholds =
     .enrichment = 2.0,
     .crossEnrichment = 3,
     .pearsonClipped = 0.05,
+    };
+
+struct qaThresholds chiaPetThresholds = 
+/* Chia pet links together DNA brought together from a long distance using an antibody. */
+    {
+    .fastqMapRatio = 0.001,
+    .bamMapRatio = 0.40,
+    .fastqQual = 25,
+    .fastqPairConcordance = 0.001,
+    .repeatContent = 0.1,
+    .ribosomeContent = 0.05,
+    .closeContamination = 0.06,
+    .farContamination = 0.02,
+    .enrichment = 1.5,
+    .crossEnrichment = 1.1,
+    .pearsonClipped = 0.0001,
     };
 
 int failQa(struct sqlConnection *conn, struct edwFile *ef, char *whyFormat, ...)
@@ -341,6 +364,27 @@ void checkThresholds(struct sqlConnection *conn,
 {
 char query[512];
 char *dataType = exp->dataType;
+boolean isEncode2 = sameWord(exp->rfa, "ENCODE2");
+
+/* Make local copy of threshold with oldFactor weighed in if need be. */
+struct qaThresholds lt = *threshold;
+threshold = &lt;
+if (isEncode2)
+    {
+    double oldFactor = 0.5;
+    lt.fastqMapRatio *= oldFactor;
+    lt.bamMapRatio *= oldFactor;
+    lt.fastqQual *= oldFactor;
+    lt.fastqPairConcordance *= oldFactor;
+    lt.repeatContent /= oldFactor;
+    lt.ribosomeContent /= oldFactor;
+    lt.closeContamination /= oldFactor;
+    lt.farContamination /= oldFactor;
+    lt.enrichment *= oldFactor;
+    lt.crossEnrichment *= oldFactor;
+    lt.pearsonClipped *= oldFactor;
+    }
+
 /* First check individual file thresholds. */
 int passStat = 1;
 int pairPassStat = 0;
@@ -355,7 +399,7 @@ if (sameString(vf->format, "fastq"))
 	passStat = failQa(conn, ef, "Map ratio is %g, threshold for %s is %g", 
 	    vf->mapRatio, dataType, threshold->fastqMapRatio);
 	}
-    else if (!sameWord(fq->qualType, "sanger"))
+    else if (!sameWord(fq->qualType, "sanger") && !solexaFastqOk && !isEncode2)
         {
 	passStat = failQa(conn, ef, "Quality scores type %s not sanger", fq->qualType);
 	}
@@ -490,37 +534,45 @@ struct sqlConnection *conn = edwConnectReadWrite();
 struct edwFile *ef, *efList = edwFileAllIntactBetween(conn, startFileId, endFileId);
 for (ef = efList; ef != NULL; ef = ef->next)
     {
+    verbose(2, "Looking at %u\n", ef->id);
     struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
     if (vf != NULL)
 	{
-	struct edwExperiment *exp = edwExperimentFromAccession(conn, vf->experiment);
-	if (exp != NULL)
+	verbose(2, " aka %s\n", vf->licensePlate);
+	if (!isEmpty(vf->experiment))
 	    {
-	    char *dataType = exp->dataType;
-	    struct qaThresholds *thresholds = NULL;
-	    if (sameWord("DNase-seq", dataType))
-		thresholds = &dnaseThresholds;
-	    else if (sameWord("RNA-seq", dataType) || sameWord("Long RNA-seq", dataType))
-	        thresholds = &longRnaSeqThresholds;   
-	    else if (sameWord("short RNA-seq", dataType))
-	        thresholds = &shortRnaSeqThresholds;   
-	    else if (sameWord("miRNA-seq", dataType))
-	        thresholds = &miRnaSeqThresholds;   
-	    else if (sameWord("ChIP-seq", dataType))
-	        thresholds = &chipSeqThresholds;
-	    else if (sameWord("Shotgun Bisulfite-seq", dataType))
-	        thresholds = &shotgunBisulfiteSeqThresholds;
-	    else if (sameWord("RAMPAGE", dataType))
-	        thresholds = &rampageThresholds;
-	    else if (sameWord("", dataType))
-	        ;
+	    struct edwExperiment *exp = edwExperimentFromAccession(conn, vf->experiment);
+	    if (exp != NULL)
+		{
+		char *dataType = exp->dataType;
+		struct qaThresholds *thresholds = NULL;
+		if (sameWord("DNase-seq", dataType))
+		    thresholds = &dnaseThresholds;
+		else if (sameWord("RNA-seq", dataType) || sameWord("Long RNA-seq", dataType))
+		    thresholds = &longRnaSeqThresholds;   
+		else if (sameWord("short RNA-seq", dataType))
+		    thresholds = &shortRnaSeqThresholds;   
+		else if (sameWord("miRNA-seq", dataType))
+		    thresholds = &miRnaSeqThresholds;   
+		else if (sameWord("ChIP-seq", dataType))
+		    thresholds = &chipSeqThresholds;
+		else if (sameWord("Shotgun Bisulfite-seq", dataType))
+		    thresholds = &shotgunBisulfiteSeqThresholds;
+		else if (sameWord("RAMPAGE", dataType))
+		    thresholds = &rampageThresholds;
+		else if (sameWord("ChiaPet", dataType))
+		    thresholds = &chiaPetThresholds;
+		else if (sameWord("", dataType))
+		    ;
+		else
+		    verbose(2, "No thresholds for data type %s", dataType);
+		verbose(2, "  dataType %s, thresholds %p\n", dataType, thresholds);
+		if (thresholds != NULL)
+		    checkThresholds(conn, ef, vf, exp, thresholds);
+		}
 	    else
-	        verbose(2, "No thresholds for data type %s", dataType);
-	    if (thresholds != NULL)
-		checkThresholds(conn, ef, vf, exp, thresholds);
+		warn("Can't find experiment for '%s'", vf->experiment);
 	    }
-	else
-	    warn("Can't find experiment for '%s'", vf->experiment);
 	}
     }
 sqlDisconnect(&conn);
@@ -532,6 +584,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+solexaFastqOk = optionExists("solexaFastqOk");
 edwQaEvaluate(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
 return 0;
 }

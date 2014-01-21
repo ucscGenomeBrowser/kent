@@ -141,6 +141,7 @@ for (i=0, ef = outputFileList; ef != NULL; ef = ef->next, ++i)
     dyJsonObjectStart(dy);
     dyJsonString(dy, "type", run->outputTypes[i], TRUE);
     struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
+    assert(vf != NULL);
     dyJsonString(dy, "value", vf->licensePlate, FALSE);
     dyJsonObjectEnd(dy, ef->next != NULL);
     }

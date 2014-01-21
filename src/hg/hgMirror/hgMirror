@@ -848,25 +848,29 @@ def refreshPage(paramStr, delay=5, addNote=False):
     if addNote:
         print("""Redirecting to <a href="%s">%s</a>"""  % (newUrl, newUrl))
 
+def jobsAreDone():
+    " True if no jobs currently in the 'at' queue "
+    cmd = "at -l | wc -l > /tmp/atWc.txt"
+    assert(os.system(cmd)==0)
+    lineCount = int(open("/tmp/atWc.txt").read().strip())
+    os.remove("/tmp/atWc.txt")
+    return lineCount==0
+
 def printLog(jobId):
     " print rsync log for given jobId to stdout "
     jobFname = "/tmp/%d.log" % int(jobId)
     print "rsync download commands:<p>"
-    rsyncDone = 0
     print "<pre>"
     for line in open(jobFname):
         print line,
-        if "speedup is" in line or "unexpectedly closed" in line or \
-                "done\n" in line or "rsync error:" in line:
-            rsyncDone += 1
 
     print "</pre>"
-    if rsyncDone>=3:
+    if jobsAreDone():
         print '<a href="hgTracks">Back to genome browser</a><p>'
         print '<a href="hgMirror">Download more tracks</a>'
     else:
-        print '<i>Downloading files... Page will reload every 5 seconds until download is complete.</i>'
-        refreshPage("jobId=%d" % jobId, delay=5000, addNote=False)
+        print '<i>Downloading files... Page will reload every 4 seconds until download is complete.</i>'
+        refreshPage("jobId=%d" % jobId, delay=4000, addNote=False)
 
 def hideSomeTracks(localTables):
     """

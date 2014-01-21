@@ -2598,7 +2598,7 @@ pmPrintf(pm, "%-8s %4d %6d %6d %5d %3d %3d %3d %4.1fg %4d %3d %s",
 pmSend(pm, rudpOut);
 }
 
-void listBatches(struct paraMessage *pm)
+void listSomeBatches(struct paraMessage *pm, int runThreshold)
 /* Write list of batches.  Format is one batch per
  * line followed by a blank line. */
 {
@@ -2614,11 +2614,25 @@ for (user = userList; user != NULL; user = user->next)
     for (bNode = user->oldBatches->head; !dlEnd(bNode); bNode = bNode->next)
         {
 	struct batch *batch = bNode->val;
-	if (batch->runningCount > 0)
+	if (batch->runningCount >= runThreshold)
 	    writeOneBatchInfo(pm, user, batch);
 	}
     }
 pmSendString(pm, rudpOut, "");
+}
+
+void listBatches(struct paraMessage *pm)
+/* Write list of all active batches.  Format is one batch per
+ * line followed by a blank line. */
+{
+listSomeBatches(pm, 1);
+}
+
+void listAllBatches(struct paraMessage *pm)
+/* Write list of batches including inactive ones.  Format is one batch per
+ * line followed by a blank line. */
+{
+listSomeBatches(pm, 0);
 }
 
 void appendLocalTime(struct paraMessage *pm, time_t t)
@@ -3407,6 +3421,8 @@ for (;;)
 	 listUsers(pm);
     else if (sameWord(command, "listBatches"))
 	 listBatches(pm);
+    else if (sameWord(command, "listAllBatches"))
+	 listAllBatches(pm);
     else if (sameWord(command, "listSick"))
 	 listSickNodes(pm);
     else if (sameWord(command, "status"))

@@ -42,6 +42,9 @@ mkdir /hive/groups/encode/encode3/encodeDataWarehouse
 hgsql hgFixed -e "create database encodeDataWarehouse"
 hgsql encodeDataWarehouse < encodeDataWarehouse.sql
 
+# Add to database settings
+hgsql -e "insert into edwSettings (name,val) values ('prefix', 'DEV')" encodeDataWarehouse
+
 # Create users
 edwCreateUser kent@soe.ucsc.edu
 update edwUser set isAdmin=1 where email='kent@soe.ucsc.edu';
@@ -64,6 +67,7 @@ edwCreateUser katrina@soe.ucsc.edu
 edwCreateUser chinhli@soe.ucsc.edu
 update edwUser set isAdmin=1 where email='chinhli@soe.ucsc.edu';
 edwCreateUser chli@ucsc.edu
+edwAddAssembly 9606 hg38 hg38 /hive/groups/encode/encode3/encValData/hg38/hg38.2bit -symlink=8c0d7fe26540718c381a8d458274f270
 edwAddAssembly 9606 hg19 hg19 /gbdb/hg19/hg19.2bit -symLink=bcdbfbe9da62f19bee88b74dabef8cd3
 edwAddAssembly 9606 male.hg19 male.hg19 /hive/groups/encode/encode3/encValData/hg19/male.hg19.2bit -symLink=d536cde4657b63e92c52719cd1bd71d1
 edwAddAssembly 9606 female.hg19 female.hg19 /hive/groups/encode/encode3/encValData/hg19/female.hg19.2bit -symLink=b7fe3540ba1bf22f8c89a7bbded3f4ee
@@ -101,6 +105,15 @@ edwAddQaEnrichTarget intron mm10 /hive/groups/encode/encode3/encValData/mm10/reg
 edwAddQaEnrichTarget utr3 mm10 /hive/groups/encode/encode3/encValData/mm10/regions/utr3.bb
 edwAddQaEnrichTarget utr5 mm10 /hive/groups/encode/encode3/encValData/mm10/regions/utr5.bb
 edwAddQaEnrichTarget utr mm10 /hive/groups/encode/encode3/encValData/mm10/regions/utr.bb
+edwAddQaEnrichTarget open hg38 /hive/groups/encode/encode3/encValData/hg38/regions/open.bb
+edwAddQaEnrichTarget exon hg38 /hive/groups/encode/encode3/encValData/hg38/regions/exon.bb
+edwAddQaEnrichTarget promoter hg38 /hive/groups/encode/encode3/encValData/hg38/regions/promoter.bb
+edwAddQaEnrichTarget coding hg38 /hive/groups/encode/encode3/encValData/hg38/regions/coding.bb
+edwAddQaEnrichTarget intron hg38 /hive/groups/encode/encode3/encValData/hg38/regions/intron.bb
+edwAddQaEnrichTarget utr hg38 /hive/groups/encode/encode3/encValData/hg38/regions/utr.bb
+edwAddQaEnrichTarget utr3 hg38 /hive/groups/encode/encode3/encValData/hg38/regions/utr3.bb
+edwAddQaEnrichTarget utr5 hg38 /hive/groups/encode/encode3/encValData/hg38/regions/utr5.bb
+edwAddQaEnrichTarget chrY hg38 /hive/groups/encode/encode3/encValData/hg38/regions/chrY.bb
 edwAddQaContamTarget hg19
 edwAddQaContamTarget mm10
 edwAddQaContamTarget ce10
@@ -108,12 +121,13 @@ edwAddQaContamTarget dm3
 edwAddQaContamTarget rn4
 edwAddQaContamTarget sacCer3
 edwAddQaContamTarget escCol1
+edwAddQaContamTarget hg38
 hgsql encodeDataWarehouse -e 'create view enrichedFiles as select f.id,v.format,v.enrichedIn,e.enrichment,left(f.submitFileName,70) submitFileName from edwQaEnrich e,edwValidFile v,edwFile f,edwQaEnrichTarget t where e.fileId=f.id and v.fileId=f.id and t.id=e.qaEnrichTargetId and v.enrichedIn=t.name;'
 hgsql encodeDataWarehouse -e 'create view crossEnrichments as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,ev.enrichedIn enrich,sampleSampleEnrichment xEnrichment from edwFile e,edwQaPairSampleOverlap p, edwFile y,edwValidFile ev where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId = e.id'
 hgsql encodeDataWarehouse -e 'create view correlations as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,pearsonInEnriched from edwFile e,edwQaPairCorrelation p, edwFile y where  e.id=p.elderFileId and y.id=p.youngerFileId'
 hgsql encodeDataWarehouse -e 'create view vf as select e.id fileId,submitId,submitFileName,edwFileName,FROM_UNIXTIME(endUploadTime) endUploadTime,FROM_UNIXTIME(updateTime) updateTime,size,md5,tags,errorMessage,deprecated,replacedBy,v.id validId,licensePlate,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,mapRatio,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd,qaVersion,uniqueMapRatio from edwFile e, edwValidFile v where e.id = v.fileId'
 
-hgsql encodeDataWarehouse -e 'create view xf as select fileId,submitId,submitFileName,edwFileName,FROM_UNIXTIME(endUploadTime) endUploadTime,FROM_UNIXTIME(updateTime) updateTime,size,md5,tags,errorMessage,deprecated,replacedBy,validId,licensePlate,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,mapRatio,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd,qaVersion,uniqueMapRatio,rfa,assayType,dataType,lab,biosample,ipTarget from vf,edwExperiment ex where vf.experiment = ex.accession'
+hgsql encodeDataWarehouse -e 'create view xf as select fileId,submitId,submitFileName,edwFileName,endUploadTime endUploadTime,updateTime updateTime,size,md5,tags,errorMessage,deprecated,replacedBy,validId,licensePlate,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,mapRatio,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd,qaVersion,uniqueMapRatio,rfa,assayType,dataType,lab,biosample,ipTarget from vf,edwExperiment ex where vf.experiment = ex.accession'
 
 #Add experiment table,  just a local one rather than from stanford
 hgsql encodeDataWarehouse -e 'load data local infile "../oneShot/rsyncEdwExpDataType/dec14.tab" into table edwExperiment'

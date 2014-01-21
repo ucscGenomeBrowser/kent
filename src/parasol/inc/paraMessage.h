@@ -94,4 +94,36 @@ void pmFetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName);
 void pmFetchFile(char *host, char *sourceName, char *destName);
 /* Fetch small file. */
 
+boolean pmSendStringWithRetries(struct paraMessage *pm, struct rudp *ru, char *string);
+/* Send out given message strng.  Print warning message and return FALSE if
+ * there is a problem. Try up to 5 times sleeping for 60 seconds in between.
+ * This is an attempt to help automated processes. */
+
+char *pmHubSendSimple(char *message, char *host);
+/* Send message to host, no response. */
+
+char *pmHubSingleLineQuery(char *query, char *host);
+/* Send message to hub and get single line response.
+ * This should be freeMem'd when done. */
+
+struct slName *pmHubMultilineQuery(char *query, char *host);
+/* Send a command with a multiline response to hub,
+ * and return response as a list of strings. */
+
+struct paraPstat2Job
+/* The job information returned by a pstat2 message by parasol,
+ * parsed out. */
+    {
+    struct paraPstat2Job *next;
+    char *status;   // 'r' mostly
+    char *parasolId; // Parasol ID as a string
+    char *user;	    // Name of user
+    char *program;  // Name of program being run
+    char *host;	    // Host name of node running job.
+    };
+#define PARAPSTAT2JOB_NUM_COLS  5
+
+struct paraPstat2Job *paraPstat2JobLoad(char **row);
+/* Turn an array of 5 strings into a paraPstat2Job. */
+
 #endif /* PARAMESSAGE_H */
