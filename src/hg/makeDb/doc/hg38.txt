@@ -2211,3 +2211,90 @@ total           5567850 5520017 5459735 5744165
 	where name="hg38";' hgcentraltest
 
 ############################################################################
+# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR LASTZ (DONE - 2014-01-21 - Hiram)
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/linSpecRep
+    cd /hive/data/genomes/hg38/bed/linSpecRep
+    #	create individual .out files from the master record in ../repeatMasker
+    mkdir splitOut
+    cat << '_EOF_' > split.csh
+#!/bin/csh -fe
+set C = $1
+head -3 ../repeatMasker/hg38.sorted.fa.out > splitOut/${C}.out
+grep "${C} " ../repeatMasker/hg38.sorted.fa.out >> splitOut/${C}.out
+'_EOF_'
+    # << happy emacs
+    chmod +x split.csh
+
+    cat << '_EOF_' > template
+#LOOP
+split.csh $(root1) {check out line+ splitOut/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # small ones first:
+    cut -f1 ../../chrom.sizes | tac > chrom.list
+    gensub2 chrom.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+# Completed: 93 of 93 jobs
+# CPU time in finished jobs:        127s       2.12m     0.04h    0.00d  0.000 y
+# IO & Wait Time:                 17154s     285.90m     4.76h    0.20d  0.001 y
+# Average job time:                 186s       3.10m     0.05h    0.00d
+# Longest finished job:             224s       3.73m     0.06h    0.00d
+# Submission to last job:           280s       4.67m     0.08h    0.00d
+
+    #	now, we can date and process each of those .out files
+    #	constructing the humanSpecific set of repeats
+    #   this means repeats found in human, and not in others
+    #   using mouse here for 'others' is good enough, a variety
+    #   of other species could be used (rat dog cow) where they all
+    #   produce the same result
+    mkdir dateRepeats
+    cd dateRepeats
+    cat << '_EOF_' > mkLSR
+#!/bin/bash
+set -beEu -o pipefail
+rm -f $1.out_mus-musculus
+ln -s ../splitOut/$1.out .
+/scratch/data/RepeatMasker/DateRepeats $1.out -query human -comp mouse
+rm $1.out
+mkdir -p ../humanSpecific
+/cluster/bin/scripts/extractRepeats 1 $1.out_mus-musculus \
+	> ../humanSpecific/$1.out.spec
+'_EOF_'
+    #	<< happy emacs
+    chmod +x mkLSR
+
+    cat << '_EOF_' > template
+#LOOP
+./mkLSR $(path1) {check out line+ ../humanSpecific/$(path1).out.spec}
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    gensub2 ../chrom.list single template jobList
+    para try ... check ... push ... etc...
+    para time
+# Completed: 455 of 455 jobs
+# CPU time in finished jobs:      13985s     233.08m     3.88h    0.16d  0.000 y
+# IO & Wait Time:                  1470s      24.50m     0.41h    0.02d  0.000 y
+# Average job time:                  34s       0.57m     0.01h    0.00d
+# Longest finished job:             111s       1.85m     0.03h    0.00d
+# Submission to last job:          1427s      23.78m     0.40h    0.02d
+
+
+    # We also need the nibs for blastz runs with lineage specific repeats
+    mkdir /hive/data/genomes/hg38/bed/nibs
+    cd /hive/data/genomes/hg38/bed/nibs
+    cut -f1 ../../chrom.sizes | while read C
+do
+    twoBitToFa -seq=${C} ../../hg38.2bit stdout \
+	| faToNib -softMask stdin ${C}.nib
+    echo "${C} done"
+done
+    mkdir /hive/data/staging/data/hg38/nib
+    rsync -a --progress ./ /hive/data/staging/data/hg38/nib
+
+#############################################################################
