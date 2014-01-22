@@ -106,15 +106,16 @@ static void processMatchLine(FILE *pslF, struct gff3Ann *node,
 {
 struct gff3Attr *attr = gff3AnnFindAttr(node, "Gap");
 
-if ((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL))
-    errAbort("match record without Gap attribute");
+char *cigar = NULL;
+if (!((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL)))
+    cigar = attr->vals->name;
 
 struct nameAndSize *nsT = getNameAndSize(chromHash, node->targetId);
 struct nameAndSize *nsQ = getNameAndSize(chromHash, node->seqid);
 
 struct psl *psl = pslFromGff3Cigar(node->seqid, nsQ->size,  node->start, node->end,
                                    nsT->name, nsT->size,  node->targetStart, node->targetEnd, 
-                                   node->strand, attr->vals->name);
+                                   node->targetStrand, cigar);
 pslOutput(psl, pslF, '\t' , '\n');
 pslFree(&psl);
 }
