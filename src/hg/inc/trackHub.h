@@ -133,7 +133,7 @@ struct chromInfo *trackHubChromInfo(char *database, char *chrom);
 char *trackHubGenomeNameToDb(char *genome);
 /* Return assembly name given a genome name if one exists, otherwise NULL. */
 
-struct dbDb *trackHubGetDbDbs();
+struct dbDb *trackHubGetDbDbs(char *clade);
 /* Get a list of dbDb structures for all the tracks in this clade/hub. */
 
 struct slPair *trackHubGetCladeLabels();
