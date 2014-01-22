@@ -738,8 +738,8 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     hvGfxBox(hvg, sx, y, w, heightPer, color);
 
     // now draw the mismatches if we're at high enough resolution 
-    if ((winBaseCount < showSnpWidth) && ((vis == tvFull) || (vis == tvPack)))
-    {
+    if ((isHalSnake && sf->qSequence != NULL) && (winBaseCount < showSnpWidth) && ((vis == tvFull) || (vis == tvPack)))
+	{
 	char *twoBitString = trackDbSetting(tg->tdb, "twoBit");
 	static struct twoBitFile *tbf = NULL;
 	static char *lastTwoBitString = NULL;
@@ -823,7 +823,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		refDna, seqLen, TRUE, FALSE);
 	    }
 
-    }
+	}
     sf->drawn = TRUE;
     tEnd = e;
     tStart = s;
@@ -991,7 +991,7 @@ if (errCatchStart(errCatch))
 	(tg->visibility == tvPack);
     hal_dup_type_t dupMode =  (isPackOrFull) ? HAL_QUERY_AND_TARGET_DUPS :
 	HAL_QUERY_DUPS;
-    int needSeq = isPackOrFull && (winBaseCount < showSnpWidth) ? 1 : 0;
+    hal_seqmode_type_t needSeq = isPackOrFull && (winBaseCount < showSnpWidth) ? HAL_LOD0_SEQUENCE : HAL_NO_SEQUENCE;
     int mapBackAdjacencies = (tg->visibility == tvFull);
     struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies);
 
