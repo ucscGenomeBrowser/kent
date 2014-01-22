@@ -1,0 +1,106 @@
+
+table eapJob
+"An analysis pipeline job to be run asynchronously and not too many all at once."
+    (
+    uint id primary auto;    "Job id"
+    lstring commandLine; "Command line of job"
+    bigInt startTime index; "Start time in seconds since 1970"
+    bigInt endTime index; "End time in seconds since 1970"
+    lstring stderr; "The output to stderr of the run - may be nonempty even with success"
+    int returnCode; "The return code from system command - 0 for success"
+    int cpusRequested; "Number of CPUs to request from job control system"
+    string parasolId index[12];	"Parasol job id for process." 
+    )
+
+table eapSoftware
+"Software that is tracked by the analysis pipeline."
+    (
+    uint id primary auto;  "Software id"
+    string name unique; "Command line name"
+    string url; "Suggested reference URL"
+    string email; "Suggested contact email"
+    )
+
+table eapSwVersion
+"A version of a particular piece of software"
+    (
+    uint id primary auto;  "Version id"
+    uint softwareId index; "Software this is associated with"
+    lstring "version"; "Version as carved out of program run with --version or the like"
+    char[32] md5; "md5 sum of executable file"
+    )
+
+table eapStep
+"A step in an analysis pipeline - something that takes one set of files to another"
+    (
+    uint id primary auto; "Step id"
+    string name unique;  "Name of this analysis step"
+    int cpusRequested; "Number of CPUs to request from job control system"
+    uint inCount; "Total number of inputs"
+    string[inCount] inputTypes; "List of types to go with input files"
+    uint outCount; "Total number of outputs"
+    string[outCount] outputNamesInTempDir; "list of all output file names in output dir"
+    string[outCount] outputFormats; "list of formats of output files"
+    string[outCount] outputTypes; "list of outputType of output files"
+    )
+ 
+table eapStepSoftware
+"Relates steps to the software they use"
+    (
+    uint id primary auto; "Link id - helps give order to software within step among other things"
+    uint stepId index;	"ID of associated step"
+    uint softwareId index; "ID of associated software"
+    )
+
+table eapStepVersion
+"All the versions of a step - a new row if any subcomponent is versioned too."
+    (
+    uint id;  	  "ID of step version -used to tie together rows in edwAnalysisStepVector"
+    uint stepId;  "ID of associated step"
+    uint version; "Version of given step - just increases by 1 with each change"
+    )
+
+table eapStepVersionSwVersion
+"A table that is queried for list of all software versions used in a step"
+    (
+    uint id;	"Link id - helps give order to steps in a given version"
+    uint stepVersionId;  "Key in edwAnalysisStepVersion table"
+    uint swVersionId;    "Key in edwAnalysisSwVersion table"
+    )
+
+table eapAnalysis
+"Information on an analysis job that we're planning on running"
+    (
+    uint id primary auto; "Analysis run ID"
+    uint jobId;  "ID in edwAnalysisJob table"
+    char[16] experiment index; "Something like ENCSR000CFA."
+    string analysisStep; "Name of analysis step.  Different data can be analysed with same step"
+    uint stepVersionId; "Keep track of versions of everything"
+    lstring tempDir; "Where analysis is to be computed"
+    uint assemblyId; "Id of assembly we are working with if analysis is all on one assembly"
+    lstring jsonResult; "JSON formatted object with result for Stanford metaDatabase"
+    byte createStatus;  "1 if output files made 0 if not made, -1 if make tried and failed"
+    )
+
+table eapInput
+"Inputs to an eapAnalysis"
+    (
+    bigInt id primary auto; "Input table ID"
+    uint runId index; "Which run this is associated with"
+    string name;  "Input name within step"
+    uint ix;  "Inputs always potentially vectors.  Have single one with zero ix for scalar input"
+    uint fileId;  "Associated file - 0 for no file, look perhaps to val below instead."
+    lstring val;  "Non-file data"
+    )
+
+table eapOutput
+"Outputs to an eapAnalysis"
+    (
+    bigInt id primary auto; "Output table ID"
+    uint runId index; "Which run this is associated with"
+    string name;  "Output name within step"
+    uint ix;  "Outputs always potentially vectors. Have single one with zero ix for scalar output"
+    uint fileId;  "Associated file - 0 for no file, look perhaps to val below instead."
+    lstring val;  "Non-file data"
+    )
+
