@@ -1,33 +1,48 @@
 <h2>Description</h2>
 <p>
-This track shows regions
-where transcription factors, proteins responsible for
-modulating gene transcription, bind to DNA as assayed by ChIP-seq (chromatin 
-immunoprecipitation with antibodies 
-specific to the transcription factor followed by sequencing of the precipitated DNA).
-The peaks of transcription factor binding underlying this track were computed using a uniform pipeline 
-that uses the variation between the two replicates to guide peak thresholds. This track combines
-data from 91 cell types and 189 transcription-factor targeting antibodies into a
-summary display. 
-Additional views of this data and additional documentation on the methods used
-to generate the data underlying this track are available from the
+This track shows regions of transcription factor binding derived from a large collection
+of ChIP-seq experiments performed by the ENCODE project, together with DNA binding motifs 
+identified within these regions by the ENCODE
+<a target=_blank href="http://www.factorbook.org">Factorbook</a> repository.</p>
+<p>
+Transcription factors (TFs) are proteins that bind to DNA and interact with RNA polymerases to
+regulate gene expression.  TFs can bind directly to specific short DNA sequences ('motifs')
+recognized by a DNA binding domain, or indirectly through interactions with other DNA-binding TFs.
+High-throughput antibody capture and sequencing methods (e.g. chromatin immunoprecipitation
+followed by sequencing, or 'ChIP-seq') can be used to identify regions of
+TF binding genome-wide.</p>
+<p>
+ENCODE TFBS ChIP-seq data were processed by the ENCODE Analysis Working Group
+pipeline to generate uniform peaks of TF binding.
+Peaks for 161 transcription factors in
+91 cell types are combined here into clusters, to produce a summary display showing 
+occupancy regions for each factor.
+Additional views of the underlying ChIP-seq data and documentation on the methods used
+to generate it are available from the
 <a href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgTfbsUniform" 
-target="_blank">ENCODE Uniform TFBS</a> track description.
-</p>
+target="_blank">ENCODE Uniform TFBS</a> track description.</p>
+
 <h2>Display Conventions</h2>
 <p>
-A gray box encompasses the peak clusters of transcription factor occupancy.  
-The darkness of the box is proportional to the maximum signal strength observed in any cell line
-contributing to the cluster.  The name to the left
-of the box is the transcription factor. The letters to the right represent the cell lines where
-a signal is detected.  The darkness of the letter is proportional to the signal strength in
-the cell line. 
-Abbreviations
-starting with capital letters designate 
+A gray box encloses each peak cluster of transcription factor occupancy, with the
+darkness of the box is proportional to the maximum signal strength observed in any cell line
+contributing to the cluster. The HGNC gene name for the transcription factor is shown 
+to the left of each cluster. Within a cluster, green highlighting indicates 
+the site of a Factorbook-identified canonical motif. (NOTE: motif highlights are shown
+only in browser windows of size 30,000 bp or less,  and display can be suppressed using 
+track configuration).</p>
+<p>
+The cell lines where signal was detected for the factor are identified by single-letter 
+abbreviations shown to the right of the cluster.  
+The darkness of each letter is proportional to the signal strength observed in the cell line. 
+Abbreviations starting with capital letters designate
 <a target="_blank" href="http://encodeproject.org/ENCODE/cellTypes.html">ENCODE cell types</a>
 identified for intensive study - Tier 1 and Tier 2 - 
-while those starting with lowercase letters designate Tier 3 cell lines.
-Click on an item in the track to see the cell lines spelled out. 
+while those starting with lowercase letters designate Tier 3 cell lines.</p>
+<p>
+Click on a peak cluster to see more information about the TF/cell assays contributing to the
+cluster, the cell line abbreviation table, and details about the highest scoring canonical 
+motif in the cluster.
 </p>
 
 <h2>Methods</h2>
@@ -43,35 +58,44 @@ factor calculated as the ratio of the maximum score value (1000) to the signal v
 standard deviation from the mean, with values exceeding 1000 capped at 1000. This has the
 effect of distributing scores up to mean plus one 1 standard deviation across the score range,
 but assigning all above to the maximum score.
-The cluster score is the highest score for any peak contributing to the cluster.  
+The cluster score is the highest score for any peak contributing to the cluster.</p>  
 <p>
-For additional documentation on the methods used to generate the data underlying this track
-please review the <a href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgTfbsUniform"
-target="_blank">ENCODE Uniform TFBS</a> track description.
+The Factorbook motif discovery and annotation pipeline uses
+the MEME-ChIP and FIMO tools from the <a target=_blank href="http://meme.nbcr.net/meme">MEME</a> software suite in conjunction with machine learning methods and
+manual curation to merge discovered motifs with known motifs reported in 
+<a target="blank" href="http://jaspar.genereg.net/">Jaspar</a> and
+<a target="blank" href="http://www.biobase-international.com/product/transcription-factor-binding-sites">TransFac</a>.
+Motifs identifications reported in Wang et al. 2012 (below) were supplemented in this track
+with more recent data (derived from newer ENCODE datasets - Jan 2011 through Mar 2012 freezes),
+provided by the Factorbook team.  Motif identifications from all datasets were merged, with sites duplicated in multiple cell lines scored as -log10 of the most significant value (qvalue) reported.
+
 </p>
 
 <h2>Release Notes</h2>
 <p>
-Release 3 (August 2013) of this track includes more datasets (690 total,
-vs. 486 in the previous release) representing all
-ENCODE transcription factor ChIP-seq passing quality assessment through the ENCODE March 2012 data freeze.
+Release 4 (February 2014) of this track adds display of the Factorbook motifs.
+Release 3 (August 2013) added 124 datasets (690 total, vs. 486 in Release 2),
+representing all ENCODE TF ChIP-seq passing quality assessment through 
+the ENCODE March 2012 data freeze.
 The peaks used to generate these clusters were called with less stringent thresholds than 
 used during the January 2011 uniform processing shown in Release 2 of this track.
 The contributing datasets are displayed as individual
 tracks in the ENCODE Uniform TFBS track, which is  available along with the primary data tracks
 in the <a href="../cgi-bin/hgTrackUi?g=wgEncodeTfBindingSuper" 
 target="_blank">ENC TF Binding Supertrack</a> page.
-The clustering for V3 is based on the transcription factor target, and so differs from V2 where clustering was based on antibody.
+The clustering for V3/V4 is based on the transcription factor target, and so differs from V2 where clustering was based on antibody.
 </p>
 <p>
-For this release, a new track table format, 'factorSource' was used to represent the primary clusters
-table and downloads file, <em>wgEncodeTfbsClusteredV3</em>.  This format consists of standard BED5
-fields (see <a target="_blank" href="../FAQ/FAQformat.html#format1">File Formats</a>) followed by two
-fields containing comma-separated lists.  The first list field contains numeric identifiers for
-experiments, keyed to the <em>wgEncodeTfbsClusteredInputsV3</em> table, which includes such information
-as the experiment's underlying Uniform TFBS table name, factor targeted, antibody used, cell type,
-treatment (if any), and laboratory source.  The second list field contains the scores for the corresponding
-experiments. For convenience, the 
+For the V3/V4 releases, a new track table format, 'factorSource' was used to represent 
+the primary clusters table and downloads file, <em>wgEncodeTfbsClusteredV3</em>.  
+This format consists of standard BED5
+fields (see <a target="_blank" href="../FAQ/FAQformat.html#format1">File Formats</a>) 
+followed by two fields containing comma-separated lists.  The first list field contains 
+numeric identifiers for experiments, keyed to the <em>wgEncodeTfbsClusteredInputsV3</em> table,
+which includes such information as the experiment's underlying Uniform TFBS table name,
+factor targeted, antibody used, cell type, treatment (if any), and laboratory source.  
+The second list field contains the scores for the corresponding experiments. 
+For convenience, the 
 <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegTfbsClustered/">
 file downloads directory</a>
 for this track also contains a BED file,
@@ -80,7 +104,7 @@ for this track also contains a BED file,
 
 <h2>Credits</h2>
 <p>
-This track shows data from the <a href='http://myers.hudsonalpha.org/'
+This track shows ChIP-seq data from the <a href='http://myers.hudsonalpha.org/'
 target="_blank">Myers Lab</a> at the <a href='http://www.hudsonalpha.org/'
 target="_blank">HudsonAlpha Institute for Biotechnology</a> and by the labs of
 <a href="http://snyderlab.stanford.edu/" target="_blank">Michael Snyder</a>,
@@ -98,7 +122,28 @@ These data were processed into uniform peak calls by the ENCODE Analysis Working
 developed by
 <a href="https://sites.google.com/site/anshulkundaje" target="_blank">Anshul Kundaje</a>
 The clustering of the uniform peaks was performed by UCSC.
+The Factorbook motif identifications and localizations (and valuable assistance with 
+interpretation) were provided by Bong Hyun Kim and Jiali Zhuang of the 
+<a target=_blank href="http://zlab.umassmed.edu">Zlab (Weng Lab)</a> at UMass Medical School.
 </p>
+
+<h2>References</h2>
+
+<pre>
+(TBD formatting)
+
+Wang et al.  Sequence features anad chromatin structure, Genome Res 2012
+
+Wang et al.  Factorbook.org, NAR 2012
+
+Gerstein et al
+Architecture of the human regulatory network, Genome Res 2012 
+
+Philip Machanick and Timothy L. Bailey, "MEME-ChIP: motif analysis of large DNA datasets", Bioinformatics 27(12):1696-1697, 2011.
+
+Charles E. Grant, Timothy L. Bailey, and William Stafford Noble, "FIMO: Scanning for occurrences of a given motif", Bioinformatics 27(7):1017-1018, 2011
+
+</pre>
 
 <h2>Data Release Policy</h2>
 <p>
