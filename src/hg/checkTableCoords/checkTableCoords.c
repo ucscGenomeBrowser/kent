@@ -221,14 +221,6 @@ boolean gotError = 0;
 int startLTZ = 0, endLTStart = 0, endGTChrom = 0;
 for (bed = bedList;  bed != NULL;  bed = bed->next)
     {
-    if (bed->chromStart < 0)
-	{
-	verbose(2, "%s.%s item %s %s:%d-%d: %s < 0\n",
-		db, table, bed->name ? bed->name : "",
-		bed->chrom, bed->chromStart, bed->chromEnd,
-		hti->startField);
-	startLTZ++;
-	}
     if (bed->chromEnd < bed->chromStart)
 	{
 	verbose(2, "%s.%s item %s %s:%d-%d: %s < %s\n",

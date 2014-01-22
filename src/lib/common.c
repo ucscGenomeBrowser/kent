@@ -382,7 +382,7 @@ slUniqify(pList,compare,free);
 }
 
 boolean slRemoveEl(void *vpList, void *vToRemove)
-/* Remove element from doubly linked list.  Usage:
+/* Remove element from singly linked list.  Usage:
  *    slRemove(&list, el);
  * Returns TRUE if element in list.  */
 {
@@ -2429,7 +2429,7 @@ if ((f = fopen(fileName, mode)) == NULL)
         else if (mode[0] == 'a')
             modeName = " to append";
         }
-    errAbort("Can't open %s%s: %s", fileName, modeName, strerror(errno));
+    errAbort("mustOpen: Can't open %s%s: %s", fileName, modeName, strerror(errno));
     }
 return f;
 }
@@ -2578,7 +2578,7 @@ if (fd < 0)
 	modeName = " to append";
     else
 	modeName = " to read";
-    errnoAbort("Can't open %s%s", fileName, modeName);
+    errnoAbort("mustOpenFd: Can't open %s%s", fileName, modeName);
     }
 return fd;
 }

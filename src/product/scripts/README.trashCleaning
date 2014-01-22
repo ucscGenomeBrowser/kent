@@ -6,15 +6,32 @@
 ===============================================================================
 A brief overview of the history of trash cleaning operations.
 
+*** First Implementation ***
+
 In the very beginning there was a simple trash directory
 that contained only volatile files which could be removed with
 a single 'find' command with a last access time limit of an hour.
+
+If you would like to run this very simple system, the command is,
+for example a 48 hour (==2880 minutes) expiration policy:
+    find /trash -type f -amin +2880 -exec rm -f {} \;
+
+*** Second Implementation ***
 
 As custom track data began to be more popular, it was decided to
 allow custom track data to live longer than the default hour.
 The single 'find' command turned into two 'find' commands, with
 an exception or inclusion list to avoid or include the trash/ct/
 directory contents for the two different last access time limits.
+
+This type of system is no longer valid since there are other types of files
+than just the custom track files, but the find commands looked like:
+    find /trash \! \( -regex "/trash/ct/.*" -or -regex "/trash/hgSs/.*" \) \
+       -type f -amin +480 -exec rm -f {} \;
+    find /trash \( -regex "/trash/ct/.*" -or -regex "/trash/hgSs/.*" \) \
+       -type f -amin +2880 -exec rm -f {} \;
+
+*** Third Implementation ***
 
 As the traffic volume increased at the UCSC genome browser, the
 numbers of files encountered in the trash directories caused

@@ -219,7 +219,7 @@ if(ixc != NULL)
     if(subChain != NULL)
 	{
 	qChainRangePlusStrand(subChain, &qs, &qe);
-	if ((subChain->qStrand == '-'))
+	if (subChain->qStrand == '-')
 	    reverse = TRUE;
 	if(reverse)
 	    { 
@@ -460,7 +460,7 @@ if (start == subChain->tStart)
     *retStartExact = TRUE;
 if (end == subChain->tEnd)
     *retEndExact = TRUE;
-if ((subChain->qStrand == '-'))
+if (subChain->qStrand == '-')
     *retRev = TRUE;
 *retCoverage = chainBasesInBlocks(subChain);
 chainFree(&toFree);

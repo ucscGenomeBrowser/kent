@@ -1,4 +1,4 @@
-#Text to Genome project, matches to markers (snp, gene, band) in text
+#publications track: matches to markers (snp, gene, band) in text
 CREATE TABLE pubsMarkerAnnot (
     articleId bigint not null,	# internal article ID, created during download
     fileId int not null,        # identifier of the file where the marker was found

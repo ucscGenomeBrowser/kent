@@ -45,9 +45,13 @@ errAbort(
   "   parasol add spoke  - Add a new spoke daemon.\n"
   "   parasol [options] add job command-line   - Add job to list.\n"
   "         options:\n"
+  "            -in=in - Where to get stdin, default /dev/null\n"
+  "            -out=out - Where to put stdout, default /dev/null\n"
   "            -wait - If set wait for job to finish to return and return with job status code\n"
-  "            -err=path -out=out -in=in - Where to put stderr, stdin, stdout output\n"
+  "            -err=outFile - set stderr to out file - only works with wait flag\n"
   "            -verbose=N - set verbosity level, default level is 1\n"
+  "            -printId - prints jobId to stdout\n"
+  "            -dir=dir - set output results dir, default is current dir\n"
   "            -results=resultFile fully qualified path to the results file, \n"
   "             or `results' in the current directory if not specified.\n"
   "            -cpu=N  Number of CPUs used by the jobs, default 1.\n"
@@ -66,7 +70,8 @@ errAbort(
   "   parasol list machines  - List machines in pool.\n"
   "   parasol [-extended] list jobs  - List jobs one per line.\n"
   "   parasol list users  - List users one per line.\n"
-  "   parasol list batches  - List batches one per line.\n"
+  "   parasol [options] list batches  - List batches one per line.\n"
+  "         option - 'all' if set include inactive\n"
   "   parasol list sick  - List nodes considered sick by all running batches, one per line.\n"
   "   parasol status  - Summarize status of machines, jobs, and spoke daemons.\n"
   "   parasol [options] pstat2  - Get status of jobs queued and running.\n"
@@ -204,6 +209,12 @@ else /* argc == 7 */
 commandHub(buf);
 }
 
+static boolean isStatusOk(int status)
+/* Convert wait() return status to return value. */
+{
+return WIFEXITED(status) && (WEXITSTATUS(status) == 0);
+}
+
 void waitAndExit(char *resultsFile, char *jobIdString, char *err)
 /* Read results file until jobId appears in it, and then if necessary
  * copy over stderr to err, and finally exit with the same result
@@ -229,14 +240,22 @@ for (;;)
 	    {
 	    if (err != NULL)
 		pmFetchFile(jr.host, jr.errFile, err);
-	    exit(jr.status);
+	    if (isStatusOk(jr.status))
+	        exit(0);
+	    else
+		{
+		if (WIFEXITED(jr.status))
+		    exit(WEXITSTATUS(jr.status));
+		else
+		    exit(-1);	// Generic badness
+		}
 	    }
 	}
     lineFileClose(&lf);
     }
 }
 
-void addJob(int argc, char *argv[], boolean printId)
+void addJob(int argc, char *argv[], boolean printId, boolean verbose)
 /* Tell hub about a new job. */
 {
 struct dyString *dy = newDyString(1024);
@@ -266,6 +285,8 @@ dyStringFree(&dy);
 if (sameString(jobIdString, "0"))
     errAbort("sick batch?: hub returned jobId==%s", jobIdString);
 if (printId)
+    printf("%s\n", jobIdString);
+if (verbose)
     {
     printf("your job %s (\"%s", jobIdString, argv[0]);
     for (i=1; i<argc; ++i)
@@ -538,7 +559,7 @@ if (sameString(command, "add"))
 	{
 	if (argc < 2)
 	    usage();
-        addJob(argc-1, argv+1, optionExists("verbose"));
+        addJob(argc-1, argv+1, optionExists("printId"), optionExists("verbose"));
 	}
     else if (sameString(subType, "spoke"))
         addSpoke();
@@ -600,7 +621,10 @@ else if (sameString(command, "list"))
     else if (sameString(subType, "user") || sameString(subType, "users"))
         hubCommandAndPrint("listUsers");
     else if (sameString(subType, "batch") || sameString(subType, "batches"))
-        hubCommandAndPrint("listBatches");
+	{
+	char *command = (optionExists("all") ? "listAllBatches" : "listBatches");
+        hubCommandAndPrint(command);
+	}
     else if (sameString(subType, "sick"))
         hubCommandAndPrint("listSick");
     else

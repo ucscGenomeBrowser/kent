@@ -224,8 +224,12 @@ else
     unlink (defaultFileName);
     if (WIFEXITED(returnStatus))
         {
-        if (WEXITSTATUS(returnStatus) == 42)
+	int childExitStatus = WEXITSTATUS(returnStatus);
+        if (childExitStatus == 42)
             errAbort("sqlExecProgProfile: exec failed");
+	else
+	    // Propagate child's exit status:
+	    _exit(childExitStatus);
         }
     else
         errAbort("sqlExecProgProfile: child process exited with abnormal status %d", returnStatus);

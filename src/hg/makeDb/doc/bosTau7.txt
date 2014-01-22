@@ -1323,13 +1323,15 @@ TMPDIR=/scratch/tmp
 ##############################################################################
 # (IN PROGRESS - 2014-01-07 - Pauline)
     mkdir /hive/data/genomes/bosTau7/bed/animalQtl
-    cd /hive/data/genome/bosTau7/bed/animalQtl
+    cd /hive/data/genomes/bosTau7/bed/animalQtl
 
     wget http://www.animalgenome.org/QTLdb/tmp/QTL_Btau_4.6.ubed.txt.gz
 
     zcat QTL_Btau_4.6.ubed.txt.gz >> bosTau7.animalQtl.bed
+    cut -f1-4 bosTau7.animalQtl.bed > bosTau7.animalQtl.bed4
+    hgLoadBed bosTau7 animalQtl bosTau7.animalQtl.bed4
 
-    hgLoadBed bosTau7 animalQtl bosTau7.animalQtl.bed
-
-##Problem with file some fields missing, and chromStart>chromEnd 
+    checkTableCoords bosTau7 animalQtl
+    # no results - yay!
+                                                                                                                      614,23        Bot
 

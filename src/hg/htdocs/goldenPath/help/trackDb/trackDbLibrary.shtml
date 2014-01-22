@@ -553,6 +553,72 @@
     Browser ID appended so that cart settings will be available.</P>
 </DIV>
 
+<DIV class="iframeUrl"><span class="types all"></span>
+<div class="format"><code>iframeUrl &lt;url&gt;</code></div>
+    <P>This setting allows integrating an external html page into the default details page, as an iframe. The usual replacement variables can be used within this URL:</P>
+    <UL>
+    <LI>$$ - ID, will be replaced by the <code>name</code>
+    of an item or other string id depending upon the fields in the
+    given track's type.</LI>
+    <LI>$T - database table name</LI>
+    <LI>$S - chromomosome name (scaffold name on
+    scaffold assemblies)</LI>
+    <LI>$[ - chromStart location (relative to zero)</LI>
+    <LI>$] - chromEnd location (relative to one)</LI>
+    <LI>$s - chromosome name without <i>chr</i> prefix (or without <i>scaffold_</i> or 
+    <i>Scaffold_</i> prefix on scaffold assemblies)</LI>
+    <LI>  $D - database name (e.g. "hg19")</LI>
+    <LI>  $P - item name portion before first : in name</LI>
+    <LI>  $p - item name portion after first : in name
+    up to next colon</LI>
+    </UL>
+
+    <P>The URL can either be a full external URL or local to the web site.</P>
+
+    <P>In HTML, iframes cannot be resized easily, so the default static size is 1024 pixels. This can be
+    changed with <A onclick="jumpTo(this)" HREF="#">iframeOptions</A></P>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+    iframeOptions height='600' width='1024'</pre>
+</DIV>
+
+<DIV class="iframeOptions"><span class="types all"></span>
+<div class="format"><code>iframeOptions &lt;string&gt;</code></div>
+    <P>When <A onclick="jumpTo(this)" HREF="#">iframeUrl</A> is used, this
+    statement specifies a string that is inserted literally into the
+    HTML &lt;iframe&gt; tag. It can include options needed for iframe formatting,
+    like width, height, scrolling, etc.
+    </P>
+
+    <P>If the statement is not present, the default is <code>width='100%' height='1024'</code>.</P>
+
+    <P>Note: dynamic resizing of iframes is not trivial, as they have to
+    be resized with javascript, across domains. We recommend keeping
+    the size static and to use scrollbars. If dynamic resizing is required, the
+    iframed page has to include a few lines of special HTML and javascript
+    code and one has to modify its body-tag, like this (see 
+    <a target="_BLANK" href="http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content">stackoverflow</a>):
+    <pre>
+    ... html header ...
+    &lt;body onload="iframeResizePipe()"&gt;
+    &lt;iframe id="helpframe" src='' height='0' width='0' frameborder='0'&gt;&lt;/iframe&gt;
+    &lt;script type="text/javascript"&gt;
+      function iframeResizePipe() {
+       var height = document.body.scrollHeight;
+       var pipe = document.getElementById('helpframe');
+       pipe.src = 'http://genome.ucsc.edu/inc/iframeHelper.html?height='+height+'&amp;cacheb='+Math.random();
+      }
+    &lt;/script&gt;
+    ... rest of webpage ...
+    </pre>
+
+    <P><B>Example:</B></P>
+    <pre>   iframeOptions width='800' height='800' scrolling='yes'</pre>
+    <P>This example fixes the size to 800x800 pixels and activates scrollbars.</P>
+</DIV>
+
 <DIV class="directUrl_for_hubs"><span class="types all"></span>
 <div class="format"><code>directUrl &lt;url&gt;</code></div>
     <P>By default, items shown in the Browser image can be linked to a details page giving
@@ -3921,9 +3987,9 @@ for each cell associated with the particular TF binding location.</P>
 
 <!-- - - - - - - - SUPERTRACK settings - - - - - - - -->
 <DIV class="superTrack_intro">
-<H3>Supertrack (Folders or Containers) settings</H3>
-    <P>The next level of
-    hierarchical groupings is called the supertrack, which may be thought of as 
+<H3>Supertrack settings</H3>
+    <P>The first 
+    hierarchical container is called the supertrack, which may be thought of as 
     a folder that holds other tracks. The Browser currently supports only one
     level of supertrack folders.  Generally the subtracks
     of a supertrack are of differing types.  If all the children are
@@ -4051,7 +4117,7 @@ for each cell associated with the particular TF binding location.</P>
     subtrack child, not the composite itself, through this setting. Any number of subtracks may
     belong to one composite, but display performance degrades significantly beyond a
     few hundred.  Set the <code>parent</code> setting to "on" to 
-    indicate whether a subtrack should be "checked" (selected) by default.  
+    indicate whether a subtrack should be visible (checked, selected) by default.  
 </DIV>
 
 <DIV class="allButtonPair"><span class="types compositeTrack"></span>

@@ -14,6 +14,7 @@
 #include "pipeline.h"
 #include "localmem.h"
 #include "cheapcgi.h"
+#include "udc.h"
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -290,6 +291,24 @@ return FALSE;
 #endif // no USE_TABIX
 }
 
+struct lineFile *lineFileUdcMayOpen(char *fileOrUrl, bool zTerm)
+/* Create a line file object with an underlying UDC cache. */
+{
+if (fileOrUrl == NULL)
+    errAbort("lineFileUdcMayOpen: fileOrUrl is NULL");
+struct lineFile *lf;
+AllocVar(lf);
+lf->fileName = cloneString(fileOrUrl);
+lf->fd = -1;
+lf->bufSize = 0;
+lf->buf = NULL;
+lf->zTerm = zTerm;
+lf->udcFile = udcFileMayOpen(fileOrUrl, NULL);
+if (lf->udcFile == NULL)
+    return NULL;
+return lf;
+}
+
 
 void lineFileExpandBuf(struct lineFile *lf, int newSize)
 /* Expand line file buffer. */
@@ -355,6 +374,11 @@ if (lf->checkSupport)
 if (lf->pl != NULL)
     errnoAbort("Can't lineFileSeek on a compressed file: %s", lf->fileName);
 lf->reuse = FALSE;
+if (lf->udcFile)
+    {
+    udcSeek(lf->udcFile, offset);
+    return;
+    }
 if (whence == SEEK_SET && offset >= lf->bufOffsetInFile
 	&& offset < lf->bufOffsetInFile + lf->bytesInBuf)
     {
@@ -440,6 +464,23 @@ if (lf->reuse)
 if (lf->nextCallBack)
     return lf->nextCallBack(lf, retStart, retSize);
 
+if (lf->udcFile)
+    {
+    char *line = udcReadLine(lf->udcFile);
+    if (line==NULL)
+        return FALSE;
+    int lineSize = strlen(line);
+    lf->bufOffsetInFile = -1;
+    lf->bytesInBuf = lineSize;
+    lf->lineIx = -1;
+    lf->lineStart = 0;
+    lf->lineEnd = lineSize;
+    *retStart = line;
+    freeMem(lf->buf);
+    lf->buf = line;
+    lf->bufSize = lineSize;
+    return TRUE;
+    }
 
 #ifdef USE_TABIX
 if (lf->tabix != NULL && lf->tabixIter != NULL)
@@ -668,6 +709,9 @@ if ((lf = *pLf) != NULL)
 	ti_close(lf->tabix);
 	}
 #endif // USE_TABIX
+    else if (lf->udcFile != NULL)
+        udcFileClose(&lf->udcFile);
+
     if (lf->closeCallBack)
         lf->closeCallBack(lf);
     freeMem(lf->fileName);

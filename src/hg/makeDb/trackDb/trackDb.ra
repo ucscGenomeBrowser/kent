@@ -2768,10 +2768,10 @@ searchPriority 10
 
 track animalQtl
 shortLabel $Organism QTL
-longLabel $Organism QT from animalQTLdb
-group map 
+longLabel $Organism Quantitative Trait Loci from animalQTLdb
+group map
 priority 11 
 visibility hide
-itemRgb on
-type bed 9 
-
+type bed 4 .
+color 255,123,89
+# iframeUrl http://www.animalgenome.org/cgi-bin/QTLdb/GG/qdetails?QTL_ID=$p

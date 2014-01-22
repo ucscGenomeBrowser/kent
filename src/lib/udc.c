@@ -1393,7 +1393,7 @@ return val;
 }
 
 char *udcReadLine(struct udcFile *file)
-/* Fetch next line from udc cache. */
+/* Fetch next line from udc cache or NULL. */
 {
 char shortBuf[2], *longBuf = NULL, *buf = shortBuf;
 int i, bufSize = sizeof(shortBuf);
@@ -1652,3 +1652,14 @@ else if (startsWith("ftp://",url))
 return answer;
 }
 #endif
+
+boolean udcIsLocal(char *url) 
+/* return true if file is not a http or ftp file, just a local file */
+{
+// copied from above
+char *protocol = NULL, *afterProtocol = NULL, *colon;
+udcParseUrl(url, &protocol, &afterProtocol, &colon);
+freez(&protocol);
+freez(&afterProtocol);
+return colon==NULL;
+}

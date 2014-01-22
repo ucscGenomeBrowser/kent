@@ -20820,6 +20820,34 @@ ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutE
     #   Read 1211379 elements of size 4 from cosmic.bed
 
 ############################################################################
+# UPDATE COSMIC TRACK - v67 (DONE - 2014-01-21 - Hiram)
+    # take a look at:
+    # ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/
+    # to see what the new version file name is, then:
+
+    cd /hive/data/genomes/hg19/bed/cosmic
+
+    time ~/kent/src/hg/utils/automation/loadCosmic.pl -dryRun hg19 \
+ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v67_031213.csv.gz
+#	New length: 1268325
+#	Old length: 1211379
+#	Percent bed overlap with previous version: 99.99%
+#	Number of deleted IDs: 409
+#	Number of added IDs: 57355
+
+#	real    1m4.883s
+
+    # that created files in: /hive/data/genomes/hg19/bed/cosmic/v67/
+
+    # then:
+    cd /hive/data/genomes/hg19/bed/cosmic/v67/
+    time ~/kent/src/hg/utils/automation/loadCosmic.pl hg19 \
+ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v67_031213.csv.gz \
+        > do.log 2>&1
+    #   real    0m57.187s
+    #   Read 1268325 elements of size 4 from cosmic.bed
+
+############################################################################
 # SwissProt Mutations track (spMut) (2013-05-09 - Max)
 cd ~/kent/src/hg/utils/uniprotMutations/
 # make a psl file to lift from uniprot to hg19
@@ -28817,3 +28845,82 @@ hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
 
 #this actually works - had to get hgLoadBed flags right, and didn't need to do
 #sort - sort was messing up the file I think?
+
+#############################################################################
+# LIFTOVER TO Hg38 (DONE - 2013-12-31 - Hiram )
+    mkdir /hive/data/genomes/hg19/bed/blat.hg38noMask.2013-12-31
+    cd /hive/data/genomes/hg19/bed/blat.hg38noMask.2013-12-31
+    # experiments were done with this process to determine if the
+    # target/query sequences need to be masked or not.  They do not
+    # need to be masked, the same result is obtained on masked or
+    # unmasked sequence.
+    # -debug run to create run dir and scripts, the partition script
+    # was modified to use the unmasked hg19/hg38 sequences
+    doSameSpeciesLiftOver.pl -debug -stop=net -buildDir=`pwd` \
+      -bigClusterHub=ku \
+       -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/hg19/11.ooc hg19 hg38
+    # Turns out the chain step procedure will not construct the proper
+    # set of files in debug mode (pslParts.lst) because it can not.
+    # the chain step has to be run for real:
+    doSameSpeciesLiftOver.pl -continue=chain -buildDir=`pwd` \
+      -bigClusterHub=ku \
+       -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/hg19/11.ooc hg19 hg38 > chain.log 2>&1
+
+    # verify the convert link on the browser is now active from hg19 to hg38
+
+#############################################################################
+2013-12-13: import of UCSC GENCODE group processing of GENCODE V19 (markd)
+    # download files
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV19/data
+    cd /hive/data/genomes/hg19/bed/gencodeV19
+
+    # download gencode release
+    cd data
+    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/release_19
+    mv ftp.sanger.ac.uk/pub/gencode/release_19 .
+    rm -rf ftp.sanger.ac.uk/
+
+    cd /hive/data/genomes/hg19/bed/gencodeV19
+    # create Makefile from previous one.
+    cp ../gencodeV18/Makefile .
+
+    # build and load tables
+    (time nice make -j 10) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.
+        make cmpRelease >gencode-cmp.tsv
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsV19 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg19/wgEncodeGencodeV18.ra human/hg19/wgEncodeGencodeV19.ra
+    cp human/hg19/wgEncodeGencodeV18.html human/hg19/wgEncodeGencodeV19.html
+
+    # edit these plus human/hg19/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV19.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous -0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
+    ### track handler for this version of gencode:
+    registerTrackHandler("wgEncodeGencodeV19", gencodeGeneMethods);
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    cd /hive/data/genomes/hg19/bed/gencodeV19
+    for tbl in $(hgsql -Ne 'show tables like "wgEncodeGencode%V19"' hg19) ; do runJoiner.csh hg19 $tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >&check/joiner.out
+##############################################################################

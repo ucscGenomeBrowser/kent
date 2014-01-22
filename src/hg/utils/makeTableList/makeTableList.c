@@ -110,7 +110,7 @@ if (bigFd)
     printf("big file names written to %s\n", bigFiles);
     carefulClose(&bigFd);
     }
-printf("table data written to %s\n", tmp);
+//printf("table data written to %s\n", tmp);
 
 if (targetConn!=NULL)
     {
@@ -123,8 +123,8 @@ if (targetConn!=NULL)
 safef(tmpTable, sizeof(tmpTable), "tableList%ld", (long) getpid());
 sqlDropTable(conn, tmpTable);
 // Field    | Type             | Null | Key | Default | Extra
-sqlSafef(buf, sizeof(buf), "CREATE TABLE %s (tableName varchar(255) not null, Field varchar(255), "
-    "Type varchar(255), NullAllowed varchar(255), isKey varchar(255), hasDefault varchar(255) NULL, Extra varchar(255),"
+sqlSafef(buf, sizeof(buf), "CREATE TABLE %s (tableName varchar(255) not null, field varchar(255), "
+    "type varchar(255), nullAllowed varchar(255), isKey varchar(255), hasDefault varchar(255) NULL, extra varchar(255),"
     "index tableIdx(tableName))", tmpTable);
 sqlUpdate(conn, buf);
 sqlSafef(buf, sizeof(buf), "LOAD DATA LOCAL INFILE '%s' INTO TABLE %s", tmp, tmpTable);
@@ -142,7 +142,7 @@ else
     sqlSafef(buf, sizeof(buf), "RENAME TABLE %s TO %s", tmpTable, tableListName);
     sqlUpdate(conn, buf);
     }
-//unlink(tmp);
+unlink(tmp);
 }
 
 void makeTableList(char *argv[], int argc, boolean all, char *tableListName)

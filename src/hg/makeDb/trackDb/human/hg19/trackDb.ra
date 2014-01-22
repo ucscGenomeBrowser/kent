@@ -2266,9 +2266,6 @@ visibility hide
 #color 0,0,200
 type gvf 
 noScoreFilter .
-#maxHeightPixels 128:57:16
-#viewLimits 0:100
-#alwaysZero on
 
 track rmsk override
 group rep
@@ -2288,4 +2285,6 @@ group rep
 track pubs override
 group phenDis
 priority 0.9
-release alpha 
+
+track pubsBingBlat override
+group phenDis

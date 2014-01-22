@@ -39,6 +39,7 @@ if (haplotypesDiscoverVcfFile(he, gp->chrom) == NULL)
     haplotypeExtrasFree(&he);
     return FALSE;
     }
+
 struct vcfFile *vcff = vcfTabixFileMayOpen(he->inFile, NULL, 0, 0,VCF_IGNORE_ERRS, 0);
 if (vcff == NULL)
     {

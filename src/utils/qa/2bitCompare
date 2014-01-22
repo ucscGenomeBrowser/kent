@@ -80,7 +80,7 @@ endif
 
 # Reports the findings of the above section
 if ($blat == '' ) then
-  echo "          blat md5sum: There are no entries for $db in hgcentraltest.blatServers"
+  echo "             blat md5sum: There are no entries for $db in hgcentraltest.blatServers"
 else
   if ($blat == 'blatx' ) then
     set blatSpacing=" blatx"
@@ -88,12 +88,12 @@ else
     set blatSpacing=$blat
   endif
   if ($blatExists == '') then
-    echo "        $blatSpacing md5sum: The $db directory does not exist in /scratch on $blat"
+    echo "           $blatSpacing md5sum: The $db directory does not exist in /scratch on $blat"
   else
     if ($md5sumBlatExists == '' ) then
-      echo "        $blatSpacing md5sum: $db.2bit does not exist in /scratch/$db on $blat"
+      echo "           $blatSpacing md5sum: $db.2bit does not exist in /scratch/$db on $blat"
     else
-      echo "        $blatSpacing md5sum: $md5sumBlat"
+      echo "           $blatSpacing md5sum: $md5sumBlat"
     endif
   endif
 endif
@@ -115,15 +115,15 @@ endif
 
 # Reports the findings of the above section
 if ($downloadExists == '' ) then
-  echo "      download md5sum: The $db directory does not exist in /usr/local/apache/htdocs-hgdownload/goldenPath"
+  echo "         download md5sum: The $db directory does not exist in /usr/local/apache/htdocs-hgdownload/goldenPath"
 else
   if ($bigZipsExists == '') then
-    echo "      download md5sum: The bigZips directory does not exist in /usr/local/apache/htdocs-hgdownload/goldenPath/$db"
+    echo "         download md5sum: The bigZips directory does not exist in /usr/local/apache/htdocs-hgdownload/goldenPath/$db"
   else
     if ($md5sumDownloadExists == '' ) then
-      echo "      download md5sum: $db.2bit does not exist in /usr/local/apache/htdocs-hgdownload/goldenPath/$db/bigZips"
+      echo "         download md5sum: $db.2bit does not exist in /usr/local/apache/htdocs-hgdownload/goldenPath/$db/bigZips"
     else
-      echo "      download md5sum: $md5sumDownload"
+      echo "         download md5sum: $md5sumDownload"
     endif
   endif
 endif
@@ -141,12 +141,12 @@ endif
 
 # Reports the findings of the above section
 if ($gbdbDevExists == '' ) then
-  echo "   hgwdev gbdb md5sum: The $db directory does not exist in /gbdb on hgwdev"
+  echo "      hgwdev gbdb md5sum: The $db directory does not exist in /gbdb on hgwdev"
 else
   if ($md5sumGbdbDevExists == '' ) then
-    echo "   hgwdev gbdb md5sum: $db.2bit does not exist in /gbdb/$db on hgwdev"
+    echo "      hgwdev gbdb md5sum: $db.2bit does not exist in /gbdb/$db on hgwdev"
   else
-    echo "   hgwdev gbdb md5sum: $md5sumGbdbDev"
+    echo "      hgwdev gbdb md5sum: $md5sumGbdbDev"
   endif
 endif
 
@@ -163,12 +163,12 @@ endif
 
 # Reports the findings of the above section
 if ($gbdbBetaExists == '' ) then
-  echo "  hgwbeta gbdb md5sum: The $db directory does not exist in /gbdb on hgwbeta"
+  echo "  hgwbeta/rr gbdb md5sum: The $db directory does not exist in /gbdb on hgwbeta"
 else
   if ($md5sumGbdbBetaExists == '' ) then
-    echo "  hgwbeta gbdb md5sum: $db.2bit does not exist in /gbdb/$db on hgwbeta"
+    echo "  hgwbeta/rr gbdb md5sum: $db.2bit does not exist in /gbdb/$db on hgwbeta"
   else
-    echo "  hgwbeta gbdb md5sum: $md5sumGbdbBeta"
+    echo "  hgwbeta/rr gbdb md5sum: $md5sumGbdbBeta"
   endif
 endif
 
@@ -176,24 +176,24 @@ echo
 
 # Outputs the date and filesize of all 2bit files if applicable
 if ($md5sumBlatExists != '') then
-  echo "        $blatSpacing date,size: "`ssh qateam@$blat ls /scratch/$db/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
+  echo "           $blatSpacing date,size: "`ssh qateam@$blat ls /scratch/$db/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
 else
-  echo "          blat date,size: N/A"
+  echo "             blat date,size: N/A"
 endif
 if ($md5sumDownloadExists != '') then
-  echo "      download date,size: "`ls /usr/local/apache/htdocs-hgdownload/goldenPath/$db/bigZips/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
+  echo "         download date,size: "`ls /usr/local/apache/htdocs-hgdownload/goldenPath/$db/bigZips/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
 else
-  echo "      download date,size: N/A"
+  echo "         download date,size: N/A"
 endif
 if ($md5sumGbdbDevExists != '') then
-  echo "   hgwdev gbdb date,size: "`ls /gbdb/$db/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
+  echo "      hgwdev gbdb date,size: "`ls /gbdb/$db/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
 else
-  echo "   hgwdev gbdb date,size: N/A"
+  echo "      hgwdev gbdb date,size: N/A"
 endif
 if ($md5sumGbdbBetaExists != '') then
-  echo "  hgwbeta gbdb date,size: "`ssh qateam@hgwbeta ls /gbdb/$db/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
+  echo "  hgwbeta/rr gbdb date,size: "`ssh qateam@hgwbeta ls /gbdb/$db/$db.2bit -l | awk '{print $6,$7,$8,$5}'`
 else
-  echo "  hgwbeta gbdb date,size: N/A"
+  echo "  hgwbeta/rr gbdb date,size: N/A"
 endif
 
 echo

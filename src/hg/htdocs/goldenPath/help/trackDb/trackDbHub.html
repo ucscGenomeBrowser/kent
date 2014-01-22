@@ -76,7 +76,7 @@ in the sections below.</I>
     <LI><A HREF="#groupingTracks">Grouping tracks into sets and hierarchies</A>
         &ndash; with examples
     <UL>
-        <LI><A HREF="#superTrack">Supertracks (AKA Folders or Containers)</A></LI>
+        <LI><A HREF="#superTrack">Supertracks (Folders)</A></LI>
         <LI><A HREF="#compositeTrack">Composite Tracks</A>
         <UL>
             <LI><A HREF="#subGroups">Subgroups</A></LI>
@@ -148,6 +148,12 @@ in the sections below.</I>
     <TR VALIGN=TOP><TD class="directUrl_for_hubs">
         <A name="directUrl"></A><IMG class='toggle detail'>
         <div class="format"><code>directUrl &lt;url&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="iframeUrl"><A name="iframeUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code>iframeUrl &lt;url&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="iframeOptions"><A name="iframeOptions"></A><IMG class='toggle detail'>
+        <div class="format"><code>iframeOptions &lt;string&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="otherDb"><A name="otherDb"></A><IMG class='toggle detail'>
         <div class="format"><code>otherDb &lt;otherDb&gt;</code></div>
@@ -461,17 +467,35 @@ into sets and hierarchies</div>
 </div>
 <div class="borderGuard">
 
-<P>All tracks for a hub are treated as a single group within the Browser.  
-However hub tracks can be further subdivided with into advanced hierarchical 
-organizations.  There is even an option to combine the data of multiple remote data files 
-into a single image.</P>
+Depending on how closely related they are, tracks can be organized into one of three 
+hierarchical containers:
+<ul>
+        <li>"<A href="#multiWig">multiWig</A>" container: when the tracks are
+        all in signal (wiggle or bigWig) format and it makes sense to overlay
+        them.<br>
+
+        Example: a set of bigWig tracks with H3K27ac signal, all on the same
+        scale</li>
+
+        <li>"<A href="#compositeTrack">composite</A>" container: when the
+        tracks are expected to be configured together or have an internal
+        subgrouping, like cell type or cell treatment.<br>
+
+        Example: a set of ChIP-bigBeds in three different cell types</li>
+
+        <li>"<A href="#superTrack">superTrack</A>" container: when the tracks
+        share no specific configuration and you mostly want to show them
+        together.<br>
+        Example: a set of composite tracks or a mix of bigBed,
+        bigWig and bam</li>
+</ul>
 
 <A name="group"></A>
 <A name="superTrack"></A>
 <TABLE class="settingsTable" id="superTrack_-_Folder_Track_Settings">
 <THEAD><TR><TD><DIV ID="superTrack_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
-        &nbsp;Supertrack (Folders or Containers) settings
+        &nbsp;Supertrack (Folders) settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="superTrack"><IMG class='toggle detail'>
         <div class="format"><code>superTrack on</code></div>

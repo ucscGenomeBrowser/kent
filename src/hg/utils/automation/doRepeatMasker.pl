@@ -178,7 +178,7 @@ sub doCluster {
   if ( $opt_useHMMER ) {
     # NOTE: This is only applicable for 8gb one-job-per-node scheduling
     $RepeatMaskerEngine = "-engine hmmer -pa 4";
-    $parasolRAM = "-cpu=4";
+    $parasolRAM = "-cpu=4 -ram=32g";
   }
 
   # Script to do a dummy run of RepeatMasker, to test our invocation and
@@ -432,7 +432,7 @@ sub doInstall {
 export db=$db
 
 hgLoadOut -table=rmsk $split \$db \$db.sorted.fa.out
-hgLoadOut -verbose=2 -tabFile=\$db.rmsk.tab -table=rmsk -nosplit \$db \$db.sorted.fa.out 2> \$db.bad.records
+hgLoadOut -verbose=2 -tabFile=\$db.rmsk.tab -table=rmsk -nosplit \$db \$db.sorted.fa.out 2> \$db.bad.records.txt
 # construct bbi files for assembly hub
 rm -fr classBed classBbi rmskClass
 mkdir classBed classBbi rmskClass

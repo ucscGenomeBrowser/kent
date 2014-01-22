@@ -21,6 +21,16 @@
 #include "hgConfig.h"
 #include "cheapcgi.h"
 
+/* a function to get mysql results, either mysql_use_result or mysql_store_result */
+/* a) mysql_use_result means that after a query, the results are stored on the server and return row-by-row 
+ * b) mysql_store_result means that the results are returned together 
+ * 
+ * a) means less memory, b) longer transfer times (latency of network * number of rows)
+ * */
+
+typedef MYSQL_RES *	STDCALL ResGetter(MYSQL *mysql);
+
+#define DEFAULTGETTER mysql_store_result
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -61,6 +71,9 @@ struct sqlConnection
     boolean inCache;                /* debugging flag to indicate it's in a cache */
     boolean isFree;                /* is this connection free for reuse; alway FALSE
                                     * unless managed by a cache */
+    boolean hasTableCache;           /* to avoid repeated checks for cache table name existence, -1 if not initialized yet */
+    struct sqlConnection *slowConn; /* optional. tried if a query fails on the conn connection */
+    char *db;                       /* to be able to lazily connect later, we need to store the database */
     };
 
 struct sqlResult
@@ -270,6 +283,17 @@ else
     return sqlProfileFindByDatabase(database);
 }
 
+static struct sqlProfile* sqlProfileGetFailover(struct sqlProfile* sp, char *database)
+/* try to find a failover slow-x profile for a profile x */
+{
+if (sp==NULL || sp->name==NULL)
+    return NULL;
+char *slowProfName = catTwoStrings("slow-", sp->name);
+struct sqlProfile *slow = sqlProfileGet(slowProfName, database);
+freez(&slowProfName);
+return slow;
+}
+
 static struct sqlProfile* sqlProfileMustGet(char *profileName, char *database)
 /* lookup a profile using the profile resolution algorithm or die trying */
 {
@@ -381,18 +405,31 @@ if (monitorFlags)
 return deltaTime;
 }
 
+static char *scConnHost(struct sqlConnection *sc)
+/* Return the host of a sqlConnection */
+{
+if (sc->conn)
+    return sc->conn->host;
+if (sc->profile->host)
+    return sc->profile->host;
+return NULL;
+}
+
 static char *scConnDb(struct sqlConnection *sc)
-/* Return sc->conn->db, unless it is NULL -- if NULL, return a string for
+/* Return sc->db, unless it is NULL -- if NULL, return a string for
  * fprint'd messages. */
 {
-return (sc->conn->db ? sc->conn->db : "db=?");
+return (sc->db ? sc->db : "db=?");
 }
 
 static void monitorPrintInfo(struct sqlConnection *sc, char *name)
 /* print a monitor message, with connection id and databases. */
 {
+long int threadId = 0;
+if (sc->conn)
+    threadId = sc->conn->thread_id;
 fprintf(stderr, "%.*s%s %ld %s\n", traceIndent, indentStr, name,
-        sc->conn->thread_id, scConnDb(sc));
+        threadId, scConnDb(sc));
 fflush(stderr);
 }
 
@@ -402,8 +439,11 @@ static void monitorPrint(struct sqlConnection *sc, char *name,
  * printf style message.*/
 {
 va_list args;
-fprintf(stderr, "%.*s%s %ld %s ", traceIndent, indentStr, name,
-        sc->conn->thread_id, scConnDb(sc));
+long int threadId = 0;
+if (sc->conn)
+    threadId = sc->conn->thread_id;
+fprintf(stderr, "%.*s%s %ld %s %s ", traceIndent, indentStr, name,
+        threadId, scConnHost(sc), scConnDb(sc));
 va_start(args, format);
 vfprintf(stderr, format, args);
 va_end(args);
@@ -507,6 +547,7 @@ void sqlDisconnect(struct sqlConnection **pSc)
 {
 struct sqlConnection *sc = *pSc;
 long deltaTime;
+
 if (sc != NULL)
     {
     if (sc->inCache)
@@ -544,16 +585,26 @@ if (sc != NULL)
 	dlRemove(node);
 	freeMem(node);
 	}
+   
+    // also close local cache connection
+    if (sc->slowConn != NULL)
+        sqlDisconnect(&sc->slowConn);
+
     freez(pSc);
     sqlNumOpenConnections--;
     }
+    
+        
 }
 
 char* sqlGetDatabase(struct sqlConnection *sc)
 /* Get the database associated with an connection. Warning: return may be NULL! */
 {
 assert(!sc->isFree);
-return sc->conn->db;
+if (sc->conn)
+    return sc->conn->db;
+else
+    return sc->db;
 }
 
 char* sqlGetHost(struct sqlConnection *sc)
@@ -580,39 +631,98 @@ sqlFreeResult(&sr);
 return databases;
 }
 
+// forward declaration of sqlUseOrStore so the order of functions does not change in this file
+// sqlUseOrStore is needed for sqlTableCacheFindConn
+// FIXME MAX: is this good practice? shall I rather reorder the functions in this file?
+static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
+	char *query, ResGetter *getter, boolean abort);
+
+static struct sqlConnection *sqlTableCacheFindConn(struct sqlConnection *conn)
+/* Check if table name caching is configured and the cache table is also present 
+ * in the server of the connection. Returns the connection or NULL */
+{
+char *tableListTable = cfgOption("showTableCache");
+if (tableListTable == NULL) 
+    return NULL;
+
+// also check if cache table exists, without using sqlTableExists
+// (sqlTableExists will always use a cache table)
+if (conn->hasTableCache==-1)
+    {
+    // to avoid hundreds of repeated table existence checks, we keep the result
+    // of sqlTableCacheFindConn in the sqlConn object
+    conn->hasTableCache = FALSE;
+
+    char query[1024];
+    sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(tableListTable));  
+    struct sqlResult *sr;
+
+    // temporarily remove failover connection, we don't want the failover switch here
+    struct sqlConnection *slowConn = conn->slowConn; 
+    conn->slowConn=NULL;
+    sr = sqlUseOrStore(conn, query, DEFAULTGETTER, FALSE);
+    conn->slowConn=slowConn;
+
+    if (sr!=NULL)
+        {
+        conn->hasTableCache = TRUE;
+        sqlFreeResult(&sr);
+        }
+    else if (slowConn!=NULL)
+        errAbort("no table cache found, although mysql failover (slow-db) is being used.");
+
+    }
+
+if (conn->hasTableCache)
+    return conn;
+else
+    return NULL;
+}
+
+static bool sqlTableCacheTableExists(struct sqlConnection *conn, char* table)
+/* check if table exists in table name cache */
+// (see redmine 3780 for some historical background on this caching)
+{
+char query[1024];
+char *tableListTable = cfgVal("showTableCache");
+sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s WHERE tableName='%s'", tableListTable, table);
+return (sqlQuickNum(conn, query)!=0);
+}
+
+static struct slName *sqlTableCacheQuery(struct sqlConnection *conn)
+/* return all table names from the table name cache as a list. */
+{
+char *tableList = cfgVal("showTableCache");
+struct slName *list = NULL, *el;
+char query[1024];
+sqlSafef(query, sizeof(query), "SELECT DISTINCT tableName FROM %s", tableList);
+
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = slNameNew(row[0]);
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+return list;
+}
+
 struct slName *sqlListTables(struct sqlConnection *conn)
 /* Return list of tables in database associated with conn. */
 {
+struct slName *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
-struct slName *list = NULL, *el;
-char *cfgName = "showTableCache";
-char *tableList = cfgOption(cfgName);
 
-if (tableList != NULL)
-    {
-    // mysql does not cache "show tables", so use a cached run of show tables which is stored in the showTableCache table.
-    // See redmine 3780 for details.
-    if(sqlTableExists(conn, tableList))
-        {
-        char query[256];
-        sqlSafef(query, sizeof(query), "select * from %s order by name desc", tableList);
-        sr = sqlGetResult(conn, query);
-        while ((row = sqlNextRow(sr)) != NULL)
-            {
-            el = slNameNew(row[0]);
-            slAddHead(&list, el);
-            }
-        }
-    else
-        {
-        errAbort("%s option is misconfigured in hg.conf: table '%s' does not exist", cfgName, tableList);
-        }
-    }
+struct sqlConnection *cacheConn = sqlTableCacheFindConn(conn);
+
+if (cacheConn)
+    list = sqlTableCacheQuery(cacheConn);
 else
     {
     char query[256];
-    sqlSafef(query, sizeof(query), "show tables");
+    sqlSafef(query, sizeof(query), "SHOW TABLES");
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -620,20 +730,42 @@ else
         slAddHead(&list, el);
         }
     slReverse(&list);
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
+
 return list;
+}
+
+struct sqlResult *sqlDescribe(struct sqlConnection *conn, char *table)
+/* run the sql DESCRIBE command or get a cached table description and return the sql result */
+{
+char query[1024];
+
+struct sqlConnection *cacheConn = sqlTableCacheFindConn(conn);
+
+if (cacheConn)
+    {
+    char *tableListTable = cfgVal("showTableCache");
+    sqlSafef(query, sizeof(query), "SELECT Field, Type, NullAllowed, isKey, hasDefault, Extra FROM %s WHERE tableName='%s'", \
+        tableListTable, table);
+    conn = cacheConn;
+    }
+
+else
+    sqlSafef(query, sizeof(query), "DESCRIBE %s", table);
+
+struct sqlResult *sr;
+sr = sqlGetResult(conn, query);
+return sr;
 }
 
 struct slName *sqlListFields(struct sqlConnection *conn, char *table)
 /* Return list of fields in table. */
 {
-char query[256];
 char **row;
 struct slName *list = NULL, *el;
 struct sqlResult *sr = NULL;
-sqlSafef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(conn, query);
+sr = sqlDescribe(conn, table);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = slNameNew(row[0]);
@@ -650,13 +782,11 @@ void sqlAddDatabaseFields(char *database, struct hash *hash)
 struct sqlConnection *conn = sqlConnect(database);
 struct slName *table, *tableList = sqlListTables(conn);
 struct sqlResult *sr;
-char query[256];
 char **row;
 char fullName[512];
 for (table = tableList; table != NULL; table = table->next)
     {
-    sqlSafef(query, sizeof(query), "describe %s", table->name);
-    sr = sqlGetResult(conn, query);
+    sr = sqlDescribe(conn, table->name);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	safef(fullName, sizeof(fullName), "%s.%s.%s",
@@ -713,29 +843,31 @@ if (sqlOpenConnections == NULL)
     }
 }
 
-static struct sqlConnection *sqlConnRemote(char *host, unsigned int port, char *socket,
+static struct sqlConnection *sqlConnRemoteFillIn(struct sqlConnection *sc, char *host, unsigned int port, char *socket,
 					   char *user, char *password,
-                                           char *database, boolean abort)
-/* Connect to database somewhere as somebody. Database maybe NULL to just
- * connect to the server.  If abort is set display error message and abort on
- * error. This is the core function that connects to a MySQL server. */
+                                           char *database, boolean abort, boolean addAsOpen)
+/* Fill the sqlConnection object: Connect to database somewhere as somebody.
+ * Database maybe NULL to just connect to the server.  If abort is set display
+ * error message and abort on error. This is the core function that connects to
+ * a MySQL server. */
 {
-struct sqlConnection *sc;
 MYSQL *conn;
 long deltaTime;
 
 sqlInitTracking();
 
-AllocVar(sc);
 sc->resultList = newDlList();
-sc->node = dlAddValTail(sqlOpenConnections, sc);
 
+if (addAsOpen)
+    sc->node = dlAddValTail(sqlOpenConnections, sc);
+
+long oldTime = monitorEnterTime;
+monitorEnterTime = 0;
 monitorEnter();
+
 if ((sc->conn = conn = mysql_init(NULL)) == NULL)
-    {
-    monitorLeave();
+    // no need for monitorLeave here
     errAbort("Couldn't connect to mySQL.");
-    }
 // Fix problem where client LOCAL setting is disabled by default for security
 mysql_options(conn, MYSQL_OPT_LOCAL_INFILE, NULL);
 if (mysql_real_connect(
@@ -749,6 +881,7 @@ if (mysql_real_connect(
 	0)	/* flags */  == NULL)
     {
     monitorLeave();
+    monitorEnterTime = oldTime;
     if (abort)
 	errAbort("Couldn't connect to database %s on %s as %s.\n%s",
 	    database, host, user, mysql_error(conn));
@@ -772,11 +905,28 @@ if (monitorFlags & JKSQL_TRACE)
 deltaTime = monitorLeave();
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_TIME", "%0.3fs", ((double)deltaTime)/1000.0);
+monitorEnterTime = oldTime;
+
 sqlNumOpenConnections++;
 if (sqlNumOpenConnections > maxNumConnections)
     maxNumConnections = sqlNumOpenConnections;
 totalNumConnects++;
+
+sc->hasTableCache=-1; // -1 => not determined 
+sc->db=database;
 return sc;
+}
+
+static struct sqlConnection *sqlConnRemote(char *host, unsigned int port, char *socket,
+					   char *user, char *password,
+                                           char *database, boolean abort)
+/* Connect to database somewhere as somebody. Database maybe NULL to just
+ * connect to the server.  If abort is set display error message and abort on
+ * error. */
+{
+struct sqlConnection *sc;
+AllocVar(sc);
+return sqlConnRemoteFillIn(sc, host, port, socket, user, password, database, abort, TRUE);
 }
 
 struct sqlConnection *sqlConnectRemote(char *host, char *user, char *password,
@@ -799,10 +949,45 @@ static struct sqlConnection *sqlConnProfile(struct sqlProfile* sp, char *databas
 /* Connect to database using the profile.  Database maybe NULL to connect to
  * the server. Optionally abort on failure. */
 {
-struct sqlConnection *conn = sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, abort);
-if (conn != NULL)
-    conn->profile = sp;  // remember profile, mainly for debugging
-return conn;
+bool mainAbort = abort;
+struct sqlConnection *sc;
+
+// get the slow-db profile for the profile, if it exists
+struct sqlProfile *slow = sqlProfileGetFailover(sp, database);
+// if we have a failover profile, don't abort right away
+if (slow!=NULL)
+    mainAbort = FALSE;
+
+// connect with the default profile
+sc = sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, mainAbort);
+if (slow==NULL)
+    // the default case: just return sc, can be NULL
+    return sc;
+
+// we still have a failover profile to setup
+if (sc==NULL)
+    {
+    // We have a failover connection configured, but no main connection.
+    // This can happen if the requested database exists only on the failover connection
+    // We only create a failover connection in this case and return it as the main one
+    sc = sqlConnRemote(slow->host, slow->port, slow->socket, slow->user, slow->password, database, abort);
+    if (monitorFlags & JKSQL_TRACE)
+        fprintf(stderr, "SQL_FAILOVER_AT_CONNECT");
+    return sc;
+    }
+
+sc->profile = sp; // remember the profile
+
+// don't connect the slow connection yet: lazily connect later when needed; saves 0.5
+// seconds per connection on transatlantic links
+// instead create a "placeholder" sqlConnection with all connection data, but no connection
+struct sqlConnection *slowSc;
+AllocVar(slowSc);
+slowSc->profile = slow; // remember the profile
+slowSc->db = database;
+slowSc->hasTableCache = -1;
+sc->slowConn = slowSc;
+return sc;
 }
 
 struct sqlConnection *sqlMayConnect(char *database)
@@ -812,10 +997,22 @@ struct sqlConnection *sqlMayConnect(char *database)
 return sqlConnProfile(sqlProfileMustGet(NULL, database), database, FALSE);
 }
 
+static struct sqlConnection *sqlConnectIfUnconnected(struct sqlConnection *sc)
+/* Take a yet unconnected failover sqlConnection object and connect it to the sql server.
+ * Don't add it to the list of open connections, as it is freed by it's non-failover parent */
+{
+if (sc->conn!=NULL)
+    return sc;
+struct sqlProfile *sp = sqlProfileMustGet(sc->profile->name, sc->db);
+sqlConnRemoteFillIn(sc, sp->host, sp->port, sp->socket, sp->user, sp->password, sc->db, TRUE, FALSE);
+return sc;
+}
+
 struct sqlConnection *sqlConnect(char *database)
 /* Connect to database on default host as default user. */
 {
-return sqlConnProfile(sqlProfileMustGet(NULL, database), database, TRUE);
+struct sqlProfile *defProf = sqlProfileMustGet(NULL, database);
+return sqlConnProfile(defProf, database, TRUE);
 }
 
 struct sqlConnection *sqlConnectProfile(char *profileName, char *database)
@@ -849,7 +1046,8 @@ MYSQL *conn = sc->conn;
 if (format != NULL) {
     vaWarn(format, args);
     }
-warn("mySQL error %d: %s", mysql_errno(conn), mysql_error(conn));
+warn("mySQL error %d: %s (profile=%s, host=%s, db=%s)", mysql_errno(conn), 
+    mysql_error(conn), sc->profile->name, sc->conn->host, sc->conn->db);
 }
 
 void sqlWarn(struct sqlConnection *sc, char *format, ...)
@@ -873,8 +1071,6 @@ va_end(args);
 noWarnAbort();
 }
 
-typedef MYSQL_RES *	STDCALL ResGetter(MYSQL *mysql);
-
 static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
 	char *query, ResGetter *getter, boolean abort)
 /* Returns NULL if result was empty and getter==mysql_use_result.
@@ -887,8 +1083,6 @@ static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
  * and the user must call next_row to see if there's anything in the resultset.
  */
 {
-assert(!sc->isFree);
-MYSQL *conn = sc->conn;
 struct sqlResult *res = NULL;
 long deltaTime;
 boolean fixedMultipleNOSQLINJ = FALSE;
@@ -915,8 +1109,23 @@ if (strstr(query, "NOSQLINJ "))
     fixedMultipleNOSQLINJ = TRUE;
     }
 
+assert(!sc->isFree);
+
 monitorEnter();
-if (mysql_real_query(conn, query, strlen(query)) != 0)
+int mysqlError = mysql_real_query(sc->conn, query, strlen(query));
+
+// if the query fails on the main connection, connect the slower/failover connection and try there
+if (mysqlError != 0 && sc->slowConn)
+    {
+    if (monitorFlags & JKSQL_TRACE)
+        monitorPrint(sc, "SQL_FAILOVER", "%s -> %s", sc->profile->name, sc->slowConn->profile->name);
+
+    sc = sc->slowConn;
+    sc = sqlConnectIfUnconnected(sc);
+    mysqlError = mysql_real_query(sc->conn, query, strlen(query));
+    }
+
+if (mysqlError != 0)
     {
     if (abort)
         {
@@ -929,9 +1138,9 @@ if (mysql_real_query(conn, query, strlen(query)) != 0)
 else
     {
     MYSQL_RES *resSet;
-    if ((resSet = getter(conn)) == NULL)
+    if ((resSet = getter(sc->conn)) == NULL)
 	{
-	if (mysql_errno(conn) != 0)
+	if (mysql_errno(sc->conn) != 0)
 	    {
             monitorLeave();
 	    sqlAbort(sc, "Can't use query:\n%s", query);
@@ -1096,7 +1305,11 @@ return exists;
 }
 
 boolean sqlTableExists(struct sqlConnection *sc, char *table)
-/* Return TRUE if a table exists. */
+/* Return TRUE if a table exists. 
+ *
+ * If a local connection is configured in hg.conf, looks up table in the local connection first 
+ * Use a table name cache table, if configured in hg.conf
+ */
 {
 char query[256];
 struct sqlResult *sr;
@@ -1127,10 +1340,22 @@ if (strchr(table,'-'))
     // if the first chrom name has a dash in it. Examples found were: scaffold_0.1-193456 scaffold_0.1-13376 HERVE_a-int 1-1
     // Assembly hubs also may have dashes in chrom names.
     }
+
+// use the table cache if we have one
+struct sqlConnection *cacheConn = sqlTableCacheFindConn(sc);
+if (cacheConn)
+    return sqlTableCacheTableExists(cacheConn, table);
+
 sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(table));  
 //sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkId(table));  // DEBUG RESTORE
-if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
-    return FALSE;
+if ((sr = sqlUseOrStore(sc, query, DEFAULTGETTER, FALSE)) == NULL)
+    {
+    if (!sc->slowConn)
+        return FALSE;
+    // if not found but we have a local connection, check the local connection, too
+    else if ((sr = sqlUseOrStore(sc->slowConn, query, DEFAULTGETTER, FALSE)) == NULL)
+        return FALSE;
+    }
 // TODO consider using sqlGetResultExt or something that would
 // allow you to abort on all errors except the actual table not found:
 // ERROR 1146 (42S02): Table 'hg19.chr_est' doesn't exist
@@ -1157,7 +1382,7 @@ char **row = 0;
 int ret = 0;
 
 sqlSafef(query, sizeof(query), "select count(*) from %s", table);
-if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
+if ((sr = sqlUseOrStore(sc, query, DEFAULTGETTER, FALSE)) == NULL)
     return -1;
 row = sqlNextRow(sr);
 if (row != NULL && row[0] != NULL)
@@ -1230,7 +1455,7 @@ struct sqlResult *sqlGetResultExt(struct sqlConnection *sc, char *query, unsigne
  * If there was an error, *errorNo will be set to the mysql error number,
  * and *error will be set to the mysql error string, which MUST NOT be freed. */
 {
-struct sqlResult *sr = sqlUseOrStore(sc, query, mysql_use_result, FALSE);
+struct sqlResult *sr = sqlUseOrStore(sc, query, DEFAULTGETTER, FALSE);
 if (sr == NULL)
     {
     MYSQL *conn = sc->conn;
@@ -1249,14 +1474,13 @@ else
 return sr;
 }
 
-
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query)
 /* 
  * Return a structure that you can do sqlNextRow() on. 
  * (You need to check the return value of sqlRow to find out if there are
  * any results.) */
 {
-return sqlUseOrStore(sc,query,mysql_use_result, TRUE);
+return sqlUseOrStore(sc, query, DEFAULTGETTER, TRUE);
 }
 
 struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query)
@@ -1567,14 +1791,12 @@ return mysql_num_fields(sr->result);
 int sqlCountColumnsInTable(struct sqlConnection *sc, char *table)
 /* Return the number of columns in a table */
 {
-char query[256];
 struct sqlResult *sr;
 char **row;
 int count;
 
 /* Read table description and count rows. */
-sqlSafef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(sc, query);
+sr = sqlDescribe(sc, table);
 count = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1786,7 +2008,7 @@ int sqlTableSize(struct sqlConnection *conn, char *table)
 /* Find number of rows in table. */
 {
 char query[128];
-sqlSafef(query, sizeof(query), "select count(*) from %s", table);
+sqlSafef(query, sizeof(query), "SELECT COUNT(*) FROM %s", table);
 return sqlQuickNum(conn, query);
 }
 
@@ -1794,14 +2016,12 @@ int sqlFieldIndex(struct sqlConnection *conn, char *table, char *field)
 /* Returns index of field in a row from table, or -1 if it
  * doesn't exist. */
 {
-char query[256];
 struct sqlResult *sr;
 char **row;
 int i = 0, ix=-1;
 
 /* Read table description into hash. */
-sqlSafef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(conn, query);
+sr = sqlDescribe(conn, table);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (sameString(row[0], field))
@@ -1819,11 +2039,9 @@ struct slName *sqlFieldNames(struct sqlConnection *conn, char *table)
 /* Returns field names from a table. */
 {
 struct slName *list = NULL;
-char query[256];
 struct sqlResult *sr;
 char **row;
-sqlSafef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(conn, query);
+sr = sqlDescribe(conn, table);
 while ((row = sqlNextRow(sr)) != NULL)
     slNameAddHead(&list, row[0]);
 sqlFreeResult(&sr);
@@ -1939,10 +2157,50 @@ return scce;
 
 static boolean sqlConnCacheEntryDbMatch(struct sqlConnCacheEntry *scce,
                                         char *database)
-/* does a database match the one in the connection cache */
+/* does a database match the one in the connection cache? */
 {
-return ((database == NULL) && (scce->conn->conn->db == NULL))
-    || sameString(database, scce->conn->conn->db);
+return ((database == NULL) && (scce->conn->db == NULL))
+    || sameString(database, scce->conn->db);
+}
+
+static boolean sqlConnChangeDb(struct sqlConnection *sc, char *database, boolean abort)
+/* change the database of an sql connection (and its failover connection)
+ * */
+{
+// if we have a failover connection, keep its db in sync
+int slowConnErr = 0;
+if (sc->slowConn)
+    {
+    sc->slowConn->db = database;
+    if (monitorFlags & JKSQL_TRACE)
+        monitorPrint(sc->slowConn, "SQL_SET_DB", "%s %s", sc->slowConn->profile->name, database);
+    if (sc->slowConn->conn)
+        slowConnErr = mysql_select_db(sc->slowConn->conn, database);
+        // we ignore the errors here: this allows to have some DBs only locally
+    }
+
+sc->db=database;
+if (monitorFlags & JKSQL_TRACE)
+    monitorPrint(sc, "SQL_SET_DB", "%s %s", sc->profile->name, database);
+
+// we only fail if there is no failover connection, this allows to have a DB
+// that does not exist locally but only remote
+int localConnErr = 0;
+localConnErr = mysql_select_db(sc->conn, database);
+if (sc->slowConn==NULL && sc->conn!=NULL && localConnErr != 0)
+    {
+    if (abort) 
+        errAbort("Couldn't set connection database to %s\n%s",
+                 database, mysql_error(sc->conn));
+    else
+        return FALSE;
+    }
+
+if (localConnErr!=0 && slowConnErr!=0 && abort)
+    errAbort("Couldn't set connection database to %s in both default and failover connection\n%s",
+             database, mysql_error(sc->conn));
+
+return TRUE;
 }
 
 static boolean sqlConnCacheEntrySetDb(struct sqlConnCacheEntry *scce,
@@ -1950,15 +2208,7 @@ static boolean sqlConnCacheEntrySetDb(struct sqlConnCacheEntry *scce,
                                       boolean abort)
 /* set the connect cache and connect to the specified database */
 {
-if (mysql_select_db(scce->conn->conn, database) != 0)
-    {
-    if (abort) 
-        errAbort("Couldn't set connection database to %s\n%s",
-                 database, mysql_error(scce->conn->conn));
-    else
-        return FALSE;
-    }
-return TRUE;
+return sqlConnChangeDb(scce->conn, database, abort);
 }
 
 static struct sqlConnCacheEntry *sqlConnCacheFindFree(struct sqlConnCache *cache,
@@ -1994,7 +2244,9 @@ if (cache->host != NULL)
     conn = sqlConnRemote(cache->host, 0, NULL, cache->user,
                          cache->password, database, abort);
 else
+    {
     conn = sqlConnProfile(profile, database, abort);
+    }
 if (conn != NULL)
     return sqlConnCacheAdd(cache, profile, conn);
 else
@@ -2355,7 +2607,12 @@ struct sqlResult *sr;
 int updateIx;
 char *ret;
 sqlSafef(query, sizeof(query), "show table status like '%s'", table);
-sr = sqlGetResult(conn, query);
+if (conn->slowConn)
+    // the failover strategy does not work for this command, 
+    // as it never returns an error. So default to slowConn instead.
+    sr = sqlGetResult(conn->slowConn, query);
+else
+    sr = sqlGetResult(conn, query);
 updateIx = getUpdateFieldIndex(sr);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -2378,12 +2635,10 @@ return time;
 char *sqlGetPrimaryKey(struct sqlConnection *conn, char *table)
 /* Get primary key if any for table, return NULL if none. */
 {
-char query[512];
 struct sqlResult *sr;
 char **row;
 char *key = NULL;
-sqlSafef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(conn, query);
+sr = sqlDescribe(conn, table);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (sameWord(row[3], "PRI"))
@@ -2430,10 +2685,9 @@ int sqlMinorVersion(struct sqlConnection *conn)
 {
 char *s = sqlVersion(conn);
 char *words[5];
-int wordCount;
 int ver;
 
-wordCount = chopString(s, ".", words, ArraySize(words));
+chopString(s, ".", words, ArraySize(words));
 
 if (!isdigit(*words[1]))
     errAbort("Unexpected format in version: %s", s);
@@ -2448,19 +2702,17 @@ char** sqlGetEnumDef(struct sqlConnection *conn, char* table, char* colName)
 {
 static char *enumPrefix = "enum(";
 struct sqlResult *sr;
-char query[128];
 char **row;
 char *defStr, *defStrCp;
 int numValues, i;
 char **enumDef;
 
 /* get enum definition */
-sqlSafef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(conn, query);
+sr = sqlDescribe(conn, table);
 while (((row = sqlNextRow(sr)) != NULL) && !sameString(row[0], colName))
     continue;
 if (row == NULL)
-    errAbort("can't find column %s in results of %s", colName, query);
+    errAbort("can't find column %s in DESCRIBE of %s", colName, table);
 
 /* parse definition in the form:
  * enum('unpicked','candidate',... ,'cantSequence') */

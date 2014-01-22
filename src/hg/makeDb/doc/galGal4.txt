@@ -1188,7 +1188,17 @@ TMPDIR=/dev/shm
 
     zcat QTL_GG_4.0.ubed.txt.gz >> galGal4.animalQtl.bed
 
-    hgLoadBed galGal4 animalQtl galGal4.animalQtl.bed
+    cut -f1-4 galGal4.animalQtl.bed > galGal4.animalQtl.bed4
+    hgLoadBed galGal4 animalQtl galGal4.animalQtl.bed4
 
     checkTableCoords galGal4 animalQtl
     #no results - yay!
+
+    # originally used commands for intial version of file - ids were
+    # name:idNumber, contributor reloaded these as numbers so skipped sed step
+    # and processed as above.
+    # trim redundant columns to the bare minimum, alter name to be
+    # QTLname:idNumber to allow use of $p in external URL for idNumber
+    cut -f1-4 galGal4.animalQtl.bed | sed -e 's/-/:/;' > galGal4.animalQtl.bed4
+    hgLoadBed galGal4 animalQtl galGal4.animalQtl.bed4
+############################################################################

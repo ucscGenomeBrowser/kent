@@ -13,6 +13,7 @@
 #include "common.h"
 #include "string.h"
 #include "dystring.h"
+#include "dnautil.h"
 //#include "ctype.h"
 
 // cgi var to activate debug output
@@ -904,8 +905,11 @@ char **row;
 char *clickedFileUrl = NULL; 
 
 bool foundSkippedRows = FALSE;
+int rowId = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    rowId++;
+
     char *fileDesc = row[0];
     char *snippet  = row[1];
     char *locString= row[2];
@@ -943,7 +947,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
     if (fasta)
-        printf(">%s<br>%s<br>", annotId, seq);
+        {
+        if (strlen(extId)!=0)
+            printf("<tt><pre>&gt;%s-%d\n", extId, rowId);
+        else
+            printf("<tt><pre>&gt;seq%d\n", rowId);
+        writeSeqWithBreaks(stdout, seq, strlen(seq), 80);
+        printf("</pre></tt>\n");
+        }
     else
         {
         web2StartRow();

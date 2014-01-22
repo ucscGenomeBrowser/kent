@@ -611,7 +611,7 @@ return TRUE;
 char *edwSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf", 
     "bigWig", "bigBed", "bedLogR", "bedRnaElements", "bedRrbs", "broadPeak", 
     "narrowPeak", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
-    "rcc", "idat", "fasta"};
+    "rcc", "idat", "fasta", "customTrack"};
 int edwSupportedFormatsCount = ArraySize(edwSupportedFormats);
 
 boolean isEmptyOrNa(char *s)
@@ -765,7 +765,8 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 }
 
-boolean cgiDictionaryVarInListSame(struct cgiDictionary *d, struct cgiVar *list)
+boolean cgiDictionaryVarInListSame(struct cgiDictionary *d, struct cgiVar *list,
+    char **retName, char **retDictVal,  char **retListVal)
 /* Return TRUE if all variables in list are found in dictionary with the same vals. */
 {
 struct cgiVar *var;
@@ -774,17 +775,36 @@ for (var = list; var != NULL; var = var->next)
     {
     struct cgiVar *dVar = hashFindVal(hash, var->name);
     if (dVar == NULL)
+	{
+	*retName = var->name;
+	*retListVal = var->val;
+	*retDictVal = NULL;
         return FALSE;
+	}
     if (!sameString(dVar->val, var->val))
+	{
+	*retName = var->name;
+	*retListVal = var->val;
+	*retDictVal = dVar->val;
         return FALSE;
+	}
     }
 return TRUE;
+}
+
+boolean cgiDictionaryFirstDiff(struct cgiDictionary *a, struct cgiDictionary *b,
+    char **retName, char **retOldVal,  char **retNewVal)
+/* If the dictionaries differ then return TRUE and return info about first difference. */
+{
+return !(cgiDictionaryVarInListSame(a, b->list, retName, retOldVal, retNewVal) 
+    && cgiDictionaryVarInListSame(b, a->list, retName, retNewVal, retOldVal));
 }
 
 boolean cgiDictionarySame(struct cgiDictionary *a, struct cgiDictionary *b)
 /* See if dictionaries have same tags with same values. */
 {
-return cgiDictionaryVarInListSame(a, b->list) && cgiDictionaryVarInListSame(b, a->list);
+char *ignore = NULL;
+return !cgiDictionaryFirstDiff(a, b, &ignore, &ignore, &ignore);
 }
 
 static void updateSubmitName(struct sqlConnection *conn, long long fileId, char *newSubmitName)
@@ -824,11 +844,16 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
     if (updateTags)
 	{
 	if (!update)
-	    errAbort("%s is duplicate of %s in warehouse, but not all columns in manifest match.\n"
+	    {
+	    char *name="", *oldVal="", *newVal="";
+	    cgiDictionaryFirstDiff(oldTags, newTags, &name, &oldVal, &newVal);
+	    errAbort("%s is duplicate of %s in warehouse, but %s column went from %s to %s.\n"
 	             "Please use the 'update' option if you are meaning to update the information\n"
 		     "associated with this file and try again if this is intentional.",
-		     newFile->submitFileName, oldFile->edwFileName);
-	edwFileResetTags(conn, oldFile, newFile->tags);
+		     newFile->submitFileName, oldFile->edwFileName,
+		     name, oldVal, newVal);
+	    }
+	edwFileResetTags(conn, oldFile, newFile->tags, TRUE);
 	}
     if (updateTags || updateName)
 	++updateCount;

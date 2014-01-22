@@ -555,22 +555,25 @@ if (table == NULL)
     return FALSE;
 boolean foundIt = FALSE;
 // Do we happen to have a bigBed version?  Better yet, bed4 only for current uses:
-char fileName[HDB_MAX_PATH_STRING];
-safef(fileName, sizeof(fileName), "/gbdb/%s/vai/%s.bed4.bb", database, table);
+char origFileName[HDB_MAX_PATH_STRING];
+safef(origFileName, sizeof(origFileName), "/gbdb/%s/vai/%s.bed4.bb", database, table);
+char* fileName = hCloneRewriteFileName(origFileName);
 if (fileExists(fileName))
     {
     if (retFileName != NULL)
-	*retFileName = cloneString(fileName);
+	*retFileName = fileName;
     foundIt = TRUE;
     }
 else
     {
     // Not bed4; try just .bb:
-    safef(fileName, sizeof(fileName), "/gbdb/%s/vai/%s.bb", database, table);
+    freez(&fileName);
+    safef(origFileName, sizeof(origFileName), "/gbdb/%s/vai/%s.bb", database, table);
+    fileName = hCloneRewriteFileName(origFileName);
     if (fileExists(fileName))
 	{
 	if (retFileName != NULL)
-	    *retFileName = cloneString(fileName);
+	    *retFileName = fileName;
 	foundIt = TRUE;
 	}
     }
@@ -909,7 +912,9 @@ char query[512];
 sqlSafef(query, sizeof(query), "select fileName from %s", table);
 char *fileName = sqlQuickString(conn, query);
 hFreeConn(&conn);
-return fileName;
+char *fileNameRewrite = hCloneRewriteFileName(fileName);
+freez(&fileName);
+return fileNameRewrite;
 }
 
 void textOpen()

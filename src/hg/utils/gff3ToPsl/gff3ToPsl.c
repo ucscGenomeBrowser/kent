@@ -15,8 +15,8 @@ errAbort(
   "usage:\n"
   "   gff3ToPsl mapFile inGff3 out.psl\n"
   "arguments:\n"
-  "   mapFile    mapping of locus names to chroms and sizes.\n"
-  "              File formatted:  locusName chromeName chromSize\n"
+  "   chrom.sizes    mapping of chroms to sizes.\n"
+  "               File formatted:  chromeName chromSize\n"
   "   inGff3     GFF3 formatted file with Gap attribute in match records\n"
   "   out.psl    PSL formatted output\n"
   "options:\n"
@@ -97,7 +97,7 @@ static struct nameAndSize *getNameAndSize(struct hash *hash, char *name)
 {
 struct hashEl *hel = hashLookup(hash, name);
 if (hel == NULL)
-    errAbort("couldn't find %s in locus file", name);
+    errAbort("couldn't find %s in chrom.sizes file", name);
 return hel->val;
 }
 
@@ -106,14 +106,16 @@ static void processMatchLine(FILE *pslF, struct gff3Ann *node,
 {
 struct gff3Attr *attr = gff3AnnFindAttr(node, "Gap");
 
-if ((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL))
-    errAbort("match record without Gap attribute");
+char *cigar = NULL;
+if (!((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL)))
+    cigar = attr->vals->name;
 
-struct nameAndSize *ns = getNameAndSize(chromHash, node->targetId);
+struct nameAndSize *nsT = getNameAndSize(chromHash, node->targetId);
+struct nameAndSize *nsQ = getNameAndSize(chromHash, node->seqid);
 
-struct psl *psl = pslFromGff3Cigar(node->seqid, node->end - node->start, node->start, node->end,
-                                   ns->name, ns->size,  node->targetStart, node->targetEnd, 
-                                   node->strand, attr->vals->name);
+struct psl *psl = pslFromGff3Cigar(node->seqid, nsQ->size,  node->start, node->end,
+                                   nsT->name, nsT->size,  node->targetStart, node->targetEnd, 
+                                   node->targetStrand, cigar);
 pslOutput(psl, pslF, '\t' , '\n');
 pslFree(&psl);
 }
@@ -139,7 +141,7 @@ struct hash *readSizes(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct hash *hash = newHash(0);
-char *row[3];
+char *row[2];
 while (lineFileRow(lf, row))
     {
     struct nameAndSize *ns;
@@ -149,8 +151,8 @@ while (lineFileRow(lf, row))
         errAbort("Duplicate %s in size file %s\n", name, fileName);
 
     AllocVar(ns);
-    ns->name = cloneString(row[1]);
-    ns->size = atoi(row[2]);
+    ns->name = cloneString(row[0]);
+    ns->size = atoi(row[1]);
     hashAdd(hash, name, ns);
     }
 lineFileClose(&lf);
