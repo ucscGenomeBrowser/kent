@@ -5,6 +5,7 @@ CREATE TABLE pubsBingSequenceAnnot (
     seqId bigint not null,	# unique identifier of this sequence within a file
     annotId bigint not null,    # articleId(10)+fileId(3)+seqId(5), refd by pubsSequenceAnnot
     fileDesc varchar(2000) not null, # description of file where sequence was found 
+    fileUrl varchar(2000) not null, # url of file where sequence was found 
     sequence longblob not null,	# sequence
     snippet longblob not null,	# flanking characters around sequence in article
     locations varchar(5000),	# comma-sep list of genomic locations where this sequence matches

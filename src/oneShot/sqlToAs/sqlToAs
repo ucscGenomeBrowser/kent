@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 import logging, optparse, sys
 
-# do not modify this file, modify the original in kent/src/oneShot/sqlToAs
-# and commit the changes
-
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
 parser = optparse.OptionParser("usage: %prog [options] <filename> - convert mysql .sql CREATE TABLE file to autoSql format") 
 parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
@@ -61,7 +58,8 @@ for line in open(filename).read().splitlines():
         name = line.split()[2].strip("`")
         tableLine = "table %s" % name
         continue
-    elif lowLine.startswith("key") or lowLine.startswith("primary") or lowLine.startswith("fulltext"):
+    elif lowLine.startswith("key") or lowLine.startswith("primary") or lowLine.startswith("fulltext") \
+        or "character set" in lowLine:
         continue
 
     # `chrom` varchar(255) NOT NULL, # chromosome

@@ -6,6 +6,7 @@ table pubsBingSequenceAnnot
     bigint seqId;         "unique identifier of this sequence within a file"
     bigint annotId;       "articleId(10)+fileId(3)+seqId(5), refd by pubsSequenceAnnot"
     string fileDesc;      "description of file where sequence was found"
+    string fileUrl;       "url of file where sequence was found"
     lstring sequence;     "sequence"
     lstring snippet;      "flanking characters around sequence in article"
     string locations;     "comma-sep list of genomic locations where this sequence matches"
