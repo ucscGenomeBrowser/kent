@@ -66,22 +66,50 @@ restrictions</A>
 
 <p>
 With the release of GRCh38, in order to synchronize with the GRC assembly version numbering
-scheme, UCSC made the decision to name this assembly hg38 instead of hg20.
+scheme, UCSC made the decision to name this assembly hg38 instead of hg20. For a glossary of
+assembly-related terms, please see the GRC
+<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/definitions.shtml"
+target="_blank">Assembly Terminology</a> page. GRCh38 release notes page?
 </p>
 
 <p>
 <b>Centromeres</b><br>
-Insert stuff here...
+Insert centromerey stuff here...
 </p>
 
 <p>
 <b>IUPAC characters</b><br>
-Insert more stuff here...
+In addition to A, C, G, T and N, the raw sequence files from NCBI also include additional IUPAC
+ambiguity codes for bases that could not be positively identified as A, C, G or T (see
+<a href="http://www.ncbi.nlm.nih.gov/Class/MLACourse/Modules/MolBioReview/iupac_nt_abbreviations.html"
+target="_blank">NCBI</a>
+or
+<a href="http://www.bioinformatics.org/sms/iupac.html" target="_blank">bioinformatics.org</a>
+or
+<a href="http://en.wikipedia.org/wiki/Nucleic_acid_notation" target="_blank">Wikipedia</a>
+for more information) (***WE SHOULD CHOOSE ONE OF THESE REFERENCES***). As part of the UCSC
+assembly creation process, these IUPAC characters are converted to N's, so the FASTA files
+available for download from UCSC contain N's instead of the original IUPAC characters. For
+FASTA files containing these IUPAC characters, the raw data files are available for download
+from the NCBI
+<a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38"
+target="_blank">FTP site</a>.
+</p>
+
+<p>
+List IUPAC character statistics?
 </p>
 
 <p>
 <b>Note on chrM</b><br>
-Insert even more stuff here...
+The hg19 assembly was released with the mitochondrion sequence (represented as &quot;chrM&quot;
+in the Genome Browser) contained in GenBank record NC_001807. After the release of hg19, the
+mitochondrion sequence in NC_001807 was replaced with record
+<a href="http://www.ncbi.nlm.nih.gov/nuccore/NC_012920" target="_blank">NC_012920</a>,
+though the hg19 assembly was not updated to reflect this change. The hg38 assembly now
+includes this newer mitochondrion sequence. Please see the
+<a href="http://mitomap.org/bin/view.pl/MITOMAP/HumanMitoSeq" target="_blank">Revised Cambridge
+Reference Sequence (rCRS)</a> page for more information.
 </p>
 
 <p>
@@ -174,6 +202,7 @@ list of hg38 chromosome names.
 </p>
 
 <p>
+<b>Pseudoautosomal regions</b><br>
 The Y chromosome in this assembly contains two pseudoautosomal regions (PARs)
 that were taken from the corresponding regions in the X chromosome and are
 exact duplicates:
@@ -182,27 +211,3 @@ chrY:10,000-2,781,479 and chrY:56,887,902-57,217,415
 <br>chrX:10,000-2,781,479 and chrX:155,701,382-156,030,895
 </blockquote>
 </p>
-
-<hr>
-
-<P>
-Potential sections to include on this page:
-<UL>
-<LI>Description of new features such as centromeres</LI>
-<LI>Mention of IUPAC characters and how UCSC does not use nor pass them
-through to download files.  Perhaps mention where they can be found since
-it is only a few locations.</LI>
-<LI>Mention where the PAR regions are<BR>
-<pre>
-+-------+------------+-----------+------+
-| chrom | chromStart | chromEnd  | name |
-+-------+------------+-----------+------+
-| chrX  |      10000 |   2781479 | PAR1 |
-| chrX  |  155701382 | 156030895 | PAR2 |
-| chrY  |      10000 |   2781479 | PAR1 |
-| chrY  |   56887902 |  57217415 | PAR2 |
-+-------+------------+-----------+------+
-</pre></LI>
-<LI>chrM fiasco AKA chrMt now == J01415.2, was: NC_001807/AF347015.1</LI>
-</UL>
-</P>
