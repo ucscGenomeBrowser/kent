@@ -304,8 +304,11 @@ a.cv:active {text-decoration:underline;}
 
 /* imageV2 */
 div.dragZoom { cursor: text; }
-img.sliceImg { position:relative; border:0; }
+img.sliceImg { position:relative; border:0; z-index:10;} /* z-index allows highlight beneath img */
 div.sliceDiv { overflow:hidden; }
+div.highlightItem { opacity:0.7; border-style:none; position:absolute; overflow:hidden; }
+div.loading { position: absolute; opacity: 0.75; z-index: 15; 
+              background: white url("/images/loading.gif") no-repeat center;   }
 
 /* These are for imageV2 sideButtons: */
 .btn  { border-style: outset; background-color: #CCCCCC; border-color: #CCCCCC; } /* border-color: works for FF but screws up IE */

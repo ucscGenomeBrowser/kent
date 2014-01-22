@@ -206,7 +206,8 @@ return  !((noRandom && (endsWith(name, "_random")
                         || startsWith("chrUn", name)
                         || sameWord("chrNA", name) /* danRer */
                         || sameWord("chrU", name)))  /* dm */
-          || (noHap && stringIn( "_hap", name)));
+          || (noHap && stringIn( "_hap", name))
+          || (noHap && stringIn( "_alt", name)));
 }
 
 void bitsToBins(Bits *bits, char *chrom, int chromSize, FILE *binFile, int binSize, int binOverlap)
