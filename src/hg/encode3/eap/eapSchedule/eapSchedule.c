@@ -17,15 +17,17 @@ boolean noJob = FALSE;
 boolean ignoreQa = FALSE;
 boolean justLink = FALSE;
 boolean dry = FALSE;
+char *clStep = "*";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwScheduleAnalysis - Schedule analysis runs.\n"
+  "eapSchedule - Schedule analysis runs.\n"
   "usage:\n"
-  "   edwScheduleAnalysis startFileId endFileId output\n"
+  "   eapSchedule startFileId endFileId\n"
   "options:\n"
+  "   -step=pattern - Just run steps with names matching pattern which is * by default\n"
   "   -retry - if job has run and failed retry it\n"
   "   -again - if set schedule it even if it's been run once\n"
   "   -up - update on software MD5s rather than aborting on them\n"
@@ -38,6 +40,7 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"step", OPTION_STRING},
    {"retry", OPTION_BOOLEAN},
    {"again", OPTION_BOOLEAN},
    {"up", OPTION_BOOLEAN},
@@ -102,6 +105,8 @@ static boolean alreadyTakenCareOf(struct sqlConnection *conn,
 {
 if (again)
     return FALSE;
+if (!wildMatch(clStep, analysisStep))
+    return TRUE;
 char query[512];
 if (retry)
     sqlSafef(query, sizeof(query),
@@ -855,6 +860,7 @@ noJob = optionExists("noJob");
 ignoreQa = optionExists("ignoreQa");
 justLink = optionExists("justLink");
 dry = optionExists("dry");
+clStep = optionVal("step", clStep);
 edwScheduleAnalysis(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
 return 0;
 }
