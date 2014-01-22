@@ -470,6 +470,13 @@ hPrintf("</TD><TD>");
 hPrintf("Next/previous exon navigation");
 hPrintf("</TD></TR>\n");
 
+hPrintf("<TR><TD>");
+hCheckBox("enableHighlightingDialog", cartUsualBoolean(cart, "enableHighlightingDialog", TRUE));
+hPrintf("</TD><TD>");
+hPrintf("Enable highlight with drag-and-select "
+        "(if unchecked, drag-and-select always zooms to selection)");
+hPrintf("</TD></TR>\n");
+
 hTableEnd();
 cgiDown(0.9);
 
