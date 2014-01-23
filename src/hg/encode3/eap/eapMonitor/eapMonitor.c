@@ -26,6 +26,7 @@ errAbort(
   "commands:\n"
   "   status - print overall pipeline activity\n"
   "   steps - print out information on each step\n"
+  "   doctor - reset sick counters for all steps\n"
   "   info - information about configuration\n"
   "   chill - remove jobs that haven't started from job table, but keep running ones going\n"
   "   cull N - remove jobs that have been running more than N days\n"
