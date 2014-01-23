@@ -232,6 +232,8 @@ minScore bed broadPeak narrowPeak
 motifTable factorSource
 motifPwmTable factorSource
 motifMapTable factorSource
+motifMaxWindow factorSource
+motifDrawDefault factorSource
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
 nextExonText *

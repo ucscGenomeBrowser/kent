@@ -235,6 +235,10 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
     padding-right: 5px;
 }
 
+/* hgTracks config page groups list */
+TABLE.groupLists { background-color: #FFFEE8; width: 50em; }
+TABLE.groupLists TR:not(.blueToggleBar):not(.noData) TD { border: 1px solid; }
+
 /* for displaying a basic table - need to condense these to all just the .stdTbl class */
 table.chainTbl, .descTbl, .stdTbl {border-collapse: collapse;}
 table.chainTbl td, .descTbl td, .descTbl th, .stdTbl td, .stdTbl th {border: 1px solid #666; padding: 5px;}
@@ -304,8 +308,11 @@ a.cv:active {text-decoration:underline;}
 
 /* imageV2 */
 div.dragZoom { cursor: text; }
-img.sliceImg { position:relative; border:0; }
+img.sliceImg { position:relative; border:0; z-index:10;} /* z-index allows highlight beneath img */
 div.sliceDiv { overflow:hidden; }
+div.highlightItem { opacity:0.7; border-style:none; position:absolute; overflow:hidden; }
+div.loading { position: absolute; opacity: 0.75; z-index: 15; 
+              background: white url("/images/loading.gif") no-repeat center;   }
 
 /* These are for imageV2 sideButtons: */
 .btn  { border-style: outset; background-color: #CCCCCC; border-color: #CCCCCC; } /* border-color: works for FF but screws up IE */

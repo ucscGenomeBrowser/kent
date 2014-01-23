@@ -2326,3 +2326,20 @@ done | sed -e "`cat accessionToUcsc.sed.txt`" > ucsc.grch38.agp
     hgLoadSqlTab hg38 ctgPos2 hg38.ctgPos2.sql ctgPos2.tab
 
 ############################################################################
+# constructing download files (WORKING - 2014-01-15 - Hiram)
+    # add hg38 to all.joiner and verify it is clean:
+    joinerCheck -database=hg38 -keys all.joiner
+# Checking keys on database hg38
+#  hg38.ucscToINSDC.chrom - hits 455 of 455 (100.000%) ok
+    # and all table coordinates are OK:
+    checkTableCoords hg38
+
+    cd /hive/data/genomes/hg38
+    time $HOME/kent/src/hg/utils/automation/makeDownloads.pl \
+      -workhorse=hgwdev hg38
+    # makeDownloads.pl has made a preliminary set of files
+
+    # need to fixup these names and add chromFa.tar.gz files
+    cd /hive/data/genomes/hg38/goldenPath/bigZips
+
+############################################################################

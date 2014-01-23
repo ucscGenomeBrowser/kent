@@ -102,6 +102,8 @@ errAbort(
   "                     table1 is in table2 than it is genome-wide.\n"
   "   '-where=some sql pattern'  Restrict to features matching some sql pattern\n"
   "You can include a '!' before a table name to negate it.\n"
+  "   To prevent your shell from interpreting the '!' you will need\n"
+  "   to use the backslash \\!, for example the gap table: \\!gap\n"
   "Some table names can be followed by modifiers such as:\n"
   "    :exon:N          Break into exons and add N to each end of each exon\n"
   "    :cds             Break into coding exons\n"
@@ -206,7 +208,8 @@ return  !((noRandom && (endsWith(name, "_random")
                         || startsWith("chrUn", name)
                         || sameWord("chrNA", name) /* danRer */
                         || sameWord("chrU", name)))  /* dm */
-          || (noHap && stringIn( "_hap", name)));
+          || (noHap && stringIn( "_hap", name))
+          || (noHap && stringIn( "_alt", name)));
 }
 
 void bitsToBins(Bits *bits, char *chrom, int chromSize, FILE *binFile, int binSize, int binOverlap)

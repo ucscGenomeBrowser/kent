@@ -90,6 +90,9 @@ if (changeVis != -2)
 
 jsInit();
 cgiMakeHiddenVar(configGroupTarget, "none");
+
+// Now all groups are in a single table, divided by an empty borderless row
+hPrintf("<TABLE BORDER='0' CELLSPACING='0' class='groupLists'>\n");
 for (group = groupList; group != NULL; group = group->next)
     {
     struct trackRef *tr;
@@ -104,11 +107,9 @@ for (group = groupList; group != NULL; group = group->next)
     boolean isOpen = !isCollapsedGroup(group);
     collapseGroupGoodies(isOpen, FALSE, &indicatorImg,
                             &indicator, &otherState);
-    hPrintf("<TABLE BORDER='1' CELLSPACING='0' style='background-color:#%s; width:54em;'>\n",
-            HG_COL_INSIDE);
     hPrintf("<TR NOWRAP class='blueToggleBar'>");
     hPrintf("<TH NOWRAP align='left' colspan=3>");
-    hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
+    hPrintf("<table style='width:100%%;'><tr class='noData'><td style='text-align:left;'>");
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
             collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
@@ -150,8 +151,7 @@ for (group = groupList; group != NULL; group = group->next)
     safef(submitName, sizeof(submitName), "%sSubmit", group->name);
     cgiMakeButtonWithMsg(submitName, "submit","Submit your selections and view them in the browser");
     hPrintf("</td></tr></table>\n");
-    hPrintf("</TH>\n");
-    hPrintf("</TR>\n");
+    hPrintf("</TH></TR>\n");
 
     /* First non-CT, non-hub group gets ruler. */
     if (!showedRuler && !isHubTrack(group->name) &&
@@ -164,14 +164,11 @@ for (group = groupList; group != NULL; group = group->next)
                 cartSessionVarName(), cartSessionId(cart),
                 chromName, RULER_TRACK_NAME);
         hPrintf("%s</A>", RULER_TRACK_LABEL);
-	hPrintf("</TD>");
-	hPrintf("<TD>");
+	hPrintf("</TD><TD>");
 	hTvDropDownClass("ruler", rulerMode, FALSE, rulerMode ? "normalText" : "hiddenText");
-	hPrintf("</TD>");
-	hPrintf("<TD>");
+	hPrintf("</TD><TD>");
 	hPrintf("Chromosome position in bases.  (Clicks here zoom in 3x)");
-	hPrintf("</TD>");
-	hPrintf("</TR>\n");
+	hPrintf("</TD></TR>\n");
 	}
     /* Scan track list to determine which supertracks have visible member
      * tracks, and to insert a track in the list for the supertrack.
@@ -225,7 +222,8 @@ for (group = groupList; group != NULL; group = group->next)
         struct track *track = tr->track;
         struct trackDb *tdb = track->tdb;
 
-        hPrintf("<TR %sid='%s-%d'>",(isOpen ? "" : "style='display: none'"),group->name, rowCount++);
+        hPrintf("<TR %sid='%s-%d'>",(isOpen ? "" : "style='display: none;'"),
+                group->name, rowCount++);
         hPrintf("<TD NOWRAP>");
         if (tdbIsSuperTrackChild(tdb))
             /* indent members of a supertrack */
@@ -244,8 +242,7 @@ for (group = groupList; group != NULL; group = group->next)
             hPrintf("...");
         if (track->hasUi)
 	    hPrintf("</A>");
-	hPrintf("</TD>");
-        hPrintf("<TD NOWRAP>");
+	hPrintf("</TD><TD NOWRAP>");
         if (tdbIsSuperTrackChild(tdb))
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
@@ -273,15 +270,15 @@ for (group = groupList; group != NULL; group = group->next)
 	    }
         else
 	    hPrintf("[No data-%s]", chromName);
-	hPrintf("</TD>");
-	hPrintf("<TD NOWRAP>");
+	hPrintf("</TD><TD NOWRAP>");
         hPrintf("%s", tdb->longLabel);
-	hPrintf("</TD>");
-	hPrintf("</TR>\n");
+	hPrintf("</TD></TR>\n");
 	}
-    hPrintf("</TABLE>\n");
+    hPrintf("<tr class='noData'><td colspan=3>");
     cgiDown(0.9);
+    hPrintf("</td></tr>\n");
     }
+hPrintf("</TABLE>\n");
 }
 
 static int addDownloadOnlyTracks(char *db,struct group **pGroupList,struct track **pTrackList)
@@ -468,6 +465,13 @@ hPrintf("<TR><TD>");
 hCheckBox("nextExonArrows", cartUsualBoolean(cart, "nextExonArrows", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Next/previous exon navigation");
+hPrintf("</TD></TR>\n");
+
+hPrintf("<TR><TD>");
+hCheckBox("enableHighlightingDialog", cartUsualBoolean(cart, "enableHighlightingDialog", TRUE));
+hPrintf("</TD><TD>");
+hPrintf("Enable highlight with drag-and-select "
+        "(if unchecked, drag-and-select always zooms to selection)");
 hPrintf("</TD></TR>\n");
 
 hTableEnd();

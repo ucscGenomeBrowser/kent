@@ -363,9 +363,24 @@ var posting = {
 
     blockUseMap: false,
 
-    blockMapClicks:   function ()  {         posting.blockUseMap=true;  },
-    allowMapClicks:   function ()  {         posting.blockUseMap=false; },
-    mapClicksAllowed: function ()  { return (posting.blockUseMap == false); },
+    blockMapClicks: function () 
+    // Blocks clicking on map items when in effect. Drag opperations frequently call this.
+    { 
+        posting.blockUseMap=true;  
+    },
+    
+    allowMapClicks:function ()  
+    // reallows map clicks.  Called after operations that compete with clicks (e.g. dragging) 
+    { 
+        $('body').css('cursor', ''); // Explicitly remove wait cursor.
+        posting.blockUseMap=false; 
+    },
+
+    mapClicksAllowed: function () 
+    // Verify that click-competing operation (e.g. dragging) isn't currently occurring.
+    { 
+        return (posting.blockUseMap == false); 
+    },
 
     blockTheMapOnMouseMove: function (ev)
     {
@@ -545,16 +560,8 @@ var vis = {
 var dragSelect = {
 
     areaSelector:    null, // formerly "imgAreaSelect". jQuery element used for imgAreaSelect
-    autoHideSetting: true, // Current state of imgAreaSelect autoHide setting
     originalCursor:  null,
     startTime:       null,
-
-    rulerModeToggle: function (ele) // UNUSED?
-    {
-        dragSelect.autoHideSetting = !ele.checked;
-        var obj = dragSelect.areaSelector.data('imgAreaSelect');
-        obj.setOptions({autoHide : dragSelect.autoHideSetting});
-    },
 
     selectStart: function (img, selection)
     {
@@ -580,6 +587,93 @@ var dragSelect = {
         return true;
     },
 
+    highlightThisRegion: function(newPosition)
+    // set highlighting newPosition in server-side cart and apply the highlighting in local UI.
+    {
+        var start, end;
+        if (arguments.length == 2) {
+            start = arguments[0];
+            end = arguments[1];
+        } else {
+            var pos = parsePosition(newPosition);
+            start = pos.start;
+            end = pos.end;
+        }
+        hgTracks.highlight  = getDb() + "." + hgTracks.chromName + ":" + start + "-" + end;
+        hgTracks.highlight += '#AAFFFF'; // Also include highlight color
+        // we include enableHighlightingDialog because it may have been changed by the dialog
+        setCartVars(['highlight', 'enableHighlightingDialog'], 
+                    [hgTracks.highlight, hgTracks.enableHighlightingDialog ? 1 : 0]);
+        imageV2.highlightRegion();
+    },
+
+    selectionEndDialog: function (newPosition)
+    // Let user choose between zoom-in and highlighting.
+    {   
+        var dragSelectDialog = $("#dragSelectDialog")[0];
+        if (!dragSelectDialog) {
+            $("body").append("<div id='dragSelectDialog'>" + newPosition + 
+                             "<p><input type='checkbox' id='disableDragHighlight'>" + 
+                             "Don't show this dialog again and always zoom.<BR>" + 
+                             "(Re-enable highlight via the 'configure' menu at any time.)</p>");
+            dragSelectDialog = $("#dragSelectDialog")[0];
+        }
+        $(dragSelectDialog).dialog({
+                modal: true,
+                title: "Drag-and-select",
+                closeOnEscape: true,
+                resizable: false,
+                autoOpen: false,
+                revertToOriginalPos: true,
+                minWidth: 400,
+                buttons: {  
+                    "Zoom In": function() {
+                        // Zoom to selection
+                        $(this).dialog("option", "revertToOriginalPos", false);
+                        if (imageV2.inPlaceUpdate) {
+                            var params = "position=" + newPosition;
+                            if ($("#disableDragHighlight").attr('checked')) {
+                                hgTracks.enableHighlightingDialog = false;
+                                params += "&enableHighlightingDialog=0"
+                            }
+                            imageV2.navigateInPlace(params, null, true);
+                        } else {
+                            $('body').css('cursor', 'wait');
+                            document.TrackHeaderForm.submit();
+                        }
+                        $(this).dialog("close");
+                    },
+                    "Highlight": function() {
+                        // Highlight selection
+                        $(imageV2.imgTbl).imgAreaSelect({hide:true});
+                        if ($("#disableDragHighlight").attr('checked'))
+                            hgTracks.enableHighlightingDialog = false;
+                        dragSelect.highlightThisRegion(newPosition);
+                        $(this).dialog("close");
+                    },
+                    "Cancel": function() {
+                        $(this).dialog("close");
+                    }
+                },
+                open: function () { // Make zoom the focus/default action
+                   $(this).parents('.ui-dialog-buttonpane button:eq(0)').focus(); 
+                },
+                
+                close: function() {
+                    // All exits to dialog should go through this
+                    $(imageV2.imgTbl).imgAreaSelect({hide:true});
+                    if($(this).dialog("option", "revertToOriginalPos"))
+                        genomePos.revertToOriginalPos();
+                    if($("#disableDragHighlight").attr('checked'))
+                        $(this).remove();
+                    else
+                        $(this).hide();
+                    $('body').css('cursor', ''); // Occasionally wait cursor got left behind
+                }
+        });
+        $(dragSelectDialog).dialog('open');
+    },
+
     selectEnd: function (img, selection)
     {
         var now = new Date();
@@ -587,10 +681,11 @@ var dragSelect = {
         if(dragSelect.originalCursor != null)
             jQuery('body').css('cursor', dragSelect.originalCursor);
         // ignore releases outside of the image rectangle (allowing a 10 pixel slop)
-        if(dragSelect.autoHideSetting && genomePos.check(img, selection)) {
-        // ignore single clicks that aren't in the top of the image (this happens b/c the clickClipHeight test in dragSelect.selectStart
-        // doesn't occur when the user single clicks).
-        doIt = dragSelect.startTime != null || selection.y1 <= hgTracks.rulerClickHeight;
+        if (genomePos.check(img, selection)) {
+            // ignore single clicks that aren't in the top of the image
+            // (this happens b/c the clickClipHeight test in dragSelect.selectStart
+            // doesn't occur when the user single clicks).
+            doIt = dragSelect.startTime != null || selection.y1 <= hgTracks.rulerClickHeight;
         }
         if(doIt) {
             // dragSelect.startTime is null if mouse has never been moved
@@ -599,18 +694,25 @@ var dragSelect = {
                               || (now.getTime() - dragSelect.startTime) < 100);
             var newPosition = genomePos.update(img, selection, singleClick);
             if(newPosition != undefined) {
-                if(imageV2.inPlaceUpdate) {
-                    imageV2.navigateInPlace("position=" + newPosition, null, true);
-                } else {
-                    jQuery('body').css('cursor', 'wait');
-                    document.TrackHeaderForm.submit();
+                if (hgTracks.enableHighlightingDialog)
+                    dragSelect.selectionEndDialog(newPosition);
+                else {
+                    $(imageV2.imgTbl).imgAreaSelect({hide:true});
+                    if (imageV2.inPlaceUpdate) {
+                        imageV2.navigateInPlace("position=" + newPosition, null, true);
+                    } else {
+                        jQuery('body').css('cursor', 'wait');
+                        document.TrackHeaderForm.submit();
+                    }
                 }
             }
         } else {
+            $(imageV2.imgTbl).imgAreaSelect({hide:true});
             genomePos.revertToOriginalPos();
         }
         dragSelect.startTime = null;
-        setTimeout('posting.allowMapClicks();',50); // Necessary incase the dragSelect.selectEnd was over a map item. select takes precedence.
+        // blockMapClicks/allowMapClicks() is necessary if selectEnd was over a map item.
+        setTimeout('posting.allowMapClicks();',50);
         return true;
     },
 
@@ -618,7 +720,7 @@ var dragSelect = {
     {
         var imgHeight = 0;
         if (imageV2.enabled)
-            imgHeight = imageV2.imgTbl.height();
+            imgHeight = imageV2.imgTbl.innerHeight() - 1; // last little bit makes border look ok
 
         // No longer disable without ruler, because shift-drag still works
         if(typeof(hgTracks) != "undefined") {
@@ -635,7 +737,7 @@ var dragSelect = {
                 onSelectStart:   dragSelect.selectStart,
                 onSelectChange:  dragSelect.selectChange,
                 onSelectEnd:     dragSelect.selectEnd,
-                autoHide:        dragSelect.autoHideSetting,
+                autoHide:        false, // gets hidden after possible dialog
                 movable:         false,
                 clickClipHeight: heights
             }));
@@ -1320,6 +1422,7 @@ jQuery.fn.panImages = function(){
     var prevX       = (hgTracks.imgBoxPortalOffsetX + hgTracks.imgBoxLeftLabel) * -1;
     var portalWidth = 0;
     var savedPosition;
+    var highlightArea  = null; // Used to ensure dragSelect highlight will scroll. 
 
     this.each(function(){
 
@@ -1341,6 +1444,7 @@ jQuery.fn.panImages = function(){
 
     // globals across all panImages
     portalWidth     = $(pan).width();
+    portalAbsoluteX = $(pan).offset().left;
     // globals to one panImage
     var newX        = 0;
     var mouseDownX  = 0;
@@ -1372,6 +1476,7 @@ jQuery.fn.panImages = function(){
                 }
                 mouseIsDown = true;
                 mouseDownX = e.clientX;
+                highlightArea = $('#highlightItem')[0];
                 atEdge = (!beyondImage && (prevX >= leftLimit || prevX <= rightLimit));
                 $(document).bind('mousemove',panner);
                 $(document).bind( 'mouseup', panMouseUp);  // Will exec only once
@@ -1421,6 +1526,7 @@ jQuery.fn.panImages = function(){
                 var nowPos = newX.toString() + "px";
                 $(".panImg").css( {'left': nowPos });
                 $('.tdData').css( {'backgroundPosition': nowPos } );
+                scrollHighlight(relativeX);
                 if (!only1xScrolling)
                     panAdjustHeight(newX);  // NOTE: This will dynamically resize image while scrolling.  Do we want to?
             }
@@ -1449,6 +1555,8 @@ jQuery.fn.panImages = function(){
                 var oldPos = prevX.toString() + "px";
                 $(".panImg").css( {'left': oldPos });
                 $('.tdData').css( {'backgroundPosition': oldPos } );
+                if (highlightArea)
+                    imageV2.highlightRegion();
                 return true;
             }
 
@@ -1630,6 +1738,24 @@ jQuery.fn.panImages = function(){
             $(dragMask).hide();
     }
 
+    function scrollHighlight(relativeX) 
+    // Scrolls the highlight region if one exists
+    {        
+        if (highlightArea) {
+            // Best to have a left and right, then min/max the edges, then set width
+            var hiOffset = $(highlightArea).offset();
+            var hiDefinedLeft  = $(highlightArea).data('leftPixels');
+            var hiDefinedWidth = $(highlightArea).data('widthPixels');
+            hiOffset.left = Math.max(hiDefinedLeft + relativeX,
+                                     portalAbsoluteX);
+            var right     = Math.min(hiDefinedLeft + hiDefinedWidth + relativeX,
+                                     portalAbsoluteX + portalWidth);
+            var newWidth = Math.max(right - hiOffset.left,0);
+            if (hiDefinedWidth != newWidth)
+                $(highlightArea).width(newWidth);
+            $(highlightArea).offset(hiOffset);
+        }
+    }
 
 
 };
@@ -1705,7 +1831,7 @@ var rightClick = {
         jQuery('body').css('cursor', '');
         var str = "<IMG[^>]*SRC='([^']+)'";
         var reg = new RegExp(str);
-        a = reg.exec(response);
+        var a = reg.exec(response);
         if(a && a[1]) {
             if(window.open(a[1]) == null) {
                 rightClick.windowOpenFailedMsg();
@@ -1748,7 +1874,7 @@ var rightClick = {
             setTimeout(function() { rightClick.hitFinish(menuItemClicked, menuObject, cmd); }, 10);
             return;
         }
-        if(cmd == 'selectWholeGene' || cmd == 'getDna') {
+        if (cmd == 'selectWholeGene' || cmd == 'getDna' || cmd == 'highlightItem') {
                 // bring whole gene into view or redirect to DNA screen.
                 var href = rightClick.selectedMenuItem.href;
                 var chromStart, chromEnd;
@@ -1787,6 +1913,8 @@ var rightClick = {
                         if (window.open(url) === null) {
                             rightClick.windowOpenFailedMsg();
                         }
+                    } else if (cmd == 'highlightItem') {
+                        dragSelect.highlightThisRegion(parseInt(chromStart), parseInt(chromEnd));
                     } else {
                         var newPosition = genomePos.setByCoordinates(chrom, chromStart, chromEnd);
                         var reg = new RegExp("hgg_gene=([^&]+)");
@@ -1879,14 +2007,6 @@ var rightClick = {
             }
             location.assign(url);
 
-        } else if (cmd == 'dragZoomMode') {
-            dragSelect.autoHideSetting = true;
-            var obj = dragSelect.areaSelector.data('imgAreaSelect');
-            obj.setOptions({autoHide : true, movable: false});
-        } else if (cmd == 'hilightMode') {
-            dragSelect.autoHideSetting = false;
-            var obj = dragSelect.areaSelector.data('imgAreaSelect');
-            obj.setOptions({autoHide : false, movable: true});
         } else if (cmd == 'viewImg') {
             // Fetch a new copy of track img and show it to the user in another window. This code assume we have updated
             // remote cart with all relevant chages (e.g. drag-reorder).
@@ -1972,10 +2092,8 @@ var rightClick = {
                 }
                 if (vars.length > 0) {
                     setCartVars( vars, vals );
-                    dragReorder.init();
-                    dragSelect.load(false);
                 }
-                imageV2.markAsDirtyPage();
+                imageV2.afterImgChange(true);
             }
         } else if (cmd == 'hideComposite') {
             var rec = hgTracks.trackDb[id];
@@ -1988,13 +2106,29 @@ var rightClick = {
                     }
                 var selectUpdated = vis.update(rec.parentTrack, 'hide');
                 setCartVar(rec.parentTrack, 'hide' );
-                dragReorder.init();
-                dragSelect.load(false);
-                imageV2.markAsDirtyPage();
+                imageV2.afterImgChange(true);
                 }
             }
             //else
             //    warn('What went wrong?');
+        } else if (cmd == 'zoomToHighlight') { // If highlight exists for this assembly, zoom to it
+            if (hgTracks.highlight) {
+                var pos = parsePositionWithDb(hgTracks.highlight);
+                if (pos && pos.db == getDb()) {
+                    if (imageV2.inPlaceUpdate) {
+                        var params = "position=" + pos.chrom + ':' + pos.start + '-' + pos.end;
+                        imageV2.navigateInPlace(params, null, true);
+                    } else {
+                        genomePos.setByCoordinates(pos.chrom, pos.start, pos.end);
+                        jQuery('body').css('cursor', 'wait');
+                        document.TrackHeaderForm.submit();
+                    }
+                }
+            }
+        } else if (cmd == 'removeHighlight') {
+            hgTracks.highlight = null;
+            setCartVars(['highlight'], ['[]']);
+            imageV2.highlightRegion();
         } else {   // if ( cmd in 'hide','dense','squish','pack','full','show' )
             // Change visibility settings:
             //
@@ -2014,9 +2148,7 @@ var rightClick = {
                 else
                     setCartVar(id, 'hide' );
                 $(document.getElementById('tr_' + id)).remove();
-                dragReorder.init();
-                dragSelect.load(false);
-                imageV2.markAsDirtyPage();
+                imageV2.afterImgChange(true);
             } else if (!imageV2.mapIsUpdateable) {
                 jQuery('body').css('cursor', 'wait');
                 if(selectUpdated) {
@@ -2201,6 +2333,13 @@ var rightClick = {
                                                         "selectWholeGene"); return true;
                                               }
                                     };
+                                o[rightClick.makeImgTag("highlight.png") + " Highlight " + title] = 
+                                    {   onclick: function(menuItemClicked, menuObject) {
+                                            rightClick.hit(menuItemClicked, menuObject,
+                                                           "highlightItem"); 
+                                            return true;
+                                        }
+                                    };
                                 if(rightClick.supportZoomCodon && rec.type.indexOf("genePred") != -1) {
                                     // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
                                     var name, table;
@@ -2285,35 +2424,6 @@ var rightClick = {
                         }
                     }
                 }
-                if (!done) {
-                    if(false) {
-                        // Currently toggling b/n drag-and-zoom mode and hilite mode is disabled b/c we don't know how to keep hilite mode from disabling the
-                        // context menus.
-                        var o = new Object();
-                        var str = "drag-and-zoom mode";
-                        if(dragSelect.autoHideSetting) {
-                            str += selectedImg;
-                            // menu[str].className = 'context-menu-checked-item';
-                        }
-                        o[str] = { onclick: function(menuItemClicked, menuObject) {
-                                     rightClick.hit(menuItemClicked, menuObject, "dragZoomMode");
-                                     return true; }
-                                 };
-                        menu.push(o);
-                        o = new Object();
-                        // console.dir(ele);
-                        str = "hilight mode";
-                        if (!dragSelect.autoHideSetting) {
-                            str += selectedImg;
-                        }
-                        o[str] = { onclick: function(menuItemClicked, menuObject) {
-                                      rightClick.hit(menuItemClicked, menuObject, "hilightMode");
-                                      return true; }
-                                 };
-                        menu.push(o);
-                    }
-                    //menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { rightClick.hit(menuItemClicked, menuObject, "viewImg"); return true; }}});
-                }
 
                 if(rightClick.selectedMenuItem && rec) {
                     // Add cfg options at just shy of end...
@@ -2359,6 +2469,27 @@ var rightClick = {
                     menu.push(o);
                 }
 
+                menu.push($.contextMenu.separator);
+                if(hgTracks.highlight) {
+                    var o;
+                    if (hgTracks.highlight.search(getDb() + '.') == 0) {
+                        o = new Object();
+                        o[rightClick.makeImgTag("highlightZoom.png") + 
+                                                                  " Zoom to highlighted region"] = 
+                            {   onclick:function(menuItemClicked, menuObject) {
+                                    rightClick.hit(menuItemClicked, menuObject, "zoomToHighlight");
+                                    return true; 
+                                }
+                            };
+                        o[rightClick.makeImgTag("highlightRemove.png") + " Remove highlighting"] = 
+                            {   onclick:function(menuItemClicked, menuObject) {
+                                    rightClick.hit(menuItemClicked, menuObject, "removeHighlight");
+                                    return true; 
+                                }
+                            };
+                        menu.push(o);
+                    }
+                }
                 // Add view image at end
                 var o = new Object();
                 o[rightClick.makeImgTag("eye.png") + " View image"] = {
@@ -2366,7 +2497,6 @@ var rightClick = {
                         rightClick.hit(menuItemClicked, menuObject, "viewImg");
                         return true; }
                 };
-                menu.push($.contextMenu.separator);
                 menu.push(o);
 
                 return menu;
@@ -2463,8 +2593,7 @@ var popUp = {
             if(hide) {
                 setVarsFromHash(changedVars);
                 $(document.getElementById('tr_' + trackName)).remove();
-                dragReorder.init();
-                dragSelect.load(false);
+                imageV2.afterImgChange(true);
             } else {
                 // Keep local state in sync if user changed visibility
                 if(newVis != null) {
@@ -2658,6 +2787,15 @@ var imageV2 = {
         }
     },
     
+    afterImgChange: function (dirty)
+    {   // Standard things to do when manipulations change image without ajax update.
+        dragReorder.init();
+        dragSelect.load(false);
+        imageV2.highlightRegion();
+        if (dirty)
+            imageV2.markAsDirtyPage();
+    },
+    
     afterReload: function (id)
     {   // Reload various UI widgets after updating imgTbl map.
         dragReorder.init();
@@ -2674,6 +2812,7 @@ var imageV2 = {
         if (imageV2.backSupport) {
             if (id) { // The remainder is only needed for full reload
                 imageV2.markAsDirtyPage(); // vis of cfg change
+                imageV2.highlightRegion();
                 return;
             }
         }
@@ -2681,6 +2820,7 @@ var imageV2 = {
         imageV2.loadRemoteTracks();
         makeItemsByDrag.load();
         imageV2.loadSuggestBox();
+        imageV2.highlightRegion();
 
         if (imageV2.backSupport) {
             imageV2.setInHistory(false);    // Set this new position into History stack
@@ -3079,6 +3219,56 @@ var imageV2 = {
             });
     },
     
+    highlightRegion: function()
+    // highlight vertical region in imgTbl based on hgTracks.highlight (#709).
+    {
+        var pos;
+        var hexColor = '#FFAAAA'
+        $('#highlightItem').remove();
+        if(hgTracks.highlight) {
+            pos = parsePositionWithDb(hgTracks.highlight);
+            if(pos) {
+                pos.start--;  // make start 0-based to match hgTracks.winStart
+                if (pos.color)
+                    hexColor = pos.color;
+            }
+        }
+        if(pos != null && pos.chrom == hgTracks.chromName && pos.db == getDb() 
+        && pos.start <= hgTracks.imgBoxPortalEnd && pos.end >= hgTracks.imgBoxPortalStart) {
+            var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart;
+            var portal = $('#imgTbl td.tdData')[0];
+            var leftPixels = $(portal).offset().left + 3; // 3 for borders and cgi item calcs ??
+            var pixelsPerBase = ($(portal).width() - 2) / portalWidthBases;
+            var clippedStartBases = Math.max(pos.start, hgTracks.imgBoxPortalStart);
+            var clippedEndBases = Math.min(pos.end, hgTracks.imgBoxPortalEnd);
+            var widthPixels = (clippedEndBases - clippedStartBases) * pixelsPerBase;
+            if(hgTracks.revCmplDisp)
+                leftPixels += (hgTracks.imgBoxPortalEnd - clippedEndBases) * pixelsPerBase - 1;
+            else
+                leftPixels += (clippedStartBases - hgTracks.imgBoxPortalStart) * pixelsPerBase;
+            // Impossible to get perfect... Okay to overrun by a pixel on each side
+            leftPixels  = Math.floor(leftPixels);
+            widthPixels = Math.ceil(widthPixels);
+            if (widthPixels < 2) {
+                widthPixels = 3;
+                leftPixels -= 1;
+            }
+
+            var area = jQuery("<div id='highlightItem' class='highlightItem'></div>");
+            $(area).css({ backgroundColor: hexColor, // display: 'none'
+                        left: leftPixels + 'px', top: $('#imgTbl').offset().top + 1 + 'px',
+                        width: widthPixels + 'px',
+                        height: $('#imgTbl').css('height') });
+            $(area).data({leftPixels: leftPixels, widthPixels: widthPixels});// needed for dragScroll
+
+            // Larry originally appended to imgTbl, but discovered that doesn't work on IE 8 and 9.
+            $('body').append($(area)); 
+            // z-index is done in css class, so highlight is beneath transparent data images.
+            // NOTE: ideally highlight would be below transparent blue-lines, but THAT is a  
+            // background-image so z-index can't get below it!  PS/PDF looks better for blue-lines!
+        }
+    },
+
     backSupport: (window.History.enabled != undefined), // support of r back button via: 
     history: null,                                     //  jquery.history.js and HTML5 history API
     
@@ -3125,6 +3315,7 @@ var imageV2 = {
             if (newChrom == oldChrom) {
                 imageV2.markAsDirtyPage();
                 imageV2.navigateInPlace("position="+encodeURIComponent(newPos), null, false);
+                window.scrollTo(0,0);
                 return false;
             }
             return true;
@@ -3259,8 +3450,8 @@ $(document).ready(function()
             // mark as non dirty to avoid infinite loop in chrome.
             imageV2.markAsCleanPage();
             jQuery('body').css('cursor', 'wait');
-                window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
-                return false;
+            window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
+            return false;
         }
     }
     initVars();
@@ -3342,6 +3533,7 @@ $(document).ready(function()
         }
         imageV2.loadRemoteTracks();
         makeItemsByDrag.load();
+        imageV2.highlightRegion();
     }
 
     // Drag select in chromIdeogram
