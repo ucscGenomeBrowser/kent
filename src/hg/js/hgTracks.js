@@ -3315,6 +3315,7 @@ var imageV2 = {
             if (newChrom == oldChrom) {
                 imageV2.markAsDirtyPage();
                 imageV2.navigateInPlace("position="+encodeURIComponent(newPos), null, false);
+                window.scrollTo(0,0);
                 return false;
             }
             return true;
