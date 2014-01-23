@@ -431,10 +431,13 @@ for(i=0;i<ArraySize(regExs);i++)
 return str;
 }
 
-void jsBeginCollapsibleSectionFontSize(struct cart *cart, char *track, char *section,
-				       char *sectionTitle, boolean isOpenDefault, char *fontSize)
+static void jsBeginCollapsibleSectionFull(struct cart *cart, char *track, char *section,
+                                   char *sectionTitle, boolean isOpenDefault, char *fontSize,
+                                   boolean oldStyle)
 /* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's
- * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. */
+ * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. 
+ * With support for style variation. "oldStyle" has blue background color in section header
+ * (as in web.c sections). "fontSize" is ignored if oldStyle is TRUE */
 {
 char collapseGroupVar[512];
 safef(collapseGroupVar, sizeof(collapseGroupVar), "%s.section_%s_close", track, section);
@@ -442,7 +445,11 @@ boolean isOpen = !cartUsualBoolean(cart, collapseGroupVar, !isOpenDefault);
 
 // Both plus button and title are now in same <TD>
 // but still colspan=2 because we are lib code and callers own the table.
-printf("<TR><TD colspan=2 style='text-align:left;'>\n");
+puts("<TR");
+if (oldStyle)
+    puts(" class='subheadingBar'");
+puts (">");
+printf("<TD colspan=2 style='text-align:left;'>\n");
 printf("<input type='hidden' name='%s' id='%s' value='%s'>\n",
        collapseGroupVar, collapseGroupVar, isOpen ? "0" : "1");
 #ifdef BUTTONS_BY_CSS
@@ -458,8 +465,30 @@ printf("<IMG height='18' width='18' "
        section, track,
        section, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
 #endif///ndef BUTTONS_BY_CSS
-printf("<B style='font-size:%s;'>&nbsp;%s</B></TD></TR>\n", fontSize, sectionTitle);
-printf("<TR %sid='%s-%d'><TD colspan=2>", isOpen ? "" : "style='display: none' ", section, 1);
+if (oldStyle || fontSize == NULL)
+    printf("&nbsp;%s</TD></TR>\n", sectionTitle);
+else
+    printf("<B style='font-size:%s;'>&nbsp;%s</B>", fontSize, sectionTitle);
+puts("</TD></TR>\n");
+printf("<TR %s id='%s-%d'><TD colspan=2>", isOpen ? "" : "style='display: none' ", section, 1);
+}
+
+void jsBeginCollapsibleSectionOldStyle(struct cart *cart, char *track, char *section,
+				       char *sectionTitle, boolean isOpenDefault)
+/* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's
+ * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. 
+ * With support for varying font size */
+{
+jsBeginCollapsibleSectionFull(cart, track, section, sectionTitle, isOpenDefault, NULL, TRUE);
+}
+
+void jsBeginCollapsibleSectionFontSize(struct cart *cart, char *track, char *section,
+				       char *sectionTitle, boolean isOpenDefault, char *fontSize)
+/* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's
+ * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. 
+ * With support for varying font size */
+{
+jsBeginCollapsibleSectionFull(cart, track, section, sectionTitle, isOpenDefault, fontSize, FALSE);
 }
 
 void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, char *sectionTitle,
@@ -467,7 +496,7 @@ void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, ch
 /* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's
  * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. */
 {
-jsBeginCollapsibleSectionFontSize(cart, track, section, sectionTitle, isOpenDefault, "larger");
+jsBeginCollapsibleSectionFull(cart, track, section, sectionTitle, isOpenDefault, "larger", FALSE);
 }
 
 void jsEndCollapsibleSection()
