@@ -117,6 +117,34 @@ results->jobCount = slCount(results->lineList);
 return results;
 }
 
+
+int resultsCrashCount(struct results *results)
+/* Return count of crashed/errored jobs */
+{
+struct jobResult *jr;
+int count = 0;
+for (jr = results->jobList; jr != NULL; jr = jr->next)
+    {
+    if (!WIFEXITED(jr->status) || WEXITSTATUS(jr->status) != 0)
+        ++count;
+    }
+return count;
+}
+
+int resultsGoodFinishCount(struct results *results)
+/* Return count of crashed/errored jobs */
+{
+struct jobResult *jr;
+int count = 0;
+for (jr = results->jobList; jr != NULL; jr = jr->next)
+    {
+    if (WIFEXITED(jr->status) && WEXITSTATUS(jr->status) == 0)
+        ++count;
+    }
+return count;
+}
+
+
 void searchForResults(char *dir, struct hash *hash, struct results **retResults)
 /* Look in current dir and all subdirs for results files. */
 {
@@ -210,13 +238,13 @@ for (q = qList; q != NULL; q = q->next)
     finishedJobs += q->jobCount;
     }
 int qCount = qHash->elCount;
+printf("Analysis steps:   %5d:", qCount);
+fflush(stdout);	    // ugly - just figuring out where time is used
 
 struct hash *runningHash = eapParasolRunningHash(clParaHost, NULL);
 struct sqlConnection *conn = edwConnect();
 int runningCount = countParaRunning(conn, runningHash, qHash);
 
-// printf("Jobs finished: %ld\n", finishedJobs);
-printf("Analysis steps:   %5d:", qCount);
 slSort(&qList, resultsCmpScore);
 int i;
 q = qList;
@@ -345,7 +373,7 @@ splitPath(file, dir, root, ext);
 char tempPath[PATH_LEN];
 safef(tempPath, sizeof(tempPath), "%s%s%s", eapTempDir, root, ext);
 char command[3*PATH_LEN];
-safef(command, sizeof(command), "scp %s:%s %s", host, file, tempPath);
+safef(command, sizeof(command), "scp %s %s:%s %s", eapSshArgs, host, file, tempPath);
 mustSystem(command);
 return cloneString(tempPath);
 }
@@ -474,7 +502,8 @@ struct jobResult *crashed = findCrashed(parasolId);
 if (crashed == NULL)
     errAbort("No most recent error");
 char command[2*PATH_LEN];
-safef(command, sizeof(command), "scp %s:%s /dev/stdout", crashed->host, crashed->errFile);
+safef(command, sizeof(command), "scp %s %s:%s /dev/stdout", eapSshArgs, 
+    crashed->host, crashed->errFile);
 mustSystem(command);
 }
 
@@ -613,12 +642,12 @@ char query[512];
 sqlSafef(query, sizeof(query), "select * from %s where endTime = 0", clTable);
 struct edwAnalysisJob *waitList = edwAnalysisJobLoadByQuery(conn, query);
 
-printf("#stat finish run  wait results\n");
+printf("#stat crash finish run  wait results\n");
 for (q = qList; q != NULL; q = q->next)
     {
     char *code = (isSick(q) ? "sick" : "good");
     int waitCount = countWaiting(waitList, q->name);
-    printf("%s %6d %3d %5d %s\n", code, slCount(q->lineList), 
+    printf("%s %6d %6d %3d %5d %s\n", code, resultsCrashCount(q), resultsGoodFinishCount(q), 
 	    q->runningCount, waitCount - q->runningCount, q->pathName);
     }
 }
@@ -639,18 +668,14 @@ struct edwAnalysisJob *job, *jobList = edwAnalysisJobLoadByQuery(conn, query);
 struct hash *jobHash = hashNew(0);
 for (job = jobList; job != NULL; job = job->next)
     hashAdd(jobHash, job->parasolId, job);
-verbose(1, "Have %d pending jobs with parasol\n", slCount(jobList));
+verbose(1, "Have %d pending jobs launched but not finished in database\n", slCount(jobList));
 
 /* Make a list/hash of jobs currently running */
-struct paraPstat2Job *pJob, *pJobList = NULL;
-struct hash *pJobHash = eapParasolRunningHash(clParaHost, &pJobList);
-for (pJob = pJobList; pJob != NULL; pJob = pJob->next)
-    {
-    hashAdd(pJobHash, pJob->parasolId, pJob);
-    }
+struct hash *pJobHash = eapParasolRunningHash(clParaHost, NULL);
+verbose(1, "Have %d jobs running on parasol\n", pJobHash->elCount);
 
 /* Loop through database job list.  If it isn't on the running list then assume it's a lost
- * sole and mark it as succeeded at current time.... */
+ * soul and mark it as succeeded at current time.... */
 int scroungeCount = 0;
 if (parasolId)
     {
@@ -675,6 +700,18 @@ else
 printf("Scrounged %d - use eapFinish and it will find them or doom them\n", scroungeCount);
 }
 
+void doDoctor(int argc, char *argv[])
+/* Reset sick status */
+{
+struct results *q, *qList = NULL;
+searchForResults(eapParaQueues, NULL, &qList);
+for (q = qList; q != NULL; q = q->next)
+    {
+    char message[512];
+    safef(message, sizeof(message), "clearSickNodes %s %s", getUser(), q->pathName);
+    pmHubSingleLineQuery(message, clParaHost);
+    }
+}
 
 void eapMonitor(char *command, int argc, char **argv)
 /* eapMonitor - Monitor jobs running through the pipeline.. */
@@ -718,6 +755,8 @@ else if (sameString(command, "scrounge"))
     {
     doScrounge(argc, argv);
     }
+else if (sameString(command, "doctor"))
+    doDoctor(argc, argv);
 else
     {
     errAbort("Unrecognized command %s", command);
