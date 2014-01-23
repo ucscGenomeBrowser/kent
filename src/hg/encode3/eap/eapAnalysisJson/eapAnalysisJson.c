@@ -1,4 +1,4 @@
-/* edwAnalysisAddJson - Add json string to edwAnalysisRun record.. */
+/* eapAnalysisJson - Add json string to edwAnalysisRun record.. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -14,9 +14,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwAnalysisAddJson - Add json string to edwAnalysisRun record.\n"
+  "eapAnalysisJson - Add json string to edwAnalysisRun record.\n"
   "usage:\n"
-  "   edwAnalysisAddJson analysisRunId\n"
+  "   eapAnalysisJson analysisRunId\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -155,8 +155,8 @@ dyStringAppend(dy, "}\n");
 return dyStringCannibalize(&dy);
 }
 
-void edwAnalysisAddJson(unsigned analysisRunId)
-/* edwAnalysisAddJson - Add json string to edwAnalysisRun record.. */
+void eapAnalysisJson(unsigned analysisRunId)
+/* eapAnalysisJson - Add json string to edwAnalysisRun record.. */
 {
 struct sqlConnection *conn = edwConnectReadWrite();
 char query[16*1024]; // Json might get big
@@ -212,6 +212,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-edwAnalysisAddJson(sqlUnsigned(argv[1]));
+eapAnalysisJson(sqlUnsigned(argv[1]));
 return 0;
 }
