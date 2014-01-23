@@ -4,8 +4,10 @@
 #include "hash.h"
 #include "options.h"
 #include "sqlNum.h"
-#include "encodeDataWarehouse.h"
-#include "edwLib.h"
+#include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
+#include "../../encodeDataWarehouse/inc/edwLib.h"
+#include "eapDb.h"
+#include "eapLib.h"
 #include "jsonParse.h"
 
 void usage()
