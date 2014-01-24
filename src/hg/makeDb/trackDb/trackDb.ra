@@ -1096,6 +1096,50 @@ exonArrows on
 type bed 6 .
 
 
+track snp139Common
+shortLabel Common SNPs(139)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 139) Found in >= 1% of Samples
+group varRep
+priority 99.0881
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp139Seq
+snpExceptionDesc snp139ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+codingAnnotations snp139CodingDbSnp,
+
+track snp139Mult
+shortLabel Mult. SNPs(139)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 139) That Map to Multiple Genomic Loci
+group varRep
+priority 99.0883
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp139Seq
+snpExceptionDesc snp139ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+codingAnnotations snp139CodingDbSnp,
+
+track snp139
+shortLabel All SNPs(139)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 139)
+group varRep
+priority 99.0894
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+codingAnnotations snp139CodingDbSnp,
+
 track snp138Common
 shortLabel Common SNPs(138)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Found in >= 1% of Samples
