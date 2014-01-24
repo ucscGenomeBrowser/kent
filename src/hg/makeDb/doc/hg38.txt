@@ -2351,4 +2351,9 @@ done | sed -e "`cat accessionToUcsc.sed.txt`" > ucsc.grch38.agp
     tar cvzf ./hg38.chromFa.tar.gz ./chroms/
     tar cvzf ./hg38.chromFaMasked.tar.gz ./maskedChroms/
 
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
+    ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.chromFa.tar.gz hg38.chromFa.tar.gz
+    ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.chromFaMasked.tar.gz hg38.chromFaMasked.tar.gz
+
+    #also added entries for above to md5sum.txt and README.txt
 ############################################################################
