@@ -4,6 +4,7 @@
 # edit ~/kent/src/hg/utils/automation/doDbSnp.pl instead.
 
 use Getopt::Long;
+use LWP::UserAgent;
 use warnings;
 use strict;
 use FindBin qw($Bin);
@@ -513,6 +514,8 @@ sub checkAssemblySpec {
       return keys %rejectLabels;
     }
     &demandAssemblyLabel(@labels);
+  } elsif (! $refAssemblyLabel) {
+    $refAssemblyLabel = $labels[0];
   }
   return ();
 } # checkAssemblySpec
@@ -557,6 +560,59 @@ sub tryToMakeLiftUpFromContigInfo {
   close($LU);
   return $liftUpCount, \@missingInfo;
 } # tryToMakeLiftUpFromContigInfo
+
+sub eUtilQuery($$$) {
+  # Send an eUtil query string to NCBI, try to match regex, and return regex's $1 if successful.
+  # Otherwise warn and return undef.
+  my ($ua, $query, $regex) = @_;
+  my $req = HTTP::Request->new(GET => $query);
+  my $res = $ua->request($req);
+  my $match;
+  if ($res->is_success()) {
+    my $resStr = $res->as_string();
+    if ($resStr =~ /$regex/) {
+      $match = $1;
+    } else {
+      warn "Can't find match for regex '$regex' in results of NCBI EUtil query '$query'";
+    }
+  } else {
+    warn "NCBI EUtil query '$query' failed";
+  }
+  return $match;
+} # eUtilQuery
+
+sub getNcbiAssemblyReportFile() {
+  # Use a couple NCBI EUtils queries to get the GCF* accession for the assembly,
+  # then ftp the assembly report to the local directory.
+  # (see http://redmine.soe.ucsc.edu/issues/12490#note-3 )
+  # Return the local filename if successful, otherwise undef.
+  return undef unless ($refAssemblyLabel);
+  my @assemblyLabels = split(',', $refAssemblyLabel);
+  # If there are more than one, just fetch the first... if this doesn't work,
+  # then make both this and tryToMakeLiftUpFromNcbiAssemblyReportFile() work
+  # with multiple assembly report files.
+  my $assemblyLabel = $assemblyLabels[0];
+  my $ua = LWP::UserAgent->new;
+  my $eUtilBase = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils';
+  my $assemblyIdQuery = "$eUtilBase/esearch.fcgi?db=assembly&term=$assemblyLabel";
+  my $assemblyId = eUtilQuery($ua, $assemblyIdQuery, '<Id>(\d+)<');
+  if (! defined $assemblyId) {
+    return undef;
+  }
+  my $summaryQuery = "$eUtilBase/esummary.fcgi?db=assembly&id=$assemblyId";
+  my $gcfAcc = eUtilQuery($ua, $summaryQuery, '<AssemblyAccession>([\w.]+)<');
+  my $assemblyReportFile = "$gcfAcc.assembly.txt";
+  my $assemblyReportUrl = 'ftp://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/All/' .
+    $assemblyReportFile;
+  my $ftpCmd = "$wget $assemblyReportUrl";
+  HgAutomate::verbose(1, "# $ftpCmd\n");
+  if (system($ftpCmd) == 0) {
+    return $assemblyReportFile;
+  } else {
+    warn "Command failed:\n$ftpCmd\n";
+  }
+  return undef;
+} # getNcbiAssemblyReportFile
 
 sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
   # For missing contigs described in list-of-lists $missingInfo, try to find a mapping in
@@ -642,6 +698,9 @@ sub tryToMakeLiftUp {
   if ($missingCount > 0) {
     # If we didn't find liftUp info for some contigs in ContigInfo, look in ncbiAssemblyReportFile
     # if given:
+    if (! $ncbiAssemblyReportFile) {
+      $ncbiAssemblyReportFile = getNcbiAssemblyReportFile();
+    }
     if ($ncbiAssemblyReportFile) {
       (my $thisLiftUpCount, $missingInfo) =
 	&tryToMakeLiftUpFromNcbiAssemblyReportFile($liftUpFile, \%chromSizes, $missingInfo);
@@ -710,8 +769,17 @@ sub checkSequenceNames {
 *** They are listed in $runDir/dbSnpContigsNotInUcsc.txt
 $ContigInfoLiftUp
 *** You must account for all $badContigCount contig_acc values in $CONFIG,
-*** in the liftUp file and/or ignoreDbSnpContigsFile.
-*** Then run again with -continue=loadDbSnp .
+*** using the liftUp and/or ignoreDbSnpContigsFile settings (see -help output).
+";
+    if ($ncbiAssemblyReportFile) {
+      $msg .=
+"*** Check the auto-generated suggested.lft to see if it covers all
+*** $badContigCount contigs; if it does, add 'liftUp suggested.lft' to $CONFIG.
+";
+    }
+    $msg .=
+"*** Then run again with -continue=loadDbSnp .
+
 ";
     if (! $ncbiAssemblyReportFile) {
       $msg .= "
@@ -733,9 +801,13 @@ sub loadDbSnp {
   my @rejectLabels = &checkAssemblySpec();
   my $runDir = "$buildDir/$commonName";
   # If liftUp is a relative path, prepend $runDir/
-  $liftUp = "$runDir/$liftUp" if ($liftUp !~ /^\//);
+  if ($liftUp && $liftUp !~ /^\//) {
+    $liftUp = "$runDir/$liftUp";
+  }
   # Likewise for $ignoreDbSnpContigsFile:
-  $ignoreDbSnpContigsFile = "$runDir/$ignoreDbSnpContigsFile" if ($ignoreDbSnpContigsFile !~ /^\//);
+  if ($ignoreDbSnpContigsFile && $ignoreDbSnpContigsFile !~ /^\//) {
+    $ignoreDbSnpContigsFile = "$runDir/$ignoreDbSnpContigsFile";
+  }
   # Prepare grep -v statements to exclude assembly labels or contigs if specified:
   my $grepOutLabels = @rejectLabels ? "| egrep -vw '(" . join('|', @rejectLabels) . ")' " : "";
   my $grepOutContigs = "";

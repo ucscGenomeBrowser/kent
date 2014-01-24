@@ -1631,27 +1631,36 @@ if (sameString("transparent", udc->protocol))
 return udc->updateTime;
 }
 
-#ifdef PROGRESS_METER
-off_t remoteFileSize(char *url)
-/* fetch remote file size from given URL */
+off_t udcFileSize(char *url)
+/* fetch file size from given URL or local path 
+ * returns -1 if not found. */
 {
-off_t answer = 0;
+if (udcIsLocal(url))
+    return fileSize(url);
+
+// don't go to the network if we can avoid it
+int cacheSize = udcSizeFromCache(url, NULL);
+if (cacheSize!=-1)
+    return cacheSize;
+
+off_t ret = -1;
 struct udcRemoteFileInfo info;
 
 if (startsWith("http://",url) || startsWith("https://",url))
     {
     if (udcInfoViaHttp(url, &info))
-	answer = info.size;
+	ret = info.size;
     }
 else if (startsWith("ftp://",url))
     {
     if (udcInfoViaFtp(url, &info))
-	answer = info.size;
+	ret = info.size;
     }
+else
+    errAbort("udc/udcFileSize: invalid protocol for url %s, can only do http/https/ftp", url);
 
-return answer;
+return ret;
 }
-#endif
 
 boolean udcIsLocal(char *url) 
 /* return true if file is not a http or ftp file, just a local file */
@@ -1662,4 +1671,10 @@ udcParseUrl(url, &protocol, &afterProtocol, &colon);
 freez(&protocol);
 freez(&afterProtocol);
 return colon==NULL;
+}
+
+boolean udcExists(char *url)
+/* return true if a local or remote file exists */
+{
+return udcFileSize(url)!=-1;
 }

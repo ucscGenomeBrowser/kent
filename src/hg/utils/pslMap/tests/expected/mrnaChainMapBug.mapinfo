@@ -1,2 +1,0 @@
-#srcQName	srcQStart	srcQEnd	srcQSize	srcTName	srcTStart	srcTEnd	srcStrand	srcAligned	mappingQName	mappingQStart	mappingQEnd	mappingTName	mappingTStart	mappingTEnd	mappingStrand	mappingId	mappedQName	mappedQStart	mappedQEnd	mappedTName	mappedTStart	mappedTEnd	mappedStrand	mappedAligned	qStartTrunc	qEndTrunc
-NM_001267594	0	4684	4684	chr12	48436680	48500091	-	4684	chr12	199339	133817810	chr11	69215	134983538	+	6	NM_001267594	0	4684	chr11	45239515	45300371	-	3920	0	0

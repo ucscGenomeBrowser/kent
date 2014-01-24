@@ -22,5 +22,6 @@ table pubsBlatPsl
     lstring blockSizes;   "Size of each block"
     lstring qStarts;      "Start of each block in query."
     lstring tStarts;      "Start of each block in target."
+    string tSeqType;      "types of matching sequence db: g=genome, c=cdna, p=protein (comma-sep)"
     bigint articleId;     "articleId of article in hgFixed.pubsBingArticle"
     )

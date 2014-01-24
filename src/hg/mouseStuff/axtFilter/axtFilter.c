@@ -17,12 +17,12 @@ errAbort(
   "   -q=chr1,chr2 - restrict query side sequence to those named\n"
   "   -notQ=chr1,chr2 - restrict query side sequence to those not named\n"
   "   -notQ_random - restrict query side sequence, no *_random to be used\n"
-  "   -notQ_hap - restrict query side sequence, no *_hap to be used\n"
+  "   -notQ_hap - restrict query side sequence, no *_hap|*_alt to be used\n"
   "   -t=chr1,chr2 - restrict target side sequence to those named\n"
   "   -notT=chr1,chr2 - restrict target side sequence to those not named\n"
   "   -notT_random - restrict target side sequence, no *_random to be used\n"
   "   -notT_anyRandom - restrict target side sequence, no *_random/chrUn/NA/U\n"
-  "   -notT_hap - restrict target side sequence, no *_hap to be used\n"
+  "   -notT_hap - restrict target side sequence, no *_hap|*_hap to be used\n"
   "   -minScore=N - restrict to those scoring at least N\n"
   "   -maxScore=N - restrict to those scoring less than N\n"
   "   -qStartMin=N - restrict to those with qStart at least N\n"
@@ -108,7 +108,7 @@ for (i=0; i<inCount; ++i)
 	    writeIt = FALSE;
 	if (notQ_random && endsWith(axt->qName, "_random"))
 	    writeIt = FALSE;
-	if (notQ_hap && stringIn("_hap",axt->qName))
+	if (notQ_hap && haplotype(axt->qName))
 	    writeIt = FALSE;
 	if (notT_random && endsWith(axt->tName, "_random"))
 	    writeIt = FALSE;
@@ -117,7 +117,7 @@ for (i=0; i<inCount; ++i)
 			       sameWord("chrNA", axt->tName) || /* danRer */
 			       sameWord("chrU", axt->tName) ))  /* dm */
 	    writeIt = FALSE;
-	if (notT_hap && stringIn("_hap",axt->tName))
+	if (notT_hap && haplotype(axt->tName))
 	    writeIt = FALSE;
 	if (tHash != NULL && !hashLookup(tHash, axt->tName))
 	    writeIt = FALSE;

@@ -2488,9 +2488,22 @@ hFreeConn(&conn);
 
 static void factorSourceUi(char *db, struct trackDb *tdb)
 {
-printf("<BR><B>Cell Abbreviations:</B><BR>\n");
+if (trackDbSetting(tdb, "motifTable") != NULL)
+    {
+    char varName[64];
+    printf("<BR><B>Highlight motifs: </B> ");
+    safef(varName, sizeof(varName), "%s.highlightMotifs", tdb->track);
+    cartMakeCheckBox(cart, varName, trackDbSettingClosestToHomeOn(tdb, "motifDrawDefault"));
+    }
+
+puts("<P></P>");
+puts("<TABLE>");
+jsBeginCollapsibleSectionFontSize(cart, tdb->track, "cellSources", "Cell Abbreviations", TRUE, "medium");
+//printf("<BR><B>Cell Abbreviations:</B><BR>\n");
 struct sqlConnection *conn = hAllocConn(db);
 hPrintFactorSourceAbbrevTable(conn, tdb);
+jsEndCollapsibleSection();
+puts("</TABLE>");
 hFreeConn(&conn);
 }
 

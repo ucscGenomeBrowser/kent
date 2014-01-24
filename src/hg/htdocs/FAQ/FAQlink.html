@@ -25,8 +25,8 @@
                 <TR><TD>&nbsp;</TD><TD>
 		<UL>
                 <LI><A HREF="#link1">Linking to the Genome Browser from another software application</A>
-                <LI><A HREF="#link3">Linking to the browser at the
-position of a knownCanonical transcript associated with a gene symbol</A>
+                <LI><A HREF="#link3">Linking to the browser at the position of a knownCanonical 
+		transcript associated with a gene symbol</A>
                 <LI><A HREF="#link2">The <em>hgsid</em> parameter</A>
                 <LI><A HREF="#link4">Creating a custom URL to view specific tracks</A>
 		</UL>
@@ -75,8 +75,8 @@ position of a knownCanonical transcript associated with a gene symbol</A>
 			This parameter defaults to the latest Genome
 			Browser assembly for that species. 
 			<LI><em>db</em> - designates a specific assembly version. 
-			For example, to refer to the July 2003 human release, you 
-			would use db=hg16. The <em>db</em> parameter takes 
+			For example, to refer to the Feb. 2009 human release, you 
+			would use db=hg19. The <em>db</em> parameter takes 
 			precedence over the <em>org</em> parameter. For a list of 
 			the db parameter values that correspond to UCSC 
 			assemblies, see the <A HREF="FAQreleases#release1">list of UCSC releases</A>.
@@ -127,12 +127,18 @@ the position of a knownCanonical transcript associated with a gene symbol</b></F
 			<A HREF="#link1">described above</A>, set the
 			position parameter to the gene symbol and add the 
 			parameter <em>singleSearch=knownCanonical</em>. For 
-			example, this link will open the Genome Browser for the 			hg18 human assembly at the position of the 
-			knownCanonical transcript associated with GABRA3: 
+			example, this link will open the Genome Browser for the	hg19 human assembly 
+			at the position of the knownCanonical transcript associated with GABRA3: 
 			<BLOCKQUOTE>
-			<A
-HREF="../../../cgi-bin/hgTracks?org=human&db=hg18&singleSearch=knownCanonical&position=GABRA3"
-			TARGET=_blank>http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg18&singleSearch=knownCanonical&position=GABRA3</A>
+			<A HREF="../../../cgi-bin/hgTracks?org=human&db=hg18&singleSearch=knownCanonical&position=GABRA3"
+			TARGET=_blank>http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg19&singleSearch=knownCanonical&position=GABRA3</A>
+			</BLOCKQUOTE>
+		 	<P>
+			The following URL will open up the Genome Browser description page 
+			containing links to associated information for the above gene:
+			<BLOCKQUOTE>
+			<A HREF="../../../cgi-bin/hgGene?org=human&db=hg19&hgg_gene=GABRA3"
+			TARGET=_blank>http://genome.ucsc.edu/cgi-bin/hgGene?org=human&db=hg19&hgg_gene=GABRA3</A>
 			</BLOCKQUOTE>
 		    </TD><TD WIDTH=15></TD>
 		</TR>
@@ -181,8 +187,7 @@ HREF="../../../cgi-bin/hgTracks?org=human&db=hg18&singleSearch=knownCanonical&po
 	</TABLE>
 	</TD></TR>
     </TABLE>
-    </TD><TD WIDTH=15></TD></TR>
-</TABLE><BR>
+<BR>
 
 <!-- Content Table ========================================================== -->
 <A NAME="link4"></A>
@@ -208,14 +213,16 @@ HREF="../../../cgi-bin/hgTracks?org=human&db=hg18&singleSearch=knownCanonical&po
                     <TD>
                     <P>
                         <B><FONT COLOR="#006666">Question: </FONT></B><BR>
-                        "How can I create a custom URL to view only specific
+                        "How can I create a custom URL to view a specific subset of
                         tracks in the Genome Browser?"
                         <P>
                         <B><FONT COLOR="#006666">Response:</FONT></B><BR>
-                        Each assembly in the Genome Browser has a set of default
-                        tracks that will display unless you specifically hide them
-                        in your URL. The easiest way to create your custom URL is
-                        by creating a session after logging into your account.
+                        Each assembly in the Genome Browser will display using a default set of 
+                        tracks unless you specifically modify the track set in your URL. The 
+			easiest way to construct your custom URL is by 
+			<A HREF="../../../cgi-bin/hgLogin" TARGET=_blank>logging in</A> 
+			to your Genome Browser account and creating a 
+			<A HREF="../goldenPath/help/hgSessionHelp.html">session</A>:
                         <UL>
                         <LI>Browse to the assembly of your choice (e.g. hg19).
                         <LI>Click the &quot;hide all&quot; button. All tracks
@@ -230,26 +237,33 @@ HREF="../../../cgi-bin/hgTracks?org=human&db=hg18&singleSearch=knownCanonical&po
                             your session and URL.
                         <LI>Click the &quot;submit&quot; button.
                         <LI>Click the &quot;Browser&quot; link under &quot;My
-                            Sessions&quot; to open your session in the Browser.
-                        <LI>Your session URL should look something like the
-                            following: <BLOCKQUOTE>
-                            http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=User%20Name&hgS_otherUserSessionName=HideAllTracks</BLOCKQUOTE>
+                            Sessions&quot; to open your session in the Browser. Your session URL 
+			    should look similar to this: 
+			    <BLOCKQUOTE>
+                            http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=User%20Name&hgS_otherUserSessionName=HideAllTracks
+			    </BLOCKQUOTE>
                         <LI>To display the tracks of your choice, simply add the
-                            table names to the end of the session URL in the format
-                            &amp;[table name]=[display mode] (e.g. to add the Assembly
-                            track in full display mode, add &quot;&amp;gold=full&quot;
-                            to the end of the URL).
-                        <LI>If you don't know the table name for your track, in most cases,
-                            you can hover over either the gray bar at the left side of the
-                            Browser's graphical display or the track name in the track
-                            listing below the Browser's graphical display.  A URL will be
-                            displayed at the bottom left corner of your screen and the
-                            table name will be at the end of that URL in the format
-                            &quot;g=[table name]&quot;.
-                        <LI>A URL that displays the UCSC Genes track in pack mode and
-                            the RefSeq Genes in full mode would look something like the
-                            following: <BLOCKQUOTE>
-                            http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=User%20Name&hgS_otherUserSessionName=HideAllTracks&knownGene=pack&refGene=full</BLOCKQUOTE>
+                            names of the tables associated with the tracks to the end of the 
+			    session URL in the format &quot;&amp;[table name]=[display mode]&quot;. 
+			    For example, to add the Assembly track in full display mode, add the 
+			    table name &quot;&amp;gold=full&quot; to the end of the URL: 
+                        <BLOCKQUOTE>
+                            http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=User%20Name&hgS_otherUserSessionName=HideAllTracks&gold=full
+			</BLOCKQUOTE>
+			    If you don't know the table name for a track, in most cases you can 
+			    view it by hovering the 
+			    mouse cursor over either the gray bar to the left of the Browser's 
+		 	    graphical display or the track's name in the group listings below the 
+			    graphical display. In these cases the Browser will display a URL in the 
+			    bottom left corner of the window, ending with the table name in the 
+			    format &quot;g=[table name]&quot;.
+			</UL>
+                    	<P>
+			Here is an example of a URL that displays the UCSC Genes track in pack mode 
+			and the RefSeq Genes in full mode: 
+                        <BLOCKQUOTE>
+                            http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=User%20Name&hgS_otherUserSessionName=HideAllTracks&knownGene=pack&refGene=full
+			</BLOCKQUOTE>
                     </TD><TD WIDTH=15></TD>
                 </TR>
             </TABLE>
@@ -260,3 +274,4 @@ HREF="../../../cgi-bin/hgTracks?org=human&db=hg18&singleSearch=knownCanonical&po
     </TD><TD WIDTH=15></TD></TR>
 </TABLE>
 </BODY></HTML>
+

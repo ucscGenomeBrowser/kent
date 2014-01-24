@@ -50,7 +50,7 @@ char *where = NULL;		/* Extra selection info. */
 char *chromSizes = NULL;		/* read chrom sizes from file instead of database . */
 boolean countGaps = FALSE;	/* Count gaps in denominator? */
 boolean noRandom = FALSE;	/* Exclude _random chromosomes? */
-boolean noHap = FALSE;	/* Exclude _hap chromosomes? */
+boolean noHap = FALSE;	/* Exclude _hap|_alt chromosomes? */
 int dots = 0;	/* print dots every N chroms (scaffolds) processed */
 boolean calcEnrichment = FALSE;	/* Calculate coverage/enrichment? */
 int binSize = 500000;	/* Default bin size. */
@@ -83,7 +83,7 @@ errAbort(
   "   -not              Output negation of resulting bit set.\n"
   "   -countGaps        Count gaps in denominator\n"
   "   -noRandom         Don't include _random (or Un) chromosomes\n"
-  "   -noHap            Don't include _hap chromosomes\n"
+  "   -noHap            Don't include _hap|_alt chromosomes\n"
   "   -dots=N           Output dot every N chroms (scaffolds) processed\n"
   "   -minFeatureSize=n Don't include bits of the track that are smaller than\n"
   "                     minFeatureSize, useful for differentiating between\n"
@@ -102,6 +102,8 @@ errAbort(
   "                     table1 is in table2 than it is genome-wide.\n"
   "   '-where=some sql pattern'  Restrict to features matching some sql pattern\n"
   "You can include a '!' before a table name to negate it.\n"
+  "   To prevent your shell from interpreting the '!' you will need\n"
+  "   to use the backslash \\!, for example the gap table: \\!gap\n"
   "Some table names can be followed by modifiers such as:\n"
   "    :exon:N          Break into exons and add N to each end of each exon\n"
   "    :cds             Break into coding exons\n"
@@ -206,7 +208,7 @@ return  !((noRandom && (endsWith(name, "_random")
                         || startsWith("chrUn", name)
                         || sameWord("chrNA", name) /* danRer */
                         || sameWord("chrU", name)))  /* dm */
-          || (noHap && stringIn( "_hap", name)));
+          || (noHap && haplotype(name)));
 }
 
 void bitsToBins(Bits *bits, char *chrom, int chromSize, FILE *binFile, int binSize, int binOverlap)
