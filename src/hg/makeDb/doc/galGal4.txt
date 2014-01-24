@@ -1202,7 +1202,6 @@ TMPDIR=/dev/shm
     cut -f1-4 galGal4.animalQtl.bed | sed -e 's/-/:/;' > galGal4.animalQtl.bed4
     hgLoadBed galGal4 animalQtl galGal4.animalQtl.bed4
 
-_EOF_
 ############################################################################
 # DBSNP B138 / SNP138 (DONE 1/24/14 angie)
     # RedMine #12490
@@ -1259,58 +1258,47 @@ EOF
 #./component_localID2acc:ctg7180000923959        AADN03011213.1
 #./scaffold_localID2acc:ChrE22C19W28_E50C23_random_7180000977649 AADN03011213.1
     # OK, not as hopeful as I thought (no coord offsets).
-    # Looking at assembled_chromosomes/AGP/chrLGE22C19W28_E50C23.agp.gz,
-    # I see that chrLGE22C19W28_E50C23 is composed of a bunch of JH375* contigs, not AADN*.
-    # But looking at assembled_chromosomes/AGP/chrLGE22C19W28_E50C23.comp.agp.gz,
-    # I see that CM000123.3 (whatever that is) is composed of AADN300*... but *not*
-    # AADN03011211 (one of the unaccounted-for contigs).
-
-    # OK, I give up!  I guess the 34 unfound contigs such as AADN03011211 are just not
-    # in our assembly.
-    # galGal4/chrom.sizes doesn't have any chrLGE22C19W28_E50C23_AADN*_random but perhaps
-    # it should have, since those AADN301*'s are found in unlocalized_scaffolds.
-    # Did the '_' in chrLGE22C19W28_E50C23 throw a script off the trail??
+    # But, since AADN03011213 is associated with LGE22C19W28_E50C23 in unlocalized_scaffolds,
+    # it was in the genbank assembly.  Why not in chrom.sizes?
+    # -- because Hiram found that sequence names like chrLGE22C19W28_E50C23_AADN03011213_random
+    # would be too long (search above for "these names became too long, limit is 31 in browser").
+    # So Hiram shortened them.  Now that we know what they look like in chrom.sizes, we can
+    # generate liftUp mappings to add to suggested.lft.
     popd
 
-    # We'll just have to ignore dbSNP's mappings to those 34 contigs.
-    cut -f 2 cantLiftUpSeqNames.txt > ignoreDbSnpContigs.txt
+    # Map too-big sequence name to sequence size, sort on too-big name:
+    egrep 'chrLGE22C19W28_(N0|JH)' /hive/data/genomes/galGal4/chrom.sizes \
+    | sed -e 's/chrLGE22C19W28_/chrLGE22C19W28_E50C23_/; s/_N0/_AADN0/;' \
+    | sort > bigNameToSize
+    # Map too-big sequence name to RefSeq NW_* accession, sort on too-big name:
+    awk '{print $3 "\t" $6;}' cantLiftUpSeqNames.txt | sort > bigNameToNW
+    # Use join and sed to make some liftUp entries (and re-shorten the big names):
+    join -o 2.2,1.2,1.1,1.2 bigNameToSize bigNameToNW \
+    | sed -re 's/^/0\t/; s/ /\t/g; s/_E50C23//; s/AAD//;' \
+    > bigName.lft
+    wc -l bigName.lft
+#34 bigName.lft
+
+    # Now add our tweaked-name mappings to the auto-generated suggested.lft:
+    cat suggested.lft bigName.lft > suggestedPlus.lft
     cat >> config.ra <<EOF
-liftUp suggested.lft
-ignoreDbSnpContigsFile ignoreDbSnpContigs.txt
+liftUp suggestedPlus.lft
 EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
     tail -f do.log
-    # Script stopped with mysql errors when loading snp128Seq:
-#load of snp138Seq did not go as planned: 9405190 record(s), 772 row(s) skipped, 0 warning(s) loading /dev/stdin
-    # OK, there are some duplicated IDs:
-    zcat snp138Seq.tab.gz | cut -f 1 | sort > t1
-    uniq t1 > t2
-    wc -l t1 t2
-#  9405190 t1
-#  9404418 t2
-    # No problem, paste in the last few commands in load.csh:
-    # Put in a link where one would expect to find the track build dir...
-    if (-l /hive/data/genomes/galGal4/bed/snp138) then
-      rm /hive/data/genomes/galGal4/bed/snp138
-    endif
-    ln -s /hive/data/outside/dbSNP/138/chicken /hive/data/genomes/galGal4/bed/snp138
-
-    # Look at the breakdown of exception categories:
-    zcat snp138ExceptionDesc.tab.gz | sort -k 2n,2n >> do.log
-
-    # All done!
+# *** All done!
 
 
 ##############################################################################
-# FILTER SNP138 (DONE 1/24/14 angie)
+# FILTER SNP138 (DONE 1/27/14 angie)
     cd /hive/data/outside/dbSNP/138/chicken
     zcat snp138.bed.gz \
     | ~/kent/src/hg/utils/automation/categorizeSnps.pl
-#Mult:     188224
-#Common:   20455
+#Mult:     189438
+#Common:   20461
 #Flagged:  0
-#leftover: 9170791
-    # 20,455 SNPs out of > 9M that meet the threshold for Common... enough to warrant a
+#leftover: 9173531
+    # 20,461 SNPs out of > 9M that meet the threshold for Common... enough to warrant a
     # Common SNPs track?  Maybe; easy enough to drop it later if we decide it's too sparse.
     foreach f ({Mult,Common}.bed.gz)
         mv $f snp138$f
@@ -1323,7 +1311,7 @@ EOF
 
 
 ##############################################################################
-# DBSNP CODING ANNOTATIONS (138) (DONE 1/24/14 angie)
+# DBSNP CODING ANNOTATIONS (138) (DONE 1/27/14 angie)
     cd /hive/data/outside/dbSNP/138/chicken
     # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
     # Note: sort -u with the keys below is too restrictive -- we need full line uniq.

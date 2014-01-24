@@ -1343,8 +1343,8 @@ sub loadTables {
       rm /gbdb/$db/snp/$snpBase.fa
     endif
     ln -s $runDir/$snpBase.fa /gbdb/$db/snp/$snpBase.fa
-#*** We need a way to drop duplicates without halting the script!
     zcat ${snpBase}Seq.tab.gz \\
+    | sort -k1,1 -u \\
     | hgLoadSqlTab $db ${snpBase}Seq \$HOME/kent/src/hg/lib/snpSeq.sql stdin
 
     # Put in a link where one would expect to find the track build dir...
