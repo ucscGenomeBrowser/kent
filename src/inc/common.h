@@ -1466,4 +1466,8 @@ boolean dateIsOlderBy(const char *date,const char*format, time_t seconds);
 char *dateAddTo(char *date,char *format,int addYears,int addMonths,int addDays);
 /* Add years,months,days to a formatted date and returns the new date as a cloned string
 *  format is a strptime/strftime format: %F = yyyy-mm-dd */
+
+boolean haplotype(const char *name);
+/* Is this name a haplotype name ?  _hap or _alt in the name */
+
 #endif /* COMMON_H */

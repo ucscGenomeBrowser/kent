@@ -1254,6 +1254,7 @@ if ($chromBased) {
 	$chrRoot =~ s/_random$//;
     if (! $opt_noChromRoot) {
 	$chrRoot =~ s/_\w+_hap\d+//;
+	$chrRoot =~ s/_\w+_alt\d+//;
     }
     push @{$chromRoots{$chrRoot}}, $chr;
   }
