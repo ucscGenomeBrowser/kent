@@ -292,10 +292,15 @@ return FALSE;
 }
 
 struct lineFile *lineFileUdcMayOpen(char *fileOrUrl, bool zTerm)
-/* Create a line file object with an underlying UDC cache. */
+/* Create a line file object with an underlying UDC cache. NULL if not found. */
 {
 if (fileOrUrl == NULL)
     errAbort("lineFileUdcMayOpen: fileOrUrl is NULL");
+
+struct udcFile *udcFile = udcFileMayOpen(fileOrUrl, NULL);
+if (udcFile == NULL)
+    return NULL;
+
 struct lineFile *lf;
 AllocVar(lf);
 lf->fileName = cloneString(fileOrUrl);
@@ -303,9 +308,7 @@ lf->fd = -1;
 lf->bufSize = 0;
 lf->buf = NULL;
 lf->zTerm = zTerm;
-lf->udcFile = udcFileMayOpen(fileOrUrl, NULL);
-if (lf->udcFile == NULL)
-    return NULL;
+lf->udcFile = udcFile;
 return lf;
 }
 

@@ -1336,17 +1336,17 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		    udcFileClose(&wibFH);
 		    freeMem(currentFile);
 		    }
-                currentFile = hCloneRewriteFileName(wi->file);
+                currentFile = hReplaceGbdb(wi->file);
 		wibFH = udcFileMayOpen(currentFile, NULL);
-		if ((struct udcFile*)-1 == wibFH)
+		if (wibFH==NULL)
 		    errAbort("hgTracks/wigLoadPreDraw: failed to open wiggle %s", currentFile);
 		}
 	    }
 	else
 	    {
-            currentFile = hCloneRewriteFileName(wi->file);
+            currentFile = hReplaceGbdb(wi->file);
             wibFH = udcFileMayOpen(currentFile, NULL);
-	    if ((struct udcFile*)-1 == wibFH)
+	    if (wibFH==NULL)
 		errAbort("hgTracks/wigLoadPreDraw: failed to open wiggle %s", currentFile);
 	    }
 /*	Ready to draw, what do we know:

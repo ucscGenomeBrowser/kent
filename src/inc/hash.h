@@ -236,6 +236,10 @@ struct hash *hashFromSlNameList(void *list);
 /* Create a hash out of a list of slNames or any kind of list where the */
 /* first field is the next pointer and the second is the name. */
 
+struct hash *hashSetFromSlNameList(void *list);
+/* Create a hashSet (hash without values) out of a list of slNames or any kind
+ * of list where the first field is the next pointer and the second is the name. */
+
 void freeHash(struct hash **pHash);
 /* Free up hash table. */
 #define hashFree(a) freeHash(a)	/* Synonym */
