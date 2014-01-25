@@ -69,12 +69,12 @@ fi
 
 
 #  TEST 1
-oneTest "$TESTPROG hg16 plusStrand.bed.gz" "35741   192"
-oneTest "$TESTPROG hg16 minusStrand.bed.gz" "54872   199"
+oneTest "$TESTPROG hg16 plusStrand.bed.gz" "08998   212"
+oneTest "$TESTPROG hg16 minusStrand.bed.gz" "62695   231"
 
 if [ -n "${verbose}" ]; then
     C=`echo $tests | awk '{printf "%4d", $1}'`
     echo "${C}   run, $failures failed";
 fi
 
-exit 0
+exit $failures
