@@ -800,8 +800,6 @@ if (bits != NULL)
     if (retTime)
 	*retTime = bits->remoteUpdate;
     }
-else
-    warn("Can't open bitmap file %s: %s\n", bitmapFileName, strerror(errno));
 udcBitmapClose(&bits);
 return ret;
 }
