@@ -25,9 +25,10 @@ table eapSwVersion
 "A version of a particular piece of software"
     (
     uint id primary auto;  "Version id"
-    uint softwareId index; "Software this is associated with"
-    lstring "version"; "Version as carved out of program run with --version or the like"
-    char[32] md5; "md5 sum of executable file"
+    string software index; "Name field of software this is associated with"
+    lstring version; "Version as carved out of program run with --version or the like"
+    char[32] md5 index; "md5 sum of executable file"
+    lstring notes;	"Any notes on the version" 
     )
 
 table eapStep
@@ -38,6 +39,7 @@ table eapStep
     int cpusRequested; "Number of CPUs to request from job control system"
     uint inCount; "Total number of inputs"
     string[inCount] inputTypes; "List of types to go with input files"
+    string[inCount] inputFormats; "List of formats of input files"
     uint outCount; "Total number of outputs"
     string[outCount] outputNamesInTempDir; "list of all output file names in output dir"
     string[outCount] outputFormats; "list of formats of output files"
@@ -48,22 +50,22 @@ table eapStepSoftware
 "Relates steps to the software they use"
     (
     uint id primary auto; "Link id - helps give order to software within step among other things"
-    uint stepId index;	"ID of associated step"
-    uint softwareId index; "ID of associated software"
+    string step index[24];	"name of associated step"
+    string software index[24]; "name of associated software"
     )
 
 table eapStepVersion
 "All the versions of a step - a new row if any subcomponent is versioned too."
     (
-    uint id;  	  "ID of step version -used to tie together rows in edwAnalysisStepVector"
-    uint stepId;  "ID of associated step"
+    uint id primary auto;  	  "ID of step version -used to tie together rows in edwAnalysisStepVector"
+    string step;  "name of associated step"
     uint version; "Version of given step - just increases by 1 with each change"
     )
 
-table eapStepVersionSwVersion
+table eapStepSwVersion
 "A table that is queried for list of all software versions used in a step"
     (
-    uint id;	"Link id - helps give order to steps in a given version"
+    uint id primary auto;	"Link id - helps give order to steps in a given version"
     uint stepVersionId;  "Key in edwAnalysisStepVersion table"
     uint swVersionId;    "Key in edwAnalysisSwVersion table"
     )
@@ -85,8 +87,8 @@ table eapAnalysis
 table eapInput
 "Inputs to an eapAnalysis"
     (
-    bigInt id primary auto; "Input table ID"
-    uint runId index; "Which run this is associated with"
+    uint id primary auto; "Input table ID"
+    uint analysisId index; "Which eapAnalysis this is associated with"
     string name;  "Input name within step"
     uint ix;  "Inputs always potentially vectors.  Have single one with zero ix for scalar input"
     uint fileId;  "Associated file - 0 for no file, look perhaps to val below instead."
@@ -96,8 +98,8 @@ table eapInput
 table eapOutput
 "Outputs to an eapAnalysis"
     (
-    bigInt id primary auto; "Output table ID"
-    uint runId index; "Which run this is associated with"
+    uint id primary auto; "Output table ID"
+    uint analysisId index; "Which eapAnalysis this is associated with"
     string name;  "Output name within step"
     uint ix;  "Outputs always potentially vectors. Have single one with zero ix for scalar output"
     uint fileId;  "Associated file - 0 for no file, look perhaps to val below instead."

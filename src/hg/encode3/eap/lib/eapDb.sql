@@ -34,12 +34,14 @@ CREATE TABLE eapSoftware (
 #A version of a particular piece of software
 CREATE TABLE eapSwVersion (
     id int unsigned auto_increment,	# Version id
-    softwareId int unsigned default 0,	# Software this is associated with
+    software varchar(255) default '',	# Name field of software this is associated with
     version longblob,	# Version as carved out of program run with --version or the like
     md5 char(32) default 0,	# md5 sum of executable file
+    notes longblob,	# Any notes on the version
               #Indices
     PRIMARY KEY(id),
-    INDEX(softwareId)
+    INDEX(software),
+    INDEX(md5)
 );
 
 #A step in an analysis pipeline - something that takes one set of files to another
@@ -49,6 +51,7 @@ CREATE TABLE eapStep (
     cpusRequested int default 0,	# Number of CPUs to request from job control system
     inCount int unsigned default 0,	# Total number of inputs
     inputTypes longblob,	# List of types to go with input files
+    inputFormats longblob,	# List of formats of input files
     outCount int unsigned default 0,	# Total number of outputs
     outputNamesInTempDir longblob,	# list of all output file names in output dir
     outputFormats longblob,	# list of formats of output files
@@ -61,26 +64,26 @@ CREATE TABLE eapStep (
 #Relates steps to the software they use
 CREATE TABLE eapStepSoftware (
     id int unsigned auto_increment,	# Link id - helps give order to software within step among other things
-    stepId int unsigned default 0,	# ID of associated step
-    softwareId int unsigned default 0,	# ID of associated software
+    step varchar(255) default '',	# name of associated step
+    software varchar(255) default '',	# name of associated software
               #Indices
     PRIMARY KEY(id),
-    INDEX(stepId),
-    INDEX(softwareId)
+    INDEX(step(24)),
+    INDEX(software(24))
 );
 
 #All the versions of a step - a new row if any subcomponent is versioned too.
 CREATE TABLE eapStepVersion (
-    id int unsigned default 0,	# ID of step version -used to tie together rows in edwAnalysisStepVector
-    stepId int unsigned default 0,	# ID of associated step
+    id int unsigned auto_increment,	# ID of step version -used to tie together rows in edwAnalysisStepVector
+    step varchar(255) default '',	# name of associated step
     version int unsigned default 0,	# Version of given step - just increases by 1 with each change
               #Indices
     PRIMARY KEY(id)
 );
 
 #A table that is queried for list of all software versions used in a step
-CREATE TABLE eapStepVersionSwVersion (
-    id int unsigned default 0,	# Link id - helps give order to steps in a given version
+CREATE TABLE eapStepSwVersion (
+    id int unsigned auto_increment,	# Link id - helps give order to steps in a given version
     stepVersionId int unsigned default 0,	# Key in edwAnalysisStepVersion table
     swVersionId int unsigned default 0,	# Key in edwAnalysisSwVersion table
               #Indices
@@ -105,26 +108,26 @@ CREATE TABLE eapAnalysis (
 
 #Inputs to an eapAnalysis
 CREATE TABLE eapInput (
-    id bigint auto_increment,	# Input table ID
-    runId int unsigned default 0,	# Which run this is associated with
+    id int unsigned auto_increment,	# Input table ID
+    analysisId int unsigned default 0,	# Which eapAnalysis this is associated with
     name varchar(255) default '',	# Input name within step
     ix int unsigned default 0,	# Inputs always potentially vectors.  Have single one with zero ix for scalar input
     fileId int unsigned default 0,	# Associated file - 0 for no file, look perhaps to val below instead.
     val longblob,	# Non-file data
               #Indices
     PRIMARY KEY(id),
-    INDEX(runId)
+    INDEX(analysisId)
 );
 
 #Outputs to an eapAnalysis
 CREATE TABLE eapOutput (
-    id bigint auto_increment,	# Output table ID
-    runId int unsigned default 0,	# Which run this is associated with
+    id int unsigned auto_increment,	# Output table ID
+    analysisId int unsigned default 0,	# Which eapAnalysis this is associated with
     name varchar(255) default '',	# Output name within step
     ix int unsigned default 0,	# Outputs always potentially vectors. Have single one with zero ix for scalar output
     fileId int unsigned default 0,	# Associated file - 0 for no file, look perhaps to val below instead.
     val longblob,	# Non-file data
               #Indices
     PRIMARY KEY(id),
-    INDEX(runId)
+    INDEX(analysisId)
 );

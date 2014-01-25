@@ -354,7 +354,7 @@ fputc(lastSep,f);
 }
 
 
-char *eapSwVersionCommaSepFieldNames = "id,softwareId,version,md5";
+char *eapSwVersionCommaSepFieldNames = "id,software,version,md5,notes";
 
 void eapSwVersionStaticLoad(char **row, struct eapSwVersion *ret)
 /* Load a row from eapSwVersion table into ret.  The contents of ret will
@@ -362,9 +362,10 @@ void eapSwVersionStaticLoad(char **row, struct eapSwVersion *ret)
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->softwareId = sqlUnsigned(row[1]);
+ret->software = row[1];
 ret->version = row[2];
 safecpy(ret->md5, sizeof(ret->md5), row[3]);
+ret->notes = row[4];
 }
 
 struct eapSwVersion *eapSwVersionLoadByQuery(struct sqlConnection *conn, char *query)
@@ -397,8 +398,8 @@ void eapSwVersionSaveToDb(struct sqlConnection *conn, struct eapSwVersion *el, c
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s')", 
-	tableName,  el->id,  el->softwareId,  el->version,  el->md5);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s')", 
+	tableName,  el->id,  el->software,  el->version,  el->md5,  el->notes);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -411,9 +412,10 @@ struct eapSwVersion *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->softwareId = sqlUnsigned(row[1]);
+ret->software = cloneString(row[1]);
 ret->version = cloneString(row[2]);
 safecpy(ret->md5, sizeof(ret->md5), row[3]);
+ret->notes = cloneString(row[4]);
 return ret;
 }
 
@@ -423,7 +425,7 @@ struct eapSwVersion *eapSwVersionLoadAll(char *fileName)
 {
 struct eapSwVersion *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -441,7 +443,7 @@ struct eapSwVersion *eapSwVersionLoadAllByChar(char *fileName, char chopper)
 {
 struct eapSwVersion *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -463,9 +465,10 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
-ret->softwareId = sqlUnsignedComma(&s);
+ret->software = sqlStringComma(&s);
 ret->version = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->md5, sizeof(ret->md5));
+ret->notes = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -477,7 +480,9 @@ void eapSwVersionFree(struct eapSwVersion **pEl)
 struct eapSwVersion *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->software);
 freeMem(el->version);
+freeMem(el->notes);
 freez(pEl);
 }
 
@@ -499,7 +504,9 @@ void eapSwVersionOutput(struct eapSwVersion *el, FILE *f, char sep, char lastSep
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
-fprintf(f, "%u", el->softwareId);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->software);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->version);
@@ -508,11 +515,15 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->md5);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->notes);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
 
-char *eapStepCommaSepFieldNames = "id,name,cpusRequested,inCount,inputTypes,outCount,outputNamesInTempDir,outputFormats,outputTypes";
+char *eapStepCommaSepFieldNames = "id,name,cpusRequested,inCount,inputTypes,inputFormats,outCount,outputNamesInTempDir,outputFormats,outputTypes";
 
 struct eapStep *eapStepLoadByQuery(struct sqlConnection *conn, char *query)
 /* Load all eapStep from table that satisfy the query given.  
@@ -544,16 +555,18 @@ void eapStepSaveToDb(struct sqlConnection *conn, struct eapStep *el, char *table
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-char  *inputTypesArray, *outputNamesInTempDirArray, *outputFormatsArray, *outputTypesArray;
+char  *inputTypesArray, *inputFormatsArray, *outputNamesInTempDirArray, *outputFormatsArray, *outputTypesArray;
 inputTypesArray = sqlStringArrayToString(el->inputTypes, el->inCount);
+inputFormatsArray = sqlStringArrayToString(el->inputFormats, el->inCount);
 outputNamesInTempDirArray = sqlStringArrayToString(el->outputNamesInTempDir, el->outCount);
 outputFormatsArray = sqlStringArrayToString(el->outputFormats, el->outCount);
 outputTypesArray = sqlStringArrayToString(el->outputTypes, el->outCount);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%d,%u,'%s',%u,'%s','%s','%s')", 
-	tableName,  el->id,  el->name,  el->cpusRequested,  el->inCount,  inputTypesArray ,  el->outCount,  outputNamesInTempDirArray ,  outputFormatsArray ,  outputTypesArray );
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%d,%u,'%s','%s',%u,'%s','%s','%s')", 
+	tableName,  el->id,  el->name,  el->cpusRequested,  el->inCount,  inputTypesArray ,  inputFormatsArray ,  el->outCount,  outputNamesInTempDirArray ,  outputFormatsArray ,  outputTypesArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&inputTypesArray);
+freez(&inputFormatsArray);
 freez(&outputNamesInTempDirArray);
 freez(&outputFormatsArray);
 freez(&outputTypesArray);
@@ -567,7 +580,7 @@ struct eapStep *ret;
 
 AllocVar(ret);
 ret->inCount = sqlUnsigned(row[3]);
-ret->outCount = sqlUnsigned(row[5]);
+ret->outCount = sqlUnsigned(row[6]);
 ret->id = sqlUnsigned(row[0]);
 ret->name = cloneString(row[1]);
 ret->cpusRequested = sqlSigned(row[2]);
@@ -578,17 +591,22 @@ assert(sizeOne == ret->inCount);
 }
 {
 int sizeOne;
-sqlStringDynamicArray(row[6], &ret->outputNamesInTempDir, &sizeOne);
+sqlStringDynamicArray(row[5], &ret->inputFormats, &sizeOne);
+assert(sizeOne == ret->inCount);
+}
+{
+int sizeOne;
+sqlStringDynamicArray(row[7], &ret->outputNamesInTempDir, &sizeOne);
 assert(sizeOne == ret->outCount);
 }
 {
 int sizeOne;
-sqlStringDynamicArray(row[7], &ret->outputFormats, &sizeOne);
+sqlStringDynamicArray(row[8], &ret->outputFormats, &sizeOne);
 assert(sizeOne == ret->outCount);
 }
 {
 int sizeOne;
-sqlStringDynamicArray(row[8], &ret->outputTypes, &sizeOne);
+sqlStringDynamicArray(row[9], &ret->outputTypes, &sizeOne);
 assert(sizeOne == ret->outCount);
 }
 return ret;
@@ -600,7 +618,7 @@ struct eapStep *eapStepLoadAll(char *fileName)
 {
 struct eapStep *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -618,7 +636,7 @@ struct eapStep *eapStepLoadAllByChar(char *fileName, char chopper)
 {
 struct eapStep *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -650,6 +668,17 @@ AllocArray(ret->inputTypes, ret->inCount);
 for (i=0; i<ret->inCount; ++i)
     {
     ret->inputTypes[i] = sqlStringComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->inputFormats, ret->inCount);
+for (i=0; i<ret->inCount; ++i)
+    {
+    ret->inputFormats[i] = sqlStringComma(&s);
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
@@ -704,6 +733,10 @@ freeMem(el->name);
 if (el->inputTypes != NULL)
     freeMem(el->inputTypes[0]);
 freeMem(el->inputTypes);
+/* All strings in inputFormats are allocated at once, so only need to free first. */
+if (el->inputFormats != NULL)
+    freeMem(el->inputFormats[0]);
+freeMem(el->inputFormats);
 /* All strings in outputNamesInTempDir are allocated at once, so only need to free first. */
 if (el->outputNamesInTempDir != NULL)
     freeMem(el->outputNamesInTempDir[0]);
@@ -758,6 +791,19 @@ for (i=0; i<el->inCount; ++i)
 if (sep == ',') fputc('}',f);
 }
 fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->inCount; ++i)
+    {
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->inputFormats[i]);
+    if (sep == ',') fputc('"',f);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
 fprintf(f, "%u", el->outCount);
 fputc(sep,f);
 {
@@ -802,7 +848,7 @@ fputc(lastSep,f);
 }
 
 
-char *eapStepSoftwareCommaSepFieldNames = "id,stepId,softwareId";
+char *eapStepSoftwareCommaSepFieldNames = "id,step,software";
 
 void eapStepSoftwareStaticLoad(char **row, struct eapStepSoftware *ret)
 /* Load a row from eapStepSoftware table into ret.  The contents of ret will
@@ -810,8 +856,8 @@ void eapStepSoftwareStaticLoad(char **row, struct eapStepSoftware *ret)
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->stepId = sqlUnsigned(row[1]);
-ret->softwareId = sqlUnsigned(row[2]);
+ret->step = row[1];
+ret->software = row[2];
 }
 
 struct eapStepSoftware *eapStepSoftwareLoadByQuery(struct sqlConnection *conn, char *query)
@@ -844,8 +890,8 @@ void eapStepSoftwareSaveToDb(struct sqlConnection *conn, struct eapStepSoftware 
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u)", 
-	tableName,  el->id,  el->stepId,  el->softwareId);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s')", 
+	tableName,  el->id,  el->step,  el->software);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -858,8 +904,8 @@ struct eapStepSoftware *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->stepId = sqlUnsigned(row[1]);
-ret->softwareId = sqlUnsigned(row[2]);
+ret->step = cloneString(row[1]);
+ret->software = cloneString(row[2]);
 return ret;
 }
 
@@ -909,8 +955,8 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
-ret->stepId = sqlUnsignedComma(&s);
-ret->softwareId = sqlUnsignedComma(&s);
+ret->step = sqlStringComma(&s);
+ret->software = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -922,6 +968,8 @@ void eapStepSoftwareFree(struct eapStepSoftware **pEl)
 struct eapStepSoftware *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->step);
+freeMem(el->software);
 freez(pEl);
 }
 
@@ -943,14 +991,18 @@ void eapStepSoftwareOutput(struct eapStepSoftware *el, FILE *f, char sep, char l
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
-fprintf(f, "%u", el->stepId);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->step);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->softwareId);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->software);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
 
-char *eapStepVersionCommaSepFieldNames = "id,stepId,version";
+char *eapStepVersionCommaSepFieldNames = "id,step,version";
 
 void eapStepVersionStaticLoad(char **row, struct eapStepVersion *ret)
 /* Load a row from eapStepVersion table into ret.  The contents of ret will
@@ -958,7 +1010,7 @@ void eapStepVersionStaticLoad(char **row, struct eapStepVersion *ret)
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->stepId = sqlUnsigned(row[1]);
+ret->step = row[1];
 ret->version = sqlUnsigned(row[2]);
 }
 
@@ -992,8 +1044,8 @@ void eapStepVersionSaveToDb(struct sqlConnection *conn, struct eapStepVersion *e
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u)", 
-	tableName,  el->id,  el->stepId,  el->version);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u)", 
+	tableName,  el->id,  el->step,  el->version);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1006,7 +1058,7 @@ struct eapStepVersion *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->stepId = sqlUnsigned(row[1]);
+ret->step = cloneString(row[1]);
 ret->version = sqlUnsigned(row[2]);
 return ret;
 }
@@ -1057,7 +1109,7 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
-ret->stepId = sqlUnsignedComma(&s);
+ret->step = sqlStringComma(&s);
 ret->version = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
@@ -1070,6 +1122,7 @@ void eapStepVersionFree(struct eapStepVersion **pEl)
 struct eapStepVersion *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->step);
 freez(pEl);
 }
 
@@ -1091,17 +1144,19 @@ void eapStepVersionOutput(struct eapStepVersion *el, FILE *f, char sep, char las
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
-fprintf(f, "%u", el->stepId);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->step);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->version);
 fputc(lastSep,f);
 }
 
 
-char *eapStepVersionSwVersionCommaSepFieldNames = "id,stepVersionId,swVersionId";
+char *eapStepSwVersionCommaSepFieldNames = "id,stepVersionId,swVersionId";
 
-void eapStepVersionSwVersionStaticLoad(char **row, struct eapStepVersionSwVersion *ret)
-/* Load a row from eapStepVersionSwVersion table into ret.  The contents of ret will
+void eapStepSwVersionStaticLoad(char **row, struct eapStepSwVersion *ret)
+/* Load a row from eapStepSwVersion table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
@@ -1110,21 +1165,21 @@ ret->stepVersionId = sqlUnsigned(row[1]);
 ret->swVersionId = sqlUnsigned(row[2]);
 }
 
-struct eapStepVersionSwVersion *eapStepVersionSwVersionLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all eapStepVersionSwVersion from table that satisfy the query given.  
+struct eapStepSwVersion *eapStepSwVersionLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all eapStepSwVersion from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
  * anotherTable.something'.
- * Dispose of this with eapStepVersionSwVersionFreeList(). */
+ * Dispose of this with eapStepSwVersionFreeList(). */
 {
-struct eapStepVersionSwVersion *list = NULL, *el;
+struct eapStepSwVersion *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = eapStepVersionSwVersionLoad(row);
+    el = eapStepSwVersionLoad(row);
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -1132,8 +1187,8 @@ sqlFreeResult(&sr);
 return list;
 }
 
-void eapStepVersionSwVersionSaveToDb(struct sqlConnection *conn, struct eapStepVersionSwVersion *el, char *tableName, int updateSize)
-/* Save eapStepVersionSwVersion as a row to the table specified by tableName. 
+void eapStepSwVersionSaveToDb(struct sqlConnection *conn, struct eapStepSwVersion *el, char *tableName, int updateSize)
+/* Save eapStepSwVersion as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
@@ -1146,11 +1201,11 @@ sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-struct eapStepVersionSwVersion *eapStepVersionSwVersionLoad(char **row)
-/* Load a eapStepVersionSwVersion from row fetched with select * from eapStepVersionSwVersion
- * from database.  Dispose of this with eapStepVersionSwVersionFree(). */
+struct eapStepSwVersion *eapStepSwVersionLoad(char **row)
+/* Load a eapStepSwVersion from row fetched with select * from eapStepSwVersion
+ * from database.  Dispose of this with eapStepSwVersionFree(). */
 {
-struct eapStepVersionSwVersion *ret;
+struct eapStepSwVersion *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
@@ -1159,17 +1214,17 @@ ret->swVersionId = sqlUnsigned(row[2]);
 return ret;
 }
 
-struct eapStepVersionSwVersion *eapStepVersionSwVersionLoadAll(char *fileName) 
-/* Load all eapStepVersionSwVersion from a whitespace-separated file.
- * Dispose of this with eapStepVersionSwVersionFreeList(). */
+struct eapStepSwVersion *eapStepSwVersionLoadAll(char *fileName) 
+/* Load all eapStepSwVersion from a whitespace-separated file.
+ * Dispose of this with eapStepSwVersionFreeList(). */
 {
-struct eapStepVersionSwVersion *list = NULL, *el;
+struct eapStepSwVersion *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[3];
 
 while (lineFileRow(lf, row))
     {
-    el = eapStepVersionSwVersionLoad(row);
+    el = eapStepSwVersionLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -1177,17 +1232,17 @@ slReverse(&list);
 return list;
 }
 
-struct eapStepVersionSwVersion *eapStepVersionSwVersionLoadAllByChar(char *fileName, char chopper) 
-/* Load all eapStepVersionSwVersion from a chopper separated file.
- * Dispose of this with eapStepVersionSwVersionFreeList(). */
+struct eapStepSwVersion *eapStepSwVersionLoadAllByChar(char *fileName, char chopper) 
+/* Load all eapStepSwVersion from a chopper separated file.
+ * Dispose of this with eapStepSwVersionFreeList(). */
 {
-struct eapStepVersionSwVersion *list = NULL, *el;
+struct eapStepSwVersion *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[3];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = eapStepVersionSwVersionLoad(row);
+    el = eapStepSwVersionLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -1195,10 +1250,10 @@ slReverse(&list);
 return list;
 }
 
-struct eapStepVersionSwVersion *eapStepVersionSwVersionCommaIn(char **pS, struct eapStepVersionSwVersion *ret)
-/* Create a eapStepVersionSwVersion out of a comma separated string. 
+struct eapStepSwVersion *eapStepSwVersionCommaIn(char **pS, struct eapStepSwVersion *ret)
+/* Create a eapStepSwVersion out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new eapStepVersionSwVersion */
+ * return a new eapStepSwVersion */
 {
 char *s = *pS;
 
@@ -1211,31 +1266,31 @@ ret->swVersionId = sqlUnsignedComma(&s);
 return ret;
 }
 
-void eapStepVersionSwVersionFree(struct eapStepVersionSwVersion **pEl)
-/* Free a single dynamically allocated eapStepVersionSwVersion such as created
- * with eapStepVersionSwVersionLoad(). */
+void eapStepSwVersionFree(struct eapStepSwVersion **pEl)
+/* Free a single dynamically allocated eapStepSwVersion such as created
+ * with eapStepSwVersionLoad(). */
 {
-struct eapStepVersionSwVersion *el;
+struct eapStepSwVersion *el;
 
 if ((el = *pEl) == NULL) return;
 freez(pEl);
 }
 
-void eapStepVersionSwVersionFreeList(struct eapStepVersionSwVersion **pList)
-/* Free a list of dynamically allocated eapStepVersionSwVersion's */
+void eapStepSwVersionFreeList(struct eapStepSwVersion **pList)
+/* Free a list of dynamically allocated eapStepSwVersion's */
 {
-struct eapStepVersionSwVersion *el, *next;
+struct eapStepSwVersion *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    eapStepVersionSwVersionFree(&el);
+    eapStepSwVersionFree(&el);
     }
 *pList = NULL;
 }
 
-void eapStepVersionSwVersionOutput(struct eapStepVersionSwVersion *el, FILE *f, char sep, char lastSep) 
-/* Print out eapStepVersionSwVersion.  Separate fields with sep. Follow last field with lastSep. */
+void eapStepSwVersionOutput(struct eapStepSwVersion *el, FILE *f, char sep, char lastSep) 
+/* Print out eapStepSwVersion.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
@@ -1435,15 +1490,15 @@ fputc(lastSep,f);
 }
 
 
-char *eapInputCommaSepFieldNames = "id,runId,name,ix,fileId,val";
+char *eapInputCommaSepFieldNames = "id,analysisId,name,ix,fileId,val";
 
 void eapInputStaticLoad(char **row, struct eapInput *ret)
 /* Load a row from eapInput table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->id = sqlLongLong(row[0]);
-ret->runId = sqlUnsigned(row[1]);
+ret->id = sqlUnsigned(row[0]);
+ret->analysisId = sqlUnsigned(row[1]);
 ret->name = row[2];
 ret->ix = sqlUnsigned(row[3]);
 ret->fileId = sqlUnsigned(row[4]);
@@ -1480,8 +1535,8 @@ void eapInputSaveToDb(struct sqlConnection *conn, struct eapInput *el, char *tab
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %lld,%u,'%s',%u,%u,'%s')", 
-	tableName,  el->id,  el->runId,  el->name,  el->ix,  el->fileId,  el->val);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%u,%u,'%s')", 
+	tableName,  el->id,  el->analysisId,  el->name,  el->ix,  el->fileId,  el->val);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1493,8 +1548,8 @@ struct eapInput *eapInputLoad(char **row)
 struct eapInput *ret;
 
 AllocVar(ret);
-ret->id = sqlLongLong(row[0]);
-ret->runId = sqlUnsigned(row[1]);
+ret->id = sqlUnsigned(row[0]);
+ret->analysisId = sqlUnsigned(row[1]);
 ret->name = cloneString(row[2]);
 ret->ix = sqlUnsigned(row[3]);
 ret->fileId = sqlUnsigned(row[4]);
@@ -1547,8 +1602,8 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->id = sqlLongLongComma(&s);
-ret->runId = sqlUnsignedComma(&s);
+ret->id = sqlUnsignedComma(&s);
+ret->analysisId = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->ix = sqlUnsignedComma(&s);
 ret->fileId = sqlUnsignedComma(&s);
@@ -1585,9 +1640,9 @@ for (el = *pList; el != NULL; el = next)
 void eapInputOutput(struct eapInput *el, FILE *f, char sep, char lastSep) 
 /* Print out eapInput.  Separate fields with sep. Follow last field with lastSep. */
 {
-fprintf(f, "%lld", el->id);
+fprintf(f, "%u", el->id);
 fputc(sep,f);
-fprintf(f, "%u", el->runId);
+fprintf(f, "%u", el->analysisId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
@@ -1604,15 +1659,15 @@ fputc(lastSep,f);
 }
 
 
-char *eapOutputCommaSepFieldNames = "id,runId,name,ix,fileId,val";
+char *eapOutputCommaSepFieldNames = "id,analysisId,name,ix,fileId,val";
 
 void eapOutputStaticLoad(char **row, struct eapOutput *ret)
 /* Load a row from eapOutput table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->id = sqlLongLong(row[0]);
-ret->runId = sqlUnsigned(row[1]);
+ret->id = sqlUnsigned(row[0]);
+ret->analysisId = sqlUnsigned(row[1]);
 ret->name = row[2];
 ret->ix = sqlUnsigned(row[3]);
 ret->fileId = sqlUnsigned(row[4]);
@@ -1649,8 +1704,8 @@ void eapOutputSaveToDb(struct sqlConnection *conn, struct eapOutput *el, char *t
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %lld,%u,'%s',%u,%u,'%s')", 
-	tableName,  el->id,  el->runId,  el->name,  el->ix,  el->fileId,  el->val);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%u,%u,'%s')", 
+	tableName,  el->id,  el->analysisId,  el->name,  el->ix,  el->fileId,  el->val);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1662,8 +1717,8 @@ struct eapOutput *eapOutputLoad(char **row)
 struct eapOutput *ret;
 
 AllocVar(ret);
-ret->id = sqlLongLong(row[0]);
-ret->runId = sqlUnsigned(row[1]);
+ret->id = sqlUnsigned(row[0]);
+ret->analysisId = sqlUnsigned(row[1]);
 ret->name = cloneString(row[2]);
 ret->ix = sqlUnsigned(row[3]);
 ret->fileId = sqlUnsigned(row[4]);
@@ -1716,8 +1771,8 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->id = sqlLongLongComma(&s);
-ret->runId = sqlUnsignedComma(&s);
+ret->id = sqlUnsignedComma(&s);
+ret->analysisId = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->ix = sqlUnsignedComma(&s);
 ret->fileId = sqlUnsignedComma(&s);
@@ -1754,9 +1809,9 @@ for (el = *pList; el != NULL; el = next)
 void eapOutputOutput(struct eapOutput *el, FILE *f, char sep, char lastSep) 
 /* Print out eapOutput.  Separate fields with sep. Follow last field with lastSep. */
 {
-fprintf(f, "%lld", el->id);
+fprintf(f, "%u", el->id);
 fputc(sep,f);
-fprintf(f, "%u", el->runId);
+fprintf(f, "%u", el->analysisId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);

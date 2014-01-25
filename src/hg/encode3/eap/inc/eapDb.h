@@ -148,7 +148,7 @@ void eapSoftwareOutput(struct eapSoftware *el, FILE *f, char sep, char lastSep);
 #define eapSoftwareCommaOut(el,f) eapSoftwareOutput(el,f,',',',');
 /* Print out eapSoftware as a comma separated list including final comma. */
 
-#define EAPSWVERSION_NUM_COLS 4
+#define EAPSWVERSION_NUM_COLS 5
 
 extern char *eapSwVersionCommaSepFieldNames;
 
@@ -157,9 +157,10 @@ struct eapSwVersion
     {
     struct eapSwVersion *next;  /* Next in singly linked list. */
     unsigned id;	/* Version id */
-    unsigned softwareId;	/* Software this is associated with */
+    char *software;	/* Name field of software this is associated with */
     char *version;	/* Version as carved out of program run with --version or the like */
     char md5[33];	/* md5 sum of executable file */
+    char *notes;	/* Any notes on the version */
     };
 
 void eapSwVersionStaticLoad(char **row, struct eapSwVersion *ret);
@@ -217,7 +218,7 @@ void eapSwVersionOutput(struct eapSwVersion *el, FILE *f, char sep, char lastSep
 #define eapSwVersionCommaOut(el,f) eapSwVersionOutput(el,f,',',',');
 /* Print out eapSwVersion as a comma separated list including final comma. */
 
-#define EAPSTEP_NUM_COLS 9
+#define EAPSTEP_NUM_COLS 10
 
 extern char *eapStepCommaSepFieldNames;
 
@@ -230,6 +231,7 @@ struct eapStep
     int cpusRequested;	/* Number of CPUs to request from job control system */
     unsigned inCount;	/* Total number of inputs */
     char **inputTypes;	/* List of types to go with input files */
+    char **inputFormats;	/* List of formats of input files */
     unsigned outCount;	/* Total number of outputs */
     char **outputNamesInTempDir;	/* list of all output file names in output dir */
     char **outputFormats;	/* list of formats of output files */
@@ -296,8 +298,8 @@ struct eapStepSoftware
     {
     struct eapStepSoftware *next;  /* Next in singly linked list. */
     unsigned id;	/* Link id - helps give order to software within step among other things */
-    unsigned stepId;	/* ID of associated step */
-    unsigned softwareId;	/* ID of associated software */
+    char *step;	/* name of associated step */
+    char *software;	/* name of associated software */
     };
 
 void eapStepSoftwareStaticLoad(char **row, struct eapStepSoftware *ret);
@@ -364,7 +366,7 @@ struct eapStepVersion
     {
     struct eapStepVersion *next;  /* Next in singly linked list. */
     unsigned id;	/* ID of step version -used to tie together rows in edwAnalysisStepVector */
-    unsigned stepId;	/* ID of associated step */
+    char *step;	/* name of associated step */
     unsigned version;	/* Version of given step - just increases by 1 with each change */
     };
 
@@ -423,73 +425,73 @@ void eapStepVersionOutput(struct eapStepVersion *el, FILE *f, char sep, char las
 #define eapStepVersionCommaOut(el,f) eapStepVersionOutput(el,f,',',',');
 /* Print out eapStepVersion as a comma separated list including final comma. */
 
-#define EAPSTEPVERSIONSWVERSION_NUM_COLS 3
+#define EAPSTEPSWVERSION_NUM_COLS 3
 
-extern char *eapStepVersionSwVersionCommaSepFieldNames;
+extern char *eapStepSwVersionCommaSepFieldNames;
 
-struct eapStepVersionSwVersion
+struct eapStepSwVersion
 /* A table that is queried for list of all software versions used in a step */
     {
-    struct eapStepVersionSwVersion *next;  /* Next in singly linked list. */
+    struct eapStepSwVersion *next;  /* Next in singly linked list. */
     unsigned id;	/* Link id - helps give order to steps in a given version */
     unsigned stepVersionId;	/* Key in edwAnalysisStepVersion table */
     unsigned swVersionId;	/* Key in edwAnalysisSwVersion table */
     };
 
-void eapStepVersionSwVersionStaticLoad(char **row, struct eapStepVersionSwVersion *ret);
-/* Load a row from eapStepVersionSwVersion table into ret.  The contents of ret will
+void eapStepSwVersionStaticLoad(char **row, struct eapStepSwVersion *ret);
+/* Load a row from eapStepSwVersion table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct eapStepVersionSwVersion *eapStepVersionSwVersionLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all eapStepVersionSwVersion from table that satisfy the query given.  
+struct eapStepSwVersion *eapStepSwVersionLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all eapStepSwVersion from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
  * anotherTable.something'.
- * Dispose of this with eapStepVersionSwVersionFreeList(). */
+ * Dispose of this with eapStepSwVersionFreeList(). */
 
-void eapStepVersionSwVersionSaveToDb(struct sqlConnection *conn, struct eapStepVersionSwVersion *el, char *tableName, int updateSize);
-/* Save eapStepVersionSwVersion as a row to the table specified by tableName. 
+void eapStepSwVersionSaveToDb(struct sqlConnection *conn, struct eapStepSwVersion *el, char *tableName, int updateSize);
+/* Save eapStepSwVersion as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
-struct eapStepVersionSwVersion *eapStepVersionSwVersionLoad(char **row);
-/* Load a eapStepVersionSwVersion from row fetched with select * from eapStepVersionSwVersion
- * from database.  Dispose of this with eapStepVersionSwVersionFree(). */
+struct eapStepSwVersion *eapStepSwVersionLoad(char **row);
+/* Load a eapStepSwVersion from row fetched with select * from eapStepSwVersion
+ * from database.  Dispose of this with eapStepSwVersionFree(). */
 
-struct eapStepVersionSwVersion *eapStepVersionSwVersionLoadAll(char *fileName);
-/* Load all eapStepVersionSwVersion from whitespace-separated file.
- * Dispose of this with eapStepVersionSwVersionFreeList(). */
+struct eapStepSwVersion *eapStepSwVersionLoadAll(char *fileName);
+/* Load all eapStepSwVersion from whitespace-separated file.
+ * Dispose of this with eapStepSwVersionFreeList(). */
 
-struct eapStepVersionSwVersion *eapStepVersionSwVersionLoadAllByChar(char *fileName, char chopper);
-/* Load all eapStepVersionSwVersion from chopper separated file.
- * Dispose of this with eapStepVersionSwVersionFreeList(). */
+struct eapStepSwVersion *eapStepSwVersionLoadAllByChar(char *fileName, char chopper);
+/* Load all eapStepSwVersion from chopper separated file.
+ * Dispose of this with eapStepSwVersionFreeList(). */
 
-#define eapStepVersionSwVersionLoadAllByTab(a) eapStepVersionSwVersionLoadAllByChar(a, '\t');
-/* Load all eapStepVersionSwVersion from tab separated file.
- * Dispose of this with eapStepVersionSwVersionFreeList(). */
+#define eapStepSwVersionLoadAllByTab(a) eapStepSwVersionLoadAllByChar(a, '\t');
+/* Load all eapStepSwVersion from tab separated file.
+ * Dispose of this with eapStepSwVersionFreeList(). */
 
-struct eapStepVersionSwVersion *eapStepVersionSwVersionCommaIn(char **pS, struct eapStepVersionSwVersion *ret);
-/* Create a eapStepVersionSwVersion out of a comma separated string. 
+struct eapStepSwVersion *eapStepSwVersionCommaIn(char **pS, struct eapStepSwVersion *ret);
+/* Create a eapStepSwVersion out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new eapStepVersionSwVersion */
+ * return a new eapStepSwVersion */
 
-void eapStepVersionSwVersionFree(struct eapStepVersionSwVersion **pEl);
-/* Free a single dynamically allocated eapStepVersionSwVersion such as created
- * with eapStepVersionSwVersionLoad(). */
+void eapStepSwVersionFree(struct eapStepSwVersion **pEl);
+/* Free a single dynamically allocated eapStepSwVersion such as created
+ * with eapStepSwVersionLoad(). */
 
-void eapStepVersionSwVersionFreeList(struct eapStepVersionSwVersion **pList);
-/* Free a list of dynamically allocated eapStepVersionSwVersion's */
+void eapStepSwVersionFreeList(struct eapStepSwVersion **pList);
+/* Free a list of dynamically allocated eapStepSwVersion's */
 
-void eapStepVersionSwVersionOutput(struct eapStepVersionSwVersion *el, FILE *f, char sep, char lastSep);
-/* Print out eapStepVersionSwVersion.  Separate fields with sep. Follow last field with lastSep. */
+void eapStepSwVersionOutput(struct eapStepSwVersion *el, FILE *f, char sep, char lastSep);
+/* Print out eapStepSwVersion.  Separate fields with sep. Follow last field with lastSep. */
 
-#define eapStepVersionSwVersionTabOut(el,f) eapStepVersionSwVersionOutput(el,f,'\t','\n');
-/* Print out eapStepVersionSwVersion as a line in a tab-separated file. */
+#define eapStepSwVersionTabOut(el,f) eapStepSwVersionOutput(el,f,'\t','\n');
+/* Print out eapStepSwVersion as a line in a tab-separated file. */
 
-#define eapStepVersionSwVersionCommaOut(el,f) eapStepVersionSwVersionOutput(el,f,',',',');
-/* Print out eapStepVersionSwVersion as a comma separated list including final comma. */
+#define eapStepSwVersionCommaOut(el,f) eapStepSwVersionOutput(el,f,',',',');
+/* Print out eapStepSwVersion as a comma separated list including final comma. */
 
 #define EAPANALYSIS_NUM_COLS 9
 
@@ -573,8 +575,8 @@ struct eapInput
 /* Inputs to an eapAnalysis */
     {
     struct eapInput *next;  /* Next in singly linked list. */
-    long long id;	/* Input table ID */
-    unsigned runId;	/* Which run this is associated with */
+    unsigned id;	/* Input table ID */
+    unsigned analysisId;	/* Which eapAnalysis this is associated with */
     char *name;	/* Input name within step */
     unsigned ix;	/* Inputs always potentially vectors.  Have single one with zero ix for scalar input */
     unsigned fileId;	/* Associated file - 0 for no file, look perhaps to val below instead. */
@@ -644,8 +646,8 @@ struct eapOutput
 /* Outputs to an eapAnalysis */
     {
     struct eapOutput *next;  /* Next in singly linked list. */
-    long long id;	/* Output table ID */
-    unsigned runId;	/* Which run this is associated with */
+    unsigned id;	/* Output table ID */
+    unsigned analysisId;	/* Which eapAnalysis this is associated with */
     char *name;	/* Output name within step */
     unsigned ix;	/* Outputs always potentially vectors. Have single one with zero ix for scalar output */
     unsigned fileId;	/* Associated file - 0 for no file, look perhaps to val below instead. */
