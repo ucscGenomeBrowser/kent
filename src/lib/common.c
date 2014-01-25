@@ -441,6 +441,15 @@ for (i=list;i;i=i->next)
 return NULL;
 }
 
+struct slUnsigned *slUnsignedNew(unsigned x)
+/* Return a new int. */
+{
+struct slUnsigned *a;
+AllocVar(a);
+a->val = x;
+return a;
+}
+
 static int doubleCmp(const void *va, const void *vb)
 /* Compare function to sort array of doubles. */
 {

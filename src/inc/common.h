@@ -470,6 +470,16 @@ int slIntCmpRev(const void *va, const void *vb);
 struct slInt * slIntFind(struct slInt *list, int target);
 /* Find target in slInt list or return NULL */
 
+struct slUnsigned
+/* List of unsigned */
+    {
+    struct slUnsigned *next;  /* Next in list */
+    unsigned val;	      /* Unsigned value */
+    };
+
+struct slUnsigned *slUnsignedNew(unsigned x);
+/* Return a new slUnsigned. */
+
 /******* slDouble - a double on a list *******/
 
 struct slDouble
