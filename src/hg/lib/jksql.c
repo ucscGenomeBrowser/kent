@@ -2401,8 +2401,8 @@ return to;
 }
 
 char *sqlEscapeTabFileString(const char *from)
-/* Escape a string for including in a tab seperated file. Output string
- * must be 2*strlen(from)+1 */
+/* Escape a string for including in a tab seperated file. Freez or freeMem
+ * result when done. */
 {
 int size = (strlen(from)*2) +1;
 char *to = needMem(size * sizeof(char));
