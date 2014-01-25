@@ -1,4 +1,4 @@
-/* eapAnalysisJson - Add json string to edwAnalysisRun record.. */
+/* eapAnalysisJson - Add json string to eapAnalysis record.. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -14,7 +14,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "eapAnalysisJson - Add json string to edwAnalysisRun record.\n"
+  "eapAnalysisJson - Add json string to eapAnalysis record.\n"
   "usage:\n"
   "   eapAnalysisJson analysisRunId\n"
   "options:\n"
@@ -84,54 +84,58 @@ dyStringAppendC(dy, '}');
 dyJsonEndLine(dy, isMiddle);
 }
 
-char *jsonForRun(struct sqlConnection *conn, struct edwAnalysisRun *run, 
-    struct edwFile *inputFileList, struct edwFile *outputFileList, struct edwAnalysisJob *job)
+char *jsonForRun(struct sqlConnection *conn, struct eapAnalysis *run,  struct eapStep *step,
+    struct edwFile *inputFileList, struct edwFile *outputFileList, struct eapJob *job)
 /* Generate json for run given input and output file lists. */
 {
 struct dyString *dy = dyStringNew(0);
 
 dyStringAppend(dy, "{\n");
-dyJsonString(dy, "uuid", run->uuid, TRUE);
 dyJsonNumber(dy, "start_time", job->startTime, TRUE);
 dyJsonNumber(dy, "end_time", job->endTime, TRUE);
 dyJsonString(dy, "analysis", run->analysisStep, TRUE);
-dyJsonString(dy, "configuration", run->configuration, TRUE);
 
 /* Print sw_version list */
-struct edwAnalysisStep *step = edwAnalysisStepFromName(conn, run->analysisStep);
-if (step == NULL)
-    errAbort("edwAnalysisStep named %s not found", run->analysisStep);
 dyJsonListStart(dy, "sw_version");
-int i;
-for (i=0; i<step->softwareCount; ++i)
+
+char query[512];
+sqlSafef(query, sizeof(query), 
+    "select software,version,md5 from eapStepSwVersion,eapSwVersion "
+    " where eapStepSwVersion.swVersionId = eapSwVersion.id"
+    " and eapStepSwVersion.stepVersionId='%u'"
+    , run->stepVersionId);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+boolean firstTime = TRUE;
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    char query[256];
-    sqlSafef(query, sizeof(query), 
-	"select * from edwAnalysisSoftware where name = '%s'", step->software[i]);
-    struct edwAnalysisSoftware *software = edwAnalysisSoftwareLoadByQuery(conn, query);
-    if (software == NULL)
-         errAbort("%s not found in edwAnalysisSoftware table", step->software[i]);
-    
-    dyJsonObjectStart(dy);
-    dyJsonString(dy, "software", software->name, TRUE);
-    dyJsonString(dy, "version", software->version, TRUE);
-    dyJsonString(dy, "md5", software->md5, FALSE);
-    dyJsonObjectEnd(dy, i != step->softwareCount-1);
-    edwAnalysisSoftwareFree(&software);
+    char *name = row[0], *version = row[1], *md5 = row[2];
+    if (firstTime)
+        firstTime = FALSE;
+    else
+        dyStringAppendC(dy, ',');
+    dyStringAppendC(dy, '{');
+    dyJsonString(dy, "software", name, TRUE);
+    dyJsonString(dy, "version", version, TRUE);
+    dyJsonString(dy, "md5", md5, FALSE);
+    dyStringAppendC(dy, '}');
     }
 dyJsonListEnd(dy, TRUE);
 
 /* Print input list */
 dyJsonListStart(dy, "inputs");
 struct edwFile *ef;
+int i;
 for (i=0, ef = inputFileList; ef != NULL; ef = ef->next, ++i)
     {
     dyJsonObjectStart(dy);
+    dyJsonString(dy, "type", step->inputTypes[i], TRUE);
+    dyStringAppend(dy, "\"value\": [");
     struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
     assert(vf != NULL);
-    dyJsonString(dy, "type", run->inputTypes[i], TRUE);
-    dyJsonString(dy, "value", vf->licensePlate, FALSE);
+    dyStringPrintf(dy, "\"%s\"", vf->licensePlate);
     edwValidFileFree(&vf);
+    dyStringAppend(dy, "]\n");
     dyJsonObjectEnd(dy, ef->next != NULL);
     }
 dyJsonListEnd(dy, TRUE);
@@ -141,10 +145,13 @@ dyJsonListStart(dy, "outputs");
 for (i=0, ef = outputFileList; ef != NULL; ef = ef->next, ++i)
     {
     dyJsonObjectStart(dy);
-    dyJsonString(dy, "type", run->outputTypes[i], TRUE);
+    dyJsonString(dy, "type", step->outputTypes[i], TRUE);
+    dyStringAppend(dy, "\"value\": [");
     struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
     assert(vf != NULL);
-    dyJsonString(dy, "value", vf->licensePlate, FALSE);
+    dyStringPrintf(dy, "\"%s\"", vf->licensePlate);
+    edwValidFileFree(&vf);
+    dyStringAppend(dy, "]\n");
     dyJsonObjectEnd(dy, ef->next != NULL);
     }
 dyJsonListEnd(dy, TRUE);
@@ -156,53 +163,58 @@ return dyStringCannibalize(&dy);
 }
 
 void eapAnalysisJson(unsigned analysisRunId)
-/* eapAnalysisJson - Add json string to edwAnalysisRun record.. */
+/* eapAnalysisJson - Add json string to eapAnalysis record.. */
 {
 struct sqlConnection *conn = edwConnectReadWrite();
 char query[16*1024]; // Json might get big
-safef(query, sizeof(query), "select * from edwAnalysisRun where id=%u", analysisRunId);
-struct edwAnalysisRun *run = edwAnalysisRunLoadByQuery(conn, query);
+safef(query, sizeof(query), "select * from eapAnalysis where id=%u", analysisRunId);
+struct eapAnalysis *run = eapAnalysisLoadByQuery(conn, query);
 
-if (run->outputFileCount != run->createCount)
-    errAbort("edwAnalysisRun record #%u,  createCount less than outputFileCount", run->id);
+struct eapStep *step = eapStepFromName(conn, run->analysisStep);
+if (step == NULL)
+    errAbort("eapStep named %s not found", run->analysisStep);
 
 /* Get list of input files */
-struct edwFile *inputFile, *inputFileList = NULL;
-int i;
-for (i=0; i<run->inputFileCount; ++i)
-    {
-    inputFile = edwFileFromId(conn, run->inputFileIds[i]);
-    slAddTail(&inputFileList, inputFile);
-    }
+safef(query, sizeof(query), 
+    "select edwFile.* from edwFile,eapInput where edwFile.id=eapInput.fileId "
+    " and eapInput.analysisId = %u "
+    " order by eapInput.id"
+    , analysisRunId);
+struct edwFile *inputFileList = edwFileLoadByQuery(conn, query);
 
 /* Get list of output files */
-struct edwFile *outFile, *outFileList = NULL;
+safef(query, sizeof(query), 
+    "select edwFile.* from edwFile,eapOutput where edwFile.id=eapOutput.fileId "
+    " and eapOutput.analysisId = %u "
+    " order by eapOutput.id"
+    , analysisRunId);
+struct edwFile *outFile, *outFileList = edwFileLoadByQuery(conn, query);
+
+/* Count how many outputs are validated */
 int validCount = 0;
-for (i=0; i<run->createCount; ++i)
+for (outFile = outFileList; outFile != NULL; outFile = outFile->next)
     {
-    outFile = edwFileFromId(conn, run->createFileIds[i]);
     struct edwValidFile *vf = edwValidFileFromFileId(conn, outFile->id);
     if (vf != NULL)
 	++validCount;
-    slAddTail(&outFileList, outFile);
     }
 
-if (validCount == run->createCount)
+/* If all are validated then addempt to attach json... */
+if (validCount == step->outCount)
     {
-    sqlSafef(query, sizeof(query), "select * from edwAnalysisJob where id=%u", run->jobId);
-    struct edwAnalysisJob *job = edwAnalysisJobLoadByQuery(conn, query);
-    run->jsonResult = jsonForRun(conn, run, inputFileList, outFileList, job);
+    sqlSafef(query, sizeof(query), "select * from eapJob where id=%u", run->jobId);
+    struct eapJob *job = eapJobLoadByQuery(conn, query);
+    run->jsonResult = jsonForRun(conn, run, step, inputFileList, outFileList, job);
     verbose(1, "creating json of %d characters\n", (int)strlen(run->jsonResult));
     jsonParse(run->jsonResult);  // Just for validation
-    uglyf("after parse creating json of %d characters\n", (int)strlen(run->jsonResult));
 
     sqlSafef(query, sizeof(query), 
-       "update edwAnalysisRun set jsonResult='%s' where id=%u", run->jsonResult, run->id);
+       "update eapAnalysis set jsonResult='%s' where id=%u", run->jsonResult, run->id);
     sqlUpdate(conn, query);
     }
 else
     {
-    verbose(1, "%d of %d files validated\n", validCount, run->createCount);
+    verbose(1, "%d of %d files validated\n", validCount, step->outCount);
     }
 }
 
