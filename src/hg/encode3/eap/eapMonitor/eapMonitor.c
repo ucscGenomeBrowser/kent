@@ -9,6 +9,7 @@
 #include "../../../../parasol/inc/paraMessage.h"
 #include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
 #include "../../encodeDataWarehouse/inc/edwLib.h"
+#include "eapDb.h"
 #include "eapLib.h"
 
 /* Command line variables. */
@@ -174,7 +175,7 @@ int countParaRunning(struct sqlConnection *conn, struct hash *parasolRunningHash
 int count = 0;
 char query[512];
 sqlSafef(query, sizeof(query), "select * from %s where startTime > 0 and endTime = 0", clTable);
-struct edwAnalysisJob *job, *jobList = edwAnalysisJobLoadByQuery(conn, query);
+struct eapJob *job, *jobList = eapJobLoadByQuery(conn, query);
 for (job = jobList; job != NULL; job = job->next)
     {
     char *step = eapStepFromCommandLine(job->commandLine);
@@ -240,7 +241,6 @@ for (q = qList; q != NULL; q = q->next)
     }
 int qCount = qHash->elCount;
 printf("Analysis steps:   %5d:", qCount);
-fflush(stdout);	    // ugly - just figuring out where time is used
 
 struct hash *runningHash = eapParasolRunningHash(clParaHost, NULL);
 struct sqlConnection *conn = edwConnect();
@@ -286,11 +286,13 @@ printf("Jobs queued:    %7d\n", dbJobsQueued);
 
 sqlSafef(query, sizeof(query), "select max(endTime) from %s where returnCode = 0", clTable);
 long long lastGoodTime = sqlQuickLongLong(conn, query);
-printf("Last return ok:  %6.2f hours ago\n", (double)(edwNow() - lastGoodTime)/3600);
+if (lastGoodTime > 0)
+    printf("Last return ok:  %6.2f hours ago\n", (double)(edwNow() - lastGoodTime)/3600);
 
 sqlSafef(query, sizeof(query), "select max(endTime) from %s where returnCode != 0", clTable);
 long long lastCrashTime = sqlQuickLongLong(conn, query);
-printf("Last crash:      %6.2f hours ago\n", (double)(edwNow() - lastCrashTime)/3600);
+if (lastCrashTime > 0)
+    printf("Last crash:      %6.2f hours ago\n", (double)(edwNow() - lastCrashTime)/3600);
 
 sqlSafef(query, sizeof(query), "select count(*) from %s where returnCode != 0", clTable);
 int dbJobsCrashed = sqlQuickNum(conn, query);
@@ -408,13 +410,13 @@ else
 mustRemove(tempFile);
 }
 
-struct edwAnalysisJob *edwAnalysisJobFromParasolId(struct sqlConnection *conn, char *parasolId)
+struct eapJob *eapJobFromParasolId(struct sqlConnection *conn, char *parasolId)
 /* Return job matching parasol ID if any. */
 {
 char query[256];
 sqlSafef(query, sizeof(query), "select * from %s where parasolId='%s'",
 	clTable, parasolId);
-return edwAnalysisJobLoadByQuery(conn, query);
+return eapJobLoadByQuery(conn, query);
 }
 
 struct jobResult *findJobOnList(struct jobResult *list, char *parasolId)
@@ -471,7 +473,7 @@ struct jobResult *crashed = findCrashed(parasolId);
 if (crashed != NULL)
     {
     struct sqlConnection *conn = sqlConnect(clDatabase);
-    struct edwAnalysisJob *job = edwAnalysisJobFromParasolId(conn, crashed->jobId);
+    struct eapJob *job = eapJobFromParasolId(conn, crashed->jobId);
     if (job != NULL)
 	{
 	printf("Command line: %s\n", job->commandLine);
@@ -526,9 +528,9 @@ searchForResults(eapParaQueues, NULL, &qList);
 struct sqlConnection *conn = edwConnect();
 char query[512];
 sqlSafef(query, sizeof(query), 
-    "select * from edwAnalysisJob where returnCode != 0 and endTime > %lld",
+    "select * from eapJob where returnCode != 0 and endTime > %lld",
     edwNow() - (long long)(days * 3600 * 24));
-struct edwAnalysisJob *job, *jobList = edwAnalysisJobLoadByQuery(conn, query);
+struct eapJob *job, *jobList = eapJobLoadByQuery(conn, query);
 for (job = jobList; job != NULL; job = job->next)
     {
     char *node = "n/a";
@@ -560,7 +562,7 @@ slFreeList(&lineList);
 return gotSick;
 }
 
-char *glueFromPath(char *path)
+char *stepFromPath(char *path)
 /* Given path to parasol queue, return corresponding glue script name.
  * FreeMem the results of this when done. */
 {
@@ -592,10 +594,10 @@ return cloneString(glue);
 int countRunning(struct sqlConnection *conn, struct results *q, struct hash *runningHash)
 /* Count up the number of jobs in pjobList that are associated with q */
 {
-char *glue = glueFromPath(q->pathName);
+char *glue = stepFromPath(q->pathName);
 char query[PATH_LEN*2];
 sqlSafef(query, sizeof(query), "select * from %s where startTime > 0 and endTime = 0", clTable);
-struct edwAnalysisJob *job, *jobList = edwAnalysisJobLoadByQuery(conn, query);
+struct eapJob *job, *jobList = eapJobLoadByQuery(conn, query);
 int runningCount = 0;
 for (job = jobList; job != NULL; job = job->next)
     {
@@ -614,10 +616,10 @@ freez(&glue);
 return runningCount;
 }
 
-int countWaiting(struct edwAnalysisJob *waitList, char *step)
+int countWaiting(struct eapJob *waitList, char *step)
 /* Return number of jobs on waitList belonging to step. */
 {
-struct edwAnalysisJob *job;
+struct eapJob *job;
 int count = 0;
 for (job = waitList; job != NULL; job = job->next)
     {
@@ -641,15 +643,15 @@ countParaRunning(conn, runningHash, qHash);
 slSort(&qList, resultsCmpScore);
 char query[512];
 sqlSafef(query, sizeof(query), "select * from %s where endTime = 0", clTable);
-struct edwAnalysisJob *waitList = edwAnalysisJobLoadByQuery(conn, query);
+struct eapJob *waitList = eapJobLoadByQuery(conn, query);
 
-printf("#stat crash finish run  wait results\n");
+printf("#stat crash finish run  wait step\n");
 for (q = qList; q != NULL; q = q->next)
     {
     char *code = (isSick(q) ? "sick" : "good");
     int waitCount = countWaiting(waitList, q->name);
     printf("%s %6d %6d %3d %5d %s\n", code, resultsCrashCount(q), resultsGoodFinishCount(q), 
-	    q->runningCount, waitCount - q->runningCount, q->pathName);
+	    q->runningCount, waitCount - q->runningCount, stepFromPath(q->pathName));
     }
 }
 
@@ -665,7 +667,7 @@ if (argc > 0)
 struct sqlConnection *conn = sqlConnect(clDatabase);
 char query[512];
 sqlSafef(query, sizeof(query), "select * from %s where startTime > 0 and endTime = 0", clTable);
-struct edwAnalysisJob *job, *jobList = edwAnalysisJobLoadByQuery(conn, query);
+struct eapJob *job, *jobList = eapJobLoadByQuery(conn, query);
 struct hash *jobHash = hashNew(0);
 for (job = jobList; job != NULL; job = job->next)
     hashAdd(jobHash, job->parasolId, job);
