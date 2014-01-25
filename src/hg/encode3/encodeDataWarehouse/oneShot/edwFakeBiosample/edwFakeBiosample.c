@@ -114,6 +114,8 @@ verbose(1, "Read %d from %s\n", biosampleHash->elCount, input);
 /* Process Stanford biosample list into hash */
 struct hash *stanfordAccHash = hashNew(0);  // Keyed by term, value is ENCBS #
 char *jsonText = getTextViaHttps(url, userId, password);
+if (jsonText == NULL)
+     errAbort("Couldn't get text response from %s\nUser %s, password %s\n", url, userId, password);
 struct jsonElement *jsonRoot = jsonParse(jsonText);
 char *bioListName = "@graph";
 struct jsonElement *jsonBioList = jsonMustFindNamedField(jsonRoot, "", bioListName);
