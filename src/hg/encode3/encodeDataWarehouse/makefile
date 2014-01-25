@@ -11,7 +11,6 @@ UTIL_DIRS = \
     edwAddQaContamTarget \
     edwAddQaEnrichTarget \
     edwAddSubscriber \
-    edwAnalysisAddJson \
     edwChangeFormat \
     edwCorrectFileTags \
     edwCreateUser \
