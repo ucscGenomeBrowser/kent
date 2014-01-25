@@ -41,6 +41,7 @@ for (job = jobList; job != NULL; job = job->next)
      j.startTime = job->startTime;
      j.endTime = job->endTime;
      j.stderr = sqlEscapeTabFileString(emptyForNull(job->stderr));
+     j.returnCode = job->returnCode;
      j.cpusRequested = max(1, job->cpusRequested);
      char buf[16];
      if (isEmpty(job->parasolId))
