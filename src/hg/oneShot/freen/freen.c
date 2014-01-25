@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "htmlPage.h"
+#include "sqlList.h"
 
 void usage()
 {
@@ -15,12 +16,15 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void freen(char *url)
+void freen(char *string)
 {
-int i;
-for (i=45547; i<= 45580; ++i)
-    printf(" %d", i);
-printf("\n");
+uglyf("%d ',' in %s\n", countChars(string, ','), string);
+int count = chopByChar(cloneString(string), ',', NULL, 0);
+uglyf("Count by chopByChar is %d\n", count);
+char **array;
+int arraySize;
+sqlStringDynamicArray(cloneString(string), &array, &arraySize);
+uglyf("sqlStringDynamicArray yields %d\n", arraySize);
 }
 
 
