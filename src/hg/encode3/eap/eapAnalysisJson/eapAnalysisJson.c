@@ -169,6 +169,8 @@ struct sqlConnection *conn = edwConnectReadWrite();
 char query[16*1024]; // Json might get big
 safef(query, sizeof(query), "select * from eapAnalysis where id=%u", analysisRunId);
 struct eapAnalysis *run = eapAnalysisLoadByQuery(conn, query);
+if (run == NULL)
+     return;
 
 struct eapStep *step = eapStepFromName(conn, run->analysisStep);
 if (step == NULL)
