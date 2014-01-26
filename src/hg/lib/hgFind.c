@@ -551,9 +551,10 @@ char *makeIndexPath(char *db)
 {
 /* create the pathname with the knowngene index for a db, result needs to be freed */
 char *path = needMem(PATH_LEN);
-char *gbdbLoc = cfgOptionDefault("gbdb.loc", "/gbdb/");
-safef(path, PATH_LEN, "%s%s/knownGene.ix", gbdbLoc, db);
-return path;
+safef(path, PATH_LEN, "/gbdb/%s/knownGene.ix", db);
+char *newPath = hReplaceGbdb(path);
+freez(&path);
+return newPath;
 }
 
 static boolean gotFullText(char *db)
@@ -562,16 +563,13 @@ static boolean gotFullText(char *db)
 char *indexPath = makeIndexPath(db);
 boolean result = FALSE;
 
-if (udcIsLocal(indexPath))
-    if (fileExists(indexPath))
-        result = TRUE;
-    else
-        {
-        warn("%s doesn't exist", indexPath);
-        result = FALSE;
-        }
-else
+if (udcExists(indexPath))
     result = TRUE;
+else
+    {
+    warn("%s doesn't exist", indexPath);
+    result = FALSE;
+    }
 
 freez(&indexPath);
 return result;

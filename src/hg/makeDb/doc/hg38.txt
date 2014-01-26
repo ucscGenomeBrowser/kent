@@ -2211,3 +2211,149 @@ total           5567850 5520017 5459735 5744165
 	where name="hg38";' hgcentraltest
 
 ############################################################################
+# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR LASTZ (DONE - 2014-01-21 - Hiram)
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/linSpecRep
+    cd /hive/data/genomes/hg38/bed/linSpecRep
+    #	create individual .out files from the master record in ../repeatMasker
+    mkdir splitOut
+    cat << '_EOF_' > split.csh
+#!/bin/csh -fe
+set C = $1
+head -3 ../repeatMasker/hg38.sorted.fa.out > splitOut/${C}.out
+grep "${C} " ../repeatMasker/hg38.sorted.fa.out >> splitOut/${C}.out
+'_EOF_'
+    # << happy emacs
+    chmod +x split.csh
+
+    cat << '_EOF_' > template
+#LOOP
+split.csh $(root1) {check out line+ splitOut/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # small ones first:
+    cut -f1 ../../chrom.sizes | tac > chrom.list
+    gensub2 chrom.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+# Completed: 93 of 93 jobs
+# CPU time in finished jobs:        127s       2.12m     0.04h    0.00d  0.000 y
+# IO & Wait Time:                 17154s     285.90m     4.76h    0.20d  0.001 y
+# Average job time:                 186s       3.10m     0.05h    0.00d
+# Longest finished job:             224s       3.73m     0.06h    0.00d
+# Submission to last job:           280s       4.67m     0.08h    0.00d
+
+    #	now, we can date and process each of those .out files
+    #	constructing the humanSpecific set of repeats
+    #   this means repeats found in human, and not in others
+    #   using mouse here for 'others' is good enough, a variety
+    #   of other species could be used (rat dog cow) where they all
+    #   produce the same result
+    mkdir dateRepeats
+    cd dateRepeats
+    cat << '_EOF_' > mkLSR
+#!/bin/bash
+set -beEu -o pipefail
+rm -f $1.out_mus-musculus
+ln -s ../splitOut/$1.out .
+/scratch/data/RepeatMasker/DateRepeats $1.out -query human -comp mouse
+rm $1.out
+mkdir -p ../humanSpecific
+/cluster/bin/scripts/extractRepeats 1 $1.out_mus-musculus \
+	> ../humanSpecific/$1.out.spec
+'_EOF_'
+    #	<< happy emacs
+    chmod +x mkLSR
+
+    cat << '_EOF_' > template
+#LOOP
+./mkLSR $(path1) {check out line+ ../humanSpecific/$(path1).out.spec}
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    gensub2 ../chrom.list single template jobList
+    para try ... check ... push ... etc...
+    para time
+# Completed: 455 of 455 jobs
+# CPU time in finished jobs:      13985s     233.08m     3.88h    0.16d  0.000 y
+# IO & Wait Time:                  1470s      24.50m     0.41h    0.02d  0.000 y
+# Average job time:                  34s       0.57m     0.01h    0.00d
+# Longest finished job:             111s       1.85m     0.03h    0.00d
+# Submission to last job:          1427s      23.78m     0.40h    0.02d
+
+
+    # We also need the nibs for blastz runs with lineage specific repeats
+    mkdir /hive/data/genomes/hg38/bed/nibs
+    cd /hive/data/genomes/hg38/bed/nibs
+    cut -f1 ../../chrom.sizes | while read C
+do
+    twoBitToFa -seq=${C} ../../hg38.2bit stdout \
+	| faToNib -softMask stdin ${C}.nib
+    echo "${C} done"
+done
+    mkdir /hive/data/staging/data/hg38/nib
+    rsync -a --progress ./ /hive/data/staging/data/hg38/nib
+
+#############################################################################
+## GRC Contigs/ctgPos2 track (DONE - 2014-12-25 - Hiram)
+    # provide mapping of UCSC chrom names to GRC names
+    mkdir /hive/data/genomes/hg38/bed/ctgPos2
+    cd /hive/data/genomes/hg38/bed/ctgPos2
+    grep -v "^#" ../../genbank/GCA_000001405.15_GRCh38_top-level.acc2name \
+	| awk '{printf "s/^%s/%s/g;\n", $1, $3}' > accessionToUcsc.sed.txt
+
+    find ../../genbank -type f | grep "/assembled_chromosomes/AGP/" | sed -e 's/.comp//' | while read F
+do
+   if [ -s $F ]; then
+      zcat $F | grep -v "^#"
+   fi
+done | sed -e "`cat accessionToUcsc.sed.txt`" > ucsc.grch38.agp
+
+    awk '$5 != "N"' ucsc.grch38.agp \
+| awk '{printf "%s\t%d\t%s\t%d\t%d\t%s\n", $6, $3-$2+1, $1, $2-1, $3, $5}' \
+	| sort -u | sort -k3,3 -k4,4n > ctgPos2.tab
+
+
+    export ctgSize=`awk '{print length($1)}' ctgPos2.tab | sort -n | tail -1`
+    export chrSize=`awk '{print length($3)}' ctgPos2.tab | sort -n | tail -1`
+
+    sed -e "s/20/$ctgSize/; s/16/$chrSize/;" \
+	/cluster/home/hiram/kent/src/hg/lib/ctgPos2.sql > hg38.ctgPos2.sql
+
+    hgLoadSqlTab hg38 ctgPos2 hg38.ctgPos2.sql ctgPos2.tab
+
+############################################################################
+# constructing download files (WORKING - 2014-01-15 - Hiram)
+    # add hg38 to all.joiner and verify it is clean:
+    joinerCheck -database=hg38 -keys all.joiner
+# Checking keys on database hg38
+#  hg38.ucscToINSDC.chrom - hits 455 of 455 (100.000%) ok
+    # and all table coordinates are OK:
+    checkTableCoords hg38
+
+    cd /hive/data/genomes/hg38
+    time $HOME/kent/src/hg/utils/automation/makeDownloads.pl \
+      -workhorse=hgwdev hg38
+    # makeDownloads.pl has made a preliminary set of files
+
+    # need to fixup these names and add chromFa.tar.gz files
+    cd /hive/data/genomes/hg38/goldenPath/bigZips
+
+    mkdir chroms
+    mkdir maskedChroms
+
+    faSplit byname hg38.fa.gz chroms/
+    faSplit byname hg38.fa.masked.gz maskedChroms/
+
+    tar cvzf ./hg38.chromFa.tar.gz ./chroms/
+    tar cvzf ./hg38.chromFaMasked.tar.gz ./maskedChroms/
+
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
+    ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.chromFa.tar.gz hg38.chromFa.tar.gz
+    ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.chromFaMasked.tar.gz hg38.chromFaMasked.tar.gz
+
+    #also added entries for above to md5sum.txt and README.txt
+############################################################################

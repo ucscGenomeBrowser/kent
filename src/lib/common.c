@@ -3501,3 +3501,12 @@ if (strptime(date,format, &tp))
     }
 return cloneString(newDate);  // newDate is never freed!
 }
+
+boolean haplotype(const char *name)
+/* Is this name a haplotype name ?  _hap or _alt in the name */
+{
+if (stringIn("_hap", name) || stringIn("_alt", name))
+   return TRUE;
+else
+   return FALSE;
+}

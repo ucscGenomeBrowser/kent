@@ -202,9 +202,9 @@ char *hTableForTrack(char *db, char *trackName);
 /* Return a table for a track in db. Returns one of the split
  * tables, or main table if not split */
 
-char *hCloneRewriteFileName(char* fileName);
+char *hReplaceGbdb(char* fileName);
 /* clone and change a filename that can be located in /gbdb to somewhere else
- * according to hg.conf's "gbdb.loc". Result has to be freed. */
+ * according to hg.conf's "gbdbLoc1" and "gbdbLoc2". Result has to be freed. */
 
 void hParseTableName(char *db, char *table, char trackName[HDB_MAX_TABLE_STRING],
 		     char chrom[HDB_MAX_CHROM_STRING]);

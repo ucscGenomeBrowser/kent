@@ -41,23 +41,22 @@ html altSequence
     visibility hide
     parent altSequence
     type psl
-    indelDoubleInsert on
-    indelQueryInsert on
-    showDiffBasesAllScales .
-    showDiffBasesMaxZoom 10000.0
-    showCdsMaxZoom 10000.0
-    showCdsAllScales .
-    baseColorDefault itemBases
-    pslSequence no
-    baseColorUseSequence extFile seqHg19Patch10 extHg19Patch10
 
 	track altSequenceLiftOver
         parent altSequenceViewPsl
         subGroups view=psl
-	shortLabel Alignment
+	shortLabel UCSC psl
 	longLabel GRCh38 Alternate Sequence Lift Over Alignments
 	html altSeqComposite
 	priority 3
+
+	track ncbiAltMappings
+        parent altSequenceViewPsl
+        subGroups view=psl
+	shortLabel NCBI psl
+	longLabel GRCh38 Alternate Sequence alignments from NCBI gff cigar format
+	html altSeqComposite
+	priority 4
 
     track altSequenceViewChain
     shortLabel Chain
@@ -73,7 +72,7 @@ html altSequence
         longLabel GRCh38 Alternate Sequence Chained Alignments
         type chain hg38
         html chainNet
-	priority 4
+	priority 5
 
     track altSequenceViewNet
     shortLabel Net
@@ -88,4 +87,4 @@ html altSequence
         longLabel GRCh38 Alternate Sequence Alignment Net
         type netAlign hg38 chainAltSequence
         html chainNet
-	priority 5
+	priority 6

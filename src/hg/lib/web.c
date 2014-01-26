@@ -370,12 +370,9 @@ puts(
 puts("</div>");
 }
 
-void webNewSection(char* format, ...)
-/* create a new section on the web page */
+void webNewSectionHeaderStart()
+/* Start the header for a new section on the web page */
 {
-va_list args;
-va_start(args, format);
-
 webEndSection();
 puts("<div>");
 puts("<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->");
@@ -387,14 +384,25 @@ puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are cl
     "    <TABLE BGCOLOR='#" HG_COL_INSIDE
          "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
     "     <div class='subheadingBar' class='windowSize'>");
+}
 
-vprintf(format, args);
-
+void webNewSectionHeaderEnd()
+/* Properly close header of collapsible section on web page */
+{
 puts("     </div>\n"
      "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
           "<TR><TH HEIGHT=10></TH></TR>\n"
      "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n");
+}
 
+void webNewSection(char* format, ...)
+/* create a new section on the web page */
+{
+va_list args;
+va_start(args, format);
+webNewSectionHeaderStart();
+vprintf(format, args);
+webNewSectionHeaderEnd();
 va_end(args);
 }
 

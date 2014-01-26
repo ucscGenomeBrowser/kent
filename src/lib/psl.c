@@ -1810,23 +1810,40 @@ if (psl->qSequence != NULL)
 *blockSpacePtr = newSpace;
 }
 
-static boolean getNextCigarOp(char **ptr, char *op, int *size)
-/* parts the next cigar op */
+static boolean getNextCigarOp(char *startPtr, boolean reverse, char **ptr, char *op, int *size)
+/* gets one cigar op out of the CIGAR string.  Reverse the order if asked */
 {
 char *str = *ptr;
 
-if ((str == NULL) || (*str == 0))
+if (str == NULL)
+    return FALSE;
+
+if ((!reverse && (*str == 0)) || (reverse && (str == startPtr)))
     return FALSE;
 
 // between each cigar op there could be nothing, or a space, or a plus
-char *end = str + 1;
-for(;*end ; end++)
+if (reverse)
     {
-    if (! (isdigit(*end)  || (*end == ' ') || (*end == '+')))
-	break;
+    char *end = str - 1;
+    for(;*end ; end--)
+	{
+	if (isalpha(*end))
+	    break;
+	}
+    str = end;
+    *ptr = end;
     }
+else
+    {
+    char *end = str + 1;
+    for(;*end ; end++)
+	{
+	if (! (isdigit(*end)  || (*end == ' ') || (*end == '+')))
+	    break;
+	}
 
-*ptr = end;
+    *ptr = end;
+    }
 
 *op = *str++;
 *size = atoi(str);
@@ -1843,9 +1860,6 @@ struct psl* pslFromGff3Cigar(char *qName, int qSize, int qStart, int qEnd,
 int blocksAlloced = 4;
 struct psl *psl = pslNew(qName, qSize, qStart, qEnd, tName, tSize, tStart, tEnd, strand, blocksAlloced, 0);
 
-char cigarSpec[strlen(cigar+1)];  // copy since parsing is destructive
-strcpy(cigarSpec, cigar);
-char *cigarNext = cigarSpec;
 char op;
 int size;
 int qNext = qStart, qBlkEnd = qEnd;
@@ -1857,32 +1871,53 @@ int tNext = tStart, tBlkEnd = tEnd;
 if (strand[1] == '-')
     reverseIntRange(&tNext, &tBlkEnd, tSize);
 
-while(getNextCigarOp(&cigarNext, &op, &size))
+if (cigar == NULL)
     {
-    switch (op)
-        {
-        case 'M': // match or mismatch (gapless aligned block)
-            if (psl->blockCount == blocksAlloced)
-                pslGrow(psl, &blocksAlloced);
+    // no cigar means one block
+    size = qEnd - qStart;
+    totalSize += size;
+    psl->blockSizes[psl->blockCount] = size;
+    psl->qStarts[psl->blockCount] = qNext;
+    psl->tStarts[psl->blockCount] = tNext;
+    psl->blockCount++;
+    tNext += size;
+    qNext += size;
+    }
+else
+    {
+    char cigarSpec[strlen(cigar+1)];  // copy since parsing is destructive
+    strcpy(cigarSpec, cigar);
+    char *cigarNext = cigarSpec;
+    if (strand[0] == '-')
+	for(; *cigarNext; cigarNext++)
+	    ;
+    while(getNextCigarOp(cigarSpec, (strand[0] == '-'), &cigarNext, &op, &size))
+	{
+	switch (op)
+	    {
+	    case 'M': // match or mismatch (gapless aligned block)
+		if (psl->blockCount == blocksAlloced)
+		    pslGrow(psl, &blocksAlloced);
 
-	    totalSize += size;
-            psl->blockSizes[psl->blockCount] = size;
-            psl->qStarts[psl->blockCount] = qNext;
-            psl->tStarts[psl->blockCount] = tNext;
-            psl->blockCount++;
-            tNext += size;
-            qNext += size;
-            break;
-        case 'I': // inserted in target
-            tNext += size;
-            break;
-        case 'D': // deleted from target
-            qNext += size;
-            break;
-        
-        default:
-            errAbort("unrecognized CIGAR op %c in %s", op, cigar);
-        }
+		totalSize += size;
+		psl->blockSizes[psl->blockCount] = size;
+		psl->qStarts[psl->blockCount] = qNext;
+		psl->tStarts[psl->blockCount] = tNext;
+		psl->blockCount++;
+		tNext += size;
+		qNext += size;
+		break;
+	    case 'I': // inserted in target
+		tNext += size;
+		break;
+	    case 'D': // deleted from target
+		qNext += size;
+		break;
+	    
+	    default:
+		errAbort("unrecognized CIGAR op %c in %s", op, cigar);
+	    }
+	}
     }
 assert(qNext == qBlkEnd);
 assert(tNext == tBlkEnd);
