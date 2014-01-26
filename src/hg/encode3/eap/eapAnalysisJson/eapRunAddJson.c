@@ -179,7 +179,7 @@ if (step == NULL)
 /* Get list of input files */
 safef(query, sizeof(query), 
     "select edwFile.* from edwFile,eapInput where edwFile.id=eapInput.fileId "
-    " and eapInput.analysisId = %u "
+    " and eapInput.runId = %u "
     " order by eapInput.id"
     , analysisRunId);
 struct edwFile *inputFileList = edwFileLoadByQuery(conn, query);
@@ -187,7 +187,7 @@ struct edwFile *inputFileList = edwFileLoadByQuery(conn, query);
 /* Get list of output files */
 safef(query, sizeof(query), 
     "select edwFile.* from edwFile,eapOutput where edwFile.id=eapOutput.fileId "
-    " and eapOutput.analysisId = %u "
+    " and eapOutput.runId = %u "
     " order by eapOutput.id"
     , analysisRunId);
 struct edwFile *outFile, *outFileList = edwFileLoadByQuery(conn, query);

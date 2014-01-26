@@ -219,7 +219,7 @@ struct edwSubmit *submit = eapCurrentSubmit(conn);
 
 /* Get list of input files */
 struct edwFile *inputFileList = NULL;
-sqlSafef(query, sizeof(query), "select * from eapInput where analysisId=%u order by id", 
+sqlSafef(query, sizeof(query), "select * from eapInput where runId=%u order by id", 
     run->id);
 struct eapInput *input, *inputList = eapInputLoadByQuery(conn, query);
 for (input = inputList; input != NULL; input = input->next)
@@ -281,7 +281,7 @@ for (i=0; i<step->outCount; ++i)
 
     /* Make eapOutput record */
     sqlSafef(query, sizeof(query),
-	    "insert eapOutput (analysisId,name,ix,fileId) values (%u,'%s',%u,%u)"
+	    "insert eapOutput (runId,name,ix,fileId) values (%u,'%s',%u,%u)"
 	    , run->id, step->outputTypes[i], 0, outputFile->id);
     sqlUpdate(conn, query);
 
