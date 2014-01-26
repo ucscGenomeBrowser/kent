@@ -570,7 +570,7 @@ scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(inFileIds), inFileIds, inTypes);
 }
 
-int mustGetReadLengthForFastq(struct sqlConnection *conn, unsigned fileId)
+double mustGetReadLengthForFastq(struct sqlConnection *conn, unsigned fileId, boolean *retAllSame)
 /* Verify that associated file is in edwFastqFile table and return average read length */
 {
 char query[256];
@@ -578,7 +578,11 @@ sqlSafef(query, sizeof(query), "select readSizeMean from edwFastqFile where file
 double result = sqlQuickDouble(conn, query);
 if (result < 1)
     errAbort("No edwFastqFile record for %u", fileId);
-return round(result);
+sqlSafef(query, sizeof(query), 
+    "select readSizeMax - readSizeMin from edwFastqFile where fileId=%u", fileId);
+double diff = sqlQuickDouble(conn, query);
+*retAllSame = (diff == 0.0);
+return result;
 }
 
 #ifdef OLDWAY
@@ -647,12 +651,15 @@ slFreeList(&parentList);
 return fastqId;
 }
 
-int bamReadLength(char *fileName, int maxCount)
-/* Open up bam, read up to maxCount reads, and return size of read, enforcing
+double bamReadLength(char *fileName, int maxCount, boolean *retAllSame)
+/* Open up bam, read up to maxCount reads, and return size of read, checking
  * all are same size. */
 {
 #ifdef USE_BAM
+long long totalReadLength = 0;
+int count = 0;
 int readLength = 0;
+boolean allSame = TRUE;
 samfile_t *sf = samopen(fileName, "rb", NULL);
 bam1_t one;
 ZeroVar(&one);	// This seems to be necessary!
@@ -666,11 +673,21 @@ for (i=0; i<maxCount; ++i)
     if (readLength == 0)
         readLength = length;
     else if (readLength != length)
-        errAbort("Varying size reads in %s, %d and %d", fileName, readLength, length);
+	{
+	if (allSame)
+	    warn("Varying size reads in %s, %d and %d", fileName, readLength, length);
+	allSame = FALSE;
+	}
+    totalReadLength += length;
+    ++count;
     }
 samclose(sf);
 assert(readLength != 0);
-return readLength;
+double averageReadLength = 0;
+*retAllSame = allSame;
+if (count > 0)
+    averageReadLength = (double)totalReadLength/count;
+return averageReadLength;
 #else // no USE_BAM
 warn(COMPILE_WITH_SAMTOOLS, "bamReadLength");
 return 0;
@@ -692,11 +709,17 @@ if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
 verbose(2, "schedulingHotspot on %s step %s\n", ef->edwFileName, analysisStep);
 /* Make command line */
 unsigned fastqId = getFirstParentOfFormat(conn, "fastq", ef->id);
-int readLength = 0;
+double readLength = 0;
+boolean allSame = FALSE;
 if (fastqId == 0)
-    readLength = bamReadLength(edwPathForFileId(conn, ef->id), 1000);
+    readLength = bamReadLength(edwPathForFileId(conn, ef->id), 1000, &allSame);
 else
-    readLength = mustGetReadLengthForFastq(conn, fastqId);
+    readLength = mustGetReadLengthForFastq(conn, fastqId, &allSame);
+if (!allSame)
+    {
+    warn("Couldn't schedule hotspot on %s, not all reads the same size.", ef->edwFileName);
+    return;
+    }
 
 char *tempDir = newTempDir(analysisStep);
 
@@ -707,7 +730,7 @@ preloadCache(conn, cache);
 char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "eap_run_hotspot %s %s %d %s%s %s%s %s%s",
     edwSimpleAssemblyName(assembly->ucscDb), efName,
-    readLength, tempDir, "out.narrowPeak.bigBed", 
+    (int)readLength, tempDir, "out.narrowPeak.bigBed", 
     tempDir, "out.broadPeak.bigBed", tempDir, "out.bigWig");
 
 /* Declare step input and output arrays and schedule it. */
