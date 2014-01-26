@@ -57,7 +57,7 @@ for (dict = dictList; dict != NULL; dict = dict->next)
 return val;
 }
 
-char *fakeTags(struct sqlConnection *conn, struct eapAnalysis *run, 
+char *fakeTags(struct sqlConnection *conn, struct eapRun *run, 
     struct edwFile *inputFileList, int fileIx, char *validKey, char *ucscDb)
 /* Return tags for our output */
 {
@@ -98,12 +98,12 @@ cgiDictionaryFreeList(&dictList);
 return dyStringCannibalize(&dy);
 }
 
-void markRunAsFailed(struct sqlConnection *conn, struct eapAnalysis *run)
+void markRunAsFailed(struct sqlConnection *conn, struct eapRun *run)
 /* Mark that the run failed,  prevent reanalysis */
 {
 char query[128];
 sqlSafef(query, sizeof(query), 
-    "update eapAnalysis set createStatus = -1 where id=%u", run->id);
+    "update eapRun set createStatus = -1 where id=%u", run->id);
 sqlUpdate(conn, query);
 }
 
@@ -200,7 +200,7 @@ verbose(1, "%s\n", command);
 mustSystem(command);
 }
 
-void finishGoodRun(struct sqlConnection *conn, struct eapAnalysis *run, 
+void finishGoodRun(struct sqlConnection *conn, struct eapRun *run, 
     struct eapJob *job)
 /* Looks like the job for the run completed successfully, so let's grab results
  * and store them permanently */
@@ -293,7 +293,7 @@ for (i=0; i<step->outCount; ++i)
     edwAddJob(conn, command);
     }
 sqlSafef(query, sizeof(query), 
-	"update eapAnalysis set createStatus=1 where id=%u", run->id);
+	"update eapRun set createStatus=1 where id=%u", run->id);
 sqlUpdate(conn, query);
 
 if (!noClean)
@@ -308,8 +308,8 @@ void eapFinish(char *how)
 {
 struct sqlConnection *conn = edwConnectReadWrite();
 char query[512];
-sqlSafef(query, sizeof(query), "select * from eapAnalysis where createStatus = 0");
-struct eapAnalysis *run, *runList = eapAnalysisLoadByQuery(conn, query);
+sqlSafef(query, sizeof(query), "select * from eapRun where createStatus = 0");
+struct eapRun *run, *runList = eapRunLoadByQuery(conn, query);
 verbose(1, "Got %d unfinished analysis\n", slCount(runList));
 
 
