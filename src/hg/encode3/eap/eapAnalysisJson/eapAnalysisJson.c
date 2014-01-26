@@ -201,7 +201,7 @@ for (outFile = outFileList; outFile != NULL; outFile = outFile->next)
 	++validCount;
     }
 
-/* If all are validated then addempt to attach json... */
+/* If all are validated then attempt to attach json... */
 if (validCount == step->outCount)
     {
     sqlSafef(query, sizeof(query), "select * from eapJob where id=%u", run->jobId);
