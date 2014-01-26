@@ -174,17 +174,18 @@ char query[512];
 sqlSafef(query, sizeof(query), "select max(id) from eapStepVersion where step='%s'", stepName);
 long long stepVersionId = sqlQuickLongLong(conn, query);
 
-/* Get list of eapSwVersion corresponding to that step. */
-sqlSafef(query, sizeof(query), 
-    "select eapSwVersion.* from eapSwVersion,eapStepSwVersion "
-    " where eapSwVersion.id = eapStepSwVersion.swVersionId "
-    " and eapStepSwVersion.stepVersionId = %lld",  stepVersionId);
-struct eapSwVersion *sv, *svList = eapSwVersionLoadByQuery(conn, query);
-for (sv = svList; sv != NULL; sv = sv->next)
+/* Get list of eapStepSoftware corresponding to that step. */
+sqlSafef(query, sizeof(query), "select * from eapStepSoftware where step='%s'", stepName);
+struct eapStepSoftware *ss, *ssList = eapStepSoftwareLoadByQuery(conn, query);
+
+for (ss = ssList; ss != NULL; ss = ss->next)
     {
-    checkMd5OnCommand(stepName, sv->software, sv->md5);
+    sqlSafef(query, sizeof(query), 
+	"select * from eapSwVersion where software='%s' order by id desc limit 1", ss->software);
+    struct eapSwVersion *sv = eapSwVersionLoadByQuery(conn, query);
+    checkMd5OnCommand(ss->step, sv->software, sv->md5);
     }
-eapSwVersionFreeList(&svList);
+eapStepSoftwareFreeList(&ssList);
 return stepVersionId;
 }
 
