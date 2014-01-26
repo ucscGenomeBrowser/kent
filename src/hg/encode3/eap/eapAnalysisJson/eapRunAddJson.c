@@ -1,4 +1,4 @@
-/* eapAnalysisJson - Add json string to eapAnalysis record.. */
+/* eapRunAddJson - Add json string to eapRun record.. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -14,9 +14,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "eapAnalysisJson - Add json string to eapAnalysis record.\n"
+  "eapRunAddJson - Add json string to eapRun record.\n"
   "usage:\n"
-  "   eapAnalysisJson analysisRunId\n"
+  "   eapRunAddJson analysisRunId\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -84,7 +84,7 @@ dyStringAppendC(dy, '}');
 dyJsonEndLine(dy, isMiddle);
 }
 
-char *jsonForRun(struct sqlConnection *conn, struct eapAnalysis *run,  struct eapStep *step,
+char *jsonForRun(struct sqlConnection *conn, struct eapRun *run,  struct eapStep *step,
     struct edwFile *inputFileList, struct edwFile *outputFileList, struct eapJob *job)
 /* Generate json for run given input and output file lists. */
 {
@@ -162,13 +162,13 @@ dyStringAppend(dy, "}\n");
 return dyStringCannibalize(&dy);
 }
 
-void eapAnalysisJson(unsigned analysisRunId)
-/* eapAnalysisJson - Add json string to eapAnalysis record.. */
+void eapRunAddJson(unsigned analysisRunId)
+/* eapRunAddJson - Add json string to eapRun record.. */
 {
 struct sqlConnection *conn = edwConnectReadWrite();
 char query[16*1024]; // Json might get big
-safef(query, sizeof(query), "select * from eapAnalysis where id=%u", analysisRunId);
-struct eapAnalysis *run = eapAnalysisLoadByQuery(conn, query);
+safef(query, sizeof(query), "select * from eapRun where id=%u", analysisRunId);
+struct eapRun *run = eapRunLoadByQuery(conn, query);
 if (run == NULL)
      return;
 
@@ -211,7 +211,7 @@ if (validCount == step->outCount)
     jsonParse(run->jsonResult);  // Just for validation
 
     sqlSafef(query, sizeof(query), 
-       "update eapAnalysis set jsonResult='%s' where id=%u", run->jsonResult, run->id);
+       "update eapRun set jsonResult='%s' where id=%u", run->jsonResult, run->id);
     sqlUpdate(conn, query);
     }
 else
@@ -226,6 +226,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-eapAnalysisJson(sqlUnsigned(argv[1]));
+eapRunAddJson(sqlUnsigned(argv[1]));
 return 0;
 }
