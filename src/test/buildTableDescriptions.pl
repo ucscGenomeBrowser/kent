@@ -190,7 +190,7 @@ sub slurpAutoSql {
       } elsif (/^\s*(object|simple)\s+(\S+)/ && !$gotLeftParen) {
 	$object = $2;
 	$table = "";
-      } elsif (/^\s*enum\s*\([^\)]+\s*(\S+)\s*;/) {
+      } elsif (/^\s*enum\s*\([^\)]+\)\s*(\S+)\s*;/) {
 	$fields .= "$1,";
       } elsif (/^[^\"]+\s+(\S+)\s*;/) {
 	$fields .= "$1,";

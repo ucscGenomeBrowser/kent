@@ -1,6 +1,6 @@
 include ../../../../inc/common.mk
 
-O = eapLib.o 
+O = eapDb.o eapLib.o 
 
 ${MACHTYPE}/eaplib.a: ${O}
 	mkdir -p ${MACHTYPE}

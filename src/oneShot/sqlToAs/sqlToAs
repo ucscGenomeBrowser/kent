@@ -71,7 +71,8 @@ for line in open(filename).read().splitlines():
         if len(parts)>2 and "signed" in parts[2]:
             sqlType=sqlType+" "+parts[2]
 
-        fieldName = fieldName.strip("`")
+        fieldName = fieldName.strip("`").strip(",")
+        sqlType = sqlType.strip(",")
 
         if sqlType.startswith("char"):
             asType = sqlType.replace("(","[").replace(")","]")

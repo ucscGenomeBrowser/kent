@@ -13,6 +13,7 @@
 
 
 static struct optionSpec options[] = {
+    {"size",    OPTION_BOOLEAN},
     {"raBuf",    OPTION_BOOLEAN},
     {"fork",     OPTION_BOOLEAN},
     {"protocol", OPTION_STRING},
@@ -24,6 +25,7 @@ boolean raBuf = FALSE;   /* exercise the read-ahead buffer */
 boolean doFork = FALSE;
 char *protocol = "ftp";
 unsigned int seed = 0;
+int size = 0;
 
 // Local copy (reference file) and URL for testing:
 #define THOUSAND_HIVE "/hive/data/outside/1000genomes/ncbi/ftp-trace.ncbi.nih.gov/1000genomes/"
@@ -288,6 +290,12 @@ udcFileClose(&udcf);
 return gotError;
 
 }
+
+bool testSize(char *url, long int  size) 
+{
+return (udcFileSize(url)==size)   ;
+}
+
 boolean testReadAheadBuffer(char *url, char *localCopy)
 /* Open a udcFile, read different random locations, and check for errors. */
 {
@@ -410,6 +418,7 @@ int main(int argc, char *argv[])
 {
 boolean gotError = FALSE;
 optionInit(&argc, argv, options);
+size = optionExists("size");
 raBuf = optionExists("raBuf");
 doFork = optionExists("fork");
 protocol = optionVal("protocol", protocol);
@@ -442,7 +451,9 @@ if (sameString(protocol, "http"))
     {
     char *httpUrl = "http://hgwdev.cse.ucsc.edu/~angie/wgEncodeCshlRnaSeqAlignmentsK562ChromatinShort.bb";
     char *httpLocalCopy = "/gbdb/hg18/bbi/wgEncodeCshlRnaSeqAlignmentsK562ChromatinShort.bb";
-    if (raBuf)
+    if (size)
+	gotError |= testSize(httpUrl, 117209441222);
+    else if (raBuf)
 	gotError |= testReadAheadBuffer(httpUrl, httpLocalCopy);
     else if (doFork)
 	gotError |= testConcurrent(httpUrl, httpLocalCopy);

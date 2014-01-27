@@ -1,5 +1,8 @@
 /* eapLib - library shared by analysis pipeline modules */
 
+#ifndef EAPLIB_H
+#define EAPLIB_H
+
 extern char *eapEdwCacheDir;
 /* Where data warehouse files are cached in a place that the cluster can access. */
 
@@ -22,6 +25,21 @@ extern char *eapParaQueues;
 /* Root directory to parasol job results queues, where parasol (eventually) stores
  * results of jobs that successfully complete or crash. */
 
+extern char *eapSshArgs;
+/* Arguments to pass to ssh or scp for good performance and security */
+
+struct sqlConnection *eapConnect();
+/* Return read-only connection to eap database (which may be same as edw database) */
+
+struct sqlConnection *eapConnectReadWrite();
+/* Return read/write connection to eap database, which may be same as edw database) */
+
+void eapPathForCommand(char *command, char path[PATH_LEN]);
+/* Figure out path associated with command */
+
+void eapMd5ForCommand(char *command, char md5[33]);
+/* Figure out md5 associated with command */
+
 struct paraPstat2Job *eapParasolRunningList(char *paraHost);
 /* Return list of running jobs  in paraPstat2Job format. */
 
@@ -31,3 +49,32 @@ struct hash *eapParasolRunningHash(char *paraHost, struct paraPstat2Job **retLis
 
 char *eapStepFromCommandLine(char *commandLine);
 /* Given command line looking like 'edwCdJob step parameters to program' return 'step' */
+
+struct eapStep *eapStepFromName(struct sqlConnection *conn, char *name);
+/* Get eapStep record from database based on name. */
+
+struct eapStep *eapStepFromNameOrDie(struct sqlConnection *conn, char *analysisStep);
+/* Get analysis step of given name, or complain and die. */
+
+struct eapSoftware *eapSoftwareFromName(struct sqlConnection *conn, char *name);
+/* Get eapSoftware record by name */
+
+unsigned eapCheckVersions(struct sqlConnection *conn, char *analysisStep);
+/* Check that we are running tracked versions of everything. Returns version/step
+ * id of current step. */
+
+void eapSoftwareUpdateMd5ForStep(struct sqlConnection *conn, char *analysisStep);
+/* Update MD5s on all software used by step. */
+
+int eapJobAdd(struct sqlConnection *conn, char *commandLine, int cpusRequested);
+/* Add job to edwAnalyisJob table and return job ID. */
+
+unsigned eapCurrentStepVersion(struct sqlConnection *conn, char *stepName);
+/* Returns current version (id in eapStepVersion) for step.  
+ * Behind the scenes it checks the software used by step against the current
+ * step version.  If any has changed (or if no version yet exists) it creates
+ * a new version and returns it.  In case of no change it just returns id
+ * of currently tracked version. */
+
+#endif /* EAPLIB_H */
+

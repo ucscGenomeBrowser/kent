@@ -441,6 +441,15 @@ for (i=list;i;i=i->next)
 return NULL;
 }
 
+struct slUnsigned *slUnsignedNew(unsigned x)
+/* Return a new int. */
+{
+struct slUnsigned *a;
+AllocVar(a);
+a->val = x;
+return a;
+}
+
 static int doubleCmp(const void *va, const void *vb)
 /* Compare function to sort array of doubles. */
 {
@@ -3491,4 +3500,13 @@ if (strptime(date,format, &tp))
     strftime(newDate,12,format,&tp);
     }
 return cloneString(newDate);  // newDate is never freed!
+}
+
+boolean haplotype(const char *name)
+/* Is this name a haplotype name ?  _hap or _alt in the name */
+{
+if (stringIn("_hap", name) || stringIn("_alt", name))
+   return TRUE;
+else
+   return FALSE;
 }

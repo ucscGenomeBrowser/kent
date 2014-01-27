@@ -8,28 +8,31 @@
 #include "obscure.h"
 #include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
 #include "../../encodeDataWarehouse/inc/edwLib.h"
+#include "eapDb.h"
 #include "eapLib.h"
 
 boolean again = FALSE;
 boolean retry = FALSE;
-boolean updateSoftwareMd5 = FALSE;
 boolean noJob = FALSE;
 boolean ignoreQa = FALSE;
 boolean justLink = FALSE;
 boolean dry = FALSE;
+char *clStep = "*";
+char *clInFormat = "*";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwScheduleAnalysis - Schedule analysis runs.\n"
+  "eapSchedule - Schedule analysis runs.\n"
   "usage:\n"
-  "   edwScheduleAnalysis startFileId endFileId output\n"
+  "   eapSchedule startFileId endFileId\n"
   "options:\n"
+  "   -step=pattern - Just run steps with names matching pattern which is * by default\n"
+  "   -inFormat=pattern - Just run steps that are triggered by files of this format\n"
   "   -retry - if job has run and failed retry it\n"
   "   -again - if set schedule it even if it's been run once\n"
-  "   -up - update on software MD5s rather than aborting on them\n"
-  "   -noJob - if set then don't put job on edwAnalysisJob table\n"
+  "   -noJob - if set then don't put job on eapJob table\n"
   "   -ignoreQa - if set then ignore QA results when scheduling\n"
   "   -justLink - just symbolically link rather than copy EDW files to cache\n"
   "   -dry - just print out the commands that would result\n"
@@ -38,6 +41,8 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"step", OPTION_STRING},
+   {"inFormat", OPTION_STRING},
    {"retry", OPTION_BOOLEAN},
    {"again", OPTION_BOOLEAN},
    {"up", OPTION_BOOLEAN},
@@ -98,23 +103,29 @@ return targetAssemblyForDbAndSex(conn, vf->ucscDb, sex);
 static boolean alreadyTakenCareOf(struct sqlConnection *conn, 
     struct edwAssembly *assembly, char *analysisStep, 
     long long firstInput)
-/* Return how many of the existing job are already scheduled */
+/* Return true if job is already scheduled or otherwise taken care of */
 {
+if (!wildMatch(clStep, analysisStep))
+    return TRUE;
 if (again)
     return FALSE;
 char query[512];
 if (retry)
     sqlSafef(query, sizeof(query),
-	"select count(*) from edwAnalysisRun"
-	" where firstInputId=%lld and analysisStep='%s' and createStatus >= 0"
+	"select count(*) from eapAnalysis,eapInput"
+	" where eapAnalysis.id = eapInput.analysisId"
+	" and eapInput.fileId=%lld and analysisStep='%s' and createStatus >= 0"
 	" and assemblyId = %u",
 	firstInput, analysisStep, assembly->id);
 else
     sqlSafef(query, sizeof(query),
-	"select count(*) from edwAnalysisRun where firstInputId=%lld and analysisStep='%s'"
+	"select count(*) from eapAnalysis,eapInput"
+	" where eapAnalysis.id = eapInput.analysisId"
+	" and eapInput.fileId=%lld and analysisStep='%s'"
 	" and assemblyId = %u",
 	firstInput, analysisStep, assembly->id);
 int count = sqlQuickNum(conn, query);
+verbose(2, "query %s\ncount %d\n", query, count);
 return count > 0;
 }
 
@@ -132,15 +143,12 @@ return cloneString(withLast);
 
 char *scheduleStep(struct sqlConnection *conn, char *tempDir,
     char *analysisStep, char *commandLine, char *experiment, struct edwAssembly *assembly,
-    int inCount, unsigned inputIds[], char *inputTypes[],
-    int outCount, char *outputNames[], char *outputTypes[], char *outputFormats[])
+    int inCount, unsigned inputIds[], char *inputTypes[])
 /* Schedule a step.  Returns temp dir it is to be run in. */
 {
-struct edwAnalysisStep *step = edwAnalysisStepFromNameOrDie(conn, analysisStep);
+struct eapStep *step = eapStepFromNameOrDie(conn, analysisStep);
 
-if (updateSoftwareMd5)
-    edwAnalysisSoftwareUpdateMd5ForStep(conn, analysisStep);
-edwAnalysisCheckVersions(conn, analysisStep);
+unsigned stepVersionId = eapCheckVersions(conn, analysisStep);
 
 if (dry)
     printf("%s\n", commandLine);
@@ -153,26 +161,31 @@ else
     safef(fullCommandLine, sizeof(fullCommandLine), 
 	"edwCdJob %s", commandLine);
 
-    /* Make up edwAnalysisRun record */
-    struct edwAnalysisRun *run;
+    /* Make up eapAnalysis record and save it. */
+    struct eapAnalysis *run;
     AllocVar(run);
     if (!noJob)
-	run->jobId = edwAnalysisJobAdd(conn, fullCommandLine, step->cpusRequested);
+	run->jobId = eapJobAdd(conn, fullCommandLine, step->cpusRequested);
     safef(run->experiment, sizeof(run->experiment), "%s",  experiment);
     run->analysisStep = analysisStep;
-    run->configuration = "";
+    run->stepVersionId = stepVersionId;
     run->tempDir = tempDir;
-    run->firstInputId = inputIds[0];
-    run->inputFileCount = inCount;
-    run->inputFileIds = inputIds;
-    run->inputTypes = inputTypes;
-    run->outputFileCount = outCount;
-    run->outputNamesInTempDir = outputNames;
-    run->outputFormats = outputFormats;
-    run->outputTypes = outputTypes;
     if (assembly != NULL) run->assemblyId = assembly->id;
     run->jsonResult = "";
-    edwAnalysisRunSaveToDb(conn, run, "edwAnalysisRun", 0);
+    eapAnalysisSaveToDb(conn, run, "eapAnalysis", 0);
+    run->id = sqlLastAutoId(conn);
+
+    /* Write input records. */
+    int i;
+    for (i=0; i<step->inCount; ++i)
+        {
+	struct eapInput in = {.analysisId=run->id};
+	in.name = inputTypes[i];
+	in.fileId = inputIds[i];
+	eapInputSaveToDb(conn, &in, "eapInput", 0);
+	}
+
+    /* Write output records during eapFinis.... */
     freez(&run);
     }
 return tempDir;
@@ -190,7 +203,6 @@ struct edwAssembly *getBwaIndex(struct sqlConnection *conn, struct edwFile *ef, 
 /* Target for now is same as UCSC DB.  Returns assembly ID */
 {
 struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
-// assembly = targetAssemblyForDbAndSex(conn, "hg19", "centro");	
 makeBwaIndexPath(assembly->name, indexPath);
 return assembly;
 }
@@ -326,15 +338,11 @@ if (!alreadyTakenCareOf(conn, assembly, analysisStep, vf1->fileId))
 	"%s %s %s %s %s%s", 
 	command, indexPath, ef1Name, ef2Name, tempDir, outBamName);
 
-    /* Make up edwAnalysisRun record and schedule it*/
+    /* Make up eapAnalysis record and schedule it*/
     unsigned inFileIds[2] = {ef1->id, ef2->id};
     char *inTypes[2] = {"read1", "read2"};
-    char *outNames[1] = {outBamName};
-    char *outTypes[1] = {"alignments"};
-    char *outFormats[1] = {"bam"};
     scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
-	ArraySize(inFileIds), inFileIds, inTypes,
-	ArraySize(outNames), outNames, outTypes, outFormats);
+	ArraySize(inFileIds), inFileIds, inTypes);
 
     }
 /* Clean up */
@@ -368,15 +376,11 @@ char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "%s %s %s %s%s", 
     command, indexPath, efName, tempDir, outBamName);
 
-/* Make up edwAnalysisRun record and schedule it*/
+/* Make up eapAnalysis record and schedule it*/
 unsigned inFileIds[1] = {ef->id};
 char *inTypes[1] = {"reads"};
-char *outNames[1] = {"out.bam"};
-char *outTypes[1] = {"alignments"};
-char *outFormats[1] = {"bam"};
 scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
-    ArraySize(inFileIds), inFileIds, inTypes,
-    ArraySize(outNames), outNames, outTypes, outFormats);
+    ArraySize(inFileIds), inFileIds, inTypes);
 }
 
 boolean bamIsPaired(char *fileName, int maxCount)
@@ -453,12 +457,8 @@ safef(commandLine, sizeof(commandLine), "%s %s %s %s%s %s%s",
 /* Declare step input and output arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
 char *inTypes[] = {"alignments"};
-char *outFormats[] = {"narrowPeak", "bigWig"};
-char *outNames[] = {"out.narrowPeak.bigBed", "out.bigWig"};
-char *outTypes[] = {"macs2_dnase_peaks", "macs2_dnase_signal"};
 scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
-    ArraySize(inFileIds), inFileIds, inTypes,
-    ArraySize(outNames), outNames, outTypes, outFormats);
+    ArraySize(inFileIds), inFileIds, inTypes);
 }
 
 struct edwExperiment *findChipControlExp(struct sqlConnection *conn, char *accession)
@@ -566,15 +566,11 @@ safef(commandLine, sizeof(commandLine), "%s %s %s %s %s%s %s%s",
 /* Declare step input and output arrays and schedule it. */
 unsigned inFileIds[] = {ef->id, controlEf->id};
 char *inTypes[] = {"chipBam", "controlBam"};
-char *outFormats[] = {"narrowPeak", "bigWig"};
-char *outNames[] = {"out.narrowPeak.bigBed", "out.bigWig"};
-char *outTypes[] = {"macs2_chip_peaks", "macs2_chip_signal"};
 scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
-    ArraySize(inFileIds), inFileIds, inTypes,
-    ArraySize(outNames), outNames, outTypes, outFormats);
+    ArraySize(inFileIds), inFileIds, inTypes);
 }
 
-int mustGetReadLengthForFastq(struct sqlConnection *conn, unsigned fileId)
+double mustGetReadLengthForFastq(struct sqlConnection *conn, unsigned fileId, boolean *retAllSame)
 /* Verify that associated file is in edwFastqFile table and return average read length */
 {
 char query[256];
@@ -582,61 +578,88 @@ sqlSafef(query, sizeof(query), "select readSizeMean from edwFastqFile where file
 double result = sqlQuickDouble(conn, query);
 if (result < 1)
     errAbort("No edwFastqFile record for %u", fileId);
-return round(result);
+sqlSafef(query, sizeof(query), 
+    "select readSizeMax - readSizeMin from edwFastqFile where fileId=%u", fileId);
+double diff = sqlQuickDouble(conn, query);
+*retAllSame = (diff == 0.0);
+return result;
 }
 
-boolean edwAnalysisRunHasOutput(struct edwAnalysisRun *run, unsigned outId)
+#ifdef OLDWAY
+boolean eapAnalysisHasOutput(struct sqlConnection *conn, unsigned analysisId, unsigned outId)
 /* Return TRUE if any of the outputs of run match outId */
 {
+char query[256];
+sqlSafef(query, sizeof(query), "select count(*) from eapOutput where analysisId=%u", analysisId
 int i;
 for (i=0; i<run->createCount; ++i)
     if (run->createFileIds[i] == outId)
         return TRUE;
 return FALSE;
 }
+#endif /* OLDWAY */
 
 
-unsigned getFastqForBam(struct sqlConnection *conn, unsigned bamFileId)
+unsigned getFirstParentOfFormat(struct sqlConnection *conn, char *format, unsigned childFileId)
 /* Return fastq id associated with bam file or die trying. */
 {
-unsigned fastqId = 0;   
-
-/* Silly this - we have to scan all analysisRun records. */
-char query[512];
+unsigned fastqId = 0;
+/* Scan backwards input/output tables until reach a fastq */
+/* Look for input that led to us, getting both file ID and format */
+char query[256];
 sqlSafef(query, sizeof(query), 
-    "select * from edwAnalysisRun where createStatus > 0  and createCount > 0");
-struct edwAnalysisRun *run, *runList = edwAnalysisRunLoadByQuery(conn, query);
+    "select eapInput.fileId,edwValidFile.format from eapInput,eapOutput,edwValidFile "
+    " where eapOutput.analysisId = eapInput.analysisId and eapInput.fileId = edwValidFile.fileId"
+    " and eapOutput.fileId=%u", childFileId);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
 
-for (run = runList; run != NULL; run = run->next)
+/* Hopefully fastq is an immediate parent.  We loop through all input and
+ * check it for fastqs.  If it's not fastq we put it on a list in case we need
+ * to look further upstream for the fastq. */
+struct slUnsigned *parentList = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (edwAnalysisRunHasOutput(run, bamFileId))
-       {
-       struct edwValidFile *vf = edwValidFileFromFileId(conn, run->firstInputId);
-       if (sameString(vf->format, "fastq"))
-	   {
-	   fastqId = vf->fileId;
-	   break;
-	   }
-       else
-           {
-	   fastqId = getFastqForBam(conn, vf->fileId);
-	   if (fastqId != 0)
-	       break;
-	   }
-       edwValidFileFree(&vf);
-       }
+    unsigned fileId = sqlUnsigned(row[0]);
+    if (sameString(format, row[1]))
+	{
+	fastqId = fileId;
+	break;
+	}
+    else
+	{
+	struct slUnsigned *el = slUnsignedNew(fileId);
+	slAddHead(&parentList,el);
+	}
     }
+sqlFreeResult(&sr);
 
-edwAnalysisRunFreeList(&runList);
+if (fastqId == 0)  // No joy here, then go look in parents.
+     {
+     struct slUnsigned *parent;
+     for (parent = parentList; parent != NULL; parent = parent->next)
+	 {
+	 unsigned result = getFirstParentOfFormat(conn, format, parent->val);
+	 if (result > 0)
+	     {
+	     fastqId = result;
+	     break;
+	     }
+	 }
+     }
+slFreeList(&parentList);
 return fastqId;
 }
 
-int bamReadLength(char *fileName, int maxCount)
-/* Open up bam, read up to maxCount reads, and return size of read, enforcing
+double bamReadLength(char *fileName, int maxCount, boolean *retAllSame)
+/* Open up bam, read up to maxCount reads, and return size of read, checking
  * all are same size. */
 {
 #ifdef USE_BAM
+long long totalReadLength = 0;
+int count = 0;
 int readLength = 0;
+boolean allSame = TRUE;
 samfile_t *sf = samopen(fileName, "rb", NULL);
 bam1_t one;
 ZeroVar(&one);	// This seems to be necessary!
@@ -650,11 +673,21 @@ for (i=0; i<maxCount; ++i)
     if (readLength == 0)
         readLength = length;
     else if (readLength != length)
-        errAbort("Varying size reads in %s, %d and %d", fileName, readLength, length);
+	{
+	if (allSame)
+	    warn("Varying size reads in %s, %d and %d", fileName, readLength, length);
+	allSame = FALSE;
+	}
+    totalReadLength += length;
+    ++count;
     }
 samclose(sf);
 assert(readLength != 0);
-return readLength;
+double averageReadLength = 0;
+*retAllSame = allSame;
+if (count > 0)
+    averageReadLength = (double)totalReadLength/count;
+return averageReadLength;
 #else // no USE_BAM
 warn(COMPILE_WITH_SAMTOOLS, "bamReadLength");
 return 0;
@@ -675,12 +708,18 @@ if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
 
 verbose(2, "schedulingHotspot on %s step %s\n", ef->edwFileName, analysisStep);
 /* Make command line */
-int fastqId = getFastqForBam(conn, ef->id);
-int readLength = 0;
+unsigned fastqId = getFirstParentOfFormat(conn, "fastq", ef->id);
+double readLength = 0;
+boolean allSame = FALSE;
 if (fastqId == 0)
-    readLength = bamReadLength(edwPathForFileId(conn, ef->id), 1000);
+    readLength = bamReadLength(edwPathForFileId(conn, ef->id), 1000, &allSame);
 else
-    readLength = mustGetReadLengthForFastq(conn, fastqId);
+    readLength = mustGetReadLengthForFastq(conn, fastqId, &allSame);
+if (!allSame)
+    {
+    warn("Couldn't schedule hotspot on %s, not all reads the same size.", ef->edwFileName);
+    return;
+    }
 
 char *tempDir = newTempDir(analysisStep);
 
@@ -691,18 +730,14 @@ preloadCache(conn, cache);
 char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "eap_run_hotspot %s %s %d %s%s %s%s %s%s",
     edwSimpleAssemblyName(assembly->ucscDb), efName,
-    readLength, tempDir, "out.narrowPeak.bigBed", 
+    (int)readLength, tempDir, "out.narrowPeak.bigBed", 
     tempDir, "out.broadPeak.bigBed", tempDir, "out.bigWig");
 
 /* Declare step input and output arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
 char *inTypes[] = {"alignments"};
-char *outFormats[] = {"broadPeak", "narrowPeak", "bigWig"};
-char *outNames[] = {"out.broadPeak.bigBed", "out.narrowPeak.bigBed", "out.bigWig"};
-char *outTypes[] = {"hotspot_broad_peaks", "hotspot_narrow_peaks", "hotspot_signal"};
 scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
-    ArraySize(inFileIds), inFileIds, inTypes,
-    ArraySize(outNames), outNames, outTypes, outFormats);
+    ArraySize(inFileIds), inFileIds, inTypes);
 }
 
 void scheduleBamSort(struct sqlConnection *conn, 
@@ -728,12 +763,8 @@ safef(commandLine, sizeof(commandLine), "eap_bam_sort %s %s%s",
 /* Declare step input and output arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
 char *inTypes[] = {"unsorted"};
-char *outFormats[] = {"bam", };
-char *outNames[] = {"out.bam"};
-char *outTypes[] = {"alignments",};
 scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
-    ArraySize(inFileIds), inFileIds, inTypes,
-    ArraySize(outNames), outNames, outTypes, outFormats);
+    ArraySize(inFileIds), inFileIds, inTypes);
 }
 
 
@@ -764,8 +795,6 @@ if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq") ||
     else
         {
 	scheduleBwaSingle(conn, ef, vf, exp);
-#ifdef SOON
-#endif /* SOON */
 	}
     }
 }
@@ -777,9 +806,7 @@ void runBamAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwVa
 if (sameString(exp->dataType, "DNase-seq"))
     {
     scheduleMacsDnase(conn, ef, vf, exp);
-#ifdef SOON
     scheduleHotspot(conn, ef, vf, exp);
-#endif /* SOON */
     }
 else if (sameString(exp->dataType, "ChIP-seq"))
     {
@@ -791,8 +818,6 @@ void runSingleAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct ed
     struct edwExperiment *exp)
 {
 verbose(2, "run single analysis format %s, dataType %s\n", vf->format, exp->dataType);
-#ifdef SOON
-#endif /* SOON */
 if (sameWord("fastq", vf->format))
     runFastqAnalysis(conn, ef, vf, exp);
 if (sameWord("bam", vf->format))
@@ -804,6 +829,7 @@ void runReplicateAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct
 {
 verbose(2, "run replicate analysis format %s, dataType %s\n", vf->format, exp->dataType);
 #ifdef SOON
+// Pseudocode here only for now`
 if (!inReplicatedTable(ef,vf,exp))
     {
     if (isReplicated(ef, vf, exp))
@@ -824,7 +850,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
     {
     verbose(2, "processing edwFile id %u\n", ef->id);
     struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
-    if (vf != NULL)
+    if (vf != NULL && wildMatch(clInFormat, vf->format))
 	{
 	verbose(2, "aka %s\n", vf->licensePlate);
 	struct edwExperiment *exp = edwExperimentFromAccession(conn, vf->experiment); 
@@ -850,11 +876,12 @@ if (argc != 3)
     usage();
 retry = optionExists("retry");
 again = optionExists("again");
-updateSoftwareMd5 = optionExists("up");
 noJob = optionExists("noJob");
 ignoreQa = optionExists("ignoreQa");
 justLink = optionExists("justLink");
 dry = optionExists("dry");
+clStep = optionVal("step", clStep);
+clInFormat = optionVal("inFormat", clInFormat);
 edwScheduleAnalysis(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
 return 0;
 }

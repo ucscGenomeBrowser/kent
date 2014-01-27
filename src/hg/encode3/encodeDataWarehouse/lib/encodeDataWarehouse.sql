@@ -208,6 +208,7 @@ CREATE TABLE edwValidFile (
     PRIMARY KEY(id),
     INDEX(licensePlate),
     UNIQUE(fileId),
+    INDEX(format(12)),
     INDEX(outputType(16)),
     INDEX(experiment(16))
 );
@@ -412,70 +413,4 @@ CREATE TABLE edwSubmitJob (
     pid int default 0,	# Process ID for running processes
               #Indices
     PRIMARY KEY(id)
-);
-
-#An analysis pipeline job to be run asynchronously and not too many all at once.
-CREATE TABLE edwAnalysisJob (
-    id int unsigned auto_increment,	# Job id
-    commandLine longblob,	# Command line of job
-    startTime bigint default 0,	# Start time in seconds since 1970
-    endTime bigint default 0,	# End time in seconds since 1970
-    stderr longblob,	# The output to stderr of the run - may be nonempty even with success
-    returnCode int default 0,	# The return code from system command - 0 for success
-    pid int default 0,	# Process ID for running processes
-    cpusRequested int default 0,	# Number of CPUs to request from job control system
-    parasolId varchar(255) default '',	# Parasol job id for process.
-              #Indices
-    PRIMARY KEY(id)
-);
-
-#Software that is tracked by the analysis pipeline.
-CREATE TABLE edwAnalysisSoftware (
-    id int unsigned auto_increment,	# Software id
-    name varchar(255) default '',	# Command line name
-    version longblob,	# Current version
-    md5 char(32) default 0,	# md5 sum of executable file
-              #Indices
-    PRIMARY KEY(id),
-    UNIQUE(name)
-);
-
-#A step in an analysis pipeline - something that takes one file to another
-CREATE TABLE edwAnalysisStep (
-    id int unsigned auto_increment,	# Step id
-    name varchar(255) default '',	# Name of this analysis step
-    softwareCount int default 0,	# Number of pieces of software used in step
-    software longblob,	# Names of software used. First is the glue script
-    cpusRequested int default 0,	# Number of CPUs to request from job control system
-              #Indices
-    PRIMARY KEY(id),
-    UNIQUE(name)
-);
-
-#Information on an analysis job that we're planning on running
-CREATE TABLE edwAnalysisRun (
-    id int unsigned auto_increment,	# Analysis run ID
-    jobId int unsigned default 0,	# ID in edwAnalysisJob table
-    experiment char(16) default 0,	# Something like ENCSR000CFA.
-    analysisStep varchar(255) default '',	# Name of analysis step
-    configuration varchar(255) default '',	# Configuration for analysis step
-    tempDir longblob,	# Where analysis is to be computed
-    firstInputId int unsigned default 0,	# ID in edwFile of first input
-    inputFileCount int unsigned default 0,	# Total number of input files
-    inputFileIds longblob,	# list of all input files as fileIds
-    inputTypes longblob,	# List of types to go with input files in json output
-    assemblyId int unsigned default 0,	# Id of assembly we are working with
-    outputFileCount int unsigned default 0,	# Total number of output files
-    outputNamesInTempDir longblob,	# list of all output file names in output dir
-    outputFormats longblob,	# list of formats of output files
-    outputTypes longblob,	# list of formats of output files
-    jsonResult longblob,	# JSON formatted object with result for Stanford metaDatabase
-    uuid char(37) default 0,	# Help to synchronize us with Stanford.
-    createStatus tinyint default 0,	# 1 if output files made 0 if not made, -1 if make tried and failed
-    createCount int unsigned default 0,	# Count of files made
-    createFileIds longblob,	# list of ids of output files in warehouse
-              #Indices
-    PRIMARY KEY(id),
-    INDEX(experiment),
-    INDEX(uuid)
 );

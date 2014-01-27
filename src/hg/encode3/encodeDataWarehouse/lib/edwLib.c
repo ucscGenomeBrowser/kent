@@ -751,7 +751,6 @@ void edwAddJob(struct sqlConnection *conn, char *command)
 char query[256+strlen(command)];
 sqlSafef(query, sizeof(query), "insert into edwJob (commandLine) values('%s')", command);
 sqlUpdate(conn, query);
-edwPokeFifo("edwQaAgent.fifo");
 }
 
 void edwAddQaJob(struct sqlConnection *conn, long long fileId)
@@ -1384,18 +1383,6 @@ sqlSafef(query, sizeof(query),
 return edwQaPairedEndFastqLoadByQuery(conn, query);
 }
 
-int edwAnalysisJobAdd(struct sqlConnection *conn, char *commandLine, int cpusRequested)
-/* Add job to edwAnalyisJob table and return job ID. */
-{
-struct edwAnalysisJob job =
-   {
-   .commandLine = commandLine,
-   .cpusRequested = cpusRequested
-   };
-edwAnalysisJobSaveToDb(conn, &job, "edwAnalysisJob", 0);
-return sqlLastAutoId(conn);
-}
-
 FILE *edwPopen(char *command, char *mode)
 /* do popen or die trying */
 {
@@ -1447,92 +1434,6 @@ char line[2*PATH_LEN];
 edwOneLineSystemResult(command, line, sizeof(line));
 memcpy(md5Hex, line, 32);
 md5Hex[32] = 0;
-}
-
-void edwPathForCommand(char *command, char path[PATH_LEN])
-/* Figure out path associated with command */
-{
-char sysCommand[PATH_LEN*2];
-safef(sysCommand, sizeof(sysCommand), "bash -c 'which %s'", command);
-edwOneLineSystemResult(sysCommand, path, PATH_LEN);
-eraseTrailingSpaces(path);
-}
-
-struct edwAnalysisStep *edwAnalysisStepFromNameOrDie(struct sqlConnection *conn, char *analysisStep)
-/* Get analysis step of given name, or complain and die. */
-{
-struct edwAnalysisStep *step = edwAnalysisStepFromName(conn, analysisStep);
-if (step == NULL)
-    errAbort("Can't find %s in edwAnalysisStep table", analysisStep);
-return step;
-}
-
-struct edwAnalysisStep *edwAnalysisStepFromName(struct sqlConnection *conn, char *name)
-/* Get edwAnalysisStep record from database based on name. */
-{
-char query[256];
-sqlSafef(query, sizeof(query), "select * from edwAnalysisStep where name = '%s'", name);
-return edwAnalysisStepLoadByQuery(conn, query);
-}
-
-struct edwAnalysisSoftware *edwAnalysisSoftwareFromName(struct sqlConnection *conn, char *name)
-/* Get edwAnalysisSoftware record by name */
-{
-char query[256];
-sqlSafef(query, sizeof(query), "select * from edwAnalysisSoftware where name = '%s'", name);
-return edwAnalysisSoftwareLoadByQuery(conn, query);
-}
-
-static void checkOrUpdate(struct sqlConnection *conn,
-    char *usedIn, struct edwAnalysisSoftware *software, boolean update)
-/* Basically do a 'which' to find path, and then calc md5sum */
-{
-char path[PATH_LEN];
-edwPathForCommand(software->name, path);
-char md5[33];
-edwMd5File(path, md5);
-if (!sameString(md5, software->md5))
-    {
-    if (update)
-        {
-	char query[256];
-	sqlSafef(query, sizeof(query), "update edwAnalysisSoftware set md5='%s' where id=%u",
-	    md5, software->id);
-	sqlUpdate(conn, query);
-	}
-    else
-	errAbort("Need to update edwAnalysisSoftware %s used in %s\nOld md5 %s, new md5 %s",
-	    software->name, usedIn, software->md5, md5);
-    }
-}
-
-void edwAnalysisCheckOrUpdateSoftwareForStep(struct sqlConnection *conn, char *analysisStep,
-    boolean doUpdate)
-/* Check that we are running tracked versions of everything. */
-{
-struct edwAnalysisStep *step = edwAnalysisStepFromNameOrDie(conn, analysisStep);
-int i;
-for (i=0; i<step->softwareCount; ++i)
-    {
-    struct edwAnalysisSoftware *software = edwAnalysisSoftwareFromName(conn, step->software[i]);
-    if (software == NULL)
-        errAbort("Can't find %s in edwAnalysisSoftware table", step->software[i]);
-    checkOrUpdate(conn, analysisStep, software, doUpdate);
-    edwAnalysisSoftwareFree(&software);
-    }
-edwAnalysisStepFree(&step);
-}
-
-void edwAnalysisCheckVersions(struct sqlConnection *conn, char *analysisStep)
-/* Check that we are running tracked versions of everything. */
-{
-edwAnalysisCheckOrUpdateSoftwareForStep(conn, analysisStep, FALSE);
-}
-
-void edwAnalysisSoftwareUpdateMd5ForStep(struct sqlConnection *conn, char *analysisStep)
-/* Update MD5s on all software used by step. */
-{
-edwAnalysisCheckOrUpdateSoftwareForStep(conn, analysisStep, TRUE);
 }
 
 

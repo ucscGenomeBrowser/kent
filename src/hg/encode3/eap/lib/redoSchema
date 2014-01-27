@@ -1,0 +1,5 @@
+#!/bin/tcsh -efx
+autoSql eapDb.as eapDb -dbLink -defaultZeros
+mv eapDb.h ../inc
+make
+resetDb

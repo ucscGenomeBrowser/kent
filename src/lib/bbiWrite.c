@@ -49,23 +49,26 @@ int chromCount = slCount(usageList);
 struct bbiChromUsage *usage;
 
 /* Allocate and fill in array from list. */
-struct bbiChromInfo *chromInfoArray;
-AllocArray(chromInfoArray, chromCount);
-int i;
+struct bbiChromInfo *chromInfoArray = NULL;
 int maxChromNameSize = 0;
-for (i=0, usage = usageList; i<chromCount; ++i, usage = usage->next)
+if (chromCount > 0)
     {
-    char *chromName = usage->name;
-    int len = strlen(chromName);
-    if (len > maxChromNameSize)
-        maxChromNameSize = len;
-    chromInfoArray[i].name = chromName;
-    chromInfoArray[i].id = usage->id;
-    chromInfoArray[i].size = usage->size;
-    }
+    AllocArray(chromInfoArray, chromCount);
+    int i;
+    for (i=0, usage = usageList; i<chromCount; ++i, usage = usage->next)
+	{
+	char *chromName = usage->name;
+	int len = strlen(chromName);
+	if (len > maxChromNameSize)
+	    maxChromNameSize = len;
+	chromInfoArray[i].name = chromName;
+	chromInfoArray[i].id = usage->id;
+	chromInfoArray[i].size = usage->size;
+	}
 
-/* Sort so the b-Tree actually works. */
-qsort(chromInfoArray, chromCount, sizeof(chromInfoArray[0]), bbiChromInfoCmp);
+    /* Sort so the b-Tree actually works. */
+    qsort(chromInfoArray, chromCount, sizeof(chromInfoArray[0]), bbiChromInfoCmp);
+    }
 
 /* Write chromosome bPlusTree */
 int chromBlockSize = min(blockSize, chromCount);
@@ -231,8 +234,11 @@ for (;;)
     lastStart = start;
     }
 slReverse(&usageList);
+double aveSize = 0;
+if (bedCount > 0)
+    aveSize = (double)totalBases/bedCount;
 *retMinDiff = minDiff;
-*retAveSize = (double)totalBases/bedCount;
+*retAveSize = aveSize;
 *retBedCount = bedCount;
 freeHash(&uniqHash);
 return usageList;

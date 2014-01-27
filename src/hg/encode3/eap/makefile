@@ -7,8 +7,9 @@ include ../../../inc/common.mk
 USE_DIRS = $(UTIL_DIRS) 
 
 UTIL_DIRS = \
+    eapAnalysisJson \
     eapDaemon \
-    eapMonintor \
+    eapMonitor \
     eapSchedule
 
 # edwFinishAnalysis depends on -luuid, which is not available on Macs without special port install.
@@ -17,12 +18,13 @@ ifneq ($(UNAME_S),Darwin)
     UTIL_DIRS += eapFinish
 endif
 
+buildUtils: edwLib $(UTIL_DIRS:%=%.buildUtils)
+%.buildUtils:
+	cd $* && $(MAKE)
+
 edwLib:
 	cd lib && ${MAKE}
 
-buildUtils: $(UTIL_DIRS:%=%.buildUtils)
-%.buildUtils:
-	cd $* && $(MAKE)
 
 test::	${TEST_DIRS:%=%.test}
 %.test:

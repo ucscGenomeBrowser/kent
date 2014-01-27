@@ -56,7 +56,7 @@ errAbort(
   "   -gap  - Only pass gaps, not fills. Only useful with -line.\n"
   "   -line - Do this a line at a time, not recursing\n"
   "   -noRandom      - suppress chains involving 'random' chromosomes\n"
-  "   -noHap         - suppress chains involving chromosome names inc '_hap'\n"
+  "   -noHap         - suppress chains involving chromosome names inc '_hap|_alt'\n"
   );
 }
 
@@ -250,7 +250,7 @@ if (fill->chainId)
 	    || sameWord("chrU", fill->qName)) /* dm */
 	    return FALSE;
 	}
-    if (noHap && stringIn("_hap",fill->qName))
+    if (noHap && haplotype(fill->qName))
 	return FALSE;
     if (fill->qStart < qStartMin || fill->qStart >= qStartMax)
         return FALSE;
@@ -407,7 +407,7 @@ for (i=0; i<inCount; ++i)
 			     || sameWord("chrNA", net->name) /* danRer */
 			     || sameWord("chrU", net->name)))  /* dm */
 	        writeIt = FALSE;
-	    if (noHap && stringIn("_hap",net->name))
+	    if (noHap && haplotype(net->name))
 		writeIt = FALSE;
 	    if (writeIt)
 		{

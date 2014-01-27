@@ -42,8 +42,8 @@ errAbort(
   "   -minFill=N  - default half of minSpace\n"
   "   -minScore=N - minimum chain score to consider, default %.1lf\n"
   "   -verbose=N - Alter verbosity (default 1)\n"
-  "   -inclHap - include query sequences name in the form *_hap*. Normally\n"
-  "              these are excluded from nets as being haplotype\n"
+  "   -inclHap - include query sequences name in the form *_hap*|*_alt*.\n"
+  "              Normally these are excluded from nets as being haplotype\n"
   "              pseudochromosomes\n"
   , minSpace, minScore);
 }
@@ -90,7 +90,7 @@ struct chrom
 static boolean inclQuery(struct chain *chain)
 /* should this query be included? */
 {
-return inclHap || (stringIn("_hap", chain->qName) == NULL);
+return inclHap || ! haplotype(chain->qName);
 }
 
 int gapCmpStart(const void *va, const void *vb)

@@ -1,0 +1,35 @@
+#:lav
+d {
+  normalize-lav 133851895 160039680
+}
+d {
+  "restore_rpts applied to:
+  lastz.v1.03.02 /dev/shm/blastz.KRxyCp/s1.strip.fa /dev/shm/blastz.KRxyCp/s2.strip.rev.fa B=0 H=2000 
+     A    C    G    T
+    91 -114  -31 -123
+  -114  100 -125  -31
+   -31 -125  100 -114
+  -123  -31 -114   91
+  O = 400, E = 30, K = 3000, L = 3000, M = 0"
+}
+#:lav
+s {
+  "/scratch/data/hg19/nib/chr12.nib" 1 133851895 
+  "/scratch/data/mm10/nib/chr3.nib-" 1 160039680 
+}
+h {
+   ">/scratch/data/hg19/nib/chr12.nib:120000001-133851895:___"
+   ">/scratch/data/mm10/nib/chr3.nib:120000001-130000000:___ (reverse complement)"
+}
+a {
+  s 3892
+  b 132879984 37732617
+  e 132880140 37732773
+  l 132879984 37732617 132879983 37732616 0
+  l 132879984 37732631 132880085 37732732 68
+  l 132880100 37732733 132880140 37732773 63
+}
+m {
+  n 0
+}
+#:eof

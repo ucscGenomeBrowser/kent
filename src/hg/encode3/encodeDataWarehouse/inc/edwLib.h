@@ -276,9 +276,6 @@ struct edwQaPairedEndFastq *edwQaPairedEndFastqFromVfs(struct sqlConnection *con
     struct edwValidFile **retVf1,  struct edwValidFile **retVf2);
 /* Return pair record if any for the two fastq files. */
 
-int edwAnalysisJobAdd(struct sqlConnection *conn, char *commandLine, int cpusRequested);
-/* Add job to edwAnalyisJob table and return job ID. */
-
 void edwMd5File(char *fileName, char md5Hex[33]);
 /* call md5sum utility to calculate md5 for file and put result in hex format md5Hex 
  * This ends up being about 30% faster than library routine md5HexForFile,
@@ -288,22 +285,6 @@ void edwMd5File(char *fileName, char md5Hex[33]);
 
 void edwPathForCommand(char *command, char path[PATH_LEN]);
 /* Figure out path associated with command */
-
-struct edwAnalysisStep *edwAnalysisStepFromName(struct sqlConnection *conn, char *name);
-/* Get edwAnalysisStep record from database based on name. */
-
-struct edwAnalysisStep *edwAnalysisStepFromNameOrDie(struct sqlConnection *conn, 
-    char *analysisStep);
-/* Get analysis step of given name, or complain and die. */
-
-struct edwAnalysisSoftware *edwAnalysisSoftwareFromName(struct sqlConnection *conn, char *name);
-/* Get edwAnalysisSoftware record by name */
-
-void edwAnalysisCheckVersions(struct sqlConnection *conn, char *analysisStep);
-/* Check that we are running tracked versions of everything. */
-
-void edwAnalysisSoftwareUpdateMd5ForStep(struct sqlConnection *conn, char *analysisStep);
-/* Update MD5s on all software used by step. */
 
 void edwPokeFifo(char *fifoName);
 /* Send '\n' to fifo to wake up associated daemon */

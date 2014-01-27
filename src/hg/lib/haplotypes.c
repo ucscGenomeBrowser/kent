@@ -101,7 +101,7 @@ if (he->vcfTrack != NULL)
     if (tdb != NULL)
         {
         char *vcfFileName = bbiNameFromSettingOrTableChrom(tdb, he->conn, tdb->table, chrom);
-        he->inFile = hCloneRewriteFileName(vcfFileName); // XX very small memory leak?
+        he->inFile = hReplaceGbdb(vcfFileName); // XX very small memory leak?
         }
     }
 

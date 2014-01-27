@@ -10,6 +10,8 @@
 #include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
 #include "../../encodeDataWarehouse/inc/edwLib.h"
 #include "encode3/encode3Valid.h"
+#include "eapDb.h"
+#include "eapLib.h"
 
 boolean noClean = FALSE;
 boolean keepFailing = FALSE;
@@ -55,16 +57,18 @@ for (dict = dictList; dict != NULL; dict = dict->next)
 return val;
 }
 
-char *fakeTags(struct sqlConnection *conn, struct edwAnalysisRun *run, 
+char *fakeTags(struct sqlConnection *conn, struct eapAnalysis *run, 
     struct edwFile *inputFileList, int fileIx, char *validKey, char *ucscDb)
-/* Return tags for out output */
+/* Return tags for our output */
 {
+struct eapStep *step = eapStepFromNameOrDie(conn, run->analysisStep);
+
 /* Fill in tags we actually know will be there */
 struct dyString *dy = dyStringNew(0);
-cgiEncodeIntoDy("format", run->outputFormats[fileIx], dy);
+cgiEncodeIntoDy("format", step->outputFormats[fileIx], dy);
 cgiEncodeIntoDy("ucsc_db", ucscDb, dy);
 cgiEncodeIntoDy("valid_key", validKey, dy);
-cgiEncodeIntoDy("output_type", run->outputTypes[fileIx], dy);
+cgiEncodeIntoDy("output_type", step->outputTypes[fileIx], dy);
 
 /* Next set up stuff to handle variable parts we only put in if all inputs agree. */
 
@@ -94,12 +98,12 @@ cgiDictionaryFreeList(&dictList);
 return dyStringCannibalize(&dy);
 }
 
-void markRunAsFailed(struct sqlConnection *conn, struct edwAnalysisRun *run)
+void markRunAsFailed(struct sqlConnection *conn, struct eapAnalysis *run)
 /* Mark that the run failed,  prevent reanalysis */
 {
 char query[128];
 sqlSafef(query, sizeof(query), 
-    "update edwAnalysisRun set createStatus = -1 where id=%u", run->id);
+    "update eapAnalysis set createStatus = -1 where id=%u", run->id);
 sqlUpdate(conn, query);
 }
 
@@ -121,8 +125,12 @@ return edwUserFromEmail(conn, "edw@encodedcc.sdsc.edu");
 unsigned eapNewSubmit(struct sqlConnection *conn)
 /* Create new submission record for eap */
 {
+/* In practice this just gets called if there is no existing submission for the EAP.
+ * Most of the time the eap just hooks up to the most recent existing submission.
+ * We make new EAP submissions sometimes to help lump together major versions. */
 struct edwUser *eapUser = edwUserForPipeline(conn);
 char query[512];
+// The "EAP" url is clearly fake, but more informative than blank I guess.
 sqlSafef(query, sizeof(query), 
     "insert edwSubmit (userId,url,startUploadTime) values (%u,'%s',%lld)"
     , eapUser->id, "EAP", edwNow());
@@ -192,42 +200,40 @@ verbose(1, "%s\n", command);
 mustSystem(command);
 }
 
-void finishGoodRun(struct sqlConnection *conn, struct edwAnalysisRun *run, 
-    struct edwAnalysisJob *job)
+void finishGoodRun(struct sqlConnection *conn, struct eapAnalysis *run, 
+    struct eapJob *job)
 /* Looks like the job for the run completed successfully, so let's grab results
  * and store them permanently */
 {
 /* Do a version check before committing to database. */
-edwAnalysisCheckVersions(conn, run->analysisStep);
+eapCheckVersions(conn, run->analysisStep);
 
 /* Look up UCSC db. */
 char query[1024];
 sqlSafef(query, sizeof(query), "select ucscDb from edwAssembly where id=%u", run->assemblyId);
 char *ucscDb = sqlQuickString(conn, query);
 
-/* Generate 16 bytes of random sequence with uuid generator */
-unsigned char uu[16];
-uuid_generate(uu);
-uuid_unparse(uu, run->uuid);
+/* What step are we running under what submit? */
+struct eapStep *step = eapStepFromNameOrDie(conn, run->analysisStep);
+struct edwSubmit *submit = eapCurrentSubmit(conn);
 
 /* Get list of input files */
-struct edwFile *inputFile, *inputFileList = NULL;
-int i;
-for (i=0; i<run->inputFileCount; ++i)
+struct edwFile *inputFileList = NULL;
+sqlSafef(query, sizeof(query), "select * from eapInput where analysisId=%u order by id", 
+    run->id);
+struct eapInput *input, *inputList = eapInputLoadByQuery(conn, query);
+for (input = inputList; input != NULL; input = input->next)
     {
-    inputFile = edwFileFromId(conn, run->inputFileIds[i]);
+    struct edwFile *inputFile = edwFileFromId(conn, input->fileId);
     slAddTail(&inputFileList, inputFile);
     }
 
-struct edwSubmit *submit = eapCurrentSubmit(conn);
-
-/* Generate initial edwRun records for each of the file outputs. */
-struct edwFile *outputFile, *outputFileList = NULL;
-struct dyString *outputFileIds = dyStringNew(0);
-for (i=0; i<run->outputFileCount; ++i)
+/* Generate initial records for each of the file outputs. */
+int i;
+for (i=0; i<step->outCount; ++i)
     {
     char path[PATH_LEN];
-    safef(path, sizeof(path), "%s%s", run->tempDir, run->outputNamesInTempDir[i]);
+    safef(path, sizeof(path), "%s%s", run->tempDir, step->outputNamesInTempDir[i]);
 
     verbose(1, "processing %s\n", path);
     if (!fileExists(path))
@@ -242,6 +248,7 @@ for (i=0; i<run->outputFileCount; ++i)
 	}
 
     /* Make most of edwFile record */
+    struct edwFile *outputFile;
     AllocVar(outputFile);
     outputFile->submitId = submit->id;
     outputFile->submitFileName = cloneString(path);
@@ -272,26 +279,27 @@ for (i=0; i<run->outputFileCount; ++i)
 
     updateSubmissionRecord(conn, outputFile);
 
+    /* Make eapOutput record */
+    sqlSafef(query, sizeof(query),
+	    "insert eapOutput (analysisId,name,ix,fileId) values (%u,'%s',%u,%u)"
+	    , run->id, step->outputTypes[i], 0, outputFile->id);
+    sqlUpdate(conn, query);
+
+
     /* Schedule validation and finishing */
     char command[256];
     safef(command, sizeof(command), "bash -exc 'edwQaAgent %u;edwAnalysisAddJson %u'",
 	   outputFile->id, run->id);
     edwAddJob(conn, command);
-
-    dyStringPrintf(outputFileIds, "%u,", outputFile->id);
-    slAddTail(&outputFileList, outputFile);
     }
 sqlSafef(query, sizeof(query), 
-   "update edwAnalysisRun set uuid='%s', createStatus=1, createCount=%d, createFileIds='%s'"
-   "where id=%u",
-   run->uuid, slCount(outputFileList), outputFileIds->string, run->id);
+	"update eapAnalysis set createStatus=1 where id=%u", run->id);
 sqlUpdate(conn, query);
 
 if (!noClean)
     {
     removeTempDir(run->tempDir);
     }
-dyStringFree(&outputFileIds);
 }
 
 void eapFinish(char *how)
@@ -300,15 +308,15 @@ void eapFinish(char *how)
 {
 struct sqlConnection *conn = edwConnectReadWrite();
 char query[512];
-sqlSafef(query, sizeof(query), "select * from edwAnalysisRun where createStatus = 0");
-struct edwAnalysisRun *run, *runList = edwAnalysisRunLoadByQuery(conn, query);
+sqlSafef(query, sizeof(query), "select * from eapAnalysis where createStatus = 0");
+struct eapAnalysis *run, *runList = eapAnalysisLoadByQuery(conn, query);
 verbose(1, "Got %d unfinished analysis\n", slCount(runList));
 
 
 for (run = runList; run != NULL; run = run->next)
     {
-    sqlSafef(query, sizeof(query), "select * from edwAnalysisJob where id=%u", run->jobId);
-    struct edwAnalysisJob *job = edwAnalysisJobLoadByQuery(conn, query);
+    sqlSafef(query, sizeof(query), "select * from eapJob where id=%u", run->jobId);
+    struct eapJob *job = eapJobLoadByQuery(conn, query);
     if (job == NULL)
 	{
         warn("No job for run %u, jobId %u doesn't exist", run->id, run->jobId);
@@ -335,7 +343,7 @@ for (run = runList; run != NULL; run = run->next)
 	    verbose(2, "running %s\n", command);
 	    }
 	}
-    };
+    }
 }
 
 int main(int argc, char *argv[])

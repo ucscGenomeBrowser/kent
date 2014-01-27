@@ -41,7 +41,7 @@ import cgitb; cgitb.enable()
 
 # these are default python modules on python 2.7, no errors expected here
 import urllib2, zlib, collections, StringIO, gzip, string, sys, os, random, \
-    subprocess, re, types
+    subprocess, re, types, socket
 
 from collections import defaultdict, namedtuple
 from os.path import *
@@ -117,6 +117,22 @@ def debug(msg):
     if DEBUG:
         print(msg+"<br>")
         sys.stdout.flush()
+
+def runningAtUcsc():
+    if "hgwdev" in socket.gethostname():
+        return True
+    return False
+    
+def runCmd(cmd, mustRun=True):
+    " wrapper around os.system that makes sure sudo is not called "
+    if runingAtUcsc() and cmd.startswith("sudo"):
+        return 0
+
+    ret = os.system(cmd)
+    if ret!=0 and mustRun:
+        print "Could not run command %s" % cmd
+        sys.exit(0)
+    return ret
 
 def loadGroups(db):
     """ load grp table via mysql and return as a list of tuples (name, label)"""
@@ -268,14 +284,14 @@ def getTrackVis(settings):
     return trackVis, isSuperTrack
 
 def parseTrackDb(db):
-    """ download and parse trackDb, return four dictionaries:
+    """ download and parse trackDb, returns 7 values
     1) dict trackName -> shortLabel
-    1) dict trackName -> tableName (usually the same as trackName, but not for encode and genbank)
-    2) dict trackName -> trackName of parent track
-    3) dict groupName -> list of top-level trackNames
-    4) pseudoTracks: set of names of tracks that have no tables ("views", "composites", "superTracks", "container multiWig")
-    5) trackVis: dict trackName -> visibility
-    6) set of all superTrack names
+    2) dict trackName -> tableName (usually the same as trackName, but not for encode and genbank)
+    3) dict trackName -> trackName of parent track
+    4) dict group -> list of top-level trackNames (not table names)
+    5) pseudoTracks: set of names of tracks that have no tables ("views", "composites", "superTracks", "container multiWig")
+    6) trackVis: dict trackName -> visibility
+    7) set of all superTrack names
     """
     rows = downloadTable(db, "trackDb")
     trackLabels = dict()
@@ -697,10 +713,7 @@ def getRsyncSizes(dataType, db):
     tmpFname = "/tmp/%s_%s.rsync.txt" % (dataType, db)
     if not isfile(tmpFname):
         cmd = "rsync -navP rsync://hgdownload.cse.ucsc.edu/%s/%s/ > %s" % (dataType, db, tmpFname)
-        ret = os.system(cmd)
-        if ret!=0:
-            print "Could not run %s" % cmd
-            sys.exit(0)
+        runCmd(cmd)
 
     # parse rsync output file
     tableSizes = collections.defaultdict(int)
@@ -767,7 +780,7 @@ def udrIsUsable():
     if not isfile("/tmp/useUdr"):
         # try to transfer a file
         cmd = "udr rsync -avP hgdownload.soe.ucsc.edu::goldenPath/hg19/bigZips/README.txt /tmp/"
-        ret = os.system(cmd)
+        ret = runCmd(cmd, mustRun=False)
         useUdr = (ret==0)
         open("/tmp/useUdr", "w").write(str(int(useUdr)))
         return useUdr
@@ -808,15 +821,6 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
     cmdFh.write(cmd)
 
     cmdFh.close()
-    #cmdFh.write('sudo -u mysql 
-        #(rsyncCmd, listFname, db, localDbDir, jobId))
-    #cmdFh.write('sudo -u mysql %s -avP --no-progress --files-from=%s hgdownload.cse.ucsc.edu::mysql/%s %s >> /tmp/%d.log 2>&1\n' % \
-
-    #cmdFh.write('%s -avP --no-progress --files-from=%s hgdownload.cse.ucsc.edu::gbdb/%s /gbdb/%s/ >> /tmp/%d.log\n' % \
-        #(rsyncCmd, gbdbListFname, db, db, jobId))
-    #cmdFh.write('sudo -u mysql %s -avP --no-progress --files-from=%s hgdownload.cse.ucsc.edu::mysql/hgFixed %s/hgFixed >> /tmp/%d.log \n' \
-        #% (rsyncCmd, fixedFname, MYSQLDIR, jobId))
-
     # "at" suggested by http://stackoverflow.com/questions/6024472/start-background-process-daemon-from-cgi-script/6091159#6091159
     cmd = "at now -f %s" % jobFname
 
@@ -828,11 +832,7 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
 
     # run commands
     print("Starting udr/rsync command script...")
-    ret = os.system(cmd)
-
-    if ret!=0:
-        print "Could not run command %s" % cmd
-        sys.exit(0)
+    runCmd(cmd)
 
 def refreshPage(paramStr, delay=5, addNote=False):
     " refresh current CGI page using javascript "
@@ -851,7 +851,7 @@ def refreshPage(paramStr, delay=5, addNote=False):
 def jobsAreDone():
     " True if no jobs currently in the 'at' queue "
     cmd = "at -l | wc -l > /tmp/atWc.txt"
-    assert(os.system(cmd)==0)
+    runCmd(cmd)
     lineCount = int(open("/tmp/atWc.txt").read().strip())
     os.remove("/tmp/atWc.txt")
     return lineCount==0
@@ -902,14 +902,19 @@ def getLocalSizes(db):
     return a dict with table name -> total size of a mysql directory and filename -> size for the gbdb dir
     (gbdb filenames are relative to the gbdb/db directory)
     """
+
     path = join(MYSQLDIR, db)
     sizes = defaultdict(int)
+    if runningAtUcsc():
+        return sizes
+
     sqlFname = '/tmp/localMysqlDirList.txt'
     cmd = 'sudo -u mysql /bin/ls -l %s > %s' % (path, sqlFname)
-    ret = os.system(cmd)
+    ret = runCmd(cmd, mustRun=False)
     if ret!=0:
         print "<small>warning: cannot read file sizes from %s, local file sizes will be incorrect</small><br>" % path
         return sizes
+
     for line in open(sqlFname):
         fields = line.strip().split()
         if len(fields)<4:
@@ -927,7 +932,7 @@ def getLocalSizes(db):
         gbdbFname = '/tmp/localGbdbDirList.txt'
         # trailing slash is important
         cmd = 'find %s/ -type f > %s ' % (gbdbDir, gbdbFname)
-        assert(os.system(cmd)==0)
+        runCmd(cmd)
         fnames = open(gbdbFname).read().splitlines()
         for fname in fnames:
             relName = fname.replace(gbdbDir+"/", "")
@@ -938,9 +943,9 @@ def makeGbdb():
     """ create the gbdb directory and assign it to the apache user """
     if not isdir(getGbdbDir()):
         cmd = "sudo mkdir %s" % getGbdbDir()
-        assert(os.system(cmd)==0)
+        runCmd(cmd)
         cmd = "sudo chown %s.%s %s" % (APACHEUSER, APACHEUSER, getGbdbDir())
-        assert(os.system(cmd)==0)
+        runCmd(cmd)
 
 def checkGbdbMysqlAccess():
     """ check if we have write access to gbdb and mysql dir and can run the at command """
@@ -955,7 +960,7 @@ def checkGbdbMysqlAccess():
     try:
         open(tmpFname, "w")
     except IOError:
-        print "This program cannot write to the %s directory. Please make sure that the apache user has permission to write to /gbdb<br>" % getGbdbDir()
+        print "This program cannot write to the %s directory. Please make sure that the apache user has permission to write to %s<br>" % (getGbdbDir(), getGbdbDir())
         print 'Use "sudo visudo" to add these lines to /etc/sudoers:<br>'
         print msg
         print 'Or check the directory permissions if the directory already exists.<br>'
@@ -964,7 +969,7 @@ def checkGbdbMysqlAccess():
     # check if we can rsync to mysql
     tmpFname2= "%s/test.tmp" % MYSQLDIR
     cmd = "sudo -u mysql rsync %s %s" % (tmpFname, tmpFname2)
-    ret = os.system(cmd)
+    ret = runCmd(cmd, mustRun=False)
     if ret!=0:
         print "Could not run %s<br>" % cmd
         print """Cannot run rsync as the mysql user. Please make sure that you have these lines in /etc/sudoers:<br>"""
@@ -975,13 +980,13 @@ def checkGbdbMysqlAccess():
     os.remove(tmpFname)
 
     cmd = "sudo -u mysql rm %s" % tmpFname2
-    ret = os.system(cmd)
+    ret = runCmd(cmd, mustRun=False)
     if ret!=0:
         os.remove(tmpFname2)
 
     # check if we can run "at"
     cmd = "echo echo hi | at now"
-    ret = os.system(cmd)
+    ret = runCmd(cmd, mustRun=False)
     if ret != 0:
         print "Could not run %s<br>" % cmd
         print "It looks like we cannot run the 'at' command<br>"
@@ -1078,6 +1083,10 @@ def htmlMiddle(args):
 
     # when user has clicked OK, run rsync and refresh with jobId
     if "submit" in args.keys():
+        if runningAtUcsc():
+            print "cannot do this on hgwdev"
+            sys.exit(0)
+
         makeGbdb()
         checkGbdbMysqlAccess()
 
@@ -1097,6 +1106,10 @@ def htmlMiddle(args):
 
     # if we have a jobId in URL, show the rsync log
     elif "jobId" in args.keys():
+        if runningAtUcsc():
+            print "cannot do this on hgwdev"
+            sys.exit(0)
+
         jobId = int(args["jobId"].value)
         printLog(jobId)
 

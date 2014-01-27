@@ -1024,7 +1024,7 @@ struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end)
 {
 struct dnaSeq *seq = NULL;
 char *newFileName = NULL;
-newFileName = hCloneRewriteFileName(fileName);
+newFileName = hReplaceGbdb(fileName);
 if (twoBitIsFile(newFileName))
     seq = fetchTwoBitSeq(newFileName, seqName, start, end);
 else
@@ -1037,7 +1037,7 @@ struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end)
 /* Fetch sequence from file.  If it is a .2bit file then fetch the named sequence.
    If it is .nib then just ignore seqName. */
 {
-fileName = hCloneRewriteFileName(fileName);
+fileName = hReplaceGbdb(fileName);
 struct dnaSeq *seq  = NULL;
 if (twoBitIsFile(fileName))
     {
@@ -1265,12 +1265,15 @@ hFreeConn(&conn);
 return list;
 }
 
-char *hCloneRewriteFileName(char* fileName)
- /* Clones and returns a gbdb filename, potentially rewriting it according to hg.conf
+char *hReplaceGbdb(char* fileName)
+ /* Returns a gbdb filename, potentially rewriting it according to hg.conf
   * If the settings gbdbLoc1 and gbdbLoc2 are found, try them in order, by 
   * replacing /gbdb/ with the new locations.
-  * We assume /gbdb/ does not appear somewhere inside a fileName.
+  * If after the replacement of gbdbLoc1 the resulting fileName does not exist,
+  * gbdbLoc2 is used.
   * This function does not guarantee that the filename exists.
+  * We assume /gbdb/ does not appear somewhere inside a fileName.
+  * Result has to be free'd.
  * */
 {
 if (fileName==NULL)
@@ -1328,7 +1331,7 @@ if ((row = sqlNextRow(sr)) == NULL)
 	}
     }
 
-path = hCloneRewriteFileName(row[0]);
+path = hReplaceGbdb(row[0]);
 
 dbSize = sqlLongLong(row[1]);
 sqlFreeResult(&sr);
@@ -2370,7 +2373,7 @@ char *hDbDbNibPath(char *database)
 /* return nibPath from dbDb for database, has to be freed */
 {
 char *rawNibPath = hDbDbOptionalField(database, "nibPath");
-char *nibPath = hCloneRewriteFileName(rawNibPath);
+char *nibPath = hReplaceGbdb(rawNibPath);
 freez(&rawNibPath);
 return nibPath;
 }
@@ -2396,7 +2399,7 @@ char *hHtmlPath(char *database)
 /* NOTE: must free returned string after use */
 {
 char *htmlPath = hDbDbOptionalField(database, "htmlPath");
-char *newPath = hCloneRewriteFileName(htmlPath);
+char *newPath = hReplaceGbdb(htmlPath);
 freez(&htmlPath);
 return newPath;
 }
@@ -2800,8 +2803,8 @@ db = sqlGetDatabase(conn);
 /* Read table description into hash. */
 boolean gotIt = TRUE, binned = FALSE;
 binned = hIsBinned(db, table);
-// XX Do I need to free the slList implicitly created here?
-struct hash *hash = hashFromSlNameList(sqlListFields(conn, table));
+struct slName *tableList = sqlListFields(conn, table);
+struct hash *hash = hashSetFromSlNameList(tableList);
 
 /* Look for bed-style or linkedFeatures names. */
 if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEnd))
@@ -2882,7 +2885,10 @@ else
          strcpy(retName, "name");
     gotIt = FALSE;
     }
+
+slFreeList(&tableList);
 freeHash(&hash);
+
 *retBinned = binned;
 return gotIt;
 }
@@ -5237,7 +5243,7 @@ if (fileName == NULL)
 	errAbort("Missing fileName in %s table", table);
     }
 
-char *rewrittenFname = hCloneRewriteFileName(fileName);
+char *rewrittenFname = hReplaceGbdb(fileName);
 freez(&fileName);
 return rewrittenFname;
 }
@@ -5247,7 +5253,7 @@ char *bbiNameFromSettingOrTableChrom(struct trackDb *tdb, struct sqlConnection *
 /* Return file name from bigDataUrl or little table that might have a seqName column.
  * If table does have a seqName column, return NULL if there is no file for seqName. */
 {
-char *fileName = hCloneRewriteFileName(trackDbSetting(tdb, "bigDataUrl"));
+char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (fileName == NULL)
     fileName = bbiNameFromTableChrom(conn, table, seqName);
 return fileName;

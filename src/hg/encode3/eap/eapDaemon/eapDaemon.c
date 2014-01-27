@@ -16,6 +16,7 @@
 #include "verbose.h"
 #include "../../../../parasol/inc/jobResult.h"
 #include "../../../../parasol/inc/paraMessage.h"
+#include "eapDb.h"
 #include "eapLib.h"
 
 /* Variables set from command line */
@@ -34,8 +35,8 @@ errAbort(
   "where:\n"
   "   count - number of simultanious jobs to run\n"
   "options:\n"
-  "   -database=%s - mySQL database where edwAnalysisJob table lives\n"
-  "   -table=%s - table in edwAnalysisJob format to use\n"
+  "   -database=%s - mySQL database where eapJob table lives\n"
+  "   -table=%s - table in eapJob format to use\n"
   "   -debug - don't fork, close stdout, and daemonize self\n"
   "   -log=logFile - send error messages and warnings of daemon itself to logFile\n"
   "        There are not many of these.  Error mesages from jobs daemon runs end up\n"
@@ -61,7 +62,7 @@ static struct optionSpec options[] = {
 int cmpByParasolId(void *a, void *b)
 /* Set up rbTree so as to work on strings. */
 {
-struct edwAnalysisJob *aJob = a, *bJob = b;
+struct eapJob *aJob = a, *bJob = b;
 return strcmp(aJob->parasolId, bJob->parasolId);
 }
 
@@ -113,7 +114,7 @@ return queue;
 }
 
 
-void sendToParasol(struct edwAnalysisJob *job, struct resultsQueue *queue)
+void sendToParasol(struct eapJob *job, struct resultsQueue *queue)
 /* Add job to current parasol queue. Sets job->parasolId and saves it
  * to database. */
 {
@@ -146,8 +147,8 @@ sqlDisconnect(&conn);
 dyStringFree(&cmd);
 }
 
-void finishJob(struct edwAnalysisJob *job, struct jobResult *jr) 
-/* Move parasol job result into edwAnalysisJob table */
+void finishJob(struct eapJob *job, struct jobResult *jr) 
+/* Move parasol job result into eapJob table */
 {
 int status = -1;
 if (WIFEXITED(jr->status))
@@ -195,13 +196,13 @@ for (queue = queueList; queue != NULL; queue = queue->next)
 	queue->believePos = TRUE;
 	struct jobResult *jr;
 	jr = jobResultLoad(row);
-	struct edwAnalysisJob jobKey = {.parasolId = jr->jobId,};
-	struct edwAnalysisJob *job = rbTreeFind(running, &jobKey);
+	struct eapJob jobKey = {.parasolId = jr->jobId,};
+	struct eapJob *job = rbTreeFind(running, &jobKey);
 	if (job != NULL)
 	    {
 	    finishJob(job, jr);
 	    rbTreeRemove(running, job);
-	    edwAnalysisJobFree(&job);
+	    eapJobFree(&job);
 	    finishedCount += 1;
 	    }
 	jobResultFree(&jr);
@@ -244,7 +245,7 @@ char query[256];
 struct sqlConnection *conn = sqlConnect(clDatabase);
 sqlSafef(query, sizeof(query), 
     "select * from %s where startTime > 0 and endTime = 0 order by id", clTable);
-struct edwAnalysisJob *oldJob, *oldJobList = edwAnalysisJobLoadByQuery(conn, query);
+struct eapJob *oldJob, *oldJobList = eapJobLoadByQuery(conn, query);
 verbose(1, "Got %d old jobs in %s to reconnect to\n", slCount(oldJobList), clTable);
 
 /* Set up rbTree as a convenient quick access container for jobs */
@@ -265,7 +266,7 @@ int oldFinishedCount = finishJobsWithResults(running, allQueues);  // This updat
 
 /* Figure out jobs that are *still* running in one of our batches.  These
  * we'll add to our count of running threads. */
-oldJobList = edwAnalysisJobLoadByQuery(conn, query);  // Reload hopefully diminished old job list
+oldJobList = eapJobLoadByQuery(conn, query);  // Reload hopefully diminished old job list
 struct hash *currentlyRunningHash = eapParasolRunningHash(clParaHost, NULL);
 int oldRunningCount = 0;
 for (oldJob = oldJobList; oldJob != NULL; oldJob = oldJob->next)
@@ -274,7 +275,7 @@ for (oldJob = oldJobList; oldJob != NULL; oldJob = oldJob->next)
 	oldRunningCount += 1;
     }
 hashFree(&currentlyRunningHash);
-edwAnalysisJobFree(&oldJobList);
+eapJobFree(&oldJobList);
 sqlDisconnect(&conn);
 
 verbose(1, "Reconnected to %d finished and %d running old jobs\n", 
@@ -294,7 +295,7 @@ for (;;)
     conn = sqlConnect(clDatabase);  // It may have been a while so open fresh connection
     sqlSafef(query, sizeof(query), 
 	"select * from %s where startTime = 0 order by id limit 1", clTable);
-    struct edwAnalysisJob *job = edwAnalysisJobLoadByQuery(conn, query);
+    struct eapJob *job = eapJobLoadByQuery(conn, query);
     sqlDisconnect(&conn);
 
     if (job != NULL)

@@ -557,7 +557,7 @@ boolean foundIt = FALSE;
 // Do we happen to have a bigBed version?  Better yet, bed4 only for current uses:
 char origFileName[HDB_MAX_PATH_STRING];
 safef(origFileName, sizeof(origFileName), "/gbdb/%s/vai/%s.bed4.bb", database, table);
-char* fileName = hCloneRewriteFileName(origFileName);
+char* fileName = hReplaceGbdb(origFileName);
 if (fileExists(fileName))
     {
     if (retFileName != NULL)
@@ -569,7 +569,7 @@ else
     // Not bed4; try just .bb:
     freez(&fileName);
     safef(origFileName, sizeof(origFileName), "/gbdb/%s/vai/%s.bb", database, table);
-    fileName = hCloneRewriteFileName(origFileName);
+    fileName = hReplaceGbdb(origFileName);
     if (fileExists(fileName))
 	{
 	if (retFileName != NULL)
@@ -912,7 +912,7 @@ char query[512];
 sqlSafef(query, sizeof(query), "select fileName from %s", table);
 char *fileName = sqlQuickString(conn, query);
 hFreeConn(&conn);
-char *fileNameRewrite = hCloneRewriteFileName(fileName);
+char *fileNameRewrite = hReplaceGbdb(fileName);
 freez(&fileName);
 return fileNameRewrite;
 }

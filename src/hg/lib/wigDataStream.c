@@ -216,7 +216,7 @@ return TRUE;
 static void findWibFile(struct wiggleDataStream *wds, char *file)
 /* look for file in full pathname given, or in same directory */
 {
-wds->wibFile = hCloneRewriteFileName(file);
+wds->wibFile = hReplaceGbdb(file);
 wds->wibFH = udcFileMayOpen(wds->wibFile, NULL);
 if (wds->wibFH == NULL)
     {

@@ -2109,17 +2109,23 @@ var rightClick = {
                 imageV2.afterImgChange(true);
                 }
             }
-            //else
-            //    warn('What went wrong?');
-        } else if (cmd == 'zoomToHighlight') { // If highlight exists for this assembly, zoom to it
+        } else if (cmd == 'jumpToHighlight') { // If highlight exists for this assembly, jump to it
             if (hgTracks.highlight) {
-                var pos = parsePositionWithDb(hgTracks.highlight);
-                if (pos && pos.db == getDb()) {
+                var newPos = parsePositionWithDb(hgTracks.highlight);
+                if (newPos && newPos.db == getDb()) {
+                    if ( $('#highlightItem').length == 0) { // not visible? jump to it
+                        var curPos = parsePosition(genomePos.get());
+                        var diff = ((curPos.end - curPos.start) - (newPos.end - newPos.start));
+                        if (diff > 0) { // new position is smaller then current, then center it
+                            newPos.start = Math.max( Math.floor(newPos.start - (diff/2) ), 0 );
+                            newPos.end   = newPos.start + (curPos.end - curPos.start);
+                        }
+                    }
                     if (imageV2.inPlaceUpdate) {
-                        var params = "position=" + pos.chrom + ':' + pos.start + '-' + pos.end;
+                        var params = "position=" + newPos.chrom+':'+newPos.start+'-'+newPos.end;
                         imageV2.navigateInPlace(params, null, true);
                     } else {
-                        genomePos.setByCoordinates(pos.chrom, pos.start, pos.end);
+                        genomePos.setByCoordinates(newPos.chrom, newPos.start, newPos.end);
                         jQuery('body').css('cursor', 'wait');
                         document.TrackHeaderForm.submit();
                     }
@@ -2473,20 +2479,20 @@ var rightClick = {
                 if(hgTracks.highlight) {
                     var o;
                     if (hgTracks.highlight.search(getDb() + '.') == 0) {
+                        var currentlySeen = ($('#highlightItem').length > 0); 
                         o = new Object();
-                        o[rightClick.makeImgTag("highlightZoom.png") + 
-                                                                  " Zoom to highlighted region"] = 
-                            {   onclick:function(menuItemClicked, menuObject) {
-                                    rightClick.hit(menuItemClicked, menuObject, "zoomToHighlight");
-                                    return true; 
-                                }
+                        // Jumps to highlight when not currently seen in image
+                        var text = (currentlySeen ? " Zoom" : " Jump") + " to highlighted region";
+                        o[rightClick.makeImgTag("highlightZoom.png") + text] = {
+                            onclick: rightClick.makeHitCallback('jumpToHighlight')
+                        };
+
+                        if ( currentlySeen ) {   // Remove only when seen
+                            o[rightClick.makeImgTag("highlightRemove.png") + 
+                                                                       " Remove highlighting"] = {
+                                onclick: rightClick.makeHitCallback('removeHighlight')
                             };
-                        o[rightClick.makeImgTag("highlightRemove.png") + " Remove highlighting"] = 
-                            {   onclick:function(menuItemClicked, menuObject) {
-                                    rightClick.hit(menuItemClicked, menuObject, "removeHighlight");
-                                    return true; 
-                                }
-                            };
+                        }
                         menu.push(o);
                     }
                 }
@@ -3315,6 +3321,7 @@ var imageV2 = {
             if (newChrom == oldChrom) {
                 imageV2.markAsDirtyPage();
                 imageV2.navigateInPlace("position="+encodeURIComponent(newPos), null, false);
+                window.scrollTo(0,0);
                 return false;
             }
             return true;
