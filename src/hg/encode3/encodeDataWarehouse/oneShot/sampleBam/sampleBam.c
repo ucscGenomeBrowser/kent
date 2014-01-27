@@ -20,7 +20,8 @@ errAbort(
   "   in.bam is the full input bam\n"
   "   inSize is the number of reads in in.bam\n"
   "   outSize is the number of reads we want to sample\n"
-  "   out.sam is the output in sam format (text format, needs to be converted to BAM)\n"
+  // "   out.sam is the output in sam format (text format, needs to be converted to BAM)\n"
+  "   out.bed is the output in bed format (really seems like it should output BAM or SAM!)\n"
   "options:\n"
   "   -seed=N - random number seed, defaults to 0\n"
   );
