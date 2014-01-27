@@ -11,7 +11,7 @@
 #include "expRecord.h"
 #include "dystring.h"
 #include "factorSource.h"
-
+#include "bed6FloatScore.h"
 
 static struct factorSource *loadOne(char **row)
 /* Load up factorSource from array of strings. */
@@ -21,18 +21,14 @@ return factorSourceLoad(row);
 
 /* Save info about motifs */
 struct motifInfo {
-    char *motifTable;
     struct hash *motifTargets;
+    struct bed6FloatScore *motifs;
 };
 
 static void factorSourceLoadItems(struct track *track)
 /* Load all items (and motifs if table is present) in window */
 {
 bedLoadItem(track, track->table, (ItemLoader)loadOne);
-
-char *motifTable = trackDbSetting(track->tdb, "motifTable");
-if (motifTable == NULL)
-    return;
 
 char varName[64];
 safef(varName, sizeof(varName), "%s.highlightMotifs", track->track);
@@ -44,18 +40,27 @@ if (motifMaxWindow != NULL)
     if (winEnd - winStart > sqlUnsigned(motifMaxWindow))
         return;
 
+char *motifTable = trackDbSetting(track->tdb, "motifTable");
+if (motifTable == NULL)
+    return;
+
 struct sqlConnection *conn = hAllocConn(database);
 if (sqlTableExists(conn, motifTable))
     {
     struct motifInfo *motifInfo = NULL;
     AllocVar(motifInfo);
     track->extraUiData = motifInfo;
-    motifInfo->motifTable = cloneString(motifTable);
+
+    // Load motifs
+    struct slList *items = track->items;
+    bedLoadItem(track, motifTable, (ItemLoader)bed6FloatScoreLoad);
+    motifInfo->motifs = track->items;
+    track->items = items;
 
     char *motifMapTable = trackDbSetting(track->tdb, "motifMapTable");
-    if (sqlTableExists(conn, motifMapTable))
+    if (motifMapTable != NULL && sqlTableExists(conn, motifMapTable))
         {
-        /* load (small) map table into hash */
+        // Load map table 
         char query[256];
         struct sqlResult *sr = NULL;
         char **row = NULL;
@@ -136,7 +141,6 @@ static void factorSourceDrawMotifForItemAt(struct track *track, void *item,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw motif on factorSource item at a particular position. */
 {
-int rowOffset;
 struct motifInfo *motifInfo = (struct motifInfo *)track->extraUiData;
 if (motifInfo == NULL)
     return;
@@ -144,15 +148,6 @@ if (motifInfo == NULL)
 // Draw region with highest motif score
 // NOTE: shows only canonical motif for the factor, so hides co-binding potential
 // NOTE: current table has single motif per factor
-struct sqlConnection *conn = hAllocConn(database);
-
-struct sqlResult *sr;
-char where[256];
-char **row;
-
-// QUESTION: Is performance adequate with this design ?  Could query table once and
-// add motif ranges to items.
-
 struct factorSource *fs = item;
 char *target = fs->name;
 int heightPer = track->heightPer;
@@ -163,20 +158,36 @@ if (targetHash != NULL)
     if (target == NULL)
         target = fs->name;
     }
-sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", target);
-sr = hRangeQuery(conn, motifInfo->motifTable, fs->chrom, fs->chromStart,
-                 fs->chromEnd, where, &rowOffset);
+struct bed6FloatScore *m, *motif = NULL, *motifs = NULL;
+for (m = motifInfo->motifs; 
+        m != NULL && m->chromEnd <= fs->chromEnd; m = m->next)
+    {
+    if (sameString(m->name, target) && m->chromStart >= fs->chromStart)
+        {
+        AllocVar(motif);
+        motif->chrom = cloneString(m->chrom);
+        motif->chromStart = m->chromStart;
+        motif->chromEnd = m->chromEnd;
+        motif->name = m->name;
+        motif->score = m->score;
+        motif->strand[0] = m->strand[0];
+        slAddHead(&motifs, motif);
+        }
+    }
+if (motifs == NULL)
+    return;
+slSort(&motifs, bedCmpScore);
+slReverse(&motifs);
+
 #define HIGHEST_SCORING
 #ifdef HIGHEST_SCORING
-if ((row = sqlNextRow(sr)) != NULL)
+if ((motif = motifs) != NULL)
 #else
-     while ((row = sqlNextRow(sr)) != NULL)
+for (motif = motifs; motifs != NULL; motif = motif->next)
 #endif
     {
-    int start = sqlUnsigned(row[rowOffset+1]);
-    int end = sqlUnsigned(row[rowOffset+2]);
-    int x1 = round((double)((int)start-winStart)*scale) + xOff;
-    int x2 = round((double)((int)end-winStart)*scale) + xOff;
+    int x1 = round((double)((int)motif->chromStart-winStart)*scale) + xOff;
+    int x2 = round((double)((int)motif->chromEnd-winStart)*scale) + xOff;
     int w = x2-x1;
     if (w < 1)
         w = 1;
@@ -186,13 +197,12 @@ if ((row = sqlNextRow(sr)) != NULL)
         // Draw chevrons for directionality
         Color textColor = hvGfxContrastingColor(hvg, color);
         int midY = y + (heightPer>>1);
-        int dir = (row[rowOffset+5][0] == '+' ? 1 : -1);
+        int dir = (*motif->strand == '+' ? 1 : -1);
         clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
                        dir, textColor, TRUE);
         }
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
+//bed6FloatScoreFreeList(&motifs);
 }
 
 static void factorSourceDraw(struct track *track, int seqStart, int seqEnd,
