@@ -131,7 +131,7 @@ zcat $lift | pslMap -chainMapFile -swapMap $db.kg.psl stdin stdout \
 |  sort -k 14,14 -k 16,16n > $db.$otherDb.kg.psl
 
 echo "hgLoadPsl:"
-hgLoadPsl $otherDb $db.$otherDb.kg.psl -table=temp${db}KgPslMapped
+hgLoadPsl -clientLoad $otherDb $db.$otherDb.kg.psl -table=temp${db}KgPslMapped
 
 echo "hgMapToGene:"
 hgMapToGene -all $otherDb -type=psl -verbose=0 temp${db}KgPslMapped $otherGeneTable temp${otherDb}kgTo${db}kg
