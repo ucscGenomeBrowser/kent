@@ -63,7 +63,7 @@ struct sqlProfile
 struct sqlConnection
 /* This is an item on a list of sql open connections. */
     {
-    MYSQL *conn;		    /* Connection. */
+    MYSQL *conn;		    /* Connection. Can be NULL if not connected yet. */
     struct sqlProfile *profile;     /* profile, or NULL if not opened via a profile */
     struct dlNode *node;	    /* Pointer to list node. */
     struct dlList *resultList;	    /* Any open results. */
@@ -71,9 +71,11 @@ struct sqlConnection
     boolean inCache;                /* debugging flag to indicate it's in a cache */
     boolean isFree;                /* is this connection free for reuse; alway FALSE
                                     * unless managed by a cache */
-    int hasTableCache;           /* to avoid repeated checks for cache table name existence, -1 if not initialized yet */
-    struct sqlConnection *slowConn; /* optional. tried if a query fails on the conn connection */
-    char *db;                       /* to be able to lazily connect later, we need to store the database */
+    int hasTableCache;              /* to avoid repeated checks for cache table name existence, 
+                                      -1 if not initialized yet */
+    struct sqlConnection *slowConn; /* tried if a query fails on the main conn connection. Can be NULL. */
+    char *db;                       /* to be able to connect later (if conn is NULL), we need to  */
+                                    /* store the database */
     };
 
 struct sqlResult
@@ -412,6 +414,13 @@ static char *scConnDb(struct sqlConnection *sc)
 return (sc->db ? sc->db : "db=?");
 }
 
+static char *scConnProfile(struct sqlConnection *sc)
+/* Return sc->profile->name, unless profile is NULL -- if NULL, return a string for
+ * fprint'd messages. */
+{
+return (sc->profile ? sc->profile->name : "<noProfile>");
+}
+
 static void monitorPrintInfo(struct sqlConnection *sc, char *name)
 /* print a monitor message, with connection id and databases. */
 {
@@ -576,6 +585,7 @@ if (sc != NULL)
 	freeMem(node);
 	}
    
+    freeMem(sc->db);
     // also close local cache connection
     if (sc->slowConn != NULL)
         sqlDisconnect(&sc->slowConn);
@@ -905,7 +915,7 @@ if (sqlNumOpenConnections > maxNumConnections)
 totalNumConnects++;
 
 sc->hasTableCache=-1; // -1 => not determined 
-sc->db=database;
+sc->db=cloneString(database);
 return sc;
 }
 
@@ -1002,7 +1012,10 @@ static struct sqlConnection *sqlConnectIfUnconnected(struct sqlConnection *sc)
 {
 if (sc->conn!=NULL)
     return sc;
-struct sqlProfile *sp = sqlProfileMustGet(sc->profile->name, sc->db);
+char *profName = NULL;
+if (sc->profile)
+    profName = sc->profile->name;
+struct sqlProfile *sp = sqlProfileMustGet(profName, sc->db);
 sqlConnRemoteFillIn(sc, sp->host, sp->port, sp->socket, sp->user, sp->password, sc->db, TRUE, FALSE);
 return sc;
 }
@@ -1046,7 +1059,7 @@ if (format != NULL) {
     vaWarn(format, args);
     }
 warn("mySQL error %d: %s (profile=%s, host=%s, db=%s)", mysql_errno(conn), 
-    mysql_error(conn), sc->profile->name, sc->conn->host, sc->conn->db);
+    mysql_error(conn), scConnProfile(sc), sqlGetHost(sc), scConnDb(sc));
 }
 
 void sqlWarn(struct sqlConnection *sc, char *format, ...)
@@ -1117,7 +1130,7 @@ int mysqlError = mysql_real_query(sc->conn, query, strlen(query));
 if (mysqlError != 0 && sc->slowConn && sameWord(sqlGetDatabase(sc), sqlGetDatabase(sc->slowConn)))
     {
     if (monitorFlags & JKSQL_TRACE)
-        monitorPrint(sc, "SQL_FAILOVER", "%s -> %s", sc->profile->name, sc->slowConn->profile->name);
+        monitorPrint(sc, "SQL_FAILOVER", "%s -> %s", scConnProfile(sc), scConnProfile(sc->slowConn));
 
     sc = sc->slowConn;
     sc = sqlConnectIfUnconnected(sc);
@@ -2158,35 +2171,41 @@ static boolean sqlConnCacheEntryDbMatch(struct sqlConnCacheEntry *scce,
                                         char *database)
 /* does a database match the one in the connection cache? */
 {
-return ((database == NULL) && (scce->conn->db == NULL))
-    || sameString(database, scce->conn->db);
+return (sameOk(database, sqlGetDatabase(scce->conn)));
 }
 
 static boolean sqlConnChangeDb(struct sqlConnection *sc, char *database, boolean abort)
-/* change the database of an sql connection (and its failover connection)
- * */
+/* change the database of an sql connection (and its failover connection) */
 {
 // if we have a failover connection, keep its db in sync
 int slowConnErr = 0;
 if (sc->slowConn)
     {
     if (monitorFlags & JKSQL_TRACE)
-        monitorPrint(sc->slowConn, "SQL_SET_DB", "%s %s", sc->slowConn->profile->name, database);
+        monitorPrint(sc->slowConn, "SQL_SET_DB_SLOW", "%s", database);
     if (sc->slowConn->conn)
         slowConnErr = mysql_select_db(sc->slowConn->conn, database);
         if (slowConnErr==0)
-            sc->slowConn->db = database;
-        // if an error occured, the slowConn will be out of sync with the main connection
+            {
+            freeMem(sc->slowConn->db);
+            sc->slowConn->db = cloneString(database);
+            }
+        else
+            monitorPrint(sc->slowConn, "SQL_SET_DB_SLOW_FAIL", "");
+        // note: if an error occured, the slowConn will now have a different db than the main
+        // connection
     }
 
-sc->db=database;
-if (monitorFlags & JKSQL_TRACE)
-    monitorPrint(sc, "SQL_SET_DB", "%s %s", sc->profile->name, database);
+freeMem(sc->db);
+sc->db=cloneString(database);
 
-// we only fail if there is no failover connection, this allows to have a DB
-// that does not exist locally but only remote
+if (monitorFlags & JKSQL_TRACE)
+    monitorPrint(sc, "SQL_SET_DB", "%s", database);
+
 int localConnErr = 0;
 localConnErr = mysql_select_db(sc->conn, database);
+
+// if there is no failover connection, stop now
 if (sc->slowConn==NULL && sc->conn!=NULL && localConnErr != 0)
     {
     if (abort) 
@@ -2195,6 +2214,8 @@ if (sc->slowConn==NULL && sc->conn!=NULL && localConnErr != 0)
         return FALSE;
     }
 
+// we have a failover connection: only fail if both failover and main connection
+// reported an error. this allows to have databases that exist only on one of both servers
 if (localConnErr!=0 && slowConnErr!=0 && abort)
     // can't use sqlAbort, not sure which one is connected at this point
     errAbort("Couldn't set connection database to %s in either default or failover connection\n%s",
