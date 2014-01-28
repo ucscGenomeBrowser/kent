@@ -108,7 +108,7 @@ void motifMultipleHitsSection(struct dnaSeq **seqs, int count, struct dnaMotif *
 // Detect inconsistent motif/pwm tables and suppress confusing display
 if (motif != NULL)
     {
-    if (motif->columnCount != seqs[0]->size)
+    if (seqs != NULL && motif->columnCount != seqs[0]->size)
         {
         warn("Motif seq length doesn't match PWM\n");
         return;
