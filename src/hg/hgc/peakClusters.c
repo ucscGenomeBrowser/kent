@@ -457,7 +457,8 @@ if (motif != NULL && hits != NULL)
     sqlFreeResult(&sr);
     #endif
 
-    puts("<p></p>");
+    //puts("<p></p>");
+    webNewSection("Motif Sequence from Matching Strand");
     for (hit = hits, i = 0; hit != NULL; hit = hit->next, i++)
         {
         struct dnaSeq *seq = hDnaFromSeq(database, 
@@ -497,7 +498,7 @@ if (motif != NULL && hits != NULL)
     }
 if (seqs != NULL)
     {
-    motifMultipleHitsSection(seqs, hitCount, motif);
+    motifLogoAndMatrix(seqs, hitCount, motif);
     }
 }
 
