@@ -101,9 +101,8 @@ hFreeConn(&conn);
 return motif;
 }
 
-
-void motifMultipleHitsSection(struct dnaSeq **seqs, int count, struct dnaMotif *motif)
-/* Print out section about motif, possibly with mutliple occurrences. */
+void motifLogoAndMatrix(struct dnaSeq **seqs, int count, struct dnaMotif *motif)
+/* Print out motif sequence logo and text (possibly with multiple occurences) */
 {
 // Detect inconsistent motif/pwm tables and suppress confusing display
 if (motif != NULL)
@@ -114,9 +113,7 @@ if (motif != NULL)
         return;
         }
     }
-
 #define MOTIF_HELP_PAGE "../goldenPath/help/hgRegMotifHelp.html"
-webNewSection("Motif Sequence from Matching Strand");
 printf("<PRE>\n");
 printf("<table>\n");
 if (motif != NULL)
@@ -158,13 +155,30 @@ printf("</table>\n");
 printf("</PRE>");
 }
 
+void motifMultipleHitsSection(struct dnaSeq **seqs, int count, struct dnaMotif *motif, char *title)
+/* Print out section about motif, possibly with mutliple occurrences. */
+{
+// Detect inconsistent motif/pwm tables and suppress confusing display
+if (motif != NULL)
+    {
+    if (seqs != NULL && motif->columnCount != seqs[0]->size)
+        {
+        warn("Motif seq length doesn't match PWM\n");
+        return;
+        }
+    }
+webNewSection(title);
+motifLogoAndMatrix(seqs, count, motif);
+}
+
 void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif)
 /* Print out section about motif. */
 {
+static char *title = "Motif Sequence";
 if(seq == NULL)
-    motifMultipleHitsSection(NULL, 0, motif);
+    motifMultipleHitsSection(NULL, 0, motif, title);
 else
-    motifMultipleHitsSection(&seq, 1, motif);
+    motifMultipleHitsSection(&seq, 1, motif, title);
 }
 
 void doTriangle(struct trackDb *tdb, char *item, char *motifTable)
