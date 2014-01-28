@@ -452,7 +452,7 @@ if (sameString(protocol, "http"))
     char *httpUrl = "http://hgwdev.cse.ucsc.edu/~angie/wgEncodeCshlRnaSeqAlignmentsK562ChromatinShort.bb";
     char *httpLocalCopy = "/gbdb/hg18/bbi/wgEncodeCshlRnaSeqAlignmentsK562ChromatinShort.bb";
     if (size)
-	gotError |= testSize(httpUrl, 117209441222);
+	gotError |= testSize(httpUrl, fileSize(httpLocalCopy));
     else if (raBuf)
 	gotError |= testReadAheadBuffer(httpUrl, httpLocalCopy);
     else if (doFork)
