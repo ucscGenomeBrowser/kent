@@ -458,7 +458,7 @@ if (motif != NULL && hits != NULL)
     #endif
 
     //puts("<p></p>");
-    webNewSection("Motif Sequence from Matching Strand");
+    webNewSection("Canonical Motif in Cluster");
     for (hit = hits, i = 0; hit != NULL; hit = hit->next, i++)
         {
         struct dnaSeq *seq = hDnaFromSeq(database, 
@@ -536,7 +536,6 @@ printf("<B>Factor:</B> %s<BR>\n", factorLink);
 printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
 printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
 
-doClusterMotifDetails(conn, tdb, cluster);
 
 /* Get list of tracks we'll look through for input. */
 char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
@@ -554,19 +553,25 @@ if (inputTableFieldDisplay != NULL)
     char *vocab = trackDbSetting(tdb, "controlledVocabulary");
 
     /* In a new section put up list of hits. */
-    webNewSection("List of %s Items in Cluster", cluster->name);
+    webNewSection("Assays for %s in Cluster", cluster->name);
     webPrintLinkTableStart();
     printClusterTableHeader(fieldList, TRUE, FALSE, TRUE);
     printFactorSourceTableHits(cluster, conn, sourceTable, 
             inputTrackTable, fieldList, FALSE, vocab);
     webPrintLinkTableEnd();
 
-    webNewSection("List of cells assayed for %s but without hits in cluster", cluster->name);
+    webNewSectionHeaderStart();
+    char sectionTitle[128];
+    safef(sectionTitle, 
+            sizeof(sectionTitle),"Assays for %s Without Hits in Cluster", cluster->name);
+    jsBeginCollapsibleSectionOldStyle(cart, tdb->track, "cellNoHits", sectionTitle, FALSE);
+    webNewSectionHeaderEnd();
     webPrintLinkTableStart();
     printClusterTableHeader(fieldList, TRUE, FALSE, FALSE);
     printFactorSourceTableHits(cluster, conn, sourceTable, 
             inputTrackTable, fieldList, TRUE, vocab);
     webPrintLinkTableEnd();
+    jsEndCollapsibleSection();
     }
 else
     {
@@ -574,12 +579,11 @@ else
         "inputTableFieldDisplay", tdb->track);
     }
 webNewSectionHeaderStart();
-jsBeginCollapsibleSectionOldStyle(cart, tdb->track, "cellSources", "Table of cell abbreviations", 
-                                  TRUE);
+jsBeginCollapsibleSectionOldStyle(cart, tdb->track, "cellSources", "Cell Abbreviations", FALSE);
 webNewSectionHeaderEnd();
 hPrintFactorSourceAbbrevTable(conn, tdb);
 jsEndCollapsibleSection();
 
-webNewSection("");
+doClusterMotifDetails(conn, tdb, cluster);
 }
 
