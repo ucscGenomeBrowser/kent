@@ -537,6 +537,7 @@ var vis = {
                     rec.visibility = 0;
                 // else Would be nice to hide subtracks as well but that may be overkill
                 $(document.getElementById('tr_' + track)).remove();
+                imageV2.highlightRegion();
                 $(this).attr('class', 'hiddenText');
             } else
                 $(this).attr('class', 'normalText');
@@ -2898,6 +2899,8 @@ var imageV2 = {
             var newJsonRec = newJson.trackDb[id];
             var oldJsonRec = oldJson.trackDb[id];
             
+            if (newJsonRec.visibility == 0)  // hidden 'ruler' is in newJson.trackDb!
+                continue;
             if (newJsonRec.type == "remote")
                 continue;
             if (oldJsonRec != undefined &&  oldJsonRec.visibility != 0) {
@@ -3565,8 +3568,11 @@ $(document).ready(function()
         }
     }
 
-    // Experimentally trying jquery.history.js
+    // jquery.history.js Back-button support
     if (imageV2.enabled && imageV2.backSupport) {
         imageV2.setupHistory();
     }
+    
+    // When warn box is dismissed, any image highlight needs to be redrawn.
+    $('#warnOK').click(function (e) { imageV2.highlightRegion()});
 });
