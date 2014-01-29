@@ -5036,13 +5036,114 @@ else
 }
 
 int chrSlNameCmp(const void *el1, const void *el2)
+/* Compare chromosome or linkage group names str1 and str2 
+ * to achieve this order:
+ * chr1 .. chr22
+ * chrX
+ * chrY
+ * chrM
+ * chr1_{alt, random} .. chr22_{alt, random}
+ * chrUns
+ */
+{
+struct slName *sln1 = *(struct slName **)el1;
+struct slName *sln2 = *(struct slName **)el2;
+return chrNameCmp(sln1->name, sln2->name);
+}
+
+int chrNameCmpWithAltRandom(char *str1, char *str2)
+/* Compare chromosome or linkage group names str1 and str2 
+ * to achieve this order:
+ * chr1 .. chr22
+ * chrX
+ * chrY
+ * chrM
+ * chr1_{alt, random} .. chr22_{alt, random}
+ * chrUns
+ */
+{
+int num1 = 0, num2 = 0;
+int match1 = 0, match2 = 0;
+char suffix1[512], suffix2[512];
+
+/* put chrUn at the bottom */
+if (startsWith("chrUn", str1) && !startsWith("chrUn", str2))
+    return 1;
+if (!startsWith("chrUn", str1) && startsWith("chrUn", str2))
+    return  -1;
+
+/* if it is _alt or _random then it goes at the end */
+if ( (endsWith(str1, "_alt")||endsWith(str1, "_random")) && !(endsWith(str2, "_alt") || endsWith(str2, "_random")))
+    return 1;
+if (!(endsWith(str1, "_alt")||endsWith(str1, "_random")) &&  (endsWith(str2, "_alt") || endsWith(str2, "_random")))
+    return -1;
+
+/* get past "chr" or "Group" prefix: */
+if (startsWith("chr", str1))
+    str1 += 3;
+else if (startsWith("Group", str1))
+    str1 += 5;
+else
+    return -1;
+if (startsWith("chr", str2))
+    str2 += 3;
+else if (startsWith("Group", str2))
+    str2 += 5;
+else
+    return 1;
+/* If only one is numeric, that one goes first. 
+ * If both are numeric, compare by number; 
+ * If same number, put _randoms at end, then look at suffix. 
+ * Otherwise go alph. but put M and U/Un/Un_random at end. */
+match1 = sscanf(str1, "%d%s", &num1, suffix1);
+match2 = sscanf(str2, "%d%s", &num2, suffix2);
+if (match1 && !match2)
+    return -1;
+else if (!match1 && match2)
+    return 1;
+else if (match1 && match2)
+    {
+    int diff = num1 - num2;
+    if (diff != 0)
+	return diff;
+
+    /* within groups with the same number, organize with random last */
+    if (endsWith(str1, "_random") && !endsWith(str2, "_random"))
+	return 1;
+    if (!endsWith(str1, "_random") && endsWith(str2, "_random"))
+	return -1;
+
+    /* same chrom number... got suffix? */
+    if (match1 > 1 && match2 <= 1)
+	return 1;
+    else if (match1 <= 1 && match2 > 1)
+	return -1;
+    else if (match1 > 1 && match2 > 1)
+	return strcmp(suffix1, suffix2);
+    else
+	/* This shouldn't happen (duplicate chrom name passed in) */
+	return 0;
+    }
+else if (str1[0] == 'U' && str2[0] != 'U')
+    return 1;
+else if (str1[0] != 'U' && str2[0] == 'U')
+    return -1;
+else if (sameString(str1, "M") && !sameString(str2, "M"))
+    return 1;
+else if (!sameString(str1, "M") && sameString(str2, "M"))
+    return -1;
+else
+    return strcmp(str1, str2);
+}
+
+int chrSlNameCmpWithAltRandom(const void *el1, const void *el2)
 /* Compare chromosome names by number, then suffix.  el1 and el2 must be
  * slName **s (as passed in by slSort) whose names match the regex
  * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
 {
 struct slName *sln1 = *(struct slName **)el1;
 struct slName *sln2 = *(struct slName **)el2;
-return chrNameCmp(sln1->name, sln2->name);
+return chrNameCmpWithAltRandom(sln1->name, sln2->name);
 }
 
 int bedCmpExtendedChr(const void *va, const void *vb)
