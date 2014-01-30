@@ -459,7 +459,7 @@ if (sumList != NULL)
 	if (overlap > 0)
 	    {
 	    double overlapFactor = (double)overlap / (sum->end - sum->start);
-	    validCount += sum->validCount * overlapFactor;
+	    validCount += (sum->validCount * overlapFactor + 0.5);
 	    sumData += sum->sumData * overlapFactor;
 	    sumSquares += sum->sumSquares * overlapFactor;
 	    if (maxVal < sum->maxVal)

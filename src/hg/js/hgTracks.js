@@ -551,9 +551,14 @@ var vis = {
             $('select.normalText,select.hiddenText').attr('disabled',true);
         });
         $(form).attr('method','get');
+    },
 
+    restoreFromBackButton: function()
+    // Re-enabling vis dropdowns is necessarty because intiForAjax() disables them on submit.
+    {
+        $('select.normalText,select.hiddenText').attr('disabled',false);
     }
-
+    
 }
   ////////////////////////////////////////////////////////////
  // dragSelect is also known as dragZoom or shift-dragZoom //
@@ -3362,6 +3367,8 @@ var imageV2 = {
                     imageV2.navigateInPlace("db="+getDb()+"&position=" + cachedPos, null, false);
                 }
             }
+            // Special because FF is leaving vis drop-downs disabled
+            vis.restoreFromBackButton();
         }
     },
     
@@ -3542,7 +3549,19 @@ $(document).ready(function()
         }
         imageV2.loadRemoteTracks();
         makeItemsByDrag.load();
+        
+        // Any highlighted region must be shown and warnBox must play nice with it.
         imageV2.highlightRegion();
+        // When warnBox is dismissed, any image highlight needs to be redrawn.
+        $('#warnOK').click(function (e) { imageV2.highlightRegion()});
+        // Also entend the function that shows the warn box so that it too redraws the highlight.
+        showWarnBox = (function (oldShowWarnBox) {
+            function newShowWarnBox() {
+                oldShowWarnBox.apply();
+                imageV2.highlightRegion();
+            }
+            return newShowWarnBox;
+        })(showWarnBox);
     }
 
     // Drag select in chromIdeogram
@@ -3572,7 +3591,5 @@ $(document).ready(function()
     if (imageV2.enabled && imageV2.backSupport) {
         imageV2.setupHistory();
     }
-    
-    // When warn box is dismissed, any image highlight needs to be redrawn.
-    $('#warnOK').click(function (e) { imageV2.highlightRegion()});
+
 });

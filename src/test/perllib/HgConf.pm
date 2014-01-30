@@ -28,6 +28,7 @@ sub readConf {
       if (/^\s*include\s+(\S+)/) {
 	my $includeFile = $1;
 	my $cwd = `pwd`;
+	chomp($cwd);
 	if ($filename =~ /^(.*\/)[^\/]+$/) {
 	  chdir $1;
 	}
