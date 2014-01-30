@@ -30,7 +30,7 @@
 
 typedef MYSQL_RES *	STDCALL ResGetter(MYSQL *mysql);
 
-#define DEFAULTGETTER mysql_store_result
+#define DEFAULTGETTER mysql_use_result
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
