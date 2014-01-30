@@ -2495,16 +2495,6 @@ if (trackDbSetting(tdb, "motifTable") != NULL)
     safef(varName, sizeof(varName), "%s.highlightMotifs", tdb->track);
     cartMakeCheckBox(cart, varName, trackDbSettingClosestToHomeOn(tdb, "motifDrawDefault"));
     }
-
-puts("<P></P>");
-puts("<TABLE>");
-jsBeginCollapsibleSectionFontSize(cart, tdb->track, "cellSources", "Cell Abbreviations", TRUE, "medium");
-//printf("<BR><B>Cell Abbreviations:</B><BR>\n");
-struct sqlConnection *conn = hAllocConn(db);
-hPrintFactorSourceAbbrevTable(conn, tdb);
-jsEndCollapsibleSection();
-puts("</TABLE>");
-hFreeConn(&conn);
 }
 
 #ifdef UNUSED
