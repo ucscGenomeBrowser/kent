@@ -5746,9 +5746,9 @@ if(!trackImgOnly)
     jsIncludeFile("utils.js", NULL);
     jsIncludeFile("ajax.js", NULL);
     jsIncludeFile("jquery.watermarkinput.js", NULL);
-    jsIncludeFile("jquery.history.js", NULL);  // Experimental
     if(!searching)
         {
+        jsIncludeFile("jquery.history.js", NULL);
         jsIncludeFile("jquery.imgareaselect.js", NULL);
         }
     jsIncludeFile("autocomplete.js", NULL);

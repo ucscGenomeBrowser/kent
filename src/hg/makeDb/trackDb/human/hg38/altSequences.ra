@@ -9,7 +9,7 @@ visibility hide
 type bed 4
 noInherit on
 group map
-priority 105
+priority 0
 otherDb hg38
 chainMinScore 1000
 chainLinearGap medium

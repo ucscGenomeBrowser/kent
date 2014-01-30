@@ -5,13 +5,13 @@ L += -lm ${MYSQLLIBS}
 MYLIBDIR = $(kentSrc)/lib/${MACHTYPE}
 MYLIBS =  ../../lib/$(MACHTYPE)/edwlib.a ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-A = rsyncEdwUser
+A = rsyncEdwUserTable
 
 O = $A.o 
 
 compile: $O $(MYLIBS) 
-	${CC} ${COPT} -o rsyncEdwUser $O ${MYLIBS} $L
-#	@./rsyncEdwUser
+	${CC} ${COPT} -o rsyncEdwUserTable $O ${MYLIBS} $L
+#	@./rsyncEdwUserTable
 
 clean::
-	rm -f rsyncEdwUser ${O}
+	rm -f rsyncEdwUserTable ${O}

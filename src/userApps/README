@@ -126,6 +126,12 @@ When the utilities are built here, their usage messages have
 been collected together in one file:
 	kentUtils.Documentation.txt
 
+Please note: kent commands use the special keywords:
+   'stdin', 'stdout' and 'stderr' in place of input or output file name
+   arguments.  This is unlike the default unix command line behavior
+   of having 'stdin' and 'stdout' as default input and output arguments
+   without mention.
+
 ========================================================================
 
 MySQL database access:
