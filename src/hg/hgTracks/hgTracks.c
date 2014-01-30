@@ -674,7 +674,12 @@ if(doIdeo)
     ideoTrack->ixAltColor = hvGfxFindRgb(hvg, &ideoTrack->altColor);
     hvGfxSetClip(hvg, 0, gfxBorder, ideoWidth, ideoTrack->height);
     if (sameString(startBand, endBand))
-        safef(title, sizeof(title), "%s (%s)", chromName, startBand);
+        {
+        if (startBand[0] == '\0')
+            safef(title, sizeof(title), "%s", chromName);
+        else
+            safef(title, sizeof(title), "%s (%s)", chromName, startBand);
+        }
     else
         safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
     textWidth = mgFontStringWidth(font, title);
