@@ -409,6 +409,7 @@ canPack On
     motifDrawDefault on
     urlLabel Factorbook Link:
     url http://www.factorbook.org/mediawiki/index.php/$$
+    idInUrlSql select value from factorbookGeneAlias where name='%s'
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     visibility dense
     useScore 1

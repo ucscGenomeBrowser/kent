@@ -3857,8 +3857,11 @@ if (container == NULL && wordCount > 0)
 genericHeader(tdb, headerItem);
 
 itemForUrl = getIdInUrl(tdb, item);
-printCustomUrl(tdb, itemForUrl, item == itemForUrl);
-printIframe(tdb, itemForUrl);
+if (itemForUrl != NULL && itemForUrl[0] != 0)
+    {
+    printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+    printIframe(tdb, itemForUrl);
+    }
 
 if (plus != NULL)
     {

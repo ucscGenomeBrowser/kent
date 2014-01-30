@@ -172,7 +172,7 @@ highlightColor genePred
 html *
 htmlFile customTracks
 htmlUrl customTracks
-idInUrlSql altGraphX genePred chain
+idInUrlSql altGraphX genePred chain factorSource
 idXref genePred
 iframeUrl *
 iframeOptions *
