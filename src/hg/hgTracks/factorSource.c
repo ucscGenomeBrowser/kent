@@ -63,7 +63,7 @@ if (filter != NULL && filter->slChoices != NULL && differentString(filter->slCho
         //uglyf("Adding %s.   ", choice->name);
         }
     fsInfo->factorChoices = factorHash;
-    uglyf("before filter: %d items", slCount(track->items));
+    //uglyf("before filter: %d items", slCount(track->items));
     filterItems(track, factorFilter, "include");
     //uglyf("after filter: %d items", slCount(track->items));
 }
