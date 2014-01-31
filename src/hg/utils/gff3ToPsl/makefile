@@ -14,7 +14,7 @@ gff3ToPsl: ${O} ${MYLIBS}
 compile:: ${O}
 	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
 
-test::
+test::	gff3ToPsl
 	(cd tests && ${MAKE} test)
 
 clean::
