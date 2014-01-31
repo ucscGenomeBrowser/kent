@@ -30,8 +30,9 @@ boolean factorFilter(struct track *track, void *item)
 /* Returns true if an item should be passed by the filter. NOTE: single filter supported here*/
 {
 struct hash *factorHash = ((struct factorSourceInfo *)track->extraUiData)->factorChoices;
-if (hashLookup(factorHash, ((struct factorSource *)item)->name) != NULL)
-    return TRUE;
+if (track->extraUiData != NULL && factorHash != NULL)
+    if (hashLookup(factorHash, ((struct factorSource *)item)->name) != NULL)
+        return TRUE;
 return FALSE;
 }
 
@@ -46,7 +47,7 @@ track->extraUiData = fsInfo;
 
 // Filter factors based on multi-select
 filterBy_t *filter = filterBySetGet(track->tdb, cart, NULL);
-if (filter != NULL && differentString(filter->slChoices->name, "All"))
+if (filter != NULL && filter->slChoices != NULL && differentString(filter->slChoices->name, "All"))
     {
     struct slName *choice;
     struct hash *factorHash = newHash(0);
