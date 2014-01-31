@@ -1073,3 +1073,9 @@ insert into kateTemp (select * from wgEncodeTfbsClusteredV3)
     # Read 1750827 elements of size 6 from motifs.bed
 
 
+#######################################################################
+# Table cleanup/renaming (more to come):
+
+TfbsClusteredV3a -> TfbsClusteredV3a_old
+TfbsClusteredV4 -> TfbsClusteredV3a
+TfbsClusteredV5 -> TfbsClusteredV3b
