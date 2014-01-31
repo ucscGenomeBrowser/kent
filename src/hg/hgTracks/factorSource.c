@@ -21,6 +21,7 @@ return factorSourceLoad(row);
 
 /* Save info about factors and their motifs */
 struct factorSourceInfo {
+    boolean showCellAbbrevs;
     struct hash *factorChoices;
     struct hash *motifTargets;
     struct bed6FloatScore *motifs;
@@ -45,6 +46,11 @@ struct factorSourceInfo *fsInfo = NULL;
 AllocVar(fsInfo);
 track->extraUiData = fsInfo;
 
+// Check UI setting to show cell abbreviations
+char varName[64];
+safef(varName, sizeof(varName), "%s.showCellAbbrevs", track->track);
+fsInfo->showCellAbbrevs = cartUsualBoolean(cart, varName, TRUE);
+
 // Filter factors based on multi-select
 filterBy_t *filter = filterBySetGet(track->tdb, cart, NULL);
 if (filter != NULL && filter->slChoices != NULL && differentString(filter->slChoices->name, "All"))
@@ -54,16 +60,15 @@ if (filter != NULL && filter->slChoices != NULL && differentString(filter->slCho
     for (choice = filter->slChoices; choice != NULL; choice = choice->next)
         {
         hashAdd(factorHash, cloneString(choice->name), NULL);
-        printf("Adding %s.   ", choice->name);
+        //uglyf("Adding %s.   ", choice->name);
         }
     fsInfo->factorChoices = factorHash;
     uglyf("before filter: %d items", slCount(track->items));
     filterItems(track, factorFilter, "include");
-    uglyf("after filter: %d items", slCount(track->items));
+    //uglyf("after filter: %d items", slCount(track->items));
 }
 
 // Motifs
-char varName[64];
 safef(varName, sizeof(varName), "%s.highlightMotifs", track->track);
 if (!cartUsualBoolean(cart, varName, trackDbSettingClosestToHomeOn(track->tdb, "motifDrawDefault")))
     return;
@@ -148,7 +153,8 @@ if (w < 1)
 hvGfxBox(hvg, x1, y, w, heightPer, color);
 
 /* Draw text to the right */
-if (vis == tvFull || vis == tvPack)
+struct factorSourceInfo *fsInfo = (struct factorSourceInfo *)track->extraUiData;
+if ((vis == tvFull || vis == tvPack) && fsInfo->showCellAbbrevs)
     {
     int x = x2 + tl.mWidth/2;
     int i;
