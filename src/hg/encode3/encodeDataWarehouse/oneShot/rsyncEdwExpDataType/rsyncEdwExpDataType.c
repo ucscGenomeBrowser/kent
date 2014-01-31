@@ -174,7 +174,8 @@ return result;
 }
 
 char *findControl(char *expAccession, char *userId, char *password)
-/* Load up JSON and find somewhere inside of it control if possible. */
+/* Load up JSON and find somewhere inside of it control if possible.  This will
+ * return a control that targets 'input' over other controls. */
 {
 char *result = NULL;
 struct jsonElement *exp = getParsedJsonForId("experiments/", expAccession, userId, password);
@@ -184,12 +185,16 @@ if (exp)
     struct slRef *ref, *refList = jsonListVal(possibles, "possible_controls");
     for (ref = refList; ref != NULL; ref = ref->next)
         {
-	struct jsonElement *controls = ref->val;
-	char *controlExperiment = jsonOptionalStringField(controls, "accession", NULL);
+	struct jsonElement *control = ref->val;
+	char *controlExperiment = jsonOptionalStringField(control, "accession", NULL);
 	if (controlExperiment != NULL)
 	    {
-	    result = cloneString(controlExperiment);
-	    break;
+	    char *target = jsonOptionalStringField(control, "target", NULL);
+	    if (target != NULL) uglyf("target %s %s\n", target, controlExperiment);
+	    if (target != NULL && sameWord(target, "Input"))
+		 freez(&result);
+	    if (result == NULL)
+	        result = cloneString(controlExperiment);
 	    }
 	}
     }
@@ -262,6 +267,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
     struct jsonElement *el = ref->val;
     char *acc = jsonStringField(el, "accession");
     char *assayType = jsonStringField(el, "assay_term_name");
+    // Try getting assay_term_id instead either from here or the individual experiment
     char *dataType = assayType;
     if (dataType != NULL)
         {
@@ -274,7 +280,17 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	    }
 	if (dataType != NULL)
 	    {
+	    /* Get old version of this experiment (in database) and freak out
+	     * and die if the data type has changed on us. */
 	    struct edwExperiment *oldExp = hashFindVal(oldHash, acc);
+	    if (oldExp != NULL)
+		{
+		if (!sameString(oldExp->dataType, dataType))
+		    errAbort("Change in data type for %s %s vs %s\n", 
+			    acc, oldExp->dataType, dataType);
+		}
+
+	    /* In the case of ChIP-seq, attemt to find matching control. */
 	    char *ipTarget = "", *control = "";
 	    if (sameString(dataType, "ChIP-seq") && sameString(rfa, "ENCODE3"))
 	        {
@@ -282,12 +298,8 @@ for (ref = refList; ref != NULL; ref = ref->next)
 		verbose(1, "ipTarget %s\n", ipTarget);
 		control = findControl(acc, userId, password);
 		}
-	    if (oldExp != NULL)
-		{
-		if (!sameString(oldExp->dataType, dataType))
-		    errAbort("Change in data type for %s %s vs %s\n", 
-			    acc, oldExp->dataType, dataType);
-		}
+
+	    /* Write out experiment record in tab separated file. */
 	    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", acc, dataType,
 		jsonOptionalStringField(el, "lab.title", ""),
 		jsonOptionalStringField(el, "biosample_term_name", ""),
