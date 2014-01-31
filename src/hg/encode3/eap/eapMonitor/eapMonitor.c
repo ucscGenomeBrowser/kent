@@ -146,6 +146,32 @@ for (jr = results->jobList; jr != NULL; jr = jr->next)
 return count;
 }
 
+double resultsAverageMinutes(struct results *results)
+/* Return average minutes taken per job */
+{
+struct jobResult *jr;
+int count = 0;
+double seconds = 0;
+for (jr = results->jobList; jr != NULL; jr = jr->next)
+    {
+    if (WIFEXITED(jr->status) && WEXITSTATUS(jr->status) == 0)
+	{
+        ++count;
+	double start = jr->startTime;
+	double end = jr->endTime;
+	if (end > 0)
+	    {
+	    seconds += end - start;
+	    }
+	}
+    }
+if (count == 0)
+    return 0;
+else
+    return seconds/count/60.0;
+}
+
+
 
 void searchForResults(char *dir, struct hash *hash, struct results **retResults)
 /* Look in current dir and all subdirs for results files. */
@@ -185,7 +211,8 @@ for (job = jobList; job != NULL; job = job->next)
         
     if (hashLookup(parasolRunningHash, job->parasolId))
         {
-	q->runningCount += 1;
+	if (q != NULL)
+	    q->runningCount += 1;
 	++count;
 	}
     }
@@ -227,26 +254,32 @@ const struct results *b = *((struct results **)vb);
 return resultsScore(b) - resultsScore(a);
 }
 
+char *getParaDirs(struct sqlConnection *conn)
+/* Get root directory for our parasol results. */
+{
+char *paraDirs = eapParaDirs(conn);
+return paraDirs;
+}
 
 void doStatus()
 /* Print out overall status */
 {
 struct results *q, *qList = NULL;
 struct hash *qHash = hashNew(0);
-searchForResults(eapParaQueues, qHash, &qList);
+struct sqlConnection *conn = edwConnect();
+searchForResults(getParaDirs(conn), qHash, &qList);
 long finishedJobs = 0;
 for (q = qList; q != NULL; q = q->next)
     {
     finishedJobs += q->jobCount;
     }
 int qCount = qHash->elCount;
-printf("Analysis steps:   %5d:", qCount);
 
 struct hash *runningHash = eapParasolRunningHash(clParaHost, NULL);
-struct sqlConnection *conn = edwConnect();
 int runningCount = countParaRunning(conn, runningHash, qHash);
 
 slSort(&qList, resultsCmpScore);
+printf("Top steps:   ");
 int i;
 q = qList;
 for (i=0; i<3 && i<qCount; ++i)
@@ -338,13 +371,25 @@ for (id = idList; idList != NULL; id = id->next)
     }
 }
 
+int eapStepCount(struct sqlConnection *conn)
+/* Return number of steps in the pipeline. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select count(*) from eapStep");
+int count = sqlQuickNum(conn, query);
+return count;
+}
+
 void doInfo()
 /* Print out configuration info. */
 {
-printf("Queue dir:     %s\n", eapParaQueues);
 printf("Database:      %s\n", clDatabase);
 printf("Jobs table:    %s\n", clTable);
 printf("Parasol host:  %s\n", clParaHost);
+struct sqlConnection *conn = sqlConnect(clDatabase);
+printf("Step count: %4d\n", eapStepCount(conn));
+printf("Queue dir:     %s\n", getParaDirs(conn));
+sqlDisconnect(&conn);
 }
 
 struct jobResult *getRecentCrashed(struct jobResult *jobList, struct jobResult *bestSoFar)
@@ -442,12 +487,12 @@ for (q = resultsList; q != NULL; q = q->next)
 return NULL;
 }
 
-struct jobResult *findCrashed(char *parasolId)
+static struct jobResult *findCrashed(struct sqlConnection *conn, char *parasolId)
 /* Find job with given parasol ID or if parasolID is null, most recently crashed job */
 {
 struct results *q, *qList = NULL;
 struct jobResult *crashed = NULL;
-searchForResults(eapParaQueues, NULL, &qList);
+searchForResults(getParaDirs(conn), NULL, &qList);
 for (q = qList; q != NULL; q = q->next)
     {
     struct jobResult *jrList = q->jobList;
@@ -466,13 +511,13 @@ return crashed;
 void doErr(int argc, char **argv)
 /* Print error stats, and specific info on a recent error */
 {
+struct sqlConnection *conn = sqlConnect(clDatabase);
 char *parasolId = NULL;
 if (argc > 0)
     parasolId = argv[0];
-struct jobResult *crashed = findCrashed(parasolId);
+struct jobResult *crashed = findCrashed(conn, parasolId);
 if (crashed != NULL)
     {
-    struct sqlConnection *conn = sqlConnect(clDatabase);
     struct eapJob *job = eapJobFromParasolId(conn, crashed->jobId);
     if (job != NULL)
 	{
@@ -501,7 +546,8 @@ void doErrFile(int argc, char **argv)
 char *parasolId = NULL;
 if (argc > 0)
     parasolId = argv[0];
-struct jobResult *crashed = findCrashed(parasolId);
+struct sqlConnection *conn = sqlConnect(clDatabase);
+struct jobResult *crashed = findCrashed(conn, parasolId);
 if (crashed == NULL)
     errAbort("No most recent error");
 char command[2*PATH_LEN];
@@ -522,10 +568,10 @@ if (argc > 1)
     step = argv[1];
 
 /* Get finished job lists. */
-struct results *qList = NULL;
-searchForResults(eapParaQueues, NULL, &qList);
-
 struct sqlConnection *conn = edwConnect();
+struct results *qList = NULL;
+searchForResults(getParaDirs(conn), NULL, &qList);
+
 char query[512];
 sqlSafef(query, sizeof(query), 
     "select * from eapJob where returnCode != 0 and endTime > %lld",
@@ -562,13 +608,14 @@ slFreeList(&lineList);
 return gotSick;
 }
 
-char *stepFromPath(char *path)
+static char *stepFromPath(struct sqlConnection *conn, char *path)
 /* Given path to parasol queue, return corresponding glue script name.
  * FreeMem the results of this when done. */
 {
-if (!startsWith( eapParaQueues, path))
-    errAbort("%s does not start with %s", path, eapParaQueues);
-char *local = path + strlen(eapParaQueues) + 1;
+char *paraDir = getParaDirs(conn);
+if (!startsWith( paraDir, path))
+    errAbort("%s does not start with %s", path, paraDir);
+char *local = path + strlen(paraDir) + 1;
 char dir[PATH_LEN];
 splitPath(local, dir, NULL, NULL);
 int dirLen = strlen(dir);
@@ -594,7 +641,7 @@ return cloneString(glue);
 int countRunning(struct sqlConnection *conn, struct results *q, struct hash *runningHash)
 /* Count up the number of jobs in pjobList that are associated with q */
 {
-char *glue = stepFromPath(q->pathName);
+char *glue = stepFromPath(conn, q->pathName);
 char query[PATH_LEN*2];
 sqlSafef(query, sizeof(query), "select * from %s where startTime > 0 and endTime = 0", clTable);
 struct eapJob *job, *jobList = eapJobLoadByQuery(conn, query);
@@ -636,7 +683,8 @@ void doSteps(int argc, char **argv)
 struct results *q, *qList = NULL;
 struct sqlConnection *conn = sqlConnect(clDatabase);
 struct hash *qHash = hashNew(0);
-searchForResults(eapParaQueues, qHash, &qList);
+char *paraDirs = getParaDirs(conn);
+searchForResults(paraDirs, qHash, &qList);
 struct paraPstat2Job *pjobList = NULL;
 struct hash *runningHash = eapParasolRunningHash(clParaHost, &pjobList);
 countParaRunning(conn, runningHash, qHash);
@@ -645,13 +693,15 @@ char query[512];
 sqlSafef(query, sizeof(query), "select * from %s where endTime = 0", clTable);
 struct eapJob *waitList = eapJobLoadByQuery(conn, query);
 
-printf("#stat crash finish run  wait step\n");
+printf("#stat crash finish run  wait %-24s minutes\n", "step");
 for (q = qList; q != NULL; q = q->next)
     {
     char *code = (isSick(q) ? "sick" : "good");
     int waitCount = countWaiting(waitList, q->name);
-    printf("%s %6d %6d %3d %5d %s\n", code, resultsCrashCount(q), resultsGoodFinishCount(q), 
-	    q->runningCount, waitCount - q->runningCount, stepFromPath(q->pathName));
+    printf("%s %6d %6d %3d %5d %-24s %5.1f\n", code, 
+	    resultsCrashCount(q), resultsGoodFinishCount(q), 
+	    q->runningCount, waitCount - q->runningCount, stepFromPath(conn, q->pathName),
+	    resultsAverageMinutes(q));
     }
 }
 
@@ -706,8 +756,9 @@ printf("Scrounged %d - use eapFinish and it will find them or doom them\n", scro
 void doDoctor(int argc, char *argv[])
 /* Reset sick status */
 {
+struct sqlConnection *conn = sqlConnect(clDatabase);
 struct results *q, *qList = NULL;
-searchForResults(eapParaQueues, NULL, &qList);
+searchForResults(getParaDirs(conn), NULL, &qList);
 for (q = qList; q != NULL; q = q->next)
     {
     char message[512];
