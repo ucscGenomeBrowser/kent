@@ -102,7 +102,7 @@ extTable *
 fieldCount customTracks
 filePos *
 fileSortOrder *
-filterBy genePred bed
+filterBy genePred bed factorSource
 filterComposite *
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
 firstItemPos customTracks

@@ -19,17 +19,49 @@ static struct factorSource *loadOne(char **row)
 return factorSourceLoad(row);
 }
 
-/* Save info about motifs */
-struct motifInfo {
+/* Save info about factors and their motifs */
+struct factorSourceInfo {
+    struct hash *factorChoices;
     struct hash *motifTargets;
     struct bed6FloatScore *motifs;
 };
+
+boolean factorFilter(struct track *track, void *item)
+/* Returns true if an item should be passed by the filter. NOTE: single filter supported here*/
+{
+struct hash *factorHash = ((struct factorSourceInfo *)track->extraUiData)->factorChoices;
+if (hashLookup(factorHash, ((struct factorSource *)item)->name) != NULL)
+    return TRUE;
+return FALSE;
+}
 
 static void factorSourceLoadItems(struct track *track)
 /* Load all items (and motifs if table is present) in window */
 {
 bedLoadItem(track, track->table, (ItemLoader)loadOne);
 
+struct factorSourceInfo *fsInfo = NULL;
+AllocVar(fsInfo);
+track->extraUiData = fsInfo;
+
+// Filter factors based on multi-select
+filterBy_t *filter = filterBySetGet(track->tdb, cart, NULL);
+if (filter != NULL && differentString(filter->slChoices->name, "All"))
+    {
+    struct slName *choice;
+    struct hash *factorHash = newHash(0);
+    for (choice = filter->slChoices; choice != NULL; choice = choice->next)
+        {
+        hashAdd(factorHash, cloneString(choice->name), NULL);
+        printf("Adding %s.   ", choice->name);
+        }
+    fsInfo->factorChoices = factorHash;
+    uglyf("before filter: %d items", slCount(track->items));
+    filterItems(track, factorFilter, "include");
+    uglyf("after filter: %d items", slCount(track->items));
+}
+
+// Motifs
 char varName[64];
 safef(varName, sizeof(varName), "%s.highlightMotifs", track->track);
 if (!cartUsualBoolean(cart, varName, trackDbSettingClosestToHomeOn(track->tdb, "motifDrawDefault")))
@@ -47,14 +79,11 @@ if (motifTable == NULL)
 struct sqlConnection *conn = hAllocConn(database);
 if (sqlTableExists(conn, motifTable))
     {
-    struct motifInfo *motifInfo = NULL;
-    AllocVar(motifInfo);
-    track->extraUiData = motifInfo;
 
     // Load motifs
     struct slList *items = track->items;
     bedLoadItem(track, motifTable, (ItemLoader)bed6FloatScoreLoad);
-    motifInfo->motifs = track->items;
+    fsInfo->motifs = track->items;
     track->items = items;
 
     char *motifMapTable = trackDbSetting(track->tdb, "motifMapTable");
@@ -75,7 +104,7 @@ if (sqlTableExists(conn, motifTable))
                 hashAdd(targetHash, cloneString(target), cloneString(motif));
             }
         sqlFreeResult(&sr);
-        motifInfo->motifTargets = targetHash;
+        fsInfo->motifTargets = targetHash;
         }
     }
 hFreeConn(&conn);
@@ -141,8 +170,8 @@ static void factorSourceDrawMotifForItemAt(struct track *track, void *item,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw motif on factorSource item at a particular position. */
 {
-struct motifInfo *motifInfo = (struct motifInfo *)track->extraUiData;
-if (motifInfo == NULL)
+struct factorSourceInfo *fsInfo = (struct factorSourceInfo *)track->extraUiData;
+if (fsInfo == NULL)
     return;
 
 // Draw region with highest motif score
@@ -151,7 +180,7 @@ if (motifInfo == NULL)
 struct factorSource *fs = item;
 char *target = fs->name;
 int heightPer = track->heightPer;
-struct hash *targetHash = (struct hash *)motifInfo->motifTargets;
+struct hash *targetHash = fsInfo->motifTargets;
 if (targetHash != NULL)
     {
     target = hashFindVal(targetHash, fs->name);
@@ -159,7 +188,7 @@ if (targetHash != NULL)
         target = fs->name;
     }
 struct bed6FloatScore *m, *motif = NULL, *motifs = NULL;
-for (m = motifInfo->motifs; 
+for (m = fsInfo->motifs; 
         m != NULL && m->chromEnd <= fs->chromEnd; m = m->next)
     {
     if (sameString(m->name, target) && m->chromStart >= fs->chromStart)

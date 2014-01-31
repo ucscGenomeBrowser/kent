@@ -2495,6 +2495,14 @@ if (trackDbSetting(tdb, "motifTable") != NULL)
     safef(varName, sizeof(varName), "%s.highlightMotifs", tdb->track);
     cartMakeCheckBox(cart, varName, trackDbSettingClosestToHomeOn(tdb, "motifDrawDefault"));
     }
+// Multi-select filter on factors
+// NOTE: doesn't currently support track type in composites
+filterBy_t *filters = filterBySetGet(tdb, cart, tdb->track);
+if (filters == NULL)
+    return;
+puts("<p>");
+filterBySetCfgUi(cart, tdb, filters, TRUE);
+filterBySetFree(&filters);
 }
 
 #ifdef UNUSED
