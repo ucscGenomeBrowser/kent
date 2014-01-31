@@ -98,6 +98,12 @@ struct stepInit steps[] =
     "macs2_chip_peaks,macs2_chip_signal", "narrowPeak,bigWig", "out.narrowPeak.bigBed,out.bigWig",
     },
 
+    {
+    "sum_bigWig", 1,
+    "eap_sum_bigWig,bigWigMerge,bedGraphPack,bedGraphToBigWig",
+    "signal", "bigWig",
+    "pooled_signal", "bigWig", "out.bigWig",
+    }
 
 };
 
@@ -191,7 +197,9 @@ for (i=0; i<softwareCount; ++i)
     }
 
 /* Force step version stuff to be made right away */
+uglyf("About to force  eapCurrentStepVersion on %s\n", init->name);
 eapCurrentStepVersion(conn, init->name);
+uglyf("Past eapCurrentStepVersion on %s\n", init->name);
 
 /* Clean up. */
 dyStringFree(&query);
