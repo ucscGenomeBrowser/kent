@@ -537,15 +537,15 @@ _EOF_
     );
   if ($bundleParts) {
   $bossScript->add(<<_EOF_
-# if [ -d tParts ]; then
-#   echo 'constructing tParts/*.2bit files'
-#   ls tParts/*.lst | sed -e 's#tParts/##; s#.lst##;' | while read tPart
-#   do
-#     sed -e 's#.*.2bit:##;' tParts/\$tPart.lst \\
-#       | twoBitToFa -seqList=stdin $seq1Dir stdout \\
-#         | faToTwoBit stdin tParts/\$tPart.2bit
-#   done
-# fi
+if [ -d tParts ]; then
+  echo 'constructing tParts/*.2bit files'
+  ls tParts/*.lst | sed -e 's#tParts/##; s#.lst##;' | while read tPart
+  do
+    sed -e 's#.*.2bit:##;' tParts/\$tPart.lst \\
+      | twoBitToFa -seqList=stdin $seq1Dir stdout \\
+        | faToTwoBit stdin tParts/\$tPart.2bit
+  done
+fi
 if [ -d qParts ]; then
   echo 'constructing qParts/*.2bit files'
   ls qParts/*.lst | sed -e 's#qParts/##; s#.lst##;' | while read qPart
