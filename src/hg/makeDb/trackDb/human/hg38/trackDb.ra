@@ -215,3 +215,11 @@ html cpgIslandSuper
     html cpgIslandSuper
 
 include chainNetPrimate.ra
+
+track contigAlignmentSegments
+shortLabel ContigSegments
+longLabel non-bridged contig segments used in lastz/chain/net alignment pipeline
+group x
+priority 0
+visibility hide
+type bed 4
