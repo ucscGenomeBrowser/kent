@@ -69,6 +69,7 @@ cgiEncodeIntoDy("format", step->outputFormats[fileIx], dy);
 cgiEncodeIntoDy("ucsc_db", ucscDb, dy);
 cgiEncodeIntoDy("valid_key", validKey, dy);
 cgiEncodeIntoDy("output_type", step->outputTypes[fileIx], dy);
+cgiEncodeIntoDy("experiment", run->experiment, dy);
 
 /* Next set up stuff to handle variable parts we only put in if all inputs agree. */
 
@@ -82,7 +83,7 @@ for (ef = inputFileList; ef != NULL; ef = ef->next)
     }
 
 /* Loop through fields that might be shared putting them into tags if they are. */
-static char *fakeIfShared[] = {"experiment", "replicate", "enriched_in", 
+static char *fakeIfShared[] = {"replicate", "enriched_in", 
     "technical_replicate", "paired_end", };
 int i;
 for (i=0; i<ArraySize(fakeIfShared); ++i)
@@ -287,10 +288,14 @@ for (i=0; i<step->outCount; ++i)
 
 
     /* Schedule validation and finishing */
+#ifdef MAYBE_SOON
     char command[256];
     safef(command, sizeof(command), "bash -exc 'edwQaAgent %u;edwAnalysisAddJson %u'",
 	   outputFile->id, run->id);
     edwAddJob(conn, command);
+#else /* MAYBE_SOON */
+    edwAddQaJob(conn, outputFile->id);
+#endif /* MAYBE_SOON */
     }
 sqlSafef(query, sizeof(query), 
 	"update eapRun set createStatus=1 where id=%u", run->id);
