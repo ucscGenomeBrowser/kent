@@ -21,7 +21,6 @@
 extern char *edwDatabase;   /* Name of database we connect to. */
 extern char *edwRootDir;    /* Name of root directory for our files, including trailing '/' */
 extern char *eapRootDir;    /* Name of root directory for analysis pipeline */
-extern char *edwLicensePlatePrefix; /* License plates start with this - thanks Mike Cherry. */
 extern char *edwValDataDir; /* Data files we need for validation go here. */
 extern int edwSingleFileTimeout;   // How many seconds we give ourselves to fetch a single file
 
@@ -32,6 +31,9 @@ struct sqlConnection *edwConnect();
 
 struct sqlConnection *edwConnectReadWrite();
 /* Returns read/write connection to database. */
+
+char *edwLicensePlatePrefix(struct sqlConnection *conn);
+/* Return license plate prefix for current database - something like TST or DEV or ENCFF */
 
 long long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, 
     char *md5, long long size);
@@ -112,6 +114,15 @@ void edwMakeFileNameAndPath(int edwFileId, char *submitFileName, char edwFile[PA
 /* Convert file id to local file name, and full file path. Make any directories needed
  * along serverPath. */
 
+char *edwSetting(struct sqlConnection *conn, char *name);
+/* Return named settings value,  or NULL if setting doesn't exist. */
+
+char *edwRequiredSetting(struct sqlConnection *conn, char *name);
+/* Returns setting, abort if it isn't found. */
+
+char *edwLicensePlateHead(struct sqlConnection *conn);
+/* Return license plate prefix for current database - something like TST or DEV or ENCFF */
+
 struct edwFile *edwGetLocalFile(struct sqlConnection *conn, char *localAbsolutePath, 
     char *symLinkMd5Sum);
 /* Get record of local file from database, adding it if it doesn't already exist.
@@ -150,6 +161,9 @@ struct genomeRangeTree *edwMakeGrtFromBed3List(struct bed3 *bedList);
 
 struct edwAssembly *edwAssemblyForUcscDb(struct sqlConnection *conn, char *ucscDb);
 /* Get assembly for given UCSC ID or die trying */
+
+struct edwAssembly *edwAssemblyForId(struct sqlConnection *conn, long long id);
+/* Get assembly of given ID. */
 
 char *edwSimpleAssemblyName(char *assembly);
 /* Given compound name like male.hg19 return just hg19 */
