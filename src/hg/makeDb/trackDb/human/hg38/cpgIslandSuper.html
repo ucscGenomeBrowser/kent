@@ -16,6 +16,21 @@ for some other reason, perhaps having to do with the regulation of gene
 expression.  CpG islands are regions where CpGs are present at
 significantly higher levels than is typical for the genome as a whole.</p>
 
+<p>
+In hg19, the CpG Islands track was created using masked sequence only.
+As a result, CpG islands were not identified in regions identified by
+RepeatMasker because ALUs can potentially be mis-classified as CpG islands.
+With hg38, both masked and unmasked versions of the track are offered.  The
+unmasked version of the track displays potential CpG islands that exist in
+repeat regions and would otherwise not be visible in the masked version.
+</p>
+
+<p>
+By default, only the masked version of the track is displayed.  To view the
+unmasked version, change the visibility settings in the track controls at
+the top of this page.
+</p>
+
 <h2>Methods</h2>
 
 <p>CpG islands were predicted by searching the sequence one base at a

@@ -516,6 +516,7 @@ sub convertOutput {
     # lavToAxt -dropSelf to axtToPsl.
     &run("lavToAxt -dropSelf $lav $tSeq $qSeq stdout " .
 	 "| axtToPsl stdin $tSizes $qSizes $out");
+    &run("pslCheck $out");
   } else {
     &run("lavToPsl $lav $out");
     &run("pslCheck $out");
@@ -573,6 +574,7 @@ $query2bit =~ s/.lst$/.2bit/;
 if ( -s $query2bit ) {
   &run("/bin/cp -p $query2bit $TMP");  # it is used repeatedly for each tSpec
   $query2bit =~ s#qParts/##;
+  $query2bit =~ s#tParts/##;  # could be this for self alignment
   @qFileSpecs = undef;
   $qFileSpecs[0] = "$TMP/$query2bit";
   $collapsed = 1;
