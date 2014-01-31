@@ -295,7 +295,12 @@ ifeq (${ENCODE_PIPELINE_BIN},)
     ENCODE_PIPELINE_BIN=/cluster/data/encode/pipeline/bin
 endif
 
-DESTBINDIR=${DESTDIR}/${BINDIR}
+# avoid an extra leading slash when DESTDIR is empty
+ifeq (${DESTDIR},)
+  DESTBINDIR=${BINDIR}
+else
+  DESTBINDIR=${DESTDIR}/${BINDIR}
+endif
 
 # location of stringify program
 STRINGIFY = ${DESTBINDIR}/stringify
