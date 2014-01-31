@@ -556,6 +556,7 @@ ZNF274,\
 ZZZ3
 
     # This is released track with TF Motif setting (on beta)
+    # Tables here obsolete -- replace with alpha track
     track wgEncodeRegTfbsClusteredV3
     release beta
     shortLabel Txn Fac ChIP V3
@@ -593,7 +594,7 @@ ZZZ3
     dataVersion ENCODE Mar 2012 Freeze
 
     # This is alternate cluster version -- antibody-based, as done in V2
-    track wgEncodeRegTfbsClusteredV4
+    track wgEncodeRegTfbsClusteredV3a
     release alpha
     shortLabel Txn Fac ChIP V3a
     longLabel Transcription Factor ChIP-seq Clusters V3a (189 antibodies, 162 targets) from ENCODE
