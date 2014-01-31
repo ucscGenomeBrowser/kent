@@ -70,8 +70,8 @@ table eapStepSwVersion
     uint swVersionId;    "Key in edwAnalysisSwVersion table"
     )
 
-table eapAnalysis
-"Information on an analysis job that we're planning on running"
+table eapRun
+"Information on an compute job that produces files by running a step."
     (
     uint id primary auto; "Analysis run ID"
     uint jobId;  "ID in edwAnalysisJob table"
@@ -88,7 +88,7 @@ table eapInput
 "Inputs to an eapAnalysis"
     (
     uint id primary auto; "Input table ID"
-    uint analysisId index; "Which eapAnalysis this is associated with"
+    uint runId index; "Which eapAnalysis this is associated with"
     string name;  "Input name within step"
     uint ix;  "Inputs always potentially vectors.  Have single one with zero ix for scalar input"
     uint fileId;  "Associated file - 0 for no file, look perhaps to val below instead."
@@ -99,7 +99,7 @@ table eapOutput
 "Outputs to an eapAnalysis"
     (
     uint id primary auto; "Output table ID"
-    uint analysisId index; "Which eapAnalysis this is associated with"
+    uint runId index; "Which eapAnalysis this is associated with"
     string name;  "Output name within step"
     uint ix;  "Outputs always potentially vectors. Have single one with zero ix for scalar output"
     uint fileId;  "Associated file - 0 for no file, look perhaps to val below instead."
