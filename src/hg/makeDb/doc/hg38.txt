@@ -2217,7 +2217,7 @@ total           5567850 5520017 5459735 5744165
 ############################################################################
 ## reset default position to ABO gene (DONE - 2014-01-13 - Hiram)
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr9:133247948-133269889"
+    hgsql -e 'update dbDb set defaultPos="chr9:133252000-133280861"
 	where name="hg38";' hgcentraltest
 
 ############################################################################
