@@ -405,7 +405,7 @@ canPack On
     motifTable factorbookMotifPos
     motifPwmTable factorbookMotifPwm
     motifMapTable factorbookMotifTarget
-    motifMaxWindow 30000
+    motifMaxWindow 50000
     motifDrawDefault on
     urlLabel Factorbook Link:
     url http://www.factorbook.org/mediawiki/index.php/$$
@@ -416,7 +416,7 @@ canPack On
     priority 1.71
     maxWindowToDraw 10000000
     dataVersion ENCODE Mar 2012 Freeze
-    filterBy name:Factor=\
+    filterBy name:factor=\
 ATF1,\
 ATF2,\
 ATF3,\
