@@ -21,7 +21,7 @@ extern char *eapJobTable;
 extern char *eapParaHost;
 /* Parasol host name. A machine running paraHub */
 
-extern char *eapParaQueues;
+char *eapParaDirs(struct sqlConnection *conn);
 /* Root directory to parasol job results queues, where parasol (eventually) stores
  * results of jobs that successfully complete or crash. */
 

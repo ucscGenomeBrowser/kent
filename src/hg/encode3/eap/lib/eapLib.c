@@ -31,10 +31,6 @@ char *eapJobTable = "eapJob";
 char *eapParaHost = "ku";
 /* Parasol host name. A machine running paraHub */
 
-char *eapParaQueues = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues";
-/* Root directory to parasol job results queues, where parasol (eventually) stores
- * results of jobs that successfully complete or crash. */
-
 char *eapSshArgs = "-o StrictHostKeyChecking=no -o BatchMode=yes";
 /* Arguments to pass to ssh or scp for good performance and security */
 
@@ -48,6 +44,19 @@ struct sqlConnection *eapConnectReadWrite()
 /* Return read/write connection to eap database, which may be same as edw database) */
 {
 return edwConnectReadWrite();
+}
+
+char *eapParaDirs(struct sqlConnection *conn)
+/* Root directory to parasol job results queues, where parasol (eventually) stores
+ * results of jobs that successfully complete or crash. */
+{
+static char buf[PATH_LEN];
+if (buf[0] == 0)
+    {
+    safef(buf, sizeof(buf), "%s/%s", "/hive/groups/encode/encode3/eap/queues", 
+	edwLicensePlateHead(conn));
+    };
+return buf;
 }
 
 
