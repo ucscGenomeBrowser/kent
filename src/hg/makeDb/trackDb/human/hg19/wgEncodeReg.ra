@@ -404,7 +404,7 @@ canPack On
     inputTableFieldDisplay cellType factor antibody treatment lab
     motifTable factorbookMotifPos
     motifPwmTable factorbookMotifPwm
-    motifMapTable factorbookMotifTarget
+    motifMapTable factorbookMotifTargetV2
     motifMaxWindow 50000
     motifDrawDefault on
     urlLabel Factorbook Link:

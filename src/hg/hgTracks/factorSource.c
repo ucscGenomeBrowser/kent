@@ -60,12 +60,9 @@ if (filter != NULL && filter->slChoices != NULL && differentString(filter->slCho
     for (choice = filter->slChoices; choice != NULL; choice = choice->next)
         {
         hashAdd(factorHash, cloneString(choice->name), NULL);
-        //uglyf("Adding %s.   ", choice->name);
         }
     fsInfo->factorChoices = factorHash;
-    //uglyf("before filter: %d items", slCount(track->items));
     filterItems(track, factorFilter, "include");
-    //uglyf("after filter: %d items", slCount(track->items));
 }
 
 // Motifs
@@ -105,9 +102,9 @@ if (sqlTableExists(conn, motifTable))
         while ((row = sqlNextRow(sr)) != NULL)
             {
             char *target = row[0];
-            char *motif = row[1];
-            if (motif[0] != 0)
-                hashAdd(targetHash, cloneString(target), cloneString(motif));
+            char *motifs = row[1];   // string, comma-sep list, or empty string
+            if (motifs[0] != 0)
+                hashAdd(targetHash, cloneString(target), slNameListFromString(motifs, ','));
             }
         sqlFreeResult(&sr);
         fsInfo->motifTargets = targetHash;
@@ -185,30 +182,31 @@ if (fsInfo == NULL)
 // NOTE: shows only canonical motif for the factor, so hides co-binding potential
 // NOTE: current table has single motif per factor
 struct factorSource *fs = item;
-char *target = fs->name;
 int heightPer = track->heightPer;
 struct hash *targetHash = fsInfo->motifTargets;
+struct slName *motifNames = NULL;
 if (targetHash != NULL)
-    {
-    target = hashFindVal(targetHash, fs->name);
-    if (target == NULL)
-        target = fs->name;
-    }
+    motifNames = hashFindVal(targetHash, fs->name);
+if (motifNames == NULL)
+    motifNames = slNameNew(fs->name);
+
+// Find motifs that lie completely within peak (sensible for ChIP-seq data ?)
 struct bed6FloatScore *m, *motif = NULL, *motifs = NULL;
-for (m = fsInfo->motifs; 
-        m != NULL && m->chromEnd <= fs->chromEnd; m = m->next)
+
+for (m = fsInfo->motifs; m != NULL && m->chromEnd <= fs->chromEnd; m = m->next)
     {
-    if (sameString(m->name, target) && m->chromStart >= fs->chromStart)
-        {
-        AllocVar(motif);
-        motif->chrom = cloneString(m->chrom);
-        motif->chromStart = m->chromStart;
-        motif->chromEnd = m->chromEnd;
-        motif->name = m->name;
-        motif->score = m->score;
-        motif->strand[0] = m->strand[0];
-        slAddHead(&motifs, motif);
-        }
+    if (m->chromStart < fs->chromStart)
+        continue;
+    if (!slNameInList(motifNames, m->name))
+        continue;
+    AllocVar(motif);
+    motif->chrom = cloneString(m->chrom);
+    motif->chromStart = m->chromStart;
+    motif->chromEnd = m->chromEnd;
+    motif->name = m->name;
+    motif->score = m->score;
+    motif->strand[0] = m->strand[0];
+    slAddHead(&motifs, motif);
     }
 if (motifs == NULL)
     return;
