@@ -236,7 +236,7 @@ for (motif = motifs; motifs != NULL; motif = motif->next)
                        dir, textColor, TRUE);
         }
     }
-//bed6FloatScoreFreeList(&motifs);
+//bed6FloatScoreFreeList(&motifs);  # not worth exec time (or debug time)
 }
 
 static void factorSourceDraw(struct track *track, int seqStart, int seqEnd,
