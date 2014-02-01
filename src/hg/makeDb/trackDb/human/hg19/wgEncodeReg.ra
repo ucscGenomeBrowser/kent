@@ -615,10 +615,12 @@ ZZZ3
     release alpha
     shortLabel Factorbook Motif
     longLabel Transcription Factor Motifs identified in ENCODE ChIP-seq (Factorbook)
-    type bed 4 +
+    type bed6FloatScore
+    motifPwmTable factorbookMotifPwm
+    #colorByStrand 22,182,33 17,136,25
     superTrack wgEncodeReg dense
     #color 0,128,0
-    color 22, 182,33
+    color 22,182,33
     priority 1.8
 
     track wgEncodeRegTfbsClusteredMotifs_larry

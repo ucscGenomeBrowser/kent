@@ -230,7 +230,7 @@ minLimit *
 minMax chromGraph
 minScore bed broadPeak narrowPeak
 motifTable factorSource
-motifPwmTable factorSource
+motifPwmTable factorSource bed6FloatScore
 motifMapTable factorSource
 motifMaxWindow factorSource
 motifDrawDefault factorSource

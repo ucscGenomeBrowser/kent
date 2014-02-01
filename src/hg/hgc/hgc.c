@@ -3736,7 +3736,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char table[64];
 boolean hasBin;
-struct bed6FloatScore *b6;
+struct bed6FloatScore *b6 = NULL;
 struct dyString *query = newDyString(512);
 char **row;
 boolean firstTime = TRUE;
@@ -3762,6 +3762,19 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Strand:</B> %s<BR>\n", b6->strand);
     }
 sqlFreeResult(&sr);
+
+// Support for motif display if configured in trackDb
+// TODO - share code with factorSource
+char *motifPwmTable = trackDbSetting(tdb, "motifPwmTable");
+struct dnaMotif *motif = NULL;
+if (motifPwmTable != NULL && sqlTableExists(conn, motifPwmTable))
+    {
+    motif = loadDnaMotif(b6->name, motifPwmTable);
+    if (motif == NULL)
+        return;
+    struct dnaSeq *seq = hDnaFromSeq(database, b6->chrom, b6->chromStart, b6->chromEnd, dnaLower);
+    motifLogoAndMatrix(&seq, 1, motif);
+    }
 hFreeConn(&conn);
 /* printTrackHtml is done in genericClickHandlerPlus. */
 }
