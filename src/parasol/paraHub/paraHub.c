@@ -3369,7 +3369,9 @@ for (;;)
     line = pm->data;
     logDebug("hub: %s", line);
     command = nextWord(&line);
-    if (sameWord(command, "jobDone"))
+    if (command == NULL)
+         warn("Empty command");
+    else if (sameWord(command, "jobDone"))
 	 jobDone(line);
     else if (sameWord(command, "recycleSpoke"))
 	 recycleSpoke(line);
@@ -3435,7 +3437,9 @@ for (;;)
 	 addSpoke();
     else if (sameWord(command, "plan"))
 	 plan(pm);
-    if (sameWord(command, "quit"))
+    else 
+         warn("Unrecognized command %s", command);
+    if (command != NULL && sameWord(command, "quit"))
 	 break;
     pmFree(&pm);
     }
