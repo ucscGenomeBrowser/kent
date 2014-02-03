@@ -631,6 +631,7 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
     $missingContigs{$contig} = $i;
   }
   my @missingInfo = ();
+
   my $NARF = &HgAutomate::mustOpen("$ncbiAssemblyReportFile");
   while (<$NARF>) {
     next if (/^#/);
@@ -640,7 +641,12 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
     if (exists $missingContigs{$rsaTrimmed}) {
       my $ucscName;
       if ($chr eq "na") {
-	$ucscName = "chrUn_$gbaTrimmed";
+	if ($db eq 'susScr3') {
+	  $ucscName = $gbAcc;
+	  $ucscName =~ s/\./-/;
+	} else {
+	  $ucscName = "chrUn_$gbaTrimmed";
+	}
       } else {
 	$chr = "M" if ($chr eq "MT");
 	$chr = "chr$chr" unless ($chr =~ /^chr/);
@@ -861,6 +867,7 @@ sub loadDbSnp {
       | perl -wpe '$cleanDbSnpSql' \\
         > tmp.tab
       hgLoadSqlTab -oldTable $tmpDb \$t placeholder tmp.tab
+      rm tmp.tab
     end
     hgsql $tmpDb -e \\
       'alter table $ContigInfo add index (ctg_id); \\
@@ -1097,7 +1104,7 @@ EOF
 
     #######################################################################
     # Extract observed alleles, molType and snp class from FASTA headers gnl
-    foreach rej (AltOnly NotOn)
+    foreach rej (AltOnly)
       if (-e $runDir/rs_fasta/rs_ch\$rej.fas.gz) then
         mkdir -p $runDir/rs_fasta/rejects
         mv $runDir/rs_fasta/rs_ch\$rej.fas.gz $runDir/rs_fasta/rejects/
@@ -1108,7 +1115,7 @@ EOF
 
     zcat $runDir/rs_fasta/rs_ch*.fas.gz \\
     | grep '^>gnl' \\
-    | perl -wpe 's/^\\S+rs(\\d+) .*mol="(\\w+)"\\|class=(\\d+)\\|alleles="([^"]+)"\\|build.*/\$1\\t\$4\\t\$2\\t\$3/ || die "Parse error line \$.:\\n\$_\\n\\t";' \\
+    | perl -wpe 's/""/"/g; s/^\\S+rs(\\d+) .*mol="(\\w+)"\\|class=(\\d+)\\|alleles="([^"]+)"\\|build.*/\$1\\t\$4\\t\$2\\t\$3/ || die "Parse error line \$.:\\n\$_\\n\\t";' \\
     | sort -nu \\
       > ucscGnl.txt
 #*** compare output of following 2 commands:
@@ -1279,19 +1286,14 @@ working directory to $runDir.";
     zcat $runDir/rs_fasta/rs_ch*.fas.gz \\
     | perl -wpe 's/^>gnl\\|dbSNP\\|(rs\\d+) .*/>\$1/ || ! /^>/ || die;' \\
       > $snpBase.fa
-    # Check for duplicates.
-    grep ^\\>rs $snpBase.fa | sort > seqHeaders
-#*** compare output of following 2 commands:
-    wc -l seqHeaders
-#30144822 seqHeaders
-    uniq seqHeaders | wc -l
-#30144822
     # Use hgLoadSeq to generate .tab output for sequence file offsets,
     # and keep only the columns that we need: acc and file_offset.
-    # Index it and translate to snpSeq table format.
+    # Translate to snpSeq table format and remove duplicates.
     hgLoadSeq -test placeholder $snpBase.fa
-    cut -f 2,6 seq.tab > ${snpBase}Seq.tab
-    rm seq.tab seqHeaders
+    cut -f 2,6 seq.tab \\
+    | sort -k1,1 -u \\
+      > ${snpBase}Seq.tab
+    rm seq.tab
 
 # Compress (where possible -- not .fa unfortunately) and copy results back to
 # $runDir
@@ -1331,7 +1333,7 @@ sub loadTables {
     endif
 
     # Load up main track tables.
-    hgLoadBed -tab -onServer -tmpDir=\$TMPDIR -allowStartEqualEnd \\
+    hgLoadBed -tab -onServer -tmpDir=\$TMPDIR -allowStartEqualEnd -type=bed6+ \\
       $db $snpBase -sqlTable=$snpBase.sql $snpBase.bed.gz
 
     zcat ${snpBase}ExceptionDesc.tab.gz \\
@@ -1344,7 +1346,6 @@ sub loadTables {
     endif
     ln -s $runDir/$snpBase.fa /gbdb/$db/snp/$snpBase.fa
     zcat ${snpBase}Seq.tab.gz \\
-    | sort -k1,1 -u \\
     | hgLoadSqlTab $db ${snpBase}Seq \$HOME/kent/src/hg/lib/snpSeq.sql stdin
 
     # Put in a link where one would expect to find the track build dir...

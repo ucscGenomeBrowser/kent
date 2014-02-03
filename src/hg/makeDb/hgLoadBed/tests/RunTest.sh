@@ -76,6 +76,7 @@ rm -f bed.tab
 
 oneTest "zcat bed4.txt.gz | $TESTPROGRAM ${NOLOAD} test bedLoadTest stdin" "29784     1"
 oneTest "zcat bed6.txt.gz | $TESTPROGRAM ${NOLOAD} test bedLoadTest stdin" "01708     1"
+oneTest "zcat bed6plus19.txt.gz | $TESTPROGRAM ${NOLOAD} -type=bed6+ -chromInfo=chrom.sizes test bedLoadTest stdin" "34682     1"
 oneTest "zcat bed14.txt.gz | $TESTPROGRAM ${NOLOAD} test bedLoadTest stdin" "00496     2"
 oneTest "zcat bed9.txt.gz | $TESTPROGRAM ${NOLOAD} test bedLoadTest stdin" "27920     2"
 oneTest "zcat bedGraph.txt.gz | $TESTPROGRAM ${NOLOAD} -bedGraph=4 test bedLoadTest stdin" "22118     1"

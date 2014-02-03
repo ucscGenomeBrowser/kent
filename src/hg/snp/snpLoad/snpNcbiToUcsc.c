@@ -1511,8 +1511,11 @@ else if (sameString(class, "deletion") || sameString(class, "insertion") ||
 	flagIupac(observed);
 	}
     else
-	lineFileAbort(lf, "Encountered something that doesn't fit "
+	{
+	warn("Encountered something that doesn't fit "
 		      "observedIndelFormat: %s", observed);
+	writeException(ObservedWrongFormat);
+	}
     }
 else if (sameString(class, "het"))
     {
