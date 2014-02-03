@@ -49,6 +49,9 @@ boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options
 boolean bedDetail = FALSE;      /* TRUE == bedDetail type, requires tab and sqlTable */
 
 char *type = NULL;              /* type=bedN{+{P}} bed and bedPlus input validation type */
+int typeBedN = -1;		/* parsed-out N from type */
+int typeBedP = -1;		/* parsed-out P from type */
+
 char *as = NULL;                /* Optional path to .as file for validation support of bedPlus */
 
 /* command line option specifications */
@@ -160,7 +163,7 @@ if (expireSeconds > 0)
 exit(0);
 }
 
-int findBedSize(char *fileName, struct lineFile **retLf)
+int getFirstRowColumnCount(char *fileName, struct lineFile **retLf)
 /* Read first line of file and figure out how many words in it. */
 /* Input file could be stdin, in which case we really don't want to open,
  * read, and close it here.  So if retLf is non-NULL, return the open 
@@ -214,6 +217,55 @@ return dif;
 }
 
 
+struct asObject *getAsObj(int columnCount)
+/* If the -as=table.as option was given, parse the autoSql file into an asObject.
+ * Otherwise try to deduce autoSql from type; if no type info, just return NULL. */
+{
+struct asObject *asObj = NULL;
+if (as != NULL)
+    {
+    asObj = asParseFile(as);
+    if (asObj->next != NULL)
+	errAbort("Can only handle .as files containing a single object.");
+    if (typeBedN > 0)
+	// abort if -type=bedN columns are not standard
+	asCompareObjAgainstStandardBed(asObj, typeBedN, TRUE);
+    }
+else if (bedDetail)
+    asObj = bedDetailAsObj();
+else if (typeBedN > 0)
+    {
+    char *asText = bedAsDef(typeBedN, columnCount);
+    asObj = asParseText(asText);
+    freeMem(asText);
+    }
+return asObj;
+}
+
+int getFieldCount(int columnCount, struct asObject *asObj)
+/* Return the expected number of columns in input.  If asObj is non-NULL, use its
+ * fieldcount. Otherwise, use the passed-in columnCount (from first file in list).
+ * If -type=bedN[+[P]] option was given, check consistency w/fieldCount. */
+{
+int fieldCount = columnCount;
+if (asObj != NULL)
+    // Set field count according to autoSql.
+    fieldCount = slCount(asObj->columnList);
+
+if (typeBedN > 0)
+    {
+    // User provided -type=bedN[+[P]]; see if N (and P, if given) are consistent with
+    // fieldCount.
+    if (fieldCount < typeBedN)
+	errAbort("fieldCount from -as or input file (%d) is too small (-type=%s)\n",
+		 fieldCount, type);
+    if (typeBedP >= 0 && fieldCount != typeBedN + typeBedP)
+	errAbort("fieldCount from -as or input file (%d) does not match -type=%s\n",
+		 fieldCount, type);
+    }
+return fieldCount;
+}
+
 static void checkChromNameAndSize(struct lineFile *lf, char *s, unsigned chromEnd)
 /* Check that the name is non-empty and exists, and that chromEnd <= chromSize. Abort on error. */
 {
@@ -243,17 +295,14 @@ lineFileAbort(lf, "chrom column empty");
 
 
 void loadOneBed(struct lineFile *lf, int bedSize, struct bedStub **pList)
-/* Load one bed file.  Make sure all lines have bedSize fields.
+/* Load one bed file.  Make sure all lines have the correct number of fields.
  * Put results in *pList. */
 {
 char *words[64], *line, *dupe;
 int wordCount;
 struct bedStub *bed;
-
-int fieldCount = 0;
-int bedN = 0;
-int bedP = 0;
-struct asObject *asObj = NULL;
+struct asObject *asObj = getAsObj(bedSize);
+int fieldCount = getFieldCount(bedSize, asObj);
 struct bed *validateBed;
 AllocVar(validateBed);
 
@@ -270,80 +319,15 @@ while (lineFileNextReal(lf, &line))
     /* ignore empty lines	*/
     if (0 == wordCount)
 	continue;
-    lineFileExpectWords(lf, bedSize, wordCount);
+    lineFileExpectWords(lf, fieldCount, wordCount);
 
     if (type)  
         // TODO also, may need to add a flag to the validateBed() interface to support -allowNegativeScores when not isCt
         //  although can probably get away without it since usually -allowNegativeScores is used by ct which has already verified it.
         //  thus -allowNegativeScores is unlikely to be used with -type.
 	{
-	/* First time through figure out the field count, and if not set, the defined standard field count. */
-	if (fieldCount == 0)
-	    {
-	    // parse type
-	    char *btype = cloneString(type);
-	    char *plus = strchr(btype, '+');
-	    if (plus)
-		{
-		*plus++ = 0;
-		if (isdigit(*plus))
-		    bedP = sqlUnsigned(plus);
-		else
-		    bedP = -1;
-		}
-	    if (!startsWith("bed", btype))
-		errAbort("type must begin with \"bed\"");
-	    btype +=3;
-	    bedN = sqlUnsigned(btype);
-
-	    if (bedN < 3)
-		errAbort("Bed must be 3 or higher, found %d\n", bedN);
-	    if (bedN > 15) 
-		errAbort("Bed must be 15 or lower, found %d\n", bedN);
-
-	    /* Load up as-object if defined in file. */
-	    struct asObject *asObj = NULL;
-	    if (as != NULL)
-		{
-		/* Parse it and do sanity check. */
-		asObj = asParseFile(as);
-		if (asObj->next != NULL)
-		    errAbort("Can only handle .as files containing a single object.");
-		fieldCount = slCount(asObj->columnList);
-		asCompareObjAgainstStandardBed(asObj, bedN, TRUE); // abort if bedN columns are not standard
-		}
-	    else
-		{
-		fieldCount = bedSize;
-		if (bedDetail)
-		    {
-		    asObj = bedDetailAsObj();
-		    }
-		else
-		    {
-		    char *asText = bedAsDef(bedN, fieldCount);
-		    asObj = asParseText(asText);
-		    freeMem(asText);
-		    }
-		}
-	    if (bedP == -1)  // user did not specify how many plus columns there are.
-		{
-		bedP = fieldCount - bedN;
-		if (bedP < 1)
-		    lineFileAbort(lf, "fieldCount input (%d) did not match the specification (%s)\n"
-			, fieldCount, type);
-		}
-
-	    if (fieldCount != bedN + bedP)
-		lineFileAbort(lf, "fieldCount input (%d) did not match the specification (%s)\n"
-		    , fieldCount, type);
-	    }
-
-
-	loadAndValidateBed(words, bedN, fieldCount, lf, validateBed, asObj, FALSE);
-
+	loadAndValidateBed(words, typeBedN, fieldCount, lf, validateBed, asObj, FALSE);
 	checkChromNameAndSize(lf, validateBed->chrom, validateBed->chromEnd);
-	
 	}
 
     AllocVar(bed);
@@ -375,7 +359,7 @@ freez(&validateBed);
 #define writeFailed(fileName) { errAbort("Write to %s failed -- disk full?", fileName); }
 
 
-void writeBedTab(char *fileName, struct bedStub *bedList, int bedSize)
+void writeBedTab(char *fileName, struct bedStub *bedList)
 /* Write out bed list to tab-separated file. */
 {
 struct bedStub *bed;
@@ -632,7 +616,7 @@ else if (!oldTable)
     }
 
 verbose(1, "Saving %s\n", tab);
-writeBedTab(tab, bedList, bedSize);
+writeBedTab(tab, bedList);
 
 if ( ! noLoad )
     {
@@ -703,7 +687,7 @@ void hgLoadBed(char *database, char *track, int bedCount, char *bedFiles[])
 /* hgLoadBed - Load a generic bed file into database. */
 {
 struct lineFile *lf = NULL;
-int bedSize = findBedSize(bedFiles[0], &lf);
+int bedSize = getFirstRowColumnCount(bedFiles[0], &lf);
 struct bedStub *bedList = NULL;
 int i;
 int loadedElementCount;
@@ -723,7 +707,7 @@ if ((bedGraph > 0) && (bedGraph > bedSize))
 
 for (i=0; i<bedCount; ++i)
     {
-    /* bedFiles[0] was opened by findBedSize above -- since it might be stdin,
+    /* bedFiles[0] was opened by getFirstRowColumnCount above -- since it might be stdin,
      * it's left open and reused by loadOneBed.  After that, open here: */
     if (i > 0)
 	lf = lineFileOpen(bedFiles[i], TRUE);
@@ -747,6 +731,31 @@ if (loadedElementCount > 0)
     loadDatabase(database, track, bedSize, bedList);
 else if (! ignoreEmpty)
     errAbort("empty input file for %s.%s", database,track);
+}
+
+void parseType()
+/* If the -type=bedN[+[P]] option was given, parse out N [and P]. */
+{
+if (type)
+    {
+    if (!startsWith("bed", type))
+	errAbort("-type=bedN[+[P]]: type must begin with \"bed\"");
+    char *dup = cloneString(type + strlen("bed"));
+    char *plus = strchr(dup, '+');
+    if (plus)
+	{
+	*plus++ = 0;
+	if (isdigit(*plus))
+	    typeBedP = sqlUnsigned(plus);
+	}
+    typeBedN = sqlUnsigned(dup);
+    if (typeBedN < 3)
+	errAbort("-type=bedN[+[P]]: N must be 3 or higher, found %d in '%s'\n", typeBedN, type);
+    if (typeBedN > 15)
+	errAbort("-type=bedN[+[P]]: N must be 15 or lower, found %d in '%s'\n", typeBedN, type);
+    if (typeBedN < 9)
+	itemRgb = FALSE;
+    }
 }
 
 int main(int argc, char *argv[])
@@ -784,6 +793,7 @@ nameIx = ! optionExists("noNameIx");
 ignoreEmpty = optionExists("ignoreEmpty");
 allowNegativeScores = optionExists("allowNegativeScores");
 customTrackLoader = optionExists("customTrackLoader");
+parseType();
 /* turns on: noNameIx, ignoreEmpty, allowStartEqualEnd, allowNegativeScores
  * -verbose=0 */
 if (customTrackLoader)
