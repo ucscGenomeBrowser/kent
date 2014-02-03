@@ -400,7 +400,11 @@ if (motifTable != NULL && sqlTableExists(conn, motifTable))
                 "select motif from %s where target = '%s'", motifMapTable, cluster->name);
         char *ret = sqlQuickString(conn, query);
         if (ret == NULL)
+            {
+            // missing target from table -- no canonical motif
+            webNewEmptySection();
             return;
+            }
         motifNames = slNameListFromString(ret, ',');
         }
     for (mn = motifNames; mn != NULL; mn = mn->next)
