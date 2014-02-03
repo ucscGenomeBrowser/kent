@@ -274,11 +274,7 @@ dyStringPrintf(dy, "addJob2 %s %s %s %s %s %f %lld",
                userName, dir, in, out, results, cpuUsage, ramUsage);
 for (i=0; i<argc; ++i)
     dyStringPrintf(dy, " %s", argv[i]);
-if (dy->stringSize > rudpMaxSize)
-    errAbort("The following string has %d bytes, but can only be %d:\n%s\n"
-             "Please either shorten the current directory or the command line\n"
-             "possibly by making a shell script that encapsulates a long command.\n"
-             ,  dy->stringSize, (int)rudpMaxSize, dy->string);
+pmCheckCommandSize(dy->string, dy->stringSize);
 
 jobIdString = hubCommandGetReciept(dy->string);
 dyStringFree(&dy);
