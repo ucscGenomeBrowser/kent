@@ -674,7 +674,12 @@ if(doIdeo)
     ideoTrack->ixAltColor = hvGfxFindRgb(hvg, &ideoTrack->altColor);
     hvGfxSetClip(hvg, 0, gfxBorder, ideoWidth, ideoTrack->height);
     if (sameString(startBand, endBand))
-        safef(title, sizeof(title), "%s (%s)", chromName, startBand);
+        {
+        if (startBand[0] == '\0')
+            safef(title, sizeof(title), "%s", chromName);
+        else
+            safef(title, sizeof(title), "%s (%s)", chromName, startBand);
+        }
     else
         safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
     textWidth = mgFontStringWidth(font, title);
@@ -5380,14 +5385,20 @@ cgiTableFieldEnd();
 cgiTableRowEnd();
 }
 
-void chromInfoRowsChrom()
+void chromInfoRowsChromExt(char *sortType)
 /* Make table rows of chromosomal chromInfo name & size, sorted by name. */
 {
 struct slName *chromList = hAllChromNames(database);
 struct slName *chromPtr = NULL;
 long long total = 0;
 
-slSort(&chromList, chrSlNameCmp);
+if (sameString(sortType,"default"))
+    slSort(&chromList, chrSlNameCmp);
+else if (sameString(sortType,"withAltRandom"))
+    slSort(&chromList, chrSlNameCmpWithAltRandom);
+else
+    errAbort("unknown sort type in chromInfoRowsChromExt: %s", sortType);
+
 for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     unsigned size = hChromSize(database, chromPtr->name);
@@ -5406,6 +5417,12 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     }
 chromInfoTotalRow(slCount(chromList), total);
 slFreeList(&chromList);
+}
+
+void chromInfoRowsChrom()
+/* Make table rows of chromosomal chromInfo name & size, sorted by name. */
+{
+chromInfoRowsChromExt("default");
 }
 
 static int  chromInfoCmpSize(const void *va, const void *vb)
@@ -5621,7 +5638,9 @@ puts("Length (bp) including gaps &nbsp;");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
-if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) &&
+if (sameString(database,"hg38"))
+    chromInfoRowsChromExt("withAltRandom");
+else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) &&
     hChromCount(database) < 100)
     chromInfoRowsChrom();
 else
@@ -5732,9 +5751,9 @@ if(!trackImgOnly)
     jsIncludeFile("utils.js", NULL);
     jsIncludeFile("ajax.js", NULL);
     jsIncludeFile("jquery.watermarkinput.js", NULL);
-    jsIncludeFile("jquery.history.js", NULL);  // Experimental
     if(!searching)
         {
+        jsIncludeFile("jquery.history.js", NULL);
         jsIncludeFile("jquery.imgareaselect.js", NULL);
         }
     jsIncludeFile("autocomplete.js", NULL);

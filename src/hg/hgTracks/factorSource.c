@@ -19,18 +19,53 @@ static struct factorSource *loadOne(char **row)
 return factorSourceLoad(row);
 }
 
-/* Save info about motifs */
-struct motifInfo {
+/* Save info about factors and their motifs */
+struct factorSourceInfo {
+    boolean showCellAbbrevs;
+    struct hash *factorChoices;
     struct hash *motifTargets;
     struct bed6FloatScore *motifs;
 };
+
+boolean factorFilter(struct track *track, void *item)
+/* Returns true if an item should be passed by the filter. NOTE: single filter supported here*/
+{
+struct hash *factorHash = ((struct factorSourceInfo *)track->extraUiData)->factorChoices;
+if (track->extraUiData != NULL && factorHash != NULL)
+    if (hashLookup(factorHash, ((struct factorSource *)item)->name) != NULL)
+        return TRUE;
+return FALSE;
+}
 
 static void factorSourceLoadItems(struct track *track)
 /* Load all items (and motifs if table is present) in window */
 {
 bedLoadItem(track, track->table, (ItemLoader)loadOne);
 
+struct factorSourceInfo *fsInfo = NULL;
+AllocVar(fsInfo);
+track->extraUiData = fsInfo;
+
+// Check UI setting to show cell abbreviations
 char varName[64];
+safef(varName, sizeof(varName), "%s.showCellAbbrevs", track->track);
+fsInfo->showCellAbbrevs = cartUsualBoolean(cart, varName, TRUE);
+
+// Filter factors based on multi-select
+filterBy_t *filter = filterBySetGet(track->tdb, cart, NULL);
+if (filter != NULL && filter->slChoices != NULL && differentString(filter->slChoices->name, "All"))
+    {
+    struct slName *choice;
+    struct hash *factorHash = newHash(0);
+    for (choice = filter->slChoices; choice != NULL; choice = choice->next)
+        {
+        hashAdd(factorHash, cloneString(choice->name), NULL);
+        }
+    fsInfo->factorChoices = factorHash;
+    filterItems(track, factorFilter, "include");
+}
+
+// Motifs
 safef(varName, sizeof(varName), "%s.highlightMotifs", track->track);
 if (!cartUsualBoolean(cart, varName, trackDbSettingClosestToHomeOn(track->tdb, "motifDrawDefault")))
     return;
@@ -47,14 +82,11 @@ if (motifTable == NULL)
 struct sqlConnection *conn = hAllocConn(database);
 if (sqlTableExists(conn, motifTable))
     {
-    struct motifInfo *motifInfo = NULL;
-    AllocVar(motifInfo);
-    track->extraUiData = motifInfo;
 
     // Load motifs
     struct slList *items = track->items;
     bedLoadItem(track, motifTable, (ItemLoader)bed6FloatScoreLoad);
-    motifInfo->motifs = track->items;
+    fsInfo->motifs = track->items;
     track->items = items;
 
     char *motifMapTable = trackDbSetting(track->tdb, "motifMapTable");
@@ -70,12 +102,12 @@ if (sqlTableExists(conn, motifTable))
         while ((row = sqlNextRow(sr)) != NULL)
             {
             char *target = row[0];
-            char *motif = row[1];
-            if (motif[0] != 0)
-                hashAdd(targetHash, cloneString(target), cloneString(motif));
+            char *motifs = row[1];   // string, comma-sep list, or empty string
+            if (motifs[0] != 0)
+                hashAdd(targetHash, cloneString(target), slNameListFromString(motifs, ','));
             }
         sqlFreeResult(&sr);
-        motifInfo->motifTargets = targetHash;
+        fsInfo->motifTargets = targetHash;
         }
     }
 hFreeConn(&conn);
@@ -118,7 +150,8 @@ if (w < 1)
 hvGfxBox(hvg, x1, y, w, heightPer, color);
 
 /* Draw text to the right */
-if (vis == tvFull || vis == tvPack)
+struct factorSourceInfo *fsInfo = (struct factorSourceInfo *)track->extraUiData;
+if ((vis == tvFull || vis == tvPack) && fsInfo->showCellAbbrevs)
     {
     int x = x2 + tl.mWidth/2;
     int i;
@@ -141,38 +174,39 @@ static void factorSourceDrawMotifForItemAt(struct track *track, void *item,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw motif on factorSource item at a particular position. */
 {
-struct motifInfo *motifInfo = (struct motifInfo *)track->extraUiData;
-if (motifInfo == NULL)
+struct factorSourceInfo *fsInfo = (struct factorSourceInfo *)track->extraUiData;
+if (fsInfo == NULL)
     return;
 
 // Draw region with highest motif score
 // NOTE: shows only canonical motif for the factor, so hides co-binding potential
 // NOTE: current table has single motif per factor
 struct factorSource *fs = item;
-char *target = fs->name;
 int heightPer = track->heightPer;
-struct hash *targetHash = (struct hash *)motifInfo->motifTargets;
+struct hash *targetHash = fsInfo->motifTargets;
+struct slName *motifNames = NULL;
 if (targetHash != NULL)
-    {
-    target = hashFindVal(targetHash, fs->name);
-    if (target == NULL)
-        target = fs->name;
-    }
+    motifNames = hashFindVal(targetHash, fs->name);
+if (motifNames == NULL)
+    motifNames = slNameNew(fs->name);
+
+// Find motifs that lie completely within peak (sensible for ChIP-seq data ?)
 struct bed6FloatScore *m, *motif = NULL, *motifs = NULL;
-for (m = motifInfo->motifs; 
-        m != NULL && m->chromEnd <= fs->chromEnd; m = m->next)
+
+for (m = fsInfo->motifs; m != NULL && m->chromEnd <= fs->chromEnd; m = m->next)
     {
-    if (sameString(m->name, target) && m->chromStart >= fs->chromStart)
-        {
-        AllocVar(motif);
-        motif->chrom = cloneString(m->chrom);
-        motif->chromStart = m->chromStart;
-        motif->chromEnd = m->chromEnd;
-        motif->name = m->name;
-        motif->score = m->score;
-        motif->strand[0] = m->strand[0];
-        slAddHead(&motifs, motif);
-        }
+    if (m->chromStart < fs->chromStart)
+        continue;
+    if (!slNameInList(motifNames, m->name))
+        continue;
+    AllocVar(motif);
+    motif->chrom = cloneString(m->chrom);
+    motif->chromStart = m->chromStart;
+    motif->chromEnd = m->chromEnd;
+    motif->name = m->name;
+    motif->score = m->score;
+    motif->strand[0] = m->strand[0];
+    slAddHead(&motifs, motif);
     }
 if (motifs == NULL)
     return;
@@ -202,7 +236,7 @@ for (motif = motifs; motifs != NULL; motif = motif->next)
                        dir, textColor, TRUE);
         }
     }
-//bed6FloatScoreFreeList(&motifs);
+//bed6FloatScoreFreeList(&motifs);  # not worth exec time (or debug time)
 }
 
 static void factorSourceDraw(struct track *track, int seqStart, int seqEnd,

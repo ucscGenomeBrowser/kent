@@ -2139,6 +2139,16 @@ done
     cp -p hg38.contigs.2bit ../..
     cp -p hg38.contigs.lift ../../jkStuff
 
+    # load as a track to be able to see where they are:
+    egrep "chrUn|chrM|_alt|_random" hg38.contigs.chrom.sizes \
+	| awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $1}' \
+	> fullCoverage.hg38Contigs.bed
+    cat hg38.contigs.bed >>  fullCoverage.hg38Contigs.bed
+    featureBits -or -countGaps hg38 fullCoverage.hg38Contigs.bed gap
+    # 3209286105 bases of 3209286105 (100.000%) in intersection
+
+    hgLoadBed hg38 contigAlignmentSegments fullCoverage.hg38Contigs.bed
+
 #############################################################################
 ## analysis of repeat elements from each RM run
 ## (DONE - 2014-01-10 - Hiram)
@@ -2207,7 +2217,7 @@ total           5567850 5520017 5459735 5744165
 ############################################################################
 ## reset default position to ABO gene (DONE - 2014-01-13 - Hiram)
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr9:133247948-133269889"
+    hgsql -e 'update dbDb set defaultPos="chr9:133252000-133280861"
 	where name="hg38";' hgcentraltest
 
 ############################################################################

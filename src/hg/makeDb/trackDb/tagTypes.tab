@@ -102,7 +102,7 @@ extTable *
 fieldCount customTracks
 filePos *
 fileSortOrder *
-filterBy genePred bed
+filterBy genePred bed factorSource
 filterComposite *
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
 firstItemPos customTracks
@@ -172,7 +172,7 @@ highlightColor genePred
 html *
 htmlFile customTracks
 htmlUrl customTracks
-idInUrlSql altGraphX genePred chain
+idInUrlSql altGraphX genePred chain factorSource
 idXref genePred
 iframeUrl *
 iframeOptions *
@@ -230,7 +230,7 @@ minLimit *
 minMax chromGraph
 minScore bed broadPeak narrowPeak
 motifTable factorSource
-motifPwmTable factorSource
+motifPwmTable factorSource bed6FloatScore
 motifMapTable factorSource
 motifMaxWindow factorSource
 motifDrawDefault factorSource

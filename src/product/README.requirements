@@ -9,9 +9,13 @@ gnu make - http://www.gnu.org/software/make/
 MySQL development system and libraries - http://dev.mysql.com/
 libpng runtime and development packages - http://www.libpng.org/
 libssl runtime and development packages - http://www.openssl.org/
+ghostscript - ps to pdf converter - http://ghostscript.com
 
 Optional:
 'git' source code management: http://git-scm.com/downloads
+'gmt' map plotting tools www.soest.hawaii.edu/gmt/
+'pstack' for stack traces 
+
 
 It is best to install these packages with your standard operating
 system package management tools.
