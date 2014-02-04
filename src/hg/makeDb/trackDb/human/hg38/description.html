@@ -79,8 +79,8 @@ Insert centromerey stuff here...
 
 <p>
 <b>IUPAC characters</b><br>
-In addition to A, C, G, T and N, the raw sequence files from NCBI also include additional IUPAC
-ambiguity codes for bases that could not be positively identified as A, C, G or T (see
+In addition to the standard nucleotide codes, the raw sequence files from NCBI also include
+IUPAC ambiguity codes for bases that could not be positively identified as A, C, G or T (see
 <a href="http://www.ncbi.nlm.nih.gov/Class/MLACourse/Modules/MolBioReview/iupac_nt_abbreviations.html"
 target="_blank">NCBI</a>
 or
@@ -88,10 +88,9 @@ or
 or
 <a href="http://en.wikipedia.org/wiki/Nucleic_acid_notation" target="_blank">Wikipedia</a>
 for more information) (***WE SHOULD CHOOSE ONE OF THESE REFERENCES***). As part of the UCSC
-assembly creation process, these IUPAC characters are converted to N's, so the FASTA files
-available for download from UCSC contain N's instead of the original IUPAC characters. For
-FASTA files containing these IUPAC characters, the raw data files are available for download
-from the NCBI
+assembly creation process, all IUPAC ambiguity characters are converted to Ns.  The FASTA files
+available for download from UCSC reflect this. The raw data files containing the original IUPAC
+characters are available for download from the NCBI
 <a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38"
 target="_blank">FTP site</a>.
 </p>
@@ -102,12 +101,13 @@ List IUPAC character statistics?
 
 <p>
 <b>Note on chrM</b><br>
-The hg19 assembly was released with the mitochondrion sequence (represented as &quot;chrM&quot;
-in the Genome Browser) contained in GenBank record NC_001807. After the release of hg19, the
-mitochondrion sequence in NC_001807 was replaced with record
-<a href="http://www.ncbi.nlm.nih.gov/nuccore/NC_012920" target="_blank">NC_012920</a>,
-though the hg19 assembly was not updated to reflect this change. The hg38 assembly now
-includes this newer mitochondrion sequence. Please see the
+The hg38 assembly now includes the mitochondrion sequence (represented as &quot;chrM&quot;
+in the Genome Browser) contained in GenBank record
+<a href="http://www.ncbi.nlm.nih.gov/nuccore/NC_012920" target="_blank">NC_012920</a>.
+The hg19 assembly was released with the mitochondrion sequence contained in GenBank record
+NC_001807.  After the release of hg19, the mitochondrion sequence in NC_001807 was replaced
+with record NC_012920, but the hg19 assembly was never updated to reflect this change.
+Please see the
 <a href="http://mitomap.org/bin/view.pl/MITOMAP/HumanMitoSeq" target="_blank">Revised Cambridge
 Reference Sequence (rCRS)</a> page for more information.
 </p>
