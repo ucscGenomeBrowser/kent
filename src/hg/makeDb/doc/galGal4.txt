@@ -1355,3 +1355,9 @@ EOF
 
 
 ##############################################################################
+# Farm Animal Cytoband track (IN PROGRESS - 2014-02-04 - Pauline)
+    mkdir /hive/data/genomes/galGal4/bed/cytoBand
+    cd /hive/data/genomes/galGal4/bed/cytoBand
+
+    wget http://www.animalgenome.org/hu/share/GbandCoord.tar.gz
+

@@ -600,7 +600,7 @@ susScr3.genbank.est.native.load = yes
     # verify the track link to INSDC functions
 
 ##############################################################################
-# (IN PROGRESS - 2014-01-06 - Pauline)
+# Farm Animal QTL track (IN PROGRESS - 2014-01-06 - Pauline)
     mkdir /hive/data/genomes/susScr3/bed/animalQtl
     cd /hive/data/genomes/susScr3/bed/animalQtl
 
@@ -612,3 +612,5 @@ susScr3.genbank.est.native.load = yes
  
     checkTableCoords susScr3 animalQtl
     # no results - yay!
+
+##############################################################################
