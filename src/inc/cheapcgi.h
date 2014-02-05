@@ -218,6 +218,11 @@ void cgiDecode(char *in, char *out, int inLength);
 /* Decode from cgi pluses-for-spaces format to normal.
  * Out will be a little shorter than in typically. */
 
+void cgiDecodeFull(char *in, char *out, int inLength);
+/* Out will be a cgi-decoded version of in (no space from plus!).
+ * Out will be a little shorter than in typically, and
+ * can be the same buffer. */
+
 char *cgiEncode(char *inString);
 /* Return a cgi-encoded version of inString.
  * Alphanumerics kept as is, space translated to plus,
