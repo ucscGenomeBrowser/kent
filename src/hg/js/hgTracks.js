@@ -3554,7 +3554,7 @@ $(document).ready(function()
         imageV2.highlightRegion();
         // When warnBox is dismissed, any image highlight needs to be redrawn.
         $('#warnOK').click(function (e) { imageV2.highlightRegion()});
-        // Also entend the function that shows the warn box so that it too redraws the highlight.
+        // Also extend the function that shows the warn box so that it too redraws the highlight.
         showWarnBox = (function (oldShowWarnBox) {
             function newShowWarnBox() {
                 oldShowWarnBox.apply();
