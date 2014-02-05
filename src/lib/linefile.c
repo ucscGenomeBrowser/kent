@@ -469,11 +469,11 @@ if (lf->nextCallBack)
 
 if (lf->udcFile)
     {
+    lf->bufOffsetInFile = udcTell(lf->udcFile);
     char *line = udcReadLine(lf->udcFile);
     if (line==NULL)
         return FALSE;
     int lineSize = strlen(line);
-    lf->bufOffsetInFile = -1;
     lf->bytesInBuf = lineSize;
     lf->lineIx = -1;
     lf->lineStart = 0;
