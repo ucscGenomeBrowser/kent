@@ -5036,15 +5036,9 @@ else
 }
 
 int chrSlNameCmp(const void *el1, const void *el2)
-/* Compare chromosome or linkage group names str1 and str2 
- * to achieve this order:
- * chr1 .. chr22
- * chrX
- * chrY
- * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
- * chrUns
- */
+/* Compare chromosome names by number, then suffix.  el1 and el2 must be
+ * slName **s (as passed in by slSort) whose names match the regex
+ * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
 {
 struct slName *sln1 = *(struct slName **)el1;
 struct slName *sln2 = *(struct slName **)el2;
@@ -5137,9 +5131,15 @@ else
 }
 
 int chrSlNameCmpWithAltRandom(const void *el1, const void *el2)
-/* Compare chromosome names by number, then suffix.  el1 and el2 must be
- * slName **s (as passed in by slSort) whose names match the regex
- * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
+/* Compare chromosome or linkage group names str1 and str2 
+ * to achieve this order:
+ * chr1 .. chr22
+ * chrX
+ * chrY
+ * chrM
+ * chr1_{alt, random} .. chr22_{alt, random}
+ * chrUns
+ */
 {
 struct slName *sln1 = *(struct slName **)el1;
 struct slName *sln2 = *(struct slName **)el2;
