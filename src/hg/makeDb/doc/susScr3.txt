@@ -600,7 +600,7 @@ susScr3.genbank.est.native.load = yes
     # verify the track link to INSDC functions
 
 ##############################################################################
-# (IN PROGRESS - 2014-01-06 - Pauline)
+# Farm Animal QTL track (IN PROGRESS - 2014-01-06 - Pauline)
     mkdir /hive/data/genomes/susScr3/bed/animalQtl
     cd /hive/data/genomes/susScr3/bed/animalQtl
 
@@ -737,4 +737,5 @@ EOF
 #Read 207193 elements of size 11 from snp138CodingDbSnp.bed
 
 
+>>>>>>> 45efbeec981610e863332cb5beeda68ffe775406
 ##############################################################################

@@ -232,7 +232,8 @@ for (motif = motifs; motifs != NULL; motif = motif->next)
         Color textColor = hvGfxContrastingColor(hvg, color);
         int midY = y + (heightPer>>1);
         int dir = (*motif->strand == '+' ? 1 : -1);
-        clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+        if (vis != tvDense)
+            clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
                        dir, textColor, TRUE);
         }
     }
