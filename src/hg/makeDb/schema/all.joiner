@@ -3886,6 +3886,22 @@ identifier lrgTranscriptId
     $hg.lrgPep.name
     $hg.lrgCds.id
 
+# Transcription Factor and TF Motif track info
+
+identifier txnFactorGeneId
+"Transcription factor gene name (for human, HGNC)"
+    hg19.wgEncodeRegTfbsClusteredV3.name
+    # note: these could be in hgFixed or other non-assembly db
+    hg19.factorbookMotifTarget.target
+    hg19.factorbookGeneAlias.name
+
+identifier txnFactorMotifId
+"Transcription factor motif name/id"
+    hg19.factorbookMotifPos.name
+    hg19.factorbookMotifPwm.name
+    hg19.factorbookMotifTarget.motif comma
+
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
