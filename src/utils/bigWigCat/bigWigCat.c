@@ -577,8 +577,8 @@ for (index = 1; index < inNamesCount; index++)
 	bbiCachedChromLookup(inFiles[index], ct2->startChromIx, -1, chrom3, 100);
 	bbiCachedChromLookup(inFiles[index], ct2->endChromIx, -1, chrom4, 100);
 	errAbort("Files %s and %s overlap, cannot continue!\n"
-		 "%s spans from %s:%i to %s:%i\n"
-		 "%s spans from %s:%i to %s:%i\n",
+		 "%s spans from %s:%d to %s:%d\n"
+		 "%s spans from %s:%d to %s:%d\n",
 		 inNames[index-1], inNames[index], 
 		 inNames[index-1], chrom1, ct1->startBase, chrom2, ct1->endBase,
 		 inNames[index], chrom3, ct2->startBase, chrom4, ct2->endBase);
