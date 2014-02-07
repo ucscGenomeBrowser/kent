@@ -22,6 +22,8 @@ extern char *edwDatabase;   /* Name of database we connect to. */
 extern char *edwRootDir;    /* Name of root directory for our files, including trailing '/' */
 extern char *eapRootDir;    /* Name of root directory for analysis pipeline */
 extern char *edwValDataDir; /* Data files we need for validation go here. */
+extern char *edwDaemonEmail; /* Email address of our automatic user. */
+
 extern int edwSingleFileTimeout;   // How many seconds we give ourselves to fetch a single file
 
 #define edwMinMapQual 3	//Above this -10log10 theshold we have >50% chance of being right
@@ -186,6 +188,9 @@ void edwAddJob(struct sqlConnection *conn, char *command);
 void edwAddQaJob(struct sqlConnection *conn, long long fileId);
 /* Create job to do QA on this and add to queue */
 
+struct edwSubmit *edwSubmitFromId(struct sqlConnection *conn, long long id);
+/* Return submission with given ID or NULL if no such submission. */
+
 struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url);
 /* Return most recent submission, possibly in progress, from this url */
 
@@ -195,6 +200,10 @@ long long edwSubmitMaxStartTime(struct edwSubmit *submit, struct sqlConnection *
 
 int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn);
 /* Count number of new files in submission that have been validated. */
+
+boolean edwSubmitIsValidated(struct edwSubmit *submit, struct sqlConnection *conn);
+/* Return TRUE if validation has run.  This does not mean that they all passed validation.
+ * It just means the validator has run and has made a decision on each file in the submission. */
 
 void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url, boolean update);
 /* Add submission job to table and wake up daemon.  If update is set allow submission to

@@ -31,6 +31,7 @@ int edwSingleFileTimeout = 4*60*60;   // How many seconds we give ourselves to f
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
 char *eapRootDir = "/data/encode3/encodeAnalysisPipeline/";
 char *edwValDataDir = "/data/encode3/encValData/";
+char *edwDaemonEmail = "edw@encodedcc.sdsc.edu";
 
 struct sqlConnection *edwConnect()
 /* Returns a read only connection to database. */
@@ -468,7 +469,7 @@ safef(serverPath, PATH_LEN, "%s%s", edwRootDir, edwFile);
 }
 
 char *edwSetting(struct sqlConnection *conn, char *name)
-/* Return named settings value,  or NULL if setting doesn't exist. */
+/* Return named settings value,  or NULL if setting doesn't exist. FreeMem when done. */
 {
 char query[256];
 sqlSafef(query, sizeof(query), "select val from edwSettings where name='%s'", name);
@@ -476,7 +477,7 @@ return sqlQuickString(conn, query);
 }
 
 char *edwRequiredSetting(struct sqlConnection *conn, char *name)
-/* Returns setting, abort if it isn't found. */
+/* Returns setting, abort if it isn't found. FreeMem when done. */
 {
 char *val = edwSetting(conn, name);
 if (val == NULL)
@@ -485,9 +486,15 @@ return val;
 }
 
 char *edwLicensePlateHead(struct sqlConnection *conn)
-/* Return license plate prefix for current database - something like TST or DEV or ENCFF */
+/* Return license plate prefix for current database - something like TSTFF or DEVFF or ENCFF */
 {
-return edwRequiredSetting(conn, "prefix");
+static char head[32];
+if (head[0] == 0)
+     {
+     char *prefix = edwRequiredSetting(conn, "prefix");
+     safef(head, sizeof(head), "%s", prefix);
+     }
+return head;
 }
 
 
@@ -824,6 +831,15 @@ if (retJobId != NULL)
 return aheadOfUs;
 }
 
+struct edwSubmit *edwSubmitFromId(struct sqlConnection *conn, long long id)
+/* Return submission with given ID or NULL if no such submission. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwSubmit where id=%lld", id);
+return edwSubmitLoadByQuery(conn, query);
+}
+
+
 struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url)
 /* Return most recent submission, possibly in progress, from this url */
 {
@@ -862,7 +878,7 @@ int edwSubmitCountErrors(struct edwSubmit *submit, struct sqlConnection *conn)
 {
 char query[256];
 sqlSafef(query, sizeof(query), 
-    "select count(*) from edwFile where e.submitId=%u and errorMessage != '' and errorMessage is not null",
+    "select count(*) from edwFile where submitId=%u and errorMessage != '' and errorMessage is not null",
     submit->id);
 return sqlQuickNum(conn, query);
 }
