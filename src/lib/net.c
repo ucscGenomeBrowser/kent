@@ -500,7 +500,7 @@ else
 	{
 	++u; // that first slash is not considered part of the ftp path 
 	// decode now because the FTP server does NOT expect URL-encoding.
-	cgiDecode(u,parsed->file,strlen(u));
+	cgiDecodeFull(u,parsed->file,strlen(u));  // decodes %FF but not +
 	}
 
     }

@@ -1321,7 +1321,7 @@ TMPDIR=/scratch/tmp
     # verify the track link to INSDC functions
 
 ##############################################################################
-# (IN PROGRESS - 2014-01-07 - Pauline)
+# Farm Animal QTL track (IN PROGRESS - 2014-01-07 - Pauline)
     mkdir /hive/data/genomes/bosTau7/bed/animalQtl
     cd /hive/data/genomes/bosTau7/bed/animalQtl
 
@@ -1334,4 +1334,193 @@ TMPDIR=/scratch/tmp
     checkTableCoords bosTau7 animalQtl
     # no results - yay!
                                                                                                                       614,23        Bot
+##############################################################################
+# Farm Animal Cytoband track (IN PROGRESS - 2014-02-04 - Pauline)
+    mkdir /hive/data/genomes/bosTau7/bed/cytoBand
+    cd /hive/data/genomes/bosTau7/bed/cytoBand
 
+    wget http://www.animalgenome.org/hu/share/GBandCow.tar.gz 
+
+
+############################################################################
+# DBSNP B138 / SNP138 (DONE 1/31/14 angie)
+    # RedMine #12490
+    screen
+    mkdir -p /hive/data/outside/dbSNP/138/cow
+    cd /hive/data/outside/dbSNP/138/cow
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (cow_9913 in this case).
+    # Then click into that directory and look for file names like
+    #    b(1[0-9][0-9])_
+    # -- use the first num for build setting in config.ra
+    # The buildAssembly setting in config.ra is empty because dbSNP stopped including
+    # that in file names.
+    cat > config.ra <<EOF
+db bosTau7
+build 138
+buildAssembly 
+orgDir cow_9913
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
+    # Some trial and error is always required to get the config.ra just right.
+    # First stop:
+# *** This release contains more than one assembly label.
+# *** Please examine this list in case we need to exclude any of these:
+#
+#Bos_taurus_UMD_3.1
+#Btau_4.6.1
+# *** Add refAssemblyLabel to config.ra.  If keeping all labels, it will
+# *** look like this:
+#
+#refAssemblyLabel Bos_taurus_UMD_3.1,Btau_4.6.1
+#
+# *** Edit out any of those that are not included in bosTau7 (e.g. Celera).
+# *** Then restart this script with -continue=loadDbSnp .
+    # bosTau7 is Btau_4.6.1 (UMD_3.1 is bosTau6):
+    cat >> config.ra <<EOF
+refAssemblyLabel Btau_4.6.1
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+    # Next stop:
+#*** 1 lines of b138_ContigInfo.bcp.gz contained contig names that
+#*** could not be mapped to chrom.size via their GenBank contig mappings; see
+#*** /hive/data/outside/dbSNP/138/cow/cantLiftUpSeqNames.txt .
+#
+#*** You must account for all 13387 contig_acc values in config.ra,
+#*** using the liftUp and/or ignoreDbSnpContigsFile settings (see -help output).
+#*** Check the auto-generated suggested.lft to see if it covers all
+#*** 13387 contigs; if it does, add 'liftUp suggested.lft' to config.ra.
+#*** Then run again with -continue=loadDbSnp .
+    cat cantLiftUpSeqNames.txt
+#unlocalized-scaffold (no chr23_GL629717_random in chrom.sizes)  NT_182078       chr23
+
+    # Let's look at the assembly we got from GenBank:
+    pushd /hive/data/genomes/bosTau7/genbank/Primary_Assembly/
+    head unlocalized_scaffolds/unlocalized.chr2scaf
+##Chromosome     Unlocalized Scaffold (Accession.version)
+#23      GL629717.2
+    # -- and that's it!  Apparently GL629717 is the only unlocalized contig.
+    # Now check the first section in this file... seqeuences were picked up from
+    # assembled_chromosomes and unplaced_scaffolds -- but not from unlocalized_scaffolds.
+    # So I believe we have an orphan contig, and need to ignore dbSNP's mappings to it.
+    popd
+    cut -f 2 cant* > ignoreContig.txt
+    cat >> config.ra <<EOF
+liftUp suggested.lft
+ignoreDbSnpContigsFile ignoreContig.txt
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+    # The script halted because of a malformed fasta header (note the use of ""...""
+    # instead of "..." in the alleles keyword):
+#Parse error line 18636997:
+#>gnl|dbSNP|rs137508789 rs=137508789|pos=51|len=101|taxid=9913|mol="genomic"|class=2|alleles=""N-,C/T, B-, R-,J-,C/T""|build=133|suspect=?
+    # Tweak doDbSnp.pl to handle that, re-run with -debug to regenerate addToDbSnp.csh:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=addToDbSnp -stop=addToDbSnp -debug
+    # Now edit addToDbSnp.csh to wrap "if(0)" around the parts that completed,
+    # and run the rest of the commands:
+    ./addToDbSnp.csh >>& do.log & tail -f do.log
+    # Now continue with the next step after addToDbSnp.csh, bigJoin:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=bigJoin >>& do.log &
+    tail -f do.log
+    # Next stop: the same strangely formatted observed alleles above caused an
+    # abort in snpNcbiToUcsc:
+#Error line 18001467 of ucscNcbiSnp.bed: Encountered something that doesn't fit observedIndelFormat: N-,C/T, B-, R-,J-,C/T
+#Command failed:
+#ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' hgwdev nice /hive/data/outside/dbSNP/138/cow/translate.csh
+    # Changed snpNcbiToUcsc to assign an ObservedWrongFormat exception instead of aborting.
+    # Try again:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=translate >>& do.log &
+    tail -f do.log
+#Skipped 172559 snp mappings due to errors -- see snp138Errors.bed
+    # That's a lot of errors... take a look and ask dbSNP?  All are 'Missing observed'.
+    # Spot-checking... rs210944221 turns up in rs_chNotOn.fas.gz which we exclude...
+    # I think it's a bug for it to be there.  It's on chr1 in Btau_4.6.1 (bosTau6) according to
+    # http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=rs210944221
+    # Could it be in rs_chNotOn because it's not placed in UMD/bosTau7??
+    # Maybe excluding rs_chNotOn is not the right thing to do.
+    # Yep, all spot-checks imply we should keep rs_chNotOn.
+    # OK, fixed doDbSnp.pl; re-run from addToDbSnp on...
+    mkdir -p `cat workingDir`
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=addToDbSnp >>& do.log &
+    tail -f do.log
+    # Here's the next place that strangely formatted observed alleles gum things up:
+#hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd bosTau7 snp138 -sqlTable=snp138.sql snp138.bed.gz
+#Reading snp138.bed.gz
+#Read 22370480 elements of size 25 from snp138.bed.gz
+#Sorted
+#Creating table definition for snp138
+#Saving /data/tmp/loadBed_hgwdev_8e4_c23ae0.tab
+#ERROR: expecting r,g,b specification, found: 'N-,C/T, B-, R-,J-,C/T'
+    # The observed column does not contain rgb values.  Up to this point it didn't contain
+    # commas either I guess... better add -type=bed6+ to the hgLoadBed command.
+    # And better make hgLoadBed not assume itemRgb if bedN < 9!
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=load >>& do.log &
+    tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# FILTER SNP138 (DONE 2/3/14 angie)
+    cd /hive/data/outside/dbSNP/138/cow
+    zcat snp138.bed.gz \
+    | ~/kent/src/hg/utils/automation/categorizeSnps.pl
+#Mult:     2460543
+#Common:   10223
+#Flagged:  0
+#leftover: 19899714
+    # 10,461 SNPs out of > 22M that meet the threshold for Common... enough to warrant a
+    # Common SNPs track?  Maybe; easy enough to drop it later if we decide it's too sparse.
+    foreach f ({Mult,Common}.bed.gz)
+        mv $f snp138$f
+    end
+    # Load tables
+    foreach subset (Mult Common)
+        hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \
+          bosTau7 snp138$subset -sqlTable=snp138.sql snp138$subset.bed.gz
+    end
+
+
+##############################################################################
+# DBSNP CODING ANNOTATIONS (138) (DONE 2/3/14 angie)
+    cd /hive/data/outside/dbSNP/138/cow
+    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
+    # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
+    zcat ncbiFuncAnnotations.txt.gz \
+    | ~/kent/src/hg/utils/automation/fixNcbiFuncCoords.pl ncbiFuncInsertions.ctg.bed.gz \
+    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
+    | uniq \
+      > ncbiFuncAnnotationsFixed.txt
+    wc -l ncbiFuncAnnotationsFixed.txt
+#243649 ncbiFuncAnnotationsFixed.txt
+   # How many & what kinds of function types?
+    cut -f 6 ncbiFuncAnnotationsFixed.txt \
+    | sort -n | uniq -c
+#  55145 3   (coding-synon) 
+# 119906 8   (cds-reference)
+#   1037 41  (nonsense)     
+#  63668 42  (missense)     
+#    146 43  (stop-loss)    
+#    572 44  (frameshift)   
+#   3175 45  (cds-indel)    
+
+   # Gather up multiple annotation lines into one line per {snp, gene, frame}:
+    ~/kent/src/hg/utils/automation/collectNcbiFuncAnnotations.pl ncbiFuncAnnotationsFixed.txt \
+    | liftUp snp138CodingDbSnp.bed suggested.lft warn stdin
+#No cds-reference given for [NW_001493113, 1424575, 1424575, 137847803, XM_003582923]; skipping
+#No cds-reference given for [NW_001495409, 963470, 963470, 137850981, XM_002704914]; skipping
+#No cds-reference given for [NW_001494179, 2062380, 2062381, 209664496, NM_174508]; skipping
+#No cds-reference given for [NW_001495147, 87343, 87343, 210367715, NM_001206387]; skipping
+#No cds-reference given for [NW_001495033, 1486820, 1486821, 383348263, XM_592833]; skipping
+#...
+    # As in galGal4, tons of such warnings (which used to be silent) -- should consider
+    # not requiring that info.  hgc would have to extract the reference allele and codon(s)
+    # from assembly sequence... which I think it already does in a different part of hgc...
+    hgLoadBed bosTau7 snp138CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
+      -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
+      snp138CodingDbSnp.bed
+#Read 123098 elements of size 11 from snp138CodingDbSnp.bed
+
+
+##############################################################################

@@ -175,6 +175,9 @@ struct slRef *ref;
 for (ref = refList; ref != NULL; ref = ref->next)
     {
     struct preDrawContainer *pre = ref->val;
+    if (pre == NULL)  // pre may be null if the bigWig file didn't load
+	continue;
+
     struct preDrawElement *p = pre->preDraw + pre->preDrawZero;
     int width = pre->width;
     int i;

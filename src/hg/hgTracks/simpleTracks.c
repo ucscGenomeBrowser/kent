@@ -1194,9 +1194,8 @@ hvGfxBox(hvg, x1, y, w, height, color);
 }
 
 
-void filterItems(struct track *tg,
-    boolean (*filter)(struct track *tg, void *item),
-    char *filterType)
+void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *item), 
+                char *filterType)
 /* Filter out items from track->itemList. */
 {
 struct slList *newList = NULL, *oldList = NULL, *el, *next;

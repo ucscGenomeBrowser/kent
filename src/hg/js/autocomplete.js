@@ -81,9 +81,9 @@ var suggestBox = {
                         var auto = $('.ui-autocomplete');
                         var curHeight = $(auto).children().length * 21;
                         if (curHeight > maxHeight)
-                            $(auto).css({maxHeight: maxHeight+'px', overflow:'scroll'});
+                            $(auto).css({maxHeight: maxHeight+'px', overflow:'scroll', zIndex: 12});
                         else
-                            $(auto).css({maxHeight: 'none', overflow:'hidden'});
+                            $(auto).css({maxHeight: 'none', overflow:'hidden', zIndex: 12});
                     }
                 },
                 select: function (event, ui) {

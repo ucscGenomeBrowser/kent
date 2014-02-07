@@ -846,6 +846,28 @@ int chrSlNameCmp(const void *el1, const void *el2);
  * slName **s (as passed in by slSort) whose names match the regex
  * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
 
+int chrNameCmpWithAltRandom(char *str1, char *str2);
+/* Compare chromosome or linkage group names str1 and str2 
+ * to achieve this order:
+ * chr1 .. chr22
+ * chrX
+ * chrY
+ * chrM
+ * chr1_{alt, random} .. chr22_{alt, random}
+ * chrUns
+ */
+
+int chrSlNameCmpWithAltRandom(const void *el1, const void *el2);
+/* Compare chromosome or linkage group names str1 and str2 
+ * to achieve this order:
+ * chr1 .. chr22
+ * chrX
+ * chrY
+ * chrM
+ * chr1_{alt, random} .. chr22_{alt, random}
+ * chrUns
+ */
+
 int bedCmpExtendedChr(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart.  Use extended
  * chrom name comparison, that strip prefixes and does numeric compare */

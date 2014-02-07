@@ -1365,6 +1365,10 @@ void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct 
 void dontLoadItems(struct track *tg);
 /* No-op loadItems when we aren't going to try. */
 
+void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *item), 
+                char *filterType);
+/* Filter out items from track->itemList. */
+
 //#define REMOTE_TRACK_AJAX_CALLBACK
 #ifdef REMOTE_TRACK_AJAX_CALLBACK
 #define REMOTE_TRACK_HEIGHT (tl.fontHeight*2)

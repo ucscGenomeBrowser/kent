@@ -88,7 +88,7 @@ st.genome = cloneString(row[1]);
 st.isTrans = atoi(row[2]);
 st.host = cloneString(row[3]);
 st.port = cloneString(row[4]);
-st.nibDir = cloneString(row[5]);
+st.nibDir = hReplaceGbdb(row[5]);
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 return &st;

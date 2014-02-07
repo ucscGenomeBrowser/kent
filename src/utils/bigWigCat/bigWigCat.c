@@ -568,8 +568,21 @@ void checkOverlaps(char ** inNames, struct bbiFile ** inFiles, int inNamesCount)
 int index;
 
 for (index = 1; index < inNamesCount; index++)
-    if (filesOverlap(inFiles[index-1], inFiles[index]))
-	errAbort("Files %s and %s overlap, cannot continue!\n", inNames[index-1], inNames[index]);
+    if (filesOverlap(inFiles[index-1], inFiles[index])) {
+	struct cirTreeFile * ct1 = inFiles[index-1]->unzoomedCir;
+	struct cirTreeFile * ct2 = inFiles[index]->unzoomedCir;
+	char chrom1[100], chrom2[100], chrom3[100], chrom4[100];
+	bbiCachedChromLookup(inFiles[index-1], ct1->startChromIx, -1, chrom1, 100);
+	bbiCachedChromLookup(inFiles[index-1], ct1->endChromIx, -1, chrom2, 100);
+	bbiCachedChromLookup(inFiles[index], ct2->startChromIx, -1, chrom3, 100);
+	bbiCachedChromLookup(inFiles[index], ct2->endChromIx, -1, chrom4, 100);
+	errAbort("Files %s and %s overlap, cannot continue!\n"
+		 "%s spans from %s:%d to %s:%d\n"
+		 "%s spans from %s:%d to %s:%d\n",
+		 inNames[index-1], inNames[index], 
+		 inNames[index-1], chrom1, ct1->startBase, chrom2, ct1->endBase,
+		 inNames[index], chrom3, ct2->startBase, chrom4, ct2->endBase);
+    }
 }
 
 void checkFileSettings(char ** inNames, struct bbiFile ** inFiles, int inNamesCount) 
@@ -626,6 +639,7 @@ errAbort(
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
   "\n"
   "Note: must use wigToBigWig -fixedSummaries -keepAllChromosomes (perhaps in parallel cluster jobs) to create the input files.\n"
+  "Note: By non-overlapping we mean the entire span of each file, from first data point to last data point, must not overlap with that of other files.\n"
   , bbiCurrentVersion, itemsPerSlot
   );
 }

@@ -87,7 +87,10 @@ if (nibIsFile(fileName))
 else
     {
     struct twoBitFile *tbf = NULL;
-    char *tSeqName = strchr(fileName, ':');
+    // split a filename+chrom like "/gbdb/hg19/hg19.2bit:chr1"
+    // (can also be URL like "http://hgdownload.cse.ucsc.edu/gbdb/hg19/hg19.2bit:chr1")
+    // into filename and tSeqName
+    char *tSeqName = strrchr(fileName, ':');
     int tSeqSize = 0;
     if (tSeqName == NULL)
         errAbort("No colon in .2bit response from gfServer");

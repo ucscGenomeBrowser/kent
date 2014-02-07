@@ -357,7 +357,7 @@ va_end(args);
 }
 
 
-static void webEndSection()
+void webEndSection()
 /* Close down a section */
 {
 puts(
@@ -370,8 +370,9 @@ puts(
 puts("</div>");
 }
 
-void webNewSectionHeaderStart()
-/* Start the header for a new section on the web page */
+void webNewSectionHeaderStart(boolean hasTitle)
+/* Start the header for a new section on the web page.
+ * May be used to maintain table layout without a proper section header */
 {
 webEndSection();
 puts("<div>");
@@ -382,8 +383,11 @@ puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are cl
     "   <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER
         "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
     "    <TABLE BGCOLOR='#" HG_COL_INSIDE
-         "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
-    "     <div class='subheadingBar' class='windowSize'>");
+         "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n");
+if (hasTitle)
+    puts("<div class='subheadingBar' class='windowSize'>");
+else
+    puts("<div>");
 }
 
 void webNewSectionHeaderEnd()
@@ -400,10 +404,17 @@ void webNewSection(char* format, ...)
 {
 va_list args;
 va_start(args, format);
-webNewSectionHeaderStart();
+webNewSectionHeaderStart(TRUE);
 vprintf(format, args);
 webNewSectionHeaderEnd();
 va_end(args);
+}
+
+void webNewEmptySection()
+/* create a new section on the web page to maintain table layout */
+{
+webNewSectionHeaderStart(FALSE);
+webNewSectionHeaderEnd();
 }
 
 void webEndSectionTables()

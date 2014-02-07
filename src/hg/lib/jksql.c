@@ -30,7 +30,7 @@
 
 typedef MYSQL_RES *	STDCALL ResGetter(MYSQL *mysql);
 
-#define DEFAULTGETTER mysql_store_result
+#define DEFAULTGETTER mysql_use_result
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -63,7 +63,7 @@ struct sqlProfile
 struct sqlConnection
 /* This is an item on a list of sql open connections. */
     {
-    MYSQL *conn;		    /* Connection. */
+    MYSQL *conn;		    /* Connection. Can be NULL if not connected yet. */
     struct sqlProfile *profile;     /* profile, or NULL if not opened via a profile */
     struct dlNode *node;	    /* Pointer to list node. */
     struct dlList *resultList;	    /* Any open results. */
@@ -71,9 +71,11 @@ struct sqlConnection
     boolean inCache;                /* debugging flag to indicate it's in a cache */
     boolean isFree;                /* is this connection free for reuse; alway FALSE
                                     * unless managed by a cache */
-    int hasTableCache;           /* to avoid repeated checks for cache table name existence, -1 if not initialized yet */
-    struct sqlConnection *slowConn; /* optional. tried if a query fails on the conn connection */
-    char *db;                       /* to be able to lazily connect later, we need to store the database */
+    int hasTableCache;              /* to avoid repeated checks for cache table name existence, 
+                                      -1 if not initialized yet, otherwise like a boolean */
+    struct sqlConnection *slowConn; /* tried if a query fails on the main conn connection. Can be NULL. */
+    char *db;                       /* to be able to connect later (if conn is NULL), we need to  */
+                                    /* store the database */
     };
 
 struct sqlResult
@@ -89,9 +91,15 @@ static struct dlList *sqlOpenConnections = NULL;
 static unsigned sqlNumOpenConnections = 0;
 
 char *defaultProfileName = "db";                  // name of default profile
+char *slowProfPrefix = "slow-";                   // prefix for failover profile for profile (="slow-db")
 static struct hash *profiles = NULL;              // profiles parsed from hg.conf, by name
 static struct sqlProfile *defaultProfile = NULL;  // default profile, also in profiles list
 static struct hash* dbToProfile = NULL;           // db to sqlProfile
+
+// forward declaration of sqlUseOrStore so the order of functions does not change
+// (sqlUseOrStore is needed for sqlTableCacheFindConn), to keep the git diffs clean
+static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
+	char *query, ResGetter *getter, boolean abort);
 
 static char *envOverride(char *envName, char *defaultVal)
 /* look up envName in environment, if it exists and is non-empty, return its
@@ -288,7 +296,7 @@ static struct sqlProfile* sqlProfileGetFailover(struct sqlProfile* sp, char *dat
 {
 if (sp==NULL || sp->name==NULL)
     return NULL;
-char *slowProfName = catTwoStrings("slow-", sp->name);
+char *slowProfName = catTwoStrings(slowProfPrefix, sp->name);
 struct sqlProfile *slow = sqlProfileGet(slowProfName, database);
 freez(&slowProfName);
 return slow;
@@ -410,6 +418,13 @@ static char *scConnDb(struct sqlConnection *sc)
  * fprint'd messages. */
 {
 return (sc->db ? sc->db : "db=?");
+}
+
+static char *scConnProfile(struct sqlConnection *sc)
+/* Return sc->profile->name, unless profile is NULL -- if NULL, return a string for
+ * fprint'd messages. */
+{
+return (sc->profile ? sc->profile->name : "<noProfile>");
 }
 
 static void monitorPrintInfo(struct sqlConnection *sc, char *name)
@@ -576,6 +591,7 @@ if (sc != NULL)
 	freeMem(node);
 	}
    
+    freeMem(sc->db);
     // also close local cache connection
     if (sc->slowConn != NULL)
         sqlDisconnect(&sc->slowConn);
@@ -623,11 +639,31 @@ sqlFreeResult(&sr);
 return databases;
 }
 
-// forward declaration of sqlUseOrStore so the order of functions does not change in this file
-// sqlUseOrStore is needed for sqlTableCacheFindConn
-// FIXME MAX: is this good practice? shall I rather reorder the functions in this file?
-static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
-	char *query, ResGetter *getter, boolean abort);
+
+static bool sqlTableExistsNoCache(struct sqlConnection *sc, char *tableName)
+/* check if cache table exists, without using sqlTableExists
+   (sqlTableExists will try to use a cache table itself) */
+{
+bool ret = FALSE;
+
+char query[1024];
+sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(tableName));  
+struct sqlResult *sr;
+
+// temporarily remove failover connection, we don't want the failover switch here
+struct sqlConnection *slowConn = sc->slowConn; 
+sc->slowConn=NULL;
+sr = sqlUseOrStore(sc, query, DEFAULTGETTER, FALSE);
+sc->slowConn=slowConn;
+
+if (sr!=NULL)
+    {
+    ret = TRUE;
+    sqlFreeResult(&sr);
+    }
+return ret;
+}
+
 
 static struct sqlConnection *sqlTableCacheFindConn(struct sqlConnection *conn)
 /* Check if table name caching is configured and the cache table is also present 
@@ -637,32 +673,13 @@ char *tableListTable = cfgOption("showTableCache");
 if (tableListTable == NULL) 
     return NULL;
 
-// also check if cache table exists, without using sqlTableExists
-// (sqlTableExists will always use a cache table)
-if (conn->hasTableCache==-1)
+// to avoid hundreds of repeated table existence checks, we keep the result
+// of sqlTableCacheFindConn in the sqlConn object
+if (conn->hasTableCache==-1) // -1 => undefined
     {
-    // to avoid hundreds of repeated table existence checks, we keep the result
-    // of sqlTableCacheFindConn in the sqlConn object
-    conn->hasTableCache = FALSE;
-
-    char query[1024];
-    sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(tableListTable));  
-    struct sqlResult *sr;
-
-    // temporarily remove failover connection, we don't want the failover switch here
-    struct sqlConnection *slowConn = conn->slowConn; 
-    conn->slowConn=NULL;
-    sr = sqlUseOrStore(conn, query, DEFAULTGETTER, FALSE);
-    conn->slowConn=slowConn;
-
-    if (sr!=NULL)
-        {
-        conn->hasTableCache = TRUE;
-        sqlFreeResult(&sr);
-        }
-    else if (slowConn!=NULL)
+    conn->hasTableCache = (int) sqlTableExistsNoCache(conn, tableListTable);
+    if (conn->slowConn && !conn->hasTableCache)
         errAbort("no table cache found, although mysql failover (slow-db) is being used.");
-
     }
 
 if (conn->hasTableCache)
@@ -891,6 +908,7 @@ if (((conn->db != NULL) && !sameString(database, conn->db))
    || ((conn->db == NULL) && (database != NULL)))
    errAbort("apparent mismatch between mysql.h used to compile jksql.c and libmysqlclient");
 
+sc->db=cloneString(database);
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_CONNECT", "%s %s", host, user);
 
@@ -905,7 +923,6 @@ if (sqlNumOpenConnections > maxNumConnections)
 totalNumConnects++;
 
 sc->hasTableCache=-1; // -1 => not determined 
-sc->db=database;
 return sc;
 }
 
@@ -969,7 +986,7 @@ if (sc==NULL)
         sc->profile = sp; // remember the profile
 
     if (monitorFlags & JKSQL_TRACE)
-        fprintf(stderr, "SQL_FAILOVER_AT_CONNECT");
+        fprintf(stderr, "SQL_FAILOVER_AT_CONNECT\n");
     return sc;
     }
 
@@ -983,8 +1000,8 @@ sc->profile = sp; // remember the profile
 struct sqlConnection *slowSc;
 AllocVar(slowSc);
 slowSc->profile = slow; // remember the profile
-slowSc->db = database;
-slowSc->hasTableCache = -1;
+slowSc->db = cloneString(database);
+slowSc->hasTableCache = -1; // -1 => undefined
 sc->slowConn = slowSc;
 return sc;
 }
@@ -998,11 +1015,14 @@ return sqlConnProfile(sqlProfileMustGet(NULL, database), database, FALSE);
 
 static struct sqlConnection *sqlConnectIfUnconnected(struct sqlConnection *sc)
 /* Take a yet unconnected failover sqlConnection object and connect it to the sql server.
- * Don't add it to the list of open connections, as it is freed by it's non-failover parent */
+ * Don't add it to the list of open connections, as it is freed by its non-failover parent */
 {
 if (sc->conn!=NULL)
     return sc;
-struct sqlProfile *sp = sqlProfileMustGet(sc->profile->name, sc->db);
+char *profName = NULL;
+if (sc->profile)
+    profName = sc->profile->name;
+struct sqlProfile *sp = sqlProfileMustGet(profName, sc->db);
 sqlConnRemoteFillIn(sc, sp->host, sp->port, sp->socket, sp->user, sp->password, sc->db, TRUE, FALSE);
 return sc;
 }
@@ -1046,7 +1066,7 @@ if (format != NULL) {
     vaWarn(format, args);
     }
 warn("mySQL error %d: %s (profile=%s, host=%s, db=%s)", mysql_errno(conn), 
-    mysql_error(conn), sc->profile->name, sc->conn->host, sc->conn->db);
+    mysql_error(conn), scConnProfile(sc), sqlGetHost(sc), scConnDb(sc));
 }
 
 void sqlWarn(struct sqlConnection *sc, char *format, ...)
@@ -1117,7 +1137,7 @@ int mysqlError = mysql_real_query(sc->conn, query, strlen(query));
 if (mysqlError != 0 && sc->slowConn && sameWord(sqlGetDatabase(sc), sqlGetDatabase(sc->slowConn)))
     {
     if (monitorFlags & JKSQL_TRACE)
-        monitorPrint(sc, "SQL_FAILOVER", "%s -> %s", sc->profile->name, sc->slowConn->profile->name);
+        monitorPrint(sc, "SQL_FAILOVER", "%s -> %s", scConnProfile(sc), scConnProfile(sc->slowConn));
 
     sc = sc->slowConn;
     sc = sqlConnectIfUnconnected(sc);
@@ -2158,35 +2178,41 @@ static boolean sqlConnCacheEntryDbMatch(struct sqlConnCacheEntry *scce,
                                         char *database)
 /* does a database match the one in the connection cache? */
 {
-return ((database == NULL) && (scce->conn->db == NULL))
-    || sameString(database, scce->conn->db);
+return (sameOk(database, sqlGetDatabase(scce->conn)));
 }
 
 static boolean sqlConnChangeDb(struct sqlConnection *sc, char *database, boolean abort)
-/* change the database of an sql connection (and its failover connection)
- * */
+/* change the database of an sql connection (and its failover connection) */
 {
 // if we have a failover connection, keep its db in sync
 int slowConnErr = 0;
 if (sc->slowConn)
     {
     if (monitorFlags & JKSQL_TRACE)
-        monitorPrint(sc->slowConn, "SQL_SET_DB", "%s %s", sc->slowConn->profile->name, database);
+        monitorPrint(sc->slowConn, "SQL_SET_DB_SLOW", "%s", database);
     if (sc->slowConn->conn)
         slowConnErr = mysql_select_db(sc->slowConn->conn, database);
         if (slowConnErr==0)
-            sc->slowConn->db = database;
-        // if an error occured, the slowConn will be out of sync with the main connection
+            {
+            freeMem(sc->slowConn->db);
+            sc->slowConn->db = cloneString(database);
+            }
+        else
+            monitorPrint(sc->slowConn, "SQL_SET_DB_SLOW_FAIL", "");
+        // note: if an error occured, the slowConn will now have a different db than the main
+        // connection
     }
 
-sc->db=database;
-if (monitorFlags & JKSQL_TRACE)
-    monitorPrint(sc, "SQL_SET_DB", "%s %s", sc->profile->name, database);
+freeMem(sc->db);
+sc->db=cloneString(database);
 
-// we only fail if there is no failover connection, this allows to have a DB
-// that does not exist locally but only remote
+if (monitorFlags & JKSQL_TRACE)
+    monitorPrint(sc, "SQL_SET_DB", "%s", database);
+
 int localConnErr = 0;
 localConnErr = mysql_select_db(sc->conn, database);
+
+// if there is no failover connection, stop now
 if (sc->slowConn==NULL && sc->conn!=NULL && localConnErr != 0)
     {
     if (abort) 
@@ -2195,6 +2221,8 @@ if (sc->slowConn==NULL && sc->conn!=NULL && localConnErr != 0)
         return FALSE;
     }
 
+// we have a failover connection: only fail if both failover and main connection
+// reported an error. this allows to have databases that exist only on one of both servers
 if (localConnErr!=0 && slowConnErr!=0 && abort)
     // can't use sqlAbort, not sure which one is connected at this point
     errAbort("Couldn't set connection database to %s in either default or failover connection\n%s",
@@ -2455,11 +2483,19 @@ struct hash *databases = newHash(8);
 // add databases found using default profile
 addProfileDatabases(defaultProfileName, databases);
 
+// add databases found in failover profile
+char *slowProfName = catTwoStrings(slowProfPrefix, defaultProfileName);
+addProfileDatabases(slowProfName, databases);
+freez(&slowProfName);
+
 // add other databases explicitly associated with other profiles
 struct hashCookie cookie = hashFirst(dbToProfile);
 struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
-    hashAdd(databases, ((struct sqlProfile*)hel->val)->name, NULL);
+    {
+    char *db = ((struct sqlProfile*)hel->val)->name;
+    hashAdd(databases, db, NULL);
+    }
 return databases;
 }
 
@@ -2607,10 +2643,14 @@ struct sqlResult *sr;
 int updateIx;
 char *ret;
 sqlSafef(query, sizeof(query), "show table status like '%s'", table);
-if (conn->slowConn)
-    // the failover strategy does not work for this command, 
-    // as it never returns an error. So default to slowConn instead.
+// the failover strategy for slowConn does not work for this command, 
+// as it never returns an error. So need to check for table presence first
+if (conn->slowConn && !sqlTableExistsNoCache(conn, table))
+    {
+    sqlConnectIfUnconnected(conn->slowConn);
+    monitorPrintInfo(conn->slowConn, "SQL_TABLE_STATUS_FAILOVER");
     sr = sqlGetResult(conn->slowConn, query);
+    }
 else
     sr = sqlGetResult(conn, query);
 updateIx = getUpdateFieldIndex(sr);

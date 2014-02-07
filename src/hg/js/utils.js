@@ -1099,7 +1099,7 @@ function yieldingIterator(interatingFunc,continuingFunc,args)
 }
 
 function showLoadingImage(id)
-// Show a loading image above the given id; return's id of div added (alowwing later removal).
+// Show a loading image above the given id; return's id of div added (allowing later removal).
 {
     var loadingId = id + "LoadingOverlay";
     var overlay = $("<div id='"+loadingId+"' class='loading'></div>");

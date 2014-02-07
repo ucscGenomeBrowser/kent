@@ -261,7 +261,7 @@ ifeq (${HG_WARN},)
       HG_WARN_UNINIT=-Wuninitialized
     else
       ifeq (${FULLWARN},hgwdev)
-        HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type
+        HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type -Wempty-body
         HG_WARN_UNINIT=-Wuninitialized
       else
         HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
@@ -295,7 +295,12 @@ ifeq (${ENCODE_PIPELINE_BIN},)
     ENCODE_PIPELINE_BIN=/cluster/data/encode/pipeline/bin
 endif
 
-DESTBINDIR=${DESTDIR}/${BINDIR}
+# avoid an extra leading slash when DESTDIR is empty
+ifeq (${DESTDIR},)
+  DESTBINDIR=${BINDIR}
+else
+  DESTBINDIR=${DESTDIR}/${BINDIR}
+endif
 
 # location of stringify program
 STRINGIFY = ${DESTBINDIR}/stringify

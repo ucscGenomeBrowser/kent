@@ -537,6 +537,7 @@ var vis = {
                     rec.visibility = 0;
                 // else Would be nice to hide subtracks as well but that may be overkill
                 $(document.getElementById('tr_' + track)).remove();
+                imageV2.highlightRegion();
                 $(this).attr('class', 'hiddenText');
             } else
                 $(this).attr('class', 'normalText');
@@ -550,9 +551,14 @@ var vis = {
             $('select.normalText,select.hiddenText').attr('disabled',true);
         });
         $(form).attr('method','get');
+    },
 
+    restoreFromBackButton: function()
+    // Re-enabling vis dropdowns is necessarty because intiForAjax() disables them on submit.
+    {
+        $('select.normalText,select.hiddenText').attr('disabled',false);
     }
-
+    
 }
   ////////////////////////////////////////////////////////////
  // dragSelect is also known as dragZoom or shift-dragZoom //
@@ -630,15 +636,17 @@ var dragSelect = {
                     "Zoom In": function() {
                         // Zoom to selection
                         $(this).dialog("option", "revertToOriginalPos", false);
+                        if ($("#disableDragHighlight").attr('checked'))
+                            hgTracks.enableHighlightingDialog = false;
                         if (imageV2.inPlaceUpdate) {
                             var params = "position=" + newPosition;
-                            if ($("#disableDragHighlight").attr('checked')) {
-                                hgTracks.enableHighlightingDialog = false;
+                            if (!hgTracks.enableHighlightingDialog)
                                 params += "&enableHighlightingDialog=0"
-                            }
                             imageV2.navigateInPlace(params, null, true);
                         } else {
                             $('body').css('cursor', 'wait');
+                            if (!hgTracks.enableHighlightingDialog)
+                                setCartVars(['enableHighlightingDialog'],[0]);
                             document.TrackHeaderForm.submit();
                         }
                         $(this).dialog("close");
@@ -2898,6 +2906,8 @@ var imageV2 = {
             var newJsonRec = newJson.trackDb[id];
             var oldJsonRec = oldJson.trackDb[id];
             
+            if (newJsonRec.visibility == 0)  // hidden 'ruler' is in newJson.trackDb!
+                continue;
             if (newJsonRec.type == "remote")
                 continue;
             if (oldJsonRec != undefined &&  oldJsonRec.visibility != 0) {
@@ -3359,6 +3369,8 @@ var imageV2 = {
                     imageV2.navigateInPlace("db="+getDb()+"&position=" + cachedPos, null, false);
                 }
             }
+            // Special because FF is leaving vis drop-downs disabled
+            vis.restoreFromBackButton();
         }
     },
     
@@ -3539,7 +3551,19 @@ $(document).ready(function()
         }
         imageV2.loadRemoteTracks();
         makeItemsByDrag.load();
+        
+        // Any highlighted region must be shown and warnBox must play nice with it.
         imageV2.highlightRegion();
+        // When warnBox is dismissed, any image highlight needs to be redrawn.
+        $('#warnOK').click(function (e) { imageV2.highlightRegion()});
+        // Also extend the function that shows the warn box so that it too redraws the highlight.
+        showWarnBox = (function (oldShowWarnBox) {
+            function newShowWarnBox() {
+                oldShowWarnBox.apply();
+                imageV2.highlightRegion();
+            }
+            return newShowWarnBox;
+        })(showWarnBox);
     }
 
     // Drag select in chromIdeogram
@@ -3565,8 +3589,9 @@ $(document).ready(function()
         }
     }
 
-    // Experimentally trying jquery.history.js
+    // jquery.history.js Back-button support
     if (imageV2.enabled && imageV2.backSupport) {
         imageV2.setupHistory();
     }
+
 });
