@@ -117,19 +117,13 @@ sqlSafef(query, sizeof(query),
 return  (sqlQuickNum(conn, query) > 0);
 }
 
-struct edwUser *edwUserForPipeline(struct sqlConnection *conn)
-/* Get user associated with automatic processes. */
-{
-return edwUserFromEmail(conn, "edw@encodedcc.sdsc.edu");
-}
-
 unsigned eapNewSubmit(struct sqlConnection *conn)
 /* Create new submission record for eap */
 {
 /* In practice this just gets called if there is no existing submission for the EAP.
  * Most of the time the eap just hooks up to the most recent existing submission.
  * We make new EAP submissions sometimes to help lump together major versions. */
-struct edwUser *eapUser = edwUserForPipeline(conn);
+struct edwUser *eapUser = eapUserForPipeline(conn);
 char query[512];
 // The "EAP" url is clearly fake, but more informative than blank I guess.
 sqlSafef(query, sizeof(query), 
@@ -145,7 +139,7 @@ struct edwSubmit *eapCurrentSubmit(struct sqlConnection *conn)
 /* Get submit record for pipeline. */
 {
 char query[256];
-struct edwUser *eapUser = edwUserForPipeline(conn);
+struct edwUser *eapUser = eapUserForPipeline(conn);
 sqlSafef(query, sizeof(query),
     "select max(id) from edwSubmit where userId=%u", eapUser->id);
 unsigned submitId = sqlQuickNum(conn, query);
