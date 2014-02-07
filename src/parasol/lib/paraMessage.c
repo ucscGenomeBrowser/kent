@@ -110,6 +110,19 @@ pmSet(pm, string);
 return pmSend(pm, ru);
 }
 
+void pmCheckCommandSize(char *string, int len)
+/* Check that string of given len is not too long to fit into paraMessage.
+ * If it is, abort with good error message assuming it was a command string */
+{
+if (len > rudpMaxSize)
+    {
+    errAbort("The following string has %d bytes, but can only be %d:\n%s\n"
+             "Please either shorten the current directory or the command line\n"
+             "possibly by making a shell script that encapsulates a long command.\n"
+             ,  len, (int)rudpMaxSize, string);
+    }
+}
+
 boolean pmReceiveTimeOut(struct paraMessage *pm, struct rudp *ru, int timeOut)
 /* Wait up to timeOut microseconds for message.  To wait forever
  * set timeOut to zero. */

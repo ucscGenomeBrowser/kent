@@ -900,11 +900,7 @@ char *jobId = NULL;
 
 dyStringPrintf(cmd, "addJob2 %s %s /dev/null /dev/null %s %f %lld %s",
                getUser(), jobCwd, resultsName, job->cpusUsed, job->ramUsed, job->command);
-if (cmd->stringSize > rudpMaxSize)
-    errAbort("The following string has %d bytes, but can only be %d:\n%s\n"
-             "Please either shorten the current directory or the command line\n"
-             "possibly by making a shell script that encapsulates a long command.\n"
-             ,  cmd->stringSize, (int)rudpMaxSize, cmd->string);
+pmCheckCommandSize(cmd->string, cmd->stringSize);
 jobId = hubSingleLineQuery(cmd->string);
 if (sameString(jobId,"0"))
     {

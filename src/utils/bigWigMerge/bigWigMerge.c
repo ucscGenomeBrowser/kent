@@ -16,7 +16,7 @@ errAbort(
   "You'll have to run bedGraphToBigWig to make the output bigWig.\n"
   "The signal values are just added together to merge them\n"
   "usage:\n"
-  "   bigWigMerge in1.bw in2.bw .. inN.bw out.bedGraph\n"
+  "   bigWigMerge v1 in1.bw in2.bw .. inN.bw out.bedGraph\n"
   "options:\n"
   "   -threshold=0.N - don't output values at or below this threshold. Default is 0.0\n"
   "   -adjust=0.N - add adjustment to each value\n"

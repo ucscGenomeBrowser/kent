@@ -90,8 +90,8 @@ CREATE TABLE eapStepSwVersion (
     PRIMARY KEY(id)
 );
 
-#Information on an analysis job that we're planning on running
-CREATE TABLE eapAnalysis (
+#Information on an compute job that produces files by running a step.
+CREATE TABLE eapRun (
     id int unsigned auto_increment,	# Analysis run ID
     jobId int unsigned default 0,	# ID in edwAnalysisJob table
     experiment char(16) default 0,	# Something like ENCSR000CFA.
@@ -109,25 +109,25 @@ CREATE TABLE eapAnalysis (
 #Inputs to an eapAnalysis
 CREATE TABLE eapInput (
     id int unsigned auto_increment,	# Input table ID
-    analysisId int unsigned default 0,	# Which eapAnalysis this is associated with
+    runId int unsigned default 0,	# Which eapAnalysis this is associated with
     name varchar(255) default '',	# Input name within step
     ix int unsigned default 0,	# Inputs always potentially vectors.  Have single one with zero ix for scalar input
     fileId int unsigned default 0,	# Associated file - 0 for no file, look perhaps to val below instead.
     val longblob,	# Non-file data
               #Indices
     PRIMARY KEY(id),
-    INDEX(analysisId)
+    INDEX(runId)
 );
 
 #Outputs to an eapAnalysis
 CREATE TABLE eapOutput (
     id int unsigned auto_increment,	# Output table ID
-    analysisId int unsigned default 0,	# Which eapAnalysis this is associated with
+    runId int unsigned default 0,	# Which eapAnalysis this is associated with
     name varchar(255) default '',	# Output name within step
     ix int unsigned default 0,	# Outputs always potentially vectors. Have single one with zero ix for scalar output
     fileId int unsigned default 0,	# Associated file - 0 for no file, look perhaps to val below instead.
     val longblob,	# Non-file data
               #Indices
     PRIMARY KEY(id),
-    INDEX(analysisId)
+    INDEX(runId)
 );

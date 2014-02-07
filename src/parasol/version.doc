@@ -326,3 +326,4 @@
 12.16   Fixed bug in planner where r and c parameters were reversed which means the ramUnit option to paraHub now works.
 12.17   Added a little to parasol command line.  It now has a 'wait' option to the 'add job' 
 	command that will wait for the job to finish before it returns.
+12.18   Made paraHub not crash when you send it an empty message.

@@ -8,6 +8,7 @@
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "../../eap/inc/eapDb.h"
+#include "edwAnalysis.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -73,6 +74,7 @@ for (sw = swList; sw != NULL; sw = sw->next)
     out.url = "";
     out.email = "";
     eapSoftwareTabOut(&out, f);
+    sw->id = id;   // Now using eap instead of edw IDs. 
     }
 carefulClose(&f);
 
@@ -84,6 +86,7 @@ for (sw = swList; sw != NULL; sw = sw->next)
     out.id = ++id;
     out.software = sw->name;
     out.version = sw->version;
+    out.notes = "";
     memcpy(out.md5, sw->md5, sizeof(out.md5));
     eapSwVersionTabOut(&out, f);
     }
@@ -246,7 +249,7 @@ for (run = runList; run != NULL; run = run->next)
     struct edwAnalysisStep *step = hashFindVal(stepHash, run->analysisStep);
     if (step == NULL)
         errAbort("Can't find %s in stepHash in run %u", run->analysisStep, run->id);
-    struct eapAnalysis out = {0};
+    struct eapRun out = {0};
     out.id = run->id;
     out.jobId = run->jobId;
     memcpy(out.experiment, run->experiment, sizeof(out.experiment));
@@ -256,7 +259,7 @@ for (run = runList; run != NULL; run = run->next)
     out.assemblyId = run->assemblyId;
     out.jsonResult = sqlEscapeTabFileString(run->jsonResult);
     out.createStatus = run->createStatus;
-    eapAnalysisTabOut(&out, f);
+    eapRunTabOut(&out, f);
     freez(&out.jsonResult);
     }
 carefulClose(&f);
@@ -275,7 +278,7 @@ for (run = runList; run != NULL; run = run->next)
 	    {
 	    struct eapInput in;
 	    in.id = ++inId;
-	    in.analysisId = run->id;
+	    in.runId = run->id;
 	    in.name = run->inputTypes[i];
 	    in.ix = 0;
 	    in.fileId = run->inputFileIds[i];
@@ -300,7 +303,7 @@ for (run = runList; run != NULL; run = run->next)
 	    {
 	    struct eapOutput out;
 	    out.id = ++outId;
-	    out.analysisId = run->id;
+	    out.runId = run->id;
 	    out.name = run->outputTypes[i];
 	    out.ix = 0;
 	    out.fileId = run->createFileIds[i];
@@ -316,16 +319,20 @@ void loadEapDb(char *dir)
 {
 struct sqlConnection *conn = edwConnectReadWrite();
 char *tables[] = {"eapJob", "eapSoftware", "eapSwVersion", "eapStep", "eapStepSoftware", "eapStepVersion",
-"eapStepSwVersion", "eapAnalysis", "eapInput", "eapOutput",};
+"eapStepSwVersion", "eapRun", "eapInput", "eapOutput",};
 int i;
 for (i=0; i<ArraySize(tables); ++i)
     {
     char *table = tables[i];
 
+    /* Delete what used to be in table */
+    char query[2*PATH_MAX];
+    sqlSafef(query, sizeof(query), "delete from %s", table);
+    sqlUpdate(conn,query);
+
     /* Make up tab separated file name and ask database to load files into the table. */
     char tabName[PATH_LEN];
     safef(tabName, PATH_LEN, "%s/%s.tab", dir, table);
-    char query[2*PATH_MAX];
     sqlSafef(query, sizeof(query), "load data local infile '%s' into table %s", tabName, table);
     verbose(2, "%s\n", query);
     sqlUpdate(conn, query);
@@ -365,7 +372,7 @@ versionVsVersion(conn, stepList, stepHash, swList, swHash, stepVersionSwVersionF
 
 struct edwAnalysisRun *runList = edwAnalysisRunLoadByQuery(conn, "select * from edwAnalysisRun order by id");
 char analysisFile[PATH_LEN], inputFile[PATH_LEN], outputFile[PATH_LEN];
-safef(analysisFile, PATH_LEN, "%s/%s", dir, "eapAnalysis.tab");
+safef(analysisFile, PATH_LEN, "%s/%s", dir, "eapRun.tab");
 safef(inputFile, PATH_LEN, "%s/%s", dir, "eapInput.tab");
 safef(outputFile, PATH_LEN, "%s/%s", dir, "eapOutput.tab");
 transformRun(conn, runList, stepHash, analysisFile, inputFile, outputFile);

@@ -46,7 +46,7 @@ void pmClear(struct paraMessage *pm);
 /* Clear out data buffer. */
 
 void pmSet(struct paraMessage *pm, char *message);
-/* Set message in data buffer. */
+/* Set message in data buffer. Aborts if message too long (rudpMaxSize or more). */
 
 void pmPrintf(struct paraMessage *pm, char *format, ...)
 /* Print message into end of data buffer.  Warn if it goes
@@ -64,6 +64,10 @@ boolean pmSend(struct paraMessage *pm, struct rudp *ru);
 boolean pmSendString(struct paraMessage *pm, struct rudp *ru, char *string);
 /* Send out given message strng.  Print warning message and return FALSE if
  * there is a problem. */
+
+void pmCheckCommandSize(char *string, int len);
+/* Check that string of given len is not too long to fit into paraMessage.
+ * If it is, abort with good error message assuming it was a command string */
 
 boolean pmReceive(struct paraMessage *pm, struct rudp *ru);
 /* Receive message.  Print warning message and return FALSE if

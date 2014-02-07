@@ -7,10 +7,14 @@ include ../../../inc/common.mk
 USE_DIRS = $(UTIL_DIRS) 
 
 UTIL_DIRS = \
-    eapAnalysisJson \
+    eapAddSoftware \
+    eapAddStep \
     eapDaemon \
+    eapFinish \
     eapMonitor \
-    eapSchedule
+    eapRunAddJson \
+    eapSchedule \
+    eapUpdateSoftware
 
 # edwFinishAnalysis depends on -luuid, which is not available on Macs without special port install.
 # For now, skip it if we're on Mac.

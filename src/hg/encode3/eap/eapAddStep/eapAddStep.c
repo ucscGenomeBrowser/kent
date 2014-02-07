@@ -98,6 +98,26 @@ struct stepInit steps[] =
     "macs2_chip_peaks,macs2_chip_signal", "narrowPeak,bigWig", "out.narrowPeak.bigBed,out.bigWig",
     },
 
+    {
+    "sum_bigWig", 1,
+    "eap_sum_bigWig,bigWigMerge,bedGraphPack,bedGraphToBigWig",
+    "signal", "bigWig",
+    "pooled_signal", "bigWig", "out.bigWig",
+    },
+
+    {
+    "replicated_narrow_peaks", 1,
+    "eap_replicated_narrow_peaks,edwReplicatedPeaks,eap_narrowPeak_to_bigBed",
+    "peaks1,peaks2",  "narrowPeak,narrowPeak",
+    "replicated_narrowPeak", "narrowPeak", "out.narrowPeak.bigBed",
+    },
+
+    {
+    "replicated_broad_peaks", 1,
+    "eap_replicated_broad_peaks,edwReplicatedPeaks,eap_broadPeak_to_bigBed",
+    "peaks1,peaks2",  "broadPeak,broadPeak",
+    "replicated_broadPeak", "broadPeak", "out.broadPeak.bigBed",
+    },
 
 };
 
