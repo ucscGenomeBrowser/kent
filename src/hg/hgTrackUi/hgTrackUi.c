@@ -2489,7 +2489,8 @@ hFreeConn(&conn);
 static void factorSourceUi(char *db, struct trackDb *tdb)
 {
 // Multi-select filter on factors
-// NOTE: doesn't currently support track type in composites
+// NOTE: this UI code doesn't currently support the use of factorSource tracks
+// as subtracks in a composite (would require moving to hui.c, using newer cfgByType approach)
 filterBy_t *filters = filterBySetGet(tdb, cart, tdb->track);
 if (filters != NULL)
     {
