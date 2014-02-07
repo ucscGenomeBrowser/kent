@@ -8,6 +8,7 @@
 #include "obscure.h"
 #include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
 #include "../../encodeDataWarehouse/inc/edwLib.h"
+#include "../../../../parasol/inc/paraMessage.h"
 #include "eapDb.h"
 #include "eapLib.h"
 
@@ -149,6 +150,9 @@ void scheduleStepInputBundle(struct sqlConnection *conn, char *tempDir,
     int inCount, unsigned inputIds[], char *inputTypes[], boolean bundleInputs)
 /* Schedule a step.  Optionally bundle together all inputs into single vector input. */
 {
+char *commandPrefix = "edwCdJob ";
+int commandPad = strlen(commandPrefix);
+pmCheckCommandSize(commandLine, strlen(commandLine) + commandPad);
 struct eapStep *step = eapStepFromNameOrDie(conn, analysisStep);
 unsigned stepVersionId = eapCheckVersions(conn, analysisStep);
 
@@ -169,7 +173,7 @@ else
     /* Wrap command line in cd to temp dir */
     char fullCommandLine[strlen(commandLine)+128];
     safef(fullCommandLine, sizeof(fullCommandLine), 
-	"edwCdJob %s", commandLine);
+	"%s%s", commandPrefix, commandLine);
 
     /* Make up eapRun record and save it. */
     struct eapRun *run;
@@ -831,12 +835,12 @@ if (sameString(exp->dataType, "DNase-seq"))
     {
     scheduleMacsDnase(conn, ef, vf, exp);
     scheduleHotspot(conn, ef, vf, exp);
-#ifdef SOON
-#endif /* SOON */
     }
 else if (sameString(exp->dataType, "ChIP-seq"))
     {
+#ifdef SOON
     scheduleMacsChip(conn, ef, vf, exp);
+#endif /* SOON */
     }
 }
 
@@ -889,7 +893,7 @@ for (ef = pool; ef != NULL; ef = ef->next)
 preloadCache(conn, cache);
 
 
-/* Stage inputs and turn into slList of file names */
+/* Make up command line */
 struct dyString *command = dyStringNew(2048);
 dyStringPrintf(command, "eap_sum_bigWig %s%s %s",
     tempDir, "out.bigWig", assembly->name);
@@ -922,7 +926,8 @@ void replicaWigAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct e
 /* Run analysis on wigs that have been replicated.  */
 {
 char *outputType = vf->outputType;
-if (sameString(outputType, "macs2_dnase_signal") || sameString(outputType, "macs2_chip_signal"))
+if (sameString(outputType, "macs2_dnase_signal") || sameString(outputType, "macs2_chip_signal")
+    || sameString(outputType, "hotspot_signal"))
     {
     struct edwFile *pool = listOutputTypeForExp(conn, 
 				vf->experiment, vf->outputType, vf->format, vf->ucscDb);
@@ -939,6 +944,140 @@ if (sameString(outputType, "macs2_dnase_signal") || sameString(outputType, "macs
     }
 }
 
+struct edwFile *bestPeakRep(struct sqlConnection *conn, char *notRep, struct edwFile *efList)
+/* Return best looking replica on list.  How to decide?  Hmm, good question! */
+/* At the moment it is using the enrichment*coverage calcs if available, otherwise covereage
+ * depth.  It looks like it is not preferring peaks that have been processed all the way
+ * from scratch from the fastq files by pipeline though. */
+{
+verbose(2, "bestPeakRep for list of %d\n", slCount(efList));
+/* If we are only one in list the choice is easy! */
+if (efList->next == NULL)
+    return efList;
+
+/* We multiply together two factors to make a score - the enrichment in our target area
+ * times the coverage.  Find the best scoring by this criteria and use it.  */
+double bestScore = -1;
+struct edwFile *bestEf = NULL, *ef;
+struct edwQaEnrichTarget *target = NULL;
+for (ef = efList; ef != NULL; ef = ef->next)
+    {
+    struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
+    if (differentString(vf->replicate, notRep) )
+	{
+	double score = 0;
+	if (!isEmpty(vf->enrichedIn) && !sameString(vf->enrichedIn, "unknown")) 
+	    {
+	    char query[256];
+	    if (target == NULL)
+		{
+		char *assemblyName = edwSimpleAssemblyName(vf->ucscDb);
+		struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, assemblyName);
+		sqlSafef(query, sizeof(query), 
+		    "select * from edwQaEnrichTarget where assemblyId=%u and name='%s'"
+		    , assembly->id, vf->enrichedIn);
+		target = edwQaEnrichTargetLoadByQuery(conn, query);
+		if (target == NULL)
+		    errAbort("Unexpected empty result from %s", query);
+		edwAssemblyFree(&assembly);
+		}
+	    sqlSafef(query, sizeof(query), 
+		"select coverage*enrichment from edwQaEnrich where fileId=%u and qaEnrichTargetId=%u"
+		, vf->fileId, target->id);
+	    score = sqlQuickDouble(conn, query);
+	    }
+	else
+	    {
+	    score = vf->depth;
+	    }
+	if (score > bestScore)
+	    {
+	    bestScore = score;
+	    bestEf = ef;
+	    }
+	}
+    edwValidFileFree(&vf);
+    }
+edwQaEnrichTargetFree(&target);
+return bestEf;
+}
+
+void scheduleReplicatedPeaks(struct sqlConnection *conn, char *peakType, 
+    struct edwExperiment *exp,  struct edwValidFile *youngestVf, struct edwFile *pool)
+/* Schedule job that produces replicated peaks out of individual peaks from two replicates. */
+{
+/* Figure out which step running based on peakType */
+char *analysisStep = NULL;
+char *outFileName = NULL;
+if (sameString(peakType, "narrowPeak"))
+    {
+    analysisStep = "replicated_narrow_peaks";
+    outFileName= "out.narrowPeak.bigBed";
+    }
+else
+    {
+    analysisStep = "replicated_broad_peaks";
+    outFileName= "out.broadPeak.bigBed";
+    }
+
+
+/* Get assembly and figure out if we are already done */
+struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, youngestVf->ucscDb);
+if (alreadyTakenCareOf(conn, assembly, analysisStep, youngestVf->fileId))
+    return;
+verbose(2, "Theoretically I'd be making replicated peaks in %s on file %u=%u\n", 
+    exp->accession, pool->id, youngestVf->fileId);
+
+/* We always take the most recent replicate. Choose best remaining rep by some measure for second */
+struct edwFile *ef1 = pool;
+struct edwFile *ef2 = bestPeakRep(conn, youngestVf->replicate, pool->next);
+if (ef2 == NULL)
+    return;
+
+/* Grab temp dir */
+char *tempDir = newTempDir(analysisStep);
+
+/* Stage inputs and make command line. */
+struct cache *cache = cacheNew();
+char *ef1Name = cacheMore(cache, ef1);
+char *ef2Name = cacheMore(cache, ef2);
+preloadCache(conn, cache);
+char commandLine[4*PATH_LEN];
+safef(commandLine, sizeof(commandLine), 
+    "eap_%s %s %s %s %s%s", 
+    analysisStep, assembly->name, ef1Name, ef2Name, tempDir, outFileName);
+
+/* Make up eapRun record and schedule it*/
+unsigned inFileIds[2] = {ef1->id, ef2->id};
+char *inTypes[2] = {"peaks1", "peaks2"};
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
+    ArraySize(inFileIds), inFileIds, inTypes);
+
+}
+
+void replicaPeakAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
+    struct edwExperiment *exp, char *peakType)
+/* Run analysis on replicated peaks */
+{
+char *outputType = vf->outputType;
+verbose(2, "replicaPeakAnalysis(outputType=%s)\n", outputType);
+if (sameString(outputType, "macs2_narrow_peaks") || sameString(outputType, "hotspot_narrow_peaks")
+    || sameString(outputType, "hotspot_broad_peaks"))
+    {
+    struct edwFile *pool = listOutputTypeForExp(conn, 
+				vf->experiment, vf->outputType, vf->format, vf->ucscDb);
+    if (slCount(pool) > 1)
+        {
+	/* Output is sorted, so if we are first we are youngest (highest id) and responsible. 
+	 * (Since scheduler is called on all in pool, don't want all to try to do this.) */
+	if (pool->id == ef->id)   
+	    {
+	    scheduleReplicatedPeaks(conn, peakType, exp, vf, pool);
+	    }
+	}
+    }
+}
+
 void runReplicateAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
     struct edwExperiment *exp)
 /* Run analysis we hold off on until we have replicates. */
@@ -948,6 +1087,8 @@ if (vf->replicateQaStatus > 0)
     {
     if (sameWord("bigWig", vf->format))
         replicaWigAnalysis(conn, ef, vf, exp);
+    else if (sameWord("broadPeak", vf->format) || sameWord("narrowPeak", vf->format))
+        replicaPeakAnalysis(conn, ef, vf, exp, vf->format);
     }
 }
 
