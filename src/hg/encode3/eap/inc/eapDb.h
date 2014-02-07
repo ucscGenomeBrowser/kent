@@ -493,14 +493,14 @@ void eapStepSwVersionOutput(struct eapStepSwVersion *el, FILE *f, char sep, char
 #define eapStepSwVersionCommaOut(el,f) eapStepSwVersionOutput(el,f,',',',');
 /* Print out eapStepSwVersion as a comma separated list including final comma. */
 
-#define EAPANALYSIS_NUM_COLS 9
+#define EAPRUN_NUM_COLS 9
 
-extern char *eapAnalysisCommaSepFieldNames;
+extern char *eapRunCommaSepFieldNames;
 
-struct eapAnalysis
-/* Information on an analysis job that we're planning on running */
+struct eapRun
+/* Information on an compute job that produces files by running a step. */
     {
-    struct eapAnalysis *next;  /* Next in singly linked list. */
+    struct eapRun *next;  /* Next in singly linked list. */
     unsigned id;	/* Analysis run ID */
     unsigned jobId;	/* ID in edwAnalysisJob table */
     char experiment[17];	/* Something like ENCSR000CFA. */
@@ -512,60 +512,60 @@ struct eapAnalysis
     signed char createStatus;	/* 1 if output files made 0 if not made, -1 if make tried and failed */
     };
 
-void eapAnalysisStaticLoad(char **row, struct eapAnalysis *ret);
-/* Load a row from eapAnalysis table into ret.  The contents of ret will
+void eapRunStaticLoad(char **row, struct eapRun *ret);
+/* Load a row from eapRun table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct eapAnalysis *eapAnalysisLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all eapAnalysis from table that satisfy the query given.  
+struct eapRun *eapRunLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all eapRun from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
  * anotherTable.something'.
- * Dispose of this with eapAnalysisFreeList(). */
+ * Dispose of this with eapRunFreeList(). */
 
-void eapAnalysisSaveToDb(struct sqlConnection *conn, struct eapAnalysis *el, char *tableName, int updateSize);
-/* Save eapAnalysis as a row to the table specified by tableName. 
+void eapRunSaveToDb(struct sqlConnection *conn, struct eapRun *el, char *tableName, int updateSize);
+/* Save eapRun as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
-struct eapAnalysis *eapAnalysisLoad(char **row);
-/* Load a eapAnalysis from row fetched with select * from eapAnalysis
- * from database.  Dispose of this with eapAnalysisFree(). */
+struct eapRun *eapRunLoad(char **row);
+/* Load a eapRun from row fetched with select * from eapRun
+ * from database.  Dispose of this with eapRunFree(). */
 
-struct eapAnalysis *eapAnalysisLoadAll(char *fileName);
-/* Load all eapAnalysis from whitespace-separated file.
- * Dispose of this with eapAnalysisFreeList(). */
+struct eapRun *eapRunLoadAll(char *fileName);
+/* Load all eapRun from whitespace-separated file.
+ * Dispose of this with eapRunFreeList(). */
 
-struct eapAnalysis *eapAnalysisLoadAllByChar(char *fileName, char chopper);
-/* Load all eapAnalysis from chopper separated file.
- * Dispose of this with eapAnalysisFreeList(). */
+struct eapRun *eapRunLoadAllByChar(char *fileName, char chopper);
+/* Load all eapRun from chopper separated file.
+ * Dispose of this with eapRunFreeList(). */
 
-#define eapAnalysisLoadAllByTab(a) eapAnalysisLoadAllByChar(a, '\t');
-/* Load all eapAnalysis from tab separated file.
- * Dispose of this with eapAnalysisFreeList(). */
+#define eapRunLoadAllByTab(a) eapRunLoadAllByChar(a, '\t');
+/* Load all eapRun from tab separated file.
+ * Dispose of this with eapRunFreeList(). */
 
-struct eapAnalysis *eapAnalysisCommaIn(char **pS, struct eapAnalysis *ret);
-/* Create a eapAnalysis out of a comma separated string. 
+struct eapRun *eapRunCommaIn(char **pS, struct eapRun *ret);
+/* Create a eapRun out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new eapAnalysis */
+ * return a new eapRun */
 
-void eapAnalysisFree(struct eapAnalysis **pEl);
-/* Free a single dynamically allocated eapAnalysis such as created
- * with eapAnalysisLoad(). */
+void eapRunFree(struct eapRun **pEl);
+/* Free a single dynamically allocated eapRun such as created
+ * with eapRunLoad(). */
 
-void eapAnalysisFreeList(struct eapAnalysis **pList);
-/* Free a list of dynamically allocated eapAnalysis's */
+void eapRunFreeList(struct eapRun **pList);
+/* Free a list of dynamically allocated eapRun's */
 
-void eapAnalysisOutput(struct eapAnalysis *el, FILE *f, char sep, char lastSep);
-/* Print out eapAnalysis.  Separate fields with sep. Follow last field with lastSep. */
+void eapRunOutput(struct eapRun *el, FILE *f, char sep, char lastSep);
+/* Print out eapRun.  Separate fields with sep. Follow last field with lastSep. */
 
-#define eapAnalysisTabOut(el,f) eapAnalysisOutput(el,f,'\t','\n');
-/* Print out eapAnalysis as a line in a tab-separated file. */
+#define eapRunTabOut(el,f) eapRunOutput(el,f,'\t','\n');
+/* Print out eapRun as a line in a tab-separated file. */
 
-#define eapAnalysisCommaOut(el,f) eapAnalysisOutput(el,f,',',',');
-/* Print out eapAnalysis as a comma separated list including final comma. */
+#define eapRunCommaOut(el,f) eapRunOutput(el,f,',',',');
+/* Print out eapRun as a comma separated list including final comma. */
 
 #define EAPINPUT_NUM_COLS 6
 
@@ -576,7 +576,7 @@ struct eapInput
     {
     struct eapInput *next;  /* Next in singly linked list. */
     unsigned id;	/* Input table ID */
-    unsigned analysisId;	/* Which eapAnalysis this is associated with */
+    unsigned runId;	/* Which eapAnalysis this is associated with */
     char *name;	/* Input name within step */
     unsigned ix;	/* Inputs always potentially vectors.  Have single one with zero ix for scalar input */
     unsigned fileId;	/* Associated file - 0 for no file, look perhaps to val below instead. */
@@ -647,7 +647,7 @@ struct eapOutput
     {
     struct eapOutput *next;  /* Next in singly linked list. */
     unsigned id;	/* Output table ID */
-    unsigned analysisId;	/* Which eapAnalysis this is associated with */
+    unsigned runId;	/* Which eapAnalysis this is associated with */
     char *name;	/* Output name within step */
     unsigned ix;	/* Outputs always potentially vectors. Have single one with zero ix for scalar output */
     unsigned fileId;	/* Associated file - 0 for no file, look perhaps to val below instead. */

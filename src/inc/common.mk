@@ -18,7 +18,9 @@ FULLWARN = $(shell uname -n)
 L=
 
 # pthreads is required
-L+=-pthread
+ifneq ($(UNAME_S),Darwin)
+  L+=-pthread
+endif
 
 # autodetect if openssl is installed
 ifeq (${SSLDIR},)
@@ -261,7 +263,7 @@ ifeq (${HG_WARN},)
       HG_WARN_UNINIT=-Wuninitialized
     else
       ifeq (${FULLWARN},hgwdev)
-        HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type
+        HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type -Wempty-body
         HG_WARN_UNINIT=-Wuninitialized
       else
         HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type

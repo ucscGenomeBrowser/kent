@@ -2269,8 +2269,10 @@ else if (tdbIsMultiTrack(parent))
         }
     }
 if (countUnchecked + countVisChanged)
+    {
     WARN("%s visOrig:%s visMax:%s unchecked:%d  Vis changed:%d",parent->track,
          hStringFromTv(visOrig),hStringFromTv(visMax),countUnchecked,countVisChanged);
+    }
 
 return (countUnchecked + countVisChanged);
 }

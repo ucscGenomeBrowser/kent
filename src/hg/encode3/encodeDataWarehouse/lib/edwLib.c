@@ -26,12 +26,12 @@
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
 char *edwDatabase = "encodeDataWarehouse";
-char *edwLicensePlatePrefix = "ENCFF";
 int edwSingleFileTimeout = 4*60*60;   // How many seconds we give ourselves to fetch a single file
 
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
 char *eapRootDir = "/data/encode3/encodeAnalysisPipeline/";
 char *edwValDataDir = "/data/encode3/encValData/";
+char *edwDaemonEmail = "edw@encodedcc.sdsc.edu";
 
 struct sqlConnection *edwConnect()
 /* Returns a read only connection to database. */
@@ -468,6 +468,35 @@ safef(edwFile, PATH_LEN, "%s%s%s", edwDir, baseName, suffix);
 safef(serverPath, PATH_LEN, "%s%s", edwRootDir, edwFile);
 }
 
+char *edwSetting(struct sqlConnection *conn, char *name)
+/* Return named settings value,  or NULL if setting doesn't exist. FreeMem when done. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select val from edwSettings where name='%s'", name);
+return sqlQuickString(conn, query);
+}
+
+char *edwRequiredSetting(struct sqlConnection *conn, char *name)
+/* Returns setting, abort if it isn't found. FreeMem when done. */
+{
+char *val = edwSetting(conn, name);
+if (val == NULL)
+    errAbort("Required %s setting is not defined in edwSettings table", name);
+return val;
+}
+
+char *edwLicensePlateHead(struct sqlConnection *conn)
+/* Return license plate prefix for current database - something like TSTFF or DEVFF or ENCFF */
+{
+static char head[32];
+if (head[0] == 0)
+     {
+     char *prefix = edwRequiredSetting(conn, "prefix");
+     safef(head, sizeof(head), "%s", prefix);
+     }
+return head;
+}
+
 
 static char *localHostName = "localhost";
 static char *localHostDir = "";  
@@ -677,6 +706,17 @@ if (assembly == NULL)
 return assembly;
 }
 
+struct edwAssembly *edwAssemblyForId(struct sqlConnection *conn, long long id)
+/* Get assembly of given ID. */
+{
+char query[128];
+sqlSafef(query, sizeof(query), "select * from edwAssembly where id=%lld", id);
+struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
+if (assembly == NULL)
+    errAbort("Can't find assembly for %lld", id);
+return assembly;
+}
+
 char *edwSimpleAssemblyName(char *assembly)
 /* Given compound name like male.hg19 return just hg19 */
 /* Given name of assembly return name where we want to do enrichment calcs. */
@@ -791,6 +831,15 @@ if (retJobId != NULL)
 return aheadOfUs;
 }
 
+struct edwSubmit *edwSubmitFromId(struct sqlConnection *conn, long long id)
+/* Return submission with given ID or NULL if no such submission. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from edwSubmit where id=%lld", id);
+return edwSubmitLoadByQuery(conn, query);
+}
+
+
 struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url)
 /* Return most recent submission, possibly in progress, from this url */
 {
@@ -822,6 +871,24 @@ sqlSafef(query, sizeof(query),
     "select count(*) from edwFile e,edwValidFile v where e.id = v.fileId and e.submitId=%u",
     submit->id);
 return sqlQuickNum(conn, query);
+}
+
+int edwSubmitCountErrors(struct edwSubmit *submit, struct sqlConnection *conn)
+/* Count number of errors with submitted files */
+{
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select count(*) from edwFile where submitId=%u and errorMessage != '' and errorMessage is not null",
+    submit->id);
+return sqlQuickNum(conn, query);
+}
+
+boolean edwSubmitIsValidated(struct edwSubmit *submit, struct sqlConnection *conn)
+/* Return TRUE if validation has run.  This does not mean that they all passed validation.
+ * It just means the validator has run and has made a decision on each file in the submission. */
+{
+/* Is this off by one because of the validated.txt being in the submission but never validated? */
+return edwSubmitCountErrors(submit,conn) + edwSubmitCountNewValid(submit, conn) == submit->newFiles;
 }
 
 void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url, boolean update)

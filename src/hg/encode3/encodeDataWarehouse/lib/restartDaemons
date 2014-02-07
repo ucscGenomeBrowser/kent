@@ -3,9 +3,7 @@
 # Relaunch edwRunDaemons.  Send them initial wake up message
 set subFifo = /usr/local/apache/userdata/edwSubmit.fifo
 set qaFifo = /usr/local/apache/userdata/edwQaAgent.fifo
-set analysisFifo = /usr/local/apache/userdata/edwAnalysis.fifo
 killall edwRunDaemon
-killall edwAnalysisDaemon
 edwRunDaemon encodeDataWarehouse edwSubmitJob 4 $subFifo -log=edwSubmit.log
 echo hi > $subFifo
 edwRunDaemon encodeDataWarehouse edwJob 4 $qaFifo -log=edwQaAgent.log

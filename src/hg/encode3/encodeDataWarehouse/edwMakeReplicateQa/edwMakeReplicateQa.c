@@ -435,7 +435,8 @@ if (!isEmpty(replicate) && !sameString(replicate, "n/a")
     struct edwValidFile *elder, *elderList = edwFindElderReplicates(conn, vf);
     if (elderList != NULL)
 	{
-	struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+	char *targetDb = edwSimpleAssemblyName(vf->ucscDb);
+	struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, targetDb);
 	for (elder = elderList; elder != NULL; elder = elder->next)
 	    {
 	    doReplicatePair(conn, assembly, edwFileFromIdOrDie(conn, elder->fileId), elder, ef, vf);

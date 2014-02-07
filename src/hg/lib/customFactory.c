@@ -1688,7 +1688,7 @@ sqlSafef(query,sizeof(query),
     tableName);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
-if ((row = sqlNextRow(sr)) != NULL);
+if ((row = sqlNextRow(sr)) != NULL)
     {
     if (row[0]) *retLowerLimit = sqlDouble(row[0]);
     if (row[1]) *retUpperLimit = sqlDouble(row[1]);

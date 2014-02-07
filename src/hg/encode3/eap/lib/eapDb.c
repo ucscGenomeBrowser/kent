@@ -1301,10 +1301,10 @@ fputc(lastSep,f);
 }
 
 
-char *eapAnalysisCommaSepFieldNames = "id,jobId,experiment,analysisStep,stepVersionId,tempDir,assemblyId,jsonResult,createStatus";
+char *eapRunCommaSepFieldNames = "id,jobId,experiment,analysisStep,stepVersionId,tempDir,assemblyId,jsonResult,createStatus";
 
-void eapAnalysisStaticLoad(char **row, struct eapAnalysis *ret)
-/* Load a row from eapAnalysis table into ret.  The contents of ret will
+void eapRunStaticLoad(char **row, struct eapRun *ret)
+/* Load a row from eapRun table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
@@ -1319,21 +1319,21 @@ ret->jsonResult = row[7];
 ret->createStatus = sqlSigned(row[8]);
 }
 
-struct eapAnalysis *eapAnalysisLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all eapAnalysis from table that satisfy the query given.  
+struct eapRun *eapRunLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all eapRun from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
  * anotherTable.something'.
- * Dispose of this with eapAnalysisFreeList(). */
+ * Dispose of this with eapRunFreeList(). */
 {
-struct eapAnalysis *list = NULL, *el;
+struct eapRun *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = eapAnalysisLoad(row);
+    el = eapRunLoad(row);
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -1341,8 +1341,8 @@ sqlFreeResult(&sr);
 return list;
 }
 
-void eapAnalysisSaveToDb(struct sqlConnection *conn, struct eapAnalysis *el, char *tableName, int updateSize)
-/* Save eapAnalysis as a row to the table specified by tableName. 
+void eapRunSaveToDb(struct sqlConnection *conn, struct eapRun *el, char *tableName, int updateSize)
+/* Save eapRun as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
@@ -1355,11 +1355,11 @@ sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-struct eapAnalysis *eapAnalysisLoad(char **row)
-/* Load a eapAnalysis from row fetched with select * from eapAnalysis
- * from database.  Dispose of this with eapAnalysisFree(). */
+struct eapRun *eapRunLoad(char **row)
+/* Load a eapRun from row fetched with select * from eapRun
+ * from database.  Dispose of this with eapRunFree(). */
 {
-struct eapAnalysis *ret;
+struct eapRun *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
@@ -1374,17 +1374,17 @@ ret->createStatus = sqlSigned(row[8]);
 return ret;
 }
 
-struct eapAnalysis *eapAnalysisLoadAll(char *fileName) 
-/* Load all eapAnalysis from a whitespace-separated file.
- * Dispose of this with eapAnalysisFreeList(). */
+struct eapRun *eapRunLoadAll(char *fileName) 
+/* Load all eapRun from a whitespace-separated file.
+ * Dispose of this with eapRunFreeList(). */
 {
-struct eapAnalysis *list = NULL, *el;
+struct eapRun *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[9];
 
 while (lineFileRow(lf, row))
     {
-    el = eapAnalysisLoad(row);
+    el = eapRunLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -1392,17 +1392,17 @@ slReverse(&list);
 return list;
 }
 
-struct eapAnalysis *eapAnalysisLoadAllByChar(char *fileName, char chopper) 
-/* Load all eapAnalysis from a chopper separated file.
- * Dispose of this with eapAnalysisFreeList(). */
+struct eapRun *eapRunLoadAllByChar(char *fileName, char chopper) 
+/* Load all eapRun from a chopper separated file.
+ * Dispose of this with eapRunFreeList(). */
 {
-struct eapAnalysis *list = NULL, *el;
+struct eapRun *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = eapAnalysisLoad(row);
+    el = eapRunLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -1410,10 +1410,10 @@ slReverse(&list);
 return list;
 }
 
-struct eapAnalysis *eapAnalysisCommaIn(char **pS, struct eapAnalysis *ret)
-/* Create a eapAnalysis out of a comma separated string. 
+struct eapRun *eapRunCommaIn(char **pS, struct eapRun *ret)
+/* Create a eapRun out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new eapAnalysis */
+ * return a new eapRun */
 {
 char *s = *pS;
 
@@ -1432,11 +1432,11 @@ ret->createStatus = sqlSignedComma(&s);
 return ret;
 }
 
-void eapAnalysisFree(struct eapAnalysis **pEl)
-/* Free a single dynamically allocated eapAnalysis such as created
- * with eapAnalysisLoad(). */
+void eapRunFree(struct eapRun **pEl)
+/* Free a single dynamically allocated eapRun such as created
+ * with eapRunLoad(). */
 {
-struct eapAnalysis *el;
+struct eapRun *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->analysisStep);
@@ -1445,21 +1445,21 @@ freeMem(el->jsonResult);
 freez(pEl);
 }
 
-void eapAnalysisFreeList(struct eapAnalysis **pList)
-/* Free a list of dynamically allocated eapAnalysis's */
+void eapRunFreeList(struct eapRun **pList)
+/* Free a list of dynamically allocated eapRun's */
 {
-struct eapAnalysis *el, *next;
+struct eapRun *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    eapAnalysisFree(&el);
+    eapRunFree(&el);
     }
 *pList = NULL;
 }
 
-void eapAnalysisOutput(struct eapAnalysis *el, FILE *f, char sep, char lastSep) 
-/* Print out eapAnalysis.  Separate fields with sep. Follow last field with lastSep. */
+void eapRunOutput(struct eapRun *el, FILE *f, char sep, char lastSep) 
+/* Print out eapRun.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
@@ -1490,7 +1490,7 @@ fputc(lastSep,f);
 }
 
 
-char *eapInputCommaSepFieldNames = "id,analysisId,name,ix,fileId,val";
+char *eapInputCommaSepFieldNames = "id,runId,name,ix,fileId,val";
 
 void eapInputStaticLoad(char **row, struct eapInput *ret)
 /* Load a row from eapInput table into ret.  The contents of ret will
@@ -1498,7 +1498,7 @@ void eapInputStaticLoad(char **row, struct eapInput *ret)
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->analysisId = sqlUnsigned(row[1]);
+ret->runId = sqlUnsigned(row[1]);
 ret->name = row[2];
 ret->ix = sqlUnsigned(row[3]);
 ret->fileId = sqlUnsigned(row[4]);
@@ -1536,7 +1536,7 @@ void eapInputSaveToDb(struct sqlConnection *conn, struct eapInput *el, char *tab
 {
 struct dyString *update = newDyString(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%u,%u,'%s')", 
-	tableName,  el->id,  el->analysisId,  el->name,  el->ix,  el->fileId,  el->val);
+	tableName,  el->id,  el->runId,  el->name,  el->ix,  el->fileId,  el->val);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1549,7 +1549,7 @@ struct eapInput *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->analysisId = sqlUnsigned(row[1]);
+ret->runId = sqlUnsigned(row[1]);
 ret->name = cloneString(row[2]);
 ret->ix = sqlUnsigned(row[3]);
 ret->fileId = sqlUnsigned(row[4]);
@@ -1603,7 +1603,7 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
-ret->analysisId = sqlUnsignedComma(&s);
+ret->runId = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->ix = sqlUnsignedComma(&s);
 ret->fileId = sqlUnsignedComma(&s);
@@ -1642,7 +1642,7 @@ void eapInputOutput(struct eapInput *el, FILE *f, char sep, char lastSep)
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
-fprintf(f, "%u", el->analysisId);
+fprintf(f, "%u", el->runId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
@@ -1659,7 +1659,7 @@ fputc(lastSep,f);
 }
 
 
-char *eapOutputCommaSepFieldNames = "id,analysisId,name,ix,fileId,val";
+char *eapOutputCommaSepFieldNames = "id,runId,name,ix,fileId,val";
 
 void eapOutputStaticLoad(char **row, struct eapOutput *ret)
 /* Load a row from eapOutput table into ret.  The contents of ret will
@@ -1667,7 +1667,7 @@ void eapOutputStaticLoad(char **row, struct eapOutput *ret)
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->analysisId = sqlUnsigned(row[1]);
+ret->runId = sqlUnsigned(row[1]);
 ret->name = row[2];
 ret->ix = sqlUnsigned(row[3]);
 ret->fileId = sqlUnsigned(row[4]);
@@ -1705,7 +1705,7 @@ void eapOutputSaveToDb(struct sqlConnection *conn, struct eapOutput *el, char *t
 {
 struct dyString *update = newDyString(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%u,%u,'%s')", 
-	tableName,  el->id,  el->analysisId,  el->name,  el->ix,  el->fileId,  el->val);
+	tableName,  el->id,  el->runId,  el->name,  el->ix,  el->fileId,  el->val);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1718,7 +1718,7 @@ struct eapOutput *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->analysisId = sqlUnsigned(row[1]);
+ret->runId = sqlUnsigned(row[1]);
 ret->name = cloneString(row[2]);
 ret->ix = sqlUnsigned(row[3]);
 ret->fileId = sqlUnsigned(row[4]);
@@ -1772,7 +1772,7 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
-ret->analysisId = sqlUnsignedComma(&s);
+ret->runId = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->ix = sqlUnsignedComma(&s);
 ret->fileId = sqlUnsignedComma(&s);
@@ -1811,7 +1811,7 @@ void eapOutputOutput(struct eapOutput *el, FILE *f, char sep, char lastSep)
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
-fprintf(f, "%u", el->analysisId);
+fprintf(f, "%u", el->runId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);

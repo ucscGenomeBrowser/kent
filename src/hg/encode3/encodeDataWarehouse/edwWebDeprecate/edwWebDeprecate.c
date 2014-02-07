@@ -113,10 +113,11 @@ else
    for (acc = accList; acc != NULL; acc = acc->next)
        {
        char *licensePlate = acc->name;
-       if (!startsWith(edwLicensePlatePrefix, licensePlate))
+       char *prefix = edwLicensePlateHead(conn);
+       if (!startsWith(prefix, licensePlate))
            {
 	   ok = FALSE;
-	   warn("%s is not an accession, doesn't start with %s", licensePlate, edwLicensePlatePrefix);
+	   warn("%s is not an accession, doesn't start with %s", licensePlate, prefix);
 	   break;
 	   }
 	char query[256];
