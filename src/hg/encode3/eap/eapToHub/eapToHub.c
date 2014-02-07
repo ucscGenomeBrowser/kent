@@ -55,6 +55,9 @@ fprintf(f, "email genome@soe.ucsc.edu\n");
 carefulClose(&f);
 }
 
+/* After the genome.txt and hub.txt it gets harder.   Here's a bunch of data structures
+ * to help us build up trackDb.txt */
+
 struct replicate
 /* Info on one replicate */
     {
@@ -130,6 +133,26 @@ slReverse(&otList);
 return otList;
 }
 
+struct slName *getReplicateNames(struct fullExperiment *expList)
+/* Return list of all replicate names */
+{
+struct slName *repList = NULL;
+struct fullExperiment *exp;
+for (exp = expList; exp != NULL; exp = exp->next)
+    {
+    struct replicate *rep;
+    for (rep = exp->repList; rep != NULL; rep = rep->next)
+        {
+	char *name = rep->name;
+	if (isEmpty(name))
+	    name = "pooled";
+	slNameStore(&repList, name);
+	}
+    }
+slSort(&repList, slNameCmpStringsWithEmbeddedNumbers);
+return repList;
+}
+
 boolean viewableOutput(char *output)
 /* Returns TRUE if this is a viewable output type */
 {
@@ -154,6 +177,60 @@ while ((c = *s++) != 0)
 return buf;  // Nonreentrant but this is probably one-time-use code
 }
 
+void outputMatchingTrack(char *viewName, struct fullExperiment *exp, struct replicate *rep, 
+    char *outputType, struct vFile *vf,  char *indent, FILE *f)
+/* If vf is of outputType then write a track based around it to f */
+{
+if (vf != NULL)
+    {
+    if (sameString(outputType, vf->valid->outputType))
+	{
+	char *repName = rep->name;
+	if (isEmpty(repName))
+	    repName = "pooled";
+	fprintf(f, "%strack %s\n", indent, vf->valid->licensePlate);
+	char *biosample = exp->exp->biosample;
+	fprintf(f, "%sshortLabel %s %s\n", indent, biosample, repName);
+	fprintf(f, "%sparent %s\n", indent, viewName);
+	fprintf(f, "%slongLabel %s %s %s from %s\n", 
+	    indent, biosample, exp->exp->dataType, repName, exp->exp->lab);
+	fprintf(f, "%ssubGroups view=%s biosample=%s replicate=%s\n", 
+		indent, viewName, biosample, repName);
+	fprintf(f, "%sbigDataUrl /warehouse/%s\n", indent, vf->file->edwFileName);
+	fprintf(f, "\n");
+	}
+    }
+}
+
+
+void writeView(struct sqlConnection *conn, char *rootName, char *outputType,
+    struct fullExperiment *expList, FILE *f)
+/* Write one view - the view stanza and all the actual track stanzas */
+{
+char *cappedOutputType = cloneString(outputType);
+cappedOutputType[0] = toupper(cappedOutputType[0]);
+char viewName[256];
+safef(viewName, sizeof(viewName), "%sView%s", rootName, cappedOutputType);
+fprintf(f, "    track %s\n", viewName);
+fprintf(f, "    shortLabel %s\n", outputType);
+fprintf(f, "    view %s\n", outputType);
+fprintf(f, "    parent %s\n", rootName);
+fprintf(f, "\n");
+
+struct fullExperiment *exp;
+for (exp = expList; exp != NULL; exp = exp->next)
+    {
+    struct replicate *rep;
+    for (rep = exp->repList; rep != NULL; rep = rep->next)
+        {
+	outputMatchingTrack(viewName, exp, rep, outputType, rep->bamList, "        ", f);
+	outputMatchingTrack(viewName, exp, rep, outputType, rep->bigWigList, "        ", f);
+	outputMatchingTrack(viewName, exp, rep, outputType, rep->narrowList, "        ", f);
+	outputMatchingTrack(viewName, exp, rep, outputType, rep->broadList, "        ", f);
+	}
+    }
+}
+
 void writeTrackDb(struct sqlConnection *conn, struct fullExperiment *expList, 
     struct slName *bioList, char *outFile)
 /* Write out trackDb info */
@@ -163,12 +240,15 @@ struct hash *otHash = hashNew(0);
 struct outputType *ot, *otList = outputTypesForExpList(expList, otHash);
 verbose(1, "%d outputTypes\n", slCount(otList));
 
+/* Write out a bunch of easy fields in top level stanza */
 char *rootName = "dnaseTop";
 fprintf(f, "track %s\n", rootName);
 fprintf(f, "compositeTrack on\n");
 fprintf(f, "shortLabel EAP DNase\n");
 fprintf(f, "longLabel EAP DNase on hg19 using Hotspot5 and BWA 0.7.0\n");
 fprintf(f, "group regulation\n");
+
+/* Group 1 - the views */
 fprintf(f, "subGroup1 views Views");
 for (ot = otList; ot != NULL; ot = ot->next)
     {
@@ -176,6 +256,8 @@ for (ot = otList; ot != NULL; ot = ot->next)
 	fprintf(f, " %s=%s", ot->name, ot->name);
     }
 fprintf(f, "\n");
+
+/* Group 2 the cellTypes */
 fprintf(f, "subGroup2 biosamples Biosamples");
 struct slName *bio;
 for (bio = bioList; bio != NULL; bio = bio->next)
@@ -183,6 +265,28 @@ for (bio = bioList; bio != NULL; bio = bio->next)
     fprintf(f, " %s=%s", symbolify(bio->name), bio->name);
     }
 fprintf(f, "\n");
+
+/* Group 3, the replicates */
+fprintf(f, "subGroup3 replicates Replicates");
+struct slName *rep, *repList = getReplicateNames(expList);
+for (rep = repList; rep != NULL; rep = rep->next)
+     fprintf(f, " %s=%s", symbolify(rep->name), rep->name);
+fprintf(f, "\n");
+
+/* Some more scalar fields in first stanza */
+fprintf(f, "sortOrder biosamples=+ replicates=+ view=+\n");
+fprintf(f, "dimensions dimensionY=biosample dimensionX=replicates\n");
+fprintf(f, "dragAndDrop subTracks\n");
+fprintf(f, "noInherit on\n");
+fprintf(f, "configurable on\n");
+fprintf(f, "type bed 3\n");
+fprintf(f, "\n");
+
+/* Now move on to views */
+for (ot = otList; ot != NULL; ot = ot->next)
+    {
+    writeView(conn, rootName, ot->name, expList, f);
+    }
 
 carefulClose(&f);
 }
