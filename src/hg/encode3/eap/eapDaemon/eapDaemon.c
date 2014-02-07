@@ -256,7 +256,7 @@ for (oldJob = oldJobList; oldJob != NULL; oldJob = oldJob->next)
     {
     char *commandName = eapStepFromCommandLine(oldJob->commandLine);
     char queueName[PATH_LEN];
-    safef(queueName, sizeof(queueName), "%s/%s/results", eapParaQueues, commandName);
+    safef(queueName, sizeof(queueName), "%s/%s/results", eapParaDirs(conn), commandName);
     findOrCreateQueue(queueName, FALSE);
     rbTreeAdd(running, oldJob);
     freez(&commandName);
@@ -296,14 +296,13 @@ for (;;)
     sqlSafef(query, sizeof(query), 
 	"select * from %s where startTime = 0 order by id limit 1", clTable);
     struct eapJob *job = eapJobLoadByQuery(conn, query);
-    sqlDisconnect(&conn);
 
     if (job != NULL)
         {
 	/* Cool, got a job, send it to parasol and track it in running container */
 	char *commandName = eapStepFromCommandLine(job->commandLine);
 	char queueName[PATH_LEN];
-	safef(queueName, sizeof(queueName), "%s/%s/results", eapParaQueues, commandName);
+	safef(queueName, sizeof(queueName), "%s/%s/results", eapParaDirs(conn), commandName);
 	struct resultsQueue *queue = findOrCreateQueue(queueName, TRUE);
 	sendToParasol(job, queue);
 	rbTreeAdd(running, job);
@@ -315,6 +314,7 @@ for (;;)
 	/* No new jobs, maybe we'll nap for 10 seconds */
 	sleep(10);
 	}
+    sqlDisconnect(&conn);
     }
 }
 

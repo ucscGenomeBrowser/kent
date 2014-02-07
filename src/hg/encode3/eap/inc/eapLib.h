@@ -21,7 +21,7 @@ extern char *eapJobTable;
 extern char *eapParaHost;
 /* Parasol host name. A machine running paraHub */
 
-extern char *eapParaQueues;
+char *eapParaDirs(struct sqlConnection *conn);
 /* Root directory to parasol job results queues, where parasol (eventually) stores
  * results of jobs that successfully complete or crash. */
 
@@ -33,6 +33,9 @@ struct sqlConnection *eapConnect();
 
 struct sqlConnection *eapConnectReadWrite();
 /* Return read/write connection to eap database, which may be same as edw database) */
+
+struct edwUser *eapUserForPipeline(struct sqlConnection *conn);
+/* Get user associated with automatic processes and pipeline submissions. */
 
 void eapPathForCommand(char *command, char path[PATH_LEN]);
 /* Figure out path associated with command */

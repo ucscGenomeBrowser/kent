@@ -578,7 +578,7 @@ struct bbiInterval *intervalList = NULL, *interval;
 struct lm *lm = lmInit(0);
 intervalList = (*fetchIntervals)(bbi, chrom, start, end, lm);
 boolean result = FALSE;
-if (intervalList != NULL);
+if (intervalList != NULL)
     {
     int i;
     bits32 baseStart = start, baseEnd;

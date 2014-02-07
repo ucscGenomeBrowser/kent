@@ -13,14 +13,14 @@
 #include "eapLib.h"
 #include "eapDb.h"
 
-char *eapEdwCacheDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/edwCache/";
+char *eapEdwCacheDir = "/hive/groups/encode/3/eap/cach/";
 /* Where data warehouse files are cached in a place that the cluster can access. */
 
-char *eapValDataDir = "/hive/groups/encode/encode3/encValData/";
+char *eapValDataDir = "/hive/groups/encode/3/encValData/";
 /* Where information sufficient to validate a file lives.  This includes genomes of
  * several species indexed for alignment. */
 
-char *eapTempDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/tmp/";
+char *eapTempDir = "/hive/groups/encode/3/encodeAnalysisPipeline/tmp/";
 /* This temp dir will contain a subdir for each job.  The edwFinish program will
  * remove these if the job went well.  If the job didn't go well they'll probably
  * be empty.  There's some in-between cases though. */
@@ -30,10 +30,6 @@ char *eapJobTable = "eapJob";
 
 char *eapParaHost = "ku";
 /* Parasol host name. A machine running paraHub */
-
-char *eapParaQueues = "/hive/groups/encode/encode3/encodeAnalysisPipeline/queues";
-/* Root directory to parasol job results queues, where parasol (eventually) stores
- * results of jobs that successfully complete or crash. */
 
 char *eapSshArgs = "-o StrictHostKeyChecking=no -o BatchMode=yes";
 /* Arguments to pass to ssh or scp for good performance and security */
@@ -48,6 +44,25 @@ struct sqlConnection *eapConnectReadWrite()
 /* Return read/write connection to eap database, which may be same as edw database) */
 {
 return edwConnectReadWrite();
+}
+
+struct edwUser *eapUserForPipeline(struct sqlConnection *conn)
+/* Get user associated with automatic processes and pipeline submissions. */
+{
+return edwUserFromEmail(conn, edwDaemonEmail);
+}
+
+char *eapParaDirs(struct sqlConnection *conn)
+/* Root directory to parasol job results queues, where parasol (eventually) stores
+ * results of jobs that successfully complete or crash. */
+{
+static char buf[PATH_LEN];
+if (buf[0] == 0)
+    {
+    safef(buf, sizeof(buf), "%s/%s", "/hive/groups/encode/encode3/eap/queues", 
+	edwLicensePlateHead(conn));
+    };
+return buf;
 }
 
 

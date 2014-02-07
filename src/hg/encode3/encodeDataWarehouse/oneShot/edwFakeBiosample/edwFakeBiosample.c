@@ -73,6 +73,7 @@ char url[1024];
 safef(url, sizeof(url), "submit.encodedcc.org/biosamples/%s/?format=json", acc);
 char *text = getTextViaHttps(url, userId, password);
 struct jsonElement *json = jsonParse(text);
+// Fish out biosample_term_id - typically something like "UBERON:002107"
 struct jsonElement *donor = jsonFindNamedField(json, url, "donor");
 if (donor != NULL)
     {

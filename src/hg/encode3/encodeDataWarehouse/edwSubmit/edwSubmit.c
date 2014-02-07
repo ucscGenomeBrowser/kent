@@ -20,6 +20,7 @@
 #include "encodeDataWarehouse.h"
 #include "encode3/encode3Valid.h"
 #include "edwLib.h"
+#include "mailViaPipe.h"
 
 boolean doNow = FALSE;
 boolean doUpdate= FALSE;
@@ -699,7 +700,8 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	char *reason = row[replaceReasonIx];
 	if (!isEmptyOrNa(replaces))
 	    {
-	    if (!startsWith(edwLicensePlatePrefix, replaces))
+	    char *prefix = edwLicensePlateHead(conn);
+	    if (!startsWith(prefix, replaces))
 		errAbort("%s in replaces column is not an ENCODE file accession", replaces);
 	    if (isEmptyOrNa(reason))
 		errAbort("Replacing %s without a reason\n", replaces);
@@ -861,6 +863,68 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
     cgiDictionaryFree(&newTags);
     }
 return updateCount;
+}
+
+void doValidatedEmail(struct edwSubmit *submit, boolean isComplete)
+/* Send an email with info on all validated files */
+{
+struct sqlConnection *conn = edwConnect();
+struct edwUser *user = edwUserFromId(conn, submit->userId);
+struct dyString *message = dyStringNew(0);
+
+if (isComplete)
+    dyStringPrintf(message, "Your submission from %s is completely validated\n", submit->url);
+else
+    dyStringPrintf(message, 
+	"Your submission hasn't validated after 24 hours, something is probably wrong\n"
+	"at %s\n", submit->url);
+dyStringPrintf(message, "\n#accession\tsubmitted_file_name\tnotes\n");
+char query[512];
+sqlSafef(query, sizeof(query),
+    "select licensePlate,submitFileName "
+    " from edwFile left join edwValidFile on edwFile.id = edwValidFile.fileId "
+    " and edwFile.submitId = %u"
+    , submit->id);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *licensePlate = row[0];
+    char *submitFileName = row[1];
+    dyStringPrintf(message, "%s\t%s\t", naForNull(licensePlate), submitFileName);
+    if (licensePlate == NULL)
+        {
+	dyStringPrintf(message, "Not validating");
+	}
+    dyStringPrintf(message, "\n");
+    }
+sqlFreeResult(&sr);
+
+mailViaPipe(user->email, "EDW Validation Results", message->string, edwDaemonEmail);
+sqlDisconnect(&conn);
+dyStringFree(&message);
+}
+
+void waitForValidationAndSendEmail(struct edwSubmit *submit, char *email)
+/* Poll database every 5 minute or so to see if finished. */
+{
+int maxSeconds = 3600*24;
+int secondsPer = 60*5;
+int seconds;
+for (seconds = 0; seconds < maxSeconds; seconds += secondsPer)
+for (;;)
+    {
+    sleep(secondsPer);
+    struct sqlConnection *conn = edwConnect();
+    if (edwSubmitIsValidated(submit, conn))
+         {
+	 doValidatedEmail(submit, TRUE);
+	 return;
+	 }
+    sqlDisconnect(&conn);
+    }
+doValidatedEmail(submit, FALSE);
 }
 
 void edwSubmit(char *submitUrl, char *email)
@@ -1065,7 +1129,12 @@ sqlSafef(query, sizeof(query),
 	edwNow(), submitId);
 sqlUpdate(conn, query);
 
-sqlDisconnect(&conn);
+#ifdef SOON
+/* Get a real submission record and then set things up so mail user when all done. */
+struct edwSubmit *submit = edwSubmitFromId(conn, submitId);
+sqlDisconnect(&conn);	// We'll be waiting a while so free connection
+waitForValidationAndSendEmail(submit, email);
+#endif /* SOON */
 }
 
 int main(int argc, char *argv[])
