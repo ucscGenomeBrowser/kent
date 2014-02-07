@@ -86,7 +86,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     server->description = cloneString(row[2]);
     server->host = cloneString(row[3]);
     server->port = cloneString(row[4]);
-    server->seqDir = cloneString(row[5]);
+    server->seqDir = hReplaceGbdb(row[5]);
     slAddHead(&serverList, server);
     }
 sqlFreeResult(&sr);

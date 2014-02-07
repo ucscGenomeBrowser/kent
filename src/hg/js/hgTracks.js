@@ -636,15 +636,17 @@ var dragSelect = {
                     "Zoom In": function() {
                         // Zoom to selection
                         $(this).dialog("option", "revertToOriginalPos", false);
+                        if ($("#disableDragHighlight").attr('checked'))
+                            hgTracks.enableHighlightingDialog = false;
                         if (imageV2.inPlaceUpdate) {
                             var params = "position=" + newPosition;
-                            if ($("#disableDragHighlight").attr('checked')) {
-                                hgTracks.enableHighlightingDialog = false;
+                            if (!hgTracks.enableHighlightingDialog)
                                 params += "&enableHighlightingDialog=0"
-                            }
                             imageV2.navigateInPlace(params, null, true);
                         } else {
                             $('body').css('cursor', 'wait');
+                            if (!hgTracks.enableHighlightingDialog)
+                                setCartVars(['enableHighlightingDialog'],[0]);
                             document.TrackHeaderForm.submit();
                         }
                         $(this).dialog("close");
