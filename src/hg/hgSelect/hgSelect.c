@@ -50,7 +50,7 @@ static boolean inclChrom(char *chrom)
 {
 if (noRandom && (strstr(chrom, "_random") != NULL))
     return FALSE;
-if (noHap && haplotype(chrom));
+if (noHap && haplotype(chrom))
     return FALSE;
 return TRUE;
 }
