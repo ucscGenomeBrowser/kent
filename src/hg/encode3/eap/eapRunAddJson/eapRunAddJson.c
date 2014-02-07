@@ -62,7 +62,7 @@ time_t timeStamp = unixTimeVal;
 struct tm tm;
 gmtime_r(&timeStamp, &tm);
 dyJsonTag(dy, var);
-dyStringPrintf(dy, "\"%d:%02d:%02dT%02d:%02d:%0dZ\"",
+dyStringPrintf(dy, "\"%d:%02d:%02dT%02d:%02d:%02dZ\"",
     1900+tm.tm_year, tm.tm_mon+1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 dyJsonEndLine(dy, isMiddle);
 }
