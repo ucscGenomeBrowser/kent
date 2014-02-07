@@ -693,12 +693,12 @@ char query[512];
 sqlSafef(query, sizeof(query), "select * from %s where endTime = 0", clTable);
 struct eapJob *waitList = eapJobLoadByQuery(conn, query);
 
-printf("#stat crash finish run  wait %-24s minutes\n", "step");
+printf("#stat crash finish run  wait %-28s minutes\n", "step");
 for (q = qList; q != NULL; q = q->next)
     {
     char *code = (isSick(q) ? "sick" : "good");
     int waitCount = countWaiting(waitList, q->name);
-    printf("%s %6d %6d %3d %5d %-24s %5.1f\n", code, 
+    printf("%s %6d %6d %3d %5d %-28s %5.1f\n", code, 
 	    resultsCrashCount(q), resultsGoodFinishCount(q), 
 	    q->runningCount, waitCount - q->runningCount, stepFromPath(conn, q->pathName),
 	    resultsAverageMinutes(q));
