@@ -1682,7 +1682,7 @@ flag2=0;
 
 for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     {
-    if(sameString(trnaName, cbs2->qName));
+    if(sameString(trnaName, cbs2->qName))
         {
     if(flag==0)
         {
