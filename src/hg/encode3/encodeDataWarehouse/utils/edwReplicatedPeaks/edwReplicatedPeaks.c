@@ -54,7 +54,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwReplicatedPeaks - Given two peak input files in narrowPeak or broadPeak like format make\n"
+  "edwReplicatedPeaks v1 - Given two peak input files in narrowPeak or broadPeak like format make\n"
   "an output consisting only of peaks that replicate.  Scores are averaged between replicates\n"
   "as are peak boundaries\n"
   "usage:\n"
