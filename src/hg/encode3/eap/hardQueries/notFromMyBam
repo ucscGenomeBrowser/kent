@@ -1,0 +1,30 @@
+#Code to select peaks that are made from preexisting BAM rather than a pipeline one
+
+# Select random sample of 20 that includes some we want to deprecate - we'll want to deprecate on pRun being null
+select xf.fileId,xf.outputType,xf.ucscDb,xf.technicalReplicate tRep,xf.replicate rep,
+       xf.experiment,xf.dataType,xf.lab,xf.deprecated,o1.runId,i2.fileId parent,v2.format pFormat,o3.runId pRun
+from xf join eapOutput o1 on xf.fileId = o1.fileId 
+        join eapInput i2 on o1.runId = i2.runId
+	join edwValidFile v2 on i2.fileId = v2.fileId
+	left join eapOutput o3 on i2.fileId = o3.fileId
+where xf.outputType in ('hotspot_narrow_peaks', 'hotspot_broad_peaks', 'hotspot_signal') order by rand() limit 20;
+
+# Select all I want to deprecate - where bam parent isn't an output of the pipeline
+select count(*) from xf 
+	join eapOutput o1 on xf.fileId = o1.fileId 
+        join eapInput i2 on o1.runId = i2.runId
+	join edwValidFile v2 on i2.fileId = v2.fileId
+	left join eapOutput o3 on i2.fileId = o3.fileId
+where xf.outputType in ('hotspot_narrow_peaks', 'hotspot_broad_peaks', 'hotspot_signal') 
+  and o3.fileId is null;
+
+# Actually do the deprecation
+update xf
+	join eapOutput o1 on xf.fileId = o1.fileId 
+        join eapInput i2 on o1.runId = i2.runId
+	join edwValidFile v2 on i2.fileId = v2.fileId
+	left join eapOutput o3 on i2.fileId = o3.fileId
+set deprecated='Input was from old, non-pipeline-generated, alignments.'
+where xf.outputType in ('hotspot_narrow_peaks', 'hotspot_broad_peaks', 'hotspot_signal') 
+  and o3.fileId is null;
+
