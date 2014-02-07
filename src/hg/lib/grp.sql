@@ -17,6 +17,7 @@ CREATE TABLE grp (
 INSERT grp VALUES("user", "Custom Tracks", 1);
 INSERT grp VALUES("map", "Mapping and Sequencing Tracks", 2);
 INSERT grp VALUES("genes", "Genes and Gene Prediction Tracks", 3);
+INSERT grp VALUES("pub", "Literature", 3.5);
 INSERT grp VALUES("rna", "mRNA and EST Tracks", 4);
 INSERT grp VALUES("regulation", "Expression and Regulation", 5);
 INSERT grp VALUES("compGeno", "Comparative Genomics", 6);

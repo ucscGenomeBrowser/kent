@@ -59,7 +59,7 @@ if (filter != NULL && filter->slChoices != NULL && differentString(filter->slCho
     struct hash *factorHash = newHash(0);
     for (choice = filter->slChoices; choice != NULL; choice = choice->next)
         {
-        hashAdd(factorHash, cloneString(choice->name), NULL);
+        hashAdd(factorHash, choice->name, NULL);
         }
     fsInfo->factorChoices = factorHash;
     filterItems(track, factorFilter, "include");
@@ -104,7 +104,7 @@ if (sqlTableExists(conn, motifTable))
             char *target = row[0];
             char *motifs = row[1];   // string, comma-sep list, or empty string
             if (motifs[0] != 0)
-                hashAdd(targetHash, cloneString(target), slNameListFromString(motifs, ','));
+                hashAdd(targetHash, target, slNameListFromString(motifs, ','));
             }
         sqlFreeResult(&sr);
         fsInfo->motifTargets = targetHash;
@@ -232,7 +232,8 @@ for (motif = motifs; motifs != NULL; motif = motif->next)
         Color textColor = hvGfxContrastingColor(hvg, color);
         int midY = y + (heightPer>>1);
         int dir = (*motif->strand == '+' ? 1 : -1);
-        clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+        if (vis != tvDense)
+            clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
                        dir, textColor, TRUE);
         }
     }
