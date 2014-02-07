@@ -7,6 +7,7 @@
 #include "axt.h"
 #include "maf.h"
 #include "hash.h"
+#include "net.h"
 #include <fcntl.h>
 
 
@@ -20,7 +21,12 @@ struct lineFile *lf;
 char *line, *word;
 char *sig = "##maf";
 
-if ((lf = lineFileUdcMayOpen(fileName, TRUE)) == NULL)
+if ( hasProtocol(fileName))
+    lf = lineFileUdcMayOpen(fileName, TRUE);
+else
+    lf = lineFileMayOpen(fileName, TRUE);
+
+if (lf == NULL)
     return NULL;
 AllocVar(mf);
 mf->lf = lf;
