@@ -18,7 +18,9 @@ FULLWARN = $(shell uname -n)
 L=
 
 # pthreads is required
-L+=-pthread
+ifneq ($(UNAME_S),Darwin)
+  L+=-pthread
+endif
 
 # autodetect if openssl is installed
 ifeq (${SSLDIR},)
