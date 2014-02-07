@@ -13,14 +13,14 @@
 #include "eapLib.h"
 #include "eapDb.h"
 
-char *eapEdwCacheDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/edwCache/";
+char *eapEdwCacheDir = "/hive/groups/encode/3/eap/cach/";
 /* Where data warehouse files are cached in a place that the cluster can access. */
 
-char *eapValDataDir = "/hive/groups/encode/encode3/encValData/";
+char *eapValDataDir = "/hive/groups/encode/3/encValData/";
 /* Where information sufficient to validate a file lives.  This includes genomes of
  * several species indexed for alignment. */
 
-char *eapTempDir = "/hive/groups/encode/encode3/encodeAnalysisPipeline/tmp/";
+char *eapTempDir = "/hive/groups/encode/3/encodeAnalysisPipeline/tmp/";
 /* This temp dir will contain a subdir for each job.  The edwFinish program will
  * remove these if the job went well.  If the job didn't go well they'll probably
  * be empty.  There's some in-between cases though. */
@@ -44,6 +44,12 @@ struct sqlConnection *eapConnectReadWrite()
 /* Return read/write connection to eap database, which may be same as edw database) */
 {
 return edwConnectReadWrite();
+}
+
+struct edwUser *eapUserForPipeline(struct sqlConnection *conn)
+/* Get user associated with automatic processes and pipeline submissions. */
+{
+return edwUserFromEmail(conn, edwDaemonEmail);
 }
 
 char *eapParaDirs(struct sqlConnection *conn)

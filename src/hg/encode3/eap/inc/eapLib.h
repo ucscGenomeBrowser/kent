@@ -34,6 +34,9 @@ struct sqlConnection *eapConnect();
 struct sqlConnection *eapConnectReadWrite();
 /* Return read/write connection to eap database, which may be same as edw database) */
 
+struct edwUser *eapUserForPipeline(struct sqlConnection *conn);
+/* Get user associated with automatic processes and pipeline submissions. */
+
 void eapPathForCommand(char *command, char path[PATH_LEN]);
 /* Figure out path associated with command */
 
