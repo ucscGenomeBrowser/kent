@@ -524,7 +524,7 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	/* Create license plate around our ID.  File in warehouse to use license plate
 	 * instead of baby-babble IDs. */
 	    {
-	    edwMakeLicensePlate( edwLicensePlatePrefix(conn), 
+	    edwMakeLicensePlate( edwLicensePlateHead(conn), 
 		vf->id, vf->licensePlate, edwMaxPlateSize);
 
 	    /* Create swapped out version of edwFileName in newName. */
