@@ -27284,6 +27284,12 @@ wait
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/hg19/multiz100way/maf \
         hg19 multiz100way
+# Loaded 110940480 mafs in 93 files from /gbdb/hg19/multiz100way/maf
+
+# real    190m10.878s
+-rw-rw-r-- 1 6346988863 Feb  7 19:20 multiz100way.tab
+
+
     # Loaded 107446955 mafs in 93 files from /gbdb/hg19/multiz100way/maf
 
     # real    393m34.571s
@@ -27293,6 +27299,14 @@ wait
     time (cat /gbdb/hg19/multiz100way/maf/*.maf \
         | hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 hg19 multiz100waySummary stdin)
+    # second time around, 2014-02-05:
+    # Created 17161359 summary blocks from 3983260014 components and 110940480 mafs from stdin
+    # real    259m56.225s
+    # user    236m54.551s
+    # sys     19m27.053s
+# -rw-rw-r-- 1 6346988863 Feb  7 19:20 multiz100way.tab
+# -rw-rw-r-- 1  845944653 Feb  8 12:22 multiz100waySummary.tab
+
     # Created 17164313 summary blocks from 3766509527 components and 107446955 mafs from stdin
     # real    452m41.332s
     # user    229m13.460s
@@ -27302,6 +27316,11 @@ wait
     # -rw-rw-r-- 1  846085633 Sep 12 05:50 multiz100waySummary.tab
 
     wc -l *.tab
+    # second time around, 2014-02-05:
+    # 110940480 multiz100way.tab
+    # 17161359 multiz100waySummary.tab
+    # 128101839 total
+
     #  107446955 multiz100way.tab
     #   17164313 multiz100waySummary.tab
     #  124611268 total
@@ -27452,6 +27471,14 @@ runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz
     gensub2 chr.list gene.list template jobList
     para create jobList
     para try ... check ... push
+# second time around 2014-02-08
+# Completed: 3627 of 3627 jobs
+# CPU time in finished jobs:     215439s    3590.66m    59.84h    2.49d  0.007 y
+# IO & Wait Time:               1153600s   19226.66m   320.44h   13.35d  0.037 y
+# Average job time:                 377s       6.29m     0.10h    0.00d
+# Longest finished job:            6108s     101.80m     1.70h    0.07d
+# Submission to last job:         17703s     295.05m     4.92h    0.20d
+
 # Completed: 3627 of 3627 jobs
 # CPU time in finished jobs:     213502s    3558.37m    59.31h    2.47d  0.007 y
 # IO & Wait Time:              10242520s  170708.66m  2845.14h  118.55d  0.325 y
@@ -27465,7 +27492,8 @@ runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz
 do
     zcat ${F}
 done | sort -k1,1 -k2,2n > multiz100wayFrames.bed
-    # -rw-rw-r-- 1 956450045 Sep 14 09:17 multiz100wayFrames.bed
+    # -rw-rw-r-- 1 857488422 Feb  8 08:08 multiz100wayFrames.bed
+
 
     # verify there are frames on everything that we asked for:
     cut -f4 multiz100wayFrames.bed | sort | uniq -c | sort -n \
@@ -27475,21 +27503,34 @@ done | sort -k1,1 -k2,2n > multiz100wayFrames.bed
     #   39 annotation.survey.txt
     # and the minimum numbers:
     head annotation.survey.txt
+    # 155538 bosTau7
+    # 181247 oryCun2
+    # 192009 panTro4
+    # 196260 gorGor3
+    # 200210 ponAbe2
+    # 200763 hg19
+    # 212618 xenTro7
+    # ... etc ...
+    # previously, the ailMel1 low count should have been seen as an error:
     #       317 ailMel1  <- this is a bit odd
     #    202537 bosTau7
     #    230400 xenTro7
     #    237422 oryCun2
-    # ... etc ...
 
     #   load the resulting file
     ssh hgwdev
     cd /hive/data/genomes/hg19/bed/multiz100way/frames
     time gzip multiz100wayFrames.bed
-    #   real    0m33.834s
+    #   real    0m32.261s
     time hgLoadMafFrames hg19 multiz100wayFrames multiz100wayFrames.bed.gz
-    #   real    2m42.936s
+    # real    2m29.934s
 
+    # second time around:
     time featureBits -countGaps hg19 multiz100wayFrames
+    # 67663535 bases of 3137161264 (2.157%) in intersection
+    # real    1m24.320s
+
+    # first time:
     # 66293515 bases of 3137161264 (2.113%) in intersection
     # real    1m31.403s
 
