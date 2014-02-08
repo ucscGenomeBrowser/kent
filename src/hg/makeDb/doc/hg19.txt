@@ -27124,16 +27124,32 @@ runOne $(root1) {check out exists+ ../maf/$(root1).maf}
     time hgLoadMaf -pathPrefix=/gbdb/hg19/multiz100way/maf hg19 multiz100way
     # Loaded 82655835 mafs in 89 files from /gbdb/hg19/multiz100way/maf
     # real    79m31.028s
+    # -rw-rw-r-- 1 4703102815 Sep  9 11:21 multiz100way.tab
 
-# -rw-rw-r-- 1 4703102815 Sep  9 11:21 multiz100way.tab
+    # reload 'fixed' maf file 2014-02-06
+    # Loaded 110907342 mafs in 93 files from /gbdb/hg19/multiz100way/maf
+    # real    368m1.988s
+    # -rw-rw-r-- 1 6307041335 Feb  6 16:17 multiz100way.tab
+    wc -l multiz100way.tab
+    #  110907342 multiz100way.tab
 
-    time cat /gbdb/hg19/multiz100way/maf/*.maf \
-        | nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
-	-mergeGap=1500 -maxSize=200000 hg19 multiz100waySummary stdin
+    # reloading new tables 2014-02-07
+    time (cat /gbdb/hg19/multiz100way/maf/*.maf \
+        | nice -n +19 $HOME/kent/src/hg/makeDb/hgLoadMaf/hgLoadMafSummary \
+          -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 hg19 multiz100waySummary stdin)
+# Created 17161359 summary blocks from 3983260014 components and 110907342 mafs from stdin
+# real    242m0.403s
+    #  -rw-rw-r-- 1  811621935 Feb  7 12:16 multiz100waySummary.tab
+
     # Created 13514621 summary blocks from 2957351868 components and 82655835 mafs from stdin
     # real    143m55.432s
 
     wc -l multiz100way*.tab
+    #  110907342 multiz100way.tab
+    #  17161359 multiz100waySummary.tab
+    #  128068701 total
+
     #    82655835 multiz100way.tab
     #    13514621 multiz100waySummary.tab
     #    96170456 total
@@ -27246,6 +27262,14 @@ wait
     #  user    313m55.725s
     #  sys     17m12.812s
     # chr2 last one took about 70 minutes
+
+    # second reload 2014-02-07, on hgwdev 19 jobs:
+    cd /hive/data/genomes/hg19/bed/multiz100way/anno
+    time ./highMemJobs.sh > highMemJobs.log 2>&1
+
+    # real    473m47.404s
+    # user    1072m8.810s
+    # sys     30m45.768s
 
     # verify all result files have some content, look for 0 size files:
     find . -type f -size 0
