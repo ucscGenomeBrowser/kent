@@ -48,13 +48,19 @@
  * for that merger, which may not be perfect in any sense, but which is probably good enough
  * for a corner case. */
 
+/* Version history:
+ * 1 - Initial version
+ * 2 - Polished case where two peaks in one replicate overlap one peak in the other
+ *     going from taking average start and average end of all 3 peaks to a scheme that
+ *     produces one peak with average mass center of mass of the two replicates. */
+
 FILE *bigMerge = NULL;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwReplicatedPeaks v1 - Given two peak input files in narrowPeak or broadPeak like format make\n"
+  "edwReplicatedPeaks v2 - Given two peak input files in narrowPeak or broadPeak like format make\n"
   "an output consisting only of peaks that replicate.  Scores are averaged between replicates\n"
   "as are peak boundaries\n"
   "usage:\n"
@@ -201,7 +207,11 @@ for (iv = ivList; iv != NULL && i < count; iv = iv->next, ++i)
     }
 
 /* And now output averaged values in appropriate peak format. */
-fprintf(f, "%s\t%lld\t%lld\t", chrom, startSum/count, endSum/count);
+long long aveSize = (endSum - startSum)/2;
+long long midPoint = (startSum + endSum)/count;
+long long start = midPoint - aveSize/2;
+long long end = start + aveSize;
+fprintf(f, "%s\t%lld\t%lld\t", chrom, start, end);
 fprintf(f, "%s\t%lld\t%s\t", name, sumScore/count, strand);
 double invCount = 1.0/count;
 fprintf(f, "%g\t%g\t%g", invCount*sumSignal, invCount * sumP, invCount * sumQ);
