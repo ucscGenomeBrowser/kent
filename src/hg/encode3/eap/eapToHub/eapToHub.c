@@ -8,8 +8,9 @@
 #include "../../encodeDataWarehouse/inc/edwLib.h"
 #include "eapDb.h"
 #include "eapLib.h"
+#include "eapGraph.h"
 
-char *assemblyArray[] = {"hg19", "mm9"};
+char *assemblyArray[] = {"hg19", /* "mm9" */ };
 
 void usage()
 /* Explain usage and exit. */
@@ -177,7 +178,54 @@ while ((c = *s++) != 0)
 return buf;  // Nonreentrant but this is probably one-time-use code
 }
 
-void outputMatchingTrack(char *viewName, struct fullExperiment *exp, struct replicate *rep, 
+char *trackTypeForOutputType(char *outputType)
+/* Given an output type try and come up with trackType that would work. */
+{
+char buf[256];
+if (sameString(outputType, "alignments"))
+    {
+    safef(buf, sizeof(buf), "bam");
+    }
+else if (sameString(outputType, "hotspot_broad_peaks"))
+    {
+    safef(buf, sizeof(buf), "bigBed");
+    }
+else if (sameString(outputType, "hotspot_signal"))
+    {
+    safef(buf, sizeof(buf), "bigWig");
+    }
+else if (sameString(outputType, "hotspot_narrow_peaks"))
+    {
+    safef(buf, sizeof(buf), "bigBed");
+    }
+else if (sameString(outputType, "macs2_dnase_peaks"))
+    {
+    safef(buf, sizeof(buf), "bigBed");
+    }
+else if (sameString(outputType, "macs2_dnase_signal"))
+    {
+    safef(buf, sizeof(buf), "bigBed");
+    }
+else if (sameString(outputType, "pooled_signal"))
+    {
+    safef(buf, sizeof(buf), "bigWig");
+    }
+else if (sameString(outputType, "replicated_broadPeak"))
+    {
+    safef(buf, sizeof(buf), "bigBed");
+    }
+else if (sameString(outputType, "replicated_narrowPeak"))
+    {
+    safef(buf, sizeof(buf), "bigBed");
+    }
+else
+    {
+    errAbort("Unrecognized outputType %s in trackTypeForOutputType", outputType);
+    }
+return cloneString(buf);
+}
+
+void outputMatchingTrack(char *parentName, struct fullExperiment *exp, struct replicate *rep, 
     char *outputType, struct vFile *vf,  char *indent, FILE *f)
 /* If vf is of outputType then write a track based around it to f */
 {
@@ -191,15 +239,46 @@ if (vf != NULL)
 	fprintf(f, "%strack %s\n", indent, vf->valid->licensePlate);
 	char *biosample = exp->exp->biosample;
 	fprintf(f, "%sshortLabel %s %s\n", indent, biosample, repName);
-	fprintf(f, "%sparent %s\n", indent, viewName);
+	fprintf(f, "%sparent %s\n", indent, parentName);
 	fprintf(f, "%slongLabel %s %s %s from %s\n", 
 	    indent, biosample, exp->exp->dataType, repName, exp->exp->lab);
 	fprintf(f, "%ssubGroups view=%s biosample=%s replicate=%s\n", 
-		indent, viewName, biosample, repName);
+		indent, outputType, biosample, repName);
 	fprintf(f, "%sbigDataUrl /warehouse/%s\n", indent, vf->file->edwFileName);
+	fprintf(f, "%stype %s\n", indent, trackTypeForOutputType(outputType));
 	fprintf(f, "\n");
 	}
     }
+}
+
+boolean vfMatchOutput(struct vFile *vf, char *outputType)
+/* Return TRUE if vf's outputType same as outputType */
+{
+if (vf == NULL)
+    return FALSE;
+return sameString(vf->valid->outputType, outputType);
+}
+
+boolean anyMatchOutputType(struct fullExperiment *expList, char *outputType)
+/* Return TRUE if any replicated of any experiment has a member matching outputType */
+{
+struct fullExperiment *exp;
+struct replicate *rep;
+for (exp = expList; exp != NULL; exp = exp->next)
+    {
+    for (rep = exp->repList; rep != NULL; rep = rep->next)
+	{
+	if (vfMatchOutput(rep->bamList, outputType))
+	    return TRUE;
+	if (vfMatchOutput(rep->bigWigList, outputType))
+	    return TRUE;
+	if (vfMatchOutput(rep->narrowList, outputType))
+	    return TRUE;
+	if (vfMatchOutput(rep->broadList, outputType))
+	    return TRUE;
+	}
+    }
+return FALSE;
 }
 
 
@@ -207,11 +286,13 @@ void writeView(struct sqlConnection *conn, char *rootName, char *outputType,
     struct fullExperiment *expList, FILE *f)
 /* Write one view - the view stanza and all the actual track stanzas */
 {
+if (!anyMatchOutputType(expList, outputType))
+     return;
 char *cappedOutputType = cloneString(outputType);
 cappedOutputType[0] = toupper(cappedOutputType[0]);
-char viewName[256];
-safef(viewName, sizeof(viewName), "%sView%s", rootName, cappedOutputType);
-fprintf(f, "    track %s\n", viewName);
+char viewTrackName[256];
+safef(viewTrackName, sizeof(viewTrackName), "%sView%s", rootName, cappedOutputType);
+fprintf(f, "    track %s\n", viewTrackName);
 fprintf(f, "    shortLabel %s\n", outputType);
 fprintf(f, "    view %s\n", outputType);
 fprintf(f, "    parent %s\n", rootName);
@@ -223,10 +304,10 @@ for (exp = expList; exp != NULL; exp = exp->next)
     struct replicate *rep;
     for (rep = exp->repList; rep != NULL; rep = rep->next)
         {
-	outputMatchingTrack(viewName, exp, rep, outputType, rep->bamList, "        ", f);
-	outputMatchingTrack(viewName, exp, rep, outputType, rep->bigWigList, "        ", f);
-	outputMatchingTrack(viewName, exp, rep, outputType, rep->narrowList, "        ", f);
-	outputMatchingTrack(viewName, exp, rep, outputType, rep->broadList, "        ", f);
+	outputMatchingTrack(viewTrackName, exp, rep, outputType, rep->bamList, "        ", f);
+	outputMatchingTrack(viewTrackName, exp, rep, outputType, rep->bigWigList, "        ", f);
+	outputMatchingTrack(viewTrackName, exp, rep, outputType, rep->narrowList, "        ", f);
+	outputMatchingTrack(viewTrackName, exp, rep, outputType, rep->broadList, "        ", f);
 	}
     }
 }
@@ -241,7 +322,7 @@ struct outputType *ot, *otList = outputTypesForExpList(expList, otHash);
 verbose(1, "%d outputTypes\n", slCount(otList));
 
 /* Write out a bunch of easy fields in top level stanza */
-char *rootName = "dnaseTop";
+char *rootName = "dnase3";
 fprintf(f, "track %s\n", rootName);
 fprintf(f, "compositeTrack on\n");
 fprintf(f, "shortLabel EAP DNase\n");
@@ -249,16 +330,16 @@ fprintf(f, "longLabel EAP DNase on hg19 using Hotspot5 and BWA 0.7.0\n");
 fprintf(f, "group regulation\n");
 
 /* Group 1 - the views */
-fprintf(f, "subGroup1 views Views");
+fprintf(f, "subGroup1 view Views");
 for (ot = otList; ot != NULL; ot = ot->next)
     {
-    if (viewableOutput(ot->name))
+    if (viewableOutput(ot->name) && anyMatchOutputType(expList, ot->name))
 	fprintf(f, " %s=%s", ot->name, ot->name);
     }
 fprintf(f, "\n");
 
 /* Group 2 the cellTypes */
-fprintf(f, "subGroup2 biosamples Biosamples");
+fprintf(f, "subGroup2 biosample Biosamples");
 struct slName *bio;
 for (bio = bioList; bio != NULL; bio = bio->next)
     {
@@ -267,7 +348,7 @@ for (bio = bioList; bio != NULL; bio = bio->next)
 fprintf(f, "\n");
 
 /* Group 3, the replicates */
-fprintf(f, "subGroup3 replicates Replicates");
+fprintf(f, "subGroup3 replicate Replicates");
 struct slName *rep, *repList = getReplicateNames(expList);
 for (rep = repList; rep != NULL; rep = rep->next)
      fprintf(f, " %s=%s", symbolify(rep->name), rep->name);
@@ -275,11 +356,11 @@ fprintf(f, "\n");
 
 /* Some more scalar fields in first stanza */
 fprintf(f, "sortOrder biosamples=+ replicates=+ view=+\n");
-fprintf(f, "dimensions dimensionY=biosample dimensionX=replicates\n");
+fprintf(f, "dimensions dimensionY=biosample dimensionX=replicate\n");
 fprintf(f, "dragAndDrop subTracks\n");
 fprintf(f, "noInherit on\n");
 fprintf(f, "configurable on\n");
-fprintf(f, "type bed 3\n");
+fprintf(f, "type bigWig\n");  // Need something, evenif ignored
 fprintf(f, "\n");
 
 /* Now move on to views */
@@ -590,7 +671,6 @@ for (i=0; i<ArraySize(assemblyArray); ++i)
     makeDir(path);
     safef(path, sizeof(path), "%s/%s/%s", outDir, a, "trackDb.txt");
     writeTrackDbTxt(conn, eeList, a, path);
-    uglyAbort("All for now");
     }
 }
 
@@ -603,5 +683,3 @@ if (argc != 2)
 eapToHub(argv[1]);
 return 0;
 }
-#ifdef SOON
-#endif /* SOON */
