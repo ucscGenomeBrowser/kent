@@ -21,18 +21,25 @@
  *
  * The logic of the program depends on the size of the clump.   For clumps of 1, it just
  * ignores them.  For clumps of 2 and 3 it outputs a single peak containing the average
- * values of the components both in terms of start and end coordinates, and in values.
+ * values of the components, with coordinates chosen to keep the center and the
+ * total size of the output peak the same as the average center and average total size of
+ * peaks involved in the overlap in both replicates. 
+ *
  * For bigger clumps it will procede from left to right outputting the average of the next
  * two peaks until it gets down to just 2 or 3 peaks left in the clump.  It then processes
  * the last 2 or three together.   The above example would thus lead to 2 output peaks composed
  * from the sub-clumps
+ *      --x--
  *      11111    
  *        2222222222
+ *        ----x-----
  * and
+ *               -------x-------
  *               11111   1111111
  *                   2222222
+ *                   ---x---
  * These in turn would resolve to (using P for pooled) the following peaks
- *       PPPPPPP      PPPPPP
+ *       PPPPPPP    PPPPPPPPP
  * I'm not 100% sure this handles all cases, but it handles the common cases.  The one I
  * worry about is:
  *     11111111111111111111111111111111111111111
@@ -208,7 +215,7 @@ for (iv = ivList; iv != NULL && i < count; iv = iv->next, ++i)
 
 /* And now output averaged values in appropriate peak format. */
 long long aveSize = (endSum - startSum)/2;
-long long midPoint = (startSum + endSum)/count;
+long long midPoint = (startSum + endSum)/(2*count);
 long long start = midPoint - aveSize/2;
 long long end = start + aveSize;
 fprintf(f, "%s\t%lld\t%lld\t", chrom, start, end);
