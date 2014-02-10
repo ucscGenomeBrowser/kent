@@ -2366,4 +2366,71 @@ done | sed -e "`cat accessionToUcsc.sed.txt`" > ucsc.grch38.agp
     ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.chromFaMasked.tar.gz hg38.chromFaMasked.tar.gz
 
     #also added entries for above to md5sum.txt and README.txt
+
 ############################################################################
+# LASTZ MOUSE Mm10 (DONE - 2014-01-23,31 - Hiram)
+    # can no longer use the lineage specific repeats with the new lastz
+    # use a screen to manage this longish job:
+    screen -S hg38Mm10
+
+    mkdir /hive/data/genomes/hg38/bed/lastzMm10.2014-01-23
+    cd /hive/data/genomes/hg38/bed/lastzMm10.2014-01-23
+
+    # best to always specify an exact path to lastz so we know which one is used
+    # lastz default parameters are human-mouse parameters
+
+    cat << '_EOF_' > DEF
+# human vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm10
+SEQ2_DIR=/scratch/data/mm10/mm10.2bit
+SEQ2_LEN=/scratch/data/mm10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzMm10.2014-01-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -stop=net `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > net.log 2>&1
+    #	real    1494m26.135s ---- busy cluster
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -continue=load `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > load.log 2>&1
+    #	Elapsed time: 43m11s
+    cat fb.hg38.chainMm10Link.txt
+    # 964465044 bases of 3049335806 (31.629%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/mm10/bed/blastz.hg38.swap
+    cd /hive/data/genomes/mm10/bed/blastz.hg38.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg38/bed/lastzMm10.2014-01-23/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real    83m28.397s
+
+    cat fb.mm10.chainHg38Link.txt
+    #	937030766 bases of 2652783500 (35.323%) in intersection
+
+#########################################################################
