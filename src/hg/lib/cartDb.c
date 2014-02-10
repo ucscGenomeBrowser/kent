@@ -6,8 +6,67 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "hgConfig.h"
 #include "cartDb.h"
 
+boolean cartDbHasSessionKey(struct sqlConnection *conn, char *table)
+/* Check to see if the table has the sessionKey field */
+{
+static boolean userDbInitialized = FALSE;
+static boolean sessionDbInitialized = FALSE;
+static boolean userDbHasSessionKey = FALSE;
+static boolean sessionDbHasSessionKey = FALSE;
+if (sameString(table, "userDb"))
+    {
+    if (!userDbInitialized)
+	{
+	userDbInitialized = TRUE;
+	if (sqlFieldIndex(conn, table, "sessionKey") >= 0)
+	    {
+	    userDbHasSessionKey = TRUE;
+	    } 
+	}
+    return userDbHasSessionKey;
+    }
+else if (sameString(table, "sessionDb"))
+    {
+    if (!sessionDbInitialized)
+	{
+	sessionDbInitialized = TRUE;
+	if (sqlFieldIndex(conn, table, "sessionKey") >= 0)
+	    {
+	    sessionDbHasSessionKey = TRUE;
+	    } 
+	}
+    return sessionDbHasSessionKey;
+    }
+else
+    errAbort("Unknown table %s", table);
+return FALSE;
+}
+
+boolean cartDbUseSessionKey()
+/* Check settings and and state to determine if sessionKey is in use */
+{
+static boolean initialized = FALSE;
+static boolean useSessionKey = FALSE;
+if (!initialized)
+    {
+    initialized = TRUE;
+    char *sessionKey = cfgOption2("browser", "sessionKey");
+    if (!sessionKey)
+	sessionKey = "off";  // DEFAULT
+    if (sameString(sessionKey, "on"))
+	useSessionKey = TRUE;
+    else if (sameString(sessionKey, "off"))
+	useSessionKey = FALSE;
+    else if (sameString(sessionKey, "autodetect"))
+	{
+	errAbort("brower.sessionKey=autodetect has not implemented yet."); // TODO
+	}
+    }
+return useSessionKey;
+}
 
 void cartDbStaticLoad(char **row, struct cartDb *ret)
 /* Load a row from cartDb table into ret.  The contents of ret will
@@ -20,6 +79,8 @@ ret->reserved = sqlSigned(row[2]);
 ret->firstUse = row[3];
 ret->lastUse = row[4];
 ret->useCount = sqlSigned(row[5]);
+if (cartDbUseSessionKey())
+    ret->sessionKey = row[6];
 }
 
 struct cartDb *cartDbLoad(char **row)
@@ -35,6 +96,8 @@ ret->reserved = sqlSigned(row[2]);
 ret->firstUse = cloneString(row[3]);
 ret->lastUse = cloneString(row[4]);
 ret->useCount = sqlSigned(row[5]);
+if (cartDbUseSessionKey())
+    ret->sessionKey = cloneString(row[6]);
 return ret;
 }
 
@@ -96,6 +159,8 @@ ret->reserved = sqlSignedComma(&s);
 ret->firstUse = sqlStringComma(&s);
 ret->lastUse = sqlStringComma(&s);
 ret->useCount = sqlSignedComma(&s);
+if (cartDbUseSessionKey())
+    ret->sessionKey = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -110,6 +175,8 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->contents);
 freeMem(el->firstUse);
 freeMem(el->lastUse);
+if (cartDbUseSessionKey())
+    freeMem(el->sessionKey);
 freez(pEl);
 }
 
@@ -148,6 +215,11 @@ fprintf(f, "%s", el->lastUse);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->useCount);
+if (cartDbUseSessionKey())
+    {
+    fputc(sep,f);
+    fprintf(f, "%s", el->sessionKey);
+    }
 fputc(lastSep,f);
 }
 

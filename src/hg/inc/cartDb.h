@@ -19,7 +19,14 @@ struct cartDb
     char *firstUse;	/* First time this was used */
     char *lastUse;	/* Last time this was used */
     int useCount;	/* Number of times used */
+    char *sessionKey;	/* Random Key for session security */
     };
+
+boolean cartDbHasSessionKey(struct sqlConnection *conn, char *table);
+/* Check to see if the table has the sessionKey field */
+
+boolean cartDbUseSessionKey();
+/* Check settings and and state to determine if sessionKey is in use */
 
 void cartDbStaticLoad(char **row, struct cartDb *ret);
 /* Load a row from cartDb table into ret.  The contents of ret will

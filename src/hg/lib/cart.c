@@ -202,8 +202,9 @@ cdb = cartDbLoadFromId(conn, table, id);
 if (!cdb)
     {
     result = FALSE;
-    sqlSafef(query, sizeof(query), "INSERT %s VALUES(0,\"\",0,now(),now(),0)",
-	  table);
+    sqlSafef(query, sizeof(query), "INSERT %s VALUES(0,'',0,now(),now(),0%-s)",
+	  table,
+	  cartDbHasSessionKey(conn, table) ? ",''" : "");
     sqlUpdate(conn, query);
     id = sqlLastAutoId(conn);
     if ((cdb = cartDbLoadFromId(conn,table,id)) == NULL)
