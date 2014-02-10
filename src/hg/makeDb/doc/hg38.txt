@@ -2220,6 +2220,18 @@ total           5567850 5520017 5459735 5744165
     hgsql -e 'update dbDb set defaultPos="chr9:133252000-133280861"
 	where name="hg38";' hgcentraltest
 
+#########################################################################
+## update grp table with new set of standard rows (DONE - 2014-01-29 - Hiram)
+    hgsql -e 'alter table grp rename grpOriginal;' hg38
+    hgsql -e 'drop table grp;' hg38
+    hgsql -e "create table grp (PRIMARY KEY(NAME)) select * from hg19.grp" hg38
+    hgsql -e 'delete from grp where name="denisova";' hg38
+    hgsql -e 'delete from grp where name="pub";' hg38
+    hgsql -e 'delete from grp where name="neandertal";' hg38
+    hgsql -e 'update grp set defaultIsClosed=0 where name="map";' hg38
+
+    hgsql -e 'drop table grpOriginal;' hg38
+
 ############################################################################
 # PREPARE LINEAGE SPECIFIC REPEAT FILES FOR LASTZ (DONE - 2014-01-21 - Hiram)
     ssh ku
@@ -2546,5 +2558,67 @@ TMPDIR=/dev/shm
     #    82m32.329s
     cat fb.rheMac3.chainHg38Link.txt
     #   2288533769 bases of 2639145830 (86.715%) in intersection
+
+#########################################################################
+## construct analysis set (DONE - 2014-01-27 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/analysisSet
+    cd /hive/data/genomes/hg38/bed/analysisSet
+    mkdir -p splitFa
+
+    faToTwoBit \
+../../genbank/seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz \
+	hg38.unmasked.analysisSet.2bit
+
+    faCount splitFa/c*.fa > splitFa.faCount.txt
+
+    egrep -v "chr[0-9_BGHIJKLXv]*_alt" ../rmskCM/hg38.sorted.fa.out \
+	> hg38.analysisSet.out
+
+    twoBitMask hg38.unmasked.analysisSet.2bit hg38.analysisSet.out \
+	hg38.rmsk.analysisSet.2bit
+
+    egrep -v "chr[0-9_BGHIJKLXv]*_alt" ../simpleRepeat/trfMask.bed \
+	> trfMask.analysisSet.bed
+
+    twoBitMask hg38.rmsk.analysisSet.2bit -add trfMask.analysisSet.bed \
+	hg38.analysisSet.2bit
+
+    twoBitToFa hg38.unmasked.analysisSet.2bit stdout | faSize stdin
+# 3099922541 bases (165046090 N's 2934876451 real 2934876451 upper 0 lower)
+#	in 195 sequences in 1 files
+# Total size: mean 15897038.7 sd 46804464.6 min 970 (chrUn_KI270394v1)
+#	max 248956422 (chr1) median 32032
+# %0.00 masked total, %0.00 masked real
+
+    twoBitToFa hg38.analysisSet.2bit stdout | faSize stdin
+# 3099922541 bases (165046090 N's 2934876451 real 1409378896 upper 1525497555
+#	lower) in 195 sequences in 1 files
+# Total size: mean 15897038.7 sd 46804464.6 min 970 (chrUn_KI270394v1)
+#	max 248956422 (chr1) median 32032
+# %49.21 masked total, %51.98 masked real
+
+    mkdir hg38.analysisSet.chroms
+    twoBitToFa hg38.analysisSet.2bit stdout \
+	| faSplit byname stdin hg38.analysisSet.chroms/
+
+    tar cvzf ./hg38.analysisSet.chroms.tar.gz ./hg38.analysisSet.chroms
+
+    ln -s `pwd`/hg38.analysisSet.2bit \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
+    ln -s `pwd`/hg38.analysisSet.chroms.tar.gz \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
+    # add these md5 sums to md5sum.txt
+    md5sum hg38.analysisSet.2bit hg38.analysisSet.chroms.tar.gz >> \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/md5sum.txt
+
+    cp ../../genbank/README_ANALYSIS_SETS README.analysisSet.txt
+    # add note at the top of README:
+    ######################################################################
+    UCSC copy of the file from:
+
+    ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/seqs_for_alignment_pipelines/README_ANALYSIS_SETS
+
+    ln -s `pwd`/README.analysisSet.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
 
 #########################################################################
