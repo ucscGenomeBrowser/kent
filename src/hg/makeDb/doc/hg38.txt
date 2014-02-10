@@ -1969,7 +1969,7 @@ done
     checkTableCoords hg38 centromeres
 
 #############################################################################
-## alternate sequence/haplotype alignments (WORKING - 2014-01-09 - Hiram)
+## alternate sequence/haplotype alignments (DONE - 2014-01-23 - Hiram)
     mkdir /hive/data/genomes/hg38/bed/lastzAltSequences
     cd /hive/data/genomes/hg38/bed/lastzAltSequences
 
@@ -2620,5 +2620,159 @@ TMPDIR=/dev/shm
 
     ln -s `pwd`/README.analysisSet.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
+
+#########################################################################
+# LASTZ Self/hg38 (DONE - 2014-01-25,02-10 - Hiram)
+    # can no longer use the lineage specific repeats with the new lastz
+    # use a screen to manage this longish job:
+    screen -S hg38Self
+
+    mkdir /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25
+    # construct the non-bridged contigs sequence to use:
+    (twoBitToFa ../nonBridgedContigs/hg38.chroms.contigs.2bit stdout;
+      twoBitToFa ../../hg38.2bit:chrM stdout) | faToTwoBit stdin hg38.self.2bit
+    twoBitInfo hg38.self.2bit stdout | sort -k2nr > hg38.self.chrom.sizes
+
+    # best to always specify an exact path to lastz so we know which one is used
+    # lastz default parameters are human-mouse parameters
+
+    cat << '_EOF_' > DEF
+# human vs human with mouse defaults
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Human Hg38
+SEQ2_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ2_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.2bit
+SEQ2_CTGLEN=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.chrom.sizes
+SEQ2_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -stop=net `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > net.log 2>&1
+    #  real    1518m15.817s -- problems
+    # there was a problem in the 'part014' batch.  running that manually:
+    mkdir /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/run.blastz/lastJob
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/run.blastz/lastJob
+    # make 100 jobs out of the 10 parts:
+    mkdir -p psl
+    cp ../tParts/part014.lst ./xpart014.lst
+    split -l 1 xpart014.lst -d -a 3 part
+    for F in part0*
+do
+   mv $F $F.lst
+done
+
+for T in part0*.lst
+do
+  for Q in part0*.lst
+  do
+    mkdir -p psl/${T}
+    echo /cluster/home/hiram/kent/src/hg/utils/automation/blastz-run-ucsc -outFormat psl -dropSelf ${T} ${Q} ../../DEF \{check out exists psl/${T}/${T}.${Q}.psl\}
+  done
+done > jobList
+    para -ram=32g create jobList
+    para push
+    # one last failing job:
+# Completed: 99 of 100 jobs
+# CPU time in finished jobs:       2836s      47.27m     0.79h    0.03d  0.000 y
+# IO & Wait Time:                   279s       4.65m     0.08h    0.00d  0.000 y
+# Average job time:                  31s       0.52m     0.01h    0.00d
+# Longest finished job:             586s       9.77m     0.16h    0.01d
+# Submission to last job:           620s      10.33m     0.17h    0.01d
+
+    mkdir /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/run.blastz/lastJob/split010
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/run.blastz/lastJob/split010
+    mkdir psl
+
+    twoBitToFa /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.2bit:chr16_03:0-1689648 part010.fa
+
+    faSplit -lift=split010.lift size part010.fa 169000 split010_
+TOP="/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/run.blastz/lastJob/split010"
+
+for T in split*.fa
+do
+  mkdir -p psl/${T}
+  echo "${TOP}/${T}" > ${T}.lst
+  faToTwoBit  ${T} ${T}.2bit
+  for Q in split*.fa
+  do
+     echo "/cluster/home/hiram/kent/src/hg/utils/automation/blastz-run-ucsc -outFormat psl -dropSelf ${T}.lst ${Q}.lst DEF {check out exists psl/${T}/${T}.${Q}.psl}"
+  done
+done > jobList
+     para -ram=32g create jobList
+
+# Completed: 100 of 100 jobs
+# CPU time in finished jobs:     176579s    2942.99m    49.05h    2.04d  0.006 y
+# IO & Wait Time:                  1239s      20.64m     0.34h    0.01d  0.000 y
+# Average job time:                1778s      29.64m     0.49h    0.02d
+# Longest finished job:           29343s     489.05m     8.15h    0.34d
+# Submission to last job:         29348s     489.13m     8.15h    0.34d
+
+    catDir psl/* | grep -v "^#" > raw.psl
+
+    liftUp -type=.psl stdout split010.lift error raw.psl \
+        | liftUp -pslQ -type=.psl chr16_03.psl split010.lift error stdin
+
+    # this combination allowed psl headers to sneak in the middle,
+    # had to be cleaned:
+    catDir psl/* | grep -v "^#" > part014.psl
+    cat split010/chr16_03.psl >> part014.psl
+    cp -p part014.psl ../../psl/part014.lst/part014.lst_part014.lst.psl
+
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -continue=cat -stop=net `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > cat.log 2>&1
+    # real    43m11.340s
+    # failed in chaining, running manually on hgwdev
+    time ./bigJobs.sh > bigJobs.log 2>&1
+    #  real    468m59.648s
+
+    time ./part014.sh > part014.log 2>&1
+
+    # real    1319m57.911s
+    # -rw-rw-r-- 1 3581498246 Feb  8 14:37 part014.lst.chain
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -continue=chainMerge -stop=net `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > chainMerge.log 2>&1
+XXX - running - Mon Feb 10 08:52:43 PST 2014
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -continue=load -stop=load `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > load.log 2>&1
+
+    cat fb.hg38.chainSelfLink.txt
+    #	1021265143 bases of 2897316137 (35.249%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg38/bed
+    ln -s lastzSelf.2014-01-25 lastz.self
 
 #########################################################################
