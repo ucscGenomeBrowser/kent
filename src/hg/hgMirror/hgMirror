@@ -1039,7 +1039,7 @@ def addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabel
                         defaultTracks.remove(child)
 
     # also remove all superTracks from this list, otherwise will pull in all of encode again
-    # somehow visibility/inheritance works this way, only Tim knows why
+    # somehow visibility/inheritance works this way
     defaultTracks = defaultTracks-set(superTracks)
     #print defaultTracks,"<br>"
 
