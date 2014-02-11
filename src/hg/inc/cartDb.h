@@ -28,6 +28,12 @@ boolean cartDbHasSessionKey(struct sqlConnection *conn, char *table);
 boolean cartDbUseSessionKey();
 /* Check settings and and state to determine if sessionKey is in use */
 
+void cartDbSecureId(char *buf, int bufSize, struct cartDb *cartDb);
+/* Return combined string of session id plus sessionKey in buf if turned on.*/
+
+unsigned int cartDbParseId(char *id, char **pSessionKey);
+/* Parse out and return just the numeric id from the id_sessionKey string. */
+
 void cartDbStaticLoad(char **row, struct cartDb *ret);
 /* Load a row from cartDb table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

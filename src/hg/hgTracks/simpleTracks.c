@@ -502,7 +502,7 @@ struct dyString *uiStateUrlPart(struct track *toggleGroup)
 {
 struct dyString *dy = newDyString(512);
 
-dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
+dyStringPrintf(dy, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 if (toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
     int vis = toggleGroup->visibility;

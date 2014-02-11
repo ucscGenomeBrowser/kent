@@ -29,8 +29,8 @@ struct cart
 /* A cart of settings that persist. */
    {
    struct cart *next;	/* Next in list. */
-   unsigned int userId;	/* User ID in database. */
-   unsigned int sessionId;	/* Session ID in database. */
+   char *userId;	/* User ID in database. */
+   char *sessionId;	/* Session ID in database. */
    struct hash *hash;	/* String valued hash. */
    struct hash *exclude;	/* Null valued hash of variables not to save. */
    struct cartDb *userInfo;	/* Info on user. */
@@ -50,7 +50,7 @@ boolean cartTablesOk(struct sqlConnection *conn);
 /* Return TRUE if cart tables are accessible (otherwise, the connection
  * doesn't do us any good). */
 
-struct cart *cartNew(unsigned int userId, unsigned int sessionId,
+struct cart *cartNew(char *userId, char *sessionId,
 	char **exclude, struct hash *oldVars);
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include. oldVars is an optional hash to put in values
@@ -62,7 +62,7 @@ struct cart *cartOfNothing();
 struct cart *cartFromHash(struct hash *hash);
 /* Create a cart from hash */
 
-struct cart *cartFromCgiOnly(unsigned int userId, unsigned int sessionId,
+struct cart *cartFromCgiOnly(char *userId, char *sessionId,
 	char **exclude, struct hash *oldVars);
 /* Create a new cart that contains only CGI variables, nothing from the
  * database, and no way to write back to database either. */
@@ -76,13 +76,13 @@ void cartEncodeState(struct cart *cart, struct dyString *dy);
 char *cartSessionVarName();
 /* Return name of CGI session ID variable. */
 
-unsigned int cartSessionId(struct cart *cart);
+char *cartSessionId(struct cart *cart);
 /* Return session id. */
 
 char *cartSidUrlString(struct cart *cart);
 /* Return session id string as in hgsid=N . */
 
-unsigned int cartUserId(struct cart *cart);
+char *cartUserId(struct cart *cart);
 /* Return session id. */
 
 void cartRemove(struct cart *cart, char *var);

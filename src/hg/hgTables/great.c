@@ -180,13 +180,11 @@ freeDyString(&requestURL);
 
 void doGetGreatOutput(void (*dispatch)())
 {
-char hgsid[64];
 struct tempName tn;
 int saveStdout;
 FILE *f;
 
-safef(hgsid, sizeof(hgsid), "%u", cartSessionId(cart));
-trashDirFile(&tn, "great", hgsid, ".bed");
+trashDirFile(&tn, "great", cartSessionId(cart), ".bed");
 f = fopen(tn.forCgi, "w");
 
 /* We want to capture hgTables stdout output to a trash file

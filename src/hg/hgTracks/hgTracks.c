@@ -399,9 +399,9 @@ char *trackUrl(char *mapName, char *chromName)
 char *encodedMapName = cgiEncode(mapName);
 char buf[2048];
 if(chromName == NULL)
-    safef(buf, sizeof(buf), "%s?%s=%u&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), encodedMapName);
 else
-    safef(buf, sizeof(buf), "%s?%s=%u&c=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&c=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
 freeMem(encodedMapName);
 return(cloneString(buf));
 }
@@ -5401,7 +5401,7 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     unsigned size = hChromSize(database, chromPtr->name);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromPtr->name, chromPtr->name);
     cgiTableFieldEnd();
@@ -5450,7 +5450,7 @@ for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     unsigned size = chromInfo->size;
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromInfo->chrom,chromInfo->chrom);
     cgiTableFieldEnd();
@@ -5540,7 +5540,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     unsigned size = sqlUnsigned(row[1]);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            row[0], row[0]);
     cgiTableFieldEnd();
@@ -5658,9 +5658,8 @@ void resetVars()
 {
 static char *except[] = {"db", "position", NULL};
 char *cookieName = hUserCookie();
-int sessionId = cgiUsualInt(cartSessionVarName(), 0);
-char *hguidString = findCookieData(cookieName);
-int userId = (hguidString == NULL ? 0 : atoi(hguidString));
+char *sessionId = cgiOptionalString(cartSessionVarName());
+char *userId = findCookieData(cookieName);
 struct cart *oldCart = cartNew(userId, sessionId, NULL, NULL);
 cartRemoveExcept(oldCart, except);
 cartCheckout(&oldCart);

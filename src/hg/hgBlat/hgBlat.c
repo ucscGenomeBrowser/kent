@@ -233,7 +233,7 @@ boolean pslOut = startsWith("psl", output);
 boolean isStraightNuc = (qType == gftRna || qType == gftDna);
 int  minThreshold = (isStraightNuc ? minMatchShown : 0);
 
-sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
+sprintf(uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 
 /* If user has hidden BLAT track, add a setting that will unhide the 
    track if user clicks on a browser link. */

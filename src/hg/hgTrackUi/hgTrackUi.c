@@ -2580,14 +2580,14 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
                                         trackDbSetting(tdb, "onlyVisibility"),
                                         "onchange='superT.selChanged(this);'");
         printf("</TD>\n<TD>");
-        printf("<A HREF='%s?%s=%u&c=%s&g=%s' onclick='return superT.submitAndLink(this);'>"
+        printf("<A HREF='%s?%s=%s&c=%s&g=%s' onclick='return superT.submitAndLink(this);'>"
                "%s</A>&nbsp;", (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
                cartSessionVarName(), cartSessionId(cart),
                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
         }
     else
         {
-        printf("<A HREF='%s?%s=%u&g=%s'>Downloads</A>",
+        printf("<A HREF='%s?%s=%s&g=%s'>Downloads</A>",
                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
         printf("</TD>\n<TD>");
         printf("%s&nbsp;",tdb->shortLabel);
@@ -2598,14 +2598,14 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     if (tdbIsDownloadsOnly(tdb))
         printf("%s&nbsp;",tdb->shortLabel);
     else
-        printf("<A HREF='%s?%s=%u&c=%s&g=%s'>%s</A>&nbsp;",
+        printf("<A HREF='%s?%s=%s&c=%s&g=%s'>%s</A>&nbsp;",
                (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
                cartSessionVarName(), cartSessionId(cart),
                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
     printf("</TD><TD>");
     if (tdbIsDownloadsOnly(tdb))
         {
-        printf("<A HREF='%s?%s=%u&g=%s'>Downloads</A>",
+        printf("<A HREF='%s?%s=%s&g=%s'>Downloads</A>",
                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
         }
     else
@@ -2950,7 +2950,7 @@ if (!ajax)
         {
         char *encodedMapName = cgiEncode(tdb->parent->track);
         printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
-               "(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'>"
+               "(<A HREF=\"%s?%s=%s&c=%s&g=%s\" title='Link to parent track'>"
                "<IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                chromosome, encodedMapName, tdb->parent->shortLabel);
@@ -2964,7 +2964,7 @@ if (!ajax)
             if (sameString(grp->name,tdb->grp))
                 {
                 printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
-                       "(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure"
+                       "(<A HREF=\"%s?%s=%s&c=%s&hgTracksConfigPage=configure"
                        "&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration "
                        "page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
                        hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome,
@@ -3054,7 +3054,7 @@ if (!tdbIsDownloadsOnly(tdb))
             if (ajax)
                 // reference to a separate form doesn't work in modal dialog,
                 // so change window.location directly.
-                safef(buf, sizeof(buf), "window.location='%s?hgsid=%d&%s=%s';return false;",
+                safef(buf, sizeof(buf), "window.location='%s?hgsid=%s&%s=%s';return false;",
                       hgCustomName(), cartSessionId(cart), CT_SELECTED_TABLE_VAR, tdb->track);
             else
                 safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");

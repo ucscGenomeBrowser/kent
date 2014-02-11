@@ -115,7 +115,7 @@ if (theCart)
     getDbAndGenome(theCart, &db, &theGenome, NULL);
     genomeEnc = cgiEncode(theGenome);
 
-    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u",
+    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%s",
 	     orgCgiName, genomeEnc,
 	     dbCgiName, db,
 	     cartSessionVarName(), cartSessionId(theCart));
@@ -1360,7 +1360,7 @@ regex_t re;
 regmatch_t match[2];
 char *scriptName = cgiScriptName();
 if (cart)
-    safef(uiVars, sizeof(uiVars), "%s=%u", cartSessionVarName(), cartSessionId(cart));
+    safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart));
 else
     uiVars[0] = 0;
 

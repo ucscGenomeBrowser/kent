@@ -1560,7 +1560,7 @@ void mapDiamondUi(struct hvGfx *hvg, int xl, int yl, int xt, int yt,
 if (theImgBox && curImgTrack)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?%s=%u&g=%s&i=%s", hgTrackUiName(),
+    safef(link,sizeof(link),"%s?%s=%s&g=%s&i=%s", hgTrackUiName(),
           cartSessionVarName(), cartSessionId(cart), trackName, name);
     char title[128];
     safef(title,sizeof(title),"%s controls", shortLabel);
@@ -1585,7 +1585,7 @@ else
             hvGfxAdjX(hvg, xr), yr,
             hvGfxAdjX(hvg, xb), yb);
     /* move this to hgTracks when finished */
-    hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(),
+    hPrintf("HREF=\"%s?%s=%s&c=%s&g=%s&i=%s\"", hgTrackUiName(),
             cartSessionVarName(), cartSessionId(cart), chromName, trackName, name);
     mapStatusMessage("%s controls", shortLabel);
     hPrintf(">\n");
@@ -1600,7 +1600,7 @@ char *track = tg->tdb->parent ? tg->tdb->parent->track : tg->tdb->track;
 if (theImgBox && curImgTrack)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?%s=%u&g=%s&i=%s",hgTrackUiName(),
+    safef(link,sizeof(link),"%s?%s=%s&g=%s&i=%s",hgTrackUiName(),
           cartSessionVarName(), cartSessionId(cart), track, track);
     char title[128];
     safef(title,sizeof(title),"%s controls", tg->track);
@@ -1616,7 +1616,7 @@ else
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ",
             xOff, yOff, xOff+insideWidth, yOff+tg->height);
-    hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(),
+    hPrintf("HREF=\"%s?%s=%s&c=%s&g=%s&i=%s\"", hgTrackUiName(),
             cartSessionVarName(), cartSessionId(cart), chromName, track, track);
     mapStatusMessage("%s controls", tg->track);
     hPrintf(">\n");

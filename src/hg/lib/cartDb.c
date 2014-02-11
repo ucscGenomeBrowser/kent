@@ -2,6 +2,20 @@
  * generated cartDb.h and cartDb.sql.  This module links the database and
  * the RAM representation of objects. */
 
+
+/*
+ * TODO
+ *
+ * autodetect 
+ *   or even better auto-upgrade of the userDb and sessionDb tables
+ *   alter table userDb add column sessionKey varchar(255) NOT NULL default '';
+ *   alter table sessionDb add column sessionKey varchar(255) NOT NULL default '';
+ *
+ * find and modify the .as and .sql corresponding to cartDb
+ *
+ *
+ */
+
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
@@ -68,6 +82,38 @@ if (!initialized)
 return useSessionKey;
 }
 
+void cartDbSecureId(char *buf, int bufSize, struct cartDb *cartDb)
+/* Return combined string of session id plus sessionKey in buf if turned on.*/
+{
+if (cartDbUseSessionKey() && !sameString(cartDb->sessionKey,""))
+    safef(buf, bufSize, "%d_%s", cartDb->id, cartDb->sessionKey);
+else
+    safef(buf, bufSize, "%d", cartDb->id);
+}
+
+unsigned int cartDbParseId(char *id, char **pSessionKey)
+/* Parse out the numeric id and id_sessionKey string if present. */
+{
+unsigned int result = 0;
+char *e = strchr(id, '_');
+if (e)
+    *e = 0;
+result = sqlUnsigned(id);
+if (e)
+    {
+    *e = '_';
+    if (pSessionKey)
+	*pSessionKey = e+1;
+    }
+else
+    {
+    if (pSessionKey)
+	*pSessionKey = NULL;
+    }
+return result;
+}
+
+
 void cartDbStaticLoad(char **row, struct cartDb *ret)
 /* Load a row from cartDb table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -131,7 +177,7 @@ char **row;
 
 sqlDyStringPrintf(query, "select * from %s", table);
 if (where != NULL)
-    dyStringPrintf(query, " where %s", where); // the where clause must be checked by caller for sqli
+    dyStringPrintf(query, " where %-s", where); // the where clause must be checked by caller for sqli
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
