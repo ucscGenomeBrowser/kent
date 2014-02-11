@@ -6601,12 +6601,21 @@ rm -fr $tmp
     para try ... check ... push ... etc ...
 
     para time
-# Completed: 3186 of 3186 jobs
-# CPU time in finished jobs:    1306874s   21781.23m   363.02h   15.13d  0.041 y
-# IO & Wait Time:                105488s    1758.14m    29.30h    1.22d  0.003 y
-# Average job time:                 443s       7.39m     0.12h    0.01d
-# Longest finished job:             678s      11.30m     0.19h    0.01d
-# Submission to last job:          7789s     129.82m     2.16h    0.09d
+    # second time around 2014-02-10:
+# Completed: 3010 of 3010 jobs
+# CPU time in finished jobs:    5635021s   93917.02m  1565.28h   65.22d  0.179 y
+# IO & Wait Time:                162236s    2703.93m    45.07h    1.88d  0.005 y
+# Average job time:                1926s      32.10m     0.53h    0.02d
+# Longest finished job:            2890s      48.17m     0.80h    0.03d
+# Submission to last job:         40469s     674.48m    11.24h    0.47d
+
+    # first time:
+# Completed: 3010 of 3010 jobs
+# CPU time in finished jobs:    5672403s   94540.06m  1575.67h   65.65d  0.180 y
+# IO & Wait Time:                 51879s     864.64m    14.41h    0.60d  0.002 y
+# Average job time:                1902s      31.70m     0.53h    0.02d
+# Longest finished job:            2889s      48.15m     0.80h    0.03d
+# Submission to last job:         58824s     980.40m    16.34h    0.68d
 
     ssh hgwdev
     cd /cluster/data/hg18/bed/multiz46way/consPhyloP/run.phyloP/all
@@ -27556,13 +27565,39 @@ done | sort -k1,1 -k2,2n > multiz100wayFrames.bed
 
     # verify it is only on the chroms:
     cut -f2 knownGene.gp | sort | uniq -c | sort -rn
-   7967 chr1
-   5092 chr2
-   4711 chr19
-   ... etc ...
-   1178 chr18
-    954 chr21
-    452 chrY
+    # 6323 chr1
+    # 3965 chr2
+    # 3872 chr19
+    # 3670 chr11
+    # 3538 chr17
+    # 3484 chr3
+    # 3144 chr12
+    # 3099 chr6
+    # 2878 chr7
+    # 2578 chr5
+    # 2541 chr16
+    # 2534 chr10
+    # 2434 chrX
+    # 2401 chr9
+    # 2247 chr4
+    # 2043 chr14
+    # 1967 chr8
+    # 1875 chr15
+    # 1609 chr20
+    # 1363 chr22
+    # 942 chr13
+    # 891 chr18
+    # 690 chr21
+    # 308 chrY
+
+    # first time:
+    # 7967 chr1
+    # 5092 chr2
+    # 4711 chr19
+    # ... etc ...
+    # 1178 chr18
+    # 954 chr21
+    # 452 chrY
 
     genePredSingleCover knownGene.gp stdout | sort > knownGeneNR.gp
     wc -l knownGeneNR.gp
@@ -27615,12 +27650,21 @@ rm -f $c.gp $c.maf $c.ss
     para try ... check
     para -maxJob=5 push
     para time
-# Completed: 66 of 66 jobs
-# CPU time in finished jobs:      13176s     219.60m     3.66h    0.15d  0.000 y
-# IO & Wait Time:                 31790s     529.84m     8.83h    0.37d  0.001 y
-# Average job time:                 681s      11.36m     0.19h    0.01d
-# Longest finished job:            2883s      48.05m     0.80h    0.03d
-# Submission to last job:          2925s      48.75m     0.81h    0.03d
+# second time:
+# Completed: 24 of 24 jobs
+# CPU time in finished jobs:      43524s     725.41m    12.09h    0.50d  0.001 y
+# IO & Wait Time:                  2537s      42.28m     0.70h    0.03d  0.000 y
+# Average job time:                1919s      31.99m     0.53h    0.02d
+# Longest finished job:            3948s      65.80m     1.10h    0.05d
+# Submission to last job:          4133s      68.88m     1.15h    0.05d
+
+# first time:
+# Completed: 24 of 24 jobs
+# CPU time in finished jobs:      38593s     643.22m    10.72h    0.45d  0.001 y
+# IO & Wait Time:                411016s    6850.26m   114.17h    4.76d  0.013 y
+# Average job time:               18734s     312.23m     5.20h    0.22d
+# Longest finished job:           44666s     744.43m    12.41h    0.52d
+# Submission to last job:         60542s    1009.03m    16.82h    0.70d
 
     # combine mfa files
     ssh hgwdev
@@ -27632,12 +27676,12 @@ rm -f $c.gp $c.maf $c.ss
     ls -og mfa | awk '$3 == 1' | awk '{print $NF}' > empty.list
     sed -e "s#^#mfa/##" empty.list | xargs rm -f
     #want comma-less species.list
-    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
 	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
 	    > 4d.all.mfa
     # check they are all in there:
     grep "^>" 4d.all.mfa | wc -l
-    #   60
+    #   100
 
     # use phyloFit to create tree model (output is phyloFit.mod)
     time nice -n +19 \
@@ -27645,6 +27689,8 @@ rm -f $c.gp $c.maf $c.ss
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree ../tree-commas.nh 4d.all.mfa
     #   real    223m18.088s
+    # second time 2014-02-09:
+    #	real    212m12.485s
     mv phyloFit.mod all.mod
 
     grep TREE all.mod
@@ -27732,6 +27778,13 @@ wait
     # user    2286m40.633s
     # sys     52m30.012s
 
+    # second time around chr1 thru chr8:
+    time ./lastJobs.sh > lastJobs.log 2>&1
+
+    # real    383m21.628s
+    # user    1447m51.415s
+    # sys     17m44.578s
+
     # Run phastCons
     #	This job is I/O intensive in its output files, beware where this
     #	takes place or do not run too many at once.
@@ -27817,6 +27870,13 @@ rm -fr $tmp
 # Average job time:                 407s       6.78m     0.11h    0.00d
 # Longest finished job:             873s      14.55m     0.24h    0.01d
 # Submission to last job:          4792s      79.87m     1.33h    0.06d
+    # second time 2014-02-09:
+# Completed: 377 of 377 jobs
+# CPU time in finished jobs:     123749s    2062.49m    34.37h    1.43d  0.004 y
+# IO & Wait Time:                 32295s     538.24m     8.97h    0.37d  0.001 y
+# Average job time:                 414s       6.90m     0.11h    0.00d
+# Longest finished job:             726s      12.10m     0.20h    0.01d
+# Submission to last job:          2332s      38.87m     0.65h    0.03d
 
     # create Most Conserved track
     cd /hive/data/genomes/hg19/bed/multiz100way/cons/all
@@ -27830,24 +27890,33 @@ do
 done > tmpMostConserved.bed
     # real    1m31.673s
 
+    # -rw-rw-r--  1 346958126 Feb  9 20:19 tmpMostConserved.bed
     # -rw-rw-r--  1 346487128 Sep 15 21:03 tmpMostConserved.bed
 
     time /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed \
         > mostConserved.bed
     # real    1m25.027s
 
-    # -rw-rw-r--  1  355270467 Sep 15 21:07 mostConserved.bed
+    # -rw-rw-r--  1 355755569 Feb  9 20:21 mostConserved.bed
+    # -rw-rw-r--  1 355270467 Sep 15 21:07 mostConserved.bed
 
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/hg19/bed/multiz100way/cons/all
     time nice -n +19 hgLoadBed hg19 phastConsElements100way mostConserved.bed
+    # second time 2014-02-09:
+    # Read 10121223 elements of size 5 from mostConserved.bed
+    # real    1m57.217s
+
     # Read 10107363 elements of size 5 from mostConserved.bed
     # real    1m56.508s
 
     # Try for 5% overall cov, and 70% CDS cov
     time featureBits hg19 -enrichment refGene:cds phastConsElements100way
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    # second time 2014-02-09:
+    #	refGene:cds 1.211%, phastConsElements100way 5.603%, both 0.849%,
+    #	  cover 70.12%, enrich 12.51x
     #   refGene:cds 1.208%, phastConsElements100way 5.601%, both 0.847%,
     #     cover 70.11%, enrich 12.52x
     #  real    1m18.381s
@@ -27881,9 +27950,15 @@ done
     #   Converted stdin, upper limit 1.00, lower limit 0.00
     #   real    13m12.190s
     du -hsc *.wi?
-    #   1.8G    phastCons100way.wib
-    #   298M    phastCons100way.wig
-    #   2.1G    total
+    # second time around 2014-02-09:
+    # 2.7G    phastCons100way.wib
+    # 273M    phastCons100way.wig
+    # 3.0G    total
+
+    # first time:
+    # 2.7G    ../../cons.0/all/phastCons100way.wib
+    # 412M    ../../cons.0/all/phastCons100way.wig
+    # 3.1G    total
 
     #	encode into a bigWig file:
     #	(warning wigToBigWig process may be too large for memory limits
@@ -27895,8 +27970,23 @@ ulimit -v $sizeG
     time (zcat downloads/*.wigFix.gz \
         | wigToBigWig stdin ../../../../chrom.sizes phastCons100way.bw)
     #   real    38m47.061s
+    #   -rw-rw-r--  1 5777277074 Feb  9 23:49 phastCons100way.bw
     #   -rw-rw-r--  1 5897970469 Sep 15 21:40 phastCons100way.bw
     bigWigInfo phastCons100way.bw
+    # second time around 2014-02-09
+version: 4
+isCompressed: yes
+isSwapped: 0
+primaryDataSize: 3,942,673,355
+primaryIndexSize: 90,344,600
+zoomLevels: 10
+chromCount: 92
+basesCovered: 2,857,876,073
+mean: 0.101765
+min: 0.000000
+max: 1.000000
+std: 0.237072
+
 version: 4
 isCompressed: yes
 isSwapped: 0
@@ -27929,6 +28019,11 @@ std: 0.237858
 
     time wigTableStats.sh hg19 phastCons100way
     # real    0m20.097s
+# second time around 2014-02-09
+# db.table      min max mean count sumData
+# hg19.phastCons100way    0 1 0.101765 2857876073 2.90832e+08
+# 0.237072 viewLimits=0:1
+
 # db.table      min max mean count sumData
 # hg19.phastCons100way 0 1 0.102504 2832683483 2.9036e+08
 #       stdDev viewLimits
@@ -27940,11 +28035,10 @@ std: 0.237858
     time nice -n +19 hgWiggle -doHistogram -db=hg19 \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phastCons100way > histogram.data 2>&1
-    #	real    3m8.941s
+    #	real    2m38.825s
 
     #	create plot of histogram:
 
-XXX - font problem - Sun Sep 15 22:00:24 PDT 2013
     cat << '_EOF_' | gnuplot > histo.png
 set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
 set size 1.4, 0.8
@@ -27963,11 +28057,14 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
 '_EOF_'
     #	<< happy emacs
+    # complains about font, but makes the png image:
+# Could not find/open font when opening font "arial", using internal non-scalable font
+
 
     display histo.png &
 
 #########################################################################
-# phyloP conservation for 60-way (DONE - 2012-06-15 - 2012-08-21 - Hiram)
+# phyloP conservation for 100-way (DONE - 2012-06-15 - 2012-08-21 - Hiram)
 #
 # all vertebrates
 #
@@ -27999,7 +28096,7 @@ endif
 date >> $2.running
 
 rm -fr $WINDOWS
-mkdir $WINDOWS
+mkdir -p $WINDOWS
 pushd $WINDOWS > /dev/null
 if ( $WC != $NL ) then
 /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
@@ -28014,6 +28111,7 @@ rm -f $2.running
     #	do the easy ones first to see some immediate results
     ls -1S -r ../../anno/result | sed -e "s/.maf//;" > maf.list
 
+    # this needs a {check out line+ $(root1.done)} test for verification:
     cat << '_EOF_' > template
 #LOOP
 ./doSplit.csh $(root1) $(root1).done
@@ -28029,6 +28127,10 @@ rm -f $2.running
     #   finish quickly.
     time ./runEm.sh
     # real 1140m47.332s = 19h 0m 47.332s
+    # second time around, combination of a ku batch and 8 jobs on hgwdev,
+    # last 8 jobs:
+    time ./lastBits.sh > lastBits.log 2>&1
+    # real    391m46.037s
 
     # run phyloP with score=LRT
     ssh ku
@@ -28133,6 +28235,20 @@ ulimit -v $sizeG
     #   real    61m35.698s
 
     bigWigInfo phyloP100way.bw
+    # second time 2014-02-11:
+version: 4
+isCompressed: yes
+isSwapped: 0
+primaryDataSize: 7,386,377,587
+primaryIndexSize: 90,385,252
+zoomLevels: 10
+chromCount: 92
+basesCovered: 2,857,876,073
+mean: 0.105362
+min: -20.000000
+max: 9.873000
+std: 1.026658
+
 version: 4
 isCompressed: yes
 isSwapped: 0
@@ -28161,6 +28277,15 @@ std: 1.026550
     #   real    1m14.834s
 
     wigTableStats.sh hg19 phyloP100wayAll
+    # second time 2014-02-11:
+# db.table      min max mean count sumData
+# hg19.phyloP100wayAll    -20 9.873 0.105362 2857876073 3.01112e+08
+#	stdDev viewLimits
+#      1.02666 viewLimits=-5.02793:5.23865
+    #	that range is: 20 + 9.873 = 29.873 for -hBinSize=0.29873 below
+    #   to get 1,000 bins
+
+    # first time:
 # db.table      min max mean count sumData
 # hg19.phyloP100wayAll -20 9.869 0.108207 2832683483 3.06515e+08
 #	stdDev viewLimits
@@ -28170,7 +28295,7 @@ std: 1.026550
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
-	-hBinSize=0.29869 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
+	-hBinSize=0.29873 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
 	    -db=hg19 phyloP100wayAll > histogram.data 2>&1
     #   real    4m24.071s
 
@@ -28248,7 +28373,7 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/hg19.100w
 #####################################################################
     cd /hive/data/genomes/hg19/bed/multiz100way/downloads/phastCons100way
     mkdir hg19.100way.phastCons
-    cd ../hg19.100way.phastCons
+    cd hg19.100way.phastCons
     ln -s ../../../cons/all/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt
     # real    2m9.045s
