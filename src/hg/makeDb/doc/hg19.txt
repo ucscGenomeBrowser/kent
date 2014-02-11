@@ -6601,12 +6601,21 @@ rm -fr $tmp
     para try ... check ... push ... etc ...
 
     para time
-# Completed: 3186 of 3186 jobs
-# CPU time in finished jobs:    1306874s   21781.23m   363.02h   15.13d  0.041 y
-# IO & Wait Time:                105488s    1758.14m    29.30h    1.22d  0.003 y
-# Average job time:                 443s       7.39m     0.12h    0.01d
-# Longest finished job:             678s      11.30m     0.19h    0.01d
-# Submission to last job:          7789s     129.82m     2.16h    0.09d
+    # second time around 2014-02-10:
+# Completed: 3010 of 3010 jobs
+# CPU time in finished jobs:    5635021s   93917.02m  1565.28h   65.22d  0.179 y
+# IO & Wait Time:                162236s    2703.93m    45.07h    1.88d  0.005 y
+# Average job time:                1926s      32.10m     0.53h    0.02d
+# Longest finished job:            2890s      48.17m     0.80h    0.03d
+# Submission to last job:         40469s     674.48m    11.24h    0.47d
+
+    # first time:
+# Completed: 3010 of 3010 jobs
+# CPU time in finished jobs:    5672403s   94540.06m  1575.67h   65.65d  0.180 y
+# IO & Wait Time:                 51879s     864.64m    14.41h    0.60d  0.002 y
+# Average job time:                1902s      31.70m     0.53h    0.02d
+# Longest finished job:            2889s      48.15m     0.80h    0.03d
+# Submission to last job:         58824s     980.40m    16.34h    0.68d
 
     ssh hgwdev
     cd /cluster/data/hg18/bed/multiz46way/consPhyloP/run.phyloP/all
@@ -28026,11 +28035,10 @@ std: 0.237858
     time nice -n +19 hgWiggle -doHistogram -db=hg19 \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phastCons100way > histogram.data 2>&1
-    #	real    3m8.941s
+    #	real    2m38.825s
 
     #	create plot of histogram:
 
-XXX - font problem - Sun Sep 15 22:00:24 PDT 2013
     cat << '_EOF_' | gnuplot > histo.png
 set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
 set size 1.4, 0.8
@@ -28049,6 +28057,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
 '_EOF_'
     #	<< happy emacs
+    # complains about font, but makes the png image:
+# Could not find/open font when opening font "arial", using internal non-scalable font
+
 
     display histo.png &
 
@@ -28224,6 +28235,20 @@ ulimit -v $sizeG
     #   real    61m35.698s
 
     bigWigInfo phyloP100way.bw
+    # second time 2014-02-11:
+version: 4
+isCompressed: yes
+isSwapped: 0
+primaryDataSize: 7,386,377,587
+primaryIndexSize: 90,385,252
+zoomLevels: 10
+chromCount: 92
+basesCovered: 2,857,876,073
+mean: 0.105362
+min: -20.000000
+max: 9.873000
+std: 1.026658
+
 version: 4
 isCompressed: yes
 isSwapped: 0
@@ -28252,6 +28277,15 @@ std: 1.026550
     #   real    1m14.834s
 
     wigTableStats.sh hg19 phyloP100wayAll
+    # second time 2014-02-11:
+# db.table      min max mean count sumData
+# hg19.phyloP100wayAll    -20 9.873 0.105362 2857876073 3.01112e+08
+#	stdDev viewLimits
+#      1.02666 viewLimits=-5.02793:5.23865
+    #	that range is: 20 + 9.873 = 29.873 for -hBinSize=0.29873 below
+    #   to get 1,000 bins
+
+    # first time:
 # db.table      min max mean count sumData
 # hg19.phyloP100wayAll -20 9.869 0.108207 2832683483 3.06515e+08
 #	stdDev viewLimits
@@ -28261,7 +28295,7 @@ std: 1.026550
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
-	-hBinSize=0.29869 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
+	-hBinSize=0.29873 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
 	    -db=hg19 phyloP100wayAll > histogram.data 2>&1
     #   real    4m24.071s
 
@@ -28339,7 +28373,7 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/hg19.100w
 #####################################################################
     cd /hive/data/genomes/hg19/bed/multiz100way/downloads/phastCons100way
     mkdir hg19.100way.phastCons
-    cd ../hg19.100way.phastCons
+    cd hg19.100way.phastCons
     ln -s ../../../cons/all/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt
     # real    2m9.045s
