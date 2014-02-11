@@ -224,18 +224,28 @@ if (!cdb)
     struct dyString *query = dyStringNew(256);
     sqlDyStringPrintf(query, "INSERT %s VALUES(0,'',0,now(),now(),0", table);
     char *sessionKey = "";
-    // TODO should I be inserting a new random sessionKey value right now?
     if (cartDbHasSessionKey(conn, table)) 
+	{
+	if (cartDbUseSessionKey())
+	    {
+	    sessionKey = cartDbMakeRandomKey(128+33); // at least 128 bits of protection, 33 for the world population size.
+	    }
 	sqlDyStringPrintf(query, ",'%s'", sessionKey);
+	}
     sqlDyStringPrintf(query, ")");
     sqlUpdate(conn, query->string);
     dyStringFree(&query);
     unsigned int id = sqlLastAutoId(conn);
     char newSecureId[256];
-    safef(newSecureId, sizeof newSecureId, "%u_%s", id, sessionKey);
+    if (cartDbUseSessionKey() && !sameString(sessionKey,""))
+	safef(newSecureId, sizeof newSecureId, "%u_%s", id, sessionKey);
+    else
+	safef(newSecureId, sizeof newSecureId, "%u", id);
     if ((cdb = cartDbLoadFromId(conn,table,newSecureId)) == NULL)
         errAbort("Couldn't get cartDb for id=%u right after loading.  "
 		 "MySQL problem??", id);
+    if (!sameString(sessionKey,""))
+	freeMem(sessionKey);
     }
 *found = result;
 return cdb;
@@ -574,6 +584,7 @@ cdb->contents = cloneString("");
 cdb->firstUse = now();
 cdb->lastUse = now();
 cdb->useCount = 1;
+// TODO does anything need to go here for sessionKey? maybe not since id is not set here.
 return cdb;
 }
 
@@ -1223,9 +1234,7 @@ void cartSaveSession(struct cart *cart)
  * somewhere inside of form or bad things will happen when user
  * has multiple windows open. */
 {
-char buf[64];
-safef(buf, sizeof(buf), "%u", cart->sessionInfo->id);
-cgiMakeHiddenVar(sessionVar, buf);
+cgiMakeHiddenVar(sessionVar, cartSessionId(cart));
 }
 
 static void cartDumpItem(struct hashEl *hel,boolean asTable)
