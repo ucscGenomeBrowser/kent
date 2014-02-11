@@ -17,6 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 #include "chromInfo.h"
+#include "net.h"
 
 
 /* CGI Variables */
