@@ -60,6 +60,12 @@ group regulation
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
+track snp138Common override
+snpSeqFile /gbdb/mm10/snp/snp138.fa
+
+track snp138Mult override
+snpSeqFile /gbdb/mm10/snp/snp138.fa
+
 track snp137Common override
 visibility dense
 snpSeqFile /gbdb/mm10/snp/snp137.fa
