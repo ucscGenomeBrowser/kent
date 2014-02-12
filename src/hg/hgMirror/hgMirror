@@ -73,7 +73,8 @@ FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5"]
 # always copy these (small) tables for the current db, if they exist
 FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
     'knownGene', 'kgXref', 'ensemblLift', 'ucscToEnsembl','wgEncodeRegTfbsCells', \
-    'tableList', "refSeqStatus", "wgEncodeRegTfbsCellsV3", "extFile", "trackDb"]
+    'tableList', 'refSeqStatus', 'wgEncodeRegTfbsCellsV3', 'extFile', 'trackDb', 'grp',
+    'ucscRetroInfo5', "refLink", "ucscRetroSeq5"]
 
 # always copy these hgFixed tables
 FORCEFIXED = ['trackVersion', 'tableList']
@@ -125,7 +126,7 @@ def runningAtUcsc():
     
 def runCmd(cmd, mustRun=True):
     " wrapper around os.system that makes sure sudo is not called "
-    if runingAtUcsc() and cmd.startswith("sudo"):
+    if runningAtUcsc() and cmd.startswith("sudo"):
         return 0
 
     ret = os.system(cmd)
@@ -247,15 +248,13 @@ def getTrackVis(settings):
     # the order is important: tracks can have both superTrack <parent> <vis>
     # AND visibility <vis>. superTrack has prority, see wgEncodeRegMarkH3k27ac
 
-    # confusingly visibiltiy can be expressed with 
+    # visibility can be expressed with 
     # superTrack <parent> dense
-    # (Argh! Tim?)
     # or
     # visibility dense
     # 
     # superTrack on 
     # implies visibility hide
-    # (wtf?)
     isSuperTrack = False
     if "subTrack" in settings:
         opts = settings["subTrack"].split()
@@ -457,8 +456,10 @@ def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableTo
                     continue
                 gbdbListFh.write(gbdbFname+"\n")
 
-    # add the db twobit file
+    # add the db twobit file and the trackDb index
     gbdbListFh.write("%s.2bit\n" % db)
+    gbdbListFh.write("trackDb.ix\n")
+    gbdbListFh.write("trackDb.ixx\n")
 
     # add some special tables that are always good to have
     for table in forceTables:
@@ -482,6 +483,7 @@ def printTrackInfo(trackName, trackTables, trackLabels, localSizes, trackChildre
             trackToGbdbFiles, gbdbSizes, showSubtracks, indent):
     " print info about one track as html "
     trackTableNames, remoteTableSize = getTableInfo(trackName, trackTables, trackChildren, tableSizes)
+
     gbdbSize, gbdbFnames = getGbdbSize(trackName, trackTableNames, trackToGbdbFiles, gbdbSizes)
     #print gbdbFnames,"<br>"
 
@@ -546,6 +548,10 @@ def getGbdbSize(trackName, trackTableNames, trackToGbdbFiles, gbdbSizes):
     " sum up sizes of all files for all tables "
     # first get the list of fnames
     gbdbFnames = set()
+    # some entries like "liftOver" have no mysql table
+    if len(trackTableNames)==0:
+        trackTableNames = [trackName]
+
     for table in trackTableNames:
         for gbdbFname in trackToGbdbFiles[table]:
             if trackName=="defaultConsTables":
@@ -817,7 +823,7 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
     cmd = "sudo -u mysql " + buildRsyncCmd("mysql/hgFixed", localFixedDir, fixedFname, logFname)
     cmdFh.write(cmd)
 
-    cmd = buildRsyncCmd("gbdb/"+db, getGbdbDir()+"/", gbdbListFname, logFname)
+    cmd = buildRsyncCmd("gbdb/"+db, getGbdbDir()+"/"+db, gbdbListFname, logFname)
     cmdFh.write(cmd)
 
     cmdFh.close()
@@ -1011,7 +1017,7 @@ def htmlStats(localSizes, gbdbSizes, tableSizes):
     print("Total size of tables and gbdb on local disk: %(locTotal)s<p>" % locals())
 
 def addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, \
-        trackChildren, tableToGbdbFiles):
+        trackChildren, tableToGbdbFiles, trackTables, tableSizes):
     """ add special predefined track groups in place, modifies the last five parameters 
         the three groups are: all default track + all default without multiz + all non-encode plus default
         These groups are special "tracks" that don't exist, their children are the real tracks
@@ -1033,7 +1039,7 @@ def addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabel
                         defaultTracks.remove(child)
 
     # also remove all superTracks from this list, otherwise will pull in all of encode again
-    # somehow visibility/inheritance works this way, only Tim knows why
+    # somehow visibility/inheritance works this way
     defaultTracks = defaultTracks-set(superTracks)
     #print defaultTracks,"<br>"
 
@@ -1050,22 +1056,32 @@ def addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabel
         if track in defaultTracks or not track.startswith("wgEncode"):
             nonEncode.append(track)
 
+    nonEncAllTables = [t for t in tableSizes.keys() if not t.startswith("wgEncode")]
+
     # we need lists, not sets
     defaultTracks = list(defaultTracks)
 
     groupList.insert(0, ("special", "Predefined tracks sets"))
-    groupToTopTracks["special"] = ["defaultNoCons", "defaultConsTables", "default", "nonEncode"]
+    groupToTopTracks["special"] = ["defaultNoCons", "defaultConsTables", \
+        "default", "nonEncode", "liftOver", "nonEncAllTables"]
 
     trackLabels["defaultNoCons"] = "Default tracks without conservation"
     trackLabels["defaultConsTables"] = "Default tracks with conservation tables, but no alignments"
     trackLabels["default"] = "Default tracks"
     trackLabels["nonEncode"] = "Default tracks plus all non-Encode tracks"
+    trackLabels["liftOver"] = "Liftover files"
+    trackLabels["nonEncAllTables"] = "All non-Encode database tables and tracks"
 
     trackChildren["defaultNoCons"] = defaultNoCons
-    # this is a special case, handled later by makeTableFileList
     trackChildren["defaultConsTables"] = defaultTracks
     trackChildren["default"] = defaultTracks
     trackChildren["nonEncode"] = nonEncode
+
+    trackChildren["nonEncAllTables"] = nonEncAllTables
+
+    # hack: add the table names for non-track tables 
+    for tn in nonEncAllTables:
+        trackTables[tn] = tn
 
 def htmlMiddle(args):
     " print html middle part "
@@ -1097,7 +1113,8 @@ def htmlMiddle(args):
 
         jobId = int(random.random()*1000000)
 
-        addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, trackChildren, tableToGbdbFiles)
+        addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, trackChildren, \
+            tableToGbdbFiles, trackTables, tableSizes)
 
         listFname, gbdbFname, fixedFname = makeTableFileList(jobId, db, trackList, trackTables, trackChildren, \
                                         tableToGbdbFiles, tableSizes, forceTables, noTableTracks)
@@ -1119,7 +1136,8 @@ def htmlMiddle(args):
 
         localSizes = getLocalSizes(db)
 
-        addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, trackChildren, tableToGbdbFiles)
+        addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, trackChildren, \
+            tableToGbdbFiles, trackTables, tableSizes)
 
         htmlTrackTable(trackLabels, trackTables, trackParents, trackChildren, groupList, groupToTopTracks, \
             tableSizes, localSizes, gbdbSizes, tableToGbdbFiles, showSubtracks)

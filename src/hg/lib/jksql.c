@@ -908,6 +908,7 @@ if (((conn->db != NULL) && !sameString(database, conn->db))
    || ((conn->db == NULL) && (database != NULL)))
    errAbort("apparent mismatch between mysql.h used to compile jksql.c and libmysqlclient");
 
+freeMem(sc->db);
 sc->db=cloneString(database);
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_CONNECT", "%s %s", host, user);

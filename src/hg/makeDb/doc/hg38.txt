@@ -2770,9 +2770,271 @@ XXX - running - Mon Feb 10 08:52:43 PST 2014
         -chainMinScore=3000 -chainLinearGap=medium > load.log 2>&1
 
     cat fb.hg38.chainSelfLink.txt
-    #	1021265143 bases of 2897316137 (35.249%) in intersection
-    # set sym link to indicate this is the lastz for this genome:
+    #   392419010 bases of 3049335806 (12.869%) in intersection
     cd /hive/data/genomes/hg38/bed
     ln -s lastzSelf.2014-01-25 lastz.self
+    ln -s lastzSelf.2014-01-25 lastz.hg38
 
 #########################################################################
+## 4-Way Multiz for UCSC Genes construction (DONE - 2014-02-11 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg38/bed/multiz4way
+    cd /hive/data/genomes/hg38/bed/multiz4way
+
+    #	extract our 4 organisms from the 44-way on hg18:
+    ln -s /hive/data/genomes/hg18/bed/multiz44way/44way.4d.nh ./44way.nh
+
+    /cluster/bin/phast/tree_doctor \
+	--prune-all-but hg19,mm10,canFam3,rheMac3 $HOME/kent/src/hg/utils/phyloTrees/120way.nh \
+	| sed -e "s/hg19/hg38/" > 4way.nh
+
+    #	this looks like:
+    cat 4way.nh
+(((hg38:0.033974,rheMac3:0.037601):0.109934,mm10:0.356483):0.020593,canFam3:0.165928);
+
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/hg38_4way.gif
+
+    /cluster/bin/phast/all_dists 4way.nh > 4way.distances.txt
+    #	Use this output to create the table below
+    grep -y hg38 4way.distances.txt | sort -k3,3n
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                        chainHg38Link   chain    linearGap
+#    distance                      on hg38    on other   minScore
+#  1  0.071575 - rhesus rheMac3 (% 79.729) (% 86.715)       5000     medium
+#  2  0.330429 - dog canFam3    (% 49.978) (% 60.083)       3000     medium
+#  3  0.500391 - mouse mm10     (% 31.629) (% 35.323)       3000     medium
+
+    #	using the syntenic nets
+    cd /cluster/data/hg38/bed/multiz4way
+    mkdir mafLinks
+    cd mafLinks
+    mkdir rheMac3 canFam3 mm10
+
+    for D in mm10 canFam3 rheMac3
+do
+    ln -s ../../../lastz.${D}/axtChain/hg38.${D}.synNet.maf.gz ./${D}/
+done
+
+    mkdir /hive/data/genomes/hg38/bed/multiz4way/mafSplit
+    cd /hive/data/genomes/hg38/bed/multiz4way/mafSplit
+    for D in mm10 canFam3 rheMac3
+do
+    echo "working: ${D}"
+    zcat ../mafLinks/${D}/hg38.${D}.synNet.maf.gz > ${D}.maf
+    mkdir -p ${D}
+    mafSplit -byTarget -useFullSequenceName /dev/null ${D}/${D}_  ${D}.maf
+    rm -f ${D}.maf
+done
+
+    #	determine what is the newest version of multiz and use that
+    cd /hive/data/genomes/hg38/bed/multiz4way
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    # the autoMultiz cluster run
+    ssh ku
+    cd /hive/data/genomes/hg38/bed/multiz4way
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	4way.nh > tmp.nh
+    echo `cat tmp.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir run maf
+    cd run
+
+    #	NOTE: you need to set the db and multiz dirname properly in this script
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = hg38
+set c = $1
+set maf = $2
+set binDir = /hive/data/genomes/hg38/bed/multiz4way/penn
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/hg38/bed/multiz4way/mafSplit
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/${s}_$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+./autoMultiz $(root1) {check out line+ /hive/data/genomes/hg38/bed/multiz4way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cut -f1 /cluster/data/hg38/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    # 455 jobs
+    para try ... check ... push ... etc ...
+# Completed: 455 of 455 jobs
+# CPU time in finished jobs:      50111s     835.18m    13.92h    0.58d  0.002 y
+# IO & Wait Time:                  5574s      92.91m     1.55h    0.06d  0.000 y
+# Average job time:                 122s       2.04m     0.03h    0.00d
+# Longest finished job:            4717s      78.62m     1.31h    0.05d
+# Submission to last job:          4722s      78.70m     1.31h    0.05d
+
+    #	combine results into a single file for loading and gbdb reference
+    cd /hive/data/genomes/hg38/bed/multiz4way
+    grep "^#" maf/chr19_GL949749v2_alt.maf | grep -v "eof maf" > multiz4way.maf
+    grep -h -v "^#" maf/*.maf >> multiz4way.maf
+    grep "^#" maf/chr19_GL949749v2_alt.maf | grep "eof maf" >> multiz4way.maf
+    #	real    3m27.561s
+
+    #	makes a 8.5 Gb file:
+    #   -rw-rw-r-- 1 9044143788 Feb 11 12:51 multiz4way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/multiz4way
+    mkdir /gbdb/hg38/multiz4way
+    ln -s /hive/data/genomes/hg38/bed/multiz4way/multiz4way.maf \
+	/gbdb/hg38/multiz4way
+    #	the hgLoadMaf generates huge tmp files, locate them in /dev/shm
+    cd /dev/shm
+    time nice -n +19 hgLoadMaf hg38 multiz4way
+    #   Loaded 6141667 mafs in 1 files from /gbdb/hg38/multiz4way
+    #   real    2m2.812s
+
+    cd /hive/data/genomes/hg38/bed/multiz4way
+    time (cat /gbdb/hg38/multiz4way/*.maf \
+        | hgLoadMafSummary -verbose=2 -minSize=10000 \
+	-mergeGap=500 -maxSize=50000 hg38 multiz4waySummary stdin)
+    # Created 1266559 summary blocks from 11780291 components and 6141667 mafs
+    # real    3m0.791s
+# -rw-rw-r-- 1  311246327 Feb 11 12:54 multiz4way.tab
+# -rw-rw-r-- 1   58730176 Feb 11 12:58 multiz4waySummary.tab
+    wc -l multiz4way*
+    # 6141667 multiz4way.tab
+    # 1266559 multiz4waySummary.tab
+    # 7408226 total
+
+#########################################################################
+## alternate sequence alignments EXPERIMENT (DONE - 2014-01-17 - Hiram)
+    # the lastzAltSequences.2014-01-23 alignment was used for this instead
+    # of this procedure
+    mkdir /hive/data/genomes/hg38/bed/altAlignments
+    cd /hive/data/genomes/hg38/bed/altAlignments
+
+    grep -v "^#" ../../genbank/GCA_000001405.15_GRCh38_top-level.acc2name \
+	| awk '{printf "s/%s/%s/g;\n", $1, $3}' > accessionToUcsc.sed.txt
+
+    find ../../genbank -type f | grep alt_scaffolds | grep "\.gff$" \
+	| while read F
+do
+   cat $F | sed -f accessionToUcsc.sed.txt \
+	| gff3ToPsl ../../chrom.sizes stdin stdout
+done > altAlignments.psl
+	| xargs cat | sed -f accessionToUcsc.sed.txt \
+	| gff3ToPsl ../../chrom.sizes stdin altAlignments.psl
+  
+    time pslRecalcMatch altAlignments.psl ../../hg38.2bit ../../hg38.2bit \
+        altRecalcMatch.psl
+    # real    0m51.122s
+
+    # just to see what they look like in different formats:
+    pslToChain altRecalcMatch.psl altAlignments.chain
+    chainToAxt altAlignments.chain ../../hg38.2bit ../../hg38.2bit \
+	altAlignments.axt
+    axtToMaf -score altAlignments.axt ../../chrom.sizes ../../chrom.sizes \
+        altAlignments.maf
+
+    mkdir mafSplits
+    mafSplit /dev/null mafSplits/ altAlignments.maf
+    # doesn't work:
+# Can't find chrom in MAF component src: chr6_GL000250v2_alt
+
+    mkdir splits psl
+    find ../../genbank -type f | grep alt_scaffolds | grep "\.gff$" \
+        | while read F
+do
+   chrAlt=`basename $F | sed -e 's/_.*//' | sed -f accessionToUcsc.sed.txt`
+   echo $chrAlt
+   cat $F | sed -f accessionToUcsc.sed.txt \
+        | gff3ToPsl ../../chrom.sizes stdin splits/${chrAlt}.psl
+   pslRecalcMatch splits/${chrAlt}.psl ../../hg38.2bit ../../hg38.2bit \
+	psl/${chrAlt}.psl
+done
+
+   mkdir swap
+   mkdir swap/psl swap/chain swap/axt swap/maf swap/anno
+   for F in psl/*.psl
+do
+  B=`basename $F | sed -e 's/.psl//'`
+  echo $B
+  pslSwap $F stdout | pslRecalcMatch stdin ../../hg38.2bit ../../hg38.2bit \
+      swap/psl/${B}.psl
+  pslToChain swap/psl/${B}.psl swap/chain/${B}.chain
+  chainToAxt swap/chain/${B}.chain ../../hg38.2bit ../../hg38.2bit \
+	swap/axt/${B}.axt
+  axtToMaf -score swap/axt/${B}.axt ../../chrom.sizes ../../chrom.sizes stdout \
+      | sed -e 's/^s chr\([0-9XYM][0-9]* \)/s ref38.chr\1/; s/^s chr\([0-9XYM][0-9]*_\)/s alt38.chr\1/;' > swap/maf/${B}.maf
+  mafAddIRows -nBeds=nBeds swap/maf/${B}.maf ../../hg38.2bit swap/anno/${B}.maf
+done
+# axtToMaf -score swap/axt/${B}.axt ../../chrom.sizes ../../chrom.sizes stdout \
+#      | sed -e 's/^s chr/s hg38.chr/' > swap/maf/${B}.maf
+
+   twoBitInfo -nBed ../../hg38.2bit ../../hg38.N.bed
+   ln -s  ../../hg38.N.bed hg38.bed
+   ln -s ../../hg38.N.bed ref38.bed
+   ln -s ../../hg38.N.bed alt38.bed
+   echo hg38.bed > nBeds
+   echo ref38.bed >> nBeds
+   echo alt38.bed >> nBeds
+   ln -s  ../../chrom.sizes hg38.len
+   ln -s  ../../chrom.sizes ref38.len
+   ln -s  ../../chrom.sizes alt38.len
+   echo hg38.len > sizes
+   echo ref38.len >> sizes
+   echo alt38.len >> sizes
+
+   mkdir chain axt maf anno
+   for F in psl/*.psl
+do
+   B=`basename $F | sed -e 's/.psl//'`
+   echo $B
+   pslToChain $F chain/${B}.chain
+   chainToAxt chain/${B}.chain ../../hg38.2bit ../../hg38.2bit axt/${B}.axt
+  axtToMaf -score axt/${B}.axt ../../chrom.sizes ../../chrom.sizes stdout \
+      | sed -e 's/^s chr\([0-9XYM][0-9]* \)/s ref38.chr\1/; s/^s chr\([0-9XYM][0-9]*_\)/s alt38.chr\1/;' > maf/${B}.maf
+   mafAddIRows -nBeds=nBeds maf/${B}.maf ../../hg38.2bit anno/${B}.maf
+done
+
+#   axtToMaf -score axt/${B}.axt ../../chrom.sizes ../../chrom.sizes stdout \
+#      | sed -e 's/^s chr/s hg38.chr/' > maf/${B}.maf
+
+############################################################################
