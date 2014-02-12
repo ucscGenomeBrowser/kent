@@ -1,0 +1,18 @@
+track refGene override
+visibility pack
+priority 0
+
+track xenoRefGene override
+priority 0
+
+track mrna override
+priority 0
+
+track intronEst override
+priority 0
+
+track est override
+priority 0
+
+track xenoMrna override
+priority 0

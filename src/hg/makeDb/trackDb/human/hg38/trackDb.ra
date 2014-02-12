@@ -1,3 +1,8 @@
+include genbankOverrides.ra
+
+track grcIncidentDb override
+priority 0
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
@@ -13,13 +18,6 @@ track cytoBandIdeo override
 priority 0
 
 track genscan override
-priority 0
-
-track refGene override
-visibility pack
-priority 0
-
-track xenoRefGene override
 priority 0
 
 track rmsk override
