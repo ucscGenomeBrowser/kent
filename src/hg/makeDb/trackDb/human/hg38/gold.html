@@ -5,10 +5,10 @@ This track shows the sequences used in the Dec. 2013 $organism genome assembly.
 <P>
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation.</A><BR>
+TARGET=_blank>assembly documentation</A>.<BR>
 NCBI also provides
 <A HREF="http://www.ncbi.nlm.nih.gov/assembly/883148"
-TARGET="_blank">specific information about this assembly.</A>
+TARGET="_blank">specific information about this assembly</A>.
 </P>
 <P>
 The definition of this assembly is from the
@@ -36,3 +36,223 @@ Component types found in this track (with counts of that type in parenthesis):
 <LI>D - draft sequence (8)</LI>
 <LI>A - active finishing (8)</LI>
 </UL></P>
+
+<p>
+In addition to the standard nucleotide codes, the raw sequence files from NCBI also include
+IUPAC ambiguity codes for bases that could not be positively identified as A, C, G or T (see
+Wikipedia's <a href="http://en.wikipedia.org/wiki/Nucleic_acid_notation#IUPAC_notation"
+target="_blank">IUPAC notation</a> article for more information). As part of the UCSC
+assembly creation process, all IUPAC ambiguity characters are converted to Ns.  The FASTA files
+available for download from UCSC reflect this. The raw data files containing the original IUPAC
+characters can be downloaded from the NCBI
+<a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38"
+target="_blank">FTP site</a>.
+</p>
+
+<p>
+The following table lists the counts by chromosome of the various IUPAC ambiguity characters
+in the original NCBI data files:
+</p>
+
+<p>
+<table border=1 cellpadding=3>
+  <tr>
+    <td></td><td></td><td colspan=15 align="center"><b>chromosome</b></td><td></td><td></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td width=15></td>
+    <td width=30 align="center">1</td>
+    <td width=30 align="center">2</td>
+    <td width=30 align="center">3</td>
+    <td width=30 align="center">6</td>
+    <td width=30 align="center">7</td>
+    <td width=30 align="center">9</td>
+    <td width=30 align="center">10</td>
+    <td width=30 align="center">12</td>
+    <td width=30 align="center">13</td>
+    <td width=30 align="center">16</td>
+    <td width=30 align="center">17</td>
+    <td width=30 align="center">21</td>
+    <td width=30 align="center">22</td>
+    <td width=30 align="center">X</td>
+    <td width=30 align="center">Y</td>
+    <td width=15></td>
+    <td><b>Total</b></td>
+  </tr>
+  <tr>
+    <td><b>code</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+  </tr>
+  <tr>
+    <td align="center">B</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">1</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">1</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">2</td>
+  </tr>
+  <tr>
+    <td align="center">K</td>
+    <td></td>
+    <td></td>
+    <td align="center">1</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">4</td>
+    <td></td>
+    <td align="center">1</td>
+    <td></td>
+    <td align="center">2</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">8</td>
+  </tr>
+  <tr>
+    <td align="center">M</td>
+    <td></td>
+    <td align="center">1</td>
+    <td align="center">1</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">3</td>
+    <td align="center">1</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">2</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">8</td>
+  </tr>
+  <tr>
+    <td align="center">R</td>
+    <td></td>
+    <td align="center">1</td>
+    <td align="center">1</td>
+    <td align="center">1</td>
+    <td></td>
+    <td align="center">1</td>
+    <td align="center">1</td>
+    <td align="center">13</td>
+    <td></td>
+    <td></td>
+    <td align="center">1</td>
+    <td align="center">3</td>
+    <td align="center">1</td>
+    <td align="center">2</td>
+    <td align="center">1</td>
+    <td align="center">1</td>
+    <td></td>
+    <td align="center">27</td>
+  </tr>
+  <tr>
+    <td align="center">S</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">1</td>
+    <td></td>
+    <td align="center">1</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">1</td>
+    <td></td>
+    <td></td>
+    <td align="center">1</td>
+    <td align="center">1</td>
+    <td></td>
+    <td align="center">5</td>
+  </tr>
+  <tr>
+    <td align="center">W</td>
+    <td></td>
+    <td></td>
+    <td align="center">2</td>
+    <td align="center">2</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">6</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td align="center">1</td>
+    <td></td>
+    <td align="center">1</td>
+    <td align="center">1</td>
+    <td align="center">1</td>
+    <td></td>
+    <td align="center">14</td>
+  </tr>
+  <tr>
+    <td align="center">Y</td>
+    <td></td>
+    <td></td>
+    <td align="center">4</td>
+    <td align="center">3</td>
+    <td align="center">1</td>
+    <td align="center">2</td>
+    <td align="center">2</td>
+    <td align="center">8</td>
+    <td align="center">2</td>
+    <td align="center">2</td>
+    <td></td>
+    <td align="center">5</td>
+    <td></td>
+    <td align="center">2</td>
+    <td align="center">2</td>
+    <td align="center">2</td>
+    <td></td>
+    <td align="center">35</td>
+  </tr>
+  <tr height=15>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Total</b></td>
+    <td></td>
+    <td align="center">2</td>
+    <td align="center">9</td>
+    <td align="center">7</td>
+    <td align="center">1</td>
+    <td align="center">4</td>
+    <td align="center">3</td>
+    <td align="center">36</td>
+    <td align="center">3</td>
+    <td align="center">3</td>
+    <td align="center">1</td>
+    <td align="center">12</td>
+    <td align="center">3</td>
+    <td align="center">5</td>
+    <td align="center">5</td>
+    <td align="center">5</td>
+    <td></td>
+    <td align="center">99</td>
+  </tr>
+</table>
+</p>

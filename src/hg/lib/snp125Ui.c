@@ -148,7 +148,7 @@ char *snp125ClassDataName[] = {
     "unknown",
     "single",
     "in-del",
-    "heterozygous",
+    "het",
     "microsatellite",
     "named",
     "no variation",
@@ -235,7 +235,8 @@ static char *snp125ValidOldIncludeVars[] = {
     "snp125Valid1000GenomesInclude",
 };
 
-int snp125ValidArraySize   = ArraySize(snp125ValidLabels);
+int snp125ValidArraySizeHuman   = ArraySize(snp125ValidLabels);
+int snp125ValidArraySizeNonHuman  = ArraySize(snp125ValidLabels) - 2; // No HapMap, 1000Genomes
 
 /****** function related controls *******/
 /* Values are a subset of snpNNN.func values:
@@ -632,7 +633,7 @@ else
 	{
 	oldVarNames = snp125ValidOldIncludeVars;
 	oldDataName = snp125ValidDataName;
-	oldArraySize = snp125ValidArraySize;
+	oldArraySize = snp125ValidArraySizeHuman;
 	}
     else if (sameString(attribute, "func"))
 	{
