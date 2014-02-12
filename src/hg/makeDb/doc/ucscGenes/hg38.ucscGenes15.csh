@@ -1,7 +1,7 @@
 #!/bin/tcsh -efx
 # :vim nowrap
 # for emacs: -*- mode: sh; -*-
-# This describes how to make the UCSC genes on hg19, though
+# This describes how to make the UCSC genes on hg38, though
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
@@ -11,26 +11,22 @@
 # Prerequisites
 # Before executing this script, rebuild the swissprot ,proteins, and go databases.
 
-
-# SHOULD REBUILD GO DATABASE BEFORE DOING THIS!!!
-
-
 # Directories
 set genomes = /hive/data/genomes
-set dir = $genomes/hg19/bed/ucsc.14.3
+set dir = $genomes/hg38/bed/ucsc.15.1
 set scratchDir = /hive/scratch
 set testingDir = $scratchDir/ucscGenes
 
 # Databases
-set db = hg19
-set Db = hg19
+set db = hg38
+set Db = Hg38
 set oldDb = hg19
 set xdb = mm10
 set Xdb = Mm10
 set ydb = canFam3
-set zdb = rheMac2
-set spDb = sp121210
-set pbDb = proteins121210
+set zdb = rheMac3
+set spDb = sp140122
+set pbDb = proteins140122
 set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer7
@@ -54,21 +50,22 @@ endif
 
 # If rebuilding on an existing assembly make tempDb some bogus name like tmpFoo2, otherwise 
 # make tempDb same as db.
-set tempPrefix = "tmp"
-set tmpSuffix = "Foo14"
-set tempDb = ${tempPrefix}${tmpSuffix}
-set bioCycTempDb = tmpBioCyc${tmpSuffix}
+#set tempPrefix = "tmp"
+#set tmpSuffix = "Foo14"
+#set tempDb = ${tempPrefix}${tmpSuffix}
+set tempDb = hg38
+#set bioCycTempDb = tmpBioCyc${tmpSuffix}
 
 # Table for SNPs
-set snpTable = snp137
+#set snpTable = snp137
 
 # Public version number
-set lastVer = 6
-set curVer = 7
+set lastVer = 7
+set curVer = 8
 
 # Database to rebuild visiGene text from.  Should include recent mouse and human
 # but not the one you're rebuilding if you're rebuilding. (Use tempDb instead).
-set vgTextDbs = (mm8 mm9 hg18 hg19 $tempDb)
+set vgTextDbs = (mm10 hg19 $tempDb)
 
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
@@ -80,24 +77,37 @@ set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
 set yeastFa = $genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
 
 # Other files needed
-set bioCycPathways = /hive/data/outside/bioCyc/120801/1.7/data/pathways.col
-set bioCycGenes = /hive/data/outside/bioCyc/120801/1.7/data/genes.col
-set rfam = /hive/data/outside/Rfam/111130
+#set bioCycPathways = /hive/data/outside/bioCyc/120801/1.7/data/pathways.col
+#set bioCycGenes = /hive/data/outside/bioCyc/120801/1.7/data/genes.col
+# download Rfam
+
+# not done, no Rfam yet
+# #[
+cd /hive/data/outside/Rfam
+mkdir 140211
+cd 140211
+wget ftp://ftp.sanger.ac.uk/pub/databases/Rfam/CURRENT/genome.gff3.tar.gz
+tar xzvf genome.gff3.tar.gz
+mkdir hg38 
+cat /hive/data/genomes/hg38/bed/ucscToINSDC/ucscToINSDC.tab \
+  |awk '{ print("cat /hive/data/outside/Rfam/140211/" $4 ".gff3", "|sed", sprintf("%c", 39) "s/" $4 "/" $1 "/" sprintf("%c", 39))}' | bash | grep -v -e "^#" |awk '{ print $1 "\t" $4 - 1 "\t" $5 "\t" $9 "\t1\t" $7 "\t" $4 - 1 "\t" $5 "\t0\t1\t" $5 - $4 + 1 "\t0"  }' > hg38/Rfam.bed
+set rfam = /hive/data/outside/Rfam/140211
+#}
 
 # Tracks
-set multiz = multiz46way
+set multiz = multiz4way
 
 # NCBI Taxon 10090 for mouse, 9606 for human
 set taxon = 9606
 
 # Previous gene set
-set oldGeneDir = $genomes/hg19/bed/ucsc.13
+set oldGeneDir = $genomes/hg19/bed/ucsc.14.3
 set oldGeneBed = $oldGeneDir/ucscGenes.bed
 
 # Machines
 set dbHost = hgwdev
-set ramFarm = swarm
-set cpuFarm = swarm
+set ramFarm = ku
+set cpuFarm = ku
 
 # Code base
 set kent = ~/kent
@@ -125,6 +135,8 @@ hgsql -N $db -e 'select distinct name,sizePolyA from mrnaOrientInfo' | \
 #	creates the files:
 #	sizePolyA.miss  sizePolyA.tab
 
+# didn't do this yet
+# # {
 # Get CCDS for human (or else just an empty file)
 if ( `hgsql -N $db -e "show tables;" | grep -E -c "ccdsGene|chromInfo"` == 2) then
     hgsql -N $db -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ccdsGene" | genePredToBed stdin ccds.bed
@@ -145,6 +157,7 @@ else
     echo -n "" > trna.psl
     echo -n "" > refToCcds.tab
 endif
+#}
 
 
 # Get the blocks in this genome that are syntenic to the $xdb genome
@@ -156,15 +169,21 @@ netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 # the same genomic region can get two distinct hits.  For our purposes, we only
 # want one of those hits, because we're looking for regions that might be genes and
 # don't care as much about the subclass of gene.
+#not done {
+cd $dir
 cat ${rfam}/${db}/Rfam.bed |sort -k1,1 -k2,2n > rfam.sorted.bed
 bedRemoveOverlap rfam.sorted.bed rfam.distinctHits.bed
 bedIntersect -aHitAny rfam.distinctHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
 bedToPsl $genomes/$db/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
+#}
 
 # Create directories full of alignments split by chromosome.
+cd $dir
 mkdir -p est refSeq mrna 
 pslSplitOnTarget refSeq.psl refSeq
 pslSplitOnTarget mrna.psl mrna
+# no ccds
+*** stopped here
 bedSplitOnChrom ccds.bed ccds
 
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
@@ -953,7 +972,7 @@ cd ..
 # hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db ensGene knownGene knownToEnsembl -noLoad
 #awk '{print $2,$1}' ../knownToEnsembl.tab | sort | uniq > ensTransUcsc.tab
 hgsql $db -e "select value,name from knownToEnsembl" | sort | uniq > ensTransUcsc.tab
-echo "select transcript,protein from ensGtp" | hgsql hg19 | sort | uniq | awk '{if (NF==2) print}'  > ensTransProt.tab
+echo "select transcript,protein from ensGtp" | hgsql hg38 | sort | uniq | awk '{if (NF==2) print}'  > ensTransProt.tab
 join ensTransUcsc.tab ensTransProt.tab | awk '{if (NF==3)print $3, $2}' | sort | uniq  > ensProtToUc.tab
 join ensProtToUc.tab ensToTreefam.tab | sort -u | awk 'BEGIN {OFS="\t"} {print $2,$3}' | sort -u > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam $kent/src/hg/lib/knownTo.sql knownToTreefam.tab
@@ -1050,7 +1069,7 @@ doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -wo
 #        run.mm10.mm10/loadPairwise.csh
 #
 # *** -noLoad was specified -- you can run these scripts manually to load mm10 tables:
-#        run.mm10.hg19/loadPairwise.csh
+#        run.mm10.hg38/loadPairwise.csh
 #        run.mm10.rn5/loadPairwise.csh
 #        run.mm10.danRer7/loadPairwise.csh
 #        run.mm10.dm3/loadPairwise.csh
@@ -1058,7 +1077,7 @@ doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -wo
 #        run.mm10.sacCer3/loadPairwise.csh
 #
 # *** -noLoad was specified -- you can run these scripts manually to load mmBlastTab in query databases:
-#        run.hg19.mm10/loadPairwise.csh
+#        run.hg38.mm10/loadPairwise.csh
 #        run.rn5.mm10/loadPairwise.csh
 #        run.danRer7.mm10/loadPairwise.csh
 #        run.dm3.mm10/loadPairwise.csh
@@ -1304,7 +1323,7 @@ hgLoadSqlTab $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
 hgsql $tempDb -e "delete k from knownToPfam k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 
 cd $dir/pfam
-genePredToFakePsl hg19 knownGene knownGene.psl cdsOut.tab
+genePredToFakePsl hg38 knownGene knownGene.psl cdsOut.tab
 sort cdsOut.tab | sed 's/\.\./   /' > sortCdsOut.tab
 sort ucscPfam.tab> sortPfam.tab
 awk '{print $10, $11}' knownGene.psl > gene.sizes
@@ -1393,12 +1412,12 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     hgLoadSqlTab $tempDb bioCycPathway $kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab $tempDb bioCycMapDesc $kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
-# Do KEGG Pathways build (borrowing Fan Hus's strategy from hg19.txt)
+# Do KEGG Pathways build (borrowing Fan Hus's strategy from hg38.txt)
     mkdir -p $dir/kegg
     cd $dir/kegg
 
     # Make the keggMapDesc table, which maps KEGG pathway IDs to descriptive names
-    cp /cluster/data/hg19/bed/ucsc.13/kegg/map_title.tab .
+    cp /cluster/data/hg38/bed/ucsc.13/kegg/map_title.tab .
     # wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
     cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
     cut -f 2 j.tmp >j.hsa
@@ -1411,7 +1430,7 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     # to LocusLink IDs and to KEGG pathways.  First, make a table that maps 
     # LocusLink IDs to KEGG pathways from the downloaded data.  Store it temporarily
     # in the keggPathway table, overloading the schema.
-    cp /cluster/data/hg19/bed/ucsc.13/kegg/hsa_pathway.list .
+    cp /cluster/data/hg38/bed/ucsc.13/kegg/hsa_pathway.list .
 
     cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
     hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql j.tmp
@@ -1466,7 +1485,7 @@ hgsql $tempDb -N -e 'select kgId,geneSymbol from kgXref' \
 
 # 2. Get a file of per-transcript fasta sequences that contain the sequences of each 
 #    UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.
-#    Convert that file to TwoBit format and soft-link it into /gbdb/hg19/targetDb/
+#    Convert that file to TwoBit format and soft-link it into /gbdb/hg38/targetDb/
 subColumn 4 ucscGenes.bed idSub.txt ucscGenesIdSubbed.bed
 sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout \
     | faToTwoBit stdin kgTargetSeq${curVer}.2bit 
@@ -1531,11 +1550,11 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
 # blatServer by the keyword "$db"Kg with the version number appended
 hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("hg19Kgv14", "blat4d", 17847, 0, 1);'
+      'INSERT into blatServers values ("hg38Kgv14", "blat4d", 17847, 0, 1);'
 hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("hg19Kgv14", "UCSC Genes", \
-         "hg19", "kgTargetAli", "", "", \
-         "/gbdb/hg19/targetDb/kgTargetSeq7.2bit", 1, now(), "");'
+      'INSERT into targetDb values("hg38Kgv14", "UCSC Genes", \
+         "hg38", "kgTargetAli", "", "", \
+         "/gbdb/hg38/targetDb/kgTargetSeq7.2bit", 1, now(), "");'
 
 
 cd $dir
@@ -1568,11 +1587,11 @@ synBlastp.csh $ratDb $db rgdGene2 knownGene
 
 
 # need to generate multiz downloads
-#/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/knownCanonical.exonAA.fa.gz
-#/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/knownCanonical.exonNuc.fa.gz
-#/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/knownGene.exonAA.fa.gz
-#/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/knownGene.exonNuc.fa.gz
-#/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/md5sum.txt
+#/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownCanonical.exonAA.fa.gz
+#/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownCanonical.exonNuc.fa.gz
+#/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownGene.exonAA.fa.gz
+#/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownGene.exonNuc.fa.gz
+#/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/md5sum.txt
 
 echo
 echo "see the bottom of the script for details about knownToWikipedia"
@@ -1587,10 +1606,10 @@ rm -r run.*/out
 ### The following is the process Briam Lee used to pull out only
 #   the genes from knownToLocusLink for which there are Wikipedia articles.
 ### get the full knownToLocusLinkTable
-# hgsql -Ne 'select value from knownToLocusLink' hg19 | sort -u >> knToLocusLink
+# hgsql -Ne 'select value from knownToLocusLink' hg38 | sort -u >> knToLocusLink
 ###   query Wikipedia for each to if there is an article
 # for i in $(cat knToLocusLink); do lynx -dump "http://api.genewikiplus.org/biogps-plugins/wp/"$i | grep -m 1 "no results" >trash ; echo $? $i | grep "1 "| awk '{print $2}'>> workingLinks; done
 ###   pull out all isoforms that have permitted LocusLinkIds
-# for i in $(cat workingLinks); do hgsql -Ne 'select * from knownToLocusLink where value like "'$i'"' hg19 >> knownToWikipediaNew; done
+# for i in $(cat workingLinks); do hgsql -Ne 'select * from knownToLocusLink where value like "'$i'"' hg38 >> knownToWikipediaNew; done
 ###   then load the table as knownToWikipedia using the knowToLocusLink INDICES.
 

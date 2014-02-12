@@ -22,8 +22,8 @@ mkdir build
 # Get HGNC data
 
 wget -O hgnc.tab "http://www.genenames.org/cgi-bin/hgnc_downloads.cgi?title=HGNC+output+data&col=gd_hgnc_id&col=gd_app_sym&col=gd_app_name&col=gd_status&col=gd_locus_type&col=gd_locus_group&col=gd_prev_sym&col=gd_prev_name&col=gd_aliases&col=gd_name_aliases&col=gd_pub_chrom_map&col=gd_date2app_or_res&col=gd_date_mod&col=gd_date_sym_change&col=gd_date_name_change&col=gd_pub_acc_ids&col=gd_enz_ids&col=gd_pub_eg_id&col=gd_pub_ensembl_id&col=gd_mgd_id&col=gd_other_ids&col=gd_other_ids_list&col=gd_pubmed_ids&col=gd_pub_refseq_ids&col=gd_gene_fam_name&col=gd_gene_fam_pagename&col=gd_record_type&col=gd_primary_ids&col=gd_secondary_ids&col=gd_ccds_ids&col=gd_vega_ids&col=gd_lsdb_links&col=md_gdb_id&col=md_eg_id&col=md_mim_id&col=md_refseq_id&col=md_prot_id&col=md_ensembl_id&col=md_ucsc_id&col=md_mgd_id&col=md_rgd_id&status=Approved&status=Entry+Withdrawn&status_opt=1&where=&order_by=gd_app_sym_sort&format=text&limit=&submit=submit&.cgifields=&.cgifields=chr&.cgifields=status&.cgifields=hgnc_dbtag"
+#24,077,041  86.1K/s   in 3m 34s
 
-# stopped here 
 hgsql $db < $kent/src/hg/lib/hgnc.sql
 hgsql $db -e 'load data local infile "hgnc.tab" into table hgnc ignore 1 lines'
  
@@ -34,25 +34,26 @@ hgsql $db -e 'load data local infile "hgncXref.tab" into table hgncXref'
 #########################################################
 # CREATE REACTOME TABLES 
 
-# we're up to 44 now.  Got these from RM #9856
-mkdir -p /hive/data/outside/reactome/reactome44
-cd /hive/data/outside/reactome/reactome44
+# we're up to 46 now.  Got these from RM #11942
+cd /hive/data/outside/reactome/reactome46
 
-unzip UCSC_Reactome_v44.zip
-rm -rf __MACOSX/ UCSC_Reactome_v44.zip
-tail -n +7 ucsc_entity44 > ucsc_entity44.tab
-tail -n +5 ucsc_events44 > ucsc_events44.tab
+unzip UCSC_Reactome_v46.zip
+rm -rf __MACOSX/ UCSC_Reactome_v46.zip
+tail -n +7 ucsc_entity44 > ucsc_entity46.tab
+tail -n +5 ucsc_events44 > ucsc_events46.tab
 
-hgLoadSqlTab $db spReactomeEvent ~/kent/src/hg/lib/spReactomeEvent.sql ucsc_events44.tab
-hgLoadSqlTab $db spReactomeId ~/kent/src/hg/lib/spReactomeId.sql ucsc_entity44.tab
+hgLoadSqlTab $db spReactomeEvent ~/kent/src/hg/lib/spReactomeEvent.sql ucsc_events46.tab
+hgLoadSqlTab $db spReactomeId ~/kent/src/hg/lib/spReactomeId.sql ucsc_entity46.tab
 
 cd ..
 rm current reactome
-ln -s /hive/data/outside/reactome/reactome42 current
-ln -s /hive/data/outside/reactome/reactome42 reactome
+ln -s /hive/data/outside/reactome/reactome46 current
+ln -s /hive/data/outside/reactome/reactome46 reactome
 
 # BUILD spXref2 and spXref3 tables.
 cd /hive/data/inside/proteins/$date/build
+
+**** stopped here
 
 # Create a bioentry table to use as an internal replacement for accession.
 # Takes a minute
