@@ -1486,6 +1486,17 @@ itemRgb on
 color 0,0,0
 priority 26
 
+track hg38ContigDiff
+shortLabel Hg38 Diff
+longLabel Contigs dropped or changed from GRCh37/hg19 to GRCh38(hg38)
+visibility hide
+group map
+type bed 9 .
+scoreFilterByRange on
+itemRgb on
+color 0,0,0
+priority 26
+
 track evoCpg
 shortLabel Evo Cpg
 longLabel Weizmann Evolutionary CpG Islands

@@ -144,7 +144,7 @@ type bed 4 .
 chromosomes chr14,chr19,chr21,chr22,chr5,chrY
 
 track hg38ContigDiff
-shortLabel Hg38 Diff
+shortLabel Hg19 Diff
 longLabel Contigs new to GRCh38/(hg38), not carried forward from GRCh37/(hg19)
 visibility pack
 group map
