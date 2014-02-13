@@ -44,17 +44,17 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track rgdQtl override
 shortLabel RGD Human QTL
-priority 0
+priority 1
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track rgdRatQtl override
-priority 0
+priority 1
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track jaxQtlMapped override
-priority 0
+priority 1
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -66,117 +66,12 @@ track gwasCatalog override
 snpTable snp137
 snpVersion 137
 
-track ucscRetroAli4
-shortLabel Retroposed Genes 4.0
-longLabel Retroposed Genes V4, Including Pseudogenes - Sept. 2012
-group genes
-type psl
-priority 0
-color 20,0,250
-visibility hide
-ucscRetroInfo ucscRetroInfo4
-baseColorDefault diffCodons
-baseColorUseCds table ucscRetroCds4
-baseColorUseSequence extFile ucscRetroSeq4 ucscRetroExtFile4
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-
-searchName ucscRetroInfoRefSeq4
-searchTable ucscRetroAli4
-searchDescription Retroposed GenesV4, Including Pseudogenes - 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo4
-dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo4.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
-searchPriority 3.52
-
-searchName ucscRetroInfoMrna4
-searchTable ucscRetroAli4
-searchDescription Retroposed GenesV4, Including Pseudogenes - 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-searchPriority 3.55
-
-searchName ucscRetroUniProt4
-searchTable ucscRetroAli4
-searchDescription Retroposed GenesV4, Including Pseudogenes - 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo4
-xrefQuery select ucscRetroInfo4.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
-searchPriority 3.54
-
-searchName ucscRetroKnownGene4
-searchTable ucscRetroAli4
-searchDescription Retroposed GenesV4, Including Pseudogenes - 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo4
-xrefQuery select ucscRetroInfo4.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
-searchPriority 3.53
-
-track ucscRetroAli5
-shortLabel Retroposed Genes
-longLabel Retroposed Genes V5, Including Pseudogenes
-group genes
-type psl
-priority 0
-color 20,0,250
-visibility pack
-ucscRetroInfo ucscRetroInfo5
-baseColorDefault diffCodons
-baseColorUseCds table ucscRetroCds5
-baseColorUseSequence extFile ucscRetroSeq5 ucscRetroExtFile5
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-dataVersion Mar. 2013
-
-searchName ucscRetroInfoRefSeq5
-searchTable ucscRetroAli5
-searchDescription Retroposed Genes V5, Including Pseudogenes 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo5
-dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo5.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
-searchPriority 3.52
-
-searchName ucscRetroInfoMrna5
-searchTable ucscRetroAli5
-searchDescription Retroposed Genes V5, Including Pseudogenes
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-searchPriority 3.55
-
-searchName ucscRetroUniProt5
-searchTable ucscRetroAli5
-searchDescription Retroposed Genes V5, Including Pseudogenes 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo5
-xrefQuery select ucscRetroInfo5.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
-searchPriority 3.54
-
-searchName ucscRetroKnownGene5
-searchTable ucscRetroAli5
-searchDescription Retroposed Genes V5, Including Pseudogenes 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo5
-xrefQuery select ucscRetroInfo5.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
-searchPriority 3.53
-
 track ucscRetroAli6
 shortLabel Retroposed Genes
 longLabel Retroposed Genes V6, Including Pseudogenes
 group genes
 type psl
-priority 0
+priority 37.15
 color 20,0,250
 visibility pack
 ucscRetroInfo ucscRetroInfo6
@@ -224,6 +119,60 @@ xrefTable kgXref, ucscRetroInfo6
 xrefQuery select ucscRetroInfo6.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
+track ucscRetroAli7
+shortLabel Retroposed Genes 7.0
+longLabel Retroposed Genes, Including Pseudogenes 
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+nextItemButton on
+ucscRetroInfo ucscRetroInfo7
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds7
+baseColorUseSequence extFile ucscRetroSeq7 ucscRetroExtFile7
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+dataVersion Jan. 2014
+
+searchName ucscRetroInfoRefSeq7
+searchTable ucscRetroAli7
+searchDescription Retroposed GenesV7, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo7
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo7.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna7
+searchTable ucscRetroAli7
+searchDescription Retroposed GenesV7, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt7
+searchTable ucscRetroAli7
+searchDescription Retroposed GenesV7, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo7
+xrefQuery select ucscRetroInfo7.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene7
+searchTable ucscRetroAli7
+searchDescription Retroposed GenesV7, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo7
+xrefQuery select ucscRetroInfo7.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
 track illuminaProbes override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
@@ -261,7 +210,7 @@ dragAndDrop subTracks
 visibility hide
 group x
 noInherit on
-priority 0
+priority 398
 chromosomes chr4,chr6,chr17,chr6_ssto_hap7,chr6_mcf_hap5,chr6_cox_hap2,chr6_mann_hap4,chr6_apd_hap1,chr6_qbl_hap6,chr6_dbb_hap3,chr17_ctg5_hap1,chr4_ctg9_hap1
 color 0,0,0
 altColor 255,255,0
@@ -502,7 +451,7 @@ sGroup_Chimp panTro2
 speciesDefaultOff panTro2
 itemFirstCharCase noChange
 treeImage phylo/hg19_MHC.gif
-priority 0
+priority 399
 
 track chainSelf override
 longLabel $Organism Chained Self Alignments
@@ -517,7 +466,7 @@ track ctgPos2
 shortLabel GRC Map Contigs
 longLabel Genome Reference Consortium Map Contigs
 group map
-priority 0
+priority 10
 visibility hide
 type ctgPos
 url none
@@ -526,7 +475,7 @@ track multiz4way
 shortLabel 4-way Multiz
 longLabel 4-Way Multiz Alignment & Conservation
 group compGeno
-priority 0
+priority 104.2
 visibility hide
 color 0, 10, 100
 altColor 0,90,10
@@ -558,7 +507,7 @@ track hg18cytoBand
 shortLabel hg18 Chromosome Band
 longLabel Chromosome Bands (hg18)
 group map
-priority 0
+priority 1
 visibility hide
 type bed 4 +
 
@@ -566,7 +515,7 @@ track msr1
 shortLabel Gene Interactions
 longLabel Microsoft Research Gene Interactions
 group pub
-priority 0
+priority 30
 visibility hide
 type bigBed 4 .
 noScoreFilter on
@@ -576,7 +525,7 @@ track pubsDev
 shortLabel Publications Beta
 longLabel Publications: Textmining of Publications, Beta version
 group pub
-priority 0
+priority 12
 visibility hide
 color 0,0,0
 type bed 4
@@ -651,7 +600,7 @@ dimensions dimensionX=clade
 visibility hide 
 type bed 4
 group compGeno
-priority 0
+priority 103.29
 
     track cons46wayViewalign
     shortLabel Multiz Alignments
@@ -847,7 +796,7 @@ track snp138Flagged
 shortLabel Flagged SNPs(138)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Flagged by dbSNP as Clinically Assoc
 group varRep
-priority 0
+priority 99.0892
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -893,7 +842,7 @@ track snp137Flagged
 shortLabel Flagged SNPs(137)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Flagged by dbSNP as Clinically Assoc
 group varRep
-priority 0
+priority 99.0902
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -1215,7 +1164,7 @@ shortLabel 1000G Ph1 Vars
 longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, Indels, SVs
 type vcfTabix
 group varRep
-priority 0
+priority 99.1
 visibility hide
 maxWindowToDraw 5000000
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
@@ -1225,7 +1174,7 @@ compositeTrack on
 shortLabel 1000G Ph1 Accsbl
 longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions
 type bigBed 3
-priority 0
+priority 99.11
 visibility hide
 group varRep
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
@@ -1252,7 +1201,7 @@ shortLabel EVS Variants
 longLabel NHLBI GO Exome Sequencing Project (ESP) - Variants from 6,503 Exomes
 type vcfTabix
 group varRep
-priority 0
+priority 100
 visibility hide
 maxWindowToDraw 5000000
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
@@ -1291,7 +1240,7 @@ compositeTrack on
 shortLabel Vega Genes
 longLabel Vega Annotations
 group genes
-priority 0
+priority 37.1
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chr6_apd_hap1,chr6_cox_hap2,chr6_dbb_hap3,chr6_mann_hap4,chr6_mcf_hap5,chr6_qbl_hap6,chr6_ssto_hap7
 type genePred vegaPep
@@ -1319,7 +1268,7 @@ compositeTrack on
 shortLabel H-Inv 7.0
 longLabel H-Inv 7.0 gene predictions
 group genes
-priority 0
+priority 55
 visibility hide
 type bed 12
 configureByPopup off
@@ -1351,7 +1300,7 @@ release alpha
 shortLabel GC percent
 longLabel GC percent as bigWig file
 group x
-priority 0
+priority 600
 visibility hide
 type bigWig 0 100
 minLimit 0
@@ -1484,7 +1433,7 @@ type bed 9 .
 scoreFilterByRange on
 itemRgb on
 color 0,0,0
-priority 0
+priority 26
 
 track hg38ContigDiff
 shortLabel Hg38 Diff
@@ -1495,7 +1444,7 @@ type bed 9 .
 scoreFilterByRange on
 itemRgb on
 color 0,0,0
-priority 0
+priority 26
 
 track evoCpg
 shortLabel Evo Cpg
@@ -1506,7 +1455,7 @@ type bed 9 .
 noScoreFilter .
 itemRgb on
 color 0,0,0
-priority 0
+priority 111
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -1573,7 +1522,7 @@ track consIndelsHgMmCanFam
 shortLabel Cons Indels MmCf
 longLabel Indel-based Conservation for human hg19, mouse mm8 and dog canFam2
 group compGeno
-priority 0
+priority 105
 visibility hide
 useScore 1
 color 0, 60, 120
@@ -1593,7 +1542,7 @@ compositeTrack on
 shortLabel Poly(A)
 longLabel Poly(A) Sites, Both Reported and Predicted
 group rna
-priority 0
+priority 79
 visibility hide
 noInherit on
 type bed 3 .
@@ -1632,7 +1581,7 @@ subGroup2 tissType Tissue_Type Kidney=Kidney Brain=Brain Liver=Liver MaqcBrain1=
 subGroup3 strand Strand fwd=Forward rev=Reverse
 dimensions dimensionY=tissType dimensionX=strand
 sortOrder tissType=+ strand=+ view=+
-priority 0
+priority 79.2
 type bed 
 dragAndDrop subTracks
 visibility hide
@@ -2008,7 +1957,7 @@ release alpha
 shortLabel bamWigTest
 longLabel bamWigTest
 group x
-priority 0
+priority 160
 visibility hide
 type bamWig 0 1
 viewLimits 0:1
@@ -2028,7 +1977,7 @@ shortLabel GERP
 longLabel GERP scores for mammalian alignments
 group compGeno
 visibility hide
-priority 0
+priority 105
 type bigWig -15 7
 autoScale on
 maxHeightPixels 128:64:20
@@ -2049,7 +1998,7 @@ type wigMaf 0.0 1.0
 speciesCodonDefault hg19
 #speciesOrder ornAna1 galGal3 taeGut1 anoCar2 pytMol0 chrPic0 pelSin0 cheMyd0 allMis0
 speciesOrder mm9 bosTau4 monDom5 anoCar1 galGal3 xenTro2 danRer6 fr2 gasAcu1 oryLat2 calMil0
-priority 0
+priority 100
 
 track multizMarine
 #subTrack consDinoViewalign on
@@ -2073,7 +2022,7 @@ speciesCodonDefault hg19
 speciesOrder rheMac3 papAnu2 calJac3 mm10 rn5 vicPac2 turTru2 orcOrc1 bosTau7 canFam3 odoRosDiv1 loxAfr3 triMan1 monDom5
 #itemFirstCharCase noChange
 #treeImage phylo/hg19_Dino.gif
-priority 0
+priority 100
 
 track multizDino
 #subTrack consDinoViewalign on
@@ -2097,7 +2046,7 @@ speciesCodonDefault hg19
 speciesOrder ornAna1 galGal3 taeGut1 anoCar2 pytMol0 chrPic0 pelSin0 cheMyd0 allMis0
 #itemFirstCharCase noChange
 #treeImage phylo/hg19_Dino.gif
-priority 0
+priority 100
 
 track numtSeq override
 html numtSeqHg19
@@ -2106,7 +2055,7 @@ track hg19FosEndPairs
 shortLabel hg19 Fosmid End Pairs
 longLabel hg19 Fosmid End Pairs
 group map
-priority 0
+priority 18
 visibility hide
 type bed 6 +
 color 0,0,0
@@ -2117,7 +2066,7 @@ track hg19FosEndPairsBad
 shortLabel hg19 Bad Fosmid End Pairs
 longLabel hg19 Orphan, Short and Incorrectly Oriented Fosmid End Pairs
 group map
-priority 0
+priority 19
 visibility hide
 type bed 6 +
 color 0,0,0
@@ -2132,7 +2081,7 @@ track knownGene
 shortLabel UCSC Genes
 longLabel UCSC Genes (RefSeq, GenBank, CCDS, Rfam, tRNAs & Comparative Genomics)
 group genes
-priority 0
+priority 34
 visibility pack
 color 12,12,120
 type genePred knownGenePep knownGeneMrna
@@ -2153,7 +2102,7 @@ track RfamSyn
 shortLabel Rfam-Syn
 longLabel Rfam hits in regions syntenic to mm9, duplicated hits removed.
 group genes
-priority 0
+priority 53.5
 visibility hide
 type bed 6 +
 color 0,0,0
@@ -2164,7 +2113,7 @@ track mapViewGenes
 shortLabel MapView Genes
 longLabel refSeq genes from map view
 group genes
-priority 0
+priority 34.1
 visibility hide
 color 82,82,160
 type genePred
@@ -2176,7 +2125,7 @@ track knownGeneOld6
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
-priority 0
+priority 34.1
 visibility hide
 color 82,82,160
 type genePred
@@ -2219,7 +2168,7 @@ track ultraConserved
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
 group x
-priority 0
+priority 109.31
 visibility hide
 exonArrows off
 color 150,0,0
@@ -2233,7 +2182,7 @@ track ultraConservedExtended
 shortLabel Extended Ultras
 longLabel Ultras Extended Until 5 Bases Below 85% in Conservation Track
 group x
-priority 0
+priority 109.32
 visibility hide
 exonArrows off
 color 100,0,100
@@ -2272,7 +2221,7 @@ track cooperDevDelay
 shortLabel Cooper Dev. Delay
 longLabel Copy Number Variation morbidity map of developmental delay, Cooper et al. 2011
 group phenDis
-priority 0
+priority 1
 visibility hide
 #color 0,0,200
 type gvf 
@@ -2295,7 +2244,7 @@ group rep
 
 track pubs override
 group phenDis
-priority 0
+priority 0.9
 
 track pubsBingBlat override
 group phenDis
