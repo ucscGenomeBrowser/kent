@@ -47,5 +47,5 @@ doInstall:
 	@mkdir -p ${DEST}/
 	../utils/cpAndLinkToResourceFiles.pl ${extra} -exclude='makefile' -versionFile=../inc/versionInfo.h -destDir=${DEST} ${JS_FILES}
 	for file in ${STATIC_FILES}; do \
-	    cp -p --update $$file ${DEST}; \
+	    rsync -a $$file ${DEST}/; \
 	done

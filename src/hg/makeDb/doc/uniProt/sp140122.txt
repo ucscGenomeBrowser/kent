@@ -14,8 +14,9 @@ mkdir -p /hive/data/outside/uniProt/$DBDATE/build
 # Download uniProt. This will take about 12 hours
 cd /hive/data/outside/uniProt/$DBDATE/build
 wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
-# 473,685,422  462K/s   in 13m 48s
+# 486,223,605  262K/s   in 28m 26s
 wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz
+*** stopped here
 # 12,088,824,987  342K/s   in 11h 28m
 wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot_varsplic.fasta.gz
 # 6,932,064   1.01M/s   in 10s

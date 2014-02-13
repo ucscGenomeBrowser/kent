@@ -3,7 +3,7 @@ include trackDb.gliresChainNet.ra
 include trackDb.euarchontoglireChainNet.ra
 include trackDb.placentalsChainNet.ra
 include trackDb.vertebrateChainNet.ra
-include trackDb.previousVersionsChainNet.ra
+include trackDb.previousVersionsChainNet.ra alpha
 
 # Local declaration so that local gold.html is picked up.
 track gold override
@@ -59,6 +59,12 @@ track qPcrPrimers override
 group regulation
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
+
+track snp138Common override
+snpSeqFile /gbdb/mm10/snp/snp138.fa
+
+track snp138Mult override
+snpSeqFile /gbdb/mm10/snp/snp138.fa
 
 track snp137Common override
 visibility dense
@@ -121,6 +127,60 @@ query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo2
 xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
+track ucscRetroAli4
+shortLabel Retroposed Genes 4.0
+longLabel Retroposed Genes, Including Pseudogenes
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+nextItemButton on
+ucscRetroInfo ucscRetroInfo4
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds4
+baseColorUseSequence extFile ucscRetroSeq4 ucscRetroExtFile4
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+dataVersion Feb. 2014
+
+searchName ucscRetroInfoRefSeq4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo4
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo4.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo4
+xrefQuery select ucscRetroInfo4.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo4
+xrefQuery select ucscRetroInfo4.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
 track jaxQtl override

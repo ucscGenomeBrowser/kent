@@ -686,7 +686,7 @@ snp125MolTypeCart = snp125ColorsFromCart(track, "molType", snp125MolTypeOldColor
 snp125ClassCart = snp125ColorsFromCart(track, "class", snp125ClassOldColorVars, TRUE,
 				       snp125ClassDefault, snp125ClassArraySize);
 snp125ValidCart = snp125ColorsFromCart(track, "valid", snp125ValidOldColorVars, TRUE,
-				       snp125ValidDefault, snp125ValidArraySize);
+				       snp125ValidDefault, snp125ValidArraySizeHuman);
 snp125LocTypeCart = snp125ColorsFromCart(track, "locType", snp125LocTypeOldColorVars, TRUE,
 					 snp125LocTypeDefault, snp125LocTypeArraySize);
 snp132ExceptionsCart = snp125ColorsFromCart(track, "exception", snp132ExceptionVarName, FALSE,
@@ -787,7 +787,7 @@ for (snp = tg->items;  snp != NULL;  snp = snp->next)
 	    color = snp125ClassCart[valIx];
 	    break;
 	case snp125ColorSourceValid:
-	    for (i=0; i < snp125ValidArraySize; i++)
+	    for (i=0; i < snp125ValidArraySizeHuman; i++)
 		if (containsStringNoCase(snp->valid, snp125ValidDataName[i]))
 		    color = snp125ValidCart[i];
 	    break;

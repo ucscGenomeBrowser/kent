@@ -412,8 +412,7 @@ hash->numResizes++;
 
 
 struct hash *hashFromSlNameList(void *list)
-/* Create a hash out of a list of slNames or any kind of list where the */
-/* first field is the next pointer and the second is the name. */
+/* Create a hash out of a list of slNames. */
 {
 struct hash *hash = NULL;
 struct slName *namedList = list, *item;
@@ -426,9 +425,7 @@ return hash;
 }
 
 struct hash *hashSetFromSlNameList(void *list)
-/* Create a hashSet (hash with only keys) out of a list of slNames or any kind
- * of list where the first field is the next pointer and the second is the name. 
- * Returns NULL if the list is NULL. */
+/* Create a hashSet (hash with only keys) out of a list of slNames. */
 {
 struct hash *hash = NULL;
 struct slName *namedList = list, *item;

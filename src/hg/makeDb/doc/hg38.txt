@@ -1969,7 +1969,7 @@ done
     checkTableCoords hg38 centromeres
 
 #############################################################################
-## alternate sequence/haplotype alignments (WORKING - 2014-01-09 - Hiram)
+## alternate sequence/haplotype alignments (DONE - 2014-01-23 - Hiram)
     mkdir /hive/data/genomes/hg38/bed/lastzAltSequences
     cd /hive/data/genomes/hg38/bed/lastzAltSequences
 
@@ -2220,6 +2220,18 @@ total           5567850 5520017 5459735 5744165
     hgsql -e 'update dbDb set defaultPos="chr9:133252000-133280861"
 	where name="hg38";' hgcentraltest
 
+#########################################################################
+## update grp table with new set of standard rows (DONE - 2014-01-29 - Hiram)
+    hgsql -e 'alter table grp rename grpOriginal;' hg38
+    hgsql -e 'drop table grp;' hg38
+    hgsql -e "create table grp (PRIMARY KEY(NAME)) select * from hg19.grp" hg38
+    hgsql -e 'delete from grp where name="denisova";' hg38
+    hgsql -e 'delete from grp where name="pub";' hg38
+    hgsql -e 'delete from grp where name="neandertal";' hg38
+    hgsql -e 'update grp set defaultIsClosed=0 where name="map";' hg38
+
+    hgsql -e 'drop table grpOriginal;' hg38
+
 ############################################################################
 # PREPARE LINEAGE SPECIFIC REPEAT FILES FOR LASTZ (DONE - 2014-01-21 - Hiram)
     ssh ku
@@ -2366,4 +2378,663 @@ done | sed -e "`cat accessionToUcsc.sed.txt`" > ucsc.grch38.agp
     ln -s /hive/data/genomes/hg38/goldenPath/bigZips/hg38.chromFaMasked.tar.gz hg38.chromFaMasked.tar.gz
 
     #also added entries for above to md5sum.txt and README.txt
+
+############################################################################
+# LASTZ MOUSE Mm10 (DONE - 2014-01-23,31 - Hiram)
+    # can no longer use the lineage specific repeats with the new lastz
+    # use a screen to manage this longish job:
+    screen -S hg38Mm10
+
+    mkdir /hive/data/genomes/hg38/bed/lastzMm10.2014-01-23
+    cd /hive/data/genomes/hg38/bed/lastzMm10.2014-01-23
+
+    # best to always specify an exact path to lastz so we know which one is used
+    # lastz default parameters are human-mouse parameters
+
+    cat << '_EOF_' > DEF
+# human vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm10
+SEQ2_DIR=/scratch/data/mm10/mm10.2bit
+SEQ2_LEN=/scratch/data/mm10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzMm10.2014-01-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -stop=net `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > net.log 2>&1
+    #	real    1494m26.135s ---- busy cluster
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -continue=load `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > load.log 2>&1
+    #	Elapsed time: 43m11s
+    cat fb.hg38.chainMm10Link.txt
+    # 964465044 bases of 3049335806 (31.629%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/mm10/bed/blastz.hg38.swap
+    cd /hive/data/genomes/mm10/bed/blastz.hg38.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg38/bed/lastzMm10.2014-01-23/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real    83m28.397s
+
+    cat fb.mm10.chainHg38Link.txt
+    #	937030766 bases of 2652783500 (35.323%) in intersection
+
+#########################################################################
+# LASTZ Dog CanFam3 (DONE - 2014-01-26 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzCanFam3.2014-01-26
+    cd /hive/data/genomes/hg38/bed/lastzCanFam3.2014-01-26
+
+    cat << '_EOF_' > DEF
+# human vs dog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Dog CanFam3
+SEQ2_DIR=/hive/data/genomes/canFam3/canFam3.2bit
+SEQ2_LEN=/hive/data/genomes/canFam3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzCanFam3.2014-01-26
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen hg38CanFam3
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+    # Elapsed time: 1396m22s - busy cluster
+    cat fb.hg38.chainCanFam3Link.txt
+    #  1523987456 bases of 3049335806 (49.978%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/canFam3/bed/blastz.hg38.swap
+    cd /hive/data/genomes/canFam3/bed/blastz.hg38.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg38/bed/lastzCanFam3.2014-01-26/DEF \
+	-syntenicNet -swap \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #	real    107m57.787s
+
+    cat fb.canFam3.chainHg38Link.txt
+    #	1437624815 bases of 2392715236 (60.083%) in intersection
+
+#########################################################################
+# LASTZ Macaca Mulatta RheMac3 (DONE - 2014-01-27,02-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzRheMac3.2014-01-27
+    cd /hive/data/genomes/hg38/bed/lastzRheMac3.2014-01-27
+
+    # best to always specify an exact path to lastz so we know which one is used
+    # lastz default parameters are human-mouse parameters
+
+    cat << '_EOF_' > DEF
+# human vs macaca mulatta
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Macaca Mulatta RheMac3
+SEQ2_DIR=/scratch/data/rheMac3/rheMac3.2bit
+SEQ2_LEN=/scratch/data/rheMac3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzRheMac3.2014-01-27
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+        `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+	-chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    #   Elapsed time: 1426m43s - busy cluster
+    cat fb.hg38.chainRheMac3Link.txt
+    #   2431208700 bases of 3049335806 (79.729%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/rheMac3/bed/blastz.hg38.swap
+    cd /hive/data/genomes/rheMac3/bed/blastz.hg38.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg38/bed/lastzRheMac3.2014-01-27/DEF \
+        -swap -syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    #    82m32.329s
+    cat fb.rheMac3.chainHg38Link.txt
+    #   2288533769 bases of 2639145830 (86.715%) in intersection
+
+#########################################################################
+## construct analysis set (DONE - 2014-01-27 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/analysisSet
+    cd /hive/data/genomes/hg38/bed/analysisSet
+    mkdir -p splitFa
+
+    faToTwoBit \
+../../genbank/seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz \
+	hg38.unmasked.analysisSet.2bit
+
+    faCount splitFa/c*.fa > splitFa.faCount.txt
+
+    egrep -v "chr[0-9_BGHIJKLXv]*_alt" ../rmskCM/hg38.sorted.fa.out \
+	> hg38.analysisSet.out
+
+    twoBitMask hg38.unmasked.analysisSet.2bit hg38.analysisSet.out \
+	hg38.rmsk.analysisSet.2bit
+
+    egrep -v "chr[0-9_BGHIJKLXv]*_alt" ../simpleRepeat/trfMask.bed \
+	> trfMask.analysisSet.bed
+
+    twoBitMask hg38.rmsk.analysisSet.2bit -add trfMask.analysisSet.bed \
+	hg38.analysisSet.2bit
+
+    twoBitToFa hg38.unmasked.analysisSet.2bit stdout | faSize stdin
+# 3099922541 bases (165046090 N's 2934876451 real 2934876451 upper 0 lower)
+#	in 195 sequences in 1 files
+# Total size: mean 15897038.7 sd 46804464.6 min 970 (chrUn_KI270394v1)
+#	max 248956422 (chr1) median 32032
+# %0.00 masked total, %0.00 masked real
+
+    twoBitToFa hg38.analysisSet.2bit stdout | faSize stdin
+# 3099922541 bases (165046090 N's 2934876451 real 1409378896 upper 1525497555
+#	lower) in 195 sequences in 1 files
+# Total size: mean 15897038.7 sd 46804464.6 min 970 (chrUn_KI270394v1)
+#	max 248956422 (chr1) median 32032
+# %49.21 masked total, %51.98 masked real
+
+    mkdir hg38.analysisSet.chroms
+    twoBitToFa hg38.analysisSet.2bit stdout \
+	| faSplit byname stdin hg38.analysisSet.chroms/
+
+    tar cvzf ./hg38.analysisSet.chroms.tar.gz ./hg38.analysisSet.chroms
+
+    ln -s `pwd`/hg38.analysisSet.2bit \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
+    ln -s `pwd`/hg38.analysisSet.chroms.tar.gz \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
+    # add these md5 sums to md5sum.txt
+    md5sum hg38.analysisSet.2bit hg38.analysisSet.chroms.tar.gz >> \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/md5sum.txt
+
+    cp ../../genbank/README_ANALYSIS_SETS README.analysisSet.txt
+    # add note at the top of README:
+    ######################################################################
+    UCSC copy of the file from:
+
+    ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/seqs_for_alignment_pipelines/README_ANALYSIS_SETS
+
+    ln -s `pwd`/README.analysisSet.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
+
+#########################################################################
+# LASTZ Self/hg38 (DONE - 2014-01-25,02-10 - Hiram)
+    # can no longer use the lineage specific repeats with the new lastz
+    # use a screen to manage this longish job:
+    screen -S hg38Self
+
+    mkdir /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25
+    # construct the non-bridged contigs sequence to use:
+    (twoBitToFa ../nonBridgedContigs/hg38.chroms.contigs.2bit stdout;
+      twoBitToFa ../../hg38.2bit:chrM stdout) | faToTwoBit stdin hg38.self.2bit
+    twoBitInfo hg38.self.2bit stdout | sort -k2nr > hg38.self.chrom.sizes
+
+    # best to always specify an exact path to lastz so we know which one is used
+    # lastz default parameters are human-mouse parameters
+
+    cat << '_EOF_' > DEF
+# human vs human with mouse defaults
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Human Hg38
+SEQ2_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ2_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.2bit
+SEQ2_CTGLEN=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.chrom.sizes
+SEQ2_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -stop=net `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > net.log 2>&1
+    #  real    1518m15.817s -- problems
+    # there was a problem in the 'part014' batch.  running that manually:
+    mkdir /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/run.blastz/lastJob
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/run.blastz/lastJob
+    # make 100 jobs out of the 10 parts:
+    mkdir -p psl
+    cp ../tParts/part014.lst ./xpart014.lst
+    split -l 1 xpart014.lst -d -a 3 part
+    for F in part0*
+do
+   mv $F $F.lst
+done
+
+for T in part0*.lst
+do
+  for Q in part0*.lst
+  do
+    mkdir -p psl/${T}
+    echo /cluster/home/hiram/kent/src/hg/utils/automation/blastz-run-ucsc -outFormat psl -dropSelf ${T} ${Q} ../../DEF \{check out exists psl/${T}/${T}.${Q}.psl\}
+  done
+done > jobList
+    para -ram=32g create jobList
+    para push
+    # one last failing job:
+# Completed: 99 of 100 jobs
+# CPU time in finished jobs:       2836s      47.27m     0.79h    0.03d  0.000 y
+# IO & Wait Time:                   279s       4.65m     0.08h    0.00d  0.000 y
+# Average job time:                  31s       0.52m     0.01h    0.00d
+# Longest finished job:             586s       9.77m     0.16h    0.01d
+# Submission to last job:           620s      10.33m     0.17h    0.01d
+
+    mkdir /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/run.blastz/lastJob/split010
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/run.blastz/lastJob/split010
+    mkdir psl
+
+    twoBitToFa /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.2bit:chr16_03:0-1689648 part010.fa
+
+    faSplit -lift=split010.lift size part010.fa 169000 split010_
+TOP="/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/run.blastz/lastJob/split010"
+
+for T in split*.fa
+do
+  mkdir -p psl/${T}
+  echo "${TOP}/${T}" > ${T}.lst
+  faToTwoBit  ${T} ${T}.2bit
+  for Q in split*.fa
+  do
+     echo "/cluster/home/hiram/kent/src/hg/utils/automation/blastz-run-ucsc -outFormat psl -dropSelf ${T}.lst ${Q}.lst DEF {check out exists psl/${T}/${T}.${Q}.psl}"
+  done
+done > jobList
+     para -ram=32g create jobList
+
+# Completed: 100 of 100 jobs
+# CPU time in finished jobs:     176579s    2942.99m    49.05h    2.04d  0.006 y
+# IO & Wait Time:                  1239s      20.64m     0.34h    0.01d  0.000 y
+# Average job time:                1778s      29.64m     0.49h    0.02d
+# Longest finished job:           29343s     489.05m     8.15h    0.34d
+# Submission to last job:         29348s     489.13m     8.15h    0.34d
+
+    catDir psl/* | grep -v "^#" > raw.psl
+
+    liftUp -type=.psl stdout split010.lift error raw.psl \
+        | liftUp -pslQ -type=.psl chr16_03.psl split010.lift error stdin
+
+    # this combination allowed psl headers to sneak in the middle,
+    # had to be cleaned:
+    catDir psl/* | grep -v "^#" > part014.psl
+    cat split010/chr16_03.psl >> part014.psl
+    cp -p part014.psl ../../psl/part014.lst/part014.lst_part014.lst.psl
+
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -continue=cat -stop=net `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > cat.log 2>&1
+    # real    43m11.340s
+    # failed in chaining, running manually on hgwdev
+    time ./bigJobs.sh > bigJobs.log 2>&1
+    #  real    468m59.648s
+
+    time ./part014.sh > part014.log 2>&1
+
+    # real    1319m57.911s
+    # -rw-rw-r-- 1 3581498246 Feb  8 14:37 part014.lst.chain
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -continue=chainMerge -stop=net `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > chainMerge.log 2>&1
+XXX - running - Mon Feb 10 08:52:43 PST 2014
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+        -continue=load -stop=load `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium > load.log 2>&1
+
+    cat fb.hg38.chainSelfLink.txt
+    #   392419010 bases of 3049335806 (12.869%) in intersection
+    cd /hive/data/genomes/hg38/bed
+    ln -s lastzSelf.2014-01-25 lastz.self
+    ln -s lastzSelf.2014-01-25 lastz.hg38
+
+#########################################################################
+## 4-Way Multiz for UCSC Genes construction (DONE - 2014-02-11 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg38/bed/multiz4way
+    cd /hive/data/genomes/hg38/bed/multiz4way
+
+    #	extract our 4 organisms from the 44-way on hg18:
+    ln -s /hive/data/genomes/hg18/bed/multiz44way/44way.4d.nh ./44way.nh
+
+    /cluster/bin/phast/tree_doctor \
+	--prune-all-but hg19,mm10,canFam3,rheMac3 $HOME/kent/src/hg/utils/phyloTrees/120way.nh \
+	| sed -e "s/hg19/hg38/" > 4way.nh
+
+    #	this looks like:
+    cat 4way.nh
+(((hg38:0.033974,rheMac3:0.037601):0.109934,mm10:0.356483):0.020593,canFam3:0.165928);
+
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/hg38_4way.gif
+
+    /cluster/bin/phast/all_dists 4way.nh > 4way.distances.txt
+    #	Use this output to create the table below
+    grep -y hg38 4way.distances.txt | sort -k3,3n
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                        chainHg38Link   chain    linearGap
+#    distance                      on hg38    on other   minScore
+#  1  0.071575 - rhesus rheMac3 (% 79.729) (% 86.715)       5000     medium
+#  2  0.330429 - dog canFam3    (% 49.978) (% 60.083)       3000     medium
+#  3  0.500391 - mouse mm10     (% 31.629) (% 35.323)       3000     medium
+
+    #	using the syntenic nets
+    cd /cluster/data/hg38/bed/multiz4way
+    mkdir mafLinks
+    cd mafLinks
+    mkdir rheMac3 canFam3 mm10
+
+    for D in mm10 canFam3 rheMac3
+do
+    ln -s ../../../lastz.${D}/axtChain/hg38.${D}.synNet.maf.gz ./${D}/
+done
+
+    mkdir /hive/data/genomes/hg38/bed/multiz4way/mafSplit
+    cd /hive/data/genomes/hg38/bed/multiz4way/mafSplit
+    for D in mm10 canFam3 rheMac3
+do
+    echo "working: ${D}"
+    zcat ../mafLinks/${D}/hg38.${D}.synNet.maf.gz > ${D}.maf
+    mkdir -p ${D}
+    mafSplit -byTarget -useFullSequenceName /dev/null ${D}/${D}_  ${D}.maf
+    rm -f ${D}.maf
+done
+
+    #	determine what is the newest version of multiz and use that
+    cd /hive/data/genomes/hg38/bed/multiz4way
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    # the autoMultiz cluster run
+    ssh ku
+    cd /hive/data/genomes/hg38/bed/multiz4way
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	4way.nh > tmp.nh
+    echo `cat tmp.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir run maf
+    cd run
+
+    #	NOTE: you need to set the db and multiz dirname properly in this script
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = hg38
+set c = $1
+set maf = $2
+set binDir = /hive/data/genomes/hg38/bed/multiz4way/penn
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/hg38/bed/multiz4way/mafSplit
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/${s}_$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+./autoMultiz $(root1) {check out line+ /hive/data/genomes/hg38/bed/multiz4way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cut -f1 /cluster/data/hg38/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    # 455 jobs
+    para try ... check ... push ... etc ...
+# Completed: 455 of 455 jobs
+# CPU time in finished jobs:      50111s     835.18m    13.92h    0.58d  0.002 y
+# IO & Wait Time:                  5574s      92.91m     1.55h    0.06d  0.000 y
+# Average job time:                 122s       2.04m     0.03h    0.00d
+# Longest finished job:            4717s      78.62m     1.31h    0.05d
+# Submission to last job:          4722s      78.70m     1.31h    0.05d
+
+    #	combine results into a single file for loading and gbdb reference
+    cd /hive/data/genomes/hg38/bed/multiz4way
+    grep "^#" maf/chr19_GL949749v2_alt.maf | grep -v "eof maf" > multiz4way.maf
+    grep -h -v "^#" maf/*.maf >> multiz4way.maf
+    grep "^#" maf/chr19_GL949749v2_alt.maf | grep "eof maf" >> multiz4way.maf
+    #	real    3m27.561s
+
+    #	makes a 8.5 Gb file:
+    #   -rw-rw-r-- 1 9044143788 Feb 11 12:51 multiz4way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/multiz4way
+    mkdir /gbdb/hg38/multiz4way
+    ln -s /hive/data/genomes/hg38/bed/multiz4way/multiz4way.maf \
+	/gbdb/hg38/multiz4way
+    #	the hgLoadMaf generates huge tmp files, locate them in /dev/shm
+    cd /dev/shm
+    time nice -n +19 hgLoadMaf hg38 multiz4way
+    #   Loaded 6141667 mafs in 1 files from /gbdb/hg38/multiz4way
+    #   real    2m2.812s
+
+    cd /hive/data/genomes/hg38/bed/multiz4way
+    time (cat /gbdb/hg38/multiz4way/*.maf \
+        | hgLoadMafSummary -verbose=2 -minSize=10000 \
+	-mergeGap=500 -maxSize=50000 hg38 multiz4waySummary stdin)
+    # Created 1266559 summary blocks from 11780291 components and 6141667 mafs
+    # real    3m0.791s
+# -rw-rw-r-- 1  311246327 Feb 11 12:54 multiz4way.tab
+# -rw-rw-r-- 1   58730176 Feb 11 12:58 multiz4waySummary.tab
+    wc -l multiz4way*
+    # 6141667 multiz4way.tab
+    # 1266559 multiz4waySummary.tab
+    # 7408226 total
+
+#########################################################################
+## alternate sequence alignments EXPERIMENT (DONE - 2014-01-17 - Hiram)
+    # the lastzAltSequences.2014-01-23 alignment was used for this instead
+    # of this procedure
+    mkdir /hive/data/genomes/hg38/bed/altAlignments
+    cd /hive/data/genomes/hg38/bed/altAlignments
+
+    grep -v "^#" ../../genbank/GCA_000001405.15_GRCh38_top-level.acc2name \
+	| awk '{printf "s/%s/%s/g;\n", $1, $3}' > accessionToUcsc.sed.txt
+
+    find ../../genbank -type f | grep alt_scaffolds | grep "\.gff$" \
+	| while read F
+do
+   cat $F | sed -f accessionToUcsc.sed.txt \
+	| gff3ToPsl ../../chrom.sizes stdin stdout
+done > altAlignments.psl
+	| xargs cat | sed -f accessionToUcsc.sed.txt \
+	| gff3ToPsl ../../chrom.sizes stdin altAlignments.psl
+  
+    time pslRecalcMatch altAlignments.psl ../../hg38.2bit ../../hg38.2bit \
+        altRecalcMatch.psl
+    # real    0m51.122s
+
+    # just to see what they look like in different formats:
+    pslToChain altRecalcMatch.psl altAlignments.chain
+    chainToAxt altAlignments.chain ../../hg38.2bit ../../hg38.2bit \
+	altAlignments.axt
+    axtToMaf -score altAlignments.axt ../../chrom.sizes ../../chrom.sizes \
+        altAlignments.maf
+
+    mkdir mafSplits
+    mafSplit /dev/null mafSplits/ altAlignments.maf
+    # doesn't work:
+# Can't find chrom in MAF component src: chr6_GL000250v2_alt
+
+    mkdir splits psl
+    find ../../genbank -type f | grep alt_scaffolds | grep "\.gff$" \
+        | while read F
+do
+   chrAlt=`basename $F | sed -e 's/_.*//' | sed -f accessionToUcsc.sed.txt`
+   echo $chrAlt
+   cat $F | sed -f accessionToUcsc.sed.txt \
+        | gff3ToPsl ../../chrom.sizes stdin splits/${chrAlt}.psl
+   pslRecalcMatch splits/${chrAlt}.psl ../../hg38.2bit ../../hg38.2bit \
+	psl/${chrAlt}.psl
+done
+
+   mkdir swap
+   mkdir swap/psl swap/chain swap/axt swap/maf swap/anno
+   for F in psl/*.psl
+do
+  B=`basename $F | sed -e 's/.psl//'`
+  echo $B
+  pslSwap $F stdout | pslRecalcMatch stdin ../../hg38.2bit ../../hg38.2bit \
+      swap/psl/${B}.psl
+  pslToChain swap/psl/${B}.psl swap/chain/${B}.chain
+  chainToAxt swap/chain/${B}.chain ../../hg38.2bit ../../hg38.2bit \
+	swap/axt/${B}.axt
+  axtToMaf -score swap/axt/${B}.axt ../../chrom.sizes ../../chrom.sizes stdout \
+      | sed -e 's/^s chr\([0-9XYM][0-9]* \)/s ref38.chr\1/; s/^s chr\([0-9XYM][0-9]*_\)/s alt38.chr\1/;' > swap/maf/${B}.maf
+  mafAddIRows -nBeds=nBeds swap/maf/${B}.maf ../../hg38.2bit swap/anno/${B}.maf
+done
+# axtToMaf -score swap/axt/${B}.axt ../../chrom.sizes ../../chrom.sizes stdout \
+#      | sed -e 's/^s chr/s hg38.chr/' > swap/maf/${B}.maf
+
+   twoBitInfo -nBed ../../hg38.2bit ../../hg38.N.bed
+   ln -s  ../../hg38.N.bed hg38.bed
+   ln -s ../../hg38.N.bed ref38.bed
+   ln -s ../../hg38.N.bed alt38.bed
+   echo hg38.bed > nBeds
+   echo ref38.bed >> nBeds
+   echo alt38.bed >> nBeds
+   ln -s  ../../chrom.sizes hg38.len
+   ln -s  ../../chrom.sizes ref38.len
+   ln -s  ../../chrom.sizes alt38.len
+   echo hg38.len > sizes
+   echo ref38.len >> sizes
+   echo alt38.len >> sizes
+
+   mkdir chain axt maf anno
+   for F in psl/*.psl
+do
+   B=`basename $F | sed -e 's/.psl//'`
+   echo $B
+   pslToChain $F chain/${B}.chain
+   chainToAxt chain/${B}.chain ../../hg38.2bit ../../hg38.2bit axt/${B}.axt
+  axtToMaf -score axt/${B}.axt ../../chrom.sizes ../../chrom.sizes stdout \
+      | sed -e 's/^s chr\([0-9XYM][0-9]* \)/s ref38.chr\1/; s/^s chr\([0-9XYM][0-9]*_\)/s alt38.chr\1/;' > maf/${B}.maf
+   mafAddIRows -nBeds=nBeds maf/${B}.maf ../../hg38.2bit anno/${B}.maf
+done
+
+#   axtToMaf -score axt/${B}.axt ../../chrom.sizes ../../chrom.sizes stdout \
+#      | sed -e 's/^s chr/s hg38.chr/' > maf/${B}.maf
+
 ############################################################################

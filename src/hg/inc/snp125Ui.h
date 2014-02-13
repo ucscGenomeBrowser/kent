@@ -96,7 +96,8 @@ extern char *snp125ValidLabels[];
 extern char *snp125ValidOldColorVars[];
 extern char *snp125ValidDataName[];
 extern char *snp125ValidDefault[];
-extern int snp125ValidArraySize;
+extern int snp125ValidArraySizeHuman;
+extern int snp125ValidArraySizeNonHuman;
 
 /****** Func related controls *******/
 
