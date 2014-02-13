@@ -4,6 +4,7 @@
 # edit ~/kent/src/hg/utils/automation/doDbSnp.pl instead.
 
 use Getopt::Long;
+use LWP::UserAgent;
 use warnings;
 use strict;
 use FindBin qw($Bin);
@@ -513,6 +514,8 @@ sub checkAssemblySpec {
       return keys %rejectLabels;
     }
     &demandAssemblyLabel(@labels);
+  } elsif (! $refAssemblyLabel) {
+    $refAssemblyLabel = $labels[0];
   }
   return ();
 } # checkAssemblySpec
@@ -558,6 +561,59 @@ sub tryToMakeLiftUpFromContigInfo {
   return $liftUpCount, \@missingInfo;
 } # tryToMakeLiftUpFromContigInfo
 
+sub eUtilQuery($$$) {
+  # Send an eUtil query string to NCBI, try to match regex, and return regex's $1 if successful.
+  # Otherwise warn and return undef.
+  my ($ua, $query, $regex) = @_;
+  my $req = HTTP::Request->new(GET => $query);
+  my $res = $ua->request($req);
+  my $match;
+  if ($res->is_success()) {
+    my $resStr = $res->as_string();
+    if ($resStr =~ /$regex/) {
+      $match = $1;
+    } else {
+      warn "Can't find match for regex '$regex' in results of NCBI EUtil query '$query'";
+    }
+  } else {
+    warn "NCBI EUtil query '$query' failed";
+  }
+  return $match;
+} # eUtilQuery
+
+sub getNcbiAssemblyReportFile() {
+  # Use a couple NCBI EUtils queries to get the GCF* accession for the assembly,
+  # then ftp the assembly report to the local directory.
+  # (see http://redmine.soe.ucsc.edu/issues/12490#note-3 )
+  # Return the local filename if successful, otherwise undef.
+  return undef unless ($refAssemblyLabel);
+  my @assemblyLabels = split(',', $refAssemblyLabel);
+  # If there are more than one, just fetch the first... if this doesn't work,
+  # then make both this and tryToMakeLiftUpFromNcbiAssemblyReportFile() work
+  # with multiple assembly report files.
+  my $assemblyLabel = $assemblyLabels[0];
+  my $ua = LWP::UserAgent->new;
+  my $eUtilBase = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils';
+  my $assemblyIdQuery = "$eUtilBase/esearch.fcgi?db=assembly&term=$assemblyLabel";
+  my $assemblyId = eUtilQuery($ua, $assemblyIdQuery, '<Id>(\d+)<');
+  if (! defined $assemblyId) {
+    return undef;
+  }
+  my $summaryQuery = "$eUtilBase/esummary.fcgi?db=assembly&id=$assemblyId";
+  my $gcfAcc = eUtilQuery($ua, $summaryQuery, '<AssemblyAccession>([\w.]+)<');
+  my $assemblyReportFile = "$gcfAcc.assembly.txt";
+  my $assemblyReportUrl = 'ftp://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/All/' .
+    $assemblyReportFile;
+  my $ftpCmd = "$wget $assemblyReportUrl";
+  HgAutomate::verbose(1, "# $ftpCmd\n");
+  if (system($ftpCmd) == 0) {
+    return $assemblyReportFile;
+  } else {
+    warn "Command failed:\n$ftpCmd\n";
+  }
+  return undef;
+} # getNcbiAssemblyReportFile
+
 sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
   # For missing contigs described in list-of-lists $missingInfo, try to find a mapping in
   # $ncbiAssemblyReports from RefSeq assembly contig to GenBank assembly contig, and check
@@ -575,6 +631,7 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
     $missingContigs{$contig} = $i;
   }
   my @missingInfo = ();
+
   my $NARF = &HgAutomate::mustOpen("$ncbiAssemblyReportFile");
   while (<$NARF>) {
     next if (/^#/);
@@ -584,7 +641,12 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
     if (exists $missingContigs{$rsaTrimmed}) {
       my $ucscName;
       if ($chr eq "na") {
-	$ucscName = "chrUn_$gbaTrimmed";
+	if ($db eq 'susScr3') {
+	  $ucscName = $gbAcc;
+	  $ucscName =~ s/\./-/;
+	} else {
+	  $ucscName = "chrUn_$gbaTrimmed";
+	}
       } else {
 	$chr = "M" if ($chr eq "MT");
 	$chr = "chr$chr" unless ($chr =~ /^chr/);
@@ -642,6 +704,9 @@ sub tryToMakeLiftUp {
   if ($missingCount > 0) {
     # If we didn't find liftUp info for some contigs in ContigInfo, look in ncbiAssemblyReportFile
     # if given:
+    if (! $ncbiAssemblyReportFile) {
+      $ncbiAssemblyReportFile = getNcbiAssemblyReportFile();
+    }
     if ($ncbiAssemblyReportFile) {
       (my $thisLiftUpCount, $missingInfo) =
 	&tryToMakeLiftUpFromNcbiAssemblyReportFile($liftUpFile, \%chromSizes, $missingInfo);
@@ -710,8 +775,17 @@ sub checkSequenceNames {
 *** They are listed in $runDir/dbSnpContigsNotInUcsc.txt
 $ContigInfoLiftUp
 *** You must account for all $badContigCount contig_acc values in $CONFIG,
-*** in the liftUp file and/or ignoreDbSnpContigsFile.
-*** Then run again with -continue=loadDbSnp .
+*** using the liftUp and/or ignoreDbSnpContigsFile settings (see -help output).
+";
+    if ($ncbiAssemblyReportFile) {
+      $msg .=
+"*** Check the auto-generated suggested.lft to see if it covers all
+*** $badContigCount contigs; if it does, add 'liftUp suggested.lft' to $CONFIG.
+";
+    }
+    $msg .=
+"*** Then run again with -continue=loadDbSnp .
+
 ";
     if (! $ncbiAssemblyReportFile) {
       $msg .= "
@@ -733,9 +807,13 @@ sub loadDbSnp {
   my @rejectLabels = &checkAssemblySpec();
   my $runDir = "$buildDir/$commonName";
   # If liftUp is a relative path, prepend $runDir/
-  $liftUp = "$runDir/$liftUp" if ($liftUp !~ /^\//);
+  if ($liftUp && $liftUp !~ /^\//) {
+    $liftUp = "$runDir/$liftUp";
+  }
   # Likewise for $ignoreDbSnpContigsFile:
-  $ignoreDbSnpContigsFile = "$runDir/$ignoreDbSnpContigsFile" if ($ignoreDbSnpContigsFile !~ /^\//);
+  if ($ignoreDbSnpContigsFile && $ignoreDbSnpContigsFile !~ /^\//) {
+    $ignoreDbSnpContigsFile = "$runDir/$ignoreDbSnpContigsFile";
+  }
   # Prepare grep -v statements to exclude assembly labels or contigs if specified:
   my $grepOutLabels = @rejectLabels ? "| egrep -vw '(" . join('|', @rejectLabels) . ")' " : "";
   my $grepOutContigs = "";
@@ -789,6 +867,7 @@ sub loadDbSnp {
       | perl -wpe '$cleanDbSnpSql' \\
         > tmp.tab
       hgLoadSqlTab -oldTable $tmpDb \$t placeholder tmp.tab
+      rm tmp.tab
     end
     hgsql $tmpDb -e \\
       'alter table $ContigInfo add index (ctg_id); \\
@@ -1025,7 +1104,7 @@ EOF
 
     #######################################################################
     # Extract observed alleles, molType and snp class from FASTA headers gnl
-    foreach rej (AltOnly NotOn)
+    foreach rej (AltOnly)
       if (-e $runDir/rs_fasta/rs_ch\$rej.fas.gz) then
         mkdir -p $runDir/rs_fasta/rejects
         mv $runDir/rs_fasta/rs_ch\$rej.fas.gz $runDir/rs_fasta/rejects/
@@ -1036,7 +1115,7 @@ EOF
 
     zcat $runDir/rs_fasta/rs_ch*.fas.gz \\
     | grep '^>gnl' \\
-    | perl -wpe 's/^\\S+rs(\\d+) .*mol="(\\w+)"\\|class=(\\d+)\\|alleles="([^"]+)"\\|build.*/\$1\\t\$4\\t\$2\\t\$3/ || die "Parse error line \$.:\\n\$_\\n\\t";' \\
+    | perl -wpe 's/""/"/g; s/^\\S+rs(\\d+) .*mol="(\\w+)"\\|class=(\\d+)\\|alleles="([^"]+)"\\|build.*/\$1\\t\$4\\t\$2\\t\$3/ || die "Parse error line \$.:\\n\$_\\n\\t";' \\
     | sort -nu \\
       > ucscGnl.txt
 #*** compare output of following 2 commands:
@@ -1207,19 +1286,14 @@ working directory to $runDir.";
     zcat $runDir/rs_fasta/rs_ch*.fas.gz \\
     | perl -wpe 's/^>gnl\\|dbSNP\\|(rs\\d+) .*/>\$1/ || ! /^>/ || die;' \\
       > $snpBase.fa
-    # Check for duplicates.
-    grep ^\\>rs $snpBase.fa | sort > seqHeaders
-#*** compare output of following 2 commands:
-    wc -l seqHeaders
-#30144822 seqHeaders
-    uniq seqHeaders | wc -l
-#30144822
     # Use hgLoadSeq to generate .tab output for sequence file offsets,
     # and keep only the columns that we need: acc and file_offset.
-    # Index it and translate to snpSeq table format.
+    # Translate to snpSeq table format and remove duplicates.
     hgLoadSeq -test placeholder $snpBase.fa
-    cut -f 2,6 seq.tab > ${snpBase}Seq.tab
-    rm seq.tab seqHeaders
+    cut -f 2,6 seq.tab \\
+    | sort -k1,1 -u \\
+      > ${snpBase}Seq.tab
+    rm seq.tab
 
 # Compress (where possible -- not .fa unfortunately) and copy results back to
 # $runDir
@@ -1259,7 +1333,7 @@ sub loadTables {
     endif
 
     # Load up main track tables.
-    hgLoadBed -tab -onServer -tmpDir=\$TMPDIR -allowStartEqualEnd \\
+    hgLoadBed -tab -onServer -tmpDir=\$TMPDIR -allowStartEqualEnd -type=bed6+ \\
       $db $snpBase -sqlTable=$snpBase.sql $snpBase.bed.gz
 
     zcat ${snpBase}ExceptionDesc.tab.gz \\
@@ -1271,7 +1345,6 @@ sub loadTables {
       rm /gbdb/$db/snp/$snpBase.fa
     endif
     ln -s $runDir/$snpBase.fa /gbdb/$db/snp/$snpBase.fa
-#*** We need a way to drop duplicates without halting the script!
     zcat ${snpBase}Seq.tab.gz \\
     | hgLoadSqlTab $db ${snpBase}Seq \$HOME/kent/src/hg/lib/snpSeq.sql stdin
 

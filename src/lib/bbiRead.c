@@ -439,6 +439,23 @@ slReverse(&sumList);
 return sumList;
 }
 
+static int normalizeCount(struct bbiSummaryElement *el, double countFactor, 
+    double minVal, double maxVal, double sumData, double sumSquares)
+/* normalize statistics to be based on an integer number of valid bases 
+ * Integer value is the smallest integer not less than countFactor */
+{
+bits32 validCount = ceil(countFactor);
+double normFactor = (double)validCount/countFactor;
+
+el->validCount = validCount;
+el->minVal = minVal;
+el->maxVal = maxVal;
+el->sumData = sumData * normFactor;
+el->sumSquares = sumSquares * normFactor;
+
+return validCount;
+}
+
 static bits32 bbiSummarySlice(struct bbiFile *bbi, bits32 baseStart, bits32 baseEnd, 
 	struct bbiSummary *sumList, struct bbiSummaryElement *el)
 /* Update retVal with the average value if there is any data in interval.  Return number
@@ -451,6 +468,7 @@ if (sumList != NULL)
     double minVal = sumList->minVal;
     double maxVal = sumList->maxVal;
     double sumData = 0, sumSquares = 0;
+    double countFactor = 0.0;
 
     struct bbiSummary *sum;
     for (sum = sumList; sum != NULL && sum->start < baseEnd; sum = sum->next)
@@ -459,7 +477,7 @@ if (sumList != NULL)
 	if (overlap > 0)
 	    {
 	    double overlapFactor = (double)overlap / (sum->end - sum->start);
-	    validCount += sum->validCount * overlapFactor;
+	    countFactor += sum->validCount * overlapFactor;
 	    sumData += sum->sumData * overlapFactor;
 	    sumSquares += sum->sumSquares * overlapFactor;
 	    if (maxVal < sum->maxVal)
@@ -468,14 +486,9 @@ if (sumList != NULL)
 		minVal = sum->minVal;
 	    }
 	}
-    if (validCount > 0)
-	{
-	el->validCount = validCount;
-	el->minVal = minVal;
-	el->maxVal = maxVal;
-	el->sumData = sumData;
-	el->sumSquares = sumSquares;
-	}
+
+    if (countFactor > 0)
+	validCount = normalizeCount(el, countFactor, minVal, maxVal, sumData, sumSquares);
     }
 return validCount;
 }
@@ -532,10 +545,11 @@ static bits32 bbiIntervalSlice(struct bbiFile *bbi, bits32 baseStart, bits32 bas
 /* Update retVal with the average value if there is any data in interval.  Return number
  * of valid data bases in interval. */
 {
-double validCount = 0;
+bits32 validCount = 0;
 
 if (intervalList != NULL)
     {
+    double countFactor = 0;
     struct bbiInterval *interval;
     double sumData = 0, sumSquares = 0;
     double minVal = intervalList->val;
@@ -550,7 +564,7 @@ if (intervalList != NULL)
 	    int intervalSize = interval->end - interval->start;
 	    double overlapFactor = (double)overlap / intervalSize;
 	    double intervalWeight = intervalSize * overlapFactor;
-	    validCount += intervalWeight;
+	    countFactor += intervalWeight;
 	    sumData += interval->val * intervalWeight;
 	    sumSquares += interval->val * interval->val * intervalWeight;
 	    if (maxVal < interval->val)
@@ -559,13 +573,10 @@ if (intervalList != NULL)
 		minVal = interval->val;
 	    }
 	}
-    el->validCount = round(validCount);
-    el->minVal = minVal;
-    el->maxVal = maxVal;
-    el->sumData = sumData;
-    el->sumSquares = sumSquares;
+
+    validCount = normalizeCount(el, countFactor, minVal, maxVal, sumData, sumSquares);
     }
-return round(validCount);
+return validCount;
 }
 
 
@@ -578,7 +589,7 @@ struct bbiInterval *intervalList = NULL, *interval;
 struct lm *lm = lmInit(0);
 intervalList = (*fetchIntervals)(bbi, chrom, start, end, lm);
 boolean result = FALSE;
-if (intervalList != NULL);
+if (intervalList != NULL)
     {
     int i;
     bits32 baseStart = start, baseEnd;

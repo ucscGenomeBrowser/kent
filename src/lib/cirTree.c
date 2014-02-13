@@ -162,6 +162,8 @@ static struct rTree *rTreeFromChromRangeArray( struct lm *lm, int blockSize, int
 	bits64 (*fetchOffset)(const void *va, void *context), bits64 endFileOffset,
 	int *retLevelCount)
 {
+if (itemCount == 0)
+    return NULL;
 char *items = itemArray;
 struct rTree *el, *list=NULL, *tree = NULL;
 
@@ -344,11 +346,14 @@ void cirTreeFileBulkIndexToOpenFile(
 /* Create a r tree index from a sorted array, writing output starting at current position
  * of an already open file.  See rTreeFileCreate for explanation of parameters. */
 {
-int levelCount;
+int levelCount = 0;
 struct lm *lm = lmInit(0);
 struct rTree *tree = rTreeFromChromRangeArray(lm, blockSize, itemsPerSlot,
 	itemArray, itemSize, itemCount, context, fetchKey, fetchOffset, endFileOffset,
 	&levelCount);
+struct rTree dummyTree = {.startBase=0};
+if (tree == NULL) 
+    tree = &dummyTree;	// Work for empty files....
 bits32 magic = cirTreeSig;
 bits32 reserved = 0;
 writeOne(f, magic);
@@ -361,7 +366,8 @@ writeOne(f, tree->endBase);
 writeOne(f, endFileOffset);
 writeOne(f, itemsPerSlot);
 writeOne(f, reserved);
-writeTreeToOpenFile(tree, blockSize, levelCount, f);
+if (tree != &dummyTree)
+    writeTreeToOpenFile(tree, blockSize, levelCount, f);
 lmCleanup(&lm);
 }
 

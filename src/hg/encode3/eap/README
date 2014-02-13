@@ -1,0 +1,10 @@
+This the source code for the Encode Analysis Pipeline (EAP).  It is all available under the BSD 
+license as part of the ENCODE Project.
+
+The EAP is a system for running genomics pipelines implemented using mySQL, Parasol, and C.
+The C code is
+	eapDaemon - take anything in edwAnalysisJob table and feed it to Parasol
+	eapSchedule - set up edwAnalysisJob and edwAnalysisRun tables make output temp dirs
+	eapFinish - move stuff from output temp dirs into encode data warehouse
+	eapMonitor - look at how jobs are progressing through table and parasol.  
+	             If need be chill and kill steps gone awry.

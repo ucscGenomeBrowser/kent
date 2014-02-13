@@ -405,7 +405,8 @@ else if (sameString(format, "bigWig"))
     {
     doBigWigReplicate(conn, assembly, elderEf, elderVf, youngerEf, youngerVf);
     }
-else if (sameString(format, "rcc") || sameString(format, "idat"))
+else if (sameString(format, "rcc") || sameString(format, "idat") 
+    || sameString(format, "customTrack"))
     {
     warn("Don't know how to compare %s files", format);
     }
@@ -434,7 +435,8 @@ if (!isEmpty(replicate) && !sameString(replicate, "n/a")
     struct edwValidFile *elder, *elderList = edwFindElderReplicates(conn, vf);
     if (elderList != NULL)
 	{
-	struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+	char *targetDb = edwSimpleAssemblyName(vf->ucscDb);
+	struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, targetDb);
 	for (elder = elderList; elder != NULL; elder = elder->next)
 	    {
 	    doReplicatePair(conn, assembly, edwFileFromIdOrDie(conn, elder->fileId), elder, ef, vf);

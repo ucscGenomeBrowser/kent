@@ -3,6 +3,17 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
+#Settings used to configure warehouse
+CREATE TABLE edwSettings (
+    id int unsigned auto_increment,	# Settings ID
+    name varchar(255) default '',	# Settings name, can't be reused
+    val varchar(255) default '',	# Settings value, some undefined but not huge thing
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(name),
+    INDEX(val)
+);
+
 #Someone who submits files to or otherwise interacts with big data warehouse
 CREATE TABLE edwUser (
     id int unsigned auto_increment,	# Autoincremented user ID
@@ -137,8 +148,20 @@ CREATE TABLE edwAssembly (
     twoBitId int unsigned default 0,	# File ID of associated twoBit file
     baseCount bigint default 0,	# Count of bases including N's
     realBaseCount bigint default 0,	# Count of non-N bases in assembly
+    seqCount int unsigned default 0,	# Number of chromosomes or other distinct sequences in assembly
               #Indices
     PRIMARY KEY(id)
+);
+
+#A biosample - not much info here, just enough to drive analysis pipeline
+CREATE TABLE edwBiosample (
+    id int unsigned auto_increment,	# Biosample id
+    term varchar(255) default '',	# Human readable.  Shared with ENCODE2.
+    taxon int unsigned default 0,	# NCBI taxon number - 9606 for human.
+    sex varchar(255) default '',	# One letter code: M male, F female, B both, U unknown
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(term)
 );
 
 #An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford.
@@ -150,6 +173,7 @@ CREATE TABLE edwExperiment (
     rfa varchar(255) default '',	# Something like 'ENCODE2' or 'ENCODE3'.  Is award.rfa at Stanford.
     assayType varchar(255) default '',	# Similar to dataType. Is assay_term_name at Stanford.
     ipTarget varchar(255) default '',	# The target for the immunoprecipitation in ChIP & RIP.
+    control varchar(255) default '',	# Primary control for experiment.  Usually another experiment accession.
               #Indices
     UNIQUE(accession)
 );
@@ -184,6 +208,7 @@ CREATE TABLE edwValidFile (
     PRIMARY KEY(id),
     INDEX(licensePlate),
     UNIQUE(fileId),
+    INDEX(format(12)),
     INDEX(outputType(16)),
     INDEX(experiment(16))
 );
@@ -252,6 +277,8 @@ CREATE TABLE edwBamFile (
     u4mReadCount int default 0,	# Uniquely-mapped 4 million read actual read # (usually 4M)
     u4mUniquePos int default 0,	# Unique positions in target of the 4M reads that map to single pos
     u4mUniqueRatio double default 0,	# u4mUniqPos/u4mReadCount - measures library diversity
+    targetBaseCount bigint default 0,	# Count of bases in mapping target
+    targetSeqCount int unsigned default 0,	# Number of chromosomes or other distinct sequences in mapping target
               #Indices
     PRIMARY KEY(id),
     UNIQUE(fileId)
@@ -358,8 +385,8 @@ CREATE TABLE edwQaPairedEndFastq (
     recordComplete tinyint default 0,	# Flag to avoid a race condition. Ignore record if this is 0
               #Indices
     PRIMARY KEY(id),
-    UNIQUE(fileId1),
-    UNIQUE(fileId2)
+    INDEX(fileId1),
+    INDEX(fileId2)
 );
 
 #A job to be run asynchronously and not too many all at once.
@@ -386,67 +413,4 @@ CREATE TABLE edwSubmitJob (
     pid int default 0,	# Process ID for running processes
               #Indices
     PRIMARY KEY(id)
-);
-
-#An analysis pipeline job to be run asynchronously and not too many all at once.
-CREATE TABLE edwAnalysisJob (
-    id int unsigned auto_increment,	# Job id
-    commandLine longblob,	# Command line of job
-    startTime bigint default 0,	# Start time in seconds since 1970
-    endTime bigint default 0,	# End time in seconds since 1970
-    stderr longblob,	# The output to stderr of the run - may be nonempty even with success
-    returnCode int default 0,	# The return code from system command - 0 for success
-    pid int default 0,	# Process ID for running processes
-              #Indices
-    PRIMARY KEY(id)
-);
-
-#Software that is tracked by the analysis pipeline.
-CREATE TABLE edwAnalysisSoftware (
-    id int unsigned auto_increment,	# Software id
-    name varchar(255) default '',	# Command line name
-    version longblob,	# Current version
-    md5 char(32) default 0,	# md5 sum of executable file
-              #Indices
-    PRIMARY KEY(id),
-    UNIQUE(name)
-);
-
-#A step in an analysis pipeline - something that takes one file to another
-CREATE TABLE edwAnalysisStep (
-    id int unsigned auto_increment,	# Step id
-    name varchar(255) default '',	# Name of this analysis step
-    softwareCount int default 0,	# Number of pieces of software used in step
-    software longblob,	# Names of software used. First is the glue script
-              #Indices
-    PRIMARY KEY(id),
-    UNIQUE(name)
-);
-
-#Information on an analysis job that we're planning on running
-CREATE TABLE edwAnalysisRun (
-    id int unsigned auto_increment,	# Analysis run ID
-    jobId int unsigned default 0,	# ID in edwAnalysisJob table
-    experiment char(16) default 0,	# Something like ENCSR000CFA.
-    analysisStep varchar(255) default '',	# Name of analysis step
-    configuration varchar(255) default '',	# Configuration for analysis step
-    tempDir longblob,	# Where analysis is to be computed
-    firstInputId int unsigned default 0,	# ID in edwFile of first input
-    inputFileCount int unsigned default 0,	# Total number of input files
-    inputFileIds longblob,	# list of all input files as fileIds
-    inputTypes longblob,	# List of types to go with input files in json output
-    assemblyId int unsigned default 0,	# Id of assembly we are working with
-    outputFileCount int unsigned default 0,	# Total number of output files
-    outputNamesInTempDir longblob,	# list of all output file names in output dir
-    outputFormats longblob,	# list of formats of output files
-    outputTypes longblob,	# list of formats of output files
-    jsonResult longblob,	# JSON formatted object with result for Stanford metaDatabase
-    uuid char(37) default 0,	# Help to synchronize us with Stanford.
-    createStatus tinyint default 0,	# 1 if output files made 0 if not made, -1 if make tried and failed
-    createCount int unsigned default 0,	# Count of files made
-    createFileIds longblob,	# list of ids of output files in warehouse
-              #Indices
-    PRIMARY KEY(id),
-    INDEX(experiment),
-    INDEX(uuid)
 );

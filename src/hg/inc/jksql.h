@@ -224,6 +224,10 @@ char *sqlEscapeTabFileString2(char *to, const char *from);
 /* Escape a string for including in a tab seperated file. Output string
  * must be 2*strlen(from)+1 */
 
+char *sqlEscapeTabFileString(const char *from);
+/* Escape a string for including in a tab seperated file. Freez or freeMem
+ * result when done. */
+
 struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query);
 /* Query database.
  * old comment: If result empty squawk and die.

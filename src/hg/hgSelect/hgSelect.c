@@ -50,7 +50,7 @@ static boolean inclChrom(char *chrom)
 {
 if (noRandom && (strstr(chrom, "_random") != NULL))
     return FALSE;
-if (noHap && (strstr(chrom, "_hap") != NULL))
+if (noHap && haplotype(chrom))
     return FALSE;
 return TRUE;
 }
@@ -98,7 +98,7 @@ if (!tblInfo->isSplit && noRandom)
 if (!tblInfo->isSplit && noHap)
     {
     addWhereOrAnd(query, clauseCnt++);
-    sqlDyStringPrintf(query, " (%s not like \"%%__hap%%\")", tblInfo->chromField);
+    sqlDyStringPrintf(query, " (%s not like \"%%__hap%%\" AND %s not like \"%%__alt%%\")", tblInfo->chromField, tblInfo->chromField);
     }
 }
 

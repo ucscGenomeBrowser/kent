@@ -1,5 +1,8 @@
 validateManifest (vm) Versions Log
 
+1.8 (TESTING)
+    Add support for bedRrbs format including bedRrbs.as
+
 1.7 (RELEASED)
     Better checks for idat and rcc formats by refactoring the checking code from edwSubmit into hg/lib/encode3/encode3Valid.c.
     New vf version is now 4.7 and tolerates leading blank lines in fastq which covers also the case of trailing blank lines. 

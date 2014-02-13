@@ -39,7 +39,7 @@ void changeFormat(struct sqlConnection *conn, struct edwValidFile *vf, char *for
 {
 struct edwFile *ef = edwFileFromId(conn, vf->fileId);
 char *newTags = cgiStringNewValForVar(ef->tags, tagToChange, format);
-edwFileResetTags(conn, ef, newTags);
+edwFileResetTags(conn, ef, newTags, TRUE);
 edwFileFree(&ef);
 }
 

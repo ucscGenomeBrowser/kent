@@ -233,8 +233,10 @@ void hashResize(struct hash *hash, int powerOfTwoSize);
 /* Resize the hash to a new size */
 
 struct hash *hashFromSlNameList(void *list);
-/* Create a hash out of a list of slNames or any kind of list where the */
-/* first field is the next pointer and the second is the name. */
+/* Create a hash out of a list of slNames. */
+
+struct hash *hashSetFromSlNameList(void *list);
+/* Create a hashSet (hash without values) out of a list of slNames. */
 
 void freeHash(struct hash **pHash);
 /* Free up hash table. */

@@ -19,12 +19,14 @@ errAbort(
   "options:\n"
   "   -unsplit - if set will merge together tables split by chromosome\n"
   "   -noNumberCommas - if set will leave out commas in big numbers\n"
+  "   -justSchema - only schema parts, no contents\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"unsplit", OPTION_BOOLEAN},
    {"noNumberCommas", OPTION_BOOLEAN},
+   {"justSchema", OPTION_BOOLEAN},
    {"host", OPTION_STRING},
    {"user", OPTION_STRING},
    {"password", OPTION_STRING},
@@ -33,6 +35,7 @@ static struct optionSpec options[] = {
 
 boolean noNumberCommas = FALSE;
 boolean unsplit = FALSE;
+boolean justSchema = FALSE;
 struct slName *chromList;	/* List of chromosomes in unsplit case. */
 
 struct fieldDescription
@@ -310,6 +313,14 @@ struct indexGroup
     struct indexInfo *fieldList;	/* Various fields involved in index. */
     };
 
+int indexGroupCmp(const void *va, const void *vb)
+/* Compare two index groups to order by name */
+{
+const struct indexGroup *a = *((struct indexGroup **)va);
+const struct indexGroup *b = *((struct indexGroup **)vb);
+return strcmp(a->name, b->name);
+}
+
 void printIndexes(FILE *f, struct sqlConnection *conn, struct tableInfo *ti)
 /* Print info about indexes on table to file. */
 {
@@ -359,8 +370,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
-fprintf(f, "%s has %d rows and %d indexes\n", ti->name, ti->status->rows, 
-	slCount(groupList)); 
+fprintf(f, "%s has ", ti->name);
+if (!justSchema)
+    fprintf(f, "%d rows and ", ti->status->rows);
+slSort(&groupList, indexGroupCmp);
+fprintf(f, "%d indexes\n", slCount(groupList)); 
+
 for (group = groupList; group != NULL; group = group->next)
     {
     long long maxCardinality = 0, nonUnique = FALSE;
@@ -375,7 +390,7 @@ for (group = groupList; group != NULL; group = group->next)
 	nonUnique = ii->nonUnique;
 	}
     fprintf(f, "\t%s", (nonUnique ? "MUL" : "PRI") );
-    if (maxCardinality > 0 && !isSplit)
+    if (maxCardinality > 0 && !isSplit && !justSchema)
 	fprintf(f, "\t%lld", maxCardinality);
     else
         fprintf(f, "\tn/a");
@@ -444,42 +459,48 @@ for (ti = tiList; ti != NULL; ti = ti->next)
 fprintf(f, "DATABASE SUMMARY:\t%s\n", database);
 printTaggedLong(f, "tables", slCount(tiList));
 printTaggedLong(f, "fields", totalFields);
-printTaggedLong(f, "bytes", totalIndex + totalData);
-fprintf(f, "\t");
-printTaggedLong(f, "data", totalData);
-fprintf(f, "\t");
-printTaggedLong(f, "index", totalIndex);
-printTaggedLong(f, "rows", totalRows);
+if (!justSchema)
+    {
+    printTaggedLong(f, "bytes", totalIndex + totalData);
+    fprintf(f, "\t");
+    printTaggedLong(f, "data", totalData);
+    fprintf(f, "\t");
+    printTaggedLong(f, "index", totalIndex);
+    printTaggedLong(f, "rows", totalRows);
+    }
 fprintf(f, "\n");
 
 /* Print summary of table sizes ordered by size. */
-slSort(&tiList, tableInfoCmpSize);
-fprintf(f, "TABLE SIZE SUMMARY:\n");
-fprintf(f, "#bytes\tname\trows\tdata\tindex\n");
-for (ti = tiList; ti != NULL; ti = ti->next)
+if (!justSchema)
     {
-    printLongNumber(f, ti->status->dataLength + ti->status->indexLength);
-    fprintf(f, "\t");
-    fprintf(f, "%s\t", ti->name);
-    printLongNumber(f, ti->status->rows);
-    fprintf(f, "\t");
-    printLongNumber(f, ti->status->dataLength);
-    fprintf(f, "\t");
-    printLongNumber(f, ti->status->indexLength);
+    slSort(&tiList, tableInfoCmpSize);
+    fprintf(f, "TABLE SIZE SUMMARY:\n");
+    fprintf(f, "#bytes\tname\trows\tdata\tindex\n");
+    for (ti = tiList; ti != NULL; ti = ti->next)
+	{
+	printLongNumber(f, ti->status->dataLength + ti->status->indexLength);
+	fprintf(f, "\t");
+	fprintf(f, "%s\t", ti->name);
+	printLongNumber(f, ti->status->rows);
+	fprintf(f, "\t");
+	printLongNumber(f, ti->status->dataLength);
+	fprintf(f, "\t");
+	printLongNumber(f, ti->status->indexLength);
+	fprintf(f, "\n");
+	}
+    fprintf(f, "\n");
+
+    /* Print summary of table sizes ordered by size. */
+    slSort(&tiList, tableInfoCmpUpdateTime);
+    fprintf(f, "TABLE UPDATE SUMMARY:\n");
+    fprintf(f, "#table\tupdate time\tcreate time\tcheckTime\t\n");
+    for (ti = tiList; ti != NULL; ti = ti->next)
+	{
+	fprintf(f, "%s\t%s\t%s\t%s\n", ti->status->updateTime, ti->name,
+	    ti->status->createTime, naForNull(ti->status->checkTime));
+	}
     fprintf(f, "\n");
     }
-fprintf(f, "\n");
-
-/* Print summary of table sizes ordered by size. */
-slSort(&tiList, tableInfoCmpUpdateTime);
-fprintf(f, "TABLE UPDATE SUMMARY:\n");
-fprintf(f, "#table\tupdate time\tcreate time\tcheckTime\t\n");
-for (ti = tiList; ti != NULL; ti = ti->next)
-    {
-    fprintf(f, "%s\t%s\t%s\t%s\n", ti->status->updateTime, ti->name,
-    	ti->status->createTime, naForNull(ti->status->checkTime));
-    }
-fprintf(f, "\n");
 
 /* Print summary of rows and fields in each table ordered alphabetically */
 slSort(&tiList, tableInfoCmpName);
@@ -545,6 +566,7 @@ if (argc != 3)
     usage();
 noNumberCommas = optionExists("noNumberCommas");
 unsplit = optionExists("unsplit");
+justSchema = optionExists("justSchema");
 dbSnoop(argv[1], argv[2]);
 return 0;
 }

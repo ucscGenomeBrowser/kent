@@ -1201,4 +1201,163 @@ TMPDIR=/dev/shm
     # QTLname:idNumber to allow use of $p in external URL for idNumber
     cut -f1-4 galGal4.animalQtl.bed | sed -e 's/-/:/;' > galGal4.animalQtl.bed4
     hgLoadBed galGal4 animalQtl galGal4.animalQtl.bed4
+
 ############################################################################
+# DBSNP B138 / SNP138 (DONE 1/24/14 angie)
+    # RedMine #12490
+    screen
+    mkdir -p /hive/data/outside/dbSNP/138/chicken
+    cd /hive/data/outside/dbSNP/138/chicken
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (chicken_9031 in this case).
+    # Then click into that directory and look for file names like
+    #    b(1[0-9][0-9])_
+    # -- use the first num for build setting in config.ra
+    # The buildAssembly setting in config.ra is empty because dbSNP stopped including
+    # that in file names.
+    cat > config.ra <<EOF
+db galGal4
+build 138
+buildAssembly 
+orgDir chicken_9031
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
+    # Some trial and error is always required to get the config.ra just right.
+    # First stop:
+#*** 34 lines of b138_ContigInfo.bcp.gz contained contig names that
+#*** could not be mapped to chrom.size via their GenBank contig mappings; see
+#*** /hive/data/outside/dbSNP/138/chicken/cantLiftUpSeqNames.txt .
+#
+#*** You must account for all 16847 contig_acc values in config.ra,
+#*** using the liftUp and/or ignoreDbSnpContigsFile settings (see -help output).
+#*** Check the auto-generated suggested.lft to see if it covers all
+#*** 16847 contigs; if it does, add 'liftUp suggested.lft' to config.ra.
+#*** Then run again with -continue=loadDbSnp .
+
+    head -5 cantLiftUpSeqNames.txt
+#unlocalized-scaffold (no chrLGE22C19W28_E50C23_AADN03011211_random in chrom.sizes)      NW_003766145    chrLGE22C19W28_E50C23
+#unlocalized-scaffold (no chrLGE22C19W28_E50C23_AADN03011213_random in chrom.sizes)      NW_003766138    chrLGE22C19W28_E50C23
+#unlocalized-scaffold (no chrLGE22C19W28_E50C23_AADN03011215_random in chrom.sizes)      NW_003766135    chrLGE22C19W28_E50C23
+#unlocalized-scaffold (no chrLGE22C19W28_E50C23_AADN03011216_random in chrom.sizes)      NW_003766131    chrLGE22C19W28_E50C23
+#unlocalized-scaffold (no chrLGE22C19W28_E50C23_AADN03011217_random in chrom.sizes)      NW_003766128    chrLGE22C19W28_E50C23
+
+    grep chrLGE22C19W28_E50C23 /hive/data/genomes/galGal4/chrom.sizes
+#chrLGE22C19W28_E50C23   965146
+    # In our assembly, chrLGE22C19W28_E50C23 is an assembled unit, but dbSNP has mappings
+    # to individual NW_* contigs.
+    # GCF_000002315.3.assembly.txt, downloaded by doDbSnp.pl, has mappings of those NW_* contigs
+    # to AADN* GenBank contig IDs like this:
+    grep NW_003766145 GCF_000002315.3.assembly.txt
+#ChrE22C19W28_E50C23_random_7180000979879        unlocalized-scaffold    LGE22C19W28_E50C23      Linkage Group   AADN03011211.1  =       NW_003766145.1  Primary Assembly
+
+    # Now, see if galGal4/genbank/ has any info about the mapping of those AADN*'s to the
+    # assembled LGE22C19W28_E50C23:
+    pushd /hive/data/genomes/galGal4/genbank/Primary_Assembly
+    find . -type f | xargs grep AADN03011213
+#./unlocalized_scaffolds/unlocalized.chr2scaf:LGE22C19W28_E50C23 AADN03011213.1
+#./component_localID2acc:ctg7180000923959        AADN03011213.1
+#./scaffold_localID2acc:ChrE22C19W28_E50C23_random_7180000977649 AADN03011213.1
+    # OK, not as hopeful as I thought (no coord offsets).
+    # But, since AADN03011213 is associated with LGE22C19W28_E50C23 in unlocalized_scaffolds,
+    # it was in the genbank assembly.  Why not in chrom.sizes?
+    # -- because Hiram found that sequence names like chrLGE22C19W28_E50C23_AADN03011213_random
+    # would be too long (search above for "these names became too long, limit is 31 in browser").
+    # So Hiram shortened them.  Now that we know what they look like in chrom.sizes, we can
+    # generate liftUp mappings to add to suggested.lft.
+    popd
+
+    # Map too-big sequence name to sequence size, sort on too-big name:
+    egrep 'chrLGE22C19W28_(N0|JH)' /hive/data/genomes/galGal4/chrom.sizes \
+    | sed -e 's/chrLGE22C19W28_/chrLGE22C19W28_E50C23_/; s/_N0/_AADN0/;' \
+    | sort > bigNameToSize
+    # Map too-big sequence name to RefSeq NW_* accession, sort on too-big name:
+    awk '{print $3 "\t" $6;}' cantLiftUpSeqNames.txt | sort > bigNameToNW
+    # Use join and sed to make some liftUp entries (and re-shorten the big names):
+    join -o 2.2,1.2,1.1,1.2 bigNameToSize bigNameToNW \
+    | sed -re 's/^/0\t/; s/ /\t/g; s/_E50C23//; s/AAD//;' \
+    > bigName.lft
+    wc -l bigName.lft
+#34 bigName.lft
+
+    # Now add our tweaked-name mappings to the auto-generated suggested.lft:
+    cat suggested.lft bigName.lft > suggestedPlus.lft
+    cat >> config.ra <<EOF
+liftUp suggestedPlus.lft
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# FILTER SNP138 (DONE 1/27/14 angie)
+    cd /hive/data/outside/dbSNP/138/chicken
+    zcat snp138.bed.gz \
+    | ~/kent/src/hg/utils/automation/categorizeSnps.pl
+#Mult:     189438
+#Common:   20461
+#Flagged:  0
+#leftover: 9173531
+    # 20,461 SNPs out of > 9M that meet the threshold for Common... enough to warrant a
+    # Common SNPs track?  Maybe; easy enough to drop it later if we decide it's too sparse.
+    foreach f ({Mult,Common}.bed.gz)
+        mv $f snp138$f
+    end
+    # Load tables
+    foreach subset (Mult Common)
+        hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \
+          galGal4 snp138$subset -sqlTable=snp138.sql snp138$subset.bed.gz
+    end
+
+
+##############################################################################
+# DBSNP CODING ANNOTATIONS (138) (DONE 1/27/14 angie)
+    cd /hive/data/outside/dbSNP/138/chicken
+    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
+    # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
+    zcat ncbiFuncAnnotations.txt.gz \
+    | ~/kent/src/hg/utils/automation/fixNcbiFuncCoords.pl ncbiFuncInsertions.ctg.bed.gz \
+    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
+    | uniq \
+      > ncbiFuncAnnotationsFixed.txt
+    wc -l ncbiFuncAnnotationsFixed.txt
+#281194 ncbiFuncAnnotationsFixed.txt
+   # How many & what kinds of function types?
+    cut -f 6 ncbiFuncAnnotationsFixed.txt \
+    | sort -n | uniq -c
+#  84191 3   (coding-synon)
+# 125292 8   (cds-reference)
+#   1230 41  (nonsense)
+#  46722 42  (missense)
+#     67 43  (stop-loss)
+#   4017 44  (frameshift)
+#  19675 45  (cds-indel)
+
+   # Gather up multiple annotation lines into one line per {snp, gene, frame}:
+    ~/kent/src/hg/utils/automation/collectNcbiFuncAnnotations.pl ncbiFuncAnnotationsFixed.txt \
+    | liftUp snp138CodingDbSnp.bed suggested.lft warn stdin
+#No cds-reference given for [NW_003764320, 312313, 312315, 16097296, XM_424719]; skipping
+#No cds-reference given for [NW_001488830, 11818621, 11818623, 16098392, XM_424730]; skipping
+#No cds-reference given for [NW_003763686, 7034394, 7034396, 16098476, BX950238]; skipping
+#No cds-reference given for [NW_003763686, 7034394, 7034396, 16098476, XM_419189]; skipping
+#No cds-reference given for [NW_001488830, 12048499, 12048500, 16098544, NM_204871]; skipping
+#No cds-reference given for [NW_001488830, 12555500, 12555502, 16098908, CR523101]; skipping
+#No cds-reference given for [NW_001488830, 12555500, 12555502, 16098908, XM_003642946]; skipping
+#No cds-reference given for [NW_001488830, 12555500, 12555502, 16098908, XM_424737]; skipping
+#...
+    # This time, tons of such warnings (which used to be silent) -- should consider
+    # not requiring that info.  hgc would have to extract the reference allele and codon(s)
+    # from assembly sequence... which I think it already does in a different part of hgc...
+    hgLoadBed galGal4 snp138CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
+      -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
+      snp138CodingDbSnp.bed
+#Read 145135 elements of size 11 from snp138CodingDbSnp.bed
+
+
+##############################################################################
+# Farm Animal Cytoband track (IN PROGRESS - 2014-02-04 - Pauline)
+    mkdir /hive/data/genomes/galGal4/bed/cytoBand
+    cd /hive/data/genomes/galGal4/bed/cytoBand
+
+    wget http://www.animalgenome.org/hu/share/GbandCoord.tar.gz
+

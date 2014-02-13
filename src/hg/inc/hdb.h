@@ -202,9 +202,9 @@ char *hTableForTrack(char *db, char *trackName);
 /* Return a table for a track in db. Returns one of the split
  * tables, or main table if not split */
 
-char *hCloneRewriteFileName(char* fileName);
+char *hReplaceGbdb(char* fileName);
 /* clone and change a filename that can be located in /gbdb to somewhere else
- * according to hg.conf's "gbdb.loc". Result has to be freed. */
+ * according to hg.conf's "gbdbLoc1" and "gbdbLoc2". Result has to be freed. */
 
 void hParseTableName(char *db, char *table, char trackName[HDB_MAX_TABLE_STRING],
 		     char chrom[HDB_MAX_CHROM_STRING]);
@@ -845,6 +845,28 @@ int chrSlNameCmp(const void *el1, const void *el2);
 /* Compare chromosome names by number, then suffix.  el1 and el2 must be
  * slName **s (as passed in by slSort) whose names match the regex
  * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
+
+int chrNameCmpWithAltRandom(char *str1, char *str2);
+/* Compare chromosome or linkage group names str1 and str2 
+ * to achieve this order:
+ * chr1 .. chr22
+ * chrX
+ * chrY
+ * chrM
+ * chr1_{alt, random} .. chr22_{alt, random}
+ * chrUns
+ */
+
+int chrSlNameCmpWithAltRandom(const void *el1, const void *el2);
+/* Compare chromosome or linkage group names str1 and str2 
+ * to achieve this order:
+ * chr1 .. chr22
+ * chrX
+ * chrY
+ * chrM
+ * chr1_{alt, random} .. chr22_{alt, random}
+ * chrUns
+ */
 
 int bedCmpExtendedChr(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart.  Use extended

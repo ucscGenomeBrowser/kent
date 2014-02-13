@@ -355,6 +355,45 @@ void makeValidIdat(struct sqlConnection *conn, char *path, struct edwFile *ef, s
 encode3ValidateIdat(path);
 }
 
+void makeValidCustomTrack(struct sqlConnection *conn, char *path, 
+    struct edwFile *ef, struct edwValidFile *vf)
+/* Fill in some info about a BED file of no particular sub-format. This is allowed to have
+ * browser and track lines in it, which are ignored. */
+{
+struct lineFile *lf = lineFileOpen(path, TRUE);
+char *line;
+char *row[256];
+int bedSize = 0;
+while (lineFileNextReal(lf, &line))
+    {
+    if (startsWithWord("browser", line) || startsWithWord("track", line))
+        continue;
+    int wordCount = chopLine(line, row);
+    if (bedSize == 0)
+	{
+        bedSize = wordCount;
+	if (bedSize < 3)
+	    {
+	    lineFileExpectAtLeast(lf, 3, bedSize);
+	    }
+	}
+    else
+	{
+        if (bedSize != wordCount)
+	    {
+	    errAbort("Some lines of %s have %d words, but line %d of has %d words",
+		    lf->fileName, bedSize, lf->lineIx, wordCount);
+	    }
+	}
+    int start = lineFileNeedNum(lf, row, 1);
+    int end = lineFileNeedNum(lf, row, 2);
+    if (end < start)
+         errAbort("end before start line %d of %s", lf->lineIx, lf->fileName);
+    ++vf->itemCount;
+    vf->basesInItems += (end - start);
+    }
+lineFileClose(&lf);
+}
 
 static void needAssembly(struct edwFile *ef, char *format, struct edwAssembly *assembly)
 /* Require assembly tag be present. */
@@ -364,50 +403,6 @@ if (assembly == NULL)
 	(long long)ef->id, ef->submitFileName, format);
 }
 
-static char *findTagOrEmpty(struct cgiParsedVars *tags, char *key)
-/* Find key in tags.  If it is not there, or empty, or 'n/a' valued return empty string
- * otherwise return val */
-{
-char *val = hashFindVal(tags->hash, key);
-if (val == NULL || sameString(val, "n/a"))
-   return "";
-else
-   return val;
-}
-
-void validFileUpdateDb(struct sqlConnection *conn, struct edwValidFile *el, long long id)
-/* Save edwValidFile as a row to the table specified by tableName, replacing existing record at 
- * id. */
-{
-struct dyString *dy = newDyString(512);
-sqlDyStringAppend(dy, "update edwValidFile set ");
-// omit id and licensePlate fields - one autoupdates and the other depends on this
-// also omit fileId which also really can't change.
-dyStringPrintf(dy, " format='%s',", el->format);
-dyStringPrintf(dy, " outputType='%s',", el->outputType);
-dyStringPrintf(dy, " experiment='%s',", el->experiment);
-dyStringPrintf(dy, " replicate='%s',", el->replicate);
-dyStringPrintf(dy, " validKey='%s',", el->validKey);
-dyStringPrintf(dy, " enrichedIn='%s',", el->enrichedIn);
-dyStringPrintf(dy, " ucscDb='%s',", el->ucscDb);
-dyStringPrintf(dy, " itemCount=%lld,", (long long)el->itemCount);
-dyStringPrintf(dy, " basesInItems=%lld,", (long long)el->basesInItems);
-dyStringPrintf(dy, " sampleCount=%lld,", (long long)el->sampleCount);
-dyStringPrintf(dy, " basesInSample=%lld,", (long long)el->basesInSample);
-dyStringPrintf(dy, " sampleBed='%s',", el->sampleBed);
-dyStringPrintf(dy, " mapRatio=%g,", el->mapRatio);
-dyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
-dyStringPrintf(dy, " depth=%g,", el->depth);
-dyStringPrintf(dy, " singleQaStatus=0,");
-dyStringPrintf(dy, " replicateQaStatus=0,");
-dyStringPrintf(dy, " technicalReplicate='%s',", el->technicalReplicate);
-dyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
-dyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
-dyStringPrintf(dy, " uniqueMapRatio=%g", el->uniqueMapRatio);
-dyStringPrintf(dy, " where id=%lld\n", (long long)id);
-sqlUpdate(conn, dy->string);
-freeDyString(&dy);
-}
 
 void mustMakeValidFile(struct sqlConnection *conn, struct edwFile *ef, struct cgiParsedVars *tags,
     long long oldValidId)
@@ -419,15 +414,7 @@ void mustMakeValidFile(struct sqlConnection *conn, struct edwFile *ef, struct cg
 struct edwValidFile *vf;
 AllocVar(vf);
 vf->fileId = ef->id;
-vf->format = hashFindVal(tags->hash, "format");
-vf->outputType = findTagOrEmpty(tags, "output_type");
-vf->experiment = findTagOrEmpty(tags, "experiment");
-vf->replicate = findTagOrEmpty(tags, "replicate");
-vf->validKey = hashFindVal(tags->hash, "valid_key");
-vf->enrichedIn = findTagOrEmpty(tags, "enriched_in");
-vf->ucscDb = findTagOrEmpty(tags, "ucsc_db");
-vf->technicalReplicate = findTagOrEmpty(tags, "technical_replicate");
-vf->pairedEnd = findTagOrEmpty(tags, "paired_end");
+edwValidFileFieldsFromTags(vf, tags);
 vf->sampleBed = "";
 
 if (vf->format && vf->validKey)	// We only can validate if we have something for format 
@@ -513,6 +500,12 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	makeValidIdat(conn, path, ef, vf);
 	suffix = ".idat";
 	}
+    else if (sameString(format, "customTrack"))
+        {
+	makeValidCustomTrack(conn, path, ef, vf);
+	assert(endsWith(ef->submitFileName, ".gz"));
+	suffix = edwFindDoubleFileSuffix(ef->submitFileName);
+	}
     else if (sameString(format, "unknown"))
         {
 	/* No specific validation needed for unknown format. */
@@ -531,7 +524,8 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	/* Create license plate around our ID.  File in warehouse to use license plate
 	 * instead of baby-babble IDs. */
 	    {
-	    edwMakeLicensePlate(edwLicensePlatePrefix, vf->id, vf->licensePlate, edwMaxPlateSize);
+	    edwMakeLicensePlate( edwLicensePlateHead(conn), 
+		vf->id, vf->licensePlate, edwMaxPlateSize);
 
 	    /* Create swapped out version of edwFileName in newName. */
 	    struct dyString *newName = dyStringNew(0);
@@ -570,9 +564,8 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	}
     else
         {
-	validFileUpdateDb(conn, vf, oldValidId);
+	edwValidFileUpdateDb(conn, vf, oldValidId);
 	}
-
     }
 freez(&vf);
 }

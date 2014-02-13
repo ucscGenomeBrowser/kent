@@ -3815,7 +3815,7 @@
     This table has a simple 2 column format: char(255) factor, char(255) motif.</P>
 </DIV>
 
-<DIV class="motifPwmTable"><span class="types factorSource"></span>
+<DIV class="motifPwmTable"><span class="types factorSource bed6FloatScore"></span>
 <div class="format"><code>motifPwmTable &lt;table&gt;</code></div>
     <P>When viewing the details of a factorSource track item containing
     a binding motif in the <code>motifTable</code>, the 
@@ -3823,6 +3823,20 @@
     This setting names the table holding the position weight matrices 
     that provide this information.</P>
 </DIV>
+
+<DIV class="motifMaxWindow"><span class="types factorSource"></span>
+<div class="format"><code>motifMaxWindow &lt;integer&gt;</code></div>
+    <P>Display of highlighted motifs in a factorSource track can be limited using
+    this setting.  In large genomic regions motifs are not well distinguished in
+    the display, and performance is improved by suppressing the feature.</P>
+</DIV>
+
+<DIV class="motifDrawDefault"><span class="types factorSource"></span>
+<div class="format"><code>motifDrawDefault &lt;on/off&gt;</code></div>
+    <P>If a factorSource track has a motifTable, this setting controls whether motifs 
+    are drawn by default.  It is also configurable by the user.</P>
+</DIV>
+
 
 <DIV class="factorSource_example"><span class="types factorSource"></span>
 <div class="format"><B>Example of a factorSource track</B></div>
@@ -3832,6 +3846,11 @@ type factorSource
 sourceTable myCellLines
 inputTrackTable myCellLineAssociations
 inputTableFieldDisplay cellType treatment lab
+motifTable transfacMotif
+motifPwmTable transfacMotifPwm
+motifMapTable transfacMotifTarget
+motifMaxWindow 30000
+motifDrawDefault on
     ...</pre>
 <P>This track will show transcription factor (TF)
 binding evidence found in multiple cell lines.  Each item represents

@@ -11,26 +11,23 @@ UTIL_DIRS = \
     edwAddQaContamTarget \
     edwAddQaEnrichTarget \
     edwAddSubscriber \
-    edwAnalysisAddJson \
     edwChangeFormat \
     edwCorrectFileTags \
     edwCreateUser \
+    edwFakeManifestFromSubmit \
+    edwJob \
     edwMakeContaminationQa \
     edwMakeEnrichments \
+    edwMakePairedEndQa \
+    edwMakeRepeatQa \
     edwMakeReplicateQa \
     edwMakeValidFile \
     edwQaEvaluate \
     edwReallyRemoveFiles \
     edwRetryJob \
     edwRunDaemon \
-    edwScheduleAnalysis \
+    edwRunOnIds \
     edwSubmit
-
-# edwFinishAnalysis depends on -luuid, which is not available on Macs without special port install.
-# For now, skip it if we're on Mac.
-ifneq ($(UNAME_S),Darwin)
-    UTIL_DIRS += edwFinishAnalysis
-endif
 
 CGI_DIRS = \
     edwScriptSubmit \
@@ -41,8 +38,8 @@ CGI_DIRS = \
     edwWebCreateUser \
     edwWebDeprecate \
     edwWebRegisterScript \
-    edwWebXSendFile \
-    edwWebSubmit
+    edwWebSubmit \
+    edwWebXSendFile
 
 TEST_DIRS = \
 	encode2BedDoctor 

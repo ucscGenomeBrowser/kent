@@ -46,16 +46,30 @@ void maybeRemoveFile(struct sqlConnection *conn, long long fileId, boolean reall
 {
 char query[256];
 
-/* Delete from all the auxiliarry tables. */
-sqlSafef(query, sizeof(query), 
-    "delete from edwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld", 
-    fileId, fileId);
+/* Delete from all the auxiliarry tables - tables are alphabetical to help update. */
+sqlSafef(query, sizeof(query), "delete from edwBamFile where fileId=%lld", fileId);
+maybeDoUpdate(conn, query, really);
+sqlSafef(query, sizeof(query), "delete from edwFastqFile where fileId=%lld", fileId);
+maybeDoUpdate(conn, query, really);
+sqlSafef(query, sizeof(query), "delete from edwQaContam where fileId=%lld", fileId);
+maybeDoUpdate(conn, query, really);
+sqlSafef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
+maybeDoUpdate(conn, query, really);
+sqlSafef(query, sizeof(query), "delete from edwQaFail where fileId=%lld", fileId);
 maybeDoUpdate(conn, query, really);
 sqlSafef(query, sizeof(query), 
     "delete from edwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld", 
     fileId, fileId);
 maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), "delete from edwQaEnrich where fileId=%lld", fileId);
+sqlSafef(query, sizeof(query), 
+    "delete from edwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld", 
+    fileId, fileId);
+maybeDoUpdate(conn, query, really);
+sqlSafef(query, sizeof(query), 
+    "delete from edwQaPairedEndFastq where fileId1=%lld or fileId2=%lld", 
+    fileId, fileId);
+maybeDoUpdate(conn, query, really);
+sqlSafef(query, sizeof(query), "delete from edwQaRepeat where fileId=%lld", fileId);
 maybeDoUpdate(conn, query, really);
 sqlSafef(query, sizeof(query), "delete from edwValidFile where fileId=%lld", fileId);
 maybeDoUpdate(conn, query, really);

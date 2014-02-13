@@ -23,6 +23,7 @@
 #include "edwLib.h"
 
 char *clDatabase, *clTable;
+int clDelay;
 
 void usage()
 /* Explain usage and exit. */
@@ -45,6 +46,8 @@ errAbort(
   "        There are not many of these.  Error mesages from jobs daemon runs end up\n"
   "        in errorMessage fields of database.\n"
   "   -logFacility - sends error messages and such to system log facility instead.\n"
+  "   -delay=N - delay this many seconds before starting a job, default %d\n"
+  , clDelay
   );
 }
 
@@ -53,6 +56,7 @@ static struct optionSpec options[] = {
    {"log", OPTION_STRING},
    {"logFacility", OPTION_STRING},
    {"debug", OPTION_BOOLEAN},
+   {"delay", OPTION_INT},
    {NULL, 0},
 };
 
@@ -70,6 +74,12 @@ struct runner *runners;
 void finishRun(struct runner *run, int status)
 /* Finish up job. Copy results into database */
 {
+/* Clean up wait status so will show 0 for nice successful jobs */
+if (!WIFEXITED(status))
+    status = -1;
+else
+    status = WEXITSTATUS(status);
+
 /* Get job and fill in two easy fields. */
 struct edwJob *job = run->job;
 job->endTime = edwNow();
@@ -232,6 +242,8 @@ if (bytesReady > 0)
 void edwRunDaemon(char *database, char *table, char *countString, char *namedPipe)
 /* edwRunDaemon - Run jobs on multiple processers in background. . */
 {
+warn("Starting edwRunDaemon v2 on %s.%s with %s jobs synced on %s", 
+    database, table, countString,namedPipe);
 clDatabase = database;
 clTable = table;
 
@@ -293,7 +305,7 @@ for (;;)
 	lastId = job->id;
 	struct runner *runner = findFreeRunner();
 	runJob(runner, job);
-	sleep(1); // Avoid network storm
+	sleep(clDelay); // Avoid network storm
 	}
     else
         {
@@ -308,6 +320,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+clDelay = optionInt("delay", clDelay);
 if (argc != 5)
     usage();
 logDaemonize(argv[0]);

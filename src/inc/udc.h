@@ -153,10 +153,11 @@ boolean udcFastReadString(struct udcFile *f, char buf[256]);
 /* Read a string into buffer, which must be long enough
  * to hold it.  String is in 'writeString' format. */
 
-#ifdef PROGRESS_METER
-off_t remoteFileSize(char *url);
-/* fetch remote file size from given URL */
-#endif /* PROGRESS_METER */
+off_t udcFileSize(char *url);
+/* fetch remote or loca file size from given URL or path */
+
+boolean udcExists(char *url);
+/* return true if a remote or local file exists */
 
 boolean udcIsLocal(char *url);
 /* return true if url is not a http or ftp file, just a normal local file path */

@@ -46,7 +46,7 @@ void pmClear(struct paraMessage *pm);
 /* Clear out data buffer. */
 
 void pmSet(struct paraMessage *pm, char *message);
-/* Set message in data buffer. */
+/* Set message in data buffer. Aborts if message too long (rudpMaxSize or more). */
 
 void pmPrintf(struct paraMessage *pm, char *format, ...)
 /* Print message into end of data buffer.  Warn if it goes
@@ -64,6 +64,10 @@ boolean pmSend(struct paraMessage *pm, struct rudp *ru);
 boolean pmSendString(struct paraMessage *pm, struct rudp *ru, char *string);
 /* Send out given message strng.  Print warning message and return FALSE if
  * there is a problem. */
+
+void pmCheckCommandSize(char *string, int len);
+/* Check that string of given len is not too long to fit into paraMessage.
+ * If it is, abort with good error message assuming it was a command string */
 
 boolean pmReceive(struct paraMessage *pm, struct rudp *ru);
 /* Receive message.  Print warning message and return FALSE if
@@ -93,5 +97,37 @@ void pmFetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName);
 
 void pmFetchFile(char *host, char *sourceName, char *destName);
 /* Fetch small file. */
+
+boolean pmSendStringWithRetries(struct paraMessage *pm, struct rudp *ru, char *string);
+/* Send out given message strng.  Print warning message and return FALSE if
+ * there is a problem. Try up to 5 times sleeping for 60 seconds in between.
+ * This is an attempt to help automated processes. */
+
+char *pmHubSendSimple(char *message, char *host);
+/* Send message to host, no response. */
+
+char *pmHubSingleLineQuery(char *query, char *host);
+/* Send message to hub and get single line response.
+ * This should be freeMem'd when done. */
+
+struct slName *pmHubMultilineQuery(char *query, char *host);
+/* Send a command with a multiline response to hub,
+ * and return response as a list of strings. */
+
+struct paraPstat2Job
+/* The job information returned by a pstat2 message by parasol,
+ * parsed out. */
+    {
+    struct paraPstat2Job *next;
+    char *status;   // 'r' mostly
+    char *parasolId; // Parasol ID as a string
+    char *user;	    // Name of user
+    char *program;  // Name of program being run
+    char *host;	    // Host name of node running job.
+    };
+#define PARAPSTAT2JOB_NUM_COLS  5
+
+struct paraPstat2Job *paraPstat2JobLoad(char **row);
+/* Turn an array of 5 strings into a paraPstat2Job. */
 
 #endif /* PARAMESSAGE_H */

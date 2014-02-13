@@ -1331,7 +1331,7 @@ if (bedFieldCount >= 15)
     dyStringAppend(dy, "   float[expCount] expScores; \"Comma separated list of experiment scores.\"\n");
 int i;
 for (i=bedFieldCount+1; i<=totalFieldCount; ++i)
-    dyStringPrintf(dy, "string field%d;	\"Undocumented field\"\n", i+1);
+    dyStringPrintf(dy, "lstring field%d;	\"Undocumented field\"\n", i+1);
 dyStringAppend(dy, "   )\n");
 return dyStringCannibalize(&dy);
 }

@@ -21,9 +21,9 @@
 extern char *edwDatabase;   /* Name of database we connect to. */
 extern char *edwRootDir;    /* Name of root directory for our files, including trailing '/' */
 extern char *eapRootDir;    /* Name of root directory for analysis pipeline */
-extern char *eapTempDir;    /* Name of temp dir for analysis pipeline */
-extern char *edwLicensePlatePrefix; /* License plates start with this - thanks Mike Cherry. */
 extern char *edwValDataDir; /* Data files we need for validation go here. */
+extern char *edwDaemonEmail; /* Email address of our automatic user. */
+
 extern int edwSingleFileTimeout;   // How many seconds we give ourselves to fetch a single file
 
 #define edwMinMapQual 3	//Above this -10log10 theshold we have >50% chance of being right
@@ -33,6 +33,9 @@ struct sqlConnection *edwConnect();
 
 struct sqlConnection *edwConnectReadWrite();
 /* Returns read/write connection to database. */
+
+char *edwLicensePlatePrefix(struct sqlConnection *conn);
+/* Return license plate prefix for current database - something like TST or DEV or ENCFF */
 
 long long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, 
     char *md5, long long size);
@@ -113,6 +116,15 @@ void edwMakeFileNameAndPath(int edwFileId, char *submitFileName, char edwFile[PA
 /* Convert file id to local file name, and full file path. Make any directories needed
  * along serverPath. */
 
+char *edwSetting(struct sqlConnection *conn, char *name);
+/* Return named settings value,  or NULL if setting doesn't exist. */
+
+char *edwRequiredSetting(struct sqlConnection *conn, char *name);
+/* Returns setting, abort if it isn't found. */
+
+char *edwLicensePlateHead(struct sqlConnection *conn);
+/* Return license plate prefix for current database - something like TST or DEV or ENCFF */
+
 struct edwFile *edwGetLocalFile(struct sqlConnection *conn, char *localAbsolutePath, 
     char *symLinkMd5Sum);
 /* Get record of local file from database, adding it if it doesn't already exist.
@@ -129,6 +141,14 @@ struct edwFile *edwFileAllIntactBetween(struct sqlConnection *conn, int startId,
 struct edwValidFile *edwValidFileFromFileId(struct sqlConnection *conn, long long fileId);
 /* Return edwValidFile give fileId - returns NULL if not validated. */
 
+void edwValidFileUpdateDb(struct sqlConnection *conn, struct edwValidFile *el, long long id);
+/* Save edwValidFile as a row to the table specified by tableName, replacing existing record at 
+ * id. */
+
+struct cgiParsedVars;   // Forward declare this so don't have to include cheapcgi
+void edwValidFileFieldsFromTags(struct edwValidFile *vf, struct cgiParsedVars *tags);
+/* Fill in many of vf's fields from tags. */
+
 struct edwExperiment *edwExperimentFromAccession(struct sqlConnection *conn, char *acc); 
 /* Given something like 'ENCSR123ABC' return associated experiment. */
 
@@ -143,6 +163,12 @@ struct genomeRangeTree *edwMakeGrtFromBed3List(struct bed3 *bedList);
 
 struct edwAssembly *edwAssemblyForUcscDb(struct sqlConnection *conn, char *ucscDb);
 /* Get assembly for given UCSC ID or die trying */
+
+struct edwAssembly *edwAssemblyForId(struct sqlConnection *conn, long long id);
+/* Get assembly of given ID. */
+
+char *edwSimpleAssemblyName(char *assembly);
+/* Given compound name like male.hg19 return just hg19 */
 
 struct genomeRangeTree *edwGrtFromBigBed(char *fileName);
 /* Return genome range tree for simple (unblocked) bed */
@@ -162,6 +188,9 @@ void edwAddJob(struct sqlConnection *conn, char *command);
 void edwAddQaJob(struct sqlConnection *conn, long long fileId);
 /* Create job to do QA on this and add to queue */
 
+struct edwSubmit *edwSubmitFromId(struct sqlConnection *conn, long long id);
+/* Return submission with given ID or NULL if no such submission. */
+
 struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url);
 /* Return most recent submission, possibly in progress, from this url */
 
@@ -171,6 +200,10 @@ long long edwSubmitMaxStartTime(struct edwSubmit *submit, struct sqlConnection *
 
 int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn);
 /* Count number of new files in submission that have been validated. */
+
+boolean edwSubmitIsValidated(struct edwSubmit *submit, struct sqlConnection *conn);
+/* Return TRUE if validation has run.  This does not mean that they all passed validation.
+ * It just means the validator has run and has made a decision on each file in the submission. */
 
 void edwAddSubmitJob(struct sqlConnection *conn, char *userEmail, char *url, boolean update);
 /* Add submission job to table and wake up daemon.  If update is set allow submission to
@@ -218,8 +251,10 @@ struct edwFile *edwFileInProgress(struct sqlConnection *conn, int submitId);
 struct edwScriptRegistry *edwScriptRegistryFromCgi();
 /* Get script registery from cgi variables.  Does authentication too. */
 
-void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags);
-/* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
+void edwFileResetTags(struct sqlConnection *conn, struct edwFile *ef, char *newTags,
+    boolean revalidate);
+/* Reset tags on file, strip out old validation and QA,  optionally schedule new validation 
+ * and QA. */
 
 #define edwSampleTargetSize 250000  /* We target this many samples */
 
@@ -264,9 +299,6 @@ struct edwQaPairedEndFastq *edwQaPairedEndFastqFromVfs(struct sqlConnection *con
     struct edwValidFile **retVf1,  struct edwValidFile **retVf2);
 /* Return pair record if any for the two fastq files. */
 
-int edwAnalysisJobAdd(struct sqlConnection *conn, char *commandLine);
-/* Add job to edwAnalyisJob table and return job ID. */
-
 void edwMd5File(char *fileName, char md5Hex[33]);
 /* call md5sum utility to calculate md5 for file and put result in hex format md5Hex 
  * This ends up being about 30% faster than library routine md5HexForFile,
@@ -277,19 +309,16 @@ void edwMd5File(char *fileName, char md5Hex[33]);
 void edwPathForCommand(char *command, char path[PATH_LEN]);
 /* Figure out path associated with command */
 
-struct edwAnalysisStep *edwAnalysisStepFromName(struct sqlConnection *conn, char *name);
-/* Get edwAnalysisStep record from database based on name. */
-
-struct edwAnalysisSoftware *edwAnalysisSoftwareFromName(struct sqlConnection *conn, char *name);
-/* Get edwAnalysisSoftware record by name */
-
-void edwAnalysisCheckVersions(struct sqlConnection *conn, char *analysisStep);
-/* Check that we are running tracked versions of everything. */
-
-void edwAnalysisSoftwareUpdateMd5ForStep(struct sqlConnection *conn, char *analysisStep);
-/* Update MD5s on all software used by step. */
-
 void edwPokeFifo(char *fifoName);
 /* Send '\n' to fifo to wake up associated daemon */
+
+FILE *edwPopen(char *command, char *mode);
+/* do popen or die trying */
+
+void edwOneLineSystemResult(char *command, char *line, int maxLineSize);
+/* Execute system command and return one line result from it in line */
+
+boolean edwOneLineSystemAttempt(char *command, char *line, int maxLineSize);
+/* Execute system command and return one line result from it in line */
 
 #endif /* EDWLIB_H */

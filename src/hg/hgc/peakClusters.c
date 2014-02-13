@@ -25,6 +25,7 @@
 #include "expRecord.h"
 #include "bed6FloatScore.h"
 #include "ra.h"
+#include "jsHelper.h"
 #include "factorSource.h"
 
 static void printClusterTableHeader(struct slName *otherCols, 
@@ -369,16 +370,98 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doClusterMotifDetails(struct sqlConnection *conn, struct trackDb *tdb, 
+                                struct factorSource *cluster)
+/* Display details about TF binding motif(s) in cluster */
+{
+char *motifTable = trackDbSetting(tdb, "motifTable");         // localizations
+char *motifPwmTable = trackDbSetting(tdb, "motifPwmTable");   // PWM used to draw sequence logo
+char *motifMapTable = trackDbSetting(tdb, "motifMapTable");   // map target to motif
+struct slName *motifNames = NULL, *mn; // list of canonical motifs for the factor
+struct dnaMotif *motif = NULL;
+struct bed6FloatScore *hit = NULL, *maxHit = NULL;
+char **row;
+char query[256];
+
+if (motifTable != NULL && sqlTableExists(conn, motifTable))
+    {
+    struct sqlResult *sr;
+    int rowOffset;
+    char where[256];
+
+    if (motifMapTable == NULL || !sqlTableExists(conn, motifMapTable))
+        {
+        // Assume cluster name is motif name if there is no map table
+        motifNames = slNameNew(cluster->name);
+        }
+    else
+        {
+        sqlSafef(query, sizeof(query),
+                "select motif from %s where target = '%s'", motifMapTable, cluster->name);
+        char *ret = sqlQuickString(conn, query);
+        if (ret == NULL)
+            {
+            // missing target from table -- no canonical motif
+            webNewEmptySection();
+            return;
+            }
+        motifNames = slNameListFromString(ret, ',');
+        }
+    for (mn = motifNames; mn != NULL; mn = mn->next)
+        {
+        sqlSafefFrag(where, sizeof(where), "name='%s' order by score desc limit 1", mn->name);
+        sr = hRangeQuery(conn, motifTable, cluster->chrom, cluster->chromStart,
+                     cluster->chromEnd, where, &rowOffset);
+        if ((row = sqlNextRow(sr)) != NULL)
+            {
+            hit = bed6FloatScoreLoad(row + rowOffset);
+            if (maxHit == NULL || maxHit->score < hit->score)
+                maxHit = hit;
+            }
+        sqlFreeResult(&sr);
+        }
+    }
+if (maxHit == NULL)
+    {
+    // Maintain table layout
+    webNewEmptySection();
+    return;
+    }
+hit = maxHit;
+
+webNewSection("Canonical Motif in Cluster");
+char posLink[1024];
+safef(posLink, sizeof(posLink),"<a href=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a>",
+        hgTracksPathAndSettings(), database, 
+            cluster->chrom, hit->chromStart+1, hit->chromEnd,
+            cluster->chrom, hit->chromStart+1, hit->chromEnd);
+printf("<b>Motif Name:</b>  %s<br>\n", hit->name);
+printf("<b>Motif Score");
+printf(":</b>  %.2f<br>\n", hit->score);
+printf("<b>Motif Position:</b> %s<br>\n", posLink);
+printf("<b>Motif Strand:</b> %c<br>\n", (int)hit->strand[0]);
+
+struct dnaSeq *seq = hDnaFromSeq(database, seqName, hit->chromStart, hit->chromEnd, dnaLower);
+if (seq == NULL)
+    return;
+if (hit->strand[0] == '-')
+    reverseComplement(seq->dna, seq->size);
+if (motifPwmTable != NULL && sqlTableExists(conn, motifPwmTable))
+    {
+    motif = loadDnaMotif(hit->name, motifPwmTable);
+    if (motif == NULL)
+        return;
+    motifLogoAndMatrix(&seq, 1, motif);
+    }
+}
+
 void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start)
 /* Display detailed info about a cluster of TFBS peaks from other tracks. */
 {
 int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 char **row;
 struct sqlResult *sr;
-char query[256], buf[256];
-char *motifTable = trackDbSetting(tdb, "motifTable");         // localizations
-char *motifPwmTable = trackDbSetting(tdb, "motifPwmTable");   // PWM used to draw sequence logo
-char *motifMapTable = trackDbSetting(tdb, "motifMapTable");   // map target to motif
+char query[256];
 
 sqlSafef(query, sizeof(query),
 	"select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
@@ -394,49 +477,6 @@ if (cluster == NULL)
     errAbort("Error loading cluster from track %s", tdb->track);
 
 char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
-struct dnaMotif *motif = NULL;
-struct dnaSeq **seqs = NULL;
-struct bed6FloatScore *hits = NULL;
-char *target = item;
-
-if (motifTable != NULL && sqlTableExists(conn, motifTable))
-    {
-    struct sqlResult *sr;
-    int rowOffset;
-    char where[256];
-
-    if (motifMapTable != NULL && sqlTableExists(conn, motifMapTable))
-        {
-        sqlSafef(query, sizeof(query),
-                "select motif from %s where target = '%s'", motifMapTable, item);
-        // TODO: perhaps sqlQuickString ?
-        target = sqlQuickQuery(conn, query, buf, sizeof(buf));
-        }
-
-    #define HIGHEST_SCORING
-    #ifdef HIGHEST_SCORING
-    sqlSafefFrag(where, sizeof(where), "name = '%s' order by score desc", target);
-    #else
-    sqlSafefFrag(where, sizeof(where), "name = '%s'", item);
-    #endif
-    sr = hRangeQuery(conn, motifTable, cluster->chrom, cluster->chromStart,
-                     cluster->chromEnd, where, &rowOffset);
-    #ifdef HIGHEST_SCORING
-    if ((row = sqlNextRow(sr)) != NULL)
-    #else
-    while ((row = sqlNextRow(sr)) != NULL)
-    #endif
-        {
-        struct bed6FloatScore *hit = NULL;
-        AllocVar(hit);
-        hit->chromStart = sqlUnsigned(row[rowOffset + 1]);
-        hit->chromEnd = sqlUnsigned(row[rowOffset + 2]);
-        hit->score = sqlFloat(row[rowOffset + 4]);
-        hit->strand[0] = row[rowOffset + 5][0];
-        slAddHead(&hits, hit);
-        }
-    sqlFreeResult(&sr);
-    }
 
 char *factorLink = cluster->name;
 char *vocab = trackDbSetting(tdb, "controlledVocabulary");
@@ -449,73 +489,6 @@ printf("<B>Factor:</B> %s<BR>\n", factorLink);
 printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
 printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
 
-int hitCount = 0;
-if (hits != NULL)
-    {
-    hitCount = slCount(hits);
-    if (motifPwmTable != NULL && sqlTableExists(conn, motifPwmTable))
-        {
-        motif = loadDnaMotif(target, motifPwmTable);
-        }
-    }
-
-if (motif != NULL && hits != NULL)
-    {
-    struct bed6FloatScore *hit = NULL;
-    int i;
-    seqs = needMem(sizeof(struct dnaSeq *) * slCount(hits));
-    char posLink[1024];
-    char query[256];
-    float maxScore = -1;
-
-
-    sqlSafef(query, sizeof(query), 
-        "select max(score) from %s where name = '%s'", motifTable, item);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-        {
-        if(!isEmpty(row[0]))
-            {
-            maxScore = sqlFloat(row[0]);
-            }
-        }
-    sqlFreeResult(&sr);
-
-    puts("<p></p>");
-    for (hit = hits, i = 0; hit != NULL; hit = hit->next, i++)
-        {
-
-        struct dnaSeq *seq = hDnaFromSeq(database, 
-            seqName, hit->chromStart, hit->chromEnd, dnaLower);
-        if(hit->strand[0] == '-')
-            reverseComplement(seq->dna, seq->size);
-        seqs[i] = seq;
-
-        // TODO: move to hgc.c (with other pos printers)
-        safef(posLink, sizeof(posLink),"<a href=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a>",
-                hgTracksPathAndSettings(), database, 
-                    cluster->chrom, hit->chromStart+1, hit->chromEnd,
-                    cluster->chrom, hit->chromStart+1, hit->chromEnd);
-        printf("<b>Motif Score");
-        if (hitCount > 1)
-            {
-            printf("#%d", i + 1);
-            printf(":</b>  %.2f (%s max: %.2f) at %s on <b>%c</font></b> strand<br>", 
-                hit->score, cluster->name, maxScore, posLink, (int)hit->strand[0]);
-            }
-        else
-            {
-            printf(":</b>  %.2f (%s max: %.2f)<br>\n", hit->score, cluster->name, maxScore);
-            printf("<b>Motif Position:</b> %s<br>\n", posLink);
-            printf("<b>Motif Strand:</b> %c<br>\n", (int)hit->strand[0]);
-            }
-        }
-    }
-
-if (seqs != NULL)
-    {
-    motifMultipleHitsSection(seqs, hitCount, motif);
-    }
 
 /* Get list of tracks we'll look through for input. */
 char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
@@ -533,28 +506,37 @@ if (inputTableFieldDisplay != NULL)
     char *vocab = trackDbSetting(tdb, "controlledVocabulary");
 
     /* In a new section put up list of hits. */
-    webNewSection("List of %s Items in Cluster", cluster->name);
+    webNewSection("Assays for %s in Cluster", cluster->name);
     webPrintLinkTableStart();
     printClusterTableHeader(fieldList, TRUE, FALSE, TRUE);
     printFactorSourceTableHits(cluster, conn, sourceTable, 
             inputTrackTable, fieldList, FALSE, vocab);
     webPrintLinkTableEnd();
 
-    webNewSection("List of cells assayed for %s but without hits in cluster", cluster->name);
+    webNewSectionHeaderStart(TRUE);
+    char sectionTitle[128];
+    safef(sectionTitle, 
+            sizeof(sectionTitle),"Assays for %s Without Hits in Cluster", cluster->name);
+    jsBeginCollapsibleSectionOldStyle(cart, tdb->track, "cellNoHits", sectionTitle, FALSE);
+    webNewSectionHeaderEnd();
     webPrintLinkTableStart();
     printClusterTableHeader(fieldList, TRUE, FALSE, FALSE);
     printFactorSourceTableHits(cluster, conn, sourceTable, 
             inputTrackTable, fieldList, TRUE, vocab);
     webPrintLinkTableEnd();
+    jsEndCollapsibleSection();
     }
 else
     {
     errAbort("Missing required trackDb setting %s for track %s",
         "inputTableFieldDisplay", tdb->track);
     }
-
-webNewSection("Table of abbreviations for cells");
+webNewSectionHeaderStart(TRUE);
+jsBeginCollapsibleSectionOldStyle(cart, tdb->track, "cellSources", "Cell Abbreviations", FALSE);
+webNewSectionHeaderEnd();
 hPrintFactorSourceAbbrevTable(conn, tdb);
-webNewSection("Track Description");
+jsEndCollapsibleSection();
+
+doClusterMotifDetails(conn, tdb, cluster);
 }
 

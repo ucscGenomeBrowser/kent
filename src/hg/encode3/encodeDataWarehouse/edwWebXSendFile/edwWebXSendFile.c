@@ -15,7 +15,7 @@ errAbort(
   "edwWebXSendFile - A cgi script for user to download files using xsendfile.\n"
   "usage:\n"
   " Run by sending query string like \n"
-  "  \"?licenseplate=ENXXXXXXXXX&date=yyyy-mm-dd&token=a41b..7a0\" \n"
+  "  \"?accession=ENXXXXXXXXX&date=yyyy-mm-dd&user=someone@xyz.com&token=a41b..7a0\" \n"
   " to edwWebXSendFile cgi. \n"
   );
 }
@@ -33,9 +33,9 @@ return cloneString(cfgOption(CFG_ENCODEDATAWAREHOUSE_KEY));
 }
 
 char *getLicensePlate()
-/* Return the value of licenseplate in the query string */
+/* Return the value of accession in the query string */
 {
-return cloneString(cgiUsualString("licenseplate", ""));
+return cloneString(cgiUsualString("accession", ""));
 }
 
 char *getDate()
@@ -48,6 +48,12 @@ char *getToken()
 /* Return the value of token in the query string */
 {
 return cloneString(cgiUsualString("token", ""));
+}
+
+char *getUserMail()
+/* Return the value of user (email) in the query string */
+{
+return cloneString(cgiUsualString("user", ""));
 }
 
 char *getFullFileName(char * licensePlate)
@@ -83,11 +89,11 @@ printf("Content-Length: %lld\n", (long long)fileSize(fullFileName));
 printf("X-Sendfile: %s\n\n", fullFileName);
 }
 
-boolean tokenValid(char *licenseplate, char *date, char *token)
+boolean tokenValid(char *accession, char *date, char *token, char *user)
 /* Check the token to ensure that the query string was created by
  * encodedcc without any modification */ 
 {
-char *hStr=strcat(date,licenseplate);
+char *hStr=strcat(strcat(date,accession),user);
 char *digest;
 digest=hmacSha1(edwKey(), hStr);
 if (sameString(digest, token))
@@ -104,8 +110,9 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
 char *lp = getLicensePlate();
 char *tk = getToken();
 char *dt = getDate();
+char *user = getUserMail();
 /* send file out only when the query string was created by encodedcc */
-if ( tokenValid(lp, dt, tk) )
+if ( tokenValid(lp, dt, tk, user) )
     {
     char *xFile = getFullFileName(lp);
     char *bName = getBaseName(xFile);

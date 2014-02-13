@@ -37,8 +37,21 @@ void webStartWrapperDetailedNoArgs(struct cart *theCart, char *db,
 void webNewSection(char* format, ...);
 /* create a new section on the web page */
 
+void webNewEmptySection();
+/* create a new section on the web page to maintain table layout */
+
+void webNewSectionHeaderStart(boolean hasTitle);
+/* Start a new collapsible section on the web page, with +- control.
+   Allows use of jsBeginCollapsibleSection() */
+
+void webNewSectionHeaderEnd();
+/* Properly close header of collapsible section on web page */
+
 void webEnd();
 /* output the footer of the HTML page */
+
+void webEndSection();
+/* Close down a section */
 
 void webEndSectionTables();
 /* Finish with section tables (but don't do /BODY /HTML lik

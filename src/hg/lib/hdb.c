@@ -1024,7 +1024,7 @@ struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end)
 {
 struct dnaSeq *seq = NULL;
 char *newFileName = NULL;
-newFileName = hCloneRewriteFileName(fileName);
+newFileName = hReplaceGbdb(fileName);
 if (twoBitIsFile(newFileName))
     seq = fetchTwoBitSeq(newFileName, seqName, start, end);
 else
@@ -1037,7 +1037,7 @@ struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end)
 /* Fetch sequence from file.  If it is a .2bit file then fetch the named sequence.
    If it is .nib then just ignore seqName. */
 {
-fileName = hCloneRewriteFileName(fileName);
+fileName = hReplaceGbdb(fileName);
 struct dnaSeq *seq  = NULL;
 if (twoBitIsFile(fileName))
     {
@@ -1265,12 +1265,15 @@ hFreeConn(&conn);
 return list;
 }
 
-char *hCloneRewriteFileName(char* fileName)
- /* Clones and returns a gbdb filename, potentially rewriting it according to hg.conf
+char *hReplaceGbdb(char* fileName)
+ /* Returns a gbdb filename, potentially rewriting it according to hg.conf
   * If the settings gbdbLoc1 and gbdbLoc2 are found, try them in order, by 
   * replacing /gbdb/ with the new locations.
-  * We assume /gbdb/ does not appear somewhere inside a fileName.
+  * If after the replacement of gbdbLoc1 the resulting fileName does not exist,
+  * gbdbLoc2 is used.
   * This function does not guarantee that the filename exists.
+  * We assume /gbdb/ does not appear somewhere inside a fileName.
+  * Result has to be free'd.
  * */
 {
 if (fileName==NULL)
@@ -1328,7 +1331,7 @@ if ((row = sqlNextRow(sr)) == NULL)
 	}
     }
 
-path = hCloneRewriteFileName(row[0]);
+path = hReplaceGbdb(row[0]);
 
 dbSize = sqlLongLong(row[1]);
 sqlFreeResult(&sr);
@@ -2370,7 +2373,7 @@ char *hDbDbNibPath(char *database)
 /* return nibPath from dbDb for database, has to be freed */
 {
 char *rawNibPath = hDbDbOptionalField(database, "nibPath");
-char *nibPath = hCloneRewriteFileName(rawNibPath);
+char *nibPath = hReplaceGbdb(rawNibPath);
 freez(&rawNibPath);
 return nibPath;
 }
@@ -2396,7 +2399,7 @@ char *hHtmlPath(char *database)
 /* NOTE: must free returned string after use */
 {
 char *htmlPath = hDbDbOptionalField(database, "htmlPath");
-char *newPath = hCloneRewriteFileName(htmlPath);
+char *newPath = hReplaceGbdb(htmlPath);
 freez(&htmlPath);
 return newPath;
 }
@@ -2800,8 +2803,8 @@ db = sqlGetDatabase(conn);
 /* Read table description into hash. */
 boolean gotIt = TRUE, binned = FALSE;
 binned = hIsBinned(db, table);
-// XX Do I need to free the slList implicitly created here?
-struct hash *hash = hashFromSlNameList(sqlListFields(conn, table));
+struct slName *tableList = sqlListFields(conn, table);
+struct hash *hash = hashSetFromSlNameList(tableList);
 
 /* Look for bed-style or linkedFeatures names. */
 if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEnd))
@@ -2882,7 +2885,10 @@ else
          strcpy(retName, "name");
     gotIt = FALSE;
     }
+
+slFreeList(&tableList);
 freeHash(&hash);
+
 *retBinned = binned;
 return gotIt;
 }
@@ -5039,6 +5045,107 @@ struct slName *sln2 = *(struct slName **)el2;
 return chrNameCmp(sln1->name, sln2->name);
 }
 
+int chrNameCmpWithAltRandom(char *str1, char *str2)
+/* Compare chromosome or linkage group names str1 and str2 
+ * to achieve this order:
+ * chr1 .. chr22
+ * chrX
+ * chrY
+ * chrM
+ * chr1_{alt, random} .. chr22_{alt, random}
+ * chrUns
+ */
+{
+int num1 = 0, num2 = 0;
+int match1 = 0, match2 = 0;
+char suffix1[512], suffix2[512];
+
+/* put chrUn at the bottom */
+if (startsWith("chrUn", str1) && !startsWith("chrUn", str2))
+    return 1;
+if (!startsWith("chrUn", str1) && startsWith("chrUn", str2))
+    return  -1;
+
+/* if it is _alt or _random then it goes at the end */
+if ( (endsWith(str1, "_alt")||endsWith(str1, "_random")) && !(endsWith(str2, "_alt") || endsWith(str2, "_random")))
+    return 1;
+if (!(endsWith(str1, "_alt")||endsWith(str1, "_random")) &&  (endsWith(str2, "_alt") || endsWith(str2, "_random")))
+    return -1;
+
+/* get past "chr" or "Group" prefix: */
+if (startsWith("chr", str1))
+    str1 += 3;
+else if (startsWith("Group", str1))
+    str1 += 5;
+else
+    return -1;
+if (startsWith("chr", str2))
+    str2 += 3;
+else if (startsWith("Group", str2))
+    str2 += 5;
+else
+    return 1;
+/* If only one is numeric, that one goes first. 
+ * If both are numeric, compare by number; 
+ * If same number, put _randoms at end, then look at suffix. 
+ * Otherwise go alph. but put M and U/Un/Un_random at end. */
+match1 = sscanf(str1, "%d%s", &num1, suffix1);
+match2 = sscanf(str2, "%d%s", &num2, suffix2);
+if (match1 && !match2)
+    return -1;
+else if (!match1 && match2)
+    return 1;
+else if (match1 && match2)
+    {
+    int diff = num1 - num2;
+    if (diff != 0)
+	return diff;
+
+    /* within groups with the same number, organize with random last */
+    if (endsWith(str1, "_random") && !endsWith(str2, "_random"))
+	return 1;
+    if (!endsWith(str1, "_random") && endsWith(str2, "_random"))
+	return -1;
+
+    /* same chrom number... got suffix? */
+    if (match1 > 1 && match2 <= 1)
+	return 1;
+    else if (match1 <= 1 && match2 > 1)
+	return -1;
+    else if (match1 > 1 && match2 > 1)
+	return strcmp(suffix1, suffix2);
+    else
+	/* This shouldn't happen (duplicate chrom name passed in) */
+	return 0;
+    }
+else if (str1[0] == 'U' && str2[0] != 'U')
+    return 1;
+else if (str1[0] != 'U' && str2[0] == 'U')
+    return -1;
+else if (sameString(str1, "M") && !sameString(str2, "M"))
+    return 1;
+else if (!sameString(str1, "M") && sameString(str2, "M"))
+    return -1;
+else
+    return strcmp(str1, str2);
+}
+
+int chrSlNameCmpWithAltRandom(const void *el1, const void *el2)
+/* Compare chromosome or linkage group names str1 and str2 
+ * to achieve this order:
+ * chr1 .. chr22
+ * chrX
+ * chrY
+ * chrM
+ * chr1_{alt, random} .. chr22_{alt, random}
+ * chrUns
+ */
+{
+struct slName *sln1 = *(struct slName **)el1;
+struct slName *sln2 = *(struct slName **)el2;
+return chrNameCmpWithAltRandom(sln1->name, sln2->name);
+}
+
 int bedCmpExtendedChr(const void *va, const void *vb)
 /* Compare to sort based on chrom,chromStart.  Use extended
  * chrom name comparison, that strip prefixes and does numeric compare */
@@ -5237,7 +5344,7 @@ if (fileName == NULL)
 	errAbort("Missing fileName in %s table", table);
     }
 
-char *rewrittenFname = hCloneRewriteFileName(fileName);
+char *rewrittenFname = hReplaceGbdb(fileName);
 freez(&fileName);
 return rewrittenFname;
 }
@@ -5247,7 +5354,7 @@ char *bbiNameFromSettingOrTableChrom(struct trackDb *tdb, struct sqlConnection *
 /* Return file name from bigDataUrl or little table that might have a seqName column.
  * If table does have a seqName column, return NULL if there is no file for seqName. */
 {
-char *fileName = hCloneRewriteFileName(trackDbSetting(tdb, "bigDataUrl"));
+char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (fileName == NULL)
     fileName = bbiNameFromTableChrom(conn, table, seqName);
 return fileName;

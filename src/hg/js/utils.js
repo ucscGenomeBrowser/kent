@@ -905,16 +905,45 @@ function commify (str) {
 }
 
 function parsePosition(position)
-{
 // Parse chr:start-end string into a chrom, start, end object
-    position = position.replace(/,/g, "");
-    var a = /(\S+):(\d+)-(\d+)/.exec(position);
-    if(a != null && a.length == 4) {
-        var o = new Object();
-        o.chrom = a[1];
-        o.start = parseInt(a[2])
-        o.end = parseInt(a[3]);
-        return o;
+{
+    if (position && position.length > 0) {
+        position = position.replace(/,/g, "");
+        var a = /(\S+):(\d+)-(\d+)/.exec(position);
+        if(a != null && a.length == 4) {
+            var o = new Object();
+            o.chrom = a[1];
+            o.start = parseInt(a[2])
+            o.end = parseInt(a[3]);
+            return o;
+        }
+    }
+    return null;
+}
+
+function parsePositionWithDb(position)
+// Parse db.chr:start-end string into a db, chrom, start, end object
+// Also supports be db.chr:start-end#color string
+{
+    var out = new Object();
+    var parts = position.split(".");
+    if (parts.length == 2) {
+        out.db = parts[0];
+        position = parts[1];
+    } else {
+        out.db = getDb(); // default the db 
+    }
+    parts = position.split("#"); // Highlight Region may carry its color
+    if (parts.length == 2) {
+        position = parts[0];
+        out.color = '#' + parts[1];
+    }
+    var pos = parsePosition(position);
+    if (pos != null) {
+        out.chrom = pos.chrom;
+        out.start = pos.start;
+        out.end   = pos.end;
+        return out;
     }
     return null;
 }
@@ -1069,31 +1098,19 @@ function yieldingIterator(interatingFunc,continuingFunc,args)
     ro.step(1,args);                      // kick-off
 }
 
-function showLoadingImage(id, absolute)
+function showLoadingImage(id)
+// Show a loading image above the given id; return's id of div added (allowing later removal).
 {
-// Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
-// This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
-// If absolute is TRUE, then we use and absolute reference for the src tag.
     var loadingId = id + "LoadingOverlay";
-    // make an opaque overlay to partially hide the image
-    var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
+    var overlay = $("<div id='"+loadingId+"' class='loading'></div>");
     var ele = $(document.getElementById(id));
     overlay.appendTo("body");
-    overlay.css("top", ele.position().top);
     var divLeft = ele.position().left + 2;
-    overlay.css("left",divLeft);
-    var width = ele.width() - 5;
+    var width = ele.width() - 1;
     var height = ele.height();
     overlay.width(width);
     overlay.height(height);
-    overlay.css("background", "white");
-    overlay.css("opacity", 0.75);
-    // now add the overlay image itself in the center of the overlay.
-    var imgWidth = 220;   // hardwired based on width of loading.gif
-    var imgLeft = (width / 2) - (imgWidth / 2);
-    var imgTop = (height / 2 ) - 10;
-    var src = absolute ? "/images/loading.gif" : "../images/loading.gif";
-    $("<img src='" + src + "'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
+    overlay.css({top: (ele.position().top + 1) + 'px', left: divLeft + 'px'});
     return loadingId;
 }
 

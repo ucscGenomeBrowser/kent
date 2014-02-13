@@ -3736,7 +3736,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char table[64];
 boolean hasBin;
-struct bed6FloatScore *b6;
+struct bed6FloatScore *b6 = NULL;
 struct dyString *query = newDyString(512);
 char **row;
 boolean firstTime = TRUE;
@@ -3762,6 +3762,19 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Strand:</B> %s<BR>\n", b6->strand);
     }
 sqlFreeResult(&sr);
+
+// Support for motif display if configured in trackDb
+// TODO - share code with factorSource
+char *motifPwmTable = trackDbSetting(tdb, "motifPwmTable");
+struct dnaMotif *motif = NULL;
+if (motifPwmTable != NULL && sqlTableExists(conn, motifPwmTable))
+    {
+    motif = loadDnaMotif(b6->name, motifPwmTable);
+    if (motif == NULL)
+        return;
+    struct dnaSeq *seq = hDnaFromSeq(database, b6->chrom, b6->chromStart, b6->chromEnd, dnaLower);
+    motifLogoAndMatrix(&seq, 1, motif);
+    }
 hFreeConn(&conn);
 /* printTrackHtml is done in genericClickHandlerPlus. */
 }
@@ -3857,8 +3870,11 @@ if (container == NULL && wordCount > 0)
 genericHeader(tdb, headerItem);
 
 itemForUrl = getIdInUrl(tdb, item);
-printCustomUrl(tdb, itemForUrl, item == itemForUrl);
-printIframe(tdb, itemForUrl);
+if (itemForUrl != NULL && itemForUrl[0] != 0)
+    {
+    printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+    printIframe(tdb, itemForUrl);
+    }
 
 if (plus != NULL)
     {
@@ -15214,7 +15230,7 @@ return offset;
 }
 
 
-char *getSnpSeqFile(struct trackDb *tdb)
+char *getSnpSeqFile(struct trackDb *tdb, int version)
 /* find location of snp.fa and test existence. */
 {
 char *seqFile = trackDbSetting(tdb, "snpSeqFile");
@@ -15228,6 +15244,9 @@ if (isNotEmpty(seqFile))
 char seqFileBuf[512];
 safef(seqFileBuf, sizeof(seqFileBuf), "/gbdb/%s/snp/%s.fa",
       database, tdb->table);
+if (fileExists(seqFileBuf))
+    return cloneString(seqFileBuf);
+safef(seqFileBuf, sizeof(seqFileBuf), "/gbdb/%s/snp/snp%d.fa", database, version);
 if (fileExists(seqFileBuf))
     return cloneString(seqFileBuf);
 safef(seqFileBuf, sizeof(seqFileBuf), "/gbdb/%s/snp/snp.fa", database);
@@ -15345,7 +15364,7 @@ axtFree(&axt);
 hPrintf("</PRE>");
 }
 
-void printSnpAlignment(struct trackDb *tdb, struct snp *snp)
+void printSnpAlignment(struct trackDb *tdb, struct snp *snp, int version)
 /* Get flanking sequences from table; align and print */
 {
 char *fileName = NULL;
@@ -15384,7 +15403,7 @@ int skipCount = 0;
 
 off_t offset = 0;
 
-fileName = getSnpSeqFile(tdb);
+fileName = getSnpSeqFile(tdb, version);
 if (!fileName)
     return;
 
@@ -17544,7 +17563,7 @@ checkForGwasCatalog(conn, tdb, itemName);
 checkForHgdpGeo(conn, tdb, itemName, start);
 checkForHapmap(conn, tdb, itemName);
 checkForLsSnpMappings(conn, tdb->track, itemName);
-printSnpAlignment(tdb, snpAlign);
+printSnpAlignment(tdb, snpAlign, version);
 puts("</TABLE>");
 printTrackHtml(tdb);
 hFreeConn(&conn);

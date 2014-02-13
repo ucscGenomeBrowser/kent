@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "htmlPage.h"
+#include "sqlList.h"
 
 void usage()
 {
@@ -15,21 +16,15 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct htmlTag *findNextMatching(struct htmlTag *list, char *name)
-/* Return first tag in list that is of type name or NULL if not found*/
+void freen(char *string)
 {
-struct htmlTag *tag;
-for (tag = list; tag != NULL; tag = tag->next)
-   if (sameWord(name, tag->name))
-       return tag;
-return NULL;
-}
-
-void freen(char *url)
-{
-struct htmlPage *page = htmlPageGet(url);
-printf("%s\n", page->htmlText);
-htmlPageFree(&page);
+uglyf("%d ',' in %s\n", countChars(string, ','), string);
+int count = chopByChar(cloneString(string), ',', NULL, 0);
+uglyf("Count by chopByChar is %d\n", count);
+char **array;
+int arraySize;
+sqlStringDynamicArray(cloneString(string), &array, &arraySize);
+uglyf("sqlStringDynamicArray yields %d\n", arraySize);
 }
 
 

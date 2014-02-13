@@ -15,7 +15,7 @@ errAbort(
     "\n"
     "Options:\n"
     "   -noRandom - omit random and Un chromsomes\n"
-    "   -noHap - omit _hap0 chromsomes\n"
+    "   -noHap - omit _hap|_alt chromsomes\n"
     "   -noPrefix - omit \"chr\" prefix\n"
   );
 }
@@ -38,7 +38,7 @@ bool inclChrom(struct slName *chrom)
 {
 return  !((noRandom && (endsWith(chrom->name, "_random")
                         || startsWith("chrUn", chrom->name)))
-          || (noHap && stringIn( "_hap", chrom->name)));
+          || (noHap && haplotype(chrom->name)));
 }
 
 void hgChroms(char *db)

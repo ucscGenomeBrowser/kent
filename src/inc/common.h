@@ -438,7 +438,7 @@ void slSortMergeUniq(void *pA, void *b, CmpFunction *compare, void (*free)());
 // returning 0. If free is provided, items dropped from list can disposed of.
 
 boolean slRemoveEl(void *vpList, void *vToRemove);
-/* Remove element from doubly linked list.  Usage:
+/* Remove element from singly linked list.  Usage:
  *    slRemove(&list, el);
  * Returns TRUE if element in list.  */
 
@@ -469,6 +469,16 @@ int slIntCmpRev(const void *va, const void *vb);
 
 struct slInt * slIntFind(struct slInt *list, int target);
 /* Find target in slInt list or return NULL */
+
+struct slUnsigned
+/* List of unsigned */
+    {
+    struct slUnsigned *next;  /* Next in list */
+    unsigned val;	      /* Unsigned value */
+    };
+
+struct slUnsigned *slUnsignedNew(unsigned x);
+/* Return a new slUnsigned. */
 
 /******* slDouble - a double on a list *******/
 
@@ -1466,4 +1476,8 @@ boolean dateIsOlderBy(const char *date,const char*format, time_t seconds);
 char *dateAddTo(char *date,char *format,int addYears,int addMonths,int addDays);
 /* Add years,months,days to a formatted date and returns the new date as a cloned string
 *  format is a strptime/strftime format: %F = yyyy-mm-dd */
+
+boolean haplotype(const char *name);
+/* Is this name a haplotype name ?  _hap or _alt in the name */
+
 #endif /* COMMON_H */

@@ -144,7 +144,7 @@ sub getInfrastructureEntry {
   my $SameSpecies = ucfirst($db);  $SameSpecies =~ s/\d+$//;
   my @gbdbFiles = map {"$HgAutomate::gbdb/$db/$_"}
     ("$db.2bit", 'html/description.html', "wib/gc5Base.wib", "wib/quality.wib",
-     "bbi/gc5Base.bw", "bbi/quality.bw", "liftOver/${db}To$SameSpecies*");
+     "bbi/gc5BaseBw/gc5Base.bw", "bbi/qualityBw/quality.bw", "liftOver/${db}To$SameSpecies*");
   my @goldenPathFiles = map {"$HgAutomate::goldenPath/$db/$_"}
     (qw( bigZips/* database/* chromosomes/* ),
      "liftOver/${db}To$SameSpecies*");

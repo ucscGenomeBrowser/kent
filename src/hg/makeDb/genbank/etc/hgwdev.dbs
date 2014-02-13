@@ -4,8 +4,9 @@
 # then all the other assemblies for org.  Please keep this ordering!
 #
 # urgent databases
+hg38
 hg19
-mm10
+#mm10
 # 
 # Most recent assembly for each org
 #

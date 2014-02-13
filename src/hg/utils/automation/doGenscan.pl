@@ -263,8 +263,6 @@ catDir -r pep > genscan.pep
 catDir -r subopt | sort -k1,1 -k2,2n > genscanSubopt.bed
 gtfToGenePred genscan.gtf \$db.genscan.gp
 genePredToBed \$db.genscan.gp stdout | sort -k1,1 -k2,2n > \$db.genscan.bed
-bedToBigBed \$db.genscan.bed ../../chrom.sizes \$db.genscan.bb
-bedToBigBed genscanSubopt.bed ../../chrom.sizes \$db.genscanSubopt.bb
 _EOF_
   );
   $bossScript->execute();
@@ -290,6 +288,8 @@ sub doLoadGenscan {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
+bedToBigBed $db.genscan.bed ../../chrom.sizes $db.genscan.bb
+bedToBigBed genscanSubopt.bed ../../chrom.sizes $db.genscanSubopt.bb
 gtfToGenePred genscan.gtf genscan.gp
 genePredCheck -db=$db genscan.gp
 ldHgGene -gtf $db genscan genscan.gtf

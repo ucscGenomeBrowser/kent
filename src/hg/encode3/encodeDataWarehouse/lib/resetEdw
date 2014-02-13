@@ -22,16 +22,6 @@ if (! -e $qaFifo) then
 endif
 echo hi > $qaFifo &
 
-# And for analysis daemon.
-set analysisFifo = /usr/local/apache/userdata/edwAnalysis.fifo
-if (! -e $analysisFifo) then
-    mkfifo $analysisFifo
-    chmod a+x $analysisFifo
-    echo hi > $analysisFifo &
-endif
-echo hi > $analysisFifo &
-
-
 # Do the often time consuming removal of all data.
 rm -rf /hive/groups/encode/encode3/encodeDataWarehouse
 
@@ -42,29 +32,32 @@ mkdir /hive/groups/encode/encode3/encodeDataWarehouse
 hgsql hgFixed -e "create database encodeDataWarehouse"
 hgsql encodeDataWarehouse < encodeDataWarehouse.sql
 
+# Add to database settings
+hgsql -e "insert into edwSettings (name,val) values ('prefix', 'DEV')" encodeDataWarehouse
+
 # Create users
 edwCreateUser kent@soe.ucsc.edu
-update edwUser set isAdmin=1 where email='kent@soe.ucsc.edu';
+hgsql -e "update edwUser set isAdmin=1 where email='kent@soe.ucsc.edu'" encodeDataWarehouse
 edwCreateUser euriehong@stanford.edu
-update edwUser set isAdmin=1 where email='euriehong@stanford.edu';
+hgsql -e "update edwUser set isAdmin=1 where email='euriehong@stanford.edu'" encodeDataWarehouse
 edwCreateUser edw@encodedcc.sdsc.edu
 edwCreateUser cherry@stanford.edu
 edwCreateUser vmalladi@stanford.edu
-update edwUser set isAdmin=1 where email='vmalladi@stanford.edu';
+hgsql -e "update edwUser set isAdmin=1 where email='vmalladi@stanford.edu'" encodeDataWarehouse
 edwCreateUser cricketsloan@stanford.edu
-update edwUser set isAdmin=1 where email='cricketsloan@stanford.edu';
+hgsql -e "update edwUser set isAdmin=1 where email='cricketsloan@stanford.edu'" encodeDataWarehouse
 edwCreateUser etchan@stanford.edu
-update edwUser set isAdmin=1 where email='etchan@stanford.edu';
+hgsql -e "update edwUser set isAdmin=1 where email='etchan@stanford.edu'" encodeDataWarehouse
 edwCreateUser jseth@stanford.edu 
-update edwUser set isAdmin=1 where email='jseth@stanford.edu';
+hgsql -e "update edwUser set isAdmin=1 where email='jseth@stanford.edu'" encodeDataWarehouse
 edwCreateUser lrowe@stanford.edu
 edwCreateUser kate@soe.ucsc.edu
 edwCreateUser brianlee@soe.ucsc.edu
 edwCreateUser katrina@soe.ucsc.edu
 edwCreateUser chinhli@soe.ucsc.edu
-update edwUser set isAdmin=1 where email='chinhli@soe.ucsc.edu';
+hgsql -e "update edwUser set isAdmin=1 where email='chinhli@soe.ucsc.edu'" encodeDataWarehouse
 edwCreateUser chli@ucsc.edu
-edwAddAssembly 9606 hg19 hg19 /gbdb/hg19/hg19.2bit -symLink=bcdbfbe9da62f19bee88b74dabef8cd3
+edwAddAssembly 9606 hg19 hg19 /hive/data/genomes/hg19/hg19.2bit -symLink=bcdbfbe9da62f19bee88b74dabef8cd3
 edwAddAssembly 9606 male.hg19 male.hg19 /hive/groups/encode/encode3/encValData/hg19/male.hg19.2bit -symLink=d536cde4657b63e92c52719cd1bd71d1
 edwAddAssembly 9606 female.hg19 female.hg19 /hive/groups/encode/encode3/encValData/hg19/female.hg19.2bit -symLink=b7fe3540ba1bf22f8c89a7bbded3f4ee
 edwAddAssembly 10090 mm9 mm9 /gbdb/mm9/mm9.2bit -symLink=e47354d24b9d95e832c337d42b9f8f71
@@ -76,6 +69,9 @@ edwAddAssembly 7227 dm3 dm3 /gbdb/dm3/dm3.2bit -symLink=4ec509b470010829be44ed8e
 edwAddAssembly 559292 sacCer3 sacCer3 /gbdb/sacCer3/sacCer3.2bit -symLink=880201a7d1ec95c0185b0b4783c80411
 edwAddAssembly 6239 ce10 ce10 /gbdb/ce10/ce10.2bit -symLink=3d0bab4bc255fc5b3276a476e13d230c
 edwAddAssembly 562 escCol1 escCol1 /hive/groups/encode/encode3/encValData/escCol1/escCol1.2bit
+edwAddAssembly 9606 hg38 hg38 /gbdb/hg38/hg38.2bit -symLink=dcc3ea27079aa6dc3f9deccd7275e0f8
+edwAddAssembly 9606 female.hg38 female.hg38 /hive/groups/encode/encode3/encValData/female.hg38/female.hg38.2bit -symLink=a1666014df1f8a27e94f7aec56883bc3
+edwAddAssembly 9606 male.hg38 male.hg38 /hive/groups/encode/encode3/encValData/male.hg38/male.hg38.2bit -symLink=8c0d7fe26540718c381a8d458274f270
 edwAddSubscriber wgEncode 'echo good old %u from wgEncode' -tagPattern=wgEncode.ra
 edwAddQaEnrichTarget open hg19 /hive/groups/encode/encode3/encValData/hg19/regions/open.bb
 edwAddQaEnrichTarget exon hg19 /hive/groups/encode/encode3/encValData/hg19/regions/exon.bb
@@ -85,6 +81,8 @@ edwAddQaEnrichTarget intron hg19 /hive/groups/encode/encode3/encValData/hg19/reg
 edwAddQaEnrichTarget utr hg19 /hive/groups/encode/encode3/encValData/hg19/regions/utr.bb
 edwAddQaEnrichTarget utr3 hg19 /hive/groups/encode/encode3/encValData/hg19/regions/utr3.bb
 edwAddQaEnrichTarget utr5 hg19 /hive/groups/encode/encode3/encValData/hg19/regions/utr5.bb
+edwAddQaEnrichTarget chrX hg19 /hive/groups/encode/encode3/encValData/hg19/regions/chrX.bb
+edwAddQaEnrichTarget chrY hg19 /hive/groups/encode/encode3/encValData/hg19/regions/chrY.bb
 edwAddQaEnrichTarget open mm9 /hive/groups/encode/encode3/encValData/mm9/regions/open.bb
 edwAddQaEnrichTarget exon mm9 /hive/groups/encode/encode3/encValData/mm9/regions/exon.bb
 edwAddQaEnrichTarget promoter mm9 /hive/groups/encode/encode3/encValData/mm9/regions/promoter.bb
@@ -93,6 +91,8 @@ edwAddQaEnrichTarget intron mm9 /hive/groups/encode/encode3/encValData/mm9/regio
 edwAddQaEnrichTarget utr3 mm9 /hive/groups/encode/encode3/encValData/mm9/regions/utr3.bb
 edwAddQaEnrichTarget utr5 mm9 /hive/groups/encode/encode3/encValData/mm9/regions/utr5.bb
 edwAddQaEnrichTarget utr mm9 /hive/groups/encode/encode3/encValData/mm9/regions/utr.bb
+edwAddQaEnrichTarget chrX mm9 /hive/groups/encode/encode3/encValData/mm9/regions/chrX.bb
+edwAddQaEnrichTarget chrY mm9 /hive/groups/encode/encode3/encValData/mm9/regions/chrY.bb
 edwAddQaEnrichTarget open mm10 /hive/groups/encode/encode3/encValData/mm10/regions/open.bb
 edwAddQaEnrichTarget exon mm10 /hive/groups/encode/encode3/encValData/mm10/regions/exon.bb
 edwAddQaEnrichTarget promoter mm10 /hive/groups/encode/encode3/encValData/mm10/regions/promoter.bb
@@ -101,6 +101,17 @@ edwAddQaEnrichTarget intron mm10 /hive/groups/encode/encode3/encValData/mm10/reg
 edwAddQaEnrichTarget utr3 mm10 /hive/groups/encode/encode3/encValData/mm10/regions/utr3.bb
 edwAddQaEnrichTarget utr5 mm10 /hive/groups/encode/encode3/encValData/mm10/regions/utr5.bb
 edwAddQaEnrichTarget utr mm10 /hive/groups/encode/encode3/encValData/mm10/regions/utr.bb
+edwAddQaEnrichTarget chrX mm10 /hive/groups/encode/encode3/encValData/mm10/regions/chrX.bb
+edwAddQaEnrichTarget chrY mm10 /hive/groups/encode/encode3/encValData/mm10/regions/chrY.bb
+edwAddQaEnrichTarget open hg38 /hive/groups/encode/encode3/encValData/hg38/regions/open.bb
+edwAddQaEnrichTarget exon hg38 /hive/groups/encode/encode3/encValData/hg38/regions/exon.bb
+edwAddQaEnrichTarget promoter hg38 /hive/groups/encode/encode3/encValData/hg38/regions/promoter.bb
+edwAddQaEnrichTarget coding hg38 /hive/groups/encode/encode3/encValData/hg38/regions/coding.bb
+edwAddQaEnrichTarget intron hg38 /hive/groups/encode/encode3/encValData/hg38/regions/intron.bb
+edwAddQaEnrichTarget utr hg38 /hive/groups/encode/encode3/encValData/hg38/regions/utr.bb
+edwAddQaEnrichTarget utr3 hg38 /hive/groups/encode/encode3/encValData/hg38/regions/utr3.bb
+edwAddQaEnrichTarget utr5 hg38 /hive/groups/encode/encode3/encValData/hg38/regions/utr5.bb
+edwAddQaEnrichTarget chrY hg38 /hive/groups/encode/encode3/encValData/hg38/regions/chrY.bb
 edwAddQaContamTarget hg19
 edwAddQaContamTarget mm10
 edwAddQaContamTarget ce10
@@ -108,25 +119,27 @@ edwAddQaContamTarget dm3
 edwAddQaContamTarget rn4
 edwAddQaContamTarget sacCer3
 edwAddQaContamTarget escCol1
+edwAddQaContamTarget hg38
 hgsql encodeDataWarehouse -e 'create view enrichedFiles as select f.id,v.format,v.enrichedIn,e.enrichment,left(f.submitFileName,70) submitFileName from edwQaEnrich e,edwValidFile v,edwFile f,edwQaEnrichTarget t where e.fileId=f.id and v.fileId=f.id and t.id=e.qaEnrichTargetId and v.enrichedIn=t.name;'
 hgsql encodeDataWarehouse -e 'create view crossEnrichments as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,ev.enrichedIn enrich,sampleSampleEnrichment xEnrichment from edwFile e,edwQaPairSampleOverlap p, edwFile y,edwValidFile ev where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId = e.id'
 hgsql encodeDataWarehouse -e 'create view correlations as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,pearsonInEnriched from edwFile e,edwQaPairCorrelation p, edwFile y where  e.id=p.elderFileId and y.id=p.youngerFileId'
 hgsql encodeDataWarehouse -e 'create view vf as select e.id fileId,submitId,submitFileName,edwFileName,FROM_UNIXTIME(endUploadTime) endUploadTime,FROM_UNIXTIME(updateTime) updateTime,size,md5,tags,errorMessage,deprecated,replacedBy,v.id validId,licensePlate,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,mapRatio,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd,qaVersion,uniqueMapRatio from edwFile e, edwValidFile v where e.id = v.fileId'
 
-hgsql encodeDataWarehouse -e 'create view xf as select fileId,submitId,submitFileName,edwFileName,FROM_UNIXTIME(endUploadTime) endUploadTime,FROM_UNIXTIME(updateTime) updateTime,size,md5,tags,errorMessage,deprecated,replacedBy,validId,licensePlate,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,mapRatio,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd,qaVersion,uniqueMapRatio,rfa,assayType,dataType,lab,biosample,ipTarget from vf,edwExperiment ex where vf.experiment = ex.accession'
+hgsql encodeDataWarehouse -e 'create view xf as select fileId,submitId,submitFileName,edwFileName,endUploadTime endUploadTime,updateTime updateTime,size,md5,tags,errorMessage,deprecated,replacedBy,validId,licensePlate,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,mapRatio,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd,qaVersion,uniqueMapRatio,rfa,assayType,dataType,lab,biosample,ipTarget from vf,edwExperiment ex where vf.experiment = ex.accession'
 
 #Add experiment table,  just a local one rather than from stanford
-hgsql encodeDataWarehouse -e 'load data local infile "../oneShot/rsyncEdwExpDataType/dec14.tab" into table edwExperiment'
+hgsql encodeDataWarehouse -e 'load data local infile "../oneShot/rsyncEdwExpDataType/jan17.tab" into table edwExperiment'
+hgsql encodeDataWarehouse -e 'load data local infile "../oneShot/edwFakeBiosample/jan3.tab" into table edwBiosample'
 
-#Load up analysis software and steps tables
-hgsql encodeDataWarehouse -e 'load data local infile "software.tab" into table edwAnalysisSoftware'
-hgsql encodeDataWarehouse -e 'load data local infile "steps.tab" into table edwAnalysisStep'
+
+## Need to rework software reload ... possibly move it into an eap setup script instead of here.
+##Load up analysis software and steps tables
+#hgsql encodeDataWarehouse -e 'load data local infile "software.tab" into table edwAnalysisSoftware'
+#hgsql encodeDataWarehouse -e 'load data local infile "steps.tab" into table edwAnalysisStep'
 
 # Relaunch edwRunDaemons.  Send them initial wake up message
 edwRunDaemon encodeDataWarehouse edwSubmitJob 8 $subFifo -log=edwSubmit.log
 echo hi > $subFifo
 edwRunDaemon encodeDataWarehouse edwJob 10 $qaFifo -log=edwQaAgent.log
 echo hi > $qaFifo
-edwRunDaemon encodeDataWarehouse edwAnalysisJob 4 $analysisFifo -log=edwAnalysis.log
-echo hi > $analysisFifo
 

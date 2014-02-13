@@ -673,7 +673,9 @@ if(doIdeo)
     ideoTrack->ixColor = hvGfxFindRgb(hvg, &ideoTrack->color);
     ideoTrack->ixAltColor = hvGfxFindRgb(hvg, &ideoTrack->altColor);
     hvGfxSetClip(hvg, 0, gfxBorder, ideoWidth, ideoTrack->height);
-    if (sameString(startBand, endBand))
+    if (isEmpty(startBand))
+        safef(title, sizeof(title), "%s", chromName);
+    else if (sameString(startBand, endBand))
         safef(title, sizeof(title), "%s (%s)", chromName, startBand);
     else
         safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
@@ -1918,6 +1920,48 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 
+void highlightRegion(struct cart *cart, struct hvGfx *hvg, int insideX, int imagePixelHeight,
+                       int winStart, int winEnd)
+// Highlights a region in the image.  Only done if theImgBox is not defined.
+// Thus it is done for ps/pdf and view image but the hgTracks image is highlighted via js
+{
+char *highlightDef = cartOptionalString(cart, "highlight");
+if(highlightDef && theImgBox == NULL) // Only highlight region when imgBox is not used.
+    {
+    // expect db.chrom:start-end#hexColor
+    char *db     = cloneNextWordByDelimiter(&highlightDef,'.');
+    char *chrom  = cloneNextWordByDelimiter(&highlightDef,':');
+    int chromStart = atoi(cloneNextWordByDelimiter(&highlightDef,'-'));
+    int chromEnd   = atoi(cloneNextWordByDelimiter(&highlightDef,'#'));
+    if ((db    != NULL && sameString(db,   database ))
+    &&  (chrom != NULL && sameString(chrom,chromName))
+    &&  (chromEnd != 0)
+    &&  (chromStart <= winEnd && chromEnd >= winStart))
+        {
+        chromStart--; // Not zero based
+        chromStart = max(chromStart, winStart);
+        chromEnd = min(chromEnd, winEnd);
+        double pixelsPerBase = scaleForPixels(insideWidth + 1);
+        int startPixels = pixelsPerBase * (chromStart - winStart); // floor
+        if (startPixels < 0)
+            startPixels *= -1;  // reverse complement
+        int width = pixelsPerBase * (double)(chromEnd - chromStart) + 0.5; // round up
+        if (width < 2)
+            width = 2;
+
+        // Default color to light blue, but if setting has color, use it.
+        unsigned int hexColor = MAKECOLOR_32(170, 255, 255);
+        if (highlightDef != NULL && *highlightDef != '\0')
+            {
+            long rgb = strtol(highlightDef,NULL,16); // Big and little Endians
+            hexColor = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+            }
+
+        hvGfxBox(hvg, insideX + startPixels, 0, width, imagePixelHeight,hexColor);
+        }
+    }
+}
+
 struct hash *makeGlobalTrackHash(struct track *trackList)
 /* Create a global track hash and returns a pointer to it. */
 {
@@ -2165,6 +2209,9 @@ initColors(hvg);
 
 /* Start up client side map. */
 hPrintf("<MAP id='map' Name=%s>\n", mapName);
+
+if (theImgBox == NULL)  // imageV2 highlighting is done by javascript.
+    highlightRegion(cart, hvg, insideX, imagePixelHeight, winStart, winEnd);
 
 /* Find colors to draw in. */
 findTrackColors(hvg, trackList);
@@ -4551,16 +4598,6 @@ if (!hideControls)
         // This 'dirty' field is used to check if js/ajax changes to the page have occurred.
         // If so and it is reached by the back button, a page reload will occur instead.
         hPrintf("<INPUT TYPE='text' style='display:none;' name='dirty' id='dirty' VALUE='false'>\n");
-        // Define BACK_SUPPORT to support the back-button via jquery.histoty.js
-#define BACK_SUPPORT
-#ifndef BACK_SUPPORT
-        // Unfortunately this does not work in IE, so IE will get reloaded only after this full load
-        // NOTE: Larry and I have seen that the new URL is not even used, but this will abort
-        //       the page load and hasten the isDirty() check in hgTracks.js
-        hPrintf("<script type='text/javascript'>if (document.getElementById('dirty').value == "
-                "'true') {document.getElementById('dirty').value = 'false'; "
-                "window.location = '%s?hgsid=%d';}</script>\n",hgTracksName(),cart->sessionId);
-#endif//ndef BACK_SUPPORT
         hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
                 "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
         hPrintf("\n%s", trackGroupsHidden1->string);
@@ -4599,9 +4636,9 @@ if (!hideControls)
 	hButton("hgt.jump", "go");
 	if (!trackHubDatabase(database))
 	    {
-	    jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
-	    if(assemblySupportsGeneSuggest(database))
-		hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
+            jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
+            if (assemblySupportsGeneSuggest(database))
+                hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
 	    }
 	if (survey && differentWord(survey, "off"))
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'>"
@@ -5345,14 +5382,20 @@ cgiTableFieldEnd();
 cgiTableRowEnd();
 }
 
-void chromInfoRowsChrom()
+void chromInfoRowsChromExt(char *sortType)
 /* Make table rows of chromosomal chromInfo name & size, sorted by name. */
 {
 struct slName *chromList = hAllChromNames(database);
 struct slName *chromPtr = NULL;
 long long total = 0;
 
-slSort(&chromList, chrSlNameCmp);
+if (sameString(sortType,"default"))
+    slSort(&chromList, chrSlNameCmp);
+else if (sameString(sortType,"withAltRandom"))
+    slSort(&chromList, chrSlNameCmpWithAltRandom);
+else
+    errAbort("unknown sort type in chromInfoRowsChromExt: %s", sortType);
+
 for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     unsigned size = hChromSize(database, chromPtr->name);
@@ -5371,6 +5414,12 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     }
 chromInfoTotalRow(slCount(chromList), total);
 slFreeList(&chromList);
+}
+
+void chromInfoRowsChrom()
+/* Make table rows of chromosomal chromInfo name & size, sorted by name. */
+{
+chromInfoRowsChromExt("default");
 }
 
 static int  chromInfoCmpSize(const void *va, const void *vb)
@@ -5586,7 +5635,9 @@ puts("Length (bp) including gaps &nbsp;");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
-if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) &&
+if (sameString(database,"hg38"))
+    chromInfoRowsChromExt("withAltRandom");
+else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) &&
     hChromCount(database) < 100)
     chromInfoRowsChrom();
 else
@@ -5697,11 +5748,9 @@ if(!trackImgOnly)
     jsIncludeFile("utils.js", NULL);
     jsIncludeFile("ajax.js", NULL);
     jsIncludeFile("jquery.watermarkinput.js", NULL);
-#ifdef BACK_SUPPORT
-    jsIncludeFile("jquery.history.js", NULL);  // Experimental
-#endif//def BACK_SUPPORT
     if(!searching)
         {
+        jsIncludeFile("jquery.history.js", NULL);
         jsIncludeFile("jquery.imgareaselect.js", NULL);
         }
     jsIncludeFile("autocomplete.js", NULL);
@@ -5796,6 +5845,12 @@ else
     }
 
 jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
+// js code needs to know if a highlightRegion is defined for this db
+char *highlightDef = cartOptionalString(cart, "highlight");
+if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(database)] == '.')
+    jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));
+jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
+              newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));
 hPrintf("<script type='text/javascript'>\n");
 jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
 hPrintf("</script>\n");

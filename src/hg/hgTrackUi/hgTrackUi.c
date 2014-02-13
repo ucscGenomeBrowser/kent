@@ -242,15 +242,24 @@ cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedAttribut
 printf("</TD></TR>\n");
 }
 
-static char *commaSepFromSqlSetTypeDecl(struct sqlFieldInfo *fi, char *table)
-/* Destructively prepare fi->type for chopCommas: strip initial "set(" and final ")",
- * informatively errAborting if not found, and strip the single-quote characters
- * that mysql puts around each field. */
+static char *commaSepFromSqlEnumOrSetTypeDecl(struct sqlFieldInfo *fi, char *type, char *table)
+/* Destructively prepare fi->type for chopCommas. type is either "enum" or "set".
+ * Strip the initial "set(" or "enum(" and final ")", informatively errAborting if not found,
+ * and strip the single-quote characters that mysql puts around each field. */
 {
-if (!startsWith("set(", fi->type))
-    errAbort("Expected %s.%s's type to begin with 'set(' but got '%s'",
-	     table, fi->field, fi->type);
-char *vals = fi->type + strlen("set(");
+if (sameString(type, "enum"))
+    {
+    if (!startsWith("enum(", fi->type))
+	errAbort("Expected %s.%s's type to begin with 'enum(' but got '%s'",
+		 table, fi->field, fi->type);
+    }
+else if (sameString(type, "set"))
+    {
+    if (!startsWith("set(", fi->type))
+	errAbort("Expected %s.%s's type to begin with 'set(' but got '%s'",
+		 table, fi->field, fi->type);
+    }
+char *vals = fi->type + strlen(type) + 1;
 char *rightParen = strrchr(vals, ')');
 if (rightParen == NULL || rightParen[1] != '\0')
     errAbort("Expected %s.%s's type to end with ')' but got '%s'",
@@ -259,6 +268,68 @@ else
     *rightParen = '\0';
 stripChar(vals, '\'');
 return vals;
+}
+
+static struct slName *snp125FixClassGlobals(struct trackDb *tdb)
+/* Fix snp125Class* global variables to contain only the classes that are present
+ * in the SQL enum type definition. Return a list of classes that are not present. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlFieldInfo *fi, *fiList = sqlFieldInfoGet(conn, tdb->table);
+hFreeConn(&conn);
+struct slName *unusedList = NULL;
+boolean foundClass = FALSE;
+for (fi = fiList;  fi != NULL;  fi = fi->next)
+    {
+    if (sameString(fi->field, "class"))
+	{
+	foundClass = TRUE;
+	char *vals = commaSepFromSqlEnumOrSetTypeDecl(fi, "enum", tdb->table);
+	char *values[64]; // max 11 in older tables
+	int valCount = chopCommas(vals, values);
+	char *labels[valCount];
+	char *defaults[valCount];
+	char *oldVars[valCount];
+	// Use labels from old static array
+	int i;
+	for (i = 0;  i < valCount;  i++)
+	    {
+	    int oldIx = stringArrayIx(values[i], snp125ClassDataName, snp125ClassArraySize);
+	    labels[i] = snp125ClassLabels[oldIx];
+	    defaults[i] = snp125ClassDefault[oldIx];
+	    oldVars[i] = snp125ClassOldColorVars[oldIx];
+	    }
+	// Make a list of unused values;
+	for (i = 0;  i < snp125ClassArraySize;  i++)
+	    {
+	    if (stringArrayIx(snp125ClassDataName[i], values, valCount) < 0)
+		slAddHead(&unusedList, slNameNew(snp125ClassDataName[i]));
+	    }
+	// Now overwrite old globals with the correct contents.
+	snp125ClassArraySize = valCount;
+	for (i = 0;  i < valCount;  i++)
+	    {
+	    snp125ClassDataName[i] = cloneString(values[i]);
+	    snp125ClassLabels[i] = cloneString(labels[i]);
+	    snp125ClassDefault[i] = cloneString(defaults[i]);
+	    snp125ClassOldColorVars[i] = cloneString(oldVars[i]);
+	    }
+	}
+    }
+if (! foundClass)
+    errAbort("Didn't find definition of func field in %s", tdb->table);
+return unusedList;
+}
+
+static void snp125MakeHiddenInputsForUnused(char *cartVar, struct slName *unusedList)
+/* If this db's snpNNN table uses only a small subset of the global arrays, but some
+ * other db's snpNNN table uses a larger subset, we don't want to have the effect of
+ * turning off the checkboxes that aren't used in this db's snpNNN.  So make hidden
+ * inputs to pretend that all unused values' checkboxes are checked. */
+{
+struct slName *unused;
+for (unused = unusedList;  unused != NULL;  unused = unused->next)
+    cgiMakeHiddenVar(cartVar, unused->name);
 }
 
 static void snp137PrintFunctionFilterControls(struct trackDb *tdb)
@@ -273,7 +344,7 @@ for (fi = fiList;  fi != NULL;  fi = fi->next)
     {
     if (sameString(fi->field, "func"))
 	{
-	char *vals = commaSepFromSqlSetTypeDecl(fi, tdb->table);
+	char *vals = commaSepFromSqlEnumOrSetTypeDecl(fi, "set", tdb->table);
 	char *values[128]; // 22 values as of snp137
 	int valCount = chopCommas(vals, values);
 	char *labels[valCount];
@@ -286,14 +357,44 @@ for (fi = fiList;  fi != NULL;  fi = fi->next)
 		labels[i] = snpMisoLinkFromFunc(values[i]);
 	    }
 	snp125PrintFilterControls(tdb->track, "Function", "func", labels, values, valCount);
-	return;;
+	return;
 	}
     }
 errAbort("Didn't find definition of func field in %s", tdb->table);
 }
 
+int snp125ValidArraySize(int version)
+/* Figure out how many validation options are applicable to this database and version. */
+{
+// Cache result since it costs a mysql query and won't change
+static int size = 0;
+if (size == 0)
+    {
+    size = snp125ValidArraySizeNonHuman;
+    if (sameString(hOrganism(database), "Human"))
+	{
+	size = snp125ValidArraySizeHuman;
+	if (version < 130)
+	    size--; // no by-1000genomes
+	}
+    }
+return size;
+}
+
+static void snp125MakeHiddenInputsForValid(char *cartVar, int version)
+/* Non-human dbs' snpNNN tables use only a subset of the validation codes, but human dbs'
+ * snpNNN tables use all of them.  When making options for non-human dbs, we don't want
+ * to have the effect of turning off the checkboxes that aren't used (but would be for human).
+ * So make hidden inputs to pretend that all unused values' checkboxes are checked. */
+{
+int i;
+for (i = snp125ValidArraySize(version);  i < snp125ValidArraySizeHuman;  i++)
+    cgiMakeHiddenVar(cartVar, snp125ValidDataName[i]);
+}
+
 static void snp125PrintFilterControlSection(struct trackDb *tdb, int version,
-					    boolean molTypeHasMito)
+					    boolean molTypeHasMito,
+					    struct slName *snp125UnusedClasses)
 /* Print a collapsible section of filtering controls on SNP properties, first numeric
  * and then enum/set. */
 {
@@ -362,8 +463,12 @@ if (version <= 127)
 			 snp125LocTypeDataName, snp125LocTypeArraySize);
 snp125PrintFilterControls(tdb->track, "Class", "class", snp125ClassLabels,
 			  snp125ClassDataName, snp125ClassArraySize);
+safef(cartVar, sizeof(cartVar), "%s.include_%s", tdb->track, "class");
+snp125MakeHiddenInputsForUnused(cartVar, snp125UnusedClasses);
 snp125PrintFilterControls(tdb->track, "Validation", "valid", snp125ValidLabels,
-			  snp125ValidDataName, snp125ValidArraySize);
+			  snp125ValidDataName, snp125ValidArraySize(version));
+safef(cartVar, sizeof(cartVar), "%s.include_%s", tdb->track, "valid");
+snp125MakeHiddenInputsForValid(cartVar, version);
 if (version < 137)
     {
     int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
@@ -455,7 +560,7 @@ if (isNotEmpty(cgiOptionalString(buttonVar)))
 			  tdb->track, "locType");
     snp125RemoveColorVars(cart, snp125ClassOldColorVars, TRUE, snp125ClassArraySize,
 			  tdb->track, "class");
-    snp125RemoveColorVars(cart, snp125ValidOldColorVars, TRUE, snp125ValidArraySize,
+    snp125RemoveColorVars(cart, snp125ValidOldColorVars, TRUE, snp125ValidArraySizeHuman,
 			  tdb->track, "valid");
     int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
     snp125RemoveColorVars(cart, snp125FuncOldColorVars, TRUE, funcArraySize,
@@ -535,11 +640,13 @@ switch (colorSourceCart)
                 break;
     case snp125ColorSourceClass:
                 snp125PrintColorSpec(tdb->track, "class", snp125ClassOldColorVars, TRUE,
-                                     snp125ClassLabels, snp125ClassDefault, snp125ClassArraySize);
+                                     snp125ClassLabels, snp125ClassDefault,
+				     snp125ClassArraySize);
                 break;
     case snp125ColorSourceValid:
                 snp125PrintColorSpec(tdb->track, "valid", snp125ValidOldColorVars, TRUE,
-                                     snp125ValidLabels, snp125ValidDefault, snp125ValidArraySize);
+                                     snp125ValidLabels, snp125ValidDefault,
+				     snp125ValidArraySize(version));
                 break;
     case snp125ColorSourceFunc:
                 funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
@@ -601,9 +708,7 @@ char *orthoTable = snp125OrthoTable(tdb, NULL);
 int version = snpVersion(tdb->track);
 char cartVar[512];
 jsInit();
-
-if (version < 130)
-    snp125ValidArraySize--; // no by-1000genomes
+struct slName *snp125UnusedClasses = snp125FixClassGlobals(tdb);
 
 if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     {
@@ -627,7 +732,7 @@ snp125OfferGeneTracksForFunction(tdb);
 boolean molTypeHasMito = snp125CheckMolTypeForMito(tdb);
 
 puts("<TR><TD colspan=2><BR></TD></TR>");
-snp125PrintFilterControlSection(tdb, version, molTypeHasMito);
+snp125PrintFilterControlSection(tdb, version, molTypeHasMito, snp125UnusedClasses);
 puts("<TR><TD colspan=2><BR></TD></TR>");
 
 snp125PrintColorControlSection(tdb, version, molTypeHasMito);
@@ -2488,10 +2593,39 @@ hFreeConn(&conn);
 
 static void factorSourceUi(char *db, struct trackDb *tdb)
 {
-printf("<BR><B>Cell Abbreviations:</B><BR>\n");
+// Multi-select filter on factors
+// NOTE: this UI code doesn't currently support the use of factorSource tracks
+// as subtracks in a composite (would require moving to hui.c, using newer cfgByType approach)
+filterBy_t *filters = filterBySetGet(tdb, cart, tdb->track);
+if (filters != NULL)
+    {
+    puts("<p>");
+    filterBySetCfgUi(cart, tdb, filters, TRUE);
+    filterBySetFree(&filters);
+    }
+
+char varName[64];
+printf("<BR><B>Show cell abbreviations (to right of cluster): </B> ");
+safef(varName, sizeof(varName), "%s.showCellAbbrevs", tdb->track);
+cartMakeCheckBox(cart, varName, TRUE);
+
+puts("<p><table>");
+jsBeginCollapsibleSectionFontSize(cart, tdb->track, "cellSources", "Cell Abbreviations", FALSE,
+                                        "medium");
 struct sqlConnection *conn = hAllocConn(db);
 hPrintFactorSourceAbbrevTable(conn, tdb);
+jsEndCollapsibleSection();
+puts("</table>");
 hFreeConn(&conn);
+
+
+
+if (trackDbSetting(tdb, "motifTable") != NULL)
+    {
+    printf("<BR><B>Highlight motifs: </B> ");
+    safef(varName, sizeof(varName), "%s.highlightMotifs", tdb->track);
+    cartMakeCheckBox(cart, varName, trackDbSettingClosestToHomeOn(tdb, "motifDrawDefault"));
+    }
 }
 
 #ifdef UNUSED

@@ -6,6 +6,7 @@
 #include "internet.h"
 #include "rudp.h"
 #include "paraMessage.h"
+#include "errabort.h"
 #include "log.h"
 
 void pmInit(struct paraMessage *pm, rudpHost ipAddress, bits16 port)
@@ -107,6 +108,19 @@ boolean pmSendString(struct paraMessage *pm, struct rudp *ru, char *string)
 {
 pmSet(pm, string);
 return pmSend(pm, ru);
+}
+
+void pmCheckCommandSize(char *string, int len)
+/* Check that string of given len is not too long to fit into paraMessage.
+ * If it is, abort with good error message assuming it was a command string */
+{
+if (len > rudpMaxSize)
+    {
+    errAbort("The following string has %d bytes, but can only be %d:\n%s\n"
+             "Please either shorten the current directory or the command line\n"
+             "possibly by making a shell script that encapsulates a long command.\n"
+             ,  len, (int)rudpMaxSize, string);
+    }
 }
 
 boolean pmReceiveTimeOut(struct paraMessage *pm, struct rudp *ru, int timeOut)
@@ -234,7 +248,7 @@ carefulClose(&f);
 }
 
 void pmFetchFile(char *host, char *sourceName, char *destName)
-/* Fetch small file. */
+/* Fetch small file. Only works if you are on hub if they've set up any security. */
 {
 struct rudp *ru = rudpOpen();
 struct paraMessage pm;
@@ -246,5 +260,105 @@ if (ru != NULL)
 	pmFetchOpenFile(&pm, ru, destName);
     rudpClose(&ru);
     }
+}
+
+boolean pmSendStringWithRetries(struct paraMessage *pm, struct rudp *ru, char *string)
+/* Send out given message strng.  Print warning message and return FALSE if
+ * there is a problem. Try up to 5 times sleeping for 60 seconds in between.
+ * This is an attempt to help automated processes. */
+{
+int tries = 0;
+#define PMSENDSLEEP 60
+#define PMSENDMAXTRIES 5
+boolean result = FALSE;
+while (TRUE)
+    {
+    result = pmSendString(pm, ru, string);
+    if (result)
+	break;
+    warn("pmSendString timed out!");
+    ++tries;
+    if (tries >= PMSENDMAXTRIES)
+	break;
+    warn("pmSendString: will sleep %d seconds and retry", PMSENDSLEEP);
+    sleep(PMSENDSLEEP);
+    }
+return result;
+}
+
+char *pmHubSendSimple(char *message, char *host)
+/* Send message to host, no response. */
+{
+struct rudp *ru = rudpMustOpen();
+struct paraMessage pm;
+pmInitFromName(&pm, host, paraHubPort);
+if (!pmSendStringWithRetries(&pm, ru, message))
+    noWarnAbort();
+rudpClose(&ru);
+return cloneString(pm.data);
+}
+
+char *pmHubSingleLineQuery(char *query, char *host)
+/* Send message to hub and get single line response.
+ * This should be freeMem'd when done. */
+{
+struct rudp *ru = rudpMustOpen();
+struct paraMessage pm;
+
+pmInitFromName(&pm, host, paraHubPort);
+if (!pmSendStringWithRetries(&pm, ru, query))
+    noWarnAbort();
+if (!pmReceive(&pm, ru))
+    noWarnAbort();
+rudpClose(&ru);
+return cloneString(pm.data);
+}
+
+struct slName *pmHubMultilineQuery(char *query, char *host)
+/* Send a command with a multiline response to hub,
+ * and return response as a list of strings. */
+{
+struct slName *list = NULL;
+struct rudp *ru = rudpMustOpen();
+struct paraMessage pm;
+struct paraMultiMessage pmm;
+char *row[256];
+int count = 0;
+pmInitFromName(&pm, host, paraHubPort);
+/* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
+pmmInit(&pmm, &pm, pm.ipAddress.sin_addr);
+if (!pmSendStringWithRetries(&pm, ru, query))
+    noWarnAbort();
+for (;;)
+    {
+    if (!pmmReceive(&pmm, ru))
+	break;
+    if (pm.size == 0)
+	break;
+    count = chopByChar(pm.data, '\n', row, sizeof(row));
+    if (count > 1) --count;  /* for multiline, count is inflated by one */
+
+    int i;
+    for(i=0;i<count;++i)
+	{
+	slNameAddHead(&list, row[i]);
+	}
+    }
+rudpClose(&ru);
+slReverse(&list);
+return list;
+}
+
+struct paraPstat2Job *paraPstat2JobLoad(char **row)
+/* Turn an array of 5 strings into a paraPstat2Job. */
+{
+struct paraPstat2Job *job;
+AllocVar(job);
+job->status = cloneString(row[0]);
+job->parasolId = cloneString(row[1]);
+job->user = cloneString(row[2]);
+job->program = cloneString(row[3]);
+job->host = cloneString(row[4]);
+return job;
 }
 

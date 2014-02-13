@@ -581,7 +581,7 @@ static void printIndentedNameEndCallback(struct jsonElement *ele, char *name,
 {
 struct jsonPrintContext *jps = context;
 jps->indent -= jps->indentPer;
-jsonPrintOneEnd(ele, name, isLast, jps->indent, stdout);
+jsonPrintOneEnd(ele, name, isLast, jps->indent, jps->f);
 }
 
 void jsonPrintToFile(struct jsonElement *root, char *name, FILE *f, int indentPer)

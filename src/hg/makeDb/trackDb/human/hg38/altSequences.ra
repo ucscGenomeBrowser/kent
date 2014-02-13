@@ -9,7 +9,7 @@ visibility hide
 type bed 4
 noInherit on
 group map
-priority 105
+priority 0
 otherDb hg38
 chainMinScore 1000
 chainLinearGap medium
@@ -29,9 +29,9 @@ html altSequence
         subGroups view=location
 	color 32,32,190
 	shortLabel Haplotypes
-	longLabel Haplotypes to GRCh38 Reference Sequence
+	longLabel GRCh38 Haplotype to Reference sequence mapping correspondence
 	html altSeqComposite
-	priority 1
+	priority 10
         url /cgi-bin/hgTracks?db=hg38&position=$$
         urlLabel Corresponding position:
 
@@ -41,23 +41,22 @@ html altSequence
     visibility hide
     parent altSequence
     type psl
-    indelDoubleInsert on
-    indelQueryInsert on
-    showDiffBasesAllScales .
-    showDiffBasesMaxZoom 10000.0
-    showCdsMaxZoom 10000.0
-    showCdsAllScales .
-    baseColorDefault itemBases
-    pslSequence no
-    baseColorUseSequence extFile seqHg19Patch10 extHg19Patch10
 
-	track altSequenceLiftOver
+	track altSequenceLiftOverRbest
         parent altSequenceViewPsl
         subGroups view=psl
-	shortLabel Alignment
-	longLabel GRCh38 Alternate Sequence Lift Over Alignments
+	shortLabel UCSC RecipBest
+	longLabel UCSC calculated GRCh38 Alternate Sequence lift over reciprocal best alignments
 	html altSeqComposite
-	priority 3
+	priority 22
+
+	track ncbiAltMappings
+        parent altSequenceViewPsl
+        subGroups view=psl
+	shortLabel NCBI psl
+	longLabel GRCh38 Alternate Sequence alignments from NCBI gff cigar format
+	html altSeqComposite
+	priority 23
 
     track altSequenceViewChain
     shortLabel Chain
@@ -73,7 +72,7 @@ html altSequence
         longLabel GRCh38 Alternate Sequence Chained Alignments
         type chain hg38
         html chainNet
-	priority 4
+	priority 30
 
     track altSequenceViewNet
     shortLabel Net
@@ -88,4 +87,4 @@ html altSequence
         longLabel GRCh38 Alternate Sequence Alignment Net
         type netAlign hg38 chainAltSequence
         html chainNet
-	priority 5
+	priority 40
