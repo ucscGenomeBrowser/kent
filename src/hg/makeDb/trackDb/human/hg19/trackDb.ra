@@ -66,111 +66,6 @@ track gwasCatalog override
 snpTable snp137
 snpVersion 137
 
-track ucscRetroAli4
-shortLabel Retroposed Genes 4.0
-longLabel Retroposed Genes V4, Including Pseudogenes - Sept. 2012
-group genes
-type psl
-priority 37.14
-color 20,0,250
-visibility hide
-ucscRetroInfo ucscRetroInfo4
-baseColorDefault diffCodons
-baseColorUseCds table ucscRetroCds4
-baseColorUseSequence extFile ucscRetroSeq4 ucscRetroExtFile4
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-
-searchName ucscRetroInfoRefSeq4
-searchTable ucscRetroAli4
-searchDescription Retroposed GenesV4, Including Pseudogenes - 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo4
-dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo4.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
-searchPriority 3.52
-
-searchName ucscRetroInfoMrna4
-searchTable ucscRetroAli4
-searchDescription Retroposed GenesV4, Including Pseudogenes - 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-searchPriority 3.55
-
-searchName ucscRetroUniProt4
-searchTable ucscRetroAli4
-searchDescription Retroposed GenesV4, Including Pseudogenes - 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo4
-xrefQuery select ucscRetroInfo4.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
-searchPriority 3.54
-
-searchName ucscRetroKnownGene4
-searchTable ucscRetroAli4
-searchDescription Retroposed GenesV4, Including Pseudogenes - 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo4
-xrefQuery select ucscRetroInfo4.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
-searchPriority 3.53
-
-track ucscRetroAli5
-shortLabel Retroposed Genes
-longLabel Retroposed Genes V5, Including Pseudogenes
-group genes
-type psl
-priority 37.14
-color 20,0,250
-visibility pack
-ucscRetroInfo ucscRetroInfo5
-baseColorDefault diffCodons
-baseColorUseCds table ucscRetroCds5
-baseColorUseSequence extFile ucscRetroSeq5 ucscRetroExtFile5
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-dataVersion Mar. 2013
-
-searchName ucscRetroInfoRefSeq5
-searchTable ucscRetroAli5
-searchDescription Retroposed Genes V5, Including Pseudogenes 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo5
-dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo5.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
-searchPriority 3.52
-
-searchName ucscRetroInfoMrna5
-searchTable ucscRetroAli5
-searchDescription Retroposed Genes V5, Including Pseudogenes
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-searchPriority 3.55
-
-searchName ucscRetroUniProt5
-searchTable ucscRetroAli5
-searchDescription Retroposed Genes V5, Including Pseudogenes 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo5
-xrefQuery select ucscRetroInfo5.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
-searchPriority 3.54
-
-searchName ucscRetroKnownGene5
-searchTable ucscRetroAli5
-searchDescription Retroposed Genes V5, Including Pseudogenes 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo5
-xrefQuery select ucscRetroInfo5.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
-searchPriority 3.53
-
 track ucscRetroAli6
 shortLabel Retroposed Genes
 longLabel Retroposed Genes V6, Including Pseudogenes
@@ -222,6 +117,60 @@ query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo6
 xrefQuery select ucscRetroInfo6.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
+track ucscRetroAli7
+shortLabel Retroposed Genes 7.0
+longLabel Retroposed Genes, Including Pseudogenes 
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+nextItemButton on
+ucscRetroInfo ucscRetroInfo7
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds7
+baseColorUseSequence extFile ucscRetroSeq7 ucscRetroExtFile7
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+dataVersion Jan. 2014
+
+searchName ucscRetroInfoRefSeq7
+searchTable ucscRetroAli7
+searchDescription Retroposed GenesV7, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo7
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo7.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna7
+searchTable ucscRetroAli7
+searchDescription Retroposed GenesV7, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt7
+searchTable ucscRetroAli7
+searchDescription Retroposed GenesV7, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo7
+xrefQuery select ucscRetroInfo7.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene7
+searchTable ucscRetroAli7
+searchDescription Retroposed GenesV7, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo7
+xrefQuery select ucscRetroInfo7.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
 track illuminaProbes override
