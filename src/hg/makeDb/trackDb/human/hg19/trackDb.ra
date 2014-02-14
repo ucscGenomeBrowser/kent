@@ -70,6 +70,7 @@ group genes
 type psl
 color 20,0,250
 visibility pack
+priority 3
 ucscRetroInfo ucscRetroInfo6
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds6
@@ -822,6 +823,7 @@ chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
+priority 1
 
 track snp137Flagged
 shortLabel Flagged SNPs(137)
@@ -2044,6 +2046,7 @@ shortLabel UCSC Genes
 longLabel UCSC Genes (RefSeq, GenBank, CCDS, Rfam, tRNAs & Comparative Genomics)
 group genes
 visibility pack
+priority 1
 color 12,12,120
 type genePred knownGenePep knownGeneMrna
 idXref kgAlias kgID alias
@@ -2184,6 +2187,7 @@ noScoreFilter .
 
 track rmsk override
 group rep
+priority 1
 
 track nestedRepeats override
 group rep
@@ -2199,6 +2203,9 @@ group rep
 
 track pubs override
 group phenDis
+priority 1
 
 track pubsBingBlat override
 group phenDis
+
+include defaultPriority.ra
