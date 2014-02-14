@@ -463,8 +463,9 @@ type ctgPos
 url none
 
 track multiz4way
-shortLabel 4-way Multiz
-longLabel 4-Way Multiz Alignment & Conservation
+release alpha
+shortLabel test 4-way Multiz
+longLabel test 4-Way Multiz Alignment & Conservation
 group compGeno
 visibility hide
 color 0, 10, 100
@@ -587,6 +588,7 @@ dimensions dimensionX=clade
 visibility hide 
 type bed 4
 group compGeno
+priority 2
 
     track cons46wayViewalign
     shortLabel Multiz Alignments
@@ -983,9 +985,6 @@ informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterat
 
 track chainNetVenter override
 priority 450
-
-track chainNetPoodle override
-priority 451
 
 # Some, but not all subtracks of pgSnp (Personal Genome Variants) were lifted
 track pgAk1 override
