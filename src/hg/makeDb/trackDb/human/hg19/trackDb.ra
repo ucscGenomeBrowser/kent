@@ -121,13 +121,12 @@ searchPriority 3.53
 
 track ucscRetroAli7
 shortLabel Retroposed Genes 7.0
-longLabel Retroposed Genes, Including Pseudogenes 
+longLabel Retroposed Genes V7, Including Pseudogenes 
 group genes
 type psl
 priority 0
 color 20,0,250
-visibility pack
-nextItemButton on
+visibility hide
 ucscRetroInfo ucscRetroInfo7
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds7
