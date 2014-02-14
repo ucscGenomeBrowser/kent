@@ -3,7 +3,6 @@ compositeTrack on
 shortLabel Genome Variants
 longLabel Personal Genome Variants
 group varRep
-priority 0
 visibility hide
 subGroup1 view Projects A_PSU=PSU_Bushmen B_1kG=1000_Genomes_March_2010 C_CG=Complete_Genomics D_PGP=Personal_Genomes_Project N_1off=Single-Genome_Projects
 subGroup2 type Variant_type SNP=SNP Indel=Indel

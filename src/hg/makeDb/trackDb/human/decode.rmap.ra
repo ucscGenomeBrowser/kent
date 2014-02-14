@@ -3,7 +3,6 @@ compositeTrack on
 shortLabel deCODE Recomb
 longLabel deCODE Recombination maps, 10Kb bin size, October 2010
 group map
-priority 0
 type bed 3
 noInherit on
 viewLimits 0:10

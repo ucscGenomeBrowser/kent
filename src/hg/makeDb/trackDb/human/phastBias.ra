@@ -2,7 +2,6 @@ track phastBias
 shortLabel phastBias gBGC
 longLabel phastBias gBGC predictions
 compositeTrack on
-priority 0
 group compGeno
 visibility hide
 type bed 3 .
