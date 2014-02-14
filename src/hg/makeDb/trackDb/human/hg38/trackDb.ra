@@ -36,45 +36,7 @@ track gap override
 html gap
 visibility hide
 
-track rmskCM
-shortLabel RM crossMatch
-longLabel Repeating Elements by RepeatMasker - cross-match alignment engine
-group x
-visibility hide
-spectrum on
-type rmsk
-maxWindowToDraw 10000000
-canPack off
-
-track rmskBlastn
-shortLabel RM rmblastn
-longLabel Repeating Elements by RepeatMasker - rmblastn alignment engine
-group x
-visibility hide
-spectrum on
-type rmsk
-maxWindowToDraw 10000000
-canPack off
-
-track rmskHmmer
-shortLabel RM HMMER
-longLabel Repeating Elements by RepeatMasker - HMMER alignment engine
-group x
-visibility hide
-spectrum on
-type rmsk
-maxWindowToDraw 10000000
-canPack off
-
-track rmskGenbank
-shortLabel RM genbank
-longLabel Repeating Elements by RepeatMasker - masking files from GRCh38 release
-group x
-visibility hide
-spectrum on
-type rmsk
-maxWindowToDraw 10000000
-canPack off
+include rmskTracks.ra
 
 track ctgPos2
 shortLabel GRC Contigs
@@ -125,22 +87,6 @@ type bed 9 .
 scoreFilterByRange on
 itemRgb on
 color 0,0,0
-
-track hmmerUnique
-shortLabel HMMER Unique
-longLabel repeat elements identified uniquely by the HMMER engine compared to the cross-match engine
-group x
-visibility hide
-color 0,0,0
-type bed 4 .
-
-track crossMatchUnique
-shortLabel CrossMatch Unique
-longLabel repeat elements identified uniquely by the cross-match engine compared to the HMMER engine
-group x
-visibility hide
-color 0,0,0
-type bed 4 .
 
 track centromeres
 shortLabel Centromere locations
