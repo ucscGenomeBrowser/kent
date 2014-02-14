@@ -6,7 +6,7 @@ track xmGene
 shortLabel XM Genes
 longLabel XM and XR Genes
 group genes
-visibility dense
+visibility hide
 color 12,12,120
 type genePred
 #idXref refLink mrnaAcc name
@@ -17,7 +17,7 @@ track xenoXmGene
 shortLabel xeno XM Genes
 longLabel xeno XM and XR Genes
 group genes
-visibility dense
+visibility hide
 color 12,12,120
 type genePred
 #idXref refLink mrnaAcc name

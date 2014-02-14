@@ -69,8 +69,7 @@ longLabel Retroposed Genes V6, Including Pseudogenes
 group genes
 type psl
 color 20,0,250
-visibility pack
-priority 3
+visibility hide
 ucscRetroInfo ucscRetroInfo6
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds6
