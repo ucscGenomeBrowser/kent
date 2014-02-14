@@ -13,14 +13,10 @@ html gold
 track gap override
 html gap
 
-track rmsk override
-priority 0
-
 track assemblyFrags
 shortLabel Contigs
 longLabel Contig fragments used in the assembly
 group map
-priority 0
 visibility hide
 colorByStrand 150,100,30 100,50,0
 type bed 6
@@ -46,7 +42,6 @@ track mm9UcscGenes
 shortLabel mm9 Ucsc Genes
 longLabel  mm9 Ucsc Genes
 group genes
-priority 0
 visibility hide
 color 20,20,170
 type bed 12
@@ -81,7 +76,6 @@ shortLabel Retroposed Genes
 longLabel Retroposed Genes V2, Including Pseudogenes
 group genes
 type psl
-priority 0
 color 20,0,250
 visibility pack
 ucscRetroInfo ucscRetroInfo2
@@ -134,7 +128,6 @@ shortLabel Retroposed Genes 4.0
 longLabel Retroposed Genes V4, Including Pseudogenes
 group genes
 type psl
-priority 0
 color 20,0,250
 visibility hide
 ucscRetroInfo ucscRetroInfo4
