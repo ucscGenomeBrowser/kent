@@ -1,0 +1,58 @@
+track rmskTracks
+superTrack on
+shortLabel RepeatMasker
+longLabel RepeatMasker experiments with various alignment engines
+group x
+visibility hide
+color 0,100,0
+altColor 128,228,128
+
+    track rmskCM
+    superTrack rmskTracks full
+    shortLabel RM crossMatch
+    longLabel Repeating Elements by RepeatMasker - cross-match alignment engine
+    type rmsk
+    maxWindowToDraw 10000000
+    canPack off
+    spectrum on
+
+    track rmskBlastn
+    superTrack rmskTracks full
+    shortLabel RM rmblastn
+    longLabel Repeating Elements by RepeatMasker - rmblastn alignment engine
+    type rmsk
+    maxWindowToDraw 10000000
+    canPack off
+    spectrum on
+
+    track rmskHmmer
+    superTrack rmskTracks full
+    shortLabel RM HMMER
+    longLabel Repeating Elements by RepeatMasker - HMMER alignment engine
+    type rmsk
+    maxWindowToDraw 10000000
+    canPack off
+    spectrum on
+
+    track rmskGenbank
+    superTrack rmskTracks full
+    shortLabel RM genbank
+    longLabel Repeating Elements by RepeatMasker - masking files from GRCh38 release
+    type rmsk
+    maxWindowToDraw 10000000
+    canPack off
+    spectrum on
+
+    track hmmerUnique
+    superTrack rmskTracks pack
+    shortLabel HMMER Unique
+    longLabel repeat elements identified uniquely by the HMMER engine compared to the cross-match engine
+    color 0,0,0
+    type bed 4 .
+
+    track crossMatchUnique
+    superTrack rmskTracks pack
+    shortLabel CrossMatch Unique
+    longLabel repeat elements identified uniquely by the cross-match engine compared to the HMMER engine
+    color 0,0,0
+    type bed 4 .

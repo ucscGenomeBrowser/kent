@@ -925,6 +925,21 @@ return outString;
 }
 
 
+/* NOTE: Where in the URL to use which of these functions:
+ *
+ * Parts of a URL:
+ *   protocol://user:password@server.com:port/path/filename?var1=val1&var2=val2
+ *
+ * Note that a space should only be encoded to a plus and decoded from a plus
+ * when dealing with http URLs in the query part of the string,
+ * which is the part after the ? above.
+ * It should not be used in the rest of the URL.  
+ * So in the query string part of a URL, do use cgiEncode/cgiDecode. 
+ * And in the rest of the URL, use cgiEncodeFUll/cgiDecodeFull 
+ * which do not code space as plus.
+ * Since FTP does not use URLs with query parameters, use the Full version.
+ */
+
 void cgiDecode(char *in, char *out, int inLength)
 /* Decode from cgi pluses-for-spaces format to normal.
  * Out will be a little shorter than in typically, and

@@ -2,7 +2,6 @@ track bamSLDenisova
 shortLabel Denisova
 longLabel Denisova Sequence Reads
 group denisova
-priority 5
 visibility hide
 type bam
 pairEndsByName on
@@ -24,7 +23,6 @@ compositeTrack on
 shortLabel Modern Human Seq
 longLabel Alignments of Sequence Reads from 7 Humans
 group denisova
-priority 6
 visibility hide
 type bam
 pairEndsByName on

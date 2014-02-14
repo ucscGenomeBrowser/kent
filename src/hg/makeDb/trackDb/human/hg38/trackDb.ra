@@ -1,47 +1,27 @@
-include genbankOverrides.ra
-
-track grcIncidentDb override
-priority 0
 
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
 visibility pack
-priority 0
+priority 1
 
 track par override
 group x
 visibility hide
-priority 0
-
-track cytoBandIdeo override
-priority 0
-
-track genscan override
-priority 0
 
 track rmsk override
 group rep
 visibility full
-priority 0
+priority 1
 
 track windowmaskerSdust override
 group rep
-priority 0
 
 track nestedRepeats override
 group rep
-priority 0
 
 track simpleRepeat override
 group rep
-priority 0
-
-track ucscToINSDC override
-priority 0
-
-track gc5BaseBw override
-priority 0
 
 searchName assemblyAcc
 searchTable gold
@@ -55,57 +35,13 @@ termRegex [A-Z][A-Z0-9]+(\.[0-9]+)?
 track gap override
 html gap
 visibility hide
-priority 0
 
-track rmskCM
-shortLabel RM crossMatch
-longLabel Repeating Elements by RepeatMasker - cross-match alignment engine
-group x
-priority 0
-visibility hide
-spectrum on
-type rmsk
-maxWindowToDraw 10000000
-canPack off
-
-track rmskBlastn
-shortLabel RM rmblastn
-longLabel Repeating Elements by RepeatMasker - rmblastn alignment engine
-group x
-priority 0
-visibility hide
-spectrum on
-type rmsk
-maxWindowToDraw 10000000
-canPack off
-
-track rmskHmmer
-shortLabel RM HMMER
-longLabel Repeating Elements by RepeatMasker - HMMER alignment engine
-group x
-priority 0
-visibility hide
-spectrum on
-type rmsk
-maxWindowToDraw 10000000
-canPack off
-
-track rmskGenbank
-shortLabel RM genbank
-longLabel Repeating Elements by RepeatMasker - masking files from GRCh38 release
-group x
-priority 0
-visibility hide
-spectrum on
-type rmsk
-maxWindowToDraw 10000000
-canPack off
+include rmskTracks.ra
 
 track ctgPos2
 shortLabel GRC Contigs
 longLabel Genome Reference Consortium Contigs
 group map
-priority 0
 visibility hide
 type ctgPos
 url http://www.ncbi.nlm.nih.gov/nuccore/$$
@@ -122,7 +58,6 @@ track scaffolds
 shortLabel Scaffolds
 longLabel GRCh38 defined Scaffold identifiers
 group map
-priority 0
 visibility hide
 color 0,0,0
 type bed 4 .
@@ -137,47 +72,28 @@ searchPriority 18
 track analysisGap
 shortLabel Analysis Gap
 longLabel Extra Gap Locations in Analysis set sequence on chr5, 14, 19, 21, 22, Y
-priority 0
 group x
 visibility hide
 type bed 4 .
 chromosomes chr14,chr19,chr21,chr22,chr5,chrY
 
 track hg38ContigDiff
-shortLabel Hg38 Diff
+shortLabel Hg19 Diff
 longLabel Contigs new to GRCh38/(hg38), not carried forward from GRCh37/(hg19)
 visibility pack
+priority 3
 group map
 type bed 9 .
 scoreFilterByRange on
 itemRgb on
 color 0,0,0
-priority 0
-
-track hmmerUnique
-shortLabel HMMER Unique
-longLabel repeat elements identified uniquely by the HMMER engine compared to the cross-match engine
-group x
-priority 0
-visibility hide
-color 0,0,0
-type bed 4 .
-
-track crossMatchUnique
-shortLabel CrossMatch Unique
-longLabel repeat elements identified uniquely by the cross-match engine compared to the HMMER engine
-group x
-priority 0
-visibility hide
-color 0,0,0
-type bed 4 .
 
 track centromeres
 shortLabel Centromere locations
 longLabel Centromere locations
-group x
-priority 0
+group map
 visibility pack
+priority 2
 type bed 4 .
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 color 255,0,0
@@ -191,7 +107,6 @@ superTrack on
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
-priority 0
 visibility show
 color 0,100,0
 altColor 128,228,128
@@ -218,7 +133,6 @@ track contigAlignmentSegments
 shortLabel ContigSegments
 longLabel non-bridged contig segments used in lastz/chain/net alignment pipeline
 group x
-priority 0
 visibility hide
 type bed 4
 
@@ -235,7 +149,6 @@ track multiz4way
 shortLabel 4-way Multiz
 longLabel 4-Way Multiz Alignment & Conservation
 group compGeno
-priority 0
 visibility hide
 color 0, 10, 100
 altColor 0,90,10
@@ -254,3 +167,5 @@ speciesCodonDefault hg38
 speciesGroups mammal
 sGroup_mammal rheMac3 mm10 canFam3
 treeImage phylo/hg38_4way.gif
+
+include defaultPriority.ra
