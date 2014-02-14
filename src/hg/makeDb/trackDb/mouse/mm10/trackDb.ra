@@ -23,9 +23,6 @@ type bed 6
 urlLabel NCBI Nucleotide:
 url http://www.ncbi.nlm.nih.gov/nuccore/$$
 
-track ensGene override
-visibility pack
-
 # different type of gold search here so the fragments can be found with
 #	or without their trailing .1
 searchTable gold
@@ -57,6 +54,7 @@ urlLabel Click here for primer details:
 
 track snp138Common override
 snpSeqFile /gbdb/mm10/snp/snp138.fa
+priority 1
 
 track snp138Mult override
 snpSeqFile /gbdb/mm10/snp/snp138.fa
@@ -64,6 +62,7 @@ snpSeqFile /gbdb/mm10/snp/snp138.fa
 track snp137Common override
 visibility dense
 snpSeqFile /gbdb/mm10/snp/snp137.fa
+priority 2
 
 track snp137Mult override
 snpSeqFile /gbdb/mm10/snp/snp137.fa
@@ -78,6 +77,7 @@ group genes
 type psl
 color 20,0,250
 visibility pack
+priority 4
 ucscRetroInfo ucscRetroInfo2
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds2
@@ -180,3 +180,5 @@ shortLabel MGI QTL
 longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 37 (mm9)***
 origAssembly mm9 
 pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted via liftOver from the July 2007 (NCBI37/mm9) version of the track"
+
+include defaultPriority.ra
