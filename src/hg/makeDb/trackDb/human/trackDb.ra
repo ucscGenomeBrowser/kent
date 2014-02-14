@@ -3462,13 +3462,7 @@ priority 117
 track netCi2 override
 priority 117.1
 
-# expression and regulation automatically ordered
-track firstEF override
-
-track oreganno override
-
 # laminB1 supertrack
-
         track laminB1Super
         superTrack on
         shortLabel NKI Nuc Lamina
@@ -3625,8 +3619,6 @@ type bed 3
         altColor 200,100,0
         autoScale on
         priority 10
-
-track cpgIslandExt override
 
 track genotypeArrays
 compositeTrack on
