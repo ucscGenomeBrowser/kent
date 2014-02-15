@@ -7,7 +7,7 @@ subGroup2 species Species aChimp=Chimp bGorilla=Gorilla cOrangutan=Orangutan dGi
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cHaplo=Haplorrhini dStrep=Strepsirrhini
 dragAndDrop subTracks
 visibility hide
-priority 3
+priority 103
 group compGeno
 noInherit on
 color 0,0,0

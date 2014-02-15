@@ -468,6 +468,7 @@ shortLabel test 4-way Multiz
 longLabel test 4-Way Multiz Alignment & Conservation
 group compGeno
 visibility hide
+priority 107
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
@@ -579,7 +580,7 @@ noInherit on
 
 track cons46way
 compositeTrack on
-shortLabel 46-Way Cons
+shortLabel Cons 46-Way
 longLabel Vertebrate Multiz Alignment & Conservation (46 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate
