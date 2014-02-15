@@ -17,6 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 #include "chromInfo.h"
+#include "net.h"
 
 
 /* CGI Variables */
@@ -188,7 +189,7 @@ static struct chain *chainLoadIntersecting(char *fileName,
 	char *chrom, int start, int end)
 /* Load the chains that intersect given region. */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = netLineFileOpen(fileName);
 char *line;
 int chromNameSize = strlen(chrom);
 struct chain *chainList = NULL, *chain;

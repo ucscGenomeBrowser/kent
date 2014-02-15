@@ -109,7 +109,7 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 /* trackDb settings */
 #define WIKI_TRACK_LABEL "Wiki Track"
 #define WIKI_TRACK_LONGLABEL "Wiki Track user annotations"
-#define WIKI_TRACK_PRIORITY 99.99
+#define WIKI_TRACK_PRIORITY 100
 
 /* hgc variables */
 #define G_CREATE_WIKI_ITEM "htcCreateWikiItem"

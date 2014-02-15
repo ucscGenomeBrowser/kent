@@ -1,0 +1,17 @@
+
+        track chainHg19
+        subTrack euarchontoglireChainNetViewchain off
+        subGroups view=chain species=lHuman clade=aHom
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain hg19
+        otherDb hg19
+
+
+        track netHg19
+        subTrack euarchontoglireChainNetViewnet on
+        subGroups view=net species=lHuman clade=aHom
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign hg19 chainHg19
+        otherDb hg19

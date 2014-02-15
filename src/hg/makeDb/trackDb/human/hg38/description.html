@@ -69,69 +69,9 @@ With the release of GRCh38, in order to synchronize with the GRC assembly versio
 scheme, UCSC made the decision to name this assembly hg38 instead of hg20. For a glossary of
 assembly-related terms, please see the GRC
 <a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/definitions.shtml"
-target="_blank">Assembly Terminology</a> page. ***GRCh38 release notes page?***
-</p>
-
-<p>
-<b>Centromeres</b><br>
-Centromeres are specialized chromatin structures that are required for cell division.  These
-genomic regions are normally defined by long tracts of tandem repeats, or satellite DNA, that
-contain a limited number of sequence differences to distinguish the linear order of repeat copies.
-The size and repetitive nature of these regions mean they are typically not represented in
-reference assemblies.  Unlike all previous versions of the human reference assembly, where the
-centromere regions have been represented by a multi-megabase gap, GRCh38 incorporates centromere
-reference models that provide an initial genomic description derived from chromosome-assigned whole
-genome shotgun (WGS) read libraries of alpha satellite.
-</p>
-
-<p>
-Each reference model provides an approximation of the true array sequence organization.
-Although the long-range repeat ordering is not expected to represent the true organization,
-the submissions are expected to provide a biologically rich description of array variants and
-local-monomer organization as observed in the initial WGS read dataset.  As a result, these
-sequences serve as a useful mapping target to extend sequence-based studies to sites previously
-omitted from the human reference genome.
-</p>
-
-<p>
-See also:
-</p>
-
-<p>
-Miga KH, Newton Y, Jain M, Altemose N, Willard HF, Kent WJ.
-<a href="http://genome.cshlp.org/content/early/2014/02/05/gr.159624.113.abstract"
-target="_blank">Centromere reference models for human chromosomes X and Y satellite arrays</a>.
-<em>Genome Res.</em> 2014 Feb 5. [Epub ahead of print]
-</p>
-
-<p>
-<b>IUPAC characters</b><br>
-In addition to the standard nucleotide codes, the raw sequence files from NCBI also include
-IUPAC ambiguity codes for bases that could not be positively identified as A, C, G or T (see
-Wikipedia's <a href="http://en.wikipedia.org/wiki/Nucleic_acid_notation#IUPAC_notation"
-target="_blank">IUPAC notation</a> article for more information). As part of the UCSC
-assembly creation process, all IUPAC ambiguity characters are converted to Ns.  The FASTA files
-available for download from UCSC reflect this. The raw data files containing the original IUPAC
-characters can be downloaded from the NCBI
-<a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38"
-target="_blank">FTP site</a>.
-</p>
-
-<p>
-***List IUPAC character statistics?***
-</p>
-
-<p>
-<b>Note on chrM</b><br>
-The hg38 assembly now includes the mitochondrion sequence (represented as &quot;chrM&quot;
-in the Genome Browser) contained in GenBank record
-<a href="http://www.ncbi.nlm.nih.gov/nuccore/NC_012920" target="_blank">NC_012920</a>.
-The hg19 assembly was released with the mitochondrion sequence contained in GenBank record
-NC_001807.  After the release of hg19, the mitochondrion sequence in NC_001807 was replaced
-with record NC_012920, but the hg19 assembly was never updated to reflect this change.
-Please see the
-<a href="http://mitomap.org/bin/view.pl/MITOMAP/HumanMitoSeq" target="_blank">Revised Cambridge
-Reference Sequence (rCRS)</a> page for more information.
+target="_blank">Assembly Terminology</a> page. For more information, see the
+<a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/README"
+target="_blank">GRCh38 README</a>.
 </p>
 
 <p>
@@ -221,6 +161,51 @@ Some assembly statistics:
 <p>
 See the <a href="../cgi-bin/hgTracks?chromInfoPage=">sequences</a> page for a complete
 list of hg38 chromosome names.
+</p>
+
+<p>
+<b>Note on chrM</b><br>
+The hg38 assembly now includes the mitochondrion sequence (represented as &quot;chrM&quot;
+in the Genome Browser) contained in GenBank record
+<a href="http://www.ncbi.nlm.nih.gov/nuccore/NC_012920" target="_blank">NC_012920</a>.
+The hg19 assembly was released with the mitochondrion sequence contained in GenBank record
+NC_001807.  After the release of hg19, the mitochondrion sequence in NC_001807 was replaced
+with record NC_012920, but the hg19 assembly was never updated to reflect this change.
+Please see the
+<a href="http://mitomap.org/bin/view.pl/MITOMAP/HumanMitoSeq" target="_blank">Revised Cambridge
+Reference Sequence (rCRS)</a> page for more information.
+</p>
+
+<p>
+<b>Centromeres</b><br>
+Centromeres are specialized chromatin structures that are required for cell division.  These
+genomic regions are normally defined by long tracts of tandem repeats, or satellite DNA, that
+contain a limited number of sequence differences to distinguish the linear order of repeat copies.
+The size and repetitive nature of these regions mean they are typically not represented in
+reference assemblies.  Unlike all previous versions of the human reference assembly, where the
+centromere regions have been represented by a multi-megabase gap, GRCh38 incorporates centromere
+reference models that provide an initial genomic description derived from chromosome-assigned whole
+genome shotgun (WGS) read libraries of alpha satellite.
+</p>
+
+<p>
+Each reference model provides an approximation of the true array sequence organization.
+Although the long-range repeat ordering is not expected to represent the true organization,
+the submissions are expected to provide a biologically rich description of array variants and
+local-monomer organization as observed in the initial WGS read dataset.  As a result, these
+sequences serve as a useful mapping target to extend sequence-based studies to sites previously
+omitted from the human reference genome.
+</p>
+
+<p>
+See also:
+</p>
+
+<p>
+Miga KH, Newton Y, Jain M, Altemose N, Willard HF, Kent WJ.
+<a href="http://genome.cshlp.org/content/early/2014/02/05/gr.159624.113.abstract"
+target="_blank">Centromere reference models for human chromosomes X and Y satellite arrays</a>.
+<em>Genome Res.</em> 2014 Feb 5. [Epub ahead of print]
 </p>
 
 <p>

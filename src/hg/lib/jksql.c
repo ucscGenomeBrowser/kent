@@ -908,6 +908,7 @@ if (((conn->db != NULL) && !sameString(database, conn->db))
    || ((conn->db == NULL) && (database != NULL)))
    errAbort("apparent mismatch between mysql.h used to compile jksql.c and libmysqlclient");
 
+freeMem(sc->db);
 sc->db=cloneString(database);
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_CONNECT", "%s %s", host, user);
@@ -1051,10 +1052,12 @@ struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database)
  * profileName, database, or both. The profile is the prefix to the host,
  * user, and password variables in .hg.conf.  For the default profile of "db",
  * the environment variables HGDB_HOST, HGDB_USER, and HGDB_PASSWORD can
- * override.  Return NULL if connection fails.
+ * override.  Return NULL if connection fails or profile is not found.
  */
 {
 struct sqlProfile* sp = sqlProfileGet(profileName, database);
+if (sp == NULL)
+    return NULL;
 return sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, FALSE);
 }
 
