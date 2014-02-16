@@ -128,3 +128,15 @@ shortLabel MGI QTL
 longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 37 (mm9)***
 origAssembly mm9 
 pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted via liftOver from the July 2007 (NCBI37/mm9) version of the track"
+
+# GENCODE
+track wgEncodeGencodeSuper
+superTrack on
+group genes
+priority 34.1
+shortLabel GENCODE
+longLabel GENCODE Gene Annotation 
+# doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
+
+include wgEncodeGencodeVM2.ra
+
