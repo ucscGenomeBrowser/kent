@@ -7,7 +7,6 @@ longLabel Variant Calls from High-Coverage Genome Sequence of an Archaic Denisov
 type vcfTabix
 visibility hide
 group denisova
-priority 10
 
 track dhcVcfModern
 compositeTrack on
@@ -17,7 +16,6 @@ type vcfTabix
 visibility hide
 maxWindowToDraw 10000000
 group denisova
-priority 11
 
     track dhcVcfDNK02
     parent dhcVcfModern
@@ -89,7 +87,6 @@ track dhcBamDenisova
 shortLabel Denisova Seq
 longLabel Denisova High-Coverage Sequence Reads
 group denisova
-priority 14
 visibility hide
 type bam
 pairEndsByName on
@@ -118,7 +115,6 @@ subGroup3 freq Frequency Fixed=Fixed_(>99%)_in_1000_Genomes_Phase_1 FixedDbSnp=F
 dimensions dimensionX=subset dimensionY=freq
 sortOrder subset=+ freq=+
 dragAndDrop subTracks
-priority 15
 visibility hide
 type bigBed 4 +
 

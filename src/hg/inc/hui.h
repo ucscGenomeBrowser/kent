@@ -76,6 +76,7 @@ char *hCgiRoot();
 #define CUTTERS_TRACK_NAME "cutters"
 #define CUTTERS_TRACK_LABEL "Restr Enzymes"
 #define CUTTERS_TRACK_LONGLABEL "Restriction Enzymes from REBASE"
+#define CUTTERS_TRACK_PRIORITY 100
 
 /* Definition for oligo match track. */
 #define oligoMatchVar "hgt.oligoMatch"
@@ -83,6 +84,7 @@ char *hCgiRoot();
 #define OLIGO_MATCH_TRACK_NAME "oligoMatch"
 #define OLIGO_MATCH_TRACK_LABEL "Short Match"
 #define OLIGO_MATCH_TRACK_LONGLABEL "Perfect Match to Short Sequence"
+#define OLIGO_MATCH_TRACK_PRIORITY 100
 
 /* Definitions for User Psl track (hgBlat results). */
 #define USER_PSL_TRACK_NAME "hgUserPsl"

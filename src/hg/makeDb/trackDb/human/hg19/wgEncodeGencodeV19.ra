@@ -11,7 +11,6 @@ shortLabel GENCODE Genes V19
 longLabel Gene Annotations from ENCODE/GENCODE Version 19
 group genes
 dragAndDrop subTracks
-priority 34.186
 visibility hide
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA

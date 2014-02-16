@@ -9,7 +9,6 @@ visibility hide
 type bed 6
 noInherit on
 group map
-priority 25
 chromosomes chr18,chr19,chr4,chr5,chr7,chrX,chrY
 otherDb mm10Patch1
 chainMinScore 2000

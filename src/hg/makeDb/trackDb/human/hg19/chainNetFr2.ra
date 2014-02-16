@@ -1,0 +1,15 @@
+        track chainFr2
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=jFugu clade=eTele
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain fr2
+        otherDb fr2
+
+        track netFr2
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=jFugu clade=eTele
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign fr2 chainFr2
+        otherDb fr2

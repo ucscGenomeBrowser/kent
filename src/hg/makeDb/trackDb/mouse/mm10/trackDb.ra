@@ -13,22 +13,15 @@ html gold
 track gap override
 html gap
 
-track rmsk override
-priority 10
-
 track assemblyFrags
 shortLabel Contigs
 longLabel Contig fragments used in the assembly
 group map
-priority 9
 visibility hide
 colorByStrand 150,100,30 100,50,0
 type bed 6
 urlLabel NCBI Nucleotide:
 url http://www.ncbi.nlm.nih.gov/nuccore/$$
-
-track ensGene override
-visibility pack
 
 # different type of gold search here so the fragments can be found with
 #	or without their trailing .1
@@ -46,7 +39,6 @@ track mm9UcscGenes
 shortLabel mm9 Ucsc Genes
 longLabel  mm9 Ucsc Genes
 group genes
-priority 33
 visibility hide
 color 20,20,170
 type bed 12
@@ -60,9 +52,17 @@ group regulation
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
+track snp138Common override
+snpSeqFile /gbdb/mm10/snp/snp138.fa
+priority 1
+
+track snp138Mult override
+snpSeqFile /gbdb/mm10/snp/snp138.fa
+
 track snp137Common override
 visibility dense
 snpSeqFile /gbdb/mm10/snp/snp137.fa
+priority 2
 
 track snp137Mult override
 snpSeqFile /gbdb/mm10/snp/snp137.fa
@@ -75,9 +75,9 @@ shortLabel Retroposed Genes
 longLabel Retroposed Genes V2, Including Pseudogenes
 group genes
 type psl
-priority 37.14
 color 20,0,250
 visibility pack
+priority 4
 ucscRetroInfo ucscRetroInfo2
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds2
@@ -123,6 +123,58 @@ xrefTable kgXref, ucscRetroInfo2
 xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
+track ucscRetroAli4
+shortLabel Retroposed Genes 4.0
+longLabel Retroposed Genes V4, Including Pseudogenes
+group genes
+type psl
+color 20,0,250
+visibility hide
+ucscRetroInfo ucscRetroInfo4
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds4
+baseColorUseSequence extFile ucscRetroSeq4 ucscRetroExtFile4
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+dataVersion Feb. 2014
+
+searchName ucscRetroInfoRefSeq4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo4
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo4.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo4
+xrefQuery select ucscRetroInfo4.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo4
+xrefQuery select ucscRetroInfo4.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
 track jaxQtl override
 shortLabel MGI QTL 
 longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 37 (mm9)***
@@ -140,3 +192,5 @@ longLabel GENCODE Gene Annotation
 
 include wgEncodeGencodeVM2.ra
 
+
+include defaultPriority.ra
