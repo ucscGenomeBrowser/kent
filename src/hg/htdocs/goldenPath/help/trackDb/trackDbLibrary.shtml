@@ -1136,7 +1136,7 @@
     excluded.  The filter cannot be set to less than 200 or more than 1000..</P>
 </DIV>
 
-<DIV class="filterBy"><span class="types bed genePred psl"></span>
+<DIV class="filterBy"><span class="types bed genePred psl factorSource"></span>
 <div class="format"><code>filterBy  &lt;field1:title=[+]opt1a...&gt;
                             [field2:title=[+]opt2a...]</code></div>
     <!-- DONNA -- redo -->
@@ -3799,6 +3799,16 @@
     <P>If there is an <code>inputTrackTable</code> defined with
     your track, the fields that are to be displayed should be declared
     with this associated setting.</P>
+</DIV>
+
+<DIV class="filterBy_factorSource"><span class="types factorSource"></span>
+<div class="format"><code>filterBy &lt;field1:title=[+]option1a...&gt;
+                                [field2:title=[+]opt2a...]</code></div>
+    <P>This setting provides user filtering of factorSource items by factor name.
+    The simplest use is to include a comma-separated list of all factor names in the track as
+    an argument to the setting.
+    A complete description of this setting can be found in the 
+    <A HREF="#filterBy">bed/bigBed</A> item-based track settings.</P>
 </DIV>
 
 <DIV class="motifTable"><span class="types factorSource"></span>
