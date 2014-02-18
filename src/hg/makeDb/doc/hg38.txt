@@ -3038,3 +3038,29 @@ done
 #      | sed -e 's/^s chr/s hg38.chr/' > maf/${B}.maf
 
 ############################################################################
+# Liftover Gencode V19 from hg19  (DONE braney 2014-02-14)
+
+mkdir /cluster/data/hg38/bed/liftOverGencodeV19
+cd /cluster/data/hg38/bed/liftOverGencodeV19
+
+echo "show tables like 'wgEncodeGencode%19'" | hgsql hg19 | tail -n +2 > all.gencode.tables
+echo " select tableName from trackDb where tableName like 'wgEncodeGencode_%V19';" | hgsql hg19 --skip-column-names > genePred.gencode.tables
+
+# load the non-genepred table as is.   This isn't quite the right thing to do
+# with exon support, but it's good enough for our purposes at the moment
+join -v 1 *.gencode.tables | while read t; do echo "create table $t select * from hg19.$t" | hgsql hg38; echo $t; done
+
+for i in `cat genePredExt.gencode.tables`; 
+do 
+    echo "select name,score,name2 from $i" | hgsql hg19 | sort > $i.name2Score.txt;   
+    genePredToFakePsl hg19 $i $i.psl $i.cds;  
+    pslMap -chainMapFile -swapMap $i.psl /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz stdout | pslCDnaFilter -uniqueMapped stdin stdout |  sort -k 14,14 -k 16,16n | pslToBed -cds=$i.cds stdin stdout | bedToGenePred stdin stdout | sort |  join /dev/stdin $i.name2Score.txt| tr ' ' '\t' | hgLoadGenePred -genePredExt hg38 $i stdin; 
+    echo $i; 
+done
+
+for i in `cat genePred.gencode.tables`; 
+do 
+    genePredToFakePsl hg19 $i $i.psl $i.cds;  
+    pslMap -chainMapFile -swapMap $i.psl /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz stdout | pslCDnaFilter -uniqueMapped stdin stdout |  sort -k 14,14 -k 16,16n | pslToBed -cds=$i.cds stdin stdout | bedToGenePred stdin stdout |  tr ' ' '\t' | hgLoadGenePred hg38 $i stdin; 
+    echo $i; 
+done
