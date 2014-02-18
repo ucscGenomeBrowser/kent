@@ -6,7 +6,6 @@ track refGene
 shortLabel RefSeq Genes
 longLabel RefSeq Genes
 group genes
-priority 0
 visibility dense
 color 12,12,120
 type genePred refPep refMrna
@@ -18,7 +17,6 @@ table all_mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
 group rna
-priority 0
 visibility pack
 type psl .
 baseColorUseCds genbank
@@ -33,7 +31,6 @@ track tightMrna
 shortLabel Tight mRNAS
 longLabel Tightly Filtered $Organism mRNAs from GenBank
 group rna
-priority 0
 visibility hide
 spectrum on
 type psl .
@@ -49,7 +46,6 @@ track intronEst
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
 group rna
-priority 0
 visibility dense
 spectrum on
 intronGap 30
@@ -65,7 +61,6 @@ table all_est
 shortLabel $Organism ESTs
 longLabel $Organism ESTs Including Unspliced
 group rna
-priority 0
 visibility hide
 spectrum on
 intronGap 30
@@ -79,7 +74,6 @@ track tightEst
 shortLabel Tight ESTs
 longLabel Tightly Filtered $Organism ESTs Including Unspliced
 group rna
-priority 0
 visibility hide
 spectrum on
 type psl est
@@ -91,7 +85,6 @@ track xenoMrna
 shortLabel Other mRNAs
 longLabel Non-$Organism mRNAs from GenBank
 group rna
-priority 0
 visibility hide
 spectrum on
 type psl xeno
@@ -105,7 +98,6 @@ track xenoBestMrna
 shortLabel Other Best mRNAs
 longLabel Non-$Organism mRNAs from GenBank Best in Genome Alignments
 group rna
-priority 0
 visibility hide
 spectrum on
 type psl xeno
@@ -119,7 +111,6 @@ track xenoEst
 shortLabel Other ESTs
 longLabel Non-$Organism ESTs from GenBank 
 group rna
-priority 0
 visibility hide
 spectrum on
 type psl xeno
@@ -132,7 +123,6 @@ track xenoRefGene
 shortLabel Other RefSeq
 longLabel Non-$Organism RefSeq Genes
 group genes
-priority 0
 visibility dense
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
@@ -141,7 +131,6 @@ track mgcFullMrna
 shortLabel MGC Genes
 longLabel Mammalian Gene Collection Full ORF mRNAs
 group genes
-priority 0
 visibility hide
 color 0,100,0
 type psl
@@ -199,7 +188,6 @@ track orfeomeMrna
 shortLabel ORFeome Clones
 longLabel ORFeome Collaboration Gene Clones
 group genes
-priority 0
 visibility hide
 color 34,139,34
 type psl

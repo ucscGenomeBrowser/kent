@@ -13,22 +13,15 @@ html gold
 track gap override
 html gap
 
-track rmsk override
-priority 0
-
 track assemblyFrags
 shortLabel Contigs
 longLabel Contig fragments used in the assembly
 group map
-priority 0
 visibility hide
 colorByStrand 150,100,30 100,50,0
 type bed 6
 urlLabel NCBI Nucleotide:
 url http://www.ncbi.nlm.nih.gov/nuccore/$$
-
-track ensGene override
-visibility pack
 
 # different type of gold search here so the fragments can be found with
 #	or without their trailing .1
@@ -46,7 +39,6 @@ track mm9UcscGenes
 shortLabel mm9 Ucsc Genes
 longLabel  mm9 Ucsc Genes
 group genes
-priority 0
 visibility hide
 color 20,20,170
 type bed 12
@@ -62,6 +54,7 @@ urlLabel Click here for primer details:
 
 track snp138Common override
 snpSeqFile /gbdb/mm10/snp/snp138.fa
+priority 1
 
 track snp138Mult override
 snpSeqFile /gbdb/mm10/snp/snp138.fa
@@ -69,6 +62,7 @@ snpSeqFile /gbdb/mm10/snp/snp138.fa
 track snp137Common override
 visibility dense
 snpSeqFile /gbdb/mm10/snp/snp137.fa
+priority 2
 
 track snp137Mult override
 snpSeqFile /gbdb/mm10/snp/snp137.fa
@@ -81,9 +75,9 @@ shortLabel Retroposed Genes
 longLabel Retroposed Genes V2, Including Pseudogenes
 group genes
 type psl
-priority 0
 color 20,0,250
 visibility pack
+priority 4
 ucscRetroInfo ucscRetroInfo2
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds2
@@ -131,13 +125,11 @@ searchPriority 3.53
 
 track ucscRetroAli4
 shortLabel Retroposed Genes 4.0
-longLabel Retroposed Genes, Including Pseudogenes
+longLabel Retroposed Genes V4, Including Pseudogenes
 group genes
 type psl
-priority 0
 color 20,0,250
-visibility pack
-nextItemButton on
+visibility hide
 ucscRetroInfo ucscRetroInfo4
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds4
@@ -188,3 +180,17 @@ shortLabel MGI QTL
 longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 37 (mm9)***
 origAssembly mm9 
 pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted via liftOver from the July 2007 (NCBI37/mm9) version of the track"
+
+# GENCODE
+track wgEncodeGencodeSuper
+superTrack on
+group genes
+priority 34.1
+shortLabel GENCODE
+longLabel GENCODE Gene Annotation 
+# doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
+
+include wgEncodeGencodeVM2.ra
+
+
+include defaultPriority.ra
