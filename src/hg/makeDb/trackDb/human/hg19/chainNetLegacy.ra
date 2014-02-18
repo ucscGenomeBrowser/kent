@@ -7,7 +7,6 @@ subGroup2 species Species aHuman=Human abChimp=Chimp bGorilla=Gorilla dGibbon=Gi
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cHaplo=Haplorrhini dStrep=Strepsirrhini eEuarch=Euarchontoglires fLaura=Laurasiatheria gAfro=Afrotheria hXenar=Xenarthra jMammal=Mammalia kDino=Dinosauria lLepi=Lepidosauria mAmph=Amphibia nTele=Teleostei oHyper=Hyperoartia
 dragAndDrop subTracks
 visibility hide
-priority 106
 group compGeno
 noInherit on
 color 0,0,0

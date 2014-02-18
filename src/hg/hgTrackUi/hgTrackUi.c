@@ -2603,8 +2603,15 @@ if (filters != NULL)
     filterBySetCfgUi(cart, tdb, filters, TRUE);
     filterBySetFree(&filters);
     }
-
 char varName[64];
+if (trackDbSetting(tdb, "motifTable") != NULL)
+    {
+    printf("<BR><B>Highlight motifs: </B> ");
+    safef(varName, sizeof(varName), "%s.highlightMotifs", tdb->track);
+    cartMakeCheckBox(cart, varName, trackDbSettingClosestToHomeOn(tdb, "motifDrawDefault"));
+    printf("<BR>");
+    }
+
 printf("<BR><B>Show cell abbreviations (to right of cluster): </B> ");
 safef(varName, sizeof(varName), "%s.showCellAbbrevs", tdb->track);
 cartMakeCheckBox(cart, varName, TRUE);
@@ -2618,14 +2625,6 @@ jsEndCollapsibleSection();
 puts("</table>");
 hFreeConn(&conn);
 
-
-
-if (trackDbSetting(tdb, "motifTable") != NULL)
-    {
-    printf("<BR><B>Highlight motifs: </B> ");
-    safef(varName, sizeof(varName), "%s.highlightMotifs", tdb->track);
-    cartMakeCheckBox(cart, varName, trackDbSettingClosestToHomeOn(tdb, "motifDrawDefault"));
-    }
 }
 
 #ifdef UNUSED
