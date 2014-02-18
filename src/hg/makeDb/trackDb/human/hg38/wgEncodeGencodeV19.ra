@@ -18,6 +18,7 @@ allButtonPair on
 sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred 
+pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 configurable off
 wgEncodeGencodeVersion 19
 wgEncodeGencodeAttrs wgEncodeGencodeAttrsV19
