@@ -1273,13 +1273,19 @@ tdbExtrasGet(tdb)->membership = membership;
 char *tdbBigFileName(struct sqlConnection *conn, struct trackDb *tdb)
 // Return file name associated with bigWig.  Do a freeMem on returned string when done.
 {
+char *ret;
 char *fileName = trackDbSetting(tdb, "bigDataUrl"); // always takes precedence
 if (fileName != NULL)
-    return cloneString(fileName);
+    ret = cloneString(fileName);
 
 char query[256];
 sqlSafef(query, sizeof(query), "select fileName from %s", tdb->table);
-return sqlQuickString(conn, query);
+ret = sqlQuickString(conn, query);
+
+// replace /gbdb if needed
+char *rewriteRet = hReplaceGbdb(ret);
+freeMem(ret);
+return rewriteRet;
 }
 
 static void rTdbTreeAllowPack(struct trackDb *tdb)
