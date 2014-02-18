@@ -248,7 +248,7 @@ def getTrackVis(settings):
     # the order is important: tracks can have both superTrack <parent> <vis>
     # AND visibility <vis>. superTrack has prority, see wgEncodeRegMarkH3k27ac
 
-    # visibility can be expressed with 
+    # visibiltiy can be expressed with
     # superTrack <parent> dense
     # or
     # visibility dense
@@ -581,7 +581,8 @@ def htmlTrackTable(trackLabels, trackTables, trackParents, trackChildren, groupL
     print '<input type="submit" name="submit" value="Download"></input>'
 
     if showSubtracks:
-        print '<a href="%s">hide subtracks</a><br>' % myUrl
+        print '<a href="%s">hide subtracks and show predefined groups</a><br>' % myUrl
+        del groupToTopTracks["special"]
     else:
         print '<a href="%s?showSubtracks=1">show subtracks</a><br>' % myUrl
 
@@ -828,13 +829,18 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
 
     cmdFh.close()
     # "at" suggested by http://stackoverflow.com/questions/6024472/start-background-process-daemon-from-cgi-script/6091159#6091159
-    cmd = "at now -f %s" % jobFname
+    cmd = "at now -M -f %s" % jobFname
 
     # write commands to log file
     logFh = open("/tmp/%d.log" % jobId, "w")
     logFh.write(open(jobFname).read())
     logFh.write("\nrsync output:\n")
     logFh.close()
+
+    # write jobId to status file
+    idFh = open("/tmp/lastJob.log", "w")
+    idFh.write(str(jobId))
+    idFh.close()
 
     # run commands
     print("Starting udr/rsync command script...")
@@ -876,6 +882,7 @@ def printLog(jobId):
         print '<a href="hgMirror">Download more tracks</a>'
     else:
         print '<i>Downloading files... Page will reload every 4 seconds until download is complete.</i>'
+        print '<i><a href="hgMirror?stopAllJobs=1">Cancel download now</a></i>'
         refreshPage("jobId=%d" % jobId, delay=4000, addNote=False)
 
 def hideSomeTracks(localTables):
@@ -1019,7 +1026,6 @@ def htmlStats(localSizes, gbdbSizes, tableSizes):
 def addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, \
         trackChildren, tableToGbdbFiles, trackTables, tableSizes):
     """ add special predefined track groups in place, modifies the last five parameters 
-        the three groups are: all default track + all default without multiz + all non-encode plus default
         These groups are special "tracks" that don't exist, their children are the real tracks
     """
     # get all track that are not hidden
@@ -1083,6 +1089,21 @@ def addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabel
     for tn in nonEncAllTables:
         trackTables[tn] = tn
 
+def stopAllJobs():
+    """ stop all running at jobs """
+    cmd = "atrm `at -l | cut -f1`"
+    runCmd(cmd)
+    
+def assertEmptyQueue():
+    """ if the at queue is not empty, show link to log file of running job and stop program """
+    if jobsAreDone():
+        return
+
+    jobId = open("/tmp/lastJob.log").read()
+    print "There is still a download job running<br>"
+    print '<a href="hgMirror?jobId=%s">Show download job</a>' % jobId
+    sys.exit(0)
+
 def htmlMiddle(args):
     " print html middle part "
 
@@ -1130,8 +1151,16 @@ def htmlMiddle(args):
         jobId = int(args["jobId"].value)
         printLog(jobId)
 
+    # stop job if requested to do so
+    elif "stopAllJobs" in args.keys():
+        stopAllJobs()
+        print "Download job has been stopped<br>"
+        print '<a href="hgMirror">Return to track selection</a>'
+        sys.exit(0)
+
     # show tracklist and change default tracks if no param
     else:
+        assertEmptyQueue()
         showSubtracks = bool(int(args.getfirst("showSubtracks", "0")))
 
         localSizes = getLocalSizes(db)
@@ -1145,6 +1174,12 @@ def htmlMiddle(args):
         hideSomeTracks(localSizes)
 
 def main():
+    # hide some tracks if any argument specified. makes this tool usable from command line, 
+    # from cronjobs that only need to run this function
+    if len(sys.argv)>1:
+        hideSomeTracks({"trackDb":1})
+        sys.exit(0)
+
     print "Content-type: text/html"
     print
 
