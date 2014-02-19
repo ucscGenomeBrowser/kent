@@ -317,7 +317,7 @@ for (fi = fiList;  fi != NULL;  fi = fi->next)
 	}
     }
 if (! foundClass)
-    errAbort("Didn't find definition of func field in %s", tdb->table);
+    errAbort("Didn't find definition of class field in %s", tdb->table);
 return unusedList;
 }
 
