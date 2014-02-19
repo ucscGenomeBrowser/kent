@@ -3064,3 +3064,15 @@ do
     pslMap -chainMapFile -swapMap $i.psl /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz stdout | pslCDnaFilter -uniqueMapped stdin stdout |  sort -k 14,14 -k 16,16n | pslToBed -cds=$i.cds stdin stdout | bedToGenePred stdin stdout |  tr ' ' '\t' | hgLoadGenePred hg38 $i stdin; 
     echo $i; 
 done
+
+#####################################################################
+## tRNAs track ( 2014-02-18 braney DONE)
+## this is a preliminary version for UCSC build.  NOT FOR RELEASE!
+ssh hgwdev
+cd /hive/data/genomes/hg38/bed
+mkdir tRNAs
+cd tRNAs
+
+cp  /hive/users/pchan/tRNAs/Eukaryota/hg38/hg38-tRNAs.bed .
+
+hgLoadBed -tab hg38 tRNAs hg38-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql

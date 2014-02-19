@@ -4359,7 +4359,7 @@ for each cell associated with the particular TF binding location.</P>
 <div class="format"><B>Examples of Composite tracks with Subgroups</B></div>
     <pre>
     track myComposite
-    composite on
+    compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
             CD14=CD14&amp;#43; &hellip;
@@ -4389,7 +4389,7 @@ for each cell associated with the particular TF binding location.</P>
 
     <pre>
     track myCompositeIs3D
-    composite on
+    compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
             CD14=CD14&amp;#43; &hellip;
@@ -4463,7 +4463,7 @@ for each cell associated with the particular TF binding location.</P>
 <div class="format"><B>Examples of Composite tracks with Subgroups</B></div>
     <pre>
     track myComposite
-    composite on
+    compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
             CD14=CD14&amp;#43; &hellip;
@@ -4493,7 +4493,7 @@ for each cell associated with the particular TF binding location.</P>
 
     <pre>
     track myCompositeIs3D
-    composite on
+    compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
             CD14=CD14&amp;#43; &hellip;
@@ -4645,7 +4645,7 @@ for each cell associated with the particular TF binding location.</P>
 <div class="format"><B>Example of a Composite track with Views</B></div>
     <pre>
     track myMultiViewComposite
-    composite on
+    compositeTrack on
     visibility dense
     subGroup1 view Views PK=Peaks SIG=Signals
     subGroup2 cell Cell_Line \
