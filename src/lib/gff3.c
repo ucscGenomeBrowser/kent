@@ -485,6 +485,7 @@ g3a->gap = attr->vals->name;
 static void parseDerivesFromAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Derives_from attribute */
 {
+checkSingleValAttr(g3a, attr);
 g3a->derivesFromId = attr->vals->name;
 }
 
