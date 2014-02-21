@@ -317,7 +317,7 @@ for (fi = fiList;  fi != NULL;  fi = fi->next)
 	}
     }
 if (! foundClass)
-    errAbort("Didn't find definition of func field in %s", tdb->table);
+    errAbort("Didn't find definition of class field in %s", tdb->table);
 return unusedList;
 }
 
@@ -2603,8 +2603,15 @@ if (filters != NULL)
     filterBySetCfgUi(cart, tdb, filters, TRUE);
     filterBySetFree(&filters);
     }
-
 char varName[64];
+if (trackDbSetting(tdb, "motifTable") != NULL)
+    {
+    printf("<BR><B>Highlight motifs: </B> ");
+    safef(varName, sizeof(varName), "%s.highlightMotifs", tdb->track);
+    cartMakeCheckBox(cart, varName, trackDbSettingClosestToHomeOn(tdb, "motifDrawDefault"));
+    printf("<BR>");
+    }
+
 printf("<BR><B>Show cell abbreviations (to right of cluster): </B> ");
 safef(varName, sizeof(varName), "%s.showCellAbbrevs", tdb->track);
 cartMakeCheckBox(cart, varName, TRUE);
@@ -2618,14 +2625,6 @@ jsEndCollapsibleSection();
 puts("</table>");
 hFreeConn(&conn);
 
-
-
-if (trackDbSetting(tdb, "motifTable") != NULL)
-    {
-    printf("<BR><B>Highlight motifs: </B> ");
-    safef(varName, sizeof(varName), "%s.highlightMotifs", tdb->track);
-    cartMakeCheckBox(cart, varName, trackDbSettingClosestToHomeOn(tdb, "motifDrawDefault"));
-    }
 }
 
 #ifdef UNUSED

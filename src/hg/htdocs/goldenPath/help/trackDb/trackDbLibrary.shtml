@@ -1136,7 +1136,7 @@
     excluded.  The filter cannot be set to less than 200 or more than 1000..</P>
 </DIV>
 
-<DIV class="filterBy"><span class="types bed genePred psl"></span>
+<DIV class="filterBy"><span class="types bed genePred psl factorSource"></span>
 <div class="format"><code>filterBy  &lt;field1:title=[+]opt1a...&gt;
                             [field2:title=[+]opt2a...]</code></div>
     <!-- DONNA -- redo -->
@@ -3801,6 +3801,16 @@
     with this associated setting.</P>
 </DIV>
 
+<DIV class="filterBy_factorSource"><span class="types factorSource"></span>
+<div class="format"><code>filterBy &lt;field1:title=[+]option1a...&gt;
+                                [field2:title=[+]opt2a...]</code></div>
+    <P>This setting provides user filtering of factorSource items by factor name.
+    The simplest use is to include a comma-separated list of all factor names in the track as
+    an argument to the setting.
+    A complete description of this setting can be found in the 
+    <A HREF="#filterBy">bed/bigBed</A> item-based track settings.</P>
+</DIV>
+
 <DIV class="motifTable"><span class="types factorSource"></span>
 <div class="format"><code>motifTable &lt;table&gt;</code></div>
     <P>
@@ -4349,7 +4359,7 @@ for each cell associated with the particular TF binding location.</P>
 <div class="format"><B>Examples of Composite tracks with Subgroups</B></div>
     <pre>
     track myComposite
-    composite on
+    compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
             CD14=CD14&amp;#43; &hellip;
@@ -4379,7 +4389,7 @@ for each cell associated with the particular TF binding location.</P>
 
     <pre>
     track myCompositeIs3D
-    composite on
+    compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
             CD14=CD14&amp;#43; &hellip;
@@ -4453,7 +4463,7 @@ for each cell associated with the particular TF binding location.</P>
 <div class="format"><B>Examples of Composite tracks with Subgroups</B></div>
     <pre>
     track myComposite
-    composite on
+    compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
             CD14=CD14&amp;#43; &hellip;
@@ -4483,7 +4493,7 @@ for each cell associated with the particular TF binding location.</P>
 
     <pre>
     track myCompositeIs3D
-    composite on
+    compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
             CD14=CD14&amp;#43; &hellip;
@@ -4635,7 +4645,7 @@ for each cell associated with the particular TF binding location.</P>
 <div class="format"><B>Example of a Composite track with Views</B></div>
     <pre>
     track myMultiViewComposite
-    composite on
+    compositeTrack on
     visibility dense
     subGroup1 view Views PK=Peaks SIG=Signals
     subGroup2 cell Cell_Line \

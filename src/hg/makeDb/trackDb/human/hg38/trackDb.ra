@@ -1,3 +1,4 @@
+include trackDb.wgEncode.ra
 
 # Local declaration so that local gold.html is picked up.
 track gold override
@@ -89,7 +90,7 @@ itemRgb on
 color 0,0,0
 
 track centromeres
-shortLabel Centromere locations
+shortLabel Centromeres
 longLabel Centromere locations
 group map
 visibility pack
