@@ -5,6 +5,7 @@
  * hgRenderTracks web service.  See mainMain.c for the main used by the hgTracks CGI. */
 
 #include <pthread.h>
+#include <malloc.h>
 #include "common.h"
 #include "hCommon.h"
 #include "linefile.h"
@@ -4412,28 +4413,50 @@ for (track = trackList; track != NULL; track = track->next)
         track->limitedVisSet = TRUE;
 	}
     }
+
 /* pre-load remote tracks in parallel */
 int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
+int pfdListCount = 0;
 pthread_t *threads = NULL;
+pthread_attr_t attr;
+int stackSize = 2*1024*1024;  // 2 MB per thread? 10MB is default on 64-bit
 if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
     {
     findLeavesForParallelLoad(trackList, &pfdList);
+    pfdListCount = slCount(pfdList);
     /* launch parallel threads */
-    ptMax = min(ptMax, slCount(pfdList));
+    ptMax = min(ptMax, pfdListCount);
     if (ptMax > 0)
 	{
 	AllocArray(threads, ptMax);
+
+	#if defined(M_ARENA_MAX) 
+	    mallopt(M_ARENA_MAX, 8);   // Otherwise new glibc allocates 64MB arena per thread
+	#endif /* glibc malloc tuning */ 
+
+	/* Initialize thread creation attributes */
+	int rc = pthread_attr_init(&attr);
+	if (rc) errAbort("Unexpected error %d from pthread_attr_init(): %s",rc,strerror(rc));
+	/* Set thread stack size */
+	rc = pthread_attr_setstacksize(&attr, stackSize);
+	if (rc) errAbort("Unexpected error %d from pthread_attr_setstacksize(): %s",rc,strerror(rc));
+	/* Create threads */
 	int pt;
 	for (pt = 0; pt < ptMax; ++pt)
 	    {
-	    int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, &threads[pt]);
+	    rc = pthread_create(&threads[pt], &attr, remoteParallelLoad, &threads[pt]);
 	    if (rc)
 		{
 		errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
 		}
 	    }
+	/* Thread attr no longer needed */
+	rc = pthread_attr_destroy(&attr);
+	if (rc) errAbort("Unexpected error %d from pthread_attr_destroy(): %s",rc,strerror(rc));
+
 	}
     }
+
 /* load regular tracks */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -4455,12 +4478,13 @@ for (track = trackList; track != NULL; track = track->next)
 	    }
 	}
     }
+
 if (ptMax > 0)
     {
     /* wait for remote parallel load to finish */
     remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
     if (measureTiming)
-	measureTime("Waiting for parallel (%d thread) remote data fetch", ptMax);
+	measureTime("Waiting for parallel (%d threads for %d tracks) remote data fetch", ptMax, pfdListCount);
     }
 
 printTrackInitJavascript(trackList);
