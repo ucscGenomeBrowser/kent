@@ -1269,7 +1269,7 @@ close (DR);
     sort -k1,1 -k2,2n hg19.differentVersions.bed hg19.differentPortions.bed \
 	hg19.dropped.bed > hg19.itemRgb.bed
 
-    hgLoadBed hg19 hg19ContigDiff hg19.itemRgb.bed
+    hgLoadBed hg19 hg38ContigDiff hg19.itemRgb.bed
     # if you wanted to load the identicals in this track too:
     sort -k1,1 -k2,2n hg38.hg19.identical.bed hg38.itemRgb.bed \
        | hgLoadBed hg38 hg38ContigDiff stdin
