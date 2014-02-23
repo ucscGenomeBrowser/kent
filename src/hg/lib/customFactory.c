@@ -1,6 +1,7 @@
 /* customFactory - a polymorphic object for handling
  * creating various types of custom tracks. */
 
+#include <malloc.h>
 #include <pthread.h>
 #include "common.h"
 #include "errCatch.h"
@@ -763,13 +764,14 @@ static struct pipeline *bedDetailLoaderPipe(struct customTrack *track)
  *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
  *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
+
 struct dyString *tmpDy = newDyString(0);
 //bed size can vary
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-tab", "-noBin",
-	"-sqlTable=loader/bedDetail.sql", "-renameSqlTable", "-trimSqlTable", "-bedDetail", NULL, NULL, NULL, NULL, NULL, NULL};
+	"-bedDetail", NULL, NULL, NULL, NULL, NULL, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
-int index = 8;
+int index = 5;
 
 if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
@@ -3058,6 +3060,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 // Call the fac loader in parallel on all the bigDataUrl custom tracks
 // using pthreads to avoid long serial timeouts 
 pthread_t *threads = NULL;
+pthread_attr_t attr;
+int stackSize = 2*1024*1024;  // 2 MB per thread? 10MB is default on 64-bit
 if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
     {
     /* launch parallel threads */
@@ -3065,15 +3069,32 @@ if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
     if (ptMax > 0)
 	{
 	AllocArray(threads, ptMax);
+
+	#if defined(M_ARENA_MAX) 
+	    mallopt(M_ARENA_MAX, 8);  // Otherwise new glibc allocates 64MB arena per thread
+	#endif /* glibc malloc tuning */ 
+
+	/* Initialize thread creation attributes */
+	int rc = pthread_attr_init(&attr);
+	if (rc) errAbort("Unexpected error %d from pthread_attr_init(): %s",rc,strerror(rc));
+	/* Set thread stack size */
+	rc = pthread_attr_setstacksize(&attr, stackSize);
+	if (rc) errAbort("Unexpected error %d from pthread_attr_setstacksize(): %s",rc,strerror(rc));
+
 	int pt;
 	for (pt = 0; pt < ptMax; ++pt)
 	    {
-	    int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, &threads[pt]);
+	    rc = pthread_create(&threads[pt], &attr, remoteParallelLoad, &threads[pt]);
 	    if (rc)
 		{
 		errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
 		}
 	    }
+
+	/* Thread attr no longer needed */
+	rc = pthread_attr_destroy(&attr);
+	if (rc) errAbort("Unexpected error %d from pthread_attr_destroy(): %s",rc,strerror(rc));
+
 	}
     }
 if (ptMax > 0)

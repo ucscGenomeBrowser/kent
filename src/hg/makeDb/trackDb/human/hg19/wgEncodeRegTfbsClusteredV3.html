@@ -17,7 +17,7 @@ ENCODE TFBS ChIP-seq data were processed using the computational pipeline develo
 by the ENCODE Analysis Working Group to generate uniform peaks of TF binding.
 Peaks for 161 transcription factors in
 91 cell types are combined here into clusters to produce a summary display showing 
-occupancy regions for each factor and motif sites within the regions.
+occupancy regions for each factor and motif sites within the regions when identified.
 Additional views of the underlying ChIP-seq data and documentation on the methods used
 to generate it are available from the
 <a href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgTfbsUniform" 
@@ -38,9 +38,9 @@ contributing to the cluster. The HGNC gene name for the transcription factor is 
 to the left of each cluster. Within a cluster, a green highlight indicates 
 the highest scoring site of a Factorbook-identified canonical motif for
 the corresponding factor. (NOTE: motif highlights are shown
-only in browser windows of size 50,000 bp or less,  and display can be suppressed using 
-track configuration).
-Arrows on the highlight designate the strand of the motif.
+only in browser windows of size 50,000 bp or less, and their display can be suppressed by unchecking
+the highlight motifs box on the track configuration page).
+Arrows on the highlight designate the matching strand of the motif.
 </p>
 <p>
 The cell lines where signal was detected for the factor are identified by single-letter 
@@ -78,7 +78,10 @@ manual curation to merge discovered motifs with known motifs reported in
 <a target="blank" href="http://www.biobase-international.com/product/transcription-factor-binding-sites">TransFac</a>.
 Motif identifications reported in Wang et al. 2012 (below) were supplemented in this track
 with more recent data (derived from newer ENCODE datasets - Jan 2011 through Mar 2012 freezes),
-provided by the Factorbook team.  Motif identifications from all datasets were merged, with sites duplicated in multiple cell lines scored as -log10 of the most significant value (qvalue) reported.
+provided by the Factorbook team.  Motif identifications from all datasets were merged, with
+the most significant value (qvalue) reported being picked when motifs were duplicated in
+multiple cell lines.  The scores for the selected best-scoring motif sites were then transformed
+to -log10.
 
 </p>
 
@@ -98,14 +101,15 @@ The clustering for V3/V4 is based on the transcription factor target, and so dif
 </p>
 <p>
 For the V3/V4 releases, a new track table format, 'factorSource' was used to represent 
-the primary clusters table and downloads file, <em>wgEncodeTfbsClusteredV3</em>.  
+the primary clusters table and downloads file, <em>wgEncodeRegTfbsClusteredV3</em>.  
 This format consists of standard BED5
 fields (see <a target="_blank" href="../FAQ/FAQformat.html#format1">File Formats</a>) 
-followed by two fields containing comma-separated lists.  The first list field contains 
-numeric identifiers for experiments, keyed to the <em>wgEncodeTfbsClusteredInputsV3</em> table,
+followed by an experiment count field (expCount) and finally two fields containing comma-separated lists.
+The first list field (expNums) contains numeric identifiers for experiments,
+keyed to the <em>wgEncodeRegTfbsClusteredInputsV3</em> table,
 which includes such information as the experiment's underlying Uniform TFBS table name,
 factor targeted, antibody used, cell type, treatment (if any), and laboratory source.  
-The second list field contains the scores for the corresponding experiments. 
+The second list field (expScores) contains the scores for the corresponding experiments. 
 For convenience, the 
 <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegTfbsClustered/">
 file downloads directory</a>
