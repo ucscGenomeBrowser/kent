@@ -2944,6 +2944,46 @@ cat  << '_EOF_' > template
     # 7408226 total
 
 #########################################################################
+## load alternate sequence for PSL display (DONE - 2014-02-24 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/altAlignments/sequence
+    cd /hive/data/genomes/hg38/bed/altAlignments/sequence
+
+    rm -fr hg38.haplotypes.lift temp.lift targetFa queryFa
+    mkdir targetFa
+    mkdir queryFa
+    touch temp.lift
+
+    cat ../../altLocations/chrToAlt.bed | while read L
+do
+  chrName=`echo $L | awk '{print $1}'`
+  chromSize=`egrep "^$chrName   " ../../../chrom.sizes | cut -f2`
+  chrStart=`echo $L | awk '{printf "%d", $2}'`
+  chrEnd=`echo $L | awk  '{printf "%d", $3}'`
+  chrSize=`echo $chrEnd $chrStart | awk '{print $1-$3}'`
+  queryName=`echo $L | awk '{print $4}'`
+  partName="${chrName}_${chrStart}_${chrEnd}"
+  echo $chrName $chrStart $chrEnd $queryName $partName $chromSize
+  echo -e "$chrStart\t${partName}\t$chrSize\t$chrName\t$chromSize" >> temp.lift
+  twoBitToFa ../../../hg38.2bit:$chrName:$chrStart-$chrEnd stdout | sed -e "s/^>.*/>$partName/;" > targetFa/$queryName.fa
+  twoBitToFa ../../../hg38.2bit:$queryName queryFa/$queryName.fa
+done
+
+sort -u temp.lift | sort -k4,4 -k1,1n > hg38.haplotypes.lift
+
+    mkdir /gbdb/hg38/ncbiAltMappings
+    cd /hive/data/genomes/hg38/bed/altAlignments/sequence/queryFa
+    ln -s `pwd`/*.fa /gbdb/hg38/ncbiAltMappings
+    cd /hive/data/genomes/hg38/bed/altAlignments/sequence
+    hgLoadSeq -drop -seqTbl=seqNcbiAltSequence -extFileTbl=extNcbiAltSequence \
+        hg38 /gbdb/hg38/ncbiAltMappings/*.fa
+
+    pslSwap ../altAlignments.psl stdout \
+      | pslRecalcMatch stdin ../../../hg38.2bit ../../../hg38.2bit \
+        hg38.referenceTarget.psl
+
+    hgLoadPsl hg38 -table=ncbiAltMappings hg38.referenceTarget.psl
+
+#########################################################################
 ## alternate sequence alignments EXPERIMENT (DONE - 2014-01-17 - Hiram)
     # the lastzAltSequences.2014-01-23 alignment was used for this instead
     # of this procedure

@@ -101,8 +101,6 @@ color 255,0,0
 url http://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel NCBI accession record:
 
-include altSequences.ra
-
 track cpgIslandSuper
 superTrack on
 shortLabel CpG Islands
@@ -170,3 +168,58 @@ sGroup_mammal rheMac3 mm10 canFam3
 treeImage phylo/hg38_4way.gif
 
 include defaultPriority.ra
+
+track altSequence
+superTrack on
+shortLabel Alt Map
+longLabel GRCh38 Haplotype to Reference sequence mapping correspondence
+visibility hide
+otherDb hg38
+group map
+
+    track altLocations
+    superTrack altSequence pack
+    type bed 4
+    color 32,32,190
+    shortLabel Haplotypes
+    longLabel GRCh38 Haplotype to Reference sequence mapping correspondence
+    html altSequence
+    url /cgi-bin/hgTracks?db=hg38&position=$$
+    urlLabel Corresponding position:
+
+    track ncbiAltMappings
+    superTrack altSequence pack
+    shortLabel Alt Map
+    longLabel GRCh38 Alignments to the alternate sequences/haplotypes
+    type psl
+    html altSequence
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsMaxZoom 10000.0
+    showCdsAllScales .
+    baseColorDefault itemBases
+    baseColorUseSequence extFile seqNcbiAltSequence extNcbiAltSequence
+
+track altSequenceExp
+superTrack on
+shortLabel Exp Alt Map
+longLabel GRCh38 Haplotype to Reference sequence mapping correspondence
+visibility hide
+group x
+
+    track ncbiAltMappingsChain
+    superTrack altSequenceExp pack
+    shortLabel Alt Map Chain
+    longLabel Chain Mappings to the alternate sequences/haplotypes
+    type chain hg38
+    spectrum on
+    html altSequence
+
+    track ncbiAltMappingsMaf
+    superTrack altSequenceExp pack
+    shortLabel Alt Map Maf
+    longLabel Maf Mappings to the alternate sequences/haplotypes
+    type maf
+    html altSequence
