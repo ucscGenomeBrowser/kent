@@ -609,7 +609,7 @@ def htmlTrackTable(db, trackLabels, trackTables, trackParents, trackChildren, gr
 
     htmlStats(localSizes, gbdbSizes, tableSizes)
 
-    print '<form action="%s" method="post">' % myUrl
+    print '<form action="%s" method="post">'  % myUrl
     print '<input type="submit" name="submit" value="Download"></input>'
 
     if showSubtracks:
@@ -629,6 +629,7 @@ def htmlTrackTable(db, trackLabels, trackTables, trackParents, trackChildren, gr
                 trackChildren, tableSizes, trackToGbdbFiles, gbdbSizes, showSubtracks, 0)
 
     print '<p>'
+    print '<input type="hidden" name="db" value="%s"></input>' % db
     print '<input type="submit" name="submit" value="Download"></input>'
     print '</form>'
 
