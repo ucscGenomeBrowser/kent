@@ -88,10 +88,10 @@ hgConf = None
 
 def parseHgConf():
     """ return hg.conf as dict key:value """
+    global hgConf
     if hgConf is not None:
         return hgConf
 
-    global hgConf
     hgConf = dict() # python dict = hash table
 
     for line in open("hg.conf"):
