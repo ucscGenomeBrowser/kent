@@ -566,15 +566,47 @@ def getGbdbSize(trackName, trackTableNames, trackToGbdbFiles, gbdbSizes):
             total += size
     return total, gbdbFnames
 
-def htmlTrackTable(trackLabels, trackTables, trackParents, trackChildren, groupList, groupToTopTracks, \
+def htmlDbSelector(defaultDb):
+    " print dropdown box with DBs and refresh when selected "
+
+    print("Genome database:<br>")
+    dbList = []
+    # getting list of DBs
+    if mysqlDbLoaded:
+        conn = sqlConnect("hgcentral", "public")
+        cur = conn.cursor()
+
+        cur.execute("SELECT organism, description, name from dbDb order by name")
+        for row in cur.fetchall():
+            dbList.append((row[0], row[1], row[2]))
+    else:
+        print("<small>info: MySQLDb not installed, cannot retrieve hgcentral.dbDb, using internal defaults</small>")
+        dbList = [("Human", "GrCh37", "hg19"), ("Mouse","NCBI37", "mm9")]
+
+    print '<FORM>'
+    print '''<SELECT NAME="db" onchange="document.location.href = 'hgMirror?db=' + this.value">'''
+    for dbRow in dbList:
+        org, desc, db = dbRow
+        selStr = ""
+        if db==defaultDb:
+            selStr = " SELECTED"
+        print '<OPTION%s VALUE="%s">%s: %s (%s)</OPTION>' % (selStr, db, db, org, desc)
+    print '</SELECT>'
+    print '</FORM>'
+
+def htmlTrackTable(db, trackLabels, trackTables, trackParents, trackChildren, groupList, groupToTopTracks, \
         tableSizes, localSizes, gbdbSizes, trackToGbdbFiles, showSubtracks):
     " print list of track sizes/tablecount as a html form, sorted by group "
 
     myUrl = basename(__file__)
     print '<h4>UCSC genome browser track download tool</h4>'
+
+    htmlDbSelector(db)
+
     print 'Locally mirrored tracks are faster to browse than tracks that are accessed through the internet.<br>'
     print 'Select any number of tracks from the list below and click "Download" when finished.<br>'
     print 'The data will be downloaded from the UCSC servers with udr/rsync and copied to the local mysql database and %s.<p>' % getGbdbDir()
+
     htmlStats(localSizes, gbdbSizes, tableSizes)
 
     print '<form action="%s" method="post">' % myUrl
@@ -606,7 +638,12 @@ def downloadCache(url, cacheFname):
     if isfile(cachePath):
         return open(cachePath).read().splitlines()
 
-    data = urllib2.urlopen(url).read()
+    try:
+        data = urllib2.urlopen(url).read()
+    except urllib2.HTTPError:
+        print "<small>info: Could not find %s<br></small>" % url
+        data = ""
+
     if url.endswith(".gz"):
         data = StringIO.StringIO(data) # gunzipping requires to wrap a pseudo-file around the gzip data
         data = gzip.GzipFile(fileobj=data).read()
@@ -1104,10 +1141,31 @@ def assertEmptyQueue():
     print '<a href="hgMirror?jobId=%s">Show download job</a>' % jobId
     sys.exit(0)
 
+def getDb(args):
+    """ get Db from either CGI args or hgcentral, makes sure that DB actually exists """
+    if "db" in args:
+        db = args.getvalue("db")
+        try:
+            conn  = sqlConnect(db, "public")
+        except _mysql_exceptions.OperationalError:
+            print("<small>error: DB %s does not exist on public sql server, using hg19</small>" % db)
+            db = "hg19"
+    else:
+        if mysqlDbLoaded:
+            import _mysql_exceptions
+            conn = sqlConnect("hgcentral", "public")
+            cur = conn.cursor()
+            # get default db for human
+            cur.execute('SELECT name from defaultDb where genome="Human"')
+            db = cur.fetchall()[0][0]
+        else:
+            db = "hg19"
+    return db
+
 def htmlMiddle(args):
     " print html middle part "
 
-    db = "hg19"
+    db = getDb(args)
 
     if not "jobId" in args.keys():
         # parse trackDb
@@ -1168,7 +1226,7 @@ def htmlMiddle(args):
         addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, trackChildren, \
             tableToGbdbFiles, trackTables, tableSizes)
 
-        htmlTrackTable(trackLabels, trackTables, trackParents, trackChildren, groupList, groupToTopTracks, \
+        htmlTrackTable(db, trackLabels, trackTables, trackParents, trackChildren, groupList, groupToTopTracks, \
             tableSizes, localSizes, gbdbSizes, tableToGbdbFiles, showSubtracks)
 
         hideSomeTracks(localSizes)
