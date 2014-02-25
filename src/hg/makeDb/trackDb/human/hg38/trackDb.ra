@@ -187,7 +187,7 @@ group map
     url /cgi-bin/hgTracks?db=hg38&position=$$
     urlLabel Corresponding position:
 
-    track ncbiAltMappings
+    track altSeqLiftOverPsl
     superTrack altSequence pack
     shortLabel Alt Map
     longLabel GRCh38 Alignments to the alternate sequences/haplotypes
@@ -199,7 +199,7 @@ group map
     showDiffBasesMaxZoom 10000.0
     showCdsMaxZoom 10000.0
     showCdsAllScales .
-    baseColorDefault itemBases
+    baseColorDefault diffBases
     baseColorUseSequence extFile seqNcbiAltSequence extNcbiAltSequence
 
 track altSequenceExp
