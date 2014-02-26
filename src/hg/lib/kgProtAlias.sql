@@ -12,4 +12,4 @@ CREATE TABLE kgProtAlias (
     KEY(kgID),
     KEY(displayID),
     KEY(alias)
-)TYPE=MyISAM;;
+)ENGINE=MyISAM;
