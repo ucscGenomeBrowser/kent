@@ -16,17 +16,16 @@ cd /hive/data/outside/uniProt/$DBDATE/build
 wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
 # 486,223,605  262K/s   in 28m 26s
 wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz
-*** stopped here
-# 12,088,824,987  342K/s   in 11h 28m
+# 22,811,969,157 6.58M/s   in 16h 31m
 wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot_varsplic.fasta.gz
-# 6,932,064   1.01M/s   in 10s
+# 7,393,531   1.66M/s   in 8.7s
 
 # Turn flat file into relational tab-separated files.
 time zcat *.dat.gz | spToDb stdin ../tabFiles
 # real    32m21.930s
 
 # Create the database.  
-hgsql mysql <<end
+hgsql mm10 <<end
 create database sp$DBDATE;
 end
 
@@ -37,22 +36,22 @@ hgsql sp$DBDATE < ~/kent/src/hg/protein/spToDb/spDb.sql
 set s=`date +%s`
 cd /hive/data/outside/uniProt/$DBDATE/tabFiles
 foreach i (*.txt)
-    hgsqlimport --local sp$DBDATE $i
+  hgsqlimport --local sp$DBDATE $i
 end
 set e=`date +%s`
 expr $e - $s
-# 7252
+# 12170
 
 # Add varsplice info 
 zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice sp$DBDATE stdin .
-hgLoadSqlTab sp$DBDATE -append varProtein /dev/null varProtein.txt
-hgLoadSqlTab sp$DBDATE -append protein /dev/null varProtein.txt
-hgLoadSqlTab sp$DBDATE -append varAcc /dev/null varAcc.txt
-hgLoadSqlTab sp$DBDATE -append displayId /dev/null varDisplayId.txt
-hgLoadSqlTab sp$DBDATE -append accToTaxon /dev/null varAccToTaxon.txt
-hgLoadSqlTab sp$DBDATE -append geneLogic /dev/null varGeneLogic.txt
-hgLoadSqlTab sp$DBDATE -append gene /dev/null varGene.txt
-hgLoadSqlTab sp$DBDATE -append description /dev/null varDescription.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append varProtein /dev/null varProtein.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append protein /dev/null varProtein.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append varAcc /dev/null varAcc.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append displayId /dev/null varDisplayId.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append accToTaxon /dev/null varAccToTaxon.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append geneLogic /dev/null varGeneLogic.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append gene /dev/null varGene.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append description /dev/null varDescription.txt
 
 # Add table descriptions
 makeTableDescriptions sp$DBDATE ~/kent/src/hg/protein/spToDb/spDbTables.as
