@@ -10,5 +10,5 @@ CREATE TABLE spXref3 (
   KEY accession(accession),
   KEY displayID(displayID),
   KEY hugoSymbol(hugoSymbol)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

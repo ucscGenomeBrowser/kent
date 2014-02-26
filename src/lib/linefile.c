@@ -28,7 +28,7 @@ else if (startsWith("BZ",m)) ext = "bz2";
 else if (startsWith("PK\x03\x04",m)) ext = "zip";
 if (ext==NULL)
     return NULL;
-safef(buf, sizeof(buf), "somefile.%s", ext);
+safef(buf, sizeof(buf), LF_BOGUS_FILE_PREFIX "%s", ext);
 return cloneString(buf);
 }
 

@@ -5,5 +5,5 @@ CREATE TABLE pfamXref (
   KEY  (pfamAC),
   KEY  (swissAC),
   KEY  (swissDisplayID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;;
 

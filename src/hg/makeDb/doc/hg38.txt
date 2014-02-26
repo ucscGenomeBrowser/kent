@@ -1056,6 +1056,28 @@ liftOver -minBlocks=0.5 /hive/data/genomes/hg19/bed/ncbiCytoBand/cytobands.bed \
       /hive/data/gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz \
       cytobands.0.5.bed unMapped0.5
 
+###############################                    ######################
+# cytoBandIdeo - (reDONE - 2014-02-25 - kuhn) 
+
+# adding centromeres to generic cytonBandIdeo tavle as it exists.
+# (lifted track is already gone)
+
+# get the cen values for hg38
+hgsql -Ne "SELECT DISTINCT chrom FROM centromeres" hg38 | sort > hg38.chroms
+rm -f hg38.cens
+foreach chrom (`cat hg38.chroms`)
+  set cenStart=""
+  set cenEnd=""
+  set cenStart=`hgsql -Ne 'SELECT MIN(chromStart) FROM centromeres WHERE chrom = "'$chrom'"' hg38`
+  set cenEnd=`hgsql -Ne 'SELECT MAX(chromEnd) FROM centromeres WHERE chrom = "'$chrom'"' hg38`
+  echo "$chrom $cenStart $cenEnd" >> hg38.cens
+end
+
+# Modified makeCytoBandIdeo.csh to use this file instead of looking 
+#   for centromeres in a gap table.
+# Replaced existing cytoBandIdeo table, which was really only a copy 
+#   of chromInfo.
+
 ##########################################################################
 # hg19 <-> hg38 difference tracks (DONE - 2013-12-28 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/liftOverHg38
@@ -3116,3 +3138,30 @@ cd tRNAs
 cp  /hive/users/pchan/tRNAs/Eukaryota/hg38/hg38-tRNAs.bed .
 
 hgLoadBed -tab hg38 tRNAs hg38-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
+
+############################################################################
+# EXONIPHY , lifted from hg19 (DONE - braney 2014-02-19)
+#	needed for ucscGenes building
+    # exoniphyHg19.gp is prepared as follows
+    mkdir /cluster/data/hg38/bed/exoniphy
+    cd /cluster/data/hg38/bed/exoniphy
+    hgsql hg19 -e "select * from exoniphy" -N | cut  -f 2-16 > exoniphyHg19.gp
+    time nice -n +19 liftOver -genePred exoniphyHg19.gp \
+	/cluster/data/hg19/bed/liftOver/hg19ToHg38.over.chain.gz \
+	    exoniphyHg38.gp unmapped
+    # real    0m2.015s
+    # user    0m1.894s
+    # sys     0m0.076s
+
+    wc -l *
+    #   186601 exoniphyHg19.gp
+    #   186533 exoniphyHg38.gp
+    #      136 unmapped
+    #   373270 total
+
+    cd /cluster/data/hg38/bed/exoniphy
+    nice -n +19 hgLoadGenePred -genePredExt hg38 exoniphy exoniphyHg38.gp
+    nice -n +19 featureBits hg38 exoniphy
+    # 28807039 bases of 3049335806 (0.945%) in intersection
+    nice -n +19 featureBits hg19 exoniphy
+    # 28661160 bases of 2897316137 (0.989%) in intersection
