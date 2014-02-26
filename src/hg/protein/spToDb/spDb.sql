@@ -202,7 +202,7 @@ CREATE TABLE featureId (
   val varchar(40) NOT NULL default '',  # UniProt feature Id
   PRIMARY KEY  (id),
   KEY val (val(14))
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #A description of part of a protein
 CREATE TABLE feature (
