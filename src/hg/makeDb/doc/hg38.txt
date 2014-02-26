@@ -3138,3 +3138,30 @@ cd tRNAs
 cp  /hive/users/pchan/tRNAs/Eukaryota/hg38/hg38-tRNAs.bed .
 
 hgLoadBed -tab hg38 tRNAs hg38-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
+
+############################################################################
+# EXONIPHY , lifted from hg19 (DONE - braney 2014-02-19)
+#	needed for ucscGenes building
+    # exoniphyHg19.gp is prepared as follows
+    mkdir /cluster/data/hg38/bed/exoniphy
+    cd /cluster/data/hg38/bed/exoniphy
+    hgsql hg19 -e "select * from exoniphy" -N | cut  -f 2-16 > exoniphyHg19.gp
+    time nice -n +19 liftOver -genePred exoniphyHg19.gp \
+	/cluster/data/hg19/bed/liftOver/hg19ToHg38.over.chain.gz \
+	    exoniphyHg38.gp unmapped
+    # real    0m2.015s
+    # user    0m1.894s
+    # sys     0m0.076s
+
+    wc -l *
+    #   186601 exoniphyHg19.gp
+    #   186533 exoniphyHg38.gp
+    #      136 unmapped
+    #   373270 total
+
+    cd /cluster/data/hg38/bed/exoniphy
+    nice -n +19 hgLoadGenePred -genePredExt hg38 exoniphy exoniphyHg38.gp
+    nice -n +19 featureBits hg38 exoniphy
+    # 28807039 bases of 3049335806 (0.945%) in intersection
+    nice -n +19 featureBits hg19 exoniphy
+    # 28661160 bases of 2897316137 (0.989%) in intersection
