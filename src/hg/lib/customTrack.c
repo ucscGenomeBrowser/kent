@@ -658,6 +658,41 @@ else
 return cloneString(buf);
 }
 
+static boolean customTrackIsBigData(char *fileName)
+/* Return TRUE if fileName has a suffix that we recognize as a bigDataUrl track type. */
+{
+char *fileNameDecoded = cloneString(fileName);
+cgiDecode(fileName, fileNameDecoded, strlen(fileName));
+boolean result =
+    (endsWith(fileNameDecoded,".bb") ||
+     endsWith(fileNameDecoded,".bw")  ||
+     endsWith(fileNameDecoded,".bam") ||
+     endsWith(fileNameDecoded,".vcf.gz"));
+freeMem(fileNameDecoded);
+return result;
+}
+
+static char *prepBigData(struct cart *cart, char *fileName, char *binVar, char *fileVar)
+/* Pass data's memory offset and size through to customFactory */
+{
+if (!customTrackIsBigData(fileName))
+    return NULL;
+char buf[1024];
+char *cFBin = cartOptionalString(cart, binVar);
+if (cFBin)
+    {
+    // cFBin already contains memory offset and size (search for __binary in cheapcgi.c)
+    safef(buf,sizeof(buf),"memory://%s %s", fileName, cFBin);
+    }
+else
+    {
+    char *cF = cartOptionalString(cart, fileVar);
+    safef(buf, sizeof(buf),"memory://%s %lu %lu",
+	  fileName, (unsigned long) cF, (unsigned long) strlen(cF));
+    }
+return cloneString(buf);
+}
+
 boolean ctConfigUpdate(char *ctFile)
 /* CT update is needed if database has been enabled since
  * the custom tracks in this file were created.  The only way to check is
@@ -718,11 +753,17 @@ if (isNotEmpty(fileName))
             customText = prepCompressedFile(cart, fileName,
                                 CT_CUSTOM_FILE_BIN_VAR, CT_CUSTOM_FILE_VAR);
             }
+	else if (customTrackIsBigData(fileName))
+	    {
+	    // User is trying to directly upload a bigData file; pass data to
+	    // customFactory, which will alert the user that they need bigDataUrl etc.
+	    customText = prepBigData(cart, fileName, CT_CUSTOM_FILE_BIN_VAR, CT_CUSTOM_FILE_VAR);
+	    }
         else
             {
             /* unreadable file */
             struct dyString *ds = dyStringNew(0);
-            dyStringPrintf(ds, "Can't read file: %s", fileName);
+            dyStringPrintf(ds, "Unrecognized binary data format in file %s", fileName);
             err = dyStringCannibalize(&ds);
             }
 	}

@@ -14,6 +14,8 @@
 #include "tabix.h"
 #endif
 
+#define LF_BOGUS_FILE_PREFIX "somefile."
+
 enum nlType {
  nlt_undet, /* undetermined */
  nlt_unix,  /* lf   */

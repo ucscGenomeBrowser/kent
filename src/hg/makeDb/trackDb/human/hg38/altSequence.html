@@ -1,86 +1,72 @@
-<h2>Description</h2>
+<H2>Description</H2>
 
-<p>
-This track shows alternate sequence indicated by the
+<P>
+This track shows the locations of the alternate sequences/haplotypes defined
+by the
 <a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/"
 target="_blank">GRC</a> (Genome Reference Consortium) to the GRCh38 (hg38)
-reference sequence in an effort to provide the best possible reference
-assembly for the human genome. The GRC generates multiple
-representations (haplotypes/alternate loci) for regions that are too complex
+reference sequence.  The GRC generates multiple representations
+(haplotypes/alternate loci) for regions that are too complex
 to be represented by a single path.
-</p>
+</P>
 
-<h3><font color="#0000FF">Haplotypes</font></h3>
+<H3>Alt Map</H3>
+<P>
+The <EM>Alt Map</EM> track is the PSL alignment representation from the
+NCBI GFF/cigar mapping files.  This PSL representation allows the side-by-side
+alignment to be viewed in the genome browser.  This track follows the display
+conventions for
+<a href="/goldenPath/help/hgTracksHelp.html#PSLDisplay" target="_blank">
+PSL alignment tracks</a>. Alignments are displayed in <b>black</b> and,
+depending on the track configuration settings, may be interspersed with
+vertical <font color="#F88017"><b>orange</b></font> lines.
+</P>
 
-<p>
-Items in the <em>Haplotype</em> track show sequence variation present in the
-population for certain sections of the genome.
+<H3><font color="#0000FF">Haplotypes</font></H3>
+
+<P>
+Items in the <EM>Haplotype</EM> track mark the location on the reference genome
+for the corresponding sequence contained in the alternate sequence/haplotype.
 Data points in this track are always displayed in
 <font color="#0000FF"><b>blue</b></font>.
-</p>
+</P><P>
+Click on the items in this track to use the <EM>Corresponding position:</EM>
+link to navigate to the alternate sequence/haplotype from the reference
+sequence or from the alternate sequence/haplotype to the corresponding
+reference sequence location.
+</P>
 
-<h2>Methods</h2>
+<H2>Methods</H2>
 
-<h3>Haplotype/Patch Tracks</h3>
+<H3>Haplotype/Alt Map Tracks</H3>
 
-<p>
-The locations of the Patches and Haplotypes were established by NCBI and specified in the files at:<br>
+<P>
+The locations of the alternate sequence/haplotypes were established by
+NCBI and specified in the alignment files at:<br>
 <a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/"
-target="_blank">ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/</a>ALT_REF_LOCI_*/placed_scaffolds/alt_locus_scaf*primary.pos
-</p>
+target="_blank">ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/</a>ALT_REF_LOCI_*/alt_scaffolds/alignments/*.gff.
+</P><P>
+The GRC uses the <A HREF="http://www.ncbi.nlm.nih.gov/tools/gbench/"
+TARGET=_blank>NCBI Genomic Aligner (NG Aligner)</A> to align the alternate
+loci specifically to the primary assembly chromosomes on which their
+anchor sequence is found.
+</P>
 
-<p>
-and the patch release site:<br>
-<a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/"
-target="_blank">ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/</a>GRCh38.p*/PATCHES/alt_scaffolds/alt_scaffold_placement.txt
-</p>
+<P>
+The NCBI GFF/cigar annotation files were converted to PSL format with the
+<A HREF="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/userApps/README"
+TARGET=_blank>kent command line</A> program:
+<A HREF="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/hg/utils/gff3ToPsl"
+TARGET=_blank>gff3ToPsl</A>.
+</P>
 
-<h2>Credits</h2>
+<H2>References</H2>
 
-<p>
-Lastz (previously known as blastz) was developed at
-<a href="http://www.bx.psu.edu/miller_lab/" target="_blank">Pennsylvania State University</a> by
-Minmei Hou, Scott Schwartz, Zheng Zhang, and Webb Miller with advice from Ross Hardison.
-</p>
-
-<p>
-Lineage-specific repeats were identified by Arian Smit and his
-<a href="http://www.repeatmasker.org" target="_blank">RepeatMasker</a> program.
-</p>
-
-<p>
-The axtChain program was developed at the University of California Santa Cruz
-by Jim Kent with advice from Webb Miller and David Haussler.
-</p>
-
-<p>
-The browser display and database storage of the chains and nets were created
-by Robert Baertsch and Jim Kent.
-</p>
-
-<p>
-The chainNet, netSyntenic, and netClass programs were developed at the
-University of California Santa Cruz by Jim Kent.
-</p>
-
-<h2>References</h2>
-
-<p>
-Chiaromonte F, Yap VB, Miller W.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">
-Scoring pairwise genomic sequence alignments</a>.
-<em>Pac Symp Biocomput</em>. 2002:115-26.
-</p>
-<p>
-Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
-<a href="http://www.pnas.org/content/100/20/11484.abstract" target="_blank">
-Evolution's cauldron: duplication, deletion, and rearrangement in the mouse and human genomes</a>.
-<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
-</p>
-<p>
-Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC, Haussler D, Miller W.
-<a href="http://genome.cshlp.org/content/13/1/103.abstract" target="_blank">
-Human-mouse alignments with BLASTZ</a>.
-<em>Genome Res</em>. 2003 Jan;13(1):103-7.
-</p>
-
+<P>
+Genome assembly procedures are covered in the NCBI
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
+TARGET=_blank>assembly documentation</A>.<BR>
+NCBI also provides
+<A HREF="http://www.ncbi.nlm.nih.gov/assembly/883148"
+TARGET="_blank">specific information about this assembly</A>.
+</P>
