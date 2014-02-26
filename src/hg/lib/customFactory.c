@@ -1,7 +1,9 @@
 /* customFactory - a polymorphic object for handling
  * creating various types of custom tracks. */
 
+#ifndef __APPLE__
 #include <malloc.h>
+#endif
 #include <pthread.h>
 #include "common.h"
 #include "errCatch.h"
