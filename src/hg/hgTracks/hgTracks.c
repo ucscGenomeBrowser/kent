@@ -5,7 +5,9 @@
  * hgRenderTracks web service.  See mainMain.c for the main used by the hgTracks CGI. */
 
 #include <pthread.h>
+#ifndef __APPLE__
 #include <malloc.h>
+#endif
 #include "common.h"
 #include "hCommon.h"
 #include "linefile.h"
