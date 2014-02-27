@@ -697,7 +697,8 @@ EOF
 
 
 ##############################################################################
-# DBSNP CODING ANNOTATIONS (138) (DONE 1/31/14 angie)
+# DBSNP CODING ANNOTATIONS (138) (DONE 2/27/14 angie)
+    # Originally done 1/31/14, but Brian L found hgc crash caused by script bug...
     cd /hive/data/outside/dbSNP/138/pig
     # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
     # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
@@ -719,23 +720,14 @@ EOF
 #    107 44  (frameshift)
 #     93 45  (cds-indel)
 
-   # Gather up multiple annotation lines into one line per {snp, gene, frame}:
+    # 2/27/14: Re-ran from here after fixing bug in script:
+    # Gather up multiple annotation lines into one line per {snp, gene, frame}:
     ~/kent/src/hg/utils/automation/collectNcbiFuncAnnotations.pl ncbiFuncAnnotationsFixed.txt \
     | liftUp snp138CodingDbSnp.bed suggested.lft warn stdin
-#No cds-reference given for [NW_003610528, 68083, 68084, 196959833, XM_003127914]; skipping
-#No cds-reference given for [NW_003610534, 271644, 271645, 196960069, XM_003482071]; skipping
-#No cds-reference given for [NW_003609953, 908036, 908043, 196960238, NM_001037965]; skipping
-#No cds-reference given for [NW_003610534, 723462, 723463, 196960556, XM_003482072]; skipping
-#No cds-reference given for [NW_003612070, 1097102, 1097102, 326903826, NM_213781]; skipping
-#...
-    # As in galGal4, tons of such warnings (which used to be silent) -- should consider
-    # not requiring that info.  hgc would have to extract the reference allele and codon(s)
-    # from assembly sequence... which I think it already does in a different part of hgc...
     hgLoadBed susScr3 snp138CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
       snp138CodingDbSnp.bed
 #Read 207193 elements of size 11 from snp138CodingDbSnp.bed
 
 
->>>>>>> 45efbeec981610e863332cb5beeda68ffe775406
 ##############################################################################
