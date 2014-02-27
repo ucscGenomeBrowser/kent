@@ -36,10 +36,11 @@
 //FIXME: clean up RA files when CGIs no longer need them
 static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/gencode_biotypes.html";
 static char *gencodeTagsUrl = "http://www.gencodegenes.org/gencode_tags.html";
-static char *ensemblTranscriptIdUrl = "http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s";
-static char *ensemblGeneIdUrl = "http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s";
-static char *vegaTranscriptIdUrl = "http://vega.sanger.ac.uk/Homo_sapiens/Transcript/Summary?db=core;t=%s";
-static char *vegaGeneIdUrl = "http://vega.sanger.ac.uk/Homo_sapiens/Gene/Summary?db=core;g=%s";
+static char *ensemblTranscriptIdUrl = "http://www.ensembl.org/%s/Transcript/Summary?db=core;t=%s";
+static char *ensemblGeneIdUrl = "http://www.ensembl.org/%s/Gene/Summary?db=core;t=%s";
+static char *ensemblSupportingEvidUrl = "http://www.ensembl.org/%s/Transcript/SupportingEvidence?db=core;t=%s";
+static char *vegaTranscriptIdUrl = "http://vega.sanger.ac.uk/%s/Transcript/Summary?db=core;t=%s";
+static char *vegaGeneIdUrl = "http://vega.sanger.ac.uk/%s/Gene/Summary?db=core;g=%s";
 static char *yalePseudoUrl = "http://tables.pseudogene.org/%s";
 static char *hgncUrl = "http://www.genenames.org/data/hgnc_data.php?match=%s";
 static char *geneCardsUrl = "http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s";
@@ -179,6 +180,20 @@ else
     }
 }
 
+static char* getScientificNameSym(void)
+/* get the scientific name of an organism in the form "Homo_sapiens"
+ *  WARNING: static return */
+{
+static char sciNameSym[128];
+char *sciName = hScientificName(database);
+if (sciName == NULL)
+    errAbort("can't get scientific name for %s", database);
+safecpy(sciNameSym, sizeof(sciNameSym), sciName);
+freeMem(sciName);
+subChar(sciNameSym, ' ', '_');
+return sciNameSym;
+}
+
 static void prExtIdAnchor(char *id, char *urlTemplate)
 /* if an id to an external database is not empty, print an HTML anchor to it */
 {
@@ -190,18 +205,38 @@ if (!isEmpty(id))
     }
 }
 
+#if UNUSED
 static void prTdExtIdAnchor(char *id, char *urlTemplate)
 /* print a table data element with an anchor for a id */
 {
 printf("<td>");
 prExtIdAnchor(id, urlTemplate);
 }
+#endif
 
-static void prApprisTdAnchor(char *id, struct sqlConnection *conn, char *urlTemplate)
+static void prEnsIdAnchor(char *id, char *urlTemplate)
+/* if an id to an ensembl or vega database is not empty, print an HTML anchor to it */
+{
+if (!isEmpty(id))
+    {
+    char urlBuf[512];
+    safef(urlBuf, sizeof(urlBuf), urlTemplate, getScientificNameSym(), id);
+    printf("<a href=\"%s\" target=_blank>%s</a>", urlBuf, id);
+    }
+}
+
+static void prTdEnsIdAnchor(char *id, char *urlTemplate)
+/* print a table data element with an ensembl/vega anchor for a id */
+{
+printf("<td>");
+prEnsIdAnchor(id, urlTemplate);
+}
+
+static void prApprisTdAnchor(char *id, char *urlTemplate)
 /* print a gene or transcript link to APPRIS */
 {
 // under bar separated, lower case species name.
-char *speciesArg = hScientificName(sqlGetDatabase(conn));
+char *speciesArg = hScientificName(database);
 toLowerN(speciesArg, strlen(speciesArg));
 subChar(speciesArg, ' ', '_');
 
@@ -239,13 +274,13 @@ printf("<tr><th><th>Transcript<th>Gene</tr>\n");
 printf("</thead><tbody>\n");
 
 printf("<tr><th>Gencode id");
-prTdExtIdAnchor(transAttrs->transcriptId, ensemblTranscriptIdUrl);
-prTdExtIdAnchor(transAttrs->geneId, ensemblGeneIdUrl);
+prTdEnsIdAnchor(transAttrs->transcriptId, ensemblTranscriptIdUrl);
+prTdEnsIdAnchor(transAttrs->geneId, ensemblGeneIdUrl);
 printf("</tr>\n");
 
 printf("<tr><th>HAVANA manual id");
-prTdExtIdAnchor(transAttrs->havanaTranscriptId, vegaTranscriptIdUrl);
-prTdExtIdAnchor(transAttrs->havanaGeneId, vegaGeneIdUrl);
+prTdEnsIdAnchor(transAttrs->havanaTranscriptId, vegaTranscriptIdUrl);
+prTdEnsIdAnchor(transAttrs->havanaGeneId, vegaGeneIdUrl);
 printf("</tr>\n");
 
 printf("<tr><th>Position");
@@ -290,8 +325,8 @@ printf("</tr>\n");
 if (isProteinCodingTrans(transAttrs))
     {
     printf("<tr><th><a href=\"%s\" target=_blank>APPRIS</a>\n", apprisHomeUrl);
-    prApprisTdAnchor(transAttrs->transcriptId, conn, apprisTranscriptUrl);
-    prApprisTdAnchor(transAttrs->geneId, conn, apprisGeneUrl);
+    prApprisTdAnchor(transAttrs->transcriptId, apprisTranscriptUrl);
+    prApprisTdAnchor(transAttrs->geneId, apprisGeneUrl);
     printf("</tr>\n");
     }
 
@@ -560,24 +595,7 @@ sortUniqSupportExidence(&supportEvids);
 return supportEvids;
 }
 
-static char *getSupportEvidEnsemblUrl(char *gencodeId)
-/* Generate a URL to the ensembl supporting evidence page.
- * WARNING: static return. */
-{
-static char url[256];
-// generate organism part of url in the form: Homo_sapiens
-char *sciName = hScientificName(database);
-if (sciName == NULL)
-    errAbort("can't get scientific name for %s", database);
-char *space = strchr(sciName, ' ');
-if (space != NULL)
-    *space = '_';
-safef(url, sizeof(url), "http://www.ensembl.org/%s/Transcript/SupportingEvidence?db=core;t=%s", sciName, gencodeId);
-freeMem(sciName);
-return url;
-}
-
-static void writeSupportExidenceEntry(struct supportEvid *supportEvid)
+static void writeSupportEvidenceEntry(struct supportEvid *supportEvid)
 /* write HTML table entry  for a supporting evidence */
 {
 // FIXME: should link to sources when possible
@@ -592,7 +610,9 @@ static void writeSupportingEvidenceLinkHtml(char *gencodeId, struct wgEncodeGenc
 struct supportEvid *supportEvids = loadSupportEvid(transcriptSupports, exonSupports);
 
 printf("<table class=\"hgcCcds\"><thead>\n");
-printf("<tr><th colspan=\"4\">Supporting Evidence (<a href=\"%s\" target=\"_blank\">view in Ensembl</a>)</tr>\n", getSupportEvidEnsemblUrl(gencodeId));
+printf("<tr><th colspan=\"4\">Supporting Evidence (");
+prEnsIdAnchor(gencodeId, ensemblSupportingEvidUrl);
+printf(")</tr>\n");
 printf("<tr class=\"hgcCcdsSub\"><th>Source<th>Sequence<th>Source<th>Sequence</tr>\n");
 printf("</thead><tbody>\n");
 struct supportEvid *supportEvid = supportEvids;
@@ -604,7 +624,7 @@ while ((supportEvid != NULL) || (rowCnt == 0))
         {
         if (supportEvid != NULL)
             {
-            writeSupportExidenceEntry(supportEvid);
+            writeSupportEvidenceEntry(supportEvid);
             supportEvid = supportEvid->next;
             }
         else

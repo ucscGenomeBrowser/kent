@@ -8040,7 +8040,7 @@ static struct asObject *asForTdbOrDie(struct sqlConnection *conn, struct trackDb
 struct asObject *asObj = NULL;
 if (tdbIsBigBed(tdb))
     {
-    char *fileName = tdbBigFileName(conn, tdb);
+    char *fileName = hReplaceGbdb(tdbBigFileName(conn, tdb));
     asObj = bigBedFileAsObjOrDefault(fileName);
     freeMem(fileName);
     }

@@ -13,7 +13,7 @@
 
 # Directories
 set genomes = /hive/data/genomes
-set dir = $genomes/mm10/bed/ucsc.13.2
+set dir = $genomes/mm10/bed/ucsc.14.1
 set scratchDir = /hive/scratch
 set testingDir = $scratchDir/ucscGenes
 
@@ -50,23 +50,23 @@ endif
 
 # If rebuilding on an existing assembly make tempDb some bogus name like tmpFoo2, otherwise 
 # make tempDb same as db.
-#set tempPrefix = "tmp"
-#set tmpSuffix = "Foo13"
-#set tempDb = ${tempPrefix}${tmpSuffix}
-#set bioCycTempDb = tmpBioCyc${tmpSuffix}
-set tempDb = mm10
+set tempPrefix = "tmp"
+set tmpSuffix = "Foo13"
+set tempDb = ${tempPrefix}${tmpSuffix}
+set bioCycTempDb = tmpBioCyc${tmpSuffix}
+#set tempDb = mm10
 
 
 # Table for SNPs
-#set snpTable = snp130
+set snpTable = snp138
 
 # Public version number
-set lastVer = 5
-set curVer = 6
+set lastVer = 6
+set curVer = 7
 
 # Database to rebuild visiGene text from.  Should include recent mouse and human
 # but not the one you're rebuilding if you're rebuilding. (Use tempDb instead).
-set vgTextDbs = (mm8 mm9 hg18 hg19 $tempDb)
+set vgTextDbs = (mm9 hg19 $tempDb)
 
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
@@ -82,6 +82,25 @@ set bioCycPathways = /hive/data/outside/bioCyc/120801/1.7/data/pathways.col
 set bioCycGenes = /hive/data/outside/bioCyc/120801/1.7/data/genes.col
 set rfam = /hive/data/outside/Rfam/111130
 
+# didn't do this
+# {
+# download Rfam
+cd /hive/data/outside/Rfam
+mkdir 140211
+cd 140211
+wget ftp://ftp.sanger.ac.uk/pub/databases/Rfam/CURRENT/genome.gff3.tar.gz
+tar xzvf genome.gff3.tar.gz
+mkdir mm10
+*** stopped here
+cat /hive/data/genomes/hg19/chrom.aliases \
+ |awk '{ print("cat /hive/data/outside/Rfam/111130/genome_gff/" $1 ".gff3",
+                "|sed", sprintf("%c", 39) "s/" $1 "/" $2 "/" sprintf("%c", 39))}' |bash \
+		 |grep -v -e "^#" \
+		  |awk '{ print($1 "\t" $4 - 1 "\t" $5 "\t" $9 "\t1\t" $7 "\t"
+		                 $4 - 1 "\t" $5 "\t0\t1\t" $5 - $4 + 1 "\t0"  }' \
+				 > hg19/Rfam.bed
+#}
+
 
 # Tracks
 set multiz = multiz60way
@@ -96,14 +115,15 @@ set oldGeneBed = /dev/null
 
 # Machines
 set dbHost = hgwdev
-set ramFarm = encodek
-set cpuFarm = swarm
+set ramFarm = ku
+set cpuFarm = ku
 
 # Code base
 set kent = ~/kent
 
 # Create initial dir
 #set scriptDir = `pwd`
+*** stopped here need fixed genbank
 mkdir -p $dir
 cd $dir
 

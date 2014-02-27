@@ -837,10 +837,12 @@ if (relativeUrl != NULL)
 	else if (startsWithWord("vcfTabix", type))
 	    {
 	    /* Just open and close to verify file exists and is correct type. */
-	    struct vcfFile *vcf = vcfFileMayOpen(bigDataUrl, 1, 1, FALSE);
-
+	    struct vcfFile *vcf = vcfTabixFileMayOpen(bigDataUrl, NULL, 0, 0, 1, 1);
 	    if (vcf == NULL)
-	       errAbort("%s is not a VCF file", bigDataUrl);
+		// Warnings already indicated whether the tabix file is missing etc.
+		errAbort("Couldn't open %s and/or its tabix index (.tbi) file.  "
+			 "See http://genome.ucsc.edu/goldenPath/help/vcf.html",
+			 bigDataUrl);
 	    vcfFileFree(&vcf);
 	    }
 	else if (startsWithWord("bam", type))

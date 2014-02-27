@@ -10,6 +10,7 @@
 #include "hmmstats.h"
 #include "customTrack.h"
 #include "bigWig.h"
+#include "hdb.h"
 
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -266,7 +267,7 @@ if (fileName == NULL)
     if (fileName == NULL)
 	errAbort("Missing fileName in %s table", tdb->table);
     }
-bigWigClick(tdb, fileName);
+bigWigClick(tdb, hReplaceGbdb(fileName)); // tiny memory leak
 }
 
 void bigWigCustomClick(struct trackDb *tdb)
