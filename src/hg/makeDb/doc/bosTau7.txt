@@ -1339,9 +1339,8 @@ TMPDIR=/scratch/tmp
     mkdir /hive/data/genomes/bosTau7/bed/cytoBand
     cd /hive/data/genomes/bosTau7/bed/cytoBand
 
-    wget http://www.animalgenome.org/hu/share/GBandCow.tar.gz 
-
-
+    wget http://www.animalgenome.org/QTLdb/tmp/QTL_Btau_4.6.ubed.txt.gz
+    zcat QTL_Btau_4.6.ubed.txt.gz >> bosTau7.animalQtl.bed
 ############################################################################
 # DBSNP B138 / SNP138 (DONE 1/31/14 angie)
     # RedMine #12490

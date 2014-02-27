@@ -1184,8 +1184,7 @@ TMPDIR=/dev/shm
     mkdir /hive/data/genomes/galGal4/bed/animalQtl
     cd /hive/data/genomes/galGal4/bed/animalQtl
 
-    wget http://www.animalgenome.org/QTLdb/tmp/QTL_GG_4.0.ubed.txt.gz 
-
+    wget http://www.animalgenome.org/QTLdb/tmp/QTL_GG_4.0.ubed.txt.gz
     zcat QTL_GG_4.0.ubed.txt.gz >> galGal4.animalQtl.bed
 
     cut -f1-4 galGal4.animalQtl.bed > galGal4.animalQtl.bed4
