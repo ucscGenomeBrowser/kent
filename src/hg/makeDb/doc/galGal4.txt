@@ -1310,7 +1310,8 @@ EOF
 
 
 ##############################################################################
-# DBSNP CODING ANNOTATIONS (138) (DONE 1/27/14 angie)
+# DBSNP CODING ANNOTATIONS (138) (DONE 2/27/14 angie)
+    # Originally done 1/27/14, but Brian L found hgc crash caused by script bug...
     cd /hive/data/outside/dbSNP/138/chicken
     # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
     # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
@@ -1332,21 +1333,10 @@ EOF
 #   4017 44  (frameshift)
 #  19675 45  (cds-indel)
 
-   # Gather up multiple annotation lines into one line per {snp, gene, frame}:
+    # 2/27/14: Re-ran from here after fixing bug in script:
+    # Gather up multiple annotation lines into one line per {snp, gene, frame}:
     ~/kent/src/hg/utils/automation/collectNcbiFuncAnnotations.pl ncbiFuncAnnotationsFixed.txt \
     | liftUp snp138CodingDbSnp.bed suggested.lft warn stdin
-#No cds-reference given for [NW_003764320, 312313, 312315, 16097296, XM_424719]; skipping
-#No cds-reference given for [NW_001488830, 11818621, 11818623, 16098392, XM_424730]; skipping
-#No cds-reference given for [NW_003763686, 7034394, 7034396, 16098476, BX950238]; skipping
-#No cds-reference given for [NW_003763686, 7034394, 7034396, 16098476, XM_419189]; skipping
-#No cds-reference given for [NW_001488830, 12048499, 12048500, 16098544, NM_204871]; skipping
-#No cds-reference given for [NW_001488830, 12555500, 12555502, 16098908, CR523101]; skipping
-#No cds-reference given for [NW_001488830, 12555500, 12555502, 16098908, XM_003642946]; skipping
-#No cds-reference given for [NW_001488830, 12555500, 12555502, 16098908, XM_424737]; skipping
-#...
-    # This time, tons of such warnings (which used to be silent) -- should consider
-    # not requiring that info.  hgc would have to extract the reference allele and codon(s)
-    # from assembly sequence... which I think it already does in a different part of hgc...
     hgLoadBed galGal4 snp138CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
       snp138CodingDbSnp.bed

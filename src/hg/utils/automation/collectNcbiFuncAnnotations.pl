@@ -18,10 +18,8 @@ while (<>) {
       ($lastRs != $rsId || $lastCtg ne $ctg || $lastS != $s ||
        $lastTx ne $txId || $lastFrm ne $frm)) {
     if (defined $refRow) {
-      my $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts";
+      $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts";
       $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons";
-    } else {
-      warn "No cds-reference given for [$lastCtg, $lastS, $lastE, $lastRs, $lastTx]; skipping\n";
     }
     my $lineOut = join("\t", $lastCtg, $lastS, $lastE, "rs$lastRs", $lastTx, $lastFrm,
 		       $count, $fxns, $nts, $codons, $aas) . "\n";
