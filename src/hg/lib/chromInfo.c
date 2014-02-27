@@ -150,13 +150,9 @@ if (sqlDatabaseExists(db))
 /* file exists and return true */
 if (res != NULL)
     {
-    /* chromInfo table exists so check that sequence file can be opened */
-    FILE *f = fopen(seqFile, "rb");
-    if (f != NULL)
-        {
-        exists = TRUE;
-        fclose(f);
-        }
+    char *seqFile2 = hReplaceGbdb(seqFile);
+    exists = udcExists(seqFile2);
+    freeMem(seqFile2);
     }
 return exists;
 }

@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+        <title>Genome Browser in a Box - UCSC Genome Browser</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" href="/style/HGStyle.css">
+</head>
+<body class="oldStaticPage">
+
+<div class="header">
+        <img src="../../images/title.jpg" alt="UCSC Genome Bioinformatics">
+</div><!-- .header -->
+
+<div class="nav">
+<!--#include virtual="../../inc/topbar.html"-->
+</div><!-- .nav -->
+
+<div class="content">
+
+<div class="section">
+<h1>Overview</h1>
+<div class="sectionContent">
+
+Genome Genome Browser in a Box is a "virtual machine" of the entire UCSC genome browser
+website that can be run on most PCs (Windows, Mac OSX or Linux).
+It allows using the genome browser when your data is sensitive and
+cannot be uploaded onto a web server or when your data files are too big 
+for your webserver. <P>
+
+The box does not include the UCSC genome annotation database of several terabytes.
+The annotations are instead downloaded as needed from UCSC. None of your own data is
+uploaded to UCSC.<p>
+
+Depending on the distance to UCSC, remote access to the UCSC databases can be slow.
+Therefore, Genome Browser in a Box includes a simple tool that allows downloading
+("mirroring") of selected genome anotation tracks to your machine.
+
+</div><!-- .sectionContent --> 
+</div><!-- .section -->
+
+<div class="section">
+<h1>Requirements</h1>
+<div class="sectionContent">
+<ul>
+        <li>A computer with support for virtualization, which is the case for most PCs sold after 2010
+        <li>Around 10 GB space on your harddisk, more if you want to mirror many tracks
+        <li>Administrator rights for your computer to install the virtualbox software
+        <li>The firewall of your network has to allow outgoing
+        connections on port 3306 (MySQL). Otherwise, only mirrored tracks are shown.
+</ul>
+
+</div><!-- .content -->
+</div><!-- .section -->
+
+<div class="section">
+<h1>Installation</h1>
+<div class="sectionContent">
+To install Genome Browser in a Box, first download the free software VirtualBox from <a
+href="https://www.virtualbox.org/wiki/Downloads">virtualbox.org</a>. We have
+tested version 4.3.6. Install it by following the instructions on the website.</P>
+
+Then download the <a href="http://hgwdev.soe.ucsc.edu/~max/browserbox/browserbox3.zip">
+Genome Browser in a Box ZIP file </a> (~300 MB) and extract it.
+<p>
+Add the contents to VirtualBox by double-clicking the file browserbox.vbox or
+start virtualbox and select <i>Machine - Add</i> (&#8984;+A on Macs or
+Ctrl-A on Linux/Windows) and open the file
+browserbox.vbox that you just extracted.<P>
+
+<img src="../../images/gbib-add.png"><p>
+
+Finally, select "browserbox" on the left side menu of virtualbox and click the
+big button "Start" in the symbol bar.<P> 
+<img src="../../images/gbib-start.png">
+<p>
+
+Known problems:
+<ul>
+<li>Virtualbox Error: <i>VT-x/AMD-V hardware acceleration has been enabled, but is not operational. You 64-bit guest will fail to detect a 64-bit CPU and will not be able to boot.</i> 
+</li>
+        <ul>
+        <li>Some older entry-level laptops from around 2009-2011 (e.g. Toshiba Satellite U500) were sold with CPUs that do not support virtualization.  These laptops cannot run the Genome Browser in a Box. The same applies to low-cost laptops called "netbooks" with Intel Atom processors. </li>
+        <li>On some DELL Optiplex (e.g. Optiplex 960) laptops, virtualization is supported, but deactivated in the BIOS. Reboot the computer, press F12 during boot to show the BIOS menu. Go to "BIOS Setup", "Virtualization Support", "Virtualization", check "Enable Intel Virtualization Technology". Exit and save. Restart the computer.
+        </ul>
+</ul>
+
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
+<div class="section">
+<h1>Usage</h1>
+<div class="sectionContent">
+Point your internet browser to <a href="http://127.0.0.1:1234">127.0.0.1:1234</a>. You should see the normal UCSC homepage. <p>
+
+Note: even though you can use
+http://localhost:1234, too, we recommend the 127.0.0.1:1234 address, as your browser
+configuration might not be saved otherwise (most internet browsers do not send
+cookies to "http://localhost"). You might want to bookmark this address.
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
+<div class="section">
+<h1>Improving the speed by keeping a local copy ("mirror") of tracks</h1>
+<div class="sectionContent">
+If the browser is slow, then you are probably located too far away from UCSC.
+The load time of the default tracks ranges from a few seconds on the US West Coast 
+to up to 15 seconds from Europe. To download annotation tracks to your own
+machine ("mirror"), click <i>Tools - Mirror Tracks</i> in the Genome Browser
+menu of the box. The first start takes a while to load.  Select the tracks that
+you typically use and click "Download".<p>
+
+If you are unsure what to select, our recommendation is "Default tracks with
+conservation tables, but no alignments". Depending on your network bandwidth,
+the download can take several minutes or up to a few hours over an ADSL
+line. The mirror tool will try to use <a
+href="https://github.com/LabAdvComp/UDR">UDR</a> to speed up the download.
+During the download, the file browserBoxData.vdi will grow.
+Please wait until it is completed. You cannot use the Genome Browser in a Box during this
+time. Once the download is complete, the default
+tracks should load in less than a second for a typical locus.<P>
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
+<div class="section">
+<h1>Loading local bam/bigWig/bigBed</h1>
+<div class="sectionContent">
+Your computer can share directories with the Genome Browser in a Box so that you can load big files without 
+the need to upload them to a webserver. <P>
+
+To set this up, first stop the virtual machine by closing the black Genome Browser in a Box window, select "Send the shutdown signal" and confirm with "OK".<P>
+<img src="../../images/gbib-powerOff.png">
+<p>
+
+Then you need to allow virtualbox access to one or more directories on your harddisk. To do this,
+click on the browserbox in virtualbox, click on <i>Settings</i>, <i>Shared Folders</i>, 
+<i>+</i>. Select a directory on your disk under <i>Folder Path / Other</i>. 
+Select the checkbox to give access "Read-only" and make sure the checkbox for "Auto-mount" is selected.<P>
+<img src="../../images/gbib-shared.png">
+<P>
+
+You can repeat this with other folders, if needed. Then, restart the browserbox by clicking the big "Start" button again.<p>
+
+To check if your folders are shared, type this address into your web browser: <a href="http://127.0.0.1:1234/folders">http://127.0.0.1:1234/folders</a>. It should show all shared folders.<P>
+
+To obtain the bigDataUrl of any of these files, do a right-click on it
+and select "Copy link address". You can now paste this URL into your custom
+track file.<P>
+
+Example: Here is a custom track that loads a local bam file (you will have to replace the part after <tt>http://</tt> with a pasted URL from your own machine):<P>
+<pre>track type=bam name=BamExample bigDataUrl=http://127.0.0.1:1234/folders/test/bamExample.bam</pre>
+
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
+<div class="section">
+<h1>Updating the Genome Browser in a Box</h1>
+<div class="sectionContent">
+Start the box, click on the "black" screen with the terminal and type
+<pre>
+  sudo ./updateBrowser </pre>
+This will update all the genome browser software and the annotation tracks that you mirrored.<p>
+
+If for some reason your browser box does not start anymore one day, you can re-download
+the zipfile and extract only the file browserboxBoot.vmdk. Do not extract and overwrite
+browserBoxData.vdi, as it contains your track and session settings and mirrored
+tracks.
+
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
+<div class="section">
+<h1>Data Conversion Command line Tools</h1>
+<div class="sectionContent">
+<a name="tools"></a>
+The black terminal in the Genome Browser in a Box is a
+normal linux command line. The sudo password is "browser". The box includes a few UCSC tools,
+e.g. bedToBigBed and wigToBigWig, samtools and tabix. You can use them to index
+bed/bam and wiggle files.<p>
+For example, to index a BAM file in a shared folder "Documents" on your harddisk, type
+<pre>
+cd /folders/Documents
+samtools index my.sorted.bam
+</pre>
+To convert a .bed file to .bigBed format, type
+<pre>
+cd /folders/Documents
+fetchChromSizes hg19 > hg19.sizes
+bedToBigBed bedExample.txt hg19.sizes myBigBed.bb
+</pre>
+
+If you need other Genome Browser tools, type the command "downloadTools" in the terminal. It will download
+various command line tools provided by UCSC.<p>
+
+For easier use of the command line, connect to the box from your computer with
+SSH. It supports copy/paste and is faster. To connect with SSH, open a
+terminal on your computer and type "ssh browser@localhost -p 1235". The
+password is "browser".
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
+<div class="section">
+<h1>License</h1>
+<div class="sectionContent">
+Please note that the <a
+href="http://genome.ucsc.edu/license/">Genome Browser license</a> applies, so
+you cannot run the virtual machine if you work for a commercial institution and have
+not purchased a license yet.
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
+</div><!-- .content -->
+
+</body>
+</html>

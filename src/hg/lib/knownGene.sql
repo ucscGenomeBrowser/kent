@@ -17,5 +17,5 @@ CREATE TABLE knownGene (
   KEY chrom_2 (chrom(16),txEnd),
   KEY protein (proteinID(16)),
   KEY align (alignID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

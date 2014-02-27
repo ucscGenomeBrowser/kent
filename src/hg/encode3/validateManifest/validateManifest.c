@@ -11,7 +11,7 @@
 #include "encode3/encode3Valid.h"
 #include "gff.h"
 
-char *version = "1.7";
+char *version = "1.8";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
@@ -295,12 +295,20 @@ return runCmdLine(cmdLine);
 boolean validateBedRnaElements(char *fileName)
 /* Validate bedRnaElements file */
 {
-// TODO the current example manifest.txt is wrong because this should be bigBed-based (not bed-based)
-//  so that we need to  change this into bigBed with a particular bedRnaElements.as ?
 char *asFile = getAs("bedRnaElements.as");  // TODO this probably has to change
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
+return runCmdLine(cmdLine);
+}
+
+boolean validateBedRrbs(char *fileName)
+/* Validate bedRrbs file */
+{
+char *asFile = getAs("bedRrbs.as");
+char *chromInfo = getChromInfo(fileName);
+char cmdLine[1024];
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed9+2 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -426,6 +434,8 @@ if (sameString(format,"bam"))
     result = validateBam(fileName);
 else if (startsWith(format,"bedRnaElements"))
     result = validateBedRnaElements(fileName);
+else if (startsWith(format,"bedRrbs"))
+    result = validateBedRrbs(fileName);
 else if (startsWith(format,"bigBed"))
     result = validateBigBed(fileName);
 else if (startsWith(format,"bigWig"))

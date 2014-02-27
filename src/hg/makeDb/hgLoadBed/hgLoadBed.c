@@ -104,7 +104,7 @@ errAbort(
   "             the mysql server can access.\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
   "   -renameSqlTable Rename table created with -sqlTable to match track\n"
-  "   -trimSqlTable   If sqlTable has n rows, and input has m rows, only load m rows, meaning the last n-m rows in the sqlTable are optional\n"
+  "   -trimSqlTable   If sqlTable has n fields, and input has m fields, only load m fields, meaning the last n-m fields in the sqlTable are optional\n"
   "   -type=bedN[+[P]] : \n"
   "                      N is between 3 and 15, \n"
   "                      optional (+) if extra \"bedPlus\" fields, \n"
@@ -248,6 +248,17 @@ int getFieldCount(int columnCount, struct asObject *asObj)
  * If -type=bedN[+[P]] option was given, check consistency w/fieldCount. */
 {
 int fieldCount = columnCount;
+
+if (customTrackLoader && bedDetail)
+    {
+    // Custom track doesn't include bedDetail SQL, so ignore any passed in.  
+    // Just check there are minimum number of fields for a bedDetail.
+    if (fieldCount < 6) 
+        errAbort("fieldCount from input file (%d) is too small: must be >=6 for type bedDetail",
+		 fieldCount);
+    return fieldCount;
+    }
+
 if (asObj != NULL)
     // Set field count according to autoSql.
     fieldCount = slCount(asObj->columnList);
@@ -507,7 +518,7 @@ if ((char *)NULL != tmpDir)
 else
     tab = cloneString("bed.tab");
 
-if (bedDetail && sqlTable == NULL) 
+if (bedDetail && sqlTable == NULL && !customTrackLoader) 
     errAbort("bedDetail format requires sqlTable option");
 if (bedDetail && !strictTab) 
     errAbort("bedDetail format must be tab separated");

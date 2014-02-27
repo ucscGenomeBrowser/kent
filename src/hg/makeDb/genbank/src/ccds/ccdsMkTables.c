@@ -498,6 +498,8 @@ writeCcdsInfoRecs(ccdsInfoFile, ccdsInfoList);
 ccdsInfoFreeList(&ccdsInfoList);
 verbose(2, "end createCcdsInfo: %d processed, %d ignored, %d kept\n",
         cnt, ignoreCnt, cnt-ignoreCnt);
+if (cnt-ignoreCnt == 0)
+    errAbort("no CCDS entries found matching criteria");
 }
 
 static char *mkCcdsNotesSelect(struct genomeInfo *genome, struct sqlConnection *conn)

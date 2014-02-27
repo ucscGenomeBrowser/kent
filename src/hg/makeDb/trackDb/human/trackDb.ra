@@ -17,7 +17,6 @@ track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
 group map
-priority .1
 visibility dense
 type bed 4 +
 
@@ -25,7 +24,6 @@ track cytoBand
 shortLabel Chromosome Band
 longLabel Chromosome Bands Localized by FISH Mapping Clones
 group map
-priority 1
 visibility hide
 type bed 4 +
 
@@ -34,7 +32,6 @@ compositeTrack on
 shortLabel Hi Seq Depth
 longLabel Regions of Exceptionally High Depth of Aligned Short Reads
 group map
-priority 27
 visibility hide
 color 139,69,19
 altColor 0,0,0
@@ -74,7 +71,6 @@ track lrg
 shortLabel LRG Regions
 longLabel Locus Reference Genomic (LRG) Sequences Mapped to $date Assembly
 group map
-priority 100
 visibility hide
 type bigBed 12 +
 noScoreFilter .
@@ -91,7 +87,6 @@ track gad
 shortLabel GAD View
 longLabel Genetic Association Studies of Complex Diseases and Disorders
 group phenDis
-priority 1 
 visibility hide
 color 200,0,0
 type bed 4
@@ -101,7 +96,6 @@ track decipher
 shortLabel DECIPHER
 longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans
 group phenDis
-priority 1 
 visibility hide
 color 0,0,0
 type bed 4
@@ -115,7 +109,6 @@ shortLabel Case Control
 longLabel Case Control Consortium
 group phenDis
 visibility hide
-priority 50.2
 type chromGraph
 minMax 0,15
 linesAt 5,10
@@ -169,7 +162,6 @@ shortLabel NIMH Bipolar
 longLabel NIMH Bipolar Disease
 group phenDis
 visibility hide
-priority 50.3
 type chromGraph
 minMax 0,5
 linesAt 1,3
@@ -194,7 +186,6 @@ url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 group phenDis
 visibility hide
-priority 1 
 type bed 4 +
 snpTable snp130
 snpVersion 130
@@ -207,7 +198,6 @@ track vegaGene
 shortLabel Vega Genes
 longLabel Vega Annotations
 group genes
-priority 37.1
 visibility hide
 chromosomes chr1,chr16,chr18,chr19,chr6,chr7,chr9,chr10,chr13,chr14,chr20,chr22,chrX,chrY
 color 0,100,180
@@ -218,7 +208,6 @@ track vegaPseudoGene
 shortLabel Vega Pseudogenes
 longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
 group genes
-priority 37.11
 visibility hide
 chromosomes chr1,chr16,chr18,chr6,chr7,chr9,chr10,chr13,chr14,chr20,chr22,chrX,chrY,
 color 30,130,210
@@ -229,7 +218,6 @@ track sanger20
 shortLabel Sanger 20
 longLabel Sanger Institute Chromosome 20 Genes
 group genes
-priority 37.2
 visibility pack
 chromosomes chr20,
 color 0,100,180
@@ -239,7 +227,6 @@ track sanger22
 shortLabel Sanger 22
 longLabel Sanger Institute Chromosome 22 Genes
 group genes
-priority 37.3
 visibility pack
 chromosomes chr22,
 color 0,100,180
@@ -249,7 +236,6 @@ track sanger22pseudo
 shortLabel Sanger 22 Pseudo
 longLabel Sanger Center Chromosome 22 Pseudogenes
 group genes
-priority 37.4
 visibility hide
 chromosomes chr22,
 color 30,130,210
@@ -259,7 +245,6 @@ track hgIkmc
 shortLabel IKMC Genes Mapped
 longLabel International Knockout Mouse Consortium Genes Mapped to Human Genome
 group genes
-priority 64.1
 visibility hide
 type bed 12
 noScoreFilter .
@@ -273,7 +258,6 @@ track acembly
 shortLabel AceView Genes
 longLabel AceView Gene Models With Alt-Splicing
 group genes
-priority 41
 visibility hide
 color 155,0,125
 type genePred acemblyPep acemblyMrna
@@ -290,7 +274,6 @@ track slamMouse
 shortLabel Slam Mouse
 longLabel Slam Gene Predictions Using Human/Mouse Homology
 group genes
-priority 45.5
 visibility hide
 color 100,50,0
 altColor 175,150,128
@@ -300,7 +283,6 @@ track slamRat
 shortLabel Slam Rat
 longLabel Slam Gene Predictions Using Human/Rat Homology
 group genes
-priority 45.6
 visibility hide
 color 100,50,0
 altColor 175,150,128
@@ -310,7 +292,6 @@ track exoniphy
 shortLabel Exoniphy
 longLabel Exoniphy Human/Mouse/Rat/Dog
 group genes
-priority 50.9
 visibility hide
 color 173,17,162
 type genePred
@@ -319,7 +300,6 @@ track pseudoYale
 shortLabel Yale Pseudo
 longLabel Yale Pseudogenes.
 group genes
-priority 53
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -332,7 +312,6 @@ track pseudoYale60
 shortLabel Yale Pseudo60
 longLabel Yale Pseudogenes based on Ensembl Release 60
 group genes
-priority 53
 visibility hide
 spectrum on
 type genePred
@@ -355,7 +334,6 @@ track luNega
 shortLabel UCSC Pseudo
 longLabel UCSC Pseudogenes
 group genes
-priority 54
 type bed 12
 visibility hide
 
@@ -363,7 +341,6 @@ track acescan
 shortLabel ACEScan
 longLabel ACEScan alternative conserved Human-Mouse exon predictions
 group genes
-priority 55
 visibility hide
 color 125,38,205
 type genePred
@@ -372,7 +349,6 @@ track HInvGeneMrna
 shortLabel H-Inv
 longLabel H-Invitational Genes mRNA Alignments
 group rna
-priority 67.5
 visibility hide
 color 0,100,100
 type psl .
@@ -381,7 +357,6 @@ track altGraphX
 shortLabel Alt-Splicing
 longLabel Alternative Splicing from ESTs/mRNAs
 group rna
-priority 74
 visibility hide
 type altGraphX
 
@@ -389,7 +364,6 @@ track altGraphX2
 shortLabel Alt-Splicing2
 longLabel Alternative Splicing from ESTs/mRNAs - test take 2
 group rna
-priority 74.1
 visibility hide
 type altGraphX
 
@@ -397,7 +371,6 @@ track mgcIntrons
 shortLabel mgcIntronPicks
 longLabel Introns and Flanking Exons for RACE PCR
 group rna
-priority 76
 visibility hide
 type bed 12 .
 
@@ -406,7 +379,6 @@ shortLabel OMIM
 longLabel NIH's Online Mendelian Inheritance in Man
 url http://www.ncbi.nlm.nih.gov/omim/$$
 group varRep
-priority 146
 visibility hide
 type bed 4 .
 
@@ -415,7 +387,6 @@ shortLabel Mouse mRNAs
 longLabel Mouse mRNAs Mapped from mm3 via Nets/Chains
 group rna
 color 16,107,44
-priority 77
 visibility hide
 type bed 12 .
 
@@ -428,7 +399,6 @@ subGroup1 view Views RawSignal=Raw_Signal Alignments=Alignments
 subGroup2 tissueType Tissue_Type BT474=BT474 HME=HME MB435=MB435 MCF7=MCF7 T47D=T47D adipose=Adipose brain=Brain breast=Breast colon=Colon heart=Heart liver=Liver lymphNode=LymphNode skelMuscle=SkelMuscle testes=Testes
 sortOrder view=+ tissueType=+
 dimensions dimensionY=tissueType
-priority 0
 dragAndDrop subTracks
 configurable on
 visibility hide
@@ -629,7 +599,6 @@ track gladHumES
 shortLabel Gstone Arrays
 longLabel Gladstone Microarray Data
 group expression
-priority 0
 visibility hide
 type expRatio
 expScale 4.0
@@ -640,7 +609,6 @@ track gnfAtlas2
 shortLabel GNF Atlas 2
 longLabel GNF Expression Atlas 2
 group expression
-priority 0
 visibility hide
 type expRatio
 expScale 4.0
@@ -653,7 +621,6 @@ track affyUcla
 shortLabel UCLA GeneChip
 longLabel UCLA Affymetrix U133 GeneChip Data
 group expression
-priority 0
 visibility hide
 type bed 15 +
 expTable affyUclaExps
@@ -663,7 +630,6 @@ track affyUclaNorm
 shortLabel UCLA Tissues
 longLabel UCLA Affymetrix U133 GeneChip Normal Tissues
 group expression
-priority 0
 expScale 3.0
 expStep 0.5
 expTable affyUclaNormExps
@@ -675,7 +641,6 @@ track nci60
 shortLabel NCI60
 longLabel Microarray Experiments for NCI 60 Cell Lines
 group expression
-priority 0
 visibility hide
 type expRatio
 expScale 3.0
@@ -689,7 +654,6 @@ track affy
 shortLabel GNF
 longLabel GNF Gene Expression Atlas Using Affymetrix GeneChips
 group expression
-priority 0
 visibility hide
 type bed 15 +
 expTable affyExps
@@ -698,7 +662,6 @@ track affyRatio
 shortLabel GNF Ratio
 longLabel GNF Gene Expression Atlas Ratios Using Affymetrix GeneChips
 group expression
-priority 0
 visibility hide
 type expRatio
 expScale 3.0
@@ -712,7 +675,6 @@ track humanNormal
 shortLabel Human Normal
 longLabel Expression from Normal Human Tissue
 group expression
-priority 0
 visibility hide
 type expRatio
 expScale 3.0
@@ -724,7 +686,6 @@ track cghNci60
 shortLabel CGH NCI60
 longLabel Comparative Genomic Hybridization Experiments for NCI 60 Cell Lines
 group regulation
-priority 0
 visibility hide
 type bed 15 +
 
@@ -732,7 +693,6 @@ track yaleBertoneTars
 shortLabel Bertone Yale TAR
 longLabel Yale Transcriptionally Active Regions (TARs) (Bertone data)
 group expression
-priority 0
 visibility hide
 color 50,100,50
 url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
@@ -743,7 +703,6 @@ track affyTranscriptome
 shortLabel Transcriptome
 longLabel Affymetrix Experimentally Derived Transcriptome
 group expression
-priority 0
 visibility hide
 color 100,50,0
 altColor 0,0,255
@@ -754,7 +713,6 @@ track affyU133
 shortLabel Affy U133
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133
 group expression
-priority 0
 visibility hide
 type psl .
 
@@ -762,7 +720,6 @@ track affyGnf1h
 shortLabel Affy GNF1H
 longLabel Alignments of Affymetrix Consensus/Exemplars from GNF1H
 group expression
-priority 0
 visibility hide
 type psl .
 
@@ -770,7 +727,6 @@ track affyU95
 shortLabel Affy U95
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U95
 group expression
-priority 0
 visibility hide
 type psl .
 
@@ -778,7 +734,6 @@ track illuminaProbes
 shortLabel Illumina WG-6
 longLabel Alignments of Illumina WG-6 3.0 Probe set
 group expression
-priority 0
 visibility hide
 type bed 12 .
 pslTable illuminaProbesAlign
@@ -788,7 +743,6 @@ track switchDbTss
 shortLabel SwitchGear TSS
 longLabel SwitchGear Genomics Transcription Start Sites
 group regulation
-priority 0
 visibility hide
 origAssembly hg17
 type bed 6 +
@@ -797,7 +751,6 @@ track promoterStanford
 shortLabel Stanford Promoters
 longLabel Stanford Promoters
 group regulation
-priority 0
 visibility hide
 type bed 6 .
 
@@ -805,7 +758,6 @@ track promoterStanfordGene
 shortLabel Stanford Gene Model
 longLabel Stanford ENCODE Gene Models
 group regulation
-priority 0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 12 .
@@ -816,7 +768,6 @@ longLabel Human/Mouse Regulatory Potential Score
 group regulation
 color 100,50,0
 altColor 50,150,128
-priority 0
 visibility hide
 type sample 0 8
 
@@ -824,7 +775,6 @@ track vistaEnhancers
 shortLabel Vista Enhancers
 longLabel Vista HMR-Conserved Non-coding Human Enhancers from LBNL
 group regulation
-priority 0
 visibility hide
 color 50,70,120
 type bed 5 +
@@ -834,7 +784,6 @@ track uc16
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
 group compGeno
-priority 109.31
 visibility hide
 exonArrows off
 color 150,0,0
@@ -846,7 +795,6 @@ track ux16
 shortLabel Extended Ultras
 longLabel Ultras Extended Until 5 Bases Below 85% in Conservation Track
 group compGeno
-priority 109.32
 visibility hide
 exonArrows off
 color 100,0,100
@@ -858,7 +806,6 @@ longLabel Human/Mouse Evolutionary Conservation Score (std units)
 group compGeno
 color 175,150,128
 altColor 175,150,128
-priority 118
 visibility hide
 type sample 0 8
 
@@ -866,7 +813,6 @@ track ecoresTetNig1
 shortLabel Tetraodon Ecores
 longLabel Human($db)/$o_Organism ($o_date) Evolutionary Conserved Regions
 group compGeno
-priority 151.1
 visibility hide
 color 0,60,120
 autoTranslate 0
@@ -877,7 +823,6 @@ track blastCe3WB
 shortLabel C. elegans Proteins
 longLabel C. elegans Proteins
 group genes
-priority 2002
 visibility hide
 colorChromDefault off
 type psl protein
@@ -886,14 +831,12 @@ blastRef ce3.blastWBRef01
 
 track blastDm2FB override
 longLabel D. melanogaster Proteins (dm2)
-priority 2002
 visibility hide
 
 track slamNonCodingMouse
 shortLabel Slam Non-Coding Mouse
 longLabel Slam Predictions of Human/Mouse Conserved Non-Coding Regions
 group compGeno
-priority 180
 visibility hide
 color 30,130,210
 altColor 200,220,255
@@ -904,7 +847,6 @@ track slamNonCodingRat
 shortLabel Slam Non-Coding Rat
 longLabel Slam Predictions of Human/Rat Conserved Non-Coding Regions
 group compGeno
-priority 170
 visibility hide
 color 30,130,210
 altColor 200,220,255
@@ -915,7 +857,6 @@ track chimpSimpleDiff
 shortLabel Chimp Diff
 longLabel $o_Organism ($o_date) Simple Differences in Regions of High Quality Sequence
 group compGeno
-priority 206
 visibility hide
 type bed 3 +
 otherDb panTro1
@@ -924,7 +865,6 @@ track hgdpGeo
 shortLabel HGDP Allele Freq
 longLabel Human Genome Diversity Project SNP Population Allele Frequencies
 group varRep
-priority 102
 visibility hide
 url http://hgdp.uchicago.edu/cgi-bin/gbrowse/HGDP/?name=$$
 urlLabel HGDP Selection Browser:
@@ -934,7 +874,6 @@ track hgdpFst
 shortLabel HGDP Smoothd FST
 longLabel Human Genome Diversity Project Smoothed Relative FST (Fixation Index)
 group varRep
-priority 102.01
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,
 viewLimits 0:5
@@ -949,7 +888,6 @@ compositeTrack on
 shortLabel HGDP Hetrzygsty
 longLabel Human Genome Diversity Project Smoothed Expected Heterozygosity on 7 Continents
 group varRep
-priority 102.02
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,
 viewLimits 0:0.25
@@ -1020,7 +958,6 @@ compositeTrack on
 shortLabel HGDP iHS
 longLabel Human Genome Diversity Project Integrated Haplotype Score on 7 Continents
 group varRep
-priority 102.03
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
 viewLimits 0:5
@@ -1084,7 +1021,6 @@ compositeTrack on
 shortLabel HGDP XP-EHH
 longLabel Human Genome Diversity Proj Cross-Pop Ext Haplo Homzgty (XP-EHH) on 7 Continents
 group varRep
-priority 102.04
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,
 viewLimits 0:5
@@ -1147,7 +1083,6 @@ track protVarPos
 shortLabel UniProt Variants
 longLabel UniProt Variants
 group varRep
-priority 144.8
 visibility hide
 color 0,200,0
 type bed 4 +
@@ -1157,7 +1092,6 @@ release alpha
 shortLabel Locus Variants
 longLabel Compilation of $Organism Variants from LSDBs
 group varRep
-priority 144.7
 visibility hide
 color 150,0,150
 type bed 4 +
@@ -1168,7 +1102,6 @@ html gvPosOld
 shortLabel Locus Variants
 longLabel Compilation of $Organism Variants from LSDBs
 group varRep
-priority 144.7
 visibility hide
 color 150,0,150
 type bed 4 +
@@ -1177,7 +1110,6 @@ track dgv
 shortLabel DGV Beta (old)
 longLabel Database of Genomic Variants: obsolete, here for QA comparison
 group varRep
-priority 144.8
 visibility hide
 itemRgb on
 type bed 9 +
@@ -1193,7 +1125,6 @@ compositeTrack on
 shortLabel DGV Struct Var
 longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
-priority 144.8
 visibility hide
 itemRgb on
 type bed 9 +
@@ -1222,7 +1153,6 @@ compositeTrack on
 shortLabel 1000Genomes Cov
 longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase
 group varRep
-priority 101.5
 visibility hide
 subGroup1 view Views Depth=Abnormal_Depth MapQ=Mapping_Quality_Failure Uncov=No_Coverage sum=Summary
 subGroup2 pop Population Ceu=CEU ChbJpt=CHB/JPT Yri=YRI all=All
@@ -1350,7 +1280,6 @@ track tgpRecombRate
 compositeTrack on
 shortLabel 1000G Recomb Rt
 longLabel 1000 Genomes Pilot Project Recombination Rates and Genetic Map
-priority 99.12
 visibility hide
 group varRep
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
@@ -1397,7 +1326,6 @@ compositeTrack on
 shortLabel HGSV Discordant
 longLabel HGSV Discordant Clone End Alignments
 group varRep
-priority 144.85
 visibility hide
 itemRgb on
 type bed 12
@@ -1465,7 +1393,6 @@ compositeTrack on
 shortLabel HGSV Validated
 longLabel HGSV Validated Sites of Structural Variation
 group varRep
-priority 144.84
 visibility hide
 itemRgb on
 noScoreFilter .
@@ -1531,7 +1458,6 @@ shortLabel MGI Mouse QTL
 longLabel MGI Mouse Quantitative Trait Loci Coarsely Mapped to $Organism
 group phenDis
 visibility hide
-priority 151
 type bed 4 .
 otherDb mm8
 otherDbTable jaxQtl
@@ -1558,7 +1484,6 @@ shortLabel HapMap LD Hotspots
 longLabel Hotspots of Linkage Disequilibrium in the HapMap
 group varRep
 visibility hide
-priority 144.55
 viewLimits 0:16
 autoScale Off
 maxHeightPixels 64:32:16
@@ -1588,7 +1513,6 @@ compositeTrack on
 shortLabel Tajima's D SNPs
 longLabel Tajima's D SNPs
 group varRep
-priority 144.6
 visibility hide
 type bed 4 .
 
@@ -1627,7 +1551,6 @@ minLimit -4
 maxLimit 5
 autoScale Off
 maxHeightPixels 128:64:11
-priority 144.65
 type bedGraph 4
 
     track tajdAd
@@ -1658,7 +1581,6 @@ track perlegen
 shortLabel Perlegen Haplotypes
 longLabel Perlegen Common High-Resolution Haplotype Blocks
 group varRep
-priority 145.21
 visibility hide
 chromosomes chr21,
 color 0,0,0
@@ -1671,7 +1593,6 @@ compositeTrack on
 shortLabel HapMap SNPs
 longLabel HapMap SNPs
 group varRep
-priority 144.48
 visibility hide
 type bed 6 +
 configureByPopup off
@@ -1765,7 +1686,6 @@ track haplotype
 shortLabel Haplotype Blocks
 longLabel Common Haplotype Blocks
 group varRep
-priority 145.22
 visibility hide
 chromosomes chr22,
 color 0,0,0
@@ -1791,7 +1711,6 @@ track affy500K
 shortLabel Affy 500K
 longLabel Affy GeneChip Mapping 500K Array
 group varRep
-priority 145.9
 visibility hide
 type bed 6 +
 url https://www.affymetrix.com/LinkServlet?probeset=$$
@@ -1800,7 +1719,6 @@ track chimpParalogy
 shortLabel Chimp Seg Dups
 longLabel Chimp Segmental Duplications
 group varRep
-priority 330
 visibility hide
 type bed 3 .
 
@@ -1808,7 +1726,6 @@ track chainSelf
 shortLabel Self Chain
 longLabel Chained Self-Alignments
 group varRep
-priority 400
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -1820,7 +1737,6 @@ track gbDnaBigChain
 shortLabel Genbank chains
 longLabel Genbank DNA sequences >5kbp chained
 group x
-priority 400
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -1833,7 +1749,6 @@ track gbSmall
 shortLabel Genbank small
 longLabel Genbank short DNA sequences <5kbp
 group x
-priority 400
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -1846,7 +1761,6 @@ track affyTranscription
 shortLabel Transcription
 longLabel Affy. SK-N-AS Transcript Abundance
 group expression
-priority 0
 visibility hide
 autoScale Off
 color 175,150,128
@@ -1866,7 +1780,6 @@ compositeTrack on
 #compositeTrack on smart
 visibility hide
 group expression
-priority 0
 type bed 3
 subGroup1 view Views frag=Transfrags tome=Transcriptome
 subGroup2 cell Cell_Line A375=A375 FHS=FHs738Lu HEPG2P=HepG2+ HEPG2m=HepG2- \
@@ -2072,7 +1985,6 @@ track affyU133Plus2
 shortLabel Affy U133Plus2
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133 Plus 2.0
 group expression
-priority 0
 visibility hide
 type psl .
 
@@ -2080,7 +1992,6 @@ track nhgriDnaseHs
 shortLabel NHGRI DNaseI-HS
 longLabel NHGRI DNaseI-Hypersensitive Sites
 group regulation
-priority 0
 visibility hide
 type bed 5 .
 useScore 1
@@ -2092,7 +2003,6 @@ shortLabel EIO/JCVI NAS
 longLabel Eur. Inst. Oncology/J. C. Venter Inst. Nuclease Accessible Sites
 group regulation
 visibility hide
-priority 0
 type bed 3 .
 
     track eioJcviNASNeg
@@ -2115,7 +2025,6 @@ track regPotential7X
 shortLabel 7X Reg Potential
 longLabel ESPERR Regulatory Potential (7 Species)
 group regulation
-priority 200
 visibility hide
 autoScale Off
 maxHeightPixels 128:36:16
@@ -2136,7 +2045,6 @@ track chainFr1ProtEx
 shortLabel chainFr1ProtEx
 longLabel chainFr1ProtEx
 group x
-priority 125
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -2148,7 +2056,6 @@ track webbNonExonic
 shortLabel NonExonic
 longLabel Putative Non-Exonic Regions Conserved with Chicken
 group x
-priority 130
 visibility hide
 color 0,60,120
 altColor 255,220,100
@@ -2158,7 +2065,6 @@ type bed 6 .
 track pHMM_5_WayTop1
 shortLabel 1% Conserved
 longLabel Top 1 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
-priority 160
 group x
 visibility hide
 type bed 5 .
@@ -2166,7 +2072,6 @@ type bed 5 .
 track pHMM_5_WayTop01
 shortLabel 0.1% Conserved
 longLabel Top 0.1 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
-priority 160
 group x
 visibility hide
 type bed 5 .
@@ -2249,7 +2154,6 @@ shortLabel tblastFr1
 longLabel Fugu (Aug. 2003/fr1) Best tblastn hit/hg16 knownGene Exon
 group x
 spectrum on
-priority 158
 visibility hide
 type psl xeno
 
@@ -2258,7 +2162,6 @@ shortLabel tblastGalGal2
 longLabel $o_Organism ($o_date) tblastn Hit/hg16 knownGene Exon
 group x
 spectrum on
-priority 158
 visibility hide
 type psl xeno
 otherDb galGal1
@@ -2267,7 +2170,6 @@ track unAnnotated
 shortLabel unAnnotated
 longLabel Regions Not Annotated as Genes/mRNAs/ESTs/CpG/Repeats/Gaps
 group x
-priority 161
 visibility hide
 color 20,0,50
 type bed 4 .
@@ -2276,7 +2178,6 @@ track fosmidDiscordant
 shortLabel Fosmid Discordants
 longLabel Fosmid Discordants
 group varRep
-priority 170
 visibility dense
 type bed 4 .
 
@@ -2284,7 +2185,6 @@ track evofold
 shortLabel EvoFold
 longLabel EvoFold Predictions of RNA Secondary Structure
 group genes
-priority 63
 visibility hide
 color 20,90,0
 type bed 6 +
@@ -2295,7 +2195,6 @@ release alpha
 shortLabel sno/miRNA Old
 longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase (Old Track)
 group genes
-priority 63.5
 visibility hide
 color 200,80,0
 type bed 8 +
@@ -2310,7 +2209,6 @@ track wgRna
 shortLabel sno/miRNA
 longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
 group genes
-priority 63.6
 visibility hide
 color 200,80,0
 type bed 8 +
@@ -2326,7 +2224,6 @@ track lrgTranscriptAli
 shortLabel LRG Transcripts
 longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
 group genes
-priority 41
 visibility hide
 type psl .
 cdsTable lrgCds
@@ -2348,7 +2245,6 @@ track affyHuEx1
 shortLabel Affy HuEx 1.0
 longLabel Affymetrix Human Exon 1.0 Probe Sets
 group expression
-priority 0
 visibility hide
 url http://www.affymetrix.com/analysis/netaffx/exon/probe_set.affx?pk=1:$$
 urlLabel Netaffx Link:
@@ -2359,7 +2255,6 @@ track affyHumanExon
 shortLabel Affy All Exon
 longLabel Affymetrix All Exon Chips
 group expression
-priority 0
 visibility hide
 type expRatio
 expScale 4.0
@@ -2382,7 +2277,6 @@ track sestanBrainAtlas
 shortLabel Sestan Brain
 longLabel Sestan Lab Human Brain Atlas Microarrays
 group expression
-priority 0
 visibility hide
 type expRatio
 expScale 3.0
@@ -2394,7 +2288,6 @@ track xTBAmaf
 shortLabel xTBAmaf
 longLabel xTBAmaf
 group x
-priority 165
 visibility hide
 type wigMaf
 speciesGroups primate placental mammal vertebrate
@@ -2414,7 +2307,6 @@ track brMaf
 shortLabel brMaf
 longLabel brMaf
 group x
-priority 165
 visibility hide
 type wigMaf
 #speciesOrder  chimp baboon marmoset galago rat mouse cow dog armadillo  platypus  chicken
@@ -2432,7 +2324,6 @@ compositeTrack on
 shortLabel SNP Recomb Rates
 longLabel Recombination Rates from SNP Genotyping
 group varRep
-priority 145.5
 visibility hide
 type bedGraph 4
 viewLimits 0:16
@@ -2466,7 +2357,6 @@ compositeTrack on
 shortLabel HapMap LD Phased
 longLabel HapMap Linkage Disequilibrium - Phase II - from phased genotypes
 group varRep
-priority 144.491
 visibility hide
 canPack off
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
@@ -2496,7 +2386,6 @@ compositeTrack on
 shortLabel SNP Recomb Hots
 longLabel Recombination Hotspots from SNP Genotyping
 group varRep
-priority 145.51
 visibility hide
 type bed 3 .
 origAssembly hg16
@@ -2526,7 +2415,6 @@ track syntenyCow
 shortLabel Cow Synteny
 longLabel Cow Synteny Using RH Mapping
 group compGeno
-priority 188.70
 visibility hide
 color 0,100,0
 altColor 255,240,200
@@ -2537,7 +2425,6 @@ shortLabel Syntenic Nets
 longLabel Syntenic Alignment Nets for Chimp, Macaque, Mouse, Rat, and Dog
 compositeTrack on
 group compGeno
-priority 300
 visibility hide
 spectrum on
 type netAlign
@@ -2646,7 +2533,6 @@ shortLabel Reciprocal Best Nets
 longLabel Reciprocal Best Alignment Nets
 compositeTrack on
 group compGeno
-priority 301
 visibility hide
 spectrum on
 type netAlign
@@ -2778,7 +2664,6 @@ compositeTrack on
 shortLabel Stanf ChIP
 longLabel Stanford ChIP-chip (GMO6990, HeLa, HepG2, Jurkat, K562 cells; GABP, SRF, TAF, NRST/REST ChIP)
 group regulation
-priority 0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -2869,20 +2754,16 @@ shortLabel RGD Human QTL
 
 track nibbImageProbes override
 group expression
-priority 0
 
 track allenBrainAli override
 group expression
-priority 0
 
 track eponine override
-priority 0
 
 track omimLocation
 shortLabel OMIM Pheno Loci
 longLabel OMIM Phenotypes - Gene Unknown
 group phenDis
-priority 1 
 visibility hide
 color 0, 80, 0
 type bed 4
@@ -2894,7 +2775,6 @@ track omimGene2
 shortLabel OMIM Genes
 longLabel OMIM Genes - Dark Green Are Disease-causing
 group phenDis
-priority 1 
 visibility hide
 color 0, 80, 0
 type bed 4
@@ -2906,7 +2786,6 @@ track omimAvSnp
 shortLabel OMIM AV SNPs
 longLabel OMIM Allelic Variant SNPs
 group phenDis
-priority 1 
 visibility hide
 color 0, 80, 0
 type bed 4
@@ -2918,7 +2797,6 @@ track cosmic
 shortLabel COSMIC
 longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
 group phenDis
-priority 1 
 visibility hide
 color 200, 0, 0
 type bed 4
@@ -2929,7 +2807,6 @@ track lovd
 shortLabel LOVD Variants
 longLabel Leiden Open Variation Database Public Variants
 group phenDis
-priority 1 
 visibility hide
 type bedDetail 6
 url http://varcache.lovd.nl/redirect/$$
@@ -2941,7 +2818,6 @@ track hgmd
 shortLabel HGMD Variants
 longLabel Human Gene Mutation Database Public Variants
 group phenDis
-priority 1 
 visibility hide
 type bigBed 8 .
 url http://www.hgmd.cf.ac.uk/ac/gene.php?gene=$P&accession=$p
@@ -2954,7 +2830,6 @@ track spMut
 shortLabel UniProt Variants
 longLabel UniProt/SwissProt Amino Acid Substitutions
 group phenDis
-priority 1 
 visibility hide
 type bigBed 12 +
 itemRgb on
@@ -2967,7 +2842,6 @@ compositeTrack on
 shortLabel ClinVar Variants
 longLabel ClinVar Variants
 group phenDis
-priority 1 
 visibility hide
 type bigBed 4 .
 urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
@@ -2992,7 +2866,6 @@ track spAnnot
 shortLabel UniProt Annotations
 longLabel UniProt/SwissProt Annotations
 group x
-priority 35
 visibility hide
 type bigBed 12 +
 itemRgb on
@@ -3475,7 +3348,6 @@ shortLabel FOX2 CLIP-seq
 longLabel FOX2 adaptor-trimmed CLIP-seq reads
 subGroup1	view Tracks reads=Reads density=Density clusters=Clusters
 group regulation
-priority 250
 visibility hide
 type bed 3 .
 dataVersion January 2009
@@ -3569,7 +3441,6 @@ track darned
 shortLabel Human RNA Editing
 longLabel Human RNA Editing from the DAtabase of RNa EDiting
 group rna
-priority 300
 visibility hide
 itemRgb on
 noScoreFilter .
@@ -3591,47 +3462,36 @@ priority 117
 track netCi2 override
 priority 117.1
 
-# expression and regulation automatically ordered
-track firstEF override
-priority 0
-
-track oreganno override
-priority 0
-
 # laminB1 supertrack
-
-        track laminB1Super
-        superTrack on
-        shortLabel NKI Nuc Lamina
-        longLabel NKI Nuclear Lamina Associated Domains (LaminB1 DamID)
-        group regulation
-        priority 300
-
-track laminB1Lads
-superTrack laminB1Super dense
-shortLabel  NKI LADs (Tig3)
-longLabel NKI LADs (Lamina Associated Domains, Tig3 cells)
+track laminB1Super
+superTrack on
+shortLabel NKI Nuc Lamina
+longLabel NKI Nuclear Lamina Associated Domains (LaminB1 DamID)
 group regulation
-priority 300
-visibility hide
-color 0,0,127
-type bed 3
 
-track laminB1
-superTrack laminB1Super dense
-shortLabel LaminB1 (Tig3)
-longLabel NKI LaminB1 DamID Map (log2-ratio scores, Tig3 cells)
-group regulation
-priority 300
-visibility hide
-color 0,0,127
-maxHeightPixels 100:40:11
-autoScale Off
-windowingFunction mean
-smoothingWindow 2
-type wig -6.602 5.678
-spanList 60
-viewLimits -2:2
+    track laminB1Lads
+    superTrack laminB1Super dense
+    shortLabel  NKI LADs (Tig3)
+    longLabel NKI LADs (Lamina Associated Domains, Tig3 cells)
+    group regulation
+    visibility hide
+    color 0,0,127
+    type bed 3
+
+    track laminB1
+    superTrack laminB1Super dense
+    shortLabel LaminB1 (Tig3)
+    longLabel NKI LaminB1 DamID Map (log2-ratio scores, Tig3 cells)
+    group regulation
+    visibility hide
+    color 0,0,127
+    maxHeightPixels 100:40:11
+    autoScale Off
+    windowingFunction mean
+    smoothingWindow 2
+    type wig -6.602 5.678
+    spanList 60
+    viewLimits -2:2
 
 track ucsfBrainMethyl
 compositeTrack on
@@ -3647,7 +3507,6 @@ sortOrder assayType=+ view=+
 dividers assayType
 #hierachy view COV=2 CG=3
 dragAndDrop subTracks
-priority 1999
 visibility hide
 #itemRgb on
 type bed 3
@@ -3760,15 +3619,11 @@ type bed 3
         autoScale on
         priority 10
 
-track cpgIslandExt override
-priority 0
-
 track genotypeArrays
 compositeTrack on
 shortLabel SNP Arrays
 longLabel SNP Genotyping Arrays
 group varRep
-priority 101
 visibility hide
 configureByPopup off
 type bed 4 .
@@ -3861,7 +3716,6 @@ track iscaRetrospective
 shortLabel ISCA Retro
 longLabel International Standards for Cytogenomic Arrays Consortium - Retrospective variants
 group varRep
-priority 110
 visibility hide
 type gvf
 noScoreFilter .
@@ -3871,7 +3725,6 @@ track coriellDelDup
 shortLabel Coriell CNVs
 longLabel Coriell Cell Line Copy Number Variants
 group phenDis
-priority 1
 visibility hide
 type bed 9 +
 itemRgb on
@@ -3886,7 +3739,6 @@ longLabel Coriell Cell Line Deletions and Duplications
 spectrum on
 origAssembly hg18
 group varRep
-priority 112
 visibility hide
 type bedDetail 7
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
@@ -3896,7 +3748,6 @@ compositeTrack on
 shortLabel ISCA
 longLabel International Standards for Cytogenomic Arrays Consortium
 group phenDis
-priority 1
 visibility hide
 subGroup1 view Views atot=Total cnv=CNVs
 subGroup2 phen Phenotype ben=Benign path=Pathogenic unk=Unknown
@@ -4099,7 +3950,6 @@ compositeTrack on
 shortLabel NumtS Sequence
 longLabel Human NumtS mitochondrial sequence
 group varRep
-priority 500.5
 visibility hide
 noInherit on
 type bed 3 .
@@ -4214,7 +4064,6 @@ track geneReviews
 shortLabel GeneReviews
 longLabel GeneReviews
 group  phenDis
-priority 1 
 visibility hide
 color 0, 80, 0
 type bed 4

@@ -2138,6 +2138,7 @@ strain Unknown
 subId 6571
 treatment None
 view Alignments
+objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27acIggrabAlnRep2
 objType file
@@ -2165,6 +2166,7 @@ strain Unknown
 subId 6571
 treatment None
 view Alignments
+objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27acIggrabPk
 objType table
@@ -2194,6 +2196,7 @@ subId 6571
 tableName wgEncodeSydhHistMelH3k27acIggrabPk
 treatment None
 view Peaks
+objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27acIggrabRawDataRep1
 objType file
@@ -2222,6 +2225,7 @@ strain Unknown
 subId 6571
 treatment None
 view RawData
+objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27acIggrabRawDataRep2
 objType file
@@ -2250,6 +2254,7 @@ strain Unknown
 subId 6571
 treatment None
 view RawData
+objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27acIggrabSig
 objType table
@@ -2279,6 +2284,7 @@ subId 6571
 tableName wgEncodeSydhHistMelH3k27acIggrabSig
 treatment None
 view Signal
+objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep1
 objType file
