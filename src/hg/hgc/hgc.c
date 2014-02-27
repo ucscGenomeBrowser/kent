@@ -4025,6 +4025,8 @@ else if (wordCount > 0)
     else if (sameString(type, "vcfTabix"))
 	doVcfTabixDetails(tdb, item);
 #endif // USE_TABIX
+    else if (sameString(type, "vcf"))
+	doVcfDetails(tdb, item);
     }
 if (imagePath)
     {
@@ -20277,6 +20279,8 @@ else if (sameWord(type, "bam"))
 else if (sameWord(type, "vcfTabix"))
     doVcfTabixDetails(ct->tdb, itemName);
 #endif//def USE_TABIX
+else if (sameWord(type, "vcf"))
+    doVcfDetails(ct->tdb, itemName);
 else if (sameWord(type, "makeItems"))
     doMakeItemsDetails(ct, fileName);	// fileName is first word, which is, go figure, id
 else if (ct->wiggle)

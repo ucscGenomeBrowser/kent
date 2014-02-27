@@ -12214,6 +12214,12 @@ else if (sameWord(type, "vcfTabix"))
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
+else if (sameWord(type, "vcf"))
+    {
+    vcfMethods(track);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
 else if (startsWith(type, "bedDetail"))
     {
     bedDetailMethods(track);

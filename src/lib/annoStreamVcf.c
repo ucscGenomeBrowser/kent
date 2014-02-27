@@ -329,7 +329,7 @@ struct vcfFile *vcff;
 if (isTabix)
     vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, maxErr, 0);
 else
-    vcff = vcfFileMayOpen(fileOrUrl, maxErr, 0, FALSE);
+    vcff = vcfFileMayOpen(fileOrUrl, NULL, 0, 0, maxErr, 0, FALSE);
 if (vcff == NULL)
     errAbort("annoStreamVcfNew: unable to open VCF: '%s'", fileOrUrl);
 struct annoStreamVcf *self;

@@ -426,6 +426,9 @@ void doBamDetails(struct trackDb *tdb, char *item);
 void doVcfTabixDetails(struct trackDb *tdb, char *item);
 /* Show details of an alignment from a VCF file compressed and indexed by tabix. */
 
+void doVcfDetails(struct trackDb *tdb, char *item);
+/* Show details of an alignment from an uncompressed VCF file. */
+
 void doMakeItemsDetails(struct customTrack *ct, char *itemIdString);
 /* Show details of a makeItems item. */
 

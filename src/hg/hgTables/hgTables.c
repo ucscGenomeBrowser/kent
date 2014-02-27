@@ -622,7 +622,7 @@ if (startsWithWord("bigBed", tdb->type))
 else if (startsWithWord("bam", tdb->type))
     hti = bamToHti(tdb->table);
 else if (startsWithWord("vcfTabix", tdb->type))
-    hti = vcfToHti(tdb->table);
+    hti = vcfToHti(tdb->table, TRUE);
 else
     {
     AllocVar(hti);
@@ -637,6 +637,7 @@ struct hTableInfo *maybeGetHti(char *db, char *table, struct sqlConnection *conn
 /* Return primary table info, but don't abort if table not there. Conn should be open to db. */
 {
 struct hTableInfo *hti = NULL;
+boolean isTabix = FALSE;
 
 if (isHubTrack(table))
     {
@@ -647,8 +648,11 @@ else if (isBigBed(database, table, curTrack, ctLookupName))
     hti = bigBedToHti(table, conn);
 else if (isBamTable(table))
     hti = bamToHti(table);
-else if (isVcfTable(table))
-    hti = vcfToHti(table);
+else if (isVcfTable(table, &isTabix))
+    {
+    boolean isTabix = trackIsType(database, table, curTrack, "vcfTabix", ctLookupName);
+    hti = vcfToHti(table, isTabix);
+    }
 else if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
@@ -1392,12 +1396,13 @@ hashFree(&idHash);
 void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
+boolean isTabix = FALSE;
 if (isBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
 else if (isBamTable(table))
     bamTabOut(db, table, conn, fields, f);
-else if (isVcfTable(table))
-    vcfTabOut(db, table, conn, fields, f);
+else if (isVcfTable(table, &isTabix))
+    vcfTabOut(db, table, conn, fields, f, isTabix);
 else if (isCustomTrack(table))
     {
     doTabOutCustomTracks(db, table, conn, fields, f);
@@ -1423,7 +1428,7 @@ else if (isHalTable(table))
     fieldList = getBedFields(6);
 else if (isBamTable(table))
     fieldList = bamGetFields(table);
-else if (isVcfTable(table))
+else if (isVcfTable(table, NULL))
     fieldList = vcfGetFields(table);
 else if (isCustomTrack(table))
     {
