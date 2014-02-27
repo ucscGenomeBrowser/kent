@@ -794,7 +794,7 @@ if (isPositional)
 	hPrintf(" ");
 	cgiMakeButton(hgtaDoClearIntersect, "clear");
 	}
-    else
+    else if (canIntersect(database, curTable))
         {
 	hPrintf("<TR><TD><B>intersection:</B>\n");
 	cgiMakeButton(hgtaDoIntersectPage, "create");
