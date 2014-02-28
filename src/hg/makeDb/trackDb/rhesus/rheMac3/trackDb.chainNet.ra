@@ -1,3 +1,12 @@
+track chainNetHg19 override
+shortLabel $o_db Chain/Net
+
+track chainNetMm9 override
+shortLabel $o_db Chain/Net
+
+track chainNetRn4 override
+shortLabel $o_db Chain/Net
+
 track chainNetGorGor3 override
 priority 230.3
 chainMinScore 3000
