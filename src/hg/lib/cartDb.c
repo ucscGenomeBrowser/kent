@@ -23,12 +23,17 @@
 #include "hgConfig.h"
 #include "base64.h"
 #include "cartDb.h"
+#include "cart.h"
+
+extern DbConnector cartDefaultConnector;
+extern DbDisconnect cartDefaultDisconnector;
+
+static boolean userDbInitialized = FALSE;
+static boolean sessionDbInitialized = FALSE;
 
 boolean cartDbHasSessionKey(struct sqlConnection *conn, char *table)
 /* Check to see if the table has the sessionKey field */
 {
-static boolean userDbInitialized = FALSE;
-static boolean sessionDbInitialized = FALSE;
 static boolean userDbHasSessionKey = FALSE;
 static boolean sessionDbHasSessionKey = FALSE;
 if (sameString(table, "userDb"))
@@ -70,11 +75,30 @@ if (!initialized)
     initialized = TRUE;
     char *sessionKey = cfgOption2("browser", "sessionKey");
     if (!sessionKey)
-	sessionKey = "off";  // DEFAULT
+	sessionKey = "off";  // DEFAULT but this might change to another value
     if (sameString(sessionKey, "on"))
+	{
 	useSessionKey = TRUE;
+	struct sqlConnection *conn = cartDefaultConnector();
+	boolean userDbHasSessionKey = cartDbHasSessionKey(conn, "userDb");
+	boolean sessionDbHasSessionKey = cartDbHasSessionKey(conn, "sessionDb");
+	if ( ! (userDbHasSessionKey && sessionDbHasSessionKey) )
+	    {
+    	    //errAbort("brower.sessionKey=on but userDb and sesionDb are missing the sessionKey field.");
+	    // AUTO-UPGRADE tables to add missing sessionKey field here.
+	    if (!userDbHasSessionKey)
+		sqlUpdate(conn, "NOSQLINJ alter table userDb add column sessionKey varchar(255) NOT NULL default ''");
+    	    if (!sessionDbHasSessionKey) 
+    		sqlUpdate(conn, "NOSQLINJ alter table sessionDb add column sessionKey varchar(255) NOT NULL default ''");
+	    userDbInitialized = FALSE;
+	    sessionDbInitialized = FALSE;
+	    }
+	cartDefaultDisconnector(&conn);
+	}
     else if (sameString(sessionKey, "off"))
+	{
 	useSessionKey = FALSE;
+	}
     else if (sameString(sessionKey, "autodetect"))
 	{
 	errAbort("brower.sessionKey=autodetect has not implemented yet."); // TODO
@@ -95,7 +119,7 @@ carefulClose(&f);
 char * result = base64Encode(binaryString, numBytes); // converts 3 binary bytes into 4 printable characters
 int len = strlen(result);
 memSwapChar(result, len, '+', '-'); // replace + and / with characters that are URL-friendly.
-memSwapChar(result, len, '/', '@');
+memSwapChar(result, len, '/', '*');
 freeMem(binaryString);
 return result;
 }
