@@ -515,13 +515,11 @@ def printTrackInfo(trackName, trackTables, trackLabels, localSizes, trackChildre
         (remoteTableSize, gbdbSize, localTableSize, localGbdbSize))
 
     #print "remote, local", remoteSize, localSize, "<br>"
+    status = ""
     if remoteSize!=0 and remoteSize<=localSize:
-        #status = ", fully downloaded"
         addHtml = 'disabled="disabled"'
     elif localTableSize != 0:
         status = ", partially downloaded"
-    else:
-        status = ""
 
     indentStr = ""
     if indent!=0:
