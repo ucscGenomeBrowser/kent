@@ -5,5 +5,5 @@ CREATE TABLE spSecondaryID (
   KEY displayID (displayID),
   KEY accession (accession),
   KEY accession2 (accession2)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

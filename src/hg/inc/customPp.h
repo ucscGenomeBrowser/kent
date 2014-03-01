@@ -47,5 +47,8 @@ struct slName *customPpTakeBrowserLines(struct customPp *cpp);
 struct customPp *customDocPpNew(struct lineFile *lf);
 /* Return customPp for doc file that leaves browser lines */
 
+char *customPpFileName(struct customPp *cpp);
+/* Return the name of the current file being parsed (top of fileStack).  Free when done. */
+
 #endif /* CUSTOMPP_H */
 

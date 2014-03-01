@@ -134,3 +134,12 @@ struct slName *browserLines = cpp->browserLines;
 cpp->browserLines = NULL;
 return browserLines;
 }
+
+char *customPpFileName(struct customPp *cpp)
+/* Return the name of the current file being parsed (top of fileStack), or NULL
+ * if fileStack is NULL.  Free when done. */
+{
+if (cpp->fileStack == NULL)
+    return NULL;
+return cloneString(cpp->fileStack->fileName);
+}

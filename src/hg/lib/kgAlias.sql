@@ -9,4 +9,4 @@ CREATE TABLE kgAlias (
   alias varchar(80) default NULL,		# a gene alias
   KEY kgID (kgID),
   KEY alias (alias)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

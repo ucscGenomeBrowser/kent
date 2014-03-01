@@ -326,6 +326,9 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 
 /* --------- Functions related to intersecting. --------------- */
 
+boolean canIntersect(char *db, char *table);
+/* Return true if table supports intersection, i.e. it exists and is positional. */
+
 boolean anyIntersection();
 /* Return TRUE if there's an intersection to do. */
 

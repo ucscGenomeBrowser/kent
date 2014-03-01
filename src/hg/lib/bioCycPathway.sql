@@ -5,5 +5,5 @@ CREATE TABLE bioCycPathway (
   KEY kgID (kgID),
   KEY geneID (geneID),
   KEY mapID (mapID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

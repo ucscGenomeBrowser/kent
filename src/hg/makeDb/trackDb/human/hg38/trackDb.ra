@@ -93,15 +93,12 @@ track centromeres
 shortLabel Centromeres
 longLabel Centromere locations
 group map
-visibility pack
-priority 2
+visibility hide
 type bed 4 .
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 color 255,0,0
 url http://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel NCBI accession record:
-
-include altSequences.ra
 
 track cpgIslandSuper
 superTrack on
@@ -170,3 +167,58 @@ sGroup_mammal rheMac3 mm10 canFam3
 treeImage phylo/hg38_4way.gif
 
 include defaultPriority.ra
+
+track altSequence
+superTrack on
+shortLabel Alt Map
+longLabel GRCh38 Haplotype to Reference sequence mapping correspondence
+visibility hide
+otherDb hg38
+group map
+
+    track altLocations
+    superTrack altSequence pack
+    type bed 4
+    color 32,32,190
+    shortLabel Haplotypes
+    longLabel GRCh38 Haplotype to Reference sequence mapping correspondence
+    html altSequence
+    url /cgi-bin/hgTracks?db=hg38&position=$$
+    urlLabel Corresponding position:
+
+    track altSeqLiftOverPsl
+    superTrack altSequence pack
+    shortLabel Alt Map
+    longLabel GRCh38 Alignments to the alternate sequences/haplotypes
+    type psl
+    html altSequence
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsMaxZoom 10000.0
+    showCdsAllScales .
+    baseColorDefault diffBases
+    baseColorUseSequence extFile seqNcbiAltSequence extNcbiAltSequence
+
+track altSequenceExp
+superTrack on
+shortLabel Exp Alt Map
+longLabel GRCh38 Haplotype to Reference sequence mapping correspondence
+visibility hide
+group x
+
+    track ncbiAltMappingsChain
+    superTrack altSequenceExp pack
+    shortLabel Alt Map Chain
+    longLabel Chain Mappings to the alternate sequences/haplotypes
+    type chain hg38
+    spectrum on
+    html altSequence
+
+    track ncbiAltMappingsMaf
+    superTrack altSequenceExp pack
+    shortLabel Alt Map Maf
+    longLabel Maf Mappings to the alternate sequences/haplotypes
+    type maf
+    html altSequence
