@@ -576,7 +576,7 @@ def htmlDbSelector(defaultDb):
         conn = sqlConnect("hgcentral", "public")
         cur = conn.cursor()
 
-        cur.execute("SELECT organism, description, name from dbDb order by name")
+        cur.execute("SELECT organism, description, name from dbDb WHERE active = 1 order by name")
         for row in cur.fetchall():
             dbList.append((row[0], row[1], row[2]))
     else:
