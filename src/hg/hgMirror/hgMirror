@@ -458,6 +458,7 @@ def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableTo
 
     # add the db twobit file and the trackDb index
     gbdbListFh.write("%s.2bit\n" % db)
+    gbdbListFh.write("html/description.html\n")
     gbdbListFh.write("trackDb.ix\n")
     gbdbListFh.write("trackDb.ixx\n")
 
