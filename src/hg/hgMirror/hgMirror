@@ -516,7 +516,8 @@ def printTrackInfo(trackName, trackTables, trackLabels, localSizes, trackChildre
 
     #print "remote, local", remoteSize, localSize, "<br>"
     if remoteSize!=0 and remoteSize<=localSize:
-        status = ", fully downloaded"
+        #status = ", fully downloaded"
+        addHtml = 'disabled="disabled"'
     elif localTableSize != 0:
         status = ", partially downloaded"
     else:
@@ -1147,14 +1148,15 @@ def getDb(args):
     """ get Db from either CGI args or hgcentral, makes sure that DB actually exists """
     if "db" in args:
         db = args.getvalue("db")
-        try:
-            conn  = sqlConnect(db, "public")
-        except _mysql_exceptions.OperationalError:
-            print("<small>error: DB %s does not exist on public sql server, using hg19</small>" % db)
-            db = "hg19"
-    else:
         if mysqlDbLoaded:
             import _mysql_exceptions
+            try:
+                conn  = sqlConnect(db, "public")
+            except _mysql_exceptions.OperationalError:
+                print("<small>error: DB %s does not exist on public sql server, using hg19</small>" % db)
+                db = "hg19"
+    else:
+        if mysqlDbLoaded:
             conn = sqlConnect("hgcentral", "public")
             cur = conn.cursor()
             # get default db for human
