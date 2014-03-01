@@ -375,6 +375,7 @@ def findTopParent(trackParents, trackName):
 def makeTrackHierarchy(trackParents):
     """ given a dict with track->parent return dict with parent->list of child tracks.
     """
+    debug("hierarchy")
     trackChildren = dict()
     for track, parent in trackParents.iteritems():
         if parent not in trackChildren:
@@ -516,8 +517,11 @@ def printTrackInfo(trackName, trackTables, trackLabels, localSizes, trackChildre
 
     #print "remote, local", remoteSize, localSize, "<br>"
     status = ""
+    isGrey = False
     if remoteSize!=0 and remoteSize<=localSize:
         addHtml = 'disabled="disabled"'
+        isGrey = True
+        status = ", downloaded"
     elif localTableSize != 0:
         status = ", partially downloaded"
 
@@ -534,8 +538,11 @@ def printTrackInfo(trackName, trackTables, trackLabels, localSizes, trackChildre
     debug("tables: "+str(trackTableNames))
     debug("gbdbFiles: "+str(gbdbFnames))
 
-    print('%(indentStr)s<input type="checkbox" %(addHtml)s name="%(trackName)s" id="%(trackName)s">%(label)s '
-        '(<span style="color:grey">%(trackName)s</span>): %(tableStr)s, %(sizeStr)s%(gbdbStr)s%(status)s %(addNote)s<br>' % locals())
+    outStr = '%(indentStr)s<input type="checkbox" %(addHtml)s name="%(trackName)s" id="%(trackName)s">%(label)s ' \
+        '(<span>%(trackName)s</span>): %(tableStr)s, %(sizeStr)s%(gbdbStr)s%(status)s %(addNote)s<br>' % locals()
+    if isGrey:
+        outStr = '<span style="color:#C0C0C0">'+outStr+'</span>'
+    print outStr
 
     indent += 1
     if showSubtracks:
@@ -661,6 +668,7 @@ def linkTrackToGbdb(fnames, db, tableNames):
     fnames is a list of gbdb filenames that we try to assign somehow.
     """
 
+    debug("linking trackDb")
     # download a list of trackname -> bigFile name from hgwdev
     # cannot do this on the fly
     lines = downloadCache(BIGFILETABLEURL+db+"/bigFiles.tab.gz", db+"_bigFiles.tab")
@@ -751,6 +759,7 @@ def linkTrackToGbdb(fnames, db, tableNames):
 
 def getRsyncSizes(dataType, db):
     """
+    debug("rsync sizes")
     if dataType is "mysql: return dict with tableName:size for given db (includes indexes, frm + data)
     if dataType is "gbdb": return dict with filaname:size for given db
     """
@@ -1171,6 +1180,7 @@ def htmlMiddle(args):
 
     if not "jobId" in args.keys():
         # parse trackDb
+        debug("parsing")
         groupList = loadGroups(db)
         trackLabels, trackTables, trackParents, groupToTopTracks, noTableTracks, trackVis, superTracks = parseTrackDb(db)
         tableSizes = getRsyncSizes("mysql", db)
