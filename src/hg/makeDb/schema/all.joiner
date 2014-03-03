@@ -3879,6 +3879,11 @@ identifier hg19ContigDiff
     hg19.gold.frag dupeOk
     hg19.hg19ContigDiff.name
 
+identifier hg38ContigDiff
+"contig difference track"
+    hg19,hg38.gold.frag dupeOk
+    hg19,hg38.hg38ContigDiff.name
+
 # lsSnpPdb tables
 identifier lsSnpPdbProtId
 "lsSnpPdb table protId field"
