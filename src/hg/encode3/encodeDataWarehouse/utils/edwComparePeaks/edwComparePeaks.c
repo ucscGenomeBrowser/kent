@@ -96,6 +96,10 @@ long long intersectionSize = genomeRangeTreeIntersectSize(aGrt, bGrt);
 fprintf(f, "intersectionSize %lld\n", intersectionSize);
 long long unionSize = aBaseCount + bBaseCount - intersectionSize;
 fprintf(f, "unionSize = %lld\n", unionSize);
+double iuRatio = 0;
+if (unionSize > 0)
+     iuRatio = (double)intersectionSize/(double)unionSize;
+fprintf(f, "iuRatio %g\n", iuRatio);
 carefulClose(&f);
 }
 
