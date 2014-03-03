@@ -169,7 +169,7 @@ for (ii = 0;  ii < pred->exonCount;  ii++)
 		    {
 		    uint nextExonEnd = pred->exonEnds[ii+1];
 		    if (nextExonEnd > pred->cdsStart)
-			txc.startInCds = cdsOffset;
+			txc.startInCds = cdsOffset + exonCdsSize;
 		    else
 			txc.startInCds = 0;
 		    }
@@ -585,7 +585,9 @@ else
 		{
 		if (newAa[newAaSize-1] != 'Z')
 		    errAbort("gpFx: new protein is smaller but last base in new sequence "
-			     "is '%c' not 'Z'", newAa[newAaSize-1]);
+			     "is '%c' not 'Z'.\n"
+			     "oldAa (%daa): %s\nnewAa (%daa): %s\n"
+			     , newAa[newAaSize-1], oldAaSize, oldAa, newAaSize, newAa);
 		effect->soNumber = frameshift_variant;
 		}
 	    else
