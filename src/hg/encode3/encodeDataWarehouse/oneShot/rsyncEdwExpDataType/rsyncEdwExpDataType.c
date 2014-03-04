@@ -52,8 +52,11 @@ char *getTextViaHttps(char *url, char *userId, char *password)
 /* getJsonViaHttps - Fetch text from url that is https password protected.  This
  * will return a NULL rather than aborting if URL not found. */
 {
+verbose(2, "getTextViaHttps(%s %s %s)\n", url, userId, password);
 char fullUrl[1024];
-safef(fullUrl, sizeof(fullUrl), "https://%s:%s@%s", userId, password, url);
+// certificate expired safef(fullUrl, sizeof(fullUrl), "https://%s:%s@%s\n", userId, password, url);  
+safef(fullUrl, sizeof(fullUrl), "http://%s:%s@%s\n", userId, password, url);
+verbose(2, "full url:\n %s", fullUrl);
 struct htmlPage *page = htmlPageGet(fullUrl);
 if (page == NULL)
     return NULL;
@@ -190,7 +193,6 @@ if (exp)
 	if (controlExperiment != NULL)
 	    {
 	    char *target = jsonOptionalStringField(control, "target", NULL);
-	    if (target != NULL) uglyf("target %s %s\n", target, controlExperiment);
 	    if (target != NULL && sameWord(target, "Input"))
 		 freez(&result);
 	    if (result == NULL)
@@ -286,8 +288,14 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	    if (oldExp != NULL)
 		{
 		if (!sameString(oldExp->dataType, dataType))
-		    errAbort("Change in data type for %s %s vs %s\n", 
+		    {
+		    warn("Change in data type for %s %s vs %s", 
 			    acc, oldExp->dataType, dataType);
+		    if (stringIn("RNA", oldExp->dataType) && stringIn("RNA", dataType))
+		        warn("The RNA group is always changing it's mind, and no wonder!");
+		    else
+		        errAbort("Oh no,  data type changed we're going to have to figure out what to do!");
+		    }
 		}
 
 	    /* In the case of ChIP-seq, attemt to find matching control. */
