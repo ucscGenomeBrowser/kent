@@ -79,5 +79,8 @@ unsigned eapCurrentStepVersion(struct sqlConnection *conn, char *stepName);
  * a new version and returns it.  In case of no change it just returns id
  * of currently tracked version. */
 
+enum eapRedoPriority {erpNoRedo=-1, erpUnknown=0, eapUpgrade=1, eapRedo=2};
+/* Definitions for what fits in eapSwVersion.redoPriority field */
+
 #endif /* EAPLIB_H */
 
