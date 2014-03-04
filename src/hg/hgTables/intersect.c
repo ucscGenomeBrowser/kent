@@ -37,7 +37,7 @@ static char *nextVars[] = {hgtaNextIntersectGroup, hgtaNextIntersectTrack,
  * libified, probably in cart.h. */
 void removeCartVars(struct cart *cart, char **vars, int varCount);
 
-static boolean canIntersect(char *db, char *table)
+boolean canIntersect(char *db, char *table)
 /* Return true if table exists and is positional. */
 {
 if (isCustomTrack(table) && ctLookupName(table) != NULL)
@@ -47,6 +47,8 @@ if (isBamTable(table))
 if (isBigWigTable(table))
     return TRUE;
 if (isBigBed(database, table, curTrack, ctLookupName))
+    return TRUE;
+if (isVcfTable(table, NULL))
     return TRUE;
 if (isHubTrack(table))
     return TRUE;

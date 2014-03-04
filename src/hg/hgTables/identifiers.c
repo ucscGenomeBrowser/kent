@@ -64,6 +64,7 @@ static struct slName *getExamples(char *db, struct sqlConnection *conn,
 				  char *table, char *field, int count)
 /* Return a list of several example values of table.field. */
 {
+boolean isTabix = FALSE;
 if (isBamTable(table))
     {
     assert(sameString(field, "qName"));
@@ -74,10 +75,10 @@ else if (isBigBed(db, table, curTrack, ctLookupName))
     assert(sameString(field, "name"));
     return randomBigBedIds(table, conn, count);
     }
-else if (isVcfTable(table))
+else if (isVcfTable(table, &isTabix))
     {
     assert(sameString(field, "id"));
-    return randomVcfIds(table, conn, count);
+    return randomVcfIds(table, conn, count, isTabix);
     }
 else
     {
@@ -301,7 +302,7 @@ static struct hash *getAllPossibleIds(struct sqlConnection *conn,
  * make a hash of all identifiers in curTable (and alias tables if specified)
  * so that we can check the validity of pasted/uploaded identifiers. */
 {
-if (isCustomTrack(curTable) || isBamTable(curTable) || isVcfTable(curTable) ||
+if (isCustomTrack(curTable) || isBamTable(curTable) || isVcfTable(curTable, NULL) ||
     isBigBed(database, curTable, curTrack, ctLookupName))
     return NULL;
 

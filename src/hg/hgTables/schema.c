@@ -622,7 +622,7 @@ if (sameString(type, "bigBed"))
 else if (sameString(type, "bam"))
     showSchemaBam(table, tdb);
 else if (sameString(type, "vcfTabix"))
-    showSchemaVcf(table, tdb);
+    showSchemaVcf(table, tdb, TRUE);
 else
     {
     hPrintf("Binary file of type %s stored at %s<BR>\n",
@@ -642,14 +642,15 @@ printTrackHtml(tdb);
 static void showSchema(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
+boolean isTabix = FALSE;
 if (isHubTrack(table))
     showSchemaHub(db, table);
 else if (isBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table, tdb);
 else if (isBamTable(table))
     showSchemaBam(table, tdb);
-else if (isVcfTable(table))
-    showSchemaVcf(table, tdb);
+else if (isVcfTable(table, &isTabix))
+    showSchemaVcf(table, tdb, isTabix);
 else if (isCustomTrack(table))
     showSchemaCt(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))

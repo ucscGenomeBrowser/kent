@@ -841,6 +841,9 @@ void bamMethods(struct track *track);
 void vcfTabixMethods(struct track *track);
 /* Methods for Variant Call Format compressed & indexed by tabix. */
 
+void vcfMethods(struct track *track);
+/* Methods for Variant Call Format. */
+
 void altGraphXMethods(struct track *tg);
 /* setup special methods for altGraphX track */
 

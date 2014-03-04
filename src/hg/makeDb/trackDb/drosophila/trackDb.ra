@@ -1585,7 +1585,6 @@ searchTable flyBaseGene
 searchMethod exact
 searchType genePred
 termRegex FBgn[0-9]{7}[0-9]*
-shortCircuit 1
 xrefTable flyBase2004Xref
 xrefQuery select name,fbgn from %s where fbgn like '%s'
 searchDescription FlyBase FBgn ID of FlyBase Gene
@@ -1596,7 +1595,6 @@ searchTable flyBaseGene
 searchMethod exact
 searchType genePred
 termRegex FBtr[0-9]{7}[0-9]*
-shortCircuit 1
 xrefTable flyBase2004Xref
 xrefQuery select name,fbtr from %s where fbtr like '%s'
 searchDescription FlyBase FBtr ID of FlyBase Gene
@@ -1607,7 +1605,6 @@ searchTable flyBaseGene
 searchMethod exact
 searchType genePred
 termRegex FBpp[0-9]{7}[0-9]*
-shortCircuit 1
 xrefTable flyBase2004Xref
 xrefQuery select name,fbpp from %s where fbpp like '%s'
 searchDescription FlyBase FBpp ID of FlyBase Gene
@@ -1618,7 +1615,6 @@ searchTable flyBaseGene
 searchMethod exact
 searchType genePred
 termRegex FBan[0-9]{7}[0-9]*
-shortCircuit 1
 xrefTable flyBase2004Xref
 xrefQuery select name,fban from %s where fban like '%s'
 searchDescription FlyBase FBan ID of FlyBase Gene

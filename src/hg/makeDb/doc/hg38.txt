@@ -3003,7 +3003,9 @@ sort -u temp.lift | sort -k4,4 -k1,1n > hg38.haplotypes.lift
       | pslRecalcMatch stdin ../../../hg38.2bit ../../../hg38.2bit \
         hg38.referenceTarget.psl
 
-    hgLoadPsl hg38 -table=ncbiAltMappings hg38.referenceTarget.psl
+    # the table name altSeqLiftOverPsl is recognized in hgc to allow display
+    # of the details of the alignments
+    hgLoadPsl hg38 -table=altSeqLiftOverPsl hg38.referenceTarget.psl
 
 #########################################################################
 ## alternate sequence alignments EXPERIMENT (DONE - 2014-01-17 - Hiram)
@@ -3165,3 +3167,117 @@ hgLoadBed -tab hg38 tRNAs hg38-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.s
     # 28807039 bases of 3049335806 (0.945%) in intersection
     nice -n +19 featureBits hg19 exoniphy
     # 28661160 bases of 2897316137 (0.989%) in intersection
+
+#########################################################################
+# LASTZ Rat Rn5 (DONE - 2014-02-27 - Hiram)
+    #	establish a screen to control this job
+    screen -S hg38Rn5
+    mkdir /hive/data/genomes/hg38/bed/lastzRn5.2014-02-27
+    cd /hive/data/genomes/hg38/bed/lastzRn5.2014-02-27
+
+    # XXX don't forget to specify the BLASTZ binary:
+    cat << '_EOF_' > DEF
+# human vs rat
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn5
+SEQ2_DIR=/hive/data/genomes/rn5/rn5.2bit
+SEQ2_LEN=/hive/data/genomes/rn5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzRn5.2014-02-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+XXX - running - Thu Feb 27 16:13:21 PST 2014
+
+    #   real    658m53.984s
+    cat fb.hg38.chainRn5Link.txt
+    #   917356917 bases of 2897316137 (31.662%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/rn5/bed/blastz.hg38.swap
+    cd /hive/data/genomes/rn5/bed/blastz.hg38.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg38/bed/lastzRn5.2014-02-277/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    66m53.095s
+    cat fb.rn5.chainHg38Link.txt
+    #	933922552 bases of 2572853723 (36.299%) in intersection
+
+##############################################################################
+# LASTZ Rat Rn4 (DONE - 2014-02-27 - Hiram)
+    #	establish a screen to control this job
+    screen -S hg38Rn4
+    mkdir /hive/data/genomes/hg38/bed/lastzRn4.2014-02-27
+    cd /hive/data/genomes/hg38/bed/lastzRn4.2014-02-27
+
+    # XXX don't forget to specify the BLASTZ binary:
+    cat << '_EOF_' > DEF
+# human vs rat
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn4
+SEQ2_DIR=/hive/data/genomes/rn4/rn4.2bit
+SEQ2_LEN=/hive/data/genomes/rn4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzRn4.2014-02-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+XXX - running - Thu Feb 27 16:13:21 PST 2014
+
+    #   real    658m53.984s
+    cat fb.hg38.chainRn4Link.txt
+    #   917356917 bases of 2897316137 (31.662%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/rn4/bed/blastz.hg38.swap
+    cd /hive/data/genomes/rn4/bed/blastz.hg38.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg38/bed/lastzRn4.2014-02-277/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    66m53.095s
+    cat fb.rn4.chainHg38Link.txt
+    #	933922552 bases of 2572853723 (36.299%) in intersection
+
+##############################################################################
