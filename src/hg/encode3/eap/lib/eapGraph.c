@@ -133,6 +133,20 @@ struct edwFile *eapGraphFileFromId(struct eapGraph *eg, unsigned fileId)
 return intValTreeMustFind(eg->fileById, fileId);
 }
 
+struct slRef *eapGraphRunInputs(struct eapGraph *eg, unsigned runId)
+/* Fetch all inputs to this run.  Vals on slRef are eapInputs. 
+ * Do not free this list, it is owned by graph. */
+{
+return longListFindVal(eg->inputByRun, runId);
+}
+
+struct slRef *eapGraphRunOutputs(struct eapGraph *eg, unsigned runId)
+/* Fetch all outputs to this run.  Vals on slRef are eapOutputs.   
+ * Do not free this list, it is owned by graph. */
+{
+return longListFindVal(eg->outputByRun, runId);
+}
+
 struct slRef *eapGraphParentList(struct eapGraph *eg, unsigned fileId)
 /* Return list of all parents, possibly NULL.  List is in form of slRefs with eapInput vals. 
  * Do not free this list, it is owned by graph. */
@@ -348,5 +362,52 @@ for (ref = refList; ref != NULL; ref = ref->next)
     }
 slFreeList(&refList);  // This little bit of cleanup not needed for ancestors
 }
+
+void rEapGraphAllAncestors(struct eapGraph *eg, unsigned fileId, struct slRef **retList)
+/* Recursively add all ancestors. */
+{
+struct slRef *parent, *parentList = eapGraphParentList(eg, fileId);
+for (parent = parentList; parent != NULL; parent = parent->next)
+    {
+    struct eapOutput *out = parent->val;
+    refAdd(retList, out);
+    rEapGraphAllAncestors(eg, out->fileId, retList);
+    }
+}
+
+struct slRef *eapGraphAllAncestors(struct eapGraph *eg, unsigned fileId)
+/* Return list of all ancestors.  Values of slRef are eapOutputs from which you can
+ * harvest either ancestral fileIds or analysis runIds. */
+{
+/* In implementation this is just a minor wrapper around recursive routine. */
+struct slRef *list = NULL;
+rEapGraphAllAncestors(eg, fileId, &list);
+return list;
+}
+
+
+void rEapGraphAllDescendants(struct eapGraph *eg, unsigned fileId, struct slRef **retList)
+/* Recursively add all descendants. */
+{
+struct slRef *child, *childList = eapGraphChildList(eg, fileId);
+for (child = childList; child != NULL; child = child->next)
+    {
+    struct eapInput *in = child->val;
+    refAdd(retList, in);
+    rEapGraphAllDescendants(eg, in->fileId, retList);
+    }
+slFreeList(&childList);
+}
+
+struct slRef *eapGraphAllDescendants(struct eapGraph *eg, unsigned fileId)
+/* Return list of all ancestors.  Values of slRef are eapOutputs from which you can
+ * harvest either ancestral fileIds or analysis runIds. */
+{
+/* In implementation this is just a minor wrapper around recursive routine. */
+struct slRef *list = NULL;
+rEapGraphAllDescendants(eg, fileId, &list);
+return list;
+}
+
 
 

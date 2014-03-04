@@ -1,6 +1,9 @@
 /* eapGraph - stuff to help traverse the graph defined by the eapRun, eapInput, and eapOutput
  * tables that define what files were used to produce what other files */
 
+#ifndef EAPGRAPH_H
+#define EAPGRAPH_H
+
 struct eapGraph
 /* This is a complete graph */
    {
@@ -60,6 +63,17 @@ struct slRef *eapGraphParentList(struct eapGraph *eg, unsigned fileId);
  * Do not free this list, it is owned by graph. */
 
 
+/* Routines to fetch inputs and outputs of run */
+
+struct slRef *eapGraphRunInputs(struct eapGraph *eg, unsigned runId);
+/* Fetch all inputs to this run.  Vals on slRef are eapInputs. 
+ * Do not free this list, it is owned by graph. */
+
+struct slRef *eapGraphRunOutputs(struct eapGraph *eg, unsigned runId);
+/* Fetch all outputs to this run.  Vals on slRef are eapOutputs.   
+ * Do not free this list, it is owned by graph. */
+
+
 /* Routines to fetch more general ancestors */
 
 unsigned eapGraphAnyAncestorOfFormat(struct eapGraph *eg, unsigned fileId, char *format);
@@ -98,4 +112,14 @@ void eapGraphDescendantsOfFormat(struct eapGraph *eg, unsigned fileId,
  * generations back,   otherwise 1 will stop at children, 2 at grandchildren, etc. The vals
  * on the returned list are eapOutputs. This returned value should be slFreeList()'d when
  * done. */
+
+struct slRef *eapGraphAllAncestors(struct eapGraph *eg, unsigned fileId);
+/* Return list of all ancestors.  Values of slRef are eapOutputs from which you can
+ * harvest either ancestral fileIds or analysis runIds. */
+
+struct slRef *eapGraphAllDescendants(struct eapGraph *eg, unsigned fileId);
+/* Return list of all ancestors.  Values of slRef are eapInputs from which you can
+ * harvest either ancestral fileIds or analysis runIds. */
+
+#endif /* EAPGRAPH_H */
 
