@@ -15,6 +15,7 @@
 
 boolean noClean = FALSE;
 boolean keepFailing = FALSE;
+boolean maxCount = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -28,6 +29,7 @@ errAbort(
   "options:\n"
   "   -noClean if set then don't clean up temp dirs."
   "   -keepFailing - if set then don't always abort at first error\n"
+  "   -maxCount=N - maximum number to finish\n"
   );
 }
 
@@ -35,8 +37,29 @@ errAbort(
 static struct optionSpec options[] = {
    {"noClean", OPTION_BOOLEAN},
    {"keepFailing", OPTION_BOOLEAN},
+   {"maxCount", OPTION_INT},
    {NULL, 0},
 };
+
+void markRunAsFailed(struct sqlConnection *conn, struct eapRun *run)
+/* Mark that the run failed,  prevent reanalysis */
+{
+char query[128];
+sqlSafef(query, sizeof(query), 
+    "update eapRun set createStatus = -1 where id=%u", run->id);
+sqlUpdate(conn, query);
+}
+
+void conditionalFail(struct sqlConnection *conn, struct eapRun *run)
+/* Note particular run is failed, and abort rest of finishing unless they've set the magic
+ * flag */
+{
+markRunAsFailed(conn, run);
+if (!keepFailing)
+    {
+    errAbort("Aborting - use -keepFailing flag to burn through more than one such error");
+    }
+}
 
 static char *sharedVal(struct cgiDictionary *dictList, char *var)
 /* Return value if var is present and identical in all members of dictList */
@@ -97,15 +120,6 @@ for (i=0; i<ArraySize(fakeIfShared); ++i)
 /* Clean up and go home */
 cgiDictionaryFreeList(&dictList);
 return dyStringCannibalize(&dy);
-}
-
-void markRunAsFailed(struct sqlConnection *conn, struct eapRun *run)
-/* Mark that the run failed,  prevent reanalysis */
-{
-char query[128];
-sqlSafef(query, sizeof(query), 
-    "update eapRun set createStatus = -1 where id=%u", run->id);
-sqlUpdate(conn, query);
 }
 
 boolean efWithSubmitNameExists(struct sqlConnection *conn, char *submitName)
@@ -195,6 +209,165 @@ verbose(1, "%s\n", command);
 mustSystem(command);
 }
 
+struct eapOutput *eapOutputNamedOnList(struct eapOutput *list, char *name)
+/* Find named output on list */
+{
+struct eapOutput *out;
+for (out = list; out != NULL; out = out->next)
+    if (sameString(out->name, name))
+        return out;
+warn("Can't find %s on list of %d in eapOutputNamedOnList", name, slCount(list));
+return NULL;
+}
+
+void deprecateAndReplaceRunOutputs(struct sqlConnection *conn, 
+    struct eapRun *oldRun, struct eapRun *newRun)
+/* Deprecated outputs of old run and replace them with new run outputs */
+{
+char query[512];
+sqlSafef(query, sizeof(query), "select * from eapOutput where runId=%u", oldRun->id);
+struct eapOutput *oldOutList = eapOutputLoadByQuery(conn, query);
+sqlSafef(query, sizeof(query), "select * from eapOutput where runId=%u", newRun->id);
+struct eapOutput *newOutList = eapOutputLoadByQuery(conn, query);
+struct eapOutput *newOut, *oldOut;
+for (newOut = newOutList; newOut != NULL; newOut = newOut->next)
+    {
+    oldOut = eapOutputNamedOnList(oldOutList, newOut->name);
+    if (oldOut != NULL)
+        {
+	sqlSafef(query, sizeof(query),
+	    "update edwFile set replacedBy=%u, deprecated='%s' where id=%u", 
+	    newOut->fileId, "Replaced by newer version of same analysis step.", oldOut->fileId);
+	verbose(2, "%s\n", query);
+	sqlUpdate(conn, query);
+	}
+    }
+}
+
+struct eapInput *eapInputFileOnList(struct eapInput *list, unsigned fileId)
+/* Find named output on list */
+{
+struct eapInput *in;
+for (in = list; in != NULL; in = in->next)
+    if (in->fileId == fileId)
+        return in;
+return NULL;
+}
+
+
+boolean eapInputListsMatch(struct eapInput *aList, struct eapInput *bList)
+/* Return TRUE if aList and bList refer to same files*/
+{
+if (slCount(aList) != slCount(bList))
+    return FALSE;
+struct eapInput *a;
+for (a = aList; a != NULL; a = a->next)
+    {
+    if (eapInputFileOnList(bList, a->fileId) == NULL)
+        return FALSE;
+    }
+return TRUE;
+}
+
+void perhapsDeprecateEarlierVersions(struct sqlConnection *conn, struct eapRun *run)
+/* Look for runs on same input and deprecate/replace files */
+{
+/* Get list of old runs we might need to deprecate */
+char query[512];
+sqlSafef(query, sizeof(query),
+    "select * from eapRun where experiment='%s' and id<%u and analysisStep='%s' "
+    "  and assemblyId=%u and createStatus>0 and stepVersionId < %u"
+    ,  run->experiment, run->id, run->analysisStep, run->assemblyId, run->stepVersionId);
+struct eapRun *oldRun, *oldRunList = eapRunLoadByQuery(conn, query);
+verbose(2, "perhapsDeprecateEarlierVersions: run %u, %d old runs on %s\n", 
+    run->id, slCount(oldRunList), run->experiment);
+if (oldRunList == NULL)
+    return;
+
+/* Get list of inputs to existing run */
+sqlSafef(query, sizeof(query), "select * from eapInput where runId=%u", run->id);
+struct eapInput *inList = eapInputLoadByQuery(conn, query);
+for (oldRun = oldRunList; oldRun != NULL; oldRun = oldRun->next)
+    {
+    sqlSafef(query, sizeof(query), "select * from eapInput where runId=%u", oldRun->id);
+    struct eapInput *oldList = eapInputLoadByQuery(conn, query);
+    if (eapInputListsMatch(inList, oldList))
+        {
+	deprecateAndReplaceRunOutputs(conn, oldRun, run);
+	}
+    eapInputFreeList(&oldList);
+    }
+eapInputFreeList(&inList);
+eapRunFreeList(&oldRunList);
+}
+
+void absorbPhantomPeakStats(struct sqlConnection *conn, 
+    struct eapStep *step, struct eapRun *run, struct eapJob *job, struct edwFile *inList)
+/* Absorb any statistical output from phantompeaks/run_spp */ 
+{
+#ifdef JUST_FOR_DOC
+The output we parse is a single tab-separated line with the following columns as defined in 
+https://code.google.com/p/phantompeakqualtools/.  
+You might need to check this against the autoSql definition for eapPhantomPeakStats, which
+should be the same except col1 is replaced by the fileId of the associated file. 
+
+COL1: Filename: tagAlign/BAM filename
+COL2: numReads: effective sequencing depth i.e. total number of mapped reads in input file
+COL3: estFragLen: comma separated strand cross-correlation peak(s) in decreasing order of correlation.
+          The top 3 local maxima locations that are within 90% of the maximum cross-correlation value are output.
+          In almost all cases, the top (first) value in the list represents the predominant fragment length.
+          If you want to keep only the top value simply run
+          sed -r 's/,[^\t]+//g' <outFile> > <newOutFile>
+COL4: corr_estFragLen: comma separated strand cross-correlation value(s) in decreasing order (col2 follows the same order)
+COL5: phantomPeak: Read length/phantom peak strand shift
+COL6: corr_phantomPeak: Correlation value at phantom peak
+COL7: argmin_corr: strand shift at which cross-correlation is lowest
+COL8: min_corr: minimum value of cross-correlation
+COL9: Normalized strand cross-correlation coefficient (NSC) = COL4 / COL8
+COL10: Relative strand cross-correlation coefficient (RSC) = (COL4 - COL8) / (COL6 - COL8)
+COL11: QualityTag: Quality tag based on thresholded RSC (codes: -2:veryLow,-1:Low,0:Medium,1:High,2:veryHigh)
+#endif /* JUST_FOR_DOC */
+
+/* Get path of stats file - this must match command line in schedulePhantomPeakSpp() in 
+ * eapSchedule.c */
+char path[PATH_LEN];
+safef(path, sizeof(path), "%s%s", run->tempDir, "out.tab");
+uglyf("Checking stats in %s\n", path);
+
+/* Read in first row of file */
+struct lineFile *lf = lineFileOpen(path, TRUE);
+char *row[EAPPHANTOMPEAKSTATS_NUM_COLS];
+if (!lineFileRow(lf, row))
+    {
+    warn("Empty output %s on phantomPeakStats", path);
+    conditionalFail(conn, run);
+    }
+
+/* Replace first column with file ID */
+assert(slCount(inList) == 1);
+struct edwFile *ef = inList;
+char numBuf[32];
+safef(numBuf, sizeof(numBuf), "%u", ef->id);
+row[0] = numBuf;
+
+/* Load into our data structure and save to database */
+struct eapPhantomPeakStats stats;
+eapPhantomPeakStatsStaticLoad(row, &stats);
+eapPhantomPeakStatsSaveToDb(conn, &stats, "eapPhantomPeakStats", 512);
+}
+
+void absorbStats(struct sqlConnection *conn, 
+    struct eapStep *step, struct eapRun *run, struct eapJob *job, struct edwFile *inList)
+/* Absorb any statistical output files left by run into database */
+{
+uglyf("Absorb stats on list of %d\n", slCount(inList));
+/* This routine is just a dispatch based on step type.  Most steps do not produce
+ * statistical output */
+char *stepName = step->name;
+if (sameString(stepName, "phantom_peak_stats"))
+    absorbPhantomPeakStats(conn, step, run, job, inList);
+}
+
 void finishGoodRun(struct sqlConnection *conn, struct eapRun *run, 
     struct eapJob *job)
 /* Looks like the job for the run completed successfully, so let's grab results
@@ -233,12 +406,8 @@ for (i=0; i<step->outCount; ++i)
     verbose(1, "processing %s\n", path);
     if (!fileExists(path))
         {
-	markRunAsFailed(conn, run);
 	warn("Expected output %s not present", path);
-	if (!keepFailing)
-	    {
-	    errAbort("Aborting - use -keepFailing flag to burn through more than one such error");
-	    }
+	conditionalFail(conn, run);
 	break;
 	}
 
@@ -280,17 +449,14 @@ for (i=0; i<step->outCount; ++i)
 	    , run->id, step->outputTypes[i], 0, outputFile->id);
     sqlUpdate(conn, query);
 
-
     /* Schedule validation and finishing */
-#ifdef MAYBE_SOON
-    char command[256];
-    safef(command, sizeof(command), "bash -exc 'edwQaAgent %u;edwAnalysisAddJson %u'",
-	   outputFile->id, run->id);
-    edwAddJob(conn, command);
-#else /* MAYBE_SOON */
     edwAddQaJob(conn, outputFile->id);
-#endif /* MAYBE_SOON */
+
     }
+
+/* Absorb stats if any into database */
+absorbStats(conn, step, run, job, inputFileList);
+
 sqlSafef(query, sizeof(query), 
 	"update eapRun set createStatus=1 where id=%u", run->id);
 sqlUpdate(conn, query);
@@ -299,6 +465,7 @@ if (!noClean)
     {
     removeTempDir(run->tempDir);
     }
+perhapsDeprecateEarlierVersions(conn, run);
 }
 
 void eapFinish(char *how)
@@ -310,6 +477,7 @@ char query[512];
 sqlSafef(query, sizeof(query), "select * from eapRun where createStatus = 0");
 struct eapRun *run, *runList = eapRunLoadByQuery(conn, query);
 verbose(1, "Got %d unfinished analysis\n", slCount(runList));
+int count = 0;
 
 
 for (run = runList; run != NULL; run = run->next)
@@ -326,6 +494,12 @@ for (run = runList; run != NULL; run = run->next)
 	char *command = job->commandLine;
 	if (job->endTime > 0)
 	    {
+	    ++count;
+	    if (maxCount > 0 && count > maxCount)
+		{
+		verbose(1, "Did all %d\n", maxCount);
+		break;
+		}
 	    if (job->returnCode == 0)
 		{
 		verbose(2, "succeeded %s\n", command);
@@ -348,11 +522,13 @@ for (run = runList; run != NULL; run = run->next)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+uglyf("It's really me!");
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 noClean = optionExists("noClean");
 keepFailing = optionExists("keepFailing");
+maxCount = optionInt("maxCount", maxCount);
 eapFinish(argv[1]);
 return 0;
 }

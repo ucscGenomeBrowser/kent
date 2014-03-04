@@ -119,7 +119,25 @@ struct stepInit steps[] =
     "replicated_broadPeak", "broadPeak", "out.broadPeak.bigBed",
     },
 
+    {
+    "replicated_hotspot", 1,
+    "eap_pool_hotspot,eap_run_hotspot,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
+    "rep1,rep2", "bam,bam",
+    "hotspot_broad_peaks,hotspot_narrow_peaks,hotspot_signal",
+    "broadPeak,narrowPeak,bigWig",
+    "out.broadPeak.bigBed,out.narrowPeak.bigBed,out.bigWig",
+    },
+    
+    {
+    "phantom_peak_stats", 1,
+    "eap_run_phantom_peak_spp,Rscript",
+    "alignments", "bam",
+    "", "", "",
+    },
+
 };
+
+
 
 int commaSepCount(char *s)
 /* Count number of comma-separated items assuming there can be a terminal non-separating comma
