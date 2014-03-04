@@ -332,7 +332,6 @@ COL11: QualityTag: Quality tag based on thresholded RSC (codes: -2:veryLow,-1:Lo
  * eapSchedule.c */
 char path[PATH_LEN];
 safef(path, sizeof(path), "%s%s", run->tempDir, "out.tab");
-uglyf("Checking stats in %s\n", path);
 
 /* Read in first row of file */
 struct lineFile *lf = lineFileOpen(path, TRUE);
@@ -360,7 +359,6 @@ void absorbStats(struct sqlConnection *conn,
     struct eapStep *step, struct eapRun *run, struct eapJob *job, struct edwFile *inList)
 /* Absorb any statistical output files left by run into database */
 {
-uglyf("Absorb stats on list of %d\n", slCount(inList));
 /* This routine is just a dispatch based on step type.  Most steps do not produce
  * statistical output */
 char *stepName = step->name;
@@ -522,7 +520,6 @@ for (run = runList; run != NULL; run = run->next)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-uglyf("It's really me!");
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
