@@ -20,7 +20,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwBamStats - Collect some info on a BAM file\n"
+  "edwBamStats v1 - Collect some info on a BAM file\n"
   "usage:\n"
   "   edwBamStats in.bam out.ra\n"
   "options:\n"
