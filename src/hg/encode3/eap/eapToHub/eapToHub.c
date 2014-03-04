@@ -904,6 +904,15 @@ fprintf(f, "<TD>%4.1f%%</TD>\n", 100.0 * uniqueMappedCount / readCount);
 fprintf(f, "<TD>%4.1f%%</TD>\n", 100.0 * u4mUniqueRatio);
 }
 
+struct edwQaWigSpot *findSpot(struct sqlConnection *conn, long long fileId)
+/* Find best spot score if any associated with given spot/peak file */
+{
+char query[256];
+sqlSafef(query, sizeof(query),
+    "select * from edwQaWigSpot where spotId=%lld order by spotRatio desc limit 1", fileId);
+return edwQaWigSpotLoadByQuery(conn, query);
+}
+
 void writeTableHtml(struct sqlConnection *conn, struct eapGraph *eg, 
     struct fullExperiment *expList, char *assembly, char *outFile)
 /* Write out a table in simple html based on eeList*/
@@ -915,12 +924,14 @@ fprintf(f, "<TR>\n");
 fprintf(f, "<TH></TH>");
 fprintf(f, "<TH></TH>");
 fprintf(f, "<TH></TH>");
-fprintf(f, "<TH>promoter</TH>");
-fprintf(f, "<TH>promoter</TH>");
+fprintf(f, "<TH></TH>");
+fprintf(f, "<TH>promo</TH>");
+fprintf(f, "<TH>promo</TH>");
 fprintf(f, "<TH>open</TH>");
 fprintf(f, "<TH>open</TH>");
 fprintf(f, "<TH>cross</TH>");
 fprintf(f, "<TH>&nbsp; </TH>");
+fprintf(f, "<TH></TH>");
 fprintf(f, "<TH></TH>");
 fprintf(f, "<TH></TH>");
 fprintf(f, "<TH></TH>");
@@ -932,6 +943,7 @@ fprintf(f, "<TR>\n");
 fprintf(f, "<TH>Biosample</TH>");
 fprintf(f, "<TH>Reps</TH>");
 fprintf(f, "<TH>%%map</TH>");
+fprintf(f, "<TH>spot?</TH>");
 fprintf(f, "<TH>enrich</TH>");
 fprintf(f, "<TH>cover</TH>");
 fprintf(f, "<TH>enrich</TH>");
@@ -961,11 +973,23 @@ for (exp = expList; exp != NULL; exp = exp->next)
 	double u4mUniqueRatio = 0;
 	bamListStats(bamFileList, &readCount, &mappedCount, &uniqueMappedCount, &u4mUniqueRatio);
 	fprintf(f, "<TD>%4.1f%%\n", 100.0 * mappedCount / readCount);
+	struct edwQaWigSpot *spot = findSpot(conn, pooledPeakId);
+	if (spot != NULL)
+	    {
+	    fprintf(f, "<TD>%g</TD>\n", spot->spotRatio);
+	    }
+	else
+	    {
+	    fprintf(f, "<TD>n/a</TD>\n");
+	    }
 	printEnrichment(conn, pooledPeakId, "promoter", f);
 	printEnrichment(conn, pooledPeakId, "open", f);
 	}
     else
         {
+	fprintf(f, "<TD>n/a</TD>\n");
+	fprintf(f, "<TD>n/a</TD>\n");
+	fprintf(f, "<TD>n/a</TD>\n");
 	fprintf(f, "<TD>n/a</TD>\n");
 	fprintf(f, "<TD>n/a</TD>\n");
 	fprintf(f, "<TD>n/a</TD>\n");
