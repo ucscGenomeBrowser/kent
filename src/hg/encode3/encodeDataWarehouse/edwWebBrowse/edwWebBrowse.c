@@ -301,7 +301,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
     /* Make wrapper for experiments. */
     struct hash *experimentWrap = hashNew(0);
     hashAdd(experimentWrap, "experiment", 
-	"<A HREF=\"http://submit.encodedcc.org/experiments/%s/\">%s</A>");
+	"<A HREF=\"http://submit.encodedcc.org/%s/\">%s</A>");
     /* Get and print file-by-file info. */
     char title[256];
     safef(title, sizeof(title), "Files and enrichments for %d new files", submit->newFiles);
