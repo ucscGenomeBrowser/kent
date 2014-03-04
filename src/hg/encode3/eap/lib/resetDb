@@ -36,6 +36,8 @@ eapAddSoftware eap_broadPeak_to_bigBed 2 https://github.com/ENCODE-DCC/uniformAn
 eapAddSoftware eap_narrowPeak_to_bigBed 2 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
 eapAddSoftware eap_run_macs2_chip_pe 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
 eapAddSoftware eap_run_macs2_chip_se 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+eapAddSoftware Rscript '2.15.2 (2012-10-26)' 'http://stat.ethz.ch/R-manual/R-devel/library/utils/html/Rscript.html' 'R-core@r-project.org'
+eapAddSoftware eap_run_phantom_peak_spp 1  https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu 
 
 # Add all steps
 eapAddStep '*'
