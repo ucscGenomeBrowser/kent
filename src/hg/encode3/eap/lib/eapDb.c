@@ -354,7 +354,7 @@ fputc(lastSep,f);
 }
 
 
-char *eapSwVersionCommaSepFieldNames = "id,software,version,md5,notes";
+char *eapSwVersionCommaSepFieldNames = "id,software,version,md5,redoPriority,notes";
 
 void eapSwVersionStaticLoad(char **row, struct eapSwVersion *ret)
 /* Load a row from eapSwVersion table into ret.  The contents of ret will
@@ -365,7 +365,8 @@ ret->id = sqlUnsigned(row[0]);
 ret->software = row[1];
 ret->version = row[2];
 safecpy(ret->md5, sizeof(ret->md5), row[3]);
-ret->notes = row[4];
+ret->redoPriority = sqlSigned(row[4]);
+ret->notes = row[5];
 }
 
 struct eapSwVersion *eapSwVersionLoadByQuery(struct sqlConnection *conn, char *query)
@@ -398,8 +399,8 @@ void eapSwVersionSaveToDb(struct sqlConnection *conn, struct eapSwVersion *el, c
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s')", 
-	tableName,  el->id,  el->software,  el->version,  el->md5,  el->notes);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%d,'%s')", 
+	tableName,  el->id,  el->software,  el->version,  el->md5,  el->redoPriority,  el->notes);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -415,7 +416,8 @@ ret->id = sqlUnsigned(row[0]);
 ret->software = cloneString(row[1]);
 ret->version = cloneString(row[2]);
 safecpy(ret->md5, sizeof(ret->md5), row[3]);
-ret->notes = cloneString(row[4]);
+ret->redoPriority = sqlSigned(row[4]);
+ret->notes = cloneString(row[5]);
 return ret;
 }
 
@@ -425,7 +427,7 @@ struct eapSwVersion *eapSwVersionLoadAll(char *fileName)
 {
 struct eapSwVersion *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[6];
 
 while (lineFileRow(lf, row))
     {
@@ -443,7 +445,7 @@ struct eapSwVersion *eapSwVersionLoadAllByChar(char *fileName, char chopper)
 {
 struct eapSwVersion *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[6];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -468,6 +470,7 @@ ret->id = sqlUnsignedComma(&s);
 ret->software = sqlStringComma(&s);
 ret->version = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->md5, sizeof(ret->md5));
+ret->redoPriority = sqlSignedComma(&s);
 ret->notes = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -515,6 +518,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->md5);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->redoPriority);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->notes);
@@ -1824,6 +1829,200 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->val);
 if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+
+char *eapPhantomPeakStatsCommaSepFieldNames = "fileId,numReads,estFragLength,corrEstFragLen,phantomPeak,corrPhantomPeak,argMinCorr,minCorr,nsc,rsc,qualityTag";
+
+void eapPhantomPeakStatsStaticLoad(char **row, struct eapPhantomPeakStats *ret)
+/* Load a row from eapPhantomPeakStats table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->fileId = sqlUnsigned(row[0]);
+ret->numReads = sqlUnsigned(row[1]);
+ret->estFragLength = row[2];
+ret->corrEstFragLen = row[3];
+ret->phantomPeak = sqlSigned(row[4]);
+ret->corrPhantomPeak = sqlDouble(row[5]);
+ret->argMinCorr = sqlSigned(row[6]);
+ret->minCorr = sqlDouble(row[7]);
+ret->nsc = sqlDouble(row[8]);
+ret->rsc = sqlDouble(row[9]);
+ret->qualityTag = sqlSigned(row[10]);
+}
+
+struct eapPhantomPeakStats *eapPhantomPeakStatsLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all eapPhantomPeakStats from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with eapPhantomPeakStatsFreeList(). */
+{
+struct eapPhantomPeakStats *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = eapPhantomPeakStatsLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void eapPhantomPeakStatsSaveToDb(struct sqlConnection *conn, struct eapPhantomPeakStats *el, char *tableName, int updateSize)
+/* Save eapPhantomPeakStats as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%d,%g,%d,%g,%g,%g,%d)", 
+	tableName,  el->fileId,  el->numReads,  el->estFragLength,  el->corrEstFragLen,  el->phantomPeak,  el->corrPhantomPeak,  el->argMinCorr,  el->minCorr,  el->nsc,  el->rsc,  el->qualityTag);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct eapPhantomPeakStats *eapPhantomPeakStatsLoad(char **row)
+/* Load a eapPhantomPeakStats from row fetched with select * from eapPhantomPeakStats
+ * from database.  Dispose of this with eapPhantomPeakStatsFree(). */
+{
+struct eapPhantomPeakStats *ret;
+
+AllocVar(ret);
+ret->fileId = sqlUnsigned(row[0]);
+ret->numReads = sqlUnsigned(row[1]);
+ret->estFragLength = cloneString(row[2]);
+ret->corrEstFragLen = cloneString(row[3]);
+ret->phantomPeak = sqlSigned(row[4]);
+ret->corrPhantomPeak = sqlDouble(row[5]);
+ret->argMinCorr = sqlSigned(row[6]);
+ret->minCorr = sqlDouble(row[7]);
+ret->nsc = sqlDouble(row[8]);
+ret->rsc = sqlDouble(row[9]);
+ret->qualityTag = sqlSigned(row[10]);
+return ret;
+}
+
+struct eapPhantomPeakStats *eapPhantomPeakStatsLoadAll(char *fileName) 
+/* Load all eapPhantomPeakStats from a whitespace-separated file.
+ * Dispose of this with eapPhantomPeakStatsFreeList(). */
+{
+struct eapPhantomPeakStats *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[11];
+
+while (lineFileRow(lf, row))
+    {
+    el = eapPhantomPeakStatsLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct eapPhantomPeakStats *eapPhantomPeakStatsLoadAllByChar(char *fileName, char chopper) 
+/* Load all eapPhantomPeakStats from a chopper separated file.
+ * Dispose of this with eapPhantomPeakStatsFreeList(). */
+{
+struct eapPhantomPeakStats *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[11];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = eapPhantomPeakStatsLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct eapPhantomPeakStats *eapPhantomPeakStatsCommaIn(char **pS, struct eapPhantomPeakStats *ret)
+/* Create a eapPhantomPeakStats out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new eapPhantomPeakStats */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->fileId = sqlUnsignedComma(&s);
+ret->numReads = sqlUnsignedComma(&s);
+ret->estFragLength = sqlStringComma(&s);
+ret->corrEstFragLen = sqlStringComma(&s);
+ret->phantomPeak = sqlSignedComma(&s);
+ret->corrPhantomPeak = sqlDoubleComma(&s);
+ret->argMinCorr = sqlSignedComma(&s);
+ret->minCorr = sqlDoubleComma(&s);
+ret->nsc = sqlDoubleComma(&s);
+ret->rsc = sqlDoubleComma(&s);
+ret->qualityTag = sqlSignedComma(&s);
+*pS = s;
+return ret;
+}
+
+void eapPhantomPeakStatsFree(struct eapPhantomPeakStats **pEl)
+/* Free a single dynamically allocated eapPhantomPeakStats such as created
+ * with eapPhantomPeakStatsLoad(). */
+{
+struct eapPhantomPeakStats *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->estFragLength);
+freeMem(el->corrEstFragLen);
+freez(pEl);
+}
+
+void eapPhantomPeakStatsFreeList(struct eapPhantomPeakStats **pList)
+/* Free a list of dynamically allocated eapPhantomPeakStats's */
+{
+struct eapPhantomPeakStats *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    eapPhantomPeakStatsFree(&el);
+    }
+*pList = NULL;
+}
+
+void eapPhantomPeakStatsOutput(struct eapPhantomPeakStats *el, FILE *f, char sep, char lastSep) 
+/* Print out eapPhantomPeakStats.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->fileId);
+fputc(sep,f);
+fprintf(f, "%u", el->numReads);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->estFragLength);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->corrEstFragLen);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->phantomPeak);
+fputc(sep,f);
+fprintf(f, "%g", el->corrPhantomPeak);
+fputc(sep,f);
+fprintf(f, "%d", el->argMinCorr);
+fputc(sep,f);
+fprintf(f, "%g", el->minCorr);
+fputc(sep,f);
+fprintf(f, "%g", el->nsc);
+fputc(sep,f);
+fprintf(f, "%g", el->rsc);
+fputc(sep,f);
+fprintf(f, "%d", el->qualityTag);
 fputc(lastSep,f);
 }
 

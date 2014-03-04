@@ -28,6 +28,7 @@ table eapSwVersion
     string software index; "Name field of software this is associated with"
     lstring version; "Version as carved out of program run with --version or the like"
     char[32] md5 index; "md5 sum of executable file"
+    byte redoPriority;  "-1 for routine recompile, 0 for unknown, 1 for recommended, 2 for required."
     lstring notes;	"Any notes on the version" 
     )
 
@@ -104,5 +105,21 @@ table eapOutput
     uint ix;  "Outputs always potentially vectors. Have single one with zero ix for scalar output"
     uint fileId;  "Associated file - 0 for no file, look perhaps to val below instead."
     lstring val;  "Non-file data"
+    )
+
+table eapPhantomPeakStats
+"Statistics on a BAM file that contains reads that will align in a peaky fashion"
+    (
+    uint fileId;    "ID of BAM file this is taken from"
+    uint numReads;  "Number of mapped reads in that file"
+    string estFragLength; "Up to three comma separated strand cross-correlation peaks"
+    string corrEstFragLen; "Up to three cross strand correlations at the given peaks"
+    int phantomPeak;  "Read length/phantom peak strand shift"
+    double corrPhantomPeak; "Correlation value at phantom peak"
+    int argMinCorr; "strand shift at which cross-correlation is lowest"
+    double minCorr; "minimum value of cross-correlation"
+    double nsc; "Normalized strand cross-correlation coefficient (NSC) = COL4 / COL8"
+    double rsc; "Relative strand cross-correlation coefficient (RSC) = (COL4 - COL8) / (COL6 - COL8)A"
+    int qualityTag; "based on thresholded RSC (codes: -2:veryLow,-1:Low,0:Medium,1:High,2:veryHigh)"
     )
 

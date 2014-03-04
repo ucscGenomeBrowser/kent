@@ -37,6 +37,7 @@ CREATE TABLE eapSwVersion (
     software varchar(255) default '',	# Name field of software this is associated with
     version longblob,	# Version as carved out of program run with --version or the like
     md5 char(32) default 0,	# md5 sum of executable file
+    redoPriority tinyint default 0,	# -1 for routine recompile, 0 for unknown, 1 for recommended, 2 for required.
     notes longblob,	# Any notes on the version
               #Indices
     PRIMARY KEY(id),
@@ -130,4 +131,21 @@ CREATE TABLE eapOutput (
               #Indices
     PRIMARY KEY(id),
     INDEX(runId)
+);
+
+#Statistics on a BAM file that contains reads that will align in a peaky fashion
+CREATE TABLE eapPhantomPeakStats (
+    fileId int unsigned default 0,	# ID of BAM file this is taken from
+    numReads int unsigned default 0,	# Number of mapped reads in that file
+    estFragLength varchar(255) default '',	# Up to three comma separated strand cross-correlation peaks
+    corrEstFragLen varchar(255) default '',	# Up to three cross strand correlations at the given peaks
+    phantomPeak int default 0,	# Read length/phantom peak strand shift
+    corrPhantomPeak double default 0,	# Correlation value at phantom peak
+    argMinCorr int default 0,	# strand shift at which cross-correlation is lowest
+    minCorr double default 0,	# minimum value of cross-correlation
+    nsc double default 0,	# Normalized strand cross-correlation coefficient (NSC) = COL4 / COL8
+    rsc double default 0,	# Relative strand cross-correlation coefficient (RSC) = (COL4 - COL8) / (COL6 - COL8)A
+    qualityTag int default 0,	# based on thresholded RSC (codes: -2:veryLow,-1:Low,0:Medium,1:High,2:veryHigh)
+              #Indices
+    PRIMARY KEY(fileId)
 );

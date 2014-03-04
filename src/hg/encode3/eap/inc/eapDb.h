@@ -148,7 +148,7 @@ void eapSoftwareOutput(struct eapSoftware *el, FILE *f, char sep, char lastSep);
 #define eapSoftwareCommaOut(el,f) eapSoftwareOutput(el,f,',',',');
 /* Print out eapSoftware as a comma separated list including final comma. */
 
-#define EAPSWVERSION_NUM_COLS 5
+#define EAPSWVERSION_NUM_COLS 6
 
 extern char *eapSwVersionCommaSepFieldNames;
 
@@ -160,6 +160,7 @@ struct eapSwVersion
     char *software;	/* Name field of software this is associated with */
     char *version;	/* Version as carved out of program run with --version or the like */
     char md5[33];	/* md5 sum of executable file */
+    signed char redoPriority;	/* -1 for routine recompile, 0 for unknown, 1 for recommended, 2 for required. */
     char *notes;	/* Any notes on the version */
     };
 
@@ -708,6 +709,82 @@ void eapOutputOutput(struct eapOutput *el, FILE *f, char sep, char lastSep);
 
 #define eapOutputCommaOut(el,f) eapOutputOutput(el,f,',',',');
 /* Print out eapOutput as a comma separated list including final comma. */
+
+#define EAPPHANTOMPEAKSTATS_NUM_COLS 11
+
+extern char *eapPhantomPeakStatsCommaSepFieldNames;
+
+struct eapPhantomPeakStats
+/* Statistics on a BAM file that contains reads that will align in a peaky fashion */
+    {
+    struct eapPhantomPeakStats *next;  /* Next in singly linked list. */
+    unsigned fileId;	/* ID of BAM file this is taken from */
+    unsigned numReads;	/* Number of mapped reads in that file */
+    char *estFragLength;	/* Up to three comma separated strand cross-correlation peaks */
+    char *corrEstFragLen;	/* Up to three cross strand correlations at the given peaks */
+    int phantomPeak;	/* Read length/phantom peak strand shift */
+    double corrPhantomPeak;	/* Correlation value at phantom peak */
+    int argMinCorr;	/* strand shift at which cross-correlation is lowest */
+    double minCorr;	/* minimum value of cross-correlation */
+    double nsc;	/* Normalized strand cross-correlation coefficient (NSC) = COL4 / COL8 */
+    double rsc;	/* Relative strand cross-correlation coefficient (RSC) = (COL4 - COL8) / (COL6 - COL8)A */
+    int qualityTag;	/* based on thresholded RSC (codes: -2:veryLow,-1:Low,0:Medium,1:High,2:veryHigh) */
+    };
+
+void eapPhantomPeakStatsStaticLoad(char **row, struct eapPhantomPeakStats *ret);
+/* Load a row from eapPhantomPeakStats table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct eapPhantomPeakStats *eapPhantomPeakStatsLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all eapPhantomPeakStats from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with eapPhantomPeakStatsFreeList(). */
+
+void eapPhantomPeakStatsSaveToDb(struct sqlConnection *conn, struct eapPhantomPeakStats *el, char *tableName, int updateSize);
+/* Save eapPhantomPeakStats as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct eapPhantomPeakStats *eapPhantomPeakStatsLoad(char **row);
+/* Load a eapPhantomPeakStats from row fetched with select * from eapPhantomPeakStats
+ * from database.  Dispose of this with eapPhantomPeakStatsFree(). */
+
+struct eapPhantomPeakStats *eapPhantomPeakStatsLoadAll(char *fileName);
+/* Load all eapPhantomPeakStats from whitespace-separated file.
+ * Dispose of this with eapPhantomPeakStatsFreeList(). */
+
+struct eapPhantomPeakStats *eapPhantomPeakStatsLoadAllByChar(char *fileName, char chopper);
+/* Load all eapPhantomPeakStats from chopper separated file.
+ * Dispose of this with eapPhantomPeakStatsFreeList(). */
+
+#define eapPhantomPeakStatsLoadAllByTab(a) eapPhantomPeakStatsLoadAllByChar(a, '\t');
+/* Load all eapPhantomPeakStats from tab separated file.
+ * Dispose of this with eapPhantomPeakStatsFreeList(). */
+
+struct eapPhantomPeakStats *eapPhantomPeakStatsCommaIn(char **pS, struct eapPhantomPeakStats *ret);
+/* Create a eapPhantomPeakStats out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new eapPhantomPeakStats */
+
+void eapPhantomPeakStatsFree(struct eapPhantomPeakStats **pEl);
+/* Free a single dynamically allocated eapPhantomPeakStats such as created
+ * with eapPhantomPeakStatsLoad(). */
+
+void eapPhantomPeakStatsFreeList(struct eapPhantomPeakStats **pList);
+/* Free a list of dynamically allocated eapPhantomPeakStats's */
+
+void eapPhantomPeakStatsOutput(struct eapPhantomPeakStats *el, FILE *f, char sep, char lastSep);
+/* Print out eapPhantomPeakStats.  Separate fields with sep. Follow last field with lastSep. */
+
+#define eapPhantomPeakStatsTabOut(el,f) eapPhantomPeakStatsOutput(el,f,'\t','\n');
+/* Print out eapPhantomPeakStats as a line in a tab-separated file. */
+
+#define eapPhantomPeakStatsCommaOut(el,f) eapPhantomPeakStatsOutput(el,f,',',',');
+/* Print out eapPhantomPeakStats as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
