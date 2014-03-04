@@ -173,15 +173,6 @@ table edwValidFile
     double uniqueMapRatio; "Fraction of reads that map uniquely to genome for bams and fastqs"
     )
 
-table edwQaFail
-"Record of a QA failure."
-    (
-    uint id primary auto;   "ID of failure"
-    uint fileId index;	"File that failed"
-    uint qaVersion; "QA pipeline version"
-    lstring reason; "reason for failure"
-    )
-
 table edwFastqFile
 "info on a file in fastq short read format beyond what's in edwValidFile"
     (
@@ -236,6 +227,15 @@ table edwBamFile
     double u4mUniqueRatio; "u4mUniqPos/u4mReadCount - measures library diversity"
     bigInt targetBaseCount;  "Count of bases in mapping target"
     uint targetSeqCount; "Number of chromosomes or other distinct sequences in mapping target"
+    )
+
+table edwQaFail
+"Record of a QA failure."
+    (
+    uint id primary auto;   "ID of failure"
+    uint fileId index;	"File that failed"
+    uint qaVersion; "QA pipeline version"
+    lstring reason; "reason for failure"
     )
 
 table edwQaEnrichTarget
@@ -321,6 +321,20 @@ table edwQaPairedEndFastq
     double distanceMin;	 "Minimum distance"
     double distanceMax;  "Maximum distatnce"
     byte recordComplete; "Flag to avoid a race condition. Ignore record if this is 0"
+    )
+
+table edwQaWigSpot
+"Information about proportion of signal in a wig that lands under spots in a peak or bed file"
+    (
+    uint id primary auto; "Id of this wig/spot intersection"
+    uint wigId index;	"Id of bigWig file"
+    uint spotId index;  "Id of a bigBed file probably broadPeak or narrowPeak"
+    double spotRatio; "Ratio of signal in spots to total signal,  between 0 and 1"
+    double enrichment;	"Enrichment in spots compared to genome overall"
+    bigInt basesInGenome; "Number of bases in genome"
+    bigInt basesInSpots; "Number of bases in spots"
+    double sumSignal; "Total signal"
+    double spotSumSignal; "Total signal in spots"
     )
 
 

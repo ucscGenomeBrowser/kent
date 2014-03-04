@@ -2313,162 +2313,6 @@ fputc(lastSep,f);
 }
 
 
-char *edwQaFailCommaSepFieldNames = "id,fileId,qaVersion,reason";
-
-void edwQaFailStaticLoad(char **row, struct edwQaFail *ret)
-/* Load a row from edwQaFail table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
-{
-
-ret->id = sqlUnsigned(row[0]);
-ret->fileId = sqlUnsigned(row[1]);
-ret->qaVersion = sqlUnsigned(row[2]);
-ret->reason = row[3];
-}
-
-struct edwQaFail *edwQaFailLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all edwQaFail from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with edwQaFailFreeList(). */
-{
-struct edwQaFail *list = NULL, *el;
-struct sqlResult *sr;
-char **row;
-
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = edwQaFailLoad(row);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-return list;
-}
-
-void edwQaFailSaveToDb(struct sqlConnection *conn, struct edwQaFail *el, char *tableName, int updateSize)
-/* Save edwQaFail as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. This function automatically escapes quoted strings for mysql. */
-{
-struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s')", 
-	tableName,  el->id,  el->fileId,  el->qaVersion,  el->reason);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-}
-
-struct edwQaFail *edwQaFailLoad(char **row)
-/* Load a edwQaFail from row fetched with select * from edwQaFail
- * from database.  Dispose of this with edwQaFailFree(). */
-{
-struct edwQaFail *ret;
-
-AllocVar(ret);
-ret->id = sqlUnsigned(row[0]);
-ret->fileId = sqlUnsigned(row[1]);
-ret->qaVersion = sqlUnsigned(row[2]);
-ret->reason = cloneString(row[3]);
-return ret;
-}
-
-struct edwQaFail *edwQaFailLoadAll(char *fileName) 
-/* Load all edwQaFail from a whitespace-separated file.
- * Dispose of this with edwQaFailFreeList(). */
-{
-struct edwQaFail *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
-
-while (lineFileRow(lf, row))
-    {
-    el = edwQaFailLoad(row);
-    slAddHead(&list, el);
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
-}
-
-struct edwQaFail *edwQaFailLoadAllByChar(char *fileName, char chopper) 
-/* Load all edwQaFail from a chopper separated file.
- * Dispose of this with edwQaFailFreeList(). */
-{
-struct edwQaFail *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
-
-while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
-    {
-    el = edwQaFailLoad(row);
-    slAddHead(&list, el);
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
-}
-
-struct edwQaFail *edwQaFailCommaIn(char **pS, struct edwQaFail *ret)
-/* Create a edwQaFail out of a comma separated string. 
- * This will fill in ret if non-null, otherwise will
- * return a new edwQaFail */
-{
-char *s = *pS;
-
-if (ret == NULL)
-    AllocVar(ret);
-ret->id = sqlUnsignedComma(&s);
-ret->fileId = sqlUnsignedComma(&s);
-ret->qaVersion = sqlUnsignedComma(&s);
-ret->reason = sqlStringComma(&s);
-*pS = s;
-return ret;
-}
-
-void edwQaFailFree(struct edwQaFail **pEl)
-/* Free a single dynamically allocated edwQaFail such as created
- * with edwQaFailLoad(). */
-{
-struct edwQaFail *el;
-
-if ((el = *pEl) == NULL) return;
-freeMem(el->reason);
-freez(pEl);
-}
-
-void edwQaFailFreeList(struct edwQaFail **pList)
-/* Free a list of dynamically allocated edwQaFail's */
-{
-struct edwQaFail *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    edwQaFailFree(&el);
-    }
-*pList = NULL;
-}
-
-void edwQaFailOutput(struct edwQaFail *el, FILE *f, char sep, char lastSep) 
-/* Print out edwQaFail.  Separate fields with sep. Follow last field with lastSep. */
-{
-fprintf(f, "%u", el->id);
-fputc(sep,f);
-fprintf(f, "%u", el->fileId);
-fputc(sep,f);
-fprintf(f, "%u", el->qaVersion);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->reason);
-if (sep == ',') fputc('"',f);
-fputc(lastSep,f);
-}
-
-
 char *edwFastqFileCommaSepFieldNames = "id,fileId,sampleCount,basesInSample,sampleFileName,readCount,baseCount,readSizeMean,readSizeStd,readSizeMin,readSizeMax,qualMean,qualStd,qualMin,qualMax,qualType,qualZero,atRatio,aRatio,cRatio,gRatio,tRatio,nRatio,qualPos,aAtPos,cAtPos,gAtPos,tAtPos,nAtPos";
 
 struct edwFastqFile *edwFastqFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -3088,6 +2932,162 @@ fputc(sep,f);
 fprintf(f, "%lld", el->targetBaseCount);
 fputc(sep,f);
 fprintf(f, "%u", el->targetSeqCount);
+fputc(lastSep,f);
+}
+
+
+char *edwQaFailCommaSepFieldNames = "id,fileId,qaVersion,reason";
+
+void edwQaFailStaticLoad(char **row, struct edwQaFail *ret)
+/* Load a row from edwQaFail table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->qaVersion = sqlUnsigned(row[2]);
+ret->reason = row[3];
+}
+
+struct edwQaFail *edwQaFailLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwQaFail from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaFailFreeList(). */
+{
+struct edwQaFail *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwQaFailLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwQaFailSaveToDb(struct sqlConnection *conn, struct edwQaFail *el, char *tableName, int updateSize)
+/* Save edwQaFail as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s')", 
+	tableName,  el->id,  el->fileId,  el->qaVersion,  el->reason);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct edwQaFail *edwQaFailLoad(char **row)
+/* Load a edwQaFail from row fetched with select * from edwQaFail
+ * from database.  Dispose of this with edwQaFailFree(). */
+{
+struct edwQaFail *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->qaVersion = sqlUnsigned(row[2]);
+ret->reason = cloneString(row[3]);
+return ret;
+}
+
+struct edwQaFail *edwQaFailLoadAll(char *fileName) 
+/* Load all edwQaFail from a whitespace-separated file.
+ * Dispose of this with edwQaFailFreeList(). */
+{
+struct edwQaFail *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwQaFailLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaFail *edwQaFailLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwQaFail from a chopper separated file.
+ * Dispose of this with edwQaFailFreeList(). */
+{
+struct edwQaFail *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwQaFailLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaFail *edwQaFailCommaIn(char **pS, struct edwQaFail *ret)
+/* Create a edwQaFail out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaFail */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->fileId = sqlUnsignedComma(&s);
+ret->qaVersion = sqlUnsignedComma(&s);
+ret->reason = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwQaFailFree(struct edwQaFail **pEl)
+/* Free a single dynamically allocated edwQaFail such as created
+ * with edwQaFailLoad(). */
+{
+struct edwQaFail *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->reason);
+freez(pEl);
+}
+
+void edwQaFailFreeList(struct edwQaFail **pList)
+/* Free a list of dynamically allocated edwQaFail's */
+{
+struct edwQaFail *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwQaFailFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwQaFailOutput(struct edwQaFail *el, FILE *f, char sep, char lastSep) 
+/* Print out edwQaFail.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->fileId);
+fputc(sep,f);
+fprintf(f, "%u", el->qaVersion);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->reason);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -4383,6 +4383,184 @@ fputc(sep,f);
 fprintf(f, "%g", el->distanceMax);
 fputc(sep,f);
 fprintf(f, "%d", el->recordComplete);
+fputc(lastSep,f);
+}
+
+
+char *edwQaWigSpotCommaSepFieldNames = "id,wigId,spotId,spotRatio,enrichment,basesInGenome,basesInSpots,sumSignal,spotSumSignal";
+
+void edwQaWigSpotStaticLoad(char **row, struct edwQaWigSpot *ret)
+/* Load a row from edwQaWigSpot table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->wigId = sqlUnsigned(row[1]);
+ret->spotId = sqlUnsigned(row[2]);
+ret->spotRatio = sqlDouble(row[3]);
+ret->enrichment = sqlDouble(row[4]);
+ret->basesInGenome = sqlLongLong(row[5]);
+ret->basesInSpots = sqlLongLong(row[6]);
+ret->sumSignal = sqlDouble(row[7]);
+ret->spotSumSignal = sqlDouble(row[8]);
+}
+
+struct edwQaWigSpot *edwQaWigSpotLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwQaWigSpot from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaWigSpotFreeList(). */
+{
+struct edwQaWigSpot *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwQaWigSpotLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwQaWigSpotSaveToDb(struct sqlConnection *conn, struct edwQaWigSpot *el, char *tableName, int updateSize)
+/* Save edwQaWigSpot as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%lld,%lld,%g,%g)", 
+	tableName,  el->id,  el->wigId,  el->spotId,  el->spotRatio,  el->enrichment,  el->basesInGenome,  el->basesInSpots,  el->sumSignal,  el->spotSumSignal);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct edwQaWigSpot *edwQaWigSpotLoad(char **row)
+/* Load a edwQaWigSpot from row fetched with select * from edwQaWigSpot
+ * from database.  Dispose of this with edwQaWigSpotFree(). */
+{
+struct edwQaWigSpot *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->wigId = sqlUnsigned(row[1]);
+ret->spotId = sqlUnsigned(row[2]);
+ret->spotRatio = sqlDouble(row[3]);
+ret->enrichment = sqlDouble(row[4]);
+ret->basesInGenome = sqlLongLong(row[5]);
+ret->basesInSpots = sqlLongLong(row[6]);
+ret->sumSignal = sqlDouble(row[7]);
+ret->spotSumSignal = sqlDouble(row[8]);
+return ret;
+}
+
+struct edwQaWigSpot *edwQaWigSpotLoadAll(char *fileName) 
+/* Load all edwQaWigSpot from a whitespace-separated file.
+ * Dispose of this with edwQaWigSpotFreeList(). */
+{
+struct edwQaWigSpot *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwQaWigSpotLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaWigSpot *edwQaWigSpotLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwQaWigSpot from a chopper separated file.
+ * Dispose of this with edwQaWigSpotFreeList(). */
+{
+struct edwQaWigSpot *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwQaWigSpotLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaWigSpot *edwQaWigSpotCommaIn(char **pS, struct edwQaWigSpot *ret)
+/* Create a edwQaWigSpot out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaWigSpot */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->wigId = sqlUnsignedComma(&s);
+ret->spotId = sqlUnsignedComma(&s);
+ret->spotRatio = sqlDoubleComma(&s);
+ret->enrichment = sqlDoubleComma(&s);
+ret->basesInGenome = sqlLongLongComma(&s);
+ret->basesInSpots = sqlLongLongComma(&s);
+ret->sumSignal = sqlDoubleComma(&s);
+ret->spotSumSignal = sqlDoubleComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwQaWigSpotFree(struct edwQaWigSpot **pEl)
+/* Free a single dynamically allocated edwQaWigSpot such as created
+ * with edwQaWigSpotLoad(). */
+{
+struct edwQaWigSpot *el;
+
+if ((el = *pEl) == NULL) return;
+freez(pEl);
+}
+
+void edwQaWigSpotFreeList(struct edwQaWigSpot **pList)
+/* Free a list of dynamically allocated edwQaWigSpot's */
+{
+struct edwQaWigSpot *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwQaWigSpotFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwQaWigSpotOutput(struct edwQaWigSpot *el, FILE *f, char sep, char lastSep) 
+/* Print out edwQaWigSpot.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->wigId);
+fputc(sep,f);
+fprintf(f, "%u", el->spotId);
+fputc(sep,f);
+fprintf(f, "%g", el->spotRatio);
+fputc(sep,f);
+fprintf(f, "%g", el->enrichment);
+fputc(sep,f);
+fprintf(f, "%lld", el->basesInGenome);
+fputc(sep,f);
+fprintf(f, "%lld", el->basesInSpots);
+fputc(sep,f);
+fprintf(f, "%g", el->sumSignal);
+fputc(sep,f);
+fprintf(f, "%g", el->spotSumSignal);
 fputc(lastSep,f);
 }
 

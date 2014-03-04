@@ -213,17 +213,6 @@ CREATE TABLE edwValidFile (
     INDEX(experiment(16))
 );
 
-#Record of a QA failure.
-CREATE TABLE edwQaFail (
-    id int unsigned auto_increment,	# ID of failure
-    fileId int unsigned default 0,	# File that failed
-    qaVersion int unsigned default 0,	# QA pipeline version
-    reason longblob,	# reason for failure
-              #Indices
-    PRIMARY KEY(id),
-    INDEX(fileId)
-);
-
 #info on a file in fastq short read format beyond what's in edwValidFile
 CREATE TABLE edwFastqFile (
     id int unsigned auto_increment,	# ID in this table
@@ -282,6 +271,17 @@ CREATE TABLE edwBamFile (
               #Indices
     PRIMARY KEY(id),
     UNIQUE(fileId)
+);
+
+#Record of a QA failure.
+CREATE TABLE edwQaFail (
+    id int unsigned auto_increment,	# ID of failure
+    fileId int unsigned default 0,	# File that failed
+    qaVersion int unsigned default 0,	# QA pipeline version
+    reason longblob,	# reason for failure
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(fileId)
 );
 
 #A target for our enrichment analysis.
@@ -387,6 +387,23 @@ CREATE TABLE edwQaPairedEndFastq (
     PRIMARY KEY(id),
     INDEX(fileId1),
     INDEX(fileId2)
+);
+
+#Information about proportion of signal in a wig that lands under spots in a peak or bed file
+CREATE TABLE edwQaWigSpot (
+    id int unsigned auto_increment,	# Id of this wig/spot intersection
+    wigId int unsigned default 0,	# Id of bigWig file
+    spotId int unsigned default 0,	# Id of a bigBed file probably broadPeak or narrowPeak
+    spotRatio double default 0,	# Ratio of signal in spots to total signal,  between 0 and 1
+    enrichment double default 0,	# Enrichment in spots compared to genome overall
+    basesInGenome bigint default 0,	# Number of bases in genome
+    basesInSpots bigint default 0,	# Number of bases in spots
+    sumSignal double default 0,	# Total signal
+    spotSumSignal double default 0,	# Total signal in spots
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(wigId),
+    INDEX(spotId)
 );
 
 #A job to be run asynchronously and not too many all at once.
