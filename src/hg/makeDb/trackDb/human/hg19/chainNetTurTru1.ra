@@ -1,0 +1,15 @@
+        track chainTurTru1
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=jDolphin clade=bLaura
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain turTru1
+        otherDb turTru1
+
+        track netTurTru1
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=jDolphin clade=bLaura
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign turTru1 chainTurTru1
+        otherDb turTru1

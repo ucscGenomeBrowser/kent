@@ -25,7 +25,7 @@ TARGET="_blank">NCBI genome/51 (Homo sapiens)</A><BR>
 <A HREF="http://www.ncbi.nlm.nih.gov/assembly/883148"
 TARGET="_blank">NCBI assembly/883148 (GRCh38/GCA_000001405.2)</A><BR>
 <B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/31257"
-TARGET="_blank">NCBI Bioproject: 31257 TO BE CORRECTED</A>
+TARGET="_blank">NCBI Bioproject: 31257</A>
 </P>
 <HR>
 <P>
@@ -66,7 +66,22 @@ restrictions</A>
 
 <p>
 With the release of GRCh38, in order to synchronize with the GRC assembly version numbering
-scheme, UCSC made the decision to name this assembly hg38 instead of hg20. For a glossary of
+scheme, UCSC made the decision to name this assembly hg38 instead of hg20.
+</p>
+
+<p>
+Also new with GRCh38 is the "analysis set" which was created to accommodate Next Gen Sequence
+read alignment pipelines.  To avoid false mapping of reads, the unlocalized and unplaced
+scaffolds as well as chrM have been eliminated.  The new centromere sequences have also been
+eliminated to avoid difficulty of aligning reads to that repetitive region.  The Epstein-Barr
+virus sequence has been added as a decoy to attract contamination in the samples.  The
+analysis set is available on our
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/analysisSet/"
+target="_blank">download page</a>.
+</p>
+
+<p>
+For a glossary of
 assembly-related terms, please see the GRC
 <a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/definitions.shtml"
 target="_blank">Assembly Terminology</a> page. For more information, see the

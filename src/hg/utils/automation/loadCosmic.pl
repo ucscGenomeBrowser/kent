@@ -26,6 +26,10 @@ if($srcUrl =~ m,/([^/]+?_v(\d+)_.+\.csv)$,) {
     $fileName = $1;
     $ver = $2;
     $gzipped = 1;
+} elsif ($srcUrl =~ m,/([^/]+?_v(\d+)\.csv\.gz)$,) {
+    $fileName = $1;
+    $ver = $2;
+    $gzipped = 1;
 } else {
     die "Missing version number in srcUrl";
 }

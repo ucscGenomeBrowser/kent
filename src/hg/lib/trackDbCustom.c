@@ -212,7 +212,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
 		   sameString("bam", s) || sameString("bedDetail", s) ||
 		   sameString("bed8Attrs", s) || sameString("gvf", s) ||
-		   sameString("vcfTabix", s) || sameString("pgSnp", s) ||
+		   sameString("vcfTabix", s) || sameString("vcf", s) || sameString("pgSnp", s) ||
 		   sameString("narrowPeak", s) || sameString("broadPeak", s) || 
                    sameString("peptideMapping", s));
 freeMem(t);
@@ -691,7 +691,7 @@ else if (startsWith("bam", type))
     cType = cfgBam;
 else if (startsWith("psl", type))
     cType = cfgPsl;
-else if (sameWord("vcfTabix",type))
+else if (sameWord("vcfTabix",type) || sameWord("vcf", type))
     cType = cfgVcf;
 else if (sameWord("halSnake",type))
     cType = cfgSnake;
@@ -1273,13 +1273,21 @@ tdbExtrasGet(tdb)->membership = membership;
 char *tdbBigFileName(struct sqlConnection *conn, struct trackDb *tdb)
 // Return file name associated with bigWig.  Do a freeMem on returned string when done.
 {
+char *ret;
 char *fileName = trackDbSetting(tdb, "bigDataUrl"); // always takes precedence
 if (fileName != NULL)
-    return cloneString(fileName);
+    ret = cloneString(fileName);
+else
+    {
+    char query[256];
+    sqlSafef(query, sizeof(query), "select fileName from %s", tdb->table);
+    ret = sqlQuickString(conn, query);
+    }
 
-char query[256];
-sqlSafef(query, sizeof(query), "select fileName from %s", tdb->table);
-return sqlQuickString(conn, query);
+// replace /gbdb if needed
+char *rewriteRet = hReplaceGbdb(ret);
+freeMem(ret);
+return rewriteRet;
 }
 
 static void rTdbTreeAllowPack(struct trackDb *tdb)

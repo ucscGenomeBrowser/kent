@@ -529,6 +529,11 @@ if (fd < 0)
 /* Get status info from file. */
 struct stat status;
 fstat(fd, &status);
+if (status.st_size < udcBitmapHeaderSize) // check for truncated invalid bitmap files.
+    {
+    close(fd);
+    return NULL;  // returning NULL will cause the fresh creation of bitmap and sparseData files.
+    }  
 
 /* Read signature and decide if byte-swapping is needed. */
 // TODO: maybe buffer the I/O for performance?  Don't read past header - 

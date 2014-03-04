@@ -1,6 +1,9 @@
 /* customFactory - a polymorphic object for handling
  * creating various types of custom tracks. */
 
+#ifndef __APPLE__
+#include <malloc.h>
+#endif
 #include <pthread.h>
 #include "common.h"
 #include "errCatch.h"
@@ -40,6 +43,9 @@
 #include "pgSnp.h"
 #include "regexHelper.h"
 #include "chromInfo.h"
+
+// placeholder when custom track uploaded file name is not known
+#define CT_NO_FILE_NAME         "custom track"
 
 static boolean doExtraChecking = FALSE;
 
@@ -763,13 +769,14 @@ static struct pipeline *bedDetailLoaderPipe(struct customTrack *track)
  *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
  *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
+
 struct dyString *tmpDy = newDyString(0);
 //bed size can vary
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-tab", "-noBin",
-	"-sqlTable=loader/bedDetail.sql", "-renameSqlTable", "-trimSqlTable", "-bedDetail", NULL, NULL, NULL, NULL, NULL, NULL};
+	"-bedDetail", NULL, NULL, NULL, NULL, NULL, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
-int index = 8;
+int index = 5;
 
 if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
@@ -1467,6 +1474,38 @@ static struct customFactory pslFactory =
     pslLoader,
     };
 
+static boolean headerStartsWith(struct customPp *cpp, char *headerSig)
+/* If cpp has skipped lines, check the first line for headerSig.
+ * If headerSig is there, tell cpp to reuse all of the skipped header lines
+ * so the loader can access the header too.
+ * If cpp hasn't skipped lines, just check and reuse first line as usual. */
+{
+boolean foundIt = FALSE;
+struct slName *headerLines = customPpCloneSkippedLines(cpp);
+if (headerLines)
+    {
+    if (startsWith(headerSig, headerLines->name))
+	{
+	foundIt = TRUE;
+	// Reuse all of the header lines -- loader will need them.
+	slReverse(&headerLines); // cpp's reuse stack is last-in, first-out.
+	struct slName *sl;
+	for (sl = headerLines;  sl != NULL;  sl = sl->next)
+	    customPpReuse(cpp, sl->name);
+	}
+    slFreeList(&headerLines);
+    }
+else
+    {
+    char *line = customPpNext(cpp);
+    if (line == NULL)
+	return FALSE;
+    foundIt = startsWith(headerSig, line);
+    customPpReuse(cpp, line);
+    }
+return foundIt;
+}
+
 static boolean mafRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -1474,19 +1513,7 @@ static boolean mafRecognizer(struct customFactory *fac,
 {
 if (type != NULL && !sameType(type, fac->name))
     return FALSE;
-char *line = customPpNext(cpp);
-if (line == NULL)
-    return FALSE;
-
-boolean isMaf = FALSE;
-if (startsWith("##maf version", line))
-    {
-    isMaf = TRUE;
-    }
-
-customPpReuse(cpp, line);
-
-return isMaf;
+return headerStartsWith(cpp, "##maf version");
 }
 
 static void mafLoaderBuildTab(struct customTrack *track, char *mafFile)
@@ -1978,6 +2005,39 @@ if (!(startsWith("http://", url)
     errAbort("only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
 }
 
+static char *bigDataDocPath(char *type)
+/* If type is a bigData type, provide a relative path to its custom track/format doc page. */
+{
+char *docUrl = NULL;
+if (sameString(type, "bigWig"))
+    docUrl = "../goldenPath/help/bigWig.html";
+else if (sameString(type, "bigBed"))
+    docUrl = "../goldenPath/help/bigBed.html";
+else if (sameString(type, "bam"))
+    docUrl = "../goldenPath/help/bam.html";
+else if (sameString(type, "vcfTabix"))
+    docUrl = "../goldenPath/help/vcf.html";
+return docUrl;
+}
+
+static void requireBigDataUrl(char *bigDataUrl, char *type, char *trackName)
+/* If bigDataUrl is empty, errAbort with helpful message about bigDataUrl requirement */
+{
+if (isEmpty(bigDataUrl))
+    {
+    struct dyString *doc = dyStringNew(0);
+    char *docUrl = bigDataDocPath(type);
+    if (docUrl != NULL)
+	dyStringPrintf(doc, "  For more information about the bigDataUrl setting, see "
+		       "<A HREF=\"%s\" TARGET=_BLANK>%s custom track documentation</A>.",
+		       docUrl, type);
+    errAbort("Missing bigDataUrl setting from track of type=%s (%s).  "
+	     "Please check for case and spelling and that there is no new-line "
+	     "between the 'track' and the 'bigDataUrl' if the bigDataUrl appears to be there."
+	     "%s",
+	     type, trackName, doc->string);
+    }
+}
 
 static struct customTrack *bigWigLoader(struct customFactory *fac,
 	struct hash *chromHash,
@@ -1987,8 +2047,7 @@ static struct customTrack *bigWigLoader(struct customFactory *fac,
 /* Not much to this.  A bigWig has nothing here but a track line. */
 struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
-if (bigDataUrl == NULL)
-    errAbort("Missing bigDataUrl setting from track of type=bigWig.  Please check for case and spelling and that there is no new-line between the 'track' and the 'bigDataUrl' if you think the bigDataUrl is there.");
+requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 checkAllowedBigDataUrlProtocols(bigDataUrl);
 
 /* protect against temporary network error */
@@ -2035,8 +2094,7 @@ static struct customTrack *bigBedLoader(struct customFactory *fac,
 /* Not much to this.  A bigBed has nothing here but a track line. */
 struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
-if (bigDataUrl == NULL)
-    errAbort("Missing bigDataUrl setting from track of type=bigBed");
+requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 checkAllowedBigDataUrlProtocols(bigDataUrl);
 
 /* protect against temporary network error */
@@ -2085,8 +2143,7 @@ static struct customTrack *bamLoader(struct customFactory *fac, struct hash *chr
 struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 struct dyString *dyErr = dyStringNew(0);
-if (bigDataUrl == NULL)
-    errAbort("Missing bigDataUrl setting from track of type=bam (%s)", track->tdb->shortLabel);
+requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 checkAllowedBigDataUrlProtocols(bigDataUrl);
 if (doExtraChecking)
     {
@@ -2135,10 +2192,8 @@ static struct customTrack *vcfTabixLoader(struct customFactory *fac, struct hash
 {
 struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 struct dyString *dyErr = dyStringNew(0);
-if (bigDataUrl == NULL)
-    errAbort("Missing bigDataUrl setting from track of type=vcfTabix (%s)",
-	     track->tdb->shortLabel);
 checkAllowedBigDataUrlProtocols(bigDataUrl);
 if (doExtraChecking)
     {
@@ -2317,6 +2372,193 @@ static struct customFactory makeItemsFactory =
     makeItemsLoader,
     };
 
+
+/*** VCF Factory - for Variant Call Format tracks ***/
+
+static boolean vcfRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a vcf track */
+{
+if (type != NULL && !sameType(type, fac->name))
+    return FALSE;
+return headerStartsWith(cpp, "##fileformat=VCFv");
+}
+
+static void vcfLoaderAddDbTable(struct customTrack *track, char *vcfFile)
+/* Create a database table that points to vcf tab file */
+{
+customFactorySetupDbTrack(track);
+char *table = track->dbTableName;
+struct dyString *tableSql = sqlDyStringCreate("CREATE TABLE %s (fileName varchar(255) not null)",
+					      table);
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+sqlRemakeTable(conn, table, tableSql->string);
+dyStringClear(tableSql);
+sqlDyStringPrintf(tableSql, "INSERT INTO %s VALUES('%s')", table, vcfFile);
+sqlUpdate(conn, tableSql->string);
+hFreeConn(&conn);
+dyStringFree(&tableSql);
+}
+
+static struct customTrack *vcfLoader(struct customFactory *fac,	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load VCF into local file (or from local file if already loaded) */
+{
+if (!dbRequested)
+    errAbort("Vcf files have to be in database");
+
+track->dbTrackType = cloneString(fac->name);
+// This just means that we use a file not a db table:
+track->wiggle = TRUE;
+
+/* If vcfFile setting already exists, then we are reloading, not loading.
+ * Just make sure files still exist. */
+struct hash *settings = track->tdb->settingsHash;
+char *vcfFile = hashFindVal(settings, "vcfFile");
+if (vcfFile)
+    {
+    if (!fileExists(vcfFile))
+        return FALSE;
+    track->wibFile = vcfFile;
+    }
+else
+    {
+    /* vcfFile setting doesn't exist, so we are loading from stream. */
+    /* Make up vcf file name and add to settings. */
+    struct tempName tn;
+    trashDirFile(&tn, "ct", "ct", ".vcf");
+    track->wibFile = cloneString(tn.forCgi);
+    ctAddToSettings(track, "vcfFile", track->wibFile);
+    char *vcfFile = cloneString(track->wibFile);
+    // Copy VCF lines to new file.  If configured to do so, enforce a limit on bytesize.
+    FILE *f = mustOpen(vcfFile, "w");
+    char *line;
+    char *maxByteStr = cfgOption("customTracks.maxBytes");
+    if (maxByteStr != NULL)
+	{
+	long maxBytes = sqlUnsignedLong(maxByteStr);
+	long numBytesLeft = maxBytes;
+	while ((line = customFactoryNextTilTrack(cpp)) != NULL)
+	    {
+	    numBytesLeft -= strlen(line);
+
+	    if (numBytesLeft < 0)
+		{
+		carefulClose(&f);
+		unlink(vcfFile);
+		errAbort("VCF exceeded upload limit of %ld bytes.  "
+			 "Please compress and index your file, make it web-accessible, and "
+			 "construct a &quot;track line&quot; as described in "
+			 "<A HREF='%s' TARGET=_BLANK>VCF custom track documentation</A>."
+			 , maxBytes, bigDataDocPath("vcfTabix"));
+		}
+	    fprintf(f, "%s\n", line);
+	    }
+	}
+    else
+	while ((line = customFactoryNextTilTrack(cpp)) != NULL)
+	    fprintf(f, "%s\n", line);
+    carefulClose(&f);
+
+    vcfLoaderAddDbTable(track, vcfFile);
+    }
+
+track->tdb->type = cloneString("vcf");
+return track;
+}
+
+static struct customFactory vcfFactory =
+/* Factory for VCF tracks */
+    {
+    NULL,
+    "vcf",
+    vcfRecognizer,
+    vcfLoader,
+    };
+
+
+/*** bigData Oops Factory - when user tries to directly upload a bigData file ***
+ *** (as opposed to a track line with bigDataUrl), print out an informative ***
+ *** error message pointing them to documentation. ***/
+
+static boolean hasUnprintable(char *string, int firstN)
+/* Return TRUE if any of the first N characters of non-NULL string (or its length, whichever
+ * is less) are not printable characters.  */
+{
+int i;
+for (i = 0;  i < firstN && string[i] != '\0';  i++)
+    if (!isprint(string[i]) && !isspace(string[i]))
+	return TRUE;
+return FALSE;
+}
+
+static boolean bigDataOopsRecognizer(struct customFactory *fac,	struct customPp *cpp, char *type,
+				     struct customTrack *track)
+/* errAbort if looks like user uploaded a bigData file, otherwise return FALSE. */
+{
+char *line = customFactoryNextRealTilTrack(cpp);
+if (line == NULL)
+    return FALSE;
+if (hasUnprintable(line, 6))
+    {
+    char *fileName = customPpFileName(cpp);
+    if (type == NULL &&isNotEmpty(fileName))
+	{
+	if (endsWith(fileName, ".bam"))
+	    type = "bam";
+	else if (endsWith(fileName, ".bb"))
+	    type = "bigBed";
+	else if (endsWith(fileName, ".bw"))
+	    type = "bigWig";
+	}
+    char *docUrl = NULL;
+    if (isNotEmpty(type))
+	docUrl = bigDataDocPath(type);
+    struct dyString *dataName = dyStringNew(0);
+    if (isNotEmpty(fileName) && !sameString(fileName, CT_NO_FILE_NAME)
+	&& !startsWith("memory://", fileName))
+	dyStringPrintf(dataName, " (%s)", fileName);
+    else if (track->tdb && track->tdb->shortLabel
+	     && differentString(track->tdb->shortLabel, CT_DEFAULT_TRACK_NAME))
+	dyStringPrintf(dataName, " (%s)", track->tdb->shortLabel);
+    if (docUrl)
+	errAbort("It appears that you are directly uploading binary data of type %s%s.  "
+		 "Custom tracks of this type require the files to be accessible by "
+		 "public http/https/ftp, and file URLs must be passed as the bigDataUrl "
+		 "setting on a &quot;track&quot; line.  "
+		 "See <A HREF='%s' TARGET=_BLANK>%s custom track documentation</A> for "
+		 "more information and examples.",
+		 type, dataName->string, docUrl, type);
+    else
+	errAbort("It appears that you are directly uploading binary data in an unrecognized "
+		 "format%s.  For custom track formatting information, please see "
+		 "<A HREF='../goldenPath/help/customTrack.html' "
+		 "TARGET=_BLANK>custom track documentation</A>.", dataName->string);
+    }
+customPpReuse(cpp, line);
+return FALSE;
+}
+
+static struct customTrack *bigDataOopsLoader(struct customFactory *fac, struct hash *chromHash,
+					     struct customPp *cpp, struct customTrack *track,
+					     boolean dbRequested)
+/* This is a placeholder since the recognizer errAborts. */
+{
+errAbort("bigDataOopsLoader: this is a placeholder and should not be called.");
+return NULL;
+}
+
+static struct customFactory bigDataOopsFactory =
+/* Factory for recognizing direct upload of bigData files */
+    {
+    NULL,
+    "bigDataOops",
+    bigDataOopsRecognizer,
+    bigDataOopsLoader,
+    };
+
+
 /*** Framework for custom factories. ***/
 
 static struct customFactory *factoryList;
@@ -2326,9 +2568,8 @@ static void customFactoryInit()
 {
 if (factoryList == NULL)
     {
-    /* mafFactory has to be first because it
-     * doesn't strip comments
-     */
+    // mafFactory and vcfFactory have to be first because they don't strip comments (headers)
+    slAddHead(&factoryList, &vcfFactory);
     slAddHead(&factoryList, &mafFactory);
     slAddTail(&factoryList, &wigFactory);
     slAddTail(&factoryList, &bigWigFactory);
@@ -2351,6 +2592,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &vcfTabixFactory);
 #endif//def USE_TABIX
     slAddTail(&factoryList, &makeItemsFactory);
+    slAddTail(&factoryList, &bigDataOopsFactory);
     }
 }
 
@@ -2719,9 +2961,22 @@ else
         size = sqlUnsignedLong(words[2]);
 	lf = lineFileDecompressMem(TRUE, mem, size);
 	}
+    else if (startsWith("memory://", text))
+	{
+	int len = strlen(text) + 1;
+	char copy[len];
+	safecpy(copy, len, text);
+	char *words[3];
+	int wordCount = chopByWhite(copy, words, 3);
+	if (wordCount != 3)
+	    errAbort("customLineFile: badly formatted input '%s': expected 3 words, got %d",
+		     text, wordCount);
+	char *mem = (char *)sqlUnsignedLong(words[1]);
+	lf = lineFileOnString(words[0], TRUE, mem);
+	}
     else
         {
-	lf = lineFileOnString("custom track", TRUE, text);
+	lf = lineFileOnString(CT_NO_FILE_NAME, TRUE, text);
 	}
     }
 return lf;
@@ -2990,6 +3245,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * this track, and call it.  Also we may need to do some work
      * to load track into database. */
         {
+	char *bigDataUrl = hashFindVal(track->tdb->settingsHash, "bigDataUrl");
 	/* Load track from appropriate factory */
         char *type = track->tdb->type;
 	struct customFactory *fac = customFactoryFind(genomeDb, cpp, type, track);
@@ -3003,11 +3259,24 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		char *line = customFactoryNextRealTilTrack(cpp);
 		customPpReuse(cpp, line);
 		if (line == NULL)
+		    {
+		    // But if someone is trying to make a bigData track and forgot the type,
+		    // let them know about it:
+		    if (bigDataUrl)
+			errAbort("Track line with bigDataUrl setting (%s) "
+				 "is missing its type setting.", bigDataUrl);
 		    continue;
+		    }
 		else
 		    {
-		    errAbort("Unrecognized format line %d of %s:\n\t%s (note: chrom names are case sensitive)",
-			lf->lineIx, lf->fileName, emptyForNull(line));
+		    char *fileName = lf->fileName;
+		    // Don't use bogus filename made up by lineFile when attached to memory block,
+		    // or placeholder for unknown file made up by customLineFile:
+		    if (startsWith(LF_BOGUS_FILE_PREFIX, lf->fileName) ||
+			sameString(CT_NO_FILE_NAME, lf->fileName))
+			fileName = "file";
+		    errAbort("Unrecognized format line %d of %s:\n\t%s (note: chrom names are case sensitive, e.g.: correct: 'chr1', incorrect: 'Chr1', incorrect: '1')",
+			lf->lineIx, fileName, emptyForNull(line));
 		    }
 		}
 	    else
@@ -3024,7 +3293,6 @@ while ((line = customPpNextReal(cpp)) != NULL)
                 startsWith("ftp://"  , lf->fileName)
                 ))
             dataUrl = cloneString(lf->fileName);
-	char *bigDataUrl = hashFindVal(track->tdb->settingsHash, "bigDataUrl");
 	if (bigDataUrl && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
                                        //  (unless ptMax == 0 which means turn parallel loading off)
 	    { 
@@ -3058,6 +3326,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 // Call the fac loader in parallel on all the bigDataUrl custom tracks
 // using pthreads to avoid long serial timeouts 
 pthread_t *threads = NULL;
+pthread_attr_t attr;
+int stackSize = 2*1024*1024;  // 2 MB per thread? 10MB is default on 64-bit
 if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
     {
     /* launch parallel threads */
@@ -3065,15 +3335,32 @@ if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
     if (ptMax > 0)
 	{
 	AllocArray(threads, ptMax);
+
+	#if defined(M_ARENA_MAX) 
+	    mallopt(M_ARENA_MAX, 8);  // Otherwise new glibc allocates 64MB arena per thread
+	#endif /* glibc malloc tuning */ 
+
+	/* Initialize thread creation attributes */
+	int rc = pthread_attr_init(&attr);
+	if (rc) errAbort("Unexpected error %d from pthread_attr_init(): %s",rc,strerror(rc));
+	/* Set thread stack size */
+	rc = pthread_attr_setstacksize(&attr, stackSize);
+	if (rc) errAbort("Unexpected error %d from pthread_attr_setstacksize(): %s",rc,strerror(rc));
+
 	int pt;
 	for (pt = 0; pt < ptMax; ++pt)
 	    {
-	    int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, &threads[pt]);
+	    rc = pthread_create(&threads[pt], &attr, remoteParallelLoad, &threads[pt]);
 	    if (rc)
 		{
 		errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
 		}
 	    }
+
+	/* Thread attr no longer needed */
+	rc = pthread_attr_destroy(&attr);
+	if (rc) errAbort("Unexpected error %d from pthread_attr_destroy(): %s",rc,strerror(rc));
+
 	}
     }
 if (ptMax > 0)

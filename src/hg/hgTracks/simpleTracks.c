@@ -11865,8 +11865,8 @@ if (wikiTrackEnabled(database, NULL))
     tg->itemName = linkedFeaturesName;
     tg->mapItemName = variomeMapItemName;
     tg->mapItem = variomeMapItem;
-    tg->priority = 500.4;
-    tg->defaultPriority = 500.4;
+    tg->priority = WIKI_TRACK_PRIORITY;
+    tg->defaultPriority = WIKI_TRACK_PRIORITY;
     tg->groupName = cloneString("varRep");
     tg->defaultGroupName = cloneString("varRep");
     tg->exonArrows = FALSE;
@@ -12211,6 +12211,12 @@ else if (sameWord(type, "halSnake"))
 else if (sameWord(type, "vcfTabix"))
     {
     vcfTabixMethods(track);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "vcf"))
+    {
+    vcfMethods(track);
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }

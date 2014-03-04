@@ -493,6 +493,25 @@ registerTrackHandler("wgEncodeGencodeV17", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV18", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV19", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV20", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV21", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV22", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV23", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV24", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV25", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV26", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV27", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeV28", gencodeGeneMethods);
+
+registerTrackHandler("wgEncodeGencodeVM2", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeVM3", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeVM4", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeVM5", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeVM6", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeVM7", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeVM8", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeVM9", gencodeGeneMethods);
+registerTrackHandler("wgEncodeGencodeVM10", gencodeGeneMethods);
+
 }
 
 static void gencodePilotGeneMethods(struct track *tg)

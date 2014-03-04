@@ -4,7 +4,6 @@ track ntHumChimpCodingDiff
 shortLabel H-C Coding Diffs
 longLabel Neandertal Alleles in Human/Chimp Coding Non-synonymous Differences in Human Lineage
 group neandertal
-priority 3
 visibility hide
 type bed 9 .
 itemRgb on
@@ -16,7 +15,6 @@ track ntSssZScorePMVar
 shortLabel Sel Swp Scan (S)
 longLabel Selective Sweep Scan (S) on Neandertal vs. Human Polymorphisms (Z-Score +- Variance)
 group neandertal
-priority 3.1
 visibility hide
 type bigWig -8.8332 33.637199
 autoScale off
@@ -32,7 +30,6 @@ track ntSssTop5p
 shortLabel 5% Lowest S
 longLabel Selective Sweep Scan (S): 5% Smallest S scores
 group neandertal
-priority 3.2
 visibility hide
 type bed 5
 noScoreFilter .
@@ -45,7 +42,6 @@ track ntSssSnps
 shortLabel S SNPs
 longLabel SNPS Used for Selective Sweep Scan (S)
 group neandertal
-priority 3.3
 visibility hide
 type bed 9
 itemRgb on
@@ -58,7 +54,6 @@ track ntOoaHaplo
 shortLabel Cand. Gene Flow
 longLabel Candidate Regions for Gene Flow from Neandertal to Non-African Modern Humans
 group neandertal
-priority 3.8
 visibility hide
 type bed 9 +
 itemRgb on
@@ -72,7 +67,6 @@ compositeTrack on
 shortLabel Modern Human Seq
 longLabel Alignments of Sequence Reads from 5 Modern Humans
 group neandertal
-priority 6
 visibility hide
 type bam
 pairEndsByName on
@@ -131,7 +125,6 @@ track ntMito
 shortLabel Neandertal Mito
 longLabel Neandertal Mitochondrial Sequence (Vi33.16, 2008)
 group neandertal
-priority 7
 visibility hide
 type psl
 baseColorUseSequence seq

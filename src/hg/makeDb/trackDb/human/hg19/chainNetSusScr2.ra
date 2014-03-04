@@ -1,0 +1,16 @@
+
+        track chainSusScr2
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=mPig clade=bLaura
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain susScr2
+        otherDb susScr2
+
+        track netSusScr2
+        subTrack placentalChainNetViewnet on
+        subGroups view=net species=mPig clade=bLaura
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign susScr2 chainSusScr2
+        otherDb susScr2

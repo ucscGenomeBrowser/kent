@@ -338,6 +338,8 @@ if (iCol < numCols)
     }
 if (iCol < numCols)
     {
+    if (isEmpty(row[iCol])) // if the cdsStartStat field is empty
+	return ret;         // ignore the rest of the fields
     ret->cdsStartStat = parseCdsStat(row[iCol++]);
     ret->optFields |= genePredCdsStatFld;
     }

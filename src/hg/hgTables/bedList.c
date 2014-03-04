@@ -283,6 +283,7 @@ struct bed *getFilteredBeds(struct sqlConnection *conn,
 	char *table, struct region *region, struct lm *lm, int *retFieldCount)
 /* Get list of beds on single region that pass filtering. */
 {
+boolean isTabix = FALSE;
 /* region may be part of a list, and the routines we call work on lists of
  * regions.  Temporarily force region->next to NULL and restore at end. */
 struct region *oldNext = region->next;
@@ -293,8 +294,9 @@ if (isBigBed(database, table, curTrack, ctLookupName))
     bedList = bigBedGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
 else if (isBamTable(table))
     bedList = bamGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
-else if (isVcfTable(table))
-    bedList = vcfGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
+else if (isVcfTable(table, &isTabix))
+    bedList = vcfGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount,
+					  isTabix);
 else if (isCustomTrack(table))
     bedList = customTrackGetFilteredBeds(database, table, region, lm, retFieldCount);
 else if (sameWord(table, WIKI_TRACK_TABLE))

@@ -32252,3 +32252,22 @@ cd ..
 make DBS="hg18 hg19"
 
 #############################################################################
+# LIFTOVER TO Hg38 (DONE - 2014-02-19 - Hiram )
+    mkdir /hive/data/genomes/hg18/bed/blat.hg38.2014-02-19
+    cd /hive/data/genomes/hg18/bed/blat.hg38.2014-02-19
+    # -debug run to create run dir and scripts to verify this command
+    # is OK
+    doSameSpeciesLiftOver.pl -debug -buildDir=`pwd` \
+      -bigClusterHub=ku \
+       -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/hg18/11.ooc hg18 hg38
+    # then running for real
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+      -bigClusterHub=ku \
+       -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/hg18/11.ooc hg18 hg38 >  do.log 2>&1
+    # about 2h 21m
+
+    # verify the convert link on the browser is now active from hg18 to hg38
+
+#############################################################################

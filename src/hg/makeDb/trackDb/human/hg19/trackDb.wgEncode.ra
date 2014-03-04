@@ -200,8 +200,9 @@ include wgEncodeMapability.ra
 
 # Analysis tracks
 
-# AWG DNase & TFBS (wrangler: kate)
+# AWG tracks (wrangler: kate)
 include wgEncodeAwgDnaseUniform.ra
 include wgEncodeAwgTfbsUniform.ra
+include wgEncodeAwgSegmentation.ra
 
 include wgEncodeAwg.ra

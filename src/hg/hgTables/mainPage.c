@@ -643,7 +643,7 @@ hPrintf("<TABLE BORDER=0>\n");
         isPositional = htiIsPositional(hti);
         }
     isBam = isBamTable( curTable);
-    isVcf = isVcfTable( curTable);
+    isVcf = isVcfTable(curTable, NULL);
     isWig = isWiggle(database, curTable);
     if (isBigWigTable(curTable))
         {
@@ -794,7 +794,7 @@ if (isPositional)
 	hPrintf(" ");
 	cgiMakeButton(hgtaDoClearIntersect, "clear");
 	}
-    else
+    else if (canIntersect(database, curTable))
         {
 	hPrintf("<TR><TD><B>intersection:</B>\n");
 	cgiMakeButton(hgtaDoIntersectPage, "create");

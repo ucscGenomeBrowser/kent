@@ -44,6 +44,7 @@ if (cpp)
     slFreeList(&cpp->browserLines);
     slFreeList(&cpp->reusedLines);
     freeMem(cpp->inReuse);
+    slFreeList(&cpp->skippedLines);
     }
 }
 
@@ -105,8 +106,10 @@ return NULL;
 }
 
 char *customPpNextReal(struct customPp *cpp)
-/* Return next line that's nonempty and non-space. */
+/* Return next line that's nonempty, non-space and not a comment.
+ * Save skipped comment lines to cpp->skippedLines. */
 {
+slFreeList(&cpp->skippedLines);
 for (;;)
     {
     char *line = customPpNext(cpp);
@@ -116,6 +119,8 @@ for (;;)
     char c = *s;
     if (c != 0 && c != '#')
         return line;
+    else if (c == '#')
+	slNameAddHead(&cpp->skippedLines, line);
     }
 }
 
@@ -133,4 +138,23 @@ struct slName *customPpTakeBrowserLines(struct customPp *cpp)
 struct slName *browserLines = cpp->browserLines;
 cpp->browserLines = NULL;
 return browserLines;
+}
+
+struct slName *customPpCloneSkippedLines(struct customPp *cpp)
+/* Return a clone of most recent nonempty skipped (comment/header) lines from cpp,
+ * which will still have them.  slFreeList when done. */
+{
+struct slName *skippedLines = NULL, *sl;
+for (sl = cpp->skippedLines;  sl != NULL;  sl = sl->next)
+    slNameAddHead(&skippedLines, sl->name);
+return skippedLines;
+}
+
+char *customPpFileName(struct customPp *cpp)
+/* Return the name of the current file being parsed (top of fileStack), or NULL
+ * if fileStack is NULL.  Free when done. */
+{
+if (cpp->fileStack == NULL)
+    return NULL;
+return cloneString(cpp->fileStack->fileName);
 }
