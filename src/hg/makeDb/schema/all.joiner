@@ -2960,6 +2960,12 @@ identifier ensemblGeneScaffold external=Ensembl dependency
     $ensGeneScaffold.chromInfo.chrom
     $ensGeneScaffold.ensemblGeneScaffold.chrom
 
+identifier altSeqLiftOver
+"alternate sequence lift over"
+    hg38.chromInfo.chrom
+    hg38.altSeqLiftOverPsl.qName
+    hg38.altSeqLiftOverPsl.tName
+
 identifier ucscToINSDC external=INSDC dependency
 "INSDC names to UCSC chrom name translation"
     $gbd.chromInfo.chrom
@@ -3872,6 +3878,11 @@ identifier hg19ContigDiff
 "contig difference track"
     hg19.gold.frag dupeOk
     hg19.hg19ContigDiff.name
+
+identifier hg38ContigDiff
+"contig difference track"
+    hg19,hg38.gold.frag dupeOk
+    hg19,hg38.hg38ContigDiff.name
 
 # lsSnpPdb tables
 identifier lsSnpPdbProtId

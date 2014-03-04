@@ -29141,4 +29141,13 @@ hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
     # repeat this until happy, editing minCheck as needed
     cd /hive/data/genomes/hg19/bed/gencodeV19
     for tbl in $(hgsql -Ne 'show tables like "wgEncodeGencode%V19"' hg19) ; do runJoiner.csh hg19 $tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >&check/joiner.out
+
 ##############################################################################
+# hg19 <-> hg38 difference tracks (DONE - 2013-12-28 - Hiram)
+    # note: the procedure for this is in the hg38.txt file under
+    # this same heading.  The end result is the loading of the table:
+
+    cd /hive/data/genomes/hg19/bed/liftOverHg38
+    hgLoadBed hg19 hg38ContigDiff hg19.itemRgb.bed
+
+##########################################################################
