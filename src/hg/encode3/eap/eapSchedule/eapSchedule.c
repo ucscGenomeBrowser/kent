@@ -130,7 +130,6 @@ void doTest(struct sqlConnection *conn, struct edwFile *efList)
 char query[512];
 sqlSafef(query, sizeof(query), "select * from eapStep");
 struct eapStep *step, *stepList = eapStepLoadByQuery(conn, query);
-uglyf("%d steps\n", slCount(stepList));
 for (step = stepList; step != NULL; step = step->next)
     {
     unsigned curStepVersion = eapCurrentStepVersion(conn, step->name);
@@ -905,26 +904,23 @@ void schedulePhantomPeakSpp(struct sqlConnection *conn,
     struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
 /* Calculate phantom peak stats on a bam file we hope will be peaky. */
 {
-uglyf("Scheduling phantomPeakSpp\n");
+verbose(2, "Scheduling phantomPeakSpp\n");
 /* Make sure that we don't schedule it again and again */
 char *analysisStep = "phantom_peak_stats";
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
 if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
     return;
-uglyf("Looks like we got to do %s on %s\n", vf->licensePlate, vf->ucscDb);
 
 /* Make temp dir and stage input files */
 char *tempDir = newTempDir(analysisStep);
 struct cache *cache = cacheNew();
 char *efName = cacheMore(cache, ef);
 preloadCache(conn, cache);
-uglyf("tempDir=%s, efName=%s\n", tempDir, efName);
 
 /* Make command line */
 char commandLine[3*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "eap_run_phantom_peak_spp %s %s%s",
     efName, tempDir, "out.tab");
-uglyf("CommandLine %s\n", commandLine);
 
 /* Declare step input arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
