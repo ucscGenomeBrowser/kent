@@ -4390,6 +4390,9 @@ tablesIgnored $kgDb
     pbStamp
     pep%Dist
 
+tablesIgnored hg38
+    altLocations
+
 tablesIgnored hg19
     affyCytoScan
     affyExonProbe%

@@ -767,10 +767,23 @@ if (rec->alleleCount > 1)
 return chromStartOrig;
 }
 
-static struct vcfRecord *vcfParseData(struct vcfFile *vcff, int maxRecords)
+static boolean chromsMatch(char *chromA, char *chromB)
+// Return TRUE if chromA and chromB are non-NULL and identical, possibly ignoring
+// "chr" at the beginning of one but not the other.
+{
+if (chromA == NULL || chromB == NULL)
+    return FALSE;
+char *chromAPlus = startsWith("chr", chromA) ? chromA+3 : chromA;
+char *chromBPlus = startsWith("chr", chromB) ? chromB+3 : chromB;
+return sameString(chromAPlus, chromBPlus);
+}
+
+static struct vcfRecord *vcfParseData(struct vcfFile *vcff, char *chrom, int start, int end,
+				      int maxRecords)
 // Given a vcfFile into which the header has been parsed, and whose
 // lineFile is positioned at the beginning of a data row, parse and
-// return all data rows from lineFile.
+// return all data rows (in region, if chrom is non-NULL) from lineFile,
+// up to maxRecords.
 {
 if (vcff == NULL)
     return NULL;
@@ -781,17 +794,32 @@ while ((record = vcfNextRecord(vcff)) != NULL)
     {
     if (maxRecords >= 0 && recCount >= maxRecords)
         break;
-    slAddHead(&records, record);
-    recCount++;
+    if (chrom == NULL)
+	{
+	slAddHead(&records, record);
+	recCount++;
+	}
+    else if (chromsMatch(chrom, record->chrom))
+	{
+	if (end > 0 && record->chromStart >= end)
+	    break;
+	else if (record->chromEnd > start)
+	    {
+	    slAddHead(&records, record);
+	    recCount++;
+	    }
+	}
     }
 slReverse(&records);
-
 return records;
 }
 
-struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords, boolean parseAll)
+struct vcfFile *vcfFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
+			       int maxErr, int maxRecords, boolean parseAll)
 /* Open fileOrUrl and parse VCF header; return NULL if unable.
- * If parseAll, then read in all lines, parse and store in
+ * If chrom is non-NULL, scan past any variants that precede {chrom, chromStart}.
+ * Note: this is very inefficient -- it's better to use vcfTabix if possible!
+ * If parseAll, then read in all lines in region, parse and store in
  * vcff->records; if maxErr >= zero, then continue to parse until
  * there are maxErr+1 errors.  A maxErr less than zero does not stop
  * and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence */
@@ -803,9 +831,36 @@ if (startsWith("http://", fileOrUrl) || startsWith("ftp://", fileOrUrl) ||
 else
     lf = lineFileMayOpen(fileOrUrl, TRUE);
 struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
-if (parseAll)
+if (vcff && chrom != NULL)
     {
-    vcff->records = vcfParseData(vcff, maxRecords);
+    char *line = NULL;
+    int size = 0;
+    while (lineFileNext(vcff->lf, &line, &size))
+	{
+	char lineCopy[size+1];
+	safecpy(lineCopy, sizeof(lineCopy), line);
+	char *words[VCF_MAX_COLUMNS];
+	int wordCount = chopTabs(lineCopy, words);
+	int expected = 8;
+	if (vcff->genotypeCount > 0)
+	    expected = 9 + vcff->genotypeCount;
+	lineFileExpectWords(vcff->lf, expected, wordCount);
+	struct vcfRecord *record = vcfRecordFromRow(vcff, words);
+	if (chromsMatch(chrom, record->chrom))
+	    {
+	    if (record->chromEnd < start)
+		continue;
+	    else
+		{
+		lineFileReuse(vcff->lf);
+		break;
+		}
+	    }
+	}
+    }
+if (vcff && parseAll)
+    {
+    vcff->records = vcfParseData(vcff, chrom, start, end, maxRecords);
     lineFileClose(&(vcff->lf)); // Not sure why it is closed.  Angie?
     }
 return vcff;
@@ -828,7 +883,7 @@ if (isNotEmpty(chrom) && start != end)
     {
     if (lineFileSetTabixRegion(lf, chrom, start, end))
         {
-        vcff->records = vcfParseData(vcff, maxRecords);
+        vcff->records = vcfParseData(vcff, NULL, 0, 0, maxRecords);
         lineFileClose(&(vcff->lf)); // Not sure why it is closed.  Angie?
         }
     }
@@ -866,7 +921,7 @@ int oldCount = slCount(vcff->records);
 
 if (lineFileSetTabixRegion(vcff->lf, chrom, start, end))
     {
-    struct vcfRecord *records = vcfParseData(vcff, maxRecords);
+    struct vcfRecord *records = vcfParseData(vcff, NULL, 0, 0, maxRecords);
     if (records)
         {
         struct vcfRecord *lastRec = vcff->records;

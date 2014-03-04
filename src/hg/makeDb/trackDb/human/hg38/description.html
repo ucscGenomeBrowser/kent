@@ -70,8 +70,14 @@ scheme, UCSC made the decision to name this assembly hg38 instead of hg20.
 </p>
 
 <p>
-Also new with GRCh38 is the "analysis set".  To accommodate Next Gen Sequence read alignment
-pipelines, some stuff was done. Really awesome stuff.  Seriously.
+Also new with GRCh38 is the "analysis set" which was created to accommodate Next Gen Sequence
+read alignment pipelines.  To avoid false mapping of reads, the unlocalized and unplaced
+scaffolds as well as chrM have been eliminated.  The new centromere sequences have also been
+eliminated to avoid difficulty of aligning reads to that repetitive region.  The Epstein-Barr
+virus sequence has been added as a decoy to attract contamination in the samples.  The
+analysis set is available on our
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/analysisSet/"
+target="_blank">download page</a>.
 </p>
 
 <p>

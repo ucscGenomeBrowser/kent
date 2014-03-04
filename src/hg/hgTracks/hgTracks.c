@@ -3296,6 +3296,13 @@ else if (sameString(type, "vcfTabix"))
         tg->loadItems = dontLoadItems;
     tg->mapItemName = ctMapItemName;
     }
+else if (sameString(type, "vcf"))
+    {
+    tg = trackFromTrackDb(tdb);
+    tg->customPt = ct;
+    vcfMethods(tg);
+    tg->mapItemName = ctMapItemName;
+    }
 else if (sameString(type, "makeItems"))
     {
     tg = trackFromTrackDb(tdb);
