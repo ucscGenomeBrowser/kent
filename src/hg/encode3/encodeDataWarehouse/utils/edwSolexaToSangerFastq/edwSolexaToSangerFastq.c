@@ -9,7 +9,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwSolexaToSangerFastq - Subtract 31 from each quality to get from solexe to sanger format.\n"
+  "edwSolexaToSangerFastq v1 - Subtract 31 from each quality to get from solexe to sanger format.\n"
   "usage:\n"
   "   edwSolexaToSangerFastq inSolexa.fq outSanger.fq\n"
   "The in.fq can be gzipped.  Use 'stdin' or 'stdout' as a file name to use in a pipe.\n"
