@@ -8,6 +8,7 @@
 
 char *clVersion = NULL;
 char *clMd5 = NULL;
+int redoPriority = -1;
 
 void usage()
 /* Explain usage and exit. */
@@ -19,6 +20,7 @@ errAbort(
   "options:\n"
   "   -version=version  - update version # with this\n"
   "   -md5=md5hex       - use this md5 sum rather than having program calculate it\n"
+  "   -redoPriority     - -1 for no redo, 0 for agnostic, 1 recommended upgrade, 2 must redo\n"
   );
 }
 
@@ -26,6 +28,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"version", OPTION_STRING},
    {"md5", OPTION_STRING},
+   {"redoPriority", OPTION_INT},
    {NULL, 0},
 };
 
@@ -61,8 +64,9 @@ if (existing > 0)
     errAbort("Warn %d existing %s %s %s in eapSwVersion", existing, software, version, md5);
 
 sqlSafef(query, sizeof(query),
-    "insert eapSwVersion (software, version, md5, notes) values ('%s', '%s', '%s', '%s')"
-    , software, version, md5, notes);
+    "insert eapSwVersion (software, version, md5, redoPriority, notes) "
+                " values ('%s', '%s', '%s', %d, '%s')"
+    , software, version, md5, redoPriority, notes);
 sqlUpdate(conn, query);
 }
 
@@ -74,6 +78,9 @@ if (argc != 3)
     usage();
 clVersion = optionVal("version", clVersion);
 clMd5 = optionVal("md5", clMd5);
+redoPriority = optionInt("redoPriority", redoPriority);
+if (redoPriority < -1 || redoPriority > 2)
+    errAbort("redoPriority must be between -1 and 2");
 eapUpdateSoftware(argv[1], argv[2]);
 return 0;
 }
