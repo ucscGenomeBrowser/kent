@@ -36,7 +36,7 @@ char *getTextViaHttps(char *url, char *userId, char *password)
  * will return a NULL rather than aborting if URL not found. */
 {
 char fullUrl[1024];
-safef(fullUrl, sizeof(fullUrl), "https://%s:%s@%s", userId, password, url);
+safef(fullUrl, sizeof(fullUrl), "http://%s:%s@%s", userId, password, url);
 struct htmlPage *page = htmlPageGet(fullUrl);
 if (page == NULL)
     return NULL;
