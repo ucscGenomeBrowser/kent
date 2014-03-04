@@ -288,6 +288,14 @@ struct edwBamFile * edwMakeBamStatsAndSample(struct sqlConnection *conn, long lo
 struct edwBamFile *edwBamFileFromFileId(struct sqlConnection *conn, long long fileId);
 /* Get edwBamFile with given fileId or NULL if none such */
 
+struct edwQaWigSpot *edwMakeWigSpot(struct sqlConnection *conn, long long wigId, long long spotId);
+/* Create a new edwQaWigSpot record in database based on comparing wig file to spot file
+ * (specified by id's in edwFile table). */
+
+struct edwQaWigSpot *edwQaWigSpotFor(struct sqlConnection *conn, 
+    long long wigFileId, long long spotFileId);
+/* Return wigSpot relationship if any we have in database for these two files. */
+
 char *edwOppositePairedEndString(char *end);
 /* Return "1" for "2" and vice versa */
 
