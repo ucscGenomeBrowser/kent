@@ -189,9 +189,12 @@ switch (type)
 struct vcfFile *vcfFileNew();
 /* Return a new, empty vcfFile object. */
 
-struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords, boolean parseAll);
+struct vcfFile *vcfFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
+			       int maxErr, int maxRecords, boolean parseAll);
 /* Open fileOrUrl and parse VCF header; return NULL if unable.
- * If parseAll, then read in all lines, parse and store in
+ * If chrom is non-NULL, scan past any variants that precede {chrom, chromStart}.
+ * Note: this is very inefficient -- it's better to use vcfTabix if possible!
+ * If parseAll, then read in all lines in region, parse and store in
  * vcff->records; if maxErr >= zero, then continue to parse until
  * there are maxErr+1 errors.  A maxErr less than zero does not stop
  * and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence. */

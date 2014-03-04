@@ -178,10 +178,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
 
     sqlSafef(query, sizeof(query),
 	"insert into edwSubmit (url,  userId) values (\"%s\",  %d)", url, user->id);
-    /* need to create real edwSubmit entries first before processing
- * edwFile !! */ 
-    /* done once */ sqlUpdate(conn, query);
-    /* not yet */ maybeDoUpdate(conn, query, really, f);
+    maybeDoUpdate(conn, query, really, f);
 
 //verbose(1,"Creating edwSubmit with: %s\n", query);
     }
