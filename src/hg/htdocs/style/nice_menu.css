@@ -19,6 +19,7 @@
 }*/
 #main-menu-whole {
 	width:100%;
+	min-width:1000px;
 	height:32px;
 	background:#00457c;
 	font-family: Arial,Helvetica,sans-serif;
