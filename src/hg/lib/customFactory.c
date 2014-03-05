@@ -1474,6 +1474,38 @@ static struct customFactory pslFactory =
     pslLoader,
     };
 
+static boolean headerStartsWith(struct customPp *cpp, char *headerSig)
+/* If cpp has skipped lines, check the first line for headerSig.
+ * If headerSig is there, tell cpp to reuse all of the skipped header lines
+ * so the loader can access the header too.
+ * If cpp hasn't skipped lines, just check and reuse first line as usual. */
+{
+boolean foundIt = FALSE;
+struct slName *headerLines = customPpCloneSkippedLines(cpp);
+if (headerLines)
+    {
+    if (startsWith(headerSig, headerLines->name))
+	{
+	foundIt = TRUE;
+	// Reuse all of the header lines -- loader will need them.
+	slReverse(&headerLines); // cpp's reuse stack is last-in, first-out.
+	struct slName *sl;
+	for (sl = headerLines;  sl != NULL;  sl = sl->next)
+	    customPpReuse(cpp, sl->name);
+	}
+    slFreeList(&headerLines);
+    }
+else
+    {
+    char *line = customPpNext(cpp);
+    if (line == NULL)
+	return FALSE;
+    foundIt = startsWith(headerSig, line);
+    customPpReuse(cpp, line);
+    }
+return foundIt;
+}
+
 static boolean mafRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -1481,19 +1513,7 @@ static boolean mafRecognizer(struct customFactory *fac,
 {
 if (type != NULL && !sameType(type, fac->name))
     return FALSE;
-char *line = customPpNext(cpp);
-if (line == NULL)
-    return FALSE;
-
-boolean isMaf = FALSE;
-if (startsWith("##maf version", line))
-    {
-    isMaf = TRUE;
-    }
-
-customPpReuse(cpp, line);
-
-return isMaf;
+return headerStartsWith(cpp, "##maf version");
 }
 
 static void mafLoaderBuildTab(struct customTrack *track, char *mafFile)
@@ -2353,6 +2373,111 @@ static struct customFactory makeItemsFactory =
     };
 
 
+/*** VCF Factory - for Variant Call Format tracks ***/
+
+static boolean vcfRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a vcf track */
+{
+if (type != NULL && !sameType(type, fac->name))
+    return FALSE;
+return headerStartsWith(cpp, "##fileformat=VCFv");
+}
+
+static void vcfLoaderAddDbTable(struct customTrack *track, char *vcfFile)
+/* Create a database table that points to vcf tab file */
+{
+customFactorySetupDbTrack(track);
+char *table = track->dbTableName;
+struct dyString *tableSql = sqlDyStringCreate("CREATE TABLE %s (fileName varchar(255) not null)",
+					      table);
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+sqlRemakeTable(conn, table, tableSql->string);
+dyStringClear(tableSql);
+sqlDyStringPrintf(tableSql, "INSERT INTO %s VALUES('%s')", table, vcfFile);
+sqlUpdate(conn, tableSql->string);
+hFreeConn(&conn);
+dyStringFree(&tableSql);
+}
+
+static struct customTrack *vcfLoader(struct customFactory *fac,	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load VCF into local file (or from local file if already loaded) */
+{
+if (!dbRequested)
+    errAbort("Vcf files have to be in database");
+
+track->dbTrackType = cloneString(fac->name);
+// This just means that we use a file not a db table:
+track->wiggle = TRUE;
+
+/* If vcfFile setting already exists, then we are reloading, not loading.
+ * Just make sure files still exist. */
+struct hash *settings = track->tdb->settingsHash;
+char *vcfFile = hashFindVal(settings, "vcfFile");
+if (vcfFile)
+    {
+    if (!fileExists(vcfFile))
+        return FALSE;
+    track->wibFile = vcfFile;
+    }
+else
+    {
+    /* vcfFile setting doesn't exist, so we are loading from stream. */
+    /* Make up vcf file name and add to settings. */
+    struct tempName tn;
+    trashDirFile(&tn, "ct", "ct", ".vcf");
+    track->wibFile = cloneString(tn.forCgi);
+    ctAddToSettings(track, "vcfFile", track->wibFile);
+    char *vcfFile = cloneString(track->wibFile);
+    // Copy VCF lines to new file.  If configured to do so, enforce a limit on bytesize.
+    FILE *f = mustOpen(vcfFile, "w");
+    char *line;
+    char *maxByteStr = cfgOption("customTracks.maxBytes");
+    if (maxByteStr != NULL)
+	{
+	long maxBytes = sqlUnsignedLong(maxByteStr);
+	long numBytesLeft = maxBytes;
+	while ((line = customFactoryNextTilTrack(cpp)) != NULL)
+	    {
+	    numBytesLeft -= strlen(line);
+
+	    if (numBytesLeft < 0)
+		{
+		carefulClose(&f);
+		unlink(vcfFile);
+		errAbort("VCF exceeded upload limit of %ld bytes.  "
+			 "Please compress and index your file, make it web-accessible, and "
+			 "construct a &quot;track line&quot; as described in "
+			 "<A HREF='%s' TARGET=_BLANK>VCF custom track documentation</A>."
+			 , maxBytes, bigDataDocPath("vcfTabix"));
+		}
+	    fprintf(f, "%s\n", line);
+	    }
+	}
+    else
+	while ((line = customFactoryNextTilTrack(cpp)) != NULL)
+	    fprintf(f, "%s\n", line);
+    carefulClose(&f);
+
+    vcfLoaderAddDbTable(track, vcfFile);
+    }
+
+track->tdb->type = cloneString("vcf");
+return track;
+}
+
+static struct customFactory vcfFactory =
+/* Factory for VCF tracks */
+    {
+    NULL,
+    "vcf",
+    vcfRecognizer,
+    vcfLoader,
+    };
+
+
 /*** bigData Oops Factory - when user tries to directly upload a bigData file ***
  *** (as opposed to a track line with bigDataUrl), print out an informative ***
  *** error message pointing them to documentation. ***/
@@ -2386,8 +2511,6 @@ if (hasUnprintable(line, 6))
 	    type = "bigBed";
 	else if (endsWith(fileName, ".bw"))
 	    type = "bigWig";
-	else if (endsWith(fileName, ".vcf.gz"))
-	    type = "vcfTabix";
 	}
     char *docUrl = NULL;
     if (isNotEmpty(type))
@@ -2445,9 +2568,8 @@ static void customFactoryInit()
 {
 if (factoryList == NULL)
     {
-    /* mafFactory has to be first because it
-     * doesn't strip comments
-     */
+    // mafFactory and vcfFactory have to be first because they don't strip comments (headers)
+    slAddHead(&factoryList, &vcfFactory);
     slAddHead(&factoryList, &mafFactory);
     slAddTail(&factoryList, &wigFactory);
     slAddTail(&factoryList, &bigWigFactory);
@@ -3153,7 +3275,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		    if (startsWith(LF_BOGUS_FILE_PREFIX, lf->fileName) ||
 			sameString(CT_NO_FILE_NAME, lf->fileName))
 			fileName = "file";
-		    errAbort("Unrecognized format line %d of %s:\n\t%s (note: chrom names are case sensitive)",
+		    errAbort("Unrecognized format line %d of %s:\n\t%s (note: chrom names are case sensitive, e.g.: correct: 'chr1', incorrect: 'Chr1', incorrect: '1')",
 			lf->lineIx, fileName, emptyForNull(line));
 		    }
 		}

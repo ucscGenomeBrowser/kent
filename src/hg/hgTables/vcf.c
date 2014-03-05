@@ -19,17 +19,29 @@
 
 #define VCFDATALINE_NUM_COLS 10
 
-boolean isVcfTable(char *table)
-/* Return TRUE if table corresponds to a VCF file. */
+boolean isVcfTable(char *table, boolean *retIsTabix)
+/* Return TRUE if table corresponds to a VCF file. 
+ * If retIsTabix is non-NULL, set *retIsTabix to TRUE if this is vcfTabix (not just vcf). */
 {
+boolean isVcfTabix = FALSE, isVcf = FALSE;
 struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 if (tdb)
-    return tdbIsVcf(tdb);
+    {
+    isVcfTabix = startsWithWord("vcfTabix", tdb->type);
+    isVcf = startsWithWord("vcf", tdb->type);
+    }
 else
-    return trackIsType(database, table, curTrack, "vcfTabix", ctLookupName);
+    {
+    isVcfTabix = trackIsType(database, table, curTrack, "vcfTabix", ctLookupName);
+    if (!isVcfTabix)
+	isVcf = trackIsType(database, table, curTrack, "vcf", ctLookupName);
+    }
+if (retIsTabix)
+    *retIsTabix = isVcfTabix;
+return (isVcfTabix || isVcf);
 }
 
-struct hTableInfo *vcfToHti(char *table)
+struct hTableInfo *vcfToHti(char *table, boolean isTabix)
 /* Get standard fields of VCF into hti structure. */
 {
 struct hTableInfo *hti;
@@ -39,11 +51,11 @@ hti->isPos= TRUE;
 strcpy(hti->chromField, "chrom");
 strcpy(hti->startField, "pos");
 strcpy(hti->nameField, "id");
-hti->type = cloneString("vcfTabix");
+hti->type = cloneString(isTabix ? "vcfTabix" : "vcf");
 return hti;
 }
 
-struct slName *vcfGetFields(char *table)
+struct slName *vcfGetFields()
 /* Get fields of vcf as simple name list. */
 {
 struct asObject *as = vcfAsObj();
@@ -167,7 +179,26 @@ else
     row[8] = row[9] = ""; // compatible with localmem usage
 }
 
-void vcfTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f)
+static char *vcfFileName(struct trackDb *tdb, struct sqlConnection *conn, char *table, char *chrom)
+// Look up the vcf or vcfTabix file name, using CUSTOM_TRASH if necessary.
+{
+boolean isCt = isCustomTrack(table);
+char *dbTable = table;
+struct sqlConnection *dbConn = conn;
+if (isCt)
+    {
+    dbConn = hAllocConn(CUSTOM_TRASH);
+    struct customTrack *ct = ctLookupName(table);
+    dbTable = ct->dbTableName;
+    }
+char *fileName = bbiNameFromSettingOrTableChrom(tdb, dbConn, dbTable, chrom);
+if (isCt)
+    hFreeConn(&dbConn);
+return fileName;
+}
+
+void vcfTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f,
+	       boolean isTabix)
 /* Print out selected fields from VCF.  If fields is NULL, then print out all fields. */
 {
 struct hTableInfo *hti = NULL;
@@ -192,7 +223,7 @@ chopByChar(fields, ',', fieldArray, fieldCount);
 /* Get list of all fields in big bed and turn it into a hash of column indexes keyed by
  * column name. */
 struct hash *fieldHash = hashNew(0);
-struct slName *bb, *bbList = vcfGetFields(table);
+struct slName *bb, *bbList = vcfGetFields();
 int i;
 for (bb = bbList, i=0; bb != NULL; bb = bb->next, ++i)
     {
@@ -234,9 +265,14 @@ struct dyString *dyGt = newDyString(1024);
 struct vcfRecord *rec;
 for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
-    char *fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, region->chrom);
-    struct vcfFile *vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
-					       100, maxOut);
+    char *fileName = vcfFileName(tdb, conn, table, region->chrom);
+    struct vcfFile *vcff;
+    if (isTabix)
+	vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
+				   100, maxOut);
+    else
+	vcff = vcfFileMayOpen(fileName, region->chrom, region->start, region->end,
+			      100, maxOut, TRUE);
     if (vcff == NULL)
 	noWarnAbort();
     // If we are outputting all fields, but this VCF has no genotype info, omit the
@@ -295,11 +331,17 @@ freeMem(columnArray);
 
 static void addFilteredBedsOnRegion(char *fileName, struct region *region, char *table,
 				    struct asFilter *filter, struct lm *bedLm,
-				    struct bed **pBedList, struct hash *idHash, int *pMaxOut)
+				    struct bed **pBedList, struct hash *idHash, int *pMaxOut,
+				    boolean isTabix)
 /* Add relevant beds in reverse order to pBedList */
 {
-struct vcfFile *vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
-					   100, *pMaxOut);
+struct vcfFile *vcff;
+if (isTabix)
+    vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
+			       100, *pMaxOut);
+else
+    vcff = vcfFileMayOpen(fileName, region->chrom, region->start, region->end,
+			  100, *pMaxOut, TRUE);
 if (vcff == NULL)
     noWarnAbort();
 struct lm *lm = lmInit(0);
@@ -337,7 +379,7 @@ vcfFileFree(&vcff);
 
 struct bed *vcfGetFilteredBedsOnRegions(struct sqlConnection *conn,
 	char *db, char *table, struct region *regionList, struct lm *lm,
-	int *retFieldCount)
+	int *retFieldCount, boolean isTabix)
 /* Get list of beds from VCF, in all regions, that pass filtering. */
 {
 int maxOut = bigFileMaxOutput();
@@ -352,10 +394,11 @@ struct bed *bedList = NULL;
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
-    char *fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, region->chrom);
+    char *fileName = vcfFileName(tdb, conn, table, region->chrom);
     if (fileName == NULL)
 	continue;
-    addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList, idHash, &maxOut);
+    addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList, idHash, &maxOut,
+			    isTabix);
     freeMem(fileName);
     if (maxOut <= 0)
 	{
@@ -368,13 +411,14 @@ slReverse(&bedList);
 return bedList;
 }
 
-struct slName *randomVcfIds(char *table, struct sqlConnection *conn, int count)
+struct slName *randomVcfIds(char *table, struct sqlConnection *conn, int count, boolean isTabix)
 /* Return some semi-random IDs from a VCF file. */
 {
 /* Read 10000 items from vcf file,  or if they ask for a big list, then 4x what they ask for. */
 struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
-char *fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, hDefaultChrom(database));
-struct lineFile *lf = lineFileTabixMayOpen(fileName, TRUE);
+char *fileName = vcfFileName(tdb, conn, table, hDefaultChrom(database));
+struct lineFile *lf = isTabix ? lineFileTabixMayOpen(fileName, TRUE) :
+				lineFileMayOpen(fileName, TRUE);
 if (lf == NULL)
     noWarnAbort();
 int orderedCount = count * 4;
@@ -407,11 +451,11 @@ return idList;
 
 #define VCF_MAX_SCHEMA_COLS 20
 
-void showSchemaVcf(char *table, struct trackDb *tdb)
+void showSchemaVcf(char *table, struct trackDb *tdb, boolean isTabix)
 /* Show schema on vcf. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-char *fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, hDefaultChrom(database));
+char *fileName = vcfFileName(tdb, conn, table, hDefaultChrom(database));
 
 struct asObject *as = vcfAsObj();
 hPrintf("<B>Database:</B> %s", database);
@@ -442,7 +486,8 @@ webNewSection("Sample Rows");
 hTableStart();
 
 /* Fetch sample rows. */
-struct lineFile *lf = lineFileTabixMayOpen(fileName, TRUE);
+struct lineFile *lf = isTabix ? lineFileTabixMayOpen(fileName, TRUE) :
+				lineFileMayOpen(fileName, TRUE);
 if (lf == NULL)
     noWarnAbort();
 char *row[VCF_MAX_SCHEMA_COLS];

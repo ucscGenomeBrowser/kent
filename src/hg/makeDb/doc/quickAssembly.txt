@@ -1,0 +1,200 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how to construct a UCSC genome browser for
+#   any genome sequence.  Enter your genome information in the source tree
+#   file: kent/src/hg/utils/phyloTrees/dbCommonScientificCladeOrderkey.tab
+
+# for example (note tab separated columns):
+# calMil1 Elephant shark Callorhinchus milii vertebrate chondrichthyes 4796
+
+
+# 1. find your sequence at:
+#   ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes
+
+#  for example:
+#  ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Callorhinchus_milii/Callorhinchus_milii-6.1.3/
+
+
+# establish your DB name to use in the following commands:
+
+export DB=calMil1
+
+#############################################################################
+# create directory and download sequence
+
+mkdir -p /hive/data/genomes/${DB}/genbank
+cd -p /hive/data/genomes/${DB}/genbank
+
+time rsync -a -P \
+  rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Callorhinchus_milii/Callorhinchus_milii-6.1.3/ \
+    ./
+
+#############################################################################
+# establish UCSC naming scheme
+#    When the assembly is composed only of unplaced scaffolds:
+
+cd /hive/data/genomes/${DB}
+time ~/kent/src/hg/utils/automation/unplacedScaffolds.pl ${DB} > step1.log 2>&1
+# this constructs the files and directory:
+# -rw-rw-r-- 1 244682665 Mar  4 12:30 calMil1.unmasked.2bit
+# drwxrwxr-x 2       512 Mar  4 12:30 ucsc
+# -rw-rw-r-- 1    369313 Mar  4 12:30 chrom.sizes
+
+# setup the scientific name:
+echo "Callorhinchus milii" > species.name.txt
+
+cp -p ucsc/${DB}.ucsc.agp ./${DB}.agp
+
+
+#############################################################################
+# the three repeat procedures can all start at the same time.
+# the windowMasker may end with an error if it finishes before
+# repeatMasker since it tries to compare its result with the RM result
+# but this isn't a fatal flaw, it is just a featureBits that doesn't finish
+
+#############################################################################
+# running repeat masker:
+mkdir -p /hive/data/genomes/${DB}/bed/repeatMasker
+cd /hive/data/genomes/${DB}/bed/repeatMasker
+
+export sciName=`cat ../../species.name.txt`
+
+$ the useRMBlastn is the faster alignment engine
+time doRepeatMasker.pl -buildDir=`pwd` -stop=mask \
+   -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+   -species "$sciName" -useRMBlastn \
+   -smallClusterHub=ku ${DB} > mask.log 2>&1 &
+
+#############################################################################
+# running simple repeats:
+mkdir /hive/data/genomes/${DB}/bed/simpleRepeat
+cd /hive/data/genomes/${DB}/bed/simpleRepeat
+time doSimpleRepeat.pl -buildDir=`pwd` \
+   -smallClusterHub=ku -workhorse=hgwdev -stop=filter ${DB} > filter.log 2>&1
+
+#############################################################################
+# running window masker:
+mkdir /hive/data/genomes/${DB}/bed/windowMasker
+cd /hive/data/genomes/${DB}/bed/windowMasker
+time doWindowMasker.pl -stop=twobit -buildDir=`pwd` \
+   -workhorse=hgwdev ${DB} > twobit.log 2>&1
+
+   # after gaps are done below, clean this result, do not mark
+   # gaps as masked:
+awk '{print $3-$2,$0}' ../gap/notGap.bed > notGap.sizes.txt
+# biggest contiguous sequence
+max=`sort -rn notGap.sizes.txt | head -1 | awk '{print $1}'`
+minCover=`echo $max | awk '{printf "%15.10f", 1/(2*$1)}' | sed -e 's/ //g'`
+
+bedIntersect -minCoverage=$minCover windowmasker.sdust.bed \
+   ../gap/notGap.bed stdout | sort -k1,1 -k2,2n | gzip -c > cleanWMask.bed.gz
+
+zcat cleanWMask.bed.gz | twoBitMask ../../${DB}.unmasked.2bit \
+   stdin -type=.bed ${DB}.cleanWMSdust.2bit
+twoBitToFa ${DB}.cleanWMSdust.2bit stdout | faSize stdin \
+   > faSize.${DB}.cleanWMSdust.txt 2>&1
+
+cat faSize.${DB}.cleanWMSdust.txt
+
+#############################################################################
+# check gaps - the above windowMasker needs this
+
+mkdir /hive/data/genomes/${DB}/bed/gap
+cd /hive/data/genomes/${DB}/bed/gap
+findMotif -motif=gattaca -verbose=4 -strand=+ ../../${DB}.unmasked.2bit > findMotif.txt 2>&1
+grep "#GAP " findMotif.txt | sed -e "s/^#GAP //" | sort -k1,1 -k2,2n > allGaps.bed
+awk '{printf "%s\t%d\t'${DB}'.2bit\n", $1, $2}' ../../chrom.sizes > chromInfo.tab
+featureBits test -chromSize=chromInfo.tab -not -bed=notGap.bed allGaps.bed 2> /dev/null
+
+awk '{print $3-$2}' allGaps.bed | ave stdin > gap.stats.txt
+
+#############################################################################
+# decide to use WindowMasker or RepeatMasker result
+#   usually on whichever is the greater mask, but use RM when
+#   the results are similar
+
+cd /hive/data/genomes/${DB}
+
+    # to use Repeat Masker result:
+
+twoBitMask bed/repeatMasker/${DB}.rmsk.2bit \
+    -add bed/simpleRepeat/trfMask.bed  ${DB}.2bit
+    # the warning about the bed file >=13 fields is OK
+
+    # to use Window Masker result:
+twoBitMask bed/windowMasker/${DB}.cleanWMSdust.2bit \
+    -add bed/simpleRepeat/trfMask.bed  ${DB}.2bit
+
+    # measure the results from either masking:
+twoBitToFa ${DB}.2bit stdout | faSize stdin > faSize.${DB}.2bit.txt
+
+#############################################################################
+# construct minimal database so other operations can continue
+
+mkdir /hive/data/genomes/${DB}/bed/chromInfo
+cd /hive/data/genomes/${DB}
+awk '{print $1 "\t" $2 "\t/gbdb/'$DB/$DB'.2bit";}' chrom.sizes \
+  > bed/chromInfo/chromInfo.tab
+
+hgsql -e "create database $DB;" test
+
+hgGoldGapGl -noGl ${DB} ${DB}.agp
+
+cut -f1 bed/chromInfo/chromInfo.tab | awk '{print length($0)}' | sort -nr > bed/chromInfo/t.chrSize
+export chrSize=`head -1 bed/chromInfo/t.chrSize`
+sed -e "s/chrom(16)/chrom($chrSize)/" \
+   ${HOME}/kent/src/hg/lib/chromInfo.sqchromInfo/chromInfo.sql
+rm -f bed/chromInfo/t.chrSize
+hgLoadSqlTab ${DB} chromInfo bed/chromInfo/chromInfo.sql \
+   bed/chromInfo/chromInfo.tab
+
+hgLoadOut -nosplit $DB -table=rmsk bed/repeatMasker/$DB.sorted.fa.out
+
+
+hgLoadBed $DB windowmaskerSdust bed/windowMasker/cleanWMask.bed.gz
+
+
+hgLoadBed $DB simpleRepeat bed/simpleRepeat/simpleRepeat.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+hgsql $DB < $HOME/kent/src/hg/lib/grp.sql
+mkdir -p /gbdb/${DB}
+
+ln -s /hive/data/genomes/${DB}/${DB}.2bit /gbdb/${DB}
+mkdir $HOME/kent/src/hg/makeDb/trackDb/assemblyHubs/${DB}
+
+cd $HOME/kent/src/hg/makeDb/trackb
+
+make EXTRA="-strict" DBS=$DB
+make GIT=echo EXTRA="-strict" DBS=$DB alpha
+
+rm -f /gbdb/$DB/trackDb.ix /gbdb/$DB/trackDb.ixx
+
+#############################################################################
+# after the database is established, the following procedures can be run
+#############################################################################
+# genscan track
+
+mkdir /hive/data/genomes/${DB}/bed/genscan
+cd /hive/data/genomes/${DB}/bed/genscan
+doGenscan.pl -buildDir=`pwd` -bigClusterHub=ku -workhorse=hgwdev \
+    -dbHost=hgwdev $DB > do.log 2>&1
+
+#############################################################################
+# CPG Islands track
+
+mkdir /hive/data/genomes/${DB}/bed/cpgIslands
+cd /hive/data/genomes/${DB}/bed/cpgIslands
+time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+   -dbHost=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+    -maskedSeq=/hive/data/genomes/${DB}/${DB}.unmasked.2bit $DB > do.log  2>&1
+
+#############################################################################
+# add dbDb/genomeClade entries to add browser to pull-down menus on genome-test
+
+export asmInfoPath="/hive/data/genomes/${DB}/genbank/ASSEMBLY_INFO"
+export dbDbInfo="~kent/src/hg/utils/phyloTrees/dbCommonScientificCladeOrderkey.tab"
+export chromSizes="/hive/data/genomes/${DB}/chrom.sizes"
+export asmDate=`grep "^DATE:" ${asmInfoPath} | cut -f2`
+
+#############################################################################

@@ -1,7 +1,5 @@
 /* vcfTrack -- handlers for Variant Call Format data. */
 
-#ifdef USE_TABIX
-
 #include "common.h"
 #include "dystring.h"
 #include "errCatch.h"
@@ -10,10 +8,6 @@
 #include "hgc.h"
 #include "htmshell.h"
 #include "jsHelper.h"
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
-#include "knetUdc.h"
-#include "udc.h"
-#endif//def USE_TABIX && KNETFILE_HOOKS
 #include "pgSnp.h"
 #include "regexHelper.h"
 #include "trashDir.h"
@@ -379,14 +373,21 @@ makeDisplayAlleles(rec, showLeftBase, leftBase, 5, FALSE, TRUE, displayAls);
 vcfGenotypesDetails(rec, tdb->track, displayAls);
 }
 
+#ifdef USE_TABIX
+
+#if (defined KNETFILE_HOOKS)
+#include "knetUdc.h"
+#include "udc.h"
+#endif//def KNETFILE_HOOKS
+
 void doVcfTabixDetails(struct trackDb *tdb, char *item)
 /* Show details of an alignment from a VCF file compressed and indexed by tabix. */
 {
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
+#if (defined KNETFILE_HOOKS)
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
-#endif//def USE_TABIX && KNETFILE_HOOKS
+#endif//def KNETFILE_HOOKS
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct sqlConnection *conn = hAllocConnTrack(database, tdb);
@@ -420,3 +421,47 @@ else
 
 
 #endif // no USE_TABIX
+
+
+void doVcfDetails(struct trackDb *tdb, char *item)
+/* Show details of an alignment from an uncompressed VCF file. */
+{
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+struct customTrack *ct = lookupCt(tdb->track);
+struct sqlConnection *conn = NULL;
+char *table = tdb->table;
+if (ct)
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    }
+else
+    conn = hAllocConnTrack(database, tdb);
+char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, seqName);
+hFreeConn(&conn);
+int vcfMaxErr = -1;
+struct vcfFile *vcff = NULL;
+/* protect against parsing error */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    vcff = vcfFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1, TRUE);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    if (isNotEmpty(errCatch->message->string))
+	warn("%s", errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+if (vcff != NULL)
+    {
+    struct vcfRecord *rec;
+    for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+	if (rec->chromStart == start && rec->chromEnd == end) // in pgSnp mode, don't get name
+	    vcfRecordDetails(tdb, rec);
+    }
+else
+    printf("Sorry, unable to open %s<BR>\n", fileOrUrl);
+}
