@@ -10107,7 +10107,9 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         }
     if (useAcc)
         dyStringAppend(name, lf->name);
-    lf->extra = dyStringCannibalize(&name);
+    if (dyStringLen(name))
+        lf->extra = dyStringCannibalize(&name);
+    dyStringFree(&name);
     }
 }
 
