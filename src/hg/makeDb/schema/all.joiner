@@ -2966,6 +2966,12 @@ identifier altSeqLiftOver
     hg38.altSeqLiftOverPsl.qName
     hg38.altSeqLiftOverPsl.tName
 
+identifier altSeqExtSeqFiles
+"alternate sequence sequence files"
+    hg38.altSeqLiftOverPsl.qName dupeOk
+    hg38.seqNcbiAltSequence.acc
+    hg38.extNcbiAltSequence.name chopAfter=.
+
 identifier ucscToINSDC external=INSDC dependency
 "INSDC names to UCSC chrom name translation"
     $gbd.chromInfo.chrom
@@ -3879,13 +3885,7 @@ identifier hg19ContigDiff
     hg19.gold.frag dupeOk
     hg19.hg19ContigDiff.name
 
-identifier extAltSequence
-"contig difference track"
-    hg38.chromInfo.chrom
-    hg38.seqNcbiAltSequence.acc
-    hg38.extNcbiAltSequence.name chopAfter=.
-
-identifier hg38ContigDiff
+identifier ContigDiff
 "contig difference track"
     hg19,hg38.gold.frag dupeOk
     hg19,hg38.hg38ContigDiff.name
