@@ -4562,6 +4562,8 @@ tablesIgnored mm10
     mm10Haplotypes
     altSeqLiftOverPslP1
     altSeqPatchesP1
+    wgEncodeGencode2wayConsPseudo%
+    wgEncodeGencodePolya%
 
 tablesIgnored $ce
     chr%_wabaCbr

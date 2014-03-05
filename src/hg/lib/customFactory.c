@@ -1498,8 +1498,12 @@ if (headerLines)
 else
     {
     char *line = customPpNext(cpp);
-    if (line == NULL)
-	return FALSE;
+    while (isEmpty(line))
+	{
+	if (line == NULL)
+	    return FALSE;
+	line = customPpNext(cpp);
+	}
     foundIt = startsWith(headerSig, line);
     customPpReuse(cpp, line);
     }
