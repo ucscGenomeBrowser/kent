@@ -2108,7 +2108,7 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     mm10.mrnaRefseq.mrna minCheck=0.30
     hg17.mrnaRefseq.mrna minCheck=0.80
     $rn.mrnaRefseq.mrna minCheck=0.03
-    $gbd,!hg17,!hg18,!hg19,!mm7,!mm8,!mm9,!mm10,!rn4.spMrna.mrnaID minCheck=0.98
+    $gbd,!hg17,!hg18,!hg19,!mm7,!mm8,!mm9,!mm10,!rn4,!hg38.spMrna.mrnaID minCheck=0.98
     $mm.dupSpMrna.mrnaID minCheck=0.10
     $mm.dupSpMrna.dupMrnaID minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.30
@@ -3070,9 +3070,9 @@ identifier cgapMapId
 identifier cgapAlias
 "NCI Cancer Genome Annotation Project Alias"
     $gbd.cgapAlias.alias dupeOk
-    $gbd,!hg16,!hg18,!hg19,!mm9,!mm10.knownGene.name minCheck=0.50
+    $gbd,!hg16,!hg18,!hg19,!mm9,!mm10,!hg38.knownGene.name minCheck=0.50
     hg16.knownGene.name minCheck=0.05
-    hg18,hg19,mm9,mm10.kgXref.geneSymbol minCheck=0.84
+    hg18,hg19,hg38,mm9,mm10.kgXref.geneSymbol minCheck=0.74
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 
