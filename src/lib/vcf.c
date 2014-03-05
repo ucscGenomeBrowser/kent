@@ -767,6 +767,77 @@ if (rec->alleleCount > 1)
 return chromStartOrig;
 }
 
+static boolean allEndsGEStartsAndIdentical(char **starts, char **ends, int count)
+/* Given two arrays with <count> elements, return true if all strings in ends[] are
+ * greater than or equal to the corresponding strings in starts[], and all ends[]
+ * have the same char. */
+{
+int i;
+char refEnd = ends[0][0];
+for (i = 0;  i < count;  i++)
+    {
+    if (ends[i] < starts[i] || ends[i][0] != refEnd)
+	return FALSE;
+    }
+return TRUE;
+}
+
+static int countIdenticalBasesRight(char **alleles, int alCount)
+/* Return the number of bases that are identical at the end of each allele (usually 0). */
+{
+char *alleleEnds[alCount];
+int i;
+for (i = 0;  i < alCount;  i++)
+    {
+    int alLen = strlen(alleles[i]);
+    // If any allele is symbolic, don't try to trim.
+    if (!isAllNt(alleles[i], alLen))
+	return 0;
+    alleleEnds[i] = alleles[i] + alLen-1;
+    }
+int trimmedBases = 0;
+while (allEndsGEStartsAndIdentical(alleles, alleleEnds, alCount))
+    {
+    trimmedBases++;
+    // Trim identical last base of alleles and move alleleEnds[] items back.
+    for (i = 0;  i < alCount;  i++)
+	alleleEnds[i]--;
+    }
+return trimmedBases;
+}
+
+unsigned int vcfRecordTrimAllelesRight(struct vcfRecord *rec)
+/* Some tools output indels with extra base to the right, for example ref=ACC, alt=ACCC
+ * which should be ref=A, alt=AC.  When the extra bases make the variant extend from an
+ * intron (or gap) into an exon, it can cause a false appearance of a frameshift.
+ * To avoid this, when all alleles have identical base(s) at the end, trim all of them,
+ * and update rec->chromEnd.
+ * For hgTracks' mapBox we need the correct chromStart for identifying the record in hgc,
+ * so return the original chromEnd. */
+{
+unsigned int chromEndOrig = rec->chromEnd;
+int alCount = rec->alleleCount;
+char **alleles = rec->alleles;
+int trimmedBases = countIdenticalBasesRight(alleles, alCount);
+if (trimmedBases > 0)
+    {
+    struct vcfFile *vcff = rec->file;
+    // Allocate new pooled strings for the trimmed alleles.
+    int i;
+    for (i = 0;  i < alCount;  i++)
+	{
+	int alLen = strlen(alleles[i]); // alLen >= trimmedBases > 0
+	char trimmed[alLen+1];
+	safencpy(trimmed, sizeof(trimmed), alleles[i], alLen - trimmedBases);
+	if (isEmpty(trimmed))
+	    safencpy(trimmed, sizeof(trimmed), "-", 1);
+	alleles[i] = vcfFilePooledStr(vcff, trimmed);
+	}
+    rec->chromEnd -= trimmedBases;
+    }
+return chromEndOrig;
+}
+
 static boolean chromsMatch(char *chromA, char *chromB)
 // Return TRUE if chromA and chromB are non-NULL and identical, possibly ignoring
 // "chr" at the beginning of one but not the other.
@@ -834,10 +905,9 @@ struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
 if (vcff && chrom != NULL)
     {
     char *line = NULL;
-    int size = 0;
-    while (lineFileNext(vcff->lf, &line, &size))
+    while (lineFileNextReal(vcff->lf, &line))
 	{
-	char lineCopy[size+1];
+	char lineCopy[strlen(line)+1];
 	safecpy(lineCopy, sizeof(lineCopy), line);
 	char *words[VCF_MAX_COLUMNS];
 	int wordCount = chopTabs(lineCopy, words);
@@ -1172,10 +1242,10 @@ return asParseText(vcfDataLineAutoSqlString);
 
 char *vcfGetSlashSepAllelesFromWords(char **words, struct dyString *dy)
 /* Overwrite dy with a /-separated allele string from VCF words,
- * skipping the extra initial base that VCF requires for indel alleles if necessary.
+ * skipping the extra initial base that VCF requires for indel alleles if necessary,
+ * and trimming identical bases at the ends of all alleles if there are any.
  * Return dy->string for convenience. */
 {
-dyStringClear(dy);
 // VCF reference allele gets its own column:
 char *refAllele = words[3];
 char *altAlleles = words[4];
@@ -1183,41 +1253,29 @@ char *altAlleles = words[4];
 int alCount = 1 + countChars(altAlleles, ',') + 1;
 char *alleles[alCount];
 alleles[0] = refAllele;
-dyStringAppend(dy, altAlleles);
-chopByChar(dy->string, ',', &(alleles[1]), alCount-1);
-boolean hasPaddingBase = allelesHavePaddingBase(alleles, alCount);
-int offset = hasPaddingBase ? 1 : 0;
-// Build a /-separated allele string, trimming first base if offset is 1:
-dyStringClear(dy);
-if (refAllele[offset] == '\0')
-    dyStringAppendC(dy, '-');
-else
-    dyStringAppend(dy, refAllele+offset);
-if (isNotEmpty(altAlleles) && differentString(altAlleles, "."))
+char altAlCopy[strlen(altAlleles)+1];
+safecpy(altAlCopy, sizeof(altAlCopy), altAlleles);
+chopByChar(altAlCopy, ',', &(alleles[1]), alCount-1);
+int i;
+if (allelesHavePaddingBase(alleles, alCount))
     {
-    // Read alleles from altAlleles because the contents of alleles[] are trashed
-    // by our reuse of dy.
-    char *p;
-    while ((p = strchr(altAlleles, ',')) != NULL)
-	{
+    // Skip padding base:
+    for (i = 0;  i < alCount;  i++)
+	alleles[i]++;
+    }
+// Having dealt with left padding base, now look for identical bases on the right:
+int trimmedBases = countIdenticalBasesRight(alleles, alCount);
+// Build a /-separated allele string, trimming bases on the right if necessary:
+dyStringClear(dy);
+for (i = 0;  i < alCount;  i++)
+    {
+    if (i > 0)
 	dyStringAppendC(dy, '/');
-	int len = p - altAlleles;
-	if (len-offset == 0)
-	    dyStringAppendC(dy, '-');
-	else if (isAllNt(altAlleles, len))
-	    dyStringAppendN(dy, altAlleles+offset, len-offset);
-	else
-	    dyStringAppendN(dy, altAlleles, len);  // symbolic
-	altAlleles = p+1;
-	}
-    dyStringAppendC(dy, '/');
-    int len = strlen(altAlleles);
-    if (len-offset == 0)
+    char *allele = alleles[i];
+    if (allele[trimmedBases] == '\0')
 	dyStringAppendC(dy, '-');
-    else if (isAllNt(altAlleles, len))
-	dyStringAppendN(dy, altAlleles+offset, len-offset);
     else
-	dyStringAppendN(dy, altAlleles, len);  // symbolic
+	dyStringAppendN(dy, allele, strlen(allele)-trimmedBases);
     }
 return dy->string;
 }
