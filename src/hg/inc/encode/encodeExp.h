@@ -186,6 +186,9 @@ void encodeExpSetAccession(struct encodeExp *exp, char *tableName);
 void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int id);
 /* Revoke an experiment by removing the accession. */
 
+boolean encodeExpIsAccessioned(struct encodeExp *exp);
+/* Determine if experiment has an accession (not unaccessioned or deaccessioned) */
+
 char *encodeExpKey(struct encodeExp *exp);
 /* Create a hash key from an encodeExp */
 
