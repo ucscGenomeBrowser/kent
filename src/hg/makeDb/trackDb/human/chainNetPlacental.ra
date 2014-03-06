@@ -20,7 +20,7 @@ chainMinScore 3000
 dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on
-html hg19mammalChainNet
+html placentalChainNet
 
     track placentalChainNetViewchain
     shortLabel Chains
