@@ -562,7 +562,8 @@ int iExon = findLastFramedExon(gp);
 int frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
 for (iExon--; (iExon >= 0) && (gp->exonEnds[iExon] > gp->cdsStart); iExon--)
     {
-    assert(gp->exonFrames[iExon] < 0);
+    if (!((gp->exonFrames[iExon] < 0) || (gp->exonFrames[iExon] == frame)))
+        errAbort("conflicting frame for %s exon index %d, was %d, trying to assign %d", gp->name, iExon, gp->exonFrames[iExon], frame);
     gp->exonFrames[iExon] = frame;
     frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
     }

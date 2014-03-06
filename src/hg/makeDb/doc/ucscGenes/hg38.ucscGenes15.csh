@@ -1317,7 +1317,7 @@ ls -1 ../pfam/splitProt > prot.list
 cat << '_EOF_' > doScop
 #!/bin/csh -ef
 /hive/data/outside/pfam/Pfam27.0/PfamScan/hmmer-3.1b1/src/hmmsearch   --domtblout /scratch/tmp/scop.$2.pf --noali -o /dev/null -E 0.1 /hive/data/outside/scop/1.75/hmmlib_1.75  ../pfam/splitProt/$1
-mv /scratch/tmp/$2.pf $3
+mv /scratch/tmp/scop.$2.pf $3
 '_EOF_'
     # << happy emacs
 chmod +x doScop
