@@ -2853,12 +2853,10 @@ var imageV2 = {
                 $(tr).html(newTr.children())
 
                 // Need to update tr class list too
-
-                var classes = $(html).find("tr[id='tr_"+ id + "']")[0].className.split(/\s+/)
-
-                if(classes && classes[1] && classes[1].length > 0) {
+                var classes = $(html).find("tr[id='tr_"+ id + "']")[0].className
+                if(classes && classes.length > 0) {
                     $(tr).removeClass();
-                    $(tr).addClass(classes[1]);
+                    $(tr).addClass(classes);
                 }
 
                 // NOTE: Want to examine the png? Uncomment:
