@@ -540,7 +540,7 @@ speciesGroups mammal
 sGroup_mammal rheMac2 mm9 canFam2
 treeImage phylo/hg19_4way.gif
 
-include chainNetPrimate.ra
+include ../chainNetPrimate.ra
 
 include chainNetPlacental.ra
 
