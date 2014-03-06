@@ -68,7 +68,7 @@ shortLabel Retroposed Genes
 longLabelRetroposed Genes V5, Including Pseudogenes
 group genes
 type psl
-priority37.14
+priority 37.14
 color 20,0,250
 visibility pack
 ucscRetro InfoucscRetroInfo5
