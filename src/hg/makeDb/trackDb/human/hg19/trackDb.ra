@@ -63,7 +63,7 @@ track gwasCatalog override
 snpTable snp137
 snpVersion 137
 
-trackucscRetroAli5
+track ucscRetroAli5
 shortLabel Retroposed Genes
 longLabelRetroposed Genes V5, Including Pseudogenes
 group genes
