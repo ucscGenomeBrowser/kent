@@ -5,5 +5,5 @@ CREATE TABLE keggPathway (
   KEY kgID (kgID),
   KEY locusID (locusID),
   KEY mapID (mapID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

@@ -25,6 +25,7 @@
 #include "geoMirror.h"
 #include "hubConnect.h"
 #include "trackHub.h"
+#include "cgiApoptosis.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1362,8 +1363,19 @@ cartDefaultDisconnector(&conn);
 void cartWriteCookie(struct cart *cart, char *cookieName)
 /* Write out HTTP Set-Cookie statement for cart. */
 {
+char *domain = cfgVal("central.domain");
+if (sameWord("HTTPHOST", domain))
+    {
+    // IE9 does not accept portnames in cookie domains
+    char *hostWithPort = hHttpHost();
+    struct netParsedUrl *url;
+    AllocVar(url);
+    netParseUrl(hostWithPort, url);
+    domain = url->host;
+    }
+
 printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\r\n",
-        cookieName, cart->userInfo->id, cfgVal("central.domain"), cookieDate());
+        cookieName, cart->userInfo->id, domain, cookieDate());
 if(geoMirrorEnabled())
     {
     // This occurs after the user has manually choosen to go back to the original site; we store redirect value into a cookie so we 
@@ -1629,6 +1641,7 @@ void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName,
  * oldVars - those in cart that are overlayed by cgi-vars are
  * put in optional hash oldVars. */
 {
+cgiApoptosisSetup();
 struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
 setThemeFromCart(cart);
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
