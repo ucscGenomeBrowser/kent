@@ -71,10 +71,10 @@ type psl
 priority37.14
 color 20,0,250
 visibility pack
-ucscRetroInfoucscRetroInfo5
+ucscRetro InfoucscRetroInfo5
 baseColorDefault diffCodons
-baseColorUseCdstable ucscRetroCds5
-baseColorUseSequenceextFile ucscRetroSeq5 ucscRetroExtFile5
+baseColorUseCds table ucscRetroCds5
+baseColorUseSequence extFile ucscRetroSeq5 ucscRetroExtFile5
 indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .
@@ -83,24 +83,24 @@ showCdsAllScales .
 showCdsMaxZoom 10000.0
 dataVersionMar. 2013
 
-searchNameucscRetroInfoRefSeq5
-searchTableucscRetroAli5
-searchDescriptionRetroposed Genes V5, Including Pseudogenes 
+searchName ucscRetroInfoRefSeq5
+searchTable ucscRetroAli5
+searchDescription Retroposed Genes V5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTablerefLink, ucscRetroInfo5
+xrefTable refLink, ucscRetroInfo5
 dontCheckXrefQueryFormat 1
 xrefQueryselect ucscRetroInfo5.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
 
-searchNameucscRetroInfoMrna5
-searchTableucscRetroAli5
-searchDescriptionRetroposed Genes V5, Including Pseudogenes
+searchName ucscRetroInfoMrna5
+searchTable ucscRetroAli5
+searchDescription Retroposed Genes V5, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 searchPriority 3.55
 
-searchNameucscRetroUniProt5
-searchTableucscRetroAli5
-searchDescriptionRetroposed Genes V5, Including Pseudogenes 
+searchName ucscRetroUniProt5
+searchTable ucscRetroAli5
+searchDescription Retroposed Genes V5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTablekgXref, ucscRetroInfo5
