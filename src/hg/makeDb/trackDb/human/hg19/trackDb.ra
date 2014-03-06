@@ -542,7 +542,7 @@ treeImage phylo/hg19_4way.gif
 
 include ../chainNetPrimate.ra
 
-include chainNetPlacental.ra
+include ../chainNetPlacental.ra
 
 include ../chainNetVertebrate.ra
 
