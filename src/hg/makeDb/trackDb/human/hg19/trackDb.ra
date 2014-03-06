@@ -65,7 +65,7 @@ snpVersion 137
 
 track ucscRetroAli5
 shortLabel Retroposed Genes
-longLabelRetroposed Genes V5, Including Pseudogenes
+longLabel Retroposed Genes V5, Including Pseudogenes
 group genes
 type psl
 priority 37.14
