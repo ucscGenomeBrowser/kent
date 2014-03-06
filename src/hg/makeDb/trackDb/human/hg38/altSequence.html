@@ -1,10 +1,9 @@
 <H2>Description</H2>
 
 <P>
-This track shows the locations of the alternate sequences/haplotypes defined
-by the
-<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/"
-target="_blank">Genome Reference Consortium</a> (GRC) to the GRCh38 (hg38)
+This track shows the locations of the alternate sequences and haplotypes defined by the
+<pa href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/"
+target="_blank">Genome Reference Consortium</a> (GRC) on the GRCh38 (hg38)
 reference sequence.  The GRC generates multiple representations
 (haplotypes/alternate loci) for regions that are too complex
 to be represented by a single path.
@@ -12,60 +11,52 @@ to be represented by a single path.
 
 <H3>Alt Map</H3>
 <P>
-The <EM>Alt Map</EM> track is the PSL alignment representation from the
-NCBI GFF/cigar mapping files.  This PSL representation allows the side-by-side
-alignment to be viewed in the Genome Browser.  This track follows the display
-conventions for
-<a href="/goldenPath/help/hgTracksHelp.html#PSLDisplay" target="_blank">
-PSL alignment tracks</a>. Alignments are displayed in <b>black</b> and,
-depending on the track configuration settings, may be interspersed with
-vertical <font color="#F88017"><b>orange</b></font> lines.
+The <EM>Alt Map</EM> track shows a PSL alignment of the data in the
+NCBI alternate sequence/haplotype mapping files to the reference sequence, allowing a side-by-side
+comparison of the two.  Alignments are displayed in <b>black</b> and indicate
+gaps and insertions in the query and target sequences, depending on the 
+track configuration settings. For information on interpreting the alignment display, see
+the reference pages on <a href="/goldenPath/help/hgTracksHelp.html#PSLDisplay" 
+target="_blank">display conventions for PSL alignment tracks</a> and
+<a href="/goldenPath/help/hgIndelDisplay.html">alignment insertion/deletion display options</a>.
 </P>
 
-<H3><font color="#0000FF">Haplotypes</font></H3>
-
+<H3>Haplotypes</H3>
 <P>
-Items in the <EM>Haplotype</EM> track mark the location on the reference genome
-for the corresponding sequence contained in the alternate sequence/haplotype.
-Data points in this track are always displayed in
-<font color="#0000FF"><b>blue</b></font>.
-</P><P>
-Click on the items in this track to use the <EM>Corresponding position:</EM>
-link to navigate to the alternate sequence/haplotype from the reference
-sequence or from the alternate sequence/haplotype to the corresponding
-reference sequence location.
+Items in the <EM>Haplotype</EM> track, displayed in <font color="#0000FF"><b>blue</b></font>, 
+show locations on the reference genome that correspond to the alternate
+sequence/haplotype regions.
+</P>
+<P>
+Click on an item to display a link to the corresponding position
+in the alternate sequence/haplotype (from the reference sequence) or to the corresponding 
+reference sequence location (from the alternate sequence/haplotype). 
 </P>
 
 <H2>Methods</H2>
-
-<H3>Haplotype/Alt Map Tracks</H3>
-
 <P>
-The locations of the alternate sequence/haplotypes were established by
-NCBI and specified in the alignment files at:<br>
+The locations of the alternate sequence/haplotypes, which have been established by
+NCBI, are specified in the ALT_REF_LOCI_*/alt_scaffolds/alignments/*.gff files in the 
 <a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/"
-target="_blank">ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/</a>ALT_REF_LOCI_*/alt_scaffolds/alignments/*.gff.
-</P><P>
-The GRC uses the <A HREF="http://www.ncbi.nlm.nih.gov/tools/gbench/"
+target="_blank">GRCh38 GenBank directory</a>.
+The GRC used the <A HREF="http://www.ncbi.nlm.nih.gov/tools/gbench/"
 TARGET=_blank>NCBI Genomic Aligner</A> (NG Aligner) to align the alternate
-loci specifically to the primary assembly chromosomes on which their
-anchor sequence is found.
+loci specifically to the primary chromosomes on which their anchor sequence is found.
 </P>
 
 <P>
 The NCBI GFF/cigar annotation files were converted to PSL format with the
 <A HREF="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/userApps/README"
-TARGET=_blank>kent command line</A> program
+TARGET=_blank>kent command line</A> program,
 <A HREF="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/hg/utils/gff3ToPsl"
 TARGET=_blank>gff3ToPsl</A>.
 </P>
 
 <H2>References</H2>
-
 <P>
-Genome assembly procedures are described in the NCBI
+For general information about the genome assembly process, see the 
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation</A>. NCBI also provides
-<A HREF="http://www.ncbi.nlm.nih.gov/assembly/883148"
-TARGET="_blank">specific information about this assembly</A>.
+TARGET=_blank>overview of genome assembly procedures</A> on the NCBI website. 
+NCBI also provides <A HREF="http://www.ncbi.nlm.nih.gov/assembly/883148/"
+TARGET="_blank">specific information</A> about the hg38 assembly.
 </P>
