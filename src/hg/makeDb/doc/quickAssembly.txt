@@ -190,11 +190,62 @@ time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
     -maskedSeq=/hive/data/genomes/${DB}/${DB}.unmasked.2bit $DB > do.log  2>&1
 
 #############################################################################
-# add dbDb/genomeClade entries to add browser to pull-down menus on genome-test
+# add dbDb/clade/genomeClade entries to add browser to selection menus
+#   on genome-test
+
+mkdir /hive/data/genomes/${DB}/dbDb
+cd /hive/data/genomes/${DB}/dbDb
 
 export asmInfoPath="/hive/data/genomes/${DB}/genbank/ASSEMBLY_INFO"
-export dbDbInfo="~kent/src/hg/utils/phyloTrees/dbCommonScientificCladeOrderkey.tab"
+export dbDbInfo="${HOME}/kent/src/hg/utils/phyloTrees/dbCommonScientificCladeOrderkey.tab"
 export chromSizes="/hive/data/genomes/${DB}/chrom.sizes"
-export asmDate=`grep "^DATE:" ${asmInfoPath} | cut -f2`
+export asmDate=`grep "^DATE:" ${asmInfoPath} | cut -f2 | sed -e 's/^[0-9]+-//; s/-/ /;'`
+
+export asmShortLabel=`grep "^ASSEMBLY SHORT NAME:" ${asmInfoPath} | cut -f2`;
+export asmSciName=`grep "^ORGANISM:" ${asmInfoPath} | cut -f2`;
+export asmTaxID=`grep "^TAXID:" ${asmInfoPath} | cut -f2`;
+export asmSourceName=`grep "^ASSEMBLY SUBMITTER:" ${asmInfoPath} | cut -f2`;
+export asmAccession=`grep "^ASSEMBLY ACCESSION:" ${asmInfoPath} | cut -f2`;
+export orderKey=`grep "^$DB" $dbDbInfo | cut -f6`;
+export clade=`grep "^$DB" $dbDbInfo | cut -f4`;
+export commonName=`grep "^$DB" $dbDbInfo | cut -f2`;
+export chrName=`head -1 $chromSizes | cut -f1`;
+export chrLength=`head -1 $chromSizes | cut -f2`;
+export chrStart=`echo $chrLength | awk '{printf "%d", ($1/2)-($1/10)}'`
+export chrEnd=`echo $chrLength | awk '{printf "%d", ($1/2)+($1/10)}'`
+export defaultPos="${chrName}:${chrStart}-${chrEnd}"
+
+echo "DELETE from dbDb where name = \"$DB\";
+INSERT INTO dbDb
+    (name, description, nibPath, organism,
+     defaultPos, active, orderKey, genome, scientificName,
+     htmlPath, hgNearOk, hgPbOk, sourceName, taxId)
+VALUES
+    (\"$DB\", \"$asmDate ($asmShortLabel/$DB)\", \"/gbdb/$DB\",
+     \"$commonName\",
+     \"$defaultPos\", 1, $orderKey, \"$commonName\", \"$asmSciName\",
+     \"/gbdb/$DB/html/description.html\", 0, 0,
+     \"$asmSourceName $asmAccession\", $asmTaxID);" > ${DB}.dbDb.sql
+
+echo \
+"INSERT INTO defaultDb (genome, name) VALUES (\"${commonName}\", \"$DB\");" \
+    > ${DB}.defaultDb.sql
+
+case $clade in
+  "primate")
+echo "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"${commonName}\", \"$clade\", \"16\");"
+    ;;
+  "mammal")
+echo "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"${commonName}\", \"$clade\", \"35\");"
+    ;;
+  "rodent")
+echo "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"${commonName}\", \"$clade\", \"40\");"
+    ;;
+  "vertebrate")
+echo "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"${commonName}\", \"$clade\", \"70\");"
+    ;;
+esac > ${DB}.genomeClade.sql
+
+cat ${DB}.*.sql | hgsql hgcentraltest
 
 #############################################################################

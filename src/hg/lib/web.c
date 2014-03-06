@@ -28,6 +28,7 @@
 #include "geoMirror.h"
 #include <regex.h>
 #include "trackHub.h"
+#include <unistd.h>
 /* phoneHome business */
 
 
@@ -43,6 +44,9 @@ static char *extraStyle = NULL;
 /* globals: a cart and db for use in error handlers. */
 static struct cart *errCart = NULL;
 static char *errDb = NULL;
+
+// forward declaration to keep function ordering
+static void phoneHome();
 
 void textVaWarn(char *format, va_list args)
 {
@@ -897,7 +901,7 @@ if (scriptName && ip)  /* will not be true from command line execution */
 	    close(STDOUT_FILENO); /* do not hang up Apache finish for parent */
 	    expireSeconds = 0;	/* no error message from this exit */
 	    (void) signal(SIGALRM, cgiApoptosis);
-	    (void) alarm(6);	/* timeout here in 6 seconds */
+	    (void) alarm(30);	/* timeout here in 30 seconds */
 #include "versionInfo.h"
 	    char url[1024];
             char *browserName = "browser.v";
@@ -908,11 +912,15 @@ if (scriptName && ip)  /* will not be true from command line execution */
 	"genomewiki.", "ucsc.edu/", "cgi-bin/useCount?", "version=", browserName,
 		CGI_VERSION);
 
-	    /* 6 second alarm will exit this page fetch if it does not work */
+	    /* 30 second alarm will exit this page fetch if it does not work */
 	    (void) htmlPageGetWithCookies(url, NULL); /* ignore return */
 
-	    exit(0);
-	    }	/* child of fork has done exit(0) normally or via alarm */
+            // make sure we don't exit if we complete before 30 seconds, as
+            // otherwise we will close the mysql connections that the parent is
+            // still using
+            sleep(30); 
+            exit(0);
+            }	/* child of fork has done exit(0) normally or via alarm */
 	}		/* trash file open OK */
     if (expireSeconds > 0)
 	{

@@ -172,6 +172,7 @@ while (annoFilterRowFails(sSelf->filters, words, sSelf->numCols, &rightFail))
     }
 struct vcfRecord *rec = self->record;
 vcfRecordTrimIndelLeftBase(rec);
+vcfRecordTrimAllelesRight(rec);
 char *chrom = getProperChromName(self, rec->chrom);
 return annoRowFromStringArray(chrom, rec->chromStart, rec->chromEnd,
 			      rightFail, words, sSelf->numCols, callerLm);

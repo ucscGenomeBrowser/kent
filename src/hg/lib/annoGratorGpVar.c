@@ -323,14 +323,18 @@ static struct variant *variantFromVcfRow(struct annoGratorGpVar *self, struct an
 /* Translate vcf array of words into variant. */
 {
 char **words = row->data;
-// VCF may use abbreviated refAllele, so use VCF's refAllele to detect allele->isReference
-// instead of the actual refAllele that's passed in.  But skip the initial extra base if
-// necessary, i.e. if 1-based vcfStart is the same as row->start.
-uint vcfStart = atoll(words[1]);
-int offset = (vcfStart == row->start) ? 1 : 0;
-char *vcfRefAllele = words[3] + offset;
 char *alStr = vcfGetSlashSepAllelesFromWords(words, self->dyScratch);
-unsigned alCount = chopByChar(alStr, '/', NULL, 0);
+// The reference allele is the first allele in alStr -- and it may be trimmed on both ends with
+// respect to the raw VCF ref allele in words[3], so copy vcfRefAllele back out of alStr.
+// That ensures that variantNew will get the reference allele that matches the slash-separated
+// allele string.
+int refLen = strlen(alStr);
+char *p = strchr(alStr, '/');
+if (p)
+    refLen = p - alStr;
+char vcfRefAllele[refLen + 1];
+safencpy(vcfRefAllele, sizeof(vcfRefAllele), alStr, refLen);
+unsigned alCount = countChars(alStr, '/') + 1;
 return variantNew(row->chrom, row->start, row->end, alCount, alStr, vcfRefAllele, self->lm);
 }
 

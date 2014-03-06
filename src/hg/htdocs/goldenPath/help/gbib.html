@@ -60,17 +60,17 @@ To install Genome Browser in a Box, first download the free software VirtualBox 
 href="https://www.virtualbox.org/wiki/Downloads">virtualbox.org</a>. We have
 tested version 4.3.6. Install it by following the instructions on the website.</P>
 
-Then download the <a href="http://hgwdev.soe.ucsc.edu/~max/browserbox/browserbox3.zip">
+Then download the <a href="http://hgwdev.soe.ucsc.edu/~max/browserbox/browserbox.zip">
 Genome Browser in a Box ZIP file </a> (~300 MB) and extract it.
 <p>
-Add the contents to VirtualBox by double-clicking the file browserbox.vbox or
+Add the contents of the zip file to VirtualBox by double-clicking the file browserbox.vbox or
 start virtualbox and select <i>Machine - Add</i> (&#8984;+A on Macs or
 Ctrl-A on Linux/Windows) and open the file
 browserbox.vbox that you just extracted.<P>
 
 <img src="../../images/gbib-add.png"><p>
 
-Finally, select "browserbox" on the left side menu of virtualbox and click the
+Finally, if needed, select "browserbox" on the left side menu of virtualbox and click the
 big button "Start" in the symbol bar.<P> 
 <img src="../../images/gbib-start.png">
 <p>
@@ -83,6 +83,13 @@ Known problems:
         <li>Some older entry-level laptops from around 2009-2011 (e.g. Toshiba Satellite U500) were sold with CPUs that do not support virtualization.  These laptops cannot run the Genome Browser in a Box. The same applies to low-cost laptops called "netbooks" with Intel Atom processors. </li>
         <li>On some DELL Optiplex (e.g. Optiplex 960) laptops, virtualization is supported, but deactivated in the BIOS. Reboot the computer, press F12 during boot to show the BIOS menu. Go to "BIOS Setup", "Virtualization Support", "Virtualization", check "Enable Intel Virtualization Technology". Exit and save. Restart the computer.
         </ul>
+<li>Virtualbox Error: <i>"Failed to open virtual machine located in... Trying to open a VM config ... which has the same UUID as an existing virtual machine. </i> 
+        <ul>
+        <li>This happens if you have already downloaded and installed Genome Browser in a Box before </li>
+        <li>Start VirtualBox, select the old browserbox virtual machine and choose "Machine - Remove" in the menu (Ctrl+R or &#8984;+R). When asked, choose "Remove only" so you still keep the old browserbox on your disk.</li>
+        <li>Now double-click the newly downloaded browserbox.vbox file or add it with "Machine - Add"</li>
+        </ul>
+</li>
 </ul>
 
 </div><!-- .sectionContent -->
@@ -115,7 +122,7 @@ conservation tables, but no alignments". Depending on your network bandwidth,
 the download can take several minutes or up to a few hours over an ADSL
 line. The mirror tool will try to use <a
 href="https://github.com/LabAdvComp/UDR">UDR</a> to speed up the download.
-During the download, the file browserBoxData.vdi will grow.
+During the download, the file browserbox-disk2.vmdk will grow.
 Please wait until it is completed. You cannot use the Genome Browser in a Box during this
 time. Once the download is complete, the default
 tracks should load in less than a second for a typical locus.<P>
@@ -162,8 +169,8 @@ Start the box, click on the "black" screen with the terminal and type
 This will update all the genome browser software and the annotation tracks that you mirrored.<p>
 
 If for some reason your browser box does not start anymore one day, you can re-download
-the zipfile and extract only the file browserboxBoot.vmdk. Do not extract and overwrite
-browserBoxData.vdi, as it contains your track and session settings and mirrored
+the zipfile and extract only the file browserbox-disk1.vmdk. Do not extract and overwrite
+browserbox-disk2.vmdk, as it contains your track and session settings and mirrored
 tracks.
 
 </div><!-- .sectionContent -->
@@ -174,7 +181,7 @@ tracks.
 <div class="sectionContent">
 <a name="tools"></a>
 The black terminal in the Genome Browser in a Box is a
-normal linux command line. The sudo password is "browser". The box includes a few UCSC tools,
+normal linux command line. The root password is "browser". The box includes a few UCSC tools,
 e.g. bedToBigBed and wigToBigWig, samtools and tabix. You can use them to index
 bed/bam and wiggle files.<p>
 For example, to index a BAM file in a shared folder "Documents" on your harddisk, type
@@ -194,8 +201,8 @@ various command line tools provided by UCSC.<p>
 
 For easier use of the command line, connect to the box from your computer with
 SSH. It supports copy/paste and is faster. To connect with SSH, open a
-terminal on your computer and type "ssh browser@localhost -p 1235". The
-password is "browser".
+terminal on your computer and type <tt>ssh browser@localhost -p 1235</tt>. The
+password is "browser". You can use <tt>sudo</tt> for root access, it does not require a password.
 </div><!-- .sectionContent -->
 </div><!-- .section -->
 

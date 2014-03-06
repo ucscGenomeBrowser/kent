@@ -9,6 +9,7 @@
 #include "web.h"
 #include "portable.h"
 #include "hgGene.h"
+#include "hgConfig.h"
 
 
 static void rnaTrashDirsInit(char **tables, int count)
@@ -53,6 +54,9 @@ webPrintLabelCell("Fold Energy");
 webPrintLabelCell("Bases");
 webPrintLabelCell("Energy/Base");
 webPrintWideCenteredLabelCell("Display As", 3);
+
+char *rnaPlotPath = cfgOptionDefault("rnaPlotPath", "../cgi-bin/RNAplot");
+
 for (side = 0; side < ArraySize(names); ++side)
     {
     char *table = tables[side];
@@ -70,18 +74,35 @@ for (side = 0; side < ArraySize(names); ++side)
 	/* Load fold and save it as postScript. */
 	rnaFoldStaticLoad(row, &fold);
 	safef(psName, sizeof(psName), "../trash/%s/%s_%s.ps", table, table, geneId);
-	if (!fileExists(psName))
+        bool plotDone = FALSE;
+	if (fileExists(psName))
+            plotDone = TRUE;
+        else
 	    {
 	    FILE *f;
-	    f = popen("../cgi-bin/RNAplot", "w");
-	    if (f != NULL)
-	        {
-		fprintf(f, ">%s\n", psName);	/* This tells where to put file. */
-		fprintf(f, "%s\n%s\n", fold.seq, fold.fold);
-		pclose(f);
-		}
-	    }
 
+            if (!fileExists(rnaPlotPath))
+                {
+                plotDone = FALSE;
+                fprintf(stderr, "Could not find %s", rnaPlotPath);
+                }
+            else
+                {
+                f = popen(rnaPlotPath, "w");
+                if (f != NULL)
+                    {
+                    fprintf(f, ">%s\n", psName);	/* This tells where to put file. */
+                    fprintf(f, "%s\n%s\n", fold.seq, fold.fold);
+                    pclose(f);
+                    plotDone = TRUE;
+                    }
+                }
+            }
+
+        // newer versions of RNAplot add _ss.ps to the file name
+        if (!fileExists(psName))
+            safef(psName, sizeof(psName), "../trash/%s/%s_%s.ps_ss.ps", table, table, geneId);
+            
 	/* Print row of table, starting with energy terms . */
 	hPrintf("</TR><TR>");
 	bases = strlen(fold.seq);
@@ -96,23 +117,26 @@ for (side = 0; side < ArraySize(names); ++side)
 	hPrintf("%1.3f", fold.energy/bases);
 	webPrintLinkCellEnd();
 
-	/* Print link to png image. */
-	webPrintLinkCellStart();
-	hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
-	    geneCgi, cartSidUrlString(cart), 
-	    hggMrnaFoldRegion, table,
-	    hggMrnaFoldPs, psName,
-	    hggDoRnaFoldDisplay, "picture");
-	hPrintf(" Picture ");
-	hPrintf("</A>");
-	webPrintLinkCellEnd();
+        if (plotDone)
+            {
+            /* Print link to png image. */
+            webPrintLinkCellStart();
+            hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
+                geneCgi, cartSidUrlString(cart), 
+                hggMrnaFoldRegion, table,
+                hggMrnaFoldPs, psName,
+                hggDoRnaFoldDisplay, "picture");
+            hPrintf(" Picture ");
+            hPrintf("</A>");
+            webPrintLinkCellEnd();
 
-	/* Print link to PostScript. */
-	webPrintLinkCellStart();
-	hPrintf("<A HREF=\"%s\" class=\"toc\">", psName);
-	hPrintf(" PostScript ");
-	hPrintf("</A>");
-	webPrintLinkCellEnd();
+            /* Print link to PostScript. */
+            webPrintLinkCellStart();
+            hPrintf("<A HREF=\"%s\" class=\"toc\">", psName);
+            hPrintf(" PostScript ");
+            hPrintf("</A>");
+            webPrintLinkCellEnd();
+            }
 
 	/* Print link to text. */
 	webPrintLinkCellStart();
