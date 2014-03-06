@@ -165,12 +165,13 @@ slReverse(&newList);
 vcff->records = newList;
 }
 
-struct pgSnpVcfStart
-/* This extends struct pgSnp by tacking on an original VCF chromStart at the end,
+struct pgSnpVcfStartEnd
+/* This extends struct pgSnp by tacking on an original VCF chromStart and End at the end,
  * for use by indelTweakMapItem below.  This can be cast to pgs. */
 {
     struct pgSnp pgs;
     unsigned int vcfStart;
+    unsigned int vcfEnd;
 };
 
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
@@ -183,8 +184,9 @@ int maxLen = 33;
 int maxAlCount = 5;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
-    struct pgSnpVcfStart *psvs = needMem(sizeof(*psvs));
+    struct pgSnpVcfStartEnd *psvs = needMem(sizeof(*psvs));
     psvs->vcfStart = vcfRecordTrimIndelLeftBase(rec);
+    psvs->vcfEnd = vcfRecordTrimAllelesRight(rec);
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
     memcpy(&(psvs->pgs), pgs, sizeof(*pgs));
     pgs = (struct pgSnp *)psvs; // leak mem
@@ -543,6 +545,7 @@ void mapBoxForCenterVariant(struct vcfRecord *rec, struct hvGfx *hvg, struct tra
 {
 struct dyString *dy = dyStringNew(0);
 unsigned int chromStartMap = vcfRecordTrimIndelLeftBase(rec);
+unsigned int chromEndMap = vcfRecordTrimAllelesRight(rec);
 gtSummaryString(rec, dy);
 dyStringAppend(dy, "   Haplotypes sorted on ");
 char *centerChrom = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "centerVariantChrom");
@@ -561,7 +564,7 @@ if (w <= 1)
     x1--;
     w = 3;
     }
-mapBoxHgcOrHgGene(hvg, chromStartMap, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
+mapBoxHgcOrHgGene(hvg, chromStartMap, chromEndMap, x1, yOff, w, tg->height, tg->track,
 		  rec->name, dy->string, NULL, TRUE, NULL);
 }
 
@@ -621,6 +624,7 @@ static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, unsign
 /* Draw a stack of genotype bars for this record */
 {
 unsigned int chromStartMap = vcfRecordTrimIndelLeftBase(rec);
+unsigned int chromEndMap = vcfRecordTrimAllelesRight(rec);
 const double scale = scaleForPixels(width);
 int x1 = round((double)(rec->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(rec->chromEnd-winStart)*scale) + xOff;
@@ -705,7 +709,7 @@ else
     {
     struct dyString *dy = dyStringNew(0);
     gtSummaryString(rec, dy);
-    mapBoxHgcOrHgGene(hvg, chromStartMap, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
+    mapBoxHgcOrHgGene(hvg, chromStartMap, chromEndMap, x1, yOff, w, tg->height, tg->track,
 		      rec->name, dy->string, NULL, TRUE, NULL);
     }
 if (colorMode == altOnlyMode)
@@ -1120,8 +1124,9 @@ static void indelTweakMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 /* Pass the original vcf chromStart to pgSnpMapItem, so if we have trimmed an identical
  * first base from item's alleles and start, we will still pass the correct start to hgc. */
 {
-struct pgSnpVcfStart *psvs = item;
-pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, end, x, y, width, height);
+struct pgSnpVcfStartEnd *psvs = item;
+pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, psvs->vcfEnd,
+	     x, y, width, height);
 }
 
 

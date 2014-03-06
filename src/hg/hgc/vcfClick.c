@@ -360,6 +360,7 @@ printf("</FORM>\n");
 char leftBase = rec->alleles[0][0];
 unsigned int vcfStart = vcfRecordTrimIndelLeftBase(rec);
 boolean showLeftBase = (rec->chromStart == vcfStart+1);
+(void)vcfRecordTrimAllelesRight(rec);
 char *displayAls[rec->alleleCount];
 makeDisplayAlleles(rec, showLeftBase, leftBase, 20, TRUE, FALSE, displayAls);
 printPosOnChrom(seqName, rec->chromStart, rec->chromEnd, NULL, FALSE, rec->name);

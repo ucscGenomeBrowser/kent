@@ -245,6 +245,15 @@ unsigned int vcfRecordTrimIndelLeftBase(struct vcfRecord *rec);
  * However, for hgTracks' mapBox we need the correct chromStart for identifying the
  * record in hgc -- so return the original chromStart. */
 
+unsigned int vcfRecordTrimAllelesRight(struct vcfRecord *rec);
+/* Some tools output indels with extra base to the right, for example ref=ACC, alt=ACCC
+ * which should be ref=A, alt=AC.  When the extra bases make the variant extend from an
+ * intron (or gap) into an exon, it can cause a false appearance of a frameshift.
+ * To avoid this, when all alleles have identical base(s) at the end, trim all of them,
+ * and update rec->chromEnd.
+ * For hgTracks' mapBox we need the correct chromStart for identifying the record in hgc,
+ * so return the original chromEnd. */
+
 int vcfRecordCmp(const void *va, const void *vb);
 /* Compare to sort based on position. */
 
