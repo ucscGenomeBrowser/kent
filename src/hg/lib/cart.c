@@ -25,6 +25,7 @@
 #include "geoMirror.h"
 #include "hubConnect.h"
 #include "trackHub.h"
+#include "cgiApoptosis.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1629,6 +1630,7 @@ void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName,
  * oldVars - those in cart that are overlayed by cgi-vars are
  * put in optional hash oldVars. */
 {
+cgiApoptosisSetup();
 struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
 setThemeFromCart(cart);
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);

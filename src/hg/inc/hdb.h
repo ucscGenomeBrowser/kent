@@ -456,6 +456,9 @@ boolean hIsBetaHost(void);
 /* Return TRUE if this is running on beta (QA) web-server.
  * Use sparingly as behavior on beta should be as close to RR as possible. */
 
+boolean hIsBrowserbox();
+/* Return TRUE if this is the browserbox virtual machine */
+
 boolean hIsPreviewHost(void);
 /* Return TRUE if this is running on preview web-server.  The preview
  * server is a mirror of the development server provided for public

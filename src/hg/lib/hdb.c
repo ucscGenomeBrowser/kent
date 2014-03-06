@@ -3236,6 +3236,14 @@ boolean hIsBetaHost()
 return hHostHasPrefix("hgwbeta");
 }
 
+boolean hIsBrowserbox()
+/* Return TRUE if this is the browserbox virtual machine */
+{
+char name[256];
+gethostname(name, sizeof(name));
+return (startsWith("browserbox", name));
+}
+
 boolean hIsPreviewHost()
 /* Return TRUE if this is running on preview web-server.  The preview
  * server is a mirror of the development server provided for public
