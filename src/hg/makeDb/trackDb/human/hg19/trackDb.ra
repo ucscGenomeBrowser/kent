@@ -71,7 +71,7 @@ type psl
 priority 37.14
 color 20,0,250
 visibility pack
-ucscRetro InfoucscRetroInfo5
+ucscRetroInfo ucscRetroInfo5
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds5
 baseColorUseSequence extFile ucscRetroSeq5 ucscRetroExtFile5
