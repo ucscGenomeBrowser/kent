@@ -89,7 +89,7 @@ searchDescription Retroposed Genes V5, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 xrefTable refLink, ucscRetroInfo5
 dontCheckXrefQueryFormat 1
-xrefQueryselect ucscRetroInfo5.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+xrefQuery select ucscRetroInfo5.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
 
 searchName ucscRetroInfoMrna5
@@ -103,17 +103,17 @@ searchTable ucscRetroAli5
 searchDescription Retroposed Genes V5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
-xrefTablekgXref, ucscRetroInfo5
-xrefQueryselect ucscRetroInfo5.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+xrefTable kgXref, ucscRetroInfo5
+xrefQuery select ucscRetroInfo5.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
 searchPriority 3.54
 
-searchNameucscRetroKnownGene5
-searchTableucscRetroAli5
-searchDescriptionRetroposed Genes V5, Including Pseudogenes 
+searchName ucscRetroKnownGene5
+searchTable ucscRetroAli5
+searchDescription Retroposed Genes V5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
-xrefTablekgXref, ucscRetroInfo5
-xrefQueryselect ucscRetroInfo5.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+xrefTable kgXref, ucscRetroInfo5
+xrefQuery select ucscRetroInfo5.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
 track ucscRetroAli6
