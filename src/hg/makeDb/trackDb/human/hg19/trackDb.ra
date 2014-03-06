@@ -81,7 +81,7 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
-dataVersionMar. 2013
+dataVersion Mar. 2013
 
 searchName ucscRetroInfoRefSeq5
 searchTable ucscRetroAli5
