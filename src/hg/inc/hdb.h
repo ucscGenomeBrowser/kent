@@ -444,6 +444,9 @@ struct sqlConnection *hMaybeConnectArchiveCentral(void);
 /* Connect to central database for archives.
  * Free this up with hDisconnectCentralArchive(). */
 
+char *hHttpHost();
+/* return http host from apache or hostname if run from command line  */
+
 boolean hHostHasPrefix(char *prefix);
 /* Return TRUE if this is running on web-server with host name prefix */
 

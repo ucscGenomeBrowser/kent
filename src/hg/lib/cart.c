@@ -1363,8 +1363,19 @@ cartDefaultDisconnector(&conn);
 void cartWriteCookie(struct cart *cart, char *cookieName)
 /* Write out HTTP Set-Cookie statement for cart. */
 {
+char *domain = cfgVal("central.domain");
+if (sameWord("HTTPHOST", domain))
+    {
+    // IE9 does not accept portnames in cookie domains
+    char *hostWithPort = hHttpHost();
+    struct netParsedUrl *url;
+    AllocVar(url);
+    netParseUrl(hostWithPort, url);
+    domain = url->host;
+    }
+
 printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\r\n",
-        cookieName, cart->userInfo->id, cfgVal("central.domain"), cookieDate());
+        cookieName, cart->userInfo->id, domain, cookieDate());
 if(geoMirrorEnabled())
     {
     // This occurs after the user has manually choosen to go back to the original site; we store redirect value into a cookie so we 

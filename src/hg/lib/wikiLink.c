@@ -27,9 +27,14 @@ return FALSE;
 }
 
 char *wikiLinkHost()
-/* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
+/* Return the wiki host specified in hg.conf, or NULL.  Allocd here. 
+ * Returns hostname from http request if hg.conf entry is HTTPHOSTNAME.
+ * */
 {
-return cloneString(cfgOption(CFG_WIKI_HOST));
+char *wikiHost = cfgOption(CFG_WIKI_HOST);
+if ((wikiHost!=NULL) && sameString(wikiHost, "HTTPHOST"))
+    wikiHost = hHttpHost();
+return cloneString(wikiHost);
 }
 
 boolean wikiLinkEnabled()

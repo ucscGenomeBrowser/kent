@@ -3203,18 +3203,28 @@ else
     return slNameCloneList((struct slName *)(hel->val));
 }
 
-boolean hHostHasPrefix(char *prefix)
-/* Return TRUE if this is running on web-server with host name prefix */
+char* hHttpHost()
+/* return http host from apache or hostname if run from command line  */
 {
 char host[256];
-if (prefix == NULL)
-    return FALSE;
 
 char *httpHost = getenv("HTTP_HOST");
+
 if (httpHost == NULL && !gethostname(host, sizeof(host)))
     // make sure this works when CGIs are run from the command line.
     httpHost = host;
 
+return httpHost;
+}
+
+
+boolean hHostHasPrefix(char *prefix)
+/* Return TRUE if this is running on web-server with host name prefix */
+{
+if (prefix == NULL)
+    return FALSE;
+
+char *httpHost = hHttpHost();
 if (httpHost == NULL)
     return FALSE;
 
