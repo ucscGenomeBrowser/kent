@@ -5,7 +5,8 @@ genePredCheck = ${DESTBINDIR}/genePredCheck
 
 all:
 
-test: basic srcPre dups impliedStop ensembl geneNameAsName2 splitStop ignoreGroupWithoutExons
+test: basic srcPre dups impliedStop ensembl geneNameAsName2 splitStop \
+	ignoreGroupWithoutExons ensemblSplicedStop
 
 # basic conversion
 basic: mkdirs
@@ -57,6 +58,11 @@ ignoreGroupWithoutExons: mkdirs
 	${genePredCheck} -verbose=0 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
+# this caused assert in assigning exon frame
+ensemblSplicedStop: mkdirs
+	${gtfToGenePred} -genePredExt input/ensemblSplicedStop.gp output/$@.gp
+	${genePredCheck} -verbose=0 output/$@.gp
+	diff expected/$@.gp output/$@.gp
 
 mkdirs:
 	mkdir -p output
