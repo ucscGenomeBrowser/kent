@@ -126,6 +126,7 @@ html cpgIslandSuper
     html cpgIslandSuper
 
 include ../chainNetPrimate.ra
+include ../chainNetPlacental.ra
 include ../chainNetVertebrate.ra
 include ../chainNetLegacy.ra alpha
 

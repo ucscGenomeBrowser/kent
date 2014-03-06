@@ -88,13 +88,8 @@ include chainNetVicPac2.ra
         type chain loxAfr3
         otherDb loxAfr3
 
-        track chainFelCat4
-        subTrack placentalChainNetViewchain off
-        subGroups view=chain species=pCat clade=bLaura
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain felCat4
-        otherDb felCat4
+include chainNetFelCat4.ra beta,public
+include chainNetFelCat5.ra alpha
 
         track chainCanFam3
         subTrack placentalChainNetViewchain off
@@ -274,14 +269,6 @@ include chainNetTurTru2.ra alpha
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign loxAfr3 chainLoxAfr3
         otherDb loxAfr3
-
-        track netFelCat4
-        subTrack placentalChainNetViewnet off
-        subGroups view=net species=pCat clade=bLaura
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign felCat4 chainFelCat4
-        otherDb felCat4
 
         track netCanFam3
         subTrack placentalChainNetViewnet on
