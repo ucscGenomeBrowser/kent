@@ -1657,6 +1657,9 @@ hgsql hg19 -e 'LOAD DATA LOCAL INFILE "allMotifTargetsV4.load.tab" INTO TABLE fa
 # Generate comma-sep list of factors for trackDb filter, 'factorFilterList.txt'
 
 
-
 # Get citations for track description References section
         getTrackReferences 22955990  23203885  22955619 > refs.txt
+
+# Update target table using new gene vs. canonical motif table from Jiali at Zlab (2014-03-06 kate)
+
+wget http://zlab.umassmed.edu/~zhuangj/Direct_binding_motifs.tar.gz
