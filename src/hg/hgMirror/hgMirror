@@ -1151,10 +1151,19 @@ def assertEmptyQueue():
     print '<a href="hgMirror?jobId=%s">Show download job</a>' % jobId
     sys.exit(0)
 
+legalChars = set(string.digits).union(set(string.letters.lower())).union("_")
+
+def mustBeClean(str):
+    """ make sure a string contains only letters and digits """
+    for s in str:
+        if s not in legalChars:
+            print "illegal character in CGI parameter"
+            sys.exit(0)
+
 def getDb(args):
     """ get Db from either CGI args or hgcentral, makes sure that DB actually exists """
     if "db" in args:
-        db = args.getvalue("db")
+        db = mustBeClean(args.getvalue("db"))
         if mysqlDbLoaded:
             import _mysql_exceptions
             try:
@@ -1198,6 +1207,8 @@ def htmlMiddle(args):
         checkGbdbMysqlAccess()
 
         trackList = set(args.keys())
+        for t in trackList:
+            mustBeClean(t)
         trackList.remove("submit")
 
         forceTables = findImportantTables(tableSizes)
