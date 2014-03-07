@@ -1368,10 +1368,9 @@ if (sameWord("HTTPHOST", domain))
     {
     // IE9 does not accept portnames in cookie domains
     char *hostWithPort = hHttpHost();
-    struct netParsedUrl *url;
-    AllocVar(url);
-    netParseUrl(hostWithPort, url);
-    domain = url->host;
+    struct netParsedUrl npu;
+    netParseUrl(hostWithPort, &npu);
+    domain = cloneString(npu.host);
     }
 
 printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\r\n",
