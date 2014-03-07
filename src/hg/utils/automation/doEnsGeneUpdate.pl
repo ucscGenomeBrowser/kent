@@ -397,7 +397,7 @@ _EOF_
 _EOF_
   );
   $bossScript->add(<<_EOF_
-gtfToGenePred -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \\
+gtfToGenePred -geneNameAsName2 -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \\
     | gzip > $db.allGenes.gp.gz
 $Bin/extractGtf.pl infoOut.txt > ensGtp.tab
 $Bin/ensemblInfo.pl infoOut.txt > ensemblToGeneName.tab
