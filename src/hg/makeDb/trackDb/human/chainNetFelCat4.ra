@@ -1,0 +1,15 @@
+        track chainFelCat4
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=pCat clade=bLaura
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain felCat4
+        otherDb felCat4
+
+        track netFelCat4
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=pCat clade=bLaura
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign felCat4 chainFelCat4
+        otherDb felCat4

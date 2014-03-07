@@ -70,16 +70,15 @@ years. As with the previous GRCh37 assembly, the
 target="_blank">Genome Reference Consortium</a> (GRC) 
 is now the primary source for human genome assembly data submitted to GenBank. Beginning with this 
 release, the UCSC Genome Browser version numbers for the human assemblies now match those of the 
-GRC to minimize version confusion. Hence, the GRCh38 assembly is referred to as hg38 in Genome 
-Browser datasets and documentation. 
-
+GRC to minimize version confusion. Hence, the GRCh38 assembly is referred to as &quot;hg38&quot; 
+in the Genome Browser datasets and documentation. 
 <p>
-<b><em>GRCh38 Highlights</em></b>
+<b>GRCh38 Highlights</b>
 <ul>
 <li>
 <b>Alternate sequences</b> - Several human chromosomal regions exhibit sufficient variability to 
 prevent adequate representation by a single sequence. To address this, the GRCh38 assembly provides 
-alternate sequence for selected variant regions with the inclusion of  <em>alternate loci 
+alternate sequence for selected variant regions through the inclusion of  <em>alternate loci 
 scaffolds</em> (or <em>alt loci</em>). Alt loci are separate accessioned sequences that are aligned 
 to reference chromosomes. This assembly contains 261 alt loci, many of which are associated with 
 the LRC/KIR area of chr19 and the MHC region on chr6.
@@ -90,18 +89,21 @@ list of the reference chromosomes and alternate sequences in GRCh38.
 represented centromeric regions in previous assemblies have been replaced by sequences from
 centromere models created by 
 <a href="http://genome.cshlp.org/content/early/2014/02/05/gr.159624.113.abstract"
-target="_blank">Karen Miga et al., 2014</a> (UCSC's Kent lab). The models, which provide the 
-approximate repeat number and order for each centromere, will be useful for read mapping and 
-variation studies. 
+target="_blank">Karen Miga et al.</a>, using centromere databases developed during her work in
+the <a href="http://www.genome.duke.edu/labs/WillardLab/" target="_blank">Willard lab</a> at 
+Duke University and analysis software developed while working in the 
+<a href="http://cbse.soe.ucsc.edu/people/kent" target="_blank">Kent lab</a> at UCSC.
+The models, which provide the approximate repeat number and order for each centromere, will be 
+useful for read mapping and variation studies. 
 <li>
-<b>Miochondrial genome</b> - The mitochondrial reference sequence included in the GRCh38 assembly 
+<b>Mitochondrial genome</b> - The mitochondrial reference sequence included in the GRCh38 assembly 
 (termed &quot;chrM&quot; in the UCSC Genome Browser) is the 
 <a href="http://mitomap.org/bin/view.pl/MITOMAP/HumanMitoSeq"
 target="_blank">Revised Cambridge Reference Sequence</a> (rCRS) from 
 <a href="http://mitomap.org/MITOMAP" target="_blank">MITOMAP</a> with GenBank accession number 
 J01415.2 and RefSeq accession number NC_012920.1. This differs from the chrM sequence 
 (RefSeq accession number NC_001907) provided by the Genome Browser for hg19, which was not updated 
-when the GRCh37 assembly transitioned to the new version.
+when the GRCh37 assembly later transitioned to the new version.
 <li>
 <b>Sequence updates</b> - Several erroneous bases and misassembled regions in GRCh37 have been 
 corrected in the GRCh38 assembly, and more than 100 gaps have been filled or reduced. Much of the 
@@ -119,16 +121,8 @@ contamination in the samples. The analysis set may be downloaded from the Genome
 target="_blank">downloads page</a>.
 </ul>
 <p>
-For a glossary of assembly-related terms, see the GRC
-<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/definitions.shtml"
-target="_blank">Assembly Terminology</a> page. For more detailed information about the files 
-included in the GRCh38 GenBank submission, see the
-<a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/README"
-target="_blank">GRCh38 README</a>.
-</p>
-<p>
-<b><em>Chromosome naming conventions</em></b>
-<p>
+<b>Chromosome naming conventions</b>
+<br>
 UCSC has introduced some slight changes to the Genome Browser chromosome naming scheme with
 this release:
 <ul>
@@ -144,8 +138,8 @@ this release:
 </ul>
 </p>
 <p>
-<b><em>Pseudoautosomal regions</em></b>
-<p>
+<b>Pseudoautosomal regions</b>
+<br>
 The Y chromosome in this assembly contains two pseudoautosomal regions (PARs)
 that were taken from the corresponding regions in the X chromosome and are
 exact duplicates:
@@ -156,42 +150,39 @@ chrY:10,000-2,781,479 and chrY:56,887,902-57,217,415
 </p>
 
 <p>
-<b><em>Assembly statistics</em></b>
-<p>
+<b>Assembly statistics</b>
+<br>
 For a detailed set of statistics about this assembly, see the 
 <a href="http://www.ncbi.nlm.nih.gov/assembly/883148/#/st_Primary-Assembly"
 target="_blank">GRCh38 GenBank record</a>.
 <br>
 <TABLE BORDER=1 CELLPADDING=3>
-<!--
-<TR><TH>Number</TH><TH>Haplotypes</TH><TH WIDTH=85>Unplaced Contigs</TH></TH></TR>
--->
-<TR><TH>Number</TH><TH>Haplotypes</TH><TH>Unplaced Contigs</TH></TH></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr1</TD><TD ALIGN="CENTER"><FONT SIZE=-1>12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr2</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>15</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>2</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr3</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>11</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr7</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr8</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr10</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr11</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr14</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>8</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr15</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr17</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>18</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr18</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>10</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr19</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>43</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr20</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr21</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>7</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr22</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrX</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrY</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-<TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrM</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TH>Number</TH><TH>Haplotypes</TH><TH>Unplaced Contigs</TH></TH></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr1</TD><TD ALIGN="CENTER"><FONT SIZE=-1>12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr2</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>15</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>2</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr3</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>11</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr7</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr8</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr10</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr11</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr14</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>8</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr15</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr17</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>18</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr18</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>10</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr19</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>43</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr20</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr21</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>7</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr22</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrX</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrY</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrM</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
 </TABLE>
 </p>
 <p>
@@ -204,6 +195,15 @@ target="_blank">GRCh38 GenBank record</a>.
     <TR><TD></TD><TD></TD></TR>
     <TR><TD><B><FONT SIZE=-1>Total</FONT></B></TD><TD ALIGN="CENTER"><FONT SIZE=-1>455</FONT></TD></TR>
 </TABLE>
+</p>
+<p>
+For more information about the files included in the GRCh38 GenBank submission, see the
+<a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/README"
+target="_blank">GRCh38 README</a>. 
+Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser 
+<a href="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg38/">FTP server</a> or the
+<a href="http://hgdownload.cse.ucsc.edu/downloads.html#human">Downloads</a> page.  
+The annotation tracks for this browser were generated by UCSC and collaborators worldwide.
 </p>
 
 <h3>References</h3>

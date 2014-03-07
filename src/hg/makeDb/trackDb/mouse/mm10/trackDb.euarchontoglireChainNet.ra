@@ -122,8 +122,8 @@ html chainNet
         type chain panTro4
         otherDb panTro4
 
-include hg19ChainNet.ra public
-include hg38ChainNet.ra alpha,beta
+include hg19ChainNet.ra
+include hg38ChainNet.ra
 
     track euarchontoglireChainNetViewnet
     shortLabel Nets

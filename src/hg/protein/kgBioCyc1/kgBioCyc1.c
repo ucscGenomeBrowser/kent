@@ -15,13 +15,16 @@ errAbort(
   "usage:\n"
   "   kgBioCyc1 genes.tab pathways.tab database bioCycPathway.tab bioCycMapDesc.tab\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -noEnsembl   don't use Ensembl tables to look up id\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"noEnsembl", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+boolean noEnsembl = FALSE;
 
 void checkWordMatch(char *fileName, char **words, int lineIx, int wordIx, char *expecting)
 /* CHeck that words[wordIx] is same as expecting or report error and abort. */
@@ -63,15 +66,18 @@ while ((wordCount = lineFileChopNextTab(lf, words, ArraySize(words))) > 0)
     char *symbol = words[1];
     char *knownGeneId = NULL;
 
-    /* BioCycId is really an ENSEMBL Gene ID.  Use following SQL to look it up. */
-    sqlSafef(query, sizeof(query), 
-       "select distinct(knownCanonical.transcript)  "
-       "from ensGtp,knownToEnsembl,knownIsoforms,knownCanonical "
-       "where ensGtp.gene = '%s' "
-       "and ensGtp.transcript = knownToEnsembl.value "
-       "and knownToEnsembl.name=knownIsoforms.transcript "
-       "and knownCanonical.clusterId = knownIsoforms.clusterId", bioCycId);
-    knownGeneId = sqlQuickString(conn, query);
+    if (!noEnsembl)
+	{
+	/* BioCycId is really an ENSEMBL Gene ID.  Use following SQL to look it up. */
+	sqlSafef(query, sizeof(query), 
+	   "select distinct(knownCanonical.transcript)  "
+	   "from ensGtp,knownToEnsembl,knownIsoforms,knownCanonical "
+	   "where ensGtp.gene = '%s' "
+	   "and ensGtp.transcript = knownToEnsembl.value "
+	   "and knownToEnsembl.name=knownIsoforms.transcript "
+	   "and knownCanonical.clusterId = knownIsoforms.clusterId", bioCycId);
+	knownGeneId = sqlQuickString(conn, query);
+	}
 
     /* If we don't have it, make an attempt to get it from gene symbol instead. */
     if (knownGeneId == NULL)
@@ -200,6 +206,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
+noEnsembl = optionExists("noEnsembl");
 kgBioCyc1(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
