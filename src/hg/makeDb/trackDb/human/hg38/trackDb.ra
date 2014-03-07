@@ -125,7 +125,10 @@ html cpgIslandSuper
     priority 2
     html cpgIslandSuper
 
-include chainNetPrimate.ra
+include ../chainNetPrimate.ra
+include ../chainNetPlacental.ra
+include ../chainNetVertebrate.ra
+include ../chainNetLegacy.ra alpha
 
 track contigAlignmentSegments
 shortLabel ContigSegments

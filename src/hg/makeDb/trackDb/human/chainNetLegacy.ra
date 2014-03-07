@@ -115,6 +115,14 @@ html chainNet
         type chain felCat3
         otherDb felCat3
 
+        track chainFelCat4
+        subTrack legacyChainNetViewchain on
+        subGroups view=chain species=yCat clade=fLaura
+        shortLabel $o_db Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain felCat4
+        otherDb felCat4
+
         track chainCanFamPoodle1
         subTrack legacyChainNetViewchain on
         subGroups view=chain species=zDog clade=fLaura
@@ -376,6 +384,14 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign felCat3 chainFelCat3
         otherDb felCat3
+
+        track netFelCat4
+        subTrack legacyChainNetViewnet on
+        subGroups view=net species=yCat clade=fLaura
+        shortLabel $o_db Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign felCat4 chainFelCat4
+        otherDb felCat4
 
         track netCanFamPoodle1
         subTrack legacyChainNetViewnet on
