@@ -709,6 +709,8 @@ sqlDyStringPrintf(dy, "UPDATE %s SET contents='", table);
 sqlDyAppendEscaped(dy, contents);
 sqlDyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
 sqlDyStringPrintf(dy, " where id=%u", cdb->id);
+if (cartDbUseSessionKey())
+  sqlDyStringPrintf(dy, " and sessionKey='%s'", cdb->sessionKey);
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
@@ -1411,8 +1413,10 @@ cartDefaultDisconnector(&conn);
 void cartWriteCookie(struct cart *cart, char *cookieName)
 /* Write out HTTP Set-Cookie statement for cart. */
 {
-printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\r\n",
-        cookieName, cart->userInfo->id, cfgVal("central.domain"), cookieDate());
+char userIdKey[256];
+cartDbSecureId(userIdKey, sizeof userIdKey, cart->userInfo);
+printf("Set-Cookie: %s=%s; path=/; domain=%s; expires=%s\r\n",
+        cookieName, userIdKey, cfgVal("central.domain"), cookieDate());
 if(geoMirrorEnabled())
     {
     // This occurs after the user has manually choosen to go back to the original site; we store redirect value into a cookie so we 
