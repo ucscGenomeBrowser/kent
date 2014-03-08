@@ -2503,7 +2503,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
            name2 field is populated with "noXref" because there is
            no alternate name. Replace this with "none" */
         printf("<b>Gene Symbol:");
-        if (sameString(gp->name2, "noXref"))
+        if ((strlen(gp->name2) < 1) || (sameString(gp->name2, "noXref")))
            printf("</b> none<br>\n");
         else
            printf("</b> %s<br>\n",gp->name2);
@@ -8437,7 +8437,7 @@ if (gpList && gpList->name2)
     if (gpList->cdsStart == gpList->cdsEnd)
 	nonCoding = TRUE;
     printf("<B>Ensembl Gene Link: </B>");
-    if (sameString(gpList->name2, "noXref"))
+    if ((strlen(gpList->name2) < 1) || sameString(gpList->name2, "noXref"))
        printf("none<BR>\n");
     else
        printf("<A HREF=\"%s/geneview?gene=%s\" "
