@@ -4,15 +4,11 @@
 
 
 /*
- * TODO
+ *  TODO REMOVE AFTER AUTOUPGRADE COMPLETE: (added 2014-03-09)
  *
- * autodetect 
- *   or even better auto-upgrade of the userDb and sessionDb tables
- *   alter table userDb add column sessionKey varchar(255) NOT NULL default '';
+ * autoupgrade of the userDb and sessionDb tables
+ *   alter table userDb    add column sessionKey varchar(255) NOT NULL default '';
  *   alter table sessionDb add column sessionKey varchar(255) NOT NULL default '';
- *
- * find and modify the .as and .sql corresponding to cartDb
- *
  *
  */
 
@@ -25,11 +21,18 @@
 #include "cartDb.h"
 #include "cart.h"
 
+#include "errCatch.h"
+#include "portable.h"
+#include "obscure.h"
+#include <sys/time.h>
+
 extern DbConnector cartDefaultConnector;
 extern DbDisconnect cartDefaultDisconnector;
 
 static boolean userDbInitialized = FALSE;
 static boolean sessionDbInitialized = FALSE;
+
+struct dyString *dyUpgradeError = NULL;
 
 boolean cartDbHasSessionKey(struct sqlConnection *conn, char *table)
 /* Check to see if the table has the sessionKey field */
@@ -65,6 +68,130 @@ else
 return FALSE;
 }
 
+#define AUTOUPGRPATHSIZE 256
+static char *makeResultName(char *tableName, char *path)
+/* return path in trash for corresponding autoupgrade result file */
+{
+safef(path, AUTOUPGRPATHSIZE, "../trash/AUTO_UPGRADE_RESULT_%s", tableName);
+return cloneString(path);
+}
+
+static boolean checkAutoUpgradeTableResultTimeIsOld(char *tableName)
+/* Has enough time passed since the last upgrade check? 
+ * The idea is to only check once every few minutes
+ * rather than each time the CGI runs. */
+{
+char path[AUTOUPGRPATHSIZE];
+makeResultName(tableName, path);
+if (!fileExists(path))
+    return TRUE;  // If there is no result yet we should test and make one
+struct timeval rawtime;
+gettimeofday( &rawtime, NULL );
+time_t now = rawtime.tv_sec;
+time_t fMT = fileModTime(path);
+double diff = difftime(now, fMT);
+if (diff > (3 * 60))  // 3 minutes in seconds
+    return TRUE;  // The result is old we should test it again in case situation changed
+return FALSE;
+}
+
+static char * readAutoUpgradeTableResult(char *tableName)
+/* Read table upgrade result */
+{
+char path[AUTOUPGRPATHSIZE];
+char *result = NULL;
+makeResultName(tableName, path);
+if (!fileExists(path))
+    return NULL;  // There is no result yet
+readInGulp(path, &result, NULL);
+return result;
+}
+
+static void writeAutoUpgradeTableResult(char *tableName, char *result)
+/* Write table upgrade result */
+{
+char path[AUTOUPGRPATHSIZE];
+makeResultName(tableName, path);
+writeGulp(path, result, strlen(result));
+}
+
+
+void autoUpgradeTableAddSesssionKey(struct sqlConnection *conn, char *tableName)
+/* Try to upgrade the table by adding sessionKey field
+ * in a safe way handling success failures and retries
+ * with multiple CGIs running. */
+{
+
+boolean testAgain = checkAutoUpgradeTableResultTimeIsOld(tableName);
+if (testAgain)
+    {
+    // Get the advisory lock for this table
+    // This prevents multiple CGI processes from trying to upgrade simultaneously
+    char lockName[256];
+    safef(lockName, sizeof lockName, "AUTO_UPGRADE_%s", tableName);
+    sqlGetLock(conn, lockName);
+
+    // Make sure that the table has not been already upgraded by some earlier process.
+    // We do not want to upgrade more than once.
+    if (sqlFieldIndex(conn, tableName, "sessionKey") == -1)
+	{
+
+	char result[4096];
+
+	// Put a catch around the table upgrade attempt,
+	// both to allow us to continue if it fails,
+	// and to catch the error message and save it in the results file
+	struct errCatch *errCatch = errCatchNew();
+	if (errCatchStart(errCatch))
+	    { 
+	    char query[256];
+	    sqlSafef(query, sizeof query, "alter table %s add column sessionKey varchar(255) NOT NULL default ''", tableName);
+	    sqlUpdate(conn, query);
+	    }
+	errCatchEnd(errCatch);
+	if (errCatch->gotError)
+	    {
+	    safef(result, sizeof result, "AUTOUPGRADE FAILED\n%s", errCatch->message->string);
+	    }
+	else
+	    {
+	    safef(result, sizeof result, "OK\n");
+	    }
+
+	errCatchFree(&errCatch);
+
+	writeAutoUpgradeTableResult(tableName, result);
+
+	}
+
+    // Release the advisory lock for this table
+    sqlReleaseLock(conn, lockName);
+
+    }
+else
+    {  // in the interests of speed, just use the old result
+    char *oldResult = readAutoUpgradeTableResult(tableName);
+    if (oldResult)
+	{
+	if (startsWith("AUTOUPGRADE FAILED", oldResult))
+	    {
+	    // cannot do this here since it is too early and the warn handler does not work right
+	    // it ends up writing html and javascript before the cookie and response header have even been finished.
+	    // warn("%s", oldResult);  
+	    // instead, save the error message for access later from select places like hgGateway
+	    if (!dyUpgradeError)
+		dyUpgradeError = dyStringNew(256);
+	    else
+		dyStringPrintf(dyUpgradeError,"\n");
+	    dyStringPrintf(dyUpgradeError,"%s", oldResult);
+	    }
+	}
+    }
+
+}
+
+
+
 boolean cartDbUseSessionKey()
 /* Check settings and and state to determine if sessionKey is in use */
 {
@@ -75,7 +202,7 @@ if (!initialized)
     initialized = TRUE;
     char *sessionKey = cfgOption2("browser", "sessionKey");
     if (!sessionKey)
-	sessionKey = "off";  // DEFAULT but this might change to another value
+	sessionKey = "on";  // DEFAULT but this might change to another value
     if (sameString(sessionKey, "on"))
 	{
 	useSessionKey = TRUE;
@@ -84,14 +211,22 @@ if (!initialized)
 	boolean sessionDbHasSessionKey = cartDbHasSessionKey(conn, "sessionDb");
 	if ( ! (userDbHasSessionKey && sessionDbHasSessionKey) )
 	    {
-    	    //errAbort("brower.sessionKey=on but userDb and sesionDb are missing the sessionKey field.");
+    	    //errAbort("brower.sessionKey=on but userDb and sessionDb are missing the sessionKey field.");
 	    // AUTO-UPGRADE tables to add missing sessionKey field here.
 	    if (!userDbHasSessionKey)
-		sqlUpdate(conn, "NOSQLINJ alter table userDb add column sessionKey varchar(255) NOT NULL default ''");
-    	    if (!sessionDbHasSessionKey) 
-    		sqlUpdate(conn, "NOSQLINJ alter table sessionDb add column sessionKey varchar(255) NOT NULL default ''");
-	    userDbInitialized = FALSE;
-	    sessionDbInitialized = FALSE;
+		{
+		autoUpgradeTableAddSesssionKey(conn, "userDb");
+		userDbInitialized = FALSE;
+		userDbHasSessionKey = cartDbHasSessionKey(conn, "userDb");
+		}
+    	    if (!sessionDbHasSessionKey)
+		{
+		autoUpgradeTableAddSesssionKey(conn, "sessionDb");
+		sessionDbInitialized = FALSE;
+		sessionDbHasSessionKey = cartDbHasSessionKey(conn, "sessionDb");
+		}
+	    if ( ! (userDbHasSessionKey && sessionDbHasSessionKey) )
+		useSessionKey = FALSE;
 	    }
 	cartDefaultDisconnector(&conn);
 	}
@@ -118,8 +253,8 @@ mustRead(f, binaryString, numBytes);
 carefulClose(&f);
 char * result = base64Encode(binaryString, numBytes); // converts 3 binary bytes into 4 printable characters
 int len = strlen(result);
-memSwapChar(result, len, '+', '-'); // replace + and / with characters that are URL-friendly.
-memSwapChar(result, len, '/', '*');
+memSwapChar(result, len, '+', 'A'); // replace + and / with characters that are URL-friendly.
+memSwapChar(result, len, '/', 'a');
 freeMem(binaryString);
 return result;
 }

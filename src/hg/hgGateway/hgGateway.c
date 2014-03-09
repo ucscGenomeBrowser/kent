@@ -28,6 +28,9 @@ char *clade = NULL;
 char *organism = NULL;
 char *db = NULL;
 
+// TODO REMOVE AFTER AUTOUPGRADE COMPLETE: (added 2014-03-09)
+extern struct dyString *dyUpgradeError;
+
 void hgGateway()
 /* hgGateway - Human Genome Browser Gateway. */
 {
@@ -275,6 +278,11 @@ else
     htmlDoEscape();
     }
 hgGateway();
+
+// TODO REMOVE AFTER AUTOUPGRADE COMPLETE: (added 2014-03-09)
+if (dyUpgradeError)
+    warn(dyUpgradeError->string);
+
 cartWebEnd();
 }
 
