@@ -156,7 +156,7 @@ TARGET=_blank>here</a> to view this track in the Genome Browser.
 <P><B><I>Example 3B:</I></B><BR>
 This example shows a simple annotation file containing one data set in the bigBed format. 
 This track displays random sized blocks across chr21 in the human genome. The big data 
-formats, such as the bigBed format, must be uploaded using a bigDataUrl that is 
+formats, such as the bigBed format, can be uploaded using a bigDataUrl that is 
 specified in the track line. For more information on these track line parameters, refer 
 to the <A HREF="#TRACK">Track Lines</A> section. 
 <P>
@@ -168,6 +168,13 @@ example in the browser:
 <tt>track type=bigBed name="bigBed Example One" description="A bigBed file" bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</tt>
 </P>
 
+<P>
+Alternatively, you may also upload just the URL of the bigBed file <P>
+<tt>
+http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb
+</tt>
+<P>
+This will infer the track type as "bigBed" based on the file extension and set the track name to "bigBedExample".
 
 <P><B>Step 4. Display your annotation track in the Genome Browser</B><BR>
 To view your annotation data in the Genome Browser, open the 

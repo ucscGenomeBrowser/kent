@@ -375,6 +375,7 @@ def findTopParent(trackParents, trackName):
 def makeTrackHierarchy(trackParents):
     """ given a dict with track->parent return dict with parent->list of child tracks.
     """
+    debug("hierarchy")
     trackChildren = dict()
     for track, parent in trackParents.iteritems():
         if parent not in trackChildren:
@@ -458,6 +459,7 @@ def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableTo
 
     # add the db twobit file and the trackDb index
     gbdbListFh.write("%s.2bit\n" % db)
+    gbdbListFh.write("html/description.html\n")
     gbdbListFh.write("trackDb.ix\n")
     gbdbListFh.write("trackDb.ixx\n")
 
@@ -514,12 +516,14 @@ def printTrackInfo(trackName, trackTables, trackLabels, localSizes, trackChildre
         (remoteTableSize, gbdbSize, localTableSize, localGbdbSize))
 
     #print "remote, local", remoteSize, localSize, "<br>"
+    status = ""
+    isGrey = False
     if remoteSize!=0 and remoteSize<=localSize:
-        status = ", fully downloaded"
+        addHtml = 'disabled="disabled"'
+        isGrey = True
+        status = ", downloaded"
     elif localTableSize != 0:
         status = ", partially downloaded"
-    else:
-        status = ""
 
     indentStr = ""
     if indent!=0:
@@ -534,8 +538,11 @@ def printTrackInfo(trackName, trackTables, trackLabels, localSizes, trackChildre
     debug("tables: "+str(trackTableNames))
     debug("gbdbFiles: "+str(gbdbFnames))
 
-    print('%(indentStr)s<input type="checkbox" %(addHtml)s name="%(trackName)s" id="%(trackName)s">%(label)s '
-        '(<span style="color:grey">%(trackName)s</span>): %(tableStr)s, %(sizeStr)s%(gbdbStr)s%(status)s %(addNote)s<br>' % locals())
+    outStr = '%(indentStr)s<input type="checkbox" %(addHtml)s name="%(trackName)s" id="%(trackName)s">%(label)s ' \
+        '(<span>%(trackName)s</span>): %(tableStr)s, %(sizeStr)s%(gbdbStr)s%(status)s %(addNote)s<br>' % locals()
+    if isGrey:
+        outStr = '<span style="color:#C0C0C0">'+outStr+'</span>'
+    print outStr
 
     indent += 1
     if showSubtracks:
@@ -576,7 +583,7 @@ def htmlDbSelector(defaultDb):
         conn = sqlConnect("hgcentral", "public")
         cur = conn.cursor()
 
-        cur.execute("SELECT organism, description, name from dbDb order by name")
+        cur.execute("SELECT organism, description, name from dbDb WHERE active = 1 order by name")
         for row in cur.fetchall():
             dbList.append((row[0], row[1], row[2]))
     else:
@@ -661,6 +668,7 @@ def linkTrackToGbdb(fnames, db, tableNames):
     fnames is a list of gbdb filenames that we try to assign somehow.
     """
 
+    debug("linking trackDb")
     # download a list of trackname -> bigFile name from hgwdev
     # cannot do this on the fly
     lines = downloadCache(BIGFILETABLEURL+db+"/bigFiles.tab.gz", db+"_bigFiles.tab")
@@ -751,6 +759,7 @@ def linkTrackToGbdb(fnames, db, tableNames):
 
 def getRsyncSizes(dataType, db):
     """
+    debug("rsync sizes")
     if dataType is "mysql: return dict with tableName:size for given db (includes indexes, frm + data)
     if dataType is "gbdb": return dict with filaname:size for given db
     """
@@ -1142,18 +1151,28 @@ def assertEmptyQueue():
     print '<a href="hgMirror?jobId=%s">Show download job</a>' % jobId
     sys.exit(0)
 
+legalChars = set(string.digits).union(set(string.letters.lower())).union("_")
+
+def mustBeClean(str):
+    """ make sure a string contains only letters and digits """
+    for s in str:
+        if s not in legalChars:
+            print "illegal character in CGI parameter"
+            sys.exit(0)
+
 def getDb(args):
     """ get Db from either CGI args or hgcentral, makes sure that DB actually exists """
     if "db" in args:
-        db = args.getvalue("db")
-        try:
-            conn  = sqlConnect(db, "public")
-        except _mysql_exceptions.OperationalError:
-            print("<small>error: DB %s does not exist on public sql server, using hg19</small>" % db)
-            db = "hg19"
-    else:
+        db = mustBeClean(args.getvalue("db"))
         if mysqlDbLoaded:
             import _mysql_exceptions
+            try:
+                conn  = sqlConnect(db, "public")
+            except _mysql_exceptions.OperationalError:
+                print("<small>error: DB %s does not exist on public sql server, using hg19</small>" % db)
+                db = "hg19"
+    else:
+        if mysqlDbLoaded:
             conn = sqlConnect("hgcentral", "public")
             cur = conn.cursor()
             # get default db for human
@@ -1170,6 +1189,7 @@ def htmlMiddle(args):
 
     if not "jobId" in args.keys():
         # parse trackDb
+        debug("parsing")
         groupList = loadGroups(db)
         trackLabels, trackTables, trackParents, groupToTopTracks, noTableTracks, trackVis, superTracks = parseTrackDb(db)
         tableSizes = getRsyncSizes("mysql", db)
@@ -1187,6 +1207,8 @@ def htmlMiddle(args):
         checkGbdbMysqlAccess()
 
         trackList = set(args.keys())
+        for t in trackList:
+            mustBeClean(t)
         trackList.remove("submit")
 
         forceTables = findImportantTables(tableSizes)

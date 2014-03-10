@@ -3,5 +3,5 @@ CREATE TABLE cgapBiocPathway (
   mapID varchar(40) NOT NULL default '',
   KEY cgapID (cgapID),
   KEY mapID (mapID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

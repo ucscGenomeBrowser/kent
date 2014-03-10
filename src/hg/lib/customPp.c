@@ -11,6 +11,7 @@
 #include "linefile.h"
 #include "net.h"
 #include "customPp.h"
+#include "customTrack.h"
 #ifdef PROGRESS_METER
 #include "udc.h"
 #endif
@@ -44,7 +45,33 @@ if (cpp)
     slFreeList(&cpp->browserLines);
     slFreeList(&cpp->reusedLines);
     freeMem(cpp->inReuse);
+    slFreeList(&cpp->skippedLines);
     }
+}
+
+static char* bigUrlToTrackLine(char *url)
+/* given the URL to a big file, create a custom track
+ * line for it, has to be freed. Return NULL
+ * if it's not a big file URL  */
+{
+struct netParsedUrl npu;
+netParseUrl(url, &npu);
+
+char baseName[PATH_LEN];
+char ext[FILEEXT_LEN];
+splitPath(npu.file, NULL, baseName, ext);
+char *trackName = baseName;
+
+eraseTrailingSpaces(ext);
+char *type = customTrackTypeFromBigFile(ext);
+if (type==NULL)
+    return url;
+
+char buf[4000];
+safef(buf, sizeof(buf), "track name=%s bigDataUrl=%s type=%s\n", trackName, url, type);
+
+freeMem(type);
+return cloneString(buf);
 }
 
 char *customPpNext(struct customPp *cpp)
@@ -75,14 +102,19 @@ while ((lf = cpp->fileStack) != NULL)
         {
 	if (startsWith("http://", line) || startsWith("https://", line) || startsWith("ftp://", line))
 	    {
-	    lf = netLineFileOpen(line);
-	    slAddHead(&cpp->fileStack, lf);
-#ifdef PROGRESS_METER
-	    off_t remoteSize = 0;
-	    remoteSize = remoteFileSize(line);
-	    cpp->remoteFileSize = remoteSize;
-#endif
-	    continue;
+            if (customTrackIsBigData(line))
+                line = bigUrlToTrackLine(line);
+            else
+                {
+                lf = netLineFileOpen(line);
+                slAddHead(&cpp->fileStack, lf);
+    #ifdef PROGRESS_METER
+                off_t remoteSize = 0;
+                remoteSize = remoteFileSize(line);
+                cpp->remoteFileSize = remoteSize;
+    #endif
+                continue;
+                }
 	    }
 	else if (!cpp->ignoreBrowserLines && startsWith("browser", line))
 	    {
@@ -105,8 +137,10 @@ return NULL;
 }
 
 char *customPpNextReal(struct customPp *cpp)
-/* Return next line that's nonempty and non-space. */
+/* Return next line that's nonempty, non-space and not a comment.
+ * Save skipped comment lines to cpp->skippedLines. */
 {
+slFreeList(&cpp->skippedLines);
 for (;;)
     {
     char *line = customPpNext(cpp);
@@ -116,6 +150,8 @@ for (;;)
     char c = *s;
     if (c != 0 && c != '#')
         return line;
+    else if (c == '#')
+	slNameAddHead(&cpp->skippedLines, line);
     }
 }
 
@@ -133,6 +169,16 @@ struct slName *customPpTakeBrowserLines(struct customPp *cpp)
 struct slName *browserLines = cpp->browserLines;
 cpp->browserLines = NULL;
 return browserLines;
+}
+
+struct slName *customPpCloneSkippedLines(struct customPp *cpp)
+/* Return a clone of most recent nonempty skipped (comment/header) lines from cpp,
+ * which will still have them.  slFreeList when done. */
+{
+struct slName *skippedLines = NULL, *sl;
+for (sl = cpp->skippedLines;  sl != NULL;  sl = sl->next)
+    slNameAddHead(&skippedLines, sl->name);
+return skippedLines;
 }
 
 char *customPpFileName(struct customPp *cpp)

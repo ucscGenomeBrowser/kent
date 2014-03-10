@@ -305,10 +305,10 @@ if (retGroupRefList != NULL)
 }
 
 boolean isVariantCustomTrack(struct trackDb *tdb, void *filterData)
-/* This is a TdbFilterFunction to get custom or hub tracks with type pgSnp or vcfTabix. */
+/* This is a TdbFilterFunction to get custom or hub tracks with type pgSnp or vcf(Tabix). */
 {
 return ((sameString(tdb->grp, "user") || isHubTrack(tdb->track)) &&
-	(sameString(tdb->type, "pgSnp") || sameString(tdb->type, "vcfTabix")));
+	(sameString(tdb->type, "pgSnp") || startsWith("vcf", tdb->type)));
 }
 
 void selectVariants(struct slRef *varGroupList, struct slRef *varTrackList)
@@ -897,9 +897,9 @@ void checkVariantTrack(struct trackDb *tdb)
 /* variantTrack should be either pgSnp or VCF. */
 {
 if (! sameString(tdb->type, "pgSnp") &&
-    ! sameString(tdb->type, "vcfTabix"))
+    ! startsWith("vcf", tdb->type))
     {
-    errAbort("Expected variant track '%s' to be either pgSnp or vcfTabix, but it's '%s'",
+    errAbort("Expected variant track '%s' to be type pgSnp, vcf or vcfTabix, but it's '%s'",
 	     tdb->track, tdb->type);
     }
 }

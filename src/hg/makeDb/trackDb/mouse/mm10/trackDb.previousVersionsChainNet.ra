@@ -58,14 +58,6 @@ html chainNet
         type chain nomLeu1
         otherDb nomLeu1
 
-        track chainHg19
-        subTrack previousVersionsChainNetViewchain off
-        subGroups view=chain species=eHuman clade=bHom
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain hg19
-        otherDb hg19
-
         track chainFelCat4
         subTrack previousVersionsChainNetViewchain off
         subGroups view=chain species=fCat clade=eCarn
@@ -175,14 +167,6 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign nomLeu1 chainNomLeu1
         otherDb nomLeu1
-
-        track netHg19
-        subTrack previousVersionsChainNetViewnet off
-        subGroups view=net species=eHuman clade=bHom
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign hg19 chainHg19
-        otherDb hg19
 
         track netFelCat4
         subTrack previousVersionsChainNetViewnet on

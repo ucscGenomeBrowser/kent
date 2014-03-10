@@ -840,6 +840,12 @@ void encodeExpRemoveAccession(struct sqlConnection *conn, char *tableName, int i
 encodeExpAccession(conn, tableName, id, FALSE);
 }
 
+boolean encodeExpIsAccessioned(struct encodeExp *exp)
+/* Determine if experiment has an accession (not unaccessioned or deaccessioned) */
+{
+return encodeExpGetAccession(exp) != NULL;
+}
+
 void encodeExpRemove(struct sqlConnection *conn, char *tableName, struct encodeExp *exp, char *why)
 /* Delete row containing experiment from encodeExp.
  * WARNING:  This is a management function, not for regular use.  Accession must

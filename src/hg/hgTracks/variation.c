@@ -689,7 +689,7 @@ snp125ValidCart = snp125ColorsFromCart(track, "valid", snp125ValidOldColorVars, 
 				       snp125ValidDefault, snp125ValidArraySizeHuman);
 snp125LocTypeCart = snp125ColorsFromCart(track, "locType", snp125LocTypeOldColorVars, TRUE,
 					 snp125LocTypeDefault, snp125LocTypeArraySize);
-snp132ExceptionsCart = snp125ColorsFromCart(track, "exception", snp132ExceptionVarName, FALSE,
+snp132ExceptionsCart = snp125ColorsFromCart(track, "exceptions", snp132ExceptionVarName, FALSE,
 					    snp132ExceptionDefault, snp132ExceptionArraySize);
 snp132BitfieldsCart = snp125ColorsFromCart(track, "bitfields", snp132BitfieldVarName, FALSE,
 					   snp132BitfieldDefault, snp132BitfieldArraySize);

@@ -48,7 +48,7 @@ if (isBigWigTable(table))
     return TRUE;
 if (isBigBed(database, table, curTrack, ctLookupName))
     return TRUE;
-if (isVcfTable(table))
+if (isVcfTable(table, NULL))
     return TRUE;
 if (isHubTrack(table))
     return TRUE;

@@ -643,7 +643,7 @@ hPrintf("<TABLE BORDER=0>\n");
         isPositional = htiIsPositional(hti);
         }
     isBam = isBamTable( curTable);
-    isVcf = isVcfTable( curTable);
+    isVcf = isVcfTable(curTable, NULL);
     isWig = isWiggle(database, curTable);
     if (isBigWigTable(curTable))
         {

@@ -88,7 +88,19 @@ st.genome = cloneString(row[1]);
 st.isTrans = atoi(row[2]);
 st.host = cloneString(row[3]);
 st.port = cloneString(row[4]);
-st.nibDir = hReplaceGbdb(row[5]);
+
+// hReplaceGbdb checks only if the dir exists
+// with the way nibDir works, we have to check if the 2bit file exists
+// do the rewriting, then strip off the 2bit filename again
+char buf[4096];
+safef(buf, sizeof(buf), "%s/%s.2bit", row[5], st.db);
+char *newPath = hReplaceGbdb(buf);
+
+char dir[4096];
+splitPath(newPath, dir, NULL, NULL);
+st.nibDir = cloneString(dir);
+freeMem(newPath);
+
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 return &st;

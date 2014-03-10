@@ -123,7 +123,10 @@ while ((exp = slPopHead(&exps)) != NULL)
     {
     // filter out experiments not in the selected database
     if (database && ids[exp->ix] == 0)
-            continue;
+        continue;
+    // filter out unaccessioned or deaccessioned experiments
+    if (!encodeExpIsAccessioned(exp))
+        continue;
     encodeExpJson(output, exp);
     dyStringAppend(output,",\n");
     }

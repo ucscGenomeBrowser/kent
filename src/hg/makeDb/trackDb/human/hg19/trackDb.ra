@@ -16,7 +16,7 @@ visibility hide
 
 track encodeRegions override
 shortLabel ENCODE Pilot
-longLabel Regions used for ENCODE Pilot Project (1%)
+longLabel Regions Used for ENCODE Pilot Project (1%)
 group map
 pennantIcon encodeThumbnail.jpg ../ENCODE "encode project"
 
@@ -63,8 +63,60 @@ track gwasCatalog override
 snpTable snp137
 snpVersion 137
 
-track ucscRetroAli6
+track ucscRetroAli5
 shortLabel Retroposed Genes
+longLabel Retroposed Genes V5, Including Pseudogenes
+group genes
+type psl
+color 20,0,250
+visibility hide
+ucscRetroInfo ucscRetroInfo5
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds5
+baseColorUseSequence extFile ucscRetroSeq5 ucscRetroExtFile5
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+dataVersion Mar. 2013
+
+searchName ucscRetroInfoRefSeq5
+searchTable ucscRetroAli5
+searchDescription Retroposed Genes V5, Including Pseudogenes 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo5
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo5.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna5
+searchTable ucscRetroAli5
+searchDescription Retroposed Genes V5, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt5
+searchTable ucscRetroAli5
+searchDescription Retroposed Genes V5, Including Pseudogenes 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo5
+xrefQuery select ucscRetroInfo5.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene5
+searchTable ucscRetroAli5
+searchDescription Retroposed Genes V5, Including Pseudogenes 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo5
+xrefQuery select ucscRetroInfo5.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
+track ucscRetroAli6
+shortLabel Retroposed Genes 6.0
 longLabel Retroposed Genes V6, Including Pseudogenes
 group genes
 type psl
@@ -196,7 +248,7 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 track hapChainNet
 compositeTrack on
 shortLabel Hap Chain/Net
-longLabel Haplotype regions, chain and net tracks
+longLabel Haplotype Regions, Chain and Net Tracks
 subGroup1 view Views chain=Chains net=Nets chr6map=chr6Map
 subGroup2 refChr Reference_chromosome chr4=chr4 chr6=chr6 chr17=chr17 haps=haplotypes chr6map=chr6Map
 dimensions dimensionX=refChr
@@ -223,70 +275,70 @@ chainNormScoreAvailable yes
         subTrack hapChainNetViewchain off
         subGroups view=chain refChr=chr6
         shortLabel APD Chain
-        longLabel chr6 haplotype APD Chain
+        longLabel chr6 Haplotype APD Chain
         type chain hg19
 
         track chain_cox_hap2
         subTrack hapChainNetViewchain off
         subGroups view=chain refChr=chr6
         shortLabel COX Chain
-        longLabel chr6 haplotype COX Chain
+        longLabel chr6 Haplotype COX Chain
         type chain hg19
 
         track chain_dbb_hap3
         subTrack hapChainNetViewchain off
         subGroups view=chain refChr=chr6
         shortLabel DBB Chain
-        longLabel chr6 haplotype DBB Chain
+        longLabel chr6 Haplotype DBB Chain
         type chain hg19
 
         track chain_mann_hap4
         subTrack hapChainNetViewchain off
         subGroups view=chain refChr=chr6
         shortLabel MANN Chain
-        longLabel chr6 haplotype MANN Chain
+        longLabel chr6 Haplotype MANN Chain
         type chain hg19
 
         track chain_mcf_hap5
         subTrack hapChainNetViewchain off
         subGroups view=chain refChr=chr6
         shortLabel MCF Chain
-        longLabel chr6 haplotype MCF Chain
+        longLabel chr6 Haplotype MCF Chain
         type chain hg19
 
         track chain_qbl_hap6
         subTrack hapChainNetViewchain off
         subGroups view=chain refChr=chr6
         shortLabel QBL Chain
-        longLabel chr6 haplotype QBL Chain
+        longLabel chr6 Haplotype QBL Chain
         type chain hg19
 
         track chain_ssto_hap7
         subTrack hapChainNetViewchain off
         subGroups view=chain refChr=chr6
         shortLabel SSTO Chain
-        longLabel chr6 haplotype SSTO Chain
+        longLabel chr6 Haplotype SSTO Chain
         type chain hg19
 
         track chain_chr17_ctg5_hap1
         subTrack hapChainNetViewchain off
         subGroups view=chain refChr=chr17
         shortLabel chr17 CTG5 Chain
-        longLabel chr17 haplotype CTG5 Chain
+        longLabel chr17 Haplotype CTG5 Chain
         type chain hg19
 
         track chain_chr4_ctg9_hap1
         subTrack hapChainNetViewchain off
         subGroups view=chain refChr=chr4
         shortLabel chr4 CTG9 Chain
-        longLabel chr4 haplotype CTG9 Chain
+        longLabel chr4 Haplotype CTG9 Chain
         type chain hg19
 
         track chain_haplotypes
         subTrack hapChainNetViewchain off
         subGroups view=chain refChr=haps
         shortLabel Hap Chains
-        longLabel Reference chromosome chains on haplotypes
+        longLabel Reference Chromosome Chains on Haplotypes
         type chain hg19
 
     track hapChainNetViewnet
@@ -299,119 +351,119 @@ chainNormScoreAvailable yes
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel APD Net
-        longLabel chr6 haplotype APD net
+        longLabel chr6 Haplotype APD Net
         type netAlign hg19 chain_apd_hap1
 
         track net_cox_hap2
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel COX Net
-        longLabel chr6 haplotype COX net
+        longLabel chr6 Haplotype COX Net
         type netAlign hg19 chain_cox_hap2
 
         track net_dbb_hap3
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel DBB Net
-        longLabel chr6 haplotype DBB net
+        longLabel chr6 Haplotype DBB Net
         type netAlign hg19 chain_dbb_hap3
 
         track net_mann_hap4
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel MANN Net
-        longLabel chr6 haplotype MANN net
+        longLabel chr6 Haplotype MANN Net
         type netAlign hg19 chain_mann_hap4
 
         track net_mcf_hap5
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel MCF Net
-        longLabel chr6 haplotype MCF net
+        longLabel chr6 Haplotype MCF Net
         type netAlign hg19 chain_mcf_hap5
 
         track net_qbl_hap6
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel QBL Net
-        longLabel chr6 haplotype QBL net
+        longLabel chr6 Haplotype QBL Net
         type netAlign hg19 chain_qbl_hap6
 
         track net_ssto_hap7
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel SSTO Net
-        longLabel chr6 haplotype SSTO net
+        longLabel chr6 Haplotype SSTO Net
         type netAlign hg19 chain_ssto_hap7
 
         track net_chr17_ctg5_hap1
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr17
         shortLabel chr17 CTG5 Net
-        longLabel chr17 haplotype CTG5 net
+        longLabel chr17 Haplotype CTG5 Net
         type netAlign hg19 chain_chr17_ctg5_hap1
 
         track net_chr4_ctg9_hap1
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr4
         shortLabel chr4 CTG9 Net
-        longLabel chr4 haplotype CTG9 net
+        longLabel chr4 Haplotype CTG9 Net
         type netAlign hg19 chain_chr4_ctg9_hap1
 
         track net_haplotypes
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=haps
         shortLabel Hap Nets
-        longLabel Reference chromosome nets on haplotypes
+        longLabel Reference Chromosome Nets on Haplotypes
         type netAlign hg19 chain_haplotypes
 
         track netSyn_apd_hap1
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel APD SynNet
-        longLabel chr6 haplotype APD syntenic net
+        longLabel chr6 Haplotype APD Syntenic Net
         type netAlign hg19 chain_apd_hap1
 
         track netSyn_cox_hap2
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel COX SynNet
-        longLabel chr6 haplotype COX syntenic net
+        longLabel chr6 Haplotype COX Syntenic Net
         type netAlign hg19 chain_cox_hap2
 
         track netSyn_dbb_hap3
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel DBB SynNet
-        longLabel chr6 haplotype DBB syntenic net
+        longLabel chr6 Haplotype DBB Syntenic Net
         type netAlign hg19 chain_dbb_hap3
 
         track netSyn_mann_hap4
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel MANN SynNet
-        longLabel chr6 haplotype MANN syntenic net
+        longLabel chr6 Haplotype MANN Syntenic Net
         type netAlign hg19 chain_mann_hap4
 
         track netSyn_mcf_hap5
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel MCF SynNet
-        longLabel chr6 haplotype MCF syntenic net
+        longLabel chr6 Haplotype MCF Syntenic Net
         type netAlign hg19 chain_mcf_hap5
 
         track netSyn_qbl_hap6
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel QBL SynNet
-        longLabel chr6 haplotype QBL syntenic net
+        longLabel chr6 Haplotype QBL Syntenic Net
         type netAlign hg19 chain_qbl_hap6
 
         track netSyn_ssto_hap7
         subTrack hapChainNetViewnet off
         subGroups view=net refChr=chr6
         shortLabel SSTO SynNet
-        longLabel chr6 haplotype SSTO syntenic net
+        longLabel chr6 Haplotype SSTO Syntenic Net
         type netAlign hg19 chain_ssto_hap7
 
     track hapChainNetViewchr6map
@@ -424,7 +476,7 @@ chainNormScoreAvailable yes
         subGroups refChr=chr6map view=chr6map
         configurable off
         shortLabel Hap Mapping
-        longLabel Linear mapping of haplotype to reference chromosome
+        longLabel Linear Mapping of Haplotype to Reference Chromosome
         type bed 12
 
 track multizMHC
@@ -487,13 +539,13 @@ speciesGroups mammal
 sGroup_mammal rheMac2 mm9 canFam2
 treeImage phylo/hg19_4way.gif
 
-include chainNetPrimate.ra
+include ../chainNetPrimate.ra
 
-include chainNetPlacental.ra
+include ../chainNetPlacental.ra
 
-include chainNetVertebrate.ra
+include ../chainNetVertebrate.ra
 
-include chainNetLegacy.ra alpha
+include ../chainNetLegacy.ra alpha
 
 track hg18cytoBand
 shortLabel hg18 Chromosome Band
@@ -513,7 +565,7 @@ release alpha
 
 track pubsDev
 shortLabel Publications Beta
-longLabel Publications: Textmining of Publications, Beta version
+longLabel Publications: Textmining of Publications, Beta Version
 group pub
 visibility hide
 color 0,0,0
@@ -541,7 +593,7 @@ noInherit on
 
     track pubsDevBlatPsl
     shortLabel Individual Seq. Matches
-    longLabel Individual sequence matches of one selected article from sequences track
+    longLabel Individual Sequence Matches of One Selected Article from Sequences Track
     parent pubsDev off
     type psl
     visibility hide
@@ -553,7 +605,7 @@ noInherit on
 
     #track pubsDevMarkerBand
     #shortLabel (Dev) Bands
-    #longLabel (Dev) Cytogenetic bands in Publications
+    #longLabel (Dev) Cytogenetic Bands in Publications
     #parent pubsDev on
     #visibility hide
     #priority 3
@@ -571,7 +623,7 @@ noInherit on
 
     #track pubsDevMarkerGene
     #shortLabel (Dev) Genes
-    #longLabel (Dev) Gene symbols in Publications
+    #longLabel (Dev) Gene Symbols in Publications
     #parent pubsDev on
     #priority 3
     #visibility hide
@@ -1247,7 +1299,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
 track hinv70Composite
 compositeTrack on
 shortLabel H-Inv 7.0
-longLabel H-Inv 7.0 gene predictions
+longLabel H-Inv 7.0 Gene Predictions
 group genes
 visibility hide
 type bed 12
@@ -1257,28 +1309,28 @@ url http://h-invitational.jp/hinv/spsoup/transcript_view?hit_id=$$
     track hinv70Coding
     subTrack hinv70Composite
     shortLabel H-Inv genes
-    longLabel H-Inv v7.0 gene predictions
+    longLabel H-Inv v7.0 Gene Predictions
     priority 1
     color 0,50,225
 
     track hinv70NonCoding
     subTrack hinv70Composite
     shortLabel H-Inv non-coding
-    longLabel H-Inv v7.0 non-coding gene predictions
+    longLabel H-Inv v7.0 Non-coding Gene Predictions
     priority 2
     color 15,100,180
 
     track hinv70PseudoGene
     subTrack hinv70Composite
     shortLabel H-Inv pseudo-genes
-    longLabel H-Inv v7.0 pseudo gene predictions
+    longLabel H-Inv v7.0 Pseudogene Predictions
     priority 3
     color 30,130,210
 
 track gc5BaseBw
 release alpha
 shortLabel GC percent
-longLabel GC percent as bigWig file
+longLabel GC Percent as bigWig File
 group x
 visibility hide
 type bigWig 0 100
@@ -1405,7 +1457,7 @@ searchPriority 15
 
 track hg19ContigDiff
 shortLabel Hg18 Diff
-longLabel Contigs new to GRCh37/(hg19), not carried forward from NCBI build 36(hg18)
+longLabel Contigs New to GRCh37/(hg19), Not Carried Forward from NCBI Build 36(hg18)
 visibility hide
 group map
 type bed 9 .
@@ -1415,7 +1467,7 @@ color 0,0,0
 
 track hg38ContigDiff
 shortLabel Hg38 Diff
-longLabel Contigs dropped or changed from GRCh37/hg19 to GRCh38(hg38)
+longLabel Contigs Dropped or Changed from GRCh37(hg19) to GRCh38(hg38)
 visibility hide
 group map
 type bed 9 .
@@ -1495,7 +1547,7 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track consIndelsHgMmCanFam
 shortLabel Cons Indels MmCf
-longLabel Indel-based Conservation for human hg19, mouse mm8 and dog canFam2
+longLabel Indel-based Conservation for Human hg19, Mouse mm8 and Dog canFam2
 group compGeno
 visibility hide
 useScore 1
@@ -1718,7 +1770,7 @@ noInherit on
 
 track genotypeArrays
 shortLabel SNP/CNV Arrays
-longLabel Microarray probesets
+longLabel Microarray Probesets
 compositeTrack on
 group varRep
 visibility hide
@@ -1765,7 +1817,7 @@ type bed 3 .
     track affyCytoScan
     parent genotypeArrays
     shortLabel Affy CytoScan
-    longLabel Affymetrix Cytoscan CNV and SNP array probeset
+    longLabel Affymetrix Cytoscan CNV and SNP Array Probeset
     itemRgb on
     type bed 9 .
     priority 6
@@ -1943,7 +1995,7 @@ otherDb hg19
 
 track allHg19RS_BW
 shortLabel GERP
-longLabel GERP scores for mammalian alignments
+longLabel GERP Scores for Mammalian Alignments
 group compGeno
 visibility hide
 type bigWig -15 7
@@ -2063,7 +2115,7 @@ intronGap 12
 #
 track RfamSyn
 shortLabel Rfam-Syn
-longLabel Rfam hits in regions syntenic to mm9, duplicated hits removed.
+longLabel Rfam Hits in Regions Syntenic to mm9, Duplicated Hits Removed
 group genes
 visibility hide
 type bed 6 +
@@ -2073,7 +2125,7 @@ exonArrows off
 
 track mapViewGenes
 shortLabel MapView Genes
-longLabel refSeq genes from map view
+longLabel refSeq Genes from Map View
 group genes
 visibility hide
 color 82,82,160
@@ -2177,7 +2229,7 @@ type bigWig 1 141
 
 track cooperDevDelay
 shortLabel Cooper Dev. Delay
-longLabel Copy Number Variation morbidity map of developmental delay, Cooper et al. 2011
+longLabel Copy Number Variation Morbidity Map of Developmental Delay, Cooper et al. 2011
 group phenDis
 visibility hide
 #color 0,0,200

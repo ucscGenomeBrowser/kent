@@ -57,7 +57,7 @@ searchPriority 5
 
 track scaffolds
 shortLabel Scaffolds
-longLabel GRCh38 defined Scaffold identifiers
+longLabel GRCh38 Defined Scaffold Identifiers
 group map
 visibility hide
 color 0,0,0
@@ -72,7 +72,7 @@ searchPriority 18
 
 track analysisGap
 shortLabel Analysis Gap
-longLabel Extra Gap Locations in Analysis set sequence on chr5, 14, 19, 21, 22, Y
+longLabel Extra Gap Locations in Analysis Set Sequence on chr5, 14, 19, 21, 22, Y
 group x
 visibility hide
 type bed 4 .
@@ -80,7 +80,7 @@ chromosomes chr14,chr19,chr21,chr22,chr5,chrY
 
 track hg38ContigDiff
 shortLabel Hg19 Diff
-longLabel Contigs new to GRCh38/(hg38), not carried forward from GRCh37/(hg19)
+longLabel Contigs New to GRCh38/(hg38), Not Carried Forward from GRCh37/(hg19)
 visibility pack
 priority 3
 group map
@@ -91,7 +91,7 @@ color 0,0,0
 
 track centromeres
 shortLabel Centromeres
-longLabel Centromere locations
+longLabel Centromere Locations
 group map
 visibility hide
 type bed 4 .
@@ -121,15 +121,18 @@ html cpgIslandSuper
     track cpgIslandExtUnmasked
     superTrack cpgIslandSuper hide
     shortLabel Unmasked CpG
-    longLabel CpG Islands on all sequence (Islands < 300 Bases are Light Green)
+    longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
     priority 2
     html cpgIslandSuper
 
-include chainNetPrimate.ra
+include ../chainNetPrimate.ra
+include ../chainNetPlacental.ra
+include ../chainNetVertebrate.ra
+include ../chainNetLegacy.ra alpha
 
 track contigAlignmentSegments
 shortLabel ContigSegments
-longLabel non-bridged contig segments used in lastz/chain/net alignment pipeline
+longLabel Non-bridged Contig Segments Used in lastz/chain/net Alignment Pipeline
 group x
 visibility hide
 type bed 4
@@ -171,7 +174,7 @@ include defaultPriority.ra
 track altSequence
 superTrack on
 shortLabel Alt Map
-longLabel GRCh38 Haplotype to Reference sequence mapping correspondence
+longLabel GRCh38 Haplotype to Reference Sequence Mapping Correspondence
 visibility hide
 otherDb hg38
 group map
@@ -181,7 +184,7 @@ group map
     type bed 4
     color 32,32,190
     shortLabel Haplotypes
-    longLabel GRCh38 Haplotype to Reference sequence mapping correspondence
+    longLabel GRCh38 Haplotype to Reference Sequence Mapping Correspondence
     html altSequence
     url /cgi-bin/hgTracks?db=hg38&position=$$
     urlLabel Corresponding position:
@@ -189,7 +192,7 @@ group map
     track altSeqLiftOverPsl
     superTrack altSequence pack
     shortLabel Alt Map
-    longLabel GRCh38 Alignments to the alternate sequences/haplotypes
+    longLabel GRCh38 Alignments to the Alternate Sequences/Haplotypes
     type psl
     html altSequence
     indelDoubleInsert on
@@ -204,14 +207,14 @@ group map
 track altSequenceExp
 superTrack on
 shortLabel Exp Alt Map
-longLabel GRCh38 Haplotype to Reference sequence mapping correspondence
+longLabel GRCh38 Haplotype to Reference Sequence Mapping Correspondence
 visibility hide
 group x
 
     track ncbiAltMappingsChain
     superTrack altSequenceExp pack
     shortLabel Alt Map Chain
-    longLabel Chain Mappings to the alternate sequences/haplotypes
+    longLabel Chain Mappings to the Alternate Sequences/Haplotypes
     type chain hg38
     spectrum on
     html altSequence
@@ -219,6 +222,6 @@ group x
     track ncbiAltMappingsMaf
     superTrack altSequenceExp pack
     shortLabel Alt Map Maf
-    longLabel Maf Mappings to the alternate sequences/haplotypes
+    longLabel Maf Mappings to the Alternate Sequences/Haplotypes
     type maf
     html altSequence

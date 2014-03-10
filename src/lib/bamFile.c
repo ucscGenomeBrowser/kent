@@ -25,8 +25,8 @@ return samDir;
 }
 #endif//ndef KNETFILE_HOOKS
 
-static bam_index_t *bamOpenIdx(char *bamFileName)
-/* If bamFileName has a valid accompanying .bai file, parse and return the index;
+static bam_index_t *bamOpenIdx(char *fileOrUrl)
+/* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
  * otherwise return NULL. */
 {
 #ifndef KNETFILE_HOOKS
@@ -39,7 +39,7 @@ boolean usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"))
 if (usingUrl)
     setCurrentDir(samDir);
 #endif//ndef KNETFILE_HOOKS
-bam_index_t *idx = bam_index_load(bamFileName);
+bam_index_t *idx = bam_index_load(fileOrUrl);
 #ifndef KNETFILE_HOOKS
 if (usingUrl)
     setCurrentDir(runDir);
