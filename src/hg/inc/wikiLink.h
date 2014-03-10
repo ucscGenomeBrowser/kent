@@ -28,16 +28,16 @@ char *wikiLinkUserName();
 /* Return the user name specified in cookies from the browser, or NULL if 
  * the user doesn't appear to be logged in. */
 
-char *wikiLinkUserLoginUrl(int hgsid);
+char *wikiLinkUserLoginUrl(char *hgsid);
 /* Return the URL for the wiki user login page. */
 
-char *wikiLinkUserLogoutUrl(int hgsid);
+char *wikiLinkUserLogoutUrl(char *hgsid);
 /* Return the URL for the wiki user logout page. */
 
-char *wikiLinkUserSignupUrl(int hgsid);
+char *wikiLinkUserSignupUrl(char *hgsid);
 /* Return the URL for the user signup  page. */
 
-char *wikiLinkChangePasswordUrl(int hgsid);
+char *wikiLinkChangePasswordUrl(char *hgsid);
 /* Return the URL for the user change password page. */
 
 #endif /* WIKILINK_H */
