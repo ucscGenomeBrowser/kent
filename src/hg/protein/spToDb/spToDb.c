@@ -715,7 +715,7 @@ for (;;)
     else if (startsWith("KW", type))
         {
 	char *end;
-	stripLastPeriod(line);
+	stripLastChar(line);
 	while (line != NULL)
 	    {
 	    end = strchr(line, ';');

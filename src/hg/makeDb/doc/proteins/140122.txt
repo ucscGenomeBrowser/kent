@@ -128,6 +128,25 @@ hgsql $spdb -N -e 'select extAcc1, d.val from extDbRef x, displayId d, extDb whe
 
 hgLoadSqlTab -notOnServer $db pdbSP $kent/src/hg/lib/pdbSP.sql pdbSP.tab
 
+hgsql proteins111004 -N -e 'select * from spOldNew' >spOldNew.tab
+hgLoadSqlTab $db spOldNew $kent/src/hg/lib/spOldNew.sql ./spOldNew.tab
+
+hgsql $db -e 'create index oldDisplayId on spOldNew(oldDisplayId)'
+hgsql $db -e 'create index newDisplayId on spOldNew(newDisplayId)'
+
+# CREATE spVariant TABLE TO ENABLE UNIPROT VARIANT SPLICE ISOFORM PROCESSING 
+cd /hive/data/inside/proteins/$date
+
+hgsql $db  -N -e 'select accession,accession from spXref3' >j1
+cat j1 |grep "-" |sed -e 's/-/\t/'|cut -f 1,3 >j2
+cat j1 |grep -v "-" >>j3
+cat j2 j3 |sort -u >spVariant.tab
+rm j1 j2 j3
+
+
+hgLoadSqlTab $db  spVariant $kent/src/hg/lib/spVariant.sql ./spVariant.tab
+hgsql $db  -e 'create index parent on spVariant(parent)'
+
 #stopped here because don't need the rest of these tables.
 
 #	Build the spDisease table
@@ -171,24 +190,6 @@ rm j1.tmp j2.tmp j3.tmp j4.tmp
 hgLoadSqlTab $db uniProtAlias $kent/src/hg/lib/uniProtAlias.sql ./uniProtAlias.tab
 hgsql $db -e 'create index alias on uniProtAlias(alias)'
 
-hgsql proteins111004 -N -e 'select * from spOldNew' >spOldNew.tab
-hgLoadSqlTab $db spOldNew $kent/src/hg/lib/spOldNew.sql ./spOldNew.tab
-
-hgsql $db -e 'create index oldDisplayId on spOldNew(oldDisplayId)'
-hgsql $db -e 'create index newDisplayId on spOldNew(newDisplayId)'
-
-# CREATE spVariant TABLE TO ENABLE UNIPROT VARIANT SPLICE ISOFORM PROCESSING 
-cd /hive/data/inside/proteins/$date
-
-hgsql $db  -N -e 'select accession,accession from spXref3' >j1
-cat j1 |grep "-" |sed -e 's/-/\t/'|cut -f 1,3 >j2
-cat j1 |grep -v "-" >>j3
-cat j2 j3 |sort -u >spVariant.tab
-rm j1 j2 j3
-
-
-hgLoadSqlTab $db  spVariant $kent/src/hg/lib/spVariant.sql ./spVariant.tab
-hgsql $db  -e 'create index parent on spVariant(parent)'
 
 #########################################################
 # CREATE REACTOME TABLES 
