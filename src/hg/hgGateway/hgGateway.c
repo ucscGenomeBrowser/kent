@@ -281,7 +281,7 @@ hgGateway();
 
 // TODO REMOVE AFTER AUTOUPGRADE COMPLETE: (added 2014-03-09)
 if (dyUpgradeError)
-    warn(dyUpgradeError->string);
+    warn("%s", dyUpgradeError->string);
 
 cartWebEnd();
 }
