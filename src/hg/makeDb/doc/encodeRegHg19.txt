@@ -1660,6 +1660,22 @@ hgsql hg19 -e 'LOAD DATA LOCAL INFILE "allMotifTargetsV4.load.tab" INTO TABLE fa
 # Get citations for track description References section
         getTrackReferences 22955990  23203885  22955619 > refs.txt
 
-# Update target table using new gene vs. canonical motif table from Jiali at Zlab (2014-03-06 kate)
+# Requested corrections target table using new gene vs. canonical motif table from Jiali at Zlab (2014-03-06 kate)
+# They returned files with new motif calls & annotations.  Perhaps for another version of the track!
 
 wget http://zlab.umassmed.edu/~zhuangj/Direct_binding_motifs.tar.gz
+wget http://zlab.umassmed.edu/~kimb/motif_centric_encode_tfbs.sorted.bed.bz2
+bunzip2 !$
+
+# In email, the following TF's 4 were specifically mentioned as direct binders 
+# missing canonical motif:
+# NFIC->NFIC (already in table)
+# NR4A1->NR4A1 (not in our TF clusters, rejected due to low quality, so not relevant to table)
+# and these two, which will be added to the table!
+# NR3C1->NR3C1
+# FOS->API
+
+sed -e 's/NR3C1\t$/NR3C1\tNR3C1/' -e 's/FOS\t$/FOS\tAP1/' allMotifTargetsV4.load.tab > factorbookMotifCanonical.load.tab
+hgsql hg19 < motifTarget.sql
+hgsql hg19 -e 'alter table motifTarget rename to factorbookMotifCanonical'
+hgsql hg19 -e 'LOAD DATA LOCAL INFILE "factorbookMotifCanonical.load.tab" INTO TABLE factorbookMotifCanonical'
