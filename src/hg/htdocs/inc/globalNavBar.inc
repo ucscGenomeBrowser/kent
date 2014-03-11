@@ -54,7 +54,7 @@
 
 <!-- OPTIONAL_VIEW_MENU -->
 
-<li class="menuparent last" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
+<li class="menuparent" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
 <!-- CONTEXT_SPECIFIC_HELP -->
 <li><a href="../FAQ/">FAQs</a></li>
 <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
@@ -64,7 +64,7 @@
 </ul>
 </li>
 
-<li class="menuparent" id="aboutUs"><span>About Us</span>
+<li class="menuparent last" id="aboutUs"><span>About Us</span>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first odd"><a href="../goldenPath/newsarch.html">News</a></li>
 	<li class="even"><a href="../goldenPath/pubs.html">Publications</a></li>
