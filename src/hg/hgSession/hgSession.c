@@ -981,7 +981,7 @@ else
 	lf = NULL;
 	}
     dyStringPrintf(dyMessage, "&nbsp;&nbsp;"
-	   "<A HREF=\"http%s://%s%s?%s=%u\">Browser</A>",
+	   "<A HREF=\"http%s://%s%s?%s=%s\">Browser</A>",
 	   cgiAppendSForHttps(), cgiServerNamePort(), destAppScriptName(),
 	   cartSessionVarName(), cartSessionId(cart));
     }
