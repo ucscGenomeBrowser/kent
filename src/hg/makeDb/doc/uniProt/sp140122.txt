@@ -42,6 +42,41 @@ set e=`date +%s`
 expr $e - $s
 # 12170
 
+# sp140122.accToKeyword: Records: 107641689  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.accToTaxon: Records: 52159208  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.author: Records: 494838  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.citation: Records: 61734988  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.citationRc: Records: 55008839  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.citationRp: Records: 172575  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.comment: Records: 80808264  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.commentType: Records: 29  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.commentVal: Records: 328352  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.commonName: Records: 118788  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.description: Records: 52159208  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.displayId: Records: 52159208  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.extDb: Records: 127  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.extDbRef: Records: 586498660  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.feature: Records: 35270331  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.featureClass: Records: 39  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.featureId: Records: 1576146  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.featureType: Records: 418114  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.gene: Records: 61530238  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.geneLogic: Records: 50178390  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.info: Records: 52159208  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.keyword: Records: 1127  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.organelle: Records: 10664  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.otherAcc: Records: 333988  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.pathogenHost: Records: 6216  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.protein: Records: 52159208  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.proteinEvidence: Records: 52159208  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.proteinEvidenceType: Records: 5  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.rcType: Records: 4  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.rcVal: Records: 1260506  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.reference: Records: 337684  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.referenceAuthors: Records: 1907542  Deleted: 0  Skipped: 0  Warnings: 0
+# sp140122.taxon: Records: 463860  Deleted: 0  Skipped: 0  Warnings: 0
+
+
 # Add varsplice info 
 zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice sp$DBDATE stdin .
 hgLoadSqlTab sp$DBDATE -notOnServer -append varProtein /dev/null varProtein.txt

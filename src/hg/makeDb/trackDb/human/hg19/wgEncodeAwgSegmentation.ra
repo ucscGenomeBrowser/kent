@@ -53,7 +53,7 @@ filterBy reserved:Segment_Type=\
     subGroups tier=t1 cellType=t1H1HESC method=ChromHMM
     type bed 9 .
 
-    track wgEncodeAwgSegmentationChromhmmH1Helas3
+    track wgEncodeAwgSegmentationChromhmmHelas3
     parent wgEncodeAwgSegmentation off
     shortLabel HeLa-S3 ChromHMM
     longLabel HeLa-S3 Genome Segmentation by ChromHMM from ENCODE/Analysis
@@ -96,7 +96,7 @@ filterBy reserved:Segment_Type=\
     subGroups tier=t1 cellType=t1H1HESC method=Segway
     type bed 9 .
 
-    track wgEncodeAwgSegmentationSegwayH1Helas3
+    track wgEncodeAwgSegmentationSegwayHelas3
     parent wgEncodeAwgSegmentation off
     shortLabel HeLa-S3 Segway
     longLabel HeLa-S3 Genome Segmentation by Segway from ENCODE/Analysis
@@ -139,7 +139,7 @@ filterBy reserved:Segment_Type=\
     subGroups tier=t1 cellType=t1H1HESC method=Combined
     type bed 9 .
 
-    track wgEncodeAwgSegmentationCombinedH1Helas3
+    track wgEncodeAwgSegmentationCombinedHelas3
     parent wgEncodeAwgSegmentation on
     shortLabel HeLa-S3 Combined
     longLabel HeLa-S3 Genome Segmentation by Combined Segway+ChromHMM from ENCODE/Analysis
