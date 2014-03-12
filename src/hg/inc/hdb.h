@@ -206,6 +206,10 @@ char *hReplaceGbdb(char* fileName);
 /* clone and change a filename that can be located in /gbdb to somewhere else
  * according to hg.conf's "gbdbLoc1" and "gbdbLoc2". Result has to be freed. */
 
+char *hReplaceGbdbSeqDir(char *path, char *db);
+/* similar to hReplaceGbdb, but accepts a nib or 2bit "directory" (basename) under
+ * gbdb, like /gbdb/hg19 (for jkLib that means /gbdb/hg19/hg19.2bit). */
+
 void hParseTableName(char *db, char *table, char trackName[HDB_MAX_TABLE_STRING],
 		     char chrom[HDB_MAX_CHROM_STRING]);
 /* Parse an actual table name like "chr17_random_blastzWhatever" into
