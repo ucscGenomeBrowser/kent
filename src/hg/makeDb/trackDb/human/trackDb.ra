@@ -3145,6 +3145,15 @@ termRegex LRG_[0-9]+t[0-9]+
 semiShortCircuit 1
 searchPriority 50
 
+searchName lrgTranscriptAliNoTNum
+searchTable lrgTranscriptAli
+searchMethod exact
+searchType psl
+query select tName, tStart, tEnd, qName from %s where qName like '%st%%'
+termRegex LRG_[0-9]+
+semiShortCircuit 1
+searchPriority 50
+
 searchTable acescan
 searchMethod fuzzy
 searchType genePred
