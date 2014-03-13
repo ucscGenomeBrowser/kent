@@ -2290,7 +2290,7 @@ identifier knownGeneId dependency
 identifier knownGeneOld6Id dependency
 "Previous UCSC Gene build"
     $kgDb.knownGeneOld6.name
-    $kgDb.k65ToKg7.oldId full
+    $kgDb.kg6ToKg7.oldId full
     $kgDb.kgXrefOld6.kgID full
 
 identifier knownGeneOld5Id dependency

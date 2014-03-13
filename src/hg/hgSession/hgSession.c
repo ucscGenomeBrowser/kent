@@ -1035,7 +1035,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 
     dyStringPrintf(dyMessage, "<B>%s</B><P>\n"
 		   "<FORM ACTION=\"%s\" NAME=\"detailForm\" METHOD=GET>\n"
-		   "<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=%u>"
+		   "<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=%s>"
 		   "<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">"
 		   "Session Name: "
 		   "<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\" "
