@@ -1,6 +1,6 @@
 validateManifest (vm) Versions Log
 
-1.8 (TESTING)
+1.8 (RELEASED)
     Support for bedRrbs format including bedRrbs.as
     Tolerate phiX174 phage in bams by adding the sequence to encValData/hg19/{chrom.sizes,hg19.2bit}
 
