@@ -17,7 +17,7 @@ The sequence of instructions here are similar to the Mirror site
 	    XBitHack option to be enabled to allow:
 	      <!--#include ... --> statements to function.
             Add 'Options +Includes' for your html directory, your
-            httpd.conf file entry looks lik::
+            httpd.conf file entry looks like:
 XBitHack on
 <Directory /usr/local/apache/htdocs>
    Options +Includes
