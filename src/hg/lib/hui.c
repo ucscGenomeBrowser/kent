@@ -1258,6 +1258,7 @@ static char *zoomOptions[] = {
     ZOOM_1PT5X,
     ZOOM_3X,
     ZOOM_10X,
+    ZOOM_100X,
     ZOOM_BASE
     };
 
