@@ -225,13 +225,12 @@ struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
 if (fileOrUrl == NULL)
     errAbort("lineFileTabixMayOpen: fileOrUrl is NULL");
 int tbiNameSize = strlen(fileOrUrl) + strlen(".tbi") + 1;
-char *tbiName = needMem(tbiNameSize);
-safef(tbiName, tbiNameSize, "%s.tbi", fileOrUrl);
+char tbiName[tbiNameSize];
+safef(tbiName, sizeof(tbiName), "%s.tbi", fileOrUrl);
 tabix_t *tabix = ti_open(fileOrUrl, tbiName);
 if (tabix == NULL)
     {
     warn("Unable to open \"%s\"", fileOrUrl);
-    freez(&tbiName);
     return NULL;
     }
 if ((tabix->idx = ti_index_load(tbiName)) == NULL)
@@ -239,7 +238,6 @@ if ((tabix->idx = ti_index_load(tbiName)) == NULL)
     warn("Unable to load tabix index from \"%s\"", tbiName);
     ti_close(tabix);
     tabix = NULL;
-    freez(&tbiName);
     return NULL;
     }
 struct lineFile *lf = needMem(sizeof(struct lineFile));
@@ -250,7 +248,6 @@ lf->buf = needMem(lf->bufSize);
 lf->zTerm = zTerm;
 lf->tabix = tabix;
 lf->tabixIter = ti_iter_first();
-freez(&tbiName);
 return lf;
 #else // no USE_TABIX
 warn(COMPILE_WITH_TABIX, "lineFileTabixMayOpen");
