@@ -116,43 +116,43 @@ linesAt 5,10
     track cccTrendPvalBd
     parent caseControl
     shortLabel CCC Bipolar Dis
-    longLabel Case Control Consortium bipolar disorder trend -log10 P-value
+    longLabel Case Control Consortium Bipolar Disorder Trend -log10 P-value
     priority 1
 
     track cccTrendPvalCad
     parent caseControl
     shortLabel CCC Coronary Art
-    longLabel Case Control Consortium coronary artery disease trend -log10 P-value
+    longLabel Case Control Consortium Coronary Artery Disease Trend -log10 P-value
     priority 2
 
     track cccTrendPvalCd
     parent caseControl
     shortLabel CCC Crohns Dis
-    longLabel Case Control Consortium Crohn's disease trend -log10 P-value
+    longLabel Case Control Consortium Crohn's Disease Trend -log10 P-value
     priority 3
 
     track cccTrendPvalHt
     parent caseControl
     shortLabel CCC Hypertension
-    longLabel Case Control Consortium hypertension trend -log10 P-value
+    longLabel Case Control Consortium Hypertension Trend -log10 P-value
     priority 4
 
     track cccTrendPvalRa
     parent caseControl
     shortLabel CCC Rheum Arth
-    longLabel Case Control Consortium rheumatoid arthritis trend -log10 P-value
+    longLabel Case Control Consortium Rheumatoid Arthritis Trend -log10 P-value
     priority 5
 
     track cccTrendPvalT1d
     parent caseControl
     shortLabel CCC T1 Diabetes
-    longLabel Case Control Consortium type 1 diabetes trend -log10 P-value
+    longLabel Case Control Consortium Type 1 Diabetes Trend -log10 P-value
     priority 6
 
     track cccTrendPvalT2d
     parent caseControl
     shortLabel CCC T2 Diabetes
-    longLabel Case Control Consortium type 2 diabetes trend -log10 P-value
+    longLabel Case Control Consortium Type 2 Diabetes Trend -log10 P-value
     priority 7
 
 
@@ -169,13 +169,13 @@ linesAt 1,3
     track nimhBipolarUs
     parent nimhBipolar
     shortLabel NIMH Bipolar Us
-    longLabel NIMH Bipolar disorder (US) -log10 P-value
+    longLabel NIMH Bipolar Disorder (US) -log10 P-value
     priority 1
 
     track nimhBipolarDe
     parent nimhBipolar
     shortLabel NIMH Bipolar De
-    longLabel NIMH Bipolar disorder (German) -log10 P-value
+    longLabel NIMH Bipolar Disorder (German) -log10 P-value
     priority 2
 
 
@@ -339,7 +339,7 @@ visibility hide
 
 track acescan
 shortLabel ACEScan
-longLabel ACEScan alternative conserved Human-Mouse exon predictions
+longLabel ACEScan Alternative Conserved Human-Mouse Exon Predictions
 group genes
 visibility hide
 color 125,38,205
@@ -393,7 +393,7 @@ type bed 12 .
 track burgeRnaSeqGemMapperAlign
 compositeTrack on
 shortLabel Burge RNA-seq
-longLabel Burge lab RNA-seq aligned by GEM Mapper
+longLabel Burge Lab RNA-seq Aligned by GEM Mapper
 group expression
 subGroup1 view Views RawSignal=Raw_Signal Alignments=Alignments
 subGroup2 tissueType Tissue_Type BT474=BT474 HME=HME MB435=MB435 MCF7=MCF7 T47D=T47D adipose=Adipose brain=Brain breast=Breast colon=Colon heart=Heart liver=Liver lymphNode=LymphNode skelMuscle=SkelMuscle testes=Testes
@@ -568,7 +568,7 @@ type bed 12
         track burgeRnaSeqGemMapperAlignBT474
         parent burgeRnaSeqGemMapperAlignViewAlignments off
         shortLabel RNA-seq BT474
-        longLabel Burge Lab RNA-seq 32mer Reads from BT474 Breast Tumour Cell Line
+        longLabel Burge Lab RNA-seq 32mer Reads from BT474 Breast Tumor Cell Line
         subGroups view=Alignments tissueType=BT474
 
         track burgeRnaSeqGemMapperAlignHME
@@ -732,7 +732,7 @@ type psl .
 
 track illuminaProbes
 shortLabel Illumina WG-6
-longLabel Alignments of Illumina WG-6 3.0 Probe set
+longLabel Alignments of Illumina WG-6 3.0 Probe Set
 group expression
 visibility hide
 type bed 12 .
@@ -782,7 +782,7 @@ useScore 1
 
 track uc16
 shortLabel Ultra Conserved
-longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
+longLabel Ultraconserved Elements (200 bp 100% ID in Rat/Mouse/Human)
 group compGeno
 visibility hide
 exonArrows off
@@ -1108,7 +1108,7 @@ type bed 4 +
 
 track dgv
 shortLabel DGV Beta (old)
-longLabel Database of Genomic Variants: obsolete, here for QA comparison
+longLabel Database of Genomic Variants: Obsolete, here for QA comparison
 group varRep
 visibility hide
 itemRgb on
@@ -1245,35 +1245,35 @@ type bed 3
 	track covMask1kGPilotLowCovUnionDepth
 	parent covMask1kGPilotLowCovSumView
 	shortLabel Depth Union
-	longLabel Union of all populations' depth masks
+	longLabel Union of All Populations' Depth Masks
 	subGroups view=sum pop=all
 	color 180,0,0
 
 	track covMask1kGPilotLowCovUnionMapQ
 	parent covMask1kGPilotLowCovSumView
 	shortLabel MapQ Union
-	longLabel Union of all populations' mapping quality masks
+	longLabel Union of All Populations' Mapping Quality Masks
 	subGroups view=sum pop=all
 	color 224,108,108
 
 	track covMask1kGPilotLowCovUnionUncov
 	parent covMask1kGPilotLowCovSumView
 	shortLabel Uncov Union
-	longLabel Union of all populations' uncovered regions
+	longLabel Union of All Populations' Uncovered Regions
 	subGroups view=sum pop=all
 	color 150,150,150
 
 	track covMask1kGPilotLowCovIntersectionUncov
 	parent covMask1kGPilotLowCovSumView
 	shortLabel Uncov Intsct
-	longLabel Intersection of all populations' uncovered regions
+	longLabel Intersection of All Populations' Uncovered Regions
 	subGroups view=sum pop=all
 	color 150,150,150
 
 	track covMask1kGPilotLowCovUnion
 	parent covMask1kGPilotLowCovSumView
 	shortLabel Union
-	longLabel Union of all masks
+	longLabel Union of All Masks
 	subGroups view=sum pop=all
 
 track tgpRecombRate
@@ -1734,8 +1734,8 @@ type chain hg16
 otherDb hg16
 
 track gbDnaBigChain
-shortLabel Genbank chains
-longLabel Genbank DNA sequences >5kbp chained
+shortLabel GenBank Chains
+longLabel GenBank DNA Sequences >5kbp Chained
 group x
 visibility hide
 color 100,50,0
@@ -1746,8 +1746,8 @@ iframeOptions height='600' width='1024'
 idInUrlSql SELECT qName from gbDnaBigChain where id=%-s
 
 track gbSmall
-shortLabel Genbank small
-longLabel Genbank short DNA sequences <5kbp
+shortLabel GenBank Small
+longLabel GenBank Short DNA Sequences <5kbp
 group x
 visibility hide
 color 100,50,0
@@ -2008,14 +2008,14 @@ type bed 3 .
     track eioJcviNASNeg
     parent eioJcviNAS
     shortLabel EIO/JCVI CD34- NAS
-    longLabel CD34- cells Nuclease Accessible sites
+    longLabel CD34- cells Nuclease Accessible Sites
     priority 2
     color 100,30,250
 
     track eioJcviNASPos
     parent eioJcviNAS
     shortLabel EIO/JCVI CD34+ NAS
-    longLabel CD34+ cells Nuclease Accessible sites
+    longLabel CD34+ cells Nuclease Accessible Sites
     priority 1
     color 100,30,150
 
@@ -2151,7 +2151,7 @@ otherDb galGal2
 
 track tblastFr1
 shortLabel tblastFr1
-longLabel Fugu (Aug. 2003/fr1) Best tblastn hit/hg16 knownGene Exon
+longLabel Fugu (Aug. 2003/fr1) Best tblastn Hit/hg16 knownGene Exon
 group x
 spectrum on
 visibility hide
@@ -2355,7 +2355,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 track hapmapLdPh
 compositeTrack on
 shortLabel HapMap LD Phased
-longLabel HapMap Linkage Disequilibrium - Phase II - from phased genotypes
+longLabel HapMap Linkage Disequilibrium - Phase II - from Phased Genotypes
 group varRep
 visibility hide
 canPack off
@@ -2366,19 +2366,19 @@ type ld2
     track hapmapLdPhYri
     parent hapmapLdPh
     shortLabel Phased YRI
-    longLabel Linkage Disequilibrium for the Yoruba (YRI) from phased genotypes
+    longLabel Linkage Disequilibrium for the Yoruba (YRI) from Phased Genotypes
     priority 1
 
     track hapmapLdPhCeu
     parent hapmapLdPh
     shortLabel Phased CEU
-    longLabel Linkage Disequilibrium for the CEPH (CEU) from phased genotypes
+    longLabel Linkage Disequilibrium for the CEPH (CEU) from Phased Genotypes
     priority 2
 
     track hapmapLdPhChbJpt
     parent hapmapLdPh
     shortLabel Ph JPT+CHB
-    longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from phased genotypes
+    longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from Phased Genotypes
     priority 5
 
 track snpRecombHotspot
@@ -3345,7 +3345,7 @@ searchPriority 10
 track fox2ClipSeqComp
 compositeTrack on
 shortLabel FOX2 CLIP-seq
-longLabel FOX2 adaptor-trimmed CLIP-seq reads
+longLabel FOX2 Adaptor-trimmed CLIP-seq reads
 subGroup1	view Tracks reads=Reads density=Density clusters=Clusters
 group regulation
 visibility hide
@@ -3361,7 +3361,7 @@ dataVersion January 2009
         track fox2ClipSeq
         parent fox2ClipSeqCompViewreads
         shortLabel FOX2 CLIP-seq
-        longLabel FOX2 adaptor-trimmed CLIP-seq reads
+        longLabel FOX2 Adaptor-trimmed CLIP-seq Reads
         subGroups	view=reads
         priority 1
         type bed 9 .
@@ -3379,7 +3379,7 @@ dataVersion January 2009
         track fox2ClipSeqDensityForwardStrand
         parent fox2ClipSeqCompViewdensity
         shortLabel Density Forward
-        longLabel FOX2 adaptor-trimmed CLIP-seq Density Forward Strand
+        longLabel FOX2 Adaptor-trimmed CLIP-seq Density Forward Strand
         subGroups	view=density
         priority 2
         type wig 0 2401
@@ -3393,7 +3393,7 @@ dataVersion January 2009
         track fox2ClipSeqDensityReverseStrand
         parent fox2ClipSeqCompViewdensity
         shortLabel Density Reverse
-        longLabel FOX2 adaptor-trimmed CLIP-seq Density Reverse Strand
+        longLabel FOX2 Adaptor-trimmed CLIP-seq Density Reverse Strand
         subGroups	view=density
         priority 3
         type wig 0 1406
@@ -3413,7 +3413,7 @@ dataVersion January 2009
         track fox2ClipClusters
         parent fox2ClipSeqCompViewclusters
         shortLabel FOX2 clusters
-        longLabel FOX2 binding site clusters
+        longLabel FOX2 Binding Site Clusters
         subGroups   view=clusters
         priority 4
         type bed 4 .
@@ -3971,7 +3971,7 @@ html numtSeq
     track numtSAssembled
     parent numtSeq
     shortLabel NumtS assembled
-    longLabel Human NumtS assembled
+    longLabel Human NumtS Assembled
     color 0,60,120
     priority 2
     useScore 1
@@ -3982,7 +3982,7 @@ html numtSeq
     track numtSMitochondrion
     parent numtSeq
     shortLabel NumtS on mitochon
-    longLabel Human NumtS on mitochondrion
+    longLabel Human NumtS on Mitochondrion
     useScore 1
     #noScoreFilter .
     color 0,60,120
@@ -3992,7 +3992,7 @@ html numtSeq
 
     track numtSMitochondrionChrPlacement
     parent numtSeq
-    longLabel Human NumtS on mitochondrion with chromosome placement
+    longLabel Human NumtS on Mitochondrion with Chromosome Placement
     shortLabel NumtS chr colored
     priority 4
     itemRgb on
@@ -4002,7 +4002,7 @@ html numtSeq
     track  bamAllNumtSSorted
     parent numtSeq
     shortLabel NumtS SNPs
-    longLabel Human NumtS on mitochondrion SNPs
+    longLabel Human NumtS on Mitochondrion SNPs
     priority 5
     visibility pack
     configurable on
