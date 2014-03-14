@@ -40,9 +40,11 @@ struct stepInit
     char *software;	/* Comma separated list of software names. First one gives name to step. */
     char *inputTypes;
     char *inputFormats;	/* Comma separated list of input formats */
+    char *inputDescriptions; /* Comma separated list of input descriptions. */
     char *outputTypes;
     char *outputFormats;/* Comma separated list of formats */
     char *outputNamesInTempDir;  /* Comma separated list of file names in temp dir */
+    char *outputDescriptions; /* Comma separated list of input descriptions. */
     };
 
 struct stepInit steps[] =  
@@ -51,93 +53,107 @@ struct stepInit steps[] =
     "bwa_single_end", 2,		// name and CPUs
     "eap_run_bwa_se,bwa,samtools",	// software
     "reads", "fastq",			// input names and formats
+    "Reads in Sanger fastq format",     // input description
     "alignments", "bam", "out.bam",	// output names, formats, and file names
+    "Alignments in BAM format sorted by genomic position including random pick of multi-aligners"
     },
 
     {
     "bwa_paired_end", 2, 
     "eap_run_bwa_pe,bwa,samtools",
     "reads1,reads2", "fastq,fastq",
+    "Forward direction reads in Sanger fastq format,"     // input description
+    "Reverse direction reads in Sanger fastq format",
     "alignments", "bam", "out.bam",
+    "Alignments in BAM format sorted by genomic position including random pick of multi-aligners"
     },
 
     {
     "macs2_dnase_se", 1,
     "eap_run_macs2_dnase_se,macs2,bedToBigBed,bedGraphToBigWig",
     "alignments", "bam",
+    "Alignments of single end reads in bam format",
     "macs2_dnase_peaks,macs2_dnase_signal", "narrowPeak,bigWig", "out.narrowPeak.bigBed,out.bigWig",
+    "Narrow peak calls from Macs2,Base-by-base signal graph from macs2"
     },
 
     {
     "macs2_dnase_pe", 1,
     "eap_run_macs2_dnase_pe,macs2,bedToBigBed,bedGraphToBigWig",
+    "Alignments of paired end reads in bam format",
     "alignments", "bam",
     "macs2_dnase_peaks,macs2_dnase_signal", "narrowPeak,bigWig", "out.narrowPeak.bigBed,out.bigWig",
+    "Narrow peak calls from Macs2,Base-by-base signal graph from macs2"
     },
 
     {
     "hotspot", 1,
     "eap_run_hotspot,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
     "alignments", "bam",
+    "Alignments of reads with cuts on 5-prime ends in bam format",
     "hotspot_broad_peaks,hotspot_narrow_peaks,hotspot_signal",
     "broadPeak,narrowPeak,bigWig",
-    "out.broadPeak.bigBed,out.narrowPeak.bigBed,out.bigWig"
+    "out.broadPeak.bigBed,out.narrowPeak.bigBed,out.bigWig",
+    "Hotspot calls,Peak calls from hotspot,Base-by-base signal graph from hotspot"
     },
 
     {
     "macs2_chip_se", 1,
     "eap_run_macs2_chip_se,macs2,bedToBigBed,bedGraphToBigWig",
     "chipBam,controlBam", "bam,bam",
+    "Alignments of single end reads from IP,Alignments of single end reads from control",
     "macs2_chip_peaks,macs2_chip_signal", "narrowPeak,bigWig", "out.narrowPeak.bigBed,out.bigWig",
+    "Narrow peak calls from Macs2,Base-by-base signal graph from macs2"
     },
 
     {
     "macs2_chip_pe", 1,
     "eap_run_macs2_chip_pe,macs2,bedToBigBed,bedGraphToBigWig",
     "chipBam,controlBam", "bam,bam",
+    "Alignments of paired end reads from IP,Alignments of paired end reads from control",
     "macs2_chip_peaks,macs2_chip_signal", "narrowPeak,bigWig", "out.narrowPeak.bigBed,out.bigWig",
+    "Narrow peak calls from Macs2,Base-by-base signal graph from macs2"
     },
 
     {
     "sum_bigWig", 1,
     "eap_sum_bigWig,bigWigMerge,bedGraphPack,bedGraphToBigWig",
     "signal", "bigWig",
+    "List of bigWig files",
     "pooled_signal", "bigWig", "out.bigWig",
-    },
-
-    {
-    "replicated_narrow_peaks", 1,
-    "eap_replicated_narrow_peaks,edwReplicatedPeaks,eap_narrowPeak_to_bigBed",
-    "peaks1,peaks2",  "narrowPeak,narrowPeak",
-    "replicated_narrowPeak", "narrowPeak", "out.narrowPeak.bigBed",
-    },
-
-    {
-    "replicated_broad_peaks", 1,
-    "eap_replicated_broad_peaks,edwReplicatedPeaks,eap_broadPeak_to_bigBed",
-    "peaks1,peaks2",  "broadPeak,broadPeak",
-    "replicated_broadPeak", "broadPeak", "out.broadPeak.bigBed",
+    "Sum of inputs signals"
     },
 
     {
     "replicated_hotspot", 1,
     "eap_pool_hotspot,eap_run_hotspot,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
     "rep1,rep2", "bam,bam",
+    "Replicate 1 alignments in bam format,Replicate 2 alignments in bam format",
     "hotspot_broad_peaks,hotspot_narrow_peaks,hotspot_signal",
     "broadPeak,narrowPeak,bigWig",
     "out.broadPeak.bigBed,out.narrowPeak.bigBed,out.bigWig",
+    "Hotspot calls,Peak calls from hotspot,Base-by-base signal graph from hotspot"
     },
     
     {
     "phantom_peak_stats", 1,
     "eap_run_phantom_peak_spp,Rscript",
     "alignments", "bam",
+    "Alignments from some sort of peaky data set in BAM format",
     "", "", "",
+    "",
+    },
+
+    {
+    "dnase_stats", 1,
+    "eap_dnase_stats,edwBamStats,bigBedToBed,bigWigAverageOverBed,eap_run_phantom_peak_spp,Rscript,eap_run_hotspot,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
+    "alignments", "bam",
+    "Alignments from a DNAse hypersensitivity assay in BAM format",
+    "", "", "",
+    "",
     },
 
 };
-
-
 
 int commaSepCount(char *s)
 /* Count number of comma-separated items assuming there can be a terminal non-separating comma
@@ -163,6 +179,10 @@ int matchCount = commaSepCount(init->inputFormats);
 if (inCount != matchCount)
     errAbort("inputTypes has %d elements but inputFormats has %d in step %s", 
 	    inCount, matchCount, init->name);
+matchCount = commaSepCount(init->inputDescriptions);
+if (inCount != matchCount)
+    errAbort("inputTypes has %d elements but inputDescriptions has %d in step %s",
+	    inCount, matchCount, init->name);
 int outCount = commaSepCount(init->outputTypes);
 matchCount = commaSepCount(init->outputFormats);
 if (outCount != matchCount)
@@ -171,6 +191,10 @@ if (outCount != matchCount)
 matchCount = commaSepCount(init->outputNamesInTempDir);
 if (outCount != matchCount)
     errAbort("outputTypes has %d elements but outputNamesInTempDir has %d in step %s", 
+	    outCount, matchCount, init->name);
+matchCount = commaSepCount(init->outputDescriptions);
+if (outCount != matchCount)
+    errAbort("outputTypes has %d elements but outputDescriptions has %d in step %s", 
 	    outCount, matchCount, init->name);
 
 struct dyString *query = dyStringNew(0);
@@ -204,18 +228,20 @@ for (i=0; i<softwareCount; ++i)
 dyStringClear(query);
 dyStringAppend(query,
 	"insert eapStep (name,cpusRequested,"
-        " inCount,inputTypes,inputFormats,"
-	" outCount,outputNamesInTempDir,outputTypes,outputFormats)"
+        " inCount,inputTypes,inputFormats,inputDescriptions,"
+	" outCount,outputNamesInTempDir,outputTypes,outputFormats,outputDescriptions)"
 	" values (");
 dyStringPrintf(query, "'%s',", init->name);
 dyStringPrintf(query, "%d,", init->cpusRequested);
 dyStringPrintf(query, "%d,", inCount);
 dyStringPrintf(query, "'%s',", init->inputTypes);
 dyStringPrintf(query, "'%s',", init->inputFormats);
+dyStringPrintf(query, "\"%s\",", init->inputDescriptions);
 dyStringPrintf(query, "%d,", outCount);
 dyStringPrintf(query, "'%s',", init->outputNamesInTempDir);
 dyStringPrintf(query, "'%s',", init->outputTypes);
-dyStringPrintf(query, "'%s'", init->outputFormats);
+dyStringPrintf(query, "'%s',", init->outputFormats);
+dyStringPrintf(query, "\"%s\"", init->outputDescriptions);
 dyStringPrintf(query, ")");
 sqlUpdate(conn, query->string);
 
@@ -227,6 +253,7 @@ for (i=0; i<softwareCount; ++i)
 	    init->name, softwareArray[i]);
     sqlUpdate(conn, query->string);
     }
+
 
 /* Force step version stuff to be made right away */
 eapCurrentStepVersion(conn, init->name);
