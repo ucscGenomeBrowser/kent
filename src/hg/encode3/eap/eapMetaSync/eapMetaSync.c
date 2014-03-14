@@ -33,7 +33,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void syncOneRecord(struct sqlConnection *conn, char *type, struct dyString *json, 
+void syncOneRecord(struct sqlConnection *conn, char *type, struct jsonWrite *json, 
     char *table, long long id)
 /* Send over one record and save UUID result to row of table defined by id in idField. */
 {
@@ -44,12 +44,12 @@ uglyf("%s\n", dyUrl->string);
 
 /* Construct dyString for http header */
 struct dyString *dyHeader = dyStringNew(0);
-dyStringPrintf(dyHeader, "Content-length: %d\r\n", json->stringSize);
+dyStringPrintf(dyHeader, "Content-length: %d\r\n", json->dy->stringSize);
 dyStringPrintf(dyHeader, "Content-type: text/javascript\r\n");
 
 /* Send header and then JSON */
 int sd = netOpenHttpExt(dyUrl->string, "POST", dyHeader->string);
-mustWriteFd(sd, json->string, json->stringSize);
+mustWriteFd(sd, json->dy->string, json->dy->stringSize);
 
 /* Grab response */
 struct dyString *dyText = netSlurpFile(sd);
@@ -65,8 +65,9 @@ int status = response->status->status;
 if (status != 200 && status != 201)  // HTTP codes
     {
     errAbort("ERROR - Metadatabase returns %d to our post request\n"
-             "Url: %s\n"
-	     "Full response: %s\n",  status, dyUrl->string, dyText->string);
+	     "POSTED JSON: %s\n"
+             "URL: %s\n"
+	     "FULL RESPONSE: %s\n",  status, json->dy->string, dyUrl->string, dyText->string);
     }
 
 /* Parse uuid out of json response.  It should look something like
@@ -110,7 +111,7 @@ response->fullText = NULL;  // avoid double free of this
 htmlPageFree(&response);
 }
 
-struct dyString *jsonForSoftware(struct eapSoftware *sw)
+struct jsonWrite *jsonForSoftware(struct eapSoftware *sw)
 /* Return JSON text for software.  This is something that looks
  * like:
 	{
@@ -120,13 +121,13 @@ struct dyString *jsonForSoftware(struct eapSoftware *sw)
 	}
  */
 {
-struct dyString *dy = dyStringNew(0);
-dyJsonObjectStart(dy);
-dyJsonString(dy, "name", sw->name, TRUE);
-dyJsonString(dy, "title", sw->name, TRUE);
-dyJsonString(dy, "url", sw->url, FALSE);
-dyJsonObjectEnd(dy, FALSE);
-return dy;
+struct jsonWrite *jw = jsonWriteNew(0);
+jsonWriteObjectStart(jw);
+jsonWriteString(jw, "name", sw->name);
+jsonWriteString(jw, "title", sw->name);
+jsonWriteString(jw, "url", sw->url);
+jsonWriteObjectEnd(jw);
+return jw;
 }
 
 void syncSoftware(struct sqlConnection *conn)
@@ -142,13 +143,13 @@ for (sw = swList; sw != NULL; sw = sw->next)
 	warn("Skipping %s until they handle upper case right", sw->name);
 	continue;
 	}
-    struct dyString *json = jsonForSoftware(sw);
+    struct jsonWrite *json = jsonForSoftware(sw);
     syncOneRecord(conn, "software", json, "eapSoftware", sw->id);
-    dyStringFree(&json);
+    jsonWriteFree(&json);
     }
 }
 
-struct dyString *jsonForSwVersion(struct sqlConnection *conn, struct eapSwVersion *ver)
+struct jsonWrite *jsonForSwVersion(struct sqlConnection *conn, struct eapSwVersion *ver)
 /* Construct JSON string describing ver. */
 {
 char query[256];
@@ -161,13 +162,13 @@ if (sw == NULL || isEmpty(sw->metaUuid))
     return NULL;
     }
 uglyf("sw id %u, softare %s, metaUuid %s\n",  sw->id, sw->name, sw->metaUuid);
-struct dyString *dy = dyStringNew(0);
-dyJsonObjectStart(dy);
-dyJsonString(dy, "software", sw->metaUuid, TRUE);
-dyJsonString(dy, "version", ver->version, TRUE);
-dyJsonString(dy, "dcc_md5", ver->md5, FALSE);
-dyJsonObjectEnd(dy, FALSE);
-return dy;
+struct jsonWrite *jw = jsonWriteNew(0);
+jsonWriteObjectStart(jw);
+jsonWriteString(jw, "software", sw->metaUuid);
+jsonWriteString(jw, "version", ver->version);
+jsonWriteString(jw, "dcc_md5", ver->md5);
+jsonWriteObjectEnd(jw);
+return jw;
 }
 
 void syncSoftwareVersion(struct sqlConnection *conn)
@@ -178,11 +179,11 @@ sqlSafef(query, sizeof(query), "select * from eapSwVersion where metaUuid=''");
 struct eapSwVersion *ver, *verList = eapSwVersionLoadByQuery(conn, query);
 for (ver = verList; ver != NULL; ver = ver->next)
     {
-    struct dyString *json = jsonForSwVersion(conn, ver);
+    struct jsonWrite *json = jsonForSwVersion(conn, ver);
     if (json != NULL)
 	{
 	syncOneRecord(conn, "software_version", json, "eapSwVersion", ver->id);
-	dyStringFree(&json);
+	jsonWriteFree(&json);
 	}
     else
         {
@@ -191,17 +192,99 @@ for (ver = verList; ver != NULL; ver = ver->next)
     }
 }
 
-struct dyString *jsonForStep(struct sqlConnection *conn, struct eapStep *step)
+struct eapStepVersion *eapStepVersionLatest(struct sqlConnection *conn, char *stepName)
+/* Return latest version of named step.  Aborts if no such step. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select * from eapStepVersion where step='%s' order by version desc limit 1", stepName);
+struct eapStepVersion *ver = eapStepVersionLoadByQuery(conn, query);
+if (ver == NULL)
+    errAbort("Couldn't find eapStepVersion for %s", stepName);
+return ver;
+}
+
+struct eapSoftware *eapSoftwareLoadByName(struct sqlConnection *conn, char *name)
+/* Return named software */
+{
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select * from eapSoftware where name='%s'", name);
+return eapSoftwareLoadByQuery(conn, query);
+}
+
+struct jsonWrite *jsonForStep(struct sqlConnection *conn, struct eapStep *step)
 /* Convert an eapStep to json. See step.json in same directory as the .c file. 
  * for an example. */
 {
-struct dyString *dy = dyStringNew(0);
-dyJsonObjectStart(dy);
-dyJsonString(dy, "name", step->name, TRUE);
-dyJsonString(dy, "title", step->name, TRUE);
-dyJsonString(dy, "url", step->url, FALSE);
-dyJsonObjectEnd(dy, FALSE);
-return dy;
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw);
+
+/* Write name.  Maybe write title and description someday. */
+jsonWriteString(jw, "name", step->name);
+jsonWriteString(jw, "description", step->description);
+
+/* Write version */
+struct eapStepVersion *ver = eapStepVersionLatest(conn, step->name);
+jsonWriteNumber(jw, "version", ver->version);
+
+/* Write software */
+jsonWriteListStart(jw, "software");
+char query[512];
+sqlSafef(query, sizeof(query), "select * from eapStepSoftware where step='%s'", step->name);
+struct eapStepSoftware *ss, *ssList = eapStepSoftwareLoadByQuery(conn, query);
+boolean isFirst = TRUE;
+struct dyString *dy = jw->dy;
+for (ss = ssList; ss != NULL; ss = ss->next)
+    {
+    struct eapSoftware *software = eapSoftwareLoadByName(conn, ss->software);
+    assert(software != NULL);
+    if (software->metaUuid)
+        {
+	if (!isFirst)
+	    {
+	    dyStringAppendC(dy, ',');
+	    dyStringAppendC(dy, '\n');
+	    }
+	isFirst = FALSE;
+	dyStringAppendC(dy, '"');
+	dyStringPrintf(dy, "/software/%s/", software->metaUuid);
+	dyStringAppendC(dy, '"');
+	}
+    }
+if (!isFirst)
+    dyStringAppendC(dy, '\n');
+jsonWriteListEnd(jw);
+/* Done with writing software list */
+
+
+/* Write input list */
+jsonWriteListStart(jw, "inputs");
+int i;
+for (i=0; i<step->inCount; ++i)
+    {
+    jsonWriteObjectStart(jw);
+    jsonWriteString(jw, "format", step->inputFormats[i]);
+    jsonWriteString(jw, "name", step->inputTypes[i]);
+    jsonWriteString(jw, "description", step->inputDescriptions[i]);
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+
+/* Write output list */
+jsonWriteListStart(jw, "outputs");
+for (i=0; i<step->outCount; ++i)
+    {
+    jsonWriteObjectStart(jw);
+    jsonWriteString(jw, "format", step->outputFormats[i]);
+    jsonWriteString(jw, "name", step->outputTypes[i]);
+    jsonWriteString(jw, "description", step->outputDescriptions[i]);
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+
+jsonWriteObjectEnd(jw);
+return jw;
 }
 
 void syncStep(struct sqlConnection *conn)
@@ -210,13 +293,14 @@ void syncStep(struct sqlConnection *conn)
 char query[256];
 sqlSafef(query, sizeof(query), "select * from eapStep where metaUuid=''");
 struct eapStep *step, *stepList = eapStepLoadByQuery(conn, query);
+uglyf("Got %d steps\n", slCount(stepList));
 for (step = stepList; step != NULL; step = step->next)
     {
-    struct dyString *json = jsonForStep(conn, step);
+    struct jsonWrite *json = jsonForStep(conn, step);
     if (json != NULL)
 	{
 	syncOneRecord(conn, "analysis_step", json, "eapStep", step->id);
-	dyStringFree(&json);
+	jsonWriteFree(&json);
 	}
     else
         {
@@ -224,7 +308,6 @@ for (step = stepList; step != NULL; step = step->next)
 	}
     }
 }
-
 
 
 void eapMetaSync(char *host, char *userId, char *password)
