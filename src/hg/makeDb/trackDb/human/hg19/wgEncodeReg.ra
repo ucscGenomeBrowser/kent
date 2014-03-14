@@ -394,11 +394,10 @@ canPack On
 
     # This is released track with TF Motif setting (under development)
     track wgEncodeRegTfbsClusteredV3
-    release alpha,beta
     shortLabel Txn Fac ChIP V4
     longLabel Transcription Factor ChIP-seq V4 (161 factors) with Factorbook motifs from ENCODE
     type factorSource
-    superTrack wgEncodeReg dense
+    superTrack wgEncodeReg hide
     sourceTable wgEncodeRegTfbsCellsV3
     inputTrackTable wgEncodeRegTfbsClusteredInputsV3
     inputTableFieldDisplay cellType factor antibody treatment lab
@@ -411,7 +410,7 @@ canPack On
     url http://www.factorbook.org/mediawiki/index.php/$$
     idInUrlSql select value from factorbookGeneAlias where name='%s'
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility hide
+    visibility dense
     useScore 1
     priority 1.71
     maxWindowToDraw 10000000
@@ -578,23 +577,6 @@ canPack On
         ZNF263,\
         ZNF274,\
         ZZZ3
-
-    # This is latest released
-    track wgEncodeRegTfbsClusteredV3
-    release public
-    shortLabel Txn Fac ChIP V3
-    longLabel Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
-    type factorSource
-    superTrack wgEncodeReg hide
-    sourceTable wgEncodeRegTfbsCellsV3
-    inputTrackTable wgEncodeRegTfbsClusteredInputsV3
-    inputTableFieldDisplay cellType factor antibody treatment lab
-    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility hide
-    useScore 1
-    priority 1.71
-    maxWindowToDraw 10000000
-    dataVersion ENCODE Mar 2012 Freeze
 
     # This is alternate cluster version -- antibody-based, as done in V2
     track wgEncodeRegTfbsClusteredV3a

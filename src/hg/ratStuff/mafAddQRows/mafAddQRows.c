@@ -119,7 +119,7 @@ static struct hash *loadQacIndex(struct slPair *species)
 {
 char buffer[1024];
 struct lineFile *lf;
-char *row[1];
+char *row[2];
 int seqCount;
 struct hash *qacIndex;
 struct hashEl *hel;
@@ -131,6 +131,7 @@ lf = lineFileOpen(buffer, TRUE);
 /* get the count of sequences in the qac file */
 if (lineFileNextRow(lf, row, 1) == FALSE)
     errAbort("Index file %s is empty.", lf->fileName);
+verbose(2, "loadQacIndex: reading file '%s' finds '%s' sequences\n", buffer, row[0]);
 seqCount = lineFileNeedFullNum(lf, row, 0);
 
 /* build and populate a hash mapping chrom to file offset */

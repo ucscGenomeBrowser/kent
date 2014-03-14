@@ -201,7 +201,6 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006, Aug 2007
         group regulation
         shortLabel LI/UCSD TAF1
         longLabel Ludwig Institute/UC San Diego TAF1 Binding in Fibroblasts
-        priority 300
 
 track wgEncodeUcsdNgTaf1Signal
 superTrack wgEncodeUcsdNgTaf1Super dense
@@ -1069,7 +1068,6 @@ longLabel ENCODE Gencode Gene Annotations
 group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 dragAndDrop subTracks
-priority 34.3
 #visibility pack
 color 12,12,120
 url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx

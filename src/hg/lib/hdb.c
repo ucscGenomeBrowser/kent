@@ -1306,8 +1306,7 @@ char *hReplaceGbdbSeqDir(char *path, char *db)
  * gbdb, like /gbdb/hg19 (which by jkLib is translated to /gbdb/hg19/hg19.2bit).
  hReplaceGbdb would check only if the dir exists. For 2bit basename, we
  have to check if the 2bit file exists, do the rewriting, then strip off the
- 2bit filename again. Otherwise, /gbdb/hg19 will never be rewritten, as it
- exists but might be empty and without a 2bit file.
+ 2bit filename again. 
  This function works with .nib directories, but nib does not support opening
  from URLs.  As of Feb 2014, only hg16 and anoGam1 use a .nib directory.
 */

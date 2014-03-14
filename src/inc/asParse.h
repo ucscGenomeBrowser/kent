@@ -135,12 +135,6 @@ boolean asCompareObjs(char *name1, struct asObject *as1, char *name2, struct asO
  * Othewise, return TRUE if the objects columns match through the first numColumnsToCheck fields. 
  * If retNumColumnsSame is not NULL, then it will be set to the number of contiguous matching columns. */
 
-INLINE boolean asObjectsMatchFirstN(struct asObject *as1, struct asObject *as2, int n)
-/* Return TRUE if as1 has the same first n columns as as2. */
-{
-return asCompareObjs(as1->name, as1, as2->name, as2, n, NULL, FALSE);
-}
-
 INLINE boolean asObjectsMatch(struct asObject *as1, struct asObject *as2)
 {
 int colCount = slCount(as1->columnList);
@@ -148,5 +142,10 @@ if (slCount(as2->columnList) != colCount)
     return FALSE;
 return asCompareObjs(as1->name, as1, as2->name, as2, colCount, NULL, FALSE);
 }
+
+boolean asColumnNamesMatchFirstN(struct asObject *as1, struct asObject *as2, int n);
+/* Compare only the column names of as1 and as2, not types because if an asObj has been
+ * created from sql type info, longblobs are cast to lstrings but in the proper autoSql
+ * might be lists instead (e.g. longblob in sql, uint exonStarts[exonCount] in autoSql. */
 
 #endif /* ASPARSE_H */

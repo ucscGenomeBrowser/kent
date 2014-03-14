@@ -54,18 +54,19 @@ static char* bigUrlToTrackLine(char *url)
  * line for it, has to be freed. Return NULL
  * if it's not a big file URL  */
 {
-struct netParsedUrl npu;
-netParseUrl(url, &npu);
-
-char baseName[PATH_LEN];
-char ext[FILEEXT_LEN];
-splitPath(npu.file, NULL, baseName, ext);
-char *trackName = baseName;
-
-eraseTrailingSpaces(ext);
-char *type = customTrackTypeFromBigFile(ext);
+char *type = customTrackTypeFromBigFile(url);
 if (type==NULL)
     return url;
+
+struct netParsedUrl npu;
+netParseUrl(url, &npu);
+char baseName[PATH_LEN];
+splitPath(npu.file, NULL, baseName, NULL);
+// For vcfTabix files that end in ".vcf.gz", only the ".gz" is stripped off by splitPath;
+// strip off the remaining ".vcf":
+if (endsWith(baseName, ".vcf"))
+    baseName[strlen(baseName)-4] = '\0';
+char *trackName = baseName;
 
 char buf[4000];
 safef(buf, sizeof(buf), "track name=%s bigDataUrl=%s type=%s\n", trackName, url, type);
