@@ -37,6 +37,7 @@ struct stepInit
     {
     char *name;     /* Name of step, should be same ase first software name */
     int cpusRequested;	/* # of cpus requested from job control system */
+    char *description;  /* Sentence long description of step */
     char *software;	/* Comma separated list of software names. First one gives name to step. */
     char *inputTypes;
     char *inputFormats;	/* Comma separated list of input formats */
@@ -51,6 +52,7 @@ struct stepInit steps[] =
 {
     {
     "bwa_single_end", 2,		// name and CPUs
+    "Align single ended fastq with bwa to produce BAM sorted by genome position",  // Description
     "eap_run_bwa_se,bwa,samtools",	// software
     "reads", "fastq",			// input names and formats
     "Reads in Sanger fastq format",     // input description
@@ -60,6 +62,7 @@ struct stepInit steps[] =
 
     {
     "bwa_paired_end", 2, 
+    "Align paired end fastqs with bwa to produce BAM sorted by genome position",  // Description
     "eap_run_bwa_pe,bwa,samtools",
     "reads1,reads2", "fastq,fastq",
     "Forward direction reads in Sanger fastq format,"     // input description
@@ -70,6 +73,7 @@ struct stepInit steps[] =
 
     {
     "macs2_dnase_se", 1,
+    "Call peaks and generate signal plot from a single ended DNAse bam file using Macs2",
     "eap_run_macs2_dnase_se,macs2,bedToBigBed,bedGraphToBigWig",
     "alignments", "bam",
     "Alignments of single end reads in bam format",
@@ -79,6 +83,7 @@ struct stepInit steps[] =
 
     {
     "macs2_dnase_pe", 1,
+    "Call peaks and generate signal plot from a paired end DNAse bam file using Macs2",
     "eap_run_macs2_dnase_pe,macs2,bedToBigBed,bedGraphToBigWig",
     "Alignments of paired end reads in bam format",
     "alignments", "bam",
@@ -88,6 +93,7 @@ struct stepInit steps[] =
 
     {
     "hotspot", 1,
+    "Call hotspots, peaks, and generate a signal plot from DNAse bam file using hotspot",
     "eap_run_hotspot,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
     "alignments", "bam",
     "Alignments of reads with cuts on 5-prime ends in bam format",
@@ -99,6 +105,7 @@ struct stepInit steps[] =
 
     {
     "macs2_chip_se", 1,
+    "Generate peaks and signal for single ended ChIP-seq BAM files from IP and control using Macs2",
     "eap_run_macs2_chip_se,macs2,bedToBigBed,bedGraphToBigWig",
     "chipBam,controlBam", "bam,bam",
     "Alignments of single end reads from IP,Alignments of single end reads from control",
@@ -108,6 +115,7 @@ struct stepInit steps[] =
 
     {
     "macs2_chip_pe", 1,
+    "Generate peaks and signal for paired end ChIP-seq BAM files from IP and control using Macs2",
     "eap_run_macs2_chip_pe,macs2,bedToBigBed,bedGraphToBigWig",
     "chipBam,controlBam", "bam,bam",
     "Alignments of paired end reads from IP,Alignments of paired end reads from control",
@@ -117,6 +125,7 @@ struct stepInit steps[] =
 
     {
     "sum_bigWig", 1,
+    "Add together signals from multiple bigWigs producing a bigWig for the sum",
     "eap_sum_bigWig,bigWigMerge,bedGraphPack,bedGraphToBigWig",
     "signal", "bigWig",
     "List of bigWig files",
@@ -126,6 +135,7 @@ struct stepInit steps[] =
 
     {
     "replicated_hotspot", 1,
+    "Pool together two replicates and run hotspot on them",
     "eap_pool_hotspot,eap_run_hotspot,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
     "rep1,rep2", "bam,bam",
     "Replicate 1 alignments in bam format,Replicate 2 alignments in bam format",
@@ -137,6 +147,7 @@ struct stepInit steps[] =
     
     {
     "phantom_peak_stats", 1,
+    "Run the phantom peaks stats tools to calculate RSC and NSC among other things.",
     "eap_run_phantom_peak_spp,Rscript",
     "alignments", "bam",
     "Alignments from some sort of peaky data set in BAM format",
@@ -146,6 +157,7 @@ struct stepInit steps[] =
 
     {
     "dnase_stats", 1,
+    "Subsample bam file to 5M mapped reads, run hotspot, and collect a bunch of statistics.",
     "eap_dnase_stats,edwBamStats,bigBedToBed,bigWigAverageOverBed,eap_run_phantom_peak_spp,Rscript,eap_run_hotspot,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
     "alignments", "bam",
     "Alignments from a DNAse hypersensitivity assay in BAM format",
@@ -227,12 +239,13 @@ for (i=0; i<softwareCount; ++i)
 /* Make step record. */
 dyStringClear(query);
 dyStringAppend(query,
-	"insert eapStep (name,cpusRequested,"
+	"insert eapStep (name,cpusRequested,description,"
         " inCount,inputTypes,inputFormats,inputDescriptions,"
 	" outCount,outputNamesInTempDir,outputTypes,outputFormats,outputDescriptions)"
 	" values (");
 dyStringPrintf(query, "'%s',", init->name);
 dyStringPrintf(query, "%d,", init->cpusRequested);
+dyStringPrintf(query, "\"%s\",", init->description);
 dyStringPrintf(query, "%d,", inCount);
 dyStringPrintf(query, "'%s',", init->inputTypes);
 dyStringPrintf(query, "'%s',", init->inputFormats);
