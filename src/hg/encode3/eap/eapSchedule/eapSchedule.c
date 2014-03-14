@@ -929,6 +929,43 @@ scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(inFileIds), inFileIds, inTypes);
 }
 
+void scheduleDnaseStats(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
+/* Calculate dnase qa stats on a bam file we hope will be peaky. */
+{
+verbose(2, "Scheduling dnaseStats\n");
+/* Make sure that we don't schedule it again and again */
+char *analysisStep = "dnase_stats";
+struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+if (!endsWith(vf->ucscDb, "hg19")) return;    // ugly temp
+if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
+    return;
+
+/* Figure out read length */
+int readLength = getReadLengthAndCheckForHotspot(conn, ef);
+if (readLength <= 0)
+    return;
+
+/* Make temp dir and stage input files */
+char *tempDir = newTempDir(analysisStep);
+struct cache *cache = cacheNew();
+char *efName = cacheMore(cache, ef);
+preloadCache(conn, cache);
+
+/* Make command line */
+char commandLine[3*PATH_LEN];
+safef(commandLine, sizeof(commandLine), "eap_dnase_stats %s %s %d %s%s %s%s %s%s",
+    efName, edwSimpleAssemblyName(assembly->name), readLength, 
+    tempDir, "bamStats.ra", tempDir, "phantomPeaks.tab", tempDir, "spot.ra");
+
+/* Declare step input arrays and schedule it. */
+unsigned inFileIds[] = {ef->id};
+char *inTypes[] = {"alignments"};
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
+    ArraySize(inFileIds), inFileIds, inTypes);
+}
+
+
 void scheduleBamSort(struct sqlConnection *conn, 
     struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
 /* Look to see if a bam is sorted, and if not, then produce a sorted version of it */
@@ -997,11 +1034,12 @@ if (sameString(exp->dataType, "DNase-seq"))
     scheduleMacsDnase(conn, ef, vf, exp);
     scheduleHotspot(conn, ef, vf, exp);
     schedulePhantomPeakSpp(conn, ef, vf, exp);
+    scheduleDnaseStats(conn, ef, vf, exp);
     }
 else if (sameString(exp->dataType, "ChIP-seq"))
     {
-#ifdef SOON
     scheduleMacsChip(conn, ef, vf, exp);
+#ifdef SOON
 #endif /* SOON */
     }
 }
@@ -1163,59 +1201,6 @@ for (ef = efList; ef != NULL; ef = ef->next)
     }
 edwQaEnrichTargetFree(&target);
 return bestEf;
-}
-
-void scheduleReplicatedPeaks(struct sqlConnection *conn, char *peakType, 
-    struct edwExperiment *exp,  struct edwValidFile *youngestVf, struct edwFile *pool)
-/* Schedule job that produces replicated peaks out of individual peaks from two replicates. */
-{
-/* Figure out which step running based on peakType */
-char *analysisStep = NULL;
-char *outFileName = NULL;
-if (sameString(peakType, "narrowPeak"))
-    {
-    analysisStep = "replicated_narrow_peaks";
-    outFileName= "out.narrowPeak.bigBed";
-    }
-else
-    {
-    analysisStep = "replicated_broad_peaks";
-    outFileName= "out.broadPeak.bigBed";
-    }
-
-
-/* Get assembly and figure out if we are already done */
-struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, youngestVf->ucscDb);
-if (alreadyTakenCareOf(conn, assembly, analysisStep, youngestVf->fileId))
-    return;
-verbose(2, "Theoretically I'd be making replicated peaks in %s on file %u=%u\n", 
-    exp->accession, pool->id, youngestVf->fileId);
-
-/* We always take the most recent replicate. Choose best remaining rep by some measure for second */
-struct edwFile *ef1 = pool;
-struct edwFile *ef2 = bestRepOnList(conn, youngestVf->replicate, pool->next);
-if (ef2 == NULL)
-    return;
-
-/* Grab temp dir */
-char *tempDir = newTempDir(analysisStep);
-
-/* Stage inputs and make command line. */
-struct cache *cache = cacheNew();
-char *ef1Name = cacheMore(cache, ef1);
-char *ef2Name = cacheMore(cache, ef2);
-preloadCache(conn, cache);
-char commandLine[4*PATH_LEN];
-safef(commandLine, sizeof(commandLine), 
-    "eap_%s %s %s %s %s%s", 
-    analysisStep, assembly->name, ef1Name, ef2Name, tempDir, outFileName);
-
-/* Make up eapRun record and schedule it*/
-unsigned inFileIds[2] = {ef1->id, ef2->id};
-char *inTypes[2] = {"peaks1", "peaks2"};
-scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
-    ArraySize(inFileIds), inFileIds, inTypes);
-
 }
 
 void replicaPeakAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
