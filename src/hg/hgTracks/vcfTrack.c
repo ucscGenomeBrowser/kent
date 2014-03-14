@@ -12,6 +12,9 @@
 #include "trashDir.h"
 #include "vcf.h"
 #include "vcfUi.h"
+#include "knetUdc.h"
+#include "udc.h"
+
 
 static boolean getMinQual(struct trackDb *tdb, double *retMinQual)
 /* Return TRUE and set retMinQual if cart contains minimum QUAL filter */
@@ -1132,11 +1135,6 @@ pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, psvs->vcfEnd,
 
 #ifdef USE_TABIX
 
-#ifdef KNETFILE_HOOKS
-#include "knetUdc.h"
-#include "udc.h"
-#endif//def KNETFILE_HOOKS
-
 static void vcfTabixLoadItems(struct track *tg)
 /* Load items in window from VCF file using its tabix index file. */
 {
@@ -1193,9 +1191,7 @@ errCatchFree(&errCatch);
 void vcfTabixMethods(struct track *track)
 /* Methods for VCF + tabix files. */
 {
-#ifdef KNETFILE_HOOKS
 knetUdcInstall();
-#endif
 pgSnpMethods(track);
 track->mapItem = indelTweakMapItem;
 // Disinherit next/prev flag and methods since we don't support next/prev:

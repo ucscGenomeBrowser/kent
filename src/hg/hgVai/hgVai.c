@@ -1957,9 +1957,7 @@ if (isEmpty(cartOptionalString(cart, hgvaRange)))
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 knetUdcInstall();
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 initGroupsTracksTables(cart, &fullTrackList, &fullGroupList);
 if (lookupPosition(cart, hgvaRange))

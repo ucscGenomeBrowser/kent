@@ -208,10 +208,10 @@ lf->buf = s;
 return lf;
 }
 
-#if (defined USE_SAMTABIX || (defined USE_TABIX && !defined KNETFILE_HOOKS))
+#if (defined USE_TABIX && defined KNETFILE_HOOKS && !defined USE_SAMTABIX)
 // UCSC aliases for backwards compatibility with independently patched & linked samtools and tabix:
-#define ti_bgzf_tell bgzf_tell
-#define ti_bgzf_read bgzf_read
+#define bgzf_tell ti_bgzf_tell
+#define bgzf_read ti_bgzf_read
 #endif
 
 struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
@@ -276,7 +276,7 @@ if (iter == NULL)
 if (lf->tabixIter != NULL)
     ti_iter_destroy(lf->tabixIter);
 lf->tabixIter = iter;
-lf->bufOffsetInFile = ti_bgzf_tell(lf->tabix->fp);
+lf->bufOffsetInFile = bgzf_tell(lf->tabix->fp);
 lf->bytesInBuf = 0;
 lf->lineIx = -1;
 lf->lineStart = 0;
@@ -556,7 +556,7 @@ while (!gotLf)
 #ifdef USE_TABIX
     else if (lf->tabix != NULL && readSize > 0)
 	{
-	readSize = ti_bgzf_read(lf->tabix->fp, buf+sizeLeft, readSize);
+	readSize = bgzf_read(lf->tabix->fp, buf+sizeLeft, readSize);
 	if (readSize < 1)
 	    return FALSE;
 	}
