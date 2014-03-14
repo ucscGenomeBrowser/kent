@@ -12,6 +12,8 @@ The C code is
 	eapUpdateSoftware - Tell system about a new version of software
 	eapAddStep - add a new analysis step (something that processes files and generally
 	             creates other files, though there are also 'statistics only' steps.
+	eapMetaSync - still in development but meant to turn eap objects into JSON that gets
+	              sent to the metadatabase which responds with metaUuid we store in tables.
 There's also a few temporary programs:
 	eapRunAddJson - Creates JSON for ENCODED at Stanford, so that database can also
 	             track file relationships and steps.   This was just a second draft.
@@ -30,7 +32,8 @@ The overall process for making a new analysis is:
    on hgwdev and encode-02
 6) Edit eapSchedule.c to tell system in what circumstances to run the step.
 7) Schedule step on somewhere between 1 and 10 files using eapSchedule on encode-02
-8) Examine output directory in eapRun.tempDir and make sure it looks good.
+8) Examine output directory in eapRun.tempDir and make sure it looks good.  It will be a subdir of
+   /hive/groups/encode/encode3/encodeAnalysisPipeline/tmp that starts with the step name.
 9) Edit eapFinish.c to tell system how to store results.
 10) Run eapFinish with -noClean flag (so you get a chance to correct bugs before it 
     deletes the directory).
