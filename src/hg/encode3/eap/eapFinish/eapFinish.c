@@ -7,8 +7,10 @@
 #include "options.h"
 #include "portable.h"
 #include "cheapcgi.h"
+#include "errCatch.h"
 #include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
 #include "../../encodeDataWarehouse/inc/edwLib.h"
+#include "../../encodeDataWarehouse/inc/edwQaWigSpotFromRa.h"
 #include "encode3/encode3Valid.h"
 #include "eapDb.h"
 #include "eapLib.h"
@@ -338,8 +340,7 @@ struct lineFile *lf = lineFileOpen(path, TRUE);
 char *row[EAPPHANTOMPEAKSTATS_NUM_COLS];
 if (!lineFileRow(lf, row))
     {
-    warn("Empty output %s on phantomPeakStats", path);
-    conditionalFail(conn, run);
+    errAbort("Empty output %s on phantomPeakStats", path);
     }
 
 /* Replace first column with file ID */
@@ -355,15 +356,87 @@ eapPhantomPeakStatsStaticLoad(row, &stats);
 eapPhantomPeakStatsSaveToDb(conn, &stats, "eapPhantomPeakStats", 512);
 }
 
+void absorbDnaseStats(struct sqlConnection *conn, 
+    struct eapStep *step, struct eapRun *run, struct eapJob *job, struct edwFile *inList)
+/* Absorb any statistical output from phantompeaks/run_spp */ 
+{
+/* Make sure we have expected single input. */
+assert(slCount(inList) == 1);
+struct edwFile *ef = inList;
+
+/* This routine builds up the stats5 structure below and saves it to database. */
+struct edwQaDnaseSingleStats5m stats5 = {.next=NULL, .fileId=ef->id};
+
+/* Get path of spot.ra file  and load it. */
+char spotPath[PATH_LEN];
+safef(spotPath, sizeof(spotPath), "%s%s", run->tempDir, "spot.ra");
+struct edwQaWigSpot *spot = edwQaWigSpotOneFromRa(spotPath);
+
+/* Transfer spot data into stats5 */
+stats5.spotRatio = spot->spotRatio;
+stats5.enrichment = spot->enrichment;
+stats5.basesInGenome = spot->basesInGenome;
+stats5.basesInSpots = spot->basesInSpots;
+stats5.sumSignal = spot->sumSignal;
+stats5.spotSumSignal = spot->spotSumSignal;
+
+/* Get path of phantomPeaks.tab file  */
+char ppsPath[PATH_LEN];
+safef(ppsPath, sizeof(ppsPath), "%s%s", run->tempDir, "phantomPeaks.tab");
+
+/* Read in first row of file */
+struct lineFile *lf = lineFileOpen(ppsPath, TRUE);
+char *row[EAPPHANTOMPEAKSTATS_NUM_COLS];
+if (!lineFileRow(lf, row))
+    errAbort("Empty output %s in absorbDnaseStats", ppsPath);
+
+/* Replace first column with 0 since it needs to be an int for fileId, not fileName. */
+row[0] = "0";
+
+/* Load phantom peaks data structure */
+struct eapPhantomPeakStats pps;
+eapPhantomPeakStatsStaticLoad(row, &pps);
+
+
+/* Transfer phantomPeak info to stats5. */
+stats5.sampleReads = pps.numReads;
+stats5.estFragLength = pps.estFragLength;
+stats5.corrEstFragLen= pps.corrEstFragLen;
+stats5.phantomPeak = pps.phantomPeak;
+stats5.corrPhantomPeak = pps.corrPhantomPeak;
+stats5.argMinCorr = pps.argMinCorr;
+stats5.minCorr = pps.minCorr;
+stats5.nsc = pps.nsc;
+stats5.rsc = pps.rsc;
+stats5.rscQualityTag = pps.qualityTag;
+ 
+/* Save to database */
+edwQaDnaseSingleStats5mSaveToDb(conn, &stats5, "edwQaDnaseSingleStats5m", 512);
+}
+
 void absorbStats(struct sqlConnection *conn, 
     struct eapStep *step, struct eapRun *run, struct eapJob *job, struct edwFile *inList)
 /* Absorb any statistical output files left by run into database */
 {
 /* This routine is just a dispatch based on step type.  Most steps do not produce
  * statistical output */
-char *stepName = step->name;
-if (sameString(stepName, "phantom_peak_stats"))
-    absorbPhantomPeakStats(conn, step, run, job, inList);
+
+/* Wrap in error collection */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    char *stepName = step->name;
+    if (sameString(stepName, "phantom_peak_stats"))
+	absorbPhantomPeakStats(conn, step, run, job, inList);
+    else if (sameString(stepName, "dnase_stats"))
+	absorbDnaseStats(conn, step, run, job, inList);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    conditionalFail(conn, run);
+    }
+errCatchFree(&errCatch);
 }
 
 void finishGoodRun(struct sqlConnection *conn, struct eapRun *run, 
