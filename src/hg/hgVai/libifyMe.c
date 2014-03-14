@@ -460,7 +460,7 @@ else
     struct annoStreamer *streamer = streamerFromTrack(assembly, dbTable, tdb, chrom, maxOutRows);
     if (primaryAsObj != NULL &&
 	(asObjectsMatch(primaryAsObj, pgSnpAsObj()) || asObjectsMatch(primaryAsObj, vcfAsObj()))
-	&& asObjectsMatchFirstN(streamer->asObj, genePredAsObj(), 10))
+	&& asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10))
 	grator = annoGratorGpVarNew(streamer);
     else
 	grator = annoGratorNew(streamer);

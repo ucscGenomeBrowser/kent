@@ -4,5 +4,5 @@ CREATE TABLE spOldNew (
   oldDisplayId varchar(40) NOT NULL default '', # old display ID
   newDisplayId varchar(40) NOT NULL default '', # new dipslay ID
   KEY acc(acc)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
