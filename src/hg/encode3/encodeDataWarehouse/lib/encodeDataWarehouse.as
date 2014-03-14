@@ -337,6 +337,29 @@ table edwQaWigSpot
     double spotSumSignal; "Total signal in spots"
     )
 
+table edwQaDnaseSingleStats5m
+"Statistics calculated based on a 5M sample of DNAse aligned reads from a bam file."
+    (
+    uint id primary auto;  "Id of this row in table."
+    uint fileId index;	"Id of bam file this is calculated from"
+    uint sampleReads;  "Number of mapped reads "
+    double spotRatio; "Ratio of signal in spots to total signal,  between 0 and 1"
+    double enrichment;	"Enrichment in spots compared to genome overall"
+    bigInt basesInGenome; "Number of bases in genome"
+    bigInt basesInSpots; "Number of bases in spots"
+    double sumSignal; "Total signal"
+    double spotSumSignal; "Total signal in spots"
+    string estFragLength; "Up to three comma separated strand cross-correlation peaks"
+    string corrEstFragLen; "Up to three cross strand correlations at the given peaks"
+    int phantomPeak;  "Read length/phantom peak strand shift"
+    double corrPhantomPeak; "Correlation value at phantom peak"
+    int argMinCorr; "strand shift at which cross-correlation is lowest"
+    double minCorr; "minimum value of cross-correlation"
+    double nsc; "Normalized strand cross-correlation coefficient (NSC) = corrEstFragLen/minCorr"
+    double rsc; "Relative strand cross-correlation coefficient (RSC)"
+    int rscQualityTag; "based on thresholded RSC (codes: -2:veryLow,-1:Low,0:Medium,1:High,2:veryHigh)"
+    )
+
 
 table edwJob
 "A job to be run asynchronously and not too many all at once."

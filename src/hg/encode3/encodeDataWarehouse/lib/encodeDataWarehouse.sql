@@ -406,6 +406,31 @@ CREATE TABLE edwQaWigSpot (
     INDEX(spotId)
 );
 
+#Statistics calculated based on a 5M sample of DNAse aligned reads from a bam file.
+CREATE TABLE edwQaDnaseSingleStats5m (
+    id int unsigned auto_increment,	# Id of this row in table.
+    fileId int unsigned default 0,	# Id of bam file this is calculated from
+    sampleReads int unsigned default 0,	# Number of mapped reads 
+    spotRatio double default 0,	# Ratio of signal in spots to total signal,  between 0 and 1
+    enrichment double default 0,	# Enrichment in spots compared to genome overall
+    basesInGenome bigint default 0,	# Number of bases in genome
+    basesInSpots bigint default 0,	# Number of bases in spots
+    sumSignal double default 0,	# Total signal
+    spotSumSignal double default 0,	# Total signal in spots
+    estFragLength varchar(255) default '',	# Up to three comma separated strand cross-correlation peaks
+    corrEstFragLen varchar(255) default '',	# Up to three cross strand correlations at the given peaks
+    phantomPeak int default 0,	# Read length/phantom peak strand shift
+    corrPhantomPeak double default 0,	# Correlation value at phantom peak
+    argMinCorr int default 0,	# strand shift at which cross-correlation is lowest
+    minCorr double default 0,	# minimum value of cross-correlation
+    nsc double default 0,	# Normalized strand cross-correlation coefficient (NSC) = corrEstFragLen/minCorr
+    rsc double default 0,	# Relative strand cross-correlation coefficient (RSC)
+    rscQualityTag int default 0,	# based on thresholded RSC (codes: -2:veryLow,-1:Low,0:Medium,1:High,2:veryHigh)
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(fileId)
+);
+
 #A job to be run asynchronously and not too many all at once.
 CREATE TABLE edwJob (
     id int unsigned auto_increment,	# Job id

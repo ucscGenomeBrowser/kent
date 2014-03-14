@@ -1780,6 +1780,89 @@ void edwQaWigSpotOutput(struct edwQaWigSpot *el, FILE *f, char sep, char lastSep
 #define edwQaWigSpotCommaOut(el,f) edwQaWigSpotOutput(el,f,',',',');
 /* Print out edwQaWigSpot as a comma separated list including final comma. */
 
+#define EDWQADNASESINGLESTATS5M_NUM_COLS 18
+
+extern char *edwQaDnaseSingleStats5mCommaSepFieldNames;
+
+struct edwQaDnaseSingleStats5m
+/* Statistics calculated based on a 5M sample of DNAse aligned reads from a bam file. */
+    {
+    struct edwQaDnaseSingleStats5m *next;  /* Next in singly linked list. */
+    unsigned id;	/* Id of this row in table. */
+    unsigned fileId;	/* Id of bam file this is calculated from */
+    unsigned sampleReads;	/* Number of mapped reads  */
+    double spotRatio;	/* Ratio of signal in spots to total signal,  between 0 and 1 */
+    double enrichment;	/* Enrichment in spots compared to genome overall */
+    long long basesInGenome;	/* Number of bases in genome */
+    long long basesInSpots;	/* Number of bases in spots */
+    double sumSignal;	/* Total signal */
+    double spotSumSignal;	/* Total signal in spots */
+    char *estFragLength;	/* Up to three comma separated strand cross-correlation peaks */
+    char *corrEstFragLen;	/* Up to three cross strand correlations at the given peaks */
+    int phantomPeak;	/* Read length/phantom peak strand shift */
+    double corrPhantomPeak;	/* Correlation value at phantom peak */
+    int argMinCorr;	/* strand shift at which cross-correlation is lowest */
+    double minCorr;	/* minimum value of cross-correlation */
+    double nsc;	/* Normalized strand cross-correlation coefficient (NSC) = corrEstFragLen/minCorr */
+    double rsc;	/* Relative strand cross-correlation coefficient (RSC) */
+    int rscQualityTag;	/* based on thresholded RSC (codes: -2:veryLow,-1:Low,0:Medium,1:High,2:veryHigh) */
+    };
+
+void edwQaDnaseSingleStats5mStaticLoad(char **row, struct edwQaDnaseSingleStats5m *ret);
+/* Load a row from edwQaDnaseSingleStats5m table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwQaDnaseSingleStats5m *edwQaDnaseSingleStats5mLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwQaDnaseSingleStats5m from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaDnaseSingleStats5mFreeList(). */
+
+void edwQaDnaseSingleStats5mSaveToDb(struct sqlConnection *conn, struct edwQaDnaseSingleStats5m *el, char *tableName, int updateSize);
+/* Save edwQaDnaseSingleStats5m as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct edwQaDnaseSingleStats5m *edwQaDnaseSingleStats5mLoad(char **row);
+/* Load a edwQaDnaseSingleStats5m from row fetched with select * from edwQaDnaseSingleStats5m
+ * from database.  Dispose of this with edwQaDnaseSingleStats5mFree(). */
+
+struct edwQaDnaseSingleStats5m *edwQaDnaseSingleStats5mLoadAll(char *fileName);
+/* Load all edwQaDnaseSingleStats5m from whitespace-separated file.
+ * Dispose of this with edwQaDnaseSingleStats5mFreeList(). */
+
+struct edwQaDnaseSingleStats5m *edwQaDnaseSingleStats5mLoadAllByChar(char *fileName, char chopper);
+/* Load all edwQaDnaseSingleStats5m from chopper separated file.
+ * Dispose of this with edwQaDnaseSingleStats5mFreeList(). */
+
+#define edwQaDnaseSingleStats5mLoadAllByTab(a) edwQaDnaseSingleStats5mLoadAllByChar(a, '\t');
+/* Load all edwQaDnaseSingleStats5m from tab separated file.
+ * Dispose of this with edwQaDnaseSingleStats5mFreeList(). */
+
+struct edwQaDnaseSingleStats5m *edwQaDnaseSingleStats5mCommaIn(char **pS, struct edwQaDnaseSingleStats5m *ret);
+/* Create a edwQaDnaseSingleStats5m out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaDnaseSingleStats5m */
+
+void edwQaDnaseSingleStats5mFree(struct edwQaDnaseSingleStats5m **pEl);
+/* Free a single dynamically allocated edwQaDnaseSingleStats5m such as created
+ * with edwQaDnaseSingleStats5mLoad(). */
+
+void edwQaDnaseSingleStats5mFreeList(struct edwQaDnaseSingleStats5m **pList);
+/* Free a list of dynamically allocated edwQaDnaseSingleStats5m's */
+
+void edwQaDnaseSingleStats5mOutput(struct edwQaDnaseSingleStats5m *el, FILE *f, char sep, char lastSep);
+/* Print out edwQaDnaseSingleStats5m.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwQaDnaseSingleStats5mTabOut(el,f) edwQaDnaseSingleStats5mOutput(el,f,'\t','\n');
+/* Print out edwQaDnaseSingleStats5m as a line in a tab-separated file. */
+
+#define edwQaDnaseSingleStats5mCommaOut(el,f) edwQaDnaseSingleStats5mOutput(el,f,',',',');
+/* Print out edwQaDnaseSingleStats5m as a comma separated list including final comma. */
+
 #define EDWJOB_NUM_COLS 7
 
 extern char *edwJobCommaSepFieldNames;

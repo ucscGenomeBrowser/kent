@@ -4565,6 +4565,235 @@ fputc(lastSep,f);
 }
 
 
+char *edwQaDnaseSingleStats5mCommaSepFieldNames = "id,fileId,sampleReads,spotRatio,enrichment,basesInGenome,basesInSpots,sumSignal,spotSumSignal,estFragLength,corrEstFragLen,phantomPeak,corrPhantomPeak,argMinCorr,minCorr,nsc,rsc,rscQualityTag";
+
+void edwQaDnaseSingleStats5mStaticLoad(char **row, struct edwQaDnaseSingleStats5m *ret)
+/* Load a row from edwQaDnaseSingleStats5m table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->sampleReads = sqlUnsigned(row[2]);
+ret->spotRatio = sqlDouble(row[3]);
+ret->enrichment = sqlDouble(row[4]);
+ret->basesInGenome = sqlLongLong(row[5]);
+ret->basesInSpots = sqlLongLong(row[6]);
+ret->sumSignal = sqlDouble(row[7]);
+ret->spotSumSignal = sqlDouble(row[8]);
+ret->estFragLength = row[9];
+ret->corrEstFragLen = row[10];
+ret->phantomPeak = sqlSigned(row[11]);
+ret->corrPhantomPeak = sqlDouble(row[12]);
+ret->argMinCorr = sqlSigned(row[13]);
+ret->minCorr = sqlDouble(row[14]);
+ret->nsc = sqlDouble(row[15]);
+ret->rsc = sqlDouble(row[16]);
+ret->rscQualityTag = sqlSigned(row[17]);
+}
+
+struct edwQaDnaseSingleStats5m *edwQaDnaseSingleStats5mLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwQaDnaseSingleStats5m from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaDnaseSingleStats5mFreeList(). */
+{
+struct edwQaDnaseSingleStats5m *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwQaDnaseSingleStats5mLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwQaDnaseSingleStats5mSaveToDb(struct sqlConnection *conn, struct edwQaDnaseSingleStats5m *el, char *tableName, int updateSize)
+/* Save edwQaDnaseSingleStats5m as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%lld,%lld,%g,%g,'%s','%s',%d,%g,%d,%g,%g,%g,%d)", 
+	tableName,  el->id,  el->fileId,  el->sampleReads,  el->spotRatio,  el->enrichment,  el->basesInGenome,  el->basesInSpots,  el->sumSignal,  el->spotSumSignal,  el->estFragLength,  el->corrEstFragLen,  el->phantomPeak,  el->corrPhantomPeak,  el->argMinCorr,  el->minCorr,  el->nsc,  el->rsc,  el->rscQualityTag);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct edwQaDnaseSingleStats5m *edwQaDnaseSingleStats5mLoad(char **row)
+/* Load a edwQaDnaseSingleStats5m from row fetched with select * from edwQaDnaseSingleStats5m
+ * from database.  Dispose of this with edwQaDnaseSingleStats5mFree(). */
+{
+struct edwQaDnaseSingleStats5m *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->sampleReads = sqlUnsigned(row[2]);
+ret->spotRatio = sqlDouble(row[3]);
+ret->enrichment = sqlDouble(row[4]);
+ret->basesInGenome = sqlLongLong(row[5]);
+ret->basesInSpots = sqlLongLong(row[6]);
+ret->sumSignal = sqlDouble(row[7]);
+ret->spotSumSignal = sqlDouble(row[8]);
+ret->estFragLength = cloneString(row[9]);
+ret->corrEstFragLen = cloneString(row[10]);
+ret->phantomPeak = sqlSigned(row[11]);
+ret->corrPhantomPeak = sqlDouble(row[12]);
+ret->argMinCorr = sqlSigned(row[13]);
+ret->minCorr = sqlDouble(row[14]);
+ret->nsc = sqlDouble(row[15]);
+ret->rsc = sqlDouble(row[16]);
+ret->rscQualityTag = sqlSigned(row[17]);
+return ret;
+}
+
+struct edwQaDnaseSingleStats5m *edwQaDnaseSingleStats5mLoadAll(char *fileName) 
+/* Load all edwQaDnaseSingleStats5m from a whitespace-separated file.
+ * Dispose of this with edwQaDnaseSingleStats5mFreeList(). */
+{
+struct edwQaDnaseSingleStats5m *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[18];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwQaDnaseSingleStats5mLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaDnaseSingleStats5m *edwQaDnaseSingleStats5mLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwQaDnaseSingleStats5m from a chopper separated file.
+ * Dispose of this with edwQaDnaseSingleStats5mFreeList(). */
+{
+struct edwQaDnaseSingleStats5m *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[18];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwQaDnaseSingleStats5mLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaDnaseSingleStats5m *edwQaDnaseSingleStats5mCommaIn(char **pS, struct edwQaDnaseSingleStats5m *ret)
+/* Create a edwQaDnaseSingleStats5m out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaDnaseSingleStats5m */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->fileId = sqlUnsignedComma(&s);
+ret->sampleReads = sqlUnsignedComma(&s);
+ret->spotRatio = sqlDoubleComma(&s);
+ret->enrichment = sqlDoubleComma(&s);
+ret->basesInGenome = sqlLongLongComma(&s);
+ret->basesInSpots = sqlLongLongComma(&s);
+ret->sumSignal = sqlDoubleComma(&s);
+ret->spotSumSignal = sqlDoubleComma(&s);
+ret->estFragLength = sqlStringComma(&s);
+ret->corrEstFragLen = sqlStringComma(&s);
+ret->phantomPeak = sqlSignedComma(&s);
+ret->corrPhantomPeak = sqlDoubleComma(&s);
+ret->argMinCorr = sqlSignedComma(&s);
+ret->minCorr = sqlDoubleComma(&s);
+ret->nsc = sqlDoubleComma(&s);
+ret->rsc = sqlDoubleComma(&s);
+ret->rscQualityTag = sqlSignedComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwQaDnaseSingleStats5mFree(struct edwQaDnaseSingleStats5m **pEl)
+/* Free a single dynamically allocated edwQaDnaseSingleStats5m such as created
+ * with edwQaDnaseSingleStats5mLoad(). */
+{
+struct edwQaDnaseSingleStats5m *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->estFragLength);
+freeMem(el->corrEstFragLen);
+freez(pEl);
+}
+
+void edwQaDnaseSingleStats5mFreeList(struct edwQaDnaseSingleStats5m **pList)
+/* Free a list of dynamically allocated edwQaDnaseSingleStats5m's */
+{
+struct edwQaDnaseSingleStats5m *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwQaDnaseSingleStats5mFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwQaDnaseSingleStats5mOutput(struct edwQaDnaseSingleStats5m *el, FILE *f, char sep, char lastSep) 
+/* Print out edwQaDnaseSingleStats5m.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->fileId);
+fputc(sep,f);
+fprintf(f, "%u", el->sampleReads);
+fputc(sep,f);
+fprintf(f, "%g", el->spotRatio);
+fputc(sep,f);
+fprintf(f, "%g", el->enrichment);
+fputc(sep,f);
+fprintf(f, "%lld", el->basesInGenome);
+fputc(sep,f);
+fprintf(f, "%lld", el->basesInSpots);
+fputc(sep,f);
+fprintf(f, "%g", el->sumSignal);
+fputc(sep,f);
+fprintf(f, "%g", el->spotSumSignal);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->estFragLength);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->corrEstFragLen);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->phantomPeak);
+fputc(sep,f);
+fprintf(f, "%g", el->corrPhantomPeak);
+fputc(sep,f);
+fprintf(f, "%d", el->argMinCorr);
+fputc(sep,f);
+fprintf(f, "%g", el->minCorr);
+fputc(sep,f);
+fprintf(f, "%g", el->nsc);
+fputc(sep,f);
+fprintf(f, "%g", el->rsc);
+fputc(sep,f);
+fprintf(f, "%d", el->rscQualityTag);
+fputc(lastSep,f);
+}
+
+
 char *edwJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode,pid";
 
 void edwJobStaticLoad(char **row, struct edwJob *ret)
