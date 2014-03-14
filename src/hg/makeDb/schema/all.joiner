@@ -3988,16 +3988,16 @@ identifier lrgTranscriptId
 
 identifier txnFactorGeneId
 "Transcription factor gene name (for human, HGNC)"
-    hg19.wgEncodeRegTfbsClusteredV3.name
+    hg19.wgEncodeRegTfbsClusteredV3.name dupeOk
     # note: these could be in hgFixed or other non-assembly db
-    hg19.factorbookMotifTarget.target
-    hg19.factorbookGeneAlias.name
+    hg19.factorbookMotifCanonical.target
+    hg19.factorbookGeneAlias.name minCheck=0.85
 
 identifier txnFactorMotifId
 "Transcription factor motif name/id"
-    hg19.factorbookMotifPos.name
-    hg19.factorbookMotifPwm.name
-    hg19.factorbookMotifTarget.motif comma
+    hg19.factorbookMotifPos.name dupeOk
+    hg19.factorbookMotifPwm.name minCheck=0.85
+    hg19.factorbookMotifCanonical.motif comma minCheck=0.85
 
 
 # Dependencies not already captured in identifiers
