@@ -699,6 +699,7 @@ void indelEnabled(struct cart *cart, struct trackDb *tdb, float basesPerPixel,
 #define ZOOM_1PT5X      "1.5x"
 #define ZOOM_3X         "3x"
 #define ZOOM_10X        "10x"
+#define ZOOM_100X       "100x"
 #define ZOOM_BASE       "base"
 
 void zoomRadioButtons(char *var, char *curVal);

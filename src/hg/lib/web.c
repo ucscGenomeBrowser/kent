@@ -15,20 +15,16 @@
 #include "hgColors.h"
 #include "hubConnect.h"
 #include "search.h"
+#include "geoMirror.h"
+#include "trackHub.h"
+#include "versionInfo.h"
+
 #ifndef GBROWSE
 #include "axtInfo.h"
 #include "wikiLink.h"
 #include "googleAnalytics.h"
 #include "jsHelper.h"
 #endif /* GBROWSE */
-/* phoneHome business */
-#include <utime.h>
-#include <htmlPage.h>
-#include <signal.h>
-#include "geoMirror.h"
-#include <regex.h>
-#include "trackHub.h"
-/* phoneHome business */
 
 
 /* flag that tell if the CGI header has already been outputed */
@@ -115,7 +111,7 @@ if (theCart)
     getDbAndGenome(theCart, &db, &theGenome, NULL);
     genomeEnc = cgiEncode(theGenome);
 
-    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u",
+    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%s",
 	     orgCgiName, genomeEnc,
 	     dbCgiName, db,
 	     cartSessionVarName(), cartSessionId(theCart));
@@ -808,121 +804,6 @@ if (differentWord(genome, hGenome(retDb)))
 return retDb;
 }
 
-static unsigned long expireSeconds = 0;
-static boolean lazarus = FALSE;
-void lazarusLives(unsigned long newExpireSeconds)
-/* Long running process requests more time */
-{
-lazarus = TRUE;
-expireSeconds = newExpireSeconds;
-}
-
-/* phoneHome business */
-static void cgiApoptosis(int status)
-/* signal handler for SIGALRM for phoneHome function and CGI expiration */
-{
-if (lazarus)
-    {
-    (void) alarm(expireSeconds);    /* CGI timeout */
-    lazarus = FALSE;
-    return;
-    }
-if (expireSeconds > 0)
-    {
-    /* want to see this error message in the apache error_log also */
-    fprintf(stderr, "cgiApoptosis: %lu seconds\n", expireSeconds);
-    /* most of our CGIs post a polite non-fatal message with this errAbort */
-    errAbort("procedures have exceeded timeout: %lu seconds, function has ended.\n", expireSeconds);
-    }
-exit(0);
-}
-
-static void phoneHome()
-{
-static boolean beenHere = FALSE;
-if (beenHere)  /* one at a time please */
-    return;
-beenHere = TRUE;
-
-char *expireTime = cfgOptionDefault("browser.cgiExpireMinutes", "20");
-unsigned expireMinutes = sqlUnsigned(expireTime);
-expireSeconds = expireMinutes * 60;
-
-char trashFile[PATH_LEN];
-safef(trashFile, sizeof(trashFile), "%s/registration.txt", trashDir());
-
-/* trashFile does not exist during command line execution */
-if(fileExists(trashFile))	/* update access time for trashFile */
-    {
-    struct utimbuf ut;
-    struct stat mystat;
-    ZeroVar(&mystat);
-    if (stat(trashFile,&mystat)==0)
-	{
-	ut.actime = clock1();
-	ut.modtime = mystat.st_mtime;
-	}
-    else
-	{
-	ut.actime = ut.modtime = clock1();
-	}
-    (void) utime(trashFile, &ut);
-    if (expireSeconds > 0)
-	{
-	(void) signal(SIGALRM, cgiApoptosis);
-	(void) alarm(expireSeconds);	/* CGI timeout */
-	}
-    return;
-    }
-
-char *scriptName = cgiScriptName();
-char *ip = getenv("SERVER_ADDR");
-if (scriptName && ip)  /* will not be true from command line execution */
-    {
-    FILE *f = fopen(trashFile, "w");
-    if (f)		/* rigamarole only if we can get a trash file */
-	{
-	time_t now = time(NULL);
-	char *localTime;
-	extern char *tzname[2];
-	struct tm *tm = localtime(&now);
-	localTime = sqlUnixTimeToDate(&now,FALSE); /* FALSE == localtime */
-	fprintf(f, "%s, %s, %s %s, %s\n", scriptName, ip, localTime,
-	    tm->tm_isdst ? tzname[1] : tzname[0], trashFile);
-	fclose(f);
-	chmod(trashFile, 0666);
-	pid_t pid0 = fork();
-	if (0 == pid0)	/* in child */
-	    {
-	    close(STDOUT_FILENO); /* do not hang up Apache finish for parent */
-	    expireSeconds = 0;	/* no error message from this exit */
-	    (void) signal(SIGALRM, cgiApoptosis);
-	    (void) alarm(6);	/* timeout here in 6 seconds */
-#include "versionInfo.h"
-	    char url[1024];
-            char *browserName = "browser.v";
-            if (hHostHasPrefix("browserbox"))
-                browserName = "browserBox.v";
-
-	    safef(url, sizeof(url), "%s%s%s%s%s%s%s", "http://",
-	"genomewiki.", "ucsc.edu/", "cgi-bin/useCount?", "version=", browserName,
-		CGI_VERSION);
-
-	    /* 6 second alarm will exit this page fetch if it does not work */
-	    (void) htmlPageGetWithCookies(url, NULL); /* ignore return */
-
-	    exit(0);
-	    }	/* child of fork has done exit(0) normally or via alarm */
-	}		/* trash file open OK */
-    if (expireSeconds > 0)
-	{
-	(void) signal(SIGALRM, cgiApoptosis);
-	(void) alarm(expireSeconds);	/* CGI timeout */
-	}
-    }			/* an actual CGI binary */
-}			/* phoneHome()	*/
-/* phoneHome business */
-
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
 		      char **retClade, struct hash *oldVars)
 /* Examine CGI and cart variables to determine which db, genome, or clade
@@ -944,8 +825,6 @@ boolean gotClade = hGotClade();
 *retDb = cgiOptionalString(dbCgiName);
 *retGenome = cgiOptionalString(orgCgiName);
 *retClade = cgiOptionalString(cladeCgiName);
-/* phoneHome business */
-phoneHome();
 
 /* Was the database passed in as a cgi param?
  * If so, it takes precedence and determines the genome. */
@@ -1364,7 +1243,7 @@ regex_t re;
 regmatch_t match[2];
 char *scriptName = cgiScriptName();
 if (cart)
-    safef(uiVars, sizeof(uiVars), "%s=%u", cartSessionVarName(), cartSessionId(cart));
+    safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart));
 else
     uiVars[0] = 0;
 

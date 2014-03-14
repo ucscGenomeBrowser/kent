@@ -50,9 +50,39 @@ while (lineFileRow(lf, row))
     {
     char *composite = row[0];
     char *labName = row[1];
-   if (sameWord(labName, "n/a"))
+    if (sameWord(labName, "n/a"))
         continue;
+    /**************** Special Cases: ******************/
+    /* Skip a composite group when no file from       */
+    /* the group has been submitted, such as          */
+    /*   wgEncodeNhgriBip                             */ 
+    /*   wgEncodeRegTxn                               */
+    /*   wgEncodeRegTfbsClustered                     */
+    /*   wgEncodeRegDnaseClustered                    */
+    /*   wgEncodeAwgTfbsUniform                       */
+    if (sameWord(composite, "wgEncodeNhgriBip"))
+	continue;
+    if (sameWord(composite, "wgEncodeRegTxn"))
+        continue;
+    if (sameWord(composite, "wgEncodeRegTfbsClustered"))
+        continue;
+    if (sameWord(composite, "wgEncodeRegDnaseClustered"))
+        continue;
+    if (sameWord(composite, "wgEncodeAwgTfbsUniform"))
+        continue;
+    /* wgEncodeAwgDnaseUniform from UW or Duke only:  */
+    if (sameWord(composite, "wgEncodeAwgDnaseUniform")
+        && (!(sameWord(labName, "Duke") 
+	|| sameWord(labName, "UW"))))
+        continue;
+    /* No wgEncodeHaibTfbs file submitted from Caltech */
+    if (sameWord(composite, "wgEncodeHaibTfbs")
+        && sameWord(labName, "Caltech"))
+        continue;
+    /*                                                */ 
+    /**************************************************/
     hashAdd(grpLabHash, composite, cloneString(labName));
+    verbose(1, "Adding %s -- %s\n", composite, labName);
     }
 }
 
@@ -89,12 +119,9 @@ while (lineFileRow(lf, row))
     else
 	errAbort("Can't decide import date of %s submit date: %s, resubmitDate: %s dateUnrestricted: %s", object, dateSubmit, dateReSubmit, dateUnrestricted);
     hashAdd(labHash, object, cloneString(lab));
-//verbose(1,"   added lab %s to labHash\n", lab);
     hashAdd(dateHash, object, cloneString(dateImport));
-//verbose(1,"Set %s with lab to %s  import date to %s \n", object, lab, dateImport);
     }
 lineFileClose(&lf);
-//verbose(1, "Read %d from %s\n", labHash->elCount, fName);
 }
 
 void createLabUserHash(char *fName, struct hash *labUserHash)
@@ -158,9 +185,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
     name = hel->name;
     value = hel->val;
 
-//verbose(1, "Found %s -->  %s in %s grpLabHash\n", name, value, assembly);
     char *submitUserMail = hashMustFindVal(labUserHash, value);
-//verbose(1, "  found submitUserMail: %s\n", submitUserMail);
     char submitUserName[256];
     strcpy(submitUserName, submitUserMail);
     chopSuffixAt(submitUserName, '@');
@@ -178,12 +203,8 @@ for (hel = helList; hel != NULL; hel = hel->next)
 
     sqlSafef(query, sizeof(query),
 	"insert into edwSubmit (url,  userId) values (\"%s\",  %d)", url, user->id);
-    /* need to create real edwSubmit entries first before processing
- * edwFile !! */ 
-    /* done once */ sqlUpdate(conn, query);
-    /* not yet */ maybeDoUpdate(conn, query, really, f);
+    maybeDoUpdate(conn, query, really, f);
 
-//verbose(1,"Creating edwSubmit with: %s\n", query);
     }
 }
 
@@ -198,19 +219,66 @@ for (hel = helList; hel != NULL; hel = hel->next)
     {
     name = hel->name;
     labName = hel->val;
-//verbose(1, "processing %s -- %s\n", name, labName);
     /* get the submitId for this group */
-    //char url[512];
+    char subName[256];
+    char tName[256];
     char nameLike[512];
     char *percent = "%";
     safef(nameLike, sizeof(nameLike), "http://encodedcc.sdsc.edu/encode2/%s/%s/%s/users/%s", assembly, name, labName, percent);
     sqlSafef(query, sizeof(query), "select id from edwSubmit where url like '%s'", nameLike);
     int sId = sqlQuickNum(conn, query);
-//verbose(1, " sId of %s  -- %d from %s\n", name, sId, labName);
+    verbose(1, " sId of %s  -- %d from %s\n", name, sId, labName);
+    safef(subName, sizeof(subName), "%s", name);
 
-    safef(nameLike, sizeof(nameLike), "%s/%s/%s%s", assembly, name, name, percent);
+    /**************** Special Cases: ******************/
+    /*                                                */
+    /* Change wgEncodeAwgDnaseUniform to              */ 
+    /* wgEncodeAwgDnaseDuke% or wgEncodeAwgDnaseUw    */
+    if (sameWord(name,"wgEncodeAwgDnaseUniform") && sameWord(labName,"Duke"))
+	safef(subName, sizeof(subName), "wgEncodeAwgDnaseDuke");
+    if (sameWord(name,"wgEncodeAwgDnaseUniform") && sameWord(labName,"UW"))
+        safef(subName, sizeof(subName), "wgEncodeAwgDnaseUw");
+    /* Change wgEncodeMapability to                   */
+    /* wgEncodeCrgMapability, wgEncodeDacMapability,  */
+    /* or wgEncodeDukeMapability                      */
+    if (sameWord(name,"wgEncodeMapability") && 
+	(sameWord(labName,"CRG-Guigo") || sameWord(labName,"CRG-Guigo-m")))
+        safef(subName, sizeof(subName), "wgEncodeCrgMapability");
+    if (sameWord(name,"wgEncodeMapability") && sameWord(labName,"DAC-Stanford"))
+        safef(subName, sizeof(subName), "wgEncodeDacMapability");
+    if (sameWord(name,"wgEncodeMapability") && sameWord(labName,"Duke"))
+        safef(subName, sizeof(subName), "wgEncodeDukeMapability");
+    /* Change wgEncodeGencode to wgEncodeGencode%V% like */
+    /* wgEncodeGencode%V% for V7, V10, V11, and V12      */                     
+    if (startsWith("wgEncodeGencode", name))
+	{
+	safecpy(tName, sizeof(tName), name);
+        if (endsWith(tName,"V7")) 
+	    {
+	    chopPrefixAt(tName,'V');
+	    safef(subName, sizeof(subName), "%s%s",tName, "%V7");
+	    }
+        if (endsWith(tName,"V10"))
+            {
+            chopPrefixAt(tName,'V');
+            safef(subName, sizeof(subName), "%s%s",tName, "%V10");
+            }
+        if (endsWith(tName,"V11"))
+            {
+            chopPrefixAt(tName,'V');
+            safef(subName, sizeof(subName), "%s%s",tName, "%V11");
+            }
+        if (endsWith(tName,"V12"))
+            {
+            chopPrefixAt(tName,'V');
+            safef(subName, sizeof(subName), "%s%s",tName, "%V12");
+            }
+	}
+    /*                                                */
+    /**************************************************/
+
+    safef(nameLike, sizeof(nameLike), "%s/%s/%s%s", assembly, name, subName, percent);
     sqlSafef(query, sizeof(query), "select * from edwFile where SubmitFilename like '%s'", nameLike);
-//verbose(1,"%s\n", query);
     sr = sqlGetResult(conn, query);
     int nFile = 0;
     long long tSize = 0;
@@ -224,13 +292,10 @@ for (hel = helList; hel != NULL; hel = hel->next)
         {
         struct edwFile *edwfile = edwFileLoad(row);
         strcpy(pathName, edwfile->submitFileName);
-//verbose(1, " pathName was  %s\n", pathName);
         chopPrefixAt(pathName, '.');
-//verbose(1, "    chooped to  %s\n", pathName);
 	strcpy(baseName,(basename(pathName)));
 	/* skip the basename (subtrack) if it is not processed by this lab */
 	fromLab = hashMustFindVal(labHash, baseName);
-//verbose(1, "fromLab: %s   labName: %s baseName: %s \n", fromLab, labName, baseName);
 	if (!sameString(fromLab, labName)) 
 	    continue; 
 
@@ -238,11 +303,9 @@ for (hel = helList; hel != NULL; hel = hel->next)
         tSize += edwfile->size;
 	char *dateImport = hashMustFindVal(dateHash, baseName);
 	ulTime = dateToSeconds(dateImport, "%Y-%m-%d");
-//verbose(1, "  %s is  import on %s %lld\n", baseName, dateImport, ulTime);
        /* remnber the submitFileName */
         n = slNameNew(edwfile->submitFileName);
         slAddHead(&list, n);
-//verbose(1, "Add %s to edwFile list to be updatted\n", n->name);
         } /* end while result row */
 //verbose(1, "Total number of files: %d  total byte count %lld list count: %d\n", nFile, tSize, slCount(list));
     sqlFreeResult(&sr);
@@ -253,7 +316,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
         updateEdwSubmit(conn, sId, nFile, tSize, ulTime, f);
 	slFreeList(&list);
 	}
-    }/* for each compsite group */
+    } /* for each compsite group */
 }
 
 void edwFakeEncode2Submit(char *tsvLab, char *grpHg19, char *tsvHg19, char *grpMm9, char *tsvMm9,  char *outSql)

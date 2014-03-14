@@ -849,7 +849,7 @@ if (dy == NULL)
     {
     dy = newDyString(64);
     if (cart != NULL)
-	dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
+	dyStringPrintf(dy, "%s=%s", cartSessionVarName(), cartSessionId(cart));
     s = dy->string;
     }
 return s;

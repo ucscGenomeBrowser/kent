@@ -502,7 +502,7 @@ struct dyString *uiStateUrlPart(struct track *toggleGroup)
 {
 struct dyString *dy = newDyString(512);
 
-dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
+dyStringPrintf(dy, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 if (toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
     int vis = toggleGroup->visibility;
@@ -10107,7 +10107,9 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         }
     if (useAcc)
         dyStringAppend(name, lf->name);
-    lf->extra = dyStringCannibalize(&name);
+    if (dyStringLen(name))
+        lf->extra = dyStringCannibalize(&name);
+    dyStringFree(&name);
     }
 }
 

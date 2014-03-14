@@ -2503,7 +2503,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
            name2 field is populated with "noXref" because there is
            no alternate name. Replace this with "none" */
         printf("<b>Gene Symbol:");
-        if (sameString(gp->name2, "noXref"))
+        if ((strlen(gp->name2) < 1) || (sameString(gp->name2, "noXref")))
            printf("</b> none<br>\n");
         else
            printf("</b> %s<br>\n",gp->name2);
@@ -8437,7 +8437,7 @@ if (gpList && gpList->name2)
     if (gpList->cdsStart == gpList->cdsEnd)
 	nonCoding = TRUE;
     printf("<B>Ensembl Gene Link: </B>");
-    if (sameString(gpList->name2, "noXref"))
+    if ((strlen(gpList->name2) < 1) || sameString(gpList->name2, "noXref"))
        printf("none<BR>\n");
     else
        printf("<A HREF=\"%s/geneview?gene=%s\" "
@@ -13909,7 +13909,7 @@ struct sqlResult *sr = NULL, *sr1 = NULL;
 char **row;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-int hgsid = cartSessionId(cart);
+char *hgsid = cartSessionId(cart);
 struct stsMapMouse stsRow;
 struct stsInfoMouse *infoRow;
 char stsid[20];
@@ -14009,7 +14009,7 @@ if (row != NULL)
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    stsMapMouseStaticLoad(row, &stsRow);
-	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapMouse&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&g=stsMapMouse&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
 		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 	    }
 	printf("</TABLE>\n");
@@ -14037,7 +14037,7 @@ struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
 char **row;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-int hgsid = cartSessionId(cart);
+char *hgsid = cartSessionId(cart);
 struct stsMapMouseNew stsRow;
 struct stsInfoMouseNew *infoRow;
 char stsid[20];
@@ -14195,7 +14195,7 @@ if (row != NULL)
             while ((row = sqlNextRow(sr)) != NULL)
                 {
                 stsMapMouseNewStaticLoad(row, &stsRow);
-                printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&"
+                printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&"
                        "g=stsMapMouseNew&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
                        stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name,
                        stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
@@ -14224,7 +14224,7 @@ struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
 char **row;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-int hgsid = cartSessionId(cart);
+char *hgsid = cartSessionId(cart);
 struct stsMapRat stsRow;
 struct stsInfoRat *infoRow;
 char stsid[20];
@@ -14375,7 +14375,7 @@ if (row != NULL)
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    stsMapRatStaticLoad(row+hasBin, &stsRow);
-	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapRat&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&g=stsMapRat&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
 		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 	    }
 	printf("</TABLE>\n");

@@ -3,5 +3,5 @@ CREATE TABLE cgapAlias (
   alias varchar(80) NOT NULL default '',
   KEY cgapID (cgapID),
   KEY alias (alias)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

@@ -34,6 +34,7 @@ static const char *vcfEx2 = "vcfEx2";
 static const char *bigBedToTabOut = "bigBedToTabOut";
 static const char *snpBigWigToTabOut = "snpBigWigToTabOut";
 static const char *vepOut = "vepOut";
+static const char *vepOutIndelTrim = "vepOutIndelTrim";
 static const char *gpFx = "gpFx";
 
 void usage()
@@ -56,9 +57,10 @@ errAbort(
     "    %s\n"
     "    %s\n"
     "    %s\n"
+    "    %s\n"
     , pgSnpDbToTabOut, pgSnpKgDbToTabOutShort, pgSnpKgDbToTabOutLong,
     snpConsDbToTabOutShort, snpConsDbToTabOutLong,
-    vcfEx1, vcfEx2, bigBedToTabOut, snpBigWigToTabOut, vepOut, gpFx
+    vcfEx1, vcfEx2, bigBedToTabOut, snpBigWigToTabOut, vepOut, vepOutIndelTrim, gpFx
     );
 }
 
@@ -139,7 +141,7 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
     else
 	{
 	struct annoStreamer *src = streamerFromInfo(grInfo);
-	if (doGpFx && grInfo->asObj && asObjectsMatchFirstN(grInfo->asObj, genePredAsObj(), 10))
+	if (doGpFx && grInfo->asObj && asColumnNamesMatchFirstN(grInfo->asObj, genePredAsObj(), 10))
 	    grator = annoGratorGpVarNew(src);
 	else
 	    grator = annoGratorNew(src);
@@ -196,6 +198,7 @@ if (!doAllTests)
 	sameString(argv[2], bigBedToTabOut) ||
 	sameString(argv[2], snpBigWigToTabOut) ||
 	sameString(argv[2], vepOut) ||
+	sameString(argv[2], vepOutIndelTrim) ||
 	sameString(argv[2], gpFx))
 	test = cloneString(argv[2]);
     else
@@ -322,6 +325,30 @@ if (doAllTests || sameString(test, vepOut))
     annoGratorQuerySetRegion(query, "chr1", 876900, 886920);
     annoGratorQueryExecute(query);
     annoGratorQuerySetRegion(query, "chr5", 135530, 145535);
+    annoGratorQueryExecute(query);
+    annoGratorQueryFree(&query);
+    }
+
+if (doAllTests || sameString(test, vepOutIndelTrim))
+    {
+    struct streamerInfo indelTrimVcf = { NULL, assembly, NULL,
+					 "input/annoGrator/indelTrim.vcf",
+					 arWords, vcfAsObj() };
+    struct streamerInfo gencodeInfo = { NULL, assembly, db, "wgEncodeGencodeBasicV19", arWords,
+				   asParseFile("../genePredExt.as") };
+    indelTrimVcf.next = &gencodeInfo;
+    // Instead of dbToTabOut, we need to make a VEP config data structure and
+    // use it to create an annoFormatVep.
+    struct streamerInfo *primaryInfo = &indelTrimVcf;
+    struct annoStreamer *primary = NULL;
+    struct annoGrator *gratorList = NULL;
+    sourcesFromInfoList(primaryInfo, TRUE, &primary, &gratorList);
+    struct annoStreamer *gpVarSource = (struct annoStreamer *)gratorList;
+    struct annoFormatter *vepOut = annoFormatVepNew("stdout", FALSE, primary, "indelTrimVcf",
+						    gpVarSource, "EnsemblGenes ...",
+						    NULL, NULL);
+    struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
+    annoGratorQuerySetRegion(query, "chr11", 0, 0);
     annoGratorQueryExecute(query);
     annoGratorQueryFree(&query);
     }

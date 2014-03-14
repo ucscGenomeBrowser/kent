@@ -19,6 +19,7 @@
 }*/
 #main-menu-whole {
 	width:100%;
+	min-width:1000px; /* NOTE: must cover all top menu options, else wrapping breaks menu */
 	height:32px;
 	background:#00457c;
 	font-family: Arial,Helvetica,sans-serif;

@@ -683,7 +683,7 @@ void makeGroupDropDown(struct dyString *dy, char *selGroup)
 /* Make group drop-down from fullGroupList. */
 {
 dyStringAppend(dy, "<SELECT NAME='groupSel'>\n");
-if (selGroup == NULL || sameString(selGroup, "none"));
+if (selGroup == NULL || sameString(selGroup, "none"))
     dyStringAppend(dy, " <OPTION VALUE='none' SELECTED>\n");
 struct grp *group;
 for (group = fullGroupList; group != NULL; group = group->next)
@@ -1875,7 +1875,7 @@ else
     {
     struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
     if (asObjectsMatch(primary->asObj, pgSnpAsObj()) &&
-	asObjectsMatchFirstN(streamer->asObj, genePredAsObj(), 10))
+	asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10))
 	grator = annoGratorGpVarNew(streamer);
     else
 	grator = annoGratorNew(streamer);

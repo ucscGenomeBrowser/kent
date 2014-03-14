@@ -298,10 +298,13 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
             cStart = gene->chromStart + gene->chromStarts[i] + gene->blockSizes[i] - (end - codStart + 1);
             }
 //printf("TESTING fetching sequence for %s:%d-%d\n", gene->chrom, cStart, cEnd);
-        struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
-        dyStringPrintf(seq, "%s", s->dna);
+	if (cStart < cEnd)
+	    {
+	    struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
+	    dyStringPrintf(seq, "%s", s->dna);
 //printf("TESTING got seq=%s<br>\n", s->dna);
-        //freeDnaSeq(&s);
+	    //freeDnaSeq(&s);
+	    }
         /* check following exons, chrom order */
         if (posStrand && rv->cdEnd >= codStart + gene->blockSizes[i])
             {
@@ -309,9 +312,12 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
             int end = rv->cdEnd;
             cStart = gene->chromStart + gene->chromStarts[i+1] - 1;
             cEnd = gene->chromStart + gene->chromStarts[i+1] + (end - st + 1);
-            struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
-            dyStringPrintf(seq, "%s", s->dna);
-            //freeDnaSeq(&s);
+	    if (cStart < cEnd)
+		{
+		struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
+		dyStringPrintf(seq, "%s", s->dna);
+		//freeDnaSeq(&s);
+		}
             }
         else if (!posStrand && rv->cdStart < (codStart - 1))
             {
@@ -320,10 +326,13 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
             cStart = gene->chromStart + gene->chromStarts[i+1];
             cEnd = gene->chromStart + gene->chromStarts[i+1] + (end - st);
 //printf("TESTING fetching sequence for %s:%d-%d\n", gene->chrom, cStart, cEnd);
-            struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
-            dyStringPrintf(seq, "%s", s->dna);
-            //freeDnaSeq(&s);
+	    if (cStart < cEnd)
+		{
+		struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
+		dyStringPrintf(seq, "%s", s->dna);
+		//freeDnaSeq(&s);
 //printf("TESTING got seq=%s<br>\n", s->dna);
+		}
             }
         rv->seq = dyStringCannibalize(&seq);
         break;

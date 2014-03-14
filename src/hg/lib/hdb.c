@@ -1301,6 +1301,26 @@ path = replaceChars(fileName, "/gbdb/", newGbdbLoc);
 return path;
 }
 
+char *hReplaceGbdbSeqDir(char *path, char *db)
+/* similar to hReplaceGbdb, but accepts a nib or 2bit "directory" (basename) under
+ * gbdb, like /gbdb/hg19 (which by jkLib is translated to /gbdb/hg19/hg19.2bit).
+ hReplaceGbdb would check only if the dir exists. For 2bit basename, we
+ have to check if the 2bit file exists, do the rewriting, then strip off the
+ 2bit filename again. 
+ This function works with .nib directories, but nib does not support opening
+ from URLs.  As of Feb 2014, only hg16 and anoGam1 use a .nib directory.
+*/
+{
+char buf[4096];
+safef(buf, sizeof(buf), "%s/%s.2bit", path, db);
+char *newPath = hReplaceGbdb(buf);
+
+char dir[4096];
+splitPath(newPath, dir, NULL, NULL);
+freeMem(newPath);
+return cloneString(dir);
+}
+
 char *hTryExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId, boolean abortOnError)
 /* Get external file name from table and ID.  Typically
  * extFile table will be 'extFile' or 'gbExtFile'
@@ -3203,18 +3223,28 @@ else
     return slNameCloneList((struct slName *)(hel->val));
 }
 
-boolean hHostHasPrefix(char *prefix)
-/* Return TRUE if this is running on web-server with host name prefix */
+char* hHttpHost()
+/* return http host from apache or hostname if run from command line  */
 {
 char host[256];
-if (prefix == NULL)
-    return FALSE;
 
 char *httpHost = getenv("HTTP_HOST");
+
 if (httpHost == NULL && !gethostname(host, sizeof(host)))
     // make sure this works when CGIs are run from the command line.
     httpHost = host;
 
+return httpHost;
+}
+
+
+boolean hHostHasPrefix(char *prefix)
+/* Return TRUE if this is running on web-server with host name prefix */
+{
+if (prefix == NULL)
+    return FALSE;
+
+char *httpHost = hHttpHost();
 if (httpHost == NULL)
     return FALSE;
 
@@ -3234,6 +3264,14 @@ boolean hIsBetaHost()
  * Use sparingly as behavior on beta should be as close to RR as possible. */
 {
 return hHostHasPrefix("hgwbeta");
+}
+
+boolean hIsBrowserbox()
+/* Return TRUE if this is the browserbox virtual machine */
+{
+char name[256];
+gethostname(name, sizeof(name));
+return (startsWith("browserbox", name));
 }
 
 boolean hIsPreviewHost()

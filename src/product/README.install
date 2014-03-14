@@ -16,8 +16,16 @@ The sequence of instructions here are similar to the Mirror site
 	    NOTE: The browser static html WEB pages require the Apache
 	    XBitHack option to be enabled to allow:
 	      <!--#include ... --> statements to function.
+            Add 'Options +Includes' for your html directory, your
+            httpd.conf file entry looks like:
+XBitHack on
+<Directory /usr/local/apache/htdocs>
+   Options +Includes
+</Directory>
+
 	    You can test your Apache cgi-bin/ directory with the script:
 		scripts/printEnv.pl
+
 	b. MySQL database is installed and working
 		$ mysql -u browser -pgenome -e 'show tables;' mysql
 	    MySQL can be run from the command line, and

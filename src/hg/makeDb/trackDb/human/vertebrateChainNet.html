@@ -1,7 +1,7 @@
 <H2>Description</H2>
 <H3>Chain Track</H3>
 <P>
-The chain track shows alignments of human ($date/$db) to
+The chain track shows alignments of human ($date) to
 other genomes using a gap scoring system that allows longer gaps 
 than traditional affine gap scoring systems. It can also tolerate gaps in both
 human and the other genome simultaneously. These 
@@ -30,7 +30,7 @@ The net track shows the best human/other chain for
 every part of the other genome. It is useful for
 finding orthologous regions and for studying genome
 rearrangement.  The human sequence used in this annotation is from
-the $date ($db) assembly.</P>
+the $date assembly.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <H3>Chain Track</H3>
@@ -87,11 +87,57 @@ of the gapless subsections (blocks) of the alignments. A dynamic program
 was then run over the kd-trees to find the maximally scoring chains of these
 blocks.
 
-$matrix
+<BLOCKQUOTE><TABLE BORDER=0 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR ALIGN=left><TD>
+<P>
+<BLOCKQUOTE>
+The following lastz matrix was used<BR>for the alignments to: Wallaby, Tasmanian Devil
+</P>
+<TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR ALIGN=right><TD>&nbsp;</TD><TD><B>A</B></TD><TD><B>C</B></TD><TD><B>G</B></TD><TD><B>T</B></TD></TR>
+<TR ALIGN=right><TD><B>A<B></TD><TD>91</TD><TD>-114</TD><TD>-31</TD><TD>-123</TD></TR>
+<TR ALIGN=right><TD><B>C<B></TD><TD>-114</TD><TD>100</TD><TD>-125</TD><TD>-31</TD></TR>
 
-Chains scoring below a minimum score of '$chainMinScore' were discarded;
-the remaining chains are displayed in this track.  The linear gap
-matrix used with axtChain:<BR>
+<TR ALIGN=right><TD><B>G<B></TD><TD>-31</TD><TD>-125</TD><TD>100</TD><TD>-114</TD></TR>
+<TR ALIGN=right><TD><B>T<B></TD><TD>-123</TD><TD>-31</TD><TD>-114</TD><TD>91</TD></TR>
+</TABLE></BLOCKQUOTE>
+
+</TD><TD WIDTH=40>&nbsp;</TD><TD>
+<P>
+<BLOCKQUOTE>
+The following lastz matrix was used<BR>for the alignments to: American Alligator, Medium Ground Finch,<BR>
+Opossum, Platypus, Chicken, Zebra Finch, Lizard, <em>X. tropicalis</em>,<BR>
+Stickleback, Fugu, Zebrafish, Tetraodon, Medaka, Lamprey
+</P>
+<TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR ALIGN=right><TD>&nbsp;</TD><TD><B>A</B></TD><TD><B>C</B></TD><TD><B>G</B></TD><TD><B>T</B></TD></TR>
+<TR ALIGN=right><TD><B>A<B></TD><TD>91</TD><TD>-90</TD><TD>-25</TD><TD>-100</TD></TR>
+<TR ALIGN=right><TD><B>C<B></TD><TD>-90</TD><TD>100</TD><TD>-100</TD><TD>-25</TD></TR>
+<TR ALIGN=right><TD><B>G<B></TD><TD>-25</TD><TD>-100</TD><TD>100</TD><TD>-90</TD></TR>
+<TR ALIGN=right><TD><B>T<B></TD><TD>-100</TD><TD>-25</TD><TD>-90</TD><TD>91</TD></TR>
+</TABLE></BLOCKQUOTE>
+</TD></TR></TABLE></BLOCKQUOTE></P>
+
+For the Wallaby alignment, chains scoring below a minimum score
+of '3000' were discarded; the remaining chains are displayed in this track.
+The linear gap matrix used with axtChain:<BR>
+
+<PRE>-linearGap=medium
+
+tableSize    11
+smallSize   111
+position  1   2   3   11  111  2111  12111  32111   72111  152111  252111
+qGap    350 425 450  600  900  2900  22900  57900  117900  217900  317900
+tGap    350 425 450  600  900  2900  22900  57900  117900  217900  317900
+bothGap 750 825 850 1000 1300  3300  23300  58300  118300  218300  318300
+</PRE>
+
+For the alignments to: American Alligator, Medium Ground Finch, Tasmanian Devil, Opossum, Platypus, Chicken,
+Zebra Finch, Lizard, <em>X. tropicalis</em>, Stickleback, Fugu, Zebrafish, Tetraodon,
+Medaka and Lamprey, chains scoring below a minimum score
+of '$chainMinScore' were discarded; the remaining chains are displayed
+in this track.  The linear gap matrix used with axtChain:<BR>
+
 $chainLinearGap
 
 See also: <A HREF="http://genomewiki.ucsc.edu/index.php/Hg19_conservation_lastz_parameters"

@@ -7,6 +7,7 @@
 #include "hdb.h"
 #include "jsHelper.h"
 #include "hui.h"
+#include "botDelay.h"
 
 
 #define CART_DUMP_REMOVE_VAR "n/a"
@@ -21,6 +22,9 @@ char *vName = "cartDump.varName";
 char *vVal = "cartDump.newValue";
 char *wildcard;
 boolean asTable = cartVarExists(cart,CART_DUMP_AS_TABLE);
+
+// To discourage hacking, call bottleneck
+hgBotDelay();
 
 if (cgiVarExists("submit"))
     {

@@ -40,7 +40,7 @@ import cgi
 import cgitb; cgitb.enable()
 
 # these are default python modules on python 2.7, no errors expected here
-import urllib2, zlib, collections, StringIO, gzip, string, sys, os, random, \
+import urllib, urllib2, zlib, collections, StringIO, gzip, string, sys, os, random, \
     subprocess, re, types, socket
 
 from collections import defaultdict, namedtuple
@@ -104,14 +104,20 @@ def parseHgConf():
 
     return hgConf
 
+oldConn = {}
+
 def sqlConnect(db, name):
-    """ connect to sql """
+    """ connect to sql, reuse open connections """
+    if (db, name) in oldConn:
+        return oldConn[(db, name)]
+
     if name=="public":
         host, user, passwd = "genome-mysql.cse.ucsc.edu", "genomep", "password"
     elif name=="local":
         cfg = parseHgConf()
         host, user, passwd = cfg["db.host"], cfg["db.user"], cfg["db.password"]
     conn = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)
+    oldConn[(db, name)] = conn
     return conn
 
 def debug(msg):
@@ -277,7 +283,10 @@ def getTrackVis(settings):
             else:
                 assert(False)
         elif len(opts)==2:
-                trackVis= opts[1]
+            trackVis = opts[1]
+        elif len(opts)==1:
+            isSuperTrack = True
+            trackVis = "hide"
         else:
             assert(False)
     return trackVis, isSuperTrack
@@ -431,6 +440,24 @@ def humanReadable(totalSize):
     #s = os.statvfs(p)
     #return s.f_bsize * s.f_bavail
 
+def trackToFiles(trackName, trackTables, trackChildren, tableSizes, tableToGbdbFiles, noTableTracks):
+    " return list of mysql tables and gbdb files for a given trackName "
+    tableNames = []
+    gbdbFiles = []
+
+    trackTableNames, totalSize = getTableInfo(trackName, trackTables, trackChildren, tableSizes)
+    for table in trackTableNames:
+        if table in noTableTracks:
+            continue
+        tableNames.append(table)
+
+        for gbdbFname in tableToGbdbFiles[table]:
+            if trackName=="defaultConsTables" and (gbdbFname.endswith(".maf") or gbdbFname.endswith(".wib")):
+                continue
+            gbdbFiles.append(gbdbFname)
+
+    return tableNames, gbdbFiles
+
 def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableToGbdbFiles, tableSizes, forceTables, noTableTracks):
     """
     create an rsync include file in /tmp for a list of tracks and return file name
@@ -444,18 +471,15 @@ def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableTo
 
     # write table and gbdb files names to two different files, one for mysql rsync, one for gbdb rsync
     for trackName in trackNames:
-        trackTableNames, totalSize = getTableInfo(trackName, trackTables, trackChildren, tableSizes)
-        for table in trackTableNames:
-            if table in noTableTracks:
-                continue
+        tableNames, gbdbFiles = trackToFiles(trackName, trackTables, trackChildren, tableSizes, \
+                tableToGbdbFiles, noTableTracks)
 
+        for table in tableNames:
             for ext in [".MYD", ".MYI", ".frm"]:
                 mysqlListFh.write("%s%s\n" % (table,ext))
 
-            for gbdbFname in tableToGbdbFiles[table]:
-                if trackName=="defaultConsTables" and (gbdbFname.endswith(".maf") or gbdbFname.endswith(".wib")):
-                    continue
-                gbdbListFh.write(gbdbFname+"\n")
+        for gbdbFname in gbdbFiles:
+            gbdbListFh.write(gbdbFname+"\n")
 
     # add the db twobit file and the trackDb index
     gbdbListFh.write("%s.2bit\n" % db)
@@ -481,7 +505,7 @@ def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableTo
 
     return outFname, gbdbListFname, fixListFname
 
-def printTrackInfo(trackName, trackTables, trackLabels, localSizes, trackChildren, tableSizes, \
+def printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, trackChildren, tableSizes, \
             trackToGbdbFiles, gbdbSizes, showSubtracks, indent):
     " print info about one track as html "
     trackTableNames, remoteTableSize = getTableInfo(trackName, trackTables, trackChildren, tableSizes)
@@ -496,7 +520,7 @@ def printTrackInfo(trackName, trackTables, trackLabels, localSizes, trackChildre
 
     if remoteSize==0:
         addHtml = 'disabled="disabled"'
-        addNote = "<small>this track cannot be mirrored</small>"
+        addNote = "<small>this track cannot be mirrored (no permission)</small>"
 
     sizeStr = humanReadable(remoteTableSize)
     if len(trackTableNames)==1:
@@ -538,7 +562,8 @@ def printTrackInfo(trackName, trackTables, trackLabels, localSizes, trackChildre
     debug("tables: "+str(trackTableNames))
     debug("gbdbFiles: "+str(gbdbFnames))
 
-    outStr = '%(indentStr)s<input type="checkbox" %(addHtml)s name="%(trackName)s" id="%(trackName)s">%(label)s ' \
+    outStr = '%(indentStr)s<input type="checkbox" %(addHtml)s name="%(trackName)s" id="%(trackName)s">'\
+        '<a href="hgMirror?db=%(db)s&showFiles=%(trackName)s">%(label)s</a> ' \
         '(<span>%(trackName)s</span>): %(tableStr)s, %(sizeStr)s%(gbdbStr)s%(status)s %(addNote)s<br>' % locals()
     if isGrey:
         outStr = '<span style="color:#C0C0C0">'+outStr+'</span>'
@@ -547,7 +572,7 @@ def printTrackInfo(trackName, trackTables, trackLabels, localSizes, trackChildre
     indent += 1
     if showSubtracks:
         for subTrack in trackChildren.get(trackName, []):
-            printTrackInfo(subTrack, trackTables, trackLabels, localSizes, trackChildren, \
+            printTrackInfo(db, subTrack, trackTables, trackLabels, localSizes, trackChildren, \
                 tableSizes, trackToGbdbFiles, gbdbSizes, \
                 showSubtracks=showSubtracks, indent=indent)
 
@@ -573,42 +598,128 @@ def getGbdbSize(trackName, trackTableNames, trackToGbdbFiles, gbdbSizes):
             total += size
     return total, gbdbFnames
 
-def htmlDbSelector(defaultDb):
-    " print dropdown box with DBs and refresh when selected "
+def htmlDropBox(selName, elList, selKey):
+    """ 
+    print html dropdown box with a selected default element and auto-reload on selection 
+    print html dropbox box with (key, desc) elList, selKey is the key of the selected element.
+    the name of the dropbox variable is selName and upon selection, a page refresh will be issued
+    with the new value in selName
+    """
+    addStr = ""
+    if selName=="clade":
+        addStr += "document.orgForm.org.value = 0; "
+    if selName=="org" or selName=="clade":
+        addStr += "document.orgForm.db.value = 0; "
 
-    print("Genome database:<br>")
-    dbList = []
-    # getting list of DBs
-    if mysqlDbLoaded:
-        conn = sqlConnect("hgcentral", "public")
-        cur = conn.cursor()
+    print '''<SELECT NAME="%s" onchange="document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value; %s document.orgForm.submit();">''' % (selName, selName, selName, selName, addStr)
 
-        cur.execute("SELECT organism, description, name from dbDb WHERE active = 1 order by name")
-        for row in cur.fetchall():
-            dbList.append((row[0], row[1], row[2]))
-    else:
-        print("<small>info: MySQLDb not installed, cannot retrieve hgcentral.dbDb, using internal defaults</small>")
-        dbList = [("Human", "GrCh37", "hg19"), ("Mouse","NCBI37", "mm9")]
-
-    print '<FORM>'
-    print '''<SELECT NAME="db" onchange="document.location.href = 'hgMirror?db=' + this.value">'''
-    for dbRow in dbList:
-        org, desc, db = dbRow
+    for row in elList:
+        elKey, desc = row
         selStr = ""
-        if db==defaultDb:
+        if elKey==selKey:
             selStr = " SELECTED"
-        print '<OPTION%s VALUE="%s">%s: %s (%s)</OPTION>' % (selStr, db, db, org, desc)
+        print '<OPTION%s VALUE="%s">%s</OPTION>' % (selStr, elKey, desc)
     print '</SELECT>'
+
+def printHiddenForm(clade, org, db):
+    " hidden form is needed for javascript "
+    print """
+    <FORM ACTION="hgMirror" METHOD="GET" NAME="orgForm">
+    <input type="hidden" name="clade" value="%s">
+    <input type="hidden" name="org" value="%s">
+    <input type="hidden" name="db" value="%s">
+    </FORM>
+    """ % (clade, org, db)
+
+def getCladeAssemblyDb(clade, org, db):
+    """ return the list of clades, organisms and assemblies and default DBs.
+    any of clade, org or db can be None.
+    Return values for clade, org, db so all are valid strings
+    """
+    if not mysqlDbLoaded:
+        print("<small>info: MySQLDb not installed, cannot retrieve hgcentral.dbDb, using internal defaults</small>")
+        cladeList = (("mammal", "Mammal"))
+        orgList = (("Human", "Human"))
+        dbList = (("hg19", "Human (GrCh37)"), ("mm9", "Mouse (NCBI37)"))
+        defaultDb = {"Human":"hg19"}
+        return cladeList, orgList, dbList
+
+    conn = sqlConnect("hgcentral", "public")
+    cur = conn.cursor()
+
+    # list of all clades ("mammal", "Mammal"), ...
+    cladeList = []
+    cur.execute("SELECT name, label FROM clade ORDER BY priority")
+    for row in cur.fetchall():
+        cladeList.append((row[0], row[1]))
+
+    # list of organisms for current clade, ("Human", "Human"), ("Chimp", "Chimp"), ...
+    if clade is None or clade=="0":
+        clade = "mammal"
+    orgList = []
+    cur.execute('SELECT genome FROM genomeClade WHERE clade=%s ORDER BY priority', (clade,))
+    for row in cur.fetchall():
+        orgList.append((row[0], row[0]))
+
+    # list of assemblies of current organism, like ("hg19", "NCBI37"), ("hg18", NCBI36"), etc...
+    if org is None or org=="0":
+        org = orgList[0][0]
+    dbList = []
+    cur.execute('SELECT name, description FROM dbDb WHERE organism = %s order by orderKey;', (org, ))
+    for row in cur.fetchall():
+        dbList.append((row[0], row[1]))
+
+    # default db per organism, {"Human":"hg19"}
+    defaultDbs = {}
+    cur.execute('SELECT genome, name FROM defaultDb')
+    for row in cur.fetchall():
+        defaultDbs[row[0]] = row[1]
+
+    if (db==None or db=="0"):
+        if org not in defaultDbs:
+            print "organism %s is not valid" % org
+            sys.exit(0)
+        db = defaultDbs[org]
+
+    # make sure that the db we return exists on public mysql
+    if mysqlDbLoaded:
+        import _mysql_exceptions
+        try:
+            conn  = sqlConnect(db, "public")
+        except _mysql_exceptions.OperationalError:
+            print("<small>error: DB %s does not exist on public sql server</small>" % db)
+            db = "hg19"
+
+    orgInfo = {}
+    orgInfo["clades"] = cladeList
+    orgInfo["orgs"] = orgList
+    orgInfo["dbs"] = dbList
+    orgInfo["defaultDbs"] = defaultDbs
+
+    return orgInfo, clade, org, db
+
+def htmlDbSelector(orgInfo, clade, org, db):
+    " print dropdown boxes with clade, assembly, DBs and refresh when selected "
+    print '<FORM name="mainForm">'
+
+    print("Group: ")
+    htmlDropBox("clade", orgInfo["clades"], clade)
+    print("Genome: ")
+    htmlDropBox("org", orgInfo["orgs"], org)
+    print("Assembly: ")
+    htmlDropBox("db", orgInfo["dbs"], db)
+
+    print '<INPUT type="submit" name="submit" value="Select"></input>'
     print '</FORM>'
 
-def htmlTrackTable(db, trackLabels, trackTables, trackParents, trackChildren, groupList, groupToTopTracks, \
+    printHiddenForm(clade, org, db)
+
+def htmlTrackTable(db, trackLabels, trackTables, \
+        trackParents, trackChildren, groupList, groupToTopTracks, \
         tableSizes, localSizes, gbdbSizes, trackToGbdbFiles, showSubtracks):
     " print list of track sizes/tablecount as a html form, sorted by group "
 
     myUrl = basename(__file__)
-    print '<h4>UCSC genome browser track download tool</h4>'
-
-    htmlDbSelector(db)
 
     print 'Locally mirrored tracks are faster to browse than tracks that are accessed through the internet.<br>'
     print 'Select any number of tracks from the list below and click "Download" when finished.<br>'
@@ -632,7 +743,7 @@ def htmlTrackTable(db, trackLabels, trackTables, trackParents, trackChildren, gr
         print "<h4>%s</h4>" % groupLabel
 
         for trackName in groupToTopTracks[groupName]:
-            printTrackInfo(trackName, trackTables, trackLabels, localSizes, \
+            printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, \
                 trackChildren, tableSizes, trackToGbdbFiles, gbdbSizes, showSubtracks, 0)
 
     print '<p>'
@@ -649,15 +760,21 @@ def downloadCache(url, cacheFname):
     try:
         data = urllib2.urlopen(url).read()
     except urllib2.HTTPError:
-        print "<small>info: Could not find %s<br></small>" % url
-        data = ""
+        print "<small>info: Could not find %s. bigWig/bigBed/bam files will be skipped.<br></small>" % url
+        data = None
 
-    if url.endswith(".gz"):
+    if data is not None and url.endswith(".gz"):
         data = StringIO.StringIO(data) # gunzipping requires to wrap a pseudo-file around the gzip data
         data = gzip.GzipFile(fileobj=data).read()
-    cacheFh = open(cachePath, "wb")
-    cacheFh.write(data)
-    cacheFh.close()
+
+    # only create cache file if we got some data
+    if data == None:
+        data = ""
+    else:
+        cacheFh = open(cachePath, "wb")
+        cacheFh.write(data)
+        cacheFh.close()
+
     return data.splitlines()
 
 def linkTrackToGbdb(fnames, db, tableNames):
@@ -972,7 +1089,7 @@ def getLocalSizes(db):
     cmd = 'sudo -u mysql /bin/ls -l %s > %s' % (path, sqlFname)
     ret = runCmd(cmd, mustRun=False)
     if ret!=0:
-        print "<small>warning: cannot read file sizes from %s, local file sizes will be incorrect</small><br>" % path
+        print "<small>info: cannot read file sizes from %s, local file sizes unknown</small><br>" % path
         return sizes
 
     for line in open(sqlFname):
@@ -1151,32 +1268,65 @@ def assertEmptyQueue():
     print '<a href="hgMirror?jobId=%s">Show download job</a>' % jobId
     sys.exit(0)
 
-def getDb(args):
-    """ get Db from either CGI args or hgcentral, makes sure that DB actually exists """
-    if "db" in args:
-        db = args.getvalue("db")
-        if mysqlDbLoaded:
-            import _mysql_exceptions
-            try:
-                conn  = sqlConnect(db, "public")
-            except _mysql_exceptions.OperationalError:
-                print("<small>error: DB %s does not exist on public sql server, using hg19</small>" % db)
-                db = "hg19"
-    else:
-        if mysqlDbLoaded:
-            conn = sqlConnect("hgcentral", "public")
-            cur = conn.cursor()
-            # get default db for human
-            cur.execute('SELECT name from defaultDb where genome="Human"')
-            db = cur.fetchall()[0][0]
-        else:
-            db = "hg19"
-    return db
+# the list of allowed chars in cgi args: digits, letters and dashes
+legalChars = set(string.digits)
+legalChars.update(set(string.letters))
+legalChars.update("_-.()/: ")
+
+def mustBeClean(str):
+    """ make sure a string contains only letters and digits """
+    if str==None:
+        return str
+
+    str = urllib.unquote(str)
+    str = str.strip()
+
+    for s in str:
+        if s not in legalChars:
+            print "illegal character in CGI parameter"
+            sys.exit(0)
+    return str
+
+#def getDb(args, org):
+    #""" get Db from either CGI args or hgcentral, makes sure that DB actually exists """
+    #db = mustBeClean(args.getvalue("db", default=None))
+    #if db=="0":
+        #db = None
+#
+    #if db!=None:
+        #if mysqlDbLoaded:
+            #import _mysql_exceptions
+            #try:
+                #conn  = sqlConnect(db, "public")
+            #except _mysql_exceptions.OperationalError:
+                #print("<small>error: DB %s does not exist on public sql server</small>" % db)
+                #db = None
+    ##else:
+        #if mysqlDbLoaded:
+            #conn = sqlConnect("hgcentral", "public")
+            #cur = conn.cursor()
+            ## get default db for org
+            #cur.execute('SELECT name from defaultDb where genome=%s', (org,))
+            #rowList = cur.fetchall()
+            #print rowList
+            #db = rowList[0][0]
+            #if db=="":
+                #print "Invalid org parameter %s" % org
+                #sys.exit(0)
+    #else:
+        #db = "hg19"
+    #return db
+
+def getCgiVar(args, name):
+    return mustBeClean(args.getvalue(name, default=None))
 
 def htmlMiddle(args):
     " print html middle part "
 
-    db = getDb(args)
+    clade = getCgiVar(args, "clade")
+    org   = getCgiVar(args, "org")
+    db    = getCgiVar(args, "db")
+    orgInfo, clade, org, db = getCladeAssemblyDb(clade, org, db)
 
     if not "jobId" in args.keys():
         # parse trackDb
@@ -1189,7 +1339,7 @@ def htmlMiddle(args):
         tableToGbdbFiles = linkTrackToGbdb(gbdbSizes, db, tableSizes)
 
     # when user has clicked OK, run rsync and refresh with jobId
-    if "submit" in args.keys():
+    if "submit" in args.keys() and args["submit"].value=="Download":
         if runningAtUcsc():
             print "cannot do this on hgwdev"
             sys.exit(0)
@@ -1198,7 +1348,10 @@ def htmlMiddle(args):
         checkGbdbMysqlAccess()
 
         trackList = set(args.keys())
+        for t in trackList:
+            mustBeClean(t)
         trackList.remove("submit")
+        trackList.remove("db")
 
         forceTables = findImportantTables(tableSizes)
 
@@ -1212,6 +1365,25 @@ def htmlMiddle(args):
         runRsyncJobs(jobId, db, listFname, gbdbFname, fixedFname)
         refreshPage("jobId=%d" % jobId, addNote=True)
 
+    # show list of files is told to do so
+    elif "showFiles" in args.keys() and "db" in args.keys():
+        trackName = args["showFiles"].value
+        tables, gbdbFiles = trackToFiles(trackName, trackTables, trackChildren, \
+                tableSizes, tableToGbdbFiles, noTableTracks)
+
+        print "<h4>MySQL tables linked to track %s</h4>" % trackName
+        for table in tables:
+            size = tableSizes[table]
+            sizeStr = humanReadable(size)
+            print table+" (%s) <br>" % sizeStr
+        
+        print "<h4>GBDB files linked to track %s</h4>" % trackName
+        for gbdbFname in gbdbFiles:
+            size = gbdbSizes[gbdbFname]
+            sizeStr = humanReadable(size)
+            print gbdbFname+" (%s) <br>" % sizeStr
+        sys.exit(0)
+
     # if we have a jobId in URL, show the rsync log
     elif "jobId" in args.keys():
         if runningAtUcsc():
@@ -1224,13 +1396,17 @@ def htmlMiddle(args):
     # stop job if requested to do so
     elif "stopAllJobs" in args.keys():
         stopAllJobs()
-        print "Download job has been stopped<br>"
+        print "All download jobs have been stopped<br>"
         print '<a href="hgMirror">Return to track selection</a>'
         sys.exit(0)
 
     # show tracklist and change default tracks if no param
     else:
         assertEmptyQueue()
+
+        print '<h4>UCSC genome browser track download tool</h4>'
+        htmlDbSelector(orgInfo, clade, org, db)
+
         showSubtracks = bool(int(args.getfirst("showSubtracks", "0")))
 
         localSizes = getLocalSizes(db)
@@ -1238,7 +1414,8 @@ def htmlMiddle(args):
         addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, trackChildren, \
             tableToGbdbFiles, trackTables, tableSizes)
 
-        htmlTrackTable(db, trackLabels, trackTables, trackParents, trackChildren, groupList, groupToTopTracks, \
+        htmlTrackTable(db, trackLabels, trackTables, trackParents, trackChildren, \
+            groupList, groupToTopTracks, \
             tableSizes, localSizes, gbdbSizes, tableToGbdbFiles, showSubtracks)
 
         hideSomeTracks(localSizes)

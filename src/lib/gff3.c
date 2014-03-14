@@ -196,7 +196,7 @@ static char convertEscape(struct gff3Ann *g3a, char *esc, char *src)
 /* convert character at esc, which should start with a `%' and be a string
  * in the form `%09' */
 {
-if (!(isxdigit(esc[1]) && isxdigit(esc[1])))
+if (!(isxdigit(esc[1]) && isxdigit(esc[2])))
     raiseInvalidEscape(g3a, src);
 char num[3], *end;
 strncpy(num, esc+1, 2);

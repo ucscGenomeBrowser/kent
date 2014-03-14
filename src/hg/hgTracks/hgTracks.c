@@ -70,7 +70,7 @@
  * program's unique variables be qualified with a prefix though. */
 char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.in1", "hgt.in2", "hgt.in3", "hgt.inBase",
-            "hgt.out1", "hgt.out2", "hgt.out3",
+            "hgt.out1", "hgt.out2", "hgt.out3", "hgt.out4",
             "hgt.left1", "hgt.left2", "hgt.left3",
             "hgt.right1", "hgt.right2", "hgt.right3",
             "hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
@@ -402,9 +402,9 @@ char *trackUrl(char *mapName, char *chromName)
 char *encodedMapName = cgiEncode(mapName);
 char buf[2048];
 if(chromName == NULL)
-    safef(buf, sizeof(buf), "%s?%s=%u&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), encodedMapName);
 else
-    safef(buf, sizeof(buf), "%s?%s=%u&c=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&c=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
 freeMem(encodedMapName);
 return(cloneString(buf));
 }
@@ -1707,6 +1707,8 @@ else if (sameString(zoomType, ZOOM_3X))
     newWinWidth = winWidth/3;
 else if (sameString(zoomType, ZOOM_10X))
     newWinWidth = winWidth/10;
+else if (sameString(zoomType, ZOOM_100X))
+    newWinWidth = winWidth/100;
 else if (sameString(zoomType, ZOOM_BASE))
     newWinWidth = insideWidth/tl.mWidth;
 else
@@ -4613,6 +4615,7 @@ if (!hideControls)
     topButton("hgt.out1", ZOOM_1PT5X);
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
+    topButton("hgt.out4", ZOOM_100X);
     hWrites("<div style='height:0.3em;'></div>\n");
 #endif//ndef USE_NAVIGATION_LINKS
 
@@ -4711,7 +4714,9 @@ hPrintf("<td width='60' align='right'><a href='?hgt.out2=1' "
         "title='zoom out 3x'>&lt;&lt;&nbsp;&gt;&gt;</a>\n");
 hPrintf("<td width='80' align='right'><a href='?hgt.out3=1' "
         "title='zoom out 10x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
-hPrintf("<td>&nbsp;</td>\n"); // Without width cell expands table with, forcing others to sides
+hPrintf("<td width='80' align='right'><a href='?hgt.out4=1' "
+        "title='zoom out 100x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
+hPrintf("<td>&nbsp;</td>\n"); // Without width cell expands table width, forcing others to sides
 hPrintf("<td width='20' align='right'><a href='?hgt.right1=1' "
         "title='move 10&#37; to the right'>&gt;</a>\n");
 
@@ -5351,6 +5356,8 @@ else if (cgiVarExists("hgt.out2"))
     zoomAroundCenter(3.0);
 else if (cgiVarExists("hgt.out3"))
     zoomAroundCenter(10.0);
+else if (cgiVarExists("hgt.out4"))
+    zoomAroundCenter(100.0);
 else if (cgiVarExists("hgt.dinkLL"))
     dinkWindow(TRUE, -dinkSize("dinkL"));
 else if (cgiVarExists("hgt.dinkLR"))
@@ -5434,7 +5441,7 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     unsigned size = hChromSize(database, chromPtr->name);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromPtr->name, chromPtr->name);
     cgiTableFieldEnd();
@@ -5483,7 +5490,7 @@ for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     unsigned size = chromInfo->size;
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromInfo->chrom,chromInfo->chrom);
     cgiTableFieldEnd();
@@ -5573,7 +5580,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     unsigned size = sqlUnsigned(row[1]);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            row[0], row[0]);
     cgiTableFieldEnd();
@@ -5691,9 +5698,8 @@ void resetVars()
 {
 static char *except[] = {"db", "position", NULL};
 char *cookieName = hUserCookie();
-int sessionId = cgiUsualInt(cartSessionVarName(), 0);
-char *hguidString = findCookieData(cookieName);
-int userId = (hguidString == NULL ? 0 : atoi(hguidString));
+char *sessionId = cgiOptionalString(cartSessionVarName());
+char *userId = findCookieData(cookieName);
 struct cart *oldCart = cartNew(userId, sessionId, NULL, NULL);
 cartRemoveExcept(oldCart, except);
 cartCheckout(&oldCart);

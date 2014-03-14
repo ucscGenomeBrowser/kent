@@ -658,16 +658,34 @@ else
 return cloneString(buf);
 }
 
-static boolean customTrackIsBigData(char *fileName)
+char* customTrackTypeFromBigFile(char *fileName)
+/* return most likely type for a big file name or NULL,
+ * has to be freed */
+{
+// based on udc cache dir analysis by hiram in rm #12813
+if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed") || endsWith(fileName, ".bigbed"))
+    return cloneString("bigBed");
+if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig") ||  
+            endsWith(fileName, ".bigwig") || endsWith(fileName, ".bwig"))
+    return cloneString("bigWig");
+if (endsWith(fileName, ".bam"))
+    return cloneString("bam");
+if (endsWith(fileName, ".vcf.gz"))
+    return cloneString("vcfTabix");
+return NULL;
+}
+
+boolean customTrackIsBigData(char *fileName)
 /* Return TRUE if fileName has a suffix that we recognize as a bigDataUrl track type. */
 {
 char *fileNameDecoded = cloneString(fileName);
 cgiDecode(fileName, fileNameDecoded, strlen(fileName));
-boolean result =
-    (endsWith(fileNameDecoded,".bb") ||
-     endsWith(fileNameDecoded,".bw")  ||
-     endsWith(fileNameDecoded,".bam") ||
-     endsWith(fileNameDecoded,".vcf.gz"));
+
+boolean result;
+char *type = customTrackTypeFromBigFile(fileNameDecoded);
+result = (type!=NULL);
+
+freeMem(type);
 freeMem(fileNameDecoded);
 return result;
 }

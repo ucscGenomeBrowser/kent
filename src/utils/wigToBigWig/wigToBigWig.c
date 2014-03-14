@@ -56,7 +56,7 @@ void wigToBigWig(char *inName, char *chromSizes, char *outName)
 /* wigToBigWig - Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format.. */
 {
-bigWigFileCreate(inName, chromSizes, blockSize, itemsPerSlot, clipDontDie, doCompress, keepAllChromosomes, fixedSummaries, outName);
+bigWigFileCreateEx(inName, chromSizes, blockSize, itemsPerSlot, clipDontDie, doCompress, keepAllChromosomes, fixedSummaries, outName);
 }
 
 int main(int argc, char *argv[])

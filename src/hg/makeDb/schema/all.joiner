@@ -2108,7 +2108,7 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     mm10.mrnaRefseq.mrna minCheck=0.30
     hg17.mrnaRefseq.mrna minCheck=0.80
     $rn.mrnaRefseq.mrna minCheck=0.03
-    $gbd,!hg17,!hg18,!hg19,!mm7,!mm8,!mm9,!mm10,!rn4.spMrna.mrnaID minCheck=0.98
+    $gbd,!hg17,!hg18,!hg19,!mm7,!mm8,!mm9,!mm10,!rn4,!hg38.spMrna.mrnaID minCheck=0.98
     $mm.dupSpMrna.mrnaID minCheck=0.10
     $mm.dupSpMrna.dupMrnaID minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.30
@@ -2280,8 +2280,9 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.oldId minCheck=0.5 exclude=
     $kgDb.kg3ToKg4.newId minCheck=0.5 exclude=
     $kgDb,!hg19.kg4ToKg5.newId minCheck=0.5 exclude=
-    $kgDb.kg5ToKg6.newId exclude=
+    $kgDb,!mm10.kg5ToKg6.newId exclude=
     $kgDb.kg6ToKg7.newId exclude=
+    $kgDb.kg7ToKg8.newId exclude=
     $kgDb,!hg16.kgTargetAli.qName full
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
@@ -2289,7 +2290,7 @@ identifier knownGeneId dependency
 identifier knownGeneOld6Id dependency
 "Previous UCSC Gene build"
     $kgDb.knownGeneOld6.name
-    $kgDb.k65ToKg7.oldId full
+    $kgDb.kg6ToKg7.oldId full
     $kgDb.kgXrefOld6.kgID full
 
 identifier knownGeneOld5Id dependency
@@ -2966,6 +2967,12 @@ identifier altSeqLiftOver
     hg38.altSeqLiftOverPsl.qName
     hg38.altSeqLiftOverPsl.tName
 
+identifier altSeqExtSeqFiles
+"alternate sequence sequence files"
+    hg38.altSeqLiftOverPsl.qName dupeOk
+    hg38.seqNcbiAltSequence.acc
+    hg38.extNcbiAltSequence.name chopAfter=.
+
 identifier ucscToINSDC external=INSDC dependency
 "INSDC names to UCSC chrom name translation"
     $gbd.chromInfo.chrom
@@ -3070,9 +3077,9 @@ identifier cgapMapId
 identifier cgapAlias
 "NCI Cancer Genome Annotation Project Alias"
     $gbd.cgapAlias.alias dupeOk
-    $gbd,!hg16,!hg18,!hg19,!mm9,!mm10.knownGene.name minCheck=0.50
+    $gbd,!hg16,!hg18,!hg19,!mm9,!mm10,!hg38.knownGene.name minCheck=0.50
     hg16.knownGene.name minCheck=0.05
-    hg18,hg19,mm9,mm10.kgXref.geneSymbol minCheck=0.84
+    hg18,hg19,hg38,mm9,mm10.kgXref.geneSymbol minCheck=0.74
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 
@@ -3879,7 +3886,7 @@ identifier hg19ContigDiff
     hg19.gold.frag dupeOk
     hg19.hg19ContigDiff.name
 
-identifier hg38ContigDiff
+identifier ContigDiff
 "contig difference track"
     hg19,hg38.gold.frag dupeOk
     hg19,hg38.hg38ContigDiff.name
@@ -3981,16 +3988,16 @@ identifier lrgTranscriptId
 
 identifier txnFactorGeneId
 "Transcription factor gene name (for human, HGNC)"
-    hg19.wgEncodeRegTfbsClusteredV3.name
+    hg19.wgEncodeRegTfbsClusteredV3.name dupeOk
     # note: these could be in hgFixed or other non-assembly db
-    hg19.factorbookMotifTarget.target
-    hg19.factorbookGeneAlias.name
+    hg19.factorbookMotifCanonical.target
+    hg19.factorbookGeneAlias.name minCheck=0.85
 
 identifier txnFactorMotifId
 "Transcription factor motif name/id"
-    hg19.factorbookMotifPos.name
-    hg19.factorbookMotifPwm.name
-    hg19.factorbookMotifTarget.motif comma
+    hg19.factorbookMotifPos.name dupeOk
+    hg19.factorbookMotifPwm.name minCheck=0.85
+    hg19.factorbookMotifCanonical.motif comma minCheck=0.85
 
 
 # Dependencies not already captured in identifiers
@@ -4556,6 +4563,8 @@ tablesIgnored mm10
     mm10Haplotypes
     altSeqLiftOverPslP1
     altSeqPatchesP1
+    wgEncodeGencode2wayConsPseudo%
+    wgEncodeGencodePolya%
 
 tablesIgnored $ce
     chr%_wabaCbr
