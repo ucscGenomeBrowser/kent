@@ -276,6 +276,12 @@ for (submit = submitList; submit != NULL; submit = submit->next)
      * file by file info. */
     if (!isEmpty(submit->errorMessage))
         printf("<B>%s</B><BR>\n", submit->errorMessage);
+
+    /* Figure out and print upload time */
+    sqlSafef(query, sizeof(query), 
+	"select from_unixtime(startUploadTime) from edwSubmit where id=%u", submit->id);
+    char *dateTime = sqlQuickString(conn, query);
+    printf("Started upload %s<BR>\n", dateTime);
     printf("%d files in validated.txt including %d already in warehouse<BR>\n", 
 	submit->fileCount, submit->oldFiles);
     if (submit->newFiles > 0)
