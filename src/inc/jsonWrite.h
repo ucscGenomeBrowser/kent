@@ -1,47 +1,56 @@
-/* jsonWrite - Helper routines for writing out JSON. 
- *
- * Apologies for the awkward 'isMiddle' parameter.  This is
- * from JSON not allowing a terminal comma for a comma separated
- * list.   A larger, more usable library might find a way to
- * take care of this for you. */
+/* jsonWrite - Helper routines for writing out JSON. */
 
 #ifndef JSONWRITE_H
 #define JSONWRITE_H
 
-void dyJsonTag(struct dyString *dy, char *var);
+struct jsonWrite
+/* Object to help output JSON */
+     {
+     struct jsonWrite *next;
+     struct dyString *dy;	/* Most of this module is building json text in here */
+     bool objStack[128];	/* We need stack deep enough to handle nested objects and lists */
+     int stackIx;		/* Current index in stack */
+     };
+
+struct jsonWrite *jsonWriteNew();
+/* Return new empty jsonWrite struct. */
+
+void jsonWriteFree(struct jsonWrite **pJw);
+/* Free up a jsonWrite object. */
+
+void jsonWriteTag(struct jsonWrite *jw, char *var);
 /* Print out quoted tag followed by colon */
 
-void dyJsonEndLine(struct dyString *dy, boolean isMiddle);
+void jsonWriteEndLine(struct jsonWrite *jw);
 /* Write comma if in middle, and then newline regardless. */
 
-void dyJsonString(struct dyString *dy, char *var, char *string, boolean isMiddle);
+void jsonWriteString(struct jsonWrite *jw, char *var, char *string);
 /* Print out "var": "val" */
 
-void dyJsonDateFromUnix(struct dyString *dy, char *var, long long unixTimeVal, boolean isMiddle);
+void jsonWriteDateFromUnix(struct jsonWrite *jw, char *var, long long unixTimeVal);
 /* Add "var": YYYY-MM-DDT-HH:MM:SSZ given a Unix time stamp */
 
-void dyJsonNumber(struct dyString *dy, char *var, long long val, boolean isMiddle);
+void jsonWriteNumber(struct jsonWrite *jw, char *var, long long val);
 /* print out "var": val as number */
 
-void dyJsonLink(struct dyString *dy, char *var, char *objRoot, char *name, boolean isMiddle);
+void jsonWriteLink(struct jsonWrite *jw, char *var, char *objRoot, char *name);
 /* Print out the jsony type link to another object.  objRoot will start and end with a '/'
  * and may have additional slashes in this usage. */
 
-void dyJsonLinkNum(struct dyString *dy, char *var, char *objRoot, long long id, boolean isMiddle);
+void jsonWriteLinkNum(struct jsonWrite *jw, char *var, char *objRoot, long long id);
 /* Print out the jsony type link to another object with a numerical id.  objRoot will start 
  * and end with a '/' and may have additional slashes in this usage. */
 
-void dyJsonListStart(struct dyString *dy, char *var);
+void jsonWriteListStart(struct jsonWrite *jw, char *var);
 /* Start an array in JSON */
 
-void dyJsonListEnd(struct dyString *dy, boolean isMiddle);
+void jsonWriteListEnd(struct jsonWrite *jw);
 /* End an array in JSON */
 
-void dyJsonObjectStart(struct dyString *dy);
+void jsonWriteObjectStart(struct jsonWrite *dy);
 /* Print start of object */
 
-void dyJsonObjectEnd(struct dyString *dy, boolean isMiddle);
+void jsonWriteObjectEnd(struct jsonWrite *jw);
 /* End object in JSON */
-
 
 #endif /* JSONWRITE_H */
