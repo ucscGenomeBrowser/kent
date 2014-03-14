@@ -1159,7 +1159,7 @@ else
 	     config->variantSource->name);
 if (config->gpVarSource == NULL)
     errAbort("afVepSetConfig: config must have a gpVarSource");
-else if (! asObjectsMatchFirstN(config->gpVarSource->asObj, genePredAsObj(), 10))
+else if (! asColumnNamesMatchFirstN(config->gpVarSource->asObj, genePredAsObj(), 10))
     errAbort("afVepSetConfig: gpVarSource %s doesn't look like genePred",
 	     config->gpVarSource->name);
 struct asColumn *gpvAsColumns = config->gpVarSource->asObj->columnList;

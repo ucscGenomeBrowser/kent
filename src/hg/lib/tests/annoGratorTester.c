@@ -141,7 +141,7 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
     else
 	{
 	struct annoStreamer *src = streamerFromInfo(grInfo);
-	if (doGpFx && grInfo->asObj && asObjectsMatchFirstN(grInfo->asObj, genePredAsObj(), 10))
+	if (doGpFx && grInfo->asObj && asColumnNamesMatchFirstN(grInfo->asObj, genePredAsObj(), 10))
 	    grator = annoGratorGpVarNew(src);
 	else
 	    grator = annoGratorNew(src);
