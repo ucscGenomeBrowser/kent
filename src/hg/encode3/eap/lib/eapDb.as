@@ -19,6 +19,7 @@ table eapSoftware
     string name unique; "Command line name"
     string url; "Suggested reference URL"
     string email; "Suggested contact email"
+    char[36] metaUuid index[16]; "UUID into Stanford metadata system if synced"
     )
 
 table eapSwVersion
@@ -30,6 +31,7 @@ table eapSwVersion
     char[32] md5 index; "md5 sum of executable file"
     byte redoPriority;  "-1 for routine recompile, 0 for unknown, 1 for recommended, 2 for required."
     lstring notes;	"Any notes on the version" 
+    char[36] metaUuid index[16]; "UUID into Stanford metadata system if synced"
     )
 
 table eapStep
@@ -38,13 +40,17 @@ table eapStep
     uint id primary auto; "Step id"
     string name unique;  "Name of this analysis step"
     int cpusRequested; "Number of CPUs to request from job control system"
+    string description;  "Description of step, about a sentence."
     uint inCount; "Total number of inputs"
     string[inCount] inputTypes; "List of types to go with input files"
     string[inCount] inputFormats; "List of formats of input files"
+    string[inCount] inputDescriptions; "List of descriptions of input files"
     uint outCount; "Total number of outputs"
     string[outCount] outputNamesInTempDir; "list of all output file names in output dir"
     string[outCount] outputFormats; "list of formats of output files"
     string[outCount] outputTypes; "list of outputType of output files"
+    string[outCount] outputDescriptions; "list of descriptions of outputs"
+    char[36] metaUuid index[16]; "UUID into Stanford metadata system if synced"
     )
  
 table eapStepSoftware
@@ -83,6 +89,7 @@ table eapRun
     uint assemblyId; "Id of assembly we are working with if analysis is all on one assembly"
     lstring jsonResult; "JSON formatted object with result for Stanford metaDatabase"
     byte createStatus;  "1 if output files made 0 if not made, -1 if make tried and failed"
+    char[36] metaUuid index[16]; "UUID into Stanford metadata system if synced"
     )
 
 table eapInput
@@ -108,7 +115,7 @@ table eapOutput
     )
 
 table eapPhantomPeakStats
-"Statistics on a BAM file that contains reads that will align in a peaky fashion"
+"Statistics on a BAM file that contains reads that will align in a peaky fashion - deprecated"
     (
     uint fileId;    "ID of BAM file this is taken from"
     uint numReads;  "Number of mapped reads in that file"

@@ -79,7 +79,7 @@ void eapJobOutput(struct eapJob *el, FILE *f, char sep, char lastSep);
 #define eapJobCommaOut(el,f) eapJobOutput(el,f,',',',');
 /* Print out eapJob as a comma separated list including final comma. */
 
-#define EAPSOFTWARE_NUM_COLS 4
+#define EAPSOFTWARE_NUM_COLS 5
 
 extern char *eapSoftwareCommaSepFieldNames;
 
@@ -91,6 +91,7 @@ struct eapSoftware
     char *name;	/* Command line name */
     char *url;	/* Suggested reference URL */
     char *email;	/* Suggested contact email */
+    char metaUuid[37];	/* UUID into Stanford metadata system if synced */
     };
 
 void eapSoftwareStaticLoad(char **row, struct eapSoftware *ret);
@@ -148,7 +149,7 @@ void eapSoftwareOutput(struct eapSoftware *el, FILE *f, char sep, char lastSep);
 #define eapSoftwareCommaOut(el,f) eapSoftwareOutput(el,f,',',',');
 /* Print out eapSoftware as a comma separated list including final comma. */
 
-#define EAPSWVERSION_NUM_COLS 6
+#define EAPSWVERSION_NUM_COLS 7
 
 extern char *eapSwVersionCommaSepFieldNames;
 
@@ -162,6 +163,7 @@ struct eapSwVersion
     char md5[33];	/* md5 sum of executable file */
     signed char redoPriority;	/* -1 for routine recompile, 0 for unknown, 1 for recommended, 2 for required. */
     char *notes;	/* Any notes on the version */
+    char metaUuid[37];	/* UUID into Stanford metadata system if synced */
     };
 
 void eapSwVersionStaticLoad(char **row, struct eapSwVersion *ret);
@@ -219,7 +221,7 @@ void eapSwVersionOutput(struct eapSwVersion *el, FILE *f, char sep, char lastSep
 #define eapSwVersionCommaOut(el,f) eapSwVersionOutput(el,f,',',',');
 /* Print out eapSwVersion as a comma separated list including final comma. */
 
-#define EAPSTEP_NUM_COLS 10
+#define EAPSTEP_NUM_COLS 14
 
 extern char *eapStepCommaSepFieldNames;
 
@@ -230,13 +232,17 @@ struct eapStep
     unsigned id;	/* Step id */
     char *name;	/* Name of this analysis step */
     int cpusRequested;	/* Number of CPUs to request from job control system */
+    char *description;	/* Description of step, about a sentence. */
     unsigned inCount;	/* Total number of inputs */
     char **inputTypes;	/* List of types to go with input files */
     char **inputFormats;	/* List of formats of input files */
+    char **inputDescriptions;	/* List of descriptions of input files */
     unsigned outCount;	/* Total number of outputs */
     char **outputNamesInTempDir;	/* list of all output file names in output dir */
     char **outputFormats;	/* list of formats of output files */
     char **outputTypes;	/* list of outputType of output files */
+    char **outputDescriptions;	/* list of descriptions of outputs */
+    char metaUuid[37];	/* UUID into Stanford metadata system if synced */
     };
 
 struct eapStep *eapStepLoadByQuery(struct sqlConnection *conn, char *query);
@@ -494,7 +500,7 @@ void eapStepSwVersionOutput(struct eapStepSwVersion *el, FILE *f, char sep, char
 #define eapStepSwVersionCommaOut(el,f) eapStepSwVersionOutput(el,f,',',',');
 /* Print out eapStepSwVersion as a comma separated list including final comma. */
 
-#define EAPRUN_NUM_COLS 9
+#define EAPRUN_NUM_COLS 10
 
 extern char *eapRunCommaSepFieldNames;
 
@@ -511,6 +517,7 @@ struct eapRun
     unsigned assemblyId;	/* Id of assembly we are working with if analysis is all on one assembly */
     char *jsonResult;	/* JSON formatted object with result for Stanford metaDatabase */
     signed char createStatus;	/* 1 if output files made 0 if not made, -1 if make tried and failed */
+    char metaUuid[37];	/* UUID into Stanford metadata system if synced */
     };
 
 void eapRunStaticLoad(char **row, struct eapRun *ret);
@@ -715,7 +722,7 @@ void eapOutputOutput(struct eapOutput *el, FILE *f, char sep, char lastSep);
 extern char *eapPhantomPeakStatsCommaSepFieldNames;
 
 struct eapPhantomPeakStats
-/* Statistics on a BAM file that contains reads that will align in a peaky fashion */
+/* Statistics on a BAM file that contains reads that will align in a peaky fashion - deprecated */
     {
     struct eapPhantomPeakStats *next;  /* Next in singly linked list. */
     unsigned fileId;	/* ID of BAM file this is taken from */

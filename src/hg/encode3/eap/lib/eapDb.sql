@@ -26,9 +26,11 @@ CREATE TABLE eapSoftware (
     name varchar(255) default '',	# Command line name
     url varchar(255) default '',	# Suggested reference URL
     email varchar(255) default '',	# Suggested contact email
+    metaUuid char(36) default '',	# UUID into Stanford metadata system if synced
               #Indices
     PRIMARY KEY(id),
-    UNIQUE(name)
+    UNIQUE(name),
+    INDEX(metaUuid(16))
 );
 
 #A version of a particular piece of software
@@ -36,13 +38,15 @@ CREATE TABLE eapSwVersion (
     id int unsigned auto_increment,	# Version id
     software varchar(255) default '',	# Name field of software this is associated with
     version longblob,	# Version as carved out of program run with --version or the like
-    md5 char(32) default 0,	# md5 sum of executable file
+    md5 char(32) default '',	# md5 sum of executable file
     redoPriority tinyint default 0,	# -1 for routine recompile, 0 for unknown, 1 for recommended, 2 for required.
     notes longblob,	# Any notes on the version
+    metaUuid char(36) default '',	# UUID into Stanford metadata system if synced
               #Indices
     PRIMARY KEY(id),
     INDEX(software),
-    INDEX(md5)
+    INDEX(md5),
+    INDEX(metaUuid(16))
 );
 
 #A step in an analysis pipeline - something that takes one set of files to another
@@ -50,16 +54,21 @@ CREATE TABLE eapStep (
     id int unsigned auto_increment,	# Step id
     name varchar(255) default '',	# Name of this analysis step
     cpusRequested int default 0,	# Number of CPUs to request from job control system
+    description varchar(255) default '',	# Description of step, about a sentence.
     inCount int unsigned default 0,	# Total number of inputs
     inputTypes longblob,	# List of types to go with input files
     inputFormats longblob,	# List of formats of input files
+    inputDescriptions longblob,	# List of descriptions of input files
     outCount int unsigned default 0,	# Total number of outputs
     outputNamesInTempDir longblob,	# list of all output file names in output dir
     outputFormats longblob,	# list of formats of output files
     outputTypes longblob,	# list of outputType of output files
+    outputDescriptions longblob,	# list of descriptions of outputs
+    metaUuid char(36) default '',	# UUID into Stanford metadata system if synced
               #Indices
     PRIMARY KEY(id),
-    UNIQUE(name)
+    UNIQUE(name),
+    INDEX(metaUuid(16))
 );
 
 #Relates steps to the software they use
@@ -95,16 +104,18 @@ CREATE TABLE eapStepSwVersion (
 CREATE TABLE eapRun (
     id int unsigned auto_increment,	# Analysis run ID
     jobId int unsigned default 0,	# ID in edwAnalysisJob table
-    experiment char(16) default 0,	# Something like ENCSR000CFA.
+    experiment char(16) default '',	# Something like ENCSR000CFA.
     analysisStep varchar(255) default '',	# Name of analysis step.  Different data can be analysed with same step
     stepVersionId int unsigned default 0,	# Keep track of versions of everything
     tempDir longblob,	# Where analysis is to be computed
     assemblyId int unsigned default 0,	# Id of assembly we are working with if analysis is all on one assembly
     jsonResult longblob,	# JSON formatted object with result for Stanford metaDatabase
     createStatus tinyint default 0,	# 1 if output files made 0 if not made, -1 if make tried and failed
+    metaUuid char(36) default '',	# UUID into Stanford metadata system if synced
               #Indices
     PRIMARY KEY(id),
-    INDEX(experiment)
+    INDEX(experiment),
+    INDEX(metaUuid(16))
 );
 
 #Inputs to an eapAnalysis
@@ -133,7 +144,7 @@ CREATE TABLE eapOutput (
     INDEX(runId)
 );
 
-#Statistics on a BAM file that contains reads that will align in a peaky fashion
+#Statistics on a BAM file that contains reads that will align in a peaky fashion - deprecated
 CREATE TABLE eapPhantomPeakStats (
     fileId int unsigned default 0,	# ID of BAM file this is taken from
     numReads int unsigned default 0,	# Number of mapped reads in that file

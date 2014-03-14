@@ -192,7 +192,7 @@ fputc(lastSep,f);
 }
 
 
-char *eapSoftwareCommaSepFieldNames = "id,name,url,email";
+char *eapSoftwareCommaSepFieldNames = "id,name,url,email,metaUuid";
 
 void eapSoftwareStaticLoad(char **row, struct eapSoftware *ret)
 /* Load a row from eapSoftware table into ret.  The contents of ret will
@@ -203,6 +203,7 @@ ret->id = sqlUnsigned(row[0]);
 ret->name = row[1];
 ret->url = row[2];
 ret->email = row[3];
+safecpy(ret->metaUuid, sizeof(ret->metaUuid), row[4]);
 }
 
 struct eapSoftware *eapSoftwareLoadByQuery(struct sqlConnection *conn, char *query)
@@ -235,8 +236,8 @@ void eapSoftwareSaveToDb(struct sqlConnection *conn, struct eapSoftware *el, cha
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s')", 
-	tableName,  el->id,  el->name,  el->url,  el->email);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s')", 
+	tableName,  el->id,  el->name,  el->url,  el->email,  el->metaUuid);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -252,6 +253,7 @@ ret->id = sqlUnsigned(row[0]);
 ret->name = cloneString(row[1]);
 ret->url = cloneString(row[2]);
 ret->email = cloneString(row[3]);
+safecpy(ret->metaUuid, sizeof(ret->metaUuid), row[4]);
 return ret;
 }
 
@@ -261,7 +263,7 @@ struct eapSoftware *eapSoftwareLoadAll(char *fileName)
 {
 struct eapSoftware *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -279,7 +281,7 @@ struct eapSoftware *eapSoftwareLoadAllByChar(char *fileName, char chopper)
 {
 struct eapSoftware *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -304,6 +306,7 @@ ret->id = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->url = sqlStringComma(&s);
 ret->email = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->metaUuid, sizeof(ret->metaUuid));
 *pS = s;
 return ret;
 }
@@ -350,11 +353,15 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->email);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->metaUuid);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
 
-char *eapSwVersionCommaSepFieldNames = "id,software,version,md5,redoPriority,notes";
+char *eapSwVersionCommaSepFieldNames = "id,software,version,md5,redoPriority,notes,metaUuid";
 
 void eapSwVersionStaticLoad(char **row, struct eapSwVersion *ret)
 /* Load a row from eapSwVersion table into ret.  The contents of ret will
@@ -367,6 +374,7 @@ ret->version = row[2];
 safecpy(ret->md5, sizeof(ret->md5), row[3]);
 ret->redoPriority = sqlSigned(row[4]);
 ret->notes = row[5];
+safecpy(ret->metaUuid, sizeof(ret->metaUuid), row[6]);
 }
 
 struct eapSwVersion *eapSwVersionLoadByQuery(struct sqlConnection *conn, char *query)
@@ -399,8 +407,8 @@ void eapSwVersionSaveToDb(struct sqlConnection *conn, struct eapSwVersion *el, c
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%d,'%s')", 
-	tableName,  el->id,  el->software,  el->version,  el->md5,  el->redoPriority,  el->notes);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%d,'%s','%s')", 
+	tableName,  el->id,  el->software,  el->version,  el->md5,  el->redoPriority,  el->notes,  el->metaUuid);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -418,6 +426,7 @@ ret->version = cloneString(row[2]);
 safecpy(ret->md5, sizeof(ret->md5), row[3]);
 ret->redoPriority = sqlSigned(row[4]);
 ret->notes = cloneString(row[5]);
+safecpy(ret->metaUuid, sizeof(ret->metaUuid), row[6]);
 return ret;
 }
 
@@ -427,7 +436,7 @@ struct eapSwVersion *eapSwVersionLoadAll(char *fileName)
 {
 struct eapSwVersion *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -445,7 +454,7 @@ struct eapSwVersion *eapSwVersionLoadAllByChar(char *fileName, char chopper)
 {
 struct eapSwVersion *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -472,6 +481,7 @@ ret->version = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->md5, sizeof(ret->md5));
 ret->redoPriority = sqlSignedComma(&s);
 ret->notes = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->metaUuid, sizeof(ret->metaUuid));
 *pS = s;
 return ret;
 }
@@ -524,11 +534,15 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->notes);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->metaUuid);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
 
-char *eapStepCommaSepFieldNames = "id,name,cpusRequested,inCount,inputTypes,inputFormats,outCount,outputNamesInTempDir,outputFormats,outputTypes";
+char *eapStepCommaSepFieldNames = "id,name,cpusRequested,description,inCount,inputTypes,inputFormats,inputDescriptions,outCount,outputNamesInTempDir,outputFormats,outputTypes,outputDescriptions,metaUuid";
 
 struct eapStep *eapStepLoadByQuery(struct sqlConnection *conn, char *query)
 /* Load all eapStep from table that satisfy the query given.  
@@ -560,21 +574,25 @@ void eapStepSaveToDb(struct sqlConnection *conn, struct eapStep *el, char *table
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-char  *inputTypesArray, *inputFormatsArray, *outputNamesInTempDirArray, *outputFormatsArray, *outputTypesArray;
+char  *inputTypesArray, *inputFormatsArray, *inputDescriptionsArray, *outputNamesInTempDirArray, *outputFormatsArray, *outputTypesArray, *outputDescriptionsArray;
 inputTypesArray = sqlStringArrayToString(el->inputTypes, el->inCount);
 inputFormatsArray = sqlStringArrayToString(el->inputFormats, el->inCount);
+inputDescriptionsArray = sqlStringArrayToString(el->inputDescriptions, el->inCount);
 outputNamesInTempDirArray = sqlStringArrayToString(el->outputNamesInTempDir, el->outCount);
 outputFormatsArray = sqlStringArrayToString(el->outputFormats, el->outCount);
 outputTypesArray = sqlStringArrayToString(el->outputTypes, el->outCount);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%d,%u,'%s','%s',%u,'%s','%s','%s')", 
-	tableName,  el->id,  el->name,  el->cpusRequested,  el->inCount,  inputTypesArray ,  inputFormatsArray ,  el->outCount,  outputNamesInTempDirArray ,  outputFormatsArray ,  outputTypesArray );
+outputDescriptionsArray = sqlStringArrayToString(el->outputDescriptions, el->outCount);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%d,'%s',%u,'%s','%s','%s',%u,'%s','%s','%s','%s','%s')", 
+	tableName,  el->id,  el->name,  el->cpusRequested,  el->description,  el->inCount,  inputTypesArray ,  inputFormatsArray ,  inputDescriptionsArray ,  el->outCount,  outputNamesInTempDirArray ,  outputFormatsArray ,  outputTypesArray ,  outputDescriptionsArray ,  el->metaUuid);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&inputTypesArray);
 freez(&inputFormatsArray);
+freez(&inputDescriptionsArray);
 freez(&outputNamesInTempDirArray);
 freez(&outputFormatsArray);
 freez(&outputTypesArray);
+freez(&outputDescriptionsArray);
 }
 
 struct eapStep *eapStepLoad(char **row)
@@ -584,36 +602,48 @@ struct eapStep *eapStepLoad(char **row)
 struct eapStep *ret;
 
 AllocVar(ret);
-ret->inCount = sqlUnsigned(row[3]);
-ret->outCount = sqlUnsigned(row[6]);
+ret->inCount = sqlUnsigned(row[4]);
+ret->outCount = sqlUnsigned(row[8]);
 ret->id = sqlUnsigned(row[0]);
 ret->name = cloneString(row[1]);
 ret->cpusRequested = sqlSigned(row[2]);
+ret->description = cloneString(row[3]);
 {
 int sizeOne;
-sqlStringDynamicArray(row[4], &ret->inputTypes, &sizeOne);
+sqlStringDynamicArray(row[5], &ret->inputTypes, &sizeOne);
 assert(sizeOne == ret->inCount);
 }
 {
 int sizeOne;
-sqlStringDynamicArray(row[5], &ret->inputFormats, &sizeOne);
+sqlStringDynamicArray(row[6], &ret->inputFormats, &sizeOne);
 assert(sizeOne == ret->inCount);
 }
 {
 int sizeOne;
-sqlStringDynamicArray(row[7], &ret->outputNamesInTempDir, &sizeOne);
+sqlStringDynamicArray(row[7], &ret->inputDescriptions, &sizeOne);
+assert(sizeOne == ret->inCount);
+}
+{
+int sizeOne;
+sqlStringDynamicArray(row[9], &ret->outputNamesInTempDir, &sizeOne);
 assert(sizeOne == ret->outCount);
 }
 {
 int sizeOne;
-sqlStringDynamicArray(row[8], &ret->outputFormats, &sizeOne);
+sqlStringDynamicArray(row[10], &ret->outputFormats, &sizeOne);
 assert(sizeOne == ret->outCount);
 }
 {
 int sizeOne;
-sqlStringDynamicArray(row[9], &ret->outputTypes, &sizeOne);
+sqlStringDynamicArray(row[11], &ret->outputTypes, &sizeOne);
 assert(sizeOne == ret->outCount);
 }
+{
+int sizeOne;
+sqlStringDynamicArray(row[12], &ret->outputDescriptions, &sizeOne);
+assert(sizeOne == ret->outCount);
+}
+safecpy(ret->metaUuid, sizeof(ret->metaUuid), row[13]);
 return ret;
 }
 
@@ -623,7 +653,7 @@ struct eapStep *eapStepLoadAll(char *fileName)
 {
 struct eapStep *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[14];
 
 while (lineFileRow(lf, row))
     {
@@ -641,7 +671,7 @@ struct eapStep *eapStepLoadAllByChar(char *fileName, char chopper)
 {
 struct eapStep *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[14];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -665,6 +695,7 @@ if (ret == NULL)
 ret->id = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->cpusRequested = sqlSignedComma(&s);
+ret->description = sqlStringComma(&s);
 ret->inCount = sqlUnsignedComma(&s);
 {
 int i;
@@ -684,6 +715,17 @@ AllocArray(ret->inputFormats, ret->inCount);
 for (i=0; i<ret->inCount; ++i)
     {
     ret->inputFormats[i] = sqlStringComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->inputDescriptions, ret->inCount);
+for (i=0; i<ret->inCount; ++i)
+    {
+    ret->inputDescriptions[i] = sqlStringComma(&s);
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
@@ -722,6 +764,18 @@ for (i=0; i<ret->outCount; ++i)
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->outputDescriptions, ret->outCount);
+for (i=0; i<ret->outCount; ++i)
+    {
+    ret->outputDescriptions[i] = sqlStringComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+sqlFixedStringComma(&s, ret->metaUuid, sizeof(ret->metaUuid));
 *pS = s;
 return ret;
 }
@@ -734,6 +788,7 @@ struct eapStep *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->name);
+freeMem(el->description);
 /* All strings in inputTypes are allocated at once, so only need to free first. */
 if (el->inputTypes != NULL)
     freeMem(el->inputTypes[0]);
@@ -742,6 +797,10 @@ freeMem(el->inputTypes);
 if (el->inputFormats != NULL)
     freeMem(el->inputFormats[0]);
 freeMem(el->inputFormats);
+/* All strings in inputDescriptions are allocated at once, so only need to free first. */
+if (el->inputDescriptions != NULL)
+    freeMem(el->inputDescriptions[0]);
+freeMem(el->inputDescriptions);
 /* All strings in outputNamesInTempDir are allocated at once, so only need to free first. */
 if (el->outputNamesInTempDir != NULL)
     freeMem(el->outputNamesInTempDir[0]);
@@ -754,6 +813,10 @@ freeMem(el->outputFormats);
 if (el->outputTypes != NULL)
     freeMem(el->outputTypes[0]);
 freeMem(el->outputTypes);
+/* All strings in outputDescriptions are allocated at once, so only need to free first. */
+if (el->outputDescriptions != NULL)
+    freeMem(el->outputDescriptions[0]);
+freeMem(el->outputDescriptions);
 freez(pEl);
 }
 
@@ -781,6 +844,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->cpusRequested);
 fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->description);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
 fprintf(f, "%u", el->inCount);
 fputc(sep,f);
 {
@@ -803,6 +870,19 @@ for (i=0; i<el->inCount; ++i)
     {
     if (sep == ',') fputc('"',f);
     fprintf(f, "%s", el->inputFormats[i]);
+    if (sep == ',') fputc('"',f);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->inCount; ++i)
+    {
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->inputDescriptions[i]);
     if (sep == ',') fputc('"',f);
     fputc(',', f);
     }
@@ -849,6 +929,23 @@ for (i=0; i<el->outCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 }
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->outCount; ++i)
+    {
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->outputDescriptions[i]);
+    if (sep == ',') fputc('"',f);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->metaUuid);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -1306,7 +1403,7 @@ fputc(lastSep,f);
 }
 
 
-char *eapRunCommaSepFieldNames = "id,jobId,experiment,analysisStep,stepVersionId,tempDir,assemblyId,jsonResult,createStatus";
+char *eapRunCommaSepFieldNames = "id,jobId,experiment,analysisStep,stepVersionId,tempDir,assemblyId,jsonResult,createStatus,metaUuid";
 
 void eapRunStaticLoad(char **row, struct eapRun *ret)
 /* Load a row from eapRun table into ret.  The contents of ret will
@@ -1322,6 +1419,7 @@ ret->tempDir = row[5];
 ret->assemblyId = sqlUnsigned(row[6]);
 ret->jsonResult = row[7];
 ret->createStatus = sqlSigned(row[8]);
+safecpy(ret->metaUuid, sizeof(ret->metaUuid), row[9]);
 }
 
 struct eapRun *eapRunLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1354,8 +1452,8 @@ void eapRunSaveToDb(struct sqlConnection *conn, struct eapRun *el, char *tableNa
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,'%s',%u,'%s',%d)", 
-	tableName,  el->id,  el->jobId,  el->experiment,  el->analysisStep,  el->stepVersionId,  el->tempDir,  el->assemblyId,  el->jsonResult,  el->createStatus);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,'%s',%u,'%s',%d,'%s')", 
+	tableName,  el->id,  el->jobId,  el->experiment,  el->analysisStep,  el->stepVersionId,  el->tempDir,  el->assemblyId,  el->jsonResult,  el->createStatus,  el->metaUuid);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1376,6 +1474,7 @@ ret->tempDir = cloneString(row[5]);
 ret->assemblyId = sqlUnsigned(row[6]);
 ret->jsonResult = cloneString(row[7]);
 ret->createStatus = sqlSigned(row[8]);
+safecpy(ret->metaUuid, sizeof(ret->metaUuid), row[9]);
 return ret;
 }
 
@@ -1385,7 +1484,7 @@ struct eapRun *eapRunLoadAll(char *fileName)
 {
 struct eapRun *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -1403,7 +1502,7 @@ struct eapRun *eapRunLoadAllByChar(char *fileName, char chopper)
 {
 struct eapRun *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1433,6 +1532,7 @@ ret->tempDir = sqlStringComma(&s);
 ret->assemblyId = sqlUnsignedComma(&s);
 ret->jsonResult = sqlStringComma(&s);
 ret->createStatus = sqlSignedComma(&s);
+sqlFixedStringComma(&s, ret->metaUuid, sizeof(ret->metaUuid));
 *pS = s;
 return ret;
 }
@@ -1491,6 +1591,10 @@ fprintf(f, "%s", el->jsonResult);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->createStatus);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->metaUuid);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
