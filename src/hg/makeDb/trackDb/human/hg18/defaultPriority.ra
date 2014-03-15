@@ -1,0 +1,18 @@
+
+# Genes and Gene Predictions
+track knownGene override
+priority 1
+
+track refGene override
+priority 2
+
+# mRNA and EST
+track mrna override
+priority 1
+
+track intronEst override
+priority 2
+
+# Variation and Repeats
+track rmsk override
+priority 1

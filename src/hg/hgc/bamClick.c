@@ -7,10 +7,8 @@
 #include "hdb.h"
 #include "hgBam.h"
 #include "hgc.h"
-#if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def USE_BAM && KNETFILE_HOOKS
 
 
 #include "hgBam.h"
@@ -176,11 +174,9 @@ else
    skipQualityScore = TRUE;
 // TODO: libify tdb settings table_pairEndsByName, stripPrefix and pairSearchRange
 
-#if (defined USE_BAM && defined KNETFILE_HOOKS)
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
-#endif//def USE_BAM && KNETFILE_HOOKS
 
 if (sameString(item, "zoom in"))
     printf("Zoom in to a region with fewer items to enable 'detail page' links for individual items.<BR>");

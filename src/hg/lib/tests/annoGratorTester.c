@@ -14,13 +14,11 @@
 #include "dystring.h"
 #include "genePred.h"
 #include "hdb.h"
+#include "knetUdc.h"
 #include "memalloc.h"
 #include "pgSnp.h"
 #include "udc.h"
 #include "vcf.h"
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
-#include "knetUdc.h"
-#endif//def USE_TABIX && KNETFILE_HOOKS
 
 // Names of tests:
 static const char *pgSnpDbToTabOut = "pgSnpDbToTabOut";
@@ -247,9 +245,7 @@ if (doAllTests || sameString(test, snpConsDbToTabOutShort) ||
 // Fifth test: VCF with genotypes
 if (doAllTests || sameString(test, vcfEx1))
     {
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
     knetUdcInstall();
-#endif//def USE_TABIX && KNETFILE_HOOKS
     struct streamerInfo vcfEx1 = { NULL, assembly, NULL,
 			   "http://genome.ucsc.edu/goldenPath/help/examples/vcfExample.vcf.gz",
 				   arWords, vcfAsObj() };

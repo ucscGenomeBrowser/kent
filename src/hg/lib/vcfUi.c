@@ -9,10 +9,8 @@
 #include "jsHelper.h"
 #include "vcf.h"
 #include "vcfUi.h"
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def USE_TABIX && KNETFILE_HOOKS
 
 INLINE char *nameOrDefault(char *thisName, char *defaultVal)
 /* If thisName is not a placeholder value, return it; otherwise return default. */
@@ -124,11 +122,9 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 static struct vcfFile *vcfHopefullyOpenHeader(struct cart *cart, struct trackDb *tdb)
 /* Defend against network errors and return the vcfFile object with header data, or NULL. */
 {
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
-#endif//def USE_TABIX && KNETFILE_HOOKS
 char *db = cartString(cart, "db");
 char *table = tdb->table;
 char *dbTableName = trackDbSetting(tdb, "dbTableName");
