@@ -1162,7 +1162,7 @@ def checkGbdbMysqlAccess():
         os.remove(tmpFname2)
 
     # check if we can run "at"
-    cmd = "echo echo hi | at now"
+    cmd = "echo echo hi | at -M now"
     ret = runCmd(cmd, mustRun=False)
     if ret != 0:
         print "Could not run %s<br>" % cmd
