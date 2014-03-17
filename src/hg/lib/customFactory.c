@@ -773,10 +773,10 @@ static struct pipeline *bedDetailLoaderPipe(struct customTrack *track)
 struct dyString *tmpDy = newDyString(0);
 //bed size can vary
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-tab", "-noBin",
-	"-bedDetail", NULL, NULL, NULL, NULL, NULL, NULL};
+	"-sqlTable=loader/bedDetail.sql", "-renameSqlTable", "-trimSqlTable", "-bedDetail", NULL, NULL, NULL, NULL, NULL, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
-int index = 5;
+int index = 8;
 
 if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
