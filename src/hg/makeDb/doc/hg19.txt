@@ -24652,7 +24652,8 @@ EOF
 
 
 ############################################################################
-# SNPMASKED SEQUENCE FOR SNP138 (DONE 8/19/13 angie)
+# SNPMASKED SEQUENCE FOR SNP138 (DONE 3/17/14 angie)
+# Originally done 8/19/13, but user reported in MLQ #12902 that not all files were gzipped.
    mkdir /hive/data/genomes/hg19/snp138Mask
    cd /hive/data/genomes/hg19/snp138Mask
    # Identify rsIds with various problems -- we will exclude those.
@@ -24693,8 +24694,14 @@ EOF
    foreach f (substitutions/chr*.fa)
      echo $f:t:r
      mv $f $f:r.subst.fa
-     gzip $f:r.subst.fa &
    end
+   # Fire off a bunch of gzip jobs in parallel:
+   ls -1 substitutions/*.fa | split -l 5
+   foreach f (x??)
+     gzip `cat $f` &
+   end
+   # Wait for backgrounded gzip jobs to complete
+   rm x??
 
    # Insertions & deletions not done.  To date we have only offered substs for download.
    # If there is user demand, use template from snp131 above.
