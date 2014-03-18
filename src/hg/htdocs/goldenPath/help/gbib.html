@@ -75,7 +75,7 @@ big button "Start" in the symbol bar.<P>
 <img src="../../images/gbib-start.png">
 <p>
 
-Known problems:
+Common problems:
 <ul>
 <li>Virtualbox Error: <i>VT-x/AMD-V hardware acceleration has been enabled, but is not operational. You 64-bit guest will fail to detect a 64-bit CPU and will not be able to boot.</i> 
 </li>
@@ -83,10 +83,17 @@ Known problems:
         <li>Some older entry-level laptops from around 2009-2011 (e.g. Toshiba Satellite U500) were sold with CPUs that do not support virtualization.  These laptops cannot run the Genome Browser in a Box. The same applies to low-cost laptops called "netbooks" with Intel Atom processors. </li>
         <li>On some DELL Optiplex (e.g. Optiplex 960) laptops, virtualization is supported, but deactivated in the BIOS. Reboot the computer, press F12 during boot to show the BIOS menu. Go to "BIOS Setup", "Virtualization Support", "Virtualization", check "Enable Intel Virtualization Technology". Exit and save. Restart the computer.
         </ul>
+
 <li>Virtualbox Error: <i>"Failed to open virtual machine located in... Trying to open a VM config ... which has the same UUID as an existing virtual machine. </i> 
         <ul>
         <li>This happens if you have already downloaded and installed Genome Browser in a Box before </li>
         <li>Start VirtualBox, select the old browserbox virtual machine and choose "Machine - Remove" in the menu (Ctrl+R or &#8984;+R). When asked, choose "Remove only" so you still keep the old browserbox on your disk.</li>
+        <li>Now double-click the newly downloaded browserbox.vbox file or add it with "Machine - Add"</li>
+        </ul>
+<li>Virtualbox Error: <i>"Failed to open virtual machine located in... Cannot register the hard disk ... because a hard disk ... already exists</i> 
+        <ul>
+        <li>This happens if you have already downloaded and installed Genome Browser in a Box before</li>
+        <li>Start VirtualBox, go to "File - Virtual Media Manager" in the menu (Ctrl+D or &#8984;+D). Select browserbox-disk2.vmdk and click "Remove".</li>
         <li>Now double-click the newly downloaded browserbox.vbox file or add it with "Machine - Add"</li>
         </ul>
 </li>
