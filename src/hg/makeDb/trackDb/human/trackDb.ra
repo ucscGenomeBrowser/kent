@@ -3120,6 +3120,7 @@ searchTable switchDbTss
 searchMethod prefix
 searchType bed
 shortCircuit 1
+termRegex CHR[a-zA-Z_0-9]+
 searchPriority 19
 
 searchTable uniGene_2
