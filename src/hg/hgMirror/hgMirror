@@ -74,7 +74,12 @@ FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5"]
 FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
     'knownGene', 'kgXref', 'ensemblLift', 'ucscToEnsembl','wgEncodeRegTfbsCells', \
     'tableList', 'refSeqStatus', 'wgEncodeRegTfbsCellsV3', 'extFile', 'trackDb', 'grp',
-    'ucscRetroInfo5', "refLink", "ucscRetroSeq5", "ensemblLift", "knownCanonical"]
+    'ucscRetroInfo5', "refLink", "ucscRetroSeq5", "ensemblLift", "knownCanonical",
+    # for faster searches
+    'hgFindSpec', 'ensemblToGeneName', "ucscToINSDC",
+    # these are almost required for searches, common tracks and not too big
+    "ensGene", "xenoRefGene"
+    ]
 
 # always copy these hgFixed tables
 FORCEFIXED = ['trackVersion', 'tableList']
