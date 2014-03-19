@@ -5592,6 +5592,10 @@ done | sort -k1,1 -k2,2n > multiz60wayFrames.bed
     #   57707702 bases of 2730871774 (2.113%) in intersection
     #   real    1m45.141s
 
+    # reload table to fix frames problems 2014-03-19 - Hiram
+    time featureBits -countGaps mm10 multiz60wayFrames
+    # 58892097 bases of 2730871774 (2.157%) in intersection
+
     #   enable the trackDb entries:
 # frames multiz60wayFrames
 # irows on
