@@ -99,6 +99,13 @@ struct stepInit steps[] =
     },
 
     {
+    "spp_chip_se", 1,
+    "eap_run_spp_chip_se,Rscript,run_spp,bedToBigBed",
+    "chipBam,controlBam", "bam,bam",
+    "spp_chip_peaks", "narrowPeak", "out.narrowPeak.bigBed",
+    },
+
+    {
     "sum_bigWig", 1,
     "eap_sum_bigWig,bigWigMerge,bedGraphPack,bedGraphToBigWig",
     "signal", "bigWig",
