@@ -1175,6 +1175,17 @@ cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 gzip run.*/all.tab
 
+# make knownToNextProt
+mkdir -p $dir/nextProt
+cd $dir/nextProt
+
+wget "ftp://ftp.nextprot.org/pub/current_release/ac_lists/nextprot_ac_list_all.txt"
+awk '{print $0, $0}' nextprot_ac_list_all.txt | sed 's/NX_//' | sort > displayIdToNextProt.txt
+hgsql -e "select spID,kgId from kgXref" --skip-column-names hg38 | awk '{if (NF == 2) print}' | sort > displayIdToKgId.txt
+join displayIdToKgId.txt displayIdToNextProt.txt | awk 'BEGIN {OFS="\t"} {print $2,$3}' > knownToNextProt.tab
+hgLoadSqlTab -notOnServer $tempDb  knownToNextProt $kent/src/hg/lib/knownTo.sql  knownToNextProt.tab
+
+
 # make knownToWikipedia
 mkdir -p $dir/wikipedia
 cd $dir/wikipedia
