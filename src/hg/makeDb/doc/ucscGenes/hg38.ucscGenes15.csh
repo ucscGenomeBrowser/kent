@@ -61,10 +61,6 @@ set tempDb = hg38
 set lastVer = 7
 set curVer = 8
 
-# Database to rebuild visiGene text from.  Should include recent mouse and human
-# but not the one you're rebuilding if you're rebuilding. (Use tempDb instead).
-set vgTextDbs = (mm10 hg19 $tempDb)
-
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
 set xdbFa = $genomes/$xdb/bed/ucsc.13.1/ucscGenes.faa
@@ -1010,17 +1006,6 @@ endif
 knownToVisiGene $tempDb -probesDb=$db
 hgsql $tempDb -e "delete k from knownToVisiGene k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 
-vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
-# probe has 26611 rows
-# gene has 20413 rows
-# imageProbe has 125765 rows
-
-# This shouldn't be here me thinks
-cd /usr/local/apache/cgi-bin/visiGeneData
-ixIxx visiGene.text visiGene.ix visiGene.ixx
-cd $dir
-#end me thinking
-
 # Create Human P2P protein-interaction Gene Sorter columns
 if ($db =~ hg*) then
 #TODO
@@ -1535,6 +1520,12 @@ hgsql hgcentraltest -e \
       'INSERT into targetDb values("hg38Kgv15", "UCSC Genes", \
          "hg38", "kgTargetAli", "", "", \
          "/gbdb/hg38/targetDb/kgTargetSeq8.2bit", 1, now(), "");'
+
+#
+##
+##   WRAP-UP  
+#
+#  add database to the db's in kent/src/hg/visiGene/vgGetText
 
 cd $dir
 #
