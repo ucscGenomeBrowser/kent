@@ -525,7 +525,7 @@ def printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, trackChi
 
     if remoteSize==0:
         addHtml = 'disabled="disabled"'
-        addNote = "<small>this track cannot be mirrored (no permission)</small>"
+        addNote = "<small>this track cannot be mirrored (restricted data)</small>"
 
     sizeStr = humanReadable(remoteTableSize)
     if len(trackTableNames)==1:
@@ -643,11 +643,17 @@ def getCladeAssemblyDb(clade, org, db):
     """
     if not mysqlDbLoaded:
         print("<small>info: MySQLDb not installed, cannot retrieve hgcentral.dbDb, using internal defaults</small>")
-        cladeList = (("mammal", "Mammal"))
-        orgList = (("Human", "Human"))
-        dbList = (("hg19", "Human (GrCh37)"), ("mm9", "Mouse (NCBI37)"))
+        cladeList = [("mammal", "Mammal")]
+        orgList = [("Human", "Human")]
+        dbList = [("hg19", "Human (GrCh37)"), ("mm9", "Mouse (NCBI37)")]
         defaultDb = {"Human":"hg19"}
-        return cladeList, orgList, dbList
+        orgInfo = {}
+        orgInfo["clades"] = cladeList
+        orgInfo["orgs"] = orgList
+        orgInfo["dbs"] = dbList
+        orgInfo["defaultDbs"] = {"Human":"hg19"}
+
+        return orgInfo, "mammal", "Human", "hg19"
 
     conn = sqlConnect("hgcentral", "public")
     cur = conn.cursor()
@@ -1346,7 +1352,7 @@ def htmlMiddle(args):
     # when user has clicked OK, run rsync and refresh with jobId
     if "submit" in args.keys() and args["submit"].value=="Download":
         if runningAtUcsc():
-            print "cannot do this on hgwdev"
+            print "<br>Cannot do this on hgwdev. Copying things from hgdownload to hgwdev is not a good idea."
             sys.exit(0)
 
         makeGbdb()
