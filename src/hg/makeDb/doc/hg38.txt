@@ -2683,6 +2683,27 @@ TMPDIR=/dev/shm
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
 
 #########################################################################
+# the FULL analysis set (DONE - 2014-03-18 - Hiram
+    mkdir /hive/data/genomes/hg38/bed/fullAnalysisSet
+    cd /hive/data/genomes/hg38/bed/fullAnalysisSet
+
+    mkdir hg38.fullAnalysisSet.chroms
+    twoBitToFa ../analysisSet/hg38.analysisSet.2bit stdout \
+       | faSplit byname stdin hg38.fullAnalysisSet.chroms/
+
+    grep _alt ../../chrom.sizes | cut -f 1 > alt.list
+
+    twoBitToFa -seqList=alt.list ../../hg38.2bit stdout \
+       | faSplit byname stdin hg38.fullAnalysisSet.chroms/
+
+    faCount hg38.fullAnalysisSet.chroms/chr*.fa > faCount.fullAnalysisSet.txt
+
+    faToTwoBit hg38.fullAnalysisSet.chroms/chr*.fa hg38.fullAnalysisSet.2bit
+    twoBitInfo hg38.fullAnalysisSet.2bit stdout | sort -k2nr > chrom.sizes
+
+    tar cvzf ./hg38.fullAnalysisSet.chroms.tar.gz ./hg38.fullAnalysisSet.chroms
+
+#########################################################################
 # LASTZ Self/hg38 (DONE - 2014-01-25,02-10 - Hiram)
     # can no longer use the lineage specific repeats with the new lastz
     # use a screen to manage this longish job:
@@ -3320,3 +3341,25 @@ XXX - running - Thu Feb 27 16:13:21 PST 2014
     #	933922552 bases of 2572853723 (36.299%) in intersection
 
 ##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2014-03-07 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg38/bed/geneid
+    cd /hive/data/genomes/hg38/bed/geneid
+    mkdir download
+    cd download
+    for C in `cut -f1 ../../../chrom.sizes`
+    do
+	echo $C
+ wget --timestamping \
+http://genome.crg.es/genepredictions/H.sapiens/hg38/geneid_v1.4/${C}.gtf3
+    wget --timestamping \
+http://genome.crg.es/genepredictions/H.sapiens/hg38/geneid_v1.4/${C}.prot
+    done
+
+    cd ..
+    cat download/*.gtf | ldHgGene -gtf -genePredExt hg38 geneid stdin
+    #	Read 33428 transcripts in 277332 lines in 1 files
+    #	33428 groups 92 seqs 1 sources 3 feature types
+    #	33428 gene predictions
+
+###########################################################################
