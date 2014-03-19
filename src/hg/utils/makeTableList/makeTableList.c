@@ -162,7 +162,6 @@ if (bigFileTmp)
     unlink(bigFileTmp);
     }
 
-sqlDisconnect(&conn);
 }
 
 void makeTableList(char *argv[], int argc, boolean all, char *tableListName)
@@ -228,6 +227,7 @@ for (; dbs != NULL; dbs = dbs->next)
         }
 
     makeTableListConn(tableListName, conn, targetConn);
+    sqlDisconnect(&conn);
     }
 }
 
