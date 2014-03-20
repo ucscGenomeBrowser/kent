@@ -8,3 +8,36 @@ The C code is
 	eapFinish - move stuff from output temp dirs into encode data warehouse
 	eapMonitor - look at how jobs are progressing through table and parasol.  
 	             If need be chill and kill steps gone awry.
+	eapAddSoftware - add a piece of software that is used by and tracked by the system
+	eapUpdateSoftware - Tell system about a new version of software
+	eapAddStep - add a new analysis step (something that processes files and generally
+	             creates other files, though there are also 'statistics only' steps.
+	eapMetaSync - still in development but meant to turn eap objects into JSON that gets
+	              sent to the metadatabase which responds with metaUuid we store in tables.
+There's also a few temporary programs:
+	eapRunAddJson - Creates JSON for ENCODED at Stanford, so that database can also
+	             track file relationships and steps.   This was just a second draft.
+		     It turns out we may well use a different approach.
+	eapToHub - Create a hub for DNAse hypersensitivity data calculated by EAP.  Just for
+	           demo.
+
+The overall process for making a new analysis is:
+1) Create an analysis step bash script that should start with the name "eap_run_" and belong
+   in the github shared with Stanford.
+2) Test the step on hgwdev installing anything needed, and keeping track of what is installed
+3) Test the step on ku, asking system admins to install anything needed to run it on that machine
+   or the associated cluster.
+4) Run eapAddSoftware to add any new software.  Do this on both hgwdev and encode-02
+5) Edit eapAddStep.c and make a new item in the step array for your step,  then run eapAddStep
+   on hgwdev and encode-02
+6) Edit eapSchedule.c to tell system in what circumstances to run the step.
+7) Schedule step on somewhere between 1 and 10 files using eapSchedule on encode-02
+8) Examine output directory in eapRun.tempDir and make sure it looks good.  It will be a subdir of
+   /hive/groups/encode/encode3/encodeAnalysisPipeline/tmp that starts with the step name.
+9) Edit eapFinish.c to tell system how to store results.
+10) Run eapFinish with -noClean flag (so you get a chance to correct bugs before it 
+    deletes the directory).
+11) Check database to make sure everything is good.
+12) Run eapSchedule with -step=yourStepName to tell system to do step on whole database on 
+    encode-02.
+13) Contact Jim before running step on encode-01 (the production site).
