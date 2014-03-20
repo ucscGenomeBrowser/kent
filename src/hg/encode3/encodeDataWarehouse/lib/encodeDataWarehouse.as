@@ -148,7 +148,7 @@ table edwValidFile
     (
     uint id primary auto;          "ID of validated file"
     char[16] licensePlate index;  "A abc123 looking license-platish thing."
-    uint fileId unique;      "Pointer to file in main file table"
+    uint fileId index;      "Pointer to file in main file table"
     string format index[12];    "What format it's in from manifest"
     string outputType index[16]; "What output_type it is from manifest"
     string experiment index[16]; "What experiment it's in from manifest"
