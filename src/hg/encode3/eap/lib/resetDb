@@ -18,6 +18,7 @@ eapAddSoftware hotspot HotSpot5 http://www.uwencode.org/proj/hotspot/ rthurman@u
 eapAddSoftware bedtools 2.17.0 http://bedtools.readthedocs.org arq5x@virginia.edu
 eapAddSoftware intersectBed 2.17.0 http://bedtools.readthedocs.org arq5x@virginia.edu
 
+
 # UCSC Software
 eapAddSoftware bedToBigBed 2.5 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' genome@soe.ucsc.edu
 eapAddSoftware wigToBigWig 4 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' genome@soe.ucsc.edu
@@ -36,6 +37,7 @@ eapAddSoftware eap_broadPeak_to_bigBed 2 https://github.com/ENCODE-DCC/uniformAn
 eapAddSoftware eap_narrowPeak_to_bigBed 2 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
 eapAddSoftware eap_run_macs2_chip_pe 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
 eapAddSoftware eap_run_macs2_chip_se 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+eapAddSoftware eap_run_spp_chip_se 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kate@soe.ucsc.edu
 
 # Add all steps
 eapAddStep '*'
