@@ -3437,10 +3437,10 @@ for (;;)
 	 addSpoke();
     else if (sameWord(command, "plan"))
 	 plan(pm);
+    else if (sameWord(command, "quit"))
+         break;
     else 
          warn("Unrecognized command %s", command);
-    if (command != NULL && sameWord(command, "quit"))
-	 break;
     pmFree(&pm);
     }
 endHeartbeat();

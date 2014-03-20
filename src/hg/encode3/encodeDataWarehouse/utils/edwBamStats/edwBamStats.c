@@ -1,4 +1,10 @@
 /* edwBamStats - Collect some info on a BAM file. */
+
+/* version history: 
+ *    1 - initial release 
+ *    2 - added sampleBam option
+ */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -14,27 +20,33 @@
 
 int u4mSize = 4000000;	
 int sampleBedSize = 250000;
+int sampleBamSize = 5000000;
 char *sampleBed = NULL;
+char *sampleBam = NULL;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwBamStats - Collect some info on a BAM file\n"
+  "edwBamStats v2 - Collect some info on a BAM file\n"
   "usage:\n"
   "   edwBamStats in.bam out.ra\n"
   "options:\n"
-  "   -sampleBed=file.bed\n"
-  "   -sampleBedSize=N Max # of items sampleBed, default %d\n"
+  "   -sampleBed=out.bed\n"
+  "   -sampleBam=out.bam\n"
+  "   -sampleBamSize=N Max # of items in sampleBam, default %d. Only includes mapped reads.\n"
+  "   -sampleBedSize=N Max # of items in sampleBed, default %d.\n"
   "   -u4mSize=N # of uniquely mapped items used in library complexity calculation, default %d\n"
-  , sampleBedSize, u4mSize
+  , sampleBamSize, sampleBedSize, u4mSize
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"sampleBed", OPTION_STRING},
+   {"sampleBam", OPTION_STRING},
    {"sampleBedSize", OPTION_INT},
+   {"sampleBamSize", OPTION_INT},
    {"u4mSize", OPTION_INT},
    {NULL, 0},
 };
@@ -139,6 +151,75 @@ for (tp = oldList; tp != NULL; tp = next)
 *pB = bList;
 }
 
+samfile_t *samMustOpen(char *fileName, char *mode, void *extraHeader)
+/* Open up samfile or die trying */
+{
+samfile_t *sf = samopen(fileName, mode, extraHeader);
+if (sf == NULL)
+    errnoAbort("Couldn't open %s.\n", fileName);
+return sf;
+}
+
+void subsampleMappedFromBam(char *inBam, long long inMappedCount, 
+    char *sampleBam, long long outMappedCount)
+/* Create a sam file that is a robustly sampled subset of the mapping portion
+ * of the inBam file.  The sam can be converted to bam later.  This routine
+ * already has enough to do! */
+{
+/* Create a byte-map that is inMappedCount long and has outMappedCount 1's randomly
+ * dispersed through it. */
+char *map = needLargeMem(inMappedCount);
+int outSize = min(outMappedCount, inMappedCount);
+uglyf("inMappedCount=%lld ouMappedCount=%lld outSize = %d\n", inMappedCount, outMappedCount, outSize);
+memset(map, 1, outSize);
+memset(map+outSize, 0, inMappedCount - outSize);
+shuffleArrayOfChars(map, inMappedCount);
+
+/* Open up bam file */
+samfile_t *in = samMustOpen(inBam, "rb", NULL);
+
+/* Open up sam output and write header */
+samfile_t *out = samMustOpen(sampleBam, "wb", in->header);
+
+/* Loop through bam items, writing them to sam or not according to map. */
+int mapIx = 0;
+bam1_t one;
+ZeroVar(&one);	// This seems to be necessary!
+for (;;)
+    {
+    /* Read next record. */
+    if (samread(in, &one) < 0)
+	break;
+
+    /* Just consider mapped reads. */
+    if ((one.core.flag & BAM_FUNMAP) == 0 && one.core.tid >= 0)
+        {
+	if (map[mapIx])
+	    samwrite(out, &one);
+	++mapIx;
+	}
+    }
+
+/* Clean up and go home. */
+freeMem(map);
+samclose(in);
+samclose(out);
+}
+
+
+void openSamReadHeader(char *fileName, samfile_t **retSf, bam_header_t **retHead)
+/* Open file and check header.  Abort with error message if a problem. */
+{
+samfile_t *sf = samMustOpen(fileName, "rb", NULL);
+bam_header_t *head = sf->header;
+if (head == NULL)
+    errAbort("Aborting ... Bad BAM header in file: %s", fileName);
+*retSf = sf;
+*retHead = head;
+}
+
+
+
 void edwBamStats(char *inBam, char *outRa)
 /* edwBamStats - Collect some info on a BAM file. */
 {
@@ -161,12 +242,9 @@ int doubleSize = 2*u4mSize;
 int listSize = 0;
 
 /* Open file and get header for it. */
-samfile_t *sf = samopen(inBam, "rb", NULL);
-if (sf == NULL)
-    errnoAbort("Couldn't open %s.\n", inBam);
-bam_header_t *head = sf->header;
-if (head == NULL)
-    errAbort("Aborting ... Bad BAM header in file: %s", inBam);
+samfile_t *sf = NULL;
+bam_header_t *head = NULL;
+openSamReadHeader(inBam, &sf, &head);
 
 /* Start with some processing on the headers.  Get sorted versions of them. */
 uint32_t *sortedSizes = CloneArray(head->target_len, head->n_targets);
@@ -287,6 +365,12 @@ if (sampleBed != NULL)
     carefulClose(&bf);
     }
 
+/* Deal with sam output if any */
+if (sampleBam != NULL)
+    {
+    subsampleMappedFromBam(inBam, mappedCount, sampleBam, sampleBamSize);
+    }
+
 /* Clean up */
 samclose(sf);
 carefulClose(&f);
@@ -299,7 +383,9 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 sampleBed = optionVal("sampleBed", sampleBed);
+sampleBam = optionVal("sampleBam", sampleBam);
 sampleBedSize = optionInt("sampleBedSize", sampleBedSize);
+sampleBamSize = optionInt("sampleBamSize", sampleBamSize);
 u4mSize = optionInt("u4mSize", u4mSize);
 edwBamStats(argv[1], argv[2]);
 return 0;

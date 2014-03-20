@@ -72,7 +72,6 @@ edwAddAssembly 562 escCol1 escCol1 /hive/groups/encode/encode3/encValData/escCol
 edwAddAssembly 9606 hg38 hg38 /gbdb/hg38/hg38.2bit -symLink=dcc3ea27079aa6dc3f9deccd7275e0f8
 edwAddAssembly 9606 female.hg38 female.hg38 /hive/groups/encode/encode3/encValData/female.hg38/female.hg38.2bit -symLink=a1666014df1f8a27e94f7aec56883bc3
 edwAddAssembly 9606 male.hg38 male.hg38 /hive/groups/encode/encode3/encValData/male.hg38/male.hg38.2bit -symLink=8c0d7fe26540718c381a8d458274f270
-edwAddSubscriber wgEncode 'echo good old %u from wgEncode' -tagPattern=wgEncode.ra
 edwAddQaEnrichTarget open hg19 /hive/groups/encode/encode3/encValData/hg19/regions/open.bb
 edwAddQaEnrichTarget exon hg19 /hive/groups/encode/encode3/encValData/hg19/regions/exon.bb
 edwAddQaEnrichTarget promoter hg19 /hive/groups/encode/encode3/encValData/hg19/regions/promoter.bb

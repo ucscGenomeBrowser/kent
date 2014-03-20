@@ -23,7 +23,7 @@
 #include "mailViaPipe.h"
 
 boolean doNow = FALSE;
-boolean doUpdate= FALSE;
+boolean doUpdate = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -883,8 +883,8 @@ char query[512];
 sqlSafef(query, sizeof(query),
     "select licensePlate,submitFileName "
     " from edwFile left join edwValidFile on edwFile.id = edwValidFile.fileId "
-    " and edwFile.submitId = %u"
-    , submit->id);
+    " where edwFile.submitId = %u and edwFile.id != %u"
+    , submit->id, submit->submitFileId);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 
@@ -913,9 +913,7 @@ int maxSeconds = 3600*24;
 int secondsPer = 60*5;
 int seconds;
 for (seconds = 0; seconds < maxSeconds; seconds += secondsPer)
-for (;;)
     {
-    sleep(secondsPer);
     struct sqlConnection *conn = edwConnect();
     if (edwSubmitIsValidated(submit, conn))
          {
@@ -923,6 +921,7 @@ for (;;)
 	 return;
 	 }
     sqlDisconnect(&conn);
+    sleep(secondsPer);	// Sleep for 5 more minutes
     }
 doValidatedEmail(submit, FALSE);
 }
@@ -1129,12 +1128,10 @@ sqlSafef(query, sizeof(query),
 	edwNow(), submitId);
 sqlUpdate(conn, query);
 
-#ifdef SOON
 /* Get a real submission record and then set things up so mail user when all done. */
 struct edwSubmit *submit = edwSubmitFromId(conn, submitId);
 sqlDisconnect(&conn);	// We'll be waiting a while so free connection
 waitForValidationAndSendEmail(submit, email);
-#endif /* SOON */
 }
 
 int main(int argc, char *argv[])
