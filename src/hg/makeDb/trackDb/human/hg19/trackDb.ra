@@ -2125,7 +2125,7 @@ exonArrows off
 
 track mapViewGenes
 shortLabel MapView Genes
-longLabel refSeq Genes from Map View
+longLabel RefSeq Genes from Map View
 group genes
 visibility hide
 color 82,82,160

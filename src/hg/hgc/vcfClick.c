@@ -11,6 +11,8 @@
 #include "pgSnp.h"
 #include "regexHelper.h"
 #include "trashDir.h"
+#include "knetUdc.h"
+#include "udc.h"
 #include "vcf.h"
 #include "vcfUi.h"
 
@@ -376,19 +378,12 @@ vcfGenotypesDetails(rec, tdb->track, displayAls);
 
 #ifdef USE_TABIX
 
-#if (defined KNETFILE_HOOKS)
-#include "knetUdc.h"
-#include "udc.h"
-#endif//def KNETFILE_HOOKS
-
 void doVcfTabixDetails(struct trackDb *tdb, char *item)
 /* Show details of an alignment from a VCF file compressed and indexed by tabix. */
 {
-#if (defined KNETFILE_HOOKS)
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
-#endif//def KNETFILE_HOOKS
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct sqlConnection *conn = hAllocConnTrack(database, tdb);

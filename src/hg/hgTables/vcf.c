@@ -12,11 +12,6 @@
 #include "vcf.h"
 #include "web.h"
 
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
-#include "knetUdc.h"
-#include "udc.h"
-#endif//def USE_TABIX && KNETFILE_HOOKS
-
 #define VCFDATALINE_NUM_COLS 10
 
 boolean isVcfTable(char *table, boolean *retIsTabix)

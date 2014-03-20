@@ -30,9 +30,7 @@
 #include "genePred.h"
 #include "hgMaf.h"
 #include "pgSnp.h"
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 #include "annoGratorQuery.h"
 #include "annoStreamDb.h"
 #include "annoStreamVcf.h"
@@ -1563,9 +1561,7 @@ setUdcCacheDir();
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 knetUdcInstall();
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 cartWebStart(cart, database, "Variant Annotation Integrator");
 jsInit();

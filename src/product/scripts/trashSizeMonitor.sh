@@ -56,6 +56,9 @@ chmod 666 "${trashFileList}"
 
 runMonitor()
 {
+# the following measurement scripts need something to work, so in case
+# all of the trash hierarchy is empty, give it something to work on:
+${ECHO} "some trash" > "${TRASH}/hgt/someTrash.png"
 # this find can take up to 20 minutes for a filesystem with 2 million files
 # it depends upon the type of filesystem
 nice -n 19 find ${TRASH} -ignore_readdir_race -xdev -type f 2> /dev/null > "${trashFileList}"

@@ -86,13 +86,24 @@ void updateEdwUserInfo(char *email, char *uuid, int isAdmin, FILE *f)
 //struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *conn =  edwConnectReadWrite(edwDatabase);
 char query[512];
-/* use email to search now, will use uuid eventually */
+/* use uuid then email to search the user row */
 if (!sqlRowExists(conn, "edwUser", "uuid", uuid))
     {
-    sqlSafef(query, sizeof(query),
-	"insert into edwUser (email, uuid, isAdmin) values('%s', '%s', %d)", 
-	email, uuid, isAdmin);
-    maybeDoUpdate(conn, query, really, f);
+    /* Was this user created by edwCreateUser without real encodedcc uuid? */
+    if (sqlRowExists(conn, "edwUser", "email", email))
+	{
+	/* yes, update it with real uuid from encodedcc */
+        sqlSafef(query, sizeof(query),
+	    "update edwUser set uuid = '%s', isAdmin = '%d' where email = '%s' and uuid = '0'",
+	    uuid, isAdmin, email);
+        maybeDoUpdate(conn, query, really, f);
+	}
+    else
+	{
+	sqlSafef(query, sizeof(query),
+	    "insert into edwUser (email, uuid, isAdmin) values('%s', '%s', %d)",	    email, uuid, isAdmin);
+        maybeDoUpdate(conn, query, really, f);
+	}
     }
 else
     {

@@ -23494,64 +23494,54 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
-# cat/felCat5 Lastz run (DONE - 2013-07-11 - Hiram)
-    screen -S felCat5    # use screen to manage this long running job
-    mkdir /hive/data/genomes/hg19/bed/lastzFelCat5.2013-07-11
-    cd /hive/data/genomes/hg19/bed/lastzFelCat5.2013-07-11
+# LASTZ Cat felCat5 (DONE - 2014-03-12 - PAULINE)
+    mkdir /hive/data/genomes/hg19/bed/lastzfelCat5.2014-02-26
+    cd /hive/data/genomes/hg19/bed/lastzfelCat5.2014-02-26
+
+    screen -S hg19felCat5
     cat << '_EOF_' > DEF
-# human vs cat
+# human vs Cat
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
 
 # TARGET: Human Hg19
 SEQ1_DIR=/scratch/data/hg19/hg19.2bit
 SEQ1_LEN=/scratch/data/hg19/chrom.sizes
-SEQ1_CHUNK=10000000
+SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
+SEQ1_LIMIT=5
 
-# QUERY: cat FelCat5
+# QUERY: Cat felCat5
 SEQ2_DIR=/hive/data/genomes/felCat5/felCat5.2bit
 SEQ2_LEN=/hive/data/genomes/felCat5/chrom.sizes
-SEQ2_CHUNK=20000000
+SEQ2_CHUNK=10000000
 SEQ2_LAP=0
-SEQ2_LIMIT=30
 
-BASE=/hive/data/genomes/hg19/bed/lastzFelCat5.2013-07-11
-TMPDIR=/scratch/tmp
+BASE=/hive/data/genomes/hg19/bed/lastzfelCat5.2014-02-26
+TMPDIR=/dev/shm
 '_EOF_'
-    # << emacs
+    # << happy emacs
 
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
-        -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -syntenicNet > do.log 2>&1
-    #   real    1408m3.295s
-    #   chaining chr19 on hgwdev
-    #   real    184m20.645s
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
-        -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -continue=chainMerge -syntenicNet > chainMerge.log 2>&1
-    #   real    132m29.811s
+    bash
+    doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium >& do.log
+    # Elapsed time: 1396m22s - busy cluster
+    cat fb.hg19.chainfelCat5Link.txt
+    # 1519102826 bases of 2897316137 (52.431%) in intersection
 
-    cat fb.hg19.chainFelCat5Link.txt
-    #   1518956396 bases of 2897316137 (52.426%) in intersection
-
-    # filter with doRecipBest.pl
-    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
-        hg19 felCat5 > rbest.log 2>&1 &
-    #   real    68m58.182s
-
-    # running the swap
+    #   running the swap
     mkdir /hive/data/genomes/felCat5/bed/blastz.hg19.swap
     cd /hive/data/genomes/felCat5/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        -swap /hive/data/genomes/hg19/bed/lastzFelCat5.2013-07-11/DEF \
-        -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -syntenicNet > swap.log 2>&1
-    #  real    106m53.116s
+        /hive/data/genomes/hg19/bed/lastzfelCat5.2014-02-26/DEF \
+        -syntenicNet -swap \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium >& swap.log
 
     cat fb.felCat5.chainHg19Link.txt
-    #  1453539854 bases of 2364296207 (61.479%) in intersection
+    # 1453639480 bases of 2364296207 (61.483%) in intersection 
 
     cd /hive/data/genomes/felCat5/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -24652,7 +24642,8 @@ EOF
 
 
 ############################################################################
-# SNPMASKED SEQUENCE FOR SNP138 (DONE 8/19/13 angie)
+# SNPMASKED SEQUENCE FOR SNP138 (DONE 3/17/14 angie)
+# Originally done 8/19/13, but user reported in MLQ #12902 that not all files were gzipped.
    mkdir /hive/data/genomes/hg19/snp138Mask
    cd /hive/data/genomes/hg19/snp138Mask
    # Identify rsIds with various problems -- we will exclude those.
@@ -24693,8 +24684,14 @@ EOF
    foreach f (substitutions/chr*.fa)
      echo $f:t:r
      mv $f $f:r.subst.fa
-     gzip $f:r.subst.fa &
    end
+   # Fire off a bunch of gzip jobs in parallel:
+   ls -1 substitutions/*.fa | split -l 5
+   foreach f (x??)
+     gzip `cat $f` &
+   end
+   # Wait for backgrounded gzip jobs to complete
+   rm x??
 
    # Insertions & deletions not done.  To date we have only offered substs for download.
    # If there is user demand, use template from snp131 above.

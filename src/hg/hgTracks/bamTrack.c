@@ -14,10 +14,8 @@
 #include "cds.h"
 #include "hgBam.h"
 #include "wigCommon.h"
-#if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def USE_BAM && KNETFILE_HOOKS
 #include "bigWarn.h"
 #include "errCatch.h"
 
@@ -779,9 +777,7 @@ if (!hashLookup(settings, "showDiffBasesMaxZoom"))
 void bamMethods(struct track *track)
 /* Methods for BAM alignment files. */
 {
-#if (defined USE_BAM && defined KNETFILE_HOOKS)
 knetUdcInstall();
-#endif//def USE_BAM && KNETFILE_HOOKS
 
 track->canPack = TRUE;
 boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE,

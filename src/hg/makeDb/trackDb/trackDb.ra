@@ -76,7 +76,7 @@ type bed 3 +
 
 track par
 shortLabel PAR
-longLabel Pseudoautosomal regions
+longLabel Pseudoautosomal Regions
 group map
 visibility hide
 color 160,0,50
@@ -307,7 +307,7 @@ url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
 
 track pubs
 shortLabel Publications
-longLabel Publications: Sequences in scientific articles
+longLabel Publications: Sequences in Scientific Articles
 group pub 
 visibility dense
 color 0,0,0
@@ -333,7 +333,7 @@ noInherit on
 
     track pubsBlatPsl
     shortLabel Indiv. Seq. Matches
-    longLabel Individual sequence matches of one selected article from sequences track
+    longLabel Individual Sequence Matches of One Selected Article from Sequences Track
     parent pubs off
     type psl
     visibility hide
@@ -344,7 +344,7 @@ noInherit on
 
     track pubsMarkerBand
     shortLabel Bands
-    longLabel Cytogenetic bands in Publications
+    longLabel Cytogenetic Bands in Publications
     parent pubs off
     visibility hide
     priority 3
@@ -360,7 +360,7 @@ noInherit on
 
     track pubsMarkerGene
     shortLabel Genes
-    longLabel Gene symbols in Publications
+    longLabel Gene Symbols in Publications
     parent pubs off
     priority 3
     visibility hide
@@ -368,7 +368,7 @@ noInherit on
 
 track pubsBingBlat
 shortLabel Web Sequences
-longLabel DNA Sequences in web pages indexed by Bing.com / Microsoft Research
+longLabel DNA Sequences in Web Pages Indexed by Bing.com / Microsoft Research
 group pub
 type bed 12 .
 visibility hide
@@ -667,7 +667,7 @@ type genePred
 
 track exonWalkRna
 shortLabel ExonWalkRna
-longLabel ExonWalk Alt-Splicing Transcripts mRNA only, no orthology
+longLabel ExonWalk Alt-Splicing Transcripts mRNA Only, No Orthology
 color 23,58,58
 group genes
 visibility hide
@@ -675,7 +675,7 @@ type genePred
 
 track exonWalkRnaNoCds
 shortLabel ExonWalkRnaNoCds
-longLabel Exonwalk on Rna only, no orthology, no CDS mapping
+longLabel Exonwalk on RNA Only, No Orthology, No CDS Mapping
 color 23,58,58
 group genes
 visibility hide
@@ -818,7 +818,7 @@ type bed 4 +
 
 track cpgIslandGgfAndyMasked
 shortLabel CpG Islands (AL)
-longLabel CpG Islands - Andy Law, masked sequence (Islands < 300 Bases are Light Green)
+longLabel CpG Islands - Andy Law, Masked Sequence (Islands < 300 Bases are Light Green)
 group regulation
 visibility hide
 color 0,100,0
@@ -1499,7 +1499,7 @@ html gc5Base
 
 track ensemblGeneScaffold
 shortLabel Ensembl Assembly
-longLabel Ensembl Gene Scaffold assembly
+longLabel Ensembl Gene Scaffold Assembly
 group map
 visibility hide
 color 0,0,0
@@ -2385,6 +2385,7 @@ searchName oreg
 searchTable oreganno
 searchMethod exact
 query select chrom, chromStart, chromEnd, id from %s where id = '%s'
+termRegex OREG[0-9]+
 padding 500
 searchPriority 55
 
@@ -2517,7 +2518,7 @@ searchPriority 1.1
 
 track grcIncidentDb
 shortLabel GRC Incident
-longLabel GRC Incident database
+longLabel GRC Incident Database
 group map
 visibility hide
 type bigBed 4 +
@@ -2527,7 +2528,7 @@ nonBedFieldsLabel Summary information from incident database:
 
 track tRNAs
 shortLabel tRNA Genes
-longLabel Transfer RNA genes identified with tRNAscan-SE
+longLabel Transfer RNA Genes Identified with tRNAscan-SE
 group genes
 visibility hide
 color 0,20,150
@@ -2555,7 +2556,7 @@ url http://pfam.sanger.ac.uk/family/$$
 track numtSeq2012
 compositeTrack on
 shortLabel NumtS Sequence
-longLabel $Organism NumtS mitochondrial sequence
+longLabel $Organism NumtS Mitochondrial Sequence
 group varRep
 visibility hide
 noInherit on
@@ -2575,7 +2576,7 @@ html numtSeq2012
     track numtSAssembled
     parent numtSeq2012
     shortLabel NumtS assembled
-    longLabel $Organism NumtS assembled
+    longLabel $Organism NumtS Assembled
     color 0,60,120
     priority 2
     useScore 1
@@ -2585,7 +2586,7 @@ html numtSeq2012
     track numtSMitochondrion
     parent numtSeq2012
     shortLabel NumtS on chrM
-    longLabel $Organism NumtS on mitochondrion
+    longLabel $Organism NumtS on Mitochondrion
     useScore 1
     color 0,60,120
     priority 3
@@ -2596,7 +2597,7 @@ html numtSeq2012
     track  bamAllNumtSSorted
     parent numtSeq2012
     shortLabel NumtS SNPs
-    longLabel $Organism NumtS on mitochondrion SNPs
+    longLabel $Organism NumtS on Mitochondrion SNPs
     priority 4
     visibility pack
     configurable on

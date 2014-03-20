@@ -14,10 +14,8 @@
 #include "customFactory.h"
 #include "portable.h"
 #include "errCatch.h"
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 #include "net.h"
 #include "jsHelper.h"
 #include <signal.h>
@@ -1113,11 +1111,9 @@ getDbAndGenome(cart, &database, &organism, oldVars);
 
 customFactoryEnableExtraChecking(TRUE);
 
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 if (sameString(initialDb, "0"))
     {
