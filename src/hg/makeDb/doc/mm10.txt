@@ -5440,9 +5440,11 @@ hgsql -N -e "select * from xenoRefGene" ${DB} | cut -f2- \
     echo "${DB} done"
 done
     #   5. genscan: gadMor1 melUnd1 oreNil2 speTri2 turTru2
+    # this was done in error the first time, mistakenly using
+    # the xenoRefGene table instead of genscan
     for DB in `cat genscan.list`
 do
-hgsql -N -e "select * from xenoRefGene" ${DB} | cut -f2- \
+hgsql -N -e "select * from genscan" ${DB} | cut -f2- \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
@@ -5594,7 +5596,7 @@ done | sort -k1,1 -k2,2n > multiz60wayFrames.bed
 
     # reload table to fix frames problems 2014-03-19 - Hiram
     time featureBits -countGaps mm10 multiz60wayFrames
-    # 58892097 bases of 2730871774 (2.157%) in intersection
+    # 79955378 bases of 2730871774 (2.928%) in intersection
 
     #   enable the trackDb entries:
 # frames multiz60wayFrames
