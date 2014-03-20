@@ -5,6 +5,8 @@ cd $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/hgTablesTest
 make 
 cd $WEEKLYBLD
 
+setenv HGDB_CONF /cluster/home/build/.hg.conf.beta
+
 echo "$HOME/bin/$MACHTYPE/hgTablesTest -org=Human -orgs=1  hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/hgTables-v${BRANCHNN}.log" > ./logs/hgTables-v${BRANCHNN}.log
 $HOME/bin/$MACHTYPE/hgTablesTest -appendLog -org=Human -orgs=1  hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/hgTables-v${BRANCHNN}.log
 echo "" >> ./logs/hgTables-v${BRANCHNN}.log

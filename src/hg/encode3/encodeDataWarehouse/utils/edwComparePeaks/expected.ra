@@ -1,0 +1,6 @@
+aFileName a.bigBed
+aBaseCount 2000
+bFileName b.bigBed
+bBaseCount 3000
+intersectionSize 500
+unionSize = 4500

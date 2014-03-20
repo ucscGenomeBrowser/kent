@@ -93,7 +93,8 @@ else
     long long curSize = 0;  // Amount of current file we know we've transferred.
 
     /* Print title letting them know if upload is done or in progress. */
-    printf("<B>Submission by %s is ", userEmail);
+    struct edwUser *user = edwUserFromId(conn, sub->userId);
+    printf("<B>Submission by %s is ", user->email);
     if (!isEmpty(sub->errorMessage))
 	{
 	if (endUploadTime == 0)
