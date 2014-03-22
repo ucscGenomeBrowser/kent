@@ -1488,11 +1488,11 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
 # blatServer by the keyword "$db"Kg with the version number appended
 hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("mm10Kgv13", "blat4a", 17829, 0, 1);'
+      'INSERT into blatServers values ("mm10KgSeq7", "blat4b", 17851, 0, 1);'
 hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("mm10Kgv13", "UCSC Genes", \
+      'INSERT into targetDb values("mm10KgSeq7", "UCSC Genes", \
          "mm10", "kgTargetAli", "", "", \
-         "/gbdb/mm10/targetDb/kgTargetSeq.2bit", 1, now(), "");'
+         "/gbdb/mm10/targetDb/kgTargetSeq7.2bit", 1, now(), "");'
 
 
 cd $dir
