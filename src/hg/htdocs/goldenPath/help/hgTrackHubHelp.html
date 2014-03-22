@@ -513,7 +513,7 @@ hub shown in <em>Example 1</em>.</p>
 
 <P><B>Step 5. Create the genomes.txt file</B><BR>
 Create a genomes.txt file within the track hub directory that contains a two-line 
-stanza for each genome assembly that is supported by the hub data. 
+stanza that must be separated by a line for each genome assembly that is supported by the hub data. 
 Each stanza shows the location of the trackDb file that defines 
 display properties for each track in that assembly.<p>
 
@@ -526,7 +526,7 @@ display properties for each track in that assembly.<p>
 </TT></BLOCKQUOTE>
 
 <P><em>genome</em> - a valid UCSC database name. Each stanza must begin with
-this tag.</p>
+this tag and each stanza must be separated by an empty line.</p>
 
 <P><em>trackDb</em> - the relative path of the trackDb file for the assembly
 designated by the <em>genome</em> tag. By convention, the trackDb file is 
