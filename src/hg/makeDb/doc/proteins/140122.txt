@@ -128,8 +128,8 @@ hgsql $spdb -N -e 'select extAcc1, d.val from extDbRef x, displayId d, extDb whe
 
 hgLoadSqlTab -notOnServer $db pdbSP $kent/src/hg/lib/pdbSP.sql pdbSP.tab
 
-hgsql proteins111004 -N -e 'select * from spOldNew' >spOldNew.tab
-hgLoadSqlTab $db spOldNew $kent/src/hg/lib/spOldNew.sql ./spOldNew.tab
+hgsql proteins121210 -N -e 'select * from spOldNew' >spOldNew.tab
+hgLoadSqlTab -notOnServer $db spOldNew $kent/src/hg/lib/spOldNew.sql ./spOldNew.tab
 
 hgsql $db -e 'create index oldDisplayId on spOldNew(oldDisplayId)'
 hgsql $db -e 'create index newDisplayId on spOldNew(newDisplayId)'
@@ -204,8 +204,8 @@ rm -rf __MACOSX/ reactome_v46_ucsc.zip
 tail -n +7 ucsc_entity46 > ucsc_entity46.tab
 tail -n +5 ucsc_events46 > ucsc_events46.tab
 
-hgLoadSqlTab $db spReactomeEvent ~/kent/src/hg/lib/spReactomeEvent.sql ucsc_events46.tab
-hgLoadSqlTab $db spReactomeId ~/kent/src/hg/lib/spReactomeId.sql ucsc_entity46.tab
+hgLoadSqlTab -notOnServer $db spReactomeEvent ~/kent/src/hg/lib/spReactomeEvent.sql ucsc_events46.tab
+hgLoadSqlTab -notOnServer $db spReactomeId ~/kent/src/hg/lib/spReactomeId.sql ucsc_entity46.tab
 
 cd ..
 rm current reactome
