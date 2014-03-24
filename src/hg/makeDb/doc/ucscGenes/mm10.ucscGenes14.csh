@@ -1362,13 +1362,13 @@ hgLoadSqlTab -notOnServer $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpA
     cd $dir/kegg
 
     # Make the keggMapDesc table, which maps KEGG pathway IDs to descriptive names
-    cp /cluster/data/hg19/bed/ucsc.13/kegg/map_title.tab .
+    cp /cluster/data/mm10/bed/ucsc.13.1/kegg/map_title.tab .
     # wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
-    cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
-    cut -f 2 j.tmp >j.hsa
+    cat map_title.tab | sed -e 's/\t/\tmmu\t/' > j.tmp
+    cut -f 2 j.tmp >j.mmu
     cut -f 1,3 j.tmp >j.1
-    paste j.hsa j.1 |sed -e 's/\t//' > keggMapDesc.tab
-    rm j.hsa j.1 j.tmp
+    paste j.mmu j.1 |sed -e 's/\t//' > keggMapDesc.tab
+    rm j.mmu j.1 j.tmp
     hgLoadSqlTab -notOnServer $tempDb keggMapDesc $kent/src/hg/lib/keggMapDesc.sql keggMapDesc.tab
 
     # Following in two-step process, build/load a table that maps UCSC Gene IDs
@@ -1487,8 +1487,7 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
 # blatServer by the keyword "$db"Kg with the version number appended
-hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("mm10KgSeq7", "blat4b", 17851, 0, 1);'
+hgsql hgcentraltest -e 'INSERT into blatServers values ("mm10KgSeq7", "blat4b", 17851, 0, 1);'
 hgsql hgcentraltest -e \                                                    
       'INSERT into targetDb values("mm10KgSeq7", "UCSC Genes", \
          "mm10", "kgTargetAli", "", "", \
