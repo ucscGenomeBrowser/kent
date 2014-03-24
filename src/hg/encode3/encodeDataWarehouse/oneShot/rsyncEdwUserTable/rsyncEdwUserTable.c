@@ -64,7 +64,7 @@ char *getAllUsersJson(char *sUrl, char *userId, char *password)
 {
 char url[512];
 safef(url, sizeof(url), "%s/users/?format=json&limit=all", sUrl);
-verbose(1, "Fetching all users from\n  %s\n", url);
+//verbose(1, "Fetching all users from\n  %s\n", url);
 return getTextViaHttp(url, userId, password);
 }
 
@@ -122,7 +122,7 @@ char *usersJsonText = getAllUsersJson(url, userId, password);
 struct jsonElement *jsonRoot = jsonParse(usersJsonText);
 char *userListName = "@graph";
 struct jsonElement *jsonUserList = jsonMustFindNamedField(jsonRoot, "", userListName);
-verbose(1, "Got @graph %p\n", jsonUserList);
+//verbose(1, "Got @graph %p\n", jsonUserList);
 struct slName *list = NULL;
 struct slRef *ref, *refList = jsonListVal(jsonUserList, userListName);
 for (ref = refList; ref != NULL; ref = ref->next)
@@ -131,7 +131,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
     char *uuid = jsonStringField(el, "uuid");
     if (uuid !=NULL) slNameAddHead(&list, uuid);
     }
-verbose(1, "Got %d uuid to process\n", slCount(list));
+//verbose(1, "Got %d uuid to process\n", slCount(list));
 return list;
 }
 
@@ -142,7 +142,7 @@ void rsyncEdwUserTable(char *url, char *userId, char *password, char *outTab)
 FILE *f = mustOpen(outTab, "w");
 
 struct slName *uuidList=createUuidList(url, userId, password);
-verbose(1, "uuidList created  %p\n", uuidList);
+//verbose(1, "uuidList created  %p\n", uuidList);
 struct slName *sln;
 int realUserCount = 0;
 for (sln = uuidList;  sln != NULL;  sln = sln->next)
@@ -168,10 +168,10 @@ for (sln = uuidList;  sln != NULL;  sln = sln->next)
             }
         }
     updateEdwUserInfo(email, uuid, isAdmin, f);
-    verbose(1, "%s\t%s\t%d\n", email, uuid, isAdmin);
+    //verbose(1, "%s\t%s\t%d\n", email, uuid, isAdmin);
     ++realUserCount;
     }
-verbose(1, "Total of %d users processed\n", realUserCount);
+//verbose(1, "Total of %d users processed\n", realUserCount);
 carefulClose(&f);
 }
 
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 really = optionExists("really");
-if (really) verbose(1, "Really going to do it! \n");
+//if (really) verbose(1, "Really going to do it! \n");
 if (argc != 5)
     usage();
 rsyncEdwUserTable(argv[1], argv[2], argv[3], argv[4]);
