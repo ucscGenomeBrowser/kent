@@ -116,3 +116,10 @@ tables knownToNextProt
 idSql select value from knownToNextProt where name = '%s';
 url http://www.nextprot.org/db/entry/%s
 priority 10
+
+name lynx
+shortLabel Lynx
+tables knownToLynx
+idSql select value from knownToLynx where name = '%s';
+url http://lynx.ci.uchicago.edu/gene/?geneid=%s
+priority 10
