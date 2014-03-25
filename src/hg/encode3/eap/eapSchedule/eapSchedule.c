@@ -690,8 +690,12 @@ else
     scriptName = "eap_run_spp_chip_se";
     }
 
+verbose(2, "Looking for control for chip file %s\n", ef->edwFileName);
+
 // Get control bam file info
 struct edwFile *controlEf = findChipControlFile(conn, vf, exp);
+if (controlEf == NULL)
+    errAbort("Can't find control file for ChIP experiment %s", exp->accession);
 
 verbose(2, "schedulingSppChip on %s with control %s,  step %s, script %s\n", ef->edwFileName, 
     controlEf->edwFileName, analysisStep, scriptName);
