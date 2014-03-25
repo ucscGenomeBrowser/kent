@@ -610,7 +610,7 @@ void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub)
 /* set the error message in the hubStatus table */
 {
 struct sqlConnection *conn = hConnectCentral();
-char query[64*1024];
+char query[64 * 1024];
 struct trackHub *tHub = hub->trackHub;
 
 if (errorMessage != NULL)
@@ -618,7 +618,7 @@ if (errorMessage != NULL)
     // make sure there is no newline at the end.  This should be unneccesary
     // but there are many, many places where newlines are added in calls
     // to warn and errAbort
-    char buffer[64*1024];
+    char buffer[64 * 1024];
     safecpy(buffer, sizeof buffer, errorMessage);
     while (lastChar(buffer) == '\n')
 	buffer[strlen(buffer) - 1] = '\0';
