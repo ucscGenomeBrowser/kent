@@ -996,6 +996,8 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
     # write job script
     cmdFh = open(jobFname, "w")
 
+    cmdFh.write("echo $$ > /tmp/lastJob.pid\n")
+
     cmd = "sudo -u mysql " + buildRsyncCmd("mysql/"+db, localDbDir, listFname, logFname)
     cmdFh.write(cmd)
 
@@ -1268,8 +1270,12 @@ def addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabel
         trackTables[tn] = tn
 
 def stopAllJobs():
-    """ stop all running at jobs """
+    """ stop all waiting at jobs and the currently running download job """
     cmd = "atrm `at -l | cut -f1`"
+    runCmd(cmd)
+
+    lastPid = open("/tmp/lastJob.pid").read().strip()
+    cmd = "kill %s" % lastPid
     runCmd(cmd)
     
 def assertEmptyQueue():
