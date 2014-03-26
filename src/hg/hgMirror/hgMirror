@@ -954,6 +954,9 @@ def udrIsUsable():
         print "ERROR: could not find the rsync executable in the PATH"
         sys.exit(0)
 
+    # we temporarily don't use udr 
+    return False
+
     # check if we can find udr binary
     udrPath = spawn.find_executable("udr")
     if udrPath is None:
