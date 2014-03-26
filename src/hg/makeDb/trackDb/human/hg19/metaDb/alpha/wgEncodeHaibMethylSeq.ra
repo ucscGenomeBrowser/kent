@@ -1416,6 +1416,7 @@ fileName wgEncodeHaibMethylSeqHct116MspAlnRep1.bam,wgEncodeHaibMethylSeqHct116Ms
 grant Myers
 lab HudsonAlpha
 labExpId SL10
+md5sum 41140df85f0a074e3b47d22da90522d1
 project wgEncode
 protocol PCR2x
 replicate 1
