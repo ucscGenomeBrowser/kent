@@ -4553,7 +4553,7 @@ lab HudsonAlpha
 labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 2b7992b8af6f13290c64f823e3fd32cb
+md5sum 57bcbd175c914076e174bc3035d95f78
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4610,7 +4610,7 @@ lab HudsonAlpha
 labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 7e976d2e7b81b98225dcd17c3017ad4f
+md5sum 616a9f79468defa0fdc84403b0672b08
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4782,7 +4782,7 @@ lab HudsonAlpha
 labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 188f96aa58f1c723133a5ecf0a859ac7
+md5sum 46509e548dac1f9069e562b792f8f6a4
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4838,7 +4838,7 @@ lab HudsonAlpha
 labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum eb5efe45da1e1a1a86252c918665a35f
+md5sum 344b2fdcb158777eb9ef1046919892bc
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4849,4 +4849,4 @@ submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex original
 treatment None
 view TranscriptGencV7
 
-# MAGIC: 961056506
+# MAGIC: -163918146
