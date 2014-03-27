@@ -92,11 +92,19 @@ Common problems:
         <li>Start VirtualBox, select the old browserbox virtual machine and choose "Machine - Remove" in the menu (Ctrl+R or &#8984;+R). When asked, choose "Remove only" so you still keep the old browserbox on your disk.</li>
         <li>Double-click the newly downloaded browserbox.vbox file or add it with "Machine - Add"</li>
         </ul>
+
 <li>Virtualbox Error: <i>"Failed to open virtual machine located in... Cannot register the hard disk ... because a hard disk ... already exists</i> 
         <ul>
         <li>This happens if you have already downloaded and installed Genome Browser in a Box before</li>
         <li>Start VirtualBox, go to "File - Virtual Media Manager" in the menu (Ctrl+D or &#8984;+D). Select browserbox-disk2.vmdk and click "Remove".</li>
         <li>Double-click the newly downloaded browserbox.vbox file or add it with "Machine - Add"</li>
+        </ul>
+
+<li>Genome Browser: <i>Couldn't connect to database hg19 on genome-mysql.cse.ucsc.edu as genomep</i></li>
+        <ul>
+        <li>This means that the virtual machine could not connect to the UCSC MySQL server</li>
+        <li>It can be caused by a change of the IP address (e.g. on a wifi) which has not been picked up by the virtual machine yet. You can restart the box or run a command to reset the network like <tt>sudo ifup --force eth0</tt></li>
+        <li>This can also be caused by a firewall that does not pass outgoing TCP data on port 3306/MySQL</li>
         </ul>
 </li>
 </ul>

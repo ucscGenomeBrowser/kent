@@ -6,8 +6,8 @@
 
 track wgEncodeAwgSegmentation
 compositeTrack on
-shortLabel Genome State Seg
-longLabel Genome State Segmentations from ENCODE
+shortLabel Genome Segments
+longLabel Genome Segmentations from ENCODE
 group regulation
 subGroup1 tier Tier t1=1 t2=2
 subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2)
