@@ -1019,7 +1019,7 @@ lab GIS
 labExpId IHG024
 labVersion clone-free
 localization cytosol
-md5sum 927644527b04fea14e544236c778a3fd
+md5sum 43d7ca9a887f31047a1baccb796d9c8b
 objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
@@ -1051,7 +1051,7 @@ lab GIS
 labExpId DHG001
 labVersion clone-based
 localization cytosol
-md5sum bd1c3ae97d07de1a5debd9d6889622b6
+md5sum d6aca3475c5cb1c7b4e8a9ac6d1026ed
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1081,7 +1081,7 @@ lab GIS
 labExpId IHG024
 labVersion clone-free
 localization cytosol
-md5sum 48763242783e077fd5ddd697d43b6969
+md5sum 9c1a439d01fb082b23e026388b6718dd
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1111,7 +1111,7 @@ lab GIS
 labExpId IHG024
 labVersion clone-free
 localization cytosol
-md5sum c57288b61e645beb3689f6ee35ec8ab8
+md5sum fc34aca1582ce3c791a4f5df7311ca96
 objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
@@ -1142,7 +1142,7 @@ lab GIS
 labExpId DHG001
 labVersion clone-based
 localization cytosol
-md5sum 77d2d0ac459f83a4c223f55af5036f1d
+md5sum 71652744741071a5964d03e30149243b
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1171,7 +1171,7 @@ lab GIS
 labExpId IHG024
 labVersion clone-free
 localization cytosol
-md5sum b54da1aa919da0cf1b818cc563de09dd
+md5sum 7f50a4196a6557139a5b0b39a73b9de3
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1200,7 +1200,7 @@ lab GIS
 labExpId IHG024
 labVersion clone-free
 localization cytosol
-md5sum e2ad5fc07a8f727aeb6a3fccd64658a8
+md5sum a124b93ec33b6930e9ba241a13c749a8
 objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
@@ -1231,7 +1231,7 @@ lab GIS
 labExpId DHG001
 labVersion clone-based
 localization cytosol
-md5sum d53b25727740a365620efc52c2607f97
+md5sum 84d5e9d31ed8eed12a827c9cc3f6982c
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1260,7 +1260,7 @@ lab GIS
 labExpId IHG024
 labVersion clone-free
 localization cytosol
-md5sum 054624748b11266dc4bef4cdd6e611ed
+md5sum 4784bfb738c10b61e34c6177e7c29adf
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1503,7 +1503,7 @@ lab GIS
 labExpId DHG002
 labVersion clone-based
 localization nucleus
-md5sum c55682f7a3bf37d20d6af81fe5f0842a
+md5sum 011715b1976580d3837f46b6efdd6fb1
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1533,7 +1533,7 @@ lab GIS
 labExpId DHG002
 labVersion clone-based
 localization nucleus
-md5sum 0ed640ba88d1e5cb702fd41ed0f26cc3
+md5sum eb7b79830c23d3d729bdc9c605f6368f
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1562,7 +1562,7 @@ lab GIS
 labExpId DHG002
 labVersion clone-based
 localization nucleus
-md5sum 015408fe68f41e10ab0993e1a152f49d
+md5sum 2894f464d1a7646ffc5a27eef1b1c3dc
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1680,7 +1680,7 @@ lab GIS
 labExpId IHE001
 labVersion clone-free
 localization cell
-md5sum ed52fdd87447ac04c2a67c8036e617fa
+md5sum 0a28028ba1f146b003881c674ed35d62
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1710,7 +1710,7 @@ lab GIS
 labExpId IHE001
 labVersion clone-free
 localization cell
-md5sum fcd1ef8ffb346888bd36e0830dec1f48
+md5sum 8f8266709db516faed3d2127780096df
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1739,7 +1739,7 @@ lab GIS
 labExpId IHE001
 labVersion clone-free
 localization cell
-md5sum daa6a09e3a88a84c06e9bffd922088cf
+md5sum cd82d6011ecf2e188b8f2a774508a94d
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1882,7 +1882,7 @@ lab GIS
 labExpId RHH014
 labVersion clone-free
 localization cell
-md5sum b1c071be3fab2f36af1ee504775c1ea6
+md5sum d8d7ccd1781bbf316a68e8ed88b8d9e6
 project wgEncode
 readType 2x36
 replicate 1
@@ -1910,7 +1910,7 @@ lab GIS
 labExpId RHH015
 labVersion clone-free
 localization cell
-md5sum a436b1d295aa2985d20c1db445e59482
+md5sum e847205019dba276b4450a05969dbba9
 objStatus revoked - poor quality
 project wgEncode
 readType 2x36
@@ -1939,7 +1939,7 @@ lab GIS
 labExpId RHH014
 labVersion clone-free
 localization cell
-md5sum 34c7a52501a75d010613734311b07def
+md5sum bc3680fa8452e4880fb94bba4aa95f13
 project wgEncode
 readType 2x36
 replicate 1
@@ -1965,7 +1965,7 @@ lab GIS
 labExpId RHH015
 labVersion clone-free
 localization cell
-md5sum 7e1a4068b0dd8a19958ce3cb44a7185e
+md5sum c78d3fa812d92c4e0c890a6a963e8b5e
 objStatus revoked - poor quality
 project wgEncode
 readType 2x36
@@ -1993,7 +1993,7 @@ lab GIS
 labExpId RHH014
 labVersion clone-free
 localization cell
-md5sum 4ed83de07bd6528b08652336116370f5
+md5sum 5c64b47ef025e6e0ad672c3bf15c18cc
 project wgEncode
 readType 2x36
 replicate 1
@@ -2019,7 +2019,7 @@ lab GIS
 labExpId RHH015
 labVersion clone-free
 localization cell
-md5sum c26479c9bcf4db5a9f5199bba84c80e4
+md5sum 2e6413f1465078a23f376322c2ccd9b2
 objStatus revoked - poor quality
 project wgEncode
 readType 2x36
@@ -2190,7 +2190,7 @@ lab GIS
 labExpId RHH002
 labVersion clone-free
 localization cytosol
-md5sum 655b9edfd19654af2ed95127ff0e8085
+md5sum 4656002d3fe512e9e27e09042794d5ae
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -2220,7 +2220,7 @@ lab GIS
 labExpId RHH002
 labVersion clone-free
 localization cytosol
-md5sum 0fe2f6902a856f4a89a6208bfc45f3b4
+md5sum bce8b4ba72d31a8d49e51dc1bf4a9ba3
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -2249,7 +2249,7 @@ lab GIS
 labExpId RHH002
 labVersion clone-free
 localization cytosol
-md5sum 06475ca109055b147953b22d1ce8a0d6
+md5sum 2ac73eb4931bf1d2de942c69d8f2b578
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -2397,7 +2397,7 @@ lab GIS
 labExpId RHH004
 labVersion clone-free
 localization nucleus
-md5sum e6a6e268a1473c12fd2639d0b0403b45
+md5sum de49cfc7cc6a4a4f84b4db0d4f1dea29
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -2428,7 +2428,7 @@ lab GIS
 labExpId RHH004
 labVersion clone-free
 localization nucleus
-md5sum b1ad9c86e6f91c6a7b280b4853f217a3
+md5sum ad5af8d508129839e0eded6504192c15
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -2458,7 +2458,7 @@ lab GIS
 labExpId RHH004
 labVersion clone-free
 localization nucleus
-md5sum cfd949158be49d6e896b1a8026516089
+md5sum 85c16b6826b41e4b702a1550edc37f54
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -2488,7 +2488,7 @@ lab GIS
 labExpId RHH004
 labVersion clone-free
 localization nucleus
-md5sum 68fb641df5cb5675b0545f4bd8baf36b
+md5sum de20f645ea6d70f0d2b7fcc10bf01e6d
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -2517,7 +2517,7 @@ lab GIS
 labExpId RHH004
 labVersion clone-free
 localization nucleus
-md5sum 96be75480c5ba4a7661b79ab436ea538
+md5sum bd9c8453f8cc1b462d327614321046da
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -2547,7 +2547,7 @@ lab GIS
 labExpId RHH004
 labVersion clone-free
 localization nucleus
-md5sum 3bcdb71547d2174a62aba8f569c22f0a
+md5sum 9c1bb79ddf69ed86900fe1ff3abe2a40
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -2728,7 +2728,7 @@ lab GIS
 labExpId DHH002
 labVersion clone-based
 localization cytosol
-md5sum 5340bd7fd0e817d1f4bc97d54a9cc616
+md5sum 9d66639de524ab6d159d9ceef85c7110
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -2758,7 +2758,7 @@ lab GIS
 labExpId DHH002
 labVersion clone-based
 localization cytosol
-md5sum d030fe790b3bd228dba12c20120502fe
+md5sum 01ac2447678a0ab4b72678a3ec64b0e5
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -2787,7 +2787,7 @@ lab GIS
 labExpId DHH002
 labVersion clone-based
 localization cytosol
-md5sum 15b48b7e515203a8da15d6574e530302
+md5sum d800bc3b41a0f5b2430b2fee91c59021
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -2905,7 +2905,7 @@ lab GIS
 labExpId DHH003
 labVersion clone-based
 localization nucleus
-md5sum 6d1013d3708a627e7bfea530cc956a20
+md5sum 0792cee5750de10dbc1c82a0badf9e15
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -2935,7 +2935,7 @@ lab GIS
 labExpId DHH003
 labVersion clone-based
 localization nucleus
-md5sum 611c84aac912a872ebd7b5e96b56a411
+md5sum 7fce1c15605e19bb2fc7019179026010
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -2964,7 +2964,7 @@ lab GIS
 labExpId DHH003
 labVersion clone-based
 localization nucleus
-md5sum b460f513d02ba179e300a7707c304f05
+md5sum bd73d6539f8d343dc89195842c92849e
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -3112,7 +3112,7 @@ lab GIS
 labExpId RHH003
 labVersion clone-free
 localization cytosol
-md5sum eebddd4159a45dca0830358f11bb8900
+md5sum 3b1164ace222f4650fa689ea9b14177c
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -3143,7 +3143,7 @@ lab GIS
 labExpId RHH003
 labVersion clone-free
 localization cytosol
-md5sum 80c305101f2009d07355d970e29b7a68
+md5sum 3f522dc545a5c02d8ba385097fb45adc
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -3173,7 +3173,7 @@ lab GIS
 labExpId RHH003
 labVersion clone-free
 localization cytosol
-md5sum fc6b364e07f4627f5beb8470d1d928f3
+md5sum cce0e097972fbd372eacd426b1754e65
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -3203,7 +3203,7 @@ lab GIS
 labExpId RHH003
 labVersion clone-free
 localization cytosol
-md5sum 85087703eccb962bc6a6219987045ad8
+md5sum 69b3970780cbfa5ac12d6c8b6a1cc0a0
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -3232,7 +3232,7 @@ lab GIS
 labExpId RHH003
 labVersion clone-free
 localization cytosol
-md5sum d5f62548021f4f652d91cd27b7f01f60
+md5sum d5c2c815089dede8f9fcc1f408ef7bb2
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -3262,7 +3262,7 @@ lab GIS
 labExpId RHH003
 labVersion clone-free
 localization cytosol
-md5sum e36bbb621397a521ad8dd50e0f91212e
+md5sum 04d5abf878044ef7697e64d2be3354b9
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -3443,7 +3443,7 @@ lab GIS
 labExpId RHH001
 labVersion clone-free
 localization nucleus
-md5sum 61b8749ad28fc63fcf004a03fd981f9a
+md5sum b0830a5c107425e6a16e0d2d45906614
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -3473,7 +3473,7 @@ lab GIS
 labExpId RHH001
 labVersion clone-free
 localization nucleus
-md5sum 911bf003341fcf8141f5f26747db7dbe
+md5sum 0c6af2812bcc366d3f043aca8992807d
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -3502,7 +3502,7 @@ lab GIS
 labExpId RHH001
 labVersion clone-free
 localization nucleus
-md5sum 90aeea4d36c645ac2d14291b18b72914
+md5sum 2a61843bca0be12bccfca3f009297455
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -4559,7 +4559,7 @@ lab GIS
 labExpId PHK001
 labVersion clone-based
 localization chromatin
-md5sum 16ffaaa53f93a84e8c3015d2eb1de073
+md5sum 3160d3f0ea455fdde6dcc71daef5f1d3
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -4589,7 +4589,7 @@ lab GIS
 labExpId PHK001
 labVersion clone-based
 localization chromatin
-md5sum cee07690167916813020639b9b0c7cec
+md5sum 5bb5797e8b3652e1db48d4e40cc7b8f6
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -4707,7 +4707,7 @@ lab GIS
 labExpId IHK009010015
 labVersion clone-free
 localization cytosol
-md5sum 9b9fd57b832df82baad1afd3c847765f
+md5sum 385505dab8c87f9f4836b9f295159343
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -4737,7 +4737,7 @@ lab GIS
 labExpId IHK009010015
 labVersion clone-free
 localization cytosol
-md5sum 8ef48f1596c5cadcdbefaa7a67218413
+md5sum b5c88c91eea636eaf4525fa99e0f61c0
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -4766,7 +4766,7 @@ lab GIS
 labExpId IHK009010015
 labVersion clone-free
 localization cytosol
-md5sum 507d7b722ee096954356cb00e25a06c6
+md5sum 970adbb8dfe23f802af69a7d4b166742
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -4884,7 +4884,7 @@ lab GIS
 labExpId DHK008
 labVersion clone-based
 localization nucleolus
-md5sum 76fd054dbb1842f9c58fa0d3631f53d8
+md5sum 6245e6e550bdd7b02943dbec4e98500d
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -4914,7 +4914,7 @@ lab GIS
 labExpId DHK008
 labVersion clone-based
 localization nucleolus
-md5sum 09a7d6a2c09127c185a426201229d8dc
+md5sum 4ab47e7e40bca37fd0bcb366128747e3
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -4943,7 +4943,7 @@ lab GIS
 labExpId DHK008
 labVersion clone-based
 localization nucleolus
-md5sum 1080104d5622e38d8884f4c97c98b9f4
+md5sum eb0e49911e705623dee7f3e6e39badf6
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -5061,7 +5061,7 @@ lab GIS
 labExpId PHK002
 labVersion clone-based
 localization nucleoplasm
-md5sum 643381be4177a6bc13a2052defa3b3ae
+md5sum 60279d2d6461fa892258d58fb35bb211
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -5091,7 +5091,7 @@ lab GIS
 labExpId PHK002
 labVersion clone-based
 localization nucleoplasm
-md5sum f9f78b4c36a26c0663f74f264fc98034
+md5sum fbc0be62aee6010a9e633b141be8b951
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -5209,7 +5209,7 @@ lab GIS
 labExpId DHK006
 labVersion clone-based
 localization nucleus
-md5sum 398974455a7b7a22faa37baef00b89e7
+md5sum c622f345e6ab92dee2ef9fb4d7b91c42
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -5239,7 +5239,7 @@ lab GIS
 labExpId DHK006
 labVersion clone-based
 localization nucleus
-md5sum 70a243e36a1a02ba1aa3e796f2e5c059
+md5sum 9777c2e01d3693705695a377d40dee98
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -5268,7 +5268,7 @@ lab GIS
 labExpId DHK006
 labVersion clone-based
 localization nucleus
-md5sum 8c3460c1bbff5e8bb08bcacd67978e05
+md5sum 5b6963834b726eb0379e97d9ee3a3e72
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -5386,7 +5386,7 @@ lab GIS
 labExpId DHK007
 labVersion clone-based
 localization polysome
-md5sum ca9b0f37cf1e3eab147d690374ba6991
+md5sum 1c669e9eb5dcc50d94576297ab48991b
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -5416,7 +5416,7 @@ lab GIS
 labExpId DHK007
 labVersion clone-based
 localization polysome
-md5sum 11e2b327e72491d169218b2446cabbe8
+md5sum 71187261d5a845d218f80ee0fa3d8306
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -5445,7 +5445,7 @@ lab GIS
 labExpId DHK007
 labVersion clone-based
 localization polysome
-md5sum 8ba34c4d5b57f981b499e73e9b252a2a
+md5sum 34362616d7bd2cf7b940cea07c5d10ec
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -6469,7 +6469,7 @@ lab GIS
 labExpId IHN011
 labVersion clone-free
 localization cytosol
-md5sum 937dd4a0a0c71f512bbb64ce4c3af912
+md5sum 350035cc394b24a152381400b9d908bf
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -6499,7 +6499,7 @@ lab GIS
 labExpId IHN011
 labVersion clone-free
 localization cytosol
-md5sum 1dfd651571f3e562651269b20d317a2d
+md5sum 3d66efa677d17add52deec772909e365
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -6528,7 +6528,7 @@ lab GIS
 labExpId IHN011
 labVersion clone-free
 localization cytosol
-md5sum 63ad89abb193d2afc5ce52cfd7d6f00b
+md5sum c515db639fc264e726e0ecf9f60ff981
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -6646,7 +6646,7 @@ lab GIS
 labExpId IHN012
 labVersion clone-free
 localization nucleus
-md5sum 5d6f7fafd4c46def32f966f51ab92ee5
+md5sum 80ae968e0ee60496f19a619eb58e6884
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -6676,7 +6676,7 @@ lab GIS
 labExpId IHN012
 labVersion clone-free
 localization nucleus
-md5sum 335aa957d884afa7957abf29bcc58e62
+md5sum 499f6f261dcfa2f451db94d0f5e587af
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -6705,7 +6705,7 @@ lab GIS
 labExpId IHN012
 labVersion clone-free
 localization nucleus
-md5sum 0574f548bfca92c6400452cf71dffb0c
+md5sum 98008b9f33e355d609b99502a92ae134
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -6823,7 +6823,7 @@ lab GIS
 labExpId DHP001
 labVersion clone-based
 localization cell
-md5sum 03f9cd2ff4caa0dfc6406e53e6660487
+md5sum 75ca48713aa261be31525b68a33181be
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -6853,7 +6853,7 @@ lab GIS
 labExpId DHP001
 labVersion clone-based
 localization cell
-md5sum bccec7defc834d01fcc1c491d2b38ef0
+md5sum d3d270b6d0d0a6ef995eff021b192170
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -6882,7 +6882,7 @@ lab GIS
 labExpId DHP001
 labVersion clone-based
 localization cell
-md5sum 8b04f434b5b80d74948578f2182b1e2e
+md5sum 012910ec5fc11f4a25dd0c1cc10d8cb4
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -7858,4 +7858,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: 1839002641
+# MAGIC: -245895184
