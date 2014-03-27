@@ -996,7 +996,7 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
     # write job script
     cmdFh = open(jobFname, "w")
 
-    cmdFh.write("echo $$ > /tmp/lastJob.pid\n")
+    cmdFh.write("ps -o pgid= -p $$ > /tmp/lastJob.pid\n")
 
     cmd = "sudo -u mysql " + buildRsyncCmd("mysql/"+db, localDbDir, listFname, logFname)
     cmdFh.write(cmd)
@@ -1274,9 +1274,10 @@ def stopAllJobs():
     cmd = "atrm `at -l | cut -f1`"
     runCmd(cmd)
 
-    lastPid = open("/tmp/lastJob.pid").read().strip()
-    cmd = "kill %s" % lastPid
-    runCmd(cmd)
+    if isfile("/tmp/lastJob.pid"):
+        lastPid = open("/tmp/lastJob.pid").read().strip()
+        cmd = "sudo kill -- -%s" % lastPid
+        runCmd(cmd)
     
 def assertEmptyQueue():
     """ if the at queue is not empty, show link to log file of running job and stop program """
