@@ -45,5 +45,49 @@
 # -rw-rw-r-- 1 700587893 Mar 26 18:18 balAcu1.ucsc.fa.gz
 # -rw-rw-r-- 1       206 Mar 26 18:20 checkAgp.result.txt
 
+#############################################################################
+#  Initial database build (DONE - 2014-03-27 - Hiram)
+
+    cd /hive/data/genomes/balAcu1
+    cat << '_EOF_' > balAcu1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db balAcu1
+clade mammal
+# genomeCladePriority 35
+scientificName Balaenoptera acutorostrata scammoni
+commonName Minke whale
+assemblyDate Oct. 2013
+assemblyLabel Korea Ocean Research & Development Institute
+assemblyShortLabel BalAcu1.0
+orderKey 2369
+mitoAcc NC_005271.1
+fastaFiles /hive/data/genomes/balAcu1/ucsc/balAcu1.ucsc.fa.gz
+agpFiles /hive/data/genomes/balAcu1/ucsc/balAcu1.ucsc.agp
+dbDbSpeciesDir balAcu
+photoCreditURL http://www.noaa.gov/
+photoCreditName NOAA - National Oceanic and Atmospheric Administration
+ncbiGenomeId 10769
+ncbiAssemblyId 78761
+ncbiAssemblyName BalAcu1.0
+ncbiBioProject 237330
+genBankAccessionID GCA_000493695.1
+taxId 310752
+'_EOF_'
+    # << happy emacs
+
+    # stepwise, the first 'seq' step didn't work with the
+    # scientificName above because the chrM sequence did not have
+    # the scammoni on the name, use a config.ra for that step without
+    # that part of the name, then continue with the full name:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-stop=seq balAcu1.config.ra > seq.log 2>&1
+
+    # verify sequence and AGP are OK:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=agp -stop=agp balAcu1.config.ra > agp.log 2>&1
+
+    # then finish it off:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=db balAcu1.config.ra > db.log 2>&1
 
 #############################################################################
