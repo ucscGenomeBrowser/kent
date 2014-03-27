@@ -1,0 +1,49 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the balAcu1
+# Balaenoptera acutorostrata scammoni - Minke whale
+
+#	DATE:   31-Oct-2013
+#	ORGANISM:       Balaenoptera acutorostrata scammoni
+#	TAXID:  310752
+#	ASSEMBLY LONG NAME:     BalAcu1.0
+#	ASSEMBLY SHORT NAME:    BalAcu1.0
+#	ASSEMBLY SUBMITTER:     Korea Ocean Research & Development Institute
+#	ASSEMBLY TYPE:  Haploid
+#	NUMBER OF ASSEMBLY-UNITS:       1
+#	ASSEMBLY ACCESSION:     GCA_000493695.1
+
+#	FTP-RELEASE DATE: 07-Nov-2013
+
+#       rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Balaenoptera_acutorostrata/BalAcu1.0/
+
+#	Mitochondrial sequence: NC_005271.1
+
+
+#############################################################################
+# fetch sequence from genbank (DONE - 2013-03-26 - Hiram)
+    mkdir -p /hive/data/genomes/balAcu1/genbank
+    cd /hive/data/genomes/balAcu1/genbank
+
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Balaenoptera_acutorostrata/BalAcu1.0/ ./
+
+    # measure sequence to be used here  (there will be the chrMT also ...)
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+
+    #   2431671281 bases (145030652 N's 2286640629 real 2286640629 upper
+    #   0 lower) in 10775 sequences in 1 files
+    #   Total size: mean 225677.1 sd 1878463.2
+    #   min 200 (gi|555415911|gb|ATDI01158464.1|)
+    #   max 51448160 (gi|555757145|gb|KI537095.1|) median 394
+
+#############################################################################
+# fixup names for UCSC standards (DONE - 2014-03-26 - Hiram)
+    cd /hive/data/genomes/balAcu1
+    $HOME/kent/src/hg/utils/automation/unplacedScaffolds.pl balAcu1
+    # constructs ./ucsc/ directory here:
+# -rw-rw-r-- 1  20508313 Mar 26 18:04 balAcu1.ucsc.agp
+# -rw-rw-r-- 1 700587893 Mar 26 18:18 balAcu1.ucsc.fa.gz
+# -rw-rw-r-- 1       206 Mar 26 18:20 checkAgp.result.txt
+
+
+#############################################################################
