@@ -1053,6 +1053,11 @@ def printLog(jobId):
     jobFname = "/tmp/%d.log" % int(jobId)
     print "rsync download commands:<p>"
     print "<pre>"
+    if not isfile(jobFname):
+        print "This download job is not active anymore.<p>"
+        print '<a href="hgMirror">Start a new download</a>'
+        sys.exit(0)
+
     for line in open(jobFname):
         print line,
 
