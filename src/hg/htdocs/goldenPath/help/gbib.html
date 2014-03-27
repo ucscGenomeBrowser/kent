@@ -61,7 +61,7 @@ href="https://www.virtualbox.org/wiki/Downloads">virtualbox.org</a>. We have
 tested version 4.3.6. Install it by following the instructions on the website.</P>
 
 Then download the <a href="http://hgwdev.soe.ucsc.edu/~max/browserbox/browserbox.zip">
-Genome Browser in a Box ZIP file </a> (~300 MB) and extract it.
+Genome Browser in a Box ZIP file </a> (~450 MB) and extract it.
 <p>
 Add the contents of the zip file to VirtualBox by double-clicking the file browserbox.vbox or
 start virtualbox and select <i>Machine - Add</i> (&#8984;+A on Macs or
@@ -73,6 +73,8 @@ browserbox.vbox that you just extracted.<P>
 Finally, if needed, select "browserbox" on the left side menu of virtualbox and click the
 big button "Start" in the symbol bar.<P> 
 <img src="../../images/gbib-start.png">
+<p>
+The software will update itself every day, the first time you start it. You can see the progress of the update on your screen ("Now updating the genome browser programs"). Please wait until the update is done, it typically takes 10-30 seconds.
 <p>
 
 Common problems:
@@ -88,13 +90,21 @@ Common problems:
         <ul>
         <li>This happens if you have already downloaded and installed Genome Browser in a Box before </li>
         <li>Start VirtualBox, select the old browserbox virtual machine and choose "Machine - Remove" in the menu (Ctrl+R or &#8984;+R). When asked, choose "Remove only" so you still keep the old browserbox on your disk.</li>
-        <li>Now double-click the newly downloaded browserbox.vbox file or add it with "Machine - Add"</li>
+        <li>Double-click the newly downloaded browserbox.vbox file or add it with "Machine - Add"</li>
         </ul>
+
 <li>Virtualbox Error: <i>"Failed to open virtual machine located in... Cannot register the hard disk ... because a hard disk ... already exists</i> 
         <ul>
         <li>This happens if you have already downloaded and installed Genome Browser in a Box before</li>
         <li>Start VirtualBox, go to "File - Virtual Media Manager" in the menu (Ctrl+D or &#8984;+D). Select browserbox-disk2.vmdk and click "Remove".</li>
-        <li>Now double-click the newly downloaded browserbox.vbox file or add it with "Machine - Add"</li>
+        <li>Double-click the newly downloaded browserbox.vbox file or add it with "Machine - Add"</li>
+        </ul>
+
+<li>Genome Browser: <i>Couldn't connect to database hg19 on genome-mysql.cse.ucsc.edu as genomep</i></li>
+        <ul>
+        <li>This means that the virtual machine could not connect to the UCSC MySQL server</li>
+        <li>It can be caused by a change of the IP address (e.g. on a wifi) which has not been picked up by the virtual machine yet. You can restart the box or run a command to reset the network like <tt>sudo ifup --force eth0</tt></li>
+        <li>This can also be caused by a firewall that does not pass outgoing TCP data on port 3306/MySQL</li>
         </ul>
 </li>
 </ul>
@@ -127,12 +137,11 @@ you typically use and click "Download".<p>
 If you are unsure what to select, our recommendation is "Default tracks with
 conservation tables, but no alignments". Depending on your network bandwidth,
 the download can take several minutes or up to a few hours over an ADSL
-line. The mirror tool will try to use <a
-href="https://github.com/LabAdvComp/UDR">UDR</a> to speed up the download.
+line. 
 During the download, the file browserbox-disk2.vmdk will grow.
 Please wait until it is completed. You cannot use the Genome Browser in a Box during this
 time. Once the download is complete, the default
-tracks should load in less than a second for a typical locus.<P>
+tracks should load in less than three seconds for a typical locus.<P>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
 
@@ -147,7 +156,7 @@ To set this up, first stop the virtual machine by closing the black Genome Brows
 <p>
 
 Then you need to allow virtualbox access to one or more directories on your harddisk. To do this,
-click on the browserbox in virtualbox, click on <i>Settings</i>, <i>Shared Folders</i>, 
+click on the "browserbox" entry in virtualbox, click on <i>Settings</i>, <i>Shared Folders</i>, 
 <i>+</i>. Select a directory on your disk under <i>Folder Path / Other</i>. 
 Select the checkbox to give access "Read-only" and make sure the checkbox for "Auto-mount" is selected.<P>
 <img src="../../images/gbib-shared.png">

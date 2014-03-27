@@ -7483,7 +7483,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20871
 localization cell
-md5sum 348d6f85de112c739ff649866b372153
+md5sum 2d306eeedf9e29bac05a2c729b809fdf
 project wgEncode
 readType 2x76D
 replicate 2
@@ -12831,7 +12831,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20921
 localization cell
-md5sum 89ea4fa47dc7479d37c47d6688171bd7
+md5sum 7d18cfd784b89751d24523ef3f3e7364
 project wgEncode
 readType 2x76D
 replicate 2
@@ -15606,7 +15606,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21181
 localization cell
-md5sum 99010a1a627743fd3ada2fda976a0294
+md5sum db81d46dceb87b2a02f298fad37062e5
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17413,7 +17413,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21038
 localization cell
-md5sum 176961cf70ed3fedea68c1626b8f4815
+md5sum 38d4e2dc3b8617f16a6927f4e6c257b8
 objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
@@ -17444,7 +17444,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21039
 localization cell
-md5sum 7631ba95140a51fee57cae1fef5b0ce6
+md5sum 2ad90c87142c7368f48b46104b8ac84d
 objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
@@ -20321,4 +20321,4 @@ strain C57BL/6J
 subId 7798
 view TranscriptEnsV65IAcuff
 
-# MAGIC: -1029856625
+# MAGIC: -4215618
