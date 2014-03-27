@@ -189,11 +189,15 @@ else
         slNameAddHead(&dbs, argv[i]);
     }
 
+// just check that the username/password actually works
+struct sqlConnection *conn;
+conn = sqlConnectRemote(host, user, password, NULL);
+sqlDisconnect(&conn);
+
 for (; dbs != NULL; dbs = dbs->next)
     {
     // open connect to source db
     printf("DB: %s\n", dbs->name);
-    struct sqlConnection *conn;
     if(host)
         conn = sqlMayConnectRemote(host, user, password, dbs->name);
     else
