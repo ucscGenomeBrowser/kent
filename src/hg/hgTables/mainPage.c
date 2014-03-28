@@ -461,16 +461,21 @@ for (ot = otList; ot != NULL; ot = ot->next)
     }
 hPrintf("</SELECT>\n");
 hPrintf(" ");
-hPrintf(" Send output to ");
-cgiMakeCheckBoxIdAndJS("sendToGalaxy", doGalaxy(),
-    "checkboxGalaxy",
-    "onclick=\"document.getElementById('checkboxGreat').checked=false; return true;\"");
-hPrintf("<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A>\n");
-nbSpaces(2);
-cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
-    "checkboxGreat",
-    "onclick=\"return onSelectGreat();\"");
-hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
+
+if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
+    {
+    hPrintf(" Send output to ");
+    cgiMakeCheckBoxIdAndJS("sendToGalaxy", doGalaxy(),
+        "checkboxGalaxy",
+        "onclick=\"document.getElementById('checkboxGreat').checked=false; return true;\"");
+    hPrintf("<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A>\n");
+    nbSpaces(2);
+    cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
+        "checkboxGreat",
+        "onclick=\"return onSelectGreat();\"");
+    hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
+    }
+
 hPrintf("</TD></TR>\n");
 }
 
