@@ -133,6 +133,26 @@ else
 		maxAltFreq = altFreq;
 	    }
 	}
+    else
+        // Use MAF for alternate allele freqs from MAF:
+        {
+        const struct vcfInfoElement *mafEl = vcfRecordFindInfo(record, "MAF");
+        const struct vcfInfoDef *mafDef = vcfInfoDefForKey(vcff, "MAF");
+        if (mafEl != NULL && mafDef != NULL && mafDef->type == vcfInfoString
+        && startsWith("Minor Allele Frequency",mafDef->description))
+            {
+            // If INFO includes alt allele freqs, use them directly.
+            gotInfo = TRUE;
+
+            if (mafEl->count >= 1 && !mafEl->missingData[mafEl->count-1])
+                {
+                char data[64];
+                safecpy(data,sizeof(data),mafEl->values[mafEl->count-1].datString);
+                maxAltFreq = atof(lastWordInLine(data));
+                refFreq -= maxAltFreq;
+                }
+            }
+        }
     }
 if (gotInfo)
     {
