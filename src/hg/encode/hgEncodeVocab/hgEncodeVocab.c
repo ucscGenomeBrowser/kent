@@ -11,6 +11,7 @@
 #include "cv.h"
 #include "web.h"
 #include "jsHelper.h"
+#include "hgConfig.h"
 
 /* hgEncodeVocab - A CGI script to display the different types of encode controlled vocabulary.
  * usage:
@@ -58,6 +59,9 @@ char *s;
 if (title == NULL)
     title = docTerm;
 
+//can use hg.conf to direct links back to main UCSC server if a mirror doesn't
+//want all the PDFs
+char *baseUrl = cfgOptionDefault("hgEncodeVocabDocBaseUrl", "");
 // add links to protocol doc if it exists
 char docUrl[PATH_LEN];
 char docFile[PATH_LEN];
@@ -94,7 +98,7 @@ if (s != NULL)
                 printf("%s<em>missing</em>\n",docTitle);
             else
                 {
-                safef(docUrl,  sizeof(docUrl),  "%s%s", dir, fileName);
+                safef(docUrl,  sizeof(docUrl),  "%s%s%s", baseUrl, dir, fileName);
                 safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
                 printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
                 docsPrinted++;
@@ -106,7 +110,7 @@ if (s != NULL)
     }
 else if (genericDoc)
     { // generate a standard name
-    safef(docUrl,  sizeof(docUrl),  "%s%s_protocol.pdf", dir, term);
+    safef(docUrl,  sizeof(docUrl),  "%s%s%s_protocol.pdf", baseUrl, dir, term);
     safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
     if (fileExists(docFile))
         {
