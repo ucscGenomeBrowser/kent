@@ -18,6 +18,7 @@
 #include "obscure.h"
 #include "bamFile.h"
 #include "raToStruct.h"
+#include "web.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "edwFastqFileFromRa.h"
@@ -933,16 +934,27 @@ puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
 	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
 printf("<HTML><HEAD><TITLE>%s</TITLE>\n", title);
 puts("<meta http-equiv='X-UA-Compatible' content='IE=Edge'>");
+puts("<link rel='stylesheet' href='/style/encode3.css' type='text/css'>");
 puts("<script type='text/javascript' SRC='/js/jquery.js'></script>");
 puts("<script type='text/javascript' SRC='/js/jquery.cookie.js'></script>");
 puts("<script type='text/javascript' src='https://login.persona.org/include.js'></script>");
 puts("<script type='text/javascript' src='/js/edwPersona.js'></script>");
-puts("</HEAD><BODY>");
+puts("</HEAD>");
+
+/* layout with navigation bar */
+puts("<BODY>\n");
+puts("<div id='layout'>");
+puts("<div id='navbar' class='navbar navbar-fixed-top navbar-inverse'>");
+webIncludeFile("/inc/edwNavBar.html");
+puts("</div>");
+puts("<div id='content' class='container'><div>");
+
 }
 
 void edwWebFooterWithPersona()
 /* Print out end tags and persona script stuff */
 {
+puts("</div></div></div>");
 htmlEnd();
 }
 

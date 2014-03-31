@@ -30,24 +30,33 @@ errAbort(
 void logIn()
 /* Put up name.  No password for now. */
 {
-printf("Welcome to the prototype ENCODE Data Warehouse submission site.<BR>");
-printf("Please sign in via Persona");
-printf("<INPUT TYPE=BUTTON NAME=\"signIn\" VALUE=\"sign in\" id=\"signin\">");
+printf("<DIV>");
+printf("<H3>Welcome to the prototype ENCODE Data Warehouse submission site</H3>");
+printf("<H5>Please sign in using Persona&nbsp;");
+printf("<INPUT TYPE=BUTTON NAME=\"signIn\" CLASS=\"btn\" VALUE=\"Sign in\" id=\"signin\"</H5>");
+printf("</DIV>");
 }
 
 void getUrl(struct sqlConnection *conn)
 /* Put up URL. */
 {
-edwMustGetUserFromEmail(conn, userEmail);
-printf("Please enter a URL for a validated manifest file:<BR>");
-printf("URL ");
+struct edwUser *user = edwMustGetUserFromEmail(conn, userEmail);
+printf("<script>$('#edw-user').text(%s)</script>", user->email);
+
+printf("<H1>Submit Data</H1>");
+
+printf("<P CLASS='title'>Enter the URL of a validated manifest file:<P>");
+
+puts("<DIV CLASS=\"input-append\">");
 cgiMakeTextVar("url", emptyForNull(cgiOptionalString("url")), 80);
-cgiMakeButton("submitUrl", "submit");
-printf("<BR>\n");
+cgiMakeButton("submitUrl", "Submit");
+puts("</DIV>");
+
+puts("<DIV>");
 cgiMakeCheckBox("update", FALSE);
-printf(" Update information associated with files that have already been uploaded.");
+printf(" Update information for files previously submitted");
+puts("</DIV>");
 printf("<BR>Submission by %s", userEmail);
-edwPrintLogOutButton();
 }
 
 static char *stopButtonName = "stopUpload";
