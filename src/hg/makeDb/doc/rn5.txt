@@ -1719,3 +1719,17 @@ done > ensToUcsc.lift
     # verify the track link to INSDC functions
 
 ##############################################################################
+# chain/net hg38 (DONE - 2014-03-31 - Pauline)
+
+    #	running the swap
+    mkdir /hive/data/genomes/rn5/bed/blastz.hg38.swap
+    cd /hive/data/genomes/rn5/bed/blastz.hg38.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg38/bed/lastzRn5.2014-02-27/DEF \
+	-swap \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 
+    #   real    66m53.095s
+    cat fb.rn5.chainHg38Link.txt
+    #   934256475 bases of 2572853723 (36.312%) in intersection
+##############################################################################
