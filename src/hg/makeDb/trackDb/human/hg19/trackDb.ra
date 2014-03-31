@@ -36,7 +36,6 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 track gad override
 release beta,public
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track fosEndPairs override
 origAssembly hg18
