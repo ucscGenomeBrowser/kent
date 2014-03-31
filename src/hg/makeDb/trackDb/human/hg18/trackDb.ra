@@ -3735,6 +3735,8 @@ type bed 9 .
 scoreFilterByRange on
 itemRgb on
 color 0,0,0
+urlLabel Genbank accession:
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
 
 track evoCpg
 shortLabel Evo Cpg
