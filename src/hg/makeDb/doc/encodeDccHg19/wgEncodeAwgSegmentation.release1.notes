@@ -1,0 +1,74 @@
+mkChangeNotes v2
+hg19 wgEncodeAwgSegmentation Release 1
+2014-03-25
+
+QA Count Summaries for Release 1:
+Tables: 18
+Files: 18
+Gbdbs: 0
+Supplemental: 0
+Other: 3
+
+REVOKED:
+Tables: 0
+Files: 0
+Gbdbs: 0
+
+Sizes of New:
+Table: 4359 MB (4 GB)
+Files: 997 MB
+Gbdbs: 0 MB
+Supplemental: 0 MB
+Other: 1 MB
+Total: 5357 MB (5 GB)
+
+
+New Tables (18):
+wgEncodeAwgSegmentationChromhmmGm12878
+wgEncodeAwgSegmentationChromhmmH1hesc
+wgEncodeAwgSegmentationChromhmmHelas3
+wgEncodeAwgSegmentationChromhmmHepg2
+wgEncodeAwgSegmentationChromhmmHuvec
+wgEncodeAwgSegmentationChromhmmK562
+wgEncodeAwgSegmentationCombinedGm12878
+wgEncodeAwgSegmentationCombinedH1hesc
+wgEncodeAwgSegmentationCombinedHelas3
+wgEncodeAwgSegmentationCombinedHepg2
+wgEncodeAwgSegmentationCombinedHuvec
+wgEncodeAwgSegmentationCombinedK562
+wgEncodeAwgSegmentationSegwayGm12878
+wgEncodeAwgSegmentationSegwayH1hesc
+wgEncodeAwgSegmentationSegwayHelas3
+wgEncodeAwgSegmentationSegwayHepg2
+wgEncodeAwgSegmentationSegwayHuvec
+wgEncodeAwgSegmentationSegwayK562
+
+
+New Download Files (18):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationChromhmmGm12878.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationChromhmmH1hesc.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationChromhmmHelas3.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationChromhmmHepg2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationChromhmmHuvec.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationChromhmmK562.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationCombinedGm12878.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationCombinedH1hesc.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationCombinedHelas3.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationCombinedHepg2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationCombinedHuvec.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationCombinedK562.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationSegwayGm12878.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationSegwayH1hesc.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationSegwayHelas3.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationSegwayHepg2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationSegwayHuvec.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/wgEncodeAwgSegmentationSegwayK562.bed.gz
+
+
+New Other Files (3):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/README.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/release1/md5sum.txt
+
+
+No Errors

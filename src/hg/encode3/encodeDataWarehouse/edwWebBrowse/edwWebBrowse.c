@@ -276,6 +276,12 @@ for (submit = submitList; submit != NULL; submit = submit->next)
      * file by file info. */
     if (!isEmpty(submit->errorMessage))
         printf("<B>%s</B><BR>\n", submit->errorMessage);
+
+    /* Figure out and print upload time */
+    sqlSafef(query, sizeof(query), 
+	"select from_unixtime(startUploadTime) from edwSubmit where id=%u", submit->id);
+    char *dateTime = sqlQuickString(conn, query);
+    printf("Started upload %s<BR>\n", dateTime);
     printf("%d files in validated.txt including %d already in warehouse<BR>\n", 
 	submit->fileCount, submit->oldFiles);
     if (submit->newFiles > 0)
@@ -301,7 +307,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
     /* Make wrapper for experiments. */
     struct hash *experimentWrap = hashNew(0);
     hashAdd(experimentWrap, "experiment", 
-	"<A HREF=\"http://submit.encodedcc.org/experiments/%s/\">%s</A>");
+	"<A HREF=\"http://submit.encodedcc.org/%s/\">%s</A>");
     /* Get and print file-by-file info. */
     char title[256];
     safef(title, sizeof(title), "Files and enrichments for %d new files", submit->newFiles);

@@ -23494,64 +23494,54 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
-# cat/felCat5 Lastz run (DONE - 2013-07-11 - Hiram)
-    screen -S felCat5    # use screen to manage this long running job
-    mkdir /hive/data/genomes/hg19/bed/lastzFelCat5.2013-07-11
-    cd /hive/data/genomes/hg19/bed/lastzFelCat5.2013-07-11
+# LASTZ Cat felCat5 (DONE - 2014-03-12 - PAULINE)
+    mkdir /hive/data/genomes/hg19/bed/lastzfelCat5.2014-02-26
+    cd /hive/data/genomes/hg19/bed/lastzfelCat5.2014-02-26
+
+    screen -S hg19felCat5
     cat << '_EOF_' > DEF
-# human vs cat
+# human vs Cat
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
 
 # TARGET: Human Hg19
 SEQ1_DIR=/scratch/data/hg19/hg19.2bit
 SEQ1_LEN=/scratch/data/hg19/chrom.sizes
-SEQ1_CHUNK=10000000
+SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
+SEQ1_LIMIT=5
 
-# QUERY: cat FelCat5
+# QUERY: Cat felCat5
 SEQ2_DIR=/hive/data/genomes/felCat5/felCat5.2bit
 SEQ2_LEN=/hive/data/genomes/felCat5/chrom.sizes
-SEQ2_CHUNK=20000000
+SEQ2_CHUNK=10000000
 SEQ2_LAP=0
-SEQ2_LIMIT=30
 
-BASE=/hive/data/genomes/hg19/bed/lastzFelCat5.2013-07-11
-TMPDIR=/scratch/tmp
+BASE=/hive/data/genomes/hg19/bed/lastzfelCat5.2014-02-26
+TMPDIR=/dev/shm
 '_EOF_'
-    # << emacs
+    # << happy emacs
 
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
-        -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -syntenicNet > do.log 2>&1
-    #   real    1408m3.295s
-    #   chaining chr19 on hgwdev
-    #   real    184m20.645s
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
-        -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -continue=chainMerge -syntenicNet > chainMerge.log 2>&1
-    #   real    132m29.811s
+    bash
+    doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium >& do.log
+    # Elapsed time: 1396m22s - busy cluster
+    cat fb.hg19.chainfelCat5Link.txt
+    # 1519102826 bases of 2897316137 (52.431%) in intersection
 
-    cat fb.hg19.chainFelCat5Link.txt
-    #   1518956396 bases of 2897316137 (52.426%) in intersection
-
-    # filter with doRecipBest.pl
-    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
-        hg19 felCat5 > rbest.log 2>&1 &
-    #   real    68m58.182s
-
-    # running the swap
+    #   running the swap
     mkdir /hive/data/genomes/felCat5/bed/blastz.hg19.swap
     cd /hive/data/genomes/felCat5/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        -swap /hive/data/genomes/hg19/bed/lastzFelCat5.2013-07-11/DEF \
-        -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -syntenicNet > swap.log 2>&1
-    #  real    106m53.116s
+        /hive/data/genomes/hg19/bed/lastzfelCat5.2014-02-26/DEF \
+        -syntenicNet -swap \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium >& swap.log
 
     cat fb.felCat5.chainHg19Link.txt
-    #  1453539854 bases of 2364296207 (61.479%) in intersection
+    # 1453639480 bases of 2364296207 (61.483%) in intersection 
 
     cd /hive/data/genomes/felCat5/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -29001,6 +28991,121 @@ done
 hgLoadSqlTab hg19 evsEsp6500 ~/kent/src/hg/lib/bbiChroms.sql evsEsp6500.txt
 
 # Add evsEsp6500 track to hg19/trackDb.ra
+
+#########################################################################
+# EVS Exome Variants from ESP 6500 Exome UPDATE (Redmine 9329) 2014-03-28
+cd /hive/data/outside/evs/
+mkdir update
+cd /hive/data/outside/evs/update
+wget 'http://evs.gs.washington.edu/evs_bulk_data/ESP6500SI-V2-SSA137.protein-hgvs-update.snps_indels.vcf.tar.gz'
+tar -xzf ESP6500SI-V2-SSA137.protein-hgvs-update.snps_indels.vcf.tar.gz
+ll
+-rw-r--r-- 1 tdreszer genecats 124720615 Mar 28 13:19 ESP6500SI-V2-SSA137.protein-hgvs-update.snps_indels.vcf.tar.gz
+-rw-r--r-- 1 tdreszer genecats  93987280 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr1.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  38334975 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr10.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  56868856 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr11.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  49327119 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr12.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  15843124 Feb  6 14:13 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr13.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  30776532 Feb  6 14:13 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr14.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  31170814 Feb  6 14:13 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr15.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  44270899 Feb  6 14:13 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr16.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  57017358 Feb  6 14:13 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr17.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  14075899 Feb  6 14:13 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr18.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  65266023 Feb  6 14:13 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr19.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  68850168 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr2.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  25274351 Feb  6 14:13 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr20.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  12146878 Feb  6 14:13 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr21.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  22731583 Feb  6 14:01 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr22.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  54016869 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr3.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  35294803 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr4.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  43985947 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr5.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  45749446 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr6.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  44366928 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr7.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  33404366 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr8.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  40067651 Feb  6 14:12 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr9.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats  25130716 Feb  6 14:13 ESP6500SI-V2-SSA137.updatedProteinHgvs.chrX.snps_indels.vcf
+-rw-r--r-- 1 tdreszer genecats    269593 Feb  6 14:13 ESP6500SI-V2-SSA137.updatedProteinHgvs.chrY.snps_indels.vcf
+
+# compress and make indexes
+for chr in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y; do
+    /cluster/bin/tabix-0.2.6/bgzip ESP6500SI-V2-SSA137.updatedProteinHgvs.chr${chr}.snps_indels.vcf
+done
+for chr in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y; do
+    /cluster/bin/tabix-0.2.6/tabix ESP6500SI-V2-SSA137.updatedProteinHgvs.chr${chr}.snps_indels.vcf.gz
+done
+
+ll
+total 507888
+-rw-r--r-- 1 tdreszer genecats 124720615 Mar 28 13:19 ESP6500SI-V2-SSA137.protein-hgvs-update.snps_indels.vcf.tar.gz
+-rw-rw-r-- 1 tdreszer genecats  13258210 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr1.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     57068 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr1.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   5324193 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr10.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     26305 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr10.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   8057163 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr11.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     30370 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr11.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   6951317 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr12.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     31468 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr12.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   2282785 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr13.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     13687 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr13.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   4413068 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr14.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     19361 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr14.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   4451406 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr15.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     20177 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr15.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   6266701 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr16.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     19274 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr16.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   8005745 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr17.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     26399 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr17.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   2011561 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr18.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     11774 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr18.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   9459910 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr19.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     22802 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr19.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   9746724 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr2.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     49265 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr2.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   3560127 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr20.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     14067 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr20.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   1710937 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr21.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats      5960 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr21.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   3211748 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr22.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     10850 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr22.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   7609634 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr3.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     38695 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr3.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   5116781 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr4.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     28085 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr4.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   6118583 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr5.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     29707 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr5.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   6561883 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr6.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     32430 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr6.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   6395768 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr7.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     32174 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr7.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   4816721 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr8.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     24693 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr8.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   5656727 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr9.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     25797 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chr9.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats   3528086 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chrX.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats     23418 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chrX.snps_indels.vcf.gz.tbi
+-rw-rw-r-- 1 tdreszer genecats     32962 Mar 28 13:30 ESP6500SI-V2-SSA137.updatedProteinHgvs.chrY.snps_indels.vcf.gz
+-rw-rw-r-- 1 tdreszer genecats       811 Mar 28 13:31 ESP6500SI-V2-SSA137.updatedProteinHgvs.chrY.snps_indels.vcf.gz.tbi
+
+cd ..
+mkdir older
+mv *.vcf.gz older
+mv *.vcf.gz,tbi older
+mv *.tar.gz older
+mv *.txt older
+mv update/* .
+rmdir update
+
+# make new symlinks in gbdb:
+rm /gbdb/hg19/evs/*.vcf.gz*
+ln -s `pwd`/*.vcf.gz* /gbdb/hg19/evs/
+
+# Update hg19.evsEsp6500 table
+cp /dev/null evsEsp6500.txt
+for chr in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y; do
+    echo "/gbdb/hg19/evs/ESP6500SI-V2-SSA137.updatedProteinHgvs.chr${chr}.snps_indels.vcf.gz\tchr${chr}" >> evsEsp6500.txt
+done
+# manually swapped in tabs for \t's, then load
+hgLoadSqlTab hg19 evsEsp6500 ~/kent/src/hg/lib/bbiChroms.sql evsEsp6500.txt
 
 ########################################################################
 # UCSF BRAIN METHYLATION (DONE 2013-11-26 Pauline)

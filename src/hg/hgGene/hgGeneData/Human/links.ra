@@ -110,3 +110,16 @@ idSql select mRNA from kgXref where kgID = '%s'
 url http://smd.stanford.edu/cgi-bin/source/sourceResult?organism=Hs&option=Number&criteria=%s&choice=Gene
 priority 10
 
+name nextProt
+shortLabel neXtProt
+tables knownToNextProt
+idSql select value from knownToNextProt where name = '%s';
+url http://www.nextprot.org/db/entry/%s
+priority 10
+
+name lynx
+shortLabel Lynx
+tables knownToLynx
+idSql select value from knownToLynx where name = '%s';
+url http://lynx.ci.uchicago.edu/gene/?geneid=%s
+priority 10

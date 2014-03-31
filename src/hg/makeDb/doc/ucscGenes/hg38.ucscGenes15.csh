@@ -61,10 +61,6 @@ set tempDb = hg38
 set lastVer = 7
 set curVer = 8
 
-# Database to rebuild visiGene text from.  Should include recent mouse and human
-# but not the one you're rebuilding if you're rebuilding. (Use tempDb instead).
-set vgTextDbs = (mm10 hg19 $tempDb)
-
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
 set xdbFa = $genomes/$xdb/bed/ucsc.13.1/ucscGenes.faa
@@ -1010,17 +1006,6 @@ endif
 knownToVisiGene $tempDb -probesDb=$db
 hgsql $tempDb -e "delete k from knownToVisiGene k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 
-vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
-# probe has 26611 rows
-# gene has 20413 rows
-# imageProbe has 125765 rows
-
-# This shouldn't be here me thinks
-cd /usr/local/apache/cgi-bin/visiGeneData
-ixIxx visiGene.text visiGene.ix visiGene.ixx
-cd $dir
-#end me thinking
-
 # Create Human P2P protein-interaction Gene Sorter columns
 if ($db =~ hg*) then
 #TODO
@@ -1174,6 +1159,27 @@ hgsql -e "select  count(*) from scBlastTab\G" $tempDb | tail -n +2
 cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 gzip run.*/all.tab
+
+# make knownToLynx
+mkdir -p $dir/lynx
+cd $dir/lynx
+
+wget "http://lynx.ci.uchicago.edu/downloads/LYNX_GENES.tab"
+awk '{print $2}' LYNX_GENES.tab | sort > lynxExists.txt
+hgsql -e "select geneSymbol,kgId from kgXref" --skip-column-names hg38 | awk '{if (NF == 2) print}' | sort > geneSymbolToKgId.txt
+join lynxExists.txt geneSymbolToKgId.txt | awk 'BEGIN {OFS="\t"} {print $2,$1}' | sort > knownToLynx.tab
+hgLoadSqlTab -notOnServer $tempDb  knownToLynx $kent/src/hg/lib/knownTo.sql  knownToLynx.tab
+
+# make knownToNextProt
+mkdir -p $dir/nextProt
+cd $dir/nextProt
+
+wget "ftp://ftp.nextprot.org/pub/current_release/ac_lists/nextprot_ac_list_all.txt"
+awk '{print $0, $0}' nextprot_ac_list_all.txt | sed 's/NX_//' | sort > displayIdToNextProt.txt
+hgsql -e "select spID,kgId from kgXref" --skip-column-names hg38 | awk '{if (NF == 2) print}' | sort > displayIdToKgId.txt
+join displayIdToKgId.txt displayIdToNextProt.txt | awk 'BEGIN {OFS="\t"} {print $2,$3}' > knownToNextProt.tab
+hgLoadSqlTab -notOnServer $tempDb  knownToNextProt $kent/src/hg/lib/knownTo.sql  knownToNextProt.tab
+
 
 # make knownToWikipedia
 mkdir -p $dir/wikipedia
@@ -1524,6 +1530,12 @@ hgsql hgcentraltest -e \
       'INSERT into targetDb values("hg38Kgv15", "UCSC Genes", \
          "hg38", "kgTargetAli", "", "", \
          "/gbdb/hg38/targetDb/kgTargetSeq8.2bit", 1, now(), "");'
+
+#
+##
+##   WRAP-UP  
+#
+#  add database to the db's in kent/src/hg/visiGene/vgGetText
 
 cd $dir
 #

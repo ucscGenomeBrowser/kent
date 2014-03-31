@@ -148,7 +148,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11653
 labVersion Myocyte
-md5sum 4853119787e205a94b25cce052ac593c
+md5sum dfd51e8b8085f88f932fb39a06ef0104
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -179,7 +179,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11847
 labVersion Myocyte
-md5sum 1e66262144505f2832528bd9dbe145fe
+md5sum b892c626867f7786070f89cced35838e
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -336,7 +336,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11942
 labVersion Myoblast
-md5sum 06e07bf2493064eabbb1cd8a7c2d5540
+md5sum 3829991ad29d3f3696d3407fdf9c8833
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -461,7 +461,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10506
 labVersion Myoblast
-md5sum a4fa543dc520d66e8a705808985fb0c4
+md5sum 2fe303b44d55d0d3464b339077be6b14
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -586,7 +586,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11718
 labVersion Myocyte
-md5sum d4ae498617375436b2f0de55f6a30269
+md5sum b794c3409f9a6c2947a186ed6bc225f2
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -711,7 +711,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11565
 labVersion Myoblast
-md5sum 1b23dfe3fe05f85d9fa46424b220427e
+md5sum 123a1f5c44fe1641162f67ae54da87c1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -804,7 +804,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10007
 labVersion Myocyte
-md5sum 3ec102b653752c231c8e9c25929e799f
+md5sum d3e6b557677a645e80bb0b3d70d7bda0
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -897,7 +897,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10194
 labVersion Myocyte
-md5sum de5dd36d0a3758d08da7923bf900d53d
+md5sum c73bd2cbe9f08c6b3a428df632e29844
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -990,7 +990,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10135
 labVersion Myoblast
-md5sum bea0d979c2958d4aff0f050f8bf40bb9
+md5sum 5df76a94598618d84573ec41bf1152a8
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1085,7 +1085,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11610
 labVersion Myocyte
-md5sum 2d79d5355421a0dd3d00841146d71fd0
+md5sum 3c962722d1d865e3b5357ed9430e49f4
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1177,7 +1177,7 @@ geoSampleAccession GSM915160
 grant Hardison
 lab Caltech-m
 labExpId 11612
-md5sum beda94224fa62b31bfded9a2c2a76b86
+md5sum 893887c61424c2e1ec8ecee617fefa33
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1299,7 +1299,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11610
 labVersion Myocyte
-md5sum 8f39892c680989c310f697cafbb21bfd
+md5sum 2e2a8ec2eb3b6564d7d24185af306b0f
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1330,7 +1330,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11637
 labVersion Myocyte
-md5sum 20da9e5e36c6477101696332bacfea1e
+md5sum e1809c850776fb587748530b0d384e3d
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -1455,7 +1455,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11612
 labVersion Myoblast
-md5sum 63d22b26b5b97a7c5a6bf0e352475af7
+md5sum 79cab86a85e223053f9d02ec420c009c
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1487,7 +1487,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11638
 labVersion Myoblast
-md5sum ceb38754f32035befccbe64b6b562f6a
+md5sum 0d84929e5140f7b4c09727c2c2c41589
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -1519,7 +1519,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11670
 labVersion Myoblast
-md5sum 978982c31f8dfc17f9379586e2c47249
+md5sum 24ecf87e9a5635a454e8b75951d54691
 project wgEncode
 protocol PCR1x
 replicate 3
@@ -1710,7 +1710,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11682
 labVersion Myocyte
-md5sum bab1d8cc5e165e7f4cef55cbc09a6732
+md5sum 692b6156dd527c2bb75f6a8ac82cc030
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1835,7 +1835,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11924
 labVersion Myoblast
-md5sum fd7e6600b6f6af3a97a75a25727d8ca4
+md5sum 27e0edbf2b3e1b202e43cf5d2705a053
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1960,7 +1960,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10065
 labVersion Myocyte
-md5sum 330b628a4869881038c0a644387d3047
+md5sum 3e4c930a342912535f9c05d990e4f6ca
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2085,7 +2085,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10704
 labVersion Myocyte
-md5sum c0804c9ec27b994be5ce03cbe3a4e7bc
+md5sum becd17ad15fa61650ae37e3ce2a4dc93
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2210,7 +2210,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10703
 labVersion Myocyte
-md5sum 3e8dfda249536bad6da5c86cf9d56337
+md5sum 9dbcae785a1a1a941dafc11ea03a2275
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2305,7 +2305,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10150
 labVersion Myocyte
-md5sum 2965d6a2d1da10c066b570fa946ae38b
+md5sum b0db261af590fb33d29172a19d230ef8
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2430,7 +2430,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10158
 labVersion Myocyte
-md5sum ebf8f3c0d1cccb1aabf6224cbdba2988
+md5sum 6c8031ecd7dfcfbf4171c6a2e9481451
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2555,7 +2555,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10599
 labVersion Myoblast
-md5sum 4634d63c0f5ce75e24f2c576d589cabc
+md5sum 0ae510f80fb7be988ede2c050f8334dc
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2680,7 +2680,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11927
 labVersion Myocyte
-md5sum 36507cb85d1c9c4c92a1d856949c324b
+md5sum 681bb4497c4540d61d1274829f3ace0a
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -2805,7 +2805,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10296
 labVersion Myocyte
-md5sum b3fb86fda97a9819cc4c3d39fbf8041d
+md5sum c823dc11dba7986b69d2216bfbd4c905
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2930,7 +2930,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10481
 labVersion Myocyte
-md5sum 1a7e1de58e9d0476c7d549f36405d537
+md5sum 0d5b83f3f9ca5628c82ffa1de07feb38
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -3055,7 +3055,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10333
 labVersion Myoblast
-md5sum 31437b0e3fb74bfeb87456517622483d
+md5sum 2a875cd132555c5a82eb328239b27cc0
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -3180,7 +3180,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11926
 labVersion Myocyte
-md5sum 3a0960a153474762cd8e728c0133db6c
+md5sum d2a3a76954e1b731276404dd7837b5cd
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -3305,7 +3305,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10335
 labVersion Myocyte
-md5sum fc59d53f8545ab3ce02057d71d5eb9bd
+md5sum 8258ae4d3c434f6fa8d5db8b18a1b4e1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -3430,7 +3430,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11719
 labVersion Myocyte
-md5sum 70ca3865205ec6ba58ba0d0feda9ea89
+md5sum 422fc27b552dd0be9a5620ff4fd5833b
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -3555,7 +3555,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10409
 labVersion Myocyte
-md5sum 0fdf14758199a3f0b976b433b995d426
+md5sum adfbb25c163368e01ad06314f160435c
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -3680,7 +3680,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11644
 labVersion Myocyte
-md5sum a61ca1953ad6ea0daf02c179d00d9da0
+md5sum a70ed949cc8dacb54ebf6cf051a40d2f
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -3805,7 +3805,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11923
 labVersion Myoblast
-md5sum 09f4ccbbac6e15f32c8b49055cd251ef
+md5sum 681efd1b1d4497a0a69aaf84925de5fb
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -3848,4 +3848,4 @@ tableName wgEncodeCaltechTfbsC2c12Usf1FCntrl50bPcr1xSigRep1
 treatment None
 view Signal
 
-# MAGIC: 721810115
+# MAGIC: 1687415345

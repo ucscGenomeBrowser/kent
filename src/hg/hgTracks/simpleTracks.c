@@ -10085,6 +10085,76 @@ tg->items = lfFromGenePredInRange(tg, tg->table, chromName, winStart, winEnd);
 filterItems(tg, genePredClassFilter, "include");
 }
 
+static char *ensGeneName(struct track *tg, void *item)
+{
+static char cat[128];
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL)
+    {
+    safef(cat, sizeof(cat), "%s", (char *)lf->extra);
+    return cat;
+    }
+else
+    return lf->name;
+}
+
+static void ensGeneAssignConfiguredName(struct track *tg)
+/* Set name on genePred in "extra" field to gene name, accession, or both,
+ * depending, on UI on all items in track */
+{
+char *geneLabel = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "label","accession");
+boolean otherGeneName =  sameString(geneLabel, "gene");
+boolean useGeneName =  sameString(geneLabel, "ensembl");
+boolean useAcc = sameString(geneLabel, "accession");
+struct sqlConnection *conn = NULL;
+if (otherGeneName)
+   conn = hAllocConn(database);
+
+struct linkedFeatures *lf;
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    {
+    struct dyString *name = dyStringNew(SMALLDYBUF);
+    if (otherGeneName)
+        {
+        char buf[256];
+        char query[256];
+        sqlSafef(query, sizeof(query),
+          "select value from ensemblToGeneName where name = \"%s\"", lf->name);
+        char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
+        if (isNotEmpty(ret))
+            dyStringAppend(name, ret);
+        else
+            dyStringAppend(name, lf->name);
+        }
+    else if (useGeneName)
+        {
+        if (isNotEmpty((char*)lf->extra))
+            dyStringAppend(name, lf->extra);
+        else
+            dyStringAppend(name, lf->name);
+        }
+    else if (useAcc)
+        {
+        dyStringAppend(name, lf->name);
+        }
+    else
+        lf->extra = NULL;
+    if (dyStringLen(name))
+        lf->extra = dyStringCannibalize(&name);
+    dyStringFree(&name);
+    }
+if (otherGeneName)
+    hFreeConn(&conn);
+}
+
+static void loadGenePredEnsGene(struct track *tg)
+/* Convert gene pred in window to linked feature. */
+{
+loadGenePredWithName2(tg);
+ensGeneAssignConfiguredName(tg);
+tg->itemName = ensGeneName;
+}
+
 void genePredAssignConfiguredName(struct track *tg)
 /* Set name on genePred in "extra" field to gene name, accession, or both,
  * depending, on UI on all items in track */
@@ -12156,7 +12226,10 @@ else if (sameWord(type, "sample"))
 else if (sameWord(type, "genePred"))
     {
     linkedFeaturesMethods(track);
-    track->loadItems = loadGenePred;
+    if (startsWith("ensGene", track->track))
+        track->loadItems = loadGenePredEnsGene;
+    else
+        track->loadItems = loadGenePred;
     track->colorShades = NULL;
     if (track->itemAttrTbl != NULL)
         track->itemColor = genePredItemAttrColor;

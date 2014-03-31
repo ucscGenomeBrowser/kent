@@ -74,7 +74,12 @@ FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5"]
 FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
     'knownGene', 'kgXref', 'ensemblLift', 'ucscToEnsembl','wgEncodeRegTfbsCells', \
     'tableList', 'refSeqStatus', 'wgEncodeRegTfbsCellsV3', 'extFile', 'trackDb', 'grp',
-    'ucscRetroInfo5', "refLink", "ucscRetroSeq5", "ensemblLift", "knownCanonical"]
+    'ucscRetroInfo5', "refLink", "ucscRetroSeq5", "ensemblLift", "knownCanonical",
+    # for faster searches
+    'hgFindSpec', 'ensemblToGeneName', "ucscToINSDC",
+    # these are almost required for searches, common tracks and not too big
+    "ensGene", "xenoRefGene"
+    ]
 
 # always copy these hgFixed tables
 FORCEFIXED = ['trackVersion', 'tableList']
@@ -520,7 +525,7 @@ def printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, trackChi
 
     if remoteSize==0:
         addHtml = 'disabled="disabled"'
-        addNote = "<small>this track cannot be mirrored (no permission)</small>"
+        addNote = "<small>this track cannot be mirrored (restricted data)</small>"
 
     sizeStr = humanReadable(remoteTableSize)
     if len(trackTableNames)==1:
@@ -638,11 +643,17 @@ def getCladeAssemblyDb(clade, org, db):
     """
     if not mysqlDbLoaded:
         print("<small>info: MySQLDb not installed, cannot retrieve hgcentral.dbDb, using internal defaults</small>")
-        cladeList = (("mammal", "Mammal"))
-        orgList = (("Human", "Human"))
-        dbList = (("hg19", "Human (GrCh37)"), ("mm9", "Mouse (NCBI37)"))
+        cladeList = [("mammal", "Mammal")]
+        orgList = [("Human", "Human")]
+        dbList = [("hg19", "Human (GrCh37)"), ("mm9", "Mouse (NCBI37)")]
         defaultDb = {"Human":"hg19"}
-        return cladeList, orgList, dbList
+        orgInfo = {}
+        orgInfo["clades"] = cladeList
+        orgInfo["orgs"] = orgList
+        orgInfo["dbs"] = dbList
+        orgInfo["defaultDbs"] = {"Human":"hg19"}
+
+        return orgInfo, "mammal", "Human", "hg19"
 
     conn = sqlConnect("hgcentral", "public")
     cur = conn.cursor()
@@ -883,7 +894,7 @@ def getRsyncSizes(dataType, db):
     # run rsync command
     tmpFname = "/tmp/%s_%s.rsync.txt" % (dataType, db)
     if not isfile(tmpFname):
-        cmd = "rsync -navP rsync://hgdownload.cse.ucsc.edu/%s/%s/ > %s" % (dataType, db, tmpFname)
+        cmd = "rsync -nav rsync://hgdownload.cse.ucsc.edu/%s/%s/ > %s" % (dataType, db, tmpFname)
         runCmd(cmd)
 
     # parse rsync output file
@@ -943,6 +954,9 @@ def udrIsUsable():
         print "ERROR: could not find the rsync executable in the PATH"
         sys.exit(0)
 
+    # we temporarily don't use udr 
+    return False
+
     # check if we can find udr binary
     udrPath = spawn.find_executable("udr")
     if udrPath is None:
@@ -950,7 +964,7 @@ def udrIsUsable():
 
     if not isfile("/tmp/useUdr"):
         # try to transfer a file
-        cmd = "udr rsync -avP hgdownload.soe.ucsc.edu::goldenPath/hg19/bigZips/README.txt /tmp/"
+        cmd = "udr rsync -av hgdownload.soe.ucsc.edu::goldenPath/hg19/bigZips/README.txt /tmp/"
         ret = runCmd(cmd, mustRun=False)
         useUdr = (ret==0)
         open("/tmp/useUdr", "w").write(str(int(useUdr)))
@@ -963,11 +977,11 @@ def buildRsyncCmd(remotePath, localPath, listFname, logFname):
     """ returns an rsync or udr command  to get files from remotePath to localPath"""
     if udrIsUsable():
         cmd =\
-            'udr rsync -avzP --no-progress --files-from=%(listFname)s ' \
+            'udr rsync -avz --no-progress --files-from=%(listFname)s ' \
             'hgdownload.cse.ucsc.edu::%(remotePath)s %(localPath)s >> %(logFname)s 2>&1\n' % locals()
     else:
         cmd =\
-            'rsync -avzP --no-progress --files-from=%(listFname)s ' \
+            'rsync -avz --no-progress --files-from=%(listFname)s ' \
             'rsync://hgdownload.cse.ucsc.edu/%(remotePath)s %(localPath)s >> %(logFname)s 2>&1\n' % locals()
     return cmd
 
@@ -981,6 +995,8 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
 
     # write job script
     cmdFh = open(jobFname, "w")
+
+    cmdFh.write("ps -o pgid= -p $$ > /tmp/lastJob.pid\n")
 
     cmd = "sudo -u mysql " + buildRsyncCmd("mysql/"+db, localDbDir, listFname, logFname)
     cmdFh.write(cmd)
@@ -1037,6 +1053,11 @@ def printLog(jobId):
     jobFname = "/tmp/%d.log" % int(jobId)
     print "rsync download commands:<p>"
     print "<pre>"
+    if not isfile(jobFname):
+        print "This download job is not active anymore.<p>"
+        print '<a href="hgMirror">Start a new download</a>'
+        sys.exit(0)
+
     for line in open(jobFname):
         print line,
 
@@ -1254,9 +1275,14 @@ def addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabel
         trackTables[tn] = tn
 
 def stopAllJobs():
-    """ stop all running at jobs """
+    """ stop all waiting at jobs and the currently running download job """
     cmd = "atrm `at -l | cut -f1`"
     runCmd(cmd)
+
+    if isfile("/tmp/lastJob.pid"):
+        lastPid = open("/tmp/lastJob.pid").read().strip()
+        cmd = "sudo kill -- -%s" % lastPid
+        runCmd(cmd)
     
 def assertEmptyQueue():
     """ if the at queue is not empty, show link to log file of running job and stop program """
@@ -1341,7 +1367,7 @@ def htmlMiddle(args):
     # when user has clicked OK, run rsync and refresh with jobId
     if "submit" in args.keys() and args["submit"].value=="Download":
         if runningAtUcsc():
-            print "cannot do this on hgwdev"
+            print "<br>Cannot do this on hgwdev. Copying things from hgdownload to hgwdev is not a good idea."
             sys.exit(0)
 
         makeGbdb()

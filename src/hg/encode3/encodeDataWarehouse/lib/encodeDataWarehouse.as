@@ -148,7 +148,7 @@ table edwValidFile
     (
     uint id primary auto;          "ID of validated file"
     char[16] licensePlate index;  "A abc123 looking license-platish thing."
-    uint fileId unique;      "Pointer to file in main file table"
+    uint fileId index;      "Pointer to file in main file table"
     string format index[12];    "What format it's in from manifest"
     string outputType index[16]; "What output_type it is from manifest"
     string experiment index[16]; "What experiment it's in from manifest"
@@ -171,15 +171,6 @@ table edwValidFile
     string pairedEnd; "The paired_end tag from the manifest.  Values 1,2 or ''"
     byte qaVersion; "Version of QA pipeline making status decisions"
     double uniqueMapRatio; "Fraction of reads that map uniquely to genome for bams and fastqs"
-    )
-
-table edwQaFail
-"Record of a QA failure."
-    (
-    uint id primary auto;   "ID of failure"
-    uint fileId index;	"File that failed"
-    uint qaVersion; "QA pipeline version"
-    lstring reason; "reason for failure"
     )
 
 table edwFastqFile
@@ -236,6 +227,15 @@ table edwBamFile
     double u4mUniqueRatio; "u4mUniqPos/u4mReadCount - measures library diversity"
     bigInt targetBaseCount;  "Count of bases in mapping target"
     uint targetSeqCount; "Number of chromosomes or other distinct sequences in mapping target"
+    )
+
+table edwQaFail
+"Record of a QA failure."
+    (
+    uint id primary auto;   "ID of failure"
+    uint fileId index;	"File that failed"
+    uint qaVersion; "QA pipeline version"
+    lstring reason; "reason for failure"
     )
 
 table edwQaEnrichTarget
@@ -321,6 +321,43 @@ table edwQaPairedEndFastq
     double distanceMin;	 "Minimum distance"
     double distanceMax;  "Maximum distatnce"
     byte recordComplete; "Flag to avoid a race condition. Ignore record if this is 0"
+    )
+
+table edwQaWigSpot
+"Information about proportion of signal in a wig that lands under spots in a peak or bed file"
+    (
+    uint id primary auto; "Id of this wig/spot intersection"
+    uint wigId index;	"Id of bigWig file"
+    uint spotId index;  "Id of a bigBed file probably broadPeak or narrowPeak"
+    double spotRatio; "Ratio of signal in spots to total signal,  between 0 and 1"
+    double enrichment;	"Enrichment in spots compared to genome overall"
+    bigInt basesInGenome; "Number of bases in genome"
+    bigInt basesInSpots; "Number of bases in spots"
+    double sumSignal; "Total signal"
+    double spotSumSignal; "Total signal in spots"
+    )
+
+table edwQaDnaseSingleStats5m
+"Statistics calculated based on a 5M sample of DNAse aligned reads from a bam file."
+    (
+    uint id primary auto;  "Id of this row in table."
+    uint fileId index;	"Id of bam file this is calculated from"
+    uint sampleReads;  "Number of mapped reads "
+    double spotRatio; "Ratio of signal in spots to total signal,  between 0 and 1"
+    double enrichment;	"Enrichment in spots compared to genome overall"
+    bigInt basesInGenome; "Number of bases in genome"
+    bigInt basesInSpots; "Number of bases in spots"
+    double sumSignal; "Total signal"
+    double spotSumSignal; "Total signal in spots"
+    string estFragLength; "Up to three comma separated strand cross-correlation peaks"
+    string corrEstFragLen; "Up to three cross strand correlations at the given peaks"
+    int phantomPeak;  "Read length/phantom peak strand shift"
+    double corrPhantomPeak; "Correlation value at phantom peak"
+    int argMinCorr; "strand shift at which cross-correlation is lowest"
+    double minCorr; "minimum value of cross-correlation"
+    double nsc; "Normalized strand cross-correlation coefficient (NSC) = corrEstFragLen/minCorr"
+    double rsc; "Relative strand cross-correlation coefficient (RSC)"
+    int rscQualityTag; "based on thresholded RSC (codes: -2:veryLow,-1:Low,0:Medium,1:High,2:veryHigh)"
     )
 
 

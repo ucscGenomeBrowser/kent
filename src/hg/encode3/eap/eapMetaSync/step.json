@@ -1,0 +1,30 @@
+{
+"title": "bwa paired end reads",
+"name": "bwa_paired_end",
+"description": "Aligns two paired-end fastqs file with bwa to produce a bam file sorted by genome position",
+"version": 2,
+"inputs": [
+{
+"format": "fastq",
+"description": "fastq format file containing forward strand reads",
+"name": "read1"
+},
+{
+"format": "fastq",
+"description": "fastq format file containing reverse strand reads",
+"name": "read2"
+}
+],
+"outputs": [
+{
+"format": "bam",
+"description": "BAM file containing alignment sorted by genome position.",
+"name": "alignment"
+}
+],
+"software": [
+"/software/a979b1df-6061-4111-a33d-dec9558a7c5d/",
+"/software/231c8461-a73d-4784-a1f1-3c2ec81b2408/",
+"/software/f9d40cda-749a-4da3-ac3b-ee240f098122/"
+]
+},

@@ -381,7 +381,6 @@ lab UMass-Dekker
 md5sum 75ea972f516ffbab7f907f64f46176cf
 objStatus replaced - Peak calls were missed in first run of analysis
 project wgEncode
-region None
 subId 5451
 tableName wgEncodeUmassDekker5CGm12878Pk
 view Peaks
@@ -403,7 +402,6 @@ grant Dekker
 lab UMass-Dekker
 md5sum b5e579c7bb3e210ccb36217110ee1e4d
 project wgEncode
-region None
 subId 7026
 submittedDataVersion V2 - Additional peaks that were initially skipped
 tableName wgEncodeUmassDekker5CGm12878PkV2
@@ -742,7 +740,6 @@ lab UMass-Dekker
 md5sum 0b830bc481812a030b09c4c18e4bf6df
 objStatus replaced - Peak calls were missed in first run of analysis
 project wgEncode
-region None
 subId 5451
 tableName wgEncodeUmassDekker5CH1hescPk
 view Peaks
@@ -764,7 +761,6 @@ grant Dekker
 lab UMass-Dekker
 md5sum d4ab6e7ec49042fda51b3aad829c5c60
 project wgEncode
-region None
 subId 7026
 submittedDataVersion V2 - Additional peaks that were initially skipped
 tableName wgEncodeUmassDekker5CH1hescPkV2
@@ -1103,7 +1099,6 @@ lab UMass-Dekker
 md5sum b3e549a8a1dc7aaa1bc367da2d6d0910
 objStatus replaced - Peak calls were missed in first run of analysis
 project wgEncode
-region None
 subId 5451
 tableName wgEncodeUmassDekker5CHelas3Pk
 view Peaks
@@ -1125,7 +1120,6 @@ grant Dekker
 lab UMass-Dekker
 md5sum 6d15b0d587abdfc7585cd9c87567038f
 project wgEncode
-region None
 subId 7026
 submittedDataVersion V2 - Additional peaks that were initially skipped
 tableName wgEncodeUmassDekker5CHelas3PkV2
@@ -1464,7 +1458,6 @@ lab UMass-Dekker
 md5sum af4345e5a20e4aa0a68c09083f405000
 objStatus replaced - Peak calls were missed in first run of analysis
 project wgEncode
-region None
 subId 5451
 tableName wgEncodeUmassDekker5CK562Pk
 view Peaks
@@ -1486,10 +1479,9 @@ grant Dekker
 lab UMass-Dekker
 md5sum e6298e43182775f168b66788136fada2
 project wgEncode
-region None
 subId 7026
 submittedDataVersion V2 - Additional peaks that were initially skipped
 tableName wgEncodeUmassDekker5CK562PkV2
 view Peaks
 
-# MAGIC: -2018875615
+# MAGIC: -2020153783
