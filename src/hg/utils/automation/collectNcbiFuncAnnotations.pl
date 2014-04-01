@@ -18,6 +18,9 @@ while (<>) {
       ($lastRs != $rsId || $lastCtg ne $ctg || $lastS != $s ||
        $lastTx ne $txId || $lastFrm ne $frm)) {
     if (defined $refRow) {
+      if (! defined $fxns) {
+	($fxns, $nts, $aas, $codons) = ("", "", "", "");
+      }
       $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts";
       $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons";
     }

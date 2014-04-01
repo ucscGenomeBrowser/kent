@@ -44,8 +44,8 @@ else
 endif
 
 # get months sessions has been alive:
-set months=`hgsql -N -h $sqlrr -e "SELECT DISTINCT firstUse FROM namedSessionDb" hgcentral \
-  | awk -F- '{print $1"-"$2}' | sort -u`
+set months=`hgsql -N -h $sqlrr -e 'SELECT DISTINCT DATE_FORMAT(firstUse, \
+  "%Y-%m") FROM namedSessionDb' hgcentral | sort -u`
 
 # get stats
 rm -f tempOutFile
@@ -54,13 +54,13 @@ echo " first  count users  shared   reused  "
 echo "------  ----- ----- -------  -------"
 foreach month ( $months )
   set count=`hgsql -N -h $sqlrr -e 'SELECT COUNT(*) FROM namedSessionDb \
-    WHERE firstUse LIKE "'$month%'"' hgcentral`
+    WHERE DATE_FORMAT(firstUse, "%Y-%m") = "'$month'"' hgcentral`
   set users=`hgsql -N -h $sqlrr -e 'SELECT COUNT(DISTINCT(userName)) \
-    FROM namedSessionDb WHERE firstUse like "'$month%'"' hgcentral`
+    FROM namedSessionDb WHERE DATE_FORMAT(firstUse, "%Y-%m") = "'$month'"' hgcentral`
   set shared=`hgsql -N -h $sqlrr -e 'SELECT COUNT(*) FROM namedSessionDb \
-    WHERE firstUse LIKE "'$month%'" AND shared = 1' hgcentral`
+    WHERE DATE_FORMAT(firstUse, "%Y-%m") = "'$month'" AND shared = 1' hgcentral`
   set reuse=`hgsql -N -h $sqlrr -e 'SELECT firstUse, lastUse FROM namedSessionDb \
-    WHERE firstUse LIKE "'$month%'"' hgcentral \
+    WHERE DATE_FORMAT(firstUse, "%Y-%m") = "'$month'"' hgcentral \
     |  awk '$1 != $3 {print $1, $3}'  | wc -l`
   echo $month $count $users $shared $reuse  \
     | awk '{printf ("%7s %4s %5s %4s %2d%% %4s %2d%%\n", \
