@@ -1160,6 +1160,16 @@ cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 gzip run.*/all.tab
 
+# make knownToLynx
+mkdir -p $dir/lynx
+cd $dir/lynx
+
+wget "http://lynx.ci.uchicago.edu/downloads/LYNX_GENES.tab"
+awk '{print $2}' LYNX_GENES.tab | sort > lynxExists.txt
+hgsql -e "select geneSymbol,kgId from kgXref" --skip-column-names hg38 | awk '{if (NF == 2) print}' | sort > geneSymbolToKgId.txt
+join lynxExists.txt geneSymbolToKgId.txt | awk 'BEGIN {OFS="\t"} {print $2,$1}' | sort > knownToLynx.tab
+hgLoadSqlTab -notOnServer $tempDb  knownToLynx $kent/src/hg/lib/knownTo.sql  knownToLynx.tab
+
 # make knownToNextProt
 mkdir -p $dir/nextProt
 cd $dir/nextProt

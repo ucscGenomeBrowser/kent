@@ -188,7 +188,13 @@ and the first of the extra fields to be used for track item search.
  <LI> Create the custom track on the human assembly hg18 (Mar. 2006), and
   view it in the genome browser (see <EM>step 8</EM>). Note that the original
   BED file contains data only on chromsome 7.
- <LI> If you are using the bigBed file in a track hub.  You can use the additional indices for track item search.  See the setting "searchIndex" in the <A href="http://hgwdev.cse.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html">Track Database Definition Document</A> for more information.
+ <LI> If you are using the bigBed file in a track hub, then you can use the
+additional indices for track item searches. See the setting "searchIndex" in the
+<A href="http://hgwdev.cse.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html#searchIndex">Track Database Definition Document</A>
+for more information. For example, if you ran your bedToBigBed with the
+option of "-extraIndex=name", you will only be able to search on the name field by
+adding the following line, "searchIndex name" to the stanza about your bigBed
+in the hub's trackDb.txt file. 
 </UL>
 
 <H3>Sharing Your Data with Others</H3>

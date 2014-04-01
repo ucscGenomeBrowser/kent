@@ -20,21 +20,11 @@
                       <ul>
                         <p><li>
                         <a class="thick" href="http://www.broadinstitute.org/mammals/haploreg/haploreg.php" target="_blank">HaploReg</a><br>
-                        Explores annotations of the noncoding genome at variants on haplotype blocks, such as candidate
-                        regulatory SNPs at disease-associated loci.
-                        </p>
-
-                        <p>
-                        Under Set Options tab, set Browse ENCODE button to &quot;on&quot; and select an LD threshold
-                        and reference population.
-                        </p>
-
-                        <p>
-                        Under Build Query Tab, enter a SNP (rsXXXXX), a set of SNPs, a genomic region, or select a GWAS
-                        from the drop down menu.
-                        </p>
-
-                        <p>
+                        Explores annotations of the noncoding genome at variants on haplotype blocks,
+                        such as candidate regulatory SNPs at disease-associated loci. Under Set
+                        Options tab, set Browse ENCODE button to &quot;on&quot; and select an LD threshold
+                        and reference population. Under Build Query Tab, enter a SNP (rsXXXXX),
+                        a set of SNPs, a genomic region, or select a GWAS from the drop down menu.
                         HaploReg returns SNPs in LD with query SNPs, their frequency in 4 populations 
                         from 1000 Genomes Phase1, and also tells you what evidence ENCODE has found for 
                         regulatory protein binding (mouse over to see the protein names), chromatin
@@ -72,6 +62,34 @@
                         </li></p>
 
                         <p><li>
+                        <a class="thick" href="http://piq.csail.mit.edu/" target="_blank">PIQ: Protein Interaction Quantification</a><br>
+                        PIQ is a computational method that models the magnitude and shape of
+                        genome-wide DNase profiles to facilitate the identification of
+                        transcription factor (TF) binding sites.   The input of PIQ is one
+                        or more DNase-seq experiments, the genome sequence of the organism
+                        assayed and a list of motifs represented as position weight matrices (PWMs)
+                        that describe candidate TF binding sites.  PIQ uses machine learning methods
+                        to normalize input DNase-seq data and then predicts TF binding by detecting
+                        both the shape and magnitude of DNase profiles specific to each TF. The
+                        output of PIQ is the probability of occupancy for each candidate binding
+                        site in the genome, along with aggregate TF-specific scores (e.g. metrics
+                        for TF-specific chromatin opening). 
+                        </p>
+
+                        <p>
+                        Sherwood RI, Hashimoto T, O'Donnell CW, Lewis S, Barkal AA, van Hoff JP, Karun V, Jaakkola T,
+                        Gifford DK.
+                        <a href="http://dx.doi.org/10.1038/nbt.2798" target="_blank">
+                        Discovery of directional and nondirectional pioneer transcription factors by modeling DNase profile
+                        magnitude and shape</a>.
+                        <em>Nat Biotechnol</em>. 2014 Feb;32(2):171-8.
+                        PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24441470" target="_blank">24441470</a>; PMC: <a
+                        href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3951735" target="_blank">PMC3951735</a>
+                        </p>
+                        </li></p>
+
+
+                        <p><li>
                         <a class="thick" href="http://www.factorbook.org/" target="_blank">Factorbook</a><br>
                         A wiki-style resource that organizes all the information associated with each transcription factor (TF),
                         including the ChIP-seq peaks, discovered motifs, TF-TF interactions, and the chromatin features
@@ -90,7 +108,7 @@
                         </li></p>
 
                         <p><li>
-                        <a class="thick" href="http://www.broadinstitute.org/~pouyak/motif-disc/human/" target="_blank">ENCODE-motifs</a><br>
+                        <a class="thick" href="http://compbio.mit.edu/encode-motifs" target="_blank">ENCODE-motifs</a><br>
                         A database that uncovers the molecular basis of TF binding in the human genome based on regulatory
                         motif analysis of all Transcription Factors (TFs) grouped by family. This allows browsing of all known
                         motifs for each factor, curated from TRANSFAC, Jaspar, and Protein Binding Microarray (PBM) experiments,
@@ -103,7 +121,11 @@
 
                         <p>
                         Kheradpour P, Kellis M.
-                        ENCODE-motifs: systematic analysis of regulatory motifs associated with transcription factor binding in the human genome. (Submitted)
+                        <a href="http://nar.oxfordjournals.org/cgi/pmidlookup?view=long&amp;pmid=24335146" target="_blank">
+                        Systematic discovery and characterization of regulatory motifs in ENCODE TF binding experiments</a>.
+                        <em>Nucleic Acids Res</em>. 2014 Mar 1;42(5):2976-87.
+                        PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24335146" target="_blank">24335146</a>; PMC: <a
+                        href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3950668" target="_blank">PMC3950668</a>
                         </li></p>
 
                         <p><li>
@@ -159,6 +181,6 @@
 
                </div><!--end content-->
        </div><!--end wrapper--> 
-       <p class="date">Updated 20 Nov 2013</p>
+       <p class="date">Updated 24 Mar 2014</p>
     </body>
 </html>

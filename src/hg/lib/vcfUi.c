@@ -324,9 +324,12 @@ if (vcff != NULL)
 	     "Local haplotype blocks can often be identified using this display.</P>");
 	vcfCfgHapCluster(cart, tdb, vcff, name, parentLevel);
 	}
-    puts("<H3>Filters</H3>");
-    vcfCfgMinQual(cart, tdb, vcff, name, parentLevel);
-    vcfCfgFilterColumn(cart, tdb, vcff, name, parentLevel);
+    if (differentString(tdb->track,"evsEsp6500"))
+        {
+        puts("<H3>Filters</H3>");
+        vcfCfgMinQual(cart, tdb, vcff, name, parentLevel);
+        vcfCfgFilterColumn(cart, tdb, vcff, name, parentLevel);
+        }
     vcfCfgMinAlleleFreq(cart, tdb, vcff, name, parentLevel);
     }
 else
