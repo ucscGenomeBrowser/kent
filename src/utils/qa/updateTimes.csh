@@ -26,11 +26,12 @@ if ( $#argv < 2 || $#argv > 3 ) then
   echo "  if table is trackDb, trackDb_public will also be checked."
   echo "  warning:  not in real time for RR.  uses overnight dump." 
   echo
-  echo "    usage:  database tablelist [verbose | noEuro]"
+  echo "    usage:  database tablelist [verbose | noEuro | verboseNoEuro]"
   echo
   echo "            reports on dev, beta, RR and euronode"
   echo "            tablelist will accept single table"
   echo "            verbose mode will print machines names"
+  echo "            noEuro mode will stop before checking genome-euro"
   echo
   exit
 else
@@ -46,16 +47,16 @@ endif
 
 
 if ( $#argv == 3 ) then
-  if ( $argv[3] == "verbose" ) then
+  if ( $argv[3] == "noEuro" || $argv[3] == "verboseNoEuro" ) then
+    set noEuro=true
+  endif
+  if ( $argv[3] == "verbose" || $argv[3] == "verboseNoEuro" ) then
     set dot=( 'dev  ' 'beta ' 'pub  ' 'rr   ' 'euro ' )
   else
-    if ( $argv[3] == "noEuro" ) then
-      set noEuro=true
-    else
-    echo
-    echo 'sorry. third argument must be "verbose" or "noEuro"'
-    $0
-    exit
+    if ( $noEuro == "false" ) then
+      echo '\nsorry. third argument must be "verbose" or "noEuro" or "verboseNoEuro"'
+      $0
+      exit
     endif
   endif
 endif
