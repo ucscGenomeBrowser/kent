@@ -1483,7 +1483,7 @@ TMPDIR=/scratch/tmp
 
     cd /hive/data/genomes/rn5/bed/lastzAilMel1.2012-11-29
     time doRecipBest.pl -buildDir=`pwd` rn5 ailMel1 > rbest.log 2>&1
-    # about 20 minutes
+    # real    25m5.378s
 
     mkdir /hive/data/genomes/ailMel1/bed/blastz.rn5.swap
     cd /hive/data/genomes/ailMel1/bed/blastz.rn5.swap
