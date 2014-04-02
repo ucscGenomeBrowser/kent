@@ -1,0 +1,232 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the balAcu1
+# Balaenoptera acutorostrata scammoni - Minke whale
+
+#	DATE:   31-Oct-2013
+#	ORGANISM:       Balaenoptera acutorostrata scammoni
+#	TAXID:  310752
+#	ASSEMBLY LONG NAME:     BalAcu1.0
+#	ASSEMBLY SHORT NAME:    BalAcu1.0
+#	ASSEMBLY SUBMITTER:     Korea Ocean Research & Development Institute
+#	ASSEMBLY TYPE:  Haploid
+#	NUMBER OF ASSEMBLY-UNITS:       1
+#	ASSEMBLY ACCESSION:     GCA_000493695.1
+
+#	FTP-RELEASE DATE: 07-Nov-2013
+
+#       rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Balaenoptera_acutorostrata/BalAcu1.0/
+
+#	Mitochondrial sequence: NC_005271.1
+
+
+#############################################################################
+# fetch sequence from genbank (DONE - 2013-03-26 - Hiram)
+    mkdir -p /hive/data/genomes/balAcu1/genbank
+    cd /hive/data/genomes/balAcu1/genbank
+
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Balaenoptera_acutorostrata/BalAcu1.0/ ./
+
+    # measure sequence to be used here  (there will be the chrMT also ...)
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+
+    #   2431671281 bases (145030652 N's 2286640629 real 2286640629 upper
+    #   0 lower) in 10775 sequences in 1 files
+    #   Total size: mean 225677.1 sd 1878463.2
+    #   min 200 (gi|555415911|gb|ATDI01158464.1|)
+    #   max 51448160 (gi|555757145|gb|KI537095.1|) median 394
+
+#############################################################################
+# fixup names for UCSC standards (DONE - 2014-03-26 - Hiram)
+    cd /hive/data/genomes/balAcu1
+    $HOME/kent/src/hg/utils/automation/unplacedScaffolds.pl balAcu1
+    # constructs ./ucsc/ directory here:
+# -rw-rw-r-- 1  20508313 Mar 26 18:04 balAcu1.ucsc.agp
+# -rw-rw-r-- 1 700587893 Mar 26 18:18 balAcu1.ucsc.fa.gz
+# -rw-rw-r-- 1       206 Mar 26 18:20 checkAgp.result.txt
+
+#############################################################################
+#  Initial database build (DONE - 2014-03-27 - Hiram)
+
+    cd /hive/data/genomes/balAcu1
+    cat << '_EOF_' > balAcu1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db balAcu1
+clade mammal
+genomeCladePriority 35
+scientificName Balaenoptera acutorostrata scammoni
+commonName Minke whale
+assemblyDate Oct. 2013
+assemblyLabel Korea Ocean Research & Development Institute
+assemblyShortLabel BalAcu1.0
+orderKey 2369
+mitoAcc NC_005271.1
+fastaFiles /hive/data/genomes/balAcu1/ucsc/balAcu1.ucsc.fa.gz
+agpFiles /hive/data/genomes/balAcu1/ucsc/balAcu1.ucsc.agp
+dbDbSpeciesDir balAcu
+photoCreditURL http://www.noaa.gov/
+photoCreditName NOAA - National Oceanic and Atmospheric Administration
+ncbiGenomeId 10769
+ncbiAssemblyId 78761
+ncbiAssemblyName BalAcu1.0
+ncbiBioProject 237330
+genBankAccessionID GCA_000493695.1
+taxId 310752
+'_EOF_'
+    # << happy emacs
+
+    # stepwise, the first 'seq' step didn't work with the
+    # scientificName above because the chrM sequence did not have
+    # the scammoni on the name, use a config.ra for that step without
+    # that part of the name, then continue with the full name:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-stop=seq balAcu1.config.ra > seq.log 2>&1
+
+    # verify sequence and AGP are OK:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=agp -stop=agp balAcu1.config.ra > agp.log 2>&1
+
+    # then finish it off:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=db balAcu1.config.ra > db.log 2>&1
+    #  real    22m15.793s
+
+##########################################################################
+# running repeat masker (DONE - 2014-03-27 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/repeatMasker
+    cd /hive/data/genomes/balAcu1/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=ku balAcu1 > do.log 2>&1 &
+XXX - running - Thu Mar 27 13:51:32 PDT 2014
+    #   about 17h 35m
+
+    cat faSize.rmsk.txt
+    #   2455541136 bases (91244929 N's 2364296207 real 1342935452 upper
+    #   1021360755 lower) in 5500 sequences in 1 files
+    #   Total size: mean 446462.0 sd 8150539.1 min 205 (chrUn_JH413284)
+    #   max 239302903 (chrA1) median 1243
+    #   %41.59 masked total, %43.20 masked real
+
+    egrep -i "versi|relea" do.log
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+# CC   RELEASE 20110920; 
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+
+    featureBits -countGaps balAcu1 rmsk
+    #   1023331634 bases of 2455541136 (41.674%) in intersection
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2014-03-27 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/simpleRepeat
+    cd /hive/data/genomes/balAcu1/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+	balAcu1 > do.log 2>&1 &
+    #	real    4m49.523s
+    cat fb.simpleRepeat 
+    #   35896803 bases of 2286657046 (1.570%) in intersection
+
+XXX - waiting for rmsk - Thu Mar 27 14:21:40 PDT 2014
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/balAcu1
+    twoBitMask balAcu1.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed balAcu1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa balAcu1.2bit stdout | faSize stdin > faSize.balAcu1.2bit.txt
+    cat faSize.balAcu1.2bit.txt
+    #   2455541136 bases (91244929 N's 2364296207 real 1341962038 upper
+    #   1022334169 lower) in 5500 sequences in 1 files
+    #   Total size: mean 446462.0 sd 8150539.1 min 205 (chrUn_JH413284)
+    #   max 239302903 (chrA1) median 1243
+    #   %41.63 masked total, %43.24 masked real
+
+    rm /gbdb/balAcu1/balAcu1.2bit
+    ln -s `pwd`/balAcu1.2bit /gbdb/balAcu1/balAcu1.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2014-03-27 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/gap
+    cd /hive/data/genomes/balAcu1/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../balAcu1.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m53.846s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits balAcu1 -not gap -bed=notGap.bed
+    #   2403678276 bases of 2403678276 (100.000%) in intersection
+    #   real    0m12.025s
+    time featureBits balAcu1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   0 bases of 2286657046 (0.000%) in intersection
+    #   real    12m56.037s
+
+    # no new gaps, nothing to do, take a look at felCat5.txt for an example
+    # of what to do here with the new gaps
+
+##########################################################################
+## WINDOWMASKER (DONE - 2014-03-27 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/windowMasker
+    cd /hive/data/genomes/balAcu1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev balAcu1 > do.log 2>&1 &
+XXX - running - Thu Mar 27 14:21:05 PDT 2014
+    #   about 2h 47m
+
+    # Masking statistics
+    twoBitToFa balAcu1.wmsk.2bit stdout | faSize stdin
+    #   2455541136 bases (91244929 N's 2364296207 real 1589489056 upper
+    #   774807151 lower) in 5500 sequences in 1 files
+    #   Total size: mean 446462.0 sd 8150539.1 min 205 (chrUn_JH413284)
+    #   max 239302903 (chrA1) median 1243
+    #   %31.55 masked total, %32.77 masked real
+
+    twoBitToFa balAcu1.wmsk.sdust.2bit stdout | faSize stdin
+    #   2455541136 bases (91244929 N's 2364296207 real 1577768583 upper
+    #   786527624 lower) in 5500 sequences in 1 files
+    #   Total size: mean 446462.0 sd 8150539.1 min 205 (chrUn_JH413284)
+    #   max 239302903 (chrA1) median 1243
+    #   %32.03 masked total, %33.27 masked real
+
+    hgLoadBed balAcu1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #   Read 13534078 elements of size 3 from windowmasker.sdust.bed.gz
+
+    featureBits -countGaps balAcu1 windowmaskerSdust
+    #   877772553 bases of 2455541136 (35.747%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits balAcu1 -not gap -bed=notGap.bed
+    #   2364296207 bases of 2364296207 (100.000%) in intersection
+
+    time nice -n +19 featureBits balAcu1 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #   786527624 bases of 2364296207 (33.267%) in intersection
+    #   real    4m29.505s
+
+    #	reload track to get it clean
+    hgLoadBed balAcu1 windowmaskerSdust cleanWMask.bed.gz
+    #   Read 13586894 elements of size 4 from cleanWMask.bed.gz
+    featureBits -countGaps balAcu1 windowmaskerSdust
+    #   786527624 bases of 2455541136 (32.031%) in intersection
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../balAcu1.unmasked.2bit stdin \
+	    -type=.bed balAcu1.cleanWMSdust.2bit
+    twoBitToFa balAcu1.cleanWMSdust.2bit stdout | faSize stdin \
+        > balAcu1.cleanWMSdust.faSize.txt
+    cat balAcu1.cleanWMSdust.faSize.txt
+    #   2455541136 bases (91244929 N's 2364296207 real 1577768583 upper
+    #   786527624 lower) in 5500 sequences in 1 files
+    #   Total size: mean 446462.0 sd 8150539.1 min 205 (chrUn_JH413284)
+    #   max 239302903 (chrA1) median 1243
+    #   %32.03 masked total, %33.27 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps balAcu1 rmsk windowmaskerSdust
+    #   553445549 bases of 2455541136 (22.539%) in intersection
+
+#############################################################################

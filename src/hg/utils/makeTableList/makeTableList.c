@@ -14,6 +14,7 @@ static char *toProf = NULL;
 static char *toHost = NULL;
 static char *toUser = NULL;
 static char *toPassword = NULL;
+static char *hgcentral = NULL;
 boolean doBigFiles = FALSE;
 
 void usage()
@@ -31,6 +32,7 @@ errAbort(
   "   -toHost             alternative to toProf: mysql target host\n"
   "   -toUser             alternative to toProf: mysql target user\n"
   "   -toPassword         alternative to toProf: mysql target pwd\n"
+  "   -hgcentral          specify an alternative hgcentral db name when using -all\n"
   "   -all                recreate tableList for all active assemblies in hg.conf's hgcentral\n"
   "   -bigFiles           create table with tuples (track, name of bigfile)\n");
 }
@@ -44,6 +46,7 @@ static struct optionSpec options[] = {
     {"toHost", OPTION_STRING},
     {"toPassword", OPTION_STRING},
     {"toUser", OPTION_STRING},
+    {"hgcentral", OPTION_STRING},
     {"bigFiles", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -175,7 +178,11 @@ printf("This tool is running DESCRIBE on all tables. \n"
 
 if(all)
     {
-    struct sqlConnection *conn = hConnectCentral();
+    struct sqlConnection *conn;
+    if (hgcentral != NULL)
+        conn = sqlConnectRemote(host, user, password, hgcentral);
+    else
+        conn = hConnectCentral();
     sr = sqlGetResult(conn, "NOSQLINJ select name from dbDb where active=1");
     while ((row = sqlNextRow(sr)) != NULL)
         slNameAddHead(&dbs, row[0]);
@@ -189,11 +196,15 @@ else
         slNameAddHead(&dbs, argv[i]);
     }
 
+// just check that the username/password actually works
+struct sqlConnection *conn;
+conn = sqlConnectRemote(host, user, password, NULL);
+sqlDisconnect(&conn);
+
 for (; dbs != NULL; dbs = dbs->next)
     {
     // open connect to source db
     printf("DB: %s\n", dbs->name);
-    struct sqlConnection *conn;
     if(host)
         conn = sqlMayConnectRemote(host, user, password, dbs->name);
     else
@@ -243,6 +254,7 @@ toProf = optionVal("toProf", NULL);
 toHost = optionVal("toHost", NULL);
 toUser = optionVal("toUser", NULL);
 toPassword = optionVal("toPassword", NULL);
+hgcentral = optionVal("hgcentral", NULL);
 doBigFiles = optionExists("bigFiles");
 if (argc < 2 && !all)
     usage();
