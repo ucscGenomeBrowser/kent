@@ -7,7 +7,9 @@
  *  v2 - making it so daemon only keeps current job in memory consulting db table always
  *       for next job.  This simplifies code and allows the daemon to respond to changes 
  *       the job table at the expense of spinning the DB daemon a little more often.  Also
- *       maintaining a new column, pid, that contains unix process id for the job. */
+ *       maintaining a new column, pid, that contains unix process id for the job. 
+ *  v3 - put delay to default to 1, since seems to be needed when restarting if there are
+ *       jobs in the queue. */
 
 #include <sys/wait.h>
 #include "common.h"
@@ -23,13 +25,13 @@
 #include "edwLib.h"
 
 char *clDatabase, *clTable;
-int clDelay;
+int clDelay = 1;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwRunDaemon v2 - Run jobs on multiple processers in background.  This is done with\n"
+  "edwRunDaemon v3 - Run jobs on multiple processers in background.  This is done with\n"
   "a combination of infrequent polling of the database, and a unix fifo which can be\n"
   "sent a signal (anything ending with a newline actually) that tells it to go look\n"
   "at database now.\n"

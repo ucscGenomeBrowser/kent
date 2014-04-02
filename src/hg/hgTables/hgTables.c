@@ -32,9 +32,7 @@
 #include "hgConfig.h"
 #include "udc.h"
 #include "chromInfo.h"
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 void usage()
 /* Explain usage and exit. */
@@ -1985,9 +1983,7 @@ freezeName = hFreezeFromDb(database);
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 knetUdcInstall();
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 /* Init track and group lists and figure out what page to put up. */
 initGroupsTracksTables();

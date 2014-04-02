@@ -86,7 +86,7 @@ for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
 	    hasFirst = TRUE;
 	    }
         hPrintf("<A HREF = \"");
-	hPrintf("http://amigo.geneontology.org/cgi-bin/amigo/go.cgi?view=details&search_constraint=terms&depth=0&query=%s", goID);
+	hPrintf("http://amigo1.geneontology.org/cgi-bin/amigo/go.cgi?view=details&search_constraint=terms&depth=0&query=%s", goID);
 	hPrintf("\" TARGET=_blank>%s</A> %s<BR>\n", goID, goTermName);
 	}
     if (hasFirst)

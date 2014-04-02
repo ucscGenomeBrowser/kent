@@ -69,28 +69,69 @@ if (string != NULL)
 return string;
 }
 
-static void printGenomes(struct trackHub *thub)
-/* print supported assembly names from trackHub */
-{
-/* List of associated genomes. */
-struct trackHubGenome *genomes = thub->genomeList;
-struct dyString *dy = newDyString(100);
-
-for(; genomes; genomes = genomes->next)
-    dyStringPrintf(dy,"%s, ", trackHubSkipHubName(genomes->name));
-ourPrintCell(removeLastComma( dyStringCannibalize(&dy)));
-}
-
-static void printGenomeList(struct slName *genomes)
+#define GENLISTWIDTH 40
+static void printGenomeList(struct slName *genomes, int row)
 /* print supported assembly names from sl list */
 {
 /* List of associated genomes. */
 struct dyString *dy = newDyString(100);
-
+struct dyString *dyShort = newDyString(100);
+char *trimmedName = NULL;
 for(; genomes; genomes = genomes->next)
-    dyStringPrintf(dy,"%s, ", trackHubSkipHubName(genomes->name));
-ourPrintCell(removeLastComma( dyStringCannibalize(&dy)));
+    {
+    trimmedName = trackHubSkipHubName(genomes->name);
+    dyStringPrintf(dy,"%s, ", trimmedName);
+    if (dyShort->stringSize == 0 || (dyShort->stringSize+strlen(trimmedName)<=GENLISTWIDTH))
+	dyStringPrintf(dyShort,"%s, ", trimmedName);
+    }
+char *genomesString = removeLastComma( dyStringCannibalize(&dy));
+char *genomesShort = removeLastComma( dyStringCannibalize(&dyShort));
+char tempHtml[1024+strlen(genomesString)+strlen(genomesShort)];
+if (strlen(genomesShort) > GENLISTWIDTH)  // If even the first element is too long, truncate it.
+    genomesShort[GENLISTWIDTH] = 0;
+if (strlen(genomesShort)==strlen(genomesString))
+    {
+    safef(tempHtml, sizeof tempHtml, "%s", genomesString);
+    }
+else
+    {
+    safef(tempHtml, sizeof tempHtml, 
+	"<span id=Short%d "
+	"onclick=\"javascript:"
+	"document.getElementById('Short%d').style.display='none';"
+	"document.getElementById('Full%d').style.display='inline';"
+	"return false;\">[+]&nbsp;%s...</span>"
+
+	"<span id=Full%d "
+	"style=\"display:none\" "
+	"onclick=\"javascript:"
+	"document.getElementById('Full%d').style.display='none';"
+	"document.getElementById('Short%d').style.display='inline';"
+	"return false;\">[-]<br>%s</span>"
+
+	, row, row, row, genomesShort 
+	, row, row, row, genomesString);
+    }
+ourPrintCell(tempHtml);
+//ourPrintCell(removeLastComma( dyStringCannibalize(&dy)));
 }
+
+
+static void printGenomes(struct trackHub *thub, int row)
+/* print supported assembly names from trackHub */
+{
+/* List of associated genomes. */
+struct trackHubGenome *genomes = thub->genomeList;
+struct slName *list = NULL, *el;
+for(; genomes; genomes = genomes->next)
+    {
+    el = slNameNew(genomes->name);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+printGenomeList(list, row);
+}
+
 
 static void hgHubConnectUnlisted(struct hubConnectStatus *hubList, 
     struct hash *publicHash)
@@ -196,7 +237,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	ourPrintCell("");
 
     if (hub->trackHub != NULL)
-	printGenomes(hub->trackHub);
+	printGenomes(hub->trackHub, count);
     else
 	ourPrintCell("");
     ourPrintCell(hub->hubUrl);
@@ -224,10 +265,12 @@ sqlSafef(query, sizeof(query), "select hubUrl,shortLabel,longLabel,dbList from %
 	publicTable); 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
+int count = 0;
 
 boolean gotAnyRows = FALSE;
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    ++count;
     char *url = row[0], *shortLabel = row[1], *longLabel = row[2], 
     	  *dbList = row[3];
     if (gotAnyRows)
@@ -289,7 +332,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
 	    errorMessage);
 
-    printGenomeList(slNameListFromComma(dbList)); // Leaking a bit of memory
+    printGenomeList(slNameListFromComma(dbList), count); // Leaking a bit of memory
     ourPrintCell(url);
 
     hashStore(publicHash, url);

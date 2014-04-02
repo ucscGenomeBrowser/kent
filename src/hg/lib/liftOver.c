@@ -1844,7 +1844,7 @@ if (conn)
     chain = liftOverChainLoadByQuery(conn, query);
     if (chain != NULL)
         {
-        path = hReplaceGbdb(chain->path);
+        path = cloneString(chain->path);
         liftOverChainFree(&chain);
         }
     hDisconnectCentral(&conn);

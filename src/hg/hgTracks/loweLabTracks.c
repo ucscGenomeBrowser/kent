@@ -77,7 +77,7 @@ LLshadesOfCOGS['P'-'A']=hvGfxFindColorIx(hvg, 204, 204,252);
 LLshadesOfCOGS['Q'-'A']=hvGfxFindColorIx(hvg, 188, 204,252);
 LLshadesOfCOGS['R'-'A']=hvGfxFindColorIx(hvg, 224, 224,224); /* general function prediction */
 LLshadesOfCOGS['S'-'A']=hvGfxFindColorIx(hvg, 204, 204,204);
-LLshadesOfCOGS['-'-'A']=hvGfxFindColorIx(hvg, 224, 224,224);/* no cog - same as R (general function prediction) */
+LLshadesOfCOGS['+'+'-'-'A']=hvGfxFindColorIx(hvg, 224, 224,224);/* no cog - same as R (general function prediction) */
 }
 
 void loadBed6(struct track *tg)
@@ -125,7 +125,10 @@ if(hTableExists(database, "COG"))
     if(COG!=NULL)
 	{
         chopString(COG->code, "," , temparray, 9999);
-        return LLshadesOfCOGS[(temparray[0][0]-'A')];
+	if (temparray[0][0] == '-')
+	  return LLshadesOfCOGS[('+'+temparray[0][0]-'A')];
+	else
+	  return LLshadesOfCOGS[(temparray[0][0]-'A')];
 	}
     else
         return blackIndex();
@@ -171,7 +174,10 @@ if(hTableExists(database, "COG"))
     if(COG!=NULL)
 	{
 	chopString(COG->code, "," , temparray, 9999);
-	return LLshadesOfCOGS[(temparray[0][0]-'A')];
+	if (temparray[0][0] == '-')
+	  return LLshadesOfCOGS[('+'+temparray[0][0]-'A')];
+	else
+	  return LLshadesOfCOGS[(temparray[0][0]-'A')];
 	}
     else
 	return shadesOfGray[9];

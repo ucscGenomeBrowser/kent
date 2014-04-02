@@ -9,6 +9,8 @@
 #include "encodeDataWarehouse.h"
 
 boolean really;
+/* number of users in different stage */
+int prevN = 0, postN = 0, procN = 0, addedN = 0, updateN = 0;;
 
 void usage()
 /* Explain usage and exit. */
@@ -28,6 +30,27 @@ static struct optionSpec options[] = {
     {"really", OPTION_BOOLEAN},
     {NULL, 0},
 };
+
+int countTable(struct sqlConnection *conn, char *tName)
+/* get number of rows of the table */
+{
+char query[512];
+sqlSafef(query, sizeof(query),
+    "select count(*) from %s" , tName);
+return sqlQuickNum(conn, query);
+}
+    
+void logUpdateResult(FILE *f)
+/* log the update result */
+{
+/* mail message for cron task when new users are added */
+if ( addedN > 0)
+    verbose(1, "%d user records processed.\n%d new user added to edwUser table.\nedwUser started with %d and ended with %d rows.\n%d users information updated\n",
+    procN, addedN, prevN, postN, updateN);
+/* write out the update statistics to the output file */
+fprintf(f, "%d user records processed.\n%d new user added to edwUser table.\nedwUser table started with %d and ended with %d rows.\n%d users information updated\n",
+    procN, addedN, prevN, postN, updateN);
+}
 
 char *getTextViaHttp(char *url, char *userId, char *password)
 /* getTextViaHttp - Fetch text from url that is http password protected. This
@@ -64,7 +87,7 @@ char *getAllUsersJson(char *sUrl, char *userId, char *password)
 {
 char url[512];
 safef(url, sizeof(url), "%s/users/?format=json&limit=all", sUrl);
-verbose(1, "Fetching all users from\n  %s\n", url);
+//verbose(1, "Fetching all users from\n  %s\n", url);
 return getTextViaHttp(url, userId, password);
 }
 
@@ -78,21 +101,31 @@ else
     fprintf(f, "%s\n", query);
 }
 
-void updateEdwUserInfo(char *email, char *uuid, int isAdmin, FILE *f)
+void updateEdwUserInfo(struct sqlConnection *conn, char *email, char *uuid, int isAdmin, FILE *f)
 /* update edwUser table based on information from encodedcc's users json
  * text using uuid as search key to update email and isAdmine column */
 {
-//char *database = "chinhliTest";
-//struct sqlConnection *conn = sqlConnect(database);
-struct sqlConnection *conn =  edwConnectReadWrite(edwDatabase);
 char query[512];
-/* use email to search now, will use uuid eventually */
+/* use uuid then email to search the user row */
 if (!sqlRowExists(conn, "edwUser", "uuid", uuid))
     {
-    sqlSafef(query, sizeof(query),
-	"insert into edwUser (email, uuid, isAdmin) values('%s', '%s', %d)", 
-	email, uuid, isAdmin);
-    maybeDoUpdate(conn, query, really, f);
+    /* Was this user created by edwCreateUser without real encodedcc uuid? */
+    if (sqlRowExists(conn, "edwUser", "email", email))
+	{
+	/* yes, update it with real uuid from encodedcc */
+        sqlSafef(query, sizeof(query),
+	    "update edwUser set uuid = '%s', isAdmin = '%d' where email = '%s' and uuid = '0'",
+	    uuid, isAdmin, email);
+        maybeDoUpdate(conn, query, really, f);
+	updateN += 1;
+	}
+    else
+	{
+	sqlSafef(query, sizeof(query),
+	    "insert into edwUser (email, uuid, isAdmin) values('%s', '%s', %d)",	    email, uuid, isAdmin);
+        maybeDoUpdate(conn, query, really, f);
+	addedN += 1;
+	}
     }
 else
     {
@@ -100,10 +133,10 @@ else
 	"update edwUser set email = '%s', isAdmin = '%d' where uuid = '%s'", 
 	email, isAdmin, uuid);
     maybeDoUpdate(conn, query, really, f);
+    updateN += 1;
     }
 return;
 }
-
 
 struct slName *createUuidList(char *url, char *userId, char *password)
 {
@@ -111,7 +144,7 @@ char *usersJsonText = getAllUsersJson(url, userId, password);
 struct jsonElement *jsonRoot = jsonParse(usersJsonText);
 char *userListName = "@graph";
 struct jsonElement *jsonUserList = jsonMustFindNamedField(jsonRoot, "", userListName);
-verbose(1, "Got @graph %p\n", jsonUserList);
+//verbose(1, "Got @graph %p\n", jsonUserList);
 struct slName *list = NULL;
 struct slRef *ref, *refList = jsonListVal(jsonUserList, userListName);
 for (ref = refList; ref != NULL; ref = ref->next)
@@ -120,7 +153,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
     char *uuid = jsonStringField(el, "uuid");
     if (uuid !=NULL) slNameAddHead(&list, uuid);
     }
-verbose(1, "Got %d uuid to process\n", slCount(list));
+//verbose(1, "Got %d uuid to process\n", slCount(list));
 return list;
 }
 
@@ -129,9 +162,12 @@ void rsyncEdwUserTable(char *url, char *userId, char *password, char *outTab)
  * Stanford  encodedcc. */ 
 {
 FILE *f = mustOpen(outTab, "w");
-
+//char *database = "chinhliTest";
+//struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn =  edwConnectReadWrite(edwDatabase);
+prevN = countTable(conn, "edwUser");
 struct slName *uuidList=createUuidList(url, userId, password);
-verbose(1, "uuidList created  %p\n", uuidList);
+//verbose(1, "uuidList created  %p\n", uuidList);
 struct slName *sln;
 int realUserCount = 0;
 for (sln = uuidList;  sln != NULL;  sln = sln->next)
@@ -156,11 +192,14 @@ for (sln = uuidList;  sln != NULL;  sln = sln->next)
                 isAdmin = 1;
             }
         }
-    updateEdwUserInfo(email, uuid, isAdmin, f);
-    verbose(1, "%s\t%s\t%d\n", email, uuid, isAdmin);
+    updateEdwUserInfo(conn, email, uuid, isAdmin, f);
+    //verbose(1, "%s\t%s\t%d\n", email, uuid, isAdmin);
     ++realUserCount;
     }
-verbose(1, "Total of %d users processed\n", realUserCount);
+procN = realUserCount;
+postN = countTable(conn, "edwUser");
+logUpdateResult(f);
+//verbose(1, "Total of %d users processed\n", realUserCount);
 carefulClose(&f);
 }
 
@@ -168,7 +207,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 really = optionExists("really");
-if (really) verbose(1, "Really going to do it! \n");
+//if (really) verbose(1, "Really going to do it! \n");
 if (argc != 5)
     usage();
 rsyncEdwUserTable(argv[1], argv[2], argv[3], argv[4]);

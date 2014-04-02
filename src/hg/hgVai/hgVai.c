@@ -532,6 +532,9 @@ char query[64];
 sqlSafef(query, sizeof(query), "show tables like 'snp1__%s'", suffix);
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *snpNNNTables = sqlQuickList(conn, query);
+if (slCount(snpNNNTables)==0 && sqlFailoverConn(conn)!=NULL)
+    snpNNNTables = sqlQuickList(sqlFailoverConn(conn), query);
+
 hFreeConn(&conn);
 if (snpNNNTables == NULL)
     return NULL;
@@ -1957,9 +1960,7 @@ if (isEmpty(cartOptionalString(cart, hgvaRange)))
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 knetUdcInstall();
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 initGroupsTracksTables(cart, &fullTrackList, &fullGroupList);
 if (lookupPosition(cart, hgvaRange))

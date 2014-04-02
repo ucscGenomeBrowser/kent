@@ -175,7 +175,7 @@ grant Gingeras
 lab RIKEN
 labExpId K16
 localization cell
-md5sum 56fb9223f20ea47d8fc9ac986de14d0f
+md5sum 6dc8e90ede3de081cd9391bddb3046c7
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -200,7 +200,7 @@ grant Gingeras
 lab RIKEN
 labExpId K17
 localization cell
-md5sum ba92c4b67807582aa6a9572073e69ee3
+md5sum 5b90dc178a0d5c91d683b0d52fbc5eee
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -225,7 +225,7 @@ grant Gingeras
 lab RIKEN
 labExpId K16,K17
 localization cell
-md5sum cae06fe184558274964cc7a34164bf89
+md5sum 52d88c27c4545855e132da2eeaecf85c
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -905,7 +905,7 @@ grant Gingeras
 lab RIKEN
 labExpId K12
 localization cell
-md5sum 73716d9b241a824ecc1a80539fe326ae
+md5sum eed6b59cf45655fa0ef9debfd8039f37
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -930,7 +930,7 @@ grant Gingeras
 lab RIKEN
 labExpId K13
 localization cell
-md5sum 74ba9d09a4c64ef086ba64317fd149e6
+md5sum eb2c60ac4cbe40d0c33933a7f296becc
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -955,7 +955,7 @@ grant Gingeras
 lab RIKEN
 labExpId K12,K13
 localization cell
-md5sum cd8c202675587912e01c8ca4c2b24344
+md5sum 3016ad718c738c73a1b4464ebabfd966
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -1159,7 +1159,7 @@ grant Gingeras
 lab RIKEN
 labExpId K18
 localization cell
-md5sum 2bdeccb1e52715ccbffc0e2da5f5676d
+md5sum 65d8e70e4d31f8c6fac7150db9dce317
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1184,7 +1184,7 @@ grant Gingeras
 lab RIKEN
 labExpId K19
 localization cell
-md5sum 40c7327ec23ce4d16f20d584fe981b87
+md5sum b0c6e9f6d1bf16355c44fb7b68d379f2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1209,7 +1209,7 @@ grant Gingeras
 lab RIKEN
 labExpId K18,K19
 localization cell
-md5sum 77f308b9e1745c719328d6a96f030278
+md5sum 92dc5d616b8527bfef4565fc4894fcb8
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -1842,7 +1842,7 @@ grant Gingeras
 lab RIKEN
 labExpId J72,J73
 localization cell
-md5sum 42dad26024f54a14d89c8ac0a4a89192
+md5sum 177c08c98076452c958bef6b6e1ad7a2
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -1969,7 +1969,7 @@ geoSampleAccession GSM849329
 grant Gingeras
 lab RIKEN
 localization cytosol
-md5sum 156618e589854a9454497754f0b0b003
+md5sum a55c37bad666e528ba5cdd59e5479f09
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -2071,7 +2071,7 @@ grant Gingeras
 lab RIKEN
 labExpId I27
 localization cytosol
-md5sum 156618e589854a9454497754f0b0b003
+md5sum a55c37bad666e528ba5cdd59e5479f09
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -2094,7 +2094,7 @@ grant Gingeras
 lab RIKEN
 labExpId I27
 localization cytosol
-md5sum 327f9a60e47cefc8ad0ce78122d9f472
+md5sum 4325ec242a56ce4d14b305a1ef2d7327
 project wgEncode
 rnaExtract longNonPolyA
 subId 4526
@@ -2370,7 +2370,7 @@ grant Gingeras
 lab RIKEN
 labExpId J84,J85
 localization cytosol
-md5sum 74c76a88c989f1a7972e96b49c514a40
+md5sum 5ed978912ffbdbd77193e22c9471cc05
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -2544,7 +2544,7 @@ grant Gingeras
 lab RIKEN
 labExpId I69
 localization nucleolus
-md5sum 86558766bd604387be73ca72418eddb0
+md5sum b41da47757f986b41e82570a3a702b7e
 project wgEncode
 rnaExtract total
 subId 2433
@@ -2567,7 +2567,7 @@ grant Gingeras
 lab RIKEN
 labExpId I69
 localization nucleolus
-md5sum bcfebe0eb93dcc20af0772a0bedfe759
+md5sum eacce8d334f65ef42d5145896f7434b0
 project wgEncode
 rnaExtract total
 subId 4506
@@ -2711,7 +2711,7 @@ grant Gingeras
 lab RIKEN
 labExpId J59
 localization nucleus
-md5sum 401b0d36cc6ecbc8b59f3ad73e1bd44f
+md5sum 056368b4dbedbdafdfbc294b1b5b53c9
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 1
@@ -2807,7 +2807,7 @@ grant Gingeras
 lab RIKEN
 labExpId J59
 localization nucleus
-md5sum 401b0d36cc6ecbc8b59f3ad73e1bd44f
+md5sum 056368b4dbedbdafdfbc294b1b5b53c9
 project wgEncode
 rnaExtract longNonPolyA
 subId 2350
@@ -2830,7 +2830,7 @@ grant Gingeras
 lab RIKEN
 labExpId J59
 localization nucleus
-md5sum 609ab760c944108b3297c4a1214995f2
+md5sum 0869c5e6ef84ba26cb24b1d356f3b598
 project wgEncode
 rnaExtract longNonPolyA
 subId 4509
@@ -3107,7 +3107,7 @@ grant Gingeras
 lab RIKEN
 labExpId J93,J94
 localization nucleus
-md5sum f540fa9eeba85d12124693b116f1b581
+md5sum 4e86809330cd6d1ff3486ce84e4f205d
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -3234,7 +3234,7 @@ geoSampleAccession GSM849355
 grant Gingeras
 lab RIKEN
 localization cell
-md5sum d4bf93d6c819c491b124cda8dc8593ce
+md5sum 4d3aa53e55b2bc0038a5b73991a1a86a
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -3336,7 +3336,7 @@ grant Gingeras
 lab RIKEN
 labExpId I67
 localization cell
-md5sum d4bf93d6c819c491b124cda8dc8593ce
+md5sum 4d3aa53e55b2bc0038a5b73991a1a86a
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -3359,7 +3359,7 @@ grant Gingeras
 lab RIKEN
 labExpId I67
 localization cell
-md5sum 814faa1bdd7e766ce10fab6e40da90fc
+md5sum 36f1f066b9e014ae349ccf85c97072c8
 project wgEncode
 rnaExtract longNonPolyA
 subId 4530
@@ -3690,7 +3690,7 @@ grant Gingeras
 lab RIKEN
 labExpId J74
 localization cell
-md5sum a7186ad215baddb0067b790b3188d8a4
+md5sum e5dfecc88e4f357a611b0944415c64bc
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3715,7 +3715,7 @@ grant Gingeras
 lab RIKEN
 labExpId J75
 localization cell
-md5sum 10ff2ab8cd1740567213ec8e14ff95ce
+md5sum dcad914c266f19fac2224892613f7142
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3740,7 +3740,7 @@ grant Gingeras
 lab RIKEN
 labExpId J74,J75
 localization cell
-md5sum a5ad9ad642ab1252e2aa890aab89328d
+md5sum d9e7aac643c14cefbd4c60c6bf2a435f
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -3919,7 +3919,7 @@ grant Gingeras
 lab RIKEN
 labExpId J86
 localization cytosol
-md5sum a1f11acd7a2c04941a8e83f4c31e5c13
+md5sum c4bab48736c9028348ef5945dca8cddf
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -4099,7 +4099,7 @@ grant Gingeras
 lab RIKEN
 labExpId J95
 localization nucleus
-md5sum 233452cd0e0d6de26c902b65bcabaa54
+md5sum 22719a100ed3942f15197f84d8f0ee08
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -5149,7 +5149,7 @@ grant Gingeras
 lab RIKEN
 labExpId J80
 localization cell
-md5sum 48aff060ec90197fa98e74584a48c63f
+md5sum 01a8d9a661f09a2696d8dc79ed8cdedc
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -5174,7 +5174,7 @@ grant Gingeras
 lab RIKEN
 labExpId J81
 localization cell
-md5sum 3cdaeaa2170fb7dc3d9ce96b3d7cea49
+md5sum 646c43a96b0cad93f08b7dff0a7aa562
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -5199,7 +5199,7 @@ grant Gingeras
 lab RIKEN
 labExpId J80,J81
 localization cell
-md5sum 4935697034d9b624b10dfc2244421c03
+md5sum b80e83fd659c9c5ca2957c9fec15b1b9
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -5324,7 +5324,7 @@ grant Gingeras
 lab RIKEN
 labExpId J56
 localization cytosol
-md5sum 01bebeda593fbde96d2eb7157099fd59
+md5sum d871d29397114870d82b1c19b0111519
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -5420,7 +5420,7 @@ grant Gingeras
 lab RIKEN
 labExpId J56
 localization cytosol
-md5sum 01bebeda593fbde96d2eb7157099fd59
+md5sum d871d29397114870d82b1c19b0111519
 project wgEncode
 rnaExtract longNonPolyA
 subId 2784
@@ -5443,7 +5443,7 @@ grant Gingeras
 lab RIKEN
 labExpId J56
 localization cytosol
-md5sum 3696114d14200626baeea4f2e54c757c
+md5sum 655ca54c52650c26014ce4c38ef217f6
 project wgEncode
 rnaExtract longNonPolyA
 subId 4535
@@ -5773,7 +5773,7 @@ grant Gingeras
 lab RIKEN
 labExpId J87
 localization cytosol
-md5sum 1430caf04df24a9f56178363869beb1f
+md5sum 3ec04315018620e6c3a76f3b93b2a4f5
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -5798,7 +5798,7 @@ grant Gingeras
 lab RIKEN
 labExpId J88
 localization cytosol
-md5sum ae3619b785120420ccdd78e6362b4147
+md5sum b57efcce8b62a36fbe010c8b3f594a88
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -5823,7 +5823,7 @@ grant Gingeras
 lab RIKEN
 labExpId J87,J88
 localization cytosol
-md5sum daa6f533411f7bde84295ba8681aa0a1
+md5sum 1556fe4f56a0649fee371b48a90b7dc2
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -5994,7 +5994,7 @@ grant Gingeras
 lab RIKEN
 labExpId J58
 localization nucleolus
-md5sum e14ab9bb9e49263376054a517b60d9fb
+md5sum fb18f833db6f51bee64857dc15bd9ea9
 project wgEncode
 rnaExtract total
 subId 2783
@@ -6017,7 +6017,7 @@ grant Gingeras
 lab RIKEN
 labExpId J58
 localization nucleolus
-md5sum fa0907bef59c2e6d2859a78c8cd7debf
+md5sum 3538e885cbbbf2ca3c991acb121dc65c
 project wgEncode
 rnaExtract total
 subId 4534
@@ -6480,7 +6480,7 @@ grant Gingeras
 lab RIKEN
 labExpId J96
 localization nucleus
-md5sum d6dadc01f9575c7b754d546ef84c4f58
+md5sum 55ba068e7b13d75201c663ffe39400c9
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -6505,7 +6505,7 @@ grant Gingeras
 lab RIKEN
 labExpId J97
 localization nucleus
-md5sum 04741d526d1ffb690877dba05983374e
+md5sum a7c9beb6040c6c2d92d5bfdb0e9afe54
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -6530,7 +6530,7 @@ grant Gingeras
 lab RIKEN
 labExpId J96,J97
 localization nucleus
-md5sum 0c65e7b005ff546427a34167b406e989
+md5sum 96a7bb5403f1fb1d328e663f7c4b1c6f
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -6838,7 +6838,7 @@ grant Gingeras
 lab RIKEN
 labExpId K01
 localization cell
-md5sum f06a3ecb0f2c6184bbacff728a9367f7
+md5sum 2b131f5ab11e14ed60047eb8ca57613d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -6863,7 +6863,7 @@ grant Gingeras
 lab RIKEN
 labExpId K02
 localization cell
-md5sum 0691a8a363cfa1d6f273ef1404975f25
+md5sum 01e8e30cca2077b5eda9380746db5148
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -6888,7 +6888,7 @@ grant Gingeras
 lab RIKEN
 labExpId K01,K02
 localization cell
-md5sum c683cb9e7a9af91d7fe6e41b21ad80f0
+md5sum b69fce26cd814558e21bdfe31ba93cde
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -7016,7 +7016,7 @@ geoSampleAccession GSM849351
 grant Gingeras
 lab RIKEN
 localization cytosol
-md5sum 4f4d4cbaff9fc82b473d1295e50d68a9
+md5sum 96d301a41cebd3f2b3f0b6d30f83171b
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -7118,7 +7118,7 @@ grant Gingeras
 lab RIKEN
 labExpId I42
 localization cytosol
-md5sum 4f4d4cbaff9fc82b473d1295e50d68a9
+md5sum 96d301a41cebd3f2b3f0b6d30f83171b
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -7141,7 +7141,7 @@ grant Gingeras
 lab RIKEN
 labExpId I42
 localization cytosol
-md5sum 69355df2a822905da656e1e8a5256356
+md5sum bd0d4473bd0de3317a08852a7f95851e
 project wgEncode
 rnaExtract longNonPolyA
 subId 4514
@@ -7472,7 +7472,7 @@ grant Gingeras
 lab RIKEN
 labExpId J89
 localization cytosol
-md5sum 8fbbb9aeb0f5ea42681994c970f68958
+md5sum 66622788bfa7867bbfd53e3464f124c8
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -7497,7 +7497,7 @@ grant Gingeras
 lab RIKEN
 labExpId J90
 localization cytosol
-md5sum 7a2b2712a012cd2f641c4a9cf2f0567a
+md5sum 9284f1dc696bc0d6ddcd696fb3f16bdd
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -7522,7 +7522,7 @@ grant Gingeras
 lab RIKEN
 labExpId J89,J90
 localization cytosol
-md5sum 0dbcfdad1b806f358beccefa182ff6b7
+md5sum 60c5bef504aa84c8f3452a401e250af8
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -7696,7 +7696,7 @@ grant Gingeras
 lab RIKEN
 labExpId I68
 localization nucleolus
-md5sum fc15bf347bc65f48d85a7023a69307d8
+md5sum ce7414eb4bb738ac9cd421b02f4ae1a9
 project wgEncode
 rnaExtract total
 subId 2433
@@ -7719,7 +7719,7 @@ grant Gingeras
 lab RIKEN
 labExpId I68
 localization nucleolus
-md5sum b8e6ac9083b35bc2d975acc006b12be7
+md5sum f73e9f94524221f59765ae0ea4ab31ef
 project wgEncode
 rnaExtract total
 subId 4519
@@ -7870,7 +7870,7 @@ geoSampleAccession GSM849345
 grant Gingeras
 lab RIKEN
 localization nucleus
-md5sum 03303fa51c6164b304c2ed50deb916db
+md5sum beeabe1b50f52f84a613ba2d37473847
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -7972,7 +7972,7 @@ grant Gingeras
 lab RIKEN
 labExpId I44
 localization nucleus
-md5sum 03303fa51c6164b304c2ed50deb916db
+md5sum beeabe1b50f52f84a613ba2d37473847
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -7995,7 +7995,7 @@ grant Gingeras
 lab RIKEN
 labExpId I44
 localization nucleus
-md5sum bbd730b098c78868bfddade44545455f
+md5sum b5f4f44fde655f7e3701875095665b2b
 project wgEncode
 rnaExtract longNonPolyA
 subId 4512
@@ -8326,7 +8326,7 @@ grant Gingeras
 lab RIKEN
 labExpId J98
 localization nucleus
-md5sum c8f912f5218c074fe4eb7b0330d4402f
+md5sum 6281fe7344b8068fd76b57c14cf9cb61
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -8351,7 +8351,7 @@ grant Gingeras
 lab RIKEN
 labExpId J99
 localization nucleus
-md5sum 705e67a50698e2e90bcf0bda168c3721
+md5sum 32d6ac6b48b5d5a57a17eeb005845310
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -8376,7 +8376,7 @@ grant Gingeras
 lab RIKEN
 labExpId J98,J99
 localization nucleus
-md5sum 1673ba173a7af98a615d7b5a172f1874
+md5sum 193e981a4acfb1767c690433abc71fcf
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -10797,7 +10797,7 @@ grant Gingeras
 lab RIKEN
 labExpId J78
 localization cell
-md5sum a1c85ed9f1edd7fee962c93d5878ed18
+md5sum 05685594e155c33386e463d3d42b1592
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -10822,7 +10822,7 @@ grant Gingeras
 lab RIKEN
 labExpId J79
 localization cell
-md5sum 03be2619488234789125162894879e2e
+md5sum 69437ea2c9b2a78278e6f1e50c1a0b33
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -10847,7 +10847,7 @@ grant Gingeras
 lab RIKEN
 labExpId J78,J79
 localization cell
-md5sum 67489ff0adc8f8c09b908edff8bab0f5
+md5sum 032b9e1809a4993c2d3e8442d9d72142
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -10974,7 +10974,7 @@ geoSampleAccession GSM849350
 grant Gingeras
 lab RIKEN
 localization cytosol
-md5sum f595e2b2f31e1d5be33425131b561044
+md5sum d68e00e456608b90d3340578bcef160a
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -11076,7 +11076,7 @@ grant Gingeras
 lab RIKEN
 labExpId I72
 localization cytosol
-md5sum f595e2b2f31e1d5be33425131b561044
+md5sum d68e00e456608b90d3340578bcef160a
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -11099,7 +11099,7 @@ grant Gingeras
 lab RIKEN
 labExpId I72
 localization cytosol
-md5sum 1b5216d531a772fe0ce5df1a72f44193
+md5sum 7a15e490341fd955c3ef48eade9746c1
 project wgEncode
 rnaExtract longNonPolyA
 subId 4523
@@ -11430,7 +11430,7 @@ grant Gingeras
 lab RIKEN
 labExpId K03
 localization cytosol
-md5sum 7a7073171fa24bcbac35da28fce57622
+md5sum e64901fc3b901c948ddca1c4bf2cfcc5
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -11455,7 +11455,7 @@ grant Gingeras
 lab RIKEN
 labExpId K04
 localization cytosol
-md5sum 80f9a109c3769001e78f12701940aa6e
+md5sum 6efef534d2909964b534bc3a2536d7e3
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -11480,7 +11480,7 @@ grant Gingeras
 lab RIKEN
 labExpId K03,K04
 localization cytosol
-md5sum 27e96ed6b35f3f03a7d209e7a9502d06
+md5sum d0188926a6dd32bbf0b8768648a15c7a
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -11920,7 +11920,7 @@ grant Gingeras
 lab RIKEN
 labExpId K05
 localization nucleus
-md5sum b2436773be7fd0e1d2458a69484f53ef
+md5sum f9cc135cca9e65cfe20b3d6e7403bb07
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -11945,7 +11945,7 @@ grant Gingeras
 lab RIKEN
 labExpId K06
 localization nucleus
-md5sum 2cdc65a2b7537beac4272727ad90de5e
+md5sum 247cce4782779a20f48c5d0a8407f302
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -11970,7 +11970,7 @@ grant Gingeras
 lab RIKEN
 labExpId K05,K06
 localization nucleus
-md5sum fd1da2b073e5315f72377b74a61f43c9
+md5sum 5a1524e7996607fb768feffec68bd90b
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -13513,7 +13513,7 @@ grant Gingeras
 lab RIKEN
 labExpId J70
 localization cell
-md5sum acc5abcee6cfdfb9c2fad98ddb0154e0
+md5sum 9fa5e69c3d4cc16e3cac828e5e750f20
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -13538,7 +13538,7 @@ grant Gingeras
 lab RIKEN
 labExpId J71
 localization cell
-md5sum a03037ef99001eea0f238178024b822b
+md5sum 9c048e5938ae18420e6490473c99a822
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -13563,7 +13563,7 @@ grant Gingeras
 lab RIKEN
 labExpId J70,J71
 localization cell
-md5sum ec8f9f716ff2255a3e66ccb6c2ac0cdd
+md5sum dc96479e4e99898c7d61bc6d1697e0ba
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -13742,7 +13742,7 @@ grant Gingeras
 lab RIKEN
 labExpId I35
 localization chromatin
-md5sum e7b91fbdb9f9eac8018843d29034f46a
+md5sum 1cc5198e0171504bf322ffe6e56c42bb
 project wgEncode
 rnaExtract total
 subId 2433
@@ -13765,7 +13765,7 @@ grant Gingeras
 lab RIKEN
 labExpId I35
 localization chromatin
-md5sum bd2b281357f87f13534d58f8365d877a
+md5sum 402b309cac2e2839a02c3c75258e235e
 project wgEncode
 rnaExtract total
 subId 4516
@@ -13917,7 +13917,7 @@ geoSampleAccession GSM849353
 grant Gingeras
 lab RIKEN
 localization cytosol
-md5sum f66fed331f01cd38826cc9ef27af4dec
+md5sum aaaf93fdef20e44bef7b755cb6eafa75
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -13942,7 +13942,7 @@ geoSampleAccession GSM849353
 grant Gingeras
 lab RIKEN
 localization cytosol
-md5sum 503137391d3ae1bf419039cf08628549
+md5sum f59a10743632dc7c0b096f42cf6a4e5a
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -14045,7 +14045,7 @@ grant Gingeras
 lab RIKEN
 labExpId I22
 localization cytosol
-md5sum f66fed331f01cd38826cc9ef27af4dec
+md5sum aaaf93fdef20e44bef7b755cb6eafa75
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438
@@ -14069,7 +14069,7 @@ grant Gingeras
 lab RIKEN
 labExpId I22
 localization cytosol
-md5sum 503137391d3ae1bf419039cf08628549
+md5sum f59a10743632dc7c0b096f42cf6a4e5a
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438
@@ -14092,7 +14092,7 @@ grant Gingeras
 lab RIKEN
 labExpId I22
 localization cytosol
-md5sum ad261019740cf8d6dd841691bb31b2e0
+md5sum 78f9da37fee8723be7d5a14ea59bf92e
 project wgEncode
 rnaExtract longNonPolyA
 subId 4501
@@ -14554,7 +14554,7 @@ grant Gingeras
 lab RIKEN
 labExpId I40
 localization cytosol
-md5sum a9333f15e65df9547095a0c5e4c12503
+md5sum e0592429b9f0a5f521202790659e8aa3
 project wgEncode
 rnaExtract longPolyA
 subId 2433
@@ -14577,7 +14577,7 @@ grant Gingeras
 lab RIKEN
 labExpId J82
 localization cytosol
-md5sum afc57d65410893ab36a0eaad51f5e2dc
+md5sum 5f1238be6920dc23869318410c1addad
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -14602,7 +14602,7 @@ grant Gingeras
 lab RIKEN
 labExpId J83
 localization cytosol
-md5sum 72645dfebabab533fecf688bcaf079da
+md5sum 9c000f7e2d870101ef7093dfff43d891
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -14627,7 +14627,7 @@ grant Gingeras
 lab RIKEN
 labExpId J82,J83
 localization cytosol
-md5sum 3414a5d0b5885e68ca69de4e0d5e2bc3
+md5sum 6eb16316a72e6613d7898f419e9317e5
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -14748,7 +14748,7 @@ grant Gingeras
 lab RIKEN
 labExpId I33
 localization nucleolus
-md5sum fe79eac36ebccb42996f6564d9b2e370
+md5sum f524bb1dc39a0045b91d2cc19d1adec6
 project wgEncode
 rnaExtract total
 subId 2929
@@ -14771,7 +14771,7 @@ grant Gingeras
 lab RIKEN
 labExpId I33
 localization nucleolus
-md5sum da0e5b9709d2a74333146e247c085781
+md5sum c5a05dfe07287a865b65d23e159ed8a7
 project wgEncode
 rnaExtract total
 subId 4507
@@ -14974,7 +14974,7 @@ grant Gingeras
 lab RIKEN
 labExpId I34
 localization nucleoplasm
-md5sum 14e822fa3eb825ec9b71965e69c2fbfa
+md5sum 18b951622e82343c60ec991d946c2c80
 project wgEncode
 rnaExtract total
 subId 2433
@@ -14997,7 +14997,7 @@ grant Gingeras
 lab RIKEN
 labExpId I34
 localization nucleoplasm
-md5sum 537eb3084e7b1fe1355d51c864052501
+md5sum 69a3159c51d6adc9047c038c78619127
 project wgEncode
 rnaExtract total
 subId 4525
@@ -15146,7 +15146,7 @@ geoSampleAccession GSM849337
 grant Gingeras
 lab RIKEN
 localization nucleus
-md5sum 9d7b82387ebad327206f8450755d8064
+md5sum 3157c80ffbe34f481385d58e6ba015e3
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -15171,7 +15171,7 @@ geoSampleAccession GSM849337
 grant Gingeras
 lab RIKEN
 localization nucleus
-md5sum 17e7bf564ec690be04203e2f00c08fb0
+md5sum 7a6278ff2b4228af25c0ef82038b302a
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -15271,7 +15271,7 @@ grant Gingeras
 lab RIKEN
 labExpId I23
 localization nucleus
-md5sum 9d7b82387ebad327206f8450755d8064
+md5sum 3157c80ffbe34f481385d58e6ba015e3
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438
@@ -15295,7 +15295,7 @@ grant Gingeras
 lab RIKEN
 labExpId I23
 localization nucleus
-md5sum 17e7bf564ec690be04203e2f00c08fb0
+md5sum 7a6278ff2b4228af25c0ef82038b302a
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438
@@ -15318,7 +15318,7 @@ grant Gingeras
 lab RIKEN
 labExpId I23
 localization nucleus
-md5sum c0327cbaaf7e2753ca35b00435915c9d
+md5sum 219afcb8d1ca6063da98b32a8c788c72
 project wgEncode
 rnaExtract longNonPolyA
 subId 4537
@@ -15649,7 +15649,7 @@ grant Gingeras
 lab RIKEN
 labExpId J91
 localization nucleus
-md5sum 443107342a6cc9c0dbf6b7a4982f4b7d
+md5sum 311db9270ded082662c108218dc44223
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -15674,7 +15674,7 @@ grant Gingeras
 lab RIKEN
 labExpId J92
 localization nucleus
-md5sum 38a90912bd3faa0a7922b017afd685dc
+md5sum 18ad97363a6db77d49474fdc02429d37
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -15699,7 +15699,7 @@ grant Gingeras
 lab RIKEN
 labExpId J91,J92
 localization nucleus
-md5sum 35317534002907553886dc557ac955a9
+md5sum 111a88c53fd3dc0ab47d921148a8d779
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -15826,7 +15826,7 @@ geoSampleAccession GSM849354
 grant Gingeras
 lab RIKEN
 localization polysome
-md5sum 806eacce6b100c39691379c3d0f2c689
+md5sum 15d330184e3f51e4eac5478b2d1f604a
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -15928,7 +15928,7 @@ grant Gingeras
 lab RIKEN
 labExpId I32
 localization polysome
-md5sum 806eacce6b100c39691379c3d0f2c689
+md5sum 15d330184e3f51e4eac5478b2d1f604a
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -15951,7 +15951,7 @@ grant Gingeras
 lab RIKEN
 labExpId I32
 localization polysome
-md5sum e8e9e04367062b18b3cda02d4833760c
+md5sum 68410324788ab99eafe2e13e6f7a3e08
 project wgEncode
 rnaExtract longNonPolyA
 subId 4511
@@ -16255,7 +16255,7 @@ grant Gingeras
 lab RIKEN
 labExpId K11
 localization cell
-md5sum 9bd8a2a71306b9d94f44abe10cf2ad78
+md5sum cb3f964491ca3adf30f4fa6082d29363
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -16280,7 +16280,7 @@ grant Gingeras
 lab RIKEN
 labExpId K07,K11
 localization cell
-md5sum ccccc512cf479b0d8643dd787f1f4561
+md5sum d06d095e747daaf1137f81da567c2d80
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -17558,7 +17558,7 @@ grant Gingeras
 lab RIKEN
 labExpId J76
 localization cell
-md5sum 91f153e228713d2d1a13f59c1bbc5940
+md5sum e36c75543fd9e57d3254ab9ab082d6be
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -17583,7 +17583,7 @@ grant Gingeras
 lab RIKEN
 labExpId J77
 localization cell
-md5sum 3332bce9c14895d69029476b99cfcf9c
+md5sum 4e735ecd76e55d3e1b47f0b299b67adf
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -17608,7 +17608,7 @@ grant Gingeras
 lab RIKEN
 labExpId J76,J77
 localization cell
-md5sum 87467c120ff6dbaf356641f056345f11
+md5sum ce48cf1d307b8725c4555c88b956c598
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -17735,7 +17735,7 @@ geoSampleAccession GSM849346
 grant Gingeras
 lab RIKEN
 localization cytosol
-md5sum dc2f4bdb77604cc83ac513d1bce01e9c
+md5sum 9d03b4f6b30606abc1eab76a4223af9e
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -17837,7 +17837,7 @@ grant Gingeras
 lab RIKEN
 labExpId I70
 localization cytosol
-md5sum dc2f4bdb77604cc83ac513d1bce01e9c
+md5sum 9d03b4f6b30606abc1eab76a4223af9e
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -17860,7 +17860,7 @@ grant Gingeras
 lab RIKEN
 labExpId I70
 localization cytosol
-md5sum 001b69ac44954bc7f76715f19bc62ed4
+md5sum 7de935344118dd2c0c853d2dfcd4092a
 project wgEncode
 rnaExtract longNonPolyA
 subId 4533
@@ -18139,7 +18139,7 @@ grant Gingeras
 lab RIKEN
 labExpId K08
 localization cytosol
-md5sum 98d0763fc02162d12115b7945d95660e
+md5sum 75efcd24749256d1695653f345ef514c
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -18164,7 +18164,7 @@ grant Gingeras
 lab RIKEN
 labExpId K20
 localization cytosol
-md5sum b304c6e398746c4a887b39abd10c7e50
+md5sum 004cea6db848d9ced05a2f90a510673f
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -18189,7 +18189,7 @@ grant Gingeras
 lab RIKEN
 labExpId K08,K20
 localization cytosol
-md5sum cef0c282ea69c47517e16a07e7b572ca
+md5sum e2c39dc6ee97ac5872f4a2efa0cd0e31
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -18316,7 +18316,7 @@ geoSampleAccession GSM849347
 grant Gingeras
 lab RIKEN
 localization nucleus
-md5sum e14364084c863ce7581d29e6a05606d8
+md5sum 878ea53a02c3abbd147227af41b19194
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -18418,7 +18418,7 @@ grant Gingeras
 lab RIKEN
 labExpId I71
 localization nucleus
-md5sum e14364084c863ce7581d29e6a05606d8
+md5sum 878ea53a02c3abbd147227af41b19194
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -18441,7 +18441,7 @@ grant Gingeras
 lab RIKEN
 labExpId I71
 localization nucleus
-md5sum 37d7b6fecf0df39f6f5ddf6fefba4a13
+md5sum f9e5b12e82965c9d1b7e8c154dcb2140
 project wgEncode
 rnaExtract longNonPolyA
 subId 4538
@@ -18729,7 +18729,7 @@ grant Gingeras
 lab RIKEN
 labExpId K09
 localization nucleus
-md5sum ac5894359b16f3731a144ac0457aec50
+md5sum c236ae0b6d35366584b656068e9557ad
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -18782,7 +18782,7 @@ grant Gingeras
 lab RIKEN
 labExpId K09
 localization nucleus
-md5sum a4359018a31ea1259a6fad197a869d8c
+md5sum b90e2290be56f4844f30d0e74f34affc
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -19433,7 +19433,7 @@ geoSampleAccession GSM849336
 grant Gingeras
 lab RIKEN
 localization cell
-md5sum 9902b82d88eba04a6e257fb58fd6cd36
+md5sum d149812b46a088135f76b11ee02ca828
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -19458,7 +19458,7 @@ geoSampleAccession GSM849336
 grant Gingeras
 lab RIKEN
 localization cell
-md5sum ba14c8e25c45e02d92d4ae9705dd4669
+md5sum db1ae71115cabc68f4770cea867eaae8
 objStatus revoked - bad data from old release
 project wgEncode
 replicate 0
@@ -19561,7 +19561,7 @@ grant Gingeras
 lab RIKEN
 labExpId I09
 localization cell
-md5sum 9902b82d88eba04a6e257fb58fd6cd36
+md5sum d149812b46a088135f76b11ee02ca828
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438
@@ -19585,7 +19585,7 @@ grant Gingeras
 lab RIKEN
 labExpId I09
 localization cell
-md5sum ba14c8e25c45e02d92d4ae9705dd4669
+md5sum db1ae71115cabc68f4770cea867eaae8
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438
@@ -20723,7 +20723,7 @@ grant Gingeras
 lab RIKEN
 labExpId K14
 localization cell
-md5sum 32f189b19f433b49d0c7179945493373
+md5sum aa505f281a58a7364a46d78534344add
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -20748,7 +20748,7 @@ grant Gingeras
 lab RIKEN
 labExpId K15
 localization cell
-md5sum 2a25a6a95dc0aff867be7c50bd8ecded
+md5sum 5a506d27437e288f9672da2947864970
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -20773,7 +20773,7 @@ grant Gingeras
 lab RIKEN
 labExpId K14,K15
 localization cell
-md5sum 5cfcfa3ed99060207aa475c2e0db341d
+md5sum 8ad7deb793ed341deda73447d6d3e129
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -20806,4 +20806,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -1505429137
+# MAGIC: -112211321

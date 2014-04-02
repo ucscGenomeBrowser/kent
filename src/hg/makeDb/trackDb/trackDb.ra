@@ -2385,6 +2385,7 @@ searchName oreg
 searchTable oreganno
 searchMethod exact
 query select chrom, chromStart, chromEnd, id from %s where id = '%s'
+termRegex OREG[0-9]+
 padding 500
 searchPriority 55
 

@@ -92,7 +92,7 @@ static struct dlList *sqlOpenConnections = NULL;
 static unsigned sqlNumOpenConnections = 0;
 
 char *defaultProfileName = "db";                  // name of default profile for main connection
-char *failoverProfPrefix = "slow-";                   // prefix for failover profile of main profile (="slow-db")
+char *failoverProfPrefix = "slow-";               // prefix for failover profile of main profile (="slow-db")
 static struct hash *profiles = NULL;              // profiles parsed from hg.conf, by name
 static struct sqlProfile *defaultProfile = NULL;  // default profile, also in profiles list
 static struct hash* dbToProfile = NULL;           // db to sqlProfile
@@ -1105,6 +1105,13 @@ va_end(args);
 noWarnAbort();
 }
 
+struct sqlConnection *sqlFailoverConn(struct sqlConnection *sc)
+/* returns the failover connection of a connection or NULL.
+ * (Needed because the sqlConnection is not in the .h file) */
+{
+return sc->failoverConn;
+}
+
 bool sqlConnMustUseFailover(struct sqlConnection *sc)
 /* Returns true if a connection has a failover connection and 
  * the current db does not exist on the main connection.
@@ -1172,7 +1179,8 @@ int mysqlError = mysql_real_query(sc->conn, query, strlen(query));
 if (mysqlError != 0 && sc->failoverConn && sameWord(sqlGetDatabase(sc), sqlGetDatabase(sc->failoverConn)))
     {
     if (monitorFlags & JKSQL_TRACE)
-        monitorPrint(sc, "SQL_FAILOVER", "%s -> %s", scConnProfile(sc), scConnProfile(sc->failoverConn));
+        monitorPrint(sc, "SQL_FAILOVER", "%s -> %s | %s", scConnProfile(sc),
+            scConnProfile(sc->failoverConn), query);
 
     sc = sc->failoverConn;
     sqlConnectIfUnconnected(sc, TRUE);

@@ -62,7 +62,7 @@ else
 	}
     else
         {
-	safef(query, sizeof(query), 
+	sqlSafef(query, sizeof(query), 
 	    "select count(*) from edwFile where submitId=%u and errorMessage != ''",
 	    sub->id);
 	int errCount = sqlQuickNum(conn, query);
@@ -90,7 +90,7 @@ if (sameString(status, "error"))
 	addErrFile(dy, errCount, sub->url, sub->errorMessage);
 	++errCount;
 	}
-    safef(query, sizeof(query), "select * from edwFile where submitId=%u and errorMessage != ''",
+    sqlSafef(query, sizeof(query), "select * from edwFile where submitId=%u and errorMessage != ''",
 	sub->id);
     struct edwFile *file, *fileList = edwFileLoadByQuery(conn, query);
     for (file = fileList; file != NULL; file = file->next)

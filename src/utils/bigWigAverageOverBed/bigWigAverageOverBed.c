@@ -12,13 +12,14 @@
 
 
 char *bedOut = NULL;
+char *statsRa = NULL;
 int sampleAroundCenter = 0;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bigWigAverageOverBed - Compute average score of big wig over each bed, which may have introns.\n"
+  "bigWigAverageOverBed v2 - Compute average score of big wig over each bed, which may have introns.\n"
   "usage:\n"
   "   bigWigAverageOverBed in.bw in.bed out.tab\n"
   "The output columns are:\n"
@@ -29,6 +30,7 @@ errAbort(
   "   mean0 - average over bases with non-covered bases counting as zeroes\n"
   "   mean - average over just covered bases\n"
   "Options:\n"
+  "   -stats=stats.ra - Output a collection of overall statistics to stat.ra file\n"
   "   -bedOut=out.bed - Make output bed that is echo of input bed but with mean column appended\n"
   "   -sampleAroundCenter=N - Take sample at region N bases wide centered around bed item, rather\n"
   "                     than the usual sample in the bed item.\n"
@@ -37,6 +39,7 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"bedOut", OPTION_STRING},
+   {"stats", OPTION_STRING},
    {"sampleAroundCenter", OPTION_INT},
    {NULL, 0},
 };
@@ -96,6 +99,49 @@ if (f != NULL)
     }
 }
 
+double sumSum;
+long long sumCoverage;
+long long sumSize;
+
+void updateSums(double sum, int coverage, int size)
+/* Just add to the above three numbers. */
+{
+sumSum += sum;
+sumCoverage += coverage;
+sumSize += size;
+}
+
+long long bbiTotalChromSize(struct bbiFile *bbi)
+/* Return sum of sizes of all chromosomes */
+{
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+long long total = 0;
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    total += chrom->size;
+bbiChromInfoFreeList(&chromList);
+return total;
+}
+
+/* Return all chromosomes in file.  Dispose of this with bbiChromInfoFreeList. */
+void outputSums(char *fileName, struct bbiFile *bbi)
+/* Write a little .ra file with results of sums. */
+{
+FILE *f = mustOpen(fileName, "w");
+struct bbiSummaryElement sumEl = bbiTotalSummary(bbi);
+double totalSignal = sumEl.sumData;
+long long basesInGenome = bbiTotalChromSize(bbi);
+fprintf(f, "spotRatio %g\n", sumSum/totalSignal);
+fprintf(f, "enrichment %g\n", (sumSum/sumSize) / (totalSignal/basesInGenome));
+fprintf(f, "maxEnrichment %g\n", (double)basesInGenome/sumSize);
+fprintf(f, "basesInGenome %lld\n", basesInGenome);
+fprintf(f, "basesInSpots %lld\n", sumSize);
+fprintf(f, "basesInSpotsWithSignal %lld\n", sumCoverage);
+fprintf(f, "sumSignal %g\n", totalSignal);
+fprintf(f, "spotSumSignal %g\n", sumSum);
+carefulClose(&f);
+}
+
+
 void averageFetchingEachBlock(struct bbiFile *bbi, struct bed *bedList, int fieldCount, 
 	FILE *f, FILE *bedF)
 /* Do the averaging fetching each block from bedList from bigWig.  Fastest for short bedList. */
@@ -138,6 +184,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	 mean = sum/coverage;
     fprintf(f, "%s\t%d\t%d\t%g\t%g\t%g\n", bed->name, size, coverage, sum, sum/size, mean);
     optionallyPrintBedPlus(bedF, bed, fieldCount, mean);
+    updateSums(sum, coverage, size);
     }
 }
 
@@ -237,6 +284,7 @@ for (bedList = *pBedList; bedList != NULL; bedList = nextChrom)
 		 mean = sum/coverage;
 	    fprintf(f, "%s\t%d\t%d\t%g\t%g\t%g\n", bed->name, size, coverage, sum, sum/size, mean);
 	    optionallyPrintBedPlus(bedF, bed, fieldCount, mean);
+	    updateSums(sum, coverage, size);
 	    }
 	verboseDot();
 	}
@@ -284,6 +332,8 @@ if (blockCount < 3000)
     averageFetchingEachBlock(bbi, bedList, fieldCount, f, bedF);
 else
     averageFetchingEachChrom(bbi, &bedList, fieldCount, f, bedF);
+if (statsRa != NULL)
+    outputSums(statsRa, bbi);
 
 carefulClose(&bedF);
 carefulClose(&f);
@@ -296,6 +346,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 bedOut = optionVal("bedOut", bedOut);
+statsRa = optionVal("stats", statsRa);
 sampleAroundCenter = optionInt("sampleAroundCenter", sampleAroundCenter);
 bigWigAverageOverBed(argv[1], argv[2], argv[3]);
 return 0;

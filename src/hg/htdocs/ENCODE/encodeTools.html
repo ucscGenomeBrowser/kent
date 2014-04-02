@@ -27,7 +27,7 @@
                   <li><a href="#other">Other Tools</a></li>
                 </ul>
                 </p>
-                <p class="date">Updated 25 July 2012</p>
+                <p class="date">Updated 21 March 2014</p>
 
                </div><!--end content-->
        </div><!--end wrapper-->
@@ -38,40 +38,6 @@
                         <h4>ChIP-seq Peak Callers</h4>
 
                       <ul>
-                        <p><li>
-                        <a class="thick" href="http://liulab.dfci.harvard.edu/MACS/" target="_blank">MACS</a><br>
-                        A widely-used, fast, robust ChIP-seq peak-finding algorithm that accounts for the offset
-                        in forward-strand and reverse-strand reads to improve resolution and uses a dynamic Poisson
-                        distribution to effectively capture local biases in the genome.  MACS 1.4 is being used for
-                        the current uniform peak calling pipeline.
-                        </p>
-
-                        <p>
-                        Feng J, Liu T, Zhang Y.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/21633945" target="_blank">
-                        Using MACS to identify peaks from ChIP-Seq data</a>.
-                        <em>Curr Protoc Bioinformatics</em>. 2011 Jun;Chapter 2:Unit 2.14.
-                        </p>
-
-                        <p>
-                        Zhang Y, Liu T, Meyer CA, Eeckhoute J, Johnson DS, Bernstein BE, Nusbaum C, Myers RM, Brown M, Li W <em>et al</em>.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/18798982" target="_blank">
-                        Model-based analysis of ChIP-Seq (MACS)</a>.
-                        <em>Genome Biol</em>. 2008;9(9):R137.
-                        </li></p>
-
-                        <p><li>
-                        <a class="thick" href="http://info.gersteinlab.org/PeakSeq" target="_blank">PeakSeq</a><br>
-                        Identifies enriched regions in ChIP-seq type experiments and explicitly compares signal
-                        experiments to control experiments.
-                        </p>
-
-                        <p>
-                        Rozowsky J, Euskirchen G, Auerbach RK, Zhang ZD, Gibson T, Bjornson R, Carriero N, Snyder M, Gerstein MB.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/19122651" target="_blank">
-                        PeakSeq enables systematic scoring of ChIP-seq experiments relative to controls</a>.
-                        <em>Nat Biotechnol</em>. 2009 Jan;27(1):66-75.
-                        </li></p>
 
                         <p><li>
                         <a class="thick" href="http://compbio.med.harvard.edu/Supplements/ChIP-seq/" target="_blank">SPP</a><br>
@@ -79,21 +45,116 @@
                         in forward-strand and reverse-strand reads to improve resolution, compares enrichment in
                         signal to background or control experiments, and can also estimate whether the available number
                         of reads is sufficient to achieve saturation, meaning that additional reads would not allow
-                        identification of additional peaks.
+                        identification of additional peaks. SPP will be used in the ENCODE 3 uniform peak calling pipeline.
                         </p>
-
                         <p>
                         Kharchenko PV, Tolstorukov MY, Park PJ.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/19029915" target="_blank">
+                        <a href="http://dx.doi.org/10.1038/nbt.1508" target="_blank">
                         Design and analysis of ChIP-seq experiments for DNA-binding proteins</a>.
                         <em>Nat Biotechnol</em>. 2008 Dec;26(12):1351-9.
+                        PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/19029915" target="_blank">19029915</a>; PMC: <a
+                        href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2597701" target="_blank">PMC2597701</a>
                         </li></p>
+
+                        <p><li>
+                        <a class="thick" href="http://sysbio.mit.edu/gem/" target="_blank">GEM</a><br>
+                        GEM is a Java software package for analyzing genome wide ChIP-seq/ChIP-exo data.
+                        GEM can decompose single observed peaks into multiple binding events, determine
+                        binding event location at high spatial resolution, and discover explanatory DNA
+                        sequence motifs with an integrated model of ChIP reads and proximal DNA sequences.
+                        GEM is able to process single-end or paired-end data and can be run in single-condition
+                        mode or multi-condition mode.  GEM will be used in the ENCODE 3 uniform peak calling pipeline.
+                        </p>
+                        <p>
+                        Guo Y, Mahony S, Gifford DK.
+                        <a href="http://dx.plos.org/10.1371/journal.pcbi.1002638" target="_blank">
+                        High resolution genome wide binding event finding and motif discovery reveals transcription factor
+                        spatial binding constraints</a>.
+                        <em>PLoS Comput Biol</em>. 2012;8(8):e1002638.
+                        PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22912568" target="_blank">22912568</a>; PMC: <a
+                        href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3415389" target="_blank">PMC3415389</a>
+                        </li></p>
+
+                        <p><li>
+                        <a class="thick" href="http://info.gersteinlab.org/PeakSeq" target="_blank">PeakSeq</a><br>
+                        Identifies enriched regions in ChIP-seq type experiments and explicitly compares signal
+                        experiments to control experiments. PeakSeq will be used in the ENCODE 3 uniform peak calling
+                        pipeline.
+                        </p>
+                        <p>
+                        Rozowsky J, Euskirchen G, Auerbach RK, Zhang ZD, Gibson T, Bjornson R, Carriero N, Snyder M,
+                        Gerstein MB.
+                        <a href="http://dx.doi.org/10.1038/nbt.1518" target="_blank">
+                        PeakSeq enables systematic scoring of ChIP-seq experiments relative to controls</a>.
+                        <em>Nat Biotechnol</em>. 2009 Jan;27(1):66-75.
+                        PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/19122651" target="_blank">19122651</a>; PMC: <a
+                        href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2924752" target="_blank">PMC2924752</a>
+                        </li></p>
+
+                        <p><li>
+                        <a class="thick" href="http://liulab.dfci.harvard.edu/MACS/" target="_blank">MACS</a><br>
+                        A widely-used, fast, robust ChIP-seq peak-finding algorithm that accounts for the offset
+                        in forward-strand and reverse-strand reads to improve resolution and uses a dynamic Poisson
+                        distribution to effectively capture local biases in the genome.  MACS 1.4 was used in
+                        the ENCODE 2 uniform peak calling pipeline.
+                        </p>
+                        <p>
+                        Feng J, Liu T, Zhang Y.
+                        <a href="http://dx.doi.org/10.1002/0471250953.bi0214s34" target="_blank">
+                        Using MACS to identify peaks from ChIP-Seq data</a>.
+                        <em>Curr Protoc Bioinformatics</em>. 2011 Jun;Chapter 2:Unit 2.14.
+                        PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/21633945" target="_blank">21633945</a>; PMC: <a
+                        href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3120977" target="_blank">PMC3120977</a>
+                        </p>
+                        <p>
+                        Zhang Y, Liu T, Meyer CA, Eeckhoute J, Johnson DS, Bernstein BE, Nusbaum C, Myers RM, Brown M, Li W
+                        <em>et al</em>.
+                        <a href="http://genomebiology.com/content/9/9/R137" target="_blank">
+                        Model-based analysis of ChIP-Seq (MACS)</a>.
+                        <em>Genome Biol</em>. 2008;9(9):R137.
+                        PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/18798982" target="_blank">18798982</a>; PMC: <a
+                        href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2592715" target="_blank">PMC2592715</a>
+                        </p>
+                        </li></p>
+
                       </ul>
 
                         <hr>
                         <h4>RNA-seq Analysis</h4>
 
                       <ul>
+                        <p><li>
+                        <a class="thick" href="https://github.com/alexdobin/STAR/releases" target="_blank">STAR</a><br>
+                        STAR (Spliced Transcript Alignment to a Reference) aligns short and long
+                        RNA-seq reads to a reference genome using uncompressed suffix arrays.
+                        </p>
+                        <p>
+                        Dobin A, Davis CA, Schlesinger F, Drenkow J, Zaleski C, Jha S, Batut P, Chaisson M, Gingeras TR.
+                        <a href="http://bioinformatics.oxfordjournals.org/cgi/pmidlookup?view=long&amp;pmid=23104886"
+                        target="_blank">
+                        STAR: ultrafast universal RNA-seq aligner</a>.
+                        <em>Bioinformatics</em>. 2013 Jan 1;29(1):15-21.
+                        PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/23104886" target="_blank">23104886</a>; PMC: <a
+                        href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3530905" target="_blank">PMC3530905</a>
+                        </p>
+                        </li></p>
+
+                        <p><li>
+                        <a class="thick" href="http://sammeth.net/confluence/display/FLUX/Home" target="_blank">Flux Capacitor</a><br>
+                        A program to estimate the frequencies of annotated transcripts (GTF format)
+                        from an RNA-Seq experiment, solving a linear program inferred from the
+                        observed read mappings (BAM format). There are options for single, stranded,
+                        and/or paired-end reads.
+                        </p>
+                        <p>
+                        Montgomery SB, Sammeth M, Gutierrez-Arcelus M, Lach RP, Ingle C, Nisbett J, Guigo R, Dermitzakis ET.
+                        <a href="http://dx.doi.org/10.1038/nature08903" target="_blank">
+                        Transcriptome genetics using second generation sequencing in a Caucasian population</a>.
+                        <em>Nature</em>. 2010 Apr 1;464(7289):773-7.
+                        PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/20220756" target="_blank">20220756</a>; PMC: <a
+                        href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3836232" target="_blank">PMC3836232</a>
+                        </li></p>
+
                         <p><li>
                         <a class="thick" href="http://info.gersteinlab.org/FusionSeq" target="_blank">FusionSeq</a><br>
                         A computational framework that detects chimeric transcripts from paired-end RNA-seq experiments.
@@ -349,7 +410,7 @@
                         <a name="spot" class="thick">SPOT (Signal Portion of Tags)</a><br>
                         Measures signal-to-noise in genome-wide epigenetic profiling assays by calculating the fraction
                         of reads that fall in tag-enriched regions (see the <a href="#hotspot">Hotspot</a> program,
-                        described above) from a sample of 10 million reads.  The SPOT methodology can be generalized to
+                        described above) from a sample of 5 million reads.  The SPOT methodology can be generalized to
                         use any peak-finder.  A publication of SPOT and a more complete description are in preparation.
                         </li></p>
                       </ul>

@@ -1768,6 +1768,19 @@ void omimGeneUI(struct trackDb *tdb)
 omimGeneIdConfig(tdb);
 }
 
+void ensGeneIdConfig(struct trackDb *tdb)
+/* Put up gene ID track controls */
+{
+char varName[64];
+char *geneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->track);
+geneLabel = cartUsualString(cart, varName, "transcript");
+printf("<B>Label:</B> ");
+radioButton(varName, geneLabel, "accession");
+radioButton(varName, geneLabel, "ensembl");
+radioButton(varName, geneLabel, "gene");
+}
+
 void geneIdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
@@ -1856,6 +1869,16 @@ printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "gene", "gene", FALSE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 
+baseColorDrawOptDropDown(cart, tdb);
+}
+
+void ensGeneUI(struct trackDb *tdb)
+/* Put up Ensembl Gene track-specific controls */
+{
+ensGeneIdConfig(tdb);
+printf("<BR>\n");
+
+/* Put up codon coloring stuff. */
 baseColorDrawOptDropDown(cart, tdb);
 }
 
@@ -2800,6 +2823,8 @@ else if (startsWith("ucscRetro", track)
     retroGeneUI(tdb);
 else if (sameString(track, "ensGeneNonCoding"))
     ensemblNonCodingUI(tdb);
+else if (sameString(track, "ensGene"))
+    ensGeneUI(tdb);
 else if (sameString(track, "vegaGeneComposite"))
     vegaGeneUI(tdb);
 else if (sameString(track, "rosetta"))

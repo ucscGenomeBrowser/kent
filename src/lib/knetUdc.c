@@ -83,4 +83,12 @@ void knetUdcInstall()
 knet_init_alt(kuOpen, kuDopen, kuRead, kuSeek, kuTell, kuClose);
 }
 
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
+
+#else// no (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
+
+void knetUdcInstall()
+/* Required libs aren't installed; do nothing. */
+{
+}
+
+#endif

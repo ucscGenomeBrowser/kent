@@ -12,6 +12,9 @@
 #include "trashDir.h"
 #include "vcf.h"
 #include "vcfUi.h"
+#include "knetUdc.h"
+#include "udc.h"
+
 
 static boolean getMinQual(struct trackDb *tdb, double *retMinQual)
 /* Return TRUE and set retMinQual if cart contains minimum QUAL filter */
@@ -130,6 +133,26 @@ else
 		maxAltFreq = altFreq;
 	    }
 	}
+    else
+        // Use MAF for alternate allele freqs from MAF:
+        {
+        const struct vcfInfoElement *mafEl = vcfRecordFindInfo(record, "MAF");
+        const struct vcfInfoDef *mafDef = vcfInfoDefForKey(vcff, "MAF");
+        if (mafEl != NULL && mafDef != NULL && mafDef->type == vcfInfoString
+        && startsWith("Minor Allele Frequency",mafDef->description))
+            {
+            // If INFO includes alt allele freqs, use them directly.
+            gotInfo = TRUE;
+
+            if (mafEl->count >= 1 && !mafEl->missingData[mafEl->count-1])
+                {
+                char data[64];
+                safecpy(data,sizeof(data),mafEl->values[mafEl->count-1].datString);
+                maxAltFreq = atof(lastWordInLine(data));
+                refFreq -= maxAltFreq;
+                }
+            }
+        }
     }
 if (gotInfo)
     {
@@ -1132,11 +1155,6 @@ pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, psvs->vcfEnd,
 
 #ifdef USE_TABIX
 
-#ifdef KNETFILE_HOOKS
-#include "knetUdc.h"
-#include "udc.h"
-#endif//def KNETFILE_HOOKS
-
 static void vcfTabixLoadItems(struct track *tg)
 /* Load items in window from VCF file using its tabix index file. */
 {
@@ -1193,9 +1211,7 @@ errCatchFree(&errCatch);
 void vcfTabixMethods(struct track *track)
 /* Methods for VCF + tabix files. */
 {
-#ifdef KNETFILE_HOOKS
 knetUdcInstall();
-#endif
 pgSnpMethods(track);
 track->mapItem = indelTweakMapItem;
 // Disinherit next/prev flag and methods since we don't support next/prev:

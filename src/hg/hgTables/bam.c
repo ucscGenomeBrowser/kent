@@ -24,11 +24,6 @@
 #include "asFilter.h"
 #include "xmlEscape.h"
 #include "hgBam.h"
-#if (defined USE_BAM && defined KNETFILE_HOOKS)
-#include "knetUdc.h"
-#include "udc.h"
-#endif//def USE_BAM && KNETFILE_HOOKS
-
 
 boolean isBamTable(char *table)
 /* Return TRUE if table corresponds to a BAM file. */
