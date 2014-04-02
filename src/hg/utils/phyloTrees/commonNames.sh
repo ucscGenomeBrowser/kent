@@ -13,6 +13,7 @@ export F=$1
 /cluster/bin/phast/tree_doctor \
 -r \
 "hg19 -> Human ;
+hg38 -> Human ;
 panTro3 -> Chimp ;
 panTro4 -> Chimp ;
 panPan1 -> Bonobo ;
