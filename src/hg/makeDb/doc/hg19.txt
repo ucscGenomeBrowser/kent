@@ -24252,7 +24252,13 @@ TMPDIR=/scratch/tmp
 
 
 ##############################################################################
-# DBSNP B138 / SNP138 (DONE 10/21/13)
+# DBSNP B138 / SNP138 (DONE 3/28/14)
+# Redone from scratch 3/28/14 after finding that the FTP files available when b138
+# was announced were outdated and were replaced a few weeks after the announcement.
+# 1.2million SNPs were dropped because they were not in the fasta files.  Next time,
+# check dates and pay more attention to line count of snp138Errors.bed.gz.  (#12975)
+# The script ran uneventfully.
+# Partially redone 8/19/13, 10/21/13 to fix allele freq script bugs.
 # Redmine #11438
     mkdir -p /hive/data/outside/dbSNP/138/human
     cd /hive/data/outside/dbSNP/138/human
@@ -24369,7 +24375,9 @@ EOF
 
 
 #############################################################################
-# FILTER SNP138 (DONE 10/22/13 angie)
+# FILTER SNP138 (DONE 3/28/14 angie)
+# Redone 3/28/14 after redo w/new b138 FTP files (#12975).
+# Redone 10/22/13.
    # Redmine #11438
    # Make several tracks that are filtered subsets of snp138:
    # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp138Mult
@@ -24379,13 +24387,18 @@ EOF
    cd /hive/data/outside/dbSNP/138/human
    zcat snp138.bed.gz \
    | ~/kent/src/hg/utils/automation/categorizeSnps.pl
+#Mult:     3617212
+#Common:   14056661
+#Flagged:  91499
+#leftover: 47699648
+   foreach f ({Mult,Common,Flagged}.bed.gz)
+     mv $f snp138$f
+   end
+   # Compare to counts from 10/22, before complete re-run w/updated FTP files:
 #Mult:     3616194
 #Common:   14056510
 #Flagged:  90349
 #leftover: 46502161
-   foreach f ({Mult,Common,Flagged}.bed.gz)
-     mv $f snp138$f
-   end
    # Compare to counts from before fixing #11954 ('-' appearing twice in alleles):
 #Mult:     3616194
 #Common:   14056627
@@ -24412,6 +24425,8 @@ EOF
 
 #############################################################################
 # SNP138 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 8/1/13 angie)
+# Redone 3/31/14 after redo w/new b138 FTP files (#12975).
+# Previously done 8/1/13
    # Redmine #11438
    mkdir /hive/data/genomes/hg19/bed/snp138Ortho
    cd /hive/data/genomes/hg19/bed/snp138Ortho
@@ -24448,12 +24463,12 @@ EOF
    ssh swarm
    cd /hive/data/genomes/hg19/bed/snp138Ortho/run.liftOChimp
    para make jobList
-#Completed: 5304 of 5304 jobs
-#CPU time in finished jobs:     475962s    7932.71m   132.21h    5.51d  0.015 y
-#IO & Wait Time:                 36627s     610.44m    10.17h    0.42d  0.001 y
-#Average job time:                  97s       1.61m     0.03h    0.00d
-#Longest finished job:             260s       4.33m     0.07h    0.00d
-#Submission to last job:          1031s      17.18m     0.29h    0.01d
+#Completed: 5404 of 5404 jobs
+#CPU time in finished jobs:     366531s    6108.84m   101.81h    4.24d  0.012 y
+#IO & Wait Time:                 18722s     312.04m     5.20h    0.22d  0.001 y
+#Average job time:                  71s       1.19m     0.02h    0.00d
+#Longest finished job:             270s       4.50m     0.07h    0.00d
+#Submission to last job:          1562s      26.03m     0.43h    0.02d
 
    # Map coords to orangutan using liftOver.
    mkdir ../run.liftOPon
@@ -24468,12 +24483,12 @@ EOF
        >> jobList
    end
    para make jobList
-#Completed: 5304 of 5304 jobs
-#CPU time in finished jobs:    1041993s   17366.55m   289.44h   12.06d  0.033 y
-#IO & Wait Time:                 62886s    1048.10m    17.47h    0.73d  0.002 y
-#Average job time:                 208s       3.47m     0.06h    0.00d
-#Longest finished job:             591s       9.85m     0.16h    0.01d
-#Submission to last job:          2247s      37.45m     0.62h    0.03d
+#Completed: 5404 of 5404 jobs
+#CPU time in finished jobs:     737428s   12290.47m   204.84h    8.54d  0.023 y
+#IO & Wait Time:                 24367s     406.12m     6.77h    0.28d  0.001 y
+#Average job time:                 141s       2.35m     0.04h    0.00d
+#Longest finished job:             653s      10.88m     0.18h    0.01d
+#Submission to last job:          3135s      52.25m     0.87h    0.04d
 
    # Map coords to macaque using liftOver.
    mkdir ../run.liftOMac
@@ -24488,12 +24503,12 @@ EOF
        >> jobList
    end
    para make jobList
-#Completed: 5304 of 5304 jobs
-#CPU time in finished jobs:    1235025s   20583.75m   343.06h   14.29d  0.039 y
-#IO & Wait Time:                 73046s    1217.44m    20.29h    0.85d  0.002 y
-#Average job time:                 247s       4.11m     0.07h    0.00d
-#Longest finished job:             667s      11.12m     0.19h    0.01d
-#Submission to last job:          2932s      48.87m     0.81h    0.03d
+#Completed: 5404 of 5404 jobs
+#CPU time in finished jobs:     783517s   13058.61m   217.64h    9.07d  0.025 y
+#IO & Wait Time:                 24306s     405.10m     6.75h    0.28d  0.001 y
+#Average job time:                 149s       2.49m     0.04h    0.00d
+#Longest finished job:             653s      10.88m     0.18h    0.01d
+#Submission to last job:          5939s      98.98m     1.65h    0.07d
 
    cd /hive/data/genomes/hg19/bed/snp138Ortho
    # Concatenate the chimp results, sorting by chimp pos in order to
@@ -24511,9 +24526,9 @@ EOF
    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/rheMac3/rheMac3.2bit \
    | sort > rheMac3.orthoGlom.txt
    wc -l panTro4.orthoGlom.txt ponAbe2.orthoGlom.txt rheMac3.orthoGlom.txt
-#   49906656 panTro4.orthoGlom.txt
-#   47488075 ponAbe2.orthoGlom.txt
-#   42882640 rheMac3.orthoGlom.txt
+#   50847196 panTro4.orthoGlom.txt
+#   48383647 ponAbe2.orthoGlom.txt
+#   43702072 rheMac3.orthoGlom.txt
 
    # Use the glommed name field as a key to join up chimp and macaque
    # allele data.  Include glommed name from both files because if only
@@ -24547,14 +24562,15 @@ EOF
    hgLoadBed -tab -onServer -tmpDir=/data/tmp -renameSqlTable \
      -sqlTable=$HOME/kent/src/hg/lib/snpOrthoPanPonRhe.sql \
      hg19 snp138OrthoPt4Pa2Rm3 snp138OrthoPt4Pa2Rm3.bed
-#Read 51604308 elements of size 22 from snp138OrthoPt4Pa2Rm3.bed
+#Read 52573568 elements of size 22 from snp138OrthoPt4Pa2Rm3.bed
    # Cleanup:
    rm -r run*/split tmp.txt
    gzip snp138ExcludeIds.txt snp138ForLiftOver.bed &
 
 
 ############################################################################
-# DBSNP CODING ANNOTATIONS (138) (DONE 8/1/13 angie)
+# DBSNP CODING ANNOTATIONS (138) (DONE 3/31/14 angie)
+   # Previously done 8/1/13
    cd /hive/data/outside/dbSNP/138/human
    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
    # For anything except an insertion (0 bases between flanks),
@@ -24563,87 +24579,58 @@ EOF
    # then look up each ID in ncbiFuncAnnotations.txt to tell which
    # transform to apply.
    # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
-   zcat ncbiFuncAnnotations.txt.gz \
-   | perl -we 'open($IDS, "zcat ncbiFuncInsertions.ctg.bed.gz |") || die "ids: $!"; \
-             while (<$IDS>) { chomp; $ids{$_} = 1; } \
-             close($IDS); \
-             %coding = (2=>1, 3=>1, 4=>1, 8=>1, 9=>1, 41=>1, 42=>1, 43=>1, 44=>1, 45=>1); \
-             while (<>) { \
-               chomp;  @w = split("\t"); # id, ctg, start, end, ... \
-               next unless $coding{$w[5]}; \
-               $bed4 = join("\t", $w[1], $w[2], $w[3], $w[0]); \
-               if (exists $ids{$bed4} && $w[3] == $w[2]+1) { \
-                 $w[2]++; # 2-base insertions: increment start coord \
-               } else { \
-                 $w[3]++; # increment end coord to get half-open \
-               } \
-               print join("\t", @w) . "\n"; \
-             }' \
-   | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
-   | uniq \
-     > ncbiCodingAnnotations.txt
-   wc -l ncbiCodingAnnotations.txt
-#6283172 ncbiCodingAnnotations.txt
+    zcat ncbiFuncAnnotations.txt.gz \
+    | ~/kent/src/hg/utils/automation/fixNcbiFuncCoords.pl ncbiFuncInsertions.ctg.bed.gz \
+    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
+    | uniq \
+      > ncbiFuncAnnotationsFixed.txt
+    wc -l ncbiFuncAnnotationsFixed.txt
+
+#6187796 ncbiFuncAnnotationsFixed.txt
    # How many & what kinds of function types?
-   cut -f 6 ncbiCodingAnnotations.txt \
+   cut -f 6 ncbiFuncAnnotationsFixed.txt \
    | sort -n | uniq -c
-#1030099 3   (coding-synon)
-#2874272 8   (cds-reference -- ignored)
-#  51472 41  (nonsense)
-#1790294 42  (missense)
-#   1677 43  (stop-loss)
-#  53215 44  (frameshift)
-# 482143 45  (cds-indel)
+#1013446 3  (coding-synon)            
+#2830106 8  (cds-reference -- ignored)
+#  50753 41 (nonsense)                
+#1762922 42 (missense)                
+#   1623 43 (stop-loss)               
+#  51453 44 (frameshift)              
+# 477493 45 (cds-indel)
 
    # In b138, the functional annotations include non-coding (frame = NULL),
    # which we'll exclude here because this is supposed to be just coding stuff...
    # probably need to update how we show dbSNP's func annos anyway, e.g.
    # it is a shame that we toss out codon number and transcript offset.
    # Gather up multiple annotation lines into one line per {snp, gene, frame}:
-   perl -e  'while (<>) { chomp; \
-               my ($rsId, $ctg, $s, $e, $txId, $fxn, $frm, $nt, $aa, $codon) = split("\t"); \
-               next if ($fxn == 8 && ($frm eq "NULL" && $aa eq "NULL" && $codon eq "NULL")); \
-               if (defined $lastRs && \
-                   ($lastRs != $rsId || $lastCtg ne $ctg || $lastS != $s || \
-                    $lastTx ne $txId || $lastFrm ne $frm)) { \
-                 if (defined $refRow) { \
-                   $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
-                   $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
-                 } \
-                 $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
-                       "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
-                 $lineOut =~ s@NULL@n/a@g; \
-                 print $lineOut; \
-                 $refRow = undef;  @rows = ();  ($count, $fxns, $nts, $codons, $aas) = (); \
-               } \
-               ($lastRs, $lastCtg, $lastS, $lastE, $lastTx, $lastFrm) = \
-                   ($rsId, $ctg, $s, $e, $txId, $frm); \
-               $count++; \
-               if ($fxn == 8) { \
-                 $refRow = [$fxn, $nt, $aa, $codon]; \
-               } else { \
-                $fxns .= "$fxn,";  $nts .= "$nt,";  $aas .= "$aa,";  $codons .= "$codon,"; \
-               } \
-             } \
-             if (defined $refRow) { \
-               $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
-               $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
-             } \
-             $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
-                   "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
-             $lineOut =~ s@NULL@n/a@g; \
-             print $lineOut;' \
-     ncbiCodingAnnotations.txt \
+   ~/kent/src/hg/utils/automation/collectNcbiFuncAnnotations.pl ncbiFuncAnnotationsFixed.txt \
    | liftUp snp138CodingDbSnp.bed /hive/data/genomes/hg19/jkStuff/liftContigs.lft warn stdin
+   # This had some hg19-specific warnings, e.g.
+#NC_012920 isn't in liftSpec file line 2973 of stdin
+#NC_012920 isn't in liftSpec file line 2981 of stdin
+   # That's the chrM hg19 didn't use.  We need to pull out NC_012920 lines and use
+   # liftOver instead of liftUp.
+   g -w NC_012920 ncbiFuncAnnotationsFixed.txt \
+   | ~/kent/src/hg/utils/automation/collectNcbiFuncAnnotations.pl \
+   | liftOver -tab -bedPlus=3 stdin /hive/data/outside/dbSNP/131/human/NC_012920ToChrM.over.chain \
+       snp138CodingDbSnp.chrM.bed snp138CodingDbSnp.chrM.unmapped
+   # Now sort them back together:
+   mv snp138CodingDbSnp.bed snp138CodingDbSnp.allButChrM.bed
+   sort -k1,1 -k2n,2n snp138CodingDbSnp.chrM.bed snp138CodingDbSnp.allButChrM.bed \
+     > snp138CodingDbSnp.bed
+
+   # Load table
    hgLoadBed hg19 snp138CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
      -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
      snp138CodingDbSnp.bed
-#Read 3264160 elements of size 11 from snp138CodingDbSnp.bed
+#Read 3278887 elements of size 11 from snp138CodingDbSnp.bed
 
 
 ############################################################################
-# SNPMASKED SEQUENCE FOR SNP138 (DONE 3/17/14 angie)
-# Originally done 8/19/13, but user reported in MLQ #12902 that not all files were gzipped.
+# SNPMASKED SEQUENCE FOR SNP138 (DONE 3/31/14 angie)
+# Redone 3/31/14 after redo w/new b138 FTP files (#12975).
+# Updated 3/17/14 when user reported in MLQ #12902 that not all files were gzipped.
+# Originally done 8/19/13.
    mkdir /hive/data/genomes/hg19/snp138Mask
    cd /hive/data/genomes/hg19/snp138Mask
    # Identify rsIds with various problems -- we will exclude those.
@@ -24655,13 +24642,13 @@ EOF
    | grep -vFwf snp138ExcludeRsIds.txt \
      > snp138Cleaned.bed
    wc -l snp138Cleaned.bed
-#59750537 snp138Cleaned.bed
+#60882371 snp138Cleaned.bed
 
    # Substitutions:
    mkdir substitutions
    snpMaskSingle snp138Cleaned.bed /hive/data/genomes/hg19/hg19.2bit stdout diffObserved.txt \
    | faSplit byname stdin substitutions/
-#Masked 53195733 snps in 53195715 out of 3137040325 genomic bases
+#Masked 54208201 snps in 54208183 out of 3137040325 genomic bases
 #/hive/data/genomes/hg19/hg19.2bit has 3137161264 total bases, but the total number of bases in sequences for which we masked snps is 3137040325 (difference is 120939)
    # Check that 120939 is the total #bases in sequences with nothing in snp138Cleaned:
    grep -Fw single snp138Cleaned.bed | cut -f 1 | uniq > /data/tmp/1

@@ -19,6 +19,7 @@
 #include "joiner.h"
 #include "hubConnect.h"
 #include "trackHub.h"
+#include "hgConfig.h"
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
