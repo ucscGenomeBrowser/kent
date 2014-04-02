@@ -1105,6 +1105,13 @@ va_end(args);
 noWarnAbort();
 }
 
+struct sqlConnection *sqlFailoverConn(struct sqlConnection *sc)
+/* returns the failover connection of a connection or NULL.
+ * (Needed because the sqlConnection is not in the .h file) */
+{
+return sc->failoverConn;
+}
+
 bool sqlConnMustUseFailover(struct sqlConnection *sc)
 /* Returns true if a connection has a failover connection and 
  * the current db does not exist on the main connection.

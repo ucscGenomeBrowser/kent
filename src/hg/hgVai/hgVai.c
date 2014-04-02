@@ -532,6 +532,9 @@ char query[64];
 sqlSafef(query, sizeof(query), "show tables like 'snp1__%s'", suffix);
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *snpNNNTables = sqlQuickList(conn, query);
+if (slCount(snpNNNTables)==0 && sqlFailoverConn(conn)!=NULL)
+    snpNNNTables = sqlQuickList(sqlFailoverConn(conn), query);
+
 hFreeConn(&conn);
 if (snpNNNTables == NULL)
     return NULL;

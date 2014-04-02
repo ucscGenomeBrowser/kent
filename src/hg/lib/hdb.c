@@ -2433,10 +2433,19 @@ return genome;
 char *hDbDbNibPath(char *database)
 /* return nibPath from dbDb for database, has to be freed */
 {
-char *rawNibPath = hDbDbOptionalField(database, "nibPath");
-char *nibPath = hReplaceGbdb(rawNibPath);
-freez(&rawNibPath);
-return nibPath;
+char* seqDir = NULL;
+bool useNib = cfgOptionBooleanDefault("allowNib", TRUE);
+if (useNib)
+    seqDir = hDbDbOptionalField(database, "nibPath");
+else
+    {
+    char buf[4096];
+    safef(buf, sizeof(buf), "/gbdb/%s", database);
+    char *twoBitDir = hReplaceGbdbSeqDir(buf, database);
+    seqDir = twoBitDir;
+    fprintf(stderr, "twoBitDir %s\n", twoBitDir);
+    }
+return seqDir;
 }
 
 char *hGenome(char *database)

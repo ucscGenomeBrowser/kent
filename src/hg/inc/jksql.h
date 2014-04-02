@@ -680,4 +680,7 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
+struct sqlConnection *sqlCanFailover(struct sqlConnection *sc);
+/* returns the failover connection of a connection or NULL. */
+
 #endif /* JKSQL_H */
