@@ -39,6 +39,8 @@
 #include "hui.h"
 #include "trackHub.h"
 #include "udc.h"
+#include "paraFetch.h"
+#include "filePath.h"
 
 
 #ifdef LOWELAB
@@ -1265,16 +1267,9 @@ hFreeConn(&conn);
 return list;
 }
 
-char *hReplaceGbdb(char* fileName)
- /* Returns a gbdb filename, potentially rewriting it according to hg.conf
-  * If the settings gbdbLoc1 and gbdbLoc2 are found, try them in order, by 
-  * replacing /gbdb/ with the new locations.
-  * If after the replacement of gbdbLoc1 the resulting fileName does not exist,
-  * gbdbLoc2 is used.
-  * This function does not guarantee that the filename exists.
-  * We assume /gbdb/ does not appear somewhere inside a fileName.
-  * Result has to be free'd.
- * */
+char *hReplaceGbdbLocal(char* fileName)
+ /* Returns a gbdb filename, potentially rewriting it according to hg.conf's gbdbLoc1 */
+ /* Result has to be freed */
 {
 if (fileName==NULL)
     return fileName;
@@ -1283,16 +1278,31 @@ char* newGbdbLoc = cfgOption("gbdbLoc1");
 char* path;
 
 // if no config option set or not a /gbdb filename, then just return
-// otherwise replace /gbdb/ with the new prefix and return if exists.
+// otherwise replace /gbdb/ with the new prefix and return it
 if (newGbdbLoc==NULL || !startsWith("/gbdb/", fileName))
    return cloneString(fileName);
 
 path = replaceChars(fileName, "/gbdb/", newGbdbLoc);
+return path;
+}
+
+char *hReplaceGbdb(char* fileName)
+ /* Returns a gbdb filename, potentially rewriting it according to hg.conf
+  * If the settings gbdbLoc1 and gbdbLoc2 are found, try them in order, by 
+  * replacing /gbdb/ with the new locations.
+  * If after the replacement of gbdbLoc1 the resulting fileName does not exist,
+  * gbdbLoc2 is used.
+  * This function does not guarantee that the returned filename exists.
+  * We assume /gbdb/ does not appear somewhere inside a fileName.
+  * Result has to be free'd.
+ * */
+{
+char *path = hReplaceGbdbLocal(fileName);
 if (fileExists(path))
     return path;
 
 // if the file did not exist, replace with gbdbLoc2
-newGbdbLoc = cfgOption("gbdbLoc2");
+char* newGbdbLoc = cfgOption("gbdbLoc2");
 if (newGbdbLoc==NULL)
     return path;
 
@@ -1308,7 +1318,7 @@ char *hReplaceGbdbSeqDir(char *path, char *db)
  have to check if the 2bit file exists, do the rewriting, then strip off the
  2bit filename again. 
  This function works with .nib directories, but nib does not support opening
- from URLs.  As of Feb 2014, only hg16 and anoGam1 use a .nib directory.
+ from URLs.  As of Feb 2014, only hg16 and anoGam1 have no .2bit file.
 */
 {
 char buf[4096];
@@ -1319,6 +1329,37 @@ char dir[4096];
 splitPath(newPath, dir, NULL, NULL);
 freeMem(newPath);
 return cloneString(dir);
+}
+
+char* hReplaceGbdbMustDownload(char* path)
+/* given a location in /gbdb, rewrite it to the new location using gbdbLoc1 and download it
+ * if needed from gbdbLoc2.
+ * Used for adding files on the fly on mirrors or the box.
+ * Returns local path, needs to be freed. Aborts if download failed.
+ * */
+{
+char* locPath = hReplaceGbdbLocal(path);
+// skip if file is there
+if (fileExists(locPath))
+    return locPath;
+// skip if we already got a url or cannot rewrite a path
+char* url = hReplaceGbdb(path);
+if (sameString(locPath, url))
+    return locPath;
+
+// check that we can write to the dest dir
+if ((access(locPath, W_OK))==0)
+    errAbort("trying to download %s but no write access to %s\n", url, locPath);
+
+char locDir[1024];
+splitPath(locPath, locDir, NULL, NULL);
+makeDirsOnPath(locDir);
+
+bool success = parallelFetch(url, locPath, 1, 1, TRUE, FALSE);
+if (! success)
+    errAbort("Could not download %s to %s\n", url, locPath);
+
+return locPath;
 }
 
 char *hTryExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId, boolean abortOnError)
