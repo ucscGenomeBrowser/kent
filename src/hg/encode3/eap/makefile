@@ -12,7 +12,6 @@ UTIL_DIRS = \
     eapDaemon \
     eapFinish \
     eapMonitor \
-    eapRunAddJson \
     eapSchedule \
     eapUpdateSoftware
 

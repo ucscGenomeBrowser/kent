@@ -1,0 +1,347 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the calMil1
+# Callorhinchus milii - Elephant shark
+
+#	DATE:   11-Dec-2013
+#	ORGANISM:       Callorhinchus milii
+#	TAXID:  7868
+#	ASSEMBLY LONG NAME:     Callorhinchus_milii-6.1.3
+#	ASSEMBLY SHORT NAME:    Callorhinchus_milii-6.1.3
+#	ASSEMBLY SUBMITTER:  Institute of Molecular and Cell Biology, Singapore
+#	ASSEMBLY TYPE:  Haploid
+#	NUMBER OF ASSEMBLY-UNITS:       1
+#	ASSEMBLY ACCESSION:     GCA_000165045.2
+
+#	FTP-RELEASE DATE: 12-Dec-2013
+
+
+#       rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Callorhinchus_milii/Callorhinchus_milii-6.1.3/
+
+#	Mitochondrial sequence: NC_014285
+
+
+#############################################################################
+# fetch sequence from genbank (DONE - 2014-03-04 - Hiram)
+    mkdir -p /hive/data/genomes/calMil1/genbank
+    cd /hive/data/genomes/calMil1/genbank
+
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Callorhinchus_milii/Callorhinchus_milii-6.1.3/ ./
+
+    # measure sequence to be used here  (there will be the chrMT later ...)
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+
+    # 974481817 bases (37545129 N's 936936688 real 936936688 upper 0 lower)
+    # in 21203 sequences in 1 files
+    # Total size: mean 45959.6 sd 516515.0 min 66
+    # (gi|564405813|gb|AAVX02067420.1|)
+    # max 18507834 (gi|564982704|gb|KI635855.1|) median 1428
+    # %0.00 masked total, %0.00 masked real
+
+
+#############################################################################
+# fixup names for UCSC standards (DONE - 2014-03-04 - Hiram)
+    cd /hive/data/genomes/calMil1
+    $HOME/kent/src/hg/utils/automation/unplacedScaffolds.pl calMil1
+    # constructs ./ucsc/ directory here:
+# -rw-rw-r-- 1   6131987 Mar  4 12:24 calMil1.ucsc.agp
+# -rw-rw-r-- 1 285809423 Mar  4 12:30 calMil1.ucsc.fa.gz
+# -rw-rw-r-- 1       203 Mar  4 12:30 checkAgp.result.txt
+
+#############################################################################
+#  Initial database build (DONE - 2014-04-01 - Hiram)
+
+    cd /hive/data/genomes/calMil1
+    cat << '_EOF_' > calMil1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db calMil1
+clade vertebrate
+genomeCladePriority 70
+scientificName Callorhinchus milii
+commonName Elephant shark
+assemblyDate Dec. 2013
+assemblyLabel Institute of Molecular and Cell Biology, Singapore
+assemblyShortLabel Callorhinchus_milii-6.1.3
+orderKey 4796
+mitoAcc NC_014285.1
+fastaFiles /hive/data/genomes/calMil1/ucsc/calMil1.ucsc.fa.gz
+agpFiles /hive/data/genomes/calMil1/ucsc/calMil1.ucsc.agp
+dbDbSpeciesDir calMil
+photoCreditURL http://www.flagstaffotos.com.au/
+photoCreditName Flagstaff Fotos/Wikipedia
+ncbiGenomeId 689
+ncbiAssemblyId 85971
+ncbiAssemblyName Callorhinchus_milii-6.1.3
+ncbiBioProject 18361
+genBankAccessionID GCA_000165045.2
+taxId 7868
+'_EOF_'
+    # << happy emacs
+
+    # stepwise to verify sequence and AGP file
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-stop=seq calMil1.config.ra > seq.log 2>&1
+
+    # verify sequence and AGP are OK:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=agp -stop=agp calMil1.config.ra > agp.log 2>&1
+
+    # then finish it off:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=db calMil1.config.ra > db.log 2>&1
+    #  real    22m15.793s
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=dbDb calMil1.config.ra > dbDb.log 2>&1
+
+##########################################################################
+# running repeat masker (DONE - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/calMil1/bed/repeatMasker
+    cd /hive/data/genomes/calMil1/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=ku calMil1 > do.log 2>&1 &
+XXX - running - Tue Apr  1 15:55:30 PDT 2014
+    #    real    1125m12.023s
+
+    cat faSize.rmsk.txt
+    #    2431687698 bases (145030652 N's 2286657046 real 1334394119 upper
+    #    952262927 lower) in 10776 sequences in 1 files
+    #    Total size: mean 225657.7 sd 1878377.1 min 200 (ATDI01158464)
+    #    max 51448160 (KI537095) median 394
+    #    %39.16 masked total, %41.64 masked real
+
+
+    egrep -i "versi|relea" do.log
+#  RepeatMasker version open-4.0.3
+#    June 20 2013 (open-4-0-3) version of RepeatMasker
+# CC   RELEASE 20130422; 
+
+    featureBits -countGaps calMil1 rmsk
+    #   954201519 bases of 2431687698 (39.240%) in intersection
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/calMil1/bed/simpleRepeat
+    cd /hive/data/genomes/calMil1/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+	calMil1 > do.log 2>&1 &
+XXX - running - Tue Apr  1 15:55:30 PDT 2014
+    #	real    4m49.523s
+    cat fb.simpleRepeat 
+    #   35896803 bases of 2286657046 (1.570%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/calMil1
+    twoBitMask calMil1.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed calMil1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa calMil1.2bit stdout | faSize stdin > faSize.calMil1.2bit.txt
+    cat faSize.calMil1.2bit.txt
+    #  2431687698 bases (145030652 N's 2286657046 real 1333528377 upper
+    #    953128669 lower) in 10776 sequences in 1 files
+    #  Total size: mean 225657.7 sd 1878377.1 min 200 (ATDI01158464)
+    #   max 51448160 (KI537095) median 394
+    #  %39.20 masked total, %41.68 masked real
+
+
+    rm /gbdb/calMil1/calMil1.2bit
+    ln -s `pwd`/calMil1.2bit /gbdb/calMil1/calMil1.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/calMil1/bed/gap
+    cd /hive/data/genomes/calMil1/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../calMil1.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m9.753s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits calMil1 -not gap -bed=notGap.bed
+    #   15 bases of 936953458 (0.000%) in intersection
+    #  real    7m32.454s
+
+    # not enough to worry about, in fact they are all on chrM
+    # nothing to do, take a look at felCat5.txt for an example
+    # of what to do here with the new gaps
+
+##########################################################################
+## WINDOWMASKER (DONE - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/calMil1/bed/windowMasker
+    cd /hive/data/genomes/calMil1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev calMil1 > do.log 2>&1 &
+XXX - running - Tue Apr  1 16:07:30 PDT 2014
+    #   real    205m27.180s
+
+    # Masking statistics
+    cat faSize.calMil1.cleanWMSdust.txt
+    #  2431687698 bases (145030652 N's 2286657046 real 1533887679 upper
+    #    752769367 lower) in 10776 sequences in 1 files
+    #  Total size: mean 225657.7 sd 1878377.1 min 200 (ATDI01158464)
+    #    max 51448160 (KI537095) median 394
+    #  %30.96 masked total, %32.92 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps calMil1 rmsk windowmaskerSdust
+    #   491805301 bases of 2431687698 (20.225%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/calMil1/bed/cytoBand
+    cd /hive/data/genomes/calMil1/bed/cytoBand
+    makeCytoBandIdeo.csh calMil1
+
+##########################################################################
+# cpgIslands - (TBD - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/calMil1/bed/cpgIslands
+    cd /hive/data/genomes/calMil1/bed/cpgIslands
+    time doCpgIslands.pl calMil1 > do.log 2>&1 &
+    # real    5m28.908s
+
+    cat fb.calMil1.cpgIslandExt.txt
+    #   26505589 bases of 2286657046 (1.159%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/calMil1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/calMil1/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -stop=makeBed \
+          -maskedSeq=/hive/data/genomes/calMil1/calMil1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku calMil1 > makeBed.log 2>&1
+    #  real    4m40.925s
+
+    # debug load step so it can be loaded into a separate table:
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -debug -continue=load \
+          -maskedSeq=/hive/data/genomes/calMil1/calMil1.unmasked.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku calMil1
+    # edit and change the table name to load: cpgIslandExtUnmasked
+
+    time ./doLoadCpg.csh > load.log 2>&1
+    #   Read 35561 elements of size 10 from cpgIsland.bed
+    #   real    0m8.166s
+
+    cat fb.calMil1.cpgIslandExtUnmasked.txt 
+    $ 33531280 bases of 2286657046 (1.466%) in intersection
+
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -debug -continue=cleanup \
+          -maskedSeq=/hive/data/genomes/calMil1/calMil1.unmasked.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku calMil1
+
+#########################################################################
+# genscan - (TBD - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/calMil1/bed/genscan
+    cd /hive/data/genomes/calMil1/bed/genscan
+    time doGenscan.pl calMil1 > do.log 2>&1  &
+    # real    24m47.395s
+
+    cat fb.calMil1.genscan.txt
+    #   53624691 bases of 2286657046 (2.345%) in intersection
+    cat fb.calMil1.genscanSubopt.txt
+    #   53864323 bases of 2286657046 (2.356%) in intersection
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (TBD - 2014-04-01 - Hiram)
+    # Use -repMatch=750, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2286657046 / 2897316137 \) \* 1024
+    # ( 2286657046 / 2897316137 ) * 1024 = 808.174429
+    # round up to 850
+
+    cd /hive/data/genomes/calMil1
+    blat calMil1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/calMil1.11.ooc -repMatch=850
+    #	Wrote 26442 overused 11-mers to jkStuff/calMil1.11.ooc
+
+    # there are *only* bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" calMil1 | sort | uniq -c
+    #    173296 yes
+
+#########################################################################
+# AUTO UPDATE GENBANK (WORKING - 2014-04-01 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Balaenoptera acutorostrata      27      0       0
+# Balaenoptera acutorostrata scammoni     0       0       1
+# Balaenoptera borealis   5       0       0
+# Balaenoptera brydei     5       0       0
+# Balaenoptera edeni      1       0       0
+# Balaenoptera omurai     3       0       0
+# Balaenoptera physalus   12      0       0
+
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # this appears that calMil1 has plenty of native est's
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add calMil1 following vicPac1
+# calMil1 (minke whale)
+calMil1.serverGenome = /hive/data/genomes/calMil1/calMil1.2bit
+calMil1.clusterGenome = /hive/data/genomes/calMil1/calMil1.2bit
+calMil1.ooc = /hive/data/genomes/calMil1/jkStuff/calMil1.11.ooc
+calMil1.lift = no
+calMil1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+calMil1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+calMil1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+calMil1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+calMil1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+calMil1.refseq.mrna.native.load = no
+calMil1.refseq.mrna.xeno.load = yes
+calMil1.genbank.mrna.xeno.load = no
+calMil1.genbank.est.native.load = no
+calMil1.genbank.mrna.native.load = no
+calMil1.genbank.mrna.native.loadDesc = no
+calMil1.downloadDir = calMil1
+calMil1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding calMil1 Minke whale refs #12977" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for balAcuNames refs 12977" src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time ./bin/gbAlignStep -initial calMil1 &
+    #	var/build/logs/2014.04.01-14:30:21.calMil1.initalign.log
+XXX - running - Tue Apr  1 14:30:43 PDT 2014
+    #	about 9 hours 10 minutes
+    #   from 2013.06.10-09:51:08 to 2013.06.10-19:05:46
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad calMil1 &
+    #	logFile: var/dbload/hgwdev/logs/2013.06.18-09:56:16.dbload.log
+    #	real    22m47.950s
+
+    # enable daily alignment and update of hgwdev (TBD - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add calMil1 to: etc/align.dbs etc/hgwdev.dbs
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added calMil1 to daily hgwdev build refs #10833" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################

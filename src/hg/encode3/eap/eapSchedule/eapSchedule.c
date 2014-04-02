@@ -617,14 +617,13 @@ freez(&controlName);
 return edwExperimentLoadByQuery(conn, query);
 }
 
-void scheduleMacsChip(struct sqlConnection *conn, 
-    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
-/* If it hasn't already been done schedule macs analysis of the chip-seq bam file. */
+struct edwFile *findChipControlFile(struct sqlConnection *conn, 
+    struct edwValidFile *vf, struct edwExperiment *exp)
+/* Find control file for this chip file */
 {
-// Try and find control 
 struct edwExperiment *controlExp = findChipControlExp(conn, exp->accession);
 if (controlExp == NULL)
-    return;
+    return NULL;
 
 // Got control experiment,  now let's go for a matching bam file. 
 char query[PATH_LEN*3];
@@ -634,7 +633,7 @@ sqlSafef(query, sizeof(query),
 struct edwValidFile *controlVf, *controlVfList = edwValidFileLoadByQuery(conn, query);
 int controlCount = slCount(controlVfList);
 if (controlCount <= 0)
-    return;
+    return NULL;
 
 // Go through list and try to pick one
 int bestScore = 0;
@@ -660,16 +659,79 @@ for (controlVf = controlVfList; controlVf != NULL; controlVf = controlVf->next)
 	}
     }
 if (bestControl == NULL)
-    return;
+    return NULL;
 
+// Figure out control bam file info
+return edwFileFromId(conn, bestControl->fileId);
+}
+
+void scheduleSppChip(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
+/* If it hasn't already been done schedule SPP peak calling for a chip-seq bam file. */
+{
 // Figure out input bam name
 char bamName[PATH_LEN];
 safef(bamName, sizeof(bamName), "%s%s", edwRootDir, ef->edwFileName);
 
-// Figure out control bam name
-struct edwFile *controlEf = edwFileFromId(conn, bestControl->fileId);
-char controlBamName[PATH_LEN];
-safef(controlBamName, sizeof(controlBamName), "%s%s", edwRootDir, controlEf->edwFileName);
+// Figure out analysis step and script based on paired end status of input bam
+boolean isPaired = bamIsPaired(bamName, 1000);
+char *analysisStep, *scriptName;
+if (isPaired)
+    {
+    /*
+    analysisStep = "spp_chip_pe";
+    scriptName = "eap_run_spp_chip_pe";
+    */
+    return;
+    }
+else
+    {
+    analysisStep = "spp_chip_se";
+    scriptName = "eap_run_spp_chip_se";
+    }
+
+verbose(2, "Looking for control for chip file %s\n", ef->edwFileName);
+
+// Get control bam file info
+struct edwFile *controlEf = findChipControlFile(conn, vf, exp);
+if (controlEf == NULL)
+    errAbort("Can't find control file for ChIP experiment %s", exp->accession);
+
+verbose(2, "schedulingSppChip on %s with control %s,  step %s, script %s\n", ef->edwFileName, 
+    controlEf->edwFileName, analysisStep, scriptName);
+
+/* Make sure that we don't schedule it again and again */
+struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
+    return;
+
+char *tempDir = newTempDir(analysisStep);
+
+/* Stage inputs and make command line. */
+struct cache *cache = cacheNew();
+char *efName = cacheMore(cache, ef);
+char *controlEfName = cacheMore(cache, controlEf);
+preloadCache(conn, cache);
+
+char commandLine[4*PATH_LEN];
+safef(commandLine, sizeof(commandLine), "%s %s %s %s %s%s", 
+    scriptName, assembly->name, efName, controlEfName,
+    tempDir, "out.narrowPeak.bigBed");
+
+/* Declare step input and output arrays and schedule it. */
+unsigned inFileIds[] = {ef->id, controlEf->id};
+char *inTypes[] = {"chipBam", "controlBam"};
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
+    ArraySize(inFileIds), inFileIds, inTypes);
+}
+
+void scheduleMacsChip(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
+/* If it hasn't already been done schedule Macs peak calling for a chip-seq bam file. */
+{
+// Figure out input bam name
+char bamName[PATH_LEN];
+safef(bamName, sizeof(bamName), "%s%s", edwRootDir, ef->edwFileName);
 
 // Figure out analysis step and script based on paired end status of input bam
 boolean isPaired = bamIsPaired(bamName, 1000);
@@ -685,8 +747,11 @@ else
     scriptName = "eap_run_macs2_chip_se";
     }
 
-verbose(2, "schedulingMacsChip on %s step %s, script %s\n", ef->edwFileName, 
-    analysisStep, scriptName);
+// Get control bam file info
+struct edwFile *controlEf = findChipControlFile(conn, vf, exp);
+
+verbose(2, "schedulingMacsChip on %s with control %s,  step %s, script %s\n", ef->edwFileName, 
+    controlEf->edwFileName, analysisStep, scriptName);
 
 /* Make sure that we don't schedule it again and again */
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
@@ -700,6 +765,7 @@ struct cache *cache = cacheNew();
 char *efName = cacheMore(cache, ef);
 char *controlEfName = cacheMore(cache, controlEf);
 preloadCache(conn, cache);
+
 char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "%s %s %s %s %s%s %s%s", 
     scriptName, assembly->name, efName, controlEfName,
@@ -1038,8 +1104,9 @@ if (sameString(exp->dataType, "DNase-seq"))
     }
 else if (sameString(exp->dataType, "ChIP-seq"))
     {
-    scheduleMacsChip(conn, ef, vf, exp);
+    scheduleSppChip(conn, ef, vf, exp);
 #ifdef SOON
+    scheduleMacsChip(conn, ef, vf, exp);
 #endif /* SOON */
     }
 }
