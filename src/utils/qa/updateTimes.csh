@@ -44,6 +44,7 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
+
 if ( $#argv == 3 ) then
   if ( $argv[3] == "verbose" ) then
     set dot=( 'dev  ' 'beta ' 'pub  ' 'rr   ' 'euro ' )
@@ -55,8 +56,10 @@ if ( $#argv == 3 ) then
     echo 'sorry. third argument must be "verbose" or "noEuro"'
     $0
     exit
+    endif
   endif
 endif
+
 
 # check if it is a file or a tablename
 file $tablelist | egrep -q "ASCII text"
@@ -92,7 +95,7 @@ foreach table ($tables)
   endif
   echo "$dot[4]"$fourth
 
-  if ( noEuro == "false" ) then
+  if ( $noEuro == "false" ) then
     set fifth=`getTableStatus.csh $db genome-euro | sed '1,2d' \
         | grep -w ^$table | awk '{print $14, $15}'`
     if ( $status ) then
