@@ -87,6 +87,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	ornAna1 \
 	oreNil1 oreNil2 \
 	fr1 fr2 fr3 \
+	calMil1 \
 	petMar1 petMar2 \
 	braFlo1 braFlo2 \
 	cioSav1 \

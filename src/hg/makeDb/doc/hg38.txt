@@ -3266,24 +3266,22 @@ TMPDIR=/scratch/tmp
 	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
-XXX - running - Thu Feb 27 16:13:21 PST 2014
 
     #   real    658m53.984s
     cat fb.hg38.chainRn5Link.txt
-    #   917356917 bases of 2897316137 (31.662%) in intersection
+    # 938823407 bases of 3049335806 (30.788%) in intersection
 
     #	running the swap
     mkdir /hive/data/genomes/rn5/bed/blastz.hg38.swap
     cd /hive/data/genomes/rn5/bed/blastz.hg38.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/hg38/bed/lastzRn5.2014-02-277/DEF \
-	-swap -noLoadChainSplit \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+	/hive/data/genomes/hg38/bed/lastzRn5.2014-02-27/DEF \
+	-swap \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 
     #   real    66m53.095s
     cat fb.rn5.chainHg38Link.txt
-    #	933922552 bases of 2572853723 (36.299%) in intersection
-
+    #   934256475 bases of 2572853723 (36.312%) in intersection
 ##############################################################################
 # LASTZ Rat Rn4 (DONE - 2014-02-27 - Hiram)
     #	establish a screen to control this job

@@ -484,10 +484,12 @@ if (errCatchStart(errCatch))
 	    }
 	}
 
+    char *fileName2 = hReplaceGbdb(fileName);
+
     char posForBam[512];
     safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
     if (!isPaired)
-	bamFetch(fileName, posForBam, addBam, &btd, NULL);
+	bamFetch(fileName2, posForBam, addBam, &btd, NULL);
     else
 	{
 	char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
@@ -495,7 +497,7 @@ if (errCatchStart(errCatch))
 	if (pairSearchRange > 0)
 	    safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
 		  max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamFetch(fileName, posForBam, addBamPaired, &btd, NULL);
+	bamFetch(fileName2, posForBam, addBamPaired, &btd, NULL);
 	struct hashEl *hel;
 	struct hashCookie cookie = hashFirst(btd.pairHash);
 	while ((hel = hashNext(&cookie)) != NULL)
@@ -505,6 +507,8 @@ if (errCatchStart(errCatch))
 		slAddHead(&(tg->items), lfsFromLf(lf));
 	    }
 	}
+    freez(&fileName2);
+
     if (tg->visibility != tvDense)
 	{
 	slReverse(&(tg->items));
