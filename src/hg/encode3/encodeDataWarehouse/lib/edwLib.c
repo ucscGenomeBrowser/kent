@@ -939,6 +939,9 @@ puts("<script type='text/javascript' SRC='/js/jquery.js'></script>");
 puts("<script type='text/javascript' SRC='/js/jquery.cookie.js'></script>");
 puts("<script type='text/javascript' src='https://login.persona.org/include.js'></script>");
 puts("<script type='text/javascript' src='/js/edwPersona.js'></script>");
+// TODO: pull into an EDW style sheet
+puts("<style>input {width: auto;}</style>");
+
 puts("</HEAD>");
 
 /* layout with navigation bar */
