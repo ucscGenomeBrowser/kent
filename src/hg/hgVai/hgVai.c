@@ -460,7 +460,7 @@ struct slName *findDbNsfpTables()
 if (startsWith(hubTrackPrefix, database))
     return NULL;
 struct sqlConnection *conn = hAllocConn(database);
-struct slName *dbNsfpTables = sqlQuickList(conn, "NOSQLINJ show tables like 'dbNsfp%'");
+struct slName *dbNsfpTables = sqlListTablesLike(conn, "LIKE 'dbNsfp%'");
 hFreeConn(&conn);
 return dbNsfpTables;
 }
@@ -528,12 +528,13 @@ if (startsWith(hubTrackPrefix, database))
     return NULL;
 if (suffix == NULL)
     suffix = "";
-char query[64];
-sqlSafef(query, sizeof(query), "show tables like 'snp1__%s'", suffix);
+char likeExpr[64];
+safef(likeExpr, sizeof(likeExpr), "LIKE 'snp1__%s'", suffix);
 struct sqlConnection *conn = hAllocConn(database);
-struct slName *snpNNNTables = sqlQuickList(conn, query);
+struct slName *snpNNNTables = sqlListTablesLike(conn, likeExpr);
+
 hFreeConn(&conn);
-if (snpNNNTables == NULL)
+if ((snpNNNTables == NULL) || (slCount(snpNNNTables)==0))
     return NULL;
 // Skip to last in list -- highest number (show tables can't use rlike or 'order by'):
 struct slName *table = snpNNNTables;

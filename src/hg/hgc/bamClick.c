@@ -189,7 +189,7 @@ char position[512];
 safef(position, sizeof(position), "%s:%d-%d", seqName, winStart, winEnd);
 struct hash *pairHash = isPaired ? hashNew(0) : NULL;
 struct bamTrackData btd = {start, item, pairHash};
-char *fileName = trackDbSetting(tdb, "bigDataUrl");
+char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (fileName == NULL)
     {
     if (isCustomTrack(tdb->table))
@@ -199,7 +199,7 @@ if (fileName == NULL)
     else
 	{
 	struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-	fileName = bamFileNameFromTable(conn, tdb->table, seqName);
+	fileName = hReplaceGbdb(bamFileNameFromTable(conn, tdb->table, seqName));
 	hFreeConn(&conn);
 	}
     }

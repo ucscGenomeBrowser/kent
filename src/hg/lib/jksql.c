@@ -714,13 +714,19 @@ sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s WHERE tableName='%s'", t
 return (sqlQuickNum(conn, query)!=0);
 }
 
-static struct slName *sqlTableCacheQuery(struct sqlConnection *conn)
-/* return all table names from the table name cache as a list. */
+static struct slName *sqlTableCacheQuery(struct sqlConnection *conn, char *likeExpr)
+/* return all table names from the table name cache as a list. 
+ * Can optionally filter with a likeExpr e.g. "LIKE snp%". */
 {
 char *tableList = cfgVal("showTableCache");
 struct slName *list = NULL, *el;
 char query[1024];
-sqlSafef(query, sizeof(query), "SELECT DISTINCT tableName FROM %s", tableList);
+// mysql SHOW TABLES is sorted alphabetically by default
+if (likeExpr==NULL)
+    sqlSafef(query, sizeof(query), "SELECT DISTINCT tableName FROM %s ORDER BY tableName", tableList);
+else
+    sqlSafef(query, sizeof(query), 
+        "SELECT DISTINCT tableName FROM %s WHERE tableName %s ORDER BY tableName", tableList, likeExpr);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -729,12 +735,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     el = slNameNew(row[0]);
     slAddHead(&list, el);
     }
+slReverse(&list);
 sqlFreeResult(&sr);
 return list;
 }
 
-struct slName *sqlListTables(struct sqlConnection *conn)
-/* Return list of tables in database associated with conn. */
+struct slName *sqlListTablesLike(struct sqlConnection *conn, char *likeExpr)
+/* Return list of tables in database associated with conn. Optionally filter list with
+ * given LIKE expression that can be NULL or string e.g. "LIKE 'snp%'". */
 {
 struct slName *list = NULL, *el;
 struct sqlResult *sr;
@@ -743,11 +751,15 @@ char **row;
 struct sqlConnection *cacheConn = sqlTableCacheFindConn(conn);
 
 if (cacheConn)
-    list = sqlTableCacheQuery(cacheConn);
+    list = sqlTableCacheQuery(cacheConn, likeExpr);
 else
     {
     char query[256];
-    sqlSafef(query, sizeof(query), "SHOW TABLES");
+    if (likeExpr == NULL)
+        safef(query, sizeof(query), "NOSQLINJ SHOW TABLES");
+    else
+        safef(query, sizeof(query), "NOSQLINJ SHOW TABLES %s", likeExpr);
+
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -759,6 +771,12 @@ else
     }
 
 return list;
+}
+
+struct slName *sqlListTables(struct sqlConnection *sc)
+/* Return list of tables in database associated with conn. */
+{
+return sqlListTablesLike(sc, NULL);
 }
 
 struct sqlResult *sqlDescribe(struct sqlConnection *conn, char *table)
@@ -1103,6 +1121,13 @@ va_start(args, format);
 sqlVaWarn(sc, format, args);
 va_end(args);
 noWarnAbort();
+}
+
+struct sqlConnection *sqlFailoverConn(struct sqlConnection *sc)
+/* returns the failover connection of a connection or NULL.
+ * (Needed because the sqlConnection is not in the .h file) */
+{
+return sc->failoverConn;
 }
 
 bool sqlConnMustUseFailover(struct sqlConnection *sc)
