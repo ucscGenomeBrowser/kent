@@ -959,7 +959,7 @@ return ci->size;
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
-if (hDbIsActive(db))
+if (hDbIsActive(db) && cfgOptionBooleanDefault("allowNib", TRUE))
     {
     struct chromInfo *ci = mustGetChromInfo(db, chromName);
     safef(retNibName, HDB_MAX_PATH_STRING, "%s", ci->fileName);
@@ -1297,6 +1297,8 @@ char *hReplaceGbdb(char* fileName)
   * Result has to be free'd.
  * */
 {
+if (fileName == NULL)
+    return fileName;
 char *path = hReplaceGbdbLocal(fileName);
 if (fileExists(path))
     return path;
