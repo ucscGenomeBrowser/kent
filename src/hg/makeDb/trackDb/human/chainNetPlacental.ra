@@ -88,8 +88,7 @@ include chainNetVicPac2.ra
         type chain loxAfr3
         otherDb loxAfr3
 
-include chainNetFelCat4.ra beta,public
-include chainNetFelCat5.ra alpha
+include chainNetFelCat5.ra
 
         track chainCanFam3
         subTrack placentalChainNetViewchain off
