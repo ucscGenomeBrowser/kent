@@ -1297,6 +1297,8 @@ char *hReplaceGbdb(char* fileName)
   * Result has to be free'd.
  * */
 {
+if (fileName == NULL)
+    return fileName;
 char *path = hReplaceGbdbLocal(fileName);
 if (fileExists(path))
     return path;
