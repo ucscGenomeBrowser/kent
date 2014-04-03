@@ -756,9 +756,9 @@ else
     {
     char query[256];
     if (likeExpr == NULL)
-        sqlSafef(query, sizeof(query), "SHOW TABLES");
+        safef(query, sizeof(query), "NOSQLINJ SHOW TABLES");
     else
-        sqlSafef(query, sizeof(query), "SHOW TABLES %s", likeExpr);
+        safef(query, sizeof(query), "NOSQLINJ SHOW TABLES %s", likeExpr);
 
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
