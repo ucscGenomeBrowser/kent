@@ -31,8 +31,8 @@ void logIn()
 /* Put up name.  No password for now. */
 {
 printf("<DIV>");
-printf("<H3>Welcome to the prototype ENCODE Data Warehouse submission site</H3>");
-printf("<H5>Please sign in using Persona&nbsp;");
+printf("<H3>Welcome to the ENCODE data submission site</H3>");
+printf("Please sign in using Persona&nbsp;");
 printf("<INPUT TYPE=BUTTON NAME=\"signIn\" CLASS=\"btn\" VALUE=\"Sign in\" id=\"signin\"</H5>");
 printf("</DIV>");
 }
@@ -43,7 +43,7 @@ void getUrl(struct sqlConnection *conn)
 struct edwUser *user = edwMustGetUserFromEmail(conn, userEmail);
 printf("<script>$('#edw-user').text(%s)</script>", user->email);
 
-printf("<H1>Submit Data</H1>");
+printf("<H3>Submit data</H3>");
 
 printf("<P CLASS='title'>Enter the URL of a validated manifest file:<P>");
 
@@ -56,7 +56,6 @@ puts("<DIV>");
 cgiMakeCheckBox("update", FALSE);
 printf(" Update information for files previously submitted");
 puts("</DIV>");
-printf("<BR>Submission by %s", userEmail);
 }
 
 static char *stopButtonName = "stopUpload";
@@ -204,17 +203,12 @@ else
 	else
 	    {
 	    printf("<B>submission time:</B> %s<BR>\n", duration->string);
-	    cgiMakeButton("getUrl", "submit another data set");
 	    }
 	}
     }
 cgiMakeButton("monitor", "refresh status");
 if (endUploadTime == 0 && isEmpty(sub->errorMessage))
     cgiMakeButton(stopButtonName, "stop upload");
-printf(" <input type=\"button\" value=\"browse submissions\" "
-       "onclick=\"window.location.href='edwWebBrowse';\">\n");
-
-edwPrintLogOutButton();
 }
 
 void submitUrl(struct sqlConnection *conn)
@@ -304,7 +298,10 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
 
 /* Put out HTTP header and HTML HEADER all the way through <BODY> */
-edwWebHeaderWithPersona("Submit data to ENCODE Data Warehouse");
+edwWebHeaderWithPersona("Submit data");
+
+// TODO: find a better place for menu update
+puts("<script>$('#edw-submit').hide();</script>");
 
 /* Call error handling wrapper that catches us so we write /BODY and /HTML to close up page
  * even through an errAbort. */
