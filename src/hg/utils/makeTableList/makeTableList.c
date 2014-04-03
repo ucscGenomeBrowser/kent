@@ -187,7 +187,7 @@ if(all)
     while ((row = sqlNextRow(sr)) != NULL)
         slNameAddHead(&dbs, row[0]);
     sqlFreeResult(&sr);
-    hDisconnectCentral(&conn);
+    sqlDisconnect(&conn);
     }
 else
     {
