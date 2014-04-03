@@ -98,6 +98,10 @@ char* sqlGetHost(struct sqlConnection *sc);
 struct slName *sqlGetAllDatabase(struct sqlConnection *sc);
 /* Get a list of all database on the server */
 
+struct slName *sqlListTablesLike(struct sqlConnection *conn, char *likeExpr);
+/* Return list of tables in database associated with conn. Optionally filter list with
+ * given LIKE expression that can be NULL or string e.g. "LIKE 'snp%'". */
+
 struct slName *sqlListTables(struct sqlConnection *conn);
 /* Return list of tables in database associated with conn. */
 
