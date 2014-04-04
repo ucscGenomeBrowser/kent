@@ -520,7 +520,7 @@ CREATE TABLE $db (
   releaseLogUrl longblob NOT NULL,
   importance char(1) NOT NULL default '',
   PRIMARY KEY  (`qid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 _EOF_
   ;
