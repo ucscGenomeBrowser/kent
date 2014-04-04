@@ -1774,11 +1774,11 @@ void ensGeneIdConfig(struct trackDb *tdb)
 char varName[64];
 char *geneLabel;
 safef(varName, sizeof(varName), "%s.label", tdb->track);
-geneLabel = cartUsualString(cart, varName, "transcript");
+geneLabel = cartUsualString(cart, varName, "ENST* identifier");
 printf("<B>Label:</B> ");
-radioButton(varName, geneLabel, "accession");
-radioButton(varName, geneLabel, "ensembl");
-radioButton(varName, geneLabel, "gene");
+radioButton(varName, geneLabel, "ENST* identifier");
+radioButton(varName, geneLabel, "ENSG* identifier");
+radioButton(varName, geneLabel, "gene symbol");
 }
 
 void geneIdConfig(struct trackDb *tdb)
