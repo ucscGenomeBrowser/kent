@@ -431,6 +431,18 @@ if (range[0] != 0)
     {
     struct region r;
     isSingle = searchPosition(range, &r);
+    if (!isSingle)
+	{
+	// We will call doMainPage after this, so push web start handlers;
+	// hgFind code pops the handlers that it pushes, but after doMainPage
+	// we'll close the page and pop again, so we need to push here.
+	webPushErrHandlersCartDb(cart, database);
+	// In case user manually edits the browser location as described in #13009,
+	// revert the position.  If they instead choose from the list as we expect,
+	// that will set the position to their choice.
+	char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
+	cartSetString(cart, "position", lastPosition);
+	}
     }
 else
     {
