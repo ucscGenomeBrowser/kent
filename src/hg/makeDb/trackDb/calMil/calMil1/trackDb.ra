@@ -6,3 +6,5 @@ html gold
 track gap override
 html gap
 
+track cpgIslandSuper override
+release beta,public
