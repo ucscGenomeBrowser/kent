@@ -740,34 +740,47 @@ sqlFreeResult(&sr);
 return list;
 }
 
+static struct slName *sqlListTablesForConn(struct sqlConnection *conn, char *likeExpr)
+/* run SHOW TABLES on connection and return a slName list */
+{
+char query[256];
+if (likeExpr == NULL)
+    safef(query, sizeof(query), "NOSQLINJ SHOW TABLES");
+else
+    safef(query, sizeof(query), "NOSQLINJ SHOW TABLES %s", likeExpr);
+
+struct slName *list = NULL, *el;
+
+struct sqlResult *sr;
+char **row;
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = slNameNew(row[0]);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
 struct slName *sqlListTablesLike(struct sqlConnection *conn, char *likeExpr)
 /* Return list of tables in database associated with conn. Optionally filter list with
  * given LIKE expression that can be NULL or string e.g. "LIKE 'snp%'". */
 {
-struct slName *list = NULL, *el;
-struct sqlResult *sr;
-char **row;
+struct slName *list = NULL;
 
 struct sqlConnection *cacheConn = sqlTableCacheFindConn(conn);
 
 if (cacheConn)
     list = sqlTableCacheQuery(cacheConn, likeExpr);
 else
-    {
-    char query[256];
-    if (likeExpr == NULL)
-        safef(query, sizeof(query), "NOSQLINJ SHOW TABLES");
-    else
-        safef(query, sizeof(query), "NOSQLINJ SHOW TABLES %s", likeExpr);
+    list = sqlListTablesForConn(conn, likeExpr);
 
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        el = slNameNew(row[0]);
-        slAddHead(&list, el);
-        }
-    slReverse(&list);
-    sqlFreeResult(&sr);
+if (conn->failoverConn != NULL)
+    {
+    struct slName *failoverList = sqlListTablesForConn(conn->failoverConn, likeExpr);
+    slSortMergeUniq(list, failoverList, slNameCmp, slNameFree);
     }
 
 return list;
