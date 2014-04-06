@@ -124,6 +124,16 @@ struct stepInit steps[] =
     },
 
     {
+    "spp_chip_se", 1,
+    "Generate peaks single end ChIP-seq BAM files from IP and control using SPP",
+    "eap_run_spp_chip_se,Rscript,bedToBigBed",
+    "chipBam,controlBam", "bam,bam",
+    "Alignments of single end reads from IP,Alignments of single end reads from control",
+    "spp_chip_peaks", "narrowPeak", "out.narrowPeak.bigBed",
+    "Narrow peak calls from SPP"
+    },
+
+    {
     "sum_bigWig", 1,
     "Add together signals from multiple bigWigs producing a bigWig for the sum",
     "eap_sum_bigWig,bigWigMerge,bedGraphPack,bedGraphToBigWig",

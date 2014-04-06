@@ -86,6 +86,9 @@ struct edwUser *edwFindUserFromFileId(struct sqlConnection *conn, int fId);
 char *edwFindOwnerNameFromFileId(struct sqlConnection *conn, int fId);
 /* Return name of submitter. Return "an unknown user" if name is NULL */
 
+boolean edwUserIsAdmin(struct sqlConnection *conn, char *userEmail);
+/* Return true if the user is an admin */
+
 void edwWarnUnregisteredUser(char *email);
 /* Put up warning message about unregistered user and tell them how to register. */
 

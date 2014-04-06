@@ -6,6 +6,7 @@ visibility pack
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap
+visibility hide
 
 track cpgIslandSuper override
 release beta,public
@@ -13,5 +14,5 @@ release beta,public
 track xenoRefGene override
 visibility pack
 
-track rmsk override
-visibility full
+track intronEst override
+visibility hide

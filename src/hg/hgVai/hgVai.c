@@ -157,7 +157,7 @@ char *makePositionInput()
 /* Return HTML for the position input. */
 {
 struct dyString *dy = dyStringCreate("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\">",
-				     hgvaRange, 26,
+				     hgvaRange, 45,
 				     addCommasToPos(NULL, cartString(cart, hgvaRange)));
 return dyStringCannibalize(&dy);
 }
@@ -460,7 +460,7 @@ struct slName *findDbNsfpTables()
 if (startsWith(hubTrackPrefix, database))
     return NULL;
 struct sqlConnection *conn = hAllocConn(database);
-struct slName *dbNsfpTables = sqlQuickList(conn, "NOSQLINJ show tables like 'dbNsfp%'");
+struct slName *dbNsfpTables = sqlListTablesLike(conn, "LIKE 'dbNsfp%'");
 hFreeConn(&conn);
 return dbNsfpTables;
 }
@@ -528,12 +528,13 @@ if (startsWith(hubTrackPrefix, database))
     return NULL;
 if (suffix == NULL)
     suffix = "";
-char query[64];
-sqlSafef(query, sizeof(query), "show tables like 'snp1__%s'", suffix);
+char likeExpr[64];
+safef(likeExpr, sizeof(likeExpr), "LIKE 'snp1__%s'", suffix);
 struct sqlConnection *conn = hAllocConn(database);
-struct slName *snpNNNTables = sqlQuickList(conn, query);
+struct slName *snpNNNTables = sqlListTablesLike(conn, likeExpr);
+
 hFreeConn(&conn);
-if (snpNNNTables == NULL)
+if ((snpNNNTables == NULL) || (slCount(snpNNNTables)==0))
     return NULL;
 // Skip to last in list -- highest number (show tables can't use rlike or 'order by'):
 struct slName *table = snpNNNTables;
@@ -1967,16 +1968,21 @@ if (lookupPosition(cart, hgvaRange))
     else
 	doUi();
     }
-else if (webGotWarnings())
+else
     {
-    // We land here when lookupPosition pops up a warning box.
-    // Reset the problematic position and show the main page.
+    // Revert to lastPosition if we have multiple matches or warnings,
+    // especially in case user manually edits browser location as in #13009:
     char *position = cartUsualString(cart, "lastPosition", hDefaultPos(database));
     cartSetString(cart, hgvaRange, position);
-    doMainPage();
+    if (webGotWarnings())
+	{
+	// We land here when lookupPosition pops up a warning box.
+	// Reset the problematic position and show the main page.
+	doMainPage();
+	}
+    // If lookupPosition returned FALSE and didn't report warnings,
+    // then it wrote HTML showing multiple position matches & links.
     }
-// If lookupPosition returned FALSE and didn't report warnings,
-// then it wrote HTML showing multiple position matches & links.
 
 cartCheckout(&cart);
 cgiExitTime("hgVai", enteredMainTime);
