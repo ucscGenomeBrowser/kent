@@ -158,9 +158,11 @@ taxId 7868
 	-strand=+ ../../calMil1.unmasked.2bit > findMotif.txt 2>&1
     #	real    0m9.753s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
-    featureBits calMil1 -not gap -bed=notGap.bed
+    featureBits -countGaps calMil1 -not gap -bed=notGap.bed
+
+    time featureBits calMil1 allGaps.bed notGap.bed -bed=new.gaps.bed
     #   15 bases of 936953458 (0.000%) in intersection
-    #  real    7m32.454s
+    #  real    7m11.392s
 
     # not enough to worry about, in fact they are all on chrM
     # nothing to do, take a look at felCat5.txt for an example
