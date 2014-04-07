@@ -17,6 +17,7 @@ s/apiMel4/Apis_mellifera/;
 s/macFas5/Macaca_fascicularis/;
 s/camFer1/Camelus_ferus/;
 s/chlSab1/Chlorocebus_sabaeus/;
+s/chlSab2/Chlorocebus_sabaeus/;
 s/panHod1/Pantholops_hodgsonii/;
 s/capHir1/Capra_hircus/;
 s/chrAsi1/Chrysochloris_asiatica/;

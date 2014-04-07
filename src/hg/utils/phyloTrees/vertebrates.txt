@@ -146,6 +146,9 @@ lepOcu	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Semionotiformes; 
 # spotted green pufferfish Tetraodon nigroviridis
 tetNig	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Tetraodon
 
+# Japanese eel Anguilla japonica
+angJap	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Elopomorpha; Anguilliformes; Anguilloidei; Anguillidae; Anguilla
+
 # zebrafish Danio rerio
 danRer	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Clupeocephala; Otocephala; Ostariophysi; Otophysi; Cypriniphysi; Cypriniformes; Cyprinoidea; Cyprinidae; Danio
 
