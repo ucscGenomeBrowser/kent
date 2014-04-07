@@ -99,6 +99,7 @@ melGal1	Turkey	Meleagris gallopavo	vertebrate	aves	4360
 strCam1	Ostrich	Struthio camelus	vertebrate	aves	4363
 taeGut2	Zebra finch	Taeniopygia guttata	vertebrate	aves	4369
 taeGut1	Zebra finch	Taeniopygia guttata	vertebrate	aves	4370
+serCan1	Canary	Serinus canaria	vertebrate	aves	4372
 geoFor1	Medium ground finch	Geospiza fortis	vertebrate	aves	4373
 melUnd1	Budgerigar	Melopsittacus undulatus	vertebrate	aves	4375
 allMis1	American alligator	Alligator mississippiensis	vertebrate	sauria	4380
@@ -117,14 +118,15 @@ latCha1	Coelacanth	Latimeria chalumnae	vertebrate	sarcopterygii	4465
 tetNig2	Tetraodon	Tetraodon nigroviridis	vertebrate	tetraodontidae	4599
 fr3	Fugu	Takifugu rubripes	vertebrate	tetraodontidae	4628
 takFla1	Yellowbelly pufferfish	Takifugu flavidus	vertebrate	tetraodontidae	4640
-hapBur1	Burton's mouthbreeder	Haplochromis burtoni	vertebrate	cichlidae	4650
-mayZeb1	Zebra mbuna	Maylandia zebra	vertebrate	cichlidae	4660
-punNye1	Pundamilia nyererei	Pundamilia nyererei	vertebrate	cichlidae	4665
-oreNil2	Nile tilapia	Oreochromis niloticus	vertebrate	cichlidae	4669
-neoBri1	Princess of Burundi	Neolamprologus brichardi	vertebrate	cichlidae	4680
-gasAcu1	Stickleback	Gasterosteus aculeatus	vertebrate	smegmamorpha	4700
-oryLat2	Medaka	Oryzias latipes	vertebrate	smegmamorpha	4729
-xipMac1	Southern platyfish	Xiphophorus maculatus	vertebrate	smegmamorpha	4740
+hapBur1	Burton's mouthbreeder	Haplochromis burtoni	vertebrate	percomorpha	4650
+mayZeb1	Zebra mbuna	Maylandia zebra	vertebrate	percomorpha	4660
+punNye1	Pundamilia nyererei	Pundamilia nyererei	vertebrate	percomorpha	4665
+oreNil2	Nile tilapia	Oreochromis niloticus	vertebrate	percomorpha	4669
+neoBri1	Princess of Burundi	Neolamprologus brichardi	vertebrate	percomorpha	4680
+cynSem1	Tongue sole	Cynoglossus semilaevis	vertebrate	percomorpha	4690
+gasAcu1	Stickleback	Gasterosteus aculeatus	vertebrate	percomorpha	4700
+oryLat2	Medaka	Oryzias latipes	vertebrate	percomorpha	4729
+xipMac1	Southern platyfish	Xiphophorus maculatus	vertebrate	percomorpha	4740
 gadMor1	Atlantic cod	Gadus morhua	vertebrate	neoteleostei	4750
 danRer7	Zebrafish	Danio rerio	vertebrate	teleostei	4774
 astMex1	Mexican tetra (cavefish)	Astyanax mexicanus	vertebrate	teleostei	4790

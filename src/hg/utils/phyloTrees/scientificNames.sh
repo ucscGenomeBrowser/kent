@@ -74,6 +74,8 @@ s/panTig1/Panthera_tigris_altaica/;
 s/bubBub1/Bubalus_bubalis/;
 s/lipVex1/Lipotes_vexillifer/;
 s/bosTau7/Bos_taurus/;
+s/serCan1/Serinus_canaria/;
+s/cynSem1/Cynoglossus_semilaevis/;
 s/xipMac1/Xiphophorus_maculatus/;'
 }
 
