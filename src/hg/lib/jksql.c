@@ -715,7 +715,9 @@ return (sqlQuickNum(conn, query)!=0);
 }
 
 static struct slName *sqlTableCacheQuery(struct sqlConnection *conn, char *likeExpr)
-/* return all table names from the table name cache as a list. 
+/* This function queries the tableCache table. It is used by the sqlTableList 
+ * function, so it doe not have to connect to the main sql server just to get a list of table names.
+ * Returns all table names from the table name cache as a list. 
  * Can optionally filter with a likeExpr e.g. "LIKE snp%". */
 {
 char *tableList = cfgVal("showTableCache");

@@ -2445,7 +2445,6 @@ else
     safef(buf, sizeof(buf), "/gbdb/%s", database);
     char *twoBitDir = hReplaceGbdbSeqDir(buf, database);
     seqDir = twoBitDir;
-    fprintf(stderr, "twoBitDir %s\n", twoBitDir);
     }
 return seqDir;
 }
