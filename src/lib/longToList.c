@@ -1,4 +1,4 @@
-/* longList - this is a way of associating a generic list with a long key.
+/* longToList - this is a way of associating a generic list with a long key.
  * You can retrieve back the list given the key,  and add to lists associated with
  * any given tree. The list can be any sort of singly-linked object that starts with
  * a next field. 
@@ -9,7 +9,7 @@
 #include "common.h"
 #include "localmem.h"
 #include "rbTree.h"
-#include "longList.h"
+#include "longToList.h"
 
 static int llKeyListCmp(void *va, void *vb)
 /* Compare to sort two llKeyLists on key */
@@ -27,20 +27,20 @@ else
     return 0;
 }
 
-struct longList *longListNew()
-/* Return new empty longList */
+struct longToList *longToListNew()
+/* Return new empty longToList */
 {
-struct longList *ll;
+struct longToList *ll;
 AllocVar(ll);
 ll->tree = rbTreeNew(llKeyListCmp);
 ll->lm = ll->tree->lm;
 return ll;
 }
 
-void longListFree(struct longList **pLl)
-/* Free up memory associated with longList. */
+void longToListFree(struct longToList **pLl)
+/* Free up memory associated with longToList. */
 {
-struct longList *ll = *pLl;
+struct longToList *ll = *pLl;
 if (ll != NULL)
     {
     rbTreeFree(&ll->tree);
@@ -48,7 +48,7 @@ if (ll != NULL)
     }
 }
 
-struct llKeyList *longListAdd(struct longList *ll, long key, void *item)
+struct llKeyList *longToListAdd(struct longToList *ll, long key, void *item)
 /* Add item to key-associated record in ll.  May make up new record if the
  * key has never been seen before.  If record already exists item will be prepended
  * to any existing items. Returns llKeyList associated with key, but most people just
@@ -69,7 +69,7 @@ slAddHead(&lkl->list, ref);
 return lkl;
 }
 
-struct llKeyList *longListLookup(struct longList *ll, long key)
+struct llKeyList *longToListLookup(struct longToList *ll, long key)
 /* Given a key return llKeyList associated with it if any, may return NULL */
 {
 struct llKeyList find;
@@ -77,22 +77,22 @@ find.key = key;
 return rbTreeFind(ll->tree, &find);
 }
 
-struct slRef *longListFindVal(struct longList *ll, long key)
+struct slRef *longToListFindVal(struct longToList *ll, long key)
 /* Returns the list associated with this key, or NULL if key not in container. */
 {
-struct llKeyList *lkl = longListLookup(ll, key);
+struct llKeyList *lkl = longToListLookup(ll, key);
 if (lkl == NULL)
     return NULL;
 else
     return lkl->list;
 }
 
-struct slRef *longListMustFindVal(struct longList *ll, long key)
+struct slRef *longToListMustFindVal(struct longToList *ll, long key)
 /* Returns the list associated with this key. Aborts if key not found in container. */
 {
-struct llKeyList *lkl = longListLookup(ll, key);
+struct llKeyList *lkl = longToListLookup(ll, key);
 if (lkl == NULL)
-    errAbort("Can't find %ld in longList, in longListMustFindVal", key);
+    errAbort("Can't find %ld in longToList, in longToListMustFindVal", key);
 return lkl->list;
 }
 
