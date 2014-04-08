@@ -5272,7 +5272,7 @@ if (isGenome(position) || NULL ==
         freeMem(position);
         position = cloneString(cartUsualString(cart, "lastPosition", defaultPosition));
         hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd,cart);
-        if (hgp != NULL && position != defaultPosition)
+        if (hgp != NULL && differentString(position, defaultPosition))
             cartSetString(cart, "position", position);
         }
     }
@@ -5285,6 +5285,11 @@ createHgFindMatchHash();
 I.e., multiple results may have been found and are printed out prior to this code*/
 if (NULL == chromName)
     {
+    // In case user manually edits the browser location as described in #13009,
+    // revert the position.  If they instead choose from the list as we expect,
+    // that will set the position to their choice.
+    char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
+    cartSetString(cart, "position", lastPosition);
     return;
     }
 

@@ -158,9 +158,11 @@ taxId 7868
 	-strand=+ ../../calMil1.unmasked.2bit > findMotif.txt 2>&1
     #	real    0m9.753s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
-    featureBits calMil1 -not gap -bed=notGap.bed
+    featureBits -countGaps calMil1 -not gap -bed=notGap.bed
+
+    time featureBits calMil1 allGaps.bed notGap.bed -bed=new.gaps.bed
     #   15 bases of 936953458 (0.000%) in intersection
-    #  real    7m32.454s
+    #  real    7m11.392s
 
     # not enough to worry about, in fact they are all on chrM
     # nothing to do, take a look at felCat5.txt for an example
@@ -343,9 +345,9 @@ calMil1.perChromTables = no
     make etc-update
 
 ############################################################################
-# set default position on Myoglobin gene displays  (DONE - 2014-04-03 - Hiram)
+# set default position showing the missing SPP gene (DONE - 2014-04-04 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="KI537194:1947619-1969416" where name="calMil1";' \
+'update dbDb set defaultPos="KI635875:1934002-2090480" where name="calMil1";' \
 	hgcentraltest
 
 #########################################################################
@@ -390,18 +392,15 @@ calMil1.perChromTables = no
     cd /hive/data/genomes/calMil1
     time makeDownloads.pl -workhorse=hgwdev -dbHost=hgwdev calMil1 \
        > downloads.log 2>&1
-XXX - running Thu Apr  3 15:31:20 PDT 2014
-    # real    23m14.645s
+    # real    10m14.722s
 
 ##############################################################################
-# pushQ entry (TBD - 2014-04-02 - Hiram)
+# pushQ entry (DONE - 2014-04-04 - Hiram)
     mkdir /hive/data/genomes/calMil1/pushQ
     cd /hive/data/genomes/calMil1/pushQ
     # Mark says don't let the transMap track get there
     time makePushQSql.pl calMil1 2> stderr.txt | grep -v transMap > calMil1.sql
-    #   real    3m55.511s
-
-hgwbeta hgsql -h mysqlbeta -N qapushq -e 'select rank from pushQ order by rank desc limit 1'
+    #   real    1m54.437s
 
     scp -p calMil1.sql qateam@hgwbeta:/tmp
     ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/calMil1.sql'
