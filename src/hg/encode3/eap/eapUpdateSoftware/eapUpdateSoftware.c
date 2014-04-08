@@ -8,7 +8,7 @@
 
 char *clVersion = NULL;
 char *clMd5 = NULL;
-int redoPriority = -1;
+enum eapRedoPriority redoPriority = erpNoRedo;
 
 void usage()
 /* Explain usage and exit. */
