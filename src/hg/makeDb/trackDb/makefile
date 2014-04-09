@@ -48,6 +48,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 \
 	rn3 rn4 rn5 \
 	speTri1 speTri2 cavPor3 \
+	criGri1 \
 	chiLan1 \
 	hetGla1 hetGla2 \
 	sarHar1 \

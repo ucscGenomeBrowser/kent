@@ -264,7 +264,8 @@ for (info = infoList; info != NULL; info = info->next)
 	    char aminoAcid[4], antiCodon[4];
 	    (void) strncpy(antiCodon, strchr(tRnaName, '-') + 4, 3);
 	    (void) strncpy(aminoAcid, strchr(tRnaName, '-') + 1, 3);
-	    (void) strncpy(antiCodon, strchr(tRnaName, '-') + 4, 3);
+	    aminoAcid[3] = 0;
+	    antiCodon[3] = 0;
 	    geneSymbol = catTwoStrings("TRNA_", aminoAcid);
 	    sprintf(description, "transfer RNA %s (anticodon %s)", 
 		    &aminoAcid[0], &antiCodon[0]);

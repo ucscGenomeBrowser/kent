@@ -715,7 +715,9 @@ return (sqlQuickNum(conn, query)!=0);
 }
 
 static struct slName *sqlTableCacheQuery(struct sqlConnection *conn, char *likeExpr)
-/* return all table names from the table name cache as a list. 
+/* This function queries the tableCache table. It is used by the sqlTableList 
+ * function, so it doe not have to connect to the main sql server just to get a list of table names.
+ * Returns all table names from the table name cache as a list. 
  * Can optionally filter with a likeExpr e.g. "LIKE snp%". */
 {
 char *tableList = cfgVal("showTableCache");
@@ -740,34 +742,47 @@ sqlFreeResult(&sr);
 return list;
 }
 
+static struct slName *sqlListTablesForConn(struct sqlConnection *conn, char *likeExpr)
+/* run SHOW TABLES on connection and return a slName list */
+{
+char query[256];
+if (likeExpr == NULL)
+    safef(query, sizeof(query), "NOSQLINJ SHOW TABLES");
+else
+    safef(query, sizeof(query), "NOSQLINJ SHOW TABLES %s", likeExpr);
+
+struct slName *list = NULL, *el;
+
+struct sqlResult *sr;
+char **row;
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = slNameNew(row[0]);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
 struct slName *sqlListTablesLike(struct sqlConnection *conn, char *likeExpr)
 /* Return list of tables in database associated with conn. Optionally filter list with
  * given LIKE expression that can be NULL or string e.g. "LIKE 'snp%'". */
 {
-struct slName *list = NULL, *el;
-struct sqlResult *sr;
-char **row;
+struct slName *list = NULL;
 
 struct sqlConnection *cacheConn = sqlTableCacheFindConn(conn);
 
 if (cacheConn)
     list = sqlTableCacheQuery(cacheConn, likeExpr);
 else
-    {
-    char query[256];
-    if (likeExpr == NULL)
-        safef(query, sizeof(query), "NOSQLINJ SHOW TABLES");
-    else
-        safef(query, sizeof(query), "NOSQLINJ SHOW TABLES %s", likeExpr);
+    list = sqlListTablesForConn(conn, likeExpr);
 
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        el = slNameNew(row[0]);
-        slAddHead(&list, el);
-        }
-    slReverse(&list);
-    sqlFreeResult(&sr);
+if (conn->failoverConn != NULL)
+    {
+    struct slName *failoverList = sqlListTablesForConn(conn->failoverConn, likeExpr);
+    slSortMergeUniq(list, failoverList, slNameCmp, slNameFree);
     }
 
 return list;

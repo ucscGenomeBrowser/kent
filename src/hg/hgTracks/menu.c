@@ -236,15 +236,15 @@ if (differentWord(database,"susScr2"))
     }
 hFreeConn(&conn);
 
-if (sameString(database, "hg18"))
+if (sameString(database, "hg38"))
     {
-    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&build=previous&CHR=%s&BEG=%d&END=%d",
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d",
           skipChr(chromName), winStart+1, winEnd);
     appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
     }
 else if (sameString(database, "hg19"))
     {
-    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d",
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&build=previous&CHR=%s&BEG=%d&END=%d",
           skipChr(chromName), winStart+1, winEnd);
     appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
     }

@@ -10099,13 +10099,13 @@ else
 }
 
 static void ensGeneAssignConfiguredName(struct track *tg)
-/* Set name on genePred in "extra" field to gene name, accession, or both,
+/* Set name on genePred in "extra" field to gene symbol, ENSG id, or ENST id,
  * depending, on UI on all items in track */
 {
 char *geneLabel = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "label","accession");
-boolean otherGeneName =  sameString(geneLabel, "gene");
-boolean useGeneName =  sameString(geneLabel, "ensembl");
-boolean useAcc = sameString(geneLabel, "accession");
+boolean otherGeneName =  sameString(geneLabel, "gene symbol");
+boolean useGeneName =  sameString(geneLabel, "ENSG* identifier");
+boolean useAcc = sameString(geneLabel, "ENST* identifier");
 struct sqlConnection *conn = NULL;
 if (otherGeneName)
    conn = hAllocConn(database);

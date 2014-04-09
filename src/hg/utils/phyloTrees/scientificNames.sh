@@ -17,6 +17,7 @@ s/apiMel4/Apis_mellifera/;
 s/macFas5/Macaca_fascicularis/;
 s/camFer1/Camelus_ferus/;
 s/chlSab1/Chlorocebus_sabaeus/;
+s/chlSab2/Chlorocebus_sabaeus/;
 s/panHod1/Pantholops_hodgsonii/;
 s/capHir1/Capra_hircus/;
 s/chrAsi1/Chrysochloris_asiatica/;
@@ -74,6 +75,8 @@ s/panTig1/Panthera_tigris_altaica/;
 s/bubBub1/Bubalus_bubalis/;
 s/lipVex1/Lipotes_vexillifer/;
 s/bosTau7/Bos_taurus/;
+s/serCan1/Serinus_canaria/;
+s/cynSem1/Cynoglossus_semilaevis/;
 s/xipMac1/Xiphophorus_maculatus/;'
 }
 

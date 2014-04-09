@@ -3331,7 +3331,7 @@ searchMethod exact
 searchType bed
 shortCircuit 1
 semiShortCircuit 1
-termRegex ([0-9]{6})+\.+([0-9]{4})
+termRegex ([0-9]{6})\.([0-9]{4})
 searchPriority 10
 
 searchName omimGene2Acc
