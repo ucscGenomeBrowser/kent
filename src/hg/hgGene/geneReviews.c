@@ -13,7 +13,7 @@ static void geneReviewsPrint(struct section *section,
 {
 char query[256];
 char * geneSymbol;
-if (sqlTableExists(conn, "geneReviewsRefGene"))
+if (sqlTableExists(conn, "geneReviewsGeneGRshortNBKidGRtitle"))
     {
     sqlSafef(query, sizeof(query), "select geneSymbol from kgXref where kgId = '%s'", itemName);
     geneSymbol = sqlQuickString(conn, query);
@@ -35,18 +35,18 @@ char **row;
 char query[512];
 boolean firstTime = TRUE;
 
-sqlSafef(query, sizeof(query), "select  geneSymbol, grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
+sqlSafef(query, sizeof(query), "select geneSymbol, grShort, NBKid, grTitle from geneReviewsGeneGRshortNBKidGRtitle where geneSymbol='%s'", itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
       if (firstTime)
         {
-          printf("<B>GeneReview(s) and GeneTest disease(s) related to gene  </B>%s:<BR>", row[0]);    
+          printf("<B>GeneReviews article(s) related to gene  </B>%s:<BR>", row[0]);    
           firstTime = FALSE;
         }
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>",row[1], row[1]);
        printf(" ("); 
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", row[3], row[3]);
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank>%s</A>", row[2], row[3]);
        printf(")<BR>");
      }
      sqlFreeResult(&sr);
@@ -54,20 +54,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 static boolean geneReviewsExists(struct section *section,
         struct sqlConnection *conn, char *geneId)
-/* Return TRUE if geneReviewsRefGene table exist and have GeneReviews articles
+/* Return TRUE if geneReviewsGeneGRshortNBKidGRtitle table exist and have GeneReviews articles
  * on this one. */
 {
 char query[256];
 char * geneSymbol;
 char * grSymbol;
 
-if (sqlTableExists(conn, "geneReviewsRefGene"))
+if (sqlTableExists(conn, "geneReviewsGeneGRshortNBKidGRtitle"))
     {
        sqlSafef(query, sizeof(query), "select geneSymbol from kgXref where kgId = '%s'", geneId);
        geneSymbol = sqlQuickString(conn, query);
        if (geneSymbol != NULL)
           {
-             sqlSafef(query, sizeof(query), "select  geneSymbol from geneReviewsRefGene where geneSymbol='%s'", geneSymbol);
+             sqlSafef(query, sizeof(query), "select  geneSymbol from geneReviewsGeneGRshortNBKidGRtitle where geneSymbol='%s'", geneSymbol);
              grSymbol = sqlQuickString(conn, query);
              if (grSymbol != NULL)
                 {
