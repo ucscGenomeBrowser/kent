@@ -52,6 +52,7 @@ felCat5	Cat	Felis catus	mammal	carnivora	2418
 panTig1	Amur tiger	Panthera tigris altaica	mammal	carnivora	2425
 musFur1	Ferret 	Mustela putorius furo	mammal	carnivora	2430
 canFam3	Dog	Canis lupus familiaris	mammal	carnivora	2437
+canLup1	Gray wolf	Canis lupus	mammal	carnivora	2440
 camFer1	Bactrian camel	Camelus ferus	mammal	carnivora	2450
 ailMel1	Panda	Ailuropoda melanoleuca	mammal	carnivora	2460
 odoRosDiv1	Pacific walrus	Odobenus rosmarus divergens	mammal	carnivora	2470
@@ -59,6 +60,7 @@ lepWed1	Weddell seal	Leptonychotes weddellii	mammal	carnivora	2480
 myoBra1	Brandt's myotis (bat)	Myotis brandtii	mammal	chiroptera	2500
 myoDav1	David's myotis (bat)	Myotis davidii	mammal	chiroptera	2510
 myoLuc2	Microbat	Myotis lucifugus	mammal	chiroptera	2514
+rhiFer1	Greater horseshoe bat	Rhinolophus ferrumequinum	mammal	chiroptera	2516
 eptFus1	Big brown bat	Eptesicus fuscus	mammal	chiroptera	2517
 eidHel1	Straw colored fruit bat	Eidolon helvum	mammal	chiroptera	2518
 pteVam1	Megabat	Pteropus vampyrus	mammal	chiroptera	2520
@@ -102,6 +104,7 @@ taeGut1	Zebra finch	Taeniopygia guttata	vertebrate	aves	4370
 serCan1	Canary	Serinus canaria	vertebrate	aves	4372
 geoFor1	Medium ground finch	Geospiza fortis	vertebrate	aves	4373
 melUnd1	Budgerigar	Melopsittacus undulatus	vertebrate	aves	4375
+pytBiv1	Burmese python	Python bivittatus	vertebrate	sauria	4378
 allMis1	American alligator	Alligator mississippiensis	vertebrate	sauria	4380
 allSin1	Chinese alligator	Alligator sinensis	vertebrate	sauria	4382
 croPor1	Crocodile	Crocodylus porosus	vertebrate	sauria	4385
@@ -112,6 +115,7 @@ cheMyd1	Green seaturtle	Chelonia mydas	vertebrate	testudines	4395
 pelSin1	Chinese softshell turtle	Pelodiscus sinensis	vertebrate	testudines	4400
 apaSpi1	Spiny softshell turtle	Apalone spinifera	vertebrate	testudines	4403
 chrPic1	Painted turtle	Chrysemys picta bellii	vertebrate	testudines	4405
+chrPic2	Painted turtle	Chrysemys picta bellii	vertebrate	testudines	4405
 xenTro7	Frog (X. tropicalis)	Xenopus tropicalis	vertebrate	tetrapoda	4439
 xenTro3	Frog (X. tropicalis)	Xenopus tropicalis	vertebrate	tetrapoda	4440
 latCha1	Coelacanth	Latimeria chalumnae	vertebrate	sarcopterygii	4465
@@ -124,9 +128,12 @@ punNye1	Pundamilia nyererei	Pundamilia nyererei	vertebrate	percomorpha	4665
 oreNil2	Nile tilapia	Oreochromis niloticus	vertebrate	percomorpha	4669
 neoBri1	Princess of Burundi	Neolamprologus brichardi	vertebrate	percomorpha	4680
 cynSem1	Tongue sole	Cynoglossus semilaevis	vertebrate	percomorpha	4690
+sebNig1	Tiger rockfish	Sebastes nigrocinctus	vertebrate	percomorpha	4693
+sebRub1	Flag rockfish	Sebastes rubrivinctus	vertebrate	percomorpha	4696
 gasAcu1	Stickleback	Gasterosteus aculeatus	vertebrate	percomorpha	4700
 oryLat2	Medaka	Oryzias latipes	vertebrate	percomorpha	4729
 xipMac1	Southern platyfish	Xiphophorus maculatus	vertebrate	percomorpha	4740
+poeFor1	Amazon molly	Poecilia formosa	vertebrate	percomorpha	4745
 gadMor1	Atlantic cod	Gadus morhua	vertebrate	neoteleostei	4750
 angJap1	Japanese eel	Anguilla japonica	vertebrate	teleostei	4770
 danRer7	Zebrafish	Danio rerio	vertebrate	teleostei	4774
