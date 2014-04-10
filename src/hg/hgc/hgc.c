@@ -9926,7 +9926,7 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     // show GeneReviews  link(s)
-    if (sqlTableExists(conn, "geneReviewsRefGene"))
+    if (sqlTableExists(conn, "geneReviewsGeneGRshortNBKidGRtitle"))
         {
         sqlSafef(query, sizeof(query),
           "select distinct r.name2 from refLink l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",

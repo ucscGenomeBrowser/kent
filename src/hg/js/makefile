@@ -15,7 +15,7 @@ JS_FILES=ajax.js alleles.js autocomplete.js edwPersona.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js \
     ${JQUERY_FILES}
 
-STATIC_FILES=staticDoc.js jquery.js
+STATIC_FILES=staticDoc.js
 
 ifdef LOWELAB
     JS_FILES += lowetooltip.js loweautocomplete.js
