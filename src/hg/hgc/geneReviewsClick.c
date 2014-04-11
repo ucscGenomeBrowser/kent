@@ -29,8 +29,8 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 int i;
-char *clickMsg = "Click GR short name or NCBI Book id link to find the GeneReviews article.";
-char *spacer = "           ";
+char *clickMsg = "Click GR short name link to find the GeneReviews article on NCBI Bookshelf.";
+char *spacer = "   ";
 boolean firstTime = TRUE;
 
 if (!sqlTableExists(conn, "geneReviewsGeneGRshortNBKidGRtitle")) return;
@@ -52,19 +52,21 @@ while ((row = sqlNextRow(sr)) != NULL)
           firstTime = FALSE;
           printf("<PRE><TT>");
               // #123456789-123456789-123456789-123456789-123456789-123456789-
-          printf("GR short name       NCBI Book id      Disease name<BR>");
+          printf("GR short name          Disease name<BR>");
 
-          printf("------------------------------------------------------------");
+          printf("---------------------------------------------------------");
           printf("--------------------<BR>");
         }
-        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>", NBKid, grShort);
         if (strlen(grShort) <= 20) {
           for (i = 0; i <  20-strlen(grShort); i ++ )
              {
                 printf("%s", " " );
              }
            }
-        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>%s%s<BR>", NBKid, NBKid, spacer, grTitle);
+       printf("%s%s<BR>", spacer, grTitle);
+
+//        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>%s%s<BR>", NBKid, NBKid, spacer, grTitle);
     }  /* end while */
  printf("</TT></PRE>");
  sqlFreeResult(&sr);
