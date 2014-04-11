@@ -30,7 +30,7 @@ merge of the segmentations produced by the ChromHMM and Segway software.
 In both segmentations, sets of states across 
 <a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=GM12878,K562,H1-hESC,HeLa-S3,HepG2,HUVEC">six human cell types</a> 
 were learned by computationally integrating ChIP-seq data for 
-<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Input"> ten factors plus input</a>, 
+<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,Pol2,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Input"> ten factors plus input</a>, 
 two DNase-seq assays and a FAIRE-seq assay. 
 In both segmentations, twenty-five states were used to segment the genome, and these states 
 were then grouped and colored to highlight predicted functional elements. 
@@ -66,7 +66,7 @@ The seven states of the combined segmentation, the candidate annotations and ass
 <p>ChIP-seq data from the ENCODE Consortium was used to generate this track, and the ChromHMM 
 and Segway programs were used to perform the segmentation. For both original segmentations, 
 data for 
-<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Input">ten factors plus input</a>, 
+<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,Pol2,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Input">ten factors plus input</a>, 
 two DNase-seq assays and a FAIRE-seq assay and 
 <a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=GM12878,K562,H1-hESC,HeLa-S3,HepG2,HUVEC"> six cell types</a>
 was used.
@@ -102,7 +102,8 @@ the summary combined segmentation.
 A common set of states across <a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=GM12878,H1-hESC,K562,HeLa-S3,HepG2,HUVEC">
 six human cell types</a> (GM12878, H1-hESC, K562, HeLa-S3, HepG2, HUVEC) were learned by
 computationally integrating ChIP-seq data for
-<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Input">8 chromatin marks, input data and the CTCF transcription factor</a>, 
+<a target=ucscVocab 
+href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Pol2,Input">8 chromatin marks, RNA Polymerase II, input data and the CTCF transcription factor</a>, 
 two DNase-seq assays and a FAIRE-seq assay, using a Hidden Markov Model (HMM). 
 In total, twenty-five states were used to segment the genome, and these states were then 
 grouped and colored to highlight predicted functional elements.
@@ -135,8 +136,8 @@ The candidate annotations and associated segment colors are as follows:</p>
 ChIP-seq data from the ENCODE Consortium was used to generate this track, and the ChromHMM 
 program was used to perform the segmentation. 
 Data for 
-<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Input">
-8 chromatin marks, input data and the CTCF transcription factor</a>, 
+<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Pol2,Input">
+8 chromatin marks, RNA Polymerase II, input data and the CTCF transcription factor</a>, 
 two DNase-seq assays and a FAIRE-seq assay and 
 <a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=GM12878,K562,H1-hESC,HeLa-S3,HepG2,HUVEC">six cell types</a>
 binarized separately at a 200 base pair resolution using a Poisson background model and fold enrichment cut-offs. 
@@ -183,7 +184,7 @@ The segment states, associated colors, and candidate annotations are:</p>
 <p>
 ChIP-seq data from the ENCODE Consortium was used to generate this track, and the Segway program 
 was used to perform the segmentation. Data for 
-<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Input">ten factors plus input</a>, 
+<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Pol2,Input">ten factors plus input</a>, 
 two DNase-seq assays and a FAIRE-seq assay and 
 <a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=GM12878,K562,H1-hESC,HeLa-S3,HepG2,HUVEC">six cell types</a>
 was converted to real valued signal data using the Wiggler program. Using the ENCODE regions 
