@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+import urllib2, time, os, datetime, optparse, sys
+
+parser = optparse.OptionParser("""usage: %prog [options] URL filename - compare modification time of file on http server against mtime of file on disk, return exit 0 if it is newer, exit with 1 if not newer.
+example:
+if [ ! %prog http://hgdownload.cse.ucsc.edu/admin/hgcentral.sql lastUpdateTime.flag ]; then
+    echo skip update
+    exit
+fi
+""")
+
+(options, args) = parser.parse_args()
+
+if len(args)==0:
+    parser.print_help()
+    sys.exit(1)
+
+URL, flagFname = args
+
+# little helper class to download only the http HEAD
+class HeadRequest(urllib2.Request):
+    def get_method(self):
+        return "HEAD"
+
+
+# get the mtime of the file on the server
+response = urllib2.urlopen(HeadRequest(URL))
+timeStr = response.headers.getheader("Last-Modified")
+serverTime = datetime.datetime.fromtimestamp(time.mktime(time.strptime(timeStr, "%a, %d %b %Y %H:%M:%S GMT")))
+
+# get the mtime of the flag file
+localTime = datetime.datetime.fromtimestamp(0)
+if os.path.isfile(flagFname):
+    t = os.path.getmtime(flagFname)
+    localTime = datetime.datetime.fromtimestamp(t)
+
+if serverTime > localTime:
+    print "file was updated on server"
+    sys.exit(1)
+else:
+    sys.exit(0)

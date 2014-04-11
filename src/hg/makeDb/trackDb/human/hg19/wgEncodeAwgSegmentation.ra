@@ -22,7 +22,7 @@ type bed 9 .
 itemRgb on
 wgEncode 1
 noScoreFilter .
-visibility dense
+visibility hide
 dataVersion ENCODE Jan 2011 Freeze
 filterBy reserved:Segment_Type=\
             16711680|Strong_Promoter{color:#FF0000},\

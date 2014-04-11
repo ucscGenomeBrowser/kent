@@ -39,8 +39,8 @@ speTri	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Sciuridae; Xe
 dipOrd	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Heteromyidae; Dipodomyinae; Dipodomys
 
 # Taxonomy ID: 230844
-# Prairie deer mouse - Peromyscus maniculatus bairdii
-perBai	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Cricetidae; Neotominae; Peromyscus; Peromyscus maniculatus
+# Prairie (North American) deer mouse - Peromyscus maniculatus bairdii
+perManBai	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Cricetidae; Neotominae; Peromyscus; Peromyscus maniculatus
 
 # Prairie Vole - Microtus ochrogaster
 micOch1 Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Cricetidae; Arvicolinae; Microtus
@@ -106,6 +106,9 @@ pteAle	Eutheria; Laurasiatheria; Chiroptera; Megachiroptera; Pteropodidae; Ptero
 # Megabat - Pteropus vampyrus
 pteVam	Eutheria; Laurasiatheria; Chiroptera; Megachiroptera; Pteropodidae; Pteropodinae; Pteropus
 
+# Greater horseshoe bat Rhinolophus ferrumequinum
+rhiFer	Eutheria; Boreoeutheria; Laurasiatheria; Chiroptera; Microchiroptera; Rhinolophidae; Rhinolophinae; Rhinolophus
+
 # Indian false vampire - Megaderma lyra
 megLyr	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Megadermatidae; Megaderma
 
@@ -138,6 +141,9 @@ musFur	Eutheria; Laurasiatheria; Carnivora; Caniformia; Mustelidae; Mustelinae; 
 
 # Dog Canis familiaris
 canFam	Eutheria; Laurasiatheria; Carnivora; Caniformia; Canidae; Canis
+
+# Gray wolf - Canis lupus
+canLup	Eutheria; Boreoeutheria; Laurasiatheria; Carnivora; Caniformia; Canidae; Canis
 
 # Panda Ailuropoda melanoleuca
 ailMel	Eutheria; Laurasiatheria; Carnivora; Caniformia; Ursidae; Ailuropoda
