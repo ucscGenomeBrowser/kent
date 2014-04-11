@@ -17084,50 +17084,70 @@ TMPDIR=/scratch/tmp
     #	90929066 bases of 1358334882 (6.694%) in intersection
 
 ############################################################################
-# GENEREVIEWS TRACK (DONE 2011-09-22 - Chin)
+# GENEREVIEWS TRACK (DONE 2014-04-09 - Chin)
+# geneReviews data located at ftp://ftp.ncbi.nlm.nih.gov/pub/GeneReviews/
+# which will be updated weekly
     mkdir /hive/data/genomes/hg19/bed/geneReviews
     mkdir -p /hive/data/outside/ncbi/geneReviews/current
     cd /hive/data/outside/ncbi/geneReviews/current
-    wget --timestamping ftp://ftp.ncbi.nih.gov/pub/GeneTests/README.html
-    wget --timestamping ftp://ftp.ncbi.nih.gov/pub/GeneTests/*.txt
-    # Note: the report *.txt are updated daily
+    wget --timestamping ftp://ftp.ncbi.nih.gov/pub/GeneReviews/*.*
+    chmod 660 *.txt
     wc -l *.txt
-    219 README.html
-    #   3043 data_to_build_custom_reports.txt
-    #   7245 disease_OMIM.txt
-    #   3729 disease_gene_GR.txt
-    #   1415 disease_hierarchy.txt
+    #  606 GRtitle_shortname_NBKid.txt
+    # 2792 NBKid_shortname_OMIM.txt
+    # 1337 NBKid_shortname_genesymbol.txt
+        
+    cp -p NBKid_shortname_genesymbol.txt /hive/data/genomes/hg19/bed/geneReviews/.
+    cp -p NBKid_shortname_OMIM.txt /hive/data/genomes/hg19/bed/geneReviews/.
+    cp -p GRtitle_shortname_NBKid.txt /hive/data/genomes/hg19/bed/geneReviews/.
 
-    cp disease_gene_GR.txt /hive/data/genomes/hg19/bed/geneReviews/.
     cd /hive/data/genomes/hg19/bed/geneReviews
-    cat disease_gene_GR.txt | grep -v "^#" \
-     | awk  -F'|' '{if ($3!="-" && $3!="Not applicable" && $4!="-") \
-      printf  "%s\t%s\t%s\t%s\n", $3, $4, $1, $2}' | sort -k1 > grRefGeneData.tab
-    # Create geneReviewsRefGene table
-    cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsRefGene.sql
-CREATE TABLE geneReviewsRefGene (
+
+    cat NBKid_shortname_genesymbol.txt | grep -v "^#" \
+     | awk  '{FS="\t"} {OFS="\t"} {if ($3!="Not applicable") \
+      print $3,$2,$1}' | sort -k1 > geneReviewsGrshortNBKid.tab
+    # Create geneReviewsGrshortNBKid table 
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsGrshortNBKid.sql
+CREATE TABLE geneReviewsGrshortNBKid (
     geneSymbol  varchar(255) not null,   # refSeq gene symbol
     grShort     varchar(255) not null,   # short name for GeneReviews article
-    diseaseID   int unsigned not null,   # Disease ID of the review article
-    diseaseName varchar(255) not null,   # Disease name of the review article
+    NBKid       varchar(255) not null,   # NCBI book ID of the review article
     index (geneSymbol)
 );
 '_EOF_'
     # << happy emacs
+    # load RefSeg Gene to geneReviews article mapping list to hg19
+    hgLoadSqlTab -warn hg19 geneReviewsGrshortNBKid \
+      $HOME/kent/src/hg/lib/geneReviewsGrshortNBKid.sql geneReviewsGrshortNBKid.tab
 
-    # load RefSeg Gene to geneReview mapping list to hg19
-    hgLoadSqlTab -warn hg19 geneReviewsRefGene \
-      $HOME/kent/src/hg/lib/geneReviewsRefGene.sql grRefGeneData.tab
-    # Scanning through 1 files
-
-    # Generate a list of refSeq genes thah have geneReview assoicate with it.
-    cat  grRefGeneData.tab | awk -F'\t' '{printf  "%s\n", $1}' \
+    # Generate a list of refSeq genes that have geneReview assoicate with it.
+    cat  geneReviewsGrshortNBKid.tab | awk -F'\t' '{printf  "%s\n", $1}' \
        | sort  | uniq  > grRefGene.lst
     wc -l *.*
-    #   3729 disease_gene_GR.txt
-    #   1111 grData.tab
-    #    946 grRefGene.lst
+    #  606 GRtitle_shortname_NBKid.txt
+    # 1337 NBKid_shortname_genesymbol.txt
+    # 1324 geneReviewsGrshortNBKid.tab
+    # 1126 grRefGene.lst
 
+    # Note: awk bug -- when reading the first input line, awk treat space as
+    # TAB. So need to work around it by print out all line, then use grep to 
+    # filter first header line
+    cat GRtitle_shortname_NBKid.txt | awk  '{FS="\t"} {OFS="\t"}  {print $1,$2,$3}' |  grep -v "^#" | sort -k1 > geneReviewsGrshortTitleNBKid.tab
+    # Create and load geneReviewsGrshortTitleNBKid
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsGrshortTitleNBKid.sql
+CREATE TABLE geneReviewsGrshortTitleNBKid (
+    grShort     varchar(255) not null,   # short name for GeneReviews article
+    grTitle     varchar(255) not null,   # full geneReviews article name
+    NBKid       varchar(255) not null,   # NCBI book ID of the review article
+    index (grShort)
+);
+'_EOF_'
+
+    hgLoadSqlTab -warn hg19 geneReviewsGrshortTitleNBKid \
+      $HOME/kent/src/hg/lib/geneReviewsGrshortTitleNBKid.sql geneReviewsGrshortTitleNBKid.tab
+
+    cat << '_EOF_' > createGeneReviewsTab.sh
+##!/bin/sh
     # for each refGen in grRefGene.lst, create a non-overlapping bed row.
     cat grRefGene.lst | while read G
       do
@@ -17140,112 +17160,48 @@ CREATE TABLE geneReviewsRefGene (
         cat temp.out >> geneReviews.tab
       done
     rm temp.*
+'_EOF_'
+# << happy emacs
+    chmod +x createGeneReviewsTab.sh
+    ./createGeneReviewsTab.sh
+
+    wc -l *.tab
+    #  1165 bed.tab
+    #  1165 geneReviews.tab
+    #  1324 geneReviewsGrshortNBKid.tab
+    #   605 geneReviewsGrshortTitleNBKid.tab
 
     # load the collapsed bed4 file to hg19,
     hgLoadBed hg19 geneReviews geneReviews.tab
 
-    # addGeneReviewToBed.pl will add the geneReviews detail in html format to
-    # the bed 4 file
-    cat << '_EOF_' > $HOME/kent/src/utils/geneReviews/addGeneReviewToBed.pl
-#!/usr/bin/perl
-use warnings;
-use strict;
-sub usage() {
-    print "usage: ./addGRtoBed.pl dbName > outputFile\n";
-}
-my $argc=scalar(@ARGV);
-if ($argc != 1) {
-    usage; die "ERROR: Please supply a database name for results.\n";
-}
-#get the list of (unique) of gene symbols form geneReviews table
-my @geneReviews = split('\n',
- `hgsql -N -e "select chrom, chromStart, chromEnd, name from geneReviews;" $ARGV[0]`);
-my $grBed;
-my $clickMsg = " (Click links below to search GeneReviews or GeneTests)";
-my $firstTime = 1;
-my $field;
-my $details;
-foreach $grBed(@geneReviews) {
-   $details = "";
-   my @col = split(/\t/, $grBed);
-   #print "Processing name: ", $col[3], " <BR>";
-   my @grShort = split('\n',
-    `hgsql -N -e 'select  grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol="$col[3]"' $ARGV[0]`);
-   $firstTime = 1;
-   my $count = scalar(@grShort);
-   my $i;
-   my $j;
-   for ($i=0; $i < $count; $i++) {
-       my @f5 = split(/\t/, $grShort[$i]);
-   if ($firstTime == 1) {
-      $firstTime=0;
-      $details = "";
-      $details = "<BR><B>GeneReview available for " . $col[3] .  ": </B> " . $clickMsg . "<BR>";
-      $details .= "<PRE><TT>";
-      $details .= "Short name    Disease ID     GeneTests disease name<BR>";
-      $details .= "-----------------------------------------------------------";
-      $details .= "-----------------------------------------------------------";
-      $details .= "----------------------------------<BR>";
-      }
-      $details .= "<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/" . $f5[0] . "\" TARGET=_blank><B>" . $f5[0] . "</B></A>";
-      if (length($f5[0]) <= 15) {
-        for ($j = 0; $j <  15-length($f5[0]); $j ++ )
-           {
-              $details .= " ";
-           }
-         }
-       $details .=  $f5[1] . "       ";
-       $details .= "<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/" . $f5[2] . "?db=genetests&search_param==begins_with\" TARGET=_blank>" . $f5[2]  ."<BR>";
-     }
-       $details .= "</TT></PRE><BR>";
-       print $col[0], "\t", $col[1], "\t", $col[2], "\t", $col[3], "\t", $details, "\n";
-  }
-'_EOF_'
-    # << happy emacs
-    chmod +x $HOME/kent/src/utils/geneReviews/addGeneReviewToBed.pl
-    # Add geneReview item in html format format as field 5
-    $HOME/kent/src/utils/geneReviews//addGeneReviewToBed.pl hg19 > hg19.geneReviews.bed5
-
-    # Convert to bigBed format
-    cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsBed5.as
-table geneReviewsBed5
-"GeneReviews  bigBed 4 + with extra field for detail page"
-    (
-    string chrom;      "Reference sequence chromosome or scaffold"
-    uint   chromStart; "Start position in chromosome"
-    uint   chromEnd;   "End position in chromosome"
-    string name;       "Short Name of item"
-    lstring description; "geneReviews item details in html"
-    )
-'_EOF_'
-    # << happy emacs
-
-    /cluster/bin/x86_64/bedToBigBed -bedFields=4 -tabs \
-     -as=$HOME/kent/src/hg/lib/geneReviewsBed5.as  hg19.geneReviews.bed5 \
-     /hive/data/genomes/hg19/chrom.sizes hg19.geneReviews.bb
-
-    # upload the bigBed file to genomewiki
-    /cluster/bin/scripts/gwUploadFile hg19.geneReviews.bb hg19.geneReviews.bb
-    #  UploadFile hg19.geneReviews.bb hg19.geneReviews.bb
-    #  # loading file: hg19.geneReviews.bb
-    #  # into Image name: Hg19.geneReviews.bb
-    #  # login name: chinhli
-    #  # siteUrl: genomewiki.ucsc.edu
-    #  # traceBackLimit: 0
-    #  # traceBackLimit: 0 past site.Images
-    #  Image info: {u'comment': u'gwUploadFile upload', u'sha1': u'643966466503bd6770f67d49397f4b94174beed2', u'url': u'http://genomewiki.ucsc.edu/images/b/b9/Hg19.geneReviews.bb', u'timestamp': u'2011-09-22T17:40:56Z', u'metadata': None, u'height': 0, u'width': 0, u'user': u'Chinhli', u'descriptionurl': u'http://genomewiki.ucsc.edu/index.php/File:Hg19.geneReviews.bb', u'size': 174667}
-    #  Image File:Hg19.geneReviews.bb usage:
-
-    cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsBB.sql
-# sql to create geneReviewsBB table
-DROP TABLE IF EXISTS geneReviewsBB;
-CREATE TABLE geneReviewsBB (
-    fileName varchar(255) not null      # geneReviews.bb location (url)
+    # Create and load geneReviewsGeneGRshortNBKidGRtitle table 
+    # the new table will replace the old geneReviewsRefGene with diseaseID in
+    # it.
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsGeneGRshortNBKidGRtitle.sql
+CREATE TABLE geneReviewsGeneGRshortNBKidGRtitle (
+    geneSymbol  varchar(255) not null,   # refSeq gene symbol
+    grShort     varchar(255) not null,   # short name for geneReviews article
+    NBKid       varchar(255) not null,   # NCBI book ID of geneRreviews article
+    grTitle     varchar(255) not null,   # full geneReviews article name
+    index (geneSymbol)
 );
 '_EOF_'
-    # << happy emacs
-    hgsql hg19 -e "source $HOME/kent/src/hg/lib/geneReviewsBB.sql;"
-    hgsql hg19 -e 'insert into geneReviewsBB values ("http://genomewiki.ucsc.edu/images/b/b9/Hg19.geneReviews.bb");'
+# << happy emacs
+
+    hgsql hg19 -N -e \
+      "SELECT  s.geneSymbol, s.grShort, t.NBKid, t.grTitle \
+          FROM geneReviewsGrshortNBKid s, geneReviewsGrshortTitleNBKid t \
+          WHERE s.grShort = t.grShort ORDER BY s.geneSymbol;" > geneReviewsGeneGRshortNBKidGRtitle.tab
+
+    hgLoadSqlTab -warn hg19 geneReviewsGeneGRshortNBKidGRtitle \
+      $HOME/kent/src/hg/lib/geneReviewsGeneGRshortNBKidGRtitle.sql geneReviewsGeneGRshortNBKidGRtitle.tab
+
+    # Check in the following to git:  
+    # $HOME/kent/src/hg/lib/geneReviewsGrshortNBKid.sql
+    # $HOME/kent/src/hg/lib/geneReviewsGrshortTitleNBKid.sql
+    # $HOME/kent/src/hg/lib/geneReviewsGeneGRshortNBKidGRtitle.sql    
+    # Update the human/trackDb.ra and human/geneReviews.html
+
 
 
 ##############################################################################

@@ -828,6 +828,7 @@ html cpgIslandSuper
     html cpgIslandSuper
 
     track cpgIslandExtUnmasked
+    release alpha
     superTrack cpgIslandSuper hide
     shortLabel Unmasked CpG
     longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
