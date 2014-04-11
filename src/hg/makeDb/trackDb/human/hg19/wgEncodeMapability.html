@@ -10,7 +10,7 @@ separated as separate (views). For each view, there are
 multiple subtracks representing different sequence lengths or methods of preparation.
 Instructions for configuring multi-view tracks are
 <A HREF="/goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
-<B>Mapability</B> tracks consist of the following views:
+Mappability tracks consist of the following views:
 <DL>
 <DT><I>Alignability</I></DT>
 <DD>These tracks provide a measure of how often the sequence found at the particular
@@ -38,7 +38,7 @@ to a region of the genome. To generate the data, the GEM-mappability
 been employed. The method is equivalent to mapping sliding windows of k-mers
 (where k has been set to 36, 40, 50, 75 or 100 nts to produce these tracks)
 back to the genome using the GEM mapper aligner (up to 2 mismatches were
-allowed in this case). For each window, a mapability score was computed
+allowed in this case). For each window, a mappability score was computed
 (S = 1/(number of matches found in the genome): S=1 means one match in the
 genome, S=0.5 is two matches in the genome, and so on). The
 <em>CRG Alignability</em> tracks were
@@ -70,11 +70,11 @@ cell line and type of experiment. There were 80 open chromatin tracks
 (DNase and FAIRE datasets) and 20 ChIP-seq input/control tracks spanning
 &#126;60 human tissue types/cell lines in total used to identify these regions
 with signal artifacts. These regions tend to have a very high ratio of
-multi-mapping to unique mapping reads and high variance in mapability.
+multi-mapping to unique mapping reads and high variance in mappability.
 Some of these regions overlap pathological repeat elements such as satellite,
-centromeric and telomeric repeats. However, simple mapability based filters
+centromeric and telomeric repeats. However, simple mappability based filters
 do not account for most of these regions. Hence, it is recommended to use this
-blacklist alongside mapability filters.  The
+blacklist alongside mappability filters.  The
 <em>DAC Blacklisted Regions</em> track was generated for the ENCODE project.
 <!-- Complete methods can be found
 <A HREF="ftp://encodeftp.cse.ucsc.edu/users/akundaje/rawdata/blacklists/hg19/hg19-blacklist-README.pdf">here</a>.
@@ -139,8 +139,14 @@ We thank NHGRI for ENCODE funding support.  (Contact:
 title="&#97;k&#117;&#110;d&#97;&#106;&#101;&#64;&#115;&#116;&#97;n&#102;or&#100;.&#101;&#100;&#117;" rel="nofollow" TARGET=_BLANK>Anshul Kundaje</A>).
 </P>
 
-<H2> Data Release Policy </H2>
+<H2> References </H2>
+<P>
+Derrien T, Estelle J, Marco Sola S, Knowles DG, Raineri E, Guigo R, Ribeca P.
+<a href="http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0030377"
+target="_blank">Fast computation and applications of genome mappability</a>.
+<em>PLoS One</em>. 2012;7(1):e30377. </P>
 
+<H2> Data Release Policy </H2>
 <P>Data users may freely use all data in this track.  ENCODE labs that
 contributed annotations have exempted the data displayed here from the
 ENCODE data release policy restrictions.

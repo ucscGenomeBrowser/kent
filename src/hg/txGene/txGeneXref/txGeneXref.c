@@ -254,6 +254,7 @@ for (info = infoList; info != NULL; info = info->next)
 	if (stringIn("Pseudo", tRnaName)) 
 	    {
 	    char antiCodon[4];
+	    antiCodon[3] = 0;
 	    (void) strncpy(antiCodon, strchr(tRnaName, '-') + strlen("Pseudo") + 1,3);
 	    geneSymbol = cloneString("TRNA_Pseudo");
 	    sprintf(description, "transfer RNA pseudogene (anticodon %s)",

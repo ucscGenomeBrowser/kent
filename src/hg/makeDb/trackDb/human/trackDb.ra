@@ -4082,8 +4082,8 @@ searchName geneReviews
 searchTable geneReviews
 searchType bed
 searchPriority 50
-xrefTable geneReviewsRefGene
-xrefQuery select geneSymbol,diseaseName from %s where diseaseName like '%%%s%%'
+xrefTable geneReviewsGeneGRshortNBKidGRtitle
+xrefQuery select geneSymbol,grTitle from %s where grTitle like '%%%s%%'
 searchBoth on
 
 searchTable dgv

@@ -1,7 +1,7 @@
 track wgEncodeMapability
 compositeTrack on
-shortLabel Mapability
-longLabel Mapability or Uniqueness of Reference Genome from ENCODE
+shortLabel Mappability
+longLabel Mappability or Uniqueness of Reference Genome from ENCODE
 group map
 subGroup1 win Window_Size w036=36_bp w040=40_bp w050=50_bp w075=75_bp w100=100_bp
 subGroup2 lab Lab CRG=CRG-Guigo
