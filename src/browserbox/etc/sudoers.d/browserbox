@@ -1,0 +1,5 @@
+www-data     ALL = (mysql:mysql) NOPASSWD: /usr/local/bin/udr,/bin/ls,/usr/bin/rsync,/bin/rm
+www-data     ALL = (root:root) NOPASSWD: /bin/mkdir /gbdb
+www-data     ALL = (root:root) NOPASSWD: /bin/chown www-data.www-data /gbdb
+www-data     ALL = (root:root) NOPASSWD: /bin/kill
+browser     ALL = (root:root) NOPASSWD: /home/browser/updateBrowser
