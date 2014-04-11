@@ -67,7 +67,6 @@ printf("Allow me to deprecate files not uploaded by me:  ");
 cgiMakeCheckBox("allowBox", FALSE);
 printf("<BR>");
 cgiMakeButton("submit", "submit");
-edwPrintLogOutButton();
 }
 
 static void localWarn(char *format, va_list args)

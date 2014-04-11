@@ -298,7 +298,7 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
 
 /* Put out HTTP header and HTML HEADER all the way through <BODY> */
-edwWebHeaderWithPersona("Submit data");
+edwWebHeaderWithPersona("");
 
 // TODO: find a better place for menu update
 puts("<script>$('#edw-submit').hide();</script>");

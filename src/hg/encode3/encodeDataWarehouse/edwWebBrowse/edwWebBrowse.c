@@ -386,7 +386,7 @@ int main(int argc, char *argv[])
 boolean isFromWeb = cgiIsOnWeb();
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
-edwWebHeaderWithPersona("Welcome!");
+edwWebHeaderWithPersona("");
 // TODO: find a better place for menu update
 puts("<script>$('#edw-browse').hide();</script>");
 htmEmptyShell(doMiddle, NULL);

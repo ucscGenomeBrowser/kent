@@ -932,16 +932,14 @@ printf("Content-Type:text/html\r\n");
 printf("\r\n\r\n");
 puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
 	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
-printf("<HTML><HEAD><TITLE>%s</TITLE>\n", title);
+printf("<HTML><HEAD><TITLE>%s</TITLE>\n", "ENCODE Data Warehouse");
 puts("<meta http-equiv='X-UA-Compatible' content='IE=Edge'>");
 puts("<link rel='stylesheet' href='/style/encode3.css' type='text/css'>");
+puts("<link rel='stylesheet' href='/style/encode3_ucsc.css' type='text/css'>");
 puts("<script type='text/javascript' SRC='/js/jquery.js'></script>");
 puts("<script type='text/javascript' SRC='/js/jquery.cookie.js'></script>");
 puts("<script type='text/javascript' src='https://login.persona.org/include.js'></script>");
 puts("<script type='text/javascript' src='/js/edwPersona.js'></script>");
-// TODO: pull into an EDW style sheet
-puts("<style>input {width: auto;}</style>");
-
 puts("</HEAD>");
 
 /* layout with navigation bar */
