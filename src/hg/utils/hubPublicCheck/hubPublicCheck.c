@@ -36,7 +36,7 @@ int hubPublicCheck(char *table)
 {
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
-sqlSafef(query, sizeof(query), "select hubUrl, shortLabel,longLabel from %s", 
+sqlSafef(query, sizeof(query), "select hubUrl, shortLabel,longLabel,dbList from %s", 
 	table); 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -44,13 +44,13 @@ int differences = 0;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *url = row[0], *shortLabel = row[1], *longLabel = row[2]; 
+    char *url = row[0], *shortLabel = row[1], *longLabel = row[2], *dbList = row[3];
     struct errCatch *errCatch = errCatchNew();
     boolean gotWarning = FALSE;
     struct trackHub *tHub = NULL;
     
     if (errCatchStart(errCatch))
-	tHub = trackHubOpen(url, "1"); 
+	tHub = trackHubOpen(url, "hub_1"); 
     errCatchEnd(errCatch);
     if (errCatch->gotError)
 	{
@@ -76,6 +76,24 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 	printf("update %s set longLabel=\"%s\" where hubUrl=\"%s\";\n",table, tHub->longLabel, url);
 	}
+
+    struct hashCookie cookie = hashFirst(tHub->genomeHash);
+    struct dyString *dy = newDyString(1024);
+    int dbCount;
+    struct hashEl *hel;
+
+    while ((hel = hashNext(&cookie)) != NULL)
+	{
+	dbCount++;
+	dyStringPrintf(dy, "%s,", trackHubSkipHubName(hel->name));
+	}
+    if (!sameString(dy->string, dbList))
+	{
+	differences++;
+
+	printf("update %s set dbList=\"%s\" where hubUrl=\"%s\";\n",table, dy->string, url);
+	}
+
     }
 return differences;
 }
@@ -89,7 +107,7 @@ struct trackHub *tHub = NULL;
 int dbCount = 0;
 
 if (errCatchStart(errCatch))
-    tHub = trackHubOpen(url, "1"); 
+    tHub = trackHubOpen(url, "hub_1"); 
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
@@ -108,7 +126,7 @@ struct dyString *dy = newDyString(1024);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     dbCount++;
-    dyStringPrintf(dy, "%s,", hel->name);
+    dyStringPrintf(dy, "%s,", trackHubSkipHubName(hel->name));
     }
 
 printf("insert into %s (hubUrl,shortLabel,longLabel,registrationTime,dbCount,dbList) values (\"%s\",\"%s\", \"%s\",now(),%d, \"%s\");\n",

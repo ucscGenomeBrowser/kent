@@ -1,0 +1,17 @@
+#!/bin/bash
+set +e
+# these processes keep files open that prevent us from remounting ro
+killall dhclient
+service mysql stop
+service apache2 stop
+service rsyslog stop
+
+
+#e4defrag /
+mount -o remount,ro / && zerofree -v /dev/sda1; sudo mount -o remount,rw /
+
+#e4defrag /data/
+mount -o remount,ro /data && zerofree -v /dev/sdb1
+# if the first one did work, try this
+mount -o ro /data && zerofree -v /dev/sdb1
+mount -o remount,rw /data

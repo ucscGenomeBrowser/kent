@@ -603,7 +603,7 @@ canPack On
     type bed6FloatScore
     motifPwmTable factorbookMotifPwm
     #colorByStrand 22,182,33 17,136,25
-    superTrack wgEncodeReg dense
+    superTrack wgEncodeReg hide
     #color 0,128,0
     color 22,182,33
     priority 1.8
