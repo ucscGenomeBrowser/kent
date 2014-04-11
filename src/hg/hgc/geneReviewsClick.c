@@ -33,10 +33,10 @@ char *clickMsg = "Click GR short name link to find the GeneReviews article on NC
 char *spacer = "   ";
 boolean firstTime = TRUE;
 
-if (!sqlTableExists(conn, "geneReviewsGeneGRshortNBKidGRtitle")) return;
+if (!sqlTableExists(conn, "geneReviewsDetail")) return;
 
 
-sqlSafef(query, sizeof(query), "select  grShort, NBKid, grTitle from geneReviewsGeneGRshortNBKidGRtitle where geneSymbol='%s'", itemName);
+sqlSafef(query, sizeof(query), "select  grShort, NBKid, grTitle from geneReviewsDetail where geneSymbol='%s'", itemName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -81,9 +81,9 @@ char **row;
 char query[512];
 boolean firstTime = TRUE;
 
-if (!sqlTableExists(conn, "geneReviewsGeneGRshortNBKidGRtitle")) return;
+if (!sqlTableExists(conn, "geneReviewsDetail")) return;
 
-sqlSafef(query, sizeof(query), "select grShort, NBKid, grTitle from geneReviewsGeneGRshortNBKidGRtitle where geneSymbol='%s'", itemName);
+sqlSafef(query, sizeof(query), "select grShort, NBKid, grTitle from geneReviewsDetail where geneSymbol='%s'", itemName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -95,7 +95,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
           printf("<B>Related GeneReviews disease(s): </B>");
           firstTime = FALSE;
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>", NBKid, grShort);
         printf(" (");
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank>%s</A>", NBKid, grTitle);
        printf(")");
