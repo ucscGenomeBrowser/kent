@@ -617,13 +617,13 @@ freez(&controlName);
 return edwExperimentLoadByQuery(conn, query);
 }
 
-struct edwFile *findChipControlFile(struct sqlConnection *conn, 
+struct edwFile *mustFindChipControlFile(struct sqlConnection *conn, 
     struct edwValidFile *vf, struct edwExperiment *exp)
 /* Find control file for this chip file */
 {
 struct edwExperiment *controlExp = findChipControlExp(conn, exp->accession);
 if (controlExp == NULL)
-    return NULL;
+    errAbort("Can't find control experiment for ChIP experiment %s", exp->accession);
 
 // Got control experiment,  now let's go for a matching bam file. 
 char query[PATH_LEN*3];
@@ -659,7 +659,7 @@ for (controlVf = controlVfList; controlVf != NULL; controlVf = controlVf->next)
 	}
     }
 if (bestControl == NULL)
-    return NULL;
+    errAbort("Can't find control file for ChIP experiment %s", exp->accession);
 
 // Figure out control bam file info
 return edwFileFromId(conn, bestControl->fileId);
@@ -693,10 +693,7 @@ else
 verbose(2, "Looking for control for chip file %s\n", ef->edwFileName);
 
 // Get control bam file info
-struct edwFile *controlEf = findChipControlFile(conn, vf, exp);
-if (controlEf == NULL)
-    errAbort("Can't find control file for ChIP experiment %s", exp->accession);
-
+struct edwFile *controlEf = mustFindChipControlFile(conn, vf, exp);
 verbose(2, "schedulingSppChip on %s with control %s,  step %s, script %s\n", ef->edwFileName, 
     controlEf->edwFileName, analysisStep, scriptName);
 
@@ -748,8 +745,7 @@ else
     }
 
 // Get control bam file info
-struct edwFile *controlEf = findChipControlFile(conn, vf, exp);
-
+struct edwFile *controlEf = mustFindChipControlFile(conn, vf, exp);
 verbose(2, "schedulingMacsChip on %s with control %s,  step %s, script %s\n", ef->edwFileName, 
     controlEf->edwFileName, analysisStep, scriptName);
 
