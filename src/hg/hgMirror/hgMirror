@@ -67,6 +67,9 @@ APACHEUSER = "www-data"
 #DEBUG=True
 DEBUG=False
 
+# list of tables to exclude from track search
+REMOVESEARCH = ["wgEncodeGencodeBasicV19", "wgEncodeGencodeCompV17", "wgEncodeGencodeBasicV14", "wgEncodeGencodeBasicV17", "wgEncodeGencodeCompV14", "mgcFullMrna", "wgEncodeGencodeBasicV7", "orfeomeMrna", "wgEncodeGencodePseudoGeneV14", "wgEncodeGencodePseudoGeneV17", "wgEncodeGencodePseudoGeneV19", "wgEncodeGencodeCompV7", "knownGeneOld6", "geneReviews", "transMapAlnSplicedEst", "gbCdnaInfo", "oreganno", "vegaPseudoGene", "transMapAlnMRna", "ucscGenePfam", "qPcrPrimers", "transMapAlnUcscGenes", "transMapAlnRefSeq", "genscan"]
+
 # list of tracks to hide by default
 FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5"]
 
@@ -99,7 +102,8 @@ def parseHgConf():
 
     hgConf = dict() # python dict = hash table
 
-    for line in open("hg.conf"):
+    confDir = dirname(__file__)
+    for line in open(join(confDir, "hg.conf")):
         line = line.rstrip("\n").strip()
         if line.startswith("#"):
             continue
@@ -1070,6 +1074,13 @@ def printLog(jobId):
         print '<i><a href="hgMirror?stopAllJobs=1">Cancel download now</a></i>'
         refreshPage("jobId=%d" % jobId, delay=4000, addNote=False)
 
+def removeSomeTracksFromSearch(db):
+    conn = sqlConnect("hg19", "local")
+    cur = conn.cursor()
+    for table in REMOVESEARCH:
+        query = "DELETE FROM hgFindSpec WHERE searchTable='%s';" % table
+        cur.execute(query)
+
 def hideSomeTracks(localTables):
     """
     hide some notoriously slow tracks by default
@@ -1079,7 +1090,7 @@ def hideSomeTracks(localTables):
         return
 
     if "trackDb" not in localTables:
-	return
+        return
 
     conn = sqlConnect("hg19", "local")
     cur = conn.cursor()
@@ -1445,11 +1456,13 @@ def htmlMiddle(args):
             tableSizes, localSizes, gbdbSizes, tableToGbdbFiles, showSubtracks)
 
         hideSomeTracks(localSizes)
+        removeSomeTracksFromSearch(localSizes)
 
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
     if len(sys.argv)>1:
+        removeSomeTracksFromSearch("hg19")
         hideSomeTracks({"trackDb":1})
         sys.exit(0)
 
