@@ -9954,3 +9954,27 @@ EOF
     make joinerCheck
     # see output in check/joiner.out
 ##############################################################################
+# SEGMENTAL DUPLICATIONS (WORKING 4/14/14 Pauline)
+    # File emailed from John Huddleston (jlhudd@uw.edu) in the Eichler Lab. 
+    mkdir /hive/data/genomes/mm10/bed/genomicSuperDups
+    cd /hive/data/genomes/mm10/bed/genomicSuperDups
+
+    wget --timestamping 'http://mouseparalogy.gs.washington.edu/GRCm38/genomicSuperDup.tab'
+
+    mv genomicSuperDup.tab mm10_WGAC.tab
+
+    awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' mm10_WGAC.tab \
+    | hgLoadBed mm10 genomicSuperDups stdin \
+      -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+    # mm8 version of track had issue where strand values were "+" and "_" --
+    # checked and found same issue - so ran same fix:
+    hgsql mm10 -e 'update genomicSuperDups set strand = "-" where strand = "_";'
+
+    #new mm10 version has a lot more stuff than version on mm8:
+    #featureBits mm8 genomicSuperDups
+    #157417547 bases of 2567283971 (6.132%) in intersection
+    #featureBits mm10 genomicSuperDups
+    #214917441 bases of 2652783500 (8.102%) in intersection
+    #select count(*) from genomicSuperDups;
+    #659775 (vs. 277816 in mm8)
