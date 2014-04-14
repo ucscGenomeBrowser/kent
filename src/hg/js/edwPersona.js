@@ -12,6 +12,13 @@ $(function () {
         signOutLink.onclick = function() { navigator.id.logout(); };
     }
 
+    // update navigation bar to show email of logged in user
+    if (email != null) {
+        $('#edw-user').text(email);
+    } else {
+        $('#signout').hide();
+    }
+
     navigator.id.watch({
       loggedInUser: email,
       onlogin: function(assertion) {
