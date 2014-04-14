@@ -43,7 +43,6 @@ else
     {
     struct sqlConnection *conn = sqlConnect(edwDatabase);
     struct edwUser *user = edwUserFromEmail(conn, oldUserEmail);
-    edwPrintLogOutButton();
     if (user != NULL && edwUserIsAdmin(conn, oldUserEmail)) 
 	{
 	printf("%s is authorized to create a new user<BR>\n", oldUserEmail);
