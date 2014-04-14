@@ -27,6 +27,7 @@ UTIL_DIRS = \
     edwRetryJob \
     edwRunDaemon \
     edwRunOnIds \
+    edwRsyncEdwUser \
     edwSubmit
 
 CGI_DIRS = \
