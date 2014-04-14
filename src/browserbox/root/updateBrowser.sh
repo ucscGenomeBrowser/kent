@@ -83,7 +83,7 @@ if [ "$1" == "beta" ] ; then
 fi
 
 echo
-echo Now updating the genome browser programs, html files and data files:
+echo Now updating the genome browser software and data:
 
 # update CGIs
 echo updating CGIs...
@@ -91,7 +91,7 @@ rsync --delete --delete-excluded $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/ap
 chown -R www-data.www-data /usr/local/apache/cgi-bin/*
 
 echo updating HTML files...
-rsync --delete --delete-excluded $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bw --exclude *.gz --exclude favicon.ico --exclude folders --exclude ancestors/** --exclude admin/** --exclude goldenPath/customTracks/*/* --exclude images/mammalPsg/**
+rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bw --exclude *.gz --exclude favicon.ico --exclude folders --exclude ancestors/** --exclude admin/** --exclude goldenPath/customTracks/*/* --exclude images/mammalPsg/** --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png
 chown -R www-data.www-data /usr/local/apache/htdocs/
 #wget http://hgwdev.soe.ucsc.edu/favicon.ico -O /usr/local/apache/htdocs/favicon.ico
 
@@ -115,8 +115,27 @@ mysql hgcentral -e 'delete from hubPublic where hubUrl like "%nknguyen%"'
 
 echo patching menu 
 cp /usr/local/apache/htdocs/inc/globalNavBar.inc /tmp/navbar.inc
+# remove mirrors and downloads menu
+sed -i '/<li class="menuparent" id="mirrors">/,/^<\/li>$/d' /tmp/navbar.inc 
+sed -i '/<li class="menuparent" id="downloads">/,/^<\/li>$/d' /tmp/navbar.inc 
 cat /tmp/navbar.inc | grep -v hgNear | grep -v hgVisiGene | sed -e '/hgLiftOver/a <li><a href="../cgi-bin/hgMirror">Mirror tracks</a></li>' | uniq > /usr/local/apache/htdocs/inc/globalNavBar.inc 
 rm /tmp/navbar.inc
+
+# patch left side menu:
+# remove encode, neandertal, galaxy, visiGene, Downloads, cancer browser, microbial, mirrors, jobs
+# <A CLASS="leftbar" HREF="cgi-bin/hgGateway">
+#                        #Genome Browser</A><HR>
+for i in hgNear ENCODE Neandertal galaxy VisiGene hgdownload genome-cancer microbes mirror jobs; do
+    sed -i '/<A CLASS="leftbar" .*'$i'.*$/,/<HR>$/d' /usr/local/apache/htdocs/index.html
+done
+
+# patch main page
+sed -i 's/About the UCSC Genome Bioinformatics Site/About the UCSC Genome Browser in a Box/g' /usr/local/apache/htdocs/indexIntro.html
+# patch contacts page
+sed -i 's/......cgi-bin\/hgUserSuggestion/http:\/\/genome.ucsc.edu\/cgi-bin\/hgUserSuggestion/' /usr/local/apache/htdocs/contacts.html
+# remove visigene from top menu
+sed -i '/hgVisiGene/d' /usr/local/apache/htdocs/inc/home.topbar.html
+
 # not needed, but running anyway
 chown www-data.www-data /usr/local/apache/htdocs/inc/globalNavBar.inc
 
@@ -133,13 +152,12 @@ mysql hgcentral -e 'drop table if exists tableList'
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "cons%way"'
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "ucscRetroAli%"'
 
-LATENCY=`ping genome.ucsc.edu -n -c1 -q | grep rtt | cut -d' ' -f4 | cut -d/ -f2 | cut -d. -f1`
-if [ "$LATENCY" -gt "90" ]; then
-    echo making low-latency changes
-    # excluding some rarely used tracks from track search
-    # potentially add: rgdQtl rgdRatQtl hgIkmc acembly jaxQtlAsIs jaxQtlPadded vegaGene
-    /usr/local/apache/cgi-bin/hgMirror hideTracks
-fi
+#LATENCY=`ping genome.ucsc.edu -n -c1 -q | grep rtt | cut -d' ' -f4 | cut -d/ -f2 | cut -d. -f1`
+#if [ "$LATENCY" -gt "90" ]; then
+#echo making low-latency changes
+# excluding some rarely used tracks from track search
+# potentially add: rgdQtl rgdRatQtl hgIkmc acembly jaxQtlAsIs jaxQtlPadded vegaGene
+/usr/local/apache/cgi-bin/hgMirror hideTracks
 
 touch /root/lastUpdateTime.flag
 echo update done.

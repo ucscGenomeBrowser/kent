@@ -56,3 +56,6 @@ Tue Mar 25 16:10:09 PDT 2014
 
 Fri Apr  4 09:01:41 PDT 2014
 - added urlIsNotNewerThanFile
+
+Fri Apr 11 09:22:50 PDT 2014
+- update timing changed to 1 minute, using hgMirror now to hide tracks

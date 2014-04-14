@@ -9,6 +9,6 @@ if [ -f /root/noAutoUpdate ]; then
 fi
 
 # sleep a little bit, so we don't hammer the rsync server
-sleep $[RANDOM%30]m
+sleep $[RANDOM%30]
 
 /root/updateBrowser.sh
