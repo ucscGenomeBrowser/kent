@@ -118,6 +118,28 @@ if (row != NULL)
 sqlFreeResult(&sr);
 }
 
+static void getSymbolAndDescription(char *acc, struct sqlConnection *gConn, char **geneSymbol, char **description)
+{
+*geneSymbol = *description = NULL;
+
+char query[1024];
+sqlSafef(query, sizeof(query),
+    "select geneName.name, description.name from gbCdnaInfo,geneName,description "
+    "where description.id=gbCdnaInfo.description "
+    "and geneName.id=gbCdnaInfo.geneName and gbCdnaInfo.acc = '%s'", acc);
+
+
+struct sqlResult *sr = sqlGetResult(gConn, query);
+char **row = sqlNextRow(sr);
+
+if (row != NULL)
+    {
+    *geneSymbol = cloneString(row[0]);
+    *description = cloneString(row[1]);
+    }
+sqlFreeResult(&sr);
+}
+
 void txGeneXref(char *genomeDb, char *tempDb, char *uniProtDb, 
 		char *genePredFile, char *infoFile, char *pickFile, 
 		char *evFile, char *outFile)
@@ -295,93 +317,23 @@ for (info = infoList; info != NULL; info = info->next)
 	    mRNA = cloneString(ev->primary);
 	    chopSuffix(mRNA);
 	    }
-
-	/* Still no joy? Try genbank RNA records. 
-	 * First, try to get the symbol and description from 
-	 * the same record.  Don't do any of this if there's a RefSeq.
-	 * GenBank records are last resort, and if there's a RefSeq with
-	 * a blank description, going to GenBank records for the description
-	 * involves too much risk of a gene symbol and description that 
-	 * contradict each other. */
-	if (geneSymbol == NULL && description == NULL && strcmp(refseq, "") != 0) 
-	    {
-	    if (ev != NULL)
-		{
-		int i;
-		for (i=0; i<ev->accCount; ++i)
-		    {
-		    char *acc = ev->accs[i];
-		    chopSuffix(acc);
-		    if (geneSymbol == NULL && description == NULL)
-			{
-			sqlSafef(query, sizeof(query), 
-			      "select geneName.name from gbCdnaInfo,geneName "
-			      "where geneName.id=gbCdnaInfo.geneName "
-			      "and geneName.name != 'n/a'"
-			      "and gbCdnaInfo.description > 0 "
-			      "and gbCdnaInfo.acc = '%s'", acc);
-			geneSymbol = sqlQuickString(gConn, query);
-			if (geneSymbol != NULL) 
-			    {
-			    sqlSafef(query, sizeof(query), 
-				  "select description.name " 
-				  "from gbCdnaInfo,description "
-				  "where description.id=gbCdnaInfo.description "
-				  "and gbCdnaInfo.acc = '%s'", acc);
-			    description = sqlQuickString(gConn, query);
-			    if (description != NULL) 
-				{
-				if (sameString(description, "n/a"))
-				    description = NULL;
-				}
-			    }
-		        }
-		    }
-		}
-	    }
 	}
 
-    /* And if that failed too, try getting them from different records
-     * and HOPING that they match... */
     if (geneSymbol == NULL || description == NULL)
-        {
-        if (ev != NULL)
-            {
-            int i;
-            for (i=0; i<ev->accCount; ++i)
-                {
-                char *acc = ev->accs[i];
-                chopSuffix(acc);
-                if (geneSymbol == NULL)
-                    {
-                    sqlSafef(query, sizeof(query),
-                        "select geneName.name from gbCdnaInfo,geneName "
-			  "where geneName.id=gbCdnaInfo.geneName and gbCdnaInfo.acc = '%s'", acc);
-                    geneSymbol = sqlQuickString(gConn, query);
-                    if (geneSymbol != NULL)
-                        {
-                        if (sameString(geneSymbol, "n/a"))
-			    geneSymbol = NULL;
-                        }
-                    }
-                if (description == NULL)
-                    {
-                    sqlSafef(query, sizeof(query),
-                        "select description.name from gbCdnaInfo,description "
-                        "where description.id=gbCdnaInfo.description "
-			  "and gbCdnaInfo.acc = '%s'", acc);
-                    description = sqlQuickString(gConn, query);
-                    if (description != NULL)
-                        {
-                        if (sameString(description, "n/a"))
-			    description = NULL;
-                        }
-                    }
-                }
-            }
+	getSymbolAndDescription(mRNA, gConn, &geneSymbol, &description);
+
+    if (geneSymbol == NULL || description == NULL)
+	{
+	int i;
+	for (i=0; (geneSymbol == NULL) && (i < ev->accCount); ++i)
+	    {
+	    char *acc = ev->accs[i];
+	    chopSuffix(acc);
+	    getSymbolAndDescription(acc, gConn, &geneSymbol, &description);
+	    }
         }
 
-    if (geneSymbol == NULL)
+    if ((geneSymbol == NULL) || sameString(geneSymbol, "n/a") )
         geneSymbol = mRNA;
     if (description == NULL)
         description = mRNA;
