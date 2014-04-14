@@ -129,6 +129,7 @@ static char *tupBelNames[] = {"Tupaia belangeri", NULL};
 static char *vicPacNames[] = {"Vicugna pacos", NULL};
 static char *balAcuNames[] = {"Balaenoptera acutorostrata", "Balaenoptera acutorostrata scammoni", "Balaenoptera borealis", "Balaenoptera brydei", "Balaenoptera edeni", "Balaenoptera omurai", "Balaenoptera physalus", NULL};
 static char *calMilNames[] = {"Callorhinchus milii", NULL};
+static char *criGriNames[] = {"Cricetulus griseus", NULL};
 
 static char *endNames[] = {NULL};
 
@@ -235,6 +236,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"vicPac", vicPacNames},
     {"balAcu", balAcuNames},
     {"calMil", calMilNames},
+    {"criGri", criGriNames},
     {"CHM", hgNames},
     {"braNey", hgNames},
     {NULL, endNames}

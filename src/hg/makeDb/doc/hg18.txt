@@ -32036,37 +32036,37 @@ mkdir -p /usr/local/apache/htdocs/evoFoldV2
 ln -s /hive/data/genomes/gs.19/build36/bed/evofoldV2/doEvoFoldV2/evoFoldV2  /gbdb/hg18/evoFoldV2 
 ln -s /gbdb/hg18/evoFoldV2 /usr/local/apache/htdocs/evoFoldV2/hg18
 
-
-
 ############################################################################
-# GENEREVIEWS TRACK (DONE 2011-09-22 - Chin)
+# GENEREVIEWS TRACK (DONE 2014-04-09 - Chin)
 # This track depends on some tasks completed for hg19, specifically:
 #
-#      ~/kent/src/hg/lib/geneReviewsBB.sql
-#      ~/kent/src/hg/lib/geneReviewsBed5.as
-#      ~/kent/src/hg/lib/geneReviewsRefGene.sql
-#      ~/kent/src/hg/makeDb/trackDb/human/geneReviews.html
-#      ~/kent/src/utils/geneReviews/addGeneReviewToBed.pl
+# $HOME/kent/src/hg/lib/geneReviewsGrshortNBKid.sql
+# $HOME/kent/src/hg/lib/geneReviewsGrshortTitleNBKid.sql
+# $HOME/kent/src/hg/lib/geneReviewsDetail.sql    
+# $HOME/kent/src/hg/makeDb/trackDb/human/geneReviews.html
 #
-#  and data fetched from NCBI:
-#       /hive/data/outside/ncbi/geneReviews/current/disease_gene_GR.txt
-#       /hive/data/genomes/hg19/bed/geneReviews/grRefGeneData.tab
-#       /hive/data/genomes/hg19/bed/geneReviews/grRefGene.lst
+#  and data fetched from NCBI ftp://ftp.ncbi.nlm.nih.gov/pub/GeneReviews/
+#   /hive/data/outside/ncbi/geneReviews/current/NBKid_shortname_genesymbol.txt
+#   /hive/data/genomes/hg19/bed/geneReviews/geneGrshortNBKid.tab
+#   /hive/data/genomes/hg19/bed/geneReviews/grRefGene.lst
 # 
 # Refer to GENEREVIEWS TRACK section in hg19.txt for details
 
     mkdir /hive/data/genomes/hg18/bed/geneReviews
     cd /hive/data/genomes/hg18/bed/geneReviews
-    cp /hive/data/outside/ncbi/geneReviews/current/disease_gene_GR.txt .
-    cp  /hive/data/genomes/hg19/bed/geneReviews/grRefGeneData.tab .
+    cp -p /hive/data/genomes/hg19/bed/geneReviews/geneReviewsGrshortNBKid.tab .
+    cp -p /hive/data/genomes/hg19/bed/geneReviews/geneReviewsGrshortTitleNBKid.tab .
+    cp -p /hive/data/genomes/hg19/bed/geneReviews/grRefGene.lst .
 
-    # load RefSeg Gene to geneReview mapping list to hg18
-    hgLoadSqlTab -warn hg18 geneReviewsRefGene \
-      $HOME/kent/src/hg/lib/geneReviewsRefGene.sql grRefGeneData.tab
-    # Scanning through 1 files
 
-    cp /hive/data/genomes/hg19/bed/geneReviews/grRefGene.lst .
-  
+    # load RefSeg Gene to geneReviews article mapping list to hg18
+    hgLoadSqlTab -warn hg18 geneReviewsGrshortNBKid \
+      $HOME/kent/src/hg/lib/geneReviewsGrshortNBKid.sql geneReviewsGrshortNBKid.tab
+    hgLoadSqlTab -warn hg18 geneReviewsGrshortTitleNBKid \
+      $HOME/kent/src/hg/lib/geneReviewsGrshortTitleNBKid.sql geneReviewsGrshortTitleNBKid.tab
+
+    cat << '_EOF_' > createGeneReviewsTab.sh
+##!/bin/sh
     # for each refGen in grRefGene.lst, create a non-overlapping bed row.
     cat grRefGene.lst | while read G
       do
@@ -32079,35 +32079,24 @@ ln -s /gbdb/hg18/evoFoldV2 /usr/local/apache/htdocs/evoFoldV2/hg18
         cat temp.out >> geneReviews.tab
       done
     rm temp.*
-
+'_EOF_'
+# << happy emacs
+    chmod +x createGeneReviewsTab.sh
+    ./createGeneReviewsTab.sh
+    wc -l *.tab
+    # 1105 geneReviews.tab
+    # 1324 geneReviewsGrshortNBKid.tab
+    #  605 geneReviewsGrshortTitleNBKid.tab
     # load the collapsed bed4 file to hg18,
     hgLoadBed hg18 geneReviews geneReviews.tab
 
-    # Use addGeneReviewToBed.pl will add the geneReviews detail in html format to 
-    # the bed 4 file
-    chmod +x $HOME/kent/src/utils/geneReviews/addGeneReviewToBed.pl
-    # Add geneReview item in html format format as field 5
-    $HOME/kent/src/utils/geneReviews//addGeneReviewToBed.pl hg18 > hg18.geneReviews.bed5
+    hgsql hg18 -N -e \
+      "SELECT  s.geneSymbol, s.grShort, t.NBKid, t.grTitle \
+          FROM geneReviewsGrshortNBKid s, geneReviewsGrshortTitleNBKid t \
+          WHERE s.grShort = t.grShort ORDER BY s.geneSymbol;" > geneReviewsDetail.tab
 
-    # Convert to bigBed format 
-    /cluster/bin/x86_64/bedToBigBed -bedFields=4 -tabs \
-     -as=$HOME/kent/src/hg/lib/geneReviewsBed5.as  hg18.geneReviews.bed5 \
-     /hive/data/genomes/hg18/chrom.sizes hg18.geneReviews.bb
-
-    # upload the bigBed file to genomewiki
-    /cluster/bin/scripts/gwUploadFile hg18.geneReviews.bb hg18.geneReviews.bb
-    # # loading file: hg18.geneReviews.bb
-    # # into Image name: Hg18.geneReviews.bb
-    # # login name: chinhli
-    # # siteUrl: genomewiki.ucsc.edu
-    # # traceBackLimit: 0
-    # # traceBackLimit: 0 past site.Images
-    # Image info: {u'comment': u'gwUploadFile upload', u'sha1': u'6f5009a367a6b4fdaa2739541680253bd183af12', u'url': u'http://genomewiki.ucsc.edu/images/c/cd/Hg18.geneReviews.bb', u'timestamp': u'2011-09-22T23:28:39Z', u'metadata': None, u'height': 0, u'width': 0, u'user': u'Chinhli', u'descriptionurl': u'http://genomewiki.ucsc.edu/index.php/File:Hg18.geneReviews.bb', u'size': 170249}
-    # Image File:Hg18.geneReviews.bb usage:
-
-    hgsql hg18 -e "source $HOME/kent/src/hg/lib/geneReviewsBB.sql;"
-    hgsql hg18 -e 'insert into geneReviewsBB values ("http://genomewiki.ucsc.edu/images/c/cd/Hg18.geneReviews.bb")'
-    
+    hgLoadSqlTab -warn hg18 geneReviewsDetail \
+      $HOME/kent/src/hg/lib/geneReviewsDetail.sql geneReviewsDetail.tab
 
 #############################################################################
 2012-06-25 markd

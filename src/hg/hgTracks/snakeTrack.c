@@ -19,6 +19,7 @@
 #include "trackHub.h"
 #include "limits.h"
 #include "snakeUi.h"
+#include "bits.h"
 
 #include "halBlockViz.h"
 
@@ -36,6 +37,7 @@ struct snakeFeature
     char *qSequence;			/* may have sequence, or NULL */
     char *tSequence;			/* may have sequence, or NULL */
     char *qName;			/* chrom name on other species */
+    unsigned pixX1, pixX2;              /* pixel coordinates within window */
     };
 
 static int snakeFeatureCmpTStart(const void *va, const void *vb)
@@ -63,8 +65,9 @@ if (diff == 0)
 return diff;
 }
 
-
 // static machinery to calculate full and pack snake
+
+#define NUM_LEVELS	1000
 
 struct level
 {
@@ -73,16 +76,21 @@ int orientation;	/* strand.. see above */
 unsigned long edge;	/* the leading edge of this level */
 int adjustLevel;	/* used to compress out the unused levels */
 boolean hasBlock;	/* are there any blocks in this level */
+
+// these fields are used to compact full snakes
+unsigned *connectsToLevel;  /* what levels does this level connect to */
+Bits *pixels;               /* keep track of what pixels are used */
+struct snakeFeature *blocks; /* the ungapped blocks attached to this level */
 };
 
-static struct level Levels[10000]; /* for packing the snake, not re-entrant! */
+static struct level Levels[NUM_LEVELS]; /* for packing the snake, not re-entrant! */
 static int maxLevel = 0;     	     /* deepest level */	
 
 /* blocks that make it through the min size filter */
 static struct snakeFeature *newList = NULL;   
 
 static void clearLevels()
-/* clear out the data structure that we use to calculate full snakes */
+/* clear out the data structure that we use to calculate snakes */
 {
 int ii;
 
@@ -212,9 +220,187 @@ struct snakeInfo
 int maxLevel;
 } snakeInfo;
 
+static void freeFullLevels()
+// free the connection levels and bitmaps for each level
+{
+int ii;
+
+for(ii=0; ii <= maxLevel; ii++)
+    {
+    freez(&Levels[ii].connectsToLevel);
+    bitFree(&Levels[ii].pixels);
+    }
+}
+
+static void initializeFullLevels(struct snakeFeature *sfList)
+/* initialize levels for compact snakes */
+{
+int ii;
+
+for(ii=0; ii <= maxLevel; ii++)
+    {
+    Levels[ii].connectsToLevel = needMem((maxLevel+1) * sizeof(unsigned));
+    Levels[ii].pixels = bitAlloc(insideWidth);
+    Levels[ii].blocks = NULL;
+    }
+
+struct snakeFeature *sf, *prev = NULL, *next;
+int prevLevel = -1;
+double scale = scaleForWindow(insideWidth, winStart, winEnd);
+
+for(sf=sfList; sf; prev = sf, sf = next)
+    {
+    next = sf->next;
+
+    if (positiveRangeIntersection(sf->start, sf->end, winStart, winEnd))
+	{
+	int sClp = (sf->start < winStart) ? winStart : sf->start;
+	sf->pixX1 = round((sClp - winStart)*scale);
+	int eClp = (sf->end > winEnd) ? winEnd : sf->end;
+	sf->pixX2 = round((eClp - winStart)*scale);
+	}
+    else
+	{
+	sf->pixX1 = sf->pixX2 = 0;
+	}
+
+    bitSetRange(Levels[sf->level].pixels, sf->pixX1, sf->pixX2 - sf->pixX1);
+
+    if (prevLevel != -1)
+	Levels[sf->level].connectsToLevel[prevLevel] = 1;
+
+    if(next != NULL)
+	Levels[sf->level].connectsToLevel[next->level] = 1;
+
+    prevLevel = sf->level;
+
+    slAddHead(&Levels[sf->level].blocks, sf);
+    }
+}
+
+static int highestLevelBelowUs(int level)
+// is there a level below us that doesn't connect to us
+{
+int newLevel;
+
+// find the highest level below us that we connect to
+for(newLevel = level - 1; newLevel >= 0; newLevel--)	 
+    if (Levels[level].connectsToLevel[newLevel])
+	break;
+
+// if the next level is more than one below us, we may
+// be able to push our blocks to it.
+if ((newLevel < 0) || (newLevel + 1 == level))
+    return -1;
+
+return newLevel + 1;
+}
+
+// the number of pixels we need clear on either side of the blocks we push
+#define EXTRASPACE	10
+
+static boolean checkBlocksOnLevel(int level, struct snakeFeature *sfList)
+// is there enough pixels on this level to hold our blocks?
+{
+struct snakeFeature *sf;
+
+for(sf=sfList; sf;  sf = sf->next)
+    {
+    if (bitCountRange(Levels[level].pixels, sf->pixX1 - EXTRASPACE, (sf->pixX2 - sf->pixX1) + 2*EXTRASPACE))
+	return FALSE;
+    }
+return TRUE;
+}
+
+static void collapseLevel(int oldLevel, int newLevel)
+// push level up to higher level
+{
+struct snakeFeature *sf;
+struct snakeFeature *next;
+
+for(sf=Levels[oldLevel].blocks; sf;  sf = next)
+    {
+    next = sf->next;
+    sf->level = newLevel;
+    slAddHead(&Levels[newLevel].blocks, sf);
+
+    bitSetRange(Levels[sf->level].pixels, sf->pixX1, sf->pixX2 - sf->pixX1);
+    }
+Levels[oldLevel].blocks = NULL;
+Levels[oldLevel].pixels = bitAlloc(insideWidth);
+}
+
+static void remapConnections(int oldLevel, int newLevel)
+// if we've moved a level, we need to remap all the connections
+{
+int ii, jj;
+
+for(ii=0; ii <= maxLevel; ii++)
+    {
+    for(jj=0; jj <= maxLevel; jj++)
+	{
+	if (Levels[ii].connectsToLevel[oldLevel])
+	    {
+	    Levels[ii].connectsToLevel[oldLevel] = 0;
+	    Levels[ii].connectsToLevel[newLevel] = 1;
+	    }
+	}
+    }
+}
+
+static struct snakeFeature *compactSnakes(struct snakeFeature *sfList)
+// collapse levels that will fit on a higer level
+{
+int ii;
+
+initializeFullLevels(sfList);
+
+// start with third level to see what can be compacted
+for(ii=2; ii <= maxLevel; ii++) 
+    {
+    int newLevel;
+    // is there a level below us that doesn't connect to us
+    if ((newLevel = highestLevelBelowUs(ii)) > 0)
+	{
+	int jj;
+	for (jj=newLevel; jj < ii; jj++)
+	    {
+	    if (checkBlocksOnLevel(jj, Levels[ii].blocks))
+		{
+		collapseLevel(ii, jj);
+		remapConnections(ii, jj);
+		break;
+		}
+	    }
+	}
+    }
+
+// reattach blocks in the levels to linkedFeature
+struct snakeFeature *newList = NULL;
+for(ii=0; ii <= maxLevel; ii++)
+    {
+    newList = slCat(Levels[ii].blocks, newList);
+    }
+slSort(&newList, snakeFeatureCmpQStart);
+
+// figure out the new max
+int newMax = 0;
+for(ii=0; ii <= maxLevel; ii++)
+    if (Levels[ii].blocks != NULL)
+	newMax = ii;
+
+freeFullLevels();
+maxLevel = newMax;
+
+return newList;
+}
+
 static void calcFullSnake(struct track *tg, void *item)
+// calculate a full snake
 {
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
+
+// if there aren't any blocks, don't bother
 if (lf->components == NULL)
     return;
 
@@ -286,6 +472,8 @@ if (lf->codons == NULL)
     for(sf=(struct snakeFeature *)lf->components; sf; sf = sf->next)
 	sf->level = Levels[sf->level].adjustLevel;
 
+    // now compact the snakes
+    lf->components = (void *)compactSnakes((struct snakeFeature *)lf->components);
     struct snakeInfo *si;
     AllocVar(si);
     si->maxLevel = maxLevel;

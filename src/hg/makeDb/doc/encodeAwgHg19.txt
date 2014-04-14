@@ -917,6 +917,9 @@ cat > loadFiles.csh << 'EOF'
     mkdir -p $dir
     ln downloads/*.gz $dir
 
+    # release1, releaseLatest ?
+    ln -s release1 beta
+
     # make alpha in trackDb (install metaDb)
 
     # add files.txt, md5sum.txt
@@ -928,7 +931,14 @@ cat > loadFiles.csh << 'EOF'
     /cluster/bin/scripts/encodeMkChangeNotes hg19 wgEncodeAwgSegmentation 1 > wgEncodeAwgSegmentation.release1.notes
     encodeQaInit hg19 wgEncodeAwgSegmentation 1 12259 -t
 
+# Responses to QA
 
+# Fixes to track description from Steve Wilder (kate 4/11/14)
+
+    cd /hive/data/genomes/hg19/bed/wgEncodeAwgGenomeSegmentation/ebi
+    cp genomeSegmentation.html genomeSegmentation.html.old
+    wget  http://www.ebi.ac.uk/~swilder/ENCODE/awgHubdevel/hg19/genomeSegmentation.html
+    diff genomeSegmentation.html genomeSegmentation.html.old
 
 
 

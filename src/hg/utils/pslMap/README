@@ -1,23 +1,62 @@
 
-pslMap is a tool for projecting alignments to another sequence through a
-common alignment.  This is an implementation of the TransMap algorithm:
+Overview:
+
+pslMap is an alignment tool than combines two alignment, sharing a common
+sequence, to produce another alignment.  This is an implementation of the
+TransMap alignment algorithm on PSL files.
+
 Given alignments of
-      a -> b
-      b -> c
-it produces an alignment of a -> c.
+      a to b
+      b to c
+it produces an alignment of a to c by projecting through b.  This differs from
+liftOver in that it does a base-by-base mapping, which may insert or delete
+bases within a block.  The mappings produced by lifeOver are block-level,
+which may expand or contract the size of blocks.
+
+Description:
+
+   pslMap [options] inPsl mapFile outPsl
+
+The pslMap program takes alignments the PSL format alignment in the inPsl file
+and projects the alignments through the overlapping mapFile alignments, which
+can be in PSL or chain format.  The resulting alignments are written to outPsl
+file in PSL format.
+
+The target side of inPsl must be the same set of sequences as the query side
+of mapFile.  Input alignments with target sequence names that don't match any
+mapping file query sequence names are discarded.  If the matching target and
+query name have different sequence sizes, an error will be generated.  The
+options -swapMap and -swapIn can be used to swap the query and target sides of
+either alignment if the are not in the required orientation.
+
+Special handling is provide to support mapping proteins to a genome.  If the
+input PSL is a protein to DNA PSL, the protein coordinates will be converted
+to CDS coordinates in the output PSL.  That is, each coordinate in the protein
+will be multiplied by three.  This is used when mapping proteins to the genome
+by mapping protein to mRNA alignments with mRNA to genome alignments.  Unlike
+most protein to genome alignment process, the resulting CDS to genome
+alignment is able to represent amino acids that are coded for by spliced
+codons.
+
 
 Examples:
 
 Mapping cDNAs between organism using syntenic chains of genomic alignments:
 
-   # to map a psl of mouse cDNA to genomic (mm8) alignments to hg18
-   # in mmCDna.mm8.psl
+   # map a PSL file of mouse cDNA to genomic (mm8) alignments to hg18 in
+   # mmCDna.mm8.psl
 
    chainDir=/cluster/data/mm8/bed/blastz.hg18/axtChain
 
+   # create a subset of syntenic chains for 
    netFilter -syn $chainDir/mm8.hg18.net.gz >mm8.hg18.syn.net
    netChainSubset -wholeChains mm8.hg18.syn.net $chainDir/mm8.hg18.all.chain.gz mm8.hg18.syn.chain
 
-   # since target of chains is mm8, we must use -swapMap option
-          
+   # since target of the chains is mm8, we must use -swapMap option
    pslMap -chainMapFile -swapMap mmCDna.mm8.psl hg18.syn.chain mmCDna.hg18.psl
+
+Citation:
+  Jingchun Zhu, J. Zachary Sanborn, Mark Diekhans, Craig B. Lowe, Tom H. Pringle, and David Haussler.
+  Comparative genomics search for losses of long-established genes on the human lineage.
+  PLoS Computational Biology, 3:e247 EP , Dec 2007.
+  http://dx.doi.org/10.1371/journal.pcbi.0030247

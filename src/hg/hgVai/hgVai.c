@@ -157,7 +157,7 @@ char *makePositionInput()
 /* Return HTML for the position input. */
 {
 struct dyString *dy = dyStringCreate("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\">",
-				     hgvaRange, 26,
+				     hgvaRange, 45,
 				     addCommasToPos(NULL, cartString(cart, hgvaRange)));
 return dyStringCannibalize(&dy);
 }
@@ -1968,16 +1968,21 @@ if (lookupPosition(cart, hgvaRange))
     else
 	doUi();
     }
-else if (webGotWarnings())
+else
     {
-    // We land here when lookupPosition pops up a warning box.
-    // Reset the problematic position and show the main page.
+    // Revert to lastPosition if we have multiple matches or warnings,
+    // especially in case user manually edits browser location as in #13009:
     char *position = cartUsualString(cart, "lastPosition", hDefaultPos(database));
     cartSetString(cart, hgvaRange, position);
-    doMainPage();
+    if (webGotWarnings())
+	{
+	// We land here when lookupPosition pops up a warning box.
+	// Reset the problematic position and show the main page.
+	doMainPage();
+	}
+    // If lookupPosition returned FALSE and didn't report warnings,
+    // then it wrote HTML showing multiple position matches & links.
     }
-// If lookupPosition returned FALSE and didn't report warnings,
-// then it wrote HTML showing multiple position matches & links.
 
 cartCheckout(&cart);
 cgiExitTime("hgVai", enteredMainTime);

@@ -281,6 +281,16 @@ if (owner == NULL)
 return cloneString(owner->email);
 }
 
+boolean edwUserIsAdmin(struct sqlConnection *conn, char *userEmail)
+/* Return true if the user is an admin */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select isAdmin from edwUser where email = '%s'", userEmail);
+int id = sqlQuickNum(conn, query);
+if (id == 1) return TRUE;
+return FALSE;
+}
+
 void edwWarnUnregisteredUser(char *email)
 /* Put up warning message about unregistered user and tell them how to register. */
 {
