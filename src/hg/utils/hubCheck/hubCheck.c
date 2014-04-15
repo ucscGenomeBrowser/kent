@@ -19,6 +19,7 @@ errAbort(
   "                           Will create this directory if not existing\n"
   "   -verbose=2            - output verbosely\n"
   "   -clear=browserMachine - clear hub status, no checking\n"
+  "   -searchFile=trixInput - output search terms into trixInput file\n"
   "   -noTracks             - don't check each track, just trackDb\n"
   );
 }
@@ -26,6 +27,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"udcDir", OPTION_STRING},
    {"clear", OPTION_STRING},
+   {"searchFile", OPTION_STRING},
    {"noTracks", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -93,7 +95,16 @@ boolean checkTracks = !optionExists("noTracks");
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 struct dyString *errors = newDyString(1024);
 
-if ( trackHubCheck(argv[1], errors, checkTracks))
+FILE *searchFp = NULL;
+char *searchFile = NULL;
+searchFile = optionVal("searchFile", searchFile) ;
+if (searchFile != NULL)
+    {
+    if ((searchFp = fopen(searchFile, "a")) == NULL)
+	errAbort("cannot open search file %s\n", searchFile);
+    }
+
+if ( trackHubCheck(argv[1], errors, checkTracks, searchFp))
     {
     printf("Errors with hub at '%s'\n", argv[1]);
     printf("%s\n",errors->string);

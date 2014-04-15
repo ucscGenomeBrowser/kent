@@ -1511,16 +1511,16 @@ hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
-# old number of unique query values: 60302
-# old number of unique target values 22241
-# new number of unique query values: 57026
-# new number of unique target values 21771
+# old number of unique query values: 60316
+# old number of unique target values 22327
+# new number of unique query values: 52599
+# new number of unique target values 20635
 
 synBlastp.csh $ratDb $db rgdGene2 knownGene
-#old number of unique query values: 11267
-# old number of unique target values 11104
-#new number of unique query values: 8399
-#new number of unique target values 8530
+# old number of unique query values: 11266
+# old number of unique target values 11106
+# new number of unique query values: 8400
+# new number of unique target values 8530
 
 # Clean up
 rm -r run.*/out

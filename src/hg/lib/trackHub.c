@@ -41,6 +41,8 @@
 #include "hubConnect.h"
 #include "trix.h"
 #include "vcf.h"
+#include "htmshell.h"
+#include "hubConnect.h"
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
@@ -736,7 +738,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 validateTracks(hub, genome, tdbList);
 
 trackDbAddTableField(tdbList);
-trackHubAddNamePrefix(hub->name, tdbList);
+if (!isEmpty(hub->name))
+    trackHubAddNamePrefix(hub->name, tdbList);
 if (genome->twoBitPath == NULL)
     trackHubAddGroupName(hub->name, tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
@@ -806,61 +809,112 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
+static void addOneDescription(char *trackDbFile, struct trackDb *tdb)
+/* Fetch tdb->track's html description and store in tdb->html. */
+{
+/* html setting should always be set because we set it at load time */
+char *htmlName = trackDbSetting(tdb, "html");
+if (htmlName == NULL)
+    return;
+
+char *simpleName = hubConnectSkipHubPrefix(htmlName);
+char *url = trackHubRelativeUrl(trackDbFile, simpleName);
+char buffer[10*1024];
+safef(buffer, sizeof buffer, "%s.html", url);
+tdb->html = netReadTextFileIfExists(buffer);
+freez(&url);
+}
+
+void trackHubAddDescription(char *trackDbFile, struct trackDb *tdb)
+/* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
+ * and store in tdb->html. */
+{
+addOneDescription(trackDbFile, tdb);
+if (isEmpty(tdb->html))
+    {
+    struct trackDb *parent;
+    for (parent = tdb->parent;  isEmpty(tdb->html) && parent != NULL;  parent = parent->parent)
+	{
+	addOneDescription(trackDbFile, parent);
+	if (isNotEmpty(parent->html))
+	    tdb->html = cloneString(parent->html);
+	}
+    }
+}
+
 static int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, 
-    struct trackDb *tdb, struct dyString *errors)
+    struct trackDb *tdb, struct dyString *errors, FILE *searchFp)
 /* Make sure that track is ok. */
 {
-struct errCatch *errCatch = errCatchNew();
-char *relativeUrl = trackDbSetting(tdb, "bigDataUrl");
 int retVal = 0;
+struct errCatch *errCatch = errCatchNew();
 
-if (relativeUrl != NULL)
+if (errCatchStart(errCatch))
     {
-    if (errCatchStart(errCatch))
+    if (searchFp != NULL)
 	{
-	char *bigDataUrl = trackHubRelativeUrl(genome->trackDbFile, relativeUrl);
-	char *type = trackDbRequiredSetting(tdb, "type");
-	verbose(2, "checking %s.%s type %s at %s\n", genome->name, tdb->track, type, bigDataUrl);
-
-	if (startsWithWord("bigWig", type))
+	addOneDescription(genome->trackDbFile, tdb);
+	if (tdb->html != NULL)
 	    {
-	    /* Just open and close to verify file exists and is correct type. */
-	    struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
-	    bbiFileClose(&bbi);
-	    }
-	else if (startsWithWord("bigBed", type))
-	    {
-	    /* Just open and close to verify file exists and is correct type. */
-	    struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
-	    bbiFileClose(&bbi);
-	    }
-	else if (startsWithWord("vcfTabix", type))
-	    {
-	    /* Just open and close to verify file exists and is correct type. */
-	    struct vcfFile *vcf = vcfTabixFileMayOpen(bigDataUrl, NULL, 0, 0, 1, 1);
-	    if (vcf == NULL)
-		// Warnings already indicated whether the tabix file is missing etc.
-		errAbort("Couldn't open %s and/or its tabix index (.tbi) file.  "
-			 "See http://genome.ucsc.edu/goldenPath/help/vcf.html",
-			 bigDataUrl);
-	    vcfFileFree(&vcf);
-	    }
-	else if (startsWithWord("bam", type))
-	    {
-	    bamFileAndIndexMustExist(bigDataUrl);
+	    char *stripHtml =htmlTextStripTags(tdb->html);
+	    strSwapChar(stripHtml, '\n', ' ');
+	    strSwapChar(stripHtml, '\t', ' ');
+	    fprintf(searchFp, "%s.%s\t%s\t%s\t%s\n",hub->url, tdb->track, 
+		tdb->shortLabel, tdb->longLabel, stripHtml);
 	    }
 	else
-	    errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
-	freez(&bigDataUrl);
+	    fprintf(searchFp, "%s.%s\t%s\t%s\n",hub->url, tdb->track, 
+		tdb->shortLabel, tdb->longLabel);
 	}
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
+    else 
 	{
-	retVal = 1;
-	dyStringPrintf(errors, "%s", errCatch->message->string);
+	char *relativeUrl = trackDbSetting(tdb, "bigDataUrl");
+	char *type = trackDbRequiredSetting(tdb, "type");
+
+	if (relativeUrl != NULL)
+	    {
+	    char *bigDataUrl = trackHubRelativeUrl(genome->trackDbFile, relativeUrl);
+	    verbose(2, "checking %s.%s type %s at %s\n", genome->name, tdb->track, type, bigDataUrl);
+	    if (startsWithWord("bigWig", type))
+		{
+		/* Just open and close to verify file exists and is correct type. */
+		struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
+		bbiFileClose(&bbi);
+		}
+	    else if (startsWithWord("bigBed", type))
+		{
+		/* Just open and close to verify file exists and is correct type. */
+		struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
+		bbiFileClose(&bbi);
+		}
+	    else if (startsWithWord("vcfTabix", type))
+		{
+		/* Just open and close to verify file exists and is correct type. */
+		struct vcfFile *vcf = vcfTabixFileMayOpen(bigDataUrl, NULL, 0, 0, 1, 1);
+		if (vcf == NULL)
+		    // Warnings already indicated whether the tabix file is missing etc.
+		    errAbort("Couldn't open %s and/or its tabix index (.tbi) file.  "
+			     "See http://genome.ucsc.edu/goldenPath/help/vcf.html",
+			     bigDataUrl);
+		vcfFileFree(&vcf);
+		}
+	    else if (startsWithWord("bam", type))
+		{
+		bamFileAndIndexMustExist(bigDataUrl);
+		}
+	    else
+		errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
+	    freez(&bigDataUrl);
+	    }
 	}
-    errCatchFree(&errCatch);
     }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    retVal = 1;
+    dyStringPrintf(errors, "%s", errCatch->message->string);
+    }
+errCatchFree(&errCatch);
 
 return retVal;
 }
@@ -930,7 +984,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 }
 
 static int hubCheckGenome(struct trackHub *hub, struct trackHubGenome *genome,
-    struct dyString *errors, boolean checkTracks)
+    struct dyString *errors, boolean checkTracks, FILE *searchFp)
 /* Check out genome within hub. */
 {
 struct errCatch *errCatch = errCatchNew();
@@ -956,13 +1010,14 @@ if (!checkTracks)
 
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    retVal |= hubCheckTrack(hub, genome, tdb, errors);
+    retVal |= hubCheckTrack(hub, genome, tdb, errors, searchFp);
 verbose(2, "%d tracks in %s\n", slCount(tdbList), genome->name);
 
 return retVal;
 }
 
-int trackHubCheck(char *hubUrl, struct dyString *errors, boolean checkTracks)
+int trackHubCheck(char *hubUrl, struct dyString *errors, 
+    boolean checkTracks, FILE *searchFp)
 /* hubCheck - Check a track data hub for integrity. Put errors in dyString.
  *      return 0 if hub has no errors, 1 otherwise 
  *      if checkTracks is TRUE, individual tracks are checked
@@ -992,7 +1047,7 @@ verbose(2, "%s has %d elements\n", hub->genomesFile, slCount(hub->genomeList));
 struct trackHubGenome *genome;
 for (genome = hub->genomeList; genome != NULL; genome = genome->next)
     {
-    retVal |= hubCheckGenome(hub, genome, errors, checkTracks);
+    retVal |= hubCheckGenome(hub, genome, errors, checkTracks, searchFp);
     }
 trackHubClose(&hub);
 
@@ -1138,3 +1193,4 @@ else
 
 findPosInTdbList(tdbList, term, hgp);
 }
+

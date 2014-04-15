@@ -30,24 +30,32 @@ errAbort(
 void logIn()
 /* Put up name.  No password for now. */
 {
-printf("Welcome to the prototype ENCODE Data Warehouse submission site.<BR>");
-printf("Please sign in via Persona");
-printf("<INPUT TYPE=BUTTON NAME=\"signIn\" VALUE=\"sign in\" id=\"signin\">");
+printf("<DIV>");
+printf("<H3>Welcome to the ENCODE data submission site</H3>");
+printf("Please sign in using Persona&nbsp;");
+printf("<INPUT TYPE=BUTTON NAME=\"signIn\" CLASS=\"btn\" VALUE=\"Sign in\" id=\"signin\"</H5>");
+printf("</DIV>");
 }
 
 void getUrl(struct sqlConnection *conn)
 /* Put up URL. */
 {
-edwMustGetUserFromEmail(conn, userEmail);
-printf("Please enter a URL for a validated manifest file:<BR>");
-printf("URL ");
+struct edwUser *user = edwMustGetUserFromEmail(conn, userEmail);
+printf("<script>$('#edw-user').text(%s)</script>", user->email);
+
+printf("<H3>Submit data</H3>");
+
+printf("<P CLASS='title'>Enter the URL of a validated manifest file:<P>");
+
+puts("<DIV CLASS=\"input-append\">");
 cgiMakeTextVar("url", emptyForNull(cgiOptionalString("url")), 80);
-cgiMakeButton("submitUrl", "submit");
-printf("<BR>\n");
+cgiMakeButton("submitUrl", "Submit");
+puts("</DIV>");
+
+puts("<DIV>");
 cgiMakeCheckBox("update", FALSE);
-printf(" Update information associated with files that have already been uploaded.");
-printf("<BR>Submission by %s", userEmail);
-edwPrintLogOutButton();
+printf(" Update information for files previously submitted");
+puts("</DIV>");
 }
 
 static char *stopButtonName = "stopUpload";
@@ -195,17 +203,12 @@ else
 	else
 	    {
 	    printf("<B>submission time:</B> %s<BR>\n", duration->string);
-	    cgiMakeButton("getUrl", "submit another data set");
 	    }
 	}
     }
 cgiMakeButton("monitor", "refresh status");
 if (endUploadTime == 0 && isEmpty(sub->errorMessage))
     cgiMakeButton(stopButtonName, "stop upload");
-printf(" <input type=\"button\" value=\"browse submissions\" "
-       "onclick=\"window.location.href='edwWebBrowse';\">\n");
-
-edwPrintLogOutButton();
 }
 
 void submitUrl(struct sqlConnection *conn)
@@ -295,7 +298,10 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
 
 /* Put out HTTP header and HTML HEADER all the way through <BODY> */
-edwWebHeaderWithPersona("Submit data to ENCODE Data Warehouse");
+edwWebHeaderWithPersona("");
+
+// TODO: find a better place for menu update
+puts("<script>$('#edw-submit').hide();</script>");
 
 /* Call error handling wrapper that catches us so we write /BODY and /HTML to close up page
  * even through an errAbort. */

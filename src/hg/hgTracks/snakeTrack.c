@@ -252,10 +252,17 @@ for(sf=sfList; sf; prev = sf, sf = next)
     {
     next = sf->next;
 
-    int sClp = (sf->start < winStart) ? winStart : sf->start;
-    sf->pixX1 = round((sClp - winStart)*scale);
-    int eClp = (sf->end > winEnd) ? winEnd : sf->end;
-    sf->pixX2 = round((eClp - winStart)*scale);
+    if (positiveRangeIntersection(sf->start, sf->end, winStart, winEnd))
+	{
+	int sClp = (sf->start < winStart) ? winStart : sf->start;
+	sf->pixX1 = round((sClp - winStart)*scale);
+	int eClp = (sf->end > winEnd) ? winEnd : sf->end;
+	sf->pixX2 = round((eClp - winStart)*scale);
+	}
+    else
+	{
+	sf->pixX1 = sf->pixX2 = 0;
+	}
 
     bitSetRange(Levels[sf->level].pixels, sf->pixX1, sf->pixX2 - sf->pixX1);
 

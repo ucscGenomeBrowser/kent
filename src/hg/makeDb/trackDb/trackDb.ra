@@ -1379,6 +1379,24 @@ visibility hide
 useScore 1
 type bed 12 +
 
+track rmskUpdate
+shortLabel RM update
+longLabel Updated Repeating Elements by RepeatMasker
+group x
+visibility hide
+spectrum on
+type rmsk
+maxWindowToDraw 10000000
+canPack off
+
+track nestedRepeatsUpdate
+shortLabel Update Intrptd Rpts
+longLabel Update Fragments of Interrupted Repeats Joined by RepeatMasker ID
+group x
+visibility hide
+useScore 1
+type bed 12 +
+
 track rmskCensor
 shortLabel CENSOR Repeats
 longLabel Repeating Elements by CENSOR and Repbase 11.6 (Giri Institute)

@@ -143,4 +143,6 @@ struct trackDb *hubCollectTracks( char *database, struct grp **pGroupList);
 /* Generate trackDb structures for all the tracks in attached hubs.  
  * Make grp structures for each hub. Returned group list is reversed. */
 
+char *hubConnectSkipHubPrefix(char *trackName);
+/* Given something like "hub_123_myWig" return myWig.  Don't free this, it's not allocated */
 #endif /* HUBCONNECT_H */

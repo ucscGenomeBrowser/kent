@@ -1,4 +1,4 @@
-/* rsyncEdwUserTable - Update edwUser table using user information from encodedcc. */
+/* edwRsyncEdwUser - Update edwUser table using user information from encodedcc. */
 #include "common.h"
 #include "dystring.h"
 #include "options.h"
@@ -16,9 +16,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "rsyncEdwUserTable - Update edwUser table using user information from encodedcc. \n"
+  "edwRsyncEdwUser - Update edwUser table using user information from encodedcc. \n"
   "usage:\n"
-  "rsyncEdwUserTable url uid pwd update.sql\n"
+  "edwRsyncEdwUser url uid pwd update.sql\n"
   "where url will need to be in quotes if it contains a question mark.\n"
   "options:\n"
   "   -really - Needs to be set for anything to happen, otherwise will just print update statement to update.sql file.\n"
@@ -157,8 +157,8 @@ for (ref = refList; ref != NULL; ref = ref->next)
 return list;
 }
 
-void rsyncEdwUserTable(char *url, char *userId, char *password, char *outTab)
-/* rsyncEdwUserTable - Update edwUser table using user information from
+void edwRsyncEdwUser(char *url, char *userId, char *password, char *outTab)
+/* edwRsyncEdwUser - Update edwUser table using user information from
  * Stanford  encodedcc. */ 
 {
 FILE *f = mustOpen(outTab, "w");
@@ -210,6 +210,6 @@ really = optionExists("really");
 //if (really) verbose(1, "Really going to do it! \n");
 if (argc != 5)
     usage();
-rsyncEdwUserTable(argv[1], argv[2], argv[3], argv[4]);
+edwRsyncEdwUser(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
