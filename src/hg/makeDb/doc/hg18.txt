@@ -32042,7 +32042,7 @@ ln -s /gbdb/hg18/evoFoldV2 /usr/local/apache/htdocs/evoFoldV2/hg18
 #
 # $HOME/kent/src/hg/lib/geneReviewsGrshortNBKid.sql
 # $HOME/kent/src/hg/lib/geneReviewsGrshortTitleNBKid.sql
-# $HOME/kent/src/hg/lib/geneReviewsGeneGRshortNBKidGRtitle.sql    
+# $HOME/kent/src/hg/lib/geneReviewsDetail.sql    
 # $HOME/kent/src/hg/makeDb/trackDb/human/geneReviews.html
 #
 #  and data fetched from NCBI ftp://ftp.ncbi.nlm.nih.gov/pub/GeneReviews/
@@ -32093,10 +32093,10 @@ ln -s /gbdb/hg18/evoFoldV2 /usr/local/apache/htdocs/evoFoldV2/hg18
     hgsql hg18 -N -e \
       "SELECT  s.geneSymbol, s.grShort, t.NBKid, t.grTitle \
           FROM geneReviewsGrshortNBKid s, geneReviewsGrshortTitleNBKid t \
-          WHERE s.grShort = t.grShort ORDER BY s.geneSymbol;" > geneReviewsGeneGRshortNBKidGRtitle.tab
+          WHERE s.grShort = t.grShort ORDER BY s.geneSymbol;" > geneReviewsDetail.tab
 
-    hgLoadSqlTab -warn hg18 geneReviewsGeneGRshortNBKidGRtitle \
-      $HOME/kent/src/hg/lib/geneReviewsGeneGRshortNBKidGRtitle.sql geneReviewsGeneGRshortNBKidGRtitle.tab
+    hgLoadSqlTab -warn hg18 geneReviewsDetail \
+      $HOME/kent/src/hg/lib/geneReviewsDetail.sql geneReviewsDetail.tab
 
 #############################################################################
 2012-06-25 markd

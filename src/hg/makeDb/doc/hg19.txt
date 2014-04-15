@@ -17174,11 +17174,11 @@ CREATE TABLE geneReviewsGrshortTitleNBKid (
     # load the collapsed bed4 file to hg19,
     hgLoadBed hg19 geneReviews geneReviews.tab
 
-    # Create and load geneReviewsGeneGRshortNBKidGRtitle table 
+    # Create and load geneReviewsDetail table 
     # the new table will replace the old geneReviewsRefGene with diseaseID in
     # it.
-    cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsGeneGRshortNBKidGRtitle.sql
-CREATE TABLE geneReviewsGeneGRshortNBKidGRtitle (
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsDetail.sql
+CREATE TABLE geneReviewsDetail (
     geneSymbol  varchar(255) not null,   # refSeq gene symbol
     grShort     varchar(255) not null,   # short name for geneReviews article
     NBKid       varchar(255) not null,   # NCBI book ID of geneRreviews article
@@ -17191,15 +17191,15 @@ CREATE TABLE geneReviewsGeneGRshortNBKidGRtitle (
     hgsql hg19 -N -e \
       "SELECT  s.geneSymbol, s.grShort, t.NBKid, t.grTitle \
           FROM geneReviewsGrshortNBKid s, geneReviewsGrshortTitleNBKid t \
-          WHERE s.grShort = t.grShort ORDER BY s.geneSymbol;" > geneReviewsGeneGRshortNBKidGRtitle.tab
+          WHERE s.grShort = t.grShort ORDER BY s.geneSymbol;" > geneReviewsDetail.tab
 
-    hgLoadSqlTab -warn hg19 geneReviewsGeneGRshortNBKidGRtitle \
-      $HOME/kent/src/hg/lib/geneReviewsGeneGRshortNBKidGRtitle.sql geneReviewsGeneGRshortNBKidGRtitle.tab
+    hgLoadSqlTab -warn hg19 geneReviewsDetail \
+      $HOME/kent/src/hg/lib/geneReviewsDetail.sql geneReviewsDetail.tab
 
     # Check in the following to git:  
     # $HOME/kent/src/hg/lib/geneReviewsGrshortNBKid.sql
     # $HOME/kent/src/hg/lib/geneReviewsGrshortTitleNBKid.sql
-    # $HOME/kent/src/hg/lib/geneReviewsGeneGRshortNBKidGRtitle.sql    
+    # $HOME/kent/src/hg/lib/geneReviewsDetail.sql    
     # Update the human/trackDb.ra and human/geneReviews.html
 
 

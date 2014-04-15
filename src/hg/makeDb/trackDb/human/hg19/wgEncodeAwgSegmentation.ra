@@ -14,7 +14,7 @@ subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nb
 subGroup3 method Method ChromHMM=ChromHMM Segway=Segway Combined=Combined
 dimensions dimX=method dimY=cellType
 sortOrder tier=+ cellType=+ method=+
-fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell
 priority 0

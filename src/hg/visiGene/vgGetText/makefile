@@ -6,8 +6,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = vgGetText.o visiGene.o
 
-DBS = mm7 mm8 mm9 hg17 hg18
-ALPHA_DBS = mm7 mm8 hg17 hg18
+DBS = mm7 mm8 mm9 mm10 hg17 hg18 hg19 hg38
+ALPHA_DBS =  mm7 mm8 mm9 mm10 hg17 hg18 hg19 hg38
 
 my:: compile
 	${MKDIR} ${CGI_BIN}-${USER}/visiGeneData
