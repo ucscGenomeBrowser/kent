@@ -40,9 +40,6 @@ printf("</DIV>");
 void getUrl(struct sqlConnection *conn)
 /* Put up URL. */
 {
-struct edwUser *user = edwMustGetUserFromEmail(conn, userEmail);
-printf("<script>$('#edw-user').text(%s)</script>", user->email);
-
 printf("<H3>Submit data</H3>");
 
 printf("<P CLASS='title'>Enter the URL of a validated manifest file:<P>");
