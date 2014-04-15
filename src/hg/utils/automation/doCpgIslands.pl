@@ -18,6 +18,7 @@ use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
     $opt_maskedSeq
+    $opt_tableName
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -58,6 +59,8 @@ options:
                           (necessary when continuing at a later date).
     -maskedSeq seq.2bit   Use seq.2bit as the masked input sequence instead
                           of default ($maskedSeq).
+    -tableName name       Load table 'name' instead of default cpgIslandExt
+                          e.g.: -tableName cpgIslandExtUnmasked
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -89,13 +92,14 @@ Assumptions:
 # Command line args: db
 my ($db);
 # Other:
-my ($buildDir, $secondsStart, $secondsEnd);
+my ($buildDir, $tableName, $secondsStart, $secondsEnd);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
 		      'maskedSeq=s',
+		      'tableName=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -256,7 +260,7 @@ catDir -r results \\
      | awk \'\{\$2 = \$2 - 1; width = \$3 - \$2;  printf\(\"\%s\\t\%d\\t\%s\\t\%s \%s\\t\%s\\t\%s\\t\%0.0f\\t\%0.1f\\t\%s\\t\%s\\n\", \$1, \$2, \$3, \$5, \$6, width, \$6, width\*\$7\*0.01, 100.0\*2\*\$6\/width, \$7, \$9\);}\' \\
      | sort -k1,1 -k2,2n > cpgIsland.bed
 bedToBigBed -tab -type=bed4+6 -as=\$HOME/kent/src/hg/lib/cpgIslandExt.as \\
-  cpgIsland.bed ../../chrom.sizes $db.cpgIslandExt.bb
+  cpgIsland.bed ../../chrom.sizes $db.$tableName.bb
 _EOF_
   );
   $bossScript->execute();
@@ -275,9 +279,10 @@ sub doLoadCpg {
   $bossScript->add(<<_EOF_
 set C=`cut -f1 cpgIsland.bed | sort -u | awk '{print length(\$0)}' | sort -rn | sed -n -e '1,1 p'`
 sed -e "s/14/\${C}/" \$HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
-hgLoadBed -sqlTable=cpgIslandExt.sql -tab $db cpgIslandExt cpgIsland.bed 
-checkTableCoords -verboseBlocks -table=cpgIslandExt $db
-featureBits $db cpgIslandExt >&fb.$db.cpgIslandExt.txt
+hgLoadBed -noLoad -sqlTable=cpgIslandExt.sql -tab $db $tableName cpgIsland.bed
+hgLoadSqlTab $db $tableName cpgIslandExt.sql bed.tab
+checkTableCoords -verboseBlocks -table=$tableName $db
+featureBits $db $tableName >&fb.$db.$tableName.txt
 _EOF_
   );
   $bossScript->execute();
@@ -323,6 +328,7 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/cpgIslands";
 $maskedSeq = $opt_maskedSeq ? $opt_maskedSeq :
   "$HgAutomate::clusterData/$db/$db.2bit";
+$tableName = $opt_tableName ? $opt_tableName : "cpgIslandExt";
 
 # Do everything.
 $stepper->execute();
