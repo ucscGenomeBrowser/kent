@@ -255,7 +255,7 @@ twoBitToFa ${DB}.2bit stdout | faSize stdin > faSize.${DB}.2bit.txt
     ln -s /hive/data/genomes/${DB}/${DB}.2bit /gbdb/${DB}/${DB}.2bit
 
 #############################################################################
-# after the database is established, the following procedures can be run
+# after the masked sequence is established, the following tracks can be created
 #############################################################################
 # genscan track
 
@@ -270,7 +270,33 @@ doGenscan.pl -buildDir=`pwd` -bigClusterHub=ku -workhorse=hgwdev \
 mkdir /hive/data/genomes/${DB}/bed/cpgIslands
 cd /hive/data/genomes/${DB}/bed/cpgIslands
 time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
-   -dbHost=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-    -maskedSeq=/hive/data/genomes/${DB}/${DB}.unmasked.2bit $DB > do.log  2>&1
+   -dbHost=hgwdev -smallClusterHub=ku -workhorse=hgwdev $DB > do.log 2>&1
+
+#############################################################################
+# CPG Islands Unmasked track
+
+mkdir /hive/data/genomes/${DB}/bed/cpgIslandsUnmasked
+cd /hive/data/genomes/${DB}/bed/cpgIslandsUnmasked
+time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+   -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
+    -workhorse=hgwdev \
+    -maskedSeq=/hive/data/genomes/${DB}/${DB}.unmasked.2bit $DB > do.log 2>&1
+
+#############################################################################
+# GC 5-base track
+
+mkdir /hive/data/genomes/${DB}/bed/gc5Base
+cd /hive/data/genomes/${DB}/bed/gc5Base
+hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 ${DB} \
+  /hive/data/genomes/${DB}/${DB}.unmasked.2bit \
+    | gzip -c > ${DB}.gc5Base.wigVarStep.gz
+wigToBigWig ${DB}.gc5Base.wigVarStep.gz ../../chrom.sizes ${DB}.gc5Base.bw
+
+mkdir -p /gbdb/${DB}/bbi/gc5BaseBw
+rm -f /gbdb/${DB}/bbi/gc5BaseBw/gc5Base.bw
+ln -s `pwd`/${DB}.gc5Base.bw /gbdb/${DB}/bbi/gc5BaseBw/gc5Base.bw
+hgsql ${DB} -e "DROP TABLE IF EXISTS gc5BaseBw;
+    CREATE TABLE gc5BaseBw (fileName varchar(255) not null);
+       INSERT INTO gc5BaseBw VALUES (\"/gbdb/${DB}/bbi/gc5BaseBw/gc5Base.bw\");"
 
 #############################################################################
