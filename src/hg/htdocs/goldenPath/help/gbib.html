@@ -24,7 +24,7 @@
 <P><B>Table of Contents:</B>
 <TD><UL><B>
                 <LI><A CLASS="toc" HREF="#What">
-                        What is the Genome Browser in Box?</A>
+                        What is the Genome Browser in a Box?</A>
                 <LI><A CLASS="toc" HREF="#GetStarted">
                         Getting Started: Setting up the Genome Browser in a Box</A>
                 <LI><A CLASS="toc" HREF="#UsingGbib">
@@ -58,7 +58,7 @@ of the UCSC Genome Browser's functionality from the comfort of your own computer
 focused towards allowing users with protected data to use the Genome Browser's functionality. We 
 expect that many of these users with protected data will be using the human genomes (hg19, and 
 soon hg38). Because of this, the GBiB has been optimized for use with the hg19 assembly. Many of the
-more recent assemblies, will work, but without <A HREF="#GbibMirroring">mirroring</A> additional
+more recent assemblies will work, but without <A HREF="#GbibMirroring">mirroring</A> additional
 data, they may be slow.
 </P>
 
@@ -68,7 +68,7 @@ While the GBiB and the Genome Browser are similar in many ways, there are severa
 One of the key differences is the ability to visualize sensitive or protected data using the GBiB.
 Previously, to view your data using the Genome Browser, you would have to either upload your data
 to the UCSC Genome Browser website, or place your file on a accessible web server and supply the
-URL to UCSC. With the GBiB however, none of your data is uploaded to UCSC. The GBiB also allows
+URL to UCSC. With the GBiB, however, none of your data is uploaded to UCSC. The GBiB also allows
 you to view your data using the Genome Browser when your data files are too big to be uploaded
 to a public web server.
 </P>
@@ -85,7 +85,7 @@ that are not available on our public MySQL server include the DECIPHER, HGMD Var
 tracks, as well as several OMIM tracks. Depending on your distance to UCSC, remote access to these
 UCSC databases can be slow. Therefore, the GBiB includes a simple tool that allows downloading
 ("mirroring") of selected genome annotation tracks to your machine. You can find more information on
-this new tool in the <A HREF="#GbibMirroring">Improving the Speed of the GBiB</A> section.
+this new tool in the <A HREF="#GbibMirroring">Improving the Speed By Mirroring Tracks</A> section.
 </P>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
@@ -101,13 +101,13 @@ when using the GBiB. These requirements include:
 <ul>
         <li>A computer with support for virtualization, which is the case for most PCs sold after 2010.</li>
         <li>Free VirtualBox software from <A href="https://www.virtualbox.org/wiki/Downloads" TARGET="_BLANK">
-	    virtualbox.org</A></li>
+	    virtualbox.org</A>.</li>
             <ul>
             <li>Install it by following the instructions on the website.</li>
             <li>You must have administrator rights for your computer to install the VirtualBox software.</li>
             <li>We have tested and confirmed that the GBiB works using versions 4.3.6 though 4.3.8.</li>
             </ul>
-        <li>Around 10 GB space on your hard disk, more if you want to mirror many tracks.</li>
+        <li>Around 10 GB space on your hard disk (or more if you plan to mirror many tracks).</li>
         <li>Your network firewall must allow connections on the following ports:</li>
 		<ul>
 		<li>port 3306 is used by MySQL. Without this, only mirrored tracks are shown.</li>
@@ -118,14 +118,14 @@ when using the GBiB. These requirements include:
 <P><B>Installation</B></P>
 <P>
 Once you have confirmed that your PC meets the above requirements, download the
-<a href="http://hgwdev.soe.ucsc.edu/~max/browserbox/browserbox.zip">Genome Browser in a Box ZIP
-file</a> (~450 MB) and extract the three files in it. These files can be moved to a different directory,
-as long as they as long as all three files are located in the same directory and not renamed.
+<a href="http://genome-test.soe.ucsc.edu/browserbox/browserbox.zip">Genome Browser in a Box ZIP
+file</a> (~5 GB) and extract the three files in it. These files can be moved to a different directory,
+as long as all three files are located in the same directory and not renamed.
 </P>
 
 <P>
 You can add the GBiB to VirtualBox by either double-clicking the file browserbox.vbox or by
-starting VirtualBox and selecting <i>Machine - Add</i> (&#8984;+A on Macs or Ctrl-A on Linux/Windows)
+starting VirtualBox and selecting <i>Machine &gt;&gt; Add</i> (&#8984;+A on Macs or Ctrl-A on Linux/Windows)
 and opening the file browserbox.vbox.
 </P>
 
@@ -158,9 +158,10 @@ can start using the GBiB as you would the main Genome Browser website. You can f
 to using the UCSC Genome Browser on our <A HREF="hgTracksHelp.html">main help page</A>.
 </P>
 
-<P>Note: even though you can use http://localhost:1234, too, we recommend the 127.0.0.1:1234 address,
-as your browser configuration might not be saved otherwise (most internet browsers do not send cookies
-to "http://localhost"). You might want to bookmark this address.
+<P>
+Note: we recommend using the the 127.0.0.1:1234 address instead of http://localhost:1234. Your browser 
+configuration may not be saved since most internet browsers do not send cookies to "http://localhost". 
+We also suggest bookmarking this address.
 </P>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
@@ -175,7 +176,7 @@ The load time of the default tracks ranges from a few seconds on the West coast 
 to up to 15 seconds from Europe. The GBiB includes the new <A HREF="../../cgi-bin/hgMirror" 
 TARGET="_BLANK">Mirror</A> tool that allows you to download tracks to your machine, which will greatly 
 increase the speed of the GBiB when accessing those tracks. To download annotation tracks to your
-own machine ("mirror"), click <i>Tools - Mirror Tracks</i> in the Genome Browser menu of the box.
+own machine ("mirror"), click <i>Tools &gt;&gt; Mirror Tracks</i> in the Genome Browser menu of the box.
 The first time you navigate to this mirror tool, the page may take a while to load. Select the tracks 
 that you typically use by checking the boxes next to the track names, and clicking "Download". In 
 addition to downloading entire track sets, you can also download individual subtracks. The size of 
@@ -212,7 +213,7 @@ This auto-update process ensures that you will always have the newest data and f
 </P>
 
 <P>
-In addition to the auto-update process, you can manually update the GBiB using the command-line.
+In addition to the auto-update process, you can manually update the GBiB using the command line.
 To do this, make sure your GBiB has been correctly setup according to the instructions in the
 "<A HREF="#GetStarted">Getting Started</A>" section. Once you have started the GBiB, click on the
 "black" screen with the terminal and type the following command:
@@ -222,7 +223,7 @@ mirrored.
 </P>
 
 <P>
-You can turn off this auto-update process using the GBiB command-line. Once you have started
+You can turn off this auto-update process using the GBiB command line. Once you have started
 the GBiB, click on the "black" screen with the terminal and type the following command:
 <pre>autoUpdateOff</pre>
 While you can turn this auto-update process off, it is not recommended. Without this update process
@@ -278,9 +279,9 @@ meaning that you can share local files with the GBiB for easy uploading as a cus
 <TR><TD>
 <P><B>Step 1. Shutdown the GBiB virtual machine</B>
 <ol>
-    <li>Closing the black GBiB window</li>
-    <li>Selecting "Send the shutdown signal"</li>
-    <li>Confirm by clicking "OK".</li>
+    <li>Close the black GBiB window.</li>
+    <li>Select "Send the shutdown signal".</li>
+    <li>Then confirm by clicking "OK".</li>
 </ol></P>
 </TD><TD>
 <img src="../../images/gbib-powerOff.png" alt="GBiB Power Off">
@@ -294,7 +295,7 @@ meaning that you can share local files with the GBiB for easy uploading as a cus
 <ol>
 	<li>Click on the "browserbox" entry in VirtualBox, click on <i>Settings</i>.</li>
 	<li>Click on <i>Shared Folders</i>.</li>
-	<li>Then hit the small <i>+</i> icon.</li>
+	<li>Click on the small <i>+</i> icon.</li>
 	<li>Select a directory on your disk under <i>Folder Path / Other</i>.</li>
 	<li>Select the checkbox to give access "Read-only", and make sure the checkbox for "Auto-mount"
 	is selected.</li>
@@ -317,7 +318,7 @@ on any file and select "Copy link address". You can now paste this URL into the
 
 <P><B><I>Example 1:</I></B></P>
 <P>
-Here is a custom track that loads a local bam file (you will have to replace the part after
+Here is a custom track that loads a local BAM file (you will have to replace the part after
 <tt>http://</tt> with a pasted URL from your own machine):
 <pre>track type=bam name=BamExample bigDataUrl=http://127.0.0.1:1234/folders/test/bamExample.bam</pre>
 </P>
@@ -326,7 +327,7 @@ Here is a custom track that loads a local bam file (you will have to replace the
 <P>
 The black terminal for the GBiB is a normal Linux command line. For easier use of the command
 line, you can connect to the box from your computer with SSH. Your computer's terminal likely
-supports copy/paste and is faster. To connect with SSH, open a terminal on your computer and type
+supports copy/paste and is faster. To connect with SSH, open a terminal on your computer and type:
 <pre>ssh browser@localhost -p 1235</pre> 
 You will be prompted for a password when attepmting to access the GBiB from your computer's command
 line. The password is "browser". You can use <tt>sudo</tt> for root access, which does not require 
@@ -346,7 +347,7 @@ listing and description for all of these tools can be found on UCSC's
 
 <P><B><I>Example 2:</I></B></P>
 <P>
-To index a BAM file in a shared folder "Documents" on your hard disk, type
+To index a BAM file in a shared folder "Documents" on your hard disk, type:
 <pre>
 cd /folders/Documents
 samtools index my.sorted.bam
@@ -355,7 +356,7 @@ samtools index my.sorted.bam
 
 <P><B><I>Example 3:</I></B></P>
 <P>
-To convert a .bed file in a shared folder "Documents" on your hard disk to a .bigBed format file, type
+To convert a .bed file in a shared folder "Documents" on your hard disk to a .bigBed format file, type:
 <pre>
 cd /folders/Documents
 fetchChromSizes hg19 &gt; hg19.sizes
@@ -371,15 +372,15 @@ bedToBigBed bedExample.txt hg19.sizes myBigBed.bb
 <P>
 By default, the GBiB can only be accessed from the machine that it is installed on. This is done
 so that others cannot access your data. You can, however, make your GBiB instance available for use
-by others. You can open external access to your Browser in a Box by stopping it, selecting the browserbox
-machine in VirtualBox, clicking Settings and going to Network - Adapter 1 - Advanced - Port Forwarding.
+by others. You can open external access to your GBiB by stopping it, selecting the browserbox
+machine in VirtualBox, clicking Settings and going to <i>Network &gt;&gt; Adapter 1 &gt;&gt; Advanced &gt;&gt; Port Forwarding</i>.
 Remove the address "127.0.0.1" from "Rule 1" by deleting it with the backspace key.
 </P>
 
 <P>
 Your colleagues can then access and use your GBiB instance by typing your IP address into their
 internet browser, followed by the :1234 port. Please keep in mind that once you have opened up your
-GBiB for remote access, that anyone who knows your IP address will be able to access your GBiB and
+GBiB for remote access, anyone who knows your IP address will be able to access your GBiB and
 files that you have shared with it.
 </P>
 </div><!-- .sectionContent -->
@@ -402,9 +403,9 @@ your GBiB will not work with the main UCSC Genome Browser website, and vice vers
 </P>
 
 <P>
-Unfortunately, username recovery is not supported at this time. You can however recover lost
+Unfortunately, username recovery is not supported at this time. You can, however, recover lost
 passwords. The system for recovering lost passwords on the GBiB is much different than that on the
-Genome Browser, and requires access to the command-line. Use the following steps to recover lost
+Genome Browser, and requires access to the command line. Use the following steps to recover lost
 passwords:
 <ol>
     <li>Navigate to the <A HREF="../../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1" TARGET="BLANK"
@@ -433,7 +434,7 @@ can change your password.
 <div class="section">
 <h1>Troubleshooting Common Problems</h1>
 <div class="sectionContent">
-<P>This section contains some common errors that you may encounter while setting and installing the
+<P>This section contains some common errors that you may encounter while setting up and installing the
 GBiB. This section is in no way a complete listing of all of the problems that you may encounter
 during the GBiB setup. If you run into issues not listed below, feel free to email the UCSC Genome
 Browser mailing list at <A HREF="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;e.&#117;&#99;&#115;&#99;.
@@ -448,32 +449,32 @@ Your 64-bit guest will fail to detect a 64-bit CPU and will not be able to boot.
 	    processors.</li>
         <li>On some DELL Optiplex (e.g. Optiplex 960) laptops, virtualization is supported, but
             deactivated in the BIOS. Reboot the computer, press F12 during boot to show the BIOS
-            menu. Go to "BIOS Setup", "Virtualization Support", "Virtualization", check "Enable
+            menu. Go to <i>BIOS Setup >> Virtualization Support &gt;&gt; Virtualization</i>, and check "Enable
             Intel Virtualization Technology". Exit and save. Restart the computer.</li>
         </ul>
 <li>VirtualBox Error: <i>"Failed to open virtual machine located in... Trying to open a VM config ...
-which has the same UUID as an existing virtual machine.</i></li>
+which has the same UUID as an existing virtual machine."</i></li>
         <ul>
-        <li>This happens if you have already downloaded and installed Genome Browser in a Box before
-        <li>Start VirtualBox, select the old browserbox virtual machine and choose "Machine - Remove" in
+        <li>This happens if Genome Browser in a Box has already been downloaded and installed.</li>
+        <li>Start VirtualBox, select the old browserbox virtual machine and choose <i>Machine &gt;&gt; Remove</i> in
 	    the menu (Ctrl+R or &#8984;+R). When asked, choose "Remove only" so you still keep the old
 	    browserbox on your disk.</li>
-        <li>Double-click the newly downloaded browserbox.vbox file or add it with "Machine - Add".</li>
+        <li>Double-click the newly downloaded browserbox.vbox file or add it with <i>Machine &gt;&gt; Add</i>.</li>
         </ul>
 <li>VirtualBox Error: <i>"Failed to open virtual machine located in... Cannot register the hard
-disk ... because a hard disk ... already exists</i></li>
+disk ... because a hard disk ... already exists."</i></li>
         <ul>
         <li>This happens if you have already downloaded and installed a Genome Browser in a Box before.</li>
-        <li>Start VirtualBox, go to "File - Virtual Media Manager" in the menu (Ctrl+D or &#8984;+D).
+        <li>Start VirtualBox, go to <i>File &gt;&gt; Virtual Media Manager</i> in the menu (Ctrl+D or &#8984;+D).
 	    Select browserbox-disk2.vmdk and click "Remove".</li>
-        <li>Double-click the newly downloaded browserbox.vbox file or add it with "Machine - Add".</li>
+        <li>Double-click the newly downloaded browserbox.vbox file or add it with <i>Machine &gt;&gt; Add</i>.</li>
         </ul>
-<li>Genome Browser Error: <i>Couldn't connect to database hg19 on genome-mysql.cse.ucsc.edu as genomep</i></li>
+<li>Genome Browser Error: <i>Couldn't connect to database hg19 on genome-mysql.cse.ucsc.edu as genomep</i>.</li>
         <ul>
         <li>This means that the virtual machine could not connect to the UCSC MySQL server.</li>
         <li>It can be caused by a change of the IP address (e.g. on a Wi-Fi) which has not been picked
             up by the virtual machine yet. You can restart the box or run a command to reset the
-            network like <tt>sudo ifup --force eth0</tt></li>
+            network like <tt>sudo ifup --force eth0</tt>.</li>
         <li>This can also be caused by a firewall that does not allow outgoing TCP data on port
             3306/MySQL. Please contact your institution's IT support to enquire about ways to open 
 	    this port.</li>

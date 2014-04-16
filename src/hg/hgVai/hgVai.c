@@ -311,6 +311,10 @@ return ((sameString(tdb->grp, "user") || isHubTrack(tdb->track)) &&
 	(sameString(tdb->type, "pgSnp") || startsWith("vcf", tdb->type)));
 }
 
+// Function prototype to avoid shuffling code around:
+char *findLatestSnpTable(char *suffix);
+/* Return the name of the 'snp1__<suffix>' table with the highest build number, if any. */
+
 void selectVariants(struct slRef *varGroupList, struct slRef *varTrackList)
 /* Offer selection of user's variant custom tracks, example variants, pasted input etc. */
 {
@@ -330,15 +334,20 @@ for (ref = varTrackList;  ref != NULL;  ref = ref->next)
     printOption(tdb->track, selected, tdb->longLabel);
     }
 printOption(hgvaSampleVariants, selected, hgvaSampleVariantsLabel);
-printOption(hgvaUseVariantIds, selected, hgvaVariantIdsLabel);
+boolean hasSnps = (findLatestSnpTable(NULL) != NULL);
+if (hasSnps)
+    printOption(hgvaUseVariantIds, selected, hgvaVariantIdsLabel);
 printf("</SELECT><BR>\n");
 
-printf("<div id='"hgvaVariantPasteContainer"'%s>\n",
-       differentString(selected, hgvaUseVariantIds) ? " style='display: none;'" : "");
-printf("Enter dbSNP rs# identifiers separated by whitespace or commas:<BR>\n");
-char *oldPasted = cartUsualString(cart, hgvaVariantIds, "");
-cgiMakeTextArea(hgvaVariantIds, oldPasted, 10, 70);
-puts("</div>");
+if (hasSnps)
+    {
+    printf("<div id='"hgvaVariantPasteContainer"'%s>\n",
+	   differentString(selected, hgvaUseVariantIds) ? " style='display: none;'" : "");
+    printf("Enter dbSNP rs# identifiers separated by whitespace or commas:<BR>\n");
+    char *oldPasted = cartUsualString(cart, hgvaVariantIds, "");
+    cgiMakeTextArea(hgvaVariantIds, oldPasted, 10, 70);
+    puts("</div>");
+    }
 
 printf("<B>maximum number of variants to be processed:</B>\n");
 char *curLimit = cartUsualString(cart, "hgva_variantLimit", "10000");
@@ -1597,6 +1606,8 @@ static void rsIdsToVcfRecords(struct annoAssembly *assembly, struct slName *rsId
 if (rsIds == NULL)
     return;
 char *table = findLatestSnpTable(NULL);
+if (table == NULL)
+    return;
 struct sqlConnection *conn = hAllocConn(assembly->name);
 // Build a 'name in (...)' query, and build a hash of IDs so we can test whether all were found
 struct dyString *dq = sqlDyStringCreate("select chrom, chromStart, chromEnd, name, strand, "
