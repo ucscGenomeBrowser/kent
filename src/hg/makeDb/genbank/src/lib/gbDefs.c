@@ -196,8 +196,7 @@ unsigned gbGuessSrcDb(char* acc)
 /* Guess the src db from an accession */
 {
 /* refseq ids start with N?_ or X?_ */
-if ((strlen(acc) > 3) && (acc[2] == '_') 
-    && ((acc[0] == 'N') || (acc[0] == 'X')))
+if ((strlen(acc) > 3) && (acc[2] == '_') )
     return GB_REFSEQ;
 else
     return GB_GENBANK;

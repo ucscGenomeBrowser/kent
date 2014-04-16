@@ -877,7 +877,7 @@ static void refSeqParse()
 /* do special parsing of RefSeq data that was stuck in a comment */
 {
 char *next, *name, *value;
-if (startsWith("NM_", getCurAcc()) || startsWith("NR_", getCurAcc()))
+//if (startsWith("NM_", getCurAcc()) || startsWith("NR_", getCurAcc()))
     {
     parseRefSeqStatus();
     parseRefSeqDerived();

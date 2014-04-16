@@ -1630,6 +1630,7 @@ static char *aggregateLabels[] =
     "none",
     "transparent",
     "solid",
+    "stacked",
     };
 
 static char *aggregateValues[] =
@@ -1637,7 +1638,23 @@ static char *aggregateValues[] =
     WIG_AGGREGATE_NONE,
     WIG_AGGREGATE_TRANSPARENT,
     WIG_AGGREGATE_SOLID,
+    WIG_AGGREGATE_STACKED,
     };
+
+char *wiggleAggregateFunctionEnumToString(enum wiggleAggregateFunctionEnum x)
+/* Convert from enum to string representation. */
+{
+return aggregateValues[x];
+}
+
+enum wiggleAggregateFunctionEnum wiggleAggregateFunctionStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, aggregateValues);
+if (x < 0)
+   errAbort("hui::wiggleAggregateFunctionStringToEnum() - Unknown option %s", string);
+return x;
+}
 
 void aggregateDropDown(char *var, char *curVal)
 /* Make drop down menu for aggregate strategy */
