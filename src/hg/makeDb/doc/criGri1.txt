@@ -67,8 +67,8 @@ assemblyLabel Beijing Genomics Institution-Shenzhen
 assemblyShortLabel C_griseus_v1.0
 orderKey 1610
 mitoAcc NC_007936.1
-fastaFiles /hive/data/genomes/calMil1/ucsc/calMil1.ucsc.fa.gz
-agpFiles /hive/data/genomes/calMil1/ucsc/calMil1.ucsc.agp
+fastaFiles /hive/data/genomes/criGri1/ucsc/criGri1.ucsc.fa.gz
+agpFiles /hive/data/genomes/criGri1/ucsc/criGri1.ucsc.agp
 dbDbSpeciesDir criGri
 photoCreditURL http://en.wikipedia.org/wiki/File:Chinesedsaffa.jpg
 photoCreditName Wikimedia Commons
