@@ -33,10 +33,9 @@ and base alignment quality (BAQ) adjustments were applied.
 All data were simultaneously analyzed for exome SNP variants at the University of Michigan 
 (by the Abecasis Laboratory). SNPs were called using a two-step approach. First, genotype 
 likelihood files (GLFs) were generated using samtools pileup on individual BAM files. Next, 
-we used glfMultiples, a multi-sample variant caller, to generate initial SNP calls. Details of 
-the likelihood model implemented in glfMultiples are given in 
-<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/21460063" target=_blank>Li et al (Genome Research (2011) 21:940-951;</A> 
-section entitled "Identifying Potential Polymorphic Sites"). The Michigan SNP calling pipeline 
+we used glfMultiples, a multi-sample variant caller, to generate initial SNP calls. Details of
+the likelihood model implemented in glfMultiples are given in Li, et al., 2011
+(in the section entitled "Identifying Potential Polymorphic Sites"). The Michigan SNP calling pipeline
 is available at: 
 <A HREF="http://genome.sph.umich.edu/wiki/UMAKE" target=_blank>http://genome.sph.umich.edu/wiki/UMAKE</A>. 
 This pipeline makes diploid calls for pseudo-autosomal regions of male samples and haploid 
@@ -69,11 +68,9 @@ and the variant annotations at the coding-DNA and protein levels mostly follow
 <A HREF="http://www.hgvs.org/mutnomen/" target=_blank>HGVS</A> 
 notations.
 </P>
-<P>The SNP calls are included in the release of dbSNP build 138. The full dataset is described in 
-<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/23201682" target=_blank>Fu et.al. Nature 2013 Jan 10;493(7431):216-20</A>, 
-and a subset of the data (i.e., 2,500 exomes) was published by the ESP Population Genetics 
-and Statistical Analysis Working Group in 
-<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/22604720" target=_blank>Tennessen et. al., Science 2012 Jul 6;337(6090):64-9.</A>
+<P>The SNP calls are included in the release of dbSNP build 138. The full dataset is described in
+Fu, et al., 2013, and a subset of the data (i.e., 2,500 exomes) was published by the ESP Population
+Genetics and Statistical Analysis Working Group in Tennessen, et al., 2012.
 </P>
 
 <H2>Credits</H2>
@@ -97,32 +94,32 @@ Contact: <A HREF="mailto:&#101;&#118;&#115;&#115;&#101;&#114;&#118;&#101;&#114;&
 </P>
 
 <H2>References</H2>
+<p>
+Fu W, O'Connor TD, Jun G, Kang HM, Abecasis G, Leal SM, Gabriel S, Rieder MJ, Altshuler D, Shendure
+J <em>et al</em>.
+<a href="http://www.nature.com/nature/journal/v493/n7431/abs/nature11690.html" target="_blank">
+Analysis of 6,515 exomes reveals the recent origin of most human protein-coding variants</a>.
+<em>Nature</em>. 2013 Jan 10;493(7431):216-20.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/23201682" target="_blank">23201682</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3676746/" target="_blank">PMC3676746</a>
+</p>
 
 <p>
 Li Y, Sidore C, Kang HM, Boehnke M, Abecasis GR.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/21460063" target=_blank>Low-coverage sequencing: Implications for design of complex trait association studies</a>.
-<em>Genome Res</em>. 2011 Jun;21(6):940-51. doi: 10.1101/gr.117259.110. Epub 2011 Apr 1.
-PMID:21460063.  PMCID:PMC3106327.
-
+<a href="http://genome.cshlp.org/content/21/6/940.long" target="_blank">
+Low-coverage sequencing: implications for design of complex trait association studies</a>.
+<em>Genome Res</em>. 2011 Jun;21(6):940-51.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/21460063" target="_blank">21460063</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3106327/" target="_blank">PMC3106327</a>
 </p>
 
 <p>
-Fu W, O'Connor TD, Jun G, Kang HM, Abecasis G, Leal SM, Gabriel S, Rieder MJ, Altshuler D, 
-Shendure J, Nickerson DA, Bamshad MJ; NHLBI Exome Sequencing Project, Akey JM.
-<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/23201682" target=_blank>Analysis of 6,515 exomes reveals the recent origin of most human protein-coding variants.</A>
-<em>Nature</em> 2013 Jan 10;493(7431):216-20. doi: 10.1038/nature11690. Epub 2012 Nov 28.
-PMID:23201682.  PMCID:PMC3676746.
-
-</p>
-
-<p>
-Tennessen JA, Bigham AW, O'Connor TD, Fu W, Kenny EE, Gravel S, McGee S, Do R, Liu X, 
-Jun G, Kang HM, Jordan D, Leal SM, Gabriel S, Rieder MJ, Abecasis G, Altshuler D, 
-Nickerson DA, Boerwinkle E, Sunyaev S, Bustamante CD, Bamshad MJ, Akey JM; Broad GO; 
-Seattle GO; NHLBI Exome Sequencing Project.
-<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/22604720" target=_blank>Evolution and functional impact of rare coding variation from deep sequencing of human exomes.</A>
-<em>Science</em> 2012 Jul 6;337(6090):64-9. doi: 10.1126/science.1219240. Epub 2012 May 17.
-PMID:22604720.  PMCID:PMC3708544.
+Tennessen JA, Bigham AW, O'Connor TD, Fu W, Kenny EE, Gravel S, McGee S, Do R, Liu X, Jun G <em>et
+al</em>.
+<a href="http://www.sciencemag.org/content/337/6090/64.abstract" target="_blank">
+Evolution and functional impact of rare coding variation from deep sequencing of human exomes</a>.
+<em>Science</em>. 2012 Jul 6;337(6090):64-9.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22604720" target="_blank">22604720</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3708544/" target="_blank">PMC3708544</a>
 </p>
 </div>
-

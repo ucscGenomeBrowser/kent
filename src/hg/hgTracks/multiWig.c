@@ -165,14 +165,15 @@ freez(&lineBuf);
 
 
 static void minMaxVals(struct slRef *refList, double *retMin, double *retMax,
-     enum wiggleAlwaysZeroEnum alwaysZero)
+     enum wiggleAlwaysZeroEnum alwaysZero, double *yOffsets)
 /* Figure out min/max of everything in list.  The refList contains pointers to
  * preDrawContainers */
 {
 /* Turns out to be *much* shorter to rewrite than to reuse preDrawAutoScale */
 double max = -BIGDOUBLE, min = BIGDOUBLE;
 struct slRef *ref;
-for (ref = refList; ref != NULL; ref = ref->next)
+int numTrack = 0;
+for (ref = refList; ref != NULL; numTrack++,ref = ref->next)
     {
     struct preDrawContainer *pre = ref->val;
     if (pre == NULL)  // pre may be null if the bigWig file didn't load
@@ -181,13 +182,23 @@ for (ref = refList; ref != NULL; ref = ref->next)
     struct preDrawElement *p = pre->preDraw + pre->preDrawZero;
     int width = pre->width;
     int i;
-    for (i=0; i<width; ++i)
+    int offset = numTrack * pre->width;
+    int prevOffset = (numTrack - 1) * pre->width;
+    for (i=0; i<width; ++i, offset++)
 	{
 	if (p->count)
 	    {
 	    if (min > p->min) min = p->min;
 	    if (max < p->max) max = p->max;
+	    if (yOffsets)
+		yOffsets[offset] = p->max;
 	    }
+	else if (yOffsets)
+	    {
+	    yOffsets[offset] = 0;
+	    }
+	if (prevOffset > 0)
+	    yOffsets[offset] += yOffsets[prevOffset];
 	++p;
 	}
     }
@@ -202,32 +213,70 @@ if (alwaysZero == wiggleAlwaysZeroOn)
 *retMin = min;
 }
 
+
+static struct wigGraphOutput *setUpWgo(int xOff, int yOff, int width, int height, int numTracks, struct wigCartOptions *wigCart, struct hvGfx *hvg)
+{
+/* Deal with tranparency possibly */
+struct wigGraphOutput *wgo;
+struct floatPic *floatPic = NULL;
+switch(wigCart->aggregateFunction)
+    {
+    case wiggleAggregateTransparent:
+	{
+	//int height = tg->lineHeight;
+	floatPic = floatPicNew(width, height);
+	floatPicSet(floatPic, 1, 1, 1);
+	wgo = wigGraphOutputTransparent(floatPic);
+	break;
+	}
+    case wiggleAggregateNone:
+    case wiggleAggregateSolid:
+	{
+	wgo = wigGraphOutputSolid(xOff, yOff, hvg);
+	break;
+	}
+    case wiggleAggregateStacked:
+	{
+	wgo = wigGraphOutputStack(xOff, yOff, width, numTracks, hvg);
+	break;
+	}
+    }
+return wgo;
+}
+
+
 static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw items in multiWig container. */
 {
 struct track *subtrack;
-char *aggregate = wigFetchAggregateValWithCart(cart, tg->tdb);
-boolean overlay = wigIsOverlayTypeAggregate(aggregate);
 boolean errMsgShown = FALSE;
 int y = yOff;
 boolean errMsgFound = FALSE;
-// determine if any subtracks had errors
+int numTracks = 0;
+// determine if any subtracks had errors and count them up
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    if (isSubtrackVisible(subtrack) && subtrack->networkErrMsg)
-	errMsgFound = TRUE;
+    if (isSubtrackVisible(subtrack) )
+	{
+	numTracks++;
+	if (subtrack->networkErrMsg)
+	    errMsgFound = TRUE;
+	}
     }
+
 if (errMsgFound)
     {
     Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
     hvGfxBox(hvg, xOff, yOff, width, tg->height, yellow);
     }
 
+struct wigCartOptions *wigCart = tg->extraUiData;
+struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, wigCart, hvg);
+
 /* Cope with autoScale - we do it here rather than in the child tracks, so that
  * all children can be on same scale. */
-struct wigCartOptions *wigCart = tg->extraUiData;
 if (wigCart->autoScale)
     {
     /* Force load of all predraw arrays so can do calcs. Build up list, and then
@@ -243,7 +292,7 @@ if (wigCart->autoScale)
 	    }
 	}
     double minVal, maxVal;
-    minMaxVals(refList, &minVal, &maxVal, wigCart->alwaysZero);
+    minMaxVals(refList, &minVal, &maxVal, wigCart->alwaysZero, wgo->yOffsets);
     slFreeList(&refList);
 
     /* Cope with log transform if need be */
@@ -264,19 +313,7 @@ if (wigCart->autoScale)
 	}
     }
 
-/* Deal with tranparency possibly */
-struct wigGraphOutput *wgo;
-struct floatPic *floatPic = NULL;
-if (wigCart->transparent)
-    {
-    int height = tg->lineHeight;
-    floatPic = floatPicNew(width, height);
-    floatPicSet(floatPic, 1, 1, 1);
-    wgo = wigGraphOutputTransparent(floatPic);
-    }
-else
-    wgo = wigGraphOutputSolid(xOff, yOff, hvg);
-
+int numTrack = 0;
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
@@ -285,13 +322,14 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	    {
 	    if (subtrack->networkErrMsg)
 	       errMsgShown = TRUE;
+	    wgo->numTrack = numTrack++;
 	    subtrack->wigGraphOutput = wgo;
 	    int height = subtrack->totalHeight(subtrack, vis);
 	    hvGfxSetClip(hvg, xOff, y, width, height);
-	    if (overlay)
+	    if (wigCart->aggregateFunction != wiggleAggregateNone)
 		subtrack->lineHeight = tg->lineHeight;
 	    subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
-	    if (!overlay)
+	    if (wigCart->aggregateFunction == wiggleAggregateNone)
 		{
 		y += height + 1;
 		wgo->yOff = y;
@@ -301,10 +339,10 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	}
     }
 
-if (wigCart->transparent)
+if (wigCart->aggregateFunction == wiggleAggregateTransparent)
    {
-   floatPicIntoHvg(floatPic, xOff, yOff, hvg);
-   floatPicFree(&floatPic);
+   floatPicIntoHvg(wgo->image, xOff, yOff, hvg);
+   floatPicFree((struct floatPic **)&wgo->image);
    }
 
 char *url = trackUrl(tg->track, chromName);
@@ -315,10 +353,9 @@ mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, y, width, tg->height, tg->track, 
 static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height of multiWigcontainer. */
 {
-char *aggregate = wigFetchAggregateValWithCart(cart, tg->tdb);
-boolean overlay = wigIsOverlayTypeAggregate(aggregate);
+struct wigCartOptions *wigCart = tg->extraUiData;
 int totalHeight =  0;
-if (overlay)                                                                                       
+if (wigCart->aggregateFunction !=  wiggleAggregateNone)
     totalHeight =  wigTotalHeight(tg, vis);                                                        
 struct track *subtrack;
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
@@ -328,7 +365,7 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	// Logic is slightly complicated by fact we want to call the totalHeight
 	// method for each subtrack even if in overlay mode.
 	int oneHeight = subtrack->totalHeight(subtrack, vis);
-	if (!overlay)
+	if (wigCart->aggregateFunction ==  wiggleAggregateNone)
 	    {
 	    if (totalHeight != 0)
 	       totalHeight += 1;
@@ -365,9 +402,8 @@ static void multiWigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis)
 /* Draw left labels - by deferring to first subtrack. */
 {
-char *aggregate = wigFetchAggregateValWithCart(cart, tg->tdb);
-boolean overlay = wigIsOverlayTypeAggregate(aggregate);
-if (overlay)
+struct wigCartOptions *wigCart = tg->extraUiData;
+if (wigCart->aggregateFunction != wiggleAggregateNone)
     {
     struct track *firstVisibleSubtrack = NULL;
     boolean showNumbers = graphLimitsAllSame(tg->subtracks, &firstVisibleSubtrack);
