@@ -964,7 +964,6 @@ puts("<div id='navbar' class='navbar navbar-fixed-top navbar-inverse'>");
 webIncludeFile("/inc/edwNavBar.html");
 puts("</div>");
 puts("<div id='content' class='container'><div>");
-
 }
 
 void edwWebFooterWithPersona()
