@@ -1001,7 +1001,6 @@ for (x1 = 0; x1 < width; ++x1)
 		    if (yOffsets)
 			{
 			stackY = yOffsets[numTrack *  width + x1];
-			printf("%d ", stackY);
 			}
 		    vLine(image,x, stackY+yOff+boxTop, boxHeight, drawColor);
 		    }
