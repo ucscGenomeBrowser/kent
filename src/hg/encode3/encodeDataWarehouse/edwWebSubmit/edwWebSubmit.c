@@ -69,7 +69,7 @@ paraFetchReadStatus(path, &pcList, &url, &fileSize, &dateString, &totalDownloade
 return totalDownloaded;
 }
 
-void monitorSubmission(struct sqlConnection *conn)
+void monitorSubmission(struct sqlConnection *conn, boolean autoRefresh)
 /* Write out information about submission. */
 {
 char *url = trimSpaces(cgiString("url"));
@@ -203,11 +203,14 @@ else
 	    }
 	}
     }
-cgiMakeHiddenVar("monitor", "monitor");
-puts("<script>setTimeout(function() { $('form').submit(); }, 5000)</script>");
-
 if (endUploadTime == 0 && isEmpty(sub->errorMessage))
     cgiMakeButton(stopButtonName, "stop upload");
+
+if (autoRefresh && isEmpty(sub->errorMessage))
+    {
+    cgiMakeHiddenVar("monitor", "monitor");
+    puts("<script>var edwRefresh = setTimeout(function() { $('form').submit(); }, 5000)</script>");
+    }
 }
 
 void submitUrl(struct sqlConnection *conn)
@@ -276,17 +279,17 @@ if (userEmail == NULL)
 else if (cgiVarExists(stopButtonName))
     {
     stopUpload(conn);
-    monitorSubmission(conn);
+    monitorSubmission(conn, FALSE);
     }
 else if (cgiVarExists("submitUrl"))
     {
     submitUrl(conn);
     sleep1000(1000);
-    monitorSubmission(conn);
+    monitorSubmission(conn, TRUE);
     }
 else if (cgiVarExists("monitor"))
     {
-    monitorSubmission(conn);
+    monitorSubmission(conn, TRUE);
     }
 else
     {
