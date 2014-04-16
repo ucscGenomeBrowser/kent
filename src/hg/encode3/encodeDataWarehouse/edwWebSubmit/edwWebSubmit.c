@@ -203,14 +203,15 @@ else
 	    }
 	}
     }
-cgiMakeButton("monitor", "refresh status");
+cgiMakeHiddenVar("monitor", "monitor");
+puts("<script>setTimeout(function() { $('form').submit(); }, 5000)</script>");
+
 if (endUploadTime == 0 && isEmpty(sub->errorMessage))
     cgiMakeButton(stopButtonName, "stop upload");
 }
 
 void submitUrl(struct sqlConnection *conn)
-/* Submit validated manifest if it is not already in process.  Show
- * progress once it is in progress. */
+/* Submit validated manifest if it is not already in process. */
 {
 /* Parse email and URL out of CGI vars. Do a tiny bit of error checking. */
 char *url = trimSpaces(cgiString("url"));
@@ -223,10 +224,6 @@ int sd = netUrlMustOpenPastHeader(url);
 close(sd);
 
 edwAddSubmitJob(conn, userEmail, url, cgiBoolean("update"));
-
-/* Give the system a half second to react and then put up status info about submission */
-sleep1000(1000);
-monitorSubmission(conn);
 }
 
 void stopUpload(struct sqlConnection *conn)
@@ -255,7 +252,6 @@ else
 	"update edwSubmit set errorMessage='Stopped by user.' where id=%u", sub->id);
     sqlUpdate(conn, query);
     }
-monitorSubmission(conn);
 }
 
 
@@ -272,20 +268,35 @@ void doMiddle()
 {
 pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
+puts("<script>$('#edw-submit').show();</script>");
 struct sqlConnection *conn = edwConnectReadWrite(edwDatabase);
 userEmail = edwGetEmailAndVerify();
 if (userEmail == NULL)
     logIn();
 else if (cgiVarExists(stopButtonName))
+    {
     stopUpload(conn);
-else if (cgiVarExists("submitUrl"))
-    submitUrl(conn);
-else if (cgiVarExists("monitor"))
     monitorSubmission(conn);
+    }
+else if (cgiVarExists("submitUrl"))
+    {
+    submitUrl(conn);
+    sleep1000(1000);
+    monitorSubmission(conn);
+    }
+else if (cgiVarExists("monitor"))
+    {
+    monitorSubmission(conn);
+    }
 else
+    {
     getUrl(conn);
+    // TODO: better way to achieve context-dependent menu
+    puts("<script>$('#edw-submit').hide();</script>");
+    }
 printf("</FORM>");
 }
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -296,9 +307,6 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
 
 /* Put out HTTP header and HTML HEADER all the way through <BODY> */
 edwWebHeaderWithPersona("");
-
-// TODO: find a better place for menu update
-puts("<script>$('#edw-submit').hide();</script>");
 
 /* Call error handling wrapper that catches us so we write /BODY and /HTML to close up page
  * even through an errAbort. */
