@@ -8,7 +8,6 @@ track gap override
 html gap
 
 track cpgIslandSuper
-release beta,public
 superTrack on
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
