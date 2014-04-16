@@ -959,17 +959,15 @@ puts("</HEAD>");
 
 /* layout with navigation bar */
 puts("<BODY>\n");
-puts("<div id='layout'>");
-puts("<div id='navbar' class='navbar navbar-fixed-top navbar-inverse'>");
-webIncludeFile("/inc/edwNavBar.html");
-puts("</div>");
-puts("<div id='content' class='container'><div>");
+
+edwWebNavBarStart();
 }
+
 
 void edwWebFooterWithPersona()
 /* Print out end tags and persona script stuff */
 {
-puts("</div></div></div>");
+edwWebNavBarEnd();
 htmlEnd();
 }
 
@@ -1620,3 +1618,61 @@ for (i=0; i<ArraySize(places); ++i)
 	}
     }
 }
+
+/***/
+/* Shared functions for EDW web CGI's.
+   Mostly wrappers for javascript tweaks */
+
+void edwWebAutoRefresh(int msec)
+/* Refresh page after msec.  Use 0 to cancel autorefresh */
+{
+if (msec > 0)
+    printf("<script>var edwRefresh = setTimeout(function() { $('form').submit(); }, %d);</script>",
+            msec);
+else if (msec == 0)
+    puts("<script>clearTimeout(edwRefresh);</script>");
+
+// Negative msec ignored
+}
+
+
+void edwWebAutoRefreshProtectInput()
+/* Cancel autorefresh when input widgets are clicked.  Use on pages with user input 
+   widgets having state beyond a button press */
+{
+puts("<script>$('form').click(function() {clearTimeout(edwRefresh);});</script>");
+}
+
+
+/***/
+/* Navigation bar */
+
+void edwWebNavBarStart()
+/* Layout navigation bar */
+{
+puts("<div id='layout'>");
+puts("<div id='navbar' class='navbar navbar-fixed-top navbar-inverse'>");
+webIncludeFile("/inc/edwNavBar.html");
+puts("</div>");
+puts("<div id='content' class='container'><div>");
+}
+
+void edwWebNavBarEnd()
+/* Close layout after navigation bar */
+{
+puts("</div></div></div>");
+}
+
+void edwWebBrowseMenuItem(boolean on)
+/* Toggle visibility of 'Browse submissions' link on navigation menu */
+{
+printf("<script>$('#edw-browse').%s();</script>", on ? "show" : "hide");
+}
+
+void edwWebSubmitMenuItem(boolean on)
+/* Toggle visibility of 'Submit data' link on navigation menu */
+{
+printf("<script>$('#edw-submit').%s();</script>", on ? "show" : "hide");
+}
+
+

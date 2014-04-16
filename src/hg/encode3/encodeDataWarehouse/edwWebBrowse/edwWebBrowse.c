@@ -387,8 +387,8 @@ printf("</FORM>\n");
 // auto-refresh page
 if (userEmail != NULL)
     {
-    puts("<script>var edwRefresh = setTimeout('location.reload(true);', 5000);</script>");
-    puts("<script>$('form').eq(0).click(function() {clearTimeout(edwRefresh);});</script>");
+    edwWebAutoRefresh(5000);
+    edwWebAutoRefreshProtectInput();
     }
 }
 
@@ -400,7 +400,7 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
 edwWebHeaderWithPersona("");
 // TODO: find a better place for menu update
-puts("<script>$('#edw-browse').hide();</script>");
+edwWebBrowseMenuItem(FALSE);
 htmEmptyShell(doMiddle, NULL);
 edwWebFooterWithPersona();
 return 0;

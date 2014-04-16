@@ -28,6 +28,8 @@ extern int edwSingleFileTimeout;   // How many seconds we give ourselves to fetc
 
 #define edwMinMapQual 3	//Above this -10log10 theshold we have >50% chance of being right
 
+#define EDW_WEB_REFRESH_5_SEC 5000
+
 struct sqlConnection *edwConnect();
 /* Returns a read only connection to database. */
 
@@ -331,5 +333,31 @@ void edwOneLineSystemResult(char *command, char *line, int maxLineSize);
 
 boolean edwOneLineSystemAttempt(char *command, char *line, int maxLineSize);
 /* Execute system command and return one line result from it in line */
+
+/***/
+/* Shared functions for EDW web CGI's.
+   Mostly wrappers for javascript tweaks */
+
+void edwWebAutoRefresh(int msec);
+/* Refresh page after msec.  Use 0 to cancel autorefresh */
+
+void edwWebAutoRefreshProtectInput();
+/* Cancel autorefresh when input widgets are clicked.  Use on pages with user input 
+   widgets having state beyond a button press */
+
+/***/
+/* Navigation bar */
+
+void edwWebNavBarStart();
+/* Layout navigation bar */
+
+void edwWebNavBarEnd();
+/* Close layout after navigation bar */
+
+void edwWebBrowseMenuItem(boolean on);
+/* Toggle visibility of 'Browse submissions' link on navigation menu */
+
+void edwWebSubmitMenuItem(boolean on);
+/* Toggle visibility of 'Submit data' link on navigation menu */
 
 #endif /* EDWLIB_H */

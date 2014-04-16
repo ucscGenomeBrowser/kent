@@ -209,7 +209,7 @@ if (endUploadTime == 0 && isEmpty(sub->errorMessage))
 if (autoRefresh && isEmpty(sub->errorMessage))
     {
     cgiMakeHiddenVar("monitor", "monitor");
-    puts("<script>var edwRefresh = setTimeout(function() { $('form').submit(); }, 5000)</script>");
+    edwWebAutoRefresh(EDW_WEB_REFRESH_5_SEC);
     }
 }
 
@@ -271,7 +271,7 @@ void doMiddle()
 {
 pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
-puts("<script>$('#edw-submit').show();</script>");
+edwWebSubmitMenuItem(TRUE);
 struct sqlConnection *conn = edwConnectReadWrite(edwDatabase);
 userEmail = edwGetEmailAndVerify();
 if (userEmail == NULL)
@@ -294,8 +294,7 @@ else if (cgiVarExists("monitor"))
 else
     {
     getUrl(conn);
-    // TODO: better way to achieve context-dependent menu
-    puts("<script>$('#edw-submit').hide();</script>");
+    edwWebSubmitMenuItem(FALSE);
     }
 printf("</FORM>");
 }
