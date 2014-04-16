@@ -242,15 +242,19 @@ void showRecentFiles(struct sqlConnection *conn)
 printf("<div>");
 printf("Select whose files to browse: ");
 char *user = printUserControl(conn, "selectUser", userEmail);
-printf("</div><div>");
+printf("</div>");
+
+printf("<div>");
 printf(" Maximum number of submissions to view: ");
 int maxSubCount = cgiOptionalInt("maxSubCount", 3);
 if (maxSubCount == 0)
      maxSubCount = 2;
 // override stanford fixed width input widget styling
 cgiMakeIntVar("maxSubCount", maxSubCount, 3);
-printf("</div><div>");
-cgiMakeButton("Submit", "update view");
+printf("</div>");
+
+printf("<div>");
+cgiMakeButton("Submit", "submit");
 printf("</div>");
 
 /* Get id for user. */
@@ -362,6 +366,7 @@ if (userEmail == NULL)
     printf("<H3>Welcome to the ENCODE data submission browser</H3>\n");
 else
     printf("<H3>Browse submissions</H3>\n");
+
 printf("<div id=\"userId\">");
 if (userEmail == NULL)
     {
@@ -378,6 +383,13 @@ if (userEmail != NULL)
     sqlDisconnect(&conn);
     }
 printf("</FORM>\n");
+
+// auto-refresh page
+if (userEmail != NULL)
+    {
+    puts("<script>var edwRefresh = setTimeout('location.reload(true);', 5000);</script>");
+    puts("<script>$('form').eq(0).click(function() {clearTimeout(edwRefresh);});</script>");
+    }
 }
 
 int main(int argc, char *argv[])
