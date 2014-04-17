@@ -542,7 +542,7 @@ taeGut2.upstreamGeneTbl = refGene
 #########################################################################
 # set default position similar to taeGut1 (DONE - 2013-06-19 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="chrZ:56287176-56342404" where name="taeGut2";' \
+'update dbDb set defaultPos="chrZ:56283356-56343168" where name="taeGut2";' \
 	hgcentraltest
 
 #########################################################################
