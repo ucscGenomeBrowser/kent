@@ -1,0 +1,186 @@
+metaObject wgEncodeAwgSegmentation
+objType composite
+composite wgEncodeAwgSegmentation
+expVars cell
+
+metaObject wgEncodeAwgSegmentationChromhmmGm12878
+objType table
+cell GM12878
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationChromhmmGm12878.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationChromhmmGm12878
+
+metaObject wgEncodeAwgSegmentationChromhmmH1hesc
+objType table
+cell H1-hESC
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationChromhmmH1hesc.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationChromhmmH1hesc
+
+metaObject wgEncodeAwgSegmentationChromhmmHelas3
+objType table
+cell HeLa-S3
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationChromhmmHelas3.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationChromhmmHelas3
+
+metaObject wgEncodeAwgSegmentationChromhmmHepg2
+objType table
+cell HepG2
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationChromhmmHepg2.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationChromhmmHepg2
+
+metaObject wgEncodeAwgSegmentationChromhmmHuvec
+objType table
+cell HUVEC
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationChromhmmHuvec.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationChromhmmHuvec
+
+metaObject wgEncodeAwgSegmentationChromhmmK562
+objType table
+cell K562
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationChromhmmK562.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationChromhmmK562
+
+metaObject wgEncodeAwgSegmentationCombinedGm12878
+objType table
+cell GM12878
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationCombinedGm12878.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationCombinedGm12878
+
+metaObject wgEncodeAwgSegmentationCombinedH1hesc
+objType table
+cell H1-hESC
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationCombinedH1hesc.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationCombinedH1hesc
+
+metaObject wgEncodeAwgSegmentationCombinedHelas3
+objType table
+cell HeLa-S3
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationCombinedHelas3.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationCombinedHelas3
+
+metaObject wgEncodeAwgSegmentationCombinedHepg2
+objType table
+cell HepG2
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationCombinedHepg2.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationCombinedHepg2
+
+metaObject wgEncodeAwgSegmentationCombinedHuvec
+objType table
+cell HUVEC
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationCombinedHuvec.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationCombinedHuvec
+
+metaObject wgEncodeAwgSegmentationCombinedK562
+objType table
+cell K562
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationCombinedK562.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationCombinedK562
+
+metaObject wgEncodeAwgSegmentationSegwayGm12878
+objType table
+cell GM12878
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationSegwayGm12878.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationSegwayGm12878
+
+metaObject wgEncodeAwgSegmentationSegwayH1hesc
+objType table
+cell H1-hESC
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationSegwayH1hesc.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationSegwayH1hesc
+
+metaObject wgEncodeAwgSegmentationSegwayHelas3
+objType table
+cell HeLa-S3
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationSegwayHelas3.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationSegwayHelas3
+
+metaObject wgEncodeAwgSegmentationSegwayHepg2
+objType table
+cell HepG2
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationSegwayHepg2.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationSegwayHepg2
+
+metaObject wgEncodeAwgSegmentationSegwayHuvec
+objType table
+cell HUVEC
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationSegwayHuvec.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationSegwayHuvec
+
+metaObject wgEncodeAwgSegmentationSegwayK562
+objType table
+cell K562
+composite wgEncodeAwgSegmentation
+dataType Combined
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgSegmentationSegwayK562.bed.gz
+project wgEncode
+tableName wgEncodeAwgSegmentationSegwayK562
+
+# MAGIC: -2017053285
