@@ -115,12 +115,13 @@ Project</a>.
 <li>
 <b>Analysis set</b> - The GRCh38 assembly offers an &quot;analysis set&quot; that was created to 
 accommodate next generation sequencing read alignment pipelines. To avoid false mapping of reads,
-the unlocalized and unplaced scaffolds, as well as chrM,  have been removed from this set, and the 
-new centromere sequences have been eliminated to avoid difficulty of aligning reads to that 
-repetitive region. The Epstein-Barr virus sequence has been added as a decoy to attract 
-contamination in the samples. The analysis set may be downloaded from the Genome Browser 
+duplicate copies of centromeric arrays and WGS on several chromosomes have been hard-masked with
+Ns.  The two PAR regions on chromosome Y have also been hard-masked, and the Epstein-Barr virus
+sequence has been added as a decoy to attract contamination in samples. Two versions of the
+analysis set are available on our
 <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/analysisSet/"
-target="_blank">downloads page</a>.
+target="_blank">downloads page</a>:
+one without the alternate chromosomes from this assembly, and one that includes them.
 </ul>
 <p>
 <b>Chromosome naming conventions</b>

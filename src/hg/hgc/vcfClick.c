@@ -82,7 +82,7 @@ if (rec->infoCount == 0)
     return;
 struct vcfFile *vcff = rec->file;
 puts("<B>INFO column annotations:</B><BR>");
-puts("<TABLE border=0 cellspacing=0 cellpadding=0>");
+puts("<TABLE border=0 cellspacing=0 cellpadding=2>");
 int i;
 for (i = 0;  i < rec->infoCount;  i++)
     {
@@ -90,7 +90,8 @@ for (i = 0;  i < rec->infoCount;  i++)
     const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
     if (def == NULL)
 	continue;
-    printf("<TR><TD align=\"right\"><B>%s:</B></TD><TD>&nbsp;", el->key);
+    printf("<TR valign='top'><TD align=\"right\"><B>%s:</B></TD><TD style=width:15%%;'>",
+           el->key);
     int j;
     enum vcfInfoType type = def->type;
     if (type == vcfInfoFlag && el->count == 0)
@@ -106,7 +107,7 @@ for (i = 0;  i < rec->infoCount;  i++)
 	    vcfPrintDatum(stdout, el->values[j], type);
 	}
     if (def != NULL)
-	printf("</TD><TD>&nbsp;%s", def->description);
+	printf("&nbsp;&nbsp;</TD><TD>%s", def->description);
     else
 	printf("</TD><TD>");
     printf("</TD></TR>\n");
