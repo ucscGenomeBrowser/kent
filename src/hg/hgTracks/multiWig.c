@@ -165,7 +165,7 @@ freez(&lineBuf);
 
 
 static void minMaxVals(struct slRef *refList, double *retMin, double *retMax,
-     enum wiggleAlwaysZeroEnum alwaysZero, double *yOffsets)
+     enum wiggleWindowingEnum windowingFunction,enum wiggleAlwaysZeroEnum alwaysZero, double *yOffsets)
 /* Figure out min/max of everything in list.  The refList contains pointers to
  * preDrawContainers */
 {
@@ -186,18 +186,34 @@ for (ref = refList; ref != NULL; numTrack++,ref = ref->next)
     int prevOffset = (numTrack - 1) * pre->width;
     for (i=0; i<width; ++i, offset++)
 	{
+	double val;
+
+	switch(windowingFunction)
+	{
+	    case wiggleWindowingMean:
+		val = p->sumData / p->count;
+		break;
+
+	    case wiggleWindowingWhiskers:
+	    case wiggleWindowingMax:
+		val = p->max;
+		break;
+	    case wiggleWindowingMin:
+		val = p->min;
+		break;
+	}
 	if (p->count)
 	    {
-	    if (min > p->min) min = p->min;
-	    if (max < p->max) max = p->max;
+	    if (min > val) min = val;
+	    if (max < val) max = val;
 	    if (yOffsets)
-		yOffsets[offset] = p->max;
+		yOffsets[offset] = val;
 	    }
 	else if (yOffsets)
 	    {
 	    yOffsets[offset] = 0;
 	    }
-	if (prevOffset > 0)
+	if (yOffsets && (prevOffset > 0))
 	    yOffsets[offset] += yOffsets[prevOffset];
 	++p;
 	}
@@ -292,7 +308,7 @@ if (wigCart->autoScale)
 	    }
 	}
     double minVal, maxVal;
-    minMaxVals(refList, &minVal, &maxVal, wigCart->alwaysZero, wgo->yOffsets);
+    minMaxVals(refList, &minVal, &maxVal, wigCart->windowingFunction,  wigCart->alwaysZero, wgo->yOffsets);
     slFreeList(&refList);
 
     /* Cope with log transform if need be */
