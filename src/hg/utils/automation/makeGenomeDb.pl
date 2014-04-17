@@ -1050,8 +1050,8 @@ to find Genome Browser tracks that match specific selection criteria.
 <P>
 <B>Download sequence and annotation data:</B>
 <UL>
+<LI><A HREF="../goldenPath/help/ftp.html">Using rsync</A> (recommended)
 <LI><A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/">Using FTP</A>
-(recommended)
 <LI><A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#$anchorRoot">Using HTTP</A>
 <LI><A HREF="../goldenPath/credits.html#${anchorRoot}_credits">Data use conditions and
 restrictions</A>
