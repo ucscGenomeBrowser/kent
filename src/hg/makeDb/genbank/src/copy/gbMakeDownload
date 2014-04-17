@@ -277,38 +277,6 @@ sub getUpstreamGeneTbl($) {
     }
 }    
 
-# Get the parts of upstream MAF tables and organism files to use to creating
-# upstream MAFS, or undef if not specified.
-sub getCDSFasta($) {
-    my($db) = @_;
-    my $spec = getDbConfUndef($db, "upstreamMaf");
-    if (!defined($spec)) {
-        return undef;
-    }
-    my @parts = splitSpaceList($spec);
-    if ($#parts+1 & 1) {
-        gbError("expected pairs of arguments to $db.upstreamMaf, got: $spec");
-    }
-    return @parts;
-}
-
-# create upstream FASTA file for a database and size if it doesn't exist or
-# is out of date.
-sub maybeMakeCDSFasta($$$) {
-    my($justCheck, $db, $size) = @_;
-    my $downloadDir = getSeqDownloadDir($downloadRootDir, $db);
-    my $fa = "$downloadDir/upstream${size}.fa.gz";
-    my $geneTbl = getUpstreamGeneTbl($db);
-    if (defined($geneTbl) && fileOutOfDate($fa)) {
-        if (!$justCheck) {
-            makeUpstreamFaSize($db, $geneTbl, $size, $fa);
-        }
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
 # Get the paris of upstream MAF tables and organism files to use to creating
 # upstream MAFS, or undef if not specified.
 sub getUpstreamMafTblsOrgs($) {
@@ -429,9 +397,6 @@ sub updateDownloadFiles($$) {
         $needUpdated = 1;
     }
     if (maybeMakeUpstreamMafs($justCheck, $db)) {
-        $needUpdated = 1;
-    }
-    if (maybeMakeCDSFasta($justCheck, $db)) {
         $needUpdated = 1;
     }
     return $needUpdated;
