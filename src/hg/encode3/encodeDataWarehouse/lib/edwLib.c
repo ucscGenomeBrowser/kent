@@ -281,13 +281,21 @@ if (owner == NULL)
 return cloneString(owner->email);
 }
 
+int edwFindUserIdFromEmail(struct sqlConnection *conn, char *userEmail)
+/* Return true id of this user */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select id from edwUser where email = '%s'", userEmail);
+return sqlQuickNum(conn, query);
+}
+
 boolean edwUserIsAdmin(struct sqlConnection *conn, char *userEmail)
 /* Return true if the user is an admin */
 {
 char query[256];
 sqlSafef(query, sizeof(query), "select isAdmin from edwUser where email = '%s'", userEmail);
-int id = sqlQuickNum(conn, query);
-if (id == 1) return TRUE;
+int isAdmin = sqlQuickNum(conn, query);
+if (isAdmin == 1) return TRUE;
 return FALSE;
 }
 

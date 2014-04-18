@@ -213,6 +213,28 @@ if (autoRefresh && isEmpty(sub->errorMessage))
     }
 }
 
+boolean okToResubmitThisUrl(struct sqlConnection *conn, char *url)
+/* Return true if the user is an administrator or the original submitter */
+{
+if (edwUserIsAdmin(conn,userEmail)) 
+    return TRUE; 
+if (!sqlRowExists(conn, "edwSubmit", "url", url))
+    return TRUE;
+/* url exists, find out who is the original submitter */
+int uId = edwFindUserIdFromEmail(conn, userEmail);
+char  query[256];
+sqlSafef(query, sizeof(query),
+    "select distinct userId from edwSubmit where url='%s'", url);
+struct slInt *idList = sqlQuickNumList(conn, query);
+struct slInt *id;
+for (id = idList; id != NULL; id = id->next)
+    {
+    if (id->val == uId)
+    return TRUE;
+    }
+return FALSE;
+}
+
 void submitUrl(struct sqlConnection *conn)
 /* Submit validated manifest if it is not already in process. */
 {
@@ -225,6 +247,10 @@ if (!stringIn("://", url))
 edwMustGetUserFromEmail(conn, userEmail);
 int sd = netUrlMustOpenPastHeader(url);
 close(sd);
+
+/* Check is it OK for the user to resubmit the url or update its information */
+if (!okToResubmitThisUrl(conn, url))
+    errAbort("The url was previously submitted by another user, you cannot submit it again nor update its information.");
 
 edwAddSubmitJob(conn, userEmail, url, cgiBoolean("update"));
 }
