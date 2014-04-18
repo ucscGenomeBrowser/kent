@@ -88,6 +88,9 @@ struct edwUser *edwFindUserFromFileId(struct sqlConnection *conn, int fId);
 char *edwFindOwnerNameFromFileId(struct sqlConnection *conn, int fId);
 /* Return name of submitter. Return "an unknown user" if name is NULL */
 
+int edwFindUserIdFromEmail(struct sqlConnection *conn, char *userEmail);
+/* Return true id of this user */
+
 boolean edwUserIsAdmin(struct sqlConnection *conn, char *userEmail);
 /* Return true if the user is an admin */
 
