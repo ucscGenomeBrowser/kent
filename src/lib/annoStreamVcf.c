@@ -125,7 +125,8 @@ if (minChrom != NULL)
 char **words = nextRowRaw(self);
 if (regionChrom != NULL && words != NULL)
     {
-    if (self->isTabix && strcmp(getProperChromName(self, words[0]), regionChrom) < 0)
+    char *rowChrom = getProperChromName(self, words[0]);
+    if (self->isTabix && strcmp(rowChrom, regionChrom) < 0)
 	{
 	uint regionEnd = sSelf->regionEnd;
 	if (minChrom != NULL && sSelf->chrom == NULL)
@@ -133,8 +134,8 @@ if (regionChrom != NULL && words != NULL)
 	lineFileSetTabixRegion(self->vcff->lf, regionChrom, regionStart, regionEnd);
 	}
     while (words != NULL &&
-	   (strcmp(getProperChromName(self, words[0]), regionChrom) < 0 ||
-	    (sameString(words[0], regionChrom) && self->record->chromEnd < regionStart)))
+	   (strcmp(rowChrom, regionChrom) < 0 ||
+	    (sameString(rowChrom, regionChrom) && self->record->chromEnd < regionStart)))
 	words = nextRowRaw(self);
     }
 // Tabix doesn't give us any rows past end of region, but if not using tabix,
