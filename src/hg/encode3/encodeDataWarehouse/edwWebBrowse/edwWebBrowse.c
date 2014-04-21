@@ -223,9 +223,14 @@ char *printUserControl(struct sqlConnection *conn, char *cgiVarName, char *defau
 /* Print out control and return currently selected user. */
 {
 char query[256];
-sqlSafef(query, sizeof(query), 
-    "select distinct email from edwUser,edwSubmit where edwUser.id = edwSubmit.userId order by email"
-    );
+
+if (edwUserIsAdmin(conn,userEmail))
+    sqlSafef(query, sizeof(query), 
+	"select distinct email from edwUser,edwSubmit where edwUser.id = edwSubmit.userId order by email");
+else 
+    sqlSafef(query, sizeof(query), 
+	"select distinct email from edwUser,edwSubmit where edwUser.id = edwSubmit.userId and email='%s' order by email", defaultUser);
+
 struct slName *userList = sqlQuickList(conn, query);
 int userCount = 0;
 char **userArray;
