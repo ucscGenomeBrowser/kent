@@ -1,6 +1,7 @@
 # Notes about installing packages.
 # Use tools.ra as the one true definition of tools currently installed and used.
 
+# The path to these tools is:  /hive/groups/encode/encode3/tools
 
 # 2014-03-25 downloaded gencode.v19.annotations.gtf.gz from ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz
 # moved to: /hive/groups/encode/encode3/encValData/hg19 and gunzipped.
