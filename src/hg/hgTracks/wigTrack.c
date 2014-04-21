@@ -823,7 +823,7 @@ wgo->image = image;
 wgo->vLine = vLineViaHvg;
 wgo->xOff = xOff;
 wgo->yOff = yOff;
-wgo->yOffsets = needHugeMem(width * numTracks * sizeof(unsigned));
+wgo->yOffsets = needHugeMem(width * numTracks * sizeof(double));
 return wgo;
 }
 
@@ -984,6 +984,14 @@ for (x1 = 0; x1 < width; ++x1)
 		    {
 		    int y0 = graphUpperLimit * scaleFactor;
 		    int y1 = (graphUpperLimit - dataValue)*scaleFactor;
+		    if (yOffsets)
+			{
+			if (numTrack > 0)
+			    {
+			    y0 = (graphUpperLimit  - yOffsets[(numTrack-1) *  width + x1]) *scaleFactor;
+			    y1 = (graphUpperLimit - dataValue - yOffsets[(numTrack-1) *  width + x1])*scaleFactor;
+			    }
+			}
 
 		    int boxHeight = max(1,abs(y1 - y0));
 		    int boxTop = min(y1,y0);
@@ -997,12 +1005,7 @@ for (x1 = 0; x1 < width; ++x1)
 		    // make sure it draws something
 		    if ((boxTop+boxHeight) == 0)
 			boxHeight += 1;
-		    int stackY = 0;
-		    if (yOffsets)
-			{
-			stackY = yOffsets[numTrack *  width + x1];
-			}
-		    vLine(image,x, stackY+yOff+boxTop, boxHeight, drawColor);
+		    vLine(image,x, yOff+boxTop, boxHeight, drawColor);
 		    }
 		}
 	    else

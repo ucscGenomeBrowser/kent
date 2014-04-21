@@ -184,7 +184,7 @@ for (ref = refList; ref != NULL; numTrack++,ref = ref->next)
     int i;
     int offset = numTrack * pre->width;
     int prevOffset = (numTrack - 1) * pre->width;
-    for (i=0; i<width; ++i, offset++)
+    for (i=0; i<width; ++i, offset++,prevOffset++)
 	{
 	double val;
 
@@ -204,17 +204,24 @@ for (ref = refList; ref != NULL; numTrack++,ref = ref->next)
 	}
 	if (p->count)
 	    {
-	    if (min > val) min = val;
-	    if (max < val) max = val;
 	    if (yOffsets)
 		yOffsets[offset] = val;
+	    else
+		{
+		if (min > val) min = val;
+		if (max < val) max = val;
+		}
 	    }
 	else if (yOffsets)
 	    {
 	    yOffsets[offset] = 0;
 	    }
-	if (yOffsets && (prevOffset > 0))
+	if (yOffsets && (numTrack > 0))
+	    {
 	    yOffsets[offset] += yOffsets[prevOffset];
+	    if (min > yOffsets[offset]) min = yOffsets[offset];
+	    if (max < yOffsets[offset]) max = yOffsets[offset];
+	    }
 	++p;
 	}
     }
@@ -291,9 +298,10 @@ if (errMsgFound)
 struct wigCartOptions *wigCart = tg->extraUiData;
 struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, wigCart, hvg);
 
-/* Cope with autoScale - we do it here rather than in the child tracks, so that
+/* Cope with autoScale and stacked bars - we do it here rather than in the child tracks, so that
  * all children can be on same scale. */
-if (wigCart->autoScale)
+double minVal, maxVal;
+if (wigCart->autoScale || (wigCart->aggregateFunction == wiggleAggregateStacked))
     {
     /* Force load of all predraw arrays so can do calcs. Build up list, and then
      * figure out max/min.  No worries about multiple loading, the loaders protect
@@ -307,25 +315,28 @@ if (wigCart->autoScale)
 	    refAdd(&refList, pre);
 	    }
 	}
-    double minVal, maxVal;
+    slReverse(&refList);
     minMaxVals(refList, &minVal, &maxVal, wigCart->windowingFunction,  wigCart->alwaysZero, wgo->yOffsets);
     slFreeList(&refList);
 
-    /* Cope with log transform if need be */
-    if (wigCart->transformFunc == wiggleTransformFuncLog)
-         {
-	 minVal = wiggleLogish(minVal);
-	 maxVal = wiggleLogish(maxVal);
-	 }
+    if (wigCart->autoScale)
+	{
+	/* Cope with log transform if need be */
+	if (wigCart->transformFunc == wiggleTransformFuncLog)
+	     {
+	     minVal = wiggleLogish(minVal);
+	     maxVal = wiggleLogish(maxVal);
+	     }
 
-    /* Loop through again setting up the wigCarts of the children to have minY/maxY for
-     * our limits and autoScale off. */
-    for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
-        {
-	struct wigCartOptions *wigCart = subtrack->extraUiData;
-	wigCart->minY = minVal;
-	wigCart->maxY = maxVal;
-	wigCart->autoScale = wiggleScaleManual;
+	/* Loop through again setting up the wigCarts of the children to have minY/maxY for
+	 * our limits and autoScale off. */
+	for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+	    {
+	    struct wigCartOptions *wigCart = subtrack->extraUiData;
+	    wigCart->minY = minVal;
+	    wigCart->maxY = maxVal;
+	    wigCart->autoScale = wiggleScaleManual;
+	    }
 	}
     }
 
