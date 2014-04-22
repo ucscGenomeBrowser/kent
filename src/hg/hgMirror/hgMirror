@@ -124,20 +124,14 @@ def parseHgConf():
 
     return hgConf
 
-oldConn = {}
-
 def sqlConnect(db, name):
-    """ connect to sql, reuse open connections """
-    if (db, name) in oldConn:
-        return oldConn[(db, name)]
-
+    """ connect to sql """
     if name=="public":
         host, user, passwd = "genome-mysql.cse.ucsc.edu", "genomep", "password"
     elif name=="local":
         cfg = parseHgConf()
         host, user, passwd = cfg["db.host"], cfg["db.user"], cfg["db.password"]
     conn = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)
-    oldConn[(db, name)] = conn
     return conn
 
 def debug(msg):
@@ -171,6 +165,8 @@ def loadGroups(db):
         groups = []
         for row in cur.fetchall():
             groups.append((row[0], row[1]))
+        cur.close()
+        conn.close()
     else:
         for row in downloadTable(db, "grp"):
             groups.append((row[0], row[1]))
@@ -700,6 +696,9 @@ def getCladeAssemblyDb(clade, org, db):
     cur.execute('SELECT genome, name FROM defaultDb')
     for row in cur.fetchall():
         defaultDbs[row[0]] = row[1]
+
+    cur.close()
+    conn.close()
 
     if (db==None or db=="0"):
         if org not in defaultDbs:
