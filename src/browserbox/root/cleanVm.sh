@@ -51,3 +51,6 @@ swapoff /swapfile
 dd if=/dev/zero of=/swapfile bs=1M count=1024
 chmod 600 /swapfile
 mkswap /swapfile
+
+# reset update time, make sure that the box will update itself on next restart ?
+# rm /root/lastUpdateTime.flag
