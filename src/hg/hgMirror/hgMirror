@@ -15,17 +15,15 @@
 # - when user clicks submit, start udr transfer and redirect to page that shows progress
 # - handles non-existing tables and some hgFixed tables
 
-# The script autodetects if udr is installed and usable by transferring a small file from UCSC
-# If this is not successful, it uses rsync
+# When run from the command line, this CGI hides some tracks and removes from tracks from
+# track search on hg19. This is usually run from a cronjob after trackDb updates.
 
 # This script requires the following setup
 # - mysqldb python module
-# - udr in /usr/local/bin
 # - "rsync" in path
 # - "at" in path
-# - the apache user must be allowed to execute udr as the mysql user and access to /gbdb
 #   To allow this on ubuntu, add these lines to /etc/sudoers:
-#www-data     ALL = (mysql:mysql) NOPASSWD: /usr/local/bin/udr,/bin/ls,/usr/bin/rsync,/bin/rm
+#www-data     ALL = (mysql:mysql) NOPASSWD: /bin/ls,/usr/bin/rsync,/bin/rm
 #www-data     ALL = (root:root) NOPASSWD: /bin/mkdir /gbdb
 #www-data     ALL = (root:root) NOPASSWD: /bin/chown www-data.www-data /gbdb</pre>
 # - the apache user has to be able to run 'at' jobs. 
@@ -94,6 +92,24 @@ BIGFILETABLEURL = "http://hgwdev.soe.ucsc.edu/~max/browserbox/"
 # cache of hg.conf dict
 hgConf = None
 
+def parseConf(fname):
+    " parse a hg.conf style file, return as dict key -> value (all strings) "
+    conf = {}
+    for line in open(fname):
+        line = line.strip()
+        if line.startswith("#"):
+            continue
+        elif line.startswith("include "):
+            inclFname = line.split()[1]
+            if isfile(inclFname):
+                inclDict = parseConf(inclFname)
+                conf.update(inclDict)
+        elif "=" in line: # string search for "="
+            key, value = line.split("=")
+            conf[key] = value
+    return conf
+
+
 def parseHgConf():
     """ return hg.conf as dict key:value """
     global hgConf
@@ -103,13 +119,8 @@ def parseHgConf():
     hgConf = dict() # python dict = hash table
 
     confDir = dirname(__file__)
-    for line in open(join(confDir, "hg.conf")):
-        line = line.rstrip("\n").strip()
-        if line.startswith("#"):
-            continue
-        if "=" in line: # string search for "="
-            key, value = line.split("=")
-            hgConf[key] = value
+    fname = join(confDir, "hg.conf")
+    hgConf = parseConf(fname)
 
     return hgConf
 
