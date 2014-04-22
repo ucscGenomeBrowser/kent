@@ -8,10 +8,9 @@
 8	Seed storage protein
 9	Direct protein sequencing
 10	Pyrrolidone carboxylic acid
-11	
-12	GTP-binding
-13	Bile acid catabolism
-14	NADP
-15	Oxidoreductase
-16	Alternative splicing
-17	Allergen
+11	GTP-binding
+12	Bile acid catabolism
+13	NADP
+14	Oxidoreductase
+15	Alternative splicing
+16	Allergen
