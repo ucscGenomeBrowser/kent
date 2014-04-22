@@ -1480,6 +1480,12 @@ def main():
     print "Content-type: text/html"
     print
 
+    parseHgConf()
+    if hgConf==None or not hgConf.get("allowHgMirror", "0").lower() in ["1", "yes", "true"]:
+        print("hgMirror is not activated on this machine<br>")
+        print("Set allowHgMirror=1 in your cgi-bin/hg.conf file<br>")
+        sys.exit(0)
+        
     args = cgi.FieldStorage()
 
     if "debug" in args.keys():
