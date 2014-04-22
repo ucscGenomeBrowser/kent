@@ -1089,7 +1089,7 @@ if (hIsPrivateHost())
         char * name = (imgTrack->name != NULL ? imgTrack->name
                                               : imgTrack->tdb != NULL ? imgTrack->tdb->track
                                                                       : imgFile);
-        warnWithBackTrace("imgTrackAddMapItem(%s,%s) mapItem(%d:%d,%d:%d) spills over track bounds(%d:%d,%d:%d)",
+        warn("imgTrackAddMapItem(%s,%s) mapItem(%d:%d,%d:%d) spills over track bounds(%d:%d,%d:%d)",
              name,title,topLeftX,topLeftY,bottomRightX,bottomRightY,leftX,topY,rightX,bottomY);
         }
     }
