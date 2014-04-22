@@ -19,6 +19,7 @@
 #include "bigWarn.h"
 #include "errCatch.h"
 #include "trackHub.h"
+#include "net.h"
 
 struct bbiFile *fetchBbiForTrack(struct track *track)
 /* Fetch bbiFile from track, opening it if it is not already open. */
@@ -39,6 +40,11 @@ if (bbi == NULL)
 	fileName = bbiNameFromSettingOrTable(track->tdb, conn, track->table);
 	hFreeConn(&conn);
 	}
+    
+    #ifdef USE_GBIB_PWD
+    #include "gbib.c"
+    #endif
+
     bbi = track->bbiFile = bigBedFileOpen(fileName);
     }
 return bbi;
