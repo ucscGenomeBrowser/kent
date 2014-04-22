@@ -1085,14 +1085,14 @@ def printLog(jobId):
         print '<i><a href="hgMirror?stopAllJobs=1">Cancel download now</a></i>'
         refreshPage("jobId=%d" % jobId, delay=4000, addNote=False)
 
-def removeSomeTracksFromSearch(db):
-    conn = sqlConnect("hg19", "local")
+def removeSomeTracksFromSearch(conn):
     cur = conn.cursor()
     for table in REMOVESEARCH:
         query = "DELETE FROM hgFindSpec WHERE searchTable='%s';" % table
         cur.execute(query)
+    cur.close()
 
-def hideSomeTracks(localTables):
+def hideSomeTracks(conn, localTables):
     """
     hide some notoriously slow tracks by default
     """
@@ -1103,13 +1103,13 @@ def hideSomeTracks(localTables):
     if "trackDb" not in localTables:
         return
 
-    conn = sqlConnect("hg19", "local")
     cur = conn.cursor()
     hideList = ["'"+s+"'" for s in FORCEHIDE]
     hideStr = ", ".join(hideList)
     hideStr = "(%s)" % hideStr
     query = "UPDATE trackDb SET visibility=0 WHERE tableName in %s" % hideStr
     cur.execute(query)
+    cur.close()
 
 def getGbdbDir():
     " return local gbdb dir without trailing slash "
@@ -1368,6 +1368,13 @@ def mustBeClean(str):
 def getCgiVar(args, name):
     return mustBeClean(args.getvalue(name, default=None))
 
+def ignoreSomeTracks(db, localSizes):
+    " remove some tracks from trackDb and others from hgFindSpec "
+    conn = sqlConnect(db, "local")
+    hideSomeTracks(conn, localSizes)
+    removeSomeTracksFromSearch(conn)
+    conn.close()
+
 def htmlMiddle(args):
     " print html middle part "
 
@@ -1466,15 +1473,13 @@ def htmlMiddle(args):
             groupList, groupToTopTracks, \
             tableSizes, localSizes, gbdbSizes, tableToGbdbFiles, showSubtracks)
 
-        hideSomeTracks(localSizes)
-        removeSomeTracksFromSearch(db)
+        ignoreSomeTracks(db, localSizes)
 
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
     if len(sys.argv)>1:
-        removeSomeTracksFromSearch("hg19")
-        hideSomeTracks({"trackDb":1})
+        ignoreSomeTracks("h19", {"trackDb":1})
         sys.exit(0)
 
     print "Content-type: text/html"
