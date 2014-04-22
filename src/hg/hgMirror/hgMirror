@@ -1479,7 +1479,7 @@ def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
     if len(sys.argv)>1:
-        ignoreSomeTracks("h19", {"trackDb":1})
+        ignoreSomeTracks("hg19", {"trackDb":1})
         sys.exit(0)
 
     print "Content-type: text/html"
