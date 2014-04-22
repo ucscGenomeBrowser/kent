@@ -15,17 +15,15 @@
 # - when user clicks submit, start udr transfer and redirect to page that shows progress
 # - handles non-existing tables and some hgFixed tables
 
-# The script autodetects if udr is installed and usable by transferring a small file from UCSC
-# If this is not successful, it uses rsync
+# When run from the command line, this CGI hides some tracks and removes from tracks from
+# track search on hg19. This is usually run from a cronjob after trackDb updates.
 
 # This script requires the following setup
 # - mysqldb python module
-# - udr in /usr/local/bin
 # - "rsync" in path
 # - "at" in path
-# - the apache user must be allowed to execute udr as the mysql user and access to /gbdb
 #   To allow this on ubuntu, add these lines to /etc/sudoers:
-#www-data     ALL = (mysql:mysql) NOPASSWD: /usr/local/bin/udr,/bin/ls,/usr/bin/rsync,/bin/rm
+#www-data     ALL = (mysql:mysql) NOPASSWD: /bin/ls,/usr/bin/rsync,/bin/rm
 #www-data     ALL = (root:root) NOPASSWD: /bin/mkdir /gbdb
 #www-data     ALL = (root:root) NOPASSWD: /bin/chown www-data.www-data /gbdb</pre>
 # - the apache user has to be able to run 'at' jobs. 
