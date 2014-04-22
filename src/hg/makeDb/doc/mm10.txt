@@ -9978,3 +9978,155 @@ EOF
     #214917441 bases of 2652783500 (8.102%) in intersection
     #select count(*) from genomicSuperDups;
     #659775 (vs. 277816 in mm8)
+#
+#########################################################################
+# hgPal downloads (DONE braney 2009-11-03)
+#   FASTA from 60way for refGene, knownGene, knownCanonical
+
+    ssh hgwdev
+    screen
+    bash
+    rm -rf /cluster/data/mm10/bed/multiz60way/pal
+    mkdir /cluster/data/mm10/bed/multiz60way/pal
+    cd /cluster/data/mm10/bed/multiz60way/pal
+    for i in `cat ../species.list`; do echo $i; done > order.lst
+
+    mz=multiz60way
+    gp=refGene
+    db=mm10
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    nice time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# 1817.21user 233.92system 4:54:04elapsed 11%CPU (0avgtext+0avgdata
+# 920192maxresident)k
+# 6024inputs+0outputs (7major+1648126minor)pagefaults 0swaps
+
+    mz=multiz60way
+    gp=refGene
+    db=mm10
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz60way
+    gp=refGene
+    db=mm10
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 &
+    sleep 1
+    tail -f $gp.$mz.job.log
+
+# oops... missed the timing
+
+
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    # now do the canonical set
+    cd /cluster/data/mm10/bed/multiz60way/pal
+    mz=multiz60way
+    gp=knownCanonical
+    db=mm10
+    for j in `awk '{print $1}' /cluster/data/mm10/chrom.sizes`
+    do
+	echo "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$j'" | hgsql $db | tail -n +2 > $j.known.bed
+    done
+
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -geneBeds=$j.known.bed  $db $mz knownGene order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -noTrans $db $mz knownGene order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -exons -noTrans $db $mz knownGene order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -exons $db $mz knownGene order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 &
+    sleep 1
+    tail -f $gp.$mz.job.log
+
+# real    302m20.489s
+# user    27m31.179s
+# sys     5m30.071s
+
+
+    rm *.known.bed
+    mz=multiz60way
+    gp=knownCanonical
+    db=mm10
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    mz=multiz60way
+    gp=knownCanonical
+    db=mm10
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    }#############################################################################

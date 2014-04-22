@@ -40,9 +40,6 @@ printf("</DIV>");
 void getUrl(struct sqlConnection *conn)
 /* Put up URL. */
 {
-struct edwUser *user = edwMustGetUserFromEmail(conn, userEmail);
-printf("<script>$('#edw-user').text(%s)</script>", user->email);
-
 printf("<H3>Submit data</H3>");
 
 printf("<P CLASS='title'>Enter the URL of a validated manifest file:<P>");
@@ -72,7 +69,7 @@ paraFetchReadStatus(path, &pcList, &url, &fileSize, &dateString, &totalDownloade
 return totalDownloaded;
 }
 
-void monitorSubmission(struct sqlConnection *conn)
+void monitorSubmission(struct sqlConnection *conn, boolean autoRefresh)
 /* Write out information about submission. */
 {
 char *url = trimSpaces(cgiString("url"));
@@ -206,14 +203,40 @@ else
 	    }
 	}
     }
-cgiMakeButton("monitor", "refresh status");
 if (endUploadTime == 0 && isEmpty(sub->errorMessage))
     cgiMakeButton(stopButtonName, "stop upload");
+
+if (autoRefresh && isEmpty(sub->errorMessage))
+    {
+    cgiMakeHiddenVar("monitor", "monitor");
+    edwWebAutoRefresh(EDW_WEB_REFRESH_5_SEC);
+    }
+}
+
+boolean okToResubmitThisUrl(struct sqlConnection *conn, char *url)
+/* Return true if the user is an administrator or the original submitter */
+{
+if (edwUserIsAdmin(conn,userEmail)) 
+    return TRUE; 
+if (!sqlRowExists(conn, "edwSubmit", "url", url))
+    return TRUE;
+/* url exists, find out who is the original submitter */
+int uId = edwFindUserIdFromEmail(conn, userEmail);
+char  query[256];
+sqlSafef(query, sizeof(query),
+    "select distinct userId from edwSubmit where url='%s'", url);
+struct slInt *idList = sqlQuickNumList(conn, query);
+struct slInt *id;
+for (id = idList; id != NULL; id = id->next)
+    {
+    if (id->val == uId)
+    return TRUE;
+    }
+return FALSE;
 }
 
 void submitUrl(struct sqlConnection *conn)
-/* Submit validated manifest if it is not already in process.  Show
- * progress once it is in progress. */
+/* Submit validated manifest if it is not already in process. */
 {
 /* Parse email and URL out of CGI vars. Do a tiny bit of error checking. */
 char *url = trimSpaces(cgiString("url"));
@@ -225,11 +248,11 @@ edwMustGetUserFromEmail(conn, userEmail);
 int sd = netUrlMustOpenPastHeader(url);
 close(sd);
 
-edwAddSubmitJob(conn, userEmail, url, cgiBoolean("update"));
+/* Check is it OK for the user to resubmit the url or update its information */
+if (!okToResubmitThisUrl(conn, url))
+    errAbort("The url was previously submitted by another user, you cannot submit it again nor update its information.");
 
-/* Give the system a half second to react and then put up status info about submission */
-sleep1000(1000);
-monitorSubmission(conn);
+edwAddSubmitJob(conn, userEmail, url, cgiBoolean("update"));
 }
 
 void stopUpload(struct sqlConnection *conn)
@@ -258,7 +281,6 @@ else
 	"update edwSubmit set errorMessage='Stopped by user.' where id=%u", sub->id);
     sqlUpdate(conn, query);
     }
-monitorSubmission(conn);
 }
 
 
@@ -275,20 +297,34 @@ void doMiddle()
 {
 pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
+edwWebSubmitMenuItem(TRUE);
 struct sqlConnection *conn = edwConnectReadWrite(edwDatabase);
 userEmail = edwGetEmailAndVerify();
 if (userEmail == NULL)
     logIn();
 else if (cgiVarExists(stopButtonName))
+    {
     stopUpload(conn);
+    monitorSubmission(conn, FALSE);
+    }
 else if (cgiVarExists("submitUrl"))
+    {
     submitUrl(conn);
+    sleep1000(1000);
+    monitorSubmission(conn, TRUE);
+    }
 else if (cgiVarExists("monitor"))
-    monitorSubmission(conn);
+    {
+    monitorSubmission(conn, TRUE);
+    }
 else
+    {
     getUrl(conn);
+    edwWebSubmitMenuItem(FALSE);
+    }
 printf("</FORM>");
 }
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -299,9 +335,6 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
 
 /* Put out HTTP header and HTML HEADER all the way through <BODY> */
 edwWebHeaderWithPersona("");
-
-// TODO: find a better place for menu update
-puts("<script>$('#edw-submit').hide();</script>");
 
 /* Call error handling wrapper that catches us so we write /BODY and /HTML to close up page
  * even through an errAbort. */

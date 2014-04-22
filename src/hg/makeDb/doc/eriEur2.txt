@@ -421,8 +421,6 @@ eriEur2.perChromTables = no
     # 2715720925 bases of 2715720925 (100.000%) in intersection
 
 ##############################################################################
-
-############################################################################
 # construct download files (DONE - 2014-04-11 - Hiram)
     # after db name has been added to all.joiner and
     # joinerCheck -database=eriEur2 -keys all.joiner
@@ -445,3 +443,17 @@ eriEur2.perChromTables = no
     ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/eriEur2.sql'
 
 ###########################################################################
+# genscan track (DONE - 2013-09-12 - Hiram)
+
+    cd /hive/data/genomes/eriEur2/bed/genscan
+    doGenscan.pl -buildDir=/hive/data/genomes/eriEur2/bed/genscan \
+       -bigClusterHub=ku  -workhorse=hgwdev \
+           -dbHost=hgwdev eriEur2 > do.log 2>&1
+    #  Elapsed time: 65m12s
+
+    cat fb.eriEur2.genscan.txt
+    #  45444338 bases of 2333073535 (1.948%) in intersection
+    cat fb.eriEur2.genscanSubopt.txt
+    #  44934986 bases of 2333073535 (1.926%) in intersection
+
+#############################################################################

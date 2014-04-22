@@ -599,6 +599,58 @@ if (optString)
 ret = wiggleWindowingStringToEnum(windowingFunction);
 freeMem(windowingFunction);
 return(ret);
+}
+
+enum wiggleAggregateFunctionEnum wigFetchAggregateFunctionWithCart(struct cart *theCart,
+                                               struct trackDb *tdb, char *name, char **optString)
+/****** windowingFunction - Whiskers by default **************************/
+{
+char *Default = wiggleAggregateFunctionEnumToString(wiggleAggregateTransparent);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
+char *aggregateFunction = NULL;
+enum wiggleAggregateFunctionEnum ret;
+
+aggregateFunction = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, 
+                                                                AGGREGATE));
+
+/*      If windowingFunction is a string, it came from the cart, otherwise
+ *      see if it is specified in the trackDb option, finally
+ *	return the default.
+ */
+if (!aggregateFunction)
+    {
+    char * tdbDefault =
+        trackDbSettingClosestToHomeOrDefault(tdb, AGGREGATE, Default);
+
+    freeMem(aggregateFunction);
+    if (differentWord(Default,tdbDefault))
+        aggregateFunction = cloneString(tdbDefault);
+    else
+	{
+	struct hashEl *hel;
+	/*	no aggregateFunction from trackDb, maybe it is in tdb->settings
+	 *	(custom tracks keep settings here)
+	 */
+	aggregateFunction = cloneString(Default);
+	if ((tdb->settings != (char *)NULL) &&
+	    (tdb->settingsHash != (struct hash *)NULL))
+	    {
+	    if ((hel =hashLookup(tdb->settingsHash, AGGREGATE)) !=NULL)
+		if (differentWord(Default,(char *)hel->val))
+		    {
+		    freeMem(aggregateFunction);
+		    aggregateFunction = cloneString((char *)hel->val);
+		    }
+	    }
+	}
+    }
+
+if (optString)
+    *optString = cloneString(aggregateFunction);
+
+ret = wiggleAggregateFunctionStringToEnum(aggregateFunction);
+freeMem(aggregateFunction);
+return(ret);
 }       /*      enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart() */
 
 enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart(struct cart *theCart, struct trackDb *tdb, 
@@ -738,12 +790,6 @@ void wigFetchMinMaxLimitsWithCart(struct cart *theCart, struct trackDb *tdb, cha
 {
 wigFetchMinMaxYWithCart(theCart,tdb,name,min,max,tDbMin,tDbMax,0,NULL);
 }       /*      void wigFetchMinMaxYWithCart()  */
-
-char *wigFetchAggregateValWithCart(struct cart *cart, struct trackDb *tdb)
-/* Return aggregate value for track. */
-{
-return cartOrTdbString(cart, tdb, "aggregate", WIG_AGGREGATE_NONE);
-}
 
 boolean wigIsOverlayTypeAggregate(char *aggregate)
 /* Return TRUE if aggregater type is one of the overlay ones. */

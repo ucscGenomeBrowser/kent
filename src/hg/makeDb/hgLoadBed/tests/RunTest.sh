@@ -82,6 +82,7 @@ oneTest "zcat bed14.txt.gz | $TESTPROGRAM ${NOLOAD} test bedLoadTest stdin" "004
 oneTest "zcat bed9.txt.gz | $TESTPROGRAM ${NOLOAD} test bedLoadTest stdin" "27920     2"
 oneTest "zcat bedGraph.txt.gz | $TESTPROGRAM ${NOLOAD} -bedGraph=4 test bedLoadTest stdin" "22118     1"
 oneTest "zcat bed6Detail.txt.gz | $TESTPROGRAM ${NOLOAD} -bedDetail -tab -customTrackLoader test bedLoadTest stdin" "61404     1"
+# oneTest "zcat bed4Detail.txt.gz | $TESTPROGRAM ${NOLOAD} -bedDetail -tab -customTrackLoader test bedLoadTest stdin" "61404     1"
 
 if [ -n "${verbose}" ]; then
     C=`echo $tests | awk '{printf "%4d", $1}'`

@@ -582,6 +582,20 @@ void wiggleGridDropDown(char *var, char *curVal);
 #define WIG_AGGREGATE_NONE "none"
 #define WIG_AGGREGATE_TRANSPARENT "transparentOverlay"
 #define WIG_AGGREGATE_SOLID "solidOverlay"
+#define WIG_AGGREGATE_STACKED "stacked"
+
+/*	Wiggle track aggregate option	*/
+enum wiggleAggregateFunctionEnum {
+   wiggleAggregateNone = 0,
+   wiggleAggregateTransparent = 1,
+   wiggleAggregateSolid = 2,
+   wiggleAggregateStacked = 3,
+};
+
+char *wiggleAggregateFunctionEnumToString(enum wiggleAggregateFunctionEnum x);
+/* Convert from enum to string representation. */
+
+enum wiggleAggregateFunctionEnum wiggleAggregateFunctionStringToEnum(char *string);
 
 /*** BAM alignment track coloring code: ***/
 // tdbSettings / cart var suffixes and default values:

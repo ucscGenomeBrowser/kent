@@ -67,8 +67,8 @@ assemblyLabel Beijing Genomics Institution-Shenzhen
 assemblyShortLabel C_griseus_v1.0
 orderKey 1610
 mitoAcc NC_007936.1
-fastaFiles /hive/data/genomes/calMil1/ucsc/calMil1.ucsc.fa.gz
-agpFiles /hive/data/genomes/calMil1/ucsc/calMil1.ucsc.agp
+fastaFiles /hive/data/genomes/criGri1/ucsc/criGri1.ucsc.fa.gz
+agpFiles /hive/data/genomes/criGri1/ucsc/criGri1.ucsc.agp
 dbDbSpeciesDir criGri
 photoCreditURL http://en.wikipedia.org/wiki/File:Chinesedsaffa.jpg
 photoCreditName Wikimedia Commons
@@ -413,3 +413,15 @@ criGri1.perChromTables = no
     ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/criGri1.sql'
 
 ###########################################################################
+## blat server turned on (DONE - 2014-01-13 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("criGri1", "blat4b", "17852", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("criGri1", "blat4b", "17853", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################

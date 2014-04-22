@@ -256,13 +256,32 @@ printf("</TR></tbody></TABLE>\n");
 printf("</div>");
 }
 
-static struct hash *outputPublicTable(struct sqlConnection *conn, char *publicTable)
+static void addPublicHubsToHubStatus(struct sqlConnection *conn, char *publicTable, char  *statusTable)
+/* add url's in the hubPublic table to the hubStatus table if they aren't there already */
+{
+char query[1024];
+sqlSafef(query, sizeof(query), "select hubUrl from %s where hubUrl not in (select hubUrl from %s)\n", publicTable, statusTable); 
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *errorMessage = NULL;
+    char *url = row[0];
+
+    // add this url to the hubStatus table
+    hubFindOrAddUrlInStatusTable(database, cart, url, &errorMessage);
+    }
+}
+
+static struct hash *outputPublicTable(struct sqlConnection *conn, char *publicTable, char *statusTable)
 /* Put up the list of public hubs and other controls for the page. */
 {
+addPublicHubsToHubStatus(conn, publicTable, statusTable);
+
 struct hash *publicHash = NULL;
 char query[512];
-sqlSafef(query, sizeof(query), "select hubUrl,shortLabel,longLabel,dbList from %s", 
-	publicTable); 
+sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,s.errorMessage,s.id from %s p,%s s where p.hubUrl = s.hubUrl", 
+	 publicTable, statusTable); 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 int count = 0;
@@ -272,7 +291,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     ++count;
     char *url = row[0], *shortLabel = row[1], *longLabel = row[2], 
-    	  *dbList = row[3];
+    	  *dbList = row[3], *errorMessage = row[4];
+    int id = atoi(row[5]);
     if (gotAnyRows)
 	webPrintLinkTableNewRow();
     else
@@ -295,11 +315,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	// allocate the hash to store hubUrl's
 	publicHash = newHash(5);
 	}
-
-    char *errorMessage = NULL;
-    // get an id for this hub
-    unsigned id = hubFindOrAddUrlInStatusTable(database, cart, 
-	url, &errorMessage);
 
     if ((id != 0) && isEmpty(errorMessage)) 
 	{
@@ -355,8 +370,10 @@ struct hash *retHash = NULL;
 struct sqlConnection *conn = hConnectCentral();
 char *publicTable = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE", 
 	hubPublicTableConfVariable, defaultHubPublicTableName);
+char *statusTable = cfgOptionEnvDefault("HGDB_HUB_STATUS_TABLE", 
+	hubStatusTableConfVariable, defaultHubStatusTableName);
 if (!(sqlTableExists(conn, publicTable) && 
-	(retHash = outputPublicTable(conn, publicTable)) != NULL ))
+	(retHash = outputPublicTable(conn, publicTable,statusTable)) != NULL ))
     {
     printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
     printf("No Public Track Hubs for this genome assembly<BR>");

@@ -223,9 +223,14 @@ char *printUserControl(struct sqlConnection *conn, char *cgiVarName, char *defau
 /* Print out control and return currently selected user. */
 {
 char query[256];
-sqlSafef(query, sizeof(query), 
-    "select distinct email from edwUser,edwSubmit where edwUser.id = edwSubmit.userId order by email"
-    );
+
+if (edwUserIsAdmin(conn,userEmail))
+    sqlSafef(query, sizeof(query), 
+	"select distinct email from edwUser,edwSubmit where edwUser.id = edwSubmit.userId order by email");
+else 
+    sqlSafef(query, sizeof(query), 
+	"select distinct email from edwUser,edwSubmit where edwUser.id = edwSubmit.userId and email='%s' order by email", defaultUser);
+
 struct slName *userList = sqlQuickList(conn, query);
 int userCount = 0;
 char **userArray;
@@ -242,15 +247,19 @@ void showRecentFiles(struct sqlConnection *conn)
 printf("<div>");
 printf("Select whose files to browse: ");
 char *user = printUserControl(conn, "selectUser", userEmail);
-printf("</div><div>");
+printf("</div>");
+
+printf("<div>");
 printf(" Maximum number of submissions to view: ");
 int maxSubCount = cgiOptionalInt("maxSubCount", 3);
 if (maxSubCount == 0)
      maxSubCount = 2;
 // override stanford fixed width input widget styling
 cgiMakeIntVar("maxSubCount", maxSubCount, 3);
-printf("</div><div>");
-cgiMakeButton("Submit", "update view");
+printf("</div>");
+
+printf("<div>");
+cgiMakeButton("Submit", "submit");
 printf("</div>");
 
 /* Get id for user. */
@@ -362,6 +371,7 @@ if (userEmail == NULL)
     printf("<H3>Welcome to the ENCODE data submission browser</H3>\n");
 else
     printf("<H3>Browse submissions</H3>\n");
+
 printf("<div id=\"userId\">");
 if (userEmail == NULL)
     {
@@ -378,6 +388,13 @@ if (userEmail != NULL)
     sqlDisconnect(&conn);
     }
 printf("</FORM>\n");
+
+// auto-refresh page
+if (userEmail != NULL)
+    {
+    edwWebAutoRefresh(5000);
+    edwWebAutoRefreshProtectInput();
+    }
 }
 
 int main(int argc, char *argv[])
@@ -388,7 +405,7 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
 edwWebHeaderWithPersona("");
 // TODO: find a better place for menu update
-puts("<script>$('#edw-browse').hide();</script>");
+edwWebBrowseMenuItem(FALSE);
 htmEmptyShell(doMiddle, NULL);
 edwWebFooterWithPersona();
 return 0;

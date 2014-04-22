@@ -1,16 +1,9 @@
 /* edwPersona.js - Hooks up signin and signout buttons to Persona authentication. */
 
 $(function () {
-    var email = $.cookie("email");
-    var signInLink = document.getElementById('signin');
-    if (signInLink) {
-        signInLink.onclick = function() { navigator.id.request(); };
-    }
-
-    var signOutLink = document.getElementById('signout');
-    if (signOutLink) {
-        signOutLink.onclick = function() { navigator.id.logout(); };
-    }
+    var email = $.cookie('email');
+    $('#signin').click(function(){ navigator.id.request(); });
+    $('#signout').click(function(){ navigator.id.logout(); });
 
     // update navigation bar to show email of logged in user
     if (email != null) {

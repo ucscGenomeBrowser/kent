@@ -82,7 +82,7 @@ if (rec->infoCount == 0)
     return;
 struct vcfFile *vcff = rec->file;
 puts("<B>INFO column annotations:</B><BR>");
-puts("<TABLE border=0 cellspacing=0 cellpadding=0>");
+puts("<TABLE border=0 cellspacing=0 cellpadding=2>");
 int i;
 for (i = 0;  i < rec->infoCount;  i++)
     {
@@ -90,7 +90,8 @@ for (i = 0;  i < rec->infoCount;  i++)
     const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
     if (def == NULL)
 	continue;
-    printf("<TR><TD align=\"right\"><B>%s:</B></TD><TD>&nbsp;", el->key);
+    printf("<TR valign='top'><TD align=\"right\"><B>%s:</B></TD><TD style=width:15%%;'>",
+           el->key);
     int j;
     enum vcfInfoType type = def->type;
     if (type == vcfInfoFlag && el->count == 0)
@@ -106,7 +107,7 @@ for (i = 0;  i < rec->infoCount;  i++)
 	    vcfPrintDatum(stdout, el->values[j], type);
 	}
     if (def != NULL)
-	printf("</TD><TD>&nbsp;%s", def->description);
+	printf("&nbsp;&nbsp;</TD><TD>%s", def->description);
     else
 	printf("</TD><TD>");
     printf("</TD></TR>\n");
@@ -376,26 +377,22 @@ makeDisplayAlleles(rec, showLeftBase, leftBase, 5, FALSE, TRUE, displayAls);
 vcfGenotypesDetails(rec, tdb->track, displayAls);
 }
 
-#ifdef USE_TABIX
-
-void doVcfTabixDetails(struct trackDb *tdb, char *item)
-/* Show details of an alignment from a VCF file compressed and indexed by tabix. */
+void doVcfDetailsCore(struct trackDb *tdb, char *fileOrUrl, boolean isTabix)
+/* Show item details using fileOrUrl. */
 {
-knetUdcInstall();
-if (udcCacheTimeout() < 300)
-    udcSetCacheTimeout(300);
+genericHeader(tdb, NULL);
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, seqName);
-hFreeConn(&conn);
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
-/* protect against temporary network error */
+/* protect against temporary network or parsing error */
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1);
+    if (isTabix)
+	vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1);
+    else
+	vcff = vcfFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1, TRUE);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -413,6 +410,22 @@ if (vcff != NULL)
     }
 else
     printf("Sorry, unable to open %s<BR>\n", fileOrUrl);
+printTrackHtml(tdb);
+}
+
+
+#ifdef USE_TABIX
+
+void doVcfTabixDetails(struct trackDb *tdb, char *item)
+/* Show details of an alignment from a VCF file compressed and indexed by tabix. */
+{
+knetUdcInstall();
+if (udcCacheTimeout() < 300)
+    udcSetCacheTimeout(300);
+struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, seqName);
+hFreeConn(&conn);
+doVcfDetailsCore(tdb, fileOrUrl, TRUE);
 }
 
 
@@ -422,8 +435,6 @@ else
 void doVcfDetails(struct trackDb *tdb, char *item)
 /* Show details of an alignment from an uncompressed VCF file. */
 {
-int start = cartInt(cart, "o");
-int end = cartInt(cart, "t");
 struct customTrack *ct = lookupCt(tdb->track);
 struct sqlConnection *conn = NULL;
 char *table = tdb->table;
@@ -436,28 +447,5 @@ else
     conn = hAllocConnTrack(database, tdb);
 char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, seqName);
 hFreeConn(&conn);
-int vcfMaxErr = -1;
-struct vcfFile *vcff = NULL;
-/* protect against parsing error */
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    vcff = vcfFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1, TRUE);
-    }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    if (isNotEmpty(errCatch->message->string))
-	warn("%s", errCatch->message->string);
-    }
-errCatchFree(&errCatch);
-if (vcff != NULL)
-    {
-    struct vcfRecord *rec;
-    for (rec = vcff->records;  rec != NULL;  rec = rec->next)
-	if (rec->chromStart == start && rec->chromEnd == end) // in pgSnp mode, don't get name
-	    vcfRecordDetails(tdb, rec);
-    }
-else
-    printf("Sorry, unable to open %s<BR>\n", fileOrUrl);
+doVcfDetailsCore(tdb, fileOrUrl, FALSE);
 }

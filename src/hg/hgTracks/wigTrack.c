@@ -814,6 +814,19 @@ rgbColor.b = (2*rgbColor.b+255)/3;
 return MAKECOLOR_32(rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
+struct wigGraphOutput *wigGraphOutputStack(int xOff, int yOff,  int width, int numTracks, struct hvGfx *image)
+/* Get appropriate wigGraphOutput for non-transparent stacked rendering */
+{
+struct wigGraphOutput *wgo;
+AllocVar(wgo);
+wgo->image = image;
+wgo->vLine = vLineViaHvg;
+wgo->xOff = xOff;
+wgo->yOff = yOff;
+wgo->yOffsets = needHugeMem(width * numTracks * sizeof(double));
+return wgo;
+}
+
 struct wigGraphOutput *wigGraphOutputSolid(int xOff, int yOff, struct hvGfx *image)
 /* Get appropriate wigGraphOutput for non-transparent rendering */
 {
@@ -827,7 +840,7 @@ return wgo;
 }
 
 static void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
-    struct track *tg, void *image, WigVerticalLineVirtual vLine, int xOff, int yOff,
+    struct track *tg, void *image, WigVerticalLineVirtual vLine, int xOff, int yOff, double *yOffsets, int numTrack,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
     double epsilon, Color *colorArray, enum trackVisibility vis,
     struct wigCartOptions *wigCart)
@@ -971,6 +984,14 @@ for (x1 = 0; x1 < width; ++x1)
 		    {
 		    int y0 = graphUpperLimit * scaleFactor;
 		    int y1 = (graphUpperLimit - dataValue)*scaleFactor;
+		    if (yOffsets)
+			{
+			if (numTrack > 0)
+			    {
+			    y0 = (graphUpperLimit  - yOffsets[(numTrack-1) *  width + x1]) *scaleFactor;
+			    y1 = (graphUpperLimit - dataValue - yOffsets[(numTrack-1) *  width + x1])*scaleFactor;
+			    }
+			}
 
 		    int boxHeight = max(1,abs(y1 - y0));
 		    int boxTop = min(y1,y0);
@@ -1047,7 +1068,7 @@ struct preDrawElement *preDraw = preDrawContainer->preDraw;
 Color *colorArray = makeColorArray(preDraw, width, preDrawZero, wigCart, tg, hvg);
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
 graphPreDraw(preDraw, preDrawZero, width,
-	tg, wgo->image, wgo->vLine, wgo->xOff, wgo->yOff, 
+	tg, wgo->image, wgo->vLine, wgo->xOff, wgo->yOff, wgo->yOffsets, wgo->numTrack,
 	graphUpperLimit, graphLowerLimit, graphRange,
 	epsilon, colorArray, vis, wigCart);
 
@@ -1650,12 +1671,16 @@ char *containerType = trackDbSetting(tdb, "container");
 if (containerType != NULL && sameString(containerType, "multiWig"))
      wigCart->isMultiWig = TRUE;
 
+wigCart->aggregateFunction = wigFetchAggregateFunctionWithCart(cart,tdb,tdb->track, (char **) NULL);
+
+/*
 char *aggregate = wigFetchAggregateValWithCart(cart, tdb);
 if (aggregate != NULL)
     {
     wigCart->overlay = wigIsOverlayTypeAggregate(aggregate);
     wigCart->transparent = sameString(WIG_AGGREGATE_TRANSPARENT, aggregate);
     }
+*/
 return wigCart;
 }
 
