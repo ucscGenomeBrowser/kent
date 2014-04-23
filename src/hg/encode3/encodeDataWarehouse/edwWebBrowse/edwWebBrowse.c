@@ -267,7 +267,7 @@ cgiMakeIntVar("maxSubCount", maxSubCount, 3);
 printf("</div>");
 
 printf("<div>");
-cgiMakeButton("Submit", "change view");
+cgiMakeButton("Submit", "update view");
 printf("</div>");
 
 /* Get id for user. */
