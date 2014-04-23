@@ -715,8 +715,14 @@ if (assemblyMenu)
     puts("</TD></TR></TABLE><P>\n");
     }
 else
+    {
+    char *assemblyName = hFreezeDateOpt(database);
+    if (assemblyName == NULL)
+	assemblyName = "default";
+
     printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s &nbsp;&nbsp;&nbsp;[%s]\n",
-            organism, hFreezeDateOpt(database), database);
+            organism, assemblyName, database);
+	}
 
 if (measureTiming && (loadTime > 0))
     printf("\n<BR>load time: %ld ms<BR>\n", loadTime);

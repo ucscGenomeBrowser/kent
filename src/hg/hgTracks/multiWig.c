@@ -201,6 +201,11 @@ for (ref = refList; ref != NULL; numTrack++,ref = ref->next)
 	    case wiggleWindowingMin:
 		val = p->min;
 		break;
+	    default:
+		{
+		errAbort("bad windowing function (value: %d)\n", windowingFunction);
+		break;
+		}
 	}
 	if (p->count)
 	    {
@@ -261,6 +266,11 @@ switch(wigCart->aggregateFunction)
     case wiggleAggregateStacked:
 	{
 	wgo = wigGraphOutputStack(xOff, yOff, width, numTracks, hvg);
+	break;
+	}
+    default:
+	{
+	errAbort("bad aggregate function (value: %d)\n", wigCart->aggregateFunction);
 	break;
 	}
     }

@@ -496,3 +496,47 @@ From doc: https://docs.google.com/a/soe.ucsc.edu/spreadsheet/ccc?key=0Ak-BGQb_Rj
 
 
 
+###############
+# ChIP-seq peak callers
+#
+# Installation procedure followed from existing tools:
+#
+# mkdir tool-rel
+# ln -s tool-rel tool
+# cd tool
+# ftp package
+# uncompress and untar package
+
+# There are 3:  SPP (Park lab, Harvard), PeakSeq (Gerstein lab, Yale), GEM (Gifford lab, MIT)
+
+# SPP (Peter Parchenk), modified by Anshul Kundaje for use with IDR
+# http://compbio.med.harvard.edu/Supplements/ChIP-seq/tutorial.html
+# https://sites.google.com/site/anshulkundaje/projects/idr#TOC-CALL-PEAKS-ON-INDIVIDUAL-REPLICATES
+# https://sites.google.com/site/anshulkundaje/projects/idr#TOC-CALL-PEAKS-ON-POOLED-REPLICATES
+# https://code.google.com/p/phantompeakqualtools/
+
+# PeakSeq (Joel Rozowsky)
+# http://wiki.encodedcc.org/index.php/PeakSeq
+# http://info.gersteinlab.org/PeakSeq
+
+# GEM
+# http://wiki.encodedcc.org/index.php/GPS/GEM
+# http://www.psrg.csail.mit.edu/gem/
+
+mkdir gem.v2.4.1
+http://www.psrg.csail.mit.edu/gem/download/gem.v2.4.1.tar.gz
+cd gem
+
+java -jar -Xmx10G gem.jar
+# Example: java -Xmx10G -jar gem.jar --d Read_Distribution_default.txt --g mm8.info --genome your_path/mm8 --s 2000000000 --expt SRX000540_mES_CTCF.bed --ctrl SRX000543_mES_GFP.bed --f BED --out mouseCTCF --k_min 6 --k_max 13
+# ENCODE example: java -Xmx15G -jar gem.jar --g hg19.info --d Read_Distribution_default.txt --s 2400000000 --expt wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdAlnRep1.bam --expt wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdAlnRep2.bam --ctrl wgEncodeSydhTfbsGm12878InputIggrabAlnRep1.bam --f SAM --out CTCF_GM12878 --genome /yourpath/hg19 --k_min 6 --k_max 13 --outNP
+# For use with IDR (relaxed peaks), add -q 0
+
+# QUESTIONS:  
+#   Why both replicates in example -- is this for pooled results ? (try it)
+# NOTE: -t to specify #cpus (default is number of cpu's on host?)
+# Curious what is default -q value ? (significance threshold)
+
+# required params:  --d, --exptX
+# use --f SAM for BAM input
+# use --outNP for narrowPeak output
