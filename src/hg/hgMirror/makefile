@@ -11,6 +11,8 @@ ifeq (${CGI_BIN_BETA},)
     CGI_BIN_BETA=${CGI_BIN}-beta
 endif
 
+clean::
+	
 my::
 	cp hgMirror ${CGI_BIN_USER}/
 beta::
