@@ -1,7 +1,9 @@
 # Notes about installing packages.
 # Use tools.ra as the one true definition of tools currently installed and used.
 
-# The path to these tools is:  /hive/groups/encode/encode3/tools
+# The path to these tools is:  /hive/groups/encode/encode3/tools (aka $EAP_TOOLS_DIR)
+# All tools used directly by pipeline should be in $EAP_TOOLS_DIR/tools.ra
+# NOTE: toolsRaCheck.py will check validity and -fix will fix some issues of tools.ra
 
 # 2014-03-25 downloaded gencode.v19.annotations.gtf.gz from ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz
 # moved to: /hive/groups/encode/encode3/encValData/hg19 and gunzipped.
@@ -31,469 +33,296 @@ version 1.6.0_24
 # MACS2
 # ../../python2.7 setup.py build; ../../python2.7 setup.py install --prefix=/hive/groups/encode/encode3/tools/Python
 
-# Bowtie2 (required by tophat)
-# Installed the precompiled linux version
-
-# Tophat
-# Installed the precompiled linux version
-
-# TODO:
-fastqStatsAndSubsample  http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64.v287/ or http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/utils/fastqStatsAndSubsample;h=386d59fca8c53347ce8e85156d64848f44a0cbe8;hb=refs/heads/v291_branch
-javaVersion         1.6.0_24
-
-
 - Rscript ./configure, make (no install!).  Performed on hgwdev to get F77 (fortran).  Hope it works fine running on encode-01 !!
 
 
-# STAR: making genomes
-cd /hive/groups/encode/encode3/tools/STAR_2.3.0e/
-mkdir genomes
-cd genomes
-mkdir hg19
-mkdir tmp
-cd tmp
-# From /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/tmp
-/hive/groups/encode/encode3/tools/STAR_2.3.0e/STAR --runMode genomeGenerate --genomeDir /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19 --genomeFastaFiles \
-/hive/data/genomes/hg19/1/chr1.fa \
-/hive/data/genomes/hg19/2/chr2.fa \
-/hive/data/genomes/hg19/3/chr3.fa \
-/hive/data/genomes/hg19/4/chr4.fa \
-/hive/data/genomes/hg19/5/chr5.fa \
-/hive/data/genomes/hg19/6/chr6.fa \
-/hive/data/genomes/hg19/7/chr7.fa \
-/hive/data/genomes/hg19/8/chr8.fa \
-/hive/data/genomes/hg19/9/chr9.fa \
-/hive/data/genomes/hg19/10/chr10.fa \
-/hive/data/genomes/hg19/11/chr11.fa \
-/hive/data/genomes/hg19/12/chr12.fa \
-/hive/data/genomes/hg19/13/chr13.fa \
-/hive/data/genomes/hg19/14/chr14.fa \
-/hive/data/genomes/hg19/15/chr15.fa \
-/hive/data/genomes/hg19/16/chr16.fa \
-/hive/data/genomes/hg19/17/chr17.fa \
-/hive/data/genomes/hg19/18/chr18.fa \
-/hive/data/genomes/hg19/19/chr19.fa \
-/hive/data/genomes/hg19/20/chr20.fa \
-/hive/data/genomes/hg19/21/chr21.fa \
-/hive/data/genomes/hg19/22/chr22.fa \
-/hive/data/genomes/hg19/X/chrX.fa \
-/hive/data/genomes/hg19/Y/chrY.fa \
-/hive/data/genomes/hg19/M/chrM.fa \
- --runThreadN 4 &
+###############
+# STAR install
+# https://github.com/alexdobin/STAR/archive/ENCODE_2014-03-16_2.3.1z1.tar.gz
+# Note: this was after v2.3.0e which worked fine.  However RNA-seq working group prefers 2.3.1
+# tar -xzf STAR-ENCODE_2014-03-16_2.3.1z1.tar.gz; cd STAR-ENCODE_2014-03-16_2.3.1z1/; make
+# cd ..; mv STAR-ENCODE_2014-03-16_2.3.1z1.tar.gz STAR-ENCODE_2014-03-16_2.3.1z1/
+# ln -sf STAR-ENCODE_2014-03-16_2.3.1z1/STAR STAR
+# edit tools.ra
 
-mkdir ../hg19.female
-/hive/groups/encode/encode3/tools/STAR_2.3.0e/STAR --runMode genomeGenerate --genomeDir /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19.female --genomeFastaFiles \
-/hive/data/genomes/hg19/1/chr1.fa \
-/hive/data/genomes/hg19/2/chr2.fa \
-/hive/data/genomes/hg19/3/chr3.fa \
-/hive/data/genomes/hg19/4/chr4.fa \
-/hive/data/genomes/hg19/5/chr5.fa \
-/hive/data/genomes/hg19/6/chr6.fa \
-/hive/data/genomes/hg19/7/chr7.fa \
-/hive/data/genomes/hg19/8/chr8.fa \
-/hive/data/genomes/hg19/9/chr9.fa \
-/hive/data/genomes/hg19/10/chr10.fa \
-/hive/data/genomes/hg19/11/chr11.fa \
-/hive/data/genomes/hg19/12/chr12.fa \
-/hive/data/genomes/hg19/13/chr13.fa \
-/hive/data/genomes/hg19/14/chr14.fa \
-/hive/data/genomes/hg19/15/chr15.fa \
-/hive/data/genomes/hg19/16/chr16.fa \
-/hive/data/genomes/hg19/17/chr17.fa \
-/hive/data/genomes/hg19/18/chr18.fa \
-/hive/data/genomes/hg19/19/chr19.fa \
-/hive/data/genomes/hg19/20/chr20.fa \
-/hive/data/genomes/hg19/21/chr21.fa \
-/hive/data/genomes/hg19/22/chr22.fa \
-/hive/data/genomes/hg19/X/chrX.fa \
-/hive/data/genomes/hg19/M/chrM.fa \
- --runThreadN 4 &
- ENCFF001RGR.hg19.2bit
-### Try again:
-# male.hg19/starData/ERCC/*
-# male.hg19/starData/wold/*
-# female.hg19/starData/ERCC/*
-# female.hg19/starData/wold/*
-# hg19/rnaSpikeIns.ENCFF001RTO.fasta
-# hg19/rnaSpikeIns.ENCFF001RTP.fasta
-# hg19/starData/ERCC/* -> male.hg19/starData/ERCC/*
-# hg19/starData/wold/* -> male.hg19/starData/wold/*
-
-
-#/hive/groups/encode/encode3/tools/STAR --runMode genomeGenerate \
-#  --genomeDir /hive/groups/encode/encode3/encValData/male.hg19/starData/ \
-#  --sjdbGTFfile /hive/groups/encode/encode3/encValData/hg19/gencode.v16.annotation.gtf --sjdbOverhang 1 \
-#  --genomeFastaFiles /hive/groups/encode/encode3/encValData/male.hg19/male.hg19.fa --runThreadN 4 &
-
-/hive/groups/encode/encode3/tools/STAR --runMode genomeGenerate \
-  --genomeDir /hive/groups/encode/encode3/encValData/male.hg19/starData/ERCC/ \
-  --sjdbGTFfile /hive/groups/encode/encode3/encValData/hg19/gencode.v16.annotation.gtf --sjdbOverhang 100 \
-  --genomeFastaFiles /hive/groups/encode/encode3/encValData/male.hg19/male.hg19.fa \
-    /hive/groups/encode/encode3/encValData/hg19/rnaSpikeIns.ENCFF001RTP.fasta --runThreadN 6 > starGenome.log 2>&1 &
-
-/hive/groups/encode/encode3/tools/STAR --runMode genomeGenerate \
-  --genomeDir /hive/groups/encode/encode3/encValData/male.hg19/starData/wold/ \
-  --sjdbGTFfile /hive/groups/encode/encode3/encValData/hg19/gencode.v16.annotation.gtf --sjdbOverhang 100 \
-  --genomeFastaFiles /hive/groups/encode/encode3/encValData/male.hg19/male.hg19.fa \
-    /hive/groups/encode/encode3/encValData/hg19/rnaSpikeIns.ENCFF001RTO.fasta --runThreadN 6 &
-
-#/hive/groups/encode/encode3/tools/STAR --runMode genomeGenerate \
-#  --genomeDir /hive/groups/encode/encode3/encValData/female.hg19/starData \
-#  --sjdbGTFfile /hive/groups/encode/encode3/encValData/hg19/gencode.v16.annotation.gtf --sjdbOverhang 1 \
-#  --genomeFastaFiles /hive/groups/encode/encode3/encValData/female.hg19/female.hg19.fa --runThreadN 4 &
-
-/hive/groups/encode/encode3/tools/STAR --runMode genomeGenerate \
-  --genomeDir /hive/groups/encode/encode3/encValData/female.hg19/starData/ERCC/ \
-  --sjdbGTFfile /hive/groups/encode/encode3/encValData/hg19/gencode.v16.annotation.gtf --sjdbOverhang 100 \
-  --genomeFastaFiles /hive/groups/encode/encode3/encValData/female.hg19/female.hg19.fa \
-    /hive/groups/encode/encode3/encValData/hg19/rnaSpikeIns.ENCFF001RTP.fasta --runThreadN 6 &
-
-/hive/groups/encode/encode3/tools/STAR --runMode genomeGenerate \
-  --genomeDir /hive/groups/encode/encode3/encValData/female.hg19/starData/wold/ \
-  --sjdbGTFfile /hive/groups/encode/encode3/encValData/hg19/gencode.v16.annotation.gtf --sjdbOverhang 100 \
-  --genomeFastaFiles /hive/groups/encode/encode3/encValData/female.hg19/female.hg19.fa \
-    /hive/groups/encode/encode3/encValData/hg19/rnaSpikeIns.ENCFF001RTO.fasta --runThreadN 6 &
-
-https://github.com/georgimarinov/GeorgiScripts.git
-
-# towards an actual run:
-/hive/groups/encode/encode3/tools/STAR_2.3.0e/STAR --runMode alignReads --genomeDir /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19 \
-  --readFilesIn /hive/users/tdreszer/galaxy/data/rnaSeq/wgEncodeCshlShortRnaSeqK562PolysomeShortRawData.fastq.gz \
-  --runThreadN 4 --readFilesCommand zcat \
-  --outReadsUnmapped Fastx \
-  --outFilterMultimapNmax 2 \
-  --outFilterMismatchNoverLmax 0.05 &
-  
-  --outFilterMultimapNmax 2           # Reject tags that align in more than 2 places
-  --outFilterMismatchNmax 2           # Tolerate up to 2 mismatches per tag
-  --outFilterMismatchNoverLmax   0.05 # Tolerate no more than 1 in 20 mismatches
-  -- outFilterMatchNminOverLread 0.95 # Inverse of outFilterMismatchNoverLmax??
-  --outQSconversionAdd -31            # (e.g. to convert from Illumina to Sanger, use -31)
-  Defined in:
-  /hive/groups/encode/encode3/tools/STAR_2.3.0e/parametersDefault
-  
-set EAP_TOOLS_DIR in path, then:
-> eap_run_star_se /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19 /hive/users/tdreszer/galaxy/data/rnaSeq/wgEncodeCshlShortRnaSeqK562PolysomeShortRawData.fastq.gz starAligned.bam &
- + '[' 3 -ne 3 ']'
-+ ln /hive/users/tdreszer/galaxy/data/rnaSeq/wgEncodeCshlShortRnaSeqK562PolysomeShortRawData.fastq.gz tmp.fq.gz
-+ STAR --genomeDir /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19 --readFilesIn tmp.fq.gz --readFilesCommand zcat --runThreadN 4
-Feb 19 15:19:49 ..... Started STAR run
-Feb 19 15:20:36 ..... Started mapping
-Feb 19 15:53:21 ..... Finished successfully
-+ rm Log.out
-+ samtools view -S -b Aligned.out.sam
-[samopen] SAM header is present: 25 sequences.
-Parse error at line 137005: sequence and quality are inconsistent
-/hive/groups/encode/encode3/tools/eap_run_star_se: line 28: 44122 Aborted                 (core dumped) samtools view -S -b Aligned.out.sam > tmp.bam
-
-[1]+  Exit 134                eap_run_star_se /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19 /hive/users/tdreszer/galaxy/data/rnaSeq/wgEncodeCshlShortRnaSeqK562PolysomeShortRawData.fastq.gz starAligned.bam
-
-# samtools conversion to bam failed!
-> ht 137004 2 Aligned.out.sam 
-SINATRA_5_FC30FD4AAXX:8:80:1094:1398	272	chr2	33141659	1	1S34M1S	*	0	0AGGGGGGAGGGGGGGGGGGGGGGGGGGGGGGGGGGG	G`CUbT>?P=JYhXch^hhhhahOhhhhhhhhhhhS	NH:i:4	HI:i:4	AS:i:33nM:i:0
-NINA_1_FC30G3VAAXX:6:9:1423:1549	16	chr19	13947400	255	6S30M	*	0	0GGGGGGGGGGGGGCTGGAAATCCCTGGCAATGTGAT	haYQeKRhWh^hhhhhhh_hhhhhhhhhhhhhhh	NH:i:1	HI:i:1	AS:i:23nM:i:3
-# first is okay, but second line fails "sequence and quality are inconsistent"
-# braney says GGGGGGGGGGGGGCTGGAAATCCCTGGCAATGTGAT	haYQeKRhWh^hhhhhhh_hhhhhhhhhhhhhhh are expected to be the same length
-
-# From fastq:
-@NINA_1_FC30G3VAAXX:6:9:1423:1549
-ATCACATTGCCAGGGATTTCCAGCCCCCCCCCCCCC
-+NINA_1_FC30G3VAAXX:6:9:1423:1549
-
-#### Hmmm.  Try some different datasets: was encode2, now should be edw:
-select t1.licensePlate,t1.fileId,t1.replicate,t1.pairedEnd,t2.dataType,t2.lab,t2.accession from edwValidFile t1,edwExperiment t2 where t1.format = 'fastq' and t1.experiment = t2.accession and t2.dataType like 'RNA%';
-+--------------+--------+-----------+-----------+----------+---------+------------------+
-| licensePlate | fileId | replicate | pairedEnd | dataType | lab     | accession        |
-+--------------+--------+-----------+-----------+----------+---------+------------------+
-| DEV000ADX    |    111 | 4         |           | RnaPet   | GIS     | wgEncodeEH002929 |
-| DEV000ADY    |    110 | 3         |           | RnaPet   | GIS     | wgEncodeEH002929 |
-| DEV000ADZ    |    112 | 3         |           | RnaPet   | GIS     | wgEncodeEH002929 |
-| DEV000AEA    |    113 | 4         |           | RnaPet   | GIS     | wgEncodeEH002929 |
-| DEV000AET    |    133 | 4         |           | RNA-seq  | CSHL    | wgEncodeEH000181 |
-| DEV000AEU    |    132 | 3         |           | RNA-seq  | CSHL    | wgEncodeEH000181 |
-| DEV000AFE    |    134 | 3         |           | RNA-seq  | CSHL    | wgEncodeEH000181 |
-| DEV000AFG    |    135 | 4         |           | RNA-seq  | CSHL    | wgEncodeEH000181 |
-| DEV000AGA    |    169 | 1         |           | RNA-seq  | Caltech | wgEncodeEH001670 |
-| DEV000AGB    |    168 | 1         |           | RNA-seq  | Caltech | wgEncodeEH001670 |
-| DEV000AGC    |    170 | 1         |           | RNA-seq  | Caltech | wgEncodeEH001670 |
-| DEV000AGD    |    171 | 1         |           | RNA-seq  | Caltech | wgEncodeEH001670 |
-| DEV000AGV    |    173 | 1         |           | RNA-seq  | Caltech | wgEncodeEH001670 |
-| DEV000AGW    |    172 | 1         |           | RNA-seq  | Caltech | wgEncodeEH001670 |
-| DEV000AHX    |    213 | 2         |           | RNA-seq  | CSHL    | wgEncodeEH002687 |
-| DEV000AHY    |    214 | 2         |           | RNA-seq  | CSHL    | wgEncodeEH002687 |
-| DEV000AIW    |    219 | 1         |           | RNA-seq  | CSHL    | wgEncodeEH002687 |
-| DEV000AIZ    |    220 | 1         |           | RNA-seq  | CSHL    | wgEncodeEH002687 |
-| DEV000AJF    |    251 | 3         |           | RnaPet   | GIS     | wgEncodeEH002933 |
-| DEV000AJG    |    253 | 3         |           | RnaPet   | GIS     | wgEncodeEH002933 |
-| DEV000AJH    |    252 | 4         |           | RnaPet   | GIS     | wgEncodeEH002933 |
-| DEV000AJM    |    254 | 4         |           | RnaPet   | GIS     | wgEncodeEH002933 |
-| DEV000ALD    |    301 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALE    |    303 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALF    |    302 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALG    |    304 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALH    |    306 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALI    |    305 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALJ    |    307 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALK    |    308 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALL    |    309 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALM    |    310 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALN    |    311 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALO    |    313 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALP    |    315 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALQ    |    314 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALR    |    312 | 1         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALS    |    318 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALT    |    316 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALU    |    317 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALV    |    319 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALW    |    321 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALX    |    320 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000ALY    |    322 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000AMB    |    323 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-| DEV000AMC    |    324 | 2         |           | RNA-seq  | UW-m    | wgEncodeEM002952 |
-+--------------+--------+-----------+-----------+----------+---------+------------------+
-46 rows in set (0.00 sec)
-select id,submitFileName,edwFileName,tags from edwFile where id in (213,214,219,220);
-+-----+------------------------------------------------------------------------------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------+
-| id  | submitFileName                                                                                 | edwFileName                  | tags                                                                                                                    |
-+-----+------------------------------------------------------------------------------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------+
-| 219 | hg19/wgEncodeCshlLongRnaSeq/wgEncodeCshlLongRnaSeqNhemm27012303CellTotalFastqRd1Rep1.fastq.gz  | 2014/1/25/DEV000AIW.fastq.gz | format=fastq&output_type=FastqRd1&experiment=wgEncodeEH002687&replicate=1&enriched_in=exon&valid_key=V3901&ucsc_db=hg19 |
-| 220 | hg19/wgEncodeCshlLongRnaSeq/wgEncodeCshlLongRnaSeqNhemm27012303CellTotalFastqRd2Rep1.fastq.gz  | 2014/1/25/DEV000AIZ.fastq.gz | format=fastq&output_type=FastqRd2&experiment=wgEncodeEH002687&replicate=1&enriched_in=exon&valid_key=V1276&ucsc_db=hg19 |
-| 213 | hg19/wgEncodeCshlLongRnaSeq/wgEncodeCshlLongRnaSeqNhemm270110012CellTotalFastqRd1Rep2.fastq.gz | 2014/1/25/DEV000AHX.fastq.gz | format=fastq&output_type=FastqRd1&experiment=wgEncodeEH002687&replicate=2&enriched_in=exon&valid_key=V7107&ucsc_db=hg19 |
-| 214 | hg19/wgEncodeCshlLongRnaSeq/wgEncodeCshlLongRnaSeqNhemm270110012CellTotalFastqRd2Rep2.fastq.gz | 2014/1/25/DEV000AHY.fastq.gz | format=fastq&output_type=FastqRd2&experiment=wgEncodeEH002687&replicate=2&enriched_in=exon&valid_key=V3398&ucsc_db=hg19 |
-+-----+------------------------------------------------------------------------------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------+
-ll ../encodeDataWarehouse/2014/1/25/DEV000AIW.fastq.gz, DEV000AIZ.fastq.gz, DEV000AHX.fastq.gz, DEV000AHY.fastq.gz
--rw-rw-r-- 1 kent genecats 10004161529 Feb 17  2012 /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIW.fastq.gz
--rw-rw-r-- 1 kent genecats 10217109588 Feb 17  2012 /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIZ.fastq.gz
--rw-rw-r-- 1 kent genecats 11589275284 Feb 17  2012 /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AHX.fastq.gz
--rw-rw-r-- 1 kent genecats 11834951333 Feb 17  2012 /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AHY.fastq.gz
-
-set EAP_TOOLS_DIR in path, then:
-> env | grep PATH | grep encode3
-> export PATH=${EAP_TOOLS_DIR}:$PATH
-> eap_run_star_pe /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19 /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIW.fastq.gz /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIZ.fastq.gz starAlignedFromPaired.bam &
-+ '[' 4 -ne 4 ']'
-+ ln /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIW.fastq.gz tmp1.fq.gz
-+ ln /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIW.fastq.gz tmp2.fq.gz
-+ STAR --genomeDir /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19 --readFilesIn tmp1.fq.gz tmp2.fq.gz --readFilesCommand zcat --runThreadN 4
-Feb 20 11:40:54 ..... Started STAR run
-Feb 20 11:48:15 ..... Started mapping
-Feb 20 12:50:33 ..... Finished successfully
-ll
-total 39079936
--rw-rw-r-- 1 tdreszer genecats        1684 Feb 20 12:50 Log.final.out
--rw-rw-r-- 1 tdreszer genecats        7444 Feb 20 12:50 Log.progress.out
--rw-rw-r-- 1 tdreszer genecats      569296 Feb 20 12:50 SJ.out.tab
--rw-rw-r-- 3 kent     genecats 10004161529 Feb 17  2012 tmp1.fq.gz
--rw-rw-r-- 3 kent     genecats 10004161529 Feb 17  2012 tmp2.fq.gz
-
-## Ouch!!! I destroyed /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIZ.fastq.gz
-mv /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIZ.fastq.gz starAlignedFromPaired.bam
-cp /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/wgEncodeCshlLongRnaSeqNhemm27012303CellTotalFastqRd2Rep1.fastq.gz tmp2.fq.gz
-ln tmp2.fq.gz /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIZ.fastq.gz
-ll /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIW.fastq.gz /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIZ.fastq.gz
--rw-rw-r-- 4 kent genecats 10217109588 Feb 20 13:37 /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIW.fastq.gz
--rw-rw-r-- 4 kent genecats 10217109588 Feb 20 13:37 /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIZ.fastq.gz
-
-cp /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/wgEncodeCshlLongRnaSeqNhemm27012303CellTotalFastqRd1Rep1.fastq.gz rep1Rd1.fq.gz
-ln /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/wgEncodeCshlLongRnaSeqNhemm27012303CellTotalFastqRd2Rep1.fastq.gz rep1Rd2.fq.gz
-rm /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIW.fastq.gz
-cp rep1Rd1.fq.gz /hive/groups/encode/encode3/encodeDataWarehouse/2014/1/25/DEV000AIW.fastq.gz
-select id,edwFileName,md5 from edwFile where id in (219,220);
-+-----+------------------------------+----------------------------------+
-| id  | edwFileName                  | md5                              |
-+-----+------------------------------+----------------------------------+
-| 219 | 2014/1/25/DEV000AIW.fastq.gz | 533be35dd4c7824e20d7d779bf8ddc9c |
-| 220 | 2014/1/25/DEV000AIZ.fastq.gz | d89bf7f4048c168023407f283900557c |
-+-----+------------------------------+----------------------------------+
-md5sum ../../../../encodeDataWarehouse/2014/1/25/DEV000AI?.fastq.gz
-533be35dd4c7824e20d7d779bf8ddc9c  ../../../../encodeDataWarehouse/2014/1/25/DEV000AIW.fastq.gz
-d89bf7f4048c168023407f283900557c  ../../../../encodeDataWarehouse/2014/1/25/DEV000AIZ.fastq.gz
-
-### Try again
-> eap_run_star_pe /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19 rep1Rd1.fq.gz rep1Rd2.fq.gz alignedFromPair.bam > runlog.txt 2>&1 &
-+ '[' 4 -ne 4 ']'
-+ cp rep1Rd1.fq.gz tmp1.fq.gz
-+ cp rep1Rd2.fq.gz tmp2.fq.gz
-+ STAR --genomeDir /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19 --readFilesIn tmp1.fq.gz tmp2.fq.gz --readFilesCommand zcat --runThreadN 4
-Feb 20 14:48:01 ..... Started STAR run
-Feb 20 14:49:21 ..... Started mapping
-Feb 20 16:08:12 ..... Finished successfully
-+ rm Log.out
-+ samtools view -S -b Aligned.out.sam
-[samopen] SAM header is present: 25 sequences.
-+ rm Aligned.out.sam
-+ samtools sort tmp.bam sorted
-[bam_sort_core] merging from 104 files...
-+ rm tmp.bam
-+ mv sorted.bam alignedFromPair2.bam
-+ cat Log.final.out
-                                 Started job on |	Feb 20 14:48:01
-                             Started mapping on |	Feb 20 14:49:21
-                                    Finished on |	Feb 20 16:08:12
-       Mapping speed, Million of reads per hour |	100.82
-
-                          Number of input reads |	132488637
-                      Average input read length |	202
-                                    UNIQUE READS:
-                   Uniquely mapped reads number |	122266416
-                        Uniquely mapped reads % |	92.28%
-                          Average mapped length |	200.63
-                       Number of splices: Total |	22931558
-            Number of splices: Annotated (sjdb) |	0
-                       Number of splices: GT/AG |	22454217
-                       Number of splices: GC/AG |	231835
-                       Number of splices: AT/AC |	11839
-               Number of splices: Non-canonical |	233667
-                      Mismatch rate per base, % |	0.42%
-                         Deletion rate per base |	0.01%
-                        Deletion average length |	1.85
-                        Insertion rate per base |	0.01%
-                       Insertion average length |	1.44
-                             MULTI-MAPPING READS:
-        Number of reads mapped to multiple loci |	1828536
-             % of reads mapped to multiple loci |	1.38%
-        Number of reads mapped to too many loci |	17754
-             % of reads mapped to too many loci |	0.01%
-                                  UNMAPPED READS:
-       % of reads unmapped: too many mismatches |	0.00%
-                 % of reads unmapped: too short |	6.29%
-                     % of reads unmapped: other |	0.03%
-ll
-total 111894080
--rw-rw-r-- 1 tdreszer genecats        1706 Feb 20 16:08 Log.final.out
--rw-rw-r-- 1 tdreszer genecats        9332 Feb 20 16:08 Log.progress.out
--rw-rw-r-- 1 tdreszer genecats     9691022 Feb 20 16:08 SJ.out.tab
--rw-rw-r-- 1 tdreszer genecats 16578568218 Feb 20 20:07 alignedFromPair.bam <=== Why so huge?
--rw-rw-r-- 1 tdreszer genecats        2320 Feb 20 20:07 runlog.txt
--rw-rw-r-- 1 tdreszer genecats 10004161529 Feb 20 14:45 tmp1.fq.gz
--rw-rw-r-- 1 tdreszer genecats 10217109588 Feb 20 14:48 tmp2.fq.gz
-
-> eap_run_star_pe /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19 rep1Rd1.fq.gz rep1Rd2.fq.gz alignedFromPair2And2.bam > runlog.txt 2>&1 &
-+ '[' 4 -ne 4 ']'
-+ cp rep1Rd1.fq.gz tmp1.fq.gz
-+ cp rep1Rd2.fq.gz tmp2.fq.gz
-+ STAR --genomeDir /hive/groups/encode/encode3/tools/STAR_2.3.0e/genomes/hg19 --readFilesIn tmp1.fq.gz tmp2.fq.gz --readFilesCommand zcat --runThreadN 4 --outFilterMultimapNmax 2 --outFilterMismatchNoverLmax 0.10
-Feb 21 11:22:46 ..... Started STAR run
-Feb 21 12:16:46 ..... Started mapping
-Feb 21 13:36:12 ..... Finished successfully
-+ rm Log.out
-+ samtools view -S -b Aligned.out.sam
-[samopen] SAM header is present: 25 sequences.
-+ rm Aligned.out.sam
-+ samtools sort tmp.bam sorted
-[bam_sort_core] merging from 102 files...
-+ rm tmp.bam
-+ mv sorted.bam alignedFromPair2And2.bam
-+ cat Log.final.out
-                                 Started job on |	Feb 21 11:22:46
-                             Started mapping on |	Feb 21 12:16:46
-                                    Finished on |	Feb 21 13:36:12
-       Mapping speed, Million of reads per hour |	100.08
-
-                          Number of input reads |	132488637
-                      Average input read length |	202
-                                    UNIQUE READS:
-                   Uniquely mapped reads number |	122274409
-                        Uniquely mapped reads % |	92.29%
-                          Average mapped length |	200.62
-                       Number of splices: Total |	22930877
-            Number of splices: Annotated (sjdb) |	0
-                       Number of splices: GT/AG |	22453690
-                       Number of splices: GC/AG |	231798
-                       Number of splices: AT/AC |	11840
-               Number of splices: Non-canonical |	233549
-                      Mismatch rate per base, % |	0.41%
-                         Deletion rate per base |	0.01%
-                        Deletion average length |	1.85
-                        Insertion rate per base |	0.01%
-                       Insertion average length |	1.44
-                             MULTI-MAPPING READS:
-        Number of reads mapped to multiple loci |	1373262
-             % of reads mapped to multiple loci |	1.04%
-        Number of reads mapped to too many loci |	474321
-             % of reads mapped to too many loci |	0.36%
-                                  UNMAPPED READS:
-       % of reads unmapped: too many mismatches |	0.00%
-                 % of reads unmapped: too short |	6.29%
-                     % of reads unmapped: other |	0.03%
--rw-rw-r-- 1 tdreszer genecats        1707 Feb 21 13:36 Log.final.out
--rw-rw-r-- 1 tdreszer genecats        9332 Feb 21 13:36 Log.progress.out
--rw-rw-r-- 1 tdreszer genecats     9328493 Feb 21 13:36 SJ.out.tab
--rw-rw-r-- 1 tdreszer genecats 16359494321 Feb 21 18:26 alignedFromPair2And2.bam
--rw-rw-r-- 4    19739 genecats 10004161529 Feb 17  2012 rep1Rd1.fq.gz
--rw-rw-r-- 4    19739 genecats 10217109588 Feb 17  2012 rep1Rd2.fq.gz
--rw-rw-r-- 1 tdreszer genecats        2385 Feb 21 18:26 runlog.txt
-
-### bamEvaluate:
-src/hg/encode3/encodeDataWarehouse/utils/edwBamStats No version, produces RA file
-   # TODO use edwBamStats  Do we even want metrics/strandCorr anymore???
-src/hg/encode3/encodeDataWarehouse/utils/edwSamPairedEndStats No version
-src/hg/encode3/encodeDataWarehouse/edwQaEvaluate PASS/FAIL criteria defined here!
-
-From RNA Wiki http://wiki.encodedcc.org/index.php/RNA_Evaluation:_Datasets
-Filtering of alignments: long RNA
-STAR	 TopHat (Caltech) with Bowtie1	 TopHat2 (UConn) with Bowtie2	 Harmonized
-Number of mismatches	 4% of read length	 4% of read length	 4% of read length	 4% of read length
-Mapped length	 ≥66% of read length	 end-to-end	 end-to-end	 Cannot harmonize
-Multi-mappers	 ≤20	 ≤20	 ≤20	 ≤20
-Single-end alignments for PE data	 No	 No	 No	 No
-Chimeric alignments	 No	 No	 No	 No
-Unmapped reads	 Yes	 Yes	 Yes	 Yes
-Alignments to spike-ins	 In the same SAM file	 In the same SAM file	 In the same SAM file	 In the same SAM file
-[edit]
-
-RNA Evaluation data:
-https://docs.google.com/a/soe.ucsc.edu/spreadsheet/ccc?key=0ApNn9g05ykFNdFZsd3I5VF93dHdGd2lhZTg3YUMwaWc&usp=drive_web#gid=4
+# STAR: making genome indexes
+# Note this was after pervios star version and previous gencode.v16 annotations
+cd /hive/groups/encode/encode3/encValData/female.hg19/
+mkdir starData; cd starData; mkdir ERCC; cd ERCC
+STAR --runMode genomeGenerate \
+  --genomeDir ${EAP_REF_DIR}/female.hg19/starData/ERCC/ \
+  --sjdbGTFfile ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+  --sjdbOverhang 100 \
+  --genomeFastaFiles ${EAP_REF_DIR}/female.hg19/female.hg19.fa \
+    ${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTP.fasta \
+  --runThreadN 6 > ${EAP_REF_DIR}/female.hg19/starData/ERCC/command.v19.log 2>&1
+Mar 27 00:50:49 ..... Started STAR run
+Mar 27 00:50:49 ... Starting to generate Genome files
+Mar 27 00:52:42 ... finished processing splice junctions database ...
+Mar 27 00:53:20 ... starting to sort  Suffix Array. This may take a long time...
+Mar 27 00:53:54 ... sorting Suffix Array chunks and saving them to disk...
+Mar 27 01:25:46 ... loading chunks from disk, packing SA...
+Mar 27 01:27:56 ... writing Suffix Array to disk ...
+Mar 27 01:29:20 ... Finished generating suffix array
+Mar 27 01:29:20 ... starting to generate Suffix Array index...
+Mar 27 01:59:20 ... writing SAindex to disk
+Mar 27 01:59:26 ..... Finished successfully
+cd ..; mkdir WSC; cd WSC
+STAR --runMode genomeGenerate \
+  --genomeDir ${EAP_REF_DIR}/female.hg19/starData/WSC/ \
+  --sjdbGTFfile ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+  --sjdbOverhang 100 \
+  --genomeFastaFiles ${EAP_REF_DIR}/female.hg19/female.hg19.fa \
+    ${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+  --runThreadN 6 > ${EAP_REF_DIR}/female.hg19/starData/WSC/command.v19.log 2>&1
+Mar 27 00:51:26 ..... Started STAR run
+Mar 27 00:51:26 ... Starting to generate Genome files
+Mar 27 00:53:20 ... finished processing splice junctions database ...
+Mar 27 00:53:59 ... starting to sort  Suffix Array. This may take a long time...
+Mar 27 00:54:33 ... sorting Suffix Array chunks and saving them to disk...
+Mar 27 01:29:15 ... loading chunks from disk, packing SA...
+Mar 27 01:33:06 ... writing Suffix Array to disk ...
+Mar 27 01:34:34 ... Finished generating suffix array
+Mar 27 01:34:34 ... starting to generate Suffix Array index...
+Mar 27 02:03:50 ... writing SAindex to disk
+Mar 27 02:03:56 ..... Finished successfully
+cd /hive/groups/encode/encode3/encValData/male.hg19/
+mkdir starData; cd starData; mkdir ERCC; cd ERCC
+STAR --runMode genomeGenerate \
+  --genomeDir ${EAP_REF_DIR}/male.hg19/starData/ERCC/ \
+  --sjdbGTFfile ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+  --sjdbOverhang 100 \
+  --genomeFastaFiles ${EAP_REF_DIR}/male.hg19/male.hg19.fa \
+    ${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTP.fasta \
+  --runThreadN 6 > ${EAP_REF_DIR}/male.hg19/starData/ERCC/command.v19.log 2>&1
+Mar 26 21:42:26 ..... Started STAR run
+Mar 26 21:42:26 ... Starting to generate Genome files
+Mar 26 21:44:21 ... finished processing splice junctions database ...
+Mar 26 21:44:59 ... starting to sort  Suffix Array. This may take a long time...
+Mar 26 21:45:34 ... sorting Suffix Array chunks and saving them to disk...
+Mar 26 22:17:02 ... loading chunks from disk, packing SA...
+Mar 26 22:19:40 ... writing Suffix Array to disk ...
+Mar 26 22:21:08 ... Finished generating suffix array
+Mar 26 22:21:08 ... starting to generate Suffix Array index...
+Mar 26 22:48:41 ... writing SAindex to disk
+Mar 26 22:48:44 ..... Finished successfully
+cd ..; mkdir WSC; cd WSC
+STAR --runMode genomeGenerate \
+  --genomeDir ${EAP_REF_DIR}/male.hg19/starData/WSC/ \
+  --sjdbGTFfile ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+  --sjdbOverhang 100 \
+  --genomeFastaFiles ${EAP_REF_DIR}/male.hg19/male.hg19.fa \
+    ${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+  --runThreadN 6 > ${EAP_REF_DIR}/male.hg19/starData/WSC/command.v19.log 2>&1
+Mar 27 00:49:47 ..... Started STAR run
+Mar 27 00:49:47 ... Starting to generate Genome files
+Mar 27 00:51:36 ... finished processing splice junctions database ...
+Mar 27 00:52:15 ... starting to sort  Suffix Array. This may take a long time...
+Mar 27 00:52:53 ... sorting Suffix Array chunks and saving them to disk...
+Mar 27 01:28:13 ... loading chunks from disk, packing SA...
+Mar 27 01:31:59 ... writing Suffix Array to disk ...
+Mar 27 01:33:18 ... Finished generating suffix array
+Mar 27 01:33:19 ... starting to generate Suffix Array index...
+Mar 27 02:01:46 ... writing SAindex to disk
+Mar 27 02:01:49 ..... Finished successfully
+# ln -sf ${EAP_REF_DIR}/male.hg19/starData ${EAP_REF_DIR}/hg19/starData
+# Write starData/README
 
 
-############ Problems with star alignment???
->>>> First seen on makewigglefromBAM-NH.py:
-> eap_run_rna_bam_to_bigwigs /hive/users/tdreszer/galaxy/data/rnaSeq/GraveleyGmTotalRep1Rd1_ENCFF001RDI_2_ENCFF001RDA.bam /hive/groups/encode/encode3/encValData/hg19/chrom.sizes uniqPlusRep1.bw uniqMinusRep1.bw allPlusRep1.bw allMinusRep1.bw
-+ '[' 6 -ne 6 ']'
-+ cp /hive/users/tdreszer/galaxy/data/rnaSeq/GraveleyGmTotalRep1Rd1_ENCFF001RDI_2_ENCFF001RDA.bam tmp.bam
-+ python2.7 /hive/groups/encode/encode3/tools/makewigglefromBAM-NH.py --- tmp.bam /hive/groups/encode/encode3/encValData/hg19/chrom.sizes outUniqPlus.wig -stranded + -nomulti -RPM -notitle -fragments second-read-strand
-testing for NH tags presence
-no NH: tags in BAM file, exiting
-# 2014-03-10 08:24:47 'eap_run_rna_bam_to_bigwigs' returned 256
+###############
+# tophat install (precompiled linux version)
+# http://tophat.cbcb.umd.edu/downloads/tophat-2.0.8.Linux_x86_64.tar.gz
+# Note: this was after trying several other versions (2.0.11) which crashed 30hrs into alignment run
+# tar -xzf tophat-2.0.8.Linux_x86_64.tar.gz; NO make REQUIRED
+# mv tophat-2.0.8.Linux_x86_64.tar.gz tophat-2.0.8.Linux_x86_64/
+# ln -sf tophat-2.0.8.Linux_x86_64/tophat tophat
+# edit tools.ra
 
->>>> But NH tags are in star Aligned.out.sam
-HWI-ST697:179:D1VK3ACXX:4:1101:10862:11893	163	chr17	7212966	255	100M	=	7213052	1403	CTTGGACTTCGAGACAGGAGATGCAGGGGCCTCAGCCACCTTCCCAATGCAGTGCTCAGCATTACGTAAGAATGGCTTTGTGGTGCTCAAAGGCCGGCCA	CCCFFFFFHHHHHJJJJJJJJJJJJJJJJJJJJIJIJIJJIJJJJJJJIIIJIJJIJJJJHHHHHHFFFFEEEEEDDDDDDDDCBDDDDDDDDDDDDDDD	NH:i:1	HI:i:1	AS:i:199	nM:i:0
+# Bowtie2 install (precompiled linux version) (required by tophat)
+# http://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.1.0/bowtie2-2.1.0-linux-x86_64.zip/download
+# Note: this was after trying bowtie2-2.2.1, which with tophat-2.0.11 crashed 30hrs into alignment
+# unzip bowtie2-2.1.0-linux-x86_64.zip; # no make required
+# cd bowtie2-2.1.0-linux-x86_64.zip bowtie2-2.1.0
+# Installed the precompiled linux version
+# ln -sf bowtie2-2.1.0/bowtie2-align bowtie2-align
+# ln -sf bowtie2-2.1.0/bowtie2-build bowtie2-build
+# ln -sf bowtie2-2.1.0/bowtie2-inspect bowtie2-inspect
+# edit tools.ra
 
->>>> Warning in samtools effort to reheader/sort
-# eap_run_star_long_pe
-samtools view -S -b Aligned.out.sam | samtools reheader newHeader.sam - | samtools sort -m 20000000000 - sorted
-+ samtools view -S -b Aligned.out.sam
-+ samtools reheader newHeader.sam -
-+ samtools sort -m 20000000000 - sorted
-[bam_header_read] EOF marker is absent. The input is probably truncated.
-[bam_header_read] EOF marker is absent. The input is probably truncated.
-???? Because of pipe ?
+# tophat/bowtie2: making genome indexes
+# Note this was after pervious tophat/bowtie2 versions and previous gencode.v16 annotations
+cd /hive/groups/encode/encode3/encValData/female.hg19/
+mkdir tophatData; cd tophatData
+bowtie2-build --offrate 3 -f ${EAP_REF_DIR}/female.hg19/female.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTP.fasta \
+    ${EAP_REF_DIR}/female.hg19/tophatData/ERCC > ERCC_command.log 2>&1 
+tail ERCC_command.log
+    sideSz: 64
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 14769670
+    numLines: 14769670
+    ebwtTotLen: 945258880
+    ebwtTotSz: 945258880
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 01:27:47
+bowtie2-build --offrate 3 -f ${EAP_REF_DIR}/female.hg19/female.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+    ${EAP_REF_DIR}/female.hg19/tophatData/WSC > WSC_command.log 2>&1
+tail WSC_command.log
+    sideSz: 64
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 14769358
+    numLines: 14769358
+    ebwtTotLen: 945238912
+    ebwtTotSz: 945238912
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 01:33:27
+mkdir annotation; cd annotation
+# Because I don't know the bowtie command and tophat doesn't support creating this directly, 
+# I created it with a mini run from the testing dir
+tophat --no-discordant --no-mixed -p 8 -z0 --min-intron-length 20 --max-intron-length 1000000 \
+           --read-mismatches 4 --read-edit-dist 4 --max-multihits 20 --library-type fr-firststrand \
+           --GTF ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+           --transcriptome-index ${EAP_REF_DIR}/female.hg19/tophatData/annotation/gencode.v19 \
+       --min-anchor-length 8 --splice-mismatches 0 --read-gap-length 2 \
+       --mate-inner-dist 50 --mate-std-dev 20 --segment-length 25 \
+       --b2-L 20 --b2-N 0 --b2-D 15 --b2-R 2 \
+           ${EAP_REF_DIR}/female.hg19/tophatData/ERCC tmpR1.fq.gz tmpR2.fq.gz > $1.log 2>&1 &
+cd /hive/groups/encode/encode3/encValData/male.hg19/
+mkdir tophatData; cd tophatData
+bowtie2-build --offrate 3 -f ${EAP_REF_DIR}/male.hg19/male.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTP.fasta \
+    ${EAP_REF_DIR}/male.hg19/tophatData/ERCC > ERCC_command.log 2>&1
+tail ERCC_command.log
+    sideSz: 64
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 14889381
+    numLines: 14889381
+    ebwtTotLen: 952920384
+    ebwtTotSz: 952920384
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 01:25:48
+bowtie2-build --offrate 3 -f ${EAP_REF_DIR}/male.hg19/male.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+    ${EAP_REF_DIR}/male.hg19/tophatData/WSC > WSC_command.log 2>&1
+tail WSC_command.log
+    sideSz: 64
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 14889069
+    numLines: 14889069
+    ebwtTotLen: 952900416
+    ebwtTotSz: 952900416
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 01:28:23
+mkdir annotation; cd annotation
+# Because I don't know the bowtie command and tophat doesn't support creating this directly, 
+# I created it with a mini run from the testing dir
+tophat --no-discordant --no-mixed -p 8 -z0 --min-intron-length 20 --max-intron-length 1000000 \
+           --read-mismatches 4 --read-edit-dist 4 --max-multihits 20 --library-type fr-firststrand \
+           --GTF ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+           --transcriptome-index ${EAP_REF_DIR}/male.hg19/tophatData/annotation/gencode.v19 \
+       --min-anchor-length 8 --splice-mismatches 0 --read-gap-length 2 \
+       --mate-inner-dist 50 --mate-std-dev 20 --segment-length 25 \
+       --b2-L 20 --b2-N 0 --b2-D 15 --b2-R 2 \
+           ${EAP_REF_DIR}/male.hg19/tophatData/ERCC tmpR1.fq.gz tmpR2.fq.gz > $1.log 2>&1 &
+# ln -sf ${EAP_REF_DIR}/male.hg19/tophatData ${EAP_REF_DIR}/hg19/tophatData
+# Write tophatData/README
+# Note that the first run of each tophat alignment first recreates the fa file 
+# (combined genome and spike-ins) from index files.  To avoid this in the future, 
+# I copied the recreated/combined fa file into the appropriate reference dir.
 
->>>> Chris uses samtools view -S -b -u   ### What does -u do differently?
+# tophat_bam_xsA_tag_fix.pl install (tophat alignments still need to be patched up)
+# https://github.com/xweigit/xweiEncodeScripts/archive/v1.0.tar.gz
+# tar -xzf xweiEncodeScripts-1.0.tar.gz; mv xweiEncodeScripts-1.0.tar.gz xweiEncodeScripts-1.0/
+# ln -sf xweiEncodeScripts-1.0/tophat_bam_xsA_tag_fix.pl tophat_bam_xsA_tag_fix.pl
+# edit tools.ra
 
-samtools view -S -b Aligned.out.sam | samtools reheader newHeader.sam - > trySb.bam
-samtools view -S -b -u Aligned.out.sam | samtools reheader newHeader.sam - > trySbu.bam
+###############
+# makewigglefromBAM-NH.py install (Georgi script to make filtered bigWigs from bams)
+# https://github.com/georgimarinov/GeorgiScripts.git
+# No release!
+# unzip GeorgiScripts-master.zip; mv GeorgiScripts-master.zip GeorgiScripts/
+# ln -sf GeorgiScripts/makewigglefromBAM-NH.py makewigglefromBAM-NH.py
+# edit tools.ra
 
-samtools view -S -b -u Aligned.out.sam | samtools reheader newHeader.sam - > trySbu.bam
+###############
+# RSEM install (quantify RNA-seq known transcript results)
+# https://github.com/bli25wisc/RSEM/archive/v1.2.12.tar.gz
+# tar -xzf RSEM-1.2.12.tar.gz; mv RSEM-1.2.12.tar.gz RSEM-1.2.12/; cd RSEM-1.2.12/; make
+# cd ..; ln -sf RSEM-1.2.12/rsem-calculate-expression rsem-calculate-expression
+# edit tools.ra
 
-
-${EAP_TOOLS_DIR}/python2.7 ${EAP_TOOLS_DIR}/makewigglefromBAM-NH.py --- oldAlignment.bam ${EAP_REF_DIR}/hg19/chrom.sizes outUniqPlus.wig -stranded + -nomulti -RPM -notitle -fragments second-read-strand
-
-tophat --no-discordant --no-mixed --transcriptome-index gencode.v16.female.spikeins             -p 16                                       --min-intron-length 70                                                                     --library-type fr-firststrand -z0 -o $output_directory -a 6 -m 2 -g 20 -n 2 female.spikeins.hg19 Read1.fastq.gz Read2.fastq.gz
-
-       --no-discordant --no-mixed --transcriptome-index gencode.v16.annotation.female --bowtie1 -p 8 --read-edit-dist 4 --read-mismatches 4 --min-intron-length 20 --max-intron-length 1000000 --GTF gencode.v16.annotation.female.gtf 
-
--p 16 -a 6 -m 2 -g 20 -n 2 -z0 -o $output_directory
-
--a 6 v 8
-
-From doc: https://docs.google.com/a/soe.ucsc.edu/spreadsheet/ccc?key=0Ak-BGQb_RjaedEJJYk9WV2lQQXBtRzc4OUJVX2pEV2c#gid=2
-# Graveley:
--p 8 -z0 -o $FILEDIR -a 6 -m 2 --min-intron-length 20 -g 1 --no-novel-juncs --librarytype fr-firststrand --transcriptome-index gen10 -n 2  gen10
-# Wold:
--GTF -denovo discovery on
-
+# RSEM/bowtie2: making genome indexes
+cd /hive/groups/encode/encode3/encValData/female.hg19/
+mkdir rsemData; cd rsemData
+${EAP_TOOLS_DIR}/RSEM-1.2.12/rsem-prepare-reference --no-polyA \
+             --bowtie2 --bowtie2-path ${EAP_TOOLS_DIR}/bowtie2-2.1.0 \
+             --gtf ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+             ${EAP_REF_DIR}/hg19/female.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+             ${EAP_REF_DIR}/female.hg19/rsemData/WSC > WSC_command.log 2>&1 
+tail ERCC_command.log
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 1490815
+    numLines: 1490815
+    ebwtTotLen: 95412160
+    ebwtTotSz: 95412160
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 00:19:40
+${EAP_TOOLS_DIR}/RSEM-1.2.12/rsem-prepare-reference --no-polyA \
+             --bowtie2 --bowtie2-path ${EAP_TOOLS_DIR}/bowtie2-2.1.0 \
+             --gtf ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+             ${EAP_REF_DIR}/hg19/female.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+             ${EAP_REF_DIR}/female.hg19/rsemData/WSC > WSC_command.log 2>&1 
+tail WSC_command.log
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 1490815
+    numLines: 1490815
+    ebwtTotLen: 95412160
+    ebwtTotSz: 95412160
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 00:20:30
+cd /hive/groups/encode/encode3/encValData/male.hg19/
+mkdir rsemData; cd rsemData
+${EAP_TOOLS_DIR}/RSEM-1.2.12/rsem-prepare-reference --no-polyA \
+             --bowtie2 --bowtie2-path ${EAP_TOOLS_DIR}/bowtie2-2.1.0 \
+             --gtf ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+             ${EAP_REF_DIR}/hg19/male.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTP.fasta \
+             ${EAP_REF_DIR}/male.hg19/rsemData/ERCC > ERCC_command.log 2>&1 
+tail ERCC_command.log 
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 1495360
+    numLines: 1495360
+    ebwtTotLen: 95703040
+    ebwtTotSz: 95703040
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 00:21:16
+${EAP_TOOLS_DIR}/RSEM-1.2.12/rsem-prepare-reference --no-polyA \
+             --bowtie2 --bowtie2-path ${EAP_TOOLS_DIR}/bowtie2-2.1.0 \
+             --gtf ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+             ${EAP_REF_DIR}/hg19/male.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+             ${EAP_REF_DIR}/male.hg19/rsemData/WSC > WSC_command.log 2>&1 
+tail WSC_command.log
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 1495360
+    numLines: 1495360
+    ebwtTotLen: 95703040
+    ebwtTotSz: 95703040
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 00:20:27
+# ln -sf ${EAP_REF_DIR}/male.hg19/rsemData ${EAP_REF_DIR}/hg19/rsemData
+# Write rsemData/README
 
 
 ###############

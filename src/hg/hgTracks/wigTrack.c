@@ -1014,7 +1014,10 @@ for (x1 = 0; x1 < width; ++x1)
 		    }
 		else
 		    {
-		    int yPointGraph = scaleHeightToPixels(dataValue) - 1;
+		    double y0 = dataValue;
+		    if ((yOffsets != NULL) && (numTrack > 0))
+			y0 += yOffsets[(numTrack-1) *  width + x1];
+		    int yPointGraph = scaleHeightToPixels(y0) - 1;
 		    vLine(image, x, yPointGraph, 3, drawColor);
 		    }
 		}
