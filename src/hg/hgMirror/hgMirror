@@ -62,11 +62,14 @@ MYSQLDIR = "/var/lib/mysql"
 # can probably autodetect this, but hardcoded here
 APACHEUSER = "www-data"
 
+# optional file with rows to add to tableList
+TABLELISTADD = "/root/tableListAdd.hg19.tab"
+
 #DEBUG=True
 DEBUG=False
 
 # list of tables to exclude from track search
-REMOVESEARCH = ["wgEncodeGencodeBasicV19", "wgEncodeGencodeCompV17", "wgEncodeGencodeBasicV14", "wgEncodeGencodeBasicV17", "wgEncodeGencodeCompV14", "mgcFullMrna", "wgEncodeGencodeBasicV7", "orfeomeMrna", "wgEncodeGencodePseudoGeneV14", "wgEncodeGencodePseudoGeneV17", "wgEncodeGencodePseudoGeneV19", "wgEncodeGencodeCompV7", "knownGeneOld6", "geneReviews", "transMapAlnSplicedEst", "gbCdnaInfo", "oreganno", "vegaPseudoGene", "transMapAlnMRna", "ucscGenePfam", "qPcrPrimers", "transMapAlnUcscGenes", "transMapAlnRefSeq", "genscan"]
+REMOVESEARCH = ["wgEncodeGencodeBasicV19", "wgEncodeGencodeCompV17", "wgEncodeGencodeBasicV14", "wgEncodeGencodeBasicV17", "wgEncodeGencodeCompV14", "mgcFullMrna", "wgEncodeGencodeBasicV7", "orfeomeMrna", "wgEncodeGencodePseudoGeneV14", "wgEncodeGencodePseudoGeneV17", "wgEncodeGencodePseudoGeneV19", "wgEncodeGencodeCompV7", "knownGeneOld6", "geneReviews", "transMapAlnSplicedEst", "gbCdnaInfo", "oreganno", "vegaPseudoGene", "transMapAlnMRna", "ucscGenePfam", "qPcrPrimers", "transMapAlnUcscGenes", "transMapAlnRefSeq", "genscan", "bacEndPairs", "fosEndPairs"]
 
 # list of tracks to hide by default
 FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5"]
@@ -87,7 +90,8 @@ FORCEFIXED = ['trackVersion', 'tableList']
 
 # big file table base URL
 # points to a http directory with <db>/bigFiles.tab files that tell us which bigfile goes to which track
-BIGFILETABLEURL = "http://hgwdev.soe.ucsc.edu/~max/browserbox/"
+BIGFILETABLEURL = "http://hgwdev.soe.ucsc.edu/~max/browserbox/%s/bigFiles.tab.gz" # %s == db
+#BIGFILETABLEURL = "http://hgdownload.cse.ucsc.edu/goldenpath/%s/database/bigFiles.tab.gz"
 
 # cache of hg.conf dict
 hgConf = None
@@ -813,7 +817,7 @@ def linkTrackToGbdb(fnames, db, tableNames):
     debug("linking trackDb")
     # download a list of trackname -> bigFile name from hgwdev
     # cannot do this on the fly
-    lines = downloadCache(BIGFILETABLEURL+db+"/bigFiles.tab.gz", db+"_bigFiles.tab")
+    lines = downloadCache(BIGFILETABLEURL % db, db+"_bigFiles.tab")
     tableFiles = defaultdict(list)
     assignedFnames = []
     fileTables = dict()
@@ -1367,11 +1371,20 @@ def mustBeClean(str):
 def getCgiVar(args, name):
     return mustBeClean(args.getvalue(name, default=None))
 
-def ignoreSomeTracks(db, localSizes):
-    " remove some tracks from trackDb and others from hgFindSpec "
+def addTableList(db, conn):
+    " add a local file with rows to add to tableList for hg19 "
+    if db=="hg19" and isfile(TABLELISTADD):
+        query = 'LOAD DATA INFILE "%s" INTO TABLE tableList' % (TABLELISTADD)
+        cur = conn.cursor()
+        cur.execute(query)
+        cur.close()
+
+def postRsyncChanges(db, localSizes):
+    " remove some tracks from trackDb, others from hgFindSpec and add a few row to tableList"
     conn = sqlConnect(db, "local")
     hideSomeTracks(conn, localSizes)
     removeSomeTracksFromSearch(conn)
+    addTableList(db, conn)
     conn.close()
 
 def htmlMiddle(args):
@@ -1472,13 +1485,13 @@ def htmlMiddle(args):
             groupList, groupToTopTracks, \
             tableSizes, localSizes, gbdbSizes, tableToGbdbFiles, showSubtracks)
 
-        ignoreSomeTracks(db, localSizes)
+        postRsyncChanges(db, localSizes)
 
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
     if len(sys.argv)>1:
-        ignoreSomeTracks("hg19", {"trackDb":1})
+        postRsyncChanges("hg19", {"trackDb":1})
         sys.exit(0)
 
     print "Content-type: text/html"
