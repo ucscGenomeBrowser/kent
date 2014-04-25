@@ -366,7 +366,7 @@ if (wigCart->aggregateFunction == wiggleAggregateTransparent)
    }
 
 char *url = trackUrl(tg->track, chromName);
-mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, y, width, tg->height, tg->track, tg->track, NULL,
+mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->track, tg->track, NULL,
 	      url, TRUE, NULL);
 }
 
