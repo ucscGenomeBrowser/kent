@@ -665,11 +665,10 @@ double preDrawAutoScale(struct preDrawElement *preDraw, int preDrawZero,
     double maxY, double minY, enum wiggleAlwaysZeroEnum alwaysZero)
 /*	if autoScaling, scan preDraw array and determine limits */
 {
-double graphRange;
-double overallUpperLimit, overallLowerLimit, overallRange;
-
 if (autoScale == wiggleScaleAuto)
     {
+    double overallUpperLimit = wigEncodeStartingUpperLimit;
+    double overallLowerLimit = wigEncodeStartingLowerLimit;
     int i, lastI = preDrawZero+width;
 
     /* reset limits for auto scale */
@@ -683,7 +682,7 @@ if (autoScale == wiggleScaleAuto)
 		val =  preDraw[i].max;
 	    if (val > overallUpperLimit)
 		overallUpperLimit = val;
-	    val =  preDraw[i].smooth;
+
 	    if (windowingFunction ==  wiggleWindowingWhiskers)
 		val =  preDraw[i].min;
 	    if (val < overallLowerLimit)
@@ -697,7 +696,7 @@ if (autoScale == wiggleScaleAuto)
 	else if ( overallLowerLimit > 0)
 	    overallLowerLimit = 0.0;
 	}
-    overallRange = overallUpperLimit - overallLowerLimit;
+    double overallRange = overallUpperLimit - overallLowerLimit;
     if (overallRange == 0.0)
 	{
 	if (overallUpperLimit > 0.0)
@@ -727,7 +726,8 @@ else
     *graphUpperLimit = maxY;
     *graphLowerLimit = minY;
     }
-graphRange = *graphUpperLimit - *graphLowerLimit;
+
+double graphRange = *graphUpperLimit - *graphLowerLimit;
 *epsilon = graphRange / lineHeight;
 return(graphRange);
 }
