@@ -1381,6 +1381,8 @@ def addTableList(db, conn):
 
 def postRsyncChanges(db, localSizes):
     " remove some tracks from trackDb, others from hgFindSpec and add a few row to tableList"
+    if not mysqlDbLoaded:
+        return
     conn = sqlConnect(db, "local")
     hideSomeTracks(conn, localSizes)
     removeSomeTracksFromSearch(conn)
