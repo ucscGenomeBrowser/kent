@@ -186,27 +186,8 @@ for (ref = refList; ref != NULL; numTrack++,ref = ref->next)
     int prevOffset = (numTrack - 1) * pre->width;
     for (i=0; i<width; ++i, offset++,prevOffset++)
 	{
-	double val;
+	double val = p->smooth;
 
-	switch(windowingFunction)
-	{
-	    case wiggleWindowingMean:
-		val = p->sumData / p->count;
-		break;
-
-	    case wiggleWindowingWhiskers:
-	    case wiggleWindowingMax:
-		val = p->max;
-		break;
-	    case wiggleWindowingMin:
-		val = p->min;
-		break;
-	    default:
-		{
-		errAbort("bad windowing function (value: %d)\n", windowingFunction);
-		break;
-		}
-	}
 	if (p->count)
 	    {
 	    if (yOffsets)
@@ -311,43 +292,45 @@ struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, 
 /* Cope with autoScale and stacked bars - we do it here rather than in the child tracks, so that
  * all children can be on same scale. */
 double minVal, maxVal;
-if (wigCart->autoScale || (wigCart->aggregateFunction == wiggleAggregateStacked))
+
+/* Force load of all predraw arrays so can do calcs. Build up list, and then
+ * figure out max/min.  No worries about multiple loading, the loaders protect
+ * themselves. */
+struct slRef *refList = NULL;
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    /* Force load of all predraw arrays so can do calcs. Build up list, and then
-     * figure out max/min.  No worries about multiple loading, the loaders protect
-     * themselves. */
-    struct slRef *refList = NULL;
-    for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
-        {
-	if (isSubtrackVisible(subtrack))
-	    {
-	    struct preDrawContainer *pre = subtrack->loadPreDraw(subtrack, seqStart, seqEnd, width);
-	    refAdd(&refList, pre);
-	    }
-	}
-    slReverse(&refList);
-    minMaxVals(refList, &minVal, &maxVal, wigCart->windowingFunction,  wigCart->alwaysZero, wgo->yOffsets);
-    slFreeList(&refList);
-
-    if (wigCart->autoScale)
+    if (isSubtrackVisible(subtrack))
 	{
-	/* Cope with log transform if need be */
-	if (wigCart->transformFunc == wiggleTransformFuncLog)
-	     {
-	     minVal = wiggleLogish(minVal);
-	     maxVal = wiggleLogish(maxVal);
-	     }
-
-	/* Loop through again setting up the wigCarts of the children to have minY/maxY for
-	 * our limits and autoScale off. */
-	for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
-	    {
-	    struct wigCartOptions *wigCart = subtrack->extraUiData;
-	    wigCart->minY = minVal;
-	    wigCart->maxY = maxVal;
-	    wigCart->autoScale = wiggleScaleManual;
-	    }
+	struct preDrawContainer *pre = subtrack->loadPreDraw(subtrack, seqStart, seqEnd, width);
+	preDrawWindowFunction(pre->preDraw, pre->preDrawSize, wigCart->windowingFunction,
+		wigCart->transformFunc);
+	preDrawSmoothing(pre->preDraw, pre->preDrawSize, wigCart->smoothingWindow);
+	pre->smoothingDone = TRUE;
+	refAdd(&refList, pre);
 	}
+    }
+slReverse(&refList);
+minMaxVals(refList, &minVal, &maxVal, wigCart->windowingFunction,  wigCart->alwaysZero, wgo->yOffsets);
+slFreeList(&refList);
+
+if (!wigCart->autoScale)
+    {
+    minVal = wigCart->minY;
+    maxVal = wigCart->maxY;
+    }
+
+/* Loop through again setting up the wigCarts of the children to have minY/maxY for
+ * our limits and autoScale off. */
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    struct wigCartOptions *wigCart = subtrack->extraUiData;
+    wigCart->minY = minVal;
+    wigCart->maxY = maxVal;
+    wigCart->autoScale = wiggleScaleManual;
+    struct preDrawContainer *pre = subtrack->preDrawContainer;
+    pre->graphUpperLimit = maxVal;
+    pre->graphLowerLimit = minVal;
+    
     }
 
 int numTrack = 0;
