@@ -4652,6 +4652,12 @@ if (parentLevel)
         safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
         aggregateDropDown(option, aggregateVal);
         puts("</td></TR>");
+
+	if (sameString(aggregateVal, WIG_AGGREGATE_STACKED)  &&
+	    sameString(windowingFunction, "mean+whiskers"))
+	    {
+	    windowingFunction = "maximum";
+	    }
         }
     }
 

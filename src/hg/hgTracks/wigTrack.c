@@ -1653,14 +1653,10 @@ if (containerType != NULL && sameString(containerType, "multiWig"))
 
 wigCart->aggregateFunction = wigFetchAggregateFunctionWithCart(cart,tdb,tdb->track, (char **) NULL);
 
-/*
-char *aggregate = wigFetchAggregateValWithCart(cart, tdb);
-if (aggregate != NULL)
-    {
-    wigCart->overlay = wigIsOverlayTypeAggregate(aggregate);
-    wigCart->transparent = sameString(WIG_AGGREGATE_TRANSPARENT, aggregate);
-    }
-*/
+// can't do mean with whiskers in stacked mode
+if ((wigCart->aggregateFunction == wiggleAggregateStacked) &&
+    ( wigCart->windowingFunction == wiggleWindowingWhiskers))
+    wigCart->windowingFunction = wiggleWindowingMax;
 return wigCart;
 }
 
