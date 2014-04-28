@@ -4731,7 +4731,7 @@ else
     }
 
 // add a little javascript call to make sure we don't get whiskers with stacks
-puts("<script> $(function () { multiWigSetupOnChange('wgEncodeRegMarkH3k27ac'); }); </script>\n");
+printf("<script> $(function () { multiWigSetupOnChange('%s'); }); </script>\n", name);
 
 cfgEndBox(boxed);
 }
