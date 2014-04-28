@@ -29,3 +29,10 @@ The character code in css pulled from Stanford produces a list icon
   margin-top: 0;
 }
 
+/* problem with layout (nav bar overlaps content when window shrunk)
+  requires use of margin instead of padding. */
+
+#content {
+  margin-top: 75px;
+  padding-top: 0px;
+}

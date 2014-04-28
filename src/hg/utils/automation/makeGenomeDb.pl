@@ -1124,10 +1124,10 @@ This track shows the gaps in the $assemblyDate $em\$organism$noEm genome assembl
 <P>
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation.</A><BR>
+TARGET=_blank>assembly documentation</A>.<BR>
 NCBI also provides
 <A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
-TARGET="_blank">specific information about this assembly.</A>
+TARGET="_blank">specific information about this assembly</A>.
 </P>
 <P>
 The definition of the gaps in this assembly is from the
@@ -1226,10 +1226,10 @@ This track shows the sequences used in the $assemblyDate $em\$organism$noEm geno
 <P>
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation.</A><BR>
+TARGET=_blank>assembly documentation</A>.<BR>
 NCBI also provides
 <A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
-TARGET="_blank">specific information about this assembly.</A>
+TARGET="_blank">specific information about this assembly</A>.
 </P>
 <P>
 The definition of this assembly is from the
@@ -1248,7 +1248,7 @@ blocks.  The relative order and orientation of the contigs
 within a scaffold is always known; therefore, a line is drawn in the graphical
 display to bridge the blocks.</P>
 <P>
-Component types found in this track (with counts of that type in parenthesis):
+Component types found in this track (with counts of that type in parentheses):
 <UL>
 _EOF_
     ;

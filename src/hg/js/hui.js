@@ -1336,3 +1336,43 @@ $(document).ready(function()
     // Put navigation links in top corner
     navigationLinksSetup();
 });
+
+function selectLinkChanges($changed, $affected, mapping) {
+// When the $changed changes, examine the value of $affected to see if it
+// needs to be tweaked according to mapping, which is an object of objects
+// like this: { 'pickySetting' : { 'notOKValue': 'OKValue' } }
+// If $changed changes to 'pickySetting', and $affected is 'notOKValue',
+// then $affected is changed to 'OKValue'.  Any notOKValue for pickySetting
+// is disabled.  If $changed doesn't have a pickySetting, then all options
+// are enabled.
+    var $affectedOptions = $affected.children('option');
+    $changed.bind("change", function () {
+        var changedVal = $changed.val();
+        var subst = mapping[changedVal];
+        $affectedOptions.removeAttr('disabled');
+        if (subst) {
+            var affectedVal = $affected.val();
+            if (subst[affectedVal]) {
+                $affected.val(subst[affectedVal]);
+            }
+            for (var notOK in subst) {
+                var $option = $affectedOptions.filter(
+                    function() { return $(this).text() === notOK; }
+                    );
+                $option.attr('disabled','disabled');
+            }
+        }
+    });
+}
+
+function multiWigSetupOnChange(track) {
+    var $overlay = $('select[name="' + track + '.aggregate"]');
+    var $winFunc = $('select[name="' + track + '.windowingFunction"]');
+    if ($overlay && $winFunc) {
+        selectLinkChanges($overlay, $winFunc, {
+            'stacked': { 'mean+whiskers': 'mean' }
+        });
+    } else {
+        $("#message").text('$ cant find my selectors for ' + track + '!');
+    }
+}

@@ -19,6 +19,7 @@ errAbort(
 }
 
 char *userEmail = NULL; /* User's email handle. */
+boolean noPrevSubmission; /* No previous submission */
 
 boolean queryIntoTable(struct sqlConnection *conn, char *query, char *title, struct hash *wraps)
 /* Make query and show result in a html table.  Return FALSE (and make no output)
@@ -215,6 +216,13 @@ if (count != 0)
     for (i=0, el=list;  el != NULL; el = el->next, ++i)
         array[i] = el->name;
     }
+else /* No submission record from this user */
+    {
+    AllocArray(array, 1);
+    array[0] = userEmail;    
+    count = 1;
+    noPrevSubmission = TRUE;
+    }
 *retCount = count;
 *retArray = array;
 }
@@ -259,7 +267,7 @@ cgiMakeIntVar("maxSubCount", maxSubCount, 3);
 printf("</div>");
 
 printf("<div>");
-cgiMakeButton("Submit", "submit");
+cgiMakeButton("Submit", "update view");
 printf("</div>");
 
 /* Get id for user. */
@@ -278,6 +286,12 @@ sqlSafef(query, sizeof(query),
     "and (newFiles != 0 or metaChangeCount != 0 or errorMessage is not NULL)"
     " order by id desc limit %d", userId, maxSubCount);
 struct edwSubmit *submit, *submitList = edwSubmitLoadByQuery(conn, query);
+
+if (noPrevSubmission)
+    {
+    printf("<H4>There is no file submitted by %s</H4>\n",user);
+    return;
+    }
 
 for (submit = submitList; submit != NULL; submit = submit->next)
     {
@@ -367,6 +381,7 @@ void doMiddle()
 /* Write what goes between BODY and /BODY */
 {
 userEmail = edwGetEmailAndVerify();
+noPrevSubmission = FALSE;
 if (userEmail == NULL)
     printf("<H3>Welcome to the ENCODE data submission browser</H3>\n");
 else

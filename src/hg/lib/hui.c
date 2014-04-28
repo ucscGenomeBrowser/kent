@@ -4652,6 +4652,12 @@ if (parentLevel)
         safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
         aggregateDropDown(option, aggregateVal);
         puts("</td></TR>");
+
+	if (sameString(aggregateVal, WIG_AGGREGATE_STACKED)  &&
+	    sameString(windowingFunction, "mean+whiskers"))
+	    {
+	    windowingFunction = "maximum";
+	    }
         }
     }
 
@@ -4723,6 +4729,9 @@ else
     puts("</TD></TR></TABLE>");
     printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
     }
+
+// add a little javascript call to make sure we don't get whiskers with stacks
+printf("<script> $(function () { multiWigSetupOnChange('%s'); }); </script>\n", name);
 
 cfgEndBox(boxed);
 }

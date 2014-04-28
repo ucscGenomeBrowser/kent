@@ -2621,7 +2621,8 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             }
-        y = doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
+        doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
+        y += trackPlusLabelHeight(track, fontHeight);
         }
     }
 
