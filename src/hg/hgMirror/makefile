@@ -11,11 +11,11 @@ ifeq (${CGI_BIN_BETA},)
     CGI_BIN_BETA=${CGI_BIN}-beta
 endif
 
-clean::
-	
 my::
 	cp hgMirror ${CGI_BIN_USER}/
 beta::
 	cp hgMirror ${CGI_BIN_BETA}/
 alpha::
 	cp hgMirror ${CGI_BIN}/
+clean::
+	
