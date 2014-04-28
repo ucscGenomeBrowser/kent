@@ -1021,9 +1021,13 @@ for (x1 = 0; x1 < width; ++x1)
 		    vLine(image, x, yPointGraph, 3, drawColor);
 		    }
 		}
-	    if (dataValue > graphUpperLimit)
+	    double stackValue = dataValue;
+
+	    if ((yOffsets != NULL) && (numTrack > 0))
+		stackValue += yOffsets[(numTrack-1) *  width + x1];
+	    if (stackValue > graphUpperLimit)
 		vLine(image, x, yOff, 2, clipColor);
-	    else if (dataValue < graphLowerLimit)
+	    else if (stackValue < graphLowerLimit)
 		vLine(image, x, yOff + h - 1, 2, clipColor);
 #undef scaleHeightToPixels	/* No longer use this symbol */
             }   /*	vis == tvFull || vis == tvPack */
@@ -1649,14 +1653,10 @@ if (containerType != NULL && sameString(containerType, "multiWig"))
 
 wigCart->aggregateFunction = wigFetchAggregateFunctionWithCart(cart,tdb,tdb->track, (char **) NULL);
 
-/*
-char *aggregate = wigFetchAggregateValWithCart(cart, tdb);
-if (aggregate != NULL)
-    {
-    wigCart->overlay = wigIsOverlayTypeAggregate(aggregate);
-    wigCart->transparent = sameString(WIG_AGGREGATE_TRANSPARENT, aggregate);
-    }
-*/
+// can't do mean with whiskers in stacked mode
+if ((wigCart->aggregateFunction == wiggleAggregateStacked) &&
+    ( wigCart->windowingFunction == wiggleWindowingWhiskers))
+    wigCart->windowingFunction = wiggleWindowingMax;
 return wigCart;
 }
 
