@@ -151,15 +151,6 @@ for (tp = oldList; tp != NULL; tp = next)
 *pB = bList;
 }
 
-samfile_t *samMustOpen(char *fileName, char *mode, void *extraHeader)
-/* Open up samfile or die trying */
-{
-samfile_t *sf = samopen(fileName, mode, extraHeader);
-if (sf == NULL)
-    errnoAbort("Couldn't open %s.\n", fileName);
-return sf;
-}
-
 void subsampleMappedFromBam(char *inBam, long long inMappedCount, 
     char *sampleBam, long long outMappedCount)
 /* Create a sam file that is a robustly sampled subset of the mapping portion
@@ -176,10 +167,10 @@ memset(map+outSize, 0, inMappedCount - outSize);
 shuffleArrayOfChars(map, inMappedCount);
 
 /* Open up bam file */
-samfile_t *in = samMustOpen(inBam, "rb", NULL);
+samfile_t *in = bamMustOpenLocal(inBam, "rb", NULL);
 
 /* Open up sam output and write header */
-samfile_t *out = samMustOpen(sampleBam, "wb", in->header);
+samfile_t *out = bamMustOpenLocal(sampleBam, "wb", in->header);
 
 /* Loop through bam items, writing them to sam or not according to map. */
 int mapIx = 0;
@@ -210,7 +201,7 @@ samclose(out);
 void openSamReadHeader(char *fileName, samfile_t **retSf, bam_header_t **retHead)
 /* Open file and check header.  Abort with error message if a problem. */
 {
-samfile_t *sf = samMustOpen(fileName, "rb", NULL);
+samfile_t *sf = bamMustOpenLocal(fileName, "rb", NULL);
 bam_header_t *head = sf->header;
 if (head == NULL)
     errAbort("Aborting ... Bad BAM header in file: %s", fileName);
