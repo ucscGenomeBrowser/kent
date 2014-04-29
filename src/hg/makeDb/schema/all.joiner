@@ -4329,6 +4329,7 @@ tablesIgnored $gbd
     gc5Base
     gc5BaseBw
     gcPercent
+    genomicSuperDups
     genscanSubopt
     %gold
     grp
@@ -4627,7 +4628,6 @@ tablesIgnored $canFam
     polyASeqSitesKidneyRev
     polyASeqSitesTestisFwd
     polyASeqSitesTestisRev
-    genomicSuperDups
     mzH%
 
 tablesIgnored $anoGam
@@ -4743,7 +4743,6 @@ tablesIgnored $hg
     fox2ClipSeqDensityForwardStrand
     fox2ClipSeqDensityReverseStrand
     geneTests
-    genomicSuperDups
     grcIncidentDb
     haplotype
     hapMapRelease24CEURecombMap
