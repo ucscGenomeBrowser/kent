@@ -1,4 +1,9 @@
 /* edwBamFilter - Remove reads from a BAM file based on a number of criteria.. */
+
+/* version history: 
+ *    1 - initial release 
+ */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -11,7 +16,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwBamFilter - Remove reads from a BAM file based on a number of criteria.\n"
+  "edwBamFilter v1 - Remove reads from a BAM file based on a number of criteria.\n"
   "usage:\n"
   "   edwBamFilter in.bam out.bam\n"
   "options:\n"
