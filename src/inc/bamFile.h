@@ -47,6 +47,17 @@ void bamFileAndIndexMustExist(char *fileOrUrl);
 samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName);
 /* Return an open bam file as well as the filename of the bam. */
 
+samfile_t *bamMustOpenLocal(char *fileName, char *mode, void *extraHeader);
+/* Open up sam or bam file or die trying.  The mode parameter is 
+ *    "r" - open SAM to read
+ *    "rb" - open BAM to read
+ *    "w" - open SAM to write
+ *    "wb" - open BAM to write
+ * The extraHeader is generally NULL in the read case, and the write case
+ * contains a pointer to a bam_header_t with information about the header.
+ * The implementation is just a wrapper around samopen from the samtools library
+ * that aborts with error message if there's a problem with the open. */
+
 void bamFetchAlreadyOpen(samfile_t *samfile, bam_index_t *idx, char *bamFileName, 
 			 char *position, bam_fetch_f callbackFunc, void *callbackData);
 /* With the open bam file, return items the same way with the callbacks as with bamFetch() */
