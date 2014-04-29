@@ -13,7 +13,6 @@
 #include "eapDb.h"
 #include "eapLib.h"
 #include "eapGraph.h"
-#include "longList.h"
 
 char *submitUrl = "hgwdev-kent.cse.ucsc.edu/cgi-bin/edwScriptSubmit";
 char *statusUrl = "hgwdev-kent.cse.ucsc.edu/cgi-bin/edwScriptSubmitStatus";

@@ -19,10 +19,10 @@ struct eapGraph
    /* Random access containers for our graph */
    struct hash *runByExperiment;  // Multivalued has of runs keyed by experiment
    struct rbTree *runById;	  // Way to fetch runs given ID
-   struct longList *inputByFile;  // Inputs keyed by fileID
-   struct longList *inputByRun;   // Inputs keyed by runID
+   struct longToList *inputByFile;  // Inputs keyed by fileID
+   struct longToList *inputByRun;   // Inputs keyed by runID
    struct rbTree *outputByFile;   // Outputs keyed by fileId
-   struct longList *outputByRun;  // Outputs keyed by run
+   struct longToList *outputByRun;  // Outputs keyed by run
 
    /* Random access containers for files */
    struct rbTree *fileById;
