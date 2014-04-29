@@ -211,7 +211,8 @@ if (!isUpdateForm)
     puts("&nbsp;&nbsp;&nbsp;");
     puts("assembly\n");
     printAssemblyListHtml(database, onChangeDb);
-    if (! stringIn(database, hFreezeFromDb(database)))
+    char *description = hFreezeFromDb(database);
+    if ((description != NULL) && ! stringIn(database, description))
 	{
 	puts("&nbsp;&nbsp;&nbsp;");
 	printf("[%s]", trackHubSkipHubName(database));
@@ -714,8 +715,14 @@ if (assemblyMenu)
     puts("</TD></TR></TABLE><P>\n");
     }
 else
+    {
+    char *assemblyName = hFreezeDateOpt(database);
+    if (assemblyName == NULL)
+	assemblyName = "default";
+
     printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s &nbsp;&nbsp;&nbsp;[%s]\n",
-            organism, hFreezeDate(database), database);
+            organism, assemblyName, database);
+	}
 
 if (measureTiming && (loadTime > 0))
     printf("\n<BR>load time: %ld ms<BR>\n", loadTime);

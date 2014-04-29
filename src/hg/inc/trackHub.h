@@ -93,9 +93,11 @@ void trackHubGenomeFree(struct trackHubGenome **pGenome);
 void trackHubGenomeFreeList(struct trackHubGenome **pList);
 /* Free a list of dynamically allocated trackHubGenome's. */
 
-int trackHubCheck(char *hubUrl, struct dyString *errors, boolean checkTracks);
+int trackHubCheck(char *hubUrl, struct dyString *errors, 
+    boolean checkTracks, FILE *searchFp);
 /* trackHubCheck - Check a track data hub for integrity. Put errors in dyString.
  *      if checkTracks is TRUE, individual tracks are checked
+ *      if searchFp is non-null, then put search terms in there
  *      return 0 if hub has no errors, 1 otherwise */
 
 void trackHubPolishTrackNames(struct trackHub *hub, struct trackDb *tdbList);
@@ -158,5 +160,9 @@ struct dbDb *trackHubDbDbFromAssemblyDb(char *database);
 struct hgPositions;
 void trackHubFindPos(char *db, char *term, struct hgPositions *hgp);
 /* Look for term in track hubs.  Update hgp if found */
+
+void trackHubAddDescription(char *trackDbFile, struct trackDb *tdb);
+/* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
+ * and store in tdb->html. */
 #endif /* TRACKHUB_H */
 

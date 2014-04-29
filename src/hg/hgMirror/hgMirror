@@ -15,17 +15,15 @@
 # - when user clicks submit, start udr transfer and redirect to page that shows progress
 # - handles non-existing tables and some hgFixed tables
 
-# The script autodetects if udr is installed and usable by transferring a small file from UCSC
-# If this is not successful, it uses rsync
+# When run from the command line, this CGI hides some tracks and removes from tracks from
+# track search on hg19. This is usually run from a cronjob after trackDb updates.
 
 # This script requires the following setup
 # - mysqldb python module
-# - udr in /usr/local/bin
 # - "rsync" in path
 # - "at" in path
-# - the apache user must be allowed to execute udr as the mysql user and access to /gbdb
 #   To allow this on ubuntu, add these lines to /etc/sudoers:
-#www-data     ALL = (mysql:mysql) NOPASSWD: /usr/local/bin/udr,/bin/ls,/usr/bin/rsync,/bin/rm
+#www-data     ALL = (mysql:mysql) NOPASSWD: /bin/ls,/usr/bin/rsync,/bin/rm
 #www-data     ALL = (root:root) NOPASSWD: /bin/mkdir /gbdb
 #www-data     ALL = (root:root) NOPASSWD: /bin/chown www-data.www-data /gbdb</pre>
 # - the apache user has to be able to run 'at' jobs. 
@@ -64,8 +62,14 @@ MYSQLDIR = "/var/lib/mysql"
 # can probably autodetect this, but hardcoded here
 APACHEUSER = "www-data"
 
+# optional file with rows to add to tableList
+TABLELISTADD = "/root/tableListAdd.hg19.tab"
+
 #DEBUG=True
 DEBUG=False
+
+# list of tables to exclude from track search
+REMOVESEARCH = ["wgEncodeGencodeBasicV19", "wgEncodeGencodeCompV17", "wgEncodeGencodeBasicV14", "wgEncodeGencodeBasicV17", "wgEncodeGencodeCompV14", "mgcFullMrna", "wgEncodeGencodeBasicV7", "orfeomeMrna", "wgEncodeGencodePseudoGeneV14", "wgEncodeGencodePseudoGeneV17", "wgEncodeGencodePseudoGeneV19", "wgEncodeGencodeCompV7", "knownGeneOld6", "geneReviews", "transMapAlnSplicedEst", "gbCdnaInfo", "oreganno", "vegaPseudoGene", "transMapAlnMRna", "ucscGenePfam", "qPcrPrimers", "transMapAlnUcscGenes", "transMapAlnRefSeq", "genscan", "bacEndPairs", "fosEndPairs"]
 
 # list of tracks to hide by default
 FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5"]
@@ -86,10 +90,29 @@ FORCEFIXED = ['trackVersion', 'tableList']
 
 # big file table base URL
 # points to a http directory with <db>/bigFiles.tab files that tell us which bigfile goes to which track
-BIGFILETABLEURL = "http://hgwdev.soe.ucsc.edu/~max/browserbox/"
+BIGFILETABLEURL = "http://hgwdev.soe.ucsc.edu/~max/browserbox/%s/bigFiles.tab.gz" # %s == db
+#BIGFILETABLEURL = "http://hgdownload.cse.ucsc.edu/goldenpath/%s/database/bigFiles.tab.gz"
 
 # cache of hg.conf dict
 hgConf = None
+
+def parseConf(fname):
+    " parse a hg.conf style file, return as dict key -> value (all strings) "
+    conf = {}
+    for line in open(fname):
+        line = line.strip()
+        if line.startswith("#"):
+            continue
+        elif line.startswith("include "):
+            inclFname = line.split()[1]
+            if isfile(inclFname):
+                inclDict = parseConf(inclFname)
+                conf.update(inclDict)
+        elif "=" in line: # string search for "="
+            key, value = line.split("=")
+            conf[key] = value
+    return conf
+
 
 def parseHgConf():
     """ return hg.conf as dict key:value """
@@ -99,30 +122,20 @@ def parseHgConf():
 
     hgConf = dict() # python dict = hash table
 
-    for line in open("hg.conf"):
-        line = line.rstrip("\n").strip()
-        if line.startswith("#"):
-            continue
-        if "=" in line: # string search for "="
-            key, value = line.split("=")
-            hgConf[key] = value
+    confDir = dirname(__file__)
+    fname = join(confDir, "hg.conf")
+    hgConf = parseConf(fname)
 
     return hgConf
 
-oldConn = {}
-
 def sqlConnect(db, name):
-    """ connect to sql, reuse open connections """
-    if (db, name) in oldConn:
-        return oldConn[(db, name)]
-
+    """ connect to sql """
     if name=="public":
         host, user, passwd = "genome-mysql.cse.ucsc.edu", "genomep", "password"
     elif name=="local":
         cfg = parseHgConf()
         host, user, passwd = cfg["db.host"], cfg["db.user"], cfg["db.password"]
     conn = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)
-    oldConn[(db, name)] = conn
     return conn
 
 def debug(msg):
@@ -156,6 +169,8 @@ def loadGroups(db):
         groups = []
         for row in cur.fetchall():
             groups.append((row[0], row[1]))
+        cur.close()
+        conn.close()
     else:
         for row in downloadTable(db, "grp"):
             groups.append((row[0], row[1]))
@@ -686,6 +701,9 @@ def getCladeAssemblyDb(clade, org, db):
     for row in cur.fetchall():
         defaultDbs[row[0]] = row[1]
 
+    cur.close()
+    conn.close()
+
     if (db==None or db=="0"):
         if org not in defaultDbs:
             print "organism %s is not valid" % org
@@ -799,7 +817,7 @@ def linkTrackToGbdb(fnames, db, tableNames):
     debug("linking trackDb")
     # download a list of trackname -> bigFile name from hgwdev
     # cannot do this on the fly
-    lines = downloadCache(BIGFILETABLEURL+db+"/bigFiles.tab.gz", db+"_bigFiles.tab")
+    lines = downloadCache(BIGFILETABLEURL % db, db+"_bigFiles.tab")
     tableFiles = defaultdict(list)
     assignedFnames = []
     fileTables = dict()
@@ -1070,7 +1088,14 @@ def printLog(jobId):
         print '<i><a href="hgMirror?stopAllJobs=1">Cancel download now</a></i>'
         refreshPage("jobId=%d" % jobId, delay=4000, addNote=False)
 
-def hideSomeTracks(localTables):
+def removeSomeTracksFromSearch(conn):
+    cur = conn.cursor()
+    for table in REMOVESEARCH:
+        query = "DELETE FROM hgFindSpec WHERE searchTable='%s';" % table
+        cur.execute(query)
+    cur.close()
+
+def hideSomeTracks(conn, localTables):
     """
     hide some notoriously slow tracks by default
     """
@@ -1079,15 +1104,15 @@ def hideSomeTracks(localTables):
         return
 
     if "trackDb" not in localTables:
-	return
+        return
 
-    conn = sqlConnect("hg19", "local")
     cur = conn.cursor()
     hideList = ["'"+s+"'" for s in FORCEHIDE]
     hideStr = ", ".join(hideList)
     hideStr = "(%s)" % hideStr
     query = "UPDATE trackDb SET visibility=0 WHERE tableName in %s" % hideStr
     cur.execute(query)
+    cur.close()
 
 def getGbdbDir():
     " return local gbdb dir without trailing slash "
@@ -1346,6 +1371,24 @@ def mustBeClean(str):
 def getCgiVar(args, name):
     return mustBeClean(args.getvalue(name, default=None))
 
+def addTableList(db, conn):
+    " add a local file with rows to add to tableList for hg19 "
+    if db=="hg19" and isfile(TABLELISTADD):
+        query = 'LOAD DATA INFILE "%s" INTO TABLE tableList' % (TABLELISTADD)
+        cur = conn.cursor()
+        cur.execute(query)
+        cur.close()
+
+def postRsyncChanges(db, localSizes):
+    " remove some tracks from trackDb, others from hgFindSpec and add a few row to tableList"
+    if not mysqlDbLoaded:
+        return
+    conn = sqlConnect(db, "local")
+    hideSomeTracks(conn, localSizes)
+    removeSomeTracksFromSearch(conn)
+    addTableList(db, conn)
+    conn.close()
+
 def htmlMiddle(args):
     " print html middle part "
 
@@ -1444,18 +1487,24 @@ def htmlMiddle(args):
             groupList, groupToTopTracks, \
             tableSizes, localSizes, gbdbSizes, tableToGbdbFiles, showSubtracks)
 
-        hideSomeTracks(localSizes)
+        postRsyncChanges(db, localSizes)
 
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
     if len(sys.argv)>1:
-        hideSomeTracks({"trackDb":1})
+        postRsyncChanges("hg19", {"trackDb":1})
         sys.exit(0)
 
     print "Content-type: text/html"
     print
 
+    parseHgConf()
+    if hgConf==None or not hgConf.get("allowHgMirror", "0").lower() in ["1", "yes", "true"]:
+        print("hgMirror is not activated on this machine<br>")
+        print("Set allowHgMirror=1 in your cgi-bin/hg.conf file<br>")
+        sys.exit(0)
+        
     args = cgi.FieldStorage()
 
     if "debug" in args.keys():

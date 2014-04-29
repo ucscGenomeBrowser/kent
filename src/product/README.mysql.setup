@@ -42,8 +42,8 @@ and browser developers:
 3.  A MySQL user that has general write permissions to all
 	browser and genome databases to be used by developers
 
-The cgi-bin binaries obtain the first two MySQL identities from the text
-file: $WEBROOT/cgi-bin/hg.conf
+The cgi-bin binaries obtain the first two of these MySQL identities from
+the text file: $WEBROOT/cgi-bin/hg.conf
 
 Developers of the browser databases obtain their MySQL identities
 from a text file in their home directory: ~/.hg.conf

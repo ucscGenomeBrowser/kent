@@ -959,7 +959,17 @@ return ci->size;
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
-if (hDbIsActive(db) && cfgOptionBooleanDefault("allowNib", TRUE))
+if (cfgOptionBooleanDefault("forceTwoBit", FALSE) == TRUE)
+    {
+    char buf[HDB_MAX_PATH_STRING];
+    safef(buf, HDB_MAX_PATH_STRING, "/gbdb/%s/%s.2bit", db, db);
+    char *newPath = hReplaceGbdb(buf);
+    safecpy(retNibName, HDB_MAX_PATH_STRING, newPath);
+    freeMem(newPath);
+    return;
+    }
+
+if (hDbIsActive(db))
     {
     struct chromInfo *ci = mustGetChromInfo(db, chromName);
     safef(retNibName, HDB_MAX_PATH_STRING, "%s", ci->fileName);
@@ -1279,7 +1289,7 @@ char* path;
 
 // if no config option set or not a /gbdb filename, then just return
 // otherwise replace /gbdb/ with the new prefix and return it
-if (newGbdbLoc==NULL || !startsWith("/gbdb/", fileName))
+if ((newGbdbLoc==NULL) || (!startsWith("/gbdb/", fileName)))
    return cloneString(fileName);
 
 path = replaceChars(fileName, "/gbdb/", newGbdbLoc);
@@ -1299,6 +1309,9 @@ char *hReplaceGbdb(char* fileName)
 {
 if (fileName == NULL)
     return fileName;
+if (!startsWith("/gbdb/", fileName))
+    return cloneString(fileName);
+
 char *path = hReplaceGbdbLocal(fileName);
 if (fileExists(path))
     return path;

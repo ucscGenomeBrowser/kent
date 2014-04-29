@@ -631,6 +631,7 @@ struct cart *cartNew(char *userId, char *sessionId,
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include */
 {
+cgiApoptosisSetup();
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
@@ -1693,7 +1694,6 @@ void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName,
  * oldVars - those in cart that are overlayed by cgi-vars are
  * put in optional hash oldVars. */
 {
-cgiApoptosisSetup();
 struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
 setThemeFromCart(cart);
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);

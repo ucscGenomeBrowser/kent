@@ -1,0 +1,66 @@
+<H2>Description</H2>
+<P>
+This track shows regions detected as putative genomic duplications within the
+golden path. The following display conventions are used to distinguish
+levels of similarity:
+<UL>
+<LI>
+Light to dark gray: 90 - 98% similarity
+<LI>
+Light to dark yellow: 98 - 99% similarity
+<LI>
+Light to dark orange: greater than 99% similarity 
+<LI>
+Red: duplications of greater than 98% similarity that lack sufficient 
+Segmental Duplication Database evidence (most likely missed overlaps) 
+</UL>
+For a region to be included in the track, at least 2.5 Kb of the total 
+sequence (containing at least 500 bp of non-RepeatMasked sequence) had 
+to align and a sequence identity of at least 90% was required.</P>
+
+<H2>Methods</H2>
+<P>
+Segmental duplications play an important role in both genomic disease 
+and gene evolution.  This track displays an analysis of the global 
+organization of these long-range segments of identity in genomic sequence.
+</P>
+
+<P>Large recent duplications (&gt;= 1 kb and &gt;= 90% identity) were detected
+by identifying high-copy repeats, removing these repeats from the genomic 
+sequence ("fuguization") and searching all sequence for similarity.  The 
+repeats were then reinserted into the pairwise alignments, the ends of 
+alignments trimmed, and global alignments were generated.
+For a full description of the "fuguization" detection method, see Bailey 
+<em>et al.</em> (2001) in the References section below. This method has become 
+known as WGAC (whole-genome assembly comparison); for example, see Bailey 
+<em>et al.</em> (2002).
+
+<H2>Credits</H2>
+<P>
+These data were provided by 
+<A HREF="mailto:&#97;r&#97;&#106;&#97;&#64;&#117;&#119;.&#101;&#100;&#117;">Archana Raja</A>
+<!-- above address is araja at uw.edu -->
+</A> and
+<A HREF="mailto:&#101;&#101;e&#64;&#103;s.&#119;&#97;&#115;&#104;&#105;&#110;&#103;&#116;&#111;n.&#101;&#100;&#117;">Evan Eichler</A> 
+at the <A HREF="http://eichlerlab.gs.washington.edu/" 
+TARGET=_BLANK>University of Washington</A>. </P>
+
+<H2>References</H2>
+<P>
+Bailey JA, Gu Z, Clark RA, Reinert K, Samonte RV, Schwartz S, Adams MD, 
+Myers EW, Li PW, Eichler EE.
+<A HREF="http://www.sciencemag.org/content/297/5583/1003.abstract"
+TARGET=_BLANK>Recent segmental duplications in the human genome</A>.
+<em>Science</em>. 2002 Aug 9;297(5583):1003-7.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/12169732" target="_blank">12169732</a>
+</p>
+
+<P>
+Bailey JA, Yavor AM, Massa HF, Trask BJ, Eichler EE.
+<A HREF="http://genome.cshlp.org/content/11/6/1005.long"
+TARGET=_blank>Segmental duplications: organization and impact within the 
+current human genome project assembly</A>.
+<em>Genome Res</em>. 2001 Jun;11(6):1005-17.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/11381028" target="_blank">11381028</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC311093/" target="_blank">PMC311093</a>
+</p>

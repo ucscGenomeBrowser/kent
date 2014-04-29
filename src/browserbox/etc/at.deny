@@ -1,0 +1,25 @@
+alias
+backup
+bin
+daemon
+ftp
+games
+gnats
+guest
+irc
+lp
+mail
+man
+nobody
+operator
+proxy
+qmaild
+qmaill
+qmailp
+qmailq
+qmailr
+qmails
+sync
+sys
+#next line removed for hgMirror UCSC browser mirror script
+#www-data

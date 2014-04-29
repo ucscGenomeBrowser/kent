@@ -346,15 +346,15 @@ canPack On
 
     track wgEncodeRegTfbsClusteredV2
     release beta, public
-    shortLabel Txn Factor ChIP
-    longLabel Transcription Factor ChIP-seq from ENCODE
+    shortLabel Txn Fac ChIP V2
+    longLabel Transcription Factor ChIP-seq from ENCODE V2
     type factorSource
-    superTrack wgEncodeReg dense
+    superTrack wgEncodeReg hide
     sourceTable wgEncodeRegTfbsCells
     inputTrackTable wgEncodeRegTfbsClusteredInputs
     inputTableFieldDisplay cellType factor treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility dense
+    visibility hide
     useScore 1
     priority 1.73
     html wgEncodeRegTfbsClustered.release2
@@ -392,12 +392,12 @@ canPack On
     #maxWindowToDraw 10000000
     #dataVersion ENCODE Jul 2012 Freeze
 
-    # This is released track with TF Motif setting (under development)
+    # This is released track with new TF Motif feature
     track wgEncodeRegTfbsClusteredV3
-    shortLabel Txn Fac ChIP V4
-    longLabel Transcription Factor ChIP-seq V4 (161 factors) with Factorbook motifs from ENCODE
+    shortLabel Txn Factor ChIP
+    longLabel Transcription Factor ChIP-seq (161 factors) from ENCODE with Factorbook Motifs
     type factorSource
-    superTrack wgEncodeReg hide
+    superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCellsV3
     inputTrackTable wgEncodeRegTfbsClusteredInputsV3
     inputTableFieldDisplay cellType factor antibody treatment lab
@@ -603,7 +603,7 @@ canPack On
     type bed6FloatScore
     motifPwmTable factorbookMotifPwm
     #colorByStrand 22,182,33 17,136,25
-    superTrack wgEncodeReg dense
+    superTrack wgEncodeReg hide
     #color 0,128,0
     color 22,182,33
     priority 1.8

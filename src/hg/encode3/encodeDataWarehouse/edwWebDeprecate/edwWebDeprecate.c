@@ -75,7 +75,6 @@ if (okToShowAllowBox(conn, userEmail))
     printf("<BR>");
     }
 cgiMakeButton("submit", "submit");
-edwPrintLogOutButton();
 }
 
 static void localWarn(char *format, va_list args)

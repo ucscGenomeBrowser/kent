@@ -657,41 +657,18 @@ if (smoothingWindow > 0)
     }
 }
 
-double preDrawLimits(struct preDrawElement *preDraw, int preDrawZero,
-    int width, double *overallUpperLimit, double *overallLowerLimit)
-/*	scan preDraw array and determine graph limits */
-{
-int i;
-
-/*	Just in case they haven't been initialized before	*/
-*overallUpperLimit = wigEncodeStartingUpperLimit;
-*overallLowerLimit = wigEncodeStartingLowerLimit;
-for (i = preDrawZero; i < preDrawZero+width; ++i)
-    {
-    /*	count is non-zero meaning valid data exists here	*/
-    if (preDraw[i].count)
-	{
-	if (preDraw[i].max > *overallUpperLimit)
-	    *overallUpperLimit = preDraw[i].max;
-	if (preDraw[i].min < *overallLowerLimit)
-	    *overallLowerLimit = preDraw[i].min;
-	}
-    }
-return (overallUpperLimit - overallLowerLimit);
-}
-
 double preDrawAutoScale(struct preDrawElement *preDraw, int preDrawZero,
     int width, enum wiggleScaleOptEnum autoScale,
-    double *overallUpperLimit, double *overallLowerLimit,
+    enum wiggleWindowingEnum windowingFunction,
     double *graphUpperLimit, double *graphLowerLimit,
-    double *overallRange, double *epsilon, int lineHeight,
+    double *epsilon, int lineHeight,
     double maxY, double minY, enum wiggleAlwaysZeroEnum alwaysZero)
 /*	if autoScaling, scan preDraw array and determine limits */
 {
-double graphRange;
-
 if (autoScale == wiggleScaleAuto)
     {
+    double overallUpperLimit = wigEncodeStartingUpperLimit;
+    double overallLowerLimit = wigEncodeStartingLowerLimit;
     int i, lastI = preDrawZero+width;
 
     /* reset limits for auto scale */
@@ -700,31 +677,37 @@ if (autoScale == wiggleScaleAuto)
 	/*	count is non-zero meaning valid data exists here	*/
 	if (preDraw[i].count)
 	    {
-	    if (preDraw[i].smooth > *overallUpperLimit)
-		*overallUpperLimit = preDraw[i].smooth;
-	    if (preDraw[i].smooth < *overallLowerLimit)
-		*overallLowerLimit = preDraw[i].smooth;
+	    double val =  preDraw[i].smooth;
+	    if (windowingFunction ==  wiggleWindowingWhiskers)
+		val =  preDraw[i].max;
+	    if (val > overallUpperLimit)
+		overallUpperLimit = val;
+
+	    if (windowingFunction ==  wiggleWindowingWhiskers)
+		val =  preDraw[i].min;
+	    if (val < overallLowerLimit)
+		overallLowerLimit = val;
 	    }
 	}
     if (alwaysZero == wiggleAlwaysZeroOn)
 	{
-	if ( *overallUpperLimit < 0)
-	    *overallUpperLimit = 0.0;
-	else if ( *overallLowerLimit > 0)
-	    *overallLowerLimit = 0.0;
+	if ( overallUpperLimit < 0)
+	    overallUpperLimit = 0.0;
+	else if ( overallLowerLimit > 0)
+	    overallLowerLimit = 0.0;
 	}
-    *overallRange = *overallUpperLimit - *overallLowerLimit;
-    if (*overallRange == 0.0)
+    double overallRange = overallUpperLimit - overallLowerLimit;
+    if (overallRange == 0.0)
 	{
-	if (*overallUpperLimit > 0.0)
+	if (overallUpperLimit > 0.0)
             {
-            *graphUpperLimit = *overallUpperLimit;
+            *graphUpperLimit = overallUpperLimit;
             *graphLowerLimit = 0.0;
             } 
-        else if (*overallUpperLimit < 0.0) 
+        else if (overallUpperLimit < 0.0) 
             {
             *graphUpperLimit = 0.0;
-            *graphLowerLimit = *overallUpperLimit;
+            *graphLowerLimit = overallUpperLimit;
             } 
         else 
             {
@@ -734,8 +717,8 @@ if (autoScale == wiggleScaleAuto)
         } 
     else 
         {
-        *graphUpperLimit = *overallUpperLimit;
-        *graphLowerLimit = *overallLowerLimit;
+        *graphUpperLimit = overallUpperLimit;
+        *graphLowerLimit = overallLowerLimit;
         }
     } 
 else 
@@ -743,7 +726,8 @@ else
     *graphUpperLimit = maxY;
     *graphLowerLimit = minY;
     }
-graphRange = *graphUpperLimit - *graphLowerLimit;
+
+double graphRange = *graphUpperLimit - *graphLowerLimit;
 *epsilon = graphRange / lineHeight;
 return(graphRange);
 }
@@ -814,6 +798,19 @@ rgbColor.b = (2*rgbColor.b+255)/3;
 return MAKECOLOR_32(rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
+struct wigGraphOutput *wigGraphOutputStack(int xOff, int yOff,  int width, int numTracks, struct hvGfx *image)
+/* Get appropriate wigGraphOutput for non-transparent stacked rendering */
+{
+struct wigGraphOutput *wgo;
+AllocVar(wgo);
+wgo->image = image;
+wgo->vLine = vLineViaHvg;
+wgo->xOff = xOff;
+wgo->yOff = yOff;
+wgo->yOffsets = needHugeMem(width * numTracks * sizeof(double));
+return wgo;
+}
+
 struct wigGraphOutput *wigGraphOutputSolid(int xOff, int yOff, struct hvGfx *image)
 /* Get appropriate wigGraphOutput for non-transparent rendering */
 {
@@ -827,7 +824,7 @@ return wgo;
 }
 
 static void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
-    struct track *tg, void *image, WigVerticalLineVirtual vLine, int xOff, int yOff,
+    struct track *tg, void *image, WigVerticalLineVirtual vLine, int xOff, int yOff, double *yOffsets, int numTrack,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
     double epsilon, Color *colorArray, enum trackVisibility vis,
     struct wigCartOptions *wigCart)
@@ -971,6 +968,14 @@ for (x1 = 0; x1 < width; ++x1)
 		    {
 		    int y0 = graphUpperLimit * scaleFactor;
 		    int y1 = (graphUpperLimit - dataValue)*scaleFactor;
+		    if (yOffsets)
+			{
+			if (numTrack > 0)
+			    {
+			    y0 = (graphUpperLimit  - yOffsets[(numTrack-1) *  width + x1]) *scaleFactor;
+			    y1 = (graphUpperLimit - dataValue - yOffsets[(numTrack-1) *  width + x1])*scaleFactor;
+			    }
+			}
 
 		    int boxHeight = max(1,abs(y1 - y0));
 		    int boxTop = min(y1,y0);
@@ -1009,13 +1014,20 @@ for (x1 = 0; x1 < width; ++x1)
 		    }
 		else
 		    {
-		    int yPointGraph = scaleHeightToPixels(dataValue) - 1;
+		    double y0 = dataValue;
+		    if ((yOffsets != NULL) && (numTrack > 0))
+			y0 += yOffsets[(numTrack-1) *  width + x1];
+		    int yPointGraph = scaleHeightToPixels(y0) - 1;
 		    vLine(image, x, yPointGraph, 3, drawColor);
 		    }
 		}
-	    if (dataValue > graphUpperLimit)
+	    double stackValue = dataValue;
+
+	    if ((yOffsets != NULL) && (numTrack > 0))
+		stackValue += yOffsets[(numTrack-1) *  width + x1];
+	    if (stackValue > graphUpperLimit)
 		vLine(image, x, yOff, 2, clipColor);
-	    else if (dataValue < graphLowerLimit)
+	    else if (stackValue < graphLowerLimit)
 		vLine(image, x, yOff + h - 1, 2, clipColor);
 #undef scaleHeightToPixels	/* No longer use this symbol */
             }   /*	vis == tvFull || vis == tvPack */
@@ -1047,7 +1059,7 @@ struct preDrawElement *preDraw = preDrawContainer->preDraw;
 Color *colorArray = makeColorArray(preDraw, width, preDrawZero, wigCart, tg, hvg);
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
 graphPreDraw(preDraw, preDrawZero, width,
-	tg, wgo->image, wgo->vLine, wgo->xOff, wgo->yOff, 
+	tg, wgo->image, wgo->vLine, wgo->xOff, wgo->yOff, wgo->yOffsets, wgo->numTrack,
 	graphUpperLimit, graphLowerLimit, graphRange,
 	epsilon, colorArray, vis, wigCart);
 
@@ -1198,9 +1210,6 @@ enum wiggleYLineMarkEnum yLineOnOff;
 double yLineMark;
 
 /*	determined from data	*/
-double overallUpperLimit = wigEncodeStartingUpperLimit;
-double overallLowerLimit = wigEncodeStartingLowerLimit;
-double overallRange=0;		/*	determined from data	*/
 double graphUpperLimit=0;	/*	scaling choice will set these	*/
 double graphLowerLimit=0;	/*	scaling choice will set these	*/
 double graphRange=0;		/*	scaling choice will set these	*/
@@ -1216,29 +1225,21 @@ yLineMark = wigCart->yLineMark;
  */
 
 struct preDrawElement *preDraw = preContainer->preDraw;
-double thisOverallUpperLimit;
-double thisOverallLowerLimit;
-double thisGraphUpperLimit;
-double thisGraphLowerLimit;
 
-preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction,
-	wigCart->transformFunc);
-preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
-overallRange = preDrawLimits(preDraw, preDrawZero, width,
-    &thisOverallUpperLimit, &thisOverallLowerLimit);
-graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
-    wigCart->autoScale,
-    &thisOverallUpperLimit, &thisOverallLowerLimit,
-    &thisGraphUpperLimit, &thisGraphLowerLimit,
-    &overallRange, &epsilon, tg->lineHeight,
-    wigCart->maxY, wigCart->minY, wigCart->alwaysZero);
+if (preContainer->smoothingDone == FALSE)
+    {
+    preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction,
+	    wigCart->transformFunc);
+    preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
+    graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
+	wigCart->autoScale, wigCart->windowingFunction,
+	&preContainer->graphUpperLimit, &preContainer->graphLowerLimit,
+	&epsilon, tg->lineHeight,
+	wigCart->maxY, wigCart->minY, wigCart->alwaysZero);
+	}
 
-overallUpperLimit = thisOverallUpperLimit;
-overallLowerLimit = thisOverallLowerLimit;
-graphUpperLimit = thisGraphUpperLimit;
-graphLowerLimit = thisGraphLowerLimit;
-
-overallRange = overallUpperLimit - overallLowerLimit;
+graphUpperLimit = preContainer->graphUpperLimit;
+graphLowerLimit = preContainer->graphLowerLimit;
 
 /* if we're autoscaling and the range is 0 this implies that all values 
  * in the given range are the same.  We create a bottom of the scale  
@@ -1650,12 +1651,12 @@ char *containerType = trackDbSetting(tdb, "container");
 if (containerType != NULL && sameString(containerType, "multiWig"))
      wigCart->isMultiWig = TRUE;
 
-char *aggregate = wigFetchAggregateValWithCart(cart, tdb);
-if (aggregate != NULL)
-    {
-    wigCart->overlay = wigIsOverlayTypeAggregate(aggregate);
-    wigCart->transparent = sameString(WIG_AGGREGATE_TRANSPARENT, aggregate);
-    }
+wigCart->aggregateFunction = wigFetchAggregateFunctionWithCart(cart,tdb,tdb->track, (char **) NULL);
+
+// can't do mean with whiskers in stacked mode
+if ((wigCart->aggregateFunction == wiggleAggregateStacked) &&
+    ( wigCart->windowingFunction == wiggleWindowingWhiskers))
+    wigCart->windowingFunction = wiggleWindowingMax;
 return wigCart;
 }
 

@@ -18,6 +18,7 @@
 #include "obscure.h"
 #include "bamFile.h"
 #include "raToStruct.h"
+#include "web.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "edwFastqFileFromRa.h"
@@ -280,13 +281,21 @@ if (owner == NULL)
 return cloneString(owner->email);
 }
 
+int edwFindUserIdFromEmail(struct sqlConnection *conn, char *userEmail)
+/* Return true id of this user */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select id from edwUser where email = '%s'", userEmail);
+return sqlQuickNum(conn, query);
+}
+
 boolean edwUserIsAdmin(struct sqlConnection *conn, char *userEmail)
 /* Return true if the user is an admin */
 {
 char query[256];
 sqlSafef(query, sizeof(query), "select isAdmin from edwUser where email = '%s'", userEmail);
-int id = sqlQuickNum(conn, query);
-if (id == 1) return TRUE;
+int isAdmin = sqlQuickNum(conn, query);
+if (isAdmin == 1) return TRUE;
 return FALSE;
 }
 
@@ -941,18 +950,32 @@ printf("Content-Type:text/html\r\n");
 printf("\r\n\r\n");
 puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
 	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
-printf("<HTML><HEAD><TITLE>%s</TITLE>\n", title);
+printf("<HTML><HEAD><TITLE>%s</TITLE>\n", "ENCODE Data Warehouse");
 puts("<meta http-equiv='X-UA-Compatible' content='IE=Edge'>");
+
+// Use Stanford ENCODE3 CSS for common look
+puts("<link rel='stylesheet' href='/style/encode3.css' type='text/css'>");
+puts("<link rel='stylesheet' href='/style/encode3Ucsc.css' type='text/css'>");
+// external link icon (box with arrow) is from FontAwesome (fa-external-link)
+puts("<link href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' rel='stylesheet'>");
+
 puts("<script type='text/javascript' SRC='/js/jquery.js'></script>");
 puts("<script type='text/javascript' SRC='/js/jquery.cookie.js'></script>");
 puts("<script type='text/javascript' src='https://login.persona.org/include.js'></script>");
 puts("<script type='text/javascript' src='/js/edwPersona.js'></script>");
-puts("</HEAD><BODY>");
+puts("</HEAD>");
+
+/* layout with navigation bar */
+puts("<BODY>\n");
+
+edwWebNavBarStart();
 }
+
 
 void edwWebFooterWithPersona()
 /* Print out end tags and persona script stuff */
 {
+edwWebNavBarEnd();
 htmlEnd();
 }
 
@@ -1603,3 +1626,61 @@ for (i=0; i<ArraySize(places); ++i)
 	}
     }
 }
+
+/***/
+/* Shared functions for EDW web CGI's.
+   Mostly wrappers for javascript tweaks */
+
+void edwWebAutoRefresh(int msec)
+/* Refresh page after msec.  Use 0 to cancel autorefresh */
+{
+if (msec > 0)
+    printf("<script>var edwRefresh = setTimeout(function() { $('form').submit(); }, %d);</script>",
+            msec);
+else if (msec == 0)
+    puts("<script>clearTimeout(edwRefresh);</script>");
+
+// Negative msec ignored
+}
+
+
+void edwWebAutoRefreshProtectInput()
+/* Cancel autorefresh when input widgets are clicked.  Use on pages with user input 
+   widgets having state beyond a button press */
+{
+puts("<script>$('form').click(function() {clearTimeout(edwRefresh);});</script>");
+}
+
+
+/***/
+/* Navigation bar */
+
+void edwWebNavBarStart()
+/* Layout navigation bar */
+{
+puts("<div id='layout'>");
+puts("<div id='navbar' class='navbar navbar-fixed-top navbar-inverse'>");
+webIncludeFile("/inc/edwNavBar.html");
+puts("</div>");
+puts("<div id='content' class='container'><div>");
+}
+
+void edwWebNavBarEnd()
+/* Close layout after navigation bar */
+{
+puts("</div></div></div>");
+}
+
+void edwWebBrowseMenuItem(boolean on)
+/* Toggle visibility of 'Browse submissions' link on navigation menu */
+{
+printf("<script>$('#edw-browse').%s();</script>", on ? "show" : "hide");
+}
+
+void edwWebSubmitMenuItem(boolean on)
+/* Toggle visibility of 'Submit data' link on navigation menu */
+{
+printf("<script>$('#edw-submit').%s();</script>", on ? "show" : "hide");
+}
+
+

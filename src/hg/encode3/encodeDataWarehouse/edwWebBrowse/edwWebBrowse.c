@@ -19,6 +19,7 @@ errAbort(
 }
 
 char *userEmail = NULL; /* User's email handle. */
+boolean noPrevSubmission; /* No previous submission */
 
 boolean queryIntoTable(struct sqlConnection *conn, char *query, char *title, struct hash *wraps)
 /* Make query and show result in a html table.  Return FALSE (and make no output)
@@ -215,6 +216,13 @@ if (count != 0)
     for (i=0, el=list;  el != NULL; el = el->next, ++i)
         array[i] = el->name;
     }
+else /* No submission record from this user */
+    {
+    AllocArray(array, 1);
+    array[0] = userEmail;    
+    count = 1;
+    noPrevSubmission = TRUE;
+    }
 *retCount = count;
 *retArray = array;
 }
@@ -223,9 +231,14 @@ char *printUserControl(struct sqlConnection *conn, char *cgiVarName, char *defau
 /* Print out control and return currently selected user. */
 {
 char query[256];
-sqlSafef(query, sizeof(query), 
-    "select distinct email from edwUser,edwSubmit where edwUser.id = edwSubmit.userId order by email"
-    );
+
+if (edwUserIsAdmin(conn,userEmail))
+    sqlSafef(query, sizeof(query), 
+	"select distinct email from edwUser,edwSubmit where edwUser.id = edwSubmit.userId order by email");
+else 
+    sqlSafef(query, sizeof(query), 
+	"select distinct email from edwUser,edwSubmit where edwUser.id = edwSubmit.userId and email='%s' order by email", defaultUser);
+
 struct slName *userList = sqlQuickList(conn, query);
 int userCount = 0;
 char **userArray;
@@ -239,14 +252,23 @@ return curUser;
 void showRecentFiles(struct sqlConnection *conn)
 /* Show users files grouped by submission sorted with most recent first. */
 {
+printf("<div>");
 printf("Select whose files to browse: ");
 char *user = printUserControl(conn, "selectUser", userEmail);
+printf("</div>");
+
+printf("<div>");
 printf(" Maximum number of submissions to view: ");
 int maxSubCount = cgiOptionalInt("maxSubCount", 3);
 if (maxSubCount == 0)
      maxSubCount = 2;
+// override stanford fixed width input widget styling
 cgiMakeIntVar("maxSubCount", maxSubCount, 3);
+printf("</div>");
+
+printf("<div>");
 cgiMakeButton("Submit", "update view");
+printf("</div>");
 
 /* Get id for user. */
 char query[1024];
@@ -265,12 +287,18 @@ sqlSafef(query, sizeof(query),
     " order by id desc limit %d", userId, maxSubCount);
 struct edwSubmit *submit, *submitList = edwSubmitLoadByQuery(conn, query);
 
+if (noPrevSubmission)
+    {
+    printf("<H4>There is no file submitted by %s</H4>\n",user);
+    return;
+    }
+
 for (submit = submitList; submit != NULL; submit = submit->next)
     {
-    printf("<H2><A HREF=\"edwWebSubmit?url=%s&monitor=on\">%s</A> ", 
+    printf("<H3><A HREF=\"edwWebSubmit?url=%s&monitor=on\">%s</A> ", 
 	cgiEncode(submit->url), submit->url);
     printSubmitState(submit, conn);
-    printf("</H2>\n");
+    printf("</H3>\n");
 
     /* Print a little summary information about the submission overall before getting down to the
      * file by file info. */
@@ -352,18 +380,18 @@ for (submit = submitList; submit != NULL; submit = submit->next)
 void doMiddle()
 /* Write what goes between BODY and /BODY */
 {
-printf("<H1>ENCODE Data Warehouse Submission Browser</H1>\n");
 userEmail = edwGetEmailAndVerify();
+noPrevSubmission = FALSE;
+if (userEmail == NULL)
+    printf("<H3>Welcome to the ENCODE data submission browser</H3>\n");
+else
+    printf("<H3>Browse submissions</H3>\n");
+
 printf("<div id=\"userId\">");
 if (userEmail == NULL)
     {
-    printf("Please sign in.");
+    printf("Please sign in with Persona&nbsp;");
     printf("<INPUT TYPE=SUBMIT NAME=\"signIn\" VALUE=\"sign in\" id=\"signin\">");
-    }
-else
-    {
-    printf("Hello %s", userEmail);
-    edwPrintLogOutButton();
     }
 printf("</div>");
 
@@ -375,6 +403,13 @@ if (userEmail != NULL)
     sqlDisconnect(&conn);
     }
 printf("</FORM>\n");
+
+// auto-refresh page
+if (userEmail != NULL)
+    {
+    edwWebAutoRefresh(5000);
+    edwWebAutoRefreshProtectInput();
+    }
 }
 
 int main(int argc, char *argv[])
@@ -383,7 +418,9 @@ int main(int argc, char *argv[])
 boolean isFromWeb = cgiIsOnWeb();
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
-edwWebHeaderWithPersona("ENCODE Data Warehouse Submission Browser");
+edwWebHeaderWithPersona("");
+// TODO: find a better place for menu update
+edwWebBrowseMenuItem(FALSE);
 htmEmptyShell(doMiddle, NULL);
 edwWebFooterWithPersona();
 return 0;

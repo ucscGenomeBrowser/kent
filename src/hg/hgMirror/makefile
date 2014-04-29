@@ -17,3 +17,5 @@ beta::
 	cp hgMirror ${CGI_BIN_BETA}/
 alpha::
 	cp hgMirror ${CGI_BIN}/
+clean::
+	

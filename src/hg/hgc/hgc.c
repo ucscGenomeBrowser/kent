@@ -4021,12 +4021,6 @@ else if (wordCount > 0)
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
 #endif // USE_BAM
-#ifdef USE_TABIX
-    else if (sameString(type, "vcfTabix"))
-	doVcfTabixDetails(tdb, item);
-#endif // USE_TABIX
-    else if (sameString(type, "vcf"))
-	doVcfDetails(tdb, item);
     }
 if (imagePath)
     {
@@ -9926,7 +9920,7 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     // show GeneReviews  link(s)
-    if (sqlTableExists(conn, "geneReviewsRefGene"))
+    if (sqlTableExists(conn, "geneReviewsDetail"))
         {
         sqlSafef(query, sizeof(query),
           "select distinct r.name2 from refLink l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
@@ -25357,6 +25351,16 @@ else if (sameWord(table, "htcLrgCdna"))
 else if (isHubTrack(table) && startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
+    }
+#ifdef USE_TABIX
+else if (tdb != NULL && startsWithWord("vcfTabix", tdb->type))
+    {
+    doVcfTabixDetails(tdb, item);
+    }
+#endif // USE_TABIX
+else if (tdb != NULL && startsWithWord("vcf", tdb->type))
+    {
+    doVcfDetails(tdb, item);
     }
 
 else if (tdb != NULL)

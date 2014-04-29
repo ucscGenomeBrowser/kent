@@ -1630,6 +1630,7 @@ static char *aggregateLabels[] =
     "none",
     "transparent",
     "solid",
+    "stacked",
     };
 
 static char *aggregateValues[] =
@@ -1637,7 +1638,23 @@ static char *aggregateValues[] =
     WIG_AGGREGATE_NONE,
     WIG_AGGREGATE_TRANSPARENT,
     WIG_AGGREGATE_SOLID,
+    WIG_AGGREGATE_STACKED,
     };
+
+char *wiggleAggregateFunctionEnumToString(enum wiggleAggregateFunctionEnum x)
+/* Convert from enum to string representation. */
+{
+return aggregateValues[x];
+}
+
+enum wiggleAggregateFunctionEnum wiggleAggregateFunctionStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, aggregateValues);
+if (x < 0)
+   errAbort("hui::wiggleAggregateFunctionStringToEnum() - Unknown option %s", string);
+return x;
+}
 
 void aggregateDropDown(char *var, char *curVal)
 /* Make drop down menu for aggregate strategy */
@@ -4635,6 +4652,12 @@ if (parentLevel)
         safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
         aggregateDropDown(option, aggregateVal);
         puts("</td></TR>");
+
+	if (sameString(aggregateVal, WIG_AGGREGATE_STACKED)  &&
+	    sameString(windowingFunction, "mean+whiskers"))
+	    {
+	    windowingFunction = "maximum";
+	    }
         }
     }
 
@@ -4706,6 +4729,9 @@ else
     puts("</TD></TR></TABLE>");
     printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
     }
+
+// add a little javascript call to make sure we don't get whiskers with stacks
+printf("<script> $(function () { multiWigSetupOnChange('%s'); }); </script>\n", name);
 
 cfgEndBox(boxed);
 }
