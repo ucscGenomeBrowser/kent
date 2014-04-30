@@ -9,7 +9,7 @@ $HOME/bin/$MACHTYPE/hgNearTest hgwbeta.cse.ucsc.edu/cgi-bin/hgNear ./logs/hgNear
 # creates branch.hgNear.log - look for unusual errors
 
 #-- to check for errors: 
-set res = `cat ./logs/hgNear-v${BRANCHNN}.log | egrep "Total"`
+set res = "`cat ./logs/hgNear-v${BRANCHNN}.log | egrep 'Total'`"
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" == "0" ) then
  echo "error occurred:"
