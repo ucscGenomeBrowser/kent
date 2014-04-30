@@ -323,6 +323,9 @@ if (!wigCart->autoScale)
  * our limits and autoScale off. */
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
+    if (!isSubtrackVisible(subtrack))
+	continue;
+
     struct wigCartOptions *wigCart = subtrack->extraUiData;
     wigCart->minY = minVal;
     wigCart->maxY = maxVal;
