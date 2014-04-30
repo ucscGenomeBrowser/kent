@@ -1,0 +1,10 @@
+This directory contains data from:
+
+fromAnshul.tab - Received from Anshul Kundaje via https://docs.google.com/a/soe.ucsc.edu/spreadsheet/ccc?key=0Am6FxqAtrFDwdHdRcHNQUy03SjBoSVMxdUNyZV9Rdnc&usp=drive_web#gid=7
+This is the one used in presentation to AWG.  Here's an excerpt from Anshul's email 
+describing the data:
+    The Rescue Ratio (Np/Nt) (Column AK) and the self consistency ratio (N1/N2) (Column AL) have the replicate agreement scores. Scroll over the headers to see what these are. If these numbers are greater than 2, we flag replicates as having poor reproducibility. Further by tracking individual replicate quality scores (library complexity, number of reads, cross-correlation), I can figure out which replicate is the problematic one. I flag them accordingly in Columns E,F,G and H.
+
+someAnshul.tab - selected columns from fromAnshul.tab since whole thing doesn't parse well.
+
+fromPortal.tab - From ENCODE portal

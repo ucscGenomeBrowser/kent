@@ -11,7 +11,7 @@
 #include "encode3/encode3Valid.h"
 #include "gff.h"
 
-char *version = "1.8";
+char *version = "1.9";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
@@ -203,6 +203,8 @@ else
     safencat(genome, sizeof genome, fileName, slash - fileName);
     }
 if (
+    !sameString(genome, "dm3") &&
+    !sameString(genome, "ce10") &&
     !sameString(genome, "hg19") &&
     !sameString(genome, "hg20") &&
     !sameString(genome, "hg38") &&

@@ -124,6 +124,9 @@ xipMac	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanth
 # Amazon molly - Poecilia formosa
 poeFor	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Smegmamorpha; Atherinomorpha; Cyprinodontiformes; Cyprinodontoidei; Poeciliidae; Poeciliinae; Poecilia
 
+# guppy - Poecilia reticulata
+poeRet	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteoglossocephalai; Clupeocephala; Euteleosteomorpha; Neoteleostei; Eurypterygia; Ctenosquamata; Acanthomorphata; Euacanthomorphacea; Percomorphaceae; Ovalentaria; Atherinomorphae; Cyprinodontiformes; Cyprinodontoidei; Poeciliidae; Poeciliinae; Poecilia
+
 # tongue sole fish Cynoglossus semilaevis
 cynSem	 Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Pleuronectiformes; Soleoidei; Cynoglossidae; Cynoglossinae; Cynoglossus
 
@@ -151,6 +154,7 @@ fr	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomor
 
 # Spotted Gar - Lepisosteus oculatus
 lepOcu	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Semionotiformes; Lepisosteidae; Lepisosteus
+
 
 # spotted green pufferfish Tetraodon nigroviridis
 tetNig	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Tetraodon

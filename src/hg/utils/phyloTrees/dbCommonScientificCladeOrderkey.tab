@@ -6,6 +6,7 @@ panPan1	Bonobo	Pan paniscus	primate	primate	245
 gorGor3	Gorilla	Gorilla gorilla gorilla	primate	primate	250
 ponAbe2	Orangutan	Pongo pygmaeus abelii	primate	primate	310
 nomLeu3	Gibbon	Nomascus leucogenys	primate	primate	328
+chlSab2	Green monkey	Chlorocebus sabaeus	primate	primate	339
 chlSab1	Green monkey	Chlorocebus sabaeus	primate	primate	340
 rheMac3	Rhesus	Macaca mulatta	primate	primate	359
 macFas5	Crab-eating macaque	Macaca fascicularis	primate	primate	380
@@ -23,7 +24,7 @@ rn5	Rat	Rattus norvegicus	rodent	glires	1559
 octDeg1	Brush-tailed rat	Octodon degus	rodent	glires	1575
 dipOrd1	Kangaroo rat	Dipodomys ordii	rodent	glires	1580
 jacJac1	Lesser Egyptian jerboa	Jaculus jaculus	rodent	glires	1590
-perBai1	Prairie deer mouse	Peromyscus maniculatus bairdii	rodent	glires	1595
+perManBai1	Prairie deer mouse	Peromyscus maniculatus bairdii	rodent	glires	1595
 micOch1	Prairie vole	Microtus ochrogaster	rodent	glires	1600
 criGri1	Chinese hamster	Cricetulus griseus	rodent	glires	1610
 mesAur1	Golden hamster	Mesocricetus auratus	rodent	glires	1620
@@ -133,6 +134,7 @@ sebRub1	Flag rockfish	Sebastes rubrivinctus	vertebrate	percomorpha	4696
 gasAcu1	Stickleback	Gasterosteus aculeatus	vertebrate	percomorpha	4700
 oryLat2	Medaka	Oryzias latipes	vertebrate	percomorpha	4729
 xipMac1	Southern platyfish	Xiphophorus maculatus	vertebrate	percomorpha	4740
+poeRet1	guppy	Poecilia reticulata	vertebrate	percomorpha	4743
 poeFor1	Amazon molly	Poecilia formosa	vertebrate	percomorpha	4745
 gadMor1	Atlantic cod	Gadus morhua	vertebrate	neoteleostei	4750
 angJap1	Japanese eel	Anguilla japonica	vertebrate	teleostei	4770

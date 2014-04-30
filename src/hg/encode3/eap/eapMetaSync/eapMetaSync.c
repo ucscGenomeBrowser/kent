@@ -40,7 +40,7 @@ void syncOneRecord(struct sqlConnection *conn, char *type, struct jsonWrite *jso
 /* Construct dyString for URL */
 struct dyString *dyUrl = dyStringNew(0);
 dyStringPrintf(dyUrl, "http://%s:%s@%s/%s/", gUserId, gPassword, gHost, type);
-uglyf("%s\n", dyUrl->string);
+verbose(2, "%s\n", dyUrl->string);
 
 /* Construct dyString for http header */
 struct dyString *dyHeader = dyStringNew(0);
@@ -220,7 +220,7 @@ struct jsonWrite *jsonForStep(struct sqlConnection *conn, struct eapStep *step)
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw);
 
-/* Write name.  Maybe write title and description someday. */
+/* Write name and description. */
 jsonWriteString(jw, "name", step->name);
 jsonWriteString(jw, "description", step->description);
 

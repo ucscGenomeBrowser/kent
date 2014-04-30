@@ -1,0 +1,103 @@
+track cons13way
+compositeTrack on
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (13 species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+type bed 4
+group compGeno
+priority 103.29
+
+    track cons13wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons13way
+
+	track multiz13way
+        subTrack cons13wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments & Conservation (13 species)
+        subGroups view=align
+        noInherit on
+	irows on
+	summary multiz13waySummary
+	frames multiz13wayFrames
+	color 0, 10, 100
+	altColor 0,90,10
+	type wigMaf 0.0 1.0
+	speciesCodonDefault rn5
+	speciesGroups vertebrate
+	sGroup_vertebrate rn5 mm10 cavPor3 hg38 panTro4 rheMac3 bosTau7 canFam3 ailMel1 monDom5 galGal4 melGal1 danRer7 
+        itemFirstCharCase noChange
+	treeImage phylo/rn5_13way.png
+        priority 100
+
+    track cons13wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons13way
+
+        # PhyloP conservation
+        track phyloP13way
+        subTrack cons13wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel PhyloP Cons
+        longLabel Basewise Conservation by PhyloP (13 species)
+        noInherit on
+        configurable on
+        type wig -7.192 2.0
+        maxHeightPixels 100:50:11
+        viewLimits -0.5:0.5
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 40,40,120
+        altColor 120,40,40
+        priority 2
+
+    track cons13wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons13way
+
+        # phastCons conservation
+        track phastcons13way
+        subTrack cons13wayViewphastcons off
+        subGroups view=phastcons
+        shortLabel phastCons Cons
+        longLabel Conservation by PhastCons (13 species)
+        noInherit on
+        configurable on
+        type wig 0 1
+        viewLimits 0:1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 40,120,40
+        altColor 120,40,40
+        priority 12
+
+    track cons13wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons13way
+
+        # Conserved Elements (Most Conserved)
+        track phastConsElements13way
+        subTrack cons13wayViewelements off
+        subGroups view=elements
+        shortLabel Cons. Elem.
+        longLabel Conserved Elements (13 species)
+        noInherit on
+        type bed 5 .
+        color 170,100,50
+        exonArrows off
+        showTopScorers 200
+        priority 23
