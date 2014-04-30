@@ -2179,6 +2179,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 dyStringFree(&query);
 slReverse(&bedList);
+sqlFreeResult(&sr);
 hFreeConn(&conn);
 return(bedList);
 }
