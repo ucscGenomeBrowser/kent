@@ -9,10 +9,8 @@
 #include "jsHelper.h"
 #include "vcf.h"
 #include "vcfUi.h"
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def USE_TABIX && KNETFILE_HOOKS
 
 INLINE char *nameOrDefault(char *thisName, char *defaultVal)
 /* If thisName is not a placeholder value, return it; otherwise return default. */
@@ -124,19 +122,26 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 static struct vcfFile *vcfHopefullyOpenHeader(struct cart *cart, struct trackDb *tdb)
 /* Defend against network errors and return the vcfFile object with header data, or NULL. */
 {
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
-#endif//def USE_TABIX && KNETFILE_HOOKS
 char *db = cartString(cart, "db");
-struct sqlConnection *conn = hAllocConnTrack(db, tdb);
+char *table = tdb->table;
+char *dbTableName = trackDbSetting(tdb, "dbTableName");
+struct sqlConnection *conn;
+if (isCustomTrack(tdb->track) && isNotEmpty(dbTableName))
+    {
+    conn =  hAllocConn(CUSTOM_TRASH);
+    table = dbTableName;
+    }
+else
+    conn = hAllocConnTrack(db, tdb);
 char *fileOrUrl = NULL;
 char *chrom = cartOptionalString(cart, "c");
 if (chrom != NULL)
-    fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, chrom);
+    fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, chrom);
 if (fileOrUrl == NULL)
-    fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, hDefaultChrom(db));
+    fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, hDefaultChrom(db));
 hFreeConn(&conn);
 if (fileOrUrl == NULL)
     return NULL;
@@ -146,7 +151,10 @@ struct vcfFile *vcff = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, vcfMaxErr, -1);
+    if (startsWithWord("vcfTabix", tdb->type))
+	vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, vcfMaxErr, -1);
+    else
+	vcff = vcfFileMayOpen(fileOrUrl, NULL, 0, 0, vcfMaxErr, -1, FALSE);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -316,9 +324,12 @@ if (vcff != NULL)
 	     "Local haplotype blocks can often be identified using this display.</P>");
 	vcfCfgHapCluster(cart, tdb, vcff, name, parentLevel);
 	}
-    puts("<H3>Filters</H3>");
-    vcfCfgMinQual(cart, tdb, vcff, name, parentLevel);
-    vcfCfgFilterColumn(cart, tdb, vcff, name, parentLevel);
+    if (differentString(tdb->track,"evsEsp6500"))
+        {
+        puts("<H3>Filters</H3>");
+        vcfCfgMinQual(cart, tdb, vcff, name, parentLevel);
+        vcfCfgFilterColumn(cart, tdb, vcff, name, parentLevel);
+        }
     vcfCfgMinAlleleFreq(cart, tdb, vcff, name, parentLevel);
     }
 else

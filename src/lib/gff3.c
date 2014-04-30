@@ -196,7 +196,7 @@ static char convertEscape(struct gff3Ann *g3a, char *esc, char *src)
 /* convert character at esc, which should start with a `%' and be a string
  * in the form `%09' */
 {
-if (!(isxdigit(esc[1]) && isxdigit(esc[1])))
+if (!(isxdigit(esc[1]) && isxdigit(esc[2])))
     raiseInvalidEscape(g3a, src);
 char num[3], *end;
 strncpy(num, esc+1, 2);
@@ -343,7 +343,10 @@ static boolean checkAttrTag(struct gff3Ann *g3a, char *tag)
 char *tc = tag;
 boolean isOk = isalpha(*tc);
 for (tc++; isOk && (*tc != '\0'); tc++)
-    isOk = (*tc == '_') || isalnum(*tc);
+    {
+    if (!((*tc == '_') || isalnum(*tc)))
+        isOk = FALSE;
+    }
 if (!isOk)
     gff3AnnErr(g3a, "invalid attribute tag, must start with an alphabetic character and be composed of alphanumeric or underscore characters: %s", tag);
 return isOk;
@@ -482,6 +485,7 @@ g3a->gap = attr->vals->name;
 static void parseDerivesFromAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Derives_from attribute */
 {
+checkSingleValAttr(g3a, attr);
 g3a->derivesFromId = attr->vals->name;
 }
 

@@ -32,9 +32,7 @@
 #include "hgConfig.h"
 #include "udc.h"
 #include "chromInfo.h"
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 void usage()
 /* Explain usage and exit. */
@@ -433,6 +431,18 @@ if (range[0] != 0)
     {
     struct region r;
     isSingle = searchPosition(range, &r);
+    if (!isSingle)
+	{
+	// We will call doMainPage after this, so push web start handlers;
+	// hgFind code pops the handlers that it pushes, but after doMainPage
+	// we'll close the page and pop again, so we need to push here.
+	webPushErrHandlersCartDb(cart, database);
+	// In case user manually edits the browser location as described in #13009,
+	// revert the position.  If they instead choose from the list as we expect,
+	// that will set the position to their choice.
+	char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
+	cartSetString(cart, "position", lastPosition);
+	}
     }
 else
     {
@@ -622,7 +632,7 @@ if (startsWithWord("bigBed", tdb->type))
 else if (startsWithWord("bam", tdb->type))
     hti = bamToHti(tdb->table);
 else if (startsWithWord("vcfTabix", tdb->type))
-    hti = vcfToHti(tdb->table);
+    hti = vcfToHti(tdb->table, TRUE);
 else
     {
     AllocVar(hti);
@@ -637,6 +647,7 @@ struct hTableInfo *maybeGetHti(char *db, char *table, struct sqlConnection *conn
 /* Return primary table info, but don't abort if table not there. Conn should be open to db. */
 {
 struct hTableInfo *hti = NULL;
+boolean isTabix = FALSE;
 
 if (isHubTrack(table))
     {
@@ -647,8 +658,11 @@ else if (isBigBed(database, table, curTrack, ctLookupName))
     hti = bigBedToHti(table, conn);
 else if (isBamTable(table))
     hti = bamToHti(table);
-else if (isVcfTable(table))
-    hti = vcfToHti(table);
+else if (isVcfTable(table, &isTabix))
+    {
+    boolean isTabix = trackIsType(database, table, curTrack, "vcfTabix", ctLookupName);
+    hti = vcfToHti(table, isTabix);
+    }
 else if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
@@ -1392,12 +1406,13 @@ hashFree(&idHash);
 void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
+boolean isTabix = FALSE;
 if (isBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
 else if (isBamTable(table))
     bamTabOut(db, table, conn, fields, f);
-else if (isVcfTable(table))
-    vcfTabOut(db, table, conn, fields, f);
+else if (isVcfTable(table, &isTabix))
+    vcfTabOut(db, table, conn, fields, f, isTabix);
 else if (isCustomTrack(table))
     {
     doTabOutCustomTracks(db, table, conn, fields, f);
@@ -1423,7 +1438,7 @@ else if (isHalTable(table))
     fieldList = getBedFields(6);
 else if (isBamTable(table))
     fieldList = bamGetFields(table);
-else if (isVcfTable(table))
+else if (isVcfTable(table, NULL))
     fieldList = vcfGetFields(table);
 else if (isCustomTrack(table))
     {
@@ -1980,9 +1995,7 @@ freezeName = hFreezeFromDb(database);
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 knetUdcInstall();
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 /* Init track and group lists and figure out what page to put up. */
 initGroupsTracksTables();

@@ -7,7 +7,24 @@
 #include "htmshell.h"
 #include "udc.h"
 
-#ifndef KNETFILE_HOOKS
+#ifdef KNETFILE_HOOKS
+// If KNETFILE_HOOKS is used (as recommended!), then we can simply call bam_index_load
+// without worrying about the samtools lib creating local cache files in cgi-bin:
+
+static bam_index_t *bamOpenIdx(char *fileOrUrl)
+/* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
+ * otherwise return NULL. */
+{
+bam_index_t *idx = bam_index_load(fileOrUrl);
+return idx;
+}
+
+#else// no KNETFILE_HOOKS
+// Oh well.  The unmodified samtools lib downloads .bai files into the current
+// working directory, which is cgi-bin -- not good.  So we need to temporarily
+// change to a trash directory, let samtools download there, then pop back to
+// cgi-bin.
+
 static char *getSamDir()
 /* Return the name of a trash dir for samtools to run in (it creates files in current dir)
  * and make sure the directory exists. */
@@ -23,13 +40,11 @@ if (samDir == NULL)
     }
 return samDir;
 }
-#endif//ndef KNETFILE_HOOKS
 
-static bam_index_t *bamOpenIdx(char *bamFileName)
-/* If bamFileName has a valid accompanying .bai file, parse and return the index;
+static bam_index_t *bamOpenIdx(char *fileOrUrl)
+/* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
  * otherwise return NULL. */
 {
-#ifndef KNETFILE_HOOKS
 // When file is an URL, this caches the index file in addition to validating:
 // Since samtools's url-handling code saves the .bai file to the current directory,
 // chdir to a trash directory before calling bam_index_load, then chdir back.
@@ -38,14 +53,13 @@ char *samDir = getSamDir();
 boolean usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
 if (usingUrl)
     setCurrentDir(samDir);
-#endif//ndef KNETFILE_HOOKS
-bam_index_t *idx = bam_index_load(bamFileName);
-#ifndef KNETFILE_HOOKS
+bam_index_t *idx = bam_index_load(fileOrUrl);
 if (usingUrl)
     setCurrentDir(runDir);
-#endif//ndef KNETFILE_HOOKS
 return idx;
 }
+
+#endif//ndef KNETFILE_HOOKS
 
 static void bamCloseIdx(bam_index_t **pIdx)
 /* Free unless already NULL. */

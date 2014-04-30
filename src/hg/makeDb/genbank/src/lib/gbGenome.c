@@ -85,6 +85,7 @@ static char *bosTauNames[] = {"Bos taurus", NULL};
 static char *xenTroNames[] = {"Xenopus tropicalis", 
                               "Xenopus (Silurana) tropicalis", NULL};
 static char *anoCarNames[] = {"Anolis carolinensis", NULL};
+static char *poeRetNames[] = {"Poecilia reticulata", NULL};
 static char *gasAcuNames[] = {"Gasterosteus aculeatus", NULL};
 static char *oryLatNames[] = {"Oryzias latipes", NULL};
 static char *chiLanNames[] = {"Chinchilla lanigera", NULL};
@@ -127,6 +128,9 @@ static char *speTriNames[] = {"Spermophilus tridecemlineatus", "Ictidomys tridec
 static char *tarSyrNames[] = {"Tarsius syrichta", NULL};
 static char *tupBelNames[] = {"Tupaia belangeri", NULL};
 static char *vicPacNames[] = {"Vicugna pacos", NULL};
+static char *balAcuNames[] = {"Balaenoptera acutorostrata", "Balaenoptera acutorostrata scammoni", "Balaenoptera borealis", "Balaenoptera brydei", "Balaenoptera edeni", "Balaenoptera omurai", "Balaenoptera physalus", NULL};
+static char *calMilNames[] = {"Callorhinchus milii", NULL};
+static char *criGriNames[] = {"Cricetulus griseus", NULL};
 
 static char *endNames[] = {NULL};
 
@@ -193,6 +197,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"bosTau", bosTauNames},
     {"xenTro", xenTroNames},
     {"anoCar", anoCarNames},
+    {"poeRet", poeRetNames},
     {"gasAcu", gasAcuNames},
     {"oryLat", oryLatNames},
     {"chiLan", chiLanNames},
@@ -231,6 +236,9 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"tarSyr", tarSyrNames},
     {"tupBel", tupBelNames},
     {"vicPac", vicPacNames},
+    {"balAcu", balAcuNames},
+    {"calMil", calMilNames},
+    {"criGri", criGriNames},
     {"CHM", hgNames},
     {"braNey", hgNames},
     {NULL, endNames}

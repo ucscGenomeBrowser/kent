@@ -47,7 +47,6 @@ void sendParamsToGalaxy(char *doParam, char *paramVal)
 /* intermediate page for formats printed directly from top form */
 {
 char *shortLabel = curTable;
-char hgsid[64];
 char *output = cartString(cart, hgtaOutputType);
 
 if (curTrack != NULL)
@@ -76,8 +75,7 @@ startGalaxyForm();
 /* send the hgta_do parameter that won't be in the cart */
 cgiMakeHiddenVar(doParam, paramVal);
 /* need to send sessionId */
-safef(hgsid, sizeof(hgsid), "%u", cartSessionId(cart));
-cgiMakeHiddenVar(cartSessionVarName(cart), hgsid);
+cgiMakeHiddenVar(cartSessionVarName(cart), cartSessionId(cart));
 printGalaxySubmitButtons();
 htmlClose();
 }
@@ -86,7 +84,7 @@ void startGalaxyForm ()
 /* start form to send parameters to Galaxy, also send required params */
 {
 char selfUrl[256];
-int hguid = cartUserId(cart);
+char *hguid = cartUserId(cart);
 
 hPrintf("<FORM ACTION=\"%s\" METHOD=POST>\n", getGalaxyUrl());
 /* copy cart parameters into hidden fields to send to Galaxy */
@@ -101,11 +99,9 @@ safef(selfUrl, sizeof(selfUrl), "http://%s%s", cgiServerNamePort(), cgiScriptNam
 cgiMakeHiddenVar("URL", selfUrl);
 hPrintf("\n");
 /* forward user parameters */
-if (hguid > 0)
+if (hguid)
     {
-    char id[25];
-    safef(id, sizeof(id), "%u", hguid);
-    cgiMakeHiddenVar("hguid", id);
+    cgiMakeHiddenVar("hguid", hguid);
     hPrintf("\n");
     }
 /* send database and organism and table for Galaxy's info */

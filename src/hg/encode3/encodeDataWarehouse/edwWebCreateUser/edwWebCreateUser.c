@@ -36,18 +36,14 @@ else if (cgiVarExists("newUser"))
     printf("Note %s will need to create a Persona account as well if they don't have one. ", 
 	newUser);
     printf("They will be led through the process when they sign in.<BR>");
-    printf("<INPUT TYPE=BUTTON NAME=\"signOut\" VALUE=\"sign out %s\" id=\"signout\">", 
-	oldUserEmail);
     printf(" ");
     cgiMakeButton("submit", "Add another user");
-    edwPrintLogOutButton();
     }
 else
     {
     struct sqlConnection *conn = sqlConnect(edwDatabase);
     struct edwUser *user = edwUserFromEmail(conn, oldUserEmail);
-    edwPrintLogOutButton();
-    if (user != NULL)
+    if (user != NULL && edwUserIsAdmin(conn, oldUserEmail)) 
 	{
 	printf("%s is authorized to create a new user<BR>\n", oldUserEmail);
 	printf("Email of new user:\n");

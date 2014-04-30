@@ -11,23 +11,30 @@ static char *host = NULL;
 static char *user = NULL;
 static char *password = NULL;
 static char *toProf = NULL;
-static char *bigFiles = NULL;
+static char *toHost = NULL;
+static char *toUser = NULL;
+static char *toPassword = NULL;
+static char *hgcentral = NULL;
+boolean doBigFiles = FALSE;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "makeTableList - create/recreate tableList tables (cache of SHOW TABLES)\n"
+  "makeTableList - create/recreate tableList tables (cache of SHOW TABLES and DESCRIBE)\n"
   "usage:\n"
   "   makeTableList [assemblies]\n"
   "options:\n"
   "   -host               show tables: mysql host\n"
-  "   -password           show tables: mysql password\n"
   "   -user               show tables: mysql user\n"
-  "   -toProf             optional: mysql profile to write table list to\n"
-  "   -all                recreate tableList for all assemblies\n"
-  "   -bigFiles <fname>   create file with tuples (db, track, name of bigfile)\n"
-  );
+  "   -password           show tables: mysql password\n"
+  "   -toProf             optional: mysql profile to write table list to (target server)\n"
+  "   -toHost             alternative to toProf: mysql target host\n"
+  "   -toUser             alternative to toProf: mysql target user\n"
+  "   -toPassword         alternative to toProf: mysql target pwd\n"
+  "   -hgcentral          specify an alternative hgcentral db name when using -all\n"
+  "   -all                recreate tableList for all active assemblies in hg.conf's hgcentral\n"
+  "   -bigFiles           create table with tuples (track, name of bigfile)\n");
 }
 
 static struct optionSpec options[] = {
@@ -36,7 +43,11 @@ static struct optionSpec options[] = {
     {"password", OPTION_STRING},
     {"user", OPTION_STRING},
     {"toProf", OPTION_STRING},
-    {"bigFiles", OPTION_STRING},
+    {"toHost", OPTION_STRING},
+    {"toPassword", OPTION_STRING},
+    {"toUser", OPTION_STRING},
+    {"hgcentral", OPTION_STRING},
+    {"bigFiles", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -50,18 +61,22 @@ char *tmpDir = getenv("TMPDIR");
 if(tmpDir == NULL)
     tmpDir = "/tmp";
 char *tmp = cloneString(rTempName(tmpDir, "makeTableList", ".txt"));
+
+char *bigFileTmp = NULL;
+FILE *bigFd = NULL;
+if (doBigFiles)
+    {
+    bigFileTmp = cloneString(rTempName(tmpDir, "bigFiles", ".txt"));
+    bigFd = mustOpen(bigFileTmp, "w");
+    }
+
 struct sqlResult *sr;
 char **row;
 char buf[1024];
 char tmpTable[512];
 FILE *fd = mustOpen(tmp, "w");
-FILE *bigFd = NULL;
-if (bigFiles)
-    bigFd = mustOpen(bigFiles, "w");
-
 // iterate over all tables and execute "describe" for them
 // write to tab sep file, prefixed with table name
-printf("running DESCRIBE on all tables. Depending on the latency to the mysql server, this can take a while...\n");
 struct slName *allTables =  sqlListTables(conn);
 struct slName *tbl;
 char *sep;
@@ -93,28 +108,22 @@ for (tbl = allTables;  tbl != NULL;  tbl = tbl->next)
         }
     sqlFreeResult(&sr);
 
-    // write fileName column to big file index
-    if (bigFd!=NULL && hasFileCol && numRows==1)
+    // only output bigfile name if we have found a "fileName" column and the table has 1 row
+    if (bigFd && hasFileCol && numRows==1)
         {
-        //char *db = sqlGetDatabase(conn);
         sqlSafef(query, sizeof(query), "select * from %s", tbl->name);
         sr = sqlGetResult(conn, query);
         while ((row = sqlNextRow(sr)) != NULL)
             fprintf(bigFd,"%s\t%s\n",tbl->name, row[0]);
+        sqlFreeResult(&sr);
         }
     }
 
 carefulClose(&fd);
-if (bigFd)
-    {
-    printf("big file names written to %s\n", bigFiles);
-    carefulClose(&bigFd);
-    }
-//printf("table data written to %s\n", tmp);
+carefulClose(&bigFd);
 
 if (targetConn!=NULL)
     {
-    sqlDisconnect(&conn);
     conn = targetConn;
     verbose(2, "using target connection \n");
     }
@@ -143,6 +152,19 @@ else
     sqlUpdate(conn, buf);
     }
 unlink(tmp);
+
+if (bigFileTmp)
+    {
+    // load bigFiles directly into a table
+    sqlDropTable(conn, "bigFiles");
+    sqlSafef(buf, sizeof(buf), "CREATE TABLE bigFiles (tableName varchar(255) not null, fileName varchar(255), "
+        "index tableIdx(tableName))");
+    sqlUpdate(conn, buf);
+    sqlSafef(buf, sizeof(buf), "LOAD DATA LOCAL INFILE '%s' INTO TABLE bigFiles", bigFileTmp);
+    sqlUpdate(conn, buf);
+    unlink(bigFileTmp);
+    }
+
 }
 
 void makeTableList(char *argv[], int argc, boolean all, char *tableListName)
@@ -151,15 +173,21 @@ void makeTableList(char *argv[], int argc, boolean all, char *tableListName)
 struct sqlResult *sr;
 char **row;
 struct slName *dbs = NULL;
+printf("This tool is running DESCRIBE on all tables. \n"
+    "Depending on the latency to the mysql server, this can take a while.\n");
 
 if(all)
     {
-    struct sqlConnection *conn = hConnectCentral();
-    sr = sqlGetResult(conn, "NOSQLINJ select name from dbDb");
+    struct sqlConnection *conn;
+    if (hgcentral != NULL)
+        conn = sqlConnectRemote(host, user, password, hgcentral);
+    else
+        conn = hConnectCentral();
+    sr = sqlGetResult(conn, "NOSQLINJ select name from dbDb where active=1");
     while ((row = sqlNextRow(sr)) != NULL)
         slNameAddHead(&dbs, row[0]);
     sqlFreeResult(&sr);
-    hDisconnectCentral(&conn);
+    sqlDisconnect(&conn);
     }
 else
     {
@@ -168,28 +196,49 @@ else
         slNameAddHead(&dbs, argv[i]);
     }
 
+// just check that the username/password actually works
+struct sqlConnection *conn;
+conn = sqlConnectRemote(host, user, password, NULL);
+sqlDisconnect(&conn);
+
 for (; dbs != NULL; dbs = dbs->next)
     {
+    // open connect to source db
+    printf("DB: %s\n", dbs->name);
+    if(host)
+        conn = sqlMayConnectRemote(host, user, password, dbs->name);
+    else
+        conn = sqlMayConnect(dbs->name);
+    verbose(2, "source db: %s\n", dbs->name);
     // make sure assembly exists (on hgwdev some entries in hgcentraltest.dbDb do not exist).
-    if(!all || sqlDatabaseExists(dbs->name))
+    if(conn==NULL)
         {
-        struct sqlConnection *conn;
-        if(host)
-            conn = sqlConnectRemote(host, user, password, dbs->name);
-        else
-            conn = sqlConnect(dbs->name);
-        verbose(2, "db: %s\n", dbs->name);
-
-        struct sqlConnection *targetConn = NULL;
-        if (isNotEmpty(toProf))
-            {
-            targetConn = sqlConnectProfile(toProf, dbs->name);
-            verbose(2, "target db profile: %s\n", toProf);
-            }
-            
-        makeTableListConn(tableListName, conn, targetConn);
-        sqlDisconnect(&conn);
+        printf("db does not exist on source mysql server\n");
+        continue;
         }
+
+    struct sqlConnection *targetConn = conn;
+    // open connection to target db
+    if (isNotEmpty(toProf))
+        {
+        targetConn = sqlMayConnectProfile(toProf, dbs->name);
+        verbose(2, "target db profile: %s\n", toProf);
+        }
+    else if (isNotEmpty(toHost) && isNotEmpty(toUser) && isNotEmpty(toPassword))
+        {
+        targetConn = sqlMayConnectRemote(toHost, toUser, toPassword, dbs->name);
+        verbose(2, "target db host, user, password: %s, %s, %s\n", toHost, toUser, toPassword);
+        }
+            
+    // make sure assembly exists (on hgwdev some entries in hgcentraltest.dbDb do not exist).
+    if(targetConn==NULL)
+        {
+        printf("db does not exist on target\n");
+        continue;
+        }
+
+    makeTableListConn(tableListName, conn, targetConn);
+    sqlDisconnect(&conn);
     }
 }
 
@@ -202,7 +251,11 @@ host = optionVal("host", NULL);
 user = optionVal("user", NULL);
 password = optionVal("password", NULL);
 toProf = optionVal("toProf", NULL);
-bigFiles = optionVal("bigFiles", NULL);
+toHost = optionVal("toHost", NULL);
+toUser = optionVal("toUser", NULL);
+toPassword = optionVal("toPassword", NULL);
+hgcentral = optionVal("hgcentral", NULL);
+doBigFiles = optionExists("bigFiles");
 if (argc < 2 && !all)
     usage();
 char *tableListName = cfgOptionDefault("showTableCache", "tableList");

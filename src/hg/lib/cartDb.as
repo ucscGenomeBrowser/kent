@@ -7,4 +7,5 @@ table cartDb
     string firstUse; "First time this was used"
     string lastUse; "Last time this was used"
     int useCount; "Number of times used"
+    string sessionKey; "Random key to protect session ids"
     )

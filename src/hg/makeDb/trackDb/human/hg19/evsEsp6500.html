@@ -1,0 +1,135 @@
+<div style='max-width:1000px;'>
+<H2>Description</H2>
+
+<P>The goal of the 
+<A HREF="https://esp.gs.washington.edu/drupal/" target=_blank>NHLBI GO Exome Sequencing Project (ESP)</A> 
+is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by 
+pioneering the application of next-generation sequencing of the protein coding regions of the 
+human genome across diverse, richly-phenotyped populations and to share these datasets and 
+findings with the scientific community to extend and enrich the diagnosis, management and 
+treatment of heart, lung and blood disorders. The current data release (ESP6500SI-V2-SSA137) 
+through the 
+<A HREF="http://evs.gs.washington.edu/EVS/#tabs-7" target=_blank>EVS website</A> 
+is taken from 6,503 samples drawn from multiple 
+<A HREF="https://esp.gs.washington.edu/drupal/dbGaP_Releases" target=_blank>ESP cohorts</A> 
+and represents all of the ESP exome variant data.
+
+<P>
+Data in this track was obtained from the  
+<A HREF="http://evs.gs.washington.edu/EVS/#tabs-7" target=_blank>EVS Release Version: v.0.0.25. (Feb. 7, 2014)</A>.
+</P>
+
+<H2>Display Conventions</H2>
+<P>
+In &quot;dense&quot; mode, a vertical line is drawn at the position of each
+variant.
+In &quot;pack&quot; and &quot;full&quot; modes, in addition to the vertical line, a label to 
+the left shows the reference allele first and variant alleles below 
+(<span style='color:red;'>A = red</span>, <span style='color:blue;'>C = blue</span>, 
+<span style='color:green;'>G = green</span>, <span style='color:magenta;'>T = magenta</span>, 
+Indels = black).
+Hovering the pointer over any variant will prompt the display of the occurances numbers for each 
+allele in the Exome Sequencing Project's database.  Clicking on any variant will result in 
+full details of that variant being displayed as well as possible links to the ESP and dbSNP 
+databases.</P>
+
+<H2>Methods</H2>
+
+<P>Sequences were aligned to NCBI build 37 human genome reference using BWA. PCR duplicates 
+were removed using Picard. Alignments were recalibrated using GATK. Lane-level indel realignments 
+and base alignment quality (BAQ) adjustments were applied.
+</P>
+<P>
+All data were simultaneously analyzed for exome SNP variants at the University of Michigan 
+(by the Abecasis Laboratory). SNPs were called using a two-step approach. First, genotype 
+likelihood files (GLFs) were generated using samtools pileup on individual BAM files. Next, 
+we used glfMultiples, a multi-sample variant caller, to generate initial SNP calls. Details of
+the likelihood model implemented in glfMultiples are given in Li, et al., 2011
+(in the section entitled "Identifying Potential Polymorphic Sites"). The Michigan SNP calling pipeline
+is available at: 
+<A HREF="http://genome.sph.umich.edu/wiki/UMAKE" target=_blank>http://genome.sph.umich.edu/wiki/UMAKE</A>. 
+This pipeline makes diploid calls for pseudo-autosomal regions of male samples and haploid 
+calls for the rest of the chromosome. Female samples have diploid calls for all regions on 
+the X chromosome. SNPs were filtered by a machine-learning technique called support 
+vector machine (SVM) classification (for a detailed description, see 
+<A HREF="http://evs.gs.washington.edu/EVS/HelpDescriptions.jsp?tab=tabs-1#FilterStatus" target=_blank>Filter Status</A>).
+</P>
+
+<P>Small INDEL variants were analyzed at the Broad Institute (by the Genome Sequencing and 
+Analysis group) using the 
+<A HREF="http://www.broadinstitute.org/gatk/" target=_blank>GATK</A> 
+variation discovery pipeline following the guidelines in the 
+<A HREF="http://gatkforums.broadinstitute.org/discussion/1186/best-practice-variant-detection-with-the-gatk-v4-for-release-2-0" target=_blank>GATK best practices v4</A>. 
+More specifically, each BAM was reduced to create a Reduced BAM, and then INDELs were 
+discovered by analyzing all samples simultaneously with the GATK 
+<A HREF="http://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_sting_gatk_walkers_genotyper_UnifiedGenotyper.html" target=_blank>UnifiedGenotyper</A>, 
+and subsequently filtered by the GATK Variant Quality Score Recalibration (VQSR) filtering 
+model, again following the V4 best practices. The INDEL genotypes for X and Y chromosomes
+were adjusted to be consistent with the samples' genders. Female samples have diploid calls 
+for all regions on the X chromosome. Male samples have diploid calls for pseudo-autosomal 
+regions on the X chromosome and haploid calls for the rest of the X chromosome and on the 
+Y chromosome as well. However, the INDEL calls for the ESP data are preliminary and not as 
+robust as the SNP calls at this point. Users are advised to keep this difference in mind 
+when applying the ESP data to research studies.
+</P>
+<P>All SNPs and INDELs were further annotated by 
+<A HREF="http://snp.gs.washington.edu/SeattleSeqAnnotation137/" target=_blank>SeattleSeqAnnotation137</A>, 
+and the variant annotations at the coding-DNA and protein levels mostly follow 
+<A HREF="http://www.hgvs.org/mutnomen/" target=_blank>HGVS</A> 
+notations.
+</P>
+<P>The SNP calls are included in the release of dbSNP build 138. The full dataset is described in
+Fu, et al., 2013, and a subset of the data (i.e., 2,500 exomes) was published by the ESP Population
+Genetics and Statistical Analysis Working Group in Tennessen, et al., 2012.
+</P>
+
+<H2>Credits</H2>
+
+<P>
+The authors would like to thank the 
+<A HREF="https://esp.gs.washington.edu/drupal/" target=_blank>NHLBI GO Exome Sequencing Project</A> 
+and its ongoing studies which produced and provided exome variant calls for comparison: the 
+<A HREF="https://esp.gs.washington.edu/drupal/LungGO" target=_blank>Lung GO Sequencing Project (HL-102923)</A>, 
+the 
+<A HREF="https://esp.gs.washington.edu/drupal/WHISP" target=_blank>WHI Sequencing Project (HL-102924)</A>, 
+the 
+<A HREF="https://esp.gs.washington.edu/drupal/BroadGO" target=_blank>Broad GO Sequencing Project (HL-102925)</A>, 
+the 
+<A HREF="https://esp.gs.washington.edu/drupal/SeattleGO" target=_blank>Seattle GO Sequencing Project (HL-102926)</A>,  
+and the 
+<A HREF="https://esp.gs.washington.edu/drupal/HeartGO" target=_blank>Heart GO Sequencing Project (HL-103010)</A>.
+</P>
+<P>
+Contact: <A HREF="mailto:&#101;&#118;&#115;&#115;&#101;&#114;&#118;&#101;&#114;&#064;&#117;&#119;&#046;&#101;&#100;&#117;">&#101;&#118;&#115;&#115;&#101;&#114;&#118;&#101;&#114;&#064;&#117;&#119;&#046;&#101;&#100;&#117;</A>
+</P>
+
+<H2>References</H2>
+<p>
+Fu W, O'Connor TD, Jun G, Kang HM, Abecasis G, Leal SM, Gabriel S, Rieder MJ, Altshuler D, Shendure
+J <em>et al</em>.
+<a href="http://www.nature.com/nature/journal/v493/n7431/abs/nature11690.html" target="_blank">
+Analysis of 6,515 exomes reveals the recent origin of most human protein-coding variants</a>.
+<em>Nature</em>. 2013 Jan 10;493(7431):216-20.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/23201682" target="_blank">23201682</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3676746/" target="_blank">PMC3676746</a>
+</p>
+
+<p>
+Li Y, Sidore C, Kang HM, Boehnke M, Abecasis GR.
+<a href="http://genome.cshlp.org/content/21/6/940.long" target="_blank">
+Low-coverage sequencing: implications for design of complex trait association studies</a>.
+<em>Genome Res</em>. 2011 Jun;21(6):940-51.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/21460063" target="_blank">21460063</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3106327/" target="_blank">PMC3106327</a>
+</p>
+
+<p>
+Tennessen JA, Bigham AW, O'Connor TD, Fu W, Kenny EE, Gravel S, McGee S, Do R, Liu X, Jun G <em>et
+al</em>.
+<a href="http://www.sciencemag.org/content/337/6090/64.abstract" target="_blank">
+Evolution and functional impact of rare coding variation from deep sequencing of human exomes</a>.
+<em>Science</em>. 2012 Jul 6;337(6090):64-9.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22604720" target="_blank">22604720</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3708544/" target="_blank">PMC3708544</a>
+</p>
+</div>

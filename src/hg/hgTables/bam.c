@@ -24,11 +24,6 @@
 #include "asFilter.h"
 #include "xmlEscape.h"
 #include "hgBam.h"
-#if (defined USE_BAM && defined KNETFILE_HOOKS)
-#include "knetUdc.h"
-#include "udc.h"
-#endif//def USE_BAM && KNETFILE_HOOKS
-
 
 boolean isBamTable(char *table)
 /* Return TRUE if table corresponds to a BAM file. */
@@ -66,7 +61,7 @@ hti->type = cloneString("bam");
 return hti;
 }
 
-struct slName *bamGetFields(char *table)
+struct slName *bamGetFields()
 /* Get fields of bam as simple name list. */
 {
 struct asObject *as = bamAsObj();
@@ -128,7 +123,7 @@ chopByChar(fields, ',', fieldArray, fieldCount);
 /* Get list of all fields in big bed and turn it into a hash of column indexes keyed by
  * column name. */
 struct hash *fieldHash = hashNew(0);
-struct slName *bb, *bbList = bamGetFields(table);
+struct slName *bb, *bbList = bamGetFields();
 int i;
 for (bb = bbList, i=0; bb != NULL; bb = bb->next, ++i)
     {

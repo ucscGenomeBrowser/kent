@@ -830,7 +830,8 @@ EOF
 
 
 ##############################################################################
-# DBSNP CODING ANNOTATIONS (139) (DONE 1/24/14 angie)
+# DBSNP CODING ANNOTATIONS (139) (DONE 2/27/14 angie)
+    # Originally done 1/24/14, but Brian L found hgc crash caused by script bug...
     cd /hive/data/outside/dbSNP/139/dog
     # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
     # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
@@ -852,17 +853,10 @@ EOF
 #   3461 44  (frameshift)
 #      5 45  (cds-indel)
 
-   # Gather up multiple annotation lines into one line per {snp, gene, frame}:
+    # 2/27/14: Re-ran from here after fixing bug in script:
+    # Gather up multiple annotation lines into one line per {snp, gene, frame}:
     ~/kent/src/hg/utils/automation/collectNcbiFuncAnnotations.pl ncbiFuncAnnotationsFixed.txt \
     | liftUp snp139CodingDbSnp.bed suggested.lft warn stdin
-#No cds-reference given for [NW_003726097, 5056450, 5056450, 22977965, XM_542234]; skipping
-#No cds-reference given for [NW_003726126, 62708114, 62708114, 24781715, XM_845702]; skipping
-#No cds-reference given for [NW_003726065, 37412109, 37412109, 397509903, NM_001003360]; skipping
-#No cds-reference given for [NW_003726065, 21113017, 21113083, 397510434, NM_001006650]; skipping
-#No cds-reference given for [NW_003726075, 1796143, 1796145, 397510981, NM_001013416]; skipping
-#No cds-reference given for [NW_003726102, 7768590, 7768593, 397511123, NM_001006653]; skipping
-#No cds-reference given for [NW_003726107, 3413298, 3413298, 397513179, XM_845173]; skipping
-    # Only a few such warnings (which used to be silent) -- no big deal.
     hgLoadBed canFam3 snp139CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
       snp139CodingDbSnp.bed

@@ -27,9 +27,14 @@ return FALSE;
 }
 
 char *wikiLinkHost()
-/* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
+/* Return the wiki host specified in hg.conf, or NULL.  Allocd here. 
+ * Returns hostname from http request if hg.conf entry is HTTPHOSTNAME.
+ * */
 {
-return cloneString(cfgOption(CFG_WIKI_HOST));
+char *wikiHost = cfgOption(CFG_WIKI_HOST);
+if ((wikiHost!=NULL) && sameString(wikiHost, "HTTPHOST"))
+    wikiHost = hHttpHost();
+return cloneString(wikiHost);
 }
 
 boolean wikiLinkEnabled()
@@ -72,16 +77,16 @@ else
 return NULL;
 }
 
-static char *encodedHgSessionReturnUrl(int hgsid)
+static char *encodedHgSessionReturnUrl(char *hgsid)
 /* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
 {
 char retBuf[1024];
-safef(retBuf, sizeof(retBuf), "http%s://%s/cgi-bin/hgSession?hgsid=%d",
+safef(retBuf, sizeof(retBuf), "http%s://%s/cgi-bin/hgSession?hgsid=%s",
       cgiAppendSForHttps(), cgiServerNamePort(), hgsid);
 return cgiEncode(retBuf);
 }
 
-char *wikiLinkUserLoginUrl(int hgsid)
+char *wikiLinkUserLoginUrl(char *hgsid)
 /* Return the URL for the wiki user login page. */
 {
 char buf[2048];
@@ -108,7 +113,7 @@ freez(&retEnc);
 return(cloneString(buf));
 }
 
-char *wikiLinkUserLogoutUrl(int hgsid)
+char *wikiLinkUserLogoutUrl(char *hgsid)
 /* Return the URL for the wiki user logout page. */
 {
 char buf[2048];
@@ -136,7 +141,7 @@ freez(&retEnc);
 return(cloneString(buf));
 }
 
-char *wikiLinkUserSignupUrl(int hgsid)
+char *wikiLinkUserSignupUrl(char *hgsid)
 /* Return the URL for the user signup  page. */
 {
 char buf[2048];
@@ -164,7 +169,7 @@ freez(&retEnc);
 return(cloneString(buf));
 }
 
-char *wikiLinkChangePasswordUrl(int hgsid)
+char *wikiLinkChangePasswordUrl(char *hgsid)
 /* Return the URL for the user change password page. */
 {
 char buf[2048];

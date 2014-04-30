@@ -28,7 +28,7 @@ else if (startsWith("BZ",m)) ext = "bz2";
 else if (startsWith("PK\x03\x04",m)) ext = "zip";
 if (ext==NULL)
     return NULL;
-safef(buf, sizeof(buf), "somefile.%s", ext);
+safef(buf, sizeof(buf), LF_BOGUS_FILE_PREFIX "%s", ext);
 return cloneString(buf);
 }
 
@@ -208,10 +208,10 @@ lf->buf = s;
 return lf;
 }
 
-#if (defined USE_SAMTABIX || (defined USE_TABIX && !defined KNETFILE_HOOKS))
+#if (defined USE_TABIX && defined KNETFILE_HOOKS && !defined USE_SAMTABIX)
 // UCSC aliases for backwards compatibility with independently patched & linked samtools and tabix:
-#define ti_bgzf_tell bgzf_tell
-#define ti_bgzf_read bgzf_read
+#define bgzf_tell ti_bgzf_tell
+#define bgzf_read ti_bgzf_read
 #endif
 
 struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
@@ -225,13 +225,12 @@ struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
 if (fileOrUrl == NULL)
     errAbort("lineFileTabixMayOpen: fileOrUrl is NULL");
 int tbiNameSize = strlen(fileOrUrl) + strlen(".tbi") + 1;
-char *tbiName = needMem(tbiNameSize);
-safef(tbiName, tbiNameSize, "%s.tbi", fileOrUrl);
+char tbiName[tbiNameSize];
+safef(tbiName, sizeof(tbiName), "%s.tbi", fileOrUrl);
 tabix_t *tabix = ti_open(fileOrUrl, tbiName);
 if (tabix == NULL)
     {
     warn("Unable to open \"%s\"", fileOrUrl);
-    freez(&tbiName);
     return NULL;
     }
 if ((tabix->idx = ti_index_load(tbiName)) == NULL)
@@ -239,7 +238,6 @@ if ((tabix->idx = ti_index_load(tbiName)) == NULL)
     warn("Unable to load tabix index from \"%s\"", tbiName);
     ti_close(tabix);
     tabix = NULL;
-    freez(&tbiName);
     return NULL;
     }
 struct lineFile *lf = needMem(sizeof(struct lineFile));
@@ -250,7 +248,6 @@ lf->buf = needMem(lf->bufSize);
 lf->zTerm = zTerm;
 lf->tabix = tabix;
 lf->tabixIter = ti_iter_first();
-freez(&tbiName);
 return lf;
 #else // no USE_TABIX
 warn(COMPILE_WITH_TABIX, "lineFileTabixMayOpen");
@@ -279,7 +276,7 @@ if (iter == NULL)
 if (lf->tabixIter != NULL)
     ti_iter_destroy(lf->tabixIter);
 lf->tabixIter = iter;
-lf->bufOffsetInFile = ti_bgzf_tell(lf->tabix->fp);
+lf->bufOffsetInFile = bgzf_tell(lf->tabix->fp);
 lf->bytesInBuf = 0;
 lf->lineIx = -1;
 lf->lineStart = 0;
@@ -559,7 +556,7 @@ while (!gotLf)
 #ifdef USE_TABIX
     else if (lf->tabix != NULL && readSize > 0)
 	{
-	readSize = ti_bgzf_read(lf->tabix->fp, buf+sizeLeft, readSize);
+	readSize = bgzf_read(lf->tabix->fp, buf+sizeLeft, readSize);
 	if (readSize < 1)
 	    return FALSE;
 	}

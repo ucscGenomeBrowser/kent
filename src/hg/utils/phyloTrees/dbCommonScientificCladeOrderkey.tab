@@ -6,6 +6,7 @@ panPan1	Bonobo	Pan paniscus	primate	primate	245
 gorGor3	Gorilla	Gorilla gorilla gorilla	primate	primate	250
 ponAbe2	Orangutan	Pongo pygmaeus abelii	primate	primate	310
 nomLeu3	Gibbon	Nomascus leucogenys	primate	primate	328
+chlSab2	Green monkey	Chlorocebus sabaeus	primate	primate	339
 chlSab1	Green monkey	Chlorocebus sabaeus	primate	primate	340
 rheMac3	Rhesus	Macaca mulatta	primate	primate	359
 macFas5	Crab-eating macaque	Macaca fascicularis	primate	primate	380
@@ -23,7 +24,7 @@ rn5	Rat	Rattus norvegicus	rodent	glires	1559
 octDeg1	Brush-tailed rat	Octodon degus	rodent	glires	1575
 dipOrd1	Kangaroo rat	Dipodomys ordii	rodent	glires	1580
 jacJac1	Lesser Egyptian jerboa	Jaculus jaculus	rodent	glires	1590
-perBai1	Prairie deer mouse	Peromyscus maniculatus bairdii	rodent	glires	1595
+perManBai1	Prairie deer mouse	Peromyscus maniculatus bairdii	rodent	glires	1595
 micOch1	Prairie vole	Microtus ochrogaster	rodent	glires	1600
 criGri1	Chinese hamster	Cricetulus griseus	rodent	glires	1610
 mesAur1	Golden hamster	Mesocricetus auratus	rodent	glires	1620
@@ -52,6 +53,7 @@ felCat5	Cat	Felis catus	mammal	carnivora	2418
 panTig1	Amur tiger	Panthera tigris altaica	mammal	carnivora	2425
 musFur1	Ferret 	Mustela putorius furo	mammal	carnivora	2430
 canFam3	Dog	Canis lupus familiaris	mammal	carnivora	2437
+canLup1	Gray wolf	Canis lupus	mammal	carnivora	2440
 camFer1	Bactrian camel	Camelus ferus	mammal	carnivora	2450
 ailMel1	Panda	Ailuropoda melanoleuca	mammal	carnivora	2460
 odoRosDiv1	Pacific walrus	Odobenus rosmarus divergens	mammal	carnivora	2470
@@ -59,6 +61,7 @@ lepWed1	Weddell seal	Leptonychotes weddellii	mammal	carnivora	2480
 myoBra1	Brandt's myotis (bat)	Myotis brandtii	mammal	chiroptera	2500
 myoDav1	David's myotis (bat)	Myotis davidii	mammal	chiroptera	2510
 myoLuc2	Microbat	Myotis lucifugus	mammal	chiroptera	2514
+rhiFer1	Greater horseshoe bat	Rhinolophus ferrumequinum	mammal	chiroptera	2516
 eptFus1	Big brown bat	Eptesicus fuscus	mammal	chiroptera	2517
 eidHel1	Straw colored fruit bat	Eidolon helvum	mammal	chiroptera	2518
 pteVam1	Megabat	Pteropus vampyrus	mammal	chiroptera	2520
@@ -99,8 +102,10 @@ melGal1	Turkey	Meleagris gallopavo	vertebrate	aves	4360
 strCam1	Ostrich	Struthio camelus	vertebrate	aves	4363
 taeGut2	Zebra finch	Taeniopygia guttata	vertebrate	aves	4369
 taeGut1	Zebra finch	Taeniopygia guttata	vertebrate	aves	4370
+serCan1	Canary	Serinus canaria	vertebrate	aves	4372
 geoFor1	Medium ground finch	Geospiza fortis	vertebrate	aves	4373
 melUnd1	Budgerigar	Melopsittacus undulatus	vertebrate	aves	4375
+pytBiv1	Burmese python	Python bivittatus	vertebrate	sauria	4378
 allMis1	American alligator	Alligator mississippiensis	vertebrate	sauria	4380
 allSin1	Chinese alligator	Alligator sinensis	vertebrate	sauria	4382
 croPor1	Crocodile	Crocodylus porosus	vertebrate	sauria	4385
@@ -110,6 +115,7 @@ pytMolBiv1	Burmese python	Python molurus bivittatus	vertebrate	sauria	4392
 cheMyd1	Green seaturtle	Chelonia mydas	vertebrate	testudines	4395
 pelSin1	Chinese softshell turtle	Pelodiscus sinensis	vertebrate	testudines	4400
 apaSpi1	Spiny softshell turtle	Apalone spinifera	vertebrate	testudines	4403
+chrPic2	Painted turtle	Chrysemys picta bellii	vertebrate	testudines	4404
 chrPic1	Painted turtle	Chrysemys picta bellii	vertebrate	testudines	4405
 xenTro7	Frog (X. tropicalis)	Xenopus tropicalis	vertebrate	tetrapoda	4439
 xenTro3	Frog (X. tropicalis)	Xenopus tropicalis	vertebrate	tetrapoda	4440
@@ -117,15 +123,21 @@ latCha1	Coelacanth	Latimeria chalumnae	vertebrate	sarcopterygii	4465
 tetNig2	Tetraodon	Tetraodon nigroviridis	vertebrate	tetraodontidae	4599
 fr3	Fugu	Takifugu rubripes	vertebrate	tetraodontidae	4628
 takFla1	Yellowbelly pufferfish	Takifugu flavidus	vertebrate	tetraodontidae	4640
-hapBur1	Burton's mouthbreeder	Haplochromis burtoni	vertebrate	cichlidae	4650
-mayZeb1	Zebra mbuna	Maylandia zebra	vertebrate	cichlidae	4660
-punNye1	Pundamilia nyererei	Pundamilia nyererei	vertebrate	cichlidae	4665
-oreNil2	Nile tilapia	Oreochromis niloticus	vertebrate	cichlidae	4669
-neoBri1	Princess of Burundi	Neolamprologus brichardi	vertebrate	cichlidae	4680
-gasAcu1	Stickleback	Gasterosteus aculeatus	vertebrate	smegmamorpha	4700
-oryLat2	Medaka	Oryzias latipes	vertebrate	smegmamorpha	4729
-xipMac1	Southern platyfish	Xiphophorus maculatus	vertebrate	smegmamorpha	4740
+hapBur1	Burton's mouthbreeder	Haplochromis burtoni	vertebrate	percomorpha	4650
+mayZeb1	Zebra mbuna	Maylandia zebra	vertebrate	percomorpha	4660
+punNye1	Pundamilia nyererei	Pundamilia nyererei	vertebrate	percomorpha	4665
+oreNil2	Nile tilapia	Oreochromis niloticus	vertebrate	percomorpha	4669
+neoBri1	Princess of Burundi	Neolamprologus brichardi	vertebrate	percomorpha	4680
+cynSem1	Tongue sole	Cynoglossus semilaevis	vertebrate	percomorpha	4690
+sebNig1	Tiger rockfish	Sebastes nigrocinctus	vertebrate	percomorpha	4693
+sebRub1	Flag rockfish	Sebastes rubrivinctus	vertebrate	percomorpha	4696
+gasAcu1	Stickleback	Gasterosteus aculeatus	vertebrate	percomorpha	4700
+oryLat2	Medaka	Oryzias latipes	vertebrate	percomorpha	4729
+xipMac1	Southern platyfish	Xiphophorus maculatus	vertebrate	percomorpha	4740
+poeRet1	guppy	Poecilia reticulata	vertebrate	percomorpha	4743
+poeFor1	Amazon molly	Poecilia formosa	vertebrate	percomorpha	4745
 gadMor1	Atlantic cod	Gadus morhua	vertebrate	neoteleostei	4750
+angJap1	Japanese eel	Anguilla japonica	vertebrate	teleostei	4770
 danRer7	Zebrafish	Danio rerio	vertebrate	teleostei	4774
 astMex1	Mexican tetra (cavefish)	Astyanax mexicanus	vertebrate	teleostei	4790
 lepOcu1	Spotted gar	Lepisosteus oculatus	vertebrate	neopterygii	4793

@@ -142,7 +142,7 @@ struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = hAllocConn(database);
 char *menuStr, buf[4096], uiVars[1024];
-safef(uiVars, sizeof(uiVars), "%s=%u", cartSessionVarName(), cartSessionId(cart));
+safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart));
 
 menuStr = menuBar(cart);
 
@@ -152,7 +152,7 @@ appendLink(&links, buf, "PDF/PS", "pdfLink", FALSE);
 safef(buf, sizeof(buf), "%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s",
       hgcNameAndSettings(), winStart, chromName, winStart, winEnd, database, uiVars);
 appendLink(&links, buf, "DNA", "dnaLink", FALSE);
-safef(buf, sizeof(buf), "../cgi-bin/hgConvert?hgsid=%d&db=%s", cartSessionId(cart), database);
+safef(buf, sizeof(buf), "../cgi-bin/hgConvert?hgsid=%s&db=%s", cartSessionId(cart), database);
 appendLink(&links, buf, "in other Genomes (Convert)", "convertMenuLink", FALSE);
 
 // Add link-outs to other dbs as appropriate for this assembly
@@ -236,15 +236,15 @@ if (differentWord(database,"susScr2"))
     }
 hFreeConn(&conn);
 
-if (sameString(database, "hg18"))
+if (sameString(database, "hg38"))
     {
-    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&build=previous&CHR=%s&BEG=%d&END=%d",
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d",
           skipChr(chromName), winStart+1, winEnd);
     appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
     }
 else if (sameString(database, "hg19"))
     {
-    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d",
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&build=previous&CHR=%s&BEG=%d&END=%d",
           skipChr(chromName), winStart+1, winEnd);
     appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
     }

@@ -4,6 +4,7 @@
 # then all the other assemblies for org.  Please keep this ordering!
 #
 # urgent databases
+hg38
 hg19
 mm10
 # 
@@ -15,12 +16,14 @@ anoCar2
 anoGam1
 apiMel2
 aplCal1
+balAcu1
 bosTau7
 braFlo1
 caeJap1
 caePb2
 caeRem3
 calJac3
+calMil1
 canFam3
 cavPor3
 cb3

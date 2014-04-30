@@ -380,6 +380,11 @@ else if (sameString("vcfTabix", tdb->type))
     char *fileOrUrl = getBigDataFileName(db, tdb, selTable, chrom);
     streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
     }
+else if (sameString("vcf", tdb->type))
+    {
+    char *fileOrUrl = getBigDataFileName(dataDb, tdb, dbTable, chrom);
+    streamer = annoStreamVcfNew(fileOrUrl, FALSE, assembly, maxOutRows);
+    }
 else if (sameString("bam", tdb->type))
     {
     warn("Sorry, BAM is not yet supported");
@@ -455,7 +460,7 @@ else
     struct annoStreamer *streamer = streamerFromTrack(assembly, dbTable, tdb, chrom, maxOutRows);
     if (primaryAsObj != NULL &&
 	(asObjectsMatch(primaryAsObj, pgSnpAsObj()) || asObjectsMatch(primaryAsObj, vcfAsObj()))
-	&& asObjectsMatchFirstN(streamer->asObj, genePredAsObj(), 10))
+	&& asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10))
 	grator = annoGratorGpVarNew(streamer);
     else
 	grator = annoGratorNew(streamer);

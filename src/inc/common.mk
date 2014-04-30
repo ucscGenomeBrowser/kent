@@ -201,6 +201,13 @@ ifeq (${SAMTABIXDIR},)
     endif
 endif
 
+# autodetect UCSC additional source code with password for some external tracks on gbib
+GBIBDIR = /hive/groups/browser/gbib/
+ifneq ($(wildcard ${GBIBDIR}/*.c),)
+  HG_DEFS+=-DUSE_GBIB_PWD
+  HG_INC += -I${GBIBDIR}
+endif
+
 # libsamtabix (samtools + tabix + Angie's KNETFILE_HOOKS extension to it): disabled by default
 ifeq (${USE_SAMTABIX},1)
     KNETFILE_HOOKS=1

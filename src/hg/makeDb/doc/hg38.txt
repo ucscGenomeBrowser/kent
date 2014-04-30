@@ -1042,6 +1042,45 @@ rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
 #  200 chr12       123443533       123443733        chr12.10
 
 #########################################################################
+##  CYTOBAND - ideogram track (DONE - 2014-03-04 - Hiram)
+    ssh hgwdev
+    mkdir -p /hive/data/outside/ncbi/ideogram/2014-03
+    cd /hive/data/outside/ncbi/ideogram/2014-03
+
+    # fetch all the ideogram files:
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/pub/gdp/ ./
+
+    mkdir /hive/data/genomes/hg38/bed/cytoband
+    cd /hive/data/genomes/hg38/bed/cytoband
+
+    # Create bed file
+    $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl \
+/hive/data/outside/ncbi/ideogram/2014-03/ideogram_9606_GCF_000001305.14_850_V1
+
+    # add in the other genome data:
+    hgsql -N -e 'select * from cytoBand;' hg38 > bobTable.bed
+
+    egrep "chrU|chrM|_alt|_random" bobTable.bed >> cytoBand.bed
+
+    ## can now verify before load:
+    $HOME/kent/src/utils/ncbi/cytoBandVerify.pl
+    #   everything checks out OK on 455 chroms
+
+    # Load the bed file
+    hgLoadBed -tab -noBin -sqlTable=$HOME/kent/src/hg/lib/cytoBand.sql \
+	hg38 cytoBand cytoBand.bed
+    cut -f1 cytoBand.bed | sort -u | awk '{print length($1)}' | sort -rn | head
+    #  23
+    sed -e 's/12/23/' $HOME/kent/src/hg/lib/cytoBand.sql > cytoBand.sql
+    sort -k1,1 -k2,2n cytoBand.bed \
+	| hgLoadSqlTab hg38 cytoBand cytoBand.sql stdin
+
+    # Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # cytoBandIdeo is just a replicate of the cytoBand track.
+    hgsql -e "drop table cytoBandIdeo;" hg38
+    hgsql hg38 -e "create table cytoBandIdeo (index(chrom(23),chromStart)) as select * from cytoBand;"
+
+##########################################################################
 # cytoBandIdeo - (DONE - 2013-12-26 - Hiram)
     mkdir /hive/data/genomes/hg38/bed/cytoBand
     cd /hive/data/genomes/hg38/bed/cytoBand
@@ -1055,6 +1094,28 @@ liftOver /hive/data/genomes/hg19/bed/ncbiCytoBand/cytobands.bed \
 liftOver -minBlocks=0.5 /hive/data/genomes/hg19/bed/ncbiCytoBand/cytobands.bed \
       /hive/data/gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz \
       cytobands.0.5.bed unMapped0.5
+
+###############################                    ######################
+# cytoBandIdeo - (reDONE - 2014-02-25 - kuhn) 
+
+# adding centromeres to generic cytonBandIdeo tavle as it exists.
+# (lifted track is already gone)
+
+# get the cen values for hg38
+hgsql -Ne "SELECT DISTINCT chrom FROM centromeres" hg38 | sort > hg38.chroms
+rm -f hg38.cens
+foreach chrom (`cat hg38.chroms`)
+  set cenStart=""
+  set cenEnd=""
+  set cenStart=`hgsql -Ne 'SELECT MIN(chromStart) FROM centromeres WHERE chrom = "'$chrom'"' hg38`
+  set cenEnd=`hgsql -Ne 'SELECT MAX(chromEnd) FROM centromeres WHERE chrom = "'$chrom'"' hg38`
+  echo "$chrom $cenStart $cenEnd" >> hg38.cens
+end
+
+# Modified makeCytoBandIdeo.csh to use this file instead of looking 
+#   for centromeres in a gap table.
+# Replaced existing cytoBandIdeo table, which was really only a copy 
+#   of chromInfo.
 
 ##########################################################################
 # hg19 <-> hg38 difference tracks (DONE - 2013-12-28 - Hiram)
@@ -1269,7 +1330,7 @@ close (DR);
     sort -k1,1 -k2,2n hg19.differentVersions.bed hg19.differentPortions.bed \
 	hg19.dropped.bed > hg19.itemRgb.bed
 
-    hgLoadBed hg19 hg19ContigDiff hg19.itemRgb.bed
+    hgLoadBed hg19 hg38ContigDiff hg19.itemRgb.bed
     # if you wanted to load the identicals in this track too:
     sort -k1,1 -k2,2n hg38.hg19.identical.bed hg38.itemRgb.bed \
        | hgLoadBed hg38 hg38ContigDiff stdin
@@ -2622,6 +2683,27 @@ TMPDIR=/dev/shm
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips
 
 #########################################################################
+# the FULL analysis set (DONE - 2014-03-18 - Hiram
+    mkdir /hive/data/genomes/hg38/bed/fullAnalysisSet
+    cd /hive/data/genomes/hg38/bed/fullAnalysisSet
+
+    mkdir hg38.fullAnalysisSet.chroms
+    twoBitToFa ../analysisSet/hg38.analysisSet.2bit stdout \
+       | faSplit byname stdin hg38.fullAnalysisSet.chroms/
+
+    grep _alt ../../chrom.sizes | cut -f 1 > alt.list
+
+    twoBitToFa -seqList=alt.list ../../hg38.2bit stdout \
+       | faSplit byname stdin hg38.fullAnalysisSet.chroms/
+
+    faCount hg38.fullAnalysisSet.chroms/chr*.fa > faCount.fullAnalysisSet.txt
+
+    faToTwoBit hg38.fullAnalysisSet.chroms/chr*.fa hg38.fullAnalysisSet.2bit
+    twoBitInfo hg38.fullAnalysisSet.2bit stdout | sort -k2nr > chrom.sizes
+
+    tar cvzf ./hg38.fullAnalysisSet.chroms.tar.gz ./hg38.fullAnalysisSet.chroms
+
+#########################################################################
 # LASTZ Self/hg38 (DONE - 2014-01-25,02-10 - Hiram)
     # can no longer use the lineage specific repeats with the new lastz
     # use a screen to manage this longish job:
@@ -2944,6 +3026,48 @@ cat  << '_EOF_' > template
     # 7408226 total
 
 #########################################################################
+## load alternate sequence for PSL display (DONE - 2014-02-24 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/altAlignments/sequence
+    cd /hive/data/genomes/hg38/bed/altAlignments/sequence
+
+    rm -fr hg38.haplotypes.lift temp.lift targetFa queryFa
+    mkdir targetFa
+    mkdir queryFa
+    touch temp.lift
+
+    cat ../../altLocations/chrToAlt.bed | while read L
+do
+  chrName=`echo $L | awk '{print $1}'`
+  chromSize=`egrep "^$chrName   " ../../../chrom.sizes | cut -f2`
+  chrStart=`echo $L | awk '{printf "%d", $2}'`
+  chrEnd=`echo $L | awk  '{printf "%d", $3}'`
+  chrSize=`echo $chrEnd $chrStart | awk '{print $1-$3}'`
+  queryName=`echo $L | awk '{print $4}'`
+  partName="${chrName}_${chrStart}_${chrEnd}"
+  echo $chrName $chrStart $chrEnd $queryName $partName $chromSize
+  echo -e "$chrStart\t${partName}\t$chrSize\t$chrName\t$chromSize" >> temp.lift
+  twoBitToFa ../../../hg38.2bit:$chrName:$chrStart-$chrEnd stdout | sed -e "s/^>.*/>$partName/;" > targetFa/$queryName.fa
+  twoBitToFa ../../../hg38.2bit:$queryName queryFa/$queryName.fa
+done
+
+sort -u temp.lift | sort -k4,4 -k1,1n > hg38.haplotypes.lift
+
+    mkdir /gbdb/hg38/ncbiAltMappings
+    cd /hive/data/genomes/hg38/bed/altAlignments/sequence/queryFa
+    ln -s `pwd`/*.fa /gbdb/hg38/ncbiAltMappings
+    cd /hive/data/genomes/hg38/bed/altAlignments/sequence
+    hgLoadSeq -drop -seqTbl=seqNcbiAltSequence -extFileTbl=extNcbiAltSequence \
+        hg38 /gbdb/hg38/ncbiAltMappings/*.fa
+
+    pslSwap ../altAlignments.psl stdout \
+      | pslRecalcMatch stdin ../../../hg38.2bit ../../../hg38.2bit \
+        hg38.referenceTarget.psl
+
+    # the table name altSeqLiftOverPsl is recognized in hgc to allow display
+    # of the details of the alignments
+    hgLoadPsl hg38 -table=altSeqLiftOverPsl hg38.referenceTarget.psl
+
+#########################################################################
 ## alternate sequence alignments EXPERIMENT (DONE - 2014-01-17 - Hiram)
     # the lastzAltSequences.2014-01-23 alignment was used for this instead
     # of this procedure
@@ -3038,3 +3162,202 @@ done
 #      | sed -e 's/^s chr/s hg38.chr/' > maf/${B}.maf
 
 ############################################################################
+# Liftover Gencode V19 from hg19  (DONE braney 2014-02-14)
+
+mkdir /cluster/data/hg38/bed/liftOverGencodeV19
+cd /cluster/data/hg38/bed/liftOverGencodeV19
+
+echo "show tables like 'wgEncodeGencode%19'" | hgsql hg19 | tail -n +2 > all.gencode.tables
+echo " select tableName from trackDb where tableName like 'wgEncodeGencode_%V19';" | hgsql hg19 --skip-column-names > genePred.gencode.tables
+
+# load the non-genepred table as is.   This isn't quite the right thing to do
+# with exon support, but it's good enough for our purposes at the moment
+join -v 1 *.gencode.tables | while read t; do echo "create table $t select * from hg19.$t" | hgsql hg38; echo $t; done
+
+for i in `cat genePredExt.gencode.tables`; 
+do 
+    echo "select name,score,name2 from $i" | hgsql hg19 | sort > $i.name2Score.txt;   
+    genePredToFakePsl hg19 $i $i.psl $i.cds;  
+    pslMap -chainMapFile -swapMap $i.psl /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz stdout | pslCDnaFilter -uniqueMapped stdin stdout |  sort -k 14,14 -k 16,16n | pslToBed -cds=$i.cds stdin stdout | bedToGenePred stdin stdout | sort |  join /dev/stdin $i.name2Score.txt| tr ' ' '\t' | hgLoadGenePred -genePredExt hg38 $i stdin; 
+    echo $i; 
+done
+
+for i in `cat genePred.gencode.tables`; 
+do 
+    genePredToFakePsl hg19 $i $i.psl $i.cds;  
+    pslMap -chainMapFile -swapMap $i.psl /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz stdout | pslCDnaFilter -uniqueMapped stdin stdout |  sort -k 14,14 -k 16,16n | pslToBed -cds=$i.cds stdin stdout | bedToGenePred stdin stdout |  tr ' ' '\t' | hgLoadGenePred hg38 $i stdin; 
+    echo $i; 
+done
+
+#####################################################################
+## tRNAs track ( 2014-02-18 braney DONE)
+## this is a preliminary version for UCSC build.  NOT FOR RELEASE!
+ssh hgwdev
+cd /hive/data/genomes/hg38/bed
+mkdir tRNAs
+cd tRNAs
+
+cp  /hive/users/pchan/tRNAs/Eukaryota/hg38/hg38-tRNAs.bed .
+
+hgLoadBed -tab hg38 tRNAs hg38-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
+
+############################################################################
+# EXONIPHY , lifted from hg19 (DONE - braney 2014-02-19)
+#	needed for ucscGenes building
+    # exoniphyHg19.gp is prepared as follows
+    mkdir /cluster/data/hg38/bed/exoniphy
+    cd /cluster/data/hg38/bed/exoniphy
+    hgsql hg19 -e "select * from exoniphy" -N | cut  -f 2-16 > exoniphyHg19.gp
+    time nice -n +19 liftOver -genePred exoniphyHg19.gp \
+	/cluster/data/hg19/bed/liftOver/hg19ToHg38.over.chain.gz \
+	    exoniphyHg38.gp unmapped
+    # real    0m2.015s
+    # user    0m1.894s
+    # sys     0m0.076s
+
+    wc -l *
+    #   186601 exoniphyHg19.gp
+    #   186533 exoniphyHg38.gp
+    #      136 unmapped
+    #   373270 total
+
+    cd /cluster/data/hg38/bed/exoniphy
+    nice -n +19 hgLoadGenePred -genePredExt hg38 exoniphy exoniphyHg38.gp
+    nice -n +19 featureBits hg38 exoniphy
+    # 28807039 bases of 3049335806 (0.945%) in intersection
+    nice -n +19 featureBits hg19 exoniphy
+    # 28661160 bases of 2897316137 (0.989%) in intersection
+
+#########################################################################
+# LASTZ Rat Rn5 (DONE - 2014-02-27 - Hiram)
+    #	establish a screen to control this job
+    screen -S hg38Rn5
+    mkdir /hive/data/genomes/hg38/bed/lastzRn5.2014-02-27
+    cd /hive/data/genomes/hg38/bed/lastzRn5.2014-02-27
+
+    # XXX don't forget to specify the BLASTZ binary:
+    cat << '_EOF_' > DEF
+# human vs rat
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn5
+SEQ2_DIR=/hive/data/genomes/rn5/rn5.2bit
+SEQ2_LEN=/hive/data/genomes/rn5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzRn5.2014-02-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+
+    #   real    658m53.984s
+    cat fb.hg38.chainRn5Link.txt
+    # 938823407 bases of 3049335806 (30.788%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/rn5/bed/blastz.hg38.swap
+    cd /hive/data/genomes/rn5/bed/blastz.hg38.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg38/bed/lastzRn5.2014-02-27/DEF \
+	-swap \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 
+    #   real    66m53.095s
+    cat fb.rn5.chainHg38Link.txt
+    #   934256475 bases of 2572853723 (36.312%) in intersection
+##############################################################################
+# LASTZ Rat Rn4 (DONE - 2014-02-27 - Hiram)
+    #	establish a screen to control this job
+    screen -S hg38Rn4
+    mkdir /hive/data/genomes/hg38/bed/lastzRn4.2014-02-27
+    cd /hive/data/genomes/hg38/bed/lastzRn4.2014-02-27
+
+    # XXX don't forget to specify the BLASTZ binary:
+    cat << '_EOF_' > DEF
+# human vs rat
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn4
+SEQ2_DIR=/hive/data/genomes/rn4/rn4.2bit
+SEQ2_LEN=/hive/data/genomes/rn4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzRn4.2014-02-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+XXX - running - Thu Feb 27 16:13:21 PST 2014
+
+    #   real    658m53.984s
+    cat fb.hg38.chainRn4Link.txt
+    #   917356917 bases of 2897316137 (31.662%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/rn4/bed/blastz.hg38.swap
+    cd /hive/data/genomes/rn4/bed/blastz.hg38.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg38/bed/lastzRn4.2014-02-277/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    66m53.095s
+    cat fb.rn4.chainHg38Link.txt
+    #	933922552 bases of 2572853723 (36.299%) in intersection
+
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2014-03-07 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg38/bed/geneid
+    cd /hive/data/genomes/hg38/bed/geneid
+    mkdir download
+    cd download
+    for C in `cut -f1 ../../../chrom.sizes`
+    do
+	echo $C
+ wget --timestamping \
+http://genome.crg.es/genepredictions/H.sapiens/hg38/geneid_v1.4/${C}.gtf3
+    wget --timestamping \
+http://genome.crg.es/genepredictions/H.sapiens/hg38/geneid_v1.4/${C}.prot
+    done
+
+    cd ..
+    cat download/*.gtf | ldHgGene -gtf -genePredExt hg38 geneid stdin
+    #	Read 33428 transcripts in 277332 lines in 1 files
+    #	33428 groups 92 seqs 1 sources 3 feature types
+    #	33428 gene predictions
+
+###########################################################################

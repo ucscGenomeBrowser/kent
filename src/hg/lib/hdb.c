@@ -39,6 +39,8 @@
 #include "hui.h"
 #include "trackHub.h"
 #include "udc.h"
+#include "paraFetch.h"
+#include "filePath.h"
 
 
 #ifdef LOWELAB
@@ -957,6 +959,16 @@ return ci->size;
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
+if (cfgOptionBooleanDefault("forceTwoBit", FALSE) == TRUE)
+    {
+    char buf[HDB_MAX_PATH_STRING];
+    safef(buf, HDB_MAX_PATH_STRING, "/gbdb/%s/%s.2bit", db, db);
+    char *newPath = hReplaceGbdb(buf);
+    safecpy(retNibName, HDB_MAX_PATH_STRING, newPath);
+    freeMem(newPath);
+    return;
+    }
+
 if (hDbIsActive(db))
     {
     struct chromInfo *ci = mustGetChromInfo(db, chromName);
@@ -1265,16 +1277,9 @@ hFreeConn(&conn);
 return list;
 }
 
-char *hReplaceGbdb(char* fileName)
- /* Returns a gbdb filename, potentially rewriting it according to hg.conf
-  * If the settings gbdbLoc1 and gbdbLoc2 are found, try them in order, by 
-  * replacing /gbdb/ with the new locations.
-  * If after the replacement of gbdbLoc1 the resulting fileName does not exist,
-  * gbdbLoc2 is used.
-  * This function does not guarantee that the filename exists.
-  * We assume /gbdb/ does not appear somewhere inside a fileName.
-  * Result has to be free'd.
- * */
+char *hReplaceGbdbLocal(char* fileName)
+ /* Returns a gbdb filename, potentially rewriting it according to hg.conf's gbdbLoc1 */
+ /* Result has to be freed */
 {
 if (fileName==NULL)
     return fileName;
@@ -1283,22 +1288,93 @@ char* newGbdbLoc = cfgOption("gbdbLoc1");
 char* path;
 
 // if no config option set or not a /gbdb filename, then just return
-// otherwise replace /gbdb/ with the new prefix and return if exists.
-if (newGbdbLoc==NULL || !startsWith("/gbdb/", fileName))
+// otherwise replace /gbdb/ with the new prefix and return it
+if ((newGbdbLoc==NULL) || (!startsWith("/gbdb/", fileName)))
    return cloneString(fileName);
 
 path = replaceChars(fileName, "/gbdb/", newGbdbLoc);
+return path;
+}
+
+char *hReplaceGbdb(char* fileName)
+ /* Returns a gbdb filename, potentially rewriting it according to hg.conf
+  * If the settings gbdbLoc1 and gbdbLoc2 are found, try them in order, by 
+  * replacing /gbdb/ with the new locations.
+  * If after the replacement of gbdbLoc1 the resulting fileName does not exist,
+  * gbdbLoc2 is used.
+  * This function does not guarantee that the returned filename exists.
+  * We assume /gbdb/ does not appear somewhere inside a fileName.
+  * Result has to be free'd.
+ * */
+{
+if (fileName == NULL)
+    return fileName;
+if (!startsWith("/gbdb/", fileName))
+    return cloneString(fileName);
+
+char *path = hReplaceGbdbLocal(fileName);
 if (fileExists(path))
     return path;
 
 // if the file did not exist, replace with gbdbLoc2
-newGbdbLoc = cfgOption("gbdbLoc2");
+char* newGbdbLoc = cfgOption("gbdbLoc2");
 if (newGbdbLoc==NULL)
     return path;
 
 freeMem(path);
 path = replaceChars(fileName, "/gbdb/", newGbdbLoc);
 return path;
+}
+
+char *hReplaceGbdbSeqDir(char *path, char *db)
+/* similar to hReplaceGbdb, but accepts a nib or 2bit "directory" (basename) under
+ * gbdb, like /gbdb/hg19 (which by jkLib is translated to /gbdb/hg19/hg19.2bit).
+ hReplaceGbdb would check only if the dir exists. For 2bit basename, we
+ have to check if the 2bit file exists, do the rewriting, then strip off the
+ 2bit filename again. 
+ This function works with .nib directories, but nib does not support opening
+ from URLs.  As of Feb 2014, only hg16 and anoGam1 have no .2bit file.
+*/
+{
+char buf[4096];
+safef(buf, sizeof(buf), "%s/%s.2bit", path, db);
+char *newPath = hReplaceGbdb(buf);
+
+char dir[4096];
+splitPath(newPath, dir, NULL, NULL);
+freeMem(newPath);
+return cloneString(dir);
+}
+
+char* hReplaceGbdbMustDownload(char* path)
+/* given a location in /gbdb, rewrite it to the new location using gbdbLoc1 and download it
+ * if needed from gbdbLoc2.
+ * Used for adding files on the fly on mirrors or the box.
+ * Returns local path, needs to be freed. Aborts if download failed.
+ * */
+{
+char* locPath = hReplaceGbdbLocal(path);
+// skip if file is there
+if (fileExists(locPath))
+    return locPath;
+// skip if we already got a url or cannot rewrite a path
+char* url = hReplaceGbdb(path);
+if (sameString(locPath, url))
+    return locPath;
+
+// check that we can write to the dest dir
+if ((access(locPath, W_OK))==0)
+    errAbort("trying to download %s but no write access to %s\n", url, locPath);
+
+char locDir[1024];
+splitPath(locPath, locDir, NULL, NULL);
+makeDirsOnPath(locDir);
+
+bool success = parallelFetch(url, locPath, 1, 1, TRUE, FALSE);
+if (! success)
+    errAbort("Could not download %s to %s\n", url, locPath);
+
+return locPath;
 }
 
 char *hTryExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId, boolean abortOnError)
@@ -2103,6 +2179,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 dyStringFree(&query);
 slReverse(&bedList);
+sqlFreeResult(&sr);
 hFreeConn(&conn);
 return(bedList);
 }
@@ -2372,10 +2449,18 @@ return genome;
 char *hDbDbNibPath(char *database)
 /* return nibPath from dbDb for database, has to be freed */
 {
-char *rawNibPath = hDbDbOptionalField(database, "nibPath");
-char *nibPath = hReplaceGbdb(rawNibPath);
-freez(&rawNibPath);
-return nibPath;
+char* seqDir = NULL;
+bool useNib = cfgOptionBooleanDefault("allowNib", TRUE);
+if (useNib)
+    seqDir = hDbDbOptionalField(database, "nibPath");
+else
+    {
+    char buf[4096];
+    safef(buf, sizeof(buf), "/gbdb/%s", database);
+    char *twoBitDir = hReplaceGbdbSeqDir(buf, database);
+    seqDir = twoBitDir;
+    }
+return seqDir;
 }
 
 char *hGenome(char *database)
@@ -3203,18 +3288,28 @@ else
     return slNameCloneList((struct slName *)(hel->val));
 }
 
-boolean hHostHasPrefix(char *prefix)
-/* Return TRUE if this is running on web-server with host name prefix */
+char* hHttpHost()
+/* return http host from apache or hostname if run from command line  */
 {
 char host[256];
-if (prefix == NULL)
-    return FALSE;
 
 char *httpHost = getenv("HTTP_HOST");
+
 if (httpHost == NULL && !gethostname(host, sizeof(host)))
     // make sure this works when CGIs are run from the command line.
     httpHost = host;
 
+return httpHost;
+}
+
+
+boolean hHostHasPrefix(char *prefix)
+/* Return TRUE if this is running on web-server with host name prefix */
+{
+if (prefix == NULL)
+    return FALSE;
+
+char *httpHost = hHttpHost();
 if (httpHost == NULL)
     return FALSE;
 
@@ -3234,6 +3329,14 @@ boolean hIsBetaHost()
  * Use sparingly as behavior on beta should be as close to RR as possible. */
 {
 return hHostHasPrefix("hgwbeta");
+}
+
+boolean hIsBrowserbox()
+/* Return TRUE if this is the browserbox virtual machine */
+{
+char name[256];
+gethostname(name, sizeof(name));
+return (startsWith("browserbox", name));
 }
 
 boolean hIsPreviewHost()

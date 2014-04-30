@@ -29,6 +29,10 @@ falPer	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 # Mallard duck Anas platyrhynchos
 anaPla  Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Anseriformes; Anatidae; Anas
 
+# tax ID 8801
+# Ostrich Struthio camelus
+strCam	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Palaeognathae; Struthioniformes; Struthionidae; Struthio
+
 # Turkey Meleagris gallopavo
 melGal	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Meleagridinae; Meleagris
 
@@ -39,10 +43,6 @@ galGal	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 # Coturnix japonica - Japanese quail
 cotJap	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Perdicinae; Coturnix
 
-# tax ID 8801
-# Ostrich Struthio camelus
-strCam	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Palaeognathae; Struthioniformes; Struthionidae; Struthio
-
 # Collared Flycatcher - Ficedula albicollis
 ficAlb	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Muscicapidae; Ficedula
 
@@ -52,11 +52,14 @@ pseHum	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 # White-throated sparrow Zonotrichia albicollis
 zonAlb  Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Fringillidae; Emberizinae; Emberizini; Zonotrichia
 
-# Zebra finch Taeniopygia guttata
-taeGut	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Estrildidae; Estrildinae; Taeniopygia
-
 # medium ground finche Geospiza fortis
 geoFor  Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Fringillidae; Emberizinae; Thraupini; Geospiza
+
+# common canary Serinus canaria
+serCan	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Fringillidae; Carduelinae; Serinus
+
+# Zebra finch Taeniopygia guttata
+taeGut	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Estrildidae; Estrildinae; Taeniopygia
 
 # budgerigar Melopsittacus undulatus
 melUnd	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Psittaciformes; Psittacidae; Melopsittacus
@@ -77,7 +80,7 @@ allMis	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 allSin	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Crocodylia; Alligatoridae; Alligatorinae; Alligator
 
 # Burmese python - Python molurus bivittatus
-pytMolBiv	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Lepidosauria; Squamata; Bifurcata; Unidentata; Episquamata; Toxicofera; Serpentes; Henophidia; Pythonidae; Python
+pytBiv	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Lepidosauria; Squamata; Bifurcata; Unidentata; Episquamata; Toxicofera; Serpentes; Henophidia; Pythonidae; Python
 
 # Lizard Anolis carolinensis
 anoCar	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Lepidosauria; Squamata; Iguania; Iguanidae; Polychrotinae; Anolis
@@ -103,6 +106,12 @@ latCha	Euteleostomi; Sarcopterygii; Coelacanthimorpha; Coelacanthiformes; Coelac
 # Atlantic cod - Gadus morhua
 gadMor	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Paracanthopterygii; Gadiformes; Gadidae; Gadus
 
+# Tiger rockfish - Sebastes nigrocinctus
+sebNig	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Scorpaeniformes; Scorpaenoidei; Sebastidae; Sebastinae; Sebastes
+
+# Flag rockfish - Sebastes rubrivinctus
+sebRub	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Scorpaeniformes; Scorpaenoidei; Sebastidae; Sebastinae; Sebastes
+
 # three-spined stickleback Gasterosteus aculeatus
 gasAcu	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Smegmamorpha; Gasterosteiformes/Syngnathiformes group; Gasterosteiformes; Gasterosteidae; Gasterosteus
 
@@ -111,6 +120,15 @@ oryLat	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanth
 
 # southern platyfish Xiphophorus maculatus
 xipMac	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Smegmamorpha; Atherinomorpha; Cyprinodontiformes; Cyprinodontoidei; Poeciliidae; Poeciliinae; Xiphophorus
+
+# Amazon molly - Poecilia formosa
+poeFor	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Smegmamorpha; Atherinomorpha; Cyprinodontiformes; Cyprinodontoidei; Poeciliidae; Poeciliinae; Poecilia
+
+# guppy - Poecilia reticulata
+poeRet	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteoglossocephalai; Clupeocephala; Euteleosteomorpha; Neoteleostei; Eurypterygia; Ctenosquamata; Acanthomorphata; Euacanthomorphacea; Percomorphaceae; Ovalentaria; Atherinomorphae; Cyprinodontiformes; Cyprinodontoidei; Poeciliidae; Poeciliinae; Poecilia
+
+# tongue sole fish Cynoglossus semilaevis
+cynSem	 Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Pleuronectiformes; Soleoidei; Cynoglossidae; Cynoglossinae; Cynoglossus
 
 # (cichlid) Neolamprologus brichardi
 neoBri	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Perciformes; Labroidei; Cichlidae; African cichlids; Pseudocrenilabrinae; Lamprologini; Neolamprologus
@@ -137,8 +155,12 @@ fr	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomor
 # Spotted Gar - Lepisosteus oculatus
 lepOcu	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Semionotiformes; Lepisosteidae; Lepisosteus
 
+
 # spotted green pufferfish Tetraodon nigroviridis
 tetNig	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Tetraodon
+
+# Japanese eel Anguilla japonica
+angJap	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Elopomorpha; Anguilliformes; Anguilloidei; Anguillidae; Anguilla
 
 # zebrafish Danio rerio
 danRer	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Clupeocephala; Otocephala; Ostariophysi; Otophysi; Cypriniphysi; Cypriniformes; Cyprinoidea; Cyprinidae; Danio

@@ -51,7 +51,20 @@
 	<li class="last"><a href="../cgi-bin/hgCustom">Custom Tracks</a></li>
 	</ul>
 </li>
-<li class="menuparent" id="aboutUs"><span>About Us</span>
+
+<!-- OPTIONAL_VIEW_MENU -->
+
+<li class="menuparent" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
+<!-- CONTEXT_SPECIFIC_HELP -->
+<li><a href="../FAQ/">FAQs</a></li>
+<li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
+<li><a href="../training.html">Training</a></li>
+<li><a href="../contacts.html">Mailing Lists</a></li>
+<li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
+</ul>
+</li>
+
+<li class="menuparent last" id="aboutUs"><span>About Us</span>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first odd"><a href="../goldenPath/newsarch.html">News</a></li>
 	<li class="even"><a href="../goldenPath/pubs.html">Publications</a></li>
@@ -66,17 +79,6 @@
 </ul>
 </li>
 
-<!-- OPTIONAL_VIEW_MENU -->
-
-<li class="menuparent last" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
-<!-- CONTEXT_SPECIFIC_HELP -->
-<li><a href="../FAQ/">FAQs</a></li>
-<li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
-<li><a href="../training.html">Training</a></li>
-<li><a href="../contacts.html">Mailing Lists</a></li>
-<li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
-</ul>
-</li>
 </ul>
 </div>
 		</div>

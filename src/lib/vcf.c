@@ -687,18 +687,30 @@ if (vcff->genotypeCount > 0)
 return record;
 }
 
+static int checkWordCount(struct vcfFile *vcff, char **words, int wordCount)
+// Compensate for error in 1000 Genomes Phase 1 file
+// ALL.chr21.integrated_phase1_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+// which has some lines that have an extra "\t" at the end of line,
+// causing the wordCount to be too high by 1:
+{
+int expected = 8;
+if (vcff->genotypeCount > 0)
+    expected = 9 + vcff->genotypeCount;
+if (wordCount == expected+1 && words[expected][0] == '\0')
+    wordCount--;
+lineFileExpectWords(vcff->lf, expected, wordCount);
+return wordCount;
+}
+
 struct vcfRecord *vcfNextRecord(struct vcfFile *vcff)
 /* Parse the words in the next line from vcff into a vcfRecord. Return NULL at end of file.
  * Note: this does not store record in vcff->records! */
 {
 char *words[VCF_MAX_COLUMNS];
 int wordCount;
-if ((wordCount = lineFileChop(vcff->lf, words)) <= 0)
+if ((wordCount = lineFileChopTab(vcff->lf, words)) <= 0)
     return NULL;
-int expected = 8;
-if (vcff->genotypeCount > 0)
-    expected = 9 + vcff->genotypeCount;
-lineFileExpectWords(vcff->lf, expected, wordCount);
+wordCount = checkWordCount(vcff, words, wordCount);
 return vcfRecordFromRow(vcff, words);
 }
 
@@ -767,10 +779,94 @@ if (rec->alleleCount > 1)
 return chromStartOrig;
 }
 
-static struct vcfRecord *vcfParseData(struct vcfFile *vcff, int maxRecords)
+static boolean allEndsGEStartsAndIdentical(char **starts, char **ends, int count)
+/* Given two arrays with <count> elements, return true if all strings in ends[] are
+ * greater than or equal to the corresponding strings in starts[], and all ends[]
+ * have the same char. */
+{
+int i;
+char refEnd = ends[0][0];
+for (i = 0;  i < count;  i++)
+    {
+    if (ends[i] < starts[i] || ends[i][0] != refEnd)
+	return FALSE;
+    }
+return TRUE;
+}
+
+static int countIdenticalBasesRight(char **alleles, int alCount)
+/* Return the number of bases that are identical at the end of each allele (usually 0). */
+{
+char *alleleEnds[alCount];
+int i;
+for (i = 0;  i < alCount;  i++)
+    {
+    int alLen = strlen(alleles[i]);
+    // If any allele is symbolic, don't try to trim.
+    if (!isAllNt(alleles[i], alLen))
+	return 0;
+    alleleEnds[i] = alleles[i] + alLen-1;
+    }
+int trimmedBases = 0;
+while (allEndsGEStartsAndIdentical(alleles, alleleEnds, alCount))
+    {
+    trimmedBases++;
+    // Trim identical last base of alleles and move alleleEnds[] items back.
+    for (i = 0;  i < alCount;  i++)
+	alleleEnds[i]--;
+    }
+return trimmedBases;
+}
+
+unsigned int vcfRecordTrimAllelesRight(struct vcfRecord *rec)
+/* Some tools output indels with extra base to the right, for example ref=ACC, alt=ACCC
+ * which should be ref=A, alt=AC.  When the extra bases make the variant extend from an
+ * intron (or gap) into an exon, it can cause a false appearance of a frameshift.
+ * To avoid this, when all alleles have identical base(s) at the end, trim all of them,
+ * and update rec->chromEnd.
+ * For hgTracks' mapBox we need the correct chromStart for identifying the record in hgc,
+ * so return the original chromEnd. */
+{
+unsigned int chromEndOrig = rec->chromEnd;
+int alCount = rec->alleleCount;
+char **alleles = rec->alleles;
+int trimmedBases = countIdenticalBasesRight(alleles, alCount);
+if (trimmedBases > 0)
+    {
+    struct vcfFile *vcff = rec->file;
+    // Allocate new pooled strings for the trimmed alleles.
+    int i;
+    for (i = 0;  i < alCount;  i++)
+	{
+	int alLen = strlen(alleles[i]); // alLen >= trimmedBases > 0
+	char trimmed[alLen+1];
+	safencpy(trimmed, sizeof(trimmed), alleles[i], alLen - trimmedBases);
+	if (isEmpty(trimmed))
+	    safencpy(trimmed, sizeof(trimmed), "-", 1);
+	alleles[i] = vcfFilePooledStr(vcff, trimmed);
+	}
+    rec->chromEnd -= trimmedBases;
+    }
+return chromEndOrig;
+}
+
+static boolean chromsMatch(char *chromA, char *chromB)
+// Return TRUE if chromA and chromB are non-NULL and identical, possibly ignoring
+// "chr" at the beginning of one but not the other.
+{
+if (chromA == NULL || chromB == NULL)
+    return FALSE;
+char *chromAPlus = startsWith("chr", chromA) ? chromA+3 : chromA;
+char *chromBPlus = startsWith("chr", chromB) ? chromB+3 : chromB;
+return sameString(chromAPlus, chromBPlus);
+}
+
+static struct vcfRecord *vcfParseData(struct vcfFile *vcff, char *chrom, int start, int end,
+				      int maxRecords)
 // Given a vcfFile into which the header has been parsed, and whose
 // lineFile is positioned at the beginning of a data row, parse and
-// return all data rows from lineFile.
+// return all data rows (in region, if chrom is non-NULL) from lineFile,
+// up to maxRecords.
 {
 if (vcff == NULL)
     return NULL;
@@ -781,17 +877,32 @@ while ((record = vcfNextRecord(vcff)) != NULL)
     {
     if (maxRecords >= 0 && recCount >= maxRecords)
         break;
-    slAddHead(&records, record);
-    recCount++;
+    if (chrom == NULL)
+	{
+	slAddHead(&records, record);
+	recCount++;
+	}
+    else if (chromsMatch(chrom, record->chrom))
+	{
+	if (end > 0 && record->chromStart >= end)
+	    break;
+	else if (record->chromEnd > start)
+	    {
+	    slAddHead(&records, record);
+	    recCount++;
+	    }
+	}
     }
 slReverse(&records);
-
 return records;
 }
 
-struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords, boolean parseAll)
+struct vcfFile *vcfFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
+			       int maxErr, int maxRecords, boolean parseAll)
 /* Open fileOrUrl and parse VCF header; return NULL if unable.
- * If parseAll, then read in all lines, parse and store in
+ * If chrom is non-NULL, scan past any variants that precede {chrom, chromStart}.
+ * Note: this is very inefficient -- it's better to use vcfTabix if possible!
+ * If parseAll, then read in all lines in region, parse and store in
  * vcff->records; if maxErr >= zero, then continue to parse until
  * there are maxErr+1 errors.  A maxErr less than zero does not stop
  * and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence */
@@ -803,9 +914,32 @@ if (startsWith("http://", fileOrUrl) || startsWith("ftp://", fileOrUrl) ||
 else
     lf = lineFileMayOpen(fileOrUrl, TRUE);
 struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
-if (parseAll)
+if (vcff && chrom != NULL)
     {
-    vcff->records = vcfParseData(vcff, maxRecords);
+    char *line = NULL;
+    while (lineFileNextReal(vcff->lf, &line))
+	{
+	char lineCopy[strlen(line)+1];
+	safecpy(lineCopy, sizeof(lineCopy), line);
+	char *words[VCF_MAX_COLUMNS];
+	int wordCount = chopTabs(lineCopy, words);
+	wordCount = checkWordCount(vcff, words, wordCount);
+	struct vcfRecord *record = vcfRecordFromRow(vcff, words);
+	if (chromsMatch(chrom, record->chrom))
+	    {
+	    if (record->chromEnd < start)
+		continue;
+	    else
+		{
+		lineFileReuse(vcff->lf);
+		break;
+		}
+	    }
+	}
+    }
+if (vcff && parseAll)
+    {
+    vcff->records = vcfParseData(vcff, chrom, start, end, maxRecords);
     lineFileClose(&(vcff->lf)); // Not sure why it is closed.  Angie?
     }
 return vcff;
@@ -828,7 +962,7 @@ if (isNotEmpty(chrom) && start != end)
     {
     if (lineFileSetTabixRegion(lf, chrom, start, end))
         {
-        vcff->records = vcfParseData(vcff, maxRecords);
+        vcff->records = vcfParseData(vcff, NULL, 0, 0, maxRecords);
         lineFileClose(&(vcff->lf)); // Not sure why it is closed.  Angie?
         }
     }
@@ -866,7 +1000,7 @@ int oldCount = slCount(vcff->records);
 
 if (lineFileSetTabixRegion(vcff->lf, chrom, start, end))
     {
-    struct vcfRecord *records = vcfParseData(vcff, maxRecords);
+    struct vcfRecord *records = vcfParseData(vcff, NULL, 0, 0, maxRecords);
     if (records)
         {
         struct vcfRecord *lastRec = vcff->records;
@@ -1117,10 +1251,10 @@ return asParseText(vcfDataLineAutoSqlString);
 
 char *vcfGetSlashSepAllelesFromWords(char **words, struct dyString *dy)
 /* Overwrite dy with a /-separated allele string from VCF words,
- * skipping the extra initial base that VCF requires for indel alleles if necessary.
+ * skipping the extra initial base that VCF requires for indel alleles if necessary,
+ * and trimming identical bases at the ends of all alleles if there are any.
  * Return dy->string for convenience. */
 {
-dyStringClear(dy);
 // VCF reference allele gets its own column:
 char *refAllele = words[3];
 char *altAlleles = words[4];
@@ -1128,41 +1262,29 @@ char *altAlleles = words[4];
 int alCount = 1 + countChars(altAlleles, ',') + 1;
 char *alleles[alCount];
 alleles[0] = refAllele;
-dyStringAppend(dy, altAlleles);
-chopByChar(dy->string, ',', &(alleles[1]), alCount-1);
-boolean hasPaddingBase = allelesHavePaddingBase(alleles, alCount);
-int offset = hasPaddingBase ? 1 : 0;
-// Build a /-separated allele string, trimming first base if offset is 1:
-dyStringClear(dy);
-if (refAllele[offset] == '\0')
-    dyStringAppendC(dy, '-');
-else
-    dyStringAppend(dy, refAllele+offset);
-if (isNotEmpty(altAlleles) && differentString(altAlleles, "."))
+char altAlCopy[strlen(altAlleles)+1];
+safecpy(altAlCopy, sizeof(altAlCopy), altAlleles);
+chopByChar(altAlCopy, ',', &(alleles[1]), alCount-1);
+int i;
+if (allelesHavePaddingBase(alleles, alCount))
     {
-    // Read alleles from altAlleles because the contents of alleles[] are trashed
-    // by our reuse of dy.
-    char *p;
-    while ((p = strchr(altAlleles, ',')) != NULL)
-	{
+    // Skip padding base:
+    for (i = 0;  i < alCount;  i++)
+	alleles[i]++;
+    }
+// Having dealt with left padding base, now look for identical bases on the right:
+int trimmedBases = countIdenticalBasesRight(alleles, alCount);
+// Build a /-separated allele string, trimming bases on the right if necessary:
+dyStringClear(dy);
+for (i = 0;  i < alCount;  i++)
+    {
+    if (i > 0)
 	dyStringAppendC(dy, '/');
-	int len = p - altAlleles;
-	if (len-offset == 0)
-	    dyStringAppendC(dy, '-');
-	else if (isAllNt(altAlleles, len))
-	    dyStringAppendN(dy, altAlleles+offset, len-offset);
-	else
-	    dyStringAppendN(dy, altAlleles, len);  // symbolic
-	altAlleles = p+1;
-	}
-    dyStringAppendC(dy, '/');
-    int len = strlen(altAlleles);
-    if (len-offset == 0)
+    char *allele = alleles[i];
+    if (allele[trimmedBases] == '\0')
 	dyStringAppendC(dy, '-');
-    else if (isAllNt(altAlleles, len))
-	dyStringAppendN(dy, altAlleles+offset, len-offset);
     else
-	dyStringAppendN(dy, altAlleles, len);  // symbolic
+	dyStringAppendN(dy, allele, strlen(allele)-trimmedBases);
     }
 return dy->string;
 }

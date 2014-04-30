@@ -618,7 +618,7 @@ return startsWithWord("bam", tdb->type);
 INLINE boolean tdbIsVcf(struct trackDb *tdb)
 // Return TRUE if tdb corresponds to a VCF file.
 {
-return startsWithWord("vcfTabix", tdb->type);
+return startsWithWord("vcfTabix", tdb->type) || startsWithWord("vcf", tdb->type);
 }
 
 boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb, boolean onlyAjax);

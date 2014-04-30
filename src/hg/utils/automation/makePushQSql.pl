@@ -520,7 +520,7 @@ CREATE TABLE $db (
   releaseLogUrl longblob NOT NULL,
   importance char(1) NOT NULL default '',
   PRIMARY KEY  (`qid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 _EOF_
   ;
@@ -606,7 +606,7 @@ sub printMainPushQEntry {
   my $date = `date +%Y-%m-%d`;
   my $size = 0;
   chomp $date;
-  my $qapushqSql = "$HgAutomate::runSSH hgwbeta hgsql -h mysqlbeta -N qapushq";
+  my $qapushqSql = "$HgAutomate::runSSH qateam\@hgwbeta ./bin/x86_64/hgsql -h mysqlbeta -N qapushq";
   my $rankQuery = 'select rank from pushQ order by rank desc limit 1';
   my $rank = `echo $rankQuery | $qapushqSql`;
   $rank += 1;
@@ -675,7 +675,7 @@ _EOF_
         care of, and the beginning of handling composites is here but not used
         yet.
  *** 6. Make sure that qapushq does not already have a table named $db:
-          ssh hgwbeta hgsql -h mysqlbeta qapushq -NBe "'desc $db;'"
+          ssh qateam\@hgwbeta ./bin/x86_64/hgsql -h mysqlbeta qapushq -NBe "'desc $db;'"
         You *should* see this error:
           ERROR 1146 at line 1: Table 'qapushq.$db' doesn't exist
         If it already has that table, talk to QA and figure out whether

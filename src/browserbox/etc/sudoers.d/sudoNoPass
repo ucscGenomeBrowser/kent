@@ -1,0 +1,2 @@
+# allow sudo for browser without password
+browser ALL=(ALL) NOPASSWD: ALL

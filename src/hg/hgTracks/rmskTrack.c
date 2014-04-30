@@ -114,6 +114,10 @@ if (isFull)
 	x1 = roundingScale(ro.genoStart-winStart, width, baseWidth)+xOff;
 	x1 = max(x1, 0);
 	x2 = roundingScale(ro.genoEnd-winStart, width, baseWidth)+xOff;
+	if (x1 < insideX)
+	    x1 = insideX;
+	if (x2 > insideX+width)
+	    x2 = insideX+width;
 	w = x2-x1;
 	if (w <= 0)
 	    w = 1;

@@ -18,9 +18,127 @@ boolean noJob = FALSE;
 boolean ignoreQa = FALSE;
 boolean justLink = FALSE;
 boolean dry = FALSE;
+boolean clTest = FALSE;
+boolean clUpgrade = FALSE;
 char *clStep = "*";
 char *clInFormat = "*";
 int clMax = 0;
+
+struct eapSwVersion *eapSwVersionForStepVersion(struct sqlConnection *conn, unsigned stepVersionId)
+/* Get a list of swVersion for all software used by the given step version */
+{
+char query[128];
+sqlSafef(query, sizeof(query),
+    "select sv.* from eapSwVersion sv,eapStepSwVersion ssv "
+    " where ssv.swVersionId = sv.id and ssv.stepVersionId=%u ", stepVersionId);
+return eapSwVersionLoadByQuery(conn, query);
+}
+
+
+unsigned eapStepVersionIdRedoThreshold(struct sqlConnection *conn, char *stepName,
+    enum eapRedoPriority threshold)
+/* Returns lowest stepVersionId that does not *have* to be rerun according to 
+ * eapSwVersionRedoPriority being no more than threshold. */
+{
+/* Query system for what version it would use currently.  This actually forces it to
+ * build version if need be to fit all the latest software. */
+unsigned lastGoodVersion = eapCurrentStepVersion(conn, stepName);  
+
+/* Get a list of all versions of this step ordered with most recent first. */
+char query[256];
+sqlSafef(query, sizeof(query), 
+	"select * from eapStepVersion where step='%s' order by id desc", stepName);
+struct eapStepVersion *stepVersion, *stepVersionList = eapStepVersionLoadByQuery(conn, query);
+
+/* So some cheap sanity checking to make sure indeed we have a step and know what the latest is. */
+if (stepVersionList == NULL)
+     internalErr();
+assert(stepVersionList->id == lastGoodVersion);
+
+/* If we are only version of step things are easy, we'll skip most of the rest. */
+if (stepVersionList->next != NULL)
+    {
+    verbose(2, "Oh my, more than one version of this step.  Life gets hard.\n"); 
+
+    /* Get a list of all swVersion used in current step, assumed good */
+    struct eapSwVersion *curVer, *curVerList = eapSwVersionForStepVersion(conn, lastGoodVersion);
+
+    /* Build up a hash keyed by software with eapSwVersion as values */
+    struct hash *curVersionHash = hashNew(5);
+    for (curVer = curVerList; curVer != NULL; curVer = curVer->next)
+        hashAdd(curVersionHash, curVer->software, curVer);
+
+    /* Loop through each step version seeing if there is a required upgrade to a piece of
+     * software used by step. */
+    for (stepVersion = stepVersionList->next; stepVersion != NULL; stepVersion = stepVersion->next)
+	{
+	struct eapSwVersion *ver, *verList = eapSwVersionForStepVersion(conn, stepVersion->id);
+	boolean anyMeetThreshold = FALSE;
+	for (ver = verList; ver != NULL; ver = ver->next)
+	    {
+	    struct hashEl *hel = hashLookup(curVersionHash, ver->software);
+	    if (hel == NULL)
+		{
+	        warn("Older version of step %s is using software %s not used in current\n"
+		         "version of step.  What to do?", stepName,  ver->software);
+		internalErr();
+		}
+	    struct eapSwVersion *curVer = hel->val;
+	    if (curVer->id != ver->id)
+	        {
+		if (curVer->redoPriority >= threshold)
+		    {
+		    anyMeetThreshold = TRUE;
+		    break;
+		    }
+		}
+	    }
+	if (anyMeetThreshold)
+	    break;
+	verbose(2, "Looks like we can go back a version ok to %d\n", stepVersion->id);
+	lastGoodVersion = stepVersion->id;
+	}
+    }
+eapStepVersionFreeList(&stepVersionList);
+return lastGoodVersion;
+}
+
+unsigned stepVersionIdRedoThreshold(struct sqlConnection *conn, struct hash *cache,
+    char *stepName, enum eapRedoPriority threshold)
+/* Look up minimum stepVersion required for this step, using cache to avoid overheating
+ * database. You need a separate cache for each different threshold */
+{
+struct hashEl *hel = hashLookup(cache, stepName);
+unsigned redoThreshold;
+if(hel == NULL)
+    {
+    redoThreshold = eapStepVersionIdRedoThreshold(conn, stepName, threshold);
+    hashAddInt(cache, stepName, redoThreshold);
+    }
+else
+    {
+    redoThreshold = ptToInt(hel->val);
+    }
+return redoThreshold;
+}
+ 
+struct hashEl *hashAddInt(struct hash *hash, char *name, int val);
+
+void doTest(struct sqlConnection *conn, struct edwFile *efList)
+/* Do some test something */
+{
+char query[512];
+sqlSafef(query, sizeof(query), "select * from eapStep");
+struct eapStep *step, *stepList = eapStepLoadByQuery(conn, query);
+for (step = stepList; step != NULL; step = step->next)
+    {
+    unsigned curStepVersion = eapCurrentStepVersion(conn, step->name);
+    printf("%s\t%u\t", step->name, curStepVersion);
+    long redoThreshold2 = eapStepVersionIdRedoThreshold(conn, step->name, 2);
+    long redoThreshold1 = eapStepVersionIdRedoThreshold(conn, step->name, 2);
+    printf("redo1 %ld\tredo2 %ld\n", redoThreshold1, redoThreshold2);
+    }
+}
 
 void usage()
 /* Explain usage and exit. */
@@ -33,6 +151,7 @@ errAbort(
   "   -step=pattern - Just run steps with names matching pattern which is * by default\n"
   "   -inFormat=pattern - Just run steps that are triggered by files of this format\n"
   "   -retry - if job has run and failed retry it\n"
+  "   -upgrade - redo older analysis runs if steps have been upgraded in optional way\n"
   "   -again - if set schedule it even if it's been run once\n"
   "   -noJob - if set then don't put job on eapJob table\n"
   "   -ignoreQa - if set then ignore QA results when scheduling\n"
@@ -44,11 +163,12 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"test", OPTION_BOOLEAN},
    {"step", OPTION_STRING},
    {"inFormat", OPTION_STRING},
    {"retry", OPTION_BOOLEAN},
+   {"upgrade", OPTION_BOOLEAN},
    {"again", OPTION_BOOLEAN},
-   {"up", OPTION_BOOLEAN},
    {"noJob", OPTION_BOOLEAN},
    {"ignoreQa", OPTION_BOOLEAN},
    {"justLink", OPTION_BOOLEAN},
@@ -56,6 +176,11 @@ static struct optionSpec options[] = {
    {"dry", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+/* Another calculated from the command line, consider read only outside of main: */
+enum eapRedoPriority gRedoPriority = eapRedo;
+struct hash *gRedoThresholdCache = NULL;
+
 
 struct edwAssembly *targetAssemblyForDbAndSex(struct sqlConnection *conn, char *ucscDb, char *sex)
 /* Figure out best target assembly for something that is associated with a given ucscDB.  
@@ -104,6 +229,7 @@ char *sex = sexFromExp(conn, ef, vf);
 return targetAssemblyForDbAndSex(conn, vf->ucscDb, sex);
 }
 
+
 static boolean alreadyTakenCareOf(struct sqlConnection *conn, 
     struct edwAssembly *assembly, char *analysisStep, 
     long long firstInput)
@@ -114,20 +240,16 @@ if (!wildMatch(clStep, analysisStep))
 if (again)
     return FALSE;
 char query[512];
+int statusMin = -1;
 if (retry)
-    sqlSafef(query, sizeof(query),
-	"select count(*) from eapRun,eapInput"
-	" where eapRun.id = eapInput.runId"
-	" and eapInput.fileId=%lld and analysisStep='%s' and createStatus >= 0"
-	" and assemblyId = %u",
-	firstInput, analysisStep, assembly->id);
-else
-    sqlSafef(query, sizeof(query),
-	"select count(*) from eapRun,eapInput"
-	" where eapRun.id = eapInput.runId"
-	" and eapInput.fileId=%lld and analysisStep='%s'"
-	" and assemblyId = %u",
-	firstInput, analysisStep, assembly->id);
+    statusMin = 0;
+sqlSafef(query, sizeof(query),
+    "select count(*) from eapRun,eapInput"
+    " where eapRun.id = eapInput.runId"
+    " and eapInput.fileId=%lld and analysisStep='%s' and createStatus >= %d"
+    " and assemblyId = %u and stepVersionId >= %u",
+    firstInput, analysisStep, statusMin, assembly->id,
+    stepVersionIdRedoThreshold(conn, gRedoThresholdCache, analysisStep, gRedoPriority));
 int count = sqlQuickNum(conn, query);
 verbose(2, "query %s\ncount %d\n", query, count);
 return count > 0;
@@ -165,7 +287,7 @@ if (clMax > 0)
     }
 
 if (dry)
-    printf("%s\n", commandLine);
+    printf("%u %s\n", inputIds[0], commandLine);
 else
     {
     verbose(1, "scheduling %s on %u in %s\n", analysisStep, inputIds[0], tempDir);
@@ -495,14 +617,13 @@ freez(&controlName);
 return edwExperimentLoadByQuery(conn, query);
 }
 
-void scheduleMacsChip(struct sqlConnection *conn, 
-    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
-/* If it hasn't already been done schedule macs analysis of the chip-seq bam file. */
+struct edwFile *mustFindChipControlFile(struct sqlConnection *conn, 
+    struct edwValidFile *vf, struct edwExperiment *exp)
+/* Find control file for this chip file */
 {
-// Try and find control 
 struct edwExperiment *controlExp = findChipControlExp(conn, exp->accession);
 if (controlExp == NULL)
-    return;
+    errAbort("Can't find control experiment for ChIP experiment %s", exp->accession);
 
 // Got control experiment,  now let's go for a matching bam file. 
 char query[PATH_LEN*3];
@@ -512,7 +633,7 @@ sqlSafef(query, sizeof(query),
 struct edwValidFile *controlVf, *controlVfList = edwValidFileLoadByQuery(conn, query);
 int controlCount = slCount(controlVfList);
 if (controlCount <= 0)
-    return;
+    return NULL;
 
 // Go through list and try to pick one
 int bestScore = 0;
@@ -538,16 +659,76 @@ for (controlVf = controlVfList; controlVf != NULL; controlVf = controlVf->next)
 	}
     }
 if (bestControl == NULL)
-    return;
+    errAbort("Can't find control file for ChIP experiment %s", exp->accession);
 
+// Figure out control bam file info
+return edwFileFromId(conn, bestControl->fileId);
+}
+
+void scheduleSppChip(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
+/* If it hasn't already been done schedule SPP peak calling for a chip-seq bam file. */
+{
 // Figure out input bam name
 char bamName[PATH_LEN];
 safef(bamName, sizeof(bamName), "%s%s", edwRootDir, ef->edwFileName);
 
-// Figure out control bam name
-struct edwFile *controlEf = edwFileFromId(conn, bestControl->fileId);
-char controlBamName[PATH_LEN];
-safef(controlBamName, sizeof(controlBamName), "%s%s", edwRootDir, controlEf->edwFileName);
+// Figure out analysis step and script based on paired end status of input bam
+boolean isPaired = bamIsPaired(bamName, 1000);
+char *analysisStep, *scriptName;
+if (isPaired)
+    {
+    /*
+    analysisStep = "spp_chip_pe";
+    scriptName = "eap_run_spp_chip_pe";
+    */
+    return;
+    }
+else
+    {
+    analysisStep = "spp_chip_se";
+    scriptName = "eap_run_spp_chip_se";
+    }
+
+verbose(2, "Looking for control for chip file %s\n", ef->edwFileName);
+
+// Get control bam file info
+struct edwFile *controlEf = mustFindChipControlFile(conn, vf, exp);
+verbose(2, "schedulingSppChip on %s with control %s,  step %s, script %s\n", ef->edwFileName, 
+    controlEf->edwFileName, analysisStep, scriptName);
+
+/* Make sure that we don't schedule it again and again */
+struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
+    return;
+
+char *tempDir = newTempDir(analysisStep);
+
+/* Stage inputs and make command line. */
+struct cache *cache = cacheNew();
+char *efName = cacheMore(cache, ef);
+char *controlEfName = cacheMore(cache, controlEf);
+preloadCache(conn, cache);
+
+char commandLine[4*PATH_LEN];
+safef(commandLine, sizeof(commandLine), "%s %s %s %s %s%s", 
+    scriptName, assembly->name, efName, controlEfName,
+    tempDir, "out.narrowPeak.bigBed");
+
+/* Declare step input and output arrays and schedule it. */
+unsigned inFileIds[] = {ef->id, controlEf->id};
+char *inTypes[] = {"chipBam", "controlBam"};
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
+    ArraySize(inFileIds), inFileIds, inTypes);
+}
+
+void scheduleMacsChip(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
+/* If it hasn't already been done schedule Macs peak calling for a chip-seq bam file. */
+{
+// Figure out input bam name
+char bamName[PATH_LEN];
+safef(bamName, sizeof(bamName), "%s%s", edwRootDir, ef->edwFileName);
 
 // Figure out analysis step and script based on paired end status of input bam
 boolean isPaired = bamIsPaired(bamName, 1000);
@@ -563,8 +744,10 @@ else
     scriptName = "eap_run_macs2_chip_se";
     }
 
-verbose(2, "schedulingMacsChip on %s step %s, script %s\n", ef->edwFileName, 
-    analysisStep, scriptName);
+// Get control bam file info
+struct edwFile *controlEf = mustFindChipControlFile(conn, vf, exp);
+verbose(2, "schedulingMacsChip on %s with control %s,  step %s, script %s\n", ef->edwFileName, 
+    controlEf->edwFileName, analysisStep, scriptName);
 
 /* Make sure that we don't schedule it again and again */
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
@@ -578,6 +761,7 @@ struct cache *cache = cacheNew();
 char *efName = cacheMore(cache, ef);
 char *controlEfName = cacheMore(cache, controlEf);
 preloadCache(conn, cache);
+
 char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "%s %s %s %s %s%s %s%s", 
     scriptName, assembly->name, efName, controlEfName,
@@ -712,6 +896,30 @@ for (i=0; i<ArraySize(okReadLengths); ++i)
 return FALSE;
 }
 
+int getReadLengthAndCheckForHotspot(struct sqlConnection *conn, struct edwFile *ef)
+/* Figure out read length for file. */
+{
+unsigned fastqId = getFirstParentOfFormat(conn, "fastq", ef->id);
+double readLength = 0;
+boolean allSame = FALSE;
+if (fastqId == 0)
+    readLength = bamReadLength(edwPathForFileId(conn, ef->id), 1000, &allSame);
+else
+    readLength = mustGetReadLengthForFastq(conn, fastqId, &allSame);
+if (!allSame)
+    {
+    verbose(2, "Couldn't schedule hotspot on %s, not all reads the same size.\n", ef->edwFileName);
+    return 0;
+    }
+if (!hotspotReadLengthOk(readLength))
+    {
+    verbose(2, "Hotspot read length %g not supported on %s\n", readLength, ef->edwFileName);
+    return 0;
+    }
+return readLength;
+}
+
+
 void scheduleHotspot(struct sqlConnection *conn, 
     struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
 /* If it hasn't already been done schedule hotspot analysis of the file. */
@@ -731,23 +939,9 @@ if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
 
 verbose(2, "schedulingHotspot on %s step %s\n", ef->edwFileName, analysisStep);
 /* Make command line */
-unsigned fastqId = getFirstParentOfFormat(conn, "fastq", ef->id);
-double readLength = 0;
-boolean allSame = FALSE;
-if (fastqId == 0)
-    readLength = bamReadLength(edwPathForFileId(conn, ef->id), 1000, &allSame);
-else
-    readLength = mustGetReadLengthForFastq(conn, fastqId, &allSame);
-if (!allSame)
-    {
-    verbose(2, "Couldn't schedule hotspot on %s, not all reads the same size.\n", ef->edwFileName);
+int readLength = getReadLengthAndCheckForHotspot(conn, ef);
+if (readLength <= 0)
     return;
-    }
-if (!hotspotReadLengthOk(readLength))
-    {
-    verbose(2, "Hotspot read length %g not supported on %s\n", readLength, ef->edwFileName);
-    return;
-    }
 
 char *tempDir = newTempDir(analysisStep);
 
@@ -758,15 +952,81 @@ preloadCache(conn, cache);
 char commandLine[4*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "eap_run_hotspot %s %s %d %s%s %s%s %s%s",
     edwSimpleAssemblyName(assembly->ucscDb), efName,
-    (int)readLength, tempDir, "out.narrowPeak.bigBed", 
+    readLength, tempDir, "out.narrowPeak.bigBed", 
     tempDir, "out.broadPeak.bigBed", tempDir, "out.bigWig");
 
-/* Declare step input and output arrays and schedule it. */
+/* Declare step input arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
 char *inTypes[] = {"alignments"};
 scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
     ArraySize(inFileIds), inFileIds, inTypes);
 }
+
+void schedulePhantomPeakSpp(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
+/* Calculate phantom peak stats on a bam file we hope will be peaky. */
+{
+verbose(2, "Scheduling phantomPeakSpp\n");
+/* Make sure that we don't schedule it again and again */
+char *analysisStep = "phantom_peak_stats";
+struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
+    return;
+
+/* Make temp dir and stage input files */
+char *tempDir = newTempDir(analysisStep);
+struct cache *cache = cacheNew();
+char *efName = cacheMore(cache, ef);
+preloadCache(conn, cache);
+
+/* Make command line */
+char commandLine[3*PATH_LEN];
+safef(commandLine, sizeof(commandLine), "eap_run_phantom_peak_spp %s %s%s",
+    efName, tempDir, "out.tab");
+
+/* Declare step input arrays and schedule it. */
+unsigned inFileIds[] = {ef->id};
+char *inTypes[] = {"alignments"};
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
+    ArraySize(inFileIds), inFileIds, inTypes);
+}
+
+void scheduleDnaseStats(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
+/* Calculate dnase qa stats on a bam file we hope will be peaky. */
+{
+verbose(2, "Scheduling dnaseStats\n");
+/* Make sure that we don't schedule it again and again */
+char *analysisStep = "dnase_stats";
+struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
+if (!endsWith(vf->ucscDb, "hg19")) return;    // ugly temp
+if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
+    return;
+
+/* Figure out read length */
+int readLength = getReadLengthAndCheckForHotspot(conn, ef);
+if (readLength <= 0)
+    return;
+
+/* Make temp dir and stage input files */
+char *tempDir = newTempDir(analysisStep);
+struct cache *cache = cacheNew();
+char *efName = cacheMore(cache, ef);
+preloadCache(conn, cache);
+
+/* Make command line */
+char commandLine[3*PATH_LEN];
+safef(commandLine, sizeof(commandLine), "eap_dnase_stats %s %s %d %s%s %s%s %s%s",
+    efName, edwSimpleAssemblyName(assembly->name), readLength, 
+    tempDir, "bamStats.ra", tempDir, "phantomPeaks.tab", tempDir, "spot.ra");
+
+/* Declare step input arrays and schedule it. */
+unsigned inFileIds[] = {ef->id};
+char *inTypes[] = {"alignments"};
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
+    ArraySize(inFileIds), inFileIds, inTypes);
+}
+
 
 void scheduleBamSort(struct sqlConnection *conn, 
     struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
@@ -788,7 +1048,7 @@ char commandLine[3*PATH_LEN];
 safef(commandLine, sizeof(commandLine), "eap_bam_sort %s %s%s", 
     efName, tempDir, "out.bam");
 
-/* Declare step input and output arrays and schedule it. */
+/* Declare step input arrays and schedule it. */
 unsigned inFileIds[] = {ef->id};
 char *inTypes[] = {"unsorted"};
 scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
@@ -835,9 +1095,12 @@ if (sameString(exp->dataType, "DNase-seq"))
     {
     scheduleMacsDnase(conn, ef, vf, exp);
     scheduleHotspot(conn, ef, vf, exp);
+    schedulePhantomPeakSpp(conn, ef, vf, exp);
+    scheduleDnaseStats(conn, ef, vf, exp);
     }
 else if (sameString(exp->dataType, "ChIP-seq"))
     {
+    scheduleSppChip(conn, ef, vf, exp);
 #ifdef SOON
     scheduleMacsChip(conn, ef, vf, exp);
 #endif /* SOON */
@@ -881,25 +1144,24 @@ verbose(2, "Theoretically I'd be pooling %d wigs around %s\n", slCount(pool), ex
 struct eapStep *step = eapStepFromNameOrDie(conn, analysisStep);
 char *tempDir = newTempDir(analysisStep);
 
-/* Stage inputs and turn into slList of file names */
-struct slName *inFileNames = NULL;
+/* Stage inputs and write file names into a file */
 struct cache *cache = cacheNew();
 struct edwFile *ef;
+char inListFile[PATH_LEN];
+safef(inListFile,sizeof(inListFile), "%s%s", tempDir, "in.lst");
+FILE *f = mustOpen(inListFile, "w");
 for (ef = pool; ef != NULL; ef = ef->next)
     {
     char *fileName = cacheMore(cache, ef);
-    slNameAddTail(&inFileNames, fileName);
+    fprintf(f, "%s\n", fileName);
     }
+carefulClose(&f);
 preloadCache(conn, cache);
-
 
 /* Make up command line */
 struct dyString *command = dyStringNew(2048);
-dyStringPrintf(command, "eap_sum_bigWig %s%s %s",
-    tempDir, "out.bigWig", assembly->name);
-struct slName *in;
-for (in = inFileNames; in != NULL; in = in->next)
-     dyStringPrintf(command, " %s", in->name);
+dyStringPrintf(command, "eap_pool_big_wig %s %s %s%s ",
+    assembly->name, inListFile, tempDir, "out.bigWig");
 
 /* Create step input arrays and schedule it. */
 int inCount = slCount(pool);
@@ -925,6 +1187,7 @@ void replicaWigAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct e
     struct edwExperiment *exp)
 /* Run analysis on wigs that have been replicated.  */
 {
+#ifdef SOON
 char *outputType = vf->outputType;
 if (sameString(outputType, "macs2_dnase_signal") || sameString(outputType, "macs2_chip_signal")
     || sameString(outputType, "hotspot_signal"))
@@ -942,15 +1205,16 @@ if (sameString(outputType, "macs2_dnase_signal") || sameString(outputType, "macs
 	    }
 	}
     }
+#endif /* SOON */
 }
 
-struct edwFile *bestPeakRep(struct sqlConnection *conn, char *notRep, struct edwFile *efList)
+struct edwFile *bestRepOnList(struct sqlConnection *conn, char *notRep, struct edwFile *efList)
 /* Return best looking replica on list.  How to decide?  Hmm, good question! */
 /* At the moment it is using the enrichment*coverage calcs if available, otherwise covereage
  * depth.  It looks like it is not preferring peaks that have been processed all the way
  * from scratch from the fastq files by pipeline though. */
 {
-verbose(2, "bestPeakRep for list of %d\n", slCount(efList));
+verbose(2, "bestRepOnList for list of %d\n", slCount(efList));
 /* If we are only one in list the choice is easy! */
 if (efList->next == NULL)
     return efList;
@@ -1002,63 +1266,11 @@ edwQaEnrichTargetFree(&target);
 return bestEf;
 }
 
-void scheduleReplicatedPeaks(struct sqlConnection *conn, char *peakType, 
-    struct edwExperiment *exp,  struct edwValidFile *youngestVf, struct edwFile *pool)
-/* Schedule job that produces replicated peaks out of individual peaks from two replicates. */
-{
-/* Figure out which step running based on peakType */
-char *analysisStep = NULL;
-char *outFileName = NULL;
-if (sameString(peakType, "narrowPeak"))
-    {
-    analysisStep = "replicated_narrow_peaks";
-    outFileName= "out.narrowPeak.bigBed";
-    }
-else
-    {
-    analysisStep = "replicated_broad_peaks";
-    outFileName= "out.broadPeak.bigBed";
-    }
-
-
-/* Get assembly and figure out if we are already done */
-struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, youngestVf->ucscDb);
-if (alreadyTakenCareOf(conn, assembly, analysisStep, youngestVf->fileId))
-    return;
-verbose(2, "Theoretically I'd be making replicated peaks in %s on file %u=%u\n", 
-    exp->accession, pool->id, youngestVf->fileId);
-
-/* We always take the most recent replicate. Choose best remaining rep by some measure for second */
-struct edwFile *ef1 = pool;
-struct edwFile *ef2 = bestPeakRep(conn, youngestVf->replicate, pool->next);
-if (ef2 == NULL)
-    return;
-
-/* Grab temp dir */
-char *tempDir = newTempDir(analysisStep);
-
-/* Stage inputs and make command line. */
-struct cache *cache = cacheNew();
-char *ef1Name = cacheMore(cache, ef1);
-char *ef2Name = cacheMore(cache, ef2);
-preloadCache(conn, cache);
-char commandLine[4*PATH_LEN];
-safef(commandLine, sizeof(commandLine), 
-    "eap_%s %s %s %s %s%s", 
-    analysisStep, assembly->name, ef1Name, ef2Name, tempDir, outFileName);
-
-/* Make up eapRun record and schedule it*/
-unsigned inFileIds[2] = {ef1->id, ef2->id};
-char *inTypes[2] = {"peaks1", "peaks2"};
-scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
-    ArraySize(inFileIds), inFileIds, inTypes);
-
-}
-
 void replicaPeakAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
     struct edwExperiment *exp, char *peakType)
 /* Run analysis on replicated peaks */
 {
+#ifdef SOON
 char *outputType = vf->outputType;
 verbose(2, "replicaPeakAnalysis(outputType=%s)\n", outputType);
 if (sameString(outputType, "macs2_narrow_peaks") || sameString(outputType, "hotspot_narrow_peaks")
@@ -1076,6 +1288,94 @@ if (sameString(outputType, "macs2_narrow_peaks") || sameString(outputType, "hots
 	    }
 	}
     }
+#endif /* SOON */
+}
+
+void scheduleReplicatedHotspot(struct sqlConnection *conn, struct edwExperiment *exp,  
+    struct edwValidFile *youngestVf, struct edwFile *pool)
+/* Schedule job that produces replicated peaks out of individual peaks from two replicates. */
+{
+char *analysisStep = "replicated_hotspot";
+verbose(2, "Considering %s on %s\n", analysisStep, youngestVf->licensePlate);
+/* Not ready for hg38 yet */
+if (sameString("hg38", youngestVf->ucscDb) || endsWith(youngestVf->ucscDb, ".hg38"))
+    {
+    verbose(2, "Skipping replicated_hotspot on %s %u\n", youngestVf->ucscDb, youngestVf->fileId);
+    return;
+    }
+
+/* Get assembly and figure out if we are already done */
+struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, youngestVf->ucscDb);
+if (alreadyTakenCareOf(conn, assembly, analysisStep, youngestVf->fileId))
+    return;
+verbose(2, "Theoretically I'd be making replicated hotspots in %s on file %u=%u\n", 
+    exp->accession, pool->id, youngestVf->fileId);
+
+/* We always take the most recent replicate. Choose best remaining rep by some measure for second */
+struct edwFile *ef1 = pool;
+struct edwValidFile *vf1 = edwValidFileFromFileId(conn, ef1->id);
+struct edwFile *ef2 = bestRepOnList(conn, vf1->replicate, pool->next);
+if (ef2 == NULL)
+    return;
+
+/* Make sure that the read lengths are all the same.  Hotspot needs this */
+int readLength1 = getReadLengthAndCheckForHotspot(conn, ef1);
+if (readLength1 <= 0)
+    return;
+int readLength2 = getReadLengthAndCheckForHotspot(conn, ef2);
+if (readLength2 <= 0)
+    return;
+if (readLength1 != readLength2)
+    {
+    warn("Replicates don't have matching read lengths in %u vs %u", ef1->id, ef2->id);
+    return;
+    }
+
+/* Stage inputs. */
+struct cache *cache = cacheNew();
+char *ef1Name = cacheMore(cache, ef1);
+char *ef2Name = cacheMore(cache, ef2);
+preloadCache(conn, cache);
+
+/* Grab temp dir */
+char *tempDir = newTempDir(analysisStep);
+
+/* Make up a file in temp dir that is list of all inputs, just two... */
+char inListFile[PATH_LEN];
+safef(inListFile,sizeof(inListFile), "%s%s", tempDir, "in.lst");
+FILE *f = mustOpen(inListFile, "w");
+fprintf(f, "%s\n%s\n", ef1Name, ef2Name);
+carefulClose(&f);
+
+/* Make command line. */
+char commandLine[4*PATH_LEN];
+safef(commandLine, sizeof(commandLine), "eap_pool_hotspot %s %s %d %s%s %s%s %s%s",
+    edwSimpleAssemblyName(assembly->ucscDb), inListFile,
+    readLength1, tempDir, "out.narrowPeak.bigBed", 
+    tempDir, "out.broadPeak.bigBed", tempDir, "out.bigWig");
+
+/* Make up eapRun record and schedule it*/
+unsigned inFileIds[2] = {ef1->id, ef2->id};
+char *inTypes[2] = {"rep1", "rep2"};
+scheduleStep(conn, tempDir, analysisStep, commandLine, exp->accession, assembly,
+    ArraySize(inFileIds), inFileIds, inTypes);
+
+}
+
+
+void replicaBamAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
+    struct edwExperiment *exp)
+/* Run analysis on bams that have been replicated.  */
+{
+if (sameString(exp->dataType, "DNase-seq"))
+    {
+    struct edwFile *pool = listOutputTypeForExp(conn, 
+				vf->experiment, vf->outputType, vf->format, vf->ucscDb);
+    if (slCount(pool) > 1)
+	{
+	scheduleReplicatedHotspot(conn, exp, vf, pool);
+	}
+    }
 }
 
 void runReplicateAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
@@ -1089,6 +1389,8 @@ if (vf->replicateQaStatus > 0)
         replicaWigAnalysis(conn, ef, vf, exp);
     else if (sameWord("broadPeak", vf->format) || sameWord("narrowPeak", vf->format))
         replicaPeakAnalysis(conn, ef, vf, exp, vf->format);
+    else if (sameWord("bam", vf->format))
+        replicaBamAnalysis(conn, ef, vf, exp);
     }
 }
 
@@ -1098,6 +1400,12 @@ void edwScheduleAnalysis(int startFileId, int endFileId)
 struct sqlConnection *conn = edwConnectReadWrite();
 struct edwFile *ef, *efList = edwFileAllIntactBetween(conn, startFileId, endFileId);
 verbose(2, "Got %d intact files between %d and %d\n", slCount(efList), startFileId, endFileId);
+if (clTest)
+    {
+    doTest(conn, efList);
+    return;
+    }
+
 for (ef = efList; ef != NULL; ef = ef->next)
     {
     verbose(2, "processing edwFile id %u\n", ef->id);
@@ -1126,6 +1434,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+clTest= optionExists("test");
 retry = optionExists("retry");
 again = optionExists("again");
 noJob = optionExists("noJob");
@@ -1135,6 +1444,10 @@ dry = optionExists("dry");
 clStep = optionVal("step", clStep);
 clInFormat = optionVal("inFormat", clInFormat);
 clMax = optionInt("max", clMax);
+clUpgrade = optionExists("upgrade");
+if (clUpgrade)
+    gRedoPriority = eapUpgrade;
+gRedoThresholdCache = hashNew(8);
 edwScheduleAnalysis(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
 return 0;
 }

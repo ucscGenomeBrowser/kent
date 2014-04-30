@@ -317,7 +317,7 @@ for (fi = fiList;  fi != NULL;  fi = fi->next)
 	}
     }
 if (! foundClass)
-    errAbort("Didn't find definition of func field in %s", tdb->table);
+    errAbort("Didn't find definition of class field in %s", tdb->table);
 return unusedList;
 }
 
@@ -1768,6 +1768,19 @@ void omimGeneUI(struct trackDb *tdb)
 omimGeneIdConfig(tdb);
 }
 
+void ensGeneIdConfig(struct trackDb *tdb)
+/* Put up gene ID track controls */
+{
+char varName[64];
+char *geneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->track);
+geneLabel = cartUsualString(cart, varName, "ENST* identifier");
+printf("<B>Label:</B> ");
+radioButton(varName, geneLabel, "ENST* identifier");
+radioButton(varName, geneLabel, "ENSG* identifier");
+radioButton(varName, geneLabel, "gene symbol");
+}
+
 void geneIdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
@@ -1856,6 +1869,16 @@ printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "gene", "gene", FALSE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 
+baseColorDrawOptDropDown(cart, tdb);
+}
+
+void ensGeneUI(struct trackDb *tdb)
+/* Put up Ensembl Gene track-specific controls */
+{
+ensGeneIdConfig(tdb);
+printf("<BR>\n");
+
+/* Put up codon coloring stuff. */
 baseColorDrawOptDropDown(cart, tdb);
 }
 
@@ -2603,8 +2626,15 @@ if (filters != NULL)
     filterBySetCfgUi(cart, tdb, filters, TRUE);
     filterBySetFree(&filters);
     }
-
 char varName[64];
+if (trackDbSetting(tdb, "motifTable") != NULL)
+    {
+    printf("<BR><B>Highlight motifs: </B> ");
+    safef(varName, sizeof(varName), "%s.highlightMotifs", tdb->track);
+    cartMakeCheckBox(cart, varName, trackDbSettingClosestToHomeOn(tdb, "motifDrawDefault"));
+    printf("<BR>");
+    }
+
 printf("<BR><B>Show cell abbreviations (to right of cluster): </B> ");
 safef(varName, sizeof(varName), "%s.showCellAbbrevs", tdb->track);
 cartMakeCheckBox(cart, varName, TRUE);
@@ -2618,14 +2648,6 @@ jsEndCollapsibleSection();
 puts("</table>");
 hFreeConn(&conn);
 
-
-
-if (trackDbSetting(tdb, "motifTable") != NULL)
-    {
-    printf("<BR><B>Highlight motifs: </B> ");
-    safef(varName, sizeof(varName), "%s.highlightMotifs", tdb->track);
-    cartMakeCheckBox(cart, varName, trackDbSettingClosestToHomeOn(tdb, "motifDrawDefault"));
-    }
 }
 
 #ifdef UNUSED
@@ -2685,14 +2707,14 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
                                         trackDbSetting(tdb, "onlyVisibility"),
                                         "onchange='superT.selChanged(this);'");
         printf("</TD>\n<TD>");
-        printf("<A HREF='%s?%s=%u&c=%s&g=%s' onclick='return superT.submitAndLink(this);'>"
+        printf("<A HREF='%s?%s=%s&c=%s&g=%s' onclick='return superT.submitAndLink(this);'>"
                "%s</A>&nbsp;", (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
                cartSessionVarName(), cartSessionId(cart),
                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
         }
     else
         {
-        printf("<A HREF='%s?%s=%u&g=%s'>Downloads</A>",
+        printf("<A HREF='%s?%s=%s&g=%s'>Downloads</A>",
                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
         printf("</TD>\n<TD>");
         printf("%s&nbsp;",tdb->shortLabel);
@@ -2703,14 +2725,14 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     if (tdbIsDownloadsOnly(tdb))
         printf("%s&nbsp;",tdb->shortLabel);
     else
-        printf("<A HREF='%s?%s=%u&c=%s&g=%s'>%s</A>&nbsp;",
+        printf("<A HREF='%s?%s=%s&c=%s&g=%s'>%s</A>&nbsp;",
                (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
                cartSessionVarName(), cartSessionId(cart),
                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
     printf("</TD><TD>");
     if (tdbIsDownloadsOnly(tdb))
         {
-        printf("<A HREF='%s?%s=%u&g=%s'>Downloads</A>",
+        printf("<A HREF='%s?%s=%s&g=%s'>Downloads</A>",
                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
         }
     else
@@ -2801,6 +2823,8 @@ else if (startsWith("ucscRetro", track)
     retroGeneUI(tdb);
 else if (sameString(track, "ensGeneNonCoding"))
     ensemblNonCodingUI(tdb);
+else if (sameString(track, "ensGene"))
+    ensGeneUI(tdb);
 else if (sameString(track, "vegaGeneComposite"))
     vegaGeneUI(tdb);
 else if (sameString(track, "rosetta"))
@@ -3055,7 +3079,7 @@ if (!ajax)
         {
         char *encodedMapName = cgiEncode(tdb->parent->track);
         printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
-               "(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'>"
+               "(<A HREF=\"%s?%s=%s&c=%s&g=%s\" title='Link to parent track'>"
                "<IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                chromosome, encodedMapName, tdb->parent->shortLabel);
@@ -3069,7 +3093,7 @@ if (!ajax)
             if (sameString(grp->name,tdb->grp))
                 {
                 printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
-                       "(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure"
+                       "(<A HREF=\"%s?%s=%s&c=%s&hgTracksConfigPage=configure"
                        "&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration "
                        "page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
                        hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome,
@@ -3159,7 +3183,7 @@ if (!tdbIsDownloadsOnly(tdb))
             if (ajax)
                 // reference to a separate form doesn't work in modal dialog,
                 // so change window.location directly.
-                safef(buf, sizeof(buf), "window.location='%s?hgsid=%d&%s=%s';return false;",
+                safef(buf, sizeof(buf), "window.location='%s?hgsid=%s&%s=%s';return false;",
                       hgCustomName(), cartSessionId(cart), CT_SELECTED_TABLE_VAR, tdb->track);
             else
                 safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");

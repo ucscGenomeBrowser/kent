@@ -222,6 +222,9 @@ enum wiggleGraphOptEnum wigFetchGraphTypeWithCart(struct cart *cart, struct trac
         wigFetchGraphTypeWithCart(cart,(tdb),(tdb)->track,(optString))
 /* return graph type, line(points) or bar graph	*/
 
+enum wiggleAggregateFunctionEnum wigFetchAggregateFunctionWithCart(struct cart *cart, struct trackDb *tdb, 
+                                                           char *name, char **optString);
+
 enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *cart, struct trackDb *tdb, 
                                                            char *name, char **optString);
 #define wigFetchWindowingFunction(tdb,optString) \
@@ -245,9 +248,6 @@ void wigFetchYLineMarkValueWithCart(struct cart *cart,struct trackDb *tdb, char 
 #define wigFetchYLineMarkValue(tdb,tDbYMark) \
         wigFetchYLineMarkValueWithCart(cart,(tdb),(tdb)->track,(tDbYMark))
 /* return value for the y line marker to be drawn   */
-
-char *wigFetchAggregateValWithCart(struct cart *cart, struct trackDb *tdb);
-/* Return aggregate value for track. */
 
 boolean wigIsOverlayTypeAggregate(char *aggregate);
 /* Return TRUE if aggregater type is one of the overlay ones. */

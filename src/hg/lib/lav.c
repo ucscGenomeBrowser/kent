@@ -81,7 +81,9 @@ for (i=0; ; ++i)
        break;
        }
     word = needNextWord(lf, &line);
-    word += 2;  /* Skip over "> */
+    word++;  /* Skip over `"' and optional `>' */
+    if (*word == '>')
+	word++;
     e = strchr(word, '"');
     if (e != NULL) 
         {

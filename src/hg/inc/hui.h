@@ -76,6 +76,7 @@ char *hCgiRoot();
 #define CUTTERS_TRACK_NAME "cutters"
 #define CUTTERS_TRACK_LABEL "Restr Enzymes"
 #define CUTTERS_TRACK_LONGLABEL "Restriction Enzymes from REBASE"
+#define CUTTERS_TRACK_PRIORITY 100
 
 /* Definition for oligo match track. */
 #define oligoMatchVar "hgt.oligoMatch"
@@ -83,6 +84,7 @@ char *hCgiRoot();
 #define OLIGO_MATCH_TRACK_NAME "oligoMatch"
 #define OLIGO_MATCH_TRACK_LABEL "Short Match"
 #define OLIGO_MATCH_TRACK_LONGLABEL "Perfect Match to Short Sequence"
+#define OLIGO_MATCH_TRACK_PRIORITY 100
 
 /* Definitions for User Psl track (hgBlat results). */
 #define USER_PSL_TRACK_NAME "hgUserPsl"
@@ -580,6 +582,20 @@ void wiggleGridDropDown(char *var, char *curVal);
 #define WIG_AGGREGATE_NONE "none"
 #define WIG_AGGREGATE_TRANSPARENT "transparentOverlay"
 #define WIG_AGGREGATE_SOLID "solidOverlay"
+#define WIG_AGGREGATE_STACKED "stacked"
+
+/*	Wiggle track aggregate option	*/
+enum wiggleAggregateFunctionEnum {
+   wiggleAggregateNone = 0,
+   wiggleAggregateTransparent = 1,
+   wiggleAggregateSolid = 2,
+   wiggleAggregateStacked = 3,
+};
+
+char *wiggleAggregateFunctionEnumToString(enum wiggleAggregateFunctionEnum x);
+/* Convert from enum to string representation. */
+
+enum wiggleAggregateFunctionEnum wiggleAggregateFunctionStringToEnum(char *string);
 
 /*** BAM alignment track coloring code: ***/
 // tdbSettings / cart var suffixes and default values:
@@ -697,6 +713,7 @@ void indelEnabled(struct cart *cart, struct trackDb *tdb, float basesPerPixel,
 #define ZOOM_1PT5X      "1.5x"
 #define ZOOM_3X         "3x"
 #define ZOOM_10X        "10x"
+#define ZOOM_100X       "100x"
 #define ZOOM_BASE       "base"
 
 void zoomRadioButtons(char *var, char *curVal);

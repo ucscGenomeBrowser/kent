@@ -189,9 +189,12 @@ switch (type)
 struct vcfFile *vcfFileNew();
 /* Return a new, empty vcfFile object. */
 
-struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords, boolean parseAll);
+struct vcfFile *vcfFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
+			       int maxErr, int maxRecords, boolean parseAll);
 /* Open fileOrUrl and parse VCF header; return NULL if unable.
- * If parseAll, then read in all lines, parse and store in
+ * If chrom is non-NULL, scan past any variants that precede {chrom, chromStart}.
+ * Note: this is very inefficient -- it's better to use vcfTabix if possible!
+ * If parseAll, then read in all lines in region, parse and store in
  * vcff->records; if maxErr >= zero, then continue to parse until
  * there are maxErr+1 errors.  A maxErr less than zero does not stop
  * and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence. */
@@ -241,6 +244,15 @@ unsigned int vcfRecordTrimIndelLeftBase(struct vcfRecord *rec);
  * 2. In pgSnp display mode, the two alleles are always the same color.
  * However, for hgTracks' mapBox we need the correct chromStart for identifying the
  * record in hgc -- so return the original chromStart. */
+
+unsigned int vcfRecordTrimAllelesRight(struct vcfRecord *rec);
+/* Some tools output indels with extra base to the right, for example ref=ACC, alt=ACCC
+ * which should be ref=A, alt=AC.  When the extra bases make the variant extend from an
+ * intron (or gap) into an exon, it can cause a false appearance of a frameshift.
+ * To avoid this, when all alleles have identical base(s) at the end, trim all of them,
+ * and update rec->chromEnd.
+ * For hgTracks' mapBox we need the correct chromStart for identifying the record in hgc,
+ * so return the original chromEnd. */
 
 int vcfRecordCmp(const void *va, const void *vb);
 /* Compare to sort based on position. */

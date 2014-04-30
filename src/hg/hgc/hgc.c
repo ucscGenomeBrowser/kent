@@ -2503,7 +2503,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
            name2 field is populated with "noXref" because there is
            no alternate name. Replace this with "none" */
         printf("<b>Gene Symbol:");
-        if (sameString(gp->name2, "noXref"))
+        if ((strlen(gp->name2) < 1) || (sameString(gp->name2, "noXref")))
            printf("</b> none<br>\n");
         else
            printf("</b> %s<br>\n",gp->name2);
@@ -4021,10 +4021,6 @@ else if (wordCount > 0)
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
 #endif // USE_BAM
-#ifdef USE_TABIX
-    else if (sameString(type, "vcfTabix"))
-	doVcfTabixDetails(tdb, item);
-#endif // USE_TABIX
     }
 if (imagePath)
     {
@@ -8435,7 +8431,7 @@ if (gpList && gpList->name2)
     if (gpList->cdsStart == gpList->cdsEnd)
 	nonCoding = TRUE;
     printf("<B>Ensembl Gene Link: </B>");
-    if (sameString(gpList->name2, "noXref"))
+    if ((strlen(gpList->name2) < 1) || sameString(gpList->name2, "noXref"))
        printf("none<BR>\n");
     else
        printf("<A HREF=\"%s/geneview?gene=%s\" "
@@ -9924,7 +9920,7 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     // show GeneReviews  link(s)
-    if (sqlTableExists(conn, "geneReviewsRefGene"))
+    if (sqlTableExists(conn, "geneReviewsDetail"))
         {
         sqlSafef(query, sizeof(query),
           "select distinct r.name2 from refLink l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
@@ -13907,7 +13903,7 @@ struct sqlResult *sr = NULL, *sr1 = NULL;
 char **row;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-int hgsid = cartSessionId(cart);
+char *hgsid = cartSessionId(cart);
 struct stsMapMouse stsRow;
 struct stsInfoMouse *infoRow;
 char stsid[20];
@@ -14007,7 +14003,7 @@ if (row != NULL)
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    stsMapMouseStaticLoad(row, &stsRow);
-	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapMouse&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&g=stsMapMouse&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
 		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 	    }
 	printf("</TABLE>\n");
@@ -14035,7 +14031,7 @@ struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
 char **row;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-int hgsid = cartSessionId(cart);
+char *hgsid = cartSessionId(cart);
 struct stsMapMouseNew stsRow;
 struct stsInfoMouseNew *infoRow;
 char stsid[20];
@@ -14193,7 +14189,7 @@ if (row != NULL)
             while ((row = sqlNextRow(sr)) != NULL)
                 {
                 stsMapMouseNewStaticLoad(row, &stsRow);
-                printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&"
+                printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&"
                        "g=stsMapMouseNew&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
                        stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name,
                        stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
@@ -14222,7 +14218,7 @@ struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
 char **row;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-int hgsid = cartSessionId(cart);
+char *hgsid = cartSessionId(cart);
 struct stsMapRat stsRow;
 struct stsInfoRat *infoRow;
 char stsid[20];
@@ -14373,7 +14369,7 @@ if (row != NULL)
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    stsMapRatStaticLoad(row+hasBin, &stsRow);
-	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapRat&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&g=stsMapRat&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
 		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 	    }
 	printf("</TABLE>\n");
@@ -20277,6 +20273,8 @@ else if (sameWord(type, "bam"))
 else if (sameWord(type, "vcfTabix"))
     doVcfTabixDetails(ct->tdb, itemName);
 #endif//def USE_TABIX
+else if (sameWord(type, "vcf"))
+    doVcfDetails(ct->tdb, itemName);
 else if (sameWord(type, "makeItems"))
     doMakeItemsDetails(ct, fileName);	// fileName is first word, which is, go figure, id
 else if (ct->wiggle)
@@ -25353,6 +25351,16 @@ else if (sameWord(table, "htcLrgCdna"))
 else if (isHubTrack(table) && startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
+    }
+#ifdef USE_TABIX
+else if (tdb != NULL && startsWithWord("vcfTabix", tdb->type))
+    {
+    doVcfTabixDetails(tdb, item);
+    }
+#endif // USE_TABIX
+else if (tdb != NULL && startsWithWord("vcf", tdb->type))
+    {
+    doVcfDetails(tdb, item);
     }
 
 else if (tdb != NULL)

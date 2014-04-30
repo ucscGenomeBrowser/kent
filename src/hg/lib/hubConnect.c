@@ -322,38 +322,6 @@ for(tdb = tdbList; tdb; tdb = next)
 return p;
 }
 
-static void addOneDescription(char *trackDbFile, struct trackDb *tdb)
-/* Fetch tdb->track's html description and store in tdb->html. */
-{
-/* html setting should always be set because we set it at load time */
-char *htmlName = trackDbSetting(tdb, "html");
-if (htmlName == NULL)
-    return;
-
-char *simpleName = hubConnectSkipHubPrefix(htmlName);
-char *url = trackHubRelativeUrl(trackDbFile, simpleName);
-char buffer[10*1024];
-safef(buffer, sizeof buffer, "%s.html", url);
-tdb->html = netReadTextFileIfExists(buffer);
-freez(&url);
-}
-
-static void addDescription(char *trackDbFile, struct trackDb *tdb)
-/* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
- * and store in tdb->html. */
-{
-addOneDescription(trackDbFile, tdb);
-if (isEmpty(tdb->html))
-    {
-    struct trackDb *parent;
-    for (parent = tdb->parent;  isEmpty(tdb->html) && parent != NULL;  parent = parent->parent)
-	{
-	addOneDescription(trackDbFile, parent);
-	if (isNotEmpty(parent->html))
-	    tdb->html = cloneString(parent->html);
-	}
-    }
-}
 
 void hubConnectAddDescription(char *database, struct trackDb *tdb)
 /* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
@@ -363,7 +331,7 @@ unsigned hubId = hubIdFromTrackName(tdb->track);
 struct trackHub *hub = trackHubFromId(hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
 trackHubPolishTrackNames(hub, tdb);
-addDescription(hubGenome->trackDbFile, tdb);
+trackHubAddDescription(hubGenome->trackDbFile, tdb);
 }
 
 struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database, 
@@ -397,7 +365,7 @@ if (tdb == NULL)
 /* Note: this does NOT add the HTML for supertrack kids */
 struct trackDb *parent;
 for (parent = tdb; parent != NULL; parent = parent->parent)
-    addDescription(hubGenome->trackDbFile, parent);
+    trackHubAddDescription(hubGenome->trackDbFile, parent);
 trackHubClose(&hub);
 
 return tdb;
@@ -610,7 +578,7 @@ void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub)
 /* set the error message in the hubStatus table */
 {
 struct sqlConnection *conn = hConnectCentral();
-char query[4096];
+char query[64 * 1024];
 struct trackHub *tHub = hub->trackHub;
 
 if (errorMessage != NULL)
@@ -618,7 +586,7 @@ if (errorMessage != NULL)
     // make sure there is no newline at the end.  This should be unneccesary
     // but there are many, many places where newlines are added in calls
     // to warn and errAbort
-    char buffer[4096];
+    char buffer[64 * 1024];
     safecpy(buffer, sizeof buffer, errorMessage);
     while (lastChar(buffer) == '\n')
 	buffer[strlen(buffer) - 1] = '\0';

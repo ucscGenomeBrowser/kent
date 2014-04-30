@@ -3,53 +3,25 @@ track gold override
 visibility hide
 html gold
 
+track simpleRepeat override
+visibility dense
+
+track windowmaskerSdust override
+visibility dense
+
 # Local declaration so that local gap.html is picked up.
 track gap override
 visibility hide
 html gap
 
-track kap1SummitCoverage
-shortLabel Morris summit coverage
-longLabel Coverage of Morris MACS summits +- 10 bp
-group regulation
-visibility full
-color 0,0,200
-type bigWig 0 130
-autoScale on
-maxHeightPixels 100:50:8
-priority 50
 
-track kap1Summits
-shortLabel Morris summits
-longLabel Morris MACS summits +- 10 bp
-group regulation
+track repNames
+shortLabel Repeat Names
+longLabel Repeat Consensus Sequence Names
+group map
 visibility hide
-color 30,30,0
-type psl xeno hg19
-otherDb hg19
-priority 52
-
-track ZNF486SummitCoverage 
-shortLabel Boris Coverage
-longLabel Coverage of Boris MACS summits +- 10 bp
-group regulation
-visibility full
-color 0,100,0
-type bigWig 0 130
-autoScale on
-maxHeightPixels 100:50:8
-priority 50
-
-track H3K9m3SummitCoverage
-shortLabel H3K9m3 Coverage
-longLabel Coverage of H3K9m3 MACS summits +- 10 bp
-group regulation
-visibility full
-color 200,0,0
-type bigWig 0 130
-autoScale on
-maxHeightPixels 100:50:8
-priority 50
+color 0,0,0
+type bed 4
 
 track liftOver
 shortLabel liftOver
@@ -185,15 +157,6 @@ priority 68
 bedFilter on
 url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
 
-track greenMin
-shortLabel mira
-longLabel Mira alignment
-group regulation
-visibility hide
-color 30,90,30
-type bed 12
-priority 69
-
 track zfPred
 shortLabel ZF predictions on SVA
 longLabel zf.princeton.edu seq predictions
@@ -236,8 +199,6 @@ type bigWig 0 1000
 priority 80
 allButtonPair on
 
-include trackDb.dnase.ra
-
 track repEncodeBroadHistone
 compositeTrack on
 shortLabel Histone Marks
@@ -262,104 +223,10 @@ type bigWig 0 100
 priority 90
 allButtonPair on
 
-# greenberg tracks
-track greenberg
-shortLabel Dave annotations
-longLabel Dave annotations
-group x
-visibility hide
-color 30,30,100
-type psl .
-priority 30
-
-track vntr15
-shortLabel VNTR15 matches
-longLabel VNTR15 matches
-group x
-visibility hide
-color 30,30,100
-type psl .
-priority 30
-
-track hits7580
-shortLabel ZNF91 hits, 80%
-longLabel Persikov ZNF91, individual fingers matches: min information 0.75 bp, minimum relative score 80%
-group x
-visibility hide
-color 30,30,100
-type bed 5
-priority 29
-
-track hit75808To14
-shortLabel ZNF91 hits, 80%, ZF8-14
-longLabel Persikov ZNF91, finger 8-14 matches: min information 0.75 bp, minimum relative score 80%
-group x
-visibility hide
-color 30,30,100
-type bed 5
-priority 29
-
-track hit758019To25
-shortLabel ZNF91 hits, 80%, ZF19-25
-longLabel Persikov ZNF91, finger 19-25 matches: min information 0.75 bp, minimum relative score 80%
-group x
-visibility hide
-color 30,30,100
-type bed 5
-priority 29
-
-track hits7590
-shortLabel ZNF91 hits, 90%
-longLabel Persikov ZNF91, individual fingers matches: min information 0.75 bp, minimum relative score 90%
-group x
-visibility hide
-color 30,30,100
-type bed 5
-priority 29
-
-track hit75908To14
-shortLabel ZNF91 hits, 90%, ZF8-14
-longLabel Persikov ZNF91, finger 8-14 matches: min information 0.75 bp, minimum relative score 90%
-group x
-visibility hide
-color 30,30,100
-type bed 5
-priority 29
-
-track hit759019To25
-shortLabel ZNF91 hits, 90%, ZF19-24
-longLabel Persikov ZNF91, finger 19-25 matches: min information 0.75 bp, minimum relative score 90%
-group x
-visibility hide
-color 30,30,100
-type bed 5
-priority 29
-
-track chainedHits3290
-shortLabel Chained Matches 3/2/90
-longLabel Chained Matches, min 3 fingers, maximum inserts 2, min avg score 90%
-group x
-visibility hide
-color 30,30,100
-type bed 12
-priority 31
-
-track chainedHits3280
-shortLabel Chained Matches 3/2/80
-longLabel Chained Matches, min 3 fingers, maximum inserts 2, min avg score 80%
-group x
-visibility hide
-color 30,30,100
-type bed 12
-priority 31
-
-track chainedHits3090s0
-shortLabel Chained Matches 3/0/90
-longLabel Chained Matches, min 3 fingers, maximum inserts 0, min avg score 90%
-group x
-visibility hide
-color 30,30,100
-type bed 12
-priority 31
-
 include trackDb.tf.ra
+include trackDb.dnase.ra
+
+searchTable repNames
+searchType bed
+searchPriority 50
+searchMethod fuzzy

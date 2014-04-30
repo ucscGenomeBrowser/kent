@@ -202,9 +202,22 @@ char *hTableForTrack(char *db, char *trackName);
 /* Return a table for a track in db. Returns one of the split
  * tables, or main table if not split */
 
+char *hReplaceGbdbLocal(char* fileName);
+ /* Returns a gbdb filename, potentially rewriting it according to hg.conf's gbdbLoc1 */
+ /* Result has to be freed */
+
 char *hReplaceGbdb(char* fileName);
 /* clone and change a filename that can be located in /gbdb to somewhere else
  * according to hg.conf's "gbdbLoc1" and "gbdbLoc2". Result has to be freed. */
+
+char *hReplaceGbdbSeqDir(char *path, char *db);
+/* similar to hReplaceGbdb, but accepts a nib or 2bit "directory" (basename) under
+ * gbdb, like /gbdb/hg19 (for jkLib that means /gbdb/hg19/hg19.2bit). */
+
+
+char* hReplaceGbdbMustDownload(char* path);
+/* given a location in /gbdb, rewrite it to the new location using gbdbLoc1 and download it
+ * if needed from gbdbLoc2. */
 
 void hParseTableName(char *db, char *table, char trackName[HDB_MAX_TABLE_STRING],
 		     char chrom[HDB_MAX_CHROM_STRING]);
@@ -444,6 +457,9 @@ struct sqlConnection *hMaybeConnectArchiveCentral(void);
 /* Connect to central database for archives.
  * Free this up with hDisconnectCentralArchive(). */
 
+char *hHttpHost();
+/* return http host from apache or hostname if run from command line  */
+
 boolean hHostHasPrefix(char *prefix);
 /* Return TRUE if this is running on web-server with host name prefix */
 
@@ -455,6 +471,9 @@ boolean hIsPrivateHost(void);
 boolean hIsBetaHost(void);
 /* Return TRUE if this is running on beta (QA) web-server.
  * Use sparingly as behavior on beta should be as close to RR as possible. */
+
+boolean hIsBrowserbox();
+/* Return TRUE if this is the browserbox virtual machine */
 
 boolean hIsPreviewHost(void);
 /* Return TRUE if this is running on preview web-server.  The preview

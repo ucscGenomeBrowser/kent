@@ -1,0 +1,10 @@
+#!/bin/sh
+if [ "$#" -eq 0 ]; then
+    echo run this script with a trackname as the first parameter
+    echo e.g. mirrorTrack.sh refGene
+    echo optional second parameter are rsync options e.g.
+    echo e.g. mirrorTrack.sh refGene -n
+    exit 1
+fi
+
+sudo -u mysql rsync --progress -vltrz $2 rsync://hgdownload.cse.ucsc.edu/mysql/hg19/$1* /data/mysql/hg19/

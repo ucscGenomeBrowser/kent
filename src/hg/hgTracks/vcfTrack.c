@@ -12,12 +12,9 @@
 #include "trashDir.h"
 #include "vcf.h"
 #include "vcfUi.h"
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def USE_TABIX && KNETFILE_HOOKS
 
-#ifdef USE_TABIX
 
 static boolean getMinQual(struct trackDb *tdb, double *retMinQual)
 /* Return TRUE and set retMinQual if cart contains minimum QUAL filter */
@@ -136,6 +133,26 @@ else
 		maxAltFreq = altFreq;
 	    }
 	}
+    else
+        // Use MAF for alternate allele freqs from MAF:
+        {
+        const struct vcfInfoElement *mafEl = vcfRecordFindInfo(record, "MAF");
+        const struct vcfInfoDef *mafDef = vcfInfoDefForKey(vcff, "MAF");
+        if (mafEl != NULL && mafDef != NULL && mafDef->type == vcfInfoString
+        && startsWith("Minor Allele Frequency",mafDef->description))
+            {
+            // If INFO includes alt allele freqs, use them directly.
+            gotInfo = TRUE;
+
+            if (mafEl->count >= 1 && !mafEl->missingData[mafEl->count-1])
+                {
+                char data[64];
+                safecpy(data,sizeof(data),mafEl->values[mafEl->count-1].datString);
+                maxAltFreq = atof(lastWordInLine(data));
+                refFreq -= maxAltFreq;
+                }
+            }
+        }
     }
 if (gotInfo)
     {
@@ -171,12 +188,13 @@ slReverse(&newList);
 vcff->records = newList;
 }
 
-struct pgSnpVcfStart
-/* This extends struct pgSnp by tacking on an original VCF chromStart at the end,
+struct pgSnpVcfStartEnd
+/* This extends struct pgSnp by tacking on an original VCF chromStart and End at the end,
  * for use by indelTweakMapItem below.  This can be cast to pgs. */
 {
     struct pgSnp pgs;
     unsigned int vcfStart;
+    unsigned int vcfEnd;
 };
 
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
@@ -189,8 +207,9 @@ int maxLen = 33;
 int maxAlCount = 5;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
-    struct pgSnpVcfStart *psvs = needMem(sizeof(*psvs));
+    struct pgSnpVcfStartEnd *psvs = needMem(sizeof(*psvs));
     psvs->vcfStart = vcfRecordTrimIndelLeftBase(rec);
+    psvs->vcfEnd = vcfRecordTrimAllelesRight(rec);
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
     memcpy(&(psvs->pgs), pgs, sizeof(*pgs));
     pgs = (struct pgSnp *)psvs; // leak mem
@@ -549,6 +568,7 @@ void mapBoxForCenterVariant(struct vcfRecord *rec, struct hvGfx *hvg, struct tra
 {
 struct dyString *dy = dyStringNew(0);
 unsigned int chromStartMap = vcfRecordTrimIndelLeftBase(rec);
+unsigned int chromEndMap = vcfRecordTrimAllelesRight(rec);
 gtSummaryString(rec, dy);
 dyStringAppend(dy, "   Haplotypes sorted on ");
 char *centerChrom = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "centerVariantChrom");
@@ -567,7 +587,7 @@ if (w <= 1)
     x1--;
     w = 3;
     }
-mapBoxHgcOrHgGene(hvg, chromStartMap, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
+mapBoxHgcOrHgGene(hvg, chromStartMap, chromEndMap, x1, yOff, w, tg->height, tg->track,
 		  rec->name, dy->string, NULL, TRUE, NULL);
 }
 
@@ -627,6 +647,7 @@ static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, unsign
 /* Draw a stack of genotype bars for this record */
 {
 unsigned int chromStartMap = vcfRecordTrimIndelLeftBase(rec);
+unsigned int chromEndMap = vcfRecordTrimAllelesRight(rec);
 const double scale = scaleForPixels(width);
 int x1 = round((double)(rec->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(rec->chromEnd-winStart)*scale) + xOff;
@@ -711,7 +732,7 @@ else
     {
     struct dyString *dy = dyStringNew(0);
     gtSummaryString(rec, dy);
-    mapBoxHgcOrHgGene(hvg, chromStartMap, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
+    mapBoxHgcOrHgGene(hvg, chromStartMap, chromEndMap, x1, yOff, w, tg->height, tg->track,
 		      rec->name, dy->string, NULL, TRUE, NULL);
     }
 if (colorMode == altOnlyMode)
@@ -1121,6 +1142,19 @@ tg->mapsSelf = TRUE;
 tg->extraUiData = vcff;
 }
 
+static void indelTweakMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+        char *itemName, char *mapItemName, int start, int end, int x, int y, int width, int height)
+/* Pass the original vcf chromStart to pgSnpMapItem, so if we have trimmed an identical
+ * first base from item's alleles and start, we will still pass the correct start to hgc. */
+{
+struct pgSnpVcfStartEnd *psvs = item;
+pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, psvs->vcfEnd,
+	     x, y, width, height);
+}
+
+
+#ifdef USE_TABIX
+
 static void vcfTabixLoadItems(struct track *tg)
 /* Load items in window from VCF file using its tabix index file. */
 {
@@ -1174,21 +1208,10 @@ if (errCatch->gotError || vcff == NULL)
 errCatchFree(&errCatch);
 }
 
-static void indelTweakMapItem(struct track *tg, struct hvGfx *hvg, void *item,
-        char *itemName, char *mapItemName, int start, int end, int x, int y, int width, int height)
-/* Pass the original vcf chromStart to pgSnpMapItem, so if we have trimmed an identical
- * first base from item's alleles and start, we will still pass the correct start to hgc. */
-{
-struct pgSnpVcfStart *psvs = item;
-pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, end, x, y, width, height);
-}
-
 void vcfTabixMethods(struct track *track)
 /* Methods for VCF + tabix files. */
 {
-#ifdef KNETFILE_HOOKS
 knetUdcInstall();
-#endif
 pgSnpMethods(track);
 track->mapItem = indelTweakMapItem;
 // Disinherit next/prev flag and methods since we don't support next/prev:
@@ -1226,3 +1249,66 @@ track->drawItems = drawUseVcfTabixWarning;
 }
 
 #endif // no USE_TABIX
+
+static void vcfLoadItems(struct track *tg)
+/* Load items in window from VCF file. */
+{
+int vcfMaxErr = -1;
+struct vcfFile *vcff = NULL;
+boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
+							VCF_HAP_ENABLED_VAR, TRUE);
+char *table = tg->table;
+struct customTrack *ct = tg->customPt;
+struct sqlConnection *conn;
+if (ct == NULL)
+    conn = hAllocConnTrack(database, tg->tdb);
+else
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    }
+char *vcfFile = bbiNameFromSettingOrTable(tg->tdb, conn, table);
+hFreeConn(&conn);
+/* protect against parse error */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    vcff = vcfFileMayOpen(vcfFile, chromName, winStart, winEnd, vcfMaxErr, -1, TRUE);
+    if (vcff != NULL)
+	{
+	filterRecords(vcff, tg->tdb);
+	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
+	    (tg->visibility == tvPack || tg->visibility == tvSquish))
+	    vcfHapClusterOverloadMethods(tg, vcff);
+	else
+	    {
+	    tg->items = vcfFileToPgSnp(vcff, tg->tdb);
+	    // pgSnp bases coloring/display decision on count of items:
+	    tg->customInt = slCount(tg->items);
+	    }
+	// Don't vcfFileFree here -- we are using its string pointers!
+	}
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError || vcff == NULL)
+    {
+    if (isNotEmpty(errCatch->message->string))
+	tg->networkErrMsg = cloneString(errCatch->message->string);
+    tg->drawItems = bigDrawWarning;
+    tg->totalHeight = bigWarnTotalHeight;
+    }
+errCatchFree(&errCatch);
+}
+
+void vcfMethods(struct track *track)
+/* Methods for Variant Call Format. */
+{
+pgSnpMethods(track);
+track->mapItem = indelTweakMapItem;
+// Disinherit next/prev flag and methods since we don't support next/prev:
+track->nextExonButtonable = FALSE;
+track->nextPrevExon = NULL;
+track->nextPrevItem = NULL;
+track->loadItems = vcfLoadItems;
+track->canPack = TRUE;
+}

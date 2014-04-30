@@ -17,6 +17,7 @@ set first=""
 set second=""
 set third=""
 set fourth=""
+set noEuro=false
 set fifth=""  # euro
 
 if ( $#argv < 2 || $#argv > 3 ) then
@@ -25,11 +26,12 @@ if ( $#argv < 2 || $#argv > 3 ) then
   echo "  if table is trackDb, trackDb_public will also be checked."
   echo "  warning:  not in real time for RR.  uses overnight dump." 
   echo
-  echo "    usage:  database tablelist [verbose]"
+  echo "    usage:  database tablelist [verbose | noEuro | verboseNoEuro]"
   echo
   echo "            reports on dev, beta, RR and euronode"
   echo "            tablelist will accept single table"
   echo "            verbose mode will print machines names"
+  echo "            noEuro mode will stop before checking genome-euro"
   echo
   exit
 else
@@ -43,16 +45,22 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
+
 if ( $#argv == 3 ) then
-  if ( $argv[3] == "verbose" ) then
+  if ( $argv[3] == "noEuro" || $argv[3] == "verboseNoEuro" ) then
+    set noEuro=true
+  endif
+  if ( $argv[3] == "verbose" || $argv[3] == "verboseNoEuro" ) then
     set dot=( 'dev  ' 'beta ' 'pub  ' 'rr   ' 'euro ' )
   else
-    echo
-    echo 'sorry. third argument must be "verbose"'
-    $0
-    exit
+    if ( $noEuro == "false" ) then
+      echo '\nsorry. third argument must be "verbose" or "noEuro" or "verboseNoEuro"'
+      $0
+      exit
+    endif
   endif
 endif
+
 
 # check if it is a file or a tablename
 file $tablelist | egrep -q "ASCII text"
@@ -88,12 +96,14 @@ foreach table ($tables)
   endif
   echo "$dot[4]"$fourth
 
-  set fifth=`getTableStatus.csh $db genome-euro | sed '1,2d' \
-      | grep -w ^$table | awk '{print $14, $15}'`
-  if ( $status ) then
-    set fifth=""
+  if ( $noEuro == "false" ) then
+    set fifth=`getTableStatus.csh $db genome-euro | sed '1,2d' \
+        | grep -w ^$table | awk '{print $14, $15}'`
+    if ( $status ) then
+      set fifth=""
+    endif
+    echo "$dot[5]"$fifth
   endif
-  echo "$dot[5]"$fifth
 
 end
 echo

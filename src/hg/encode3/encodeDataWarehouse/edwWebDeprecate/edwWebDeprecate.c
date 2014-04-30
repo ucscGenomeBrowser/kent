@@ -24,6 +24,11 @@ errAbort(
   );
 }
 
+boolean okToShowAllowBox(struct sqlConnection *conn, char *userEmail)
+{
+return edwUserIsAdmin(conn,userEmail);
+};
+
 boolean checkOwnership(struct sqlConnection *conn, int fId, char *userEmail)
 /* Return true if file to be deprecated was submitted by this user. */
 {
@@ -63,11 +68,13 @@ printf("<BR>");
 printf("Please enter in reason for deprecating files:<BR>");
 cgiMakeTextArea("reason", reason, 4, 60);
 printf("<BR>");
-printf("Allow me to deprecate files not uploaded by me:  ");
-cgiMakeCheckBox("allowBox", FALSE);
-printf("<BR>");
+if (okToShowAllowBox(conn, userEmail))
+    {
+    printf("Allow me to deprecate files not uploaded by me:  ");
+    cgiMakeCheckBox("allowBox", FALSE);
+    printf("<BR>");
+    }
 cgiMakeButton("submit", "submit");
-edwPrintLogOutButton();
 }
 
 static void localWarn(char *format, va_list args)
@@ -135,7 +142,8 @@ else
 	    ok = FALSE;
 	    warn("You can not deprecate %s which was originally uploaded by %s.\n",
 	    licensePlate, edwFindOwnerNameFromFileId(conn, id));
-	    warn("Please click the check box below to override this rule.");
+	    if (okToShowAllowBox(conn, userEmail))
+		warn("Please click the check box below to override this rule.");
 	    break;
 	    }
 

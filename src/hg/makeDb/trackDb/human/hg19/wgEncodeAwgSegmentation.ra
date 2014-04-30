@@ -1,0 +1,169 @@
+# ENCODE AWG Genome Segmentation (Kate)
+
+# There are 3 methods:  ChromHMM, Segmway, Combined.  
+# (ChromHMM is similar methods to the Broad HMM track, but this is 10-state redo for ENCODE papers)
+# There are 6 subtracks (cell type) for each method
+
+track wgEncodeAwgSegmentation
+compositeTrack on
+shortLabel Genome Segments
+longLabel Genome Segmentations from ENCODE
+group regulation
+subGroup1 tier Tier t1=1 t2=2
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2)
+subGroup3 method Method ChromHMM=ChromHMM Segway=Segway Combined=Combined
+dimensions dimX=method dimY=cellType
+sortOrder tier=+ cellType=+ method=+
+fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type 
+dragAndDrop subTracks
+controlledVocabulary encode/cv.ra cellType=cell
+priority 0
+type bed 9 .
+itemRgb on
+wgEncode 1
+noScoreFilter .
+visibility hide
+dataVersion ENCODE Jan 2011 Freeze
+filterBy reserved:Segment_Type=\
+            16711680|Strong_Promoter{color:#FF0000},\
+            16738665|Promoter_Flanking{color:#FF6969},\
+            13568966|Inactive_Promoter_*{color:#CF0BC6},\
+            16435712|Strong_Enhancer{color:#FACA00},\
+            16776196|Weak_Enhancer{color:#FFFC04},\
+            704254|Insulator{color:#0ABEFE},\
+            45136|Transcribed{color:#00B050},\
+            10092390|Low_Activity_*{color:#99FF66},\
+            8355711|Repressed{color:#7F7F7F},\
+            14803425|Repetitive_*{color:#E1E1E1}
+
+#filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong_Enhancer,5_Strong_Enhancer,6_Weak_Enhancer,7_Weak_Enhancer,8_Insulator,9_Txn_Transition,10_Txn_Elongation,11_Weak_Txn,12_Repressed,13_Heterochrom/lo,14_Repetitive/CNV,15_Repetitive/CNV
+
+# ChromHMM
+    track wgEncodeAwgSegmentationChromhmmGm12878
+    parent wgEncodeAwgSegmentation off
+    shortLabel GM12878 ChromHMM
+    longLabel GM12878 Genome Segmentation by ChromHMM from ENCODE/Analysis
+    subGroups tier=t1 cellType=t1GM12878 method=ChromHMM
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationChromhmmH1hesc
+    parent wgEncodeAwgSegmentation off
+    shortLabel H1-hESC ChromHMM
+    longLabel H1-hESC Genome Segmentation by ChromHMM from ENCODE/Analysis
+    subGroups tier=t1 cellType=t1H1HESC method=ChromHMM
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationChromhmmHelas3
+    parent wgEncodeAwgSegmentation off
+    shortLabel HeLa-S3 ChromHMM
+    longLabel HeLa-S3 Genome Segmentation by ChromHMM from ENCODE/Analysis
+    subGroups tier=t2 cellType=t2HELAS3 method=ChromHMM
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationChromhmmHepg2
+    parent wgEncodeAwgSegmentation off
+    shortLabel HepG2 ChromHMM
+    longLabel HepG2 Genome Segmentation by ChromHMM from ENCODE/Analysis
+    subGroups tier=t2 cellType=t2HEPG2 method=ChromHMM
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationChromhmmHuvec
+    parent wgEncodeAwgSegmentation off
+    shortLabel HUVEC ChromHMM
+    longLabel HUVEC Genome Segmentation by ChromHMM from ENCODE/Analysis
+    subGroups tier=t2 cellType=t2HUVEC method=ChromHMM
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationChromhmmK562
+    parent wgEncodeAwgSegmentation off
+    shortLabel K562 ChromHMM
+    longLabel K562 Genome Segmentation by ChromHMM from ENCODE/Analysis
+    subGroups tier=t1 cellType=t1K562 method=ChromHMM
+    type bed 9 .
+
+# Segway
+    track wgEncodeAwgSegmentationSegwayGm12878
+    parent wgEncodeAwgSegmentation off
+    shortLabel GM12878 Segway
+    longLabel GM12878 Genome Segmentation by Segway from ENCODE/Analysis
+    subGroups tier=t1 cellType=t1GM12878 method=Segway
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationSegwayH1hesc
+    parent wgEncodeAwgSegmentation off
+    shortLabel H1-hESC Segway
+    longLabel H1-hESC Genome Segmentation by Segway from ENCODE/Analysis
+    subGroups tier=t1 cellType=t1H1HESC method=Segway
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationSegwayHelas3
+    parent wgEncodeAwgSegmentation off
+    shortLabel HeLa-S3 Segway
+    longLabel HeLa-S3 Genome Segmentation by Segway from ENCODE/Analysis
+    subGroups tier=t2 cellType=t2HELAS3 method=Segway
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationSegwayHepg2
+    parent wgEncodeAwgSegmentation off
+    shortLabel HepG2 Segway
+    longLabel HepG2 Genome Segmentation by Segway from ENCODE/Analysis
+    subGroups tier=t2 cellType=t2HEPG2 method=Segway
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationSegwayHuvec
+    parent wgEncodeAwgSegmentation off
+    shortLabel HUVEC Segway
+    longLabel HUVEC Genome Segmentation by Segway from ENCODE/Analysis
+    subGroups tier=t2 cellType=t2HUVEC method=Segway
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationSegwayK562
+    parent wgEncodeAwgSegmentation off
+    shortLabel K562 Segway
+    longLabel K562 Genome Segmentation by Segway from ENCODE/Analysis
+    subGroups tier=t1 cellType=t1K562 method=Segway
+    type bed 9 .
+
+# Combined
+    track wgEncodeAwgSegmentationCombinedGm12878
+    parent wgEncodeAwgSegmentation on
+    shortLabel GM12878 Combined
+    longLabel GM12878 Genome Segmentation by Combined Segway+ChromHMM from ENCODE/Analysis
+    subGroups tier=t1 cellType=t1GM12878 method=Combined
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationCombinedH1hesc
+    parent wgEncodeAwgSegmentation on
+    shortLabel H1-hESC Combined
+    longLabel H1-hESC Genome Segmentation by Combined Segway+ChromHMM from ENCODE/Analysis
+    subGroups tier=t1 cellType=t1H1HESC method=Combined
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationCombinedHelas3
+    parent wgEncodeAwgSegmentation off
+    shortLabel HeLa-S3 Combined
+    longLabel HeLa-S3 Genome Segmentation by Combined Segway+ChromHMM from ENCODE/Analysis
+    subGroups tier=t2 cellType=t2HELAS3 method=Combined
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationCombinedHepg2
+    parent wgEncodeAwgSegmentation off
+    shortLabel HepG2 Combined
+    longLabel HepG2 Genome Segmentation by Combined Segway+ChromHMM from ENCODE/Analysis
+    subGroups tier=t2 cellType=t2HEPG2 method=Combined
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationCombinedHuvec
+    parent wgEncodeAwgSegmentation off
+    shortLabel HUVEC Combined
+    longLabel HUVEC Genome Segmentation by Combined Segway+ChromHMM from ENCODE/Analysis
+    subGroups tier=t2 cellType=t2HUVEC method=Combined
+    type bed 9 .
+
+    track wgEncodeAwgSegmentationCombinedK562
+    parent wgEncodeAwgSegmentation on
+    shortLabel K562 Combined
+    longLabel K562 Genome Segmentation by Combined Segway+ChromHMM from ENCODE/Analysis
+    subGroups tier=t1 cellType=t1K562 method=Combined
+    type bed 9 .
+

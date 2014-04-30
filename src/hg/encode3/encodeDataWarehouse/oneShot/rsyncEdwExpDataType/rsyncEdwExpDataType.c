@@ -27,9 +27,8 @@ errAbort(
   "rsyncEdwExpDataType - Get experiment and data types from ENCODED via json, and from\n"
   "encode2 database via sql\n"
   "usage:\n"
-  "   rsyncEdwExpDataType url userId password out.tab\n"
-  "where URL is 'submit.encodedcc.org/experiments/?format=json' with quotes most likely\n"
-  "and the userId and password are programatically generated things obtained from Laurence Rowe\n"
+  "   rsyncEdwExpDataType userId password out.tab\n"
+  "where the userId and password are programatically generated things obtained from Laurence Rowe\n"
   "at Stanford most likely.\n"
   "Options:\n"
   "   -cache=cacheName - get JSON list from cache rather than from database where possible\n"
@@ -52,8 +51,11 @@ char *getTextViaHttps(char *url, char *userId, char *password)
 /* getJsonViaHttps - Fetch text from url that is https password protected.  This
  * will return a NULL rather than aborting if URL not found. */
 {
+verbose(2, "getTextViaHttps(%s %s %s)\n", url, userId, password);
 char fullUrl[1024];
-safef(fullUrl, sizeof(fullUrl), "https://%s:%s@%s", userId, password, url);
+// certificate expired safef(fullUrl, sizeof(fullUrl), "https://%s:%s@%s\n", userId, password, url);  
+safef(fullUrl, sizeof(fullUrl), "http://%s:%s@%s\n", userId, password, url);
+verbose(2, "full url:\n %s", fullUrl);
 struct htmlPage *page = htmlPageGet(fullUrl);
 if (page == NULL)
     return NULL;
@@ -112,7 +114,8 @@ char *getStanfordJson(char *table, char *accession, char *userId, char *password
 /* Get json text associated with an object */
 {
 char url[512];
-safef(url, sizeof(url), "submit.encodedcc.org/%s%s/?format=json", table, accession);
+// possibly use 'www.encodedcc.org' instead of 'submit.encodedcc.org' in the future.
+safef(url, sizeof(url), "submit.encodedcc.org/%s%s/?format=json&limit=all", table, accession);
 verbose(1, "Fetching from %s\n", url);
 return getTextViaHttps(url, userId, password);
 }
@@ -190,7 +193,6 @@ if (exp)
 	if (controlExperiment != NULL)
 	    {
 	    char *target = jsonOptionalStringField(control, "target", NULL);
-	    if (target != NULL) uglyf("target %s %s\n", target, controlExperiment);
 	    if (target != NULL && sameWord(target, "Input"))
 		 freez(&result);
 	    if (result == NULL)
@@ -225,7 +227,7 @@ if (sizeRange == NULL)
      warn("Missing %s from %s replicates library", sizeRangeName, expAccession);
      return "RNA-seq";
      }
-if (sameString("<200", sizeRange))
+if (sameString("<200", sizeRange) || sameString("300-350", sizeRange))
     {
     return "Short RNA-seq";
     }
@@ -249,7 +251,7 @@ for (exp = expList; exp != NULL; exp = exp->next)
 return hash;
 }
 
-void rsyncStanfordExp(char *url, char *userId, char *password, FILE *f)
+void rsyncStanfordExp(char *userId, char *password, FILE *f)
 /* Get data from Stanford ENCODED via JSON */
 {
 struct hash *oldHash = (fresh ? hashNew(0) : hashExpTable(edwConnect()));
@@ -272,7 +274,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
     if (dataType != NULL)
         {
 	char *rfa = jsonOptionalStringField(el, "award.rfa", "");
-	if (!isEmpty(rfa) && sameString(rfa, "ENCODE3") && sameString(dataType, "RNA-seq"))
+	if (sameString(dataType, "RNA-seq"))
 	    {
 	    char *newDataType = rnaSubtype(acc, userId, password);
 	    verbose(1, "%s -> %s\n", dataType, naForNull(newDataType));
@@ -286,8 +288,14 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	    if (oldExp != NULL)
 		{
 		if (!sameString(oldExp->dataType, dataType))
-		    errAbort("Change in data type for %s %s vs %s\n", 
+		    {
+		    warn("Change in data type for %s %s vs %s", 
 			    acc, oldExp->dataType, dataType);
+		    if (stringIn("RNA", oldExp->dataType) && stringIn("RNA", dataType))
+		        warn("Change in RNA data type,  just ignoring for now since RNA pipeline not implemented.");
+		    else
+		        errAbort("Oh no,  data type changed we're going to have to figure out what to do!");
+		    }
 		}
 
 	    /* In the case of ChIP-seq, attemt to find matching control. */
@@ -412,13 +420,13 @@ for (exp = expList; exp != NULL; exp = exp->next)
     }
 }
 
-void rsyncEdwExpDataType(char *url, char *userId, char *password, char *outTab)
+void rsyncEdwExpDataType(char *userId, char *password, char *outTab)
 /* rsyncEdwExpDataType - Get experiment and data types from ENCODED via json.. */
 {
 FILE *f = mustOpen(outTab, "w");
 if (!noStanford)
     {
-    rsyncStanfordExp(url, userId, password, f);
+    rsyncStanfordExp(userId, password, f);
     }
 if (!noUcsc)
     {
@@ -432,11 +440,11 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 4)
     usage();
 cacheName = optionVal("cache", cacheName);
 noStanford = optionExists("noStanford");
 noUcsc = optionExists("noUcsc");
-rsyncEdwExpDataType(argv[1], argv[2], argv[3], argv[4]);
+rsyncEdwExpDataType(argv[1], argv[2], argv[3]);
 return 0;
 }

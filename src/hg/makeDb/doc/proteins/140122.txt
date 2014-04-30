@@ -53,7 +53,6 @@ ln -s /hive/data/outside/reactome/reactome46 reactome
 # BUILD spXref2 and spXref3 tables.
 cd /hive/data/inside/proteins/$date/build
 
-**** stopped here
 
 # Create a bioentry table to use as an internal replacement for accession.
 # Takes a minute
@@ -82,10 +81,10 @@ hgsql $spdb -e "drop table bioentryID"
 cat spXref3a.tab  spXref3b.tab  spXref3av.tab spXref3bv.tab >spXref3.tab
 
 # load into the spXref3 table
-hgLoadSqlTab $db spXref3 $kent/src/hg/lib/spXref3.sql spXref3.tab
+hgLoadSqlTab -notOnServer $db spXref3 $kent/src/hg/lib/spXref3.sql spXref3.tab
 
 # load the same data into a second temp table
-hgLoadSqlTab $db spXref3B $kent/src/hg/lib/spXref3.sql spXref3.tab
+hgLoadSqlTab -notOnServer $db spXref3B $kent/src/hg/lib/spXref3.sql spXref3.tab
 
 # remove records that have empty HUGO symbol, yet other records 
 # of the same accession does have non-empty HUGO symbols.
@@ -100,20 +99,26 @@ hgsql -e "select displayId.val, displayId.acc, otherAcc.val from displayId, \
         otherAcc where otherAcc.acc = displayId.acc;" $spdb \
 	| sed -e "1d" > spSecondaryID.tab
 
-hgLoadSqlTab $db spSecondaryID $kent/src/hg/lib/spSecondaryID.sql ./spSecondaryID.tab
+hgLoadSqlTab -notOnServer $db spSecondaryID $kent/src/hg/lib/spSecondaryID.sql ./spSecondaryID.tab
 
 #	Build pfamXref and pfamDesc tables
-# First get pfam info into /hive/data/outside/pfam/current/Pfam-A.full.gz somehow.
-# Did it this time with
-#   wget --timestamping ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam-A.full.gz
+
+mkdir /hive/data/outside/pfam/pfam27.0
+cd  /hive/data/outside/pfam/pfam27.0
+wget --timestamping ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam-A.full.gz
+# 2014-02-21 13:13:58 (1.09 MB/s) - `Pfam-A.full.gz' saved [4301369417]
+
+rm current
+ln -s Pfam27.0  current
+
 cd    /hive/data/outside/pfam/current/
 
 gunzip -c Pfam-A.full.gz | pfamXref $db stdin pfamADesc.tab pfamAXref.tab >pfamXref.log
 
-hgLoadSqlTab $db pfamDesc $kent/src/hg/lib/pfamDesc.sql pfamADesc.tab
+hgLoadSqlTab -notOnServer $db pfamDesc $kent/src/hg/lib/pfamDesc.sql pfamADesc.tab
 
 
-hgLoadSqlTab $db pfamXref $kent/src/hg/lib/pfamXref.sql pfamAXref.tab
+hgLoadSqlTab -notOnServer $db pfamXref $kent/src/hg/lib/pfamXref.sql pfamAXref.tab
 
 #	Build the pdbSP table, new process using extDbRef data from spXXXXXX
 
@@ -121,9 +126,28 @@ cd /hive/data/inside/proteins/$date
 
 hgsql $spdb -N -e 'select extAcc1, d.val from extDbRef x, displayId d, extDb where x.acc=d.acc and extDb.val="PDB" and x.extDb=extDb.id'|sort -u >pdbSP.tab
 
-hgLoadSqlTab $db pdbSP $kent/src/hg/lib/pdbSP.sql pdbSP.tab
+hgLoadSqlTab -notOnServer $db pdbSP $kent/src/hg/lib/pdbSP.sql pdbSP.tab
 
-#stopped here
+hgsql proteins121210 -N -e 'select * from spOldNew' >spOldNew.tab
+hgLoadSqlTab -notOnServer $db spOldNew $kent/src/hg/lib/spOldNew.sql ./spOldNew.tab
+
+hgsql $db -e 'create index oldDisplayId on spOldNew(oldDisplayId)'
+hgsql $db -e 'create index newDisplayId on spOldNew(newDisplayId)'
+
+# CREATE spVariant TABLE TO ENABLE UNIPROT VARIANT SPLICE ISOFORM PROCESSING 
+cd /hive/data/inside/proteins/$date
+
+hgsql $db  -N -e 'select accession,accession from spXref3' >j1
+cat j1 |grep "-" |sed -e 's/-/\t/'|cut -f 1,3 >j2
+cat j1 |grep -v "-" >>j3
+cat j2 j3 |sort -u >spVariant.tab
+rm j1 j2 j3
+
+
+hgLoadSqlTab $db  spVariant $kent/src/hg/lib/spVariant.sql ./spVariant.tab
+hgsql $db  -e 'create index parent on spVariant(parent)'
+
+#stopped here because don't need the rest of these tables.
 
 #	Build the spDisease table
 cd /hive/data/inside/proteins/$date
@@ -166,24 +190,6 @@ rm j1.tmp j2.tmp j3.tmp j4.tmp
 hgLoadSqlTab $db uniProtAlias $kent/src/hg/lib/uniProtAlias.sql ./uniProtAlias.tab
 hgsql $db -e 'create index alias on uniProtAlias(alias)'
 
-hgsql proteins111004 -N -e 'select * from spOldNew' >spOldNew.tab
-hgLoadSqlTab $db spOldNew $kent/src/hg/lib/spOldNew.sql ./spOldNew.tab
-
-hgsql $db -e 'create index oldDisplayId on spOldNew(oldDisplayId)'
-hgsql $db -e 'create index newDisplayId on spOldNew(newDisplayId)'
-
-# CREATE spVariant TABLE TO ENABLE UNIPROT VARIANT SPLICE ISOFORM PROCESSING 
-cd /hive/data/inside/proteins/$date
-
-hgsql $db  -N -e 'select accession,accession from spXref3' >j1
-cat j1 |grep "-" |sed -e 's/-/\t/'|cut -f 1,3 >j2
-cat j1 |grep -v "-" >>j3
-cat j2 j3 |sort -u >spVariant.tab
-rm j1 j2 j3
-
-
-hgLoadSqlTab $db  spVariant $kent/src/hg/lib/spVariant.sql ./spVariant.tab
-hgsql $db  -e 'create index parent on spVariant(parent)'
 
 #########################################################
 # CREATE REACTOME TABLES 
@@ -198,8 +204,8 @@ rm -rf __MACOSX/ reactome_v46_ucsc.zip
 tail -n +7 ucsc_entity46 > ucsc_entity46.tab
 tail -n +5 ucsc_events46 > ucsc_events46.tab
 
-hgLoadSqlTab $db spReactomeEvent ~/kent/src/hg/lib/spReactomeEvent.sql ucsc_events46.tab
-hgLoadSqlTab $db spReactomeId ~/kent/src/hg/lib/spReactomeId.sql ucsc_entity46.tab
+hgLoadSqlTab -notOnServer $db spReactomeEvent ~/kent/src/hg/lib/spReactomeEvent.sql ucsc_events46.tab
+hgLoadSqlTab -notOnServer $db spReactomeId ~/kent/src/hg/lib/spReactomeId.sql ucsc_entity46.tab
 
 cd ..
 rm current reactome

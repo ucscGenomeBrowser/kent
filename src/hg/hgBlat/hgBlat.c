@@ -88,7 +88,8 @@ st.genome = cloneString(row[1]);
 st.isTrans = atoi(row[2]);
 st.host = cloneString(row[3]);
 st.port = cloneString(row[4]);
-st.nibDir = hReplaceGbdb(row[5]);
+st.nibDir = hReplaceGbdbSeqDir(row[5], st.db);
+
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 return &st;
@@ -233,7 +234,7 @@ boolean pslOut = startsWith("psl", output);
 boolean isStraightNuc = (qType == gftRna || qType == gftDna);
 int  minThreshold = (isStraightNuc ? minMatchShown : 0);
 
-sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
+sprintf(uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 
 /* If user has hidden BLAT track, add a setting that will unhide the 
    track if user clicks on a browser link. */

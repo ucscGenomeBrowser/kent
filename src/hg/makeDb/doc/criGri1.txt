@@ -1,0 +1,427 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the criGri1
+# Cricetulus griseus - Chinese hamster
+
+# DATE:   12-Jul-2013
+# ORGANISM:       Cricetulus griseus
+# TAXID:  10029
+# ASSEMBLY LONG NAME:     C_griseus_v1.0
+# ASSEMBLY SHORT NAME:    C_griseus_v1.0
+# ASSEMBLY SUBMITTER:     Beijing Genomics Institution-shenzhen
+# ASSEMBLY TYPE:  Haploid
+# NUMBER OF ASSEMBLY-UNITS:       1
+# ASSEMBLY ACCESSION:     GCA_000419365.1
+
+# FTP-RELEASE DATE: 12-Jul-2013
+
+
+#       rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Cricetulus_griseus/C_griseus_v1.0/
+
+#	Mitochondrial sequence: NC_007936.1
+
+#############################################################################
+# fetch sequence from genbank (DONE - 2013-07-15 - Hiram)
+    mkdir -p /hive/data/genomes/criGri1/genbank
+    cd /hive/data/genomes/criGri1/genbank
+
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Cricetulus_griseus/C_griseus_v1.0/
+
+    # measure sequence to be used here  (there will be the chrMT later ...)
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+
+    # 2360130144 bases (58820511 N's 2301309633 real 2301309633 upper 0 lower)
+    #  in 52710 sequences in 1 files
+    # Total size: mean 44775.8 sd 290740.6
+    #  min 201 (gi|521664324|gb|AMDS01150391.1|)
+    #  max 8324132 (gi|523501934|gb|KE382941.1|) median 363
+
+#############################################################################
+# fixup names for UCSC standards (DONE - 2014-04-03 - Hiram)
+    cd /hive/data/genomes/criGri1
+    $HOME/kent/src/hg/utils/automation/unplacedScaffolds.pl criGri1
+    # constructs ./ucsc/ directory here, with contents:
+# -rw-rw-r-- 1  20585665 Apr  3 12:39 criGri1.ucsc.agp
+# -rw-rw-r-- 1 696696150 Apr  3 12:53 criGri1.ucsc.fa.gz
+# -rw-rw-r-- 1       206 Apr  3 12:54 checkAgp.result.txt
+    cat checkAgp.result.txt 
+# AMDS01150761 1 414 1 W AMDS01150761.1 1 414 +
+# agpFrag->chromStart: 0, agpFrag->chromEnd: 414, dnaOffset: 0
+# FASTA sequence entry
+# Valid Fasta file entry
+# All AGP and FASTA entries agree - both files are valid
+
+#############################################################################
+#  Initial database build (DONE - 2014-04-03 - Hiram)
+
+    cd /hive/data/genomes/criGri1
+    cat << '_EOF_' > criGri1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db criGri1
+clade mammal
+genomeCladePriority 40
+scientificName Cricetulus griseus
+commonName Chinese hamster
+assemblyDate Jul. 2013
+assemblyLabel Beijing Genomics Institution-Shenzhen
+assemblyShortLabel C_griseus_v1.0
+orderKey 1610
+mitoAcc NC_007936.1
+fastaFiles /hive/data/genomes/criGri1/ucsc/criGri1.ucsc.fa.gz
+agpFiles /hive/data/genomes/criGri1/ucsc/criGri1.ucsc.agp
+dbDbSpeciesDir criGri
+photoCreditURL http://en.wikipedia.org/wiki/File:Chinesedsaffa.jpg
+photoCreditName Wikimedia Commons
+ncbiGenomeId 2791
+ncbiAssemblyId 40911
+ncbiAssemblyName C_griseus_v1.0
+ncbiBioProject 167053
+genBankAccessionID GCA_000419365.1
+taxId 10029
+'_EOF_'
+    # << happy emacs
+
+    # stepwise to verify sequence and AGP file
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-stop=seq criGri1.config.ra > seq.log 2>&1
+
+    # verify sequence and AGP are OK:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=agp -stop=agp criGri1.config.ra > agp.log 2>&1
+
+    # then finish it off:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=db criGri1.config.ra > db.log 2>&1
+    #  real    22m15.793s
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=dbDb criGri1.config.ra > dbDb.log 2>&1
+
+##########################################################################
+# running repeat masker (DONE - 2014-04-03 - Hiram)
+    mkdir /hive/data/genomes/criGri1/bed/repeatMasker
+    cd /hive/data/genomes/criGri1/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=ku criGri1 > do.log 2>&1 &
+    # real    1461m31.405s cluster power reset problems
+    time doRepeatMasker.pl -buildDir=`pwd` \
+	-continue=cat -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=ku criGri1 > cat.log 2>&1
+    #    real    30m50.353s
+
+    cat faSize.rmsk.txt
+    # 2360146428 bases (58820511 N's 2301325917 real 1679980994
+    #    upper 621344923 lower) in 52711 sequences in 1 files
+    # Total size: mean 44775.2 sd 290737.8 min 201 (AMDS01150391)
+    #    max 8324132 (KE382941) median 363
+    # %26.33 masked total, %27.00 masked real
+
+    egrep -i "versi|relea" do.log
+#  RepeatMasker version open-4.0.3
+#    June 20 2013 (open-4-0-3) version of RepeatMasker
+#  CC   RELEASE 20130422;     
+
+    featureBits -countGaps criGri1 rmsk
+    #   622786906 bases of 2360146428 (26.388%) in intersection
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2013-07-15 - Hiram)
+    mkdir /hive/data/genomes/criGri1/bed/simpleRepeat
+    cd /hive/data/genomes/criGri1/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+	criGri1 > do.log 2>&1 &
+    #  real    34m39.070s
+    cat fb.simpleRepeat 
+    #   60911693 bases of 2301325917 (2.647%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/criGri1
+    twoBitMask criGri1.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed criGri1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa criGri1.2bit stdout | faSize stdin > faSize.criGri1.2bit.txt
+    cat faSize.criGri1.2bit.txt
+    # 2360146428 bases (58820511 N's 2301325917 real 1678560642 upper
+    #    622765275 lower) in 52711 sequences in 1 files
+    # Total size: mean 44775.2 sd 290737.8 min 201 (AMDS01150391)
+    #    max 8324132 (KE382941) median 363
+    # %26.39 masked total, %27.06 masked real
+
+    rm /gbdb/criGri1/criGri1.2bit
+    ln -s `pwd`/criGri1.2bit /gbdb/criGri1/criGri1.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2013-07-15 - Hiram)
+    mkdir /hive/data/genomes/criGri1/bed/gap
+    cd /hive/data/genomes/criGri1/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../criGri1.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m9.753s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits -countGaps criGri1 -not gap -bed=notGap.bed
+    featureBits criGri1 -not gap -bed=notGap.bed allGaps.bed
+    time featureBits -countGaps criGri1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    time featureBits -countGaps criGri1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   0 bases of 2360146428 (0.000%) in intersection
+    #  real    60m7.525s
+
+    # nothing to do here, take a look at felCat5.txt for an example
+    # of what to do here with the new gaps
+
+##########################################################################
+## WINDOWMASKER (DONE - 2013-07-15 - Hiram)
+    mkdir /hive/data/genomes/criGri1/bed/windowMasker
+    cd /hive/data/genomes/criGri1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev criGri1 > do.log 2>&1 &
+    #  real    60m16.423s
+
+    # Masking statistics
+    cat faSize.criGri1.cleanWMSdust.txt
+    # 2360146428 bases (58820511 N's 2301325917 real 1584044208 upper
+    #    717281709 lower) in 52711 sequences in 1 files
+    # Total size: mean 44775.2 sd 290737.8 min 201 (AMDS01150391)
+    #    max 8324132 (KE382941) median 363
+    # %30.39 masked total, %31.17 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    # if RM finished before this got here, the answer is in:
+    cat fb.criGri1.rmsk.windowmaskerSdust.txt
+    #   717281709 bases of 2360146428 (30.391%) in intersection
+
+    # or, if WM finished first, that failed, and this was the last
+    # step of the procedure:
+    featureBits -countGaps criGri1 rmsk windowmaskerSdust
+    #   328705522 bases of 2360146428 (13.927%) in intersection
+
+    # plus, if it failed, run the clean step to completely finish WM
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2014-04-07 - Hiram)
+    mkdir /hive/data/genomes/criGri1/bed/cytoBand
+    cd /hive/data/genomes/criGri1/bed/cytoBand
+    makeCytoBandIdeo.csh criGri1
+
+##########################################################################
+# cpgIslands - (DONE - 2013-11-25 - Hiram)
+    mkdir /hive/data/genomes/criGri1/bed/cpgIslands
+    cd /hive/data/genomes/criGri1/bed/cpgIslands
+    time doCpgIslands.pl criGri1 > do.log 2>&1 &
+    # real    27m23.569s
+
+    cat fb.criGri1.cpgIslandExt.txt
+    #   6627706 bases of 2301325917 (0.288%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-04-07 - Hiram)
+    mkdir /hive/data/genomes/criGri1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/criGri1/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -stop=makeBed \
+          -maskedSeq=/hive/data/genomes/criGri1/criGri1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku criGri1 > makeBed.log 2>&1
+    #  real    16m17.972s
+
+    # debug load step so it can be loaded into a separate table:
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -debug -continue=load \
+          -maskedSeq=/hive/data/genomes/criGri1/criGri1.unmasked.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku criGri1
+    # edit and change the table name to load: cpgIslandExtUnmasked
+
+    time ./doLoadCpg.csh > load.log 2>&1
+    #   Read 14660 elements of size 10 from cpgIsland.bed
+    #   real    0m8.166s
+
+    cat fb.criGri1.cpgIslandExtUnmasked.txt 
+    # 7278222 bases of 2301325917 (0.316%) in intersection
+
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -continue=cleanup \
+          -maskedSeq=/hive/data/genomes/criGri1/criGri1.unmasked.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku criGri1
+    # real    1m53.092s
+
+#########################################################################
+# genscan - (DONE - 2013-09-11 - Hiram)
+    mkdir /hive/data/genomes/criGri1/bed/genscan
+    cd /hive/data/genomes/criGri1/bed/genscan
+    time doGenscan.pl criGri1 > do.log 2>&1  &
+    # real    24m47.395s
+
+    cat fb.criGri1.genscan.txt
+    #   57975526 bases of 2301325917 (2.519%) in intersection
+    cat fb.criGri1.genscanSubopt.txt
+    #   65771387 bases of 2301325917 (2.858%) in intersection
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2014-04-07 - Hiram)
+    # Use -repMatch=850, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2301325917 / 2897316137 \) \* 1024
+    # ( 2301325917 / 2897316137 ) * 1024 = 813.358856
+
+    # round up to 850
+
+    cd /hive/data/genomes/criGri1
+    blat criGri1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/criGri1.11.ooc -repMatch=850
+    #	Wrote 21108 overused 11-mers to jkStuff/criGri1.11.ooc
+
+
+    # there are *only* bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" criGri1 | sort | uniq -c
+    #     166152 yes
+
+#########################################################################
+# AUTO UPDATE GENBANK (WORKING - 2014-04-02 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism                mrnaCnt estCnt  refSeqCnt
+# Cricetulus griseus      90126   13      325
+
+
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # this appears that criGri1 has plenty of native est's
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add criGri1 just before the mouse entries
+# criGri1 (Chinese hamster)
+criGri1.serverGenome = /hive/data/genomes/criGri1/criGri1.2bit
+criGri1.clusterGenome = /hive/data/genomes/criGri1/criGri1.2bit
+criGri1.ooc = /hive/data/genomes/criGri1/jkStuff/criGri1.11.ooc
+criGri1.lift = no
+criGri1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+criGri1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+criGri1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+criGri1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+criGri1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+criGri1.refseq.mrna.native.load = yes
+criGri1.refseq.mrna.xeno.load = yes
+criGri1.genbank.mrna.xeno.load = no
+criGri1.genbank.est.native.load = yes
+criGri1.genbank.mrna.native.load = yes
+criGri1.genbank.mrna.native.loadDesc = no
+criGri1.downloadDir = criGri1
+criGri1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    # and edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding criGri1 Chinese hamster refs #6506" \
+        etc/genbank.conf src/lib/gbGenome.c
+    git push
+    make etc-update
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time ./bin/gbAlignStep -initial criGri1 &
+    #  logFIle: var/build/logs/2014.04.10-11:17:35.criGri1.initalign.log
+    #  real    163m50.612s
+
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad criGri1
+    #	logFile: var/dbload/hgwdev/logs/2014.04.10-15:04:01.criGri1.dbload.log
+    #	about 18 minutes
+
+    # enable daily alignment and update of hgwdev (TBD - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add criGri1 to: etc/align.dbs etc/hgwdev.dbs
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added criGri1 to daily hgwdev build refs #6506" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
+# set default position on DHFR gene displays  (DONE - 2014-04-11 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="KE382584:3834159-3887734" where name="criGri1";' \
+	hgcentraltest
+
+#########################################################################
+# create ucscToINSDC name mapping (DONE - 2014-04-11 - Hiram)
+    mkdir /hive/data/genomes/criGri1/bed/ucscToINSDC
+    cd /hive/data/genomes/criGri1/bed/ucscToINSDC
+
+    # this script has been maturing over time, it is close to complete.
+    # to find a latest copy of it:
+    # ls -ogrt /hive/data/genomes/*/bed/ucscToINSDC/translateNames.sh
+
+    cp -p /hive/data/genomes/papAnu2/bed/ucscToINSDC/translateNames.sh .
+    ./translateNames.sh
+    # it says:
+# need to find chrM accessions
+    # so add this one:
+    echo -e 'chrM\tNC_007936.1' >> ucscToINSDC.txt
+    # needs to be sorted to work with join
+    sort ucscToINSDC.txt > ucscToINSDC.tab
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes | sort \
+        > name.coordinate.tab
+
+    join name.coordinate.tab ucscToINSDC.tab | tr '[ ]' '[\t]' > ucscToINSDC.bed
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+# 12
+
+    # use the 12 in this sed:
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab criGri1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords criGri1 ucscToINSDC
+    # should cover all bases
+    featureBits -countGaps criGri1 ucscToINSDC
+    # 2360146428 bases of 2360146428 (100.000%) in intersection
+
+##############################################################################
+# construct download files (DONE - 2014-04-11 - Hiram)
+    # after db name has been added to all.joiner and
+    # joinerCheck -database=criGri1 -keys all.joiner
+    # is clean
+
+    cd /hive/data/genomes/criGri1
+    time makeDownloads.pl -workhorse=hgwdev -dbHost=hgwdev criGri1 \
+       > downloads.log 2>&1
+    # real    25m45.426s
+
+##############################################################################
+# pushQ entry (DONE - 2014-04-11 - Hiram)
+    mkdir /hive/data/genomes/criGri1/pushQ
+    cd /hive/data/genomes/criGri1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl criGri1 2> stderr.txt | grep -v transMap > criGri1.sql
+    #   real    1m50.349s
+
+    scp -p criGri1.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/criGri1.sql'
+
+###########################################################################
+## blat server turned on (DONE - 2014-01-13 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("criGri1", "blat4b", "17852", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("criGri1", "blat4b", "17853", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################

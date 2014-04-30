@@ -1,7 +1,11 @@
 validateManifest (vm) Versions Log
 
-1.8 (TESTING)
-    Add support for bedRrbs format including bedRrbs.as
+1.9 (Developing)
+    Allow dm3 and ce10 assemblies.
+
+1.8 (RELEASED)
+    Support for bedRrbs format including bedRrbs.as
+    Tolerate phiX174 phage in bams by adding the sequence to encValData/hg19/{chrom.sizes,hg19.2bit}
 
 1.7 (RELEASED)
     Better checks for idat and rcc formats by refactoring the checking code from edwSubmit into hg/lib/encode3/encode3Valid.c.

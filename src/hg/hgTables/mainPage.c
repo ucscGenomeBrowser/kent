@@ -19,6 +19,7 @@
 #include "joiner.h"
 #include "hubConnect.h"
 #include "trackHub.h"
+#include "hgConfig.h"
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -461,16 +462,21 @@ for (ot = otList; ot != NULL; ot = ot->next)
     }
 hPrintf("</SELECT>\n");
 hPrintf(" ");
-hPrintf(" Send output to ");
-cgiMakeCheckBoxIdAndJS("sendToGalaxy", doGalaxy(),
-    "checkboxGalaxy",
-    "onclick=\"document.getElementById('checkboxGreat').checked=false; return true;\"");
-hPrintf("<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A>\n");
-nbSpaces(2);
-cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
-    "checkboxGreat",
-    "onclick=\"return onSelectGreat();\"");
-hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
+
+if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
+    {
+    hPrintf(" Send output to ");
+    cgiMakeCheckBoxIdAndJS("sendToGalaxy", doGalaxy(),
+        "checkboxGalaxy",
+        "onclick=\"document.getElementById('checkboxGreat').checked=false; return true;\"");
+    hPrintf("<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A>\n");
+    nbSpaces(2);
+    cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
+        "checkboxGreat",
+        "onclick=\"return onSelectGreat();\"");
+    hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
+    }
+
 hPrintf("</TD></TR>\n");
 }
 
@@ -643,7 +649,7 @@ hPrintf("<TABLE BORDER=0>\n");
         isPositional = htiIsPositional(hti);
         }
     isBam = isBamTable( curTable);
-    isVcf = isVcfTable( curTable);
+    isVcf = isVcfTable(curTable, NULL);
     isWig = isWiggle(database, curTable);
     if (isBigWigTable(curTable))
         {
@@ -794,7 +800,7 @@ if (isPositional)
 	hPrintf(" ");
 	cgiMakeButton(hgtaDoClearIntersect, "clear");
 	}
-    else
+    else if (canIntersect(database, curTable))
         {
 	hPrintf("<TR><TD><B>intersection:</B>\n");
 	cgiMakeButton(hgtaDoIntersectPage, "create");

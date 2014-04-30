@@ -1,0 +1,401 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the balAcu1
+# Balaenoptera acutorostrata scammoni - Minke whale
+
+#	DATE:   31-Oct-2013
+#	ORGANISM:       Balaenoptera acutorostrata scammoni
+#	TAXID:  310752
+#	ASSEMBLY LONG NAME:     BalAcu1.0
+#	ASSEMBLY SHORT NAME:    BalAcu1.0
+#	ASSEMBLY SUBMITTER:     Korea Ocean Research & Development Institute
+#	ASSEMBLY TYPE:  Haploid
+#	NUMBER OF ASSEMBLY-UNITS:       1
+#	ASSEMBLY ACCESSION:     GCA_000493695.1
+
+#	FTP-RELEASE DATE: 07-Nov-2013
+
+#       rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Balaenoptera_acutorostrata/BalAcu1.0/
+
+#	Mitochondrial sequence: NC_005271.1
+
+
+#############################################################################
+# fetch sequence from genbank (DONE - 2013-03-26 - Hiram)
+    mkdir -p /hive/data/genomes/balAcu1/genbank
+    cd /hive/data/genomes/balAcu1/genbank
+
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Balaenoptera_acutorostrata/BalAcu1.0/ ./
+
+    # measure sequence to be used here  (there will be the chrMT also ...)
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+
+    #   2431671281 bases (145030652 N's 2286640629 real 2286640629 upper
+    #   0 lower) in 10775 sequences in 1 files
+    #   Total size: mean 225677.1 sd 1878463.2
+    #   min 200 (gi|555415911|gb|ATDI01158464.1|)
+    #   max 51448160 (gi|555757145|gb|KI537095.1|) median 394
+
+#############################################################################
+# fixup names for UCSC standards (DONE - 2014-03-26 - Hiram)
+    cd /hive/data/genomes/balAcu1
+    $HOME/kent/src/hg/utils/automation/unplacedScaffolds.pl balAcu1
+    # constructs ./ucsc/ directory here:
+# -rw-rw-r-- 1  20508313 Mar 26 18:04 balAcu1.ucsc.agp
+# -rw-rw-r-- 1 700587893 Mar 26 18:18 balAcu1.ucsc.fa.gz
+# -rw-rw-r-- 1       206 Mar 26 18:20 checkAgp.result.txt
+
+#############################################################################
+#  Initial database build (DONE - 2014-03-27 - Hiram)
+
+    cd /hive/data/genomes/balAcu1
+    cat << '_EOF_' > balAcu1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db balAcu1
+clade mammal
+genomeCladePriority 35
+scientificName Balaenoptera acutorostrata scammoni
+commonName Minke whale
+assemblyDate Oct. 2013
+assemblyLabel Korea Ocean Research & Development Institute
+assemblyShortLabel BalAcu1.0
+orderKey 2369
+mitoAcc NC_005271.1
+fastaFiles /hive/data/genomes/balAcu1/ucsc/balAcu1.ucsc.fa.gz
+agpFiles /hive/data/genomes/balAcu1/ucsc/balAcu1.ucsc.agp
+dbDbSpeciesDir balAcu
+photoCreditURL http://www.noaa.gov/
+photoCreditName NOAA - National Oceanic and Atmospheric Administration
+ncbiGenomeId 10769
+ncbiAssemblyId 78761
+ncbiAssemblyName BalAcu1.0
+ncbiBioProject 237330
+genBankAccessionID GCA_000493695.1
+taxId 310752
+'_EOF_'
+    # << happy emacs
+
+    # stepwise, the first 'seq' step didn't work with the
+    # scientificName above because the chrM sequence did not have
+    # the scammoni on the name, use a config.ra for that step without
+    # that part of the name, then continue with the full name:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-stop=seq balAcu1.config.ra > seq.log 2>&1
+
+    # verify sequence and AGP are OK:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=agp -stop=agp balAcu1.config.ra > agp.log 2>&1
+
+    # then finish it off:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=db balAcu1.config.ra > db.log 2>&1
+    #  real    22m15.793s
+
+##########################################################################
+# running repeat masker (DONE - 2014-03-27 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/repeatMasker
+    cd /hive/data/genomes/balAcu1/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=ku balAcu1 > do.log 2>&1 &
+    #    real    1125m12.023s
+
+    cat faSize.rmsk.txt
+    #    2431687698 bases (145030652 N's 2286657046 real 1334394119 upper
+    #    952262927 lower) in 10776 sequences in 1 files
+    #    Total size: mean 225657.7 sd 1878377.1 min 200 (ATDI01158464)
+    #    max 51448160 (KI537095) median 394
+    #    %39.16 masked total, %41.64 masked real
+
+
+    egrep -i "versi|relea" do.log
+#  RepeatMasker version open-4.0.3
+#    June 20 2013 (open-4-0-3) version of RepeatMasker
+# CC   RELEASE 20130422; 
+
+    featureBits -countGaps balAcu1 rmsk
+    #   954201519 bases of 2431687698 (39.240%) in intersection
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2014-03-27 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/simpleRepeat
+    cd /hive/data/genomes/balAcu1/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+	balAcu1 > do.log 2>&1 &
+    #	real    4m49.523s
+    cat fb.simpleRepeat 
+    #   35896803 bases of 2286657046 (1.570%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/balAcu1
+    twoBitMask balAcu1.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed balAcu1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa balAcu1.2bit stdout | faSize stdin > faSize.balAcu1.2bit.txt
+    cat faSize.balAcu1.2bit.txt
+    #  2431687698 bases (145030652 N's 2286657046 real 1333528377 upper
+    #    953128669 lower) in 10776 sequences in 1 files
+    #  Total size: mean 225657.7 sd 1878377.1 min 200 (ATDI01158464)
+    #   max 51448160 (KI537095) median 394
+    #  %39.20 masked total, %41.68 masked real
+
+
+    rm /gbdb/balAcu1/balAcu1.2bit
+    ln -s `pwd`/balAcu1.2bit /gbdb/balAcu1/balAcu1.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2014-03-27 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/gap
+    cd /hive/data/genomes/balAcu1/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../balAcu1.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m53.846s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits balAcu1 -not gap -bed=notGap.bed
+    #   2403678276 bases of 2403678276 (100.000%) in intersection
+    #   real    0m12.025s
+    time featureBits balAcu1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   0 bases of 2286657046 (0.000%) in intersection
+    #   real    12m56.037s
+
+    # no new gaps, nothing to do, take a look at felCat5.txt for an example
+    # of what to do here with the new gaps
+
+##########################################################################
+## WINDOWMASKER (DONE - 2014-03-27 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/windowMasker
+    cd /hive/data/genomes/balAcu1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev balAcu1 > do.log 2>&1 &
+    #   real    205m27.180s
+
+    # Masking statistics
+    cat faSize.balAcu1.cleanWMSdust.txt
+    #  2431687698 bases (145030652 N's 2286657046 real 1533887679 upper
+    #    752769367 lower) in 10776 sequences in 1 files
+    #  Total size: mean 225657.7 sd 1878377.1 min 200 (ATDI01158464)
+    #    max 51448160 (KI537095) median 394
+    #  %30.96 masked total, %32.92 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps balAcu1 rmsk windowmaskerSdust
+    #   491805301 bases of 2431687698 (20.225%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/cytoBand
+    cd /hive/data/genomes/balAcu1/bed/cytoBand
+    makeCytoBandIdeo.csh balAcu1
+
+##########################################################################
+# cpgIslands - (DONE - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/cpgIslands
+    cd /hive/data/genomes/balAcu1/bed/cpgIslands
+    time doCpgIslands.pl balAcu1 > do.log 2>&1 &
+    # real    5m28.908s
+
+    cat fb.balAcu1.cpgIslandExt.txt
+    #   26505589 bases of 2286657046 (1.159%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/balAcu1/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -stop=makeBed \
+          -maskedSeq=/hive/data/genomes/balAcu1/balAcu1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku balAcu1 > makeBed.log 2>&1
+    #  real    4m40.925s
+
+    # debug load step so it can be loaded into a separate table:
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -debug -continue=load \
+          -maskedSeq=/hive/data/genomes/balAcu1/balAcu1.unmasked.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku balAcu1
+    # edit and change the table name to load: cpgIslandExtUnmasked
+
+    time ./doLoadCpg.csh > load.log 2>&1
+    #   Read 65448 elements of size 10 from cpgIsland.bed
+
+    cat fb.balAcu1.cpgIslandExtUnmasked.txt 
+    $ 33531280 bases of 2286657046 (1.466%) in intersection
+
+#########################################################################
+
+#########################################################################
+# genscan - (DONE - 2014-04-01 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/genscan
+    cd /hive/data/genomes/balAcu1/bed/genscan
+    time doGenscan.pl balAcu1 > do.log 2>&1  &
+    # real    24m47.395s
+
+    cat fb.balAcu1.genscan.txt
+    #   53624691 bases of 2286657046 (2.345%) in intersection
+    cat fb.balAcu1.genscanSubopt.txt
+    #   53864323 bases of 2286657046 (2.356%) in intersection
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2014-04-01 - Hiram)
+    # Use -repMatch=750, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2286657046 / 2897316137 \) \* 1024
+    # ( 2286657046 / 2897316137 ) * 1024 = 808.174429
+    # round up to 850
+
+    cd /hive/data/genomes/balAcu1
+    blat balAcu1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/balAcu1.11.ooc -repMatch=850
+    #	Wrote 26442 overused 11-mers to jkStuff/balAcu1.11.ooc
+
+    # there are *only* bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" balAcu1 | sort | uniq -c
+    #    173296 yes
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2014-04-02 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Balaenoptera acutorostrata      27      0       0
+# Balaenoptera acutorostrata scammoni     0       0       1
+# Balaenoptera borealis   5       0       0
+# Balaenoptera brydei     5       0       0
+# Balaenoptera edeni      1       0       0
+# Balaenoptera omurai     3       0       0
+# Balaenoptera physalus   12      0       0
+
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # this appears that balAcu1 has effectively zero native est's
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add balAcu1 following vicPac1
+# balAcu1 (minke whale)
+balAcu1.serverGenome = /hive/data/genomes/balAcu1/balAcu1.2bit
+balAcu1.clusterGenome = /hive/data/genomes/balAcu1/balAcu1.2bit
+balAcu1.ooc = /hive/data/genomes/balAcu1/jkStuff/balAcu1.11.ooc
+balAcu1.lift = no
+balAcu1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+balAcu1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+balAcu1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+balAcu1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+balAcu1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+balAcu1.refseq.mrna.native.load = no
+balAcu1.refseq.mrna.xeno.load = yes
+balAcu1.genbank.mrna.xeno.load = no
+balAcu1.genbank.est.native.load = no
+balAcu1.genbank.mrna.native.load = no
+balAcu1.genbank.mrna.native.loadDesc = no
+balAcu1.downloadDir = balAcu1
+balAcu1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding balAcu1 Minke whale refs #12977" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for balAcuNames refs 12977" src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time ./bin/gbAlignStep -initial balAcu1 &
+    #	var/build/logs/2014.04.02-09:17:41.balAcu1.initalign.log
+    #  real    87m5.013s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad balAcu1 &
+    #	logFile: var/dbload/hgwdev/logs/2014.04.02-11:43:24.balAcu1.dbload.log
+    #	real    5m20.938s
+
+    # enable daily alignment and update of hgwdev (TBD - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add balAcu1 to: etc/align.dbs etc/hgwdev.dbs
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added balAcu1 to daily hgwdev build refs #12977" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
+# set default position on Myoglobin gene displays  (DONE - 2014-04-02 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="KI537194:1947619-1969416" where name="balAcu1";' \
+	hgcentraltest
+
+#########################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/bed/ucscToINSDC
+    cd /hive/data/genomes/balAcu1/bed/ucscToINSDC
+
+    # this script has been maturing over time, it is close to complete.
+    # to find a latest copy of it:
+    # ls -ogrt /hive/data/genomes/*/bed/ucscToINSDC/translateNames.sh
+
+    cp -p /hive/data/genomes/papAnu2/bed/ucscToINSDC/translateNames.sh .
+    ./translateNames.sh
+    # it says:
+# need to find chrM accessions
+    # so add this one:
+    echo -e 'chrM\tNC_005271.1' >> ucscToINSDC.txt
+    # needs to be sorted to work with join
+    sort ucscToINSDC.txt > ucscToINSDC.tab
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes | sort \
+        > name.coordinate.tab
+
+    join name.coordinate.tab ucscToINSDC.tab | tr '[ ]' '[\t]' > ucscToINSDC.bed
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+# 12
+
+    # use the 12 in this sed:
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab balAcu1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords balAcu1 ucscToINSDC
+    featureBits -countGaps balAcu1 ucscToINSDC
+    # 2431687698 bases of 2431687698 (100.000%) in intersection
+
+##############################################################################
+# construct download files (DONE - 2014-04-02 - Hiram)
+    # after db name has been added to all.joiner and
+    # joinerCheck -database=balAcu1 -keys all.joiner
+    # is clean
+
+    cd /hive/data/genomes/balAcu1
+    time makeDownloads.pl -workhorse=hgwdev -dbHost=hgwdev balAcu1 \
+       > downloads.log 2>&1
+    # real    23m14.645s
+
+##############################################################################
+# pushQ entry (DONE - 2014-04-02 - Hiram)
+    mkdir /hive/data/genomes/balAcu1/pushQ
+    cd /hive/data/genomes/balAcu1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl balAcu1 2> stderr.txt | grep -v transMap > balAcu1.sql
+    #   real    3m55.511s
+
+hgwbeta hgsql -h mysqlbeta -N qapushq -e 'select rank from pushQ order by rank desc limit 1'
+
+    scp -p balAcu1.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/balAcu1.sql'
+
+###########################################################################

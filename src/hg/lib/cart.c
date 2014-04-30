@@ -25,6 +25,7 @@
 #include "geoMirror.h"
 #include "hubConnect.h"
 #include "trackHub.h"
+#include "cgiApoptosis.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -60,13 +61,19 @@ int uLen, sLen;
 if (conn != NULL)
     {
     /* Since the content string is chopped, query for the actual length. */
-    char query[1024];
-    sqlSafef(query, sizeof(query), "select length(contents) from userDb "
-	  "where id = %d", u->id);
-    uLen = sqlQuickNum(conn, query);
-    sqlSafef(query, sizeof(query), "select length(contents) from sessionDb "
-	  "where id = %d", s->id);
-    sLen = sqlQuickNum(conn, query);
+    struct dyString *query = dyStringNew(1024);
+    sqlDyStringPrintf(query, "select length(contents) from userDb"
+	  " where id = %d", u->id);
+    if (cartDbUseSessionKey())
+	  sqlDyStringPrintf(query, " and sessionKey='%s'", u->sessionKey);
+    uLen = sqlQuickNum(conn, query->string);
+    dyStringClear(query);
+    sqlDyStringPrintf(query, "select length(contents) from sessionDb"
+	  " where id = %d", s->id);
+    if (cartDbUseSessionKey())
+	  sqlDyStringPrintf(query, " and sessionKey='%s'", s->sessionKey);
+    sLen = sqlQuickNum(conn, query->string);
+    dyStringFree(&query);
     }
 else
     {
@@ -85,12 +92,16 @@ fprintf(stderr, "ASH: %22s: "
 	when,
 	u->id, uLen, u->useCount, s->id, sLen, s->useCount,
 	pix, textSize, trackControls, (long)getpid(), cgiRemoteAddr());
-if (cart->userId != 0 && u->id != cart->userId)
-    fprintf(stderr, "ASH: bad userId %d --> %d!  pid=%ld\n",
-	    cart->userId, u->id, (long)getpid());
-if (cart->sessionId != 0 && s->id != cart->sessionId)
-    fprintf(stderr, "ASH: bad sessionId %d --> %d!  pid=%ld\n",
-	    cart->sessionId, s->id, (long)getpid());
+char userIdKey[256];
+cartDbSecureId(userIdKey, sizeof userIdKey, u);
+if (cart->userId && !sameString(userIdKey, cart->userId))
+    fprintf(stderr, "ASH: bad userId %s --> %d_%s!  pid=%ld\n",
+	    cart->userId, u->id, u->sessionKey, (long)getpid());
+char sessionIdKey[256];
+cartDbSecureId(sessionIdKey, sizeof sessionIdKey, s);
+if (cart->sessionId && !sameString(sessionIdKey, cart->sessionId))
+    fprintf(stderr, "ASH: bad sessionId %s --> %d_%s!  pid=%ld\n",
+	    cart->sessionId, s->id, s->sessionKey, (long)getpid());
 }
 
 boolean cartTablesOk(struct sqlConnection *conn)
@@ -167,48 +178,75 @@ else
     }
 }
 
-struct cartDb *cartDbLoadFromId(struct sqlConnection *conn, char *table, int id)
+struct cartDb *cartDbLoadFromId(struct sqlConnection *conn, char *table, char *secureId)
 /* Load up cartDb entry for particular ID.  Returns NULL if no such id. */
 {
-if (id == 0)
-   return NULL;
+
+if (!secureId)
+    return NULL;
 else
-   {
-   struct cartDb *cdb = NULL;
-   char where[64];
-   sqlSafefFrag(where, sizeof(where), "id = %u", id);
-   cdb = cartDbLoadWhere(conn, table, where);
-   if (looksCorrupted(cdb))
+    {
+    struct cartDb *cdb = NULL;
+    struct dyString *where = dyStringNew(256);
+    char *sessionKey = NULL;	    
+    unsigned int id = cartDbParseId(secureId, &sessionKey);
+    sqlDyStringPrintfFrag(where, "id = %u", id);
+    if (cartDbUseSessionKey())
+	{
+	if (!sessionKey)
+	    sessionKey = "";
+	sqlDyStringPrintfFrag(where, " and sessionKey='%s'", sessionKey);
+	}
+    cdb = cartDbLoadWhere(conn, table, where->string);
+    dyStringFree(&where);
+    if (looksCorrupted(cdb))
        {
        /* Can't use warn here -- it interrupts the HTML header, causing an
 	* err500 (and nothing useful in error_log) instead of a warning. */
        fprintf(stderr,
-	       "%s id=%d looks corrupted -- starting over with new %s id.\n",
+	       "%s id=%u looks corrupted -- starting over with new %s id.\n",
 	       table, id, table);
        cdb = NULL;
        }
-   return cdb;
-   }
+    return cdb;
+    }
 }
 
-struct cartDb *loadDb(struct sqlConnection *conn, char *table, int id, boolean *found)
+struct cartDb *loadDb(struct sqlConnection *conn, char *table, char *secureId, boolean *found)
 /* Load bits from database and save in hash. */
 {
 struct cartDb *cdb;
-char query[256];
 boolean result = TRUE;
 
-cdb = cartDbLoadFromId(conn, table, id);
+cdb = cartDbLoadFromId(conn, table, secureId);
 if (!cdb)
     {
     result = FALSE;
-    sqlSafef(query, sizeof(query), "INSERT %s VALUES(0,\"\",0,now(),now(),0)",
-	  table);
-    sqlUpdate(conn, query);
-    id = sqlLastAutoId(conn);
-    if ((cdb = cartDbLoadFromId(conn,table,id)) == NULL)
-        errAbort("Couldn't get cartDb for id=%d right after loading.  "
+    struct dyString *query = dyStringNew(256);
+    sqlDyStringPrintf(query, "INSERT %s VALUES(0,'',0,now(),now(),0", table);
+    char *sessionKey = "";
+    if (cartDbHasSessionKey(conn, table)) 
+	{
+	if (cartDbUseSessionKey())
+	    {
+	    sessionKey = cartDbMakeRandomKey(128+33); // at least 128 bits of protection, 33 for the world population size.
+	    }
+	sqlDyStringPrintf(query, ",'%s'", sessionKey);
+	}
+    sqlDyStringPrintf(query, ")");
+    sqlUpdate(conn, query->string);
+    dyStringFree(&query);
+    unsigned int id = sqlLastAutoId(conn);
+    char newSecureId[256];
+    if (cartDbUseSessionKey() && !sameString(sessionKey,""))
+	safef(newSecureId, sizeof newSecureId, "%u_%s", id, sessionKey);
+    else
+	safef(newSecureId, sizeof newSecureId, "%u", id);
+    if ((cdb = cartDbLoadFromId(conn,table,newSecureId)) == NULL)
+        errAbort("Couldn't get cartDb for id=%u right after loading.  "
 		 "MySQL problem??", id);
+    if (!sameString(sessionKey,""))
+	freeMem(sessionKey);
     }
 *found = result;
 return cdb;
@@ -449,12 +487,12 @@ if ((row = sqlNextRow(sr)) != NULL)
 	(userName && sameString(sessionOwner, userName)))
 	{
 	char *sessionVar = cartSessionVarName();
-	unsigned hgsid = cartSessionId(cart);
+	char *hgsid = cartSessionId(cart);
 	struct sqlConnection *conn2 = hConnectCentral();
 	sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
 	cartRemoveLike(cart, "*");
 	cartParseOverHash(cart, row[1]);
-	cartSetInt(cart, sessionVar, hgsid);
+	cartSetString(cart, sessionVar, hgsid);
 	if (oldVars)
 	    hashEmpty(oldVars);
 	/* Overload settings explicitly passed in via CGI (except for the
@@ -490,10 +528,10 @@ void cartLoadSettings(struct lineFile *lf, struct cart *cart,
 char *line = NULL;
 int size = 0;
 char *sessionVar = cartSessionVarName();
-unsigned hgsid = cartSessionId(cart);
+char *hgsid = cartSessionId(cart);
 
 cartRemoveLike(cart, "*");
-cartSetInt(cart, sessionVar, hgsid);
+cartSetString(cart, sessionVar, hgsid);
 while (lineFileNext(lf, &line, &size))
     {
     char *var = nextWord(&line);
@@ -547,6 +585,7 @@ cdb->contents = cloneString("");
 cdb->firstUse = now();
 cdb->lastUse = now();
 cdb->useCount = 1;
+// TODO does anything need to go here for sessionKey? maybe not since id is not set here.
 return cdb;
 }
 
@@ -568,7 +607,7 @@ struct cart *cartOfNothing()
 return cartFromHash(newHash(0));
 }
 
-struct cart *cartFromCgiOnly(unsigned int userId, unsigned int sessionId,
+struct cart *cartFromCgiOnly(char *userId, char *sessionId,
 	char **exclude, struct hash *oldVars)
 /* Create a new cart that contains only CGI variables, nothing from the
  * database. */
@@ -587,11 +626,12 @@ if (exclude != NULL)
 return cart;
 }
 
-struct cart *cartNew(unsigned int userId, unsigned int sessionId,
+struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include */
 {
+cgiApoptosisSetup();
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
@@ -609,7 +649,7 @@ if (sessionIdFound)
 else if (userIdFound)
     cartParseOverHash(cart, cart->userInfo->contents);
 char when[1024];
-safef(when, sizeof(when), "open %d %d", userId, sessionId);
+safef(when, sizeof(when), "open %s %s", userId, sessionId);
 cartTrace(cart, when, conn);
 
 loadCgiOverHash(cart, oldVars);
@@ -671,6 +711,8 @@ sqlDyStringPrintf(dy, "UPDATE %s SET contents='", table);
 sqlDyAppendEscaped(dy, contents);
 sqlDyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
 sqlDyStringPrintf(dy, " where id=%u", cdb->id);
+if (cartDbUseSessionKey())
+  sqlDyStringPrintf(dy, " and sessionKey='%s'", cdb->sessionKey);
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
@@ -753,24 +795,28 @@ char *cartSessionVarName()
 return sessionVar;
 }
 
-unsigned int cartSessionId(struct cart *cart)
+char *cartSessionId(struct cart *cart)
 /* Return session id. */
 {
-return cart->sessionInfo->id;
+static char buf[256];
+cartDbSecureId(buf, sizeof buf, cart->sessionInfo);
+return buf;
 }
 
 char *cartSidUrlString(struct cart *cart)
 /* Return session id string as in hgsid=N . */
 {
 static char buf[64];
-safef(buf, sizeof(buf), "%s=%u", cartSessionVarName(), cartSessionId(cart));
+safef(buf, sizeof(buf), "%s=%s", cartSessionVarName(), cartSessionId(cart));
 return buf;
 }
 
-unsigned int cartUserId(struct cart *cart)
+char *cartUserId(struct cart *cart)
 /* Return session id. */
 {
-return cart->userInfo->id;
+static char buf[256];
+cartDbSecureId(buf, sizeof buf, cart->userInfo);
+return buf;
 }
 
 static char *cartMultShadowVar(struct cart *cart, char *var)
@@ -1192,9 +1238,7 @@ void cartSaveSession(struct cart *cart)
  * somewhere inside of form or bad things will happen when user
  * has multiple windows open. */
 {
-char buf[64];
-safef(buf, sizeof(buf), "%u", cart->sessionInfo->id);
-cgiMakeHiddenVar(sessionVar, buf);
+cgiMakeHiddenVar(sessionVar, cartSessionId(cart));
 }
 
 static void cartDumpItem(struct hashEl *hel,boolean asTable)
@@ -1324,35 +1368,44 @@ static char *cookieDate()
 return "Thu, 31-Dec-2037 23:59:59 GMT";
 }
 
-static int getCookieId(char *cookieName)
+static char *getCookieId(char *cookieName)
 /* Get id value from cookie. */
 {
-char *hguidString = findCookieData(cookieName);
-return (hguidString == NULL ? 0 : atoi(hguidString));
+return findCookieData(cookieName);
 }
 
-static int getSessionId()
+static char *getSessionId()
 /* Get session id if any from CGI. */
 {
-return cgiUsualInt("hgsid", 0);
+return cgiOptionalString("hgsid");
 }
 
-static void clearDbContents(struct sqlConnection *conn, char *table, unsigned id)
+static void clearDbContents(struct sqlConnection *conn, char *table, char * secureId)
 /* Clear out contents field of row in table that matches id. */
 {
-char query[256];
-if (id == 0)
-   return;
-sqlSafef(query, sizeof(query), "update %s set contents='' where id=%u",
-      table, id);
-sqlUpdate(conn, query);
+if (!secureId)
+    return;
+struct dyString *query = dyStringNew(256);
+char *sessionKey = NULL;	    
+unsigned int id = cartDbParseId(secureId, &sessionKey);
+sqlDyStringPrintf(query, "update %s set contents='' where id=%u", table, id);
+if (cartDbUseSessionKey())
+    {
+    if (!sessionKey)
+	sessionKey = "";
+    sqlDyStringPrintf(query, " and sessionKey='%s'", sessionKey);
+    }
+sqlUpdate(conn, query->string);
+dyStringFree(&query);
+
+
 }
 
 void cartResetInDb(char *cookieName)
 /* Clear cart in database. */
 {
-int hguid = getCookieId(cookieName);
-int hgsid = getSessionId();
+char *hguid = getCookieId(cookieName);
+char *hgsid = getSessionId();
 struct sqlConnection *conn = cartDefaultConnector();
 clearDbContents(conn, "userDb", hguid);
 clearDbContents(conn, "sessionDb", hgsid);
@@ -1362,8 +1415,20 @@ cartDefaultDisconnector(&conn);
 void cartWriteCookie(struct cart *cart, char *cookieName)
 /* Write out HTTP Set-Cookie statement for cart. */
 {
-printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\r\n",
-        cookieName, cart->userInfo->id, cfgVal("central.domain"), cookieDate());
+char *domain = cfgVal("central.domain");
+if (sameWord("HTTPHOST", domain))
+    {
+    // IE9 does not accept portnames in cookie domains
+    char *hostWithPort = hHttpHost();
+    struct netParsedUrl npu;
+    netParseUrl(hostWithPort, &npu);
+    domain = cloneString(npu.host);
+    }
+
+char userIdKey[256];
+cartDbSecureId(userIdKey, sizeof userIdKey, cart->userInfo);
+printf("Set-Cookie: %s=%s; path=/; domain=%s; expires=%s\r\n",
+        cookieName, userIdKey, domain, cookieDate());
 if(geoMirrorEnabled())
     {
     // This occurs after the user has manually choosen to go back to the original site; we store redirect value into a cookie so we 
@@ -1380,8 +1445,8 @@ struct cart *cartForSession(char *cookieName, char **exclude,
                             struct hash *oldVars)
 /* This gets the cart without writing any HTTP lines at all to stdout. */
 {
-int hguid = getCookieId(cookieName);
-int hgsid = getSessionId();
+char *hguid = getCookieId(cookieName);
+char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
 if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */

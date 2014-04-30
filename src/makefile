@@ -17,6 +17,7 @@ topLibs:
 	@./machTest.sh
 	cd lib && ${MAKE}
 	cd jkOwnLib && ${MAKE}
+	cd parasol/lib && ${MAKE}
 
 hgLib:
 	@./hg/sqlEnvTest.sh
@@ -159,3 +160,21 @@ buildCellar: $(cellarDirs:%=%.cellar)
 cleanCellar: $(cellarDirs:%=%.cellarClean)
 %.cellarClean:
 	cd $* && echo $* && $(MAKE) clean
+
+## top level target for everything html related
+DOCS_LIST = hg/htdocs hg/js hg/htdocs/style
+doc: ${DOCS_LIST:%=%.docuser}
+%.docuser:
+	cd $* && $(MAKE)
+
+doc-alpha: ${DOCS_LIST:%=%.docalpha}
+%.docalpha:
+	cd $* && $(MAKE) alpha
+
+doc-beta: ${DOCS_LIST:%=%.docbeta}
+%.docbeta:
+	cd $* && $(MAKE) beta
+
+doc-install: ${DOCS_LIST:%=%.docinstall}
+%.docinstall:
+	cd $* && $(MAKE) install

@@ -30,9 +30,6 @@ visibility hide
 track refGene override
 visibility pack
 
-track chainNetHg19 override
-visibility pack
-
 track chainNetMm10 override
 visibility dense
 

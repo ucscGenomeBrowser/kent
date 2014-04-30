@@ -1,7 +1,5 @@
 /* vcfTrack -- handlers for Variant Call Format data. */
 
-#ifdef USE_TABIX
-
 #include "common.h"
 #include "dystring.h"
 #include "errCatch.h"
@@ -10,13 +8,11 @@
 #include "hgc.h"
 #include "htmshell.h"
 #include "jsHelper.h"
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
-#include "knetUdc.h"
-#include "udc.h"
-#endif//def USE_TABIX && KNETFILE_HOOKS
 #include "pgSnp.h"
 #include "regexHelper.h"
 #include "trashDir.h"
+#include "knetUdc.h"
+#include "udc.h"
 #include "vcf.h"
 #include "vcfUi.h"
 
@@ -86,7 +82,7 @@ if (rec->infoCount == 0)
     return;
 struct vcfFile *vcff = rec->file;
 puts("<B>INFO column annotations:</B><BR>");
-puts("<TABLE border=0 cellspacing=0 cellpadding=0>");
+puts("<TABLE border=0 cellspacing=0 cellpadding=2>");
 int i;
 for (i = 0;  i < rec->infoCount;  i++)
     {
@@ -94,7 +90,8 @@ for (i = 0;  i < rec->infoCount;  i++)
     const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
     if (def == NULL)
 	continue;
-    printf("<TR><TD align=\"right\"><B>%s:</B></TD><TD>&nbsp;", el->key);
+    printf("<TR valign='top'><TD align=\"right\"><B>%s:</B></TD><TD style=width:15%%;'>",
+           el->key);
     int j;
     enum vcfInfoType type = def->type;
     if (type == vcfInfoFlag && el->count == 0)
@@ -110,7 +107,7 @@ for (i = 0;  i < rec->infoCount;  i++)
 	    vcfPrintDatum(stdout, el->values[j], type);
 	}
     if (def != NULL)
-	printf("</TD><TD>&nbsp;%s", def->description);
+	printf("&nbsp;&nbsp;</TD><TD>%s", def->description);
     else
 	printf("</TD><TD>");
     printf("</TD></TR>\n");
@@ -366,6 +363,7 @@ printf("</FORM>\n");
 char leftBase = rec->alleles[0][0];
 unsigned int vcfStart = vcfRecordTrimIndelLeftBase(rec);
 boolean showLeftBase = (rec->chromStart == vcfStart+1);
+(void)vcfRecordTrimAllelesRight(rec);
 char *displayAls[rec->alleleCount];
 makeDisplayAlleles(rec, showLeftBase, leftBase, 20, TRUE, FALSE, displayAls);
 printPosOnChrom(seqName, rec->chromStart, rec->chromEnd, NULL, FALSE, rec->name);
@@ -379,26 +377,22 @@ makeDisplayAlleles(rec, showLeftBase, leftBase, 5, FALSE, TRUE, displayAls);
 vcfGenotypesDetails(rec, tdb->track, displayAls);
 }
 
-void doVcfTabixDetails(struct trackDb *tdb, char *item)
-/* Show details of an alignment from a VCF file compressed and indexed by tabix. */
+void doVcfDetailsCore(struct trackDb *tdb, char *fileOrUrl, boolean isTabix)
+/* Show item details using fileOrUrl. */
 {
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
-knetUdcInstall();
-if (udcCacheTimeout() < 300)
-    udcSetCacheTimeout(300);
-#endif//def USE_TABIX && KNETFILE_HOOKS
+genericHeader(tdb, NULL);
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, seqName);
-hFreeConn(&conn);
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
-/* protect against temporary network error */
+/* protect against temporary network or parsing error */
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1);
+    if (isTabix)
+	vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1);
+    else
+	vcff = vcfFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1, TRUE);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -416,7 +410,42 @@ if (vcff != NULL)
     }
 else
     printf("Sorry, unable to open %s<BR>\n", fileOrUrl);
+printTrackHtml(tdb);
+}
+
+
+#ifdef USE_TABIX
+
+void doVcfTabixDetails(struct trackDb *tdb, char *item)
+/* Show details of an alignment from a VCF file compressed and indexed by tabix. */
+{
+knetUdcInstall();
+if (udcCacheTimeout() < 300)
+    udcSetCacheTimeout(300);
+struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, seqName);
+hFreeConn(&conn);
+doVcfDetailsCore(tdb, fileOrUrl, TRUE);
 }
 
 
 #endif // no USE_TABIX
+
+
+void doVcfDetails(struct trackDb *tdb, char *item)
+/* Show details of an alignment from an uncompressed VCF file. */
+{
+struct customTrack *ct = lookupCt(tdb->track);
+struct sqlConnection *conn = NULL;
+char *table = tdb->table;
+if (ct)
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    }
+else
+    conn = hAllocConnTrack(database, tdb);
+char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, seqName);
+hFreeConn(&conn);
+doVcfDetailsCore(tdb, fileOrUrl, FALSE);
+}

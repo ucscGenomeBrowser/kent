@@ -12,6 +12,7 @@ cd $JAVABUILD
 nohup LiftOverTest kent/java/src/edu/ucsc/genome/util/LiftOverTest.props >& $WEEKLYBLD/logs/$log 
 
 echo "LiftOverTest robot done. Check to see if any errors in $WEEKLYBLD/logs/$log."
+echo "LiftOverTest robot done. Check to see if any errors in $WEEKLYBLD/logs/$log." \
+  | mail -s "v${BRANCHNN} LiftOverTest robot done." $USER ${BUILDMEISTER} browser-qa
 
 exit 0
-

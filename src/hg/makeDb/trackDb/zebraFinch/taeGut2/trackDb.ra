@@ -1,3 +1,5 @@
+include trackDb.chainNet.ra
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
@@ -5,4 +7,32 @@ html gold
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap
+visibility hide
 
+track multizLandBirds
+shortLabel Land Birds
+longLabel Land Birds
+noInherit on
+irows on
+summary multizLandBirdsSummary
+frames multizLandBirdsFrames
+group x
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+#speciesCodonDefault hg19
+speciesOrder geoFor1 corBra0 manVit0 acaChl0 melUnd1 nesNot0 falChe1 falPer1 carCri0 picPub0 merNub0 bucRhi0 apaVit0 lepDis0 colStr0 tytAlb0 halLeu0 halAlb0 hieMor0 aquPen0 catAur0 nipNip0 aptFos0 cucCan0 
+#itemFirstCharCase noChange
+#treeImage phylo/hg19_Dino.gif
+
+track ensGene override
+visibility pack
+
+track mrna override
+visibility hide
+
+track intronEst override
+visibility hide
+
+track xenoRefGene override
+visibility hide

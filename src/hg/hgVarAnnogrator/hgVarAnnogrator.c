@@ -30,9 +30,7 @@
 #include "genePred.h"
 #include "hgMaf.h"
 #include "pgSnp.h"
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 #include "annoGratorQuery.h"
 #include "annoStreamDb.h"
 #include "annoStreamVcf.h"
@@ -683,7 +681,7 @@ void makeGroupDropDown(struct dyString *dy, char *selGroup)
 /* Make group drop-down from fullGroupList. */
 {
 dyStringAppend(dy, "<SELECT NAME='groupSel'>\n");
-if (selGroup == NULL || sameString(selGroup, "none"));
+if (selGroup == NULL || sameString(selGroup, "none"))
     dyStringAppend(dy, " <OPTION VALUE='none' SELECTED>\n");
 struct grp *group;
 for (group = fullGroupList; group != NULL; group = group->next)
@@ -1563,9 +1561,7 @@ setUdcCacheDir();
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 knetUdcInstall();
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 cartWebStart(cart, database, "Variant Annotation Integrator");
 jsInit();
@@ -1875,7 +1871,7 @@ else
     {
     struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
     if (asObjectsMatch(primary->asObj, pgSnpAsObj()) &&
-	asObjectsMatchFirstN(streamer->asObj, genePredAsObj(), 10))
+	asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10))
 	grator = annoGratorGpVarNew(streamer);
     else
 	grator = annoGratorNew(streamer);

@@ -824,7 +824,126 @@ cat  << 'EOF' > link.csh
     hgBbiDbLink hg19 $table /gbdb/hg19/$track/$table.bb
 
     
+#############################################################################
+# Segmentations (2014-2-18 kate)
 
+# There are 3 segmentations on the AWG hub:
+#       1. ChromHMM
+#       2. Segway
+#       3. Combined
+# UCSC already has a ChromHMM track (currently in the Broad Histone supertrack, but
+# this is a newer segmentation using that method (10-state vs. 15)).
+# The segmentations will be formatted similarly to existing track (BED 9)
+# Docs and data will be pulled from the AWG hub.
+
+    cd /hive/data/genomes/hg19/bed
+    mkdir -p wgEncodeAwgGenomeSegmentation
+    cd wgEncodeAwgGenomeSegmentation
+    mkdir ebi
+    cd ebi
+
+    # get track description, trackDb, and files from EBI site that hosts analysis hub
+    wget http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/trackDb.txt 
+    wget http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/genomeSegmentation.html 
+    cp genomeSegmentation.html ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeAwgSegmentation.html 
+
+    grep segmentation trackDb.txt | grep bigDataUrl | sed 's/.*\///' > files.txt
+    wc -l files.txt
+    # 18 (6 each for the 3 methods)
+
+cat > getFiles.csh << 'EOF'
+    foreach f (`cat files.txt`)
+        echo  $f
+        wget http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/byDataType/segmentations/jan2011/hub/$f
+    end
+'EOF'
+
+    # NOTE: bigBedInfo shows Segway with roughly 10x item count of ChromHMM (12M vs. 1.2M)
+    # ChromHMM:  1.1M - 1.4M range
+    # Segway: 12.7M - 15.8M
+    # Combined: .7M - 3.2M
+
+    # Compare hub ChromHMM files with current UCSC track
+    cd ..
+    zcat /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz > \
+        bed/gm12878.broad.bed
+    bigBedToBed ebi/gm12878.ChromHMM.bb bed/gm123878.chromHmm.bed
+
+    #These look very different -- confirming they were redone for Sep 2012 papers.
+
+    cd ebi
+cat > expandFiles.csh << 'EOF'
+    foreach f (`cat files.txt`)
+        echo $f
+        set b = $f:r
+        set cell = `echo $b:r | perl -wpe 's/(.)(.*)/\u$1\L$2/'`
+        set method = `echo $b:e | perl -wpe 's/(.)(.*)/\u$1\L$2/'`
+        set out = wgEncodeAwgSegmentation${method}${cell}
+        bigBedToBed $f ../bed/$out.bed
+    end
+'EOF'
+    csh expandFiles.csh >&! expandFiles.out &
+
+    # Load into tables
+    cd bed
+cat > loadFiles.csh << 'EOF'
+    foreach f (*.bed)
+        hgLoadBed -tab hg19 $f:r $f
+    end
+'EOF'
+    csh loadFiles.csh >&! loadFiles.out &
+    cd ..
+
+    # Add metadata
+    # add+edit trackDb/human/hg19/metaDb/alpha/wgEncodeAwgSegmentation.ra
+    pushd ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha
+    mdbUpdate hg19 -test wgEncodeAwgSegmentation.ra
+    mdbUpdate hg19 wgEncodeAwgSegmentation.ra
+    mdbPrint hg19 -composite=wgEncodeAwgSegmentation > wgEncodeAwgSegmentation.ra
+    # add to makefile
+    # commit to git
+    popd
+
+    # Create downloads
+    cd bed
+    foreach f (*.bed)
+        echo $f
+        gzip -c $f > ../downloads/$f.gz
+    end
+    cd ..
+
+    # set up file downloads in expected locale
+    set dir = /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeAwgSegmentation
+    mkdir -p $dir
+    ln downloads/*.gz $dir
+
+    # release1, releaseLatest ?
+    ln -s release1 beta
+
+    # make alpha in trackDb (install metaDb)
+
+    # add files.txt, md5sum.txt
+    cd $dir
+    encodeMkFilesList hg19 
+    md5sum *.gz > md5sum.txt
+    # create README file
+
+    /cluster/bin/scripts/encodeMkChangeNotes hg19 wgEncodeAwgSegmentation 1 > wgEncodeAwgSegmentation.release1.notes
+    encodeQaInit hg19 wgEncodeAwgSegmentation 1 12259 -t
+
+# Responses to QA
+
+# Fixes to track description from Steve Wilder (kate 4/11/14)
+
+    cd /hive/data/genomes/hg19/bed/wgEncodeAwgGenomeSegmentation/ebi
+    cp genomeSegmentation.html genomeSegmentation.html.old
+    wget  http://www.ebi.ac.uk/~swilder/ENCODE/awgHubdevel/hg19/genomeSegmentation.html
+    diff genomeSegmentation.html genomeSegmentation.html.old
+
+
+
+
+        
 
 
 

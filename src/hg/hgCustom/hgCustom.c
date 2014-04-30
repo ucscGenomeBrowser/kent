@@ -14,10 +14,8 @@
 #include "customFactory.h"
 #include "portable.h"
 #include "errCatch.h"
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 #include "net.h"
 #include "jsHelper.h"
 #include <signal.h>
@@ -116,7 +114,7 @@ if (hIsGsidServer())
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
   " line attributes as described in the \n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
-  " Data in the bigBed, bigWig, BAM and VCF formats must be provided via a URL embedded in a track\n"
+  " Data in the bigBed, bigWig, BAM and VCF formats can be provided via only a URL or embedded in a track\n"
   " line in the box below.\n"
   );
   }
@@ -144,7 +142,7 @@ else
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
   " line attributes as described in the \n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
-  " Data in the bigBed, bigWig, BAM and VCF formats must be provided via a URL embedded in a track\n"
+  " Data in the bigBed, bigWig, BAM and VCF formats can be provided via only a URL or embedded in a track\n"
   " line in the box below.\n"
   " Publicly available custom tracks are listed\n"
   " <A HREF='../goldenPath/customTracks/custTracks.html'>here</A>.\n"
@@ -213,7 +211,8 @@ if (!isUpdateForm)
     puts("&nbsp;&nbsp;&nbsp;");
     puts("assembly\n");
     printAssemblyListHtml(database, onChangeDb);
-    if (! stringIn(database, hFreezeFromDb(database)))
+    char *description = hFreezeFromDb(database);
+    if ((description != NULL) && ! stringIn(database, description))
 	{
 	puts("&nbsp;&nbsp;&nbsp;");
 	printf("[%s]", trackHubSkipHubName(database));
@@ -716,8 +715,14 @@ if (assemblyMenu)
     puts("</TD></TR></TABLE><P>\n");
     }
 else
+    {
+    char *assemblyName = hFreezeDateOpt(database);
+    if (assemblyName == NULL)
+	assemblyName = "default";
+
     printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s &nbsp;&nbsp;&nbsp;[%s]\n",
-            organism, hFreezeDate(database), database);
+            organism, assemblyName, database);
+	}
 
 if (measureTiming && (loadTime > 0))
     printf("\n<BR>load time: %ld ms<BR>\n", loadTime);
@@ -1113,11 +1118,9 @@ getDbAndGenome(cart, &database, &organism, oldVars);
 
 customFactoryEnableExtraChecking(TRUE);
 
-#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
-#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 if (sameString(initialDb, "0"))
     {

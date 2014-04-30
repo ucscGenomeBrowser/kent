@@ -1079,3 +1079,607 @@ insert into kateTemp (select * from wgEncodeTfbsClusteredV3)
 TfbsClusteredV3a -> TfbsClusteredV3a_old
 TfbsClusteredV4 -> TfbsClusteredV3a
 TfbsClusteredV5 -> TfbsClusteredV3b
+
+
+#######################################################################
+# Factorbook motifs (Jun 2013, and then Dec 2013-Feb 2014, kate)
+
+# Data consists of motif locations, positions weight matrices, 
+# and curation (which motifs are canonical for which factors.
+# Basis of the track is supplementary data from Wang et al. Sep2012 Genome Res paper,
+# plus newer data provided by Bong Hyun Kim (nghyun.kim nghyun.kim@umassmed.edu)
+# of Factorbook team at Zhiping Weng's lab (Zlab).
+
+# From Bong-Hyun:
+#These are discovered motifs from 2012 freeze, methods in GR 2012:22(9), Wang et al.
+#Basically the motif were discovered from 500 strongest signal peaks by MEME, and then they are tested if they are enriched compared to the flanking regions of the peaks or GC content matching regions. And then the motifs are condensed by manual curation. Then the peak regions are searched by the condensed motifs using FIMO.  Note that UA (unannotated) motifs are new motif described in the genome research paper, but UAK's are potentially unannotated motifs found newer datasets and not yet carefully curated.
+
+    cd /cluster/data/hg19/bed
+    mkdir factorbook
+    cd factorbook
+
+#################
+# Motif locations within ENCODE peaks
+# Each line is the genomic location of a motif whose name is the 5th column.
+# The 6, 7 and 8th columns are q-value of the motif match, peak number (or bed file line number) 
+# in the original uniform processed peak call, and peak summit, respectively.
+#
+# Load these as a BED table of merged data from all experiments, with q-value replaced with
+# -log10 score.  Duplicate items are removed, with the item scored as maximum found.
+# (NOTE: this table could be expanded to included the sources as in factorSource tables -- this
+# would allow it to be used to show motifs in the individual experiment narrowPeak files)
+
+    wget http://zlab.umassmed.edu/zlab/publications/TFBS.tar.gz  
+        # data from Sep2012 Genome Research paper (through Jan 2011 ENCODE freeze)
+    wget http://zlab.umassmed.edu/~kimb/encode_tfbs.tar.gz
+        # newer data (Jan 2011 - Mar 2012 ENCODE freeze)
+
+    tar xvfz encode_tfbs.tar.gz
+    cd encode_tfbs
+    cat *.bed | wc -l
+    # 6316631 
+    # ls *.bed | wc -l
+    # 294
+    #  why so few  ?  -- asking Bong-hyun
+    # NOTE: some beds are for controls!
+    # NOTE: there are motifs for different factors in these peaks (not just target of assay)
+    # Around 6M localizations in these files, some appearing multiply reflecting detection
+    # in peaks from different expereriments.  These will be merged in the final table.
+
+    # convert:
+    #  chrom, start, end, strand, name, qvalue ->
+    #  chrom, start, end, name, float_score, strand (bed6FLoatScore)
+    cat encode_tfbs/*.bed pub_tfbs/*.summary | \
+        awk '{OFS="\t"; print $1, $2-1, $3, $5, $6, $4}' > motifs.withdupes.bed 
+    wc -l motifs.withdupes.bed 
+       # 12115922 
+
+    bedSort motifs.withdupes.bed stdout | uniq > motifs.bed
+
+    wc -l motifs.bed
+      # 12022426 motifs.bed
+
+    hgLoadBed hg19 -sqlTable=$HOME/kent/src/hg/lib/bed6FloatScore.sql -renameSqlTable \
+        wgEncodeRegTfbsClusteredMotifs_factorBook motifs.bed
+    # Read 12022426 elements of size 6 from motifs.bed
+
+    # TODO: remove multiple hits at same position, remove q-value (we will rescore later)
+
+    awk '{$5=0; print}' motifs.bed | uniq > motifs.uniq.bed
+
+    wc -l motifs.uniq.bed
+    # 2631434 motifs.uniq.bed
+    # 2.6M, down from 12M
+
+    hgLoadBed hg19 -sqlTable=$HOME/kent/src/hg/lib/bed6FloatScore.sql -renameSqlTable \
+        wgEncodeAwgTfbsMotifs motifs.uniq.bed
+
+# Check range of qvalue:
+
+    >select min(score) from wgEncodeAwgTfbsMotifs; | 0.000000002479999983151515 |
+    >select max(score) from wgEncodeAwgTfbsMotifs; | 0.6370000243186951 |
+    >select count(*) from wgEncodeAwgTfbsMotifs where score > .1 |  1065928 |
+
+    # BongHyun says these are bad quality -- should drop
+
+    >select count(*) from wgEncodeAwgTfbsMotifs; | 12022426 |
+
+# Reload table with -log10 scoring and motif name fixes (Jan 21, 2014 KRR)
+# (Two new canonicals were found that have Jaspar naming convention V_ prefix:)
+
+#NFIC    NFIC (V_NF1_Q6)
+#NR4A1   NR4A1 (V_TR4_03)
+
+# Also, both v-Jun and v-JUN are used
+
+    cat > dedupAndScore.pl << 'EOF'
+#!/usr/bin/env/perl
+
+# retain lowest scored item (q-value) at a location, converting score to -log10
+# expects file to be pre-sorted with: sort -k1,4 -k6,6 -k5,5
+
+sub minusLog10 {
+    my $n = shift;
+    return -log($n)/log(10);
+}
+
+$chrN = "";
+while (<>) {
+    chomp;
+    ($chr, $start, $end, $name, $score, $strand) = split;
+    if ($chr ne $chrN || $start ne $startN || $end ne $endN || $name ne $nameN || $strand ne $strandN) {
+        $logScore = minusLog10($score);
+        printf("%s\t%d\t%d\t%s\t%.2f\t%s\n", $chr, $start, $end, $name, $logScore, $strand);
+        $chrN = $chr; $startN = $start; $endN = $end; $nameN = $name; $strandN = $strand;
+    }
+}
+'EOF'
+
+    sort -k1,4 -k6,6 -k5,5 motifs.bed > motifs.sorted.bed
+    perl dedupAndScore.pl < motifs.sorted.bed | \
+        # fix motif naming inconsisencies (V_ 
+        sed -e 's/v-Jun/v-JUN/' -e 's/V_NF1_Q6/NFIC/' -e 's/V_TR4_03/NR4A1/' > motifs.load.bed
+
+    wc -l motifs.load.bed
+    #2366151 motifs.load.bed
+
+    hgLoadBed hg19 -sqlTable=$HOME/kent/src/hg/lib/bed6FloatScore.sql -renameSqlTable \
+        factorbookMotifPos motifs.load.bed
+
+
+#################
+# Position weight matrices for the motifs
+# These are in MEME format
+
+    wget http://zlab.umassmed.edu/~kimb/gr_paper_extended.meme
+
+    # MOTIF A-Box 
+    #...
+    # A 0.25000 C 0.25000 G 0.25000 T 0.25000
+    #...
+    # letter-probability matrix: alength= 4 w= 21 nsites= 116 E= 5.4e-213
+    # 0.137931        0.189655        0.017241        0.655172
+    # 0.620690        0.051724        0.077586        0.250000
+    # ...
+
+    # use w for column count.  1 probability row per column.  order: acgt
+
+     grep MOTIF gr_paper*meme | wc -l
+     # 132
+     # total motifs
+
+cat > convertMotifs.pl << 'EOF'
+#!/usr/bin/env perl
+
+# convertMotifs - create load file for UCSC transRegCodeMotif table from MEME output
+
+## MEME format:  
+
+#MOTIF <name>
+#...
+#letter-probability matrix: alength= 4 w=<columns>
+#Aprob Cprob Gprob Tprob
+#...
+
+## TransRegCodeMotif format:
+#name columnCount aProb cProb gProb
+#    where *Prob fields are comma-sep lists of length columnCount
+
+use warnings;
+use strict;
+
+my $name;
+my $columnCount;
+my $cols = 0;
+my $aProb, my $cProb, my $gProb, my $tProb;
+my @aProbs = (), my @cProbs = (), my @gProbs = (), my @tProbs = ();
+
+sub printProbs {
+    # print comma-sep list of probabilities
+    my ($probs) = @_;
+    print "\t";
+    foreach my $prob (@$probs) {
+        print "$prob,";
+    }
+}
+
+while (<>) {
+    if (/^MOTIF (\S+)/) {
+        $name = $1;
+    } elsif (defined($name) && /^letter-probability matrix: alength= \d+ w= (\d+)/) {
+        $columnCount = $1;
+    } elsif (defined($columnCount)) {
+        # working on probabilities
+        if ($cols < $columnCount) {
+            # slurp in probabilities
+            $cols++;
+            ($aProb, $cProb, $gProb, $tProb) = split;
+            push(@aProbs, $aProb);
+            push(@cProbs, $cProb);
+            push(@gProbs, $gProb);
+            push(@tProbs, $tProb);
+        } else {
+            # finished with this motif -- print it out and set up for next
+            print "$name\t$columnCount";
+            printProbs(\@aProbs);
+            printProbs(\@cProbs);
+            printProbs(\@gProbs);
+            printProbs(\@tProbs);
+            print "\n";
+
+            undef $name;
+            undef $columnCount;
+            $cols = 0;
+            @aProbs = (); @cProbs = (); @gProbs = (); @tProbs = ();
+        }
+    }
+}
+'EOF'
+
+     convertMotifs.pl gr_paper_extended.meme > transRegCodeMotif.tab
+     # wc -l transRegCodeMotifs.tab
+     # 132 transRegCodeMotifs.tab
+
+     hgLoadSqlTab hg19 transRegCodeMotifs_factorBook ~/kent/src/hg/lib/transRegCodeMotif.sql \
+            transRegCodeMotif.tab
+       # mySQL error 1062: Duplicate entry 'v-JUN' for key 1
+       # There are both v-JUN and v-Jun entries 
+       # For now, prune out v-Jun (and inquire at zlab) amd reload
+
+    # Again, motif name consistency
+    sed -e 's/V_NF1_Q6/NFIC/' -e 's/V_TR4_03/NR4A1/' transRegCodeMotif.fixed.tab > pwms.tab
+    hgLoadSqlTab hg19 factorbookMotifPwm ~/kent/src/hg/lib/transRegCodeMotif.sql pwms.tab
+
+
+##########
+# Create alias table to map factor names at UCSC (HGNC, in ENCODE controlled vocab), to Factorbook
+# names (not always HGNC), so linkouts work.  For use with trackDb url setting.
+
+cat > geneAlias.sql << 'EOF'
+    CREATE TABLE factorbookGeneAlias (
+        name VARCHAR(255) NOT NULL,
+        value VARCHAR(255) NOT NULL,
+            PRIMARY KEY (name)
+    );
+
+cat > testLinks.csh << 'EOF'
+foreach f (`awk '{print $1}' allMotifTargets.load.tab`)
+    wget -O /dev/null -q http://www.factorbook.org/mediawiki/index.php/$f  
+    set ret = $status
+    echo "$f : $ret"
+end
+'EOF'
+
+csh testLinks.csh > testLinks.out
+
+# results in 'noPage.txt' and 'misnamedPage.txt'
+# various tweaking to generate factorbookGeneAlias.tab (sorry, log is lost, but should be easy to recreate)
+
+hgsql hg19 < geneAlias.sql
+hgsql hg19 -e 'LOAD DATA LOCAL INFILE "factorbookGeneAlias.tab" INTO TABLE factorbookGeneAlias'
+
+#1/31/14 - patch factorbookGeneAlias
+update factorbookGeneAlias set value='ERalpha a' where name='ESR1';
+
+#3/13/14 - remove genes not in TF clusters (bad quality dataaset)
+delete from factorbookGeneAlias where name='NR4A1'
+delete from factorbookGeneAlias where name='SREBP2'
+
+##########
+# Create table to map factor names to their canonical motifs (12/4/13 Kate)
+# Many twists and turns here -- the goal is to assure factor names match UCSC TF CV names, and
+# that motif names match BED of motif positions.  Also, that only factors having DNA-binding domains
+# that will bind directly are listed (not those with 'tethered-only' binding mode).
+# Approach was to use Table S1 + communications from Zlab for newer factors, removing those 
+# listed in Table S3 as tethered only.  Zlabbers have offered to provide us with a full
+# file for reloading this table.
+
+# Get targets for each dataset
+    csh listMotifs.csh > targets.txt
+    cp targets.txt targets.txt.fixed
+
+# Remove low quality datasets (see details in AwgTfbsUniform)
+#   These were left out of TFBS Clusters V3
+
+    #wgEncodeSydhTfbsGm12878Spt20StdAlnRep0
+    #wgEncodeSydhTfbsGm12878Gcn5StdAlnRep0
+    #wgEncodeHaibTfbsPfsk1Pol24h8V0416101AlnRep0
+    #wgEncodeHaibTfbsA549Sp1V0422111Etoh02AlnRep0
+    #wgEncodeSydhTfbsHepg2CebpzIggrabAlnRep0
+    #wgEncodeSydhTfbsHelas3Gcn5StdAlnRep0
+    #wgEncodeSydhTfbsGm12878Irf3IggmusAlnRep0
+    #wgEncodeSydhTfbsK562Xrcc4StdAlnRep0
+    #wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep0
+    #wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep0
+    #wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep0
+
+# 78 left unmatched
+
+# List motifs in datasets
+    csh listMotifs2.csh > motifs2.txt
+    cp motifs2.txt motifs2.txt.fixed
+# remove bad datasets above
+
+# merge files
+
+    paste targets.txt.fixed motifs2.txt.fixed > target_motifs.txt
+
+# remove bad Uchicago datasets.  All but:
+
+    #wgEncodeUchicagoTfbsK562Ehdac8ControlAlnRep0
+    #wgEncodeUchicagoTfbsK562EjundControlAlnRep0
+    #wgEncodeUchicagoTfbsK562EjunbControlAlnRep0
+    #wgEncodeUchicagoTfbsK562Egata2ControlAlnRep0
+    #wgEncodeUchicagoTfbsK562EfosControlAlnRep0
+
+# inventory file
+    awk -F'\t' 'OFS="\t" {print $1, $2, $4}' < target_motifs.txt > target_motifs_out.txt
+
+# Create map table
+
+cat > motifTarget.sql << 'EOF'
+    CREATE TABLE motifTarget (
+        target VARCHAR(255) NOT NULL,
+        motif VARCHAR(255) NOT NULL,
+            PRIMARY KEY (target)
+    );
+'EOF'
+        
+hgsql hg19 < factorbookMotifTarget.sql
+
+# Get mappings from GR paper (Wang 2012)
+
+wget http://genome.cshlp.org/content/suppl/2012/08/22/22.9.1798.DC1/TableS1.xls
+
+# extract tab-sep file: to FactorbookTableS1.txt
+# columns needed for map table:   2: HGNC ID, 4: canonical motif
+# NOTE: a few have two canonical( ; sep) -- keep it simple for now, just use first
+# NOTE: some have no canonical -- col 4 is empty
+
+tail -n +2 FactorbookTableS1.txt | \
+        awk -F'\t''{print $2, $4}' | sort | uniq | sed 's/;.*//' > pubMotifs.txt
+
+# Need same for newer data
+# Merge and load in table
+
+#awk '{print $1, "\t", $2}' pubMotifs.txt newMotifs.guess.txt | sort > allMotifs.tab
+#hgsql hg19 -e 'LOAD DATA LOCAL INFILE "factorbookTargetToMotif.tab" INTO TABLE factorbookTargetToMotif'
+
+# Replace with mappings from Bong-Hyun, sent in 12/19 email
+
+cat << 'EOF' | sed 's/  */ /' | grep -v '^#' > newMotifs.txt
+#The TFs not mentioned in my list do not have specific binding motifs, e.g. histone acetylases or other non-specific DNA binding proteins.
+#Common.Name     canonical.motif
+ATF1    CREB
+ATF2    CREB
+BACH1   NFE2
+CREB1   CREB
+ELK1    ELF1
+FOXM1   FOXA
+FOXP2   FOXA
+MAZ     UAK42
+NFIC    NFIC
+NR4A1   NR4A1
+RUNX3   RUNX1
+SP4     SP1
+SREBF2  SREBF1
+STAT5A  STAT1
+TCF3    TCF3
+TEAD4   TEAD4
+ZKSCAN1         UAK54
+ZNF217  UAK59
+'EOF'
+
+# NOTE: NR4A1 and SREBF2(SREBP2) not in Anshul's uniform peaks (failed qual filter I think)
+# Drop these from target list
+
+sort pubMotifs.txt newMotifs.txt | sed 's/ /\t/' > allMotifTargets.tab
+hgsql hg19 < motifTarget.sql
+hgsql hg19 -e 'alter table motifTarget rename to factorbookMotifTarget'
+hgsql hg19 -e 'LOAD DATA LOCAL INFILE "allMotifTargets.tab" INTO TABLE factorbookMotifTarget'
+
+# Check for identifier mismatches
+# 1.  Clusters table with Motif targets table
+hgsql hg19 -e "select distinct(name) from wgEncodeRegTfbsClusteredV3 order by name" > clusterTargets.txt
+hgsql hg19 -e "select distinct(target) from factorbookMotifTarget order by target" > motifTargets.txt
+diff clusterTargets.txt motifTargets.txt > targets.diff
+# These are targets in Factorbook, not in UCSC targets list
+grep '>' targets.diff
+> target
+> NFKB1
+        # -> RELA in UCSC CV (target gene for this antibody -  NFKB p65)
+> NR4A1
+        # not in UCSC clusters track (low qual data ?  It's Chicago)
+> POLR3A
+        # -> RPC155 in UCSC CV (old-school, not current HGNC)
+> SREBF1
+        # -> SREBP1 in UCSC CV (old-school, not current HGNC)
+> SREBF2
+        # -> SREBP2 in UCSC CV (old-school, not current HGNC)
+
+# Update targets table to use UCSC CV targets 
+sed -e 's/^NFKB1/RELA/' -e 's/^POLR3A/RPC155/' -e 's/^SREBF1/SREBP1/' -e 's/^SREBF2/SREBP2/' \
+        allMotifTargets.tab > allMotifTargets.load.tab
+hgsql hg19 -e 'LOAD DATA LOCAL INFILE "allMotifTargets.load.tab" INTO TABLE factorbookMotifTarget'
+
+
+# TODO: remove targets having no canonical motif (25 of total 137)
+
+# Also need to rename two new canonicals found that have Jaspar naming convention:
+
+#NFIC    NFIC (V_NF1_Q6)
+#NR4A1   NR4A1 (V_TR4_03)
+
+
+# Also, spot-checking new canonical list above, I noted that ATF2 motif file lacked CREB -- inquiring with BongHyun as to why.
+
+#wgEncodeHaibTfbsGm12878Atf2sc81188V0422111AlnRep0.tfbs.bed : AP1 UAK16 v-JUN
+#wgEncodeHaibTfbsH1hescAtf2sc81188V0422111AlnRep0.tfbs.bed : v-JUN
+#wgEncodeHaibTfbsH1hescAtf3V0416102AlnRep0.tfbs.bed : CREB UAK18 USF ZNF143-ext
+#wgEncodeHaibTfbsHepg2Atf3V0416101AlnRep0.tfbs.bed : CREB-ext UAK18 USF
+#wgEncodeHaibTfbsK562Atf3V0416101AlnRep0.tfbs.bed : AP1 UAK17
+#wgEncodeSydhTfbsK562Atf106325StdAlnRep0.tfbs.bed : NFY SP1 ZNF143-ext v-JUN
+
+# NOTE: some factors have two canonical motifs listed (; separated in Table S1)
+# For now, using just the first, but looking at data, both seem important.
+# Need code changes to pick these up.
+
+$ grep ';' *S1.txt | awk '{print $2, $4}' | sort | uniq 
+ATF3 CREB;CREB-ext
+CTCF CTCF;CTCF-ext
+CTCFL CTCF;CTCF-ext
+GATA1 GATA1;GATA1-ext
+GATA2 GATA1;GATA1-ext
+JUN AP-1;v-JUN
+JUNB AP-1;v-JUN
+JUND AP-1;v-JUN
+RAD21 CTCF;CTCF-ext
+SMC3 CTCF;CTCF-ext
+THAP1 UA4;UA5
+ZNF143 ZNF143;ZNF143-ext
+ZNF274 UA10;UA11
+
+# Check for identifier mismatches
+# 1.  Clusters table with Motif targets table
+hgsql hg19 -e "select distinct(name) from wgEncodeRegTfbsClusteredV3 order by name" > clusterTargets.txt
+hgsql hg19 -e "select distinct(target) from factorbookMotifTarget order by target" > motifTargets.txt
+diff clusterTargets.txt motifTargets.txt > targets.diff
+# These are targets in Factorbook, not in UCSC targets list
+grep '>' targets.diff
+> target
+> NFKB1
+        # -> RELA in UCSC CV (target gene for this antibody -  NFKB p65)
+> NR4A1
+        # not in UCSC clusters track (low qual data ?  It's Chicago)
+> POLR3A
+        # -> RPC155 in UCSC CV (old-school, not current HGNC)
+> SREBF1
+        # -> SREBP1 in UCSC CV (old-school, not current HGNC)
+> SREBF2
+        # -> SREBP2 in UCSC CV (old-school, not current HGNC)
+
+# Update targets table to use UCSC CV targets 
+
+grep '<' targets.diff > ucsc.diff
+# Notes here about targets at UCSC not in target table.  FYI.
+
+# Check motif name consistency across tables
+awk '{print $4}' motifs.load.bed | sort | uniq > bedMotifs.txt
+awk '{print $2}' allMotifTargets.load.tab | sort | uniq > targetMotifs.txt
+awk '{print $1}' pwms.tab | sort | uniq > pwmMotifs.txt
+
+diff pwmMotifs.txt targetMotifs.txt | grep '>'
+> 
+> AP-1
+        # AP1
+> AP-2
+        # AP2
+> NF-Y
+        # NFY, NFY-UA2 ?
+> PU.1
+        # PU1
+> bHLH
+        # BHLHE40
+
+# Check pwms vs. bed files
+diff pwmMotifs.txt bedMotifs.txt
+67c67
+< UA12
+        # no UA12 in bed file
+---
+> UA14
+        # no UA14 in pwms
+71d70
+< UA5
+77a77,79
+> UAK18
+> UAK19
+> UAK20
+130a133
+> v-Jun
+        # should be v-JUN for consistency
+
+# Update BED table to correct v-Jun
+cp motifs.load.bed motifs.fix.bed
+sed 's/v-Jun/v-JUN/' motifs.fix.bed >motifs.load.bed
+hgLoadBed hg19 -sqlTable=$HOME/kent/src/hg/lib/bed6FloatScore.sql -renameSqlTable \
+        factorbookMotifPos motifs.load.bed
+
+
+# Update targets table to match bed & pwm tables
+cp allMotifTargets.load.tab allMotifTargets.fix.tab
+sed -e 's/AP-1$/AP1/' -e 's/AP-2$/AP2/' -e 's/NF-Y/NFY/' -e 's/PU.1/PU1/' -e 's/bHLH/BHLHE40/' \
+        allMotifTargets.fix.tab > allMotifTargets.load.tab
+hgsql hg19 -e 'DELETE FROM factorbookMotifTarget; LOAD DATA LOCAL INFILE "allMotifTargets.load.tab" INTO TABLE factorbookMotifTarget'
+
+
+#Add secondary canonicals:
+    #CREB-ext, CTCF-ext, GATA1-ext, v-JUN (to AP-1), UA5 (to UA4), ANF143-ext, UA11 (to UA10)
+
+sed \
+    -e 's/CREB$/CREB,CREB-ext/g' \
+    -e 's/CTCF$/CTCF,CTCF-ext/g' \
+    -e 's/GATA1$/GATA1,GATA1-ext/g' \
+    -e 's/ZNF143$/ZNF143,ZNF143-ext/g' \
+    -e 's/UA4$/UA4,UA5/g' \
+    -e 's/UA10$/UA10,UA11/g' \
+    -e 's/AP-1$/AP-1,v-JUN/g' \
+        allMotifTargets.load.tab > allMotifTargetsV2.load.tab
+
+hgsql hg19 < motifTarget.sql
+hgsql hg19 -e 'alter table motifTarget rename to factorbookMotifTargetV2'
+hgsql hg19 -e 'LOAD DATA LOCAL INFILE "allMotifTargetsV2.load.tab" INTO TABLE factorbookMotifTargetV2'
+        
+# Remove motifs for 'indirect' binding TFs (those showing only 'tethered' mode in Table S3
+
+awk 'FS="\t" {printf("%s\t%s\t%s\n", $2, $3, $12)}' FactorbookTableS3.txt | sort | uniq > indirects.tsv
+
+# Tethered only are:
+BATF      AP-1
+BCL11A      UA9
+BCL3      NFKB1
+ETS1      ETS1
+FOS      AP-1
+GATA2      GATA1;GATA1-ext
+GATA3      GATA3
+IRF1      PRDM1
+MXI1      MAX
+NR3C1      NR3C1
+PAX5      PAX5
+POLR2A      TBP
+PPARGC1A      ESRRA
+RAD21      CTCF;CTCF-ext
+RFX5      RFX5
+SMC3      CTCF;CTCF-ext
+SREBF1      SREBF1
+SRF      SRF
+STAT3      STAT1
+TAF1      TBP 
+
+# Hand edit motifs for factors above out of file (allMotifTargetsV2.load.tab -> V3)
+
+hgsql hg19 -e 'select distinct(name) from wgEncodeRegTfbsClusteredV3 order by name' > allFactors.txt
+hgsql hg19 -e 'select distinct(target) from factorbookMotifTarget order by name' > allMotifFactors.txt
+
+diff allFactors.txt allMotifFactors.txt | grep '<' | sed -e 's/< //' > newNoMotifFactors.txt
+wc -l newNoMotifFactors.txt
+26 newNoMotifFactors.txt
+
+# NOTE: NR4A1 and SREBF2(SREBP2) not in Anshul's uniform peaks (failed qual filter I think)
+# Drop these from allMotifTargetsV4.load.tab
+
+sed -e 's/$/\t/' -e '/NR4A1/d' -e '/SREBF2/d' newNoMotifFactors.txt > foo
+mv foo newNoMotifFactors.txt
+
+cat allMotifTargetsV3.load.tab newNoMotifFactors.txt | sort > allMotifTargetsV4.load.tab
+
+hgsql hg19 < motifTarget.sql
+hgsql hg19 -e 'alter table motifTarget rename to factorbookMotifTargetV4'
+hgsql hg19 -e 'LOAD DATA LOCAL INFILE "allMotifTargetsV4.load.tab" INTO TABLE factorbookMotifTargetV4'
+
+
+# Generate comma-sep list of factors for trackDb filter, 'factorFilterList.txt'
+
+
+# Get citations for track description References section
+        getTrackReferences 22955990  23203885  22955619 > refs.txt
+
+# Requested corrections target table using new gene vs. canonical motif table from Jiali at Zlab (2014-03-06 kate)
+# They returned files with new motif calls & annotations.  Perhaps for another version of the track!
+
+wget http://zlab.umassmed.edu/~zhuangj/Direct_binding_motifs.tar.gz
+wget http://zlab.umassmed.edu/~kimb/motif_centric_encode_tfbs.sorted.bed.bz2
+bunzip2 !$
+
+# In email, the following TF's 4 were specifically mentioned as direct binders 
+# missing canonical motif:
+# NFIC->NFIC (already in table)
+# NR4A1->NR4A1 (not in our TF clusters, rejected due to low quality, so not relevant to table)
+# and these two, which will be added to the table!
+# NR3C1->NR3C1
+# FOS->API
+
+sed -e 's/NR3C1\t$/NR3C1\tNR3C1/' -e 's/FOS\t$/FOS\tAP1/' allMotifTargetsV4.load.tab > factorbookMotifCanonical.load.tab
+hgsql hg19 < motifTarget.sql
+hgsql hg19 -e 'alter table motifTarget rename to factorbookMotifCanonical'
+hgsql hg19 -e 'LOAD DATA LOCAL INFILE "factorbookMotifCanonical.load.tab" INTO TABLE factorbookMotifCanonical'

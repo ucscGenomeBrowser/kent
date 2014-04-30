@@ -28,6 +28,8 @@ extern int edwSingleFileTimeout;   // How many seconds we give ourselves to fetc
 
 #define edwMinMapQual 3	//Above this -10log10 theshold we have >50% chance of being right
 
+#define EDW_WEB_REFRESH_5_SEC 5000
+
 struct sqlConnection *edwConnect();
 /* Returns a read only connection to database. */
 
@@ -85,6 +87,12 @@ struct edwUser *edwFindUserFromFileId(struct sqlConnection *conn, int fId);
 
 char *edwFindOwnerNameFromFileId(struct sqlConnection *conn, int fId);
 /* Return name of submitter. Return "an unknown user" if name is NULL */
+
+int edwFindUserIdFromEmail(struct sqlConnection *conn, char *userEmail);
+/* Return true id of this user */
+
+boolean edwUserIsAdmin(struct sqlConnection *conn, char *userEmail);
+/* Return true if the user is an admin */
 
 void edwWarnUnregisteredUser(char *email);
 /* Put up warning message about unregistered user and tell them how to register. */
@@ -288,6 +296,14 @@ struct edwBamFile * edwMakeBamStatsAndSample(struct sqlConnection *conn, long lo
 struct edwBamFile *edwBamFileFromFileId(struct sqlConnection *conn, long long fileId);
 /* Get edwBamFile with given fileId or NULL if none such */
 
+struct edwQaWigSpot *edwMakeWigSpot(struct sqlConnection *conn, long long wigId, long long spotId);
+/* Create a new edwQaWigSpot record in database based on comparing wig file to spot file
+ * (specified by id's in edwFile table). */
+
+struct edwQaWigSpot *edwQaWigSpotFor(struct sqlConnection *conn, 
+    long long wigFileId, long long spotFileId);
+/* Return wigSpot relationship if any we have in database for these two files. */
+
 char *edwOppositePairedEndString(char *end);
 /* Return "1" for "2" and vice versa */
 
@@ -320,5 +336,31 @@ void edwOneLineSystemResult(char *command, char *line, int maxLineSize);
 
 boolean edwOneLineSystemAttempt(char *command, char *line, int maxLineSize);
 /* Execute system command and return one line result from it in line */
+
+/***/
+/* Shared functions for EDW web CGI's.
+   Mostly wrappers for javascript tweaks */
+
+void edwWebAutoRefresh(int msec);
+/* Refresh page after msec.  Use 0 to cancel autorefresh */
+
+void edwWebAutoRefreshProtectInput();
+/* Cancel autorefresh when input widgets are clicked.  Use on pages with user input 
+   widgets having state beyond a button press */
+
+/***/
+/* Navigation bar */
+
+void edwWebNavBarStart();
+/* Layout navigation bar */
+
+void edwWebNavBarEnd();
+/* Close layout after navigation bar */
+
+void edwWebBrowseMenuItem(boolean on);
+/* Toggle visibility of 'Browse submissions' link on navigation menu */
+
+void edwWebSubmitMenuItem(boolean on);
+/* Toggle visibility of 'Submit data' link on navigation menu */
 
 #endif /* EDWLIB_H */

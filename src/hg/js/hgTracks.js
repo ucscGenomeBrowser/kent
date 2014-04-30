@@ -2846,21 +2846,17 @@ var imageV2 = {
     updateImgForId: function (html, id, fullImageReload, newJsonRec)
     {   // update row in imgTbl for given id.
         // return true if we successfully pull slice for id and update it in imgTrack.
-        var str = "<TR id='tr_" + id + "'[^>]*>([\\s\\S]+?)</TR>";
-        var reg = new RegExp(str);
-        var a = reg.exec(html);
-        if(a && a[1]) {
+        var newTr = $(html).find("tr[id='tr_" + id + "']");
+        if (newTr.length > 0) {
             var tr = $(document.getElementById("tr_" + id));
             if (tr.length > 0) {
-                $(tr).html(a[1]);
+                $(tr).html(newTr.children())
 
                 // Need to update tr class list too
-                str = "<TR id='tr_" + id + "[^>]* class='(.*)'>";
-                reg = new RegExp(str);
-                var classes = reg.exec(html);
-                if(classes && classes[1] && classes[1].length > 0) {
+                var classes = $(html).find("tr[id='tr_"+ id + "']")[0].className
+                if(classes && classes.length > 0) {
                     $(tr).removeClass();
-                    $(tr).addClass(classes[1]);
+                    $(tr).addClass(classes);
                 }
 
                 // NOTE: Want to examine the png? Uncomment:
@@ -2879,11 +2875,10 @@ var imageV2 = {
                 // Need to update vis box (in case this is reached via back-button)
                 if (imageV2.backSupport && fullImageReload) {
                     // Update abbr so that rows can be resorted properly
-                    str = "<TR id='tr_" + id + "[^>]* abbr='(.*)' class";
-                    reg = new RegExp(str);
-                    var abbr = reg.exec(html);
-                    if(abbr && abbr[1] && abbr[1].length > 0) {
-                        $(tr).attr('abbr',abbr[1]);
+                    var abbr = $(newTr).attr('abbr');
+
+                    if(abbr) {
+                        $(tr).attr('abbr', abbr);
                     }
 
                     if (newJsonRec)
@@ -3396,14 +3391,15 @@ var imageV2 = {
             } else
                 title = genomePos.get()
 
+            var sid = getHgsid(); // Wish you were here!  Come on, someone must catch this.
             if (fullPageLoad) { 
                 // Should only be on initial set-up: first navigation to page
-                imageV2.history.replaceState({position: newPos, hgsid: + getHgsid()},title,
-                                          "hgTracks?db=" + getDb() + "&position=" + newPos);
+                imageV2.history.replaceState({position: newPos, hgsid: + sid },title,
+                                 "hgTracks?db=" + getDb() + "&position=" + newPos + "&hgsid="+sid);
             } else {  
                 // Should be when advancing (not-back-button)
                 imageV2.history.pushState({position: newPos, hgsid: + getHgsid()},title,
-                                          "hgTracks?db=" + getDb() + "&position=" + newPos);
+                                 "hgTracks?db=" + getDb() + "&position=" + newPos + "&hgsid="+sid);
             }
         }
     }

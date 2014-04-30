@@ -160,7 +160,7 @@ for (group = groupList; group != NULL; group = group->next)
         showedRuler = TRUE;
         hPrintf("<TR %sid='%s-0'>",(isOpen ? "" : "style='display: none'"), group->name);
 	hPrintf("<TD>");
-        hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s&hgTracksConfigPage=configure\">", hgTrackUiName(),
+        hPrintf("<A HREF=\"%s?%s=%s&c=%s&g=%s&hgTracksConfigPage=configure\">", hgTrackUiName(),
                 cartSessionVarName(), cartSessionId(cart),
                 chromName, RULER_TRACK_NAME);
         hPrintf("%s</A>", RULER_TRACK_LABEL);
@@ -233,7 +233,7 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintPennantIcon(tdb);
 
         if (track->hasUi)
-            hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%u&g=%s&hgTracksConfigPage=configure'>",
+            hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%s&g=%s&hgTracksConfigPage=configure'>",
                     tdb->parent ? "Part of super track: " : "Configure ",
                     tdb->parent ? tdb->parent->shortLabel : tdb->shortLabel,
                     hgTrackUiName(),cartSessionVarName(), cartSessionId(cart), track->track);
@@ -250,7 +250,7 @@ for (group = groupList; group != NULL; group = group->next)
 	/* If track is not on this chrom print an informational
 	   message for the user. */
         if (tdbIsDownloadsOnly(tdb))    // No vis display for downloadsOnly
-            hPrintf("<A TITLE='Downloadable files...' HREF='%s?%s=%u&g=%s'>Downloads</A>",
+            hPrintf("<A TITLE='Downloadable files...' HREF='%s?%s=%s&g=%s'>Downloads</A>",
                     hgFileUiName(),cartSessionVarName(), cartSessionId(cart), tdb->track);
         else if (hTrackOnChrom(track->tdb, chromName))
 	    {

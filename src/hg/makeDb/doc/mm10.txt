@@ -5440,9 +5440,11 @@ hgsql -N -e "select * from xenoRefGene" ${DB} | cut -f2- \
     echo "${DB} done"
 done
     #   5. genscan: gadMor1 melUnd1 oreNil2 speTri2 turTru2
+    # this was done in error the first time, mistakenly using
+    # the xenoRefGene table instead of genscan
     for DB in `cat genscan.list`
 do
-hgsql -N -e "select * from xenoRefGene" ${DB} | cut -f2- \
+hgsql -N -e "select * from genscan" ${DB} | cut -f2- \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
@@ -5591,6 +5593,10 @@ done | sort -k1,1 -k2,2n > multiz60wayFrames.bed
     time featureBits -countGaps mm10 multiz60wayFrames
     #   57707702 bases of 2730871774 (2.113%) in intersection
     #   real    1m45.141s
+
+    # reload table to fix frames problems 2014-03-19 - Hiram
+    time featureBits -countGaps mm10 multiz60wayFrames
+    # 79955378 bases of 2730871774 (2.928%) in intersection
 
     #   enable the trackDb entries:
 # frames multiz60wayFrames
@@ -9901,3 +9907,226 @@ EOF
 
 
 ##############################################################################
+2013-12-13: import of UCSC GENCODE group processing of GENCODE VM2 (markd)
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM2
+    cd /hive/data/genomes/mm10/bed/gencodeVM2
+
+    # create Makefile from previous one.
+    cp /hive/data/genomes/hg19/bed/gencodeV19/Makefile .
+
+    # download, build and load tables
+    (time nice make -j 10) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.
+        # NOT DONE THIS TIME, SINCE THIS is the first mouse.
+        make cmpRelease >gencode-cmp.tsv
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsVM2 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/mm10/wgEncodeGencodeV18.ra human/mm10/wgEncodeGencodeVM2.ra
+    cp human/mm10/wgEncodeGencodeV18.html human/mm10/wgEncodeGencodeVM2.html
+
+    # edit these plus human/mm10/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeVM2.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous -0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
+    ### track handler for this version of gencode:
+    registerTrackHandler("wgEncodeGencodeVM2", gencodeGeneMethods);
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    cd /hive/data/genomes/mm10/bed/gencodeVM2
+    make joinerCheck
+    # see output in check/joiner.out
+##############################################################################
+# SEGMENTAL DUPLICATIONS (WORKING 4/14/14 Pauline)
+    # File emailed from John Huddleston (jlhudd@uw.edu) in the Eichler Lab. 
+    mkdir /hive/data/genomes/mm10/bed/genomicSuperDups
+    cd /hive/data/genomes/mm10/bed/genomicSuperDups
+
+    wget --timestamping 'http://mouseparalogy.gs.washington.edu/GRCm38/genomicSuperDup.tab'
+
+    mv genomicSuperDup.tab mm10_WGAC.tab
+
+    awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' mm10_WGAC.tab \
+    | hgLoadBed mm10 genomicSuperDups stdin \
+      -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+    # mm8 version of track had issue where strand values were "+" and "_" --
+    # checked and found same issue - so ran same fix:
+    hgsql mm10 -e 'update genomicSuperDups set strand = "-" where strand = "_";'
+
+    #new mm10 version has a lot more stuff than version on mm8:
+    #featureBits mm8 genomicSuperDups
+    #157417547 bases of 2567283971 (6.132%) in intersection
+    #featureBits mm10 genomicSuperDups
+    #214917441 bases of 2652783500 (8.102%) in intersection
+    #select count(*) from genomicSuperDups;
+    #659775 (vs. 277816 in mm8)
+#
+#########################################################################
+# hgPal downloads (DONE braney 2009-11-03)
+#   FASTA from 60way for refGene, knownGene, knownCanonical
+
+    ssh hgwdev
+    screen
+    bash
+    rm -rf /cluster/data/mm10/bed/multiz60way/pal
+    mkdir /cluster/data/mm10/bed/multiz60way/pal
+    cd /cluster/data/mm10/bed/multiz60way/pal
+    for i in `cat ../species.list`; do echo $i; done > order.lst
+
+    mz=multiz60way
+    gp=refGene
+    db=mm10
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    nice time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# 1817.21user 233.92system 4:54:04elapsed 11%CPU (0avgtext+0avgdata
+# 920192maxresident)k
+# 6024inputs+0outputs (7major+1648126minor)pagefaults 0swaps
+
+    mz=multiz60way
+    gp=refGene
+    db=mm10
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz60way
+    gp=refGene
+    db=mm10
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 &
+    sleep 1
+    tail -f $gp.$mz.job.log
+
+# oops... missed the timing
+
+
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    # now do the canonical set
+    cd /cluster/data/mm10/bed/multiz60way/pal
+    mz=multiz60way
+    gp=knownCanonical
+    db=mm10
+    for j in `awk '{print $1}' /cluster/data/mm10/chrom.sizes`
+    do
+	echo "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$j'" | hgsql $db | tail -n +2 > $j.known.bed
+    done
+
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -geneBeds=$j.known.bed  $db $mz knownGene order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -noTrans $db $mz knownGene order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -exons -noTrans $db $mz knownGene order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -exons $db $mz knownGene order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 &
+    sleep 1
+    tail -f $gp.$mz.job.log
+
+# real    302m20.489s
+# user    27m31.179s
+# sys     5m30.071s
+
+
+    rm *.known.bed
+    mz=multiz60way
+    gp=knownCanonical
+    db=mm10
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    mz=multiz60way
+    gp=knownCanonical
+    db=mm10
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    }#############################################################################

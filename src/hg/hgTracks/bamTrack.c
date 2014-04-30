@@ -14,10 +14,8 @@
 #include "cds.h"
 #include "hgBam.h"
 #include "wigCommon.h"
-#if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def USE_BAM && KNETFILE_HOOKS
 #include "bigWarn.h"
 #include "errCatch.h"
 
@@ -486,10 +484,12 @@ if (errCatchStart(errCatch))
 	    }
 	}
 
+    char *fileName2 = hReplaceGbdb(fileName);
+
     char posForBam[512];
     safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
     if (!isPaired)
-	bamFetch(fileName, posForBam, addBam, &btd, NULL);
+	bamFetch(fileName2, posForBam, addBam, &btd, NULL);
     else
 	{
 	char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
@@ -497,7 +497,7 @@ if (errCatchStart(errCatch))
 	if (pairSearchRange > 0)
 	    safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
 		  max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamFetch(fileName, posForBam, addBamPaired, &btd, NULL);
+	bamFetch(fileName2, posForBam, addBamPaired, &btd, NULL);
 	struct hashEl *hel;
 	struct hashCookie cookie = hashFirst(btd.pairHash);
 	while ((hel = hashNext(&cookie)) != NULL)
@@ -507,6 +507,8 @@ if (errCatchStart(errCatch))
 		slAddHead(&(tg->items), lfsFromLf(lf));
 	    }
 	}
+    freez(&fileName2);
+
     if (tg->visibility != tvDense)
 	{
 	slReverse(&(tg->items));
@@ -779,9 +781,7 @@ if (!hashLookup(settings, "showDiffBasesMaxZoom"))
 void bamMethods(struct track *track)
 /* Methods for BAM alignment files. */
 {
-#if (defined USE_BAM && defined KNETFILE_HOOKS)
 knetUdcInstall();
-#endif//def USE_BAM && KNETFILE_HOOKS
 
 track->canPack = TRUE;
 boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE,

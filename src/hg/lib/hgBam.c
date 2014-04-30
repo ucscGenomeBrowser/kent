@@ -191,7 +191,7 @@ helper.chrom = chrom;
 helper.dy = dyStringNew(0);
 helper.samList = NULL;
 char posForBam[256];
-safef(posForBam, sizeof(posForBam), "%s:%d-%d", chrom, start, end);
+safef(posForBam, sizeof(posForBam), "%s:%d-%d", chrom, start+1, end);
 bamFetch(fileOrUrl, posForBam, bamAddOneSamAlignment, &helper, &helper.samFile);
 dyStringFree(&helper.dy);
 slReverse(&helper.samList);

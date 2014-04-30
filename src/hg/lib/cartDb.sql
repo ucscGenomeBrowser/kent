@@ -11,6 +11,7 @@ CREATE TABLE userDb (
     firstUse DATETIME not null,	# First time this was used
     lastUse DATETIME not null,	# Last time this was used
     useCount int not null,	# Number of times used
+    sessionKey varchar(255) NOT NULL DEFAULT '', # Random key to protect session ids
               #Indices
     PRIMARY KEY(id)
 );
@@ -22,6 +23,7 @@ CREATE TABLE sessionDb (
     firstUse DATETIME not null,	# First time this was used
     lastUse DATETIME not null,	# Last time this was used
     useCount int not null,	# Number of times used
+    sessionKey varchar(255) NOT NULL DEFAULT '', # Random key to protect session ids
               #Indices
     PRIMARY KEY(id)
 );

@@ -1,0 +1,61 @@
+Fri Oct 25 11:10:34 PDT 2013
+- /etc/init/tty1.conf: added auto login of browser on tt1 to getty
+- added /etc/apache2/sites-available/000-default
+- hg.conf: empty domain for cookie on localhost, works in firefox, chrom, if accessed as 127.0.0.1
+- hg.conf: changed hgLogin server name
+- /usr/bin/sendmail using ssmtp via mailjet
+- /etc/rc.local: mounts vbox host folder "shared" (not in fstab to avoid
+  errors during boot time)
+
+Mon Oct 28 13:57:33 PDT 2013
+- Hiram started trashcleaner 
+
+Wed Jan 15 02:13:25 PST 2014
+- /etc/pam.d/sshd : activate access.conf
+- /etc/security/access.conf: restrict ssh logins to 10.0.x.x network
+
+Fri Jan 17 06:26:35 PST 2014
+- created sdb1 and mounted on /data via fstab
+- symlink from /var/lib/mysql to /data/mysql
+- changed /etc/mysql/my.cnf: datadir in /data/mysql
+- removed apparmor to allow mysql directory move, requires reboot
+- removed www-data from /etc/at.deny for hgMirror
+- added file /etc/sudoers.d/browserbox for hgMirror
+- changed grub to NOT stop when a boot was unsuccessful! Added 
+  GRUB_RECORDFAIL_TIMEOUT=0 to /etc/default/grub and did update-grub
+
+Mon Jan 20 13:17:47 PST 2014
+- added gpm to get rid of this annoying mouse capture
+- added acpi-tools to be able to shutdown from the host
+
+Wed Jan 22 02:00:14 PST 2014
+- changed apache ports.conf and 000default.conf to listen to port 1234, makes bigDataUrl pasting possible
+
+Thu Jan 30 08:55:34 PST 2014
+- moved to rsync for cgi updates and added cronjob to update everything every hour
+
+Sun Feb  2 12:10:19 PST 2014
+- added symlink from htdocs/folders to /media, so auto mounted folders are seen (ht to Jonathan!)
+- added www-data to vboxsf group, so apache can read the auto-mounted shared folders
+
+Thu Mar  6 04:15:32 PST 2014
+- added 64bit RNAplot and package libgomp1 for it
+- changing hg.conf to use HTTPHOST, pushed via postUpdate.sh
+
+Sat Mar 15 08:39:53 PDT 2014
+- change TMPTIME to 1 in /etc/default/rcS to make ubuntu clean the /tmp dir once per day
+
+Tue Mar 18 08:49:08 PDT 2014
+- added the debian user to mysql and changed the socket config in /etc/mysql/debian.cnf
+  see http://www.lornajane.net/posts/2008/Logrotate-Error-on-Ubuntu
+
+Tue Mar 25 16:10:09 PDT 2014
+- changed user "browser" .bashrc to run update when on tty1 and use skipFile in /tmp
+- added cronjob to clean /tmp once per day at 3am
+- major changes to updateBrowser.sh
+
+Fri Apr  4 09:01:41 PDT 2014
+- added urlIsNotNewerThanFile
+
+Fri Apr 11 09:22:50 PDT 2014
+- update timing changed to 1 minute, using hgMirror now to hide tracks

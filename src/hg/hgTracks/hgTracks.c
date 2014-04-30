@@ -67,7 +67,7 @@
  * program's unique variables be qualified with a prefix though. */
 char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.in1", "hgt.in2", "hgt.in3", "hgt.inBase",
-            "hgt.out1", "hgt.out2", "hgt.out3",
+            "hgt.out1", "hgt.out2", "hgt.out3", "hgt.out4",
             "hgt.left1", "hgt.left2", "hgt.left3",
             "hgt.right1", "hgt.right2", "hgt.right3",
             "hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
@@ -399,9 +399,9 @@ char *trackUrl(char *mapName, char *chromName)
 char *encodedMapName = cgiEncode(mapName);
 char buf[2048];
 if(chromName == NULL)
-    safef(buf, sizeof(buf), "%s?%s=%u&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), encodedMapName);
 else
-    safef(buf, sizeof(buf), "%s?%s=%u&c=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&c=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
 freeMem(encodedMapName);
 return(cloneString(buf));
 }
@@ -1113,7 +1113,7 @@ tg->longLabel = longLabel;
 tg->loadItems = oligoMatchLoad;
 tg->itemName = oligoMatchName;
 tg->mapItemName = oligoMatchName;
-tg->priority = 101;
+tg->priority = OLIGO_MATCH_TRACK_PRIORITY;
 tg->defaultPriority = tg->priority;
 tg->groupName = "map";
 tg->defaultGroupName = cloneString(tg->groupName);
@@ -1704,6 +1704,8 @@ else if (sameString(zoomType, ZOOM_3X))
     newWinWidth = winWidth/3;
 else if (sameString(zoomType, ZOOM_10X))
     newWinWidth = winWidth/10;
+else if (sameString(zoomType, ZOOM_100X))
+    newWinWidth = winWidth/100;
 else if (sameString(zoomType, ZOOM_BASE))
     newWinWidth = insideWidth/tl.mWidth;
 else
@@ -2619,7 +2621,8 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             }
-        y = doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
+        doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
+        y += trackPlusLabelHeight(track, fontHeight);
         }
     }
 
@@ -3291,6 +3294,13 @@ else if (sameString(type, "vcfTabix"))
     vcfTabixMethods(tg);
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
+    tg->mapItemName = ctMapItemName;
+    }
+else if (sameString(type, "vcf"))
+    {
+    tg = trackFromTrackDb(tdb);
+    tg->customPt = ct;
+    vcfMethods(tg);
     tg->mapItemName = ctMapItemName;
     }
 else if (sameString(type, "makeItems"))
@@ -4412,17 +4422,21 @@ for (track = trackList; track != NULL; track = track->next)
         track->limitedVisSet = TRUE;
 	}
     }
+
 /* pre-load remote tracks in parallel */
 int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
+int pfdListCount = 0;
 pthread_t *threads = NULL;
 if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
     {
     findLeavesForParallelLoad(trackList, &pfdList);
+    pfdListCount = slCount(pfdList);
     /* launch parallel threads */
-    ptMax = min(ptMax, slCount(pfdList));
+    ptMax = min(ptMax, pfdListCount);
     if (ptMax > 0)
 	{
 	AllocArray(threads, ptMax);
+	/* Create threads */
 	int pt;
 	for (pt = 0; pt < ptMax; ++pt)
 	    {
@@ -4434,6 +4448,7 @@ if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
 	    }
 	}
     }
+
 /* load regular tracks */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -4455,12 +4470,13 @@ for (track = trackList; track != NULL; track = track->next)
 	    }
 	}
     }
+
 if (ptMax > 0)
     {
     /* wait for remote parallel load to finish */
     remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
     if (measureTiming)
-	measureTime("Waiting for parallel (%d thread) remote data fetch", ptMax);
+	measureTime("Waiting for parallel (%d threads for %d tracks) remote data fetch", ptMax, pfdListCount);
     }
 
 printTrackInitJavascript(trackList);
@@ -4580,6 +4596,7 @@ if (!hideControls)
     topButton("hgt.out1", ZOOM_1PT5X);
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
+    topButton("hgt.out4", ZOOM_100X);
     hWrites("<div style='height:0.3em;'></div>\n");
 #endif//ndef USE_NAVIGATION_LINKS
 
@@ -4678,7 +4695,9 @@ hPrintf("<td width='60' align='right'><a href='?hgt.out2=1' "
         "title='zoom out 3x'>&lt;&lt;&nbsp;&gt;&gt;</a>\n");
 hPrintf("<td width='80' align='right'><a href='?hgt.out3=1' "
         "title='zoom out 10x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
-hPrintf("<td>&nbsp;</td>\n"); // Without width cell expands table with, forcing others to sides
+hPrintf("<td width='80' align='right'><a href='?hgt.out4=1' "
+        "title='zoom out 100x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
+hPrintf("<td>&nbsp;</td>\n"); // Without width cell expands table width, forcing others to sides
 hPrintf("<td width='20' align='right'><a href='?hgt.right1=1' "
         "title='move 10&#37; to the right'>&gt;</a>\n");
 
@@ -5254,7 +5273,7 @@ if (isGenome(position) || NULL ==
         freeMem(position);
         position = cloneString(cartUsualString(cart, "lastPosition", defaultPosition));
         hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd,cart);
-        if (hgp != NULL && position != defaultPosition)
+        if (hgp != NULL && differentString(position, defaultPosition))
             cartSetString(cart, "position", position);
         }
     }
@@ -5267,6 +5286,11 @@ createHgFindMatchHash();
 I.e., multiple results may have been found and are printed out prior to this code*/
 if (NULL == chromName)
     {
+    // In case user manually edits the browser location as described in #13009,
+    // revert the position.  If they instead choose from the list as we expect,
+    // that will set the position to their choice.
+    char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
+    cartSetString(cart, "position", lastPosition);
     return;
     }
 
@@ -5318,6 +5342,8 @@ else if (cgiVarExists("hgt.out2"))
     zoomAroundCenter(3.0);
 else if (cgiVarExists("hgt.out3"))
     zoomAroundCenter(10.0);
+else if (cgiVarExists("hgt.out4"))
+    zoomAroundCenter(100.0);
 else if (cgiVarExists("hgt.dinkLL"))
     dinkWindow(TRUE, -dinkSize("dinkL"));
 else if (cgiVarExists("hgt.dinkLR"))
@@ -5401,7 +5427,7 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     unsigned size = hChromSize(database, chromPtr->name);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromPtr->name, chromPtr->name);
     cgiTableFieldEnd();
@@ -5450,7 +5476,7 @@ for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     unsigned size = chromInfo->size;
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromInfo->chrom,chromInfo->chrom);
     cgiTableFieldEnd();
@@ -5540,7 +5566,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     unsigned size = sqlUnsigned(row[1]);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            row[0], row[0]);
     cgiTableFieldEnd();
@@ -5658,9 +5684,8 @@ void resetVars()
 {
 static char *except[] = {"db", "position", NULL};
 char *cookieName = hUserCookie();
-int sessionId = cgiUsualInt(cartSessionVarName(), 0);
-char *hguidString = findCookieData(cookieName);
-int userId = (hguidString == NULL ? 0 : atoi(hguidString));
+char *sessionId = cgiOptionalString(cartSessionVarName());
+char *userId = findCookieData(cookieName);
 struct cart *oldCart = cartNew(userId, sessionId, NULL, NULL);
 cartRemoveExcept(oldCart, except);
 cartCheckout(&oldCart);

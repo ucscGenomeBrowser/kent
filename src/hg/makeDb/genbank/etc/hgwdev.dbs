@@ -6,7 +6,7 @@
 # urgent databases
 hg38
 hg19
-#mm10
+mm10
 # 
 # Most recent assembly for each org
 #
@@ -16,6 +16,7 @@ anoCar2
 anoGam1
 apiMel2
 aplCal1
+balAcu1
 bosTau7
 braFlo2
 braNey1
@@ -23,6 +24,7 @@ caeJap1
 caePb2
 caeRem3
 calJac3
+calMil1
 canFam3
 cavPor3
 cb3
@@ -32,6 +34,7 @@ chiLan1
 choHof1
 chrPic1
 ci2
+criGri1
 danRer7
 dasNov3
 dipOrd1
@@ -69,6 +72,7 @@ myoLuc2
 nemVec1
 nomLeu3
 ochPri2
+ochPri3
 oreNil2
 ornAna1
 oryCun2

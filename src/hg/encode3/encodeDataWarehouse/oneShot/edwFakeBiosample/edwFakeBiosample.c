@@ -1,4 +1,5 @@
 /* edwFakeBiosample - Fake up biosample table from meld of encode3 and encode2 sources.. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -9,6 +10,7 @@
 #include "jsonParse.h"
 
 char *cacheName = NULL;
+char *jsonOutFile = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -20,14 +22,18 @@ errAbort(
   "Where cellTypeSlim.tab is the result of running the command on hgwdev\n"
   "    hgsql -e 'select term,sex,organism from cellType' -N encode2Meta\n"
   "and also lives in the source tree.  The output is intended for the edwBiosample table.\n"
+  "The url is something like submit.encodedcc.org/biosamples/?format=json&limit=all\n"
+  "but with user name and password sent in the https fashion.\n"
   "options:\n"
   "   -cache=cacheName - get JSON list from cache rather than from database where possible\n"
+  "   -json=outFile - send json output from Stanford to outfile\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"cache", OPTION_STRING},
+   {"json", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -36,7 +42,7 @@ char *getTextViaHttps(char *url, char *userId, char *password)
  * will return a NULL rather than aborting if URL not found. */
 {
 char fullUrl[1024];
-safef(fullUrl, sizeof(fullUrl), "https://%s:%s@%s", userId, password, url);
+safef(fullUrl, sizeof(fullUrl), "http://%s:%s@%s", userId, password, url);
 struct htmlPage *page = htmlPageGet(fullUrl);
 if (page == NULL)
     return NULL;
@@ -118,6 +124,13 @@ char *jsonText = getTextViaHttps(url, userId, password);
 if (jsonText == NULL)
      errAbort("Couldn't get text response from %s\nUser %s, password %s\n", url, userId, password);
 struct jsonElement *jsonRoot = jsonParse(jsonText);
+if (jsonOutFile != NULL)
+    {
+    FILE *f = mustOpen(jsonOutFile, "w");
+    jsonPrintToFile(jsonRoot, "", f, 4);
+    carefulClose(&f);
+    }
+    
 char *bioListName = "@graph";
 struct jsonElement *jsonBioList = jsonMustFindNamedField(jsonRoot, "", bioListName);
 struct slRef *ref, *refList = jsonListVal(jsonBioList, bioListName);
@@ -168,6 +181,7 @@ optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
 cacheName = optionVal("cache", cacheName);
+jsonOutFile = optionVal("json", jsonOutFile);
 edwFakeBiosample(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }

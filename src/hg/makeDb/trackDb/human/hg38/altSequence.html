@@ -1,0 +1,60 @@
+<H2>Description</H2>
+
+<P>
+This track shows the locations of the alternate sequences and haplotypes defined by the
+<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/"
+target="_blank">Genome Reference Consortium</a> (GRC) on the GRCh38 (hg38)
+reference sequence.  The GRC generates multiple representations
+(haplotypes/alternate loci) for regions that are too complex
+to be represented by a single path.
+</P>
+
+<H3>Alt Map</H3>
+<P>
+The <EM>Alt Map</EM> track shows a PSL alignment of the data in the
+NCBI alternate sequence/haplotype mapping files to the reference sequence, allowing a side-by-side
+comparison of the two.  Alignments are displayed in <b>black</b> and indicate
+gaps and insertions in the query and target sequences, depending on the 
+track configuration settings. For information on interpreting the alignment display, see
+the reference pages on <a href="/goldenPath/help/hgTracksHelp.html#PSLDisplay" 
+target="_blank">display conventions for PSL alignment tracks</a> and
+<a href="/goldenPath/help/hgIndelDisplay.html">alignment insertion/deletion display options</a>.
+</P>
+
+<H3>Haplotypes</H3>
+<P>
+Items in the <EM>Haplotype</EM> track, displayed in <font color="#0000FF"><b>blue</b></font>, 
+show locations on the reference genome that correspond to the alternate
+sequence/haplotype regions.
+Click on an item to display a link to the corresponding position
+in the alternate sequence/haplotype (from the reference sequence) or to the corresponding 
+reference sequence location (from the alternate sequence/haplotype). 
+</P>
+
+<H2>Methods</H2>
+<P>
+The locations of the alternate sequence/haplotypes, which have been established by
+NCBI, are specified in the ALT_REF_LOCI_*/alt_scaffolds/alignments/*.gff files in the 
+<a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/"
+target="_blank">GRCh38 GenBank directory</a>.
+The GRC used the <A HREF="http://www.ncbi.nlm.nih.gov/tools/gbench/"
+TARGET=_blank>NCBI Genomic Aligner</A> (NG Aligner) to align the alternate
+loci specifically to the primary chromosomes on which their anchor sequence is found.
+</P>
+
+<P>
+The NCBI GFF/cigar annotation files were converted to PSL format with the
+<A HREF="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/userApps/README"
+TARGET=_blank>kent command line</A> program,
+<A HREF="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/hg/utils/gff3ToPsl"
+TARGET=_blank>gff3ToPsl</A>.
+</P>
+
+<H2>References</H2>
+<P>
+For general information about the genome assembly process, see the 
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
+TARGET=_blank>overview of genome assembly procedures</A> on the NCBI website. 
+NCBI also provides <A HREF="http://www.ncbi.nlm.nih.gov/assembly/883148/"
+TARGET="_blank">specific information</A> about the hg38 assembly.
+</P>

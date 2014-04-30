@@ -131,36 +131,45 @@ Passed 16890026 of 25763098 of 25763098, 65.56%
 
 # Ask sys-admin to switch the database pointer go to point to go080130.
 ##########################################################################
-### UPDATE GO DATABASE (DONE 2013-11-26 braney)
+### UPDATE GO DATABASE (DONE 2014-02-23 braney)
 
 # UPDATE GO DATABASE
 # Download the terms and make the database.
 ssh hgwdev
-mkdir /hive/data/outside/geneOntology/20131126
-cd  /hive/data/outside/geneOntology/20131126
+mkdir /hive/data/outside/geneOntology/20140213
+cd  /hive/data/outside/geneOntology/20140213
 
-wget  "http://archive.geneontology.org/latest-termdb/go_daily-termdb-tables.tar.gz"
+wget "http://archive.geneontology.org/full/2014-02-01/go_201402-assocdb-tables.tar.gz"
 
-hgsql -e 'create database go131126'
-tar xvfz go_daily-termdb-tables.tar.gz
+hgsql -e 'create database go140213'
+tar xvfz go_201402-assocdb-tables.tar.gz
 
-cd go_daily-termdb-tables
-cat *.sql | hgsql go131126
+cd go_201402-assocdb-tables
+for i in *.txt
+do
+    if test -s $i
+    then
+	cat `basename  $i .txt`.sql
+    fi
+done | hgsql go140213
 
 for i in *.txt
 do 
-    echo $i
-    echo "load data local infile '$i' into table `basename $i .txt`" | hgsql go131126
+    if test -s $i
+    then
+	echo $i
+	echo "load data local infile '$i' into table `basename $i .txt`" | hgsql go140213
+    fi
 done
 
 # Please note the new place to get gene_association.goa_uniprot.gz
 wget --timestamping \
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gene_association.goa_uniprot.gz
 
-zcat gene_association.goa_uniprot.gz |hgGoAssociation go131126 goaPart stdin
+zcat gene_association.goa_uniprot.gz |hgGoAssociation go140213 goaPart stdin
 
-# Passed 162299167 of 208714106 of 208714106, 77.76%
+# Passed 192715679 of 254966113 of 254966113, 75.58%
 
-# Ask sys-admin to switch the database pointer go to point to go131126
+# Ask sys-admin to switch the database pointer go to point to go140213
 ##########################################################################
 
