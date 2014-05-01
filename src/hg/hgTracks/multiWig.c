@@ -302,11 +302,15 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack))
 	{
 	struct preDrawContainer *pre = subtrack->loadPreDraw(subtrack, seqStart, seqEnd, width);
-	preDrawWindowFunction(pre->preDraw, pre->preDrawSize, wigCart->windowingFunction,
-		wigCart->transformFunc);
-	preDrawSmoothing(pre->preDraw, pre->preDrawSize, wigCart->smoothingWindow);
-	pre->smoothingDone = TRUE;
-	refAdd(&refList, pre);
+
+	if (pre != NULL)  // pre maybe null if the load fails
+	    {
+	    preDrawWindowFunction(pre->preDraw, pre->preDrawSize, wigCart->windowingFunction,
+		    wigCart->transformFunc);
+	    preDrawSmoothing(pre->preDraw, pre->preDrawSize, wigCart->smoothingWindow);
+	    pre->smoothingDone = TRUE;
+	    refAdd(&refList, pre);
+	    }
 	}
     }
 slReverse(&refList);
@@ -331,9 +335,12 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     wigCart->maxY = maxVal;
     wigCart->autoScale = wiggleScaleManual;
     struct preDrawContainer *pre = subtrack->preDrawContainer;
-    pre->graphUpperLimit = maxVal;
-    pre->graphLowerLimit = minVal;
-    
+
+    if (pre != NULL)  // pre maybe null if the load fails
+	{
+	pre->graphUpperLimit = maxVal;
+	pre->graphLowerLimit = minVal;
+	}
     }
 
 int numTrack = 0;
