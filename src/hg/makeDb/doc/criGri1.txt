@@ -443,7 +443,7 @@ NC_007936
     hgsql -N -e "select frag from gold;" criGri1 | egrep -v -e '[AN][MC][D_][S0]0[0-9]+(\.1)?' | wc -l
     # 0
 
-    # hence, add to trackDb/alpaca/criGri1/trackDb.ra
+    # hence, add to trackDb/criGri/criGri1/trackDb.ra
 searchTable gold
 shortCircuit 1
 termRegex [AN][MC][D_][S0]0[0-9]+(\.1)?

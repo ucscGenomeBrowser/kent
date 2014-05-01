@@ -475,7 +475,7 @@ NC_002080
     hgsql -N -e "select frag from gold;" eriEur2 | egrep -v -e '[AN][MC][D_][U0]0[0-9]+(\.1)?' | wc -l
     # 0
 
-    # hence, add to trackDb/alpaca/eriEur2/trackDb.ra
+    # hence, add to trackDb/hedgehog/eriEur2/trackDb.ra
 searchTable gold
 shortCircuit 1
 termRegex [AN][MC][D_][U0]0[0-9]+(\.1)?
