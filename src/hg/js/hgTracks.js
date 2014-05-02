@@ -271,7 +271,7 @@ var genomePos = {
         $.ajax({
                 type: "GET",
                 url: "../cgi-bin/hgApi",
-                data: "cmd=defaultPos&db=" + getDb(),
+                data: cart.addUpdatesToUrl("cmd=defaultPos&db=" + getDb()),
                 dataType: "html",
                 trueSuccess: genomePos.handleChange,
                 success: catchErrorOrDispatch,
@@ -453,10 +453,86 @@ var posting = {
             thisForm=$(thisForm)[0];
         if(thisForm != undefined && $(thisForm).length == 1) {
             //alert("posting form:"+$(thisForm).attr('name'));
-            var href = vis.cartUpdatesAddToUrl(obj.href);
+            var href = cart.addUpdatesToUrl(obj.href);
             return postTheForm($(thisForm).attr('name'),href);
         }
         return true;
+    }
+}
+
+/////////////////////////
+//// cart updating /////
+///////////////////////
+var cart = {
+
+    updateQueue: {},
+    
+    updatesWaiting: function ()
+    {   // returns TRUE if updates are waiting.
+        return (Object.keys(cart.updateQueue).length !== 0);
+    },
+    
+    addUpdatesToUrl: function (url)
+    {   // adds any outstanding cart updates to the url, then clears the queue
+        if (cart.updatesWaiting()) {
+            var updates = "";
+            for (var track in cart.updateQueue) {
+                updates += "&" + track + "=" + cart.updateQueue[track];
+            }
+            if (updates.length > 0) {
+                if(url.length > 0 && url.lastIndexOf("?") == -1 && url.lastIndexOf("&") == -1)
+                    url += "?" + updates.substring(1);
+                else
+                    url += updates
+            }
+            cart.updateQueue = {};
+        }
+        return url;
+    },
+    
+    // NOTE: could update in background, however, failing to hit "refresh" is a user choice
+    // updatesViaAjax: function ()
+    // {   // Called via timer: updates the cart via setVars.
+    // if (!cart.updatesWaiting())
+    //     return;
+    // 
+    //     var tracks = [];
+    //     var newVis = [];
+    //     for (var track in cart.updateQueue) {
+    //         tracks.push(track)
+    //         newVis.push(cart.updateQueue[track]);
+    //     }
+    //     if (tracks.length === 0)
+    //         return;
+    //     cart.updateQueue = {};
+    //     setCartVars(tracks,newVis,async=false); // sync to avoid another race condition mess
+    // },
+    
+    addUpdateToQueue: function (track,newVis)
+    {   // creates a string of updates to save for ajax batch or a submit
+        cart.updateQueue[track] = newVis;
+        
+        // NOTE: could update in background, however, failing to hit "refresh" is a user choice
+        // first in queue, schedule background update
+        // if (Object.keys(cart.updateQueue).length === 1)
+        //     setTimeout("cart.updatesViaAjax();",10000);
+    },
+
+    setVars: function (names, values, errFunc, async)
+    {   // ajax updates the cart, and includes any queued updates.
+        if (cart.updatesWaiting()) {
+            for (var track in cart.updateQueue) {
+                names.push(track);
+                values.push(cart.updateQueue[track]);
+            }
+            cart.updateQueue = {};
+        }
+        setCartVars(names, values, errFunc, async);
+    },
+    
+    setVar: function (names, values, errFunc, async)
+    {   // wraps single var update to expected arrays
+        vis.setVars( [ name ], [ value ], errFunc, async );
     }
 }
 
@@ -527,55 +603,6 @@ var vis = {
         return false;
     },
     
-    cartUpdatesWaiting: function ()
-    {   // returns TRUE if updates are waiting.
-        return (Object.keys(vis.cartUpdateQueue).length !== 0);
-    },
-    
-    cartUpdatesAddToUrl: function (url)
-    {   // adds any outstanding cart updates to the url, then clears the queue
-        var updates = "";
-        for (var track in vis.cartUpdateQueue) {
-            updates += "&" + track + "=" + vis.cartUpdateQueue[track];
-        }
-        if (updates.length > 0) {
-            if(url.length > 0 && url.lastIndexOf("?") == -1 && url.lastIndexOf("&") == -1)
-                url += "?" + updates.substring(1);
-            else
-                url += updates
-        }
-        vis.cartUpdateQueue = {};
-        return url;
-    },
-
-    // NOTE: could update in background, however, failing to hit "refresh" is a user choice
-    // cartUpdatesViaAjax: function ()
-    // {   // Called via timer: updates the cart via setVars.
-    // if (!vis.cartUpdatesWaiting())
-    //     return;
-    // 
-    //     var tracks = [];
-    //     var newVis = [];
-    //     for (var track in vis.cartUpdateQueue) {
-    //         tracks.push(track)
-    //         newVis.push(vis.cartUpdateQueue[track]);
-    //     }
-    //     if (tracks.length === 0)
-    //         return;
-    //     vis.cartUpdateQueue = {};
-    //     setCartVars(tracks,newVis,async=false); // sync to avoid another race condition mess
-    // },
-
-    cartUpdateAddToQueue: function (track,newVis)
-    {   // creates a string of updates to save for ajax batch or a submit
-        vis.cartUpdateQueue[track] = newVis;
-        
-        // NOTE: could update in background, however, failing to hit "refresh" is a user choice
-        // first in queue, schedule background update
-        // if (Object.keys(vis.cartUpdateQueue).length === 1)
-        //     setTimeout("vis.cartUpdatesViaAjax();",10000);
-    },
-
     initForAjax: function()
     {   // To better support the back-button, it is good to eliminate extraneous form puts
         // Towards that end, we support visBoxes making ajax calls to update cart.
@@ -593,7 +620,7 @@ var vis = {
             } else
                 $(this).attr('class', 'normalText');
             
-            vis.cartUpdateAddToQueue(track,$(this).val());
+            cart.addUpdateToQueue(track,$(this).val());
             return false;
         });
         // Now we can rid the submt of the burden of all those vis boxes
@@ -659,7 +686,7 @@ var dragSelect = {
         hgTracks.highlight  = getDb() + "." + hgTracks.chromName + ":" + start + "-" + end;
         hgTracks.highlight += '#AAFFFF'; // Also include highlight color
         // we include enableHighlightingDialog because it may have been changed by the dialog
-        setCartVars(['highlight', 'enableHighlightingDialog'], 
+        cart.setVars(['highlight', 'enableHighlightingDialog'], 
                     [hgTracks.highlight, hgTracks.enableHighlightingDialog ? 1 : 0]);
         imageV2.highlightRegion();
     },
@@ -697,7 +724,7 @@ var dragSelect = {
                         } else {
                             $('body').css('cursor', 'wait');
                             if (!hgTracks.enableHighlightingDialog)
-                                setCartVars(['enableHighlightingDialog'],[0]);
+                                cart.setVars(['enableHighlightingDialog'],[0]);
                             document.TrackHeaderForm.submit();
                         }
                         $(this).dialog("close");
@@ -1153,7 +1180,7 @@ var dragReorder = {
             }
         });
         if(names.length > 0) {
-            setCartVars(names,values);
+            cart.setVars(names,values);
             imageV2.markAsDirtyPage();
         }
     },
@@ -2002,7 +2029,7 @@ var rightClick = {
                             $.ajax({
                                     type: "GET",
                                     url: "../cgi-bin/hgTracks",
-                                    data: data,
+                                    data: cart.addUpdatesToUrl(data),
                                     dataType: "html",
                                     trueSuccess: imageV2.updateImgAndMap,
                                     success: catchErrorOrDispatch,
@@ -2039,8 +2066,8 @@ var rightClick = {
                 $.ajax({
                         type: "GET",
                         url: "../cgi-bin/hgApi",
-                        data: "db=" + getDb() +  "&cmd=" + ajaxCmd + "&num=" + results +
-                              "&table=" + args.table + "&name=" + args.name,
+                        data: cart.addUpdatesToUrl("db=" + getDb() +  "&cmd=" + ajaxCmd + "&num=" +
+                              results + "&table=" + args.table + "&name=" + args.name),
                         trueSuccess: rightClick.handleZoomCodon,
                         success: catchErrorOrDispatch,
                         error: errorHandler,
@@ -2080,7 +2107,7 @@ var rightClick = {
             $.ajax({
                     type: "GET",
                     url: "../cgi-bin/hgTracks",
-                    data: data,
+                    data: cart.addUpdatesToUrl(data),
                     dataType: "html",
                     trueSuccess: rightClick.handleViewImg,
                     success: catchErrorOrDispatch,
@@ -2150,7 +2177,7 @@ var rightClick = {
                     $(rows[ix]).remove();
                 }
                 if (vars.length > 0) {
-                    setCartVars( vars, vals );
+                    cart.setVars( vars, vals );
                 }
                 imageV2.afterImgChange(true);
             }
@@ -2164,7 +2191,7 @@ var rightClick = {
                         $(rows[ix]).remove();
                     }
                 var selectUpdated = vis.update(rec.parentTrack, 'hide');
-                setCartVar(rec.parentTrack, 'hide' );
+                cart.setVar(rec.parentTrack, 'hide' );
                 imageV2.afterImgChange(true);
                 }
             }
@@ -2192,7 +2219,7 @@ var rightClick = {
             }
         } else if (cmd == 'removeHighlight') {
             hgTracks.highlight = null;
-            setCartVars(['highlight'], ['[]']);
+            cart.setVars(['highlight'], ['[]']);
             imageV2.highlightRegion();
         } else {   // if ( cmd in 'hide','dense','squish','pack','full','show' )
             // Change visibility settings:
@@ -2207,11 +2234,11 @@ var rightClick = {
                 // Hide local display of this track and update server side cart.
                 // Subtracks controlled by 2 settings so del vis and set sel=0.  Others, just set vis hide.
                 if(tdbIsSubtrack(rec))
-                    setCartVars( [ id, id+"_sel" ], [ '[]', 0 ] ); // Remove subtrack level vis and explicitly uncheck.
+                    cart.setVars( [ id, id+"_sel" ], [ '[]', 0 ] ); // Remove subtrack level vis and explicitly uncheck.
                 else if(tdbIsFolderContent(rec))
-                    setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // supertrack children need to have _sel set to trigger superttrack reshaping
+                    cart.setVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // supertrack children need to have _sel set to trigger superttrack reshaping
                 else
-                    setCartVar(id, 'hide' );
+                    cart.setVar(id, 'hide' );
                 $(document.getElementById('tr_' + id)).remove();
                 imageV2.afterImgChange(true);
             } else if (!imageV2.mapIsUpdateable) {
@@ -2626,7 +2653,7 @@ var popUp = {
         myLink += "&ajax=1";
         $.ajax({
                     type: "GET",
-                    url: myLink,
+                    url: cart.addUpdatesToUrl(myLink),
                     dataType: "html",
                     trueSuccess: popUp.uiDialog,
                     success: catchErrorOrDispatch,
@@ -3020,7 +3047,7 @@ var imageV2 = {
         $.ajax({
                     type: getOrPost,
                     url: "../cgi-bin/hgTracks",
-                    data: data,
+                    data: cart.addUpdatesToUrl(data),
                     dataType: "html",
                     trueSuccess: imageV2.updateImgAndMap,
                     success: catchErrorOrDispatch,
@@ -3267,7 +3294,7 @@ var imageV2 = {
         $.ajax({
                 type: "GET",
                 url: "../cgi-bin/hgTracks",
-                data: vis.cartUpdatesAddToUrl(params + 
+                data: cart.addUpdatesToUrl(params + 
                                               "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + 
                                               getHgsid()),
                 dataType: "html",
@@ -3384,9 +3411,9 @@ var imageV2 = {
             }
             
             // If chrom changed AND there are vis updates waiting...
-            if (vis.cartUpdatesWaiting()) {
+            if (cart.updatesWaiting()) {
                 var url = "hgTracks?db=" + getDb() + "&position=" + newPos + "&hgsid="+getHgsid();
-                url = vis.cartUpdatesAddToUrl(url)
+                url = cart.addUpdatesToUrl(url)
                 window.location.assign(url)
                 return false;
             }
