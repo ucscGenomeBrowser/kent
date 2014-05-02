@@ -453,7 +453,7 @@ var posting = {
             thisForm=$(thisForm)[0];
         if(thisForm != undefined && $(thisForm).length == 1) {
             //alert("posting form:"+$(thisForm).attr('name'));
-            var href = obj.href + vis.cartUpdatesGet();
+            var href = vis.cartUpdatesAddToUrl(obj.href);
             return postTheForm($(thisForm).attr('name'),href);
         }
         return true;
@@ -527,21 +527,31 @@ var vis = {
         return false;
     },
     
-    cartUpdatesGet: function ()
-    {   // returns any outstanding cart updates as a string, and clears the queue
+    cartUpdatesWaiting: function ()
+    {   // returns TRUE if updates are waiting.
+        return (Object.keys(vis.cartUpdateQueue).length !== 0);
+    },
+    
+    cartUpdatesAddToUrl: function (url)
+    {   // adds any outstanding cart updates to the url, then clears the queue
         var updates = "";
         for (var track in vis.cartUpdateQueue) {
             updates += "&" + track + "=" + vis.cartUpdateQueue[track];
         }
-
+        if (updates.length > 0) {
+            if(url.length > 0 && url.lastIndexOf("?") == -1 && url.lastIndexOf("&") == -1)
+                url += "?" + updates.substring(1);
+            else
+                url += updates
+        }
         vis.cartUpdateQueue = {};
-        return updates;
+        return url;
     },
 
     // NOTE: could update in background, however, failing to hit "refresh" is a user choice
     // cartUpdatesViaAjax: function ()
     // {   // Called via timer: updates the cart via setVars.
-    // if (Object.keys(vis.cartUpdateQueue).length === 0)
+    // if (!vis.cartUpdatesWaiting())
     //     return;
     // 
     //     var tracks = [];
@@ -3257,8 +3267,9 @@ var imageV2 = {
         $.ajax({
                 type: "GET",
                 url: "../cgi-bin/hgTracks",
-                data: params + "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + 
-                                getHgsid() + vis.cartUpdatesGet(),
+                data: vis.cartUpdatesAddToUrl(params + 
+                                              "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + 
+                                              getHgsid()),
                 dataType: "html",
                 trueSuccess: imageV2.updateImgAndMap,
                 success: catchErrorOrDispatch,
@@ -3371,6 +3382,15 @@ var imageV2 = {
                 window.scrollTo(0,0);
                 return false;
             }
+            
+            // If chrom changed AND there are vis updates waiting...
+            if (vis.cartUpdatesWaiting()) {
+                var url = "hgTracks?db=" + getDb() + "&position=" + newPos + "&hgsid="+getHgsid();
+                url = vis.cartUpdatesAddToUrl(url)
+                window.location.assign(url)
+                return false;
+            }
+
             return true;
         });
         // Have vis box changes update cart through ajax.  This helps keep page/cart in sync.
