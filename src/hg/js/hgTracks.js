@@ -453,7 +453,8 @@ var posting = {
             thisForm=$(thisForm)[0];
         if(thisForm != undefined && $(thisForm).length == 1) {
             //alert("posting form:"+$(thisForm).attr('name'));
-            return postTheForm($(thisForm).attr('name'),obj.href);
+            var href = obj.href + vis.cartUpdatesGet();
+            return postTheForm($(thisForm).attr('name'),href);
         }
         return true;
     }
@@ -465,6 +466,7 @@ var posting = {
 var vis = {
 
     enumOrder: new Array("hide", "dense", "full", "pack", "squish"),  // map cgi enum visibility codes to strings
+    cartUpdateQueue: {},
 
     update: function (track, visibility)
     {   // Updates visibility state in hgTracks.trackDb and any visible elements on the page.
@@ -525,6 +527,45 @@ var vis = {
         return false;
     },
     
+    cartUpdatesGet: function ()
+    {   // returns any outstanding cart updates as a string, and clears the queue
+        var updates = "";
+        for (var track in vis.cartUpdateQueue) {
+            updates += "&" + track + "=" + vis.cartUpdateQueue[track];
+        }
+
+        vis.cartUpdateQueue = {};
+        return updates;
+    },
+
+    // NOTE: could update in background, however, failing to hit "refresh" is a user choice
+    // cartUpdatesViaAjax: function ()
+    // {   // Called via timer: updates the cart via setVars.
+    // if (Object.keys(vis.cartUpdateQueue).length === 0)
+    //     return;
+    // 
+    //     var tracks = [];
+    //     var newVis = [];
+    //     for (var track in vis.cartUpdateQueue) {
+    //         tracks.push(track)
+    //         newVis.push(vis.cartUpdateQueue[track]);
+    //     }
+    //     if (tracks.length === 0)
+    //         return;
+    //     vis.cartUpdateQueue = {};
+    //     setCartVars(tracks,newVis,async=false); // sync to avoid another race condition mess
+    // },
+
+    cartUpdateAddToQueue: function (track,newVis)
+    {   // creates a string of updates to save for ajax batch or a submit
+        vis.cartUpdateQueue[track] = newVis;
+        
+        // NOTE: could update in background, however, failing to hit "refresh" is a user choice
+        // first in queue, schedule background update
+        // if (Object.keys(vis.cartUpdateQueue).length === 1)
+        //     setTimeout("vis.cartUpdatesViaAjax();",10000);
+    },
+
     initForAjax: function()
     {   // To better support the back-button, it is good to eliminate extraneous form puts
         // Towards that end, we support visBoxes making ajax calls to update cart.
@@ -542,7 +583,7 @@ var vis = {
             } else
                 $(this).attr('class', 'normalText');
             
-            setCartVar(track,$(this).val());
+            vis.cartUpdateAddToQueue(track,$(this).val());
             return false;
         });
         // Now we can rid the submt of the burden of all those vis boxes
@@ -3216,7 +3257,8 @@ var imageV2 = {
         $.ajax({
                 type: "GET",
                 url: "../cgi-bin/hgTracks",
-                data: params + "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + getHgsid(),
+                data: params + "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + 
+                                getHgsid() + vis.cartUpdatesGet(),
                 dataType: "html",
                 trueSuccess: imageV2.updateImgAndMap,
                 success: catchErrorOrDispatch,
