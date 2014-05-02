@@ -166,7 +166,8 @@ DROP TABLE IF EXISTS Organizations;
 CREATE TABLE Organizations (
 	organization_uid int PRIMARY KEY  NOT NULL ,
 	name varchar (128) NOT NULL ,
-	approval_authority tinyint(1) NOT NULL 
+	approval_authority tinyint(1) NOT NULL ,
+	tax_id int NOT NULL 
 ) 
 ;
 
@@ -294,7 +295,7 @@ CREATE TABLE SwissProtMatches (
         swiss_prot_length int NOT NULL ,
         identity_pct float NOT NULL ,
         mismatch_count int NOT NULL ,
-        gap_count int NOT NULL 
+        gap_count int NOT NULL ,
 ) 
 ;
 
