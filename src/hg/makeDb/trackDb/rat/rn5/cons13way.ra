@@ -66,7 +66,7 @@ priority 103.29
     subTrack cons13way
 
         # phastCons conservation
-        track phastcons13way
+        track phastCons13way
         subTrack cons13wayViewphastcons off
         subGroups view=phastcons
         shortLabel phastCons Cons
