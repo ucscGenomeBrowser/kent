@@ -49,9 +49,9 @@ priority 103.29
         longLabel Basewise Conservation by PhyloP (13 species)
         noInherit on
         configurable on
-        type wig -7.192 2.0
+        type wig -7.06 2.21
         maxHeightPixels 100:50:11
-        viewLimits -0.5:0.5
+        viewLimits -3.1:2.3
         autoScale off
         spanList 1
         windowingFunction mean
