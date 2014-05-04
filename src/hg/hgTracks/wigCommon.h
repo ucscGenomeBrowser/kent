@@ -43,6 +43,8 @@ struct preDrawContainer
     int preDrawZero;		/* Offset from start of predraw array to data requested.  We
                                  * get more because of smoothing */
     int width;			/* Passed in width, number of pixels to display without smooth */
+    double graphUpperLimit, graphLowerLimit; /* limits to the smoothed value */
+    boolean smoothingDone;      /* did we already do the smoothing? */
     };
 
 struct preDrawElement
@@ -106,9 +108,9 @@ double preDrawLimits(struct preDrawElement *preDraw, int preDrawZero,
 
 double preDrawAutoScale(struct preDrawElement *preDraw, int preDrawZero,
     int width, enum wiggleScaleOptEnum autoScale,
-    double *overallUpperLimit, double *overallLowerLimit,
+    enum wiggleWindowingEnum windowingFunction,
     double *graphUpperLimit, double *graphLowerLimit,
-    double *overallRange, double *epsilon, int lineHeight,
+    double *epsilon, int lineHeight,
     double maxY, double minY, enum wiggleAlwaysZeroEnum alwaysZero);
 /*	if autoScaling, scan preDraw array and determine limits */
 

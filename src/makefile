@@ -17,6 +17,7 @@ topLibs:
 	@./machTest.sh
 	cd lib && ${MAKE}
 	cd jkOwnLib && ${MAKE}
+	cd parasol/lib && ${MAKE}
 
 hgLib:
 	@./hg/sqlEnvTest.sh

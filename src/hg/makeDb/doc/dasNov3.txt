@@ -460,3 +460,17 @@ dasNov3.perChromTables = no
     # verify the track link to INSDC functions
 
 ##############################################################################
+# CPG Islands Unmasked track (DONE - 2014-04-24 - Hiram)
+    mkdir /hive/data/genomes/dasNov3/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/dasNov3/bed/cpgIslandsUnmasked
+    time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
+        -workhorse=hgwdev \
+          -maskedSeq=/hive/data/genomes/dasNov3/dasNov3.unmasked.2bit \
+            dasNov3 > do.log 2>&1
+    # real    24m14.038s
+
+    cat fb.dasNov3.cpgIslandExtUnmasked.txt
+    # 61507517 bases of 2192103426 (2.806%) in intersection
+
+##############################################################################

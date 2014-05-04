@@ -1011,6 +1011,52 @@ if (slice == NULL)
 return sliceUpdate(slice,type,img,title,width,height,offsetX,offsetY);
 }
 
+int imgTrackCoordinates(struct imgTrack *imgTrack, int *leftX,int *topY,int *rightX,int *bottomY)
+// Fills in topLeft x,y and bottomRight x,y coordinates, returning topY.
+{
+int xLeft = 0,yTop = 0,xRight = 0,yBottom = 0;
+struct imgSlice *slice;
+for (slice = imgTrack->slices;slice != NULL;slice=slice->next)
+    {
+    if (revCmplDisp)
+        {
+        if (xLeft == 0 || xLeft > slice->offsetX - slice->width)
+            xLeft = slice->offsetX - slice->width;
+        if (xRight < slice->offsetX)
+            xRight = slice->offsetX;
+        }
+    else
+        {
+        if (xLeft == 0 || xLeft > slice->offsetX)
+            xLeft = slice->offsetX;
+        if (xRight < slice->offsetX + slice->width)
+            xRight = slice->offsetX + slice->width;
+        }
+    if (yTop == 0 || yTop > slice->offsetY)
+        yTop = slice->offsetY;
+    if (yBottom < slice->offsetY + slice->height)
+        yBottom = slice->offsetY + slice->height;
+    }
+if ( leftX != NULL)
+    *leftX     = xLeft;
+if ( topY != NULL)
+    *topY     = yTop;
+if ( rightX != NULL)
+    *rightX = xRight;
+if ( bottomY != NULL)
+    *bottomY = yBottom;
+return yTop;
+}
+#define imgTrackTopY(imgTrack) imgTrackCoordinates(imgTrack,NULL,NULL,NULL,NULL)
+
+int imgTrackBottomY(struct imgTrack *imgTrack)
+// Returns the Y coordinate of the bottom of the track.
+{
+int bottomY = 0;
+imgTrackCoordinates(imgTrack,NULL,NULL,NULL,&bottomY);
+return bottomY;
+}
+
 struct mapSet *imgTrackGetMapByType(struct imgTrack *imgTrack,enum sliceType type)
 // Gets the map assocated with a specific slice belonging to the imgTrack
 {
@@ -1032,6 +1078,21 @@ char *imgFile = NULL;               // name of file that hold the image
 char *neededId = NULL; // id is only added it it is NOT the trackId.
 if (imgTrack->tdb == NULL || differentStringNullOk(id, imgTrack->tdb->track))
     neededId = id;
+
+// Trap surprising location s for map items, but only on test machines.
+if (hIsPrivateHost())
+    {
+    int leftX, topY, rightX, bottomY;
+    imgTrackCoordinates(imgTrack, &leftX, &topY, &rightX, &bottomY);
+    if (topLeftY < topY || bottomRightY > bottomY || topLeftX < leftX || bottomRightX > rightX)
+        {
+        char * name = (imgTrack->name != NULL ? imgTrack->name
+                                              : imgTrack->tdb != NULL ? imgTrack->tdb->track
+                                                                      : imgFile);
+        warn("imgTrackAddMapItem(%s,%s) mapItem(%d:%d,%d:%d) spills over track bounds(%d:%d,%d:%d)",
+             name,title,topLeftX,topLeftY,bottomRightX,bottomRightY,leftX,topY,rightX,bottomY);
+        }
+    }
 
 int count = 0;
 for (slice = imgTrack->slices;slice != NULL;slice=slice->next)

@@ -1,4 +1,6 @@
-/* eapLib - library shared by analysis pipeline modules */
+/* eapGraph - stuff to help traverse the graph defined by the eapRun, eapInput, and eapOutput
+ * tables that define what files were used to produce what other files */
+
 
 #include "common.h"
 #include "hash.h"
@@ -6,7 +8,7 @@
 #include "jksql.h"
 #include "portable.h"
 #include "intValTree.h"
-#include "longList.h"
+#include "longToList.h"
 #include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
 #include "../../encodeDataWarehouse/inc/edwLib.h"
 #include "eapDb.h"
@@ -47,16 +49,16 @@ for (run = eg->runList; run != NULL; run = run->next)
      intValTreeAdd(ivt, run->id, run);
 
 /* Set up inputByFile */
-struct longList *ll;
-eg->inputByFile = ll = longListNew();
+struct longToList *lToL;
+eg->inputByFile = lToL = longToListNew();
 struct eapInput *in;
 for (in = eg->inputList; in != NULL; in = in->next)
-    longListAdd(ll, in->fileId, in);
+    longToListAdd(lToL, in->fileId, in);
 
 /* Set up inputByRun */
-eg->inputByRun = ll = longListNew();
+eg->inputByRun = lToL = longToListNew();
 for (in = eg->inputList; in != NULL; in = in->next)
-    longListAdd(ll, in->runId, in);
+    longToListAdd(lToL, in->runId, in);
 
 /* Set up outputByFile - this one is singly-valued so easier */
 eg->outputByFile = ivt = intValTreeNew();
@@ -65,9 +67,9 @@ for (out = eg->outputList; out != NULL; out = out->next)
     intValTreeAdd(ivt, out->fileId, out);
 
 /* Set up outputByRun */
-eg->outputByRun = ll = longListNew();
+eg->outputByRun = lToL = longToListNew();
 for (out = eg->outputList; out != NULL; out = out->next)
-    longListAdd(ll, out->runId, out);
+    longToListAdd(lToL, out->runId, out);
 
 /* Set up fileById */
 eg->fileById = ivt = intValTreeNew();
@@ -107,10 +109,10 @@ edwValidFileFreeList(&eg->validList);
 /* Free up all 9 subcontainers, in same order as the corresponding fields are declared. */
 hashFree(&eg->runByExperiment);
 rbTreeFree(&eg->runById);
-longListFree(&eg->inputByFile);
-longListFree(&eg->inputByRun);
+longToListFree(&eg->inputByFile);
+longToListFree(&eg->inputByRun);
 rbTreeFree(&eg->outputByFile);
-longListFree(&eg->outputByRun);
+longToListFree(&eg->outputByRun);
 rbTreeFree(&eg->fileById);
 rbTreeFree(&eg->validByFileId);
 hashFree(&eg->validByExperiment);
@@ -137,14 +139,14 @@ struct slRef *eapGraphRunInputs(struct eapGraph *eg, unsigned runId)
 /* Fetch all inputs to this run.  Vals on slRef are eapInputs. 
  * Do not free this list, it is owned by graph. */
 {
-return longListFindVal(eg->inputByRun, runId);
+return longToListFindVal(eg->inputByRun, runId);
 }
 
 struct slRef *eapGraphRunOutputs(struct eapGraph *eg, unsigned runId)
 /* Fetch all outputs to this run.  Vals on slRef are eapOutputs.   
  * Do not free this list, it is owned by graph. */
 {
-return longListFindVal(eg->outputByRun, runId);
+return longToListFindVal(eg->outputByRun, runId);
 }
 
 struct slRef *eapGraphParentList(struct eapGraph *eg, unsigned fileId)
@@ -154,7 +156,7 @@ struct slRef *eapGraphParentList(struct eapGraph *eg, unsigned fileId)
 struct eapOutput *out = intValTreeFind(eg->outputByFile, fileId);
 if (out == NULL)
     return NULL;
-return longListFindVal(eg->inputByRun, out->runId);
+return longToListFindVal(eg->inputByRun, out->runId);
 }
 
 
@@ -185,7 +187,7 @@ unsigned eapGraphOneSingleParent(struct eapGraph *eg, unsigned fileId)
 {
 unsigned id = eapGraphSingleParent(eg, fileId);
 if (id == 0)
-    errAbort("%u doesn't exist in eapGraphRequiredSingleParent", fileId);
+    errAbort("%u doesn't exist in eapGraphOneSingleParent", fileId);
 return id;
 }
 
@@ -283,12 +285,12 @@ struct slRef *eapGraphChildList(struct eapGraph *eg, unsigned fileId)
  * You can slFreeList result when done. */
 {
 struct slRef *outList = NULL;
-struct slRef *in, *inList = longListFindVal(eg->inputByFile, fileId);
+struct slRef *in, *inList = longToListFindVal(eg->inputByFile, fileId);
 for (in = inList; in != NULL; in = in->next)
     {
     struct eapInput *input = in->val;
     unsigned runId = input ->runId;
-    struct slRef *runOut, *runOutList = longListFindVal(eg->outputByRun, runId);
+    struct slRef *runOut, *runOutList = longToListFindVal(eg->outputByRun, runId);
     for (runOut = runOutList; runOut != NULL; runOut = runOut->next)
         {
 	struct eapOutput *output = runOut->val;

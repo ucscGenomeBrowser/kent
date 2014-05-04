@@ -85,6 +85,7 @@ s/cynSem1/Cynoglossus_semilaevis/;
 s/sebNig1/Sebastes_nigrocinctus/;
 s/sebRub1/Sebastes_rubrivinctus/;
 s/poeFor1/Poecilia_formosa/;
+s/poeReg1/Poecilia_reticulata/;
 s/xipMac1/Xiphophorus_maculatus/;'
 }
 

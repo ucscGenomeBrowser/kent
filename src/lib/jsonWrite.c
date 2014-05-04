@@ -1,9 +1,4 @@
-/* jsonWrite - Helper routines for writing out JSON. 
- *
- * Apologies for the awkward 'isMiddle' parameter.  This is
- * from JSON not allowing a terminal comma for a comma separated
- * list.   A larger, more usable library might find a way to
- * take care of this for you. */
+/* jsonWrite - Helper routines for writing out JSON.  */
 
 #include "common.h"
 #include "hash.h"
