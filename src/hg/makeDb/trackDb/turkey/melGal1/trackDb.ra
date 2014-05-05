@@ -1,5 +1,3 @@
-include trackDb.chainNet.ra
-
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold

@@ -170,13 +170,13 @@ include chainNetFelCat5.ra
         type chain ochPri2
         otherDb ochPri2
 
-        track chainEriEur1
+        track chainEriEur2
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=uHedgehog clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain eriEur1
-        otherDb eriEur1
+        type chain eriEur2
+        otherDb eriEur2
 
 include chainNetEchTel2.ra
 
@@ -357,13 +357,13 @@ include chainNetTurTru2.ra alpha
         type netAlign ochPri2 chainOchPri2
         otherDb ochPri2
 
-        track netEriEur1
+        track netEriEur2
         subTrack placentalChainNetViewnet off
         subGroups view=net species=uHedgehog clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign eriEur1 chainEriEur1
-        otherDb eriEur1
+        type netAlign eriEur2 chainEriEur2
+        otherDb eriEur2
 
         track netMm10
         subTrack placentalChainNetViewnet on
