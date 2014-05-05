@@ -51,6 +51,7 @@ table gene
     (
     char[12] acc;	"Primary accession"
     string val;		"Single gene name"
+    byte isPrimary;	"True if primary gene name, false if a synonym"
     )
 
 table taxon

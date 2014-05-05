@@ -1,8 +1,41 @@
+track chainNetMelGal1 override
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+priority 205.3
+
+track chainNetTaeGut2 override
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+priority 210.3
+
 track chainNetGeoFor1 override
 chainMinScore 1000
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 priority 215.3
 
+track chainNetRn5 override
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+priority 440.3
+
 track chainNetMm10 override
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 visibility pack
 priority 470.3
+
+track chainNetHg19 override
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+priority 580.3
+
+track chainNetPetMar2 override
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+priority 650.3
