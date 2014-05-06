@@ -21,4 +21,9 @@ alpha::
 	rm -f ${CGI_BIN}/hgMirror
 	cp -p hgMirror ${CGI_BIN}/
 clean::
-	
+
+compile::
+
+install::
+	rm -f ${DESTDIR}${CGI_BIN}/hgMirror
+	cp -p hgMirror ${DESTDIR}${CGI_BIN}/
