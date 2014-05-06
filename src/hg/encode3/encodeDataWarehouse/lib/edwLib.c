@@ -743,7 +743,7 @@ char *edwSimpleAssemblyName(char *assembly)
 {
 /* If it ends with one of our common assembly suffix, then do enrichment calcs
  * in that space, rather than some subspace such as male, female, etc. */
-static char *specialAsm[] = {".hg19",".hg38",".mm9",".mm10"};
+static char *specialAsm[] = {".hg19",".hg38",".mm9",".mm10",".dm3",".ce10"};
 int i;
 for (i=0; i<ArraySize(specialAsm); ++i)
     {
