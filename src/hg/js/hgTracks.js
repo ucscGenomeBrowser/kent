@@ -271,7 +271,7 @@ var genomePos = {
         $.ajax({
                 type: "GET",
                 url: "../cgi-bin/hgApi",
-                data: "cmd=defaultPos&db=" + getDb(),
+                data: cart.varsToUrlData({ 'cmd': 'defaultPos', 'db': getDb() }),
                 dataType: "html",
                 trueSuccess: genomePos.handleChange,
                 success: catchErrorOrDispatch,
@@ -453,10 +453,121 @@ var posting = {
             thisForm=$(thisForm)[0];
         if(thisForm != undefined && $(thisForm).length == 1) {
             //alert("posting form:"+$(thisForm).attr('name'));
-            return postTheForm($(thisForm).attr('name'),obj.href);
+            return postTheForm($(thisForm).attr('name'),cart.addUpdatesToUrl(obj.href));
         }
         return true;
     }
+}
+
+/////////////////////////
+//// cart updating /////
+///////////////////////
+var cart = {
+    // Controls queuing and ultimately updating cart variables vis ajax or submit. Queued vars
+    // are held in an object with unique keys preventing duplicate updates and ensuring last update 
+    // takes precedence.  WARNING: be careful creating an object with variables on the fly:
+    // cart.setVarsObj({track: vis}) is invalid but cart.setVarsObj({'knownGene': vis}) is ok! 
+
+    updateQueue: {},
+    
+    updatesWaiting: function ()
+    {   // returns TRUE if updates are waiting.
+        return (Object.keys(cart.updateQueue).length !== 0);
+    },
+    
+    addUpdatesToUrl: function (url)
+    {   // adds any outstanding cart updates to the url, then clears the queue
+        if (cart.updatesWaiting()) {
+            //console.log('cart.addUpdatesToUrl: '+Object.keys(cart.updateQueue).length+' vars');
+            var updates = cart.varsToUrlData(); // clears the queue
+            if (typeof url === 'undefined' || url.length === 0)
+                return updates;
+
+            if (updates.length > 0) {
+                var dataOnly = (url.indexOf("cgi-bin") === -1); // all urls should be to our cgis
+                if (!dataOnly && url.lastIndexOf("?") === -1)
+                    url += "?" + updates;
+                else
+                    url += '&' + updates;
+            }
+        }
+        return url;
+    },
+    
+    beforeUnload: function ()
+    {   // named function that can be bound and unbound to beforeunload event
+        // Makes sure any outstanding queued updates are sent before leaving the page.
+        //console.log('cart.beforeUnload: '+Object.keys(cart.updateQueue).length+' vars');
+        cart.setVarsObj( {}, null, false ); // synchronous
+    },
+    
+    varsToUrlData: function (varsObj)
+    {   // creates a url data (var1=val1&var2=val2...) string from vars object and queue
+        // The queue will be emptied by this call.
+        cart.queueVarsObj(varsObj); // lay ontop of queue, to give new values precedence
+        
+        // Now convert to url data and clear queue
+        var urlData = '';
+        if (cart.updatesWaiting()) {
+            //console.log('cart.varsToUrlData: '+Object.keys(cart.updateQueue).length+' vars');
+            urlData = varHashToQueryString(cart.updateQueue);
+            cart.updateQueue = {};
+        }
+        return urlData;
+    },
+    
+    setVarsObj: function (varsObj, errFunc, async)
+    {   // Set all vars in a var hash, appending any queued updates
+        //console.log('cart.setVarsObj: were:'+Object.keys(cart.updateQueue).length + 
+        //            ' new:'+Object.keys(varsObj).length);
+        cart.queueVarsObj(varsObj); // lay ontop of queue, to give new values precedence
+        
+        // Now ajax update all in queue and clear queue
+        if (cart.updatesWaiting()) {
+            setVarsFromHash(cart.updateQueue, errFunc, async);
+            cart.updateQueue = {};
+        }
+    },
+    
+    arysToObj: function (names,values)
+    {   // Make hash type obj with two parallel arrays. (should be moved to utils.js).
+        var obj = {};
+        for(var ix=0; ix<names.length; ix++) {
+            obj[names[ix]] = values[ix]; 
+        }
+        return obj;
+    },
+    
+    setVars: function (names, values, errFunc, async)
+    {   // ajax updates the cart, and includes any queued updates.
+        cart.setVarsObj(cart.arysToObj(names, values), errFunc, async);
+    },
+
+    queueVarsObj: function (varsObj)
+    {   // Add object worth of cart updates to the 'to be updated' queue, so they can be sent to
+        // the server later. Note: hash allows overwriting previous updates to the same variable.
+        if (typeof varsObj !== 'undefined' && Object.keys(varsObj).length !== 0) {
+            //console.log('cart.queueVarsObj: were:'+Object.keys(cart.updateQueue).length + 
+            //            ' new:'+Object.keys(varsObj).length);
+            for (var name in varsObj) {
+                cart.updateQueue[name] = varsObj[name];
+                
+                // NOTE: could update in background, however, failing to hit "refresh" is a user choice
+                // first in queue, schedule background update
+                if (Object.keys(cart.updateQueue).length === 1) {
+                    // By unbind/bind, we assure that there is only one instance bound
+                    $(window).unbind('beforeunload', cart.beforeUnload); 
+                    $(window).bind(  'beforeunload', cart.beforeUnload); 
+                }
+            }
+        }
+    },
+    
+    addVarsToQueue: function (names,values)
+    {   // creates a string of updates to save for ajax batch or a submit
+        cart.queueVarsObj(cart.arysToObj(names,values));
+    },
+    
 }
 
   ///////////////////////////////////////////////
@@ -542,7 +653,7 @@ var vis = {
             } else
                 $(this).attr('class', 'normalText');
             
-            setCartVar(track,$(this).val());
+            cart.addVarsToQueue([track], [$(this).val()]);
             return false;
         });
         // Now we can rid the submt of the burden of all those vis boxes
@@ -608,8 +719,8 @@ var dragSelect = {
         hgTracks.highlight  = getDb() + "." + hgTracks.chromName + ":" + start + "-" + end;
         hgTracks.highlight += '#AAFFFF'; // Also include highlight color
         // we include enableHighlightingDialog because it may have been changed by the dialog
-        setCartVars(['highlight', 'enableHighlightingDialog'], 
-                    [hgTracks.highlight, hgTracks.enableHighlightingDialog ? 1 : 0]);
+        cart.setVarsObj({               'highlight': hgTracks.highlight, 
+                         'enableHighlightingDialog': hgTracks.enableHighlightingDialog ? 1 : 0 });
         imageV2.highlightRegion();
     },
 
@@ -646,7 +757,7 @@ var dragSelect = {
                         } else {
                             $('body').css('cursor', 'wait');
                             if (!hgTracks.enableHighlightingDialog)
-                                setCartVars(['enableHighlightingDialog'],[0]);
+                                cart.setVarsObj({'enableHighlightingDialog': 0 });
                             document.TrackHeaderForm.submit();
                         }
                         $(this).dialog("close");
@@ -1091,18 +1202,16 @@ var dragReorder = {
 
     setOrder: function (table)
     {   // Sets the 'order' value for the image table after a drag reorder
-        var names = [];
-        var values = [];
+        var varsToUpdate = {};
         $("tr.imgOrd").each(function (i) {
             if ($(this).attr('abbr') != $(this).attr('rowIndex').toString()) {
                 $(this).attr('abbr',$(this).attr('rowIndex').toString());
                 var name = this.id.substring('tr_'.length) + '_imgOrd';
-                names.push(name);
-                values.push($(this).attr('abbr'));
+                varsToUpdate[name] = $(this).attr('abbr');
             }
         });
-        if(names.length > 0) {
-            setCartVars(names,values);
+        if (Object.keys(varsToUpdate).length !== 0) {
+            cart.setVarsObj(varsToUpdate);
             imageV2.markAsDirtyPage();
         }
     },
@@ -1150,7 +1259,7 @@ var dragReorder = {
         var center = $(tr).find(".sliceDiv.cntrLab");
         if($(center) == undefined)
             return;
-        seen = ($(center).css('display') != 'none');
+        var seen = ($(center).css('display') != 'none');
         if(show == seen)
             return;
 
@@ -1429,6 +1538,7 @@ jQuery.fn.panImages = function(){
     var only1xScrolling = ((hgTracks.imgBoxWidth - hgTracks.imgBoxPortalWidth) == 0);//< hgTracks.imgBoxLeftLabel);
     var prevX       = (hgTracks.imgBoxPortalOffsetX + hgTracks.imgBoxLeftLabel) * -1;
     var portalWidth = 0;
+    var portalAbsoluteX = 0;
     var savedPosition;
     var highlightArea  = null; // Used to ensure dragSelect highlight will scroll. 
 
@@ -1951,7 +2061,7 @@ var rightClick = {
                             $.ajax({
                                     type: "GET",
                                     url: "../cgi-bin/hgTracks",
-                                    data: data,
+                                    data: cart.addUpdatesToUrl(data),
                                     dataType: "html",
                                     trueSuccess: imageV2.updateImgAndMap,
                                     success: catchErrorOrDispatch,
@@ -1988,8 +2098,8 @@ var rightClick = {
                 $.ajax({
                         type: "GET",
                         url: "../cgi-bin/hgApi",
-                        data: "db=" + getDb() +  "&cmd=" + ajaxCmd + "&num=" + results +
-                              "&table=" + args.table + "&name=" + args.name,
+                        data: cart.varsToUrlData({ 'db': getDb(), 'cmd': ajaxCmd, 'num': results,
+                              'table': args.table, 'name': args.name }),
                         trueSuccess: rightClick.handleZoomCodon,
                         success: catchErrorOrDispatch,
                         error: errorHandler,
@@ -2024,12 +2134,12 @@ var rightClick = {
             }
             return;
 */
-            var data = "hgt.imageV1=1&hgt.trackImgOnly=1&hgsid=" + getHgsid();
             jQuery('body').css('cursor', 'wait');
             $.ajax({
                     type: "GET",
                     url: "../cgi-bin/hgTracks",
-                    data: data,
+                    data: cart.varsToUrlData({ 'hgt.imageV1': '1','hgt.trackImgOnly': '1', 
+                                               'hgsid': getHgsid() }),
                     dataType: "html",
                     trueSuccess: rightClick.handleViewImg,
                     success: catchErrorOrDispatch,
@@ -2087,19 +2197,16 @@ var rightClick = {
             var row = $( 'tr#tr_' + id );
             var rows = dragReorder.getContiguousRowSet(row);
             if (rows && rows.length > 0) {
-                var vars = new Array();
-                var vals = new Array();
+                var varsToUpdate = {};
                 for (var ix=rows.length - 1; ix >= 0; ix--) { // from bottom, just in case remove screws with us
                     var rowId = $(rows[ix]).attr('id').substring('tr_'.length);
-                    //if (tdbIsSubtrack(hgTracks.trackDb[rowId]) == false)
-                    //    warn('What went wrong?');
-
-                    vars.push(rowId, rowId+'_sel'); // Remove subtrack level vis and explicitly uncheck.
-                    vals.push('[]', 0);
+                    // Remove subtrack level vis and explicitly uncheck.
+                    varsToUpdate[rowId]        = '[]';
+                    varsToUpdate[rowId+'_sel'] = 0;
                     $(rows[ix]).remove();
                 }
-                if (vars.length > 0) {
-                    setCartVars( vars, vals );
+                if (Object.keys(varsToUpdate).length !== 0) {
+                    cart.setVarsObj(varsToUpdate);
                 }
                 imageV2.afterImgChange(true);
             }
@@ -2113,7 +2220,7 @@ var rightClick = {
                         $(rows[ix]).remove();
                     }
                 var selectUpdated = vis.update(rec.parentTrack, 'hide');
-                setCartVar(rec.parentTrack, 'hide' );
+                cart.setVars( [rec.parentTrack], ['hide']);
                 imageV2.afterImgChange(true);
                 }
             }
@@ -2141,7 +2248,7 @@ var rightClick = {
             }
         } else if (cmd == 'removeHighlight') {
             hgTracks.highlight = null;
-            setCartVars(['highlight'], ['[]']);
+            cart.setVarsObj({ 'highlight': '[]' });
             imageV2.highlightRegion();
         } else {   // if ( cmd in 'hide','dense','squish','pack','full','show' )
             // Change visibility settings:
@@ -2156,11 +2263,11 @@ var rightClick = {
                 // Hide local display of this track and update server side cart.
                 // Subtracks controlled by 2 settings so del vis and set sel=0.  Others, just set vis hide.
                 if(tdbIsSubtrack(rec))
-                    setCartVars( [ id, id+"_sel" ], [ '[]', 0 ] ); // Remove subtrack level vis and explicitly uncheck.
+                    cart.setVars( [ id, id+"_sel" ], [ '[]', 0 ] ); // Remove subtrack level vis and explicitly uncheck.
                 else if(tdbIsFolderContent(rec))
-                    setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // supertrack children need to have _sel set to trigger superttrack reshaping
+                    cart.setVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // supertrack children need to have _sel set to trigger superttrack reshaping
                 else
-                    setCartVar(id, 'hide' );
+                    cart.setVars([id], ['hide']);
                 $(document.getElementById('tr_' + id)).remove();
                 imageV2.afterImgChange(true);
             } else if (!imageV2.mapIsUpdateable) {
@@ -2568,14 +2675,14 @@ var popUp = {
                 return;
             else if (rec["configureBy"] == 'clickThrough') {
                 jQuery('body').css('cursor', 'wait');
-                window.location = myLink;
+                window.location = cart.addUpdatesToUrl(myLink);
                 return;
             }  // default falls through to configureBy popup
         }
         myLink += "&ajax=1";
         $.ajax({
                     type: "GET",
-                    url: myLink,
+                    url: cart.addUpdatesToUrl(myLink),
                     dataType: "html",
                     trueSuccess: popUp.uiDialog,
                     success: catchErrorOrDispatch,
@@ -2600,12 +2707,14 @@ var popUp = {
         var newVis = changedVars[trackName];
         var hide = (newVis != null && (newVis == 'hide' || newVis == '[]'));  // subtracks do not have "hide", thus '[]'
         if($('#imgTbl') == undefined) { // On findTracks or config page
-            setVarsFromHash(changedVars);
+            if (Object.keys(changedVars).length !== 0)
+                cart.setVarsObj(changedVars);
             //if(hide) // TODO: When findTracks or config page has cfg popup, then vis change needs to be handled in page here
         }
         else {  // On image page
             if(hide) {
-                setVarsFromHash(changedVars);
+                if (Object.keys(changedVars).length !== 0)
+                    cart.setVarsObj(changedVars);
                 $(document.getElementById('tr_' + trackName)).remove();
                 imageV2.afterImgChange(true);
             } else {
@@ -2613,13 +2722,12 @@ var popUp = {
                 if(newVis != null) {
                     vis.update(trackName, newVis);
                 }
-                var urlData = varHashToQueryString(changedVars);
-                if(urlData.length > 0) {
+                if (Object.keys(changedVars).length !== 0) {
+                    var urlData = cart.varsToUrlData(changedVars);
                     if(imageV2.mapIsUpdateable) {
                         imageV2.requestImgUpdate(trackName,urlData,"");
                     } else {
-                        window.location = "../cgi-bin/hgTracks?" + urlData +
-                                          "&hgsid=" + getHgsid();
+                        window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
                     }
                 }
             }
@@ -2969,7 +3077,7 @@ var imageV2 = {
         $.ajax({
                     type: getOrPost,
                     url: "../cgi-bin/hgTracks",
-                    data: data,
+                    data: cart.addUpdatesToUrl(data),
                     dataType: "html",
                     trueSuccess: imageV2.updateImgAndMap,
                     success: catchErrorOrDispatch,
@@ -3216,7 +3324,8 @@ var imageV2 = {
         $.ajax({
                 type: "GET",
                 url: "../cgi-bin/hgTracks",
-                data: params + "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + getHgsid(),
+                data: cart.addUpdatesToUrl(params + 
+                                      "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + getHgsid()),
                 dataType: "html",
                 trueSuccess: imageV2.updateImgAndMap,
                 success: catchErrorOrDispatch,
@@ -3329,6 +3438,15 @@ var imageV2 = {
                 window.scrollTo(0,0);
                 return false;
             }
+            
+            // If chrom changed AND there are vis updates waiting...
+            if (cart.updatesWaiting()) {
+                var url = "../cgi-bin/hgTracks?" + cart.varsToUrlData({ 'db': getDb(), 
+                                                        'position': newPos, 'hgsid': getHgsid() });
+                window.location.assign(url)
+                return false;
+            }
+
             return true;
         });
         // Have vis box changes update cart through ajax.  This helps keep page/cart in sync.

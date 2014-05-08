@@ -12,10 +12,18 @@ ifeq (${CGI_BIN_BETA},)
 endif
 
 my::
-	cp hgMirror ${CGI_BIN_USER}/
+	rm -f ${CGI_BIN}/hgMirror
+	cp -p hgMirror ${CGI_BIN}/
 beta::
-	cp hgMirror ${CGI_BIN_BETA}/
+	rm -f ${CGI_BIN}/hgMirror
+	cp -p hgMirror ${CGI_BIN}/
 alpha::
-	cp hgMirror ${CGI_BIN}/
+	rm -f ${CGI_BIN}/hgMirror
+	cp -p hgMirror ${CGI_BIN}/
 clean::
-	
+
+compile::
+
+install::
+	rm -f ${DESTDIR}${CGI_BIN}/hgMirror
+	cp -p hgMirror ${DESTDIR}${CGI_BIN}/

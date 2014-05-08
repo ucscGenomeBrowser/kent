@@ -149,7 +149,8 @@ GO
 CREATE TABLE [dbo].[Organizations] (
 	[organization_uid] [int] IDENTITY (1, 1) NOT FOR REPLICATION  NOT NULL ,
 	[name] [varchar] (128) COLLATE Latin1_General_BIN NOT NULL ,
-	[approval_authority] [bit] NOT NULL 
+	[approval_authority] [bit] NOT NULL ,
+	[tax_id] [int] NOT NULL 
 ) ON [PRIMARY]
 GO
 
