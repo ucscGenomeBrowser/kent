@@ -406,10 +406,7 @@ printf("</FORM>\n");
 
 // auto-refresh page
 if (userEmail != NULL)
-    {
     edwWebAutoRefresh(5000);
-    edwWebAutoRefreshProtectInput();
-    }
 }
 
 int main(int argc, char *argv[])
