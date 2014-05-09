@@ -4712,9 +4712,17 @@ for each cell associated with the particular TF binding location.</P>
     related that it makes sense to view it as a single track.  The
     premiere example of this is the signal overlay
     track (i.e. "<code>multiWig</code>").  Signal overlay tracks display the signal
-    data from several subtracks as colored transparencies, making it
+    data from several subtracks combined in several different ways, making it
     possible to see the data of several tracks together in a condensed
-    view.  The value of the overlay track surpasses simply condensing the
+    view. The default overlay method for multiWigs is as colored transparencies,
+    in which all the graphs are drawn on top of one other in such a way
+    that overlapping regions are a different color. Another choice
+    is solid overlay, where all the graphs are still drawn overlapping each
+    other, but without transparency.  A third choice is stacked
+    where the values of the subtracks are stacked on top of one another with
+    no overlap such that the total height of the wiggle is the sum of 
+    all the values in the subtracks.
+    The value of the overlay track surpasses simply condensing the
     image.  Occasionally this is the most effective way to identify
     hidden relationships in the underlying data.  The overlay track
     should not be overused, however.  Attempts to overlay too many
@@ -4752,12 +4760,13 @@ for each cell associated with the particular TF binding location.</P>
 </DIV>
 
 <DIV class="aggregate"><span class="types container multiWig"></span>
-<div class="format"><code>aggregate &lt;transparentOverly/solidOverlay/none&gt;</code></div>
+<div class="format"><code>aggregate &lt;transparentOverlay/stacked/solidOverlay/none&gt;</code></div>
     <P>It is important to declare an aggregation method; otherwise, this set of tracks displays 
-    as a composite would, with additional restrictions. Of the three options, the preferred 
-    setting is <code>transparentOverlay</code>.  The setting <code>solidOverlay</code> should
-    not be used if there
-    are more than a couple of tracks, and "<code>none</code>" should never be the
+    as a composite would, with additional restrictions. Of the four options, the preferred 
+    setting is <code>transparentOverlay</code>. The setting <code>stacked</code>
+    will draw the graphs in stacked mode.
+    The setting <code>solidOverlay</code> should not be used if there
+    are more than a couple of tracks, and <code>none</code> should never be the
     default.  The aggregation method is a configurable option,
     however, so the user may wish to temporarily set it to none in
     order to see subtleties hidden in overlay mode.</P>

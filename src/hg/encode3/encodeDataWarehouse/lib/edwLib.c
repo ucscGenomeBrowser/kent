@@ -743,7 +743,7 @@ char *edwSimpleAssemblyName(char *assembly)
 {
 /* If it ends with one of our common assembly suffix, then do enrichment calcs
  * in that space, rather than some subspace such as male, female, etc. */
-static char *specialAsm[] = {".hg19",".hg38",".mm9",".mm10"};
+static char *specialAsm[] = {".hg19",".hg38",".mm9",".mm10",".dm3",".ce10"};
 int i;
 for (i=0; i<ArraySize(specialAsm); ++i)
     {
@@ -1635,22 +1635,19 @@ void edwWebAutoRefresh(int msec)
 /* Refresh page after msec.  Use 0 to cancel autorefresh */
 {
 if (msec > 0)
-    printf("<script>var edwRefresh = setTimeout(function() { $('form').submit(); }, %d);</script>",
-            msec);
+    {
+    // set timeout to refresh page (saving/restoring scroll position via cookie)
+    printf("<script>var edwRefresh = setTimeout(function() { $.cookie('edwWeb.scrollTop', $(window).scrollTop()); $('form').submit(); }, %d);</script>", msec);
+    puts("<script>$(document).ready(function() {$(document).scrollTop($.cookie('edwWeb.scrollTop'))});</script>");
+
+    // disable autorefresh when user is changing page settings
+    puts("<script>$('form').click(function() {clearTimeout(edwRefresh); $.cookie('edwWeb.scrollTop', null);});</script>");
+    }
 else if (msec == 0)
-    puts("<script>clearTimeout(edwRefresh);</script>");
+    puts("clearTimeout(edwRefresh);</script>");
 
 // Negative msec ignored
 }
-
-
-void edwWebAutoRefreshProtectInput()
-/* Cancel autorefresh when input widgets are clicked.  Use on pages with user input 
-   widgets having state beyond a button press */
-{
-puts("<script>$('form').click(function() {clearTimeout(edwRefresh);});</script>");
-}
-
 
 /***/
 /* Navigation bar */
