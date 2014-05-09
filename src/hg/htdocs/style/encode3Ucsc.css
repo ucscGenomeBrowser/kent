@@ -3,6 +3,7 @@
 /* override fixed width input box */
 input {
     width: auto;
+    vertical-align: text-bottom;
 }
 
 /* override character code for external link icon, 'fa-external-link'
