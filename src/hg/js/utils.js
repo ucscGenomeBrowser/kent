@@ -247,6 +247,32 @@ function aryRemove(ary,vals)
     return ary;
 }
 
+function arysToObj(names,values)
+{   // Make hash type obj with two parallel arrays.
+    var obj = {};
+    for(var ix=0; ix<names.length; ix++) {
+        obj[names[ix]] = values[ix]; 
+    }
+    return obj;
+}
+
+function objNotEmpty(obj)
+{   // returns true on non empty object.
+    return ($.isEmptyObject(obj) === false);
+}
+
+function objKeyCount(obj)
+{   // returns number of keys in object.
+    if (!Object.keys) {
+        var count = 0;
+        for (var key in obj) {
+            count++;
+        }
+        return count;
+    } else
+        return Object.keys(obj).length;
+}
+
 function isInteger(s)
 {
     return (!isNaN(parseInt(s)) && isFinite(s) && s.toString().indexOf('.') < 0);
