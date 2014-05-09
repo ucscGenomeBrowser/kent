@@ -121,6 +121,38 @@ color 0,0,0
 altColor 90,90,90
 exonArrows off
 
+track traceClone
+shortLabel Clone Ends
+longLabel NCBI Trace Clones
+group map
+visibility hide
+type bed 6 +
+color 0,0,0
+altColor 80,80,80
+trackHandler bacEndPairs
+lfPslTable traceEnd
+exonArrows off
+
+searchTable traceClone
+searchType bed
+searchPriority 100
+
+track traceCloneBad
+shortLabel Clone Ends Flagged
+longLabel Flagged NCBI Trace Clones (too long/short or orphan end)
+group map
+visibility hide
+type bed 6 +
+color 0,0,0
+altColor 80,80,80
+trackHandler bacEndPairsBad
+lfPslTable traceEndBad
+exonArrows off
+
+searchTable traceCloneBad
+searchType bed
+searchPriority 100
+
 track fosEndPairs
 shortLabel Fosmid End Pairs
 longLabel Fosmid End Pairs

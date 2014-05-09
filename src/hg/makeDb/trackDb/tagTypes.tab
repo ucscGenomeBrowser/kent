@@ -201,6 +201,7 @@ itemDetailsHtmlTable genePred psl bed
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
 itemRgb bedDetail bedGraph bed bedLogR bigBed
+lfPslTable bed
 linesAt chromGraph
 longLabel *
 longlabel genePred
@@ -370,6 +371,7 @@ table *
 tableBrowser *
 tdbType customTracks
 track *
+trackHandler *
 transMapGene psl
 transMapInfo psl
 transMapSrc psl
