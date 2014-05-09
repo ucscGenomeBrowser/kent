@@ -654,6 +654,7 @@ var vis = {
                 $(this).attr('class', 'normalText');
             
             cart.addVarsToQueue([track], [$(this).val()]);
+            imageV2.markAsDirtyPage();
             return false;
         });
         // Now we can rid the submt of the burden of all those vis boxes
