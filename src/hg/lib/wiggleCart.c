@@ -220,14 +220,6 @@ if (defaultViewLimits != NULL)
     }
 else if (missingAbsMin || missingAbsMax)
     {
-    // I would like to make this an errAbort, but too many tracks are afflicted
-    // to do that until hgTrackDb helps to enforce:
-    if (hIsPrivateHost())
-	warn("trackDb %s, and no default view limits are specified for track %s",
-	     (isBedGraph ? MIN_LIMIT " and/or " MAX_LIMIT " is not specified" :
-			   "'type wig' line is missing min and/or max data value"),
-	     tdb->track);
-    // When that becomes an errAbort, remove these defines from wiggle.h:
     if (isBedGraph)
 	{
 	absMin = DEFAULT_MIN_BED_GRAPH;

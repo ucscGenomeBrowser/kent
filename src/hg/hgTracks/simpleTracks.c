@@ -3071,7 +3071,6 @@ static void genericDrawItem(struct track *tg, struct spaceNode *sn,
 /* draw one non-overflow item */
 {
 struct slList *item = sn->val;
-boolean withLabels = (withLeftLabels && (vis == tvPack) && !tg->drawName);
 int s = tg->itemStart(tg, item);
 int e = tg->itemEnd(tg, item);
 int sClp = (s < winStart) ? winStart : s;
@@ -3089,8 +3088,9 @@ if (tg->itemNameColor != NULL)
     }
 int y = yOff + tg->lineHeight * sn->row;
 tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-/* pgSnp tracks may change flags between items */
-withLabels = (withLeftLabels && withIndividualLabels && (vis == tvPack) && !tg->drawName);
+
+/* pgSnpDrawAt may change withIndividualLabels between items */
+boolean withLabels = (withLeftLabels && withIndividualLabels && (vis == tvPack) && !tg->drawName);
 if (withLabels)
     {
     char *name = tg->itemName(tg, item);
@@ -9708,6 +9708,15 @@ mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
 freeDyString(&ds);
 }
 
+void pgSnpLeftLabels(struct track *tg, int seqStart, int seqEnd,
+		     struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+		     boolean withCenterLabels, MgFont *font, Color color,
+		     enum trackVisibility vis)
+/* pgSnp draws its own left labels when it draws the item; this is a placeholder so the
+ * default full-mode left labels aren't drawn too. */
+{
+}
+
 void pgSnpMethods (struct track *tg)
 /* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
  * (if available) allele counts in mouseover. */
@@ -9721,6 +9730,7 @@ tg->drawItemAt = pgSnpDrawAt;
 tg->mapItem = pgSnpMapItem;
 tg->nextItemButtonable = TRUE;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->drawLeftLabels = pgSnpLeftLabels;
 }
 
 void loadBlatz(struct track *tg)
