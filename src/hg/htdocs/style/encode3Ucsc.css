@@ -3,6 +3,10 @@
 /* override fixed width input box and set alignment */
 input {
     width: auto;
+}
+
+/* align input boxes with buttons */
+.input-row input[type="submit"] {
     vertical-align: text-bottom;
 }
 

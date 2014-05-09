@@ -261,7 +261,7 @@ if (edwUserIsAdmin(conn, userEmail))
     printf("</div>");
     }
 
-puts("<div>");
+puts("<div class='input-row'>");
 puts("Maximum number of submissions to view: ");
 int maxSubCount = cgiOptionalInt("maxSubCount", 3);
 if (maxSubCount == 0)
