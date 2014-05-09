@@ -466,7 +466,7 @@ if (lf->codons == NULL)
 	if ((Levels[ii].init) && (Levels[ii].hasBlock))
 	    count++;
 	}
-    maxLevel = count - 1;
+    maxLevel = count;
 
     // remap blocks
     for(sf=(struct snakeFeature *)lf->components; sf; sf = sf->next)

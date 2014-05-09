@@ -95,20 +95,21 @@ this new tool in the <A HREF="#GbibMirroring">Improving the Speed By Mirroring T
 <h1>Getting Started: Setting up the Genome Browser in a Box</h1>
 <div class="sectionContent">
 <P>
-The Genome Browser in a Box (GBiB) will run on most modern PCs and major operationg systems.
+The Genome Browser in a Box (GBiB) will run on most modern PCs and major operating systems.
 There are some basic requirements that your PC should meet to provide the best experience
 when using the GBiB:
 <ul>
         <li>A computer with support for virtualization, which is the case for most PCs sold after 2010.</li>
-        <li><A HREF="https://www.virtualbox.org/">VirtualBox Software</A> (available free in many situations
-	    - see their <A HREF=https://www.virtualbox.org/wiki/Licensing_FAQ>licensing terms and conditions</A>
-	    for details.)</li>
+        <li><A HREF="https://www.virtualbox.org/" TARGET="_BLANK">VirtualBox Software</A></li>
             <ul>
+	    <li>The software is free to use in many situations. See their
+		<A HREF="https://www.virtualbox.org/wiki/Licensing_FAQ"
+		TARGET="_BLANK">licensing terms and conditions</A> for details.</li>
             <li>Install it by following the instructions on the website.</li>
             <li>You must have administrator rights for your computer to install the VirtualBox software.</li>
             <li>We have tested and confirmed that the GBiB works using versions 4.3.6 through 4.3.8.</li>
             </ul>
-        <li>Around 15 GB space on your hard disk (or more if you plan to mirror many tracks).</li>
+        <li>At least 15 GB of free space on your hard disk (or more if you plan to mirror many tracks).</li>
         <li>Your network firewall must allow connections on the following ports:</li>
 		<ul>
 		<li>Port 3306 is used by MySQL. Without this, only mirrored tracks are shown.</li>
@@ -119,7 +120,7 @@ when using the GBiB:
 <P><B>Installation</B></P>
 <P>
 Once you have confirmed that your PC meets the above requirements, download the
-<a href="http://hgdownload.cse.ucsc.edu/gbib/gbib.zip">Genome Browser in a Box ZIP
+<a href="http://hgdownload.cse.ucsc.edu/gbib/gbib.zip" TARGET="_BLANK">Genome Browser in a Box ZIP
 file</a> (~5 GB). This download may take anywhere from 30 minutes to a few hours depending on your
 Internet speed and distance from UCSC. Once you have finished downloading the GBiB ZIP file, unzip
 and extract the three files in it. These files can be moved to a different directory, as long as
@@ -155,7 +156,7 @@ If there are error messages displayed by VirtualBox or the Genome Browser, pleas
 <P>
 Make sure that you have set up your Genome Browser in a Box (GBiB) according to the instructions
 in the "<A HREF="#GetStarted">Getting Started</A>" section. Once you have your GBiB set up and powered
-on, point your Internet browser to <a href="http://127.0.0.1:1234">127.0.0.1:1234</a> (we suggest
+on, point your Internet browser to <a href="http://127.0.0.1:1234" TARGET="_BLANK">127.0.0.1:1234</a> (we suggest
 bookmarking this address). If you have correctly set up your GBiB, you should see the normal UCSC
 homepage. Once on the UCSC homepage, you can start using the GBiB as you would the main Genome Browser
 website. You can find an introduction to using the UCSC Genome Browser on our
@@ -177,10 +178,12 @@ browser configuration may not be saved between sessions.
 <P>
 As a first measure, you can try to increase the amount of RAM that Genome
 Browser in a Box is allowed to use. By default it is limited to 1GB but if your machine
-has enough RAM installed, you might want to increase it to 2GB, 4GB or even 8GB. Stop the box, 
-click "Settings - System" and increase the memory slider to a value of your choice. This will 
-usually make the system more responsive.<p>
+has enough RAM installed, you might want to increase it to 2GB, 4GB or even 8GB. Stop the box,
+click <i>Settings &gt;&gt; System</i> and increase the memory slider to a value of your choice. This will
+usually make the system more responsive.
+</P>
 
+<P>
 If your Genome Browser in a Box (GBiB) is still slow, then you are probably located too far away
 from UCSC.
 The load time of the default tracks ranges from a few seconds on the West coast of the United States
