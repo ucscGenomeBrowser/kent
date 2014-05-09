@@ -472,13 +472,13 @@ var cart = {
     
     updatesWaiting: function ()
     {   // returns TRUE if updates are waiting.
-        return (Object.keys(cart.updateQueue).length !== 0);
+        return objNotEmpty(cart.updateQueue);
     },
     
     addUpdatesToUrl: function (url)
     {   // adds any outstanding cart updates to the url, then clears the queue
         if (cart.updatesWaiting()) {
-            //console.log('cart.addUpdatesToUrl: '+Object.keys(cart.updateQueue).length+' vars');
+            //console.log('cart.addUpdatesToUrl: '+objKeyCount(cart.updateQueue)+' vars');
             var updates = cart.varsToUrlData(); // clears the queue
             if (typeof url === 'undefined' || url.length === 0)
                 return updates;
@@ -497,7 +497,7 @@ var cart = {
     beforeUnload: function ()
     {   // named function that can be bound and unbound to beforeunload event
         // Makes sure any outstanding queued updates are sent before leaving the page.
-        //console.log('cart.beforeUnload: '+Object.keys(cart.updateQueue).length+' vars');
+        //console.log('cart.beforeUnload: '+objKeyCount(cart.updateQueue)+' vars');
         cart.setVarsObj( {}, null, false ); // synchronous
     },
     
@@ -509,7 +509,7 @@ var cart = {
         // Now convert to url data and clear queue
         var urlData = '';
         if (cart.updatesWaiting()) {
-            //console.log('cart.varsToUrlData: '+Object.keys(cart.updateQueue).length+' vars');
+            //console.log('cart.varsToUrlData: '+objKeyCount(cart.updateQueue)+' vars');
             urlData = varHashToQueryString(cart.updateQueue);
             cart.updateQueue = {};
         }
@@ -518,8 +518,8 @@ var cart = {
     
     setVarsObj: function (varsObj, errFunc, async)
     {   // Set all vars in a var hash, appending any queued updates
-        //console.log('cart.setVarsObj: were:'+Object.keys(cart.updateQueue).length + 
-        //            ' new:'+Object.keys(varsObj).length);
+        //console.log('cart.setVarsObj: were:'+objKeyCount(cart.updateQueue) + 
+        //            ' new:'+objKeyCount(varsObj);
         cart.queueVarsObj(varsObj); // lay ontop of queue, to give new values precedence
         
         // Now ajax update all in queue and clear queue
@@ -529,32 +529,23 @@ var cart = {
         }
     },
     
-    arysToObj: function (names,values)
-    {   // Make hash type obj with two parallel arrays. (should be moved to utils.js).
-        var obj = {};
-        for(var ix=0; ix<names.length; ix++) {
-            obj[names[ix]] = values[ix]; 
-        }
-        return obj;
-    },
-    
     setVars: function (names, values, errFunc, async)
     {   // ajax updates the cart, and includes any queued updates.
-        cart.setVarsObj(cart.arysToObj(names, values), errFunc, async);
+        cart.setVarsObj(arysToObj(names, values), errFunc, async);
     },
 
     queueVarsObj: function (varsObj)
     {   // Add object worth of cart updates to the 'to be updated' queue, so they can be sent to
         // the server later. Note: hash allows overwriting previous updates to the same variable.
-        if (typeof varsObj !== 'undefined' && Object.keys(varsObj).length !== 0) {
-            //console.log('cart.queueVarsObj: were:'+Object.keys(cart.updateQueue).length + 
-            //            ' new:'+Object.keys(varsObj).length);
+        if (typeof varsObj !== 'undefined' && objNotEmpty(varsObj)) {
+            //console.log('cart.queueVarsObj: were:'+objKeyCount(cart.updateQueue) + 
+            //            ' new:'+objKeyCount(varsObj));
             for (var name in varsObj) {
                 cart.updateQueue[name] = varsObj[name];
                 
                 // NOTE: could update in background, however, failing to hit "refresh" is a user choice
                 // first in queue, schedule background update
-                if (Object.keys(cart.updateQueue).length === 1) {
+                if (objKeyCount(cart.updateQueue) === 1) {
                     // By unbind/bind, we assure that there is only one instance bound
                     $(window).unbind('beforeunload', cart.beforeUnload); 
                     $(window).bind(  'beforeunload', cart.beforeUnload); 
@@ -565,7 +556,7 @@ var cart = {
     
     addVarsToQueue: function (names,values)
     {   // creates a string of updates to save for ajax batch or a submit
-        cart.queueVarsObj(cart.arysToObj(names,values));
+        cart.queueVarsObj(arysToObj(names,values));
     },
     
 }
@@ -654,6 +645,7 @@ var vis = {
                 $(this).attr('class', 'normalText');
             
             cart.addVarsToQueue([track], [$(this).val()]);
+            imageV2.markAsDirtyPage();
             return false;
         });
         // Now we can rid the submt of the burden of all those vis boxes
@@ -1210,7 +1202,7 @@ var dragReorder = {
                 varsToUpdate[name] = $(this).attr('abbr');
             }
         });
-        if (Object.keys(varsToUpdate).length !== 0) {
+        if (objNotEmpty(varsToUpdate)) {
             cart.setVarsObj(varsToUpdate);
             imageV2.markAsDirtyPage();
         }
@@ -2205,7 +2197,7 @@ var rightClick = {
                     varsToUpdate[rowId+'_sel'] = 0;
                     $(rows[ix]).remove();
                 }
-                if (Object.keys(varsToUpdate).length !== 0) {
+                if (objNotEmpty(varsToUpdate)) {
                     cart.setVarsObj(varsToUpdate);
                 }
                 imageV2.afterImgChange(true);
@@ -2707,13 +2699,13 @@ var popUp = {
         var newVis = changedVars[trackName];
         var hide = (newVis != null && (newVis == 'hide' || newVis == '[]'));  // subtracks do not have "hide", thus '[]'
         if($('#imgTbl') == undefined) { // On findTracks or config page
-            if (Object.keys(changedVars).length !== 0)
+            if (objNotEmpty(changedVars))
                 cart.setVarsObj(changedVars);
             //if(hide) // TODO: When findTracks or config page has cfg popup, then vis change needs to be handled in page here
         }
         else {  // On image page
             if(hide) {
-                if (Object.keys(changedVars).length !== 0)
+                if (objNotEmpty(changedVars))
                     cart.setVarsObj(changedVars);
                 $(document.getElementById('tr_' + trackName)).remove();
                 imageV2.afterImgChange(true);
@@ -2722,7 +2714,7 @@ var popUp = {
                 if(newVis != null) {
                     vis.update(trackName, newVis);
                 }
-                if (Object.keys(changedVars).length !== 0) {
+                if (objNotEmpty(changedVars)) {
                     var urlData = cart.varsToUrlData(changedVars);
                     if(imageV2.mapIsUpdateable) {
                         imageV2.requestImgUpdate(trackName,urlData,"");
