@@ -252,23 +252,25 @@ return curUser;
 void showRecentFiles(struct sqlConnection *conn)
 /* Show users files grouped by submission sorted with most recent first. */
 {
-printf("<div>");
-printf("Select whose files to browse: ");
-char *user = printUserControl(conn, "selectUser", userEmail);
-printf("</div>");
+char *user = userEmail;
+if (edwUserIsAdmin(conn, userEmail))
+    {
+    printf("<div>");
+    printf("Select whose files to browse: ");
+    user = printUserControl(conn, "selectUser", userEmail);
+    printf("</div>");
+    }
 
-printf("<div>");
-printf(" Maximum number of submissions to view: ");
+puts("<div class='input-row'>");
+puts("Maximum number of submissions to view: ");
 int maxSubCount = cgiOptionalInt("maxSubCount", 3);
 if (maxSubCount == 0)
      maxSubCount = 2;
 // override stanford fixed width input widget styling
 cgiMakeIntVar("maxSubCount", maxSubCount, 3);
-printf("</div>");
-
-printf("<div>");
+puts("&nbsp;");
 cgiMakeButton("Submit", "update view");
-printf("</div>");
+puts("</div>");
 
 /* Get id for user. */
 char query[1024];
@@ -405,7 +407,7 @@ if (userEmail != NULL)
 printf("</FORM>\n");
 
 // auto-refresh page
-if (userEmail != NULL)
+if (userEmail != NULL && !cgiOptionalString("noRefresh"))
     edwWebAutoRefresh(5000);
 }
 
