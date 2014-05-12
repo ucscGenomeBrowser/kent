@@ -12,10 +12,10 @@ ifeq (${CGI_BIN_BETA},)
 endif
 
 my::
-	rm -f ${CGI_BIN}/hgMirror
+	rm -f ${CGI_BIN_USER}/hgMirror
 	cp -p hgMirror ${CGI_BIN}/
 beta::
-	rm -f ${CGI_BIN}/hgMirror
+	rm -f ${CGI_BIN_BETA}/hgMirror
 	cp -p hgMirror ${CGI_BIN}/
 alpha::
 	rm -f ${CGI_BIN}/hgMirror
