@@ -1,9 +1,24 @@
 /* Customizations (on top of Stanford CSS) for use in UCSC ENCODE3 web cgis (edwWeb*) */
 
-/* override fixed width input box */
+/* override fixed width input box and set alignment */
 input {
     width: auto;
+}
+
+/* align input boxes with buttons */
+.input-row input[type="submit"] {
     vertical-align: text-bottom;
+}
+
+/* avoid using background image of dna */
+
+body {
+    background: #e8ecef;
+}
+
+/* avoid using background image */
+.navbar-inverse .navbar-inner {
+  background: #0a253d;
 }
 
 /* override character code for external link icon, 'fa-external-link'

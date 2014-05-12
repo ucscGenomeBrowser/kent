@@ -249,26 +249,38 @@ freez(&userArray);
 return curUser;
 }
 
+
 void showRecentFiles(struct sqlConnection *conn)
 /* Show users files grouped by submission sorted with most recent first. */
 {
-printf("<div>");
-printf("Select whose files to browse: ");
-char *user = printUserControl(conn, "selectUser", userEmail);
-printf("</div>");
+char *user = userEmail;
+if (edwUserIsAdmin(conn, userEmail))
+    {
+    printf("<div>");
+    printf("Select whose files to browse: ");
+    user = printUserControl(conn, "selectUser", userEmail);
+    printf("</div>");
+    }
 
-printf("<div>");
-printf(" Maximum number of submissions to view: ");
-int maxSubCount = cgiOptionalInt("maxSubCount", 3);
+puts("<div class='input-row'>");
+
+puts("Maximum number of submissions to view: ");
+
+/* Get user choice from CGI var or cookie */
+int maxSubCount = 0;
+if (!cgiVarExists("maxSubCount"))
+    {
+    char *subs = findCookieData("edwWeb.maxSubCount");
+    if (subs)
+        maxSubCount = atoi(subs);
+    }
 if (maxSubCount == 0)
-     maxSubCount = 2;
-// override stanford fixed width input widget styling
+    maxSubCount = cgiOptionalInt("maxSubCount", 3);
 cgiMakeIntVar("maxSubCount", maxSubCount, 3);
-printf("</div>");
 
-printf("<div>");
+puts("&nbsp;");
 cgiMakeButton("Submit", "update view");
-printf("</div>");
+puts("</div>");
 
 /* Get id for user. */
 char query[1024];
@@ -405,7 +417,7 @@ if (userEmail != NULL)
 printf("</FORM>\n");
 
 // auto-refresh page
-if (userEmail != NULL)
+if (userEmail != NULL && !cgiOptionalString("noRefresh"))
     edwWebAutoRefresh(5000);
 }
 
@@ -415,6 +427,8 @@ int main(int argc, char *argv[])
 boolean isFromWeb = cgiIsOnWeb();
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
+if (cgiVarExists("maxSubCount"))
+    htmlSetCookie("edwWeb.maxSubCount", cgiString("maxSubCount"), NULL, NULL, NULL, FALSE);
 edwWebHeaderWithPersona("");
 // TODO: find a better place for menu update
 edwWebBrowseMenuItem(FALSE);
