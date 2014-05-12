@@ -21,7 +21,7 @@ while those for coding open reading frames are thicker. The following color key 
 <li><span style="font-weight: bold;">Black</span> -- feature has a corresponding entry in the Protein
  Data Bank (PDB)</li>
 <li><span style="color: #0C0C78; font-weight: bold;">Dark blue</span> -- transcript has been reviewed
- or validated by either the RefSeq, SwissProt or CCDS staff</li>
+ or validated by either the RefSeq or SwissProt staff</li>
 <li><span style="color: #5050A0; font-weight: bold;">Medium blue</span> -- other RefSeq transcripts</li>
 <li><span style="color: #8282D2; font-weight: bold;">Light blue</span> -- non-RefSeq transcripts</li>
 </ul>
@@ -42,8 +42,8 @@ progressively relaxed for longer sequences.</LI>
 <LI>Alignments are broken up at non-intronic gaps, with small isolated fragments thrown out.</LI>
 <LI>A splicing graph is created for each set of overlapping alignments. This graph has an edge
 for each exon or intron, and a vertex for each splice site, start, and end. Each RNA that
-contributes to an edge is kept as evidence for that edge. Gene models from the Consensus CDS project
-(CCDS) are also added to the graph.</LI>
+contributes to an edge is kept as evidence for that edge. 
+</LI>
 <LI>A similar splicing graph is created in the mouse, based on mouse RNA and ESTs. If the mouse
 graph has an edge that is orthologous to an edge in the human graph, that is added to the evidence
 for the human edge.</LI>
@@ -64,7 +64,7 @@ The program weighs as positive evidence the length of the protein, the presence 
 sequence at the start codon, and the length of the orthologous predicted protein in other species.
 As negative evidence it considers nonsense-mediated decay and start codons in any frame upstream of
 the predicted start codon. For RefSeq transcripts the RefSeq protein prediction is used directly
-instead of this procedure.  For CCDS proteins the CCDS protein is used directly.</LI>
+instead of this procedure.  
 <LI>The corresponding UniProt protein is found, if any.</LI>
 <LI>The transcript is assigned a permanent &quot;uc&quot; accession. If the transcript was not in
 the previous release of UCSC Genes, the accession ends with the suffix &quot;.1&quot; indicating
@@ -120,8 +120,7 @@ The UCSC Genes track was produced at UCSC using a computational pipeline develop
 Chuck Sugnet, Melissa Cline and Mark Diekhans. It is based on data from NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/RefSeq/" TARGET=_blank>RefSeq</A>,
 <A HREF="http://www.uniprot.org/" TARGET=_blank>UniProt</A> 
-(including TrEMBL and TrEMBL-NEW), 
-<A HREF="http://www.ncbi.nlm.nih.gov/CCDS/" TARGET=_blank>CCDS</A>, and
+(including TrEMBL and TrEMBL-NEW), and 
 <A HREF="http://www.ncbi.nlm.nih.gov/Genbank/index.html"
 TARGET=_blank>GenBank</A> as well as data from 
 <A HREF="http://rfam.sanger.ac.uk/">Rfam</A> and
