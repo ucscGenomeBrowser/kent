@@ -207,7 +207,7 @@ function setCartVar(name, value, errFunc, async)
     setCartVars( [ name ], [ value ], errFunc, async );
 }
 
-function setVarsFromHash(varHash)
+function setVarsFromHash(varHash, errFunc, async)
 {
 // Set all vars in a var hash
 // If obj is undefined then obj is document!
@@ -218,7 +218,7 @@ function setVarsFromHash(varHash)
         values.push(varHash[aVar]);
     }
     if(names.length > 0) {
-        setCartVars(names,values);
+        setCartVars(names,values, errFunc, async);
     }
 }
 

@@ -30,7 +30,7 @@ TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
 	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross \
             mouseStuff mrnaToGene pslCDnaFilter pslDiff pslHisto \
             pslPartition pslSelect pslStats pslSwap pslToBed spideyToPsl \
-	    sqlToXml xmlToSql utils protein
+	    sqlToXml xmlToSql utils
 
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
 

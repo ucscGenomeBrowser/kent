@@ -1552,17 +1552,16 @@ hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
-# old number of unique query values: 43103
-# old number of unique target values 22704
-# new number of unique query values: 34612
-# new number of unique target values 19733
+# old number of unique query values: 43110
+# old number of unique target values 22769
+# new number of unique query values: 35140
+# new number of unique target values 20138
 
 synBlastp.csh $ratDb $db rgdGene2 knownGene
-# old number of unique query values: 11206
-# old number of unique target values 10796
-# new number of unique query values: 6741
-# new number of unique target values 6925
-
+#old number of unique query values: 11205
+#old number of unique target values 10791
+#new number of unique query values: 7854
+#new number of unique target values 7935
 
 # need to generate multiz downloads
 #/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownCanonical.exonAA.fa.gz

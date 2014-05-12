@@ -10,7 +10,10 @@ type narrowPeak
 visibility dense
 group regulation
 priority 3.6
-minGrayLevel 4
+minGrayLevel 3
+spectrum on
+scoreMax 1000
+scoreMin 100
 wgEncode 1
 
 
@@ -24,3 +27,4 @@ type bigBed 3
 color 150,150,50
 priority 3.7
 wgEncode 1
+spectrum on
