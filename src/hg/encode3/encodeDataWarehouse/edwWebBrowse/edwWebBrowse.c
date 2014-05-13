@@ -372,7 +372,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
 	"from edwFile e,edwQaPairSampleOverlap p, edwFile y,edwValidFile ev,edwValidFile yv \n"
         "where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId=e.id and yv.fileId=y.id\n"
         "      and y.submitId = %u \n"
-        "      order by ev.experiment,'output type',format,repA,repB\n"
+        "      order by ev.experiment,'output type',format,repA,repB,idA,idB\n"
 	, submit->id);
     queryIntoTable(conn, query, "Cross-enrichment between replicates in target areas", experimentWrap);
 
@@ -383,7 +383,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
 	"from edwFile e,edwQaPairCorrelation p, edwFile y,edwValidFile ev,edwValidFile yv \n"
         "where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId=e.id and yv.fileId=y.id\n"
         "      and y.submitId = %u \n"
-        "      order by ev.experiment,'output type',format,repA,repB\n"
+        "      order by ev.experiment,'output type',format,repA,repB,idA,idB\n"
 	, submit->id);
     queryIntoTable(conn, query, "Correlation between replicates in target areas", experimentWrap);
     }
