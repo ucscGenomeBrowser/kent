@@ -1,3 +1,5 @@
+/* jshint */
+
 // hover effect to highlight table rows
 $(function() {
     $(".hubList tr").hover(
@@ -6,7 +8,7 @@ $(function() {
         $(this).addClass("hoverRow");
     }, function() {
         $(this).removeClass("hoverRow");
-    })
+    });
 });
 
 
@@ -29,5 +31,5 @@ $(document).ready(function() {
             e.preventDefault(); // prevents return from also submitting whole form
             if (validateUrl($('#hubUrl').val())) $('input[name="hubAddButton"]').focus().click(); // clicks the AddHub button
         }
-    })
+    });
 });
