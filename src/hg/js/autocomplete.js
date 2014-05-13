@@ -6,14 +6,16 @@
    Requires three elements on page: positionDisplay (static display), positionInput (input textbox) and position (hidden).
 */
 
+/* jshint */
+
 var suggestBox = {
     ajaxGet: function ajaxGet(db) {
         // Returns autocomplete source function
         // db is the relevant assembly (e.g. "hg18")
-        var cache = new Object; // cache is is used as a hash to cache responses from the server.
+        var cache = {}; // cache is is used as a hash to cache responses from the server.
         return function(request, callback) {
             var key = request.term;
-            if (cache[key] == null) {
+            if (!cache[key]) {
                 $.ajax({
                     url: "../cgi-bin/hgSuggest",
                     data: "db=" + db + "&prefix=" + encodeURIComponent(key),
@@ -22,7 +24,7 @@ var suggestBox = {
                         // We get a lot of duplicate requests (especially the first letters of words),
                         // so we keep a cache of the suggestions lists we've retreived.
                         cache[this.key] = response;
-                        this.cont(eval(response));
+                        this.cont(JSON.parse(response));
                     },
                     success: catchErrorOrDispatch,
                     error: function(request, status, errorThrown) {
@@ -33,10 +35,10 @@ var suggestBox = {
                     cont: callback
                 });
             } else {
-                callback(eval(cache[key]));
+                callback(JSON.parse(cache[key]));
             }
             // warn(request.term);
-        }
+        };
     },
 
     clearFindMatches: function() {
@@ -103,7 +105,7 @@ var suggestBox = {
                 // This handles case where user typed or edited something rather than choosing from a suggest list;
                 // in this case, we only change the position hidden; we do NOT update the displayed coordinates.
                 var val = $('#positionInput').val();
-                if (!val || val.length == 0 || val == waterMark)
+                if (!val || val.length === 0 || val === waterMark)
                 // handles case where users zeroes out positionInput; in that case we revert to currently displayed position
                 val = $('#positionDisplay').text();
                 $('#position').val(val);
@@ -117,4 +119,4 @@ var suggestBox = {
             suggestBox.clearFindMatches();
         });
     }
-}
+};
