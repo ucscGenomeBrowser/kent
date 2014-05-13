@@ -85,9 +85,9 @@ $(function () {
         // work-around for some supplementary files being accessioned as experiments (5C)
         // they show up in both reference genome and cell assay lists incorrectly
         // remove them from refGenome list of they are in cellAssayExps
-        for (dataType in refGenomeExps) {
-            if (cellAssayExps[dataType] !== undefined) {
-                delete refGenomeExps[dataType];
+        for (var dType in refGenomeExps) {
+            if (cellAssayExps[dType] !== undefined) {
+                delete refGenomeExps[dType];
             }
         }
         // fill in tables and activate buttons
