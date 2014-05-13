@@ -1,7 +1,7 @@
 <H2>Description</H2>
 <P>
 The UCSC Genes track is a set of gene predictions based on data from RefSeq, GenBank, CCDS,
-Rfam, and the <a href="hgTrackUi?db=hg19&g=tRNAs">tRNA Genes</a> track. The track
+Rfam, and the <a href="hgTrackUi?db=hg38&g=tRNAs">tRNA Genes</a> track. The track
 includes both protein-coding genes and
 non-coding RNA genes. Both types of genes can produce non-coding transcripts, but non-coding
 RNA genes do not produce protein-coding transcripts. This is a moderately conservative set of
@@ -56,9 +56,9 @@ initial RNAs to avoid a combinatorial explosion in alternative splicing. All Ref
 output. For other multi-exon transcripts to be output, an edge supported by at least one additional
 line of evidence beyond the RNA is required.  Single-exon genes require either two RNAs or two 
 additional lines of evidence beyond the single RNA.</LI>
-<LI>Alignments are merged in from the hg19
-<A HREF="hgTrackUi?db=hg19&g=tRNAs">tRNA Genes</A> track and from Rfam
-in regions that are syntenic with the mm9 mouse genome.</LI> 
+<LI>Alignments are merged in from the hg38
+<A HREF="hgTrackUi?db=hg38&g=tRNAs">tRNA Genes</A> track and from Rfam
+in regions that are syntenic with the mm10 mouse genome.</LI> 
 <LI>Protein predictions are generated. For non-RefSeq transcripts we use the txCdsPredict program to
 determine if the transcript is protein-coding, and if so, the locations of the start and stop codons. 
 The program weighs as positive evidence the length of the protein, the presence of a Kozak consensus
@@ -80,7 +80,7 @@ incremented.</LI>
 <H2>Related Data</H2>
 <P>
 The UCSC Genes transcripts are annotated in numerous tables, each of which is also available as a
-<a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">downloadable file</a>.  These
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg38/database/">downloadable file</a>.  These
 include tables that link UCSC Genes transcripts to external datasets (such as
 <I>knownToLocusLink</I>, which maps UCSC Genes transcripts to Entrez identifiers, previously known
 as Locus Link identifiers), and tables that detail some property of UCSC Genes transcript sequences
@@ -118,15 +118,15 @@ this is the longest isoform.</LI>
 <H2>Credits</H2>
 <P>
 The UCSC Genes track was produced at UCSC using a computational pipeline developed by Jim Kent,
-Chuck Sugnet, Melissa Cline and Mark Diekhans. It is based on data from NCBI
+Chuck Sugnet, Melissa Cline, Brian Raney, and Mark Diekhans. It is based on data from NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/RefSeq/" TARGET=_blank>RefSeq</A>,
 <A HREF="http://www.uniprot.org/" TARGET=_blank>UniProt</A> 
 (including TrEMBL and TrEMBL-NEW), 
 <A HREF="http://www.ncbi.nlm.nih.gov/CCDS/" TARGET=_blank>CCDS</A>, and
 <A HREF="http://www.ncbi.nlm.nih.gov/Genbank/index.html"
 TARGET=_blank>GenBank</A> as well as data from 
-<A HREF="http://rfam.sanger.ac.uk/">Rfam</A> and
-<A HREF="http://lowelab.ucsc.edu/">the Todd Lowe lab</A>.
+<A HREF="http://rfam.sanger.ac.uk/" TARGET=_blank>Rfam</A> and
+<A HREF="http://lowelab.ucsc.edu/" TARGET=_blank>the Todd Lowe lab</A>.
 Our thanks to the people running these databases and to the scientists worldwide who have made
 contributions to them.</P>
 
