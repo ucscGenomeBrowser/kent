@@ -9,7 +9,7 @@ $(document).ready(function() {
 
     // Default the image width to current browser window width (#2633).
     var ele = $('input[name=pix]');
-    if (ele.length && (!ele.val() || ele.val().length == 0)) {
+    if (ele.length && (!ele.val() || ele.val().length === 0)) {
         ele.val(calculateHgTracksWidth());
     }
 
