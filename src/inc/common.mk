@@ -369,3 +369,7 @@ ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
 %.o: %.c
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
 
+# jshint: off unless JSHINT is already in environment
+ifeq (${JSHINT},)
+    JSHINT=/bin/true
+endif

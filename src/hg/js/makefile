@@ -40,6 +40,9 @@ clean:
 
 compile:
 
+jshint:
+	${JSHINT} --exclude-path=jshint.exclude *.js
+
 install:
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
 
