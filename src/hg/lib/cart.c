@@ -446,14 +446,6 @@ hashElFreeList(&helList);
 assert(hashNumEntries(hash) == 0);
 }
 
-INLINE char *getDb(struct cart *cart, struct hash *oldVars)
-/* Quick wrapper around getDbGenomeClade for when we only want db. */
-{
-char *db=NULL, *ignoreOrg, *ignoreClade;
-getDbGenomeClade(cart, &db, &ignoreOrg, &ignoreClade, oldVars);
-return db;
-}
-
 #ifndef GBROWSE
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
