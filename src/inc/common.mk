@@ -371,5 +371,5 @@ ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
 
 # jshint: off unless JSHINT is already in environment
 ifeq (${JSHINT},)
-    JSHINT=/bin/true
+    JSHINT=true
 endif
