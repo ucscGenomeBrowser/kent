@@ -35,6 +35,8 @@ struct trackHub
     char *genomesFile;	/* URL to genome.ra file. Not allocated here. */
 
     char *name;	/* Symbolic name of hub in cart, etc.  From trackHubOpen hubName parameter. */
+
+    char *descriptionUrl;  /* URL to description file */
     };
 
 struct trackHubGenome
