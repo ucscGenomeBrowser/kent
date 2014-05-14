@@ -6,7 +6,7 @@
 #Positions of BAC end pairs for clones
 CREATE TABLE bacEndPairs (
     bin smallint not null,	# Bin number for browser speedup
-    chrom varchar(15) not null,	# Human chromosome
+    chrom varchar(255) not null,	# Human chromosome
     chromStart int unsigned not null,	# Start position of clone in chromosome
     chromEnd int unsigned not null,	# End position of clone in chromosome
     name varchar(100) not null,	# Name of clone
