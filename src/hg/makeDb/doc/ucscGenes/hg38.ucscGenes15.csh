@@ -975,7 +975,11 @@ if ($db =~ hg*) then
     #hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133Plus2 knownGene knownToU133Plus2
     #hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133 knownGene knownToU133
     #hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU95 knownGene knownToU95
-    #knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
+    mkdir hprd
+    cd hprd
+    wget "http://www.hprd.org/edownload/HPRD_FLAT_FILES_041310"
+    tar xvf HPRD_FLAT_FILES_041310.tar.gz
+    knownToHprd $tempDb FLAT_FILES_072010/HPRD_ID_MAPPINGS.txt
     #hgsql $tempDb -e "delete k from knownToHprd k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 endif
 
