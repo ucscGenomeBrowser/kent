@@ -13,10 +13,10 @@ endif
 
 my::
 	rm -f ${CGI_BIN_USER}/hgMirror
-	cp -p hgMirror ${CGI_BIN}/
+	cp -p hgMirror ${CGI_BIN_USER}/
 beta::
 	rm -f ${CGI_BIN_BETA}/hgMirror
-	cp -p hgMirror ${CGI_BIN}/
+	cp -p hgMirror ${CGI_BIN_BETA}/
 alpha::
 	rm -f ${CGI_BIN}/hgMirror
 	cp -p hgMirror ${CGI_BIN}/
