@@ -980,7 +980,7 @@ if ($db =~ hg*) then
     wget "http://www.hprd.org/edownload/HPRD_FLAT_FILES_041310"
     tar xvf HPRD_FLAT_FILES_041310.tar.gz
     knownToHprd $tempDb FLAT_FILES_072010/HPRD_ID_MAPPINGS.txt
-    #hgsql $tempDb -e "delete k from knownToHprd k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
+    hgsql $tempDb -e "delete k from knownToHprd k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 endif
 
 if ($db =~ hg*) then
@@ -1012,13 +1012,11 @@ hgsql $tempDb -e "delete k from knownToVisiGene k, kgXref x where k.name = x.kgI
 
 # Create Human P2P protein-interaction Gene Sorter columns
 if ($db =~ hg*) then
-#TODO
-#hgLoadNetDist $genomes/$db/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
-#    -sqlRemap="select distinct value, name from knownToHprd"
-#hgLoadNetDist $genomes/$db/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2P \
-#    -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
-#hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P \
-#    -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
+hgLoadNetDist $genomes/hg19/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
+    -sqlRemap="select distinct value, name from knownToHprd"
+hgLoadNetDist $genomes/hg19/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2P \
+    -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
+hgLoadNetDist $genomes/hg19/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
 
