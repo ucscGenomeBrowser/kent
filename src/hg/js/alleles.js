@@ -1,7 +1,7 @@
 // JavaScript Especially for the Gene Haplotype Alleles section of hgGene CGI
 
-// Tell jslint and browser to use strict mode for this file:
-"use strict";
+// Don't complain about line break before '||' etc:
+/* jshint -W014 */
 
 // Alleles supports gene haplotype alleles section
 var alleles = (function()
@@ -85,7 +85,7 @@ var alleles = (function()
     {   // The sort table is controlled by utls.js, but this is some allele specific stuff
     
         var thisId = $(obj).attr('id');
-        if (persistSortColId != thisId)
+        if (persistSortColId !== thisId)
             persistSortColId  = thisId;
         else
             persistSortReverse = ( !persistSortReverse );
@@ -101,10 +101,10 @@ var alleles = (function()
     { // When an ajax update occurs, restore the non-ajax settings state
         
         // See if table was sorted previously
-        if (persistSortColId != '') {
+        if (persistSortColId !== '') {
     
             var col = $('table#alleles').find('TH#' + persistSortColId);
-            if (col != undefined && col.length != 0) {
+            if (col && col.length !== 0) {
                 var colIx = Number( $(col).attr('cellIndex') );
                 $(col).click();
                 if (persistSortReverse) {// click twice if reverse order!
@@ -119,7 +119,7 @@ var alleles = (function()
         $('table#alleles').find('TH').click(function (e) { afterSort(this); });
         
         // Persist on lighlite as red
-        if (hiliteId != '')
+        if (hiliteId !== '')
             hiliteSpecial( hiliteId );
     }
 
@@ -130,7 +130,7 @@ var alleles = (function()
     
         // Is there a title?
         var theTitle = obj.title;
-        if (theTitle == undefined || theTitle.length === 0)
+        if (!theTitle || theTitle.length === 0)
             return;
 
         var varId = $( obj ).attr('id');
@@ -153,19 +153,19 @@ var alleles = (function()
     
         // make sure it doesn't already exist!
         var hId = hiliteTag(xPx,widthPx);
-        if (hilites.indexOf(hId) != -1)
+        if (hilites.indexOf(hId) !== -1)
             return hId;
         
         var tbl = $('table#alleles');
         var tripleView = ($(tbl).find('TD.dnaToo').length > 0);
         
-        if (yPx == undefined) {
+        if (yPx === undefined || yPx === null) {  // number could be 0 so be explicit
             if (tripleView)
                 yPx = $(tbl).position().top + 2;  // span whole height of table
             else
                 yPx = $(tbl).find('TH#seq').position().top; // skip first row of header
         }
-        if (heightPx == undefined || heightPx === 0) {
+        if (!heightPx || heightPx === 0) {
             if (tripleView)
                 heightPx = $(tbl).height() - 8;  // span whole height of table
             else
@@ -185,13 +185,13 @@ var alleles = (function()
     
     function hiliteRemove(id)
     {   // removes a specific hilite or all hilite divs if id is not supplied. 
-        if (id == undefined || id === "") {
+        if (!id || id === "") {
             $('div.hilite').remove();
             hilites = [];
         } else {
             $('div.hilite').remove('#' + id);
             var ix = hilites.indexOf(hId);
-            if (ix != -1)
+            if (ix !== -1)
                 hilites.splice(ix,1);
         }
     }
@@ -200,7 +200,7 @@ var alleles = (function()
     {   // makes one single hilite more noticeable
  
         $('div.hiliteSpecial').removeClass('hiliteSpecial');
-        if (id != undefined && id != "") {
+        if (id && id !== "") {
             $('div.hilite.'+id).addClass('hiliteSpecial');
             //$('td.var.'+id).addClass('hiliteSpecial');
             // Need to find column, then highlight each cell in column with some additional style.
@@ -214,7 +214,7 @@ var alleles = (function()
         if (hilites.length > 0) {
             hiliteRemove();
             hiliteAllDiffs();
-            if (hiliteId != '')
+            if (hiliteId !== '')
                 hiliteSpecial( hiliteId );
         }
     }
@@ -224,13 +224,13 @@ var alleles = (function()
     
         // Don't even bother if full sequence isn't showing
         var fullSeq = $('input#'+sectionName+'_fullSeq');
-        if (fullSeq.length != 0 && $(fullSeq).val().indexOf('Hide') === -1)
+        if (fullSeq.length !== 0 && $(fullSeq).val().indexOf('Hide') === -1)
             return;
         
         // DNA view or AA view?
         var spans;
         var dnaView = $('input#'+sectionName+'_dnaView');
-        if (dnaView != undefined && $(dnaView).val().indexOf('DNA') === -1) {
+        if (dnaView && $(dnaView).val().indexOf('DNA') === -1) {
             spans = $('table#alleles').find('TH.seq').find('B');
         } else { // AA view
             spans = $('table#alleles').find('TH.seq').find('span');
@@ -247,12 +247,12 @@ var alleles = (function()
             var varClass = $( this ).attr("class").split(' ');
             if (varClass.length > 0) {
                 // One of the classes should be the id for the TH defining the variant
-                for (var ix=0; ix < varClass.length; ix++ ) {
-                    if (varClass[ix].indexOf('text') != 0) {
-                        var variant = $('table#alleles').find('TH.var#' + varClass[ix]);
-                        if (variant != undefined && variant.length === 1) {
+                for (var cIx=0; cIx < varClass.length; cIx++ ) {
+                    if (varClass[cIx].indexOf('text') !== 0) {
+                        var variant = $('table#alleles').find('TH.var#' + varClass[cIx]);
+                        if (variant && variant.length === 1) {
                             $(div).attr('title',$(variant).attr('title'));
-                            $(div).addClass(varClass[ix]);
+                            $(div).addClass(varClass[cIx]);
                             break;
                         }
                     }
@@ -267,32 +267,35 @@ var alleles = (function()
         positionTitle: function (e, obj)
         { // sets the current title to show the position of the pointer
           // Relies upon a span and fixed width text
-          // Note: charsPerPos == 3 to show aa position when showing DNA triplets
+          // Note: charsPerPos === 3 to show aa position when showing DNA triplets
     
-            var e = e || window.event;
+            e = e || window.event; // protection against IE<9
             var over = ((e.pageX - $(obj).offset().left) / seqPxPerPos) + 0.5; // round up
             $(obj).attr('title',over.toFixed(0)); // title is simply position
         },
     
         rareAlleleToggle: function (btn,setCart)
         { // toggle the visibility of rare alleles
+            if (setCart === undefined || setCart === null) // boolean
+                setCart = true;
             var trs = $('table#alleles tbody tr.allele');
-            persistRareHapsShown = ($(btn).val().indexOf('Show') != -1);
+            persistRareHapsShown = ($(btn).val().indexOf('Show') !== -1);
+            var counts;
             if (persistRareHapsShown) {
                 $(trs).filter('.rare').removeClass('hidden');
-                var counts = $(trs).filter(':visible').length + ' of ' + $(trs).length + ".";
+                counts = $(trs).filter(':visible').length + ' of ' + $(trs).length + ".";
                 $('span#alleleCounts').text( 'All gene haplotypes shown: ' + counts);
                 $('span#alleleCounts').addClass('textAlert'); 
                 $(btn).val('Hide rare haplotypes');
-                if (setCart == undefined || setCart)
+                if (setCart === true)
                     setCartVar(btn.id,'1');
             } else {
                 $(trs).filter('.rare').addClass('hidden');
-                var counts = $(trs).filter(':visible').length + ' of ' + $(trs).length + ".";
+                counts = $(trs).filter(':visible').length + ' of ' + $(trs).length + ".";
                 $('span#alleleCounts').text( 'Common gene haplotypes shown: ' + counts );
                 $('span#alleleCounts').removeClass('textAlert'); 
                 $(btn).val('Show rare haplotypes');
-                if (setCart == undefined || setCart)
+                if (setCart === true)
                     setCartVar(btn.id,'[]');
             }
             hilitesResize();
@@ -300,14 +303,16 @@ var alleles = (function()
         
         scoresToggle: function (btn,setCart)
         { // toggle the visibility of scores
-            persistScoresShown = ($(btn).val().indexOf('Show') != -1);
+            if (setCart === undefined || setCart === null) // boolean
+                setCart = true;
+            persistScoresShown = ($(btn).val().indexOf('Show') !== -1);
             if (persistScoresShown) {
                 $('table#alleles').find('.score').removeClass('hidden');
                 $('table#alleles').find('.andScore').each(function (ix) { 
                     $(this).attr('colspan',Number($(this).attr('colspan')) + 1);
                 });
                 $(btn).val('Hide scoring');
-                if (setCart == undefined || setCart)
+                if (setCart === true)
                     setCartVar(btn.id,'1');
             } else {
                 $('table#alleles').find('.score').addClass('hidden');
@@ -315,7 +320,7 @@ var alleles = (function()
                     $(this).attr('colspan',Number($(this).attr('colspan')) - 1);
                 });
                 $(btn).val('Show scoring');
-                if (setCart == undefined || setCart)
+                if (setCart === true)
                     setCartVar(btn.id,'[]');
             }
             hilitesResize();
@@ -323,7 +328,7 @@ var alleles = (function()
         
         scoresShow: function (obj,val)
         { // toggle the visibility of scores
-            persistScoresShown = (val == 'set');
+            persistScoresShown = (val === 'set');
             if (persistScoresShown) {
                 $('table#alleles').find('.score').removeClass('hidden');
                 $(obj).val('[]');
@@ -338,8 +343,8 @@ var alleles = (function()
         // TODO: Would be good to hide pop and popScore columns, instead of ajax setAndRefresh
         /* popShow: function (obj,val)
         { // toggle the visibility of scores
-            persistScoresShown = (val == 'set');
-            if (val == 'set') {
+            persistScoresShown = (val === 'set');
+            if (val === 'set') {
                 return setAndRefresh(obj.id,val)
                 $('table#alleles').find('.score').removeClass('hidden');
                 //$(obj).val('[]');
@@ -361,7 +366,7 @@ var alleles = (function()
         { // Delayed call of private function
             hiliteAllDiffs();
             // Persist on lighlite as red
-            if (hiliteId != '')
+            if (hiliteId !== '')
                 hiliteSpecial( hiliteId );
         },
         
@@ -369,7 +374,7 @@ var alleles = (function()
         { // Initialize or reinitailze (after ajax) the sortable table
         
             // This whole section could be renamed
-            //if (sectionId != undefined && sectionId.length !== 0)
+            //if (sectionId && sectionId.length !== 0)
             //    sectionName = sectionId;
             
             initSortTable();
@@ -382,11 +387,11 @@ var alleles = (function()
             // Calculate some useful constants:
             seqCharsPerPos = 1; // Most cases
             var tripletButton = normed( $('input#'+sectionName+'_triplets') );
-            if (tripletButton != undefined && $(tripletButton).val().indexOf('Show') === -1)
+            if (tripletButton && $(tripletButton).val().indexOf('Show') === -1)
                 seqCharsPerPos = 3;
             seqPxPerPos = 7;
             var fullSeqHeader = normed( $(tbl).find('TH.seq') );
-            if (fullSeqHeader != undefined) {
+            if (fullSeqHeader) {
                 var seqLen = $(fullSeqHeader).text().length;
                 //if (seqCharsPerPos === 3)
                 //    seqLen /= 2;
@@ -396,7 +401,7 @@ var alleles = (function()
             }
             
             // Highlight variants in full sequence
-            setTimeout("alleles.delayedHilites()", 200);  // Delay till after page settles
+            setTimeout(alleles.delayedHilites(), 200);  // Delay till after page settles
             
             // Want to sort on previos column if there was a sort before ajax update
             persistThroughUpdates();
