@@ -1,17 +1,21 @@
 // AJAX Utilities
 
+// Don't complain about line break before '||' etc:
+/* jshint -W014 */
+
 var debug = false;
 
 var req;
 
 function nullProcessReqChange()
 {
-    if(debug && this.readyState == 4)
+    if (debug && this.readyState === 4)
             alert("req.responseText: " + req.responseText);
 }
 
-// The ajaxWaitCount code is currently NOT used, but we are keeping it in case in the future we decide we
-// really need to support sequential AJAX calls (without just using synchronous AJAX calls).
+// The ajaxWaitCount code is currently NOT used, but we are keeping it in case in the future we
+// decide we really need to support sequential AJAX calls (without just using async = false).
+// Why? to send several async ajax calls but wait for them all to finish
 // 
 // When setting vars with ajax, it may be necessary to wait for response before newer calls
 // Therefore this counter is set up to allow an "outside callback" when the ajax is done
@@ -29,11 +33,11 @@ var ajaxWaitCallbackFunction = null;
 var ajaxWaitCallbackTimeOut = null;
 function ajaxWaitCallbackRegister(func)
 { // register a function to be called when the ajax waiting is done.
-    if(ajaxWaitIsDone())
+    if (ajaxWaitIsDone())
         func();
     else {
         ajaxWaitCallbackFunction = func;
-        ajaxWaitCallbackTimeOut = setTimeout("ajaxWaitCallback();",5000);  // just in case
+        ajaxWaitCallbackTimeOut = setTimeout(ajaxWaitCallback(),5000);  // just in case
     }
 }
 
@@ -41,7 +45,7 @@ function ajaxWaitCallback()
 { // Perform the actual function (which could have been because of a callback or a timeout)
     // Clear the timeout if this is not due to ajaxWaitDone
     //warn("ajaxWaitCallback: "+ajaxWaitIsDone());
-    if(ajaxWaitCallbackTimeOut != null) {
+    if (ajaxWaitCallbackTimeOut) {
         clearTimeout(ajaxWaitCallbackTimeOut);
         ajaxWaitCallbackTimeOut = null;
     }
@@ -49,7 +53,7 @@ function ajaxWaitCallback()
     ajaxWaitCountReset();
 
     // Finally do the function
-    if(ajaxWaitCallbackFunction
+    if (ajaxWaitCallbackFunction
     && jQuery.isFunction(ajaxWaitCallbackFunction)) {
         ajaxWaitCallbackFunction();
     }
@@ -58,11 +62,11 @@ function ajaxWaitCallback()
 
 function ajaxWaitCountDown()
 { // called whenever an ajax request is done
-    if((req && req.readyState == 4)
-    || (this.readyState == 4))
+    if ((req && req.readyState === 4)
+    || (this.readyState === 4))
     { // It is only state 4 that means done
         ajaxWaitCount--;
-        if(ajaxWaitIsDone())
+        if (ajaxWaitIsDone())
             ajaxWaitCallback();
     }
     //warn(req.readyState + " waiters:"+ajaxWaitCount);
@@ -73,7 +77,7 @@ function ajaxWaitCountDown()
 // function formSubmit()
 // { // This will be called as a callback on timeout or ajaxWaitCallback
 //
-//     if(formToSubmit != null) {
+//     if (formToSubmit) {
 //         //warn("submitting form:"+$(formToSubmit).attr('name') + ": "+ajaxWaitIsDone());
 //         var form = formToSubmit;
 //         formToSubmit = "GO"; // Flag to wait no longer
@@ -83,7 +87,7 @@ function ajaxWaitCountDown()
 // }
 // function formSubmitRegister(form)
 // { // Registers the form submit to be done by ajaxWaitCallback or timeout
-//     if(formToSubmit != null) // Repeated submission got through, so ignore it
+//     if (formToSubmit) // Repeated submission got through, so ignore it
 //         return false;
 //     waitMaskSetup(5000);     // Will prevent repeated submissions, I hope.
 //     formToSubmit = form;
@@ -94,10 +98,10 @@ function ajaxWaitCountDown()
 //
 // function formSubmitWaiter(e)
 // { // Here we will wait for up to 5 seconds before continuing.
-//     if(formToSubmit == null)
+//     if (!formToSubmit)
 //         return formSubmitRegister(e.target); // register on first time through
 //
-//     if(formToSubmit == "GO") {  // Called again as complete
+//     if (formToSubmit === "GO") {  // Called again as complete
 //         //warn("formSubmitWaiter(): GO");
 //         formToSubmit = "STOP";  // Do this only once!
 //         return true;
@@ -121,31 +125,31 @@ function loadXMLDoc(url, callBack)
 {
 // From http://developer.apple.com/internet/webcontent/xmlhttpreq.html
     //warn("AJAX started: "+url);
-    if(callBack == null)
+    if (!callBack)
         callBack = nullProcessReqChange;
     req = false;
     // branch for native XMLHttpRequest object
-    if(window.XMLHttpRequest && !(window.ActiveXObject)) {
+    if (window.XMLHttpRequest && !(window.ActiveXObject)) {
         try {
             req = new XMLHttpRequest();
         } catch(e) {
             req = false;
         }
-    } else if(window.ActiveXObject) {
+    } else if (window.ActiveXObject) {
         // branch for IE/Windows ActiveX version
         try {
             req = new ActiveXObject("Msxml2.XMLHTTP");
         } catch(e) {
             try {
                 req = new ActiveXObject("Microsoft.XMLHTTP");
-            } catch(e) {
+            } catch(ev) {
                 req = false;
             }
         }
     }
-    if(debug)
+    if (debug)
         alert(url);
-    if(req) {
+    if (req) {
         req.onreadystatechange = callBack;
         req.open("GET", url, true);
         req.send();
@@ -156,35 +160,35 @@ function loadXMLDoc(url, callBack)
 function setCartVars(names, values, errFunc, async)
 {
 // Asynchronously sets the array of cart vars with values
-    if(names.length <= 0)
+    if (names.length <= 0)
         return;
 
-    if (errFunc == null)
+    if (!errFunc)
 	errFunc = errorHandler;
-    if (async == null)
+    if (async === null || async === undefined) // async is boolean so be explicit!
 	async = true;
 
     // Set up constant portion of url
     var loc = window.location.href;
-    if(loc.indexOf("?") > -1) {
+    if (loc.indexOf("?") > -1) {
         loc = loc.substring(0, loc.indexOf("?"));
     }
-    if(loc.lastIndexOf("/") > -1) {
+    if (loc.lastIndexOf("/") > -1) {
         loc = loc.substring(0, loc.lastIndexOf("/"));
     }
     loc = loc + "/cartDump";
     var hgsid = getHgsid();
     var data = "submit=1&noDisplay=1&hgsid=" + hgsid;
     var track = getTrack();
-    if(track && track.length > 0)
+    if (track && track.length > 0)
         data = data + "&g=" + track;
     for(var ix=0; ix<names.length; ix++) {
         data = data + "&" + encodeURIComponent(names[ix]) + "=" + encodeURIComponent(values[ix]);
     }
     var type;
-    // We prefer GETs so we can analyze logs, but use POSTs if data is longer than a (conservatively small) 
-    // maximum length to avoid problems on older versions of IE.
-    if((loc.length + data.length) > 2000) {
+    // We prefer GETs so we can analyze logs, but use POSTs if data is longer than a
+    // (conservatively small)  maximum length to avoid problems on older versions of IE.
+    if ((loc.length + data.length) > 2000) {
         type = "POST";
     } else {
         type = "GET";
@@ -217,7 +221,7 @@ function setVarsFromHash(varHash, errFunc, async)
         names.push(aVar);
         values.push(varHash[aVar]);
     }
-    if(names.length > 0) {
+    if (names.length > 0) {
         setCartVars(names,values, errFunc, async);
     }
 }
@@ -228,7 +232,7 @@ function setAllVars(obj,subtrackName)
 // If obj is undefined then obj is document!
     var names = [];
     var values = [];
-    if($(obj) == undefined)
+    if (!obj)
         obj = $('document');
 
     setVarsFromHash(getAllVars(obj,subtrackName));
@@ -248,9 +252,9 @@ function submitMain()
 function setCartVarAndRefresh(name,val)
 {
     setCartVar(name,val);
-    var main=$('form[name="mainForm"]')
+    var main=$('form[name="mainForm"]');
     $(main).attr('action',window.location.href);
-    setTimeout("submitMain()",50);  // Delay in submit helps ensure that cart var has gotten there first.
+    setTimeout(submitMain(),50);  // Delay helps ensure that cart var has gotten there first.
 
     return false;
 }
@@ -259,24 +263,24 @@ function errorHandler(request, textStatus)
 {
     var str;
     var tryAgain = true;
-    if(textStatus && textStatus.length && textStatus != "error") {
+    if (textStatus && textStatus.length && textStatus !== "error") {
         str = "Encountered network error : '" + textStatus + "'.";
     } else {
-        if(request.responseText) {
+        if (request.responseText) {
             tryAgain = false;
             str = "Encountered error: '" + request.responseText + "'";
         } else {
-            str = "Encountered a network error."
+            str = "Encountered a network error.";
         }
     }
-    if(tryAgain)
+    if (tryAgain)
         str += " Please try again. If the problem persists, please check your network connection.";
     warn(str);
     jQuery('body').css('cursor', '');
-    if(this.disabledEle) {
+    if (this.disabledEle) {
         this.disabledEle.removeAttr('disabled');
     }
-    if(this.loadingId) {
+    if (this.loadingId) {
 	hideLoadingImage(this.loadingId);
     }
 }
@@ -284,7 +288,7 @@ function errorHandler(request, textStatus)
 function catchErrorOrDispatch(obj, textStatus)
 {
 // generic ajax success handler (handles fact that success is not always success).
-    if(textStatus == 'success')
+    if (textStatus === 'success')
         this.trueSuccess(obj, textStatus);
     else
         errorHandler.call(this, obj, textStatus);
@@ -294,9 +298,9 @@ function catchErrorOrDispatch(obj, textStatus)
 function lookupMetadata(trackName,showLonglabel,showShortLabel)
 { // Ajax call to repopulate a metadata vals select when mdb var changes
     var thisData = "db=" + getDb() +  "&cmd=tableMetadata&track=" + trackName;
-    if(showLonglabel)
+    if (showLonglabel)
         thisData += "&showLonglabel=1";
-    if(showShortLabel)
+    if (showShortLabel)
         thisData += "&showShortLabel=1";
     $.ajax({
         type: "GET",
@@ -315,12 +319,12 @@ function loadMetadataTable(response, status)
 {
     var div = $("div#div_"+this.cmd+"_meta");
     var td = $(div).parent('td');
-    if(td.length > 0 && $(td[0]).width() > 200) {
+    if (td.length > 0 && $(td[0]).width() > 200) {
         $(td[0]).css('maxWidth',$(td[0]).width() + "px");
         $(div).css('overflow','visible');
     }
     $(div).html(response);
-    if(td.length > 0 && $(td[0]).width() > 200) {
+    if (td.length > 0 && $(td[0]).width() > 200) {
         tr = $(td[0]).parent('tr');
         if (tr.length > 0) {
             if ($(tr).hasClass("bgLevel2"))
@@ -335,7 +339,7 @@ function loadMetadataTable(response, status)
 function removeHgsid(href)
 {
 // remove session id from url parameters
-    if(href.indexOf("?hgsid=") == -1) {
+    if (href.indexOf("?hgsid=") === -1) {
         href = href.replace(/\&hgsid=\d+/, "");
     } else {
         href = href.replace(/\?hgsid=\d+\&/, "?");
@@ -350,7 +354,7 @@ var gAppendTo = null;
 
 function _retrieveHtml(fileName,obj)
 { // popup cfg dialog
-    if (obj && obj != undefined && $(obj).length == 1) {
+    if (obj && $(obj).length === 1) {
         gAppendTo = obj;
     } else
         gAppendTo = null;
@@ -371,15 +375,16 @@ function retrieveHtml(fileName,obj,toggle)
 { // Retrieves html from file
   // If no obj is supplied then html will be shown in a popup.
   // if obj supplied then object's html will be replaced by what is retrieved.
-  //    if obj and toggle == true, and obj has html, it will be emptied, resulting in toggle like calls
-    if (toggle && obj && obj != undefined && $(obj).length == 1) {
+  //    if obj and toggle === true, and obj has html, it will be emptied, thus in toggle like calls
+    if (toggle && obj && $(obj).length === 1) {
         if ($(obj).html().length > 0) {
-            $(obj).html("")
+            $(obj).html("");
             return;
         }
     }
 
-    waitOnFunction( _retrieveHtml, fileName, obj );  // Launches the popup but shields the ajax with a waitOnFunction
+    // Launches the popup but shields the ajax with a waitOnFunction
+    waitOnFunction( _retrieveHtml, fileName, obj );  
 }
 
 function retrieveHtmlHandle(response, status)
@@ -390,20 +395,20 @@ function retrieveHtmlHandle(response, status)
     response = response.replace(/<a /ig, "<a target='_blank' ");
 
     // TODO: Shlurp up any javascript files from the response and load them with $.getScript()
-    // example <script type='text/javascript' SRC='../js/tdreszer/jquery.contextmenu-1296177766.js'></script>
+    // example <script type='text/javascript' SRC='../js/jquery.contextmenu.js'></script>
     var cleanHtml = response;
-    var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
+    var shlurpPattern=/<script type=\'text\/javascript\' SRC\=\'.*\'\><\/script\>/gi;
     var jsFiles = cleanHtml.match(shlurpPattern);
     cleanHtml = cleanHtml.replace(shlurpPattern,"");
-    shlurpPattern=/\<script type=\'text\/javascript\'>.*\<\/script\>/gi;
+    shlurpPattern=/<script type=\'text\/javascript\'>.*<\/script\>/gi;
     var jsEmbeded = cleanHtml.match(shlurpPattern);
     cleanHtml = cleanHtml.replace(shlurpPattern,"");
     //<LINK rel='STYLESHEET' href='../style/ui.dropdownchecklist-1276528376.css' TYPE='text/css' />
-    shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
+    shlurpPattern=/<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
     var cssFiles = cleanHtml.match(shlurpPattern);
     cleanHtml = cleanHtml.replace(shlurpPattern,"");
 
-    if (gAppendTo && gAppendTo != undefined) {
+    if (gAppendTo) {
         //warn($(gAppendTo).html());
         //return;
         $(gAppendTo).html(cleanHtml);
@@ -411,7 +416,7 @@ function retrieveHtmlHandle(response, status)
     }
 
     var popUp = $('#popupDialog');
-    if (popUp == undefined || $(popUp).length == 0) {
+    if (!popUp || $(popUp).length === 0) {
         $('body').prepend("<div id='popupDialog' style='display: none'></div>");
         popUp = $('#popupDialog');
     }
@@ -433,20 +438,20 @@ function retrieveHtmlHandle(response, status)
         }},
         close: function() {
             var popUpClose = $('#popupDialog');
-            if (popUpClose != undefined && $(popUpClose).length == 1) {
-                $(popUpClose).html("");  // clear out html after close to prevent problems caused by duplicate html elements
-            }
+            if (popUpClose && $(popUpClose).length === 1) {
+                $(popUpClose).html("");  // clear out html after close to prevent problems caused
+            }                            // by duplicate html elements
         }
     });
 
     var myWidth =  $(window).width() - 300;
-    if(myWidth > 900)
+    if (myWidth > 900)
         myWidth = 900;
     $(popUp).dialog("option", "maxWidth", myWidth);
     $(popUp).dialog("option", "width", myWidth);
     $(popUp).dialog('open');
     var buttOk = $('button.ui-state-default');
-    if($(buttOk).length == 1)
+    if ($(buttOk).length === 1)
         $(buttOk).focus();
 }
 
@@ -459,8 +464,8 @@ function scrapeVariable(html, name)
                         "\\n?// END " + name, "m");
     var a = re.exec(html);
     var json;
-    if(a && a[1]) {
-        json = eval("(" + a[1] + ")");
+    if (a && a[1]) {
+        json = JSON.parse(a[1]);
     }
     return json;
 }
@@ -485,21 +490,24 @@ var loadingImage = function ()
     return {
         init: function(_imgEle, _msgEle, _msg)
         {
-            // This should be called from the ready method; imgEle and msgEle should be jQuery objects
+            // This should be called from the ready method; imgEle and msgEle should be jQuery objs
             imgEle = _imgEle;
             msgEle = _msgEle;
             statusMsg = _msg;
-            // To make the loadingImg visible on FF, we have to make sure it's visible during page load (i.e. in html) otherwise it doesn't get shown by the submitClick code.
+            // To make the loadingImg visible on FF, we have to make sure it's visible during
+            // page load (i.e. in html) otherwise it doesn't get shown by the submitClick code.
             imgEle.hide();
         },
         run: function() {
             msgEle.append(statusMsg);
-            if(navigator.userAgent.indexOf("Chrome") != -1) {
-                // In Chrome, gif animation and setTimeout's are stopped when the browser receives the first blank line/comment of the next page
-                // (basically, the current page is unloaded). I have found no way around this problem, so we just show a 
-                // simple "Processing..." message (we can't make that blink, b/c Chrome doesn't support blinking text).
+            if (navigator.userAgent.indexOf("Chrome") !== -1) {
+                // In Chrome, gif animation and setTimeout's are stopped when the browser
+                // receives the first blank line/comment of the next page (basically, the current
+                // page is unloaded). I have found no way around this problem, so we just show a 
+                // simple "Processing..." message
+                // (we can't make that blink, b/c Chrome doesn't support blinking text).
                 // 
-                // (Surprisingly, this is NOT true for Safari, so this is apparently not a WebKit issue).
+                // (Surprisingly, this is NOT true for Safari, so apparently not a WebKit issue).
                 imgEle.replaceWith("<span id='loadingBlinker'>&nbsp;&nbsp;<b>Processing...</b></span>");
             } else {
                 imgEle.show();
@@ -511,5 +519,5 @@ var loadingImage = function ()
 	    msgEle.hide();
 	    jQuery('body').css('cursor', '');
 	}
-    }
+    };
 }();
