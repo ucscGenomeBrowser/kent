@@ -24151,7 +24151,7 @@ bool found = FALSE;
 char *b;
 while ((b = va_arg(args, char *)) != NULL)
     {
-    if sameWord(a, b)
+    if (sameWord(a, b))
         {
         found = TRUE;
         break;
@@ -24892,7 +24892,7 @@ else if (sameWord(table, "tigrGeneIndex"))
     //{
     //doLinkedFeaturesSeries(table, item, tdb);
     //}
-else if (sameAltWords(table, handler, "bacEndPairs", "bacEndPairsBad", "bacEndPairsLong", "bacEndSingles"))
+else if (sameAltWords(table, handler, "bacEndPairs", "bacEndPairsBad", "bacEndPairsLong", "bacEndSingles", NULL))
     {
     doLinkedFeaturesSeries(table, item, tdb);
     }
