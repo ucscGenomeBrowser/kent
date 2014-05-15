@@ -52,3 +52,7 @@ The character code in css pulled from Stanford produces a list icon
   margin-top: 75px;
   padding-top: 0px;
 }
+
+hr {
+    border-bottom: 1px solid #bababa;
+}
