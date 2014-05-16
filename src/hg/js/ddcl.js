@@ -173,16 +173,22 @@ var ddcl = {
             var multiSelect = this;
             if (!force) { // condition on bad dimensions
                 var id = $(multiSelect).attr('id');
-                control = normed($('#ddcl-' + id));
-                if (!control)
-                    return;                            // This is being called before normal init
-                var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
-                if ($(controlSelector).width() > 20)
-                    return;  // Dimensions look okay
+                var control = normed($('#ddcl-' + id));
+                if (!control) {
+                    // Object never initialized so do it now.
+                    //$(multiSelect).show(); // necessary to get dimensions
+                    ddcl.setup(multiSelect,'noneIsAll');
+                } else {
+                    // This is being called before normal init
+                    var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
+                    if ($(controlSelector).width() <= 20) {
+                        // Initialized before fully visible so do it again.
+                        $(multiSelect).dropdownchecklist("destroy");
+                        $(multiSelect).show(); // necessary to get dimensions
+                        ddcl.setup(multiSelect,'noneIsAll');
+                    } // else dimensions look okay
+                }
             }
-            $(multiSelect).dropdownchecklist("destroy");
-            $(multiSelect).show(); // necessary to get dimensions
-            ddcl.setup(multiSelect,'noneIsAll');
         });
     },
 
@@ -229,10 +235,15 @@ var ddcl = {
                 id = 'ix' +  $('select').index(obj);
             }
             $(obj).attr('id',id);
+        } else {
+            if (normed($('#ddcl-' + id)))    // Don't set up twice!
+                return;
         }
 
         // These values can only be taken from the select before it becomes a DDCL
         var maxWidth = $(obj).width();
+        if (maxWidth === 0) // currently hidden so wait for a reinit();
+            return;
         var minWidth = $(obj).css('min-width');
         if (minWidth && minWidth.length > 0) { // Is a string, so convert and compare
             minWidth = parseInt(minWidth);
@@ -538,6 +549,6 @@ var filterTable = {
 
 $(document).ready(function() {
 
-    setTimeout(ddcl.start(),2);  // necessary to delay startup till all selects get ids.
+    setTimeout(ddcl.start,2);  // necessary to delay startup till all selects get ids.
 });
 
