@@ -37,7 +37,7 @@ function ajaxWaitCallbackRegister(func)
         func();
     else {
         ajaxWaitCallbackFunction = func;
-        ajaxWaitCallbackTimeOut = setTimeout(ajaxWaitCallback(),5000);  // just in case
+        ajaxWaitCallbackTimeOut = setTimeout(ajaxWaitCallback,5000);  // just in case
     }
 }
 
@@ -226,7 +226,7 @@ function setVarsFromHash(varHash, errFunc, async)
     }
 }
 
-function setAllVars(obj,subtrackName)
+function setAllVars(obj,subtrackName) // DEAD CODE ?
 {
 // Set all enabled inputs and selects found as children obj with names to cart with ajax
 // If obj is undefined then obj is document!
@@ -244,17 +244,17 @@ function setAllVars(obj,subtrackName)
 //     setCartVar($(obj).attr('id'),$(obj).val());
 // }
 
-function submitMain()
+function submitMain()  // DEAD CODE ?
 {
     $('form[name="mainForm"]').submit();
 }
 
-function setCartVarAndRefresh(name,val)
+function setCartVarAndRefresh(name,val) // DEAD CODE ?
 {
     setCartVar(name,val);
     var main=$('form[name="mainForm"]');
     $(main).attr('action',window.location.href);
-    setTimeout(submitMain(),50);  // Delay helps ensure that cart var has gotten there first.
+    setTimeout(submitMain,50);  // Delay helps ensure that cart var has gotten there first.
 
     return false;
 }

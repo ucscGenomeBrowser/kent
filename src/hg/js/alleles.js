@@ -109,8 +109,9 @@ var alleles = (function()
                 $(col).click();
                 if (persistSortReverse) {// click twice if reverse order!
                     persistSortReverse = false; // Needed so that it is set again
-                    setTimeout("$('table#alleles').find('TH#" + persistSortColId + 
-                                                                          "').click();", 50);
+                    setTimeout(function() { 
+                                    $('table#alleles').find('TH#' + persistSortColId).click(); 
+                                }, 50);
                 }
             }
         }
@@ -401,7 +402,7 @@ var alleles = (function()
             }
             
             // Highlight variants in full sequence
-            setTimeout(alleles.delayedHilites(), 200);  // Delay till after page settles
+            setTimeout(alleles.delayedHilites, 200);  // Delay till after page settles
             
             // Want to sort on previos column if there was a sort before ajax update
             persistThroughUpdates();
