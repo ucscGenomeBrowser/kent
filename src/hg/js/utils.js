@@ -2,12 +2,15 @@
 
 // "use strict";
 
+// Don't complain about line break before '||' etc:
+/* jshint -W014 */
+
 var debug = false;
 
 function clickIt(obj,state,force)
 {
 // calls click() for an object, and click();click() if force
-    if(obj.checked != state) {
+    if (obj.checked !== state) {
         obj.click();
     } else if (force) {
         obj.click();
@@ -20,7 +23,7 @@ function setCheckBoxesWithPrefix(obj, prefix, state)
     var list = inputArrayThatMatches("checkbox","id",prefix,"");
     for (var i=0;i<list.length;i++) {
         var ele = list[i];
-            if(ele.checked != state)
+            if (ele.checked !== state)
                 ele.click();  // Forces onclick() javascript to run
     }
 }
@@ -30,14 +33,14 @@ function setCheckBoxesThatContain(nameOrId, state, force, sub1)
 // Set all checkboxes which contain 1 or more given substrings in NAME or ID to state boolean
 // First substring: must begin with it; 2 subs: beg and end; 3: begin, middle and end.
 // This can force the 'onclick() js of the checkbox, even if it is already in the state
-    if(debug)
+    if (debug)
         alert("setCheckBoxesContains is about to set the checkBoxes to "+state);
     var list;
-    if(arguments.length == 4)
+    if (arguments.length === 4)
         list = inputArrayThatMatches("checkbox",nameOrId,sub1,"");
-    else if(arguments.length == 5)
+    else if (arguments.length === 5)
         list = inputArrayThatMatches("checkbox",nameOrId,sub1,arguments[4]);
-    else if(arguments.length == 6)
+    else if (arguments.length === 6)
         list = inputArrayThatMatches("checkbox",nameOrId,sub1,arguments[4],arguments[5]);
     for (var ix=0;ix<list.length;ix++) {
         clickIt(list[ix],state,force);
@@ -48,65 +51,70 @@ function setCheckBoxesThatContain(nameOrId, state, force, sub1)
 function inputArrayThatMatches(inpType,nameOrId,prefix,suffix)
 {
     // returns an array of input controls that match the criteria
-    var found = new Array();
+    var found = [];
     var fIx = 0;
     if (document.getElementsByTagName)
     {
         var list;
-        if(inpType == 'select')
+        if (inpType === 'select')
             list = document.getElementsByTagName('select');
         else
             list = document.getElementsByTagName('input');
         for (var ix=0;ix<list.length;ix++) {
             var ele = list[ix];
-            if(inpType.length > 0 && inpType != 'select' && ele.type != inpType)
+            if (inpType.length > 0 && inpType !== 'select' && ele.type !== inpType)
                 continue;
             var identifier = ele.name;
-            if(nameOrId.search(/id/i) != -1)
+            if (nameOrId.search(/id/i) !== -1)
                 identifier = ele.id;
             var failed = false;
-            if(prefix.length > 0)
-                failed = (identifier.indexOf(prefix) != 0)
-            if(!failed && suffix.length > 0)
-                failed = (identifier.lastIndexOf(suffix) != (identifier.length - suffix.length))
-            if(!failed) {
-                for(var aIx=4;aIx<arguments.length;aIx++) {
-                    if(identifier.indexOf(arguments[aIx]) == -1) {
+            if (prefix.length > 0)
+                failed = (identifier.indexOf(prefix) !== 0);
+            if (!failed && suffix.length > 0)
+                failed = (identifier.lastIndexOf(suffix) !== (identifier.length - suffix.length));
+            if (!failed) {
+                for (var aIx=4;aIx<arguments.length;aIx++) {
+                    if (identifier.indexOf(arguments[aIx]) === -1) {
                         failed = true;
                         break;
                     }
                 }
             }
-            if(!failed) {
+            if (!failed) {
                 found[fIx] = ele;
                 fIx++;
             }
         }
     } else {
         // NS 4.x - I gave up trying to get this to work.
-        if(debugLevel>2)
+        if (debugLevel>2)
            alert("arrayOfInputsThatMatch is unimplemented for this browser");
     }
     return found;
 }
 
 
-function normed(obj)
-{ // returns undefined, the obj or the obj normalized from one member array
-    if (obj == undefined || obj == null || obj.length == 0)
+function normed(thing)
+{   // RETURNS undefined, the lone member of the set or the full set if more than one member.
+    // Used for normalizing returns from jquery DOM selects (e.g. $('tr.track').children('td.data'))
+    // jquery returns an "array like 'object'" with 0 or more entries.  
+    // Use this to treat 0 entries the same as undefined and 1 entry as the item itself
+    if (thing === undefined || thing === null
+    ||  (thing.length !== undefined && thing.length === 0)  // Empty array (or 'array like object')
+    ||  ($.isPlainObject(thing) && $.isEmptyObject(thing))) // Empty simple object
         return undefined;
-    if (obj.length == 1)
-        return obj[0];
-    return obj;   // (obj.length > 1)
+    if (thing.length && thing.length === 1 && jQuery.type(thing) !== 'string') // string is overkill
+        return thing[0]; // Container of one item should return the item itself.
+    return thing;
 }
 
-function waitCursor(obj)
+function waitCursor(obj)  // DEAD CODE?
 {
     //document.body.style.cursor="wait"
     obj.style.cursor="wait";
 }
 
-function endWaitCursor(obj)
+function endWaitCursor(obj)  // DEAD CODE?
 {
     obj.style.cursor="";
 }
@@ -121,18 +129,18 @@ function getURLParam()
 // Second interface will default to using window.location.href
     var strHref, strParamName;
     var strReturn = "";
-    if(arguments.length == 1) {
+    if (arguments.length === 1) {
           strHref = window.location.href;
           strParamName = arguments[0];
     } else {
           strHref = arguments[0];
           strParamName = arguments[1];
     }
-    if ( strHref.indexOf("?") > -1 ){
+    if ( strHref.indexOf("?") > -1) {
       var strQueryString = strHref.substr(strHref.indexOf("?")).toLowerCase();
       var aQueryString = strQueryString.split("&");
-      for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
-         if (aQueryString[iParam].indexOf(strParamName.toLowerCase() + "=") > -1 ){
+      for (var iParam = 0; iParam < aQueryString.length; iParam++) {
+         if (aQueryString[iParam].indexOf(strParamName.toLowerCase() + "=") > -1) {
             var aParam = aQueryString[iParam].split("=");
             strReturn = aParam[1];
             break;
@@ -150,7 +158,7 @@ function makeHiddenInput(theForm,aName,aValue)
 function updateOrMakeNamedVariable(theForm,aName,aValue)
 {   // Store a value to a named input.  Will make the input if necessary
     var inp = $(theForm).find("input[name='"+aName+"']:last");
-    if(inp != undefined && inp.length > 0) {
+    if (inp && inp.length > 0) {
         inp.val(aValue);
         inp.disabled = false;
     } else
@@ -160,31 +168,31 @@ function updateOrMakeNamedVariable(theForm,aName,aValue)
 function disableNamedVariable(theForm,aName)
 {   // Store a value to a named input.  Will make the input if necessary
     var inp = $(theForm).find("input[name='"+aName+"']:last");
-    if(inp != undefined && inp.length > 0)
+    if (inp && inp.length > 0)
         inp.disabled = true;
 }
 
-function parseUrlAndUpdateVars(theForm,href)
+function parseUrlAndUpdateVars(theForm,href)  // DEAD CODE?
 {   // Parses the URL and converts GET vals to POST vals
     var url = href;
     var extraIx = url.indexOf("?");
-    if(extraIx > 0) {
+    if (extraIx > 0) {
         var extra = url.substring(extraIx+1);
         url = url.substring(0,extraIx);
         // now extra must be repeatedly broken into name=var
         extraIx = extra.indexOf("=");
-        for(;extraIx > 0;extraIx = extra.indexOf("=")) {
+        for (; extraIx > 0;extraIx = extra.indexOf("=")) {
             var aValue;
             var aName = extra.substring(0,extraIx);
             var endIx = extra.indexOf("&");
-            if( endIx>0) {
+            if (endIx>0) {
                 aValue = extra.substring(extraIx+1,endIx);
                 extra  = extra.substring(endIx+1);
             } else {
                 aValue = extra.substring(extraIx+1);
                 extra  = "";
             }
-            if(aName.length>0 && aValue.length>0)
+            if (aName.length > 0 && aValue.length > 0)
                 updateOrMakeNamedVariable(theForm,aName,aValue);
         }
     }
@@ -194,8 +202,8 @@ function parseUrlAndUpdateVars(theForm,href)
 function postTheForm(formName,href)
 {   // posts the form with a passed in href
     var goodForm=$("form[name='"+formName+"']");
-    if(goodForm.length == 1) {
-        if(href != undefined && href.length > 0) {
+    if (goodForm.length === 1) {
+        if (href && href.length > 0) {
             $(goodForm).attr('action',href); // just attach the straight href
         }
         $(goodForm).attr('method','POST');
@@ -207,7 +215,7 @@ function postTheForm(formName,href)
 function setVarAndPostForm(aName,aValue,formName)
 {   // Sets a specific variable then posts
     var goodForm=$("form[name='"+formName+"']");
-    if(goodForm.length == 1) {
+    if (goodForm.length === 1) {
         updateOrMakeNamedVariable(goodForm,aName,aValue);
     }
     return postTheForm(formName,window.location.href);
@@ -215,22 +223,23 @@ function setVarAndPostForm(aName,aValue,formName)
 
 // json help routines
 function tdbGetJsonRecord(trackName)  { return hgTracks.trackDb[trackName]; }
-function tdbIsFolder(tdb)             { return (tdb.kindOfParent == 1); } // NOTE: These must jive with tdbKindOfParent() and tdbKindOfChild() in trackDb.h
-function tdbIsComposite(tdb)          { return (tdb.kindOfParent == 2); }
-function tdbIsMultiTrack(tdb)         { return (tdb.kindOfParent == 3); }
-function tdbIsView(tdb)               { return (tdb.kindOfParent == 4); } // Don't expect to use
-function tdbIsContainer(tdb)          { return (tdb.kindOfParent == 2 || tdb.kindOfParent == 3); }
-function tdbIsLeaf(tdb)               { return (tdb.kindOfParent == 0); }
-function tdbIsFolderContent(tdb)      { return (tdb.kindOfChild  == 1); }
-function tdbIsCompositeSubtrack(tdb)  { return (tdb.kindOfChild  == 2); }
-function tdbIsMultiTrackSubtrack(tdb) { return (tdb.kindOfChild  == 3); }
-function tdbIsSubtrack(tdb)           { return (tdb.kindOfChild  == 2 || tdb.kindOfChild == 3); }
-function tdbHasParent(tdb)            { return (tdb.kindOfChild  != 0 && tdb.parentTrack); }
+// NOTE: These must jive with tdbKindOfParent() and tdbKindOfChild() in trackDb.h
+function tdbIsFolder(tdb)             { return (tdb.kindOfParent === 1); } 
+function tdbIsComposite(tdb)          { return (tdb.kindOfParent === 2); }
+function tdbIsMultiTrack(tdb)         { return (tdb.kindOfParent === 3); }
+function tdbIsView(tdb)               { return (tdb.kindOfParent === 4); } // Don't expect to use
+function tdbIsContainer(tdb)          { return (tdb.kindOfParent === 2 || tdb.kindOfParent === 3); }
+function tdbIsLeaf(tdb)               { return (tdb.kindOfParent === 0); }
+function tdbIsFolderContent(tdb)      { return (tdb.kindOfChild  === 1); }
+function tdbIsCompositeSubtrack(tdb)  { return (tdb.kindOfChild  === 2); }
+function tdbIsMultiTrackSubtrack(tdb) { return (tdb.kindOfChild  === 3); }
+function tdbIsSubtrack(tdb)           { return (tdb.kindOfChild  === 2 || tdb.kindOfChild === 3); }
+function tdbHasParent(tdb)            { return (tdb.kindOfChild  !== 0 && tdb.parentTrack); }
 
 function aryFind(ary,val)
 {// returns the index of a value on the array or -1;
-    for(var ix=0;ix<ary.length;ix++) {
-        if(ary[ix] == val) {
+    for (var ix=0; ix < ary.length; ix++) {
+        if (ary[ix] === val) {
             return ix;
         }
     }
@@ -239,9 +248,9 @@ function aryFind(ary,val)
 
 function aryRemove(ary,vals)
 { // removes one or more variables that are found in the array
-    for(var vIx=0;vIx<vals.length;vIx++) {
+    for (var vIx=0; vIx < vals.length; vIx++) {
         var ix = aryFind(ary,vals[vIx]);
-        if(ix != -1)
+        if (ix !== -1)
             ary.splice(ix,1);
     }
     return ary;
@@ -250,14 +259,16 @@ function aryRemove(ary,vals)
 function arysToObj(names,values)
 {   // Make hash type obj with two parallel arrays.
     var obj = {};
-    for(var ix=0; ix<names.length; ix++) {
+    for (var ix=0; ix < names.length; ix++) {
         obj[names[ix]] = values[ix]; 
     }
     return obj;
 }
 
 function objNotEmpty(obj)
-{   // returns true on non empty object.
+{   // returns true on non empty object.  Obj should pass $.isPlainObject()
+    if ($.isPlainObject(obj) === false)
+        warn("Only use plain js objects in objNotEmpty()");
     return ($.isEmptyObject(obj) === false);
 }
 
@@ -287,52 +298,59 @@ function validateInt(obj,min,max)
     var title = obj.title;
     var rangeMin=parseInt(min);
     var rangeMax=parseInt(max);
-    if(title.length == 0)
+    if (title.length === 0)
         title = "Value";
-    var popup=( $.browser.msie == false );
-    for(;;) {
-        if((obj.value == undefined || obj.value == "") && isInteger(obj.defaultValue))
+    var popup=( $.browser.msie === false );
+    for (;;) {
+        if ((obj.value === undefined || obj.value === null || obj.value === "") 
+        &&  isInteger(obj.defaultValue))
             obj.value = obj.defaultValue;
-        if(!isInteger(obj.value)) {
-            if(popup) {
+        if (!isInteger(obj.value)) {
+            if (popup) {
                 obj.value = prompt(title +" is invalid.\nMust be an integer.",obj.value);
                 continue;
             } else {
-                alert(title +" of '"+obj.value +"' is invalid.\nMust be an integer."); // try a prompt box!
+                alert(title +" of '"+obj.value +"' is invalid.\nMust be an integer.");
                 obj.value = obj.defaultValue;
                 return false;
             }
         }
         var val = parseInt(obj.value);
-        if(isInteger(min) && isInteger(max)) {
-            if(val < rangeMin || val > rangeMax) {
-                if(popup) {
-                    obj.value = prompt(title +" is invalid.\nMust be between "+rangeMin+" and "+rangeMax+".",obj.value);
+        if (isInteger(min) && isInteger(max)) {
+            if (val < rangeMin || val > rangeMax) {
+                if (popup) {
+                    obj.value = prompt(title +" is invalid.\nMust be between "+rangeMin+
+                                                                   " and "+rangeMax+".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid.\nMust be between "+rangeMin+" and "+rangeMax+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be between "+
+                                                                     rangeMin+" and "+rangeMax+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
             }
-        } else if(isInteger(min)) {
-            if(val < rangeMin) {
-                if(popup) {
-                    obj.value = prompt(title +" is invalid.\nMust be no less than "+rangeMin+".",obj.value);
+        } else if (isInteger(min)) {
+            if (val < rangeMin) {
+                if (popup) {
+                    obj.value = prompt(title +" is invalid.\nMust be no less than "+
+                                                                           rangeMin+".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no less than "+rangeMin+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no less than "+
+                                                                                      rangeMin+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
             }
-        } else if(isInteger(max)) {
-            if(val > rangeMax) {
-                if(popup) {
-                    obj.value = prompt(title +" is invalid.\nMust be no greater than "+rangeMax+".",obj.value);
+        } else if (isInteger(max)) {
+            if (val > rangeMax) {
+                if (popup) {
+                    obj.value = prompt(title +" is invalid.\nMust be no greater than "+
+                                                                           rangeMax+".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no greater than "+rangeMax+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no greater than "+
+                                                                                      rangeMax+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
@@ -347,14 +365,15 @@ function validateFloat(obj,min,max)
     var title = obj.title;
     var rangeMin=parseFloat(min);
     var rangeMax=parseFloat(max);
-    if(title.length == 0)
+    if (title.length === 0)
         title = "Value";
-    var popup=( $.browser.msie == false );
-    for(;;) {
-        if((obj.value == undefined || obj.value == "") && isFloat(obj.defaultValue))
+    var popup=( $.browser.msie === false );
+    for (;;) {
+        if ((obj.value === undefined || obj.value === null || obj.value === "") 
+        &&  isFloat(obj.defaultValue))
             obj.value = obj.defaultValue;
-        if(!isFloat(obj.value)) {
-            if(popup) {
+        if (!isFloat(obj.value)) {
+            if (popup) {
                 obj.value = prompt(title +" is invalid.\nMust be a number.",obj.value);
                 continue;
             } else {
@@ -364,35 +383,41 @@ function validateFloat(obj,min,max)
             }
         }
         var val = parseFloat(obj.value);
-        if(isFloat(min) && isFloat(max)) {
-            if(val < rangeMin || val > rangeMax) {
-                if(popup) {
-                    obj.value = prompt(title +" is invalid.\nMust be between "+rangeMin+" and "+rangeMax+".",obj.value);
+        if (isFloat(min) && isFloat(max)) {
+            if (val < rangeMin || val > rangeMax) {
+                if (popup) {
+                    obj.value = prompt(title +" is invalid.\nMust be between "+rangeMin+" and "+
+                                                                           rangeMax+".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid.\nMust be between "+rangeMin+" and "+rangeMax+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be between "+rangeMin+
+                                                                              " and "+rangeMax+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
             }
-        } else if(isFloat(min)) {
-            if(val < rangeMin) {
-                if(popup) {
-                    obj.value = prompt(title +" is invalid.\nMust be no less than "+rangeMin+".",obj.value);
+        } else if (isFloat(min)) {
+            if (val < rangeMin) {
+                if (popup) {
+                    obj.value = prompt(title +" is invalid.\nMust be no less than "+rangeMin+
+                                                                                   ".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no less than "+rangeMin+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no less than "+
+                                                                                      rangeMin+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
             }
-        } else if(isFloat(max)) {
-            if(val > rangeMax) {
-                if(popup) {
-                    obj.value = prompt(title +" is invalid.\nMust be no greater than "+rangeMax+".",obj.value);
+        } else if (isFloat(max)) {
+            if (val > rangeMax) {
+                if (popup) {
+                    obj.value = prompt(title +" is invalid.\nMust be no greater than "+
+                                                                           rangeMax+".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no greater than "+rangeMax+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no greater than "+
+                                                                                      rangeMax+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
@@ -407,10 +432,10 @@ function validateUrl(url)
 
     // I got this regexp from http://stackoverflow.com/questions/1303872/url-validation-using-javascript
     var regexp = /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
-    if(regexp.test(url)) {
+    if (regexp.test(url)) {
         return true;
     } else {
-        alert(url + " is an invalid url")
+        alert(url + " is an invalid url");
         return false;
     }
 }
@@ -418,9 +443,9 @@ function validateUrl(url)
 function metadataIsVisible(trackName)
 {
     var divit = $("#div_"+trackName+"_meta");
-    if (divit == undefined || divit.length == 0)
+    if (!divit || divit.length === 0)
         return false;
-    return ($(divit).css('display') != 'none');
+    return ($(divit).css('display') !== 'none');
 }
 
 function metadataShowHide(trackName,showLonglabel,showShortLabel)
@@ -428,24 +453,24 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
     var divit = $("#div_"+trackName+"_meta");
-    if (divit == undefined || divit.length == 0)
+    if (!divit || divit.length === 0)
         return false;
     var img = $(divit).prev('a').find("img");
-    if (img != undefined && $(img).length == 1) {
+    if (img && $(img).length === 1) {
         img = $(img)[0];
-        if ($(divit).css('display') == 'none')
+        if ($(divit).css('display') === 'none')
             $(img).attr('src','../images/upBlue.png');
         else
             $(img).attr('src','../images/downBlue.png');
     }
-    if($(divit).css('display') == 'none') {
-        if (typeof(subCfg) !== "undefined") {
+    if ($(divit).css('display') === 'none') {
+        if (typeof(subCfg) === "object") {// subCfg.js file included?
             var cfg = normed($("#div_cfg_"+trackName));
-            if (cfg != undefined)   // Hide any configuration when opening metadata
+            if (cfg)   // Hide any configuration when opening metadata
                 $(cfg).hide();
         }
 
-        if($(divit).find('table').length == 0) {
+        if ($(divit).find('table').length === 0) {
             lookupMetadata(trackName,showLonglabel,showShortLabel);
             return false;
         }
@@ -456,7 +481,7 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
         var bgClass = null;
         var classes = $( tr ).attr("class").split(" ");
         for (var ix=0;ix<classes.length;ix++) {
-            if (classes[ix].substring(0,'bgLevel'.length) == 'bgLevel')
+            if (classes[ix].substring(0,'bgLevel'.length) === 'bgLevel')
                 bgClass = classes[ix];
         }
         if (bgClass) {
@@ -475,36 +500,36 @@ function setTableRowVisibility(button, prefix, hiddenPrefix, titleDesc, doAjax)
 // src of the +/- img button.
     var retval = true;
     var hidden = $("input[name='"+hiddenPrefix+"_"+prefix+"_close']");
-    if($(button) != undefined && $(hidden) != undefined && $(hidden).length > 0) {
+    if (button && hidden && $(hidden).length > 0) {
 	var newVal = -1;
         if (arguments.length > 5)
             newVal = arguments[5] ? 0 : 1;
         var oldSrc = $(button).attr("src");
-        if (oldSrc != undefined && oldSrc.length > 0) {
+        if (oldSrc && oldSrc.length > 0) {
             // Old img version of the toggleButton
-            if (newVal == -1)
+            if (newVal === -1)
                 newVal = oldSrc.indexOf("/remove") > 0 ? 1 : 0;
-            if(newVal == 1)
+            if (newVal === 1)
                 $(button).attr("src", oldSrc.replace("/remove", "/add") );
             else
                 $(button).attr("src", oldSrc.replace("/add", "/remove") );
         } else {
             // new BUTTONS_BY_CSS
-            if (newVal == -1) {
+            if (newVal === -1) {
                 oldSrc = $(button).text();
-                if (oldSrc != undefined && oldSrc.length == 1)
-                    newVal = $(button).text() == "+" ? 0 : 1;
+                if (oldSrc && oldSrc.length === 1)
+                    newVal = (oldSrc === '+') ? 0 : 1;
                 else {
                     warn("Uninterpretable toggleButton!");
                     newVal = 0;
                 }
             }
-            if(newVal == 1)
+            if (newVal === 1)
                 $(button).text('+');
             else
                 $(button).text('-');
         }
-        if(newVal == 1) {
+        if (newVal === 1) {
             $(button).attr('title', 'Expand this '+titleDesc);
             $("tr[id^='"+prefix+"-']").hide();
         } else {
@@ -552,15 +577,15 @@ function warnBoxJsSetup()
 function warn(msg)
 { // adds warnings to the warnBox
     var warnList = $('#warnList'); // warnBox contains warnList
-    if( warnList == undefined || $(warnList).length == 0 ) {
+    if (!warnList || $(warnList).length === 0) {
         warnBoxJsSetup();
         warnList = $('#warnList');
     }
-    if( $(warnList).length == 0 )
+    if ($(warnList).length === 0)
         alert(msg);
     else {
         $( warnList ).append('<li>'+msg+'</li>');
-        if(showWarnBox != undefined)
+        if ($.isFunction(showWarnBox))
             showWarnBox();
         else
             alert(msg);
@@ -568,7 +593,7 @@ function warn(msg)
 }
 
 var gWarnSinceMSecs = 0;
-function warnSince(msg)
+function warnSince(msg)  // DEAD CODE?
 {   // Warn messages with msecs since last warnSince msg
     // This is necessary because IE Developer tools are hanging
     var now = new Date();
@@ -591,8 +616,8 @@ function getAllVars(obj,subtrackName)
 {
 // Returns a hash for all inputs and selects in an obj.
 // If obj is undefined then obj is document!
-    var urlData = new Object();
-    if($(obj) == undefined)
+    var urlData = {};
+    if (!obj)
         obj = $('document');
     var inp = $(obj).find('input');
     var sel = $(obj).find('select');
@@ -600,32 +625,32 @@ function getAllVars(obj,subtrackName)
     $(inp).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
-        if($(this).attr('type') == 'checkbox') {
+        if ($(this).attr('type') === 'checkbox') {
             name = cgiBooleanShadowPrefix() + name;
             val = $(this).attr('checked') ? 1 : 0;
-        } else if($(this).attr('type') == 'radio') {
-            if(!$(this).attr('checked')) {
+        } else if ($(this).attr('type') === 'radio') {
+            if (!$(this).attr('checked')) {
                 name = undefined;
             }
         }
-        if(name != undefined && name != "Submit" && val != undefined) {
+        if (name && name !== "Submit" && val !== undefined && val !== null) {
             urlData[name] = val;
         }
     });
     $(sel).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
-        if(name != undefined && val != undefined) {
-            if(subtrackName != undefined && name == subtrackName) {
-                if(val == 'hide') {
+        if (name && val !== undefined && val !== null) {
+            if (subtrackName && name === subtrackName) {
+                if (val === 'hide') {
                    urlData[name+"_sel"] = 0;    // Can't delete "_sel" because default takes over
-                   urlData[name]        = "[]";  // can delete vis because subtrack vis should be inherited.
-                } else {
+                   urlData[name]        = "[]"; // Can delete vis because
+                } else {                        //     subtrack vis should be inherited.
                     urlData[name+"_sel"] = 1;
                     urlData[name]        = val;
                 }
             } else {
-                if ($.isArray( val ) && val.length > 1) {
+                if ($.isArray( val) && val.length > 1) {
                     urlData[name] = "[" + val.toString() + "]";
                 } else
                     urlData[name] = val;
@@ -636,11 +661,11 @@ function getAllVars(obj,subtrackName)
 }
 
 function varHashChanges(newVars,oldVars)
-{
-// Returns a hash of all vars that are changed between old and new hash.  New vars not found in old are changed.
-    var changedVars = new Object();
+{   // Returns a hash of all vars that are changed between old and new hash.
+    // New vars not found in old are changed.
+    var changedVars = {};
     for (var newVar in newVars) {
-        if(oldVars[newVar] == null || oldVars[newVar] != newVars[newVar])
+        if (!oldVars[newVar] || oldVars[newVar] !== newVars[newVar])
             changedVars[newVar] = newVars[newVar];
     }
     return changedVars;
@@ -652,15 +677,16 @@ function varHashToQueryString(varHash)
     var retVal = "";
     var count = 0;
     for (var aVar in varHash) {
-        if(count++ > 0) {
+        if (count++ > 0) {
             retVal += "&";
         }
         var val = varHash[aVar];
-        if (typeof(val) == 'string'
+        if (typeof(val) === 'string'
         && val.length >= 2
-        && val.indexOf('[') == 0
-        && val.lastIndexOf(']') == (val.length - 1)) {
+        && val.indexOf('[') === 0
+        && val.lastIndexOf(']') === (val.length - 1)) {
             var vals = val.substr(1,val.length - 2).split(',');
+            /* jshint loopfunc: true */// function inside loop works and replacement is awkward.
             $(vals).each(function (ix) {
                 if (ix > 0)
                     retVal += "&";
@@ -673,7 +699,7 @@ function varHashToQueryString(varHash)
     return retVal;
 }
 
-function getAllVarsAsUrlData(obj)
+function getAllVarsAsUrlData(obj)  // DEAD CODE?
 {
 // Returns a string in the form of var1=val1&var2=val2... for all inputs and selects in an obj
 // If obj is undefined then obj is document!
@@ -690,10 +716,10 @@ function popupBox(popit, content, popTitle)
     warn(content);
 
     // Set up the popit div if necessary
-    if(popit == undefined) {
+    if (!popit) {
         popit = $('#popit');
 
-        if(popit == undefined) {
+        if (!popit ) {
             $('body').prepend("<div id='popit' style='display: none'></div>");
             popit = $('#popit');
         }
@@ -715,13 +741,12 @@ function popupBox(popit, content, popTitle)
                                modal: true,
                                closeOnEscape: true,
                                autoOpen: false,
-                               close: function() {
-                                   // clear out html after close to prevent problems caused by duplicate html elements
-                                   $(popDiv).empty();
+                               close: function() {    // clear out html after close to prevent
+                                   $(popDiv).empty(); // problems caused by duplicate html elements
                                }
                            });
     // Apparently the options above to dialog take only once, so we set title explicitly.
-    if(popTitle != undefined && popTitle.length > 0)
+    if (popTitle && popTitle.length > 0)
         $(popit).dialog('option' , 'title' , popTitle );
     else
         $(popit).dialog('option' , 'title' , "Please Respond");
@@ -730,11 +755,12 @@ function popupBox(popit, content, popTitle)
 }
 */
 
-function embedBoxOpen(boxit, content, reenterable) // 4 extra STRING Params: boxWidth, boxTitle, applyFunc, applyName
-{
-// embeds a box for the provided content.
-// This box has 1 button (close) by default and 2 buttons if the name of an applyFunc is provided (apply, cancel)
-// If there is no apply function, the box may be reentrent, meaning subsequent calls do not need to provide content
+function embedBoxOpen(boxit, content, reenterable)  // DEAD CODE?
+{   // embeds a box for the provided content.
+    // This box has 1 button (close) by default and 2 buttons if the name of an applyFunc
+    // is provided (apply, cancel) If there is no apply function, the box may be reentrent, 
+    // meaning subsequent calls do not need to provide content
+    // NOTE: 4 extra STRING Params: boxWidth, boxTitle, applyFunc, applyName
 
     // Define extra params now
     var boxWidth = "80%";
@@ -751,10 +777,10 @@ function embedBoxOpen(boxit, content, reenterable) // 4 extra STRING Params: box
         applyName = arguments[6];
 
     // Set up the popit div if necessary
-    if (boxit == undefined) {
+    if (!boxit) {
         boxit = $('div#boxit');
 
-        if (boxit == undefined) {
+        if (!boxit) {
             $('body').prepend("<div id='boxit'></div>");
             //$('body').prepend("<div id='boxit' style='display: none'></div>");
             boxit = $('div#boxit');
@@ -771,46 +797,49 @@ function embedBoxOpen(boxit, content, reenterable) // 4 extra STRING Params: box
         // Set up closing code
         var closeButton = "Close";
         var closeHtml = "embedBoxClose($(\"#"+ $(boxit).attr('id') + "\"),";
-        if (reenterable && applyFunc.length == 0)
-            closeHtml += "true);"
+        if (reenterable && applyFunc.length === 0)
+            closeHtml += "true);";
         else
             closeHtml += "false);";
 
         // Buttons
         buildHtml += "<div>";
         if (applyFunc.length > 0) { // "Apply" button and "Cancel" button.  Apply also closes!
-            buildHtml += "&nbsp;<INPUT TYPE='button' value='" + applyName + "' onClick='"+ applyFunc + "(" + $(boxit).attr('id') + "); " + closeHtml + "'>&nbsp;";
+            buildHtml += "&nbsp;<INPUT TYPE='button' value='" + applyName + "' onClick='"+ 
+                            applyFunc + "(" + $(boxit).attr('id') + "); " + closeHtml + "'>&nbsp;";
             closeButton = "Cancel"; // If apply button then close is cancel
         }
-        buildHtml += "&nbsp;<INPUT TYPE='button' value='" + closeButton + "' onClick='" + closeHtml + "'>&nbsp;";
-        buildHtml += "</div>";
+        buildHtml += "&nbsp;<INPUT TYPE='button' value='" + closeButton + "' onClick='" + closeHtml;
+        buildHtml += "'>&nbsp;</div>";
 
-        $(boxit).html("<div class='blueBox' style='width:" + boxWidth + "; background-color:#FFF9D2;'>" + buildHtml + "</div>");  // Make it boxed
+        $(boxit).html("<div class='blueBox' style='width:" + boxWidth + 
+                          "; background-color:#FFF9D2;'>" + buildHtml + "</div>"); // Make it boxed
     }
 
-    if ($(boxit).html() == null || $(boxit).html().length == 0)
+    var boxedHtml = $(boxit).html();
+    if (!boxedHtml || boxedHtml.length === 0)
         warn("embedHtmlBox() called without content");
     else
         $(boxit).show();
 }
 
-function embedBoxClose(boxit, reenterable) // 4 extra STRING Params: boxWidth, boxTitle, applyFunc, applyName
-{
-// Close an embedded box
-    if (boxit != undefined) {
+function embedBoxClose(boxit, reenterable)  // DEAD CODE?
+{   // Close an embedded box
+    // NOTE  4 extra STRING Params: boxWidth, boxTitle, applyFunc, applyName
+    if (boxit) {
         $(boxit).hide();
-        if(!reenterable)
+        if (!reenterable)
             $(boxit).empty();
     }
 }
 
-function startTiming()
+function startTiming()  // DEAD CODE?
 {
     var now = new Date();
     return now.getTime();
 }
 
-function showTiming(start,whatTookSoLong)
+function showTiming(start,whatTookSoLong)  // DEAD CODE?
 {
     var now = new Date();
     var end = (now.getTime() - start);
@@ -823,7 +852,7 @@ function getHgsid()
 
     // .first() because hgTracks turned up 3 of these!
     var hgsid = normed($("input[name='hgsid']").first());
-    if(hgsid != undefined)
+    if (hgsid)
         return hgsid.value;
 
     hgsid = getURLParam(window.location.href, "hgsid");
@@ -831,11 +860,11 @@ function getHgsid()
         return hgsid;
 
     // This may be moved to 1st position as the most likely source
-    if (typeof(common) !== "undefined" && common.hgsid !== undefined)
+    if (typeof(common) !== "undefined" && common.hgsid !== undefined && common.hgsid !== null)
         return common.hgsid;
 
     hgsid = normed($("input#hgsid").first());
-    if(hgsid != undefined)
+    if (hgsid)
         return hgsid.value;
 
     return "";
@@ -844,7 +873,7 @@ function getHgsid()
 function getDb()
 {
     var db = normed($("input[name='db']").first());
-    if(db != undefined)
+    if (db)
         return db.value;
 
     db = getURLParam(window.location.href, "db");
@@ -852,11 +881,11 @@ function getDb()
         return db;
 
     // This may be moved to 1st position as the most likely source
-    if (typeof(common) !== "undefined" && common.db !== undefined)
+    if (typeof(common) !== "undefined" && common.db !== undefined && common.db !== null)
         return common.db;
 
     db = normed($("input#db").first());
-    if(db != undefined)
+    if (db)
         return db.value;
 
     return "";
@@ -865,7 +894,7 @@ function getDb()
 function getTrack()
 {
     var track = normed($("input[name='g']").first());
-    if (track != undefined)
+    if (track)
         return track.value;
 
     track = getURLParam(window.location.href, "g");
@@ -873,29 +902,29 @@ function getTrack()
         return track;
 
     // This may be moved to 1st position as the most likely source
-    if (typeof(common) !== "undefined" && common.track !== undefined)
+    if (typeof(common) !== "undefined" && common.track !== undefined && common.track !== null)
         return common.track;
 
-    var track = normed($("input#g").first());
-    if (track != undefined)
+    track = normed($("input#g").first());
+    if (track)
         return track.value;
 
     return "";
 }
 
-function Rectangle()
+function Rectangle()  // DEAD CODE?
 {
 // Rectangle object constructor:
 // calling syntax:
 //
 // new Rectangle(startX, endX, startY, endY)
 // new Rectangle(coords) <-- coordinate string from an area item
-    if(arguments.length == 4) {
+    if (arguments.length === 4) {
         this.startX = arguments[0];
         this.endX = arguments[1];
         this.startY = arguments[2];
         this.endY = arguments[3];
-    } else if(arguments.length > 0)  {
+    } else if (arguments.length > 0)  {
         var coords = arguments[0].split(",");
         this.startX = coords[0];
         this.endX = coords[2];
@@ -909,15 +938,15 @@ function Rectangle()
     }
 }
 
-Rectangle.prototype.contains = function(x, y)
+Rectangle.prototype.contains = function(x, y)  // DEAD CODE?
 {
 // returns true if given points are in the rectangle
     var retval = x >= this.startX && x <= this.endX && y >= this.startY && y <= this.endY;
     return retval;
-}
+};
 
 function commify (str) {
-    if(typeof(str) == "number")
+    if (typeof(str) === "number")
 	str = str + "";
     var n = str.length;
     if (n <= 3) {
@@ -925,7 +954,7 @@ function commify (str) {
     } else {
 	var pre = str.substring(0, n-3);
 	var post = str.substring(n-3);
-	var pre = commify(pre);
+	pre = commify(pre);
 	return pre + "," + post;
     }
 }
@@ -936,10 +965,10 @@ function parsePosition(position)
     if (position && position.length > 0) {
         position = position.replace(/,/g, "");
         var a = /(\S+):(\d+)-(\d+)/.exec(position);
-        if(a != null && a.length == 4) {
-            var o = new Object();
+        if (a && a.length === 4) {
+            var o = {};
             o.chrom = a[1];
-            o.start = parseInt(a[2])
+            o.start = parseInt(a[2]);
             o.end = parseInt(a[3]);
             return o;
         }
@@ -951,21 +980,21 @@ function parsePositionWithDb(position)
 // Parse db.chr:start-end string into a db, chrom, start, end object
 // Also supports be db.chr:start-end#color string
 {
-    var out = new Object();
+    var out = {};
     var parts = position.split(".");
-    if (parts.length == 2) {
+    if (parts.length === 2) {
         out.db = parts[0];
         position = parts[1];
     } else {
         out.db = getDb(); // default the db 
     }
     parts = position.split("#"); // Highlight Region may carry its color
-    if (parts.length == 2) {
+    if (parts.length === 2) {
         position = parts[0];
         out.color = '#' + parts[1];
     }
     var pos = parsePosition(position);
-    if (pos != null) {
+    if (pos) {
         out.chrom = pos.chrom;
         out.start = pos.start;
         out.end   = pos.end;
@@ -978,7 +1007,7 @@ function getSizeFromCoordinates(position)
 {
 // Parse size out of a chr:start-end string
     var o = parsePosition(position);
-    if(o != null) {
+    if (o) {
         return o.end - o.start + 1;
     }
     return null;
@@ -990,8 +1019,8 @@ var gWaitFunc;
 
 function waitMaskClear()
 { // Clears the waitMask
-    var  waitMask = $('#waitMask');
-    if( waitMask != undefined )
+    var  waitMask = normed($('#waitMask'));
+    if (waitMask)
         $(waitMask).hide();
 }
 
@@ -1000,22 +1029,23 @@ function waitMaskSetup(timeOutInMs)
 
     // Find or create the waitMask (which masks the whole page)
     var  waitMask = $('#waitMask');
-    if( waitMask == undefined || waitMask.length != 1) {
+    if (!waitMask || waitMask.length !== 1) {
         // create the waitMask
         $("body").append("<div id='waitMask' class='waitMask');'></div>");
         waitMask = $('#waitMask');
     }
-    $(waitMask).css({opacity:0.0,display:'block',top: '0px', height: $(document).height().toString() + 'px' });
+    $(waitMask).css({opacity:0.0,display:'block',top: '0px', 
+                        height: $(document).height().toString() + 'px' });
     // Special for IE, since it takes so long, make mask obvious
     //if ($.browser.msie)
     //    $(waitMask).css({opacity:0.4,backgroundColor:'gray'});
 
     // Things could fail, so always have a timeout.
-    if(timeOutInMs == undefined || timeOutInMs ==0)
+    if (!timeOutInMs)  // works for undefined, null and 0
         timeOutInMs = 30000; // IE can take forever!
 
     if (timeOutInMs > 0)
-        setTimeout('waitMaskClear();',timeOutInMs); // Just in case
+        setTimeout(waitMaskClear,timeOutInMs); // Just in case
 
     return waitMask;  // The caller could add css if they wanted.
 }
@@ -1028,27 +1058,28 @@ function _launchWaitOnFunction()
     var funcArgs = gWaitFuncArgs;
     gWaitFuncArgs = [];
 
-    if(func == undefined || !jQuery.isFunction(func))
+    if (!func || !jQuery.isFunction(func))
         warn("_launchWaitOnFunction called without a function");
     else {
-        if(funcArgs.length == 0)
+        if (funcArgs.length === 0)
             func();
-        else if (funcArgs.length == 1)
+        else if (funcArgs.length === 1)
             func(funcArgs[0]);
-        else if (funcArgs.length == 2)
+        else if (funcArgs.length === 2)
             func(funcArgs[0],funcArgs[1]);
-        else if (funcArgs.length == 3)
+        else if (funcArgs.length === 3)
             func(funcArgs[0],funcArgs[1],funcArgs[2]);
-        else if (funcArgs.length == 4)
+        else if (funcArgs.length === 4)
             func(funcArgs[0],funcArgs[1],funcArgs[2],funcArgs[3]);
-        else if (funcArgs.length == 5)
+        else if (funcArgs.length === 5)
             func(funcArgs[0],funcArgs[1],funcArgs[2],funcArgs[3],funcArgs[4]);
         else
-            warn("_launchWaitOnFunction called with " + funcArgs.length + " arguments.  Only 5 are supported.");
+            warn("_launchWaitOnFunction called with " + funcArgs.length + 
+                                                             " arguments.  Only 5 are supported.");
     }
     // Special if the first var is a button that can visually be inset
-    if(funcArgs.length > 0 && funcArgs[0].type != undefined) {
-        if(funcArgs[0].type == 'button' && $(funcArgs[0]).hasClass('inOutButton')) {
+    if (funcArgs.length > 0 && funcArgs[0].type) {
+        if (funcArgs[0].type === 'button' && $(funcArgs[0]).hasClass('inOutButton')) {
             $(funcArgs[0]).css('borderStyle',"outset");
         }
     }
@@ -1057,67 +1088,68 @@ function _launchWaitOnFunction()
 }
 
 function waitOnFunction(func)
-{ // sets the waitMask (wait cursor and no clicking), then launches the function with up to 5 arguments
-    if(!jQuery.isFunction(func)) {
+{   // sets the waitMask (wait cursor and no clicking),
+    // then launches the function with up to 5 arguments
+    if (!jQuery.isFunction(func)) {
         warn("waitOnFunction called without a function");
         return false;
     }
-    if (gWaitFunc != null)
-    {
-        if (gWaitFunc == func) // already called (sometimes hapens when onchange event is triggered
+    if (gWaitFunc) {
+        if (gWaitFunc === func) // already called (sometimes hapens when onchange event is triggered
             return true;       // by js (rather than direct user action).  Happens in IE8
         warn("waitOnFunction called but already waiting on a function");
         return false;
     }
-    if(arguments.length > 6) {
-        warn("waitOnFunction called with " + arguments.length - 1 + " arguments.  Only 5 are supported.");
+    if (arguments.length > 6) {
+        warn("waitOnFunction called with " + arguments.length - 1 + 
+                                                             " arguments.  Only 5 are supported.");
         return false;
     }
 
-    waitMaskSetup(0);  // Find or create the waitMask (which masks the whole page) but gives up after 5sec
+    waitMaskSetup(0);  // Find or create waitMask (which masks whole page) but gives up after 5sec
 
     // Special if the first var is a button that can visually be inset
-    if(arguments.length > 1 && arguments[1].type != undefined) {
-        if(arguments[1].type == 'button' && $(arguments[1]).hasClass('inOutButton')) {
+    if (arguments.length > 1 && arguments[1].type !== undefined && arguments[1].type !== null) {
+        if (arguments[1].type === 'button' && $(arguments[1]).hasClass('inOutButton')) {
             $(arguments[1]).css( 'borderStyle',"inset");
         }
     }
 
     // Build up the aruments array
-    for(var aIx=1;aIx<arguments.length;aIx++) {
-        gWaitFuncArgs.push(arguments[aIx])
+    for (var aIx=1; aIx < arguments.length; aIx++) {
+        gWaitFuncArgs.push(arguments[aIx]);
     }
     gWaitFunc = func;
 
-    setTimeout('_launchWaitOnFunction();',10);
+    setTimeout(_launchWaitOnFunction,10);
 
 }
 
 // --- yielding iterator ---
-function _yieldingIteratorObject(yieldingFunc)
+function _yieldingIteratorObject(yieldingFunc)  // DEAD CODE?
 { // This is the "recusive object" or ro which is instantiated in waitOnIteratingFunction
   // yieldingFunc is passed in from waitOnIteratingFunction
   // and will recurse which recursively calls an iterator
     this.step = function(msecs,args) {
         setTimeout(function() { yieldingFunc(args); }, msecs); // recursive timeouts
         return;
-    }
+    };
 }
 
-function yieldingIterator(interatingFunc,continuingFunc,args)
-{   // Will run interatingFunc function with "yields", then run continuingFunc
+function yieldingIterator(iteratingFunc,continuingFunc,args)  // DEAD CODE?
+{   // Will run iteratingFunc function with "yields", then run continuingFunc
     // Based upon design by Guido Tapia, PicNet
-    // interatingFunc must return number of msecs to pause before next interation.
+    // iteratingFunc must return number of msecs to pause before next interation.
     //                return 0 ends iteration with call to continuingFunc
     //                return < 0 ends iteration with no call to continuingFunc
-    // Both interatingFunc and continuingFunc will receive the single "args" param.
+    // Both iteratingFunc and continuingFunc will receive the single "args" param.
     // Hint. for multiple args, create a single struct object
 
     var ro = new _yieldingIteratorObject(function() {
-            var msecs = interatingFunc(args);
+            var msecs = iteratingFunc(args);
             if (msecs > 0)
                 ro.step(msecs,args);      // recursion
-            else if (msecs == 0)
+            else if (msecs === 0)
                 continuingFunc(args);     // completion
             // else (msec < 0) // abandon
         });
@@ -1146,10 +1178,10 @@ function hideLoadingImage(id)
 }
 
 function codonColoringChanged(name)
-{
-// Updated disabled state of codonNumbering checkbox based on current value of track coloring select.
+{   // Updated disabled state of codonNumbering checkbox based on current value
+    // of track coloring select.
     var val = $("select[name='" + name + ".baseColorDrawOpt'] option:selected").text();
-    $("input[name='" + name + ".codonNumbering']").attr('disabled', val == "OFF");
+    $("input[name='" + name + ".codonNumbering']").attr('disabled', val === "OFF");
 }
 
 
@@ -1163,9 +1195,9 @@ var bindings = {
     { // primitive not meant to be called directly but by bindings.inside and bindings.outside
         if (someString.length <= 0)
             return '';
-        if (ixBeg == undefined)
+        if (ixBeg === undefined || ixBeg === null)
             ixBeg = 0;
-        if (ixEnd == undefined)
+        if (ixEnd === undefined || ixEnd === null)
             ixEnd = someString.length;
         var insideBeg = ixBeg;
         var insideEnd = ixEnd;
@@ -1220,20 +1252,21 @@ var bindings = {
 
         return '';
     }
-}
+};
 
 function stripHgErrors(returnedHtml, whatWeDid)
-{ // strips HGERROR style 'early errors' and shows them in the warnBox
-  // If whatWeDid != null, we use it to return info about what we stripped out and processed (current just warnMsg).
+{   // strips HGERROR style 'early errors' and shows them in the warnBox
+    // If whatWeDid !== null, we use it to return info about what we stripped out and
+    // processed (current just warnMsg).
     var cleanHtml = returnedHtml;
-    while(cleanHtml.length > 0) {
+    while (cleanHtml.length > 0) {
         var bounds = bindings.outside('<!-- HGERROR-START -->','<!-- HGERROR-END -->',cleanHtml);
-        if (bounds.start == -1)
+        if (bounds.start === -1)
             break;
         var warnMsg = bindings.insideOut('<P>','</P>',cleanHtml,bounds.start,bounds.stop);
         if (warnMsg.length > 0) {
             warn(warnMsg);
-            if(whatWeDid != null)
+            if (whatWeDid)
                 whatWeDid.warnMsg = warnMsg;
         }
         cleanHtml = cleanHtml.slice(0,bounds.start) + cleanHtml.slice(bounds.stop);
@@ -1244,11 +1277,11 @@ function stripHgErrors(returnedHtml, whatWeDid)
 function stripJsFiles(returnedHtml,debug)
 { // strips javascript files from html returned by ajax
     var cleanHtml = returnedHtml;
-    var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
+    var shlurpPattern=/<script type=\'text\/javascript\' SRC\=\'.*\'\><\/script\>/gi;
     if (debug) {
         var jsFiles = cleanHtml.match(shlurpPattern);
         if (jsFiles && jsFiles.length > 0)
-            alert("jsFiles:'"+jsFiles+"'\n---------------\n"+cleanHtml); // warn() interprets html, etc.
+            alert("jsFiles:'"+jsFiles+"'\n---------------\n"+cleanHtml); // warn() interprets html
     }
     cleanHtml = cleanHtml.replace(shlurpPattern,"");
 
@@ -1258,7 +1291,7 @@ function stripJsFiles(returnedHtml,debug)
 function stripCssFiles(returnedHtml,debug)
 { // strips csst files from html returned by ajax
     var cleanHtml = returnedHtml;
-    var shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
+    var shlurpPattern=/<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
     if (debug) {
         var cssFiles = cleanHtml.match(shlurpPattern);
         if (cssFiles && cssFiles.length > 0)
@@ -1272,24 +1305,25 @@ function stripCssFiles(returnedHtml,debug)
 function stripJsEmbedded(returnedHtml, debug, whatWeDid)
 { // strips embedded javascript from html returned by ajax
   // NOTE: any warnBox style errors will be put into the warnBox
-  // If whatWeDid != null, we use it to return info about what we stripped out and processed (current just warnMsg).
+  // If whatWeDid !== null, we use it to return info about
+  // what we stripped out and processed (current just warnMsg).
     var cleanHtml = returnedHtml;
     // embedded javascript?
-    while(cleanHtml.length > 0) {
-        var begPattern = /\<script type=\'text\/javascript\'\>/i;
-        var endPattern = /\<\/script\>/i;
+    while (cleanHtml.length > 0) {
+        var begPattern = /<script type=\'text\/javascript\'\>/i;
+        var endPattern = /<\/script\>/i;
         var bounds = bindings.outside(begPattern,endPattern,cleanHtml);
-        if (bounds.start == -1)
+        if (bounds.start === -1)
             break;
         var jsEmbeded = cleanHtml.slice(bounds.start,bounds.stop);
-        if(-1 == jsEmbeded.indexOf("showWarnBox")) {
+        if (-1 === jsEmbeded.indexOf("showWarnBox")) {
             if (debug)
                 alert("jsEmbedded:'"+jsEmbeded+"'\n---------------\n"+cleanHtml);
         } else {
             var warnMsg = bindings.insideOut('<li>','</li>',cleanHtml,bounds.start,bounds.stop);
             if (warnMsg.length > 0) {
                 warn(warnMsg);
-                if(whatWeDid != null)
+                if (whatWeDid)
                     whatWeDid.warnMsg = warnMsg;
             }
         }
@@ -1303,7 +1337,7 @@ function visTriggersHiddenSelect(obj)
   // This is done by setting hidden input "_sel"
     var trackName_Sel = $(obj).attr('name') + "_sel";
     var theForm = $(obj).closest("form");
-    var visible = (obj.selectedIndex != 0);
+    var visible = (obj.selectedIndex !== 0);
     if (visible) {
         updateOrMakeNamedVariable(theForm,trackName_Sel,"1");
     } else
@@ -1311,11 +1345,11 @@ function visTriggersHiddenSelect(obj)
     return true;
 }
 
-function setCheckboxList(list, value)
+function setCheckboxList(list, value)  // DEAD CODE?
 {
 // set value of all checkboxes in semicolon delimited list
     var names = list.split(";");
-    for(var i=0;i<names.length;i++) {
+    for (var i=0; i < names.length; i++) {
         $("input[name='" + names[i] + "']").attr('checked', value);
     }
 }
@@ -1329,7 +1363,7 @@ function calculateHgTracksWidth()
 function hgTracksSetWidth()
 {
     var winWidth = calculateHgTracksWidth();
-    if($("#imgTbl").length == 0) {
+    if ($("#imgTbl").length === 0) {
         // XXXX what's this code for?
         $("#TrackForm").append('<input type="hidden" name="pix" value="' + winWidth + '"/>');
         //$("#TrackForm").submit();
@@ -1346,10 +1380,10 @@ function filterByMaxHeight(multiSel)
         pos = 260;
 
     // Special mess since the filterBy's on non-current tabs will calculate pos badly.
-    var tabbed = $('input#currentTab');
-    if (tabbed != undefined) {
+    var tabbed = normed($('input#currentTab'));
+    if (tabbed) {
         var tabDiv = $(multiSel).parents('div#'+ $(tabbed).attr('value'));
-        if (tabDiv == null || tabDiv == undefined || $(tabDiv).length == 0) {
+        if (!tabDiv || $(tabDiv).length === 0) {
             pos = 360;
         }
     }
@@ -1357,8 +1391,6 @@ function filterByMaxHeight(multiSel)
     var selHeight = $(multiSel).children().length * 21;
     if (maxHeight > selHeight)
         maxHeight = null;
-    //else if($.browser.msie && maxHeight > 500)  // DDCL bug on IE only.
-    //    maxHeight = 500;          // Seems to be solved by disbling DDCL's window.resize event for IE
 
     return maxHeight;
 }
@@ -1366,14 +1398,14 @@ function filterByMaxHeight(multiSel)
 //////////// Drag and Drop ////////////
 function tableDragAndDropRegister(thisTable)
 {// Initialize a table with tableWithDragAndDrop
-    if ($(thisTable).hasClass("tableWithDragAndDrop") == false)
+    if ($(thisTable).hasClass("tableWithDragAndDrop") === false)
         return;
 
     $(thisTable).tableDnD({
         onDragClass: "trDrag",
         dragHandle: "dragHandle",
         onDrop: function(table, row, dragStartIndex) {
-                if (row.rowIndex != dragStartIndex) {
+                if (row.rowIndex !== dragStartIndex) {
                     if (sortTable.savePositions) {
                         sortTable.savePositions(table);
                     }
@@ -1390,40 +1422,60 @@ function tableDragAndDropRegister(thisTable)
  ////////// Sort Table /////////
 ///////////////////////////////
 var sortTable = {
-    // The sortTable object handles sorting HTML tables on columns.
-    // Just add the 'sortable' class to your table and in ready() call sortTable.initialize($('table.sortable')).
-    //
-    // Details you don't need to know until you want to do something fancy.
-    // A sortable table requires:
-    //     TABLE.sortable: TABLE class='sortable' containing a THEAD header and sortable TBODY filled with the rows to sort.
-    //     THEAD.sortable: (NOTE: created if not found) The THEAD can contain multiple rows must contain:
-    //       TR.sortable: exactly 1 header TH (table row) class='sortable' which will declare the sort columns:
-    //       TH.sortable: 1 or more TH (table column headers) with class='sortable sort1 [sortRev]' (or sort2, sort3) declaring sort order and whether reversed
-    //         e.g. <TH id='factor' class='sortable sortRev sort3' nowrap>...</TH>  (this means that factor is currently the third sort column and reverse sorted)
-    //         (NOTE: If no TH.sortable is found, then every th in the TR.sortable will be converted for you and will be in sort1,2,3 order.)
-    //         ONCLICK: Each TH.sortable must call sortTable.sortOnButtonPress(this) directly or indirectly in the onclick event :
-    //           e.g. <TH id='factor' class='sortable sortRev sort3' nowrap title='Sort list on this column' onclick="return sortTable.sortOnButtonPress(this);">
-    //           (NOTE: If no onclick function is found in a TH.sortable, then it will automatically be added.)
-    //         SUP: Each TH.sortable *may* contain a <sup> which will be filled with an up or down arrow and the column's sort order: e.g. <sup>&darr;2</sup>
-    //           (NOTE: The sup can be added by using the addSuperscript option to the sortTable.initialize() function.
-    //     TBODY.sortable: (NOTE: created if not found) The TBODY class='sortable' contains the table rows that get sorted:
-    //       TBODY->TR & ->TD: Each row contains a TD for each sortable column. The innerHTML (entire contents) of the cell will be used for sorting.
-    //       TRICK: You can use the 'abbr' field to subtly alter the sortable contents.  Otherwise sorts on td contents ($(td).text()).
-    //              Use the abbr field to make case-insensitive sorts or force exceptions to alpha-text order (e.g. ZCTRL vs Control forcing controls to bottom)
-    //              e.g. <TD id='wgEncodeBroadHistoneGm12878ControlSig_factor' nowrap abbr='ZCTRL' align='left'>Control</TD>
-    //              This is also the method to ensure a numeric sort (e.g. <td align="right" abbr="000003416800354">3.2 GB</td>).
-    //              IMPORTANT: You must add abbr='use' to the TH.sortable definitions.
-    //     Finally if you want the tableSort to alternate the table row colors (using #FFFEE8 and #FFF9D2) then TBODY.sortable should also have class 'altColors'
-    //     NOTE: This class can be added by using the altColors option to the sortTable.initialize() function.
-    //
-    //     PRESERVING TO CART: To send the sort column on a form 'submit', the header tr (TR.sortable) needs a named hidden input of class='sortOrder' as:
-    //       e.g.: <INPUT TYPE=HIDDEN NAME='wgEncodeBroadHistone.sortOrder' class='sortOrder' VALUE="factor=- cell=+ view=+">
-    //       AND each sortable column header (TH.sortable) must have id='{name}' which is the name of the sortable field (e.g. 'factor', 'shortLabel')
-    //       The value preserves the column sort order and direction based upon the id={name} of each sort column.
-    //       In the example, while 'cell' may be the first column, the table is currently reverse ordered by 'factor', then by cell and view.
-    //     And to send the sorted row orders on form 'submit', each TBODY->TR will need a named hidden input field of class='trPos':
-    //       e.g. <INPUT TYPE=HIDDEN NAME='wgEncodeHaibTfbsA549ControlPcr2xDexaRawRep1.priority' class='trPos' VALUE="2">
-    //       A reason to preserve the order in the cart is if the order will affect other cgis.  For instance: sort subtracks and see that order in the hgTracks image.
+// The sortTable object handles sorting HTML tables on columns.
+// Just add the 'sortable' class to your table and in ready() call 
+//                                                       sortTable.initialize($('table.sortable')).
+//
+// Details you don't need to know until you want to do something fancy.
+// A sortable table requires:
+// TABLE.sortable: TABLE class='sortable' containing a THEAD header and sortable TBODY filled
+//                 with the rows to sort.
+//   THEAD.sortable: (NOTE: created if not found) THEAD can contain multiple rows must contain:
+//     TR.sortable: exactly 1 header TH (tr) class='sortable' which will declare the sort columns:
+//     TH.sortable: 1 or more TH (column headers) with class='sortable sort1 [sortRev]'
+//                  (or sort2, sort3) declaring sort order and whether reversed.  e.g.:
+//                  <TH id='factor' class='sortable sortRev sort3' nowrap>...</TH>
+//                  (this means that factor is currently the third sort column and reverse sorted)
+//            NOTE: If no TH.sortable is found, then every th in the TR.sortable will be converted
+//                  for you and will be in sort1,2,3 order.
+//       ONCLICK: Each TH.sortable must call sortTable.sortOnButtonPress(this) directly
+//                or indirectly in the onclick event e.g.:
+//                <TH id='factor' class='sortable sortRev sort3' nowrap title='Sort on this column' 
+//                                           onclick="return sortTable.sortOnButtonPress(this);">
+//          NOTE: onclick function will automatically be added if not found.
+//       SUP: Each TH.sortable *may* contain a <sup> which will be filled with an
+//                          up or down arrow and the column's sort order: e.g. <sup>&darr;2</sup>
+//            NOTE: The sup can be added via the addSuperscript option in sortTable.initialize().
+//   TBODY.sortable: (NOTE: created if not found) The TBODY class='sortable' contains the
+//                   table rows that get sorted:
+//                   TBODY->TR & ->TD: Each row contains a TD for each sortable column.
+//                   The innerHTML (entire contents) of the cell will be used for sorting.
+//     TRICK: You can use the 'abbr' field to subtly alter the sortable contents.
+//            Otherwise sorts on td contents ($(td).text()).  Use the abbr field to make
+//            case-insensitive sorts or force exceptions to alpha-text order
+//            (such as. ZCTRL vs Control forcing controls to bottom)  e.g.:
+//                <TD id='wgEncodeBroadHist...' nowrap abbr='ZCTRL' align='left'>Control</TD>
+//            This is also the method to ensure a numeric sort e.g.:
+//                <td align="right" abbr="000003416800354">3.2 GB</td>
+//            IMPORTANT: You must add abbr='use' to the TH.sortable definitions.
+// Finally if you want the tableSort to alternate the table row colors (using #FFFEE8 and #FFF9D2)
+// then TBODY.sortable should also have class 'altColors'
+// NOTE: This class can be added by using the altColors option to sortTable.initialize().
+//
+// PRESERVING TO CART: To send the sort column on a form 'submit', the header tr (TR.sortable)
+//   needs a named hidden input of class='sortOrder' as:
+//      <INPUT TYPE=HIDDEN NAME='wgEncodeBroadHistone.sortOrder'
+//                                              class='sortOrder' VALUE="factor=- cell=+ view=+">
+//   AND each sortable column header (TH.sortable) must have id='{name}' which is the name of
+//   the sortable field (e.g. 'factor', 'shortLabel').  The value preserves the column sort order
+//   and direction based upon the id={name} of each sort column.  In the example, while 'cell' may
+//   be the first column, the table is currently reverse ordered by 'factor', then by cell and view.
+// And to send the sorted row orders on form 'submit', each TBODY->TR will need a named hidden
+//   input field of class='trPos'.  e.g.:
+//      <INPUT TYPE=HIDDEN NAME='wgEncodeHaibTfbsA549ControlPcr2xDexaRawRep1.priority'
+//                                                                        class='trPos' VALUE="2">
+//   A reason to preserve the order in the cart is if the order will affect other cgis.
+//   For instance: sort subtracks and see that order in the hgTracks image.
 
     // Sorting a table by columns relies upon the columns obj, whose C equivalent would look like:
     //struct column
@@ -1449,10 +1501,10 @@ var sortTable = {
 
     row: function (tr,sortColumns,row)  // UNUSED: sortTable.fieldCmp works fine
     {
-        this.fields  = new Array();
-        this.reverse = new Array();
+        this.fields  = [];
+        this.reverse = [];
         this.row     = row;
-        for(var ix=0;ix<sortColumns.cellIxs.length;ix++)
+        for (var ix=0; ix < sortColumns.cellIxs.length; ix++)
             {
             var th = tr.cells[sortColumns.cellIxs[ix]];
             this.fields[ix]  = (sortColumns.useAbbr[ix] ? th.abbr : $(th).text());
@@ -1464,7 +1516,7 @@ var sortTable = {
 
     rowCmp: function (a,b)  // UNUSED: sortTable.fieldCmp works fine
     {
-        for(var ix=0;ix<a.fields.length;ix++) {
+        for (var ix=0; ix < a.fields.length; ix++) {
             if (a.fields[ix] > b.fields[ix])
                 return (a.reverse[ix] ? -1:1);
             else if (a.fields[ix] < b.fields[ix])
@@ -1475,7 +1527,7 @@ var sortTable = {
 
     field: function (value,reverse,row)
     {
-        if (sortTable.caseSensitive || typeof(value) != 'string') 
+        if (sortTable.caseSensitive || typeof(value) !== 'string') 
             this.value   = value;
         else
             this.value   = value.toLowerCase(); // case insensitive sorts
@@ -1499,14 +1551,15 @@ var sortTable = {
         // The sort routine available is javascript array.sort(), which cannot sort rows directly
         // Until we have jQuery >=v1.4, we cannot easily convert tbody.rows[] inot a javascript array
         // So we will make our own array, sort, then then walk through the table and reorder
-        // FIXME: Until better methods are developed, only sortOrder based sorts are supported and fnCompare is obsolete
+        // FIXME: Until better methods are developed, only sortOrder based sorts are supported
+        //        and fnCompare is obsolete
 
         // Create array of the primary sort column's text
-        var cols = new Array();
+        var cols = [];
         var trs = tbody.rows;
         $(trs).each(function(ix) {
             var th = this.cells[sortColumns.cellIxs[0]];
-            if(sortColumns.useAbbr[0])
+            if (sortColumns.useAbbr[0])
                 cols.push(new sortTable.field(th.abbr,sortColumns.reverse[0],this));
             else
                 cols.push(new sortTable.field($(th).text(),sortColumns.reverse[0],this));
@@ -1521,54 +1574,61 @@ var sortTable = {
 
         sortTable.tbody=tbody;
         sortTable.columns=sortColumns;
-        setTimeout('sortTable.sortFinish(sortTable.tbody,sortTable.columns)',5); // Avoid javascript timeouts!
+        // Avoid js timeout
+        setTimeout(function() { 
+                        sortTable.sortFinish(sortTable.tbody,sortTable.columns); 
+                    },5);
     },
 
     sortFinish: function (tbody,sortColumns)
-    {// Additional sort cleanup.
-    // This is in a separate function to allow calling with setTimeout() which will prevent javascript timeouts (I hope)
+    {   // Additional sort cleanup.
+        // This is in a separate function to allow calling with setTimeout() which will
+        // prevent javascript timeouts (I hope)
         sortTable.savePositions(tbody);
         if ($(tbody).hasClass('altColors'))
             sortTable.alternateColors(tbody,sortColumns);
         $(tbody).parents("table.tableWithDragAndDrop").each(function (ix) {
             tableDragAndDropRegister(this);
         });
-        if (sortTable.loadingId != null)
+        if (sortTable.loadingId)
             hideLoadingImage(sortTable.loadingId);
     },
 
     sortByColumns: function (tbody,sortColumns)
-    {// Will sort the table based on the abbr values on a set of <TH> colIds
-    // Expects tbody to not sort thead, but could take table
+    {   // Will sort the table based on the abbr values on a set of <TH> colIds
+        // Expects tbody to not sort thead, but could take table
 
         // Used to use 'sorting' class, but showLoadingImage results in much less screen redrawing
-        // For IE especially this was the difference between dead/timedout scripts and working sorts!
+        // For IE especially this was difference between dead/timedout scripts and working sorts!
         var id = $(tbody).attr('id');
-        if (id == undefined || id.length == 0) {
+        if (!id || id.length === 0) {
             $(tbody).attr('id',"tbodySort"); // Must have some id!
             id = $(tbody).attr('id');
         }
         sortTable.loadingId = showLoadingImage(id);
         sortTable.tbody=tbody;
         sortTable.columns=sortColumns;
-        setTimeout('sortTable.sort(sortTable.tbody,sortTable.columns)',50); // This allows hiding the rows while sorting!
+        // This allows hiding the rows while sorting!
+        setTimeout(function() { 
+                        sortTable.sort(sortTable.tbody,sortTable.columns); 
+                    },50); 
     },
 
     trAlternateColors: function (tbody,rowGroup,cellIx)
-    {// Will alternate colors for visible table rows.
-    // If cellIx(s) provided then color changes when the column(s) abbr or els innerHtml changes
-    // If no cellIx is provided then alternates on rowGroup (5= change color 5,10,15,...)
-    // Expects tbody to not color thead, but could take table
-        var darker   = false; // == false will trigger first row to be change color = darker
+    {   // Will alternate colors for visible table rows.
+        // If cellIx(s) provided then color changes when the column(s) abbr or els innerHtml changes
+        // If no cellIx is provided then alternates on rowGroup (5= change color 5,10,15,...)
+        // Expects tbody to not color thead, but could take table
+        var darker   = false; // === false will trigger first row to be change color = darker
 
         if (arguments.length<3) { // No columns to check so alternate on rowGroup
 
-            if (rowGroup == undefined || rowGroup == 0)
+            if (!rowGroup || rowGroup === 0)
                 rowGroup = 1;
             var curCount = 0; // Always start with a change
             $(tbody).children('tr:visible').each( function(i) {
-                if (curCount == 0 ) {
-                    curCount  = rowGroup;
+                if (curCount === 0) {
+                    curCount = rowGroup;
                     darker = (!darker);
                 }
                 if (darker) {
@@ -1584,20 +1644,20 @@ var sortTable = {
         } else {
 
             var lastContent = "startWithChange";
-            var cIxs = new Array();
-            for(var aIx=2;aIx<arguments.length;aIx++) {   // multiple columns
+            var cIxs = [];
+            for (var aIx=2; aIx < arguments.length; aIx++) {   // multiple columns
                 cIxs[aIx-2] = arguments[aIx];
             }
             $(tbody).children('tr:visible').each( function(i) {
                 curContent = "";
-                for(var ix=0;ix<cIxs.length;ix++) {
+                for (var ix=0; ix < cIxs.length; ix++) {
                     if (this.cells[cIxs[ix]]) {
-                        curContent += (this.cells[cIxs[ix]].abbr != "" ?
+                        curContent += (this.cells[cIxs[ix]].abbr !== "" ?
                                     this.cells[cIxs[ix]].abbr       :
                                     this.cells[cIxs[ix]].innerHTML );
                     }
                 }
-                if (lastContent != curContent ) {
+                if (lastContent !== curContent) {
                     lastContent  = curContent;
                     darker = (!darker);
                 }
@@ -1613,8 +1673,8 @@ var sortTable = {
     },
 
     alternateColors: function (tbody)
-    { // Will alternate colors based upon sort columns (which may be passed in as second arg, or discovered)
-    // Expects tbody to not color thead, but could take table
+    {   // Will alternate colors based upon sort columns (which may be passed in as second arg,
+        // or discovered).  Expects tbody to not color thead, but could take table
         var sortColumns;
         if (arguments.length > 1)
             sortColumns = arguments[1];
@@ -1626,12 +1686,13 @@ var sortTable = {
         }
 
         if (sortColumns) {
-            if (sortColumns.cellIxs.length==1)
+            if (sortColumns.cellIxs.length === 1)
                 sortTable.trAlternateColors(tbody,0,sortColumns.cellIxs[0]);
-            else if (sortColumns.cellIxs.length==2)
+            else if (sortColumns.cellIxs.length === 2)
                 sortTable.trAlternateColors(tbody,0,sortColumns.cellIxs[0],sortColumns.cellIxs[1]);
             else // Three columns is plenty
-                sortTable.trAlternateColors(tbody,0,sortColumns.cellIxs[0],sortColumns.cellIxs[1],sortColumns.cellIxs[2]);
+                sortTable.trAlternateColors(tbody,0,sortColumns.cellIxs[0],sortColumns.cellIxs[1],
+                                                                            sortColumns.cellIxs[2]);
         } else {
             sortTable.trAlternateColors(tbody,5); // alternates every 5th row
         }
@@ -1639,38 +1700,37 @@ var sortTable = {
 
     orderFromColumns: function (sortColumns)
     {// Creates the trackDB setting entry sortOrder subGroup1=+ ... from a sortColumns structure
-        fields = new Array();
-        for(var ix=0;ix < sortColumns.cellIxs.length;ix++) {
-            if (sortColumns.tags[ix] != undefined && sortColumns.tags[ix].length > 0)
+        fields = [];
+        for (var ix=0; ix < sortColumns.cellIxs.length; ix++) {
+            if (sortColumns.tags[ix] && sortColumns.tags[ix].length > 0)
                 fields[ix] = sortColumns.tags[ix] + "=" + (sortColumns.reverse[ix] ? "-":"+");
             else
                 fields[ix] = sortColumns.cellIxs[ix] + "=" + (sortColumns.reverse[ix] ? "-":"+");
         }
         var sortOrder = fields.join(' ');
-        //warn("sortTable.orderFromColumns("+sortColumns.cellIxs.length+"):["+sortOrder+"]");
         return sortOrder;
     },
 
     orderUpdate: function (table,sortColumns,addSuperscript)
     {// Updates the sortOrder in a sortable table
-        if (addSuperscript == undefined)
+        if (addSuperscript === undefined || addSuperscript === null)
             addSuperscript = false;
         if ($(table).is('tbody'))
             table = $(table).parent();
         var tr = $(table).find('tr.sortable')[0];
         if (tr) {
-            //warn("sortTable.orderUpdate("+sortColumns.cellIxs.length+")");
-            for(cIx=0;cIx<sortColumns.cellIxs.length;cIx++) {
+            for (cIx=0; cIx < sortColumns.cellIxs.length; cIx++) {
                 var th = tr.cells[sortColumns.cellIxs[cIx]];
+                /* jshint loopfunc: true */// function inside loop works and replacement is awkward.
                 $(th).each(function(i) {
                     // First remove old sort classes
                     var classList = $( this ).attr("class").split(" ");
                     if (classList.length < 2) // assertable
                         return;
                     classList = aryRemove(classList,["sortable"]);
-                    while( classList.length > 0 ) {
+                    while (classList.length > 0) {
                         var aClass = classList.pop();
-                        if (aClass.indexOf("sort") == 0)
+                        if (aClass.indexOf("sort") === 0)
                             $(this).removeClass(aClass);
                     }
 
@@ -1682,7 +1742,7 @@ var sortTable = {
                     // update any superscript
                     sup = $(this).find('sup')[0];
                     if (sup || addSuperscript) {
-                        var content = (sortColumns.reverse[cIx] == false ? "&darr;":"&uarr;");
+                        var content = (sortColumns.reverse[cIx] === false ? "&darr;":"&uarr;");
 
                         if (sortColumns.cellIxs.length>1) { // Number only if more than one
                             if (cIx < 5)  // Show numbering and direction only for the first 5
@@ -1702,20 +1762,20 @@ var sortTable = {
             var inp = $(tr).find('input.sortOrder')[0];
             if (inp) {
                 $(inp).val(sortTable.orderFromColumns(sortColumns));
-                if (!addSuperscript && typeof(subCfg) !== "undefined")
+                if (!addSuperscript && typeof(subCfg) === "object") // subCfg.js file included?
                     subCfg.markChange(null,inp);     // use instead of change() because type=hidden!
             }
         }
     },
 
     orderFromTr: function (tr)
-    {// Looks up the sortOrder input value from a *.sortable header row of a sortable table
+    {   // Looks up the sortOrder input value from a *.sortable header row of a sortable table
         var inp = $(tr).find('input.sortOrder')[0];
         if (inp)
             return $(inp).val();
         else {
             // create something like "cellType=+ rep=+ protocol=+ treatment=+ factor=+ view=+"
-            var fields = new Array();
+            var fields = [];
             var cells = $(tr).find('th.sortable');
             $(cells).each(function (i) {
                 var classList = $( this ).attr("class").split(" ");
@@ -1724,29 +1784,29 @@ var sortTable = {
                 classList = aryRemove(classList,["sortable"]);
                 var reverse = false;
                 var sortIx = -1;
-                while( classList.length > 0 ) {
+                while (classList.length > 0) {
                     var aClass = classList.pop();
-                    if (aClass.indexOf("sort") == 0) {
-                        if (aClass == "sortRev")
+                    if (aClass.indexOf("sort") === 0) {
+                        if (aClass === "sortRev")
                             reverse = true;
                         else {
                             aClass = aClass.substring(4);  // clip off the "sort" portion
                             var ix = parseInt(aClass);
-                            if (ix != NaN) {
+                            if (!isNaN(ix)) {
                                 sortIx = ix;
                             }
                         }
                     }
                 }
                 if (sortIx >= 0) {
-                    if (this.id != undefined && this.id.length > 0)
+                    if (this.id && this.id.length > 0)
                         fields[sortIx] = this.id + "=" + (reverse ? "-":"+");
                     else
                         fields[sortIx] = this.cellIndex + "=" + (reverse ? "-":"+");
                 }
             });
             if (fields.length > 0) {
-                if (fields[0] == undefined)
+                if (!fields[0])
                     fields.shift();  // 1 based sort ix and 0 based fields ix
                 return fields.join(' ');
             }
@@ -1755,45 +1815,47 @@ var sortTable = {
     },
 
     columnsFromSortOrder: function (sortOrder)
-    {// Creates sortColumns struct (without cellIxs[]) from a trackDB.sortOrder setting string
-        this.tags = new Array();
-        this.reverse = new Array();
+    {   // Creates sortColumns struct (without cellIxs[]) from a trackDB.sortOrder setting string
+        this.tags = [];
+        this.reverse = [];
         var fields = sortOrder.split(" "); // sortOrder looks like: "cell=+ factor=+ view=+"
-        while(fields.length > 0) {
+        while (fields.length > 0) {
             var pair = fields.shift().split("=");  // Take first and split into
-            if (pair.length == 2) {
+            if (pair.length === 2) {
                 this.tags.push(pair[0]);
-                this.reverse.push(pair[1] != '+');
+                this.reverse.push(pair[1] !== '+');
             }
         }
     },
 
     columnsFromTr: function (tr,silent)
-    {// Creates a sortColumns struct from the entries in the 'tr.sortable' heading row of a sortable table
+    {   // Creates a sortColumns struct from entries in the 'tr.sortable' heading row of the table
         this.inheritFrom = sortTable.columnsFromSortOrder;
         var sortOrder = sortTable.orderFromTr(tr);
-        if (sortOrder.length == 0 && silent == undefined) {
-            warn("Unable to obtain sortOrder from sortable table.");   // developer needs to know something is wrong
+        if (sortOrder.length === 0 && (silent === undefined || silent === null)) {
+            // developer needs to know something is wrong
+            warn("Unable to obtain sortOrder from sortable table.");   
             return;
         }
 
         this.inheritFrom(sortOrder);
         // Add two additional arrays
-        this.cellIxs = new Array();
-        this.useAbbr = new Array();
+        this.cellIxs = [];
+        this.useAbbr = [];
         var ths = $(tr).find('th.sortable');
-        for(var tIx=0;tIx<this.tags.length;tIx++) {
-            for(ix=0; ix<ths.length; ix++) {
-                if ((ths[ix].id != undefined && ths[ix].id == this.tags[tIx])
-                ||  (ths[ix].cellIndex == this.tags[tIx]))
+        for (var tIx=0; tIx < this.tags.length; tIx++) {
+            for (ix=0; ix < ths.length; ix++) {
+                if ((ths[ix].id && ths[ix].id === this.tags[tIx])
+                ||  (ths[ix].cellIndex === parseInt(this.tags[tIx])))
                 {
                     this.cellIxs[tIx] = ths[ix].cellIndex;
                     this.useAbbr[tIx] = (ths[ix].abbr.length > 0);
                 }
             }
         }
-        if (this.cellIxs.length == 0 && silent == undefined) {
-            warn("Unable to find any sortOrder.cells for sortable table.  ths.length:"+ths.length + " tags.length:"+this.tags.length + " sortOrder:["+sortOrder+"]");
+        if (this.cellIxs.length === 0 && (silent === undefined || silent === null)) {
+            warn("Unable to find any sortOrder.cells for sortable table.  ths.length:"+ths.length + 
+                 " tags.length:"+this.tags.length + " sortOrder:["+sortOrder+"]");
             return;
         }
     },
@@ -1802,27 +1864,27 @@ var sortTable = {
     {// Creates a sortColumns struct from the contents of a 'table.sortable'
         this.inheritNow = sortTable.columnsFromTr;
         var tr = $(table).find('tr.sortable')[0];
-        //if (tr == undefined && debug) warn("Couldn't find 'tr.sortable' rows:"+table.rows.length);
         this.inheritNow(tr);
     },
 
     _sortOnButtonPress: function (anchor)
-    {// Updates the sortColumns struct and sorts the table when a column header has been pressed
-    // If the current primary sort column is pressed, its direction is toggled then the table is sorted
-    // If a secondary sort column is pressed, it is moved to the primary spot and sorted in fwd direction
+    {   // Updates the sortColumns struct and sorts the table when a column header has been pressed
+        // If the current primary sort column is pressed, its direction is toggled then the table
+        // is sorted. If a secondary sort column is pressed, it is moved to the primary spot and
+        // sorted in fwd direction
         var th=$(anchor).closest('th')[0];  // Note that anchor is <a href> within th, not th
         var tr=$(th).parent();
         var theOrder = new sortTable.columnsFromTr(tr);
         var oIx = th.cellIndex;
-        for(oIx=0;oIx<theOrder.cellIxs.length;oIx++) {
-            if (theOrder.cellIxs[oIx] == th.cellIndex)
+        for (oIx=0; oIx < theOrder.cellIxs.length; oIx++) {
+            if (theOrder.cellIxs[oIx] === th.cellIndex)
                 break;
         }
-        if (oIx == theOrder.cellIxs.length) {
-            warn("Failure to find '"+th.id+"' in sort columns."); // Developer must be warned that something is wrong with sortable table setup
+        if (oIx === theOrder.cellIxs.length) {
+            // Developer must be warned that something is wrong with sortable table setup
+            warn("Failure to find '"+th.id+"' in sort columns."); 
             return;
         }
-        // assert(th.id == theOrder.tags[oIx] || th.id == undefined);
         if (oIx > 0) { // Need to reorder
             var newOrder = new sortTable.columnsFromTr(tr);
             var nIx=0; // button pushed puts this 'tagId' column first in new order
@@ -1830,8 +1892,8 @@ var sortTable = {
             newOrder.reverse[nIx] = false;  // When moving to the first position sort forward
             newOrder.cellIxs[nIx] = theOrder.cellIxs[oIx];
             newOrder.useAbbr[nIx] = theOrder.useAbbr[oIx];
-            for(var ix=0;ix<theOrder.cellIxs.length;ix++) {
-                if (ix != oIx) {
+            for (var ix=0; ix < theOrder.cellIxs.length; ix++) {
+                if (ix !== oIx) {
                     nIx++;
                     newOrder.tags[nIx]    = theOrder.tags[ix];
                     newOrder.reverse[nIx] = theOrder.reverse[ix];
@@ -1840,14 +1902,13 @@ var sortTable = {
                 }
             }
             theOrder = newOrder;
-        } else { // if (oIx == 0) {   // need to reverse directions
-            theOrder.reverse[oIx] = (theOrder.reverse[oIx] == false);
+        } else { // if (oIx === 0) {   // need to reverse directions
+            theOrder.reverse[oIx] = (theOrder.reverse[oIx] === false);
         }
         var table=$(tr).closest("table.sortable")[0];
         if (table) { // assertable
             sortTable.orderUpdate(table,theOrder);  // Must update sortOrder first!
             var tbody = $(table).find("tbody.sortable")[0];
-            //if (tbody == undefined && debug) warn("Couldn't find 'tbody.sortable' 5");
             sortTable.sortByColumns(tbody,theOrder);
         }
         return;
@@ -1863,39 +1924,32 @@ var sortTable = {
     },
 
     sortUsingColumns: function (table) // NOT USED
-    {// Sorts a table body based upon the marked columns
+    {   // Sorts a table body based upon the marked columns
         var columns = new sortTable.columnsFromTable(table);
         tbody = $(table).find("tbody.sortable")[0];
         if (tbody)
             sortTable.sortByColumns(tbody,columns);
     },
 
-    hintOnColumnHeader: function (th) // NOT USED
-    {// Upodates the sortColumns struct and sorts the table when a column headder has been pressed
-        //th.title = "Click to make this the primary sort column, or toggle direction";
-        //var tr=th.parentNode;
-        //th.title = "Current Sort Order: " + sortTable.orderFromTr(tr);
-    },
-
     savePositions: function (table)
-    {// Sets the value for the input.trPos of a table row.  Typically this is a "priority" for a track
-    // This gets called by sort or dragAndDrop in order to allow the new order to affect hgTracks display
+    {   // Sets the value for the input.trPos of a table row.  Typically this is a "priority" for
+        // a track.  This gets called by sort or dragAndDrop in order to allow the new order to
+        // affect hgTracks display
         var inputs = $(table).find("input.trPos");
         $( inputs ).each( function(i) {
             var tr = $( this ).closest('tr')[0];
             var trIx = $( tr ).attr('rowIndex').toString();
             if ($( this ).val() != trIx) {
                 $( this ).val( trIx );
-                if (typeof(subCfg) !== "undefined")  // NOTE: couldn't get $(this).change() to work.
-                    subCfg.markChange(null,this);    //       probably because this is input type=hidden!
+                if (typeof(subCfg) === "object")  // NOTE: couldn't get $(this).change() to work.
+                    subCfg.markChange(null,this); //    probably because this is input type=hidden!
             }
         });
     },
 
     ///// Following functions are for Sorting by priority
     trPriorityFind: function (tr)
-    {
-    // returns the position (*.priority) of a sortable table row
+    {   // returns the position (*.priority) of a sortable table row
         var inp = $(tr).find('input.trPos')[0];
         if (inp)
             return $(inp).val();
@@ -1903,17 +1957,17 @@ var sortTable = {
     },
 
     trPriorityCmp: function (tr1,tr2)  // UNUSED FUNCTION
-    {
-    // Compare routine for sorting by *.priority
+    {   // Compare routine for sorting by *.priority
         var priority1 = sortTable.trPriorityFind(tr1);
         var priority2 = sortTable.trPriorityFind(tr2);
         return priority2 - priority1;
     },
 
-    tablesSortAtStartup: function ()
-    {// Called at startup if you want javascript to initialize and sort all your class='sortable' tables
-    // IMPORTANT: This function WILL ONLY sort by first column.
-    // If there are multiple sort columns, please presort the list for accurtacy!!!
+    tablesSortAtStartup: function ()  // DEAD CODE?
+    {   // Called at startup if you want javascript to initialize and sort all your
+        // class='sortable' tables
+        // IMPORTANT: This function WILL ONLY sort by first column.
+        // If there are multiple sort columns, please presort the list for accurtacy!!!
         var tables = $("table.sortable");
         $(tables).each(function(i) {
             sortTable.initialize(this,true); // Will initialize superscripts
@@ -1924,58 +1978,74 @@ var sortTable = {
     initialize: function (table,addSuperscript,altColors)
     {// Called if you want javascript to initialize your class='sortable' table.
     // A sortable table requires:
-    // TABLE.sortable: TABLE class='sortable' containing a THEAD header and sortable TBODY filled with the rows to sort.
-    // THEAD.sortable: (NOTE: created if not found) The THEAD can contain multiple rows must contain:
-    //   TR.sortable: exactly 1 header TH (table row) class='sortable' which will declare the sort columnns:
-    //   TH.sortable: 1 or more TH (table column headers) with class='sortable sort1 [sortRev]' (or sort2, sort3) declaring sort order and whether reversed
-    //     e.g. <TH id='factor' class='sortable sortRev sort3' nowrap>...</TH>  (this means that factor is currently the third sort column and reverse sorted)
-    //     (NOTE: If no TH.sortable is found, then every th in the TR.sortable will be converted for you and will be in sort1,2,3 order.)
-    //     ONCLICK: Each TH.sortable must call sortTable.sortOnButtonPress(this) directly or indirectly in the onclick event :
-    //       e.g. <TH id='factor' class='sortable sortRev sort3' nowrap title='Sort list on this column' onclick="return sortTable.sortOnButtonPress(this);">
-    //       (NOTE: If no onclick function is found in a TH.sortable, then it will automatically be added.)
-    //     SUP: Each TH.sortable *may* contain a <sup> which will be filled with an up or down arrow and the column's sort order: e.g. <sup>&darr;2</sup>
-    //       (NOTE: If no sup is found but addSuperscript is requested, then they will be added.)
-    // TBODY.sortable: (NOTE: created if not found) The TBODY class='sortable' contains the table rows that get sorted:
-    //   TBODY->TR & ->TD: Each row contains a TD for each sortable column. The innerHTML (entire contents) of the cell will be used for sorting.
-    //   TRICK: You can use the 'abbr' field to subtly alter the sortable contents.  Otherwise sorts on td contents ($(td).text()).
-    //          Use the abbr field to make case-insensitive sorts or force exceptions to alpha-text order (e.g. ZCTRL vs Control forcing controls to bottom)
-    //          e.g. <TD id='wgEncodeBroadHistoneGm12878ControlSig_factor' nowrap abbr='ZCTRL' align='left'>Control</TD>
+    // TABLE.sortable: TABLE class='sortable' containing a THEAD header and
+    //                 sortable TBODY filled with the rows to sort.
+    // THEAD.sortable: (NOTE: created if not found) THEAD can contain multiple rows must contain:
+    //   TR.sortable: exactly 1 header TH (table row) class='sortable' which will declare
+    //                the sort columnns:
+    //   TH.sortable: 1 or more TH (table column headers) with class='sortable sort1 [sortRev]'
+    //                (or sort2, sort3) declaring sort order and whether reversed. e.g.:
+    //                <TH id='factor' class='sortable sortRev sort3' nowrap>...</TH>
+    //                (this means that factor is currently the third sort column and reverse sorted)
+    //          NOTE: If no TH.sortable is found, then every th in the TR.sortable will be
+    //                converted for you and will be in sort1,2,3 order.)
+    //     ONCLICK: Each TH.sortable must call sortTable.sortOnButtonPress(this) directly or
+    //              indirectly in the onclick event.  e.g.:
+    //              <TH id='factor' class='sortable sortRev sort3' nowrap title='Sort on column' 
+    //                              onclick="return sortTable.sortOnButtonPress(this);">
+    //              NOTE: onclick function will automatically be added if not found.
+    //     SUP: Each TH.sortable *may* contain a <sup> which will be filled with an up or down
+    //          arrow and the column's sort order: e.g. <sup>&darr;2</sup>
+    //          NOTE: If no sup is found but addSuperscript is requested, then they will be added.
+    // TBODY.sortable: (NOTE: created if not found) The TBODY class='sortable' contains the
+    //                 table rows that get sorted:
+    //                 TBODY->TR & ->TD: Each row contains a TD for each sortable column.
+    //                 The innerHTML (entire contents) of the cell will be used for sorting.
+    //   TRICK: You can use the 'abbr' field to subtly alter the sortable contents.
+    //          Otherwise sorts on td contents ($(td).text()).  Use the abbr field to make
+    //          case-insensitive sorts or force exceptions to alpha-text order 
+    //          (such as ZCTRL vs Control forcing controls to bottom). e.g.:
+    //             <TD id='wgEncodeBroadHist...' nowrap abbr='ZCTRL' align='left'>Control</TD>
     //          IMPORTANT: You must add abbr='use' to the TH.sortable definitions.
-    // Finally if you want the tableSort to alternate the table row colors (using #FFFEE8 and #FFF9D2) then TBODY.sortable should also have class 'altColors'
+    // Finally if you want the tableSort to alternate the table row colors
+    // (using #FFFEE8 and #FFF9D2) then TBODY.sortable should also have class 'altColors'
     // NOTE: This class can be added by using the altColors option to this function
+    
+        if (altColors === undefined || altColors === null) // explicitly default this boolean
+            altColors = false;
 
-        if ($(table).hasClass('sortable') == false) {
+        if ($(table).hasClass('sortable') === false) {
             warn('Table is not sortable');
             return;
         }
         var tr = $(table).find('tr.sortable')[0];
-        if(tr == undefined) {
+        if (!tr) {
             tr = $(table).find('tr')[0];
-            if(tr == undefined) {
+            if (!tr) {
                 warn('Sortable table has no rows');
                 return;
             }
             $(tr).addClass('sortable');
             //warn('Made first row tr.sortable');
         }
-        if ($(table).find('tr.sortable').length != 1) {
+        if ($(table).find('tr.sortable').length !== 1) {
             warn('sortable table contains more than 1 header row declaring sort columns.');
             return;
         }
 
         // If not TBODY is found, then create, wrapping all but those already in a thead
         tbody = $(table).find('tbody')[0];
-        if(tbody == undefined) {
+        if (!tbody) {
             trs = $(table).find('tr').not('thead tr');
-            $(trs).wrapAll("<TBODY class='sortable' />")
+            $(trs).wrapAll("<TBODY class='sortable' />");
             tbody = $(table).find('tbody')[0];
             //warn('Wrapped all trs not in thead.sortable in tbody.sortable');
         }
-        if ($(tbody).hasClass('sortable') == false) {
+        if ($(tbody).hasClass('sortable') === false) {
             $(tbody).addClass('sortable');
             //warn('Added sortable class to tbody');
         }
-        if(altColors != undefined && $(tbody).hasClass('altColors') == false) {
+        if (altColors && $(tbody).hasClass('altColors') === false) {
             $(tbody).addClass('altColors');
             //warn('Added altColors class to tbody.sortable');
         }
@@ -1983,19 +2053,19 @@ var sortTable = {
 
         // If not THEAD is found, then create, wrapping first row.
         thead = $(table).find('thead')[0];
-        if(thead == undefined) {
-            $(tr).wrapAll("<THEAD class='sortable' />")
+        if (!thead) {
+            $(tr).wrapAll("<THEAD class='sortable' />");
             thead = $(table).find('thead')[0];
             $(thead).insertBefore(tbody);
             //warn('Wrapped tr.sortable with thead.sortable');
         }
-        if ($(thead).hasClass('sortable') == false) {
+        if ($(thead).hasClass('sortable') === false) {
             $(thead).addClass('sortable');
             //warn('Added sortable class to thead');
         }
 
         var sortColumns = new sortTable.columnsFromTr(tr,"silent");
-        if (sortColumns == undefined || sortColumns.cellIxs.length == 0) {
+        if (!sortColumns || sortColumns.cellIxs.length === 0) {
             // could mark all columns as sortable!
             $(tr).find('th').each(function (ix) {
                 $(this).addClass('sortable');
@@ -2003,24 +2073,23 @@ var sortTable = {
                 //warn("Added class='sortable sort"+(ix+1)+"' to th:"+this.innerHTML);
             });
             sortColumns = new sortTable.columnsFromTr(tr,"silent");
-            if (sortColumns == undefined || sortColumns.cellIxs.length == 0) {
+            if (sortColumns === undefined || sortColumns.cellIxs.length === 0) {
                 warn("sortable table's header row contains no sort columns.");
                 return;
             }
         }
         // Can wrap all columnn headers with link
         $(tr).find("th.sortable").each(function (ix) {
-            //if ( $(this).queue('click').length == 0 ) {
-            if ( $(this).attr('onclick') == undefined ) {
+            if ( ! $(this).attr('onclick') ) {
                 $(this).click( function () { sortTable.sortOnButtonPress(this);} );
             }
-            if ($.browser.msie) { // Special case for IE since CSS :hover doesn't work (note pointer and hand because older IE calls it hand)
+            if ($.browser.msie) { // Special case for IE since CSS :hover doesn't work
                 $(this).hover(
                     function () { $(this).css( { backgroundColor: '#CCFFCC', cursor: 'hand' } ); },
                     function () { $(this).css( { backgroundColor: '#FCECC0', cursor: '' } ); }
                 );
             }
-            if ( $(this).attr('title').length == 0) {
+            if ( $(this).attr('title').length === 0) {
                 var title = $(this).text().replace(/[^a-z0-9 ]/ig,'');
                 if (title.length > 0 && $(this).find('sup'))
                     title = title.replace(/[0-9]$/g,'');
@@ -2029,19 +2098,20 @@ var sortTable = {
                 else
                     $(this).attr('title',"Sort list on column." );
             }
-        })
+        });
         // Now update all of those cells
         sortTable.orderUpdate(table,sortColumns,addSuperscript);
 
         // Alternate colors if requested
-        if(altColors != undefined)
+        if (altColors)
             sortTable.alternateColors(tbody);
 
-        // Highlight rows?  But on subtrack list, this will mess up the "..." coloring.  So just exclude tables with drag and drop
-        if ($(table).hasClass('tableWithDragAndDrop') == false) {
+        // Highlight rows?  But on subtrack list, this will mess up "metadata dropdown" coloring.
+        // So just exclude tables with drag and drop
+        if ($(table).hasClass('tableWithDragAndDrop') === false) {
             $('tbody.sortable').find('tr').hover(
                 function(){ $(this).addClass('bgLevel3');
-                            $(this).find('table').addClass('bgLevel3'); },      // Will highlight the rows, including '...'
+                            $(this).find('table').addClass('bgLevel3'); },
                 function(){ $(this).removeClass('bgLevel3');
                             $(this).find('table').removeClass('bgLevel3'); }
             );
@@ -2051,7 +2121,7 @@ var sortTable = {
         $(tbody).removeClass('sorting');
         $(tbody).show();
     }
-}
+};
 
 function sortTableInitialize(table,addSuperscript,altColors)
 {   // legacy in case some static pages still initialize the table the old way
@@ -2065,62 +2135,66 @@ function sortTableInitialize(table,addSuperscript,altColors)
 var findTracks = {
 
     updateMdbHelp: function (index)
-    {
-    // update the metadata help links based on currently selected values.
-    // If index == 0 we update all help items, otherwise we only update the one == index.
+    {   // update the metadata help links based on currently selected values.
+        // If index === 0 we update all help items, otherwise we only update the one === index.
         var db = getDb();
         var disabled = {  // blackList 
-            'accession':  1, 'dataVersion':      1, 'dccAccession':     1, 'expId':           1, 'geoSampleAccession': 1, 
-            'grant':      1, 'lab':              1, 'labExpId':         1, 'labVersion':      1, 'origAssembly':       1,
-            'obtainedBy': 1, 'region':           1, 'replicate':        1, 'setType':         1, 'softwareVersion':    1, 
-            'subId':      1, 'tableName':        1, 'tissueSourceType': 1, 'view':            1
-        }
+            'accession':          1, 'dataVersion':      1, 'dccAccession':    1, 'expId':    1, 
+            'geoSampleAccession': 1, 'grant':            1, 'lab':             1, 'labExpId': 1, 
+            'labVersion':         1, 'origAssembly':     1, 'obtainedBy':      1, 'region':   1, 
+            'replicate':          1, 'setType':          1, 'softwareVersion': 1, 'subId':    1, 
+            'tableName':          1, 'tissueSourceType': 1, 'view':            1
+        };
         var expected = $('tr.mdbSelect').length;
         var ix=1;
-        if (index!=0) {
+        if (index !== 0) {
             ix=index;
             expected=index;
         }
-        for(;ix <= expected;ix++) {
+        for (; ix <= expected; ix++) {
             var helpLink = $("span#helpLink" + ix);
             if (helpLink.length > 0) {
-                var val = $("select[name='hgt_mdbVar" + ix + "']").val();  // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
+                // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
+                var val = $("select[name='hgt_mdbVar" + ix + "']").val();  
                 var text = $("select[name='hgt_mdbVar" + ix + "'] option:selected").text();
-                helpLink.html("&nbsp;"); // Do not want this with length == 0 later!
-                if (typeof(disabled[val]) == 'undefined') {
+                helpLink.html("&nbsp;"); // Do not want this with length === 0 later!
+                if (typeof(disabled[val]) === 'undefined') {
                     var str;
-                    if (val == 'cell') {
-                        if (db.substr(0, 2) == "mm") {
+                    if (val === 'cell') {
+                        if (db.substr(0, 2) === "mm") {
                             str = "../ENCODE/cellTypesMouse.html";
                         } else {
                             str = "../ENCODE/cellTypes.html";
                         }
-                    } else if (val.toLowerCase() == 'antibody') {
+                    } else if (val.toLowerCase() === 'antibody') {
                         str = "../ENCODE/antibodies.html";
                     } else {
                         str = "../ENCODE/otherTerms.html#" + val;
                     }
-                    helpLink.html("<a target='_blank' title='detailed descriptions of terms' href='" + str + "'>" + text + "</a>");
+                    helpLink.html("&nbsp;<a target='_blank' " +
+                                  "title='detailed descriptions of terms'" + 
+                                  " href='" + str + "'>" + text + "</a>");
                 }
             }
         }
     },
 
     mdbVarChanged: function (obj)
-    { // Ajax call to repopulate a metadata vals select when mdb var changes
-    // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
+    {   // Ajax call to repopulate a metadata vals select when mdb var changes
+        // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
 
         findTracks.clearFound();  // Changing values so abandon what has been found
 
         var newVar = $(obj).val();
-        var a = /hgt_mdbVar(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
-        if(newVar != undefined && a && a[1]) {
+        // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
+        var a = /hgt_mdbVar(\d+)/.exec(obj.name); 
+        if (newVar !== undefined && newVar !== null && a && a[1]) {
             var num = a[1];
-            if ($('#advancedTab').length == 1 && $('#filesTab').length == 1) {
+            if ($('#advancedTab').length === 1 && $('#filesTab').length === 1) {
                 $("select.mdbVar[name='hgt_mdbVar"+num+"'][value!='"+newVar+"']").val(newVar);
             }
             var cgiVars = "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar;
-            if (document.URL.search('hgFileSearch') != -1)
+            if (document.URL.search('hgFileSearch') !== -1)
                 cgiVars += "&fileSearch=1";
             else
                 cgiVars += "&fileSearch=0";
@@ -2134,8 +2208,8 @@ var findTracks = {
                     success: catchErrorOrDispatch,
                     error: errorHandler,
                     cache: true,
-                    cmd: "hgt_mdbVal" + num, // NOTE must match METADATA_VALUE_PREFIX in hg/hgTracks/searchTracks.c
-                    num: num
+                    cmd: "hgt_mdbVal" + num, // NOTE must match METADATA_VALUE_PREFIX
+                    num: num                 //      in hg/hgTracks/searchTracks.c
                 });
         }
         // NOTE: with newJquery, the response is getting a new error (missing ; before statement)
@@ -2144,16 +2218,16 @@ var findTracks = {
     },
 
     handleNewMdbVals: function (response, status)
-    { // Handle ajax response (repopulate a metadata val select)
-    // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
+    {   // Handle ajax response (repopulate a metadata val select)
+        // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
 
-        var td = $('td#' + this.cmd );
-        if (td != undefined) {
-            td.empty();
-            td.append(response);
-            var inp = $(td).find('.mdbVal');
-            var tdIsLike = $('td#isLike'+this.num);
-            if (inp != undefined && tdIsLike != undefined) {
+        var td = normed($('td#' + this.cmd));
+        if (td) {
+            $(td).empty();
+            $(td).append(response);
+            var inp = normed($(td).find('.mdbVal'));
+            var tdIsLike = normed($('td#isLike'+this.num));
+            if (inp && tdIsLike) {
                 if ($(inp).hasClass('freeText')) {
                     $(tdIsLike).text('contains');
                 } else if ($(inp).hasClass('wildList') ||  $(inp).hasClass('filterBy')) {
@@ -2162,7 +2236,8 @@ var findTracks = {
                     $(tdIsLike).text('is');
                 }
             }
-            $(td).find('.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
+            // Do this by 'each' to set noneIsAll individually
+            $(td).find('.filterBy').each( function(i) { 
                 ddcl.setup(this,'noneIsAll');
             });
         }
@@ -2170,15 +2245,17 @@ var findTracks = {
     },
 
     mdbValChanged: function (obj)
-    { // Keep all tabs with same selects in sync  TODO: Change from name to id based identification and only have one set of inputs in form
-    // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
+    {   // Keep all tabs with same selects in sync
+        // TODO: Change from name to id based identification and only have one set of inputs in form
+        // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
 
         findTracks.clearFound();  // Changing values so abandon what has been found
 
-        if ($('#advancedTab').length == 1 && $('#filesTab').length == 1) {
+        if ($('#advancedTab').length === 1 && $('#filesTab').length === 1) {
             var newVal = $(obj).val();
-            var a = /hgt_mdbVal(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
-            if(newVal != undefined && a && a[1]) {
+            // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
+            var a = /hgt_mdbVal(\d+)/.exec(obj.name); 
+            if (newVal !== undefined && newVar !== null && a && a[1]) {
                 var num = a[1];
                 $("input.mdbVal[name='hgt_mdbVal"+num+"'][value!='"+newVal+"']").val(newVal);
                 $("select.mdbVal[name='hgt_mdbVal"+num+"'][value!='"+newVal+"']").each( function (i) {
@@ -2194,24 +2271,24 @@ var findTracks = {
     },
 
     changeVis: function (seenVis)
-    { // called by onchange of vis
+    {   // called by onchange of vis
         var visName = $(seenVis).attr('id');
-        var trackName = visName.substring(0,visName.length - "_id".length)
+        var trackName = visName.substring(0,visName.length - "_id".length);
         var hiddenVis = $("input[name='"+trackName+"']");
         var tdb = tdbGetJsonRecord(trackName);
-        if($(seenVis).val() != "hide")
+        if ($(seenVis).val() !== "hide")
             $(hiddenVis).val($(seenVis).val());
         else {
             var selCb = $("input#"+trackName+"_sel_id");
-            $(selCb).attr('checked',false);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-            $(seenVis).attr('disabled',true);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-            var needSel = (tdb.parentTrack != undefined);
+            $(selCb).attr('checked',false);    // Can't set these to [] because that means default
+            $(seenVis).attr('disabled',true);  // setting is used. However, we're explicitly hiding!
+            var needSel = (tdb.parentTrack !== undefined && tdb.parentTrack !== null);
             if (needSel) {
                 var hiddenSel = $("input[name='"+trackName+"_sel']");
-                $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+                $(hiddenSel).val('0');  // Can't set it to [] because it means default setting used.
                 $(hiddenSel).attr('disabled',false);
             }
-            if(tdbIsSubtrack(tdb))
+            if (tdbIsSubtrack(tdb))
                 $(hiddenVis).val("[]");
             else
                 $(hiddenVis).val("hide");
@@ -2219,30 +2296,29 @@ var findTracks = {
         $(hiddenVis).attr('disabled',false);
 
         $('input.viewBtn').val('View in Browser');
-        //warn("Changed "+trackName+" to "+$(hiddenVis).val())
     },
 
     clickedOne: function (selCb,justClicked)
-    { // called by on click of CB and findTracks.checkAll()
+    {   // called by on click of CB and findTracks.checkAll()
         var selName = $(selCb).attr('id');
-        var trackName = selName.substring(0,selName.length - "_sel_id".length)
+        var trackName = selName.substring(0,selName.length - "_sel_id".length);
         var hiddenSel = $("input[name='"+trackName+"_sel']");
         var seenVis = $('select#' + trackName + "_id");
         var hiddenVis = $("input[name='"+trackName+"']");
         var tr = $(selCb).parents('tr.found');
         var tdb = tdbGetJsonRecord(trackName);
-        var needSel = (tdb.parentTrack != undefined);
-        var shouldPack = tdb.canPack && tdb.kindOfParent == 0; // If parent then not pack but full
-        if (shouldPack && tdb.shouldPack != undefined && !tdb.shouldPack)
+        var needSel = (tdb.parentTrack !== undefined && tdb.parentTrack !== null);
+        var shouldPack = tdb.canPack && tdb.kindOfParent === 0; // If parent then not pack but full
+        if (shouldPack
+        && tdb.shouldPack !== undefined && tdb.shouldPack !== null && !tdb.shouldPack)
             shouldPack = false;
         var checked = $(selCb).attr('checked');
-        //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" needSel:"+needSel +" shouldPack:"+shouldPack);
 
         // First deal with seenVis control
-        if(checked) {
+        if (checked) {
             $(seenVis).attr('disabled', false);
-            if($(seenVis).attr('selectedIndex') == 0) {
-                if(shouldPack)
+            if ($(seenVis).attr('selectedIndex') === 0) {
+                if (shouldPack)
                     $(seenVis).attr('selectedIndex',3);  // packed
                 else
                     $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
@@ -2255,34 +2331,34 @@ var findTracks = {
         // Deal with hiddenSel and hiddenVis so that submit does the right thing
         // Setting these requires justClicked OR seen vs. hidden to be different
         var setHiddenInputs = justClicked;
-        if(!justClicked) {
-            if(needSel)
-                setHiddenInputs = (checked != ($(hiddenSel).val() == '1'));
+        if (!justClicked) {
+            if (needSel)
+                setHiddenInputs = (checked !== (parseInt($(hiddenSel).val()) === 1));
             else if (checked)
-                setHiddenInputs = ($(seenVis).val() != $(hiddenVis).val());
+                setHiddenInputs = ($(seenVis).val() !== $(hiddenVis).val());
             else
-                setHiddenInputs = ($(hiddenVis).val() != "hide" && $(hiddenVis).val() != "[]");
+                setHiddenInputs = ($(hiddenVis).val() !== "hide" && $(hiddenVis).val() !== "[]");
         }
-        if(setHiddenInputs) {
-            if(checked)
+        if (setHiddenInputs) {
+            if (checked)
                 $(hiddenVis).val($(seenVis).val());
-            else if(tdbIsSubtrack(tdb))
+            else if (tdbIsSubtrack(tdb))
                 $(hiddenVis).val("[]");
             else
                 $(hiddenVis).val("hide");
             $(hiddenVis).attr('disabled',false);
 
-            if(needSel) {
-                if(checked)
+            if (needSel) {
+                if (checked)
                     $(hiddenSel).val('1');
                 else
-                    $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+                    $(hiddenSel).val('0');  // Can't set it to [] because it means default is used.
                 $(hiddenSel).attr('disabled',false);
             }
         }
 
         // The "view in browser" button should be enabled/disabled
-        if(justClicked) {
+        if (justClicked) {
             $('input.viewBtn').val('View in Browser');
             findTracks.counts();
         }
@@ -2290,8 +2366,8 @@ var findTracks = {
 
 
     normalize: function ()
-    { // Normalize the page based upon current state of all found tracks
-        $('div#found').show()
+    {   // Normalize the page based upon current state of all found tracks
+        $('div#found').show();
         var selCbs = $('input.selCb');
 
         // All should have their vis enabled/disabled appropriately (false means don't update cart)
@@ -2301,12 +2377,12 @@ var findTracks = {
     },
 
     normalizeWaitOn: function ()  // UNUSED ?
-    { // Put up wait mask then Normalize the page based upon current state of all found tracks
+    {   // Put up wait mask then Normalize the page based upon current state of all found tracks
         waitOnFunction( findTracks.normalize );
     },
 
     _checkAll: function (check)
-    { // Checks/unchecks all found tracks.
+    {   // Checks/unchecks all found tracks.
         var selCbs = $('input.selCb');
         $(selCbs).attr('checked',check);
 
@@ -2324,10 +2400,11 @@ var findTracks = {
     },
 
     searchButtonsEnable: function (enable)
-    { // Displays visible and checked track count
-        var searchButton = $('input[name="hgt_tSearch"]'); // NOTE: must match TRACK_SEARCH in hg/inc/searchTracks.h
+    {   // Displays visible and checked track count
+        // NOTE: must match TRACK_SEARCH in hg/inc/searchTracks.h
+        var searchButton = $('input[name="hgt_tSearch"]'); 
         var clearButton  = $('input.clear');
-        if(enable) {
+        if (enable) {
             $(searchButton).attr('disabled',false);
             $(clearButton).attr('disabled',false);
         } else {
@@ -2337,31 +2414,31 @@ var findTracks = {
     },
 
     counts: function ()
-    {// Displays visible and checked track count
+    {   // Displays visible and checked track count
         var counter = normed($('.selCbCount'));
-        if(counter != undefined) {
+        if (counter) {
             var selCbs =  $("input.selCb");
-            if (selCbs != undefined && selCbs.length > 0)
-                $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
+            if (selCbs && selCbs.length > 0)
+                $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +
+                                                                    $(selCbs).length+ " selected)");
         }
     },
 
     clearFound: function ()
-    {// Clear found tracks and all input controls
-        var found = $('div#found');
-        if(found != undefined)
+    {   // Clear found tracks and all input controls
+        var found = normed($('div#found'));
+        if (found)
             $(found).remove();
-        found = $('div#filesFound');
-        if(found != undefined)
+        found = normed($('div#filesFound'));
+        if (found)
             $(found).remove();
         return false;
     },
 
     clear: function ()
-    {// Clear found tracks and all input controls
+    {   // Clear found tracks and all input controls
         findTracks.clearFound();
         $('input[type="text"]').val(''); // This will always be found
-        //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
         $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
         $('select.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
             //$(this).dropdownchecklist("refresh");  // requires v1.1
@@ -2377,18 +2454,21 @@ var findTracks = {
     },
 
     sortNow: function (obj)
-    {// Called by radio button to sort tracks
-        if( $('#sortIt').length == 0 )
-            $('form#trackSearch').append("<input TYPE=HIDDEN id='sortIt' name='"+$(obj).attr('name')+"' value='"+$(obj).val()+"'>");
+    {   // Called by radio button to sort tracks
+        if ($('#sortIt').length === 0)
+            $('form#trackSearch').append("<input TYPE=HIDDEN id='sortIt' name='"+
+                                             $(obj).attr('name')+"' value='"+$(obj).val()+"'>");
         else
             $('#sortIt').val($(obj).val());
 
-        // How to hold onto selected tracks?
-        // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
-        var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
-        if($(inp).length > 0) {
+        // How to hold onto selected tracks?  There are 2 separate forms.  
+        // Scrape named inputs from searchResults form and dup them on trackSearch?
+        var inp = $('form#searchResults').find('input:hidden').not(':disabled').not(
+                                                                                "[name='hgsid']");
+        if ($(inp).length > 0) {
             $(inp).appendTo('form#trackSearch');
-            $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
+            // Must be post to avoid url too long  NOTE: probably needs to be post anyway
+            $('form#trackSearch').attr('method','POST'); 
         }
 
         $('#searchSubmit').click();
@@ -2396,17 +2476,19 @@ var findTracks = {
     },
 
     page: function (pageVar,startAt)
-    {// Called by radio button to sort tracks
+    {   // Called by radio button to sort tracks
         var pager = $("input[name='"+pageVar+"']");
-        if( $(pager).length == 1)
+        if ($(pager).length === 1)
             $(pager).val(startAt);
 
-        // How to hold onto selected tracks?
-        // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
-        var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
-        if($(inp).length > 0) {
+        // How to hold onto selected tracks?  There are 2 separate forms.  
+        // Scrape named inputs from searchResults form and dup them on trackSearch?
+        var inp = $('form#searchResults').find('input:hidden').not(':disabled').not(
+                                                                                "[name='hgsid']");
+        if ($(inp).length > 0) {
             $(inp).appendTo('form#trackSearch');
-            $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
+            // Must be post to avoid url too long  NOTE: probably needs to be post anyway
+            $('form#trackSearch').attr('method','POST'); 
         }
 
         $('#searchSubmit').click();
@@ -2414,60 +2496,64 @@ var findTracks = {
     },
 
     configSet: function (name)
-    {// Called when configuring a composite or superTrack
+    {   // Called when configuring a composite or superTrack
         var thisForm =  $('form#searchResults');
         $(thisForm).attr('action',"../cgi-bin/hgTrackUi?hgt_tSearch=Search&g="+name);
         $(thisForm).find('input.viewBtn').click();
     },
 
     mdbSelectPlusMinus: function (obj)
-    { // Now [+][-] mdb var rows with javascript rather than cgi roundtrip
-    // Will remove row or clone new one.  Complication is that 'advanced' and 'files' tab duplicate the tables!
-
+    {   // Now [+][-] mdb var rows with javascript rather than cgi roundtrip
+        // Will remove row or clone new one.  Complication is that 'advanced' and 'files'
+        // tab duplicate the tables!
         var objId = $(obj).attr('id');
         var rowNum = objId.substring(objId.length - 1);
         var val = $(obj).text();
-        if (val == undefined || val.length == 0)
+        if (!val || val.length === 0)
             val = $(obj).val(); // Remove this when non-CSS buttons go away
-        if (val == '+') {
-            var buttons = $("#plusButton"+rowNum);  // Two tabs may have the exact same buttons!
+        var buttons;
+        if (val === '+') {
+            buttons = $("#plusButton"+rowNum);  // Two tabs may have the exact same buttons!
             if (buttons.length > 0) {
                 var table = null;
                 $(buttons).each(function (i) {
                     var tr = $(this).parents('tr.mdbSelect')[0];
-                    if (tr != undefined) {
+                    if (tr) {
                         table = $(tr).parents('table')[0];
                         var newTr = $(tr).clone();
                         var element = $(newTr).find("td[id^='hgt_mdbVal']")[0];
-                        if (element != undefined)
+                        if (element)
                             $(element).empty();
                         element = $(newTr).find("td[id^='isLike']")[0];
-                        if (element != undefined)
+                        if (element)
                             $(element).empty();
                         $(tr).after( newTr );
                         element = $(newTr).find("select.mdbVar")[0];
-                        if (element != undefined)
-                            $(element).attr('selectedIndex',-1);  // chrome needs this after 'after'
+                        if (element)
+                            $(element).attr('selectedIndex',-1); // chrome needs this after 'after'
                     }
                 });
                 if (table)
                     findTracks.mdbSelectRowsNormalize(table); // magic is in this function
                 return false;
             }
-        } else { // == '-'
-            var buttons = $("#minusButton"+rowNum);  // Two tabs may have the exact same buttons!
+        } else { // === '-'
+            buttons = $("#minusButton"+rowNum);  // Two tabs may have the exact same buttons!
             if (buttons.length > 0) {
                 var remaining = 0;
                 $(buttons).each(function (i) {
                     var tr = $(this).parents('tr')[0];
                     var table = $(tr).parents('table')[0];
-                    if (tr != undefined)
+                    if (tr)
                         $(tr).remove();
-                    remaining = findTracks.mdbSelectRowsNormalize(table);  // Must renormalize since 2nd of 3 rows may have been removed
+                    // Must renormalize since 2nd of 3 rows may have been removed
+                    remaining = findTracks.mdbSelectRowsNormalize(table);  
                 });
+                // Got to remove the cart vars, though it doesn't matter which as
+                // count must not be too many.
                 if (remaining > 0) {
-                    removeNum = remaining + 1;  // Got to remove the cart vars, though it doesn't matter which as count must not be too many.
-                    setCartVars( [ "hgt_mdbVar"+removeNum, "hgt_mdbVal"+removeNum ], [ "[]","[]" ] );
+                    removeNum = remaining + 1;  
+                    setCartVars( ["hgt_mdbVar"+removeNum,"hgt_mdbVal"+removeNum ], [ "[]","[]" ] );
                 }
 
                 findTracks.clearFound();  // Changing values so abandon what has been found
@@ -2480,7 +2566,7 @@ var findTracks = {
     mdbSelectRowsNormalize: function (table)
     { // Called when [-][+] buttons changed the number of mdbSelects in findTracks\
       // Will walk through each row and get the numberings of addressable elements correct.
-        if (table != undefined) {
+        if (table) {
             var mdbSelectRows = $(table).find('tr.mdbSelect');
             var needMinus = (mdbSelectRows.length > 2);
             $(table).find('tr.mdbSelect').each( function (ix) {
@@ -2488,32 +2574,36 @@ var findTracks = {
 
                 // First the [-][+] buttons
                 var plusButton = $(this).find("[id^='plusButton']")[0];
-                if (plusButton != undefined) {  // should always be a plus button
+                if (plusButton) {  // should always be a plus button
                     var oldNum =  Number(plusButton.id.substring(plusButton.id.length - 1));
-                    if (oldNum == rowNum)
+                    if (oldNum === rowNum)
                         return;  // that is continue with the next row
 
                     $(plusButton).attr('id',"plusButton"+rowNum);
                     var minusButton = $(this).find("[id^='minusButton']")[0];
                     if (needMinus) {
-                        if (minusButton == undefined) {
+                        if (!minusButton) {
                             if ($(plusButton).hasClass('pmButton'))
-                                $(plusButton).before("<span class='pmButton' id='minusButton"+rowNum+"' title='delete this row' onclick='findTracks.mdbSelectPlusMinus(this);'>-</span>");
+                                $(plusButton).before("<span class='pmButton' id='minusButton"+
+                                         rowNum+"' title='delete this row' "+
+                                         "onclick='findTracks.mdbSelectPlusMinus(this);'>-</span>");
                             else   // Remove this else when non-CSS buttons go away
-                                $(plusButton).before("<input type='button' id='minusButton"+rowNum+"' value='-' style='font-size:.7em;' title='delete this row' onclick='return findTracks.mdbSelectPlusMinus(this);'>");
+                                $(plusButton).before("<input type='button' id='minusButton"+rowNum+
+                                     "' value='-' style='font-size:.7em;' title='delete this row'" +
+                                     " onclick='return findTracks.mdbSelectPlusMinus(this);'>");
                         } else
                             $(minusButton).attr('id',"minusButton"+rowNum);
-                    } else if (minusButton != undefined)
+                    } else if (minusButton)
                         $(minusButton).remove();
                 }
 
                 // Now the mdb var=val pair of selects
                 var element = $(this).find(".mdbVar")[0];  // select var
-                if (element != undefined)
+                if (element)
                     $(element).attr('name','hgt_mdbVar' + rowNum);
 
                 element = $(this).find(".mdbVal")[0];      // select val
-                if (element != undefined) {                // not there if new row
+                if (element) {                // not there if new row
                     $(element).attr('name','hgt_mdbVal' + rowNum);
                     if ($(element).hasClass('filterBy')) {
                         $(element).attr('id',''); // removing id ensures renumbering id
@@ -2523,10 +2613,10 @@ var findTracks = {
 
                 // A couple more things
                 element = $(this).find("td[id^='isLike']")[0];
-                if (element != undefined)
+                if (element)
                     $(element).attr('id','isLike' + rowNum);
                 element = $(this).find("td[id^='hgt_mdbVal']")[0];
-                if (element != undefined)
+                if (element)
                     $(element).attr('id','hgt_mdbVal' + rowNum);
             });
 
@@ -2536,39 +2626,44 @@ var findTracks = {
     },
 
     switchTabs: function (ui)
-    { // switching tabs on findTracks page
+    {   // switching tabs on findTracks page
 
-        if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
-            setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
-        } else if( ui.panel.id == 'advancedTab') {
-            // Advanced tab has DDCL wigets which were sized badly because the hidden width was unknown
+        if (ui.panel.id === 'simpleTab' && $('div#found').length < 1) {
             // delay necessary, since select event not afterSelect event
-            setTimeout("ddcl.reinit($('div#advancedTab').find('select.filterBy'),false);",20);
+            setTimeout(function() { 
+                            $('input#simpleSearch').focus(); 
+                        },20); 
+        } else if (ui.panel.id === 'advancedTab') {
+            // Advanced tab has DDCL wigets which were sized badly because the hidden width
+            // was unknown delay necessary, since select event not afterSelect event
+            setTimeout(function() { 
+                            ddcl.reinit($('div#advancedTab').find('select.filterBy'),false); 
+                        },20);
         }
-        if( $('div#filesFound').length == 1) {
-            if( ui.panel.id == 'filesTab')
+        if ($('div#filesFound').length === 1) {
+            if (ui.panel.id === 'filesTab')
                 $('div#filesFound').show();
             else
                 $('div#filesFound').hide();
         }
-        if( $('div#found').length == 1) {
-            if( ui.panel.id != 'filesTab')
+        if ($('div#found').length === 1) {
+            if (ui.panel.id !== 'filesTab')
                 $('div#found').show();
             else
                 $('div#found').hide();
         }
     }
-}
+};
 
 function escapeJQuerySelectorChars(str)
-{
-    // replace characters which are reserved in jQuery selectors (surprisingly jQuery does not have a built in function to do this).
+{   // replace characters which are reserved in jQuery selectors
+    // (surprisingly jQuery does not have a built in function to do this).
     return str.replace(/([!"#$%&'()*+,./:;<=>?@[\]^`{|}~"])/g,'\\$1');
 }
 
-var preloadImages = new Array()
+var preloadImages = [];
 var preloadImageCount = 0;
-function preloadImg(url)
+function preloadImg(url)  // DEAD CODE?
 {
 // force an image to be loaded (e.g. for images in menus or dialogs).
     preloadImages[preloadImageCount] = new Image();
