@@ -3,14 +3,14 @@
 
 #function to create geneReviews table
 function createGeneReviewTables() { 
-# Load the internal working table geneReviewsGrshortNBKid to hg19/hg18
+# Load the internal working table geneReviewsGrshortNBKid to hg38/hg19/hg18
 hgsql $1 -e 'drop table if exists geneReviewsGrshortNBKidNew'
 hgsql $1 -e 'create table geneReviewsGrshortNBKidNew select * from geneReviewsGrshortNBKid limit 0'
 hgsql $1 -e \
 'load data local infile "geneReviewsGrshortNBKid.tab" into table geneReviewsGrshortNBKidNew'
 
 # Load the internal working table geneReviewsGrshortTitleNBKid to
-# hg19/18
+# hg38/19/18
 hgsql $1 -e 'drop table if exists geneReviewsGrshortTitleNBKidNew'
 hgsql $1 -e 'create table geneReviewsGrshortTitleNBKidNew select * from geneReviewsGrshortTitleNBKid limit 0'
 hgsql $1 -e \
@@ -60,6 +60,7 @@ grep -v "^#" GRtitle_shortname_NBKid.txt | sort -k1 > geneReviewsGrshortTitleNBK
 cat geneReviewsGrshortNBKid.tab | awk -F'\t' '{printf  "%s\n", $1}' \
     | sort  | uniq  > grRefGene.lst
 
+createGeneReviewTables "hg38"
 createGeneReviewTables "hg19"
 createGeneReviewTables "hg18"
 

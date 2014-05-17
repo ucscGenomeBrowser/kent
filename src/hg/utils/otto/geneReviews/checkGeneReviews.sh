@@ -42,9 +42,11 @@ then
 
     # build the new GENEREVIEWS track tables
     ../buildGeneReviews.sh
+    ../validateGeneReviews.sh hg38
     ../validateGeneReviews.sh hg19
     ../validateGeneReviews.sh hg18
     # now install
+    installGeneReviewTables "hg38"  
     installGeneReviewTables "hg19"    
     installGeneReviewTables "hg18"
 
