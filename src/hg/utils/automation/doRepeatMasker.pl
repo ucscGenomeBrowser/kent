@@ -553,7 +553,7 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
 $unmaskedSeq = $opt_unmaskedSeq ? $opt_unmaskedSeq :
   "$HgAutomate::clusterData/$db/$db.unmasked.2bit";
 my $seqCount = `twoBitInfo $unmaskedSeq stdout | wc -l`;
-$chromBased = ($seqCount <= $HgAutomate::splitThreshold);
+$chromBased = ($seqCount <= $HgAutomate::splitThreshold) && $opt_splitTables;
 
 # Do everything.
 $stepper->execute();
