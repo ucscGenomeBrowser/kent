@@ -1,4 +1,3 @@
-/* jshint */
 
 // hover effect to highlight table rows
 $(function() {

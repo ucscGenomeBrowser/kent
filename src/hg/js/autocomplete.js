@@ -6,8 +6,6 @@
    Requires three elements on page: positionDisplay (static display), positionInput (input textbox) and position (hidden).
 */
 
-/* jshint */
-
 var suggestBox = {
     ajaxGet: function ajaxGet(db) {
         // Returns autocomplete source function
