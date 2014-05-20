@@ -54,7 +54,7 @@ clean:
 compile:
 
 jshint:
-ifdef JSHINTL
+ifdef JSHINT
 	${JSHINT} --exclude-path=jshint.exclude *.js
 else
 	@echo Need JSHINT environment variable defined first.
