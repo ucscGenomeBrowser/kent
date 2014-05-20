@@ -238,11 +238,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     if (hub->trackHub != NULL)
 	{
 	if (hub->trackHub->descriptionUrl != NULL)
-	    {
-	    printf("<A href=%s>\n", hub->trackHub->descriptionUrl);
-	    ourPrintCell(hub->trackHub->shortLabel);
-	    puts("</A>");
-	    }
+	    ourPrintCellLink(hub->trackHub->shortLabel, hub->trackHub->descriptionUrl);
 	else
 	    ourPrintCell(hub->trackHub->shortLabel);
 	}
@@ -322,23 +318,7 @@ struct hash *urlSearchHash = NULL;
 if (haveTrixFile && !isEmpty(hubSearchTerms))
     urlSearchHash = getUrlSearchHash(trixFile, hubSearchTerms);
 
-addPublicHubsToHubStatus(conn, publicTable, statusTable);
-
-struct hash *publicHash = NULL;
-char query[512];
-bool hasDescription = sqlColumnExists(conn, publicTable, "descriptionUrl");
-
-if (hasDescription)
-    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,s.errorMessage,s.id,p.descriptionUrl from %s p,%s s where p.hubUrl = s.hubUrl", 
-	  publicTable, statusTable); 
-else
-    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,s.errorMessage,s.id from %s p,%s s where p.hubUrl = s.hubUrl", 
-	 publicTable, statusTable); 
-
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-int count = 0;
-
+// if we have search terms, put out the line telling the user so
 if (!isEmpty(hubSearchTerms))
     {
     printf("<BR>List restricted by search terms : %s\n", hubSearchTerms);
@@ -350,6 +330,7 @@ if (!isEmpty(hubSearchTerms))
     printf("<BR>\n");
     }
 
+// if we have a trix file, draw the search box
 if (haveTrixFile)
     {
     puts("<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\""
@@ -361,6 +342,22 @@ if (haveTrixFile)
 	    "class=\"hubField\" type=\"button\" value=\"Search Public Hubs\">\n");
     }
 
+// make sure all the public hubs are in the hubStatus table.
+addPublicHubsToHubStatus(conn, publicTable, statusTable);
+
+struct hash *publicHash = NULL;
+char query[512];
+bool hasDescription = sqlColumnExists(conn, publicTable, "descriptionUrl");
+if (hasDescription)
+    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,s.errorMessage,s.id,p.descriptionUrl from %s p,%s s where p.hubUrl = s.hubUrl", 
+	  publicTable, statusTable); 
+else
+    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,s.errorMessage,s.id from %s p,%s s where p.hubUrl = s.hubUrl", 
+	 publicTable, statusTable); 
+
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+int count = 0;
 boolean gotAnyRows = FALSE;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -420,11 +417,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	errAbort("cannot get id for hub with url %s\n", url);
 
     if (hasDescription && !isEmpty(descriptionUrl))
-	{
-	printf("<A HREF=\"%s\">\n", descriptionUrl);
 	ourPrintCellLink(shortLabel, descriptionUrl);
-	puts("</A>");
-	}
     else
 	ourPrintCell(shortLabel);
     if (isEmpty(errorMessage))
