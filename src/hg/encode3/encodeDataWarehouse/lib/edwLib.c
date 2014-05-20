@@ -302,11 +302,9 @@ return FALSE;
 void edwWarnUnregisteredUser(char *email)
 /* Put up warning message about unregistered user and tell them how to register. */
 {
-warn("No user exists with email %s.  If you need an account please contact your "
-	 "ENCODE DCC data wrangler, or someone you know who already does have an "
-	 "ENCODE Data Warehouse account, and have them create an account for you with "
-	 "http://%s/cgi-bin/edwWebCreateUser"
-	 , email, getenv("SERVER_NAME"));
+warn("No user exists with email %s. If you need an account please contact your "
+	 "ENCODE DCC data wrangler and have them create an account for you."
+	 , email);
 }
 
 

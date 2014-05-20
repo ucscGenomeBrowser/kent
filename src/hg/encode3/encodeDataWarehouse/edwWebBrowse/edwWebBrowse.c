@@ -36,7 +36,7 @@ if (colCount > 0)
 	{
 	if (!didHeader)
 	    {
-	    printf("<H3>%s</H3>\n", title);
+	    printf("<H4>%s</H4>\n", title);
 	    printf("<TABLE>\n");
 	    printf("<TR>");
 	    char *field;
@@ -295,33 +295,33 @@ if (userId == 0)
 /* Select all submissions, most recent first. */
 sqlSafef(query, sizeof(query), 
     "select * from edwSubmit where userId=%d "
-    "and (newFiles != 0 or metaChangeCount != 0 or errorMessage is not NULL)"
+    "and (newFiles != 0 or metaChangeCount != 0 or errorMessage is not NULL or fileIdInTransit != 0)"
     " order by id desc limit %d", userId, maxSubCount);
 struct edwSubmit *submit, *submitList = edwSubmitLoadByQuery(conn, query);
 
-if (noPrevSubmission)
+if (noPrevSubmission || !submitList)
     {
-    printf("<H4>There is no file submitted by %s</H4>\n",user);
+    printf("<H4>There are no files submitted by %s</H4>\n",user);
     return;
     }
 
 for (submit = submitList; submit != NULL; submit = submit->next)
     {
-    printf("<H3><A HREF=\"edwWebSubmit?url=%s&monitor=on\">%s</A> ", 
-	cgiEncode(submit->url), submit->url);
+    /* Figure out and print upload time */
+    sqlSafef(query, sizeof(query), 
+	"select from_unixtime(startUploadTime) from edwSubmit where id=%u", submit->id);
+    char *dateTime = sqlQuickString(conn, query);
+
+    printf("<HR><H4>%s <A HREF=\"edwWebSubmit?url=%s&monitor=on\">%s</A> ", 
+                dateTime, cgiEncode(submit->url), submit->url);
     printSubmitState(submit, conn);
-    printf("</H3>\n");
+    printf("</H4>\n");
 
     /* Print a little summary information about the submission overall before getting down to the
      * file by file info. */
     if (!isEmpty(submit->errorMessage))
         printf("<B>%s</B><BR>\n", submit->errorMessage);
 
-    /* Figure out and print upload time */
-    sqlSafef(query, sizeof(query), 
-	"select from_unixtime(startUploadTime) from edwSubmit where id=%u", submit->id);
-    char *dateTime = sqlQuickString(conn, query);
-    printf("Started upload %s<BR>\n", dateTime);
     printf("%d files in validated.txt including %d already in warehouse<BR>\n", 
 	submit->fileCount, submit->oldFiles);
     if (submit->newFiles > 0)
@@ -347,7 +347,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
     /* Make wrapper for experiments. */
     struct hash *experimentWrap = hashNew(0);
     hashAdd(experimentWrap, "experiment", 
-	"<A HREF=\"http://submit.encodedcc.org/%s/\">%s</A>");
+	"<A HREF=\"https://www.encodedcc.org/%s/\">%s</A>");
     /* Get and print file-by-file info. */
     char title[256];
     safef(title, sizeof(title), "Files and enrichments for %d new files", submit->newFiles);

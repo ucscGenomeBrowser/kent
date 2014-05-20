@@ -15,6 +15,7 @@ O = hgGene.o alleles.o altSplice.o ctd.o dnaBindMotif.o domains.o gad.o\
 include ../../inc/cgi_build_rules.mk
 
 my::
+	rm -fr ${CGI_BIN}-${USER}/hgGeneData
 	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}-${USER}/
 	chmod -R a+rX ${CGI_BIN}-${USER}/hgGeneData
 

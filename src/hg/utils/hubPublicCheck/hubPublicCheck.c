@@ -85,14 +85,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     struct hashCookie cookie = hashFirst(tHub->genomeHash);
     struct dyString *dy = newDyString(1024);
-    int dbCount;
     struct hashEl *hel;
 
     while ((hel = hashNext(&cookie)) != NULL)
-	{
-	dbCount++;
 	dyStringPrintf(dy, "%s,", trackHubSkipHubName(hel->name));
-	}
+
     if (!sameString(dy->string, dbList))
 	{
 	differences++;
