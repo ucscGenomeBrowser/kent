@@ -53,20 +53,13 @@ clean:
 
 compile:
 
-jshint:
-ifdef JSHINT
-	${JSHINT} --exclude-path=jshint.exclude *.js
-else
-	@echo Need JSHINT environment variable defined first.
-endif
-
 install:
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
 
-doInstall:
-ifdef JSHINT
+jshint:
 	${JSHINT} ${UCSC_JS_FILES} ${STATIC_FILES}
-endif
+
+doInstall: jshint
 	@mkdir -p ${DEST}/
 	../utils/cpAndLinkToResourceFiles.pl ${extra} -exclude='makefile' \
 			-versionFile=../inc/versionInfo.h -destDir=${DEST} ${SYMLINKED_FILES}
