@@ -241,7 +241,7 @@ if ((exonArrows != NULL) && sameString(exonArrows, "on"))
     drawArrows = TRUE;
 Color rangeColor = shadesOfGray[lf->grayIx];
 Color peakColor = (tg->ixColor != blackIndex()) ? tg->ixColor : getOrangeColor();
-if (drawArrows)
+if (drawArrows || lf->tallStart == 0)
     {
     shortOff = 0;
     shortHeight = heightPer;
