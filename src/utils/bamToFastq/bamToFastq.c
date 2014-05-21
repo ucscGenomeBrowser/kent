@@ -1,5 +1,4 @@
 /* bamToFastq - converts a BAM file to Fastq. */
-/* currently working, however some header information is lost */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -24,9 +23,9 @@ static struct optionSpec options[] = {
 };
 
 struct fastqSeq
-/* holds a single fastq sequence */
+/* Holds a single fastq sequence. */
     {
-    struct fastqSeq *next;
+    struct fastqSeq *next; /* Next in sequence. */
     int size;       /* Size of the sequence. */
     char *header;   /* Sequence header, begins with '@' */
     char *del;      /* Fastq deliminator '+' */
@@ -35,8 +34,8 @@ struct fastqSeq
     };
 
 void fixQuality(struct fastqSeq *seq)
-/* the bam quality reader returns a format that is not FASTQ */
-/* this function updates the bam quality to a fastq quality */
+/* The bam quality reader returns a format that is not FASTQ. */
+/* This function updates the bam quality to a fastq quality. */
 {
 int size = strlen(seq->dna);
 int i = 0;
@@ -48,7 +47,7 @@ seq->quality[size]='\0';
 }
 
 void fastqWriteNext(struct fastqSeq *input, FILE *f)
-/* a function for writing a single fastq struct to file */
+/* Writes a single fastq structure to the target file. */
 {
     fprintf(f,"%s\n",input->header);
     fprintf(f,"%s\n",input->dna);
@@ -58,7 +57,7 @@ void fastqWriteNext(struct fastqSeq *input, FILE *f)
 
 
 void freeFastqSeq(struct fastqSeq **pInput)
-/* frees the memory allocated to a fastq struct */
+/* Frees the memory allocated to a fastq structure. */
 {
 struct fastqSeq *input = *pInput;
 if (input != NULL)
@@ -72,7 +71,7 @@ if (input != NULL)
 }
 
 char *concat(char *s1, char *s2)
-/* a simple concatenate function */
+/* A simple concatenate function. */
 {
 char *result = needMem(strlen(s1)+strlen(s2) +1);
 strcpy(result,s1);
@@ -81,7 +80,7 @@ return result;
 }
 
 samfile_t *samMustOpen(char *fileName, char *mode, void *extraHeader)
-/* Open up samfile or die trying */
+/* Open up samfile or die trying. */
 {
 samfile_t *sf = samopen(fileName, mode, extraHeader);
 if (sf == NULL)
