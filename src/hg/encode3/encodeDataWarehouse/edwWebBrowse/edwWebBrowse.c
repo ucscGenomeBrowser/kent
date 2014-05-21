@@ -299,9 +299,9 @@ sqlSafef(query, sizeof(query),
     " order by id desc limit %d", userId, maxSubCount);
 struct edwSubmit *submit, *submitList = edwSubmitLoadByQuery(conn, query);
 
-if (noPrevSubmission)
+if (noPrevSubmission || !submitList)
     {
-    printf("<H4>There is no file submitted by %s</H4>\n",user);
+    printf("<H4>There are no files submitted by %s</H4>\n",user);
     return;
     }
 
@@ -322,7 +322,6 @@ for (submit = submitList; submit != NULL; submit = submit->next)
     if (!isEmpty(submit->errorMessage))
         printf("<B>%s</B><BR>\n", submit->errorMessage);
 
-    printf("Started upload %s<BR>\n", dateTime);
     printf("%d files in validated.txt including %d already in warehouse<BR>\n", 
 	submit->fileCount, submit->oldFiles);
     if (submit->newFiles > 0)
@@ -348,7 +347,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
     /* Make wrapper for experiments. */
     struct hash *experimentWrap = hashNew(0);
     hashAdd(experimentWrap, "experiment", 
-	"<A HREF=\"http://submit.encodedcc.org/%s/\">%s</A>");
+	"<A HREF=\"https://www.encodedcc.org/%s/\">%s</A>");
     /* Get and print file-by-file info. */
     char title[256];
     safef(title, sizeof(title), "Files and enrichments for %d new files", submit->newFiles);
