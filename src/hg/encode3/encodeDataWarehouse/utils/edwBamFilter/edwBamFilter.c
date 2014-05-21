@@ -23,6 +23,7 @@ errAbort(
   "   -chrom=chrM - remove a chromosome (in this case chrM)\n"
   "   -multimapped - remove multiply mapping reads\n"
   "   -unmapped - remove unmapped reads\n"
+  "   -sponge - remove reads with names starting with mito| or ribo| or other|\n"
   );
 }
 
@@ -31,33 +32,53 @@ static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
    {"multimapped", OPTION_BOOLEAN},
    {"unmapped", OPTION_BOOLEAN},
+   {"sponge", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-void edwBamFilter(char *inBam, char *outBam, char *chrom, boolean multimapped, boolean unmapped)
+void edwBamFilter(char *inBam, char *outBam, char *chrom, boolean multimapped, boolean unmapped,
+    boolean sponge)
 /* edwBamFilter - Remove reads from a BAM file based on a number of criteria.. */
 {
 /* Open file and get header for it. */
 samfile_t *in = bamMustOpenLocal(inBam, "rb", NULL);
 bam_header_t *head = in->header;
+unsigned char *skipChrom = needLargeZeroedMem(head->n_targets);
 
-/* Find out index number of chromosome. */
-int i;
-int rmTid = -1;
+/* Find out index number of chromosome and force it to be skipped. */
 if (chrom != NULL)
     {
+    int i;
     for (i=0; i<head->n_targets; ++i)
 	{
 	if (sameString(chrom, head->target_name[i]))
 	    {
-	    rmTid = i;
+	    skipChrom[i] = TRUE;
 	    break;
 	    }
 	}
-    if (rmTid == -1)
+    if (i == head->n_targets)
 	errAbort("Couldn't find %s in %s", chrom, inBam);
-    verbose(2, "rmTid for %s is %d\n", chrom, rmTid);
     }
+
+/* If sponge in play filter out sponge-named-sequences */
+if (sponge)
+    {
+    int spongeSize = 0;
+    int i;
+    for (i=0; i<head->n_targets; ++i)
+	{
+	char *name = head->target_name[i];
+	if (startsWith("other|", name) || startsWith("mito|", name) || startsWith("ribo|", name))
+	    {
+	    assert(i < head->n_targets);
+	    skipChrom[i] = TRUE;
+	    ++spongeSize;
+	    }
+	}
+    verbose(1, "Sponge size %d\n", spongeSize);
+    }
+
 
 /* Open up sam output and write header */
 samfile_t *out = bamMustOpenLocal(outBam, "wb", head);
@@ -81,7 +102,7 @@ for (;;)
 	}
     else
         {
-	if (rmTid == one.core.tid)
+	if (skipChrom[one.core.tid])
 	    continue;
         if (multimapped && one.core.qual <= edwMinMapQual)
             continue;
@@ -102,6 +123,6 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 edwBamFilter(argv[1], argv[2], optionVal("chrom", NULL), optionExists("multimapped"),
-    optionExists("unmapped"));
+    optionExists("unmapped"), optionExists("sponge"));
 return 0;
 }
