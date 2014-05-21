@@ -2,10 +2,10 @@
 /* Applies Richard Mott's trimming algorithm to the */
 /* three prime end of each sequence. */
 /* Cuttoff is the lowest desired quality score in phred scores, */
-/* set by default to a 50%  chance of mismatch. */
+/* Set by default to a 50%  chance of mismatch. */
 /* Base corresponds to any additions to the ASCII quality scheme. */
 /* Minlength specifies the minimum sequence length for the output. */
-
+/* For paired and unpaired data. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -44,28 +44,13 @@ static struct optionSpec options[] = {
 struct fastqSeq
 /* holds a single fastq sequence */
     {
-    struct fastqSeq *next;
+    struct fastqSeq *next; /* Next in list. */
     int size;       /* Size of the sequence. */
     char *header;   /* Sequence header, begins with '@' */
     char *del;      /* Fastq deliminator '+' */
     char *dna;      /* DNA sequence */
     unsigned char *quality;  /* DNA quality, in ASCII format */
     };
-
-#ifdef OLD
-struct fastqSeq  *fastqReadNext(struct lineFile *lf)
-/*reads the next fastq sequence and returns a fastq struct */
-{
-struct fastqSeq *seq=needMem(sizeof(struct fastqSeq));
-/* dyamically allocate memory */
-int size;
-lineFileNext(lf,&seq->header,&size);
-lineFileNext(lf,&seq->dna,&size);
-lineFileNext(lf,&seq->del,&size);
-lineFileNext(lf,&seq->quality,&size);
-return(seq);
-}
-#endif /* OLD */
 
 char *nextLineIntoString(struct lineFile *lf)
 /* Return next line cloned into persistent memory.  Abort if can't get next line. */
@@ -81,7 +66,7 @@ struct fastqSeq  *fastqReadNext(struct lineFile *lf)
 {
 char *line;
 if (!lineFileNext(lf, &line, NULL))
-    return NULL;   // Pass back end of file
+    return NULL;   /* Pass back end of file. */
 
 struct fastqSeq *seq;
 AllocVar(seq);
@@ -91,13 +76,14 @@ seq->del = nextLineIntoString(lf);
 seq->quality = (unsigned char *)nextLineIntoString(lf);
 seq->size = strlen(seq->dna);
 if (seq->size != strlen((char *)seq->quality))
-    errAbort("dna and quality sizes don't match at record ending line %d of %s", lf->lineIx, lf->fileName);
+    errAbort("dna and quality sizes don't match at record ending line %d of %s",
+            lf->lineIx, lf->fileName);
 return(seq);
 }
 
 
 void fastqWriteNext(struct fastqSeq *input, FILE *f)
-/* a function for writing a single fastq struct to file */
+/*  Writes a single fastq structure to the file provided. */
 {
     fprintf(f,"%s\n",input->header);
     fprintf(f,"%s\n",input->dna);
@@ -106,7 +92,7 @@ void fastqWriteNext(struct fastqSeq *input, FILE *f)
 }
 
 void freeFastqSeq(struct fastqSeq **pInput)
-/* frees the memory allocated to a fastq struct */
+/* Frees the memory allocated to a fastq structure. */
 {
 struct fastqSeq *input = *pInput;
 if (input != NULL)
@@ -120,10 +106,10 @@ if (input != NULL)
 }
 
 boolean  mottTrim(struct fastqSeq *input, int minLength, boolean isIllumina, int cutoff)
-/* applies mott's trimming algorithm to the fastq input*/
-/* trims from the 3 prime end based on */
-/* the sum of (quality score - cutoff value ) */
-/* returns true if the trimmed sequence is larger than the minimum sequene length */
+/* Applies mott's trimming algorithm to the fastq input. */
+/* Trims from the 3 prime end based on */
+/* The sum of (quality score - cutoff value ). */
+/* Returns true if the trimmed sequence is larger than the minimum sequence length. */
 {
 int base = 33;
 int index = -1;
@@ -133,19 +119,18 @@ if(isIllumina)
     base = 64;
 int len = strlen(input->dna);
 int i = len - 1;
-/*determining the trim length */
 for(; i >= 0; --i)
     {
-/*convert the quality scores to their ascii values */
-    int qualScore = input->quality[i]-base;
-/*calculate the sum of the (quality score - cutoff value)'s*/
+/* Convert the quality scores to their ascii values. */
+/* Calculate the sum of the (quality score - cutoff value)'s. */
+    int qualScore = input->quality[i] - base;
     scoreValue += (qualScore - cutoff);
     if(scoreValue < minValue)
         {
         minValue = scoreValue;
         index = i;
         }
-/*modifying the fastq fields to be the trimmed length*/
+/* Modify the fastq fields to be the trimmed length. */
 }
 if(minValue <= cutoff)
     {
@@ -161,8 +146,9 @@ return(FALSE);
 
 void parseFastqPairs(char *input, char *output,
             char *input2, char *output2, int minLength, boolean isIllumina, int cutoff )
-/* goes through fastq sequences in a fastq file*/
-/* parses, stores, mottTrims,  prints, then frees*/
+/* Goes through fastq sequences in a fastq file; */
+/* Parses, stores, mottTrims,  prints, then frees each fastq sequence. */
+/* For paired data. */
 {
 FILE *f = mustOpen(output, "w");
 FILE *f2 = mustOpen(output2, "w");
@@ -187,8 +173,8 @@ carefulClose(&f2);
 
 
 void parseFastq(char *input, char *output, int minLength, boolean isIllumina, int cutoff )
-/* goes through fastq sequences in a fastq file*/
-/* parses, stores, mottTrims,  prints, then frees*/
+/* Goes through fastq sequences in a fastq file; */
+/* Parses, stores, mottTrims,  prints, then frees each fastq sequence. */
 {
 FILE *f = mustOpen(output, "w");
 struct lineFile *lf = lineFileOpen(input, TRUE);
