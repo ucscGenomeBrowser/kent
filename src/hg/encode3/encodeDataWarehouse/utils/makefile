@@ -3,6 +3,7 @@
 include ../../../../inc/common.mk
 
 UTIL_DIRS = \
+    edwBamFilter \
     edwBamRemoveChrom \
     edwBamStats \
     edwBamToWig \
