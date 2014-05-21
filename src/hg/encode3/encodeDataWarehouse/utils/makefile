@@ -10,8 +10,7 @@ UTIL_DIRS = \
     edwReplicatedPeaks \
     edwSamPairedEndStats \
     edwSamRepeatAnalysis \
-    edwSolexaToSangerFastq \
-    edwValidKey
+    edwSolexaToSangerFastq 
 
 buildUtils: $(UTIL_DIRS:%=%.buildUtils)
 %.buildUtils:
