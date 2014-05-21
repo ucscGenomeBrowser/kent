@@ -6,7 +6,6 @@ UTIL_DIRS = \
     edwBamFilter \
     edwBamRemoveChrom \
     edwBamStats \
-    edwBamToWig \
     edwComparePeaks \
     edwReplicatedPeaks \
     edwSamPairedEndStats \
