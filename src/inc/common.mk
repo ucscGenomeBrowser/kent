@@ -202,14 +202,10 @@ ifeq (${SAMTABIXDIR},)
 endif
 
 # autodetect UCSC additional source code with password for some external tracks on gbib
-ifeq (${GBIB_PWD_SRC},)
-    GBIBDIR = /hive/groups/browser/gbib/
-    ifneq ($(wildcard ${GBIBDIR}/*.c),)
-        ifeq (${GBIB_PWD_SRC},)
-	  HG_DEFS+=-DUSE_GBIB_PWD
-	  HG_INC += -I${GBIBDIR}
-        endif
-    endif
+GBIBDIR = /hive/groups/browser/gbib/
+ifneq ($(wildcard ${GBIBDIR}/*.c),)
+  HG_DEFS+=-DUSE_GBIB_PWD
+  HG_INC += -I${GBIBDIR}
 endif
 
 # libsamtabix (samtools + tabix + Angie's KNETFILE_HOOKS extension to it): disabled by default
@@ -266,7 +262,7 @@ SYS = $(shell uname -s)
 
 ifeq (${HG_WARN},)
   ifeq (${SYS},Darwin)
-      HG_WARN = -Wall -Wno-unused-variable
+      HG_WARN = -Wall -Wno-unused-variable -Wno-deprecated-declarations
       HG_WARN_UNINIT=
   else
     ifeq (${SYS},SunOS)

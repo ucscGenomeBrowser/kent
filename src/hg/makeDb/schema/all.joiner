@@ -3967,13 +3967,13 @@ identifier ceuBcellRNASeqId
 
 identifier geneReviewsId
 "GeneReviews article ID"
-    hg18,hg19.kgXref.geneSymbol dupeOk 
-    hg18,hg19.geneReviews.name minCheck=0.85
+    hg18,hg19,hg38.kgXref.geneSymbol dupeOk 
+    hg18,hg19,hg38.geneReviews.name minCheck=0.85
 
 identifier geneReviewsRefGeneId
 "ID of GeneReviewsRefGene"
-    hg18,hg19.kgXref.geneSymbol dupeOk
-    hg18,hg19.geneReviewsRefGene.geneSymbol minCheck=0.85
+    hg18,hg19,hg38.kgXref.geneSymbol dupeOk
+    hg18,hg19,hg38.geneReviewsDetail.geneSymbol minCheck=0.85
 
 identifier mouseStrains
 "chrom names in the mouse alternate strains"
@@ -4329,6 +4329,7 @@ tablesIgnored $gbd
     gc5Base
     gc5BaseBw
     gcPercent
+    genomicSuperDups
     genscanSubopt
     %gold
     grp
@@ -4627,7 +4628,6 @@ tablesIgnored $canFam
     polyASeqSitesKidneyRev
     polyASeqSitesTestisFwd
     polyASeqSitesTestisRev
-    genomicSuperDups
     mzH%
 
 tablesIgnored $anoGam
@@ -4743,7 +4743,6 @@ tablesIgnored $hg
     fox2ClipSeqDensityForwardStrand
     fox2ClipSeqDensityReverseStrand
     geneTests
-    genomicSuperDups
     grcIncidentDb
     haplotype
     hapMapRelease24CEURecombMap

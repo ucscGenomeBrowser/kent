@@ -1770,11 +1770,11 @@ if (initedTrack == NULL || differentString(tg->track, initedTrack))
     {
     int overallStart, overallEnd;
     boolean isSeries = FALSE;
-    if ((tg->drawItems == linkedFeaturesSeriesDraw)
 #ifdef USE_BAM
-        || (tg->drawItems == bamLinkedFeaturesSeriesDraw))
+    if (tg->drawItems == linkedFeaturesSeriesDraw
+        || tg->drawItems == bamLinkedFeaturesSeriesDraw)
 #else
-	)
+    if (tg->drawItems == linkedFeaturesSeriesDraw)
 #endif
 	isSeries = TRUE;
     else if (!baseColorCanDraw(tg))

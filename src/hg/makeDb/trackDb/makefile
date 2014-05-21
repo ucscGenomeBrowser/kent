@@ -75,7 +75,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	echTel1 echTel2 \
 	monDom1 monDom4 monDom5 \
 	allMis1 \
-	chrPic1 \
+	chrPic1 chrPic2 \
 	anoCar1 anoCar2 \
 	amaVit1 geoFor1 melUnd1 \
 	galGal2 galGal3 galGal4 \
@@ -93,6 +93,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	braFlo1 braFlo2 \
 	cioSav1 \
 	danRer3 danRer4 danRer5 danRer6 danRer7 \
+	poeRet1 \
 	gasAcu1 \
 	gadMor1 \
 	dm1 dm2 dm3 \

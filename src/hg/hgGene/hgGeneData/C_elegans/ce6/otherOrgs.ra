@@ -1,5 +1,5 @@
 name human
-db hg19
+db hg38
 
 name mouse
 db mm10

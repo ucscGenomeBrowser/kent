@@ -807,7 +807,8 @@ wgo->image = image;
 wgo->vLine = vLineViaHvg;
 wgo->xOff = xOff;
 wgo->yOff = yOff;
-wgo->yOffsets = needHugeMem(width * numTracks * sizeof(double));
+if (numTracks)
+    wgo->yOffsets = needHugeMem(width * numTracks * sizeof(double));
 return wgo;
 }
 

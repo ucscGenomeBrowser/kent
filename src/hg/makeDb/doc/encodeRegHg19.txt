@@ -986,6 +986,15 @@ project wgEncode
     # vim README.txt
     cp README.txt md5sum.txt ..
 
+############
+# Fixes to Inputs table  (2014-05-19 kate)
+# Matches manual changes to uniqify Cells table
+
+hgsql hg19 -e 'update wgEncodeRegTfbsClusteredInputsV3 set source="A549+EtOH_0.02pct+HudsonAlpha+V04+USF-1" where tableName="wgEncodeAwgTfbsHaibA549Usf1V0422111Etoh02UniPk"'
+hgsql hg19 -e 'update wgEncodeRegTfbsClusteredInputsV3 set source="HepG2+HudsonAlpha+V04+NRSF" where tableName="wgEncodeAwgTfbsHaibHepg2NrsfV0416101UniPk"'
+hgsql hg19 -e 'update wgEncodeRegTfbsClusteredInputsV3 set source="SK-N-SH+HudsonAlpha+V04+NRSF"  where tableName="wgEncodeAwgTfbsHaibSknshNrsfV0416101UniPk"'
+hgsql hg19 -e 'update wgEncodeRegTfbsClusteredInputsV3 set source="K562+Stanford+Iggrab+Pol2(phosphoS2)" where tableName="wgEncodeAwgTfbsSydhK562Pol2s2IggrabUniPk"'
+
 
 #######################################################################
 # performance eval
@@ -1683,3 +1692,4 @@ sed -e 's/NR3C1\t$/NR3C1\tNR3C1/' -e 's/FOS\t$/FOS\tAP1/' allMotifTargetsV4.load
 hgsql hg19 < motifTarget.sql
 hgsql hg19 -e 'alter table motifTarget rename to factorbookMotifCanonical'
 hgsql hg19 -e 'LOAD DATA LOCAL INFILE "factorbookMotifCanonical.load.tab" INTO TABLE factorbookMotifCanonical'
+

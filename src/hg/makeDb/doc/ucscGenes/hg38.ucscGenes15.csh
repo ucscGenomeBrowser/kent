@@ -975,8 +975,12 @@ if ($db =~ hg*) then
     #hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133Plus2 knownGene knownToU133Plus2
     #hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133 knownGene knownToU133
     #hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU95 knownGene knownToU95
-    #knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
-    #hgsql $tempDb -e "delete k from knownToHprd k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
+    mkdir hprd
+    cd hprd
+    wget "http://www.hprd.org/edownload/HPRD_FLAT_FILES_041310"
+    tar xvf HPRD_FLAT_FILES_041310.tar.gz
+    knownToHprd $tempDb FLAT_FILES_072010/HPRD_ID_MAPPINGS.txt
+    hgsql $tempDb -e "delete k from knownToHprd k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 endif
 
 if ($db =~ hg*) then
@@ -1008,13 +1012,11 @@ hgsql $tempDb -e "delete k from knownToVisiGene k, kgXref x where k.name = x.kgI
 
 # Create Human P2P protein-interaction Gene Sorter columns
 if ($db =~ hg*) then
-#TODO
-#hgLoadNetDist $genomes/$db/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
-#    -sqlRemap="select distinct value, name from knownToHprd"
-#hgLoadNetDist $genomes/$db/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2P \
-#    -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
-#hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P \
-#    -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
+hgLoadNetDist $genomes/hg19/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
+    -sqlRemap="select distinct value, name from knownToHprd"
+hgLoadNetDist $genomes/hg19/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2P \
+    -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
+hgLoadNetDist $genomes/hg19/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
 
@@ -1552,17 +1554,16 @@ hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
-# old number of unique query values: 43103
-# old number of unique target values 22704
-# new number of unique query values: 34612
-# new number of unique target values 19733
+# old number of unique query values: 43110
+# old number of unique target values 22769
+# new number of unique query values: 35140
+# new number of unique target values 20138
 
 synBlastp.csh $ratDb $db rgdGene2 knownGene
-# old number of unique query values: 11206
-# old number of unique target values 10796
-# new number of unique query values: 6741
-# new number of unique target values 6925
-
+#old number of unique query values: 11205
+#old number of unique target values 10791
+#new number of unique query values: 7854
+#new number of unique target values 7935
 
 # need to generate multiz downloads
 #/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownCanonical.exonAA.fa.gz

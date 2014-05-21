@@ -28,6 +28,8 @@
 #define hubTrackPrefix "hub_"
 /* The names of all hub tracks begin with this.  Use in cart. */
 
+#define hgHubSearchTerms      "hubSearchTerms"
+/* name of cart/cgi variable containing the current search terms */
 
 boolean isHubTrack(char *trackName);
 /* Return TRUE if it's a hub track. */

@@ -22,12 +22,15 @@
 #include "jsHelper.h"
 #include "obscure.h"
 #include "hgConfig.h"
+#include "trix.h"
 
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
 #define hgHubDoClear       hgHubDo "clear"
 #define hgHubDoDisconnect  hgHubDo "disconnect"
 #define hgHubDoReset       hgHubDo "reset"
+#define hgHubDoSearch      hgHubDo "search"
+#define hgHubDoDeleteSearch      hgHubDo "deleteSearch"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -45,6 +48,16 @@ fputs("<TD>", stdout);  // do not add a newline
 static void ourCellEnd()
 {
 puts("</TD>");
+}
+
+static void ourPrintCellLink(char *str, char *url)
+{
+ourCellStart();
+printf("<A HREF=\"%s\" TARGET=_BLANK>\n", url);
+if (str != NULL)
+    fputs(str, stdout); // do not add a newline -- was causing trailing blanks get copied in cut and paste 
+puts("</A>");
+ourCellEnd();
 }
 
 static void ourPrintCell(char *str)
@@ -223,7 +236,12 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	ourCellEnd();
 	}
     if (hub->trackHub != NULL)
-	ourPrintCell(hub->trackHub->shortLabel);
+	{
+	if (hub->trackHub->descriptionUrl != NULL)
+	    ourPrintCellLink(hub->trackHub->shortLabel, hub->trackHub->descriptionUrl);
+	else
+	    ourPrintCell(hub->trackHub->shortLabel);
+	}
     else
 	ourPrintCell("");
 
@@ -273,32 +291,91 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 }
 
+struct hash *getUrlSearchHash(char *trixFile, char *hubSearchTerms)
+/* find hubs that match search term in trixFile */
+{
+struct hash *urlSearchHash = newHash(5);
+struct trix *trix = trixOpen(trixFile);
+int trixWordCount = chopString(hubSearchTerms, " ", NULL, 0);
+char *trixWords[trixWordCount];
+trixWordCount = chopString(hubSearchTerms, " ", trixWords, trixWordCount);
+
+struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, TRUE);
+for ( ; tsList != NULL; tsList = tsList->next)
+    hashStore(urlSearchHash, tsList->itemId);
+
+return urlSearchHash;
+}
+
 static struct hash *outputPublicTable(struct sqlConnection *conn, char *publicTable, char *statusTable)
 /* Put up the list of public hubs and other controls for the page. */
 {
+char *trixFile = cfgOptionEnvDefault("HUBSEARCHTRIXFILE", "hubSearchTrixFile", "/gbdb/hubs/public.ix");
+char *hubSearchTerms = cartOptionalString(cart, hgHubSearchTerms);
+boolean haveTrixFile = fileExists(trixFile);
+struct hash *urlSearchHash = NULL;
+
+if (haveTrixFile && !isEmpty(hubSearchTerms))
+    urlSearchHash = getUrlSearchHash(trixFile, hubSearchTerms);
+
+// if we have search terms, put out the line telling the user so
+if (!isEmpty(hubSearchTerms))
+    {
+    printf("<BR>List restricted by search terms : %s\n", hubSearchTerms);
+    puts("<input name=\"hubDeleteSearchButton\""
+	"onClick="
+	"\" document.searchHubForm.elements['hubSearchTerms'].value=\'\';"
+	"document.searchHubForm.submit();return true;\" "
+	"class=\"hubField\" type=\"button\" value=\"Delete Search Terms\">\n");
+    printf("<BR>\n");
+    }
+
+// if we have a trix file, draw the search box
+if (haveTrixFile)
+    {
+    puts("<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\""
+	"type=\"text\" size=\"65\"> \n"
+    "<input name=\"hubSearchButton\""
+	"onClick="
+	"\" document.searchHubForm.elements['hubSearchTerms'].value=hubSearchTerms.value;"
+	    "document.searchHubForm.submit();return true;\" "
+	    "class=\"hubField\" type=\"button\" value=\"Search Public Hubs\">\n");
+    }
+
+// make sure all the public hubs are in the hubStatus table.
 addPublicHubsToHubStatus(conn, publicTable, statusTable);
 
 struct hash *publicHash = NULL;
 char query[512];
-sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,s.errorMessage,s.id from %s p,%s s where p.hubUrl = s.hubUrl", 
+bool hasDescription = sqlColumnExists(conn, publicTable, "descriptionUrl");
+if (hasDescription)
+    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,s.errorMessage,s.id,p.descriptionUrl from %s p,%s s where p.hubUrl = s.hubUrl", 
+	  publicTable, statusTable); 
+else
+    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,s.errorMessage,s.id from %s p,%s s where p.hubUrl = s.hubUrl", 
 	 publicTable, statusTable); 
+
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 int count = 0;
-
 boolean gotAnyRows = FALSE;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ++count;
     char *url = row[0], *shortLabel = row[1], *longLabel = row[2], 
-    	  *dbList = row[3], *errorMessage = row[4];
+    	  *dbList = row[3], *errorMessage = row[4], *descriptionUrl = row[6];
     int id = atoi(row[5]);
+
+    if ((urlSearchHash != NULL) && (hashLookup(urlSearchHash, url) == NULL))
+	continue;
+
     if (gotAnyRows)
 	webPrintLinkTableNewRow();
     else
 	{
 	/* output header */
 	printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
+
 	printf("<table id=\"publicHubsTable\"> "
 	    "<thead><tr> "
 		"<th>Display</th> "
@@ -339,7 +416,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	errAbort("cannot get id for hub with url %s\n", url);
 
-    ourPrintCell(shortLabel);
+    if (hasDescription && !isEmpty(descriptionUrl))
+	ourPrintCellLink(shortLabel, descriptionUrl);
+    else
+	ourPrintCell(shortLabel);
     if (isEmpty(errorMessage))
 	ourPrintCell(longLabel);
     else
@@ -376,7 +456,7 @@ if (!(sqlTableExists(conn, publicTable) &&
 	(retHash = outputPublicTable(conn, publicTable,statusTable)) != NULL ))
     {
     printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
-    printf("No Public Track Hubs for this genome assembly<BR>");
+    printf("No Public Track Hubs<BR>");
     printf("</div>");
     }
 hDisconnectCentral(&conn);
@@ -543,20 +623,25 @@ cgiMakeHiddenVar("hubUrl", "");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 
-// this the form for the disconnect hub button
+// this is the form for the disconnect hub button
 printf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar("hubId", "");
 cgiMakeHiddenVar(hgHubDoDisconnect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 
-// this the form for the reset hub button
+// this is the form for the reset hub button
 printf("<FORM ACTION=\"%s\" NAME=\"resetHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar("hubUrl", "");
 cgiMakeHiddenVar(hgHubDoReset, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 
+// this is the form for the search hub button
+printf("<FORM ACTION=\"%s\" NAME=\"searchHubForm\">\n",  "../cgi-bin/hgHubConnect");
+cgiMakeHiddenVar(hgHubSearchTerms, "");
+cgiMakeHiddenVar(hgHubDoSearch, "on");
+puts("</FORM>");
 
 // ... and now the main form
 if (cartVarExists(cart, hgHubConnectCgiDestUrl))

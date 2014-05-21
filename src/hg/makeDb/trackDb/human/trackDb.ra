@@ -4082,7 +4082,7 @@ searchName geneReviews
 searchTable geneReviews
 searchType bed
 searchPriority 50
-xrefTable geneReviewsGeneGRshortNBKidGRtitle
+xrefTable geneReviewsDetail
 xrefQuery select geneSymbol,grTitle from %s where grTitle like '%%%s%%'
 searchBoth on
 

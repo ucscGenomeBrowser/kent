@@ -344,10 +344,6 @@ boolean edwOneLineSystemAttempt(char *command, char *line, int maxLineSize);
 void edwWebAutoRefresh(int msec);
 /* Refresh page after msec.  Use 0 to cancel autorefresh */
 
-void edwWebAutoRefreshProtectInput();
-/* Cancel autorefresh when input widgets are clicked.  Use on pages with user input 
-   widgets having state beyond a button press */
-
 /***/
 /* Navigation bar */
 

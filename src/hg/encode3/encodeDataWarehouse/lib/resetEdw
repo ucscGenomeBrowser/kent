@@ -114,6 +114,12 @@ edwAddQaEnrichTarget utr hg38 /hive/groups/encode/encode3/encValData/hg38/region
 edwAddQaEnrichTarget utr3 hg38 /hive/groups/encode/encode3/encValData/hg38/regions/utr3.bb
 edwAddQaEnrichTarget utr5 hg38 /hive/groups/encode/encode3/encValData/hg38/regions/utr5.bb
 edwAddQaEnrichTarget chrY hg38 /hive/groups/encode/encode3/encValData/hg38/regions/chrY.bb
+edwAddQaEnrichTarget exon dm3 /hive/groups/encode/encode3/encValData/dm3/regions/exon.bb
+edwAddQaEnrichTarget promoter dm3 /hive/groups/encode/encode3/encValData/dm3/regions/promoter.bb
+edwAddQaEnrichTarget intron dm3 /hive/groups/encode/encode3/encValData/dm3/regions/intron.bb
+edwAddQaEnrichTarget exon ce10 /hive/groups/encode/encode3/encValData/ce10/regions/exon.bb
+edwAddQaEnrichTarget promoter ce10 /hive/groups/encode/encode3/encValData/ce10/regions/promoter.bb
+edwAddQaEnrichTarget intron ce10 /hive/groups/encode/encode3/encValData/ce10/regions/intron.bb
 edwAddQaContamTarget hg19
 edwAddQaContamTarget mm10
 edwAddQaContamTarget ce10

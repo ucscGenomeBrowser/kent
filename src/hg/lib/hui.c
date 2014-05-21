@@ -6196,8 +6196,9 @@ if (isWigMafProt)
 else
     puts("<B>Multiple alignment base-level:</B><BR>" );
 
+boolean mafDotIsOn = trackDbSettingClosestToHomeOn(tdb, MAF_DOT_VAR);
 safef(option, sizeof option, "%s.%s", name, MAF_DOT_VAR);
-cgiMakeCheckBox(option, cartUsualBooleanClosestToHome(cart, tdb, parentLevel,MAF_DOT_VAR, FALSE));
+cgiMakeCheckBox(option, cartUsualBooleanClosestToHome(cart, tdb, parentLevel,MAF_DOT_VAR, mafDotIsOn));
 
 if (isWigMafProt)
     puts("Display amino acids identical to reference as dots<BR>" );
@@ -7832,27 +7833,37 @@ if (setting != NULL)
     {
     setting = cloneString(setting);
     char *icon = htmlEncodeText(nextWord(&setting),FALSE);
-    char *url = nextWord(&setting);
-    char *hint = htmlEncodeText(stripEnclosingDoubleQuotes(setting),FALSE);
+    char *url = NULL;
+    if (setting != NULL)
+	url = nextWord(&setting);
+    char *hint = NULL;
+    if (setting != NULL)
+	hint = htmlEncodeText(stripEnclosingDoubleQuotes(setting),FALSE);
 
-    if (strlen(url) > 0)
+    if (!isEmpty(url))
         {
-        printf("<P><a title='%s' href='%s' TARGET=ucscHelp><img height='16' width='16' "
-               "src='../images/%s'></a>",hint,url,icon);
+	if (isEmpty(hint))
+	    printf("<P><a href='%s' TARGET=ucscHelp><img height='16' width='16' "
+		   "src='../images/%s'></a>",url,icon);
+	else
+	    {
+	    printf("<P><a title='%s' href='%s' TARGET=ucscHelp><img height='16' width='16' "
+		   "src='../images/%s'></a>",hint,url,icon);
 
-        // Special case for liftOver from hg17 or hg18, but this should probably be generalized.
-        if (sameString(icon,"18.jpg") && startsWithWord("lifted",hint))
-            printf("&nbsp;Note: these data have been converted via liftOver from the Mar. 2006 "
-                   "(NCBI36/hg18) version of the track.");
-        else if (sameString(icon,"17.jpg") && startsWithWord("lifted",hint))
-            printf("&nbsp;Note: these data have been converted via liftOver from the May 2004 "
-                   "(NCBI35/hg17) version of the track.");
-        else if (strlen(hint) > 0)
-            printf("&nbsp;Note: %s.",hint);
-        printf("</P>\n");
-        }
+	    // Special case for liftOver from hg17 or hg18, but this should probably be generalized.
+	    if (sameString(icon,"18.jpg") && startsWithWord("lifted",hint))
+		printf("&nbsp;Note: these data have been converted via liftOver from the Mar. 2006 "
+		       "(NCBI36/hg18) version of the track.");
+	    else if (sameString(icon,"17.jpg") && startsWithWord("lifted",hint))
+		printf("&nbsp;Note: these data have been converted via liftOver from the May 2004 "
+		       "(NCBI35/hg17) version of the track.");
+	    else 
+		printf("&nbsp;Note: %s.",hint);
+	    printf("</P>\n");
+	    }
+	}
     else
-        printf("<img height='16' width='16' src='%s'>\n",icon);
+        printf("<BR><img height='16' width='16' src='../images/%s'>\n",icon);
     return TRUE;
     }
 return FALSE;

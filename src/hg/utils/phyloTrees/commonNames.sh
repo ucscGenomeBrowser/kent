@@ -168,6 +168,7 @@ angJap1 -> Japanese_eel ;
 danRer7 -> Zebrafish ;
 astMex1 -> Mexican_tetra ;
 poeFor1 -> Amazon_molly ;
+poeRet1 -> Guppy ;
 gadMor1 -> Atlantic_cod ;
 lipVex1 -> Yangtze_river_dolphin ;
 calMil1 -> Elephant_shark ;

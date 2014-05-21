@@ -36,15 +36,21 @@ int hubPublicCheck(char *table)
 {
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
-sqlSafef(query, sizeof(query), "select hubUrl, shortLabel,longLabel,dbList from %s", 
+bool hasDescriptionUrl = sqlColumnExists(conn, table, "descriptionUrl");
+if (hasDescriptionUrl)
+    sqlSafef(query, sizeof(query), "select hubUrl, shortLabel,longLabel,dbList,descriptionUrl from %s", 
 	table); 
+else
+    sqlSafef(query, sizeof(query), "select hubUrl, shortLabel,longLabel,dbList from %s", 
+	table); 
+
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 int differences = 0;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *url = row[0], *shortLabel = row[1], *longLabel = row[2], *dbList = row[3];
+    char *url = row[0], *shortLabel = row[1], *longLabel = row[2], *dbList = row[3], *descriptionUrl = row[4];
     struct errCatch *errCatch = errCatchNew();
     boolean gotWarning = FALSE;
     struct trackHub *tHub = NULL;
@@ -79,19 +85,23 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     struct hashCookie cookie = hashFirst(tHub->genomeHash);
     struct dyString *dy = newDyString(1024);
-    int dbCount;
     struct hashEl *hel;
 
     while ((hel = hashNext(&cookie)) != NULL)
-	{
-	dbCount++;
 	dyStringPrintf(dy, "%s,", trackHubSkipHubName(hel->name));
-	}
+
     if (!sameString(dy->string, dbList))
 	{
 	differences++;
 
 	printf("update %s set dbList=\"%s\" where hubUrl=\"%s\";\n",table, dy->string, url);
+	}
+
+    if (hasDescriptionUrl && !isEmpty(tHub->descriptionUrl) && ((descriptionUrl == NULL) || !sameString(descriptionUrl, tHub->descriptionUrl)))
+	{
+	differences++;
+
+	printf("update %s set descriptionUrl=\"%s\" where hubUrl=\"%s\";\n",table, tHub->descriptionUrl, url);
 	}
 
     }

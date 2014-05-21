@@ -16,6 +16,7 @@
 static struct optionSpec optionSpecs[] = {
     {"suffix", OPTION_STRING},
     {"keepTranslated", OPTION_BOOLEAN},
+    {"mapFileWithInQName", OPTION_BOOLEAN},
     {"chainMapFile", OPTION_BOOLEAN},
     {"swapMap", OPTION_BOOLEAN},
     {"swapIn", OPTION_BOOLEAN},
@@ -28,6 +29,7 @@ static struct optionSpec optionSpecs[] = {
 /* Values parsed from command line */
 static char* suffix = NULL;
 static unsigned mapOpts = pslTransMapNoOpts;
+static boolean mapFileWithInQName = FALSE;
 static boolean chainMapFile = FALSE;
 static boolean swapMap = FALSE;
 static boolean swapIn = FALSE;
@@ -77,15 +79,17 @@ struct mapAln
     struct mapAln *next; /* list mapping to the genomeRangeTree node */
     struct psl *psl;  /* psl, maybe created from a chain */
     int id;           /* chain id, or psl file row  */
+    char *qNameMatch;  /* option qName to match with input file */
 };
 
-static struct mapAln *mapAlnNew(struct psl *psl, int id)
+static struct mapAln *mapAlnNew(struct psl *psl, int id, char *qNameMatch)
 /* construct a new mapAln object */
 {
 struct mapAln *mapAln;
 AllocVar(mapAln);
 mapAln->psl = psl;
 mapAln->id = id;
+mapAln->qNameMatch = cloneString(qNameMatch); // maybe NULL
 return mapAln;
 }
 
@@ -136,7 +140,7 @@ for (cBlk = ch->blockList, iBlk = 0; cBlk != NULL; cBlk = cBlk->next, iBlk++)
 psl->blockCount = iBlk;
 if (swapMap)
     pslSwap(psl, FALSE);
-return mapAlnNew(psl, ch->id);
+return mapAlnNew(psl, ch->id, NULL);
 }
 
 static struct genomeRangeTree* loadMapChains(char *chainFile)
@@ -155,6 +159,27 @@ lineFileClose(&chLf);
 return mapAlns;
 }
 
+static struct mapAln* readPslMapAln(struct lineFile *pslLf, int id)
+/* read the next mapping PSL, handling optional qName.  Return NULL on EOF */
+{
+char *words[32];
+int wordCount = lineFileChopNextTab(pslLf, words, ArraySize(words));
+int pslOffset = mapFileWithInQName ? 1 : 0;  // first column is qName?
+if (wordCount == 0)
+    return NULL;
+
+struct psl *psl = NULL;
+if (wordCount-pslOffset == 21)
+    psl = pslLoad(words+pslOffset);
+else if (wordCount-pslOffset == 23)
+    psl = pslxLoad(words+pslOffset);
+else
+    errAbort("Bad PSL line %d of %s has is %d columns instead of %d or %d%s", pslLf->lineIx, pslLf->fileName, 
+             wordCount, 21+pslOffset, 23+pslOffset,
+             (mapFileWithInQName ? " (including -mapFileWithInQName extra column)" : ""));
+return mapAlnNew(psl, id, mapFileWithInQName ? words[0] : NULL);
+}
+
 static struct genomeRangeTree* loadMapPsls(char *pslFile)
 /* read a psl file and genomeRangeTree by query, linking multiple PSLs for the
  * same query.*/
@@ -162,14 +187,13 @@ static struct genomeRangeTree* loadMapPsls(char *pslFile)
 struct dyString* idBuf = NULL;
 struct genomeRangeTree* mapAlns = genomeRangeTreeNew();
 int id = 0;
-struct psl* psl;
-struct lineFile *pslLf = pslFileOpen(pslFile);
-while ((psl = pslNext(pslLf)) != NULL)
+struct mapAln* mapAln;
+struct lineFile *pslLf = lineFileOpen(pslFile, TRUE);
+while ((mapAln = readPslMapAln(pslLf, id)) != NULL)
     {
     if (swapMap)
-        pslSwap(psl, FALSE);
-    genomeRangeTreeAddValList(mapAlns, getMappingId(psl->qName, &idBuf), psl->qStart, psl->qEnd,
-                              mapAlnNew(psl, id));
+        pslSwap(mapAln->psl, FALSE);
+    genomeRangeTreeAddValList(mapAlns, getMappingId(mapAln->psl->qName, &idBuf), mapAln->psl->qStart, mapAln->psl->qEnd, mapAln);
     id++;
     }
 lineFileClose(&pslLf);
@@ -286,8 +310,11 @@ for (overMapAlnNode = overMapAlnNodes; overMapAlnNode != NULL; overMapAlnNode = 
     {
     for (overMapAln = overMapAlnNode->val; overMapAln != NULL; overMapAln = overMapAln->next)
         {
-        if (mapPslPair(inPsl, overMapAln, outPslFh, mapInfoFh, mappingPslFh))
-            wasMapped = TRUE;
+        if ((overMapAln->qNameMatch == NULL) || sameString(inPsl->qName, overMapAln->qNameMatch))
+            {
+            if (mapPslPair(inPsl, overMapAln, outPslFh, mapInfoFh, mappingPslFh))
+                wasMapped = TRUE;
+            }
         }
     }
 if ((mapInfoFh != NULL) && !wasMapped)
@@ -337,7 +364,10 @@ if (argc != 4)
 suffix = optionVal("suffix", NULL);
 if (optionExists("keepTranslated"))
     mapOpts |= pslTransMapKeepTrans;
+mapFileWithInQName = optionExists("mapFileWithInQName");
 chainMapFile = optionExists("chainMapFile");
+if (mapFileWithInQName && chainMapFile)
+    errAbort("can't specify -mapFileWithInQName with -chainMapFile");
 swapMap = optionExists("swapMap");
 swapIn = optionExists("swapIn");
 simplifyMappingIds = optionExists("simplifyMappingIds");

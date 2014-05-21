@@ -195,6 +195,7 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 
 	/* Do a little check on it */
 	if (!sameString("mm9", ucscDbVal) && !sameString("mm10", ucscDbVal)
+	    && !sameString("dm3", ucscDbVal) && !sameString("ce10", ucscDbVal)
 	    && !sameString("hg19", ucscDbVal))
 	    errAbort("Unrecognized ucsc_db %s - please arrange files so that the top " 
 	             "level directory in the fileName in the manifest is a UCSC database name "

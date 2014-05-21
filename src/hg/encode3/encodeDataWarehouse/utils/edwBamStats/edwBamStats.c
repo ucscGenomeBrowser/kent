@@ -210,6 +210,68 @@ if (head == NULL)
 }
 
 
+void statsWriteHeaderInfo(FILE *f, bam_header_t *head)
+// Write to stats file, useful information discovered in bam header.
+{
+// Try to determine the aligner.  It would be good to not hard-code expected aligners,
+// But with 0 or more @PG lines in a header, it might be hard to discover a simple answer.
+if (strcasestr(head->text,"\n@PG\tID:bwa") != NULL)
+    fprintf(f, "alignedBy bwa\n");
+else if (strcasestr(head->text,"\n@PG\tID:TopHat") != NULL)
+    fprintf(f, "alignedBy TopHat\n");
+else if (strcasestr(head->text,"\n@PG\tID:STAR") != NULL)
+    fprintf(f, "alignedBy STAR\n");
+else if (strcasestr(head->text,"\n@PG\tID:RSEM") != NULL)
+    fprintf(f, "alignedBy RSEM\n");
+else
+    {
+    //fprintf(f, "alignedBy unknown\n");
+    if (strcasestr(head->text,"\n@PG\tID:BEDTools_bedToBam") != NULL)
+        fprintf(f, "createdBy BEDTools_bedToBam\n");
+    }
+
+// See if any CO lines can be discovered (e.g. "@CO     REFID:ENCFF001RGS")
+#define CO_PREFIX "\n@CO\t"
+char *p = head->text;
+for (;;)
+    {
+    // Find "CO" at beginning of line
+    if ((p = stringIn(CO_PREFIX,p)) == NULL)
+        break;
+    p += strlen(CO_PREFIX);
+    char *coPair = cloneNextWordByDelimiter(&p,' ');
+    p -= 1; // cloneNextWord skips past delimiter, which we still need
+    if (coPair == NULL || *coPair == '\0')
+        continue;
+
+    // Only support expected CO lines at this time
+    char *words[2];
+    if (chopString(coPair, ":", words, ArraySize(words)) != 2)
+        continue;  // mangled line so skip it
+    if (sameString(words[0], "REFID") || sameString(words[0], "ANNID")
+    ||  sameString(words[0], "LIBID") || sameString(words[0], "SPIKEID"))
+        {
+        // Overkill: camelCase theId
+        strLower(words[0]);
+        words[0][strlen(words[0])-2] = 'I';
+        }
+    else
+        continue;
+
+    // print RA style "var val ..." pair
+    fprintf(f, "%s %s",words[0],words[1]);
+    if (*p != '\n')  // Perhaps there is more to the line?
+        {
+        char *restOf = cloneNextWordByDelimiter(&p,'\n');
+        p -= 1; // cloneNextWord skips past delimiter, which we still need
+        fprintf(f, " %s",restOf);
+        //freeMem(restOf); // spill
+        }
+    //freeMem(coPair); // spill
+    fputc('\n', f);
+    }
+}
+
 
 void edwBamStats(char *inBam, char *outRa)
 /* edwBamStats - Collect some info on a BAM file. */
@@ -314,6 +376,7 @@ verbose(1, "Scanned %lld reads in %s\n", readCount, inBam);
 
 
 FILE *f = mustOpen(outRa, "w");
+statsWriteHeaderInfo(f,head);
 fprintf(f, "isPaired %d\n", isPaired);
 fprintf(f, "isSortedByTarget %d\n", sortedByChrom);
 fprintf(f, "readCount %lld\n", readCount);

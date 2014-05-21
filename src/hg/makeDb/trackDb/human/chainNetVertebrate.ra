@@ -84,13 +84,13 @@ include chainNetGalGal4.ra alpha
         type chain melUnd1
         otherDb melUnd1
 
-        track chainTaeGut1
+        track chainTaeGut2
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=fbZebra_Finch clade=bDino
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain taeGut1
-        otherDb taeGut1
+        type chain taeGut2
+        otherDb taeGut2
 
         track chainAnoCar2
         subTrack vertebrateChainNetViewchain off
@@ -243,13 +243,13 @@ include chainNetFr3.ra alpha
         type netAlign melUnd1 chainMelUnd1
         otherDb melUnd1
 
-        track netTaeGut1
+        track netTaeGut2
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=fbZebra_Finch clade=bDino
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign taeGut1 chainTaeGut1
-        otherDb taeGut1
+        type netAlign taeGut2 chainTaeGut2
+        otherDb taeGut2
 
         track netAnoCar2
         subTrack vertebrateChainNetViewnet off

@@ -1,0 +1,564 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the chrPic2
+#	Western Painted Turtle - Chrysemys picta bellii - Jan 2012
+
+#    http://www.ncbi.nlm.nih.gov/assembly/49541
+#    http://www.ncbi.nlm.nih.gov/genome/24706
+#    http://www.ncbi.nlm.nih.gov/bioproject/PRJNA78657
+#    http://www.ncbi.nlm.nih.gov/bioproject/PRJNA210179 - chrMt NC_002073.3
+#    http://www.ncbi.nlm.nih.gov/nuccore/591771112/
+#    ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Chrysemys_picta/Chrysemys_picta_bellii-3.0.3/
+
+
+#    DATE:   31-Mar-2014
+#    ORGANISM:       Chrysemys picta bellii
+#    TAXID:  8478
+#    ASSEMBLY LONG NAME:     Chrysemys_picta_bellii-3.0.3
+#    ASSEMBLY SHORT NAME:    Chrysemys_picta_bellii-3.0.3
+#    ASSEMBLY SUBMITTER:     Painted turtle genome sequencing consortium
+#    ASSEMBLY TYPE:  Haploid
+#    NUMBER OF ASSEMBLY-UNITS:       1
+#    ASSEMBLY ACCESSION:     GCA_000241765.2
+#    FTP-RELEASE DATE: 01-Apr-2014
+
+#	Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Coelomata;
+#	Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata;
+#	Teleostomi; Euteleostomi; Sarcopterygii; Tetrapoda; Amniota;
+#	Sauropsida; Testudines; Cryptodira; Testudinoidea; Emydidae;
+#	Chrysemys; Chrysemys picta
+
+#############################################################################
+# Fetch sequence from genbank (DONE - 2014-04-07 - Hiram)
+
+    mkdir -p /hive/data/genomes/chrPic2/genbank
+    cd /hive/data/genomes/chrPic2/genbank
+
+    rsync -a -P \
+  rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Chrysemys_picta/Chrysemys_picta_bellii-3.0.3/ ./
+
+
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz \
+      Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+
+    #    2365749696 bases (192562473 N's 2173187223 real 2173187223 upper
+    #        0 lower) in 78594 sequences in 19 files
+    #    Total size: mean 30100.9 sd 710121.5
+    #    min 294 (gi|591641262|gb|AHGY02129839.1|)
+    #    max 77392008 (gi|602278193|gb|CM002655.1|) median 754
+
+
+    mkdir -p /hive/data/genomes/chrPic2/ucsc
+    cd /hive/data/genomes/chrPic2/ucsc
+    export mitoAcc=NC_002073.3
+
+    wget -O ${mitoAcc}.fa \
+ "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc"
+
+    echo ">chrM" > chrM.fa
+    grep -v "^>" ${mitoAcc}.fa >> chrM.fa
+
+    export mSize=`faCount chrM.fa | grep total | awk '{print $2}'`
+
+    /bin/echo -e "chrM\t1\t$mSize\t1\tF\t$mitoAcc\t1\t$mSize\t+" > chrM.agp
+
+    faCount chrM.fa
+# #seq    len     A       C       G       T       N       cpg
+# chrM    16866   5810    4376    2165    4515    0       331
+
+#############################################################################
+# process into UCSC naming scheme (DONE - 2012-01-12 - Hiram)
+    mkdir /hive/data/genomes/chrPic2/ucsc
+    cd /hive/data/genomes/chrPic2/ucsc
+
+    cat << '_EOF_' > ucscCompositeAgp.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+open (FH, "<../genbank/Primary_Assembly/assembled_chromosomes/chr2acc") or
+        die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+}
+close (FH);
+
+foreach my $acc (keys %accToChr) {
+    my $chrN =  $accToChr{$acc};
+    print "$acc $accToChr{$acc}\n";
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.comp.agp.gz|") or die "can not read chr${chrN}.comp.agp.gz";
+    open (UC, ">chr${chrN}.agp") or die "can not write to chr${chrN}.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            $line =~ s/^$acc/chr${chrN}/;
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/FASTA/chr${chrN}.fa.gz|") or die "can not read chr${chrN}.fa.gz";
+    open (UC, ">chr${chrN}.fa") or die "can not write to chr${chrN}.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            printf UC ">chr${chrN}\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x ucscCompositeAgp.pl
+    time ./ucscCompositeAgp.pl
+
+    #### construct chrUn .fa and .agp
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, ">chrUn.agp") or die "can not write to chrUn.agp";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\./v/;
+        printf UC "chrUn_%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, ">chrUn.fa") or die "can not write to chrUn.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/. Chrysemys.*//;
+        $line =~ s/\./v/;
+        printf UC ">chrUn_$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+
+    time ./unplaced.pl
+# -rw-rw-r-- 1   23867717 Apr  8 15:07 chrUn.agp
+# -rw-rw-r-- 1 1932948955 Apr  8 15:07 chrUn.fa
+
+    gzip *.fa *.agp
+    # verify nothing lost in the translation, should be the same as above
+    #	except for the name translations and the addition of chrM
+    faSize chr*.fa.gz
+    # 2365766562 bases (192562473 N's 2173204089 real 2173204089 upper
+    #    0 lower) in 78595 sequences in 20 files
+    # Total size: mean 30100.7 sd 710117.0 min 294 (chrUn_AHGY02129839v1)
+    #    max 77392008 (chr1) median 754
+
+#############################################################################
+#   Initial browser build (DONE - 2012-03-27 - Hiram)
+    cd /hive/data/genomes/chrPic2
+    cat << '_EOF_' > chrPic2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db chrPic2
+clade vertebrate
+genomeCladePriority 50
+scientificName Chrysemys picta bellii
+commonName Painted Turtle
+assemblyDate Dec. 2011
+assemblyLabel International Painted Turtle Genome Sequencing Consortium (GCA_000241765.1)
+assemblyShortLabel v3.0.1
+ncbiAssemblyName Chrysemys_picta_bellii-3.0.1
+ncbiAssemblyId 326468
+orderKey 4000
+# chrM already included
+mitoAcc none
+fastaFiles /hive/data/genomes/chrPic2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/chrPic2/ucsc/*.agp.gz
+dbDbSpeciesDir turtle
+taxId   8478
+'_EOF_'
+    # << happy emacs
+
+    # the makeGenomeDb.pl script wasn't used to build this assembly.
+    # The steps in quickAssembly.txt were performed to get the database
+    # established.  The steps for makeGenomeDb.pl were gone through
+    # in a debug mode and therefore verified they have been completed.
+    time makeGenomeDb.pl -workhorse=hgwdev -stop=agp chrPic2.config.ra \
+	> agp.log 2>&1 
+    #	real    2m2.893s
+    # check the end of agp.log to verify it is OK
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
+	-continue=db chrPic2.config.ra > db.log 2>&1 
+    #	real    17m30.996s
+
+#############################################################################
+# running repeat masker (DONE - 2014-04-09 - Hiram)
+    mkdir /hive/data/genomes/chrPic2/bed/repeatMasker
+    cd /hive/data/genomes/chrPic2/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=ku chrPic2 > do.log 2>&1 &
+    #	real    152m29.224s
+    cat faSize.rmsk.txt
+    # 2365766562 bases (192562473 N's 2173204089 real 1959124115 upper
+    #    214079974 lower) in 78595 sequences in 1 files
+    # Total size: mean 30100.7 sd 710117.0 min 294 (chrUn_AHGY02129839v1)
+    #    max 77392008 (chr1) median 754
+    # %9.05 masked total, %9.85 masked real
+
+    grep -i versi do.log
+# RepeatMasker version open-4.0.3
+#    June 20 2013 (open-4-0-3) version of RepeatMasker
+
+    featureBits -countGaps chrPic2 rmsk
+    #	214213191 bases of 2365766562 (9.055%) in intersection
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, this featureBits count
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2014-04-09 - Hiram)
+    mkdir /hive/data/genomes/chrPic2/bed/simpleRepeat
+    cd /hive/data/genomes/chrPic2/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+	chrPic2 > do.log 2>&1 &
+    #	real    43m42.360s
+
+    cat fb.simpleRepeat 
+    #	21563230 bases of 2158293365 (0.999%) in intersection
+
+    # not going to add to rmsk here, using the window masker instead since
+    #	it masks more sequence
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-03-27 - Hiram)
+    mkdir /hive/data/genomes/chrPic2/bed/gap
+    cd /hive/data/genomes/chrPic2/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../chrPic2.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m23.801s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits -countGaps chrPic2 -not gap -bed=notGap.bed
+    #	2158293365 bases of 2589745704 (83.340%) in intersection
+    #	real    0m21.340s
+
+    time featureBits -countGaps chrPic2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	3619 bases of 2589745704 (0.000%) in intersection
+    #	real    216m26.278s
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" chrPic2 | sort -n | tail -1
+    #	8964
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" chrPic2 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits -countGaps chrPic2 other.bed
+    #	3619 bases of 2589745704 (0.000%) in intersection
+    wc -l other.bed
+    #	3589
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad chrPic2 otherGap other.bed
+    #	Read 3589 elements of size 8 from other.bed
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" chrPic2
+    #	470729
+    hgsql chrPic2 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" chrPic2
+    #	474318
+    # == 470729 + 3589
+
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 chrPic2 nonBridged.lift -bedFile=nonBridged.bed
+    # see example in danRer7.txt
+
+    # there are no non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" chrPic2 | sort | uniq -c
+    #	474318 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2014-04-10 - Hiram)
+    mkdir /hive/data/genomes/chrPic2/bed/windowMasker
+    cd /hive/data/genomes/chrPic2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev chrPic2 > do.log 2>&1 &
+    #	real    225m32.368s
+
+    # Masking statistics
+    cat faSize.chrPic2.cleanWMSdust.txt
+    # 2365766562 bases (192562473 N's 2173204089 real 1488430331 upper
+    #    684773758 lower) in 78595 sequences in 1 files
+    # Total size: mean 30100.7 sd 710117.0 min 294 (chrUn_AHGY02129839v1)
+    #    max 77392008 (chr1) median 754
+    # %28.95 masked total, %31.51 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps chrPic2 rmsk windowmaskerSdust
+    #	140761128 bases of 2365766562 (5.950%) in intersection
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2014-04-10 - Hiram)
+    cd /hive/data/genomes/chrPic2
+    twoBitMask -add bed/windowMasker/chrPic2.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed chrPic2.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa chrPic2.2bit stdout | faSize stdin > faSize.chrPic2.txt
+    cat faSize.chrPic2.txt
+    # 2365766562 bases (192562473 N's 2173204089 real 1488302752 upper
+    #    684901337 lower) in 78595 sequences in 1 files
+    # Total size: mean 30100.7 sd 710117.0 min 294 (chrUn_AHGY02129839v1)
+    #    max 77392008 (chr1) median 754
+    # %28.95 masked total, %31.52 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/chrPic2/chrPic2.2bit
+    ln -s `pwd`/chrPic2.2bit /gbdb/chrPic2/chrPic2.2bit
+
+#########################################################################
+# cpgIslands - (DONE - 2014-04-16 - Hiram)
+    mkdir /hive/data/genomes/chrPic2/bed/cpgIslands
+    cd /hive/data/genomes/chrPic2/bed/cpgIslands
+    time doCpgIslands.pl chrPic2 > do.log 2>&1
+    #   Elapsed time: 114m58s
+
+    cat fb.chrPic2.cpgIslandExt.txt
+    #   16307343 bases of 2173204089 (0.750%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2014-04-16 - Hiram)
+    mkdir /hive/data/genomes/chrPic2/bed/genscan
+    cd /hive/data/genomes/chrPic2/bed/genscan
+    time doGenscan.pl chrPic2 > do.log 2>&1
+    #   Elapsed time: 534m29s
+
+    cat fb.chrPic2.genscan.txt
+    #   41715267 bases of 2173204089 (1.920%) in intersection
+    cat fb.chrPic2.genscanSubopt.txt
+    #   49704463 bases of 2173204089 (2.287%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2014-04-29 - Hiram)
+    # Use -repMatch=800, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2173204089 / 2897316137 \) \* 1024
+    #	( 2173204089 / 2897316137 ) * 1024 = 768.076690
+
+    # round up to 800
+
+    cd /hive/data/genomes/chrPic2
+    time blat chrPic2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/chrPic2.11.ooc -repMatch=800
+    #   Wrote 14175 overused 11-mers to jkStuff/chrPic2.11.ooc
+    #	real     0m40.913s
+
+    # there are non-bridged gaps, create lift file for genbank
+    hgsql -N -e "select bridge from gap;" chrPic2 | sort | uniq -c
+    #       56 no
+    #   183695 yes
+
+    cd /hive/data/genomes/chrPic2/jkStuff
+    gapToLift chrPic2 chrPic2.nonBridged.lift -bedFile=chrPic2.nonBridged.bed
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' chrPic2.nonBridged.bed | sort -nr | head
+    #   29146328 chr3   33862197        63008525        chr3.03
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2014-04-29 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Chrysemys picta 50      0       8
+# Chrysemys picta marginata       1       0       0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add chrPic2 just before chrPic1
+# chrPic2 (green painted turtle)
+chrPic2.serverGenome = /hive/data/genomes/chrPic2/chrPic2.2bit
+chrPic2.clusterGenome = /hive/data/genomes/chrPic2/chrPic2.2bit
+chrPic2.ooc = /hive/data/genomes/chrPic2/jkStuff/chrPic2.11.ooc
+chrPic2.lift = /hive/data/genomes/chrPic2/jkStuff/chrPic2.nonBridged.lift
+chrPic2.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+chrPic2.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+chrPic2.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+chrPic2.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+chrPic2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+chrPic2.refseq.mrna.native.load = no
+chrPic2.refseq.mrna.xeno.load = yes
+chrPic2.genbank.mrna.xeno.load = yes
+chrPic2.genbank.est.native.load = no
+chrPic2.downloadDir = chrPic2
+chrPic2.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding chrPic2 painted turtle refs #13166" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S chrPic2           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial chrPic2 &
+    #	var/build/logs/2014.04.29-14:57:04.chrPic2.initalign.log
+    #   real    992m15.247s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad chrPic2 &
+    #	logFile:
+    #	var/dbload/hgwdev/logs/2014.04.30-16:46:08.chrPic2.dbload.log
+    #	real    51m42.197s
+
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add chrPic2 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added chrPic2 refs #13166" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# create pushQ entry (DONE - 2012-05-24 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=chrPic2 -keys all.joiner
+
+    mkdir /hive/data/genomes/chrPic2/pushQ
+    cd /hive/data/genomes/chrPic2/pushQ
+    makePushQSql.pl chrPic2 > chrPic2.sql 2> stderr.out
+    # check stderr.out for no significant problems, it is common to see:
+# WARNING: hgwdev does not have /gbdb/chrPic2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/chrPic2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/chrPic2/bbi/quality.bw
+# WARNING: chrPic2 does not have seq
+# WARNING: chrPic2 does not have extFile
+    # which are no real problem
+    # if some tables are not identified:
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#	<some table list ... >
+    # put them in manually after loading the pushQ entry
+    scp -p chrPic2.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < chrPic2.sql
+
+#########################################################################
+# create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    mkdir /hive/data/genomes/chrPic2/bed/ucscToINSDC
+    cd /hive/data/genomes/chrPic2/bed/ucscToINSDC
+
+    # copying these scripts from the previous load and improving them
+    cp -p ../../../sorAra2/bed/ucscToINSDC/translateNames.sh .
+
+    # with each instance
+    ./translateNames.sh NC_002073.3
+    # needs to be sorted to work with join
+    sort ucscToINSDC.txt > ucscToINSDC.tab
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes | sort \
+        > name.coordinate.tab
+
+    join name.coordinate.tab ucscToINSDC.tab | tr '[ ]' '[\t]' > ucscToINSDC.bed
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+# 20
+
+    # use the 20 in this sed:
+    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab chrPic2 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords chrPic2 ucscToINSDC
+    # should cover all bases
+    featureBits -countGaps chrPic2 ucscToINSDC
+    # 2365766562 bases of 2365766562 (100.000%) in intersection
+
+    # verify the track link to INSDC functions
+
+##############################################################################
+# cytoBandIdeo - (DONE - 2014-04-29 - Hiram)
+    mkdir /hive/data/genomes/chrPic2/bed/cytoBand
+    cd /hive/data/genomes/chrPic2/bed/cytoBand
+    makeCytoBandIdeo.csh chrPic2
+
+#############################################################################
+# fixup search rule for assembly track/gold table (DONE - 2014-05-01 - Hiram)
+    hgsql -N -e "select frag from gold;" chrPic2 | sort | head -1
+AHGY02000001.1
+
+    hgsql -N -e "select frag from gold;" chrPic2 | sort | tail -2
+AHGY02262325.1
+NC_002073.3
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" chrPic2 | wc -l
+    # 262326
+
+    hgsql -N -e "select frag from gold;" chrPic2 | egrep -e '[AN][HC][G_][Y0]0[0-9]+(\.1)?' | wc -l
+    # 262326
+
+    hgsql -N -e "select frag from gold;" chrPic2 | egrep -v -e '[AN][HC][G_][Y0]0[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/turtle/chrPic2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][HC][G_][Y0]0[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # note: this rule is already in trackDb/turtle/trackDb.ra
+
+#########################################################################
