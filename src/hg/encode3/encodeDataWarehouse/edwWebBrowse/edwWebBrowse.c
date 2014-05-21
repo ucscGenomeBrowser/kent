@@ -36,7 +36,7 @@ if (colCount > 0)
 	{
 	if (!didHeader)
 	    {
-	    printf("<H3>%s</H3>\n", title);
+	    printf("<H4>%s</H4>\n", title);
 	    printf("<TABLE>\n");
 	    printf("<TR>");
 	    char *field;
@@ -249,26 +249,38 @@ freez(&userArray);
 return curUser;
 }
 
+
 void showRecentFiles(struct sqlConnection *conn)
 /* Show users files grouped by submission sorted with most recent first. */
 {
-printf("<div>");
-printf("Select whose files to browse: ");
-char *user = printUserControl(conn, "selectUser", userEmail);
-printf("</div>");
+char *user = userEmail;
+if (edwUserIsAdmin(conn, userEmail))
+    {
+    printf("<div>");
+    printf("Select whose files to browse: ");
+    user = printUserControl(conn, "selectUser", userEmail);
+    printf("</div>");
+    }
 
-printf("<div>");
-printf(" Maximum number of submissions to view: ");
-int maxSubCount = cgiOptionalInt("maxSubCount", 3);
+puts("<div class='input-row'>");
+
+puts("Maximum number of submissions to view: ");
+
+/* Get user choice from CGI var or cookie */
+int maxSubCount = 0;
+if (!cgiVarExists("maxSubCount"))
+    {
+    char *subs = findCookieData("edwWeb.maxSubCount");
+    if (subs)
+        maxSubCount = atoi(subs);
+    }
 if (maxSubCount == 0)
-     maxSubCount = 2;
-// override stanford fixed width input widget styling
+    maxSubCount = cgiOptionalInt("maxSubCount", 3);
 cgiMakeIntVar("maxSubCount", maxSubCount, 3);
-printf("</div>");
 
-printf("<div>");
+puts("&nbsp;");
 cgiMakeButton("Submit", "update view");
-printf("</div>");
+puts("</div>");
 
 /* Get id for user. */
 char query[1024];
@@ -283,33 +295,33 @@ if (userId == 0)
 /* Select all submissions, most recent first. */
 sqlSafef(query, sizeof(query), 
     "select * from edwSubmit where userId=%d "
-    "and (newFiles != 0 or metaChangeCount != 0 or errorMessage is not NULL)"
+    "and (newFiles != 0 or metaChangeCount != 0 or errorMessage is not NULL or fileIdInTransit != 0)"
     " order by id desc limit %d", userId, maxSubCount);
 struct edwSubmit *submit, *submitList = edwSubmitLoadByQuery(conn, query);
 
-if (noPrevSubmission)
+if (noPrevSubmission || !submitList)
     {
-    printf("<H4>There is no file submitted by %s</H4>\n",user);
+    printf("<H4>There are no files submitted by %s</H4>\n",user);
     return;
     }
 
 for (submit = submitList; submit != NULL; submit = submit->next)
     {
-    printf("<H3><A HREF=\"edwWebSubmit?url=%s&monitor=on\">%s</A> ", 
-	cgiEncode(submit->url), submit->url);
+    /* Figure out and print upload time */
+    sqlSafef(query, sizeof(query), 
+	"select from_unixtime(startUploadTime) from edwSubmit where id=%u", submit->id);
+    char *dateTime = sqlQuickString(conn, query);
+
+    printf("<HR><H4>%s <A HREF=\"edwWebSubmit?url=%s&monitor=on\">%s</A> ", 
+                dateTime, cgiEncode(submit->url), submit->url);
     printSubmitState(submit, conn);
-    printf("</H3>\n");
+    printf("</H4>\n");
 
     /* Print a little summary information about the submission overall before getting down to the
      * file by file info. */
     if (!isEmpty(submit->errorMessage))
         printf("<B>%s</B><BR>\n", submit->errorMessage);
 
-    /* Figure out and print upload time */
-    sqlSafef(query, sizeof(query), 
-	"select from_unixtime(startUploadTime) from edwSubmit where id=%u", submit->id);
-    char *dateTime = sqlQuickString(conn, query);
-    printf("Started upload %s<BR>\n", dateTime);
     printf("%d files in validated.txt including %d already in warehouse<BR>\n", 
 	submit->fileCount, submit->oldFiles);
     if (submit->newFiles > 0)
@@ -335,7 +347,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
     /* Make wrapper for experiments. */
     struct hash *experimentWrap = hashNew(0);
     hashAdd(experimentWrap, "experiment", 
-	"<A HREF=\"http://submit.encodedcc.org/%s/\">%s</A>");
+	"<A HREF=\"https://www.encodedcc.org/%s/\">%s</A>");
     /* Get and print file-by-file info. */
     char title[256];
     safef(title, sizeof(title), "Files and enrichments for %d new files", submit->newFiles);
@@ -360,7 +372,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
 	"from edwFile e,edwQaPairSampleOverlap p, edwFile y,edwValidFile ev,edwValidFile yv \n"
         "where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId=e.id and yv.fileId=y.id\n"
         "      and y.submitId = %u \n"
-        "      order by ev.experiment,'output type',format,repA,repB\n"
+        "      order by ev.experiment,'output type',format,repA,repB,idA,idB\n"
 	, submit->id);
     queryIntoTable(conn, query, "Cross-enrichment between replicates in target areas", experimentWrap);
 
@@ -371,7 +383,7 @@ for (submit = submitList; submit != NULL; submit = submit->next)
 	"from edwFile e,edwQaPairCorrelation p, edwFile y,edwValidFile ev,edwValidFile yv \n"
         "where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId=e.id and yv.fileId=y.id\n"
         "      and y.submitId = %u \n"
-        "      order by ev.experiment,'output type',format,repA,repB\n"
+        "      order by ev.experiment,'output type',format,repA,repB,idA,idB\n"
 	, submit->id);
     queryIntoTable(conn, query, "Correlation between replicates in target areas", experimentWrap);
     }
@@ -405,11 +417,8 @@ if (userEmail != NULL)
 printf("</FORM>\n");
 
 // auto-refresh page
-if (userEmail != NULL)
-    {
+if (userEmail != NULL && !cgiOptionalString("noRefresh"))
     edwWebAutoRefresh(5000);
-    edwWebAutoRefreshProtectInput();
-    }
 }
 
 int main(int argc, char *argv[])
@@ -418,6 +427,8 @@ int main(int argc, char *argv[])
 boolean isFromWeb = cgiIsOnWeb();
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
+if (cgiVarExists("maxSubCount"))
+    htmlSetCookie("edwWeb.maxSubCount", cgiString("maxSubCount"), NULL, NULL, NULL, FALSE);
 edwWebHeaderWithPersona("");
 // TODO: find a better place for menu update
 edwWebBrowseMenuItem(FALSE);

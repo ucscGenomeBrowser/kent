@@ -166,7 +166,8 @@ DROP TABLE IF EXISTS Organizations;
 CREATE TABLE Organizations (
 	organization_uid int PRIMARY KEY  NOT NULL ,
 	name varchar (128) NOT NULL ,
-	approval_authority tinyint(1) NOT NULL 
+	approval_authority tinyint(1) NOT NULL ,
+	tax_id int
 ) 
 ;
 

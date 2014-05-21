@@ -63,6 +63,7 @@ CREATE TABLE geneLogic (
 CREATE TABLE gene (
     acc char(12) not null,	# Primary accession
     val varchar(255) not null,	# Single gene name
+    isPrimary tinyint not null,	# True if primary gene name, false if a synonym
               #Indices
     INDEX(acc),
     INDEX(val(12))

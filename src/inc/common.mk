@@ -262,7 +262,7 @@ SYS = $(shell uname -s)
 
 ifeq (${HG_WARN},)
   ifeq (${SYS},Darwin)
-      HG_WARN = -Wall -Wno-unused-variable
+      HG_WARN = -Wall -Wno-unused-variable -Wno-deprecated-declarations
       HG_WARN_UNINIT=
   else
     ifeq (${SYS},SunOS)

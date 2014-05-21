@@ -13,7 +13,7 @@ spToDb: $O $(MYLIBS)
 test: test1 
 %:	input/%
 	${MKDIR} output/$@
-	spToDb input/$@ output/$@
+	${BINDIR}/spToDb input/$@ output/$@
 	diff -x CVS -r expected/$@ output/$@
 	rm -r output
 

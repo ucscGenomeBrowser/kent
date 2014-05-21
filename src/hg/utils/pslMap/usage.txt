@@ -22,6 +22,9 @@ Options:
   -keepTranslated - if either psl is translated, the output psl
    will be translated (both strands explicted).  Normally an
    untranslated psl will always be created
+  -mapFileWithInQName - The first column of the mapFile PSL records are a qName,
+   the remainder is a standard PSL.  When an inPsl record is mapped, only
+   mapping records are used with the corresponding qName.
   -mapInfo=file - output a file with information about each mapping.
    The file has the following columns:
      o srcQName, srcQStart, srcQEnd, srcQSize - qName, etc of

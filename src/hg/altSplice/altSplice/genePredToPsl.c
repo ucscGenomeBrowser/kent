@@ -114,16 +114,13 @@ FILE *out = NULL;
 optionInit(&argc, argv, NULL);
 if(argc !=4)
     usage();
-warn("Loading gene predictions.");
 char *chromSizesFile = argv[1];
 if(optionExists("bedFormat")) 
     gpList = gpFromBedFile(argv[2]);
 else
     gpList = genePredLoadAll(argv[2]);
 out = mustOpen(argv[3],"w");
-warn("Doing conversion.");
 pslListFromGenePred(chromSizesFile, gpList, out);
 carefulClose(&out);
-warn("Done.");
 return 0;
 }

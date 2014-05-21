@@ -46,6 +46,9 @@ DIRS = \
 	spToProteins
 USE_DIRS = $(DIRS)
 
+TEST_DIRS = \
+	spToDb
+
 all::    utils
 
 utils: $(USE_DIRS:%=%.utils)
@@ -53,12 +56,17 @@ utils: $(USE_DIRS:%=%.utils)
 %.utils:
 	(cd $* && echo $* && $(MAKE))
 
+test::	${TEST_DIRS:%=%.test}
+%.test:
+	(cd $* && ${MAKE} test)
+
 # List of directories to build
 
 clean: $(USE_DIRS:%=%.clean)
 
 %.clean:
 	(cd $* && $(MAKE) clean)
+
 
 # no makefile for:
 #       pfamXref

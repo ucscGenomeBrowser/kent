@@ -2523,3 +2523,19 @@ TMPDIR=/scratch/tmp
     #   35758035 bases of 1409770109 (2.536%) in intersection
 
 #########################################################################
+# CPG Islands Unmasked track (DONE - 2014-04-24 - Hiram)
+
+    mkdir /hive/data/genomes/danRer7/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/danRer7/bed/cpgIslandsUnmasked
+    time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
+        -workhorse=hgwdev \
+          -maskedSeq=/hive/data/genomes/danRer7/danRer7.unmasked.2bit \
+            danRer7 > do.log 2>&1
+
+    #  Elapsed time: 3m3s
+
+    cat fb.danRer7.cpgIslandExtUnmasked.txt
+    # 29436058 bases of 1409770109 (2.088%) in intersection
+
+##############################################################################

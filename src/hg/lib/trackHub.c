@@ -524,6 +524,9 @@ trackHubRequiredSetting(hub, "email");
 hub->shortLabel = trackHubRequiredSetting(hub, "shortLabel");
 hub->longLabel = trackHubRequiredSetting(hub, "longLabel");
 hub->genomesFile = trackHubRequiredSetting(hub, "genomesFile");
+char *descriptionUrl = trackHubSetting(hub, "descriptionUrl");
+if (descriptionUrl != NULL)
+    hub->descriptionUrl = trackHubRelativeUrl(hub->url, descriptionUrl);
 
 lineFileClose(&lf);
 char *genomesUrl = trackHubRelativeUrl(hub->url, hub->genomesFile);
@@ -1044,10 +1047,25 @@ if (hub == NULL)
 
 verbose(2, "hub %s\nshortLabel %s\nlongLabel %s\n", hubUrl, hub->shortLabel, hub->longLabel);
 verbose(2, "%s has %d elements\n", hub->genomesFile, slCount(hub->genomeList));
+
+if (searchFp != NULL)
+    {
+    if (hub->descriptionUrl != NULL)
+	{
+	char *html = netReadTextFileIfExists(hub->descriptionUrl);
+	char *stripHtml =htmlTextStripTags(html);
+	strSwapChar(stripHtml, '\n', ' ');
+	strSwapChar(stripHtml, '\t', ' ');
+	fprintf(searchFp, "%s\t%s\t%s\t%s\n",hub->url, hub->shortLabel, hub->longLabel, stripHtml);
+	}
+
+    return 0;
+    }
+
 struct trackHubGenome *genome;
 for (genome = hub->genomeList; genome != NULL; genome = genome->next)
     {
-    retVal |= hubCheckGenome(hub, genome, errors, checkTracks, searchFp);
+    retVal |= hubCheckGenome(hub, genome, errors, checkTracks, NULL);
     }
 trackHubClose(&hub);
 

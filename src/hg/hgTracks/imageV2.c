@@ -1084,7 +1084,7 @@ if (hIsPrivateHost())
     {
     int leftX, topY, rightX, bottomY;
     imgTrackCoordinates(imgTrack, &leftX, &topY, &rightX, &bottomY);
-    if (topLeftY < topY || bottomRightY > bottomY || topLeftX < leftX || bottomRightX > rightX)
+    if (topLeftY < topY || bottomRightY > bottomY)
         {
         char * name = (imgTrack->name != NULL ? imgTrack->name
                                               : imgTrack->tdb != NULL ? imgTrack->tdb->track
