@@ -920,6 +920,7 @@ for (seconds = 0; seconds < maxSeconds; seconds += secondsPer)
 	 doValidatedEmail(submit, TRUE);
 	 return;
 	 }
+    verbose(2, "waiting for validation\n");
     sqlDisconnect(&conn);
     sleep(secondsPer);	// Sleep for 5 more minutes
     }
