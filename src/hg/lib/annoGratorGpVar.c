@@ -282,7 +282,7 @@ return rows;
 }
 
 struct annoRow *aggvIntergenicRow(struct annoGratorGpVar *self, struct variant *variant,
-				  boolean *retRJFilterFailed, struct lm *callerLm)
+				  boolean rjFail, struct lm *callerLm)
 /* If intergenic variants (no overlapping or nearby genes) are to be included in output,
  * make an output row with empty genePred and a gpFx that is empty except for soNumber. */
 {
@@ -303,7 +303,6 @@ if (isAllNt(intergenicGpFx->allele, strlen(intergenicGpFx->allele)))
 intergenicGpFx->soNumber = intergenic_variant;
 intergenicGpFx->detailType = none;
 aggvStringifyGpFx(&wordsOut[gpColCount], intergenicGpFx, self->lm);
-boolean rjFail = (retRJFilterFailed && *retRJFilterFailed);
 return annoRowFromStringArray(variant->chrom, variant->chromStart, variant->chromEnd, rjFail,
 			      wordsOut, sSelf->numCols, callerLm);
 }
@@ -391,8 +390,9 @@ struct variant *variant = self->variantFromRow(self, primaryRow, refAllele);
 if (rows == NULL)
     {
     // No genePreds means that the primary variant is intergenic.
-    if (self->funcFilter != NULL && self->funcFilter->intergenic)
-	return aggvIntergenicRow(self, variant, retRJFilterFailed, callerLm);
+    if ((self->funcFilter == NULL || self->funcFilter->intergenic) &&
+	hasAltAllele(variant->alleles))
+	return aggvIntergenicRow(self, variant, *retRJFilterFailed, callerLm);
     else if (retRJFilterFailed && self->gpVarOverlapRule == agoMustOverlap)
 	*retRJFilterFailed = TRUE;
     return NULL;

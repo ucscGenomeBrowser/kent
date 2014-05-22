@@ -18,12 +18,17 @@ errAbort("pslToBed: tranform a psl format file to a bed format file.\n"
 	 "genbank-style CDS records showing cdsStart..cdsEnd\n"
 	 "e.g. NM_123456 34..305\n"
 	 "These coordinates are assumed to be in the query coordinate system\n"
-	 "of the psl, like those that are created from genePredToFakePsl\n");
+	 "of the psl, like those that are created from genePredToFakePsl\n"
+	 "    -posName\n"
+	 "write the full position in chrom:start-end format into the name field\n"
+	 "(can be used to create links to source position on details page)\n"
+         );
 
 } 
 
 static struct optionSpec options[] = {
    {"cds", OPTION_STRING},
+   {"posName", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -93,7 +98,7 @@ bed->thickStart = thickStart;
 bed->thickEnd = thickEnd;
 }
 
-void pslToBed(char *pslFile, char *bedFile, struct hash *cdsHash)
+void pslToBed(char *pslFile, char *bedFile, struct hash *cdsHash, bool doPosName)
 /* pslToBed -- tranform a psl format file to a bed format file */
 {
 struct lineFile *pslLf = pslFileOpen(pslFile);
@@ -103,6 +108,14 @@ struct psl *psl;
 while ((psl = pslNext(pslLf)) != NULL)
     {
     struct bed *bed = bedFromPsl(psl);
+    if (doPosName)
+        {
+        char *newName = needMem(512);
+        safef(newName, 512, "%s:%d-%d", psl->qName, psl->qStart, psl->qEnd);
+        freeMem(bed->name);
+        bed->name = newName;
+        }
+
     if (cdsHash)
 	{
 	struct cds *cds = hashFindVal(cdsHash, psl->qName);
@@ -149,12 +162,13 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 char *cdsFile = optionVal("cds", NULL);
+bool doPosName = optionExists("posName");
 struct hash *cdsHash = NULL;
 
 if (cdsFile != NULL)
     cdsHash = getCdsHash(cdsFile);
 
-pslToBed(argv[1], argv[2], cdsHash);
+pslToBed(argv[1], argv[2], cdsHash, doPosName);
 return 0;
 }
     
