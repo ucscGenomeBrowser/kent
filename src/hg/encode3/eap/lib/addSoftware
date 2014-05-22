@@ -1,0 +1,86 @@
+#!/bin/tcsh -efx
+# Add software and steps to eap tables in encodeDataWarehouse
+
+# Third party software
+eapAddSoftware bwa 0.7.0-r313 https://github.com/lh3/bwa/archive/0.7.0.tar.gz hengli@broadinstitute.org
+eapAddSoftware samtools 0.1.19-96b5f2294a https://github.com/samtools/samtools/archive/0.1.19.tar.gz hengli@broadinstitute.org
+eapAddSoftware macs2 "2.0.10.20131216 (tag:beta)" https://github.com/taoliu/MACS/archive/v2.0.10_6_6_2012.tar.gz vladimir.liu@gmail.com
+eapAddSoftware starch 2.3.0 https://github.com/bedops/bedops/releases/tag/v2.3.0 bedops@stamlab.org
+eapAddSoftware unstarch 2.3.0 https://github.com/bedops/bedops/releases/tag/v2.3.0 bedops@stamlab.org
+eapAddSoftware bedmap 2.3.0 https://github.com/bedops/bedops/releases/tag/v2.3.0 bedops@stamlab.org
+eapAddSoftware hotspot HotSpot5 https://github.com/rthurman/hotspot/archive/4.0.0.tar.gz rthurman@uw.edu
+eapAddSoftware bedtools 2.17.0 http://bedtools.readthedocs.org arq5x@virginia.edu
+eapAddSoftware intersectBed 2.17.0 https://github.com/arq5x/bedtools/archive/v2.17.0.tar.gz arq5x@virginia.edu
+eapAddSoftware Rscript 2.15.2 http://cran.cnr.berkeley.edu/src/base/R-2/R-2.15.2.tar.gz  R-core@r-project.org
+eapAddSoftware STAR 2.3.1 https://github.com/alexdobin/STAR/archive/ENCODE_2014-03-16_2.3.1z1.tar.gz dobin@cshl.edu
+eapAddSoftware bowtie2 2.1.0 http://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.1.0/bowtie2-2.1.0-linux-x86_64.zip/download langmea@cs.jhu.edu
+eapAddSoftware tophat v2.0.8 http://tophat.cbcb.umd.edu/downloads/tophat-2.0.8.Linux_x86_64.tar.gz tophat.cufflinks@gmail.com
+eapAddSoftware tophat_bam_xsA_tag_fix.pl "1.0 xwei 04/07/2014" https://github.com/xweigit/xweiEncodeScripts/archive/v1.0.tar.gz xwei@uchc.edu
+eapAddSoftware makewigglefromBAM-NH.py "Last modified 09/06/2013" https://github.com/georgimarinov/GeorgiScripts/archive/master.zip georgi@caltech.edu
+eapAddSoftware python2.7 2.7.6 http://www.python.org/ftp/python/2.7.6/Python-2.7.6.tgz 'n/a'
+eapAddSoftware run_spp.R 2.0 'https://code.google.com/p/phantompeakqualtools/downloads/detail?name=ccQualityControl.v.1.1.tar.gz' anshul.kundaje@gmail.com
+
+# UCSC Software
+eapAddSoftware bedToBigBed 2.5 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' genome@soe.ucsc.edu
+eapAddSoftware wigToBigWig 4 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' genome@soe.ucsc.edu
+eapAddSoftware bedGraphToBigWig 4 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' genome@soe.ucsc.edu
+eapAddSoftware bedGraphPack 1 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' genome@soe.ucsc.edu
+eapAddSoftware bigBedToBed 1 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads'  genome@soe.ucsc.edu
+eapAddSoftware bigWigAverageOverBed 2 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads'  genome@soe.ucsc.edu
+eapAddSoftware bigWigMerge 2 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads'  genome@soe.ucsc.edu
+
+# ENCODE DCC UCSC Software
+eapAddSoftware edwBamStats 2 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' kent@soe.ucsc.edu
+eapAddSoftware edwBamFilter 1 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' kent@soe.ucsc.edu
+eapAddSoftware hotspot.py 2 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/helpers mmaddren@soe.ucsc.edu
+eapAddSoftware eap_run_hotspot  1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue  mmaddren@soe.ucsc.edu
+eapAddSoftware eap_run_bwa_pe 3 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+eapAddSoftware eap_run_bwa_se 3 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+eapAddSoftware eap_macs2_xls_to_narrowPeak 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+eapAddSoftware eap_run_macs2_dnase_pe 2 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+eapAddSoftware eap_run_macs2_dnase_se 2 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+eapAddSoftware eap_broadPeak_to_bigBed 2 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+eapAddSoftware eap_narrowPeak_to_bigBed 2 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+eapAddSoftware eap_run_macs2_chip_pe 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+eapAddSoftware eap_run_macs2_chip_se 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+eapAddSoftware eap_run_phantom_peak_spp 1  https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu 
+eapAddSoftware eap_dnase_stats 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue  kent@soe.ucsc.edu 
+eapAddSoftware eap_sum_bigWig 2  https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue  kent@soe.ucsc.edu
+eapAddSoftware eap_pool_hotspot 2  https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue  kent@soe.ucsc.edu
+eapAddSoftware eap_pool_big_wig 2 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue  kent@soe.ucsc.edu
+eapAddSoftware eap_run_spp_chip_se 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kate@soe.ucsc.edu
+eapAddSoftware eap_run_star_long_pe v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+eapAddSoftware eap_run_star_long_se v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+eapAddSoftware eap_run_tophat_long_ercc_pe v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+eapAddSoftware eap_run_tophat_long_ercc_se v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+eapAddSoftware eap_run_tophat_long_wsc_pe v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+eapAddSoftware eap_run_tophat_long_wsc_se v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+eapAddSoftware eap_run_bam_to_bw_all_minus v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+eapAddSoftware eap_run_bam_to_bw_all_plus v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+eapAddSoftware eap_run_bam_to_bw_uniq_minus v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+eapAddSoftware eap_run_bam_to_bw_uniq_plus v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+# Still needed for Long RNA-seq:
+###eapAddSoftware eap_eval_bam v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+###eapAddSoftware eap_run_rsem_long_pe v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+###eapAddSoftware eap_run_rsem_long_se v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
+
+# in ${EAP_TOOLS_DIR}/tools.ra but not here
+#hotspot: eapAddSoftware bedops 2.3.0 https://github.com/bedops/bedops/releases/tag/v2.3.0 bedops@stamlab.org
+#hotspot: eapAddSoftware sort-bed 2.3.0 https://github.com/bedops/bedops/releases/tag/v2.3.0 bedops@stamlab.org
+#hotspot: eapAddSoftware starchcat 2.3.0 https://github.com/bedops/bedops/releases/tag/v2.3.0 bedops@stamlab.org
+#in eval: eapAddSoftware fastqc v0.10.1 http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.10.1.zip simon.andrews@babraham.ac.uk
+#in eval: eapAddSoftware fastqStatsAndSubsample v2 https://github.com/ENCODE-DCC/kentUtils/archive/v293.0.0.tar.gz genome@soe.ucsc.edu  # NOT part of ucscUtils package yet
+#eapAddSoftware edwSolexaToSangerFastq unversioned https://github.com/ENCODE-DCC/kentUtils/archive/v293.0.0.tar.gz genome@soe.ucsc.edu  # NOT part of ucscUtils package yet
+#eapAddSoftware eap_run_slx_bwa_pe v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+#eapAddSoftware eap_run_slx_bwa_se v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
+
+# differences with ${EAP_TOOLS_DIR}/tools.ra  ### Wait until the github is updated (~July)
+#eapAddSoftware bedGraphToBigWig 4 https://github.com/ENCODE-DCC/kentUtils/archive/v293.0.0.tar.gz genome@soe.ucsc.edu
+#eapAddSoftware bedToBigBed 2.5 https://github.com/ENCODE-DCC/kentUtils/archive/v293.0.0.tar.gz genome@soe.ucsc.edu
+#eapAddSoftware wigToBigWig v4 https://github.com/ENCODE-DCC/kentUtils/archive/v293.0.0.tar.gz genome@soe.ucsc.edu
+#eapAddSoftware bedGraphPack v1 https://github.com/ENCODE-DCC/kentUtils/archive/v293.0.0.tar.gz genome@soe.ucsc.edu  # NOT part of ucscUtils package yet
+#eapAddSoftware edwBamStats 2 https://github.com/ENCODE-DCC/kentUtils/archive/v293.0.0.tar.gz genome@soe.ucsc.edu  # NOT part of ucscUtils package yet
+
+# Add all steps
+eapAddStep '*'
+
