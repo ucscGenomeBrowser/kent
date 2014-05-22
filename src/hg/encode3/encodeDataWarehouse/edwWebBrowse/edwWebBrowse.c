@@ -416,9 +416,11 @@ if (userEmail != NULL)
     }
 printf("</FORM>\n");
 
+#ifdef AUTO_REFRESH
 // auto-refresh page
 if (userEmail != NULL && !cgiOptionalString("noRefresh"))
     edwWebAutoRefresh(5000);
+#endif
 }
 
 int main(int argc, char *argv[])
