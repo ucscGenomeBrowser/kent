@@ -28,7 +28,8 @@ UTIL_DIRS = \
     edwRunDaemon \
     edwRunOnIds \
     edwRsyncEdwUser \
-    edwSubmit
+    edwSubmit \
+    utils
 
 CGI_DIRS = \
     edwScriptSubmit \

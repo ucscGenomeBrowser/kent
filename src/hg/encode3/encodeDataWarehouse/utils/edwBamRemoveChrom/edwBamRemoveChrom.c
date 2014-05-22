@@ -12,8 +12,7 @@ errAbort(
   "edwBamRemoveChrom - Remove a chromosome from BAM file.\n"
   "usage:\n"
   "   edwBamRemoveChrom input chrom output\n"
-  "options:\n"
-  "   -xxx=XXX\n"
+  "You can also do this with the more general purpose edwBamFilter.\n"
   );
 }
 
@@ -22,20 +21,11 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-samfile_t *samMustOpen(char *fileName, char *mode, void *extraHeader)
-/* Open up samfile or die trying */
-{
-samfile_t *sf = samopen(fileName, mode, extraHeader);
-if (sf == NULL)
-    errnoAbort("Couldn't open %s.\n", fileName);
-return sf;
-}
-
 void edwBamRemoveChrom(char *inBam, char *chrom, char *outBam)
 /* edwBamRemoveChrom - Remove a chromosome from BAM file.. */
 {
 /* Open file and get header for it. */
-samfile_t *in = samMustOpen(inBam, "rb", NULL);
+samfile_t *in = bamMustOpenLocal(inBam, "rb", NULL);
 bam_header_t *head = in->header;
 
 /* Find out index number of chromosome. */
@@ -54,7 +44,7 @@ if (rmTid == -1)
 verbose(2, "rmTid for %s is %d\n", chrom, rmTid);
 
 /* Open up sam output and write header */
-samfile_t *out = samMustOpen(outBam, "wb", head);
+samfile_t *out = bamMustOpenLocal(outBam, "wb", head);
 
 /* Loop through copying in to out except where it is chromosome to be removed */
 int rmCount = 0;

@@ -45,6 +45,13 @@ BAD_DIRS = \
 	encode \
 	wikiPlot
 
+# can not build this on Mac OSX - has functions not supported
+ifeq ($(UNAME_S),Darwin)
+  buildRefresh=
+else
+  buildRefresh=encode3
+endif
+
 # List of directories to build for userApps
 UTILS_APPLIST = \
 	autoDtd \
@@ -121,7 +128,7 @@ UTIL_DIRS = \
 	ctgFaToFa \
 	ctgToChromFa \
 	embossToPsl \
-	encode3 \
+	${buildRefresh} \
 	fakeFinContigs \
 	fakeOut \
 	ffaToFa \
