@@ -219,7 +219,6 @@ netToAxt $tDb.$qDb.rbest.net.gz $tDb.$qDb.rbest.chain.gz \\
     $t2bit $q2bit stdout \\
     | axtSort stdin stdout \\
     | gzip -c > ../axtRBestNet/$tDb.$qDb.rbest.axt.gz
-
 # Make rbest mafNet for multiz
 mkdir ../mafRBestNet
 axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. ../axtRBestNet/$tDb.$qDb.rbest.axt.gz \\
@@ -228,6 +227,8 @@ axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. ../axtRBestNet/$tDb.$qDb.rbest.axt.gz \\
       | gzip -c > ../mafRBestNet/$tDb.$qDb.rbest.maf.gz
 cd ../mafRBestNet
 md5sum *.maf.gz > md5sum.txt
+cd ../axtRBestNet
+md5sum *.axt.gz > md5sum.txt
 _EOF_
     );
   }
