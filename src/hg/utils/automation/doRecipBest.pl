@@ -197,6 +197,9 @@ foreach f (axtChain/rBestNet/*.net)
     | axtSort stdin stdout \\
     | gzip -c > axtRBestNet/\$f:t:r.$tDb.$qDb.net.axt.gz
   end
+cd axtRBestNet
+md5sum *.axt.gz > md5sum.txt
+cd ..
 
 # Make rbest mafNet for multiz: one .maf per $tDb seq.
 mkdir mafRBestNet
@@ -223,6 +226,8 @@ axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. ../axtRBestNet/$tDb.$qDb.rbest.axt.gz \\
         $HgAutomate::clusterData/{$tDb,$qDb}/chrom.sizes  \\
                 stdout \\
       | gzip -c > ../mafRBestNet/$tDb.$qDb.rbest.maf.gz
+cd ../mafRBestNet
+md5sum *.maf.gz > md5sum.txt
 _EOF_
     );
   }
@@ -275,7 +280,7 @@ ln -s $runDir/*.rbest.*.gz .
 ln -s $runDir/md5sum.rbest.txt md5sum.txt
 ln -s $readme README.txt
 mkdir axtRBestNet
-ln -s $buildDir/axtRBestNet/*.axt.gz axtRBestNet/
+ln -s $buildDir/axtRBestNet/*.axt.gz $buildDir/axtRBestNet/md5sum.txt axtRBestNet/
 _EOF_
   );
   $bossScript->execute();
@@ -295,7 +300,7 @@ _EOF_
 ($tDb, $qDb) = @ARGV;
 
 $QDb = ucfirst($qDb);
-$splitRef =  (`wc -l < $HgAutomate::clusterData/$tDb/chrom.sizes` 
+$splitRef =  (`wc -l < $HgAutomate::clusterData/$tDb/chrom.sizes`
                         <= $HgAutomate::splitThreshold);
 
 # Establish what directory we will work in.
