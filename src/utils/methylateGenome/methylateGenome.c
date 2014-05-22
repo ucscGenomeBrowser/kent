@@ -14,7 +14,7 @@ void usage()
 errAbort(
   "methylateGenome - Creates a methylated version of a genome, in which any occurance of CG becomes TG\n"
   "usage:\n"
-  "   methylateGenome input output.fa\n"
+  "   methylateGenome input.[fa|2bit] outputPrefix\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -25,8 +25,93 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void methylateGenome(char *fileName, char *outputName)
-/* methylateGenome - Creates a methylated version of an input genome, in which any occurance of CG becomes TG. */
+void old(struct dnaSeq *seq)
+{
+int end = seq->size - 1;
+int i;
+for (i = 0; i < end; ++i)
+    {
+    char b1 = seq->dna[i];
+    int v1 = ntVal[(unsigned)b1];
+    int v2 = ntVal[(unsigned)seq->dna[i+1]];
+    
+    if (v1 == C_BASE_VAL && v2 == G_BASE_VAL)
+        {
+        if (b1 == 'C')
+            seq->dna[i] = 'T';
+        else
+            seq->dna[i] = 't';
+        }
+    }
+}
+
+void forwardStrandNoMethylation(struct dnaSeq *seq)
+{
+int end = seq->size - 1;
+int i;
+for (i = 0; i < end; ++i)
+    {
+    if (seq->dna[i] == 'C')
+        seq->dna[i] = 'T';
+    else if (seq->dna[i] == 'c')
+        seq->dna[i] = 't';
+    }
+}
+
+void reverseStrandNoMethylation(struct dnaSeq *seq)
+{
+int end = seq->size - 1;
+int i;
+for (i = 0; i < end; ++i)
+    {
+    if (seq->dna[i] == 'G')
+        seq->dna[i] = 'A';
+    else if (seq->dna[i] == 'g')
+        seq->dna[i] = 'a';
+    }
+}
+
+void forwardStrandWithMethylation(struct dnaSeq *seq)
+{
+int end = seq->size - 1;
+int i;
+for (i = 0; i < end; ++i)
+    {
+    char b1 = seq->dna[i];
+    int v1 = ntVal[(unsigned)b1];
+    int v2 = ntVal[(unsigned)seq->dna[i+1]];
+    
+    if (v1 == C_BASE_VAL && v2 != G_BASE_VAL)
+        {
+            if (b1 == 'C')
+                seq->dna[i] = 'T';
+            else if (b1 == 'c')
+                seq->dna[i] = 't';
+        }
+    }
+}
+
+void reverseStrandWithMethylation(struct dnaSeq *seq)
+{
+int end = seq->size - 1;
+int i;
+for (i = 0; i < end; ++i)
+    {
+    char b1 = seq->dna[i];
+    int v1 = ntVal[(unsigned)b1];
+    int v2 = ntVal[(unsigned)seq->dna[i+1]];
+    
+    if (v1 == G_BASE_VAL && v2 != C_BASE_VAL)
+        {
+            if (b1 == 'G')
+                seq->dna[i] = 'A';
+            else if (b1 == 'g')
+                seq->dna[i] = 'a';
+        }
+    }
+}
+
+void performConversion(char *fileName, char *outputName, void (*replacementPolicy)(struct dnaSeq *))
 {
 // Open input and output files
 struct dnaLoad *dl = dnaLoadOpen(fileName);
@@ -41,8 +126,10 @@ for (;;)
     if (seq == NULL)
         break;
       
+    replacementPolicy(seq);
+      
     // Replace all 'CG' (or 'cg') with 'TG' (or 'tg')
-    int end = seq->size - 1;
+    /*int end = seq->size - 1;
     int i;
     for (i = 0; i < end; ++i)
         {
@@ -57,7 +144,7 @@ for (;;)
             else
                 seq->dna[i] = 't';
             }
-        }
+        }*/
     
     // Write out the modified line
     faWriteNext(f, seq->name, seq->dna, seq->size);
@@ -65,6 +152,28 @@ for (;;)
     
 if (fclose(f) != 0)
     errnoAbort("fclose failed");
+}
+
+void methylateGenome(char *fileName, char *outputPrefix)
+/* methylateGenome - Creates a methylated version of an input genome, in which any occurance of CG becomes TG. */
+{
+int nameSize = 64;
+
+char forwardNoMethylName[nameSize];
+safef(forwardNoMethylName, nameSize, "%s_forwardNoMethyl.fa", outputPrefix);
+performConversion(fileName, forwardNoMethylName, &forwardStrandNoMethylation);
+
+char reverseNoMethylName[nameSize];
+safef(reverseNoMethylName, nameSize, "%s_reverseNoMethyl.fa", outputPrefix);
+performConversion(fileName, reverseNoMethylName, &reverseStrandNoMethylation);
+
+char forwardMethylName[nameSize];
+safef(forwardMethylName, nameSize, "%s_forwardMethyl.fa", outputPrefix);
+performConversion(fileName, forwardMethylName, &forwardStrandWithMethylation);
+
+char reverseMethylName[nameSize];
+safef(reverseMethylName, nameSize, "%s_reverseMethyl.fa", outputPrefix);
+performConversion(fileName, reverseMethylName, &reverseStrandWithMethylation);
 }
 
 int main(int argc, char *argv[])

@@ -22,7 +22,51 @@ boolean clTest = FALSE;
 boolean clUpgrade = FALSE;
 char *clStep = "*";
 char *clInFormat = "*";
+char *clTarget = "hg38";
 int clMax = 0;
+
+void usage()
+/* Explain usage and exit. */
+{
+errAbort(
+  "eapSchedule - Schedule analysis runs.\n"
+  "usage:\n"
+  "   eapSchedule startFileId endFileId\n"
+  "options:\n"
+  "   -step=pattern - Just run steps with names matching pattern which is * by default\n"
+  "   -target=targetName - Target name may be ucscDb like hg38 or something more specific\n"
+  "   -inFormat=pattern - Just run steps that are triggered by files of this format\n"
+  "   -retry - if job has run and failed retry it\n"
+  "   -upgrade - redo older analysis runs if steps have been upgraded in optional way\n"
+  "   -again - if set schedule it even if it's been run once\n"
+  "   -noJob - if set then don't put job on eapJob table\n"
+  "   -ignoreQa - if set then ignore QA results when scheduling\n"
+  "   -justLink - just symbolically link rather than copy EDW files to cache\n"
+  "   -max=count - Maximum number of jobs to schedule\n"
+  "   -dry - just print out the commands that would result\n"
+  );
+}
+
+/* Command line validation table. */
+static struct optionSpec options[] = {
+   {"test", OPTION_BOOLEAN},
+   {"step", OPTION_STRING},
+   {"target", OPTION_STRING},
+   {"inFormat", OPTION_STRING},
+   {"retry", OPTION_BOOLEAN},
+   {"upgrade", OPTION_BOOLEAN},
+   {"again", OPTION_BOOLEAN},
+   {"noJob", OPTION_BOOLEAN},
+   {"ignoreQa", OPTION_BOOLEAN},
+   {"justLink", OPTION_BOOLEAN},
+   {"max", OPTION_INT},
+   {"dry", OPTION_BOOLEAN},
+   {NULL, 0},
+};
+
+/* Another calculated from the command line, consider read only outside of main: */
+enum eapRedoPriority gRedoPriority = eapRedo;
+struct hash *gRedoThresholdCache = NULL;
 
 struct eapSwVersion *eapSwVersionForStepVersion(struct sqlConnection *conn, unsigned stepVersionId)
 /* Get a list of swVersion for all software used by the given step version */
@@ -140,60 +184,51 @@ for (step = stepList; step != NULL; step = step->next)
     }
 }
 
-void usage()
-/* Explain usage and exit. */
+int countAlphaPrefix(char *s)
+/* Return how many characters in string that are upper or lowercase letters.  Will return
+ * length of entire string if whole string is letters, 0 if first char is not a letter. */
 {
-errAbort(
-  "eapSchedule - Schedule analysis runs.\n"
-  "usage:\n"
-  "   eapSchedule startFileId endFileId\n"
-  "options:\n"
-  "   -step=pattern - Just run steps with names matching pattern which is * by default\n"
-  "   -inFormat=pattern - Just run steps that are triggered by files of this format\n"
-  "   -retry - if job has run and failed retry it\n"
-  "   -upgrade - redo older analysis runs if steps have been upgraded in optional way\n"
-  "   -again - if set schedule it even if it's been run once\n"
-  "   -noJob - if set then don't put job on eapJob table\n"
-  "   -ignoreQa - if set then ignore QA results when scheduling\n"
-  "   -justLink - just symbolically link rather than copy EDW files to cache\n"
-  "   -max=count - Maximum number of jobs to schedule\n"
-  "   -dry - just print out the commands that would result\n"
-  );
+int count = 0;
+char c;
+while ((c = *s++) != 0)
+    {
+    if (!isalpha(c))
+      break;
+    ++count;
+    }
+return count;
 }
 
-/* Command line validation table. */
-static struct optionSpec options[] = {
-   {"test", OPTION_BOOLEAN},
-   {"step", OPTION_STRING},
-   {"inFormat", OPTION_STRING},
-   {"retry", OPTION_BOOLEAN},
-   {"upgrade", OPTION_BOOLEAN},
-   {"again", OPTION_BOOLEAN},
-   {"noJob", OPTION_BOOLEAN},
-   {"ignoreQa", OPTION_BOOLEAN},
-   {"justLink", OPTION_BOOLEAN},
-   {"max", OPTION_INT},
-   {"dry", OPTION_BOOLEAN},
-   {NULL, 0},
-};
+boolean targetsCompatible(char *a, char *b)
+/* Return TRUE if a, b have shared alphabetic prefix. */
+{
+int aSize = countAlphaPrefix(a);
+int bSize = countAlphaPrefix(b);
+if (aSize != bSize)
+    return FALSE;
 
-/* Another calculated from the command line, consider read only outside of main: */
-enum eapRedoPriority gRedoPriority = eapRedo;
-struct hash *gRedoThresholdCache = NULL;
+// Do slightly better internal error checking than an assert.  If we have no
+// prefix things are going to be pretty confused
+if (aSize == 0)	    
+    errAbort("Internal error: Target '%s' vs '%s' in targetsCompatible?", a, b);
+
+// Return TRUE if alphabetic prefixes of a and b are the same.
+return memcmp(a, b, aSize) == 0;
+}
 
 
 struct edwAssembly *targetAssemblyForDbAndSex(struct sqlConnection *conn, char *ucscDb, char *sex)
 /* Figure out best target assembly for something that is associated with a given ucscDB.  
  * In general this will be the most recent for the organism. */
 {
-char *newDb = ucscDb;
-if (sameString("hg38", ucscDb))
-    newDb = "hg19";
 char sexedName[128];
-safef(sexedName, sizeof(sexedName), "%s.%s", sex, newDb);
+safef(sexedName, sizeof(sexedName), "%s.%s", sex, clTarget);
 char query[256];
 sqlSafef(query, sizeof(query), "select * from edwAssembly where name='%s'", sexedName);
-return edwAssemblyLoadByQuery(conn, query);
+struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
+if (assembly == NULL)
+    errAbort("Unexpected fail on %s", query);
+return assembly;
 }
 
 struct edwBiosample *edwBiosampleFromTerm(struct sqlConnection *conn, char *term)
@@ -348,6 +383,8 @@ struct edwAssembly *getBwaIndex(struct sqlConnection *conn, struct edwFile *ef, 
 /* Target for now is same as UCSC DB.  Returns assembly ID */
 {
 struct edwAssembly *assembly = chooseTarget(conn, ef, vf);
+if (assembly == NULL)
+    errAbort("Couldn't chooseTarget");
 makeBwaIndexPath(assembly->name, indexPath);
 return assembly;
 }
@@ -1061,6 +1098,7 @@ void runFastqAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edw
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
 char *dataType = exp->dataType;
+uglyf("runFastqAnalysis %s on %u %s\n", dataType, ef->id, ef->submitFileName);
 if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq") || 
     sameString(dataType, "ChiaPet") || sameString(dataType, "DnaPet") )
     {
@@ -1091,6 +1129,7 @@ void runBamAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwVa
     struct edwExperiment *exp)
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
+#ifdef SOON
 if (sameString(exp->dataType, "DNase-seq"))
     {
     scheduleMacsDnase(conn, ef, vf, exp);
@@ -1105,6 +1144,7 @@ else if (sameString(exp->dataType, "ChIP-seq"))
     scheduleMacsChip(conn, ef, vf, exp);
 #endif /* SOON */
     }
+#endif /* SOON */
 }
 
 void runSingleAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwValidFile *vf,
@@ -1408,9 +1448,8 @@ if (clTest)
 
 for (ef = efList; ef != NULL; ef = ef->next)
     {
-    verbose(2, "processing edwFile id %u\n", ef->id);
     struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
-    if (vf != NULL && wildMatch(clInFormat, vf->format))
+    if (vf != NULL && wildMatch(clInFormat, vf->format) && targetsCompatible(vf->ucscDb, clTarget))
 	{
 	verbose(2, "aka %s\n", vf->licensePlate);
 	struct edwExperiment *exp = edwExperimentFromAccession(conn, vf->experiment); 
@@ -1445,6 +1484,7 @@ clStep = optionVal("step", clStep);
 clInFormat = optionVal("inFormat", clInFormat);
 clMax = optionInt("max", clMax);
 clUpgrade = optionExists("upgrade");
+clTarget = optionVal("target", clTarget);
 if (clUpgrade)
     gRedoPriority = eapUpgrade;
 gRedoThresholdCache = hashNew(8);

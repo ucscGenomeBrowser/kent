@@ -186,7 +186,9 @@ if ((childId = mustFork()) == 0)
         errnoAbort("Can't dup2 stderr to %s", tempFileName);
     int status = system(job->commandLine);
     if (status != 0)
-        exit(-1);
+	{
+	errAbort("Error: status %d from system of %s", status, job->commandLine);
+	}
     else
 	exit(0);
     }

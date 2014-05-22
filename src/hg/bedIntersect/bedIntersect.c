@@ -28,6 +28,7 @@ void usage()
 errAbort(
   "bedIntersect - Intersect two bed files\n"
   "usage:\n"
+  "bed columns four(name) and five(score) are optional\n" 
   "   bedIntersect a.bed b.bed output.bed\n"
   "options:\n"
   "   -aHitAny        output all of a if any of it is hit by b\n"
@@ -37,7 +38,7 @@ errAbort(
   "   -tab            chop input at tabs not spaces\n"
   "   -allowStartEqualEnd  Don't discard 0-length items of a or b\n"
   "                        (e.g. point insertions)\n",
-  minCoverage
+   minCoverage
   );
 }
 
@@ -189,14 +190,14 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
-
 aHitAny = optionExists("aHitAny");
 bScore = optionExists("bScore");
 minCoverage = optionFloat("minCoverage", minCoverage);
 strictTab = optionExists("tab");
 allowStartEqualEnd = optionExists("allowStartEqualEnd");
-if (argc != 4)
-    usage();
-bedIntersect(argv[1], argv[2], argv[3]);
+if(argc==4)
+   bedIntersect(argv[1], argv[2], argv[3]);
+if(argc!=4)
+   usage();
 return 0;
 }
