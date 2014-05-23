@@ -2108,8 +2108,7 @@ var rightClick = {
                             else
                                 ele = document.TrackHeaderForm;
                             if (name)
-                                $(ele).append("<input type='hidden' name='hgFind.matches' " +
-                                              "value='" + name + "'>");
+                                cart.addVarsToQueue(['hgFind.matches'], [name]);
                             ele.submit();
                         }
                     }
@@ -2306,9 +2305,8 @@ var rightClick = {
                     // assert(document.TrackForm);
                     document.TrackForm.submit();
                 } else {
-                        // add a hidden with new visibility value
-                        var form = $(document.TrackHeaderForm);
-                        $("<input type='hidden' name='"+id+"'value='"+cmd+"'>").appendTo(form);
+                        // Add vis update to queue then submit
+                        cart.addVarsToQueue([id], [cmd]);
                         document.TrackHeaderForm.submit();
                 }
             } else {
