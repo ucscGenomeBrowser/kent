@@ -294,29 +294,69 @@ else
 return runCmdLine(cmdLine);
 }
 
-boolean validateBedRnaElements(char *fileName)
-/* Validate bedRnaElements file */
+
+boolean validateBedNP(char *fileName, char *format, boolean plainBed, int bedN, int bedP)
+/* Validate bedN+P file */
 {
-char *asFile = getAs("bedRnaElements.as");  // TODO this probably has to change
 char *chromInfo = getChromInfo(fileName);
+char asFileName[256];
+safef(asFileName, sizeof asFileName, "%s.as", format);
+char *asFile = getAs(asFileName);
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
+char *bedType = "bigBed";
+if (plainBed)
+    bedType = "bed";
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=%s%d+%d -as=%s -chromInfo=%s %s", validateFilesPath, bedType, bedN, bedP, asFile, chromInfo, fileName);
 return runCmdLine(cmdLine);
 }
 
-boolean validateBedRrbs(char *fileName)
+
+
+
+boolean validateBedLogR(char *fileName, char *format, boolean plainBed)
+/* Validate bedLogR file */
+{
+return validateBedNP(fileName, format, plainBed, 9, 1);
+}
+
+boolean validateBedRnaElements(char *fileName, char *format, boolean plainBed)
+/* Validate bedRnaElements file */
+{
+return validateBedNP(fileName, format, plainBed, 6, 3);
+}
+
+boolean validateBedRrbs(char *fileName, char *format, boolean plainBed)
 /* Validate bedRrbs file */
 {
-char *asFile = getAs("bedRrbs.as");
-char *chromInfo = getChromInfo(fileName);
-char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed9+2 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
-return runCmdLine(cmdLine);
+return validateBedNP(fileName, format, plainBed, 9, 2);
 }
+
+boolean validateBedMethyl(char *fileName, char *format, boolean plainBed)
+/* Validate bedMethyl file (bedMethyl is jut bedRrbs renamed) */
+{
+return validateBedNP(fileName, format, plainBed, 9, 2);
+}
+
+boolean validateNarrowPeak(char *fileName, char *format, boolean plainBed)
+/* Validate narrowPeak file */
+{
+return validateBedNP(fileName, format, plainBed, 6, 4);
+}
+
+boolean validateBroadPeak(char *fileName, char *format, boolean plainBed)
+/* Validate broadPeak file */
+{
+return validateBedNP(fileName, format, plainBed, 6, 3);
+}
+
 
 boolean validateBigBed(char *fileName)
 /* Validate bigBed file */
 {
+
+warn("error FILENAME %s: generic format bigBed is not allowed. Please use a specific format for the kind of bed data.", fileName);
+return FALSE;
+
 char *asFile = getAs("modPepMap-std.as");  // TODO this wrong but how do we know what to put here?
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
@@ -367,26 +407,6 @@ if (!gff->isGtf)
 return TRUE;
 }
 
-boolean validateNarrowPeak(char *fileName)
-/* Validate narrowPeak file */
-{
-char *asFile = getAs("narrowPeak.as");
-char *chromInfo = getChromInfo(fileName);
-char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+4 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
-return runCmdLine(cmdLine);
-}
-
-boolean validateBroadPeak(char *fileName)
-/* Validate broadPeak file */
-{
-char *asFile = getAs("broadPeak.as");
-char *chromInfo = getChromInfo(fileName);
-char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
-return runCmdLine(cmdLine);
-}
-
 boolean validateRcc(char *fileName)
 /* Validate RCC file */
 {
@@ -431,14 +451,30 @@ if (endsWith(fileName, ".tgz"))  // TODO how to handle .tgz tar'd fasta files.
     return FALSE;
     }
 
+// Handle support for plain BEDs that are not bigBeds.
+boolean plainBed = FALSE;
+if (startsWith("bed_", format))
+    {
+    format += strlen("bed_");  // skip the prefix.
+    plainBed = TRUE;
+    }
+
 // Call the handler based on format
 if (sameString(format,"bam"))
     result = validateBam(fileName);
+else if (startsWith(format,"bedLogR"))
+    result = validateBedLogR(fileName, format, plainBed);
 else if (startsWith(format,"bedRnaElements"))
-    result = validateBedRnaElements(fileName);
+    result = validateBedRnaElements(fileName, format, plainBed);
 else if (startsWith(format,"bedRrbs"))
-    result = validateBedRrbs(fileName);
-else if (startsWith(format,"bigBed"))
+    result = validateBedRrbs(fileName, format, plainBed);
+else if (startsWith(format,"bedMethyl"))
+    result = validateBedMethyl(fileName, format, plainBed);
+else if (startsWith(format,"narrowPeak"))
+    result = validateNarrowPeak(fileName, format, plainBed);
+else if (startsWith(format,"broadPeak"))
+    result = validateBroadPeak(fileName, format, plainBed);
+else if (startsWith(format,"bigBed")) // Actually this generic type will be rejected.
     result = validateBigBed(fileName);
 else if (startsWith(format,"bigWig"))
     result = validateBigWig(fileName);
@@ -446,10 +482,6 @@ else if (startsWith(format,"fastq"))
     result = validateFastq(fileName);
 else if (startsWith(format,"gtf"))
     result = validateGtf(fileName);
-else if (startsWith(format,"narrowPeak"))
-    result = validateNarrowPeak(fileName);
-else if (startsWith(format,"broadPeak"))
-    result = validateBroadPeak(fileName);
 else if (startsWith(format,"rcc"))
     result = validateRcc(fileName);
 else if (startsWith(format,"idat"))

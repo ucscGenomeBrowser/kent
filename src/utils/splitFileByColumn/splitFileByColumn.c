@@ -122,7 +122,7 @@ else if (hel->val == NULL)
 	if (prevHel != NULL)
 	    carefulClose((FILE **)&(prevHel->val));
 	}
-    f = mustOpen(outFileName, "a");
+    hel->val = f = mustOpen(outFileName, "a");
     freez(&outFileName);
     }
 else if (!sameString(baseName, prevBaseName))
@@ -157,8 +157,8 @@ if (tailerText != NULL)
 	{
 	char *outFileName = getFileName(hel->name);
 	hel->val = f = mustOpen(outFileName, "a");
-	fprintf(f, "%s", tailerText);
 	}
+    fprintf(f, "%s", tailerText);
     }
 carefulClose((FILE **)&(hel->val));
 }
