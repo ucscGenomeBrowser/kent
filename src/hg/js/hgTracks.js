@@ -617,11 +617,10 @@ var vis = {
     },
 
     makeTrackVisible: function (track)
-    {
+    {   // Sets the vis box to visible, and ques a cart update, but does not update the image
         if (track && vis.get(track) !== "full") {
             vis.update(track, 'pack');
-            $("<input type='hidden' name='" + track + "'value='pack'>").appendTo(
-                                                                $(document.TrackHeaderForm));
+            cart.addVarsToQueue([track], ['pack']);
         }
     },
 
@@ -3352,6 +3351,11 @@ var imageV2 = {
         // under the mouse after the in-place update.
         // Tim thinks we should consider disabling all UI input while we are doing in-place update.
         // TODO: waitOnFuction?
+    
+        // If UCSC Genes (or any suggestion) is supposed to be made visible, then do so
+        if ($("#suggestTrack").length && $('#hgFindMatches').length)
+            vis.makeTrackVisible($("#suggestTrack").val());
+
         jQuery('body').css('cursor', 'wait');
         var currentId, currentIdYOffset;
         if (keepCurrentTrackVisible) {
