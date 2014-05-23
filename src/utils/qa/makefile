@@ -10,6 +10,8 @@ install:
 	cp -p --remove-destination alertBqueue.csh         ${SCRIPTS}
 	cp -p --remove-destination allowTraffic.csh        ${SCRIPTS}
 	cp -p --remove-destination backupCentral.csh       ${SCRIPTS}
+	cp -p --remove-destination bamToBedGraph.csh       ${SCRIPTS}
+	cp -p --remove-destination bamToBigWig.csh         ${SCRIPTS}
 	cp -p --remove-destination bigPush.csh             ${SCRIPTS}
 	cp -p --remove-destination blatPing.csh            ${SCRIPTS}
 	cp -p --remove-destination browserUsage.csh        ${SCRIPTS}
