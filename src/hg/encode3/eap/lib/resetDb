@@ -31,12 +31,13 @@ eapAddSoftware bedToBigBed 2.5 'http://hgdownload.soe.ucsc.edu/downloads.html#so
 eapAddSoftware wigToBigWig 4 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' genome@soe.ucsc.edu
 eapAddSoftware bedGraphToBigWig 4 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' genome@soe.ucsc.edu
 eapAddSoftware bedGraphPack 1 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' genome@soe.ucsc.edu
-eapAddSoftware edwBamStats 2 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' kent@soe.ucsc.edu
 eapAddSoftware bigBedToBed 1 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads'  genome@soe.ucsc.edu
 eapAddSoftware bigWigAverageOverBed 2 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads'  genome@soe.ucsc.edu
 eapAddSoftware bigWigMerge 2 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads'  genome@soe.ucsc.edu
 
 # ENCODE DCC UCSC Software
+eapAddSoftware edwBamStats 2 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' kent@soe.ucsc.edu
+eapAddSoftware edwBamFilter 1 'http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads' kent@soe.ucsc.edu
 eapAddSoftware hotspot.py 2 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/helpers mmaddren@soe.ucsc.edu
 eapAddSoftware eap_run_hotspot  1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue  mmaddren@soe.ucsc.edu
 eapAddSoftware eap_run_bwa_pe 3 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kent@soe.ucsc.edu
@@ -52,6 +53,7 @@ eapAddSoftware eap_run_phantom_peak_spp 1  https://github.com/ENCODE-DCC/uniform
 eapAddSoftware eap_dnase_stats 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue  kent@soe.ucsc.edu 
 eapAddSoftware eap_sum_bigWig 2  https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue  kent@soe.ucsc.edu
 eapAddSoftware eap_pool_hotspot 2  https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue  kent@soe.ucsc.edu
+eapAddSoftware eap_pool_big_wig 2 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue  kent@soe.ucsc.edu
 eapAddSoftware eap_run_spp_chip_se 1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue kate@soe.ucsc.edu
 eapAddSoftware eap_run_star_long_pe v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu
 eapAddSoftware eap_run_star_long_se v1 https://github.com/ENCODE-DCC/uniformAnalysis/tree/master/glue tdreszer@soe.ucsc.edu

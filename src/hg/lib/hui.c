@@ -6196,8 +6196,9 @@ if (isWigMafProt)
 else
     puts("<B>Multiple alignment base-level:</B><BR>" );
 
+boolean mafDotIsOn = trackDbSettingClosestToHomeOn(tdb, MAF_DOT_VAR);
 safef(option, sizeof option, "%s.%s", name, MAF_DOT_VAR);
-cgiMakeCheckBox(option, cartUsualBooleanClosestToHome(cart, tdb, parentLevel,MAF_DOT_VAR, FALSE));
+cgiMakeCheckBox(option, cartUsualBooleanClosestToHome(cart, tdb, parentLevel,MAF_DOT_VAR, mafDotIsOn));
 
 if (isWigMafProt)
     puts("Display amino acids identical to reference as dots<BR>" );

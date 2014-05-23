@@ -5,6 +5,9 @@
 #include "options.h"
 #include "fa.h"
 
+/* Globals that hold command line options. */
+boolean addId = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -14,14 +17,25 @@ errAbort(
   "   faUniqify in.fa out.fa\n"
   "options:\n"
   "   -verbose=0 - suppress warning messages\n"
+  "   -addId - add an ID suffix to make things unique\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"addId", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
+int hashCountMatches(struct hash *hash, char *key)
+/* Count number of things matching key in hash */
+{
+int count = 0;
+struct hashEl *hel;
+for (hel = hashLookup(hash, key); hel != NULL; hel = hashLookupNext(hel))
+     ++count;
+return count;
+}
 void faUniqify(char *inFile, char *outFile)
 /* faUniqify - Remove redundant sequences from fasta.  Warn if different sequences have same name.. */
 {
@@ -40,10 +54,18 @@ while (faMixedSpeedReadNext(lf, &dna, &size, &name))
 	 if (!sameString(oldDna, newDna))
 	     warn("Name %s reused for different sequences", name);
 	 }
-    else
+    if (addId || oldDna == NULL)
          {
 	 hashAdd(uniqHash, name, newDna);
-	 faWriteNext(f, name, newDna, size);
+	 char *fullName = name;
+	 char buf[PATH_LEN];
+	 if (addId)
+	     {
+	     int count = hashCountMatches(uniqHash, name);
+	     safef(buf, sizeof(buf), "%sv%d", name, count);
+	     fullName = buf;
+	     }
+	 faWriteNext(f, fullName, newDna, size);
 	 }
     }
 carefulClose(&f);
@@ -55,6 +77,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+addId = optionExists("addId");
 faUniqify(argv[1], argv[2]);
 return 0;
 }
