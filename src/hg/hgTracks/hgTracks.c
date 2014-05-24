@@ -5692,12 +5692,6 @@ cartCheckout(&oldCart);
 cgiVarExcludeExcept(except);
 }
 
-static void addDataHubs(struct cart *cart)
-{
-hubCheckForNew(cart);
-cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
-}
-
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -5719,12 +5713,6 @@ if (measureTiming)
 state = cgiUrlString();
 printf("State: %s\n", state->string);
 #endif
-
-/* check for new data/assembly hub */
-if (cartVarExists(cart, hgHubDataText))
-    {
-    addDataHubs(cart);
-    }
 
 getDbAndGenome(cart, &database, &organism, oldVars);
 

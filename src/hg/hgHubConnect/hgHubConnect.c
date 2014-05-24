@@ -24,18 +24,10 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-#define hgHub             "hgHub_"  /* prefix for all control variables */
-#define hgHubDo            hgHub   "do_"    /* prefix for all commands */
-#define hgHubDoClear       hgHubDo "clear"
-#define hgHubDoDisconnect  hgHubDo "disconnect"
-#define hgHubDoReset       hgHubDo "reset"
-#define hgHubDoSearch      hgHubDo "search"
-#define hgHubDoDeleteSearch      hgHubDo "deleteSearch"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 
-static char *destUrl = "../cgi-bin/hgTracks";
 static char *pageTitle = "Track Data Hubs";
 char *database = NULL;
 char *organism = NULL;
@@ -200,7 +192,6 @@ printf(
 	"<th>Description</th> "
 	"<th>Assemblies</th> "
 	"<th>URL</th> "
-	"<th>Disconnect</th> "
     "</tr>\n"
     "</thead>\n");
 
@@ -220,7 +211,12 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	ourCellStart();
 	char hubName[32];
 	safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, hub->id);
-	cartMakeCheckBox(cart, hubName, FALSE);
+	if (cartUsualBoolean(cart, hubName, FALSE))
+	    printf("<input name=\"hubDisconnectButton\""
+		"onClick="
+		"\" document.disconnectHubForm.elements['hubId'].value= '%d';"
+		"document.disconnectHubForm.submit();return true;\" "
+		"class=\"hubField\" type=\"button\" value=\"Disconnect\">\n", hub->id);
 	ourCellEnd();
 	}
     else
@@ -259,15 +255,6 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     else
 	ourPrintCell("");
     ourPrintCell(hub->hubUrl);
-
-    ourCellStart();
-    printf(
-    "<input name=\"hubDisconnectButton\""
-	"onClick=\"document.disconnectHubForm.elements['hubId'].value='%d';"
-	    "document.disconnectHubForm.submit();return true;\" "
-	    "class=\"hubField\" type=\"button\" value=\"X\">\n"
-	    , hub->id);
-    ourCellEnd();
     }
 
 printf("</TR></tbody></TABLE>\n");
@@ -369,6 +356,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if ((urlSearchHash != NULL) && (hashLookup(urlSearchHash, url) == NULL))
 	continue;
 
+    struct slName *dbListNames = slNameListFromComma(dbList);
+
     if (gotAnyRows)
 	webPrintLinkTableNewRow();
     else
@@ -382,7 +371,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 		"<th>Hub Name</th> "
 		"<th>Description</th> "
 		"<th>Assemblies</th> "
-		"<th>URL</th> "
 	    "</tr></thead>\n");
 
 	// start first row
@@ -398,7 +386,34 @@ while ((row = sqlNextRow(sr)) != NULL)
 	ourCellStart();
 	char hubName[32];
 	safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
-	cartMakeCheckBox(cart, hubName, FALSE);
+	if (cartUsualBoolean(cart, hubName, FALSE))
+	    printf("<input name=\"hubDisconnectButton\""
+		"onClick="
+		"\" document.disconnectHubForm.elements['hubId'].value= '%d';"
+		"document.disconnectHubForm.submit();return true;\" "
+		"class=\"hubField\" type=\"button\" value=\"Disconnect\">\n", id);
+	else
+	    {
+	    // get first name off of list of supported databases
+	    char * name = dbListNames->name;
+
+	    // if the name isn't currently loaded, we assume it's a hub
+	    if (!hDbExists(name))
+		{
+		char buffer[512];
+
+		safef(buffer, sizeof buffer, "hub_%d_%s",  id, name);
+		name = cloneString(buffer);
+		}
+
+	    printf("<input name=\"hubConnectButton\""
+	    "onClick="
+		"\" document.connectHubForm.elements['hubUrl'].value= '%s';"
+		"document.connectHubForm.elements['db'].value= '%s';"
+		"document.connectHubForm.submit();return true;\" "
+		"class=\"hubField\" type=\"button\" value=\"Connect\">\n", url,name);
+	    }
+
 	ourCellEnd();
 	}
     else if (!isEmpty(errorMessage))
@@ -427,8 +442,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
 	    errorMessage);
 
-    printGenomeList(slNameListFromComma(dbList), count); // Leaking a bit of memory
-    ourPrintCell(url);
+    printGenomeList(dbListNames, count); 
 
     hashStore(publicHash, url);
     }
@@ -509,19 +523,6 @@ else
 printf("<pre>Completed\n");
 }
 
-static void doDisconnectHub(struct cart *theCart)
-{
-char *id = cartOptionalString(cart, "hubId");
-
-if (id != NULL)
-    {
-    char buffer[1024];
-    safef(buffer, sizeof buffer, "hgHubConnect.hub.%s", id);
-    cartRemove(cart, buffer);
-    }
-
-cartRemove(theCart, "hubId");
-}
 
 static void checkTrackDbs(struct hubConnectStatus *hubList)
 {
@@ -548,8 +549,6 @@ for(; hub; hub = hub->next)
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
-boolean gotDisconnect = FALSE;
-
 cart = theCart;
 
 if (cartVarExists(cart, hgHubDoClear))
@@ -557,16 +556,6 @@ if (cartVarExists(cart, hgHubDoClear))
     doClearHub(cart);
     cartWebEnd();
     return;
-    }
-
-if (cartVarExists(cart, hgHubDoDisconnect))
-    {
-    gotDisconnect = TRUE;
-    doDisconnectHub(cart);
-
-    // now rebuild the cart variable ("trackHubs") that has which lists which
-    // hubs are on.
-    hubConnectHubsInCart(cart);
     }
 
 if (cartVarExists(cart, hgHubDoReset))
@@ -618,13 +607,22 @@ struct hubConnectStatus *hubList =  hubConnectStatusListFromCartAll(cart);
 checkTrackDbs(hubList);
 
 // here's a little form for the add new hub button
-printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
+printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgGateway");
 cgiMakeHiddenVar("hubUrl", "");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 
+// this is the form for the connect hub button
+printf("<FORM ACTION=\"%s\" NAME=\"connectHubForm\">\n",  "../cgi-bin/hgGateway");
+cgiMakeHiddenVar("hubUrl", "");
+cgiMakeHiddenVar("db", "");
+cgiMakeHiddenVar(hgHubDoConnect, "on");
+cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+puts("</FORM>");
+
 // this is the form for the disconnect hub button
-printf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgHubConnect");
+printf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgGateway");
+cgiMakeHiddenVar("db", "hg19");
 cgiMakeHiddenVar("hubId", "");
 cgiMakeHiddenVar(hgHubDoDisconnect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
@@ -644,9 +642,7 @@ cgiMakeHiddenVar(hgHubDoSearch, "on");
 puts("</FORM>");
 
 // ... and now the main form
-if (cartVarExists(cart, hgHubConnectCgiDestUrl))
-    destUrl = cartOptionalString(cart, hgHubConnectCgiDestUrl);
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", "../cgi-bin/hgGateway");
 cartSaveSession(cart);
 
 // we have two tabs for the public and unlisted hubs
@@ -660,7 +656,6 @@ hgHubConnectUnlisted(hubList, publicHash);
 printf("</div>");
 
 printf("<div class=\"tabFooter\">");
-cgiMakeButton("Submit", "Use Selected Hubs");
 
 char *emailAddress = cfgOptionDefault("hub.emailAddress","genome@soe.ucsc.edu");
 printf("<span class=\"small\">"
@@ -676,7 +671,7 @@ cartWebEnd();
 }
 
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", 
-    hgHubDoReset, hgHubDoClear, hgHubDoDisconnect, hgHubDataText, 
+    hgHubDoReset, hgHubDoClear, hgHubDoDisconnect,hgHubDoConnect, hgHubDataText, 
     hgHubConnectRemakeTrackHub, NULL};
 
 int main(int argc, char *argv[])
