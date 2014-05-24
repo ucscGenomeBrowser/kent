@@ -57,7 +57,7 @@ void addCopyright(char *fileName, int date, char *copyrightHolder, char *license
 /* Open file, load it into memory, and write it back out (replacing current file)
  * with copyright and license comments somewhere near top. */
 {
-verbose(1, "Adding copyright %s to %s\n", copyrightHolder, fileName);
+verbose(1, "Adding copyright %d %s to %s\n", date, copyrightHolder, fileName);
 if (fileSize(fileName) > 10000000)  /* This is a genomics file or something, not text */
     errAbort("Deciding not to add copyright to %s, which is over 10M characters long", fileName);
 struct slName *line, *lineList = readAllLines(fileName);
@@ -126,7 +126,7 @@ for (line = lineList; line != NULL; line = line->next)
 carefulClose(&f);
 }
 
-void addUcscCopyright(char *date, char *fileList)
+void addUcscCopyright(char *fileList)
 /* addUcscCopyright - Add a UCSC type copyright to files. */
 {
 struct lineFile *lf = lineFileOpen(fileList, TRUE);
@@ -135,8 +135,9 @@ int size;
 while (lineFileNext(lf, &line, &size))
     {
     verbose(2, "%d %s\n", lf->lineIx, line);
-    char *fileName;
-    while ((fileName = nextWordRespectingQuotes(&line)) != NULL)
+    char *fileName = nextWordRespectingQuotes(&line);
+    char *date = nextWord(&line);
+    if (date != NULL)
         {
 	if (!containsCopyright(fileName, 10))
 	    {
@@ -151,8 +152,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 2)
     usage();
-addUcscCopyright(argv[1], argv[2]);
+addUcscCopyright(argv[1]);
 return 0;
 }
