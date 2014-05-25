@@ -33,62 +33,49 @@ if (sf == NULL)
 return sf;
 }
 
+void chroms(bam_header_t *head, bam1_t one, FILE *f, samfile_t *in)
 
+{
+int z;
+
+    for (z=0; z<head->n_targets; ++z)
+        {
+        fprintf(f, "%s\n",head->target_name[z]);
+        }
+    
+}
 void bamSplitByChrom(char *inBam)
 /* bamSplitByChrom -  Splits a bam file into multiple bam files based on chromosome . */
 {
 /* Open file and get header for it. */
 samfile_t *in = samMustOpen(inBam, "rb", NULL);
 bam_header_t *head = in->header;
-
-/* Find out index number of chromosome. */
-int i;
-int rmTid = -1;
+bam1_t one;
+FILE *f = mustOpen("chroms", "w");
+ZeroVar(&one);	// This seems to be necessary!
+chroms(head,one,f,in);
+int i =0;
 for (i=0; i<head->n_targets; ++i)
     {
-
-
-        rmTid = i;
-	break;
-
-    }
-
-
-
-
-/* Open up sam output and write header */
-char *outBam = "output";
-samfile_t *out = bamMustOpenLocal(outBam, "wb", head);
-
-/* Loop through copying in to out except where it is chromosome to be removed */
-/* Lets try and 'borrow' this loop and throw in an if statment checking the *
- * chromosome of the read, then it should be a simple matter to write each 
- * one to its respective output */
-
-int rmCount = 0;
-bam1_t one;
-ZeroVar(&one);	// This seems to be necessary!
-for (;;)
-    {
-    /* Read next record. */
-    if (samread(in, &one) < 0)
-	break;
-//	int32_t chrom = one.core.tid;
-    
    
-
-    /* Just consider mapped reads. */
-    if ((one.core.flag & BAM_FUNMAP) == 0 && one.core.tid >= 0)
+    char *outBam = head->target_name[i];  
+    samfile_t *out = bamMustOpenLocal(outBam, "wb", head);
+    for (;;)
         {
-	if (one.core.tid == rmTid)
-	    ++rmCount;
-	else
-	    samwrite(out, &one);
-	}
+        if (samread(in, &one) < 0)
+            {
+	    break;
+	    }
+	if (head->target_name[one.core.tid]==outBam)
+	    {
+            samwrite(out, &one);
+            }
     }
-samclose(in);
-samclose(out);
 
+    samclose(out);
+}
+
+samclose(in);   
 }
 
 int main(int argc, char *argv[])
