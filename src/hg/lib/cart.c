@@ -621,6 +621,20 @@ if (exclude != NULL)
 return cart;
 }
 
+static void doDisconnectHub(struct cart *cart)
+{
+char *id = cartOptionalString(cart, "hubId");
+
+if (id != NULL)
+    {
+    char buffer[1024];
+    safef(buffer, sizeof buffer, "hgHubConnect.hub.%s", id);
+    cartRemove(cart, buffer);
+    }
+
+cartRemove(cart, "hubId");
+}
+
 struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -683,6 +697,10 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 
 /* wire up the assembly hubs so we can operate without sql */
 setUdcTimeout(cart);
+if (cartVarExists(cart, hgHubDoDisconnect))
+    {
+    doDisconnectHub(cart);
+    }
 hubConnectLoadHubs(cart);
 
 if (exclude != NULL)

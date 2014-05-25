@@ -34,6 +34,15 @@
 #define hgHubSearchTerms      "hubSearchTerms"
 /* name of cart/cgi variable containing the current search terms */
 
+#define hgHub             "hgHub_"  /* prefix for all control variables */
+#define hgHubDo            hgHub   "do_"    /* prefix for all commands */
+#define hgHubDoClear       hgHubDo "clear"
+#define hgHubDoReset       hgHubDo "reset"
+#define hgHubDoSearch      hgHubDo "search"
+#define hgHubDoDeleteSearch      hgHubDo "deleteSearch"
+#define hgHubDoDisconnect  hgHubDo "disconnect"
+#define hgHubDoConnect     hgHubDo "connect"
+
 boolean isHubTrack(char *trackName);
 /* Return TRUE if it's a hub track. */
 

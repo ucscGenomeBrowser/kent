@@ -299,12 +299,16 @@ void doMiddle()
 /* doMiddle - put up middle part of web page, not including http and html headers/footers */
 {
 pushWarnHandler(localWarn);
-printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
 edwWebSubmitMenuItem(TRUE);
+printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
 struct sqlConnection *conn = edwConnectReadWrite(edwDatabase);
 userEmail = edwGetEmailAndVerify();
 if (userEmail == NULL)
+    {
+    edwWebSubmitMenuItem(FALSE);
+    edwWebBrowseMenuItem(FALSE);
     logIn();
+    }
 else if (cgiVarExists(stopButtonName))
     {
     stopUpload(conn);

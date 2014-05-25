@@ -6,7 +6,7 @@ $(function () {
     $('#signout').click(function(){ navigator.id.logout(); });
 
     // update navigation bar to show email of logged in user
-    if (email !== null) {
+    if (email) {
         $('#edw-user').text(email);
     } else {
         $('#signout').hide();

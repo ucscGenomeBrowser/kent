@@ -706,8 +706,8 @@ return effect;
 }
 
 
-static boolean hasAltAllele(struct allele *alleles)
-/* Make sure there's something to work on here... */
+boolean hasAltAllele(struct allele *alleles)
+/* Return TRUE if alleles include at least one non-reference allele. */
 {
 while (alleles != NULL && alleles->isReference)
     alleles = alleles->next;

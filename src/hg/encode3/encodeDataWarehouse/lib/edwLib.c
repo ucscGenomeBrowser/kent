@@ -1638,11 +1638,11 @@ void edwWebAutoRefresh(int msec)
 if (msec > 0)
     {
     // set timeout to refresh page (saving/restoring scroll position via cookie)
-    printf("<script>var edwRefresh = setTimeout(function() { $.cookie('edwWeb.scrollTop', $(window).scrollTop()); $('form').submit(); }, %d);</script>", msec);
-    puts("<script>$(document).ready(function() {$(document).scrollTop($.cookie('edwWeb.scrollTop'))});</script>");
+    printf("<script type='text/javascript'>var edwRefresh = setTimeout(function() { $.cookie('edwWeb.scrollTop', $(window).scrollTop()); $('form').submit(); }, %d);</script>", msec);
+    puts("<script type='text/javascript'>$(document).ready(function() {$(document).scrollTop($.cookie('edwWeb.scrollTop'))});</script>");
 
     // disable autorefresh when user is changing page settings
-    puts("<script>$('form').click(function() {clearTimeout(edwRefresh); $.cookie('edwWeb.scrollTop', null);});</script>");
+    puts("<script type='text/javascript'>$('form').click(function() {clearTimeout(edwRefresh); $.cookie('edwWeb.scrollTop', null);});</script>");
     }
 else if (msec == 0)
     puts("clearTimeout(edwRefresh);</script>");
@@ -1672,13 +1672,12 @@ puts("</div></div></div>");
 void edwWebBrowseMenuItem(boolean on)
 /* Toggle visibility of 'Browse submissions' link on navigation menu */
 {
-printf("<script>$('#edw-browse').%s();</script>", on ? "show" : "hide");
+printf("<script type='text/javascript'>$('#edw-browse').%s();</script>", on ? "show" : "hide");
 }
 
 void edwWebSubmitMenuItem(boolean on)
 /* Toggle visibility of 'Submit data' link on navigation menu */
 {
-printf("<script>$('#edw-submit').%s();</script>", on ? "show" : "hide");
+printf("<script type='text/javascript'>$('#edw-submit').%s();</script>", on ? "show" : "hide");
 }
-
 

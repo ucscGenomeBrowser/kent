@@ -746,3 +746,17 @@ priority 274.0
 track ensGene override
 visibility dense
 
+#facebase microarray track
+track FaceBase24SampleTypesAvg
+shortLabel FaceBase24STypes
+longLabel FaceBase 24 Sample Types Averaged
+#priority 79.1
+visibility hide
+type expRatio
+expScale 1.50
+expStep 0.1
+groupings facebase31_AllGroups
+group regulation
+
+#searchTable FaceBase_24Samp_Types_Averaged
+#searchType bed

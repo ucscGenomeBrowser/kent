@@ -384,11 +384,21 @@ if ((hubOrgHash != NULL) && (hel = hashLookup(hubOrgHash, genome)) != NULL)
 return NULL;
 }
 
+static void deleteAssembly(char *name, struct trackHubGenome *genome, struct trackHub *hub)
+/* delete this assembly from the assembly caches */
+{
+hashRemove(hubCladeHash, hub->name);
+slRemoveEl(&globalAssemblyHubList, hub);
+
+hashRemove(hubOrgHash, genome->organism);
+
+hashRemove(hubAssemblyHash, genome->name);
+}
+
 static void addAssembly(char *name, struct trackHubGenome *genome, struct trackHub *hub)
 /* Add a new assembly hub database to our global list. */
 {
 struct hashEl *hel;
-
 
 if (hubCladeHash == NULL)
     hubCladeHash = newHash(5);
@@ -547,7 +557,7 @@ void trackHubClose(struct trackHub **pHub)
 struct trackHub *hub = *pHub;
 if (hub != NULL)
     {
-    trackHubGenomeFreeList(&hub->genomeList);
+    trackHubGenomeFreeList(hub);
     freeMem(hub->url);
     hashFree(&hub->settings);
     hashFree(&hub->genomeHash);
@@ -567,17 +577,19 @@ if (genome != NULL)
     }
 }
 
-void trackHubGenomeFreeList(struct trackHubGenome **pList)
+void trackHubGenomeFreeList(struct trackHub *hub)
 /* Free a list of dynamically allocated trackHubGenome's */
 {
 struct trackHubGenome *el, *next;
 
-for (el = *pList; el != NULL; el = next)
+for (el = hub->genomeList; el != NULL; el = next)
     {
     next = el->next;
+    if (el->twoBitPath != NULL)
+	deleteAssembly(hub->name, el, hub);
     trackHubGenomeFree(&el);
     }
-*pList = NULL;
+hub->genomeList = NULL;
 }
 
 static char *requiredSetting(struct trackHub *hub, struct trackHubGenome *genome,
