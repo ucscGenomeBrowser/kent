@@ -12,7 +12,7 @@ errAbort(
   "usage:\n"
   "   bamSplitByChrom input.bam\n"
   "options:\n"
-  "   -prefix= chromosome prefix\n"
+  "   \n"
   );
 }
 
@@ -33,17 +33,6 @@ if (sf == NULL)
 return sf;
 }
 
-void chroms(bam_header_t *head, bam1_t one, FILE *f, samfile_t *in)
-
-{
-int z;
-
-    for (z=0; z<head->n_targets; ++z)
-        {
-        fprintf(f, "%s\n",head->target_name[z]);
-        }
-    
-}
 void bamSplitByChrom(char *inBam)
 /* bamSplitByChrom -  Splits a bam file into multiple bam files based on chromosome . */
 {
@@ -51,16 +40,16 @@ void bamSplitByChrom(char *inBam)
 samfile_t *in = samMustOpen(inBam, "rb", NULL);
 bam_header_t *head = in->header;
 bam1_t one;
-FILE *f = mustOpen("chroms", "w");
 ZeroVar(&one);	// This seems to be necessary!
-chroms(head,one,f,in);
 int i =0;
 for (i=0; i<head->n_targets; ++i)
-    {
-   
+/* Loop through each chromosome. */   
+   { 
     char *outBam = head->target_name[i];  
     samfile_t *out = bamMustOpenLocal(outBam, "wb", head);
+    /* Open an output bam file. */
     for (;;)
+    /* Loop through the input bam file. */
         {
         if (samread(in, &one) < 0)
             {
@@ -70,11 +59,9 @@ for (i=0; i<head->n_targets; ++i)
 	    {
             samwrite(out, &one);
             }
-    }
-
+        }
     samclose(out);
-}
-
+    }
 samclose(in);   
 }
 
