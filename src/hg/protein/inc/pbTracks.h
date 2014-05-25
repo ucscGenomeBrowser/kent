@@ -1,6 +1,9 @@
 /* pbTracks.h - stuff private to pbTracks, but shared with
  * individual functions. */
 
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef PBTRACKS_H
 #define PBTRACKS_H
 

@@ -1,3 +1,6 @@
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 
 /* snpMaskFlank - Print sequences centered on SNPs, exons only, with SNPs (single base substituions) 
    using IUPAC codes. */

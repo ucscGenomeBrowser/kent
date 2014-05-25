@@ -1,5 +1,8 @@
 /* liftUp - change coordinates of .psl, .agp, or .out file
  * to parent coordinate system. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "portable.h"

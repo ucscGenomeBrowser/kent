@@ -2,6 +2,9 @@
  * connecting certain data points.  This does not handle the
  * data volume that the wiggle track does.  It's meant for
  * things like graphs for gene association studies. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hash.h"
 #include "jksql.h"

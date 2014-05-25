@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* trackHub - supports collections of tracks hosted on a remote site.
  * The basic layout of a data hub is:
  *        hub.txt - contains information about the hub itself

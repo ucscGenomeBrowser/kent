@@ -2,6 +2,9 @@
  * generated borkPseudoHom.c and borkPseudoHom.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2002 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef BORKPSEUDOHOM_H
 #define BORKPSEUDOHOM_H
 

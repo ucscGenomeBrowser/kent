@@ -7,6 +7,9 @@
  * so it should be able to handle genomes with a very large 
  * number of scaffolds. See rangeTree for more information. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "sig.h"
 #include "localmem.h"

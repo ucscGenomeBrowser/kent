@@ -1,5 +1,8 @@
 /* pslToBed -- tranform a psl format file to a bed format file */
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "psl.h"
 #include "bed.h"

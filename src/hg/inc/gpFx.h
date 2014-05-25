@@ -1,5 +1,8 @@
 /* gpFx --- routines to calculate the effect of variation on a genePred */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef GPFX_H
 #define GPFX_H
 

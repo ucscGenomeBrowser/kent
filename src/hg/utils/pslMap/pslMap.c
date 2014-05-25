@@ -1,5 +1,8 @@
 /* pslMap - map PSLs alignments to new targets using alignments of the old
  * target to the new target. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "pslTransMap.h"
 #include "options.h"

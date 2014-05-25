@@ -1,6 +1,9 @@
 /* getRgdGeneCds - calculates the min(start)-1 and max(end) of 
    the CDS records of RGD genes raw data. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"

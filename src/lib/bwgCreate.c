@@ -1,6 +1,9 @@
 /* bwgCreate - create big wig files.  Implements write side of bwgInternal.h module. 
  * See the comment in bwgInternal.h for a description of the file format. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

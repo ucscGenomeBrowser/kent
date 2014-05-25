@@ -1,3 +1,6 @@
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* agpAddCtgNamesAndGaps - Add component names to AGP where there are multiple 
 * components contributing to one accession with gaps getween them. e.g.
 * Zv7_scaffold2543        228414  260893  29      D       BX649254.13     1 

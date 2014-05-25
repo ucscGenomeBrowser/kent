@@ -4,6 +4,9 @@
  * doc/database-update-step.html before modifying.
  */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "gbMetaData.h"
 #include "gbGeneTbl.h"
 #include "gbAlignTbl.h"

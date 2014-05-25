@@ -1,5 +1,8 @@
 /* annoFormatter -- aggregates, formats and writes output from multiple sources */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoFormatter.h"
 
 struct annoOption *annoFormatterGetOptions(struct annoFormatter *self)

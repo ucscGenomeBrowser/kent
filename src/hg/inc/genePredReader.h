@@ -1,6 +1,9 @@
 /* genePredReader - object to read genePred objects from database tables
  * or files.  */
 
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef GENEPREDREADER_H
 #define GENEPREDREADER_H
 

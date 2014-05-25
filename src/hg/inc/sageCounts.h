@@ -2,6 +2,9 @@
  * generated sageCounts.c and sageCounts.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef SAGECOUNTS_H
 #define SAGECOUNTS_H
 

@@ -1,5 +1,8 @@
 /* chainCart.h - cart settings for chain color options */
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CHAINCART_H
 #define CHAINCART_H
 

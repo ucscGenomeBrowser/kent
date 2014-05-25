@@ -1,5 +1,8 @@
 /* gsidMember.h  */
 
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef gsidMember_H
 #define gsidMember_H
 

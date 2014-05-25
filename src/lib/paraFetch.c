@@ -1,5 +1,8 @@
 /* paraFetch - fetch things from remote URLs in parallel. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include <utime.h>
 #include "common.h"
 #include "internet.h"

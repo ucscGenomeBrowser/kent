@@ -1,4 +1,7 @@
 /* faFiltMasked - Filter out reads that have less than 100 base pairs unmasked. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "dnautil.h"
 #include "fa.h"

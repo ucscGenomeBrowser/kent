@@ -1,5 +1,8 @@
 /* ensFace - stuff to manage interface to Ensembl web site. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ENSFACE_H
 #define ENSFACE_H
 

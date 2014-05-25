@@ -1,5 +1,8 @@
 /* hubCheck - Check a track data hub for integrity.. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "options.h"
 #include "dystring.h"

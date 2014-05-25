@@ -1,3 +1,6 @@
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /** orthoMap - Map cDNAs from one genome to another. 
 <pre>
 Using chains and nets to convert to find ortholgous regions, mrna, exons, bases.

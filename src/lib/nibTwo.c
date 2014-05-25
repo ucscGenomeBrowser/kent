@@ -1,6 +1,9 @@
 /* nibTwo - Something to let you transparently access either
  * .2bit or .nib files. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "dnaseq.h"

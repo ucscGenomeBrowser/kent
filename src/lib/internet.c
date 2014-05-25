@@ -1,5 +1,8 @@
 /* internet - some stuff to make it easier to use
  * internet sockets and the like. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "internet.h"
 

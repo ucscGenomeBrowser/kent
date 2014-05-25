@@ -4,6 +4,9 @@
  * formatted) etc.  Note that there is no C structure corresponding to a row in the hubStatus 
  * table by design.  We just want field-by-field access to this. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef HUBCONNECT_H
 #define HUBCONNECT_H
 

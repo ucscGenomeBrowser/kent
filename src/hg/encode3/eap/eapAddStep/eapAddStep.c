@@ -1,4 +1,7 @@
 /* eapAddStep - Add a step to eapStep and related tables.  This is just a small shortcut for doing it in SQL.  You can only add steps defined in C code.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

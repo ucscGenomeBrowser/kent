@@ -1,5 +1,8 @@
 /* ncbiBlast.c autoXml generated file */
 
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /**** 
  **** N.B. hand modified to use doubles rather than floats and to convert with sqlNum.
  ****/

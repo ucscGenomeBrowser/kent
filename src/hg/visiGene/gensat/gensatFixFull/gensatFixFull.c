@@ -1,5 +1,8 @@
 /* gensatFixFull - Fix a problem that arose from image magic convert not handling .full in filename 
  * during tiling.  Should be a one-time fix.. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

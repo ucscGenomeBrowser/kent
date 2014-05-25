@@ -8,6 +8,9 @@
  * depends on the database or other structures defined in src/hg/inc modules, is
  * done here. */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef BED_H
 #define BED_H
 

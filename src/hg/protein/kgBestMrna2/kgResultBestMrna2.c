@@ -1,5 +1,8 @@
 /* kgResultBestMrna2 - program to select best mRNA for each protein */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include <sys/param.h>
 #include <limits.h>
 #include "common.h"

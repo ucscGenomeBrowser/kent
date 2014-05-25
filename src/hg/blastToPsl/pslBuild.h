@@ -1,4 +1,7 @@
 /* object using in building a PSL from a blast record */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef pslBuild_h
 #define pslBuild_h
 

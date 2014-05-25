@@ -1,5 +1,8 @@
 /* gpFx --- routines to calculate the effect of variation on a genePred */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "genePred.h"
 #include "gpFx.h"

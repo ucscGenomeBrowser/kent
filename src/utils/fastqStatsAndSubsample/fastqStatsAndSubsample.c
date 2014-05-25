@@ -1,6 +1,9 @@
 /* fastqStatsAndSubsample - Go through a fastq file doing sanity checks and collecting 
  * statistics,  and also producing a smaller fastq out of a sample of the data. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

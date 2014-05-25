@@ -2,6 +2,9 @@
  * store in database.  Note to compare with featureBits enrichments use -countGaps 
  * in featureBits */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "localmem.h"

@@ -1,6 +1,9 @@
 /* regMotif.c - stuff for displaying details of regulatory
  * motifs and the like. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "dnaseq.h"

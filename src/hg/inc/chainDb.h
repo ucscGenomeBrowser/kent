@@ -7,6 +7,9 @@
  * fairly differently than the database table.   However this
  * module does refer to the same chain structure as is in chainBlock.*/
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CHAINDB_H
 #define CHAINDB_H
 

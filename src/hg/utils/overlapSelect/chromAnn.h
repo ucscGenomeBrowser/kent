@@ -1,5 +1,8 @@
 /* chromAnn - chomosome annotations, generic object to store annotations from
  * other formats */
+
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef CHROMANN_H
 #define CHROMANN_H
 struct rowReader;

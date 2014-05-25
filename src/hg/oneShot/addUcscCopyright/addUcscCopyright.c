@@ -6,20 +6,23 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
+boolean dry = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "addUcscCopyright - Add a UCSC type copyright to files without copyright.\n"
   "usage:\n"
-  "   addUcscCopyright date fileList\n"
+  "   addUcscCopyright fileList\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -dry - if set will just list files and years, but not add copyright\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"dry", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -57,11 +60,13 @@ void addCopyright(char *fileName, int date, char *copyrightHolder, char *license
 /* Open file, load it into memory, and write it back out (replacing current file)
  * with copyright and license comments somewhere near top. */
 {
-verbose(1, "Adding copyright %d %s to %s\n", date, copyrightHolder, fileName);
+verbose(1, "%s: Adding copyright %d %s\n", fileName, date, copyrightHolder);
 if (fileSize(fileName) > 10000000)  /* This is a genomics file or something, not text */
     errAbort("Deciding not to add copyright to %s, which is over 10M characters long", fileName);
 struct slName *line, *lineList = readAllLines(fileName);
 verbose(2, "%d lines in %s\n", slCount(lineList), fileName);
+if (dry)
+    return;
 
 /* Try to figure out where to put copyright.  We try to respect up to
  * 10 lines of opening comments, and will put it after opening comments
@@ -154,6 +159,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
+dry = optionExists("dry");
 addUcscCopyright(argv[1]);
 return 0;
 }

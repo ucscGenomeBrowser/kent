@@ -1,4 +1,7 @@
 /* axtSplitByTarget - Split a single axt file into one file per target. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

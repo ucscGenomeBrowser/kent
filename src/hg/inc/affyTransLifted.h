@@ -2,6 +2,9 @@
  * generated affyTransLifted.c and affyTransLifted.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2002 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef AFFYTRANSLIFTED_H
 #define AFFYTRANSLIFTED_H
 

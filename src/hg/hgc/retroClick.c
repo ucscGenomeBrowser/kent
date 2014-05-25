@@ -1,5 +1,8 @@
 /* retroClick - retroGene click handling */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /*
  * Tables associated with retroGenes:
  *   retroXxxInfo - features of retroGene

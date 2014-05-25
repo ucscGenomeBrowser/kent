@@ -1,5 +1,8 @@
 /* read_malign.h - shared procedures for handling textual multiple alignments */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "util.h"
 #include "read_malign.h"
 

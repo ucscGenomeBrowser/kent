@@ -1,6 +1,9 @@
 /* log.c - logging for servers, can log to a file and/or syslog.  Compile with
  * -DNO_SYSLOG for systems without syslog. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "log.h"
 #include "errabort.h"

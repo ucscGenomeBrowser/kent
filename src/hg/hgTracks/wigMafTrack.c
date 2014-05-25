@@ -2,6 +2,9 @@
  * and base-level alignment, or else density plot of pairwise alignments
  * (zoomed out) */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"

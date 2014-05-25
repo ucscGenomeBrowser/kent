@@ -1,5 +1,8 @@
 /* Delete ignored entries from the database.  Also handled deleting of
  * accessions to explictly reloadd */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "gbDefs.h"
 #include "gbIgnoreDelete.h"

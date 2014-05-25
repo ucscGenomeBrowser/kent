@@ -1,5 +1,8 @@
 /* Object to manage the gbSeq table. */
 
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef SEQTBL_H
 #define SEQTBL_H
 #include "common.h"

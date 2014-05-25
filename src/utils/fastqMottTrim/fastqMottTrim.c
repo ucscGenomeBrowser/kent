@@ -6,6 +6,9 @@
 /* Base corresponds to any additions to the ASCII quality scheme. */
 /* Minlength specifies the minimum sequence length for the output. */
 /* For paired and unpaired data. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

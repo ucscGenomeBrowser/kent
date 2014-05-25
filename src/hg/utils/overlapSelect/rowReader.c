@@ -1,4 +1,7 @@
 /* rowReader - read rows from tab files or databases without length restrictions */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "rowReader.h"
 #include "linefile.h"

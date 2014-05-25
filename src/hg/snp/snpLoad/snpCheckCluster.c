@@ -4,6 +4,9 @@
 /* assert insertions in sorted order */
 /* assert end == start */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* SKIPPING chrY because of those damned PAR SNPs */
 
 #include "common.h"

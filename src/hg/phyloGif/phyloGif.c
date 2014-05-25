@@ -1,3 +1,6 @@
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* phyloGif.c for parsing phylo tree and outputting a gif.
  *
  *  Author: Galt Barber 2006 

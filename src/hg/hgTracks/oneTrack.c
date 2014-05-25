@@ -1,6 +1,9 @@
 /* oneTrack: load and draw a single track.  This is written for use in 
  * GBrowse plugins but could find other uses. */
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "memgfx.h"
 #include "cart.h"
