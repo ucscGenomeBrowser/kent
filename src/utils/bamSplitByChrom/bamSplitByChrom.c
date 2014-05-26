@@ -20,9 +20,6 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
-void printBamSeq()
-{
-}
 
 samfile_t *samMustOpen(char *fileName, char *mode, void *extraHeader)
 /* Open up samfile or die trying. */
